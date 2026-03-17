@@ -1,0 +1,13 @@
+{
+  "id": "felipe1983/nemotron-reasoning-solver",
+  "title": "nemotron-reasoning-solver",
+  "code_file": "nemotron_training.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": true,
+  "enable_gpu": true,
+  "enable_internet": true,
+  "competition_sources": ["nvidia-nemotron-model-reasoning-challenge"],
+  "model_sources": ["metric/nemotron-3-nano-30b-a3b-bf16/transformers/default/1"],
+  "kernel_sources": ["ryanholbrook/nvidia-utility-script"]
+}

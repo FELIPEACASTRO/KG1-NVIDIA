@@ -1,0 +1,25 @@
+# Data files
+*.csv
+*.zip
+*.parquet
+
+# Kaggle credentials
+kaggle.json
+kaggle*.json
+
+# Python
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# Competition data
+train.csv
+test.csv
+sample_submission.csv
+
+# Downloaded notebooks
+notebooks/
+
+# Output files
+output/
+*.log
