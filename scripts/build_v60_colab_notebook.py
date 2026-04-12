@@ -145,8 +145,10 @@ pip_install([
     "ninja",
 ])
 
-# Nemotron remote code usa mamba-ssm e pode usar causal-conv1d.
-# Esses pacotes CUDA precisam enxergar o torch instalado, entao usamos --no-build-isolation.
+# Nemotron remote code precisa de mamba-ssm e pode usar causal-conv1d.
+# causal-conv1d e apenas fast-path opcional; no Colab com torch/CUDA novos ele
+# pode ficar compilando por muitos minutos. Pulamos esse build e usamos o
+# fallback injetado antes do load do modelo.
 os.environ.setdefault("MAX_JOBS", "4")
 if GPU_TIER.startswith("a100"):
     os.environ.setdefault("TORCH_CUDA_ARCH_LIST", "8.0")
@@ -157,7 +159,11 @@ if shutil.which("nvcc"):
 else:
     print("AVISO: nvcc nao encontrado. causal-conv1d pode falhar e o notebook usara fallback lento.")
 
-pip_install(["causal-conv1d", "--no-build-isolation"], allow_fail=True)
+SKIP_CAUSAL_CONV1D_BUILD = True
+if SKIP_CAUSAL_CONV1D_BUILD:
+    print("SKIP: causal-conv1d opcional; evitando build CUDA longo. Sera usado fallback sem fast-path.")
+else:
+    pip_install(["causal-conv1d", "--no-build-isolation"], allow_fail=True)
 pip_install(["mamba-ssm", "--no-build-isolation"], allow_fail=True)
 
 def check_import(label, code, required=False):
