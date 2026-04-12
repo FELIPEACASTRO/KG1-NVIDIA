@@ -59,6 +59,14 @@ def make_one_cell_source() -> str:
         'print("Falha ao baixar dataset do HF:", type(exc).__name__, str(exc)[:300])\n'
         '    print("Como fallback, selecione o arquivo v60_selective_train_boxed_dedup.jsonl no upload do Colab.")',
     )
+    combined = combined.replace(
+        '    HF_TOKEN = userdata.get("HF_TOKEN")',
+        '    HF_TOKEN = userdata.get("HF_TOKEN") or userdata.get("HF_KEY")',
+    )
+    combined = combined.replace(
+        'HF_TOKEN = HF_TOKEN or os.environ.get("HF_TOKEN") or os.environ.get("HUGGING_FACE_HUB_TOKEN")',
+        'HF_TOKEN = HF_TOKEN or os.environ.get("HF_TOKEN") or os.environ.get("HF_KEY") or os.environ.get("HUGGING_FACE_HUB_TOKEN")',
+    )
     combined = combined.replace("raise SystemExit(", "raise RuntimeError(")
     return combined
 
