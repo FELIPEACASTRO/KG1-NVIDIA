@@ -51,6 +51,7 @@ Config padrao desta run:
 - Output repo: `felipesp1983/kg1-nemotron-lora-v61-dedup-20260412-001`
 - Run: `v61-sft-dedup-weakfocus-m2500-lr5e5-a32-d0-20260412-001`
 - LoRA: rank `32`, alpha `32`, dropout `0.0`
+- Sem `causal-conv1d`, o treino usa max length efetivo `1536` para caber em BF16.
 - Gate de loss: promover se `< 6.87`; matar se `> 10` depois de 400 steps
 
 Nao cole tokens no notebook. Use Colab Secrets com `HF_TOKEN`, ou digite quando a celula pedir. O token nao sera impresso.
@@ -72,6 +73,8 @@ import os, re, json, time, random, hashlib, shutil, subprocess, getpass, gc
 from pathlib import Path
 from datetime import datetime, timezone
 from collections import Counter
+
+os.environ.setdefault("PYTORCH_CUDA_ALLOC_CONF", "expandable_segments:True")
 
 ARTIFACT_DIR = Path("/content/kg1_v61_artifacts")
 ARTIFACT_DIR.mkdir(parents=True, exist_ok=True)
@@ -238,6 +241,9 @@ SMOKE_TEST = False
 SMOKE_N = 64
 
 MAX_LENGTH = 2500
+AUTO_MEMORY_SAFE_FALLBACK = True
+FALLBACK_MAX_LENGTH_NO_CAUSAL = 1536
+OOM_RETRY_MAX_LENGTHS = [1280, 1024, 768]
 MAX_STEPS = 800
 SAVE_STEPS = 100
 NUM_TRAIN_EPOCHS = 1.0
@@ -462,6 +468,8 @@ print("MODEL_REVISION:", MODEL_REVISION)
 tokenizer = AutoTokenizer.from_pretrained(BASE_MODEL, revision=MODEL_REVISION, trust_remote_code=True, token=HF_TOKEN)
 if tokenizer.pad_token is None:
     tokenizer.pad_token = tokenizer.eos_token
+tokenizer.truncation_side = "left"
+print("Tokenizer truncation_side:", tokenizer.truncation_side, "(preserva o final com \\boxed{} em truncamento)")
 
 texts = []
 for ex in examples_for_training:
@@ -521,7 +529,7 @@ else:
     try:
         import peft.tuners.lora.model as peft_lora_model
         peft_lora_model.is_bnb_available = lambda: False
-        print("PEFT: bitsandbytes desativado para BF16; usando Linear/AdamW torch.")
+        print("PEFT: bitsandbytes desativado para BF16; usando Linear torch.")
     except Exception as exc:
         print("AVISO: nao consegui desativar bnb no PEFT:", type(exc).__name__, str(exc)[:160])
 
@@ -541,6 +549,17 @@ if not CAUSAL_CONV1D_READY:
     fake_causal_conv1d.__spec__ = importlib.machinery.ModuleSpec("causal_conv1d", loader=None)
     sys.modules.setdefault("causal_conv1d", fake_causal_conv1d)
     print("AVISO: causal_conv1d nao importou; liberando load do Nemotron com fallback sem fast-path.")
+
+effective_max_length = MAX_LENGTH
+if AUTO_MEMORY_SAFE_FALLBACK and effective_load_mode == "bf16" and not CAUSAL_CONV1D_READY:
+    effective_max_length = min(MAX_LENGTH, FALLBACK_MAX_LENGTH_NO_CAUSAL)
+    print(
+        "MEMORY SAFE: causal_conv1d ausente; "
+        f"MAX_LENGTH efetivo={effective_max_length} (solicitado={MAX_LENGTH}) "
+        "para evitar OOM no fallback torch do Nemotron/Mamba."
+    )
+else:
+    print("MAX_LENGTH efetivo:", effective_max_length)
 
 TRANSIENT_DOWNLOAD_MARKERS = (
     "IncompleteRead",
@@ -625,6 +644,9 @@ dataset_meta = {
     "by_family": gate["by_family"],
     "by_source": gate["by_source"],
 }
+BF16_OPTIM = "adafactor" if effective_load_mode == "bf16" else "adamw_torch"
+if effective_load_mode == "bf16":
+    print("BF16 optimizer:", BF16_OPTIM, "(menor uso de VRAM que AdamW torch para LoRA grande)")
 training_params = {
     "per_device_train_batch_size": PER_DEVICE_TRAIN_BATCH_SIZE,
     "gradient_accumulation_steps": GRADIENT_ACCUMULATION_STEPS,
@@ -632,7 +654,7 @@ training_params = {
     "warmup_ratio": WARMUP_RATIO,
     "weight_decay": WEIGHT_DECAY,
     "lr_scheduler_type": "cosine",
-    "optim": "paged_adamw_8bit" if effective_load_mode == "qlora_4bit" else "adamw_torch",
+    "optim": "paged_adamw_8bit" if effective_load_mode == "qlora_4bit" else BF16_OPTIM,
     "bf16": True,
     "logging_steps": 5,
     "save_steps": SAVE_STEPS,
@@ -640,6 +662,7 @@ training_params = {
     "max_grad_norm": MAX_GRAD_NORM,
 }
 lora_meta = {"r": LORA_R, "lora_alpha": LORA_ALPHA, "lora_dropout": LORA_DROPOUT, "target_modules": "all-linear", "bias": "none", "task_type": "CAUSAL_LM", "load_mode": effective_load_mode}
+trainer_train_max_length = effective_max_length
 
 def latest_logged_loss(log_history):
     for item in reversed(log_history or []):
@@ -659,7 +682,7 @@ def build_manifest(stage, checkpoint_step=None, latest_loss=None, elapsed_second
         "dataset": dataset_meta,
         "parser_gate": {"boxed_rate": gate["boxed_rate"], "parse_errors": gate["parse_errors"], "robust_gate_passed": True},
         "lora": lora_meta,
-        "training": {**training_params, "max_steps": effective_max_steps, "num_train_epochs": NUM_TRAIN_EPOCHS, "max_length": MAX_LENGTH, "seed": SEED, "latest_loss": latest_loss, "elapsed_seconds": elapsed_seconds},
+        "training": {**training_params, "max_steps": effective_max_steps, "num_train_epochs": NUM_TRAIN_EPOCHS, "requested_max_length": MAX_LENGTH, "max_length": trainer_train_max_length, "auto_memory_safe_fallback": AUTO_MEMORY_SAFE_FALLBACK, "seed": SEED, "latest_loss": latest_loss, "elapsed_seconds": elapsed_seconds},
         "promotion_gates": {"baseline_v30_loss": 6.87, "promote_if_final_loss_below": 6.87, "kill_if_loss_above_after_step_400": 10.0, "minimum_local_metric_accuracy": 0.69},
         "notes": ["Adapter-only upload. Do not submit mutable repo HEAD.", "No secret is embedded in this manifest."],
     }
@@ -709,30 +732,71 @@ length_key = "max_seq_length" if "max_seq_length" in sft_params else "max_length
 trainer_params = inspect.signature(SFTTrainer).parameters
 tok_key = "processing_class" if "processing_class" in trainer_params else "tokenizer"
 
-training_args = SFTConfig(**{
-    "output_dir": str(OUTPUT_DIR),
-    "dataset_text_field": "text",
-    length_key: MAX_LENGTH,
-    "packing": False,
-    "num_train_epochs": NUM_TRAIN_EPOCHS,
-    "max_steps": effective_max_steps,
-    "save_strategy": "steps",
-    "gradient_checkpointing": True,
-    "gradient_checkpointing_kwargs": {"use_reentrant": False},
-    "report_to": "none",
-    "dataloader_num_workers": 0,
-    **training_params,
-})
-trainer = SFTTrainer(model=model, train_dataset=train_ds, **{tok_key: tokenizer}, args=training_args, callbacks=[AdapterUploadCallback()])
+def make_trainer(train_max_length: int):
+    global trainer_train_max_length
+    trainer_train_max_length = int(train_max_length)
+    print("Criando Trainer com max_length efetivo:", trainer_train_max_length)
+    training_args = SFTConfig(**{
+        "output_dir": str(OUTPUT_DIR),
+        "dataset_text_field": "text",
+        length_key: trainer_train_max_length,
+        "packing": False,
+        "num_train_epochs": NUM_TRAIN_EPOCHS,
+        "max_steps": effective_max_steps,
+        "save_strategy": "steps",
+        "gradient_checkpointing": True,
+        "gradient_checkpointing_kwargs": {"use_reentrant": False},
+        "report_to": "none",
+        "dataloader_num_workers": 0,
+        **training_params,
+    })
+    return SFTTrainer(model=model, train_dataset=train_ds, **{tok_key: tokenizer}, args=training_args, callbacks=[AdapterUploadCallback()])
+
+trainer = make_trainer(effective_max_length)
 print("Trainer pronto. Manifesto pretrain:", OUTPUT_DIR / MANIFEST_NAME)
 """, "trainer_setup"))
 
 cells.append(code(r"""
 #@title 8. Treinar
-import time, pandas as pd
+import time, pandas as pd, gc, torch
+
+train_length_candidates = [int(trainer_train_max_length)]
+if effective_load_mode == "bf16" and not CAUSAL_CONV1D_READY:
+    train_length_candidates.extend([x for x in OOM_RETRY_MAX_LENGTHS if x < train_length_candidates[0]])
+print("TRAIN max_length candidates:", train_length_candidates)
 
 start = time.time()
-train_result = trainer.train()
+train_result = None
+last_oom = None
+for attempt_index, candidate_max_length in enumerate(train_length_candidates, start=1):
+    try:
+        if int(trainer_train_max_length) != int(candidate_max_length):
+            trainer = make_trainer(candidate_max_length)
+        print(f"TRAIN attempt {attempt_index}/{len(train_length_candidates)} com max_length={candidate_max_length}")
+        train_result = trainer.train()
+        break
+    except torch.cuda.OutOfMemoryError as exc:
+        last_oom = exc
+        print("AVISO: CUDA OOM durante treino com max_length", candidate_max_length)
+        print(str(exc).splitlines()[0][:500])
+        try:
+            model.zero_grad(set_to_none=True)
+        except Exception:
+            pass
+        try:
+            del trainer
+        except Exception:
+            pass
+        gc.collect()
+        torch.cuda.empty_cache()
+        if attempt_index == len(train_length_candidates):
+            raise RuntimeError(
+                "Treino ainda deu OOM mesmo apos reduzir max_length. "
+                "Use LOAD_MODE='qlora_4bit' com bitsandbytes funcional ou reduza LORA_R/MAX_LENGTH."
+            ) from last_oom
+        next_length = train_length_candidates[attempt_index]
+        print("Retry do treino com max_length menor:", next_length)
+
 elapsed = time.time() - start
 final_loss = latest_logged_loss(trainer.state.log_history)
 
