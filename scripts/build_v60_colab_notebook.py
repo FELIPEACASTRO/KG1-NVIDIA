@@ -139,11 +139,17 @@ pip_install([
     "safetensors==0.4.5",
     "pandas",
     "matplotlib",
-    "bitsandbytes==0.45.0",
     "sentencepiece",
     "einops",
     "ninja",
 ])
+
+# bitsandbytes e necessario apenas para QLoRA. No Colab atual com torch 2.10/cu128,
+# bnb 0.45 pode instalar sem binario CUDA e quebrar o PEFT mesmo no modo BF16
+# com "No module named 'triton.ops'". Removemos qualquer resto aqui; QLoRA instala
+# bnb sob demanda no bloco de load.
+subprocess.run([sys.executable, "-m", "pip", "uninstall", "-y", "bitsandbytes"], text=True, capture_output=True)
+print("CLEAN: bitsandbytes removido do caminho BF16; sera instalado apenas se LOAD_MODE=qlora_4bit.")
 
 # Nemotron remote code precisa de mamba-ssm e pode usar causal-conv1d.
 # causal-conv1d e apenas fast-path opcional; no Colab com torch/CUDA novos ele
@@ -471,8 +477,8 @@ print("Primeiro exemplo:", texts[0][:300].replace("\n", " "))
 
 cells.append(code(r"""
 #@title 6. Carregar modelo e aplicar LoRA/QLoRA
-import torch, gc, sys, types, importlib.machinery
-from transformers import AutoModelForCausalLM, BitsAndBytesConfig
+import torch, gc, sys, types, importlib.machinery, subprocess
+from transformers import AutoModelForCausalLM
 from peft import LoraConfig, get_peft_model, prepare_model_for_kbit_training
 
 if LOAD_MODE == "auto":
@@ -491,6 +497,18 @@ model_kwargs = {
     "torch_dtype": torch.bfloat16,
 }
 if effective_load_mode == "qlora_4bit":
+    print("QLoRA ativo: instalando bitsandbytes sob demanda.")
+    result = subprocess.run([sys.executable, "-m", "pip", "install", "-q", "-U", "bitsandbytes"], text=True, capture_output=True)
+    if result.returncode != 0:
+        print("\n".join((result.stdout + "\n" + result.stderr).strip().splitlines()[-30:]))
+        raise RuntimeError("Falha ao instalar bitsandbytes para QLoRA.")
+    try:
+        import bitsandbytes as bnb  # noqa: F401
+        print("bitsandbytes import OK para QLoRA.")
+    except Exception as exc:
+        raise RuntimeError("bitsandbytes nao importou; use A100 80GB/H100 em BF16 ou ajuste versao bnb.") from exc
+    from transformers import BitsAndBytesConfig
+
     bnb_config = BitsAndBytesConfig(
         load_in_4bit=True,
         bnb_4bit_use_double_quant=True,
@@ -500,6 +518,12 @@ if effective_load_mode == "qlora_4bit":
     model_kwargs.update({"device_map": "auto", "quantization_config": bnb_config})
 else:
     model_kwargs.update({"device_map": {"": 0}})
+    try:
+        import peft.tuners.lora.model as peft_lora_model
+        peft_lora_model.is_bnb_available = lambda: False
+        print("PEFT: bitsandbytes desativado para BF16; usando Linear/AdamW torch.")
+    except Exception as exc:
+        print("AVISO: nao consegui desativar bnb no PEFT:", type(exc).__name__, str(exc)[:160])
 
 try:
     import causal_conv1d  # noqa: F401
@@ -575,7 +599,7 @@ training_params = {
     "warmup_ratio": WARMUP_RATIO,
     "weight_decay": WEIGHT_DECAY,
     "lr_scheduler_type": "cosine",
-    "optim": "paged_adamw_8bit" if effective_load_mode == "qlora_4bit" else "adamw_bnb_8bit",
+    "optim": "paged_adamw_8bit" if effective_load_mode == "qlora_4bit" else "adamw_torch",
     "bf16": True,
     "logging_steps": 5,
     "save_steps": SAVE_STEPS,
