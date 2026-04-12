@@ -477,7 +477,7 @@ print("Primeiro exemplo:", texts[0][:300].replace("\n", " "))
 
 cells.append(code(r"""
 #@title 6. Carregar modelo e aplicar LoRA/QLoRA
-import torch, gc, sys, types, importlib.machinery, subprocess
+import torch, gc, sys, types, importlib.machinery, subprocess, time
 from transformers import AutoModelForCausalLM
 from peft import LoraConfig, get_peft_model, prepare_model_for_kbit_training
 
@@ -542,7 +542,40 @@ if not CAUSAL_CONV1D_READY:
     sys.modules.setdefault("causal_conv1d", fake_causal_conv1d)
     print("AVISO: causal_conv1d nao importou; liberando load do Nemotron com fallback sem fast-path.")
 
-model = AutoModelForCausalLM.from_pretrained(BASE_MODEL, **model_kwargs)
+TRANSIENT_DOWNLOAD_MARKERS = (
+    "IncompleteRead",
+    "ChunkedEncodingError",
+    "ProtocolError",
+    "Connection broken",
+    "ConnectionResetError",
+    "Read timed out",
+    "RemoteDisconnected",
+    "Temporary failure",
+)
+
+def is_transient_download_error(exc: Exception) -> bool:
+    message = repr(exc)
+    return any(marker in message for marker in TRANSIENT_DOWNLOAD_MARKERS)
+
+def load_model_with_retries(max_attempts: int = 5):
+    last_exc = None
+    for attempt in range(1, max_attempts + 1):
+        try:
+            print(f"MODEL LOAD attempt {attempt}/{max_attempts}")
+            return AutoModelForCausalLM.from_pretrained(BASE_MODEL, **model_kwargs)
+        except Exception as exc:
+            last_exc = exc
+            if not is_transient_download_error(exc) or attempt == max_attempts:
+                raise
+            wait_seconds = min(90, 15 * attempt)
+            print("AVISO: falha transiente no download/load do modelo:", type(exc).__name__, str(exc)[:500])
+            print(f"Retry em {wait_seconds}s. O cache parcial do Hugging Face sera reutilizado.")
+            gc.collect()
+            torch.cuda.empty_cache()
+            time.sleep(wait_seconds)
+    raise last_exc
+
+model = load_model_with_retries()
 
 DISABLE_NEMOTRON_FAST_PATH = False
 if DISABLE_NEMOTRON_FAST_PATH:
