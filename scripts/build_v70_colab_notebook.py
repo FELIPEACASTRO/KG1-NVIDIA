@@ -393,42 +393,79 @@ print(f"Total tokens: {sum(token_counts):,}")
 # ─── Cell 7: Train ───────────────────────────────────────────────────
 cells.append(code(r"""
 #@title 7. Treinar SFT
-from transformers import TrainingArguments, DataCollatorForLanguageModeling
-from trl import SFTTrainer
+from transformers import TrainingArguments
+from trl import SFTTrainer, SFTConfig
 
-training_args = TrainingArguments(
-    output_dir=str(OUTPUT_DIR / "checkpoints"),
-    num_train_epochs=NUM_TRAIN_EPOCHS,
-    per_device_train_batch_size=PER_DEVICE_TRAIN_BATCH_SIZE,
-    gradient_accumulation_steps=GRADIENT_ACCUMULATION_STEPS,
-    learning_rate=LEARNING_RATE,
-    warmup_ratio=WARMUP_RATIO,
-    weight_decay=WEIGHT_DECAY,
-    max_grad_norm=MAX_GRAD_NORM,
-    adam_beta1=ADAM_BETA1,
-    adam_beta2=ADAM_BETA2,
-    lr_scheduler_type="linear",  # huikang: linear decay to 0
-    bf16=True,
-    logging_steps=5,
-    save_steps=SAVE_STEPS,
-    save_total_limit=SAVE_TOTAL_LIMIT,
-    seed=SEED,
-    report_to="none",
-    remove_unused_columns=False,
-    dataloader_pin_memory=False,
-)
+# Detectar versao do TRL para compatibilidade
+import trl as _trl
+TRL_VERSION = tuple(int(x) for x in _trl.__version__.split('.')[:2])
+print(f"TRL version: {_trl.__version__} (major.minor: {TRL_VERSION})")
 
-data_collator = DataCollatorForLanguageModeling(tokenizer=tokenizer, mlm=False)
-
-trainer = SFTTrainer(
-    model=model,
-    args=training_args,
-    train_dataset=ds,
-    data_collator=data_collator,
-    dataset_text_field="text",
-    max_seq_length=MAX_LENGTH,
-    packing=False,
-)
+# TRL >= 5.0 usa SFTConfig ao inves de TrainingArguments
+# e nao aceita dataset_text_field como kwarg separado
+if TRL_VERSION >= (5, 0):
+    sft_config = SFTConfig(
+        output_dir=str(OUTPUT_DIR / "checkpoints"),
+        num_train_epochs=NUM_TRAIN_EPOCHS,
+        per_device_train_batch_size=PER_DEVICE_TRAIN_BATCH_SIZE,
+        gradient_accumulation_steps=GRADIENT_ACCUMULATION_STEPS,
+        learning_rate=LEARNING_RATE,
+        warmup_ratio=WARMUP_RATIO,
+        weight_decay=WEIGHT_DECAY,
+        max_grad_norm=MAX_GRAD_NORM,
+        adam_beta1=ADAM_BETA1,
+        adam_beta2=ADAM_BETA2,
+        lr_scheduler_type="linear",
+        bf16=True,
+        logging_steps=5,
+        save_steps=SAVE_STEPS,
+        save_total_limit=SAVE_TOTAL_LIMIT,
+        seed=SEED,
+        report_to="none",
+        dataset_text_field="text",
+        max_seq_length=MAX_LENGTH,
+        packing=False,
+        dataloader_pin_memory=False,
+    )
+    trainer = SFTTrainer(
+        model=model,
+        args=sft_config,
+        train_dataset=ds,
+        processing_class=tokenizer,
+    )
+else:
+    from transformers import DataCollatorForLanguageModeling
+    training_args = TrainingArguments(
+        output_dir=str(OUTPUT_DIR / "checkpoints"),
+        num_train_epochs=NUM_TRAIN_EPOCHS,
+        per_device_train_batch_size=PER_DEVICE_TRAIN_BATCH_SIZE,
+        gradient_accumulation_steps=GRADIENT_ACCUMULATION_STEPS,
+        learning_rate=LEARNING_RATE,
+        warmup_ratio=WARMUP_RATIO,
+        weight_decay=WEIGHT_DECAY,
+        max_grad_norm=MAX_GRAD_NORM,
+        adam_beta1=ADAM_BETA1,
+        adam_beta2=ADAM_BETA2,
+        lr_scheduler_type="linear",
+        bf16=True,
+        logging_steps=5,
+        save_steps=SAVE_STEPS,
+        save_total_limit=SAVE_TOTAL_LIMIT,
+        seed=SEED,
+        report_to="none",
+        remove_unused_columns=False,
+        dataloader_pin_memory=False,
+    )
+    data_collator = DataCollatorForLanguageModeling(tokenizer=tokenizer, mlm=False)
+    trainer = SFTTrainer(
+        model=model,
+        args=training_args,
+        train_dataset=ds,
+        data_collator=data_collator,
+        dataset_text_field="text",
+        max_seq_length=MAX_LENGTH,
+        packing=False,
+    )
 
 print(f"Iniciando treino: {MAX_STEPS} steps, batch={PER_DEVICE_TRAIN_BATCH_SIZE}x{GRADIENT_ACCUMULATION_STEPS}")
 print(f"Dataset: {len(ds)} exemplos, MaxLen: {MAX_LENGTH}")
