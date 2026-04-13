@@ -89,33 +89,85 @@ else:
 
 # ─── Cell 2: Install dependencies ───────────────────────────────────
 cells.append(code(r"""
-#@title 2. Instalar dependencias
-import subprocess, sys
+#@title 2. Instalar dependencias (Nemotron-H requer mamba-ssm)
+import importlib.metadata as metadata
+import os, shutil, subprocess, sys
 
-packages = [
-    "transformers>=4.46",
-    "peft>=0.18",
-    "datasets",
-    "accelerate",
-    "bitsandbytes",
-    "trl>=0.14",
-    "safetensors",
+def pip_install(args, allow_fail=False):
+    print("INSTALL:", " ".join(args))
+    result = subprocess.run([sys.executable, "-m", "pip", "install", "-q"] + args, text=True, capture_output=True)
+    if result.returncode != 0:
+        print("INSTALL FALHOU:", " ".join(args))
+        tail = (result.stdout + "\n" + result.stderr).strip().splitlines()[-20:]
+        print("\n".join(tail))
+        if not allow_fail:
+            raise RuntimeError("pip install failed: " + " ".join(args))
+    return result.returncode
+
+pip_install(["-U", "pip", "setuptools", "wheel"])
+pip_install(["packaging"])
+
+# Detectar torch pre-instalado (Colab ja vem com CUDA)
+try:
+    import torch
+    print(f"Torch: {torch.__version__} | CUDA: {torch.version.cuda} | available: {torch.cuda.is_available()}")
+except Exception:
+    pip_install(["torch"])
+
+pip_install([
+    "transformers>=4.48",
+    "peft>=0.14",
+    "trl>=0.13",
+    "datasets>=3.2",
+    "accelerate>=1.2",
     "huggingface_hub",
+    "safetensors",
+    "pandas",
     "sentencepiece",
-    "protobuf",
-]
+    "einops",
+    "ninja",
+])
 
-for retries in range(3):
+# mamba-ssm e OBRIGATORIO para Nemotron-H (arquitetura hibrida Mamba+Attention)
+# causal-conv1d e opcional (fast-path), mas pode falhar no build CUDA
+os.environ.setdefault("MAX_JOBS", "4")
+
+# Detectar arch CUDA
+if "H100" in gpu_name.upper() or "HOPPER" in gpu_name.upper():
+    os.environ.setdefault("TORCH_CUDA_ARCH_LIST", "9.0")
+elif "A100" in gpu_name.upper():
+    os.environ.setdefault("TORCH_CUDA_ARCH_LIST", "8.0")
+
+# Tentar causal-conv1d (opcional, pode falhar)
+pip_install(["causal-conv1d>=1.4.0", "--no-build-isolation"], allow_fail=True)
+
+# mamba-ssm (OBRIGATORIO)
+pip_install(["mamba-ssm>=2.2.2", "--no-build-isolation"], allow_fail=True)
+
+# Verificar imports
+def check_import(label, code, required=False):
     try:
-        subprocess.check_call([sys.executable, "-m", "pip", "install", "-q", "--no-deps"] + packages)
-        break
-    except subprocess.CalledProcessError:
-        if retries == 2:
-            raise
-        print(f"Retry {retries+1}...")
-        import time; time.sleep(5)
+        exec(code, {})
+        print(f"{label}: OK")
+        return True
+    except Exception as exc:
+        print(f"{label}: FALHOU ({type(exc).__name__}: {str(exc)[:200]})")
+        if required:
+            raise RuntimeError(f"Dependencia obrigatoria: {label}") from exc
+        return False
 
-print("Dependencias instaladas.")
+CAUSAL_CONV1D_OK = check_import("causal_conv1d", "import causal_conv1d")
+MAMBA_SSM_OK = check_import("mamba_ssm", "from mamba_ssm.ops.triton.layernorm_gated import rmsnorm_fn", required=True)
+
+if not CAUSAL_CONV1D_OK:
+    print("AVISO: causal_conv1d ausente. Sera usado fallback sem fast-path.")
+
+# Print versions
+for pkg in ["torch", "transformers", "peft", "trl", "accelerate", "mamba-ssm", "causal-conv1d"]:
+    try:
+        print(f"  {pkg}: {metadata.version(pkg)}")
+    except: pass
+print("Dependencias OK.")
 """, "install_deps"))
 
 # ─── Cell 3: Auth + Config ──────────────────────────────────────────
@@ -239,8 +291,20 @@ else:
 cells.append(code(r"""
 #@title 5. Carregar modelo + LoRA
 import torch
-from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
+from transformers import AutoModelForCausalLM, AutoTokenizer
 from peft import LoraConfig, get_peft_model, TaskType
+
+# Patch: se causal_conv1d nao instalou, injetar stub para evitar ImportError no load
+try:
+    import causal_conv1d
+except ImportError:
+    import types, sys as _sys
+    stub = types.ModuleType("causal_conv1d")
+    stub.__version__ = "0.0.0"
+    stub.causal_conv1d_fn = None
+    stub.causal_conv1d_update = None
+    _sys.modules["causal_conv1d"] = stub
+    print("Injetado stub causal_conv1d (fallback sem fast-path)")
 
 print(f"Carregando {BASE_MODEL}...")
 
@@ -248,25 +312,13 @@ tokenizer = AutoTokenizer.from_pretrained(BASE_MODEL, trust_remote_code=True, to
 if tokenizer.pad_token is None:
     tokenizer.pad_token = tokenizer.eos_token
 
-# Load model
-if USE_QLORA:
-    print("Usando QLoRA 4-bit...")
-    bnb_config = BitsAndBytesConfig(
-        load_in_4bit=True,
-        bnb_4bit_quant_type="nf4",
-        bnb_4bit_compute_dtype=torch.bfloat16,
-        bnb_4bit_use_double_quant=True,
-    )
-    model = AutoModelForCausalLM.from_pretrained(
-        BASE_MODEL, quantization_config=bnb_config,
-        device_map="auto", trust_remote_code=True, token=HF_TOKEN,
-    )
-else:
-    print("Usando BF16 full precision...")
-    model = AutoModelForCausalLM.from_pretrained(
-        BASE_MODEL, torch_dtype=torch.bfloat16,
-        device_map="auto", trust_remote_code=True, token=HF_TOKEN,
-    )
+# Load model em BF16 (H100/A100 80GB tem VRAM suficiente)
+print("Usando BF16 full precision...")
+model = AutoModelForCausalLM.from_pretrained(
+    BASE_MODEL, dtype=torch.bfloat16,
+    device_map="auto", trust_remote_code=True, token=HF_TOKEN,
+    attn_implementation="eager",  # evita flash_attn issues
+)
 
 # LoRA config - all-linear (huikang approach)
 lora_config = LoraConfig(
