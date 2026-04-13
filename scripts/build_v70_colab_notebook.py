@@ -141,8 +141,14 @@ elif "A100" in gpu_name.upper():
 # Tentar causal-conv1d (opcional, pode falhar)
 pip_install(["causal-conv1d>=1.4.0", "--no-build-isolation"], allow_fail=True)
 
-# mamba-ssm (OBRIGATORIO)
-pip_install(["mamba-ssm>=2.2.2", "--no-build-isolation"], allow_fail=True)
+# mamba-ssm (OBRIGATORIO) - tentar varias estrategias
+mamba_ok = pip_install(["mamba-ssm>=2.2.2", "--no-build-isolation"], allow_fail=True)
+if mamba_ok != 0:
+    print("Tentando mamba-ssm sem --no-build-isolation...")
+    mamba_ok = pip_install(["mamba-ssm>=2.2.2"], allow_fail=True)
+if mamba_ok != 0:
+    print("Tentando mamba-ssm via pip direto...")
+    mamba_ok = pip_install(["mamba-ssm"], allow_fail=True)
 
 # Verificar imports
 def check_import(label, code, required=False):
