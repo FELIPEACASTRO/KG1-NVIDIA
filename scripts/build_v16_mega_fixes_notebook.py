@@ -291,14 +291,22 @@ cells.append(code([
     "print(f'Loaded in {(time.time()-t0)/60:.1f}min | {torch.cuda.memory_allocated()/1e9:.1f}GB')",
 ]))
 
-# Cell 7: LoRA (V16 FIX #4: no conv1d + FIX #8: skip routed experts)
-cells.append(md(["## Cell 7 — LoRA (V16 FIX #4: no conv1d, #8: skip routed experts)"]))
+# Cell 7: LoRA (V16.1 HOTFIX: skip prepare_model_for_kbit_training to avoid FP32 upcast OOM)
+cells.append(md(["## Cell 7 — LoRA (V16.1 HOTFIX: skip FP32 upcast, no conv1d, no routed experts)"]))
 cells.append(code([
-    "from peft import LoraConfig, get_peft_model, prepare_model_for_kbit_training",
+    "from peft import LoraConfig, get_peft_model",
     "",
-    "model = prepare_model_for_kbit_training(model, use_gradient_checkpointing=True)",
-    "model.gradient_checkpointing_enable()",
-    "model.enable_input_require_grads()",
+    "# V16.1 HOTFIX: DO NOT call prepare_model_for_kbit_training —",
+    "# it upcasts out_proj + lm_head (BF16 via skip_modules) to FP32",
+    "# which causes OOM (+4GB → 77GB allocated / 79GB total on H100).",
+    "# Manually do only what we need:",
+    "model.gradient_checkpointing_enable(gradient_checkpointing_kwargs={'use_reentrant': False})",
+    "if hasattr(model, 'enable_input_require_grads'):",
+    "    model.enable_input_require_grads()",
+    "else:",
+    "    def _make_inputs_require_grad(module, inp, out): out.requires_grad_(True)",
+    "    model.get_input_embeddings().register_forward_hook(_make_inputs_require_grad)",
+    "print(f'VRAM after grad_ckpt+requires_grad: {torch.cuda.memory_allocated()/1e9:.1f} GB')",
     "",
     "# V16 FIXES:",
     "# #4: Remove conv1d (vLLM submission fails silently)",
