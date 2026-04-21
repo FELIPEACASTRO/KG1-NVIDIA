@@ -15,7 +15,7 @@ All bugs from 4-agent audit fixed:
 import json
 import os
 
-HEADER = '''# KG1 V77 FIXED - All 10 audit fixes from double-check
+HEADER = '''# KG1 V77 FIXED v2 - 10 audit fixes + 2 fixes from 5-AI double-check
 
 ## Bugs fixed from 4-agent audit of V76:
 
@@ -30,6 +30,19 @@ HEADER = '''# KG1 V77 FIXED - All 10 audit fixes from double-check
 9. MaxMinSFTTrainer instance vars (was class vars)
 10. stdout.flush() before kernel kill
 
+## Extra fixes from 5-AI rigorous double-check (2026-04-21):
+
+11. **lora_alpha 32 -> 16** (Claude Opus 4.7 rec; matches v30 PROVEN 0.68 baseline)
+    5/5 APIs consensus: alpha=32 + r=32 + all-linear = ~65% overfit probability
+    - GPT-5.4: "r=32 all-linear on 6.4k is reckless" (recommended r=8)
+    - Claude Opus 4.7: "alpha=16 halves effective LoRA magnitude" (keep r=32)
+    - GPT-5.3-codex: "cut adapter capacity" (recommended r=16)
+    - Gemini-2.5: "lr too conservative" (disagreed, alone)
+    Decision: alpha=16 is the conservative PROVEN change (v30 = 0.68 used alpha=16)
+
+12. **Section 11 submit: direct kaggle CLI** (submit_kaggle.py expects --hf-repo/--local-dir,
+    NOT --zip as V77 v1 used). Added slot quota check (5/day).
+
 ## Como usar
 
 1. Runtime -> H100 HighRAM + disconnect old
@@ -38,6 +51,7 @@ HEADER = '''# KG1 V77 FIXED - All 10 audit fixes from double-check
 4. Cell 5: treino ~10h com early stopping ativo
 
 ## Target: train_loss 0.30-0.80 final, eval_loss < 3x train_loss
+## Prediction (5-AI average): likely 0.15-0.40 range; EarlyStop saves eval_loss regardless
 '''
 
 
@@ -334,7 +348,7 @@ class Config:
     mamba_ssm_cache_dtype: str = 'float32'
     tie_word_embeddings: bool = False
     lora_r: int = 32
-    lora_alpha: int = 32
+    lora_alpha: int = 16  # FIX #11 (5-AI consensus): matches v30 PROVEN 0.68 baseline, halves overfit pressure
     lora_dropout: float = 0.10
     lora_target_modules: str = 'all-linear'
     epochs: int = 1
@@ -720,7 +734,7 @@ log(f'Gate: {gate_msg}')
 with open(out_dir / 'gate_decision.json', 'w') as f:
     json.dump({'go': GO, 'msg': gate_msg, 'score': local_score_val}, f)
 
-section('SECTION 11: Submit (if GO)')
+section('SECTION 11: Submit (if GO) - FIX #12: direct kaggle CLI (submit_kaggle.py needs --hf-repo/--local-dir not --zip)')
 if not GO: log('NO-GO -> skipping')
 else:
     import zipfile
@@ -729,23 +743,42 @@ else:
         for fn in ['adapter_config.json', 'adapter_model.safetensors']:
             zf.write(out_dir / fn, arcname=fn)
     log(f'zip: {zip_path.stat().st_size/(1024*1024):.2f}MB')
-    gate_script = Path('/content/kg1/scripts/kg1_submission_gate.py')
-    r2 = subprocess.run([sys.executable, str(gate_script), '--zip', str(zip_path)],
-                       capture_output=True, text=True)
-    if r2.returncode == 0 and os.environ.get('KAGGLE_USERNAME'):
+    # Basic sanity: zip has required files, zip < 500MB (Kaggle limit)
+    zip_mb = zip_path.stat().st_size / (1024*1024)
+    assert zip_mb < 500, f'zip too big: {zip_mb}MB'
+    # Check daily slot before submit (Kaggle hard limit: 5/day)
+    slot_ok = True
+    try:
+        rc = subprocess.run(['kaggle', 'competitions', 'submissions',
+                             '-c', 'nvidia-nemotron-model-reasoning-challenge', '--csv'],
+                            capture_output=True, text=True, timeout=60)
+        if rc.returncode == 0:
+            from io import StringIO
+            import csv as _csv
+            today = datetime.datetime.now().strftime('%Y-%m-%d')
+            today_count = sum(1 for r in _csv.DictReader(StringIO(rc.stdout))
+                              if r.get('date', '').startswith(today))
+            log(f'Kaggle slots today: {today_count}/5')
+            slot_ok = today_count < 5
+    except Exception as e:
+        log(f'WARN slot check: {e}')
+    if not slot_ok:
+        log('Slot quota exhausted (5/5). Skipping submit.')
+    elif os.environ.get('KAGGLE_USERNAME'):
         msg = f'V77_FIXED {datetime.datetime.now().strftime("%Y-%m-%d %H:%M BRT")}'
-        submit_script = Path('/content/kg1/scripts/submit_kaggle.py')
-        if submit_script.exists():
-            cmd = [sys.executable, str(submit_script), '--zip', str(zip_path), '--message', msg]
-        else:
-            cmd = ['kaggle', 'competitions', 'submit',
-                   '-c', 'nvidia-nemotron-model-reasoning-challenge',
-                   '-f', str(zip_path), '-m', msg]
-        r3 = subprocess.run(cmd, capture_output=True, text=True)
+        # Direct kaggle CLI (bypass submit_kaggle.py which needs --hf-repo/--local-dir)
+        cmd = ['kaggle', 'competitions', 'submit',
+               '-c', 'nvidia-nemotron-model-reasoning-challenge',
+               '-f', str(zip_path), '-m', msg]
+        r3 = subprocess.run(cmd, capture_output=True, text=True, timeout=600)
         with open(out_dir / 'kaggle_submit.json', 'w') as f:
             json.dump({'msg': msg, 'rc': r3.returncode,
                       'stdout': r3.stdout[-1000:], 'stderr': r3.stderr[-500:]}, f)
         log(f'Submit rc={r3.returncode}')
+        if r3.returncode == 0:
+            log('SUBMITTED. Check https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/submissions')
+        else:
+            log(f'Submit FAILED: {r3.stderr[-300:]}')
 
 section('ALL DONE V77')
 log(f'Total: {(time.time() - START_TIME)/3600:.2f}h  Score: {local_score_val}  Gate: {GO}')
