@@ -33,15 +33,31 @@ HEADER = '''# KG1 V77 FIXED v2 - 10 audit fixes + 2 fixes from 5-AI double-check
 ## Extra fixes from 5-AI rigorous double-check (2026-04-21):
 
 11. **lora_alpha 32 -> 16** (Claude Opus 4.7 rec; matches v30 PROVEN 0.68 baseline)
-    5/5 APIs consensus: alpha=32 + r=32 + all-linear = ~65% overfit probability
-    - GPT-5.4: "r=32 all-linear on 6.4k is reckless" (recommended r=8)
-    - Claude Opus 4.7: "alpha=16 halves effective LoRA magnitude" (keep r=32)
-    - GPT-5.3-codex: "cut adapter capacity" (recommended r=16)
-    - Gemini-2.5: "lr too conservative" (disagreed, alone)
-    Decision: alpha=16 is the conservative PROVEN change (v30 = 0.68 used alpha=16)
+12. **Section 11 submit: direct kaggle CLI** (submit_kaggle.py expects --hf-repo/--local-dir)
 
-12. **Section 11 submit: direct kaggle CLI** (submit_kaggle.py expects --hf-repo/--local-dir,
-    NOT --zip as V77 v1 used). Added slot quota check (5/day).
+## Triple-check 100x (14/15 APIs across 5 specific gaps, 2026-04-21):
+
+GAP A (chat template/collator): 3/3 APIs convergiram: `<|im_start|>assistant` tokeniza em
+2-3 IDs, DataCollator faz subsequence match, MAS se standalone encoding difere do in-context
+encoding (whitespace merge), resulta em 0 tokens unmasked -> loss=0 -> no-op training.
+-> FIX #13 APLICADO: diagnostic pre-train valida collator mask em 3 samples.
+
+GAP B (max_min_logprob + ignore_index): 3/3 APIs erraram - FALSE POSITIVE. Verifiquei o
+source `src/losses/max_min_logprob.py` linhas 57-65: JA usa `labels.clamp(min=0)` antes
+de gather E `masked_fill(~mask, float("inf"))` para preservar -100. Robust as-is.
+
+GAP C (mamba-ssm + transformers): 3/3 APIs alertaram risco ABI. Gemini especifico:
+"HIGH C++ ABI risk torch CXX11_ABI vs wheel cxx11abiFALSE". Mitigacao:
+-> FIX #15 APLICADO: imprime `torch._C._GLIBCXX_USE_CXX11_ABI` antes de importar mamba.
+Se True -> warning claro (wheels esperam False). Default PyPI torch = False -> OK.
+
+GAP D (LR/batch/dataset): 2/3 APIs dizem manter lr=5e-5, Claude Opus sugere 3-4e-5
+ligeiramente mais safe. Consensus: patience=3 OK, plateau esperado step 150-250,
+EarlyStop fire ~275-325. Mantenho lr=5e-5 (blast radius, alpha=16 ja conservador).
+
+GAP E (callbacks): 3/3 APIs: stack atual correto. `processing_class=tok` eh current
+TRL 0.25 style. `load_best_model_at_end=True` protege best checkpoint da rotacao.
+Nenhum bug conhecido com LoRA + grad_checkpoint + load_best. -> NO CHANGE NEEDED.
 
 ## Como usar
 
@@ -226,10 +242,19 @@ for name, url in WHEELS.items():
         raise RuntimeError(f'{name} failed')
     print(f'    [OK] {name}')
 
-print('\nVerifying imports...')
+print('\nVerifying imports + FIX #15 (triple-check GAP C: ABI check)...')
 for m in list(sys.modules.keys()):
     if any(x in m for x in ['mamba_ssm', 'causal_conv1d']):
         del sys.modules[m]
+
+# FIX #15 (triple-check 3/3 APIs): ABI check before importing mamba_ssm
+# Wheels were compiled with cxx11abiFALSE. torch default PyPI is also FALSE.
+# If mismatch -> segfault at import.
+_torch_abi = torch._C._GLIBCXX_USE_CXX11_ABI
+print(f'  torch CXX11_ABI: {_torch_abi} (wheels=False)')
+if _torch_abi:
+    print('  CRITICAL: torch built with CXX11_ABI=True, wheels are False -> segfault risk')
+    print('  If mamba_ssm import crashes, this is the cause')
 import mamba_ssm
 print(f'  [OK] mamba_ssm')
 import causal_conv1d
@@ -599,8 +624,30 @@ try:
             tokenizer=tok, mlm=False,
         )
         log(f'CompletionOnlyLM ok: "{response_template}" ({len(response_template_ids)} ids)')
+
+        # FIX #13 (triple-check GAP A, 3/3 APIs): diagnostic pre-train sanity
+        # Validate that response_template_ids actually appear in tokenized sample
+        # and that labels have non-masked tokens. If 100% masked -> loss=0 -> no-op training.
+        log('FIX #13: validating collator masks correctly on 3 samples...')
+        try:
+            sample_batch = [ds_train[i] for i in range(min(3, len(ds_train)))]
+            tokenized = [tok(s['text'], truncation=True, max_length=CFG.max_length,
+                             return_tensors='pt') for s in sample_batch]
+            collated = collator([{'input_ids': t['input_ids'][0],
+                                  'attention_mask': t['attention_mask'][0]} for t in tokenized])
+            labels_ck = collated['labels']
+            nonmask = (labels_ck != -100).sum().item()
+            total = (labels_ck != tok.pad_token_id).sum().item() if tok.pad_token_id else labels_ck.numel()
+            pct = 100 * nonmask / max(1, total)
+            log(f'  Collator diagnostic: {nonmask}/{total} tokens non-masked ({pct:.1f}%)')
+            assert nonmask > 50, f'FAIL: only {nonmask} tokens unmasked - template not matching'
+            assert pct > 5, f'FAIL: only {pct:.1f}% unmasked - will collapse to loss=0'
+            log('  [OK] collator masks ~correctly - loss will train on assistant tokens')
+        except Exception as e:
+            log(f'  WARN diagnostic failed: {e} - falling back to default collator (no masking)')
+            collator = None
     else:
-        log(f'WARN: no response_template found, using default collator')
+        log(f'WARN: no response_template found, using default collator (CE on ALL tokens)')
         collator = None
 except Exception as e:
     log(f'WARN DataCollatorForCompletionOnlyLM: {e}')
