@@ -31,7 +31,20 @@ from typing import Any
 
 import pandas as pd
 
-BOXED_RE = re.compile(r"\\boxed\{([^{}]+)\}")
+import math
+
+# Metric oficial Kaggle (reverse-engineered via Agent D1, 2026-04-21):
+# - Regex aceita \boxed{X} ou \boxed{X sem fechamento (EOF)
+# - Ordem: boxed -> "final answer is X" -> ultimo numero -> ultima linha -> NOT_FOUND
+# - verify: float + math.isclose rel_tol=1e-2 abs_tol=1e-5, fallback lower-case string
+# - NAO existe branch por categoria (bit_manipulation nao tem strict [01]+ match)
+BOXED_RE = re.compile(r"\\boxed\{([^}]*)(?:\}|$)")
+
+FINAL_ANSWER_RE = re.compile(
+    r"(?:[Tt]he\s+)?[Ff]inal\s+answer\s*(?:is)?\s*[:：]\s*(.+?)(?:\n|$)",
+    re.IGNORECASE,
+)
+NUMBER_RE = re.compile(r"-?\d+(?:\.\d+)?")
 
 # Alinhado com kg1_submission_gate.py
 REQUIRED_IN_TARGET = "in_proj"
@@ -40,29 +53,63 @@ MAX_LORA_RANK = 32
 
 
 def extract_boxed(text: str) -> str | None:
-    """Extract last \\boxed{} content."""
+    """Extract final answer seguindo fallback EXATO do metric oficial Kaggle.
+
+    Ordem de fallback (Agent D1 reverse-engineered):
+    1. `\\boxed{X}` ou `\\boxed{X` (sem fechamento). Ultimo match nao-vazio.
+    2. "The final answer is: X" variants (case-insensitive, fullwidth colon OK).
+    3. Ultimo numero (regex -?\\d+(?:\\.\\d+)?).
+    4. Ultima linha nao-vazia.
+    5. None (equivalente a "NOT_FOUND" do metric oficial).
+    """
     if not isinstance(text, str):
         return None
+    # Step 1: \boxed{} com suporte a EOF sem fechamento
     matches = BOXED_RE.findall(text)
-    return matches[-1].strip() if matches else None
+    if matches:
+        # Ultimo nao-vazio (vazios apagam resposta anterior)
+        non_empty = [m.strip() for m in matches if m.strip()]
+        if non_empty:
+            return non_empty[-1]
+        # Todos vazios: retorna ultimo stripped
+        return matches[-1].strip()
+
+    # Step 2: "final answer is: X"
+    fa_matches = FINAL_ANSWER_RE.findall(text)
+    if fa_matches:
+        return fa_matches[-1].strip()
+
+    # Step 3: ultimo numero
+    nums = NUMBER_RE.findall(text)
+    if nums:
+        return nums[-1]
+
+    # Step 4: ultima linha nao-vazia
+    for line in reversed(text.split("\n")):
+        if line.strip():
+            return line.strip()
+    return None
 
 
 def verify(answer: str, predicted: str | None) -> bool:
-    """Verify predicted matches ground truth (alinhado competition_utils)."""
+    """Verify predicted matches ground truth (metric OFICIAL Kaggle reproducido).
+
+    Fonte: kaggle_research/extracted_kernel_code/huikang__*.txt L484-502.
+    Funcao UNICA para TODAS 9 categorias (sem branch por categoria).
+    """
     if not predicted:
         return False
     a = str(answer).strip()
     p = str(predicted).strip()
-    # Binary strict match (bit_manipulation post 2026-03-29 rule)
-    if re.fullmatch(r"[01]+", a):
-        return a == p
-    # Numeric tolerance (gravity/unit_conversion rounding)
+    # PRIMEIRA tentativa: parse float em ambos. Se ambos numeros, tolerancia 1%.
+    # Isso aceita "01011" == "1011" (bit_manipulation sem leading-zero strict).
     try:
         a_num = float(a)
         p_num = float(p)
-        return abs(a_num - p_num) < 1e-2
+        return math.isclose(a_num, p_num, rel_tol=1e-2, abs_tol=1e-5)
     except (ValueError, TypeError):
-        return a == p
+        # Fallback: string lower-case exato (case-insensitive).
+        return p.lower() == a.lower()
 
 
 def validate_adapter_config(adapter_dir: Path) -> dict[str, Any]:
@@ -167,11 +214,14 @@ def run_inference_vllm(
     )
 
     tokenizer = llm.get_tokenizer()
+    # BOXED_INSTRUCTION alinhado com metric Kaggle oficial (Agent D1)
+    BOXED_INSTRUCTION = "\nPlease put your final answer inside `\\boxed{}`. For example: `\\boxed{your answer}`"
     formatted = [
         tokenizer.apply_chat_template(
-            [{"role": "user", "content": p + "\nPut your final answer inside \\boxed{}."}],
+            [{"role": "user", "content": p + BOXED_INSTRUCTION}],
             tokenize=False,
             add_generation_prompt=True,
+            enable_thinking=True,  # OBRIGATORIO (bug corrigido 2026-04-21)
         )
         for p in prompts
     ]
