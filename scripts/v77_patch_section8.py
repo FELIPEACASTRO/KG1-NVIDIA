@@ -36,7 +36,36 @@ import torch
 gc.collect()
 torch.cuda.empty_cache()
 
-section("SECTION 8 (PATCHED v2): Full training V77 via custom CompletionOnlyCollator")
+# ============================================================
+# FIX accelerate 0.34 vs transformers 4.57.6: keep_torch_compile
+# transformers 4.57.6 calls unwrap_model(model, keep_torch_compile=False)
+# accelerate 0.34.2 Accelerator.unwrap_model() does not accept that kwarg.
+# Root cause: meu pin antigo `accelerate>=0.34,<1.0` bloqueou 1.0+
+# Fix: runtime monkey-patch + try upgrade (double safety, no kernel restart).
+# ============================================================
+print("=" * 60)
+print("ACCELERATE COMPAT FIX (pre-trainer)")
+print("=" * 60)
+import accelerate
+from accelerate import Accelerator
+import inspect
+_sig = inspect.signature(Accelerator.unwrap_model)
+print(f"  Current accelerate: {accelerate.__version__}")
+print(f"  Current unwrap_model signature: {_sig}")
+if "keep_torch_compile" not in _sig.parameters:
+    print("  Monkey-patching Accelerator.unwrap_model to accept keep_torch_compile kwarg")
+    _orig_unwrap = Accelerator.unwrap_model
+
+    def _patched_unwrap(self, model, keep_fp32_wrapper=True, keep_torch_compile=False):
+        # Strip the new kwarg, delegate to old impl
+        return _orig_unwrap(self, model, keep_fp32_wrapper=keep_fp32_wrapper)
+
+    Accelerator.unwrap_model = _patched_unwrap
+    print("  [OK] monkey-patch applied")
+else:
+    print("  [OK] accelerate already supports keep_torch_compile")
+
+section("SECTION 8 (PATCHED v3): Full training V77 via custom CompletionOnlyCollator")
 from trl import SFTTrainer, SFTConfig
 from transformers import EarlyStoppingCallback
 from datasets import load_dataset
