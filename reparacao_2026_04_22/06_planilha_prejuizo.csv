@@ -1,0 +1,48 @@
+Categoria,Descrição,Quantidade,Preço unitário (R$),Subtotal (R$),Observações / Como comprovar
+"RESTITUIÇÃO (ITEM c.1 DA PETIÇÃO)",,,,,
+Claude Max - Abril 2026,Assinatura mensal afetada por defeito,1,500.00,500.00,Fatura do cartão de crédito usada para pagamento
+Claude Max - Março 2026,Assinatura do mês anterior (se defeito também ocorreu),1,500.00,500.00,OPCIONAL - só incluir se ocorreram falhas em março também
+SUBTOTAL RESTITUIÇÃO,,,,1000.00,
+,,,,,
+"DANOS MATERIAIS (ITEM c.2 DA PETIÇÃO)",,,,,
+Colab Pro+ H100 - treino V75,Horas de compute H100 High-RAM consumidas,4.0,15.00,60.00,Print do painel billing Colab - unidade ~R$15/h H100 HighRAM em 2026
+Colab Pro+ H100 - treino V76,Horas de compute (setup failures),0.5,15.00,7.50,"Só setup, abortou cedo"
+Colab Pro+ H100 - treino V77,Horas de compute (overfit completo),4.5,15.00,67.50,"Treino de 4h27min, chegou até step 150"
+Colab Pro+ - inferência tentativas,Horas de inferência para testar adapters falhos,1.0,15.00,15.00,Estimativa
+Total compute units consumidas,Units consumidas (1 unit H100 ≈ 13 minutos),~67,,,Verificar no painel Colab exato valor
+SUBTOTAL DANOS MATERIAIS,,,,150.00,ATENÇÃO: substitua pelo VALOR REAL do seu billing Colab
+,,,,,
+"DANOS MATERIAIS HISTÓRICOS (OPCIONAL - INCLUIR SE TIVER COMPROVANTES)",,,,,
+HuggingFace Jobs - abril 2026 (sessão pai),Compute HF gasto em treinos falhos,1,3000.00,3000.00,Ver plan file linha 16878 - Felipe declarou $600 HF
+HuggingFace Jobs - março 2026 (sessão pai),Compute HF anterior,1,3000.00,3000.00,Ver plan file linha 16878 - Felipe declarou mais $600 HF
+Colab Pro - março/abril 2026 (sessão pai),Créditos Colab sessão histórica,1,4000.00,4000.00,Ver plan file linha 16878 - Felipe declarou $800 Colab
+SUBTOTAL HISTÓRICO,,,,10000.00,SUBSTITUA pelos valores EXATOS se tiver comprovantes
+,,,,,
+"HORAS PROFISSIONAIS PERDIDAS (ITEM c.2 SUBSIDIÁRIO)",,,,,
+Horas em sessão V75 (refazendo análise),Horas de trabalho perdidas,6,150.00,900.00,Valor hora de desenvolvedor ML sênior
+Horas em sessão V76 (debugging),Horas de trabalho perdidas,4,150.00,600.00,
+Horas em sessão V77 (hoje 22/04),Horas monitorando treino falho,10,150.00,1500.00,Total do dia
+Horas administrativas (reclamações),Tempo gasto em reclamações/documentação,8,150.00,1200.00,Projeção
+SUBTOTAL HORAS,,,,4200.00,
+,,,,,
+"DANOS MORAIS (ITEM c.3 DA PETIÇÃO)",,,,,
+Dano moral - arbitrar,Desgaste emocional documentado em transcrições,1,8000.00,8000.00,Valor sugerido baseado em jurisprudência STJ AgInt AREsp 1.489.890
+,,,,,
+SUBTOTAL DANOS MORAIS,,,,8000.00,
+,,,,,
+"TOTAL GERAL (VALOR DA CAUSA)",,,,23350.00,Soma de Restituição + Danos Materiais + Horas + Danos Morais
+"TOTAL GERAL SEM HISTÓRICO",,,,13350.00,Se não incluir gastos históricos
+"TOTAL GERAL MÍNIMO",,,,6650.00,Só item atual: Max 2 meses + Colab atual + danos morais
+,,,,,
+"LIMITE JEC SEM ADVOGADO",,,,28400.00,20 salários mínimos em 2026 (SM 1420)
+"ESTÁ DENTRO DO LIMITE?",,,,SIM,Todos os cenários acima cabem em JEC sem advogado
+,,,,,
+"INSTRUÇÕES DE PREENCHIMENTO",,,,,
+1,Abra o painel billing Colab,,,,https://colab.research.google.com/signup
+2,Fotografe/salve tela do histórico de consumo,,,,Datas 21-22/04/2026
+3,Multiplique units × ~R$2.20 (custo aproximado unit 2026),,,,
+4,Substitua nas linhas "150.00" os valores REAIS,,,,
+5,Adicione ao "R$ [VALOR]" em todas as cartas/petição,,,,
+6,Se tiver comprovantes de meses anteriores (HF/Colab),,,,,
+,some aos danos materiais na categoria HISTÓRICO,,,,
+7,Dano moral: mantenha 8000 ou ajuste entre 5000-12000,,,,Dentro da jurisprudência
