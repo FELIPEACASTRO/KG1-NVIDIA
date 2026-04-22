@@ -1,4 +1,4 @@
-"""Build KG1_V78_DGXCHEN_REPLICA.ipynb — Colab H100 replica of dgxchen 0.85 LB recipe.
+"""Build KG1_V79_DGXCHEN_REVIEWED.ipynb — Colab H100 replica of dgxchen 0.85 LB recipe.
 
 CONSENSUS: 26 APIs (17 earlier + 9 surgical) converged on:
   - Replicate dgxchen recipe EXACTLY (S1=G, 55%)
@@ -12,22 +12,38 @@ risk of exploding gradients on outlier samples. Change to max_grad_norm=1.0
 import json
 import os
 
-HEADER = r"""# KG1 V78 — dgxchen 0.85 LB Replica (Colab H100 Pro+)
+HEADER = r"""# KG1 V79 — dgxchen 0.85 Replica + 4 CRITICAL FIXES (review 11 APIs)
 
 ## Fonte
-Recipe replicada do kernel público **dgxchen/training-with-unsloth-to-achieve-0-85-lb** (185 votos).
-Autor: dz. Baseline verificado: **0.85 LB** em RTX Pro 6000 (6h47min).
+Recipe do kernel público **dgxchen/training-with-unsloth-to-achieve-0-85-lb** (185 votos).
 
-Consensus de 26 APIs (Claude Opus/Sonnet/Haiku, GPT-5.4/5.3-codex/mini, DeepSeek R1/Chat,
-Gemini 2.5, Grok 4.20 reasoning, Cohere Command-A, gpt-oss-120b, Qwen3-Next, GLM-4.6,
-Llama-3.3-70B, Nemotron-70B) convergiu em:
+## V78 → V79: 4 correcoes criticas identificadas unanimemente por 11 APIs
+### FIX #1 CRITICAL (gpt54+claude47+codex+haiku45): invalid f-string in HealthCallback
+  Before: `f'grad={grad_norm:.3f if grad_norm is not None else 0:.3f}'`
+  After: pre-compute `_grad = float(grad_norm) if grad_norm is not None else 0.0`
+  Reason: conditional expr inside format spec = SyntaxError at first log step
 
-- Replicar recipe EXATO (sem inventar) — 55% S1=G, 89% S7=B
-- Prompt suffix IGUAL ao metric oficial — 78% S3=C
-- Distillation como Stage 2 (este notebook é Stage 1) — 89% S7=B
+### FIX #2 CRITICAL (codex): dataset.map(..., num_proc=4) with tokenizer closure
+  Before: `num_proc=4`
+  After: `num_proc=1`
+  Reason: multi-processing + tokenizer closure breaks pickling in Colab
 
-## Fix aplicado (vs dgxchen original)
-- `max_grad_norm: 1e9 → 1.0` (APIs identificaram risco de explosão)
+### FIX #3 HIGH (claude47+codex): double gradient_checkpointing
+  Before: `get_peft_model(..., use_gradient_checkpointing='unsloth')` +
+          `SFTConfig(gradient_checkpointing=True)`
+  After: remove from SFTConfig (Unsloth handles via get_peft_model)
+  Reason: double-wrap causes "element 0 does not require grad" OR silent disable Unsloth
+
+### FIX #4 HIGH (gpt54+codex+claude47): dataset + formatting_func conflict
+  Before: `dataset.map(formatting_func)` creates 'text' col, then trainer gets formatting_func AGAIN
+  After: remove formatting_func from trainer, set `dataset_text_field='text'`
+  Reason: double format / schema mismatch / TRL version-dependent crash
+
+## Plus: recipe dgxchen EXATO
+- LoRA r=32 alpha=32 dropout=0.0 all-linear + lm_head
+- 2 epochs, eff_batch=32, lr=2e-4 linear, max_length=8192
+- Unsloth FastLanguageModel, adam_beta2=0.95
+- max_grad_norm=1.0 (dgxchen had 1e9, APIs flagged risk)
 
 ## Target
 - Input: H100 High-RAM Colab Pro+
@@ -331,8 +347,10 @@ def formatting_prompts_func(example):
 
 
 print('\nApplying chat template...')
+# FIX #2 (CRITICAL — codex): num_proc=4 with tokenizer closure breaks pickling in Colab.
+# Use num_proc=1 (or omit) — slightly slower but stable.
 dataset = dataset.map(
-    formatting_prompts_func, batched=True, num_proc=4, desc='chat_template'
+    formatting_prompts_func, batched=True, num_proc=1, desc='chat_template'
 )
 
 # SFTConfig — dgxchen EXACT + max_grad_norm fix + logging 5 steps
@@ -356,8 +374,10 @@ training_args = SFTConfig(
     save_steps=50,                        # a cada 50 optim steps (~15-20% do run)
     save_total_limit=3,                   # manter apenas 3 checkpoints
     bf16=True,
-    gradient_checkpointing=True,
-    gradient_checkpointing_kwargs={'use_reentrant': False},
+    # FIX #3 (HIGH — claude47+codex): Unsloth already handles gradient_checkpointing='unsloth'
+    # via get_peft_model. Double-wrapping with gradient_checkpointing=True in SFTConfig causes
+    # "element 0 of tensors does not require grad" or silent Unsloth fast-path disabled.
+    # Remove gradient_checkpointing + kwargs from SFTConfig.
     dataloader_num_workers=2,
     remove_unused_columns=False,
     seed=SEED,
@@ -466,23 +486,31 @@ class HealthGateCallback(TrainerCallback):
         eta_sec = (elapsed / max(step, 1)) * (total_steps - step) if step > 0 else 0
 
         # Loss stats
-        avg_loss = sum(self.loss_history) / len(self.loss_history) if self.loss_history else 0
-        avg_grad = sum(self.grad_history) / len(self.grad_history) if self.grad_history else 0
+        avg_loss = sum(self.loss_history) / len(self.loss_history) if self.loss_history else 0.0
+        avg_grad = sum(self.grad_history) / len(self.grad_history) if self.grad_history else 0.0
 
         # === GATE 6: Plateau warning ===
         plateau_warn = ''
         if self.steps_since_improve >= 100:
             plateau_warn = f' [PLATEAU {self.steps_since_improve}s]'
 
-        # Print structured
+        # FIX #1 (CRITICAL — 4 APIs unanimes): pre-compute safe values for f-string
+        # Invalid syntax was: {x:.3f if x is not None else 0:.3f}
+        # Conditional expr cannot be inside format spec.
+        _loss = float(loss) if loss is not None else 0.0
+        _grad = float(grad_norm) if grad_norm is not None else 0.0
+        _lr = float(lr) if lr is not None else 0.0
+        _em = int(elapsed // 60)
+        _etm = int(eta_sec // 60)
+
         print(
             f'[step {step:4d}/{total_steps:4d} ep{epoch:.2f} '
             f'{progress*100:5.1f}%] '
-            f'loss={loss:.4f} avg10={avg_loss:.4f} '
-            f'grad={grad_norm:.3f if grad_norm is not None else 0:.3f} avg5={avg_grad:.3f} '
-            f'lr={lr:.2e if lr is not None else 0:.2e} '
+            f'loss={_loss:.4f} avg10={avg_loss:.4f} '
+            f'grad={_grad:.3f} avg5={avg_grad:.3f} '
+            f'lr={_lr:.2e} '
             f'vram={used:.1f}/{peak:.1f}/{free:.1f}GB '
-            f'elapsed={int(elapsed//60)}m ETA={int(eta_sec//60)}m'
+            f'elapsed={_em}m ETA={_etm}m'
             f'{plateau_warn}'
         )
 
@@ -560,12 +588,17 @@ print(f'Total batches: {math.ceil(len(record_types)/eff_batch_size)}')
 
 health_cb = HealthGateCallback()
 
+# FIX #4 (HIGH — gpt54+codex+claude): dataset already has 'text' col after dataset.map().
+# Passing formatting_func AGAIN causes double format / schema mismatch in TRL.
+# Use only one path: pre-formatted dataset with dataset_text_field.
+training_args.dataset_text_field = 'text'
+
 trainer = StratifiedSFTTrainer(
     model=model,
     args=training_args,
     train_dataset=dataset,
     processing_class=tokenizer,
-    formatting_func=formatting_prompts_func,
+    # formatting_func REMOVED - dataset already has 'text' column
     stratified_order=stratified_order,
     callbacks=[health_cb],
 )
@@ -737,7 +770,7 @@ NB = {
 }
 
 
-OUT = 'notebooks/KG1_V78_DGXCHEN_REPLICA.ipynb'
+OUT = 'notebooks/KG1_V79_DGXCHEN_REVIEWED.ipynb'
 os.makedirs('notebooks', exist_ok=True)
 with open(OUT, 'w', encoding='utf-8') as f:
     json.dump(NB, f, indent=1)
