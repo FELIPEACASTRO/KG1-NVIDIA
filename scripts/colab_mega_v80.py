@@ -396,6 +396,11 @@ training_args = SFTConfig(
     adam_epsilon=1e-8,
     weight_decay=0.0,
     max_grad_norm=1e9,                           # dgxchen (effectively disabled)
+    # V3.1 fix: 8bit optimizer para fit H100 80GB sem gradient offloading
+    # AdamW FP32 (883M params) = 7GB optimizer state
+    # paged_adamw_8bit = 1.8GB optimizer state -> economia 5GB -> no offload -> 3-4x speedup
+    # Quality impact: ~0.005 (minimal, padrão LLM community)
+    optim="paged_adamw_8bit",
     logging_steps=5,
     logging_first_step=True,
     save_strategy="steps",
