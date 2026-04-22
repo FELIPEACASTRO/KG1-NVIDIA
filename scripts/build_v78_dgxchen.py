@@ -262,13 +262,14 @@ builtins._v78_tokenizer = tokenizer
 print('\nLORA APPLIED — proceed to Cell 5')
 """
 
-CELL_5_TRAIN = r"""# CELL 5: Build dataset + Train (dgxchen EXACT + FIX max_grad_norm=1.0)
+CELL_5_TRAIN = r"""# CELL 5: Build dataset + Train (dgxchen EXACT + HEALTH GATES + FIX max_grad_norm=1.0)
 import builtins, pandas as pd, random, re, math, gc, time, json, torch
-from collections import defaultdict
+from collections import defaultdict, deque
 from pathlib import Path
 from datasets import Dataset as HFDataset
 from torch.utils.data import DataLoader, Sampler
 from trl import SFTTrainer, SFTConfig
+from transformers import TrainerCallback, TrainerControl, TrainerState
 
 print('=' * 60)
 print('BUILD DATASET + TRAINING (2 epochs, eff_batch=32, lr=2e-4)')
@@ -334,7 +335,7 @@ dataset = dataset.map(
     formatting_prompts_func, batched=True, num_proc=4, desc='chat_template'
 )
 
-# SFTConfig — dgxchen EXACT + max_grad_norm fix
+# SFTConfig — dgxchen EXACT + max_grad_norm fix + logging 5 steps
 training_args = SFTConfig(
     output_dir=OUTPUT_DIR,
     num_train_epochs=2,                   # dgxchen
@@ -349,8 +350,11 @@ training_args = SFTConfig(
     adam_epsilon=1e-8,
     weight_decay=0.0,                     # dgxchen
     max_grad_norm=1.0,                    # FIX: dgxchen had 1e9 (disabled). APIs flagged risk.
-    logging_steps=10,
-    save_strategy='no',
+    logging_steps=5,                      # Felipe: log a cada 5 steps (~6min)
+    logging_first_step=True,              # log step 0 tambem
+    save_strategy='steps',                # checkpoint preventivo
+    save_steps=50,                        # a cada 50 optim steps (~15-20% do run)
+    save_total_limit=3,                   # manter apenas 3 checkpoints
     bf16=True,
     gradient_checkpointing=True,
     gradient_checkpointing_kwargs={'use_reentrant': False},
@@ -360,6 +364,134 @@ training_args = SFTConfig(
     report_to='none',
     packing=False,
 )
+
+
+# ═══════════════════════════════════════════════════════════════
+# HEALTH CALLBACK — Felipe: log a cada 5 steps + gates automaticos
+# ═══════════════════════════════════════════════════════════════
+class HealthGateCallback(TrainerCallback):
+    # Monitor de saude + gates automaticos.
+    # Log cada 5 steps: loss + avg10, grad_norm + avg5, lr, VRAM used/free/peak,
+    # tokens/sec, epoch progress, ETA, warnings.
+    # Gates automaticos:
+    #   1. NaN/Inf loss -> ABORT imediato
+    #   2. Loss > 30 em step > 10 -> ABORT (exploded)
+    #   3. Loss < 0.01 em step < 50 -> WARNING overfit severo
+    #   4. grad_norm > 10 consecutivo 3x -> WARNING
+    #   5. VRAM free menor que 2GB -> WARNING (OOM proximo)
+    #   6. Loss sem melhora 100+ steps -> WARNING plateau
+
+    def __init__(self):
+        self.loss_history = deque(maxlen=10)
+        self.grad_history = deque(maxlen=5)
+        self.last_loss = None
+        self.min_loss = float('inf')
+        self.steps_since_improve = 0
+        self.high_grad_count = 0
+        self.train_start = None
+        self.tokens_processed = 0
+
+    def on_train_begin(self, args, state, control, **kwargs):
+        self.train_start = time.time()
+        print('=' * 70)
+        print('HEALTH GATES ATIVOS — log cada 5 steps + abort automatico em NaN/explosion')
+        print('=' * 70)
+
+    def on_log(self, args, state, control, logs=None, **kwargs):
+        if not logs:
+            return
+        step = int(state.global_step)
+        loss = logs.get('loss')
+        grad_norm = logs.get('grad_norm')
+        lr = logs.get('learning_rate')
+        epoch = logs.get('epoch', 0.0)
+
+        # === GATE 1: NaN/Inf ===
+        if loss is not None and isinstance(loss, float):
+            if math.isnan(loss) or math.isinf(loss):
+                print(f'!!! CRITICAL NaN/Inf detected at step {step} — ABORTING')
+                control.should_training_stop = True
+                return
+
+        # === GATE 2: Loss explosion ===
+        if loss is not None and isinstance(loss, (int, float)):
+            if loss > 30.0 and step > 10:
+                print(f'!!! CRITICAL loss explosion {loss:.3f} at step {step} — ABORTING')
+                control.should_training_stop = True
+                return
+
+        # === GATE 3: Overfit warning ===
+        if loss is not None and isinstance(loss, (int, float)):
+            if loss < 0.01 and step < 50:
+                print(f'!!! WARN severe overfit risk: loss={loss:.4f} at step {step} (too fast)')
+
+        # Update history
+        if loss is not None:
+            self.loss_history.append(float(loss))
+            if float(loss) < self.min_loss:
+                self.min_loss = float(loss)
+                self.steps_since_improve = 0
+            else:
+                self.steps_since_improve += 5  # log_steps=5
+
+        # === GATE 4: High grad_norm sustained ===
+        if grad_norm is not None:
+            self.grad_history.append(float(grad_norm))
+            if float(grad_norm) > 10.0:
+                self.high_grad_count += 1
+                if self.high_grad_count >= 3:
+                    print(f'!!! WARN grad_norm >10 3 consecutive steps '
+                          f'(last={grad_norm:.2f}). clipping=1.0 in action.')
+            else:
+                self.high_grad_count = 0
+
+        # VRAM
+        if torch.cuda.is_available():
+            free = torch.cuda.mem_get_info()[0] / 1024**3
+            total = torch.cuda.mem_get_info()[1] / 1024**3
+            used = total - free
+            peak = torch.cuda.max_memory_allocated() / 1024**3
+
+            # === GATE 5: VRAM pressure ===
+            if free < 2.0:
+                print(f'!!! WARN VRAM free={free:.1f}GB — OOM risk')
+
+        else:
+            free = used = peak = 0.0
+
+        # Timing
+        elapsed = time.time() - self.train_start if self.train_start else 0
+        total_steps = state.max_steps if state.max_steps else 1
+        progress = step / max(total_steps, 1)
+        eta_sec = (elapsed / max(step, 1)) * (total_steps - step) if step > 0 else 0
+
+        # Loss stats
+        avg_loss = sum(self.loss_history) / len(self.loss_history) if self.loss_history else 0
+        avg_grad = sum(self.grad_history) / len(self.grad_history) if self.grad_history else 0
+
+        # === GATE 6: Plateau warning ===
+        plateau_warn = ''
+        if self.steps_since_improve >= 100:
+            plateau_warn = f' [PLATEAU {self.steps_since_improve}s]'
+
+        # Print structured
+        print(
+            f'[step {step:4d}/{total_steps:4d} ep{epoch:.2f} '
+            f'{progress*100:5.1f}%] '
+            f'loss={loss:.4f} avg10={avg_loss:.4f} '
+            f'grad={grad_norm:.3f if grad_norm is not None else 0:.3f} avg5={avg_grad:.3f} '
+            f'lr={lr:.2e if lr is not None else 0:.2e} '
+            f'vram={used:.1f}/{peak:.1f}/{free:.1f}GB '
+            f'elapsed={int(elapsed//60)}m ETA={int(eta_sec//60)}m'
+            f'{plateau_warn}'
+        )
+
+    def on_train_end(self, args, state, control, **kwargs):
+        elapsed = time.time() - self.train_start if self.train_start else 0
+        print('=' * 70)
+        print(f'TRAINING FINISHED — elapsed={elapsed/60:.1f}min '
+              f'min_loss={self.min_loss:.4f} steps={state.global_step}')
+        print('=' * 70)
 
 
 # dgxchen Stratified batching by type
@@ -426,6 +558,8 @@ stratified_order = build_stratified_index_order(record_types, eff_batch_size, SE
 print(f'\nEff batch size: {eff_batch_size}')
 print(f'Total batches: {math.ceil(len(record_types)/eff_batch_size)}')
 
+health_cb = HealthGateCallback()
+
 trainer = StratifiedSFTTrainer(
     model=model,
     args=training_args,
@@ -433,9 +567,10 @@ trainer = StratifiedSFTTrainer(
     processing_class=tokenizer,
     formatting_func=formatting_prompts_func,
     stratified_order=stratified_order,
+    callbacks=[health_cb],
 )
 
-print('\nStarting SFT training...')
+print('\nStarting SFT training with HEALTH GATES (log every 5 steps)...')
 torch.cuda.reset_peak_memory_stats()
 t0 = time.time()
 trainer.train()
