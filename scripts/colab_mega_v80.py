@@ -118,8 +118,11 @@ print("=" * 70)
 
 from unsloth import FastLanguageModel
 
-MAX_SEQ_LEN = 8192
-print(f"Loading {MODEL_PATH} via Unsloth (attn=eager)...")
+MAX_SEQ_LEN = int(os.environ.get("MAX_SEQ_LEN", 4096))  # 4096 fits H100 80GB com MoE LoRA (max observed 3244 tokens)
+print(f"Loading {MODEL_PATH} via Unsloth (attn=eager, max_seq_len={MAX_SEQ_LEN})...")
+
+# Reduce CUDA fragmentation (suggested by OOM error msg)
+os.environ.setdefault("PYTORCH_CUDA_ALLOC_CONF", "expandable_segments:True")
 t_load = time.time()
 model, tokenizer = FastLanguageModel.from_pretrained(
     model_name=MODEL_PATH,
@@ -387,7 +390,7 @@ training_args = SFTConfig(
     learning_rate=2e-4,
     lr_scheduler_type="linear",
     warmup_steps=0,
-    max_length=MAX_SEQ_LEN,
+    max_length=MAX_SEQ_LEN,                      # 4096 (vs dgxchen 8192) — H100 80GB fit, zero truncation
     adam_beta1=0.9,
     adam_beta2=0.95,                             # dgxchen
     adam_epsilon=1e-8,
