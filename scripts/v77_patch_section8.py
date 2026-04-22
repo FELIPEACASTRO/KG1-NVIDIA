@@ -1,13 +1,20 @@
 # ============================================================
-# V77 PATCH: Section 8+9+10+11 para TRL 0.25.1
-# Modelo ja carregado na memoria (nao recarregar)
-# Fix: DataCollatorForCompletionOnlyLM foi REMOVIDO em TRL 0.25.1.
-# Substituido por SFTConfig(assistant_only_loss=True).
+# V77 PATCH v2: Section 8+9+10+11 para TRL 0.25.1
+# Modelo ja carregado (nao recarregar).
+#
+# Bug #1: DataCollatorForCompletionOnlyLM removido do top-level TRL 0.25.1
+# Bug #2: assistant_only_loss=True exige conversational format (messages=[...]),
+#         incompativel com flat text + enable_thinking pre-aplicado.
+#
+# Fix: custom CompletionOnlyCollator inline que replica a logica da
+#      DataCollatorForCompletionOnlyLM (subsequence match em token ids,
+#      mask ate o final do response_template).
 # ============================================================
 import os, sys, json, subprocess, shutil, gc, time, datetime, re
 from pathlib import Path
 
-# Reutiliza START_TIME, CFG, tok, model, train_path, eval_path ja no memory
+# Reutiliza START_TIME, CFG, tok, model, train_path, eval_path, HF_TOKEN,
+# GDRIVE_MOUNTED ja no memory do kernel.
 if "START_TIME" not in globals():
     START_TIME = time.time()
 
@@ -29,7 +36,7 @@ import torch
 gc.collect()
 torch.cuda.empty_cache()
 
-section("SECTION 8 (PATCHED): Full training V77 via assistant_only_loss=True")
+section("SECTION 8 (PATCHED v2): Full training V77 via custom CompletionOnlyCollator")
 from trl import SFTTrainer, SFTConfig
 from transformers import EarlyStoppingCallback
 from datasets import load_dataset
@@ -57,8 +64,117 @@ ds_train = ds_train.map(format_example, remove_columns=ds_train.column_names)
 ds_eval = ds_eval.map(format_example, remove_columns=ds_eval.column_names)
 tok.model_max_length = CFG.max_length
 
-log("Using SFTConfig(assistant_only_loss=True) - TRL 0.25.1 API")
-log("This masks user/system tokens AUTOMATICALLY from chat_template")
+
+# ============================================================
+# Custom CompletionOnlyCollator (replaces TRL 0.25 removed class)
+# Same logic as DataCollatorForCompletionOnlyLM:
+# - Tokenize text
+# - Find response_template subsequence in token ids
+# - Mask everything up to end of template with -100
+# ============================================================
+class CompletionOnlyCollator:
+    def __init__(self, tokenizer, response_template="<|im_start|>assistant"):
+        self.tok = tokenizer
+        self.template_ids = tokenizer.encode(
+            response_template, add_special_tokens=False
+        )
+        self.pad_id = (
+            tokenizer.pad_token_id
+            if tokenizer.pad_token_id is not None
+            else tokenizer.eos_token_id
+        )
+        log(f"  CompletionOnlyCollator: template='{response_template}' "
+            f"-> {len(self.template_ids)} ids {self.template_ids}")
+
+    def __call__(self, features):
+        # features: list of {'text': str} after dataset map
+        # or list of already-tokenized {'input_ids': ...}
+        batch_ids = []
+        batch_attn = []
+        for f in features:
+            if "input_ids" in f:
+                ids = (
+                    f["input_ids"].tolist()
+                    if hasattr(f["input_ids"], "tolist")
+                    else list(f["input_ids"])
+                )
+                attn = (
+                    f.get("attention_mask", [1] * len(ids))
+                )
+                if hasattr(attn, "tolist"):
+                    attn = attn.tolist()
+            else:
+                enc = self.tok(
+                    f["text"],
+                    truncation=True,
+                    max_length=CFG.max_length,
+                    add_special_tokens=False,
+                )
+                ids = enc["input_ids"]
+                attn = enc["attention_mask"]
+            batch_ids.append(ids)
+            batch_attn.append(attn)
+
+        # Find ml for padding
+        ml = max(len(ids) for ids in batch_ids)
+
+        tl = len(self.template_ids)
+        out_ids, out_labels, out_attn = [], [], []
+        n_matched = 0
+        for ids, attn in zip(batch_ids, batch_attn):
+            labels = list(ids)
+            # Find first occurrence of template in ids
+            match_idx = -1
+            for i in range(len(ids) - tl + 1):
+                if ids[i : i + tl] == self.template_ids:
+                    match_idx = i
+                    break
+            if match_idx >= 0:
+                # Mask everything including the template itself
+                for j in range(match_idx + tl):
+                    labels[j] = -100
+                n_matched += 1
+            else:
+                # Fallback: mask user+system half (first 30% as heuristic)
+                cut = min(len(ids) // 3, 100)
+                for j in range(cut):
+                    labels[j] = -100
+
+            # Pad to ml
+            pad_n = ml - len(ids)
+            ids_p = ids + [self.pad_id] * pad_n
+            labels_p = labels + [-100] * pad_n
+            attn_p = attn + [0] * pad_n
+            out_ids.append(ids_p)
+            out_labels.append(labels_p)
+            out_attn.append(attn_p)
+
+        # Periodic diagnostic on first batch (via class var)
+        if not getattr(self, "_logged_once", False):
+            self._logged_once = True
+            log(f"  Collator first batch: {n_matched}/{len(features)} "
+                f"samples matched template")
+            nonmask = sum(1 for row in out_labels for t in row if t != -100)
+            total = sum(len(row) for row in out_labels)
+            pct = 100 * nonmask / max(1, total)
+            log(f"  Collator diagnostic: {nonmask}/{total} tokens non-masked "
+                f"({pct:.1f}%)")
+            if pct < 1:
+                log("  CRITICAL: <1% tokens unmasked - loss will be ~0")
+            elif pct < 10:
+                log("  WARN: <10% unmasked - check template match")
+            else:
+                log("  [OK] masking looks healthy")
+
+        return {
+            "input_ids": torch.tensor(out_ids, dtype=torch.long),
+            "labels": torch.tensor(out_labels, dtype=torch.long),
+            "attention_mask": torch.tensor(out_attn, dtype=torch.long),
+        }
+
+
+collator = CompletionOnlyCollator(tok, response_template="<|im_start|>assistant")
+log("Using custom CompletionOnlyCollator (TRL 0.25 compat)")
 
 sft_args = SFTConfig(
     output_dir=CFG.output_dir,
@@ -84,8 +200,7 @@ sft_args = SFTConfig(
     load_best_model_at_end=True,
     metric_for_best_model="eval_loss",
     greater_is_better=False,
-    # FIX TRL 0.25.1: assistant_only_loss replaces DataCollatorForCompletionOnlyLM
-    assistant_only_loss=True,
+    # NO assistant_only_loss - our collator does masking manually
 )
 
 
@@ -137,9 +252,10 @@ trainer = MaxMinSFTTrainer(
     train_dataset=ds_train,
     eval_dataset=ds_eval,
     processing_class=tok,
+    data_collator=collator,
     callbacks=[EarlyStoppingCallback(early_stopping_patience=CFG.early_stopping_patience)],
 )
-log("Training START V77 (assistant_only_loss=True, EarlyStop patience=3)")
+log("Training START V77 (custom CompletionOnlyCollator, EarlyStop patience=3)")
 log("Target: train_loss 0.30-0.80 final. If <0.01 = overfit.")
 trainer.train()
 log("Training complete (best checkpoint loaded)")
