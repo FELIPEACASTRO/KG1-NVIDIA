@@ -11,26 +11,63 @@ Training logic is in scripts/colab_mega_v80.py (separate file on GitHub, no esca
 import json
 import os
 
-HEADER = r"""# KG1 V80 MEGA - 1 Cell Only, No Restart, dgxchen v7 EXACT
+HEADER = r"""# KG1 V80 MEGA V3 - TODOS OS FIXES CONSOLIDADOS
 
-## Execução simplificada
-**Apenas execute a célula abaixo.** Tudo roda em 1 cell:
-- Install torch 2.5.1 + mamba-ssm + ML stack (~10 min)
-- Download training script do GitHub
-- Executa em child process (torch 2.5.1 fresh, sem conflito com Colab default 2.11)
-- Download dataset (cached se V79 já rodou)
-- Download Nemotron-30B (cached se V79 já rodou)
-- Train 1 epoch ~245 steps (~2-3h H100)
-- Build submission.zip
-- Upload HF
-- Submit Kaggle (automatic)
+## Execução ultra-simplificada
+**APENAS 1 célula. Execute e espera ~3h.**
 
-**Tempo total**: ~3-4h (se model/dataset cache) ou ~4-5h (cold start)
+O que faz automaticamente:
+1. Uninstall torchcodec/torchao/torchdata (Colab pre-installed, conflita com torch 2.5)
+2. Install torch 2.5.1+cu124 via wheels diretos (bypass --index-url issues)
+3. Install mamba-ssm 2.2.4 + causal-conv1d 1.5.0.post8 (torch 2.5 ABI)
+4. Install transformers/peft/trl/accelerate/datasets/bitsandbytes
+5. Install Unsloth com --no-deps (não upgrade torch)
+6. Verify via child process (torch 2.5 clean import)
+7. Download colab_mega_v80.py do GitHub
+8. Executa training em subprocess:
+   - Dataset dgxchen v7 EXACT (problem_ids_matched.csv, 7830 rows)
+   - Model Nemotron-3-Nano-30B-A3B-BF16 (cached)
+   - LoRA r=32 alpha=32 dropout=0, 8 targets SEM lm_head
+   - max_length=**3072** (p99 safe, otimizado H100 80GB)
+   - Train 1 epoch 245 steps
+   - Save adapter + Build submission.zip + HF upload + Kaggle submit
 
-## Fixes aplicados (11 total)
-Ver `scripts/colab_mega_v80.py` no repo para implementação.
-- 7 divergências dgxchen v7 revertidas (dataset, attn, LoRA, epochs, grad_norm, checkpoint, formatting)
-- 4 fixes de execução (mamba-ssm install, torch pin, num_workers=0, --no-deps)
+**Tempo total**: ~3-4h (com cache) ou ~4-5h (cold start)
+
+## Todos os 13 fixes aplicados
+
+### 7 divergências dgxchen v7 revertidas:
+1. Dataset `problem_ids_matched.csv` (não less_cot.csv)
+2. attn_implementation='eager' (não sdpa)
+3. LoRA 8 targets SEM lm_head
+4. num_train_epochs=1 (não 2)
+5. max_grad_norm=1e9 (efetivamente disabled)
+6. gradient_checkpointing=True + use_reentrant=False
+7. formatting_func no trainer com conversation wrap
+
+### 4 fixes execução (descobertos hoje 22/04):
+8. mamba-ssm + causal-conv1d install explicit (NemotronH requer)
+9. torch 2.5.1 pin via WHEELS DIRETOS (bypass --index-url bug Colab cp312)
+10. dataloader_num_workers=0 (prev pickle CudaDeviceProperties error)
+11. Unsloth --no-deps + uninstall torchcodec (prev ABI mismatch torch 2.11)
+
+### 2 fixes performance (descobertos no primeiro run):
+12. MAX_SEQ_LEN=**3072** (não 4096) — evita gradient offloading, 4x speedup
+13. PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True (anti-fragmentation)
+
+## Credenciais (Colab Secrets 🔒)
+Adicione os 3 na barra lateral (ícone cadeado):
+- `HF_KEY` = (seu HF token DEV atual)
+- `KAGGLE_USERNAME` = felipe1983
+- `KAGGLE_KEY` = (do kaggle.json)
+
+## Hardware
+- **Recomendado**: Colab Pro+ **H100 80GB HBM3**
+- Também funciona: A100 80GB
+- **Não funciona**: T4/L4/A10 (VRAM insuficiente para Nemotron-30B + MoE LoRA)
+
+## Expected outcome
+Score Kaggle: **0.84-0.85** (replica dgxchen v7 EXACT com 0.85 LB verificado 22/04/2026)
 
 ## Credenciais (Colab Secrets - icone cadeado no painel esquerdo)
 Adicione estes 3 secrets no Colab (Runtime > Secrets):
@@ -198,6 +235,8 @@ print()
 env = os.environ.copy()
 env['PYTHONUNBUFFERED'] = '1'
 env['PYTHONIOENCODING'] = 'utf-8'
+env['PYTORCH_CUDA_ALLOC_CONF'] = 'expandable_segments:True'  # anti-fragmentation
+env['MAX_SEQ_LEN'] = '3072'  # p99 safe, H100 80GB fit, ~40s/step (vs 2.75min com 4096)
 
 proc = subprocess.Popen(
     [sys.executable, '-u', SCRIPT_PATH],
@@ -250,7 +289,7 @@ NB = {
 }
 
 
-OUT = 'notebooks/KG1_V80_MEGA.ipynb'
+OUT = 'notebooks/KG1_V80_MEGA_V3.ipynb'
 os.makedirs('notebooks', exist_ok=True)
 with open(OUT, 'w', encoding='utf-8') as f:
     json.dump(NB, f, indent=1)

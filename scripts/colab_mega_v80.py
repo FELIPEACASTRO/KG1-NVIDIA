@@ -118,7 +118,7 @@ print("=" * 70)
 
 from unsloth import FastLanguageModel
 
-MAX_SEQ_LEN = int(os.environ.get("MAX_SEQ_LEN", 4096))  # 4096 fits H100 80GB com MoE LoRA (max observed 3244 tokens)
+MAX_SEQ_LEN = int(os.environ.get("MAX_SEQ_LEN", 3072))  # 3072 covers p99=2911 tokens, H100 80GB fit sem gradient offload
 print(f"Loading {MODEL_PATH} via Unsloth (attn=eager, max_seq_len={MAX_SEQ_LEN})...")
 
 # Reduce CUDA fragmentation (suggested by OOM error msg)
