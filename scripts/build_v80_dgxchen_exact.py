@@ -405,7 +405,8 @@ training_args = SFTConfig(
     # FIX #6: V79 removed gradient_checkpointing from SFTConfig -> dgxchen v7 KEEPS it
     gradient_checkpointing=True,
     gradient_checkpointing_kwargs={'use_reentrant': False},
-    dataloader_num_workers=2,
+    dataloader_num_workers=0,  # V80 fix: num_workers>=1 fails pickle CudaDeviceProperties
+                                # in formatting_func closure on HF Jobs (and some Colab envs)
     remove_unused_columns=False,
     seed=SEED,
     report_to='none',

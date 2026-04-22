@@ -572,7 +572,8 @@ training_args = SFTConfig(
     bf16=True,
     gradient_checkpointing=True,                # dgxchen v7 exact
     gradient_checkpointing_kwargs={"use_reentrant": False},
-    dataloader_num_workers=2,
+    dataloader_num_workers=0,                   # HF Jobs fix: num_workers>=1 fails
+                                                # pickling CudaDeviceProperties in formatting_func closure
     remove_unused_columns=False,
     seed=SEED,
     report_to="none",
