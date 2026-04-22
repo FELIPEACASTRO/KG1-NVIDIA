@@ -105,9 +105,10 @@ def sh(cmd, timeout=900, check=True):
     return r
 
 
-# Uninstall torch (multi-pass)
-print('  Uninstalling existing torch...')
-for pkg in ['torch', 'torchvision', 'torchaudio']:
+# Uninstall torch + Colab pre-installed torch.* packages (torch 2.11 ABI conflicts)
+print('  Uninstalling existing torch + Colab pre-installed torchcodec/torchao/etc...')
+for pkg in ['torch', 'torchvision', 'torchaudio',
+            'torchcodec', 'torchao', 'torchdata', 'torchtune', 'torchsummary']:
     for i in range(5):
         r = sh([sys.executable, '-m', 'pip', 'uninstall', '-y', pkg], check=False)
         if 'Successfully uninstalled' not in r.stdout:
