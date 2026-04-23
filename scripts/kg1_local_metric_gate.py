@@ -22,6 +22,12 @@ if str(REPO_ROOT) not in sys.path:
 from src.competition_utils import box_answer, canonical_answer, canonical_boxed_payload  # noqa: E402
 from src.perfect_solver import classify_puzzle, solve  # noqa: E402
 
+try:
+    from scripts.kg1_canonicalize_output import canonicalize_answer, detect_family  # noqa: E402
+except Exception:  # pragma: no cover - optional import
+    canonicalize_answer = None
+    detect_family = None
+
 
 WEAK_FAMILIES = ("text_encryption", "equation_transform", "bit_manipulation")
 
@@ -68,6 +74,70 @@ def extract_boxed(text: str | None) -> str | None:
             if depth == 0:
                 return text[brace_start + 1:idx].strip()
     return None
+
+
+def extract_final_answer_official(text: str | None) -> str:
+    """Byte-exact replica of Kaggle's ``extract_final_answer``.
+
+    Source: ``C:/Users/davis/AppData/Local/Temp/tc/metric_official_exact.py``
+    (lines 114-161, sha-checked on 2026-04-22).
+
+    DO NOT "fix" the nested-brace bug here — the gate MUST mirror whatever the
+    real scorer does. Use :func:`extract_boxed` for the depth-walking (gentler)
+    extractor.
+    """
+    if text is None:
+        return 'NOT_FOUND'
+
+    matches = re.findall(r'\\boxed\{([^}]*)(?:\}|$)', text)
+    if matches:
+        non_empty = [m.strip() for m in matches if m.strip()]
+        if non_empty:
+            return non_empty[-1]
+        return matches[-1].strip()
+
+    patterns = [
+        r'The final answer is:\s*([^\n]+)',
+        r'Final answer is:\s*([^\n]+)',
+        r'Final answer\s*[:\uff1a]\s*([^\n]+)',
+        r'final answer\s*[:\uff1a]\s*([^\n]+)',
+    ]
+    for pattern in patterns:
+        matches = re.findall(pattern, text, re.IGNORECASE)
+        if matches:
+            return matches[-1].strip()
+
+    matches = re.findall(r'-?\d+(?:\.\d+)?', text)
+    if matches:
+        return matches[-1]
+
+    lines = [line.strip() for line in text.splitlines() if line.strip()]
+    return lines[-1] if lines else 'NOT_FOUND'
+
+
+def verify_official(stored_answer: str, predicted: str) -> bool:
+    """Byte-exact replica of Kaggle's ``verify`` function.
+
+    Source: ``metric_official_exact.py`` lines 164-198.
+
+    Two traps to remember:
+    - ``re.fullmatch(r'[01]+', stored)`` forces STRICT string compare on any
+      stored label that only contains 0/1 digits (BUG-2).
+    - ``math.isclose(rel_tol=1e-2, abs_tol=1e-5)`` — the abs_tol=1e-5 matters
+      for near-zero values.
+    """
+    stored_answer = stored_answer.strip()
+    predicted = predicted.strip()
+
+    if re.fullmatch(r'[01]+', stored_answer):
+        return predicted.lower() == stored_answer.lower()
+
+    try:
+        stored_num = float(stored_answer)
+        predicted_num = float(predicted)
+        return math.isclose(stored_num, predicted_num, rel_tol=1e-2, abs_tol=1e-5)
+    except Exception:
+        return predicted.lower() == stored_answer.lower()
 
 
 def maybe_float(value: str) -> float | None:
@@ -265,6 +335,102 @@ def build_decision(
         "reasons": reasons,
         "weak_family_scores": weak,
     }
+
+
+def score_with_canonicalization(
+    predictions_df,
+    solution_df,
+    apply_canonical: bool = True,
+    prediction_col: str = "prediction",
+    answer_col: str = "answer",
+    id_col: str = "id",
+    prompt_col: str = "prompt",
+) -> dict:
+    """Score with canonicalization applied BEFORE extract_final_answer.
+
+    Replicates Kaggle's scoring flow (extract_final_answer + verify) but runs
+    predictions through :func:`canonicalize_answer` first. Returns both the
+    canonicalised and the raw accuracy so callers can measure the canonical
+    gain in isolation.
+
+    Args:
+        predictions_df: pandas DataFrame with columns ``id``, ``prediction``
+            and optionally ``prompt``.
+        solution_df: pandas DataFrame with columns ``id`` and ``answer``.
+        apply_canonical: whether to apply the canonicalizer. When False, this
+            returns the raw scorer output only.
+
+    Returns:
+        A dict with keys ``raw_score``, ``canonical_score``, ``by_family`` and
+        ``per_row`` (list of dicts for downstream analysis).
+    """
+    if canonicalize_answer is None:  # pragma: no cover - defensive
+        raise RuntimeError(
+            "canonicalize_answer is unavailable; import scripts.kg1_canonicalize_output first."
+        )
+
+    import pandas as pd  # Deferred import — keep module cheap to load.
+
+    merged = solution_df.merge(predictions_df, on=id_col, how="inner")
+
+    per_row: list[dict[str, Any]] = []
+    raw_correct = 0
+    canon_correct = 0
+    by_family: dict[str, dict[str, int]] = defaultdict(
+        lambda: {"total": 0, "raw_correct": 0, "canon_correct": 0}
+    )
+    for _, row in merged.iterrows():
+        expected = str(row[answer_col])
+        prediction_raw = str(row.get(prediction_col) or "")
+        prompt = str(row.get(prompt_col) or "")
+
+        family = detect_family(prompt) if (detect_family and prompt) else classify_puzzle(prompt)
+
+        raw_extracted = extract_final_answer_official(prediction_raw)
+        raw_match = verify_official(expected, raw_extracted)
+
+        if apply_canonical:
+            canon_wrapped = canonicalize_answer(prediction_raw, family_hint=family)
+        else:
+            canon_wrapped = prediction_raw
+        canon_extracted = extract_final_answer_official(canon_wrapped)
+        canon_match = verify_official(expected, canon_extracted)
+
+        raw_correct += int(raw_match)
+        canon_correct += int(canon_match)
+
+        fam_bucket = by_family[family or "unknown"]
+        fam_bucket["total"] += 1
+        fam_bucket["raw_correct"] += int(raw_match)
+        fam_bucket["canon_correct"] += int(canon_match)
+
+        per_row.append({
+            "id": row[id_col],
+            "family": family or "unknown",
+            "expected": expected,
+            "raw_extracted": raw_extracted,
+            "canon_extracted": canon_extracted,
+            "raw_match": raw_match,
+            "canon_match": canon_match,
+        })
+
+    total = len(merged) or 1
+    summary = {
+        "raw_score": raw_correct / total,
+        "canonical_score": canon_correct / total,
+        "total_rows": total,
+        "by_family": {
+            fam: {
+                "total": stats["total"],
+                "raw_accuracy": stats["raw_correct"] / max(stats["total"], 1),
+                "canonical_accuracy": stats["canon_correct"] / max(stats["total"], 1),
+                "delta": (stats["canon_correct"] - stats["raw_correct"]) / max(stats["total"], 1),
+            }
+            for fam, stats in sorted(by_family.items())
+        },
+        "per_row": per_row,
+    }
+    return summary
 
 
 def parse_args() -> argparse.Namespace:
