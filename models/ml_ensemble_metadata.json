@@ -1,0 +1,131 @@
+{
+  "features": [
+    "output_format_boxed",
+    "output_format_final_answer",
+    "output_format_plain",
+    "num_boxes_in_output",
+    "boxed_is_empty",
+    "has_nested_braces",
+    "has_latex_command",
+    "has_comma_in_output",
+    "has_underscore",
+    "has_scientific",
+    "has_unicode",
+    "has_trailing_dot_zero",
+    "output_length_chars",
+    "output_length_tokens_est",
+    "family_bit_manipulation",
+    "family_cipher",
+    "family_equation_transform",
+    "family_gravity",
+    "family_numeral",
+    "family_unit_conversion",
+    "answer_is_binary",
+    "answer_is_numeric",
+    "answer_is_string",
+    "answer_leading_zero",
+    "answer_length",
+    "family_x_has_latex",
+    "family_x_dot_zero",
+    "family_x_comma",
+    "length_x_boxed",
+    "nested_x_latex"
+  ],
+  "n_features": 30,
+  "target_column": "label_would_pass",
+  "n_train": 53200,
+  "n_test": 13300,
+  "positive_rate": 0.435609022556391,
+  "results": {
+    "rf": {
+      "accuracy": 0.9980451127819548,
+      "precision": 0.99553264604811,
+      "recall": 1.0,
+      "f1": 0.99776132254176,
+      "roc_auc": 0.9999271667696333,
+      "brier": 0.0018106171906698148
+    },
+    "xgb": {
+      "accuracy": 0.9980451127819548,
+      "precision": 0.99553264604811,
+      "recall": 1.0,
+      "f1": 0.99776132254176,
+      "roc_auc": 0.9999283969441638,
+      "brier": 0.0018010676139965653
+    },
+    "lgb": {
+      "accuracy": 0.9980451127819548,
+      "precision": 0.99553264604811,
+      "recall": 1.0,
+      "f1": 0.99776132254176,
+      "roc_auc": 0.9999307078327674,
+      "brier": 0.001782314086129085
+    },
+    "cat": {
+      "accuracy": 0.9978947368421053,
+      "precision": 0.9955311103471983,
+      "recall": 0.9996548153261995,
+      "f1": 0.9975887013434378,
+      "roc_auc": 0.9999295581369446,
+      "brier": 0.0019459183719733272
+    },
+    "ensemble": {
+      "accuracy": 0.9980451127819548,
+      "precision": 0.99553264604811,
+      "recall": 1.0,
+      "f1": 0.99776132254176,
+      "roc_auc": 0.99992932819778,
+      "brier": 0.0018096491961718294
+    }
+  },
+  "per_family": {
+    "bit_manipulation": {
+      "n_samples": 11214,
+      "n_test": 2243,
+      "pos_rate": 0.42857142857142855,
+      "accuracy": 1.0,
+      "f1": 1.0,
+      "roc_auc": 1.0
+    },
+    "cipher": {
+      "n_samples": 11032,
+      "n_test": 2207,
+      "pos_rate": 0.42857142857142855,
+      "accuracy": 1.0,
+      "f1": 1.0,
+      "roc_auc": 1.0
+    },
+    "numeral": {
+      "n_samples": 11032,
+      "n_test": 2207,
+      "pos_rate": 0.42857142857142855,
+      "accuracy": 1.0,
+      "f1": 1.0,
+      "roc_auc": 1.0
+    },
+    "gravity": {
+      "n_samples": 11179,
+      "n_test": 2236,
+      "pos_rate": 0.42857142857142855,
+      "accuracy": 1.0,
+      "f1": 1.0,
+      "roc_auc": 1.0
+    },
+    "unit_conversion": {
+      "n_samples": 11158,
+      "n_test": 2232,
+      "pos_rate": 0.42857142857142855,
+      "accuracy": 1.0,
+      "f1": 1.0,
+      "roc_auc": 1.0
+    },
+    "equation_transform": {
+      "n_samples": 10885,
+      "n_test": 2177,
+      "pos_rate": 0.47156637574644006,
+      "accuracy": 0.9857602204869086,
+      "f1": 0.9851318944844125,
+      "roc_auc": 0.9962719613902883
+    }
+  }
+}
