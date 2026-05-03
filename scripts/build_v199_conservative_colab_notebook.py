@@ -1,0 +1,261 @@
+#!/usr/bin/env python3
+"""Build the V199 conservative continuation Colab notebook.
+
+The notebook reuses the verified V198 data pack, starts from the submitted V198
+final adapter, runs a short 20-step continuation, then converts and gates the
+result. It never submits to Kaggle automatically.
+"""
+
+from __future__ import annotations
+
+import json
+from pathlib import Path
+
+
+NOTEBOOK_PATH = Path("notebooks/KG1_V199_CONSERVATIVE_CONTINUE_COLAB_PRO.ipynb")
+REPORT_PATH = Path("runs/v199_conservative_continue_20260503/V199_NEXT_ACTIONS.md")
+
+PACK_URL = (
+    "https://raw.githubusercontent.com/FELIPEACASTRO/KG1-NVIDIA/"
+    "31d439bc4a9b33b7b3c772d3526149847103a9b1/"
+    "runs/v198_micro_distill_colab_pack_20260503/kg1_v198_colab_pack.zip"
+)
+PACK_SHA256 = "e61908c0f75018b0d265c3668600170f6fa99a1a4d559508f489cba9cd6b7c93"
+TRAIN_SCRIPT_URL = (
+    "https://raw.githubusercontent.com/FELIPEACASTRO/KG1-NVIDIA/"
+    "31d439bc4a9b33b7b3c772d3526149847103a9b1/scripts/hf_job_train_v90.py"
+)
+BRANCH_SCRIPT_BASE = "https://raw.githubusercontent.com/FELIPEACASTRO/KG1-NVIDIA/claude/competent-shamir/scripts"
+V198_FINAL_ADAPTER_SHA256 = "dd718b0d416fd9cd6ed928e90e185c131fee9d4cb956f57e59b7d00c3266dafa"
+TRAIN_SHA256 = "6d2742616300818eb50c54d36019551b24f5b71c607a2b28feda7461a709def0"
+VAL_SHA256 = "e59c907c6545e5e587097a64762e3e874508e8cd74d85d5c7c79354ebe56e73c"
+
+
+def code(source: str) -> dict:
+    return {"cell_type": "code", "execution_count": None, "metadata": {}, "outputs": [], "source": source.splitlines(True)}
+
+
+def markdown(source: str) -> dict:
+    return {"cell_type": "markdown", "metadata": {}, "source": source.splitlines(True)}
+
+
+def build_notebook() -> dict:
+    cells = [
+        markdown(
+            "# KG1 V199 conservative continuation\n\n"
+            "Short 20-step continuation from the submitted V198 final adapter. "
+            "This notebook trains and gates candidates only; it does not submit to Kaggle.\n"
+        ),
+        code(
+            "from google.colab import drive\n"
+            "drive.mount('/content/drive')\n"
+        ),
+        code(
+            "import hashlib, importlib.util, json, os, pathlib, shutil, subprocess, sys, urllib.request, zipfile\n"
+            "ROOT = pathlib.Path('/content/kg1_v199')\n"
+            "DRIVE_ROOT = pathlib.Path('/content/drive/MyDrive/KG1_NVIDIA_V199')\n"
+            "V198_DRIVE_ROOT = pathlib.Path('/content/drive/MyDrive/KG1_NVIDIA_V198')\n"
+            "V198_PACK = V198_DRIVE_ROOT / 'kg1_v198_colab_pack.zip'\n"
+            "PACK = V198_PACK if V198_PACK.exists() else DRIVE_ROOT / 'kg1_v198_colab_pack.zip'\n"
+            f"PACK_URL = '{PACK_URL}'\n"
+            f"PACK_SHA256 = '{PACK_SHA256}'\n"
+            "INIT_ADAPTER = V198_DRIVE_ROOT / 'output_v198/final_adapter'\n"
+            f"V198_FINAL_ADAPTER_SHA256 = '{V198_FINAL_ADAPTER_SHA256}'\n"
+            "OUT_BASE = DRIVE_ROOT / 'output_v199_conservative_20'\n"
+            "\n"
+            "def sha256_path(path):\n"
+            "    h = hashlib.sha256()\n"
+            "    with open(path, 'rb') as f:\n"
+            "        for chunk in iter(lambda: f.read(1024 * 1024), b''):\n"
+            "            h.update(chunk)\n"
+            "    return h.hexdigest()\n"
+            "\n"
+            "def adapter_ready(path):\n"
+            "    cfg = path / 'adapter_config.json'\n"
+            "    model = path / 'adapter_model.safetensors'\n"
+            "    if not cfg.exists() or not model.exists():\n"
+            "        return False\n"
+            "    if cfg.stat().st_size < 100 or model.stat().st_size < 4_000_000_000:\n"
+            "        return False\n"
+            "    json.loads(cfg.read_text(encoding='utf-8'))\n"
+            "    return True\n"
+            "\n"
+            "DRIVE_ROOT.mkdir(parents=True, exist_ok=True)\n"
+            "assert adapter_ready(INIT_ADAPTER), f'Missing submitted V198 final adapter: {INIT_ADAPTER}'\n"
+            "init_sha = sha256_path(INIT_ADAPTER / 'adapter_model.safetensors')\n"
+            "print('V198 final adapter sha:', init_sha)\n"
+            "assert init_sha == V198_FINAL_ADAPTER_SHA256, 'V198 final adapter SHA mismatch; do not continue from an unverified adapter.'\n"
+            "\n"
+            "if not PACK.exists():\n"
+            "    print('V198 pack not found in Drive; downloading verified pack...')\n"
+            "    urllib.request.urlretrieve(PACK_URL, PACK)\n"
+            "pack_hash = sha256_path(PACK)\n"
+            "print('Pack SHA256:', pack_hash)\n"
+            "assert pack_hash == PACK_SHA256, f'Pack SHA mismatch: {pack_hash}'\n"
+            "\n"
+            "shutil.rmtree(ROOT, ignore_errors=True)\n"
+            "ROOT.mkdir(parents=True, exist_ok=True)\n"
+            "with zipfile.ZipFile(PACK) as zf:\n"
+            "    zf.extractall(ROOT)\n"
+            "assert (ROOT / 'data/v198/v198_micro_train.strict.jsonl').exists()\n"
+            "assert (ROOT / 'data/v198/v198_micro_val.strict.jsonl').exists()\n"
+            "assert (ROOT / 'scripts/hf_job_train_v90.py').exists()\n"
+            "print('Pack extracted to', ROOT)\n"
+        ),
+        code(
+            "%cd /content/kg1_v199\n"
+            "import importlib.util, os, subprocess, sys\n"
+            "os.environ.setdefault('MAX_JOBS', '4')\n"
+            "os.environ.setdefault('PIP_ROOT_USER_ACTION', 'ignore')\n"
+            "\n"
+            "def pip_install(args):\n"
+            "    print('+ pip install', ' '.join(args))\n"
+            "    subprocess.check_call([sys.executable, '-m', 'pip', 'install', '-q', *args])\n"
+            "\n"
+            "def pip_uninstall(package_name):\n"
+            "    print('+ pip uninstall -y', package_name)\n"
+            "    subprocess.run([sys.executable, '-m', 'pip', 'uninstall', '-y', package_name], check=False)\n"
+            "\n"
+            "def install_if_missing(module_name, args):\n"
+            "    if importlib.util.find_spec(module_name) is None:\n"
+            "        pip_install(args)\n"
+            "    else:\n"
+            "        print(f'{module_name} already installed')\n"
+            "\n"
+            "pip_uninstall('torchao')\n"
+            "pip_install(['--upgrade', 'pip', 'setuptools', 'wheel', 'packaging', 'ninja==1.13.0'])\n"
+            "pip_install(['transformers==5.7.0', 'accelerate==1.13.0', 'peft==0.19.1', 'datasets==4.8.5', 'safetensors==0.7.0', 'huggingface_hub==1.13.0', 'sentencepiece==0.2.1', 'protobuf==7.34.1'])\n"
+            "install_if_missing('causal_conv1d', ['causal-conv1d==1.6.1', '--no-build-isolation'])\n"
+            "install_if_missing('mamba_ssm', ['mamba-ssm==2.3.1', '--no-build-isolation'])\n"
+            "assert importlib.util.find_spec('torchao') is None, 'torchao still installed; restart runtime and rerun cells from top'\n"
+            "import causal_conv1d, mamba_ssm\n"
+            "from mamba_ssm.ops.triton.layernorm_gated import rmsnorm_fn\n"
+            "print('mamba_ssm OK:', getattr(mamba_ssm, '__version__', 'unknown'))\n"
+        ),
+        code(
+            "import subprocess\n"
+            "gpu = subprocess.check_output('nvidia-smi --query-gpu=name,memory.total --format=csv,noheader', shell=True).decode().strip()\n"
+            "print(gpu)\n"
+            "assert ('H100' in gpu or 'A100' in gpu), 'Use H100 HighRAM or A100 HighRAM for this run.'\n"
+        ),
+        code(
+            "import os, pathlib, shutil, urllib.request\n"
+            "OUT = OUT_BASE\n"
+            "if OUT.exists():\n"
+            "    import datetime\n"
+            "    suffix = datetime.datetime.utcnow().strftime('%Y%m%d_%H%M%S')\n"
+            "    OUT = pathlib.Path(str(OUT_BASE) + '_' + suffix)\n"
+            "OUT.mkdir(parents=True, exist_ok=True)\n"
+            "print('V199_OUT =', OUT)\n"
+            f"FIXED_TRAIN_SCRIPT_URL = '{TRAIN_SCRIPT_URL}'\n"
+            "TRAIN_SCRIPT = pathlib.Path('/content/kg1_v199/scripts/hf_job_train_v90.py')\n"
+            "script_text = TRAIN_SCRIPT.read_text(encoding='utf-8') if TRAIN_SCRIPT.exists() else ''\n"
+            "if 'load_peft_weights_with_direct_fallback' not in script_text:\n"
+            "    print('Runtime has stale hf_job_train_v90.py; downloading PEFT direct-load fixed script...')\n"
+            "    urllib.request.urlretrieve(FIXED_TRAIN_SCRIPT_URL, TRAIN_SCRIPT)\n"
+            "script_text = TRAIN_SCRIPT.read_text(encoding='utf-8')\n"
+            "assert 'load_peft_weights_with_direct_fallback' in script_text\n"
+            "assert 'PEFT_MANUAL_LOAD_METHOD' in script_text\n"
+            "os.environ['UPLOAD_TO_HF'] = '0'\n"
+            "os.environ['MODEL_NAME'] = 'nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16'\n"
+            "os.environ['DATA_FILE'] = '/content/kg1_v199/data/v198/v198_micro_train.strict.jsonl'\n"
+            "os.environ['VAL_FILE'] = '/content/kg1_v199/data/v198/v198_micro_val.strict.jsonl'\n"
+            "os.environ['INIT_ADAPTER_DIR'] = str(INIT_ADAPTER)\n"
+            "os.environ['INIT_ADAPTER_LOAD_MODE'] = 'manual'\n"
+            "os.environ['PEFT_MANUAL_LOAD_METHOD'] = 'direct'\n"
+            "os.environ['OUTPUT_DIR'] = str(OUT)\n"
+            "os.environ['V199_OUT'] = str(OUT)\n"
+            "os.environ['RUN_ID'] = 'v199-conservative-v198-final-20s'\n"
+            "os.environ['MAX_LENGTH'] = '2048'\n"
+            "os.environ['BATCH_SIZE'] = '16'\n"
+            "os.environ['MICRO_BATCH_SIZE'] = '1'\n"
+            "os.environ['GRADIENT_CHECKPOINTING'] = '1'\n"
+            "os.environ['MAX_STEPS'] = '20'\n"
+            "os.environ['SAVE_EVERY_STEPS'] = '10'\n"
+            "os.environ['EVAL_EVERY_STEPS'] = '10'\n"
+            "os.environ['EVAL_MAX_EXAMPLES'] = '360'\n"
+            "os.environ['LEARNING_RATE'] = '3e-6'\n"
+            "os.environ['FINAL_LEARNING_RATE'] = '8e-7'\n"
+            "os.environ['ABORT_EVAL_LOSS_GT'] = '0.98'\n"
+            f"os.environ['EXPECTED_TRAIN_SHA256'] = '{TRAIN_SHA256}'\n"
+            f"os.environ['EXPECTED_VAL_SHA256'] = '{VAL_SHA256}'\n"
+            "os.environ['MIN_TRAIN_EXAMPLES'] = '1875'\n"
+            "os.environ['MIN_TOKENIZED_TRAIN_EXAMPLES'] = '1600'\n"
+            "os.environ['MIN_VAL_EXAMPLES'] = '720'\n"
+            "os.environ['MIN_TOKENIZED_VAL_EXAMPLES'] = '700'\n"
+            "os.environ['TRAINABLE_LORA_MODULES'] = 'in_proj,out_proj,q_proj,k_proj,v_proj,o_proj'\n"
+            "os.environ['MAX_TRAINABLE_PARAM_RATIO'] = '0.035'\n"
+            "!python scripts/hf_job_train_v90.py\n"
+        ),
+        markdown(
+            "Convert and gate the V199 adapters. This still does not submit to Kaggle.\n"
+        ),
+        code(
+            "import json, os, pathlib, subprocess, sys, urllib.request\n"
+            f"BASE = '{BRANCH_SCRIPT_BASE}'\n"
+            "for name in ['kg1_v198_posttrain_gate.py', 'kg1_v199_posttrain_gate.py', 'nemotron_submission_preflight.py', 'kg1_submission_gate.py', 'kg1_v198_final_submit_doublecheck.py']:\n"
+            "    dst = pathlib.Path('/content/kg1_v199/scripts') / name\n"
+            "    print('downloading', name)\n"
+            "    urllib.request.urlretrieve(f'{BASE}/{name}', dst)\n"
+            "\n"
+            "!python scripts/kg1_v199_posttrain_gate.py --root /content/kg1_v199 --output-root \"$V199_OUT\" --fail-on-block\n"
+            "\n"
+            "report_path = pathlib.Path(os.environ['V199_OUT']) / 'posttrain_kaggle_gate/v199_posttrain_gate_report.json'\n"
+            "report = json.loads(report_path.read_text(encoding='utf-8'))\n"
+            "assert report['decision']['ready'], report['decision']\n"
+            "primary_zip = report['decision']['primary_zip']\n"
+            "primary_label = report['decision']['primary_label']\n"
+            "print('primary_label =', primary_label)\n"
+            "print('primary_zip =', primary_zip)\n"
+            "\n"
+            "preflight_json = pathlib.Path(os.environ['V199_OUT']) / f'{primary_label}_preflight.json'\n"
+            "subprocess.run([sys.executable, 'scripts/nemotron_submission_preflight.py', '--adapter-zip', primary_zip, '--output-json', str(preflight_json), '--fail-on-block'], check=True)\n"
+            "\n"
+            "doublecheck_json = pathlib.Path(os.environ['V199_OUT']) / f'{primary_label}_submit_doublecheck.json'\n"
+            "subprocess.run([\n"
+            "    sys.executable, 'scripts/kg1_v198_final_submit_doublecheck.py',\n"
+            "    '--candidate-zip', primary_zip,\n"
+            "    '--expected-label', 'final' if primary_label == 'final' else 'checkpoint30',\n"
+            "    '--posttrain-report', str(report_path),\n"
+            "    '--preflight-report', str(preflight_json),\n"
+            "    '--output-json', str(doublecheck_json),\n"
+            "    '--fail-on-block',\n"
+            "], check=True)\n"
+            "print('V199 gated candidate ready. No Kaggle submit was performed.')\n"
+            "print('doublecheck:', doublecheck_json)\n"
+        ),
+    ]
+    return {
+        "cells": cells,
+        "metadata": {
+            "kernelspec": {"display_name": "Python 3", "language": "python", "name": "python3"},
+            "language_info": {"name": "python", "version": "3.x"},
+            "colab": {"provenance": [], "name": NOTEBOOK_PATH.name},
+            "accelerator": "GPU",
+        },
+        "nbformat": 4,
+        "nbformat_minor": 5,
+    }
+
+
+def main() -> int:
+    NOTEBOOK_PATH.parent.mkdir(parents=True, exist_ok=True)
+    NOTEBOOK_PATH.write_text(json.dumps(build_notebook(), indent=2), encoding="utf-8")
+    REPORT_PATH.parent.mkdir(parents=True, exist_ok=True)
+    REPORT_PATH.write_text(
+        "# V199 conservative continuation\n\n"
+        "- Notebook: `notebooks/KG1_V199_CONSERVATIVE_CONTINUE_COLAB_PRO.ipynb`\n"
+        "- Starts from submitted V198 final adapter SHA `dd718b0d...`.\n"
+        "- Runs 20 steps at LR `3e-6 -> 8e-7`.\n"
+        "- Saves checkpoints every 10 steps and evaluates every 10 steps.\n"
+        "- Converts and gates final/checkpoint candidates.\n"
+        "- Does not submit to Kaggle automatically.\n",
+        encoding="utf-8",
+    )
+    print(NOTEBOOK_PATH)
+    print(REPORT_PATH)
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
