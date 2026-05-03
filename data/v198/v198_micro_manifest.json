@@ -18,7 +18,7 @@
     "The notebook prefers V195 final_adapter/checkpoints, then falls back to the 0.86 baseline adapter."
   ],
   "pack_path": "runs\\v198_micro_distill_colab_pack_20260503\\kg1_v198_colab_pack.zip",
-  "pack_sha256": "7e3e41b55bb6f5736c3d5325c7b481f3b52ac918eb13c311e9a343f43f6dedca",
+  "pack_sha256": "e61908c0f75018b0d265c3668600170f6fa99a1a4d559508f489cba9cd6b7c93",
   "raw_val_path": "data\\v198\\v198_micro_val.raw.jsonl",
   "raw_val_sha256": "fe5530f0252cd47992eb983d063e8de90135b5def592d15daac603d985f26cad",
   "seed": 198,

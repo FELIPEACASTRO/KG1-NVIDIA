@@ -222,6 +222,7 @@ INIT_ADAPTER_REPO = env_str("INIT_ADAPTER_REPO", "")
 INIT_ADAPTER_REVISION = env_str("INIT_ADAPTER_REVISION", "")
 INIT_ADAPTER_SUBFOLDER = env_str("INIT_ADAPTER_SUBFOLDER", "")
 INIT_ADAPTER_LOAD_MODE = env_str("INIT_ADAPTER_LOAD_MODE", "manual")
+PEFT_MANUAL_LOAD_METHOD = env_str("PEFT_MANUAL_LOAD_METHOD", "auto")
 REQUIRE_OFFSET_MASK = env_bool("REQUIRE_OFFSET_MASK", True)
 DRY_RUN_VALIDATE_ONLY = env_bool("DRY_RUN_VALIDATE_ONLY", False)
 UPLOAD_TO_HF = env_bool("UPLOAD_TO_HF", True)
@@ -285,6 +286,103 @@ def create_lora_model(model: torch.nn.Module) -> torch.nn.Module:
     return get_peft_model(model, lora_config)
 
 
+def remap_peft_state_dict_for_direct_load(
+    weights: dict[str, torch.Tensor],
+    model_state_keys: set[str],
+    adapter_name: str = "default",
+) -> tuple[dict[str, torch.Tensor], list[str]]:
+    """Map PEFT adapter keys to the live PeftModel state dict namespace.
+
+    PEFT adapter files commonly store keys as ``lora_A.weight`` while a live
+    multi-adapter PeftModel exposes ``lora_A.default.weight``.  Recent PEFT /
+    Transformers combinations can fail in ``set_peft_model_state_dict`` before
+    applying this adapter-name conversion, so this explicit remap gives us a
+    stable direct-load path.
+    """
+
+    remapped: dict[str, torch.Tensor] = {}
+    unmapped: list[str] = []
+    replacements = (
+        (".lora_A.weight", f".lora_A.{adapter_name}.weight"),
+        (".lora_B.weight", f".lora_B.{adapter_name}.weight"),
+        (".lora_embedding_A", f".lora_embedding_A.{adapter_name}"),
+        (".lora_embedding_B", f".lora_embedding_B.{adapter_name}"),
+    )
+    for key, tensor in weights.items():
+        candidates = [key]
+        for old, new in replacements:
+            if old in key:
+                candidates.append(key.replace(old, new))
+        # Some saved adapters include a redundant PEFT prefix depending on
+        # save/load version. Keep this as a fallback rather than assuming it.
+        if key.startswith("model."):
+            candidates.append("base_model." + key)
+        mapped_key = next((candidate for candidate in candidates if candidate in model_state_keys), None)
+        if mapped_key:
+            remapped[mapped_key] = tensor
+        else:
+            unmapped.append(key)
+    return remapped, unmapped
+
+
+def load_peft_weights_with_direct_fallback(
+    loaded_model: torch.nn.Module,
+    weights: dict[str, torch.Tensor],
+    *,
+    adapter_name: str = "default",
+) -> None:
+    """Load adapter weights robustly across PEFT/Transformers versions."""
+
+    method = PEFT_MANUAL_LOAD_METHOD.strip().lower()
+    if method not in {"auto", "set_peft", "direct"}:
+        raise ValueError("PEFT_MANUAL_LOAD_METHOD must be one of: auto,set_peft,direct")
+
+    if method in {"auto", "set_peft"}:
+        try:
+            set_peft_model_state_dict(
+                loaded_model,
+                weights,
+                adapter_name=adapter_name,
+                low_cpu_mem_usage=False,
+            )
+            print("Manual adapter load used set_peft_model_state_dict successfully.")
+            return
+        except TypeError as exc:
+            if method == "set_peft":
+                raise
+            print(
+                "set_peft_model_state_dict failed; falling back to direct PEFT state_dict load: "
+                f"{type(exc).__name__}: {exc}"
+            )
+
+    model_state = loaded_model.state_dict()
+    remapped, unmapped = remap_peft_state_dict_for_direct_load(weights, set(model_state), adapter_name=adapter_name)
+    if not remapped:
+        raise RuntimeError("Direct PEFT adapter load mapped zero tensors.")
+    coverage = len(remapped) / max(1, len(weights))
+    print(
+        "Direct PEFT adapter load mapping: "
+        f"mapped={len(remapped)} unmapped={len(unmapped)} total={len(weights)} coverage={coverage:.4f}"
+    )
+    if coverage < 0.98:
+        raise RuntimeError(
+            "Direct PEFT adapter load coverage too low: "
+            f"mapped={len(remapped)} total={len(weights)} sample_unmapped={unmapped[:20]}"
+        )
+    incompatible = loaded_model.load_state_dict(remapped, strict=False)
+    missing_lora = [key for key in incompatible.missing_keys if ".lora_" in key]
+    unexpected_lora = [key for key in incompatible.unexpected_keys if ".lora_" in key]
+    print(
+        "Direct PEFT adapter load result: "
+        f"missing_lora={len(missing_lora)} unexpected_lora={len(unexpected_lora)}"
+    )
+    if missing_lora or unexpected_lora:
+        raise RuntimeError(
+            "Direct PEFT adapter load left LoRA key mismatches: "
+            f"missing_sample={missing_lora[:20]} unexpected_sample={unexpected_lora[:20]}"
+        )
+
+
 def load_trainable_adapter_or_create(model: torch.nn.Module) -> torch.nn.Module:
     """Load an existing LoRA adapter for incremental SFT, or create a new one."""
 
@@ -306,12 +404,7 @@ def load_trainable_adapter_or_create(model: torch.nn.Module) -> torch.nn.Module:
             loaded_model = create_lora_model(model)
             weights = load_peft_weights(str(adapter_dir), device="cpu")
             print(f"Manual local adapter load: tensors={len(weights)}")
-            set_peft_model_state_dict(
-                loaded_model,
-                weights,
-                adapter_name="default",
-                low_cpu_mem_usage=False,
-            )
+            load_peft_weights_with_direct_fallback(loaded_model, weights, adapter_name="default")
             return loaded_model
         with warnings.catch_warnings(record=True) as caught:
             warnings.simplefilter("always")
@@ -360,12 +453,7 @@ def load_trainable_adapter_or_create(model: torch.nn.Module) -> torch.nn.Module:
                 device="cpu",
             )
             print(f"Manual HF adapter load: tensors={len(weights)}")
-            set_peft_model_state_dict(
-                loaded_model,
-                weights,
-                adapter_name="default",
-                low_cpu_mem_usage=False,
-            )
+            load_peft_weights_with_direct_fallback(loaded_model, weights, adapter_name="default")
             return loaded_model
         with warnings.catch_warnings(record=True) as caught:
             warnings.simplefilter("always")

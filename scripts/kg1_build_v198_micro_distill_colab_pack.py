@@ -513,6 +513,7 @@ def make_notebook(
                 "os.environ['VAL_FILE'] = '/content/kg1_v198/data/v198/v198_micro_val.strict.jsonl'\n",
                 "os.environ['INIT_ADAPTER_DIR'] = str(INIT_ADAPTER)\n",
                 "os.environ['INIT_ADAPTER_LOAD_MODE'] = 'manual'\n",
+                "os.environ['PEFT_MANUAL_LOAD_METHOD'] = 'direct'\n",
                 "os.environ['OUTPUT_DIR'] = str(OUT)\n",
                 "os.environ['V198_OUT'] = str(OUT)\n",
                 "os.environ['RUN_ID'] = 'v198-micro-distill-v197-gates'\n",
