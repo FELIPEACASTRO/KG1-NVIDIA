@@ -9,6 +9,7 @@
   "decision": "PASS",
   "error_count": 0,
   "findings": [],
+  "fixed_train_script_url": "https://raw.githubusercontent.com/FELIPEACASTRO/KG1-NVIDIA/31d439bc4a9b33b7b3c772d3526149847103a9b1/scripts/hf_job_train_v90.py",
   "notebook": "notebooks\\KG1_V198_MICRO_DISTILL_COLAB_PRO.ipynb",
   "pack": "runs\\v198_micro_distill_colab_pack_20260503\\kg1_v198_colab_pack.zip",
   "pack_sha256": "e61908c0f75018b0d265c3668600170f6fa99a1a4d559508f489cba9cd6b7c93",

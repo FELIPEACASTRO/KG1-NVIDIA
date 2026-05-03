@@ -200,6 +200,9 @@ def check_required_strings(source: str, findings: list[Finding]) -> None:
         "output_cleanup": "shutil.rmtree(OUT, ignore_errors=True)",
         "stale_script_repair": "Runtime has stale hf_job_train_v90.py; downloading PEFT direct-load fixed script",
         "fixed_train_script_url": "FIXED_TRAIN_SCRIPT_URL",
+        "fixed_train_script_download": "urllib.request.urlretrieve(FIXED_TRAIN_SCRIPT_URL, TRAIN_SCRIPT)",
+        "fixed_train_script_patch_assert": "assert 'load_peft_weights_with_direct_fallback' in script_text",
+        "fixed_train_script_env_assert": "assert 'PEFT_MANUAL_LOAD_METHOD' in script_text",
         "train_script": "!python scripts/hf_job_train_v90.py",
         "converter_script": "!python scripts/kg1_convert_local_training_adapter_to_kaggle_zip.py",
     }
@@ -211,6 +214,7 @@ def check_required_strings(source: str, findings: list[Finding]) -> None:
 def check_paths_and_env(source: str, manifest: dict[str, Any], findings: list[Finding]) -> None:
     pack_url = regex_value(source, "PACK_URL")
     pack_sha = regex_value(source, "PACK_SHA256")
+    fixed_train_script_url = regex_value(source, "FIXED_TRAIN_SCRIPT_URL")
     if not pack_url:
         add(findings, "error", "missing_pack_url", "PACK_URL not found")
     else:
@@ -221,6 +225,29 @@ def check_paths_and_env(source: str, manifest: dict[str, Any], findings: list[Fi
             add(findings, "error", "pack_url_not_commit_pinned", f"revision={revision!r}")
         if "kg1_v198_colab_pack.zip" not in pack_url:
             add(findings, "error", "pack_url_wrong_file", pack_url)
+    if not fixed_train_script_url:
+        add(findings, "error", "missing_fixed_train_script_url", "FIXED_TRAIN_SCRIPT_URL not found")
+    else:
+        if "raw.githubusercontent.com/FELIPEACASTRO/KG1-NVIDIA/" not in fixed_train_script_url:
+            add(findings, "error", "fixed_train_script_url_wrong_repo", fixed_train_script_url)
+        fixed_revision = (
+            fixed_train_script_url.split("/KG1-NVIDIA/", 1)[1].split("/", 1)[0]
+            if "/KG1-NVIDIA/" in fixed_train_script_url
+            else ""
+        )
+        if not re.fullmatch(r"[0-9a-f]{7,40}", fixed_revision):
+            add(findings, "error", "fixed_train_script_url_not_commit_pinned", f"revision={fixed_revision!r}")
+        if not fixed_train_script_url.endswith("/scripts/hf_job_train_v90.py"):
+            add(findings, "error", "fixed_train_script_url_wrong_file", fixed_train_script_url)
+        if pack_url and "/KG1-NVIDIA/" in pack_url:
+            pack_revision = pack_url.split("/KG1-NVIDIA/", 1)[1].split("/", 1)[0]
+            if fixed_revision != pack_revision:
+                add(
+                    findings,
+                    "error",
+                    "fixed_train_script_revision_mismatch",
+                    f"FIXED_TRAIN_SCRIPT_URL revision={fixed_revision} PACK_URL revision={pack_revision}",
+                )
     if not pack_sha:
         add(findings, "error", "missing_pack_sha", "PACK_SHA256 not found")
     elif pack_sha != manifest.get("pack_sha256"):
@@ -256,6 +283,57 @@ def check_dependencies(source: str, findings: list[Finding]) -> None:
         add(findings, "error", "missing_no_build_isolation", "mamba/causal_conv installs should use --no-build-isolation")
 
 
+def check_peft_direct_load_script_source(source: str, label: str, findings: list[Finding]) -> None:
+    """Block PEFT/Transformers adapter-load regressions before Colab runtime."""
+
+    required = [
+        "PEFT_MANUAL_LOAD_METHOD = env_str",
+        "def remap_peft_state_dict_for_direct_load",
+        "def load_peft_weights_with_direct_fallback",
+        "load_peft_weights_with_direct_fallback(loaded_model, weights, adapter_name=\"default\")",
+        "set_peft_model_state_dict failed; falling back to direct PEFT state_dict load",
+        "Direct PEFT adapter load mapping:",
+        "coverage < 0.98",
+        "missing_lora={len(missing_lora)}",
+    ]
+    for fragment in required:
+        if fragment not in source:
+            add(findings, "error", "peft_direct_load_guard_missing", f"{label}: missing {fragment!r}")
+
+    forbidden_old_blocks = [
+        "print(f\"Manual local adapter load: tensors={len(weights)}\")\n            set_peft_model_state_dict(",
+        "print(f\"Manual HF adapter load: tensors={len(weights)}\")\n            set_peft_model_state_dict(",
+    ]
+    for fragment in forbidden_old_blocks:
+        if fragment in source:
+            add(findings, "error", "peft_stale_direct_setter_block", f"{label}: stale direct set_peft_model_state_dict block remains")
+
+    try:
+        tree = ast.parse(source)
+    except SyntaxError as exc:
+        add(findings, "error", "peft_script_ast_parse_failed", f"{label}: {exc}")
+        return
+
+    def call_name(node: ast.AST) -> str:
+        if isinstance(node, ast.Name):
+            return node.id
+        if isinstance(node, ast.Attribute):
+            return node.attr
+        return ""
+
+    for function in [node for node in ast.walk(tree) if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef))]:
+        if function.name == "load_peft_weights_with_direct_fallback":
+            continue
+        for node in ast.walk(function):
+            if isinstance(node, ast.Call) and call_name(node.func) == "set_peft_model_state_dict":
+                add(
+                    findings,
+                    "error",
+                    "peft_direct_setter_outside_fallback",
+                    f"{label}: {function.name} still calls set_peft_model_state_dict directly",
+                )
+
+
 def check_pack(
     pack_path: Path,
     manifest: dict[str, Any],
@@ -288,6 +366,8 @@ def check_pack(
                 local = Path(script)
                 if local.exists() and hashlib.sha256(archive.read(script)).hexdigest() != sha256_file(local):
                     add(findings, "error", "zip_script_hash_mismatch", script)
+            train_script_source = archive.read("scripts/hf_job_train_v90.py").decode("utf-8")
+            check_peft_direct_load_script_source(train_script_source, "zip:scripts/hf_job_train_v90.py", findings)
     except Exception as exc:
         add(findings, "error", "zip_read_failed", str(exc))
 
@@ -318,6 +398,7 @@ def check_training_script(findings: list[Finding]) -> None:
         except SyntaxError as exc:
             add(findings, "error", "script_syntax_error", f"{script}: {exc}")
     train_src = Path("scripts/hf_job_train_v90.py").read_text(encoding="utf-8")
+    check_peft_direct_load_script_source(train_src, "local:scripts/hf_job_train_v90.py", findings)
     required_train_fragments = [
         "assert_file_sha256(train_path, EXPECTED_TRAIN_SHA256",
         "assert_file_sha256(val_path, EXPECTED_VAL_SHA256",
@@ -357,6 +438,34 @@ def network_check(pack_url: str, pack_sha: str, findings: list[Finding]) -> None
             tmp_path.unlink()
         except FileNotFoundError:
             pass
+
+
+def network_check_fixed_train_script(fixed_train_script_url: str, findings: list[Finding]) -> None:
+    if not fixed_train_script_url:
+        return
+    try:
+        with urllib.request.urlopen(fixed_train_script_url, timeout=60) as response:
+            status = getattr(response, "status", 200)
+            if status != 200:
+                add(findings, "error", "fixed_train_script_url_status", f"{status}")
+            data = response.read()
+        source = data.decode("utf-8")
+        check_peft_direct_load_script_source(source, "remote:FIXED_TRAIN_SCRIPT_URL", findings)
+        local_script = Path("scripts/hf_job_train_v90.py")
+        if local_script.exists():
+            remote_sha = hashlib.sha256(data).hexdigest()
+            local_sha = sha256_file(local_script)
+            if remote_sha != local_sha:
+                add(
+                    findings,
+                    "error",
+                    "fixed_train_script_remote_local_sha_mismatch",
+                    f"remote={remote_sha} local={local_sha}",
+                )
+    except urllib.error.HTTPError as exc:
+        add(findings, "error", "fixed_train_script_url_http_error", f"{exc.code}: {exc.reason}")
+    except Exception as exc:
+        add(findings, "error", "fixed_train_script_download_failed", str(exc))
 
 
 def pypi_check(findings: list[Finding]) -> None:
@@ -449,8 +558,10 @@ def main() -> int:
 
     pack_url = regex_value(all_source, "PACK_URL") or ""
     pack_sha = regex_value(all_source, "PACK_SHA256") or ""
+    fixed_train_script_url = regex_value(all_source, "FIXED_TRAIN_SCRIPT_URL") or ""
     if args.network:
         network_check(pack_url, pack_sha, findings)
+        network_check_fixed_train_script(fixed_train_script_url, findings)
         pypi_check(findings)
 
     errors = [finding for finding in findings if finding.severity == "error"]
@@ -463,6 +574,7 @@ def main() -> int:
         "notebook": str(args.notebook),
         "pack": str(args.pack),
         "pack_url": pack_url,
+        "fixed_train_script_url": fixed_train_script_url,
         "pack_sha256": pack_sha or manifest.get("pack_sha256", ""),
         "checks": {
             "notebook_cells": len(nb.get("cells", [])),
