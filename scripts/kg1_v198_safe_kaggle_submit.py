@@ -121,6 +121,15 @@ def exception_details(exc: BaseException) -> dict[str, Any]:
             value = getattr(exc, attr)
             if value is not None:
                 details[attr] = str(value)
+    response = getattr(exc, "response", None)
+    if response is not None:
+        details["response"] = {
+            "status_code": getattr(response, "status_code", None),
+            "reason": getattr(response, "reason", None),
+            "url": getattr(response, "url", None),
+            "headers": dict(getattr(response, "headers", {}) or {}),
+            "text": getattr(response, "text", None),
+        }
     cause = getattr(exc, "__cause__", None)
     if cause is not None:
         details["cause"] = {
@@ -132,6 +141,15 @@ def exception_details(exc: BaseException) -> dict[str, Any]:
                 value = getattr(cause, attr)
                 if value is not None:
                     details["cause"][attr] = str(value)
+        response = getattr(cause, "response", None)
+        if response is not None:
+            details["cause"]["response"] = {
+                "status_code": getattr(response, "status_code", None),
+                "reason": getattr(response, "reason", None),
+                "url": getattr(response, "url", None),
+                "headers": dict(getattr(response, "headers", {}) or {}),
+                "text": getattr(response, "text", None),
+            }
     return details
 
 
@@ -224,6 +242,13 @@ def main() -> int:
             if details.get("body"):
                 print("submit_error_body:")
                 print(str(details["body"])[:4000])
+            response = details.get("response") or {}
+            if response:
+                print(f"submit_error_response_status: {response.get('status_code')}")
+                print(f"submit_error_response_reason: {response.get('reason')}")
+                if response.get("text"):
+                    print("submit_error_response_text:")
+                    print(str(response["text"])[:4000])
             print(f"report: {args.output_json}")
             if args.no_raise_on_submit_error:
                 return 0
