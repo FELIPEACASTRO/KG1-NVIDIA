@@ -198,6 +198,8 @@ def check_required_strings(source: str, findings: list[Finding]) -> None:
         "torchao_assert_absent": "assert importlib.util.find_spec('torchao') is None",
         "mamba_import": "from mamba_ssm.ops.triton.layernorm_gated import rmsnorm_fn",
         "output_cleanup": "shutil.rmtree(OUT, ignore_errors=True)",
+        "stale_script_repair": "Runtime has stale hf_job_train_v90.py; downloading PEFT direct-load fixed script",
+        "fixed_train_script_url": "FIXED_TRAIN_SCRIPT_URL",
         "train_script": "!python scripts/hf_job_train_v90.py",
         "converter_script": "!python scripts/kg1_convert_local_training_adapter_to_kaggle_zip.py",
     }
