@@ -67,6 +67,7 @@ KNOWN_REGRESSION_ADAPTER_SHA256 = {
 }
 CANONICAL_086_ZIP_SHA256 = "a3b64b154a6690a58f2338ba1c405422eadc6e1c1357f662eecb187463dfdeee"
 CANONICAL_086_ADAPTER_SHA256 = "559fd024f5ffcaff0caceddeaf25c3801009d6cabf247fc8dfccbfaf2addd916"
+REQUIRED_KAGGLE_SUBMISSION_BASENAME = "submission.zip"
 
 
 def utc_now() -> str:
@@ -141,9 +142,18 @@ def inspect_zip(candidate_zip: Path) -> dict[str, Any]:
         reasons.append("candidate_is_canonical_086_baseline_zip")
     if sizes.get("adapter_model.safetensors", 0) < 4_000_000_000:
         reasons.append("adapter_model_smaller_than_expected_for_full_v198")
+    kaggle_filename_ready = candidate_zip.name == REQUIRED_KAGGLE_SUBMISSION_BASENAME
     return {
         "ok": not reasons,
         "path": str(candidate_zip),
+        "basename": candidate_zip.name,
+        "kaggle_filename_ready": kaggle_filename_ready,
+        "required_kaggle_basename": REQUIRED_KAGGLE_SUBMISSION_BASENAME,
+        "kaggle_filename_note": (
+            "Submit through kg1_v198_safe_kaggle_submit.py or stage this exact ZIP as submission.zip."
+            if not kaggle_filename_ready
+            else "Filename accepted by Kaggle."
+        ),
         "sha256": zip_sha,
         "entries": entries,
         "sizes": sizes,

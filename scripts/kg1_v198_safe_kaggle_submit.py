@@ -23,6 +23,7 @@ from typing import Any
 
 
 COMPETITION = "nvidia-nemotron-model-reasoning-challenge"
+REQUIRED_SUBMISSION_BASENAME = "submission.zip"
 
 
 def utc_now() -> str:
@@ -98,9 +99,45 @@ def validate_doublecheck(candidate_zip: Path, doublecheck_json: Path, expected_s
 
     return {
         "candidate_zip": str(candidate_zip),
+        "candidate_basename": candidate_zip.name,
+        "required_kaggle_basename": REQUIRED_SUBMISSION_BASENAME,
+        "needs_kaggle_basename_stage": candidate_zip.name != REQUIRED_SUBMISSION_BASENAME,
         "zip_sha256": actual_sha,
         "doublecheck_json": str(doublecheck_json),
         "doublecheck_generated_at": report.get("generated_at"),
+    }
+
+
+def prepare_kaggle_named_zip(candidate_zip: Path, output_json: Path) -> tuple[Path, dict[str, Any]]:
+    """Return a path whose basename satisfies Kaggle's submission.zip requirement."""
+    if candidate_zip.name == REQUIRED_SUBMISSION_BASENAME:
+        return candidate_zip, {
+            "required_basename": REQUIRED_SUBMISSION_BASENAME,
+            "mode": "original",
+            "path": str(candidate_zip),
+        }
+
+    preferred_stage = Path("/content/kg1_v198/kaggle_submit_stage")
+    stage_dir = preferred_stage if preferred_stage.parent.exists() else output_json.parent / "kaggle_submit_stage"
+    stage_dir.mkdir(parents=True, exist_ok=True)
+    staged_zip = stage_dir / REQUIRED_SUBMISSION_BASENAME
+    if staged_zip.exists() or staged_zip.is_symlink():
+        staged_zip.unlink()
+
+    try:
+        os.symlink(candidate_zip, staged_zip)
+        mode = "symlink"
+    except OSError:
+        # Fallback is expensive for multi-GB adapters, but preserves correctness
+        # on filesystems where symlinks are unavailable.
+        shutil.copy2(candidate_zip, staged_zip)
+        mode = "copy"
+
+    return staged_zip, {
+        "required_basename": REQUIRED_SUBMISSION_BASENAME,
+        "mode": mode,
+        "source": str(candidate_zip),
+        "path": str(staged_zip),
     }
 
 
@@ -204,11 +241,13 @@ def main() -> int:
     api = KaggleApi()
     api.authenticate()
     before = summarize_latest_submissions(api, limit=5)
+    submit_zip, submit_stage = prepare_kaggle_named_zip(candidate_zip, args.output_json)
     result: dict[str, Any] = {
         "generated_at": utc_now(),
         "competition": COMPETITION,
         "dry_run": args.dry_run,
         "validation": validation,
+        "submit_stage": submit_stage,
         "credentials": creds,
         "message": args.message,
         "submissions_before": before,
@@ -216,6 +255,8 @@ def main() -> int:
 
     print("=== KG1 V198 SAFE KAGGLE SUBMIT ===")
     print(f"candidate_zip: {candidate_zip}")
+    print(f"submit_zip: {submit_zip}")
+    print(f"submit_stage_mode: {submit_stage['mode']}")
     print(f"zip_sha256: {validation['zip_sha256']}")
     print(f"kaggle_user: {creds['username']}")
     print(f"dry_run: {args.dry_run}")
@@ -225,7 +266,7 @@ def main() -> int:
         result["submitted"] = False
     else:
         try:
-            response = api.competition_submit(str(candidate_zip), args.message, COMPETITION)
+            response = api.competition_submit(str(submit_zip), args.message, COMPETITION)
         except Exception as exc:
             details = exception_details(exc)
             result["submitted"] = False
