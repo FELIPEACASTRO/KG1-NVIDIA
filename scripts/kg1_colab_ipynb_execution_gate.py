@@ -204,11 +204,26 @@ def check_required_strings(source: str, findings: list[Finding]) -> None:
         "fixed_train_script_patch_assert": "assert 'load_peft_weights_with_direct_fallback' in script_text",
         "fixed_train_script_env_assert": "assert 'PEFT_MANUAL_LOAD_METHOD' in script_text",
         "train_script": "!python scripts/hf_job_train_v90.py",
-        "converter_script": "!python scripts/kg1_convert_local_training_adapter_to_kaggle_zip.py",
     }
     for code, needle in required.items():
         if needle not in source:
             add(findings, "error", code, f"missing required notebook fragment: {needle}")
+    has_legacy_converter = "!python scripts/kg1_convert_local_training_adapter_to_kaggle_zip.py" in source
+    has_posttrain_gate = "!python scripts/kg1_v198_posttrain_gate.py" in source
+    if not has_legacy_converter and not has_posttrain_gate:
+        add(
+            findings,
+            "error",
+            "converter_or_posttrain_gate",
+            "notebook must convert the trained adapter or run kg1_v198_posttrain_gate.py",
+        )
+    if has_posttrain_gate and "POSTTRAIN_SCRIPT_URL" not in source:
+        add(
+            findings,
+            "error",
+            "posttrain_gate_download_guard",
+            "posttrain gate notebook cell must define POSTTRAIN_SCRIPT_URL for stale pack/runtime repair",
+        )
 
 
 def check_paths_and_env(source: str, manifest: dict[str, Any], findings: list[Finding]) -> None:

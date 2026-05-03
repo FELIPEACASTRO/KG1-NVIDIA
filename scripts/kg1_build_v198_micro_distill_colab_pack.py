@@ -541,7 +541,9 @@ def make_notebook(
         {
             "cell_type": "markdown",
             "metadata": {},
-            "source": ["Convert the trained adapter to Kaggle layout. This does not submit to Kaggle.\n"],
+            "source": [
+                "Convert final/checkpoint-30 to Kaggle layout and run the post-training ZIP gate. This does not submit to Kaggle.\n"
+            ],
         },
         {
             "cell_type": "code",
@@ -549,10 +551,14 @@ def make_notebook(
             "metadata": {},
             "outputs": [],
             "source": [
-                "!python scripts/kg1_convert_local_training_adapter_to_kaggle_zip.py \\\n",
-                "  --source-adapter-dir \"$V198_OUT/final_adapter\" \\\n",
-                "  --output-dir \"$V198_OUT/kaggle_layout\" \\\n",
-                "  --run-id v198-micro-distill-v197-gates\n",
+                "import pathlib, urllib.request\n",
+                "POSTTRAIN_SCRIPT = pathlib.Path('/content/kg1_v198/scripts/kg1_v198_posttrain_gate.py')\n",
+                "POSTTRAIN_SCRIPT_URL = 'https://raw.githubusercontent.com/FELIPEACASTRO/KG1-NVIDIA/claude/competent-shamir/scripts/kg1_v198_posttrain_gate.py'\n",
+                "if not POSTTRAIN_SCRIPT.exists():\n",
+                "    print('Downloading V198 posttrain gate script...')\n",
+                "    urllib.request.urlretrieve(POSTTRAIN_SCRIPT_URL, POSTTRAIN_SCRIPT)\n",
+                "assert POSTTRAIN_SCRIPT.exists(), f'Missing posttrain gate script: {POSTTRAIN_SCRIPT}'\n",
+                "!python scripts/kg1_v198_posttrain_gate.py --root /content/kg1_v198 --output-root \"$V198_OUT\" --fail-on-block\n",
             ],
         },
     ]
@@ -722,6 +728,7 @@ def build(args: argparse.Namespace) -> dict[str, Any]:
             Path("scripts/kg1_sft_format_validator.py"),
             Path("scripts/hf_convert_training_to_kaggle_layout.py"),
             Path("scripts/kg1_convert_local_training_adapter_to_kaggle_zip.py"),
+            Path("scripts/kg1_v198_posttrain_gate.py"),
         ]
         for path in pack_files:
             if path.exists():
