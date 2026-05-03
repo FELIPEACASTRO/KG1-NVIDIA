@@ -327,7 +327,7 @@ def make_notebook(
                 "ROOT = pathlib.Path('/content/kg1_v198')\n",
                 "DRIVE_ROOT = pathlib.Path('/content/drive/MyDrive/KG1_NVIDIA_V198')\n",
                 "PACK = DRIVE_ROOT / 'kg1_v198_colab_pack.zip'\n",
-                "PACK_URL = 'https://raw.githubusercontent.com/FELIPEACASTRO/KG1-NVIDIA/claude/competent-shamir/runs/v198_micro_distill_colab_pack_20260503/kg1_v198_colab_pack.zip'\n",
+                "PACK_URL = 'https://raw.githubusercontent.com/FELIPEACASTRO/KG1-NVIDIA/5bea4f0/runs/v198_micro_distill_colab_pack_20260503/kg1_v198_colab_pack.zip'\n",
                 "OUT = DRIVE_ROOT / 'output_v198'\n",
                 "BASELINE_DIR = pathlib.Path('/content/drive/MyDrive/KG1_NVIDIA_V195/init_adapter/final')\n",
                 "V195_OUT = pathlib.Path('/content/drive/MyDrive/KG1_NVIDIA_V195/output_v195')\n",
