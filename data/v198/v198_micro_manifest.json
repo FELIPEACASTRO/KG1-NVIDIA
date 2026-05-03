@@ -18,7 +18,9 @@
     "The notebook prefers V195 final_adapter/checkpoints, then falls back to the 0.86 baseline adapter."
   ],
   "pack_path": "runs\\v198_micro_distill_colab_pack_20260503\\kg1_v198_colab_pack.zip",
-  "pack_sha256": "33ca771ab0c4559a671d2781d8a063220d048b5ac02630a825f69c2c9d6d9012",
+  "pack_sha256": "7e3e41b55bb6f5736c3d5325c7b481f3b52ac918eb13c311e9a343f43f6dedca",
+  "raw_val_path": "data\\v198\\v198_micro_val.raw.jsonl",
+  "raw_val_sha256": "fe5530f0252cd47992eb983d063e8de90135b5def592d15daac603d985f26cad",
   "seed": 198,
   "strict_train_path": "data\\v198\\v198_micro_train.strict.jsonl",
   "strict_train_sha256": "6d2742616300818eb50c54d36019551b24f5b71c607a2b28feda7461a709def0",
@@ -56,8 +58,8 @@
     "positive_equation_transform": 4,
     "rows_after_repeat": 30
   },
-  "val_path": "data\\v198\\v198_micro_val.jsonl",
+  "val_path": "data\\v198\\v198_micro_val.strict.jsonl",
   "val_rows": 720,
-  "val_sha256": "fe5530f0252cd47992eb983d063e8de90135b5def592d15daac603d985f26cad",
+  "val_sha256": "e59c907c6545e5e587097a64762e3e874508e8cd74d85d5c7c79354ebe56e73c",
   "version": "v198_micro_distill_colab_pack"
 }

@@ -20,10 +20,17 @@ import hashlib
 import json
 import random
 import shutil
+import sys
 import zipfile
 from collections import Counter, defaultdict
 from pathlib import Path
 from typing import Any
+
+REPO_ROOT = Path(__file__).resolve().parent.parent
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+from scripts.kg1_canonicalize_output import _extract_last_boxed_body, canonicalize_answer
 
 
 CANONICAL_FAMILIES = {
@@ -157,6 +164,48 @@ def clone_row(
     metadata["v198_clone_of"] = old_id
     if extra_metadata:
         metadata.update(extra_metadata)
+    out["metadata"] = metadata
+    return out
+
+
+def make_strict_eval_row(row: dict[str, Any]) -> dict[str, Any]:
+    """Convert validation rows to short answer-only completions.
+
+    This keeps eval deterministic and avoids wasting H100 time on long copied
+    rationales that are not needed for validation loss.
+    """
+    out = dict(row)
+    family = canonical_family(out.get("family") or out.get("subcategory"))
+    out["family"] = family
+    answer = str(out.get("answer") or "").strip()
+    if answer and ("{" in answer or "}" in answer):
+        boxed_answer = answer.replace("\\", "\\\\").replace("{", "\\{").replace("}", "\\}")
+        if family == "equation_transform":
+            completion = f"Final answer is: {answer}\n\\boxed{{{boxed_answer}}}"
+        else:
+            completion = f"\\boxed{{{boxed_answer}}}"
+    else:
+        completion = canonicalize_answer(f"\\boxed{{{answer}}}", family_hint=family) if answer else ""
+    if not completion and answer:
+        completion = f"\\boxed{{{answer}}}"
+    body = (_extract_last_boxed_body(completion) or answer).strip()
+    if body:
+        out["answer"] = body
+    messages = out.get("messages")
+    if isinstance(messages, list):
+        rewritten: list[dict[str, Any]] = []
+        replaced = False
+        for msg in messages:
+            msg_out = dict(msg) if isinstance(msg, dict) else msg
+            if isinstance(msg_out, dict) and msg_out.get("role") == "assistant":
+                msg_out["content"] = completion
+                replaced = True
+            rewritten.append(msg_out)
+        if not replaced:
+            rewritten.append({"role": "assistant", "content": completion})
+        out["messages"] = rewritten
+    metadata = dict(out.get("metadata") or {})
+    metadata["v198_eval_format"] = "strict_answer_only"
     out["metadata"] = metadata
     return out
 
@@ -396,7 +445,7 @@ def make_notebook(
                 "with zipfile.ZipFile(PACK) as zf:\n",
                 "    zf.extractall(ROOT)\n",
                 "assert (ROOT / 'data/v198/v198_micro_train.strict.jsonl').exists()\n",
-                "assert (ROOT / 'data/v198/v198_micro_val.jsonl').exists()\n",
+                "assert (ROOT / 'data/v198/v198_micro_val.strict.jsonl').exists()\n",
                 "assert (ROOT / 'scripts/hf_job_train_v90.py').exists()\n",
                 "\n",
                 "candidates = [\n",
@@ -461,7 +510,7 @@ def make_notebook(
                 "os.environ['UPLOAD_TO_HF'] = '0'\n",
                 "os.environ['MODEL_NAME'] = 'nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16'\n",
                 "os.environ['DATA_FILE'] = '/content/kg1_v198/data/v198/v198_micro_train.strict.jsonl'\n",
-                "os.environ['VAL_FILE'] = '/content/kg1_v198/data/v198/v198_micro_val.jsonl'\n",
+                "os.environ['VAL_FILE'] = '/content/kg1_v198/data/v198/v198_micro_val.strict.jsonl'\n",
                 "os.environ['INIT_ADAPTER_DIR'] = str(INIT_ADAPTER)\n",
                 "os.environ['INIT_ADAPTER_LOAD_MODE'] = 'manual'\n",
                 "os.environ['OUTPUT_DIR'] = str(OUT)\n",
@@ -525,7 +574,8 @@ def build(args: argparse.Namespace) -> dict[str, Any]:
     args.output_run_dir.mkdir(parents=True, exist_ok=True)
 
     base_rows_raw = read_jsonl(args.v195_strict_train)
-    val_rows = read_jsonl(args.v195_val)
+    val_rows_raw = read_jsonl(args.v195_val)
+    val_rows = [make_strict_eval_row(row) for row in val_rows_raw]
     base_rows, base_counts = sample_base_rows(base_rows_raw, targets=BASE_SAMPLE_TARGETS, rng=rng)
     anti_rows, anti_stats = collect_v196_anti_regression(args.v196_stress_events, args.anti_repeats)
     gain_rows, gain_stats = collect_v197_positive_distill(args.v197_stress_events, args.gain_repeats)
@@ -550,7 +600,8 @@ def build(args: argparse.Namespace) -> dict[str, Any]:
     train_path = args.output_data_dir / "v198_micro_train.jsonl"
     clean_path = args.output_data_dir / "v198_micro_train.clean.jsonl"
     strict_path = args.output_data_dir / "v198_micro_train.strict.jsonl"
-    val_path = args.output_data_dir / "v198_micro_val.jsonl"
+    raw_val_path = args.output_data_dir / "v198_micro_val.raw.jsonl"
+    val_path = args.output_data_dir / "v198_micro_val.strict.jsonl"
     manifest_path = args.output_data_dir / "v198_micro_manifest.json"
     report_path = args.output_run_dir / "V198_MICRO_DATASET_REPORT.md"
     next_path = args.output_run_dir / "V198_NEXT_ACTIONS.md"
@@ -559,6 +610,7 @@ def build(args: argparse.Namespace) -> dict[str, Any]:
     write_jsonl(train_path, deduped)
     write_jsonl(clean_path, deduped)
     write_jsonl(strict_path, deduped)
+    write_jsonl(raw_val_path, val_rows_raw)
     write_jsonl(val_path, val_rows)
 
     train_sha = sha256_file(strict_path)
@@ -582,10 +634,12 @@ def build(args: argparse.Namespace) -> dict[str, Any]:
         "train_path": str(train_path),
         "clean_train_path": str(clean_path),
         "strict_train_path": str(strict_path),
+        "raw_val_path": str(raw_val_path),
         "val_path": str(val_path),
         "train_sha256": sha256_file(train_path),
         "clean_train_sha256": sha256_file(clean_path),
         "strict_train_sha256": train_sha,
+        "raw_val_sha256": sha256_file(raw_val_path),
         "val_sha256": val_sha,
         "base_sample_counts": base_counts,
         "v196_anti_regression_stats": anti_stats,
@@ -657,6 +711,7 @@ def build(args: argparse.Namespace) -> dict[str, Any]:
             clean_path,
             strict_path,
             val_path,
+            raw_val_path,
             manifest_path,
             report_path,
             next_path,
