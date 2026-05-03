@@ -163,6 +163,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--output-json", type=Path, required=True)
     parser.add_argument("--poll-seconds", type=int, default=0)
     parser.add_argument("--dry-run", action="store_true")
+    parser.add_argument(
+        "--no-raise-on-submit-error",
+        action="store_true",
+        help="Write diagnostics and exit 0 when Kaggle rejects the submission. Useful in notebooks.",
+    )
     return parser.parse_args()
 
 
@@ -220,6 +225,8 @@ def main() -> int:
                 print("submit_error_body:")
                 print(str(details["body"])[:4000])
             print(f"report: {args.output_json}")
+            if args.no_raise_on_submit_error:
+                return 0
             raise
         else:
             result["submitted"] = True
