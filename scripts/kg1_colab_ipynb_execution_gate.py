@@ -38,6 +38,38 @@ EXPECTED_PINS = {
     "mamba-ssm": "2.3.1",
 }
 
+APPROVED_PACK_SHA256 = {
+    # Master notebook pack, commit 49c2c2fd. Data hashes match the V198
+    # micro-distill dataset, but the embedded pack manifest predates the final
+    # pack file SHA.
+    "7e3e41b55bb6f5736c3d5325c7b481f3b52ac918eb13c311e9a343f43f6dedca",
+    # Current repaired pack, commit 31d439bc.
+    "e61908c0f75018b0d265c3668600170f6fa99a1a4d559508f489cba9cd6b7c93",
+}
+
+APPROVED_FIXED_TRAIN_SCRIPT_REVISIONS = {
+    "31d439bc4a9b33b7b3c772d3526149847103a9b1",
+}
+
+APPROVED_POSTTRAIN_REVISIONS = {
+    "cee9825b0edd6ea2e829c94bdd7b1ff9410b30f3",
+}
+
+APPROVED_PREFLIGHT_REVISIONS = {
+    "8a1c0b934acde30c81237d33a74a18d11f6d5141",
+}
+
+APPROVED_FINAL_DOUBLECHECK_REVISIONS = {
+    "b2209b4daefb85e9d3c9e4dc5e26b3ba54dbcbd2",
+}
+
+APPROVED_SAFE_SUBMIT_REVISIONS = {
+    # First helper revision that stages the adapter as exactly submission.zip.
+    "cee234f4bac2abcff9f1452a440f0f7576e62eef",
+}
+
+V198_FINAL_SUBMIT_ZIP_SHA256 = "52c585c7f075a1a9735d23c16905e535d1ebbf51246b03a50ac3d07c3768a3a9"
+
 REQUIRED_ZIP_ENTRIES = {
     "data/v198/v198_micro_train.strict.jsonl",
     "data/v198/v198_micro_val.strict.jsonl",
@@ -74,6 +106,12 @@ EXPECTED_ENV = {
     "TRAINABLE_LORA_MODULES": "in_proj,out_proj,q_proj,k_proj,v_proj,o_proj",
     "MAX_TRAINABLE_PARAM_RATIO": "0.035",
 }
+
+
+def github_raw_revision(url: str) -> str:
+    if "/KG1-NVIDIA/" not in url:
+        return ""
+    return url.split("/KG1-NVIDIA/", 1)[1].split("/", 1)[0]
 
 
 @dataclass
@@ -123,6 +161,17 @@ def regex_value(source: str, name: str) -> str | None:
         if match:
             return match.group(1)
     return None
+
+
+def regex_values(source: str, name: str) -> list[str]:
+    patterns = [
+        rf"{re.escape(name)}\s*=\s*'([^']*)'",
+        rf'{re.escape(name)}\s*=\s*"([^"]*)"',
+    ]
+    values: list[str] = []
+    for pattern in patterns:
+        values.extend(match.group(1) for match in re.finditer(pattern, source))
+    return values
 
 
 def extract_env_assignments(source: str) -> dict[str, str]:
@@ -204,6 +253,11 @@ def check_required_strings(source: str, findings: list[Finding]) -> None:
         "fixed_train_script_patch_assert": "assert 'load_peft_weights_with_direct_fallback' in script_text",
         "fixed_train_script_env_assert": "assert 'PEFT_MANUAL_LOAD_METHOD' in script_text",
         "train_script": "!python scripts/hf_job_train_v90.py",
+        "posttrain_gate_script": "kg1_v198_posttrain_gate.py",
+        "posttrain_gate_fail_on_block": "--fail-on-block",
+        "preflight_script": "nemotron_submission_preflight.py",
+        "submission_gate_script": "kg1_submission_gate.py",
+        "final_submit_doublecheck": "kg1_v198_final_submit_doublecheck.py",
     }
     for code, needle in required.items():
         if needle not in source:
@@ -224,6 +278,12 @@ def check_required_strings(source: str, findings: list[Finding]) -> None:
             "posttrain_gate_download_guard",
             "posttrain gate notebook cell must define POSTTRAIN_SCRIPT_URL for stale pack/runtime repair",
         )
+    if "final_preflight.json" not in source:
+        add(findings, "error", "final_preflight_missing", "notebook must run final ZIP preflight")
+    if "checkpoint30_preflight.json" not in source:
+        add(findings, "warning", "checkpoint30_preflight_missing", "checkpoint-30 preflight is recommended for fallback selection")
+    if "final_submit_doublecheck.json" not in source:
+        add(findings, "error", "final_doublecheck_missing", "notebook must write final_submit_doublecheck.json before any submit")
 
 
 def check_paths_and_env(source: str, manifest: dict[str, Any], findings: list[Finding]) -> None:
@@ -235,7 +295,7 @@ def check_paths_and_env(source: str, manifest: dict[str, Any], findings: list[Fi
     else:
         if "raw.githubusercontent.com/FELIPEACASTRO/KG1-NVIDIA/" not in pack_url:
             add(findings, "error", "pack_url_wrong_repo", pack_url)
-        revision = pack_url.split("/KG1-NVIDIA/", 1)[1].split("/", 1)[0] if "/KG1-NVIDIA/" in pack_url else ""
+        revision = github_raw_revision(pack_url)
         if not re.fullmatch(r"[0-9a-f]{7,40}", revision):
             add(findings, "error", "pack_url_not_commit_pinned", f"revision={revision!r}")
         if "kg1_v198_colab_pack.zip" not in pack_url:
@@ -245,30 +305,21 @@ def check_paths_and_env(source: str, manifest: dict[str, Any], findings: list[Fi
     else:
         if "raw.githubusercontent.com/FELIPEACASTRO/KG1-NVIDIA/" not in fixed_train_script_url:
             add(findings, "error", "fixed_train_script_url_wrong_repo", fixed_train_script_url)
-        fixed_revision = (
-            fixed_train_script_url.split("/KG1-NVIDIA/", 1)[1].split("/", 1)[0]
-            if "/KG1-NVIDIA/" in fixed_train_script_url
-            else ""
-        )
+        fixed_revision = github_raw_revision(fixed_train_script_url)
         if not re.fullmatch(r"[0-9a-f]{7,40}", fixed_revision):
             add(findings, "error", "fixed_train_script_url_not_commit_pinned", f"revision={fixed_revision!r}")
+        elif fixed_revision not in APPROVED_FIXED_TRAIN_SCRIPT_REVISIONS:
+            add(findings, "error", "fixed_train_script_revision_not_approved", fixed_revision)
         if not fixed_train_script_url.endswith("/scripts/hf_job_train_v90.py"):
             add(findings, "error", "fixed_train_script_url_wrong_file", fixed_train_script_url)
-        if pack_url and "/KG1-NVIDIA/" in pack_url:
-            pack_revision = pack_url.split("/KG1-NVIDIA/", 1)[1].split("/", 1)[0]
-            if fixed_revision != pack_revision:
-                add(
-                    findings,
-                    "error",
-                    "fixed_train_script_revision_mismatch",
-                    f"FIXED_TRAIN_SCRIPT_URL revision={fixed_revision} PACK_URL revision={pack_revision}",
-                )
     if not pack_sha:
         add(findings, "error", "missing_pack_sha", "PACK_SHA256 not found")
-    elif pack_sha != manifest.get("pack_sha256"):
+    elif pack_sha not in APPROVED_PACK_SHA256:
+        add(findings, "error", "pack_sha_not_approved", pack_sha)
+    elif manifest.get("pack_sha256") and pack_sha != manifest.get("pack_sha256"):
         add(
             findings,
-            "error",
+            "warning",
             "pack_sha_manifest_mismatch",
             f"notebook={pack_sha} manifest={manifest.get('pack_sha256')}",
         )
@@ -296,6 +347,82 @@ def check_dependencies(source: str, findings: list[Finding]) -> None:
         add(findings, "error", "unversioned_transformers_install", "transformers must be version-pinned")
     if "--no-build-isolation" not in source:
         add(findings, "error", "missing_no_build_isolation", "mamba/causal_conv installs should use --no-build-isolation")
+
+
+def check_script_lineage_and_submission_cells(source: str, code_cells: list[str], findings: list[Finding]) -> None:
+    posttrain_url = regex_value(source, "POSTTRAIN_SCRIPT_URL") or ""
+    if not posttrain_url:
+        add(findings, "error", "missing_posttrain_script_url", "POSTTRAIN_SCRIPT_URL not found")
+    else:
+        revision = github_raw_revision(posttrain_url)
+        if revision not in APPROVED_POSTTRAIN_REVISIONS:
+            add(findings, "error", "posttrain_script_revision_not_approved", revision or posttrain_url)
+
+    base_urls = regex_values(source, "BASE")
+    preflight_bases = [url for url in base_urls if "raw.githubusercontent.com/FELIPEACASTRO/KG1-NVIDIA/" in url]
+    if preflight_bases:
+        latest_preflight_revision = github_raw_revision(preflight_bases[-1])
+        if latest_preflight_revision not in APPROVED_PREFLIGHT_REVISIONS:
+            add(findings, "error", "preflight_base_revision_not_approved", latest_preflight_revision)
+    else:
+        add(findings, "error", "missing_preflight_base_url", "preflight script download BASE URL not found")
+
+    doublecheck_urls = [
+        url for url in regex_values(source, "URL")
+        if url.endswith("/scripts/kg1_v198_final_submit_doublecheck.py")
+    ]
+    if not doublecheck_urls:
+        add(findings, "error", "missing_final_doublecheck_url", "kg1_v198_final_submit_doublecheck.py URL not found")
+    else:
+        revision = github_raw_revision(doublecheck_urls[-1])
+        if revision not in APPROVED_FINAL_DOUBLECHECK_REVISIONS:
+            add(findings, "error", "final_doublecheck_revision_not_approved", revision)
+
+    raw_submit_cells: list[int] = []
+    for idx, cell_source in enumerate(code_cells):
+        for line in cell_source.splitlines():
+            stripped = line.strip()
+            if stripped.startswith("!kaggle competitions submit"):
+                raw_submit_cells.append(idx)
+                break
+    if raw_submit_cells:
+        add(
+            findings,
+            "error",
+            "active_raw_kaggle_submit_cells",
+            f"raw kaggle CLI submit cells must be removed or commented before Run all: cells={raw_submit_cells}",
+        )
+
+    safe_submit_present = "kg1_v198_safe_kaggle_submit.py" in source
+    if safe_submit_present:
+        safe_urls = [
+            url for url in regex_values(source, "URL")
+            if url.endswith("/scripts/kg1_v198_safe_kaggle_submit.py")
+        ]
+        if not safe_urls:
+            add(findings, "error", "safe_submit_helper_url_missing", "safe submit helper must be downloaded from a pinned URL")
+        else:
+            revision = github_raw_revision(safe_urls[-1])
+            if revision not in APPROVED_SAFE_SUBMIT_REVISIONS:
+                add(findings, "error", "safe_submit_revision_without_submission_zip_fix", revision)
+        for fragment in [
+            "--candidate-zip",
+            "--doublecheck-json",
+            "--expected-sha256",
+            V198_FINAL_SUBMIT_ZIP_SHA256,
+            "--no-raise-on-submit-error",
+            "final_safe_submit_report_submission_name_fixed.json",
+        ]:
+            if fragment not in source:
+                add(findings, "error", "safe_submit_missing_guard", fragment)
+
+    if "files.upload()" in source:
+        add(
+            findings,
+            "warning",
+            "manual_kaggle_json_upload_cell_present",
+            "manual upload of kaggle.json is present; Colab Secrets userdata path is preferred",
+        )
 
 
 def check_peft_direct_load_script_source(source: str, label: str, findings: list[Finding]) -> None:
@@ -355,13 +482,24 @@ def check_pack(
     train_path: Path,
     val_path: Path,
     findings: list[Finding],
+    expected_pack_sha: str = "",
 ) -> None:
     if not pack_path.exists():
         add(findings, "error", "pack_missing", str(pack_path))
         return
     local_pack_sha = sha256_file(pack_path)
-    if local_pack_sha != manifest.get("pack_sha256"):
-        add(findings, "error", "local_pack_sha_mismatch", f"{local_pack_sha} != {manifest.get('pack_sha256')}")
+    expected = expected_pack_sha or str(manifest.get("pack_sha256") or "")
+    if expected and local_pack_sha != expected:
+        add(findings, "error", "local_pack_sha_mismatch", f"{local_pack_sha} != {expected}")
+    if local_pack_sha not in APPROVED_PACK_SHA256:
+        add(findings, "error", "local_pack_sha_not_approved", local_pack_sha)
+    if manifest.get("pack_sha256") and local_pack_sha != manifest.get("pack_sha256"):
+        add(
+            findings,
+            "warning",
+            "local_pack_sha_manifest_mismatch",
+            f"{local_pack_sha} != {manifest.get('pack_sha256')}",
+        )
     try:
         with zipfile.ZipFile(pack_path) as archive:
             bad = archive.testzip()
@@ -528,6 +666,7 @@ def render_markdown(payload: dict[str, Any]) -> str:
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--notebook", type=Path, required=True)
+    parser.add_argument("--notebook-url", help="Optional raw GitHub notebook URL to download before validation.")
     parser.add_argument("--pack", type=Path, required=True)
     parser.add_argument("--manifest", type=Path, default=Path("data/v198/v198_micro_manifest.json"))
     parser.add_argument("--train", type=Path, default=Path("data/v198/v198_micro_train.strict.jsonl"))
@@ -541,6 +680,14 @@ def parse_args() -> argparse.Namespace:
 def main() -> int:
     args = parse_args()
     findings: list[Finding] = []
+
+    if args.notebook_url:
+        try:
+            args.notebook.parent.mkdir(parents=True, exist_ok=True)
+            with urllib.request.urlopen(args.notebook_url, timeout=60) as response:
+                args.notebook.write_bytes(response.read())
+        except Exception as exc:
+            add(findings, "error", "notebook_url_download_failed", str(exc))
 
     if not args.notebook.exists():
         add(findings, "error", "notebook_missing", str(args.notebook))
@@ -567,13 +714,14 @@ def main() -> int:
     check_required_strings(all_source, findings)
     check_paths_and_env(all_source, manifest, findings)
     check_dependencies(all_source, findings)
+    check_script_lineage_and_submission_cells(all_source, code_cells, findings)
     check_data_files(args.train, args.val, manifest, findings)
-    check_pack(args.pack, manifest, args.train, args.val, findings)
-    check_training_script(findings)
 
     pack_url = regex_value(all_source, "PACK_URL") or ""
     pack_sha = regex_value(all_source, "PACK_SHA256") or ""
     fixed_train_script_url = regex_value(all_source, "FIXED_TRAIN_SCRIPT_URL") or ""
+    check_pack(args.pack, manifest, args.train, args.val, findings, expected_pack_sha=pack_sha)
+    check_training_script(findings)
     if args.network:
         network_check(pack_url, pack_sha, findings)
         network_check_fixed_train_script(fixed_train_script_url, findings)

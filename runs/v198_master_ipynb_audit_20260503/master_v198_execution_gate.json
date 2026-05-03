@@ -1,0 +1,124 @@
+{
+  "checks": {
+    "code_cells": 22,
+    "network": true,
+    "notebook_cells": 26,
+    "train_rows": 1875,
+    "val_rows": 720
+  },
+  "decision": "FAIL",
+  "error_count": 18,
+  "findings": [
+    {
+      "code": "stale_script_repair",
+      "detail": "missing required notebook fragment: Runtime has stale hf_job_train_v90.py; downloading PEFT direct-load fixed script",
+      "severity": "error"
+    },
+    {
+      "code": "fixed_train_script_patch_assert",
+      "detail": "missing required notebook fragment: assert 'load_peft_weights_with_direct_fallback' in script_text",
+      "severity": "error"
+    },
+    {
+      "code": "fixed_train_script_env_assert",
+      "detail": "missing required notebook fragment: assert 'PEFT_MANUAL_LOAD_METHOD' in script_text",
+      "severity": "error"
+    },
+    {
+      "code": "pack_sha_manifest_mismatch",
+      "detail": "notebook=7e3e41b55bb6f5736c3d5325c7b481f3b52ac918eb13c311e9a343f43f6dedca manifest=e61908c0f75018b0d265c3668600170f6fa99a1a4d559508f489cba9cd6b7c93",
+      "severity": "warning"
+    },
+    {
+      "code": "env_peft_manual_load_method_mismatch",
+      "detail": "observed=None expected='direct'",
+      "severity": "error"
+    },
+    {
+      "code": "active_raw_kaggle_submit_cells",
+      "detail": "raw kaggle CLI submit cells must be removed or commented before Run all: cells=[13, 14, 17, 19]",
+      "severity": "error"
+    },
+    {
+      "code": "manual_kaggle_json_upload_cell_present",
+      "detail": "manual upload of kaggle.json is present; Colab Secrets userdata path is preferred",
+      "severity": "warning"
+    },
+    {
+      "code": "local_pack_sha_manifest_mismatch",
+      "detail": "7e3e41b55bb6f5736c3d5325c7b481f3b52ac918eb13c311e9a343f43f6dedca != e61908c0f75018b0d265c3668600170f6fa99a1a4d559508f489cba9cd6b7c93",
+      "severity": "warning"
+    },
+    {
+      "code": "zip_script_hash_mismatch",
+      "detail": "scripts/hf_job_train_v90.py",
+      "severity": "error"
+    },
+    {
+      "code": "peft_direct_load_guard_missing",
+      "detail": "zip:scripts/hf_job_train_v90.py: missing 'PEFT_MANUAL_LOAD_METHOD = env_str'",
+      "severity": "error"
+    },
+    {
+      "code": "peft_direct_load_guard_missing",
+      "detail": "zip:scripts/hf_job_train_v90.py: missing 'def remap_peft_state_dict_for_direct_load'",
+      "severity": "error"
+    },
+    {
+      "code": "peft_direct_load_guard_missing",
+      "detail": "zip:scripts/hf_job_train_v90.py: missing 'def load_peft_weights_with_direct_fallback'",
+      "severity": "error"
+    },
+    {
+      "code": "peft_direct_load_guard_missing",
+      "detail": "zip:scripts/hf_job_train_v90.py: missing 'load_peft_weights_with_direct_fallback(loaded_model, weights, adapter_name=\"default\")'",
+      "severity": "error"
+    },
+    {
+      "code": "peft_direct_load_guard_missing",
+      "detail": "zip:scripts/hf_job_train_v90.py: missing 'set_peft_model_state_dict failed; falling back to direct PEFT state_dict load'",
+      "severity": "error"
+    },
+    {
+      "code": "peft_direct_load_guard_missing",
+      "detail": "zip:scripts/hf_job_train_v90.py: missing 'Direct PEFT adapter load mapping:'",
+      "severity": "error"
+    },
+    {
+      "code": "peft_direct_load_guard_missing",
+      "detail": "zip:scripts/hf_job_train_v90.py: missing 'coverage < 0.98'",
+      "severity": "error"
+    },
+    {
+      "code": "peft_direct_load_guard_missing",
+      "detail": "zip:scripts/hf_job_train_v90.py: missing 'missing_lora={len(missing_lora)}'",
+      "severity": "error"
+    },
+    {
+      "code": "peft_stale_direct_setter_block",
+      "detail": "zip:scripts/hf_job_train_v90.py: stale direct set_peft_model_state_dict block remains",
+      "severity": "error"
+    },
+    {
+      "code": "peft_stale_direct_setter_block",
+      "detail": "zip:scripts/hf_job_train_v90.py: stale direct set_peft_model_state_dict block remains",
+      "severity": "error"
+    },
+    {
+      "code": "peft_direct_setter_outside_fallback",
+      "detail": "zip:scripts/hf_job_train_v90.py: load_trainable_adapter_or_create still calls set_peft_model_state_dict directly",
+      "severity": "error"
+    },
+    {
+      "code": "peft_direct_setter_outside_fallback",
+      "detail": "zip:scripts/hf_job_train_v90.py: load_trainable_adapter_or_create still calls set_peft_model_state_dict directly",
+      "severity": "error"
+    }
+  ],
+  "fixed_train_script_url": "https://raw.githubusercontent.com/FELIPEACASTRO/KG1-NVIDIA/31d439bc4a9b33b7b3c772d3526149847103a9b1/scripts/hf_job_train_v90.py",
+  "notebook": "runs\\v198_master_ipynb_audit_20260503\\KG1_V198_MICRO_DISTILL_COLAB_PRO.master.ipynb",
+  "pack": "runs\\v198_master_ipynb_audit_20260503\\kg1_v198_colab_pack_49c2c2.zip",
+  "pack_sha256": "7e3e41b55bb6f5736c3d5325c7b481f3b52ac918eb13c311e9a343f43f6dedca",
+  "pack_url": "https://raw.githubusercontent.com/FELIPEACASTRO/KG1-NVIDIA/49c2c2fd118d1eba64ababde29c0218e57fa408b/runs/v198_micro_distill_colab_pack_20260503/kg1_v198_colab_pack.zip",
+  "warning_count": 3
+}
