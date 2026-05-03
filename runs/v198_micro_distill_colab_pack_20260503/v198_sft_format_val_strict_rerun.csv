@@ -1,0 +1,23 @@
+id,family,issues,body,suggested_fix,completion_length
+4e28b132,equation_transform,nested_braces,:\},"Final answer is: :}
+\boxed{:}}",31
+57f6878e,equation_transform,nested_braces,%\{\{,"Final answer is: %{{
+\boxed{%{{}",34
+5be6a3c1,equation_transform,nested_braces,\}\}?),"Final answer is: }}?)
+\boxed{}}?)}",36
+5d786524,equation_transform,nested_braces,[\{%',"Final answer is: [{%'
+\boxed{[{%'}",35
+d0b1e41a,equation_transform,nested_braces,"#\{""!","Final answer is: #{""!
+\boxed{#{""!}",35
+d407570e,equation_transform,nested_braces,)\}\}&,"Final answer is: )}}&
+\boxed{)}}&}",36
+d56a1b4c,equation_transform,nested_braces,"\{/""","Final answer is: {/""
+\boxed{{/""}",33
+d7bcb4a6,equation_transform,nested_braces,\}\{,"Final answer is: }{
+\boxed{}{}",32
+da61dedc,equation_transform,nested_braces,/|\{#,"Final answer is: /|{#
+\boxed{/|{#}",35
+f36fe07e,equation_transform,nested_braces,"?""\}","Final answer is: ?""}
+\boxed{?""}}",33
+fcad9241,equation_transform,nested_braces,\}?,"Final answer is: }?
+\boxed{}?}",31

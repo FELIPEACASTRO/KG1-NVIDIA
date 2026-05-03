@@ -1,0 +1,48 @@
+{
+  "by_family": {
+    "bit_manipulation": {
+      "clean": 120,
+      "clean_rate": 1.0,
+      "issues": {},
+      "total": 120
+    },
+    "equation_transform": {
+      "clean": 109,
+      "clean_rate": 0.9083333333333333,
+      "issues": {
+        "nested_braces": 11
+      },
+      "total": 120
+    },
+    "gravity_constant": {
+      "clean": 120,
+      "clean_rate": 1.0,
+      "issues": {},
+      "total": 120
+    },
+    "numeral_system": {
+      "clean": 120,
+      "clean_rate": 1.0,
+      "issues": {},
+      "total": 120
+    },
+    "text_encryption": {
+      "clean": 120,
+      "clean_rate": 1.0,
+      "issues": {},
+      "total": 120
+    },
+    "unit_conversion": {
+      "clean": 120,
+      "clean_rate": 1.0,
+      "issues": {},
+      "total": 120
+    }
+  },
+  "clean_rate": 0.9847222222222223,
+  "clean_rows": 709,
+  "issue_totals": {
+    "nested_braces": 11
+  },
+  "total_rows": 720
+}

@@ -1,0 +1,33 @@
+{
+  "avg_assistant_chars": 19.919444444444444,
+  "blank_assistant_sample": [],
+  "boxed_rate": 1.0,
+  "duplicate_ids_sample": [],
+  "duplicate_prompt_excess_count": 0,
+  "family_counts": {
+    "bit_manipulation": 120,
+    "equation_transform": 120,
+    "gravity_constant": 120,
+    "numeral_system": 120,
+    "text_encryption": 120,
+    "unit_conversion": 120
+  },
+  "generated_at": "2026-05-03T18:38:33+00:00",
+  "missing_messages_sample": [],
+  "parse_errors_sample": [],
+  "path": "data\\v198\\v198_micro_val.strict.jsonl",
+  "reasons": [],
+  "records_not_in_train_csv_sample": [],
+  "rows": 720,
+  "secret_findings_sample": [],
+  "sha256": "e59c907c6545e5e587097a64762e3e874508e8cd74d85d5c7c79354ebe56e73c",
+  "source_counts": {
+    "v195_val_gold_safe": 720
+  },
+  "test_id_overlap_sample": [],
+  "test_prompt_overlap_sample": [],
+  "unboxed_assistant_sample": [],
+  "unknown_family_sample": [],
+  "valid": true,
+  "warnings": []
+}

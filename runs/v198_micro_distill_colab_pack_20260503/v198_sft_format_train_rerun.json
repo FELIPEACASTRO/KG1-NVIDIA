@@ -1,0 +1,44 @@
+{
+  "by_family": {
+    "bit_manipulation": {
+      "clean": 474,
+      "clean_rate": 1.0,
+      "issues": {},
+      "total": 474
+    },
+    "equation_transform": {
+      "clean": 552,
+      "clean_rate": 1.0,
+      "issues": {},
+      "total": 552
+    },
+    "gravity_constant": {
+      "clean": 220,
+      "clean_rate": 1.0,
+      "issues": {},
+      "total": 220
+    },
+    "numeral_system": {
+      "clean": 220,
+      "clean_rate": 1.0,
+      "issues": {},
+      "total": 220
+    },
+    "text_encryption": {
+      "clean": 189,
+      "clean_rate": 1.0,
+      "issues": {},
+      "total": 189
+    },
+    "unit_conversion": {
+      "clean": 220,
+      "clean_rate": 1.0,
+      "issues": {},
+      "total": 220
+    }
+  },
+  "clean_rate": 1.0,
+  "clean_rows": 1875,
+  "issue_totals": {},
+  "total_rows": 1875
+}

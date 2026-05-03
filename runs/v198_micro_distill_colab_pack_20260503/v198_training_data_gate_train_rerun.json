@@ -1,0 +1,37 @@
+{
+  "avg_assistant_chars": 564.7050666666667,
+  "blank_assistant_sample": [],
+  "boxed_rate": 1.0,
+  "duplicate_ids_sample": [],
+  "duplicate_prompt_excess_count": 124,
+  "family_counts": {
+    "bit_manipulation": 474,
+    "equation_transform": 552,
+    "gravity_constant": 220,
+    "numeral_system": 220,
+    "text_encryption": 189,
+    "unit_conversion": 220
+  },
+  "generated_at": "2026-05-03T18:38:34+00:00",
+  "missing_messages_sample": [],
+  "parse_errors_sample": [],
+  "path": "data\\v198\\v198_micro_train.strict.jsonl",
+  "reasons": [],
+  "records_not_in_train_csv_sample": [],
+  "rows": 1875,
+  "secret_findings_sample": [],
+  "sha256": "6d2742616300818eb50c54d36019551b24f5b71c607a2b28feda7461a709def0",
+  "source_counts": {
+    "v198_v195_balanced_rehearsal": 1729,
+    "v198_v196_wrong_anti_regression": 116,
+    "v198_v197_strict_gain_distill": 30
+  },
+  "test_id_overlap_sample": [],
+  "test_prompt_overlap_sample": [],
+  "unboxed_assistant_sample": [],
+  "unknown_family_sample": [],
+  "valid": true,
+  "warnings": [
+    "duplicate_prompts"
+  ]
+}
