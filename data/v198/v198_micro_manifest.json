@@ -1,0 +1,63 @@
+{
+  "base_sample_counts": {
+    "bit_manipulation": 360,
+    "equation_transform": 520,
+    "gravity_constant": 220,
+    "numeral_system": 220,
+    "text_encryption": 189,
+    "unit_conversion": 220
+  },
+  "clean_train_path": "data\\v198\\v198_micro_train.clean.jsonl",
+  "clean_train_sha256": "6d2742616300818eb50c54d36019551b24f5b71c607a2b28feda7461a709def0",
+  "duplicate_id_drops": 38,
+  "notebook_path": "notebooks\\KG1_V198_MICRO_DISTILL_COLAB_PRO.ipynb",
+  "notes": [
+    "No Kaggle submission is produced.",
+    "V197 validation anchors are excluded from training to keep local validation meaningful.",
+    "V196 wrong cases are repeated with unique IDs as anti-regression rehearsal.",
+    "The notebook prefers V195 final_adapter/checkpoints, then falls back to the 0.86 baseline adapter."
+  ],
+  "pack_path": "runs\\v198_micro_distill_colab_pack_20260503\\kg1_v198_colab_pack.zip",
+  "pack_sha256": "4e387d9ce102a0c36a10984aefca7e860fe980fd1571393573ae799a27d1384a",
+  "seed": 198,
+  "strict_train_path": "data\\v198\\v198_micro_train.strict.jsonl",
+  "strict_train_sha256": "6d2742616300818eb50c54d36019551b24f5b71c607a2b28feda7461a709def0",
+  "train_family_counts": {
+    "bit_manipulation": 474,
+    "equation_transform": 552,
+    "gravity_constant": 220,
+    "numeral_system": 220,
+    "text_encryption": 189,
+    "unit_conversion": 220
+  },
+  "train_path": "data\\v198\\v198_micro_train.jsonl",
+  "train_role_counts": {
+    "anti_regression": 78,
+    "balanced_rehearsal": 1729,
+    "duplicate_id_fixed": 38,
+    "strict_gain_distill": 30
+  },
+  "train_rows": 1875,
+  "train_sha256": "6d2742616300818eb50c54d36019551b24f5b71c607a2b28feda7461a709def0",
+  "train_source_counts": {
+    "v198_v195_balanced_rehearsal": 1729,
+    "v198_v196_wrong_anti_regression": 116,
+    "v198_v197_strict_gain_distill": 30
+  },
+  "v196_anti_regression_stats": {
+    "rows_after_repeat": 116,
+    "wrong_bit_manipulation": 54,
+    "wrong_equation_transform": 4
+  },
+  "v197_positive_distill_stats": {
+    "dropped_validation_anchor": 4,
+    "dropped_validation_like_anchor": 2,
+    "positive_bit_manipulation": 1,
+    "positive_equation_transform": 4,
+    "rows_after_repeat": 30
+  },
+  "val_path": "data\\v198\\v198_micro_val.jsonl",
+  "val_rows": 720,
+  "val_sha256": "fe5530f0252cd47992eb983d063e8de90135b5def592d15daac603d985f26cad",
+  "version": "v198_micro_distill_colab_pack"
+}
