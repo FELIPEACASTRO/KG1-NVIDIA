@@ -111,11 +111,35 @@ def parse_score(value: Any) -> str | None:
     return text or None
 
 
+def exception_details(exc: BaseException) -> dict[str, Any]:
+    details: dict[str, Any] = {
+        "type": type(exc).__name__,
+        "message": str(exc),
+    }
+    for attr in ("status", "reason", "body", "headers"):
+        if hasattr(exc, attr):
+            value = getattr(exc, attr)
+            if value is not None:
+                details[attr] = str(value)
+    cause = getattr(exc, "__cause__", None)
+    if cause is not None:
+        details["cause"] = {
+            "type": type(cause).__name__,
+            "message": str(cause),
+        }
+        for attr in ("status", "reason", "body", "headers"):
+            if hasattr(cause, attr):
+                value = getattr(cause, attr)
+                if value is not None:
+                    details["cause"][attr] = str(value)
+    return details
+
+
 def summarize_latest_submissions(api: Any, limit: int = 5) -> list[dict[str, Any]]:
     try:
         submissions = api.competition_submissions(COMPETITION)
     except Exception as exc:
-        return [{"error": str(exc)[:500]}]
+        return [{"error": exception_details(exc)}]
     rows = []
     for sub in submissions[:limit]:
         rows.append({
@@ -177,10 +201,30 @@ def main() -> int:
         print("DRY RUN: not submitting.")
         result["submitted"] = False
     else:
-        response = api.competition_submit(str(candidate_zip), args.message, COMPETITION)
-        result["submitted"] = True
-        result["submit_response"] = str(response)
-        print(f"submit_response: {response}")
+        try:
+            response = api.competition_submit(str(candidate_zip), args.message, COMPETITION)
+        except Exception as exc:
+            details = exception_details(exc)
+            result["submitted"] = False
+            result["submit_error"] = details
+            result["submissions_after"] = summarize_latest_submissions(api, limit=8)
+            write_json(args.output_json, result)
+            print("submit_failed: True")
+            print(f"submit_error_type: {details.get('type')}")
+            print(f"submit_error_message: {details.get('message')}")
+            if details.get("status"):
+                print(f"submit_error_status: {details.get('status')}")
+            if details.get("reason"):
+                print(f"submit_error_reason: {details.get('reason')}")
+            if details.get("body"):
+                print("submit_error_body:")
+                print(str(details["body"])[:4000])
+            print(f"report: {args.output_json}")
+            raise
+        else:
+            result["submitted"] = True
+            result["submit_response"] = str(response)
+            print(f"submit_response: {response}")
 
     if args.poll_seconds > 0:
         print(f"Waiting {args.poll_seconds}s before polling submissions...")
