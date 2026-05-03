@@ -5,7 +5,7 @@
 - warnings: `0`
 - notebook: `notebooks\KG1_V198_MICRO_DISTILL_COLAB_PRO.ipynb`
 - pack: `runs\v198_micro_distill_colab_pack_20260503\kg1_v198_colab_pack.zip`
-- pack_sha256: `7e3e41b55bb6f5736c3d5325c7b481f3b52ac918eb13c311e9a343f43f6dedca`
+- pack_sha256: `e61908c0f75018b0d265c3668600170f6fa99a1a4d559508f489cba9cd6b7c93`
 
 ## Checks
 
