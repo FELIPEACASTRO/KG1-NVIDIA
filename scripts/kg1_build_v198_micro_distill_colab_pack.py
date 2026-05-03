@@ -553,7 +553,7 @@ def make_notebook(
             "source": [
                 "import pathlib, urllib.request\n",
                 "POSTTRAIN_SCRIPT = pathlib.Path('/content/kg1_v198/scripts/kg1_v198_posttrain_gate.py')\n",
-                "POSTTRAIN_SCRIPT_URL = 'https://raw.githubusercontent.com/FELIPEACASTRO/KG1-NVIDIA/claude/competent-shamir/scripts/kg1_v198_posttrain_gate.py'\n",
+                "POSTTRAIN_SCRIPT_URL = 'https://raw.githubusercontent.com/FELIPEACASTRO/KG1-NVIDIA/cee9825b0edd6ea2e829c94bdd7b1ff9410b30f3/scripts/kg1_v198_posttrain_gate.py'\n",
                 "if not POSTTRAIN_SCRIPT.exists():\n",
                 "    print('Downloading V198 posttrain gate script...')\n",
                 "    urllib.request.urlretrieve(POSTTRAIN_SCRIPT_URL, POSTTRAIN_SCRIPT)\n",
