@@ -83,7 +83,7 @@ BASE_ENV = {
     'BATCH_SIZE': '16',
     'MICRO_BATCH_SIZE': '1',
     'GRADIENT_CHECKPOINTING': '1',
-    'EVAL_MAX_EXAMPLES': '360',
+    'EVAL_MAX_EXAMPLES': '720',
     'ABORT_EVAL_LOSS_GT': '0',
     'BASELINE_EVAL_BEFORE_TRAIN': '1',
     'REQUIRE_FINAL_EVAL_LTE_BASELINE': '1',
@@ -100,37 +100,37 @@ BASE_ENV = {
 
 CANDIDATES = [
     {
-        'label': 'A_neutral_shuffle_3s',
-        'run_id': 'v201c-A-neutral-shuffle-3s',
-        'max_steps': '3',
-        'learning_rate': '2e-7',
-        'final_learning_rate': '1e-7',
+        'label': 'A_ultralow_shuffle_1s',
+        'run_id': 'v201c-A-ultralow-shuffle-1s',
+        'max_steps': '1',
+        'learning_rate': '5e-8',
+        'final_learning_rate': '5e-8',
         'sampling_mode': 'shuffle',
         'subcategory_weights': '',
         'source_weights': '',
-        'abort_relative_delta': '0.003',
+        'abort_relative_delta': '0.001',
     },
     {
-        'label': 'B_equation_crypt_low_2s',
-        'run_id': 'v201c-B-equation-crypt-low-2s',
-        'max_steps': '2',
-        'learning_rate': '1e-7',
+        'label': 'B_equation_crypt_ultralow_1s',
+        'run_id': 'v201c-B-equation-crypt-ultralow-1s',
+        'max_steps': '1',
+        'learning_rate': '5e-8',
         'final_learning_rate': '5e-8',
         'sampling_mode': 'weighted_replacement',
-        'subcategory_weights': 'equation_transform=1.15,cryptarithm_deduce=1.25,cryptarithm_guess=1.10,equation_numeric_deduce=1.25,equation_numeric_guess=1.10',
-        'source_weights': 'v198_v196_wrong_anti_regression=1.10,v198_v197_strict_gain_distill=1.05,v198_v195_balanced_rehearsal=1.0',
-        'abort_relative_delta': '0.002',
+        'subcategory_weights': 'equation_transform=1.08,cryptarithm_deduce=1.10,cryptarithm_guess=1.05,equation_numeric_deduce=1.10,equation_numeric_guess=1.05',
+        'source_weights': 'v198_v196_wrong_anti_regression=1.05,v198_v197_strict_gain_distill=1.03,v198_v195_balanced_rehearsal=1.0',
+        'abort_relative_delta': '0.001',
     },
     {
-        'label': 'C_bit_cipher_low_2s',
-        'run_id': 'v201c-C-bit-cipher-low-2s',
-        'max_steps': '2',
-        'learning_rate': '1e-7',
+        'label': 'C_bit_cipher_ultralow_1s',
+        'run_id': 'v201c-C-bit-cipher-ultralow-1s',
+        'max_steps': '1',
+        'learning_rate': '5e-8',
         'final_learning_rate': '5e-8',
         'sampling_mode': 'weighted_replacement',
-        'subcategory_weights': 'bit_manipulation=1.20,cipher=1.20',
-        'source_weights': 'v198_v196_wrong_anti_regression=1.10,v198_v197_strict_gain_distill=1.05,v198_v195_balanced_rehearsal=1.0',
-        'abort_relative_delta': '0.002',
+        'subcategory_weights': 'bit_manipulation=1.10,cipher=1.10',
+        'source_weights': 'v198_v196_wrong_anti_regression=1.05,v198_v197_strict_gain_distill=1.03,v198_v195_balanced_rehearsal=1.0',
+        'abort_relative_delta': '0.001',
     },
 ]
 
@@ -477,10 +477,11 @@ def build_v201c_notebook() -> dict:
         "V194_RANK19_ZIP_SHA256 = '49886191bf9ce92a48106ebfcba407bf9edbe423a4ed8c476d1f6bdfdd210fd8'",
         "V194_RANK19_ADAPTER_MODEL_SHA256 = '01259fef943bc16c31d8f7907be076cc987381a6a1bbe732b1b33c2d9f2ea95f'",
         "OUT_BASE = DRIVE_ROOT / 'output_v201c_h100_a100_multicandidate_3x'",
-        "A_neutral_shuffle_3s",
-        "B_equation_crypt_low_2s",
-        "C_bit_cipher_low_2s",
+        "A_ultralow_shuffle_1s",
+        "B_equation_crypt_ultralow_1s",
+        "C_bit_cipher_ultralow_1s",
         "'MODEL_REVISION': 'cbd3fa9f933d55ef16a84236559f4ee2a0526848'",
+        "'EVAL_MAX_EXAMPLES': '720'",
         "MAX_FINAL_EVAL_REGRESSION': '0.0'",
         "'REQUIRE_FINAL_EVAL_LTE_BASELINE': '1'",
         "TRAIN_SCRIPT.parent.mkdir(parents=True, exist_ok=True)",
@@ -505,6 +506,9 @@ def build_v201c_notebook() -> dict:
         "bit_manipulation=2.5",
         "v198_v196_wrong_anti_regression=2.0",
         "SUBCATEGORY_WEIGHTS'] = 'bit_manipulation:2.5",
+        "A_neutral_shuffle_3s",
+        "B_equation_crypt_low_2s",
+        "C_bit_cipher_low_2s",
         "ALLOW_V194_REBUILD_FALLBACK=1",
         "V201C fallback rebuild requested",
         "Rebuilding exact V194 rank-19 adapter",
@@ -525,10 +529,10 @@ def main() -> int:
         "# V201C three-candidate micro-train\n\n"
         "- Notebook: `notebooks/KG1_V201C_H100_A100_MULTI_CANDIDATE_MICRO_COLAB_PRO.ipynb`.\n"
         "- Runs three independent candidates from exact V194 rank-19, not sequential phases on one adapter.\n"
-        "- Candidate A: neutral shuffle, 3 steps, LR `2e-7 -> 1e-7`.\n"
-        "- Candidate B: light equation/cryptarithm weighting, 2 steps, LR `1e-7 -> 5e-8`.\n"
-        "- Candidate C: light bit/cipher weighting, 2 steps, LR `1e-7 -> 5e-8`.\n"
-        "- Each candidate has baseline eval before training and final eval no-regression gate.\n"
+        "- Candidate A: ultra-low neutral shuffle, 1 step, LR `5e-8`.\n"
+        "- Candidate B: ultra-low equation/cryptarithm weighting, 1 step, LR `5e-8`.\n"
+        "- Candidate C: ultra-low bit/cipher weighting, 1 step, LR `5e-8`.\n"
+        "- Each candidate has 720-example baseline eval before training and final eval no-regression gate.\n"
         "- Only passed candidates are converted and preflighted; no Kaggle submit cell exists.\n"
         "- H100 or A100 80GB High-RAM is required; A100 40GB is blocked.\n",
         encoding="utf-8",

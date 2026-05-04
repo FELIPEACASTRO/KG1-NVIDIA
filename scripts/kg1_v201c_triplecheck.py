@@ -75,6 +75,9 @@ FORBIDDEN_NOTEBOOK_FRAGMENTS = [
     "SUBCATEGORY_WEIGHTS'] = 'bit_manipulation:2.5",
     "output_v201a_h100_solver_verified_micro_5",
     "output_v201b_h100_baseline_neutral_micro_3",
+    "A_neutral_shuffle_3s",
+    "B_equation_crypt_low_2s",
+    "C_bit_cipher_low_2s",
 ]
 
 
@@ -198,6 +201,7 @@ def check_training_cell(cells: list[str], findings: list[dict[str, Any]]) -> dic
         "MAX_LENGTH": "2048",
         "BATCH_SIZE": "16",
         "MICRO_BATCH_SIZE": "1",
+        "EVAL_MAX_EXAMPLES": "720",
         "ABORT_EVAL_LOSS_GT": "0",
         "BASELINE_EVAL_BEFORE_TRAIN": "1",
         "REQUIRE_FINAL_EVAL_LTE_BASELINE": "1",
@@ -212,9 +216,9 @@ def check_training_cell(cells: list[str], findings: list[dict[str, Any]]) -> dic
             add(findings, "error", "base_env_mismatch", {"key": key, "expected": value, "actual": base_env.get(key)})
 
     expected_candidates = {
-        "A_neutral_shuffle_3s": {"max_steps": "3", "learning_rate": "2e-7", "final_learning_rate": "1e-7", "sampling_mode": "shuffle"},
-        "B_equation_crypt_low_2s": {"max_steps": "2", "learning_rate": "1e-7", "final_learning_rate": "5e-8", "sampling_mode": "weighted_replacement"},
-        "C_bit_cipher_low_2s": {"max_steps": "2", "learning_rate": "1e-7", "final_learning_rate": "5e-8", "sampling_mode": "weighted_replacement"},
+        "A_ultralow_shuffle_1s": {"max_steps": "1", "learning_rate": "5e-8", "final_learning_rate": "5e-8", "sampling_mode": "shuffle"},
+        "B_equation_crypt_ultralow_1s": {"max_steps": "1", "learning_rate": "5e-8", "final_learning_rate": "5e-8", "sampling_mode": "weighted_replacement"},
+        "C_bit_cipher_ultralow_1s": {"max_steps": "1", "learning_rate": "5e-8", "final_learning_rate": "5e-8", "sampling_mode": "weighted_replacement"},
     }
     labels = [candidate.get("label") for candidate in candidates]
     if labels != list(expected_candidates):
@@ -233,11 +237,11 @@ def check_training_cell(cells: list[str], findings: list[dict[str, Any]]) -> dic
             except Exception as exc:
                 add(findings, "error", "bad_weight_map", {"label": label, "field": weight_field, "error": repr(exc)})
                 continue
-            if any(value > 1.25 for value in weights.values()):
+            if any(value > 1.10 for value in weights.values()):
                 add(findings, "error", "candidate_weight_too_aggressive", {"label": label, "field": weight_field, "weights": weights})
-        if float(candidate["learning_rate"]) > 2e-7:
+        if float(candidate["learning_rate"]) > 5e-8:
             add(findings, "error", "candidate_lr_too_high", candidate)
-        if float(candidate["abort_relative_delta"]) > 0.003:
+        if float(candidate["abort_relative_delta"]) > 0.001:
             add(findings, "error", "candidate_abort_delta_too_loose", candidate)
 
     return {"candidate_labels": labels, "base_env_keys": sorted(base_env)}
