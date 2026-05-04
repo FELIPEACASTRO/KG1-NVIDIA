@@ -74,7 +74,15 @@ REQUIRED_FRAGMENTS = [
     "kg1_submission_gate.py",
     "kg1_v198_final_submit_doublecheck.py",
     "assert primary_label == 'final'",
-    "No Kaggle submit was performed",
+    "kg1_v199b_safe_kaggle_submit.py",
+    "kg1_v198_safe_kaggle_submit.py",
+    "--expected-sha256",
+    "--manifest-json",
+    "--poll-seconds",
+    "--submit",
+    "message = f'V199B baseline-gated final eval",
+    "assert final_eval <= baseline_eval",
+    "Run the final Kaggle submit cell next",
 ]
 
 

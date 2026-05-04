@@ -681,7 +681,8 @@ def build_h100_baseline_gated_notebook() -> dict:
         "# KG1 V199B H100 baseline-gated continuation\n\n"
         "Very conservative continuation from the exact V194 rank-19 / public 0.86 adapter. "
         "This notebook evaluates the V194 baseline before training and blocks any candidate "
-        "that regresses on the same validation split. It does not submit to Kaggle.\n"
+        "that regresses on the same validation split. The final cell performs an explicit "
+        "audited Kaggle submission.\n"
     ).splitlines(True)
 
     _replace_in_all_cells(
@@ -724,6 +725,73 @@ def build_h100_baseline_gated_notebook() -> dict:
         "os.environ['ABORT_EVAL_RELATIVE_TO_BASELINE_DELTA'] = '0.02'\n"
         "os.environ['REQUIRE_FINAL_EVAL_LTE_BASELINE'] = '1'\n"
         "os.environ['MAX_FINAL_EVAL_REGRESSION'] = '0.0'\n",
+    )
+    _replace_in_all_cells(
+        notebook,
+        "print('V199 gated candidate ready. No Kaggle submit was performed.')",
+        "print('V199 gated candidate ready. Run the final Kaggle submit cell next.')",
+    )
+    _replace_in_all_cells(
+        notebook,
+        "Convert and gate the V199 adapters. This still does not submit to Kaggle.",
+        "Convert and gate the V199B adapter. The final Kaggle submit cell follows after this gate.",
+    )
+    notebook["cells"].append(
+        markdown(
+            "## Final Kaggle submit\n\n"
+            "This cell audits every file in the candidate ZIP, verifies the baseline-gated "
+            "training manifest, stages the exact artifact as `submission.zip`, and submits "
+            "to Kaggle. Run it only after the posttrain/doublecheck cell reports `final: READY`.\n"
+        )
+    )
+    notebook["cells"].append(
+        code(
+            "import json, os, pathlib, subprocess, sys, urllib.request\n"
+            "BASE = 'https://raw.githubusercontent.com/FELIPEACASTRO/KG1-NVIDIA/claude/competent-shamir/scripts'\n"
+            "SCRIPT = pathlib.Path('/content/kg1_v199/scripts/kg1_v199b_safe_kaggle_submit.py')\n"
+            "for name in ['kg1_v199b_safe_kaggle_submit.py', 'kg1_v198_safe_kaggle_submit.py', 'kg1_v198_final_submit_doublecheck.py']:\n"
+            "    dst = pathlib.Path('/content/kg1_v199/scripts') / name\n"
+            "    print('downloading', name)\n"
+            "    urllib.request.urlretrieve(f'{BASE}/{name}', dst)\n"
+            "subprocess.run([sys.executable, '-m', 'pip', 'install', '-q', '--upgrade', 'kaggle==2.0.2'], check=True)\n"
+            "\n"
+            "OUT = pathlib.Path(os.environ['V199_OUT'])\n"
+            "posttrain_report = OUT / 'posttrain_kaggle_gate/v199_posttrain_gate_report.json'\n"
+            "preflight_report = OUT / 'final_preflight.json'\n"
+            "doublecheck_json = OUT / 'final_submit_doublecheck.json'\n"
+            "manifest_json = OUT / 'final_adapter/v90_training_manifest.json'\n"
+            "posttrain = json.loads(posttrain_report.read_text(encoding='utf-8'))\n"
+            "manifest = json.loads(manifest_json.read_text(encoding='utf-8'))\n"
+            "candidate_zip = pathlib.Path(posttrain['decision']['primary_zip'])\n"
+            "expected_sha = next(item['zip']['sha256'] for item in posttrain['candidates'] if item['label'] == 'final')\n"
+            "training = manifest['training']\n"
+            "baseline_eval = float(training['baseline_eval_loss'])\n"
+            "final_eval = float(training['final_eval_loss'])\n"
+            "assert posttrain['decision']['primary_label'] == 'final', posttrain['decision']\n"
+            "assert final_eval <= baseline_eval, (final_eval, baseline_eval)\n"
+            "message = f'V199B baseline-gated final eval {final_eval:.4f} base {baseline_eval:.4f} sha {expected_sha[:8]}'\n"
+            "submit_report = OUT / 'v199b_safe_kaggle_submit_report.json'\n"
+            "print('candidate_zip:', candidate_zip)\n"
+            "print('expected_sha:', expected_sha)\n"
+            "print('message:', message)\n"
+            "\n"
+            "subprocess.run([\n"
+            "    sys.executable, str(SCRIPT),\n"
+            "    '--candidate-zip', str(candidate_zip),\n"
+            "    '--expected-sha256', expected_sha,\n"
+            "    '--posttrain-report', str(posttrain_report),\n"
+            "    '--preflight-report', str(preflight_report),\n"
+            "    '--doublecheck-json', str(doublecheck_json),\n"
+            "    '--manifest-json', str(manifest_json),\n"
+            "    '--message', message,\n"
+            "    '--output-json', str(submit_report),\n"
+            "    '--poll-seconds', '45',\n"
+            "    '--submit',\n"
+            "], check=True)\n"
+            "\n"
+            "print('submit_report:', submit_report)\n"
+            "print(submit_report.read_text(encoding='utf-8')[:4000])\n"
+        )
     )
     return notebook
 
@@ -771,7 +839,8 @@ def main() -> int:
         "- Runs 10 steps at LR `1e-6 -> 3e-7`.\n"
         "- Evaluates every 5 steps and aborts if eval loss exceeds baseline by more than `0.02`.\n"
         "- Blocks final promotion unless `final_eval_loss <= baseline_eval_loss`.\n"
-        "- Converts and gates candidates only after the baseline gate passes; does not submit to Kaggle automatically.\n",
+        "- Converts and gates candidates only after the baseline gate passes.\n"
+        "- Final cell audits the ZIP contents, stages the exact artifact as `submission.zip`, and submits through the safe Kaggle API path.\n",
         encoding="utf-8",
     )
     print(NOTEBOOK_PATH)

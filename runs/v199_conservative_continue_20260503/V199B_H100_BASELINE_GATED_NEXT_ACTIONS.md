@@ -7,4 +7,5 @@
 - Runs 10 steps at LR `1e-6 -> 3e-7`.
 - Evaluates every 5 steps and aborts if eval loss exceeds baseline by more than `0.02`.
 - Blocks final promotion unless `final_eval_loss <= baseline_eval_loss`.
-- Converts and gates candidates only after the baseline gate passes; does not submit to Kaggle automatically.
+- Converts and gates candidates only after the baseline gate passes.
+- Final cell audits the ZIP contents, stages the exact artifact as `submission.zip`, and submits through the safe Kaggle API path.
