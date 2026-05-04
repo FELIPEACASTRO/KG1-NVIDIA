@@ -21,6 +21,7 @@ PACK_URL = (
     "runs/v198_micro_distill_colab_pack_20260503/kg1_v198_colab_pack.zip"
 )
 PACK_SHA256 = "e61908c0f75018b0d265c3668600170f6fa99a1a4d559508f489cba9cd6b7c93"
+MASTER_PACK_SHA256 = "7e3e41b55bb6f5736c3d5325c7b481f3b52ac918eb13c311e9a343f43f6dedca"
 TRAIN_SCRIPT_URL = (
     "https://raw.githubusercontent.com/FELIPEACASTRO/KG1-NVIDIA/"
     "31d439bc4a9b33b7b3c772d3526149847103a9b1/scripts/hf_job_train_v90.py"
@@ -59,6 +60,8 @@ def build_notebook() -> dict:
             "PACK = V198_PACK if V198_PACK.exists() else DRIVE_ROOT / 'kg1_v198_colab_pack.zip'\n"
             f"PACK_URL = '{PACK_URL}'\n"
             f"PACK_SHA256 = '{PACK_SHA256}'\n"
+            f"MASTER_PACK_SHA256 = '{MASTER_PACK_SHA256}'\n"
+            "APPROVED_PACK_SHA256 = {PACK_SHA256, MASTER_PACK_SHA256}\n"
             "INIT_ADAPTER = V198_DRIVE_ROOT / 'output_v198/final_adapter'\n"
             f"V198_FINAL_ADAPTER_SHA256 = '{V198_FINAL_ADAPTER_SHA256}'\n"
             "OUT_BASE = DRIVE_ROOT / 'output_v199_conservative_20'\n"
@@ -91,7 +94,9 @@ def build_notebook() -> dict:
             "    urllib.request.urlretrieve(PACK_URL, PACK)\n"
             "pack_hash = sha256_path(PACK)\n"
             "print('Pack SHA256:', pack_hash)\n"
-            "assert pack_hash == PACK_SHA256, f'Pack SHA mismatch: {pack_hash}'\n"
+            "assert pack_hash in APPROVED_PACK_SHA256, f'Pack SHA mismatch: {pack_hash}'\n"
+            "if pack_hash != PACK_SHA256:\n"
+            "    print('Using approved legacy V198 pack; fixed training script will be downloaded before training.')\n"
             "\n"
             "shutil.rmtree(ROOT, ignore_errors=True)\n"
             "ROOT.mkdir(parents=True, exist_ok=True)\n"
