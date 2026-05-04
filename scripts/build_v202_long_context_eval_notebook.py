@@ -409,11 +409,11 @@ if RUN_TRAINING:
         'Create the next V202B training notebook only after this audit passes, and enforce REQUIRED_TRAINING_CONTRACT.'
     )
 
-raise RuntimeError(
-    'STOPPING BY DESIGN: V202 data audit and manifest are complete. '
-    'Review /content/drive/MyDrive/KG1_NVIDIA_V202/reports/v202_data_audit.json and v202_plan_manifest.json. '
-    'Next step is a separate V202B training notebook with REQUIRED_TRAINING_CONTRACT enforced.'
-)
+print('=== V202 AUDIT COMPLETE ===')
+print('Review /content/drive/MyDrive/KG1_NVIDIA_V202/reports/v202_data_audit.json')
+print('Review /content/drive/MyDrive/KG1_NVIDIA_V202/reports/v202_plan_manifest.json')
+print('No training was run. No Kaggle submit was performed.')
+print('Next step: build a separate V202B training notebook only after this audit is reviewed.')
 """
     ),
 ]
