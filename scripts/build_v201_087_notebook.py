@@ -130,8 +130,8 @@ def build_v201a_notebook() -> dict:
         notebook,
         "os.environ['TRAINABLE_LORA_MODULES'] = 'in_proj,out_proj,q_proj,k_proj,v_proj,o_proj'\n",
         "os.environ['SAMPLING_MODE'] = 'weighted_replacement'\n"
-        "os.environ['SUBCATEGORY_WEIGHTS'] = 'bit_manipulation:2.5,cipher:2.0,cryptarithm_deduce:3.0,cryptarithm_guess:2.0,equation_numeric_deduce:3.0,equation_numeric_guess:2.0,equation_transform:1.5'\n"
-        "os.environ['SOURCE_WEIGHTS'] = 'v198_v196_wrong_anti_regression:2.0,v198_v197_strict_gain_distill:1.5,v198_v195_balanced_rehearsal:1.0'\n"
+        "os.environ['SUBCATEGORY_WEIGHTS'] = 'bit_manipulation=2.5,cipher=2.0,cryptarithm_deduce=3.0,cryptarithm_guess=2.0,equation_numeric_deduce=3.0,equation_numeric_guess=2.0,equation_transform=1.5'\n"
+        "os.environ['SOURCE_WEIGHTS'] = 'v198_v196_wrong_anti_regression=2.0,v198_v197_strict_gain_distill=1.5,v198_v195_balanced_rehearsal=1.0'\n"
         "os.environ['TRAINABLE_LORA_MODULES'] = 'in_proj,out_proj,q_proj,k_proj,v_proj,o_proj'\n",
     )
     replace_required(
@@ -176,8 +176,8 @@ def build_v201a_notebook() -> dict:
         "REQUIRE_FINAL_EVAL_LTE_BASELINE'] = '1'",
         "MAX_FINAL_EVAL_REGRESSION'] = '0.0'",
         "SAMPLING_MODE'] = 'weighted_replacement'",
-        "SUBCATEGORY_WEIGHTS'] = 'bit_manipulation:2.5",
-        "SOURCE_WEIGHTS'] = 'v198_v196_wrong_anti_regression:2.0",
+        "SUBCATEGORY_WEIGHTS'] = 'bit_manipulation=2.5",
+        "SOURCE_WEIGHTS'] = 'v198_v196_wrong_anti_regression=2.0",
         "TRAINABLE_LORA_MODULES'] = 'in_proj,out_proj,q_proj,k_proj,v_proj,o_proj'",
         "kg1_v201a_posttrain_gate.py",
     ]
@@ -215,7 +215,7 @@ def main() -> int:
         "- Uses Drive root `/content/drive/MyDrive/KG1_NVIDIA_V201` for V201A outputs, while still accepting the V194 zip from `/content/drive/MyDrive/Submit` and legacy `/content/drive/MyDrive/KG1_NVIDIA_V199` paths.\n"
         "- Starts only from exact V194 `submission.zip` SHA `49886191bf9ce92a48106ebfcba407bf9edbe423a4ed8c476d1f6bdfdd210fd8`.\n"
         "- Runs 5 steps at LR `3e-7 -> 1e-7`.\n"
-        "- Uses weighted weak-category sampling: bit manipulation, cipher, cryptarithm, and equation numeric subcategories.\n"
+        "- Uses weighted weak-category sampling with `key=value` maps: bit manipulation, cipher, cryptarithm, and equation numeric subcategories.\n"
         "- Trains attention LoRA modules only: `in_proj,out_proj,q_proj,k_proj,v_proj,o_proj`.\n"
         "- Evaluates V194 baseline before training and blocks final promotion unless `final_eval_loss <= baseline_eval_loss`.\n"
         "- Converts with `kg1_v201a_posttrain_gate.py`; no Kaggle submit cell is present.\n"

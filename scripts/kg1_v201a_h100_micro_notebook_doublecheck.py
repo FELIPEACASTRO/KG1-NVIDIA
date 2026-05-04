@@ -50,8 +50,8 @@ REQUIRED_FRAGMENTS = [
     "REQUIRE_FINAL_EVAL_LTE_BASELINE'] = '1'",
     "MAX_FINAL_EVAL_REGRESSION'] = '0.0'",
     "SAMPLING_MODE'] = 'weighted_replacement'",
-    "SUBCATEGORY_WEIGHTS'] = 'bit_manipulation:2.5,cipher:2.0,cryptarithm_deduce:3.0,cryptarithm_guess:2.0,equation_numeric_deduce:3.0,equation_numeric_guess:2.0,equation_transform:1.5'",
-    "SOURCE_WEIGHTS'] = 'v198_v196_wrong_anti_regression:2.0,v198_v197_strict_gain_distill:1.5,v198_v195_balanced_rehearsal:1.0'",
+    "SUBCATEGORY_WEIGHTS'] = 'bit_manipulation=2.5,cipher=2.0,cryptarithm_deduce=3.0,cryptarithm_guess=2.0,equation_numeric_deduce=3.0,equation_numeric_guess=2.0,equation_transform=1.5'",
+    "SOURCE_WEIGHTS'] = 'v198_v196_wrong_anti_regression=2.0,v198_v197_strict_gain_distill=1.5,v198_v195_balanced_rehearsal=1.0'",
     "TRAINABLE_LORA_MODULES'] = 'in_proj,out_proj,q_proj,k_proj,v_proj,o_proj'",
     "MAX_TRAINABLE_PARAM_RATIO'] = '0.035'",
     "kg1_v201a_posttrain_gate.py",
@@ -77,6 +77,8 @@ FORBIDDEN_FRAGMENTS = [
     "MAX_STEPS'] = '20'",
     "MAX_STEPS'] = '10'",
     "kg1_v199_posttrain_gate.py",
+    "SUBCATEGORY_WEIGHTS'] = 'bit_manipulation:2.5",
+    "SOURCE_WEIGHTS'] = 'v198_v196_wrong_anti_regression:2.0",
 ]
 
 

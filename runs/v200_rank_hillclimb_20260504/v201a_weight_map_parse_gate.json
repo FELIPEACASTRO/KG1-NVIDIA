@@ -1,0 +1,17 @@
+{
+  "decision": "PASS",
+  "source": {
+    "v198_v195_balanced_rehearsal": 1.0,
+    "v198_v196_wrong_anti_regression": 2.0,
+    "v198_v197_strict_gain_distill": 1.5
+  },
+  "subcategory": {
+    "bit_manipulation": 2.5,
+    "cipher": 2.0,
+    "cryptarithm_deduce": 3.0,
+    "cryptarithm_guess": 2.0,
+    "equation_numeric_deduce": 3.0,
+    "equation_numeric_guess": 2.0,
+    "equation_transform": 1.5
+  }
+}

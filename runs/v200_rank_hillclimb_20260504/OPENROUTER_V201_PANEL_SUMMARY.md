@@ -33,12 +33,12 @@ The useful models converged on the same operational conclusion:
 - Steps: `5`.
 - LR: `3e-7 -> 1e-7`.
 - Sampling: weighted replacement toward weak subcategories:
-  - `bit_manipulation`
-  - `cipher`
-  - `cryptarithm_deduce`
-  - `cryptarithm_guess`
-  - `equation_numeric_deduce`
-  - `equation_numeric_guess`
+  - `bit_manipulation=2.5`
+  - `cipher=2.0`
+  - `cryptarithm_deduce=3.0`
+  - `cryptarithm_guess=2.0`
+  - `equation_numeric_deduce=3.0`
+  - `equation_numeric_guess=2.0`
 - Gates:
   - exact V194 SHA before training;
   - baseline eval before training;

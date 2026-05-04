@@ -82,8 +82,8 @@ REQUIRED_NOTEBOOK_FRAGMENTS = [
     "OUT_BASE = DRIVE_ROOT / 'output_v201a_h100_solver_verified_micro_5'",
     "RUN_ID'] = 'v201a-h100-v194-rank19-solver-verified-micro-5s'",
     "SAMPLING_MODE'] = 'weighted_replacement'",
-    "SUBCATEGORY_WEIGHTS'] = 'bit_manipulation:2.5,cipher:2.0,cryptarithm_deduce:3.0,cryptarithm_guess:2.0,equation_numeric_deduce:3.0,equation_numeric_guess:2.0,equation_transform:1.5'",
-    "SOURCE_WEIGHTS'] = 'v198_v196_wrong_anti_regression:2.0,v198_v197_strict_gain_distill:1.5,v198_v195_balanced_rehearsal:1.0'",
+    "SUBCATEGORY_WEIGHTS'] = 'bit_manipulation=2.5,cipher=2.0,cryptarithm_deduce=3.0,cryptarithm_guess=2.0,equation_numeric_deduce=3.0,equation_numeric_guess=2.0,equation_transform=1.5'",
+    "SOURCE_WEIGHTS'] = 'v198_v196_wrong_anti_regression=2.0,v198_v197_strict_gain_distill=1.5,v198_v195_balanced_rehearsal=1.0'",
     "BASELINE_EVAL_BEFORE_TRAIN'] = '1'",
     "REQUIRE_FINAL_EVAL_LTE_BASELINE'] = '1'",
     "MAX_FINAL_EVAL_REGRESSION'] = '0.0'",
@@ -98,6 +98,8 @@ FORBIDDEN_NOTEBOOK_FRAGMENTS = [
     "ABORT_EVAL_LOSS_GT'] = '0.98'",
     "MAX_STEPS'] = '20'",
     "MAX_STEPS'] = '10'",
+    "SUBCATEGORY_WEIGHTS'] = 'bit_manipulation:2.5",
+    "SOURCE_WEIGHTS'] = 'v198_v196_wrong_anti_regression:2.0",
 ]
 
 

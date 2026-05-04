@@ -38,13 +38,13 @@ Purpose: push weak categories without disturbing the 0.86 baseline.
 - Trainable modules: `in_proj,out_proj,q_proj,k_proj,v_proj,o_proj`.
 - Sampling mode: `weighted_replacement`.
 - Weak-category emphasis:
-  - `bit_manipulation:2.5`
-  - `cipher:2.0`
-  - `cryptarithm_deduce:3.0`
-  - `cryptarithm_guess:2.0`
-  - `equation_numeric_deduce:3.0`
-  - `equation_numeric_guess:2.0`
-  - `equation_transform:1.5`
+  - `bit_manipulation=2.5`
+  - `cipher=2.0`
+  - `cryptarithm_deduce=3.0`
+  - `cryptarithm_guess=2.0`
+  - `equation_numeric_deduce=3.0`
+  - `equation_numeric_guess=2.0`
+  - `equation_transform=1.5`
 - Rehearsal source mix remains active so strong categories are not dropped.
 
 ## Hard Gates
