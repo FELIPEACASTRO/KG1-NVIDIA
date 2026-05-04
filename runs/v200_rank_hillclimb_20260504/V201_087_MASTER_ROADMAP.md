@@ -47,6 +47,27 @@ Purpose: push weak categories without disturbing the 0.86 baseline.
   - `equation_transform=1.5`
 - Rehearsal source mix remains active so strong categories are not dropped.
 
+Status after execution:
+
+- Baseline eval: `1.1205`.
+- Final eval: `1.1222`.
+- Decision: blocked by `final_eval_loss <= baseline_eval_loss`.
+- Action: do not submit and do not reuse V201A as init.
+
+## Candidate V201B
+
+Purpose: retry with less movement after V201A regressed locally.
+
+- Notebook: `notebooks/KG1_V201B_H100_BASELINE_NEUTRAL_MICRO_COLAB_PRO.ipynb`.
+- Output root: `/content/drive/MyDrive/KG1_NVIDIA_V201/output_v201b_h100_baseline_neutral_micro_3`.
+- Init: exact V194 rank-19 zip only.
+- Steps: `3`.
+- LR: `2e-7 -> 1e-7`.
+- Trainable modules: `in_proj,out_proj,q_proj,k_proj,v_proj,o_proj`.
+- Sampling mode: `shuffle`.
+- Custom source/subcategory weights: disabled.
+- Gate: final eval must be `<= baseline_eval_loss`; otherwise the adapter is forensic only.
+
 ## Hard Gates
 
 Before training:
@@ -84,16 +105,16 @@ After Kaggle score:
 - Any broad soup/high-alpha merge before a better source is found.
 - Any candidate that passes packaging but fails baseline-eval no-regression.
 
-## Next Experiments If V201A Scores 0.86
+## Next Experiments If V201B Scores 0.86
 
-Do not promote V201A automatically.
+Do not promote V201B automatically.
 
-Then run V201B as a separate micro-probe:
+Then run V201C as a separate targeted probe:
 
 - Same exact V194 init.
 - Same gates.
-- 3 steps instead of 5.
-- LR `2e-7 -> 1e-7`.
-- Only equation/cryptarithm weighting.
+- 2 or 3 steps.
+- LR `1e-7 -> 5e-8`.
+- Only one category at a time, starting with equation/cryptarithm.
 
-If V201A scores below `0.86`, discard it and do not reuse it as an init.
+If V201B scores below `0.86` or fails local no-regression, discard it and do not reuse it as an init.
