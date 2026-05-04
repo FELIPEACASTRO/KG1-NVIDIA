@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-05-04",
+  "competition": "nvidia-nemotron-model-reasoning-challenge",
+  "current_best_baseline": {
+    "label": "V194",
+    "ref": 52275052,
+    "public_score": 0.86,
+    "rank_note": "rank-19 reference from user-confirmed leaderboard state",
+    "description": "v194 attention-only micro-merge aaitdads98p5 lineage1p5 keep lmhead experts sha49886191 gate-doublecheck-pass",
+    "zip_sha256": "49886191bf9ce92a48106ebfcba407bf9edbe423a4ed8c476d1f6bdfdd210fd8",
+    "role": "mandatory starting baseline for all new training or merge experiments"
+  },
+  "pending_or_unpromoted_candidates": [
+    {
+      "label": "V199B",
+      "ref": 52325494,
+      "status": "SubmissionStatus.COMPLETE",
+      "public_score": null,
+      "description": "V199B exact-sha final candidate sha 19fa057a local-audit",
+      "zip_sha256": "19fa057ad55c569c490650b430b76809cacc18fd5f5fbb8f6c5bf8f65785e59c",
+      "adapter_model_sha256": "444dd40c44ac5eb8a642ebe00a5616ba41548657dbd01e17f3db8bda7e785c7a",
+      "promotion_status": "blocked_until_public_score_and_rank_are_confirmed"
+    }
+  ],
+  "promotion_policy": {
+    "discard_if_public_score_lt": 0.86,
+    "hold_if_public_score_eq": 0.86,
+    "promote_if_public_score_gt": 0.86,
+    "equal_score_requires_rank_not_worse": true,
+    "never_start_from_regressed_candidate": true,
+    "known_regressed_candidates": [
+      {
+        "label": "V198",
+        "ref": 52301667,
+        "public_score": 0.84,
+        "zip_sha256": "52c585c7f075a1a9735d23c16905e535d1ebbf51246b03a50ac3d07c3768a3a9"
+      }
+    ]
+  }
+}
