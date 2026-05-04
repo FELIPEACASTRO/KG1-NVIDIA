@@ -33,8 +33,10 @@ APPROVED_RANK19_ZIP_SHA256 = {
 APPROVED_COMPONENT_SHA256 = {
     # aaitdads component only; not sufficient as the init adapter for V199.
     "3d16ba908a5c8808624f1abd8fdc2b29f92723f5c874761161c894d7e5759f21",
-    # Kernel output backing submission 51997779.
+    # Historical submission.zip backing submission 51997779.
     "a3b64b154a6690a58f2338ba1c405422eadc6e1c1357f662eecb187463dfdeee",
+    # Canonical Huikang default/20 adapter converted by the original Tinker notebook for submission 51997779.
+    "559fd024f5ffcaff0caceddeaf25c3801009d6cabf247fc8dfccbfaf2addd916",
 }
 
 KNOWN_BAD_INIT_ADAPTER_MODEL_SHA256 = {
@@ -55,6 +57,11 @@ FORBIDDEN_INIT_PATTERNS = [
     r"V195_OUT\s*/\s*['\"]checkpoint-110['\"]",
     r"V195_OUT\s*/\s*['\"]final_adapter['\"]",
     r"best adapter found in Drive",
+    r"felipe1983/tinker-adapter-to-ready-to-submit-adapter",
+    r"download_lineage_kernel_output",
+    r"kernels_output",
+    r"KaggleApi",
+    r"kaggle['\"]?,\s*['\"]kernels['\"]?,\s*['\"]output",
 ]
 
 
@@ -132,11 +139,16 @@ def gate_source(source: str, findings: list[Finding]) -> None:
         "adapter_ready(AAITDADS_ADAPTER, min_model_bytes=4_000_000_000)",
         "adapter_ready(LINEAGE_ADAPTER, min_model_bytes=3_000_000_000)",
         "adapter_ready(INIT_ADAPTER, min_model_bytes=4_000_000_000)",
-        "def download_lineage_kernel_output()",
-        "from kaggle.api.kaggle_api_extended import KaggleApi",
-        "api.kernels_output(kernel, path=str(LINEAGE_KERNEL_OUT)",
-        "file_pattern=r'submission\\.zip$'",
-        "shutil.which('kaggle')",
+        "LINEAGE_HUIKANG_MODEL_HANDLE",
+        "huikang/nemotron-adapter/transformers/default/20",
+        "LINEAGE_51997779_ADAPTER_MODEL_SHA256",
+        "LINEAGE_51997779_ADAPTER_CONFIG_SHA256",
+        "def locate_adapter_dir(root)",
+        "def patch_tinker_cookbook_merge()",
+        "weights.build_lora_adapter",
+        "kagglehub.model_download(LINEAGE_HUIKANG_MODEL_HANDLE",
+        "assert lineage_cfg_sha == LINEAGE_51997779_ADAPTER_CONFIG_SHA256",
+        "assert lineage_model_sha == LINEAGE_51997779_ADAPTER_MODEL_SHA256",
         "assert sha256_path(model) == V194_RANK19_ADAPTER_MODEL_SHA256",
         "assert sha256_path(cfg) == V194_RANK19_ADAPTER_CONFIG_SHA256",
         "assert manifest.get('output_adapter_sha256') == V194_RANK19_ADAPTER_MODEL_SHA256",
@@ -157,9 +169,10 @@ def gate_source(source: str, findings: list[Finding]) -> None:
         )
 
     extra_required = [
-        "felipe1983/tinker-adapter-to-ready-to-submit-adapter",
         "kagglehub==1.0.1",
-        "kaggle==2.0.2",
+        "tinker-cookbook @ git+https://github.com/thinking-machines-lab/tinker-cookbook.git@nightly",
+        "A._merge_fused_projections = patched_merge_fused_projections",
+        "559fd024f5ffcaff0caceddeaf25c3801009d6cabf247fc8dfccbfaf2addd916",
         "'--primary-weight', '0.985'",
         "'--other-weight', '0.015'",
         "'--include-key-regex'",
@@ -174,14 +187,17 @@ def gate_source(source: str, findings: list[Finding]) -> None:
     forbidden_kaggle_invocations = [
         "sys.executable, '-m', 'kaggle'",
         'sys.executable, "-m", "kaggle"',
+        "kaggle kernels output",
+        "api.kernels_output(",
+        "from kaggle.api.kaggle_api_extended import KaggleApi",
     ]
     for fragment in forbidden_kaggle_invocations:
         if fragment in source:
             add(
                 findings,
                 "error",
-                "fragile_kaggle_module_invocation",
-                "Use KaggleApi.kernels_output or the kaggle executable fallback; python -m kaggle can fail because the package has no __main__.",
+                "forbidden_private_kernel_lineage_fetch",
+                "Do not depend on private Kaggle kernel output. Rebuild the 51997779 lineage from Huikang default/20 and block on the canonical adapter SHA.",
             )
 
 
