@@ -1,0 +1,205 @@
+{
+  "checks": {
+    "fallback_lineage": {
+      "note": "aaitdads/huikang KaggleHub components are fallback-only; production path blocks unless exact V194 zip SHA is present.",
+      "ok": true
+    },
+    "hf_model_revision": {
+      "ok": true,
+      "url": "https://huggingface.co/api/models/nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16/revision/cbd3fa9f933d55ef16a84236559f4ee2a0526848"
+    },
+    "local_scripts": {
+      "items": [
+        {
+          "compile_ok": true,
+          "exists": true,
+          "path": "scripts/hf_job_train_v90.py"
+        },
+        {
+          "compile_ok": true,
+          "exists": true,
+          "path": "scripts/kg1_v198_posttrain_gate.py"
+        },
+        {
+          "compile_ok": true,
+          "exists": true,
+          "path": "scripts/kg1_v201b_posttrain_gate.py"
+        },
+        {
+          "compile_ok": true,
+          "exists": true,
+          "path": "scripts/nemotron_submission_preflight.py"
+        },
+        {
+          "compile_ok": true,
+          "exists": true,
+          "path": "scripts/kg1_submission_gate.py"
+        },
+        {
+          "compile_ok": true,
+          "exists": true,
+          "path": "scripts/kg1_v198_final_submit_doublecheck.py"
+        },
+        {
+          "compile_ok": true,
+          "exists": true,
+          "path": "scripts/kg1_update_space_soup_stream.py"
+        }
+      ],
+      "ok": true
+    },
+    "notebook": {
+      "cell_count": 9,
+      "forbidden": [],
+      "missing": [],
+      "ok": true
+    },
+    "pypi_pins": {
+      "items": [
+        {
+          "ok": true,
+          "package": "transformers",
+          "version": "5.7.0"
+        },
+        {
+          "ok": true,
+          "package": "accelerate",
+          "version": "1.13.0"
+        },
+        {
+          "ok": true,
+          "package": "peft",
+          "version": "0.19.1"
+        },
+        {
+          "ok": true,
+          "package": "datasets",
+          "version": "4.8.5"
+        },
+        {
+          "ok": true,
+          "package": "safetensors",
+          "version": "0.7.0"
+        },
+        {
+          "ok": true,
+          "package": "huggingface_hub",
+          "version": "1.13.0"
+        },
+        {
+          "ok": true,
+          "package": "sentencepiece",
+          "version": "0.2.1"
+        },
+        {
+          "ok": true,
+          "package": "protobuf",
+          "version": "7.34.1"
+        },
+        {
+          "ok": true,
+          "package": "ninja",
+          "version": "1.13.0"
+        },
+        {
+          "ok": true,
+          "package": "causal-conv1d",
+          "version": "1.6.1"
+        },
+        {
+          "ok": true,
+          "package": "mamba-ssm",
+          "version": "2.3.1"
+        },
+        {
+          "ok": true,
+          "package": "kagglehub",
+          "version": "1.0.1"
+        },
+        {
+          "ok": true,
+          "package": "kagglesdk",
+          "version": "0.1.23"
+        }
+      ],
+      "ok": true
+    },
+    "raw_scripts": {
+      "items": [
+        {
+          "bytes": 76014,
+          "ok": true,
+          "path": "scripts/hf_job_train_v90.py",
+          "sha256": "1e78386750e97082caec25bb49a8ff806047f92caf0b372cff42a98a35f7111f",
+          "url": "https://raw.githubusercontent.com/FELIPEACASTRO/KG1-NVIDIA/claude/competent-shamir/scripts/hf_job_train_v90.py"
+        },
+        {
+          "bytes": 10913,
+          "ok": true,
+          "path": "scripts/kg1_v198_posttrain_gate.py",
+          "sha256": "d22ab5adff74b2b753760893f2a22f6513ff557c3ff1b3720a86e67d91f88809",
+          "url": "https://raw.githubusercontent.com/FELIPEACASTRO/KG1-NVIDIA/claude/competent-shamir/scripts/kg1_v198_posttrain_gate.py"
+        },
+        {
+          "bytes": 3349,
+          "ok": true,
+          "path": "scripts/kg1_v201b_posttrain_gate.py",
+          "sha256": "8ef11599af86f6a86c730fc21d1c68ef660005dc999d449fab80dfb0d1d32a2c",
+          "url": "https://raw.githubusercontent.com/FELIPEACASTRO/KG1-NVIDIA/claude/competent-shamir/scripts/kg1_v201b_posttrain_gate.py"
+        },
+        {
+          "bytes": 5354,
+          "ok": true,
+          "path": "scripts/nemotron_submission_preflight.py",
+          "sha256": "05c339628308dba48be52d5079c486f902cc16eb3aaeefcbd5ee57e637be632c",
+          "url": "https://raw.githubusercontent.com/FELIPEACASTRO/KG1-NVIDIA/claude/competent-shamir/scripts/nemotron_submission_preflight.py"
+        },
+        {
+          "bytes": 35867,
+          "ok": true,
+          "path": "scripts/kg1_submission_gate.py",
+          "sha256": "5ed82484b78b9f9a7ed508047cf2e2ae29a3ceeede9cf0883684f2a3de894dbb",
+          "url": "https://raw.githubusercontent.com/FELIPEACASTRO/KG1-NVIDIA/claude/competent-shamir/scripts/kg1_submission_gate.py"
+        },
+        {
+          "bytes": 15146,
+          "ok": true,
+          "path": "scripts/kg1_v198_final_submit_doublecheck.py",
+          "sha256": "655dfd76341e838746684be6a88504aed9a326de7eb87eea3392968f83d3bc5d",
+          "url": "https://raw.githubusercontent.com/FELIPEACASTRO/KG1-NVIDIA/claude/competent-shamir/scripts/kg1_v198_final_submit_doublecheck.py"
+        },
+        {
+          "bytes": 17103,
+          "ok": true,
+          "path": "scripts/kg1_update_space_soup_stream.py",
+          "sha256": "e657e1b6735569003d15ae47ee47c783303b443c98447c9949226a57772e188f",
+          "url": "https://raw.githubusercontent.com/FELIPEACASTRO/KG1-NVIDIA/claude/competent-shamir/scripts/kg1_update_space_soup_stream.py"
+        }
+      ],
+      "ok": true
+    },
+    "tinker_nightly_fallback": {
+      "note": "Fallback-only dependency; normal V201B path requires exact V194 zip and does not rebuild via Tinker.",
+      "ok": true,
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "dacb835b31fb3f7a012851a1bc64c950d0495de3\trefs/heads/nightly"
+    },
+    "v198_pack": {
+      "approved_sha": true,
+      "bytes": 2095715,
+      "ok": true,
+      "required_members": {
+        "data/v198/v198_micro_train.strict.jsonl": true,
+        "data/v198/v198_micro_val.strict.jsonl": true,
+        "scripts/hf_job_train_v90.py": true
+      },
+      "sha256": "e61908c0f75018b0d265c3668600170f6fa99a1a4d559508f489cba9cd6b7c93",
+      "url": "https://raw.githubusercontent.com/FELIPEACASTRO/KG1-NVIDIA/31d439bc4a9b33b7b3c772d3526149847103a9b1/runs/v198_micro_distill_colab_pack_20260503/kg1_v198_colab_pack.zip"
+    }
+  },
+  "decision": "PASS",
+  "errors": [],
+  "generated_at": "2026-05-04T19:14:44+00:00",
+  "notebook": "notebooks\\KG1_V201B_H100_BASELINE_NEUTRAL_MICRO_COLAB_PRO.ipynb"
+}
