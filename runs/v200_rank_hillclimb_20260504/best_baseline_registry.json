@@ -62,6 +62,19 @@
       "planned_gate": "exact V194 lineage; shuffled baseline-neutral 3-step micro-train; final_eval_loss <= baseline_eval_loss; no automatic Kaggle submit",
       "promotion_status": "awaiting_training_and_kaggle_score",
       "decision": "not_promoted"
+    },
+    {
+      "label": "V201C",
+      "ref": null,
+      "status": "not_trained_yet",
+      "public_score": null,
+      "notebook": "notebooks/KG1_V201C_H100_A100_MULTI_CANDIDATE_MICRO_COLAB_PRO.ipynb",
+      "output_root": "/content/drive/MyDrive/KG1_NVIDIA_V201/output_v201c_h100_a100_multicandidate_3x",
+      "starting_baseline": "V194",
+      "starting_baseline_zip_sha256": "49886191bf9ce92a48106ebfcba407bf9edbe423a4ed8c476d1f6bdfdd210fd8",
+      "planned_gate": "three independent exact-V194 micro-candidates; each requires final_eval_loss <= baseline_eval_loss; no automatic Kaggle submit",
+      "promotion_status": "awaiting_training_and_kaggle_score",
+      "decision": "not_promoted"
     }
   ],
   "promotion_policy": {

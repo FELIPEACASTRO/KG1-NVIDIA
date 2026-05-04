@@ -68,6 +68,21 @@ Purpose: retry with less movement after V201A regressed locally.
 - Custom source/subcategory weights: disabled.
 - Gate: final eval must be `<= baseline_eval_loss`; otherwise the adapter is forensic only.
 
+## Candidate V201C
+
+Purpose: collect three independent micro-train metrics in one Colab session without contaminating one candidate with another.
+
+- Notebook: `notebooks/KG1_V201C_H100_A100_MULTI_CANDIDATE_MICRO_COLAB_PRO.ipynb`.
+- Output root: `/content/drive/MyDrive/KG1_NVIDIA_V201/output_v201c_h100_a100_multicandidate_3x`.
+- Init: exact V194 rank-19 zip only for every candidate.
+- Runtime: H100 High-RAM or A100 80GB High-RAM. A100 40GB is blocked.
+- Candidate A: neutral shuffle, `3` steps, LR `2e-7 -> 1e-7`.
+- Candidate B: light equation/cryptarithm focus, `2` steps, LR `1e-7 -> 5e-8`.
+- Candidate C: light bit/cipher focus, `2` steps, LR `1e-7 -> 5e-8`.
+- Each candidate runs in a separate subprocess and output directory.
+- Only candidates with `final_eval_loss <= baseline_eval_loss` are converted and preflighted.
+- No Kaggle submit is automatic.
+
 ## Hard Gates
 
 Before training:
@@ -75,7 +90,7 @@ Before training:
 - V194 zip SHA must match exactly.
 - Adapter model/config SHA must match the rank-19 baseline after extraction.
 - Notebook must have no auto-submit code.
-- H100/high-RAM runtime should be used by default.
+- H100/high-RAM runtime should be used by default; A100 is allowed only when it is 80GB.
 
 During training:
 
@@ -105,16 +120,18 @@ After Kaggle score:
 - Any broad soup/high-alpha merge before a better source is found.
 - Any candidate that passes packaging but fails baseline-eval no-regression.
 
-## Next Experiments If V201B Scores 0.86
+## Next Experiments After V201C
 
-Do not promote V201B automatically.
+Do not promote any V201C candidate automatically.
 
-Then run V201C as a separate targeted probe:
+If one V201C candidate passes local no-regression, package only that candidate and compare its Kaggle public score/rank against V194.
+
+If all V201C candidates fail local no-regression, run V201D as a smaller targeted probe:
 
 - Same exact V194 init.
 - Same gates.
-- 2 or 3 steps.
-- LR `1e-7 -> 5e-8`.
-- Only one category at a time, starting with equation/cryptarithm.
+- 1 or 2 steps.
+- LR `5e-8`.
+- One category at a time, starting with the best near-pass from V201C logs.
 
-If V201B scores below `0.86` or fails local no-regression, discard it and do not reuse it as an init.
+If V201C scores below `0.86` or fails local no-regression, discard it and do not reuse it as an init.

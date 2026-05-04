@@ -1,0 +1,46 @@
+{
+  "decision": "PASS",
+  "forbidden": {
+    "aggressive_v201a_source_weights": false,
+    "aggressive_v201a_subcategory_weights": false,
+    "auto_submit_api": false,
+    "auto_submit_cli": false,
+    "colon_weight_syntax": false,
+    "manual_upload": false,
+    "v198_adapter_init": false,
+    "v201a_gate": false,
+    "v201a_output": false,
+    "v201b_gate": false,
+    "v201b_output": false
+  },
+  "missing": [],
+  "notebook": "notebooks\\KG1_V201C_H100_A100_MULTI_CANDIDATE_MICRO_COLAB_PRO.ipynb",
+  "policy": {
+    "do_not_use_as_init": [
+      "V198",
+      "V199B unless rank improves",
+      "V201A blocked adapter",
+      "any previous V201C candidate"
+    ],
+    "promotion_requires": "candidate returncode 0, manifest present, final_eval_loss <= baseline_eval_loss, posttrain/preflight/doublecheck pass, explicit Kaggle authorization",
+    "starting_baseline": "Each candidate starts independently from exact V194 rank-19"
+  },
+  "present_forbidden": [],
+  "required": {
+    "baseline_eval_gate": true,
+    "candidate_a": true,
+    "candidate_b": true,
+    "candidate_c": true,
+    "exact_v194_adapter_sha": true,
+    "exact_v194_zip_sha": true,
+    "final_no_regression_gate": true,
+    "legacy_v194_source": true,
+    "multi_output": true,
+    "no_auto_submit_message": true,
+    "posttrain_gate": true,
+    "rank19_rule": true,
+    "submit_drive_source": true,
+    "v201_root": true,
+    "zero_final_regression": true
+  }
+}
