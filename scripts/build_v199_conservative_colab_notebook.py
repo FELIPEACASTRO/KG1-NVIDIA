@@ -13,7 +13,9 @@ from pathlib import Path
 
 
 NOTEBOOK_PATH = Path("notebooks/KG1_V199_CONSERVATIVE_CONTINUE_COLAB_PRO.ipynb")
+H100_NOTEBOOK_PATH = Path("notebooks/KG1_V199_H100_HIGH_RAM_COLAB_PRO.ipynb")
 REPORT_PATH = Path("runs/v199_conservative_continue_20260503/V199_NEXT_ACTIONS.md")
+H100_REPORT_PATH = Path("runs/v199_conservative_continue_20260503/V199_H100_NEXT_ACTIONS.md")
 
 PACK_URL = (
     "https://raw.githubusercontent.com/FELIPEACASTRO/KG1-NVIDIA/"
@@ -598,9 +600,78 @@ def build_notebook() -> dict:
     }
 
 
+def _replace_cell_source(notebook: dict, needle: str, replacement: str) -> None:
+    for cell in notebook["cells"]:
+        source = "".join(cell.get("source") or [])
+        if needle in source:
+            cell["source"] = replacement.splitlines(True)
+            return
+    raise RuntimeError(f"Could not find cell containing: {needle}")
+
+
+def _replace_in_all_cells(notebook: dict, old: str, new: str) -> None:
+    for cell in notebook["cells"]:
+        if "source" not in cell:
+            continue
+        source = "".join(cell.get("source") or [])
+        if old in source:
+            cell["source"] = source.replace(old, new).splitlines(True)
+
+
+def build_h100_highram_notebook() -> dict:
+    notebook = build_notebook()
+    notebook["metadata"]["colab"]["name"] = H100_NOTEBOOK_PATH.name
+    notebook["cells"][0]["source"] = (
+        "# KG1 V199 H100 High-RAM conservative continuation\n\n"
+        "Short 20-step continuation from the exact V194 rank-19 / public 0.86 adapter. "
+        "This notebook requires H100 High-RAM, validates the V194 zip before training, "
+        "runs training, then gates the candidate. It does not submit to Kaggle.\n"
+    ).splitlines(True)
+
+    _replace_in_all_cells(
+        notebook,
+        "OUT_BASE = DRIVE_ROOT / 'output_v199_conservative_20'",
+        "OUT_BASE = DRIVE_ROOT / 'output_v199_h100_20'",
+    )
+    _replace_in_all_cells(
+        notebook,
+        "os.environ['RUN_ID'] = 'v199-conservative-v194-rank19-20s'",
+        "os.environ['RUN_ID'] = 'v199-h100-highram-v194-rank19-20s'",
+    )
+
+    h100_resource_gate = (
+        "import pathlib, re, shutil, subprocess\n"
+        "gpu_csv = subprocess.check_output(\n"
+        "    'nvidia-smi --query-gpu=name,memory.total,driver_version --format=csv,noheader,nounits',\n"
+        "    shell=True,\n"
+        ").decode().strip()\n"
+        "print('GPU:', gpu_csv)\n"
+        "parts = [part.strip() for part in gpu_csv.split(',')]\n"
+        "assert len(parts) >= 3, f'Unexpected nvidia-smi output: {gpu_csv}'\n"
+        "gpu_name = parts[0]\n"
+        "gpu_mem_mib = int(parts[1])\n"
+        "driver_version = parts[2]\n"
+        "assert 'H100' in gpu_name, f'Use Colab Pro H100 High-RAM for this notebook; found {gpu_name}'\n"
+        "assert gpu_mem_mib >= 75000, f'H100 memory too small: {gpu_mem_mib} MiB'\n"
+        "meminfo = pathlib.Path('/proc/meminfo').read_text(encoding='utf-8')\n"
+        "host_mem_kib = int(re.search(r'MemTotal:\\s+(\\d+)', meminfo).group(1))\n"
+        "host_mem_gib = host_mem_kib / 1024 / 1024\n"
+        "disk = shutil.disk_usage('/content')\n"
+        "disk_free_gib = disk.free / 1024**3\n"
+        "print(f'Host RAM: {host_mem_gib:.1f} GiB')\n"
+        "print(f'/content free: {disk_free_gib:.1f} GiB')\n"
+        "print('Driver:', driver_version)\n"
+        "assert host_mem_gib >= 50, f'High-RAM runtime expected; host RAM is only {host_mem_gib:.1f} GiB'\n"
+        "assert disk_free_gib >= 100, f'Need at least 100 GiB free on /content; found {disk_free_gib:.1f} GiB'\n"
+    )
+    _replace_cell_source(notebook, "assert ('H100' in gpu or 'A100' in gpu)", h100_resource_gate)
+    return notebook
+
+
 def main() -> int:
     NOTEBOOK_PATH.parent.mkdir(parents=True, exist_ok=True)
     NOTEBOOK_PATH.write_text(json.dumps(build_notebook(), indent=2), encoding="utf-8")
+    H100_NOTEBOOK_PATH.write_text(json.dumps(build_h100_highram_notebook(), indent=2), encoding="utf-8")
     REPORT_PATH.parent.mkdir(parents=True, exist_ok=True)
     REPORT_PATH.write_text(
         "# V199 conservative continuation\n\n"
@@ -616,8 +687,22 @@ def main() -> int:
         "- Does not submit to Kaggle automatically.\n",
         encoding="utf-8",
     )
+    H100_REPORT_PATH.write_text(
+        "# V199 H100 High-RAM conservative continuation\n\n"
+        "- Notebook: `notebooks/KG1_V199_H100_HIGH_RAM_COLAB_PRO.ipynb`\n"
+        "- Requires H100 with at least 75 GiB GPU memory, High-RAM runtime, and at least 100 GiB free on `/content`.\n"
+        "- Starts from exact V194 rank-19 adapter SHA `01259fef...`.\n"
+        "- V194 evidence: public score `0.86`, rank `19/2613`, zip SHA `49886191...`.\n"
+        "- Primary init path: exact V194 rank-19 `submission.zip` from Drive/env, validated by zip/model/config SHA before extraction.\n"
+        "- Automatic Tinker reconstruction is disabled unless `ALLOW_V194_REBUILD_FALLBACK=1` is explicitly set.\n"
+        "- Runs 20 steps at LR `3e-6 -> 8e-7`.\n"
+        "- Converts and gates final/checkpoint candidates; does not submit to Kaggle automatically.\n",
+        encoding="utf-8",
+    )
     print(NOTEBOOK_PATH)
+    print(H100_NOTEBOOK_PATH)
     print(REPORT_PATH)
+    print(H100_REPORT_PATH)
     return 0
 
 
