@@ -76,6 +76,7 @@ REQUIRED_FRAGMENTS = [
     "assert primary_label == 'final'",
     "kg1_v199b_safe_kaggle_submit.py",
     "kg1_v198_safe_kaggle_submit.py",
+    "SCRIPT.parent.mkdir(parents=True, exist_ok=True)",
     "--expected-sha256",
     "--manifest-json",
     "--poll-seconds",
