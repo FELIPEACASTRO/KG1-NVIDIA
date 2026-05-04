@@ -16,11 +16,12 @@
       "label": "V199B",
       "ref": 52325494,
       "status": "SubmissionStatus.COMPLETE",
-      "public_score": null,
+      "public_score": 0.86,
       "description": "V199B exact-sha final candidate sha 19fa057a local-audit",
       "zip_sha256": "19fa057ad55c569c490650b430b76809cacc18fd5f5fbb8f6c5bf8f65785e59c",
       "adapter_model_sha256": "444dd40c44ac5eb8a642ebe00a5616ba41548657dbd01e17f3db8bda7e785c7a",
-      "promotion_status": "blocked_until_public_score_and_rank_are_confirmed"
+      "promotion_status": "hold_equal_score_rank_unknown",
+      "decision": "not_promoted_without_rank_improvement"
     }
   ],
   "promotion_policy": {

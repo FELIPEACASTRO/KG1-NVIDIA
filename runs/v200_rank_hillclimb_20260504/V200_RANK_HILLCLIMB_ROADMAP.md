@@ -10,7 +10,7 @@ Nenhum candidato substitui esse baseline sem score Kaggle confirmado:
 - Score `= 0.86`: manter em quarentena, promover somente se ranking/empate for melhor.
 - Score `> 0.86`: promover como novo baseline obrigatorio.
 
-V199B/ref `52325494` esta `COMPLETE`, mas sem `publicScore` pela API neste momento; portanto nao esta promovido.
+V199B/ref `52325494` saiu com score publico `0.86`. Ele nao regrediu, mas tambem nao superou o baseline. Portanto fica em quarentena e nao e promovido sem confirmacao de ranking/empate melhor.
 
 ## Objetivo V200-V202
 
@@ -88,12 +88,11 @@ Antes de qualquer submit:
 
 ## Ordem operacional
 
-1. Aguardar score/rank do V199B/ref `52325494`.
-2. Se V199B `< 0.86`, descartar e partir de V194.
-3. Se V199B `= 0.86`, guardar como evidencia, mas manter V194 como baseline salvo ranking melhor.
-4. Se V199B `> 0.86`, promover V199B como baseline.
-5. Gerar V200A e V200B em paralelo, mas submeter no maximo um candidato por vez.
-6. Atualizar `best_baseline_registry.json` apos cada score completo.
+1. Manter V194/ref `52275052` como baseline de producao.
+2. Manter V199B/ref `52325494` em quarentena: score `0.86`, ranking ainda nao confirmado como melhor.
+3. Gerar V200A e V200B a partir de V194, nao de V199B.
+4. Submeter no maximo um candidato por vez.
+5. Atualizar `best_baseline_registry.json` apos cada score completo.
 
 ## Stop conditions
 
