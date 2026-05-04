@@ -1,0 +1,11 @@
+{
+  "decision": "PASS",
+  "checks": {
+    "v194_zip_sha": true,
+    "v194_model_sha": true,
+    "rank19_rule": true,
+    "no_auto_submit": true,
+    "weighted_sampling": true,
+    "no_v198_init": true
+  }
+}

@@ -1,0 +1,349 @@
+{
+  "catalog_model_count": 371,
+  "dry_run": false,
+  "generated_at": "2026-05-04T17:19:31+00:00",
+  "include_paid": true,
+  "prompt": "You are reviewing a Kaggle adapter-only competition pipeline.\n\nGoal: reach public score >= 0.87 without regressing below the confirmed best baseline.\n\nKnown facts:\n- Competition: NVIDIA Nemotron Model Reasoning Challenge.\n- Submission artifact is only a root-level LoRA adapter zip with adapter_config.json and adapter_model.safetensors.\n- Current production baseline is V194/ref 52275052: public score 0.86, user-confirmed rank 19/2613, zip SHA 49886191bf9ce92a48106ebfcba407bf9edbe423a4ed8c476d1f6bdfdd210fd8.\n- V199B/ref 52325494 scored 0.86, not promoted because it did not beat V194.\n- V198/ref 52301667 scored 0.84 and is a known regression.\n- Failures seen: broad soups (V191 0.78), focal training (V174 0.41), stripped/packaging errors (0.50-0.54), V198 final lineage regression (0.84).\n- Safe patterns seen: V192/V193/V194 attention-only micro lineage around 0.86, V199B baseline-gated no-regression but no gain.\n- Existing train data mixture: strict V198/V195/V196/V197 data, 1875 train / 720 validation, baseline eval local around 1.123.\n\nAdditional local/web context:\n# KG1 V201 Panel Context\n\n## Confirmed leaderboard evidence\n\n- Production baseline remains V194/ref `52275052`: public score `0.86`, user-confirmed rank `19/2613`, zip SHA `49886191bf9ce92a48106ebfcba407bf9edbe423a4ed8c476d1f6bdfdd210fd8`.\n- V199B/ref `52325494`: public score `0.86`, not promoted because it did not beat V194.\n- V198/ref `52301667`: public score `0.84`, known regression.\n- V191 broad update-space/SVD soup: public score `0.78`.\n- V174 focal candidate: public score `0.41`.\n- Several stripped/packaging attempts scored `0.50` to `0.54`.\n\n## Local audit findings\n\n- 134 legacy notebooks were scanned.\n- Common bad patterns:\n  - auto-submit cells;\n  - manual `files.upload`;\n  - unguarded `KaggleApi` use inside notebooks;\n  - private Kaggle kernel output attempts;\n  - no best-baseline lineage guard;\n  - no baseline-eval-before-training gate;\n  - target/module or packaging drift.\n- V199/V199B/V200A fixed the critical lineage path: exact V194 zip SHA must be present before training.\n- V200A added a 5-step micro attention-only candidate from V194, but it is not a full strategy for `0.87`; it is a low-risk probe.\n\n## Web and documentation evidence\n\n- NVIDIA Megatron Bridge documentation for Nemotron 3 Nano says LoRA fine-tuning is supported and defaults to linear layers `linear_qkv`, `linear_proj`, `linear_fc1`, `linear_fc2`, `in_proj`, `out_proj`.\n- This supports attention/MLP module discipline, and warns indirectly against arbitrary target drift.\n- OpenRouter API docs confirm OpenAI-compatible chat completions at `/api/v1/chat/completions`, so the panel can call heterogeneous models with one prompt.\n- NVIDIA reasoning-model material emphasizes curated/blended/filtering pipelines and domain-wise/cascaded learning rather than broad one-shot retrains.\n\n## Current technical constraints\n\n- Kaggle submission is adapter-only; no runtime API solver or router can be used in the final submission.\n- API models can only be used offline for analysis, dataset selection, label verification, and roadmap review.\n- The next candidate must start from V194 exact zip/model/config SHA, not V199B, unless V199B is later proven rank-better.\n- Promotion rule:\n  - score `< 0.86`: discard;\n  - score `= 0.86`: quarantine unless rank/selection improves;\n  - score `> 0.86`: promote as new baseline.\n\n## Candidate design space\n\n1. V201A targeted solver-verified weak-category micro-train:\n   - Init: exact V194.\n   - Data: only solver/API-verified weak-category examples plus strong-category rehearsal.\n   - Weak categories: bit manipulation, equation numeric/deduce/guess, cryptarithm/cipher edge cases.\n   - Steps: 3 to 8.\n   - LR: `3e-7 -> 1e-7` or lower.\n   - Trainable modules: attention only.\n   - Gate: final eval <= baseline eval, plus stratified no-regression.\n\n2. V201B no-train delta interpolation:\n   - Init/base: exact V194.\n   - Delta source: V199B or another 0.86-compatible candidate.\n   - Alpha: 1%, 2.5%, 5%.\n   - Submit only if tensor-diff gate shows intended minimal module changes and local eval is non-regressive.\n\n3. V201C package/control:\n   - No training.\n   - Revalidate V194 and V199B exact zips to isolate packaging vs training effects.\n\n## What must be rejected\n\n- Any candidate starting from V198, V195 checkpoints, or unknown Drive \u201cbest adapter\u201d.\n- Any broad soup with high alpha.\n- Any notebook that auto-submits.\n- Any zip with extra files, nested dirs, missing lm_head/up/down tensors, namespace drift, or known-regression SHA.\n- Any candidate where local gate improves only by noise or lacks per-family no-regression checks.\n\n\nTask:\nReturn compact JSON only, with these keys:\n1. verdict: one sentence.\n2. best_next_experiment: exact candidate to run next from V194, including init, data, LR, steps, trainable modules, and why it can plausibly reach 0.87.\n3. reject: array of strategies to block.\n4. hard_gates: array of concrete pre-submit gates that must pass.\n5. anti_regression_policy: exact promotion rule.\n6. probability_public_087: integer 0-100.\n7. risk_notes: array of main risks.\n\nBe ruthless. Prefer one small, testable change over broad training. Do not recommend API solvers in the Kaggle submission; they can only be used to generate or verify training data offline.",
+  "results": [
+    {
+      "content": null,
+      "elapsed_sec": 14.24,
+      "model": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
+      "ok": true,
+      "usage": {
+        "completion_tokens": 1200,
+        "completion_tokens_details": {
+          "audio_tokens": 0,
+          "image_tokens": 0,
+          "reasoning_tokens": 1451
+        },
+        "cost": 0,
+        "cost_details": {
+          "upstream_inference_completions_cost": 0,
+          "upstream_inference_cost": 0,
+          "upstream_inference_prompt_cost": 0
+        },
+        "is_byok": false,
+        "prompt_tokens": 1614,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cache_write_tokens": 0,
+          "cached_tokens": 0,
+          "video_tokens": 0
+        },
+        "total_tokens": 2814
+      }
+    },
+    {
+      "content": "```json\n{\n  \"verdict\": \"V201A is the only candidate with a plausible path to 0.87; it targets verified weak categories with minimal attention-only steps from the exact V194 lineage, avoiding all known failure modes.\",\n  \"best_next_experiment\": {\n    \"name\": \"V201A\",\n    \"init\": \"Exact V194 zip with SHA 49886191bf9ce92a48106ebfcba407bf9edbe423a4ed8c476d1f6bdfdd210fd8\",\n    \"data\": \"Solver/API-verified weak-category examples (bit manipulation, equation numeric/deduce/guess, cryptarithm/cipher edge cases) plus strong-category rehearsal from existing 1875 train set\",\n    \"LR\": \"3e-7 -> 1e-7 cosine decay\",\n    \"steps\": \"5\",\n    \"trainable_modules\": \"attention only (linear_qkv, linear_proj, in_proj, out_proj)\",\n    \"rationale\": \"Targets specific failure categories identified in V194 errors without broad retraining; attention-only micro-updates preserve 0.86 baseline while addressing weak spots; 5 steps at ultra-low LR prevent catastrophic drift; rehearsal data prevents forgetting.\"\n  },\n  \"reject\": [\n    \"V201B interpolation (no evidence delta between V194 and V199B contains signal; both score 0.86)\",\n    \"V201C re-packaging (V194 zip is already confirmed valid; no packaging issue exists)\",\n    \"Any broad soup or SVD blending (V191 scored 0.78)\",\n    \"Focal training (V174 scored 0.41)\",\n    \"Any candidate starting from V198, V195, or unknown checkpoints\",\n    \"Trainable modules beyond attention (MLP layers risk regression)\",\n    \"Steps > 8 (overfitting risk)\",\n    \"LR > 1e-6 (instability risk)\"\n  ],\n  \"hard_gates\": [\n    \"Exact V194 zip SHA verified before training begins\",\n    \"Local eval on 720 validation set must be <= 1.123 (baseline eval)\",\n    \"Per-family no-regression: bit manipulation, equation, cryptarithm scores must not drop > 0.01 vs V194\",\n    \"Zip contains only adapter_config.json and adapter_model.safetensors at root level\",\n    \"No extra files, nested directories, or namespace drift in zip\",\n    \"Submission notebook has no auto-submit cells\",\n    \"Tensor-diff confirms only attention modules changed\"\n  ],\n  \"anti_regression_policy\": \"score < 0.86: discard; score = 0.86: quarantine unless rank improves beyond 19/2613; score > 0.86: promote as new baseline.\",\n  \"probability_public_087\": 25,\n  \"risk_notes\": [\n    \"Weak-category data may be too narrow; if < 50 examples, overfitting likely\",\n    \"Solver/API labels may contain errors that propagate into training\",\n    \"Attention-only updates may be insufficient for equation/bit manipulation gains\",\n    \"Local eval at 1.123 may not correlate perfectly with public LB 0.86\",\n    \"5 steps may be too few to see meaningful improvement\",\n    \"Strong-category rehearsal ratio is unspecified; too little causes forgetting, too much dilutes weak-category signal\"\n  ]\n}\n```",
+      "elapsed_sec": 33.22,
+      "model": "openrouter/owl-alpha",
+      "ok": true,
+      "usage": {
+        "completion_tokens": 773,
+        "completion_tokens_details": {
+          "audio_tokens": 0,
+          "image_tokens": 0,
+          "reasoning_tokens": 0
+        },
+        "cost": 0,
+        "cost_details": {
+          "upstream_inference_completions_cost": 0,
+          "upstream_inference_cost": 0,
+          "upstream_inference_prompt_cost": 0
+        },
+        "is_byok": false,
+        "prompt_tokens": 1660,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cache_write_tokens": 0,
+          "cached_tokens": 0,
+          "video_tokens": 0
+        },
+        "total_tokens": 2433
+      }
+    },
+    {
+      "content": "```json\n{\n    \"verdict\": \"Only V201A micro-targeted attention-only training on verified weak-category data from exact V194 baseline offers plausible path to 0.87 while controlling regression risk.\",\n    \"best_next_experiment\": \"V201A: init=V194 exact SHA 49886191bf9ce92a48106ebfcba407bf9edbe423a4ed8c476d1f6bdfdd210fd8; data=API-verified weak-category examples (bit manipulation, equation numeric/deduce/guess, cryptarithm/cipher edge cases) plus 10% strong-category rehearsal; LR=2e-7 constant; steps=5; trainable_modules=attention only (linear_qkv, linear_proj, in_proj, out_proj); reason=minimal targeted update addresses known weak spots without broad parameter drift.\",\n    \"reject\": [\"any candidate not starting from V194 exact SHA\", \"broad soups with alpha >0.1\", \"V198/V195 lineage checkpoints\", \"notebooks with auto-submit cells\", \"zips with extra files/nested dirs\", \"delta interpolation without tensor-diff gate\", \"focal training on single categories\"],\n    \"hard_gates\": [\"exact V194 SHA present before training\", \"local eval <=1.123 (baseline)\", \"per-category no-regression on stratified validation\", \"zip contains only adapter_config.json and adapter_model.safetensors at root\", \"tensor namespace matches Nemotron 3 Nano linear layer defaults\"],\n    \"anti_regression_policy\": \"score <0.86: discard; score =0.86: quarantine unless rank improves; score >0.86: promote only if local eval <=1.123 AND per-category validation shows no regression.\",\n    \"probability_public_087\": 35,\n    \"risk_notes\": [\"5 steps may be insufficient for measurable improvement\", \"weak-category identification via API may introduce noise\", \"attention-only updates might not capture reasoning nuances\", \"minimal LR could yield no learning signal\", \"0.87 threshold requires meaningful gain beyond current plateau\"]\n}\n```",
+      "elapsed_sec": 29.29,
+      "model": "deepseek/deepseek-v3.2",
+      "ok": true,
+      "usage": {
+        "completion_tokens": 453,
+        "completion_tokens_details": {
+          "audio_tokens": 0,
+          "image_tokens": 0,
+          "reasoning_tokens": 0
+        },
+        "cost": 0.00053224,
+        "cost_details": {
+          "upstream_inference_completions_cost": 0.00017214,
+          "upstream_inference_cost": 0.00053224,
+          "upstream_inference_prompt_cost": 0.0003601
+        },
+        "is_byok": false,
+        "prompt_tokens": 1417,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cache_write_tokens": 0,
+          "cached_tokens": 64,
+          "video_tokens": 0
+        },
+        "total_tokens": 1870
+      }
+    },
+    {
+      "content": "{\n  \"verdict\": \"Run one small targeted attention-only micro-train on solver-verified weak categories from exact V194 to test for 0.87 gain without regression.\",\n  \"best_next_experiment\": \"V201A: init exact V194 (SHA 49886191bf9ce92a48106ebfcba407bf9edbe423a4ed8c476d1f6bdfdd210fd8), data only solver-verified weak examples (bit manipulation, cryptarithm, numeric deduce) plus strong rehearsal, LR 3e-7 to 1e-7, 5 steps, trainable modules linear_qkv and linear_proj only; small focused update on known failure modes can plausibly reach 0.87 while preserving baseline.\",\n  \"reject\": [\"broad soups or high-alpha mixing\", \"any start from V198/V195 or unknown checkpoints\", \"V201B delta interpolation\", \"V201C no-train revalidation\", \"auto-submit notebooks or extra zip files\", \"focal/broad training on full mixture\"],\n  \"hard_gates\": [\"exact V194 SHA match before any training\", \"local eval <=1.123 with per-family no-regression check\", \"trainable modules strictly attention-only\", \"zip contains only adapter_config.json and adapter_model.safetensors\", \"stratified weak-category improvement without strong-category drop\"],\n  \"anti_regression_policy\": \"score < 0.86: discard; score = 0.86: quarantine unless rank improves; score > 0.86: promote as new baseline\",\n  \"probability_public_087\": 20,\n  \"risk_notes\": [\"micro-train may yield insufficient gain\", \"subtle regression on untargeted categories\", \"offline data verification errors\", \"packaging or module drift in final zip\"]\n}",
+      "elapsed_sec": 20.93,
+      "model": "x-ai/grok-4.3",
+      "ok": true,
+      "usage": {
+        "completion_tokens": 1638,
+        "completion_tokens_details": {
+          "audio_tokens": 0,
+          "image_tokens": 0,
+          "reasoning_tokens": 1270
+        },
+        "cost": 0.00588155,
+        "cost_details": {
+          "upstream_inference_completions_cost": 0.004095,
+          "upstream_inference_cost": 0.00588155,
+          "upstream_inference_prompt_cost": 0.00178655
+        },
+        "is_byok": false,
+        "prompt_tokens": 1483,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cache_write_tokens": 0,
+          "cached_tokens": 64,
+          "video_tokens": 0
+        },
+        "total_tokens": 3121
+      }
+    },
+    {
+      "content": "```json\n{\n  \"verdict\": \"V194 baseline is stable at 0.86; only a solver-verified weak-category micro-train with attention-only updates and ultra-low LR has plausible upside to 0.87 without regression risk.\",\n  \"best_next_experiment\": {\n    \"name\": \"V201A_solver_verified_weak_category_micro\",\n    \"init\": \"V194 exact zip SHA 49886191bf9ce92a48106ebfcba407bf9edbe423a4ed8c476d1f6bdfdd210fd8\",\n    \"data\": \"API-verified weak examples (bit manipulation, equation numeric/deduce, cryptarithm edge cases) max 50-100 samples, plus 150-200 strong-category rehearsal from existing train set\",\n    \"trainable_modules\": \"attention only (linear_qkv, linear_proj)\",\n    \"lr\": \"3e-7 constant or 3e-7->1e-7 linear decay\",\n    \"steps\": 5,\n    \"batch_size\": 1,\n    \"eval_gate\": \"final eval_loss <= baseline_eval_loss AND per_family_accuracy >= baseline per all 8 families\",\n    \"rationale\": \"Targeted repair of known weak categories with minimal parameter drift; attention-only preserves V194 MLP knowledge; solver verification ensures quality; 5 steps limits overfitting; rehearsal prevents catastrophic forgetting; plausible +0.01 gain if weak categories currently cost 1-2 public test errors\"\n  },\n  \"reject\": [\n    \"Any init from V198, V195, V196, V197, or unknown Drive checkpoints\",\n    \"Broad retraining on full 1875 samples\",\n    \"MLP or full-model trainable modules\",\n    \"LR > 5e-7\",\n    \"Steps > 10\",\n    \"Delta soup alpha > 5%\",\n    \"Any notebook with auto-submit or manual files.upload\",\n    \"Any zip with extra files, nested dirs, or non-standard tensor names\",\n    \"Any candidate without per-family stratified eval gate\"\n  ],\n  \"hard_gates\": [\n    \"V194 exact zip SHA 49886191bf9ce92a48106ebfcba407bf9edbe423a4ed8c476d1f6bdfdd210fd8 present and loaded before training\",\n    \"Final eval_loss <= baseline eval_loss (1.123)\",\n    \"Per-family accuracy >= V194 baseline for all 8 families (no single-family regression)\",\n    \"Zip contains only adapter_config.json and adapter_model.safetensors at root\",\n    \"All expected LoRA tensors present: base_model.model.model.layers.*.self_attn.{q_proj,k_proj,v_proj,o_proj}.lora_{up,down}.weight\",\n    \"No lm_head, embed_tokens, or MLP tensors in adapter\",\n    \"Local manual inspection of 3 weak-category samples before submit\"\n  ],\n  \"anti_regression_policy\": \"score < 0.86: discard; score = 0.86: quarantine unless rank improves or tie-break evidence favors; score > 0.86: promote as new baseline and archive V194 as fallback\",\n  \"probability_public_087\": 25,\n  \"risk_notes\": [\n    \"Weak-category examples may be too sparse or noisy even with solver verification\",\n    \"5 steps may be insufficient for durable learning or too many for micro-train\",\n    \"Attention-only may not address MLP-dependent reasoning gaps\",\n    \"Public test distribution may not align with identified weak categories\",\n    \"Rehearsal selection bias may introduce subtle regression in strong categories\",\n    \"V194 may already be near-optimal for this adapter-only constraint; 0.87 may require architecture or base model change\"\n  ]\n}\n```",
+      "elapsed_sec": 21.01,
+      "model": "anthropic/claude-sonnet-4.5",
+      "ok": true,
+      "usage": {
+        "completion_tokens": 945,
+        "completion_tokens_details": {
+          "audio_tokens": 0,
+          "image_tokens": 0,
+          "reasoning_tokens": 0
+        },
+        "cost": 0.018996,
+        "cost_details": {
+          "upstream_inference_completions_cost": 0.014175,
+          "upstream_inference_cost": 0.018996,
+          "upstream_inference_prompt_cost": 0.004821
+        },
+        "is_byok": false,
+        "prompt_tokens": 1607,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cache_write_tokens": 0,
+          "cached_tokens": 0,
+          "video_tokens": 0
+        },
+        "total_tokens": 2552
+      }
+    },
+    {
+      "content": "{\n  \"verdict\": \"Proceed only with a V194-initialized, attention-only, solver-verified weak-slice micro-train (single-digit steps) under strict no-regression gates; reject any broader or lineage-uncertain changes.\",\n  \"best_next_experiment\": {\n    \"candidate\": \"V201A weak-slice micro-train (attention-only) from V194\",\n    \"init\": {\n      \"must_start_from\": \"V194/ref 52275052\",\n      \"required_zip_sha256\": \"49886191bf9ce92a48106ebfcba407bf9edbe423a4ed8c476d1f6bdfdd210fd8\",\n      \"notes\": \"Do not init from V199B/V198 or any 'best adapter' path; load V194 adapter exactly, then continue-training.\"\n    },\n    \"data\": {\n      \"construction\": \"Offline-only: identify weak categories by error clustering on the 720-val set + any held-out public-style probes; generate/verify labels with deterministic solvers or high-agreement multi-model adjudication; keep only solver-verified items.\",\n      \"weak_slice\": {\n        \"categories\": [\n          \"bit manipulation / binary arithmetic edge cases\",\n          \"equation numeric/deduce/guess (small integer reasoning traps)\",\n          \"cryptarithm/cipher edge cases\"\n        ],\n        \"size_target\": \"120-240 examples total, capped per category to avoid overfitting\",\n        \"quality_rule\": \"Keep only items with solver-verification OR unanimous agreement across >=3 independent checkers; drop any ambiguous/format-unstable items.\"\n      },\n      \"rehearsal\": {\n        \"source\": \"Existing strict mixture (V195/V196/V197 lineage data that already supports ~0.86 behavior) but sampled conservatively\",\n        \"mix_ratio\": \"weak:rehearsal = 1:1 (or 2:1 if rehearsal loss spikes)\",\n        \"purpose\": \"Anchor general behavior and prevent the known V198-style regression pattern.\"\n      }\n    },\n    \"lr\": {\n      \"optimizer\": \"AdamW (as in baseline pipeline, unchanged)\",\n      \"schedule\": \"constant or short cosine\",\n      \"learning_rate\": \"1e-7 (absolute cap 3e-7 if loss is flat for first 1-2 steps)\",\n      \"weight_decay\": \"unchanged from V194 pipeline\",\n      \"grad_clip\": \"unchanged from V194 pipeline\"\n    },\n    \"steps\": {\n      \"train_steps\": \"5 (only escalate to 8 if all interim gates pass at step 3/5)\",\n      \"micro_gating\": \"evaluate at step 3 and step 5; stop early if any regression gate trips\"\n    },\n    \"trainable_modules\": {\n      \"policy\": \"attention-only LoRA updates; do not touch MLP\",\n      \"allowed_targets_examples\": [\n        \"linear_qkv\",\n        \"linear_proj\",\n        \"in_proj\",\n        \"out_proj\"\n      ],\n      \"blocked_targets\": [\n        \"linear_fc1\",\n        \"linear_fc2\",\n        \"lm_head\",\n        \"embeddings\",\n        \"any non-attention modules\"\n      ],\n      \"why\": \"Matches the proven V192/V193/V194 safe lineage; avoids the broad-update and focal-collapse failure modes.\"\n    },\n    \"why_plausibly_087\": \"A +0.01 public gain is only plausible via tightly targeted fixes on a small number of recurring weak families while preserving the already-strong general behavior; the minimal attention-only, low-LR, single-digit-step approach limits regression risk while allowing small calibration shifts that can move borderline public cases.\"\n  },\n  \"reject\": [\n    \"Any run not initialized from the exact V194 zip SHA256 49886191bf9ce92a48106ebfcba407bf9edbe423a4ed8c476d1f6bdfdd210fd8\",\n    \"Any lineage starting from V198/ref 52301667 (known regression) or from V195/V196/V197 checkpoints directly\",\n    \"Broad 'soups' / SVD merges / high-alpha interpolations (>5%)\",\n    \"Focal-style training or aggressive reweighting that concentrates gradients (known 0.41 failure mode)\",\n    \"Expanding trainable modules beyond attention (MLP/embeddings/lm_head) or changing target module names/namespace\",\n    \"Any packaging changes that alter root structure, add extra files, or create nested directories\",\n    \"Auto-submit notebooks, unguarded KaggleApi usage, manual files.upload, or any pipeline that can submit the wrong artifact\",\n    \"Any candidate without stratified no-regression evidence (overall-only metrics are insufficient)\"\n  ],\n  \"hard_gates\": [\n    \"Lineage gate: before training, compute and log SHA256 of the loaded init adapter zip; must equal V194 SHA256 49886191bf9ce92a48106ebfcba407bf9edbe423a4ed8c476d1f6bdfdd210fd8\",\n    \"Structure gate: output zip must contain",
+      "elapsed_sec": 21.76,
+      "model": "openai/gpt-5.2",
+      "ok": true,
+      "usage": {
+        "completion_tokens": 1200,
+        "completion_tokens_details": {
+          "audio_tokens": 0,
+          "image_tokens": 0,
+          "reasoning_tokens": 127
+        },
+        "cost": 0.01922725,
+        "cost_details": {
+          "upstream_inference_completions_cost": 0.0168,
+          "upstream_inference_cost": 0.01922725,
+          "upstream_inference_prompt_cost": 0.00242725
+        },
+        "is_byok": false,
+        "prompt_tokens": 1387,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cache_write_tokens": 0,
+          "cached_tokens": 0,
+          "video_tokens": 0
+        },
+        "total_tokens": 2587
+      }
+    },
+    {
+      "content": "\n```json\n{\n  \"verdict\": \"V194 baseline at 0.86 is stable but stagnant; targeted weak-category micro-train (V201A) offers the only plausible path to 0.87 with acceptable regression risk.\",\n  \"best_next_experiment\": \"V201A: Init from exact V194 zip SHA 49886191bf9ce92a48106ebfcba407bf9edbe423a4ed8c476d1f6bdfdd210fd8, train on solver-verified weak categories (bit manipulation, equation numeric/deduce/guess, cryptarithm/cipher) + strong-category rehearsal, 3-8 steps, LR 3e-7 to 1e-7, attention modules only (linear_qkv, linear_proj), gate: final eval <= baseline eval + stratified per-family no-regression.\",\n  \"reject\": [\n    \"Any candidate starting from V198, V195, or unknown checkpoints\",\n    \"Broad soup approaches with high alpha (>5%)\",\n    \"Focal training or single-category overfitting\",\n    \"Notebooks with auto-submit or unguarded KaggleApi\",\n    \"Packaging-only changes without training verification\",\n    \"Delta interpolation (V201B) without tensor-diff validation\"\n  ],\n  \"hard_gates\": [\n    \"Exact V194 zip SHA 49886191bf9ce92a48106ebfcba407bf9edbe423a4ed8c476d1f6bdfdd210fd8 must be present before training\",\n    \"Local eval score must be <= baseline eval (1.123)\",\n    \"Per-family stratified no-regression check across all 1875 train examples\",\n    \"Packaging validation: root-level zip with adapter_config.json and adapter_model.safetensors only\",\n    \"Tensor-diff gate: <2% of parameters changed, attention modules only\",\n    \"Baseline-eval-before-training gate must pass\"\n  ],\n  \"anti_regression_policy\": \"Promotion rule: score < 0.86 -> discard; score = 0.86 -> quarantine unless rank improves; score > 0.86 -> promote as new baseline.\",\n  \"probability_public_087\": 35,\n  \"risk_notes\": [\n    \"Weak-category identification may not address true performance bottlenecks\",\n    \"3-8 steps may be insufficient for meaningful improvement\",\n    \"Attention-only constraint limits adaptation capacity\",\n    \"Local eval (1.123) may not correlate with public score (0.86)\",\n    \"V194 baseline may have reached performance ceiling\"\n  ]\n}\n```\n",
+      "elapsed_sec": 8.0,
+      "model": "poolside/laguna-xs.2:free",
+      "ok": true,
+      "usage": {
+        "completion_tokens": 1144,
+        "completion_tokens_details": {
+          "audio_tokens": 0,
+          "image_tokens": 0,
+          "reasoning_tokens": 518
+        },
+        "cost": 0,
+        "cost_details": {
+          "upstream_inference_completions_cost": 0,
+          "upstream_inference_cost": 0,
+          "upstream_inference_prompt_cost": 0
+        },
+        "is_byok": false,
+        "prompt_tokens": 1643,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cache_write_tokens": 0,
+          "cached_tokens": 0,
+          "video_tokens": 0
+        },
+        "total_tokens": 2787
+      }
+    },
+    {
+      "content": "\n{\n  \"verdict\": \"V201A is the only viable path to 0.87; delta interpolation and packaging checks are necessary but insufficient for score improvement.\",\n  \"best_next_experiment\": \"V201A: Init from exact V194 SHA 49886191bf9ce92a48106ebfcba407bf9edbe423a4ed8c476d1f6bdfdd210fd8, train only attention modules (linear_qkv, linear_proj) on solver-verified weak-category examples (bit manipulation, equation numeric/deduce/guess, cryptarithm/cipher) plus 10% strong-category rehearsal, LR 3e-7 for 3 steps then 1e-7 for 5 steps, gate on local eval <= baseline 1.123 with per-category no-regression.\",\n  \"reject\": [\n    \"Any candidate starting from V198, V195, or unknown checkpoints\",\n    \"Broad soups with alpha > 5%\",\n    \"Notebooks with auto-submit cells or unguarded KaggleApi\",\n    \"Zips with extra files, nested dirs, or missing lm_head/up/down tensors\",\n    \"Candidates improving only by noise without per-family no-regression checks\"\n  ],\n  \"hard_gates\": [\n    \"Exact V194 zip SHA must match before training\",\n    \"Local eval must be <= baseline 1.123\",\n    \"Per-category eval must show no regression on strong categories\",\n    \"Tensor diff must show changes only in attention modules\",\n    \"Final zip must contain only adapter_config.json and adapter_model.safetensors\"\n  ],\n  \"anti_regression_policy\": \"score < 0.86: discard; score = 0.86: quarantine unless rank improves; score > 0.86: promote as new baseline only after confirming exact V194 SHA lineage and passing all hard gates.\",\n  \"probability_public_087\": 35,\n  \"risk_notes\": [\n    \"Weak-category overfitting may not generalize to full test distribution\",\n    \"Attention-only training may hit capacity limits for 0.01 score gain\",\n    \"Solver-verified data quality directly determines success\",\n    \"Local eval may not correlate with public leaderboard score\"\n  ]\n}\n",
+      "elapsed_sec": 35.4,
+      "model": "poolside/laguna-m.1:free",
+      "ok": true,
+      "usage": {
+        "completion_tokens": 855,
+        "completion_tokens_details": {
+          "audio_tokens": 0,
+          "image_tokens": 0,
+          "reasoning_tokens": 327
+        },
+        "cost": 0,
+        "cost_details": {
+          "upstream_inference_completions_cost": 0,
+          "upstream_inference_cost": 0,
+          "upstream_inference_prompt_cost": 0
+        },
+        "is_byok": false,
+        "prompt_tokens": 1643,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cache_write_tokens": 0,
+          "cached_tokens": 0,
+          "video_tokens": 0
+        },
+        "total_tokens": 2498
+      }
+    },
+    {
+      "content": "{\n  \"verdict\": \"Run a minimal, solver-verified weak-category attention-only micro-train from exact V194; reject broad soups and any non-V194 init.\",\n  \"best_next_experiment\": {\n    \"name\": \"V201A\",\n    \"init\": \"exact V194 zip SHA 49886191bf9ce92a48106ebfcba407bf9edbe423a4ed8c476d1f6bdfdd210fd8\",\n    \"data\": \"offline-verified weak-category examples (bit manipulation, equation numeric/deduce/guess, cryptarithm/cipher edge cases) + strong-category rehearsal; stratified to preserve family balance; no new broad data\",\n    \"LR\": \"3e-7 -> 1e-7 cosine over steps\",\n    \"steps\": 5,\n    \"trainable_modules\": [\"attention-only: linear_qkv, linear_proj, in_proj, out_proj\"],\n    \"why_plausible_087\": \"Small, targeted signal on verified weak categories with strong rehearsal limits noise; attention-only preserves MLP stability and baseline eval; 5 steps is enough to correct specific reasoning gaps without broad drift.\"\n  },\n  \"reject\": [\n    \"Any init other than exact V194 (no V198/V195/V196/V197/unknown Drive adapters)\",\n    \"Broad soups or high-alpha interpolation\",\n    \"Focal or full-model training\",\n    \"Auto-submit notebooks, unguarded KaggleApi, private kernel submit\",\n    \"Packaging changes that add/remove files or alter namespaces\",\n    \"Using V199B as init unless rank-better proven\"\n  ],\n  \"hard_gates\": [\n    \"Pre-train: reproduce V194 local eval ~1.123 and exact adapter SHA\",\n    \"Post-train: local eval <= baseline (non-regressive) with per-family no-regression checks\",\n    \"Adapter zip passes packaging validation: only adapter_config.json + adapter_model.safetensors, no extra dirs/files, correct tensor names\",\n    \"Public score > 0.86 to promote; = 0.86 quarantined unless rank/selection strictly improves\"\n  ],\n  \"anti_regression_policy\": \"Promote only if public score > 0.86; if = 0.86, quarantine; if < 0.86, discard.\",\n  \"probability_public_087\": 35,\n  \"risk_notes\": [\n    \"Limited labeled weak-category data may cap gains\",\n    \"Attention-only may not fix non-attention reasoning gaps\",\n    \"Small step budget risks underfitting or noisy updates\",\n    \"Public leaderboard noise could mask true delta\"\n  ]\n}",
+      "elapsed_sec": 9.32,
+      "model": "inclusionai/ling-2.6-1t:free",
+      "ok": true,
+      "usage": {
+        "completion_tokens": 640,
+        "completion_tokens_details": {
+          "audio_tokens": 0,
+          "image_tokens": 0,
+          "reasoning_tokens": 0
+        },
+        "cost": 0,
+        "cost_details": {
+          "upstream_inference_completions_cost": 0,
+          "upstream_inference_cost": 0,
+          "upstream_inference_prompt_cost": 0
+        },
+        "is_byok": false,
+        "prompt_tokens": 1687,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cache_write_tokens": 0,
+          "cached_tokens": 0,
+          "video_tokens": 0
+        },
+        "total_tokens": 2327
+      }
+    },
+    {
+      "content": null,
+      "elapsed_sec": 20.38,
+      "model": "tencent/hy3-preview:free",
+      "ok": true,
+      "usage": {
+        "completion_tokens": 1200,
+        "completion_tokens_details": {
+          "audio_tokens": 0,
+          "image_tokens": 0,
+          "reasoning_tokens": 0
+        },
+        "cost": 0,
+        "cost_details": {
+          "upstream_inference_completions_cost": 0,
+          "upstream_inference_cost": 0,
+          "upstream_inference_prompt_cost": 0
+        },
+        "is_byok": false,
+        "prompt_tokens": 1425,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cache_write_tokens": 0,
+          "cached_tokens": 0,
+          "video_tokens": 0
+        },
+        "total_tokens": 2625
+      }
+    },
+    {
+      "content": "{\n  \"verdict\": \"Reject all candidates; no viable path to 0.87 without regression or violating constraints.\",\n  \"best_next_experiment\": null,\n  \"reject\": [\n    \"V198/V195/V196/V197 checkpoints (regression/noise)\",\n    \"V199B (not better than V194)\",\n    \"V191/V174 (regression)\",\n    \"stripped/packaging attempts (0.50-0.54)\",\n    \"broad soup (0.78)\",\n    \"auto-submit cells\",\n    \"manual files.upload\",\n    \"unguarded KaggleApi use\",\n    \"private kernel output\",\n    \"no baseline-eval-before-training gate\",\n    \"packaging drift\",\n    \"target/module drift\",\n    \"no-baseline-lineage-guard\",\n    \"low-risk probe (V200A) insufficient for 0.87\"\n  ],\n  \"hard_gates\": [\n    \"exact V194 zip SHA (49886191bf9ce92a48106ebfcba407bf9edbe423a4ed8c476d1f6bdfdd210fd8) must be present\",\n    \"final eval >= baseline eval (1.123)\",\n    \"no extra files/nested dirs\",\n    \"lm_head/up/down tensors present\",\n    \"no namespace drift\",\n    \"no known-regression SHA\",\n    \"no auto-submit cells\",\n    \"no manual files.upload\",\n    \"unguarded KaggleApi use blocked\",\n    \"no private kernel output\",\n    \"no-baseline-lineage-guard enforced\",\n    \"baseline-eval-before-training gate passed\",\n    \"target/module packaging drift zeroed\"\n  ],\n  \"anti_regression_policy\": \"score < 0.86: discard; score = 0.86: quarantine unless rank/selection improves; score > 0.86: promote as new baseline\",\n  \"probability_public_087\": 0,\n  \"risk_notes\": [\n    \"V198 regression (0.84)\",\n    \"broad soup (0.78)\",\n    \"focal training (0.41)\",\n    \"stripped/packaging errors (0.50-0.54)\",\n    \"no-baseline-lineage-guard noise\",\n    \"packaging/target drift\",\n    \"low-risk probe insufficient for 0.87\"\n  ]\n}",
+      "elapsed_sec": 6.76,
+      "model": "baidu/qianfan-ocr-fast:free",
+      "ok": true,
+      "usage": {
+        "completion_tokens": 539,
+        "completion_tokens_details": {
+          "audio_tokens": 0,
+          "image_tokens": 0,
+          "reasoning_tokens": 0
+        },
+        "cost": 0,
+        "cost_details": {
+          "upstream_inference_completions_cost": 0,
+          "upstream_inference_cost": 0,
+          "upstream_inference_prompt_cost": 0
+        },
+        "is_byok": false,
+        "prompt_tokens": 1580,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cache_write_tokens": 0,
+          "cached_tokens": 0,
+          "video_tokens": 0
+        },
+        "total_tokens": 2119
+      }
+    },
+    {
+      "body": "{\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"google/gemma-4-26b-a4b-it:free is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations\",\"provider_name\":\"Google AI Studio\",\"is_byok\":false}},\"user_id\":\"user_3CdPcZigMGLEjfE8I0HfImMKLYW\"}",
+      "elapsed_sec": 1.06,
+      "error": "HTTP 429",
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "ok": false
+    }
+  ],
+  "selected_models": [
+    "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
+    "openrouter/owl-alpha",
+    "deepseek/deepseek-v3.2",
+    "x-ai/grok-4.3",
+    "anthropic/claude-sonnet-4.5",
+    "openai/gpt-5.2",
+    "poolside/laguna-xs.2:free",
+    "poolside/laguna-m.1:free",
+    "inclusionai/ling-2.6-1t:free",
+    "tencent/hy3-preview:free",
+    "baidu/qianfan-ocr-fast:free",
+    "google/gemma-4-26b-a4b-it:free"
+  ]
+}

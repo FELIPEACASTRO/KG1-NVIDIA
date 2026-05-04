@@ -1,0 +1,862 @@
+[
+  {
+    "cells": 28,
+    "flags": [
+      "auto_submit",
+      "kaggle_api_in_notebook",
+      "h100_gate"
+    ],
+    "path": "notebooks\\KG1_V100_HUIKANG_AUTOSUBMIT.ipynb"
+  },
+  {
+    "cells": 30,
+    "flags": [
+      "auto_submit",
+      "kaggle_api_in_notebook",
+      "h100_gate"
+    ],
+    "path": "notebooks\\KG1_V101_TOP1_090_TARGET.ipynb"
+  },
+  {
+    "cells": 32,
+    "flags": [
+      "auto_submit",
+      "kaggle_api_in_notebook",
+      "h100_gate"
+    ],
+    "path": "notebooks\\KG1_V102_BYTE_EXACT_090.ipynb"
+  },
+  {
+    "cells": 40,
+    "flags": [
+      "auto_submit",
+      "kaggle_api_in_notebook",
+      "h100_gate"
+    ],
+    "path": "notebooks\\KG1_V103_PRODUCTION_READY.ipynb"
+  },
+  {
+    "cells": 42,
+    "flags": [
+      "auto_submit",
+      "kaggle_api_in_notebook",
+      "h100_gate"
+    ],
+    "path": "notebooks\\KG1_V104_ALL_FIXES_CONSOLIDATED.ipynb"
+  },
+  {
+    "cells": 44,
+    "flags": [
+      "auto_submit",
+      "kaggle_api_in_notebook",
+      "h100_gate"
+    ],
+    "path": "notebooks\\KG1_V105_PRODUCTION_FINAL.ipynb"
+  },
+  {
+    "cells": 55,
+    "flags": [],
+    "path": "notebooks\\KG1_V110_HUIKANG_SURFER.ipynb"
+  },
+  {
+    "cells": 3,
+    "flags": [],
+    "path": "notebooks\\KG1_V120_MODAL_SURFER.ipynb"
+  },
+  {
+    "cells": 17,
+    "flags": [
+      "private_kernel_output"
+    ],
+    "path": "notebooks\\KG1_v130_CRYPTARITHM_ENHANCED.ipynb"
+  },
+  {
+    "cells": 19,
+    "flags": [],
+    "path": "notebooks\\KG1_v130_FINAL.ipynb"
+  },
+  {
+    "cells": 12,
+    "flags": [],
+    "path": "notebooks\\KG1_V140_COLAB.ipynb"
+  },
+  {
+    "cells": 12,
+    "flags": [],
+    "path": "notebooks\\KG1_V141_COLAB.ipynb"
+  },
+  {
+    "cells": 12,
+    "flags": [],
+    "path": "notebooks\\KG1_V142_COLAB.ipynb"
+  },
+  {
+    "cells": 12,
+    "flags": [],
+    "path": "notebooks\\KG1_V143_COLAB.ipynb"
+  },
+  {
+    "cells": 12,
+    "flags": [],
+    "path": "notebooks\\KG1_V144_COLAB.ipynb"
+  },
+  {
+    "cells": 12,
+    "flags": [],
+    "path": "notebooks\\KG1_V145_COLAB.ipynb"
+  },
+  {
+    "cells": 2,
+    "flags": [],
+    "path": "notebooks\\KG1_V146_SINGLE_CELL.ipynb"
+  },
+  {
+    "cells": 2,
+    "flags": [],
+    "path": "notebooks\\KG1_V147_SINGLE_CELL.ipynb"
+  },
+  {
+    "cells": 2,
+    "flags": [],
+    "path": "notebooks\\KG1_V148_TONG_COLAB.ipynb"
+  },
+  {
+    "cells": 2,
+    "flags": [],
+    "path": "notebooks\\KG1_V149_TONG_SAFE.ipynb"
+  },
+  {
+    "cells": 2,
+    "flags": [],
+    "path": "notebooks\\KG1_V150_MASTER.ipynb"
+  },
+  {
+    "cells": 2,
+    "flags": [],
+    "path": "notebooks\\KG1_V151_FOCUSED.ipynb"
+  },
+  {
+    "cells": 2,
+    "flags": [],
+    "path": "notebooks\\KG1_V152_TRIPLE_CHECK.ipynb"
+  },
+  {
+    "cells": 2,
+    "flags": [],
+    "path": "notebooks\\KG1_V154_FINAL.ipynb"
+  },
+  {
+    "cells": 2,
+    "flags": [],
+    "path": "notebooks\\KG1_V155_PARSER_TEST.ipynb"
+  },
+  {
+    "cells": 2,
+    "flags": [],
+    "path": "notebooks\\KG1_V156_DEFINITIVO.ipynb"
+  },
+  {
+    "cells": 2,
+    "flags": [],
+    "path": "notebooks\\KG1_V157_TODAY.ipynb"
+  },
+  {
+    "cells": 2,
+    "flags": [],
+    "path": "notebooks\\KG1_V158_CORRIGIDO.ipynb"
+  },
+  {
+    "cells": 13,
+    "flags": [],
+    "path": "notebooks\\KG1_V159_TOP1_087_COLAB.ipynb"
+  },
+  {
+    "cells": 2,
+    "flags": [],
+    "path": "notebooks\\KG1_V159_ULTIMATE.ipynb"
+  },
+  {
+    "cells": 8,
+    "flags": [],
+    "path": "notebooks\\KG1_V195_FOCAL_COLAB_PRO.ipynb"
+  },
+  {
+    "cells": 7,
+    "flags": [],
+    "path": "notebooks\\KG1_V198_MICRO_DISTILL_COLAB_PRO.ipynb"
+  },
+  {
+    "cells": 9,
+    "flags": [
+      "v198_final_lineage",
+      "best_baseline_rule",
+      "v194_sha",
+      "h100_gate"
+    ],
+    "path": "notebooks\\KG1_V199_CONSERVATIVE_CONTINUE_COLAB_PRO.ipynb"
+  },
+  {
+    "cells": 9,
+    "flags": [
+      "v198_final_lineage",
+      "best_baseline_rule",
+      "v194_sha",
+      "h100_gate"
+    ],
+    "path": "notebooks\\KG1_V199_H100_HIGH_RAM_COLAB_PRO.ipynb"
+  },
+  {
+    "cells": 11,
+    "flags": [
+      "auto_submit",
+      "v198_final_lineage",
+      "best_baseline_rule",
+      "baseline_eval_gate",
+      "v194_sha",
+      "h100_gate"
+    ],
+    "path": "notebooks\\KG1_V199B_H100_BASELINE_GATED_COLAB_PRO.ipynb"
+  },
+  {
+    "cells": 9,
+    "flags": [
+      "v198_final_lineage",
+      "best_baseline_rule",
+      "baseline_eval_gate",
+      "v194_sha",
+      "h100_gate"
+    ],
+    "path": "notebooks\\KG1_V200A_H100_MICRO_ATTENTION_COLAB_PRO.ipynb"
+  },
+  {
+    "cells": 9,
+    "flags": [],
+    "path": "notebooks\\KG1_V70_5_FIXED_METRIC.ipynb"
+  },
+  {
+    "cells": 8,
+    "flags": [
+      "h100_gate"
+    ],
+    "path": "notebooks\\KG1_v70_HF_REPLICA_COLAB.ipynb"
+  },
+  {
+    "cells": 10,
+    "flags": [],
+    "path": "notebooks\\KG1_V70_RESUBMIT_METRIC_FIX.ipynb"
+  },
+  {
+    "cells": 14,
+    "flags": [
+      "files_upload",
+      "h100_gate"
+    ],
+    "path": "notebooks\\KG1_v70_SFT_CODEGEN_COLAB.ipynb"
+  },
+  {
+    "cells": 33,
+    "flags": [],
+    "path": "notebooks\\KG1_V71_MEGA_FINAL.ipynb"
+  },
+  {
+    "cells": 33,
+    "flags": [],
+    "path": "notebooks\\KG1_V71_MEGA_FIXED.ipynb"
+  },
+  {
+    "cells": 2,
+    "flags": [],
+    "path": "notebooks\\KG1_V71_ONECELL.ipynb"
+  },
+  {
+    "cells": 3,
+    "flags": [],
+    "path": "notebooks\\KG1_V72_CLEAN.ipynb"
+  },
+  {
+    "cells": 5,
+    "flags": [],
+    "path": "notebooks\\KG1_V73_DEFINITIVO.ipynb"
+  },
+  {
+    "cells": 5,
+    "flags": [],
+    "path": "notebooks\\KG1_V74_FINAL.ipynb"
+  },
+  {
+    "cells": 6,
+    "flags": [],
+    "path": "notebooks\\KG1_V75_PRODUCTION.ipynb"
+  },
+  {
+    "cells": 6,
+    "flags": [],
+    "path": "notebooks\\KG1_V76_ANTIOVERFIT.ipynb"
+  },
+  {
+    "cells": 6,
+    "flags": [],
+    "path": "notebooks\\KG1_V77_FIXED.ipynb"
+  },
+  {
+    "cells": 7,
+    "flags": [
+      "auto_submit",
+      "h100_gate"
+    ],
+    "path": "notebooks\\KG1_V78_DGXCHEN_REPLICA.ipynb"
+  },
+  {
+    "cells": 7,
+    "flags": [
+      "auto_submit",
+      "h100_gate"
+    ],
+    "path": "notebooks\\KG1_V79_DGXCHEN_REVIEWED.ipynb"
+  },
+  {
+    "cells": 7,
+    "flags": [
+      "auto_submit"
+    ],
+    "path": "notebooks\\KG1_V80_COLAB_V2.ipynb"
+  },
+  {
+    "cells": 7,
+    "flags": [
+      "auto_submit",
+      "h100_gate"
+    ],
+    "path": "notebooks\\KG1_V80_DGXCHEN_EXACT.ipynb"
+  },
+  {
+    "cells": 2,
+    "flags": [],
+    "path": "notebooks\\KG1_V80_MEGA.ipynb"
+  },
+  {
+    "cells": 2,
+    "flags": [],
+    "path": "notebooks\\KG1_V80_MEGA_V3.ipynb"
+  },
+  {
+    "cells": 19,
+    "flags": [],
+    "path": "notebooks\\KG1_V81_CANONICALIZED.ipynb"
+  },
+  {
+    "cells": 27,
+    "flags": [],
+    "path": "notebooks\\KG1_V82_HUIKANG_RECIPE.ipynb"
+  },
+  {
+    "cells": 28,
+    "flags": [
+      "auto_submit",
+      "h100_gate"
+    ],
+    "path": "notebooks\\KG1_v90_COLAB_PRO_H100_V5.ipynb"
+  },
+  {
+    "cells": 27,
+    "flags": [
+      "auto_submit",
+      "h100_gate"
+    ],
+    "path": "notebooks\\KG1_v90_V10_COLAB_PRO.ipynb"
+  },
+  {
+    "cells": 27,
+    "flags": [
+      "auto_submit",
+      "h100_gate"
+    ],
+    "path": "notebooks\\KG1_v90_V11_COLAB_PRO.ipynb"
+  },
+  {
+    "cells": 27,
+    "flags": [
+      "auto_submit",
+      "h100_gate"
+    ],
+    "path": "notebooks\\KG1_v90_V12_COLAB_PRO.ipynb"
+  },
+  {
+    "cells": 27,
+    "flags": [
+      "auto_submit",
+      "h100_gate"
+    ],
+    "path": "notebooks\\KG1_v90_V13_COLAB_PRO.ipynb"
+  },
+  {
+    "cells": 27,
+    "flags": [
+      "auto_submit",
+      "h100_gate"
+    ],
+    "path": "notebooks\\KG1_v90_V14_COLAB_PRO.ipynb"
+  },
+  {
+    "cells": 27,
+    "flags": [
+      "auto_submit",
+      "h100_gate"
+    ],
+    "path": "notebooks\\KG1_v90_V6_COLAB_PRO.ipynb"
+  },
+  {
+    "cells": 29,
+    "flags": [
+      "auto_submit",
+      "h100_gate"
+    ],
+    "path": "notebooks\\KG1_v90_V7_COLAB_PRO.ipynb"
+  },
+  {
+    "cells": 29,
+    "flags": [
+      "auto_submit",
+      "h100_gate"
+    ],
+    "path": "notebooks\\KG1_v90_V8_COLAB_PRO.ipynb"
+  },
+  {
+    "cells": 29,
+    "flags": [
+      "auto_submit",
+      "h100_gate"
+    ],
+    "path": "notebooks\\KG1_v90_V9_COLAB_PRO.ipynb"
+  },
+  {
+    "cells": 28,
+    "flags": [
+      "auto_submit",
+      "kaggle_api_in_notebook",
+      "h100_gate"
+    ],
+    "path": "notebooks\\KG1_V100_HUIKANG_AUTOSUBMIT.ipynb"
+  },
+  {
+    "cells": 30,
+    "flags": [
+      "auto_submit",
+      "kaggle_api_in_notebook",
+      "h100_gate"
+    ],
+    "path": "notebooks\\KG1_V101_TOP1_090_TARGET.ipynb"
+  },
+  {
+    "cells": 32,
+    "flags": [
+      "auto_submit",
+      "kaggle_api_in_notebook",
+      "h100_gate"
+    ],
+    "path": "notebooks\\KG1_V102_BYTE_EXACT_090.ipynb"
+  },
+  {
+    "cells": 40,
+    "flags": [
+      "auto_submit",
+      "kaggle_api_in_notebook",
+      "h100_gate"
+    ],
+    "path": "notebooks\\KG1_V103_PRODUCTION_READY.ipynb"
+  },
+  {
+    "cells": 42,
+    "flags": [
+      "auto_submit",
+      "kaggle_api_in_notebook",
+      "h100_gate"
+    ],
+    "path": "notebooks\\KG1_V104_ALL_FIXES_CONSOLIDATED.ipynb"
+  },
+  {
+    "cells": 44,
+    "flags": [
+      "auto_submit",
+      "kaggle_api_in_notebook",
+      "h100_gate"
+    ],
+    "path": "notebooks\\KG1_V105_PRODUCTION_FINAL.ipynb"
+  },
+  {
+    "cells": 55,
+    "flags": [],
+    "path": "notebooks\\KG1_V110_HUIKANG_SURFER.ipynb"
+  },
+  {
+    "cells": 3,
+    "flags": [],
+    "path": "notebooks\\KG1_V120_MODAL_SURFER.ipynb"
+  },
+  {
+    "cells": 17,
+    "flags": [
+      "private_kernel_output"
+    ],
+    "path": "notebooks\\KG1_v130_CRYPTARITHM_ENHANCED.ipynb"
+  },
+  {
+    "cells": 19,
+    "flags": [],
+    "path": "notebooks\\KG1_v130_FINAL.ipynb"
+  },
+  {
+    "cells": 12,
+    "flags": [],
+    "path": "notebooks\\KG1_V140_COLAB.ipynb"
+  },
+  {
+    "cells": 12,
+    "flags": [],
+    "path": "notebooks\\KG1_V141_COLAB.ipynb"
+  },
+  {
+    "cells": 12,
+    "flags": [],
+    "path": "notebooks\\KG1_V142_COLAB.ipynb"
+  },
+  {
+    "cells": 12,
+    "flags": [],
+    "path": "notebooks\\KG1_V143_COLAB.ipynb"
+  },
+  {
+    "cells": 12,
+    "flags": [],
+    "path": "notebooks\\KG1_V144_COLAB.ipynb"
+  },
+  {
+    "cells": 12,
+    "flags": [],
+    "path": "notebooks\\KG1_V145_COLAB.ipynb"
+  },
+  {
+    "cells": 2,
+    "flags": [],
+    "path": "notebooks\\KG1_V146_SINGLE_CELL.ipynb"
+  },
+  {
+    "cells": 2,
+    "flags": [],
+    "path": "notebooks\\KG1_V147_SINGLE_CELL.ipynb"
+  },
+  {
+    "cells": 2,
+    "flags": [],
+    "path": "notebooks\\KG1_V148_TONG_COLAB.ipynb"
+  },
+  {
+    "cells": 2,
+    "flags": [],
+    "path": "notebooks\\KG1_V149_TONG_SAFE.ipynb"
+  },
+  {
+    "cells": 2,
+    "flags": [],
+    "path": "notebooks\\KG1_V150_MASTER.ipynb"
+  },
+  {
+    "cells": 2,
+    "flags": [],
+    "path": "notebooks\\KG1_V151_FOCUSED.ipynb"
+  },
+  {
+    "cells": 2,
+    "flags": [],
+    "path": "notebooks\\KG1_V152_TRIPLE_CHECK.ipynb"
+  },
+  {
+    "cells": 2,
+    "flags": [],
+    "path": "notebooks\\KG1_V154_FINAL.ipynb"
+  },
+  {
+    "cells": 2,
+    "flags": [],
+    "path": "notebooks\\KG1_V155_PARSER_TEST.ipynb"
+  },
+  {
+    "cells": 2,
+    "flags": [],
+    "path": "notebooks\\KG1_V156_DEFINITIVO.ipynb"
+  },
+  {
+    "cells": 2,
+    "flags": [],
+    "path": "notebooks\\KG1_V157_TODAY.ipynb"
+  },
+  {
+    "cells": 2,
+    "flags": [],
+    "path": "notebooks\\KG1_V158_CORRIGIDO.ipynb"
+  },
+  {
+    "cells": 13,
+    "flags": [],
+    "path": "notebooks\\KG1_V159_TOP1_087_COLAB.ipynb"
+  },
+  {
+    "cells": 2,
+    "flags": [],
+    "path": "notebooks\\KG1_V159_ULTIMATE.ipynb"
+  },
+  {
+    "cells": 8,
+    "flags": [],
+    "path": "notebooks\\KG1_V195_FOCAL_COLAB_PRO.ipynb"
+  },
+  {
+    "cells": 7,
+    "flags": [],
+    "path": "notebooks\\KG1_V198_MICRO_DISTILL_COLAB_PRO.ipynb"
+  },
+  {
+    "cells": 9,
+    "flags": [
+      "v198_final_lineage",
+      "best_baseline_rule",
+      "v194_sha",
+      "h100_gate"
+    ],
+    "path": "notebooks\\KG1_V199_CONSERVATIVE_CONTINUE_COLAB_PRO.ipynb"
+  },
+  {
+    "cells": 9,
+    "flags": [
+      "v198_final_lineage",
+      "best_baseline_rule",
+      "v194_sha",
+      "h100_gate"
+    ],
+    "path": "notebooks\\KG1_V199_H100_HIGH_RAM_COLAB_PRO.ipynb"
+  },
+  {
+    "cells": 11,
+    "flags": [
+      "auto_submit",
+      "v198_final_lineage",
+      "best_baseline_rule",
+      "baseline_eval_gate",
+      "v194_sha",
+      "h100_gate"
+    ],
+    "path": "notebooks\\KG1_V199B_H100_BASELINE_GATED_COLAB_PRO.ipynb"
+  },
+  {
+    "cells": 9,
+    "flags": [
+      "v198_final_lineage",
+      "best_baseline_rule",
+      "baseline_eval_gate",
+      "v194_sha",
+      "h100_gate"
+    ],
+    "path": "notebooks\\KG1_V200A_H100_MICRO_ATTENTION_COLAB_PRO.ipynb"
+  },
+  {
+    "cells": 9,
+    "flags": [],
+    "path": "notebooks\\KG1_V70_5_FIXED_METRIC.ipynb"
+  },
+  {
+    "cells": 8,
+    "flags": [
+      "h100_gate"
+    ],
+    "path": "notebooks\\KG1_v70_HF_REPLICA_COLAB.ipynb"
+  },
+  {
+    "cells": 10,
+    "flags": [],
+    "path": "notebooks\\KG1_V70_RESUBMIT_METRIC_FIX.ipynb"
+  },
+  {
+    "cells": 14,
+    "flags": [
+      "files_upload",
+      "h100_gate"
+    ],
+    "path": "notebooks\\KG1_v70_SFT_CODEGEN_COLAB.ipynb"
+  },
+  {
+    "cells": 33,
+    "flags": [],
+    "path": "notebooks\\KG1_V71_MEGA_FINAL.ipynb"
+  },
+  {
+    "cells": 33,
+    "flags": [],
+    "path": "notebooks\\KG1_V71_MEGA_FIXED.ipynb"
+  },
+  {
+    "cells": 2,
+    "flags": [],
+    "path": "notebooks\\KG1_V71_ONECELL.ipynb"
+  },
+  {
+    "cells": 3,
+    "flags": [],
+    "path": "notebooks\\KG1_V72_CLEAN.ipynb"
+  },
+  {
+    "cells": 5,
+    "flags": [],
+    "path": "notebooks\\KG1_V73_DEFINITIVO.ipynb"
+  },
+  {
+    "cells": 5,
+    "flags": [],
+    "path": "notebooks\\KG1_V74_FINAL.ipynb"
+  },
+  {
+    "cells": 6,
+    "flags": [],
+    "path": "notebooks\\KG1_V75_PRODUCTION.ipynb"
+  },
+  {
+    "cells": 6,
+    "flags": [],
+    "path": "notebooks\\KG1_V76_ANTIOVERFIT.ipynb"
+  },
+  {
+    "cells": 6,
+    "flags": [],
+    "path": "notebooks\\KG1_V77_FIXED.ipynb"
+  },
+  {
+    "cells": 7,
+    "flags": [
+      "auto_submit",
+      "h100_gate"
+    ],
+    "path": "notebooks\\KG1_V78_DGXCHEN_REPLICA.ipynb"
+  },
+  {
+    "cells": 7,
+    "flags": [
+      "auto_submit",
+      "h100_gate"
+    ],
+    "path": "notebooks\\KG1_V79_DGXCHEN_REVIEWED.ipynb"
+  },
+  {
+    "cells": 7,
+    "flags": [
+      "auto_submit"
+    ],
+    "path": "notebooks\\KG1_V80_COLAB_V2.ipynb"
+  },
+  {
+    "cells": 7,
+    "flags": [
+      "auto_submit",
+      "h100_gate"
+    ],
+    "path": "notebooks\\KG1_V80_DGXCHEN_EXACT.ipynb"
+  },
+  {
+    "cells": 2,
+    "flags": [],
+    "path": "notebooks\\KG1_V80_MEGA.ipynb"
+  },
+  {
+    "cells": 2,
+    "flags": [],
+    "path": "notebooks\\KG1_V80_MEGA_V3.ipynb"
+  },
+  {
+    "cells": 19,
+    "flags": [],
+    "path": "notebooks\\KG1_V81_CANONICALIZED.ipynb"
+  },
+  {
+    "cells": 27,
+    "flags": [],
+    "path": "notebooks\\KG1_V82_HUIKANG_RECIPE.ipynb"
+  },
+  {
+    "cells": 28,
+    "flags": [
+      "auto_submit",
+      "h100_gate"
+    ],
+    "path": "notebooks\\KG1_v90_COLAB_PRO_H100_V5.ipynb"
+  },
+  {
+    "cells": 27,
+    "flags": [
+      "auto_submit",
+      "h100_gate"
+    ],
+    "path": "notebooks\\KG1_v90_V10_COLAB_PRO.ipynb"
+  },
+  {
+    "cells": 27,
+    "flags": [
+      "auto_submit",
+      "h100_gate"
+    ],
+    "path": "notebooks\\KG1_v90_V11_COLAB_PRO.ipynb"
+  },
+  {
+    "cells": 27,
+    "flags": [
+      "auto_submit",
+      "h100_gate"
+    ],
+    "path": "notebooks\\KG1_v90_V12_COLAB_PRO.ipynb"
+  },
+  {
+    "cells": 27,
+    "flags": [
+      "auto_submit",
+      "h100_gate"
+    ],
+    "path": "notebooks\\KG1_v90_V13_COLAB_PRO.ipynb"
+  },
+  {
+    "cells": 27,
+    "flags": [
+      "auto_submit",
+      "h100_gate"
+    ],
+    "path": "notebooks\\KG1_v90_V14_COLAB_PRO.ipynb"
+  },
+  {
+    "cells": 27,
+    "flags": [
+      "auto_submit",
+      "h100_gate"
+    ],
+    "path": "notebooks\\KG1_v90_V6_COLAB_PRO.ipynb"
+  },
+  {
+    "cells": 29,
+    "flags": [
+      "auto_submit",
+      "h100_gate"
+    ],
+    "path": "notebooks\\KG1_v90_V7_COLAB_PRO.ipynb"
+  },
+  {
+    "cells": 29,
+    "flags": [
+      "auto_submit",
+      "h100_gate"
+    ],
+    "path": "notebooks\\KG1_v90_V8_COLAB_PRO.ipynb"
+  },
+  {
+    "cells": 29,
+    "flags": [
+      "auto_submit",
+      "h100_gate"
+    ],
+    "path": "notebooks\\KG1_v90_V9_COLAB_PRO.ipynb"
+  }
+]
