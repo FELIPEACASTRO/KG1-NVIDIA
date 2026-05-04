@@ -37,6 +37,29 @@ This confirms that the V199/V201 2048-token continuation route is misaligned wit
 - Updated `kg1_sft_format_validator.py` to use the last assistant message in multi-turn rows.
 - Updated `kg1_submission_gate.py` to reject ambiguous recursive adapter ZIPs with multiple configs or safetensors.
 
+## API Doublecheck
+
+OpenRouter was re-run after the notebook fixes. Six models returned successfully:
+
+- `nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free`
+- `openrouter/owl-alpha`
+- `deepseek/deepseek-v3.2`
+- `x-ai/grok-4.3`
+- `anthropic/claude-sonnet-4.5`
+- `openai/gpt-5.2`
+
+Consensus:
+
+- Keep V194 as the floor.
+- Stop 2048-token micro-continuation.
+- Move to an audit-first 8192-token route.
+- Use rank 32 and vLLM gate before any submit.
+- Do not copy public adapters without local proof.
+
+Main disagreement:
+
+- LR suggestions ranged from `1e-5` to `1e-4`. Because V201 regressed even at ultralow LR in the 2048 route, the next notebook should not blindly pick LR from the panel. V202B must start with a small controlled sweep and promote only by gate.
+
 ## Hard Rejects
 
 - Any V201C final adapter.

@@ -1,0 +1,191 @@
+{
+  "catalog_model_count": 372,
+  "dry_run": false,
+  "generated_at": "2026-05-04T23:00:40+00:00",
+  "include_paid": true,
+  "prompt": "You are reviewing a Kaggle adapter-only competition pipeline.\n\nGoal: reach public score >= 0.87 without regressing below the confirmed best baseline.\n\nKnown facts:\n- Competition: NVIDIA Nemotron Model Reasoning Challenge.\n- Submission artifact is only a root-level LoRA adapter zip with adapter_config.json and adapter_model.safetensors.\n- Current production baseline is V194/ref 52275052: public score 0.86, user-confirmed rank 19/2613, zip SHA 49886191bf9ce92a48106ebfcba407bf9edbe423a4ed8c476d1f6bdfdd210fd8.\n- V199B/ref 52325494 scored 0.86, not promoted because it did not beat V194.\n- V198/ref 52301667 scored 0.84 and is a known regression.\n- Failures seen: broad soups (V191 0.78), focal training (V174 0.41), stripped/packaging errors (0.50-0.54), V198 final lineage regression (0.84).\n- Safe patterns seen: V192/V193/V194 attention-only micro lineage around 0.86, V199B baseline-gated no-regression but no gain.\n- Existing train data mixture: strict V198/V195/V196/V197 data, 1875 train / 720 validation, baseline eval local around 1.123.\n\nAdditional local/web context:\n# V202 Devastating Doublecheck Report\n\nGenerated: 2026-05-04\n\n## Verdict\n\nDo not submit V201A, V201B, or V201C outputs. All recent micro-continuation attempts regressed against their own baselines, including the 1-step ultralow candidates.\n\nThe next safe route is V202 audit-first, then a separate V202B long-context training notebook only if the audit passes.\n\n## New High-Signal Source\n\nThe strongest source found in the second sweep is the official public repository:\n\nhttps://github.com/tonghuikang/nemotron\n\nKey audited recipe facts:\n\n- `corpus.py` sets `TOKEN_LIMIT = 8192`.\n- `train_sft.py` defaults to `max_length = 8192`.\n- `train_sft.py` uses `lora_rank = 32`.\n- `train_sft.py` uses `batch_size = 64`, `num_epochs = 1`, `micro_batch_size = 16`.\n- The recipe tracks token-level loss/logprob and masked/unmasked training tokens.\n\nThis confirms that the V199/V201 2048-token continuation route is misaligned with the public 0.87-style route.\n\n## Corrections Applied\n\n- Hardened V202 notebook ZIP extraction against path traversal.\n- Added required SHA256 checks for `corpus.jsonl`, `problems.jsonl`, `generation.jsonl`, and `nemotron_traj.csv`.\n- Replaced submit guard `assert` with explicit `RuntimeError`.\n- Added `REQUIRED_TRAINING_CONTRACT` for 8192-token future training.\n- Made the final cell fail clearly if `RUN_TRAINING=True` is set without a real training cell.\n- Removed transient `/root/.kaggle/kaggle.json` at notebook stop.\n- Updated `hf_job_train_v90.py` to accept both `key=value` and `key:value` weight maps.\n- Updated `kg1_sft_format_validator.py` so malformed JSONL rows count as `parse_error`.\n- Updated `kg1_sft_format_validator.py` to use the last assistant message in multi-turn rows.\n- Updated `kg1_submission_gate.py` to reject ambiguous recursive adapter ZIPs with multiple configs or safetensors.\n\n## Hard Rejects\n\n- Any V201C final adapter.\n- Any adapter that regresses eval versus its own baseline.\n- Any 2048-token training on the Tong/Huikang long-context corpus without distillation.\n- Any public adapter copied without local vLLM gate versus V194.\n- Any submit from the V202 audit notebook.\n\n## Next Execution\n\nRun:\n\nhttps://colab.research.google.com/github/FELIPEACASTRO/KG1-NVIDIA/blob/claude/competent-shamir/notebooks/KG1_V202_H100_A100_LONG_CONTEXT_EVAL_GATE_COLAB_PRO.ipynb\n\nExpected behavior:\n\n- It downloads only selected required files.\n- It verifies hashes.\n- It writes reports under `/content/drive/MyDrive/KG1_NVIDIA_V202/reports`.\n- It stops by design.\n- It does not train.\n- It does not submit.\n\n## Roadmap\n\n1. Run V202 audit notebook on H100 or A100 80GB.\n2. Review `v202_download_manifest.json`, `v202_data_audit.json`, and `v202_plan_manifest.json`.\n3. Build V202B only after audit passes.\n4. V202B must enforce `max_length=8192`, rank <=32, and the vLLM gate settings:\n   - `max_lora_rank=32`\n   - `max_model_len=8192`\n   - `max_tokens=7680`\n   - `temperature=0.0`\n   - `top_p=1.0`\n5. Promote only if V202B beats V194 and has zero anchor/category regression.\n\n\nTask:\nReturn compact JSON only, with these keys:\n1. verdict: one sentence.\n2. best_next_experiment: exact candidate to run next from V194, including init, data, LR, steps, trainable modules, and why it can plausibly reach 0.87.\n3. reject: array of strategies to block.\n4. hard_gates: array of concrete pre-submit gates that must pass.\n5. anti_regression_policy: exact promotion rule.\n6. probability_public_087: integer 0-100.\n7. risk_notes: array of main risks.\n\nBe ruthless. Prefer one small, testable change over broad training. Do not recommend API solvers in the Kaggle submission; they can only be used to generate or verify training data offline.",
+  "results": [
+    {
+      "content": null,
+      "elapsed_sec": 3.26,
+      "model": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
+      "ok": true,
+      "usage": {
+        "completion_tokens": 122,
+        "completion_tokens_details": {
+          "audio_tokens": 0,
+          "image_tokens": 0,
+          "reasoning_tokens": 76
+        },
+        "cost": 0,
+        "cost_details": {
+          "upstream_inference_completions_cost": 0,
+          "upstream_inference_cost": 0,
+          "upstream_inference_prompt_cost": 0
+        },
+        "is_byok": false,
+        "prompt_tokens": 1508,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cache_write_tokens": 0,
+          "cached_tokens": 0,
+          "video_tokens": 0
+        },
+        "total_tokens": 1630
+      }
+    },
+    {
+      "content": "```json\n{\n  \"verdict\": \"V202 audit must pass before any training; the only viable path to 0.87 is a V202B long-context (8192-token) LoRA training run aligned with the official Nemotron recipe, gated strictly against V194.\",\n  \"best_next_experiment\": {\n    \"candidate\": \"V202B\",\n    \"init\": \"Start from V194 adapter (ref 52275052, SHA 49886191bf9ce92a48106ebfcba407bf9edbe423a4ed8c476d1f6bdfdd210fd8) as warm-start checkpoint.\",\n    \"data\": \"Use only the audited Tong/Huikang long-context corpus (corpus.jsonl, problems.jsonl, generation.jsonl, nemotron_traj.csv) with SHA256 verified per V202 audit; max_length=8192; no 2048-token truncation.\",\n    \"LR\": \"1e-4 cosine with 5% warmup, matching the official recipe.\",\n    \"steps\": \"1 epoch, batch_size=64 (micro_batch_size=16 gradient-accumulated), ~1875 training examples.\",\n    \"trainable_modules\": \"Attention-only (q_proj, k_proj, v_proj, o_proj) with lora_rank=32, lora_alpha=32, matching V194 topology but extended to 8192 context.\",\n    \"why_087_plausible\": \"V194 already scores 0.86 at 2048 tokens; the official recipe's 8192-token training captures full reasoning chains that are truncated at 2048, which is the single largest known gap between current submissions and the 0.87 public-score frontier.\"\n  },\n  \"reject\": [\n    \"Any V201-series adapter (A/B/C) \u2014 all regressed in local eval.\",\n    \"Any 2048-token training on the long-context corpus without distillation.\",\n    \"Broad model soups (V191 pattern, scored 0.78).\",\n    \"Focal training variants (V174 pattern, scored 0.41).\",\n    \"Any adapter with packaging errors (stripped configs, recursive ZIPs, multiple safetensors).\",\n    \"Any public adapter copied from GitHub without local vLLM gate vs V194.\",\n    \"Any submission from the V202 audit notebook (it stops by design).\",\n    \"Any training run that does not enforce max_length=8192 and rank<=32.\"\n  ],\n  \"hard_gates\": [\n    \"V202 audit notebook must complete with zero SHA256 mismatches and zero parse_errors in kg1_sft_format_validator.\",\n    \"vLLM eval gate: V202B adapter must score >= V194's local eval (1.123) on the 720-validation split with max_lora_rank=32, max_model_len=8192, max_tokens=7680, temperature=0.0, top_p=1.0.\",\n    \"Zero anchor/category regression vs V194 on all eval buckets.\",\n    \"Submission ZIP must contain exactly one adapter_config.json and one adapter_model.safetensors at root level (no recursion, no extras).\",\n    \"kg1_submission_gate.py must pass with zero warnings.\",\n    \"Training contract enforced: max_length=8192, rank<=32, batch_size=64, 1 epoch.\"\n  ],\n  \"anti_regression_policy\": \"Promote V202B to submission only if (1) V202 audit passed, (2) local vLLM eval score >= V194 baseline (1.123), (3) zero anchor/category regression vs V194, (4) submission ZIP passes kg1_submission_gate.py cleanly, and (5) public LB score >= 0.86 on first submission. If",
+      "elapsed_sec": 37.37,
+      "model": "openrouter/owl-alpha",
+      "ok": true,
+      "usage": {
+        "completion_tokens": 900,
+        "completion_tokens_details": {
+          "audio_tokens": 0,
+          "image_tokens": 0,
+          "reasoning_tokens": 0
+        },
+        "cost": 0,
+        "cost_details": {
+          "upstream_inference_completions_cost": 0,
+          "upstream_inference_cost": 0,
+          "upstream_inference_prompt_cost": 0
+        },
+        "is_byok": false,
+        "prompt_tokens": 1539,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cache_write_tokens": 0,
+          "cached_tokens": 0,
+          "video_tokens": 0
+        },
+        "total_tokens": 2439
+      }
+    },
+    {
+      "content": "```json\n{\n    \"verdict\": \"All recent micro-continuation attempts regressed, requiring a hard reset to the V194 baseline with strict 8192-token alignment.\",\n    \"best_next_experiment\": \"V202B: Initialize from V194 adapter (SHA 49886191bf9ce92a48106ebfcba407bf9edbe423a4ed8c476d1f6bdfdd210fd8), train on V198/V195/V196/V197 data mixture (1875 train/720 validation) with max_length=8192, lora_rank=32, batch_size=64, micro_batch_size=16, num_epochs=1, attention-only modules, LR 2e-5, because it aligns with the public 0.87 recipe's token limit and rank while preserving the stable V194 attention-only lineage.\",\n    \"reject\": [\"Any 2048-token training on long-context corpus\", \"Broad soups\", \"Focal training\", \"Stripped/packaging errors\", \"Public adapter copies without local vLLM gate\", \"V201C final adapters\", \"Any adapter regressing vs its own baseline\"],\n    \"hard_gates\": [\"SHA256 match of corpus.jsonl, problems.jsonl, generation.jsonl, nemotron_traj.csv\", \"vLLM gate: max_lora_rank=32, max_model_len=8192, max_tokens=7680, temperature=0.0, top_p=1.0\", \"Reject recursive adapter ZIPs with multiple configs/safetensors\", \"Local eval score >1.123 (V194 baseline)\", \"8192-token training contract enforced\"],\n    \"anti_regression_policy\": \"Promote only if V202B beats V194 public score (0.86) with zero anchor/category regression, and passes all hard gates.\",\n    \"probability_public_087\": 45,\n    \"risk_notes\": [\"8192-token training may cause OOM on available hardware\", \"Single epoch may underfit complex reasoning patterns\", \"Attention-only modules may limit capacity for 0.87\", \"Data mixture unchanged from previous regressions\", \"No distillation from public 0.87 models\", \"Rank 32 may be insufficient for target score\"]\n}\n```",
+      "elapsed_sec": 38.07,
+      "model": "deepseek/deepseek-v3.2",
+      "ok": true,
+      "usage": {
+        "completion_tokens": 486,
+        "completion_tokens_details": {
+          "audio_tokens": 0,
+          "image_tokens": 0,
+          "reasoning_tokens": 0
+        },
+        "cost": 0.00059222,
+        "cost_details": {
+          "upstream_inference_completions_cost": 0.0002187,
+          "upstream_inference_cost": 0.00059222,
+          "upstream_inference_prompt_cost": 0.00037352
+        },
+        "is_byok": false,
+        "prompt_tokens": 1334,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cache_write_tokens": 0,
+          "cached_tokens": 0,
+          "video_tokens": 0
+        },
+        "total_tokens": 1820
+      }
+    },
+    {
+      "content": "{\n  \"verdict\": \"Run V202 audit first; then small attention-only 8192-context continuation from V194 only if audit passes, to target 0.87 without regression.\",\n  \"best_next_experiment\": \"Init from V194 adapter, train on strict V198/V195/V196/V197 mixture (1875 train/720 val), max_length=8192, lora_rank=32, LR=1e-5, 1 epoch, trainable_modules=['q_proj','k_proj','v_proj','o_proj'], because it aligns with official nemotron recipe (8192 tokens, rank 32, attention focus) while staying in safe micro lineage for plausible 0.87 gain.\",\n  \"reject\": [\"broad soups\", \"focal training\", \"2048-token continuation without distillation\", \"V201C adapters\", \"V198-style regressions\", \"any public adapter copy without local vLLM gate\", \"packaging errors\"],\n  \"hard_gates\": [\"vLLM gate with max_lora_rank=32, max_model_len=8192, max_tokens=7680, temperature=0.0, top_p=1.0\", \"SHA256 checks pass for corpus.jsonl/problems.jsonl/generation.jsonl/nemotron_traj.csv\", \"local eval loss <=1.123\", \"ZIP contains only adapter_config.json and adapter_model.safetensors\", \"no regression vs V194 in any category\"],\n  \"anti_regression_policy\": \"Promote only if public score >=0.87 and zero anchor/category regression versus V194 after passing vLLM gate.\",\n  \"probability_public_087\": 35,\n  \"risk_notes\": [\"8192 context shift from V194 risks instability without audit\", \"1875 samples may be insufficient for long-context gains\", \"past attention lineage capped at 0.86\", \"common packaging and eval regression failures\"]\n}",
+      "elapsed_sec": 35.54,
+      "model": "x-ai/grok-4.3",
+      "ok": true,
+      "usage": {
+        "completion_tokens": 2694,
+        "completion_tokens_details": {
+          "audio_tokens": 0,
+          "image_tokens": 0,
+          "reasoning_tokens": 2308
+        },
+        "cost": 0.00838655,
+        "cost_details": {
+          "upstream_inference_completions_cost": 0.006735,
+          "upstream_inference_cost": 0.00838655,
+          "upstream_inference_prompt_cost": 0.00165155
+        },
+        "is_byok": false,
+        "prompt_tokens": 1375,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cache_write_tokens": 0,
+          "cached_tokens": 64,
+          "video_tokens": 0
+        },
+        "total_tokens": 4069
+      }
+    },
+    {
+      "content": "```json\n{\n  \"verdict\": \"V202 audit-first is mandatory; all V201 micro-continuations regressed, and the public 8192-token recipe is incompatible with the current 2048-token lineage.\",\n  \"best_next_experiment\": {\n    \"name\": \"V202B_8K_RANK32_SINGLE_EPOCH\",\n    \"init\": \"V194 adapter weights as warm-start\",\n    \"data\": \"tonghuikang/nemotron corpus.jsonl (SHA-verified, 8192 token limit, SFT format validated)\",\n    \"lr\": \"5e-5 constant or linear decay to 1e-6\",\n    \"steps\": \"1 epoch, batch_size=64, micro_batch_size=16 (matches public recipe)\",\n    \"trainable_modules\": \"attention-only (q_proj, k_proj, v_proj, o_proj)\",\n    \"rank\": 32,\n    \"max_length\": 8192,\n    \"rationale\": \"Public 0.87+ recipe uses 8192 tokens and rank 32; V194 attention-only micro-tuning is proven safe at 0.86; single-epoch prevents overfitting; warm-start from V194 preserves baseline capability while absorbing long-context reasoning patterns.\"\n  },\n  \"reject\": [\n    \"Any V201A/V201B/V201C adapter submission\",\n    \"Any 2048-token training on long-context corpus\",\n    \"Broad soups or multi-adapter merging\",\n    \"Focal/catastrophic training (rank >32, LR >1e-4, multi-epoch without validation gate)\",\n    \"Public adapter direct copy without local vLLM V194 baseline gate\",\n    \"Training or submission from V202 audit notebook\",\n    \"Any adapter with recursive/ambiguous ZIP structure\"\n  ],\n  \"hard_gates\": [\n    \"V202 audit notebook must complete and write v202_data_audit.json with zero critical errors\",\n    \"V202B local vLLM eval on V194 validation set must be <= 1.123 (baseline parity)\",\n    \"V202B adapter must pass kg1_submission_gate.py (single adapter_config.json, single adapter_model.safetensors, no path traversal)\",\n    \"V202B public score must be >= 0.87\",\n    \"V202B must not regress on any anchor problem or category versus V194 (zero-tolerance category regression)\",\n    \"SHA256 verification required for corpus.jsonl, problems.jsonl, generation.jsonl, nemotron_traj.csv\"\n  ],\n  \"anti_regression_policy\": \"Promote V202B to production only if: (1) public score >= 0.87 AND (2) public score > 0.86 (V194) AND (3) local eval <= 1.123 AND (4) zero anchor/category regression in vLLM spot-check AND (5) all hard gates pass; otherwise retain V194 as production baseline.\",\n  \"probability_public_087\": 35,\n  \"risk_notes\": [\n    \"V202B is a large context-length jump (2048\u21928192) with unknown overfitting/underfitting dynamics on 1875-sample dataset\",\n    \"Public recipe uses 1-epoch training; insufficient epochs may underfit, but multi-epoch risks catastrophic forgetting without careful validation\",\n    \"Warm-start from V194 may anchor too strongly to 2048-token patterns, limiting 8192-token reasoning gain\",\n    \"tonghuikang corpus quality/alignment with competition distribution is unverified; SHA checks prevent tampering but not distribution shift\",\n    \"Rank 32 is higher than V194 micro-tuning; increased capacity may destabilize attention-only training",
+      "elapsed_sec": 30.89,
+      "model": "anthropic/claude-sonnet-4.5",
+      "ok": true,
+      "usage": {
+        "completion_tokens": 900,
+        "completion_tokens_details": {
+          "audio_tokens": 0,
+          "image_tokens": 0,
+          "reasoning_tokens": 0
+        },
+        "cost": 0.018084,
+        "cost_details": {
+          "upstream_inference_completions_cost": 0.0135,
+          "upstream_inference_cost": 0.018084,
+          "upstream_inference_prompt_cost": 0.004584
+        },
+        "is_byok": false,
+        "prompt_tokens": 1528,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cache_write_tokens": 0,
+          "cached_tokens": 0,
+          "video_tokens": 0
+        },
+        "total_tokens": 2428
+      }
+    },
+    {
+      "content": "{\n  \"verdict\": \"Proceed only with an audit-first, long-context-aligned continuation from V194; block all 2048-token micro-continuations and any submission not gated against V194.\",\n  \"best_next_experiment\": {\n    \"candidate_id\": \"V202B_from_V194_longctx_alignment_minchange\",\n    \"init\": {\n      \"base_model\": \"same as V194\",\n      \"adapter_init\": \"V194/ref 52275052 adapter (SHA256 49886191bf9ce92a48106ebfcba407bf9edbe423a4ed8c476d1f6bdfdd210fd8)\",\n      \"lora_rank\": 32,\n      \"lora_alpha\": \"match V194 unless explicitly different; if unknown set alpha=32 to keep scaling stable\",\n      \"dropout\": 0.0\n    },\n    \"data\": {\n      \"source\": \"tonghuikang/nemotron official repo-derived long-context corpus (corpus.jsonl / problems.jsonl / generation.jsonl / nemotron_traj.csv) AFTER V202 audit passes\",\n      \"mixing_rule\": \"keep existing strict V198/V195/V196/V197 mixture as the core; add <=20% long-context examples selected to require >2048 context (no broad soup)\",\n      \"format\": \"SFT JSONL using last assistant message; reject malformed rows (parse_error)\",\n      \"packing\": \"pack/trim to max_length=8192, ensure no implicit 2048 truncation anywhere\"\n    },\n    \"train_config\": {\n      \"objective\": \"SFT next-token loss (masked/unmasked tracked) consistent with official recipe\",\n      \"max_length\": 8192,\n      \"batch_size\": 64,\n      \"micro_batch_size\": 16,\n      \"grad_accum\": 4,\n      \"num_epochs\": 1,\n      \"",
+      "elapsed_sec": 16.4,
+      "model": "openai/gpt-5.2",
+      "ok": true,
+      "usage": {
+        "completion_tokens": 900,
+        "completion_tokens_details": {
+          "audio_tokens": 0,
+          "image_tokens": 0,
+          "reasoning_tokens": 500
+        },
+        "cost": 0.01485225,
+        "cost_details": {
+          "upstream_inference_completions_cost": 0.0126,
+          "upstream_inference_cost": 0.01485225,
+          "upstream_inference_prompt_cost": 0.00225225
+        },
+        "is_byok": false,
+        "prompt_tokens": 1287,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cache_write_tokens": 0,
+          "cached_tokens": 0,
+          "video_tokens": 0
+        },
+        "total_tokens": 2187
+      }
+    }
+  ],
+  "selected_models": [
+    "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
+    "openrouter/owl-alpha",
+    "deepseek/deepseek-v3.2",
+    "x-ai/grok-4.3",
+    "anthropic/claude-sonnet-4.5",
+    "openai/gpt-5.2"
+  ]
+}
