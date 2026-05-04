@@ -132,6 +132,11 @@ def gate_source(source: str, findings: list[Finding]) -> None:
         "adapter_ready(AAITDADS_ADAPTER, min_model_bytes=4_000_000_000)",
         "adapter_ready(LINEAGE_ADAPTER, min_model_bytes=3_000_000_000)",
         "adapter_ready(INIT_ADAPTER, min_model_bytes=4_000_000_000)",
+        "def download_lineage_kernel_output()",
+        "from kaggle.api.kaggle_api_extended import KaggleApi",
+        "api.kernels_output(kernel, path=str(LINEAGE_KERNEL_OUT)",
+        "file_pattern=r'submission\\.zip$'",
+        "shutil.which('kaggle')",
         "assert sha256_path(model) == V194_RANK19_ADAPTER_MODEL_SHA256",
         "assert sha256_path(cfg) == V194_RANK19_ADAPTER_CONFIG_SHA256",
         "assert manifest.get('output_adapter_sha256') == V194_RANK19_ADAPTER_MODEL_SHA256",
@@ -152,7 +157,7 @@ def gate_source(source: str, findings: list[Finding]) -> None:
         )
 
     extra_required = [
-        "kaggle', 'kernels', 'output', 'felipe1983/tinker-adapter-to-ready-to-submit-adapter'",
+        "felipe1983/tinker-adapter-to-ready-to-submit-adapter",
         "kagglehub==1.0.1",
         "kaggle==2.0.2",
         "'--primary-weight', '0.985'",
@@ -165,6 +170,19 @@ def gate_source(source: str, findings: list[Finding]) -> None:
     for fragment in extra_required:
         if fragment not in source:
             add(findings, "error", "missing_rank19_reconstruction_guard", fragment)
+
+    forbidden_kaggle_invocations = [
+        "sys.executable, '-m', 'kaggle'",
+        'sys.executable, "-m", "kaggle"',
+    ]
+    for fragment in forbidden_kaggle_invocations:
+        if fragment in source:
+            add(
+                findings,
+                "error",
+                "fragile_kaggle_module_invocation",
+                "Use KaggleApi.kernels_output or the kaggle executable fallback; python -m kaggle can fail because the package has no __main__.",
+            )
 
 
 def parse_args() -> argparse.Namespace:
