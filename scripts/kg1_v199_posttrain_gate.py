@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Convert and gate V199 post-training adapters.
 
-V199 is a short conservative continuation from the submitted V198 final
-adapter. This script reuses the proven V198 conversion/gate primitives, but
-checks the V199 candidate set: final, checkpoint-20, and checkpoint-10.
+V199 is a short conservative continuation from the exact V194 rank-19 adapter.
+This script reuses the proven V198 conversion/gate primitives, but checks the
+V199 candidate set: final, checkpoint-20, and checkpoint-10.
 It never submits to Kaggle.
 """
 
