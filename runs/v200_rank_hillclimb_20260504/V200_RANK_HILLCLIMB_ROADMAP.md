@@ -30,6 +30,8 @@ O criterio nao e "treinou e loss caiu"; o criterio e:
 
 Hipotese: o V199B foi conservador, mas 10 steps ainda pode ter mexido demais. Testar metade da exposicao.
 
+- Status: notebook gerado em `notebooks/KG1_V200A_H100_MICRO_ATTENTION_COLAB_PRO.ipynb`.
+- Gates estaticos: `v200a_notebook_doublecheck.json` PASS e `v200a_lineage_gate.json` PASS.
 - Init: V194 exact zip SHA `49886191...`.
 - Steps: 5.
 - LR: `5e-7 -> 2e-7`.

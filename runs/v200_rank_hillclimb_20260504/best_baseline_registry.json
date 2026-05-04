@@ -22,6 +22,18 @@
       "adapter_model_sha256": "444dd40c44ac5eb8a642ebe00a5616ba41548657dbd01e17f3db8bda7e785c7a",
       "promotion_status": "hold_equal_score_rank_unknown",
       "decision": "not_promoted_without_rank_improvement"
+    },
+    {
+      "label": "V200A",
+      "ref": null,
+      "status": "not_trained_yet",
+      "public_score": null,
+      "notebook": "notebooks/KG1_V200A_H100_MICRO_ATTENTION_COLAB_PRO.ipynb",
+      "starting_baseline": "V194",
+      "starting_baseline_zip_sha256": "49886191bf9ce92a48106ebfcba407bf9edbe423a4ed8c476d1f6bdfdd210fd8",
+      "planned_gate": "final_eval_loss <= baseline_eval_loss; no automatic Kaggle submit",
+      "promotion_status": "awaiting_training_and_kaggle_score",
+      "decision": "not_promoted"
     }
   ],
   "promotion_policy": {
