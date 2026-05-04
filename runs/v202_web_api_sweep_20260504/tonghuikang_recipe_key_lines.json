@@ -1,0 +1,4476 @@
+{
+  "generated_at": "2026-05-04T22:52:48.494702+00:00",
+  "repo": "tonghuikang/nemotron",
+  "snippets": {
+    "train_sft.py": {
+      "sha256": "70aa2f17e2c1da54abd9e6e7e141e53306a53f54ddfe35cf38bd67b700e0a163",
+      "line_count": 550,
+      "chunks": [
+        {
+          "range": [
+            90,
+            115
+          ],
+          "lines": [
+            {
+              "line": 90,
+              "text": ""
+            },
+            {
+              "line": 91,
+              "text": "@dataclasses.dataclass"
+            },
+            {
+              "line": 92,
+              "text": "class Cfg:"
+            },
+            {
+              "line": 93,
+              "text": "    loss_config: LossConfig = dataclasses.field(default_factory=CrossEntropyLossConfig)"
+            },
+            {
+              "line": 94,
+              "text": "    lr_schedule: LRSchedule = dataclasses.field("
+            },
+            {
+              "line": 95,
+              "text": "        default_factory=lambda: StepLinearDecayLRSchedule(learning_rate=2e-4)"
+            },
+            {
+              "line": 96,
+              "text": "    )"
+            },
+            {
+              "line": 97,
+              "text": "    log_path: str = dataclasses.field("
+            },
+            {
+              "line": 98,
+              "text": "        default_factory=lambda: datetime.now().strftime(\"%m-%d-%H-%M\")"
+            },
+            {
+              "line": 99,
+              "text": "    )"
+            },
+            {
+              "line": 100,
+              "text": "    model_name: str = \"nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16\""
+            },
+            {
+              "line": 101,
+              "text": "    batch_size: int = 64"
+            },
+            {
+              "line": 102,
+              "text": "    num_epochs: int = 1"
+            },
+            {
+              "line": 103,
+              "text": "    lora_rank: int = 32 # 32"
+            },
+            {
+              "line": 104,
+              "text": "    max_length: int = 8192"
+            },
+            {
+              "line": 105,
+              "text": "    train_mlp: bool = True"
+            },
+            {
+              "line": 106,
+              "text": "    train_attn: bool = True"
+            },
+            {
+              "line": 107,
+              "text": "    train_unembed: bool = True"
+            },
+            {
+              "line": 108,
+              "text": "    adam_config: AdamConfig = dataclasses.field(default_factory=AdamConfig)"
+            },
+            {
+              "line": 109,
+              "text": "    backend: Literal[\"tinker\", \"modal\"] = \"tinker\""
+            },
+            {
+              "line": 110,
+              "text": "    micro_batch_size: int | None = 16  # None for tinker (server decides), int for modal"
+            },
+            {
+              "line": 111,
+              "text": ""
+            },
+            {
+              "line": 112,
+              "text": ""
+            },
+            {
+              "line": 113,
+              "text": "@dataclasses.dataclass"
+            },
+            {
+              "line": 114,
+              "text": "class LogprobRecord:"
+            },
+            {
+              "line": 115,
+              "text": "    problem_id: str"
+            }
+          ]
+        },
+        {
+          "range": [
+            280,
+            315
+          ],
+          "lines": [
+            {
+              "line": 280,
+              "text": "    # Load examples"
+            },
+            {
+              "line": 281,
+              "text": "    entries = load_corpus_entries()"
+            },
+            {
+              "line": 282,
+              "text": "    entries = [e for e in entries if e[\"included\"]]"
+            },
+            {
+              "line": 283,
+              "text": "    examples = [TrainingExample.from_dict(e) for e in entries]"
+            },
+            {
+              "line": 284,
+              "text": "    examples = filter_training_examples(examples)"
+            },
+            {
+              "line": 285,
+              "text": "    total_masked = sum(e.masked_token_count for e in examples)"
+            },
+            {
+              "line": 286,
+              "text": "    total_unmasked = sum(e.unmasked_token_count for e in examples)"
+            },
+            {
+              "line": 287,
+              "text": "    logger.info("
+            },
+            {
+              "line": 288,
+              "text": "        f\"Loaded {len(examples)} examples, \""
+            },
+            {
+              "line": 289,
+              "text": "        f\"{total_masked + total_unmasked:,} tokens \""
+            },
+            {
+              "line": 290,
+              "text": "        f\"(unmasked={total_unmasked:,}, masked={total_masked:,})\""
+            },
+            {
+              "line": 291,
+              "text": "    )"
+            },
+            {
+              "line": 292,
+              "text": ""
+            },
+            {
+              "line": 293,
+              "text": "    n_batches = math.ceil(len(examples) / cfg.batch_size)"
+            },
+            {
+              "line": 294,
+              "text": "    total_steps = n_batches * cfg.num_epochs"
+            },
+            {
+              "line": 295,
+              "text": "    logger.info("
+            },
+            {
+              "line": 296,
+              "text": "        f\"Training for {n_batches} batches x {cfg.num_epochs} epochs\""
+            },
+            {
+              "line": 297,
+              "text": "        f\" = {total_steps} steps\""
+            },
+            {
+              "line": 298,
+              "text": "    )"
+            },
+            {
+              "line": 299,
+              "text": "    lr_params = dataclasses.asdict(cfg.lr_schedule)"
+            },
+            {
+              "line": 300,
+              "text": "    logger.info(f\"LR schedule: {type(cfg.lr_schedule).__name__} {lr_params}\")"
+            },
+            {
+              "line": 301,
+              "text": ""
+            },
+            {
+              "line": 302,
+              "text": "    # Create training client"
+            },
+            {
+              "line": 303,
+              "text": "    service_client = ServiceClient(backend=cfg.backend)"
+            },
+            {
+              "line": 304,
+              "text": "    training_client = await service_client.create_lora_training_client_async("
+            },
+            {
+              "line": 305,
+              "text": "        base_model=cfg.model_name,"
+            },
+            {
+              "line": 306,
+              "text": "        rank=cfg.lora_rank,"
+            },
+            {
+              "line": 307,
+              "text": "        train_mlp=cfg.train_mlp,"
+            },
+            {
+              "line": 308,
+              "text": "        train_attn=cfg.train_attn,"
+            },
+            {
+              "line": 309,
+              "text": "        train_unembed=cfg.train_unembed,"
+            },
+            {
+              "line": 310,
+              "text": "    )"
+            },
+            {
+              "line": 311,
+              "text": ""
+            },
+            {
+              "line": 312,
+              "text": "    logprob_dir.mkdir(parents=True, exist_ok=True)"
+            },
+            {
+              "line": 313,
+              "text": ""
+            },
+            {
+              "line": 314,
+              "text": "    # Save config"
+            },
+            {
+              "line": 315,
+              "text": "    config = dataclasses.asdict(cfg)"
+            }
+          ]
+        },
+        {
+          "range": [
+            360,
+            430
+          ],
+          "lines": [
+            {
+              "line": 360,
+              "text": ""
+            },
+            {
+              "line": 361,
+              "text": "            for batch_indices in batches:"
+            },
+            {
+              "line": 362,
+              "text": "                batch_examples = [examples[i] for i in batch_indices]"
+            },
+            {
+              "line": 363,
+              "text": ""
+            },
+            {
+              "line": 364,
+              "text": "                data: list[tinker.Datum] = []"
+            },
+            {
+              "line": 365,
+              "text": "                valid_examples: list[TrainingExample] = []"
+            },
+            {
+              "line": 366,
+              "text": "                target_masks: list[list[int]] = []"
+            },
+            {
+              "line": 367,
+              "text": "                batch_tokens: list[list[int]] = []"
+            },
+            {
+              "line": 368,
+              "text": "                batch_masks: list[list[int]] = []"
+            },
+            {
+              "line": 369,
+              "text": "                for example in batch_examples:"
+            },
+            {
+              "line": 370,
+              "text": "                    tokens, advantages = example.load_tokens()"
+            },
+            {
+              "line": 371,
+              "text": "                    if len(tokens) > cfg.max_length:"
+            },
+            {
+              "line": 372,
+              "text": "                        tokens = tokens[: cfg.max_length]"
+            },
+            {
+              "line": 373,
+              "text": "                        advantages = advantages[: cfg.max_length]"
+            },
+            {
+              "line": 374,
+              "text": "                    key = example.problem_id"
+            },
+            {
+              "line": 375,
+              "text": "                    if epoch == 0:"
+            },
+            {
+              "line": 376,
+              "text": "                        ref_logprobs = None"
+            },
+            {
+              "line": 377,
+              "text": "                        prev_logprobs = None"
+            },
+            {
+              "line": 378,
+              "text": "                    else:"
+            },
+            {
+              "line": 379,
+              "text": "                        ref_logprobs = all_ref_logprobs[key][: len(tokens) - 1]"
+            },
+            {
+              "line": 380,
+              "text": "                        prev_logprobs = all_prev_logprobs[key][: len(tokens) - 1]"
+            },
+            {
+              "line": 381,
+              "text": "                    datum = build_datum("
+            },
+            {
+              "line": 382,
+              "text": "                        tokens,"
+            },
+            {
+              "line": 383,
+              "text": "                        advantages,"
+            },
+            {
+              "line": 384,
+              "text": "                        ref_logprobs,"
+            },
+            {
+              "line": 385,
+              "text": "                        prev_logprobs,"
+            },
+            {
+              "line": 386,
+              "text": "                        epoch,"
+            },
+            {
+              "line": 387,
+              "text": "                        cfg.loss_config,"
+            },
+            {
+              "line": 388,
+              "text": "                    )"
+            },
+            {
+              "line": 389,
+              "text": "                    data.append(datum)"
+            },
+            {
+              "line": 390,
+              "text": "                    valid_examples.append(example)"
+            },
+            {
+              "line": 391,
+              "text": "                    target_masks.append(advantages[1:])"
+            },
+            {
+              "line": 392,
+              "text": "                    batch_tokens.append(tokens)"
+            },
+            {
+              "line": 393,
+              "text": "                    batch_masks.append(advantages)"
+            },
+            {
+              "line": 394,
+              "text": ""
+            },
+            {
+              "line": 395,
+              "text": "                if not data:"
+            },
+            {
+              "line": 396,
+              "text": "                    continue"
+            },
+            {
+              "line": 397,
+              "text": ""
+            },
+            {
+              "line": 398,
+              "text": "                batch_time = time.time()"
+            },
+            {
+              "line": 399,
+              "text": ""
+            },
+            {
+              "line": 400,
+              "text": "                lr = cfg.lr_schedule.get_lr(step, total_steps, epoch, cfg.num_epochs)"
+            },
+            {
+              "line": 401,
+              "text": ""
+            },
+            {
+              "line": 402,
+              "text": "                # Forward-backward + optimizer step"
+            },
+            {
+              "line": 403,
+              "text": "                fwd_bwd_future = await training_client.forward_backward_async("
+            },
+            {
+              "line": 404,
+              "text": "                    data,"
+            },
+            {
+              "line": 405,
+              "text": "                    loss_fn=cfg.loss_config.name,"
+            },
+            {
+              "line": 406,
+              "text": "                    loss_fn_config=loss_fn_config,"
+            },
+            {
+              "line": 407,
+              "text": "                    micro_batch_size=cfg.micro_batch_size,"
+            },
+            {
+              "line": 408,
+              "text": "                )"
+            },
+            {
+              "line": 409,
+              "text": "                optim_future = await training_client.optim_step_async("
+            },
+            {
+              "line": 410,
+              "text": "                    cfg.adam_config.to_adam_params(lr)"
+            },
+            {
+              "line": 411,
+              "text": "                )"
+            },
+            {
+              "line": 412,
+              "text": ""
+            },
+            {
+              "line": 413,
+              "text": "                fwd_bwd_result = await fwd_bwd_future.result_async()"
+            },
+            {
+              "line": 414,
+              "text": "                optim_result = await optim_future.result_async()"
+            },
+            {
+              "line": 415,
+              "text": ""
+            },
+            {
+              "line": 416,
+              "text": "                # Extract logprobs"
+            },
+            {
+              "line": 417,
+              "text": "                logprobs_list = [x[\"logprobs\"] for x in fwd_bwd_result.loss_fn_outputs]"
+            },
+            {
+              "line": 418,
+              "text": ""
+            },
+            {
+              "line": 419,
+              "text": "                elapsed = time.time() - batch_time"
+            },
+            {
+              "line": 420,
+              "text": "                logger.info("
+            },
+            {
+              "line": 421,
+              "text": "                    f\"epoch={epoch} step={step}/{total_steps} \""
+            },
+            {
+              "line": 422,
+              "text": "                    f\"lr={lr:.2e} n={len(data)} \""
+            },
+            {
+              "line": 423,
+              "text": "                    f\"loss={cfg.loss_config.name} t={elapsed:.1f}s\""
+            },
+            {
+              "line": 424,
+              "text": "                )"
+            },
+            {
+              "line": 425,
+              "text": ""
+            },
+            {
+              "line": 426,
+              "text": "                # Log metrics"
+            },
+            {
+              "line": 427,
+              "text": "                metrics_record: dict = {"
+            },
+            {
+              "line": 428,
+              "text": "                    \"epoch\": epoch,"
+            },
+            {
+              "line": 429,
+              "text": "                    \"step\": step,"
+            },
+            {
+              "line": 430,
+              "text": "                    \"lr\": lr,"
+            }
+          ]
+        },
+        {
+          "range": [
+            500,
+            551
+          ],
+          "lines": [
+            {
+              "line": 500,
+              "text": "                                {\"tokens\": batch_tokens[i], \"mask\": batch_masks[i]}, tf"
+            },
+            {
+              "line": 501,
+              "text": "                            )"
+            },
+            {
+              "line": 502,
+              "text": "                    all_prev_logprobs[key] = list(lp_data)"
+            },
+            {
+              "line": 503,
+              "text": ""
+            },
+            {
+              "line": 504,
+              "text": "                    unmasked_lps_i = [v for v, m in zip(lp_data, target_masks[i]) if m]"
+            },
+            {
+              "line": 505,
+              "text": "                    record = IndexRecord("
+            },
+            {
+              "line": 506,
+              "text": "                        epoch=epoch,"
+            },
+            {
+              "line": 507,
+              "text": "                        step=step,"
+            },
+            {
+              "line": 508,
+              "text": "                        problem_id=example.problem_id,"
+            },
+            {
+              "line": 509,
+              "text": "                        segment=example.segment,"
+            },
+            {
+              "line": 510,
+              "text": "                        category=example.category,"
+            },
+            {
+              "line": 511,
+              "text": "                        num_loss_tokens=example.unmasked_token_count,"
+            },
+            {
+              "line": 512,
+              "text": "                        total_loss=round(sum(-v for v in unmasked_lps_i), 4),"
+            },
+            {
+              "line": 513,
+              "text": "                        min_logprob=round(min(unmasked_lps_i), 4)"
+            },
+            {
+              "line": 514,
+              "text": "                        if unmasked_lps_i"
+            },
+            {
+              "line": 515,
+              "text": "                        else 0.0,"
+            },
+            {
+              "line": 516,
+              "text": "                    )"
+            },
+            {
+              "line": 517,
+              "text": "                    index_file.write(json.dumps(dataclasses.asdict(record)) + \"\\n\")"
+            },
+            {
+              "line": 518,
+              "text": ""
+            },
+            {
+              "line": 519,
+              "text": "                step += 1"
+            },
+            {
+              "line": 520,
+              "text": ""
+            },
+            {
+              "line": 521,
+              "text": "            epoch_elapsed = time.time() - epoch_start"
+            },
+            {
+              "line": 522,
+              "text": "            logger.info(f\"Epoch {epoch} completed in {epoch_elapsed:.1f}s\")"
+            },
+            {
+              "line": 523,
+              "text": ""
+            },
+            {
+              "line": 524,
+              "text": "            # Compute and save per-epoch loss metrics"
+            },
+            {
+              "line": 525,
+              "text": "            epoch_metrics = compute_epoch_metrics("
+            },
+            {
+              "line": 526,
+              "text": "                loss_config=cfg.loss_config,"
+            },
+            {
+              "line": 527,
+              "text": "                examples=examples,"
+            },
+            {
+              "line": 528,
+              "text": "                all_ref_logprobs=all_ref_logprobs,"
+            },
+            {
+              "line": 529,
+              "text": "                all_epoch_logprobs=all_prev_logprobs,"
+            },
+            {
+              "line": 530,
+              "text": "                epoch=epoch,"
+            },
+            {
+              "line": 531,
+              "text": "            )"
+            },
+            {
+              "line": 532,
+              "text": "            loss_record = {\"epoch\": epoch, \"metrics\": epoch_metrics}"
+            },
+            {
+              "line": 533,
+              "text": "            loss_file.write(json.dumps(loss_record) + \"\\n\")"
+            },
+            {
+              "line": 534,
+              "text": "            loss_file.flush()"
+            },
+            {
+              "line": 535,
+              "text": ""
+            },
+            {
+              "line": 536,
+              "text": "    # Save final checkpoint"
+            },
+            {
+              "line": 537,
+              "text": "    await training_client.save_checkpoint_async("
+            },
+            {
+              "line": 538,
+              "text": "        name=\"final\","
+            },
+            {
+              "line": 539,
+              "text": "        log_path=str(log_path),"
+            },
+            {
+              "line": 540,
+              "text": "    )"
+            },
+            {
+              "line": 541,
+              "text": ""
+            },
+            {
+              "line": 542,
+              "text": "    logger.info(f\"Training completed. Logprobs saved to {logprob_dir}\")"
+            },
+            {
+              "line": 543,
+              "text": ""
+            },
+            {
+              "line": 544,
+              "text": ""
+            },
+            {
+              "line": 545,
+              "text": "if __name__ == \"__main__\":"
+            },
+            {
+              "line": 546,
+              "text": "    logging.basicConfig("
+            },
+            {
+              "line": 547,
+              "text": "        level=logging.INFO,"
+            },
+            {
+              "line": 548,
+              "text": "        format=\"%(asctime)s - %(name)s - %(levelname)s - %(message)s\","
+            },
+            {
+              "line": 549,
+              "text": "    )"
+            },
+            {
+              "line": 550,
+              "text": "    asyncio.run(main())"
+            }
+          ]
+        }
+      ]
+    },
+    "corpus.py": {
+      "sha256": "51435e9c0fc1bcebbcd34a81f0a1d6cc37fbbb1922743632cef0e6b5aeea7a0e",
+      "line_count": 308,
+      "chunks": [
+        {
+          "range": [
+            35,
+            55
+          ],
+          "lines": [
+            {
+              "line": 35,
+              "text": "TOKENIZER_PATH = Path(__file__).parent / \"tokenizer.json\""
+            },
+            {
+              "line": 36,
+              "text": ""
+            },
+            {
+              "line": 37,
+              "text": "# Must match metric_reference.py / query.py"
+            },
+            {
+              "line": 38,
+              "text": "PROMPT_SUFFIX = ("
+            },
+            {
+              "line": 39,
+              "text": "    \"\\nPlease put your final answer inside `\\\\boxed{}`. \""
+            },
+            {
+              "line": 40,
+              "text": "    \"For example: `\\\\boxed{your answer}`\""
+            },
+            {
+              "line": 41,
+              "text": ")"
+            },
+            {
+              "line": 42,
+              "text": ""
+            },
+            {
+              "line": 43,
+              "text": "TOKEN_LIMIT = 8192"
+            },
+            {
+              "line": 44,
+              "text": ""
+            },
+            {
+              "line": 45,
+              "text": ""
+            },
+            {
+              "line": 46,
+              "text": "def load_jsonl(path: Path) -> list[dict]:"
+            },
+            {
+              "line": 47,
+              "text": "    entries = []"
+            },
+            {
+              "line": 48,
+              "text": "    with open(path) as f:"
+            },
+            {
+              "line": 49,
+              "text": "        for line in f:"
+            },
+            {
+              "line": 50,
+              "text": "            line = line.strip()"
+            },
+            {
+              "line": 51,
+              "text": "            if line:"
+            },
+            {
+              "line": 52,
+              "text": "                entries.append(json.loads(line))"
+            },
+            {
+              "line": 53,
+              "text": "    return entries"
+            },
+            {
+              "line": 54,
+              "text": ""
+            },
+            {
+              "line": 55,
+              "text": ""
+            }
+          ]
+        },
+        {
+          "range": [
+            180,
+            205
+          ],
+          "lines": [
+            {
+              "line": 180,
+              "text": "        reasoning_text = (REASONING_DIR / f\"{problem_id}.txt\").read_text().rstrip(\"\\n\")"
+            },
+            {
+              "line": 181,
+              "text": ""
+            },
+            {
+              "line": 182,
+              "text": "        # Extract answer from reasoning's \\boxed{} so they match"
+            },
+            {
+              "line": 183,
+              "text": "        boxed_match = re.findall(r\"\\\\boxed\\{([^}]*)\\}\", reasoning_text)"
+            },
+            {
+              "line": 184,
+              "text": "        reasoning_answer = boxed_match[-1] if boxed_match else answer"
+            },
+            {
+              "line": 185,
+              "text": "        completion_text = ("
+            },
+            {
+              "line": 186,
+              "text": "            f\"{reasoning_text}\\n</think>\\n\\\\boxed{{{reasoning_answer}}}<|im_end|>\""
+            },
+            {
+              "line": 187,
+              "text": "        )"
+            },
+            {
+              "line": 188,
+              "text": "        completion_ids = tokenizer.encode(completion_text, add_special_tokens=False).ids"
+            },
+            {
+              "line": 189,
+              "text": ""
+            },
+            {
+              "line": 190,
+              "text": "        # Tokenize prompt directly (no raw/ dependency)"
+            },
+            {
+              "line": 191,
+              "text": "        prompt_ids = tokenize_prompt(prompts[problem_id], chat_tokenizer)"
+            },
+            {
+              "line": 192,
+              "text": ""
+            },
+            {
+              "line": 193,
+              "text": "        all_tokens = prompt_ids + completion_ids"
+            },
+            {
+              "line": 194,
+              "text": "        mask = [0] * len(prompt_ids) + [1] * len(completion_ids)"
+            },
+            {
+              "line": 195,
+              "text": ""
+            },
+            {
+              "line": 196,
+              "text": "        # Truncate to token limit"
+            },
+            {
+              "line": 197,
+              "text": "        if len(all_tokens) > TOKEN_LIMIT:"
+            },
+            {
+              "line": 198,
+              "text": "            all_tokens = all_tokens[:TOKEN_LIMIT]"
+            },
+            {
+              "line": 199,
+              "text": "            mask = mask[:TOKEN_LIMIT]"
+            },
+            {
+              "line": 200,
+              "text": ""
+            },
+            {
+              "line": 201,
+              "text": "        unmasked_count = sum(mask)"
+            },
+            {
+              "line": 202,
+              "text": "        masked_count = len(mask) - unmasked_count"
+            },
+            {
+              "line": 203,
+              "text": ""
+            },
+            {
+              "line": 204,
+              "text": "        entry = CorpusEntry("
+            },
+            {
+              "line": 205,
+              "text": "            problem_id=problem_id,"
+            }
+          ]
+        },
+        {
+          "range": [
+            240,
+            260
+          ],
+          "lines": [
+            {
+              "line": 240,
+              "text": "            completion_text = f\"{completion}\\n</think><|im_end|>\""
+            },
+            {
+              "line": 241,
+              "text": "            completion_ids = tokenizer.encode("
+            },
+            {
+              "line": 242,
+              "text": "                completion_text, add_special_tokens=False"
+            },
+            {
+              "line": 243,
+              "text": "            ).ids"
+            },
+            {
+              "line": 244,
+              "text": ""
+            },
+            {
+              "line": 245,
+              "text": "            prompt_ids = tokenize_prompt(prompt_text, chat_tokenizer, suffix=\"\")"
+            },
+            {
+              "line": 246,
+              "text": ""
+            },
+            {
+              "line": 247,
+              "text": "            all_tokens = prompt_ids + completion_ids"
+            },
+            {
+              "line": 248,
+              "text": "            mask = [0] * len(prompt_ids) + [1] * len(completion_ids)"
+            },
+            {
+              "line": 249,
+              "text": ""
+            },
+            {
+              "line": 250,
+              "text": "            assert len(all_tokens) <= TOKEN_LIMIT, ("
+            },
+            {
+              "line": 251,
+              "text": "                f\"augmented entry {problem_id} exceeds token limit: \""
+            },
+            {
+              "line": 252,
+              "text": "                f\"{len(all_tokens)} > {TOKEN_LIMIT}\""
+            },
+            {
+              "line": 253,
+              "text": "            )"
+            },
+            {
+              "line": 254,
+              "text": ""
+            },
+            {
+              "line": 255,
+              "text": "            unmasked_count = sum(mask)"
+            },
+            {
+              "line": 256,
+              "text": "            masked_count = len(mask) - unmasked_count"
+            },
+            {
+              "line": 257,
+              "text": ""
+            },
+            {
+              "line": 258,
+              "text": "            entry = CorpusEntry("
+            },
+            {
+              "line": 259,
+              "text": "                problem_id=problem_id,"
+            },
+            {
+              "line": 260,
+              "text": "                category=category,"
+            }
+          ]
+        },
+        {
+          "range": [
+            286,
+            306
+          ],
+          "lines": [
+            {
+              "line": 286,
+              "text": ""
+            },
+            {
+              "line": 287,
+              "text": "    # Stats"
+            },
+            {
+              "line": 288,
+              "text": "    cat_counts: dict[str, int] = {cat: 0 for cat in {e.category for e in entries}}"
+            },
+            {
+              "line": 289,
+              "text": "    cat_tokens: dict[str, int] = {cat: 0 for cat in cat_counts}"
+            },
+            {
+              "line": 290,
+              "text": "    for e in entries:"
+            },
+            {
+              "line": 291,
+              "text": "        cat_counts[e.category] += 1"
+            },
+            {
+              "line": 292,
+              "text": "        cat_tokens[e.category] += e.unmasked_token_count"
+            },
+            {
+              "line": 293,
+              "text": ""
+            },
+            {
+              "line": 294,
+              "text": "    total_unmasked = sum(e.unmasked_token_count for e in entries)"
+            },
+            {
+              "line": 295,
+              "text": "    total_masked = sum(e.masked_token_count for e in entries)"
+            },
+            {
+              "line": 296,
+              "text": "    max_tokens = max((e.token_count for e in entries), default=0)"
+            },
+            {
+              "line": 297,
+              "text": ""
+            },
+            {
+              "line": 298,
+              "text": "    print(f\"Corpus (synthetic): {len(entries)} entries\")"
+            },
+            {
+              "line": 299,
+              "text": "    print(f\"Unmasked tokens: {total_unmasked:,}\")"
+            },
+            {
+              "line": 300,
+              "text": "    print(f\"Masked tokens:   {total_masked:,}\")"
+            },
+            {
+              "line": 301,
+              "text": "    print(f\"Max seq length:  {max_tokens:,}\")"
+            },
+            {
+              "line": 302,
+              "text": "    print()"
+            },
+            {
+              "line": 303,
+              "text": "    for cat in sorted(cat_counts):"
+            },
+            {
+              "line": 304,
+              "text": "        print(f\"  {cat}: {cat_counts[cat]} runs, {cat_tokens[cat]:,} unmasked tokens\")"
+            },
+            {
+              "line": 305,
+              "text": ""
+            },
+            {
+              "line": 306,
+              "text": ""
+            }
+          ]
+        }
+      ]
+    },
+    "loss_config.py": {
+      "sha256": "44a499f6624d61fe954e2a1bd616570a7c2f29fcbe5622f2a0a39f6408ecca6e",
+      "line_count": 376,
+      "chunks": [
+        {
+          "range": [
+            1,
+            80
+          ],
+          "lines": [
+            {
+              "line": 1,
+              "text": "import abc"
+            },
+            {
+              "line": 2,
+              "text": "import dataclasses"
+            },
+            {
+              "line": 3,
+              "text": "import math"
+            },
+            {
+              "line": 4,
+              "text": "from bisect import bisect_left, bisect_right"
+            },
+            {
+              "line": 5,
+              "text": ""
+            },
+            {
+              "line": 6,
+              "text": "from tinker.types import LossFnType"
+            },
+            {
+              "line": 7,
+              "text": ""
+            },
+            {
+              "line": 8,
+              "text": ""
+            },
+            {
+              "line": 9,
+              "text": "@dataclasses.dataclass"
+            },
+            {
+              "line": 10,
+              "text": "class LossConfig(abc.ABC):"
+            },
+            {
+              "line": 11,
+              "text": "    name: LossFnType = dataclasses.field(init=False)"
+            },
+            {
+              "line": 12,
+              "text": "    class_name: str = dataclasses.field(init=False)"
+            },
+            {
+              "line": 13,
+              "text": ""
+            },
+            {
+              "line": 14,
+              "text": "    def __post_init__(self):"
+            },
+            {
+              "line": 15,
+              "text": "        self.class_name = type(self).__name__"
+            },
+            {
+              "line": 16,
+              "text": ""
+            },
+            {
+              "line": 17,
+              "text": "    def config(self, epoch: int) -> dict[str, float]:"
+            },
+            {
+              "line": 18,
+              "text": "        return {}"
+            },
+            {
+              "line": 19,
+              "text": ""
+            },
+            {
+              "line": 20,
+              "text": "    def chart_layout(self) -> list[list[str]]:"
+            },
+            {
+              "line": 21,
+              "text": "        \"\"\"Define chart grouping: each inner list is keys sharing one chart.\"\"\""
+            },
+            {
+              "line": 22,
+              "text": "        return ["
+            },
+            {
+              "line": 23,
+              "text": "            [\"logprob_decreased\", \"logprob_increased\"],"
+            },
+            {
+              "line": 24,
+              "text": "        ]"
+            },
+            {
+              "line": 25,
+              "text": ""
+            },
+            {
+              "line": 26,
+              "text": "    def compute_global_metrics("
+            },
+            {
+              "line": 27,
+              "text": "        self,"
+            },
+            {
+              "line": 28,
+              "text": "        all_token_diffs: list[float],"
+            },
+            {
+              "line": 29,
+              "text": "        all_epoch_logprobs: list[float],"
+            },
+            {
+              "line": 30,
+              "text": "    ) -> list[list[dict[str, float]]]:"
+            },
+            {
+              "line": 31,
+              "text": "        \"\"\"Compute global metrics from all token-level diffs across examples.\"\"\""
+            },
+            {
+              "line": 32,
+              "text": "        if not all_token_diffs:"
+            },
+            {
+              "line": 33,
+              "text": "            return []"
+            },
+            {
+              "line": 34,
+              "text": "        sorted_diffs = sorted(all_token_diffs)"
+            },
+            {
+              "line": 35,
+              "text": "        n = len(sorted_diffs)"
+            },
+            {
+              "line": 36,
+              "text": "        percentile_chart: list[dict[str, float]] = []"
+            },
+            {
+              "line": 37,
+              "text": "        for p in [1, 5, 10, 25, 50, 75, 90, 95, 99]:"
+            },
+            {
+              "line": 38,
+              "text": "            idx = min(int(n * p / 100), n - 1)"
+            },
+            {
+              "line": 39,
+              "text": "            percentile_chart.append({f\"diff_p{p:02d}\": round(sorted_diffs[idx], 6)})"
+            },
+            {
+              "line": 40,
+              "text": "        DIFF_TARGETS = ["
+            },
+            {
+              "line": 41,
+              "text": "            -0.2,"
+            },
+            {
+              "line": 42,
+              "text": "            -0.1,"
+            },
+            {
+              "line": 43,
+              "text": "            -0.05,"
+            },
+            {
+              "line": 44,
+              "text": "            -0.01,"
+            },
+            {
+              "line": 45,
+              "text": "            -0.005,"
+            },
+            {
+              "line": 46,
+              "text": "            0.0,"
+            },
+            {
+              "line": 47,
+              "text": "            0.005,"
+            },
+            {
+              "line": 48,
+              "text": "            0.01,"
+            },
+            {
+              "line": 49,
+              "text": "            0.05,"
+            },
+            {
+              "line": 50,
+              "text": "            0.1,"
+            },
+            {
+              "line": 51,
+              "text": "            0.2,"
+            },
+            {
+              "line": 52,
+              "text": "        ]"
+            },
+            {
+              "line": 53,
+              "text": "        diff2p_chart: list[dict[str, float]] = []"
+            },
+            {
+              "line": 54,
+              "text": "        for d in DIFF_TARGETS:"
+            },
+            {
+              "line": 55,
+              "text": "            lo = bisect_left(sorted_diffs, d)"
+            },
+            {
+              "line": 56,
+              "text": "            hi = bisect_right(sorted_diffs, d)"
+            },
+            {
+              "line": 57,
+              "text": "            pct = round((lo + hi) / (2 * n), 6)"
+            },
+            {
+              "line": 58,
+              "text": "            diff2p_chart.append({f\"diff2p_{d}\": pct})"
+            },
+            {
+              "line": 59,
+              "text": "        return [percentile_chart, diff2p_chart]"
+            },
+            {
+              "line": 60,
+              "text": ""
+            },
+            {
+              "line": 61,
+              "text": "    def compute_metrics("
+            },
+            {
+              "line": 62,
+              "text": "        self,"
+            },
+            {
+              "line": 63,
+              "text": "        final_logprobs: list[float],"
+            },
+            {
+              "line": 64,
+              "text": "        ref_logprobs: list[float],"
+            },
+            {
+              "line": 65,
+              "text": "        mask: list[int],"
+            },
+            {
+              "line": 66,
+              "text": "        epoch: int,"
+            },
+            {
+              "line": 67,
+              "text": "    ) -> dict[str, float]:"
+            },
+            {
+              "line": 68,
+              "text": "        \"\"\"Compute per-example post-training metrics."
+            },
+            {
+              "line": 69,
+              "text": ""
+            },
+            {
+              "line": 70,
+              "text": "        mask aligns with logprobs (target token positions): 1=unmasked, 0=masked."
+            },
+            {
+              "line": 71,
+              "text": "        \"\"\""
+            },
+            {
+              "line": 72,
+              "text": "        n = len(final_logprobs)"
+            },
+            {
+              "line": 73,
+              "text": "        assert n == len(ref_logprobs) == len(mask)"
+            },
+            {
+              "line": 74,
+              "text": "        if n == 0:"
+            },
+            {
+              "line": 75,
+              "text": "            return {}"
+            },
+            {
+              "line": 76,
+              "text": "        metrics: dict[str, float] = {}"
+            },
+            {
+              "line": 77,
+              "text": "        idxs = [i for i in range(n) if mask[i] == 1]"
+            },
+            {
+              "line": 78,
+              "text": "        if idxs:"
+            },
+            {
+              "line": 79,
+              "text": "            decreased = sum(1 for i in idxs if final_logprobs[i] < ref_logprobs[i])"
+            },
+            {
+              "line": 80,
+              "text": "            increased = sum(1 for i in idxs if final_logprobs[i] > ref_logprobs[i])"
+            }
+          ]
+        },
+        {
+          "range": [
+            80,
+            160
+          ],
+          "lines": [
+            {
+              "line": 80,
+              "text": "            increased = sum(1 for i in idxs if final_logprobs[i] > ref_logprobs[i])"
+            },
+            {
+              "line": 81,
+              "text": "            unchanged = len(idxs) - decreased - increased"
+            },
+            {
+              "line": 82,
+              "text": "            metrics[\"logprob_decreased\"] = round("
+            },
+            {
+              "line": 83,
+              "text": "                (decreased + unchanged * 0.5) / len(idxs), 6"
+            },
+            {
+              "line": 84,
+              "text": "            )"
+            },
+            {
+              "line": 85,
+              "text": "            metrics[\"logprob_increased\"] = round("
+            },
+            {
+              "line": 86,
+              "text": "                (increased + unchanged * 0.5) / len(idxs), 6"
+            },
+            {
+              "line": 87,
+              "text": "            )"
+            },
+            {
+              "line": 88,
+              "text": "        return metrics"
+            },
+            {
+              "line": 89,
+              "text": ""
+            },
+            {
+              "line": 90,
+              "text": ""
+            },
+            {
+              "line": 91,
+              "text": "@dataclasses.dataclass"
+            },
+            {
+              "line": 92,
+              "text": "class CrossEntropyLossConfig(LossConfig):"
+            },
+            {
+              "line": 93,
+              "text": "    name: LossFnType = dataclasses.field(default=\"cross_entropy\", init=False)"
+            },
+            {
+              "line": 94,
+              "text": ""
+            },
+            {
+              "line": 95,
+              "text": ""
+            },
+            {
+              "line": 96,
+              "text": "@dataclasses.dataclass"
+            },
+            {
+              "line": 97,
+              "text": "class CrossEntropyWithWeightingLossConfig(CrossEntropyLossConfig, abc.ABC):"
+            },
+            {
+              "line": 98,
+              "text": "    name: LossFnType = dataclasses.field(default=\"cross_entropy\", init=False)"
+            },
+            {
+              "line": 99,
+              "text": "    branch_logprob: float  # e.g. 0.01"
+            },
+            {
+              "line": 100,
+              "text": "    first_cutoff_weight: float  # e.g. 0.5"
+            },
+            {
+              "line": 101,
+              "text": ""
+            },
+            {
+              "line": 102,
+              "text": "    def __post_init__(self):"
+            },
+            {
+              "line": 103,
+              "text": "        super().__post_init__()"
+            },
+            {
+              "line": 104,
+              "text": "        assert self.branch_logprob > 0"
+            },
+            {
+              "line": 105,
+              "text": ""
+            },
+            {
+              "line": 106,
+              "text": "    def _branch_weight(self, logprob: float) -> float:"
+            },
+            {
+              "line": 107,
+              "text": "        \"\"\"Branch scaling weight: min(1, |logprob| / branch_logprob).\"\"\""
+            },
+            {
+              "line": 108,
+              "text": "        return min(1.0, abs(logprob) / self.branch_logprob)"
+            },
+            {
+              "line": 109,
+              "text": ""
+            },
+            {
+              "line": 110,
+              "text": "    def _cutoff_weight("
+            },
+            {
+              "line": 111,
+              "text": "        self, prev_logprob: float, ref_logprob: float, epoch: int"
+            },
+            {
+              "line": 112,
+              "text": "    ) -> float:"
+            },
+            {
+              "line": 113,
+              "text": "        if epoch == 0:"
+            },
+            {
+              "line": 114,
+              "text": "            return self.first_cutoff_weight"
+            },
+            {
+              "line": 115,
+              "text": "        return 1.0"
+            },
+            {
+              "line": 116,
+              "text": ""
+            },
+            {
+              "line": 117,
+              "text": "    def apply_weights("
+            },
+            {
+              "line": 118,
+              "text": "        self,"
+            },
+            {
+              "line": 119,
+              "text": "        float_advantages: list[float],"
+            },
+            {
+              "line": 120,
+              "text": "        prev_logprobs: list[float] | None,"
+            },
+            {
+              "line": 121,
+              "text": "        ref_logprobs: list[float] | None,"
+            },
+            {
+              "line": 122,
+              "text": "        epoch: int,"
+            },
+            {
+              "line": 123,
+              "text": "    ) -> list[float]:"
+            },
+            {
+              "line": 124,
+              "text": "        \"\"\"Apply branch and cutoff weights to advantages.\"\"\""
+            },
+            {
+              "line": 125,
+              "text": "        if prev_logprobs is not None:"
+            },
+            {
+              "line": 126,
+              "text": "            float_advantages = ["
+            },
+            {
+              "line": 127,
+              "text": "                float_advantage * self._branch_weight(prev_logprob)"
+            },
+            {
+              "line": 128,
+              "text": "                for float_advantage, prev_logprob in zip("
+            },
+            {
+              "line": 129,
+              "text": "                    float_advantages, prev_logprobs"
+            },
+            {
+              "line": 130,
+              "text": "                )"
+            },
+            {
+              "line": 131,
+              "text": "            ]"
+            },
+            {
+              "line": 132,
+              "text": "        if ref_logprobs is not None and prev_logprobs is not None:"
+            },
+            {
+              "line": 133,
+              "text": "            float_advantages = ["
+            },
+            {
+              "line": 134,
+              "text": "                float_advantage * self._cutoff_weight(prev_logprob, ref_logprob, epoch)"
+            },
+            {
+              "line": 135,
+              "text": "                for float_advantage, prev_logprob, ref_logprob in zip("
+            },
+            {
+              "line": 136,
+              "text": "                    float_advantages, prev_logprobs, ref_logprobs"
+            },
+            {
+              "line": 137,
+              "text": "                )"
+            },
+            {
+              "line": 138,
+              "text": "            ]"
+            },
+            {
+              "line": 139,
+              "text": "        return float_advantages"
+            },
+            {
+              "line": 140,
+              "text": ""
+            },
+            {
+              "line": 141,
+              "text": "    def compute_global_metrics("
+            },
+            {
+              "line": 142,
+              "text": "        self,"
+            },
+            {
+              "line": 143,
+              "text": "        all_token_diffs: list[float],"
+            },
+            {
+              "line": 144,
+              "text": "        all_epoch_logprobs: list[float],"
+            },
+            {
+              "line": 145,
+              "text": "    ) -> list[list[dict[str, float]]]:"
+            },
+            {
+              "line": 146,
+              "text": "        result = super().compute_global_metrics(all_token_diffs, all_epoch_logprobs)"
+            },
+            {
+              "line": 147,
+              "text": "        if not all_token_diffs:"
+            },
+            {
+              "line": 148,
+              "text": "            return result"
+            },
+            {
+              "line": 149,
+              "text": "        sorted_vw = sorted("
+            },
+            {
+              "line": 150,
+              "text": "            ("
+            },
+            {
+              "line": 151,
+              "text": "                (d, self._branch_weight(lp))"
+            },
+            {
+              "line": 152,
+              "text": "                for d, lp in zip(all_token_diffs, all_epoch_logprobs)"
+            },
+            {
+              "line": 153,
+              "text": "            ),"
+            },
+            {
+              "line": 154,
+              "text": "            key=lambda x: x[0],"
+            },
+            {
+              "line": 155,
+              "text": "        )"
+            },
+            {
+              "line": 156,
+              "text": "        total_w = sum(w for _, w in sorted_vw)"
+            },
+            {
+              "line": 157,
+              "text": "        if total_w > 0:"
+            },
+            {
+              "line": 158,
+              "text": "            weighted_pct_chart: list[dict[str, float]] = []"
+            },
+            {
+              "line": 159,
+              "text": "            for p in [1, 5, 10, 25, 50, 75, 90, 95, 99]:"
+            },
+            {
+              "line": 160,
+              "text": "                target = total_w * p / 100"
+            }
+          ]
+        },
+        {
+          "range": [
+            160,
+            260
+          ],
+          "lines": [
+            {
+              "line": 160,
+              "text": "                target = total_w * p / 100"
+            },
+            {
+              "line": 161,
+              "text": "                cumulative = 0.0"
+            },
+            {
+              "line": 162,
+              "text": "                val = sorted_vw[-1][0]"
+            },
+            {
+              "line": 163,
+              "text": "                for v, w in sorted_vw:"
+            },
+            {
+              "line": 164,
+              "text": "                    cumulative += w"
+            },
+            {
+              "line": 165,
+              "text": "                    if cumulative >= target:"
+            },
+            {
+              "line": 166,
+              "text": "                        val = v"
+            },
+            {
+              "line": 167,
+              "text": "                        break"
+            },
+            {
+              "line": 168,
+              "text": "                weighted_pct_chart.append({f\"weighted_diff_p{p:02d}\": round(val, 6)})"
+            },
+            {
+              "line": 169,
+              "text": "            result.insert(1, weighted_pct_chart)"
+            },
+            {
+              "line": 170,
+              "text": "            sorted_diffs_only = [d for d, _ in sorted_vw]"
+            },
+            {
+              "line": 171,
+              "text": "            cum_weights = []"
+            },
+            {
+              "line": 172,
+              "text": "            cumulative = 0.0"
+            },
+            {
+              "line": 173,
+              "text": "            for _, w in sorted_vw:"
+            },
+            {
+              "line": 174,
+              "text": "                cumulative += w"
+            },
+            {
+              "line": 175,
+              "text": "                cum_weights.append(cumulative)"
+            },
+            {
+              "line": 176,
+              "text": "            DIFF_TARGETS = ["
+            },
+            {
+              "line": 177,
+              "text": "                -0.2,"
+            },
+            {
+              "line": 178,
+              "text": "                -0.1,"
+            },
+            {
+              "line": 179,
+              "text": "                -0.05,"
+            },
+            {
+              "line": 180,
+              "text": "                -0.01,"
+            },
+            {
+              "line": 181,
+              "text": "                -0.005,"
+            },
+            {
+              "line": 182,
+              "text": "                0.0,"
+            },
+            {
+              "line": 183,
+              "text": "                0.005,"
+            },
+            {
+              "line": 184,
+              "text": "                0.01,"
+            },
+            {
+              "line": 185,
+              "text": "                0.05,"
+            },
+            {
+              "line": 186,
+              "text": "                0.1,"
+            },
+            {
+              "line": 187,
+              "text": "                0.2,"
+            },
+            {
+              "line": 188,
+              "text": "            ]"
+            },
+            {
+              "line": 189,
+              "text": "            weighted_diff2p_chart: list[dict[str, float]] = []"
+            },
+            {
+              "line": 190,
+              "text": "            for d in DIFF_TARGETS:"
+            },
+            {
+              "line": 191,
+              "text": "                lo = bisect_left(sorted_diffs_only, d)"
+            },
+            {
+              "line": 192,
+              "text": "                hi = bisect_right(sorted_diffs_only, d)"
+            },
+            {
+              "line": 193,
+              "text": "                cum_lo = cum_weights[lo - 1] if lo > 0 else 0.0"
+            },
+            {
+              "line": 194,
+              "text": "                cum_hi = cum_weights[hi - 1] if hi > 0 else 0.0"
+            },
+            {
+              "line": 195,
+              "text": "                pct = round((cum_lo + cum_hi) / (2 * total_w), 6)"
+            },
+            {
+              "line": 196,
+              "text": "                weighted_diff2p_chart.append({f\"weighted_diff2p_{d}\": pct})"
+            },
+            {
+              "line": 197,
+              "text": "            result.append(weighted_diff2p_chart)"
+            },
+            {
+              "line": 198,
+              "text": "        return result"
+            },
+            {
+              "line": 199,
+              "text": ""
+            },
+            {
+              "line": 200,
+              "text": "    def chart_layout(self) -> list[list[str]]:"
+            },
+            {
+              "line": 201,
+              "text": "        return super().chart_layout() + ["
+            },
+            {
+              "line": 202,
+              "text": "            [\"weighted_logprob_decreased\", \"weighted_logprob_increased\"],"
+            },
+            {
+              "line": 203,
+              "text": "            [\"avg_branch_weight\", \"cutoff_avg_weight\", \"avg_weight\"],"
+            },
+            {
+              "line": 204,
+              "text": "            [\"branch_mask_fraction\"],"
+            },
+            {
+              "line": 205,
+              "text": "        ]"
+            },
+            {
+              "line": 206,
+              "text": ""
+            },
+            {
+              "line": 207,
+              "text": "    def compute_metrics("
+            },
+            {
+              "line": 208,
+              "text": "        self,"
+            },
+            {
+              "line": 209,
+              "text": "        final_logprobs: list[float],"
+            },
+            {
+              "line": 210,
+              "text": "        ref_logprobs: list[float],"
+            },
+            {
+              "line": 211,
+              "text": "        mask: list[int],"
+            },
+            {
+              "line": 212,
+              "text": "        epoch: int,"
+            },
+            {
+              "line": 213,
+              "text": "    ) -> dict[str, float]:"
+            },
+            {
+              "line": 214,
+              "text": "        metrics = super().compute_metrics(final_logprobs, ref_logprobs, mask, epoch)"
+            },
+            {
+              "line": 215,
+              "text": "        n = len(final_logprobs)"
+            },
+            {
+              "line": 216,
+              "text": "        if n == 0:"
+            },
+            {
+              "line": 217,
+              "text": "            return metrics"
+            },
+            {
+              "line": 218,
+              "text": "        idxs = [i for i in range(n) if mask[i] == 1]"
+            },
+            {
+              "line": 219,
+              "text": "        if not idxs:"
+            },
+            {
+              "line": 220,
+              "text": "            return metrics"
+            },
+            {
+              "line": 221,
+              "text": "        branch_scaled = sum("
+            },
+            {
+              "line": 222,
+              "text": "            1 for i in idxs if abs(final_logprobs[i]) <= self.branch_logprob"
+            },
+            {
+              "line": 223,
+              "text": "        )"
+            },
+            {
+              "line": 224,
+              "text": "        metrics[\"branch_mask_fraction\"] = round(branch_scaled / len(idxs), 6)"
+            },
+            {
+              "line": 225,
+              "text": "        branch_weights = [self._branch_weight(final_logprobs[i]) for i in idxs]"
+            },
+            {
+              "line": 226,
+              "text": "        metrics[\"avg_branch_weight\"] = round(sum(branch_weights) / len(idxs), 6)"
+            },
+            {
+              "line": 227,
+              "text": "        total_w = sum(branch_weights)"
+            },
+            {
+              "line": 228,
+              "text": "        if total_w > 0:"
+            },
+            {
+              "line": 229,
+              "text": "            w_dec = sum("
+            },
+            {
+              "line": 230,
+              "text": "                self._branch_weight(final_logprobs[i])"
+            },
+            {
+              "line": 231,
+              "text": "                for i in idxs"
+            },
+            {
+              "line": 232,
+              "text": "                if final_logprobs[i] < ref_logprobs[i]"
+            },
+            {
+              "line": 233,
+              "text": "            )"
+            },
+            {
+              "line": 234,
+              "text": "            w_inc = sum("
+            },
+            {
+              "line": 235,
+              "text": "                self._branch_weight(final_logprobs[i])"
+            },
+            {
+              "line": 236,
+              "text": "                for i in idxs"
+            },
+            {
+              "line": 237,
+              "text": "                if final_logprobs[i] > ref_logprobs[i]"
+            },
+            {
+              "line": 238,
+              "text": "            )"
+            },
+            {
+              "line": 239,
+              "text": "            w_unch = total_w - w_dec - w_inc"
+            },
+            {
+              "line": 240,
+              "text": "            metrics[\"weighted_logprob_decreased\"] = round("
+            },
+            {
+              "line": 241,
+              "text": "                (w_dec + w_unch * 0.5) / total_w, 6"
+            },
+            {
+              "line": 242,
+              "text": "            )"
+            },
+            {
+              "line": 243,
+              "text": "            metrics[\"weighted_logprob_increased\"] = round("
+            },
+            {
+              "line": 244,
+              "text": "                (w_inc + w_unch * 0.5) / total_w, 6"
+            },
+            {
+              "line": 245,
+              "text": "            )"
+            },
+            {
+              "line": 246,
+              "text": "        weights = ["
+            },
+            {
+              "line": 247,
+              "text": "            self._cutoff_weight(final_logprobs[i], ref_logprobs[i], epoch) for i in idxs"
+            },
+            {
+              "line": 248,
+              "text": "        ]"
+            },
+            {
+              "line": 249,
+              "text": "        metrics[\"cutoff_avg_weight\"] = round(sum(weights) / len(idxs), 6)"
+            },
+            {
+              "line": 250,
+              "text": "        metrics[\"avg_weight\"] = round("
+            },
+            {
+              "line": 251,
+              "text": "            sum(bw * cw for bw, cw in zip(branch_weights, weights)) / len(idxs), 6"
+            },
+            {
+              "line": 252,
+              "text": "        )"
+            },
+            {
+              "line": 253,
+              "text": "        return metrics"
+            },
+            {
+              "line": 254,
+              "text": ""
+            },
+            {
+              "line": 255,
+              "text": ""
+            },
+            {
+              "line": 256,
+              "text": "@dataclasses.dataclass"
+            },
+            {
+              "line": 257,
+              "text": "class ImportanceSamplingLossConfig(LossConfig):"
+            },
+            {
+              "line": 258,
+              "text": "    name: LossFnType = dataclasses.field(default=\"importance_sampling\", init=False)"
+            },
+            {
+              "line": 259,
+              "text": ""
+            },
+            {
+              "line": 260,
+              "text": "    def chart_layout(self) -> list[list[str]]:"
+            }
+          ]
+        },
+        {
+          "range": [
+            260,
+            377
+          ],
+          "lines": [
+            {
+              "line": 260,
+              "text": "    def chart_layout(self) -> list[list[str]]:"
+            },
+            {
+              "line": 261,
+              "text": "        return super().chart_layout() + ["
+            },
+            {
+              "line": 262,
+              "text": "            [\"kl_per_token\"],"
+            },
+            {
+              "line": 263,
+              "text": "            [\"mean_importance_ratio\"],"
+            },
+            {
+              "line": 264,
+              "text": "        ]"
+            },
+            {
+              "line": 265,
+              "text": ""
+            },
+            {
+              "line": 266,
+              "text": "    def compute_metrics("
+            },
+            {
+              "line": 267,
+              "text": "        self,"
+            },
+            {
+              "line": 268,
+              "text": "        final_logprobs: list[float],"
+            },
+            {
+              "line": 269,
+              "text": "        ref_logprobs: list[float],"
+            },
+            {
+              "line": 270,
+              "text": "        mask: list[int],"
+            },
+            {
+              "line": 271,
+              "text": "        epoch: int,"
+            },
+            {
+              "line": 272,
+              "text": "    ) -> dict[str, float]:"
+            },
+            {
+              "line": 273,
+              "text": "        metrics = super().compute_metrics(final_logprobs, ref_logprobs, mask, epoch)"
+            },
+            {
+              "line": 274,
+              "text": "        n = len(final_logprobs)"
+            },
+            {
+              "line": 275,
+              "text": "        assert n == len(ref_logprobs) == len(mask)"
+            },
+            {
+              "line": 276,
+              "text": "        idxs = [i for i in range(n) if mask[i] == 1]"
+            },
+            {
+              "line": 277,
+              "text": "        if idxs:"
+            },
+            {
+              "line": 278,
+              "text": "            log_ratios = [final_logprobs[i] - ref_logprobs[i] for i in idxs]"
+            },
+            {
+              "line": 279,
+              "text": "            metrics[\"kl_per_token\"] = round(sum(log_ratios) / len(idxs), 6)"
+            },
+            {
+              "line": 280,
+              "text": "            ratios = [math.exp(min(lr, 20)) for lr in log_ratios]"
+            },
+            {
+              "line": 281,
+              "text": "            metrics[\"mean_importance_ratio\"] = round(sum(ratios) / len(idxs), 6)"
+            },
+            {
+              "line": 282,
+              "text": "        return metrics"
+            },
+            {
+              "line": 283,
+              "text": ""
+            },
+            {
+              "line": 284,
+              "text": ""
+            },
+            {
+              "line": 285,
+              "text": "@dataclasses.dataclass"
+            },
+            {
+              "line": 286,
+              "text": "class ClipLossConfig(LossConfig, abc.ABC):"
+            },
+            {
+              "line": 287,
+              "text": "    clip_low: float"
+            },
+            {
+              "line": 288,
+              "text": "    clip_high: float"
+            },
+            {
+              "line": 289,
+              "text": ""
+            },
+            {
+              "line": 290,
+              "text": "    def chart_layout(self) -> list[list[str]]:"
+            },
+            {
+              "line": 291,
+              "text": "        return super().chart_layout() + ["
+            },
+            {
+              "line": 292,
+              "text": "            [\"kl_per_token\"],"
+            },
+            {
+              "line": 293,
+              "text": "            [\"mean_importance_ratio\"],"
+            },
+            {
+              "line": 294,
+              "text": "            [\"clip_fraction_low\", \"clip_fraction_high\"],"
+            },
+            {
+              "line": 295,
+              "text": "        ]"
+            },
+            {
+              "line": 296,
+              "text": ""
+            },
+            {
+              "line": 297,
+              "text": "    def config(self, epoch: int) -> dict[str, float]:"
+            },
+            {
+              "line": 298,
+              "text": "        if epoch == 0:"
+            },
+            {
+              "line": 299,
+              "text": "            return {\"clip_low_threshold\": 1.0, \"clip_high_threshold\": 1.0}"
+            },
+            {
+              "line": 300,
+              "text": "        return {"
+            },
+            {
+              "line": 301,
+              "text": "            \"clip_low_threshold\": self.clip_low,"
+            },
+            {
+              "line": 302,
+              "text": "            \"clip_high_threshold\": self.clip_high,"
+            },
+            {
+              "line": 303,
+              "text": "        }"
+            },
+            {
+              "line": 304,
+              "text": ""
+            },
+            {
+              "line": 305,
+              "text": "    def compute_metrics("
+            },
+            {
+              "line": 306,
+              "text": "        self,"
+            },
+            {
+              "line": 307,
+              "text": "        final_logprobs: list[float],"
+            },
+            {
+              "line": 308,
+              "text": "        ref_logprobs: list[float],"
+            },
+            {
+              "line": 309,
+              "text": "        mask: list[int],"
+            },
+            {
+              "line": 310,
+              "text": "        epoch: int,"
+            },
+            {
+              "line": 311,
+              "text": "    ) -> dict[str, float]:"
+            },
+            {
+              "line": 312,
+              "text": "        metrics = super().compute_metrics(final_logprobs, ref_logprobs, mask, epoch)"
+            },
+            {
+              "line": 313,
+              "text": "        n = len(final_logprobs)"
+            },
+            {
+              "line": 314,
+              "text": "        assert n == len(ref_logprobs) == len(mask)"
+            },
+            {
+              "line": 315,
+              "text": "        idxs = [i for i in range(n) if mask[i] == 1]"
+            },
+            {
+              "line": 316,
+              "text": "        if idxs:"
+            },
+            {
+              "line": 317,
+              "text": "            log_ratios = [final_logprobs[i] - ref_logprobs[i] for i in idxs]"
+            },
+            {
+              "line": 318,
+              "text": "            metrics[\"kl_per_token\"] = round(sum(log_ratios) / len(idxs), 6)"
+            },
+            {
+              "line": 319,
+              "text": "            ratios = [math.exp(min(lr, 20)) for lr in log_ratios]"
+            },
+            {
+              "line": 320,
+              "text": "            metrics[\"mean_importance_ratio\"] = round(sum(ratios) / len(idxs), 6)"
+            },
+            {
+              "line": 321,
+              "text": "            low = 1 - self.clip_low"
+            },
+            {
+              "line": 322,
+              "text": "            high = 1 + self.clip_high"
+            },
+            {
+              "line": 323,
+              "text": "            clipped_low = sum(1 for r in ratios if r < low)"
+            },
+            {
+              "line": 324,
+              "text": "            clipped_high = sum(1 for r in ratios if r > high)"
+            },
+            {
+              "line": 325,
+              "text": "            metrics[\"clip_fraction_low\"] = round(clipped_low / len(idxs), 6)"
+            },
+            {
+              "line": 326,
+              "text": "            metrics[\"clip_fraction_high\"] = round(clipped_high / len(idxs), 6)"
+            },
+            {
+              "line": 327,
+              "text": "        return metrics"
+            },
+            {
+              "line": 328,
+              "text": ""
+            },
+            {
+              "line": 329,
+              "text": ""
+            },
+            {
+              "line": 330,
+              "text": "@dataclasses.dataclass"
+            },
+            {
+              "line": 331,
+              "text": "class PPOLossConfig(ClipLossConfig):"
+            },
+            {
+              "line": 332,
+              "text": "    clip_low: float  # e.g. 0.2"
+            },
+            {
+              "line": 333,
+              "text": "    clip_high: float  # e.g. 0.2"
+            },
+            {
+              "line": 334,
+              "text": "    name: LossFnType = dataclasses.field(default=\"ppo\", init=False)"
+            },
+            {
+              "line": 335,
+              "text": ""
+            },
+            {
+              "line": 336,
+              "text": ""
+            },
+            {
+              "line": 337,
+              "text": "@dataclasses.dataclass"
+            },
+            {
+              "line": 338,
+              "text": "class CISPOLossConfig(ClipLossConfig):"
+            },
+            {
+              "line": 339,
+              "text": "    clip_low: float  # e.g. 0.8"
+            },
+            {
+              "line": 340,
+              "text": "    clip_high: float  # e.g. 1.2"
+            },
+            {
+              "line": 341,
+              "text": "    name: LossFnType = dataclasses.field(default=\"cispo\", init=False)"
+            },
+            {
+              "line": 342,
+              "text": ""
+            },
+            {
+              "line": 343,
+              "text": ""
+            },
+            {
+              "line": 344,
+              "text": "@dataclasses.dataclass"
+            },
+            {
+              "line": 345,
+              "text": "class DROLossConfig(LossConfig):"
+            },
+            {
+              "line": 346,
+              "text": "    beta: float  # e.g. 0.05"
+            },
+            {
+              "line": 347,
+              "text": "    name: LossFnType = dataclasses.field(default=\"dro\", init=False)"
+            },
+            {
+              "line": 348,
+              "text": ""
+            },
+            {
+              "line": 349,
+              "text": "    def chart_layout(self) -> list[list[str]]:"
+            },
+            {
+              "line": 350,
+              "text": "        return super().chart_layout() + ["
+            },
+            {
+              "line": 351,
+              "text": "            [\"kl_per_token\"],"
+            },
+            {
+              "line": 352,
+              "text": "            [\"dro_penalty_per_token\"],"
+            },
+            {
+              "line": 353,
+              "text": "        ]"
+            },
+            {
+              "line": 354,
+              "text": ""
+            },
+            {
+              "line": 355,
+              "text": "    def config(self, epoch: int) -> dict[str, float]:"
+            },
+            {
+              "line": 356,
+              "text": "        if epoch == 0:"
+            },
+            {
+              "line": 357,
+              "text": "            return {\"beta\": 0.0}"
+            },
+            {
+              "line": 358,
+              "text": "        return {\"beta\": self.beta}"
+            },
+            {
+              "line": 359,
+              "text": ""
+            },
+            {
+              "line": 360,
+              "text": "    def compute_metrics("
+            },
+            {
+              "line": 361,
+              "text": "        self,"
+            },
+            {
+              "line": 362,
+              "text": "        final_logprobs: list[float],"
+            },
+            {
+              "line": 363,
+              "text": "        ref_logprobs: list[float],"
+            },
+            {
+              "line": 364,
+              "text": "        mask: list[int],"
+            },
+            {
+              "line": 365,
+              "text": "        epoch: int,"
+            },
+            {
+              "line": 366,
+              "text": "    ) -> dict[str, float]:"
+            },
+            {
+              "line": 367,
+              "text": "        metrics = super().compute_metrics(final_logprobs, ref_logprobs, mask, epoch)"
+            },
+            {
+              "line": 368,
+              "text": "        n = len(final_logprobs)"
+            },
+            {
+              "line": 369,
+              "text": "        assert n == len(ref_logprobs) == len(mask)"
+            },
+            {
+              "line": 370,
+              "text": "        idxs = [i for i in range(n) if mask[i] == 1]"
+            },
+            {
+              "line": 371,
+              "text": "        if idxs:"
+            },
+            {
+              "line": 372,
+              "text": "            log_ratios = [final_logprobs[i] - ref_logprobs[i] for i in idxs]"
+            },
+            {
+              "line": 373,
+              "text": "            metrics[\"kl_per_token\"] = round(sum(log_ratios) / len(idxs), 6)"
+            },
+            {
+              "line": 374,
+              "text": "        sq_diffs = [(final_logprobs[i] - ref_logprobs[i]) ** 2 for i in range(n)]"
+            },
+            {
+              "line": 375,
+              "text": "        metrics[\"dro_penalty_per_token\"] = round(self.beta * 0.5 * sum(sq_diffs) / n, 6)"
+            },
+            {
+              "line": 376,
+              "text": "        return metrics"
+            }
+          ]
+        }
+      ]
+    },
+    "lr_schedule.py": {
+      "sha256": "0ebf89a261a53359849e5957204e6f9d3011babcbe6117fb10461542a6b21e3f",
+      "line_count": 37,
+      "chunks": [
+        {
+          "range": [
+            1,
+            38
+          ],
+          "lines": [
+            {
+              "line": 1,
+              "text": "import dataclasses"
+            },
+            {
+              "line": 2,
+              "text": ""
+            },
+            {
+              "line": 3,
+              "text": ""
+            },
+            {
+              "line": 4,
+              "text": "@dataclasses.dataclass"
+            },
+            {
+              "line": 5,
+              "text": "class LRSchedule:"
+            },
+            {
+              "line": 6,
+              "text": "    learning_rate: float = 2e-5"
+            },
+            {
+              "line": 7,
+              "text": "    class_name: str = dataclasses.field(init=False)"
+            },
+            {
+              "line": 8,
+              "text": ""
+            },
+            {
+              "line": 9,
+              "text": "    def __post_init__(self):"
+            },
+            {
+              "line": 10,
+              "text": "        self.class_name = type(self).__name__"
+            },
+            {
+              "line": 11,
+              "text": ""
+            },
+            {
+              "line": 12,
+              "text": "    def get_lr("
+            },
+            {
+              "line": 13,
+              "text": "        self, step: int, total_steps: int, epoch: int, total_epochs: int"
+            },
+            {
+              "line": 14,
+              "text": "    ) -> float:"
+            },
+            {
+              "line": 15,
+              "text": "        return self.learning_rate"
+            },
+            {
+              "line": 16,
+              "text": ""
+            },
+            {
+              "line": 17,
+              "text": ""
+            },
+            {
+              "line": 18,
+              "text": "@dataclasses.dataclass"
+            },
+            {
+              "line": 19,
+              "text": "class LinearDecayLRSchedule(LRSchedule):"
+            },
+            {
+              "line": 20,
+              "text": "    final_learning_rate: float = 1e-5"
+            },
+            {
+              "line": 21,
+              "text": ""
+            },
+            {
+              "line": 22,
+              "text": "    def get_lr("
+            },
+            {
+              "line": 23,
+              "text": "        self, step: int, total_steps: int, epoch: int, total_epochs: int"
+            },
+            {
+              "line": 24,
+              "text": "    ) -> float:"
+            },
+            {
+              "line": 25,
+              "text": "        mult = min(1.0, max(0.0, 1.0 - epoch / (1 + total_epochs)))"
+            },
+            {
+              "line": 26,
+              "text": "        return ("
+            },
+            {
+              "line": 27,
+              "text": "            self.final_learning_rate"
+            },
+            {
+              "line": 28,
+              "text": "            + (self.learning_rate - self.final_learning_rate) * mult"
+            },
+            {
+              "line": 29,
+              "text": "        )"
+            },
+            {
+              "line": 30,
+              "text": ""
+            },
+            {
+              "line": 31,
+              "text": ""
+            },
+            {
+              "line": 32,
+              "text": "@dataclasses.dataclass"
+            },
+            {
+              "line": 33,
+              "text": "class StepLinearDecayLRSchedule(LRSchedule):"
+            },
+            {
+              "line": 34,
+              "text": "    def get_lr("
+            },
+            {
+              "line": 35,
+              "text": "        self, step: int, total_steps: int, epoch: int, total_epochs: int"
+            },
+            {
+              "line": 36,
+              "text": "    ) -> float:"
+            },
+            {
+              "line": 37,
+              "text": "        return self.learning_rate * (1 - step / total_steps)"
+            }
+          ]
+        }
+      ]
+    },
+    "train_common.py": {
+      "sha256": "9f50f3b6a398b9d46ef85b4372887b83c8322f1674fe63be320fbcdc8b9f546f",
+      "line_count": 134,
+      "chunks": [
+        {
+          "range": [
+            1,
+            135
+          ],
+          "lines": [
+            {
+              "line": 1,
+              "text": "\"\"\"Shared utilities for training scripts.\"\"\""
+            },
+            {
+              "line": 2,
+              "text": ""
+            },
+            {
+              "line": 3,
+              "text": "from __future__ import annotations"
+            },
+            {
+              "line": 4,
+              "text": ""
+            },
+            {
+              "line": 5,
+              "text": "import json"
+            },
+            {
+              "line": 6,
+              "text": "import logging"
+            },
+            {
+              "line": 7,
+              "text": "from dataclasses import dataclass"
+            },
+            {
+              "line": 8,
+              "text": "from pathlib import Path"
+            },
+            {
+              "line": 9,
+              "text": "from typing import Literal, TypedDict, cast"
+            },
+            {
+              "line": 10,
+              "text": ""
+            },
+            {
+              "line": 11,
+              "text": "import tinker"
+            },
+            {
+              "line": 12,
+              "text": ""
+            },
+            {
+              "line": 13,
+              "text": "logger = logging.getLogger(__name__)"
+            },
+            {
+              "line": 14,
+              "text": ""
+            },
+            {
+              "line": 15,
+              "text": "Category = Literal["
+            },
+            {
+              "line": 16,
+              "text": "    \"bit_manipulation\","
+            },
+            {
+              "line": 17,
+              "text": "    \"cipher\","
+            },
+            {
+              "line": 18,
+              "text": "    \"cryptarithm_deduce\","
+            },
+            {
+              "line": 19,
+              "text": "    \"cryptarithm_guess\","
+            },
+            {
+              "line": 20,
+              "text": "    \"equation_numeric_deduce\","
+            },
+            {
+              "line": 21,
+              "text": "    \"equation_numeric_guess\","
+            },
+            {
+              "line": 22,
+              "text": "    \"gravity\","
+            },
+            {
+              "line": 23,
+              "text": "    \"numeral\","
+            },
+            {
+              "line": 24,
+              "text": "    \"unit_conversion\","
+            },
+            {
+              "line": 25,
+              "text": "]"
+            },
+            {
+              "line": 26,
+              "text": ""
+            },
+            {
+              "line": 27,
+              "text": "CORPUS_DIR = Path(__file__).parent / \"corpus\""
+            },
+            {
+              "line": 28,
+              "text": "CORPUS_INDEX = Path(__file__).parent / \"corpus.jsonl\""
+            },
+            {
+              "line": 29,
+              "text": ""
+            },
+            {
+              "line": 30,
+              "text": ""
+            },
+            {
+              "line": 31,
+              "text": "class CorpusEntry(TypedDict):"
+            },
+            {
+              "line": 32,
+              "text": "    \"\"\"Entry from corpus.jsonl.\"\"\""
+            },
+            {
+              "line": 33,
+              "text": ""
+            },
+            {
+              "line": 34,
+              "text": "    problem_id: str"
+            },
+            {
+              "line": 35,
+              "text": "    segment: str"
+            },
+            {
+              "line": 36,
+              "text": "    category: Category"
+            },
+            {
+              "line": 37,
+              "text": "    masked_token_count: int"
+            },
+            {
+              "line": 38,
+              "text": "    unmasked_token_count: int"
+            },
+            {
+              "line": 39,
+              "text": "    token_count: int"
+            },
+            {
+              "line": 40,
+              "text": "    answer: str"
+            },
+            {
+              "line": 41,
+              "text": "    included: bool"
+            },
+            {
+              "line": 42,
+              "text": ""
+            },
+            {
+              "line": 43,
+              "text": ""
+            },
+            {
+              "line": 44,
+              "text": "def load_jsonl(path: Path) -> list[dict]:"
+            },
+            {
+              "line": 45,
+              "text": "    \"\"\"Load a JSONL file.\"\"\""
+            },
+            {
+              "line": 46,
+              "text": "    entries = []"
+            },
+            {
+              "line": 47,
+              "text": "    with open(path) as f:"
+            },
+            {
+              "line": 48,
+              "text": "        for line in f:"
+            },
+            {
+              "line": 49,
+              "text": "            line = line.strip()"
+            },
+            {
+              "line": 50,
+              "text": "            if line:"
+            },
+            {
+              "line": 51,
+              "text": "                entries.append(json.loads(line))"
+            },
+            {
+              "line": 52,
+              "text": "    return entries"
+            },
+            {
+              "line": 53,
+              "text": ""
+            },
+            {
+              "line": 54,
+              "text": ""
+            },
+            {
+              "line": 55,
+              "text": "def load_corpus_entries() -> list[CorpusEntry]:"
+            },
+            {
+              "line": 56,
+              "text": "    \"\"\"Load corpus.jsonl and return typed entries.\"\"\""
+            },
+            {
+              "line": 57,
+              "text": "    return cast(list[CorpusEntry], load_jsonl(CORPUS_INDEX))"
+            },
+            {
+              "line": 58,
+              "text": ""
+            },
+            {
+              "line": 59,
+              "text": ""
+            },
+            {
+              "line": 60,
+              "text": "@dataclass"
+            },
+            {
+              "line": 61,
+              "text": "class TrainingExample:"
+            },
+            {
+              "line": 62,
+              "text": "    \"\"\"Represents a single training example with pre-tokenized data.\"\"\""
+            },
+            {
+              "line": 63,
+              "text": ""
+            },
+            {
+              "line": 64,
+              "text": "    problem_id: str"
+            },
+            {
+              "line": 65,
+              "text": "    segment: str"
+            },
+            {
+              "line": 66,
+              "text": "    category: Category"
+            },
+            {
+              "line": 67,
+              "text": "    masked_token_count: int"
+            },
+            {
+              "line": 68,
+              "text": "    unmasked_token_count: int"
+            },
+            {
+              "line": 69,
+              "text": ""
+            },
+            {
+              "line": 70,
+              "text": "    @classmethod"
+            },
+            {
+              "line": 71,
+              "text": "    def from_dict(cls, entry: CorpusEntry) -> TrainingExample:"
+            },
+            {
+              "line": 72,
+              "text": "        return cls("
+            },
+            {
+              "line": 73,
+              "text": "            problem_id=entry[\"problem_id\"],"
+            },
+            {
+              "line": 74,
+              "text": "            segment=entry[\"segment\"],"
+            },
+            {
+              "line": 75,
+              "text": "            category=entry[\"category\"],"
+            },
+            {
+              "line": 76,
+              "text": "            masked_token_count=entry[\"masked_token_count\"],"
+            },
+            {
+              "line": 77,
+              "text": "            unmasked_token_count=entry[\"unmasked_token_count\"],"
+            },
+            {
+              "line": 78,
+              "text": "        )"
+            },
+            {
+              "line": 79,
+              "text": ""
+            },
+            {
+              "line": 80,
+              "text": "    def get_segment_path(self) -> Path:"
+            },
+            {
+              "line": 81,
+              "text": "        \"\"\"Get path to the corpus segment file.\"\"\""
+            },
+            {
+              "line": 82,
+              "text": "        return CORPUS_DIR / self.problem_id / self.segment"
+            },
+            {
+              "line": 83,
+              "text": ""
+            },
+            {
+              "line": 84,
+              "text": "    def load_tokens(self) -> tuple[list[int], list[int]]:"
+            },
+            {
+              "line": 85,
+              "text": "        \"\"\"Load tokens and mask from segment file."
+            },
+            {
+              "line": 86,
+              "text": ""
+            },
+            {
+              "line": 87,
+              "text": "        Returns (tokens, mask) where mask[i]=1 means unmasked (train on this token)."
+            },
+            {
+              "line": 88,
+              "text": "        \"\"\""
+            },
+            {
+              "line": 89,
+              "text": "        segments = load_jsonl(self.get_segment_path())"
+            },
+            {
+              "line": 90,
+              "text": "        tokens: list[int] = []"
+            },
+            {
+              "line": 91,
+              "text": "        mask: list[int] = []"
+            },
+            {
+              "line": 92,
+              "text": "        for seg in segments:"
+            },
+            {
+              "line": 93,
+              "text": "            seg_tokens = seg[\"tokens\"]"
+            },
+            {
+              "line": 94,
+              "text": "            tokens.extend(seg_tokens)"
+            },
+            {
+              "line": 95,
+              "text": "            mask_val = 1 if seg[\"type\"] == \"unmasked\" else 0"
+            },
+            {
+              "line": 96,
+              "text": "            mask.extend([mask_val] * len(seg_tokens))"
+            },
+            {
+              "line": 97,
+              "text": "        return tokens, mask"
+            },
+            {
+              "line": 98,
+              "text": ""
+            },
+            {
+              "line": 99,
+              "text": ""
+            },
+            {
+              "line": 100,
+              "text": "def build_datum("
+            },
+            {
+              "line": 101,
+              "text": "    tokens: list[int],"
+            },
+            {
+              "line": 102,
+              "text": "    mask: list[int],"
+            },
+            {
+              "line": 103,
+              "text": "    max_length: int = 8192,"
+            },
+            {
+              "line": 104,
+              "text": ") -> tinker.Datum | None:"
+            },
+            {
+              "line": 105,
+              "text": "    \"\"\"Build a Tinker Datum from tokens and mask (0=masked, 1=unmasked).\"\"\""
+            },
+            {
+              "line": 106,
+              "text": "    if len(tokens) > max_length:"
+            },
+            {
+              "line": 107,
+              "text": "        tokens = tokens[:max_length]"
+            },
+            {
+              "line": 108,
+              "text": "        mask = mask[:max_length]"
+            },
+            {
+              "line": 109,
+              "text": ""
+            },
+            {
+              "line": 110,
+              "text": "    if not any(mask):"
+            },
+            {
+              "line": 111,
+              "text": "        return None"
+            },
+            {
+              "line": 112,
+              "text": ""
+            },
+            {
+              "line": 113,
+              "text": "    model_input = tinker.ModelInput("
+            },
+            {
+              "line": 114,
+              "text": "        chunks=[tinker.types.EncodedTextChunk(tokens=tokens[:-1])]"
+            },
+            {
+              "line": 115,
+              "text": "    )"
+            },
+            {
+              "line": 116,
+              "text": "    target_tokens = tokens[1:]"
+            },
+            {
+              "line": 117,
+              "text": "    # Weight for predicting token[i+1]: use mask[i+1] (train on unmasked targets)"
+            },
+            {
+              "line": 118,
+              "text": "    weights = [float(m) for m in mask[1:]]"
+            },
+            {
+              "line": 119,
+              "text": ""
+            },
+            {
+              "line": 120,
+              "text": "    return tinker.Datum("
+            },
+            {
+              "line": 121,
+              "text": "        model_input=model_input,"
+            },
+            {
+              "line": 122,
+              "text": "        loss_fn_inputs={"
+            },
+            {
+              "line": 123,
+              "text": "            \"weights\": tinker.TensorData("
+            },
+            {
+              "line": 124,
+              "text": "                data=weights,"
+            },
+            {
+              "line": 125,
+              "text": "                dtype=\"float32\","
+            },
+            {
+              "line": 126,
+              "text": "                shape=[len(weights)],"
+            },
+            {
+              "line": 127,
+              "text": "            ),"
+            },
+            {
+              "line": 128,
+              "text": "            \"target_tokens\": tinker.TensorData("
+            },
+            {
+              "line": 129,
+              "text": "                data=target_tokens,"
+            },
+            {
+              "line": 130,
+              "text": "                dtype=\"int64\","
+            },
+            {
+              "line": 131,
+              "text": "                shape=[len(target_tokens)],"
+            },
+            {
+              "line": 132,
+              "text": "            ),"
+            },
+            {
+              "line": 133,
+              "text": "        },"
+            },
+            {
+              "line": 134,
+              "text": "    )"
+            }
+          ]
+        }
+      ]
+    },
+    "upload_adapter.py": {
+      "sha256": "3070d9b226d922c559ac2f47dea2a196a1c5706a1269193616a53fbdff6c9189",
+      "line_count": 222,
+      "chunks": [
+        {
+          "range": [
+            1,
+            90
+          ],
+          "lines": [
+            {
+              "line": 1,
+              "text": "\"\"\"Upload LoRA adapter from Tinker checkpoint to Kaggle."
+            },
+            {
+              "line": 2,
+              "text": ""
+            },
+            {
+              "line": 3,
+              "text": "Usage:"
+            },
+            {
+              "line": 4,
+              "text": "    uv run modal run --detach upload_adapter.py"
+            },
+            {
+              "line": 5,
+              "text": ""
+            },
+            {
+              "line": 6,
+              "text": "Prerequisites:"
+            },
+            {
+              "line": 7,
+              "text": "    1. KAGGLE_API_TOKEN and TINKER_API_KEY in env.json"
+            },
+            {
+              "line": 8,
+              "text": "    2. Trained adapter checkpoint in Tinker"
+            },
+            {
+              "line": 9,
+              "text": ""
+            },
+            {
+              "line": 10,
+              "text": "The script:"
+            },
+            {
+              "line": 11,
+              "text": "    1. Downloads the adapter archive from Tinker to a Modal volume"
+            },
+            {
+              "line": 12,
+              "text": "    2. Creates the Kaggle model instance if it doesn't exist"
+            },
+            {
+              "line": 13,
+              "text": "    3. Uploads the adapter as a new version"
+            },
+            {
+              "line": 14,
+              "text": "\"\"\""
+            },
+            {
+              "line": 15,
+              "text": ""
+            },
+            {
+              "line": 16,
+              "text": "from __future__ import annotations"
+            },
+            {
+              "line": 17,
+              "text": ""
+            },
+            {
+              "line": 18,
+              "text": "import json"
+            },
+            {
+              "line": 19,
+              "text": "import os"
+            },
+            {
+              "line": 20,
+              "text": "import shutil"
+            },
+            {
+              "line": 21,
+              "text": "import subprocess"
+            },
+            {
+              "line": 22,
+              "text": "import tempfile"
+            },
+            {
+              "line": 23,
+              "text": ""
+            },
+            {
+              "line": 24,
+              "text": "import modal"
+            },
+            {
+              "line": 25,
+              "text": "from requests.exceptions import HTTPError"
+            },
+            {
+              "line": 26,
+              "text": ""
+            },
+            {
+              "line": 27,
+              "text": "kaggle_image = modal.Image.debian_slim(python_version=\"3.12\").pip_install("
+            },
+            {
+              "line": 28,
+              "text": "    \"kaggle>=1.6.0\","
+            },
+            {
+              "line": 29,
+              "text": "    \"tinker>=0.5.1\","
+            },
+            {
+              "line": 30,
+              "text": "    \"pydantic>=2.0,<3.0\","
+            },
+            {
+              "line": 31,
+              "text": ")"
+            },
+            {
+              "line": 32,
+              "text": ""
+            },
+            {
+              "line": 33,
+              "text": "adapter_vol = modal.Volume.from_name(\"adapter-weights\", create_if_missing=True)"
+            },
+            {
+              "line": 34,
+              "text": ""
+            },
+            {
+              "line": 35,
+              "text": "app = modal.App(\"upload-adapter-to-kaggle\")"
+            },
+            {
+              "line": 36,
+              "text": ""
+            },
+            {
+              "line": 37,
+              "text": "ADAPTER_DIR = \"/adapter/weights\""
+            },
+            {
+              "line": 38,
+              "text": "DEFAULT_INSTANCE = \"huikang/nemotron-adapter/Transformers/default\""
+            },
+            {
+              "line": 39,
+              "text": ""
+            },
+            {
+              "line": 40,
+              "text": ""
+            },
+            {
+              "line": 41,
+              "text": "def _print_files(directory: str) -> list[str]:"
+            },
+            {
+              "line": 42,
+              "text": "    \"\"\"Print files in a directory with sizes.\"\"\""
+            },
+            {
+              "line": 43,
+              "text": "    files = os.listdir(directory)"
+            },
+            {
+              "line": 44,
+              "text": "    for fname in sorted(files):"
+            },
+            {
+              "line": 45,
+              "text": "        size = os.path.getsize(os.path.join(directory, fname))"
+            },
+            {
+              "line": 46,
+              "text": "        print("
+            },
+            {
+              "line": 47,
+              "text": "            f\"  {fname}: {size / 1e9:.2f} GB\""
+            },
+            {
+              "line": 48,
+              "text": "            if size > 1e9"
+            },
+            {
+              "line": 49,
+              "text": "            else f\"  {fname}: {size / 1e6:.2f} MB\""
+            },
+            {
+              "line": 50,
+              "text": "        )"
+            },
+            {
+              "line": 51,
+              "text": "    return files"
+            },
+            {
+              "line": 52,
+              "text": ""
+            },
+            {
+              "line": 53,
+              "text": ""
+            },
+            {
+              "line": 54,
+              "text": "@app.function("
+            },
+            {
+              "line": 55,
+              "text": "    image=kaggle_image,"
+            },
+            {
+              "line": 56,
+              "text": "    volumes={\"/adapter\": adapter_vol},"
+            },
+            {
+              "line": 57,
+              "text": "    timeout=3 * 60 * 60,"
+            },
+            {
+              "line": 58,
+              "text": ")"
+            },
+            {
+              "line": 59,
+              "text": "def download_adapter(tinker_model: str, tinker_env: dict[str, str]):"
+            },
+            {
+              "line": 60,
+              "text": "    \"\"\"Download adapter weights from Tinker to Modal volume.\"\"\""
+            },
+            {
+              "line": 61,
+              "text": "    import re"
+            },
+            {
+              "line": 62,
+              "text": "    import tarfile"
+            },
+            {
+              "line": 63,
+              "text": "    import urllib.request"
+            },
+            {
+              "line": 64,
+              "text": ""
+            },
+            {
+              "line": 65,
+              "text": "    os.environ.update(tinker_env)"
+            },
+            {
+              "line": 66,
+              "text": "    import tinker"
+            },
+            {
+              "line": 67,
+              "text": ""
+            },
+            {
+              "line": 68,
+              "text": "    print(f\"Downloading adapter from {tinker_model}...\")"
+            },
+            {
+              "line": 69,
+              "text": "    os.makedirs(ADAPTER_DIR, exist_ok=True)"
+            },
+            {
+              "line": 70,
+              "text": ""
+            },
+            {
+              "line": 71,
+              "text": "    # Download archive from Tinker"
+            },
+            {
+              "line": 72,
+              "text": "    model_id = re.search(r\"tinker://([a-f0-9-]+)\", tinker_model)"
+            },
+            {
+              "line": 73,
+              "text": "    model_id_str = model_id.group(1) if model_id else \"unknown\""
+            },
+            {
+              "line": 74,
+              "text": "    print(f\"Model ID: {model_id_str}\")"
+            },
+            {
+              "line": 75,
+              "text": ""
+            },
+            {
+              "line": 76,
+              "text": "    sc = tinker.ServiceClient()"
+            },
+            {
+              "line": 77,
+              "text": "    url = ("
+            },
+            {
+              "line": 78,
+              "text": "        sc.create_rest_client()"
+            },
+            {
+              "line": 79,
+              "text": "        .get_checkpoint_archive_url_from_tinker_path(tinker_model)"
+            },
+            {
+              "line": 80,
+              "text": "        .result()"
+            },
+            {
+              "line": 81,
+              "text": "        .url"
+            },
+            {
+              "line": 82,
+              "text": "    )"
+            },
+            {
+              "line": 83,
+              "text": "    print(\"Archive URL obtained, downloading...\")"
+            },
+            {
+              "line": 84,
+              "text": ""
+            },
+            {
+              "line": 85,
+              "text": "    tar_path = f\"/tmp/adapter_{model_id_str}.tar\""
+            },
+            {
+              "line": 86,
+              "text": "    urllib.request.urlretrieve(url, tar_path)"
+            },
+            {
+              "line": 87,
+              "text": "    print(f\"Downloaded archive: {os.path.getsize(tar_path) / 1e6:.1f} MB\")"
+            },
+            {
+              "line": 88,
+              "text": ""
+            },
+            {
+              "line": 89,
+              "text": "    # Extract"
+            },
+            {
+              "line": 90,
+              "text": "    with tarfile.open(tar_path) as tar:"
+            }
+          ]
+        },
+        {
+          "range": [
+            90,
+            180
+          ],
+          "lines": [
+            {
+              "line": 90,
+              "text": "    with tarfile.open(tar_path) as tar:"
+            },
+            {
+              "line": 91,
+              "text": "        tar.extractall(ADAPTER_DIR)"
+            },
+            {
+              "line": 92,
+              "text": "    os.remove(tar_path)"
+            },
+            {
+              "line": 93,
+              "text": ""
+            },
+            {
+              "line": 94,
+              "text": "    # Find adapter files (may be in a subdirectory)"
+            },
+            {
+              "line": 95,
+              "text": "    config_path = None"
+            },
+            {
+              "line": 96,
+              "text": "    weights_path = None"
+            },
+            {
+              "line": 97,
+              "text": "    for root, _dirs, files in os.walk(ADAPTER_DIR):"
+            },
+            {
+              "line": 98,
+              "text": "        for f in files:"
+            },
+            {
+              "line": 99,
+              "text": "            if f == \"adapter_config.json\":"
+            },
+            {
+              "line": 100,
+              "text": "                config_path = os.path.join(root, f)"
+            },
+            {
+              "line": 101,
+              "text": "            elif f == \"adapter_model.safetensors\":"
+            },
+            {
+              "line": 102,
+              "text": "                weights_path = os.path.join(root, f)"
+            },
+            {
+              "line": 103,
+              "text": ""
+            },
+            {
+              "line": 104,
+              "text": "    if config_path and weights_path:"
+            },
+            {
+              "line": 105,
+              "text": "        # Move to top-level if in subdirectory"
+            },
+            {
+              "line": 106,
+              "text": "        for path in [config_path, weights_path]:"
+            },
+            {
+              "line": 107,
+              "text": "            dest = os.path.join(ADAPTER_DIR, os.path.basename(path))"
+            },
+            {
+              "line": 108,
+              "text": "            if path != dest:"
+            },
+            {
+              "line": 109,
+              "text": "                shutil.move(path, dest)"
+            },
+            {
+              "line": 110,
+              "text": ""
+            },
+            {
+              "line": 111,
+              "text": "    print(\"Extracted adapter files:\")"
+            },
+            {
+              "line": 112,
+              "text": "    _print_files(ADAPTER_DIR)"
+            },
+            {
+              "line": 113,
+              "text": "    adapter_vol.commit()"
+            },
+            {
+              "line": 114,
+              "text": ""
+            },
+            {
+              "line": 115,
+              "text": ""
+            },
+            {
+              "line": 116,
+              "text": "@app.function("
+            },
+            {
+              "line": 117,
+              "text": "    image=kaggle_image,"
+            },
+            {
+              "line": 118,
+              "text": "    volumes={\"/adapter\": adapter_vol},"
+            },
+            {
+              "line": 119,
+              "text": "    timeout=3 * 60 * 60,"
+            },
+            {
+              "line": 120,
+              "text": ")"
+            },
+            {
+              "line": 121,
+              "text": "def upload_to_kaggle(kaggle_api_token: str):"
+            },
+            {
+              "line": 122,
+              "text": "    \"\"\"Upload adapter from Modal volume to Kaggle.\"\"\""
+            },
+            {
+              "line": 123,
+              "text": "    kaggle_dir = os.path.expanduser(\"~/.kaggle\")"
+            },
+            {
+              "line": 124,
+              "text": "    os.makedirs(kaggle_dir, exist_ok=True)"
+            },
+            {
+              "line": 125,
+              "text": "    with open(os.path.join(kaggle_dir, \"access_token\"), \"w\") as f:"
+            },
+            {
+              "line": 126,
+              "text": "        f.write(kaggle_api_token)"
+            },
+            {
+              "line": 127,
+              "text": ""
+            },
+            {
+              "line": 128,
+              "text": "    from kaggle.api.kaggle_api_extended import KaggleApi"
+            },
+            {
+              "line": 129,
+              "text": ""
+            },
+            {
+              "line": 130,
+              "text": "    api = KaggleApi()"
+            },
+            {
+              "line": 131,
+              "text": "    api.authenticate()"
+            },
+            {
+              "line": 132,
+              "text": "    print(\"Kaggle API authenticated\")"
+            },
+            {
+              "line": 133,
+              "text": ""
+            },
+            {
+              "line": 134,
+              "text": "    if not os.path.exists(ADAPTER_DIR):"
+            },
+            {
+              "line": 135,
+              "text": "        raise ValueError(f\"Adapter directory not found: {ADAPTER_DIR}\")"
+            },
+            {
+              "line": 136,
+              "text": ""
+            },
+            {
+              "line": 137,
+              "text": "    files = _print_files(ADAPTER_DIR)"
+            },
+            {
+              "line": 138,
+              "text": "    print(f\"Found {len(files)} files\")"
+            },
+            {
+              "line": 139,
+              "text": ""
+            },
+            {
+              "line": 140,
+              "text": "    parts = DEFAULT_INSTANCE.split(\"/\")"
+            },
+            {
+              "line": 141,
+              "text": "    owner, model_slug, framework, instance_slug = ("
+            },
+            {
+              "line": 142,
+              "text": "        parts[0],"
+            },
+            {
+              "line": 143,
+              "text": "        parts[1],"
+            },
+            {
+              "line": 144,
+              "text": "        parts[2],"
+            },
+            {
+              "line": 145,
+              "text": "        parts[3],"
+            },
+            {
+              "line": 146,
+              "text": "    )"
+            },
+            {
+              "line": 147,
+              "text": ""
+            },
+            {
+              "line": 148,
+              "text": "    def instance_exists() -> bool:"
+            },
+            {
+              "line": 149,
+              "text": "        try:"
+            },
+            {
+              "line": 150,
+              "text": "            api.model_instance_get(DEFAULT_INSTANCE)"
+            },
+            {
+              "line": 151,
+              "text": "            return True"
+            },
+            {
+              "line": 152,
+              "text": "        except HTTPError:"
+            },
+            {
+              "line": 153,
+              "text": "            return False"
+            },
+            {
+              "line": 154,
+              "text": ""
+            },
+            {
+              "line": 155,
+              "text": "    if not instance_exists():"
+            },
+            {
+              "line": 156,
+              "text": "        print(f\"\\nInstance {DEFAULT_INSTANCE} does not exist, creating...\")"
+            },
+            {
+              "line": 157,
+              "text": ""
+            },
+            {
+              "line": 158,
+              "text": "        upload_dir = tempfile.mkdtemp()"
+            },
+            {
+              "line": 159,
+              "text": "        for fname in files:"
+            },
+            {
+              "line": 160,
+              "text": "            shutil.copy(os.path.join(ADAPTER_DIR, fname), upload_dir)"
+            },
+            {
+              "line": 161,
+              "text": ""
+            },
+            {
+              "line": 162,
+              "text": "        metadata = {"
+            },
+            {
+              "line": 163,
+              "text": "            \"ownerSlug\": owner,"
+            },
+            {
+              "line": 164,
+              "text": "            \"modelSlug\": model_slug,"
+            },
+            {
+              "line": 165,
+              "text": "            \"instanceSlug\": instance_slug,"
+            },
+            {
+              "line": 166,
+              "text": "            \"framework\": framework,"
+            },
+            {
+              "line": 167,
+              "text": "            \"licenseName\": \"Apache 2.0\","
+            },
+            {
+              "line": 168,
+              "text": "            \"overview\": \"Nemotron-3-Nano-30B LoRA adapter\","
+            },
+            {
+              "line": 169,
+              "text": "        }"
+            },
+            {
+              "line": 170,
+              "text": "        metadata_path = os.path.join(upload_dir, \"model-instance-metadata.json\")"
+            },
+            {
+              "line": 171,
+              "text": "        with open(metadata_path, \"w\") as f:"
+            },
+            {
+              "line": 172,
+              "text": "            json.dump(metadata, f)"
+            },
+            {
+              "line": 173,
+              "text": "        print(f\"Created metadata: {metadata}\")"
+            },
+            {
+              "line": 174,
+              "text": ""
+            },
+            {
+              "line": 175,
+              "text": "        api.model_instance_create(upload_dir, dir_mode=\"skip\")"
+            },
+            {
+              "line": 176,
+              "text": "        print(\"Instance created\")"
+            },
+            {
+              "line": 177,
+              "text": "    else:"
+            },
+            {
+              "line": 178,
+              "text": "        print(f\"\\nInstance {DEFAULT_INSTANCE} already exists\")"
+            },
+            {
+              "line": 179,
+              "text": ""
+            },
+            {
+              "line": 180,
+              "text": "    print(f\"\\nUploading new version to {DEFAULT_INSTANCE}...\")"
+            }
+          ]
+        },
+        {
+          "range": [
+            180,
+            223
+          ],
+          "lines": [
+            {
+              "line": 180,
+              "text": "    print(f\"\\nUploading new version to {DEFAULT_INSTANCE}...\")"
+            },
+            {
+              "line": 181,
+              "text": "    api.model_instance_version_create(DEFAULT_INSTANCE, ADAPTER_DIR, dir_mode=\"skip\")"
+            },
+            {
+              "line": 182,
+              "text": "    print(\"Version created\")"
+            },
+            {
+              "line": 183,
+              "text": ""
+            },
+            {
+              "line": 184,
+              "text": "    print(\"\\nUpload complete!\")"
+            },
+            {
+              "line": 185,
+              "text": "    return \"Success\""
+            },
+            {
+              "line": 186,
+              "text": ""
+            },
+            {
+              "line": 187,
+              "text": ""
+            },
+            {
+              "line": 188,
+              "text": "def _find_latest_adapter() -> str:"
+            },
+            {
+              "line": 189,
+              "text": "    \"\"\"Find the latest sampler_weights/final checkpoint via tinker CLI.\"\"\""
+            },
+            {
+              "line": 190,
+              "text": "    result = subprocess.run("
+            },
+            {
+              "line": 191,
+              "text": "        [\"uv\", \"run\", \"tinker\", \"-f\", \"json\", \"checkpoint\", \"list\"],"
+            },
+            {
+              "line": 192,
+              "text": "        capture_output=True,"
+            },
+            {
+              "line": 193,
+              "text": "        text=True,"
+            },
+            {
+              "line": 194,
+              "text": "        check=True,"
+            },
+            {
+              "line": 195,
+              "text": "    )"
+            },
+            {
+              "line": 196,
+              "text": "    data = json.loads(result.stdout)"
+            },
+            {
+              "line": 197,
+              "text": "    candidates = ["
+            },
+            {
+              "line": 198,
+              "text": "        c for c in data[\"checkpoints\"] if c[\"checkpoint_id\"] == \"sampler_weights/final\""
+            },
+            {
+              "line": 199,
+              "text": "    ]"
+            },
+            {
+              "line": 200,
+              "text": "    if not candidates:"
+            },
+            {
+              "line": 201,
+              "text": "        raise ValueError(\"No sampler_weights/final checkpoint found\")"
+            },
+            {
+              "line": 202,
+              "text": "    latest = max(candidates, key=lambda c: c[\"time\"])"
+            },
+            {
+              "line": 203,
+              "text": "    return latest[\"tinker_path\"]"
+            },
+            {
+              "line": 204,
+              "text": ""
+            },
+            {
+              "line": 205,
+              "text": ""
+            },
+            {
+              "line": 206,
+              "text": "@app.local_entrypoint()"
+            },
+            {
+              "line": 207,
+              "text": "def main():"
+            },
+            {
+              "line": 208,
+              "text": "    \"\"\"Download the latest adapter from Tinker and upload to Kaggle.\"\"\""
+            },
+            {
+              "line": 209,
+              "text": "    with open(\"env.json\") as f:"
+            },
+            {
+              "line": 210,
+              "text": "        env = json.load(f)"
+            },
+            {
+              "line": 211,
+              "text": ""
+            },
+            {
+              "line": 212,
+              "text": "    tinker_model = _find_latest_adapter()"
+            },
+            {
+              "line": 213,
+              "text": "    print(f\"Tinker model: {tinker_model}\")"
+            },
+            {
+              "line": 214,
+              "text": "    print(f\"Kaggle instance: {DEFAULT_INSTANCE}\")"
+            },
+            {
+              "line": 215,
+              "text": ""
+            },
+            {
+              "line": 216,
+              "text": "    kaggle_api_token = env[\"KAGGLE_API_TOKEN\"]"
+            },
+            {
+              "line": 217,
+              "text": "    tinker_env = {\"TINKER_API_KEY\": env[\"TINKER_API_KEY\"]}"
+            },
+            {
+              "line": 218,
+              "text": ""
+            },
+            {
+              "line": 219,
+              "text": "    download_adapter.remote(tinker_model, tinker_env)"
+            },
+            {
+              "line": 220,
+              "text": ""
+            },
+            {
+              "line": 221,
+              "text": "    result = upload_to_kaggle.remote(kaggle_api_token)"
+            },
+            {
+              "line": 222,
+              "text": "    print(result)"
+            }
+          ]
+        }
+      ]
+    },
+    "pyproject.toml": {
+      "sha256": "1967c5f9233de2b23c2e72324d1c4c55c015086030612c893da6531046c60c96",
+      "line_count": 24,
+      "chunks": [
+        {
+          "range": [
+            1,
+            25
+          ],
+          "lines": [
+            {
+              "line": 1,
+              "text": "[project]"
+            },
+            {
+              "line": 2,
+              "text": "name = \"claude-code-template\""
+            },
+            {
+              "line": 3,
+              "text": "version = \"0.1.0\""
+            },
+            {
+              "line": 4,
+              "text": "description = \"Add your description here\""
+            },
+            {
+              "line": 5,
+              "text": "readme = \"README.md\""
+            },
+            {
+              "line": 6,
+              "text": "requires-python = \">=3.11\""
+            },
+            {
+              "line": 7,
+              "text": "dependencies = ["
+            },
+            {
+              "line": 8,
+              "text": "    \"jinja2>=3.1.6\","
+            },
+            {
+              "line": 9,
+              "text": "    \"modal>=1.4.1\","
+            },
+            {
+              "line": 10,
+              "text": "    \"pydantic>=2.12.1\","
+            },
+            {
+              "line": 11,
+              "text": "    \"tinker>=0.16.1\","
+            },
+            {
+              "line": 12,
+              "text": "    \"tinker-cookbook>=0.3.0\","
+            },
+            {
+              "line": 13,
+              "text": "    \"torch>=2.11.0\","
+            },
+            {
+              "line": 14,
+              "text": "    \"transformers==4.57.6\","
+            },
+            {
+              "line": 15,
+              "text": "]"
+            },
+            {
+              "line": 16,
+              "text": ""
+            },
+            {
+              "line": 17,
+              "text": "[dependency-groups]"
+            },
+            {
+              "line": 18,
+              "text": "dev = ["
+            },
+            {
+              "line": 19,
+              "text": "    \"pytest>=8.4.2\","
+            },
+            {
+              "line": 20,
+              "text": "    \"ruff>=0.13.2\","
+            },
+            {
+              "line": 21,
+              "text": "]"
+            },
+            {
+              "line": 22,
+              "text": ""
+            },
+            {
+              "line": 23,
+              "text": "[tool.pytest.ini_options]"
+            },
+            {
+              "line": 24,
+              "text": "testpaths = [\".claude\"]"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

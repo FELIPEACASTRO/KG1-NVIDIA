@@ -73,6 +73,7 @@ ISSUE_CODES = (
     "completion_too_long",
     "family_mismatch",
     "empty_answer",
+    "parse_error",
 )
 
 _BOXED_COUNT_RE = re.compile(r"\\boxed\s*\{")
@@ -84,14 +85,17 @@ def _iter_rows(path: Path) -> Iterable[dict[str, Any]]:
     suffix = path.suffix.lower()
     if suffix in {".jsonl", ".ndjson"}:
         with path.open("r", encoding="utf-8") as f:
-            for line in f:
+            for line_number, line in enumerate(f, 1):
                 line = line.strip()
                 if not line:
                     continue
                 try:
                     yield json.loads(line)
-                except json.JSONDecodeError:
-                    continue
+                except json.JSONDecodeError as exc:
+                    yield {
+                        "__parse_error__": str(exc),
+                        "__line_number__": line_number,
+                    }
     elif suffix == ".csv":
         with path.open("r", encoding="utf-8", newline="") as f:
             reader = csv.DictReader(f)
@@ -103,27 +107,27 @@ def _iter_rows(path: Path) -> Iterable[dict[str, Any]]:
 
 def _get_prompt(row: dict[str, Any]) -> str:
     """Best-effort prompt extraction across common SFT schemas."""
-    for key in ("prompt", "question", "input", "instruction", "user"):
-        if row.get(key):
-            return str(row[key])
     messages = row.get("messages")
     if isinstance(messages, list):
         for msg in messages:
             if isinstance(msg, dict) and msg.get("role") in {"user", "human"}:
                 return str(msg.get("content", ""))
+    for key in ("prompt", "question", "input", "instruction", "user"):
+        if row.get(key):
+            return str(row[key])
     return ""
 
 
 def _get_completion(row: dict[str, Any]) -> str:
     """Best-effort completion extraction across common SFT schemas."""
-    for key in ("completion", "answer", "response", "output", "assistant", "target"):
-        if row.get(key):
-            return str(row[key])
     messages = row.get("messages")
     if isinstance(messages, list):
-        for msg in messages:
+        for msg in reversed(messages):
             if isinstance(msg, dict) and msg.get("role") in {"assistant", "gpt", "bot"}:
                 return str(msg.get("content", ""))
+    for key in ("completion", "response", "output", "assistant", "target", "answer"):
+        if row.get(key):
+            return str(row[key])
     return ""
 
 
@@ -136,6 +140,19 @@ def _get_family(row: dict[str, Any]) -> Optional[str]:
 
 def _check_row(row: dict[str, Any], max_completion_chars: int) -> dict[str, Any]:
     """Return per-row analysis including issue codes and suggested fix."""
+    if row.get("__parse_error__"):
+        return {
+            "id": f"line:{row.get('__line_number__', '')}",
+            "family": "malformed_json",
+            "detected_family": None,
+            "explicit_family": None,
+            "issues": ["parse_error"],
+            "body": "",
+            "suggested_fix": "",
+            "completion_length": 0,
+            "parse_error": row["__parse_error__"],
+        }
+
     prompt = _get_prompt(row)
     completion = _get_completion(row)
     explicit_family = _get_family(row)
@@ -177,7 +194,7 @@ def _check_row(row: dict[str, Any], max_completion_chars: int) -> dict[str, Any]
     if re.fullmatch(r"-?\d+\.0+", body.strip()):
         issues.append("trailing_dot_zero")
 
-    if _UNIT_LIKE_RE.search(body):
+    if family in {"gravity_constant", "unit_conversion"} and _UNIT_LIKE_RE.search(body):
         issues.append("unit_suffix")
 
     if family == "bit_manipulation" and not re.fullmatch(r"[01]{8}", body.strip()):

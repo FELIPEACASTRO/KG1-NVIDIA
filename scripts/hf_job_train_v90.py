@@ -498,9 +498,13 @@ def parse_weight_map(value: str) -> dict[str, float]:
         item = item.strip()
         if not item:
             continue
-        if "=" not in item:
+        if "=" in item:
+            key, raw_weight = item.split("=", 1)
+        elif ":" in item:
+            key, raw_weight = item.split(":", 1)
+            print(f"Warning: weight entry uses ':'; normalized to key=value form: {item}")
+        else:
             raise ValueError(f"weight entry must be key=value, got: {item}")
-        key, raw_weight = item.split("=", 1)
         key = key.strip()
         try:
             weight = float(raw_weight)

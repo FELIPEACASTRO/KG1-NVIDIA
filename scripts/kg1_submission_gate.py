@@ -624,18 +624,25 @@ def validate_adapter_zip(
     key_contract_report: dict[str, Any] | None = None
     tensor_contract_report: dict[str, Any] | None = None
     adapter_model_sha256: str | None = None
+    adapter_layout_mode = (adapter_layout_mode or "safe-root-only").strip().lower()
+    if adapter_layout_mode not in {"safe-root-only", "kaggle-recursive"}:
+        raise ValueError(f"Unsupported adapter_layout_mode: {adapter_layout_mode}")
     try:
         with zipfile.ZipFile(adapter_zip) as zf:
             names = [name.replace("\\", "/") for name in zf.namelist() if not name.endswith("/")]
             root_only_expected_entries = set(names) == REQUIRED_NEMOTRON_ADAPTER_ROOT_ENTRIES
 
             config_members = zip_members_by_basename(names, REQUIRED_ADAPTER_CONFIG)
+            if adapter_layout_mode == "kaggle-recursive" and len(config_members) > 1:
+                reasons.append("ambiguous_adapter_config_members")
             if config_members:
                 with zf.open(config_members[0]) as raw:
                     config = json.load(io.TextIOWrapper(raw, encoding="utf-8"))
                 adapter_config_report = validate_adapter_config(config)
 
             safetensor_members = zip_members_by_basename(names, "adapter_model.safetensors")
+            if adapter_layout_mode == "kaggle-recursive" and len(safetensor_members) > 1:
+                reasons.append("ambiguous_adapter_safetensor_members")
             if safetensor_members:
                 with zf.open(safetensor_members[0]) as raw:
                     adapter_model_sha256 = sha256_stream(raw)
@@ -686,10 +693,6 @@ def validate_adapter_zip(
         }
 
     basenames = {Path(name).name for name in names}
-    adapter_layout_mode = (adapter_layout_mode or "safe-root-only").strip().lower()
-    if adapter_layout_mode not in {"safe-root-only", "kaggle-recursive"}:
-        raise ValueError(f"Unsupported adapter_layout_mode: {adapter_layout_mode}")
-
     if adapter_layout_mode == "safe-root-only" and not root_only_expected_entries:
         reasons.append("adapter_zip_not_root_safetensors_only")
     if REQUIRED_ADAPTER_CONFIG not in basenames:

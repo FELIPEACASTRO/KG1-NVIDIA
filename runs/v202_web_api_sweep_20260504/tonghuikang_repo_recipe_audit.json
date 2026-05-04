@@ -1,0 +1,1143 @@
+{
+  "generated_at": "2026-05-04T22:52:08.677030+00:00",
+  "repo": "tonghuikang/nemotron",
+  "files": [
+    {
+      "path": "README.md",
+      "url": "https://raw.githubusercontent.com/tonghuikang/nemotron/master/README.md",
+      "bytes": 2206,
+      "sha256": "79227643a2078f40504ec0fcb399f69c76531aadfce3a6af9266ec7a4918f147",
+      "line_count": 39,
+      "hits": [
+        {
+          "pattern": "lora",
+          "lines": [
+            {
+              "line": 17,
+              "text": "- **[Metrics](https://nemotron.huikang.dev/metrics.html)** — Index of training runs (LR, backend, epochs, batch, LoRA rank, examples, tokens, steps). Click a run to see its per-step charts: loss per token (overall and by category), min logp"
+            }
+          ]
+        },
+        {
+          "pattern": "rank",
+          "lines": [
+            {
+              "line": 17,
+              "text": "- **[Metrics](https://nemotron.huikang.dev/metrics.html)** — Index of training runs (LR, backend, epochs, batch, LoRA rank, examples, tokens, steps). Click a run to see its per-step charts: loss per token (overall and by category), min logp"
+            }
+          ]
+        },
+        {
+          "pattern": "lr",
+          "lines": [
+            {
+              "line": 17,
+              "text": "- **[Metrics](https://nemotron.huikang.dev/metrics.html)** — Index of training runs (LR, backend, epochs, batch, LoRA rank, examples, tokens, steps). Click a run to see its per-step charts: loss per token (overall and by category), min logp"
+            }
+          ]
+        },
+        {
+          "pattern": "batch",
+          "lines": [
+            {
+              "line": 17,
+              "text": "- **[Metrics](https://nemotron.huikang.dev/metrics.html)** — Index of training runs (LR, backend, epochs, batch, LoRA rank, examples, tokens, steps). Click a run to see its per-step charts: loss per token (overall and by category), min logp"
+            }
+          ]
+        },
+        {
+          "pattern": "epoch",
+          "lines": [
+            {
+              "line": 16,
+              "text": "- **[Training](https://nemotron.huikang.dev/training.html)** — Per-problem table of step, loss-token count, and minimum logprob across training epochs. Select an epoch and a row to see token-level logprob changes against the base model."
+            },
+            {
+              "line": 17,
+              "text": "- **[Metrics](https://nemotron.huikang.dev/metrics.html)** — Index of training runs (LR, backend, epochs, batch, LoRA rank, examples, tokens, steps). Click a run to see its per-step charts: loss per token (overall and by category), min logp"
+            }
+          ]
+        },
+        {
+          "pattern": "modal",
+          "lines": [
+            {
+              "line": 37,
+              "text": "uv run modal run upload_adapter.py"
+            }
+          ]
+        },
+        {
+          "pattern": "mask",
+          "lines": [
+            {
+              "line": 15,
+              "text": "- **[Corpus](https://nemotron.huikang.dev/corpus.html)** — Sortable table of training corpus entries with masked, unmasked, and total token counts per row. Filter by category or problem ID; open a row to see the token-level trace with maski"
+            }
+          ]
+        },
+        {
+          "pattern": "logprob",
+          "lines": [
+            {
+              "line": 13,
+              "text": "- **[Base](https://nemotron.huikang.dev/base.html)** — Grid of competition problems colored by how the **base model** (pre-fine-tuning) does on each: solved / partially solved / unsolved across its generation runs. Click a problem for its p"
+            },
+            {
+              "line": 16,
+              "text": "- **[Training](https://nemotron.huikang.dev/training.html)** — Per-problem table of step, loss-token count, and minimum logprob across training epochs. Select an epoch and a row to see token-level logprob changes against the base model."
+            },
+            {
+              "line": 17,
+              "text": "- **[Metrics](https://nemotron.huikang.dev/metrics.html)** — Index of training runs (LR, backend, epochs, batch, LoRA rank, examples, tokens, steps). Click a run to see its per-step charts: loss per token (overall and by category), min logp"
+            }
+          ]
+        },
+        {
+          "pattern": "upload",
+          "lines": [
+            {
+              "line": 37,
+              "text": "uv run modal run upload_adapter.py"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "corpus.py",
+      "url": "https://raw.githubusercontent.com/tonghuikang/nemotron/master/corpus.py",
+      "bytes": 9711,
+      "sha256": "51435e9c0fc1bcebbcd34a81f0a1d6cc37fbbb1922743632cef0e6b5aeea7a0e",
+      "line_count": 309,
+      "hits": [
+        {
+          "pattern": "TOKEN_LIMIT",
+          "lines": [
+            {
+              "line": 43,
+              "text": "TOKEN_LIMIT = 8192"
+            },
+            {
+              "line": 197,
+              "text": "        if len(all_tokens) > TOKEN_LIMIT:"
+            },
+            {
+              "line": 198,
+              "text": "            all_tokens = all_tokens[:TOKEN_LIMIT]"
+            },
+            {
+              "line": 199,
+              "text": "            mask = mask[:TOKEN_LIMIT]"
+            },
+            {
+              "line": 250,
+              "text": "            assert len(all_tokens) <= TOKEN_LIMIT, ("
+            },
+            {
+              "line": 252,
+              "text": "                f\"{len(all_tokens)} > {TOKEN_LIMIT}\""
+            }
+          ]
+        },
+        {
+          "pattern": "8192",
+          "lines": [
+            {
+              "line": 43,
+              "text": "TOKEN_LIMIT = 8192"
+            }
+          ]
+        },
+        {
+          "pattern": "max_tokens",
+          "lines": [
+            {
+              "line": 296,
+              "text": "    max_tokens = max((e.token_count for e in entries), default=0)"
+            },
+            {
+              "line": 301,
+              "text": "    print(f\"Max seq length:  {max_tokens:,}\")"
+            }
+          ]
+        },
+        {
+          "pattern": "lr",
+          "lines": [
+            {
+              "line": 6,
+              "text": "The opening <think>\\\\n is already part of the prompt (from the chat template),"
+            }
+          ]
+        },
+        {
+          "pattern": "mask",
+          "lines": [
+            {
+              "line": 11,
+              "text": "- corpus/<problem_id>/synthetic.jsonl  - Segment files with interleaved masked/unmasked"
+            },
+            {
+              "line": 77,
+              "text": "    mask: list[int]"
+            },
+            {
+              "line": 78,
+              "text": "    masked_token_count: int"
+            },
+            {
+              "line": 79,
+              "text": "    unmasked_token_count: int"
+            },
+            {
+              "line": 92,
+              "text": "            \"masked_token_count\": self.masked_token_count,"
+            },
+            {
+              "line": 93,
+              "text": "            \"unmasked_token_count\": self.unmasked_token_count,"
+            },
+            {
+              "line": 102,
+              "text": "    mask: list[int],"
+            },
+            {
+              "line": 104,
+              "text": "    \"\"\"Build segment list from tokens and mask.\"\"\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "train_sft.py",
+      "url": "https://raw.githubusercontent.com/tonghuikang/nemotron/master/train_sft.py",
+      "bytes": 20220,
+      "sha256": "70aa2f17e2c1da54abd9e6e7e141e53306a53f54ddfe35cf38bd67b700e0a163",
+      "line_count": 551,
+      "hits": [
+        {
+          "pattern": "8192",
+          "lines": [
+            {
+              "line": 104,
+              "text": "    max_length: int = 8192"
+            }
+          ]
+        },
+        {
+          "pattern": "max_length",
+          "lines": [
+            {
+              "line": 104,
+              "text": "    max_length: int = 8192"
+            },
+            {
+              "line": 371,
+              "text": "                    if len(tokens) > cfg.max_length:"
+            },
+            {
+              "line": 372,
+              "text": "                        tokens = tokens[: cfg.max_length]"
+            },
+            {
+              "line": 373,
+              "text": "                        advantages = advantages[: cfg.max_length]"
+            }
+          ]
+        },
+        {
+          "pattern": "lora",
+          "lines": [
+            {
+              "line": 103,
+              "text": "    lora_rank: int = 32 # 32"
+            },
+            {
+              "line": 304,
+              "text": "    training_client = await service_client.create_lora_training_client_async("
+            },
+            {
+              "line": 306,
+              "text": "        rank=cfg.lora_rank,"
+            }
+          ]
+        },
+        {
+          "pattern": "rank",
+          "lines": [
+            {
+              "line": 103,
+              "text": "    lora_rank: int = 32 # 32"
+            },
+            {
+              "line": 306,
+              "text": "        rank=cfg.lora_rank,"
+            }
+          ]
+        },
+        {
+          "pattern": "learning_rate",
+          "lines": [
+            {
+              "line": 80,
+              "text": "    def to_adam_params(self, learning_rate: float) -> types.AdamParams:"
+            },
+            {
+              "line": 82,
+              "text": "            learning_rate=learning_rate,"
+            },
+            {
+              "line": 95,
+              "text": "        default_factory=lambda: StepLinearDecayLRSchedule(learning_rate=2e-4)"
+            }
+          ]
+        },
+        {
+          "pattern": "lr",
+          "lines": [
+            {
+              "line": 34,
+              "text": "from lr_schedule import LRSchedule, StepLinearDecayLRSchedule"
+            },
+            {
+              "line": 94,
+              "text": "    lr_schedule: LRSchedule = dataclasses.field("
+            },
+            {
+              "line": 95,
+              "text": "        default_factory=lambda: StepLinearDecayLRSchedule(learning_rate=2e-4)"
+            },
+            {
+              "line": 299,
+              "text": "    lr_params = dataclasses.asdict(cfg.lr_schedule)"
+            },
+            {
+              "line": 300,
+              "text": "    logger.info(f\"LR schedule: {type(cfg.lr_schedule).__name__} {lr_params}\")"
+            },
+            {
+              "line": 400,
+              "text": "                lr = cfg.lr_schedule.get_lr(step, total_steps, epoch, cfg.num_epochs)"
+            },
+            {
+              "line": 410,
+              "text": "                    cfg.adam_config.to_adam_params(lr)"
+            },
+            {
+              "line": 422,
+              "text": "                    f\"lr={lr:.2e} n={len(data)} \""
+            }
+          ]
+        },
+        {
+          "pattern": "batch",
+          "lines": [
+            {
+              "line": 40,
+              "text": "def _stratified_batches("
+            },
+            {
+              "line": 41,
+              "text": "    examples: list[TrainingExample], batch_size: int, rng: random.Random"
+            },
+            {
+              "line": 43,
+              "text": "    \"\"\"Return equal-sized batches with categories distributed evenly."
+            },
+            {
+              "line": 45,
+              "text": "    Deals entries one at a time into a shuffled batch order, iterating"
+            },
+            {
+              "line": 47,
+              "text": "    across batches."
+            },
+            {
+              "line": 50,
+              "text": "    n_batches = math.ceil(n / batch_size)"
+            },
+            {
+              "line": 59,
+              "text": "    # Each category gets its own shuffled batch order"
+            },
+            {
+              "line": 60,
+              "text": "    batches: list[list[int]] = [[] for _ in range(n_batches)]"
+            }
+          ]
+        },
+        {
+          "pattern": "epoch",
+          "lines": [
+            {
+              "line": 1,
+              "text": "\"\"\"SFT training on nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16 with per-epoch logprob saving."
+            },
+            {
+              "line": 102,
+              "text": "    num_epochs: int = 1"
+            },
+            {
+              "line": 119,
+              "text": "    def save(self, epoch_dir: Path) -> None:"
+            },
+            {
+              "line": 121,
+              "text": "        path = epoch_dir / self.problem_id / f\"{stem}.jsonl\""
+            },
+            {
+              "line": 129,
+              "text": "    epoch: int"
+            },
+            {
+              "line": 144,
+              "text": "    epoch: int,"
+            },
+            {
+              "line": 170,
+              "text": "                float_advantages, prev_logprobs, ref_logprobs, epoch"
+            },
+            {
+              "line": 196,
+              "text": "def compute_epoch_metrics("
+            }
+          ]
+        },
+        {
+          "pattern": "Tinker",
+          "lines": [
+            {
+              "line": 25,
+              "text": "import tinker"
+            },
+            {
+              "line": 26,
+              "text": "from tinker import types"
+            },
+            {
+              "line": 109,
+              "text": "    backend: Literal[\"tinker\", \"modal\"] = \"tinker\""
+            },
+            {
+              "line": 110,
+              "text": "    micro_batch_size: int | None = 16  # None for tinker (server decides), int for modal"
+            },
+            {
+              "line": 146,
+              "text": ") -> tinker.Datum:"
+            },
+            {
+              "line": 147,
+              "text": "    \"\"\"Build a Tinker Datum for training.\"\"\""
+            },
+            {
+              "line": 152,
+              "text": "    model_input = tinker.ModelInput("
+            },
+            {
+              "line": 153,
+              "text": "        chunks=[tinker.types.EncodedTextChunk(tokens=tokens[:-1])]"
+            }
+          ]
+        },
+        {
+          "pattern": "modal",
+          "lines": [
+            {
+              "line": 5,
+              "text": "(when training on modal)"
+            },
+            {
+              "line": 6,
+              "text": "uv run modal deploy trainer/server.py"
+            },
+            {
+              "line": 109,
+              "text": "    backend: Literal[\"tinker\", \"modal\"] = \"tinker\""
+            },
+            {
+              "line": 110,
+              "text": "    micro_batch_size: int | None = 16  # None for tinker (server decides), int for modal"
+            }
+          ]
+        },
+        {
+          "pattern": "mask",
+          "lines": [
+            {
+              "line": 212,
+              "text": "        _, full_mask = example.load_tokens()"
+            },
+            {
+              "line": 213,
+              "text": "        target_mask = full_mask[1:]"
+            },
+            {
+              "line": 214,
+              "text": "        target_mask = target_mask[: len(epoch_logprobs)]"
+            },
+            {
+              "line": 215,
+              "text": "        weight = example.unmasked_token_count"
+            },
+            {
+              "line": 217,
+              "text": "            epoch_logprobs, ref_logprobs, target_mask, epoch=epoch"
+            },
+            {
+              "line": 221,
+              "text": "        unmasked_lps = []"
+            },
+            {
+              "line": 222,
+              "text": "        for lp, rp, m in zip(epoch_logprobs, ref_logprobs, target_mask):"
+            },
+            {
+              "line": 224,
+              "text": "                unmasked_lps.append(lp)"
+            }
+          ]
+        },
+        {
+          "pattern": "logprob",
+          "lines": [
+            {
+              "line": 1,
+              "text": "\"\"\"SFT training on nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16 with per-epoch logprob saving."
+            },
+            {
+              "line": 114,
+              "text": "class LogprobRecord:"
+            },
+            {
+              "line": 117,
+              "text": "    logprobs: list[float]"
+            },
+            {
+              "line": 124,
+              "text": "            f.write(json.dumps({\"logprobs\": self.logprobs}) + \"\\n\")"
+            },
+            {
+              "line": 136,
+              "text": "    min_logprob: float"
+            },
+            {
+              "line": 142,
+              "text": "    ref_logprobs: list[float] | None,"
+            },
+            {
+              "line": 143,
+              "text": "    prev_logprobs: list[float] | None,"
+            },
+            {
+              "line": 149,
+              "text": "    assert ref_logprobs is None or len(ref_logprobs) == len(tokens) - 1"
+            }
+          ]
+        },
+        {
+          "pattern": "min_logprob",
+          "lines": [
+            {
+              "line": 136,
+              "text": "    min_logprob: float"
+            },
+            {
+              "line": 474,
+              "text": "                    metrics_record[f\"_min_logprob/{cat}\"] = round(cat_min_lp[cat], 4)"
+            },
+            {
+              "line": 513,
+              "text": "                        min_logprob=round(min(unmasked_lps_i), 4)"
+            }
+          ]
+        },
+        {
+          "pattern": "save",
+          "lines": [
+            {
+              "line": 119,
+              "text": "    def save(self, epoch_dir: Path) -> None:"
+            },
+            {
+              "line": 314,
+              "text": "    # Save config"
+            },
+            {
+              "line": 479,
+              "text": "                # Save per-example logprobs"
+            },
+            {
+              "line": 487,
+              "text": "                    ).save(epoch_dir)"
+            },
+            {
+              "line": 493,
+              "text": "                        # Save token IDs once"
+            },
+            {
+              "line": 524,
+              "text": "            # Compute and save per-epoch loss metrics"
+            },
+            {
+              "line": 536,
+              "text": "    # Save final checkpoint"
+            },
+            {
+              "line": 537,
+              "text": "    await training_client.save_checkpoint_async("
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "train_common.py",
+      "url": "https://raw.githubusercontent.com/tonghuikang/nemotron/master/train_common.py",
+      "bytes": 3605,
+      "sha256": "9f50f3b6a398b9d46ef85b4372887b83c8322f1674fe63be320fbcdc8b9f546f",
+      "line_count": 135,
+      "hits": [
+        {
+          "pattern": "8192",
+          "lines": [
+            {
+              "line": 103,
+              "text": "    max_length: int = 8192,"
+            }
+          ]
+        },
+        {
+          "pattern": "max_length",
+          "lines": [
+            {
+              "line": 103,
+              "text": "    max_length: int = 8192,"
+            },
+            {
+              "line": 106,
+              "text": "    if len(tokens) > max_length:"
+            },
+            {
+              "line": 107,
+              "text": "        tokens = tokens[:max_length]"
+            },
+            {
+              "line": 108,
+              "text": "        mask = mask[:max_length]"
+            }
+          ]
+        },
+        {
+          "pattern": "Tinker",
+          "lines": [
+            {
+              "line": 11,
+              "text": "import tinker"
+            },
+            {
+              "line": 104,
+              "text": ") -> tinker.Datum | None:"
+            },
+            {
+              "line": 105,
+              "text": "    \"\"\"Build a Tinker Datum from tokens and mask (0=masked, 1=unmasked).\"\"\""
+            },
+            {
+              "line": 113,
+              "text": "    model_input = tinker.ModelInput("
+            },
+            {
+              "line": 114,
+              "text": "        chunks=[tinker.types.EncodedTextChunk(tokens=tokens[:-1])]"
+            },
+            {
+              "line": 120,
+              "text": "    return tinker.Datum("
+            },
+            {
+              "line": 123,
+              "text": "            \"weights\": tinker.TensorData("
+            },
+            {
+              "line": 128,
+              "text": "            \"target_tokens\": tinker.TensorData("
+            }
+          ]
+        },
+        {
+          "pattern": "mask",
+          "lines": [
+            {
+              "line": 37,
+              "text": "    masked_token_count: int"
+            },
+            {
+              "line": 38,
+              "text": "    unmasked_token_count: int"
+            },
+            {
+              "line": 67,
+              "text": "    masked_token_count: int"
+            },
+            {
+              "line": 68,
+              "text": "    unmasked_token_count: int"
+            },
+            {
+              "line": 76,
+              "text": "            masked_token_count=entry[\"masked_token_count\"],"
+            },
+            {
+              "line": 77,
+              "text": "            unmasked_token_count=entry[\"unmasked_token_count\"],"
+            },
+            {
+              "line": 85,
+              "text": "        \"\"\"Load tokens and mask from segment file."
+            },
+            {
+              "line": 87,
+              "text": "        Returns (tokens, mask) where mask[i]=1 means unmasked (train on this token)."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "loss_config.py",
+      "url": "https://raw.githubusercontent.com/tonghuikang/nemotron/master/loss_config.py",
+      "bytes": 13478,
+      "sha256": "44a499f6624d61fe954e2a1bd616570a7c2f29fcbe5622f2a0a39f6408ecca6e",
+      "line_count": 377,
+      "hits": [
+        {
+          "pattern": "lr",
+          "lines": [
+            {
+              "line": 280,
+              "text": "            ratios = [math.exp(min(lr, 20)) for lr in log_ratios]"
+            },
+            {
+              "line": 319,
+              "text": "            ratios = [math.exp(min(lr, 20)) for lr in log_ratios]"
+            }
+          ]
+        },
+        {
+          "pattern": "epoch",
+          "lines": [
+            {
+              "line": 17,
+              "text": "    def config(self, epoch: int) -> dict[str, float]:"
+            },
+            {
+              "line": 29,
+              "text": "        all_epoch_logprobs: list[float],"
+            },
+            {
+              "line": 66,
+              "text": "        epoch: int,"
+            },
+            {
+              "line": 111,
+              "text": "        self, prev_logprob: float, ref_logprob: float, epoch: int"
+            },
+            {
+              "line": 113,
+              "text": "        if epoch == 0:"
+            },
+            {
+              "line": 122,
+              "text": "        epoch: int,"
+            },
+            {
+              "line": 134,
+              "text": "                float_advantage * self._cutoff_weight(prev_logprob, ref_logprob, epoch)"
+            },
+            {
+              "line": 144,
+              "text": "        all_epoch_logprobs: list[float],"
+            }
+          ]
+        },
+        {
+          "pattern": "Tinker",
+          "lines": [
+            {
+              "line": 6,
+              "text": "from tinker.types import LossFnType"
+            }
+          ]
+        },
+        {
+          "pattern": "mask",
+          "lines": [
+            {
+              "line": 65,
+              "text": "        mask: list[int],"
+            },
+            {
+              "line": 70,
+              "text": "        mask aligns with logprobs (target token positions): 1=unmasked, 0=masked."
+            },
+            {
+              "line": 73,
+              "text": "        assert n == len(ref_logprobs) == len(mask)"
+            },
+            {
+              "line": 77,
+              "text": "        idxs = [i for i in range(n) if mask[i] == 1]"
+            },
+            {
+              "line": 204,
+              "text": "            [\"branch_mask_fraction\"],"
+            },
+            {
+              "line": 211,
+              "text": "        mask: list[int],"
+            },
+            {
+              "line": 214,
+              "text": "        metrics = super().compute_metrics(final_logprobs, ref_logprobs, mask, epoch)"
+            },
+            {
+              "line": 218,
+              "text": "        idxs = [i for i in range(n) if mask[i] == 1]"
+            }
+          ]
+        },
+        {
+          "pattern": "logprob",
+          "lines": [
+            {
+              "line": 23,
+              "text": "            [\"logprob_decreased\", \"logprob_increased\"],"
+            },
+            {
+              "line": 29,
+              "text": "        all_epoch_logprobs: list[float],"
+            },
+            {
+              "line": 63,
+              "text": "        final_logprobs: list[float],"
+            },
+            {
+              "line": 64,
+              "text": "        ref_logprobs: list[float],"
+            },
+            {
+              "line": 70,
+              "text": "        mask aligns with logprobs (target token positions): 1=unmasked, 0=masked."
+            },
+            {
+              "line": 72,
+              "text": "        n = len(final_logprobs)"
+            },
+            {
+              "line": 73,
+              "text": "        assert n == len(ref_logprobs) == len(mask)"
+            },
+            {
+              "line": 79,
+              "text": "            decreased = sum(1 for i in idxs if final_logprobs[i] < ref_logprobs[i])"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "lr_schedule.py",
+      "url": "https://raw.githubusercontent.com/tonghuikang/nemotron/master/lr_schedule.py",
+      "bytes": 1009,
+      "sha256": "0ebf89a261a53359849e5957204e6f9d3011babcbe6117fb10461542a6b21e3f",
+      "line_count": 38,
+      "hits": [
+        {
+          "pattern": "learning_rate",
+          "lines": [
+            {
+              "line": 6,
+              "text": "    learning_rate: float = 2e-5"
+            },
+            {
+              "line": 15,
+              "text": "        return self.learning_rate"
+            },
+            {
+              "line": 20,
+              "text": "    final_learning_rate: float = 1e-5"
+            },
+            {
+              "line": 27,
+              "text": "            self.final_learning_rate"
+            },
+            {
+              "line": 28,
+              "text": "            + (self.learning_rate - self.final_learning_rate) * mult"
+            },
+            {
+              "line": 37,
+              "text": "        return self.learning_rate * (1 - step / total_steps)"
+            }
+          ]
+        },
+        {
+          "pattern": "lr",
+          "lines": [
+            {
+              "line": 5,
+              "text": "class LRSchedule:"
+            },
+            {
+              "line": 12,
+              "text": "    def get_lr("
+            },
+            {
+              "line": 19,
+              "text": "class LinearDecayLRSchedule(LRSchedule):"
+            },
+            {
+              "line": 22,
+              "text": "    def get_lr("
+            },
+            {
+              "line": 33,
+              "text": "class StepLinearDecayLRSchedule(LRSchedule):"
+            },
+            {
+              "line": 34,
+              "text": "    def get_lr("
+            }
+          ]
+        },
+        {
+          "pattern": "epoch",
+          "lines": [
+            {
+              "line": 13,
+              "text": "        self, step: int, total_steps: int, epoch: int, total_epochs: int"
+            },
+            {
+              "line": 23,
+              "text": "        self, step: int, total_steps: int, epoch: int, total_epochs: int"
+            },
+            {
+              "line": 25,
+              "text": "        mult = min(1.0, max(0.0, 1.0 - epoch / (1 + total_epochs)))"
+            },
+            {
+              "line": 35,
+              "text": "        self, step: int, total_steps: int, epoch: int, total_epochs: int"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "reasoning.py",
+      "url": "https://raw.githubusercontent.com/tonghuikang/nemotron/master/reasoning.py",
+      "bytes": 8689,
+      "sha256": "b5b950a2d376ad993700429ec5e2117e5191975699bc1395898298743d10f30e",
+      "line_count": 255,
+      "hits": [
+        {
+          "pattern": "lr",
+          "lines": [
+            {
+              "line": 197,
+              "text": "    # Update status for problems with investigation files (only if not already rule_found)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "augmentation.py",
+      "url": "https://raw.githubusercontent.com/tonghuikang/nemotron/master/augmentation.py",
+      "bytes": 1360,
+      "sha256": "1160991fbe9b46a1171f846b22ed6c3e4c367cedab417e6d5386c6de50436e2a",
+      "line_count": 55,
+      "hits": []
+    },
+    {
+      "path": "upload_adapter.py",
+      "url": "https://raw.githubusercontent.com/tonghuikang/nemotron/master/upload_adapter.py",
+      "bytes": 6635,
+      "sha256": "3070d9b226d922c559ac2f47dea2a196a1c5706a1269193616a53fbdff6c9189",
+      "line_count": 223,
+      "hits": [
+        {
+          "pattern": "lora",
+          "lines": [
+            {
+              "line": 1,
+              "text": "\"\"\"Upload LoRA adapter from Tinker checkpoint to Kaggle."
+            },
+            {
+              "line": 168,
+              "text": "            \"overview\": \"Nemotron-3-Nano-30B LoRA adapter\","
+            }
+          ]
+        },
+        {
+          "pattern": "lr",
+          "lines": [
+            {
+              "line": 86,
+              "text": "    urllib.request.urlretrieve(url, tar_path)"
+            },
+            {
+              "line": 178,
+              "text": "        print(f\"\\nInstance {DEFAULT_INSTANCE} already exists\")"
+            }
+          ]
+        },
+        {
+          "pattern": "Tinker",
+          "lines": [
+            {
+              "line": 1,
+              "text": "\"\"\"Upload LoRA adapter from Tinker checkpoint to Kaggle."
+            },
+            {
+              "line": 7,
+              "text": "    1. KAGGLE_API_TOKEN and TINKER_API_KEY in env.json"
+            },
+            {
+              "line": 8,
+              "text": "    2. Trained adapter checkpoint in Tinker"
+            },
+            {
+              "line": 11,
+              "text": "    1. Downloads the adapter archive from Tinker to a Modal volume"
+            },
+            {
+              "line": 29,
+              "text": "    \"tinker>=0.5.1\","
+            },
+            {
+              "line": 59,
+              "text": "def download_adapter(tinker_model: str, tinker_env: dict[str, str]):"
+            },
+            {
+              "line": 60,
+              "text": "    \"\"\"Download adapter weights from Tinker to Modal volume.\"\"\""
+            },
+            {
+              "line": 65,
+              "text": "    os.environ.update(tinker_env)"
+            }
+          ]
+        },
+        {
+          "pattern": "modal",
+          "lines": [
+            {
+              "line": 4,
+              "text": "    uv run modal run --detach upload_adapter.py"
+            },
+            {
+              "line": 11,
+              "text": "    1. Downloads the adapter archive from Tinker to a Modal volume"
+            },
+            {
+              "line": 24,
+              "text": "import modal"
+            },
+            {
+              "line": 27,
+              "text": "kaggle_image = modal.Image.debian_slim(python_version=\"3.12\").pip_install("
+            },
+            {
+              "line": 33,
+              "text": "adapter_vol = modal.Volume.from_name(\"adapter-weights\", create_if_missing=True)"
+            },
+            {
+              "line": 35,
+              "text": "app = modal.App(\"upload-adapter-to-kaggle\")"
+            },
+            {
+              "line": 60,
+              "text": "    \"\"\"Download adapter weights from Tinker to Modal volume.\"\"\""
+            },
+            {
+              "line": 122,
+              "text": "    \"\"\"Upload adapter from Modal volume to Kaggle.\"\"\""
+            }
+          ]
+        },
+        {
+          "pattern": "upload",
+          "lines": [
+            {
+              "line": 1,
+              "text": "\"\"\"Upload LoRA adapter from Tinker checkpoint to Kaggle."
+            },
+            {
+              "line": 4,
+              "text": "    uv run modal run --detach upload_adapter.py"
+            },
+            {
+              "line": 13,
+              "text": "    3. Uploads the adapter as a new version"
+            },
+            {
+              "line": 35,
+              "text": "app = modal.App(\"upload-adapter-to-kaggle\")"
+            },
+            {
+              "line": 121,
+              "text": "def upload_to_kaggle(kaggle_api_token: str):"
+            },
+            {
+              "line": 122,
+              "text": "    \"\"\"Upload adapter from Modal volume to Kaggle.\"\"\""
+            },
+            {
+              "line": 158,
+              "text": "        upload_dir = tempfile.mkdtemp()"
+            },
+            {
+              "line": 160,
+              "text": "            shutil.copy(os.path.join(ADAPTER_DIR, fname), upload_dir)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "pyproject.toml",
+      "url": "https://raw.githubusercontent.com/tonghuikang/nemotron/master/pyproject.toml",
+      "bytes": 456,
+      "sha256": "1967c5f9233de2b23c2e72324d1c4c55c015086030612c893da6531046c60c96",
+      "line_count": 25,
+      "hits": [
+        {
+          "pattern": "Tinker",
+          "lines": [
+            {
+              "line": 11,
+              "text": "    \"tinker>=0.16.1\","
+            },
+            {
+              "line": 12,
+              "text": "    \"tinker-cookbook>=0.3.0\","
+            }
+          ]
+        },
+        {
+          "pattern": "modal",
+          "lines": [
+            {
+              "line": 9,
+              "text": "    \"modal>=1.4.1\","
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
