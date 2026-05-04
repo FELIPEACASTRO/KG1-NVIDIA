@@ -59,6 +59,7 @@ os.environ['V201C_OUT'] = str(OUT_ROOT)
 
 FIXED_TRAIN_SCRIPT_URL = 'https://raw.githubusercontent.com/FELIPEACASTRO/KG1-NVIDIA/claude/competent-shamir/scripts/hf_job_train_v90.py'
 TRAIN_SCRIPT = pathlib.Path('/content/kg1_v199/scripts/hf_job_train_v90.py')
+TRAIN_SCRIPT.parent.mkdir(parents=True, exist_ok=True)
 script_text = TRAIN_SCRIPT.read_text(encoding='utf-8') if TRAIN_SCRIPT.exists() else ''
 if 'load_peft_weights_with_direct_fallback' not in script_text or 'BASELINE_EVAL_BEFORE_TRAIN' not in script_text:
     print('Runtime has stale hf_job_train_v90.py; downloading PEFT direct-load fixed script...')
@@ -72,6 +73,7 @@ assert 'REQUIRE_FINAL_EVAL_LTE_BASELINE' in script_text
 BASE_ENV = {
     'UPLOAD_TO_HF': '0',
     'MODEL_NAME': 'nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16',
+    'MODEL_REVISION': 'cbd3fa9f933d55ef16a84236559f4ee2a0526848',
     'DATA_FILE': '/content/kg1_v199/data/v198/v198_micro_train.strict.jsonl',
     'VAL_FILE': '/content/kg1_v199/data/v198/v198_micro_val.strict.jsonl',
     'INIT_ADAPTER_DIR': str(INIT_ADAPTER),
@@ -270,8 +272,9 @@ PACKAGE_CELL = r"""
 import json, os, pathlib, subprocess, sys, urllib.request
 
 BASE = 'https://raw.githubusercontent.com/FELIPEACASTRO/KG1-NVIDIA/claude/competent-shamir/scripts'
-for name in ['kg1_v198_posttrain_gate.py', 'kg1_v201c_posttrain_gate.py', 'nemotron_submission_preflight.py', 'kg1_submission_gate.py', 'kg1_v198_final_submit_doublecheck.py']:
+for name in ['kg1_convert_local_training_adapter_to_kaggle_zip.py', 'kg1_v198_posttrain_gate.py', 'kg1_v201c_posttrain_gate.py', 'nemotron_submission_preflight.py', 'kg1_submission_gate.py', 'kg1_v198_final_submit_doublecheck.py']:
     dst = pathlib.Path('/content/kg1_v199/scripts') / name
+    dst.parent.mkdir(parents=True, exist_ok=True)
     print('downloading', name)
     urllib.request.urlretrieve(f'{BASE}/{name}', dst)
 
@@ -413,6 +416,43 @@ def build_v201c_notebook() -> dict:
         "print('ALLOW_V194_REBUILD_FALLBACK=1; using SHA-gated reconstruction path.')",
         "print('V201C fallback rebuild requested but production training requires exact V194 zip.')",
     )
+    replace_required(
+        notebook,
+        """    if not ALLOW_V194_REBUILD_FALLBACK:
+        raise RuntimeError(missing_v194_zip_message())
+    print('V201C fallback rebuild requested but production training requires exact V194 zip.')
+    primary = ensure_aaitdads_component()
+    other = ensure_lineage_component()
+    TOOLS_ROOT.mkdir(parents=True, exist_ok=True)
+    soup_script = TOOLS_ROOT / 'kg1_update_space_soup_stream.py'
+    urllib.request.urlretrieve('https://raw.githubusercontent.com/FELIPEACASTRO/KG1-NVIDIA/claude/competent-shamir/scripts/kg1_update_space_soup_stream.py', soup_script)
+    if importlib.util.find_spec('safetensors') is None:
+        pip_install_quiet(['safetensors==0.7.0'])
+    print('Rebuilding exact V194 rank-19 adapter: 98.5% aaitdads + 1.5% lineage attention-only.')
+    subprocess.run([
+        sys.executable, str(soup_script),
+        '--primary-adapter', str(primary),
+        '--other-adapter', str(other),
+        '--output-dir', str(RANK19_BUILD),
+        '--config-source', str(primary / 'adapter_config.json'),
+        '--primary-weight', '0.985',
+        '--other-weight', '0.015',
+        '--rank', '32',
+        '--copy-safe-primary-non-lora',
+        '--include-key-regex', r'\\.mixer\\.(in_proj|out_proj|q_proj|k_proj|v_proj|o_proj)\\.lora_A\\.',
+    ], check=True)
+    manifest = json.loads((RANK19_BUILD / 'update_space_soup_manifest.json').read_text(encoding='utf-8'))
+    assert manifest.get('output_adapter_sha256') == V194_RANK19_ADAPTER_MODEL_SHA256, manifest
+    assert manifest.get('output_zip_sha256') == V194_RANK19_ZIP_SHA256, manifest
+    assert adapter_ready(INIT_ADAPTER, min_model_bytes=4_000_000_000), f'V194 rank-19 adapter was not built: {INIT_ADAPTER}'
+    assert sha256_path(cfg) == V194_RANK19_ADAPTER_CONFIG_SHA256
+    assert sha256_path(model) == V194_RANK19_ADAPTER_MODEL_SHA256
+    assert sha256_path(zip_path) == V194_RANK19_ZIP_SHA256
+    return INIT_ADAPTER
+""",
+        """    raise RuntimeError(missing_v194_zip_message())
+""",
+    )
     for old, new in [
         ("V201B", "V201C"),
         ("v201b", "v201c"),
@@ -440,8 +480,11 @@ def build_v201c_notebook() -> dict:
         "A_neutral_shuffle_3s",
         "B_equation_crypt_low_2s",
         "C_bit_cipher_low_2s",
+        "'MODEL_REVISION': 'cbd3fa9f933d55ef16a84236559f4ee2a0526848'",
         "MAX_FINAL_EVAL_REGRESSION': '0.0'",
         "'REQUIRE_FINAL_EVAL_LTE_BASELINE': '1'",
+        "TRAIN_SCRIPT.parent.mkdir(parents=True, exist_ok=True)",
+        "kg1_convert_local_training_adapter_to_kaggle_zip.py",
         "kg1_v201c_posttrain_gate.py",
         "v201c_candidates_summary.json",
         "v201c_final_selection.json",
@@ -463,6 +506,8 @@ def build_v201c_notebook() -> dict:
         "v198_v196_wrong_anti_regression=2.0",
         "SUBCATEGORY_WEIGHTS'] = 'bit_manipulation:2.5",
         "ALLOW_V194_REBUILD_FALLBACK=1",
+        "V201C fallback rebuild requested",
+        "Rebuilding exact V194 rank-19 adapter",
     ]
     for fragment in forbidden:
         if fragment in source:

@@ -9,6 +9,11 @@
         {
           "compile_ok": true,
           "exists": true,
+          "path": "scripts/kg1_convert_local_training_adapter_to_kaggle_zip.py"
+        },
+        {
+          "compile_ok": true,
+          "exists": true,
           "path": "scripts/hf_job_train_v90.py"
         },
         {
@@ -132,7 +137,8 @@
       "required_members": {
         "data/v198/v198_micro_train.strict.jsonl": true,
         "data/v198/v198_micro_val.strict.jsonl": true,
-        "scripts/hf_job_train_v90.py": true
+        "scripts/hf_job_train_v90.py": true,
+        "scripts/kg1_convert_local_training_adapter_to_kaggle_zip.py": true
       },
       "sha256": "e61908c0f75018b0d265c3668600170f6fa99a1a4d559508f489cba9cd6b7c93",
       "url": "https://raw.githubusercontent.com/FELIPEACASTRO/KG1-NVIDIA/31d439bc4a9b33b7b3c772d3526149847103a9b1/runs/v198_micro_distill_colab_pack_20260503/kg1_v198_colab_pack.zip"
@@ -140,6 +146,6 @@
   },
   "decision": "PASS",
   "errors": [],
-  "generated_at": "2026-05-04T19:51:09+00:00",
+  "generated_at": "2026-05-04T20:05:03+00:00",
   "notebook": "notebooks\\KG1_V201C_H100_A100_MULTI_CANDIDATE_MICRO_COLAB_PRO.ipynb"
 }

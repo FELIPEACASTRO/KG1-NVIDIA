@@ -1,0 +1,136 @@
+{
+  "checks": {
+    "builder_determinism": {
+      "built_bytes": 48744,
+      "notebook_bytes": 48744,
+      "ok": true
+    },
+    "local_scripts": {
+      "items": [
+        {
+          "compile_ok": true,
+          "exists": true,
+          "path": "scripts/kg1_convert_local_training_adapter_to_kaggle_zip.py"
+        },
+        {
+          "compile_ok": true,
+          "exists": true,
+          "path": "scripts/hf_job_train_v90.py"
+        },
+        {
+          "compile_ok": true,
+          "exists": true,
+          "path": "scripts/kg1_v198_posttrain_gate.py"
+        },
+        {
+          "compile_ok": true,
+          "exists": true,
+          "path": "scripts/kg1_v201c_posttrain_gate.py"
+        },
+        {
+          "compile_ok": true,
+          "exists": true,
+          "path": "scripts/nemotron_submission_preflight.py"
+        },
+        {
+          "compile_ok": true,
+          "exists": true,
+          "path": "scripts/kg1_submission_gate.py"
+        },
+        {
+          "compile_ok": true,
+          "exists": true,
+          "path": "scripts/kg1_v198_final_submit_doublecheck.py"
+        },
+        {
+          "compile_ok": true,
+          "exists": true,
+          "path": "scripts/build_v201c_multicandidate_notebook.py"
+        },
+        {
+          "compile_ok": true,
+          "exists": true,
+          "path": "scripts/kg1_v201c_multi_notebook_doublecheck.py"
+        },
+        {
+          "compile_ok": true,
+          "exists": true,
+          "path": "scripts/kg1_v201c_static_doublecheck.py"
+        }
+      ]
+    },
+    "local_submission_zip": {
+      "expected_v194": "49886191bf9ce92a48106ebfcba407bf9edbe423a4ed8c476d1f6bdfdd210fd8",
+      "path": "submission.zip",
+      "present": true,
+      "sha256": "ff23908bdfd69d0d8aabcfc5d4d89a117ffb317fd3f5ab1d11e9fad265998155"
+    },
+    "metadata": {
+      "kernelspec": {
+        "display_name": "Python 3",
+        "language": "python",
+        "name": "python3"
+      },
+      "notebook_name": "KG1_V201C_H100_A100_MULTI_CANDIDATE_MICRO_COLAB_PRO.ipynb"
+    },
+    "notebook_contract": {
+      "cell_count": 9,
+      "ensure_rank19_block_bytes": 754
+    },
+    "raw_scripts": {
+      "skipped": true
+    },
+    "training_cell": {
+      "base_env_keys": [
+        "ABORT_EVAL_LOSS_GT",
+        "BASELINE_EVAL_BEFORE_TRAIN",
+        "BATCH_SIZE",
+        "DATA_FILE",
+        "EVAL_MAX_EXAMPLES",
+        "EXPECTED_TRAIN_SHA256",
+        "EXPECTED_VAL_SHA256",
+        "GRADIENT_CHECKPOINTING",
+        "INIT_ADAPTER_DIR",
+        "INIT_ADAPTER_LOAD_MODE",
+        "MAX_FINAL_EVAL_REGRESSION",
+        "MAX_LENGTH",
+        "MAX_TRAINABLE_PARAM_RATIO",
+        "MICRO_BATCH_SIZE",
+        "MIN_TOKENIZED_TRAIN_EXAMPLES",
+        "MIN_TOKENIZED_VAL_EXAMPLES",
+        "MIN_TRAIN_EXAMPLES",
+        "MIN_VAL_EXAMPLES",
+        "MODEL_NAME",
+        "MODEL_REVISION",
+        "PEFT_MANUAL_LOAD_METHOD",
+        "REQUIRE_FINAL_EVAL_LTE_BASELINE",
+        "TRAINABLE_LORA_MODULES",
+        "UPLOAD_TO_HF",
+        "VAL_FILE"
+      ],
+      "candidate_labels": [
+        "A_neutral_shuffle_3s",
+        "B_equation_crypt_low_2s",
+        "C_bit_cipher_low_2s"
+      ]
+    },
+    "v198_pack": {
+      "skipped": true
+    }
+  },
+  "decision": "PASS",
+  "findings": [
+    {
+      "code": "local_submission_not_v194_rank19",
+      "detail": {
+        "expected_v194": "49886191bf9ce92a48106ebfcba407bf9edbe423a4ed8c476d1f6bdfdd210fd8",
+        "path": "submission.zip",
+        "present": true,
+        "sha256": "ff23908bdfd69d0d8aabcfc5d4d89a117ffb317fd3f5ab1d11e9fad265998155"
+      },
+      "severity": "warning"
+    }
+  ],
+  "generated_at": "2026-05-04T20:04:59+00:00",
+  "notebook": "notebooks\\KG1_V201C_H100_A100_MULTI_CANDIDATE_MICRO_COLAB_PRO.ipynb"
+}

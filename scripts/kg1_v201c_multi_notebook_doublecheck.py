@@ -28,16 +28,19 @@ REQUIRED_FRAGMENTS = [
     "A_neutral_shuffle_3s",
     "B_equation_crypt_low_2s",
     "C_bit_cipher_low_2s",
+    "'MODEL_REVISION': 'cbd3fa9f933d55ef16a84236559f4ee2a0526848'",
     "'MAX_FINAL_EVAL_REGRESSION': '0.0'",
     "'BASELINE_EVAL_BEFORE_TRAIN': '1'",
     "'REQUIRE_FINAL_EVAL_LTE_BASELINE': '1'",
     "'TRAINABLE_LORA_MODULES': 'in_proj,out_proj,q_proj,k_proj,v_proj,o_proj'",
+    "TRAIN_SCRIPT.parent.mkdir(parents=True, exist_ok=True)",
     "'sampling_mode': 'shuffle'",
     "'sampling_mode': 'weighted_replacement'",
     "equation_transform=1.15",
     "cryptarithm_deduce=1.25",
     "bit_manipulation=1.20",
     "cipher=1.20",
+    "kg1_convert_local_training_adapter_to_kaggle_zip.py",
     "kg1_v201c_posttrain_gate.py",
     "v201c_candidates_summary.json",
     "v201c_final_selection.json",
@@ -63,6 +66,8 @@ FORBIDDEN_FRAGMENTS = [
     "SUBCATEGORY_WEIGHTS'] = 'bit_manipulation:2.5",
     "SOURCE_WEIGHTS'] = 'v198_v196_wrong_anti_regression:2.0",
     "ALLOW_V194_REBUILD_FALLBACK=1",
+    "V201C fallback rebuild requested",
+    "Rebuilding exact V194 rank-19 adapter",
 ]
 
 

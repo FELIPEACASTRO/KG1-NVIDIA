@@ -29,9 +29,11 @@ APPROVED_PACK_SHA256 = {
 REQUIRED_PACK_MEMBERS = {
     "data/v198/v198_micro_train.strict.jsonl",
     "data/v198/v198_micro_val.strict.jsonl",
+    "scripts/kg1_convert_local_training_adapter_to_kaggle_zip.py",
     "scripts/hf_job_train_v90.py",
 }
 LOCAL_SCRIPTS = [
+    "scripts/kg1_convert_local_training_adapter_to_kaggle_zip.py",
     "scripts/hf_job_train_v90.py",
     "scripts/kg1_v198_posttrain_gate.py",
     "scripts/kg1_v201c_posttrain_gate.py",
@@ -64,8 +66,11 @@ REQUIRED_NOTEBOOK_FRAGMENTS = [
     "A_neutral_shuffle_3s",
     "B_equation_crypt_low_2s",
     "C_bit_cipher_low_2s",
+    "'MODEL_REVISION': 'cbd3fa9f933d55ef16a84236559f4ee2a0526848'",
     "'REQUIRE_FINAL_EVAL_LTE_BASELINE': '1'",
     "'MAX_FINAL_EVAL_REGRESSION': '0.0'",
+    "TRAIN_SCRIPT.parent.mkdir(parents=True, exist_ok=True)",
+    "kg1_convert_local_training_adapter_to_kaggle_zip.py",
     "kg1_v201c_posttrain_gate.py",
     "v201c_final_selection.json",
 ]
@@ -82,6 +87,8 @@ FORBIDDEN_NOTEBOOK_FRAGMENTS = [
     "v198_v196_wrong_anti_regression=2.0",
     "SUBCATEGORY_WEIGHTS'] = 'bit_manipulation:2.5",
     "ALLOW_V194_REBUILD_FALLBACK=1",
+    "V201C fallback rebuild requested",
+    "Rebuilding exact V194 rank-19 adapter",
 ]
 
 
