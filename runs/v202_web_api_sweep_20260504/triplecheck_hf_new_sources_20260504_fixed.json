@@ -1,0 +1,223 @@
+{
+  "generated_at": "2026-05-04T23:14:30.404123+00:00",
+  "refs": {
+    "GaryNENE/nemotron-nano-8b-reasoning-lora": {
+      "downloads": 0,
+      "files": [
+        {
+          "path": ".gitattributes",
+          "size": 1519,
+          "type": "file"
+        },
+        {
+          "path": "README.md",
+          "size": 4113,
+          "type": "file"
+        },
+        {
+          "path": "inference_kaggle.py",
+          "size": 4304,
+          "type": "file"
+        },
+        {
+          "path": "train_nemotron_lora.py",
+          "size": 8947,
+          "type": "file"
+        }
+      ],
+      "gated": false,
+      "info_url": "https://huggingface.co/api/models/GaryNENE/nemotron-nano-8b-reasoning-lora",
+      "kind": "model",
+      "lastModified": "2026-04-26T02:56:02.000Z",
+      "likes": 0,
+      "private": false,
+      "tree_url": "https://huggingface.co/api/models/GaryNENE/nemotron-nano-8b-reasoning-lora/tree/main?recursive=true&expand=true"
+    },
+    "andy279/nemotron-reasoning-challenge": {
+      "downloads": 43,
+      "files": [
+        {
+          "path": ".gitattributes",
+          "size": 2788,
+          "type": "file"
+        },
+        {
+          "path": "README.md",
+          "size": 4347,
+          "type": "file"
+        },
+        {
+          "path": "sft_train.jsonl",
+          "size": 405183725,
+          "type": "file"
+        },
+        {
+          "path": "sft_val.jsonl",
+          "size": 2569206,
+          "type": "file"
+        }
+      ],
+      "gated": "manual",
+      "info_url": "https://huggingface.co/api/datasets/andy279/nemotron-reasoning-challenge",
+      "kind": "dataset",
+      "lastModified": "2026-04-08T06:20:50.000Z",
+      "likes": 1,
+      "private": false,
+      "tree_url": "https://huggingface.co/api/datasets/andy279/nemotron-reasoning-challenge/tree/main?recursive=true&expand=true"
+    },
+    "andy279/nemotron-reasoning-challenge-raw-traces": {
+      "downloads": 26,
+      "files": [
+        {
+          "path": ".gitattributes",
+          "size": 2931,
+          "type": "file"
+        },
+        {
+          "path": "README.md",
+          "size": 3138,
+          "type": "file"
+        },
+        {
+          "path": "ds_traces.jsonl",
+          "size": 115608745,
+          "type": "file"
+        },
+        {
+          "path": "ds_traces_thinking.jsonl",
+          "size": 202093872,
+          "type": "file"
+        },
+        {
+          "path": "ds_traces_thinking_distilled.jsonl",
+          "size": 1758175,
+          "type": "file"
+        },
+        {
+          "path": "nemotron_super_traces_thinking.jsonl",
+          "size": 261942312,
+          "type": "file"
+        },
+        {
+          "path": "nemotron_super_traces_thinking_distilled.jsonl",
+          "size": 22556890,
+          "type": "file"
+        },
+        {
+          "path": "solver_bit_manipulation_traces_merged.jsonl",
+          "size": 221422786,
+          "type": "file"
+        },
+        {
+          "path": "solver_transformation_traces_gpt54.jsonl",
+          "size": 1296649,
+          "type": "file"
+        },
+        {
+          "path": "solver_transformation_traces_merged.jsonl",
+          "size": 188671259,
+          "type": "file"
+        }
+      ],
+      "gated": "manual",
+      "info_url": "https://huggingface.co/api/datasets/andy279/nemotron-reasoning-challenge-raw-traces",
+      "kind": "dataset",
+      "lastModified": "2026-04-08T06:26:28.000Z",
+      "likes": 0,
+      "private": false,
+      "tree_url": "https://huggingface.co/api/datasets/andy279/nemotron-reasoning-challenge-raw-traces/tree/main?recursive=true&expand=true"
+    },
+    "prometheus04/nvidia-kaggle": {
+      "downloads": 117,
+      "files": [
+        {
+          "path": "nemotron_sft_adapter",
+          "size": 0,
+          "type": "directory"
+        },
+        {
+          "path": ".gitattributes",
+          "size": 2696,
+          "type": "file"
+        },
+        {
+          "path": "HANDOFF_NOTES.md",
+          "size": 7834,
+          "type": "file"
+        },
+        {
+          "path": "nemotron_sft_adapter/README.md",
+          "size": 5260,
+          "type": "file"
+        },
+        {
+          "path": "nemotron_sft_adapter/adapter_config.json",
+          "size": 998,
+          "type": "file"
+        },
+        {
+          "path": "nemotron_sft_adapter/adapter_model.safetensors",
+          "size": 58233016,
+          "type": "file"
+        },
+        {
+          "path": "nemotron_sft_adapter/chat_template.jinja",
+          "size": 10504,
+          "type": "file"
+        },
+        {
+          "path": "nemotron_sft_adapter/tokenizer.json",
+          "size": 17077484,
+          "type": "file"
+        },
+        {
+          "path": "nemotron_sft_adapter/tokenizer_config.json",
+          "size": 395,
+          "type": "file"
+        },
+        {
+          "path": "sft_dataset_v2.jsonl",
+          "size": 73089947,
+          "type": "file"
+        },
+        {
+          "path": "submission_sft.zip",
+          "size": 40900525,
+          "type": "file"
+        },
+        {
+          "path": "synthetic_puzzles_v2.jsonl",
+          "size": 24859460,
+          "type": "file"
+        },
+        {
+          "path": "test.csv",
+          "size": 1461,
+          "type": "file"
+        },
+        {
+          "path": "train.csv",
+          "size": 3069304,
+          "type": "file"
+        },
+        {
+          "path": "train_grpo.py",
+          "size": 14152,
+          "type": "file"
+        },
+        {
+          "path": "train_sft.py",
+          "size": 11317,
+          "type": "file"
+        }
+      ],
+      "gated": false,
+      "info_url": "https://huggingface.co/api/datasets/prometheus04/nvidia-kaggle",
+      "kind": "dataset",
+      "lastModified": "2026-03-19T12:18:55.000Z",
+      "likes": 0,
+      "private": false,
+      "tree_url": "https://huggingface.co/api/datasets/prometheus04/nvidia-kaggle/tree/main?recursive=true&expand=true"
+    }
+  }
+}

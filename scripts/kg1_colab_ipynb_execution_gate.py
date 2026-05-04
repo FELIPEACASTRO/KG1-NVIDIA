@@ -379,10 +379,19 @@ def check_script_lineage_and_submission_cells(source: str, code_cells: list[str]
             add(findings, "error", "final_doublecheck_revision_not_approved", revision)
 
     raw_submit_cells: list[int] = []
+    raw_submit_patterns = [
+        re.compile(r"(^|[;&|]\s*|!\s*)kaggle\s+competitions\s+submit\b"),
+        re.compile(r"\bcompetition_submit\s*\("),
+        re.compile(r"\bcompetitions_submit\s*\("),
+        re.compile(r"\bKaggleApi\s*\("),
+        re.compile(r"\bsubprocess\.(run|call|check_call|check_output|Popen)\s*\([^\n#]*kaggle[^\n#]*submit"),
+    ]
     for idx, cell_source in enumerate(code_cells):
-        for line in cell_source.splitlines():
-            stripped = line.strip()
-            if stripped.startswith("!kaggle competitions submit"):
+        for raw_line in cell_source.splitlines():
+            stripped = raw_line.strip()
+            if not stripped or stripped.startswith("#"):
+                continue
+            if any(pattern.search(stripped) for pattern in raw_submit_patterns):
                 raw_submit_cells.append(idx)
                 break
     if raw_submit_cells:

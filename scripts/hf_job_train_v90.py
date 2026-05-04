@@ -506,10 +506,17 @@ def parse_weight_map(value: str) -> dict[str, float]:
         else:
             raise ValueError(f"weight entry must be key=value, got: {item}")
         key = key.strip()
+        raw_weight = raw_weight.strip()
+        if not key:
+            raise ValueError(f"weight entry has empty key: {item}")
+        if key in weights:
+            raise ValueError(f"duplicate weight entry for key {key!r}: {item}")
         try:
             weight = float(raw_weight)
         except ValueError as exc:
             raise ValueError(f"weight entry has non-numeric value: {item}") from exc
+        if not math.isfinite(weight):
+            raise ValueError(f"weight must be finite: {item}")
         if weight <= 0:
             raise ValueError(f"weight must be positive: {item}")
         weights[key] = weight

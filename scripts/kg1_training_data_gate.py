@@ -366,12 +366,27 @@ def main() -> int:
     if not args.jsonl.exists():
         print(f"[ERROR] JSONL not found: {args.jsonl}", file=sys.stderr)
         return 2
-    report = validate_jsonl(args.jsonl, args.train_csv, args.test_csv)
-    if args.clean_jsonl:
-        if args.test_csv is None:
-            print("[ERROR] --clean-jsonl requires --test-csv", file=sys.stderr)
-            return 2
-        report["clean_jsonl"] = write_clean_jsonl(args.jsonl, args.clean_jsonl, args.test_csv)
+    try:
+        report = validate_jsonl(args.jsonl, args.train_csv, args.test_csv)
+        if args.clean_jsonl:
+            if args.test_csv is None:
+                print("[ERROR] --clean-jsonl requires --test-csv", file=sys.stderr)
+                return 2
+            report["clean_jsonl"] = write_clean_jsonl(args.jsonl, args.clean_jsonl, args.test_csv)
+    except FileNotFoundError as exc:
+        report = {
+            "generated_at": utc_now(),
+            "path": str(args.jsonl),
+            "valid": False,
+            "rows": 0,
+            "boxed_rate": 0.0,
+            "reasons": [str(exc)],
+            "warnings": [],
+        }
+        write_json(args.output_json, report)
+        print(f"[ERROR] {exc}", file=sys.stderr)
+        print(f"report: {args.output_json}")
+        return 2
     write_json(args.output_json, report)
     print(f"valid: {report['valid']}")
     print(f"rows: {report['rows']}")

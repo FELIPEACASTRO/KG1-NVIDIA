@@ -3,15 +3,23 @@ from pathlib import Path
 
 
 NOTEBOOK_PATH = Path("notebooks/KG1_V202_H100_A100_LONG_CONTEXT_EVAL_GATE_COLAB_PRO.ipynb")
+_CELL_COUNTER = 0
+
+
+def _cell_id(prefix: str) -> str:
+    global _CELL_COUNTER
+    _CELL_COUNTER += 1
+    return f"v202-{prefix}-{_CELL_COUNTER:02d}"
 
 
 def md(source: str) -> dict:
-    return {"cell_type": "markdown", "metadata": {}, "source": source.splitlines(keepends=True)}
+    return {"cell_type": "markdown", "id": _cell_id("md"), "metadata": {}, "source": source.splitlines(keepends=True)}
 
 
 def code(source: str) -> dict:
     return {
         "cell_type": "code",
+        "id": _cell_id("code"),
         "execution_count": None,
         "metadata": {},
         "outputs": [],
@@ -119,26 +127,47 @@ print('deps installed')
     md(
         """## Kaggle Credentials
 
-Set `KAGGLE_USERNAME` and `KAGGLE_KEY` in Colab secrets, or place `kaggle.json` in `/content/drive/MyDrive/.kaggle/kaggle.json`.
+Set `KAGGLE_USERNAME` and `KAGGLE_KEY` in Colab secrets, environment variables, or place `kaggle.json` in `/content/drive/MyDrive/.kaggle/kaggle.json`.
 """
     ),
     code(
-        """import json, os, pathlib, shutil
+        """import atexit, json, os, pathlib, shutil
 
 kaggle_dir = pathlib.Path('/root/.kaggle')
 kaggle_dir.mkdir(parents=True, exist_ok=True)
 drive_kaggle = pathlib.Path('/content/drive/MyDrive/.kaggle/kaggle.json')
 target_kaggle = kaggle_dir / 'kaggle.json'
 
-if os.environ.get('KAGGLE_USERNAME') and os.environ.get('KAGGLE_KEY'):
+def cleanup_kaggle_credential():
+    try:
+        if target_kaggle.exists():
+            target_kaggle.unlink()
+            print('Removed transient Kaggle credential file:', target_kaggle)
+    except Exception as exc:
+        print('Kaggle credential cleanup warning:', repr(exc))
+
+atexit.register(cleanup_kaggle_credential)
+
+def read_colab_secret(name):
+    try:
+        from google.colab import userdata
+        value = userdata.get(name)
+        return value or ''
+    except Exception:
+        return ''
+
+kaggle_username = os.environ.get('KAGGLE_USERNAME') or read_colab_secret('KAGGLE_USERNAME')
+kaggle_key = os.environ.get('KAGGLE_KEY') or read_colab_secret('KAGGLE_KEY')
+
+if kaggle_username and kaggle_key:
     target_kaggle.write_text(json.dumps({
-        'username': os.environ['KAGGLE_USERNAME'],
-        'key': os.environ['KAGGLE_KEY'],
+        'username': kaggle_username,
+        'key': kaggle_key,
     }), encoding='utf-8')
 elif drive_kaggle.exists():
     shutil.copy2(drive_kaggle, target_kaggle)
 else:
-    raise RuntimeError('Missing Kaggle credentials. Add Colab secrets or /content/drive/MyDrive/.kaggle/kaggle.json')
+    raise RuntimeError('Missing Kaggle credentials. Add Colab secrets, env vars, or /content/drive/MyDrive/.kaggle/kaggle.json')
 
 target_kaggle.chmod(0o600)
 print('Kaggle credentials staged at', target_kaggle)
@@ -370,8 +399,7 @@ print(json.dumps(v202_plan, indent=2))
     ),
     code(
         """try:
-    target_kaggle.unlink(missing_ok=True)
-    print('Removed transient Kaggle credential file:', target_kaggle)
+    cleanup_kaggle_credential()
 except NameError:
     pass
 
