@@ -21,6 +21,7 @@ REQUIRED_FRAGMENTS = [
     "BEST_RANKING_BASELINE_RULE",
     "assert BEST_RANKING_BASELINE['rank'] == '19/2613'",
     "OUT_BASE = DRIVE_ROOT / 'output_v201c_h100_a100_multicandidate_3x'",
+    "ALLOW_V194_REBUILD_FALLBACK = False",
     "Use H100 or A100 80GB High-RAM",
     "gpu_mem_mib >= 75000",
     "V201C_OUT",
@@ -61,6 +62,7 @@ FORBIDDEN_FRAGMENTS = [
     "v198_v196_wrong_anti_regression=2.0",
     "SUBCATEGORY_WEIGHTS'] = 'bit_manipulation:2.5",
     "SOURCE_WEIGHTS'] = 'v198_v196_wrong_anti_regression:2.0",
+    "ALLOW_V194_REBUILD_FALLBACK=1",
 ]
 
 

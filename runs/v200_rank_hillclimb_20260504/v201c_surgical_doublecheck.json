@@ -1,0 +1,27 @@
+{
+  "candidate_count": 3,
+  "candidate_labels": [
+    "A_neutral_shuffle_3s",
+    "B_equation_crypt_low_2s",
+    "C_bit_cipher_low_2s"
+  ],
+  "checks": {
+    "local_train_sha_expected": true,
+    "local_val_sha_expected": true,
+    "submission_zip_present_locally": true
+  },
+  "decision": "PASS",
+  "findings": [
+    {
+      "code": "local_submission_not_v194_rank19",
+      "detail": {
+        "expected": "49886191bf9ce92a48106ebfcba407bf9edbe423a4ed8c476d1f6bdfdd210fd8",
+        "note": "ignored by notebook unless copied to one of the checked Colab/Drive paths",
+        "path": "submission.zip",
+        "sha256": "ff23908bdfd69d0d8aabcfc5d4d89a117ffb317fd3f5ab1d11e9fad265998155"
+      },
+      "severity": "warning"
+    }
+  ],
+  "notebook": "notebooks\\KG1_V201C_H100_A100_MULTI_CANDIDATE_MICRO_COLAB_PRO.ipynb"
+}

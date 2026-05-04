@@ -58,6 +58,7 @@ PYPI_PINS = {
 REQUIRED_NOTEBOOK_FRAGMENTS = [
     "KG1 V201C H100/A100 three-candidate micro-train",
     "OUT_BASE = DRIVE_ROOT / 'output_v201c_h100_a100_multicandidate_3x'",
+    "ALLOW_V194_REBUILD_FALLBACK = False",
     "V194_RANK19_ZIP_SHA256 = '49886191bf9ce92a48106ebfcba407bf9edbe423a4ed8c476d1f6bdfdd210fd8'",
     "V194_RANK19_ADAPTER_MODEL_SHA256 = '01259fef943bc16c31d8f7907be076cc987381a6a1bbe732b1b33c2d9f2ea95f'",
     "A_neutral_shuffle_3s",
@@ -80,6 +81,7 @@ FORBIDDEN_NOTEBOOK_FRAGMENTS = [
     "bit_manipulation=2.5",
     "v198_v196_wrong_anti_regression=2.0",
     "SUBCATEGORY_WEIGHTS'] = 'bit_manipulation:2.5",
+    "ALLOW_V194_REBUILD_FALLBACK=1",
 ]
 
 

@@ -393,6 +393,26 @@ def build_v201c_notebook() -> dict:
         "OUT_BASE = DRIVE_ROOT / 'output_v201b_h100_baseline_neutral_micro_3'",
         "OUT_BASE = DRIVE_ROOT / 'output_v201c_h100_a100_multicandidate_3x'",
     )
+    replace_required(
+        notebook,
+        "ALLOW_V194_REBUILD_FALLBACK = os.environ.get('ALLOW_V194_REBUILD_FALLBACK') == '1'",
+        "ALLOW_V194_REBUILD_FALLBACK = False",
+    )
+    replace_required(
+        notebook,
+        "'Automatic Tinker reconstruction is disabled by default because it is not byte-stable in this runtime. '",
+        "'Automatic Tinker reconstruction is disabled for V201C production training. '",
+    )
+    replace_required(
+        notebook,
+        "'Set ALLOW_V194_REBUILD_FALLBACK=1 only for forensic rebuilds, not production training.'",
+        "'Stage the exact V194 rank-19 submission.zip before training.'",
+    )
+    replace_required(
+        notebook,
+        "print('ALLOW_V194_REBUILD_FALLBACK=1; using SHA-gated reconstruction path.')",
+        "print('V201C fallback rebuild requested but production training requires exact V194 zip.')",
+    )
     for old, new in [
         ("V201B", "V201C"),
         ("v201b", "v201c"),
@@ -425,6 +445,7 @@ def build_v201c_notebook() -> dict:
         "kg1_v201c_posttrain_gate.py",
         "v201c_candidates_summary.json",
         "v201c_final_selection.json",
+        "ALLOW_V194_REBUILD_FALLBACK = False",
         "No Kaggle submit was performed.",
     ]
     for fragment in required:
@@ -441,6 +462,7 @@ def build_v201c_notebook() -> dict:
         "bit_manipulation=2.5",
         "v198_v196_wrong_anti_regression=2.0",
         "SUBCATEGORY_WEIGHTS'] = 'bit_manipulation:2.5",
+        "ALLOW_V194_REBUILD_FALLBACK=1",
     ]
     for fragment in forbidden:
         if fragment in source:
