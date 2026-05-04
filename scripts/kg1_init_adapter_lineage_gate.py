@@ -128,6 +128,10 @@ def gate_source(source: str, findings: list[Finding]) -> None:
         "assert BEST_RANKING_BASELINE['rank'] == '19/2613'",
         "assert BEST_RANKING_BASELINE['adapter_model_sha256'] == V194_RANK19_ADAPTER_MODEL_SHA256",
         "assert BEST_RANKING_BASELINE['zip_sha256'] == V194_RANK19_ZIP_SHA256",
+        "def adapter_ready(path, min_model_bytes=1_000_000)",
+        "adapter_ready(AAITDADS_ADAPTER, min_model_bytes=4_000_000_000)",
+        "adapter_ready(LINEAGE_ADAPTER, min_model_bytes=3_000_000_000)",
+        "adapter_ready(INIT_ADAPTER, min_model_bytes=4_000_000_000)",
         "assert sha256_path(model) == V194_RANK19_ADAPTER_MODEL_SHA256",
         "assert sha256_path(cfg) == V194_RANK19_ADAPTER_CONFIG_SHA256",
         "assert manifest.get('output_adapter_sha256') == V194_RANK19_ADAPTER_MODEL_SHA256",
@@ -149,6 +153,8 @@ def gate_source(source: str, findings: list[Finding]) -> None:
 
     extra_required = [
         "kaggle', 'kernels', 'output', 'felipe1983/tinker-adapter-to-ready-to-submit-adapter'",
+        "kagglehub==1.0.1",
+        "kaggle==2.0.2",
         "'--primary-weight', '0.985'",
         "'--other-weight', '0.015'",
         "'--include-key-regex'",
