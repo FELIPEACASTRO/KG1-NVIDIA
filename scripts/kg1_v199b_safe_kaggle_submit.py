@@ -406,10 +406,45 @@ def build_audit(args: argparse.Namespace) -> tuple[dict[str, Any], list[str]]:
             "reasons": ["adapter_model_member_missing"],
         }
 
-    posttrain = inspect_posttrain_report(posttrain_report, candidate_zip, str(zip_report.get("sha256") or ""))
-    preflight = inspect_preflight_report(preflight_report, candidate_zip)
-    doublecheck = inspect_doublecheck(doublecheck_json, candidate_zip, str(zip_report.get("sha256") or ""))
-    manifest = inspect_manifest(manifest_json)
+    if args.allow_zip_only and not manifest_json.exists():
+        manifest = {
+            "ok": True,
+            "path": str(manifest_json),
+            "skipped": "missing_allowed_by_exact_zip_sha_fallback",
+            "reasons": [],
+        }
+    else:
+        manifest = inspect_manifest(manifest_json)
+
+    if args.allow_zip_only and not posttrain_report.exists():
+        posttrain = {
+            "ok": True,
+            "path": str(posttrain_report),
+            "skipped": "missing_allowed_by_exact_zip_sha_fallback",
+            "reasons": [],
+        }
+    else:
+        posttrain = inspect_posttrain_report(posttrain_report, candidate_zip, str(zip_report.get("sha256") or ""))
+
+    if args.allow_zip_only and not preflight_report.exists():
+        preflight = {
+            "ok": True,
+            "path": str(preflight_report),
+            "skipped": "missing_allowed_by_exact_zip_sha_fallback",
+            "reasons": [],
+        }
+    else:
+        preflight = inspect_preflight_report(preflight_report, candidate_zip)
+
+    if args.allow_zip_only and not doublecheck_json.exists():
+        doublecheck = {
+            "ok": True,
+            "path": str(doublecheck_json),
+            "skipped": "missing_allowed_by_exact_zip_sha_fallback",
+            "reasons": [],
+        }
+    else:
+        doublecheck = inspect_doublecheck(doublecheck_json, candidate_zip, str(zip_report.get("sha256") or ""))
 
     sections = {
         "zip": zip_report,
@@ -435,6 +470,7 @@ def build_audit(args: argparse.Namespace) -> tuple[dict[str, Any], list[str]]:
             "submit_ready": not reasons,
             "reasons": reasons,
             "requires_kaggle_basename_stage": candidate_zip.name != REQUIRED_SUBMISSION_BASENAME,
+            "zip_only_fallback_allowed": bool(args.allow_zip_only),
         },
     }
     return audit, reasons
@@ -452,6 +488,14 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--message", required=True)
     parser.add_argument("--output-json", type=Path, required=True)
     parser.add_argument("--poll-seconds", type=int, default=45)
+    parser.add_argument(
+        "--allow-zip-only",
+        action="store_true",
+        help=(
+            "Allow exact-SHA ZIP submission when Colab/Drive reports are absent. "
+            "Existing reports are still validated if present."
+        ),
+    )
     parser.add_argument("--submit", action="store_true")
     return parser.parse_args()
 
@@ -492,8 +536,8 @@ def main() -> int:
     print("submit_stage_mode:", submit_stage["mode"])
     print("zip_sha256:", audit["sections"]["zip"]["sha256"])
     print("adapter_model_sha256:", audit["sections"]["zip"]["adapter_model_member_sha256"])
-    print("baseline_eval_loss:", audit["sections"]["manifest"]["baseline_eval_loss"])
-    print("final_eval_loss:", audit["sections"]["manifest"]["final_eval_loss"])
+    print("baseline_eval_loss:", audit["sections"]["manifest"].get("baseline_eval_loss"))
+    print("final_eval_loss:", audit["sections"]["manifest"].get("final_eval_loss"))
     print("kaggle_user:", creds["username"])
 
     if not args.submit:
