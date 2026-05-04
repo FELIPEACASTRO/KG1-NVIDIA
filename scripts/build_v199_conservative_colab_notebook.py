@@ -14,8 +14,12 @@ from pathlib import Path
 
 NOTEBOOK_PATH = Path("notebooks/KG1_V199_CONSERVATIVE_CONTINUE_COLAB_PRO.ipynb")
 H100_NOTEBOOK_PATH = Path("notebooks/KG1_V199_H100_HIGH_RAM_COLAB_PRO.ipynb")
+H100_BASELINE_GATED_NOTEBOOK_PATH = Path("notebooks/KG1_V199B_H100_BASELINE_GATED_COLAB_PRO.ipynb")
 REPORT_PATH = Path("runs/v199_conservative_continue_20260503/V199_NEXT_ACTIONS.md")
 H100_REPORT_PATH = Path("runs/v199_conservative_continue_20260503/V199_H100_NEXT_ACTIONS.md")
+H100_BASELINE_GATED_REPORT_PATH = Path(
+    "runs/v199_conservative_continue_20260503/V199B_H100_BASELINE_GATED_NEXT_ACTIONS.md"
+)
 
 PACK_URL = (
     "https://raw.githubusercontent.com/FELIPEACASTRO/KG1-NVIDIA/"
@@ -670,10 +674,67 @@ def build_h100_highram_notebook() -> dict:
     return notebook
 
 
+def build_h100_baseline_gated_notebook() -> dict:
+    notebook = build_h100_highram_notebook()
+    notebook["metadata"]["colab"]["name"] = H100_BASELINE_GATED_NOTEBOOK_PATH.name
+    notebook["cells"][0]["source"] = (
+        "# KG1 V199B H100 baseline-gated continuation\n\n"
+        "Very conservative continuation from the exact V194 rank-19 / public 0.86 adapter. "
+        "This notebook evaluates the V194 baseline before training and blocks any candidate "
+        "that regresses on the same validation split. It does not submit to Kaggle.\n"
+    ).splitlines(True)
+
+    _replace_in_all_cells(
+        notebook,
+        "OUT_BASE = DRIVE_ROOT / 'output_v199_h100_20'",
+        "OUT_BASE = DRIVE_ROOT / 'output_v199b_h100_baseline_gated_10'",
+    )
+    _replace_in_all_cells(
+        notebook,
+        "os.environ['RUN_ID'] = 'v199-h100-highram-v194-rank19-20s'",
+        "os.environ['RUN_ID'] = 'v199b-h100-baseline-gated-v194-rank19-10s'",
+    )
+    _replace_in_all_cells(
+        notebook,
+        f"FIXED_TRAIN_SCRIPT_URL = '{TRAIN_SCRIPT_URL}'",
+        f"FIXED_TRAIN_SCRIPT_URL = '{BRANCH_SCRIPT_BASE}/hf_job_train_v90.py'",
+    )
+    _replace_in_all_cells(
+        notebook,
+        "if 'load_peft_weights_with_direct_fallback' not in script_text:",
+        "if 'load_peft_weights_with_direct_fallback' not in script_text or 'BASELINE_EVAL_BEFORE_TRAIN' not in script_text:",
+    )
+    _replace_in_all_cells(
+        notebook,
+        "assert 'PEFT_MANUAL_LOAD_METHOD' in script_text\n",
+        "assert 'PEFT_MANUAL_LOAD_METHOD' in script_text\n"
+        "assert 'BASELINE_EVAL_BEFORE_TRAIN' in script_text\n"
+        "assert 'REQUIRE_FINAL_EVAL_LTE_BASELINE' in script_text\n",
+    )
+    _replace_in_all_cells(notebook, "MAX_STEPS'] = '20'", "MAX_STEPS'] = '10'")
+    _replace_in_all_cells(notebook, "SAVE_EVERY_STEPS'] = '10'", "SAVE_EVERY_STEPS'] = '5'")
+    _replace_in_all_cells(notebook, "EVAL_EVERY_STEPS'] = '10'", "EVAL_EVERY_STEPS'] = '5'")
+    _replace_in_all_cells(notebook, "LEARNING_RATE'] = '3e-6'", "LEARNING_RATE'] = '1e-6'")
+    _replace_in_all_cells(notebook, "FINAL_LEARNING_RATE'] = '8e-7'", "FINAL_LEARNING_RATE'] = '3e-7'")
+    _replace_in_all_cells(
+        notebook,
+        "os.environ['ABORT_EVAL_LOSS_GT'] = '0.98'\n",
+        "os.environ['ABORT_EVAL_LOSS_GT'] = '0'\n"
+        "os.environ['BASELINE_EVAL_BEFORE_TRAIN'] = '1'\n"
+        "os.environ['ABORT_EVAL_RELATIVE_TO_BASELINE_DELTA'] = '0.02'\n"
+        "os.environ['REQUIRE_FINAL_EVAL_LTE_BASELINE'] = '1'\n"
+        "os.environ['MAX_FINAL_EVAL_REGRESSION'] = '0.0'\n",
+    )
+    return notebook
+
+
 def main() -> int:
     NOTEBOOK_PATH.parent.mkdir(parents=True, exist_ok=True)
     NOTEBOOK_PATH.write_text(json.dumps(build_notebook(), indent=2), encoding="utf-8")
     H100_NOTEBOOK_PATH.write_text(json.dumps(build_h100_highram_notebook(), indent=2), encoding="utf-8")
+    H100_BASELINE_GATED_NOTEBOOK_PATH.write_text(
+        json.dumps(build_h100_baseline_gated_notebook(), indent=2), encoding="utf-8"
+    )
     REPORT_PATH.parent.mkdir(parents=True, exist_ok=True)
     REPORT_PATH.write_text(
         "# V199 conservative continuation\n\n"
@@ -701,10 +762,24 @@ def main() -> int:
         "- Converts and gates final/checkpoint candidates; does not submit to Kaggle automatically.\n",
         encoding="utf-8",
     )
+    H100_BASELINE_GATED_REPORT_PATH.write_text(
+        "# V199B H100 baseline-gated conservative continuation\n\n"
+        "- Notebook: `notebooks/KG1_V199B_H100_BASELINE_GATED_COLAB_PRO.ipynb`\n"
+        "- Requires H100 with at least 75 GiB GPU memory, High-RAM runtime, and at least 100 GiB free on `/content`.\n"
+        "- Starts from exact V194 rank-19 adapter SHA `01259fef...` extracted from the validated `submission.zip` SHA `49886191...`.\n"
+        "- Evaluates the exact V194 baseline before training on the same validation split.\n"
+        "- Runs 10 steps at LR `1e-6 -> 3e-7`.\n"
+        "- Evaluates every 5 steps and aborts if eval loss exceeds baseline by more than `0.02`.\n"
+        "- Blocks final promotion unless `final_eval_loss <= baseline_eval_loss`.\n"
+        "- Converts and gates candidates only after the baseline gate passes; does not submit to Kaggle automatically.\n",
+        encoding="utf-8",
+    )
     print(NOTEBOOK_PATH)
     print(H100_NOTEBOOK_PATH)
+    print(H100_BASELINE_GATED_NOTEBOOK_PATH)
     print(REPORT_PATH)
     print(H100_REPORT_PATH)
+    print(H100_BASELINE_GATED_REPORT_PATH)
     return 0
 
 

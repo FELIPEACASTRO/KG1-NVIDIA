@@ -209,6 +209,12 @@ SAMPLING_MODE = env_str("SAMPLING_MODE", "shuffle")
 SUBCATEGORY_WEIGHTS = env_str("SUBCATEGORY_WEIGHTS", "")
 SOURCE_WEIGHTS = env_str("SOURCE_WEIGHTS", "")
 ABORT_EVAL_LOSS_GT = env_float("ABORT_EVAL_LOSS_GT", 0.0)
+BASELINE_EVAL_BEFORE_TRAIN = env_bool("BASELINE_EVAL_BEFORE_TRAIN", False)
+ABORT_EVAL_RELATIVE_TO_BASELINE_DELTA = env_float(
+    "ABORT_EVAL_RELATIVE_TO_BASELINE_DELTA", -1.0
+)
+REQUIRE_FINAL_EVAL_LTE_BASELINE = env_bool("REQUIRE_FINAL_EVAL_LTE_BASELINE", False)
+MAX_FINAL_EVAL_REGRESSION = env_float("MAX_FINAL_EVAL_REGRESSION", 0.0)
 ABORT_TRAIN_RISE_POINTS = env_int("ABORT_TRAIN_RISE_POINTS", 0)
 ABORT_MAX_RESERVED_GIB = env_float("ABORT_MAX_RESERVED_GIB", 0.0)
 COMPUTE_PROVIDER = env_str("COMPUTE_PROVIDER", "hf_jobs")
@@ -1234,6 +1240,10 @@ def make_manifest(
             "vram_peak_gib": cuda_peak_reserved_gib(),
             "abort_policy": {
                 "eval_loss_gt": ABORT_EVAL_LOSS_GT,
+                "baseline_eval_before_train": BASELINE_EVAL_BEFORE_TRAIN,
+                "eval_relative_to_baseline_delta": ABORT_EVAL_RELATIVE_TO_BASELINE_DELTA,
+                "require_final_eval_lte_baseline": REQUIRE_FINAL_EVAL_LTE_BASELINE,
+                "max_final_eval_regression": MAX_FINAL_EVAL_REGRESSION,
                 "train_rise_points": ABORT_TRAIN_RISE_POINTS,
                 "max_reserved_gib": ABORT_MAX_RESERVED_GIB,
             },
@@ -1580,6 +1590,21 @@ def train() -> None:
     print("Sampling:")
     print(json.dumps(weighted_sample_report(train_data), indent=2, sort_keys=True))
 
+    baseline_eval_loss: float | None = None
+    if BASELINE_EVAL_BEFORE_TRAIN:
+        if not val_data:
+            raise ValueError("BASELINE_EVAL_BEFORE_TRAIN=1 requires validation data")
+        print(
+            f"Baseline eval before training: max_examples={EVAL_MAX_EXAMPLES}",
+            flush=True,
+        )
+        baseline_eval_loss = evaluate_loss(model, val_data, tokenizer, EVAL_MAX_EXAMPLES)
+        if not math.isfinite(baseline_eval_loss):
+            raise FloatingPointError(
+                f"Non-finite baseline eval loss before training: {baseline_eval_loss}"
+            )
+        print(f"baseline_eval_loss={baseline_eval_loss:.4f}", flush=True)
+
     model.train()
     global_step = 0
     accum_loss = 0.0
@@ -1713,6 +1738,27 @@ def train() -> None:
                     )
                     upload_checkpoint_during_training(checkpoint_dir)
                     raise RuntimeError("abort_eval_loss_exceeded")
+                if (
+                    baseline_eval_loss is not None
+                    and ABORT_EVAL_RELATIVE_TO_BASELINE_DELTA >= 0
+                    and eval_loss
+                    > baseline_eval_loss + ABORT_EVAL_RELATIVE_TO_BASELINE_DELTA
+                ):
+                    checkpoint_dir = Path(OUTPUT_DIR) / f"checkpoint-abort-step{global_step}"
+                    model.save_pretrained(str(checkpoint_dir))
+                    tokenizer.save_pretrained(str(checkpoint_dir))
+                    allowed = baseline_eval_loss + ABORT_EVAL_RELATIVE_TO_BASELINE_DELTA
+                    print(
+                        f"ABORT: eval_loss {eval_loss:.4f} exceeded baseline "
+                        f"{baseline_eval_loss:.4f} + "
+                        f"ABORT_EVAL_RELATIVE_TO_BASELINE_DELTA="
+                        f"{ABORT_EVAL_RELATIVE_TO_BASELINE_DELTA:.4f} "
+                        f"(allowed={allowed:.4f}); emergency checkpoint saved: "
+                        f"{checkpoint_dir}",
+                        flush=True,
+                    )
+                    upload_checkpoint_during_training(checkpoint_dir)
+                    raise RuntimeError("abort_eval_loss_regressed_vs_baseline")
 
             if SAVE_EVERY_STEPS > 0 and global_step > 0 and global_step % SAVE_EVERY_STEPS == 0:
                 checkpoint_dir = Path(OUTPUT_DIR) / f"checkpoint-{global_step}"
@@ -1737,10 +1783,25 @@ def train() -> None:
     model.save_pretrained(str(final_dir))
     tokenizer.save_pretrained(str(final_dir))
 
+    final_eval_loss = float("nan")
     if val_data:
-        final_eval = evaluate_loss(model, val_data, tokenizer, EVAL_MAX_EXAMPLES)
-        best_eval_loss = min(best_eval_loss, final_eval)
-        print(f"Final eval loss: {final_eval:.4f}; best eval loss: {best_eval_loss:.4f}")
+        final_eval_loss = evaluate_loss(model, val_data, tokenizer, EVAL_MAX_EXAMPLES)
+        best_eval_loss = min(best_eval_loss, final_eval_loss)
+        print(f"Final eval loss: {final_eval_loss:.4f}; best eval loss: {best_eval_loss:.4f}")
+        if (
+            baseline_eval_loss is not None
+            and REQUIRE_FINAL_EVAL_LTE_BASELINE
+            and final_eval_loss > baseline_eval_loss + MAX_FINAL_EVAL_REGRESSION
+        ):
+            allowed = baseline_eval_loss + MAX_FINAL_EVAL_REGRESSION
+            print(
+                f"ABORT: final_eval_loss {final_eval_loss:.4f} exceeded baseline "
+                f"{baseline_eval_loss:.4f} + MAX_FINAL_EVAL_REGRESSION="
+                f"{MAX_FINAL_EVAL_REGRESSION:.4f} (allowed={allowed:.4f}). "
+                "Final adapter was saved for forensics only and must not be submitted.",
+                flush=True,
+            )
+            raise RuntimeError("final_eval_regressed_vs_baseline")
 
     manifest = make_manifest(
         train_path=train_path,
@@ -1753,6 +1814,16 @@ def train() -> None:
         best_eval_loss=best_eval_loss,
         elapsed_seconds=elapsed,
     )
+    manifest["training"]["baseline_eval_loss"] = baseline_eval_loss
+    manifest["training"]["final_eval_loss"] = final_eval_loss
+    manifest["training"]["baseline_gate"] = {
+        "baseline_eval_before_train": BASELINE_EVAL_BEFORE_TRAIN,
+        "baseline_eval_loss": baseline_eval_loss,
+        "final_eval_loss": final_eval_loss,
+        "require_final_eval_lte_baseline": REQUIRE_FINAL_EVAL_LTE_BASELINE,
+        "max_final_eval_regression": MAX_FINAL_EVAL_REGRESSION,
+        "abort_eval_relative_to_baseline_delta": ABORT_EVAL_RELATIVE_TO_BASELINE_DELTA,
+    }
     manifest_path = final_dir / "v90_training_manifest.json"
     manifest_path.write_text(json.dumps(manifest, indent=2, sort_keys=True), encoding="utf-8")
     print(f"Final adapter saved: {final_dir}")
