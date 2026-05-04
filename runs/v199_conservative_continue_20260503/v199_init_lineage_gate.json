@@ -2,6 +2,7 @@
   "decision": "PASS",
   "findings": [],
   "paths": [
-    "notebooks\\KG1_V199_CONSERVATIVE_CONTINUE_COLAB_PRO.ipynb"
+    "notebooks\\KG1_V199_CONSERVATIVE_CONTINUE_COLAB_PRO.ipynb",
+    "scripts\\build_v199_conservative_colab_notebook.py"
   ]
 }

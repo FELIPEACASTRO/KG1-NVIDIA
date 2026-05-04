@@ -35,6 +35,8 @@ APPROVED_COMPONENT_SHA256 = {
     "3d16ba908a5c8808624f1abd8fdc2b29f92723f5c874761161c894d7e5759f21",
     # Historical submission.zip backing submission 51997779.
     "a3b64b154a6690a58f2338ba1c405422eadc6e1c1357f662eecb187463dfdeee",
+    # adapter_config.json from the canonical 51997779 lineage adapter.
+    "aaced193a997606aebd7eee1a7cfff5083c301c50a3e940de3611ee559374b61",
     # Canonical Huikang default/20 adapter converted by the original Tinker notebook for submission 51997779.
     "559fd024f5ffcaff0caceddeaf25c3801009d6cabf247fc8dfccbfaf2addd916",
 }
@@ -135,10 +137,17 @@ def gate_source(source: str, findings: list[Finding]) -> None:
         "assert BEST_RANKING_BASELINE['rank'] == '19/2613'",
         "assert BEST_RANKING_BASELINE['adapter_model_sha256'] == V194_RANK19_ADAPTER_MODEL_SHA256",
         "assert BEST_RANKING_BASELINE['zip_sha256'] == V194_RANK19_ZIP_SHA256",
+        "V194_RANK19_ZIP_CANDIDATES",
         "def adapter_ready(path, min_model_bytes=1_000_000)",
         "adapter_ready(AAITDADS_ADAPTER, min_model_bytes=4_000_000_000)",
         "adapter_ready(LINEAGE_ADAPTER, min_model_bytes=3_000_000_000)",
         "adapter_ready(INIT_ADAPTER, min_model_bytes=4_000_000_000)",
+        "def extract_v194_rank19_submission_zip(candidate):",
+        "candidate_sha == V194_RANK19_ZIP_SHA256",
+        "zf.extract('adapter_model.safetensors', INIT_ADAPTER)",
+        "zf.extract('adapter_config.json', INIT_ADAPTER)",
+        "shutil.copy2(candidate, zip_path)",
+        "def try_load_v194_rank19_zip():",
         "def install_kagglehub_runtime():",
         "kagglesdk==0.1.23",
         "assert hasattr(ke, 'get_web_endpoint')",
@@ -177,6 +186,7 @@ def gate_source(source: str, findings: list[Finding]) -> None:
         "'--upgrade', '--force-reinstall', 'kagglesdk==0.1.23', 'kagglehub==1.0.1'",
         "tinker-cookbook @ git+https://github.com/thinking-machines-lab/tinker-cookbook.git@nightly",
         "A._merge_fused_projections = patched_merge_fused_projections",
+        "aaced193a997606aebd7eee1a7cfff5083c301c50a3e940de3611ee559374b61",
         "559fd024f5ffcaff0caceddeaf25c3801009d6cabf247fc8dfccbfaf2addd916",
         "'--primary-weight', '0.985'",
         "'--other-weight', '0.015'",
