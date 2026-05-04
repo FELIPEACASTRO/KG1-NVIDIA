@@ -139,6 +139,10 @@ def gate_source(source: str, findings: list[Finding]) -> None:
         "adapter_ready(AAITDADS_ADAPTER, min_model_bytes=4_000_000_000)",
         "adapter_ready(LINEAGE_ADAPTER, min_model_bytes=3_000_000_000)",
         "adapter_ready(INIT_ADAPTER, min_model_bytes=4_000_000_000)",
+        "def install_kagglehub_runtime():",
+        "kagglesdk==0.1.23",
+        "assert hasattr(ke, 'get_web_endpoint')",
+        "purge_modules('kagglehub', 'kagglesdk')",
         "LINEAGE_HUIKANG_MODEL_HANDLE",
         "huikang/nemotron-adapter/transformers/default/20",
         "LINEAGE_51997779_ADAPTER_MODEL_SHA256",
@@ -170,6 +174,7 @@ def gate_source(source: str, findings: list[Finding]) -> None:
 
     extra_required = [
         "kagglehub==1.0.1",
+        "'--upgrade', '--force-reinstall', 'kagglesdk==0.1.23', 'kagglehub==1.0.1'",
         "tinker-cookbook @ git+https://github.com/thinking-machines-lab/tinker-cookbook.git@nightly",
         "A._merge_fused_projections = patched_merge_fused_projections",
         "559fd024f5ffcaff0caceddeaf25c3801009d6cabf247fc8dfccbfaf2addd916",
