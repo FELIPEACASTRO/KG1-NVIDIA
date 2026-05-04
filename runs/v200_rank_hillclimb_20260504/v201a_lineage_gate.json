@@ -1,6 +1,9 @@
 {
   "decision": "PASS",
   "checks": {
+    "v201_drive_root": true,
+    "legacy_v199_source": true,
+    "submit_source": true,
     "v194_zip_sha": true,
     "v194_model_sha": true,
     "rank19_rule": true,

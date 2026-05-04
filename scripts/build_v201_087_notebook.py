@@ -45,6 +45,41 @@ def build_v201a_notebook() -> dict:
 
     replace_required(
         notebook,
+        "V194_RANK19_BOOTSTRAP_TARGET = pathlib.Path('/content/drive/MyDrive/KG1_NVIDIA_V199/baseline_v194_rank19/submission.zip')",
+        "V194_RANK19_BOOTSTRAP_TARGET = pathlib.Path('/content/drive/MyDrive/KG1_NVIDIA_V201/baseline_v194_rank19/submission.zip')",
+    )
+    replace_required(
+        notebook,
+        "    pathlib.Path('/content/drive/MyDrive/KG1_NVIDIA_V199/submission.zip'),\n",
+        "    pathlib.Path('/content/drive/MyDrive/KG1_NVIDIA_V199/baseline_v194_rank19/submission.zip'),\n"
+        "    pathlib.Path('/content/drive/MyDrive/KG1_NVIDIA_V199/submission.zip'),\n",
+    )
+    replace_required(
+        notebook,
+        "/content/drive/MyDrive/KG1_NVIDIA_V199/baseline_v194_rank19/submission.zip, then rerun this cell.",
+        "/content/drive/MyDrive/KG1_NVIDIA_V201/baseline_v194_rank19/submission.zip, then rerun this cell.",
+    )
+    replace_required(
+        notebook,
+        "DRIVE_ROOT = pathlib.Path('/content/drive/MyDrive/KG1_NVIDIA_V199')\n",
+        "DRIVE_ROOT = pathlib.Path('/content/drive/MyDrive/KG1_NVIDIA_V201')\n"
+        "V199_DRIVE_ROOT = pathlib.Path('/content/drive/MyDrive/KG1_NVIDIA_V199')\n",
+    )
+    replace_required(
+        notebook,
+        "PACK = V198_PACK if V198_PACK.exists() else DRIVE_ROOT / 'kg1_v198_colab_pack.zip'",
+        "PACK_CANDIDATES = [V198_PACK, DRIVE_ROOT / 'kg1_v198_colab_pack.zip', V199_DRIVE_ROOT / 'kg1_v198_colab_pack.zip']\n"
+        "PACK = next((p for p in PACK_CANDIDATES if p.exists()), DRIVE_ROOT / 'kg1_v198_colab_pack.zip')",
+    )
+    replace_required(
+        notebook,
+        "    DRIVE_ROOT / 'baseline_v194_rank19' / 'submission.zip',\n",
+        "    DRIVE_ROOT / 'baseline_v194_rank19' / 'submission.zip',\n"
+        "    pathlib.Path('/content/drive/MyDrive/Submit/submission.zip'),\n"
+        "    V199_DRIVE_ROOT / 'baseline_v194_rank19' / 'submission.zip',\n",
+    )
+    replace_required(
+        notebook,
         "OUT_BASE = DRIVE_ROOT / 'output_v199_h100_20'",
         "OUT_BASE = DRIVE_ROOT / 'output_v201a_h100_solver_verified_micro_5'",
     )
@@ -133,6 +168,8 @@ def build_v201a_notebook() -> dict:
     source = all_source(notebook)
     required = [
         "V194_RANK19_ZIP_SHA256 = '49886191bf9ce92a48106ebfcba407bf9edbe423a4ed8c476d1f6bdfdd210fd8'",
+        "V194_RANK19_BOOTSTRAP_TARGET = pathlib.Path('/content/drive/MyDrive/KG1_NVIDIA_V201/baseline_v194_rank19/submission.zip')",
+        "V199_DRIVE_ROOT = pathlib.Path('/content/drive/MyDrive/KG1_NVIDIA_V199')",
         "BEST_RANKING_BASELINE_RULE",
         "assert BEST_RANKING_BASELINE['rank'] == '19/2613'",
         "BASELINE_EVAL_BEFORE_TRAIN'] = '1'",
@@ -175,6 +212,7 @@ def main() -> int:
         "# V201A H100 solver-verified weak-category micro-train\n\n"
         "- Notebook: `notebooks/KG1_V201A_H100_SOLVER_VERIFIED_MICRO_COLAB_PRO.ipynb`.\n"
         "- Production baseline remains V194/ref `52275052`, public score `0.86`, rank `19/2613`.\n"
+        "- Uses Drive root `/content/drive/MyDrive/KG1_NVIDIA_V201` for V201A outputs, while still accepting the V194 zip from `/content/drive/MyDrive/Submit` and legacy `/content/drive/MyDrive/KG1_NVIDIA_V199` paths.\n"
         "- Starts only from exact V194 `submission.zip` SHA `49886191bf9ce92a48106ebfcba407bf9edbe423a4ed8c476d1f6bdfdd210fd8`.\n"
         "- Runs 5 steps at LR `3e-7 -> 1e-7`.\n"
         "- Uses weighted weak-category sampling: bit manipulation, cipher, cryptarithm, and equation numeric subcategories.\n"

@@ -31,6 +31,7 @@ It did find a consistent strategy:
 Purpose: push weak categories without disturbing the 0.86 baseline.
 
 - Notebook: `notebooks/KG1_V201A_H100_SOLVER_VERIFIED_MICRO_COLAB_PRO.ipynb`.
+- Output root: `/content/drive/MyDrive/KG1_NVIDIA_V201/output_v201a_h100_solver_verified_micro_5`.
 - Init: exact V194 rank-19 zip only.
 - Steps: `5`.
 - LR: `3e-7 -> 1e-7`.

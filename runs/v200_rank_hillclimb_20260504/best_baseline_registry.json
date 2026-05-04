@@ -41,6 +41,7 @@
       "status": "not_trained_yet",
       "public_score": null,
       "notebook": "notebooks/KG1_V201A_H100_SOLVER_VERIFIED_MICRO_COLAB_PRO.ipynb",
+      "output_root": "/content/drive/MyDrive/KG1_NVIDIA_V201/output_v201a_h100_solver_verified_micro_5",
       "starting_baseline": "V194",
       "starting_baseline_zip_sha256": "49886191bf9ce92a48106ebfcba407bf9edbe423a4ed8c476d1f6bdfdd210fd8",
       "planned_gate": "exact V194 lineage; weighted weak-category 5-step micro-train; final_eval_loss <= baseline_eval_loss; no automatic Kaggle submit",
