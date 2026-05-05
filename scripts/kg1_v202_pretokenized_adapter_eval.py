@@ -22,6 +22,10 @@ from typing import Any
 
 import torch
 
+for stream in (sys.stdout, sys.stderr):
+    if hasattr(stream, "reconfigure"):
+        stream.reconfigure(encoding="utf-8", errors="replace")
+
 
 DEFAULT_SPLITS = [
     {
@@ -48,6 +52,10 @@ def sha256_file(path: Path) -> str:
 def write_json(path: Path, payload: Any) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
+
+def log(message: str) -> None:
+    print(message, flush=True)
 
 
 def parse_split_specs(value: str) -> list[dict[str, Any]]:
@@ -124,6 +132,61 @@ def count_categories(rows: list[dict[str, Any]]) -> dict[str, int]:
     return dict(sorted(counts.items()))
 
 
+@torch.no_grad()
+def eval_sample_once(
+    hf: Any,
+    model: torch.nn.Module,
+    tokenizer: Any,
+    sample: list[dict[str, Any]],
+    *,
+    label: str,
+    progress_every: int = 25,
+) -> tuple[float, dict[str, Any]]:
+    """Evaluate each item once, then aggregate overall and per-category losses."""
+
+    if not sample:
+        return float("nan"), {}
+
+    losses: list[float] = []
+    by_category: dict[str, dict[str, Any]] = defaultdict(
+        lambda: {"losses": [], "examples": 0, "tokens": 0, "unmasked_tokens": 0}
+    )
+
+    model.eval()
+    total = len(sample)
+    for index, item in enumerate(sample, start=1):
+        input_ids, attention_mask, loss_mask = hf.tensorize_batch([item], tokenizer.pad_token_id)
+        outputs = model(input_ids=input_ids, attention_mask=attention_mask, use_cache=False)
+        loss = hf.masked_cross_entropy_loss(outputs.logits, input_ids, loss_mask)
+        loss_value = float(loss.item())
+        losses.append(loss_value)
+
+        category = str(item.get("category", "unknown"))
+        category_row = by_category[category]
+        category_row["losses"].append(loss_value)
+        category_row["examples"] += 1
+        category_row["tokens"] += len(item["input_ids"])
+        category_row["unmasked_tokens"] += int(sum(item["loss_mask"]))
+
+        del input_ids, attention_mask, loss_mask, outputs, loss
+        if torch.cuda.is_available():
+            torch.cuda.empty_cache()
+        if index == 1 or index == total or index % progress_every == 0:
+            recent = sum(losses[-min(len(losses), progress_every):]) / min(len(losses), progress_every)
+            log(f"{label}: evaluated {index}/{total} examples; recent_loss={recent:.6f}")
+
+    per_category = {}
+    for category, row in sorted(by_category.items()):
+        category_losses = row.pop("losses")
+        per_category[category] = {
+            "loss": sum(category_losses) / max(1, len(category_losses)),
+            "examples": row["examples"],
+            "tokens": int(row["tokens"]),
+            "unmasked_tokens": int(row["unmasked_tokens"]),
+        }
+    return sum(losses) / max(1, len(losses)), per_category
+
+
 def eval_split(
     hf: Any,
     model: torch.nn.Module,
@@ -139,20 +202,17 @@ def eval_split(
     rows = hf.load_tong_pretokenized_archive(archive_zip)
     train_data, val_data = hf.split_pretokenized_train_val(rows)
     sample = hf.select_eval_sample(val_data, min(int(split["eval_max_examples"]), len(val_data)))
-    overall_loss = hf.evaluate_loss(model, sample, tokenizer, len(sample))
-
-    by_category: dict[str, list[dict[str, Any]]] = defaultdict(list)
-    for item in sample:
-        by_category[str(item.get("category", "unknown"))].append(item)
-
-    per_category = {}
-    for category, items in sorted(by_category.items()):
-        per_category[category] = {
-            "loss": hf.evaluate_loss(model, items, tokenizer, len(items)),
-            "examples": len(items),
-            "tokens": int(sum(len(item["input_ids"]) for item in items)),
-            "unmasked_tokens": int(sum(sum(item["loss_mask"]) for item in items)),
-        }
+    log(
+        f"Split {split['name']}: loaded_rows={len(rows)} train={len(train_data)} "
+        f"val={len(val_data)} sample={len(sample)}"
+    )
+    overall_loss, per_category = eval_sample_once(
+        hf,
+        model,
+        tokenizer,
+        sample,
+        label=f"{split['name']}",
+    )
 
     result = {
         "name": split["name"],
@@ -167,7 +227,7 @@ def eval_split(
         "overall_loss": overall_loss,
         "per_category": per_category,
     }
-    del rows, train_data, val_data, sample, by_category
+    del rows, train_data, val_data, sample
     gc.collect()
     if torch.cuda.is_available():
         torch.cuda.empty_cache()
@@ -210,7 +270,7 @@ def main() -> int:
     set_eval_env(args)
     hf = import_training_module(args.training_script)
 
-    print(f"Loading tokenizer for {hf.MODEL_NAME}...")
+    log(f"Loading tokenizer for {hf.MODEL_NAME}...")
     tokenizer = hf.AutoTokenizer.from_pretrained(
         hf.MODEL_NAME,
         revision=hf.MODEL_REVISION or None,
@@ -221,7 +281,7 @@ def main() -> int:
         tokenizer.pad_token = tokenizer.eos_token
 
     model_device_map = hf.parse_model_device_map(hf.MODEL_DEVICE_MAP)
-    print(f"Loading model {hf.MODEL_NAME} in BF16 with device_map={model_device_map}...")
+    log(f"Loading model {hf.MODEL_NAME} in BF16 with device_map={model_device_map}...")
     model = hf.AutoModelForCausalLM.from_pretrained(
         hf.MODEL_NAME,
         revision=hf.MODEL_REVISION or None,
@@ -237,7 +297,7 @@ def main() -> int:
     if post_load_device:
         model.to(post_load_device)
 
-    print(f"Loading adapter for eval: {args.adapter_dir}")
+    log(f"Loading adapter for eval: {args.adapter_dir}")
     model = hf.load_trainable_adapter_or_create(model)
     if hasattr(model.config, "use_cache"):
         model.config.use_cache = False
@@ -245,8 +305,8 @@ def main() -> int:
 
     split_results = []
     for split in split_specs:
-        print("\n" + "=" * 72)
-        print("Evaluating split:", split["name"])
+        log("\n" + "=" * 72)
+        log(f"Evaluating split: {split['name']}")
         split_results.append(eval_split(hf, model, tokenizer, args.archive_zip, split))
 
     report = {
@@ -268,8 +328,8 @@ def main() -> int:
         ),
     }
     write_json(args.output_json, report)
-    print("Eval report:", args.output_json)
-    print(json.dumps({
+    log(f"Eval report: {args.output_json}")
+    log(json.dumps({
         "label": report["label"],
         "splits": [
             {
