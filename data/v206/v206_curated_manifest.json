@@ -1,0 +1,196 @@
+{
+  "schema_version": "v206_curated_dataset_v1",
+  "generated_at_utc": "2026-05-05T21:42:34+00:00",
+  "train_path": "data\\v206\\v206_curated_train.jsonl",
+  "train_rows": 6548,
+  "train_sha256": "65a810d54da73fd3859d7ee9a9edc0c35a3f89231c0033ea74f26e55f254f9f0",
+  "family_counts": {
+    "bit_manipulation": 2050,
+    "equation_transform": 2109,
+    "gravity_constant": 584,
+    "numeral_system": 594,
+    "text_encryption": 633,
+    "unit_conversion": 578
+  },
+  "source_counts": {
+    "v206::v100_programmatic_repair_train": 1809,
+    "v206::v90_gold_safe_train": 720,
+    "v206::v92_delta_train": 968,
+    "v206::v94_equation_crypt_train": 765,
+    "v206::v95_bit_rehearsal_train": 2286
+  },
+  "builder_args": {
+    "seed": 206,
+    "rehearsal_per_family": 120,
+    "include_cautious_v195": false
+  },
+  "stats": {
+    "sources": {
+      "v100_programmatic_repair_train": {
+        "path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\.claude\\worktrees\\competent-shamir\\data\\v100\\v100_programmatic_repair_train.jsonl",
+        "exists": true,
+        "tier": "core_candidate",
+        "scanned": 2066,
+        "accepted_before_dedupe": 2059,
+        "validation_overlap_drops": 250,
+        "duplicate_drops": 0,
+        "kept": 1809,
+        "kept_family_counts": {
+          "bit_manipulation": 516,
+          "equation_transform": 735,
+          "gravity_constant": 143,
+          "numeral_system": 150,
+          "text_encryption": 123,
+          "unit_conversion": 142
+        },
+        "sha256": "086f67a86fa81a15b6f5669d15032cd8f15278c86e57bfccd757fffe7f03641a"
+      },
+      "v95_bit_rehearsal_train": {
+        "path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\.claude\\worktrees\\competent-shamir\\data\\v95\\v95_bit_rehearsal_train.jsonl",
+        "exists": true,
+        "tier": "core_candidate",
+        "scanned": 2962,
+        "accepted_before_dedupe": 2941,
+        "validation_overlap_drops": 470,
+        "duplicate_drops": 185,
+        "kept": 2286,
+        "kept_family_counts": {
+          "bit_manipulation": 1143,
+          "equation_transform": 509,
+          "gravity_constant": 158,
+          "numeral_system": 168,
+          "text_encryption": 143,
+          "unit_conversion": 165
+        },
+        "sha256": "336a50bae4d44ff51f8f585624a0235c767ec9f65d2a4fc12341e851bd0e2fd6"
+      },
+      "v94_equation_crypt_train": {
+        "path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\.claude\\worktrees\\competent-shamir\\data\\v94\\v94_equation_crypt_train.jsonl",
+        "exists": true,
+        "tier": "core_candidate",
+        "scanned": 1647,
+        "accepted_before_dedupe": 1611,
+        "validation_overlap_drops": 340,
+        "duplicate_drops": 506,
+        "kept": 765,
+        "kept_family_counts": {
+          "bit_manipulation": 62,
+          "equation_transform": 377,
+          "gravity_constant": 89,
+          "numeral_system": 83,
+          "text_encryption": 70,
+          "unit_conversion": 84
+        },
+        "sha256": "376db71425c47ab12277e37d72fd476dab1a0c8dedff755857223e79c9ca2313"
+      },
+      "v92_delta_train": {
+        "path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\.claude\\worktrees\\competent-shamir\\data\\v92\\v92_delta_train.jsonl",
+        "exists": true,
+        "tier": "core_candidate",
+        "scanned": 1843,
+        "accepted_before_dedupe": 1819,
+        "validation_overlap_drops": 348,
+        "duplicate_drops": 503,
+        "kept": 968,
+        "kept_family_counts": {
+          "bit_manipulation": 209,
+          "equation_transform": 368,
+          "gravity_constant": 74,
+          "numeral_system": 73,
+          "text_encryption": 177,
+          "unit_conversion": 67
+        },
+        "sha256": "c365a17e780946fcb48ab9b1816d48c369673ee466b18d7434fb63dc3e6a1929"
+      },
+      "v99_targeted_micro_train": {
+        "path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\.claude\\worktrees\\competent-shamir\\data\\v99\\v99_targeted_micro_train.jsonl",
+        "exists": true,
+        "tier": "micro_candidate",
+        "scanned": 128,
+        "accepted_before_dedupe": 128,
+        "validation_overlap_drops": 24,
+        "duplicate_drops": 104,
+        "kept": 0,
+        "kept_family_counts": {},
+        "sha256": "50159c7812819e7f01fd05a0dceeba2b30fddbe13fe9e72eb39a41e0b126b9f2"
+      },
+      "v90_gold_safe_train": {
+        "path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\.claude\\worktrees\\competent-shamir\\data\\v90\\v90_train_gold_safe.jsonl",
+        "exists": true,
+        "tier": "rehearsal_only",
+        "scanned": 8777,
+        "accepted_before_dedupe": 8546,
+        "validation_overlap_drops": 2256,
+        "duplicate_drops": 3035,
+        "kept": 720,
+        "kept_family_counts": {
+          "bit_manipulation": 120,
+          "equation_transform": 120,
+          "gravity_constant": 120,
+          "numeral_system": 120,
+          "text_encryption": 120,
+          "unit_conversion": 120
+        },
+        "sha256": "ad1c4a1886e92d82d03c0d75c0615ba8c4b96d29e2b07948ff72d541f03c15e4"
+      }
+    },
+    "source_order": [
+      "v100_programmatic_repair_train",
+      "v95_bit_rehearsal_train",
+      "v94_equation_crypt_train",
+      "v92_delta_train",
+      "v99_targeted_micro_train",
+      "v90_gold_safe_train"
+    ],
+    "validation_signature_stats": {
+      "jsonl": {
+        "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\.claude\\worktrees\\competent-shamir\\data\\v90\\v90_val_gold_safe_stratified.jsonl": {
+          "exists": true,
+          "rows_loaded": 720
+        },
+        "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\.claude\\worktrees\\competent-shamir\\data\\v92\\v92_delta_val.jsonl": {
+          "exists": true,
+          "rows_loaded": 300
+        },
+        "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\.claude\\worktrees\\competent-shamir\\data\\v94\\v94_equation_crypt_val.jsonl": {
+          "exists": true,
+          "rows_loaded": 279
+        },
+        "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\.claude\\worktrees\\competent-shamir\\data\\v95\\v95_bit_rehearsal_val.jsonl": {
+          "exists": true,
+          "rows_loaded": 318
+        },
+        "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\.claude\\worktrees\\competent-shamir\\data\\v100\\v100_programmatic_repair_val.jsonl": {
+          "exists": true,
+          "rows_loaded": 300
+        },
+        "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\.claude\\worktrees\\competent-shamir\\data\\v195\\v195_focal_val.jsonl": {
+          "exists": true,
+          "rows_loaded": 720
+        },
+        "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\.claude\\worktrees\\competent-shamir\\data\\v198\\v198_micro_val.strict.jsonl": {
+          "exists": true,
+          "rows_loaded": 720
+        }
+      },
+      "csv": {
+        "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\data\\splits\\val_public_proxy.csv": {
+          "exists": true,
+          "rows_loaded": 1464
+        },
+        "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\data\\splits\\val_hard_grouped.csv": {
+          "exists": true,
+          "rows_loaded": 1338
+        }
+      },
+      "unique_signatures": 3993
+    },
+    "seed": 206,
+    "rehearsal_per_family": 120,
+    "include_cautious_v195": false
+  },
+  "hard_stops": [
+    "Dataset generation only; no training or submission was executed.",
+    "Before Kaggle submission, train candidates must beat V194 on solve-rate gate with no family regression."
+  ]
+}
