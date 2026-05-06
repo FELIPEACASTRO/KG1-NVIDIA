@@ -32,6 +32,8 @@ Validated through `git ls-remote`:
 ## Operational Status
 
 - Notebook published.
+- Notebook includes H100/high-RAM sizing gate before model load.
+- Notebook emits `[V214 heartbeat]` resource logs every 60 seconds during silent commands.
 - Submit remains disabled.
 - Training remains disabled by default.
 - To train in Colab, set `KG1_V214_RUN_TRAIN=1`.

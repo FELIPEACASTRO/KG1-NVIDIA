@@ -18,13 +18,15 @@ Run the next V214 gate:
 
 1. Mount Google Drive.
 2. Bootstrap V214 data/scripts into `/content/kg1`.
-3. Audit V214 dataset hashes and row counts.
-4. Audit the protected V194 adapter in Drive.
-5. Build weak/full/strong validation CSVs from the protected V194 validation file.
-6. Run trainability dry-run.
-7. Optionally run one-step V194 continuation.
-8. Evaluate weak first.
-9. Evaluate full only if weak improves over V194.
+3. Audit dependency versions and fresh subprocess imports.
+4. Check H100/high-RAM sizing before model load.
+5. Audit V214 dataset hashes and row counts.
+6. Audit the protected V194 adapter in Drive.
+7. Build weak/full/strong validation CSVs from the protected V194 validation file.
+8. Run trainability dry-run.
+9. Optionally run one-step V194 continuation.
+10. Evaluate weak first.
+11. Evaluate full only if weak improves over V194.
 
 The notebook never packages and never submits to Kaggle.
 
@@ -69,6 +71,39 @@ Training design:
 - trainable LoRA filter: `q_proj,k_proj,v_proj,o_proj,in_proj,out_proj`;
 - no Hugging Face upload;
 - no Kaggle submit.
+
+## Runtime Size Gate
+
+The notebook blocks model load if the runtime is too small:
+
+- GPU total memory must be at least `70 GiB`;
+- system RAM total must be at least `45 GiB`;
+- system RAM available must be at least `20 GiB`;
+- `/content` free disk must be at least `80 GiB`.
+
+An H100 name is expected and logged. A non-H100 GPU can proceed only if the
+memory gate passes, but it prints a warning because the intended runtime is
+H100 high-RAM.
+
+## Anti-Stall Logs
+
+The command wrapper prints:
+
+- command start/end;
+- working directory;
+- full command line;
+- log path;
+- return code;
+- elapsed seconds.
+
+During silent long-running commands it emits a `[V214 heartbeat]` every 60
+seconds with:
+
+- elapsed seconds;
+- seconds since last command output;
+- system RAM total/available;
+- `/content` disk free/total;
+- `nvidia-smi` GPU name, memory used/total, and utilization.
 
 ## Output Paths
 

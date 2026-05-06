@@ -196,8 +196,12 @@ print('=== V214 HELPERS START ===', flush=True)
 import importlib
 import json
 import pathlib
+import queue
+import shutil
 import subprocess
 import sys
+import threading
+import time
 
 def sha256_file(path):
     path = pathlib.Path(path)
@@ -207,7 +211,49 @@ def sha256_file(path):
             h.update(chunk)
     return h.hexdigest()
 
-def run_cmd(cmd, cwd=None, env=None, log_path=None, check=True):
+def resource_snapshot_line():
+    parts = []
+    try:
+        meminfo = {}
+        with open('/proc/meminfo', encoding='utf-8') as handle:
+            for line in handle:
+                key, raw = line.split(':', 1)
+                meminfo[key] = int(raw.strip().split()[0]) / 1024 / 1024
+        parts.append(
+            'ram_total={:.1f}GiB ram_available={:.1f}GiB'.format(
+                meminfo.get('MemTotal', 0.0),
+                meminfo.get('MemAvailable', 0.0),
+            )
+        )
+    except Exception as exc:
+        parts.append(f'ram=unavailable:{type(exc).__name__}')
+    try:
+        usage = shutil.disk_usage('/content')
+        parts.append(
+            'disk_content_free={:.1f}GiB disk_content_total={:.1f}GiB'.format(
+                usage.free / 1024**3,
+                usage.total / 1024**3,
+            )
+        )
+    except Exception as exc:
+        parts.append(f'disk=unavailable:{type(exc).__name__}')
+    try:
+        gpu = subprocess.check_output(
+            [
+                'nvidia-smi',
+                '--query-gpu=name,memory.used,memory.total,utilization.gpu',
+                '--format=csv,noheader,nounits',
+            ],
+            text=True,
+            timeout=10,
+        ).strip().replace('\\n', ' | ')
+        parts.append(f'gpu=[{gpu}]')
+    except Exception as exc:
+        parts.append(f'gpu=unavailable:{type(exc).__name__}')
+    return ' '.join(parts)
+
+
+def run_cmd(cmd, cwd=None, env=None, log_path=None, check=True, heartbeat_s=60):
     cmd = [str(x) for x in cmd]
     print('--- COMMAND START ---', flush=True)
     print('cwd =', cwd or pathlib.Path.cwd(), flush=True)
@@ -230,10 +276,46 @@ def run_cmd(cmd, cwd=None, env=None, log_path=None, check=True):
         bufsize=1,
     )
     assert proc.stdout is not None
-    for line in proc.stdout:
-        print(line, end='')
-        if handle:
-            handle.write(line)
+    q = queue.Queue()
+
+    def reader():
+        try:
+            for output_line in proc.stdout:
+                q.put(output_line)
+        finally:
+            q.put(None)
+
+    thread = threading.Thread(target=reader, daemon=True)
+    thread.start()
+    last_output = started
+    last_heartbeat = started
+    reader_done = False
+    while True:
+        try:
+            item = q.get(timeout=1)
+        except queue.Empty:
+            item = '[[NO_LINE_READY]]'
+        now = time.time()
+        if item is None:
+            reader_done = True
+        elif item != '[[NO_LINE_READY]]':
+            last_output = now
+            print(item, end='', flush=True)
+            if handle:
+                handle.write(item)
+                handle.flush()
+        if heartbeat_s and now - last_heartbeat >= heartbeat_s and proc.poll() is None:
+            last_heartbeat = now
+            heartbeat = (
+                f"[V214 heartbeat] elapsed_s={now - started:.1f} "
+                f"no_output_s={now - last_output:.1f} {resource_snapshot_line()}"
+            )
+            print(heartbeat, flush=True)
+            if handle:
+                handle.write(heartbeat + '\\n')
+                handle.flush()
+        if reader_done and proc.poll() is not None:
+            break
     rc = proc.wait()
     elapsed = time.time() - started
     if handle:
@@ -317,6 +399,80 @@ except Exception as exc:
     run_cmd([sys.executable, '-m', 'pip', 'install', '-q', 'vllm'])
 fresh_python_import_check(['torch', 'transformers', 'peft', 'vllm'])
 print('=== V214 DEPENDENCY AUDIT END ===', flush=True)
+"""
+        ),
+        code(
+            """# CELL: H100/high-RAM sizing gate before any model load.
+print('=== V214 H100 SIZE GATE START ===', flush=True)
+MIN_GPU_TOTAL_GIB = float(os.environ.get('KG1_V214_MIN_GPU_GIB', '70'))
+MIN_RAM_TOTAL_GIB = float(os.environ.get('KG1_V214_MIN_RAM_TOTAL_GIB', '45'))
+MIN_RAM_AVAILABLE_GIB = float(os.environ.get('KG1_V214_MIN_RAM_AVAILABLE_GIB', '20'))
+MIN_CONTENT_FREE_GIB = float(os.environ.get('KG1_V214_MIN_CONTENT_FREE_GIB', '80'))
+
+def meminfo_gib():
+    values = {}
+    with open('/proc/meminfo', encoding='utf-8') as handle:
+        for line in handle:
+            key, raw = line.split(':', 1)
+            values[key] = int(raw.strip().split()[0]) / 1024 / 1024
+    return values
+
+def disk_free_gib(path):
+    usage = shutil.disk_usage(path)
+    return usage.free / 1024**3, usage.total / 1024**3
+
+if not torch.cuda.is_available():
+    raise RuntimeError('CUDA GPU is required for V214 dry-run/train/eval.')
+
+props = torch.cuda.get_device_properties(0)
+gpu_name = props.name
+gpu_total_gib = props.total_memory / 1024**3
+mem = meminfo_gib()
+ram_total_gib = mem.get('MemTotal', 0.0)
+ram_available_gib = mem.get('MemAvailable', 0.0)
+content_free_gib, content_total_gib = disk_free_gib('/content')
+drive_free_gib, drive_total_gib = disk_free_gib('/content/drive') if pathlib.Path('/content/drive').exists() else (0.0, 0.0)
+h100_detected = 'H100' in gpu_name.upper()
+
+size_report = {
+    'gpu_name': gpu_name,
+    'h100_detected': h100_detected,
+    'gpu_total_gib': round(gpu_total_gib, 2),
+    'ram_total_gib': round(ram_total_gib, 2),
+    'ram_available_gib': round(ram_available_gib, 2),
+    'content_disk_free_gib': round(content_free_gib, 2),
+    'content_disk_total_gib': round(content_total_gib, 2),
+    'drive_disk_free_gib': round(drive_free_gib, 2),
+    'drive_disk_total_gib': round(drive_total_gib, 2),
+    'minimums': {
+        'gpu_total_gib': MIN_GPU_TOTAL_GIB,
+        'ram_total_gib': MIN_RAM_TOTAL_GIB,
+        'ram_available_gib': MIN_RAM_AVAILABLE_GIB,
+        'content_disk_free_gib': MIN_CONTENT_FREE_GIB,
+    },
+}
+print('size_report =', json.dumps(size_report, indent=2, sort_keys=True), flush=True)
+
+if gpu_total_gib < MIN_GPU_TOTAL_GIB:
+    raise RuntimeError(
+        f'GPU memory too small for V214: {gpu_total_gib:.1f}GiB < {MIN_GPU_TOTAL_GIB:.1f}GiB. '
+        'Use H100 80GB/high-RAM or another >=80GB-class GPU.'
+    )
+if ram_total_gib < MIN_RAM_TOTAL_GIB or ram_available_gib < MIN_RAM_AVAILABLE_GIB:
+    raise RuntimeError(
+        f'System RAM inadequate: total={ram_total_gib:.1f}GiB available={ram_available_gib:.1f}GiB. '
+        'Use Colab high-RAM runtime.'
+    )
+if content_free_gib < MIN_CONTENT_FREE_GIB:
+    raise RuntimeError(
+        f'/content free disk too small: {content_free_gib:.1f}GiB < {MIN_CONTENT_FREE_GIB:.1f}GiB. '
+        'Restart runtime or free disk before model download/load.'
+    )
+if not h100_detected:
+    print('WARNING: H100 not detected. Memory gate passed, but the intended runtime is H100 high-RAM.', flush=True)
+else:
+    print('H100 detected and resource gate passed.', flush=True)
+print('=== V214 H100 SIZE GATE END ===', flush=True)
 """
         ),
         code(
