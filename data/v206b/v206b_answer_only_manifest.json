@@ -1,0 +1,49 @@
+{
+  "decision": {
+    "rationale": [
+      "V206A regressed after verbose-reasoning SFT",
+      "answer-only completions match the validation proxy and Kaggle final-answer objective",
+      "hard families are emphasized while strong families are retained as rehearsal"
+    ],
+    "use": "V206B answer-only micro candidate, not for direct Kaggle submit without gates"
+  },
+  "family_counts": {
+    "bit_manipulation": 600,
+    "equation_transform": 600,
+    "gravity_constant": 120,
+    "numeral_system": 120,
+    "text_encryption": 120,
+    "unit_conversion": 120
+  },
+  "generated_at_utc": "2026-05-06T02:32:07+00:00",
+  "origin_source_counts": {
+    "v206::v100_programmatic_repair_train": 355,
+    "v206::v90_gold_safe_train": 336,
+    "v206::v92_delta_train": 355,
+    "v206::v94_equation_crypt_train": 278,
+    "v206::v95_bit_rehearsal_train": 356
+  },
+  "rejected_counts": {},
+  "schema_version": "v206b_answer_only_micro_v1",
+  "seed": 2062,
+  "source_counts": {
+    "v206b_answer_only::v206::v100_programmatic_repair_train": 355,
+    "v206b_answer_only::v206::v90_gold_safe_train": 336,
+    "v206b_answer_only::v206::v92_delta_train": 355,
+    "v206b_answer_only::v206::v94_equation_crypt_train": 278,
+    "v206b_answer_only::v206::v95_bit_rehearsal_train": 356
+  },
+  "source_path": "data\\v206\\v206_curated_train.jsonl",
+  "source_sha256": "65a810d54da73fd3859d7ee9a9edc0c35a3f89231c0033ea74f26e55f254f9f0",
+  "target_per_family": {
+    "bit_manipulation": 600,
+    "equation_transform": 600,
+    "gravity_constant": 120,
+    "numeral_system": 120,
+    "text_encryption": 120,
+    "unit_conversion": 120
+  },
+  "train_path": "data\\v206b\\v206b_answer_only_micro_train.jsonl",
+  "train_rows": 1680,
+  "train_sha256": "5c95e9b254a3b3a37850db1c4f75914d4b23233f0cd1e9d828886399e9a42f5d"
+}
