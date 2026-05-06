@@ -4,7 +4,8 @@
 
 - Repository: `https://github.com/FELIPEACASTRO/KG1-NVIDIA`
 - Branch: `v214-h100-micro-replay`
-- Latest commit: `e83d7e02255ed2430724dcad8e79e1c34bcb2821`
+- Notebook validation commit: `e83d7e02255ed2430724dcad8e79e1c34bcb2821`
+- Note: this publish-result document may appear in a later commit on the same branch.
 
 ## Colab URL
 
