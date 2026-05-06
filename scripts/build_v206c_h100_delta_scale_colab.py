@@ -23,6 +23,101 @@ V198_VAL_SHA256 = "e59c907c6545e5e587097a64762e3e874508e8cd74d85d5c7c79354ebe56e
 _CELL_COUNTER = 0
 
 
+def runtime_bootstrap_source() -> str:
+    return f"""# V206C runtime bootstrap: keeps later cells robust after a runtime reset or out-of-order execution.
+import datetime
+import hashlib
+import json
+import os
+import pathlib
+import re
+import shutil
+import subprocess
+import sys
+import zipfile
+
+VERSION = globals().get('VERSION', 'V206C_H100_DELTA_SCALE_20260506')
+REPO_URL = globals().get('REPO_URL', os.environ.get('KG1_REPO_URL', 'https://github.com/FELIPEACASTRO/KG1-NVIDIA.git'))
+REPO_BRANCH = globals().get('REPO_BRANCH', os.environ.get('KG1_REPO_BRANCH', 'claude/competent-shamir'))
+ROOT = globals().get('ROOT', pathlib.Path('/content/kg1'))
+SCRIPT_DIR = globals().get('SCRIPT_DIR', ROOT / 'scripts')
+BUILD_SCALE_SCRIPT = globals().get('BUILD_SCALE_SCRIPT', SCRIPT_DIR / 'build_v206c_delta_scaled_adapters.py')
+EVAL_SCRIPT = globals().get('EVAL_SCRIPT', SCRIPT_DIR / 'hf_eval_adapter_loss_v206c.py')
+PREFLIGHT_SCRIPT = globals().get('PREFLIGHT_SCRIPT', SCRIPT_DIR / 'nemotron_submission_preflight.py')
+DRIVE_ROOT = globals().get('DRIVE_ROOT', pathlib.Path('/content/drive/MyDrive/KG1_NVIDIA_V206C'))
+DRIVE_V202D = globals().get('DRIVE_V202D', pathlib.Path('/content/drive/MyDrive/KG1_NVIDIA_V202D'))
+DRIVE_V206B = globals().get('DRIVE_V206B', pathlib.Path('/content/drive/MyDrive/KG1_NVIDIA_V206B'))
+RANK19_BUILD = globals().get('RANK19_BUILD', DRIVE_V202D / 'init_adapter_v194_rank19_build')
+INIT_ADAPTER = globals().get('INIT_ADAPTER', RANK19_BUILD / 'adapter')
+FAILED_V206B_ADAPTER = globals().get('FAILED_V206B_ADAPTER', DRIVE_V206B / 'output_v206b_answer_only_h100_loss_gated/train_v206b_answer_only_1s_lr1e9/final_adapter')
+OUT_ROOT = globals().get('OUT_ROOT', DRIVE_ROOT / 'output_v206c_delta_scale')
+SCALE_OUT = globals().get('SCALE_OUT', OUT_ROOT / 'scaled_adapters')
+REPORT_DIR = globals().get('REPORT_DIR', OUT_ROOT / 'reports')
+MODEL_NAME = globals().get('MODEL_NAME', '{MODEL_NAME}')
+MODEL_REVISION = globals().get('MODEL_REVISION', '{MODEL_REVISION}')
+V198_VAL_SHA256 = globals().get('V198_VAL_SHA256', '{V198_VAL_SHA256}')
+SCALES = globals().get('SCALES', '0.00,0.01,0.02,0.05,0.10')
+ALLOW_KAGGLE_SUBMIT = globals().get('ALLOW_KAGGLE_SUBMIT', False)
+for _path in [DRIVE_ROOT, OUT_ROOT, SCALE_OUT, REPORT_DIR]:
+    _path.mkdir(parents=True, exist_ok=True)
+if ALLOW_KAGGLE_SUBMIT:
+    raise RuntimeError('This notebook is intentionally submit-disabled.')
+
+if 'stream_process' not in globals():
+    def stream_process(cmd, cwd=None, env=None, log_path=None):
+        cmd = [str(part) for part in cmd]
+        print('+', ' '.join(cmd))
+        if log_path:
+            log_path.parent.mkdir(parents=True, exist_ok=True)
+            log_handle = log_path.open('w', encoding='utf-8')
+        else:
+            log_handle = None
+        proc = subprocess.Popen(
+            cmd,
+            cwd=str(cwd) if cwd else None,
+            env=env,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            text=True,
+            bufsize=1,
+        )
+        assert proc.stdout is not None
+        for line in proc.stdout:
+            print(line, end='')
+            if log_handle:
+                log_handle.write(line)
+        rc = proc.wait()
+        if log_handle:
+            log_handle.close()
+        print('returncode =', rc)
+        return rc
+
+if 'sha256_path' not in globals():
+    def sha256_path(path: pathlib.Path) -> str:
+        h = hashlib.sha256()
+        with path.open('rb') as handle:
+            for chunk in iter(lambda: handle.read(1024 * 1024), b''):
+                h.update(chunk)
+        return h.hexdigest()
+
+if 'write_json' not in globals():
+    def write_json(path: pathlib.Path, payload) -> None:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(json.dumps(payload, indent=2, sort_keys=True) + '\\n', encoding='utf-8')
+
+if not ROOT.exists():
+    raise RuntimeError('Repo /content/kg1 is missing. Run the clone/setup cell before this cell.')
+for _required in [BUILD_SCALE_SCRIPT, EVAL_SCRIPT, PREFLIGHT_SCRIPT]:
+    if not _required.exists():
+        raise FileNotFoundError(f'Missing required script. Run the clone/setup cell again: {{_required}}')
+if not INIT_ADAPTER.exists():
+    raise RuntimeError(f'V194 init adapter is missing. Run the V194 adapter setup cell: {{INIT_ADAPTER}}')
+if not FAILED_V206B_ADAPTER.exists():
+    raise RuntimeError(f'V206B forensic adapter is missing. Run V206B first: {{FAILED_V206B_ADAPTER}}')
+
+"""
+
+
 def _cell_id(prefix: str) -> str:
     global _CELL_COUNTER
     _CELL_COUNTER += 1
@@ -360,7 +455,8 @@ print('V206B forensic adapter ready:', FAILED_V206B_ADAPTER)
 """
         ),
         code(
-            """build_log = OUT_ROOT / 'v206c_build_delta_scaled_adapters.log'
+            runtime_bootstrap_source()
+            + """build_log = OUT_ROOT / 'v206c_build_delta_scaled_adapters.log'
 rc = stream_process(
     [
         sys.executable,
@@ -384,7 +480,13 @@ print('Alignment:', json.dumps(scale_manifest['alignment'], indent=2, sort_keys=
 """
         ),
         code(
-            """adapter_specs = []
+            runtime_bootstrap_source()
+            + """adapter_specs = []
+manifest_path = SCALE_OUT / 'v206c_delta_scale_manifest.json'
+if 'scale_manifest' not in globals():
+    if not manifest_path.exists():
+        raise FileNotFoundError(f'V206C scale manifest not found. Run the build cell first: {manifest_path}')
+    scale_manifest = json.loads(manifest_path.read_text(encoding='utf-8'))
 for output in scale_manifest['outputs']:
     label = output['label']
     adapter_dir = output['adapter_dir']
@@ -427,7 +529,17 @@ print('Best non-baseline:', json.dumps(eval_report['best_non_baseline'], indent=
 """
         ),
         code(
-            """preflight_report = None
+            runtime_bootstrap_source()
+            + """eval_report_path = REPORT_DIR / 'v206c_delta_scale_eval_loss_report.json'
+if 'eval_report' not in globals():
+    if not eval_report_path.exists():
+        raise FileNotFoundError(f'V206C eval report not found. Run the evaluation cell first: {eval_report_path}')
+    eval_report = json.loads(eval_report_path.read_text(encoding='utf-8'))
+manifest_path = SCALE_OUT / 'v206c_delta_scale_manifest.json'
+if 'scale_manifest' not in globals():
+    scale_manifest = json.loads(manifest_path.read_text(encoding='utf-8'))
+
+preflight_report = None
 best = eval_report['best_non_baseline']
 if eval_report['approved_loss_prefilter']:
     by_label = {item['label']: item for item in scale_manifest['outputs']}
@@ -464,7 +576,16 @@ else:
 """
         ),
         code(
-            """final_summary = {
+            runtime_bootstrap_source()
+            + """eval_report_path = REPORT_DIR / 'v206c_delta_scale_eval_loss_report.json'
+if 'eval_report' not in globals():
+    if not eval_report_path.exists():
+        raise FileNotFoundError(f'V206C eval report not found. Run the evaluation cell first: {eval_report_path}')
+    eval_report = json.loads(eval_report_path.read_text(encoding='utf-8'))
+if 'preflight_report' not in globals():
+    preflight_report = None
+
+final_summary = {
     'version': VERSION,
     'output_root': str(OUT_ROOT),
     'scale_manifest': str(SCALE_OUT / 'v206c_delta_scale_manifest.json'),
