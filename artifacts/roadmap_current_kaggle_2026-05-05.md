@@ -506,8 +506,8 @@ Next action: run the V214 Colab dry-run gate first. Training is blocked unless t
 
 Current V214 Colab execution URL:
 
-`https://colab.research.google.com/github/FELIPEACASTRO/KG1-NVIDIA/blob/master/notebooks/KG1_V214_H100_MICRO_REPLAY_COLAB.ipynb`
+`https://colab.research.google.com/github/FELIPEACASTRO/KG1-NVIDIA/blob/v214-h100-micro-replay/notebooks/KG1_V214_H100_MICRO_REPLAY_COLAB.ipynb`
 
-The V214 notebook is currently local. The URL works only after the notebook is pushed to the referenced `master` branch, or after the branch segment in the URL is changed to the branch that receives the notebook.
+Use the published branch URL unless the notebook is later merged to `master`.
 
 No Kaggle submission is allowed without explicit human approval.

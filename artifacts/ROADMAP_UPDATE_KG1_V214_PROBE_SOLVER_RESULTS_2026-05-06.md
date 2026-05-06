@@ -301,6 +301,6 @@ Gates atuais do notebook:
 
 URL Colab:
 
-`https://colab.research.google.com/github/FELIPEACASTRO/KG1-NVIDIA/blob/master/notebooks/KG1_V214_H100_MICRO_REPLAY_COLAB.ipynb`
+`https://colab.research.google.com/github/FELIPEACASTRO/KG1-NVIDIA/blob/v214-h100-micro-replay/notebooks/KG1_V214_H100_MICRO_REPLAY_COLAB.ipynb`
 
-Observacao: o notebook esta local neste momento. A URL so funciona depois de push para o branch `master` ou depois de trocar o segmento do branch no URL para o branch publicado.
+Observacao: o notebook foi preparado para o branch publicado `v214-h100-micro-replay`. Se o notebook for mergeado para `master`, o segmento do branch no URL pode ser alterado.

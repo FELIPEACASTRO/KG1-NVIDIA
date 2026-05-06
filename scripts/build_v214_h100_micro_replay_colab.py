@@ -672,9 +672,10 @@ def main() -> int:
     print(f"wrote {NOTEBOOK_PATH} bytes={NOTEBOOK_PATH.stat().st_size}")
     print(
         "colab_url=https://colab.research.google.com/github/"
-        "FELIPEACASTRO/KG1-NVIDIA/blob/master/notebooks/KG1_V214_H100_MICRO_REPLAY_COLAB.ipynb"
+        "FELIPEACASTRO/KG1-NVIDIA/blob/v214-h100-micro-replay/notebooks/"
+        "KG1_V214_H100_MICRO_REPLAY_COLAB.ipynb"
     )
-    print("NOTE: the URL works only after this local notebook is pushed to the referenced branch.")
+    print("NOTE: the URL works after the notebook is pushed to the referenced branch.")
     return 0
 
 

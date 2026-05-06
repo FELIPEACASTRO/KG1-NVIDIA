@@ -8,10 +8,9 @@ Local path:
 
 Colab URL after push:
 
-- `https://colab.research.google.com/github/FELIPEACASTRO/KG1-NVIDIA/blob/master/notebooks/KG1_V214_H100_MICRO_REPLAY_COLAB.ipynb`
+- `https://colab.research.google.com/github/FELIPEACASTRO/KG1-NVIDIA/blob/v214-h100-micro-replay/notebooks/KG1_V214_H100_MICRO_REPLAY_COLAB.ipynb`
 
-This URL works only after the notebook is pushed to the referenced `master`
-branch. If another branch is used, replace `master` in the URL.
+This URL uses the published branch `v214-h100-micro-replay`.
 
 ## Purpose
 
@@ -131,8 +130,6 @@ Any candidate below these thresholds is diagnostic-only.
 
 Human approval is required for:
 
-- pushing the notebook if the dirty worktree/conflicted files should not be
-  included;
 - launching paid/limited H100 compute;
 - setting `KG1_V214_RUN_TRAIN=1`;
 - any Kaggle submission.
