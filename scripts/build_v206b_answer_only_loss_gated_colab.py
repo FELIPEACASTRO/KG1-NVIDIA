@@ -31,6 +31,71 @@ def replace_all(text: str, replacements: list[tuple[str, str]]) -> str:
     return text
 
 
+def apply_friendly_training_block(text: str) -> str:
+    old_training_block = """    write_json(REPORT_DIR / 'v206b_train_summary.json', train_summary)
+    print(json.dumps(train_summary, indent=2, sort_keys=True))
+    if rc != 0:
+        raise RuntimeError(f'V206B training failed or gate blocked; see {TRAIN_OUT}')
+    if not train_summary['passed_no_regression_gate']:
+        raise RuntimeError('V206B did not pass final-eval <= baseline gate; packaging is blocked.')
+else:
+    print('RUN_TRAIN=False; skipping training.')
+"""
+    new_training_block = """    if rc != 0 or not train_summary['passed_no_regression_gate']:
+        baseline = train_summary.get('baseline_eval_loss')
+        final = train_summary.get('final_eval_loss')
+        delta = None if baseline is None or final is None else final - baseline
+        train_summary.update({
+            'status': 'blocked_no_submit',
+            'friendly_message': (
+                'V206B finished, but the safety gate blocked this candidate. '
+                'The final validation loss was worse than the V194 baseline, so packaging and Kaggle submission are skipped.'
+            ),
+            'package_blocked': True,
+        })
+        write_json(REPORT_DIR / 'v206b_training_blocked_friendly.json', train_summary)
+        RUN_PACKAGE = False
+        print('\\n' + '=' * 72)
+        print('V206B BLOQUEADO PELO GATE DE SEGURANCA')
+        print('=' * 72)
+        print('O treino terminou, mas este adapter NAO deve ser submetido.')
+        if baseline is not None:
+            print(f'baseline_eval_loss: {baseline:.4f}')
+        if final is not None:
+            print(f'final_eval_loss:    {final:.4f}')
+        if delta is not None:
+            print(f'delta_vs_baseline: {delta:+.6f}')
+        print('Motivo: o loss final ficou acima do baseline permitido.')
+        print('Acao tomada: empacotamento desativado; nenhum submit Kaggle sera feito.')
+        print('Resumo amigavel salvo em:', REPORT_DIR / 'v206b_training_blocked_friendly.json')
+        print('=' * 72 + '\\n')
+    else:
+        train_summary['status'] = 'passed_no_regression_gate'
+    write_json(REPORT_DIR / 'v206b_train_summary.json', train_summary)
+    print(json.dumps(train_summary, indent=2, sort_keys=True))
+else:
+    print('RUN_TRAIN=False; skipping training.')
+"""
+    if old_training_block not in text:
+        raise RuntimeError("Could not find V206B training gate block to replace.")
+    return text.replace(old_training_block, new_training_block)
+
+
+def apply_friendly_package_skip(text: str) -> str:
+    old_package_skip = """else:
+    print('RUN_PACKAGE=False; skipping packaging.')
+"""
+    new_package_skip = """else:
+    if train_summary and train_summary.get('package_blocked'):
+        print('RUN_PACKAGE=False; packaging skipped because V206B did not pass the no-regression gate.')
+    else:
+        print('RUN_PACKAGE=False; skipping packaging.')
+"""
+    if old_package_skip not in text:
+        raise RuntimeError("Could not find V206B package skip block to replace.")
+    return text.replace(old_package_skip, new_package_skip)
+
+
 def main() -> None:
     notebook = json.loads(SOURCE_NOTEBOOK.read_text(encoding="utf-8"))
     replacements = [
@@ -73,6 +138,10 @@ def main() -> None:
     for cell in notebook["cells"]:
         source = "".join(cell.get("source") or [])
         source = replace_all(source, replacements)
+        if "v206b_train_summary.json" in source and "V206B training failed or gate blocked" in source:
+            source = apply_friendly_training_block(source)
+        if "RUN_PACKAGE=False; skipping packaging" in source:
+            source = apply_friendly_package_skip(source)
         if cell.get("cell_type") == "markdown" and source.startswith("# KG1 V206B"):
             source += (
                 "\nV206B is a response-objective correction after V206A regressed: "
@@ -95,6 +164,8 @@ def main() -> None:
         "'FINAL_LEARNING_RATE': '1e-9'",
         "--adapter-zip",
         "source_v194_rank19_submission.zip",
+        "V206B BLOQUEADO PELO GATE DE SEGURANCA",
+        "v206b_training_blocked_friendly.json",
     ]
     missing = [item for item in required if item not in full_text]
     if missing:
@@ -106,6 +177,8 @@ def main() -> None:
         "data/v206/v206_curated_train.jsonl",
         "'MAX_STEPS': '3'",
         "'LEARNING_RATE': '5e-9'",
+        "V206B training failed or gate blocked",
+        "did not pass final-eval <= baseline gate",
     ]
     present = [item for item in forbidden if item in full_text]
     if present:
