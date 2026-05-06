@@ -269,10 +269,40 @@ print('=== V214 HELPERS END ===', flush=True)
         code(
             """# CELL: dependency and GPU audit.
 print('=== V214 DEPENDENCY AUDIT START ===', flush=True)
+ensure_import('packaging', 'packaging')
+from packaging.version import Version
+
+def ensure_min_version(import_name, min_version, pip_spec):
+    module = ensure_import(import_name, pip_spec)
+    observed = getattr(module, '__version__', '0')
+    print(f'{import_name}_observed_version = {observed}', flush=True)
+    if Version(str(observed).split('+')[0]) < Version(min_version):
+        print(f'{import_name} below required {min_version}; installing {pip_spec}', flush=True)
+        run_cmd([sys.executable, '-m', 'pip', 'install', '-q', '--upgrade', pip_spec])
+        module = importlib.import_module(import_name)
+        observed = getattr(module, '__version__', '0')
+        print(f'{import_name}_post_install_version = {observed}', flush=True)
+        if Version(str(observed).split('+')[0]) < Version(min_version):
+            raise RuntimeError(f'{import_name} version {observed} < required {min_version}')
+    return module
+
+def fresh_python_import_check(imports):
+    code = (
+        "import importlib, json; "
+        "mods = {}; "
+        f"names = {list(imports)!r}; "
+        "ok = {}; "
+        "\\nfor name in names:\\n"
+        "    m = importlib.import_module(name)\\n"
+        "    ok[name] = getattr(m, '__version__', 'unknown')\\n"
+        "print(json.dumps(ok, sort_keys=True))"
+    )
+    run_cmd([sys.executable, '-c', code])
+
 ensure_import('pandas', 'pandas')
 ensure_import('huggingface_hub', 'huggingface_hub')
 ensure_import('transformers', 'transformers')
-ensure_import('peft', 'peft')
+ensure_min_version('peft', '0.18.1', 'peft>=0.18.1')
 torch = ensure_import('torch')
 print('torch_cuda_available =', torch.cuda.is_available(), flush=True)
 print('torch_cuda_device_count =', torch.cuda.device_count() if torch.cuda.is_available() else 0, flush=True)
@@ -285,6 +315,7 @@ except Exception as exc:
     print('vLLM unavailable before install:', repr(exc), flush=True)
     print('Installing vLLM; eval runs in fresh Python processes.', flush=True)
     run_cmd([sys.executable, '-m', 'pip', 'install', '-q', 'vllm'])
+fresh_python_import_check(['torch', 'transformers', 'peft', 'vllm'])
 print('=== V214 DEPENDENCY AUDIT END ===', flush=True)
 """
         ),
