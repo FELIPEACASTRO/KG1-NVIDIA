@@ -1,0 +1,54 @@
+{
+  "audit": {
+    "bit_shape_ok": 880,
+    "max_assistant_word_count": 355,
+    "single_boxed": 880,
+    "verified": 880
+  },
+  "decision": "review_only_not_training_launch",
+  "family_counts": {
+    "bit_manipulation": 160,
+    "equation_transform": 120,
+    "gravity_constant": 150,
+    "numeral_system": 150,
+    "text_encryption": 150,
+    "unit_conversion": 150
+  },
+  "generated_at_utc": "2026-05-06T23:22:09+00:00",
+  "hard_gate": {
+    "requires_before_training": [
+      "manual review of manifest",
+      "adapter/tokenizer/template trainability audit",
+      "no local validation rows in training data",
+      "short dry-run only; no submit"
+    ],
+    "train_allowed_after_review": true
+  },
+  "output_jsonl": "data\\v214\\v214_micro_replay_candidate.jsonl",
+  "output_sha256": "6bd1f4727345fce59c9697cfc5ea84bdaae821fedd27a786edc7418e98e223e4",
+  "quotas": {
+    "bit_manipulation": 160,
+    "equation_transform": 120,
+    "gravity_constant": 150,
+    "numeral_system": 150,
+    "text_encryption": 150,
+    "unit_conversion": 150
+  },
+  "rejected_counts": {
+    "not_single_boxed": 25,
+    "validation_overlap": 371
+  },
+  "rows": 880,
+  "schema_version": "v214_micro_replay_candidate_v1",
+  "seed": 214,
+  "shortfalls": {},
+  "source_counts": {
+    "v206::v100_programmatic_repair_train": 29,
+    "v206::v95_bit_rehearsal_train": 851
+  },
+  "source_jsonl": "data\\v206\\v206_curated_train.jsonl",
+  "source_sha256": "65a810d54da73fd3859d7ee9a9edc0c35a3f89231c0033ea74f26e55f254f9f0",
+  "validation_csv": "artifacts\\drive_exports\\v194_baseline_predictions.csv",
+  "validation_sha256": "c759ac82950164010240a17662f7139e75b4c8071e42a77971938907a5ded26c",
+  "validation_signature_count": 947
+}

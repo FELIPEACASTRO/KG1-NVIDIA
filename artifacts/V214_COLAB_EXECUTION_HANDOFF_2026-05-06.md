@@ -1,0 +1,138 @@
+# V214 Colab Execution Handoff - 2026-05-06
+
+## Notebook
+
+Local path:
+
+- `notebooks/KG1_V214_H100_MICRO_REPLAY_COLAB.ipynb`
+
+Colab URL after push:
+
+- `https://colab.research.google.com/github/FELIPEACASTRO/KG1-NVIDIA/blob/master/notebooks/KG1_V214_H100_MICRO_REPLAY_COLAB.ipynb`
+
+This URL works only after the notebook is pushed to the referenced `master`
+branch. If another branch is used, replace `master` in the URL.
+
+## Purpose
+
+Run the next V214 gate:
+
+1. Mount Google Drive.
+2. Bootstrap V214 data/scripts into `/content/kg1`.
+3. Audit V214 dataset hashes and row counts.
+4. Audit the protected V194 adapter in Drive.
+5. Build weak/full/strong validation CSVs from the protected V194 validation file.
+6. Run trainability dry-run.
+7. Optionally run one-step V194 continuation.
+8. Evaluate weak first.
+9. Evaluate full only if weak improves over V194.
+
+The notebook never packages and never submits to Kaggle.
+
+## Required Drive Inputs
+
+- `/content/drive/MyDrive/KG1_NVIDIA_V202D/init_adapter_v194_rank19_build/adapter`
+- `/content/drive/MyDrive/KG1_NVIDIA_V207A/output_v207a_acc_gate/validation/official_train_seed42_stratified10_val.csv`
+
+The adapter directory must contain:
+
+- `adapter_config.json`
+- `adapter_model.safetensors` or `adapter_model.bin`
+
+## Default Mode
+
+By default:
+
+- `KG1_V214_RUN_DRY_RUN=1`
+- `KG1_V214_RUN_TRAIN=0`
+- `KG1_V214_RUN_EVAL=1`
+
+This means the notebook will run audits and dry-run checks, but will not train
+unless explicitly enabled.
+
+## To Enable Training
+
+Before running the training cell in Colab, set:
+
+```python
+import os
+os.environ["KG1_V214_RUN_TRAIN"] = "1"
+```
+
+Training design:
+
+- starts from V194 adapter;
+- `INIT_ADAPTER_LOAD_MODE=peft`;
+- LR `3e-7`;
+- `MAX_STEPS=1`;
+- `MAX_LENGTH=4096`;
+- batch size `4`, micro batch `1`;
+- trainable LoRA filter: `q_proj,k_proj,v_proj,o_proj,in_proj,out_proj`;
+- no Hugging Face upload;
+- no Kaggle submit.
+
+## Output Paths
+
+Root:
+
+- `/content/drive/MyDrive/KG1_NVIDIA_V214/output_v214_micro_replay`
+
+Dry-run:
+
+- `dry_run_v214_v194_cont_lr3e7_s1/dry_run.log`
+- `dry_run_v214_v194_cont_lr3e7_s1/dry_run_model_recipe_report.json`
+
+Training:
+
+- `train_v214_v194_cont_lr3e7_s1/train.log`
+- `train_v214_v194_cont_lr3e7_s1/final_adapter`
+- `train_v214_v194_cont_lr3e7_s1/final_adapter/v90_training_manifest.json`
+
+Eval:
+
+- `eval_v214_v194_cont_lr3e7_s1/weak_eval/v214_micro_weak_eval_report.json`
+- `eval_v214_v194_cont_lr3e7_s1/weak_eval/v214_micro_weak_per_task.csv`
+- `eval_v214_v194_cont_lr3e7_s1/full_eval/v214_micro_full_eval_report.json`
+- `eval_v214_v194_cont_lr3e7_s1/full_eval/v214_micro_full_per_task.csv`
+- `v214_colab_run_manifest.json`
+
+## Gates
+
+Weak gate to run full eval:
+
+- weak `>=191/315`;
+- weak truncation `<=3`.
+
+Strict candidate after human review:
+
+- full `>=828/947`;
+- weak `>=198/315`;
+- strong `632/632`;
+- full truncation within review threshold.
+
+Preferred candidate:
+
+- full `>=830/947`;
+- weak `>=198/315`;
+- strong `632/632`.
+
+Any candidate below these thresholds is diagnostic-only.
+
+## Current Local Dataset State
+
+- `data/v214/v214_micro_replay_candidate.jsonl`: `880` rows.
+- `data/v214/v214_micro_train.jsonl`: `792` rows.
+- `data/v214/v214_micro_val.jsonl`: `88` rows.
+- train/val overlap: `0`.
+- V194 validation overlap: `0`.
+- all candidate rows are verified and single-boxed.
+
+## Human Approval Boundary
+
+Human approval is required for:
+
+- pushing the notebook if the dirty worktree/conflicted files should not be
+  included;
+- launching paid/limited H100 compute;
+- setting `KG1_V214_RUN_TRAIN=1`;
+- any Kaggle submission.

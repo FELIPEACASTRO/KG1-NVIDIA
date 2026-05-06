@@ -1,0 +1,33 @@
+{
+  "decision": "internal_loss_split_only_not_submission_gate",
+  "generated_at_utc": "2026-05-06T23:27:35+00:00",
+  "input": "data\\v214\\v214_micro_replay_candidate.jsonl",
+  "input_sha256": "6bd1f4727345fce59c9697cfc5ea84bdaae821fedd27a786edc7418e98e223e4",
+  "rows": 880,
+  "schema_version": "v214_micro_split_v1",
+  "seed": 214,
+  "train_family_counts": {
+    "bit_manipulation": 144,
+    "equation_transform": 108,
+    "gravity_constant": 135,
+    "numeral_system": 135,
+    "text_encryption": 135,
+    "unit_conversion": 135
+  },
+  "train_jsonl": "data\\v214\\v214_micro_train.jsonl",
+  "train_rows": 792,
+  "train_sha256": "da601695ca59e6e981638a1105c4b9750d077fb9d15717bb0474d95a85e552a7",
+  "train_val_prompt_answer_overlap": 0,
+  "val_family_counts": {
+    "bit_manipulation": 16,
+    "equation_transform": 12,
+    "gravity_constant": 15,
+    "numeral_system": 15,
+    "text_encryption": 15,
+    "unit_conversion": 15
+  },
+  "val_fraction": 0.1,
+  "val_jsonl": "data\\v214\\v214_micro_val.jsonl",
+  "val_rows": 88,
+  "val_sha256": "ace511e400542241f3ed6bdba35c5b5d4852c72410d2b1504c88330e89482183"
+}
