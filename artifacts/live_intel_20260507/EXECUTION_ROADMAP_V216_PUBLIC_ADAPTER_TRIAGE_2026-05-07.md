@@ -106,7 +106,7 @@ Exact Colab URL on branch `v207b-external-triage`:
 
 `https://colab.research.google.com/github/FELIPEACASTRO/KG1-NVIDIA/blob/v207b-external-triage/notebooks/KG1_V207B_EXTERNAL_ADAPTER_TRIAGE_COLAB.ipynb`
 
-Current remote commit with this notebook/roadmap: `3253ffc96a8bf2b1cd91a39c5726091291ba9880`.
+The remote branch includes this notebook and roadmap.
 
 ## Required Human Interaction
 
