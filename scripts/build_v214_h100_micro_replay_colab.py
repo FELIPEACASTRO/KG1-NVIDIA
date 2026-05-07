@@ -966,11 +966,33 @@ print('=== V214 DRY RUN END ===', flush=True)
             """# CELL: optional one-step V194 continuation. Requires KG1_V214_RUN_TRAIN=1.
 print('=== V214 TRAIN START ===', flush=True)
 final_adapter = TRAIN_OUT / 'final_adapter'
+RUN_TRAIN = os.environ.get(
+    'KG1_V214_RUN_TRAIN',
+    '1' if bool(globals().get('RUN_TRAIN', False)) else '0',
+).strip().lower() in {'1', 'true', 'yes', 'on'}
+print('RUN_TRAIN_EFFECTIVE =', RUN_TRAIN, flush=True)
+
+def is_complete_adapter_dir(path):
+    path = pathlib.Path(path)
+    config_path = path / 'adapter_config.json'
+    weight_paths = [path / 'adapter_model.safetensors', path / 'adapter_model.bin']
+    return path.is_dir() and config_path.exists() and any(weight.exists() for weight in weight_paths)
+
+final_adapter_complete = is_complete_adapter_dir(final_adapter)
+print('final_adapter =', final_adapter, flush=True)
+print('final_adapter_exists =', final_adapter.exists(), flush=True)
+print('final_adapter_complete =', final_adapter_complete, flush=True)
+if final_adapter.exists() and not final_adapter_complete:
+    raise RuntimeError(
+        f'Incomplete final_adapter exists at {final_adapter}. '
+        'This usually means a previous training run failed after creating the directory. '
+        'Move/delete that partial final_adapter before retrying so eval cannot use a corrupt adapter.'
+    )
 if not RUN_TRAIN:
     print('RUN_TRAIN is false. Set environment KG1_V214_RUN_TRAIN=1 before running this cell to train.', flush=True)
-    print('Skipping training; downstream eval will run only if final_adapter already exists:', final_adapter, flush=True)
-elif final_adapter.exists():
-    print('final_adapter already exists; skipping retrain:', final_adapter, flush=True)
+    print('Skipping training; downstream eval will run only if a complete final_adapter already exists:', final_adapter, flush=True)
+elif final_adapter_complete:
+    print('complete final_adapter already exists; skipping retrain:', final_adapter, flush=True)
 else:
     rc = run_cmd(
         [sys.executable, str(ROOT / 'scripts/hf_job_train_v90.py')],
@@ -980,7 +1002,10 @@ else:
         check=True,
     )
     print('training returncode =', rc, flush=True)
-print('final_adapter =', final_adapter, 'exists =', final_adapter.exists(), flush=True)
+final_adapter_complete = is_complete_adapter_dir(final_adapter)
+print('final_adapter =', final_adapter, 'exists =', final_adapter.exists(), 'complete =', final_adapter_complete, flush=True)
+if RUN_TRAIN and not final_adapter_complete:
+    raise RuntimeError('Training finished but final_adapter is incomplete; refusing to continue to eval.')
 print('=== V214 TRAIN END ===', flush=True)
 """
         ),
@@ -993,6 +1018,8 @@ if not RUN_EVAL:
     print('RUN_EVAL is false; skipping weak eval.', flush=True)
 elif not final_adapter.exists():
     print('No final_adapter exists; skipping weak eval.', flush=True)
+elif 'is_complete_adapter_dir' in globals() and not is_complete_adapter_dir(final_adapter):
+    raise RuntimeError(f'final_adapter exists but is incomplete; refusing weak eval: {final_adapter}')
 else:
     weak_eval_dir.mkdir(parents=True, exist_ok=True)
     rc = run_cmd(
@@ -1034,6 +1061,8 @@ if not RUN_EVAL:
     print('RUN_EVAL is false; skipping full eval.', flush=True)
 elif not final_adapter.exists():
     print('No final_adapter exists; skipping full eval.', flush=True)
+elif 'is_complete_adapter_dir' in globals() and not is_complete_adapter_dir(final_adapter):
+    raise RuntimeError(f'final_adapter exists but is incomplete; refusing full eval: {final_adapter}')
 elif not weak_gate_pass:
     print('Weak gate failed; skipping full eval.', flush=True)
 else:
