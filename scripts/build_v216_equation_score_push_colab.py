@@ -357,6 +357,16 @@ def install_pip_spec(spec, label, force=False):
         check=True,
     )
 
+def uninstall_pip_specs(specs, label):
+    specs = [str(spec) for spec in specs if str(spec).strip()]
+    if not specs:
+        return 0
+    return run_cmd(
+        [sys.executable, '-m', 'pip', 'uninstall', '-y', *specs],
+        log_path=OUT_ROOT / f'pip_uninstall_{label.replace(".", "_").replace("-", "_")}.log',
+        check=False,
+    )
+
 def is_complete_adapter_dir(path):
     path = pathlib.Path(path)
     return path.is_dir() and (path / 'adapter_config.json').exists() and (
@@ -449,18 +459,55 @@ for import_name, spec in [
 if verify_import_subprocess('mamba_ssm', check=False) != 0:
     print('mamba_ssm subprocess import failed; installing causal-conv1d first, then mamba-ssm.', flush=True)
     if verify_import_subprocess('vllm', check=False) == 0:
-        raise RuntimeError(
-            'vLLM is already installed in this runtime but mamba_ssm is missing. '
-            'This is the known bad install order for V216 because vLLM changes CUDA/Python package state '
-            'before causal-conv1d can compile reliably. Use Colab Runtime > Disconnect and delete runtime '
-            '(or Factory reset runtime), then rerun this updated notebook from the first cell.'
+        print(
+            'vLLM is installed before mamba_ssm; uninstalling vLLM before the causal-conv1d/mamba build.',
+            flush=True,
         )
+        uninstall_pip_specs(['vllm'], 'vllm_pre_mamba_repair')
+        if verify_import_subprocess('vllm', check=False) == 0:
+            raise RuntimeError('Could not remove vLLM before mamba_ssm repair; see pip_uninstall_vllm_pre_mamba_repair.log')
     ensure_import('ninja', 'ninja')
     if verify_import_subprocess('causal_conv1d', check=False) != 0:
-        run_cmd(
+        causal_rc = run_cmd(
             [sys.executable, '-m', 'pip', 'install', '--progress-bar', 'off', '--no-build-isolation', V216_CAUSAL_CONV1D_PIP_SPEC],
             log_path=OUT_ROOT / 'pip_install_causal_conv1d.log',
+            check=False,
         )
+        if causal_rc != 0:
+            print('causal-conv1d build failed once; refreshing build tooling and retrying without pip cache.', flush=True)
+            run_cmd(
+                [
+                    sys.executable,
+                    '-m',
+                    'pip',
+                    'install',
+                    '-q',
+                    '--upgrade',
+                    'pip',
+                    'setuptools',
+                    'wheel',
+                    'packaging',
+                    'ninja',
+                ],
+                log_path=OUT_ROOT / 'pip_install_build_tooling_retry.log',
+            )
+            causal_rc = run_cmd(
+                [
+                    sys.executable,
+                    '-m',
+                    'pip',
+                    'install',
+                    '--progress-bar',
+                    'off',
+                    '--no-cache-dir',
+                    '--no-build-isolation',
+                    V216_CAUSAL_CONV1D_PIP_SPEC,
+                ],
+                log_path=OUT_ROOT / 'pip_install_causal_conv1d_retry.log',
+                check=False,
+            )
+        if causal_rc != 0:
+            raise RuntimeError('causal-conv1d build failed after retry; see pip_install_causal_conv1d*.log')
         verify_import_subprocess('causal_conv1d', check=True)
     else:
         print('causal_conv1d subprocess import already OK; skipping install.', flush=True)
@@ -474,16 +521,9 @@ vllm_rc = verify_import_subprocess('vllm', check=False)
 if vllm_rc != 0:
     print('vLLM subprocess import failed; installing pinned V216_VLLM_PIP_SPEC =', V216_VLLM_PIP_SPEC, flush=True)
     install_pip_spec(V216_VLLM_PIP_SPEC, 'vllm', force=False)
-    restart_marker = OUT_ROOT / 'RESTART_RUNTIME_AFTER_VLLM_INSTALL.txt'
-    restart_marker.write_text(
-        'vLLM was installed after mamba_ssm in this runtime. Restart Colab runtime and rerun from the first cell.\\n',
-        encoding='utf-8',
-    )
-    raise RuntimeError(
-        'vLLM was just installed after mamba_ssm. Restart the Colab runtime now, then rerun from the first cell. '
-        'This avoids a mixed Torch/vLLM import state after heavy wheel installs. '
-        f'Restart marker: {restart_marker}'
-    )
+    verify_import_subprocess('vllm', check=True)
+else:
+    print('vLLM subprocess import already OK; skipping install.', flush=True)
 
 torch_check_code = (
     "import json, torch; "
