@@ -80,16 +80,24 @@ Notebook checks/imports:
 - `transformers`
 - `peft>=0.18.1`
 - `torch`
+- `ninja`
+- `mamba-ssm[causal-conv1d]`, with fallback to separate `causal-conv1d`
+  and `mamba-ssm` installs
 - `vllm`
 - `bitsandbytes` optional, with fallback to torch Adam if unavailable
 - `packaging`
 
-After installing `vllm`, it runs a fresh Python subprocess import check for:
+Before loading the model, it runs an exact fresh Python subprocess check for:
+
+- `from mamba_ssm.ops.triton.layernorm_gated import rmsnorm_fn`
+
+After dependency installs, it runs a fresh Python subprocess import check for:
 
 - `torch`
 - `transformers`
 - `peft`
 - `vllm`
+- `mamba_ssm`
 
 This matters because Colab package installs can change dependency versions in a
 way that the current kernel does not fully reflect.

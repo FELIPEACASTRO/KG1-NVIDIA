@@ -75,6 +75,8 @@ Training design:
 - TF32 is enabled for supported CUDA matmul/CUDNN operations;
 - `torch.set_float32_matmul_precision("high")` is enabled;
 - `HF_HUB_ENABLE_HF_TRANSFER=1` is enabled and `hf_transfer` is installed when needed;
+- `mamba-ssm[causal-conv1d]` is installed and validated before the Nemotron
+  model load, because the model remote code imports `mamba_ssm` Mamba kernels;
 - `bitsandbytes` is attempted so the train script can use `PagedAdam8bit`;
 - `PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True`;
 - `TOKENIZERS_PARALLELISM=false`;

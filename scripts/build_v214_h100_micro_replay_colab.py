@@ -411,6 +411,44 @@ def fresh_python_import_check(imports):
     )
     run_cmd([sys.executable, '-c', code])
 
+def fresh_python_code_check(label, code_text):
+    print(f'=== FRESH PYTHON CHECK START: {label} ===', flush=True)
+    run_cmd([sys.executable, '-c', code_text])
+    print(f'=== FRESH PYTHON CHECK END: {label} ===', flush=True)
+
+def ensure_mamba_stack():
+    required_import = (
+        "from mamba_ssm.ops.triton.layernorm_gated import rmsnorm_fn\\n"
+        "import mamba_ssm, json\\n"
+        "print(json.dumps({"
+        "'mamba_ssm_version': getattr(mamba_ssm, '__version__', 'unknown'), "
+        "'layernorm_gated_rmsnorm_fn': rmsnorm_fn is not None"
+        "}, sort_keys=True))"
+    )
+    try:
+        fresh_python_code_check('mamba_ssm_preinstall', required_import)
+        return
+    except Exception as exc:
+        print('mamba_ssm required import unavailable before install:', repr(exc), flush=True)
+
+    ensure_import('ninja', 'ninja')
+    print('Installing mamba-ssm with causal-conv1d extra; this can take several minutes on a fresh Colab runtime.', flush=True)
+    try:
+        run_cmd([
+            sys.executable,
+            '-m',
+            'pip',
+            'install',
+            '-q',
+            '--no-build-isolation',
+            'mamba-ssm[causal-conv1d]',
+        ])
+    except Exception as exc:
+        print('Combined mamba-ssm extra install failed; retrying causal-conv1d and mamba-ssm separately:', repr(exc), flush=True)
+        run_cmd([sys.executable, '-m', 'pip', 'install', '-q', '--no-build-isolation', 'causal-conv1d'])
+        run_cmd([sys.executable, '-m', 'pip', 'install', '-q', '--no-build-isolation', 'mamba-ssm'])
+    fresh_python_code_check('mamba_ssm_postinstall', required_import)
+
 ensure_import('pandas', 'pandas')
 ensure_import('huggingface_hub', 'huggingface_hub')
 if os.environ.get('HF_HUB_ENABLE_HF_TRANSFER', '').strip() == '1':
@@ -423,6 +461,7 @@ print('torch_cuda_device_count =', torch.cuda.device_count() if torch.cuda.is_av
 if torch.cuda.is_available():
     print('torch_cuda_device_name =', torch.cuda.get_device_name(0), flush=True)
     print('torch_cuda_version =', getattr(torch.version, 'cuda', 'unknown'), flush=True)
+ensure_mamba_stack()
 try:
     ensure_import('vllm')
 except Exception as exc:
@@ -433,7 +472,7 @@ try:
     ensure_import('bitsandbytes', 'bitsandbytes')
 except Exception as exc:
     print('bitsandbytes unavailable after install attempt; train script will fall back to torch Adam:', repr(exc), flush=True)
-fresh_python_import_check(['torch', 'transformers', 'peft', 'vllm'])
+fresh_python_import_check(['torch', 'transformers', 'peft', 'vllm', 'mamba_ssm'])
 print('=== V214 DEPENDENCY AUDIT END ===', flush=True)
 """
         ),
