@@ -114,6 +114,8 @@ os.environ.setdefault('VLLM_USE_DEEP_GEMM_E8M0', '0')
 os.environ.setdefault('VLLM_USE_DEEP_GEMM_TMA_ALIGNED_SCALES', '0')
 os.environ.setdefault('VLLM_DEEP_GEMM_WARMUP', 'skip')
 os.environ.setdefault('VLLM_MEMORY_PROFILER_ESTIMATE_CUDAGRAPHS', '0')
+os.environ.setdefault('TORCH_CUDA_ARCH_LIST', os.environ.get('KG1_TORCH_CUDA_ARCH_LIST', '9.0'))
+os.environ.setdefault('MAX_JOBS', os.environ.get('KG1_BUILD_MAX_JOBS', '4'))
 
 VERSION = 'V216_EQUATION_SCORE_PUSH_20260507'
 REPO_URL = os.environ.get('KG1_REPO_URL', 'https://github.com/FELIPEACASTRO/KG1-NVIDIA.git')
@@ -147,8 +149,8 @@ V216_LR = os.environ.get('KG1_V216_LR', '3e-8')
 V216_MAX_STEPS = os.environ.get('KG1_V216_MAX_STEPS', '24')
 V216_TRAINABLE_MODULES = os.environ.get('KG1_V216_TRAINABLE_MODULES', 'q_proj,k_proj,v_proj,o_proj,out_proj,in_proj')
 V216_VLLM_PIP_SPEC = os.environ.get('KG1_V216_VLLM_PIP_SPEC', 'vllm==0.20.1')
-V216_CAUSAL_CONV1D_PIP_SPEC = os.environ.get('KG1_V216_CAUSAL_CONV1D_PIP_SPEC', 'causal-conv1d')
-V216_MAMBA_SSM_PIP_SPEC = os.environ.get('KG1_V216_MAMBA_SSM_PIP_SPEC', 'mamba-ssm')
+V216_CAUSAL_CONV1D_PIP_SPEC = os.environ.get('KG1_V216_CAUSAL_CONV1D_PIP_SPEC', 'causal-conv1d==1.6.1')
+V216_MAMBA_SSM_PIP_SPEC = os.environ.get('KG1_V216_MAMBA_SSM_PIP_SPEC', 'mamba-ssm==2.3.1')
 V216_MAX_LENGTH = int(os.environ.get('KG1_V216_MAX_LENGTH', '4096'))
 V216_BATCH_SIZE = int(os.environ.get('KG1_V216_BATCH_SIZE', '4'))
 V216_MICRO_BATCH_SIZE = int(os.environ.get('KG1_V216_MICRO_BATCH_SIZE', '1'))
@@ -186,6 +188,8 @@ print('V216_TRAINABLE_MODULES =', V216_TRAINABLE_MODULES, flush=True)
 print('V216_VLLM_PIP_SPEC =', V216_VLLM_PIP_SPEC, flush=True)
 print('V216_CAUSAL_CONV1D_PIP_SPEC =', V216_CAUSAL_CONV1D_PIP_SPEC, flush=True)
 print('V216_MAMBA_SSM_PIP_SPEC =', V216_MAMBA_SSM_PIP_SPEC, flush=True)
+print('TORCH_CUDA_ARCH_LIST =', os.environ.get('TORCH_CUDA_ARCH_LIST', ''), flush=True)
+print('MAX_JOBS =', os.environ.get('MAX_JOBS', ''), flush=True)
 print('WEAK_MIN_FOR_FULL =', WEAK_MIN_FOR_FULL, flush=True)
 print('WEAK_EQ_MIN_FOR_FULL =', WEAK_EQ_MIN_FOR_FULL, flush=True)
 print('WEAK_BIT_MIN_FOR_FULL =', WEAK_BIT_MIN_FOR_FULL, flush=True)
@@ -442,37 +446,44 @@ for import_name, spec in [
         install_pip_spec(spec, import_name, force=False)
         verify_import_subprocess(import_name, check=True)
 
-vllm_rc = verify_import_subprocess('vllm', check=False)
-if vllm_rc != 0:
-    print('vLLM subprocess import failed; installing pinned V216_VLLM_PIP_SPEC =', V216_VLLM_PIP_SPEC, flush=True)
-    install_pip_spec(V216_VLLM_PIP_SPEC, 'vllm', force=False)
-    restart_marker = OUT_ROOT / 'RESTART_RUNTIME_AFTER_VLLM_INSTALL.txt'
-    restart_marker.write_text(
-        'vLLM was installed in this runtime. Restart Colab runtime and rerun from the first cell.\\n',
-        encoding='utf-8',
-    )
-    raise RuntimeError(
-        'vLLM was just installed. Restart the Colab runtime now, then rerun from the first cell. '
-        'This avoids a mixed Torch/vLLM import state after heavy wheel installs. '
-        f'Restart marker: {restart_marker}'
-    )
-
 if verify_import_subprocess('mamba_ssm', check=False) != 0:
     print('mamba_ssm subprocess import failed; installing causal-conv1d first, then mamba-ssm.', flush=True)
+    if verify_import_subprocess('vllm', check=False) == 0:
+        raise RuntimeError(
+            'vLLM is already installed in this runtime but mamba_ssm is missing. '
+            'This is the known bad install order for V216 because vLLM changes CUDA/Python package state '
+            'before causal-conv1d can compile reliably. Use Colab Runtime > Disconnect and delete runtime '
+            '(or Factory reset runtime), then rerun this updated notebook from the first cell.'
+        )
     ensure_import('ninja', 'ninja')
     if verify_import_subprocess('causal_conv1d', check=False) != 0:
         run_cmd(
-            [sys.executable, '-m', 'pip', 'install', '-q', '--no-build-isolation', V216_CAUSAL_CONV1D_PIP_SPEC],
+            [sys.executable, '-m', 'pip', 'install', '--progress-bar', 'off', '--no-build-isolation', V216_CAUSAL_CONV1D_PIP_SPEC],
             log_path=OUT_ROOT / 'pip_install_causal_conv1d.log',
         )
         verify_import_subprocess('causal_conv1d', check=True)
     else:
         print('causal_conv1d subprocess import already OK; skipping install.', flush=True)
     run_cmd(
-        [sys.executable, '-m', 'pip', 'install', '-q', '--no-build-isolation', V216_MAMBA_SSM_PIP_SPEC],
+        [sys.executable, '-m', 'pip', 'install', '--progress-bar', 'off', '--no-build-isolation', V216_MAMBA_SSM_PIP_SPEC],
         log_path=OUT_ROOT / 'pip_install_mamba_ssm.log',
     )
     verify_import_subprocess('mamba_ssm', check=True)
+
+vllm_rc = verify_import_subprocess('vllm', check=False)
+if vllm_rc != 0:
+    print('vLLM subprocess import failed; installing pinned V216_VLLM_PIP_SPEC =', V216_VLLM_PIP_SPEC, flush=True)
+    install_pip_spec(V216_VLLM_PIP_SPEC, 'vllm', force=False)
+    restart_marker = OUT_ROOT / 'RESTART_RUNTIME_AFTER_VLLM_INSTALL.txt'
+    restart_marker.write_text(
+        'vLLM was installed after mamba_ssm in this runtime. Restart Colab runtime and rerun from the first cell.\\n',
+        encoding='utf-8',
+    )
+    raise RuntimeError(
+        'vLLM was just installed after mamba_ssm. Restart the Colab runtime now, then rerun from the first cell. '
+        'This avoids a mixed Torch/vLLM import state after heavy wheel installs. '
+        f'Restart marker: {restart_marker}'
+    )
 
 torch_check_code = (
     "import json, torch; "
