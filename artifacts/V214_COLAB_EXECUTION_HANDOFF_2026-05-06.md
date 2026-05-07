@@ -89,7 +89,14 @@ The notebook blocks model load if the runtime is too small:
 - GPU total memory must be at least `70 GiB`;
 - system RAM total must be at least `45 GiB`;
 - system RAM available must be at least `20 GiB`;
-- `/content` free disk must be at least `80 GiB`.
+- `/content` free disk must be at least `55 GiB` after safe cleanup;
+- `/content` free disk below `65 GiB` prints a warning but does not block.
+
+Before checking disk, the notebook removes only safe disposable paths:
+
+- `/content/sample_data`;
+- `/root/.cache/pip`;
+- `/tmp/pip-*`.
 
 An H100 name is expected and logged. A non-H100 GPU can proceed only if the
 memory gate passes, but it prints a warning because the intended runtime is

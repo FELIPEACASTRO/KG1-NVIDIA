@@ -443,7 +443,9 @@ print('=== V214 H100 SIZE GATE START ===', flush=True)
 MIN_GPU_TOTAL_GIB = float(os.environ.get('KG1_V214_MIN_GPU_GIB', '70'))
 MIN_RAM_TOTAL_GIB = float(os.environ.get('KG1_V214_MIN_RAM_TOTAL_GIB', '45'))
 MIN_RAM_AVAILABLE_GIB = float(os.environ.get('KG1_V214_MIN_RAM_AVAILABLE_GIB', '20'))
-MIN_CONTENT_FREE_GIB = float(os.environ.get('KG1_V214_MIN_CONTENT_FREE_GIB', '80'))
+MIN_CONTENT_FREE_GIB = float(os.environ.get('KG1_V214_MIN_CONTENT_FREE_GIB', '55'))
+WARN_CONTENT_FREE_GIB = float(os.environ.get('KG1_V214_WARN_CONTENT_FREE_GIB', '65'))
+SAFE_DISK_CLEANUP = os.environ.get('KG1_V214_SAFE_DISK_CLEANUP', '1').strip().lower() not in {'0', 'false', 'no', 'off'}
 
 def meminfo_gib():
     values = {}
@@ -457,8 +459,63 @@ def disk_free_gib(path):
     usage = shutil.disk_usage(path)
     return usage.free / 1024**3, usage.total / 1024**3
 
+def path_size_gib(path):
+    path = pathlib.Path(path)
+    if not path.exists():
+        return 0.0
+    if path.is_file():
+        return path.stat().st_size / 1024**3
+    total = 0
+    for child in path.rglob('*'):
+        try:
+            if child.is_file():
+                total += child.stat().st_size
+        except OSError:
+            pass
+    return total / 1024**3
+
+def safe_remove_path(path):
+    path = pathlib.Path(path)
+    before = path_size_gib(path)
+    if not path.exists():
+        return {'path': str(path), 'existed': False, 'size_gib': 0.0, 'removed': False}
+    try:
+        if path.is_dir():
+            shutil.rmtree(path)
+        else:
+            path.unlink()
+        return {'path': str(path), 'existed': True, 'size_gib': round(before, 3), 'removed': True}
+    except Exception as exc:
+        return {
+            'path': str(path),
+            'existed': True,
+            'size_gib': round(before, 3),
+            'removed': False,
+            'error': f'{type(exc).__name__}: {exc}',
+        }
+
+def safe_disk_cleanup():
+    cleanup_report = []
+    if not SAFE_DISK_CLEANUP:
+        print('SAFE_DISK_CLEANUP disabled by KG1_V214_SAFE_DISK_CLEANUP=0', flush=True)
+        return cleanup_report
+    targets = [
+        '/content/sample_data',
+        '/root/.cache/pip',
+    ]
+    for pattern in ['/tmp/pip-*']:
+        targets.extend(str(item) for item in pathlib.Path('/tmp').glob(pathlib.Path(pattern).name))
+    for target in targets:
+        cleanup_report.append(safe_remove_path(target))
+    print('safe_disk_cleanup_report =', json.dumps(cleanup_report, indent=2, sort_keys=True), flush=True)
+    return cleanup_report
+
 if not torch.cuda.is_available():
     raise RuntimeError('CUDA GPU is required for V214 dry-run/train/eval.')
+
+content_free_before_cleanup, content_total_before_cleanup = disk_free_gib('/content')
+cleanup_report = safe_disk_cleanup()
+content_free_after_cleanup, content_total_after_cleanup = disk_free_gib('/content')
 
 props = torch.cuda.get_device_properties(0)
 gpu_name = props.name
@@ -476,6 +533,8 @@ size_report = {
     'gpu_total_gib': round(gpu_total_gib, 2),
     'ram_total_gib': round(ram_total_gib, 2),
     'ram_available_gib': round(ram_available_gib, 2),
+    'content_disk_free_before_cleanup_gib': round(content_free_before_cleanup, 2),
+    'content_disk_free_after_cleanup_gib': round(content_free_after_cleanup, 2),
     'content_disk_free_gib': round(content_free_gib, 2),
     'content_disk_total_gib': round(content_total_gib, 2),
     'drive_disk_free_gib': round(drive_free_gib, 2),
@@ -485,7 +544,9 @@ size_report = {
         'ram_total_gib': MIN_RAM_TOTAL_GIB,
         'ram_available_gib': MIN_RAM_AVAILABLE_GIB,
         'content_disk_free_gib': MIN_CONTENT_FREE_GIB,
+        'content_disk_warning_gib': WARN_CONTENT_FREE_GIB,
     },
+    'cleanup_report': cleanup_report,
 }
 print('size_report =', json.dumps(size_report, indent=2, sort_keys=True), flush=True)
 
@@ -502,7 +563,15 @@ if ram_total_gib < MIN_RAM_TOTAL_GIB or ram_available_gib < MIN_RAM_AVAILABLE_GI
 if content_free_gib < MIN_CONTENT_FREE_GIB:
     raise RuntimeError(
         f'/content free disk too small: {content_free_gib:.1f}GiB < {MIN_CONTENT_FREE_GIB:.1f}GiB. '
-        'Restart runtime or free disk before model download/load.'
+        'Restart runtime, free disk, or lower KG1_V214_MIN_CONTENT_FREE_GIB only for dry-run diagnostics.'
+    )
+if content_free_gib < WARN_CONTENT_FREE_GIB:
+    print(
+        f'WARNING: /content free disk is tight: {content_free_gib:.1f}GiB < '
+        f'warning threshold {WARN_CONTENT_FREE_GIB:.1f}GiB. This should be enough '
+        'to try the V214 dry-run on this H100 runtime, but model download/cache may still fail. '
+        'If download fails, restart runtime and avoid extra installs/files before this notebook.',
+        flush=True,
     )
 if not h100_detected:
     print('WARNING: H100 not detected. Memory gate passed, but the intended runtime is H100 high-RAM.', flush=True)

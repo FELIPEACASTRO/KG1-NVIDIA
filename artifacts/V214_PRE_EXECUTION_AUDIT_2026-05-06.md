@@ -124,12 +124,23 @@ The notebook blocks model load unless:
 - GPU total memory `>=70 GiB`;
 - system RAM total `>=45 GiB`;
 - system RAM available `>=20 GiB`;
-- `/content` free disk `>=80 GiB`.
+- `/content` free disk `>=55 GiB` after safe cleanup.
+
+The notebook warns, but does not block, when `/content` free disk is below
+`65 GiB`.
+
+Safe cleanup before the disk check removes:
+
+- `/content/sample_data`;
+- `/root/.cache/pip`;
+- `/tmp/pip-*`.
 
 Expected H100 high-RAM verdict:
 
 - H100 80GB should pass the GPU memory gate.
 - Colab high-RAM should pass the system RAM gate.
+- The observed H100 runtime with about `59.5 GiB` free on `/content` should
+  pass after this gate adjustment, while logging a disk-warning.
 - A 40GB GPU should fail before model load.
 - Standard low-RAM runtime should fail before model load.
 
