@@ -1,0 +1,17 @@
+priority,label,kaggle_ref,drive_adapter_dir,expected_primary_file,expected_size_bytes,default_download
+1,huikang_default_v27,huikang/nemotron-adapter/Transformers/default/27,/content/drive/MyDrive/KG1_PUBLIC_ADAPTERS/huikang_default_v27/adapter,adapter_model.safetensors,1544348352,true
+1,huikang_default_v26,huikang/nemotron-adapter/Transformers/default/26,/content/drive/MyDrive/KG1_PUBLIC_ADAPTERS/huikang_default_v26/adapter,adapter_model.safetensors,1544348352,true
+1,huikang_default_v25,huikang/nemotron-adapter/Transformers/default/25,/content/drive/MyDrive/KG1_PUBLIC_ADAPTERS/huikang_default_v25/adapter,adapter_model.safetensors,1544348352,true
+1,huikang_default_v24,huikang/nemotron-adapter/Transformers/default/24,/content/drive/MyDrive/KG1_PUBLIC_ADAPTERS/huikang_default_v24/adapter,adapter_model.safetensors,772202848,true
+1,huikang_default_v23,huikang/nemotron-adapter/Transformers/default/23,/content/drive/MyDrive/KG1_PUBLIC_ADAPTERS/huikang_default_v23/adapter,adapter_model.safetensors,1544348352,true
+1,huikang_default_v22,huikang/nemotron-adapter/Transformers/default/22,/content/drive/MyDrive/KG1_PUBLIC_ADAPTERS/huikang_default_v22/adapter,adapter_model.safetensors,1544348352,true
+1,huikang_default_v21,huikang/nemotron-adapter/Transformers/default/21,/content/drive/MyDrive/KG1_PUBLIC_ADAPTERS/huikang_default_v21/adapter,adapter_model.safetensors,1544348352,true
+1,huikang_default_v20,huikang/nemotron-adapter/Transformers/default/20,/content/drive/MyDrive/KG1_PUBLIC_ADAPTERS/huikang_default_v20/adapter,adapter_model.safetensors,1544348352,true
+2,kienngx_1200samples_cot_1e_5,kienngx/nemotron-nano-30b-trained/Transformers/1200samples-cot-1e-5/1,/content/drive/MyDrive/KG1_PUBLIC_ADAPTERS/kienngx_1200samples_cot_1e_5/adapter,adapter_model.safetensors,3537299144,true
+2,kienngx_1200samples_cot_5e_5,kienngx/nemotron-nano-30b-trained/Transformers/1200samples-cot-5e-5/1,/content/drive/MyDrive/KG1_PUBLIC_ADAPTERS/kienngx_1200samples_cot_5e_5/adapter,adapter_model.safetensors,3537299144,true
+2,kienngx_cot_labels_3000samples,kienngx/nemotron-nano-30b-trained/Transformers/cot-labels-3000samples/1,/content/drive/MyDrive/KG1_PUBLIC_ADAPTERS/kienngx_cot_labels_3000samples/adapter,adapter_model.safetensors,3537299144,true
+2,kienngx_600_samples_packing_false,kienngx/nemotron-nano-30b-trained/Transformers/600-samples-packing-false/1,/content/drive/MyDrive/KG1_PUBLIC_ADAPTERS/kienngx_600_samples_packing_false/adapter,adapter_model.safetensors,1740420752,true
+2,kienngx_1800s_lora_rank32_false,kienngx/nemotron-nano-30b-trained/Transformers/1800s-lora-rank32-false/1,/content/drive/MyDrive/KG1_PUBLIC_ADAPTERS/kienngx_1800s_lora_rank32_false/adapter,adapter_model.safetensors,3479065680,true
+3,kienngx_tinker_adapter,kienngx/nemotron-nano-30b-trained/Triton/tinker-adapter/1,/content/drive/MyDrive/KG1_PUBLIC_ADAPTERS/kienngx_tinker_adapter/adapter,adapter_model.safetensors,3554384888,false
+3,kienngx_2400_1e_4_lr_all_linear_packingfalse,kienngx/nemotron-nano-30b-trained/Transformers/2400-1e-4_lr-all_linear-packingfalse/1,/content/drive/MyDrive/KG1_PUBLIC_ADAPTERS/kienngx_2400_1e_4_lr_all_linear_packingfalse/adapter,adapter_model.safetensors,3537299144,false
+3,kienngx_9500s_batch1_lr1e_4,kienngx/nemotron-nano-30b-trained/Transformers/9500s-batch1-lr1e-4/1,/content/drive/MyDrive/KG1_PUBLIC_ADAPTERS/kienngx_9500s_batch1_lr1e_4/adapter,adapter_model.safetensors,58233016,false

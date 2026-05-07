@@ -74,11 +74,12 @@ def build_notebook() -> dict:
         md(
             """# KG1 V207B External Adapter Triage Colab
 
-Purpose: continue the V207 roadmap after V206B/V206C were rejected.
+Purpose: continue the V207 roadmap after V206B/V206C/V214 were rejected.
 
 This notebook:
 
 - reuses the V207A official-like validation artifacts already saved in Drive;
+- downloads public Kaggle model adapters into Drive for gated testing;
 - audits external/current adapter structures before spending H100/A100 time;
 - screens only the weak families first: `equation_transform` and `bit_manipulation`;
 - runs full 947-row official-like ACC only for weak-positive candidates;
@@ -111,7 +112,7 @@ import subprocess
 import sys
 import time
 
-VERSION = 'V207B_EXTERNAL_ADAPTER_TRIAGE_20260506'
+VERSION = 'V207B_EXTERNAL_ADAPTER_TRIAGE_20260507_PUBLIC_DOWNLOADS'
 REPO_URL = os.environ.get('KG1_REPO_URL', 'https://github.com/FELIPEACASTRO/KG1-NVIDIA.git')
 REPO_BRANCH = os.environ.get('KG1_REPO_BRANCH', 'v207a-colab')
 ROOT = pathlib.Path('/content/kg1')
@@ -119,6 +120,7 @@ DRIVE_MY = pathlib.Path('/content/drive/MyDrive')
 V207A_ROOT = DRIVE_MY / 'KG1_NVIDIA_V207A' / 'output_v207a_acc_gate'
 OUT_ROOT = DRIVE_MY / 'KG1_NVIDIA_V207B' / 'output_v207b_external_adapter_triage'
 REPORT_DIR = OUT_ROOT / 'reports'
+PUBLIC_KAGGLE_ROOT = DRIVE_MY / 'KG1_PUBLIC_ADAPTERS'
 MODEL_NAME = '{MODEL_NAME}'
 MODEL_REVISION = '{MODEL_REVISION}'
 
@@ -134,9 +136,12 @@ RUN_FULL_FOR_POSITIVE = os.environ.get('KG1_V207B_RUN_FULL_FOR_POSITIVE', '1') =
 HASH_WEIGHTS = os.environ.get('KG1_V207B_HASH_WEIGHTS', '0') == '1'
 MAX_DISCOVERY_DIRS = int(os.environ.get('KG1_V207B_MAX_DISCOVERY_DIRS', '25000'))
 INCLUDE_REJECTED_V206 = os.environ.get('KG1_V207B_INCLUDE_REJECTED_V206', '0') == '1'
+RUN_KAGGLE_PUBLIC_DOWNLOAD = os.environ.get('KG1_V207B_RUN_KAGGLE_PUBLIC_DOWNLOAD', '1') == '1'
+PUBLIC_DOWNLOAD_MAX_PRIORITY = int(os.environ.get('KG1_V207B_PUBLIC_DOWNLOAD_MAX_PRIORITY', '2'))
+PUBLIC_DOWNLOAD_MAX_CANDIDATES = int(os.environ.get('KG1_V207B_PUBLIC_DOWNLOAD_MAX_CANDIDATES', '13'))
 ALLOW_KAGGLE_SUBMIT = False
 
-for path in [OUT_ROOT, REPORT_DIR, VAL_WEAK_CSV.parent]:
+for path in [OUT_ROOT, REPORT_DIR, VAL_WEAK_CSV.parent, PUBLIC_KAGGLE_ROOT]:
     path.mkdir(parents=True, exist_ok=True)
 
 print('VERSION =', VERSION)
@@ -145,6 +150,7 @@ print('REPO_BRANCH =', REPO_BRANCH)
 print('ROOT =', ROOT)
 print('V207A_ROOT =', V207A_ROOT)
 print('OUT_ROOT =', OUT_ROOT)
+print('PUBLIC_KAGGLE_ROOT =', PUBLIC_KAGGLE_ROOT)
 print('VAL_CSV =', VAL_CSV)
 print('BASELINE_PREDICTIONS =', BASELINE_PREDICTIONS)
 print('BASELINE_PER_TASK =', BASELINE_PER_TASK)
@@ -156,6 +162,9 @@ print('RUN_FULL_FOR_POSITIVE =', RUN_FULL_FOR_POSITIVE)
 print('HASH_WEIGHTS =', HASH_WEIGHTS)
 print('MAX_DISCOVERY_DIRS =', MAX_DISCOVERY_DIRS)
 print('INCLUDE_REJECTED_V206 =', INCLUDE_REJECTED_V206)
+print('RUN_KAGGLE_PUBLIC_DOWNLOAD =', RUN_KAGGLE_PUBLIC_DOWNLOAD)
+print('PUBLIC_DOWNLOAD_MAX_PRIORITY =', PUBLIC_DOWNLOAD_MAX_PRIORITY)
+print('PUBLIC_DOWNLOAD_MAX_CANDIDATES =', PUBLIC_DOWNLOAD_MAX_CANDIDATES)
 print('ALLOW_KAGGLE_SUBMIT =', ALLOW_KAGGLE_SUBMIT)
 if ALLOW_KAGGLE_SUBMIT:
     raise RuntimeError('This notebook is submit-disabled by design.')
@@ -253,6 +262,8 @@ ensure_import('huggingface_hub', 'huggingface_hub')
 ensure_import('transformers', 'transformers')
 ensure_import('peft', 'peft')
 ensure_import('safetensors', 'safetensors')
+run_cmd([sys.executable, '-m', 'pip', 'install', '-q', 'kaggle'])
+run_cmd(['kaggle', '--version'])
 torch = ensure_import('torch')
 print('torch_cuda_available =', torch.cuda.is_available())
 print('torch_cuda_device_count =', torch.cuda.device_count() if torch.cuda.is_available() else 0)
@@ -331,6 +342,184 @@ print('=== V207B V207A ARTIFACT CHECK END ===')
 """
         ),
         code(
+            """# CELL: download public Kaggle adapter candidates into Drive.
+print('=== V207B PUBLIC KAGGLE ADAPTER DOWNLOAD START ===')
+from pathlib import Path
+
+PUBLIC_KAGGLE_MODEL_CANDIDATES = [
+    # Priority 1: Huikang public adapter versions used by public competition notebooks.
+    {'label': 'huikang_default_v27', 'ref': 'huikang/nemotron-adapter/Transformers/default/27', 'priority': 1},
+    {'label': 'huikang_default_v26', 'ref': 'huikang/nemotron-adapter/Transformers/default/26', 'priority': 1},
+    {'label': 'huikang_default_v25', 'ref': 'huikang/nemotron-adapter/Transformers/default/25', 'priority': 1},
+    {'label': 'huikang_default_v24', 'ref': 'huikang/nemotron-adapter/Transformers/default/24', 'priority': 1},
+    {'label': 'huikang_default_v23', 'ref': 'huikang/nemotron-adapter/Transformers/default/23', 'priority': 1},
+    {'label': 'huikang_default_v22', 'ref': 'huikang/nemotron-adapter/Transformers/default/22', 'priority': 1},
+    {'label': 'huikang_default_v21', 'ref': 'huikang/nemotron-adapter/Transformers/default/21', 'priority': 1},
+    {'label': 'huikang_default_v20', 'ref': 'huikang/nemotron-adapter/Transformers/default/20', 'priority': 1},
+
+    # Priority 2: Kienngx variations referenced by public notebooks and model listings.
+    {'label': 'kienngx_1200samples_cot_1e_5', 'ref': 'kienngx/nemotron-nano-30b-trained/Transformers/1200samples-cot-1e-5/1', 'priority': 2},
+    {'label': 'kienngx_1200samples_cot_5e_5', 'ref': 'kienngx/nemotron-nano-30b-trained/Transformers/1200samples-cot-5e-5/1', 'priority': 2},
+    {'label': 'kienngx_cot_labels_3000samples', 'ref': 'kienngx/nemotron-nano-30b-trained/Transformers/cot-labels-3000samples/1', 'priority': 2},
+    {'label': 'kienngx_600_samples_packing_false', 'ref': 'kienngx/nemotron-nano-30b-trained/Transformers/600-samples-packing-false/1', 'priority': 2},
+    {'label': 'kienngx_1800s_lora_rank32_false', 'ref': 'kienngx/nemotron-nano-30b-trained/Transformers/1800s-lora-rank32-false/1', 'priority': 2},
+
+    # Priority 3: extra variants. Keep default download priority at 2 to control Drive usage/time.
+    {'label': 'kienngx_tinker_adapter', 'ref': 'kienngx/nemotron-nano-30b-trained/Triton/tinker-adapter/1', 'priority': 3},
+    {'label': 'kienngx_2400_1e_4_lr_all_linear_packingfalse', 'ref': 'kienngx/nemotron-nano-30b-trained/Transformers/2400-1e-4_lr-all_linear-packingfalse/1', 'priority': 3},
+    {'label': 'kienngx_9500s_batch1_lr1e_4', 'ref': 'kienngx/nemotron-nano-30b-trained/Transformers/9500s-batch1-lr1e-4/1', 'priority': 3},
+]
+
+PUBLIC_KAGGLE_EXPECTED_BYTES = {
+    'huikang_default_v27': 1544348352,
+    'huikang_default_v26': 1544348352,
+    'huikang_default_v25': 1544348352,
+    'huikang_default_v24': 772202848,
+    'huikang_default_v23': 1544348352,
+    'huikang_default_v22': 1544348352,
+    'huikang_default_v21': 1544348352,
+    'huikang_default_v20': 1544348352,
+    'kienngx_1200samples_cot_1e_5': 3537299144,
+    'kienngx_1200samples_cot_5e_5': 3537299144,
+    'kienngx_cot_labels_3000samples': 3537299144,
+    'kienngx_600_samples_packing_false': 1740420752,
+    'kienngx_1800s_lora_rank32_false': 3479065680,
+    'kienngx_tinker_adapter': 3554384888,
+    'kienngx_2400_1e_4_lr_all_linear_packingfalse': 3537299144,
+    'kienngx_9500s_batch1_lr1e_4': 58233016,
+}
+for _item in PUBLIC_KAGGLE_MODEL_CANDIDATES:
+    _item['expected_bytes'] = PUBLIC_KAGGLE_EXPECTED_BYTES.get(_item['label'], 0)
+
+def kaggle_adapter_ready(path):
+    path = Path(path)
+    return (
+        path.is_dir()
+        and (path / 'adapter_config.json').exists()
+        and ((path / 'adapter_model.safetensors').exists() or (path / 'adapter_model.bin').exists())
+    )
+
+def configure_kaggle_credentials():
+    kaggle_dir = Path('/root/.kaggle')
+    token_path = kaggle_dir / 'kaggle.json'
+    kaggle_dir.mkdir(parents=True, exist_ok=True)
+    if token_path.exists():
+        token_path.chmod(0o600)
+        print('kaggle_token =', token_path, 'exists=True')
+        return True
+
+    candidate_paths = [
+        DRIVE_MY / 'kaggle.json',
+        DRIVE_MY / 'KG1_SECRETS' / 'kaggle.json',
+        DRIVE_MY / '.kaggle' / 'kaggle.json',
+    ]
+    env_config_dir = os.environ.get('KAGGLE_CONFIG_DIR', '').strip()
+    if env_config_dir:
+        candidate_paths.append(Path(env_config_dir) / 'kaggle.json')
+
+    for src in candidate_paths:
+        print('checking_kaggle_token_source =', src, 'exists=', src.exists())
+        if src.exists():
+            shutil.copy2(src, token_path)
+            token_path.chmod(0o600)
+            print('copied_kaggle_token =', src, '->', token_path)
+            return True
+
+    print('Kaggle credentials were not found.')
+    print('Place kaggle.json at /content/drive/MyDrive/kaggle.json or /content/drive/MyDrive/KG1_SECRETS/kaggle.json, then rerun this cell.')
+    return False
+
+download_status = []
+
+if not RUN_KAGGLE_PUBLIC_DOWNLOAD:
+    print('RUN_KAGGLE_PUBLIC_DOWNLOAD=False; skipping public model downloads.')
+else:
+    if not configure_kaggle_credentials():
+        raise RuntimeError('Human action required: add Kaggle API token kaggle.json to Drive and rerun this cell.')
+    run_cmd(['kaggle', '--version'])
+
+    selected_candidates = [
+        item for item in PUBLIC_KAGGLE_MODEL_CANDIDATES
+        if int(item['priority']) <= PUBLIC_DOWNLOAD_MAX_PRIORITY
+    ][:PUBLIC_DOWNLOAD_MAX_CANDIDATES]
+    print('selected_public_download_count =', len(selected_candidates))
+    remaining_expected_bytes = sum(
+        int(item.get('expected_bytes') or 0)
+        for item in selected_candidates
+        if not kaggle_adapter_ready(PUBLIC_KAGGLE_ROOT / safe_label(item['label']) / 'adapter')
+    )
+    usage = shutil.disk_usage(PUBLIC_KAGGLE_ROOT)
+    print('download_expected_remaining_gib =', round(remaining_expected_bytes / (1024 ** 3), 2))
+    print('drive_total_gib =', round(usage.total / (1024 ** 3), 2))
+    print('drive_free_gib =', round(usage.free / (1024 ** 3), 2))
+    if remaining_expected_bytes and usage.free < remaining_expected_bytes + 5 * 1024 ** 3:
+        raise RuntimeError(
+            'Human action required: not enough free Drive space for public adapter downloads. '
+            f'Need about {remaining_expected_bytes / (1024 ** 3):.2f} GiB plus 5 GiB buffer; '
+            f'free={usage.free / (1024 ** 3):.2f} GiB.'
+        )
+    for item in selected_candidates:
+        label = safe_label(item['label'])
+        ref = item['ref']
+        target = PUBLIC_KAGGLE_ROOT / label / 'adapter'
+        log = REPORT_DIR / f'download_{label}.log'
+        target.mkdir(parents=True, exist_ok=True)
+
+        print('\\n' + '=' * 80)
+        print('download_label =', label)
+        print('download_ref =', ref)
+        print('download_priority =', item['priority'])
+        print('download_target =', target)
+        print('already_ready =', kaggle_adapter_ready(target))
+
+        if kaggle_adapter_ready(target):
+            status = 'already_ready'
+            rc = 0
+        else:
+            cmd = [
+                'kaggle',
+                'models',
+                'instances',
+                'versions',
+                'download',
+                ref,
+                '-p',
+                target,
+                '--untar',
+            ]
+            rc = run_cmd(cmd, log_path=log, check=False)
+            status = 'downloaded_ready' if rc == 0 and kaggle_adapter_ready(target) else f'download_or_structure_failed_{rc}'
+
+        nested_ready_dirs = []
+        if not kaggle_adapter_ready(target):
+            for dirpath, dirnames, filenames in os.walk(target):
+                p = Path(dirpath)
+                if kaggle_adapter_ready(p):
+                    nested_ready_dirs.append(str(p))
+
+        top_files = sorted([p.name for p in target.glob('*')])[:25] if target.exists() else []
+        row = {
+            'label': label,
+            'ref': ref,
+            'priority': int(item['priority']),
+            'target': str(target),
+            'ready': kaggle_adapter_ready(target),
+            'nested_ready_dirs': nested_ready_dirs,
+            'status': status,
+            'returncode': rc,
+            'top_files': top_files,
+            'log': str(log),
+        }
+        download_status.append(row)
+        print('download_status =', json.dumps(row, indent=2, sort_keys=True))
+
+download_manifest = OUT_ROOT / 'v207b_public_kaggle_download_manifest.json'
+download_manifest.write_text(json.dumps(download_status, indent=2, sort_keys=True), encoding='utf-8')
+print('download_manifest =', download_manifest)
+print('=== V207B PUBLIC KAGGLE ADAPTER DOWNLOAD END ===')
+"""
+        ),
+        code(
             """# CELL: discover and register candidate adapter directories.
 print('=== V207B CANDIDATE DISCOVERY START ===')
 from pathlib import Path
@@ -344,10 +533,26 @@ MANUAL_CANDIDATES = [
 
     # Common external/current adapter landing zones. Missing paths are skipped.
     ('aaitdads_my_0p86', DRIVE_MY / 'KG1_PUBLIC_ADAPTERS/aaitdads_my_0p86_adapter'),
-    ('huikang_tinker_v27', DRIVE_MY / 'KG1_PUBLIC_ADAPTERS/huikang_tinker_v27/adapter'),
-    ('huikang_tinker_v26', DRIVE_MY / 'KG1_PUBLIC_ADAPTERS/huikang_tinker_v26/adapter'),
-    ('huikang_tinker_v20', DRIVE_MY / 'KG1_PUBLIC_ADAPTERS/huikang_tinker_v20/adapter'),
-    ('kien_variant', DRIVE_MY / 'KG1_PUBLIC_ADAPTERS/kien_variant/adapter'),
+    ('huikang_default_v27', DRIVE_MY / 'KG1_PUBLIC_ADAPTERS/huikang_default_v27/adapter'),
+    ('huikang_default_v26', DRIVE_MY / 'KG1_PUBLIC_ADAPTERS/huikang_default_v26/adapter'),
+    ('huikang_default_v25', DRIVE_MY / 'KG1_PUBLIC_ADAPTERS/huikang_default_v25/adapter'),
+    ('huikang_default_v24', DRIVE_MY / 'KG1_PUBLIC_ADAPTERS/huikang_default_v24/adapter'),
+    ('huikang_default_v23', DRIVE_MY / 'KG1_PUBLIC_ADAPTERS/huikang_default_v23/adapter'),
+    ('huikang_default_v22', DRIVE_MY / 'KG1_PUBLIC_ADAPTERS/huikang_default_v22/adapter'),
+    ('huikang_default_v21', DRIVE_MY / 'KG1_PUBLIC_ADAPTERS/huikang_default_v21/adapter'),
+    ('huikang_default_v20', DRIVE_MY / 'KG1_PUBLIC_ADAPTERS/huikang_default_v20/adapter'),
+    ('huikang_tinker_v27_legacy', DRIVE_MY / 'KG1_PUBLIC_ADAPTERS/huikang_tinker_v27/adapter'),
+    ('huikang_tinker_v26_legacy', DRIVE_MY / 'KG1_PUBLIC_ADAPTERS/huikang_tinker_v26/adapter'),
+    ('huikang_tinker_v20_legacy', DRIVE_MY / 'KG1_PUBLIC_ADAPTERS/huikang_tinker_v20/adapter'),
+    ('kienngx_1200samples_cot_1e_5', DRIVE_MY / 'KG1_PUBLIC_ADAPTERS/kienngx_1200samples_cot_1e_5/adapter'),
+    ('kienngx_1200samples_cot_5e_5', DRIVE_MY / 'KG1_PUBLIC_ADAPTERS/kienngx_1200samples_cot_5e_5/adapter'),
+    ('kienngx_cot_labels_3000samples', DRIVE_MY / 'KG1_PUBLIC_ADAPTERS/kienngx_cot_labels_3000samples/adapter'),
+    ('kienngx_600_samples_packing_false', DRIVE_MY / 'KG1_PUBLIC_ADAPTERS/kienngx_600_samples_packing_false/adapter'),
+    ('kienngx_1800s_lora_rank32_false', DRIVE_MY / 'KG1_PUBLIC_ADAPTERS/kienngx_1800s_lora_rank32_false/adapter'),
+    ('kienngx_tinker_adapter', DRIVE_MY / 'KG1_PUBLIC_ADAPTERS/kienngx_tinker_adapter/adapter'),
+    ('kienngx_2400_1e_4_lr_all_linear_packingfalse', DRIVE_MY / 'KG1_PUBLIC_ADAPTERS/kienngx_2400_1e_4_lr_all_linear_packingfalse/adapter'),
+    ('kienngx_9500s_batch1_lr1e_4', DRIVE_MY / 'KG1_PUBLIC_ADAPTERS/kienngx_9500s_batch1_lr1e_4/adapter'),
+    ('kien_variant_legacy', DRIVE_MY / 'KG1_PUBLIC_ADAPTERS/kien_variant/adapter'),
     ('bugkeeper_v20', DRIVE_MY / 'KG1_PUBLIC_ADAPTERS/bugkeeper_v20/adapter'),
     ('dgxchen_trained', DRIVE_MY / 'KG1_PUBLIC_ADAPTERS/dgxchen_trained_adapter'),
 ]
@@ -780,6 +985,7 @@ def main() -> int:
     required_markers = [
         "KG1 V207B External Adapter Triage Colab",
         "V207B DRIVE MOUNT START",
+        "V207B PUBLIC KAGGLE ADAPTER DOWNLOAD START",
         "V207B CANDIDATE DISCOVERY START",
         "V207B WEAK FAMILY SCREEN START",
         "V207B FULL GATE START",
