@@ -4,7 +4,7 @@
 
 - Repository: `https://github.com/FELIPEACASTRO/KG1-NVIDIA`
 - Branch: `v214-h100-micro-replay`
-- Notebook validation commit: `13d5a9faf148ba78e9a9e5766423f20d71b5749d`
+- Notebook validation commit: `8b238831e748c866aa6e0c64e146bb88a71a185c`
 - Note: this publish-result document may appear in a later commit on the same branch.
 
 ## Colab URL
@@ -18,17 +18,19 @@ Validated through GitHub API:
 - endpoint: `https://api.github.com/repos/FELIPEACASTRO/KG1-NVIDIA/contents/notebooks/KG1_V214_H100_MICRO_REPLAY_COLAB.ipynb?ref=v214-h100-micro-replay`
 - status: `200`
 - file: `KG1_V214_H100_MICRO_REPLAY_COLAB.ipynb`
-- size: `2889047`
-- blob sha: `4f53dd42887b109b478fadc39173ec81c7d374b6`
-- commit-pinned raw sha256: `fe5ef5347b9c90189d6dc94045fed77d68ad51d1e07248eef7dcdf22c4fde775`
+- size: `2889519`
+- blob sha: `0954c26e8b245dd64eb6d670f24195be35ba83fb`
+- commit-pinned raw sha256: `32cfc6e4dab0f207d1bda3fb4b409406416740a76901e1b9c61db79872df447c`
 - validated markers:
   - `mamba-ssm[causal-conv1d]`
   - `mamba_ssm_postinstall`
   - `from mamba_ssm.ops.triton.layernorm_gated import rmsnorm_fn`
+  - `from mamba_ssm.ops.triton.ssd_combined import mamba_chunk_scan_combined, mamba_split_conv1d_scan_combined`
+  - `from causal_conv1d import causal_conv1d_fn, causal_conv1d_update`
 
 Validated through `git ls-remote`:
 
-- `13d5a9faf148ba78e9a9e5766423f20d71b5749d refs/heads/v214-h100-micro-replay`
+- `8b238831e748c866aa6e0c64e146bb88a71a185c refs/heads/v214-h100-micro-replay`
 
 ## Pull Request URL
 
