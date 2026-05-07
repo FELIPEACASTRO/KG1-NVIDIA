@@ -146,6 +146,7 @@ VAL_ROWS_EXPECTED = {VAL_ROWS}
 V216_LR = os.environ.get('KG1_V216_LR', '3e-8')
 V216_MAX_STEPS = os.environ.get('KG1_V216_MAX_STEPS', '24')
 V216_TRAINABLE_MODULES = os.environ.get('KG1_V216_TRAINABLE_MODULES', 'q_proj,k_proj,v_proj,o_proj,out_proj,in_proj')
+V216_VLLM_PIP_SPEC = os.environ.get('KG1_V216_VLLM_PIP_SPEC', 'vllm==0.20.1')
 V216_MAX_LENGTH = int(os.environ.get('KG1_V216_MAX_LENGTH', '4096'))
 V216_BATCH_SIZE = int(os.environ.get('KG1_V216_BATCH_SIZE', '4'))
 V216_MICRO_BATCH_SIZE = int(os.environ.get('KG1_V216_MICRO_BATCH_SIZE', '1'))
@@ -180,6 +181,7 @@ print('FORCE_REEVAL =', FORCE_REEVAL, flush=True)
 print('V216_LR =', V216_LR, flush=True)
 print('V216_MAX_STEPS =', V216_MAX_STEPS, flush=True)
 print('V216_TRAINABLE_MODULES =', V216_TRAINABLE_MODULES, flush=True)
+print('V216_VLLM_PIP_SPEC =', V216_VLLM_PIP_SPEC, flush=True)
 print('WEAK_MIN_FOR_FULL =', WEAK_MIN_FOR_FULL, flush=True)
 print('WEAK_EQ_MIN_FOR_FULL =', WEAK_EQ_MIN_FOR_FULL, flush=True)
 print('WEAK_BIT_MIN_FOR_FULL =', WEAK_BIT_MIN_FOR_FULL, flush=True)
@@ -322,6 +324,31 @@ def ensure_import(import_name, pip_spec=None):
         print(import_name, 'version=', getattr(module, '__version__', 'unknown'), flush=True)
         return module
 
+def verify_import_subprocess(import_name, label=None, check=False):
+    label = label or import_name
+    code = (
+        "import importlib; "
+        f"m=importlib.import_module({import_name!r}); "
+        f"print({label!r} + ' subprocess_version=' + str(getattr(m, '__version__', 'unknown')))"
+    )
+    return run_cmd(
+        [sys.executable, '-c', code],
+        log_path=OUT_ROOT / f'verify_import_{label.replace(".", "_").replace("-", "_")}.log',
+        check=check,
+        heartbeat_s=0,
+    )
+
+def install_pip_spec(spec, label, force=False):
+    cmd = [sys.executable, '-m', 'pip', 'install', '-q']
+    if force:
+        cmd.extend(['--force-reinstall'])
+    cmd.append(spec)
+    return run_cmd(
+        cmd,
+        log_path=OUT_ROOT / f'pip_install_{label.replace(".", "_").replace("-", "_")}.log',
+        check=True,
+    )
+
 def is_complete_adapter_dir(path):
     path = pathlib.Path(path)
     return path.is_dir() and (path / 'adapter_config.json').exists() and (
@@ -399,34 +426,63 @@ ensure_import('safetensors', 'safetensors')
 ensure_import('huggingface_hub', 'huggingface_hub')
 if os.environ.get('HF_HUB_ENABLE_HF_TRANSFER') == '1':
     ensure_import('hf_transfer', 'hf_transfer')
-ensure_import('transformers', 'transformers')
-ensure_import('peft', 'peft>=0.18.1')
-torch = ensure_import('torch')
-try:
-    ensure_import('vllm')
-except Exception:
-    run_cmd(
-        [sys.executable, '-m', 'pip', 'install', '-q', 'vllm'],
-        log_path=OUT_ROOT / 'pip_install_vllm.log',
+
+# Avoid importing torch/vLLM in the notebook kernel before dependency repair.
+# Pip may replace torch/vLLM wheels; subprocess checks keep the notebook process
+# from retaining stale partial modules after an install.
+for import_name, spec in [
+    ('transformers', 'transformers'),
+    ('peft', 'peft>=0.18.1'),
+]:
+    if verify_import_subprocess(import_name, check=False) != 0:
+        install_pip_spec(spec, import_name, force=False)
+        verify_import_subprocess(import_name, check=True)
+
+vllm_rc = verify_import_subprocess('vllm', check=False)
+if vllm_rc != 0:
+    print('vLLM subprocess import failed; installing pinned V216_VLLM_PIP_SPEC =', V216_VLLM_PIP_SPEC, flush=True)
+    install_pip_spec(V216_VLLM_PIP_SPEC, 'vllm', force=True)
+    vllm_rc = verify_import_subprocess('vllm', check=False)
+if vllm_rc != 0:
+    raise RuntimeError(
+        'vLLM still fails in a clean subprocess after pinned install. '
+        'Restart the Colab runtime and rerun from the top; if it repeats, set '
+        'KG1_V216_VLLM_PIP_SPEC to the previously working vLLM wheel.'
     )
-    ensure_import('vllm')
-try:
-    ensure_import('mamba_ssm')
-except Exception as exc:
-    print('mamba_ssm import failed; installing mamba-ssm[causal-conv1d].', repr(exc), flush=True)
+
+if verify_import_subprocess('mamba_ssm', check=False) != 0:
+    print('mamba_ssm subprocess import failed; installing mamba-ssm[causal-conv1d].', flush=True)
     ensure_import('ninja', 'ninja')
     run_cmd(
         [sys.executable, '-m', 'pip', 'install', '-q', '--no-build-isolation', 'mamba-ssm[causal-conv1d]'],
         log_path=OUT_ROOT / 'pip_install_mamba_ssm.log',
     )
-    ensure_import('mamba_ssm')
+    verify_import_subprocess('mamba_ssm', check=True)
 
-print('torch_cuda_available =', torch.cuda.is_available(), flush=True)
-if not torch.cuda.is_available():
+torch_check_code = (
+    "import json, torch; "
+    "props=torch.cuda.get_device_properties(0) if torch.cuda.is_available() else None; "
+    "print(json.dumps({'torch': getattr(torch, '__version__', 'unknown'), "
+    "'cuda_available': torch.cuda.is_available(), "
+    "'gpu_name': props.name if props else '', "
+    "'gpu_total_gib': props.total_memory/1024**3 if props else 0.0}))"
+)
+torch_audit_path = OUT_ROOT / 'verify_torch_cuda.jsonl'
+torch_rc = run_cmd(
+    [sys.executable, '-c', torch_check_code],
+    log_path=torch_audit_path,
+    check=False,
+    heartbeat_s=0,
+)
+if torch_rc != 0:
+    raise RuntimeError('Torch CUDA subprocess audit failed; restart the runtime and rerun from the top.')
+torch_audit_lines = [line.strip() for line in torch_audit_path.read_text(encoding='utf-8').splitlines() if line.strip()]
+torch_audit = json.loads(torch_audit_lines[-1])
+print('torch_audit =', json.dumps(torch_audit, sort_keys=True), flush=True)
+if not torch_audit.get('cuda_available'):
     raise RuntimeError('CUDA GPU is required for V216 train/eval.')
-props = torch.cuda.get_device_properties(0)
-gpu_name = props.name
-gpu_total_gib = props.total_memory / 1024**3
+gpu_name = torch_audit.get('gpu_name', '')
+gpu_total_gib = float(torch_audit.get('gpu_total_gib', 0.0))
 content_usage = shutil.disk_usage('/content')
 content_free_gib = content_usage.free / 1024**3
 print('gpu_name =', gpu_name, flush=True)
