@@ -4,7 +4,7 @@
 
 - Repository: `https://github.com/FELIPEACASTRO/KG1-NVIDIA`
 - Branch: `v214-h100-micro-replay`
-- Notebook validation commit: `068532c64ef0035eb7babd6ad1e1ddf10675e3d4`
+- Notebook validation commit: `438b3a158720b55d98f904a85343bfd1ed8da3b0`
 - Note: this publish-result document may appear in a later commit on the same branch.
 
 ## Colab URL
@@ -18,13 +18,13 @@ Validated through GitHub API:
 - endpoint: `https://api.github.com/repos/FELIPEACASTRO/KG1-NVIDIA/contents/notebooks/KG1_V214_H100_MICRO_REPLAY_COLAB.ipynb?ref=v214-h100-micro-replay`
 - status: `200`
 - file: `KG1_V214_H100_MICRO_REPLAY_COLAB.ipynb`
-- size: `2876352`
-- blob sha: `6f3692f777c0fdba5355922b99fc66ffdca373a2`
-- commit-pinned raw sha256: `45d9cadc070dbbd51f283632c54e834dac159bd3f5925150149508619fe6e0c2`
+- size: `2883146`
+- blob sha: `099d4750af2b4cd8fe5320a39594d5169d8ed1db`
+- commit-pinned raw sha256: `6d20d21595b021293c3b1865c93b2a34a3b62bd01450069fcb09f557db22cdb2`
 
 Validated through `git ls-remote`:
 
-- `068532c64ef0035eb7babd6ad1e1ddf10675e3d4 refs/heads/v214-h100-micro-replay`
+- `438b3a158720b55d98f904a85343bfd1ed8da3b0 refs/heads/v214-h100-micro-replay`
 
 ## Pull Request URL
 
@@ -35,6 +35,8 @@ Validated through `git ls-remote`:
 - Notebook published.
 - Notebook includes H100/high-RAM sizing gate before model load.
 - Notebook emits `[V214 heartbeat]` resource logs every 60 seconds during silent commands.
+- Notebook includes GPU-first placement, TF32/matmul precision controls, optional
+  `hf_transfer`, optional `bitsandbytes`, and a standalone published training script.
 - Submit remains disabled.
 - Training remains disabled by default.
 - To train in Colab, set `KG1_V214_RUN_TRAIN=1`.
