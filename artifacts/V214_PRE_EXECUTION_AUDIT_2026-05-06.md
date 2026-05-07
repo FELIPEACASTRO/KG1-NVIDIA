@@ -136,10 +136,11 @@ The notebook blocks model load unless:
 - GPU total memory `>=70 GiB`;
 - system RAM total `>=45 GiB`;
 - system RAM available `>=20 GiB`;
-- `/content` free disk `>=90 GiB` after cleanup.
+- `/content` free disk `>=60 GiB` after cleanup.
+- projected `/content` free disk after model cache `>=15 GiB`.
 
 The notebook warns, but does not block, when `/content` free disk is below
-`100 GiB`.
+`70 GiB`.
 
 Safe cleanup before the disk check removes:
 
@@ -151,16 +152,16 @@ Aggressive cleanup is enabled by default for this temporary Colab runtime. It
 also logs a top disk-usage report before and after cleanup, removes partial
 Nemotron HF cache from previous failed runs, removes `bitsandbytes`, and removes
 large preinstalled packages not used by this notebook, including TensorFlow,
-JAX, OpenCV, spaCy, XGBoost/LightGBM/CatBoost, plotting stacks, and similar
-non-training dependencies.
+JAX, OpenCV, spaCy, XGBoost/LightGBM/CatBoost, RAPIDS/cuDF/cuML/cuGraph,
+CuPy, PySpark, Gradio, plotting stacks, and similar non-training dependencies.
 
 Expected H100 high-RAM verdict:
 
 - H100 80GB should pass the GPU memory gate.
 - Colab high-RAM should pass the system RAM gate.
-- The observed H100 runtime with about `59.5 GiB` free on `/content` failed
-  during model fetch/load and reached about `2.1 GiB` free; it must now fail
-  the disk gate unless cleanup can raise free disk to at least `90 GiB`.
+- The observed H100 runtime with `61.9 GiB` free after cleanup should now pass:
+  projected free after a `42 GiB` model cache is about `19.9 GiB`, above the
+  `15 GiB` post-cache floor.
 - A 40GB GPU should fail before model load.
 - Standard low-RAM runtime should fail before model load.
 

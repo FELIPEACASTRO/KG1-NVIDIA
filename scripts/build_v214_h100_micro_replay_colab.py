@@ -494,8 +494,10 @@ print('=== V214 H100 SIZE GATE START ===', flush=True)
 MIN_GPU_TOTAL_GIB = float(os.environ.get('KG1_V214_MIN_GPU_GIB', '70'))
 MIN_RAM_TOTAL_GIB = float(os.environ.get('KG1_V214_MIN_RAM_TOTAL_GIB', '45'))
 MIN_RAM_AVAILABLE_GIB = float(os.environ.get('KG1_V214_MIN_RAM_AVAILABLE_GIB', '20'))
-MIN_CONTENT_FREE_GIB = float(os.environ.get('KG1_V214_MIN_CONTENT_FREE_GIB', '90'))
-WARN_CONTENT_FREE_GIB = float(os.environ.get('KG1_V214_WARN_CONTENT_FREE_GIB', '100'))
+MIN_CONTENT_FREE_GIB = float(os.environ.get('KG1_V214_MIN_CONTENT_FREE_GIB', '60'))
+WARN_CONTENT_FREE_GIB = float(os.environ.get('KG1_V214_WARN_CONTENT_FREE_GIB', '70'))
+EXPECTED_MODEL_CACHE_GIB = float(os.environ.get('KG1_V214_EXPECTED_MODEL_CACHE_GIB', '42'))
+MIN_POST_MODEL_CACHE_FREE_GIB = float(os.environ.get('KG1_V214_MIN_POST_MODEL_CACHE_FREE_GIB', '15'))
 SAFE_DISK_CLEANUP = os.environ.get('KG1_V214_SAFE_DISK_CLEANUP', '1').strip().lower() not in {'0', 'false', 'no', 'off'}
 AGGRESSIVE_DISK_CLEANUP = os.environ.get('KG1_V214_AGGRESSIVE_DISK_CLEANUP', '1').strip().lower() not in {'0', 'false', 'no', 'off'}
 DISK_CLEANUP_TOP_N = int(os.environ.get('KG1_V214_DISK_CLEANUP_TOP_N', '25'))
@@ -613,6 +615,25 @@ def aggressive_disk_cleanup():
         '/usr/local/lib/python3.12/dist-packages/xgboost*',
         '/usr/local/lib/python3.12/dist-packages/lightgbm*',
         '/usr/local/lib/python3.12/dist-packages/catboost*',
+        '/usr/local/lib/python3.12/dist-packages/libcugraph*',
+        '/usr/local/lib/python3.12/dist-packages/libcudf*',
+        '/usr/local/lib/python3.12/dist-packages/libcuvs*',
+        '/usr/local/lib/python3.12/dist-packages/libcuml*',
+        '/usr/local/lib/python3.12/dist-packages/cugraph*',
+        '/usr/local/lib/python3.12/dist-packages/cudf*',
+        '/usr/local/lib/python3.12/dist-packages/cuvs*',
+        '/usr/local/lib/python3.12/dist-packages/cuml*',
+        '/usr/local/lib/python3.12/dist-packages/dask_cudf*',
+        '/usr/local/lib/python3.12/dist-packages/pylibcudf*',
+        '/usr/local/lib/python3.12/dist-packages/pylibcugraph*',
+        '/usr/local/lib/python3.12/dist-packages/pylibraft*',
+        '/usr/local/lib/python3.12/dist-packages/rmm*',
+        '/usr/local/lib/python3.12/dist-packages/raft*',
+        '/usr/local/lib/python3.12/dist-packages/rapids*',
+        '/usr/local/lib/python3.12/dist-packages/cupy*',
+        '/usr/local/lib/python3.12/dist-packages/pyspark*',
+        '/usr/local/lib/python3.12/dist-packages/gradio*',
+        '/usr/local/lib/python3.12/dist-packages/panel*',
         '/usr/local/lib/python3.12/dist-packages/plotly*',
         '/usr/local/lib/python3.12/dist-packages/bokeh*',
         '/usr/local/lib/python3.12/dist-packages/pymc*',
@@ -658,6 +679,7 @@ mem = meminfo_gib()
 ram_total_gib = mem.get('MemTotal', 0.0)
 ram_available_gib = mem.get('MemAvailable', 0.0)
 content_free_gib, content_total_gib = disk_free_gib('/content')
+projected_free_after_model_cache_gib = content_free_gib - EXPECTED_MODEL_CACHE_GIB
 drive_free_gib, drive_total_gib = disk_free_gib('/content/drive') if pathlib.Path('/content/drive').exists() else (0.0, 0.0)
 h100_detected = 'H100' in gpu_name.upper()
 
@@ -671,6 +693,8 @@ size_report = {
     'content_disk_free_after_cleanup_gib': round(content_free_after_cleanup, 2),
     'content_disk_free_gib': round(content_free_gib, 2),
     'content_disk_total_gib': round(content_total_gib, 2),
+    'expected_model_cache_gib': EXPECTED_MODEL_CACHE_GIB,
+    'projected_content_free_after_model_cache_gib': round(projected_free_after_model_cache_gib, 2),
     'drive_disk_free_gib': round(drive_free_gib, 2),
     'drive_disk_total_gib': round(drive_total_gib, 2),
     'minimums': {
@@ -679,6 +703,7 @@ size_report = {
         'ram_available_gib': MIN_RAM_AVAILABLE_GIB,
         'content_disk_free_gib': MIN_CONTENT_FREE_GIB,
         'content_disk_warning_gib': WARN_CONTENT_FREE_GIB,
+        'post_model_cache_free_gib': MIN_POST_MODEL_CACHE_FREE_GIB,
     },
     'cleanup_report': cleanup_report,
     'aggressive_cleanup_report': aggressive_cleanup_report,
@@ -698,8 +723,14 @@ if ram_total_gib < MIN_RAM_TOTAL_GIB or ram_available_gib < MIN_RAM_AVAILABLE_GI
 if content_free_gib < MIN_CONTENT_FREE_GIB:
     raise RuntimeError(
         f'/content free disk too small: {content_free_gib:.1f}GiB < {MIN_CONTENT_FREE_GIB:.1f}GiB. '
-        'The previous H100 run fell to ~2GiB free during model fetch/load. '
         'Restart runtime, keep KG1_V214_AGGRESSIVE_DISK_CLEANUP=1, or use a runtime with a larger /content disk.'
+    )
+if projected_free_after_model_cache_gib < MIN_POST_MODEL_CACHE_FREE_GIB:
+    raise RuntimeError(
+        'Projected /content free disk after model cache is too small: '
+        f'{projected_free_after_model_cache_gib:.1f}GiB < {MIN_POST_MODEL_CACHE_FREE_GIB:.1f}GiB '
+        f'(free={content_free_gib:.1f}GiB, expected_model_cache={EXPECTED_MODEL_CACHE_GIB:.1f}GiB). '
+        'The previous H100 run fell to ~2GiB free during model fetch/load; keep more post-cache headroom.'
     )
 if content_free_gib < WARN_CONTENT_FREE_GIB:
     print(

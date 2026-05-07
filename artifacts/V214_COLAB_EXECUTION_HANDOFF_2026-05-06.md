@@ -92,8 +92,10 @@ The notebook blocks model load if the runtime is too small:
 - GPU total memory must be at least `70 GiB`;
 - system RAM total must be at least `45 GiB`;
 - system RAM available must be at least `20 GiB`;
-- `/content` free disk must be at least `90 GiB` after cleanup;
-- `/content` free disk below `100 GiB` prints a warning but does not block.
+- `/content` free disk must be at least `60 GiB` after cleanup;
+- projected `/content` free disk after a `42 GiB` model cache must remain at
+  least `15 GiB`;
+- `/content` free disk below `70 GiB` prints a warning but does not block.
 
 Before checking disk, the notebook logs top disk users and removes disposable
 paths:
@@ -104,9 +106,10 @@ paths:
 
 Aggressive cleanup is enabled by default for the temporary Colab runtime. It
 also removes partial Nemotron HF cache from failed runs, `bitsandbytes`, and
-large unused preinstalled packages such as TensorFlow/JAX/OpenCV/spaCy and
-similar non-training stacks. This is intentional because the previous H100 run
-dropped to about `2.1 GiB` free during model fetch/load.
+large unused preinstalled packages such as TensorFlow/JAX/OpenCV/spaCy,
+RAPIDS/cuDF/cuML/cuGraph, CuPy, PySpark, Gradio, and similar non-training
+stacks. This is intentional because the previous H100 run dropped to about
+`2.1 GiB` free during model fetch/load.
 
 An H100 name is expected and logged. A non-H100 GPU can proceed only if the
 memory gate passes, but it prints a warning because the intended runtime is
