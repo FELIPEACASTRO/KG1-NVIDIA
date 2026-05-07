@@ -11,11 +11,11 @@ dry-run checks. Enable training only after those pass.
 
 - URL: `https://colab.research.google.com/github/FELIPEACASTRO/KG1-NVIDIA/blob/v214-h100-micro-replay/notebooks/KG1_V214_H100_MICRO_REPLAY_COLAB.ipynb`
 - Branch: `v214-h100-micro-replay`
-- Validated commit: `438b3a158720b55d98f904a85343bfd1ed8da3b0`
+- Validated commit: `5987a455ba0c7f69ac31c98e502d675d11e0e072`
 - GitHub API status: `200`
-- Notebook blob size: `2883146`
-- Notebook blob sha: `099d4750af2b4cd8fe5320a39594d5169d8ed1db`
-- Commit-pinned raw sha256: `6d20d21595b021293c3b1865c93b2a34a3b62bd01450069fcb09f557db22cdb2`
+- Notebook blob size: `2886859`
+- Notebook blob sha: `e03cde2f0decbff282dd9a28519b7433a4851c16`
+- Commit-pinned raw sha256: `cb7b6b13506d8bf449e015d417aa1fb5a8a19462b02904d823e6696fd2e08daf`
 
 Static checks:
 
