@@ -121,6 +121,10 @@ V207A_ROOT = DRIVE_MY / 'KG1_NVIDIA_V207A' / 'output_v207a_acc_gate'
 OUT_ROOT = DRIVE_MY / 'KG1_NVIDIA_V207B' / 'output_v207b_external_adapter_triage'
 REPORT_DIR = OUT_ROOT / 'reports'
 PUBLIC_KAGGLE_ROOT = DRIVE_MY / 'KG1_PUBLIC_ADAPTERS'
+FALLBACK_EXPORT_BASE = os.environ.get(
+    'KG1_V207B_FALLBACK_EXPORT_BASE',
+    'https://raw.githubusercontent.com/FELIPEACASTRO/KG1-NVIDIA/v207b-external-triage/artifacts/drive_exports',
+)
 MODEL_NAME = '{MODEL_NAME}'
 MODEL_REVISION = '{MODEL_REVISION}'
 
@@ -151,6 +155,7 @@ print('ROOT =', ROOT)
 print('V207A_ROOT =', V207A_ROOT)
 print('OUT_ROOT =', OUT_ROOT)
 print('PUBLIC_KAGGLE_ROOT =', PUBLIC_KAGGLE_ROOT)
+print('FALLBACK_EXPORT_BASE =', FALLBACK_EXPORT_BASE)
 print('VAL_CSV =', VAL_CSV)
 print('BASELINE_PREDICTIONS =', BASELINE_PREDICTIONS)
 print('BASELINE_PER_TASK =', BASELINE_PER_TASK)
@@ -306,17 +311,75 @@ print('=== V207B REPO SETUP END ===')
         ),
         code(embed_sources_cell()),
         code(
-            """# CELL: verify V207A baseline artifacts and build weak-family CSV.
+            """# CELL: verify or bootstrap V207A baseline artifacts and build weak-family CSV.
 print('=== V207B V207A ARTIFACT CHECK START ===')
+import urllib.request
 import pandas as pd
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+from src.competition_utils import classify_puzzle
+
+FALLBACK_EXPORTS = {
+    BASELINE_PREDICTIONS: 'v194_baseline_predictions.csv',
+    BASELINE_PER_TASK: 'v194_baseline_per_task.csv',
+    BASELINE_REPORT: 'v194_baseline_eval_report.json',
+}
+
+def download_fallback_export(dst, filename):
+    dst = pathlib.Path(dst)
+    dst.parent.mkdir(parents=True, exist_ok=True)
+    url = FALLBACK_EXPORT_BASE.rstrip('/') + '/' + filename
+    tmp = dst.with_suffix(dst.suffix + '.tmp')
+    print('fallback_download_url =', url)
+    print('fallback_download_dst =', dst)
+    urllib.request.urlretrieve(url, tmp)
+    tmp.replace(dst)
+    print('fallback_downloaded_bytes =', dst.stat().st_size)
+
+def ensure_fallback_file(path, filename):
+    path = pathlib.Path(path)
+    print('checking', path, 'exists=', path.exists())
+    if not path.exists():
+        print('missing artifact; downloading validated fallback export:', filename)
+        download_fallback_export(path, filename)
+    print('artifact_ready =', path, 'bytes=', path.stat().st_size)
+
+for path, filename in FALLBACK_EXPORTS.items():
+    ensure_fallback_file(path, filename)
+
+if not VAL_CSV.exists():
+    print('VAL_CSV missing; reconstructing validation CSV from baseline predictions export.')
+    pred = pd.read_csv(BASELINE_PREDICTIONS)
+    prompt_col = next((c for c in ['prompt', 'prompt_x', 'prompt_y'] if c in pred.columns), None)
+    family_source_col = next((c for c in ['family', 'type'] if c in pred.columns), None)
+    required = {'id', 'answer'}
+    missing = sorted(required - set(pred.columns))
+    if missing or prompt_col is None:
+        raise RuntimeError(
+            f'Baseline predictions fallback cannot reconstruct validation CSV. '
+            f'missing={missing}, prompt_col={prompt_col}, columns={list(pred.columns)}'
+        )
+    val_cols = ['id', prompt_col, 'answer']
+    if family_source_col:
+        val_cols.append(family_source_col)
+    val = pred[val_cols].copy()
+    val = val.rename(columns={prompt_col: 'prompt'})
+    if family_source_col and family_source_col != 'family':
+        val = val.rename(columns={family_source_col: 'family'})
+    if 'family' not in val.columns:
+        val['family'] = val['prompt'].map(classify_puzzle)
+    val = val[['id', 'prompt', 'answer', 'family']]
+    val.to_csv(VAL_CSV, index=False)
+    print('VAL_CSV reconstructed rows =', len(val))
+    print('validation_source = v194_baseline_predictions_drive_export_fallback')
+else:
+    print('VAL_CSV already exists:', VAL_CSV)
 
 required_paths = [VAL_CSV, BASELINE_PREDICTIONS, BASELINE_PER_TASK, BASELINE_REPORT]
 for path in required_paths:
-    print('checking', path, 'exists=', path.exists())
+    print('final_check', path, 'exists=', path.exists(), 'bytes=', path.stat().st_size if path.exists() else None)
     if not path.exists():
-        raise FileNotFoundError(
-            'Missing V207A artifact. Run the V207A ACC gate notebook first: ' + str(path)
-        )
+        raise FileNotFoundError('Missing required V207B artifact after fallback bootstrap: ' + str(path))
 
 val = pd.read_csv(VAL_CSV)
 family_col = 'family' if 'family' in val.columns else 'type'

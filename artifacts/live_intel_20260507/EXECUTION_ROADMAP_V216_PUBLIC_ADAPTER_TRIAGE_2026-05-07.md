@@ -50,6 +50,15 @@ Raise the public score from the protected `0.86` baseline only if a candidate be
 
 Keep V194/V199B unchanged. Do not overwrite or retrain it. It remains the fallback if every public adapter fails.
 
+The V207B notebook is now self-bootstrapping for the baseline gate. If the expected V207A Drive artifacts are missing, it downloads the validated baseline exports from the branch and reconstructs:
+
+- `official_train_seed42_stratified10_val.csv`
+- `v194_baseline_predictions.csv`
+- `v194_baseline_per_task.csv`
+- `v194_baseline_eval_report.json`
+
+This avoids requiring a separate V207A notebook run before public-adapter triage.
+
 ### Phase 1 - Download Public Adapters
 
 Use only public Kaggle model assets:

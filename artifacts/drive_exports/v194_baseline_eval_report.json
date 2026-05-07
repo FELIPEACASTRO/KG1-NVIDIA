@@ -1,0 +1,41 @@
+{
+  "accuracy": 0.8680042238648363,
+  "adapter_dir": "/content/drive/MyDrive/KG1_NVIDIA_V202D/init_adapter_v194_rank19_build/adapter",
+  "base_model_path": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+  "completion_tokens": 3080950,
+  "config": {
+    "dtype": "auto",
+    "enable_chunked_prefill": true,
+    "enable_prefix_caching": true,
+    "gpu_memory_utilization": 0.85,
+    "max_lora_rank": 32,
+    "max_model_len": 8192,
+    "max_num_seqs": 64,
+    "max_tokens": 7680,
+    "model_name": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+    "model_revision": "cbd3fa9f933d55ef16a84236559f4ee2a0526848",
+    "temperature": 0.0,
+    "top_p": 1.0,
+    "trust_remote_code": true
+  },
+  "correct": 822,
+  "generated_at_utc": "2026-05-06T17:24:39.802704+00:00",
+  "generation_elapsed_s": 2217.3190734386444,
+  "inputs": {
+    "adapter": "/content/drive/MyDrive/KG1_NVIDIA_V202D/init_adapter_v194_rank19_build/adapter",
+    "limit": 0,
+    "questions_csv": "/content/drive/MyDrive/KG1_NVIDIA_V207A/output_v207a_acc_gate/validation/official_train_seed42_stratified10_val.csv",
+    "solution_csv": "/content/drive/MyDrive/KG1_NVIDIA_V207A/output_v207a_acc_gate/validation/official_train_seed42_stratified10_val.csv"
+  },
+  "label": "v194_baseline",
+  "outputs": {
+    "per_task_csv": "/content/drive/MyDrive/KG1_NVIDIA_V207A/output_v207a_acc_gate/v194_baseline_eval/v194_baseline_per_task.csv",
+    "predictions_csv": "/content/drive/MyDrive/KG1_NVIDIA_V207A/output_v207a_acc_gate/v194_baseline_eval/v194_baseline_predictions.csv",
+    "report_json": "/content/drive/MyDrive/KG1_NVIDIA_V207A/output_v207a_acc_gate/v194_baseline_eval/v194_baseline_eval_report.json"
+  },
+  "rows": 947,
+  "seed": 42,
+  "tokens_per_second": 1389.4933015761355,
+  "truncated": 1,
+  "truncation_rate": 0.0010559662090813093
+}
