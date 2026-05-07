@@ -1070,6 +1070,9 @@ print('=== V207B CANDIDATE DISCOVERY END ===')
 print('=== V207B STRUCTURE AUDIT START ===')
 from safetensors import safe_open
 
+VLLM_TARGET_NAMESPACE_PREFLIGHT_POLICY = 'require_safetensors_and_reject_known_mixer_targets'
+print('VLLM_TARGET_NAMESPACE_PREFLIGHT_POLICY =', VLLM_TARGET_NAMESPACE_PREFLIGHT_POLICY)
+
 UNSUPPORTED_VLLM_LORA_TARGET_PATTERNS = [
     '.mixer.gate_proj',
     '.mixer.x_proj',
@@ -1182,20 +1185,23 @@ def audit_adapter(label, path):
     row['model_bytes'] = int(weight_path.stat().st_size)
     row['model_sha256'] = sha256_file(weight_path, HASH_WEIGHTS)
 
-    if model_path.exists():
-        try:
-            with safe_open(str(model_path), framework='pt', device='cpu') as handle:
-                keys = list(handle.keys())
-            row['tensor_count'] = len(keys)
-            row['bad_lm_head_namespace_count'] = sum(
-                1 for key in keys if key.startswith('base_model.model.backbone.lm_head')
-            )
-            unsupported_count, unsupported_examples = unsupported_vllm_target_examples(keys)
-            row['unsupported_target_namespace_count'] = unsupported_count
-            row['unsupported_target_namespace_examples'] = json.dumps(unsupported_examples, sort_keys=True)
-        except Exception as exc:
-            row['reason'] = 'safetensors_open_failed:' + repr(exc)
-            return row
+    if not model_path.exists():
+        row['reason'] = 'safetensors_required_for_namespace_preflight'
+        return row
+
+    try:
+        with safe_open(str(model_path), framework='pt', device='cpu') as handle:
+            keys = list(handle.keys())
+        row['tensor_count'] = len(keys)
+        row['bad_lm_head_namespace_count'] = sum(
+            1 for key in keys if key.startswith('base_model.model.backbone.lm_head')
+        )
+        unsupported_count, unsupported_examples = unsupported_vllm_target_examples(keys)
+        row['unsupported_target_namespace_count'] = unsupported_count
+        row['unsupported_target_namespace_examples'] = json.dumps(unsupported_examples, sort_keys=True)
+    except Exception as exc:
+        row['reason'] = 'safetensors_open_failed:' + repr(exc)
+        return row
 
     if not row['rank_ok']:
         row['reason'] = 'rank_missing_or_gt32'
@@ -1243,6 +1249,15 @@ print('=== V207B STRUCTURE AUDIT END ===')
 print('=== V207B WEAK FAMILY SCREEN START ===')
 results = []
 
+def weak_preflight_guard(row):
+    return (
+        row.get('ready_for_eval') is True
+        and row.get('reason') == 'ready'
+        and int(row.get('unsupported_config_target_count') or 0) == 0
+        and int(row.get('unsupported_target_namespace_count') or 0) == 0
+        and bool(row.get('has_safetensors'))
+    )
+
 for row in READY_CANDIDATES:
     label = safe_label(row['label'] + '_weak')
     adapter = Path(row['path'])
@@ -1258,6 +1273,29 @@ for row in READY_CANDIDATES:
         'report_exists': report_json.exists(),
         'log': str(log),
     }, sort_keys=True))
+
+    if not weak_preflight_guard(row):
+        print('weak_eval_skip_preflight_guard =', json.dumps({
+            'label': label,
+            'reason': row.get('reason'),
+            'has_safetensors': row.get('has_safetensors'),
+            'unsupported_config_target_count': row.get('unsupported_config_target_count'),
+            'unsupported_target_namespace_count': row.get('unsupported_target_namespace_count'),
+        }, sort_keys=True))
+        results.append({
+            'label': label,
+            'path': str(adapter),
+            'status': 'skipped_preflight_guard',
+            'weak_correct': 0,
+            'weak_total': BASE_WEAK_TOTAL,
+            'weak_delta': -BASE_WEAK_CORRECT,
+            'accuracy': 0.0,
+            'truncated': None,
+            'truncation_rate': None,
+            'promote_to_full': False,
+            'report_json': str(report_json),
+        })
+        continue
 
     if FORCE_REEVAL and out.exists():
         print('FORCE_REEVAL enabled; removing previous output:', out)
@@ -1520,8 +1558,11 @@ def main() -> int:
         "V207B PUBLIC KAGGLE ADAPTER DOWNLOAD START",
         "V207B CANDIDATE DISCOVERY START",
         "V207B STRUCTURE AUDIT START",
+        "VLLM_TARGET_NAMESPACE_PREFLIGHT_POLICY",
         "unsupported_target_namespace_count",
         "unsupported_vllm_lora_target_namespace",
+        "safetensors_required_for_namespace_preflight",
+        "weak_eval_skip_preflight_guard",
         "V207B WEAK FAMILY SCREEN START",
         "V207B FULL GATE START",
         "V207B FINAL SUMMARY START",
