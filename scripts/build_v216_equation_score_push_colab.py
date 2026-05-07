@@ -441,13 +441,16 @@ for import_name, spec in [
 vllm_rc = verify_import_subprocess('vllm', check=False)
 if vllm_rc != 0:
     print('vLLM subprocess import failed; installing pinned V216_VLLM_PIP_SPEC =', V216_VLLM_PIP_SPEC, flush=True)
-    install_pip_spec(V216_VLLM_PIP_SPEC, 'vllm', force=True)
-    vllm_rc = verify_import_subprocess('vllm', check=False)
-if vllm_rc != 0:
+    install_pip_spec(V216_VLLM_PIP_SPEC, 'vllm', force=False)
+    restart_marker = OUT_ROOT / 'RESTART_RUNTIME_AFTER_VLLM_INSTALL.txt'
+    restart_marker.write_text(
+        'vLLM was installed in this runtime. Restart Colab runtime and rerun from the first cell.\\n',
+        encoding='utf-8',
+    )
     raise RuntimeError(
-        'vLLM still fails in a clean subprocess after pinned install. '
-        'Restart the Colab runtime and rerun from the top; if it repeats, set '
-        'KG1_V216_VLLM_PIP_SPEC to the previously working vLLM wheel.'
+        'vLLM was just installed. Restart the Colab runtime now, then rerun from the first cell. '
+        'This avoids a mixed Torch/vLLM import state after heavy wheel installs. '
+        f'Restart marker: {restart_marker}'
     )
 
 if verify_import_subprocess('mamba_ssm', check=False) != 0:
