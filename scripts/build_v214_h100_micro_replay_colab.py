@@ -491,6 +491,7 @@ print('=== V214 DEPENDENCY AUDIT END ===', flush=True)
         code(
             """# CELL: H100/high-RAM sizing gate before any model load.
 print('=== V214 H100 SIZE GATE START ===', flush=True)
+import os
 MIN_GPU_TOTAL_GIB = float(os.environ.get('KG1_V214_MIN_GPU_GIB', '70'))
 MIN_RAM_TOTAL_GIB = float(os.environ.get('KG1_V214_MIN_RAM_TOTAL_GIB', '45'))
 MIN_RAM_AVAILABLE_GIB = float(os.environ.get('KG1_V214_MIN_RAM_AVAILABLE_GIB', '20'))
@@ -580,6 +581,9 @@ def disk_usage_report(label, roots):
             print(f'cannot list {root}: {type(exc).__name__}: {exc}', flush=True)
             continue
         for child in children:
+            if child == pathlib.Path('/content/drive') or os.path.ismount(str(child)):
+                print(f'skipping mounted path outside local disk accounting: {child}', flush=True)
+                continue
             try:
                 rows.append((path_size_gib(child), str(child)))
             except Exception as exc:
