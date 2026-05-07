@@ -136,7 +136,22 @@ FALLBACK_EXPORT_BASE = os.environ.get(
 )
 MODEL_NAME = '{MODEL_NAME}'
 MODEL_REVISION = '{MODEL_REVISION}'
-VLLM_SPEC = os.environ.get('KG1_V207B_VLLM_SPEC', 'vllm==0.20.1')
+VLLM_VERSION = '0.20.1'
+VLLM_CUDA_FLAVOR = 'cu129'
+PYTORCH_CUDA_INDEX_URL = os.environ.get(
+    'KG1_V207B_PYTORCH_CUDA_INDEX_URL',
+    'https://download.pytorch.org/whl/cu129',
+)
+VLLM_WHEEL_URL = os.environ.get(
+    'KG1_V207B_VLLM_WHEEL_URL',
+    'https://github.com/vllm-project/vllm/releases/download/v0.20.1/vllm-0.20.1%2Bcu129-cp38-abi3-manylinux_2_31_x86_64.whl',
+)
+VLLM_SPEC = os.environ.get('KG1_V207B_VLLM_SPEC', VLLM_WHEEL_URL)
+FORCE_VLLM_REINSTALL = os.environ.get('KG1_V207B_FORCE_VLLM_REINSTALL', '1') == '1'
+VLLM_INSTALL_POLICY = (
+    'vllm==0.20.1 via official cu129 wheel; uninstall stale vllm first; '
+    'subprocess import preflight must pass before any adapter evaluation'
+)
 
 VAL_CSV = V207A_ROOT / 'validation' / 'official_train_seed42_stratified10_val.csv'
 VAL_WEAK_CSV = OUT_ROOT / 'validation' / 'official_train_seed42_stratified10_val_weak_families.csv'
@@ -176,7 +191,13 @@ print('config =', json.dumps({{
     'BASELINE_PREDICTIONS': str(BASELINE_PREDICTIONS),
     'MODEL_NAME': MODEL_NAME,
     'MODEL_REVISION': MODEL_REVISION,
+    'VLLM_VERSION': VLLM_VERSION,
+    'VLLM_CUDA_FLAVOR': VLLM_CUDA_FLAVOR,
+    'PYTORCH_CUDA_INDEX_URL': PYTORCH_CUDA_INDEX_URL,
+    'VLLM_WHEEL_URL': VLLM_WHEEL_URL,
     'VLLM_SPEC': VLLM_SPEC,
+    'FORCE_VLLM_REINSTALL': FORCE_VLLM_REINSTALL,
+    'VLLM_INSTALL_POLICY': VLLM_INSTALL_POLICY,
     'WEAK_FAMILIES': WEAK_FAMILIES,
     'RUN_KAGGLE_PUBLIC_DOWNLOAD': RUN_KAGGLE_PUBLIC_DOWNLOAD,
     'PUBLIC_DOWNLOAD_MAX_PRIORITY': PUBLIC_DOWNLOAD_MAX_PRIORITY,
@@ -189,6 +210,7 @@ print('config =', json.dumps({{
     'ALLOW_KAGGLE_SUBMIT': ALLOW_KAGGLE_SUBMIT,
 }}, indent=2, sort_keys=True))
 print('LOG_POLICY =', LOG_POLICY)
+print('VLLM_INSTALL_POLICY =', VLLM_INSTALL_POLICY)
 print('DRIVE_ORGANIZED_OUTPUTS =', json.dumps({{
     'run_outputs': str(OUT_ROOT),
     'logs': str(REPORT_DIR),
@@ -276,6 +298,7 @@ print('=== V207B COLAB SECRETS BRIDGE END ===')
 print('=== V207B HELPERS START ===')
 import importlib
 import json
+import os
 import pathlib
 import subprocess
 import sys
@@ -301,6 +324,10 @@ ESSENTIAL_OUTPUT_PATTERNS = [
     'report_json',
     'tokens_per_second',
     'heartbeat',
+    'fresh_python_import_ok',
+    'vllm_import_preflight',
+    'VLLM_INSTALL_POLICY',
+    'libcudart.so',
 ]
 
 def is_essential_output_line(line):
@@ -370,14 +397,76 @@ def ensure_import(import_name, pip_spec=None):
         print(import_name, 'version=', getattr(mod, '__version__', 'unknown'))
         return mod
 
-def fresh_python_import_check(import_name):
+def fresh_python_import_check(import_name, log_path=None, check=True):
     code = (
         "import importlib, torch; "
         f"m=importlib.import_module('{import_name}'); "
         "print('fresh_python_import_ok', m.__name__, getattr(m, '__version__', 'unknown')); "
         "print('fresh_python_torch', torch.__version__, getattr(torch.version, 'cuda', 'unknown'))"
     )
-    run_cmd([sys.executable, '-c', code])
+    return run_cmd([sys.executable, '-c', code], log_path=log_path, check=check)
+
+def refresh_nvidia_library_path():
+    try:
+        import site
+        candidates = []
+        for base in list(site.getsitepackages()) + [site.getusersitepackages()]:
+            root = pathlib.Path(base) / 'nvidia'
+            if not root.exists():
+                continue
+            for lib_dir in root.glob('*/lib'):
+                if lib_dir.exists():
+                    candidates.append(str(lib_dir))
+        existing = [item for item in os.environ.get('LD_LIBRARY_PATH', '').split(':') if item]
+        merged = []
+        for item in candidates + existing:
+            if item and item not in merged:
+                merged.append(item)
+        if merged:
+            os.environ['LD_LIBRARY_PATH'] = ':'.join(merged)
+        print('nvidia_library_path_dirs =', len(candidates))
+    except Exception as exc:
+        print('nvidia_library_path_refresh_failed =', repr(exc))
+
+def install_verified_vllm():
+    print('VLLM_INSTALL_POLICY =', VLLM_INSTALL_POLICY)
+    print('VLLM_SPEC =', VLLM_SPEC)
+    print('VLLM_WHEEL_URL =', VLLM_WHEEL_URL)
+    print('PYTORCH_CUDA_INDEX_URL =', PYTORCH_CUDA_INDEX_URL)
+    if FORCE_VLLM_REINSTALL:
+        run_cmd(
+            [sys.executable, '-m', 'pip', 'uninstall', '-y', 'vllm'],
+            log_path=REPORT_DIR / 'vllm_uninstall.log',
+            check=False,
+        )
+    run_cmd(
+        [
+            sys.executable,
+            '-m',
+            'pip',
+            'install',
+            '-q',
+            '--no-cache-dir',
+            '--extra-index-url',
+            PYTORCH_CUDA_INDEX_URL,
+            VLLM_SPEC,
+        ],
+        log_path=REPORT_DIR / 'vllm_install.log',
+    )
+    refresh_nvidia_library_path()
+    preflight_log = REPORT_DIR / 'vllm_import_preflight.log'
+    print('vllm_import_preflight_log =', preflight_log)
+    rc = fresh_python_import_check('vllm', log_path=preflight_log, check=False)
+    if rc != 0:
+        text = preflight_log.read_text(encoding='utf-8', errors='replace') if preflight_log.exists() else ''
+        if 'libcudart.so.13' in text:
+            raise RuntimeError(
+                'vLLM import preflight failed: CUDA 13 runtime was requested but libcudart.so.13 '
+                'is not available. Restart the Colab runtime and rerun from the dependency cell; '
+                'keep VLLM_SPEC on the official cu129 wheel. log=' + str(preflight_log)
+            )
+        raise RuntimeError('vLLM import preflight failed. log=' + str(preflight_log))
+    print('vllm_import_preflight_ok = True')
 
 def sha256_file(path, enabled=True):
     path = pathlib.Path(path)
@@ -419,18 +508,8 @@ print('torch_cuda_device_count =', torch.cuda.device_count() if torch.cuda.is_av
 if torch.cuda.is_available():
     print('torch_cuda_device_name =', torch.cuda.get_device_name(0))
     print('torch_cuda_version =', getattr(torch.version, 'cuda', 'unknown'))
-print('Installing pinned vLLM runtime for subprocess evaluation:', VLLM_SPEC)
-run_cmd([
-    sys.executable,
-    '-m',
-    'pip',
-    'install',
-    '-q',
-    '--extra-index-url',
-    'https://download.pytorch.org/whl/cu128',
-    VLLM_SPEC,
-])
-fresh_python_import_check('vllm')
+print('Installing and verifying pinned vLLM runtime for subprocess evaluation.')
+install_verified_vllm()
 print('=== V207B DEPENDENCY CHECK END ===')
 """
         ),
@@ -1359,6 +1438,13 @@ def main() -> int:
         "HF_TOKEN_ready",
         "'VLLM_SPEC'",
         "vllm==0.20.1",
+        "VLLM_WHEEL_URL",
+        "VLLM_INSTALL_POLICY",
+        "vllm-0.20.1%2Bcu129",
+        "https://download.pytorch.org/whl/cu129",
+        "vllm_import_preflight.log",
+        "vllm_import_preflight_ok",
+        "libcudart.so.13",
         "KAGGLE_CMD_PREFIX",
         "LOG_POLICY",
         "DRIVE_ORGANIZED_OUTPUTS",
