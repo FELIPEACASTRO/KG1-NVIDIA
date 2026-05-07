@@ -634,6 +634,7 @@ def aggressive_disk_cleanup():
         '/usr/local/lib/python3.12/dist-packages/rmm*',
         '/usr/local/lib/python3.12/dist-packages/raft*',
         '/usr/local/lib/python3.12/dist-packages/rapids*',
+        '/usr/local/lib/python3.12/dist-packages/_rapids_dask_dependency.pth',
         '/usr/local/lib/python3.12/dist-packages/cupy*',
         '/usr/local/lib/python3.12/dist-packages/pyspark*',
         '/usr/local/lib/python3.12/dist-packages/gradio*',
@@ -868,6 +869,8 @@ VAL_SHA = split_manifest['val_sha256']
 
 def training_env(output_dir, dry_run):
     env = os.environ.copy()
+    target_modules = ','.join(adapter_config.get('target_modules') or [])
+    target_parameters = ','.join(adapter_config.get('target_parameters') or [])
     env.update({
         'MODEL_NAME': MODEL_NAME,
         'MODEL_REVISION': MODEL_REVISION,
@@ -892,15 +895,18 @@ def training_env(output_dir, dry_run):
         'OUTPUT_REPO': '',
         'RUN_ID': 'v214_v194_cont_lr3e7_s1',
         'INIT_ADAPTER_DIR': str(V194_ADAPTER),
-        'INIT_ADAPTER_LOAD_MODE': 'peft',
+        'INIT_ADAPTER_LOAD_MODE': 'manual',
+        'PEFT_MANUAL_LOAD_METHOD': 'direct',
         'FAIL_ON_MISSING_ADAPTER_KEYS': '1',
         'UPLOAD_TO_HF': '0',
         'UPLOAD_CHECKPOINTS_DURING_TRAINING': '0',
         'USE_BITSANDBYTES': '1' if V214_USE_BITSANDBYTES else '0',
         'DRY_RUN_VALIDATE_ONLY': '1' if dry_run else '0',
-        'LORA_R': '32',
-        'LORA_ALPHA': '32',
-        'LORA_DROPOUT': '0.0',
+        'LORA_R': str(adapter_config.get('r', 32)),
+        'LORA_ALPHA': str(adapter_config.get('lora_alpha', 32)),
+        'LORA_DROPOUT': str(adapter_config.get('lora_dropout', 0.0)),
+        'LORA_TARGET_MODULES': target_modules,
+        'LORA_TARGET_PARAMETERS': target_parameters,
         'MAX_LENGTH': str(V214_MAX_LENGTH),
         'MAX_PROMPT_TRUNCATION_RATE': '0.0',
         'BATCH_SIZE': str(V214_BATCH_SIZE),

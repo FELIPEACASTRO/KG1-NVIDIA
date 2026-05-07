@@ -24,7 +24,7 @@ Optional env:
   LOG_EVERY_STEPS, MICRO_LOG_EVERY, SEED, EXPECTED_TRAIN_SHA256,
   EXPECTED_VAL_SHA256, MIN_TRAIN_EXAMPLES, MIN_VAL_EXAMPLES,
   MIN_TOKENIZED_TRAIN_EXAMPLES, MIN_TOKENIZED_VAL_EXAMPLES, REQUIRE_OFFSET_MASK,
-  LORA_TARGET_MODULES, MAX_TRAINABLE_PARAM_RATIO, DRY_RUN_VALIDATE_ONLY, UPLOAD_TO_HF,
+  LORA_TARGET_MODULES, LORA_TARGET_PARAMETERS, MAX_TRAINABLE_PARAM_RATIO, DRY_RUN_VALIDATE_ONLY, UPLOAD_TO_HF,
   UPLOAD_CHECKPOINTS_DURING_TRAINING, SAMPLING_MODE, SUBCATEGORY_WEIGHTS, SOURCE_WEIGHTS,
   TRAINABLE_LORA_MODULES
 """
@@ -33,6 +33,7 @@ from __future__ import annotations
 
 import gc
 import hashlib
+import inspect
 import importlib.metadata as importlib_metadata
 import json
 import math
@@ -181,6 +182,7 @@ DEFAULT_LORA_TARGET_MODULES = (
     "down_proj,in_proj,k_proj,lm_head,o_proj,out_proj,q_proj,up_proj,v_proj"
 )
 LORA_TARGET_MODULES = env_str("LORA_TARGET_MODULES", DEFAULT_LORA_TARGET_MODULES)
+LORA_TARGET_PARAMETERS = env_str("LORA_TARGET_PARAMETERS", "")
 MAX_TRAINABLE_PARAM_RATIO = env_float("MAX_TRAINABLE_PARAM_RATIO", 0.08)
 
 MAX_LENGTH = env_int("MAX_LENGTH", 6144)
@@ -285,15 +287,30 @@ def parse_target_modules(value: str) -> str | list[str]:
     return modules
 
 
+def parse_target_parameters(value: str) -> list[str]:
+    return [item.strip() for item in value.split(",") if item.strip()]
+
+
 def create_lora_model(model: torch.nn.Module) -> torch.nn.Module:
-    lora_config = LoraConfig(
-        r=LORA_R,
-        lora_alpha=LORA_ALPHA,
-        target_modules=parse_target_modules(LORA_TARGET_MODULES),
-        lora_dropout=LORA_DROPOUT,
-        bias="none",
-        task_type="CAUSAL_LM",
-    )
+    kwargs: dict[str, Any] = {
+        "r": LORA_R,
+        "lora_alpha": LORA_ALPHA,
+        "target_modules": parse_target_modules(LORA_TARGET_MODULES),
+        "lora_dropout": LORA_DROPOUT,
+        "bias": "none",
+        "task_type": "CAUSAL_LM",
+    }
+    target_parameters = parse_target_parameters(LORA_TARGET_PARAMETERS)
+    if target_parameters:
+        lora_config_params = inspect.signature(LoraConfig.__init__).parameters
+        if "target_parameters" not in lora_config_params:
+            raise RuntimeError(
+                "Current PEFT LoraConfig does not support target_parameters, "
+                f"but LORA_TARGET_PARAMETERS={target_parameters!r} is required "
+                "to recreate the initial adapter namespace."
+            )
+        kwargs["target_parameters"] = target_parameters
+    lora_config = LoraConfig(**kwargs)
     return get_peft_model(model, lora_config)
 
 
@@ -1266,6 +1283,7 @@ def make_manifest(
             "alpha": LORA_ALPHA,
             "dropout": LORA_DROPOUT,
             "target_modules": LORA_TARGET_MODULES,
+            "target_parameters": LORA_TARGET_PARAMETERS,
             "max_trainable_param_ratio": MAX_TRAINABLE_PARAM_RATIO,
         },
         "training": {
@@ -1425,6 +1443,7 @@ def train() -> None:
         f"LoRA: r={LORA_R} alpha={LORA_ALPHA} dropout={LORA_DROPOUT} "
         f"target_modules={LORA_TARGET_MODULES}"
     )
+    print(f"LoRA target_parameters: {LORA_TARGET_PARAMETERS or 'disabled'}")
     print(f"Trainable LoRA module filter: {TRAINABLE_LORA_MODULES or 'disabled'}")
     print(f"Max trainable parameter ratio: {MAX_TRAINABLE_PARAM_RATIO:.4%}")
     print(f"Length={MAX_LENGTH} batch={BATCH_SIZE} micro_batch={MICRO_BATCH_SIZE}")
@@ -1600,6 +1619,7 @@ def train() -> None:
                 "alpha": LORA_ALPHA,
                 "dropout": LORA_DROPOUT,
                 "target_modules": LORA_TARGET_MODULES,
+                "target_parameters": LORA_TARGET_PARAMETERS,
                 "parsed_target_modules": target_modules,
                 "init_adapter_dir": INIT_ADAPTER_DIR,
                 "init_adapter_repo": INIT_ADAPTER_REPO,
