@@ -1,0 +1,1115 @@
+cell_index,cell_type,line_no,flags,text
+0,markdown,1,,# KG1 V207B External Adapter Triage Colab
+0,markdown,2,,
+0,markdown,3,,Purpose: continue the V207 roadmap after V206B/V206C/V214 were rejected.
+0,markdown,4,,
+0,markdown,5,,This notebook:
+0,markdown,6,,
+0,markdown,7,,- reuses V207A official-like validation artifacts when they exist in Drive;
+0,markdown,8,,- bootstraps the validated V194 baseline exports when those artifacts are missing;
+0,markdown,9,,- downloads public Kaggle model adapters into Drive for gated testing;
+0,markdown,10,,- audits external/current adapter structures before spending H100/A100 time;
+0,markdown,11,,- screens only the weak families first: `equation_transform` and `bit_manipulation`;
+0,markdown,12,,- runs full 947-row official-like ACC only for weak-positive candidates;
+0,markdown,13,,- never trains and never submits to Kaggle.
+0,markdown,14,,
+0,markdown,15,,Colab URL:
+0,markdown,16,,
+0,markdown,17,,`https://colab.research.google.com/github/FELIPEACASTRO/KG1-NVIDIA/blob/v207b-external-triage/notebooks/KG1_V207B_EXTERNAL_ADAPTER_TRIAGE_COLAB.ipynb`
+1,code,1,,# CELL: mount Drive.
+1,code,2,progress_log,print('=== V207B DRIVE MOUNT START ===')
+1,code,3,,from google.colab import drive
+1,code,4,,drive.mount('/content/drive')
+1,code,5,progress_log,print('=== V207B DRIVE MOUNT END ===')
+2,code,1,,# CELL: runtime configuration.
+2,code,2,progress_log,print('=== V207B CONFIG START ===')
+2,code,3,,import datetime
+2,code,4,,import hashlib
+2,code,5,,import json
+2,code,6,,import os
+2,code,7,,import pathlib
+2,code,8,,import re
+2,code,9,,import shutil
+2,code,10,,import subprocess
+2,code,11,,import sys
+2,code,12,,import time
+2,code,13,,
+2,code,14,,VERSION = 'V207B_EXTERNAL_ADAPTER_TRIAGE_20260507_PUBLIC_DOWNLOADS_R2'
+2,code,15,,ROOT = pathlib.Path('/content/kg1')
+2,code,16,,DRIVE_MY = pathlib.Path('/content/drive/MyDrive')
+2,code,17,,V207A_ROOT = DRIVE_MY / 'KG1_NVIDIA_V207A' / 'output_v207a_acc_gate'
+2,code,18,,OUT_ROOT = DRIVE_MY / 'KG1_NVIDIA_V207B' / 'output_v207b_external_adapter_triage'
+2,code,19,,REPORT_DIR = OUT_ROOT / 'reports'
+2,code,20,,PUBLIC_KAGGLE_ROOT = DRIVE_MY / 'KG1_PUBLIC_ADAPTERS'
+2,code,21,,FALLBACK_EXPORT_BASE = os.environ.get(
+2,code,22,,"    'KG1_V207B_FALLBACK_EXPORT_BASE',"
+2,code,23,,"    'https://raw.githubusercontent.com/FELIPEACASTRO/KG1-NVIDIA/v207b-external-triage/artifacts/drive_exports',"
+2,code,24,,)
+2,code,25,,MODEL_NAME = 'nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16'
+2,code,26,,MODEL_REVISION = 'cbd3fa9f933d55ef16a84236559f4ee2a0526848'
+2,code,27,,"VLLM_SPEC = os.environ.get('KG1_V207B_VLLM_SPEC', 'vllm==0.20.1')"
+2,code,28,,
+2,code,29,,VAL_CSV = V207A_ROOT / 'validation' / 'official_train_seed42_stratified10_val.csv'
+2,code,30,,VAL_WEAK_CSV = OUT_ROOT / 'validation' / 'official_train_seed42_stratified10_val_weak_families.csv'
+2,code,31,,BASELINE_PREDICTIONS = V207A_ROOT / 'v194_baseline_eval' / 'v194_baseline_predictions.csv'
+2,code,32,,BASELINE_PER_TASK = V207A_ROOT / 'v194_baseline_eval' / 'v194_baseline_per_task.csv'
+2,code,33,,BASELINE_REPORT = V207A_ROOT / 'v194_baseline_eval' / 'v194_baseline_eval_report.json'
+2,code,34,,
+2,code,35,,"WEAK_FAMILIES = ['bit_manipulation', 'equation_transform']"
+2,code,36,,"FORCE_REEVAL = os.environ.get('KG1_V207B_FORCE_REEVAL', '0') == '1'"
+2,code,37,,"RUN_FULL_FOR_POSITIVE = os.environ.get('KG1_V207B_RUN_FULL_FOR_POSITIVE', '1') == '1'"
+2,code,38,,"HASH_WEIGHTS = os.environ.get('KG1_V207B_HASH_WEIGHTS', '0') == '1'"
+2,code,39,,"MAX_DISCOVERY_DIRS = int(os.environ.get('KG1_V207B_MAX_DISCOVERY_DIRS', '25000'))"
+2,code,40,,"INCLUDE_REJECTED_V206 = os.environ.get('KG1_V207B_INCLUDE_REJECTED_V206', '0') == '1'"
+2,code,41,,"RUN_KAGGLE_PUBLIC_DOWNLOAD = os.environ.get('KG1_V207B_RUN_KAGGLE_PUBLIC_DOWNLOAD', '1') == '1'"
+2,code,42,,"PUBLIC_DOWNLOAD_MAX_PRIORITY = int(os.environ.get('KG1_V207B_PUBLIC_DOWNLOAD_MAX_PRIORITY', '2'))"
+2,code,43,,"PUBLIC_DOWNLOAD_MAX_CANDIDATES = int(os.environ.get('KG1_V207B_PUBLIC_DOWNLOAD_MAX_CANDIDATES', '13'))"
+2,code,44,,ALLOW_KAGGLE_SUBMIT = False
+2,code,45,,
+2,code,46,,"for path in [OUT_ROOT, REPORT_DIR, VAL_WEAK_CSV.parent, PUBLIC_KAGGLE_ROOT]:"
+2,code,47,,"    path.mkdir(parents=True, exist_ok=True)"
+2,code,48,,
+2,code,49,progress_log,"print('VERSION =', VERSION)"
+2,code,50,progress_log,"print('ROOT =', ROOT)"
+2,code,51,progress_log,"print('V207A_ROOT =', V207A_ROOT)"
+2,code,52,progress_log,"print('OUT_ROOT =', OUT_ROOT)"
+2,code,53,progress_log,"print('PUBLIC_KAGGLE_ROOT =', PUBLIC_KAGGLE_ROOT)"
+2,code,54,progress_log,"print('FALLBACK_EXPORT_BASE =', FALLBACK_EXPORT_BASE)"
+2,code,55,progress_log,"print('VAL_CSV =', VAL_CSV)"
+2,code,56,progress_log,"print('BASELINE_PREDICTIONS =', BASELINE_PREDICTIONS)"
+2,code,57,progress_log,"print('BASELINE_PER_TASK =', BASELINE_PER_TASK)"
+2,code,58,progress_log,"print('MODEL_NAME =', MODEL_NAME)"
+2,code,59,progress_log,"print('MODEL_REVISION =', MODEL_REVISION)"
+2,code,60,progress_log,"print('VLLM_SPEC =', VLLM_SPEC)"
+2,code,61,progress_log,"print('WEAK_FAMILIES =', WEAK_FAMILIES)"
+2,code,62,progress_log,"print('FORCE_REEVAL =', FORCE_REEVAL)"
+2,code,63,progress_log,"print('RUN_FULL_FOR_POSITIVE =', RUN_FULL_FOR_POSITIVE)"
+2,code,64,progress_log,"print('HASH_WEIGHTS =', HASH_WEIGHTS)"
+2,code,65,progress_log,"print('MAX_DISCOVERY_DIRS =', MAX_DISCOVERY_DIRS)"
+2,code,66,progress_log,"print('INCLUDE_REJECTED_V206 =', INCLUDE_REJECTED_V206)"
+2,code,67,progress_log,"print('RUN_KAGGLE_PUBLIC_DOWNLOAD =', RUN_KAGGLE_PUBLIC_DOWNLOAD)"
+2,code,68,progress_log,"print('PUBLIC_DOWNLOAD_MAX_PRIORITY =', PUBLIC_DOWNLOAD_MAX_PRIORITY)"
+2,code,69,progress_log,"print('PUBLIC_DOWNLOAD_MAX_CANDIDATES =', PUBLIC_DOWNLOAD_MAX_CANDIDATES)"
+2,code,70,progress_log,"print('ALLOW_KAGGLE_SUBMIT =', ALLOW_KAGGLE_SUBMIT)"
+2,code,71,,if ALLOW_KAGGLE_SUBMIT:
+2,code,72,hard_fail,    raise RuntimeError('This notebook is submit-disabled by design.')
+2,code,73,progress_log,print('=== V207B CONFIG END ===')
+3,code,1,,# CELL: bridge Colab Secrets into environment variables without printing secret values.
+3,code,2,progress_log,print('=== V207B COLAB SECRETS BRIDGE START ===')
+3,code,3,,import json
+3,code,4,,import os
+3,code,5,,import pathlib
+3,code,6,,
+3,code,7,,def read_colab_secret(name):
+3,code,8,,    try:
+3,code,9,,        from google.colab import userdata  # type: ignore
+3,code,10,,    except Exception:
+3,code,11,,        return None
+3,code,12,,    try:
+3,code,13,colab_secret_read,        value = userdata.get(name)
+3,code,14,,    except Exception:
+3,code,15,,        return None
+3,code,16,,    if value is None:
+3,code,17,,        return None
+3,code,18,,    value = str(value).strip()
+3,code,19,,    return value or None
+3,code,20,,
+3,code,21,,"def set_env_from_secret(env_name, secret_names):"
+3,code,22,,    if os.environ.get(env_name):
+3,code,23,progress_log,"        print(env_name, 'already_set=True')"
+3,code,24,,        return True
+3,code,25,,    for secret_name in secret_names:
+3,code,26,,        value = read_colab_secret(secret_name)
+3,code,27,progress_log,"        print('colab_secret_available', secret_name, '=', bool(value))"
+3,code,28,,        if value:
+3,code,29,,            os.environ[env_name] = value
+3,code,30,progress_log,"            print(env_name, 'set_from_secret=', secret_name)"
+3,code,31,,            return True
+3,code,32,progress_log,"    print(env_name, 'set_from_secret=False')"
+3,code,33,,    return False
+3,code,34,,
+3,code,35,,"set_env_from_secret('HF_TOKEN', ['HF_TOKEN', 'HF_KEY'])"
+3,code,36,,if os.environ.get('HF_TOKEN'):
+3,code,37,,"    os.environ.setdefault('HUGGINGFACE_HUB_TOKEN', os.environ['HF_TOKEN'])"
+3,code,38,,"    os.environ.setdefault('HF_KEY', os.environ['HF_TOKEN'])"
+3,code,39,progress_log,    print('HF_TOKEN_ready=True')
+3,code,40,,else:
+3,code,41,progress_log,    print('HF_TOKEN_ready=False')
+3,code,42,,
+3,code,43,,"set_env_from_secret('KAGGLE_USERNAME', ['KAGGLE_USERNAME'])"
+3,code,44,,"set_env_from_secret('KAGGLE_KEY', ['KAGGLE_KEY'])"
+3,code,45,,kaggle_dir = pathlib.Path('/root/.kaggle')
+3,code,46,,kaggle_json = kaggle_dir / 'kaggle.json'
+3,code,47,,if os.environ.get('KAGGLE_USERNAME') and os.environ.get('KAGGLE_KEY'):
+3,code,48,,"    kaggle_dir.mkdir(parents=True, exist_ok=True)"
+3,code,49,,    if not kaggle_json.exists():
+3,code,50,,        kaggle_json.write_text(
+3,code,51,,            json.dumps(
+3,code,52,,                {
+3,code,53,,"                    'username': os.environ['KAGGLE_USERNAME'],"
+3,code,54,,"                    'key': os.environ['KAGGLE_KEY'],"
+3,code,55,,                }
+3,code,56,,"            ),"
+3,code,57,,"            encoding='utf-8',"
+3,code,58,,        )
+3,code,59,progress_log,        print('kaggle_json_created_from_colab_secrets=True')
+3,code,60,,    else:
+3,code,61,progress_log,        print('kaggle_json_already_exists=True')
+3,code,62,,    kaggle_json.chmod(0o600)
+3,code,63,,"    os.environ.setdefault('KAGGLE_CONFIG_DIR', str(kaggle_dir))"
+3,code,64,progress_log,"    print('KAGGLE_CONFIG_DIR =', os.environ.get('KAGGLE_CONFIG_DIR'))"
+3,code,65,progress_log,    print('KAGGLE_CREDENTIALS_READY=True')
+3,code,66,,else:
+3,code,67,progress_log,    print('KAGGLE_CREDENTIALS_READY=False')
+3,code,68,progress_log,print('=== V207B COLAB SECRETS BRIDGE END ===')
+4,code,1,,# CELL: helper functions and command logging.
+4,code,2,progress_log,print('=== V207B HELPERS START ===')
+4,code,3,,import importlib
+4,code,4,,import json
+4,code,5,,import pathlib
+4,code,6,,import subprocess
+4,code,7,,import sys
+4,code,8,,import time
+4,code,9,,
+4,code,10,command_runner,"def run_cmd(cmd, cwd=None, env=None, log_path=None, check=True):"
+4,code,11,,    cmd = [str(x) for x in cmd]
+4,code,12,progress_log,"    print('+', ' '.join(cmd))"
+4,code,13,,    log_handle = None
+4,code,14,,    if log_path is not None:
+4,code,15,,        log_path = pathlib.Path(log_path)
+4,code,16,,"        log_path.parent.mkdir(parents=True, exist_ok=True)"
+4,code,17,,"        log_handle = log_path.open('w', encoding='utf-8')"
+4,code,18,,    proc = subprocess.Popen(
+4,code,19,,"        cmd,"
+4,code,20,,"        cwd=str(cwd) if cwd else None,"
+4,code,21,,"        env=env,"
+4,code,22,,"        stdout=subprocess.PIPE,"
+4,code,23,,"        stderr=subprocess.STDOUT,"
+4,code,24,,"        text=True,"
+4,code,25,,"        bufsize=1,"
+4,code,26,,    )
+4,code,27,,    assert proc.stdout is not None
+4,code,28,,    for line in proc.stdout:
+4,code,29,progress_log,"        print(line, end='')"
+4,code,30,,        if log_handle:
+4,code,31,,            log_handle.write(line)
+4,code,32,,    rc = proc.wait()
+4,code,33,,    if log_handle:
+4,code,34,,        log_handle.close()
+4,code,35,progress_log,"    print('returncode =', rc)"
+4,code,36,,    if check and rc != 0:
+4,code,37,hard_fail,        raise RuntimeError(f'Command failed with rc={rc}: {cmd}')
+4,code,38,,    return rc
+4,code,39,,
+4,code,40,,"def ensure_import(import_name, pip_spec=None):"
+4,code,41,,    try:
+4,code,42,,        mod = importlib.import_module(import_name)
+4,code,43,progress_log,"        print(import_name, 'version=', getattr(mod, '__version__', 'unknown'))"
+4,code,44,,        return mod
+4,code,45,,    except Exception as exc:
+4,code,46,progress_log,"        print(import_name, 'missing/import failed:', repr(exc))"
+4,code,47,,        if not pip_spec:
+4,code,48,,            raise
+4,code,49,command_runner,"        run_cmd([sys.executable, '-m', 'pip', 'install', '-q', pip_spec])"
+4,code,50,,        mod = importlib.import_module(import_name)
+4,code,51,progress_log,"        print(import_name, 'version=', getattr(mod, '__version__', 'unknown'))"
+4,code,52,,        return mod
+4,code,53,,
+4,code,54,,def fresh_python_import_check(import_name):
+4,code,55,,    code = (
+4,code,56,,"        ""import importlib, torch; """
+4,code,57,,"        f""m=importlib.import_module('{import_name}'); """
+4,code,58,progress_log,"        ""print('fresh_python_import_ok', m.__name__, getattr(m, '__version__', 'unknown')); """
+4,code,59,progress_log,"        ""print('fresh_python_torch', torch.__version__, getattr(torch.version, 'cuda', 'unknown'))"""
+4,code,60,,    )
+4,code,61,command_runner,"    run_cmd([sys.executable, '-c', code])"
+4,code,62,,
+4,code,63,,"def sha256_file(path, enabled=True):"
+4,code,64,,    path = pathlib.Path(path)
+4,code,65,,    if not enabled:
+4,code,66,,        return ''
+4,code,67,,    h = hashlib.sha256()
+4,code,68,,    with path.open('rb') as handle:
+4,code,69,,"        for chunk in iter(lambda: handle.read(1024 * 1024), b''):"
+4,code,70,,            h.update(chunk)
+4,code,71,,    return h.hexdigest()
+4,code,72,,
+4,code,73,,def safe_label(text):
+4,code,74,,"    text = str(text).strip().replace('\\', '/')"
+4,code,75,,"    text = re.sub(r'[^A-Za-z0-9_.-]+', '_', text)"
+4,code,76,,"    text = re.sub(r'_+', '_', text).strip('_.-')"
+4,code,77,,    return text[-120:] or 'candidate'
+4,code,78,,
+4,code,79,progress_log,"print('python =', sys.version)"
+4,code,80,progress_log,print('=== V207B HELPERS END ===')
+5,code,1,,# CELL: install dependencies and validate GPU/vLLM import path.
+5,code,2,progress_log,print('=== V207B DEPENDENCY CHECK START ===')
+5,code,3,,"ensure_import('pandas', 'pandas')"
+5,code,4,,"ensure_import('huggingface_hub', 'huggingface_hub')"
+5,code,5,,"ensure_import('transformers', 'transformers')"
+5,code,6,,"ensure_import('peft', 'peft')"
+5,code,7,,"ensure_import('safetensors', 'safetensors')"
+5,code,8,command_runner,"run_cmd([sys.executable, '-m', 'pip', 'install', '-q', 'kaggle==2.0.2'])"
+5,code,9,,KAGGLE_EXE = shutil.which('kaggle')
+5,code,10,,"KAGGLE_CMD_PREFIX = [KAGGLE_EXE] if KAGGLE_EXE else [sys.executable, '-m', 'kaggle.cli']"
+5,code,11,progress_log,"print('KAGGLE_EXE =', KAGGLE_EXE)"
+5,code,12,progress_log,"print('KAGGLE_CMD_PREFIX =', KAGGLE_CMD_PREFIX)"
+5,code,13,command_runner,run_cmd(KAGGLE_CMD_PREFIX + ['--version'])
+5,code,14,,torch = ensure_import('torch')
+5,code,15,progress_log,"print('torch_cuda_available =', torch.cuda.is_available())"
+5,code,16,progress_log,"print('torch_cuda_device_count =', torch.cuda.device_count() if torch.cuda.is_available() else 0)"
+5,code,17,,if torch.cuda.is_available():
+5,code,18,progress_log,"    print('torch_cuda_device_name =', torch.cuda.get_device_name(0))"
+5,code,19,progress_log,"    print('torch_cuda_version =', getattr(torch.version, 'cuda', 'unknown'))"
+5,code,20,progress_log,"print('Installing pinned vLLM runtime for subprocess evaluation:', VLLM_SPEC)"
+5,code,21,command_runner,run_cmd([
+5,code,22,,"    sys.executable,"
+5,code,23,,"    '-m',"
+5,code,24,,"    'pip',"
+5,code,25,,"    'install',"
+5,code,26,,"    '-q',"
+5,code,27,,"    '--extra-index-url',"
+5,code,28,,"    'https://download.pytorch.org/whl/cu128',"
+5,code,29,,"    VLLM_SPEC,"
+5,code,30,,])
+5,code,31,,fresh_python_import_check('vllm')
+5,code,32,progress_log,print('=== V207B DEPENDENCY CHECK END ===')
+6,code,1,,# CELL: create local execution workspace for embedded scripts.
+6,code,2,progress_log,print('=== V207B WORKSPACE SETUP START ===')
+6,code,3,,"ROOT.mkdir(parents=True, exist_ok=True)"
+6,code,4,,"(ROOT / 'scripts').mkdir(parents=True, exist_ok=True)"
+6,code,5,,"(ROOT / 'src').mkdir(parents=True, exist_ok=True)"
+6,code,6,progress_log,"print('ROOT =', ROOT, 'exists=', ROOT.exists())"
+6,code,7,progress_log,"print('scripts_dir =', ROOT / 'scripts', 'exists=', (ROOT / 'scripts').exists())"
+6,code,8,progress_log,"print('src_dir =', ROOT / 'src', 'exists=', (ROOT / 'src').exists())"
+6,code,9,progress_log,print('=== V207B WORKSPACE SETUP END ===')
+7,code,1,,# CELL: install/repair V207B metric scripts inside the local workspace.
+7,code,2,progress_log,print('=== V207B SCRIPT BOOTSTRAP START ===')
+7,code,3,,"import json, pathlib, py_compile"
+7,code,4,,ROOT = pathlib.Path('/content/kg1')
+7,code,5,hard_fail;progress_log,"FILES = json.loads(""{\n  \""src/__init__.py\"": \""\\\""\\\""\\\""KG1 shared Python utilities.\\\""\\\""\\\""\\n\\n\"",\n  \""src/competition_utils.py\"": \""\\\""\\\""\\\""Shared metric utilities for the NVIDIA Nemotron reasoning challenge.\\n\\nThe answer extraction and verification functions intentionally mirror the\\npublic Kaggle metric path used by the Jiazhuang/Xduan local-CV notebooks:\\nextract the last boxed answer first, then fall back to final-answer phrases,\\nthen the last number, then the last non-empty line.\\n\\\""\\\""\\\""\\n\\nfrom __future__ import annotations\\n\\nimport math\\nimport re\\nimport unicodedata\\nfrom pathlib import Path\\nfrom typing import Any\\n\\n\\nREPO_ROOT = Path(__file__).resolve().parent.parent\\nDEFAULT_DATA_DIR = REPO_ROOT / \\\""data\\\""\\n\\nMODEL_NAME = \\\""nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16\\\""\\nMODEL_REVISION = \\\""cbd3fa9f933d55ef16a84236559f4ee2a0526848\\\""\\n\\nOFFICIAL_INFERENCE_CONFIG: dict[str, Any] = {\\n    \\\""model_name\\\"": MODEL_NAME,\\n    \\\""model_revision\\\"": MODEL_REVISION,\\n    \\\""max_lora_rank\\\"": 32,\\n    \\\""max_tokens\\\"": 7680,\\n    \\\""temperature\\\"": 0.0,\\n    \\\""top_p\\\"": 1.0,\\n    \\\""max_model_len\\\"": 8192,\\n    \\\""max_num_seqs\\\"": 64,\\n    \\\""gpu_memory_utilization\\\"": 0.85,\\n    \\\""enable_prefix_caching\\\"": True,\\n    \\\""enable_chunked_prefill\\\"": True,\\n    \\\""trust_remote_code\\\"": True,\\n    \\\""dtype\\\"": \\\""auto\\\"",\\n}\\n\\nPROMPT_SUFFIX = (\\n    \\\""\\\\nPlease put your final answer inside `\\\\\\\\boxed{}`. \\\""\\n    \\\""For example: `\\\\\\\\boxed{your answer}`\\\""\\n)\\n\\nFAMILIES = (\\n    \\\""gravity_constant\\\"",\\n    \\\""unit_conversion\\\"",\\n    \\\""numeral_system\\\"",\\n    \\\""text_encryption\\\"",\\n    \\\""bit_manipulation\\\"",\\n    \\\""equation_transform\\\"",\\n)\\n\\nFAMILY_ALIASES = {\\n    \\\""gravity\\\"": \\\""gravity_constant\\\"",\\n    \\\""grav\\\"": \\\""gravity_constant\\\"",\\n    \\\""gravity_constant\\\"": \\\""gravity_constant\\\"",\\n    \\\""unit\\\"": \\\""unit_conversion\\\"",\\n    \\\""units\\\"": \\\""unit_conversion\\\"",\\n    \\\""unit_conversion\\\"": \\\""unit_conversion\\\"",\\n    \\\""numeral\\\"": \\\""numeral_system\\\"",\\n    \\\""roman\\\"": \\\""numeral_system\\\"",\\n    \\\""roman_numeral\\\"": \\\""numeral_system\\\"",\\n    \\\""number_system\\\"": \\\""numeral_system\\\"",\\n    \\\""numeral_system\\\"": \\\""numeral_system\\\"",\\n    \\\""cipher\\\"": \\\""text_encryption\\\"",\\n    \\\""encryption\\\"": \\\""text_encryption\\\"",\\n    \\\""text\\\"": \\\""text_encryption\\\"",\\n    \\\""text_cipher\\\"": \\\""text_encryption\\\"",\\n    \\\""text_encryption\\\"": \\\""text_encryption\\\"",\\n    \\\""bit\\\"": \\\""bit_manipulation\\\"",\\n    \\\""bits\\\"": \\\""bit_manipulation\\\"",\\n    \\\""bit_manipulation\\\"": \\\""bit_manipulation\\\"",\\n    \\\""eq\\\"": \\\""equation_transform\\\"",\\n    \\\""equation\\\"": \\\""equation_transform\\\"",\\n    \\\""equation_rules\\\"": \\\""equation_transform\\\"",\\n    \\\""symbol_transform\\\"": \\\""equation_transform\\\"",\\n    \\\""equation_symbolic\\\"": \\\""equation_transform\\\"",\\n    \\\""equation_numeric\\\"": \\\""equation_transform\\\"",\\n    \\\""equation_numeric_deduce\\\"": \\\""equation_transform\\\"",\\n    \\\""equation_numeric_guess\\\"": \\\""equation_transform\\\"",\\n    \\\""cryptarithm_deduce\\\"": \\\""equation_transform\\\"",\\n    \\\""cryptarithm_guess\\\"": \\\""equation_transform\\\"",\\n    \\\""equation_transform\\\"": \\\""equation_transform\\\"",\\n}\\n\\n\\ndef _normalize_key(value: object) -> str:\\n    text = unicodedata.normalize(\\\""NFKC\\\"", str(value or \\\""\\\"")).strip().lower()\\n    return re.sub(r\\\""[\\\\s\\\\-]+\\\"", \\\""_\\\"", text)\\n\\n\\ndef canonical_family(value: object) -> str:\\n    key = _normalize_key(value)\\n    return FAMILY_ALIASES.get(key, key or \\\""unknown\\\"")\\n\\n\\ndef classify_puzzle(prompt: str) -> str:\\n    low = str(prompt or \\\""\\\"").lower()\\n    if \\\""bit manipulation\\\"" in low or \\\""8-bit binary\\\"" in low:\\n        return \\\""bit_manipulation\\\""\\n    if \\\""encryption\\\"" in low or \\\""decrypt the following text\\\"" in low or \\\""cipher\\\"" in low:\\n        return \\\""text_encryption\\\""\\n    if \\\""numeral system\\\"" in low or \\\""converted into a different numeral\\\"" in low:\\n        return \\\""numeral_system\\\""\\n    if \\\""gravitational\\\"" in low or \\\""gravity\\\"" in low:\\n        return \\\""gravity_constant\\\""\\n    if \\\""transformation rule\\\"" in low or \\\""transformation rules\\\"" in low:\\n        return \\\""equation_transform\\\""\\n    if \\\""unit conversion\\\"" in low or \\\""measurement\\\"" in low:\\n        return \\\""unit_conversion\\\""\\n    return \\\""unknown\\\""\\n\\n\\ndef extract_boxed_answers(text: str | None) -> list[str]:\\n    if text is None:\\n        return []\\n    return re.findall(r\\\""\\\\\\\\boxed\\\\{([^}]*)(?:\\\\}|$)\\\"", str(text))\\n\\n\\ndef extract_final_answer(text: str | None) -> str:\\n    \\\""\\\""\\\""Extract the final answer with the public Kaggle fallback order.\\\""\\\""\\\""\\n\\n    if text is None:\\n        return \\\""NOT_FOUND\\\""\\n    value = str(text)\\n\\n    matches = extract_boxed_answers(value)\\n    if matches:\\n        non_empty = [match.strip() for match in matches if match.strip()]\\n        if non_empty:\\n            return non_empty[-1]\\n        return matches[-1].strip()\\n\\n    patterns = [\\n        r\\\""The final answer is:\\\\s*([^\\\\n]+)\\\"",\\n        r\\\""Final answer is:\\\\s*([^\\\\n]+)\\\"",\\n        r\\\""Final answer\\\\s*[:\uff1a]\\\\s*([^\\\\n]+)\\\"",\\n        r\\\""final answer\\\\s*[:\uff1a]\\\\s*([^\\\\n]+)\\\"",\\n    ]\\n    for pattern in patterns:\\n        matches = re.findall(pattern, value, re.IGNORECASE)\\n        if matches:\\n            return matches[-1].strip()\\n\\n    matches = re.findall(r\\\""-?\\\\d+(?:\\\\.\\\\d+)?\\\"", value)\\n    if matches:\\n        return matches[-1]\\n\\n    lines = [line.strip() for line in value.splitlines() if line.strip()]\\n    return lines[-1] if lines else \\\""NOT_FOUND\\\""\\n\\n\\ndef verify_answer(stored_answer: object, predicted: object) -> bool:\\n    \\\""\\\""\\\""Verify a prediction with the public Kaggle metric behavior.\\\""\\\""\\\""\\n\\n    expected = str(stored_answer).strip()\\n    observed = str(predicted).strip()\\n    if re.fullmatch(r\\\""[01]+\\\"", expected):\\n        return observed.lower() == expected.lower()\\n    try:\\n        return math.isclose(float(expected), float(observed), rel_tol=1e-2, abs_tol=1e-5)\\n    except Exception:\\n        return observed.lower() == expected.lower()\\n\\n\\ndef canonical_answer(value: object) -> str:\\n    if value is None:\\n        return \\\""\\\""\\n    text = unicodedata.normalize(\\\""NFKC\\\"", str(value))\\n    return re.sub(r\\\""\\\\s+\\\"", \\\"" \\\"", text).strip()\\n\\n\\ndef escape_boxed_answer(value: object) -> str:\\n    return str(value).replace(\\\""\\\\\\\\\\\"", \\\""\\\\\\\\\\\\\\\\\\\"").replace(\\\""{\\\"", \\\""\\\\\\\\{\\\"").replace(\\\""}\\\"", \\\""\\\\\\\\}\\\"")\\n\\n\\ndef unescape_latex_braces(value: object) -> str:\\n    return str(value).replace(\\\""\\\\\\\\{\\\"", \\\""{\\\"").replace(\\\""\\\\\\\\}\\\"", \\\""}\\\"").replace(\\\""\\\\\\\\\\\\\\\\\\\"", \\\""\\\\\\\\\\\"")\\n\\n\\ndef canonical_boxed_payload(value: object) -> str:\\n    return canonical_answer(unescape_latex_braces(value))\\n\\n\\ndef parse_finite_number(value: object) -> float | None:\\n    text = canonical_answer(value).replace(\\\"",\\\"", \\\""\\\"")\\n    if not text:\\n        return None\\n    try:\\n        number = float(text)\\n    except ValueError:\\n        return None\\n    return number if math.isfinite(number) else None\\n\\n\\ndef answers_equivalent(\\n    expected: object,\\n    observed: object,\\n    *,\\n    rel_tol: float = 1e-2,\\n    abs_tol: float = 1e-5,\\n    observed_is_boxed_payload: bool = False,\\n) -> bool:\\n    expected_text = canonical_answer(expected)\\n    observed_text = canonical_boxed_payload(observed) if observed_is_boxed_payload else canonical_answer(observed)\\n    expected_number = parse_finite_number(expected_text)\\n    observed_number = parse_finite_number(observed_text)\\n    if expected_number is not None and observed_number is not None:\\n        return math.isclose(expected_number, observed_number, rel_tol=rel_tol, abs_tol=abs_tol)\\n    return expected_text.lower() == observed_text.lower()\\n\\n\\ndef box_answer(value: object) -> str:\\n    return f\\\""\\\\\\\\boxed{{{escape_boxed_answer(value)}}}\\\""\\n\\n\"",\n  \""scripts/evaluate_lora_adapter.py\"": \""#!/usr/bin/env python3\\n\\\""\\\""\\\""Official-like vLLM evaluator for Nemotron LoRA adapters.\\n\\nThis script is intentionally evaluation-only. It does not train, package, or\\nsubmit. It generates answers with the same scoring-facing settings used by the\\npublic local-CV notebooks: LoRA enabled, max rank 32, 8192 context, 7680 output\\ntokens, deterministic sampling, boxed-answer extraction, and per-family ACC.\\n\\\""\\\""\\\""\\n\\nfrom __future__ import annotations\\n\\nimport argparse\\nimport json\\nimport os\\nimport sys\\nimport time\\nfrom collections import defaultdict\\nfrom datetime import datetime, timezone\\nfrom pathlib import Path\\nfrom typing import Any\\n\\nimport pandas as pd\\n\\nROOT = Path(__file__).resolve().parents[1]\\nif str(ROOT) not in sys.path:\\n    sys.path.insert(0, str(ROOT))\\n\\nfrom src.competition_utils import (  # noqa: E402\\n    MODEL_NAME,\\n    OFFICIAL_INFERENCE_CONFIG,\\n    PROMPT_SUFFIX,\\n    classify_puzzle,\\n    extract_final_answer,\\n    verify_answer,\\n)\\n\\n\\ndef utc_now() -> str:\\n    return datetime.now(timezone.utc).isoformat()\\n\\n\\ndef parse_seeds(raw: str | int | None) -> list[int]:\\n    if raw is None or raw == \\\""\\\"":\\n        return [42]\\n    if isinstance(raw, int):\\n        return [raw]\\n    seeds: list[int] = []\\n    for chunk in str(raw).replace(\\\"";\\\"", \\\"",\\\"").split(\\\"",\\\""):\\n        chunk = chunk.strip()\\n        if chunk:\\n            seeds.append(int(chunk))\\n    return seeds or [42]\\n\\n\\ndef resolve_base_model_path(base_model_path: str = \\\""\\\"") -> str:\\n    \\\""\\\""\\\""Resolve the base model path for Colab, Kaggle, or local H100 runs.\\\""\\\""\\\""\\n\\n    if base_model_path:\\n        return base_model_path\\n    env_path = os.environ.get(\\\""KG1_BASE_MODEL_PATH\\\"") or os.environ.get(\\\""BASE_MODEL_PATH\\\"")\\n    if env_path:\\n        return env_path\\n\\n    kaggle_candidates = [\\n        \\\""/kaggle/input/models/metric/nemotron-3-nano-30b-a3b-bf16/transformers/default/1\\\"",\\n        \\\""/kaggle/input/models/metric/nemotron-3-nano-30b-a3b-bf16/transformers/default\\\"",\\n        \\\""/kaggle/input/nemotron-3-nano-30b-a3b-bf16/transformers/default/1\\\"",\\n    ]\\n    for candidate in kaggle_candidates:\\n        if Path(candidate).exists():\\n            return candidate\\n    return MODEL_NAME\\n\\n\\ndef resolve_model_revision(base_model_path: str, config: dict[str, Any]) -> str | None:\\n    \\\""\\\""\\\""Use the pinned HF revision for repo IDs, but not for local model paths.\\\""\\\""\\\""\\n\\n    revision = str(config.get(\\\""model_revision\\\"") or \\\""\\\"").strip()\\n    if not revision:\\n        return None\\n    model_text = str(base_model_path)\\n    if Path(model_text).exists() or os.path.isabs(model_text):\\n        return None\\n    return revision\\n\\n\\ndef row_id_column(frame: pd.DataFrame) -> str:\\n    for candidate in (\\\""id\\\"", \\\""row_id\\\""):\\n        if candidate in frame.columns:\\n            return candidate\\n    return str(frame.columns.to_list()[0])\\n\\n\\ndef normalize_questions(solution: pd.DataFrame, questions: pd.DataFrame, limit: int = 0) -> pd.DataFrame:\\n    solution = solution.copy()\\n    questions = questions.copy()\\n    sol_id = row_id_column(solution)\\n    q_id = row_id_column(questions)\\n    if sol_id != \\\""id\\\"":\\n        solution = solution.rename(columns={sol_id: \\\""id\\\""})\\n    if q_id != \\\""id\\\"":\\n        questions = questions.rename(columns={q_id: \\\""id\\\""})\\n    solution[\\\""id\\\""] = solution[\\\""id\\\""].astype(str)\\n    questions[\\\""id\\\""] = questions[\\\""id\\\""].astype(str)\\n    if \\\""prompt\\\"" not in questions.columns:\\n        if \\\""prompt\\\"" not in solution.columns:\\n            raise ValueError(\\\""questions or solution must contain a prompt column\\\"")\\n        questions = solution[[\\\""id\\\"", \\\""prompt\\\""]].copy()\\n    ordered = solution[[\\\""id\\\""]].merge(questions, on=\\\""id\\\"", how=\\\""left\\\"", validate=\\\""one_to_one\\\"")\\n    missing_prompt = ordered[\\\""prompt\\\""].isna().sum()\\n    if missing_prompt:\\n        raise ValueError(f\\\""questions missing prompts for {missing_prompt} solution rows\\\"")\\n    if limit > 0:\\n        ordered = ordered.head(limit).copy()\\n    return ordered\\n\\n\\ndef validate_adapter_dir(adapter_dir: str | Path) -> Path:\\n    path = Path(adapter_dir)\\n    if not path.exists():\\n        raise FileNotFoundError(f\\\""adapter path does not exist: {path}\\\"")\\n    if path.is_file() and path.suffix == \\\"".zip\\\"":\\n        raise ValueError(\\\""adapter zip must be extracted before vLLM evaluation\\\"")\\n    config = path / \\\""adapter_config.json\\\""\\n    if not config.exists():\\n        raise FileNotFoundError(f\\\""missing adapter_config.json: {config}\\\"")\\n    model_files = list(path.glob(\\\""adapter_model.safetensors\\\"")) + list(path.glob(\\\""adapter_model.bin\\\""))\\n    if not model_files:\\n        raise FileNotFoundError(f\\\""missing adapter_model.safetensors or adapter_model.bin in {path}\\\"")\\n    return path\\n\\n\\ndef render_prompts(tokenizer: Any, questions: pd.DataFrame) -> list[str]:\\n    prompts: list[str] = []\\n    for row in questions.itertuples(index=False):\\n        user_content = str(getattr(row, \\\""prompt\\\"")) + PROMPT_SUFFIX\\n        try:\\n            prompt = tokenizer.apply_chat_template(\\n                [{\\\""role\\\"": \\\""user\\\"", \\\""content\\\"": user_content}],\\n                tokenize=False,\\n                add_generation_prompt=True,\\n                enable_thinking=True,\\n            )\\n        except Exception:\\n            prompt = user_content\\n        prompts.append(prompt)\\n    return prompts\\n\\n\\ndef _sampling_params(config: dict[str, Any], seed: int):\\n    from vllm import SamplingParams\\n\\n    kwargs = {\\n        \\\""temperature\\\"": float(config.get(\\\""temperature\\\"", 0.0)),\\n        \\\""top_p\\\"": float(config.get(\\\""top_p\\\"", 1.0)),\\n        \\\""max_tokens\\\"": int(config.get(\\\""max_tokens\\\"", 7680)),\\n    }\\n    try:\\n        return SamplingParams(**kwargs, seed=int(seed))\\n    except TypeError:\\n        return SamplingParams(**kwargs)\\n\\n\\ndef apply_vllm_runtime_safety_settings() -> dict[str, str]:\\n    \\\""\\\""\\\""Apply Colab-safe vLLM settings before importing/initializing vLLM.\\n\\n    Colab H100 runtimes may install vLLM builds where DeepGEMM is enabled by\\n    default, but the `deep_gemm` backend package is absent or too old. In that\\n    state vLLM can fail during engine warmup before any generation starts. The\\n    challenge evaluation does not require DeepGEMM specifically, so disable it\\n    unless the caller explicitly opts back in.\\n    \\\""\\\""\\\""\\n\\n    allow_deep_gemm = os.environ.get(\\\""KG1_ALLOW_VLLM_DEEP_GEMM\\\"", \\\""0\\\"").strip().lower() in {\\n        \\\""1\\\"",\\n        \\\""true\\\"",\\n        \\\""yes\\\"",\\n        \\\""on\\\"",\\n    }\\n    if not allow_deep_gemm:\\n        os.environ[\\\""VLLM_USE_DEEP_GEMM\\\""] = \\\""0\\\""\\n        os.environ[\\\""VLLM_MOE_USE_DEEP_GEMM\\\""] = \\\""0\\\""\\n        os.environ[\\\""VLLM_USE_DEEP_GEMM_E8M0\\\""] = \\\""0\\\""\\n        os.environ[\\\""VLLM_USE_DEEP_GEMM_TMA_ALIGNED_SCALES\\\""] = \\\""0\\\""\\n        os.environ[\\\""VLLM_DEEP_GEMM_WARMUP\\\""] = \\\""skip\\\""\\n    os.environ.setdefault(\\\""VLLM_MEMORY_PROFILER_ESTIMATE_CUDAGRAPHS\\\"", \\\""0\\\"")\\n    keys = [\\n        \\\""KG1_ALLOW_VLLM_DEEP_GEMM\\\"",\\n        \\\""VLLM_USE_DEEP_GEMM\\\"",\\n        \\\""VLLM_MOE_USE_DEEP_GEMM\\\"",\\n        \\\""VLLM_USE_DEEP_GEMM_E8M0\\\"",\\n        \\\""VLLM_USE_DEEP_GEMM_TMA_ALIGNED_SCALES\\\"",\\n        \\\""VLLM_DEEP_GEMM_WARMUP\\\"",\\n        \\\""VLLM_MEMORY_PROFILER_ESTIMATE_CUDAGRAPHS\\\"",\\n    ]\\n    return {key: os.environ.get(key, \\\""\\\"") for key in keys}\\n\\n\\ndef first_existing_column(frame: pd.DataFrame, candidates: list[str]) -> str | None:\\n    for candidate in candidates:\\n        if candidate in frame.columns:\\n            return candidate\\n    return None\\n\\n\\ndef prepare_merged_predictions(solution: pd.DataFrame, pred: pd.DataFrame) -> pd.DataFrame:\\n    \\\""\\\""\\\""Merge generated rows with labels without relying on pandas suffix names.\\\""\\\""\\\""\\n\\n    pred_for_merge = pred.rename(columns={\\\""prompt\\\"": \\\""generated_prompt\\\"", \\\""type\\\"": \\\""pred_type\\\""}).copy()\\n    merged = solution.merge(pred_for_merge, on=\\\""id\\\"", how=\\\""left\\\"", validate=\\\""one_to_one\\\"")\\n\\n    prompt_col = first_existing_column(merged, [\\\""prompt\\\"", \\\""generated_prompt\\\"", \\\""prompt_x\\\"", \\\""prompt_y\\\""])\\n    if prompt_col is None:\\n        merged[\\\""prompt\\\""] = \\\""\\\""\\n    elif prompt_col != \\\""prompt\\\"":\\n        merged[\\\""prompt\\\""] = merged[prompt_col].fillna(\\\""\\\"").astype(str)\\n\\n    if \\\""prediction\\\"" not in merged.columns:\\n        merged[\\\""prediction\\\""] = \\\""\\\""\\n    if \\\""finish_reason\\\"" not in merged.columns:\\n        merged[\\\""finish_reason\\\""] = \\\""\\\""\\n    if \\\""completion_tokens\\\"" not in merged.columns:\\n        merged[\\\""completion_tokens\\\""] = 0\\n\\n    type_col = first_existing_column(merged, [\\\""type\\\"", \\\""task_type\\\"", \\\""family\\\"", \\\""type_x\\\"", \\\""pred_type\\\"", \\\""type_y\\\""])\\n    if type_col is None:\\n        merged[\\\""type\\\""] = merged[\\\""prompt\\\""].map(classify_puzzle)\\n    elif type_col != \\\""type\\\"":\\n        merged[\\\""type\\\""] = merged[type_col].fillna(\\\""\\\"").astype(str)\\n    missing_type = merged[\\\""type\\\""].fillna(\\\""\\\"").astype(str).eq(\\\""\\\"")\\n    if missing_type.any():\\n        merged.loc[missing_type, \\\""type\\\""] = merged.loc[missing_type, \\\""prompt\\\""].map(classify_puzzle)\\n\\n    return merged\\n\\n\\ndef evaluate_adapter(\\n    solution: pd.DataFrame,\\n    questions: pd.DataFrame,\\n    *,\\n    lora_path: str,\\n    base_model_path: str,\\n    config: dict[str, Any] | None = None,\\n    seed: int = 42,\\n    raw_predictions_path: str | Path | None = None,\\n) -> tuple[dict[str, Any], pd.DataFrame]:\\n    \\\""\\\""\\\""Run vLLM adapter inference and return a summary plus row predictions.\\\""\\\""\\\""\\n\\n    config = {**OFFICIAL_INFERENCE_CONFIG, **(config or {})}\\n    adapter_dir = validate_adapter_dir(lora_path)\\n    questions = normalize_questions(solution, questions, limit=0)\\n    solution = solution.copy()\\n    id_col = row_id_column(solution)\\n    if id_col != \\\""id\\\"":\\n        solution = solution.rename(columns={id_col: \\\""id\\\""})\\n    solution[\\\""id\\\""] = solution[\\\""id\\\""].astype(str)\\n\\n    print(\\\""========================================================================\\\"")\\n    print(\\\""KG1 official-like adapter evaluation\\\"")\\n    print(\\\""========================================================================\\\"")\\n    print(\\\""generated_at_utc =\\\"", utc_now())\\n    print(\\\""base_model_path =\\\"", base_model_path)\\n    print(\\\""adapter_dir =\\\"", adapter_dir)\\n    print(\\\""rows =\\\"", len(questions))\\n    print(\\\""seed =\\\"", seed)\\n    print(\\\""config =\\\"", json.dumps(config, indent=2, sort_keys=True))\\n    print(\\n        \\\""vllm_runtime_safety_settings =\\\"",\\n        json.dumps(apply_vllm_runtime_safety_settings(), indent=2, sort_keys=True),\\n    )\\n\\n    from vllm import LLM\\n    from vllm.lora.request import LoRARequest\\n\\n    llm_kwargs = {\\n        \\\""model\\\"": str(base_model_path),\\n        \\\""tensor_parallel_size\\\"": int(config.get(\\\""tensor_parallel_size\\\"", 1)),\\n        \\\""max_num_seqs\\\"": int(config.get(\\\""max_num_seqs\\\"", 64)),\\n        \\\""gpu_memory_utilization\\\"": float(config.get(\\\""gpu_memory_utilization\\\"", 0.85)),\\n        \\\""dtype\\\"": config.get(\\\""dtype\\\"", \\\""auto\\\""),\\n        \\\""max_model_len\\\"": int(config.get(\\\""max_model_len\\\"", 8192)),\\n        \\\""trust_remote_code\\\"": bool(config.get(\\\""trust_remote_code\\\"", True)),\\n        \\\""enable_lora\\\"": True,\\n        \\\""max_lora_rank\\\"": int(config.get(\\\""max_lora_rank\\\"", 32)),\\n        \\\""enable_prefix_caching\\\"": bool(config.get(\\\""enable_prefix_caching\\\"", True)),\\n        \\\""enable_chunked_prefill\\\"": bool(config.get(\\\""enable_chunked_prefill\\\"", True)),\\n    }\\n    model_revision = resolve_model_revision(str(base_model_path), config)\\n    if model_revision:\\n        llm_kwargs[\\\""revision\\\""] = model_revision\\n        llm_kwargs[\\\""tokenizer_revision\\\""] = model_revision\\n    print(\\\""llm_revision =\\\"", llm_kwargs.get(\\\""revision\\\"", \\\""local_path_or_default\\\""))\\n    if config.get(\\\""enforce_eager\\\"") is not None:\\n        llm_kwargs[\\\""enforce_eager\\\""] = bool(config[\\\""enforce_eager\\\""])\\n\\n    start = time.time()\\n    llm = LLM(**llm_kwargs)\\n    tokenizer = llm.get_tokenizer()\\n    print(f\\\""vLLM loaded in {time.time() - start:.1f}s\\\"")\\n\\n    rendered = render_prompts(tokenizer, questions)\\n    sampling_params = _sampling_params(config, seed)\\n    lora_request = LoRARequest(\\\""adapter\\\"", 1, str(adapter_dir))\\n\\n    if rendered:\\n        warmup_n = min(4, len(rendered))\\n        print(f\\\""warmup_rows = {warmup_n}\\\"")\\n        warmup_start = time.time()\\n        _ = llm.generate(rendered[:warmup_n], sampling_params=sampling_params, lora_request=lora_request)\\n        print(f\\\""warmup_elapsed_s = {time.time() - warmup_start:.1f}\\\"")\\n\\n    gen_start = time.time()\\n    outputs = llm.generate(rendered, sampling_params=sampling_params, lora_request=lora_request)\\n    gen_elapsed = time.time() - gen_start\\n    print(f\\\""generation_elapsed_s = {gen_elapsed:.1f}\\\"")\\n\\n    rows: list[dict[str, Any]] = []\\n    for row, output in zip(questions.itertuples(index=False), outputs):\\n        completion = output.outputs[0]\\n        raw_output = completion.text\\n        prediction = extract_final_answer(raw_output)\\n        row_id = str(getattr(row, \\\""id\\\""))\\n        prompt = str(getattr(row, \\\""prompt\\\""))\\n        rows.append(\\n            {\\n                \\\""id\\\"": row_id,\\n                \\\""prompt\\\"": prompt,\\n                \\\""raw_output\\\"": raw_output,\\n                \\\""prediction\\\"": prediction,\\n                \\\""prompt_tokens\\\"": len(getattr(output, \\\""prompt_token_ids\\\"", []) or []),\\n                \\\""completion_tokens\\\"": len(getattr(completion, \\\""token_ids\\\"", []) or []),\\n                \\\""finish_reason\\\"": completion.finish_reason or \\\""\\\"",\\n                \\\""type\\\"": classify_puzzle(prompt),\\n            }\\n        )\\n\\n    pred = pd.DataFrame(rows)\\n    if raw_predictions_path is not None:\\n        raw_path = Path(raw_predictions_path)\\n        raw_path.parent.mkdir(parents=True, exist_ok=True)\\n        pred.to_csv(raw_path, index=False)\\n        print(\\\""raw_predictions_pre_score_csv =\\\"", raw_path)\\n        print(\\\""raw_predictions_pre_score_rows =\\\"", len(pred))\\n\\n    merged = prepare_merged_predictions(solution, pred)\\n    if \\\""answer\\\"" in merged.columns:\\n        merged[\\\""correct\\\""] = merged.apply(lambda r: verify_answer(r[\\\""answer\\\""], r[\\\""prediction\\\""]), axis=1)\\n    else:\\n        merged[\\\""correct\\\""] = False\\n    merged[\\\""truncated\\\""] = merged[\\\""finish_reason\\\""].fillna(\\\""\\\"").astype(str).eq(\\\""length\\\"")\\n\\n    total_tokens = int(merged[\\\""completion_tokens\\\""].fillna(0).sum())\\n    summary = {\\n        \\\""generated_at_utc\\\"": utc_now(),\\n        \\\""base_model_path\\\"": str(base_model_path),\\n        \\\""adapter_dir\\\"": str(adapter_dir),\\n        \\\""rows\\\"": int(len(merged)),\\n        \\\""correct\\\"": int(merged[\\\""correct\\\""].sum()),\\n        \\\""accuracy\\\"": float(merged[\\\""correct\\\""].mean()) if len(merged) else 0.0,\\n        \\\""truncated\\\"": int(merged[\\\""truncated\\\""].sum()),\\n        \\\""truncation_rate\\\"": float(merged[\\\""truncated\\\""].mean()) if len(merged) else 0.0,\\n        \\\""completion_tokens\\\"": total_tokens,\\n        \\\""generation_elapsed_s\\\"": gen_elapsed,\\n        \\\""tokens_per_second\\\"": float(total_tokens / gen_elapsed) if gen_elapsed > 0 else 0.0,\\n        \\\""seed\\\"": int(seed),\\n        \\\""config\\\"": config,\\n    }\\n    print(\\\""summary =\\\"", json.dumps(summary, indent=2, sort_keys=True))\\n    return summary, merged\\n\\n\\ndef summarize_per_task(frame: pd.DataFrame) -> pd.DataFrame:\\n    rows: list[dict[str, Any]] = []\\n    grouped = frame.groupby(\\\""type\\\"", dropna=False)\\n    for family, group in grouped:\\n        total = int(len(group))\\n        correct = int(group[\\\""correct\\\""].sum())\\n        truncated = int(group[\\\""truncated\\\""].sum()) if \\\""truncated\\\"" in group else 0\\n        rows.append(\\n            {\\n                \\\""task_type\\\"": str(family),\\n                \\\""total\\\"": total,\\n                \\\""correct\\\"": correct,\\n                \\\""accuracy\\\"": correct / total if total else 0.0,\\n                \\\""truncated\\\"": truncated,\\n                \\\""truncation_rate\\\"": truncated / total if total else 0.0,\\n            }\\n        )\\n    total = int(len(frame))\\n    correct = int(frame[\\\""correct\\\""].sum()) if \\\""correct\\\"" in frame else 0\\n    truncated = int(frame[\\\""truncated\\\""].sum()) if \\\""truncated\\\"" in frame else 0\\n    rows.append(\\n        {\\n            \\\""task_type\\\"": \\\""OVERALL\\\"",\\n            \\\""total\\\"": total,\\n            \\\""correct\\\"": correct,\\n            \\\""accuracy\\\"": correct / total if total else 0.0,\\n            \\\""truncated\\\"": truncated,\\n            \\\""truncation_rate\\\"": truncated / total if total else 0.0,\\n        }\\n    )\\n    return pd.DataFrame(rows)\\n\\n\\ndef main() -> int:\\n    parser = argparse.ArgumentParser(description=__doc__)\\n    parser.add_argument(\\\""--solution-csv\\\"", type=Path, required=True)\\n    parser.add_argument(\\\""--questions-csv\\\"", type=Path, default=None)\\n    parser.add_argument(\\\""--adapter\\\"", type=Path, required=True)\\n    parser.add_argument(\\\""--base-model-path\\\"", default=\\\""\\\"")\\n    parser.add_argument(\\\""--label\\\"", default=\\\""adapter\\\"")\\n    parser.add_argument(\\\""--seed\\\"", type=int, default=42)\\n    parser.add_argument(\\\""--limit\\\"", type=int, default=0)\\n    parser.add_argument(\\\""--output-dir\\\"", type=Path, required=True)\\n    args = parser.parse_args()\\n\\n    args.output_dir.mkdir(parents=True, exist_ok=True)\\n    solution = pd.read_csv(args.solution_csv)\\n    if args.limit > 0:\\n        solution = solution.head(args.limit).copy()\\n    questions = pd.read_csv(args.questions_csv or args.solution_csv)\\n    if args.limit > 0:\\n        ids = set(solution[row_id_column(solution)].astype(str))\\n        q_id = row_id_column(questions)\\n        questions = questions[questions[q_id].astype(str).isin(ids)].copy()\\n\\n    label = args.label.replace(\\\""/\\\"", \\\""_\\\"").replace(\\\""\\\\\\\\\\\"", \\\""_\\\"")\\n    raw_predictions_path = args.output_dir / f\\\""{label}_raw_predictions_pre_score.csv\\\""\\n    summary, predictions = evaluate_adapter(\\n        solution,\\n        questions,\\n        lora_path=str(args.adapter),\\n        base_model_path=resolve_base_model_path(args.base_model_path),\\n        config=OFFICIAL_INFERENCE_CONFIG,\\n        seed=args.seed,\\n        raw_predictions_path=raw_predictions_path,\\n    )\\n    predictions_path = args.output_dir / f\\\""{label}_predictions.csv\\\""\\n    per_task_path = args.output_dir / f\\\""{label}_per_task.csv\\\""\\n    report_path = args.output_dir / f\\\""{label}_eval_report.json\\\""\\n    predictions.to_csv(predictions_path, index=False)\\n    summarize_per_task(predictions).to_csv(per_task_path, index=False)\\n    report = {\\n        **summary,\\n        \\\""label\\\"": args.label,\\n        \\\""inputs\\\"": {\\n            \\\""solution_csv\\\"": str(args.solution_csv),\\n            \\\""questions_csv\\\"": str(args.questions_csv or args.solution_csv),\\n            \\\""adapter\\\"": str(args.adapter),\\n            \\\""limit\\\"": args.limit,\\n        },\\n        \\\""outputs\\\"": {\\n            \\\""raw_predictions_pre_score_csv\\\"": str(raw_predictions_path),\\n            \\\""predictions_csv\\\"": str(predictions_path),\\n            \\\""per_task_csv\\\"": str(per_task_path),\\n            \\\""report_json\\\"": str(report_path),\\n        },\\n    }\\n    report_path.write_text(json.dumps(report, indent=2, sort_keys=True), encoding=\\\""utf-8\\\"")\\n    print(\\\""predictions_csv =\\\"", predictions_path)\\n    print(\\\""per_task_csv =\\\"", per_task_path)\\n    print(\\\""report_json =\\\"", report_path)\\n    return 0\\n\\n\\nif __name__ == \\\""__main__\\\"":\\n    raise SystemExit(main())\\n\"",\n  \""scripts/solve_rate_gate.py\"": \""#!/usr/bin/env python3\\n\\\""\\\""\\\""Solve-rate promotion gate for Nemotron LoRA candidates.\\n\\nThis is the score-facing gate: compare candidate vs baseline by decoded\\nanswers, official answer verification, and per-family regressions. It supports\\ntwo modes:\\n\\n1. CSV mode: compare existing prediction CSVs.\\n2. Adapter mode: run vLLM evaluation for baseline and candidate adapters.\\n\\\""\\\""\\\""\\n\\nfrom __future__ import annotations\\n\\nimport argparse\\nimport json\\nimport statistics\\nimport sys\\nfrom datetime import datetime, timezone\\nfrom pathlib import Path\\nfrom typing import Any\\n\\nimport pandas as pd\\n\\nROOT = Path(__file__).resolve().parents[1]\\nif str(ROOT) not in sys.path:\\n    sys.path.insert(0, str(ROOT))\\n\\nfrom scripts.evaluate_lora_adapter import evaluate_adapter, parse_seeds, resolve_base_model_path\\nfrom src.competition_utils import (\\n    OFFICIAL_INFERENCE_CONFIG,\\n    classify_puzzle,\\n    extract_boxed_answers,\\n    extract_final_answer,\\n    verify_answer,\\n)\\n\\n\\ndef utc_now() -> str:\\n    return datetime.now(timezone.utc).isoformat()\\n\\n\\ndef row_id_column(frame: pd.DataFrame) -> str:\\n    for candidate in (\\\""id\\\"", \\\""row_id\\\""):\\n        if candidate in frame.columns:\\n            return candidate\\n    return str(frame.columns.to_list()[0])\\n\\n\\ndef family_for_row(row: pd.Series) -> str:\\n    for key in (\\\""type\\\"", \\\""family\\\"", \\\""task_family\\\""):\\n        value = row.get(key)\\n        if value not in (None, \\\""\\\""):\\n            return str(value)\\n    return classify_puzzle(str(row.get(\\\""prompt\\\"", \\\""\\\"")))\\n\\n\\ndef normalize_solution(solution_csv: Path, limit: int = 0) -> pd.DataFrame:\\n    solution = pd.read_csv(solution_csv)\\n    required = {\\\""prompt\\\"", \\\""answer\\\""}\\n    missing = sorted(required - set(solution.columns))\\n    if missing:\\n        raise ValueError(f\\\""solution CSV missing required columns: {missing}\\\"")\\n    id_col = row_id_column(solution)\\n    if id_col != \\\""id\\\"":\\n        solution = solution.rename(columns={id_col: \\\""id\\\""})\\n    solution[\\\""id\\\""] = solution[\\\""id\\\""].astype(str)\\n    solution[\\\""family_gate\\\""] = solution.apply(family_for_row, axis=1)\\n    if limit > 0:\\n        solution = solution.head(limit).copy()\\n    return solution\\n\\n\\ndef predictions_from_csv(predictions_csv: Path, label: str) -> pd.DataFrame:\\n    predictions = pd.read_csv(predictions_csv)\\n    id_col = row_id_column(predictions)\\n    if id_col != \\\""id\\\"":\\n        predictions = predictions.rename(columns={id_col: \\\""id\\\""})\\n    predictions[\\\""id\\\""] = predictions[\\\""id\\\""].astype(str)\\n\\n    if \\\""raw_output\\\"" not in predictions.columns and \\\""prediction\\\"" not in predictions.columns:\\n        raise ValueError(f\\\""{label} predictions need a 'prediction' or 'raw_output' column\\\"")\\n    if \\\""raw_output\\\"" not in predictions.columns:\\n        predictions[\\\""raw_output\\\""] = predictions[\\\""prediction\\\""].astype(str)\\n    if \\\""prediction\\\"" not in predictions.columns:\\n        predictions[\\\""prediction\\\""] = predictions[\\\""raw_output\\\""].map(extract_final_answer)\\n    else:\\n        missing_prediction = predictions[\\\""prediction\\\""].isna() | (predictions[\\\""prediction\\\""].astype(str) == \\\""\\\"")\\n        predictions.loc[missing_prediction, \\\""prediction\\\""] = predictions.loc[\\n            missing_prediction, \\\""raw_output\\\""\\n        ].map(extract_final_answer)\\n    return predictions[[\\\""id\\\"", \\\""prediction\\\"", \\\""raw_output\\\""]].copy()\\n\\n\\ndef score_predictions(solution: pd.DataFrame, predictions: pd.DataFrame, label: str, seed: int | None = None) -> pd.DataFrame:\\n    merged = solution.merge(predictions, on=\\\""id\\\"", how=\\\""left\\\"", validate=\\\""one_to_one\\\"")\\n    merged[\\\""label\\\""] = label\\n    merged[\\\""seed\\\""] = seed if seed is not None else 0\\n    merged[\\\""prediction\\\""] = merged[\\\""prediction\\\""].fillna(\\\""NOT_FOUND\\\"").astype(str)\\n    merged[\\\""raw_output\\\""] = merged[\\\""raw_output\\\""].fillna(\\\""\\\"").astype(str)\\n    merged[\\\""final_answer\\\""] = merged.apply(\\n        lambda row: extract_final_answer(row[\\\""raw_output\\\""]) if row[\\\""raw_output\\\""] else row[\\\""prediction\\\""],\\n        axis=1,\\n    )\\n    merged[\\\""boxed_valid\\\""] = merged[\\\""raw_output\\\""].map(lambda value: len(extract_boxed_answers(value)) > 0)\\n    merged[\\\""correct\\\""] = merged.apply(\\n        lambda row: verify_answer(str(row[\\\""answer\\\""]), str(row[\\\""final_answer\\\""])),\\n        axis=1,\\n    )\\n    return merged\\n\\n\\ndef prediction_frames_from_adapters(\\n    solution: pd.DataFrame,\\n    questions: pd.DataFrame,\\n    *,\\n    baseline_adapter: Path,\\n    candidate_adapter: Path,\\n    base_model_path: str,\\n    seeds: list[int],\\n) -> tuple[pd.DataFrame, pd.DataFrame]:\\n    baseline_frames: list[pd.DataFrame] = []\\n    candidate_frames: list[pd.DataFrame] = []\\n    for seed in seeds:\\n        _, baseline_merged = evaluate_adapter(\\n            solution,\\n            questions,\\n            lora_path=str(baseline_adapter),\\n            base_model_path=base_model_path,\\n            config=OFFICIAL_INFERENCE_CONFIG,\\n            seed=seed,\\n        )\\n        _, candidate_merged = evaluate_adapter(\\n            solution,\\n            questions,\\n            lora_path=str(candidate_adapter),\\n            base_model_path=base_model_path,\\n            config=OFFICIAL_INFERENCE_CONFIG,\\n            seed=seed,\\n        )\\n        baseline_merged = baseline_merged.rename(columns={\\\""type\\\"": \\\""family_gate\\\""})\\n        candidate_merged = candidate_merged.rename(columns={\\\""type\\\"": \\\""family_gate\\\""})\\n        baseline_frames.append(score_predictions(solution, baseline_merged[[\\\""id\\\"", \\\""prediction\\\"", \\\""raw_output\\\""]], \\\""baseline\\\"", seed))\\n        candidate_frames.append(score_predictions(solution, candidate_merged[[\\\""id\\\"", \\\""prediction\\\"", \\\""raw_output\\\""]], \\\""candidate\\\"", seed))\\n    return pd.concat(baseline_frames, ignore_index=True), pd.concat(candidate_frames, ignore_index=True)\\n\\n\\ndef summarize(frame: pd.DataFrame) -> dict[str, Any]:\\n    by_family: dict[str, dict[str, Any]] = {}\\n    for family, group in frame.groupby(\\\""family_gate\\\""):\\n        by_family[str(family)] = {\\n            \\\""rows\\\"": int(len(group)),\\n            \\\""correct\\\"": int(group[\\\""correct\\\""].sum()),\\n            \\\""accuracy\\\"": float(group[\\\""correct\\\""].mean()) if len(group) else 0.0,\\n            \\\""boxed_format_rate\\\"": float(group[\\\""boxed_valid\\\""].mean()) if len(group) else 0.0,\\n        }\\n\\n    seed_summaries = []\\n    for seed, group in frame.groupby(\\\""seed\\\""):\\n        seed_summaries.append(\\n            {\\n                \\\""seed\\\"": int(seed),\\n                \\\""rows\\\"": int(len(group)),\\n                \\\""correct\\\"": int(group[\\\""correct\\\""].sum()),\\n                \\\""accuracy\\\"": float(group[\\\""correct\\\""].mean()) if len(group) else 0.0,\\n                \\\""boxed_format_rate\\\"": float(group[\\\""boxed_valid\\\""].mean()) if len(group) else 0.0,\\n            }\\n        )\\n    accuracies = [item[\\\""accuracy\\\""] for item in seed_summaries]\\n    return {\\n        \\\""rows\\\"": int(len(frame)),\\n        \\\""correct\\\"": int(frame[\\\""correct\\\""].sum()),\\n        \\\""accuracy\\\"": float(frame[\\\""correct\\\""].mean()) if len(frame) else 0.0,\\n        \\\""boxed_format_rate\\\"": float(frame[\\\""boxed_valid\\\""].mean()) if len(frame) else 0.0,\\n        \\\""accuracy_min_seed\\\"": float(min(accuracies)) if accuracies else 0.0,\\n        \\\""accuracy_mean_seed\\\"": float(statistics.mean(accuracies)) if accuracies else 0.0,\\n        \\\""accuracy_max_seed\\\"": float(max(accuracies)) if accuracies else 0.0,\\n        \\\""by_seed\\\"": seed_summaries,\\n        \\\""by_family\\\"": by_family,\\n    }\\n\\n\\ndef compare(\\n    baseline: pd.DataFrame,\\n    candidate: pd.DataFrame,\\n    *,\\n    family_regression_tolerance: float,\\n    min_net_gain: float,\\n    min_boxed_rate: float,\\n) -> tuple[bool, list[str], dict[str, Any]]:\\n    baseline_summary = summarize(baseline)\\n    candidate_summary = summarize(candidate)\\n    reasons: list[str] = []\\n\\n    baseline_accuracy = float(baseline_summary[\\\""accuracy\\\""])\\n    candidate_accuracy = float(candidate_summary[\\\""accuracy\\\""])\\n    net_gain = candidate_accuracy - baseline_accuracy\\n    if net_gain <= min_net_gain:\\n        reasons.append(f\\\""net_gain_not_above_threshold:{net_gain:.6f}<={min_net_gain:.6f}\\\"")\\n\\n    if float(candidate_summary[\\\""boxed_format_rate\\\""]) < min_boxed_rate:\\n        reasons.append(\\n            \\\""candidate_boxed_rate_below_threshold:\\\""\\n            f\\\""{candidate_summary['boxed_format_rate']:.6f}<{min_boxed_rate:.6f}\\\""\\n        )\\n\\n    baseline_families = baseline_summary[\\\""by_family\\\""]\\n    candidate_families = candidate_summary[\\\""by_family\\\""]\\n    family_deltas: dict[str, dict[str, float]] = {}\\n    for family in sorted(set(baseline_families) | set(candidate_families)):\\n        b_acc = float(baseline_families.get(family, {}).get(\\\""accuracy\\\"", 0.0))\\n        c_acc = float(candidate_families.get(family, {}).get(\\\""accuracy\\\"", 0.0))\\n        delta = c_acc - b_acc\\n        family_deltas[family] = {\\n            \\\""baseline_accuracy\\\"": b_acc,\\n            \\\""candidate_accuracy\\\"": c_acc,\\n            \\\""delta\\\"": delta,\\n        }\\n        if delta < -family_regression_tolerance:\\n            reasons.append(\\n                f\\\""family_regression:{family}:{c_acc:.6f}<{b_acc:.6f}-\\\""\\n                f\\\""{family_regression_tolerance:.6f}\\\""\\n            )\\n\\n    comparison = {\\n        \\\""baseline\\\"": baseline_summary,\\n        \\\""candidate\\\"": candidate_summary,\\n        \\\""net_gain\\\"": net_gain,\\n        \\\""family_deltas\\\"": family_deltas,\\n    }\\n    return len(reasons) == 0, reasons, comparison\\n\\n\\ndef write_failures(path: Path, baseline: pd.DataFrame, candidate: pd.DataFrame) -> None:\\n    cols = [\\\""id\\\"", \\\""family_gate\\\"", \\\""answer\\\"", \\\""final_answer\\\"", \\\""correct\\\""]\\n    b = baseline[cols].rename(columns={\\\""final_answer\\\"": \\\""baseline_final_answer\\\"", \\\""correct\\\"": \\\""baseline_correct\\\""})\\n    c = candidate[cols].rename(columns={\\\""final_answer\\\"": \\\""candidate_final_answer\\\"", \\\""correct\\\"": \\\""candidate_correct\\\""})\\n    merged = b.merge(c, on=[\\\""id\\\"", \\\""family_gate\\\"", \\\""answer\\\""], how=\\\""outer\\\"")\\n    merged[\\\""regressed\\\""] = merged[\\\""baseline_correct\\\""].fillna(False) & ~merged[\\\""candidate_correct\\\""].fillna(False)\\n    merged[\\\""improved\\\""] = ~merged[\\\""baseline_correct\\\""].fillna(False) & merged[\\\""candidate_correct\\\""].fillna(False)\\n    merged.to_csv(path, index=False)\\n\\n\\ndef run_self_test(solution_csv: Path, output_dir: Path, limit: int) -> int:\\n    solution = normalize_solution(solution_csv, limit=limit or 20)\\n    baseline_predictions = pd.DataFrame(\\n        {\\n            \\\""id\\\"": solution[\\\""id\\\""],\\n            \\\""prediction\\\"": solution[\\\""answer\\\""].astype(str),\\n            \\\""raw_output\\\"": \\\""\\\\\\\\boxed{\\\"" + solution[\\\""answer\\\""].astype(str) + \\\""}\\\"",\\n        }\\n    )\\n    candidate_predictions = baseline_predictions.copy()\\n    if len(candidate_predictions):\\n        candidate_predictions.loc[candidate_predictions.index[-1], \\\""prediction\\\""] = \\\""INTENTIONAL_WRONG\\\""\\n        candidate_predictions.loc[candidate_predictions.index[-1], \\\""raw_output\\\""] = \\\""\\\\\\\\boxed{INTENTIONAL_WRONG}\\\""\\n    baseline = score_predictions(solution, baseline_predictions, \\\""baseline\\\"")\\n    candidate = score_predictions(solution, candidate_predictions, \\\""candidate\\\"")\\n    approved, reasons, comparison = compare(\\n        baseline,\\n        candidate,\\n        family_regression_tolerance=0.0,\\n        min_net_gain=0.0,\\n        min_boxed_rate=1.0,\\n    )\\n    output_dir.mkdir(parents=True, exist_ok=True)\\n    payload = {\\n        \\\""self_test\\\"": True,\\n        \\\""approved\\\"": approved,\\n        \\\""reasons\\\"": reasons,\\n        \\\""comparison\\\"": comparison,\\n    }\\n    (output_dir / \\\""self_test_report.json\\\"").write_text(json.dumps(payload, indent=2), encoding=\\\""utf-8\\\"")\\n    write_failures(output_dir / \\\""self_test_row_deltas.csv\\\"", baseline, candidate)\\n    print(json.dumps(payload, indent=2))\\n    return 0 if not approved and reasons else 2\\n\\n\\ndef main() -> int:\\n    parser = argparse.ArgumentParser(description=__doc__)\\n    parser.add_argument(\\\""--solution-csv\\\"", type=Path, default=ROOT / \\\""data\\\"" / \\\""splits\\\"" / \\\""val_public_proxy.csv\\\"")\\n    parser.add_argument(\\\""--questions-csv\\\"", type=Path, default=None)\\n    parser.add_argument(\\\""--baseline-predictions\\\"", type=Path, default=None)\\n    parser.add_argument(\\\""--candidate-predictions\\\"", type=Path, default=None)\\n    parser.add_argument(\\\""--baseline-adapter\\\"", type=Path, default=None)\\n    parser.add_argument(\\\""--candidate-adapter\\\"", type=Path, default=None)\\n    parser.add_argument(\\\""--base-model-path\\\"", default=\\\""\\\"")\\n    parser.add_argument(\\\""--seeds\\\"", default=\\\""42\\\"")\\n    parser.add_argument(\\\""--limit\\\"", type=int, default=0)\\n    parser.add_argument(\\\""--family-regression-tolerance\\\"", type=float, default=0.0)\\n    parser.add_argument(\\\""--min-net-gain\\\"", type=float, default=0.0)\\n    parser.add_argument(\\\""--min-boxed-rate\\\"", type=float, default=0.98)\\n    parser.add_argument(\\\""--output-dir\\\"", type=Path, default=ROOT / \\\""artifacts\\\"" / \\\""solve_rate_gate\\\"")\\n    parser.add_argument(\\\""--json-output\\\"", type=Path, default=None)\\n    parser.add_argument(\\\""--self-test\\\"", action=\\\""store_true\\\"")\\n    args = parser.parse_args()\\n\\n    if args.self_test:\\n        return run_self_test(args.solution_csv, args.output_dir, args.limit)\\n\\n    solution = normalize_solution(args.solution_csv, args.limit)\\n    questions_csv = args.questions_csv or args.solution_csv\\n    questions = pd.read_csv(questions_csv)\\n    id_col = row_id_column(questions)\\n    if id_col != \\\""id\\\"":\\n        questions = questions.rename(columns={id_col: \\\""id\\\""})\\n    questions[\\\""id\\\""] = questions[\\\""id\\\""].astype(str)\\n    if args.limit > 0:\\n        questions = questions[questions[\\\""id\\\""].isin(set(solution[\\\""id\\\""]))].copy()\\n\\n    csv_mode = args.baseline_predictions is not None and args.candidate_predictions is not None\\n    adapter_mode = args.baseline_adapter is not None and args.candidate_adapter is not None\\n    if csv_mode == adapter_mode:\\n        raise SystemExit(\\\""Choose exactly one mode: prediction CSVs or adapter paths.\\\"")\\n\\n    if csv_mode:\\n        baseline = score_predictions(\\n            solution,\\n            predictions_from_csv(args.baseline_predictions, \\\""baseline\\\""),  # type: ignore[arg-type]\\n            \\\""baseline\\\"",\\n        )\\n        candidate = score_predictions(\\n            solution,\\n            predictions_from_csv(args.candidate_predictions, \\\""candidate\\\""),  # type: ignore[arg-type]\\n            \\\""candidate\\\"",\\n        )\\n    else:\\n        baseline, candidate = prediction_frames_from_adapters(\\n            solution,\\n            questions,\\n            baseline_adapter=args.baseline_adapter,  # type: ignore[arg-type]\\n            candidate_adapter=args.candidate_adapter,  # type: ignore[arg-type]\\n            base_model_path=resolve_base_model_path(args.base_model_path),\\n            seeds=parse_seeds(args.seeds),\\n        )\\n\\n    approved, reasons, comparison = compare(\\n        baseline,\\n        candidate,\\n        family_regression_tolerance=args.family_regression_tolerance,\\n        min_net_gain=args.min_net_gain,\\n        min_boxed_rate=args.min_boxed_rate,\\n    )\\n    args.output_dir.mkdir(parents=True, exist_ok=True)\\n    json_output = args.json_output or args.output_dir / \\\""solve_rate_gate_report.json\\\""\\n    report = {\\n        \\\""generated_at_utc\\\"": utc_now(),\\n        \\\""status\\\"": \\\""approve\\\"" if approved else \\\""reject\\\"",\\n        \\\""approved\\\"": approved,\\n        \\\""reasons\\\"": reasons,\\n        \\\""thresholds\\\"": {\\n            \\\""family_regression_tolerance\\\"": args.family_regression_tolerance,\\n            \\\""min_net_gain\\\"": args.min_net_gain,\\n            \\\""min_boxed_rate\\\"": args.min_boxed_rate,\\n        },\\n        \\\""inputs\\\"": {\\n            \\\""solution_csv\\\"": str(args.solution_csv),\\n            \\\""questions_csv\\\"": str(questions_csv),\\n            \\\""baseline_predictions\\\"": str(args.baseline_predictions) if args.baseline_predictions else \\\""\\\"",\\n            \\\""candidate_predictions\\\"": str(args.candidate_predictions) if args.candidate_predictions else \\\""\\\"",\\n            \\\""baseline_adapter\\\"": str(args.baseline_adapter) if args.baseline_adapter else \\\""\\\"",\\n            \\\""candidate_adapter\\\"": str(args.candidate_adapter) if args.candidate_adapter else \\\""\\\"",\\n            \\\""seeds\\\"": parse_seeds(args.seeds),\\n            \\\""limit\\\"": args.limit,\\n        },\\n        \\\""comparison\\\"": comparison,\\n    }\\n    json_output.write_text(json.dumps(report, indent=2), encoding=\\\""utf-8\\\"")\\n    write_failures(args.output_dir / \\\""solve_rate_row_deltas.csv\\\"", baseline, candidate)\\n    print(json.dumps(report, indent=2))\\n    return 0 if approved else 2\\n\\n\\nif __name__ == \\\""__main__\\\"":\\n    raise SystemExit(main())\\n\""\n}"")"
+7,code,6,,"for rel, content in FILES.items():"
+7,code,7,,    path = ROOT / rel
+7,code,8,,"    path.parent.mkdir(parents=True, exist_ok=True)"
+7,code,9,,"    path.write_text(content, encoding='utf-8')"
+7,code,10,progress_log,"    print('wrote', path, 'bytes=', path.stat().st_size)"
+7,code,11,,"for rel in ['src/competition_utils.py', 'scripts/evaluate_lora_adapter.py', 'scripts/solve_rate_gate.py']:"
+7,code,12,,"    py_compile.compile(str(ROOT / rel), doraise=True)"
+7,code,13,progress_log,"    print('compiled', rel)"
+7,code,14,progress_log,print('=== V207B SCRIPT BOOTSTRAP END ===')
+8,code,1,,# CELL: verify or bootstrap V207A baseline artifacts and build weak-family CSV.
+8,code,2,progress_log,print('=== V207B V207A ARTIFACT CHECK START ===')
+8,code,3,,import urllib.request
+8,code,4,,import pandas as pd
+8,code,5,,if str(ROOT) not in sys.path:
+8,code,6,,"    sys.path.insert(0, str(ROOT))"
+8,code,7,,from src.competition_utils import classify_puzzle
+8,code,8,,
+8,code,9,,FALLBACK_EXPORTS = {
+8,code,10,,"    BASELINE_PREDICTIONS: 'v194_baseline_predictions.csv',"
+8,code,11,,"    BASELINE_PER_TASK: 'v194_baseline_per_task.csv',"
+8,code,12,,"    BASELINE_REPORT: 'v194_baseline_eval_report.json',"
+8,code,13,,}
+8,code,14,,
+8,code,15,,"def download_fallback_export(dst, filename):"
+8,code,16,,    dst = pathlib.Path(dst)
+8,code,17,,"    dst.parent.mkdir(parents=True, exist_ok=True)"
+8,code,18,,    url = FALLBACK_EXPORT_BASE.rstrip('/') + '/' + filename
+8,code,19,,    tmp = dst.with_suffix(dst.suffix + '.tmp')
+8,code,20,progress_log,"    print('fallback_download_url =', url)"
+8,code,21,progress_log,"    print('fallback_download_dst =', dst)"
+8,code,22,,"    urllib.request.urlretrieve(url, tmp)"
+8,code,23,,    tmp.replace(dst)
+8,code,24,progress_log,"    print('fallback_downloaded_bytes =', dst.stat().st_size)"
+8,code,25,,
+8,code,26,,"def ensure_fallback_file(path, filename):"
+8,code,27,,    path = pathlib.Path(path)
+8,code,28,progress_log,"    print('checking', path, 'exists=', path.exists())"
+8,code,29,,    if not path.exists():
+8,code,30,progress_log,"        print('missing artifact; downloading validated fallback export:', filename)"
+8,code,31,,"        download_fallback_export(path, filename)"
+8,code,32,progress_log,"    print('artifact_ready =', path, 'bytes=', path.stat().st_size)"
+8,code,33,,
+8,code,34,,"for path, filename in FALLBACK_EXPORTS.items():"
+8,code,35,,"    ensure_fallback_file(path, filename)"
+8,code,36,,
+8,code,37,,if not VAL_CSV.exists():
+8,code,38,progress_log,    print('VAL_CSV missing; reconstructing validation CSV from baseline predictions export.')
+8,code,39,,    pred = pd.read_csv(BASELINE_PREDICTIONS)
+8,code,40,,"    prompt_col = next((c for c in ['prompt', 'prompt_x', 'prompt_y'] if c in pred.columns), None)"
+8,code,41,,"    family_source_col = next((c for c in ['family', 'type'] if c in pred.columns), None)"
+8,code,42,,"    required = {'id', 'answer'}"
+8,code,43,,    missing = sorted(required - set(pred.columns))
+8,code,44,,    if missing or prompt_col is None:
+8,code,45,hard_fail,        raise RuntimeError(
+8,code,46,,            f'Baseline predictions fallback cannot reconstruct validation CSV. '
+8,code,47,,"            f'missing={missing}, prompt_col={prompt_col}, columns={list(pred.columns)}'"
+8,code,48,,        )
+8,code,49,,"    val_cols = ['id', prompt_col, 'answer']"
+8,code,50,,    if family_source_col:
+8,code,51,,        val_cols.append(family_source_col)
+8,code,52,,    val = pred[val_cols].copy()
+8,code,53,,    val = val.rename(columns={prompt_col: 'prompt'})
+8,code,54,,    if family_source_col and family_source_col != 'family':
+8,code,55,,        val = val.rename(columns={family_source_col: 'family'})
+8,code,56,,    if 'family' not in val.columns:
+8,code,57,,        val['family'] = val['prompt'].map(classify_puzzle)
+8,code,58,,"    val = val[['id', 'prompt', 'answer', 'family']]"
+8,code,59,,"    val.to_csv(VAL_CSV, index=False)"
+8,code,60,progress_log,"    print('VAL_CSV reconstructed rows =', len(val))"
+8,code,61,progress_log,    print('validation_source = v194_baseline_predictions_drive_export_fallback')
+8,code,62,,else:
+8,code,63,progress_log,"    print('VAL_CSV already exists:', VAL_CSV)"
+8,code,64,,
+8,code,65,,"required_paths = [VAL_CSV, BASELINE_PREDICTIONS, BASELINE_PER_TASK, BASELINE_REPORT]"
+8,code,66,,for path in required_paths:
+8,code,67,progress_log,"    print('final_check', path, 'exists=', path.exists(), 'bytes=', path.stat().st_size if path.exists() else None)"
+8,code,68,,    if not path.exists():
+8,code,69,hard_fail,        raise FileNotFoundError('Missing required V207B artifact after fallback bootstrap: ' + str(path))
+8,code,70,,
+8,code,71,,val = pd.read_csv(VAL_CSV)
+8,code,72,,baseline_pred_audit = pd.read_csv(BASELINE_PREDICTIONS)
+8,code,73,,baseline_per_audit = pd.read_csv(BASELINE_PER_TASK)
+8,code,74,,baseline_report_audit = json.loads(BASELINE_REPORT.read_text(encoding='utf-8'))
+8,code,75,,
+8,code,76,,"required_val_cols = {'id', 'prompt', 'answer'}"
+8,code,77,,"required_pred_cols = {'id', 'answer', 'prediction', 'raw_output', 'correct', 'truncated'}"
+8,code,78,,"required_per_cols = {'task_type', 'total', 'correct', 'accuracy', 'truncated', 'truncation_rate'}"
+8,code,79,,missing_val_cols = sorted(required_val_cols - set(val.columns))
+8,code,80,,missing_pred_cols = sorted(required_pred_cols - set(baseline_pred_audit.columns))
+8,code,81,,missing_per_cols = sorted(required_per_cols - set(baseline_per_audit.columns))
+8,code,82,progress_log,"print('baseline_artifact_audit_val_rows =', len(val), 'missing_cols=', missing_val_cols)"
+8,code,83,progress_log,"print('baseline_artifact_audit_predictions_rows =', len(baseline_pred_audit), 'missing_cols=', missing_pred_cols)"
+8,code,84,progress_log,"print('baseline_artifact_audit_per_task_rows =', len(baseline_per_audit), 'missing_cols=', missing_per_cols)"
+8,code,85,progress_log,print(
+8,code,86,,"    'baseline_artifact_audit_report =',"
+8,code,87,,    json.dumps(
+8,code,88,,        {
+8,code,89,,"            'rows': baseline_report_audit.get('rows'),"
+8,code,90,,"            'correct': baseline_report_audit.get('correct'),"
+8,code,91,,"            'accuracy': baseline_report_audit.get('accuracy'),"
+8,code,92,,"            'truncated': baseline_report_audit.get('truncated'),"
+8,code,93,,"        },"
+8,code,94,,"        sort_keys=True,"
+8,code,95,,"    ),"
+8,code,96,,)
+8,code,97,,if missing_val_cols or missing_pred_cols or missing_per_cols:
+8,code,98,hard_fail,    raise RuntimeError(
+8,code,99,,        'Baseline fallback artifacts have invalid schema: '
+8,code,100,,"        f'val={missing_val_cols}, predictions={missing_pred_cols}, per_task={missing_per_cols}'"
+8,code,101,,    )
+8,code,102,,if len(val) != 947 or len(baseline_pred_audit) != 947:
+8,code,103,hard_fail,"    raise RuntimeError(f'Expected 947 validation/baseline rows, got val={len(val)} pred={len(baseline_pred_audit)}')"
+8,code,104,,if not val['id'].astype(str).is_unique or not baseline_pred_audit['id'].astype(str).is_unique:
+8,code,105,hard_fail,    raise RuntimeError('Validation or baseline prediction IDs are not unique.')
+8,code,106,,val_ids = set(val['id'].astype(str))
+8,code,107,,pred_ids = set(baseline_pred_audit['id'].astype(str))
+8,code,108,,if val_ids != pred_ids:
+8,code,109,hard_fail,    raise RuntimeError(f'Validation and baseline prediction ID sets differ: val={len(val_ids)} pred={len(pred_ids)}')
+8,code,110,,"baseline_report_rows = int(baseline_report_audit.get('rows', -1))"
+8,code,111,,"baseline_report_correct = int(baseline_report_audit.get('correct', -1))"
+8,code,112,,"baseline_report_truncated = int(baseline_report_audit.get('truncated', -1))"
+8,code,113,,baseline_pred_correct = int(
+8,code,114,,"    baseline_pred_audit['correct'].astype(str).str.lower().isin(['true', '1', 'yes']).sum()"
+8,code,115,,)
+8,code,116,,baseline_pred_truncated = int(
+8,code,117,,"    baseline_pred_audit['truncated'].astype(str).str.lower().isin(['true', '1', 'yes']).sum()"
+8,code,118,,)
+8,code,119,,if (
+8,code,120,,    baseline_report_rows != len(baseline_pred_audit)
+8,code,121,,    or baseline_report_correct != baseline_pred_correct
+8,code,122,,    or baseline_report_truncated != baseline_pred_truncated
+8,code,123,,):
+8,code,124,hard_fail,    raise RuntimeError(
+8,code,125,,        'Baseline report does not match predictions: '
+8,code,126,,        f'report_rows={baseline_report_rows} pred_rows={len(baseline_pred_audit)} '
+8,code,127,,        f'report_correct={baseline_report_correct} pred_correct={baseline_pred_correct} '
+8,code,128,,        f'report_truncated={baseline_report_truncated} pred_truncated={baseline_pred_truncated}'
+8,code,129,,    )
+8,code,130,,overall = baseline_per_audit[baseline_per_audit['task_type'].astype(str).eq('OVERALL')]
+8,code,131,,if len(overall) != 1:
+8,code,132,hard_fail,    raise RuntimeError('Baseline per-task CSV must contain exactly one OVERALL row.')
+8,code,133,,overall_row = overall.iloc[0]
+8,code,134,,if int(overall_row['total']) != len(baseline_pred_audit) or int(overall_row['correct']) != baseline_pred_correct:
+8,code,135,hard_fail,    raise RuntimeError('Baseline per-task OVERALL row does not match predictions.')
+8,code,136,,
+8,code,137,,family_col = 'family' if 'family' in val.columns else 'type'
+8,code,138,,if family_col not in val.columns:
+8,code,139,hard_fail,    raise RuntimeError('Validation CSV needs family or type column.')
+8,code,140,,weak = val[val[family_col].isin(WEAK_FAMILIES)].copy()
+8,code,141,,"weak.to_csv(VAL_WEAK_CSV, index=False)"
+8,code,142,,
+8,code,143,,base_per = pd.read_csv(BASELINE_PER_TASK)
+8,code,144,,base_weak = base_per[base_per['task_type'].isin(WEAK_FAMILIES)]
+8,code,145,,BASE_WEAK_CORRECT = int(base_weak['correct'].sum())
+8,code,146,,BASE_WEAK_TOTAL = int(base_weak['total'].sum())
+8,code,147,,BASE_WEAK_TRUNCATED = int(base_weak['truncated'].sum()) if 'truncated' in base_weak.columns else 0
+8,code,148,,
+8,code,149,progress_log,"print('VAL rows =', len(val))"
+8,code,150,progress_log,"print('VAL_WEAK_CSV =', VAL_WEAK_CSV, 'exists=', VAL_WEAK_CSV.exists())"
+8,code,151,progress_log,"print('weak rows =', len(weak))"
+8,code,152,progress_log,print('weak family counts =')
+8,code,153,progress_log,print(weak[family_col].value_counts().sort_index().to_string())
+8,code,154,progress_log,"print('baseline weak correct =', BASE_WEAK_CORRECT, '/', BASE_WEAK_TOTAL)"
+8,code,155,progress_log,"print('baseline weak truncated =', BASE_WEAK_TRUNCATED, '/', BASE_WEAK_TOTAL)"
+8,code,156,progress_log,print('=== V207B V207A ARTIFACT CHECK END ===')
+9,code,1,,# CELL: download public Kaggle adapter candidates into Drive.
+9,code,2,progress_log,print('=== V207B PUBLIC KAGGLE ADAPTER DOWNLOAD START ===')
+9,code,3,,from pathlib import Path
+9,code,4,,
+9,code,5,,PUBLIC_KAGGLE_MODEL_CANDIDATES = [
+9,code,6,,    # Priority 1: Huikang public adapter versions used by public competition notebooks.
+9,code,7,,"    {'label': 'huikang_default_v27', 'ref': 'huikang/nemotron-adapter/Transformers/default/27', 'priority': 1},"
+9,code,8,,"    {'label': 'huikang_default_v26', 'ref': 'huikang/nemotron-adapter/Transformers/default/26', 'priority': 1},"
+9,code,9,,"    {'label': 'huikang_default_v25', 'ref': 'huikang/nemotron-adapter/Transformers/default/25', 'priority': 1},"
+9,code,10,,"    {'label': 'huikang_default_v24', 'ref': 'huikang/nemotron-adapter/Transformers/default/24', 'priority': 1},"
+9,code,11,,"    {'label': 'huikang_default_v23', 'ref': 'huikang/nemotron-adapter/Transformers/default/23', 'priority': 1},"
+9,code,12,,"    {'label': 'huikang_default_v22', 'ref': 'huikang/nemotron-adapter/Transformers/default/22', 'priority': 1},"
+9,code,13,,"    {'label': 'huikang_default_v21', 'ref': 'huikang/nemotron-adapter/Transformers/default/21', 'priority': 1},"
+9,code,14,,"    {'label': 'huikang_default_v20', 'ref': 'huikang/nemotron-adapter/Transformers/default/20', 'priority': 1},"
+9,code,15,,
+9,code,16,,    # Priority 2: Kienngx variations referenced by public notebooks and model listings.
+9,code,17,,"    {'label': 'kienngx_1200samples_cot_1e_5', 'ref': 'kienngx/nemotron-nano-30b-trained/Transformers/1200samples-cot-1e-5/1', 'priority': 2},"
+9,code,18,,"    {'label': 'kienngx_1200samples_cot_5e_5', 'ref': 'kienngx/nemotron-nano-30b-trained/Transformers/1200samples-cot-5e-5/1', 'priority': 2},"
+9,code,19,,"    {'label': 'kienngx_cot_labels_3000samples', 'ref': 'kienngx/nemotron-nano-30b-trained/Transformers/cot-labels-3000samples/1', 'priority': 2},"
+9,code,20,,"    {'label': 'kienngx_600_samples_packing_false', 'ref': 'kienngx/nemotron-nano-30b-trained/Transformers/600-samples-packing-false/1', 'priority': 2},"
+9,code,21,,"    {'label': 'kienngx_1800s_lora_rank32_false', 'ref': 'kienngx/nemotron-nano-30b-trained/Transformers/1800s-lora-rank32-false/1', 'priority': 2},"
+9,code,22,,
+9,code,23,,    # Priority 3: extra variants. Keep default download priority at 2 to control Drive usage/time.
+9,code,24,,"    {'label': 'kienngx_tinker_adapter', 'ref': 'kienngx/nemotron-nano-30b-trained/Triton/tinker-adapter/1', 'priority': 3},"
+9,code,25,,"    {'label': 'kienngx_2400_1e_4_lr_all_linear_packingfalse', 'ref': 'kienngx/nemotron-nano-30b-trained/Transformers/2400-1e-4_lr-all_linear-packingfalse/1', 'priority': 3},"
+9,code,26,,"    {'label': 'kienngx_9500s_batch1_lr1e_4', 'ref': 'kienngx/nemotron-nano-30b-trained/Transformers/9500s-batch1-lr1e-4/1', 'priority': 3},"
+9,code,27,,]
+9,code,28,,
+9,code,29,,PUBLIC_KAGGLE_EXPECTED_BYTES = {
+9,code,30,,"    'huikang_default_v27': 1544348352,"
+9,code,31,,"    'huikang_default_v26': 1544348352,"
+9,code,32,,"    'huikang_default_v25': 1544348352,"
+9,code,33,,"    'huikang_default_v24': 772202848,"
+9,code,34,,"    'huikang_default_v23': 1544348352,"
+9,code,35,,"    'huikang_default_v22': 1544348352,"
+9,code,36,,"    'huikang_default_v21': 1544348352,"
+9,code,37,,"    'huikang_default_v20': 1544348352,"
+9,code,38,,"    'kienngx_1200samples_cot_1e_5': 3537299144,"
+9,code,39,,"    'kienngx_1200samples_cot_5e_5': 3537299144,"
+9,code,40,,"    'kienngx_cot_labels_3000samples': 3537299144,"
+9,code,41,,"    'kienngx_600_samples_packing_false': 1740420752,"
+9,code,42,,"    'kienngx_1800s_lora_rank32_false': 3479065680,"
+9,code,43,,"    'kienngx_tinker_adapter': 3554384888,"
+9,code,44,,"    'kienngx_2400_1e_4_lr_all_linear_packingfalse': 3537299144,"
+9,code,45,,"    'kienngx_9500s_batch1_lr1e_4': 58233016,"
+9,code,46,,}
+9,code,47,,for _item in PUBLIC_KAGGLE_MODEL_CANDIDATES:
+9,code,48,,"    _item['expected_bytes'] = PUBLIC_KAGGLE_EXPECTED_BYTES.get(_item['label'], 0)"
+9,code,49,,
+9,code,50,,"def kaggle_adapter_ready(path, expected_bytes=0):"
+9,code,51,,    path = Path(path)
+9,code,52,,    if not path.is_dir() or not (path / 'adapter_config.json').exists():
+9,code,53,,        return False
+9,code,54,,    model_path = path / 'adapter_model.safetensors'
+9,code,55,,    if not model_path.exists():
+9,code,56,,        model_path = path / 'adapter_model.bin'
+9,code,57,,    if not model_path.exists():
+9,code,58,,        return False
+9,code,59,,    expected_bytes = int(expected_bytes or 0)
+9,code,60,,    if expected_bytes > 0:
+9,code,61,,"        min_bytes = max(1024 * 1024, int(expected_bytes * 0.98))"
+9,code,62,,        if model_path.stat().st_size < min_bytes:
+9,code,63,progress_log,            print(
+9,code,64,,"                'adapter_model_too_small =',"
+9,code,65,,"                model_path,"
+9,code,66,,"                'size=',"
+9,code,67,,"                model_path.stat().st_size,"
+9,code,68,,"                'min_expected=',"
+9,code,69,,"                min_bytes,"
+9,code,70,,            )
+9,code,71,,            return False
+9,code,72,,    return True
+9,code,73,,
+9,code,74,,def configure_kaggle_credentials():
+9,code,75,,    kaggle_dir = Path('/root/.kaggle')
+9,code,76,,    token_path = kaggle_dir / 'kaggle.json'
+9,code,77,,"    kaggle_dir.mkdir(parents=True, exist_ok=True)"
+9,code,78,,    if token_path.exists():
+9,code,79,,        token_path.chmod(0o600)
+9,code,80,progress_log,"        print('kaggle_token =', token_path, 'exists=True')"
+9,code,81,,        return True
+9,code,82,,
+9,code,83,,    candidate_paths = [
+9,code,84,,"        DRIVE_MY / 'kaggle.json',"
+9,code,85,,"        DRIVE_MY / 'KG1_SECRETS' / 'kaggle.json',"
+9,code,86,,"        DRIVE_MY / '.kaggle' / 'kaggle.json',"
+9,code,87,,    ]
+9,code,88,,"    env_config_dir = os.environ.get('KAGGLE_CONFIG_DIR', '').strip()"
+9,code,89,,    if env_config_dir:
+9,code,90,,        candidate_paths.append(Path(env_config_dir) / 'kaggle.json')
+9,code,91,,
+9,code,92,,    for src in candidate_paths:
+9,code,93,progress_log,"        print('checking_kaggle_token_source =', src, 'exists=', src.exists())"
+9,code,94,,        if src.exists():
+9,code,95,,"            shutil.copy2(src, token_path)"
+9,code,96,,            token_path.chmod(0o600)
+9,code,97,progress_log,"            print('copied_kaggle_token =', src, '->', token_path)"
+9,code,98,,            return True
+9,code,99,,
+9,code,100,,"    env_username = os.environ.get('KAGGLE_USERNAME', '').strip()"
+9,code,101,,"    env_key = os.environ.get('KAGGLE_KEY', '').strip()"
+9,code,102,,    if env_username and env_key:
+9,code,103,,"        token_path.write_text(json.dumps({'username': env_username, 'key': env_key}), encoding='utf-8')"
+9,code,104,,        token_path.chmod(0o600)
+9,code,105,,"        os.environ.setdefault('KAGGLE_CONFIG_DIR', str(kaggle_dir))"
+9,code,106,progress_log,"        print('created_kaggle_token_from_environment =', token_path)"
+9,code,107,,        return True
+9,code,108,,
+9,code,109,,    try:
+9,code,110,,        from google.colab import userdata  # type: ignore
+9,code,111,,    except Exception:
+9,code,112,,        userdata = None
+9,code,113,,    if userdata is not None:
+9,code,114,,        try:
+9,code,115,colab_secret_read,            secret_username = str(userdata.get('KAGGLE_USERNAME') or '').strip()
+9,code,116,colab_secret_read,            secret_key = str(userdata.get('KAGGLE_KEY') or '').strip()
+9,code,117,,        except Exception:
+9,code,118,,            secret_username = ''
+9,code,119,,            secret_key = ''
+9,code,120,progress_log,"        print('colab_secret_available KAGGLE_USERNAME =', bool(secret_username))"
+9,code,121,progress_log,"        print('colab_secret_available KAGGLE_KEY =', bool(secret_key))"
+9,code,122,,        if secret_username and secret_key:
+9,code,123,,"            token_path.write_text(json.dumps({'username': secret_username, 'key': secret_key}), encoding='utf-8')"
+9,code,124,,            token_path.chmod(0o600)
+9,code,125,,"            os.environ.setdefault('KAGGLE_CONFIG_DIR', str(kaggle_dir))"
+9,code,126,progress_log,"            print('created_kaggle_token_from_colab_secrets =', token_path)"
+9,code,127,,            return True
+9,code,128,,
+9,code,129,progress_log,    print('Kaggle credentials were not found.')
+9,code,130,progress_log,"    print('Place kaggle.json at /content/drive/MyDrive/kaggle.json or /content/drive/MyDrive/KG1_SECRETS/kaggle.json, or enable Colab Secrets KAGGLE_USERNAME and KAGGLE_KEY, then rerun this cell.')"
+9,code,131,,    return False
+9,code,132,,
+9,code,133,,download_status = []
+9,code,134,,
+9,code,135,,if not RUN_KAGGLE_PUBLIC_DOWNLOAD:
+9,code,136,progress_log,    print('RUN_KAGGLE_PUBLIC_DOWNLOAD=False; skipping public model downloads.')
+9,code,137,,else:
+9,code,138,,    if not configure_kaggle_credentials():
+9,code,139,hard_fail,        raise RuntimeError('Human action required: add Kaggle API token kaggle.json to Drive and rerun this cell.')
+9,code,140,,    if 'KAGGLE_CMD_PREFIX' not in globals():
+9,code,141,,        KAGGLE_EXE = shutil.which('kaggle')
+9,code,142,,"        KAGGLE_CMD_PREFIX = [KAGGLE_EXE] if KAGGLE_EXE else [sys.executable, '-m', 'kaggle.cli']"
+9,code,143,progress_log,"        print('KAGGLE_CMD_PREFIX late_init =', KAGGLE_CMD_PREFIX)"
+9,code,144,command_runner,    run_cmd(KAGGLE_CMD_PREFIX + ['--version'])
+9,code,145,,
+9,code,146,,    selected_candidates = [
+9,code,147,,        item for item in PUBLIC_KAGGLE_MODEL_CANDIDATES
+9,code,148,,        if int(item['priority']) <= PUBLIC_DOWNLOAD_MAX_PRIORITY
+9,code,149,,    ][:PUBLIC_DOWNLOAD_MAX_CANDIDATES]
+9,code,150,progress_log,"    print('selected_public_download_count =', len(selected_candidates))"
+9,code,151,,    remaining_expected_bytes = sum(
+9,code,152,,        int(item.get('expected_bytes') or 0)
+9,code,153,,        for item in selected_candidates
+9,code,154,,        if not kaggle_adapter_ready(
+9,code,155,,"            PUBLIC_KAGGLE_ROOT / safe_label(item['label']) / 'adapter',"
+9,code,156,,"            item.get('expected_bytes') or 0,"
+9,code,157,,        )
+9,code,158,,    )
+9,code,159,,    usage = shutil.disk_usage(PUBLIC_KAGGLE_ROOT)
+9,code,160,progress_log,"    print('download_expected_remaining_gib =', round(remaining_expected_bytes / (1024 ** 3), 2))"
+9,code,161,progress_log,"    print('drive_total_gib =', round(usage.total / (1024 ** 3), 2))"
+9,code,162,progress_log,"    print('drive_free_gib =', round(usage.free / (1024 ** 3), 2))"
+9,code,163,,    if remaining_expected_bytes and usage.free < remaining_expected_bytes + 5 * 1024 ** 3:
+9,code,164,hard_fail,        raise RuntimeError(
+9,code,165,,            'Human action required: not enough free Drive space for public adapter downloads. '
+9,code,166,,            f'Need about {remaining_expected_bytes / (1024 ** 3):.2f} GiB plus 5 GiB buffer; '
+9,code,167,,            f'free={usage.free / (1024 ** 3):.2f} GiB.'
+9,code,168,,        )
+9,code,169,,    for item in selected_candidates:
+9,code,170,,        label = safe_label(item['label'])
+9,code,171,,        ref = item['ref']
+9,code,172,,        target = PUBLIC_KAGGLE_ROOT / label / 'adapter'
+9,code,173,,        log = REPORT_DIR / f'download_{label}.log'
+9,code,174,,"        target.mkdir(parents=True, exist_ok=True)"
+9,code,175,,
+9,code,176,progress_log,        print('\n' + '=' * 80)
+9,code,177,progress_log,"        print('download_label =', label)"
+9,code,178,progress_log,"        print('download_ref =', ref)"
+9,code,179,progress_log,"        print('download_priority =', item['priority'])"
+9,code,180,progress_log,"        print('download_expected_bytes =', int(item.get('expected_bytes') or 0))"
+9,code,181,progress_log,"        print('download_target =', target)"
+9,code,182,progress_log,"        print('already_ready =', kaggle_adapter_ready(target, item.get('expected_bytes') or 0))"
+9,code,183,,
+9,code,184,,"        if kaggle_adapter_ready(target, item.get('expected_bytes') or 0):"
+9,code,185,,            status = 'already_ready'
+9,code,186,,            rc = 0
+9,code,187,,        else:
+9,code,188,,            cmd = KAGGLE_CMD_PREFIX + [
+9,code,189,,"                'models',"
+9,code,190,,"                'instances',"
+9,code,191,,"                'versions',"
+9,code,192,,"                'download',"
+9,code,193,,"                ref,"
+9,code,194,,"                '-p',"
+9,code,195,,"                target,"
+9,code,196,,"                '--untar',"
+9,code,197,,            ]
+9,code,198,command_runner,"            rc = run_cmd(cmd, log_path=log, check=False)"
+9,code,199,,            status = (
+9,code,200,,                'downloaded_ready'
+9,code,201,,"                if rc == 0 and kaggle_adapter_ready(target, item.get('expected_bytes') or 0)"
+9,code,202,,                else f'download_or_structure_failed_{rc}'
+9,code,203,,            )
+9,code,204,,
+9,code,205,,        nested_ready_dirs = []
+9,code,206,,"        if not kaggle_adapter_ready(target, item.get('expected_bytes') or 0):"
+9,code,207,,"            for dirpath, dirnames, filenames in os.walk(target):"
+9,code,208,,                p = Path(dirpath)
+9,code,209,,"                if kaggle_adapter_ready(p, item.get('expected_bytes') or 0):"
+9,code,210,,                    nested_ready_dirs.append(str(p))
+9,code,211,,
+9,code,212,,        top_files = sorted([p.name for p in target.glob('*')])[:25] if target.exists() else []
+9,code,213,,        row = {
+9,code,214,,"            'label': label,"
+9,code,215,,"            'ref': ref,"
+9,code,216,,"            'priority': int(item['priority']),"
+9,code,217,,"            'expected_bytes': int(item.get('expected_bytes') or 0),"
+9,code,218,,"            'target': str(target),"
+9,code,219,,"            'ready': kaggle_adapter_ready(target, item.get('expected_bytes') or 0),"
+9,code,220,,"            'nested_ready_dirs': nested_ready_dirs,"
+9,code,221,,"            'status': status,"
+9,code,222,,"            'returncode': rc,"
+9,code,223,,"            'top_files': top_files,"
+9,code,224,,"            'log': str(log),"
+9,code,225,,        }
+9,code,226,,        download_status.append(row)
+9,code,227,progress_log,"        print('download_status =', json.dumps(row, indent=2, sort_keys=True))"
+9,code,228,,
+9,code,229,,download_manifest = OUT_ROOT / 'v207b_public_kaggle_download_manifest.json'
+9,code,230,,"download_manifest.write_text(json.dumps(download_status, indent=2, sort_keys=True), encoding='utf-8')"
+9,code,231,progress_log,"print('download_manifest =', download_manifest)"
+9,code,232,progress_log,print('=== V207B PUBLIC KAGGLE ADAPTER DOWNLOAD END ===')
+10,code,1,,# CELL: discover and register candidate adapter directories.
+10,code,2,progress_log,print('=== V207B CANDIDATE DISCOVERY START ===')
+10,code,3,,from pathlib import Path
+10,code,4,,
+10,code,5,,MANUAL_CANDIDATES = [
+10,code,6,,    # Baseline sanity / tied artifacts.
+10,code,7,,"    ('v194_init_duplicate', DRIVE_MY / 'KG1_NVIDIA_V202D/init_adapter_v194_rank19_build/adapter'),"
+10,code,8,,"    ('v194_final_keep_duplicate', DRIVE_MY / 'KG1_NVIDIA_V202D/final_v194_keep_no_submit/adapter'),"
+10,code,9,,"    ('v199b_candidate', DRIVE_MY / 'KG1_NVIDIA_V199B/final_adapter'),"
+10,code,10,,"    ('v199b_candidate_adapter', DRIVE_MY / 'KG1_NVIDIA_V199B/adapter'),"
+10,code,11,,
+10,code,12,,    # Common external/current adapter landing zones. Missing paths are skipped.
+10,code,13,,"    ('aaitdads_my_0p86', DRIVE_MY / 'KG1_PUBLIC_ADAPTERS/aaitdads_my_0p86_adapter'),"
+10,code,14,,"    ('huikang_default_v27', DRIVE_MY / 'KG1_PUBLIC_ADAPTERS/huikang_default_v27/adapter'),"
+10,code,15,,"    ('huikang_default_v26', DRIVE_MY / 'KG1_PUBLIC_ADAPTERS/huikang_default_v26/adapter'),"
+10,code,16,,"    ('huikang_default_v25', DRIVE_MY / 'KG1_PUBLIC_ADAPTERS/huikang_default_v25/adapter'),"
+10,code,17,,"    ('huikang_default_v24', DRIVE_MY / 'KG1_PUBLIC_ADAPTERS/huikang_default_v24/adapter'),"
+10,code,18,,"    ('huikang_default_v23', DRIVE_MY / 'KG1_PUBLIC_ADAPTERS/huikang_default_v23/adapter'),"
+10,code,19,,"    ('huikang_default_v22', DRIVE_MY / 'KG1_PUBLIC_ADAPTERS/huikang_default_v22/adapter'),"
+10,code,20,,"    ('huikang_default_v21', DRIVE_MY / 'KG1_PUBLIC_ADAPTERS/huikang_default_v21/adapter'),"
+10,code,21,,"    ('huikang_default_v20', DRIVE_MY / 'KG1_PUBLIC_ADAPTERS/huikang_default_v20/adapter'),"
+10,code,22,,"    ('huikang_tinker_v27_legacy', DRIVE_MY / 'KG1_PUBLIC_ADAPTERS/huikang_tinker_v27/adapter'),"
+10,code,23,,"    ('huikang_tinker_v26_legacy', DRIVE_MY / 'KG1_PUBLIC_ADAPTERS/huikang_tinker_v26/adapter'),"
+10,code,24,,"    ('huikang_tinker_v20_legacy', DRIVE_MY / 'KG1_PUBLIC_ADAPTERS/huikang_tinker_v20/adapter'),"
+10,code,25,,"    ('kienngx_1200samples_cot_1e_5', DRIVE_MY / 'KG1_PUBLIC_ADAPTERS/kienngx_1200samples_cot_1e_5/adapter'),"
+10,code,26,,"    ('kienngx_1200samples_cot_5e_5', DRIVE_MY / 'KG1_PUBLIC_ADAPTERS/kienngx_1200samples_cot_5e_5/adapter'),"
+10,code,27,,"    ('kienngx_cot_labels_3000samples', DRIVE_MY / 'KG1_PUBLIC_ADAPTERS/kienngx_cot_labels_3000samples/adapter'),"
+10,code,28,,"    ('kienngx_600_samples_packing_false', DRIVE_MY / 'KG1_PUBLIC_ADAPTERS/kienngx_600_samples_packing_false/adapter'),"
+10,code,29,,"    ('kienngx_1800s_lora_rank32_false', DRIVE_MY / 'KG1_PUBLIC_ADAPTERS/kienngx_1800s_lora_rank32_false/adapter'),"
+10,code,30,,"    ('kienngx_tinker_adapter', DRIVE_MY / 'KG1_PUBLIC_ADAPTERS/kienngx_tinker_adapter/adapter'),"
+10,code,31,,"    ('kienngx_2400_1e_4_lr_all_linear_packingfalse', DRIVE_MY / 'KG1_PUBLIC_ADAPTERS/kienngx_2400_1e_4_lr_all_linear_packingfalse/adapter'),"
+10,code,32,,"    ('kienngx_9500s_batch1_lr1e_4', DRIVE_MY / 'KG1_PUBLIC_ADAPTERS/kienngx_9500s_batch1_lr1e_4/adapter'),"
+10,code,33,,"    ('kien_variant_legacy', DRIVE_MY / 'KG1_PUBLIC_ADAPTERS/kien_variant/adapter'),"
+10,code,34,,"    ('bugkeeper_v20', DRIVE_MY / 'KG1_PUBLIC_ADAPTERS/bugkeeper_v20/adapter'),"
+10,code,35,,"    ('dgxchen_trained', DRIVE_MY / 'KG1_PUBLIC_ADAPTERS/dgxchen_trained_adapter'),"
+10,code,36,,]
+10,code,37,,
+10,code,38,,DISCOVERY_ROOTS = [
+10,code,39,,"    DRIVE_MY / 'KG1_PUBLIC_ADAPTERS',"
+10,code,40,,"    DRIVE_MY / 'KG1_NVIDIA_PUBLIC_ADAPTERS',"
+10,code,41,,"    DRIVE_MY / 'KG1_NVIDIA_EXTERNAL',"
+10,code,42,,"    DRIVE_MY / 'KG1_NVIDIA_V199B',"
+10,code,43,,"    DRIVE_MY / 'KG1_NVIDIA_V202D',"
+10,code,44,,"    DRIVE_MY / 'KG1_NVIDIA_V204',"
+10,code,45,,"    DRIVE_MY / 'KG1_NVIDIA_TINKER',"
+10,code,46,,"    DRIVE_MY / 'KG1_NVIDIA_KIEN',"
+10,code,47,,]
+10,code,48,,
+10,code,49,,REJECTED_SUBSTRINGS = [
+10,code,50,,"    'KG1_NVIDIA_V206B',"
+10,code,51,,"    'KG1_NVIDIA_V206C',"
+10,code,52,,"    'adapter_s0p010',"
+10,code,53,,"    'adapter_s0p020',"
+10,code,54,,"    'adapter_s0p050',"
+10,code,55,,"    'adapter_s0p100',"
+10,code,56,,]
+10,code,57,,
+10,code,58,,def adapter_ready_dir(path):
+10,code,59,,    path = Path(path)
+10,code,60,,    return (
+10,code,61,,        path.is_dir()
+10,code,62,,        and (path / 'adapter_config.json').exists()
+10,code,63,,        and ((path / 'adapter_model.safetensors').exists() or (path / 'adapter_model.bin').exists())
+10,code,64,,    )
+10,code,65,,
+10,code,66,,def is_rejected_path(path):
+10,code,67,,    if INCLUDE_REJECTED_V206:
+10,code,68,,        return False
+10,code,69,,    text = str(path)
+10,code,70,,    return any(chunk in text for chunk in REJECTED_SUBSTRINGS)
+10,code,71,,
+10,code,72,,candidates = {}
+10,code,73,,"for label, path in MANUAL_CANDIDATES:"
+10,code,74,,    path = Path(path)
+10,code,75,progress_log,"    print('manual_candidate', label, path, 'ready=', adapter_ready_dir(path))"
+10,code,76,,    if adapter_ready_dir(path) and not is_rejected_path(path):
+10,code,77,,"        candidates[str(path.resolve())] = {'label': safe_label(label), 'path': path}"
+10,code,78,,
+10,code,79,,for root in DISCOVERY_ROOTS:
+10,code,80,progress_log,"    print('scan_root =', root, 'exists=', root.exists())"
+10,code,81,,    if not root.exists():
+10,code,82,,        continue
+10,code,83,,    scanned_dirs = 0
+10,code,84,,"    for dirpath, dirnames, filenames in os.walk(root):"
+10,code,85,,        scanned_dirs += 1
+10,code,86,,        if scanned_dirs > MAX_DISCOVERY_DIRS:
+10,code,87,progress_log,"            print('scan_root_limit_reached', root, MAX_DISCOVERY_DIRS)"
+10,code,88,,            break
+10,code,89,,        p = Path(dirpath)
+10,code,90,,        if is_rejected_path(p):
+10,code,91,,            dirnames[:] = []
+10,code,92,,            continue
+10,code,93,,        names = set(filenames)
+10,code,94,,        if 'adapter_config.json' in names and (
+10,code,95,,            'adapter_model.safetensors' in names or 'adapter_model.bin' in names
+10,code,96,,        ):
+10,code,97,,            label = safe_label(str(p.relative_to(root)))
+10,code,98,,"            candidates[str(p.resolve())] = {'label': label, 'path': p}"
+10,code,99,progress_log,"    print('scan_root_done =', root, 'scanned_dirs=', scanned_dirs)"
+10,code,100,,
+10,code,101,,CANDIDATES = list(candidates.values())
+10,code,102,progress_log,"print('candidate_count =', len(CANDIDATES))"
+10,code,103,,for item in CANDIDATES:
+10,code,104,progress_log,"    print('candidate =', item['label'], item['path'])"
+10,code,105,,
+10,code,106,,manifest_path = OUT_ROOT / 'v207b_discovered_candidates.json'
+10,code,107,,manifest_path.write_text(
+10,code,108,,    json.dumps(
+10,code,109,,"        [{'label': x['label'], 'path': str(x['path'])} for x in CANDIDATES],"
+10,code,110,,"        indent=2,"
+10,code,111,,"        sort_keys=True,"
+10,code,112,,"    ),"
+10,code,113,,"    encoding='utf-8',"
+10,code,114,,)
+10,code,115,progress_log,"print('candidate_manifest =', manifest_path)"
+10,code,116,progress_log,print('=== V207B CANDIDATE DISCOVERY END ===')
+11,code,1,,# CELL: structure audit candidate adapters.
+11,code,2,progress_log,print('=== V207B STRUCTURE AUDIT START ===')
+11,code,3,,from safetensors import safe_open
+11,code,4,,
+11,code,5,,"def audit_adapter(label, path):"
+11,code,6,,    path = Path(path)
+11,code,7,,    cfg_path = path / 'adapter_config.json'
+11,code,8,,    model_path = path / 'adapter_model.safetensors'
+11,code,9,,    bin_path = path / 'adapter_model.bin'
+11,code,10,,    row = {
+11,code,11,,"        'label': label,"
+11,code,12,,"        'path': str(path),"
+11,code,13,,"        'exists': path.exists(),"
+11,code,14,,"        'has_config': cfg_path.exists(),"
+11,code,15,,"        'has_safetensors': model_path.exists(),"
+11,code,16,,"        'has_bin': bin_path.exists(),"
+11,code,17,,"        'model_bytes': 0,"
+11,code,18,,"        'config_sha256': '',"
+11,code,19,,"        'model_sha256': '',"
+11,code,20,,"        'peft_type': '',"
+11,code,21,,"        'r': '',"
+11,code,22,,"        'lora_alpha': '',"
+11,code,23,,"        'target_modules': '',"
+11,code,24,,"        'base_model_name_or_path': '',"
+11,code,25,,"        'tensor_count': 0,"
+11,code,26,,"        'bad_lm_head_namespace_count': 0,"
+11,code,27,,"        'rank_ok': False,"
+11,code,28,,"        'ready_for_eval': False,"
+11,code,29,,"        'reason': '',"
+11,code,30,,    }
+11,code,31,,    if not path.exists():
+11,code,32,,        row['reason'] = 'missing_path'
+11,code,33,,        return row
+11,code,34,,    if not cfg_path.exists():
+11,code,35,,        row['reason'] = 'missing_adapter_config'
+11,code,36,,        return row
+11,code,37,,    if not model_path.exists() and not bin_path.exists():
+11,code,38,,        row['reason'] = 'missing_adapter_weights'
+11,code,39,,        return row
+11,code,40,,
+11,code,41,,    cfg = json.loads(cfg_path.read_text(encoding='utf-8'))
+11,code,42,,"    row['config_sha256'] = sha256_file(cfg_path, True)"
+11,code,43,,"    row['peft_type'] = str(cfg.get('peft_type', ''))"
+11,code,44,,"    row['r'] = str(cfg.get('r', ''))"
+11,code,45,,"    row['lora_alpha'] = str(cfg.get('lora_alpha', ''))"
+11,code,46,,"    row['target_modules'] = json.dumps(cfg.get('target_modules', ''), sort_keys=True)"
+11,code,47,,"    row['base_model_name_or_path'] = str(cfg.get('base_model_name_or_path', ''))"
+11,code,48,,    try:
+11,code,49,,"        rank = int(cfg.get('r', 0))"
+11,code,50,,    except Exception:
+11,code,51,,        rank = 0
+11,code,52,,    row['rank_ok'] = 0 < rank <= 32
+11,code,53,,
+11,code,54,,    weight_path = model_path if model_path.exists() else bin_path
+11,code,55,,    row['model_bytes'] = int(weight_path.stat().st_size)
+11,code,56,,"    row['model_sha256'] = sha256_file(weight_path, HASH_WEIGHTS)"
+11,code,57,,
+11,code,58,,    if model_path.exists():
+11,code,59,,        try:
+11,code,60,,"            with safe_open(str(model_path), framework='pt', device='cpu') as handle:"
+11,code,61,,                keys = list(handle.keys())
+11,code,62,,            row['tensor_count'] = len(keys)
+11,code,63,,            row['bad_lm_head_namespace_count'] = sum(
+11,code,64,,                1 for key in keys if key.startswith('base_model.model.backbone.lm_head')
+11,code,65,,            )
+11,code,66,,        except Exception as exc:
+11,code,67,,            row['reason'] = 'safetensors_open_failed:' + repr(exc)
+11,code,68,,            return row
+11,code,69,,
+11,code,70,,    if not row['rank_ok']:
+11,code,71,,        row['reason'] = 'rank_missing_or_gt32'
+11,code,72,,    elif row['bad_lm_head_namespace_count']:
+11,code,73,,        row['reason'] = 'bad_lm_head_namespace'
+11,code,74,,    else:
+11,code,75,,        row['ready_for_eval'] = True
+11,code,76,,        row['reason'] = 'ready'
+11,code,77,,    return row
+11,code,78,,
+11,code,79,,audit_rows = []
+11,code,80,,for item in CANDIDATES:
+11,code,81,progress_log,"    print('auditing', item['label'], item['path'])"
+11,code,82,,"    audit_rows.append(audit_adapter(item['label'], item['path']))"
+11,code,83,,
+11,code,84,,audit_df = pd.DataFrame(audit_rows)
+11,code,85,,audit_csv = OUT_ROOT / 'v207b_adapter_structure_audit.csv'
+11,code,86,,audit_json = OUT_ROOT / 'v207b_adapter_structure_audit.json'
+11,code,87,,"audit_df.to_csv(audit_csv, index=False)"
+11,code,88,,"audit_json.write_text(json.dumps(audit_rows, indent=2, sort_keys=True), encoding='utf-8')"
+11,code,89,,
+11,code,90,progress_log,"print('audit_rows =', len(audit_df))"
+11,code,91,,if len(audit_df):
+11,code,92,progress_log,"    print(audit_df[['label', 'ready_for_eval', 'r', 'tensor_count', 'model_bytes', 'reason', 'path']].to_string(index=False))"
+11,code,93,,else:
+11,code,94,progress_log,    print('No candidates discovered. Add adapter paths to MANUAL_CANDIDATES or mount the Drive folder.')
+11,code,95,progress_log,"print('audit_csv =', audit_csv)"
+11,code,96,progress_log,"print('audit_json =', audit_json)"
+11,code,97,,READY_CANDIDATES = [row for row in audit_rows if row.get('ready_for_eval')]
+11,code,98,progress_log,"print('ready_candidate_count =', len(READY_CANDIDATES))"
+11,code,99,progress_log,print('=== V207B STRUCTURE AUDIT END ===')
+12,code,1,,# CELL: weak-family screen ready candidates.
+12,code,2,progress_log,print('=== V207B WEAK FAMILY SCREEN START ===')
+12,code,3,,results = []
+12,code,4,,
+12,code,5,,for row in READY_CANDIDATES:
+12,code,6,,    label = safe_label(row['label'] + '_weak')
+12,code,7,,    adapter = Path(row['path'])
+12,code,8,,    out = OUT_ROOT / f'{label}_eval'
+12,code,9,,    log = REPORT_DIR / f'{label}_eval.log'
+12,code,10,,    report_json = out / f'{label}_eval_report.json'
+12,code,11,,    per_task_csv = out / f'{label}_per_task.csv'
+12,code,12,,
+12,code,13,progress_log,    print('\n' + '=' * 80)
+12,code,14,progress_log,"    print('label =', label)"
+12,code,15,progress_log,"    print('adapter =', adapter, 'exists=', adapter.exists())"
+12,code,16,progress_log,"    print('out =', out)"
+12,code,17,progress_log,"    print('report_json =', report_json, 'exists=', report_json.exists())"
+12,code,18,,
+12,code,19,,    if FORCE_REEVAL and out.exists():
+12,code,20,progress_log,"        print('FORCE_REEVAL enabled; removing previous output:', out)"
+12,code,21,,        shutil.rmtree(out)
+12,code,22,,
+12,code,23,,    if not report_json.exists():
+12,code,24,,        cmd = [
+12,code,25,,"            sys.executable,"
+12,code,26,,"            ROOT / 'scripts' / 'evaluate_lora_adapter.py',"
+12,code,27,,"            '--solution-csv', VAL_WEAK_CSV,"
+12,code,28,,"            '--questions-csv', VAL_WEAK_CSV,"
+12,code,29,,"            '--adapter', adapter,"
+12,code,30,,"            '--base-model-path', MODEL_NAME,"
+12,code,31,,"            '--label', label,"
+12,code,32,,"            '--seed', '42',"
+12,code,33,,"            '--limit', '0',"
+12,code,34,,"            '--output-dir', out,"
+12,code,35,,        ]
+12,code,36,command_runner,"        rc = run_cmd(cmd, cwd=ROOT, log_path=log, check=False)"
+12,code,37,,        if rc != 0:
+12,code,38,,            results.append({
+12,code,39,,"                'label': label,"
+12,code,40,,"                'path': str(adapter),"
+12,code,41,,"                'status': f'eval_failed_{rc}',"
+12,code,42,,"                'weak_correct': 0,"
+12,code,43,,"                'weak_total': BASE_WEAK_TOTAL,"
+12,code,44,,"                'weak_delta': -BASE_WEAK_CORRECT,"
+12,code,45,,"                'accuracy': 0.0,"
+12,code,46,,"                'truncated': None,"
+12,code,47,,"                'truncation_rate': None,"
+12,code,48,,"                'promote_to_full': False,"
+12,code,49,,"                'report_json': str(report_json),"
+12,code,50,,            })
+12,code,51,,            continue
+12,code,52,,    else:
+12,code,53,progress_log,        print('existing report found; skipping eval')
+12,code,54,,
+12,code,55,,    report = json.loads(report_json.read_text(encoding='utf-8'))
+12,code,56,,    per = pd.read_csv(per_task_csv)
+12,code,57,,    weak_per = per[per['task_type'].isin(WEAK_FAMILIES)]
+12,code,58,,    weak_correct = int(weak_per['correct'].sum())
+12,code,59,,    weak_total = int(weak_per['total'].sum())
+12,code,60,,"    weak_truncated = int(weak_per['truncated'].sum()) if 'truncated' in weak_per.columns else int(report.get('truncated', 0))"
+12,code,61,,    weak_delta = weak_correct - BASE_WEAK_CORRECT
+12,code,62,,    trunc_rate = weak_truncated / weak_total if weak_total else 0.0
+12,code,63,,    promote = weak_delta > 0 and weak_total == BASE_WEAK_TOTAL
+12,code,64,,
+12,code,65,progress_log,    print(per.to_string(index=False))
+12,code,66,progress_log,"    print('weak_correct =', weak_correct, '/', weak_total)"
+12,code,67,progress_log,"    print('weak_correct_delta_vs_v194 =', weak_delta)"
+12,code,68,progress_log,"    print('weak_truncated =', weak_truncated, '/', weak_total)"
+12,code,69,progress_log,"    print('promote_to_full =', promote)"
+12,code,70,,
+12,code,71,,    results.append({
+12,code,72,,"        'label': label,"
+12,code,73,,"        'path': str(adapter),"
+12,code,74,,"        'status': 'done',"
+12,code,75,,"        'weak_correct': weak_correct,"
+12,code,76,,"        'weak_total': weak_total,"
+12,code,77,,"        'weak_delta': weak_delta,"
+12,code,78,,"        'accuracy': float(report['accuracy']),"
+12,code,79,,"        'truncated': weak_truncated,"
+12,code,80,,"        'truncation_rate': trunc_rate,"
+12,code,81,,"        'promote_to_full': bool(promote),"
+12,code,82,,"        'report_json': str(report_json),"
+12,code,83,,"        'predictions_csv': str(out / f'{label}_predictions.csv'),"
+12,code,84,,"        'per_task_csv': str(per_task_csv),"
+12,code,85,,    })
+12,code,86,,
+12,code,87,,weak_results = pd.DataFrame(results)
+12,code,88,,weak_csv = OUT_ROOT / 'v207b_weak_screen_results.csv'
+12,code,89,,weak_json = OUT_ROOT / 'v207b_weak_screen_results.json'
+12,code,90,,"weak_results.to_csv(weak_csv, index=False)"
+12,code,91,,"weak_json.write_text(json.dumps(results, indent=2, sort_keys=True), encoding='utf-8')"
+12,code,92,,
+12,code,93,progress_log,print('\nWEAK SCREEN SUMMARY')
+12,code,94,,if len(weak_results):
+12,code,95,progress_log,"    print(weak_results[['label', 'status', 'weak_correct', 'weak_total', 'weak_delta', 'accuracy', 'truncated', 'promote_to_full']].to_string(index=False))"
+12,code,96,,else:
+12,code,97,progress_log,    print('No ready candidates to evaluate.')
+12,code,98,progress_log,"print('weak_csv =', weak_csv)"
+12,code,99,progress_log,"print('weak_json =', weak_json)"
+12,code,100,,FULL_CANDIDATES = [item for item in results if item.get('promote_to_full')]
+12,code,101,progress_log,"print('full_candidate_count =', len(FULL_CANDIDATES))"
+12,code,102,progress_log,print('=== V207B WEAK FAMILY SCREEN END ===')
+13,code,1,,# CELL: full 947-row gate only for weak-positive candidates.
+13,code,2,progress_log,print('=== V207B FULL GATE START ===')
+13,code,3,,full_results = []
+13,code,4,,
+13,code,5,,if not RUN_FULL_FOR_POSITIVE:
+13,code,6,progress_log,    print('RUN_FULL_FOR_POSITIVE=False; skipping full gate by configuration.')
+13,code,7,,elif not FULL_CANDIDATES:
+13,code,8,progress_log,    print('No weak-positive candidates. Full 947-row evaluation skipped.')
+13,code,9,,else:
+13,code,10,,    for item in FULL_CANDIDATES:
+13,code,11,,"        base_label = safe_label(item['label'].replace('_weak', ''))"
+13,code,12,,        adapter = Path(item['path'])
+13,code,13,,        eval_label = safe_label(base_label + '_full')
+13,code,14,,        eval_out = OUT_ROOT / f'{eval_label}_eval'
+13,code,15,,        eval_log = REPORT_DIR / f'{eval_label}_eval.log'
+13,code,16,,        report_json = eval_out / f'{eval_label}_eval_report.json'
+13,code,17,,        candidate_predictions = eval_out / f'{eval_label}_predictions.csv'
+13,code,18,,
+13,code,19,progress_log,        print('\n' + '=' * 80)
+13,code,20,progress_log,"        print('full_label =', eval_label)"
+13,code,21,progress_log,"        print('adapter =', adapter)"
+13,code,22,progress_log,"        print('eval_out =', eval_out)"
+13,code,23,,
+13,code,24,,        if FORCE_REEVAL and eval_out.exists():
+13,code,25,progress_log,"            print('FORCE_REEVAL enabled; removing previous full output:', eval_out)"
+13,code,26,,            shutil.rmtree(eval_out)
+13,code,27,,
+13,code,28,,        if not report_json.exists():
+13,code,29,,            cmd = [
+13,code,30,,"                sys.executable,"
+13,code,31,,"                ROOT / 'scripts' / 'evaluate_lora_adapter.py',"
+13,code,32,,"                '--solution-csv', VAL_CSV,"
+13,code,33,,"                '--questions-csv', VAL_CSV,"
+13,code,34,,"                '--adapter', adapter,"
+13,code,35,,"                '--base-model-path', MODEL_NAME,"
+13,code,36,,"                '--label', eval_label,"
+13,code,37,,"                '--seed', '42',"
+13,code,38,,"                '--limit', '0',"
+13,code,39,,"                '--output-dir', eval_out,"
+13,code,40,,            ]
+13,code,41,command_runner,"            rc = run_cmd(cmd, cwd=ROOT, log_path=eval_log, check=False)"
+13,code,42,,            if rc != 0:
+13,code,43,,"                full_results.append({'label': eval_label, 'status': f'eval_failed_{rc}', 'path': str(adapter)})"
+13,code,44,,                continue
+13,code,45,,        else:
+13,code,46,progress_log,            print('existing full report found; skipping eval')
+13,code,47,,
+13,code,48,,        gate_out = OUT_ROOT / f'{eval_label}_gate'
+13,code,49,,        gate_log = REPORT_DIR / f'{eval_label}_gate.log'
+13,code,50,,        cmd = [
+13,code,51,,"            sys.executable,"
+13,code,52,,"            ROOT / 'scripts' / 'solve_rate_gate.py',"
+13,code,53,,"            '--solution-csv', VAL_CSV,"
+13,code,54,,"            '--baseline-predictions', BASELINE_PREDICTIONS,"
+13,code,55,,"            '--candidate-predictions', candidate_predictions,"
+13,code,56,,"            '--family-regression-tolerance', '0.0',"
+13,code,57,,"            '--min-net-gain', '0.0',"
+13,code,58,,"            '--min-boxed-rate', '0.98',"
+13,code,59,,"            '--output-dir', gate_out,"
+13,code,60,,        ]
+13,code,61,command_runner,"        rc = run_cmd(cmd, cwd=ROOT, log_path=gate_log, check=False)"
+13,code,62,,        gate_report = gate_out / 'solve_rate_gate_report.json'
+13,code,63,,        gate_payload = json.loads(gate_report.read_text(encoding='utf-8')) if gate_report.exists() else {}
+13,code,64,,        full_results.append({
+13,code,65,,"            'label': eval_label,"
+13,code,66,,"            'status': 'gate_approve' if rc == 0 else f'gate_reject_{rc}',"
+13,code,67,,"            'path': str(adapter),"
+13,code,68,,"            'gate_report': str(gate_report),"
+13,code,69,,"            'approved': bool(gate_payload.get('approved', False)),"
+13,code,70,,"            'net_gain': gate_payload.get('comparison', {}).get('net_gain'),"
+13,code,71,,"            'reasons': gate_payload.get('reasons', []),"
+13,code,72,,        })
+13,code,73,,
+13,code,74,,full_df = pd.DataFrame(full_results)
+13,code,75,,full_csv = OUT_ROOT / 'v207b_full_gate_results.csv'
+13,code,76,,full_json = OUT_ROOT / 'v207b_full_gate_results.json'
+13,code,77,,"full_df.to_csv(full_csv, index=False)"
+13,code,78,,"full_json.write_text(json.dumps(full_results, indent=2, sort_keys=True), encoding='utf-8')"
+13,code,79,,
+13,code,80,progress_log,print('\nFULL GATE SUMMARY')
+13,code,81,,if len(full_df):
+13,code,82,progress_log,    print(full_df.to_string(index=False))
+13,code,83,,else:
+13,code,84,progress_log,    print('No full-gate candidates were evaluated.')
+13,code,85,progress_log,"print('full_csv =', full_csv)"
+13,code,86,progress_log,"print('full_json =', full_json)"
+13,code,87,progress_log,print('=== V207B FULL GATE END ===')
+14,code,1,,# CELL: final V207B summary. This cell does not submit.
+14,code,2,progress_log,print('=== V207B FINAL SUMMARY START ===')
+14,code,3,,summary = {
+14,code,4,,"    'version': VERSION,"
+14,code,5,,"    'status': 'v207b_external_adapter_triage_completed',"
+14,code,6,,"    'submit_disabled': True,"
+14,code,7,,"    'v207a_root': str(V207A_ROOT),"
+14,code,8,,"    'out_root': str(OUT_ROOT),"
+14,code,9,,"    'candidate_manifest': str(OUT_ROOT / 'v207b_discovered_candidates.json'),"
+14,code,10,,"    'structure_audit_csv': str(OUT_ROOT / 'v207b_adapter_structure_audit.csv'),"
+14,code,11,,"    'weak_screen_csv': str(OUT_ROOT / 'v207b_weak_screen_results.csv'),"
+14,code,12,,"    'full_gate_csv': str(OUT_ROOT / 'v207b_full_gate_results.csv'),"
+14,code,13,,"    'full_candidate_count': len(FULL_CANDIDATES) if 'FULL_CANDIDATES' in globals() else 0,"
+14,code,14,,    'next_human_action': (
+14,code,15,,        'Review any approved full gate candidate and explicitly approve Kaggle submission.'
+14,code,16,,        if 'full_results' in globals() and any(x.get('approved') for x in full_results)
+14,code,17,,        else 'No submission candidate approved. Add more external adapters or stop.'
+14,code,18,,"    ),"
+14,code,19,,}
+14,code,20,,summary_path = OUT_ROOT / 'V207B_FINAL_RUN_SUMMARY.json'
+14,code,21,,"summary_path.write_text(json.dumps(summary, indent=2, sort_keys=True), encoding='utf-8')"
+14,code,22,progress_log,"print(json.dumps(summary, indent=2, sort_keys=True))"
+14,code,23,progress_log,"print('summary_path =', summary_path)"
+14,code,24,progress_log,print('=== V207B FINAL SUMMARY END ===')

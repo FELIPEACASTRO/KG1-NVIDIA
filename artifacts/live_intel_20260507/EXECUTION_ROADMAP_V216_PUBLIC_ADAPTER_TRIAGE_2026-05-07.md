@@ -61,6 +61,8 @@ This avoids requiring a separate V207A notebook run before public-adapter triage
 
 The notebook no longer clones the repository at runtime. It creates `/content/kg1`, writes the audited metric scripts directly into that workspace, compiles them, and uses those embedded scripts for all evaluations. The vLLM runtime is pinned to `vllm==0.20.1` by default because that is the version already exercised on the H100 logs with the DeepGEMM safety hotfix.
 
+The notebook also reads Colab Secrets without printing their values. Supported secret names are `HF_TOKEN`, `HF_KEY`, `KAGGLE_USERNAME`, and `KAGGLE_KEY`. If Kaggle username/key are available, the notebook creates `/root/.kaggle/kaggle.json` with mode `0600`; otherwise it falls back to Drive token locations.
+
 ### Phase 1 - Download Public Adapters
 
 Use only public Kaggle model assets:
@@ -122,6 +124,7 @@ The remote branch includes this notebook and roadmap.
 ## Required Human Interaction
 
 1. Add Kaggle API token if the notebook cannot find it:
+   - Colab Secrets: `KAGGLE_USERNAME` and `KAGGLE_KEY`
    - `/content/drive/MyDrive/kaggle.json`
    - or `/content/drive/MyDrive/KG1_SECRETS/kaggle.json`
 2. Run the Colab notebook on H100/A100.

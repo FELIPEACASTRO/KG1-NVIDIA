@@ -1,0 +1,170 @@
+{
+  "generated_at_utc": "2026-05-07T15:51:16.571502+00:00",
+  "status": "approve",
+  "approved": true,
+  "reasons": [],
+  "thresholds": {
+    "family_regression_tolerance": 0.0,
+    "min_net_gain": -1e-06,
+    "min_boxed_rate": 0.0
+  },
+  "inputs": {
+    "solution_csv": "artifacts\\v207b_audit\\reconstructed_val_from_baseline_predictions.csv",
+    "questions_csv": "artifacts\\v207b_audit\\reconstructed_val_from_baseline_predictions.csv",
+    "baseline_predictions": "artifacts\\drive_exports\\v194_baseline_predictions.csv",
+    "candidate_predictions": "artifacts\\drive_exports\\v194_baseline_predictions.csv",
+    "baseline_adapter": "",
+    "candidate_adapter": "",
+    "seeds": [
+      42
+    ],
+    "limit": 0
+  },
+  "comparison": {
+    "baseline": {
+      "rows": 947,
+      "correct": 822,
+      "accuracy": 0.8680042238648363,
+      "boxed_format_rate": 0.9989440337909187,
+      "accuracy_min_seed": 0.8680042238648363,
+      "accuracy_mean_seed": 0.8680042238648363,
+      "accuracy_max_seed": 0.8680042238648363,
+      "by_seed": [
+        {
+          "seed": 0,
+          "rows": 947,
+          "correct": 822,
+          "accuracy": 0.8680042238648363,
+          "boxed_format_rate": 0.9989440337909187
+        }
+      ],
+      "by_family": {
+        "bit_manipulation": {
+          "rows": 160,
+          "correct": 135,
+          "accuracy": 0.84375,
+          "boxed_format_rate": 0.99375
+        },
+        "equation_transform": {
+          "rows": 155,
+          "correct": 55,
+          "accuracy": 0.3548387096774194,
+          "boxed_format_rate": 1.0
+        },
+        "gravity_constant": {
+          "rows": 159,
+          "correct": 159,
+          "accuracy": 1.0,
+          "boxed_format_rate": 1.0
+        },
+        "numeral_system": {
+          "rows": 157,
+          "correct": 157,
+          "accuracy": 1.0,
+          "boxed_format_rate": 1.0
+        },
+        "text_encryption": {
+          "rows": 157,
+          "correct": 157,
+          "accuracy": 1.0,
+          "boxed_format_rate": 1.0
+        },
+        "unit_conversion": {
+          "rows": 159,
+          "correct": 159,
+          "accuracy": 1.0,
+          "boxed_format_rate": 1.0
+        }
+      }
+    },
+    "candidate": {
+      "rows": 947,
+      "correct": 822,
+      "accuracy": 0.8680042238648363,
+      "boxed_format_rate": 0.9989440337909187,
+      "accuracy_min_seed": 0.8680042238648363,
+      "accuracy_mean_seed": 0.8680042238648363,
+      "accuracy_max_seed": 0.8680042238648363,
+      "by_seed": [
+        {
+          "seed": 0,
+          "rows": 947,
+          "correct": 822,
+          "accuracy": 0.8680042238648363,
+          "boxed_format_rate": 0.9989440337909187
+        }
+      ],
+      "by_family": {
+        "bit_manipulation": {
+          "rows": 160,
+          "correct": 135,
+          "accuracy": 0.84375,
+          "boxed_format_rate": 0.99375
+        },
+        "equation_transform": {
+          "rows": 155,
+          "correct": 55,
+          "accuracy": 0.3548387096774194,
+          "boxed_format_rate": 1.0
+        },
+        "gravity_constant": {
+          "rows": 159,
+          "correct": 159,
+          "accuracy": 1.0,
+          "boxed_format_rate": 1.0
+        },
+        "numeral_system": {
+          "rows": 157,
+          "correct": 157,
+          "accuracy": 1.0,
+          "boxed_format_rate": 1.0
+        },
+        "text_encryption": {
+          "rows": 157,
+          "correct": 157,
+          "accuracy": 1.0,
+          "boxed_format_rate": 1.0
+        },
+        "unit_conversion": {
+          "rows": 159,
+          "correct": 159,
+          "accuracy": 1.0,
+          "boxed_format_rate": 1.0
+        }
+      }
+    },
+    "net_gain": 0.0,
+    "family_deltas": {
+      "bit_manipulation": {
+        "baseline_accuracy": 0.84375,
+        "candidate_accuracy": 0.84375,
+        "delta": 0.0
+      },
+      "equation_transform": {
+        "baseline_accuracy": 0.3548387096774194,
+        "candidate_accuracy": 0.3548387096774194,
+        "delta": 0.0
+      },
+      "gravity_constant": {
+        "baseline_accuracy": 1.0,
+        "candidate_accuracy": 1.0,
+        "delta": 0.0
+      },
+      "numeral_system": {
+        "baseline_accuracy": 1.0,
+        "candidate_accuracy": 1.0,
+        "delta": 0.0
+      },
+      "text_encryption": {
+        "baseline_accuracy": 1.0,
+        "candidate_accuracy": 1.0,
+        "delta": 0.0
+      },
+      "unit_conversion": {
+        "baseline_accuracy": 1.0,
+        "candidate_accuracy": 1.0,
+        "delta": 0.0
+      }
+    }
+  }
+}

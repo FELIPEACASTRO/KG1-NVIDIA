@@ -176,6 +176,77 @@ print('=== V207B CONFIG END ===')
 """
         ),
         code(
+            """# CELL: bridge Colab Secrets into environment variables without printing secret values.
+print('=== V207B COLAB SECRETS BRIDGE START ===')
+import json
+import os
+import pathlib
+
+def read_colab_secret(name):
+    try:
+        from google.colab import userdata  # type: ignore
+    except Exception:
+        return None
+    try:
+        value = userdata.get(name)
+    except Exception:
+        return None
+    if value is None:
+        return None
+    value = str(value).strip()
+    return value or None
+
+def set_env_from_secret(env_name, secret_names):
+    if os.environ.get(env_name):
+        print(env_name, 'already_set=True')
+        return True
+    for secret_name in secret_names:
+        value = read_colab_secret(secret_name)
+        print('colab_secret_available', secret_name, '=', bool(value))
+        if value:
+            os.environ[env_name] = value
+            print(env_name, 'set_from_secret=', secret_name)
+            return True
+    print(env_name, 'set_from_secret=False')
+    return False
+
+set_env_from_secret('HF_TOKEN', ['HF_TOKEN', 'HF_KEY'])
+if os.environ.get('HF_TOKEN'):
+    os.environ.setdefault('HUGGINGFACE_HUB_TOKEN', os.environ['HF_TOKEN'])
+    os.environ.setdefault('HF_KEY', os.environ['HF_TOKEN'])
+    print('HF_TOKEN_ready=True')
+else:
+    print('HF_TOKEN_ready=False')
+
+set_env_from_secret('KAGGLE_USERNAME', ['KAGGLE_USERNAME'])
+set_env_from_secret('KAGGLE_KEY', ['KAGGLE_KEY'])
+kaggle_dir = pathlib.Path('/root/.kaggle')
+kaggle_json = kaggle_dir / 'kaggle.json'
+if os.environ.get('KAGGLE_USERNAME') and os.environ.get('KAGGLE_KEY'):
+    kaggle_dir.mkdir(parents=True, exist_ok=True)
+    if not kaggle_json.exists():
+        kaggle_json.write_text(
+            json.dumps(
+                {
+                    'username': os.environ['KAGGLE_USERNAME'],
+                    'key': os.environ['KAGGLE_KEY'],
+                }
+            ),
+            encoding='utf-8',
+        )
+        print('kaggle_json_created_from_colab_secrets=True')
+    else:
+        print('kaggle_json_already_exists=True')
+    kaggle_json.chmod(0o600)
+    os.environ.setdefault('KAGGLE_CONFIG_DIR', str(kaggle_dir))
+    print('KAGGLE_CONFIG_DIR =', os.environ.get('KAGGLE_CONFIG_DIR'))
+    print('KAGGLE_CREDENTIALS_READY=True')
+else:
+    print('KAGGLE_CREDENTIALS_READY=False')
+print('=== V207B COLAB SECRETS BRIDGE END ===')
+"""
+        ),
+        code(
             """# CELL: helper functions and command logging.
 print('=== V207B HELPERS START ===')
 import importlib
@@ -565,8 +636,37 @@ def configure_kaggle_credentials():
             print('copied_kaggle_token =', src, '->', token_path)
             return True
 
+    env_username = os.environ.get('KAGGLE_USERNAME', '').strip()
+    env_key = os.environ.get('KAGGLE_KEY', '').strip()
+    if env_username and env_key:
+        token_path.write_text(json.dumps({'username': env_username, 'key': env_key}), encoding='utf-8')
+        token_path.chmod(0o600)
+        os.environ.setdefault('KAGGLE_CONFIG_DIR', str(kaggle_dir))
+        print('created_kaggle_token_from_environment =', token_path)
+        return True
+
+    try:
+        from google.colab import userdata  # type: ignore
+    except Exception:
+        userdata = None
+    if userdata is not None:
+        try:
+            secret_username = str(userdata.get('KAGGLE_USERNAME') or '').strip()
+            secret_key = str(userdata.get('KAGGLE_KEY') or '').strip()
+        except Exception:
+            secret_username = ''
+            secret_key = ''
+        print('colab_secret_available KAGGLE_USERNAME =', bool(secret_username))
+        print('colab_secret_available KAGGLE_KEY =', bool(secret_key))
+        if secret_username and secret_key:
+            token_path.write_text(json.dumps({'username': secret_username, 'key': secret_key}), encoding='utf-8')
+            token_path.chmod(0o600)
+            os.environ.setdefault('KAGGLE_CONFIG_DIR', str(kaggle_dir))
+            print('created_kaggle_token_from_colab_secrets =', token_path)
+            return True
+
     print('Kaggle credentials were not found.')
-    print('Place kaggle.json at /content/drive/MyDrive/kaggle.json or /content/drive/MyDrive/KG1_SECRETS/kaggle.json, then rerun this cell.')
+    print('Place kaggle.json at /content/drive/MyDrive/kaggle.json or /content/drive/MyDrive/KG1_SECRETS/kaggle.json, or enable Colab Secrets KAGGLE_USERNAME and KAGGLE_KEY, then rerun this cell.')
     return False
 
 download_status = []
@@ -1138,9 +1238,12 @@ def main() -> int:
         "KG1 V207B External Adapter Triage Colab",
         "V207B DRIVE MOUNT START",
         "V207B CONFIG START",
+        "V207B COLAB SECRETS BRIDGE START",
         "V207B DEPENDENCY CHECK START",
         "V207B WORKSPACE SETUP START",
         "V207B SCRIPT BOOTSTRAP START",
+        "KAGGLE_CREDENTIALS_READY",
+        "HF_TOKEN_ready",
         "VLLM_SPEC =",
         "vllm==0.20.1",
         "KAGGLE_CMD_PREFIX",

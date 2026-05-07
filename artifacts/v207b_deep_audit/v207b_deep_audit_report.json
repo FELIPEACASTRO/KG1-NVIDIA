@@ -1,0 +1,142 @@
+{
+  "schema_version": "v207b_deep_audit_v1",
+  "generated_at_utc": "2026-05-07T15:55:21+00:00",
+  "status": "pass",
+  "notebook": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\notebooks\\KG1_V207B_EXTERNAL_ADAPTER_TRIAGE_COLAB.ipynb",
+  "builder": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\scripts\\build_v207b_external_adapter_triage_colab.py",
+  "notebook_sha256": "d03ac3690b9a0fbd075676f5e7efb97674df8cfbf48e72162a1dd1b0c6942f10",
+  "notebook_summary": {
+    "cell_count": 15,
+    "code_cell_count": 14
+  },
+  "embedded_sources": {
+    "files": {
+      "src/__init__.py": {
+        "embedded_bytes": 36,
+        "embedded_sha256": "8db6d8415de64db4dc07574ea78e4013328993f4d448c18faa2492871eaf57fe",
+        "local_exists": true,
+        "local_bytes": 36,
+        "local_sha256": "8db6d8415de64db4dc07574ea78e4013328993f4d448c18faa2492871eaf57fe",
+        "matches_local": true,
+        "py_compile_ok": true
+      },
+      "src/competition_utils.py": {
+        "embedded_bytes": 6850,
+        "embedded_sha256": "b6aa77804681ddf29478815627aad023d9a8e673208369a930d97f13b8e15a13",
+        "local_exists": true,
+        "local_bytes": 6850,
+        "local_sha256": "b6aa77804681ddf29478815627aad023d9a8e673208369a930d97f13b8e15a13",
+        "matches_local": true,
+        "py_compile_ok": true
+      },
+      "scripts/evaluate_lora_adapter.py": {
+        "embedded_bytes": 18091,
+        "embedded_sha256": "ba463c24fbcc195ba5e23723c71524c66ba46ba74b720364cae8a063ac755b9e",
+        "local_exists": true,
+        "local_bytes": 18091,
+        "local_sha256": "ba463c24fbcc195ba5e23723c71524c66ba46ba74b720364cae8a063ac755b9e",
+        "matches_local": true,
+        "py_compile_ok": true
+      },
+      "scripts/solve_rate_gate.py": {
+        "embedded_bytes": 15694,
+        "embedded_sha256": "08daf1ffe1107495894acb9d89ad14692646994f25a9b8c2066de3f9313402e9",
+        "local_exists": true,
+        "local_bytes": 15694,
+        "local_sha256": "08daf1ffe1107495894acb9d89ad14692646994f25a9b8c2066de3f9313402e9",
+        "matches_local": true,
+        "py_compile_ok": true
+      }
+    }
+  },
+  "scripts": {
+    "evaluate_lora_adapter.py": {
+      "exists": true,
+      "sha256": "ba463c24fbcc195ba5e23723c71524c66ba46ba74b720364cae8a063ac755b9e"
+    },
+    "solve_rate_gate.py": {
+      "exists": true,
+      "sha256": "08daf1ffe1107495894acb9d89ad14692646994f25a9b8c2066de3f9313402e9"
+    },
+    "competition_utils.py": {
+      "exists": true,
+      "sha256": "b6aa77804681ddf29478815627aad023d9a8e673208369a930d97f13b8e15a13"
+    }
+  },
+  "baseline_artifacts": {
+    "artifacts\\drive_exports\\v194_baseline_predictions.csv": {
+      "exists": true,
+      "bytes": 5320811,
+      "sha256": "c759ac82950164010240a17662f7139e75b4c8071e42a77971938907a5ded26c"
+    },
+    "artifacts\\drive_exports\\v194_baseline_per_task.csv": {
+      "exists": true,
+      "bytes": 348,
+      "sha256": "226a43138815154f075d7067596ffa48bffcf1e7d4d18cf4744aeeac1cf1c09f"
+    },
+    "artifacts\\drive_exports\\v194_baseline_eval_report.json": {
+      "exists": true,
+      "bytes": 1798,
+      "sha256": "e22454366a946ceea0df56625a3118bdbd0bde461f5bb47ed61e96a6c70bac64"
+    },
+    "baseline_metrics": {
+      "rows": 947,
+      "unique_ids": true,
+      "correct": 822,
+      "truncated": 1,
+      "report_rows": 947,
+      "report_correct": 822,
+      "report_truncated": 1,
+      "report_accuracy": 0.8680042238648363
+    },
+    "weak_baseline": {
+      "correct": 190,
+      "total": 315,
+      "truncated": 1
+    }
+  },
+  "candidate_manifests": {
+    "candidate_rows": 16,
+    "default_download_rows": 13,
+    "default_download_gib": 25.5313,
+    "total_expected_gib": 32.1902
+  },
+  "help_gates": {
+    "evaluate_help": {
+      "returncode": 0,
+      "output_sample": "usage: evaluate_lora_adapter.py [-h] --solution-csv SOLUTION_CSV\n                                [--questions-csv QUESTIONS_CSV]\n                                --adapter ADAPTER\n                                [--base-model-path BASE_MODEL_PATH]\n                                [--label LABEL] [--seed SEED] [--limit LIMIT]\n                                --output-dir OUTPUT_DIR\n\nOfficial-like vLLM evaluator for Nemotron LoRA adapters. This script is\nintentionally evaluation-only. It does not tra"
+    },
+    "solve_gate_help": {
+      "returncode": 0,
+      "output_sample": "usage: solve_rate_gate.py [-h] [--solution-csv SOLUTION_CSV]\n                          [--questions-csv QUESTIONS_CSV]\n                          [--baseline-predictions BASELINE_PREDICTIONS]\n                          [--candidate-predictions CANDIDATE_PREDICTIONS]\n                          [--baseline-adapter BASELINE_ADAPTER]\n                          [--candidate-adapter CANDIDATE_ADAPTER]\n                          [--base-model-path BASE_MODEL_PATH] [--seeds SEEDS]\n                          ["
+    },
+    "builder_compile": {
+      "returncode": 0,
+      "output_sample": ""
+    },
+    "evaluate_compile": {
+      "returncode": 0,
+      "output_sample": ""
+    },
+    "solve_gate_compile": {
+      "returncode": 0,
+      "output_sample": ""
+    },
+    "competition_utils_compile": {
+      "returncode": 0,
+      "output_sample": ""
+    }
+  },
+  "remote_raw": {},
+  "kaggle_refs": {
+    "checked": 16,
+    "failures": []
+  },
+  "findings": [],
+  "outputs": {
+    "cell_audit_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v207b_deep_audit\\v207b_cell_audit.csv",
+    "line_audit_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v207b_deep_audit\\v207b_line_audit.csv",
+    "json_report": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v207b_deep_audit\\v207b_deep_audit_report.json",
+    "markdown_report": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v207b_deep_audit\\V207B_DEEP_NOTEBOOK_AUDIT.md"
+  }
+}

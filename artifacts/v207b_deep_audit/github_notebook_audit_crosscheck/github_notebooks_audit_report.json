@@ -1,0 +1,655 @@
+{
+  "schema_version": "github_notebook_audit_v1",
+  "generated_at_utc": "2026-05-07T15:52:17+00:00",
+  "source_directory": "https://api.github.com/repos/FELIPEACASTRO/KG1-NVIDIA/contents/competent-shamir/notebooks?ref=master",
+  "notebook_count": 14,
+  "decision_counts": {
+    "archive_reference_only": 1,
+    "manual_review_only": 3,
+    "reference_only": 2,
+    "run_as_triage_prefilter_no_submit": 1,
+    "usable_with_solve_rate_gate_added": 7
+  },
+  "risk_counts": {
+    "requires_google_drive_artifacts": 14,
+    "promotion_gate_loss_only_not_score_facing": 14,
+    "legacy_notebook_pre_v194_context": 4,
+    "references_v198_known_public_regression": 4,
+    "contains_kaggle_submit_code_requires_manual_review": 3,
+    "references_svd_or_v191_known_regression_mode": 2,
+    "mentions_v194_without_full_sha_guard": 2,
+    "v204_should_be_prefilter_only_until_solve_rate_gate_runs": 1
+  },
+  "notebooks": [
+    {
+      "name": "KG1_V103_PRODUCTION_READY.ipynb",
+      "path": "competent-shamir/notebooks/KG1_V103_PRODUCTION_READY.ipynb",
+      "html_url": "https://github.com/FELIPEACASTRO/KG1-NVIDIA/blob/master/competent-shamir/notebooks/KG1_V103_PRODUCTION_READY.ipynb",
+      "download_url": "https://raw.githubusercontent.com/FELIPEACASTRO/KG1-NVIDIA/master/competent-shamir/notebooks/KG1_V103_PRODUCTION_READY.ipynb",
+      "github_blob_sha": "4363451a010dcd04ef522c489e13f5872eb565dc",
+      "sha256": "52e0f79ade8cb16de89fb1cdb9beb245224acabe13ea4ddc8ae4d7e10c82359f",
+      "bytes": 122671,
+      "nbformat": 4,
+      "cell_counts": {
+        "markdown": 20,
+        "code": 18
+      },
+      "code_lines": 1899,
+      "markdown_lines": 180,
+      "flags": {
+        "mentions_v194": false,
+        "has_v194_zip_sha": false,
+        "has_v194_adapter_sha": false,
+        "has_no_submit_claim": false,
+        "has_kaggle_submit_code": true,
+        "has_files_upload": false,
+        "has_drive_dependency": true,
+        "has_hf_dependency": true,
+        "has_solve_rate_gate": false,
+        "has_loss_gate": true,
+        "has_public_adapter_triage": false,
+        "has_raw_traces_probe": false,
+        "has_human_action_gate": false,
+        "has_auto_submit_language": true
+      },
+      "decision": "manual_review_only",
+      "value": [
+        "drive_artifact_workflow",
+        "uses_huggingface_assets"
+      ],
+      "risks": [
+        "contains_kaggle_submit_code_requires_manual_review",
+        "requires_google_drive_artifacts",
+        "promotion_gate_loss_only_not_score_facing",
+        "legacy_notebook_pre_v194_context"
+      ],
+      "local_raw_copy": "artifacts\\v207b_deep_audit\\github_notebook_audit_crosscheck\\notebooks_raw\\KG1_V103_PRODUCTION_READY.ipynb"
+    },
+    {
+      "name": "KG1_V105_PRODUCTION_FINAL.ipynb",
+      "path": "competent-shamir/notebooks/KG1_V105_PRODUCTION_FINAL.ipynb",
+      "html_url": "https://github.com/FELIPEACASTRO/KG1-NVIDIA/blob/master/competent-shamir/notebooks/KG1_V105_PRODUCTION_FINAL.ipynb",
+      "download_url": "https://raw.githubusercontent.com/FELIPEACASTRO/KG1-NVIDIA/master/competent-shamir/notebooks/KG1_V105_PRODUCTION_FINAL.ipynb",
+      "github_blob_sha": "226e4134fefdc5044815afa39595f435e5c56b4f",
+      "sha256": "eaa4425115c7071d76678505a1a805e01b188ad6d03f925a93619508ac902ed8",
+      "bytes": 499671,
+      "nbformat": 4,
+      "cell_counts": {
+        "markdown": 22,
+        "code": 20
+      },
+      "code_lines": 2176,
+      "markdown_lines": 212,
+      "flags": {
+        "mentions_v194": false,
+        "has_v194_zip_sha": false,
+        "has_v194_adapter_sha": false,
+        "has_no_submit_claim": false,
+        "has_kaggle_submit_code": true,
+        "has_files_upload": false,
+        "has_drive_dependency": true,
+        "has_hf_dependency": true,
+        "has_solve_rate_gate": false,
+        "has_loss_gate": true,
+        "has_public_adapter_triage": false,
+        "has_raw_traces_probe": false,
+        "has_human_action_gate": false,
+        "has_auto_submit_language": true
+      },
+      "decision": "manual_review_only",
+      "value": [
+        "drive_artifact_workflow",
+        "uses_huggingface_assets"
+      ],
+      "risks": [
+        "contains_kaggle_submit_code_requires_manual_review",
+        "requires_google_drive_artifacts",
+        "promotion_gate_loss_only_not_score_facing",
+        "legacy_notebook_pre_v194_context"
+      ],
+      "local_raw_copy": "artifacts\\v207b_deep_audit\\github_notebook_audit_crosscheck\\notebooks_raw\\KG1_V105_PRODUCTION_FINAL.ipynb"
+    },
+    {
+      "name": "KG1_v18_PERFECT_COLAB.ipynb",
+      "path": "competent-shamir/notebooks/KG1_v18_PERFECT_COLAB.ipynb",
+      "html_url": "https://github.com/FELIPEACASTRO/KG1-NVIDIA/blob/master/competent-shamir/notebooks/KG1_v18_PERFECT_COLAB.ipynb",
+      "download_url": "https://raw.githubusercontent.com/FELIPEACASTRO/KG1-NVIDIA/master/competent-shamir/notebooks/KG1_v18_PERFECT_COLAB.ipynb",
+      "github_blob_sha": "4c4b49901e5701b58a0cc297dab7ddf19706c004",
+      "sha256": "9e8aa327bf8262f9f8e2e1568ab1580366b0927b367bffd2ba971ac65b5f8196",
+      "bytes": 231282,
+      "nbformat": 4,
+      "cell_counts": {
+        "markdown": 15,
+        "code": 20
+      },
+      "code_lines": 1015,
+      "markdown_lines": 147,
+      "flags": {
+        "mentions_v194": false,
+        "has_v194_zip_sha": false,
+        "has_v194_adapter_sha": false,
+        "has_no_submit_claim": false,
+        "has_kaggle_submit_code": false,
+        "has_files_upload": false,
+        "has_drive_dependency": true,
+        "has_hf_dependency": true,
+        "has_solve_rate_gate": false,
+        "has_loss_gate": true,
+        "has_public_adapter_triage": false,
+        "has_raw_traces_probe": false,
+        "has_human_action_gate": false,
+        "has_auto_submit_language": false
+      },
+      "decision": "reference_only",
+      "value": [
+        "drive_artifact_workflow",
+        "uses_huggingface_assets"
+      ],
+      "risks": [
+        "requires_google_drive_artifacts",
+        "promotion_gate_loss_only_not_score_facing"
+      ],
+      "local_raw_copy": "artifacts\\v207b_deep_audit\\github_notebook_audit_crosscheck\\notebooks_raw\\KG1_v18_PERFECT_COLAB.ipynb"
+    },
+    {
+      "name": "KG1_V199B_H100_BASELINE_GATED_COLAB_PRO.ipynb",
+      "path": "competent-shamir/notebooks/KG1_V199B_H100_BASELINE_GATED_COLAB_PRO.ipynb",
+      "html_url": "https://github.com/FELIPEACASTRO/KG1-NVIDIA/blob/master/competent-shamir/notebooks/KG1_V199B_H100_BASELINE_GATED_COLAB_PRO.ipynb",
+      "download_url": "https://raw.githubusercontent.com/FELIPEACASTRO/KG1-NVIDIA/master/competent-shamir/notebooks/KG1_V199B_H100_BASELINE_GATED_COLAB_PRO.ipynb",
+      "github_blob_sha": "7f40d4f5ed2f3b33b9cb6c16618af9ab4e8cf6b2",
+      "sha256": "d3d5df05e94a39c8bdacc84433d7ca89ffac59b4bf40493e71359e181ca330e4",
+      "bytes": 42598,
+      "nbformat": 4,
+      "cell_counts": {
+        "markdown": 3,
+        "code": 8
+      },
+      "code_lines": 589,
+      "markdown_lines": 10,
+      "flags": {
+        "mentions_v194": true,
+        "has_v194_zip_sha": true,
+        "has_v194_adapter_sha": true,
+        "has_no_submit_claim": false,
+        "has_kaggle_submit_code": false,
+        "has_files_upload": false,
+        "has_drive_dependency": true,
+        "has_hf_dependency": true,
+        "has_solve_rate_gate": false,
+        "has_loss_gate": true,
+        "has_public_adapter_triage": false,
+        "has_raw_traces_probe": false,
+        "has_human_action_gate": false,
+        "has_auto_submit_language": false
+      },
+      "decision": "usable_with_solve_rate_gate_added",
+      "value": [
+        "enforces_exact_v194_lineage",
+        "drive_artifact_workflow",
+        "uses_huggingface_assets",
+        "latest_equal_score_candidate_context"
+      ],
+      "risks": [
+        "requires_google_drive_artifacts",
+        "promotion_gate_loss_only_not_score_facing",
+        "references_v198_known_public_regression",
+        "references_svd_or_v191_known_regression_mode"
+      ],
+      "local_raw_copy": "artifacts\\v207b_deep_audit\\github_notebook_audit_crosscheck\\notebooks_raw\\KG1_V199B_H100_BASELINE_GATED_COLAB_PRO.ipynb"
+    },
+    {
+      "name": "KG1_V201A_H100_SOLVER_VERIFIED_MICRO_COLAB_PRO.ipynb",
+      "path": "competent-shamir/notebooks/KG1_V201A_H100_SOLVER_VERIFIED_MICRO_COLAB_PRO.ipynb",
+      "html_url": "https://github.com/FELIPEACASTRO/KG1-NVIDIA/blob/master/competent-shamir/notebooks/KG1_V201A_H100_SOLVER_VERIFIED_MICRO_COLAB_PRO.ipynb",
+      "download_url": "https://raw.githubusercontent.com/FELIPEACASTRO/KG1-NVIDIA/master/competent-shamir/notebooks/KG1_V201A_H100_SOLVER_VERIFIED_MICRO_COLAB_PRO.ipynb",
+      "github_blob_sha": "a217b55c1a98fac90283701ecb8489353aec5574",
+      "sha256": "a29b6cace350f4a457fca06b31711b7b23fd8e741fcf01e325099e332a370f7d",
+      "bytes": 60078,
+      "nbformat": 4,
+      "cell_counts": {
+        "markdown": 2,
+        "code": 7
+      },
+      "code_lines": 554,
+      "markdown_lines": 6,
+      "flags": {
+        "mentions_v194": true,
+        "has_v194_zip_sha": true,
+        "has_v194_adapter_sha": true,
+        "has_no_submit_claim": true,
+        "has_kaggle_submit_code": false,
+        "has_files_upload": false,
+        "has_drive_dependency": true,
+        "has_hf_dependency": true,
+        "has_solve_rate_gate": false,
+        "has_loss_gate": true,
+        "has_public_adapter_triage": false,
+        "has_raw_traces_probe": false,
+        "has_human_action_gate": false,
+        "has_auto_submit_language": false
+      },
+      "decision": "usable_with_solve_rate_gate_added",
+      "value": [
+        "enforces_exact_v194_lineage",
+        "no_submit_notebook",
+        "drive_artifact_workflow",
+        "uses_huggingface_assets"
+      ],
+      "risks": [
+        "requires_google_drive_artifacts",
+        "promotion_gate_loss_only_not_score_facing",
+        "references_v198_known_public_regression",
+        "references_svd_or_v191_known_regression_mode"
+      ],
+      "local_raw_copy": "artifacts\\v207b_deep_audit\\github_notebook_audit_crosscheck\\notebooks_raw\\KG1_V201A_H100_SOLVER_VERIFIED_MICRO_COLAB_PRO.ipynb"
+    },
+    {
+      "name": "KG1_V202_H100_A100_LONG_CONTEXT_EVAL_GATE_COLAB_PRO.ipynb",
+      "path": "competent-shamir/notebooks/KG1_V202_H100_A100_LONG_CONTEXT_EVAL_GATE_COLAB_PRO.ipynb",
+      "html_url": "https://github.com/FELIPEACASTRO/KG1-NVIDIA/blob/master/competent-shamir/notebooks/KG1_V202_H100_A100_LONG_CONTEXT_EVAL_GATE_COLAB_PRO.ipynb",
+      "download_url": "https://raw.githubusercontent.com/FELIPEACASTRO/KG1-NVIDIA/master/competent-shamir/notebooks/KG1_V202_H100_A100_LONG_CONTEXT_EVAL_GATE_COLAB_PRO.ipynb",
+      "github_blob_sha": "b593e8216b0872642cce3ec1f67a84bbb0fcf343",
+      "sha256": "ee98038fe23cb285475ef83b4796bbc14743cf7ccc7b7ecb72905d3ca6e710fc",
+      "bytes": 42920,
+      "nbformat": 4,
+      "cell_counts": {
+        "markdown": 2,
+        "code": 9
+      },
+      "code_lines": 350,
+      "markdown_lines": 16,
+      "flags": {
+        "mentions_v194": true,
+        "has_v194_zip_sha": true,
+        "has_v194_adapter_sha": true,
+        "has_no_submit_claim": true,
+        "has_kaggle_submit_code": false,
+        "has_files_upload": false,
+        "has_drive_dependency": true,
+        "has_hf_dependency": false,
+        "has_solve_rate_gate": false,
+        "has_loss_gate": true,
+        "has_public_adapter_triage": true,
+        "has_raw_traces_probe": false,
+        "has_human_action_gate": false,
+        "has_auto_submit_language": false
+      },
+      "decision": "usable_with_solve_rate_gate_added",
+      "value": [
+        "enforces_exact_v194_lineage",
+        "no_submit_notebook",
+        "drive_artifact_workflow"
+      ],
+      "risks": [
+        "requires_google_drive_artifacts",
+        "promotion_gate_loss_only_not_score_facing"
+      ],
+      "local_raw_copy": "artifacts\\v207b_deep_audit\\github_notebook_audit_crosscheck\\notebooks_raw\\KG1_V202_H100_A100_LONG_CONTEXT_EVAL_GATE_COLAB_PRO.ipynb"
+    },
+    {
+      "name": "KG1_V202B_H100_A100_LONG_CONTEXT_PRETOKENIZED_COLAB_PRO.ipynb",
+      "path": "competent-shamir/notebooks/KG1_V202B_H100_A100_LONG_CONTEXT_PRETOKENIZED_COLAB_PRO.ipynb",
+      "html_url": "https://github.com/FELIPEACASTRO/KG1-NVIDIA/blob/master/competent-shamir/notebooks/KG1_V202B_H100_A100_LONG_CONTEXT_PRETOKENIZED_COLAB_PRO.ipynb",
+      "download_url": "https://raw.githubusercontent.com/FELIPEACASTRO/KG1-NVIDIA/master/competent-shamir/notebooks/KG1_V202B_H100_A100_LONG_CONTEXT_PRETOKENIZED_COLAB_PRO.ipynb",
+      "github_blob_sha": "2dd68d4d973d10f5f34c5ffbb6f15b17cc75d265",
+      "sha256": "288d53d9dbd39fd28bfe35559b56d0e6b1b8c98702fd372152bd49ab026b5d57",
+      "bytes": 62200,
+      "nbformat": 4,
+      "cell_counts": {
+        "markdown": 2,
+        "code": 13
+      },
+      "code_lines": 562,
+      "markdown_lines": 17,
+      "flags": {
+        "mentions_v194": true,
+        "has_v194_zip_sha": true,
+        "has_v194_adapter_sha": true,
+        "has_no_submit_claim": true,
+        "has_kaggle_submit_code": false,
+        "has_files_upload": false,
+        "has_drive_dependency": true,
+        "has_hf_dependency": true,
+        "has_solve_rate_gate": false,
+        "has_loss_gate": true,
+        "has_public_adapter_triage": false,
+        "has_raw_traces_probe": false,
+        "has_human_action_gate": false,
+        "has_auto_submit_language": false
+      },
+      "decision": "usable_with_solve_rate_gate_added",
+      "value": [
+        "enforces_exact_v194_lineage",
+        "no_submit_notebook",
+        "drive_artifact_workflow",
+        "uses_huggingface_assets"
+      ],
+      "risks": [
+        "requires_google_drive_artifacts",
+        "promotion_gate_loss_only_not_score_facing"
+      ],
+      "local_raw_copy": "artifacts\\v207b_deep_audit\\github_notebook_audit_crosscheck\\notebooks_raw\\KG1_V202B_H100_A100_LONG_CONTEXT_PRETOKENIZED_COLAB_PRO.ipynb"
+    },
+    {
+      "name": "KG1_V202C_H100_A100_LONG_CONTEXT_CANDIDATE_SWEEP_COLAB_PRO.ipynb",
+      "path": "competent-shamir/notebooks/KG1_V202C_H100_A100_LONG_CONTEXT_CANDIDATE_SWEEP_COLAB_PRO.ipynb",
+      "html_url": "https://github.com/FELIPEACASTRO/KG1-NVIDIA/blob/master/competent-shamir/notebooks/KG1_V202C_H100_A100_LONG_CONTEXT_CANDIDATE_SWEEP_COLAB_PRO.ipynb",
+      "download_url": "https://raw.githubusercontent.com/FELIPEACASTRO/KG1-NVIDIA/master/competent-shamir/notebooks/KG1_V202C_H100_A100_LONG_CONTEXT_CANDIDATE_SWEEP_COLAB_PRO.ipynb",
+      "github_blob_sha": "578fe87b2dae735c7513a76a32d98f3a01d3ed5b",
+      "sha256": "1dce1b5721dd72dcd62167f42e23d686a5938621ab52ecd0230151d4ee94f60d",
+      "bytes": 106651,
+      "nbformat": 4,
+      "cell_counts": {
+        "markdown": 1,
+        "code": 12
+      },
+      "code_lines": 607,
+      "markdown_lines": 8,
+      "flags": {
+        "mentions_v194": true,
+        "has_v194_zip_sha": true,
+        "has_v194_adapter_sha": true,
+        "has_no_submit_claim": true,
+        "has_kaggle_submit_code": false,
+        "has_files_upload": false,
+        "has_drive_dependency": true,
+        "has_hf_dependency": true,
+        "has_solve_rate_gate": false,
+        "has_loss_gate": true,
+        "has_public_adapter_triage": false,
+        "has_raw_traces_probe": false,
+        "has_human_action_gate": false,
+        "has_auto_submit_language": false
+      },
+      "decision": "usable_with_solve_rate_gate_added",
+      "value": [
+        "enforces_exact_v194_lineage",
+        "no_submit_notebook",
+        "drive_artifact_workflow",
+        "uses_huggingface_assets"
+      ],
+      "risks": [
+        "requires_google_drive_artifacts",
+        "promotion_gate_loss_only_not_score_facing"
+      ],
+      "local_raw_copy": "artifacts\\v207b_deep_audit\\github_notebook_audit_crosscheck\\notebooks_raw\\KG1_V202C_H100_A100_LONG_CONTEXT_CANDIDATE_SWEEP_COLAB_PRO.ipynb"
+    },
+    {
+      "name": "KG1_V202D_H100_A100_STRICT_PROMOTION_GATE_COLAB_PRO.ipynb",
+      "path": "competent-shamir/notebooks/KG1_V202D_H100_A100_STRICT_PROMOTION_GATE_COLAB_PRO.ipynb",
+      "html_url": "https://github.com/FELIPEACASTRO/KG1-NVIDIA/blob/master/competent-shamir/notebooks/KG1_V202D_H100_A100_STRICT_PROMOTION_GATE_COLAB_PRO.ipynb",
+      "download_url": "https://raw.githubusercontent.com/FELIPEACASTRO/KG1-NVIDIA/master/competent-shamir/notebooks/KG1_V202D_H100_A100_STRICT_PROMOTION_GATE_COLAB_PRO.ipynb",
+      "github_blob_sha": "b149237b2247a2f574a5a607e402e5693fb16257",
+      "sha256": "0c5444efaa65715c8761306874f64a13ff49f55640bd6059da9e6ae7e735ed43",
+      "bytes": 343471,
+      "nbformat": 4,
+      "cell_counts": {
+        "markdown": 1,
+        "code": 22
+      },
+      "code_lines": 1656,
+      "markdown_lines": 10,
+      "flags": {
+        "mentions_v194": true,
+        "has_v194_zip_sha": true,
+        "has_v194_adapter_sha": true,
+        "has_no_submit_claim": true,
+        "has_kaggle_submit_code": false,
+        "has_files_upload": false,
+        "has_drive_dependency": true,
+        "has_hf_dependency": true,
+        "has_solve_rate_gate": false,
+        "has_loss_gate": true,
+        "has_public_adapter_triage": false,
+        "has_raw_traces_probe": false,
+        "has_human_action_gate": false,
+        "has_auto_submit_language": false
+      },
+      "decision": "usable_with_solve_rate_gate_added",
+      "value": [
+        "enforces_exact_v194_lineage",
+        "no_submit_notebook",
+        "drive_artifact_workflow",
+        "uses_huggingface_assets",
+        "strict_promotion_gate_notebook"
+      ],
+      "risks": [
+        "requires_google_drive_artifacts",
+        "promotion_gate_loss_only_not_score_facing",
+        "references_v198_known_public_regression"
+      ],
+      "local_raw_copy": "artifacts\\v207b_deep_audit\\github_notebook_audit_crosscheck\\notebooks_raw\\KG1_V202D_H100_A100_STRICT_PROMOTION_GATE_COLAB_PRO.ipynb"
+    },
+    {
+      "name": "KG1_V203_PUBLIC_INTEL_AND_ADAPTER_TRIAGE_COLAB.ipynb",
+      "path": "competent-shamir/notebooks/KG1_V203_PUBLIC_INTEL_AND_ADAPTER_TRIAGE_COLAB.ipynb",
+      "html_url": "https://github.com/FELIPEACASTRO/KG1-NVIDIA/blob/master/competent-shamir/notebooks/KG1_V203_PUBLIC_INTEL_AND_ADAPTER_TRIAGE_COLAB.ipynb",
+      "download_url": "https://raw.githubusercontent.com/FELIPEACASTRO/KG1-NVIDIA/master/competent-shamir/notebooks/KG1_V203_PUBLIC_INTEL_AND_ADAPTER_TRIAGE_COLAB.ipynb",
+      "github_blob_sha": "1d0453771b47eebfb9e108343f04cc6d21781a9c",
+      "sha256": "8be3bab2f56c560c78559e9a62ab7df85cf3ee98012dc0c05a1039e72c316a15",
+      "bytes": 51163,
+      "nbformat": 4,
+      "cell_counts": {
+        "markdown": 6,
+        "code": 11
+      },
+      "code_lines": 461,
+      "markdown_lines": 28,
+      "flags": {
+        "mentions_v194": true,
+        "has_v194_zip_sha": false,
+        "has_v194_adapter_sha": true,
+        "has_no_submit_claim": true,
+        "has_kaggle_submit_code": false,
+        "has_files_upload": false,
+        "has_drive_dependency": true,
+        "has_hf_dependency": true,
+        "has_solve_rate_gate": false,
+        "has_loss_gate": true,
+        "has_public_adapter_triage": true,
+        "has_raw_traces_probe": true,
+        "has_human_action_gate": false,
+        "has_auto_submit_language": false
+      },
+      "decision": "reference_only",
+      "value": [
+        "no_submit_notebook",
+        "drive_artifact_workflow",
+        "uses_huggingface_assets"
+      ],
+      "risks": [
+        "mentions_v194_without_full_sha_guard",
+        "requires_google_drive_artifacts",
+        "promotion_gate_loss_only_not_score_facing"
+      ],
+      "local_raw_copy": "artifacts\\v207b_deep_audit\\github_notebook_audit_crosscheck\\notebooks_raw\\KG1_V203_PUBLIC_INTEL_AND_ADAPTER_TRIAGE_COLAB.ipynb"
+    },
+    {
+      "name": "KG1_V204_AUTO_PUBLIC_ADAPTER_TRIAGE_COLAB.ipynb",
+      "path": "competent-shamir/notebooks/KG1_V204_AUTO_PUBLIC_ADAPTER_TRIAGE_COLAB.ipynb",
+      "html_url": "https://github.com/FELIPEACASTRO/KG1-NVIDIA/blob/master/competent-shamir/notebooks/KG1_V204_AUTO_PUBLIC_ADAPTER_TRIAGE_COLAB.ipynb",
+      "download_url": "https://raw.githubusercontent.com/FELIPEACASTRO/KG1-NVIDIA/master/competent-shamir/notebooks/KG1_V204_AUTO_PUBLIC_ADAPTER_TRIAGE_COLAB.ipynb",
+      "github_blob_sha": "c4737b5bda45a4f745c6da769694f72df098c81d",
+      "sha256": "a96f15709f8b8f0fcfdf020fde71bddc602452c7a445c16607eb5c0d2f2a197b",
+      "bytes": 25185,
+      "nbformat": 4,
+      "cell_counts": {
+        "markdown": 1,
+        "code": 7
+      },
+      "code_lines": 388,
+      "markdown_lines": 13,
+      "flags": {
+        "mentions_v194": true,
+        "has_v194_zip_sha": false,
+        "has_v194_adapter_sha": true,
+        "has_no_submit_claim": true,
+        "has_kaggle_submit_code": false,
+        "has_files_upload": false,
+        "has_drive_dependency": true,
+        "has_hf_dependency": true,
+        "has_solve_rate_gate": false,
+        "has_loss_gate": true,
+        "has_public_adapter_triage": true,
+        "has_raw_traces_probe": true,
+        "has_human_action_gate": true,
+        "has_auto_submit_language": false
+      },
+      "decision": "run_as_triage_prefilter_no_submit",
+      "value": [
+        "no_submit_notebook",
+        "drive_artifact_workflow",
+        "uses_huggingface_assets",
+        "current_public_adapter_triage_entrypoint"
+      ],
+      "risks": [
+        "mentions_v194_without_full_sha_guard",
+        "requires_google_drive_artifacts",
+        "promotion_gate_loss_only_not_score_facing",
+        "v204_should_be_prefilter_only_until_solve_rate_gate_runs"
+      ],
+      "local_raw_copy": "artifacts\\v207b_deep_audit\\github_notebook_audit_crosscheck\\notebooks_raw\\KG1_V204_AUTO_PUBLIC_ADAPTER_TRIAGE_COLAB.ipynb"
+    },
+    {
+      "name": "KG1_V206B_H100_ANSWER_ONLY_LOSS_GATED_COLAB.ipynb",
+      "path": "competent-shamir/notebooks/KG1_V206B_H100_ANSWER_ONLY_LOSS_GATED_COLAB.ipynb",
+      "html_url": "https://github.com/FELIPEACASTRO/KG1-NVIDIA/blob/master/competent-shamir/notebooks/KG1_V206B_H100_ANSWER_ONLY_LOSS_GATED_COLAB.ipynb",
+      "download_url": "https://raw.githubusercontent.com/FELIPEACASTRO/KG1-NVIDIA/master/competent-shamir/notebooks/KG1_V206B_H100_ANSWER_ONLY_LOSS_GATED_COLAB.ipynb",
+      "github_blob_sha": "8859f0cb7a03c0d359916d3884a3cb1f37efdcfc",
+      "sha256": "66ffe58c05514f6230280d9bbec4b4a30f3f27709fdb873e7d9880aa2850774d",
+      "bytes": 79487,
+      "nbformat": 4,
+      "cell_counts": {
+        "markdown": 1,
+        "code": 13
+      },
+      "code_lines": 506,
+      "markdown_lines": 16,
+      "flags": {
+        "mentions_v194": true,
+        "has_v194_zip_sha": true,
+        "has_v194_adapter_sha": true,
+        "has_no_submit_claim": false,
+        "has_kaggle_submit_code": false,
+        "has_files_upload": false,
+        "has_drive_dependency": true,
+        "has_hf_dependency": true,
+        "has_solve_rate_gate": false,
+        "has_loss_gate": true,
+        "has_public_adapter_triage": false,
+        "has_raw_traces_probe": false,
+        "has_human_action_gate": false,
+        "has_auto_submit_language": false
+      },
+      "decision": "usable_with_solve_rate_gate_added",
+      "value": [
+        "enforces_exact_v194_lineage",
+        "drive_artifact_workflow",
+        "uses_huggingface_assets"
+      ],
+      "risks": [
+        "requires_google_drive_artifacts",
+        "promotion_gate_loss_only_not_score_facing",
+        "references_v198_known_public_regression"
+      ],
+      "local_raw_copy": "artifacts\\v207b_deep_audit\\github_notebook_audit_crosscheck\\notebooks_raw\\KG1_V206B_H100_ANSWER_ONLY_LOSS_GATED_COLAB.ipynb"
+    },
+    {
+      "name": "KG1_V77_FIXED.ipynb",
+      "path": "competent-shamir/notebooks/KG1_V77_FIXED.ipynb",
+      "html_url": "https://github.com/FELIPEACASTRO/KG1-NVIDIA/blob/master/competent-shamir/notebooks/KG1_V77_FIXED.ipynb",
+      "download_url": "https://raw.githubusercontent.com/FELIPEACASTRO/KG1-NVIDIA/master/competent-shamir/notebooks/KG1_V77_FIXED.ipynb",
+      "github_blob_sha": "0d50b5a1750a035d7674300bb3f791742b1eddce",
+      "sha256": "45fce4906d0cfc2860ca0b53d8f2b8a41f6cb863d4f5d61aea60f646a798dea3",
+      "bytes": 71915,
+      "nbformat": 4,
+      "cell_counts": {
+        "markdown": 1,
+        "code": 6
+      },
+      "code_lines": 753,
+      "markdown_lines": 54,
+      "flags": {
+        "mentions_v194": false,
+        "has_v194_zip_sha": false,
+        "has_v194_adapter_sha": false,
+        "has_no_submit_claim": false,
+        "has_kaggle_submit_code": false,
+        "has_files_upload": false,
+        "has_drive_dependency": true,
+        "has_hf_dependency": true,
+        "has_solve_rate_gate": false,
+        "has_loss_gate": true,
+        "has_public_adapter_triage": false,
+        "has_raw_traces_probe": false,
+        "has_human_action_gate": false,
+        "has_auto_submit_language": false
+      },
+      "decision": "archive_reference_only",
+      "value": [
+        "drive_artifact_workflow",
+        "uses_huggingface_assets"
+      ],
+      "risks": [
+        "requires_google_drive_artifacts",
+        "promotion_gate_loss_only_not_score_facing",
+        "legacy_notebook_pre_v194_context"
+      ],
+      "local_raw_copy": "artifacts\\v207b_deep_audit\\github_notebook_audit_crosscheck\\notebooks_raw\\KG1_V77_FIXED.ipynb"
+    },
+    {
+      "name": "KG1_V80_MEGA_V3.ipynb",
+      "path": "competent-shamir/notebooks/KG1_V80_MEGA_V3.ipynb",
+      "html_url": "https://github.com/FELIPEACASTRO/KG1-NVIDIA/blob/master/competent-shamir/notebooks/KG1_V80_MEGA_V3.ipynb",
+      "download_url": "https://raw.githubusercontent.com/FELIPEACASTRO/KG1-NVIDIA/master/competent-shamir/notebooks/KG1_V80_MEGA_V3.ipynb",
+      "github_blob_sha": "30627834f580d9e1d390c45a7c094999a8370015",
+      "sha256": "90555b645d6950eb46a429c6da3118a59651b2bfda849ab3302a9bee3da733d6",
+      "bytes": 185869,
+      "nbformat": 4,
+      "cell_counts": {
+        "markdown": 1,
+        "code": 17
+      },
+      "code_lines": 1722,
+      "markdown_lines": 69,
+      "flags": {
+        "mentions_v194": false,
+        "has_v194_zip_sha": false,
+        "has_v194_adapter_sha": false,
+        "has_no_submit_claim": true,
+        "has_kaggle_submit_code": true,
+        "has_files_upload": false,
+        "has_drive_dependency": true,
+        "has_hf_dependency": true,
+        "has_solve_rate_gate": false,
+        "has_loss_gate": true,
+        "has_public_adapter_triage": false,
+        "has_raw_traces_probe": false,
+        "has_human_action_gate": false,
+        "has_auto_submit_language": false
+      },
+      "decision": "manual_review_only",
+      "value": [
+        "drive_artifact_workflow",
+        "uses_huggingface_assets"
+      ],
+      "risks": [
+        "contains_kaggle_submit_code_requires_manual_review",
+        "requires_google_drive_artifacts",
+        "promotion_gate_loss_only_not_score_facing",
+        "legacy_notebook_pre_v194_context"
+      ],
+      "local_raw_copy": "artifacts\\v207b_deep_audit\\github_notebook_audit_crosscheck\\notebooks_raw\\KG1_V80_MEGA_V3.ipynb"
+    }
+  ],
+  "outputs": {
+    "csv": "artifacts\\v207b_deep_audit\\github_notebook_audit_crosscheck\\github_notebooks_audit.csv",
+    "raw_copy_dir": "artifacts\\v207b_deep_audit\\github_notebook_audit_crosscheck\\notebooks_raw"
+  },
+  "recommendations": [
+    "Treat V204 as public-adapter discovery only; do not promote from loss alone.",
+    "Use V202D/V202C lineage checks for exact V194 SHA, but add solve-rate gate before any submit.",
+    "Archive V77/V80/V103/V105-era notebooks as historical context unless they provide reusable data only.",
+    "Any notebook containing Kaggle submit code must require an explicit human approval cell before execution."
+  ]
+}
