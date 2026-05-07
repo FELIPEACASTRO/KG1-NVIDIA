@@ -146,6 +146,8 @@ MODEL_DEVICE_MAP = env_str("MODEL_DEVICE_MAP", "auto")
 ATTN_IMPLEMENTATION = env_str("ATTN_IMPLEMENTATION", "eager")
 TORCH_ALLOW_TF32 = env_bool("TORCH_ALLOW_TF32", True)
 TORCH_FLOAT32_MATMUL_PRECISION = env_str("TORCH_FLOAT32_MATMUL_PRECISION", "high")
+TORCH_DISABLE_CUDNN_SDP = env_bool("TORCH_DISABLE_CUDNN_SDP", False)
+TORCH_FORCE_MATH_SDP = env_bool("TORCH_FORCE_MATH_SDP", False)
 GRADIENT_CHECKPOINTING = env_bool("GRADIENT_CHECKPOINTING", True)
 DATA_REPO = env_str("DATA_REPO", "felipesp1983/kg1-nemotron-training")
 DATA_FILE = env_str("DATA_FILE", "data/v90/v90_train_gold_safe.jsonl")
@@ -672,6 +674,8 @@ def cuda_runtime_report() -> dict[str, Any]:
         "nvidia_driver_capabilities": os.environ.get("NVIDIA_DRIVER_CAPABILITIES", ""),
         "torch_allow_tf32": bool(TORCH_ALLOW_TF32),
         "torch_float32_matmul_precision": TORCH_FLOAT32_MATMUL_PRECISION,
+        "torch_disable_cudnn_sdp": bool(TORCH_DISABLE_CUDNN_SDP),
+        "torch_force_math_sdp": bool(TORCH_FORCE_MATH_SDP),
         "attn_implementation": ATTN_IMPLEMENTATION,
         "gradient_checkpointing": bool(GRADIENT_CHECKPOINTING),
         "hf_hub_enable_hf_transfer": os.environ.get("HF_HUB_ENABLE_HF_TRANSFER", ""),
@@ -684,6 +688,8 @@ def apply_runtime_performance_settings() -> None:
     print("Applying runtime performance settings:")
     print(f"  TORCH_ALLOW_TF32={TORCH_ALLOW_TF32}")
     print(f"  TORCH_FLOAT32_MATMUL_PRECISION={TORCH_FLOAT32_MATMUL_PRECISION}")
+    print(f"  TORCH_DISABLE_CUDNN_SDP={TORCH_DISABLE_CUDNN_SDP}")
+    print(f"  TORCH_FORCE_MATH_SDP={TORCH_FORCE_MATH_SDP}")
     print(f"  ATTN_IMPLEMENTATION={ATTN_IMPLEMENTATION or 'transformers-default'}")
     print(f"  GRADIENT_CHECKPOINTING={GRADIENT_CHECKPOINTING}")
     if torch.cuda.is_available() and TORCH_ALLOW_TF32:
@@ -702,6 +708,38 @@ def apply_runtime_performance_settings() -> None:
                 "  warning: could not set float32 matmul precision: "
                 f"{type(exc).__name__}: {exc}"
             )
+    if torch.cuda.is_available():
+        try:
+            if TORCH_DISABLE_CUDNN_SDP and hasattr(torch.backends.cuda, "enable_cudnn_sdp"):
+                torch.backends.cuda.enable_cudnn_sdp(False)
+                print("  disabled torch CUDA cuDNN SDPA backend")
+            if TORCH_FORCE_MATH_SDP:
+                if hasattr(torch.backends.cuda, "enable_flash_sdp"):
+                    torch.backends.cuda.enable_flash_sdp(False)
+                    print("  disabled torch CUDA flash SDPA backend")
+                if hasattr(torch.backends.cuda, "enable_mem_efficient_sdp"):
+                    torch.backends.cuda.enable_mem_efficient_sdp(False)
+                    print("  disabled torch CUDA mem-efficient SDPA backend")
+                if hasattr(torch.backends.cuda, "enable_math_sdp"):
+                    torch.backends.cuda.enable_math_sdp(True)
+                    print("  enabled torch CUDA math SDPA backend")
+            sdpa_status = {}
+            for name in [
+                "flash_sdp_enabled",
+                "mem_efficient_sdp_enabled",
+                "math_sdp_enabled",
+                "cudnn_sdp_enabled",
+            ]:
+                fn = getattr(torch.backends.cuda, name, None)
+                if callable(fn):
+                    try:
+                        sdpa_status[name] = bool(fn())
+                    except Exception as exc:
+                        sdpa_status[name] = f"{type(exc).__name__}: {exc}"
+            if sdpa_status:
+                print(f"  sdpa_backend_status={json.dumps(sdpa_status, sort_keys=True)}")
+        except Exception as exc:
+            print(f"  warning: could not configure SDPA backends: {type(exc).__name__}: {exc}")
 
 
 def setup_causal_conv1d_stub() -> None:
@@ -1308,6 +1346,8 @@ def make_manifest(
                 "attn_implementation": ATTN_IMPLEMENTATION,
                 "torch_allow_tf32": TORCH_ALLOW_TF32,
                 "torch_float32_matmul_precision": TORCH_FLOAT32_MATMUL_PRECISION,
+                "torch_disable_cudnn_sdp": TORCH_DISABLE_CUDNN_SDP,
+                "torch_force_math_sdp": TORCH_FORCE_MATH_SDP,
                 "gradient_checkpointing": GRADIENT_CHECKPOINTING,
                 "hf_hub_enable_hf_transfer": os.environ.get("HF_HUB_ENABLE_HF_TRANSFER", ""),
                 "tokenizers_parallelism": os.environ.get("TOKENIZERS_PARALLELISM", ""),

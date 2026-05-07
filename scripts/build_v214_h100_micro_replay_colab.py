@@ -878,6 +878,8 @@ def training_env(output_dir, dry_run):
         'ATTN_IMPLEMENTATION': V214_ATTN_IMPLEMENTATION,
         'TORCH_ALLOW_TF32': '1',
         'TORCH_FLOAT32_MATMUL_PRECISION': 'high',
+        'TORCH_DISABLE_CUDNN_SDP': '1',
+        'TORCH_FORCE_MATH_SDP': os.environ.get('KG1_V214_FORCE_MATH_SDP', '0'),
         'GRADIENT_CHECKPOINTING': '1',
         'TOKENIZERS_PARALLELISM': os.environ.get('TOKENIZERS_PARALLELISM', 'false'),
         'HF_HUB_ENABLE_HF_TRANSFER': os.environ.get('HF_HUB_ENABLE_HF_TRANSFER', '1'),
