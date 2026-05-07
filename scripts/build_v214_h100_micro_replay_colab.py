@@ -983,11 +983,18 @@ print('final_adapter =', final_adapter, flush=True)
 print('final_adapter_exists =', final_adapter.exists(), flush=True)
 print('final_adapter_complete =', final_adapter_complete, flush=True)
 if final_adapter.exists() and not final_adapter_complete:
-    raise RuntimeError(
-        f'Incomplete final_adapter exists at {final_adapter}. '
-        'This usually means a previous training run failed after creating the directory. '
-        'Move/delete that partial final_adapter before retrying so eval cannot use a corrupt adapter.'
+    partial_backup = final_adapter.with_name(
+        final_adapter.name + '_partial_' + datetime.datetime.now(datetime.timezone.utc).strftime('%Y%m%dT%H%M%SZ')
     )
+    print(
+        'Incomplete final_adapter exists; moving it aside before continuing:',
+        final_adapter,
+        '->',
+        partial_backup,
+        flush=True,
+    )
+    shutil.move(str(final_adapter), str(partial_backup))
+    final_adapter_complete = False
 if not RUN_TRAIN:
     print('RUN_TRAIN is false. Set environment KG1_V214_RUN_TRAIN=1 before running this cell to train.', flush=True)
     print('Skipping training; downstream eval will run only if a complete final_adapter already exists:', final_adapter, flush=True)
