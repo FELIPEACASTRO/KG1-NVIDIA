@@ -172,6 +172,7 @@ def check_required_contract(text: str, findings: list[Finding]) -> None:
         "HF_TOKEN_ready",
         "KAGGLE_CREDENTIALS_READY",
         "LOG_POLICY",
+        "LOG_FLUSH_POLICY",
         "DRIVE_ORGANIZED_OUTPUTS",
         "MANIFEST_DIR",
         "PRINT_COMMAND_OUTPUT",
@@ -203,6 +204,9 @@ def check_required_contract(text: str, findings: list[Finding]) -> None:
         "unsupported_vllm_lora_target_namespace",
         "safetensors_required_for_namespace_preflight",
         "weak_eval_skip_preflight_guard",
+        "WEAK_CATASTROPHIC_SKIP_POLICY",
+        "weak_eval_skip_catastrophic_family",
+        "weak_eval_catastrophic_family_block",
         "V207B WEAK FAMILY SCREEN START",
         "V207B FULL GATE START",
         "V207B FINAL SUMMARY START",
@@ -515,8 +519,12 @@ def check_remote_raw(findings: list[Finding]) -> dict[str, Any]:
                 "vllm_import_preflight_ok",
                 "baseline_artifact_audit",
                 "LOG_POLICY",
+                "LOG_FLUSH_POLICY",
                 "DRIVE_ORGANIZED_OUTPUTS",
                 "command_output_suppressed_lines",
+                "WEAK_CATASTROPHIC_SKIP_POLICY",
+                "weak_eval_skip_catastrophic_family",
+                "weak_eval_catastrophic_family_block",
             ]:
                 if marker not in text:
                     add(findings, "error", "remote_notebook_marker_missing", marker)

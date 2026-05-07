@@ -327,6 +327,7 @@ ESSENTIAL_OUTPUT_PATTERNS = [
     'fresh_python_import_ok',
     'vllm_import_preflight',
     'VLLM_INSTALL_POLICY',
+    'LOG_FLUSH_POLICY',
     'libcudart.so',
 ]
 
@@ -343,8 +344,9 @@ def run_cmd(cmd, cwd=None, env=None, log_path=None, check=True):
     if log_path is not None:
         log_path = pathlib.Path(log_path)
         log_path.parent.mkdir(parents=True, exist_ok=True)
-        log_handle = log_path.open('w', encoding='utf-8')
+        log_handle = log_path.open('w', encoding='utf-8', buffering=1)
         print('log_path =', log_path)
+        print('LOG_FLUSH_POLICY = line_buffered_write_and_flush')
     proc = subprocess.Popen(
         cmd,
         cwd=str(cwd) if cwd else None,
@@ -367,6 +369,7 @@ def run_cmd(cmd, cwd=None, env=None, log_path=None, check=True):
             suppressed_lines += 1
         if log_handle:
             log_handle.write(line)
+            log_handle.flush()
     rc = proc.wait()
     if log_handle:
         log_handle.close()
@@ -1248,6 +1251,15 @@ print('=== V207B STRUCTURE AUDIT END ===')
             """# CELL: weak-family screen ready candidates.
 print('=== V207B WEAK FAMILY SCREEN START ===')
 results = []
+CATASTROPHIC_WEAK_CORRECT_MAX = 80
+CATASTROPHIC_TRUNCATED_MIN = 80
+catastrophic_groups = {}
+
+print('WEAK_CATASTROPHIC_SKIP_POLICY =', json.dumps({
+    'correct_lte': CATASTROPHIC_WEAK_CORRECT_MAX,
+    'truncated_gte': CATASTROPHIC_TRUNCATED_MIN,
+    'groups': ['kienngx_1200samples_cot'],
+}, sort_keys=True))
 
 def weak_preflight_guard(row):
     return (
@@ -1258,6 +1270,11 @@ def weak_preflight_guard(row):
         and bool(row.get('has_safetensors'))
     )
 
+def weak_family_group(label):
+    if label.startswith('kienngx_1200samples_cot_'):
+        return 'kienngx_1200samples_cot'
+    return None
+
 for row in READY_CANDIDATES:
     label = safe_label(row['label'] + '_weak')
     adapter = Path(row['path'])
@@ -1265,6 +1282,31 @@ for row in READY_CANDIDATES:
     log = REPORT_DIR / f'{label}_eval.log'
     report_json = out / f'{label}_eval_report.json'
     per_task_csv = out / f'{label}_per_task.csv'
+    weak_group = weak_family_group(label)
+
+    if weak_group and weak_group in catastrophic_groups:
+        skip_reason = catastrophic_groups[weak_group]
+        print('weak_eval_skip_catastrophic_family =', json.dumps({
+            'label': label,
+            'group': weak_group,
+            'source_label': skip_reason.get('source_label'),
+            'source_weak_correct': skip_reason.get('weak_correct'),
+            'source_weak_truncated': skip_reason.get('weak_truncated'),
+        }, sort_keys=True))
+        results.append({
+            'label': label,
+            'path': str(adapter),
+            'status': 'skipped_catastrophic_family',
+            'weak_correct': 0,
+            'weak_total': BASE_WEAK_TOTAL,
+            'weak_delta': -BASE_WEAK_CORRECT,
+            'accuracy': 0.0,
+            'truncated': None,
+            'truncation_rate': None,
+            'promote_to_full': False,
+            'report_json': str(report_json),
+        })
+        continue
 
     print('weak_eval_start =', json.dumps({
         'label': label,
@@ -1369,6 +1411,25 @@ for row in READY_CANDIDATES:
         'predictions_csv': str(out / f'{label}_predictions.csv'),
         'per_task_csv': str(per_task_csv),
     })
+
+    if (
+        weak_group
+        and weak_correct <= CATASTROPHIC_WEAK_CORRECT_MAX
+        and weak_truncated >= CATASTROPHIC_TRUNCATED_MIN
+    ):
+        catastrophic_groups[weak_group] = {
+            'source_label': label,
+            'weak_correct': weak_correct,
+            'weak_truncated': weak_truncated,
+            'weak_total': weak_total,
+        }
+        print('weak_eval_catastrophic_family_block =', json.dumps({
+            'group': weak_group,
+            'source_label': label,
+            'weak_correct': weak_correct,
+            'weak_truncated': weak_truncated,
+            'weak_total': weak_total,
+        }, sort_keys=True))
 
 weak_results = pd.DataFrame(results)
 weak_csv = MANIFEST_DIR / 'v207b_weak_screen_results.csv'
@@ -1554,6 +1615,7 @@ def main() -> int:
         "LOG_POLICY",
         "DRIVE_ORGANIZED_OUTPUTS",
         "command_output_suppressed_lines",
+        "LOG_FLUSH_POLICY",
         "baseline_artifact_audit",
         "V207B PUBLIC KAGGLE ADAPTER DOWNLOAD START",
         "V207B CANDIDATE DISCOVERY START",
@@ -1563,6 +1625,9 @@ def main() -> int:
         "unsupported_vllm_lora_target_namespace",
         "safetensors_required_for_namespace_preflight",
         "weak_eval_skip_preflight_guard",
+        "WEAK_CATASTROPHIC_SKIP_POLICY",
+        "weak_eval_skip_catastrophic_family",
+        "weak_eval_catastrophic_family_block",
         "V207B WEAK FAMILY SCREEN START",
         "V207B FULL GATE START",
         "V207B FINAL SUMMARY START",
