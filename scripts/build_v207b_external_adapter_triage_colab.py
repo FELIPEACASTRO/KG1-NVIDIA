@@ -1070,6 +1070,60 @@ print('=== V207B CANDIDATE DISCOVERY END ===')
 print('=== V207B STRUCTURE AUDIT START ===')
 from safetensors import safe_open
 
+UNSUPPORTED_VLLM_LORA_TARGET_PATTERNS = [
+    '.mixer.gate_proj',
+    '.mixer.x_proj',
+    '.mixer.experts.w1',
+    '.mixer.experts.w2',
+    '.mixer.experts.w3',
+]
+
+UNSUPPORTED_CONFIG_TARGETS = {
+    'gate_proj',
+    'x_proj',
+    'experts.w1',
+    'experts.w2',
+    'experts.w3',
+}
+
+def as_target_module_list(value):
+    if value is None:
+        return []
+    if isinstance(value, str):
+        return [value]
+    if isinstance(value, (list, tuple, set)):
+        return [str(item) for item in value]
+    return [str(value)]
+
+def compact_lora_weight_key(key):
+    text = str(key)
+    if text.startswith('base_model.model.'):
+        text = text[len('base_model.model.'):]
+    for suffix in ('.lora_A.weight', '.lora_B.weight', '.lora_embedding_A', '.lora_embedding_B'):
+        if suffix in text:
+            text = text.split(suffix, 1)[0]
+    return text
+
+def unsupported_vllm_target_examples(keys):
+    examples = []
+    count = 0
+    for key in keys:
+        compact = compact_lora_weight_key(key)
+        lowered = compact.lower()
+        if any(pattern in lowered for pattern in UNSUPPORTED_VLLM_LORA_TARGET_PATTERNS):
+            count += 1
+            if len(examples) < 8 and compact not in examples:
+                examples.append(compact)
+    return count, examples
+
+def unsupported_config_target_count(target_modules):
+    count = 0
+    for module in target_modules:
+        lowered = str(module).lower()
+        if lowered in UNSUPPORTED_CONFIG_TARGETS or any(pattern.strip('.') in lowered for pattern in UNSUPPORTED_VLLM_LORA_TARGET_PATTERNS):
+            count += 1
+    return count
+
 def audit_adapter(label, path):
     path = Path(path)
     cfg_path = path / 'adapter_config.json'
@@ -1092,6 +1146,9 @@ def audit_adapter(label, path):
         'base_model_name_or_path': '',
         'tensor_count': 0,
         'bad_lm_head_namespace_count': 0,
+        'unsupported_config_target_count': 0,
+        'unsupported_target_namespace_count': 0,
+        'unsupported_target_namespace_examples': '',
         'rank_ok': False,
         'ready_for_eval': False,
         'reason': '',
@@ -1111,7 +1168,9 @@ def audit_adapter(label, path):
     row['peft_type'] = str(cfg.get('peft_type', ''))
     row['r'] = str(cfg.get('r', ''))
     row['lora_alpha'] = str(cfg.get('lora_alpha', ''))
-    row['target_modules'] = json.dumps(cfg.get('target_modules', ''), sort_keys=True)
+    target_modules = as_target_module_list(cfg.get('target_modules', ''))
+    row['target_modules'] = json.dumps(target_modules, sort_keys=True)
+    row['unsupported_config_target_count'] = unsupported_config_target_count(target_modules)
     row['base_model_name_or_path'] = str(cfg.get('base_model_name_or_path', ''))
     try:
         rank = int(cfg.get('r', 0))
@@ -1131,6 +1190,9 @@ def audit_adapter(label, path):
             row['bad_lm_head_namespace_count'] = sum(
                 1 for key in keys if key.startswith('base_model.model.backbone.lm_head')
             )
+            unsupported_count, unsupported_examples = unsupported_vllm_target_examples(keys)
+            row['unsupported_target_namespace_count'] = unsupported_count
+            row['unsupported_target_namespace_examples'] = json.dumps(unsupported_examples, sort_keys=True)
         except Exception as exc:
             row['reason'] = 'safetensors_open_failed:' + repr(exc)
             return row
@@ -1139,6 +1201,8 @@ def audit_adapter(label, path):
         row['reason'] = 'rank_missing_or_gt32'
     elif row['bad_lm_head_namespace_count']:
         row['reason'] = 'bad_lm_head_namespace'
+    elif row['unsupported_config_target_count'] or row['unsupported_target_namespace_count']:
+        row['reason'] = 'unsupported_vllm_lora_target_namespace'
     else:
         row['ready_for_eval'] = True
         row['reason'] = 'ready'
@@ -1159,6 +1223,9 @@ if len(audit_df):
     ready_summary = audit_df.groupby(['ready_for_eval', 'reason'], dropna=False).size().reset_index(name='count')
     print('audit_summary =')
     print(ready_summary.to_string(index=False))
+    rejected_preview = audit_df[~audit_df['ready_for_eval']][['label', 'reason', 'unsupported_config_target_count', 'unsupported_target_namespace_count']].head(20)
+    print('rejected_preview =')
+    print(rejected_preview.to_string(index=False))
     ready_preview = audit_df[audit_df['ready_for_eval']][['label', 'r', 'tensor_count', 'model_bytes']].head(20)
     print('ready_preview =')
     print(ready_preview.to_string(index=False))
@@ -1453,6 +1520,8 @@ def main() -> int:
         "V207B PUBLIC KAGGLE ADAPTER DOWNLOAD START",
         "V207B CANDIDATE DISCOVERY START",
         "V207B STRUCTURE AUDIT START",
+        "unsupported_target_namespace_count",
+        "unsupported_vllm_lora_target_namespace",
         "V207B WEAK FAMILY SCREEN START",
         "V207B FULL GATE START",
         "V207B FINAL SUMMARY START",

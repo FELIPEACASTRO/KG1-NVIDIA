@@ -198,6 +198,8 @@ def check_required_contract(text: str, findings: list[Finding]) -> None:
         "adapter_model_too_small",
         "V207B CANDIDATE DISCOVERY START",
         "V207B STRUCTURE AUDIT START",
+        "unsupported_target_namespace_count",
+        "unsupported_vllm_lora_target_namespace",
         "V207B WEAK FAMILY SCREEN START",
         "V207B FULL GATE START",
         "V207B FINAL SUMMARY START",
