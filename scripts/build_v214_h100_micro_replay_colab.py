@@ -495,10 +495,10 @@ import os
 MIN_GPU_TOTAL_GIB = float(os.environ.get('KG1_V214_MIN_GPU_GIB', '70'))
 MIN_RAM_TOTAL_GIB = float(os.environ.get('KG1_V214_MIN_RAM_TOTAL_GIB', '45'))
 MIN_RAM_AVAILABLE_GIB = float(os.environ.get('KG1_V214_MIN_RAM_AVAILABLE_GIB', '20'))
-MIN_CONTENT_FREE_GIB = float(os.environ.get('KG1_V214_MIN_CONTENT_FREE_GIB', '60'))
-WARN_CONTENT_FREE_GIB = float(os.environ.get('KG1_V214_WARN_CONTENT_FREE_GIB', '70'))
-EXPECTED_MODEL_CACHE_GIB = float(os.environ.get('KG1_V214_EXPECTED_MODEL_CACHE_GIB', '42'))
-MIN_POST_MODEL_CACHE_FREE_GIB = float(os.environ.get('KG1_V214_MIN_POST_MODEL_CACHE_FREE_GIB', '15'))
+MIN_CONTENT_FREE_GIB = float(os.environ.get('KG1_V214_MIN_CONTENT_FREE_GIB', '70'))
+WARN_CONTENT_FREE_GIB = float(os.environ.get('KG1_V214_WARN_CONTENT_FREE_GIB', '80'))
+EXPECTED_MODEL_CACHE_GIB = float(os.environ.get('KG1_V214_EXPECTED_MODEL_CACHE_GIB', '59'))
+MIN_POST_MODEL_CACHE_FREE_GIB = float(os.environ.get('KG1_V214_MIN_POST_MODEL_CACHE_FREE_GIB', '8'))
 SAFE_DISK_CLEANUP = os.environ.get('KG1_V214_SAFE_DISK_CLEANUP', '1').strip().lower() not in {'0', 'false', 'no', 'off'}
 AGGRESSIVE_DISK_CLEANUP = os.environ.get('KG1_V214_AGGRESSIVE_DISK_CLEANUP', '1').strip().lower() not in {'0', 'false', 'no', 'off'}
 DISK_CLEANUP_TOP_N = int(os.environ.get('KG1_V214_DISK_CLEANUP_TOP_N', '25'))
