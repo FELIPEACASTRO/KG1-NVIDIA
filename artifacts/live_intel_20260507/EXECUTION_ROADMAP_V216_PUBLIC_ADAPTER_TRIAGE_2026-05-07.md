@@ -64,7 +64,7 @@ Use only public Kaggle model assets:
 
 The notebook downloads directly to Drive under:
 
-`/content/drive/MyDrive/KG1_PUBLIC_ADAPTERS/<candidate>/adapter`
+`/content/drive/MyDrive/KG1_PUBLIC_ADAPTERS/{candidate}/adapter`
 
 Stop condition: if Kaggle credentials are missing, add `kaggle.json` to Drive and rerun the download cell.
 
@@ -102,11 +102,11 @@ Notebook:
 
 `notebooks/KG1_V207B_EXTERNAL_ADAPTER_TRIAGE_COLAB.ipynb`
 
-Exact Colab URL after pushing to branch `v207b-external-triage`:
+Exact Colab URL on branch `v207b-external-triage`:
 
 `https://colab.research.google.com/github/FELIPEACASTRO/KG1-NVIDIA/blob/v207b-external-triage/notebooks/KG1_V207B_EXTERNAL_ADAPTER_TRIAGE_COLAB.ipynb`
 
-The URL works only after the current local notebook changes are pushed to that branch.
+Current remote commit with this notebook/roadmap: `3253ffc96a8bf2b1cd91a39c5726091291ba9880`.
 
 ## Required Human Interaction
 
@@ -115,4 +115,3 @@ The URL works only after the current local notebook changes are pushed to that b
    - or `/content/drive/MyDrive/KG1_SECRETS/kaggle.json`
 2. Run the Colab notebook on H100/A100.
 3. Approve or reject submission after full-gate results.
-
