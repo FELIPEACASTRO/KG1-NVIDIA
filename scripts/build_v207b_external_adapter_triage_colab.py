@@ -52,7 +52,7 @@ def embed_sources_cell() -> str:
         "scripts/solve_rate_gate.py": read_text("scripts/solve_rate_gate.py"),
     }
     payload = json.dumps(files, ensure_ascii=False, indent=2)
-    return f"""# CELL: install/repair V207B metric scripts inside the cloned repo.
+    return f"""# CELL: install/repair V207B metric scripts inside the local workspace.
 print('=== V207B SCRIPT BOOTSTRAP START ===')
 import json, pathlib, py_compile
 ROOT = pathlib.Path('/content/kg1')
@@ -78,14 +78,15 @@ Purpose: continue the V207 roadmap after V206B/V206C/V214 were rejected.
 
 This notebook:
 
-- reuses the V207A official-like validation artifacts already saved in Drive;
+- reuses V207A official-like validation artifacts when they exist in Drive;
+- bootstraps the validated V194 baseline exports when those artifacts are missing;
 - downloads public Kaggle model adapters into Drive for gated testing;
 - audits external/current adapter structures before spending H100/A100 time;
 - screens only the weak families first: `equation_transform` and `bit_manipulation`;
 - runs full 947-row official-like ACC only for weak-positive candidates;
 - never trains and never submits to Kaggle.
 
-Expected Colab URL after this notebook is pushed:
+Colab URL:
 
 `https://colab.research.google.com/github/FELIPEACASTRO/KG1-NVIDIA/blob/v207b-external-triage/notebooks/KG1_V207B_EXTERNAL_ADAPTER_TRIAGE_COLAB.ipynb`
 """
@@ -112,9 +113,7 @@ import subprocess
 import sys
 import time
 
-VERSION = 'V207B_EXTERNAL_ADAPTER_TRIAGE_20260507_PUBLIC_DOWNLOADS'
-REPO_URL = os.environ.get('KG1_REPO_URL', 'https://github.com/FELIPEACASTRO/KG1-NVIDIA.git')
-REPO_BRANCH = os.environ.get('KG1_REPO_BRANCH', 'v207a-colab')
+VERSION = 'V207B_EXTERNAL_ADAPTER_TRIAGE_20260507_PUBLIC_DOWNLOADS_R2'
 ROOT = pathlib.Path('/content/kg1')
 DRIVE_MY = pathlib.Path('/content/drive/MyDrive')
 V207A_ROOT = DRIVE_MY / 'KG1_NVIDIA_V207A' / 'output_v207a_acc_gate'
@@ -127,6 +126,7 @@ FALLBACK_EXPORT_BASE = os.environ.get(
 )
 MODEL_NAME = '{MODEL_NAME}'
 MODEL_REVISION = '{MODEL_REVISION}'
+VLLM_SPEC = os.environ.get('KG1_V207B_VLLM_SPEC', 'vllm==0.20.1')
 
 VAL_CSV = V207A_ROOT / 'validation' / 'official_train_seed42_stratified10_val.csv'
 VAL_WEAK_CSV = OUT_ROOT / 'validation' / 'official_train_seed42_stratified10_val_weak_families.csv'
@@ -149,8 +149,6 @@ for path in [OUT_ROOT, REPORT_DIR, VAL_WEAK_CSV.parent, PUBLIC_KAGGLE_ROOT]:
     path.mkdir(parents=True, exist_ok=True)
 
 print('VERSION =', VERSION)
-print('REPO_URL =', REPO_URL)
-print('REPO_BRANCH =', REPO_BRANCH)
 print('ROOT =', ROOT)
 print('V207A_ROOT =', V207A_ROOT)
 print('OUT_ROOT =', OUT_ROOT)
@@ -161,6 +159,7 @@ print('BASELINE_PREDICTIONS =', BASELINE_PREDICTIONS)
 print('BASELINE_PER_TASK =', BASELINE_PER_TASK)
 print('MODEL_NAME =', MODEL_NAME)
 print('MODEL_REVISION =', MODEL_REVISION)
+print('VLLM_SPEC =', VLLM_SPEC)
 print('WEAK_FAMILIES =', WEAK_FAMILIES)
 print('FORCE_REEVAL =', FORCE_REEVAL)
 print('RUN_FULL_FOR_POSITIVE =', RUN_FULL_FOR_POSITIVE)
@@ -267,46 +266,43 @@ ensure_import('huggingface_hub', 'huggingface_hub')
 ensure_import('transformers', 'transformers')
 ensure_import('peft', 'peft')
 ensure_import('safetensors', 'safetensors')
-run_cmd([sys.executable, '-m', 'pip', 'install', '-q', 'kaggle'])
-run_cmd(['kaggle', '--version'])
+run_cmd([sys.executable, '-m', 'pip', 'install', '-q', 'kaggle==2.0.2'])
+KAGGLE_EXE = shutil.which('kaggle')
+KAGGLE_CMD_PREFIX = [KAGGLE_EXE] if KAGGLE_EXE else [sys.executable, '-m', 'kaggle.cli']
+print('KAGGLE_EXE =', KAGGLE_EXE)
+print('KAGGLE_CMD_PREFIX =', KAGGLE_CMD_PREFIX)
+run_cmd(KAGGLE_CMD_PREFIX + ['--version'])
 torch = ensure_import('torch')
 print('torch_cuda_available =', torch.cuda.is_available())
 print('torch_cuda_device_count =', torch.cuda.device_count() if torch.cuda.is_available() else 0)
 if torch.cuda.is_available():
     print('torch_cuda_device_name =', torch.cuda.get_device_name(0))
     print('torch_cuda_version =', getattr(torch.version, 'cuda', 'unknown'))
-try:
-    ensure_import('vllm')
-except Exception as exc:
-    print('vLLM unavailable in current kernel before install:', repr(exc))
-    print('Installing vLLM. Evaluation will run in fresh Python subprocesses.')
-    run_cmd([
-        sys.executable,
-        '-m',
-        'pip',
-        'install',
-        '-q',
-        '--extra-index-url',
-        'https://download.pytorch.org/whl/cu128',
-        'vllm',
-    ])
-    fresh_python_import_check('vllm')
-else:
-    fresh_python_import_check('vllm')
+print('Installing pinned vLLM runtime for subprocess evaluation:', VLLM_SPEC)
+run_cmd([
+    sys.executable,
+    '-m',
+    'pip',
+    'install',
+    '-q',
+    '--extra-index-url',
+    'https://download.pytorch.org/whl/cu128',
+    VLLM_SPEC,
+])
+fresh_python_import_check('vllm')
 print('=== V207B DEPENDENCY CHECK END ===')
 """
         ),
         code(
-            """# CELL: clone repo and install embedded metric scripts.
-print('=== V207B REPO SETUP START ===')
-if ROOT.exists():
-    print('Repo exists; status follows:', ROOT)
-    run_cmd(['git', 'status', '--short'], cwd=ROOT, check=False)
-else:
-    run_cmd(['git', 'clone', '--branch', REPO_BRANCH, '--depth', '1', REPO_URL, str(ROOT)])
-run_cmd(['git', 'rev-parse', '--show-toplevel'], cwd=ROOT, check=False)
-run_cmd(['git', 'rev-parse', 'HEAD'], cwd=ROOT, check=False)
-print('=== V207B REPO SETUP END ===')
+            """# CELL: create local execution workspace for embedded scripts.
+print('=== V207B WORKSPACE SETUP START ===')
+ROOT.mkdir(parents=True, exist_ok=True)
+(ROOT / 'scripts').mkdir(parents=True, exist_ok=True)
+(ROOT / 'src').mkdir(parents=True, exist_ok=True)
+print('ROOT =', ROOT, 'exists=', ROOT.exists())
+print('scripts_dir =', ROOT / 'scripts', 'exists=', (ROOT / 'scripts').exists())
+print('src_dir =', ROOT / 'src', 'exists=', (ROOT / 'src').exists())
+print('=== V207B WORKSPACE SETUP END ===')
 """
         ),
         code(embed_sources_cell()),
@@ -382,6 +378,71 @@ for path in required_paths:
         raise FileNotFoundError('Missing required V207B artifact after fallback bootstrap: ' + str(path))
 
 val = pd.read_csv(VAL_CSV)
+baseline_pred_audit = pd.read_csv(BASELINE_PREDICTIONS)
+baseline_per_audit = pd.read_csv(BASELINE_PER_TASK)
+baseline_report_audit = json.loads(BASELINE_REPORT.read_text(encoding='utf-8'))
+
+required_val_cols = {'id', 'prompt', 'answer'}
+required_pred_cols = {'id', 'answer', 'prediction', 'raw_output', 'correct', 'truncated'}
+required_per_cols = {'task_type', 'total', 'correct', 'accuracy', 'truncated', 'truncation_rate'}
+missing_val_cols = sorted(required_val_cols - set(val.columns))
+missing_pred_cols = sorted(required_pred_cols - set(baseline_pred_audit.columns))
+missing_per_cols = sorted(required_per_cols - set(baseline_per_audit.columns))
+print('baseline_artifact_audit_val_rows =', len(val), 'missing_cols=', missing_val_cols)
+print('baseline_artifact_audit_predictions_rows =', len(baseline_pred_audit), 'missing_cols=', missing_pred_cols)
+print('baseline_artifact_audit_per_task_rows =', len(baseline_per_audit), 'missing_cols=', missing_per_cols)
+print(
+    'baseline_artifact_audit_report =',
+    json.dumps(
+        {
+            'rows': baseline_report_audit.get('rows'),
+            'correct': baseline_report_audit.get('correct'),
+            'accuracy': baseline_report_audit.get('accuracy'),
+            'truncated': baseline_report_audit.get('truncated'),
+        },
+        sort_keys=True,
+    ),
+)
+if missing_val_cols or missing_pred_cols or missing_per_cols:
+    raise RuntimeError(
+        'Baseline fallback artifacts have invalid schema: '
+        f'val={missing_val_cols}, predictions={missing_pred_cols}, per_task={missing_per_cols}'
+    )
+if len(val) != 947 or len(baseline_pred_audit) != 947:
+    raise RuntimeError(f'Expected 947 validation/baseline rows, got val={len(val)} pred={len(baseline_pred_audit)}')
+if not val['id'].astype(str).is_unique or not baseline_pred_audit['id'].astype(str).is_unique:
+    raise RuntimeError('Validation or baseline prediction IDs are not unique.')
+val_ids = set(val['id'].astype(str))
+pred_ids = set(baseline_pred_audit['id'].astype(str))
+if val_ids != pred_ids:
+    raise RuntimeError(f'Validation and baseline prediction ID sets differ: val={len(val_ids)} pred={len(pred_ids)}')
+baseline_report_rows = int(baseline_report_audit.get('rows', -1))
+baseline_report_correct = int(baseline_report_audit.get('correct', -1))
+baseline_report_truncated = int(baseline_report_audit.get('truncated', -1))
+baseline_pred_correct = int(
+    baseline_pred_audit['correct'].astype(str).str.lower().isin(['true', '1', 'yes']).sum()
+)
+baseline_pred_truncated = int(
+    baseline_pred_audit['truncated'].astype(str).str.lower().isin(['true', '1', 'yes']).sum()
+)
+if (
+    baseline_report_rows != len(baseline_pred_audit)
+    or baseline_report_correct != baseline_pred_correct
+    or baseline_report_truncated != baseline_pred_truncated
+):
+    raise RuntimeError(
+        'Baseline report does not match predictions: '
+        f'report_rows={baseline_report_rows} pred_rows={len(baseline_pred_audit)} '
+        f'report_correct={baseline_report_correct} pred_correct={baseline_pred_correct} '
+        f'report_truncated={baseline_report_truncated} pred_truncated={baseline_pred_truncated}'
+    )
+overall = baseline_per_audit[baseline_per_audit['task_type'].astype(str).eq('OVERALL')]
+if len(overall) != 1:
+    raise RuntimeError('Baseline per-task CSV must contain exactly one OVERALL row.')
+overall_row = overall.iloc[0]
+if int(overall_row['total']) != len(baseline_pred_audit) or int(overall_row['correct']) != baseline_pred_correct:
+    raise RuntimeError('Baseline per-task OVERALL row does not match predictions.')
+
 family_col = 'family' if 'family' in val.columns else 'type'
 if family_col not in val.columns:
     raise RuntimeError('Validation CSV needs family or type column.')
@@ -454,13 +515,29 @@ PUBLIC_KAGGLE_EXPECTED_BYTES = {
 for _item in PUBLIC_KAGGLE_MODEL_CANDIDATES:
     _item['expected_bytes'] = PUBLIC_KAGGLE_EXPECTED_BYTES.get(_item['label'], 0)
 
-def kaggle_adapter_ready(path):
+def kaggle_adapter_ready(path, expected_bytes=0):
     path = Path(path)
-    return (
-        path.is_dir()
-        and (path / 'adapter_config.json').exists()
-        and ((path / 'adapter_model.safetensors').exists() or (path / 'adapter_model.bin').exists())
-    )
+    if not path.is_dir() or not (path / 'adapter_config.json').exists():
+        return False
+    model_path = path / 'adapter_model.safetensors'
+    if not model_path.exists():
+        model_path = path / 'adapter_model.bin'
+    if not model_path.exists():
+        return False
+    expected_bytes = int(expected_bytes or 0)
+    if expected_bytes > 0:
+        min_bytes = max(1024 * 1024, int(expected_bytes * 0.98))
+        if model_path.stat().st_size < min_bytes:
+            print(
+                'adapter_model_too_small =',
+                model_path,
+                'size=',
+                model_path.stat().st_size,
+                'min_expected=',
+                min_bytes,
+            )
+            return False
+    return True
 
 def configure_kaggle_credentials():
     kaggle_dir = Path('/root/.kaggle')
@@ -499,7 +576,11 @@ if not RUN_KAGGLE_PUBLIC_DOWNLOAD:
 else:
     if not configure_kaggle_credentials():
         raise RuntimeError('Human action required: add Kaggle API token kaggle.json to Drive and rerun this cell.')
-    run_cmd(['kaggle', '--version'])
+    if 'KAGGLE_CMD_PREFIX' not in globals():
+        KAGGLE_EXE = shutil.which('kaggle')
+        KAGGLE_CMD_PREFIX = [KAGGLE_EXE] if KAGGLE_EXE else [sys.executable, '-m', 'kaggle.cli']
+        print('KAGGLE_CMD_PREFIX late_init =', KAGGLE_CMD_PREFIX)
+    run_cmd(KAGGLE_CMD_PREFIX + ['--version'])
 
     selected_candidates = [
         item for item in PUBLIC_KAGGLE_MODEL_CANDIDATES
@@ -509,7 +590,10 @@ else:
     remaining_expected_bytes = sum(
         int(item.get('expected_bytes') or 0)
         for item in selected_candidates
-        if not kaggle_adapter_ready(PUBLIC_KAGGLE_ROOT / safe_label(item['label']) / 'adapter')
+        if not kaggle_adapter_ready(
+            PUBLIC_KAGGLE_ROOT / safe_label(item['label']) / 'adapter',
+            item.get('expected_bytes') or 0,
+        )
     )
     usage = shutil.disk_usage(PUBLIC_KAGGLE_ROOT)
     print('download_expected_remaining_gib =', round(remaining_expected_bytes / (1024 ** 3), 2))
@@ -532,15 +616,15 @@ else:
         print('download_label =', label)
         print('download_ref =', ref)
         print('download_priority =', item['priority'])
+        print('download_expected_bytes =', int(item.get('expected_bytes') or 0))
         print('download_target =', target)
-        print('already_ready =', kaggle_adapter_ready(target))
+        print('already_ready =', kaggle_adapter_ready(target, item.get('expected_bytes') or 0))
 
-        if kaggle_adapter_ready(target):
+        if kaggle_adapter_ready(target, item.get('expected_bytes') or 0):
             status = 'already_ready'
             rc = 0
         else:
-            cmd = [
-                'kaggle',
+            cmd = KAGGLE_CMD_PREFIX + [
                 'models',
                 'instances',
                 'versions',
@@ -551,13 +635,17 @@ else:
                 '--untar',
             ]
             rc = run_cmd(cmd, log_path=log, check=False)
-            status = 'downloaded_ready' if rc == 0 and kaggle_adapter_ready(target) else f'download_or_structure_failed_{rc}'
+            status = (
+                'downloaded_ready'
+                if rc == 0 and kaggle_adapter_ready(target, item.get('expected_bytes') or 0)
+                else f'download_or_structure_failed_{rc}'
+            )
 
         nested_ready_dirs = []
-        if not kaggle_adapter_ready(target):
+        if not kaggle_adapter_ready(target, item.get('expected_bytes') or 0):
             for dirpath, dirnames, filenames in os.walk(target):
                 p = Path(dirpath)
-                if kaggle_adapter_ready(p):
+                if kaggle_adapter_ready(p, item.get('expected_bytes') or 0):
                     nested_ready_dirs.append(str(p))
 
         top_files = sorted([p.name for p in target.glob('*')])[:25] if target.exists() else []
@@ -565,8 +653,9 @@ else:
             'label': label,
             'ref': ref,
             'priority': int(item['priority']),
+            'expected_bytes': int(item.get('expected_bytes') or 0),
             'target': str(target),
-            'ready': kaggle_adapter_ready(target),
+            'ready': kaggle_adapter_ready(target, item.get('expected_bytes') or 0),
             'nested_ready_dirs': nested_ready_dirs,
             'status': status,
             'returncode': rc,
@@ -1048,10 +1137,20 @@ def main() -> int:
     required_markers = [
         "KG1 V207B External Adapter Triage Colab",
         "V207B DRIVE MOUNT START",
+        "V207B CONFIG START",
+        "V207B DEPENDENCY CHECK START",
+        "V207B WORKSPACE SETUP START",
+        "V207B SCRIPT BOOTSTRAP START",
+        "VLLM_SPEC =",
+        "vllm==0.20.1",
+        "KAGGLE_CMD_PREFIX",
+        "baseline_artifact_audit",
         "V207B PUBLIC KAGGLE ADAPTER DOWNLOAD START",
         "V207B CANDIDATE DISCOVERY START",
+        "V207B STRUCTURE AUDIT START",
         "V207B WEAK FAMILY SCREEN START",
         "V207B FULL GATE START",
+        "V207B FINAL SUMMARY START",
         "ALLOW_KAGGLE_SUBMIT = False",
         "submit_disabled",
     ]

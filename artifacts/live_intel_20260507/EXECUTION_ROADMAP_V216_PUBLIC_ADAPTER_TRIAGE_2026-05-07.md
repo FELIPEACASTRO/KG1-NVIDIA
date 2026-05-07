@@ -59,6 +59,8 @@ The V207B notebook is now self-bootstrapping for the baseline gate. If the expec
 
 This avoids requiring a separate V207A notebook run before public-adapter triage.
 
+The notebook no longer clones the repository at runtime. It creates `/content/kg1`, writes the audited metric scripts directly into that workspace, compiles them, and uses those embedded scripts for all evaluations. The vLLM runtime is pinned to `vllm==0.20.1` by default because that is the version already exercised on the H100 logs with the DeepGEMM safety hotfix.
+
 ### Phase 1 - Download Public Adapters
 
 Use only public Kaggle model assets:

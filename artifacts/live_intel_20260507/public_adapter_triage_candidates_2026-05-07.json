@@ -4,6 +4,8 @@
     "label": "huikang_default_v27",
     "kaggle_ref": "huikang/nemotron-adapter/Transformers/default/27",
     "drive_adapter_dir": "/content/drive/MyDrive/KG1_PUBLIC_ADAPTERS/huikang_default_v27/adapter",
+    "expected_primary_file": "adapter_model.safetensors",
+    "expected_size_bytes": 1544348352,
     "default_download": true
   },
   {
@@ -11,6 +13,8 @@
     "label": "huikang_default_v26",
     "kaggle_ref": "huikang/nemotron-adapter/Transformers/default/26",
     "drive_adapter_dir": "/content/drive/MyDrive/KG1_PUBLIC_ADAPTERS/huikang_default_v26/adapter",
+    "expected_primary_file": "adapter_model.safetensors",
+    "expected_size_bytes": 1544348352,
     "default_download": true
   },
   {
@@ -18,6 +22,8 @@
     "label": "huikang_default_v25",
     "kaggle_ref": "huikang/nemotron-adapter/Transformers/default/25",
     "drive_adapter_dir": "/content/drive/MyDrive/KG1_PUBLIC_ADAPTERS/huikang_default_v25/adapter",
+    "expected_primary_file": "adapter_model.safetensors",
+    "expected_size_bytes": 1544348352,
     "default_download": true
   },
   {
@@ -25,6 +31,8 @@
     "label": "huikang_default_v24",
     "kaggle_ref": "huikang/nemotron-adapter/Transformers/default/24",
     "drive_adapter_dir": "/content/drive/MyDrive/KG1_PUBLIC_ADAPTERS/huikang_default_v24/adapter",
+    "expected_primary_file": "adapter_model.safetensors",
+    "expected_size_bytes": 772202848,
     "default_download": true
   },
   {
@@ -32,6 +40,8 @@
     "label": "huikang_default_v23",
     "kaggle_ref": "huikang/nemotron-adapter/Transformers/default/23",
     "drive_adapter_dir": "/content/drive/MyDrive/KG1_PUBLIC_ADAPTERS/huikang_default_v23/adapter",
+    "expected_primary_file": "adapter_model.safetensors",
+    "expected_size_bytes": 1544348352,
     "default_download": true
   },
   {
@@ -39,6 +49,8 @@
     "label": "huikang_default_v22",
     "kaggle_ref": "huikang/nemotron-adapter/Transformers/default/22",
     "drive_adapter_dir": "/content/drive/MyDrive/KG1_PUBLIC_ADAPTERS/huikang_default_v22/adapter",
+    "expected_primary_file": "adapter_model.safetensors",
+    "expected_size_bytes": 1544348352,
     "default_download": true
   },
   {
@@ -46,6 +58,8 @@
     "label": "huikang_default_v21",
     "kaggle_ref": "huikang/nemotron-adapter/Transformers/default/21",
     "drive_adapter_dir": "/content/drive/MyDrive/KG1_PUBLIC_ADAPTERS/huikang_default_v21/adapter",
+    "expected_primary_file": "adapter_model.safetensors",
+    "expected_size_bytes": 1544348352,
     "default_download": true
   },
   {
@@ -53,6 +67,8 @@
     "label": "huikang_default_v20",
     "kaggle_ref": "huikang/nemotron-adapter/Transformers/default/20",
     "drive_adapter_dir": "/content/drive/MyDrive/KG1_PUBLIC_ADAPTERS/huikang_default_v20/adapter",
+    "expected_primary_file": "adapter_model.safetensors",
+    "expected_size_bytes": 1544348352,
     "default_download": true
   },
   {
@@ -60,6 +76,8 @@
     "label": "kienngx_1200samples_cot_1e_5",
     "kaggle_ref": "kienngx/nemotron-nano-30b-trained/Transformers/1200samples-cot-1e-5/1",
     "drive_adapter_dir": "/content/drive/MyDrive/KG1_PUBLIC_ADAPTERS/kienngx_1200samples_cot_1e_5/adapter",
+    "expected_primary_file": "adapter_model.safetensors",
+    "expected_size_bytes": 3537299144,
     "default_download": true
   },
   {
@@ -67,6 +85,8 @@
     "label": "kienngx_1200samples_cot_5e_5",
     "kaggle_ref": "kienngx/nemotron-nano-30b-trained/Transformers/1200samples-cot-5e-5/1",
     "drive_adapter_dir": "/content/drive/MyDrive/KG1_PUBLIC_ADAPTERS/kienngx_1200samples_cot_5e_5/adapter",
+    "expected_primary_file": "adapter_model.safetensors",
+    "expected_size_bytes": 3537299144,
     "default_download": true
   },
   {
@@ -74,6 +94,8 @@
     "label": "kienngx_cot_labels_3000samples",
     "kaggle_ref": "kienngx/nemotron-nano-30b-trained/Transformers/cot-labels-3000samples/1",
     "drive_adapter_dir": "/content/drive/MyDrive/KG1_PUBLIC_ADAPTERS/kienngx_cot_labels_3000samples/adapter",
+    "expected_primary_file": "adapter_model.safetensors",
+    "expected_size_bytes": 3537299144,
     "default_download": true
   },
   {
@@ -81,6 +103,8 @@
     "label": "kienngx_600_samples_packing_false",
     "kaggle_ref": "kienngx/nemotron-nano-30b-trained/Transformers/600-samples-packing-false/1",
     "drive_adapter_dir": "/content/drive/MyDrive/KG1_PUBLIC_ADAPTERS/kienngx_600_samples_packing_false/adapter",
+    "expected_primary_file": "adapter_model.safetensors",
+    "expected_size_bytes": 1740420752,
     "default_download": true
   },
   {
@@ -88,6 +112,8 @@
     "label": "kienngx_1800s_lora_rank32_false",
     "kaggle_ref": "kienngx/nemotron-nano-30b-trained/Transformers/1800s-lora-rank32-false/1",
     "drive_adapter_dir": "/content/drive/MyDrive/KG1_PUBLIC_ADAPTERS/kienngx_1800s_lora_rank32_false/adapter",
+    "expected_primary_file": "adapter_model.safetensors",
+    "expected_size_bytes": 3479065680,
     "default_download": true
   },
   {
@@ -95,6 +121,8 @@
     "label": "kienngx_tinker_adapter",
     "kaggle_ref": "kienngx/nemotron-nano-30b-trained/Triton/tinker-adapter/1",
     "drive_adapter_dir": "/content/drive/MyDrive/KG1_PUBLIC_ADAPTERS/kienngx_tinker_adapter/adapter",
+    "expected_primary_file": "adapter_model.safetensors",
+    "expected_size_bytes": 3554384888,
     "default_download": false
   },
   {
@@ -102,6 +130,8 @@
     "label": "kienngx_2400_1e_4_lr_all_linear_packingfalse",
     "kaggle_ref": "kienngx/nemotron-nano-30b-trained/Transformers/2400-1e-4_lr-all_linear-packingfalse/1",
     "drive_adapter_dir": "/content/drive/MyDrive/KG1_PUBLIC_ADAPTERS/kienngx_2400_1e_4_lr_all_linear_packingfalse/adapter",
+    "expected_primary_file": "adapter_model.safetensors",
+    "expected_size_bytes": 3537299144,
     "default_download": false
   },
   {
@@ -109,6 +139,8 @@
     "label": "kienngx_9500s_batch1_lr1e_4",
     "kaggle_ref": "kienngx/nemotron-nano-30b-trained/Transformers/9500s-batch1-lr1e-4/1",
     "drive_adapter_dir": "/content/drive/MyDrive/KG1_PUBLIC_ADAPTERS/kienngx_9500s_batch1_lr1e_4/adapter",
+    "expected_primary_file": "adapter_model.safetensors",
+    "expected_size_bytes": 58233016,
     "default_download": false
   }
 ]
