@@ -4,7 +4,7 @@
 
 - Repository: `https://github.com/FELIPEACASTRO/KG1-NVIDIA`
 - Branch: `v214-h100-micro-replay`
-- Notebook validation commit: `af9463e8effacd167d410375124da88a5d682e1b`
+- Notebook validation commit: `2bcceda55e83f7ca8774d4faea2a60ad0d6a5c3e`
 - Note: this publish-result document may appear in a later commit on the same branch.
 
 ## Colab URL
@@ -18,9 +18,9 @@ Validated through GitHub API:
 - endpoint: `https://api.github.com/repos/FELIPEACASTRO/KG1-NVIDIA/contents/notebooks/KG1_V214_H100_MICRO_REPLAY_COLAB.ipynb?ref=v214-h100-micro-replay`
 - status: `200`
 - file: `KG1_V214_H100_MICRO_REPLAY_COLAB.ipynb`
-- size: `2896018`
-- blob sha: `9984a819d391d972f4cbe33571eebdc07229d7fe`
-- commit-pinned raw sha256: `9eb8c3a6e1a649509c83957a38b7934f6f3091aea82e45bb61d8296685272955`
+- size: `2898460`
+- blob sha: `cc7274842e694028e2d6a2b06f8d30060a69efb3`
+- commit-pinned raw sha256: `261b3d7c41c180ef569aa571dd5e173a2fd6b213f928dc5df749247aa13df581`
 - validated markers:
   - `mamba-ssm[causal-conv1d]`
   - `mamba_ssm_postinstall`
@@ -30,10 +30,11 @@ Validated through GitHub API:
   - `AGGRESSIVE_DISK_CLEANUP`
   - `USE_BITSANDBYTES`
   - `Optimizer: torch Adam (USE_BITSANDBYTES=0)`
+  - `projected_content_free_after_model_cache_gib`
 
 Validated through `git ls-remote`:
 
-- `af9463e8effacd167d410375124da88a5d682e1b refs/heads/v214-h100-micro-replay`
+- `2bcceda55e83f7ca8774d4faea2a60ad0d6a5c3e refs/heads/v214-h100-micro-replay`
 
 ## Pull Request URL
 
@@ -47,8 +48,9 @@ Validated through `git ls-remote`:
 - Notebook includes GPU-first placement, TF32/matmul precision controls, optional
   `hf_transfer`, required `mamba-ssm` validation, default-disabled
   `bitsandbytes`, and a standalone published training script.
-- Notebook requires `/content >=90 GiB` free after cleanup and warns below
-  `100 GiB`.
+- Notebook requires `/content >=60 GiB` free after cleanup, projects a `42 GiB`
+  model cache, and requires at least `15 GiB` projected post-cache free space.
+- Notebook warns below `/content <70 GiB`.
 - Notebook logs top disk users before/after cleanup and removes partial Nemotron
   HF cache plus large unused preinstalled packages in the temporary Colab
   runtime.
