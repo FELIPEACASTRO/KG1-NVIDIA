@@ -54,12 +54,23 @@ def read_text(path: str) -> str:
     return Path(path).read_text(encoding="utf-8")
 
 
+def read_first_existing_text(*paths: str) -> str:
+    for path in paths:
+        candidate = Path(path)
+        if candidate.exists():
+            return candidate.read_text(encoding="utf-8")
+    raise FileNotFoundError(f"None of these files exist: {paths}")
+
+
 def embedded_payload() -> str:
     files = {
         "src/__init__.py": read_text("src/__init__.py") if Path("src/__init__.py").exists() else "",
         "src/competition_utils.py": read_text("src/competition_utils.py"),
         "scripts/evaluate_lora_adapter.py": read_text("scripts/evaluate_lora_adapter.py"),
-        "scripts/hf_job_train_v90.py": read_text(".claude/worktrees/competent-shamir/scripts/hf_job_train_v90.py"),
+        "scripts/hf_job_train_v90.py": read_first_existing_text(
+            "scripts/hf_job_train_v90.py",
+            ".claude/worktrees/competent-shamir/scripts/hf_job_train_v90.py",
+        ),
         "data/v214/v214_micro_train.jsonl": read_text("data/v214/v214_micro_train.jsonl"),
         "data/v214/v214_micro_val.jsonl": read_text("data/v214/v214_micro_val.jsonl"),
         "data/v214/v214_micro_replay_candidate_manifest.json": read_text(
@@ -144,6 +155,10 @@ import sys
 import textwrap
 import time
 
+os.environ.setdefault('TOKENIZERS_PARALLELISM', 'false')
+os.environ.setdefault('HF_HUB_ENABLE_HF_TRANSFER', '1')
+os.environ.setdefault('PYTORCH_CUDA_ALLOC_CONF', 'expandable_segments:True')
+
 VERSION = 'V214_H100_MICRO_REPLAY_20260506'
 ROOT = pathlib.Path('/content/kg1')
 DRIVE_ROOT = pathlib.Path('/content/drive/MyDrive/KG1_NVIDIA_V214')
@@ -158,6 +173,12 @@ MODEL_REVISION = '{MODEL_REVISION}'
 RUN_DRY_RUN = os.environ.get('KG1_V214_RUN_DRY_RUN', '1').strip().lower() not in {{'0', 'false', 'no', 'off'}}
 RUN_TRAIN = os.environ.get('KG1_V214_RUN_TRAIN', '0').strip().lower() in {{'1', 'true', 'yes', 'on'}}
 RUN_EVAL = os.environ.get('KG1_V214_RUN_EVAL', '1').strip().lower() not in {{'0', 'false', 'no', 'off'}}
+V214_MODEL_DEVICE_MAP = os.environ.get('KG1_V214_MODEL_DEVICE_MAP', 'cuda')
+V214_ATTN_IMPLEMENTATION = os.environ.get('KG1_V214_ATTN_IMPLEMENTATION', 'eager')
+V214_BATCH_SIZE = int(os.environ.get('KG1_V214_BATCH_SIZE', '4'))
+V214_MICRO_BATCH_SIZE = int(os.environ.get('KG1_V214_MICRO_BATCH_SIZE', '1'))
+V214_MAX_LENGTH = int(os.environ.get('KG1_V214_MAX_LENGTH', '4096'))
+V214_ABORT_MAX_RESERVED_GIB = float(os.environ.get('KG1_V214_ABORT_MAX_RESERVED_GIB', '78'))
 ALLOW_KAGGLE_SUBMIT = False
 
 WEAK_MIN_FOR_FULL = 191
@@ -184,6 +205,15 @@ print('MODEL_REVISION =', MODEL_REVISION)
 print('RUN_DRY_RUN =', RUN_DRY_RUN)
 print('RUN_TRAIN =', RUN_TRAIN)
 print('RUN_EVAL =', RUN_EVAL)
+print('V214_MODEL_DEVICE_MAP =', V214_MODEL_DEVICE_MAP)
+print('V214_ATTN_IMPLEMENTATION =', V214_ATTN_IMPLEMENTATION)
+print('V214_BATCH_SIZE =', V214_BATCH_SIZE)
+print('V214_MICRO_BATCH_SIZE =', V214_MICRO_BATCH_SIZE)
+print('V214_MAX_LENGTH =', V214_MAX_LENGTH)
+print('V214_ABORT_MAX_RESERVED_GIB =', V214_ABORT_MAX_RESERVED_GIB)
+print('TOKENIZERS_PARALLELISM =', os.environ.get('TOKENIZERS_PARALLELISM'))
+print('HF_HUB_ENABLE_HF_TRANSFER =', os.environ.get('HF_HUB_ENABLE_HF_TRANSFER'))
+print('PYTORCH_CUDA_ALLOC_CONF =', os.environ.get('PYTORCH_CUDA_ALLOC_CONF'))
 print('ALLOW_KAGGLE_SUBMIT =', ALLOW_KAGGLE_SUBMIT)
 if ALLOW_KAGGLE_SUBMIT:
     raise RuntimeError('Submission is disabled in V214 by design.')
@@ -383,6 +413,8 @@ def fresh_python_import_check(imports):
 
 ensure_import('pandas', 'pandas')
 ensure_import('huggingface_hub', 'huggingface_hub')
+if os.environ.get('HF_HUB_ENABLE_HF_TRANSFER', '').strip() == '1':
+    ensure_import('hf_transfer', 'hf_transfer')
 ensure_import('transformers', 'transformers')
 ensure_min_version('peft', '0.18.1', 'peft>=0.18.1')
 torch = ensure_import('torch')
@@ -397,6 +429,10 @@ except Exception as exc:
     print('vLLM unavailable before install:', repr(exc), flush=True)
     print('Installing vLLM; eval runs in fresh Python processes.', flush=True)
     run_cmd([sys.executable, '-m', 'pip', 'install', '-q', 'vllm'])
+try:
+    ensure_import('bitsandbytes', 'bitsandbytes')
+except Exception as exc:
+    print('bitsandbytes unavailable after install attempt; train script will fall back to torch Adam:', repr(exc), flush=True)
 fresh_python_import_check(['torch', 'transformers', 'peft', 'vllm'])
 print('=== V214 DEPENDENCY AUDIT END ===', flush=True)
 """
@@ -597,6 +633,14 @@ def training_env(output_dir, dry_run):
     env.update({
         'MODEL_NAME': MODEL_NAME,
         'MODEL_REVISION': MODEL_REVISION,
+        'MODEL_DEVICE_MAP': V214_MODEL_DEVICE_MAP,
+        'ATTN_IMPLEMENTATION': V214_ATTN_IMPLEMENTATION,
+        'TORCH_ALLOW_TF32': '1',
+        'TORCH_FLOAT32_MATMUL_PRECISION': 'high',
+        'GRADIENT_CHECKPOINTING': '1',
+        'TOKENIZERS_PARALLELISM': os.environ.get('TOKENIZERS_PARALLELISM', 'false'),
+        'HF_HUB_ENABLE_HF_TRANSFER': os.environ.get('HF_HUB_ENABLE_HF_TRANSFER', '1'),
+        'PYTORCH_CUDA_ALLOC_CONF': os.environ.get('PYTORCH_CUDA_ALLOC_CONF', 'expandable_segments:True'),
         'DATA_REPO': 'local',
         'DATA_FILE': str(ROOT / 'data/v214/v214_micro_train.jsonl'),
         'VAL_FILE': str(ROOT / 'data/v214/v214_micro_val.jsonl'),
@@ -618,10 +662,10 @@ def training_env(output_dir, dry_run):
         'LORA_R': '32',
         'LORA_ALPHA': '32',
         'LORA_DROPOUT': '0.0',
-        'MAX_LENGTH': '4096',
+        'MAX_LENGTH': str(V214_MAX_LENGTH),
         'MAX_PROMPT_TRUNCATION_RATE': '0.0',
-        'BATCH_SIZE': '4',
-        'MICRO_BATCH_SIZE': '1',
+        'BATCH_SIZE': str(V214_BATCH_SIZE),
+        'MICRO_BATCH_SIZE': str(V214_MICRO_BATCH_SIZE),
         'LEARNING_RATE': '3e-7',
         'FINAL_LEARNING_RATE': '3e-7',
         'NUM_EPOCHS': '1',
@@ -637,6 +681,7 @@ def training_env(output_dir, dry_run):
         'BASELINE_EVAL_BEFORE_TRAIN': '1',
         'REQUIRE_FINAL_EVAL_LTE_BASELINE': '0',
         'ABORT_EVAL_RELATIVE_TO_BASELINE_DELTA': '-1',
+        'ABORT_MAX_RESERVED_GIB': str(V214_ABORT_MAX_RESERVED_GIB),
         'COMPUTE_PROVIDER': 'colab_h100',
     })
     return env

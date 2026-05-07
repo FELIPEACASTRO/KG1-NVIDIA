@@ -26,6 +26,9 @@ Static checks:
 - notebook contains fresh subprocess import check;
 - notebook contains H100/high-RAM sizing gate;
 - notebook contains 60-second heartbeat resource logs.
+- notebook contains GPU-first model placement controls;
+- notebook contains TF32/matmul precision controls;
+- notebook contains optional `hf_transfer` and `bitsandbytes` setup.
 
 ## Dataset Checks
 
@@ -63,7 +66,7 @@ Remote notebook embeds the required files with expected hashes:
 
 - `data/v214/v214_micro_train.jsonl`: `da601695ca59e6e981638a1105c4b9750d077fb9d15717bb0474d95a85e552a7`
 - `data/v214/v214_micro_val.jsonl`: `ace511e400542241f3ed6bdba35c5b5d4852c72410d2b1504c88330e89482183`
-- `scripts/hf_job_train_v90.py`: `7250b7b04b7640fe888ca27f4753dcdb1ffeca23e81cb02614da5440b12a9f3b`
+- `scripts/hf_job_train_v90.py`: `2af64e812a7c1f56232ba5841bc9c2a78f18a069853c2d444f8ad22c6c57c90c`
 - `scripts/evaluate_lora_adapter.py`: `b56764960629cf4c43c7dab09e8f2dc8b338b284d2ed1d65a325ca80c4463168`
 - `src/competition_utils.py`: `b6aa77804681ddf29478815627aad023d9a8e673208369a930d97f13b8e15a13`
 
@@ -73,10 +76,12 @@ Notebook checks/imports:
 
 - `pandas`
 - `huggingface_hub`
+- `hf_transfer` when `HF_HUB_ENABLE_HF_TRANSFER=1`
 - `transformers`
 - `peft>=0.18.1`
 - `torch`
 - `vllm`
+- `bitsandbytes` optional, with fallback to torch Adam if unavailable
 - `packaging`
 
 After installing `vllm`, it runs a fresh Python subprocess import check for:
@@ -88,6 +93,29 @@ After installing `vllm`, it runs a fresh Python subprocess import check for:
 
 This matters because Colab package installs can change dependency versions in a
 way that the current kernel does not fully reflect.
+
+## Performance Controls
+
+The notebook/training script uses conservative performance settings:
+
+- `MODEL_DEVICE_MAP=cuda` by default, to avoid slow CPU offload on H100;
+- override via `KG1_V214_MODEL_DEVICE_MAP` if diagnostics require `auto`;
+- `ATTN_IMPLEMENTATION=eager` by default for compatibility with the existing
+  V194/V206 path;
+- override via `KG1_V214_ATTN_IMPLEMENTATION` only after dry-run proof;
+- TF32 enabled for supported CUDA matmul/CUDNN operations;
+- `torch.set_float32_matmul_precision("high")`;
+- `HF_HUB_ENABLE_HF_TRANSFER=1`;
+- `PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True`;
+- `TOKENIZERS_PARALLELISM=false`;
+- `bitsandbytes` attempted for `PagedAdam8bit`;
+- `MAX_LENGTH=4096`;
+- `BATCH_SIZE=4`;
+- `MICRO_BATCH_SIZE=1`;
+- `ABORT_MAX_RESERVED_GIB=78`.
+
+These settings prioritize fast failure on inadequate runtimes and avoid silent
+CPU offload. The solve-rate gates remain unchanged.
 
 ## Runtime Size Gate
 

@@ -69,6 +69,16 @@ Training design:
 - `MAX_LENGTH=4096`;
 - batch size `4`, micro batch `1`;
 - trainable LoRA filter: `q_proj,k_proj,v_proj,o_proj,in_proj,out_proj`;
+- GPU-first model placement: `MODEL_DEVICE_MAP=cuda` by default;
+- attention implementation remains `eager` by default for compatibility, but
+  can be overridden with `KG1_V214_ATTN_IMPLEMENTATION`;
+- TF32 is enabled for supported CUDA matmul/CUDNN operations;
+- `torch.set_float32_matmul_precision("high")` is enabled;
+- `HF_HUB_ENABLE_HF_TRANSFER=1` is enabled and `hf_transfer` is installed when needed;
+- `bitsandbytes` is attempted so the train script can use `PagedAdam8bit`;
+- `PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True`;
+- `TOKENIZERS_PARALLELISM=false`;
+- memory abort guard: `ABORT_MAX_RESERVED_GIB=78`;
 - no Hugging Face upload;
 - no Kaggle submit.
 
