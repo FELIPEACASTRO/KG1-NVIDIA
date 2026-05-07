@@ -77,7 +77,8 @@ Training design:
 - `HF_HUB_ENABLE_HF_TRANSFER=1` is enabled and `hf_transfer` is installed when needed;
 - `mamba-ssm[causal-conv1d]` is installed and validated before the Nemotron
   model load, because the model remote code imports `mamba_ssm` Mamba kernels;
-- `bitsandbytes` is attempted so the train script can use `PagedAdam8bit`;
+- `bitsandbytes` is disabled by default because the observed Colab image tried
+  to load a CUDA-incompatible `libnvJitLink.so.13`; torch Adam is used instead;
 - `PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True`;
 - `TOKENIZERS_PARALLELISM=false`;
 - memory abort guard: `ABORT_MAX_RESERVED_GIB=78`;
@@ -91,14 +92,21 @@ The notebook blocks model load if the runtime is too small:
 - GPU total memory must be at least `70 GiB`;
 - system RAM total must be at least `45 GiB`;
 - system RAM available must be at least `20 GiB`;
-- `/content` free disk must be at least `55 GiB` after safe cleanup;
-- `/content` free disk below `65 GiB` prints a warning but does not block.
+- `/content` free disk must be at least `90 GiB` after cleanup;
+- `/content` free disk below `100 GiB` prints a warning but does not block.
 
-Before checking disk, the notebook removes only safe disposable paths:
+Before checking disk, the notebook logs top disk users and removes disposable
+paths:
 
 - `/content/sample_data`;
 - `/root/.cache/pip`;
 - `/tmp/pip-*`.
+
+Aggressive cleanup is enabled by default for the temporary Colab runtime. It
+also removes partial Nemotron HF cache from failed runs, `bitsandbytes`, and
+large unused preinstalled packages such as TensorFlow/JAX/OpenCV/spaCy and
+similar non-training stacks. This is intentional because the previous H100 run
+dropped to about `2.1 GiB` free during model fetch/load.
 
 An H100 name is expected and logged. A non-H100 GPU can proceed only if the
 memory gate passes, but it prints a warning because the intended runtime is

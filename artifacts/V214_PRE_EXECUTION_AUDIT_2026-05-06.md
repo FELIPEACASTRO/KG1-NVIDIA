@@ -28,7 +28,8 @@ Static checks:
 - notebook contains 60-second heartbeat resource logs.
 - notebook contains GPU-first model placement controls;
 - notebook contains TF32/matmul precision controls;
-- notebook contains optional `hf_transfer` and `bitsandbytes` setup.
+- notebook contains optional `hf_transfer`, required Mamba kernel validation,
+  default-disabled `bitsandbytes`, and disk cleanup diagnostics.
 
 ## Dataset Checks
 
@@ -66,7 +67,7 @@ Remote notebook embeds the required files with expected hashes:
 
 - `data/v214/v214_micro_train.jsonl`: `da601695ca59e6e981638a1105c4b9750d077fb9d15717bb0474d95a85e552a7`
 - `data/v214/v214_micro_val.jsonl`: `ace511e400542241f3ed6bdba35c5b5d4852c72410d2b1504c88330e89482183`
-- `scripts/hf_job_train_v90.py`: `2af64e812a7c1f56232ba5841bc9c2a78f18a069853c2d444f8ad22c6c57c90c`
+- `scripts/hf_job_train_v90.py`: `8c542ccf74384f61d785f8374a149dd5f8db287b766512b5d63e9f86d65e71df`
 - `scripts/evaluate_lora_adapter.py`: `b56764960629cf4c43c7dab09e8f2dc8b338b284d2ed1d65a325ca80c4463168`
 - `src/competition_utils.py`: `b6aa77804681ddf29478815627aad023d9a8e673208369a930d97f13b8e15a13`
 
@@ -84,7 +85,8 @@ Notebook checks/imports:
 - `mamba-ssm[causal-conv1d]`, with fallback to separate `causal-conv1d`
   and `mamba-ssm` installs
 - `vllm`
-- `bitsandbytes` optional, with fallback to torch Adam if unavailable
+- `bitsandbytes` disabled by default for V214; `USE_BITSANDBYTES=0` is passed
+  to the training script to avoid CUDA library mismatch on Colab
 - `packaging`
 
 Before loading the model, it runs exact fresh Python subprocess checks for:
@@ -118,7 +120,7 @@ The notebook/training script uses conservative performance settings:
 - `HF_HUB_ENABLE_HF_TRANSFER=1`;
 - `PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True`;
 - `TOKENIZERS_PARALLELISM=false`;
-- `bitsandbytes` attempted for `PagedAdam8bit`;
+- `bitsandbytes` is not used by default; optimizer falls back to torch Adam;
 - `MAX_LENGTH=4096`;
 - `BATCH_SIZE=4`;
 - `MICRO_BATCH_SIZE=1`;
@@ -134,10 +136,10 @@ The notebook blocks model load unless:
 - GPU total memory `>=70 GiB`;
 - system RAM total `>=45 GiB`;
 - system RAM available `>=20 GiB`;
-- `/content` free disk `>=55 GiB` after safe cleanup.
+- `/content` free disk `>=90 GiB` after cleanup.
 
 The notebook warns, but does not block, when `/content` free disk is below
-`65 GiB`.
+`100 GiB`.
 
 Safe cleanup before the disk check removes:
 
@@ -145,12 +147,20 @@ Safe cleanup before the disk check removes:
 - `/root/.cache/pip`;
 - `/tmp/pip-*`.
 
+Aggressive cleanup is enabled by default for this temporary Colab runtime. It
+also logs a top disk-usage report before and after cleanup, removes partial
+Nemotron HF cache from previous failed runs, removes `bitsandbytes`, and removes
+large preinstalled packages not used by this notebook, including TensorFlow,
+JAX, OpenCV, spaCy, XGBoost/LightGBM/CatBoost, plotting stacks, and similar
+non-training dependencies.
+
 Expected H100 high-RAM verdict:
 
 - H100 80GB should pass the GPU memory gate.
 - Colab high-RAM should pass the system RAM gate.
-- The observed H100 runtime with about `59.5 GiB` free on `/content` should
-  pass after this gate adjustment, while logging a disk-warning.
+- The observed H100 runtime with about `59.5 GiB` free on `/content` failed
+  during model fetch/load and reached about `2.1 GiB` free; it must now fail
+  the disk gate unless cleanup can raise free disk to at least `90 GiB`.
 - A 40GB GPU should fail before model load.
 - Standard low-RAM runtime should fail before model load.
 

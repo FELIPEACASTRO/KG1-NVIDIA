@@ -158,6 +158,7 @@ import time
 os.environ.setdefault('TOKENIZERS_PARALLELISM', 'false')
 os.environ.setdefault('HF_HUB_ENABLE_HF_TRANSFER', '1')
 os.environ.setdefault('PYTORCH_CUDA_ALLOC_CONF', 'expandable_segments:True')
+os.environ.setdefault('BITSANDBYTES_NOWELCOME', '1')
 
 VERSION = 'V214_H100_MICRO_REPLAY_20260506'
 ROOT = pathlib.Path('/content/kg1')
@@ -179,6 +180,7 @@ V214_BATCH_SIZE = int(os.environ.get('KG1_V214_BATCH_SIZE', '4'))
 V214_MICRO_BATCH_SIZE = int(os.environ.get('KG1_V214_MICRO_BATCH_SIZE', '1'))
 V214_MAX_LENGTH = int(os.environ.get('KG1_V214_MAX_LENGTH', '4096'))
 V214_ABORT_MAX_RESERVED_GIB = float(os.environ.get('KG1_V214_ABORT_MAX_RESERVED_GIB', '78'))
+V214_USE_BITSANDBYTES = os.environ.get('KG1_V214_USE_BITSANDBYTES', '0').strip().lower() in {'1', 'true', 'yes', 'on'}
 ALLOW_KAGGLE_SUBMIT = False
 
 WEAK_MIN_FOR_FULL = 191
@@ -211,9 +213,11 @@ print('V214_BATCH_SIZE =', V214_BATCH_SIZE)
 print('V214_MICRO_BATCH_SIZE =', V214_MICRO_BATCH_SIZE)
 print('V214_MAX_LENGTH =', V214_MAX_LENGTH)
 print('V214_ABORT_MAX_RESERVED_GIB =', V214_ABORT_MAX_RESERVED_GIB)
+print('V214_USE_BITSANDBYTES =', V214_USE_BITSANDBYTES)
 print('TOKENIZERS_PARALLELISM =', os.environ.get('TOKENIZERS_PARALLELISM'))
 print('HF_HUB_ENABLE_HF_TRANSFER =', os.environ.get('HF_HUB_ENABLE_HF_TRANSFER'))
 print('PYTORCH_CUDA_ALLOC_CONF =', os.environ.get('PYTORCH_CUDA_ALLOC_CONF'))
+print('BITSANDBYTES_NOWELCOME =', os.environ.get('BITSANDBYTES_NOWELCOME'))
 print('ALLOW_KAGGLE_SUBMIT =', ALLOW_KAGGLE_SUBMIT)
 if ALLOW_KAGGLE_SUBMIT:
     raise RuntimeError('Submission is disabled in V214 by design.')
@@ -472,10 +476,14 @@ except Exception as exc:
     print('vLLM unavailable before install:', repr(exc), flush=True)
     print('Installing vLLM; eval runs in fresh Python processes.', flush=True)
     run_cmd([sys.executable, '-m', 'pip', 'install', '-q', 'vllm'])
-try:
-    ensure_import('bitsandbytes', 'bitsandbytes')
-except Exception as exc:
-    print('bitsandbytes unavailable after install attempt; train script will fall back to torch Adam:', repr(exc), flush=True)
+if V214_USE_BITSANDBYTES:
+    try:
+        ensure_import('bitsandbytes', 'bitsandbytes')
+    except Exception as exc:
+        print('bitsandbytes unavailable after install attempt; train script will fall back to torch Adam:', repr(exc), flush=True)
+else:
+    print('bitsandbytes disabled for V214 by default; uninstalling if present to avoid CUDA library mismatch.', flush=True)
+    run_cmd([sys.executable, '-m', 'pip', 'uninstall', '-y', 'bitsandbytes'], check=False)
 fresh_python_import_check(['torch', 'transformers', 'peft', 'vllm', 'mamba_ssm'])
 print('=== V214 DEPENDENCY AUDIT END ===', flush=True)
 """
@@ -486,9 +494,11 @@ print('=== V214 H100 SIZE GATE START ===', flush=True)
 MIN_GPU_TOTAL_GIB = float(os.environ.get('KG1_V214_MIN_GPU_GIB', '70'))
 MIN_RAM_TOTAL_GIB = float(os.environ.get('KG1_V214_MIN_RAM_TOTAL_GIB', '45'))
 MIN_RAM_AVAILABLE_GIB = float(os.environ.get('KG1_V214_MIN_RAM_AVAILABLE_GIB', '20'))
-MIN_CONTENT_FREE_GIB = float(os.environ.get('KG1_V214_MIN_CONTENT_FREE_GIB', '55'))
-WARN_CONTENT_FREE_GIB = float(os.environ.get('KG1_V214_WARN_CONTENT_FREE_GIB', '65'))
+MIN_CONTENT_FREE_GIB = float(os.environ.get('KG1_V214_MIN_CONTENT_FREE_GIB', '90'))
+WARN_CONTENT_FREE_GIB = float(os.environ.get('KG1_V214_WARN_CONTENT_FREE_GIB', '100'))
 SAFE_DISK_CLEANUP = os.environ.get('KG1_V214_SAFE_DISK_CLEANUP', '1').strip().lower() not in {'0', 'false', 'no', 'off'}
+AGGRESSIVE_DISK_CLEANUP = os.environ.get('KG1_V214_AGGRESSIVE_DISK_CLEANUP', '1').strip().lower() not in {'0', 'false', 'no', 'off'}
+DISK_CLEANUP_TOP_N = int(os.environ.get('KG1_V214_DISK_CLEANUP_TOP_N', '25'))
 
 def meminfo_gib():
     values = {}
@@ -509,12 +519,13 @@ def path_size_gib(path):
     if path.is_file():
         return path.stat().st_size / 1024**3
     total = 0
-    for child in path.rglob('*'):
-        try:
-            if child.is_file():
+    for root, _, files in os.walk(path, topdown=True):
+        for name in files:
+            child = pathlib.Path(root) / name
+            try:
                 total += child.stat().st_size
-        except OSError:
-            pass
+            except OSError:
+                pass
     return total / 1024**3
 
 def safe_remove_path(path):
@@ -553,12 +564,92 @@ def safe_disk_cleanup():
     print('safe_disk_cleanup_report =', json.dumps(cleanup_report, indent=2, sort_keys=True), flush=True)
     return cleanup_report
 
+def disk_usage_report(label, roots):
+    print(f'--- V214 DISK USAGE REPORT START: {label} ---', flush=True)
+    rows = []
+    for root_raw in roots:
+        root = pathlib.Path(root_raw)
+        if not root.exists():
+            print(f'missing root: {root}', flush=True)
+            continue
+        try:
+            children = list(root.iterdir())
+        except Exception as exc:
+            print(f'cannot list {root}: {type(exc).__name__}: {exc}', flush=True)
+            continue
+        for child in children:
+            try:
+                rows.append((path_size_gib(child), str(child)))
+            except Exception as exc:
+                print(f'cannot size {child}: {type(exc).__name__}: {exc}', flush=True)
+    rows.sort(reverse=True)
+    for size, path in rows[:DISK_CLEANUP_TOP_N]:
+        print(f'disk_item_gib={size:.2f} path={path}', flush=True)
+    print(f'--- V214 DISK USAGE REPORT END: {label} ---', flush=True)
+
+def aggressive_disk_cleanup():
+    cleanup_report = []
+    if not AGGRESSIVE_DISK_CLEANUP:
+        print('AGGRESSIVE_DISK_CLEANUP disabled by KG1_V214_AGGRESSIVE_DISK_CLEANUP=0', flush=True)
+        return cleanup_report
+    allowed_prefixes = [
+        pathlib.Path('/root/.cache').resolve(),
+        pathlib.Path('/usr/local/lib/python3.12/dist-packages').resolve(),
+    ]
+    patterns = [
+        '/root/.cache/huggingface/hub/models--nvidia--NVIDIA-Nemotron-3-Nano-30B-A3B-BF16',
+        '/root/.cache/huggingface/hub/.locks/models--nvidia--NVIDIA-Nemotron-3-Nano-30B-A3B-BF16',
+        '/usr/local/lib/python3.12/dist-packages/bitsandbytes*',
+        '/usr/local/lib/python3.12/dist-packages/tensorflow*',
+        '/usr/local/lib/python3.12/dist-packages/tensorboard*',
+        '/usr/local/lib/python3.12/dist-packages/tf_keras*',
+        '/usr/local/lib/python3.12/dist-packages/keras*',
+        '/usr/local/lib/python3.12/dist-packages/jax*',
+        '/usr/local/lib/python3.12/dist-packages/jaxlib*',
+        '/usr/local/lib/python3.12/dist-packages/cv2',
+        '/usr/local/lib/python3.12/dist-packages/opencv*',
+        '/usr/local/lib/python3.12/dist-packages/spacy*',
+        '/usr/local/lib/python3.12/dist-packages/thinc*',
+        '/usr/local/lib/python3.12/dist-packages/xgboost*',
+        '/usr/local/lib/python3.12/dist-packages/lightgbm*',
+        '/usr/local/lib/python3.12/dist-packages/catboost*',
+        '/usr/local/lib/python3.12/dist-packages/plotly*',
+        '/usr/local/lib/python3.12/dist-packages/bokeh*',
+        '/usr/local/lib/python3.12/dist-packages/pymc*',
+        '/usr/local/lib/python3.12/dist-packages/librosa*',
+        '/usr/local/lib/python3.12/dist-packages/moviepy*',
+        '/usr/local/lib/python3.12/dist-packages/skimage',
+        '/usr/local/lib/python3.12/dist-packages/scikit_image*',
+        '/usr/local/lib/python3.12/dist-packages/torch_xla*',
+    ]
+    targets = []
+    for pattern in patterns:
+        targets.extend(pathlib.Path('/').glob(pattern.lstrip('/')))
+    seen = set()
+    for target in targets:
+        try:
+            resolved = target.resolve()
+        except Exception:
+            resolved = target.absolute()
+        if str(resolved) in seen:
+            continue
+        if not any(resolved == prefix or prefix in resolved.parents for prefix in allowed_prefixes):
+            print('aggressive cleanup skip outside allowed prefixes:', target, flush=True)
+            continue
+        seen.add(str(resolved))
+        cleanup_report.append(safe_remove_path(target))
+    print('aggressive_disk_cleanup_report =', json.dumps(cleanup_report, indent=2, sort_keys=True), flush=True)
+    return cleanup_report
+
 if not torch.cuda.is_available():
     raise RuntimeError('CUDA GPU is required for V214 dry-run/train/eval.')
 
 content_free_before_cleanup, content_total_before_cleanup = disk_free_gib('/content')
+disk_usage_report('before_cleanup', ['/content', '/root/.cache', '/usr/local/lib/python3.12/dist-packages'])
 cleanup_report = safe_disk_cleanup()
+aggressive_cleanup_report = aggressive_disk_cleanup()
 content_free_after_cleanup, content_total_after_cleanup = disk_free_gib('/content')
+disk_usage_report('after_cleanup', ['/content', '/root/.cache', '/usr/local/lib/python3.12/dist-packages'])
 
 props = torch.cuda.get_device_properties(0)
 gpu_name = props.name
@@ -590,6 +681,7 @@ size_report = {
         'content_disk_warning_gib': WARN_CONTENT_FREE_GIB,
     },
     'cleanup_report': cleanup_report,
+    'aggressive_cleanup_report': aggressive_cleanup_report,
 }
 print('size_report =', json.dumps(size_report, indent=2, sort_keys=True), flush=True)
 
@@ -606,14 +698,13 @@ if ram_total_gib < MIN_RAM_TOTAL_GIB or ram_available_gib < MIN_RAM_AVAILABLE_GI
 if content_free_gib < MIN_CONTENT_FREE_GIB:
     raise RuntimeError(
         f'/content free disk too small: {content_free_gib:.1f}GiB < {MIN_CONTENT_FREE_GIB:.1f}GiB. '
-        'Restart runtime, free disk, or lower KG1_V214_MIN_CONTENT_FREE_GIB only for dry-run diagnostics.'
+        'The previous H100 run fell to ~2GiB free during model fetch/load. '
+        'Restart runtime, keep KG1_V214_AGGRESSIVE_DISK_CLEANUP=1, or use a runtime with a larger /content disk.'
     )
 if content_free_gib < WARN_CONTENT_FREE_GIB:
     print(
         f'WARNING: /content free disk is tight: {content_free_gib:.1f}GiB < '
-        f'warning threshold {WARN_CONTENT_FREE_GIB:.1f}GiB. This should be enough '
-        'to try the V214 dry-run on this H100 runtime, but model download/cache may still fail. '
-        'If download fails, restart runtime and avoid extra installs/files before this notebook.',
+        f'warning threshold {WARN_CONTENT_FREE_GIB:.1f}GiB. Proceeding is allowed because the hard minimum passed.',
         flush=True,
     )
 if not h100_detected:
@@ -770,6 +861,7 @@ def training_env(output_dir, dry_run):
         'FAIL_ON_MISSING_ADAPTER_KEYS': '1',
         'UPLOAD_TO_HF': '0',
         'UPLOAD_CHECKPOINTS_DURING_TRAINING': '0',
+        'USE_BITSANDBYTES': '1' if V214_USE_BITSANDBYTES else '0',
         'DRY_RUN_VALIDATE_ONLY': '1' if dry_run else '0',
         'LORA_R': '32',
         'LORA_ALPHA': '32',

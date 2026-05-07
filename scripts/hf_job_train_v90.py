@@ -241,6 +241,7 @@ FAIL_ON_MISSING_ADAPTER_KEYS = env_bool("FAIL_ON_MISSING_ADAPTER_KEYS", True)
 TRAINABLE_LORA_MODULES = env_str("TRAINABLE_LORA_MODULES", "")
 ADAPTER_LOAD_TORCH_DEVICE = env_str("ADAPTER_LOAD_TORCH_DEVICE", "")
 ADAPTER_LOAD_LOW_CPU_MEM_USAGE = env_bool("ADAPTER_LOAD_LOW_CPU_MEM_USAGE", False)
+USE_BITSANDBYTES = env_bool("USE_BITSANDBYTES", True)
 
 
 def optional_torch_device(value: str) -> str | None:
@@ -1633,19 +1634,29 @@ def train() -> None:
         return
 
     trainable_params = [p for p in model.parameters() if p.requires_grad]
-    try:
-        import bitsandbytes as bnb
+    if USE_BITSANDBYTES:
+        try:
+            import bitsandbytes as bnb
 
-        optimizer = bnb.optim.PagedAdam8bit(
-            trainable_params,
-            lr=LEARNING_RATE,
-            betas=(ADAM_BETA1, ADAM_BETA2),
-            eps=ADAM_EPS,
-            weight_decay=WEIGHT_DECAY,
-        )
-        print("Optimizer: bitsandbytes PagedAdam8bit")
-    except Exception as exc:
-        print(f"bitsandbytes optimizer unavailable ({exc}); using torch Adam")
+            optimizer = bnb.optim.PagedAdam8bit(
+                trainable_params,
+                lr=LEARNING_RATE,
+                betas=(ADAM_BETA1, ADAM_BETA2),
+                eps=ADAM_EPS,
+                weight_decay=WEIGHT_DECAY,
+            )
+            print("Optimizer: bitsandbytes PagedAdam8bit")
+        except Exception as exc:
+            print(f"bitsandbytes optimizer unavailable ({exc}); using torch Adam")
+            optimizer = torch.optim.Adam(
+                trainable_params,
+                lr=LEARNING_RATE,
+                betas=(ADAM_BETA1, ADAM_BETA2),
+                eps=ADAM_EPS,
+                weight_decay=WEIGHT_DECAY,
+            )
+    else:
+        print("Optimizer: torch Adam (USE_BITSANDBYTES=0)")
         optimizer = torch.optim.Adam(
             trainable_params,
             lr=LEARNING_RATE,
