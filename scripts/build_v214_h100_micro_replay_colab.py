@@ -166,7 +166,6 @@ os.environ.setdefault('VLLM_USE_DEEP_GEMM_E8M0', '0')
 os.environ.setdefault('VLLM_USE_DEEP_GEMM_TMA_ALIGNED_SCALES', '0')
 os.environ.setdefault('VLLM_DEEP_GEMM_WARMUP', 'skip')
 os.environ.setdefault('VLLM_MEMORY_PROFILER_ESTIMATE_CUDAGRAPHS', '0')
-os.environ.setdefault('VLLM_DISABLE_LOG_STATS', '1')
 
 VERSION = 'V214_H100_MICRO_REPLAY_20260506'
 ROOT = pathlib.Path('/content/kg1')
@@ -182,6 +181,7 @@ MODEL_REVISION = '{MODEL_REVISION}'
 RUN_DRY_RUN = os.environ.get('KG1_V214_RUN_DRY_RUN', '1').strip().lower() not in {{'0', 'false', 'no', 'off'}}
 RUN_TRAIN = os.environ.get('KG1_V214_RUN_TRAIN', '0').strip().lower() in {{'1', 'true', 'yes', 'on'}}
 RUN_EVAL = os.environ.get('KG1_V214_RUN_EVAL', '1').strip().lower() not in {{'0', 'false', 'no', 'off'}}
+RUN_WEAK_SMOKE = os.environ.get('KG1_V214_RUN_WEAK_SMOKE', '1').strip().lower() not in {{'0', 'false', 'no', 'off'}}
 V214_MODEL_DEVICE_MAP = os.environ.get('KG1_V214_MODEL_DEVICE_MAP', 'cuda')
 V214_ATTN_IMPLEMENTATION = os.environ.get('KG1_V214_ATTN_IMPLEMENTATION', 'eager')
 V214_BATCH_SIZE = int(os.environ.get('KG1_V214_BATCH_SIZE', '4'))
@@ -215,6 +215,7 @@ print('MODEL_REVISION =', MODEL_REVISION)
 print('RUN_DRY_RUN =', RUN_DRY_RUN)
 print('RUN_TRAIN =', RUN_TRAIN)
 print('RUN_EVAL =', RUN_EVAL)
+print('RUN_WEAK_SMOKE =', RUN_WEAK_SMOKE)
 print('V214_MODEL_DEVICE_MAP =', V214_MODEL_DEVICE_MAP)
 print('V214_ATTN_IMPLEMENTATION =', V214_ATTN_IMPLEMENTATION)
 print('V214_BATCH_SIZE =', V214_BATCH_SIZE)
@@ -1042,6 +1043,43 @@ elif 'is_complete_adapter_dir' in globals() and not is_complete_adapter_dir(fina
     raise RuntimeError(f'final_adapter exists but is incomplete; refusing weak eval: {final_adapter}')
 else:
     weak_eval_dir.mkdir(parents=True, exist_ok=True)
+    if RUN_WEAK_SMOKE:
+        weak_smoke_dir = EVAL_OUT / 'weak_eval_smoke'
+        weak_smoke_dir.mkdir(parents=True, exist_ok=True)
+        print('weak smoke eval enabled: limit=8', flush=True)
+        print('weak_smoke_dir =', weak_smoke_dir, flush=True)
+        rc = run_cmd(
+            [
+                sys.executable,
+                str(ROOT / 'scripts/evaluate_lora_adapter.py'),
+                '--solution-csv', str(weak_eval_csv),
+                '--questions-csv', str(weak_eval_csv),
+                '--adapter', str(final_adapter),
+                '--base-model-path', MODEL_NAME,
+                '--label', 'v214_micro_weak_smoke',
+                '--seed', '42',
+                '--limit', '8',
+                '--output-dir', str(weak_smoke_dir),
+            ],
+            cwd=ROOT,
+            log_path=weak_smoke_dir / 'weak_eval_smoke.log',
+            check=True,
+        )
+        weak_smoke_report_path = weak_smoke_dir / 'v214_micro_weak_smoke_eval_report.json'
+        weak_smoke_predictions_path = weak_smoke_dir / 'v214_micro_weak_smoke_predictions.csv'
+        weak_smoke_raw_path = weak_smoke_dir / 'v214_micro_weak_smoke_raw_predictions_pre_score.csv'
+        weak_smoke_per_task_path = weak_smoke_dir / 'v214_micro_weak_smoke_per_task.csv'
+        print('weak smoke returncode =', rc, flush=True)
+        print('weak_smoke_report_path =', weak_smoke_report_path, 'exists =', weak_smoke_report_path.exists(), flush=True)
+        print('weak_smoke_predictions_path =', weak_smoke_predictions_path, 'exists =', weak_smoke_predictions_path.exists(), flush=True)
+        print('weak_smoke_raw_path =', weak_smoke_raw_path, 'exists =', weak_smoke_raw_path.exists(), flush=True)
+        print('weak_smoke_per_task_path =', weak_smoke_per_task_path, 'exists =', weak_smoke_per_task_path.exists(), flush=True)
+        if not weak_smoke_report_path.exists() or not weak_smoke_predictions_path.exists() or not weak_smoke_raw_path.exists():
+            raise RuntimeError('Weak smoke eval did not produce required report/prediction files; refusing full weak eval.')
+        weak_smoke_report = json.loads(weak_smoke_report_path.read_text(encoding='utf-8'))
+        print('weak_smoke_report =', json.dumps(weak_smoke_report, indent=2, sort_keys=True), flush=True)
+        if int(weak_smoke_report.get('rows', 0)) != 8:
+            raise RuntimeError(f'Weak smoke eval row count mismatch: {weak_smoke_report.get("rows")} != 8')
     rc = run_cmd(
         [
             sys.executable,

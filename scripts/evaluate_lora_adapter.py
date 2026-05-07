@@ -184,7 +184,6 @@ def apply_vllm_runtime_safety_settings() -> dict[str, str]:
         os.environ["VLLM_USE_DEEP_GEMM_TMA_ALIGNED_SCALES"] = "0"
         os.environ["VLLM_DEEP_GEMM_WARMUP"] = "skip"
     os.environ.setdefault("VLLM_MEMORY_PROFILER_ESTIMATE_CUDAGRAPHS", "0")
-    os.environ.setdefault("VLLM_DISABLE_LOG_STATS", "1")
     keys = [
         "KG1_ALLOW_VLLM_DEEP_GEMM",
         "VLLM_USE_DEEP_GEMM",
@@ -193,9 +192,46 @@ def apply_vllm_runtime_safety_settings() -> dict[str, str]:
         "VLLM_USE_DEEP_GEMM_TMA_ALIGNED_SCALES",
         "VLLM_DEEP_GEMM_WARMUP",
         "VLLM_MEMORY_PROFILER_ESTIMATE_CUDAGRAPHS",
-        "VLLM_DISABLE_LOG_STATS",
     ]
     return {key: os.environ.get(key, "") for key in keys}
+
+
+def first_existing_column(frame: pd.DataFrame, candidates: list[str]) -> str | None:
+    for candidate in candidates:
+        if candidate in frame.columns:
+            return candidate
+    return None
+
+
+def prepare_merged_predictions(solution: pd.DataFrame, pred: pd.DataFrame) -> pd.DataFrame:
+    """Merge generated rows with labels without relying on pandas suffix names."""
+
+    pred_for_merge = pred.rename(columns={"prompt": "generated_prompt", "type": "pred_type"}).copy()
+    merged = solution.merge(pred_for_merge, on="id", how="left", validate="one_to_one")
+
+    prompt_col = first_existing_column(merged, ["prompt", "generated_prompt", "prompt_x", "prompt_y"])
+    if prompt_col is None:
+        merged["prompt"] = ""
+    elif prompt_col != "prompt":
+        merged["prompt"] = merged[prompt_col].fillna("").astype(str)
+
+    if "prediction" not in merged.columns:
+        merged["prediction"] = ""
+    if "finish_reason" not in merged.columns:
+        merged["finish_reason"] = ""
+    if "completion_tokens" not in merged.columns:
+        merged["completion_tokens"] = 0
+
+    type_col = first_existing_column(merged, ["type", "task_type", "family", "type_x", "pred_type", "type_y"])
+    if type_col is None:
+        merged["type"] = merged["prompt"].map(classify_puzzle)
+    elif type_col != "type":
+        merged["type"] = merged[type_col].fillna("").astype(str)
+    missing_type = merged["type"].fillna("").astype(str).eq("")
+    if missing_type.any():
+        merged.loc[missing_type, "type"] = merged.loc[missing_type, "prompt"].map(classify_puzzle)
+
+    return merged
 
 
 def evaluate_adapter(
@@ -206,6 +242,7 @@ def evaluate_adapter(
     base_model_path: str,
     config: dict[str, Any] | None = None,
     seed: int = 42,
+    raw_predictions_path: str | Path | None = None,
 ) -> tuple[dict[str, Any], pd.DataFrame]:
     """Run vLLM adapter inference and return a summary plus row predictions."""
 
@@ -298,13 +335,18 @@ def evaluate_adapter(
         )
 
     pred = pd.DataFrame(rows)
-    merged = solution.merge(pred, on="id", how="left", validate="one_to_one")
+    if raw_predictions_path is not None:
+        raw_path = Path(raw_predictions_path)
+        raw_path.parent.mkdir(parents=True, exist_ok=True)
+        pred.to_csv(raw_path, index=False)
+        print("raw_predictions_pre_score_csv =", raw_path)
+        print("raw_predictions_pre_score_rows =", len(pred))
+
+    merged = prepare_merged_predictions(solution, pred)
     if "answer" in merged.columns:
         merged["correct"] = merged.apply(lambda r: verify_answer(r["answer"], r["prediction"]), axis=1)
     else:
         merged["correct"] = False
-    if "type" not in merged.columns:
-        merged["type"] = merged["prompt"].map(classify_puzzle)
     merged["truncated"] = merged["finish_reason"].fillna("").astype(str).eq("length")
 
     total_tokens = int(merged["completion_tokens"].fillna(0).sum())
@@ -382,6 +424,8 @@ def main() -> int:
         q_id = row_id_column(questions)
         questions = questions[questions[q_id].astype(str).isin(ids)].copy()
 
+    label = args.label.replace("/", "_").replace("\\", "_")
+    raw_predictions_path = args.output_dir / f"{label}_raw_predictions_pre_score.csv"
     summary, predictions = evaluate_adapter(
         solution,
         questions,
@@ -389,8 +433,8 @@ def main() -> int:
         base_model_path=resolve_base_model_path(args.base_model_path),
         config=OFFICIAL_INFERENCE_CONFIG,
         seed=args.seed,
+        raw_predictions_path=raw_predictions_path,
     )
-    label = args.label.replace("/", "_").replace("\\", "_")
     predictions_path = args.output_dir / f"{label}_predictions.csv"
     per_task_path = args.output_dir / f"{label}_per_task.csv"
     report_path = args.output_dir / f"{label}_eval_report.json"
@@ -406,6 +450,7 @@ def main() -> int:
             "limit": args.limit,
         },
         "outputs": {
+            "raw_predictions_pre_score_csv": str(raw_predictions_path),
             "predictions_csv": str(predictions_path),
             "per_task_csv": str(per_task_path),
             "report_json": str(report_path),
