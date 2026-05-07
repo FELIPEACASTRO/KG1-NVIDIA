@@ -4,7 +4,7 @@
 
 - Repository: `https://github.com/FELIPEACASTRO/KG1-NVIDIA`
 - Branch: `v214-h100-micro-replay`
-- Notebook validation commit: `2bcceda55e83f7ca8774d4faea2a60ad0d6a5c3e`
+- Notebook validation commit: `b11b8facfa207ded9b2fab343fe9ab58504158e0`
 - Note: this publish-result document may appear in a later commit on the same branch.
 
 ## Colab URL
@@ -18,9 +18,9 @@ Validated through GitHub API:
 - endpoint: `https://api.github.com/repos/FELIPEACASTRO/KG1-NVIDIA/contents/notebooks/KG1_V214_H100_MICRO_REPLAY_COLAB.ipynb?ref=v214-h100-micro-replay`
 - status: `200`
 - file: `KG1_V214_H100_MICRO_REPLAY_COLAB.ipynb`
-- size: `2898460`
-- blob sha: `cc7274842e694028e2d6a2b06f8d30060a69efb3`
-- commit-pinned raw sha256: `261b3d7c41c180ef569aa571dd5e173a2fd6b213f928dc5df749247aa13df581`
+- size: `2898733`
+- blob sha: `d9d84087909df041290458388d81e155fb7421cf`
+- commit-pinned raw sha256: `086ee7f979a8a5ccdf5a592e4d284c5ff6a025226691c115896ed409357d6174`
 - validated markers:
   - `mamba-ssm[causal-conv1d]`
   - `mamba_ssm_postinstall`
@@ -31,10 +31,11 @@ Validated through GitHub API:
   - `USE_BITSANDBYTES`
   - `Optimizer: torch Adam (USE_BITSANDBYTES=0)`
   - `projected_content_free_after_model_cache_gib`
+  - `skipping mounted path outside local disk accounting`
 
 Validated through `git ls-remote`:
 
-- `2bcceda55e83f7ca8774d4faea2a60ad0d6a5c3e refs/heads/v214-h100-micro-replay`
+- `b11b8facfa207ded9b2fab343fe9ab58504158e0 refs/heads/v214-h100-micro-replay`
 
 ## Pull Request URL
 
@@ -54,6 +55,8 @@ Validated through `git ls-remote`:
 - Notebook logs top disk users before/after cleanup and removes partial Nemotron
   HF cache plus large unused preinstalled packages in the temporary Colab
   runtime.
+- Disk report skips mounted paths such as `/content/drive`; Drive is not counted
+  as local `/content` disk headroom.
 - Submit remains disabled.
 - Training remains disabled by default.
 - To train in Colab, set `KG1_V214_RUN_TRAIN=1`.
