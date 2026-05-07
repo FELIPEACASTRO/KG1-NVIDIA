@@ -1,0 +1,113 @@
+{
+  "created_at_utc": "2026-05-07T21:49:24+00:00",
+  "gates": {
+    "baseline_bit_manipulation_expected": 135,
+    "baseline_equation_transform_expected": 55,
+    "baseline_weak_total_expected": 190,
+    "full_candidate_min": 831,
+    "full_truncation_max": 4,
+    "promote_bit_manipulation_min": 133,
+    "promote_equation_transform_min": 60,
+    "promote_weak_total_min": 193
+  },
+  "inputs": {
+    "strict_pool": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\weak_family_mega_search_20260507\\candidate_weak_family_teacher_pool_historic_mega_strict_kg1_clean_safe.jsonl",
+    "v215_train": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\data\\v215\\v215_bit_focused_train.jsonl",
+    "v215_val": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\data\\v215\\v215_bit_focused_val.jsonl",
+    "v216_train": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\data\\v216\\v216_equation_symbolic_focus_train.jsonl",
+    "v216_val": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\data\\v216\\v216_equation_symbolic_focus_val.jsonl",
+    "weak_validation": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\weak_family_mega_search_20260507\\weak_validation_recomputed_rows.csv"
+  },
+  "issues": [],
+  "objective": "Score-push continuation package focused on equation_transform with bit preservation and strong replay anchor.",
+  "prefilter_rejected": {
+    "v216_train_empty_prompt_or_answer": 249,
+    "v216_val_empty_prompt_or_answer": 17
+  },
+  "recommended_training_env": {
+    "MIN_TOKENIZED_TRAIN_EXAMPLES": "10210",
+    "MIN_TOKENIZED_VAL_EXAMPLES": "681",
+    "MIN_TRAIN_EXAMPLES": "10210",
+    "MIN_VAL_EXAMPLES": "681",
+    "SAMPLING_MODE": "weighted_replacement",
+    "SOURCE_WEIGHTS": "v216_synthetic_kg1_symbolic_rules=0.55,v216_synthetic_kg1_numeric_rules=0.45,v216_synthetic_kg1_bit_rules=0.25,v216_base_clean_safe_strict_equation=0.85,v216_base_clean_safe_strict_bit=0.75,v215_replay_anchor=0.9",
+    "SUBCATEGORY_WEIGHTS": "equation_symbolic_binary=1.2,equation_symbolic_unary=1.2,equation_numeric=0.85,bit_manipulation=0.75"
+  },
+  "rejected_train": {
+    "duplicate_prompt_answer": 41
+  },
+  "rejected_val": {
+    "duplicate_prompt_answer": 2
+  },
+  "selection": {
+    "seed": 21650,
+    "strict_bit_train": 1800,
+    "strict_bit_val": 80,
+    "strict_equation_train": 3200,
+    "strict_equation_val": 120,
+    "v215_train_all": true,
+    "v216_train_all": true
+  },
+  "status": "PASS",
+  "train": {
+    "family_counts": {
+      "bit_manipulation": 2699,
+      "equation_transform": 6935,
+      "gravity_constant": 144,
+      "numeral_system": 144,
+      "text_encryption": 144,
+      "unit_conversion": 144
+    },
+    "path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\data\\v216\\v216_score_push_train.jsonl",
+    "rows": 10210,
+    "sha256": "8cfd065c102187b12c131aae7475c35e28073721175b4e6108004b0afc4d5d03",
+    "source_counts": {
+      "v215_replay_anchor": 859,
+      "v216_base_clean_safe_strict_bit": 1800,
+      "v216_base_clean_safe_strict_equation": 3200,
+      "v216_synthetic_kg1_bit_rules": 646,
+      "v216_synthetic_kg1_numeric_rules": 639,
+      "v216_synthetic_kg1_symbolic_rules": 3066
+    },
+    "subtype_counts": {
+      "bit_manipulation": 646,
+      "equation numeric": 176,
+      "equation symbolic/mixed": 3024,
+      "equation_numeric": 639,
+      "equation_symbolic_binary": 1574,
+      "equation_symbolic_unary": 1492,
+      "unknown": 2659
+    }
+  },
+  "validation": {
+    "family_counts": {
+      "bit_manipulation": 164,
+      "equation_transform": 453,
+      "gravity_constant": 16,
+      "numeral_system": 16,
+      "text_encryption": 16,
+      "unit_conversion": 16
+    },
+    "path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\data\\v216\\v216_score_push_val.jsonl",
+    "rows": 681,
+    "sha256": "80efe71260c8589b998699543c85aff3ff140bc90e431dfa0ec33bce3e0921c0",
+    "source_counts": {
+      "v215_replay_anchor": 98,
+      "v216_base_clean_safe_strict_bit": 80,
+      "v216_base_clean_safe_strict_equation": 120,
+      "v216_synthetic_kg1_bit_rules": 54,
+      "v216_synthetic_kg1_numeric_rules": 61,
+      "v216_synthetic_kg1_symbolic_rules": 268
+    },
+    "subtype_counts": {
+      "bit_manipulation": 54,
+      "equation numeric": 6,
+      "equation symbolic/mixed": 114,
+      "equation_numeric": 61,
+      "equation_symbolic_binary": 152,
+      "equation_symbolic_unary": 116,
+      "unknown": 178
+    }
+  },
+  "version": "v216_score_push"
+}
