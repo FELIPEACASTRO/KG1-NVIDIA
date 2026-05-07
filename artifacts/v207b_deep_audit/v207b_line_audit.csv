@@ -41,59 +41,75 @@ cell_index,cell_type,line_no,flags,text
 2,code,18,,OUT_ROOT = DRIVE_MY / 'KG1_NVIDIA_V207B' / 'output_v207b_external_adapter_triage'
 2,code,19,,REPORT_DIR = OUT_ROOT / 'reports'
 2,code,20,,PUBLIC_KAGGLE_ROOT = DRIVE_MY / 'KG1_PUBLIC_ADAPTERS'
-2,code,21,,FALLBACK_EXPORT_BASE = os.environ.get(
-2,code,22,,"    'KG1_V207B_FALLBACK_EXPORT_BASE',"
-2,code,23,,"    'https://raw.githubusercontent.com/FELIPEACASTRO/KG1-NVIDIA/v207b-external-triage/artifacts/drive_exports',"
-2,code,24,,)
-2,code,25,,MODEL_NAME = 'nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16'
-2,code,26,,MODEL_REVISION = 'cbd3fa9f933d55ef16a84236559f4ee2a0526848'
-2,code,27,,"VLLM_SPEC = os.environ.get('KG1_V207B_VLLM_SPEC', 'vllm==0.20.1')"
-2,code,28,,
-2,code,29,,VAL_CSV = V207A_ROOT / 'validation' / 'official_train_seed42_stratified10_val.csv'
-2,code,30,,VAL_WEAK_CSV = OUT_ROOT / 'validation' / 'official_train_seed42_stratified10_val_weak_families.csv'
-2,code,31,,BASELINE_PREDICTIONS = V207A_ROOT / 'v194_baseline_eval' / 'v194_baseline_predictions.csv'
-2,code,32,,BASELINE_PER_TASK = V207A_ROOT / 'v194_baseline_eval' / 'v194_baseline_per_task.csv'
-2,code,33,,BASELINE_REPORT = V207A_ROOT / 'v194_baseline_eval' / 'v194_baseline_eval_report.json'
-2,code,34,,
-2,code,35,,"WEAK_FAMILIES = ['bit_manipulation', 'equation_transform']"
-2,code,36,,"FORCE_REEVAL = os.environ.get('KG1_V207B_FORCE_REEVAL', '0') == '1'"
-2,code,37,,"RUN_FULL_FOR_POSITIVE = os.environ.get('KG1_V207B_RUN_FULL_FOR_POSITIVE', '1') == '1'"
-2,code,38,,"HASH_WEIGHTS = os.environ.get('KG1_V207B_HASH_WEIGHTS', '0') == '1'"
-2,code,39,,"MAX_DISCOVERY_DIRS = int(os.environ.get('KG1_V207B_MAX_DISCOVERY_DIRS', '25000'))"
-2,code,40,,"INCLUDE_REJECTED_V206 = os.environ.get('KG1_V207B_INCLUDE_REJECTED_V206', '0') == '1'"
-2,code,41,,"RUN_KAGGLE_PUBLIC_DOWNLOAD = os.environ.get('KG1_V207B_RUN_KAGGLE_PUBLIC_DOWNLOAD', '1') == '1'"
-2,code,42,,"PUBLIC_DOWNLOAD_MAX_PRIORITY = int(os.environ.get('KG1_V207B_PUBLIC_DOWNLOAD_MAX_PRIORITY', '2'))"
-2,code,43,,"PUBLIC_DOWNLOAD_MAX_CANDIDATES = int(os.environ.get('KG1_V207B_PUBLIC_DOWNLOAD_MAX_CANDIDATES', '13'))"
-2,code,44,,ALLOW_KAGGLE_SUBMIT = False
-2,code,45,,
-2,code,46,,"for path in [OUT_ROOT, REPORT_DIR, VAL_WEAK_CSV.parent, PUBLIC_KAGGLE_ROOT]:"
-2,code,47,,"    path.mkdir(parents=True, exist_ok=True)"
-2,code,48,,
-2,code,49,progress_log,"print('VERSION =', VERSION)"
-2,code,50,progress_log,"print('ROOT =', ROOT)"
-2,code,51,progress_log,"print('V207A_ROOT =', V207A_ROOT)"
-2,code,52,progress_log,"print('OUT_ROOT =', OUT_ROOT)"
-2,code,53,progress_log,"print('PUBLIC_KAGGLE_ROOT =', PUBLIC_KAGGLE_ROOT)"
-2,code,54,progress_log,"print('FALLBACK_EXPORT_BASE =', FALLBACK_EXPORT_BASE)"
-2,code,55,progress_log,"print('VAL_CSV =', VAL_CSV)"
-2,code,56,progress_log,"print('BASELINE_PREDICTIONS =', BASELINE_PREDICTIONS)"
-2,code,57,progress_log,"print('BASELINE_PER_TASK =', BASELINE_PER_TASK)"
-2,code,58,progress_log,"print('MODEL_NAME =', MODEL_NAME)"
-2,code,59,progress_log,"print('MODEL_REVISION =', MODEL_REVISION)"
-2,code,60,progress_log,"print('VLLM_SPEC =', VLLM_SPEC)"
-2,code,61,progress_log,"print('WEAK_FAMILIES =', WEAK_FAMILIES)"
-2,code,62,progress_log,"print('FORCE_REEVAL =', FORCE_REEVAL)"
-2,code,63,progress_log,"print('RUN_FULL_FOR_POSITIVE =', RUN_FULL_FOR_POSITIVE)"
-2,code,64,progress_log,"print('HASH_WEIGHTS =', HASH_WEIGHTS)"
-2,code,65,progress_log,"print('MAX_DISCOVERY_DIRS =', MAX_DISCOVERY_DIRS)"
-2,code,66,progress_log,"print('INCLUDE_REJECTED_V206 =', INCLUDE_REJECTED_V206)"
-2,code,67,progress_log,"print('RUN_KAGGLE_PUBLIC_DOWNLOAD =', RUN_KAGGLE_PUBLIC_DOWNLOAD)"
-2,code,68,progress_log,"print('PUBLIC_DOWNLOAD_MAX_PRIORITY =', PUBLIC_DOWNLOAD_MAX_PRIORITY)"
-2,code,69,progress_log,"print('PUBLIC_DOWNLOAD_MAX_CANDIDATES =', PUBLIC_DOWNLOAD_MAX_CANDIDATES)"
-2,code,70,progress_log,"print('ALLOW_KAGGLE_SUBMIT =', ALLOW_KAGGLE_SUBMIT)"
-2,code,71,,if ALLOW_KAGGLE_SUBMIT:
-2,code,72,hard_fail,    raise RuntimeError('This notebook is submit-disabled by design.')
-2,code,73,progress_log,print('=== V207B CONFIG END ===')
+2,code,21,,MANIFEST_DIR = OUT_ROOT / 'manifests'
+2,code,22,,FALLBACK_EXPORT_BASE = os.environ.get(
+2,code,23,,"    'KG1_V207B_FALLBACK_EXPORT_BASE',"
+2,code,24,,"    'https://raw.githubusercontent.com/FELIPEACASTRO/KG1-NVIDIA/v207b-external-triage/artifacts/drive_exports',"
+2,code,25,,)
+2,code,26,,MODEL_NAME = 'nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16'
+2,code,27,,MODEL_REVISION = 'cbd3fa9f933d55ef16a84236559f4ee2a0526848'
+2,code,28,,"VLLM_SPEC = os.environ.get('KG1_V207B_VLLM_SPEC', 'vllm==0.20.1')"
+2,code,29,,
+2,code,30,,VAL_CSV = V207A_ROOT / 'validation' / 'official_train_seed42_stratified10_val.csv'
+2,code,31,,VAL_WEAK_CSV = OUT_ROOT / 'validation' / 'official_train_seed42_stratified10_val_weak_families.csv'
+2,code,32,,BASELINE_PREDICTIONS = V207A_ROOT / 'v194_baseline_eval' / 'v194_baseline_predictions.csv'
+2,code,33,,BASELINE_PER_TASK = V207A_ROOT / 'v194_baseline_eval' / 'v194_baseline_per_task.csv'
+2,code,34,,BASELINE_REPORT = V207A_ROOT / 'v194_baseline_eval' / 'v194_baseline_eval_report.json'
+2,code,35,,
+2,code,36,,"WEAK_FAMILIES = ['bit_manipulation', 'equation_transform']"
+2,code,37,,"FORCE_REEVAL = os.environ.get('KG1_V207B_FORCE_REEVAL', '0') == '1'"
+2,code,38,,"RUN_FULL_FOR_POSITIVE = os.environ.get('KG1_V207B_RUN_FULL_FOR_POSITIVE', '1') == '1'"
+2,code,39,,"HASH_WEIGHTS = os.environ.get('KG1_V207B_HASH_WEIGHTS', '0') == '1'"
+2,code,40,,"MAX_DISCOVERY_DIRS = int(os.environ.get('KG1_V207B_MAX_DISCOVERY_DIRS', '25000'))"
+2,code,41,,"INCLUDE_REJECTED_V206 = os.environ.get('KG1_V207B_INCLUDE_REJECTED_V206', '0') == '1'"
+2,code,42,,"RUN_KAGGLE_PUBLIC_DOWNLOAD = os.environ.get('KG1_V207B_RUN_KAGGLE_PUBLIC_DOWNLOAD', '1') == '1'"
+2,code,43,,"PUBLIC_DOWNLOAD_MAX_PRIORITY = int(os.environ.get('KG1_V207B_PUBLIC_DOWNLOAD_MAX_PRIORITY', '2'))"
+2,code,44,,"PUBLIC_DOWNLOAD_MAX_CANDIDATES = int(os.environ.get('KG1_V207B_PUBLIC_DOWNLOAD_MAX_CANDIDATES', '13'))"
+2,code,45,,"LOG_MODE = os.environ.get('KG1_V207B_LOG_MODE', 'essential').strip().lower()"
+2,code,46,,"PRINT_COMMAND_OUTPUT = LOG_MODE in ('verbose', 'debug')"
+2,code,47,,"LOG_TAIL_LINES = int(os.environ.get('KG1_V207B_LOG_TAIL_LINES', '30'))"
+2,code,48,,LOG_POLICY = (
+2,code,49,,"    'essential: cell START/END, key Drive paths, command line/rc/elapsed, '"
+2,code,50,,"    'artifact counts, eval/gate summaries; full subprocess stdout goes to Drive log files'"
+2,code,51,,)
+2,code,52,,ALLOW_KAGGLE_SUBMIT = False
+2,code,53,,
+2,code,54,,"for path in [OUT_ROOT, REPORT_DIR, MANIFEST_DIR, VAL_WEAK_CSV.parent, PUBLIC_KAGGLE_ROOT]:"
+2,code,55,,"    path.mkdir(parents=True, exist_ok=True)"
+2,code,56,,
+2,code,57,progress_log,"print('config =', json.dumps({"
+2,code,58,,"    'VERSION': VERSION,"
+2,code,59,,"    'ROOT': str(ROOT),"
+2,code,60,,"    'OUT_ROOT': str(OUT_ROOT),"
+2,code,61,,"    'REPORT_DIR': str(REPORT_DIR),"
+2,code,62,,"    'MANIFEST_DIR': str(MANIFEST_DIR),"
+2,code,63,,"    'PUBLIC_KAGGLE_ROOT': str(PUBLIC_KAGGLE_ROOT),"
+2,code,64,,"    'VAL_CSV': str(VAL_CSV),"
+2,code,65,,"    'BASELINE_PREDICTIONS': str(BASELINE_PREDICTIONS),"
+2,code,66,,"    'MODEL_NAME': MODEL_NAME,"
+2,code,67,,"    'MODEL_REVISION': MODEL_REVISION,"
+2,code,68,,"    'VLLM_SPEC': VLLM_SPEC,"
+2,code,69,,"    'WEAK_FAMILIES': WEAK_FAMILIES,"
+2,code,70,,"    'RUN_KAGGLE_PUBLIC_DOWNLOAD': RUN_KAGGLE_PUBLIC_DOWNLOAD,"
+2,code,71,,"    'PUBLIC_DOWNLOAD_MAX_PRIORITY': PUBLIC_DOWNLOAD_MAX_PRIORITY,"
+2,code,72,,"    'PUBLIC_DOWNLOAD_MAX_CANDIDATES': PUBLIC_DOWNLOAD_MAX_CANDIDATES,"
+2,code,73,,"    'RUN_FULL_FOR_POSITIVE': RUN_FULL_FOR_POSITIVE,"
+2,code,74,,"    'FORCE_REEVAL': FORCE_REEVAL,"
+2,code,75,,"    'HASH_WEIGHTS': HASH_WEIGHTS,"
+2,code,76,,"    'LOG_MODE': LOG_MODE,"
+2,code,77,,"    'PRINT_COMMAND_OUTPUT': PRINT_COMMAND_OUTPUT,"
+2,code,78,,"    'ALLOW_KAGGLE_SUBMIT': ALLOW_KAGGLE_SUBMIT,"
+2,code,79,,"}, indent=2, sort_keys=True))"
+2,code,80,progress_log,"print('LOG_POLICY =', LOG_POLICY)"
+2,code,81,progress_log,"print('DRIVE_ORGANIZED_OUTPUTS =', json.dumps({"
+2,code,82,,"    'run_outputs': str(OUT_ROOT),"
+2,code,83,,"    'logs': str(REPORT_DIR),"
+2,code,84,,"    'manifests': str(MANIFEST_DIR),"
+2,code,85,,"    'downloaded_public_adapters': str(PUBLIC_KAGGLE_ROOT),"
+2,code,86,,"}, indent=2, sort_keys=True))"
+2,code,87,,if ALLOW_KAGGLE_SUBMIT:
+2,code,88,hard_fail,    raise RuntimeError('This notebook is submit-disabled by design.')
+2,code,89,progress_log,print('=== V207B CONFIG END ===')
 3,code,1,,# CELL: bridge Colab Secrets into environment variables without printing secret values.
 3,code,2,progress_log,print('=== V207B COLAB SECRETS BRIDGE START ===')
 3,code,3,,import json
@@ -171,77 +187,122 @@ cell_index,cell_type,line_no,flags,text
 4,code,7,,import sys
 4,code,8,,import time
 4,code,9,,
-4,code,10,command_runner,"def run_cmd(cmd, cwd=None, env=None, log_path=None, check=True):"
-4,code,11,,    cmd = [str(x) for x in cmd]
-4,code,12,progress_log,"    print('+', ' '.join(cmd))"
-4,code,13,,    log_handle = None
-4,code,14,,    if log_path is not None:
-4,code,15,,        log_path = pathlib.Path(log_path)
-4,code,16,,"        log_path.parent.mkdir(parents=True, exist_ok=True)"
-4,code,17,,"        log_handle = log_path.open('w', encoding='utf-8')"
-4,code,18,,    proc = subprocess.Popen(
-4,code,19,,"        cmd,"
-4,code,20,,"        cwd=str(cwd) if cwd else None,"
-4,code,21,,"        env=env,"
-4,code,22,,"        stdout=subprocess.PIPE,"
-4,code,23,,"        stderr=subprocess.STDOUT,"
-4,code,24,,"        text=True,"
-4,code,25,,"        bufsize=1,"
-4,code,26,,    )
-4,code,27,,    assert proc.stdout is not None
-4,code,28,,    for line in proc.stdout:
-4,code,29,progress_log,"        print(line, end='')"
-4,code,30,,        if log_handle:
-4,code,31,,            log_handle.write(line)
-4,code,32,,    rc = proc.wait()
-4,code,33,,    if log_handle:
-4,code,34,,        log_handle.close()
-4,code,35,progress_log,"    print('returncode =', rc)"
-4,code,36,,    if check and rc != 0:
-4,code,37,hard_fail,        raise RuntimeError(f'Command failed with rc={rc}: {cmd}')
-4,code,38,,    return rc
-4,code,39,,
-4,code,40,,"def ensure_import(import_name, pip_spec=None):"
-4,code,41,,    try:
-4,code,42,,        mod = importlib.import_module(import_name)
-4,code,43,progress_log,"        print(import_name, 'version=', getattr(mod, '__version__', 'unknown'))"
-4,code,44,,        return mod
-4,code,45,,    except Exception as exc:
-4,code,46,progress_log,"        print(import_name, 'missing/import failed:', repr(exc))"
-4,code,47,,        if not pip_spec:
-4,code,48,,            raise
-4,code,49,command_runner,"        run_cmd([sys.executable, '-m', 'pip', 'install', '-q', pip_spec])"
-4,code,50,,        mod = importlib.import_module(import_name)
-4,code,51,progress_log,"        print(import_name, 'version=', getattr(mod, '__version__', 'unknown'))"
-4,code,52,,        return mod
-4,code,53,,
-4,code,54,,def fresh_python_import_check(import_name):
-4,code,55,,    code = (
-4,code,56,,"        ""import importlib, torch; """
-4,code,57,,"        f""m=importlib.import_module('{import_name}'); """
-4,code,58,progress_log,"        ""print('fresh_python_import_ok', m.__name__, getattr(m, '__version__', 'unknown')); """
-4,code,59,progress_log,"        ""print('fresh_python_torch', torch.__version__, getattr(torch.version, 'cuda', 'unknown'))"""
-4,code,60,,    )
-4,code,61,command_runner,"    run_cmd([sys.executable, '-c', code])"
-4,code,62,,
-4,code,63,,"def sha256_file(path, enabled=True):"
-4,code,64,,    path = pathlib.Path(path)
-4,code,65,,    if not enabled:
-4,code,66,,        return ''
-4,code,67,,    h = hashlib.sha256()
-4,code,68,,    with path.open('rb') as handle:
-4,code,69,,"        for chunk in iter(lambda: handle.read(1024 * 1024), b''):"
-4,code,70,,            h.update(chunk)
-4,code,71,,    return h.hexdigest()
-4,code,72,,
-4,code,73,,def safe_label(text):
-4,code,74,,"    text = str(text).strip().replace('\\', '/')"
-4,code,75,,"    text = re.sub(r'[^A-Za-z0-9_.-]+', '_', text)"
-4,code,76,,"    text = re.sub(r'_+', '_', text).strip('_.-')"
-4,code,77,,    return text[-120:] or 'candidate'
-4,code,78,,
-4,code,79,progress_log,"print('python =', sys.version)"
-4,code,80,progress_log,print('=== V207B HELPERS END ===')
+4,code,10,,ESSENTIAL_OUTPUT_PATTERNS = [
+4,code,11,,"    'Traceback',"
+4,code,12,,"    'RuntimeError',"
+4,code,13,,"    'Error:',"
+4,code,14,,"    'ERROR',"
+4,code,15,,"    'failed',"
+4,code,16,,"    'returncode =',"
+4,code,17,,"    'vLLM loaded',"
+4,code,18,,"    'warmup_elapsed_s',"
+4,code,19,,"    'generation_elapsed_s',"
+4,code,20,,"    'raw_predictions_pre_score_csv',"
+4,code,21,,"    'summary =',"
+4,code,22,,"    'accuracy',"
+4,code,23,,"    'correct',"
+4,code,24,,"    'truncated',"
+4,code,25,,"    'predictions_csv',"
+4,code,26,,"    'per_task_csv',"
+4,code,27,,"    'report_json',"
+4,code,28,,"    'tokens_per_second',"
+4,code,29,,"    'heartbeat',"
+4,code,30,,]
+4,code,31,,
+4,code,32,,def is_essential_output_line(line):
+4,code,33,,    return any(pattern in line for pattern in ESSENTIAL_OUTPUT_PATTERNS)
+4,code,34,,
+4,code,35,command_runner,"def run_cmd(cmd, cwd=None, env=None, log_path=None, check=True):"
+4,code,36,,    cmd = [str(x) for x in cmd]
+4,code,37,,    started = time.time()
+4,code,38,progress_log,"    print('+', ' '.join(cmd))"
+4,code,39,,    if cwd:
+4,code,40,progress_log,"        print('cwd =', cwd)"
+4,code,41,,    log_handle = None
+4,code,42,,    if log_path is not None:
+4,code,43,,        log_path = pathlib.Path(log_path)
+4,code,44,,"        log_path.parent.mkdir(parents=True, exist_ok=True)"
+4,code,45,,"        log_handle = log_path.open('w', encoding='utf-8')"
+4,code,46,progress_log,"        print('log_path =', log_path)"
+4,code,47,,    proc = subprocess.Popen(
+4,code,48,,"        cmd,"
+4,code,49,,"        cwd=str(cwd) if cwd else None,"
+4,code,50,,"        env=env,"
+4,code,51,,"        stdout=subprocess.PIPE,"
+4,code,52,,"        stderr=subprocess.STDOUT,"
+4,code,53,,"        text=True,"
+4,code,54,,"        bufsize=1,"
+4,code,55,,    )
+4,code,56,,    assert proc.stdout is not None
+4,code,57,,    suppressed_lines = 0
+4,code,58,,    tail_lines = []
+4,code,59,,    for line in proc.stdout:
+4,code,60,,        tail_lines.append(line.rstrip('\n'))
+4,code,61,,        if len(tail_lines) > LOG_TAIL_LINES:
+4,code,62,,            tail_lines.pop(0)
+4,code,63,,        if PRINT_COMMAND_OUTPUT or is_essential_output_line(line):
+4,code,64,progress_log,"            print(line, end='')"
+4,code,65,,        else:
+4,code,66,,            suppressed_lines += 1
+4,code,67,,        if log_handle:
+4,code,68,,            log_handle.write(line)
+4,code,69,,    rc = proc.wait()
+4,code,70,,    if log_handle:
+4,code,71,,        log_handle.close()
+4,code,72,,    elapsed = time.time() - started
+4,code,73,progress_log,"    print('returncode =', rc)"
+4,code,74,progress_log,"    print('elapsed_s =', round(elapsed, 1))"
+4,code,75,progress_log,"    print('command_output_suppressed_lines =', suppressed_lines)"
+4,code,76,,    if log_path is not None:
+4,code,77,progress_log,"        print('full_command_log =', log_path)"
+4,code,78,,    if rc != 0 and tail_lines:
+4,code,79,progress_log,        print('command_tail_on_failure =')
+4,code,80,progress_log,        print('\n'.join(tail_lines[-LOG_TAIL_LINES:]))
+4,code,81,,    if check and rc != 0:
+4,code,82,hard_fail,        raise RuntimeError(f'Command failed with rc={rc}: {cmd}')
+4,code,83,,    return rc
+4,code,84,,
+4,code,85,,"def ensure_import(import_name, pip_spec=None):"
+4,code,86,,    try:
+4,code,87,,        mod = importlib.import_module(import_name)
+4,code,88,progress_log,"        print(import_name, 'version=', getattr(mod, '__version__', 'unknown'))"
+4,code,89,,        return mod
+4,code,90,,    except Exception as exc:
+4,code,91,progress_log,"        print(import_name, 'missing/import failed:', repr(exc))"
+4,code,92,,        if not pip_spec:
+4,code,93,,            raise
+4,code,94,command_runner,"        run_cmd([sys.executable, '-m', 'pip', 'install', '-q', pip_spec])"
+4,code,95,,        mod = importlib.import_module(import_name)
+4,code,96,progress_log,"        print(import_name, 'version=', getattr(mod, '__version__', 'unknown'))"
+4,code,97,,        return mod
+4,code,98,,
+4,code,99,,def fresh_python_import_check(import_name):
+4,code,100,,    code = (
+4,code,101,,"        ""import importlib, torch; """
+4,code,102,,"        f""m=importlib.import_module('{import_name}'); """
+4,code,103,progress_log,"        ""print('fresh_python_import_ok', m.__name__, getattr(m, '__version__', 'unknown')); """
+4,code,104,progress_log,"        ""print('fresh_python_torch', torch.__version__, getattr(torch.version, 'cuda', 'unknown'))"""
+4,code,105,,    )
+4,code,106,command_runner,"    run_cmd([sys.executable, '-c', code])"
+4,code,107,,
+4,code,108,,"def sha256_file(path, enabled=True):"
+4,code,109,,    path = pathlib.Path(path)
+4,code,110,,    if not enabled:
+4,code,111,,        return ''
+4,code,112,,    h = hashlib.sha256()
+4,code,113,,    with path.open('rb') as handle:
+4,code,114,,"        for chunk in iter(lambda: handle.read(1024 * 1024), b''):"
+4,code,115,,            h.update(chunk)
+4,code,116,,    return h.hexdigest()
+4,code,117,,
+4,code,118,,def safe_label(text):
+4,code,119,,"    text = str(text).strip().replace('\\', '/')"
+4,code,120,,"    text = re.sub(r'[^A-Za-z0-9_.-]+', '_', text)"
+4,code,121,,"    text = re.sub(r'_+', '_', text).strip('_.-')"
+4,code,122,,    return text[-120:] or 'candidate'
+4,code,123,,
+4,code,124,progress_log,"print('python =', sys.version)"
+4,code,125,progress_log,print('=== V207B HELPERS END ===')
 5,code,1,,# CELL: install dependencies and validate GPU/vLLM import path.
 5,code,2,progress_log,print('=== V207B DEPENDENCY CHECK START ===')
 5,code,3,,"ensure_import('pandas', 'pandas')"
@@ -532,7 +593,7 @@ cell_index,cell_type,line_no,flags,text
 9,code,77,,"    kaggle_dir.mkdir(parents=True, exist_ok=True)"
 9,code,78,,    if token_path.exists():
 9,code,79,,        token_path.chmod(0o600)
-9,code,80,progress_log,"        print('kaggle_token =', token_path, 'exists=True')"
+9,code,80,progress_log,        print('KAGGLE_CREDENTIALS_READY=True source=/root/.kaggle/kaggle.json')
 9,code,81,,        return True
 9,code,82,,
 9,code,83,,    candidate_paths = [
@@ -545,146 +606,152 @@ cell_index,cell_type,line_no,flags,text
 9,code,90,,        candidate_paths.append(Path(env_config_dir) / 'kaggle.json')
 9,code,91,,
 9,code,92,,    for src in candidate_paths:
-9,code,93,progress_log,"        print('checking_kaggle_token_source =', src, 'exists=', src.exists())"
-9,code,94,,        if src.exists():
-9,code,95,,"            shutil.copy2(src, token_path)"
-9,code,96,,            token_path.chmod(0o600)
-9,code,97,progress_log,"            print('copied_kaggle_token =', src, '->', token_path)"
-9,code,98,,            return True
-9,code,99,,
-9,code,100,,"    env_username = os.environ.get('KAGGLE_USERNAME', '').strip()"
-9,code,101,,"    env_key = os.environ.get('KAGGLE_KEY', '').strip()"
-9,code,102,,    if env_username and env_key:
-9,code,103,,"        token_path.write_text(json.dumps({'username': env_username, 'key': env_key}), encoding='utf-8')"
-9,code,104,,        token_path.chmod(0o600)
-9,code,105,,"        os.environ.setdefault('KAGGLE_CONFIG_DIR', str(kaggle_dir))"
-9,code,106,progress_log,"        print('created_kaggle_token_from_environment =', token_path)"
-9,code,107,,        return True
-9,code,108,,
-9,code,109,,    try:
-9,code,110,,        from google.colab import userdata  # type: ignore
-9,code,111,,    except Exception:
-9,code,112,,        userdata = None
-9,code,113,,    if userdata is not None:
-9,code,114,,        try:
-9,code,115,colab_secret_read,            secret_username = str(userdata.get('KAGGLE_USERNAME') or '').strip()
-9,code,116,colab_secret_read,            secret_key = str(userdata.get('KAGGLE_KEY') or '').strip()
-9,code,117,,        except Exception:
-9,code,118,,            secret_username = ''
-9,code,119,,            secret_key = ''
-9,code,120,progress_log,"        print('colab_secret_available KAGGLE_USERNAME =', bool(secret_username))"
-9,code,121,progress_log,"        print('colab_secret_available KAGGLE_KEY =', bool(secret_key))"
-9,code,122,,        if secret_username and secret_key:
-9,code,123,,"            token_path.write_text(json.dumps({'username': secret_username, 'key': secret_key}), encoding='utf-8')"
-9,code,124,,            token_path.chmod(0o600)
-9,code,125,,"            os.environ.setdefault('KAGGLE_CONFIG_DIR', str(kaggle_dir))"
-9,code,126,progress_log,"            print('created_kaggle_token_from_colab_secrets =', token_path)"
-9,code,127,,            return True
-9,code,128,,
-9,code,129,progress_log,    print('Kaggle credentials were not found.')
-9,code,130,progress_log,"    print('Place kaggle.json at /content/drive/MyDrive/kaggle.json or /content/drive/MyDrive/KG1_SECRETS/kaggle.json, or enable Colab Secrets KAGGLE_USERNAME and KAGGLE_KEY, then rerun this cell.')"
-9,code,131,,    return False
-9,code,132,,
-9,code,133,,download_status = []
-9,code,134,,
-9,code,135,,if not RUN_KAGGLE_PUBLIC_DOWNLOAD:
-9,code,136,progress_log,    print('RUN_KAGGLE_PUBLIC_DOWNLOAD=False; skipping public model downloads.')
-9,code,137,,else:
-9,code,138,,    if not configure_kaggle_credentials():
-9,code,139,hard_fail,        raise RuntimeError('Human action required: add Kaggle API token kaggle.json to Drive and rerun this cell.')
-9,code,140,,    if 'KAGGLE_CMD_PREFIX' not in globals():
-9,code,141,,        KAGGLE_EXE = shutil.which('kaggle')
-9,code,142,,"        KAGGLE_CMD_PREFIX = [KAGGLE_EXE] if KAGGLE_EXE else [sys.executable, '-m', 'kaggle.cli']"
-9,code,143,progress_log,"        print('KAGGLE_CMD_PREFIX late_init =', KAGGLE_CMD_PREFIX)"
-9,code,144,command_runner,    run_cmd(KAGGLE_CMD_PREFIX + ['--version'])
-9,code,145,,
-9,code,146,,    selected_candidates = [
-9,code,147,,        item for item in PUBLIC_KAGGLE_MODEL_CANDIDATES
-9,code,148,,        if int(item['priority']) <= PUBLIC_DOWNLOAD_MAX_PRIORITY
-9,code,149,,    ][:PUBLIC_DOWNLOAD_MAX_CANDIDATES]
-9,code,150,progress_log,"    print('selected_public_download_count =', len(selected_candidates))"
-9,code,151,,    remaining_expected_bytes = sum(
-9,code,152,,        int(item.get('expected_bytes') or 0)
-9,code,153,,        for item in selected_candidates
-9,code,154,,        if not kaggle_adapter_ready(
-9,code,155,,"            PUBLIC_KAGGLE_ROOT / safe_label(item['label']) / 'adapter',"
-9,code,156,,"            item.get('expected_bytes') or 0,"
-9,code,157,,        )
-9,code,158,,    )
-9,code,159,,    usage = shutil.disk_usage(PUBLIC_KAGGLE_ROOT)
-9,code,160,progress_log,"    print('download_expected_remaining_gib =', round(remaining_expected_bytes / (1024 ** 3), 2))"
-9,code,161,progress_log,"    print('drive_total_gib =', round(usage.total / (1024 ** 3), 2))"
-9,code,162,progress_log,"    print('drive_free_gib =', round(usage.free / (1024 ** 3), 2))"
-9,code,163,,    if remaining_expected_bytes and usage.free < remaining_expected_bytes + 5 * 1024 ** 3:
-9,code,164,hard_fail,        raise RuntimeError(
-9,code,165,,            'Human action required: not enough free Drive space for public adapter downloads. '
-9,code,166,,            f'Need about {remaining_expected_bytes / (1024 ** 3):.2f} GiB plus 5 GiB buffer; '
-9,code,167,,            f'free={usage.free / (1024 ** 3):.2f} GiB.'
-9,code,168,,        )
-9,code,169,,    for item in selected_candidates:
-9,code,170,,        label = safe_label(item['label'])
-9,code,171,,        ref = item['ref']
-9,code,172,,        target = PUBLIC_KAGGLE_ROOT / label / 'adapter'
-9,code,173,,        log = REPORT_DIR / f'download_{label}.log'
-9,code,174,,"        target.mkdir(parents=True, exist_ok=True)"
-9,code,175,,
-9,code,176,progress_log,        print('\n' + '=' * 80)
-9,code,177,progress_log,"        print('download_label =', label)"
-9,code,178,progress_log,"        print('download_ref =', ref)"
-9,code,179,progress_log,"        print('download_priority =', item['priority'])"
-9,code,180,progress_log,"        print('download_expected_bytes =', int(item.get('expected_bytes') or 0))"
-9,code,181,progress_log,"        print('download_target =', target)"
-9,code,182,progress_log,"        print('already_ready =', kaggle_adapter_ready(target, item.get('expected_bytes') or 0))"
-9,code,183,,
-9,code,184,,"        if kaggle_adapter_ready(target, item.get('expected_bytes') or 0):"
-9,code,185,,            status = 'already_ready'
-9,code,186,,            rc = 0
-9,code,187,,        else:
-9,code,188,,            cmd = KAGGLE_CMD_PREFIX + [
-9,code,189,,"                'models',"
-9,code,190,,"                'instances',"
-9,code,191,,"                'versions',"
-9,code,192,,"                'download',"
-9,code,193,,"                ref,"
-9,code,194,,"                '-p',"
-9,code,195,,"                target,"
-9,code,196,,"                '--untar',"
-9,code,197,,            ]
-9,code,198,command_runner,"            rc = run_cmd(cmd, log_path=log, check=False)"
-9,code,199,,            status = (
-9,code,200,,                'downloaded_ready'
-9,code,201,,"                if rc == 0 and kaggle_adapter_ready(target, item.get('expected_bytes') or 0)"
-9,code,202,,                else f'download_or_structure_failed_{rc}'
-9,code,203,,            )
-9,code,204,,
-9,code,205,,        nested_ready_dirs = []
-9,code,206,,"        if not kaggle_adapter_ready(target, item.get('expected_bytes') or 0):"
-9,code,207,,"            for dirpath, dirnames, filenames in os.walk(target):"
-9,code,208,,                p = Path(dirpath)
-9,code,209,,"                if kaggle_adapter_ready(p, item.get('expected_bytes') or 0):"
-9,code,210,,                    nested_ready_dirs.append(str(p))
-9,code,211,,
-9,code,212,,        top_files = sorted([p.name for p in target.glob('*')])[:25] if target.exists() else []
-9,code,213,,        row = {
-9,code,214,,"            'label': label,"
-9,code,215,,"            'ref': ref,"
-9,code,216,,"            'priority': int(item['priority']),"
-9,code,217,,"            'expected_bytes': int(item.get('expected_bytes') or 0),"
-9,code,218,,"            'target': str(target),"
-9,code,219,,"            'ready': kaggle_adapter_ready(target, item.get('expected_bytes') or 0),"
-9,code,220,,"            'nested_ready_dirs': nested_ready_dirs,"
-9,code,221,,"            'status': status,"
-9,code,222,,"            'returncode': rc,"
-9,code,223,,"            'top_files': top_files,"
-9,code,224,,"            'log': str(log),"
-9,code,225,,        }
-9,code,226,,        download_status.append(row)
-9,code,227,progress_log,"        print('download_status =', json.dumps(row, indent=2, sort_keys=True))"
-9,code,228,,
-9,code,229,,download_manifest = OUT_ROOT / 'v207b_public_kaggle_download_manifest.json'
-9,code,230,,"download_manifest.write_text(json.dumps(download_status, indent=2, sort_keys=True), encoding='utf-8')"
-9,code,231,progress_log,"print('download_manifest =', download_manifest)"
-9,code,232,progress_log,print('=== V207B PUBLIC KAGGLE ADAPTER DOWNLOAD END ===')
+9,code,93,,        if src.exists():
+9,code,94,,"            shutil.copy2(src, token_path)"
+9,code,95,,            token_path.chmod(0o600)
+9,code,96,progress_log,"            print('KAGGLE_CREDENTIALS_READY=True source=', src)"
+9,code,97,,            return True
+9,code,98,,
+9,code,99,,"    env_username = os.environ.get('KAGGLE_USERNAME', '').strip()"
+9,code,100,,"    env_key = os.environ.get('KAGGLE_KEY', '').strip()"
+9,code,101,,    if env_username and env_key:
+9,code,102,,"        token_path.write_text(json.dumps({'username': env_username, 'key': env_key}), encoding='utf-8')"
+9,code,103,,        token_path.chmod(0o600)
+9,code,104,,"        os.environ.setdefault('KAGGLE_CONFIG_DIR', str(kaggle_dir))"
+9,code,105,progress_log,        print('KAGGLE_CREDENTIALS_READY=True source=environment')
+9,code,106,,        return True
+9,code,107,,
+9,code,108,,    try:
+9,code,109,,        from google.colab import userdata  # type: ignore
+9,code,110,,    except Exception:
+9,code,111,,        userdata = None
+9,code,112,,    if userdata is not None:
+9,code,113,,        try:
+9,code,114,colab_secret_read,            secret_username = str(userdata.get('KAGGLE_USERNAME') or '').strip()
+9,code,115,colab_secret_read,            secret_key = str(userdata.get('KAGGLE_KEY') or '').strip()
+9,code,116,,        except Exception:
+9,code,117,,            secret_username = ''
+9,code,118,,            secret_key = ''
+9,code,119,,        if secret_username and secret_key:
+9,code,120,,"            token_path.write_text(json.dumps({'username': secret_username, 'key': secret_key}), encoding='utf-8')"
+9,code,121,,            token_path.chmod(0o600)
+9,code,122,,"            os.environ.setdefault('KAGGLE_CONFIG_DIR', str(kaggle_dir))"
+9,code,123,progress_log,            print('KAGGLE_CREDENTIALS_READY=True source=colab_secrets')
+9,code,124,,            return True
+9,code,125,,
+9,code,126,progress_log,    print('KAGGLE_CREDENTIALS_READY=False')
+9,code,127,progress_log,    print('Human action required: enable Colab Secrets KAGGLE_USERNAME/KAGGLE_KEY or place kaggle.json under MyDrive/KG1_SECRETS.')
+9,code,128,,    return False
+9,code,129,,
+9,code,130,,download_status = []
+9,code,131,,
+9,code,132,,if not RUN_KAGGLE_PUBLIC_DOWNLOAD:
+9,code,133,progress_log,    print('RUN_KAGGLE_PUBLIC_DOWNLOAD=False; skipping public model downloads.')
+9,code,134,,else:
+9,code,135,,    if not configure_kaggle_credentials():
+9,code,136,hard_fail,        raise RuntimeError('Human action required: add Kaggle API token kaggle.json to Drive and rerun this cell.')
+9,code,137,,    if 'KAGGLE_CMD_PREFIX' not in globals():
+9,code,138,,        KAGGLE_EXE = shutil.which('kaggle')
+9,code,139,,"        KAGGLE_CMD_PREFIX = [KAGGLE_EXE] if KAGGLE_EXE else [sys.executable, '-m', 'kaggle.cli']"
+9,code,140,progress_log,"        print('KAGGLE_CMD_PREFIX late_init =', KAGGLE_CMD_PREFIX)"
+9,code,141,command_runner,    run_cmd(KAGGLE_CMD_PREFIX + ['--version'])
+9,code,142,,
+9,code,143,,    selected_candidates = [
+9,code,144,,        item for item in PUBLIC_KAGGLE_MODEL_CANDIDATES
+9,code,145,,        if int(item['priority']) <= PUBLIC_DOWNLOAD_MAX_PRIORITY
+9,code,146,,    ][:PUBLIC_DOWNLOAD_MAX_CANDIDATES]
+9,code,147,progress_log,"    print('selected_public_download_count =', len(selected_candidates))"
+9,code,148,,    remaining_expected_bytes = sum(
+9,code,149,,        int(item.get('expected_bytes') or 0)
+9,code,150,,        for item in selected_candidates
+9,code,151,,        if not kaggle_adapter_ready(
+9,code,152,,"            PUBLIC_KAGGLE_ROOT / safe_label(item['label']) / 'adapter',"
+9,code,153,,"            item.get('expected_bytes') or 0,"
+9,code,154,,        )
+9,code,155,,    )
+9,code,156,,    usage = shutil.disk_usage(PUBLIC_KAGGLE_ROOT)
+9,code,157,progress_log,"    print('download_expected_remaining_gib =', round(remaining_expected_bytes / (1024 ** 3), 2))"
+9,code,158,progress_log,"    print('drive_total_gib =', round(usage.total / (1024 ** 3), 2))"
+9,code,159,progress_log,"    print('drive_free_gib =', round(usage.free / (1024 ** 3), 2))"
+9,code,160,,    if remaining_expected_bytes and usage.free < remaining_expected_bytes + 5 * 1024 ** 3:
+9,code,161,hard_fail,        raise RuntimeError(
+9,code,162,,            'Human action required: not enough free Drive space for public adapter downloads. '
+9,code,163,,            f'Need about {remaining_expected_bytes / (1024 ** 3):.2f} GiB plus 5 GiB buffer; '
+9,code,164,,            f'free={usage.free / (1024 ** 3):.2f} GiB.'
+9,code,165,,        )
+9,code,166,,    for item in selected_candidates:
+9,code,167,,        label = safe_label(item['label'])
+9,code,168,,        ref = item['ref']
+9,code,169,,        target = PUBLIC_KAGGLE_ROOT / label / 'adapter'
+9,code,170,,        log = REPORT_DIR / f'download_{label}.log'
+9,code,171,,"        target.mkdir(parents=True, exist_ok=True)"
+9,code,172,,
+9,code,173,,"        already_ready = kaggle_adapter_ready(target, item.get('expected_bytes') or 0)"
+9,code,174,progress_log,"        print('download_start =', json.dumps({"
+9,code,175,,"            'label': label,"
+9,code,176,,"            'priority': int(item['priority']),"
+9,code,177,,"            'expected_gib': round(int(item.get('expected_bytes') or 0) / (1024 ** 3), 3),"
+9,code,178,,"            'already_ready': already_ready,"
+9,code,179,,"            'target': str(target),"
+9,code,180,,"            'log': str(log),"
+9,code,181,,"        }, sort_keys=True))"
+9,code,182,,
+9,code,183,,        if already_ready:
+9,code,184,,            status = 'already_ready'
+9,code,185,,            rc = 0
+9,code,186,,        else:
+9,code,187,,            cmd = KAGGLE_CMD_PREFIX + [
+9,code,188,,"                'models',"
+9,code,189,,"                'instances',"
+9,code,190,,"                'versions',"
+9,code,191,,"                'download',"
+9,code,192,,"                ref,"
+9,code,193,,"                '-p',"
+9,code,194,,"                target,"
+9,code,195,,"                '--untar',"
+9,code,196,,            ]
+9,code,197,command_runner,"            rc = run_cmd(cmd, log_path=log, check=False)"
+9,code,198,,            status = (
+9,code,199,,                'downloaded_ready'
+9,code,200,,"                if rc == 0 and kaggle_adapter_ready(target, item.get('expected_bytes') or 0)"
+9,code,201,,                else f'download_or_structure_failed_{rc}'
+9,code,202,,            )
+9,code,203,,
+9,code,204,,        nested_ready_dirs = []
+9,code,205,,"        if not kaggle_adapter_ready(target, item.get('expected_bytes') or 0):"
+9,code,206,,"            for dirpath, dirnames, filenames in os.walk(target):"
+9,code,207,,                p = Path(dirpath)
+9,code,208,,"                if kaggle_adapter_ready(p, item.get('expected_bytes') or 0):"
+9,code,209,,                    nested_ready_dirs.append(str(p))
+9,code,210,,
+9,code,211,,        top_files = sorted([p.name for p in target.glob('*')])[:25] if target.exists() else []
+9,code,212,,        row = {
+9,code,213,,"            'label': label,"
+9,code,214,,"            'ref': ref,"
+9,code,215,,"            'priority': int(item['priority']),"
+9,code,216,,"            'expected_bytes': int(item.get('expected_bytes') or 0),"
+9,code,217,,"            'target': str(target),"
+9,code,218,,"            'ready': kaggle_adapter_ready(target, item.get('expected_bytes') or 0),"
+9,code,219,,"            'nested_ready_dirs': nested_ready_dirs,"
+9,code,220,,"            'status': status,"
+9,code,221,,"            'returncode': rc,"
+9,code,222,,"            'top_files': top_files,"
+9,code,223,,"            'log': str(log),"
+9,code,224,,        }
+9,code,225,,        download_status.append(row)
+9,code,226,progress_log,"        print('download_done =', json.dumps({"
+9,code,227,,"            'label': row['label'],"
+9,code,228,,"            'status': row['status'],"
+9,code,229,,"            'ready': row['ready'],"
+9,code,230,,"            'returncode': row['returncode'],"
+9,code,231,,"            'nested_ready_count': len(row['nested_ready_dirs']),"
+9,code,232,,"            'log': row['log'],"
+9,code,233,,"        }, sort_keys=True))"
+9,code,234,,
+9,code,235,,download_manifest = MANIFEST_DIR / 'v207b_public_kaggle_download_manifest.json'
+9,code,236,,"download_manifest.write_text(json.dumps(download_status, indent=2, sort_keys=True), encoding='utf-8')"
+9,code,237,progress_log,"print('download_manifest =', download_manifest)"
+9,code,238,progress_log,print('=== V207B PUBLIC KAGGLE ADAPTER DOWNLOAD END ===')
 10,code,1,,# CELL: discover and register candidate adapter directories.
 10,code,2,progress_log,print('=== V207B CANDIDATE DISCOVERY START ===')
 10,code,3,,from pathlib import Path
@@ -757,50 +824,70 @@ cell_index,cell_type,line_no,flags,text
 10,code,70,,    return any(chunk in text for chunk in REJECTED_SUBSTRINGS)
 10,code,71,,
 10,code,72,,candidates = {}
-10,code,73,,"for label, path in MANUAL_CANDIDATES:"
-10,code,74,,    path = Path(path)
-10,code,75,progress_log,"    print('manual_candidate', label, path, 'ready=', adapter_ready_dir(path))"
+10,code,73,,manual_ready = 0
+10,code,74,,"for label, path in MANUAL_CANDIDATES:"
+10,code,75,,    path = Path(path)
 10,code,76,,    if adapter_ready_dir(path) and not is_rejected_path(path):
-10,code,77,,"        candidates[str(path.resolve())] = {'label': safe_label(label), 'path': path}"
-10,code,78,,
-10,code,79,,for root in DISCOVERY_ROOTS:
-10,code,80,progress_log,"    print('scan_root =', root, 'exists=', root.exists())"
-10,code,81,,    if not root.exists():
-10,code,82,,        continue
-10,code,83,,    scanned_dirs = 0
-10,code,84,,"    for dirpath, dirnames, filenames in os.walk(root):"
-10,code,85,,        scanned_dirs += 1
-10,code,86,,        if scanned_dirs > MAX_DISCOVERY_DIRS:
-10,code,87,progress_log,"            print('scan_root_limit_reached', root, MAX_DISCOVERY_DIRS)"
-10,code,88,,            break
-10,code,89,,        p = Path(dirpath)
-10,code,90,,        if is_rejected_path(p):
-10,code,91,,            dirnames[:] = []
-10,code,92,,            continue
-10,code,93,,        names = set(filenames)
-10,code,94,,        if 'adapter_config.json' in names and (
-10,code,95,,            'adapter_model.safetensors' in names or 'adapter_model.bin' in names
-10,code,96,,        ):
-10,code,97,,            label = safe_label(str(p.relative_to(root)))
-10,code,98,,"            candidates[str(p.resolve())] = {'label': label, 'path': p}"
-10,code,99,progress_log,"    print('scan_root_done =', root, 'scanned_dirs=', scanned_dirs)"
-10,code,100,,
-10,code,101,,CANDIDATES = list(candidates.values())
-10,code,102,progress_log,"print('candidate_count =', len(CANDIDATES))"
-10,code,103,,for item in CANDIDATES:
-10,code,104,progress_log,"    print('candidate =', item['label'], item['path'])"
-10,code,105,,
-10,code,106,,manifest_path = OUT_ROOT / 'v207b_discovered_candidates.json'
-10,code,107,,manifest_path.write_text(
-10,code,108,,    json.dumps(
-10,code,109,,"        [{'label': x['label'], 'path': str(x['path'])} for x in CANDIDATES],"
-10,code,110,,"        indent=2,"
-10,code,111,,"        sort_keys=True,"
-10,code,112,,"    ),"
-10,code,113,,"    encoding='utf-8',"
-10,code,114,,)
-10,code,115,progress_log,"print('candidate_manifest =', manifest_path)"
-10,code,116,progress_log,print('=== V207B CANDIDATE DISCOVERY END ===')
+10,code,77,,        manual_ready += 1
+10,code,78,,"        candidates[str(path.resolve())] = {'label': safe_label(label), 'path': path}"
+10,code,79,progress_log,"print('manual_candidate_ready_count =', manual_ready, '/', len(MANUAL_CANDIDATES))"
+10,code,80,,
+10,code,81,,scan_summaries = []
+10,code,82,,for root in DISCOVERY_ROOTS:
+10,code,83,,    root_exists = root.exists()
+10,code,84,progress_log,"    print('scan_root =', root, 'exists=', root_exists)"
+10,code,85,,    found_before = len(candidates)
+10,code,86,,    if not root.exists():
+10,code,87,,"        scan_summaries.append({'root': str(root), 'exists': False, 'scanned_dirs': 0, 'new_candidates': 0})"
+10,code,88,,        continue
+10,code,89,,    scanned_dirs = 0
+10,code,90,,"    for dirpath, dirnames, filenames in os.walk(root):"
+10,code,91,,        scanned_dirs += 1
+10,code,92,,        if scanned_dirs > MAX_DISCOVERY_DIRS:
+10,code,93,progress_log,"            print('scan_root_limit_reached', root, MAX_DISCOVERY_DIRS)"
+10,code,94,,            break
+10,code,95,,        p = Path(dirpath)
+10,code,96,,        if is_rejected_path(p):
+10,code,97,,            dirnames[:] = []
+10,code,98,,            continue
+10,code,99,,        names = set(filenames)
+10,code,100,,        if 'adapter_config.json' in names and (
+10,code,101,,            'adapter_model.safetensors' in names or 'adapter_model.bin' in names
+10,code,102,,        ):
+10,code,103,,            label = safe_label(str(p.relative_to(root)))
+10,code,104,,"            candidates[str(p.resolve())] = {'label': label, 'path': p}"
+10,code,105,,    scan_summaries.append({
+10,code,106,,"        'root': str(root),"
+10,code,107,,"        'exists': True,"
+10,code,108,,"        'scanned_dirs': scanned_dirs,"
+10,code,109,,"        'new_candidates': len(candidates) - found_before,"
+10,code,110,,    })
+10,code,111,progress_log,"    print('scan_root_done =', root, 'scanned_dirs=', scanned_dirs, 'new_candidates=', len(candidates) - found_before)"
+10,code,112,,
+10,code,113,,CANDIDATES = list(candidates.values())
+10,code,114,progress_log,"print('candidate_count =', len(CANDIDATES))"
+10,code,115,progress_log,"print('candidate_preview =', json.dumps("
+10,code,116,,"    [{'label': item['label'], 'path': str(item['path'])} for item in CANDIDATES[:20]],"
+10,code,117,,"    indent=2,"
+10,code,118,,"    sort_keys=True,"
+10,code,119,,))
+10,code,120,,if len(CANDIDATES) > 20:
+10,code,121,progress_log,"    print('candidate_preview_truncated =', len(CANDIDATES) - 20)"
+10,code,122,,
+10,code,123,,scan_summary_path = MANIFEST_DIR / 'v207b_discovery_scan_summary.json'
+10,code,124,,"scan_summary_path.write_text(json.dumps(scan_summaries, indent=2, sort_keys=True), encoding='utf-8')"
+10,code,125,,manifest_path = MANIFEST_DIR / 'v207b_discovered_candidates.json'
+10,code,126,,manifest_path.write_text(
+10,code,127,,    json.dumps(
+10,code,128,,"        [{'label': x['label'], 'path': str(x['path'])} for x in CANDIDATES],"
+10,code,129,,"        indent=2,"
+10,code,130,,"        sort_keys=True,"
+10,code,131,,"    ),"
+10,code,132,,"    encoding='utf-8',"
+10,code,133,,)
+10,code,134,progress_log,"print('candidate_manifest =', manifest_path)"
+10,code,135,progress_log,"print('scan_summary =', scan_summary_path)"
+10,code,136,progress_log,print('=== V207B CANDIDATE DISCOVERY END ===')
 11,code,1,,# CELL: structure audit candidate adapters.
 11,code,2,progress_log,print('=== V207B STRUCTURE AUDIT START ===')
 11,code,3,,from safetensors import safe_open
@@ -881,25 +968,29 @@ cell_index,cell_type,line_no,flags,text
 11,code,78,,
 11,code,79,,audit_rows = []
 11,code,80,,for item in CANDIDATES:
-11,code,81,progress_log,"    print('auditing', item['label'], item['path'])"
-11,code,82,,"    audit_rows.append(audit_adapter(item['label'], item['path']))"
-11,code,83,,
-11,code,84,,audit_df = pd.DataFrame(audit_rows)
-11,code,85,,audit_csv = OUT_ROOT / 'v207b_adapter_structure_audit.csv'
-11,code,86,,audit_json = OUT_ROOT / 'v207b_adapter_structure_audit.json'
-11,code,87,,"audit_df.to_csv(audit_csv, index=False)"
-11,code,88,,"audit_json.write_text(json.dumps(audit_rows, indent=2, sort_keys=True), encoding='utf-8')"
-11,code,89,,
-11,code,90,progress_log,"print('audit_rows =', len(audit_df))"
-11,code,91,,if len(audit_df):
-11,code,92,progress_log,"    print(audit_df[['label', 'ready_for_eval', 'r', 'tensor_count', 'model_bytes', 'reason', 'path']].to_string(index=False))"
-11,code,93,,else:
-11,code,94,progress_log,    print('No candidates discovered. Add adapter paths to MANUAL_CANDIDATES or mount the Drive folder.')
-11,code,95,progress_log,"print('audit_csv =', audit_csv)"
-11,code,96,progress_log,"print('audit_json =', audit_json)"
-11,code,97,,READY_CANDIDATES = [row for row in audit_rows if row.get('ready_for_eval')]
-11,code,98,progress_log,"print('ready_candidate_count =', len(READY_CANDIDATES))"
-11,code,99,progress_log,print('=== V207B STRUCTURE AUDIT END ===')
+11,code,81,,"    audit_rows.append(audit_adapter(item['label'], item['path']))"
+11,code,82,,
+11,code,83,,audit_df = pd.DataFrame(audit_rows)
+11,code,84,,audit_csv = MANIFEST_DIR / 'v207b_adapter_structure_audit.csv'
+11,code,85,,audit_json = MANIFEST_DIR / 'v207b_adapter_structure_audit.json'
+11,code,86,,"audit_df.to_csv(audit_csv, index=False)"
+11,code,87,,"audit_json.write_text(json.dumps(audit_rows, indent=2, sort_keys=True), encoding='utf-8')"
+11,code,88,,
+11,code,89,progress_log,"print('audit_rows =', len(audit_df))"
+11,code,90,,if len(audit_df):
+11,code,91,,"    ready_summary = audit_df.groupby(['ready_for_eval', 'reason'], dropna=False).size().reset_index(name='count')"
+11,code,92,progress_log,    print('audit_summary =')
+11,code,93,progress_log,    print(ready_summary.to_string(index=False))
+11,code,94,,"    ready_preview = audit_df[audit_df['ready_for_eval']][['label', 'r', 'tensor_count', 'model_bytes']].head(20)"
+11,code,95,progress_log,    print('ready_preview =')
+11,code,96,progress_log,    print(ready_preview.to_string(index=False))
+11,code,97,,else:
+11,code,98,progress_log,    print('No candidates discovered. Add adapter paths to MANUAL_CANDIDATES or mount the Drive folder.')
+11,code,99,progress_log,"print('audit_csv =', audit_csv)"
+11,code,100,progress_log,"print('audit_json =', audit_json)"
+11,code,101,,READY_CANDIDATES = [row for row in audit_rows if row.get('ready_for_eval')]
+11,code,102,progress_log,"print('ready_candidate_count =', len(READY_CANDIDATES))"
+11,code,103,progress_log,print('=== V207B STRUCTURE AUDIT END ===')
 12,code,1,,# CELL: weak-family screen ready candidates.
 12,code,2,progress_log,print('=== V207B WEAK FAMILY SCREEN START ===')
 12,code,3,,results = []
@@ -912,96 +1003,103 @@ cell_index,cell_type,line_no,flags,text
 12,code,10,,    report_json = out / f'{label}_eval_report.json'
 12,code,11,,    per_task_csv = out / f'{label}_per_task.csv'
 12,code,12,,
-12,code,13,progress_log,    print('\n' + '=' * 80)
-12,code,14,progress_log,"    print('label =', label)"
-12,code,15,progress_log,"    print('adapter =', adapter, 'exists=', adapter.exists())"
-12,code,16,progress_log,"    print('out =', out)"
-12,code,17,progress_log,"    print('report_json =', report_json, 'exists=', report_json.exists())"
-12,code,18,,
-12,code,19,,    if FORCE_REEVAL and out.exists():
-12,code,20,progress_log,"        print('FORCE_REEVAL enabled; removing previous output:', out)"
-12,code,21,,        shutil.rmtree(out)
-12,code,22,,
-12,code,23,,    if not report_json.exists():
-12,code,24,,        cmd = [
-12,code,25,,"            sys.executable,"
-12,code,26,,"            ROOT / 'scripts' / 'evaluate_lora_adapter.py',"
-12,code,27,,"            '--solution-csv', VAL_WEAK_CSV,"
-12,code,28,,"            '--questions-csv', VAL_WEAK_CSV,"
-12,code,29,,"            '--adapter', adapter,"
-12,code,30,,"            '--base-model-path', MODEL_NAME,"
-12,code,31,,"            '--label', label,"
-12,code,32,,"            '--seed', '42',"
-12,code,33,,"            '--limit', '0',"
-12,code,34,,"            '--output-dir', out,"
-12,code,35,,        ]
-12,code,36,command_runner,"        rc = run_cmd(cmd, cwd=ROOT, log_path=log, check=False)"
-12,code,37,,        if rc != 0:
-12,code,38,,            results.append({
-12,code,39,,"                'label': label,"
-12,code,40,,"                'path': str(adapter),"
-12,code,41,,"                'status': f'eval_failed_{rc}',"
-12,code,42,,"                'weak_correct': 0,"
-12,code,43,,"                'weak_total': BASE_WEAK_TOTAL,"
-12,code,44,,"                'weak_delta': -BASE_WEAK_CORRECT,"
-12,code,45,,"                'accuracy': 0.0,"
-12,code,46,,"                'truncated': None,"
-12,code,47,,"                'truncation_rate': None,"
-12,code,48,,"                'promote_to_full': False,"
-12,code,49,,"                'report_json': str(report_json),"
-12,code,50,,            })
-12,code,51,,            continue
-12,code,52,,    else:
-12,code,53,progress_log,        print('existing report found; skipping eval')
-12,code,54,,
-12,code,55,,    report = json.loads(report_json.read_text(encoding='utf-8'))
-12,code,56,,    per = pd.read_csv(per_task_csv)
-12,code,57,,    weak_per = per[per['task_type'].isin(WEAK_FAMILIES)]
-12,code,58,,    weak_correct = int(weak_per['correct'].sum())
-12,code,59,,    weak_total = int(weak_per['total'].sum())
-12,code,60,,"    weak_truncated = int(weak_per['truncated'].sum()) if 'truncated' in weak_per.columns else int(report.get('truncated', 0))"
-12,code,61,,    weak_delta = weak_correct - BASE_WEAK_CORRECT
-12,code,62,,    trunc_rate = weak_truncated / weak_total if weak_total else 0.0
-12,code,63,,    promote = weak_delta > 0 and weak_total == BASE_WEAK_TOTAL
-12,code,64,,
-12,code,65,progress_log,    print(per.to_string(index=False))
-12,code,66,progress_log,"    print('weak_correct =', weak_correct, '/', weak_total)"
-12,code,67,progress_log,"    print('weak_correct_delta_vs_v194 =', weak_delta)"
-12,code,68,progress_log,"    print('weak_truncated =', weak_truncated, '/', weak_total)"
-12,code,69,progress_log,"    print('promote_to_full =', promote)"
-12,code,70,,
-12,code,71,,    results.append({
-12,code,72,,"        'label': label,"
-12,code,73,,"        'path': str(adapter),"
-12,code,74,,"        'status': 'done',"
-12,code,75,,"        'weak_correct': weak_correct,"
-12,code,76,,"        'weak_total': weak_total,"
-12,code,77,,"        'weak_delta': weak_delta,"
-12,code,78,,"        'accuracy': float(report['accuracy']),"
-12,code,79,,"        'truncated': weak_truncated,"
-12,code,80,,"        'truncation_rate': trunc_rate,"
-12,code,81,,"        'promote_to_full': bool(promote),"
-12,code,82,,"        'report_json': str(report_json),"
-12,code,83,,"        'predictions_csv': str(out / f'{label}_predictions.csv'),"
-12,code,84,,"        'per_task_csv': str(per_task_csv),"
-12,code,85,,    })
-12,code,86,,
-12,code,87,,weak_results = pd.DataFrame(results)
-12,code,88,,weak_csv = OUT_ROOT / 'v207b_weak_screen_results.csv'
-12,code,89,,weak_json = OUT_ROOT / 'v207b_weak_screen_results.json'
-12,code,90,,"weak_results.to_csv(weak_csv, index=False)"
-12,code,91,,"weak_json.write_text(json.dumps(results, indent=2, sort_keys=True), encoding='utf-8')"
-12,code,92,,
-12,code,93,progress_log,print('\nWEAK SCREEN SUMMARY')
-12,code,94,,if len(weak_results):
-12,code,95,progress_log,"    print(weak_results[['label', 'status', 'weak_correct', 'weak_total', 'weak_delta', 'accuracy', 'truncated', 'promote_to_full']].to_string(index=False))"
-12,code,96,,else:
-12,code,97,progress_log,    print('No ready candidates to evaluate.')
-12,code,98,progress_log,"print('weak_csv =', weak_csv)"
-12,code,99,progress_log,"print('weak_json =', weak_json)"
-12,code,100,,FULL_CANDIDATES = [item for item in results if item.get('promote_to_full')]
-12,code,101,progress_log,"print('full_candidate_count =', len(FULL_CANDIDATES))"
-12,code,102,progress_log,print('=== V207B WEAK FAMILY SCREEN END ===')
+12,code,13,progress_log,"    print('weak_eval_start =', json.dumps({"
+12,code,14,,"        'label': label,"
+12,code,15,,"        'adapter_exists': adapter.exists(),"
+12,code,16,,"        'out': str(out),"
+12,code,17,,"        'report_exists': report_json.exists(),"
+12,code,18,,"        'log': str(log),"
+12,code,19,,"    }, sort_keys=True))"
+12,code,20,,
+12,code,21,,    if FORCE_REEVAL and out.exists():
+12,code,22,progress_log,"        print('FORCE_REEVAL enabled; removing previous output:', out)"
+12,code,23,,        shutil.rmtree(out)
+12,code,24,,
+12,code,25,,    if not report_json.exists():
+12,code,26,,        cmd = [
+12,code,27,,"            sys.executable,"
+12,code,28,,"            ROOT / 'scripts' / 'evaluate_lora_adapter.py',"
+12,code,29,,"            '--solution-csv', VAL_WEAK_CSV,"
+12,code,30,,"            '--questions-csv', VAL_WEAK_CSV,"
+12,code,31,,"            '--adapter', adapter,"
+12,code,32,,"            '--base-model-path', MODEL_NAME,"
+12,code,33,,"            '--label', label,"
+12,code,34,,"            '--seed', '42',"
+12,code,35,,"            '--limit', '0',"
+12,code,36,,"            '--output-dir', out,"
+12,code,37,,        ]
+12,code,38,command_runner,"        rc = run_cmd(cmd, cwd=ROOT, log_path=log, check=False)"
+12,code,39,,        if rc != 0:
+12,code,40,,            results.append({
+12,code,41,,"                'label': label,"
+12,code,42,,"                'path': str(adapter),"
+12,code,43,,"                'status': f'eval_failed_{rc}',"
+12,code,44,,"                'weak_correct': 0,"
+12,code,45,,"                'weak_total': BASE_WEAK_TOTAL,"
+12,code,46,,"                'weak_delta': -BASE_WEAK_CORRECT,"
+12,code,47,,"                'accuracy': 0.0,"
+12,code,48,,"                'truncated': None,"
+12,code,49,,"                'truncation_rate': None,"
+12,code,50,,"                'promote_to_full': False,"
+12,code,51,,"                'report_json': str(report_json),"
+12,code,52,,            })
+12,code,53,,            continue
+12,code,54,,    else:
+12,code,55,progress_log,        print('existing report found; skipping eval')
+12,code,56,,
+12,code,57,,    report = json.loads(report_json.read_text(encoding='utf-8'))
+12,code,58,,    per = pd.read_csv(per_task_csv)
+12,code,59,,    weak_per = per[per['task_type'].isin(WEAK_FAMILIES)]
+12,code,60,,    weak_correct = int(weak_per['correct'].sum())
+12,code,61,,    weak_total = int(weak_per['total'].sum())
+12,code,62,,"    weak_truncated = int(weak_per['truncated'].sum()) if 'truncated' in weak_per.columns else int(report.get('truncated', 0))"
+12,code,63,,    weak_delta = weak_correct - BASE_WEAK_CORRECT
+12,code,64,,    trunc_rate = weak_truncated / weak_total if weak_total else 0.0
+12,code,65,,    promote = weak_delta > 0 and weak_total == BASE_WEAK_TOTAL
+12,code,66,,
+12,code,67,progress_log,"    print('weak_eval_done =', json.dumps({"
+12,code,68,,"        'label': label,"
+12,code,69,,"        'weak_correct': weak_correct,"
+12,code,70,,"        'weak_total': weak_total,"
+12,code,71,,"        'weak_delta_vs_v194': weak_delta,"
+12,code,72,,"        'accuracy': float(report['accuracy']),"
+12,code,73,,"        'weak_truncated': weak_truncated,"
+12,code,74,,"        'promote_to_full': bool(promote),"
+12,code,75,,"        'report_json': str(report_json),"
+12,code,76,,"    }, sort_keys=True))"
+12,code,77,,
+12,code,78,,    results.append({
+12,code,79,,"        'label': label,"
+12,code,80,,"        'path': str(adapter),"
+12,code,81,,"        'status': 'done',"
+12,code,82,,"        'weak_correct': weak_correct,"
+12,code,83,,"        'weak_total': weak_total,"
+12,code,84,,"        'weak_delta': weak_delta,"
+12,code,85,,"        'accuracy': float(report['accuracy']),"
+12,code,86,,"        'truncated': weak_truncated,"
+12,code,87,,"        'truncation_rate': trunc_rate,"
+12,code,88,,"        'promote_to_full': bool(promote),"
+12,code,89,,"        'report_json': str(report_json),"
+12,code,90,,"        'predictions_csv': str(out / f'{label}_predictions.csv'),"
+12,code,91,,"        'per_task_csv': str(per_task_csv),"
+12,code,92,,    })
+12,code,93,,
+12,code,94,,weak_results = pd.DataFrame(results)
+12,code,95,,weak_csv = MANIFEST_DIR / 'v207b_weak_screen_results.csv'
+12,code,96,,weak_json = MANIFEST_DIR / 'v207b_weak_screen_results.json'
+12,code,97,,"weak_results.to_csv(weak_csv, index=False)"
+12,code,98,,"weak_json.write_text(json.dumps(results, indent=2, sort_keys=True), encoding='utf-8')"
+12,code,99,,
+12,code,100,progress_log,print('WEAK SCREEN SUMMARY')
+12,code,101,,if len(weak_results):
+12,code,102,progress_log,"    print(weak_results[['label', 'status', 'weak_correct', 'weak_total', 'weak_delta', 'accuracy', 'truncated', 'promote_to_full']].sort_values(['promote_to_full', 'weak_delta'], ascending=[False, False]).head(20).to_string(index=False))"
+12,code,103,,else:
+12,code,104,progress_log,    print('No ready candidates to evaluate.')
+12,code,105,progress_log,"print('weak_csv =', weak_csv)"
+12,code,106,progress_log,"print('weak_json =', weak_json)"
+12,code,107,,FULL_CANDIDATES = [item for item in results if item.get('promote_to_full')]
+12,code,108,progress_log,"print('full_candidate_count =', len(FULL_CANDIDATES))"
+12,code,109,progress_log,print('=== V207B WEAK FAMILY SCREEN END ===')
 13,code,1,,# CELL: full 947-row gate only for weak-positive candidates.
 13,code,2,progress_log,print('=== V207B FULL GATE START ===')
 13,code,3,,full_results = []
@@ -1020,75 +1118,78 @@ cell_index,cell_type,line_no,flags,text
 13,code,16,,        report_json = eval_out / f'{eval_label}_eval_report.json'
 13,code,17,,        candidate_predictions = eval_out / f'{eval_label}_predictions.csv'
 13,code,18,,
-13,code,19,progress_log,        print('\n' + '=' * 80)
-13,code,20,progress_log,"        print('full_label =', eval_label)"
-13,code,21,progress_log,"        print('adapter =', adapter)"
-13,code,22,progress_log,"        print('eval_out =', eval_out)"
-13,code,23,,
-13,code,24,,        if FORCE_REEVAL and eval_out.exists():
-13,code,25,progress_log,"            print('FORCE_REEVAL enabled; removing previous full output:', eval_out)"
-13,code,26,,            shutil.rmtree(eval_out)
-13,code,27,,
-13,code,28,,        if not report_json.exists():
-13,code,29,,            cmd = [
-13,code,30,,"                sys.executable,"
-13,code,31,,"                ROOT / 'scripts' / 'evaluate_lora_adapter.py',"
-13,code,32,,"                '--solution-csv', VAL_CSV,"
-13,code,33,,"                '--questions-csv', VAL_CSV,"
-13,code,34,,"                '--adapter', adapter,"
-13,code,35,,"                '--base-model-path', MODEL_NAME,"
-13,code,36,,"                '--label', eval_label,"
-13,code,37,,"                '--seed', '42',"
-13,code,38,,"                '--limit', '0',"
-13,code,39,,"                '--output-dir', eval_out,"
-13,code,40,,            ]
-13,code,41,command_runner,"            rc = run_cmd(cmd, cwd=ROOT, log_path=eval_log, check=False)"
-13,code,42,,            if rc != 0:
-13,code,43,,"                full_results.append({'label': eval_label, 'status': f'eval_failed_{rc}', 'path': str(adapter)})"
-13,code,44,,                continue
-13,code,45,,        else:
-13,code,46,progress_log,            print('existing full report found; skipping eval')
-13,code,47,,
-13,code,48,,        gate_out = OUT_ROOT / f'{eval_label}_gate'
-13,code,49,,        gate_log = REPORT_DIR / f'{eval_label}_gate.log'
-13,code,50,,        cmd = [
-13,code,51,,"            sys.executable,"
-13,code,52,,"            ROOT / 'scripts' / 'solve_rate_gate.py',"
-13,code,53,,"            '--solution-csv', VAL_CSV,"
-13,code,54,,"            '--baseline-predictions', BASELINE_PREDICTIONS,"
-13,code,55,,"            '--candidate-predictions', candidate_predictions,"
-13,code,56,,"            '--family-regression-tolerance', '0.0',"
-13,code,57,,"            '--min-net-gain', '0.0',"
-13,code,58,,"            '--min-boxed-rate', '0.98',"
-13,code,59,,"            '--output-dir', gate_out,"
-13,code,60,,        ]
-13,code,61,command_runner,"        rc = run_cmd(cmd, cwd=ROOT, log_path=gate_log, check=False)"
-13,code,62,,        gate_report = gate_out / 'solve_rate_gate_report.json'
-13,code,63,,        gate_payload = json.loads(gate_report.read_text(encoding='utf-8')) if gate_report.exists() else {}
-13,code,64,,        full_results.append({
-13,code,65,,"            'label': eval_label,"
-13,code,66,,"            'status': 'gate_approve' if rc == 0 else f'gate_reject_{rc}',"
-13,code,67,,"            'path': str(adapter),"
-13,code,68,,"            'gate_report': str(gate_report),"
-13,code,69,,"            'approved': bool(gate_payload.get('approved', False)),"
-13,code,70,,"            'net_gain': gate_payload.get('comparison', {}).get('net_gain'),"
-13,code,71,,"            'reasons': gate_payload.get('reasons', []),"
-13,code,72,,        })
-13,code,73,,
-13,code,74,,full_df = pd.DataFrame(full_results)
-13,code,75,,full_csv = OUT_ROOT / 'v207b_full_gate_results.csv'
-13,code,76,,full_json = OUT_ROOT / 'v207b_full_gate_results.json'
-13,code,77,,"full_df.to_csv(full_csv, index=False)"
-13,code,78,,"full_json.write_text(json.dumps(full_results, indent=2, sort_keys=True), encoding='utf-8')"
-13,code,79,,
-13,code,80,progress_log,print('\nFULL GATE SUMMARY')
-13,code,81,,if len(full_df):
-13,code,82,progress_log,    print(full_df.to_string(index=False))
-13,code,83,,else:
-13,code,84,progress_log,    print('No full-gate candidates were evaluated.')
-13,code,85,progress_log,"print('full_csv =', full_csv)"
-13,code,86,progress_log,"print('full_json =', full_json)"
-13,code,87,progress_log,print('=== V207B FULL GATE END ===')
+13,code,19,progress_log,"        print('full_eval_start =', json.dumps({"
+13,code,20,,"            'label': eval_label,"
+13,code,21,,"            'adapter': str(adapter),"
+13,code,22,,"            'eval_out': str(eval_out),"
+13,code,23,,"            'eval_log': str(eval_log),"
+13,code,24,,"        }, sort_keys=True))"
+13,code,25,,
+13,code,26,,        if FORCE_REEVAL and eval_out.exists():
+13,code,27,progress_log,"            print('FORCE_REEVAL enabled; removing previous full output:', eval_out)"
+13,code,28,,            shutil.rmtree(eval_out)
+13,code,29,,
+13,code,30,,        if not report_json.exists():
+13,code,31,,            cmd = [
+13,code,32,,"                sys.executable,"
+13,code,33,,"                ROOT / 'scripts' / 'evaluate_lora_adapter.py',"
+13,code,34,,"                '--solution-csv', VAL_CSV,"
+13,code,35,,"                '--questions-csv', VAL_CSV,"
+13,code,36,,"                '--adapter', adapter,"
+13,code,37,,"                '--base-model-path', MODEL_NAME,"
+13,code,38,,"                '--label', eval_label,"
+13,code,39,,"                '--seed', '42',"
+13,code,40,,"                '--limit', '0',"
+13,code,41,,"                '--output-dir', eval_out,"
+13,code,42,,            ]
+13,code,43,command_runner,"            rc = run_cmd(cmd, cwd=ROOT, log_path=eval_log, check=False)"
+13,code,44,,            if rc != 0:
+13,code,45,,"                full_results.append({'label': eval_label, 'status': f'eval_failed_{rc}', 'path': str(adapter)})"
+13,code,46,,                continue
+13,code,47,,        else:
+13,code,48,progress_log,            print('existing full report found; skipping eval')
+13,code,49,,
+13,code,50,,        gate_out = OUT_ROOT / f'{eval_label}_gate'
+13,code,51,,        gate_log = REPORT_DIR / f'{eval_label}_gate.log'
+13,code,52,,        cmd = [
+13,code,53,,"            sys.executable,"
+13,code,54,,"            ROOT / 'scripts' / 'solve_rate_gate.py',"
+13,code,55,,"            '--solution-csv', VAL_CSV,"
+13,code,56,,"            '--baseline-predictions', BASELINE_PREDICTIONS,"
+13,code,57,,"            '--candidate-predictions', candidate_predictions,"
+13,code,58,,"            '--family-regression-tolerance', '0.0',"
+13,code,59,,"            '--min-net-gain', '0.0',"
+13,code,60,,"            '--min-boxed-rate', '0.98',"
+13,code,61,,"            '--output-dir', gate_out,"
+13,code,62,,        ]
+13,code,63,command_runner,"        rc = run_cmd(cmd, cwd=ROOT, log_path=gate_log, check=False)"
+13,code,64,,        gate_report = gate_out / 'solve_rate_gate_report.json'
+13,code,65,,        gate_payload = json.loads(gate_report.read_text(encoding='utf-8')) if gate_report.exists() else {}
+13,code,66,,        full_results.append({
+13,code,67,,"            'label': eval_label,"
+13,code,68,,"            'status': 'gate_approve' if rc == 0 else f'gate_reject_{rc}',"
+13,code,69,,"            'path': str(adapter),"
+13,code,70,,"            'gate_report': str(gate_report),"
+13,code,71,,"            'approved': bool(gate_payload.get('approved', False)),"
+13,code,72,,"            'net_gain': gate_payload.get('comparison', {}).get('net_gain'),"
+13,code,73,,"            'reasons': gate_payload.get('reasons', []),"
+13,code,74,,        })
+13,code,75,progress_log,"        print('full_gate_done =', json.dumps(full_results[-1], sort_keys=True))"
+13,code,76,,
+13,code,77,,full_df = pd.DataFrame(full_results)
+13,code,78,,full_csv = MANIFEST_DIR / 'v207b_full_gate_results.csv'
+13,code,79,,full_json = MANIFEST_DIR / 'v207b_full_gate_results.json'
+13,code,80,,"full_df.to_csv(full_csv, index=False)"
+13,code,81,,"full_json.write_text(json.dumps(full_results, indent=2, sort_keys=True), encoding='utf-8')"
+13,code,82,,
+13,code,83,progress_log,print('FULL GATE SUMMARY')
+13,code,84,,if len(full_df):
+13,code,85,progress_log,"    print(full_df[['label', 'status', 'approved', 'net_gain', 'gate_report']].to_string(index=False))"
+13,code,86,,else:
+13,code,87,progress_log,    print('No full-gate candidates were evaluated.')
+13,code,88,progress_log,"print('full_csv =', full_csv)"
+13,code,89,progress_log,"print('full_json =', full_json)"
+13,code,90,progress_log,print('=== V207B FULL GATE END ===')
 14,code,1,,# CELL: final V207B summary. This cell does not submit.
 14,code,2,progress_log,print('=== V207B FINAL SUMMARY START ===')
 14,code,3,,summary = {
@@ -1097,19 +1198,22 @@ cell_index,cell_type,line_no,flags,text
 14,code,6,,"    'submit_disabled': True,"
 14,code,7,,"    'v207a_root': str(V207A_ROOT),"
 14,code,8,,"    'out_root': str(OUT_ROOT),"
-14,code,9,,"    'candidate_manifest': str(OUT_ROOT / 'v207b_discovered_candidates.json'),"
-14,code,10,,"    'structure_audit_csv': str(OUT_ROOT / 'v207b_adapter_structure_audit.csv'),"
-14,code,11,,"    'weak_screen_csv': str(OUT_ROOT / 'v207b_weak_screen_results.csv'),"
-14,code,12,,"    'full_gate_csv': str(OUT_ROOT / 'v207b_full_gate_results.csv'),"
-14,code,13,,"    'full_candidate_count': len(FULL_CANDIDATES) if 'FULL_CANDIDATES' in globals() else 0,"
-14,code,14,,    'next_human_action': (
-14,code,15,,        'Review any approved full gate candidate and explicitly approve Kaggle submission.'
-14,code,16,,        if 'full_results' in globals() and any(x.get('approved') for x in full_results)
-14,code,17,,        else 'No submission candidate approved. Add more external adapters or stop.'
-14,code,18,,"    ),"
-14,code,19,,}
-14,code,20,,summary_path = OUT_ROOT / 'V207B_FINAL_RUN_SUMMARY.json'
-14,code,21,,"summary_path.write_text(json.dumps(summary, indent=2, sort_keys=True), encoding='utf-8')"
-14,code,22,progress_log,"print(json.dumps(summary, indent=2, sort_keys=True))"
-14,code,23,progress_log,"print('summary_path =', summary_path)"
-14,code,24,progress_log,print('=== V207B FINAL SUMMARY END ===')
+14,code,9,,"    'report_dir': str(REPORT_DIR),"
+14,code,10,,"    'manifest_dir': str(MANIFEST_DIR),"
+14,code,11,,"    'log_policy': LOG_POLICY,"
+14,code,12,,"    'candidate_manifest': str(MANIFEST_DIR / 'v207b_discovered_candidates.json'),"
+14,code,13,,"    'structure_audit_csv': str(MANIFEST_DIR / 'v207b_adapter_structure_audit.csv'),"
+14,code,14,,"    'weak_screen_csv': str(MANIFEST_DIR / 'v207b_weak_screen_results.csv'),"
+14,code,15,,"    'full_gate_csv': str(MANIFEST_DIR / 'v207b_full_gate_results.csv'),"
+14,code,16,,"    'full_candidate_count': len(FULL_CANDIDATES) if 'FULL_CANDIDATES' in globals() else 0,"
+14,code,17,,    'next_human_action': (
+14,code,18,,        'Review any approved full gate candidate and explicitly approve Kaggle submission.'
+14,code,19,,        if 'full_results' in globals() and any(x.get('approved') for x in full_results)
+14,code,20,,        else 'No submission candidate approved. Add more external adapters or stop.'
+14,code,21,,"    ),"
+14,code,22,,}
+14,code,23,,summary_path = OUT_ROOT / 'V207B_FINAL_RUN_SUMMARY.json'
+14,code,24,,"summary_path.write_text(json.dumps(summary, indent=2, sort_keys=True), encoding='utf-8')"
+14,code,25,progress_log,"print(json.dumps(summary, indent=2, sort_keys=True))"
+14,code,26,progress_log,"print('summary_path =', summary_path)"
+14,code,27,progress_log,print('=== V207B FINAL SUMMARY END ===')

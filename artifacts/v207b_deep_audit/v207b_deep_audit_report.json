@@ -1,10 +1,10 @@
 {
   "schema_version": "v207b_deep_audit_v1",
-  "generated_at_utc": "2026-05-07T15:55:21+00:00",
+  "generated_at_utc": "2026-05-07T16:12:12+00:00",
   "status": "pass",
   "notebook": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\notebooks\\KG1_V207B_EXTERNAL_ADAPTER_TRIAGE_COLAB.ipynb",
   "builder": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\scripts\\build_v207b_external_adapter_triage_colab.py",
-  "notebook_sha256": "d03ac3690b9a0fbd075676f5e7efb97674df8cfbf48e72162a1dd1b0c6942f10",
+  "notebook_sha256": "e52862740f723bf4fdb30b1cc1fc34b31bc56e939cdeb58829277b4356439f13",
   "notebook_summary": {
     "cell_count": 15,
     "code_cell_count": 14

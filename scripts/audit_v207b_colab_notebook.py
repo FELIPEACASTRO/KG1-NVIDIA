@@ -171,6 +171,11 @@ def check_required_contract(text: str, findings: list[Finding]) -> None:
         "V207B COLAB SECRETS BRIDGE START",
         "HF_TOKEN_ready",
         "KAGGLE_CREDENTIALS_READY",
+        "LOG_POLICY",
+        "DRIVE_ORGANIZED_OUTPUTS",
+        "MANIFEST_DIR",
+        "PRINT_COMMAND_OUTPUT",
+        "command_output_suppressed_lines",
         "V207B HELPERS START",
         "V207B DEPENDENCY CHECK START",
         "kaggle==2.0.2",
@@ -221,6 +226,20 @@ def check_required_contract(text: str, findings: list[Finding]) -> None:
     for pattern in secret_value_print_patterns:
         if re.search(pattern, text):
             add(findings, "error", "secret_value_print_risk", pattern)
+
+    log_noise_forbidden = [
+        "print(per.to_string(index=False))",
+        "print('candidate =', item['label'], item['path'])",
+        "download_status =', json.dumps(row, indent=2",
+        "audit_df[['label', 'ready_for_eval', 'r', 'tensor_count', 'model_bytes', 'reason', 'path']].to_string",
+    ]
+    for marker in log_noise_forbidden:
+        if marker in text:
+            add(findings, "error", "noisy_notebook_log_pattern", marker)
+    if "PRINT_COMMAND_OUTPUT or is_essential_output_line(line)" not in text:
+        add(findings, "error", "command_log_filter_missing", "run_cmd must suppress noisy stdout by default")
+    if "full_command_log =" not in text:
+        add(findings, "error", "drive_command_log_missing", "full subprocess logs must be persisted to Drive")
 
     if "userdata.get(name)" not in text:
         add(findings, "error", "colab_secret_reader_missing", "userdata.get(name)")
@@ -478,7 +497,14 @@ def check_remote_raw(findings: list[Finding]) -> dict[str, Any]:
             add(findings, "error", "remote_raw_non_200", f"{name}: {status}")
         if name == "notebook":
             text = data.decode("utf-8", errors="replace")
-            for marker in ["V207B COLAB SECRETS BRIDGE START", "vllm==0.20.1", "baseline_artifact_audit"]:
+            for marker in [
+                "V207B COLAB SECRETS BRIDGE START",
+                "vllm==0.20.1",
+                "baseline_artifact_audit",
+                "LOG_POLICY",
+                "DRIVE_ORGANIZED_OUTPUTS",
+                "command_output_suppressed_lines",
+            ]:
                 if marker not in text:
                     add(findings, "error", "remote_notebook_marker_missing", marker)
     return summary
