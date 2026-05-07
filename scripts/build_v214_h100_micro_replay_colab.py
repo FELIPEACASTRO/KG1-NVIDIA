@@ -419,10 +419,14 @@ def fresh_python_code_check(label, code_text):
 def ensure_mamba_stack():
     required_import = (
         "from mamba_ssm.ops.triton.layernorm_gated import rmsnorm_fn\\n"
+        "from mamba_ssm.ops.triton.ssd_combined import mamba_chunk_scan_combined, mamba_split_conv1d_scan_combined\\n"
+        "from causal_conv1d import causal_conv1d_fn, causal_conv1d_update\\n"
         "import mamba_ssm, json\\n"
         "print(json.dumps({"
         "'mamba_ssm_version': getattr(mamba_ssm, '__version__', 'unknown'), "
-        "'layernorm_gated_rmsnorm_fn': rmsnorm_fn is not None"
+        "'layernorm_gated_rmsnorm_fn': rmsnorm_fn is not None, "
+        "'ssd_combined_scan': mamba_chunk_scan_combined is not None and mamba_split_conv1d_scan_combined is not None, "
+        "'causal_conv1d': causal_conv1d_fn is not None and causal_conv1d_update is not None"
         "}, sort_keys=True))"
     )
     try:

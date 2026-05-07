@@ -87,9 +87,11 @@ Notebook checks/imports:
 - `bitsandbytes` optional, with fallback to torch Adam if unavailable
 - `packaging`
 
-Before loading the model, it runs an exact fresh Python subprocess check for:
+Before loading the model, it runs exact fresh Python subprocess checks for:
 
 - `from mamba_ssm.ops.triton.layernorm_gated import rmsnorm_fn`
+- `from mamba_ssm.ops.triton.ssd_combined import mamba_chunk_scan_combined, mamba_split_conv1d_scan_combined`
+- `from causal_conv1d import causal_conv1d_fn, causal_conv1d_update`
 
 After dependency installs, it runs a fresh Python subprocess import check for:
 
