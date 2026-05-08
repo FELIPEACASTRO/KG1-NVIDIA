@@ -160,6 +160,8 @@ MIN_TRAIN_EXAMPLES = {TRAIN_ROWS}
 MIN_VAL_EXAMPLES = {VAL_ROWS}
 EXPECTED_V194_ADAPTER_BYTES = 4259069440
 EXPECTED_V194_ADAPTER_TENSOR_COUNT = 12011
+EXPECTED_V217_ADAPTER_BYTES = 4259063856
+EXPECTED_V217_ADAPTER_MIN_TENSOR_COUNT = 12000
 EXPECTED_V194_TARGET_MODULES = ['k_proj', 'up_proj', 'down_proj', 'out_proj', 'v_proj', 'q_proj', 'lm_head', 'o_proj', 'in_proj']
 EXPECTED_V194_TARGET_PARAMETERS = ['mlp.experts.gate_up_proj', 'mlp.experts.down_proj']
 
@@ -202,6 +204,10 @@ print('EXPECTED_TRAIN_SHA256 =', EXPECTED_TRAIN_SHA256, flush=True)
 print('EXPECTED_VAL_SHA256 =', EXPECTED_VAL_SHA256, flush=True)
 print('MIN_TRAIN_EXAMPLES =', MIN_TRAIN_EXAMPLES, flush=True)
 print('MIN_VAL_EXAMPLES =', MIN_VAL_EXAMPLES, flush=True)
+print('EXPECTED_V194_ADAPTER_BYTES =', EXPECTED_V194_ADAPTER_BYTES, flush=True)
+print('EXPECTED_V194_ADAPTER_TENSOR_COUNT =', EXPECTED_V194_ADAPTER_TENSOR_COUNT, flush=True)
+print('EXPECTED_V217_ADAPTER_BYTES =', EXPECTED_V217_ADAPTER_BYTES, flush=True)
+print('EXPECTED_V217_ADAPTER_MIN_TENSOR_COUNT =', EXPECTED_V217_ADAPTER_MIN_TENSOR_COUNT, flush=True)
 print('TOKENIZE_ONLY_DRY_RUN =', TOKENIZE_ONLY_DRY_RUN, flush=True)
 print('MAX_PROMPT_TRUNCATION_RATE =', MAX_PROMPT_TRUNCATION_RATE, flush=True)
 print('REQUIRE_OFFSET_MASK =', REQUIRE_OFFSET_MASK, flush=True)
@@ -421,16 +427,38 @@ if not V194_VAL_CSV.exists():
     raise FileNotFoundError(V194_VAL_CSV)
 if not is_complete_adapter_dir(V217_FINAL_ADAPTER):
     raise RuntimeError('V217 final adapter is missing or incomplete; run V217 train first.')
+try:
+    from safetensors import safe_open
+except ModuleNotFoundError:
+    run_cmd([sys.executable, '-m', 'pip', 'install', '-q', 'safetensors'], log_path=OUT_ROOT / 'pip_install_safetensors.log', check=True)
+    from safetensors import safe_open
 for adapter_name, adapter_path in [('v194', V194_ADAPTER), ('v217_final', V217_FINAL_ADAPTER)]:
     config_path = adapter_path / 'adapter_config.json'
     weights_path = adapter_path / 'adapter_model.safetensors'
     config = read_json(config_path)
+    target_modules = config.get('target_modules')
+    target_parameters = config.get('target_parameters')
+    weight_bytes = weights_path.stat().st_size
+    with safe_open(weights_path, framework='pt', device='cpu') as handle:
+        tensor_count = len(handle.keys())
     print(adapter_name + '_adapter_config.json =', config_path, flush=True)
-    print(adapter_name + '_adapter_model.safetensors =', weights_path, 'bytes =', weights_path.stat().st_size, flush=True)
-    print(adapter_name + '_target_modules =', config.get('target_modules'), flush=True)
-    print(adapter_name + '_target_parameters =', config.get('target_parameters'), flush=True)
-    if adapter_name == 'v194' and weights_path.stat().st_size != EXPECTED_V194_ADAPTER_BYTES:
-        raise RuntimeError('V194 adapter size mismatch')
+    print(adapter_name + '_adapter_model.safetensors =', weights_path, 'bytes =', weight_bytes, 'tensor_count =', tensor_count, flush=True)
+    print(adapter_name + '_target_modules =', target_modules, flush=True)
+    print(adapter_name + '_target_parameters =', target_parameters, flush=True)
+    if set(target_modules or []) != set(EXPECTED_V194_TARGET_MODULES):
+        raise RuntimeError(adapter_name + ' target_modules mismatch')
+    if list(target_parameters or []) != EXPECTED_V194_TARGET_PARAMETERS:
+        raise RuntimeError(adapter_name + ' target_parameters mismatch')
+    if adapter_name == 'v194':
+        if weight_bytes != EXPECTED_V194_ADAPTER_BYTES:
+            raise RuntimeError('V194 adapter size mismatch')
+        if tensor_count != EXPECTED_V194_ADAPTER_TENSOR_COUNT:
+            raise RuntimeError('V194 adapter tensor count mismatch')
+    if adapter_name == 'v217_final':
+        if weight_bytes != EXPECTED_V217_ADAPTER_BYTES:
+            raise RuntimeError('V217 final adapter size mismatch')
+        if tensor_count < EXPECTED_V217_ADAPTER_MIN_TENSOR_COUNT:
+            raise RuntimeError('V217 final adapter tensor count below expected floor')
 
 from src.competition_utils import classify_puzzle
 full_df = pd.read_csv(V194_VAL_CSV)
