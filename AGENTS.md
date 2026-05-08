@@ -1,0 +1,19 @@
+# KG1 Agent Instructions
+
+## Notebook Generation
+
+- Every generated Colab/Jupyter notebook must include explicit progress logs in each operational cell.
+- Long-running cells must print start/end markers, key input paths, output paths, command lines, return codes, and success/failure summaries.
+- Script cells must make it possible to verify execution progress without waiting for the final manifest only.
+- If a script is long-running and currently silent, update either the script or the notebook wrapper to emit progress checkpoints before using it.
+- Every created or changed Colab notebook must be accompanied by the exact Colab execution URL in the response.
+- If the notebook exists only locally and has not been pushed to GitHub yet, explicitly say that the URL will work only after the notebook is pushed to the referenced branch.
+
+## Notebook Release Gate
+
+- Every created or changed `.ipynb` must pass `python scripts/notebook_release_gate.py <notebook path>` before it is delivered, committed, or pushed.
+- If multiple notebooks were created or changed, pass all of them to the gate in the same command.
+- The gate must validate the notebook structure, Python syntax in code cells, explicit `# CELL:` headers, START/END progress markers, Colab URL, long-running command logging, hard Kaggle-submit lock, data hash/path checks, V194 adapter checks, runtime/dependency checks, train completion checks, and weak/full eval gates.
+- Training/evaluation notebooks must include executable checks for H100/CUDA capacity, `causal-conv1d`, `mamba_ssm`, vLLM install ordering, exact dataset hashes, exact Drive adapter path, adapter tensor/config compatibility, tokenization/truncation/offset-mask contracts, final adapter completeness, and quality gates before full eval/submission.
+- The CI workflow `.github/workflows/notebook-release-gate.yml` enforces this gate for every changed notebook on push and pull request.
+- Historical notebooks are not retroactively required to pass until they are edited; once edited, they must satisfy the current gate.
