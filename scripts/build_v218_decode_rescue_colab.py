@@ -356,6 +356,9 @@ run_cmd(
 )
 commit = subprocess.check_output(['git', '-C', str(ROOT), 'rev-parse', 'HEAD'], text=True).strip()
 print('repo_commit =', commit, flush=True)
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+print('repo_root_on_sys_path =', str(ROOT) in sys.path, flush=True)
 for rel in [
     'scripts/evaluate_lora_adapter.py',
     'scripts/analyze_eval_predictions.py',
