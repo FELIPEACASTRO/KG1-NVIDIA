@@ -1,0 +1,132 @@
+{
+  "created_at_utc": "2026-05-08T11:35:43+00:00",
+  "inputs": {
+    "src_manifest": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\data\\v216\\v216_score_push_manifest.json",
+    "src_train": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\data\\v216\\v216_score_push_train.jsonl",
+    "src_train_sha256": "8cfd065c102187b12c131aae7475c35e28073721175b4e6108004b0afc4d5d03",
+    "src_val": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\data\\v216\\v216_score_push_val.jsonl",
+    "src_val_sha256": "80efe71260c8589b998699543c85aff3ff140bc90e431dfa0ec33bce3e0921c0"
+  },
+  "objective": "Reduce weak-eval truncation by training short final-answer completions from the audited V216 score-push pool.",
+  "recommended_training_env": {
+    "MIN_TOKENIZED_TRAIN_EXAMPLES": "10206",
+    "MIN_TOKENIZED_VAL_EXAMPLES": "681",
+    "MIN_TRAIN_EXAMPLES": "10206",
+    "MIN_VAL_EXAMPLES": "681",
+    "SAMPLING_MODE": "weighted_replacement",
+    "SOURCE_WEIGHTS": "v216_synthetic_kg1_symbolic_rules=1.0,v216_synthetic_kg1_numeric_rules=0.9,v216_synthetic_kg1_bit_rules=1.05,v216_base_clean_safe_strict_equation=1.0,v216_base_clean_safe_strict_bit=1.05,v215_replay_anchor=1.0",
+    "SUBCATEGORY_WEIGHTS": "equation_symbolic_binary=1.05,equation_symbolic_unary=1.05,equation_numeric=0.9,equation numeric=0.9,equation symbolic/mixed=1.0,bit_manipulation=1.05,unknown=1.0"
+  },
+  "removed_prompt_truncated_train_rows": [
+    {
+      "family": "bit_manipulation",
+      "id": "clean_safe_strict_de25c8b4c874f62d",
+      "line_no": 7995,
+      "source": "v216_base_clean_safe_strict_bit",
+      "subcategory": null
+    },
+    {
+      "family": "bit_manipulation",
+      "id": "clean_safe_strict_5719011b2b3da39f",
+      "line_no": 8327,
+      "source": "v216_base_clean_safe_strict_bit",
+      "subcategory": null
+    },
+    {
+      "family": "bit_manipulation",
+      "id": "clean_safe_strict_384d775636c751d4",
+      "line_no": 8521,
+      "source": "v216_base_clean_safe_strict_bit",
+      "subcategory": null
+    },
+    {
+      "family": "bit_manipulation",
+      "id": "clean_safe_strict_33a9e59cca3d55f8",
+      "line_no": 9299,
+      "source": "v216_base_clean_safe_strict_bit",
+      "subcategory": null
+    }
+  ],
+  "status": "PASS",
+  "train": {
+    "assistant_chars": {
+      "max": 53,
+      "min": 15,
+      "p50": 18
+    },
+    "family_counts": {
+      "bit_manipulation": 2695,
+      "equation_transform": 6935,
+      "gravity_constant": 144,
+      "numeral_system": 144,
+      "text_encryption": 144,
+      "unit_conversion": 144
+    },
+    "path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\data\\v217\\v217_short_answer_train.jsonl",
+    "rows": 10206,
+    "sha256": "a56938b1ae9eb471b779ebfc415ee88c05322941732128752680317495157984",
+    "source_counts": {
+      "v215_replay_anchor": 859,
+      "v216_base_clean_safe_strict_bit": 1796,
+      "v216_base_clean_safe_strict_equation": 3200,
+      "v216_synthetic_kg1_bit_rules": 646,
+      "v216_synthetic_kg1_numeric_rules": 639,
+      "v216_synthetic_kg1_symbolic_rules": 3066
+    },
+    "subtype_counts": {
+      "bit_manipulation": 646,
+      "equation numeric": 176,
+      "equation symbolic/mixed": 3024,
+      "equation_numeric": 639,
+      "equation_symbolic_binary": 1574,
+      "equation_symbolic_unary": 1492,
+      "unknown": 2655
+    }
+  },
+  "train_validation": {
+    "errors": {},
+    "split": "train",
+    "unique_prompt_answers": 10206
+  },
+  "validation": {
+    "assistant_chars": {
+      "max": 46,
+      "min": 15,
+      "p50": 18
+    },
+    "family_counts": {
+      "bit_manipulation": 164,
+      "equation_transform": 453,
+      "gravity_constant": 16,
+      "numeral_system": 16,
+      "text_encryption": 16,
+      "unit_conversion": 16
+    },
+    "path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\data\\v217\\v217_short_answer_val.jsonl",
+    "rows": 681,
+    "sha256": "65c4cb88b8ff2fc96940ccea33b8ca493769790c7ae80d27f2b69ac818fc6451",
+    "source_counts": {
+      "v215_replay_anchor": 98,
+      "v216_base_clean_safe_strict_bit": 80,
+      "v216_base_clean_safe_strict_equation": 120,
+      "v216_synthetic_kg1_bit_rules": 54,
+      "v216_synthetic_kg1_numeric_rules": 61,
+      "v216_synthetic_kg1_symbolic_rules": 268
+    },
+    "subtype_counts": {
+      "bit_manipulation": 54,
+      "equation numeric": 6,
+      "equation symbolic/mixed": 114,
+      "equation_numeric": 61,
+      "equation_symbolic_binary": 152,
+      "equation_symbolic_unary": 116,
+      "unknown": 178
+    }
+  },
+  "validation_validation": {
+    "errors": {},
+    "split": "validation",
+    "unique_prompt_answers": 681
+  },
+  "version": "v217_short_answer_rescue"
+}
