@@ -367,6 +367,77 @@ def uninstall_pip_specs(specs, label):
         check=False,
     )
 
+def install_causal_conv1d_with_retry(primary_log, retry_log):
+    causal_rc = run_cmd(
+        [sys.executable, '-m', 'pip', 'install', '--progress-bar', 'off', '--no-build-isolation', V216_CAUSAL_CONV1D_PIP_SPEC],
+        log_path=OUT_ROOT / primary_log,
+        check=False,
+    )
+    if causal_rc != 0:
+        print('causal-conv1d build failed once; refreshing build tooling and retrying without pip cache.', flush=True)
+        run_cmd(
+            [
+                sys.executable,
+                '-m',
+                'pip',
+                'install',
+                '-q',
+                '--upgrade',
+                'pip',
+                'setuptools',
+                'wheel',
+                'packaging',
+                'ninja',
+            ],
+            log_path=OUT_ROOT / 'pip_install_build_tooling_retry.log',
+        )
+        causal_rc = run_cmd(
+            [
+                sys.executable,
+                '-m',
+                'pip',
+                'install',
+                '--progress-bar',
+                'off',
+                '--no-cache-dir',
+                '--no-build-isolation',
+                V216_CAUSAL_CONV1D_PIP_SPEC,
+            ],
+            log_path=OUT_ROOT / retry_log,
+            check=False,
+        )
+    if causal_rc != 0:
+        raise RuntimeError('causal-conv1d build failed after retry; see pip_install_causal_conv1d*.log')
+    verify_import_subprocess('causal_conv1d', check=True)
+
+def post_vllm_extension_abi_audit(log_label, check):
+    code = r'''
+import importlib
+import json
+import torch
+
+mods = {}
+for name in ["causal_conv1d", "mamba_ssm", "transformers", "peft", "vllm"]:
+    module = importlib.import_module(name)
+    mods[name] = str(getattr(module, "__version__", "unknown"))
+
+from causal_conv1d import causal_conv1d_fn, causal_conv1d_update  # noqa: F401
+from mamba_ssm.ops.selective_scan_interface import selective_scan_fn  # noqa: F401
+
+print(json.dumps({
+    "torch": str(getattr(torch, "__version__", "unknown")),
+    "torch_cuda": str(getattr(torch.version, "cuda", "")),
+    "cuda_available": bool(torch.cuda.is_available()),
+    "mods": mods,
+}, sort_keys=True))
+'''
+    return run_cmd(
+        [sys.executable, '-c', code],
+        log_path=OUT_ROOT / log_label,
+        check=check,
+        heartbeat_s=0,
+    )
+
 def is_complete_adapter_dir(path):
     path = pathlib.Path(path)
     return path.is_dir() and (path / 'adapter_config.json').exists() and (
@@ -468,47 +539,7 @@ if verify_import_subprocess('mamba_ssm', check=False) != 0:
             raise RuntimeError('Could not remove vLLM before mamba_ssm repair; see pip_uninstall_vllm_pre_mamba_repair.log')
     ensure_import('ninja', 'ninja')
     if verify_import_subprocess('causal_conv1d', check=False) != 0:
-        causal_rc = run_cmd(
-            [sys.executable, '-m', 'pip', 'install', '--progress-bar', 'off', '--no-build-isolation', V216_CAUSAL_CONV1D_PIP_SPEC],
-            log_path=OUT_ROOT / 'pip_install_causal_conv1d.log',
-            check=False,
-        )
-        if causal_rc != 0:
-            print('causal-conv1d build failed once; refreshing build tooling and retrying without pip cache.', flush=True)
-            run_cmd(
-                [
-                    sys.executable,
-                    '-m',
-                    'pip',
-                    'install',
-                    '-q',
-                    '--upgrade',
-                    'pip',
-                    'setuptools',
-                    'wheel',
-                    'packaging',
-                    'ninja',
-                ],
-                log_path=OUT_ROOT / 'pip_install_build_tooling_retry.log',
-            )
-            causal_rc = run_cmd(
-                [
-                    sys.executable,
-                    '-m',
-                    'pip',
-                    'install',
-                    '--progress-bar',
-                    'off',
-                    '--no-cache-dir',
-                    '--no-build-isolation',
-                    V216_CAUSAL_CONV1D_PIP_SPEC,
-                ],
-                log_path=OUT_ROOT / 'pip_install_causal_conv1d_retry.log',
-                check=False,
-            )
-        if causal_rc != 0:
-            raise RuntimeError('causal-conv1d build failed after retry; see pip_install_causal_conv1d*.log')
-        verify_import_subprocess('causal_conv1d', check=True)
+        install_causal_conv1d_with_retry('pip_install_causal_conv1d.log', 'pip_install_causal_conv1d_retry.log')
     else:
         print('causal_conv1d subprocess import already OK; skipping install.', flush=True)
     run_cmd(
@@ -524,6 +555,25 @@ if vllm_rc != 0:
     verify_import_subprocess('vllm', check=True)
 else:
     print('vLLM subprocess import already OK; skipping install.', flush=True)
+
+post_vllm_rc = post_vllm_extension_abi_audit('verify_post_vllm_extension_abi.jsonl', check=False)
+if post_vllm_rc != 0:
+    print(
+        'post-vLLM extension ABI audit failed; rebuilding causal-conv1d and mamba-ssm against the final torch/vLLM stack.',
+        flush=True,
+    )
+    uninstall_pip_specs(['causal-conv1d', 'mamba-ssm'], 'post_vllm_extension_repair')
+    install_causal_conv1d_with_retry(
+        'pip_install_causal_conv1d_post_vllm.log',
+        'pip_install_causal_conv1d_post_vllm_retry.log',
+    )
+    run_cmd(
+        [sys.executable, '-m', 'pip', 'install', '--progress-bar', 'off', '--no-build-isolation', V216_MAMBA_SSM_PIP_SPEC],
+        log_path=OUT_ROOT / 'pip_install_mamba_ssm_post_vllm.log',
+    )
+    post_vllm_extension_abi_audit('verify_post_vllm_extension_abi_after_repair.jsonl', check=True)
+else:
+    print('post_vllm_extension_abi_audit_ok = True', flush=True)
 
 torch_check_code = (
     "import json, torch; "
