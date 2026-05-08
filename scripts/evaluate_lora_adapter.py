@@ -306,12 +306,15 @@ def evaluate_adapter(
     sampling_params = _sampling_params(config, seed)
     lora_request = LoRARequest("adapter", 1, str(adapter_dir))
 
-    if rendered:
-        warmup_n = min(4, len(rendered))
+    warmup_rows = int(config.get("warmup_rows", 4))
+    if rendered and warmup_rows > 0:
+        warmup_n = min(warmup_rows, len(rendered))
         print(f"warmup_rows = {warmup_n}")
         warmup_start = time.time()
         _ = llm.generate(rendered[:warmup_n], sampling_params=sampling_params, lora_request=lora_request)
         print(f"warmup_elapsed_s = {time.time() - warmup_start:.1f}")
+    else:
+        print("warmup_rows = 0")
 
     gen_start = time.time()
     outputs = llm.generate(rendered, sampling_params=sampling_params, lora_request=lora_request)
@@ -417,8 +420,10 @@ def main() -> int:
     parser.add_argument("--limit", type=int, default=0)
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--max-tokens", type=int, default=0, help="Diagnostic override for generation max_tokens.")
+    parser.add_argument("--max-model-len", type=int, default=0, help="Diagnostic override for vLLM max_model_len.")
     parser.add_argument("--max-num-seqs", type=int, default=0, help="Diagnostic override for vLLM max_num_seqs.")
     parser.add_argument("--gpu-memory-utilization", type=float, default=0.0, help="Diagnostic override for vLLM memory fraction.")
+    parser.add_argument("--warmup-rows", type=int, default=4, help="Number of explicit warmup rows before measured generation.")
     parser.add_argument("--disable-thinking", action="store_true", help="Diagnostic prompt rendering with enable_thinking=False.")
     parser.add_argument("--prompt-suffix", default="", help="Diagnostic override for the prompt suffix.")
     args = parser.parse_args()
@@ -438,10 +443,13 @@ def main() -> int:
     eval_config = dict(OFFICIAL_INFERENCE_CONFIG)
     if args.max_tokens > 0:
         eval_config["max_tokens"] = int(args.max_tokens)
+    if args.max_model_len > 0:
+        eval_config["max_model_len"] = int(args.max_model_len)
     if args.max_num_seqs > 0:
         eval_config["max_num_seqs"] = int(args.max_num_seqs)
     if args.gpu_memory_utilization > 0:
         eval_config["gpu_memory_utilization"] = float(args.gpu_memory_utilization)
+    eval_config["warmup_rows"] = max(0, int(args.warmup_rows))
     if args.disable_thinking:
         eval_config["enable_thinking"] = False
     if args.prompt_suffix:
