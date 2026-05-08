@@ -145,14 +145,14 @@ V194_VAL_CSV = pathlib.Path('{V194_VAL_CSV_DRIVE}')
 MODEL_NAME = '{MODEL_NAME}'
 MODEL_REVISION = '{MODEL_REVISION}'
 
-RUN_BASELINE_WEAK = os.environ.get('KG1_V216_RUN_BASELINE_WEAK', '1').strip().lower() not in {{'0', 'false', 'no', 'off'}}
+RUN_BASELINE_WEAK = os.environ.get('KG1_V216_RUN_BASELINE_WEAK', '0').strip().lower() not in {{'0', 'false', 'no', 'off'}}
 RUN_DRY_RUN = os.environ.get('KG1_V216_RUN_DRY_RUN', '1').strip().lower() not in {{'0', 'false', 'no', 'off'}}
 RUN_TRAIN = os.environ.get('KG1_V216_RUN_TRAIN', '1').strip().lower() in {{'1', 'true', 'yes', 'on'}}
 RUN_EVAL = os.environ.get('KG1_V216_RUN_EVAL', '1').strip().lower() not in {{'0', 'false', 'no', 'off'}}
 FORCE_RETRAIN = os.environ.get('KG1_V216_FORCE_RETRAIN', '0').strip().lower() in {{'1', 'true', 'yes', 'on'}}
 FORCE_REEVAL = os.environ.get('KG1_V216_FORCE_REEVAL', '0').strip().lower() in {{'1', 'true', 'yes', 'on'}}
 FORCE_DRY_RUN = os.environ.get('KG1_V216_FORCE_DRY_RUN', '0').strip().lower() in {{'1', 'true', 'yes', 'on'}}
-RUN_WEAK_SMOKE = os.environ.get('KG1_V216_RUN_WEAK_SMOKE', '1').strip().lower() not in {{'0', 'false', 'no', 'off'}}
+RUN_WEAK_SMOKE = os.environ.get('KG1_V216_RUN_WEAK_SMOKE', '0').strip().lower() not in {{'0', 'false', 'no', 'off'}}
 
 TRAIN_SHA = '{TRAIN_SHA}'
 VAL_SHA = '{VAL_SHA}'
@@ -452,6 +452,45 @@ print(json.dumps({
         heartbeat_s=0,
     )
 
+def train_extension_abi_audit(log_label, check):
+    code = r'''
+import importlib
+import json
+import torch
+
+mods = {}
+for name in ["causal_conv1d", "mamba_ssm", "transformers", "peft"]:
+    module = importlib.import_module(name)
+    mods[name] = str(getattr(module, "__version__", "unknown"))
+
+from causal_conv1d import causal_conv1d_fn, causal_conv1d_update  # noqa: F401
+from mamba_ssm.ops.selective_scan_interface import selective_scan_fn  # noqa: F401
+
+print(json.dumps({
+    "torch": str(getattr(torch, "__version__", "unknown")),
+    "torch_cuda": str(getattr(torch.version, "cuda", "")),
+    "cuda_available": bool(torch.cuda.is_available()),
+    "mods": mods,
+}, sort_keys=True))
+'''
+    return run_cmd(
+        [sys.executable, '-c', code],
+        log_path=OUT_ROOT / log_label,
+        check=check,
+        heartbeat_s=0,
+    )
+
+def ensure_vllm_for_eval():
+    print('=== V216 VLLM EVAL DEPENDENCY CHECK START ===', flush=True)
+    vllm_rc = verify_import_subprocess('vllm', check=False)
+    if vllm_rc != 0:
+        print('vLLM subprocess import failed; installing pinned V216_VLLM_PIP_SPEC =', V216_VLLM_PIP_SPEC, flush=True)
+        install_pip_spec(V216_VLLM_PIP_SPEC, 'vllm', force=False)
+        verify_import_subprocess('vllm', check=True)
+    else:
+        print('vLLM subprocess import already OK; skipping install.', flush=True)
+    print('=== V216 VLLM EVAL DEPENDENCY CHECK END ===', flush=True)
+
 def is_complete_adapter_dir(path):
     path = pathlib.Path(path)
     return path.is_dir() and (path / 'adapter_config.json').exists() and (
@@ -541,16 +580,25 @@ for import_name, spec in [
         install_pip_spec(spec, import_name, force=False)
         verify_import_subprocess(import_name, check=True)
 
-vllm_rc = verify_import_subprocess('vllm', check=False)
-if vllm_rc != 0:
-    print('vLLM subprocess import failed; installing pinned V216_VLLM_PIP_SPEC =', V216_VLLM_PIP_SPEC, flush=True)
-    install_pip_spec(V216_VLLM_PIP_SPEC, 'vllm', force=False)
-    verify_import_subprocess('vllm', check=True)
-else:
-    print('vLLM subprocess import already OK; skipping install.', flush=True)
+torch_pretrain_code = (
+    "import json, torch; "
+    "print(json.dumps({'torch': str(getattr(torch, '__version__', 'unknown')), "
+    "'torch_cuda': str(getattr(torch.version, 'cuda', '')), "
+    "'cuda_available': bool(torch.cuda.is_available())}, sort_keys=True))"
+)
+torch_pretrain_path = OUT_ROOT / 'verify_torch_before_train_extensions.jsonl'
+run_cmd([sys.executable, '-c', torch_pretrain_code], log_path=torch_pretrain_path, check=True, heartbeat_s=0)
+torch_pretrain = json.loads([line for line in torch_pretrain_path.read_text(encoding='utf-8').splitlines() if line.strip()][-1])
+print('torch_before_train_extensions =', json.dumps(torch_pretrain, sort_keys=True), flush=True)
+if str(torch_pretrain.get('torch', '')).startswith('2.11') and verify_import_subprocess('causal_conv1d', check=False) != 0:
+    raise RuntimeError(
+        'This runtime is already contaminated by vLLM/Torch 2.11 before train extensions were built. '
+        'Use Runtime > Disconnect and delete runtime, then rerun this notebook from the first cell. '
+        'The fixed notebook now delays vLLM until eval so a fresh runtime will not hit this path.'
+    )
 
 if verify_import_subprocess('mamba_ssm', check=False) != 0:
-    print('mamba_ssm subprocess import failed; installing causal-conv1d and mamba-ssm against the final vLLM/Torch stack.', flush=True)
+    print('mamba_ssm subprocess import failed; installing causal-conv1d first, then mamba-ssm for train stack.', flush=True)
     ensure_import('ninja', 'ninja')
     if verify_import_subprocess('causal_conv1d', check=False) != 0:
         install_causal_conv1d_with_retry('pip_install_causal_conv1d.log', 'pip_install_causal_conv1d_retry.log')
@@ -564,24 +612,7 @@ if verify_import_subprocess('mamba_ssm', check=False) != 0:
 else:
     print('mamba_ssm subprocess import already OK; skipping install.', flush=True)
 
-post_vllm_rc = post_vllm_extension_abi_audit('verify_post_vllm_extension_abi.jsonl', check=False)
-if post_vllm_rc != 0:
-    print(
-        'post-vLLM extension ABI audit failed; rebuilding causal-conv1d and mamba-ssm against the final torch/vLLM stack.',
-        flush=True,
-    )
-    uninstall_pip_specs(['causal-conv1d', 'mamba-ssm'], 'post_vllm_extension_repair')
-    install_causal_conv1d_with_retry(
-        'pip_install_causal_conv1d_post_vllm.log',
-        'pip_install_causal_conv1d_post_vllm_retry.log',
-    )
-    run_cmd(
-        [sys.executable, '-m', 'pip', 'install', '--progress-bar', 'off', '--no-build-isolation', V216_MAMBA_SSM_PIP_SPEC],
-        log_path=OUT_ROOT / 'pip_install_mamba_ssm_post_vllm.log',
-    )
-    post_vllm_extension_abi_audit('verify_post_vllm_extension_abi_after_repair.jsonl', check=True)
-else:
-    print('post_vllm_extension_abi_audit_ok = True', flush=True)
+train_extension_abi_audit('verify_train_extension_abi.jsonl', check=True)
 
 torch_check_code = (
     "import json, torch; "
@@ -668,6 +699,7 @@ if len(full_df) != 947 or len(weak_df) != 315 or len(strong_df) != 632:
 baseline_report_path = BASELINE_OUT / 'v194_baseline_weak_eval_report.json'
 baseline_per_task_path = BASELINE_OUT / 'v194_baseline_weak_per_task.csv'
 if RUN_BASELINE_WEAK and (FORCE_REEVAL or not baseline_report_path.exists()):
+    ensure_vllm_for_eval()
     rc = run_cmd(
         [
             sys.executable,
@@ -905,6 +937,7 @@ if not RUN_EVAL:
 elif not is_complete_adapter_dir(final_adapter):
     print('No complete final_adapter exists; skipping weak eval.', flush=True)
 else:
+    ensure_vllm_for_eval()
     weak_eval_dir.mkdir(parents=True, exist_ok=True)
     run_new_weak_eval = FORCE_REEVAL or not weak_report_path.exists()
     print('run_new_weak_eval =', run_new_weak_eval, flush=True)
@@ -1005,6 +1038,7 @@ elif not weak_gate_pass_for_full:
     print('Weak gate failed; full eval blocked.', flush=True)
     print('Required weak_total >=', WEAK_MIN_FOR_FULL, 'eq >=', WEAK_EQ_MIN_FOR_FULL, 'bit >=', WEAK_BIT_MIN_FOR_FULL, 'trunc <=', BASELINE_WEAK_MAX_TRUNC, flush=True)
 elif FORCE_REEVAL or not full_report_path.exists():
+    ensure_vllm_for_eval()
     full_eval_dir.mkdir(parents=True, exist_ok=True)
     rc = run_cmd(
         [
