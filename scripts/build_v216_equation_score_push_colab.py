@@ -117,6 +117,18 @@ os.environ.setdefault('VLLM_MEMORY_PROFILER_ESTIMATE_CUDAGRAPHS', '0')
 os.environ.setdefault('TORCH_CUDA_ARCH_LIST', os.environ.get('KG1_TORCH_CUDA_ARCH_LIST', '9.0'))
 os.environ.setdefault('MAX_JOBS', os.environ.get('KG1_BUILD_MAX_JOBS', '4'))
 
+try:
+    from google.colab import userdata
+    for secret_name in ['HF_TOKEN', 'HF_KEY']:
+        if not os.environ.get('HF_TOKEN'):
+            secret_value = userdata.get(secret_name)
+            if secret_value:
+                os.environ['HF_TOKEN'] = secret_value
+                os.environ['HUGGING_FACE_HUB_TOKEN'] = secret_value
+                print('loaded Hugging Face token from Colab secret:', secret_name, flush=True)
+except Exception as exc:
+    print('Colab secret probe skipped:', type(exc).__name__, flush=True)
+
 VERSION = 'V216_EQUATION_SCORE_PUSH_20260507'
 REPO_URL = os.environ.get('KG1_REPO_URL', 'https://github.com/FELIPEACASTRO/KG1-NVIDIA.git')
 REPO_BRANCH = os.environ.get('KG1_REPO_BRANCH', 'v216-equation-score-push')
@@ -139,6 +151,7 @@ RUN_TRAIN = os.environ.get('KG1_V216_RUN_TRAIN', '1').strip().lower() in {{'1', 
 RUN_EVAL = os.environ.get('KG1_V216_RUN_EVAL', '1').strip().lower() not in {{'0', 'false', 'no', 'off'}}
 FORCE_RETRAIN = os.environ.get('KG1_V216_FORCE_RETRAIN', '0').strip().lower() in {{'1', 'true', 'yes', 'on'}}
 FORCE_REEVAL = os.environ.get('KG1_V216_FORCE_REEVAL', '0').strip().lower() in {{'1', 'true', 'yes', 'on'}}
+FORCE_DRY_RUN = os.environ.get('KG1_V216_FORCE_DRY_RUN', '0').strip().lower() in {{'1', 'true', 'yes', 'on'}}
 RUN_WEAK_SMOKE = os.environ.get('KG1_V216_RUN_WEAK_SMOKE', '1').strip().lower() not in {{'0', 'false', 'no', 'off'}}
 
 TRAIN_SHA = '{TRAIN_SHA}'
@@ -182,6 +195,7 @@ print('RUN_TRAIN =', RUN_TRAIN, flush=True)
 print('RUN_EVAL =', RUN_EVAL, flush=True)
 print('FORCE_RETRAIN =', FORCE_RETRAIN, flush=True)
 print('FORCE_REEVAL =', FORCE_REEVAL, flush=True)
+print('FORCE_DRY_RUN =', FORCE_DRY_RUN, flush=True)
 print('V216_LR =', V216_LR, flush=True)
 print('V216_MAX_STEPS =', V216_MAX_STEPS, flush=True)
 print('V216_TRAINABLE_MODULES =', V216_TRAINABLE_MODULES, flush=True)
@@ -527,16 +541,16 @@ for import_name, spec in [
         install_pip_spec(spec, import_name, force=False)
         verify_import_subprocess(import_name, check=True)
 
+vllm_rc = verify_import_subprocess('vllm', check=False)
+if vllm_rc != 0:
+    print('vLLM subprocess import failed; installing pinned V216_VLLM_PIP_SPEC =', V216_VLLM_PIP_SPEC, flush=True)
+    install_pip_spec(V216_VLLM_PIP_SPEC, 'vllm', force=False)
+    verify_import_subprocess('vllm', check=True)
+else:
+    print('vLLM subprocess import already OK; skipping install.', flush=True)
+
 if verify_import_subprocess('mamba_ssm', check=False) != 0:
-    print('mamba_ssm subprocess import failed; installing causal-conv1d first, then mamba-ssm.', flush=True)
-    if verify_import_subprocess('vllm', check=False) == 0:
-        print(
-            'vLLM is installed before mamba_ssm; uninstalling vLLM before the causal-conv1d/mamba build.',
-            flush=True,
-        )
-        uninstall_pip_specs(['vllm'], 'vllm_pre_mamba_repair')
-        if verify_import_subprocess('vllm', check=False) == 0:
-            raise RuntimeError('Could not remove vLLM before mamba_ssm repair; see pip_uninstall_vllm_pre_mamba_repair.log')
+    print('mamba_ssm subprocess import failed; installing causal-conv1d and mamba-ssm against the final vLLM/Torch stack.', flush=True)
     ensure_import('ninja', 'ninja')
     if verify_import_subprocess('causal_conv1d', check=False) != 0:
         install_causal_conv1d_with_retry('pip_install_causal_conv1d.log', 'pip_install_causal_conv1d_retry.log')
@@ -547,14 +561,8 @@ if verify_import_subprocess('mamba_ssm', check=False) != 0:
         log_path=OUT_ROOT / 'pip_install_mamba_ssm.log',
     )
     verify_import_subprocess('mamba_ssm', check=True)
-
-vllm_rc = verify_import_subprocess('vllm', check=False)
-if vllm_rc != 0:
-    print('vLLM subprocess import failed; installing pinned V216_VLLM_PIP_SPEC =', V216_VLLM_PIP_SPEC, flush=True)
-    install_pip_spec(V216_VLLM_PIP_SPEC, 'vllm', force=False)
-    verify_import_subprocess('vllm', check=True)
 else:
-    print('vLLM subprocess import already OK; skipping install.', flush=True)
+    print('mamba_ssm subprocess import already OK; skipping install.', flush=True)
 
 post_vllm_rc = post_vllm_extension_abi_audit('verify_post_vllm_extension_abi.jsonl', check=False)
 if post_vllm_rc != 0:
@@ -794,7 +802,9 @@ print('=== V216 TRAINING ENV SETUP END ===', flush=True)
         code(
             """# CELL: dry-run model/adapter trainability check.
 print('=== V216 DRY RUN START ===', flush=True)
-if RUN_DRY_RUN:
+dry_report = DRY_OUT / 'dry_run_model_recipe_report.json'
+print('dry_run_report =', dry_report, 'exists =', dry_report.exists(), flush=True)
+if RUN_DRY_RUN and (FORCE_DRY_RUN or not dry_report.exists()):
     rc = run_cmd(
         [sys.executable, str(ROOT / 'scripts/hf_job_train_v90.py')],
         cwd=ROOT,
@@ -802,10 +812,13 @@ if RUN_DRY_RUN:
         log_path=DRY_OUT / 'dry_run.log',
         check=True,
     )
-    dry_report = DRY_OUT / 'dry_run_model_recipe_report.json'
-    print('dry_run_report =', dry_report, 'exists =', dry_report.exists(), flush=True)
     if not dry_report.exists():
         raise RuntimeError('dry_run_model_recipe_report.json was not written')
+    report = read_json(dry_report)
+    print('dry_run_decision =', json.dumps(report.get('decision', {}), indent=2, sort_keys=True), flush=True)
+    print('trainable_parameters =', json.dumps(report.get('trainable_parameters', {}), indent=2, sort_keys=True), flush=True)
+elif RUN_DRY_RUN:
+    print('reusing existing dry_run_report =', dry_report, flush=True)
     report = read_json(dry_report)
     print('dry_run_decision =', json.dumps(report.get('decision', {}), indent=2, sort_keys=True), flush=True)
     print('trainable_parameters =', json.dumps(report.get('trainable_parameters', {}), indent=2, sort_keys=True), flush=True)
@@ -893,7 +906,9 @@ elif not is_complete_adapter_dir(final_adapter):
     print('No complete final_adapter exists; skipping weak eval.', flush=True)
 else:
     weak_eval_dir.mkdir(parents=True, exist_ok=True)
-    if RUN_WEAK_SMOKE:
+    run_new_weak_eval = FORCE_REEVAL or not weak_report_path.exists()
+    print('run_new_weak_eval =', run_new_weak_eval, flush=True)
+    if RUN_WEAK_SMOKE and run_new_weak_eval:
         weak_smoke_dir = EVAL_OUT / 'weak_eval_smoke'
         weak_smoke_dir.mkdir(parents=True, exist_ok=True)
         print('weak smoke eval enabled: limit=8', flush=True)
@@ -915,7 +930,9 @@ else:
             check=True,
         )
         print('weak smoke returncode =', rc, flush=True)
-    if FORCE_REEVAL or not weak_report_path.exists():
+    elif RUN_WEAK_SMOKE:
+        print('weak smoke skipped because weak_report_path already exists and FORCE_REEVAL is false.', flush=True)
+    if run_new_weak_eval:
         rc = run_cmd(
             [
                 sys.executable,
