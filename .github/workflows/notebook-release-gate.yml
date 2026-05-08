@@ -1,0 +1,83 @@
+name: Notebook Release Gate
+
+on:
+  push:
+    paths:
+      - "**/*.ipynb"
+      - "AGENTS.md"
+      - "scripts/notebook_release_gate.py"
+      - ".github/workflows/notebook-release-gate.yml"
+  pull_request:
+    paths:
+      - "**/*.ipynb"
+      - "AGENTS.md"
+      - "scripts/notebook_release_gate.py"
+      - ".github/workflows/notebook-release-gate.yml"
+
+jobs:
+  notebook-release-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Select Changed Notebooks
+        id: changed
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/notebook_release_gate
+          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            BASE="${{ github.event.pull_request.base.sha }}"
+            HEAD="${{ github.event.pull_request.head.sha }}"
+          else
+            BASE="${{ github.event.before }}"
+            HEAD="${{ github.sha }}"
+          fi
+          echo "base=${BASE}"
+          echo "head=${HEAD}"
+          if [[ -n "${BASE}" && "${BASE}" != "0000000000000000000000000000000000000000" ]] && git cat-file -e "${BASE}^{commit}" 2>/dev/null; then
+            git diff --name-only --diff-filter=ACMRT "${BASE}" "${HEAD}" -- "*.ipynb" > artifacts/notebook_release_gate/changed_notebooks.txt
+          else
+            git diff-tree --no-commit-id --name-only -r "${HEAD}" -- "*.ipynb" > artifacts/notebook_release_gate/changed_notebooks.txt
+          fi
+          sort -u artifacts/notebook_release_gate/changed_notebooks.txt -o artifacts/notebook_release_gate/changed_notebooks.txt
+          echo "Changed notebooks:"
+          cat artifacts/notebook_release_gate/changed_notebooks.txt
+          if [[ -s artifacts/notebook_release_gate/changed_notebooks.txt ]]; then
+            echo "has_notebooks=true" >> "${GITHUB_OUTPUT}"
+          else
+            echo "has_notebooks=false" >> "${GITHUB_OUTPUT}"
+          fi
+
+      - name: Run Notebook Release Gate
+        if: steps.changed.outputs.has_notebooks == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          import subprocess
+          import sys
+
+          paths = [
+              line.strip()
+              for line in Path("artifacts/notebook_release_gate/changed_notebooks.txt").read_text(encoding="utf-8").splitlines()
+              if line.strip()
+          ]
+          print("Auditing notebooks:")
+          for path in paths:
+              print(f"  {path}")
+          raise SystemExit(subprocess.call([sys.executable, "scripts/notebook_release_gate.py", *paths]))
+          PY
+
+      - name: No Changed Notebooks
+        if: steps.changed.outputs.has_notebooks != 'true'
+        run: echo "No changed notebooks to audit."
