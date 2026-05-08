@@ -723,6 +723,7 @@ def training_env(output_dir, dry_run):
         'UPLOAD_CHECKPOINTS_DURING_TRAINING': '0',
         'USE_BITSANDBYTES': '0',
         'DRY_RUN_VALIDATE_ONLY': '1' if dry_run else '0',
+        'TOKENIZE_ONLY_DRY_RUN': '1' if dry_run else '0',
         'LORA_R': str(adapter_config.get('r', 32)),
         'LORA_ALPHA': str(adapter_config.get('lora_alpha', 32)),
         'LORA_DROPOUT': str(adapter_config.get('lora_dropout', 0.0)),

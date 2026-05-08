@@ -24,7 +24,8 @@ Optional env:
   LOG_EVERY_STEPS, MICRO_LOG_EVERY, SEED, EXPECTED_TRAIN_SHA256,
   EXPECTED_VAL_SHA256, MIN_TRAIN_EXAMPLES, MIN_VAL_EXAMPLES,
   MIN_TOKENIZED_TRAIN_EXAMPLES, MIN_TOKENIZED_VAL_EXAMPLES, REQUIRE_OFFSET_MASK,
-  LORA_TARGET_MODULES, LORA_TARGET_PARAMETERS, MAX_TRAINABLE_PARAM_RATIO, DRY_RUN_VALIDATE_ONLY, UPLOAD_TO_HF,
+  LORA_TARGET_MODULES, LORA_TARGET_PARAMETERS, MAX_TRAINABLE_PARAM_RATIO, DRY_RUN_VALIDATE_ONLY,
+  TOKENIZE_ONLY_DRY_RUN, UPLOAD_TO_HF,
   UPLOAD_CHECKPOINTS_DURING_TRAINING, SAMPLING_MODE, SUBCATEGORY_WEIGHTS, SOURCE_WEIGHTS,
   TRAINABLE_LORA_MODULES
 """
@@ -239,6 +240,7 @@ INIT_ADAPTER_LOAD_MODE = env_str("INIT_ADAPTER_LOAD_MODE", "manual")
 PEFT_MANUAL_LOAD_METHOD = env_str("PEFT_MANUAL_LOAD_METHOD", "auto")
 REQUIRE_OFFSET_MASK = env_bool("REQUIRE_OFFSET_MASK", True)
 DRY_RUN_VALIDATE_ONLY = env_bool("DRY_RUN_VALIDATE_ONLY", False)
+TOKENIZE_ONLY_DRY_RUN = env_bool("TOKENIZE_ONLY_DRY_RUN", False)
 UPLOAD_TO_HF = env_bool("UPLOAD_TO_HF", True)
 UPLOAD_CHECKPOINTS_DURING_TRAINING = env_bool("UPLOAD_CHECKPOINTS_DURING_TRAINING", False)
 FAIL_ON_MISSING_ADAPTER_KEYS = env_bool("FAIL_ON_MISSING_ADAPTER_KEYS", True)
@@ -1501,7 +1503,7 @@ def train() -> None:
     print(f"HF transfer enabled: {os.environ.get('HF_HUB_ENABLE_HF_TRANSFER', '')}")
     print()
 
-    if not torch.cuda.is_available():
+    if not torch.cuda.is_available() and not (DRY_RUN_VALIDATE_ONLY and TOKENIZE_ONLY_DRY_RUN):
         raise RuntimeError("CUDA GPU is required for this Nemotron v90 training job.")
 
     apply_runtime_performance_settings()
@@ -1576,6 +1578,83 @@ def train() -> None:
             "Too few validation examples survived tokenization: "
             f"{len(val_data)} < MIN_TOKENIZED_VAL_EXAMPLES={MIN_TOKENIZED_VAL_EXAMPLES}"
         )
+    if DRY_RUN_VALIDATE_ONLY and TOKENIZE_ONLY_DRY_RUN:
+        dry_run_report = {
+            "run_id": RUN_ID,
+            "model_name": MODEL_NAME,
+            "model_revision": MODEL_REVISION,
+            "data": {
+                "data_repo": DATA_REPO,
+                "train_file": DATA_FILE,
+                "train_file_sha256": file_sha256(train_path) if train_path else None,
+                "train_records": len(train_examples),
+                "tokenized_train_records": len(train_data),
+                "validation_file": VAL_FILE,
+                "validation_file_sha256": file_sha256(val_path) if val_path else None,
+                "validation_records": len(val_examples),
+                "tokenized_validation_records": len(val_data),
+                "pretokenized_archive_zip": PRETOKENIZED_ARCHIVE_ZIP,
+                "pretokenized_archive_resolved_path": str(pretokenized_archive_resolved_path) if pretokenized_archive_resolved_path else None,
+                "pretokenized_archive_sha256": file_sha256(pretokenized_archive_resolved_path) if pretokenized_archive_resolved_path else None,
+                "pretokenized_exclude_categories": sorted(parse_csv_set(PRETOKENIZED_EXCLUDE_CATEGORIES)),
+                "pretokenized_validation_examples": PRETOKENIZED_VAL_EXAMPLES,
+                "pretokenized_validation_fraction": PRETOKENIZED_VAL_FRACTION,
+                "pretokenized_validation_copy_only": PRETOKENIZED_VAL_COPY_ONLY,
+            },
+            "lora": {
+                "r": LORA_R,
+                "alpha": LORA_ALPHA,
+                "dropout": LORA_DROPOUT,
+                "target_modules": LORA_TARGET_MODULES,
+                "target_parameters": LORA_TARGET_PARAMETERS,
+                "parsed_target_modules": parse_target_modules(LORA_TARGET_MODULES),
+                "init_adapter_dir": INIT_ADAPTER_DIR,
+                "init_adapter_repo": INIT_ADAPTER_REPO,
+                "init_adapter_revision": INIT_ADAPTER_REVISION,
+                "init_adapter_subfolder": INIT_ADAPTER_SUBFOLDER,
+                "trainable_lora_module_filter": {
+                    "enabled": bool(TRAINABLE_LORA_MODULES),
+                    "requested": sorted(parse_csv_set(TRAINABLE_LORA_MODULES)),
+                    "checked_after_model_load": False,
+                },
+            },
+            "training": {
+                "max_length": MAX_LENGTH,
+                "batch_size": BATCH_SIZE,
+                "micro_batch_size": MICRO_BATCH_SIZE,
+                "gradient_accumulation": GRADIENT_ACCUMULATION,
+                "max_trainable_param_ratio": MAX_TRAINABLE_PARAM_RATIO,
+                "max_prompt_truncation_rate": MAX_PROMPT_TRUNCATION_RATE,
+                "sampling": weighted_sample_report(train_data),
+            },
+            "runtime": {
+                "cuda_available": bool(torch.cuda.is_available()),
+                "tokenize_only_dry_run": True,
+                "torch": getattr(torch, "__version__", "unknown"),
+            },
+            "trainable_parameters": {
+                "checked_after_model_load": False,
+                "reason": "TOKENIZE_ONLY_DRY_RUN=1 skips the expensive model load.",
+            },
+            "decision": {
+                "full_training_allowed": True,
+                "note": (
+                    "Tokenize-only dry run validated dataset hashes, row counts, "
+                    "chat-template tokenization, offset masks, prompt truncation guard, "
+                    "and weighted sampling. Model/adapter trainability is checked by "
+                    "the subsequent real train cell."
+                ),
+            },
+        }
+        dry_run_path = Path(OUTPUT_DIR) / "dry_run_model_recipe_report.json"
+        dry_run_path.parent.mkdir(parents=True, exist_ok=True)
+        dry_run_path.write_text(json.dumps(dry_run_report, indent=2, sort_keys=True), encoding="utf-8")
+        print(f"TOKENIZE_ONLY_DRY_RUN=1; wrote {dry_run_path} and skipped expensive model load.")
+        print("DRY_RUN_MODEL_RECIPE_REPORT_JSON_BEGIN")
+        print(json.dumps(dry_run_report, sort_keys=True))
+        print("DRY_RUN_MODEL_RECIPE_REPORT_JSON_END")
+        upload_dry_run_report(dry_run_path)
+        return
 
     model_device_map = parse_model_device_map(MODEL_DEVICE_MAP)
     print(
