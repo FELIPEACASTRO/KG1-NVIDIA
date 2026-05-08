@@ -663,6 +663,56 @@ subcategory_weights = manifest['recommended_training_env']['SUBCATEGORY_WEIGHTS'
 print('SOURCE_WEIGHTS =', source_weights, flush=True)
 print('SUBCATEGORY_WEIGHTS =', subcategory_weights, flush=True)
 
+PROMPT_TRUNCATED_TRAIN_IDS = {
+    'clean_safe_strict_de25c8b4c874f62d',
+    'clean_safe_strict_5719011b2b3da39f',
+    'clean_safe_strict_384d775636c751d4',
+    'clean_safe_strict_33a9e59cca3d55f8',
+}
+RAW_TRAIN_PATH = ROOT / 'data/v216/v216_score_push_train.jsonl'
+FILTERED_TRAIN_PATH = ROOT / 'data/v216/v216_score_push_train_no_prompt_trunc.jsonl'
+FILTERED_TRAIN_MANIFEST = OUT_ROOT / 'v216_score_push_train_no_prompt_trunc_manifest.json'
+removed_rows = []
+kept_rows = 0
+with RAW_TRAIN_PATH.open('r', encoding='utf-8') as src, FILTERED_TRAIN_PATH.open('w', encoding='utf-8') as dst:
+    for line_no, line in enumerate(src, 1):
+        row = json.loads(line)
+        row_id = str(row.get('id', ''))
+        if row_id in PROMPT_TRUNCATED_TRAIN_IDS:
+            removed_rows.append({
+                'line_no': line_no,
+                'id': row_id,
+                'family': row.get('family'),
+                'source': row.get('source'),
+                'subtype': (row.get('metadata') or {}).get('subtype') or row.get('subcategory'),
+            })
+            continue
+        dst.write(line)
+        kept_rows += 1
+
+removed_ids = {item['id'] for item in removed_rows}
+if removed_ids != PROMPT_TRUNCATED_TRAIN_IDS:
+    raise RuntimeError(f'Prompt-truncation filter mismatch: removed={sorted(removed_ids)} expected={sorted(PROMPT_TRUNCATED_TRAIN_IDS)}')
+FILTERED_TRAIN_ROWS = kept_rows
+FILTERED_TRAIN_SHA = sha256_file(FILTERED_TRAIN_PATH)
+if FILTERED_TRAIN_ROWS != TRAIN_ROWS_EXPECTED - len(PROMPT_TRUNCATED_TRAIN_IDS):
+    raise RuntimeError(f'Filtered train row count mismatch: {FILTERED_TRAIN_ROWS}')
+FILTERED_TRAIN_MANIFEST.write_text(json.dumps({
+    'raw_train_path': str(RAW_TRAIN_PATH),
+    'raw_train_rows': TRAIN_ROWS_EXPECTED,
+    'raw_train_sha256': TRAIN_SHA,
+    'filtered_train_path': str(FILTERED_TRAIN_PATH),
+    'filtered_train_rows': FILTERED_TRAIN_ROWS,
+    'filtered_train_sha256': FILTERED_TRAIN_SHA,
+    'removed_prompt_truncated_rows': removed_rows,
+}, indent=2, sort_keys=True), encoding='utf-8')
+print('raw_train_path =', RAW_TRAIN_PATH, flush=True)
+print('filtered_train_path =', FILTERED_TRAIN_PATH, flush=True)
+print('filtered_train_rows =', FILTERED_TRAIN_ROWS, flush=True)
+print('filtered_train_sha256 =', FILTERED_TRAIN_SHA, flush=True)
+print('removed_prompt_truncated_rows =', json.dumps(removed_rows, indent=2, sort_keys=True), flush=True)
+print('filtered_train_manifest =', FILTERED_TRAIN_MANIFEST, flush=True)
+
 def training_env(output_dir, dry_run):
     env = os.environ.copy()
     target_modules = ','.join(adapter_config.get('target_modules') or [])
@@ -681,13 +731,13 @@ def training_env(output_dir, dry_run):
         'HF_HUB_ENABLE_HF_TRANSFER': os.environ.get('HF_HUB_ENABLE_HF_TRANSFER', '1'),
         'PYTORCH_CUDA_ALLOC_CONF': os.environ.get('PYTORCH_CUDA_ALLOC_CONF', 'expandable_segments:True'),
         'DATA_REPO': 'local',
-        'DATA_FILE': str(ROOT / 'data/v216/v216_score_push_train.jsonl'),
+        'DATA_FILE': str(FILTERED_TRAIN_PATH),
         'VAL_FILE': str(ROOT / 'data/v216/v216_score_push_val.jsonl'),
-        'EXPECTED_TRAIN_SHA256': TRAIN_SHA,
+        'EXPECTED_TRAIN_SHA256': FILTERED_TRAIN_SHA,
         'EXPECTED_VAL_SHA256': VAL_SHA,
-        'MIN_TRAIN_EXAMPLES': str(TRAIN_ROWS_EXPECTED),
+        'MIN_TRAIN_EXAMPLES': str(FILTERED_TRAIN_ROWS),
         'MIN_VAL_EXAMPLES': str(VAL_ROWS_EXPECTED),
-        'MIN_TOKENIZED_TRAIN_EXAMPLES': str(TRAIN_ROWS_EXPECTED),
+        'MIN_TOKENIZED_TRAIN_EXAMPLES': str(FILTERED_TRAIN_ROWS),
         'MIN_TOKENIZED_VAL_EXAMPLES': str(VAL_ROWS_EXPECTED),
         'OUTPUT_DIR': str(output_dir),
         'OUTPUT_REPO': '',
@@ -1119,6 +1169,10 @@ run_manifest = {
         'batch_size': V216_BATCH_SIZE,
         'micro_batch_size': V216_MICRO_BATCH_SIZE,
         'max_length': V216_MAX_LENGTH,
+        'filtered_train_path': str(FILTERED_TRAIN_PATH) if 'FILTERED_TRAIN_PATH' in globals() else '',
+        'filtered_train_rows': int(FILTERED_TRAIN_ROWS) if 'FILTERED_TRAIN_ROWS' in globals() else None,
+        'filtered_train_sha256': FILTERED_TRAIN_SHA if 'FILTERED_TRAIN_SHA' in globals() else '',
+        'removed_prompt_truncated_train_ids': sorted(PROMPT_TRUNCATED_TRAIN_IDS) if 'PROMPT_TRUNCATED_TRAIN_IDS' in globals() else [],
         'source_weights': source_weights,
         'subcategory_weights': subcategory_weights,
     },
