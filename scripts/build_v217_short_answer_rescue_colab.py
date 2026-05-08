@@ -193,9 +193,8 @@ print('EXPECTED_V194_ADAPTER_TENSOR_COUNT =', EXPECTED_V194_ADAPTER_TENSOR_COUNT
 print('RUN_DRY_RUN =', RUN_DRY_RUN, flush=True)
 print('RUN_TRAIN =', RUN_TRAIN, flush=True)
 if not RUN_TRAIN:
-    print('TRAINING DEFAULT IS OFF to protect Colab Pro GPU spend.', flush=True)
-    print('After repo setup, runtime audit, validation CSV build, and dry-run pass, enable training with:', flush=True)
-    print("os.environ['KG1_V217_RUN_TRAIN']='1'", flush=True)
+    print('TRAINING DEFAULT IS OFF in environment variables, but the next notebook cell intentionally enables V217 training.', flush=True)
+    print('To keep this run as validation-only, skip the next enable-training cell or set RUN_TRAIN=False after it.', flush=True)
 print('RUN_EVAL =', RUN_EVAL, flush=True)
 print('FORCE_RETRAIN =', FORCE_RETRAIN, flush=True)
 print('FORCE_REEVAL =', FORCE_REEVAL, flush=True)
@@ -217,6 +216,18 @@ print('ALLOW_KAGGLE_SUBMIT =', ALLOW_KAGGLE_SUBMIT, flush=True)
 if ALLOW_KAGGLE_SUBMIT:
     raise RuntimeError('Kaggle submission is disabled in this notebook.')
 print('=== V217 CONFIG END ===', flush=True)
+"""
+        ),
+        code(
+            """# CELL: enable V217 real training.
+print('=== V217 ENABLE TRAIN START ===', flush=True)
+os.environ["KG1_V217_RUN_TRAIN"] = "1"
+RUN_TRAIN = os.environ.get("KG1_V217_RUN_TRAIN", "0").strip().lower() in {"1", "true", "yes", "on"}
+print('KG1_V217_RUN_TRAIN =', os.environ.get('KG1_V217_RUN_TRAIN'), flush=True)
+print('RUN_TRAIN =', RUN_TRAIN, flush=True)
+if not RUN_TRAIN:
+    raise RuntimeError('RUN_TRAIN should be True after enabling KG1_V217_RUN_TRAIN=1.')
+print('=== V217 ENABLE TRAIN END ===', flush=True)
 """
         ),
         code(
