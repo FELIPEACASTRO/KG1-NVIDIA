@@ -143,6 +143,10 @@ V194_ADAPTER = pathlib.Path('{V194_ADAPTER_DRIVE}')
 V194_VAL_CSV = pathlib.Path('{V194_VAL_CSV_DRIVE}')
 MODEL_NAME = '{MODEL_NAME}'
 MODEL_REVISION = '{MODEL_REVISION}'
+EXPECTED_V194_ADAPTER_BYTES = 4259069440
+EXPECTED_V194_ADAPTER_TENSOR_COUNT = 12011
+EXPECTED_V194_TARGET_MODULES = ['k_proj', 'up_proj', 'down_proj', 'out_proj', 'v_proj', 'q_proj', 'lm_head', 'o_proj', 'in_proj']
+EXPECTED_V194_TARGET_PARAMETERS = ['mlp.experts.gate_up_proj', 'mlp.experts.down_proj']
 
 RUN_DRY_RUN = os.environ.get('KG1_V217_RUN_DRY_RUN', '1').strip().lower() not in {{'0', 'false', 'no', 'off'}}
 RUN_TRAIN = os.environ.get('KG1_V217_RUN_TRAIN', '1').strip().lower() in {{'1', 'true', 'yes', 'on'}}
@@ -184,6 +188,8 @@ print('ROOT =', ROOT, flush=True)
 print('OUT_ROOT =', OUT_ROOT, flush=True)
 print('V194_ADAPTER =', V194_ADAPTER, flush=True)
 print('V194_VAL_CSV =', V194_VAL_CSV, flush=True)
+print('EXPECTED_V194_ADAPTER_BYTES =', EXPECTED_V194_ADAPTER_BYTES, flush=True)
+print('EXPECTED_V194_ADAPTER_TENSOR_COUNT =', EXPECTED_V194_ADAPTER_TENSOR_COUNT, flush=True)
 print('RUN_DRY_RUN =', RUN_DRY_RUN, flush=True)
 print('RUN_TRAIN =', RUN_TRAIN, flush=True)
 print('RUN_EVAL =', RUN_EVAL, flush=True)
@@ -526,6 +532,58 @@ if not is_complete_adapter_dir(V194_ADAPTER):
     raise RuntimeError(f'V194 adapter incomplete or missing before dependency builds: {V194_ADAPTER}')
 if not V194_VAL_CSV.exists():
     raise FileNotFoundError(f'Missing V194 validation CSV before dependency builds: {V194_VAL_CSV}')
+early_adapter_config = read_json(V194_ADAPTER / 'adapter_config.json')
+early_weights_path = V194_ADAPTER / 'adapter_model.safetensors'
+early_weight_bytes = early_weights_path.stat().st_size if early_weights_path.exists() else -1
+print('early_v194_adapter_r =', early_adapter_config.get('r'), flush=True)
+print('early_v194_target_modules =', early_adapter_config.get('target_modules'), flush=True)
+print('early_v194_target_parameters =', early_adapter_config.get('target_parameters'), flush=True)
+print('early_v194_adapter_weight_bytes =', early_weight_bytes, flush=True)
+if int(early_adapter_config.get('r', -1)) != 32:
+    raise RuntimeError('V194 adapter rank mismatch before dependency builds')
+if sorted(early_adapter_config.get('target_modules') or []) != sorted(EXPECTED_V194_TARGET_MODULES):
+    raise RuntimeError('V194 adapter target_modules mismatch before dependency builds')
+if sorted(early_adapter_config.get('target_parameters') or []) != sorted(EXPECTED_V194_TARGET_PARAMETERS):
+    raise RuntimeError('V194 adapter target_parameters mismatch before dependency builds')
+if early_weight_bytes != EXPECTED_V194_ADAPTER_BYTES:
+    raise RuntimeError(
+        f'V194 adapter weight size mismatch before dependency builds: '
+        f'{early_weight_bytes} != {EXPECTED_V194_ADAPTER_BYTES}'
+    )
+early_torch_check_code = (
+    "import json, torch; "
+    "props=torch.cuda.get_device_properties(0) if torch.cuda.is_available() else None; "
+    "print(json.dumps({'torch': str(getattr(torch, '__version__', 'unknown')), "
+    "'torch_cuda': str(getattr(torch.version, 'cuda', '')), "
+    "'cuda_available': bool(torch.cuda.is_available()), "
+    "'gpu_name': props.name if props else '', "
+    "'gpu_total_gib': props.total_memory/1024**3 if props else 0.0}, sort_keys=True))"
+)
+early_torch_audit_path = OUT_ROOT / 'early_verify_torch_cuda_before_builds.jsonl'
+early_torch_rc = run_cmd([sys.executable, '-c', early_torch_check_code], log_path=early_torch_audit_path, check=False, heartbeat_s=0)
+if early_torch_rc != 0:
+    raise RuntimeError('Early Torch/CUDA audit failed before dependency builds; restart the runtime.')
+early_torch_lines = [line.strip() for line in early_torch_audit_path.read_text(encoding='utf-8').splitlines() if line.strip()]
+early_torch = json.loads(early_torch_lines[-1])
+print('early_torch_audit =', json.dumps(early_torch, sort_keys=True), flush=True)
+early_torch_version = str(early_torch.get('torch', ''))
+early_torch_cuda = str(early_torch.get('torch_cuda', ''))
+if not early_torch.get('cuda_available'):
+    raise RuntimeError('CUDA GPU is required; failing before dependency builds.')
+if float(early_torch.get('gpu_total_gib', 0.0)) < 70:
+    raise RuntimeError(f"Need H100/A100 80GB-class GPU before dependency builds; found {early_torch}")
+if early_torch_version.startswith('2.11') or early_torch_cuda.startswith('13'):
+    raise RuntimeError(
+        'Fresh runtime Torch stack is not the train-extension stack validated for V217. '
+        f'Observed torch={early_torch_version} cuda={early_torch_cuda}. '
+        'Use Runtime > Disconnect and delete runtime, then rerun from the first cell. '
+        'This prevents causal-conv1d/mamba-ssm build failures after vLLM/Torch contamination.'
+    )
+early_content_usage = shutil.disk_usage('/content')
+early_content_free_gib = early_content_usage.free / 1024**3
+print('early_content_free_gib =', round(early_content_free_gib, 2), flush=True)
+if early_content_free_gib < 70:
+    raise RuntimeError(f'/content free disk too small before dependency builds: {early_content_free_gib:.1f}GiB < 70GiB')
 ensure_import('pandas', 'pandas')
 ensure_import('safetensors', 'safetensors')
 ensure_import('huggingface_hub', 'huggingface_hub')
@@ -619,8 +677,12 @@ adapter_config = read_json(V194_ADAPTER / 'adapter_config.json')
 print('v194_adapter_r =', adapter_config.get('r'), flush=True)
 print('v194_target_modules =', adapter_config.get('target_modules'), flush=True)
 print('v194_target_parameters =', adapter_config.get('target_parameters'), flush=True)
-if int(adapter_config.get('r', 999)) > 32:
-    raise RuntimeError('V194 adapter rank exceeds rank 32 gate')
+if int(adapter_config.get('r', 999)) != 32:
+    raise RuntimeError('V194 adapter rank mismatch')
+if sorted(adapter_config.get('target_modules') or []) != sorted(EXPECTED_V194_TARGET_MODULES):
+    raise RuntimeError('V194 adapter target_modules mismatch')
+if sorted(adapter_config.get('target_parameters') or []) != sorted(EXPECTED_V194_TARGET_PARAMETERS):
+    raise RuntimeError('V194 adapter target_parameters mismatch')
 weights_path = V194_ADAPTER / 'adapter_model.safetensors'
 if weights_path.exists():
     from safetensors import safe_open
@@ -628,8 +690,10 @@ if weights_path.exists():
         key_count = len(list(handle.keys()))
     print('v194_adapter_tensor_count =', key_count, flush=True)
     print('v194_adapter_weight_bytes =', weights_path.stat().st_size, flush=True)
-    if key_count < 1000:
-        raise RuntimeError('V194 adapter tensor count unexpectedly low')
+    if key_count != EXPECTED_V194_ADAPTER_TENSOR_COUNT:
+        raise RuntimeError(f'V194 adapter tensor count mismatch: {key_count} != {EXPECTED_V194_ADAPTER_TENSOR_COUNT}')
+    if weights_path.stat().st_size != EXPECTED_V194_ADAPTER_BYTES:
+        raise RuntimeError(f'V194 adapter weight size mismatch: {weights_path.stat().st_size} != {EXPECTED_V194_ADAPTER_BYTES}')
 print('=== V217 RUNTIME AUDIT END ===', flush=True)
 """
         ),
