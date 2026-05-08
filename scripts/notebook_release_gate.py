@@ -206,6 +206,7 @@ V220_REQUIRED_SNIPPETS = {
     "hf adapter allow patterns": "allow_patterns=['adapter_config.json', 'adapter_model.safetensors', 'README.md']",
     "public adapter completeness": "NARIBOW_ADAPTER complete",
     "public adapter candidate": "naribow_public_think1_mtok3584",
+    "init adapter public": "INIT_ADAPTER_DIR = NARIBOW_ADAPTER",
     "thinking default false disable flag": "V220_DISABLE_THINKING_DEFAULT = False",
     "thinking default guard": "V220 must keep thinking enabled by default",
     "run train hard guard": "V220 is public adapter probe only; RUN_TRAIN must stay false.",
