@@ -28,6 +28,9 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Validate Gate Script
+        run: python -m py_compile scripts/notebook_release_gate.py
+
       - name: Select Changed Notebooks
         id: changed
         shell: bash
