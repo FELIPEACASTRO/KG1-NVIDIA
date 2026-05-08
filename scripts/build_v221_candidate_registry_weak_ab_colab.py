@@ -237,7 +237,7 @@ FORCE_DOWNLOAD = os.environ.get('KG1_V221_FORCE_DOWNLOAD', '0').strip().lower() 
 FORCE_REEVAL = os.environ.get('KG1_V221_FORCE_REEVAL', '0').strip().lower() in {{'1', 'true', 'yes', 'on'}}
 RUN_FULL_IF_GATE = os.environ.get('KG1_V221_RUN_FULL_IF_GATE', '0').strip().lower() in {{'1', 'true', 'yes', 'on'}}
 V221_VLLM_PIP_SPEC = os.environ.get('KG1_V221_VLLM_PIP_SPEC', 'vllm==0.20.1')
-V221_MAX_TOKENS = int(os.environ.get('KG1_V221_MAX_TOKENS', '3584'))
+V221_MAX_TOKENS = int(os.environ.get('KG1_V221_MAX_TOKENS', '7680'))
 V221_MAX_MODEL_LEN = int(os.environ.get('KG1_V221_MAX_MODEL_LEN', '8192'))
 V221_MAX_NUM_SEQS = int(os.environ.get('KG1_V221_MAX_NUM_SEQS', '64'))
 V221_WARMUP_ROWS = int(os.environ.get('KG1_V221_WARMUP_ROWS', '0'))
@@ -717,15 +717,117 @@ print('=== V221 PREFLIGHT END ===', flush=True)
 print('=== V221 WEAK BATCH EVAL START ===', flush=True)
 weak_gate_pass_for_full = False
 best_candidate = None
+full_eval_candidate = None
 candidate_rows = []
+candidate_gate_rows = []
 batch_summary_json = EVAL_OUT / 'batch_candidate_summary.json'
 batch_summary_csv = EVAL_OUT / 'batch_candidate_summary.csv'
+
+weak_gate_requirements = {
+    'weak_total_min': int(WEAK_MIN_FOR_FULL),
+    'equation_transform_min': int(WEAK_EQ_MIN_FOR_FULL),
+    'bit_manipulation_min': int(WEAK_BIT_MIN_FOR_FULL),
+    'truncated_max': int(WEAK_MAX_TRUNC_FOR_FULL),
+}
+expected_batch_config = {
+    'max_tokens': int(V221_MAX_TOKENS),
+    'max_model_len': int(V221_MAX_MODEL_LEN),
+    'max_num_seqs': int(V221_MAX_NUM_SEQS),
+    'warmup_rows': int(V221_WARMUP_ROWS),
+    'prompt_suffix': V221_PROMPT_SUFFIX,
+}
+print('weak_gate_requirements =', json.dumps(weak_gate_requirements, indent=2, sort_keys=True), flush=True)
+print('expected_batch_config =', json.dumps(expected_batch_config, indent=2, sort_keys=True), flush=True)
+print('batch_summary_json =', batch_summary_json, flush=True)
+print('batch_summary_csv =', batch_summary_csv, flush=True)
+
+
+def _as_int(value, default=0):
+    try:
+        return int(value)
+    except Exception:
+        return default
+
+
+def _candidate_sort_key(row):
+    return (
+        _as_int(row.get('correct', 0)),
+        _as_int(row.get('equation_transform_correct', 0)),
+        _as_int(row.get('bit_manipulation_correct', 0)),
+        -_as_int(row.get('truncated', 999999), 999999),
+    )
+
+
+def _candidate_gate_detail(row):
+    correct = _as_int(row.get('correct', 0))
+    eq_correct = _as_int(row.get('equation_transform_correct', 0))
+    bit_correct = _as_int(row.get('bit_manipulation_correct', 0))
+    truncated = _as_int(row.get('truncated', 999999), 999999)
+    status_ok = row.get('status') == 'ok'
+    missing = {
+        'weak_total': max(0, WEAK_MIN_FOR_FULL - correct),
+        'equation_transform': max(0, WEAK_EQ_MIN_FOR_FULL - eq_correct),
+        'bit_manipulation': max(0, WEAK_BIT_MIN_FOR_FULL - bit_correct),
+        'truncated_excess': max(0, truncated - WEAK_MAX_TRUNC_FOR_FULL),
+    }
+    gate_pass = status_ok and all(value == 0 for value in missing.values())
+    return {
+        'name': row.get('name', ''),
+        'status': row.get('status', ''),
+        'gate_pass': bool(gate_pass),
+        'correct': correct,
+        'equation_transform_correct': eq_correct,
+        'bit_manipulation_correct': bit_correct,
+        'truncated': truncated,
+        'missing_for_gate': missing,
+        'report_json': row.get('report_json', ''),
+    }
+
+
+def _ready_candidate_names(path):
+    payload = read_json(path)
+    return [str(item.get('name', '')) for item in payload.get('candidates', [])]
+
+
+def _batch_summary_stale_reasons(path):
+    if not path.exists():
+        return ['batch summary json does not exist']
+    reasons = []
+    try:
+        summary = read_json(path)
+    except Exception as exc:
+        return [f'batch summary json could not be read: {exc}']
+    summary_config = summary.get('config', {})
+    for key, expected_value in expected_batch_config.items():
+        actual_value = summary_config.get(key)
+        if actual_value != expected_value:
+            reasons.append(f'config mismatch {key}: actual={actual_value!r} expected={expected_value!r}')
+    if str(summary.get('solution_csv', '')) != str(weak_eval_csv):
+        reasons.append(f'solution_csv mismatch: actual={summary.get("solution_csv", "")!r} expected={str(weak_eval_csv)!r}')
+    if str(summary.get('questions_csv', '')) != str(weak_eval_csv):
+        reasons.append(f'questions_csv mismatch: actual={summary.get("questions_csv", "")!r} expected={str(weak_eval_csv)!r}')
+    if str(summary.get('candidates_json', '')) != str(ready_candidates_path):
+        reasons.append(f'candidates_json mismatch: actual={summary.get("candidates_json", "")!r} expected={str(ready_candidates_path)!r}')
+    rows = summary.get('rows', [])
+    if not rows:
+        reasons.append('batch summary has no candidate rows')
+    else:
+        expected_names = _ready_candidate_names(ready_candidates_path)
+        actual_names = [str(item.get('name', '')) for item in rows]
+        if actual_names != expected_names:
+            reasons.append(f'candidate order/name mismatch: actual={actual_names!r} expected={expected_names!r}')
+    return reasons
+
 
 if not RUN_EVAL:
     print('RUN_EVAL is false; skipping V221 weak batch eval.', flush=True)
 else:
     ensure_vllm_for_eval()
-    run_new_eval = FORCE_REEVAL or not batch_summary_json.exists()
+    stale_reasons = _batch_summary_stale_reasons(batch_summary_json)
+    run_new_eval = FORCE_REEVAL or bool(stale_reasons)
+    print('FORCE_REEVAL =', FORCE_REEVAL, flush=True)
+    print('batch_summary_exists =', batch_summary_json.exists(), flush=True)
+    print('stale_reasons =', json.dumps(stale_reasons, indent=2, sort_keys=True), flush=True)
     print('run_new_eval =', run_new_eval, flush=True)
     if run_new_eval:
         cmd = [
@@ -746,32 +848,34 @@ else:
             '--prompt-suffix', V221_PROMPT_SUFFIX,
             '--continue-on-error',
         ]
+        print('weak_batch_eval_cmd =', ' '.join(map(str, cmd)), flush=True)
         rc = run_cmd(cmd, cwd=ROOT, log_path=EVAL_OUT / 'weak_batch_eval.log', check=True, heartbeat_s=60)
         print('weak batch eval returncode =', rc, flush=True)
     else:
-        print('reusing batch summary:', batch_summary_json, flush=True)
+        print('reusing compatible batch summary:', batch_summary_json, flush=True)
+
+    if not batch_summary_json.exists():
+        raise RuntimeError(f'batch summary json missing after weak eval: {batch_summary_json}')
     batch_summary = read_json(batch_summary_json)
+    print('batch_summary_generated_at_utc =', batch_summary.get('generated_at_utc', ''), flush=True)
+    print('batch_summary_config =', json.dumps(batch_summary.get('config', {}), indent=2, sort_keys=True), flush=True)
     candidate_rows = batch_summary.get('rows', [])
     print('candidate_rows =', json.dumps(candidate_rows, indent=2, sort_keys=True), flush=True)
     ok_rows = [row for row in candidate_rows if row.get('status') == 'ok']
-    best_candidate = sorted(
-        ok_rows,
-        key=lambda item: (
-            int(item.get('correct', 0)),
-            int(item.get('equation_transform_correct', 0)),
-            int(item.get('bit_manipulation_correct', 0)),
-            -int(item.get('truncated', 999999)),
-        ),
-        reverse=True,
-    )[0] if ok_rows else None
+    candidate_gate_rows = [_candidate_gate_detail(row) for row in candidate_rows]
+    gate_pass_rows = [row for row in ok_rows if _candidate_gate_detail(row)['gate_pass']]
+    best_candidate = sorted(ok_rows, key=_candidate_sort_key, reverse=True)[0] if ok_rows else None
+    full_eval_candidate = sorted(gate_pass_rows, key=_candidate_sort_key, reverse=True)[0] if gate_pass_rows else None
+    weak_gate_pass_for_full = full_eval_candidate is not None
+    print('candidate_gate_rows =', json.dumps(candidate_gate_rows, indent=2, sort_keys=True), flush=True)
     print('best_candidate =', json.dumps(best_candidate, indent=2, sort_keys=True), flush=True)
-    if best_candidate:
-        weak_gate_pass_for_full = (
-            int(best_candidate.get('correct', 0)) >= WEAK_MIN_FOR_FULL
-            and int(best_candidate.get('equation_transform_correct', 0)) >= WEAK_EQ_MIN_FOR_FULL
-            and int(best_candidate.get('bit_manipulation_correct', 0)) >= WEAK_BIT_MIN_FOR_FULL
-            and int(best_candidate.get('truncated', 999999)) <= WEAK_MAX_TRUNC_FOR_FULL
-        )
+    print('full_eval_candidate =', json.dumps(full_eval_candidate, indent=2, sort_keys=True), flush=True)
+    if weak_gate_pass_for_full:
+        print('WEAK GATE PASSED. Full eval candidate =', full_eval_candidate.get('name', ''), flush=True)
+    else:
+        print('WEAK GATE FAILED. Do not run full eval from V221 yet.', flush=True)
+        if best_candidate:
+            print('best_candidate_gate_detail =', json.dumps(_candidate_gate_detail(best_candidate), indent=2, sort_keys=True), flush=True)
 print('weak_gate_pass_for_full =', weak_gate_pass_for_full, flush=True)
 print('batch_summary_json =', batch_summary_json, flush=True)
 print('batch_summary_csv =', batch_summary_csv, flush=True)
@@ -787,8 +891,10 @@ if not weak_gate_pass_for_full:
     print('Weak gate failed or did not run; full eval blocked.', flush=True)
     print('Required weak_total >=', WEAK_MIN_FOR_FULL, 'eq >=', WEAK_EQ_MIN_FOR_FULL, 'bit >=', WEAK_BIT_MIN_FOR_FULL, 'trunc <=', WEAK_MAX_TRUNC_FOR_FULL, flush=True)
 elif not RUN_FULL_IF_GATE:
+    print('full_eval_candidate =', json.dumps(full_eval_candidate, indent=2, sort_keys=True), flush=True)
     print('Weak gate passed, but RUN_FULL_IF_GATE is false. Full eval is blocked by default to avoid accidental GPU spend.', flush=True)
 else:
+    print('full_eval_candidate =', json.dumps(full_eval_candidate, indent=2, sort_keys=True), flush=True)
     print('Full eval is intentionally not automatic in V221 candidate registry notebook.', flush=True)
     print('Manual next step: run a dedicated full-eval notebook after reviewing weak family no-loss results.', flush=True)
 print('=== V221 FULL EVAL GATE END ===', flush=True)
@@ -807,7 +913,9 @@ decision = {
     'ready_candidates_path': str(globals().get('ready_candidates_path', '')),
     'candidate_resolution_csv': str(globals().get('resolution_csv', '')),
     'candidate_rows': candidate_rows,
+    'candidate_gate_rows': candidate_gate_rows,
     'best_candidate': best_candidate,
+    'full_eval_candidate': full_eval_candidate,
     'weak_gate_pass_for_full': bool(weak_gate_pass_for_full),
     'full_report': full_report,
     'full_candidate_gate': bool(full_candidate_gate),
