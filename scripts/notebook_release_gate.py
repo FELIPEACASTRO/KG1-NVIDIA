@@ -182,6 +182,42 @@ V219_REQUIRED_SNIPPETS = {
     "submit lock guard": "Kaggle submission is disabled",
 }
 
+V220_NOTEBOOK_REL = "notebooks/KG1_V220_PUBLIC_ADAPTER_PROBE_COLAB.ipynb"
+V220_REQUIRED_FILES = [
+    ".gitattributes",
+    V218_TRAIN_REL,
+    V218_VAL_REL,
+    "data/v217/v217_short_answer_manifest.json",
+    "scripts/analyze_eval_predictions.py",
+    "scripts/build_v220_public_adapter_probe_colab.py",
+    "scripts/evaluate_lora_adapter.py",
+    "scripts/notebook_release_gate.py",
+    "src/__init__.py",
+    "src/competition_utils.py",
+]
+
+V220_REQUIRED_SNIPPETS = {
+    "repo clone branch": "'git', 'clone', '--depth', '1', '--branch', REPO_BRANCH",
+    "repo sys.path insert": "sys.path.insert(0, str(ROOT))",
+    "repo sys.path log": "repo_root_on_sys_path",
+    "public adapter repo": "NARIBOW_ADAPTER_REPO = os.environ.get('KG1_V220_PUBLIC_ADAPTER_REPO', 'Naribow/nemotron-sft-lora')",
+    "public adapter local path": "NARIBOW_ADAPTER = OUT_ROOT / 'hf_adapters'",
+    "hf snapshot download": "snapshot_download(",
+    "hf adapter allow patterns": "allow_patterns=['adapter_config.json', 'adapter_model.safetensors', 'README.md']",
+    "public adapter completeness": "NARIBOW_ADAPTER complete",
+    "public adapter candidate": "naribow_public_think1_mtok3584",
+    "thinking default false disable flag": "V220_DISABLE_THINKING_DEFAULT = False",
+    "thinking default guard": "V220 must keep thinking enabled by default",
+    "run train hard guard": "V220 is public adapter probe only; RUN_TRAIN must stay false.",
+    "max model len arg": "--max-model-len",
+    "warmup rows arg": "--warmup-rows",
+    "weak gate": "weak_gate_pass_for_full",
+    "full eval opt in": "RUN_FULL_IF_GATE",
+    "submit lock false": "ALLOW_KAGGLE_SUBMIT = False",
+    "submit lock guard": "Kaggle submission is disabled",
+    "manual review roadmap": "Manual review required before packaging; notebook still has hard submit lock.",
+}
+
 
 @dataclass
 class Finding:
@@ -522,6 +558,44 @@ def audit_v219_weak_decode_ab_contract(path: Path, notebook: dict[str, Any], tex
             add(findings, "error", "v219_builder_required_snippet_missing", snippet)
 
 
+def audit_v220_public_adapter_probe_contract(path: Path, notebook: dict[str, Any], text: str, findings: list[Finding]) -> None:
+    """Strict one-file gate for the V220 public-adapter probe notebook."""
+
+    if repo_rel(path) != V220_NOTEBOOK_REL:
+        return
+
+    code_cells = [cell for cell in notebook.get("cells", []) if cell.get("cell_type") == "code"]
+    outputs_total = sum(len(cell.get("outputs", [])) for cell in code_cells)
+    if len(code_cells) != 8:
+        add(findings, "error", "v220_code_cell_count", f"expected 8 code cells, found {len(code_cells)}")
+    if outputs_total:
+        add(findings, "error", "v220_notebook_has_outputs", f"notebook must be committed clean; outputs={outputs_total}")
+
+    for name, snippet in V220_REQUIRED_SNIPPETS.items():
+        if snippet not in text:
+            add(findings, "error", "v220_required_snippet_missing", name)
+
+    if "--disable-thinking" in text:
+        add(findings, "error", "v220_disable_thinking_banned", "V220 must not run the V218 failed no-thinking decode path")
+    if "RUN_FULL_IF_GATE = os.environ.get('KG1_V220_RUN_FULL_IF_GATE', '0')" not in text:
+        add(findings, "error", "v220_full_eval_default_not_blocked", "full eval must default off")
+    if "NARIBOW_ADAPTER" not in text or "V217_FINAL_ADAPTER" in text and "'adapter': V217_FINAL_ADAPTER" in text:
+        add(findings, "error", "v220_wrong_candidate_adapter", "V220 must evaluate the public Naribow adapter, not V217")
+
+    for rel_path in V220_REQUIRED_FILES:
+        if not (ROOT / rel_path).exists():
+            add(findings, "error", "v220_required_file_missing", rel_path)
+
+    evaluator_text = read_repo_text("scripts/evaluate_lora_adapter.py")
+    builder_text = read_repo_text("scripts/build_v220_public_adapter_probe_colab.py")
+    for option in ["--max-tokens", "--max-model-len", "--max-num-seqs", "--warmup-rows", "--prompt-suffix"]:
+        if option not in evaluator_text:
+            add(findings, "error", "v220_evaluator_cli_option_missing", option)
+    for snippet in V220_REQUIRED_SNIPPETS.values():
+        if snippet not in builder_text:
+            add(findings, "error", "v220_builder_required_snippet_missing", snippet)
+
+
 def audit_notebook(path: Path) -> NotebookAudit:
     findings: list[Finding] = []
     rel = repo_rel(path)
@@ -543,6 +617,7 @@ def audit_notebook(path: Path) -> NotebookAudit:
         audit_training_eval_contract(text, findings)
         audit_v218_decode_rescue_contract(path, notebook, text, findings)
         audit_v219_weak_decode_ab_contract(path, notebook, text, findings)
+        audit_v220_public_adapter_probe_contract(path, notebook, text, findings)
     for snippet in GENERIC_REQUIRED_SNIPPETS:
         if is_training_or_eval_notebook(text) and snippet not in text:
             add(findings, "error", "generic_training_snippet_missing", snippet)

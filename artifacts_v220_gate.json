@@ -1,0 +1,15 @@
+{
+  "notebook_count": 1,
+  "notebooks": [
+    {
+      "code_cells": 8,
+      "findings": [],
+      "markdown_cells": 1,
+      "ok": true,
+      "path": "notebooks/KG1_V220_PUBLIC_ADAPTER_PROBE_COLAB.ipynb",
+      "sha256": "31d2007c918c4f2cdb43daf0379ccd3adb129182673ec387c3bf0ddd9361244c"
+    }
+  ],
+  "ok": true,
+  "schema_version": "kg1_notebook_release_gate_v1"
+}
