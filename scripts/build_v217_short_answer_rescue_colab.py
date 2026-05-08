@@ -149,7 +149,7 @@ EXPECTED_V194_TARGET_MODULES = ['k_proj', 'up_proj', 'down_proj', 'out_proj', 'v
 EXPECTED_V194_TARGET_PARAMETERS = ['mlp.experts.gate_up_proj', 'mlp.experts.down_proj']
 
 RUN_DRY_RUN = os.environ.get('KG1_V217_RUN_DRY_RUN', '1').strip().lower() not in {{'0', 'false', 'no', 'off'}}
-RUN_TRAIN = os.environ.get('KG1_V217_RUN_TRAIN', '1').strip().lower() in {{'1', 'true', 'yes', 'on'}}
+RUN_TRAIN = os.environ.get('KG1_V217_RUN_TRAIN', '0').strip().lower() in {{'1', 'true', 'yes', 'on'}}
 RUN_EVAL = os.environ.get('KG1_V217_RUN_EVAL', '1').strip().lower() not in {{'0', 'false', 'no', 'off'}}
 FORCE_RETRAIN = os.environ.get('KG1_V217_FORCE_RETRAIN', '0').strip().lower() in {{'1', 'true', 'yes', 'on'}}
 FORCE_REEVAL = os.environ.get('KG1_V217_FORCE_REEVAL', '0').strip().lower() in {{'1', 'true', 'yes', 'on'}}
@@ -192,6 +192,10 @@ print('EXPECTED_V194_ADAPTER_BYTES =', EXPECTED_V194_ADAPTER_BYTES, flush=True)
 print('EXPECTED_V194_ADAPTER_TENSOR_COUNT =', EXPECTED_V194_ADAPTER_TENSOR_COUNT, flush=True)
 print('RUN_DRY_RUN =', RUN_DRY_RUN, flush=True)
 print('RUN_TRAIN =', RUN_TRAIN, flush=True)
+if not RUN_TRAIN:
+    print('TRAINING DEFAULT IS OFF to protect Colab Pro GPU spend.', flush=True)
+    print('After repo setup, runtime audit, validation CSV build, and dry-run pass, enable training with:', flush=True)
+    print("os.environ['KG1_V217_RUN_TRAIN']='1'", flush=True)
 print('RUN_EVAL =', RUN_EVAL, flush=True)
 print('FORCE_RETRAIN =', FORCE_RETRAIN, flush=True)
 print('FORCE_REEVAL =', FORCE_REEVAL, flush=True)
