@@ -1,0 +1,39 @@
+{
+  "notebook_count": 4,
+  "notebooks": [
+    {
+      "code_cells": 9,
+      "findings": [],
+      "markdown_cells": 1,
+      "ok": true,
+      "path": "notebooks/KG1_V218_DECODE_RESCUE_COLAB.ipynb",
+      "sha256": "c8cfe3606f50c9145d05e7e941e19bec693b4f4ca95508c3fe6cbbee66093ca8"
+    },
+    {
+      "code_cells": 8,
+      "findings": [],
+      "markdown_cells": 1,
+      "ok": true,
+      "path": "notebooks/KG1_V219_WEAK_DECODE_AB_COLAB.ipynb",
+      "sha256": "050e6025c513e748985154c0911579091d724a1a5f73e5cf8194eebd1e9df848"
+    },
+    {
+      "code_cells": 8,
+      "findings": [],
+      "markdown_cells": 1,
+      "ok": true,
+      "path": "notebooks/KG1_V220_PUBLIC_ADAPTER_PROBE_COLAB.ipynb",
+      "sha256": "14f46bea936ad55be068da5a01b6eea3c4215667261ec38a6c68373ae1a78bec"
+    },
+    {
+      "code_cells": 8,
+      "findings": [],
+      "markdown_cells": 1,
+      "ok": true,
+      "path": "notebooks/KG1_V221_CANDIDATE_REGISTRY_WEAK_AB_COLAB.ipynb",
+      "sha256": "7fdac3bc59344392bfd51420500f000b0b9a6640f8ad88d76a79fa6d7b3def44"
+    }
+  ],
+  "ok": true,
+  "schema_version": "kg1_notebook_release_gate_v1"
+}

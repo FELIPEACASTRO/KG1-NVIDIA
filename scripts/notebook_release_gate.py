@@ -219,6 +219,50 @@ V220_REQUIRED_SNIPPETS = {
     "manual review roadmap": "Manual review required before packaging; notebook still has hard submit lock.",
 }
 
+V221_NOTEBOOK_REL = "notebooks/KG1_V221_CANDIDATE_REGISTRY_WEAK_AB_COLAB.ipynb"
+V221_REQUIRED_FILES = [
+    ".gitattributes",
+    V218_TRAIN_REL,
+    V218_VAL_REL,
+    "data/v217/v217_short_answer_manifest.json",
+    "scripts/analyze_eval_predictions.py",
+    "scripts/build_v221_candidate_registry_weak_ab_colab.py",
+    "scripts/evaluate_lora_adapter.py",
+    "scripts/evaluate_lora_adapters_batch.py",
+    "scripts/notebook_release_gate.py",
+    "src/__init__.py",
+    "src/competition_utils.py",
+]
+
+V221_REQUIRED_SNIPPETS = {
+    "repo clone branch": "'git', 'clone', '--depth', '1', '--branch', REPO_BRANCH",
+    "repo sys.path insert": "sys.path.insert(0, str(ROOT))",
+    "repo sys.path log": "repo_root_on_sys_path",
+    "train sha constant": V218_TRAIN_SHA256,
+    "val sha constant": V218_VAL_SHA256,
+    "registry object": "CANDIDATE_REGISTRY",
+    "registry ready candidates": "v221_ready_candidates.json",
+    "batch evaluator script": "scripts/evaluate_lora_adapters_batch.py",
+    "batch candidates arg": "--candidates-json",
+    "batch summary": "batch_candidate_summary.json",
+    "hf candidate kind": "hf_model_adapter",
+    "kaggle dataset candidate kind": "kaggle_dataset_adapter",
+    "kaggle model candidate kind": "kaggle_model_adapter",
+    "naribow candidate": "Naribow/nemotron-sft-lora",
+    "dgxchen candidate": "dgxchen/trained-adapter",
+    "konbu candidate": "konbu17/exp026-s012-lora",
+    "kienngx candidate": "kienngx/nemotron-nano-30b-trained/Triton/tinker-adapter/1",
+    "thinking default false disable flag": "V221_DISABLE_THINKING_DEFAULT = False",
+    "thinking default guard": "V221 must keep thinking enabled by default",
+    "run train hard guard": "V221 is candidate weak A/B only; RUN_TRAIN must stay false.",
+    "max candidates control": "V221_MAX_CANDIDATES",
+    "weak gate": "weak_gate_pass_for_full",
+    "full eval opt in": "RUN_FULL_IF_GATE",
+    "full eval blocked by default": "Full eval is intentionally not automatic in V221 candidate registry notebook",
+    "submit lock false": "ALLOW_KAGGLE_SUBMIT = False",
+    "submit lock guard": "Kaggle submission is disabled",
+}
+
 
 @dataclass
 class Finding:
@@ -597,6 +641,100 @@ def audit_v220_public_adapter_probe_contract(path: Path, notebook: dict[str, Any
             add(findings, "error", "v220_builder_required_snippet_missing", snippet)
 
 
+def audit_v221_candidate_registry_contract(path: Path, notebook: dict[str, Any], text: str, findings: list[Finding]) -> None:
+    """Strict one-file gate for the V221 candidate-registry weak A/B notebook."""
+
+    if repo_rel(path) != V221_NOTEBOOK_REL:
+        return
+
+    code_cells = [cell for cell in notebook.get("cells", []) if cell.get("cell_type") == "code"]
+    outputs_total = sum(len(cell.get("outputs", [])) for cell in code_cells)
+    if len(code_cells) != 8:
+        add(findings, "error", "v221_code_cell_count", f"expected 8 code cells, found {len(code_cells)}")
+    if outputs_total:
+        add(findings, "error", "v221_notebook_has_outputs", f"notebook must be committed clean; outputs={outputs_total}")
+
+    for name, snippet in V221_REQUIRED_SNIPPETS.items():
+        if snippet not in text:
+            add(findings, "error", "v221_required_snippet_missing", name)
+
+    if "--disable-thinking" in text:
+        add(findings, "error", "v221_disable_thinking_banned", "V221 must keep thinking enabled; no no-thinking decode path in notebook")
+    if "KG1_V221_RUN_FULL_IF_GATE', '0'" not in text:
+        add(findings, "error", "v221_full_eval_default_not_blocked", "full eval must default off")
+    if "RUN_TRAIN = os.environ.get('KG1_V221_RUN_TRAIN', '0')" not in text:
+        add(findings, "error", "v221_train_default_not_blocked", "training must default off and be hard blocked")
+    if "kaggle competitions submit" in text:
+        add(findings, "error", "v221_submit_command_banned", "candidate probe notebook must not contain Kaggle submit command")
+
+    for rel_path in V221_REQUIRED_FILES:
+        if not (ROOT / rel_path).exists():
+            add(findings, "error", "v221_required_file_missing", rel_path)
+
+    train_path = ROOT / V218_TRAIN_REL
+    val_path = ROOT / V218_VAL_REL
+    if train_path.exists():
+        observed = sha256_file(train_path)
+        if observed != V218_TRAIN_SHA256:
+            add(findings, "error", "v221_train_sha_mismatch", observed)
+        rows = count_lines(train_path)
+        if rows != V218_TRAIN_ROWS:
+            add(findings, "error", "v221_train_row_count_mismatch", str(rows))
+    if val_path.exists():
+        observed = sha256_file(val_path)
+        if observed != V218_VAL_SHA256:
+            add(findings, "error", "v221_val_sha_mismatch", observed)
+        rows = count_lines(val_path)
+        if rows != V218_VAL_ROWS:
+            add(findings, "error", "v221_val_row_count_mismatch", str(rows))
+
+    batch_text = read_repo_text("scripts/evaluate_lora_adapters_batch.py")
+    builder_text = read_repo_text("scripts/build_v221_candidate_registry_weak_ab_colab.py")
+
+    for option in [
+        "--candidates-json",
+        "--max-tokens",
+        "--max-model-len",
+        "--max-num-seqs",
+        "--warmup-rows",
+        "--prompt-suffix",
+        "--continue-on-error",
+    ]:
+        if option not in batch_text:
+            add(findings, "error", "v221_batch_evaluator_cli_option_missing", option)
+
+    for snippet in [
+        "from vllm import LLM",
+        "from vllm.lora.request import LoRARequest",
+        "llm = LLM(**llm_kwargs)",
+        "render_prompts(tokenizer, questions, config)",
+        "validate_adapter_dir",
+        "for lora_id, candidate in enumerate(valid_candidates",
+        "LoRARequest(candidate[\"name\"], lora_id, str(candidate[\"adapter\"]))",
+        "batch_candidate_summary.csv",
+        "batch_candidate_summary.json",
+    ]:
+        if snippet not in batch_text:
+            add(findings, "error", "v221_batch_evaluator_contract_missing", snippet)
+
+    for snippet in [
+        "snapshot_download(",
+        "allow_patterns=['adapter_config.json', 'adapter_model.safetensors', 'adapter_model.bin', 'README.md']",
+        "cmd = ['kaggle', 'datasets', 'download'",
+        "cmd = ['kaggle', 'models', 'instances', 'versions', 'download'",
+        "has_kaggle_credentials",
+        "v221_ready_candidates.json",
+        "v221_candidate_resolution.csv",
+        "batch_candidate_summary.json",
+    ]:
+        if snippet not in builder_text:
+            add(findings, "error", "v221_builder_candidate_resolution_contract_missing", snippet)
+
+    for snippet in V221_REQUIRED_SNIPPETS.values():
+        if snippet not in builder_text:
+            add(findings, "error", "v221_builder_required_snippet_missing", snippet)
+
+
 def audit_notebook(path: Path) -> NotebookAudit:
     findings: list[Finding] = []
     rel = repo_rel(path)
@@ -619,6 +757,7 @@ def audit_notebook(path: Path) -> NotebookAudit:
         audit_v218_decode_rescue_contract(path, notebook, text, findings)
         audit_v219_weak_decode_ab_contract(path, notebook, text, findings)
         audit_v220_public_adapter_probe_contract(path, notebook, text, findings)
+        audit_v221_candidate_registry_contract(path, notebook, text, findings)
     for snippet in GENERIC_REQUIRED_SNIPPETS:
         if is_training_or_eval_notebook(text) and snippet not in text:
             add(findings, "error", "generic_training_snippet_missing", snippet)

@@ -1,0 +1,172 @@
+{
+  "schema_version": "kg1_candidate_registry_seed_v1",
+  "generated_at": "2026-05-08",
+  "purpose": "Seed registry for no-loss weak A/B and family-specific improvement work.",
+  "baseline_context": {
+    "current_public_lb_snapshot": {
+      "source": "artifacts/ias13_attachment_audit_2026_05_08/QUADRUPLECHECK_DEVASTADOR_2026_05_08/kaggle_live_leaderboard_summary.json",
+      "team": "Felipe Angelo",
+      "rank": 19,
+      "score": 0.86,
+      "leaderboard_rows": 2815
+    },
+    "recent_notebook_gate": {
+      "source": "artifacts/ias13_attachment_audit_2026_05_08/QUADRUPLECHECK_DEVASTADOR_2026_05_08/notebook_release_gate_recent_report.json",
+      "v218_ok": true,
+      "v219_ok": true,
+      "v220_ok": true,
+      "v221_ok": true,
+      "v221_gate_report": "artifacts/notebook_release_gate/v221_candidate_registry_report.json"
+    }
+  },
+  "adapter_candidates": [
+    {
+      "id": "naribow_hf_nemotron_sft_lora",
+      "kind": "hf_model_adapter",
+      "ref": "Naribow/nemotron-sft-lora",
+      "status": "validated_metadata",
+      "priority": "P1",
+      "target_families": ["all"],
+      "expected_benefit": "Clean public HF adapter with full adapter_config and safetensors.",
+      "required_gates": ["adapter_contract", "weak_eval", "family_no_regression", "truncation_gate"]
+    },
+    {
+      "id": "dgxchen_trained_adapter",
+      "kind": "kaggle_dataset_adapter",
+      "ref": "dgxchen/trained-adapter",
+      "status": "validated_metadata",
+      "priority": "P1",
+      "target_families": ["all"],
+      "expected_benefit": "Complete public adapter candidate.",
+      "required_gates": ["adapter_contract", "weak_eval", "family_no_regression", "truncation_gate"]
+    },
+    {
+      "id": "konbu17_exp026_s012_lora",
+      "kind": "kaggle_dataset_adapter",
+      "ref": "konbu17/exp026-s012-lora",
+      "status": "validated_metadata",
+      "priority": "P1",
+      "target_families": ["all"],
+      "expected_benefit": "Complete adapter candidate with expected safetensors size class.",
+      "required_gates": ["adapter_contract", "weak_eval", "family_no_regression", "truncation_gate"]
+    },
+    {
+      "id": "konbu17_sft_lora_cot_selection",
+      "kind": "kaggle_dataset_adapter_and_data",
+      "ref": "konbu17/nemotron-sft-lora-cot-selection",
+      "status": "validated_metadata",
+      "priority": "P1",
+      "target_families": ["all"],
+      "expected_benefit": "Adapter plus COT data for later filtered analysis.",
+      "required_gates": ["adapter_contract", "weak_eval", "family_no_regression", "data_quality_if_used"]
+    },
+    {
+      "id": "kienngx_tinker_adapter",
+      "kind": "kaggle_model_instance",
+      "ref": "kienngx/nemotron-nano-30b-trained/Triton/tinker-adapter/1",
+      "status": "validated_metadata",
+      "priority": "P1",
+      "target_families": ["all", "bit_manipulation", "equation_transform"],
+      "expected_benefit": "Public competitor model instance; may need Kaggle path/package handling.",
+      "required_gates": ["adapter_contract", "weak_eval", "family_no_regression"]
+    },
+    {
+      "id": "huikang_tinker_adapter_pattern",
+      "kind": "local_notebook_pattern",
+      "ref": "C:/Users/davis/Downloads/tinker-submission-notebook*.ipynb",
+      "status": "parsed_local",
+      "priority": "P0",
+      "target_families": ["all"],
+      "expected_benefit": "Shows Mamba gate_proj+x_proj to in_proj tensor conversion and minlogprob confidence gate.",
+      "required_gates": ["conversion_parity", "adapter_contract", "weak_eval"]
+    }
+  ],
+  "data_candidates": [
+    {
+      "id": "v60_selective_boxed",
+      "kind": "local_jsonl",
+      "ref": "C:/Users/davis/Downloads/v60_selective_train_boxed_dedup.jsonl",
+      "status": "profiled_local",
+      "rows": 5770,
+      "target_families": ["text_encryption", "equation_transform", "bit_manipulation", "unit_conversion", "gravity_constant", "numeral_system"],
+      "expected_benefit": "Older boxed selective pool.",
+      "required_gates": ["dedupe", "conflict_check", "family_balance", "boxed_rate", "no_blind_training"]
+    },
+    {
+      "id": "v87_train_final",
+      "kind": "local_jsonl",
+      "ref": "C:/Users/davis/Downloads/KG1_NVIDIA_Nemotron_v87/data/v87/nemotron_087_train.final.jsonl",
+      "status": "manifested_local",
+      "rows": 13527,
+      "target_families": ["all"],
+      "expected_benefit": "Historical external mix with known family/source counts.",
+      "required_gates": ["dedupe", "conflict_check", "source_quality", "no_blind_training"]
+    },
+    {
+      "id": "v87_train_plus_solver",
+      "kind": "local_jsonl",
+      "ref": "C:/Users/davis/Downloads/KG1_NVIDIA_Nemotron_v87/data/v87/nemotron_087_train_plus_solver.final.jsonl",
+      "status": "manifested_local",
+      "rows": 20314,
+      "target_families": ["unit_conversion", "gravity_constant", "numeral_system", "text_encryption", "bit_manipulation"],
+      "expected_benefit": "Includes solver_guided examples; equation_transform coverage is weak and must be treated carefully.",
+      "required_gates": ["dedupe", "conflict_check", "family_specific_acceptance", "no_blind_training"]
+    },
+    {
+      "id": "andy279_sft",
+      "kind": "hf_dataset",
+      "ref": "andy279/nemotron-reasoning-challenge",
+      "status": "validated_metadata_gated_manual",
+      "target_families": ["all"],
+      "expected_benefit": "Reported large SFT train/val set.",
+      "required_gates": ["authorized_access", "answer_correctness_filter", "boxed_filter", "family_balance"]
+    },
+    {
+      "id": "andy279_raw_traces",
+      "kind": "hf_dataset",
+      "ref": "andy279/nemotron-reasoning-challenge-raw-traces",
+      "status": "validated_metadata_gated_manual",
+      "target_families": ["bit_manipulation", "equation_transform", "text_encryption"],
+      "expected_benefit": "Raw solver and transformation traces for building verifiers/solvers.",
+      "required_gates": ["authorized_access", "trace_correctness_filter", "no_blind_training"]
+    }
+  ],
+  "solver_tracks": [
+    {
+      "id": "deterministic_unit_gravity_numeral",
+      "target_families": ["unit_conversion", "gravity_constant", "numeral_system"],
+      "priority": "P0",
+      "expected_benefit": "Low GPU cost; high confidence overrides when parser is exact.",
+      "acceptance": "All prompt examples parsed and verified; output canonical; otherwise abstain."
+    },
+    {
+      "id": "bitvector_superoptimizer",
+      "target_families": ["bit_manipulation"],
+      "priority": "P1",
+      "expected_benefit": "Can recover hard bit rules without model training.",
+      "acceptance": "Expression satisfies all examples and is ranked by simplicity; otherwise abstain."
+    },
+    {
+      "id": "equation_hypothesis_sympy_constraint",
+      "target_families": ["equation_transform"],
+      "priority": "P1",
+      "expected_benefit": "Main route to improve the biggest weak family.",
+      "acceptance": "Hypothesis/constraints prove all examples; otherwise abstain."
+    },
+    {
+      "id": "text_encryption_pbe_dsl",
+      "target_families": ["text_encryption"],
+      "priority": "P1",
+      "expected_benefit": "Program-by-example transformations with low-risk verified overrides.",
+      "acceptance": "Inferred rule explains all in-prompt examples; otherwise abstain."
+    }
+  ],
+  "global_acceptance_rules": [
+    "No full eval unless weak gate passes.",
+    "No adapter accepted unless family score improves or stays flat with lower truncation.",
+    "No solver override unless it is locally verifiable.",
+    "No new training unless dataset manifest and no-truncation dry run pass.",
+    "No vLLM install before training-stack checks in train notebooks.",
+    "No submission without release gate, submission gate, manifest, and credential scan."
+  ]
+}

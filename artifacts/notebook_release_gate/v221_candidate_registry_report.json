@@ -1,0 +1,15 @@
+{
+  "notebook_count": 1,
+  "notebooks": [
+    {
+      "code_cells": 8,
+      "findings": [],
+      "markdown_cells": 1,
+      "ok": true,
+      "path": "notebooks/KG1_V221_CANDIDATE_REGISTRY_WEAK_AB_COLAB.ipynb",
+      "sha256": "7fdac3bc59344392bfd51420500f000b0b9a6640f8ad88d76a79fa6d7b3def44"
+    }
+  ],
+  "ok": true,
+  "schema_version": "kg1_notebook_release_gate_v1"
+}
