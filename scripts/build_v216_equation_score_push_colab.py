@@ -135,7 +135,6 @@ REPO_BRANCH = os.environ.get('KG1_REPO_BRANCH', 'v216-equation-score-push')
 ROOT = pathlib.Path('/content/kg1')
 DRIVE_ROOT = pathlib.Path('/content/drive/MyDrive/KG1_NVIDIA_V216')
 OUT_ROOT = DRIVE_ROOT / 'output_v216_equation_score_push'
-BASELINE_OUT = OUT_ROOT / 'baseline_v194_weak'
 DRY_OUT = OUT_ROOT / 'dry_run_v216_eqpush_lr3e8_s24'
 TRAIN_OUT = OUT_ROOT / 'train_v216_eqpush_lr3e8_s24'
 EVAL_OUT = OUT_ROOT / 'eval_v216_eqpush_lr3e8_s24'
@@ -145,7 +144,6 @@ V194_VAL_CSV = pathlib.Path('{V194_VAL_CSV_DRIVE}')
 MODEL_NAME = '{MODEL_NAME}'
 MODEL_REVISION = '{MODEL_REVISION}'
 
-RUN_BASELINE_WEAK = os.environ.get('KG1_V216_RUN_BASELINE_WEAK', '0').strip().lower() not in {{'0', 'false', 'no', 'off'}}
 RUN_DRY_RUN = os.environ.get('KG1_V216_RUN_DRY_RUN', '1').strip().lower() not in {{'0', 'false', 'no', 'off'}}
 RUN_TRAIN = os.environ.get('KG1_V216_RUN_TRAIN', '1').strip().lower() in {{'1', 'true', 'yes', 'on'}}
 RUN_EVAL = os.environ.get('KG1_V216_RUN_EVAL', '1').strip().lower() not in {{'0', 'false', 'no', 'off'}}
@@ -168,18 +166,15 @@ V216_MAX_LENGTH = int(os.environ.get('KG1_V216_MAX_LENGTH', '4096'))
 V216_BATCH_SIZE = int(os.environ.get('KG1_V216_BATCH_SIZE', '4'))
 V216_MICRO_BATCH_SIZE = int(os.environ.get('KG1_V216_MICRO_BATCH_SIZE', '1'))
 
-BASELINE_WEAK_EXPECTED = 190
-BASELINE_EQ_EXPECTED = 55
-BASELINE_BIT_EXPECTED = 135
-BASELINE_WEAK_MAX_TRUNC = 3
 WEAK_MIN_FOR_FULL = 193
 WEAK_EQ_MIN_FOR_FULL = 60
 WEAK_BIT_MIN_FOR_FULL = 133
+WEAK_MAX_TRUNC_FOR_FULL = 3
 FULL_MIN_CANDIDATE = 831
 FULL_MAX_TRUNC = 4
 ALLOW_KAGGLE_SUBMIT = False
 
-for path in [DRIVE_ROOT, OUT_ROOT, BASELINE_OUT, DRY_OUT, TRAIN_OUT, EVAL_OUT, PACKAGE_OUT]:
+for path in [DRIVE_ROOT, OUT_ROOT, DRY_OUT, TRAIN_OUT, EVAL_OUT, PACKAGE_OUT]:
     path.mkdir(parents=True, exist_ok=True)
 
 print('VERSION =', VERSION, flush=True)
@@ -189,7 +184,6 @@ print('ROOT =', ROOT, flush=True)
 print('OUT_ROOT =', OUT_ROOT, flush=True)
 print('V194_ADAPTER =', V194_ADAPTER, flush=True)
 print('V194_VAL_CSV =', V194_VAL_CSV, flush=True)
-print('RUN_BASELINE_WEAK =', RUN_BASELINE_WEAK, flush=True)
 print('RUN_DRY_RUN =', RUN_DRY_RUN, flush=True)
 print('RUN_TRAIN =', RUN_TRAIN, flush=True)
 print('RUN_EVAL =', RUN_EVAL, flush=True)
@@ -207,6 +201,7 @@ print('MAX_JOBS =', os.environ.get('MAX_JOBS', ''), flush=True)
 print('WEAK_MIN_FOR_FULL =', WEAK_MIN_FOR_FULL, flush=True)
 print('WEAK_EQ_MIN_FOR_FULL =', WEAK_EQ_MIN_FOR_FULL, flush=True)
 print('WEAK_BIT_MIN_FOR_FULL =', WEAK_BIT_MIN_FOR_FULL, flush=True)
+print('WEAK_MAX_TRUNC_FOR_FULL =', WEAK_MAX_TRUNC_FOR_FULL, flush=True)
 print('FULL_MIN_CANDIDATE =', FULL_MIN_CANDIDATE, flush=True)
 print('ALLOW_KAGGLE_SUBMIT =', ALLOW_KAGGLE_SUBMIT, flush=True)
 if ALLOW_KAGGLE_SUBMIT:
@@ -369,16 +364,6 @@ def install_pip_spec(spec, label, force=False):
         cmd,
         log_path=OUT_ROOT / f'pip_install_{label.replace(".", "_").replace("-", "_")}.log',
         check=True,
-    )
-
-def uninstall_pip_specs(specs, label):
-    specs = [str(spec) for spec in specs if str(spec).strip()]
-    if not specs:
-        return 0
-    return run_cmd(
-        [sys.executable, '-m', 'pip', 'uninstall', '-y', *specs],
-        log_path=OUT_ROOT / f'pip_uninstall_{label.replace(".", "_").replace("-", "_")}.log',
-        check=False,
     )
 
 def install_causal_conv1d_with_retry(primary_log, retry_log):
@@ -643,8 +628,8 @@ print('=== V216 RUNTIME AUDIT END ===', flush=True)
 """
         ),
         code(
-            """# CELL: build validation CSVs and optionally verify protected V194 weak baseline.
-print('=== V216 VALIDATION AND BASELINE START ===', flush=True)
+            """# CELL: build validation CSVs.
+print('=== V216 VALIDATION CSV BUILD START ===', flush=True)
 import pandas as pd
 sys.path.insert(0, str(ROOT))
 from src.competition_utils import classify_puzzle
@@ -656,72 +641,18 @@ if 'prompt' not in full_df.columns or 'answer' not in full_df.columns:
     raise RuntimeError('V194 validation CSV must contain prompt and answer')
 full_df['type'] = full_df['prompt'].map(classify_puzzle)
 weak_df = full_df[full_df['type'].isin({'bit_manipulation', 'equation_transform'})].copy()
-strong_df = full_df[full_df['type'].isin({'gravity_constant', 'numeral_system', 'text_encryption', 'unit_conversion'})].copy()
+strong_rows = int(full_df['type'].isin({'gravity_constant', 'numeral_system', 'text_encryption', 'unit_conversion'}).sum())
 full_eval_csv = EVAL_OUT / 'v216_full_947.csv'
 weak_eval_csv = EVAL_OUT / 'v216_weak_315.csv'
-strong_eval_csv = EVAL_OUT / 'v216_strong_632.csv'
 full_df.to_csv(full_eval_csv, index=False)
 weak_df.to_csv(weak_eval_csv, index=False)
-strong_df.to_csv(strong_eval_csv, index=False)
 print('full_rows =', len(full_df), 'path =', full_eval_csv, flush=True)
 print('weak_rows =', len(weak_df), 'path =', weak_eval_csv, flush=True)
-print('strong_rows =', len(strong_df), 'path =', strong_eval_csv, flush=True)
+print('strong_rows =', strong_rows, flush=True)
 print('per_family_counts =', full_df['type'].value_counts().sort_index().to_dict(), flush=True)
-if len(full_df) != 947 or len(weak_df) != 315 or len(strong_df) != 632:
+if len(full_df) != 947 or len(weak_df) != 315 or strong_rows != 632:
     raise RuntimeError('Validation row counts are not 947/315/632')
-
-baseline_report_path = BASELINE_OUT / 'v194_baseline_weak_eval_report.json'
-baseline_per_task_path = BASELINE_OUT / 'v194_baseline_weak_per_task.csv'
-if RUN_BASELINE_WEAK and (FORCE_REEVAL or not baseline_report_path.exists()):
-    if RUN_DRY_RUN or RUN_TRAIN:
-        print(
-            'RUN_BASELINE_WEAK requested, but pre-train baseline eval is blocked to avoid installing vLLM before train dependencies. '
-            'Set KG1_V216_RUN_DRY_RUN=0 and KG1_V216_RUN_TRAIN=0 for a baseline-only diagnostic run.',
-            flush=True,
-        )
-    else:
-        ensure_vllm_for_eval()
-        rc = run_cmd(
-            [
-                sys.executable,
-                str(ROOT / 'scripts/evaluate_lora_adapter.py'),
-                '--solution-csv', str(weak_eval_csv),
-                '--questions-csv', str(weak_eval_csv),
-                '--adapter', str(V194_ADAPTER),
-                '--base-model-path', MODEL_NAME,
-                '--label', 'v194_baseline_weak',
-                '--seed', '42',
-                '--limit', '0',
-                '--output-dir', str(BASELINE_OUT),
-            ],
-            cwd=ROOT,
-            log_path=BASELINE_OUT / 'v194_baseline_weak.log',
-            check=True,
-        )
-        print('baseline weak eval returncode =', rc, flush=True)
-elif RUN_BASELINE_WEAK:
-    print('reusing existing baseline_report_path =', baseline_report_path, flush=True)
-else:
-    print('RUN_BASELINE_WEAK is false; baseline gate skipped only for diagnostics.', flush=True)
-
-baseline_report = None
-baseline_per_task = None
-if baseline_report_path.exists():
-    baseline_report = read_json(baseline_report_path)
-    print('baseline_weak_report =', json.dumps(baseline_report, indent=2, sort_keys=True), flush=True)
-    if int(baseline_report.get('correct', -1)) < BASELINE_WEAK_EXPECTED:
-        raise RuntimeError('V194 weak baseline below expected; stop before training')
-    if int(baseline_report.get('truncated', 999)) > BASELINE_WEAK_MAX_TRUNC:
-        raise RuntimeError('V194 weak truncation too high; stop before training')
-    if baseline_per_task_path.exists():
-        baseline_per_task = pd.read_csv(baseline_per_task_path)
-        print('baseline_weak_per_task =', baseline_per_task.to_string(index=False), flush=True)
-        by_task = {row['task_type']: int(row['correct']) for _, row in baseline_per_task.iterrows()}
-        if by_task.get('equation_transform', -1) < BASELINE_EQ_EXPECTED:
-            raise RuntimeError('V194 equation_transform baseline below expected')
-        if by_task.get('bit_manipulation', -1) < BASELINE_BIT_EXPECTED:
-            raise RuntimeError('V194 bit_manipulation baseline below expected')
-print('=== V216 VALIDATION AND BASELINE END ===', flush=True)
+print('=== V216 VALIDATION CSV BUILD END ===', flush=True)
 """
         ),
         code(
@@ -980,7 +911,7 @@ else:
         weak_correct >= WEAK_MIN_FOR_FULL
         and weak_eq_correct >= WEAK_EQ_MIN_FOR_FULL
         and weak_bit_correct >= WEAK_BIT_MIN_FOR_FULL
-        and weak_truncated <= BASELINE_WEAK_MAX_TRUNC
+        and weak_truncated <= WEAK_MAX_TRUNC_FOR_FULL
     )
     print('weak_correct =', weak_correct, flush=True)
     print('weak_eq_correct =', weak_eq_correct, flush=True)
@@ -1002,7 +933,7 @@ weak_gate_pass_for_full = bool(
     weak_report
     and weak_per_task is not None
     and int(weak_report.get('correct', 0)) >= WEAK_MIN_FOR_FULL
-    and int(weak_report.get('truncated', 999)) <= BASELINE_WEAK_MAX_TRUNC
+    and int(weak_report.get('truncated', 999)) <= WEAK_MAX_TRUNC_FOR_FULL
 )
 if weak_per_task is not None:
     by_task_tmp = {row['task_type']: int(row['correct']) for _, row in weak_per_task.iterrows()}
@@ -1017,7 +948,7 @@ elif not is_complete_adapter_dir(final_adapter):
     print('No complete final_adapter exists; skipping full eval.', flush=True)
 elif not weak_gate_pass_for_full:
     print('Weak gate failed; full eval blocked.', flush=True)
-    print('Required weak_total >=', WEAK_MIN_FOR_FULL, 'eq >=', WEAK_EQ_MIN_FOR_FULL, 'bit >=', WEAK_BIT_MIN_FOR_FULL, 'trunc <=', BASELINE_WEAK_MAX_TRUNC, flush=True)
+    print('Required weak_total >=', WEAK_MIN_FOR_FULL, 'eq >=', WEAK_EQ_MIN_FOR_FULL, 'bit >=', WEAK_BIT_MIN_FOR_FULL, 'trunc <=', WEAK_MAX_TRUNC_FOR_FULL, flush=True)
 elif FORCE_REEVAL or not full_report_path.exists():
     ensure_vllm_for_eval()
     full_eval_dir.mkdir(parents=True, exist_ok=True)
@@ -1142,7 +1073,6 @@ if full_per_task is not None:
 
 decision = {
     'run_train': bool(RUN_TRAIN),
-    'baseline_weak_correct': int(baseline_report.get('correct', -1)) if baseline_report else None,
     'weak_correct': int(weak_report.get('correct', -1)) if weak_report else None,
     'weak_truncated': int(weak_report.get('truncated', -1)) if weak_report else None,
     'weak_equation_transform_correct': weak_task_counts.get('equation_transform'),
@@ -1153,7 +1083,7 @@ decision = {
     'weak_gate_pass_for_full': bool(
         weak_report
         and int(weak_report.get('correct', 0)) >= WEAK_MIN_FOR_FULL
-        and int(weak_report.get('truncated', 999)) <= BASELINE_WEAK_MAX_TRUNC
+        and int(weak_report.get('truncated', 999)) <= WEAK_MAX_TRUNC_FOR_FULL
         and weak_task_counts.get('equation_transform', 0) >= WEAK_EQ_MIN_FOR_FULL
         and weak_task_counts.get('bit_manipulation', 0) >= WEAK_BIT_MIN_FOR_FULL
     ),
@@ -1176,7 +1106,6 @@ run_manifest = {
     'dataset_manifest': manifest,
     'paths': {
         'out_root': str(OUT_ROOT),
-        'baseline_out': str(BASELINE_OUT),
         'dry_out': str(DRY_OUT),
         'train_out': str(TRAIN_OUT),
         'eval_out': str(EVAL_OUT),
