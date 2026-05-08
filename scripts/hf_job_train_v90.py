@@ -1097,8 +1097,14 @@ def tokenize_examples(
                 "input_ids": full_ids,
                 "loss_mask": loss_mask,
                 "category": ex.get("family", ex.get("category", "unknown")),
-                "subcategory": (ex.get("metadata") or {}).get("subcategory", ex.get("subcategory", "unknown")),
-                "source": ex.get("source", "unknown"),
+                "subcategory": (
+                    (ex.get("metadata") or {}).get("subcategory")
+                    or (ex.get("metadata") or {}).get("subtype")
+                    or ex.get("subcategory")
+                    or ex.get("subtype")
+                    or "unknown"
+                ),
+                "source": ex.get("source") or (ex.get("metadata") or {}).get("source") or "unknown",
             }
         )
 

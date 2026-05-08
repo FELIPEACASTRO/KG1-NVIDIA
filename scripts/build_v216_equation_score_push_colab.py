@@ -388,7 +388,7 @@ def install_causal_conv1d_with_retry(primary_log, retry_log):
         check=False,
     )
     if causal_rc != 0:
-        print('causal-conv1d build failed once; refreshing build tooling and retrying without pip cache.', flush=True)
+        print('causal-conv1d build failed once; refreshing pinned build tooling and retrying without pip cache.', flush=True)
         run_cmd(
             [
                 sys.executable,
@@ -398,7 +398,7 @@ def install_causal_conv1d_with_retry(primary_log, retry_log):
                 '-q',
                 '--upgrade',
                 'pip',
-                'setuptools',
+                'setuptools==80.10.2',
                 'wheel',
                 'packaging',
                 'ninja',
@@ -423,34 +423,6 @@ def install_causal_conv1d_with_retry(primary_log, retry_log):
     if causal_rc != 0:
         raise RuntimeError('causal-conv1d build failed after retry; see pip_install_causal_conv1d*.log')
     verify_import_subprocess('causal_conv1d', check=True)
-
-def post_vllm_extension_abi_audit(log_label, check):
-    code = r'''
-import importlib
-import json
-import torch
-
-mods = {}
-for name in ["causal_conv1d", "mamba_ssm", "transformers", "peft", "vllm"]:
-    module = importlib.import_module(name)
-    mods[name] = str(getattr(module, "__version__", "unknown"))
-
-from causal_conv1d import causal_conv1d_fn, causal_conv1d_update  # noqa: F401
-from mamba_ssm.ops.selective_scan_interface import selective_scan_fn  # noqa: F401
-
-print(json.dumps({
-    "torch": str(getattr(torch, "__version__", "unknown")),
-    "torch_cuda": str(getattr(torch.version, "cuda", "")),
-    "cuda_available": bool(torch.cuda.is_available()),
-    "mods": mods,
-}, sort_keys=True))
-'''
-    return run_cmd(
-        [sys.executable, '-c', code],
-        log_path=OUT_ROOT / log_label,
-        check=check,
-        heartbeat_s=0,
-    )
 
 def train_extension_abi_audit(log_label, check):
     code = r'''
@@ -590,20 +562,22 @@ torch_pretrain_path = OUT_ROOT / 'verify_torch_before_train_extensions.jsonl'
 run_cmd([sys.executable, '-c', torch_pretrain_code], log_path=torch_pretrain_path, check=True, heartbeat_s=0)
 torch_pretrain = json.loads([line for line in torch_pretrain_path.read_text(encoding='utf-8').splitlines() if line.strip()][-1])
 print('torch_before_train_extensions =', json.dumps(torch_pretrain, sort_keys=True), flush=True)
-if str(torch_pretrain.get('torch', '')).startswith('2.11') and verify_import_subprocess('causal_conv1d', check=False) != 0:
+if str(torch_pretrain.get('torch', '')).startswith('2.11'):
     raise RuntimeError(
         'This runtime is already contaminated by vLLM/Torch 2.11 before train extensions were built. '
         'Use Runtime > Disconnect and delete runtime, then rerun this notebook from the first cell. '
         'The fixed notebook now delays vLLM until eval so a fresh runtime will not hit this path.'
     )
 
+ensure_import('ninja', 'ninja')
+if verify_import_subprocess('causal_conv1d', check=False) != 0:
+    print('causal_conv1d subprocess import failed; installing causal-conv1d for train stack.', flush=True)
+    install_causal_conv1d_with_retry('pip_install_causal_conv1d.log', 'pip_install_causal_conv1d_retry.log')
+else:
+    print('causal_conv1d subprocess import already OK; skipping install.', flush=True)
+
 if verify_import_subprocess('mamba_ssm', check=False) != 0:
-    print('mamba_ssm subprocess import failed; installing causal-conv1d first, then mamba-ssm for train stack.', flush=True)
-    ensure_import('ninja', 'ninja')
-    if verify_import_subprocess('causal_conv1d', check=False) != 0:
-        install_causal_conv1d_with_retry('pip_install_causal_conv1d.log', 'pip_install_causal_conv1d_retry.log')
-    else:
-        print('causal_conv1d subprocess import already OK; skipping install.', flush=True)
+    print('mamba_ssm subprocess import failed; installing mamba-ssm for train stack after causal-conv1d.', flush=True)
     run_cmd(
         [sys.executable, '-m', 'pip', 'install', '--progress-bar', 'off', '--no-build-isolation', V216_MAMBA_SSM_PIP_SPEC],
         log_path=OUT_ROOT / 'pip_install_mamba_ssm.log',
@@ -699,25 +673,32 @@ if len(full_df) != 947 or len(weak_df) != 315 or len(strong_df) != 632:
 baseline_report_path = BASELINE_OUT / 'v194_baseline_weak_eval_report.json'
 baseline_per_task_path = BASELINE_OUT / 'v194_baseline_weak_per_task.csv'
 if RUN_BASELINE_WEAK and (FORCE_REEVAL or not baseline_report_path.exists()):
-    ensure_vllm_for_eval()
-    rc = run_cmd(
-        [
-            sys.executable,
-            str(ROOT / 'scripts/evaluate_lora_adapter.py'),
-            '--solution-csv', str(weak_eval_csv),
-            '--questions-csv', str(weak_eval_csv),
-            '--adapter', str(V194_ADAPTER),
-            '--base-model-path', MODEL_NAME,
-            '--label', 'v194_baseline_weak',
-            '--seed', '42',
-            '--limit', '0',
-            '--output-dir', str(BASELINE_OUT),
-        ],
-        cwd=ROOT,
-        log_path=BASELINE_OUT / 'v194_baseline_weak.log',
-        check=True,
-    )
-    print('baseline weak eval returncode =', rc, flush=True)
+    if RUN_DRY_RUN or RUN_TRAIN:
+        print(
+            'RUN_BASELINE_WEAK requested, but pre-train baseline eval is blocked to avoid installing vLLM before train dependencies. '
+            'Set KG1_V216_RUN_DRY_RUN=0 and KG1_V216_RUN_TRAIN=0 for a baseline-only diagnostic run.',
+            flush=True,
+        )
+    else:
+        ensure_vllm_for_eval()
+        rc = run_cmd(
+            [
+                sys.executable,
+                str(ROOT / 'scripts/evaluate_lora_adapter.py'),
+                '--solution-csv', str(weak_eval_csv),
+                '--questions-csv', str(weak_eval_csv),
+                '--adapter', str(V194_ADAPTER),
+                '--base-model-path', MODEL_NAME,
+                '--label', 'v194_baseline_weak',
+                '--seed', '42',
+                '--limit', '0',
+                '--output-dir', str(BASELINE_OUT),
+            ],
+            cwd=ROOT,
+            log_path=BASELINE_OUT / 'v194_baseline_weak.log',
+            check=True,
+        )
+        print('baseline weak eval returncode =', rc, flush=True)
 elif RUN_BASELINE_WEAK:
     print('reusing existing baseline_report_path =', baseline_report_path, flush=True)
 else:

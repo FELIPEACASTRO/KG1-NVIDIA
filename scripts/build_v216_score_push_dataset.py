@@ -147,6 +147,7 @@ def normalize_existing_row(row: dict[str, Any], *, source: str, role: str) -> di
         or classify_puzzle(prompt)
     )
     metadata = dict(row.get("metadata") or {})
+    subtype = row.get("subtype") or metadata.get("subtype") or metadata.get("subcategory") or ""
     metadata.update(
         {
             "train_allowed": True,
@@ -155,12 +156,14 @@ def normalize_existing_row(row: dict[str, Any], *, source: str, role: str) -> di
             "original_id": row.get("id", ""),
             "original_source": row.get("source") or row.get("source_ref") or "",
             "quality_tag": row.get("quality_tag", metadata.get("quality_tag", "")),
-            "subtype": row.get("subtype", metadata.get("subtype", "")),
+            "subtype": subtype,
+            "subcategory": subtype,
         }
     )
     return {
         "id": f"{role}_{hashlib.sha1((prompt + answer + source).encode('utf-8')).hexdigest()[:16]}",
         "family": family,
+        "subcategory": subtype or "unknown",
         "prompt": prompt,
         "answer": answer,
         "messages": messages,
