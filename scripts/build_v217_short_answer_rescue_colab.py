@@ -520,6 +520,12 @@ print('=== V217 REPO SETUP END ===', flush=True)
         code(
             """# CELL: dependency, GPU, disk, and adapter audit.
 print('=== V217 RUNTIME AUDIT START ===', flush=True)
+print('early_v194_adapter_path =', V194_ADAPTER, 'complete =', is_complete_adapter_dir(V194_ADAPTER), flush=True)
+print('early_v194_validation_csv =', V194_VAL_CSV, 'exists =', V194_VAL_CSV.exists(), flush=True)
+if not is_complete_adapter_dir(V194_ADAPTER):
+    raise RuntimeError(f'V194 adapter incomplete or missing before dependency builds: {V194_ADAPTER}')
+if not V194_VAL_CSV.exists():
+    raise FileNotFoundError(f'Missing V194 validation CSV before dependency builds: {V194_VAL_CSV}')
 ensure_import('pandas', 'pandas')
 ensure_import('safetensors', 'safetensors')
 ensure_import('huggingface_hub', 'huggingface_hub')
