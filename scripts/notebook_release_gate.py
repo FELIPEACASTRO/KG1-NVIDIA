@@ -666,6 +666,14 @@ def audit_v221_candidate_registry_contract(path: Path, notebook: dict[str, Any],
         add(findings, "error", "v221_train_default_not_blocked", "training must default off and be hard blocked")
     if "kaggle competitions submit" in text:
         add(findings, "error", "v221_submit_command_banned", "candidate probe notebook must not contain Kaggle submit command")
+    for bad_literal in ['"required": true', '"required": false', '"required": null']:
+        if bad_literal in text:
+            add(
+                findings,
+                "error",
+                "v221_json_boolean_literal_in_python_cell",
+                f"embedded registry must be valid Python at runtime; found {bad_literal}",
+            )
 
     for rel_path in V221_REQUIRED_FILES:
         if not (ROOT / rel_path).exists():

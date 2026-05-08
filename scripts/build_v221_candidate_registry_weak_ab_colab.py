@@ -10,6 +10,7 @@ submission are hard-blocked by default.
 from __future__ import annotations
 
 import json
+import pprint
 from pathlib import Path
 
 
@@ -131,7 +132,7 @@ def code(source: str) -> dict:
 
 
 def build_notebook() -> dict:
-    registry_json = json.dumps(REGISTRY_SEED, indent=2, sort_keys=True)
+    registry_literal = pprint.pformat(REGISTRY_SEED, sort_dicts=True, width=120)
     cells = [
         md(
             f"""# KG1 V221 Candidate Registry Weak A/B Colab
@@ -258,7 +259,7 @@ FULL_MIN_CANDIDATE = 831
 FULL_MAX_TRUNC = 4
 ALLOW_KAGGLE_SUBMIT = False
 
-CANDIDATE_REGISTRY = {registry_json}
+CANDIDATE_REGISTRY = {registry_literal}
 
 for path in [DRIVE_ROOT, OUT_ROOT, DOWNLOAD_ROOT, EVAL_OUT, PACKAGE_OUT]:
     path.mkdir(parents=True, exist_ok=True)
