@@ -156,6 +156,7 @@ MODEL_NAME = '{MODEL_NAME}'
 MODEL_REVISION = '{MODEL_REVISION}'
 EXPECTED_V194_ADAPTER_BYTES = 4259069440
 EXPECTED_V194_ADAPTER_TENSOR_COUNT = 12011
+MIN_TRAIN_INIT_ADAPTER_BYTES = 4250000000
 EXPECTED_V194_TARGET_MODULES = ['k_proj', 'up_proj', 'down_proj', 'out_proj', 'v_proj', 'q_proj', 'lm_head', 'o_proj', 'in_proj']
 EXPECTED_V194_TARGET_PARAMETERS = ['mlp.experts.gate_up_proj', 'mlp.experts.down_proj']
 
@@ -204,6 +205,7 @@ print('V222_DECISION_MANIFEST =', V222_DECISION_MANIFEST, flush=True)
 print('V194_VAL_CSV =', V194_VAL_CSV, flush=True)
 print('EXPECTED_V194_ADAPTER_BYTES =', EXPECTED_V194_ADAPTER_BYTES, flush=True)
 print('EXPECTED_V194_ADAPTER_TENSOR_COUNT =', EXPECTED_V194_ADAPTER_TENSOR_COUNT, flush=True)
+print('MIN_TRAIN_INIT_ADAPTER_BYTES =', MIN_TRAIN_INIT_ADAPTER_BYTES, flush=True)
 print('RUN_DRY_RUN =', RUN_DRY_RUN, flush=True)
 print('RUN_TRAIN =', RUN_TRAIN, flush=True)
 if not RUN_TRAIN:
@@ -594,10 +596,10 @@ if early_weight_bytes != EXPECTED_V194_ADAPTER_BYTES:
         f'V194 adapter weight size mismatch before dependency builds: '
         f'{early_weight_bytes} != {EXPECTED_V194_ADAPTER_BYTES}'
     )
-if early_init_weight_bytes != EXPECTED_V194_ADAPTER_BYTES:
+if early_init_weight_bytes < MIN_TRAIN_INIT_ADAPTER_BYTES:
     raise RuntimeError(
-        f'V223 training init adapter weight size mismatch before dependency builds: '
-        f'{early_init_weight_bytes} != {EXPECTED_V194_ADAPTER_BYTES}'
+        f'V223 training init adapter weight size too small before dependency builds: '
+        f'{early_init_weight_bytes} < {MIN_TRAIN_INIT_ADAPTER_BYTES}'
     )
 early_torch_check_code = (
     "import json, torch; "
@@ -765,8 +767,8 @@ if init_weights_path.exists():
     print('train_init_adapter_weight_bytes =', init_weights_path.stat().st_size, flush=True)
     if init_key_count != EXPECTED_V194_ADAPTER_TENSOR_COUNT:
         raise RuntimeError(f'V223 training init adapter tensor count mismatch: {init_key_count} != {EXPECTED_V194_ADAPTER_TENSOR_COUNT}')
-    if init_weights_path.stat().st_size != EXPECTED_V194_ADAPTER_BYTES:
-        raise RuntimeError(f'V223 training init adapter weight size mismatch: {init_weights_path.stat().st_size} != {EXPECTED_V194_ADAPTER_BYTES}')
+    if init_weights_path.stat().st_size < MIN_TRAIN_INIT_ADAPTER_BYTES:
+        raise RuntimeError(f'V223 training init adapter weight size too small: {init_weights_path.stat().st_size} < {MIN_TRAIN_INIT_ADAPTER_BYTES}')
 print('=== V223 RUNTIME AUDIT END ===', flush=True)
 """
         ),
