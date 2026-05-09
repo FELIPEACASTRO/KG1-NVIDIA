@@ -426,6 +426,7 @@ def main() -> int:
     parser.add_argument("--warmup-rows", type=int, default=4, help="Number of explicit warmup rows before measured generation.")
     parser.add_argument("--disable-thinking", action="store_true", help="Diagnostic prompt rendering with enable_thinking=False.")
     parser.add_argument("--prompt-suffix", default="", help="Diagnostic override for the prompt suffix.")
+    parser.add_argument("--no-prompt-suffix", action="store_true", help="Diagnostic override: render prompts without the default suffix.")
     args = parser.parse_args()
 
     args.output_dir.mkdir(parents=True, exist_ok=True)
@@ -452,7 +453,9 @@ def main() -> int:
     eval_config["warmup_rows"] = max(0, int(args.warmup_rows))
     if args.disable_thinking:
         eval_config["enable_thinking"] = False
-    if args.prompt_suffix:
+    if args.no_prompt_suffix:
+        eval_config["prompt_suffix"] = ""
+    elif args.prompt_suffix:
         eval_config["prompt_suffix"] = args.prompt_suffix
 
     summary, predictions = evaluate_adapter(

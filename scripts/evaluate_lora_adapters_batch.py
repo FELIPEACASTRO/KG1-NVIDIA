@@ -85,7 +85,9 @@ def build_eval_config(args: argparse.Namespace) -> dict[str, Any]:
     config["warmup_rows"] = max(0, int(args.warmup_rows))
     if args.disable_thinking:
         config["enable_thinking"] = False
-    if args.prompt_suffix:
+    if args.no_prompt_suffix:
+        config["prompt_suffix"] = ""
+    elif args.prompt_suffix:
         config["prompt_suffix"] = args.prompt_suffix
     return config
 
@@ -107,6 +109,7 @@ def main() -> int:
     parser.add_argument("--warmup-rows", type=int, default=4)
     parser.add_argument("--disable-thinking", action="store_true")
     parser.add_argument("--prompt-suffix", default="")
+    parser.add_argument("--no-prompt-suffix", action="store_true")
     parser.add_argument("--continue-on-error", action="store_true")
     args = parser.parse_args()
 
