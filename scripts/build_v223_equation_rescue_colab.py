@@ -513,7 +513,6 @@ for rel in [
     'src/competition_utils.py',
     'scripts/evaluate_lora_adapter.py',
     'scripts/hf_job_train_v90.py',
-    'scripts/build_v217_short_answer_dataset.py',
 ]:
     py_path = ROOT / rel
     print('compile_target =', py_path, 'exists =', py_path.exists(), flush=True)
@@ -1358,4 +1357,5 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
+
 
