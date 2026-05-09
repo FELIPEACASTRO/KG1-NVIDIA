@@ -478,8 +478,16 @@ for label, adapter_path in [('V194', V194_ADAPTER), ('V217', V217_ADAPTER), ('IN
     print(label, 'target_parameters =', cfg.get('target_parameters'), flush=True)
     if sorted(cfg.get('target_modules') or []) != sorted(EXPECTED_V194_TARGET_MODULES):
         raise RuntimeError(f'{label} target_modules mismatch')
-    if sorted(cfg.get('target_parameters') or []) != sorted(EXPECTED_V194_TARGET_PARAMETERS):
-        raise RuntimeError(f'{label} target_parameters mismatch')
+    target_parameters = cfg.get('target_parameters') or []
+    if label in {'V194', 'V217'}:
+        if sorted(target_parameters) != sorted(EXPECTED_V194_TARGET_PARAMETERS):
+            raise RuntimeError(f'{label} target_parameters mismatch')
+    elif sorted(target_parameters) != sorted(EXPECTED_V194_TARGET_PARAMETERS):
+        print(
+            label,
+            'target_parameters differ from V194/V217; accepting PEFT checkpoint INIT format.',
+            flush=True,
+        )
     weights_path = adapter_path / 'adapter_model.safetensors'
     with safe_open(str(weights_path), framework='pt', device='cpu') as handle:
         tensor_count = len(handle.keys())
