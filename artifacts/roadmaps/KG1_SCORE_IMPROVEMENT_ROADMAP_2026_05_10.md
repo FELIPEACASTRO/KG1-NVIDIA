@@ -1867,6 +1867,20 @@ Resultado do gate:
 - `ok=true`.
 - notebook SHA256: `bc5aec2d763c58ec873511644ea91f1e7908e547181072fa659f154e932e13e3`.
 
+Validacao HF Jobs:
+
+- Job HF: `6a00bc9aaff1cd33e8f32dfb`.
+- Flavor: `cpu-basic`.
+- Status: `COMPLETED`.
+- Duracao total observada: `8s`; runtime: `3s`.
+- Comandos executados no remoto:
+  - clone da branch `v230-v226-complementarity`;
+  - `py_compile` dos scripts V240/V239 bridge;
+  - `python scripts/upload_runtime_artifacts_to_hf.py --self-test`;
+  - `python scripts/run_v239_from_hf_bridge.py --self-test`;
+  - `python scripts/notebook_release_gate.py notebooks/KG1_V240_HF_ARTIFACT_BRIDGE_COLAB.ipynb`.
+- Resultado: self-tests `ok` e notebook gate `ok=true`.
+
 Proximo passo:
 
 - Executar V240 no Colab.
