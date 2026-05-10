@@ -2581,3 +2581,58 @@ Proximo passo:
 
 - O executor foi ampliado para aceitar `KG1_ADAPTER_SUBFOLDERS` e `KG1_CANDIDATE_NAMES`, permitindo avaliar `final`, `checkpoint-4` e `checkpoint-2` no mesmo job com um unico model-load.
 - Reexecutar `final`, `checkpoint-4` e `checkpoint-2` juntos com o prompt suffix corrigido para separar falha de adapter de falha de wrapper.
+
+## V245 HF weak eval trio - resultado final da linha V244
+
+Job:
+
+- HF Job: `6a00e5b3317220dbbd1a76be`.
+- URL: `https://huggingface.co/jobs/felipesp1983/6a00e5b3317220dbbd1a76be`.
+- Run ID: `v245-h200-weak-v244-trio-20260510T200718Z`.
+- Repo commit: `10865607892d53ceac6b6a1885b13db7bf31b7c7`.
+- Upload dos resultados:
+  `https://huggingface.co/felipesp1983/kg1-nemotron-lora-v243-safe-equation-fixtures/commit/664ae944125e4f55d4d5c8d0bb02895ba72564cf`.
+- Path:
+  `evals/v245-h200-weak-v244-trio-20260510T200718Z/`.
+
+Gates:
+
+- H200 OK.
+- Commit esperado OK.
+- Weak CSV hash e row contract OK.
+- Prompt suffix corrigido preservado no config:
+  `\nReturn only one line: \boxed{answer}. No reasoning. No explanation.`
+- Tres adapters validados:
+  - `final`;
+  - `checkpoint-4`;
+  - `checkpoint-2`.
+- Todos com `r=32`, `lora_alpha=32`, pesos `4,259,063,856` bytes.
+- Upload limpo: `adapter_snapshot` nao foi publicado nos resultados do trio.
+
+Resultados weak:
+
+| Candidate | Overall | bit_manipulation | equation_transform | Truncation |
+|---|---:|---:|---:|---:|
+| `v244_final_adapter` | `18/315 = 5.71%` | `9/160 = 5.63%` | `9/155 = 5.81%` | `0` |
+| `v244_checkpoint_4` | `18/315 = 5.71%` | `9/160 = 5.63%` | `9/155 = 5.81%` | `0` |
+| `v244_checkpoint_2` | `19/315 = 6.03%` | `10/160 = 6.25%` | `9/155 = 5.81%` | `0` |
+
+Decisao:
+
+- Linha V244 reprovada.
+- Nao fazer full eval.
+- Nao fazer packaging.
+- Nao fazer Kaggle submit.
+- Nao continuar treino longo partindo desses checkpoints.
+
+Diagnostico objetivo:
+
+- O problema nao era so o prompt suffix; a execucao corrigida preservou o newline e continuou em ~6%.
+- As predicoes baixadas mostram respostas plausiveis mas quase sempre erradas, com frequencias altas de payloads como `00000000`, `10000000`, simbolos isolados e respostas curtas repetidas.
+- Isso indica regressao/degradacao real ou incompatibilidade de continuidade do adapter V244, nao truncation.
+
+Proximo passo:
+
+- Encerrar a linha V244.
+- Voltar para rota P0 do roadmap: mineracao deterministica/DSL dos miss-packs e fixtures por familia, antes de novo treino.
+- Qualquer novo treino HF deve partir de um adapter/baseline que ja prove weak ACC perto do V226 (`191/315`) ou entao deve passar primeiro por uma avaliacao weak curta; nao repetir smoke train sem weak gate intermediario.
