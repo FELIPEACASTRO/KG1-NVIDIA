@@ -870,3 +870,42 @@ Decisao de negocio:
 - Prioridade maxima: aumentar `equation_transform` de `55` para pelo menos `60` sem reduzir `bit_manipulation` abaixo de `136`.
 - O caminho mais promissor e solver/verifier, nao treino bruto.
 - Treino novo so deve acontecer depois que V234 provar que os novos dados/regras atacam misses reais, com hash, dedupe e leakage guard.
+
+## V234 implementado - external intel triage executavel
+
+Status:
+
+- Notebook criado: `notebooks/KG1_V234_EXTERNAL_INTEL_TRIAGE_COLAB.ipynb`.
+- Script criado: `scripts/analyze_v234_external_intel_triage.py`.
+- Builder criado: `scripts/build_v234_external_intel_triage_colab.py`.
+- Gate atualizado: `scripts/notebook_release_gate.py` agora valida o contrato especifico V234.
+
+URL Colab:
+
+- `https://colab.research.google.com/github/FELIPEACASTRO/KG1-NVIDIA/blob/v230-v226-complementarity/notebooks/KG1_V234_EXTERNAL_INTEL_TRIAGE_COLAB.ipynb`
+
+O que o V234 faz:
+
+- Confirma que todos os achados do roadmap tem destino explicito.
+- Revalida paridade local do extractor `\boxed{}` com os casos criticos da metric publica.
+- Materializa os CSVs/JSONs obrigatorios:
+  - `external_metric_parity_report.json`
+  - `kaggle_kernel_triage.csv`
+  - `kaggle_dataset_triage.csv`
+  - `hf_dataset_triage.csv`
+  - `kaggle_model_triage.csv`
+  - `equation_numeric_operator_probe_results.csv`
+  - `bit_boolean_function_probe_results.csv`
+  - `external_adapter_registry_candidates.csv`
+- Bloqueia treino, geracao, scoring, pacote e Kaggle submit.
+
+Resultado do dry run local:
+
+- `coverage.missing_refs=[]`
+- `coverage.refs_without_action_path=[]`
+- `metric_parity.passed=true`
+- Decisao: `external_intel_triage_ready_for_source_download`
+
+Proximo passo depois de executar no Colab:
+
+- Criar o notebook/script de download controlado das fontes com hash, licenca, linha por linha e mapping para miss-pack antes de implementar qualquer solver novo ou avaliar candidatos externos.
