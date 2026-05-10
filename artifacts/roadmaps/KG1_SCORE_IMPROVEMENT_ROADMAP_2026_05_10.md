@@ -1004,3 +1004,193 @@ Proximo passo depois de executar no Colab:
 
 - Se o V235 decidir `manual_source_access_or_license_required_before_download`, resolver credenciais/licencas primeiro.
 - Se decidir `source_access_plan_ready_needs_controlled_download`, criar o downloader V236 que baixa apenas fontes permitidas, registra hash, licenca, row counts e mapping para miss-pack.
+
+## Deep dive de literatura para `bit_manipulation` e `equation_transform` - 2026-05-10
+
+Familias da imagem/weak gate:
+
+| Familia | Linhas avaliadas | Corretas | ACC | Status |
+|---|---:|---:|---:|---|
+| `bit_manipulation` | 160 | 136 | 85.00% | medido |
+| `equation_transform` | 155 | 55 | 35.48% | medido |
+| `OVERALL weak` | 315 | 191 | 60.63% | medido |
+
+Leitura de negocio:
+
+- `bit_manipulation` ja passa o gate minimo de `133/160`, mas a margem real e pequena. Deve virar guardrail, nao foco principal de treino.
+- `equation_transform` e o gargalo: precisa sair de `55/155` para pelo menos `60/155`.
+- Regra operacional: qualquer melhoria em `equation_transform` deve preservar `bit_manipulation>=136/160`, salvo se o weak completo provar `total>=193`, `equation>=60`, `bit>=133`, `trunc<=3`.
+- Hipotese mais forte ja registrada: `equation_transform` numerico esta muito melhor que symbolic/mixed; o ganho de ACC deve mirar symbolic/mixed e operadores customizados, nao apenas aritmetica comum.
+
+### Fontes publicas e literatura tecnica consultadas
+
+Bit-vectors e bit manipulation:
+
+- Z3 Bitvectors: `https://microsoft.github.io/z3guide/docs/theories/Bitvectors/`
+  - Evidencia: Z3 modela semantica precisa de bit-vectors de tamanho fixo, com aritmetica signed/unsigned, literais binarios/hex e operacoes bitwise.
+  - Uso no KG1: representar cada entrada de 8 bits como `BitVec(8)` e validar regras candidatas sobre todos os exemplos do prompt.
+- Z3 BitVector API: `https://z3prover.github.io/api/html/ml/Z3.BitVector.html`
+  - Evidencia: API tem AND, OR, XOR, NOT, shifts, rotates, concat, extract, carry e xor3.
+  - Uso no KG1: cobrir exatamente o vocabulario do enunciado `shift`, `rotate`, `XOR`, `AND`, `OR`, `NOT`, majority/choice via boolean formulas.
+- Component-based synthesis applied to bitvector circuits: `https://www.microsoft.com/en-us/research/publication/component-based-synthesis-applied-to-bitvector-circuits/`
+  - Evidencia: sintese de programas bitvector por biblioteca de componentes + constraints + SMT/CEGIS e adequada para composicoes nao intuitivas de operacoes bitvector.
+  - Uso no KG1: trocar tentativa por LLM por enumerador/CEGIS de DSL pequena, com ranking por simplicidade e verificacao total dos exemplos.
+- SyGuS: `https://www.microsoft.com/en-us/research/publication/syntax-guided-synthesis-2/`
+  - Evidencia: problema combina especificacao semantica, gramatica de candidatos e CEGIS.
+  - Uso no KG1: transformar exemplos `input -> output` em problema PBE-BV; gramatica limitada evita overfit e explosao.
+- Reasoning Gym: `https://github.com/open-thought/reasoning-gym` e `https://arxiv.org/abs/2505.24760`
+  - Evidencia: geradores procedurais e verificadores com reward verificavel; inclui scoring em cascata e dominios de algebra/arithmetic/computation/logic.
+  - Uso no KG1: fonte de fixtures/probes e verifiers, nao treino bruto; especialmente `bitwise_arithmetic` para guardrails.
+
+Equation transform, simbolico e regra por operador:
+
+- SymPy solving: `https://docs.sympy.org/latest/guides/solving/index.html`
+  - Evidencia: SymPy resolve equacoes simbolicas, sistemas, inequacoes, diofantinas e tambem numericamente.
+  - Uso no KG1: apenas para subclasse com equacao algebraica clara e variavel unica; deve abstain em prompt ambiguidade.
+- SymPy simplify: `https://docs.sympy.org/latest/modules/simplify/simplify.html`
+  - Evidencia: `simplify()` nao e uma operacao bem definida; docs recomendam usar funcoes especificas quando o algoritmo depende de uma transformacao concreta.
+  - Uso no KG1: nao usar `simplify()` generico como solver final; usar `factor`, `expand`, `cancel`, `together`, `solve`, `solveset`, `nsimplify` com contratos especificos.
+- egg / equality saturation: `https://arxiv.org/abs/2004.03082`
+  - Evidencia: e-graphs representam muitas expressoes equivalentes e sao usados em otimizacao, reescrita e program synthesis.
+  - Uso no KG1: para symbolic/mixed, inferir e validar transformacoes por regras, sem comprometer cedo com uma sequencia de reescritas.
+- Rewrite Rule Inference Using Equality Saturation: `https://arxiv.org/abs/2108.10436`
+  - Evidencia: e-graphs podem ajudar a inferir regras menores e mais gerais a partir de enumeracao de termos.
+  - Uso no KG1: minerar regras de `equation_transform` a partir dos exemplos do prompt e dos traces, depois aceitar somente se todos os exemplos forem satisfeitos.
+
+Fontes KG1/Kaggle/HF relevantes localizadas:
+
+- HF `andy279/nemotron-reasoning-challenge`
+  - Gated, Apache-2.0, SFT KG1; `49,290` train, `1,165` validation, inclui `399` transformation unsolved.
+  - Uso: P0 apos aceite manual/licenca/hash; nao SFT bruto antes de dedupe/conflict/leakage.
+- HF `andy279/nemotron-reasoning-challenge-raw-traces`
+  - Gated, Apache-2.0; inclui solver-guided transformation e bit traces.
+  - Uso: P0 para extrair regras/probes e nao respostas cegas.
+- Kaggle `kishanvavdara/nemotron-reasoning-traj`
+  - CLI listou `40764029` bytes, `349` downloads, `25` votos.
+  - Busca web indicou `9,500` rows, `bit_manipulation=1,602`, `equation_symbolic=823`, `equation_numeric=732`.
+  - Uso: error analysis e candidate traces apos hash/licenca.
+- Kaggle `optiminist/equation-eda-operator-operation-84-solve-rate`
+  - CLI confirmou kernel com `25` votos.
+  - Uso: P0 para decompor equation por operador/operacao; nao assumir `84%` sem reproduzir localmente.
+- Kaggle `konbu17/bit-manipulation-solver-cot-generator`
+  - CLI confirmou kernel com `39` votos.
+  - Uso: P0 para DSL bitvector/boolean por bit; nao usar COT longo como saida final.
+- Kaggle `konbu17/bit-manipulation-cot-dataset`
+  - CLI listou `624941` bytes, `70` downloads, `5` votos.
+  - Uso: fixtures e testes de bit guardrail, nao treino direto.
+- Kaggle `konbu17/bit-manipulation-synthetic-cot`
+  - CLI listou `895101` bytes, `58` downloads, `4` votos.
+  - Uso: probes de solver bit, nao treino direto.
+- Kaggle Huikang:
+  - `huikang/end-to-end-finetuning-for-lb-0-85`: `257` votos.
+  - `huikang/tinker-submission-notebook`: `454` votos.
+  - `huikang/adapter-validation-notebook`: `272` votos.
+  - Uso: metodo/validacao/adapter registry; nenhum score entra sem weak eval local.
+
+### Plano tecnico para melhorar `bit_manipulation`
+
+Objetivo: manter `136/160` ou melhorar sem tocar no baseline quando o solver nao tiver prova.
+
+Implementacao recomendada:
+
+1. Parser robusto de prompt:
+   - Extrair todos os pares `8-bit -> 8-bit`.
+   - Confirmar largura fixa `8`.
+   - Extrair target.
+   - Abort se houver qualquer par malformado, largura diferente ou resposta fora de `[01]{8}`.
+2. DSL pequena e verificavel:
+   - Termos atomicos: `x`, `~x`, `shl(x,k)`, `lshr(x,k)`, `rotl(x,k)`, `rotr(x,k)`, constantes/masks para `k in 0..7`.
+   - Combinadores binarios: `AND`, `OR`, `XOR`, `NAND`, `NOR`, `XNOR`.
+   - Combinadores ternarios: `majority(a,b,c)`, `choice(a,b,c)`, `xor3(a,b,c)`.
+   - Pos-processamento permitido: identidade, NOT, XOR mask, reverse bits, optional zero/sign handling se aparecer no prompt.
+3. Busca:
+   - Primeiro enumeracao direta ate profundidade baixa.
+   - Depois CEGIS/SMT se houver multiplas hipoteses ou regra mais profunda.
+   - Ranking por menor AST, menor numero de constantes, menor numero de operacoes exoticas.
+4. Aceitacao:
+   - Uma regra so pode sobrescrever baseline se acertar 100% dos exemplos do prompt.
+   - Se houver duas regras com outputs diferentes para o target e mesmo score nos exemplos, abstain.
+   - Se o baseline ja estava correto, nao sobrescrever sem prova unica e output igual.
+5. Uso esperado:
+   - `bit_manipulation` e guardrail: usar solver para detectar regressao e recuperar poucos misses, nao como roteador agressivo.
+
+### Plano tecnico para melhorar `equation_transform`
+
+Objetivo: ganhar pelo menos `+5` em `equation_transform`, com foco em symbolic/mixed.
+
+Classes a separar antes de qualquer treino:
+
+1. Numeric operator transform:
+   - Exemplos do tipo `AA op BB = OUT`.
+   - Candidatos: aritmetica direta, aritmetica com reversao de operandos, reversao de resultado, concatenacao, zero padding, sinal customizado, modulo/base, soma/subtracao por digito, produto por digito.
+   - Verificar por operador: regras de `+`, `-`, `*`, `/`, `%`, `?`, `@`, `&` podem ser independentes.
+2. Symbolic/mixed token transform:
+   - Operandos e saidas podem conter simbolos, aspas, pipes e caracteres nao alfanumericos.
+   - Candidatos: permutacao de tokens, reversao por lado, concatenacao esquerda/direita, substituicao por tabela, shift em alfabeto observado, operador como selector.
+   - Nao tentar SymPy nesse subtipo.
+3. Algebraic equation:
+   - Usar SymPy somente quando houver uma equacao algebrica unica e variavel unica.
+   - Exigir substituicao verificada e resposta normalizada.
+4. Constraint/cryptarithm:
+   - Usar DFS/Z3 sobre digitos ou simbolos com unicidade se o prompt indicar mapeamento.
+   - Aceitar apenas solucao unica.
+
+Aceitacao de override:
+
+- A regra deve explicar todos os exemplos do prompt.
+- A regra deve gerar target unico.
+- O output deve passar extractor `\boxed{}` corrigido, preservando zeros a esquerda e simbolos literais.
+- Se a resposta envolve braces, pipes, aspas ou caracteres especiais, usar extractor balanceado, nao regex simples.
+- Se os exemplos por operador forem poucos e houver multiplas regras, abstain.
+
+### Prompt OpenRouter recomendado se a chave for disponibilizada
+
+OpenRouter nao foi chamado neste runtime porque `OPENROUTER_API_KEY` estava ausente. Se a chave estiver disponivel em ambiente seguro, usar o prompt abaixo em modelos fortes e pedir saida JSON, nunca decisao livre:
+
+```text
+You are auditing a Kaggle NVIDIA Nemotron KG1 solver plan. Do not speculate.
+Use only evidence from the provided weak rows, prompt examples, known public sources,
+and formal methods literature. We need improve equation_transform from 55/155 to >=60
+while preserving bit_manipulation >=136/160.
+
+Tasks:
+1. Classify each equation_transform miss into numeric operator, symbolic/mixed token transform,
+   algebraic equation, cryptarithm/constraint, extractor issue, or unknown.
+2. For each class, propose only deterministic solvers with acceptance predicates.
+3. For bit_manipulation, propose a finite 8-bit DSL and ambiguity/abstention checks.
+4. Return JSON with: class, evidence, proposed_solver, required_inputs, acceptance_tests,
+   regression_risks, expected_gain_upper_bound, and reasons_to_abstain.
+5. Do not claim any ACC gain unless it is computable from supplied rows.
+```
+
+### Roadmap executavel apos esta revisao
+
+P0 sem novas credenciais:
+
+1. Evoluir V233 para `V236_LOCAL_SOLVER_DSL_PROBES` usando apenas miss-packs e dados locais ja versionados.
+2. Implementar `bitvector_dsl_probe` como guardrail com abstention.
+3. Implementar `equation_operator_dsl_probe` com regras por operador e verificacao total dos exemplos.
+4. Implementar `symbolic_token_transform_probe` para permutation/concat/reverse/substitution em `equation_transform`.
+5. Rodar contra `v230_v226_complementarity_equation_miss_pack.csv` e `bit_miss_pack.csv`.
+6. Promover para eval somente se houver `>=5` overrides deployable em equation e zero regressao bit.
+
+P0 com acao humana:
+
+1. Configurar credenciais Kaggle/HF no Colab sem imprimir segredo.
+2. Resolver licenca/metadata/hash das fontes bloqueadas no V235.
+3. Criar V236 downloader apenas se `license_gate.direct_ingestion_allowed=true` para as fontes requeridas.
+4. Baixar primeiro:
+   - `metric/nvidia-nemotron-metric`
+   - `optiminist/equation-eda-operator-operation-84-solve-rate`
+   - `konbu17/bit-manipulation-solver-cot-generator`
+   - `andy279/nemotron-reasoning-challenge-raw-traces`
+   - `kishanvavdara/nemotron-reasoning-traj`
+5. Gerar hash, row count, schema, family counts, dedupe, conflict check e leakage guard antes de qualquer ingestao.
+
+Nao fazer:
+
+- Nao trocar adapter pelo titulo `LB 0.85` sem weak eval identico.
+- Nao treinar em COT bruto longo que historicamente elevou truncation.
+- Nao usar dados externos sem licenca/hash.
+- Nao aceitar `equation_transform` medido por extractor regex simples.
+- Nao reduzir `bit_manipulation` abaixo de `136/160` em nome de ganho hipotetico.
