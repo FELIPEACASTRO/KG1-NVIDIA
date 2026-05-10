@@ -297,14 +297,6 @@ V230_REQUIRED_FILES = [
     "scripts/notebook_release_gate.py",
     "src/competition_utils.py",
 ]
-RELEASE_NOTEBOOK_RELS = [
-    V218_NOTEBOOK_REL,
-    V219_NOTEBOOK_REL,
-    V220_NOTEBOOK_REL,
-    V221_NOTEBOOK_REL,
-    V230_NOTEBOOK_REL,
-]
-
 V230_REQUIRED_SNIPPETS = {
     "cpu-only purpose": "V230 CPU-only path does not install vLLM",
     "diagnostic mode explicit": "V230_DIAGNOSTIC_MODE",
@@ -341,6 +333,46 @@ V230_REQUIRED_SNIPPETS = {
     "hard submit false": "ALLOW_KAGGLE_SUBMIT = False",
     "no package submit": "No package and no Kaggle submit can be created in V230.",
 }
+
+V231_NOTEBOOK_REL = "notebooks/KG1_V231_MISS_PACK_MINING_COLAB.ipynb"
+V231_COLAB_URL = (
+    "https://colab.research.google.com/github/FELIPEACASTRO/KG1-NVIDIA/blob/"
+    "v230-v226-complementarity/notebooks/KG1_V231_MISS_PACK_MINING_COLAB.ipynb"
+)
+V231_GITHUB_URL = (
+    "https://github.com/FELIPEACASTRO/KG1-NVIDIA/blob/"
+    "v230-v226-complementarity/notebooks/KG1_V231_MISS_PACK_MINING_COLAB.ipynb"
+)
+V231_REQUIRED_FILES = [
+    "scripts/analyze_v231_miss_packs.py",
+    "scripts/build_v231_miss_pack_mining_colab.py",
+    "scripts/notebook_release_gate.py",
+]
+V231_REQUIRED_SNIPPETS = {
+    "cpu-only purpose": "V231 is CPU-only miss-pack mining",
+    "known row contract": "bf055e3b9ebce79d4bfc9e48bce5a305b1d83da882f14afddec80d6afaba5fff",
+    "expected row contract env": "KG1_V231_EXPECTED_SHARED_ROW_CONTRACT_SHA256",
+    "v230 manifest resolver": "resolve_latest_v230_manifest",
+    "v230 artifact metadata logs": "v230_output_artifact_meta",
+    "miner script": "scripts/analyze_v231_miss_packs.py",
+    "miner self test": "v231_miss_pack_mining_self_test.log",
+    "equation taxonomy output": "equation_miss_taxonomy_csv",
+    "equation rules output": "equation_solver_candidate_rules_json",
+    "bit guardrail output": "bit_guardrail_candidates_json",
+    "hard train false": "RUN_TRAIN = False",
+    "hard full false": "RUN_FULL_IF_GATE = False",
+    "hard submit false": "ALLOW_KAGGLE_SUBMIT = False",
+    "no package submit": "No package and no Kaggle submit can be created in V231.",
+}
+
+RELEASE_NOTEBOOK_RELS = [
+    V218_NOTEBOOK_REL,
+    V219_NOTEBOOK_REL,
+    V220_NOTEBOOK_REL,
+    V221_NOTEBOOK_REL,
+    V230_NOTEBOOK_REL,
+    V231_NOTEBOOK_REL,
+]
 
 
 @dataclass
@@ -1061,6 +1093,110 @@ def audit_v230_v226_complementarity_contract(path: Path, notebook: dict[str, Any
             add(findings, "error", "v230_builder_notebook_compare_failed", repr(exc))
 
 
+def audit_v231_miss_pack_mining_contract(path: Path, notebook: dict[str, Any], text: str, findings: list[Finding]) -> None:
+    """Strict release gate for the V231 CPU-only miss-pack mining notebook."""
+
+    if repo_rel(path) != V231_NOTEBOOK_REL:
+        return
+
+    code_cells = [cell for cell in notebook.get("cells", []) if cell.get("cell_type") == "code"]
+    if len(code_cells) != 7:
+        add(findings, "error", "v231_code_cell_count", f"expected 7 code cells, found {len(code_cells)}")
+    outputs_total = sum(len(cell.get("outputs", []) or []) for cell in code_cells)
+    if outputs_total:
+        add(findings, "error", "v231_notebook_has_outputs", f"notebook must be committed clean; outputs={outputs_total}")
+
+    if V231_COLAB_URL not in text:
+        add(findings, "error", "v231_colab_url_mismatch", V231_COLAB_URL)
+    if V231_GITHUB_URL not in text:
+        add(findings, "error", "v231_github_url_mismatch", V231_GITHUB_URL)
+
+    for name, snippet in V231_REQUIRED_SNIPPETS.items():
+        if snippet not in text:
+            add(findings, "error", "v231_required_snippet_missing", name)
+
+    for rel_path in V231_REQUIRED_FILES:
+        if not (ROOT / rel_path).exists():
+            add(findings, "error", "v231_required_file_missing", rel_path)
+
+    analyzer = ROOT / "scripts" / "analyze_v231_miss_packs.py"
+    analyzer_text = analyzer.read_text(encoding="utf-8") if analyzer.exists() else ""
+    analyzer_snippets = {
+        "self test ok": "v231_miss_pack_mining_self_test=ok",
+        "equation route classifier": "classify_equation_route",
+        "bit route classifier": "classify_bit_route",
+        "pairwise gain aggregation": "aggregate_pairwise_gains",
+        "miss pack validation": "validate_miss_pack",
+        "equation rules schema": "kg1_v231_equation_solver_candidate_rules_v1",
+        "bit guardrail schema": "kg1_v231_bit_guardrail_candidates_v1",
+        "manifest schema": "kg1_v231_miss_pack_mining_manifest_v1",
+        "no override acceptance": "No override without a local proof/verifier.",
+        "keep v226 fallback": "When parser/verifier is ambiguous, abstain and keep V226 baseline.",
+        "shared row contract arg": "--expected-shared-row-contract-sha256",
+        "required v230 outputs": "baseline_miss_hits_csv",
+    }
+    for name, snippet in analyzer_snippets.items():
+        if snippet not in analyzer_text:
+            add(findings, "error", "v231_analyzer_contract_missing", name)
+    if analyzer.exists():
+        completed = subprocess.run(
+            [
+                sys.executable,
+                str(analyzer),
+                "--self-test",
+                "--v230-analysis-manifest-json",
+                "dummy",
+                "--output-dir",
+                "dummy",
+            ],
+            cwd=str(ROOT),
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            check=False,
+            timeout=120,
+        )
+        if completed.returncode != 0:
+            add(
+                findings,
+                "error",
+                "v231_analyzer_self_test_failed",
+                f"returncode={completed.returncode}; tail={completed.stdout[-4000:]}",
+            )
+        elif "v231_miss_pack_mining_self_test=ok" not in completed.stdout:
+            add(findings, "error", "v231_analyzer_self_test_missing_ok", completed.stdout[-4000:])
+
+    builder = ROOT / "scripts" / "build_v231_miss_pack_mining_colab.py"
+    builder_text = builder.read_text(encoding="utf-8") if builder.exists() else ""
+    for snippet in V231_REQUIRED_SNIPPETS.values():
+        if snippet not in builder_text:
+            add(findings, "error", "v231_builder_required_snippet_missing", snippet)
+    builder_snippets = {
+        "idempotent cell ids": "_CELL_COUNTER = 0",
+        "known row contract constant": "EXPECTED_SHARED_ROW_CONTRACT_SHA256",
+        "latest v230 resolver": "resolve_latest_v230_manifest",
+        "v230 output preflight": "required_outputs = [",
+        "miner command": "analyze_v231_miss_packs.py",
+        "submission artifact scan": "blocked_artifacts",
+        "final manifest": "v231_miss_pack_mining_final_manifest.json",
+    }
+    for name, snippet in builder_snippets.items():
+        if snippet not in builder_text:
+            add(findings, "error", "v231_builder_contract_missing", name)
+    if builder.exists():
+        try:
+            spec = importlib.util.spec_from_file_location("kg1_v231_builder_gate", builder)
+            if spec is None or spec.loader is None:
+                raise RuntimeError("could not load builder module spec")
+            module = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(module)
+            generated = module.build_notebook()
+            if generated != notebook:
+                add(findings, "error", "v231_builder_notebook_mismatch", "builder output differs from committed notebook")
+        except Exception as exc:
+            add(findings, "error", "v231_builder_notebook_compare_failed", repr(exc))
+
+
 def audit_notebook(path: Path) -> NotebookAudit:
     findings: list[Finding] = []
     rel = repo_rel(path)
@@ -1089,6 +1225,7 @@ def audit_notebook(path: Path) -> NotebookAudit:
         audit_v220_public_adapter_probe_contract(path, notebook, text, findings)
         audit_v221_candidate_registry_contract(path, notebook, text, findings)
         audit_v230_v226_complementarity_contract(path, notebook, text, findings)
+        audit_v231_miss_pack_mining_contract(path, notebook, text, findings)
     for snippet in GENERIC_REQUIRED_SNIPPETS:
         if is_training_or_eval_notebook(text) and snippet not in text:
             add(findings, "error", "generic_training_snippet_missing", snippet)
