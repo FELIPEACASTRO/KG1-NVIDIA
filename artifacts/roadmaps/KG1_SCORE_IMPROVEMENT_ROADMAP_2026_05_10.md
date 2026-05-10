@@ -2930,9 +2930,10 @@ Pre-check local:
   - `bit_manipulation`: `144`;
   - `equation_transform`: `140`.
 - Hashes locais:
-  - train JSONL: `0dd74f29e779cd5877fe27ad4127e59f0874feaff63be6f8894207fcc00182c1`;
-  - val JSONL: `207d22e330ea858fcc2c01be1678b48cac29cfb4e1c59978731434c734736f80`;
+  - train JSONL: `81c8624b7e0a330a720e22b5e4fc254b238a7c618e1c0cdcdea3cf1fd96d9f41`;
+  - val JSONL: `43dd9f5fbb6864e85e60b1a6cc2ad7060a667e914a67dda2aa3a22771efb4783`;
   - blocked weak IDs CSV: `5392c44fda7e0522910735c9a8b560d9c504a136d6141ed25091f4c858c3d4ce`.
+- Escrita JSON/JSONL ajustada para LF deterministico entre Windows e Linux/HF.
 
 Decisao:
 
