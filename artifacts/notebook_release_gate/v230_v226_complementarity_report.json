@@ -1,4 +1,5 @@
 {
+  "findings": [],
   "notebook_count": 1,
   "notebooks": [
     {
@@ -7,7 +8,7 @@
       "markdown_cells": 1,
       "ok": true,
       "path": "notebooks/KG1_V230_V226_COMPLEMENTARITY_COLAB.ipynb",
-      "sha256": "818842ce76b8fd89929f3b89a84dc102e7bc3675248892cfcf0720de2647dd80"
+      "sha256": "a6f902b949d589d68daf30522b9dfb7a2a73a6791ac0fdf7e9b59cffb0e35321"
     }
   ],
   "ok": true,

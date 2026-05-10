@@ -137,6 +137,7 @@ V229_ANALYSIS_MANIFEST_JSON = pathlib.Path(os.environ.get(
 ))
 EXPECTED_REPO_COMMIT = os.environ.get('KG1_V230_EXPECTED_REPO_COMMIT', '').strip()
 EXPECTED_SHARED_ROW_CONTRACT_SHA256 = os.environ.get('KG1_V230_EXPECTED_SHARED_ROW_CONTRACT_SHA256', '').strip()
+V230_DIAGNOSTIC_MODE = os.environ.get('KG1_V230_DIAGNOSTIC_MODE', '1').strip().lower() in {'1', 'true', 'yes', 'on'}
 
 V194_ADAPTER = pathlib.Path('/content/drive/MyDrive/KG1_NVIDIA_V202D/init_adapter_v194_rank19_build/adapter')
 V217_ADAPTER = pathlib.Path('/content/drive/MyDrive/KG1_NVIDIA_V217/output_v217_short_answer_rescue/train_v217_shortans_lr1e8_s16/final_adapter')
@@ -181,7 +182,7 @@ EXPECTED_V194_TARGET_PARAMETERS = ['mlp.experts.gate_up_proj', 'mlp.experts.down
 
 RUN_TRAIN = os.environ.get('KG1_V230_RUN_TRAIN', '0').strip().lower() in {'1', 'true', 'yes', 'on'}
 RUN_ANALYSIS = os.environ.get('KG1_V230_RUN_ANALYSIS', '1').strip().lower() not in {'0', 'false', 'no', 'off'}
-ALLOW_V226_SUMMARY_SYNTHESIS = os.environ.get('KG1_V230_ALLOW_V226_SUMMARY_SYNTHESIS', '1').strip().lower() in {'1', 'true', 'yes', 'on'}
+ALLOW_V226_SUMMARY_SYNTHESIS = os.environ.get('KG1_V230_ALLOW_V226_SUMMARY_SYNTHESIS', '0').strip().lower() in {'1', 'true', 'yes', 'on'}
 RUN_FULL_IF_GATE = False
 ALLOW_KAGGLE_SUBMIT = False
 
@@ -205,6 +206,7 @@ print('RUN_ID =', RUN_ID, flush=True)
 print('ANALYSIS_OUT =', ANALYSIS_OUT, flush=True)
 print('EXPECTED_REPO_COMMIT =', EXPECTED_REPO_COMMIT, flush=True)
 print('EXPECTED_SHARED_ROW_CONTRACT_SHA256 =', EXPECTED_SHARED_ROW_CONTRACT_SHA256, flush=True)
+print('V230_DIAGNOSTIC_MODE =', V230_DIAGNOSTIC_MODE, flush=True)
 print('V221_BATCH_SUMMARY_JSON =', V221_BATCH_SUMMARY_JSON, flush=True)
 print('V226_BATCH_SUMMARY_JSON =', V226_BATCH_SUMMARY_JSON, flush=True)
 print('V229_ANALYSIS_MANIFEST_JSON =', V229_ANALYSIS_MANIFEST_JSON, flush=True)
@@ -241,6 +243,14 @@ if not RUN_ANALYSIS:
     raise RuntimeError('V230 complementarity analysis is mandatory; RUN_ANALYSIS must stay true.')
 if ALLOW_KAGGLE_SUBMIT:
     raise RuntimeError('Kaggle submission is disabled in V230.')
+if not V230_DIAGNOSTIC_MODE and not EXPECTED_SHARED_ROW_CONTRACT_SHA256:
+    raise RuntimeError('KG1_V230_EXPECTED_SHARED_ROW_CONTRACT_SHA256 is required when V230_DIAGNOSTIC_MODE is false.')
+if not V230_DIAGNOSTIC_MODE and ALLOW_V226_SUMMARY_SYNTHESIS:
+    raise RuntimeError('KG1_V230_ALLOW_V226_SUMMARY_SYNTHESIS must stay false when V230_DIAGNOSTIC_MODE is false.')
+if V230_DIAGNOSTIC_MODE:
+    print('V230 diagnostic mode is not a release or submission authorization.', flush=True)
+    if ALLOW_V226_SUMMARY_SYNTHESIS:
+        print('diagnostic_v226_summary_synthesis_enabled = true', flush=True)
 print('=== V230 CONFIG END ===', flush=True)
 """
         ),
@@ -846,6 +856,8 @@ cmd = [
     '--weak-trunc-max', str(WEAK_MAX_TRUNC_FOR_FULL),
     '--expected-shared-row-contract-sha256', EXPECTED_SHARED_ROW_CONTRACT_SHA256,
 ]
+if not V230_DIAGNOSTIC_MODE:
+    cmd.append('--require-shared-row-contract-sha256')
 run_cmd(cmd, cwd=ROOT, log_path=ANALYSIS_OUT / 'v230_v226_complementarity.log', check=True, heartbeat_s=30, timeout_s=600)
 if not analysis_manifest_path.exists():
     raise FileNotFoundError(analysis_manifest_path)
@@ -912,10 +924,12 @@ final_manifest_path = OUT_ROOT / 'v230_v226_complementarity_final_manifest.json'
 final_manifest = {
     'version': VERSION,
     'run_id': RUN_ID,
+    'v230_diagnostic_mode': V230_DIAGNOSTIC_MODE,
     'repo_branch': REPO_BRANCH,
     'repo_commit': repo_commit,
     'expected_repo_commit': EXPECTED_REPO_COMMIT,
     'expected_shared_row_contract_sha256': EXPECTED_SHARED_ROW_CONTRACT_SHA256,
+    'allow_v226_summary_synthesis': ALLOW_V226_SUMMARY_SYNTHESIS,
     'analysis_complete': True,
     'weak_gate_pass_for_full': weak_gate_pass_for_full,
     'row_level_oracle_gate_pass': row_level_oracle_gate_pass,
@@ -926,6 +940,7 @@ final_manifest = {
         'package': False,
         'kaggle_submit': False,
     },
+    'release_blocked_reason': 'V230 diagnostic mode is not a release or submission authorization.',
     'decision': decision,
     'baseline_summary': analysis_manifest.get('baseline_summary', {}),
     'family_calibration_summary': analysis_manifest.get('family_calibration_summary', []),

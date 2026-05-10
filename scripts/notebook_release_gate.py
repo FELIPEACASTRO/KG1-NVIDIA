@@ -264,6 +264,14 @@ V221_REQUIRED_SNIPPETS = {
 }
 
 V230_NOTEBOOK_REL = "notebooks/KG1_V230_V226_COMPLEMENTARITY_COLAB.ipynb"
+V230_COLAB_URL = (
+    "https://colab.research.google.com/github/FELIPEACASTRO/KG1-NVIDIA/blob/"
+    "v230-v226-complementarity/notebooks/KG1_V230_V226_COMPLEMENTARITY_COLAB.ipynb"
+)
+V230_GITHUB_URL = (
+    "https://github.com/FELIPEACASTRO/KG1-NVIDIA/blob/"
+    "v230-v226-complementarity/notebooks/KG1_V230_V226_COMPLEMENTARITY_COLAB.ipynb"
+)
 V230_REQUIRED_FILES = [
     V218_TRAIN_REL,
     V218_VAL_REL,
@@ -276,6 +284,9 @@ V230_REQUIRED_FILES = [
 
 V230_REQUIRED_SNIPPETS = {
     "cpu-only purpose": "V230 CPU-only path does not install vLLM",
+    "diagnostic mode explicit": "V230_DIAGNOSTIC_MODE",
+    "diagnostic release block": "V230 diagnostic mode is not a release or submission authorization",
+    "v226 synthesis disabled default": "KG1_V230_ALLOW_V226_SUMMARY_SYNTHESIS', '0'",
     "v226 preferred baseline": "v226__v226_best_checkpoint1_observed_191",
     "v226 known weak total": "KNOWN_V226_WEAK_TOTAL = 191",
     "mandatory analysis": "V230 complementarity analysis is mandatory",
@@ -792,6 +803,11 @@ def audit_v230_v226_complementarity_contract(path: Path, notebook: dict[str, Any
     if outputs_total:
         add(findings, "error", "v230_notebook_has_outputs", f"notebook must be committed clean; outputs={outputs_total}")
 
+    if V230_COLAB_URL not in text:
+        add(findings, "error", "v230_colab_url_mismatch", V230_COLAB_URL)
+    if V230_GITHUB_URL not in text:
+        add(findings, "error", "v230_github_url_mismatch", V230_GITHUB_URL)
+
     for name, snippet in V230_REQUIRED_SNIPPETS.items():
         if snippet not in text:
             add(findings, "error", "v230_required_snippet_missing", name)
@@ -809,6 +825,8 @@ def audit_v230_v226_complementarity_contract(path: Path, notebook: dict[str, Any
         "row contract function": "validate_shared_row_contract",
         "row contract hash": "shared_row_contract_sha256",
         "expected row contract cli": "--expected-shared-row-contract-sha256",
+        "required row contract cli": "--require-shared-row-contract-sha256",
+        "required row contract guard": "required_shared_row_contract_sha256",
         "prediction csv string dtype": "pd.read_csv(path, dtype=str, keep_default_na=False)",
         "gate normalized gap": "gate_normalized_gap",
         "family calibration": "family_calibration_summary",
@@ -861,6 +879,9 @@ def audit_v230_v226_complementarity_contract(path: Path, notebook: dict[str, Any
         "v221 nonempty gate": "V221 batch summary has no ok candidates.",
         "preferred v226 correct gate": "Required V226 baseline correct count mismatch",
         "expected row contract cli": "--expected-shared-row-contract-sha256",
+        "required row contract release": "--require-shared-row-contract-sha256",
+        "diagnostic release block": "V230 diagnostic mode is not a release or submission authorization",
+        "synthesis disabled default": "KG1_V230_ALLOW_V226_SUMMARY_SYNTHESIS', '0'",
         "runtime analyzer self test": "v230_analyzer_self_test.log",
         "v229 required": "raise FileNotFoundError(V229_ANALYSIS_MANIFEST_JSON)",
         "relative prediction path": "direct_path = report_json.parent / direct_path",
@@ -937,6 +958,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--all", action="store_true", help="Audit all notebooks under notebooks/ and competent-shamir/notebooks/.")
     parser.add_argument("--changed-from", default="", help="Git ref/sha to diff from.")
     parser.add_argument("--changed-to", default="HEAD", help="Git ref/sha to diff to.")
+    parser.add_argument("--allow-empty", action="store_true", help="Return success when notebook discovery finds no notebooks.")
     parser.add_argument("--output-json", type=Path, default=None)
     return parser.parse_args()
 
@@ -951,10 +973,19 @@ def main() -> int:
         paths = changed_notebooks(args.changed_from or None, args.changed_to)
     paths = [path for path in paths if NOTEBOOK_RE.search(str(path))]
     audits = [audit_notebook(path) for path in paths]
+    top_findings: list[Finding] = []
+    if not audits and not args.allow_empty:
+        add(
+            top_findings,
+            "error",
+            "no_notebooks_selected",
+            "No notebooks were selected for audit. Pass notebook paths, --all, --changed-from, or --allow-empty explicitly.",
+        )
     report = {
         "schema_version": "kg1_notebook_release_gate_v1",
-        "ok": all(audit.ok for audit in audits),
+        "ok": (not top_findings) and all(audit.ok for audit in audits),
         "notebook_count": len(audits),
+        "findings": [finding.__dict__ for finding in top_findings],
         "notebooks": [
             {
                 "path": audit.path,

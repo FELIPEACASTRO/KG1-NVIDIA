@@ -918,6 +918,13 @@ def run_self_test() -> int:
             expect_ok=False,
             expected_message="shared row contract hash mismatch",
         )
+        run_synthetic_cli_case(
+            root,
+            "missing_required_contract_hash",
+            extra_args=["--require-shared-row-contract-sha256"],
+            expect_ok=False,
+            expected_message="--expected-shared-row-contract-sha256 is empty",
+        )
     finally:
         shutil.rmtree(root, ignore_errors=True)
     print("v230_analyzer_self_test=ok", flush=True)
@@ -945,6 +952,7 @@ def main() -> int:
     parser.add_argument("--expected-baseline-correct", type=int, default=191)
     parser.add_argument("--expected-baseline-rows", type=int, default=315)
     parser.add_argument("--expected-shared-row-contract-sha256", default="")
+    parser.add_argument("--require-shared-row-contract-sha256", action="store_true")
     parser.add_argument("--allow-baseline-fallback", action="store_true")
     parser.add_argument("--allow-rescore-mismatch", action="store_true")
     args = parser.parse_args()
@@ -969,9 +977,15 @@ def main() -> int:
     print("expected_baseline_correct =", args.expected_baseline_correct, flush=True)
     print("expected_baseline_rows =", args.expected_baseline_rows, flush=True)
     print("expected_shared_row_contract_sha256 =", args.expected_shared_row_contract_sha256, flush=True)
+    print("required_shared_row_contract_sha256 =", args.require_shared_row_contract_sha256, flush=True)
     print("allow_baseline_fallback =", args.allow_baseline_fallback, flush=True)
     print("allow_rescore_mismatch =", args.allow_rescore_mismatch, flush=True)
     print("thresholds =", json.dumps(thresholds, indent=2, sort_keys=True), flush=True)
+
+    if args.require_shared_row_contract_sha256 and not str(args.expected_shared_row_contract_sha256).strip():
+        raise RuntimeError(
+            "--require-shared-row-contract-sha256 was set but --expected-shared-row-contract-sha256 is empty"
+        )
 
     specs: list[dict[str, str]] = []
     if str(args.v221_batch_summary_json):
@@ -1105,6 +1119,7 @@ def main() -> int:
             "expected_baseline_correct": int(args.expected_baseline_correct),
             "expected_baseline_rows": int(args.expected_baseline_rows),
             "expected_shared_row_contract_sha256": str(args.expected_shared_row_contract_sha256),
+            "required_shared_row_contract_sha256": bool(args.require_shared_row_contract_sha256),
             "allow_baseline_fallback": bool(args.allow_baseline_fallback),
             "allow_rescore_mismatch": bool(args.allow_rescore_mismatch),
         },
