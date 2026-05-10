@@ -2865,3 +2865,22 @@ Interpretacao:
 - O mirror publico confirma que o weak set esta dentro do train publico; usar essas respostas para ajustar regra/modelo e vazamento.
 - O uso permitido e apenas com exclusao explicita dos `315` weak IDs.
 - Como ainda ha `2842` linhas target-family nao weak, a rota possivel sem gated traces e construir um dataset V249 estritamente non-weak, com fixtures de validacao separados e sem usar weak labels para selecao.
+
+Execucao HF V248 confirmada:
+
+- HF Job: `6a00f1e1aff1cd33e8f3302a`.
+- URL: `https://huggingface.co/jobs/felipesp1983/6a00f1e1aff1cd33e8f3302a`.
+- Run ID: `v248-hf-public-mirror-leakage-20260510T205916Z`.
+- Repo commit executado: `c039b7e093cfdca5dbbb7effba60f835d526a7fd`.
+- Upload HF:
+  `https://huggingface.co/datasets/felipesp1983/kg1-nemotron-training/commit/0d134fc36737346c32061ab063ab01eb01db0256`.
+- Path:
+  `runtime_artifacts/v248_public_mirror_leakage_audit/v248-hf-public-mirror-leakage-20260510T205916Z/`.
+- Resultado: igual ao pre-check local.
+
+Proxima acao HF-only:
+
+- V249 deve materializar somente linhas `bit_manipulation` e `equation_transform` do mirror publico com `id` fora do weak set.
+- V249 deve gerar `train.jsonl`, `val.jsonl`, manifest, hashes e CSV de IDs bloqueados.
+- V249 nao deve treinar; e apenas preparo de dados com gates.
+- Antes de treino, precisa comparar V249 contra V217/V226 para evitar repetir dataset/efeito V244.
