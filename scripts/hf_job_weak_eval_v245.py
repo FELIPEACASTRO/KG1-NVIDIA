@@ -292,12 +292,13 @@ def run_eval(args: argparse.Namespace) -> dict[str, Any]:
     )
 
     allow_patterns = [f"{adapter_subfolder}/*"] if adapter_subfolder else ["*"]
+    adapter_cache_dir = Path(env_str("KG1_ADAPTER_CACHE_DIR", "/tmp/kg1_v245_adapter_snapshots")) / run_id
     adapter_root = Path(
         snapshot_download(
             repo_id=adapter_repo,
             repo_type="model",
             allow_patterns=allow_patterns,
-            local_dir=str(output_dir / "adapter_snapshot"),
+            local_dir=str(adapter_cache_dir),
             token=token or None,
         )
     )
@@ -344,7 +345,7 @@ def run_eval(args: argparse.Namespace) -> dict[str, Any]:
         "0",
         "--disable-thinking",
         "--prompt-suffix",
-        env_str("KG1_PROMPT_SUFFIX", DEFAULT_PROMPT_SUFFIX),
+        os.environ.get("KG1_PROMPT_SUFFIX", DEFAULT_PROMPT_SUFFIX),
         "--continue-on-error",
     ]
     run_cmd(cmd, cwd=ROOT, log_path=output_dir / "v245_hf_weak_eval.log", timeout_s=env_int("KG1_EVAL_TIMEOUT_S", 1800))
@@ -372,6 +373,8 @@ def run_eval(args: argparse.Namespace) -> dict[str, Any]:
     if env_bool("KG1_UPLOAD_TO_HF", True):
         api = HfApi(token=token or None)
         path_in_repo = env_str("KG1_OUTPUT_PATH_IN_REPO", f"evals/{run_id}")
+        final_manifest["path_in_repo"] = path_in_repo
+        final_manifest_path.write_text(json.dumps(final_manifest, indent=2, sort_keys=True), encoding="utf-8")
         print("upload_folder_repo =", output_repo, flush=True)
         print("upload_folder_path_in_repo =", path_in_repo, flush=True)
         upload_info = api.upload_folder(
@@ -380,9 +383,9 @@ def run_eval(args: argparse.Namespace) -> dict[str, Any]:
             folder_path=str(output_dir),
             path_in_repo=path_in_repo,
             commit_message=f"Add {run_id} weak eval outputs",
+            ignore_patterns=["adapter_snapshot/**"],
         )
         final_manifest["upload_info"] = str(upload_info)
-        final_manifest["path_in_repo"] = path_in_repo
         final_manifest_path.write_text(json.dumps(final_manifest, indent=2, sort_keys=True), encoding="utf-8")
         print("upload_info =", upload_info, flush=True)
 

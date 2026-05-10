@@ -2531,3 +2531,53 @@ Proximo passo automatico HF:
   - equation `>=60`;
   - bit `>=133`;
   - truncation `<=3`.
+
+## V245 HF weak eval - primeira medicao do adapter V244 final
+
+Job:
+
+- Tentativa A100: `6a00e301aff1cd33e8f32f80`.
+  - Cancelada porque ficou em `SCHEDULING` sem logs.
+- Execucao H200: `6a00e3e1317220dbbd1a76bc`.
+  - URL: `https://huggingface.co/jobs/felipesp1983/6a00e3e1317220dbbd1a76bc`.
+  - Run ID: `v245-h200-weak-final-20260510T195932Z`.
+  - Commit repo: `d4578bb098b82561ea402041691d8830ead3d4d1`.
+
+Gates confirmados antes da avaliacao:
+
+- GPU: `NVIDIA H200`, `139.80 GiB`.
+- vLLM import OK: `vllm==0.20.1`.
+- Weak CSV:
+  - rows `315`;
+  - `bit_manipulation=160`;
+  - `equation_transform=155`;
+  - SHA256 `85da758e14d57ea40270de5747f98726a0ad0b6d1795bff7dd46183005e0f9b6`;
+  - contract hash `bf055e3b9ebce79d4bfc9e48bce5a305b1d83da882f14afddec80d6afaba5fff`.
+- Adapter final:
+  - repo `felipesp1983/kg1-nemotron-lora-v243-safe-equation-fixtures/final`;
+  - `adapter_model.safetensors` `4,259,063,856` bytes;
+  - `r=32`;
+  - `lora_alpha=32`.
+
+Resultado medido:
+
+- Candidate: `v244_final_adapter`.
+- Overall weak: `18/315 = 5.71%`.
+- `bit_manipulation`: `9/160 = 5.63%`.
+- `equation_transform`: `9/155 = 5.81%`.
+- truncation: `0`.
+- Gate: reprovado.
+
+Interpretacao:
+
+- O adapter final V244 nao e utilizavel como candidato de weak/full eval.
+- A queda e grande demais para justificar full eval ou pacote.
+- Possivel fator operacional identificado: o executor V245 removia o `\n` inicial do prompt suffix porque usava `env_str(...).strip()`. Isso foi corrigido em `scripts/hf_job_weak_eval_v245.py` para preservar o prompt suffix default com newline, igual ao padrao V229/V230.
+- O primeiro upload de resultados subiu tambem `adapter_snapshot` sob `evals/`, o que era ruido de 4.28GB. O snapshot duplicado foi removido do HF repo no commit:
+  `https://huggingface.co/felipesp1983/kg1-nemotron-lora-v243-safe-equation-fixtures/commit/f95e0749b14a27dae020b7cb9eaf3a58dcc323cd`.
+- O script foi ajustado para baixar o adapter fora do `output_dir` e ignorar qualquer `adapter_snapshot/**` no upload.
+
+Proximo passo:
+
+- Reexecutar `final` uma vez com o prompt suffix corrigido para separar falha de adapter de falha de wrapper.
+- Se continuar muito abaixo do baseline, avaliar `checkpoint-2` e `checkpoint-4` com o mesmo executor corrigido.
