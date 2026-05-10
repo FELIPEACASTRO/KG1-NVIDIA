@@ -363,13 +363,23 @@ def infer_v226_name(report_path, report):
     adapter = str(report.get('inputs', {}).get('adapter') or report.get('adapter_dir') or '')
     label = str(report.get('label') or report_path.stem.replace('_eval_report', ''))
     correct = int(report.get('correct', 0))
-    lowered = adapter.lower() + ' ' + label.lower() + ' ' + str(report_path).lower()
-    if 'checkpoint-1' in lowered or 'checkpoint_1' in lowered or 'checkpoint1' in lowered:
-        return 'v226_best_checkpoint1_observed_' + str(correct)
-    if 'checkpoint-2' in lowered or 'checkpoint_2' in lowered or 'checkpoint2' in lowered:
-        return 'v226_checkpoint_2_observed_' + str(correct)
-    if 'checkpoint-3' in lowered or 'checkpoint_3' in lowered or 'checkpoint3' in lowered:
-        return 'v226_checkpoint_3_observed_' + str(correct)
+
+    def name_from_text(text):
+        lowered = str(text).lower()
+        if 'checkpoint-1' in lowered or 'checkpoint_1' in lowered or 'checkpoint1' in lowered:
+            return 'v226_best_checkpoint1_observed_' + str(correct)
+        if 'checkpoint-2' in lowered or 'checkpoint_2' in lowered or 'checkpoint2' in lowered:
+            return 'v226_checkpoint_2_observed_' + str(correct)
+        if 'checkpoint-3' in lowered or 'checkpoint_3' in lowered or 'checkpoint3' in lowered:
+            return 'v226_checkpoint_3_observed_' + str(correct)
+        return ''
+
+    adapter_name = name_from_text(adapter)
+    if adapter_name:
+        return adapter_name
+    fallback_name = name_from_text(label + ' ' + str(report_path))
+    if fallback_name:
+        return fallback_name
     return 'v226_report_' + label
 
 def synthesize_batch_summary_from_reports(output_json, source_roots):
@@ -469,7 +479,6 @@ compile_targets = [
     ROOT / 'src/competition_utils.py',
     ROOT / 'scripts/analyze_v230_v226_complementarity.py',
     ROOT / 'scripts/notebook_release_gate.py',
-    ROOT / 'scripts/evaluate_lora_adapters_batch.py',
 ]
 for py_path in compile_targets:
     print('compile_target =', py_path, 'exists =', py_path.exists(), flush=True)
