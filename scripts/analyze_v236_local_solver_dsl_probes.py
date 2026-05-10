@@ -22,6 +22,12 @@ from fractions import Fraction
 from pathlib import Path
 from typing import Any
 
+from analyze_v238_alice_parser_probes import (
+    numeric_rules as alice_numeric_rules,
+    parse_alice_prompt,
+    parse_numeric_token as parse_alice_numeric_token,
+)
+
 
 EXPECTED_ROW_CONTRACT_SHA256 = "bf055e3b9ebce79d4bfc9e48bce5a305b1d83da882f14afddec80d6afaba5fff"
 EQUATION_AUDIT_COLUMNS = [
@@ -292,6 +298,10 @@ def strip_ticks(text: str) -> str:
 
 
 def split_examples_and_query(prompt: str) -> tuple[list[tuple[str, str]], str, str]:
+    alice_examples, alice_query, alice_status = parse_alice_prompt(prompt)
+    if alice_examples and alice_query:
+        return alice_examples, alice_query, alice_status
+
     marker_match = re.search(r"Now,\s*determine\s+the\s+result\s+for:\s*(.+)$", prompt, flags=re.I | re.S)
     if not marker_match:
         marker_match = re.search(r"Now,\s*(?:solve|answer|write|compute)[^:]*:\s*(.+)$", prompt, flags=re.I | re.S)
@@ -312,6 +322,12 @@ def split_examples_and_query(prompt: str) -> tuple[list[tuple[str, str]], str, s
         rhs = strip_ticks(rhs)
         if lhs and rhs:
             examples.append((lhs, rhs))
+    if not examples:
+        for match in re.finditer(r"(?P<lhs>\S+)\s*=\s*(?P<rhs>\S+)", before):
+            lhs = strip_ticks(match.group("lhs"))
+            rhs = strip_ticks(match.group("rhs"))
+            if lhs and rhs:
+                examples.append((lhs, rhs))
     return examples, query, "ok"
 
 
@@ -321,6 +337,8 @@ def classify_equation(prompt: str, examples: list[tuple[str, str]], query: str) 
     algebraic_equation, algebraic_reason = extract_single_algebraic_equation(prompt, query)
     if algebraic_equation:
         return "algebraic_equation", "single_equation_parseable;" + algebraic_reason
+    if examples and parse_alice_numeric_token(query) and all(parse_alice_numeric_token(lhs) for lhs, _ in examples):
+        return "numeric_operator_transform", "alice_numeric_binary_operator_signature"
     if re.search(r"\d+\s*[+\-*/%]\s*\d+", example_query_text):
         return "numeric_operator_transform", "numeric_binary_operator_signature"
     if examples and (
@@ -439,6 +457,53 @@ def digitwise_add_mod10(a: int, b: int) -> str | None:
 
 
 def numeric_operator_probe(examples: list[tuple[str, str]], query: str) -> dict[str, Any]:
+    alice_query = parse_alice_numeric_token(query)
+    if alice_query is not None and all(parse_alice_numeric_token(lhs) for lhs, _ in examples):
+        query_op = alice_query[1]
+        same_op: list[tuple[tuple[int, str, int], str]] = []
+        for lhs, rhs in examples:
+            expr = parse_alice_numeric_token(lhs)
+            if expr is not None and expr[1] == query_op:
+                same_op.append((expr, normalize_answer(rhs)))
+        if not same_op:
+            return {
+                "probe_name": "numeric_operator_dsl_probe",
+                "deployable": True,
+                "status": "abstain",
+                "prediction": "",
+                "proof": f"no_examples_for_query_operator={query_op!r}",
+            }
+        candidates: list[tuple[str, str]] = []
+        for name, func in alice_numeric_rules().items():
+            outputs: list[str] = []
+            ok = True
+            for expr, _ in same_op:
+                value = func(expr[0], expr[2])
+                if value is None:
+                    ok = False
+                    break
+                outputs.append(normalize_answer(value))
+            if ok and outputs == [rhs for _, rhs in same_op]:
+                prediction = func(alice_query[0], alice_query[2])
+                if prediction is not None:
+                    candidates.append((name, str(prediction)))
+        unique_predictions = sorted(set(prediction for _, prediction in candidates))
+        if len(unique_predictions) != 1:
+            return {
+                "probe_name": "numeric_operator_dsl_probe",
+                "deployable": True,
+                "status": "abstain",
+                "prediction": "",
+                "proof": f"candidate_rule_count={len(candidates)} unique_prediction_count={len(unique_predictions)}",
+            }
+        return {
+            "probe_name": "numeric_operator_dsl_probe",
+            "deployable": True,
+            "status": "candidate",
+            "prediction": unique_predictions[0],
+            "proof": "alice_rules=" + ",".join(name for name, _ in candidates),
+        }
+
     parsed_examples = [(parse_numeric_expr(lhs), normalize_answer(rhs)) for lhs, rhs in examples]
     parsed_query = parse_numeric_expr(query)
     if not parsed_examples or parsed_query is None or any(item[0] is None for item in parsed_examples):
@@ -774,18 +839,25 @@ def self_test() -> int:
         contracts = root / "contracts.json"
         equation_rows = [
             {
+                "id": "alice_numeric_add",
+                "family": "equation_transform",
+                "expected_answer": "134",
+                "baseline_prediction": "35",
+                "prompt": "In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:\n72)27 = 99\n26#48 = 22\n42#45 = 3\n24#14 = 10\nNow, determine the result for: 94)40",
+            },
+            {
                 "id": "eq_symbolic",
                 "family": "equation_transform",
                 "expected_answer": "dc",
                 "baseline_prediction": "xx",
-                "prompt": "In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples: `ab = cd` `aa = cc` Now, determine the result for: `ba`",
+                "prompt": "In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:\nab = cd\naa = cc\nNow, determine the result for: ba",
             },
             {
                 "id": "eq_numeric",
                 "family": "equation_transform",
                 "expected_answer": "7",
                 "baseline_prediction": "6",
-                "prompt": "Below are a few examples: `2 + 3 = 5` `4 + 1 = 5` Now, determine the result for: `3 + 4`",
+                "prompt": "Below are a few examples:\n2+3 = 5\n4+1 = 5\nNow, determine the result for: 3+4",
             },
             {
                 "id": "eq_algebraic",
@@ -830,10 +902,10 @@ def self_test() -> int:
             output_dir=out_dir,
             label="v236_local_solver_dsl_probes",
             expected_shared_row_contract_sha256=EXPECTED_ROW_CONTRACT_SHA256,
-            equation_target_gain=3 if import_sympy() is not None else 2,
+            equation_target_gain=4 if import_sympy() is not None else 3,
         )
         manifest = run_analysis(args)
-        expected_verified = 3 if import_sympy() is not None else 2
+        expected_verified = 4 if import_sympy() is not None else 3
         if manifest["probe_counts"]["deployable_verified_equation_overrides"] != expected_verified:
             raise AssertionError(f"expected {expected_verified} verified equation overrides in self-test")
         if manifest["probe_counts"]["bit_guardrail_signature_verified_rows"] != 1:
