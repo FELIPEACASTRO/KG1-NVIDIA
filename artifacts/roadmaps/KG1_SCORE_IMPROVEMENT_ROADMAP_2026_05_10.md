@@ -747,3 +747,126 @@ Nova decisao possivel:
 - `bit_guardrail_probe_promising`
 - `external_adapter_requires_weak_eval`
 - `external_sources_no_actionable_gain`
+
+## Double check OpenRouter e matriz de destino dos achados - 2026-05-10
+
+Auditoria externa executada:
+
+- OpenRouter API key validada via `OPENROUTER_API_KEY` no ambiente de usuario local.
+- Endpoint validado: `https://openrouter.ai/api/v1/models`, resposta HTTP 200.
+- Modelo usado para segunda opiniao: `openai/gpt-4.1-mini`.
+- Prompt enviado: inventario de achados + este roadmap. Os anexos brutos privados nao foram enviados.
+- Resultado objetivo: `missing_refs=[]`.
+- Ajuste exigido pelo double check: alguns itens estavam no roadmap, mas com caminho de uso implicito demais. A matriz abaixo torna explicito se cada achado ja foi implementado, sera usado no V234, sera triado futuramente, ou fica como baixa prioridade/nao acionavel.
+
+### Matriz implementado agora
+
+| Achado | Uso | Status |
+|---|---|---|
+| `metric/nvidia-nemotron-metric` | Paridade de extractor/metric publica | Usado agora |
+| `extract_boxed_answers` | Corrigir extracao local de `\boxed{}` com braces aninhados/literal `}` | Implementado agora em `src/competition_utils.py` |
+
+Regra:
+
+- Nenhuma medicao nova de `equation_transform` deve ser aceita sem esse extractor corrigido.
+- Se um notebook futuro recalcular score usando extractor antigo, o gate deve rejeitar ou registrar `metric_parity_failed`.
+
+### Matriz V234 obrigatoria
+
+Esses itens devem ser usados diretamente no V234, com hash, logs e saidas auditaveis:
+
+| Achado | Uso no V234 | Saida esperada |
+|---|---|---|
+| `metric/nvidia-nemotron-metric` | Verificar paridade de metric/extractor | `external_metric_parity_report.json` |
+| `optiminist/equation-eda-operator-operation-84-solve-rate` | Probar solver numerico de equation por Pre-Op/Mid-Op/Post-Op | `equation_numeric_operator_probe_results.csv` |
+| `konbu17/bit-manipulation-solver-cot-generator` | Probar solver bit por funcoes booleanas por output bit | `bit_boolean_function_probe_results.csv` |
+| `mohankrishnathalla/nemotron-6-puzzle-types-decoded-rule-solvers` | Validar taxonomy e solvers por familia | `kaggle_kernel_triage.csv` |
+| `huikang/end-to-end-finetuning-for-lb-0-85` | Extrair criterios de treino/mask loss/corpus, sem copiar treino | `kaggle_kernel_triage.csv` |
+| `huikang/tinker-submission-notebook` | Extrair adapter registry e metric parity | `external_adapter_registry_candidates.csv` |
+| `andy279/nemotron-reasoning-challenge` | Comparar dataset oficial/gated com weak miss-pack quando autorizado | `kaggle_dataset_triage.csv` ou `hf_dataset_triage.csv` |
+| `andy279/nemotron-reasoning-challenge-raw-traces` | Minerar traces para regras/verifiers, nao SFT bruto | `kaggle_dataset_triage.csv` ou `hf_dataset_triage.csv` |
+| `kishanvavdara/nemotron-reasoning-traj` | Triar trajectories externas contra misses V230 | `kaggle_dataset_triage.csv` |
+| `kienngx/nemotron-30b-competition-trainingdata-cot-labels` | Triar CoT/labels com dedupe e leakage guard | `kaggle_dataset_triage.csv` |
+| `konbu17/bit-manipulation-cot-dataset` | Gerar probes/fixtures de bit solver | `bit_boolean_function_probe_results.csv` |
+| `konbu17/bit-manipulation-synthetic-cot` | Gerar probes/fixtures de bit solver | `bit_boolean_function_probe_results.csv` |
+| `jasonkung98/NVIDIA-Nemotron-Model-Reasoning-Challenge` | Mirror/audit de prompt/answer | `hf_dataset_triage.csv` |
+| `justus27/reasoning-gym-bitwise-arithmetic` | Probe auxiliar de bitwise guardrail | `bit_boolean_function_probe_results.csv` |
+
+Gates V234:
+
+- `missing_external_source_hash` se qualquer fonte baixada nao tiver hash registrado.
+- `external_source_license_unknown` se licenca nao estiver clara.
+- `weak_miss_pack_overlap_missing` se o achado nao mapear para linhas do miss-pack.
+- `solver_probe_no_gain` se nao houver ganho mensuravel por familia.
+- `bit_guardrail_regression` se bit cair abaixo de `136`.
+- `equation_target_not_met` se equation nao ganhar pelo menos `+5` no pacote alvo.
+
+### Matriz de triagem futura obrigatoria
+
+Esses itens nao sao implementacao imediata, mas devem ser catalogados no V234 e decididos por evidencia:
+
+| Achado | Caminho futuro | Criterio de uso |
+|---|---|---|
+| `johnnyhyland/nvidia-nemotron-sft-grpo-colab-faster` | P2 apos solver/verifier local | Usar somente se verifiers locais ja existirem |
+| `kalyankkr/all-6-puzzle-types-decoded-sft-training-data` | P2 taxonomy/SFT format audit | Usar para formato/taxonomy, nao treino bruto |
+| `dgxchen/training-with-unsloth-to-achieve-0-85-lb` | P2 receita Unsloth | Nao usar adapter sem novo weak eval, pois V221 local foi pior |
+| `hammadfarooq470/think-twice-self-correcting-reasoning` | P3 self-correction | Usar somente se houver ganho local comprovado |
+| `anhtuan299/blackboard-expert-agent-assembly-solving-technique` | P3 inspiracao TIR/multi-agent | Nao entra em pipeline KG1 sem prova local |
+| `ryanholbrook/nvidia-nemotron-submission-demo` | Catalogar baseline de submissao | Usar so como sanity check de formato |
+| `dennisfong/nvidia-nemotron-sfttrainer-training` | Catalogar receita SFT | Exigir hash, licenca e dedupe |
+| `kienngx/nvidia-nemotron-training-cot-labels` | Cruzar com dataset Kienngx | Exigir leakage guard |
+| `kienngx/nvidia-nemotron-trained-models-submission` | Adapter/model triage | Exigir weak 315 rows local |
+| `asalhi/tinker-adapter-to-ready-to-submit-adapter` | Converter/formato adapter | Usar so para compatibilidade, nao score |
+| `huikang/adapter-validation-notebook` | Validacao adapter | Incorporar checks uteis ao gate se concretos |
+| `kienngx/nvidia-nemotron-training-copy-run-instantly` | Receita replicavel | Baixa prioridade, risco de duplicacao |
+| `mayukh18/unsloth-sft-full-data-training` | Receita Unsloth | Exigir dedupe/leakage before use |
+| `llkh0a/nemotron-unsloth-sft-training-3-30-2` | Receita Unsloth | Exigir dedupe/leakage before use |
+| `newduck/nvidia-nemotron-soft-balanced-sampling-sft` | Balanced sampling | Avaliar se resolve `equation_transform` sem perder bit |
+| `konbu17/nemotron-tong-style-cot-sft-updated-v2` | CoT style | Usar so como estilo/verifier, nao treino bruto |
+| `pearpn25/bit-cot-85-1364-sample` | Bit CoT sample | Cruzar com bit solver fixtures |
+| `kimberleyduran/solver-verified-cryptarithm-cot-v2-dataset` | Solver-verified CoT idea | Usar conceito de verificacao, nao familia direta |
+| `mohamedamr992/easy-loading-of-nemotron-3` | Loading reference | Baixo impacto, usar se loader quebrar |
+| `bloodymonday/eda-problem-families` | Family EDA | Comparar taxonomy se houver divergencia |
+| `vickymaan/alice-puzzle-solver` | Solver reference | Fora das duas familias alvo, baixa prioridade |
+| `nctuan/nvidia-nemotron-reasoning-challenge` | Mirror audit | Comparar hash/linhas com mirrors |
+| `mohammedtanvir/nemotron-reasoning-traces` | Trace triage | Usar somente se mapear para weak misses |
+| `kevpan096/nemotron-reasoning-competition` | Dataset mirror/triage | Baixa prioridade ate origem ser clara |
+| `sebmontreal/nvidia-nemotron-model-reasoning-challenge` | Mirror audit | Baixa prioridade, provavel mirror |
+| `harshmali0403/nvidia-nemotron-model-reasoning-challenge` | Mirror audit | Baixa prioridade, provavel mirror |
+| `vsnihal/nvidia-nemotron-model-reasoning-challenge-01` | Mirror audit | Baixa prioridade, provavel mirror |
+| `nvidia/Puzzle-KD-Nemotron-Post-Training-Dataset-v2` | Contexto generic KD | Nao usar para V234 salvo evidencias KG1 |
+| `GaryNENE/nemotron-nano-8b-reasoning-lora` | Receita 8B | Nao compativel direto com 30B |
+| `AdaptKey/AdaptKey-Nemotron-30b` | Model/adaptador telecom | Nao relevante para KG1 atual |
+| `Taurine511/nvidia-nemotron-model-reasoning-challenge` | Verificar existencia manual | HF API retornou not found; nao usar ate confirmar |
+
+### Matriz de modelos/adapters externos
+
+Nenhum desses entra direto em submissao. Todos exigem weak eval local completo:
+
+| Modelo/adaptador | Caminho futuro | Gate minimo |
+|---|---|---|
+| `kienngx/nemotron-nano-30b-trained` | Adapter candidate registry | Weak 315 rows + no-regression por familia |
+| `atahalam/nvidia-nemotron-model-reasoning-30b-a3b-lora-0-80` | Adapter candidate registry | Validar se titulo 0.80 reproduz localmente |
+| `charancherrychowdary/nemotron-lora-adapter-v1` | Adapter candidate registry | Validar config/tensores/base model |
+| `sluitel/nemotron-70b-reasoning-lora` | Nao compativel direto | Usar somente como referencia metodologica |
+| `nathangaskell/llama-3-1-nemotron-nano-8b` | Nao compativel direto | Usar somente como referencia metodologica |
+| `metric/nemotron-3-nano-30b-a3b-bf16` | Referencia de base/metric path | Nao e novo candidato de score |
+
+### Artefatos obrigatorios para provar uso futuro
+
+O proximo notebook/script que consumir esse roadmap deve produzir:
+
+- `external_metric_parity_report.json`: prova de paridade de extractor.
+- `kaggle_kernel_triage.csv`: uma linha por kernel, com status `used_now`, `future_triage`, `rejected`, ou `not_actionable`.
+- `kaggle_dataset_triage.csv`: uma linha por dataset Kaggle, com hash, licenca, linhas e decisao.
+- `hf_dataset_triage.csv`: uma linha por dataset HF, com gated status, licenca, linhas e decisao.
+- `kaggle_model_triage.csv`: uma linha por modelo/adaptador, com base model, config e gate.
+- `equation_numeric_operator_probe_results.csv`: resultado dos probes `equation_transform`.
+- `bit_boolean_function_probe_results.csv`: resultado dos probes `bit_manipulation`.
+- `external_adapter_registry_candidates.csv`: adapters que merecem weak eval.
+
+Decisao de negocio:
+
+- Prioridade maxima: aumentar `equation_transform` de `55` para pelo menos `60` sem reduzir `bit_manipulation` abaixo de `136`.
+- O caminho mais promissor e solver/verifier, nao treino bruto.
+- Treino novo so deve acontecer depois que V234 provar que os novos dados/regras atacam misses reais, com hash, dedupe e leakage guard.
