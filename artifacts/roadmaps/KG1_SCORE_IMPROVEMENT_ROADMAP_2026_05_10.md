@@ -683,11 +683,11 @@ Hugging Face datasets/modelos validados pela API:
 - `andy279/nemotron-reasoning-challenge`: gated, Apache-2.0, `49,290` train, `1,165` validation, relevante.
 - `andy279/nemotron-reasoning-challenge-raw-traces`: gated, Apache-2.0, raw teacher traces, relevante.
 - `jasonkung98/NVIDIA-Nemotron-Model-Reasoning-Challenge`: CSV, `9.5k` train rows + `3` test rows, Apache-2.0, pode servir como mirror/audit de prompt/answer.
-- `justus27/reasoning-gym-bitwise-arithmetic`: pequeno, parquet, bitwise arithmetic, pode virar probe de guardrail.
 - `nvidia/Puzzle-KD-Nemotron-Post-Training-Dataset-v2`: grande e generico; baixa prioridade para o gap atual, mas util como contexto de post-training.
 - `GaryNENE/nemotron-nano-8b-reasoning-lora`: modelo LoRA 8B, nao compativel diretamente com o base 30B; usar apenas como referencia de receita/dados.
 - `AdaptKey/AdaptKey-Nemotron-30b`: gated, telecom LoRA; nao relevante para KG1 ACC.
 - `Taurine511/nvidia-nemotron-model-reasoning-challenge`: apareceu na busca web, mas a API HF retornou `not found`; tratar como instavel/deletado ate verificacao manual.
+- `justus27/reasoning-gym-bitwise-arithmetic`: rebaixado em 2026-05-10; busca local Kaggle kernels/datasets nao encontrou slug valido. Nao usar ate haver URL verificavel.
 
 ### Novos modelos Kaggle a triagem
 
@@ -750,14 +750,12 @@ Nova decisao possivel:
 
 ## Double check OpenRouter e matriz de destino dos achados - 2026-05-10
 
-Auditoria externa executada:
+Registro de auditoria e correcao de reproducibilidade:
 
-- OpenRouter API key validada via `OPENROUTER_API_KEY` no ambiente de usuario local.
-- Endpoint validado: `https://openrouter.ai/api/v1/models`, resposta HTTP 200.
-- Modelo usado para segunda opiniao: `openai/gpt-4.1-mini`.
-- Prompt enviado: inventario de achados + este roadmap. Os anexos brutos privados nao foram enviados.
-- Resultado objetivo: `missing_refs=[]`.
-- Ajuste exigido pelo double check: alguns itens estavam no roadmap, mas com caminho de uso implicito demais. A matriz abaixo torna explicito se cada achado ja foi implementado, sera usado no V234, sera triado futuramente, ou fica como baixa prioridade/nao acionavel.
+- Correcao 2026-05-10: uma versao anterior desta secao afirmava que `OPENROUTER_API_KEY` tinha sido validada localmente e que o endpoint `/api/v1/models` respondeu HTTP 200. O double check atual nao reproduziu essa chamada e outras secoes deste roadmap registram `OPENROUTER_API_KEY` ausente no ambiente local. Portanto, essa afirmacao fica rebaixada para registro historico nao reprodutivel, nao evidencia operacional.
+- As evidencias OpenRouter aceitas neste roadmap sao apenas os JSONs anexados pelo usuario e as fontes primarias verificadas separadamente por web/HF/Kaggle CLI.
+- Qualquer uso futuro de OpenRouter como evidencia operacional deve salvar em manifest: `prompt_sha256`, `response_sha256`, `model`, `request_id` quando disponivel, `http_status`, `created_at_utc`, `has_api_key=true` e caminho do JSON bruto.
+- Ajuste exigido pelo double check: alguns itens estavam no roadmap, mas com caminho de uso implicito demais. A matriz abaixo torna explicito se cada achado ja foi implementado, sera usado no V234/V236, sera triado futuramente, ou fica como baixa prioridade/nao acionavel.
 
 ### Matriz implementado agora
 
@@ -790,7 +788,10 @@ Esses itens devem ser usados diretamente no V234, com hash, logs e saidas audita
 | `konbu17/bit-manipulation-cot-dataset` | Gerar probes/fixtures de bit solver | `bit_boolean_function_probe_results.csv` |
 | `konbu17/bit-manipulation-synthetic-cot` | Gerar probes/fixtures de bit solver | `bit_boolean_function_probe_results.csv` |
 | `jasonkung98/NVIDIA-Nemotron-Model-Reasoning-Challenge` | Mirror/audit de prompt/answer | `hf_dataset_triage.csv` |
-| `justus27/reasoning-gym-bitwise-arithmetic` | Probe auxiliar de bitwise guardrail | `bit_boolean_function_probe_results.csv` |
+
+Rebaixado apos double check:
+
+- `justus27/reasoning-gym-bitwise-arithmetic`: nao encontrado via `kaggle kernels list` nem `kaggle datasets list` em busca exata/local. Removido da matriz obrigatoria ate existir URL/slug verificavel.
 
 Gates V234:
 
@@ -998,7 +999,6 @@ Fontes obrigatorias ainda bloqueadas:
 - `kienngx/nemotron-30b-competition-trainingdata-cot-labels`
 - `konbu17/bit-manipulation-cot-dataset`
 - `konbu17/bit-manipulation-synthetic-cot`
-- `justus27/reasoning-gym-bitwise-arithmetic`
 
 Proximo passo depois de executar no Colab:
 
@@ -1282,3 +1282,56 @@ Atualizacao P0 para V236:
    - `bit_manipulation >= 136/160` preferencialmente, ou `>=133/160` apenas se o gate total completo passar;
    - `truncated <= 3`;
    - nenhum ganho medido com extractor regex simples.
+
+## V236 implementado - local solver DSL probes
+
+Implementacao adicionada em 2026-05-10:
+
+- Script: `scripts/analyze_v236_local_solver_dsl_probes.py`.
+- Builder: `scripts/build_v236_local_solver_dsl_probes_colab.py`.
+- Notebook: `notebooks/KG1_V236_LOCAL_SOLVER_DSL_PROBES_COLAB.ipynb`.
+- Colab: `https://colab.research.google.com/github/FELIPEACASTRO/KG1-NVIDIA/blob/v230-v226-complementarity/notebooks/KG1_V236_LOCAL_SOLVER_DSL_PROBES_COLAB.ipynb`.
+
+Escopo:
+
+- CPU-only.
+- Consome o manifest V232 e os workitems:
+  - `equation_solver_workitems_jsonl`;
+  - `bit_guardrail_workitems_jsonl`;
+  - `acceptance_matrix_csv`;
+  - `solver_contracts_json`.
+- Nao treina, nao gera modelo, nao roda scoring completo, nao empacota, nao baixa payload externo e nao submete ao Kaggle.
+
+Saidas obrigatorias:
+
+- `v236_local_solver_dsl_probes_equation_subtype_audit.csv`;
+- `v236_local_solver_dsl_probes_equation_solver_probe_results.csv`;
+- `v236_local_solver_dsl_probes_bit_guardrail_probe_results.csv`;
+- `v236_local_solver_dsl_probes_equation_probe_summary.csv`;
+- `v236_local_solver_dsl_probes_manifest.json`.
+
+Probes iniciais:
+
+- `symbolic_char_map_probe`: deployable apenas quando todos os exemplos tem mesmo comprimento, mapeamento caractere-a-caractere consistente, query totalmente coberta e predicao unica.
+- `reverse_token_probe`: deployable apenas quando todos os exemplos provam reversao simples.
+- `numeric_operator_dsl_probe`: testa somente regras conservadoras `direct_arithmetic`, `reverse_result_arithmetic`, `reverse_operands_arithmetic`, `digitwise_add_mod10`; abstain em ambiguidade.
+- `bitvector_prompt_signature_guardrail`: nao sobrescreve resposta; apenas confirma assinatura de prompt bitvector e escopo de operadores permitidos para o guardrail.
+
+Validacoes ja executadas localmente:
+
+- `python -m py_compile scripts/analyze_v236_local_solver_dsl_probes.py`
+- `python scripts/analyze_v236_local_solver_dsl_probes.py --self-test`
+- `python -m py_compile scripts/build_v236_local_solver_dsl_probes_colab.py`
+- `python scripts/build_v236_local_solver_dsl_probes_colab.py`
+- `python scripts/notebook_release_gate.py notebooks/KG1_V236_LOCAL_SOLVER_DSL_PROBES_COLAB.ipynb`
+
+Resultado do gate:
+
+- `ok=true`
+- notebook SHA256: `be80f4ca59097b6aa964e734cfc8186dc1b922df99d1062640451c5ea13731ee`
+
+Proximo passo:
+
+- Executar o V236 no Colab.
+- Se `deployable_verified_equation_overrides >= 5` e `bit_guardrail_signature_verified_rows` cobrir os workitems sem override incorreto, criar apenas entao um notebook separado de rescue measurement.
+- Se V236 decidir `continue_local_solver_development`, abrir `equation_subtype_audit.csv` e expandir somente os subtipos com parser exato. Nenhuma avaliacao ou pacote deve ser feito antes disso.
