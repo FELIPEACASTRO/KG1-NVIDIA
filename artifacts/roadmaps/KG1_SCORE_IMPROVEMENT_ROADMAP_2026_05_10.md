@@ -3039,3 +3039,37 @@ Interpretacao:
 - O V249 e tecnicamente treinavel, mas nao e totalmente novo: `939/2842` linhas ja existem no V217 por prompt+answer.
 - O ganho esperado de treino deve vir dos `1903` exemplos novos e de uma mistura mais cuidadosa, nao de simplesmente repetir V217.
 - Proxima acao HF-only: executar V250 no HF, subir manifest e, se passar, criar um treino smoke muito curto com gate fraco antes de qualquer H200 longo.
+
+Execucao HF V250 confirmada:
+
+- Primeiro job: `6a00f5b4317220dbbd1a76f6`.
+  - Resultado: falhou antes da tokenizacao porque `jinja2` nao estava instalado no container CPU.
+  - Correcao operacional: rerun com `jinja2` no setup do job. Sem custo GPU.
+- Job valido: `6a00f5ecaff1cd33e8f33044`.
+- URL: `https://huggingface.co/jobs/felipesp1983/6a00f5ecaff1cd33e8f33044`.
+- Run ID: `v250-hf-v249-tokenization-gate-20260510T211631Z`.
+- Repo commit executado: `5e9dbe546e9dd579d3b4e312b7643ed1f43c2cfa`.
+- Upload HF folder:
+  `https://huggingface.co/datasets/felipesp1983/kg1-nemotron-training/commit/2ff0c9acbceca9ae4ad74688a4e9b61e34d229ea`.
+- Upload HF manifest refresh:
+  `https://huggingface.co/datasets/felipesp1983/kg1-nemotron-training/commit/94df99e4ce002dca1cf8c0d81689f8e1db5cd623`.
+- Path:
+  `runtime_artifacts/v250_v249_tokenization_gate/v250-hf-v249-tokenization-gate-20260510T211631Z/`.
+- Manifest remoto verificado:
+  `runtime_artifacts/v250_v249_tokenization_gate/v250-hf-v249-tokenization-gate-20260510T211631Z/v250_v249_tokenization_gate_manifest.json`.
+- Resultado remoto:
+  - train tokenized rows: `2558`;
+  - validation tokenized rows: `284`;
+  - train offset masks: `2558`;
+  - validation offset masks: `284`;
+  - fallback masks: `0`;
+  - prompt truncated: `0`;
+  - token max: `324`;
+  - prompt+answer overlap total vs V217: `939`;
+  - prompt+answer novel vs V217: `1903`.
+
+Status:
+
+- V250 passou.
+- Permite apenas proximo smoke GPU curto, nao um treino longo direto.
+- O smoke deve ter `MAX_STEPS` baixo, upload de checkpoints, weak eval imediato e bloqueio se nao houver melhora sobre V226 191/315.
