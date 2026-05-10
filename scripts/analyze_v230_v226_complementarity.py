@@ -60,8 +60,18 @@ def safe_name(value: str) -> str:
 def parse_bool(value: object) -> bool:
     if isinstance(value, bool):
         return value
+    if isinstance(value, (int, float)) and not pd.isna(value):
+        if value in (0, 0.0):
+            return False
+        if value in (1, 1.0):
+            return True
+        raise ValueError(f"unsupported boolean numeric value: {value!r}")
     text = str(value).strip().lower()
-    return text in {"1", "true", "yes", "y", "t"}
+    if text in {"1", "1.0", "true", "yes", "y", "t"}:
+        return True
+    if text in {"0", "0.0", "false", "no", "n", "f", "", "nan"}:
+        return False
+    raise ValueError(f"unsupported boolean text value: {value!r}")
 
 
 def as_int(value: object, default: int = 0) -> int:
@@ -83,6 +93,8 @@ def resolve_report_predictions(report_path: Path) -> Path:
     output_path = report.get("outputs", {}).get("predictions_csv", "")
     if output_path:
         path = Path(output_path)
+        if not path.is_absolute():
+            path = report_path.parent / path
         if path.exists():
             return path
         raise FileNotFoundError(f"report predictions_csv does not exist: {path}")
@@ -162,10 +174,18 @@ def load_predictions(spec: dict[str, str], allow_rescore_mismatch: bool = False)
     if duplicate_ids:
         raise RuntimeError(f"{path} has duplicate ids after string normalization: {duplicate_ids}")
     family_col = first_existing_column(out, ["type", "task_type", "family"])
+    derived_family = out["prompt"].map(classify_puzzle).map(canonical_family)
     if family_col:
         out["family"] = out[family_col].map(canonical_family)
+        family_mismatch = int((out["family"] != derived_family).sum())
+        if family_mismatch:
+            sample = out.loc[out["family"] != derived_family, ["id", family_col, "prompt"]].head(5).to_dict(orient="records")
+            raise RuntimeError(
+                f"{path} has {family_mismatch} rows where declared family disagrees with prompt classifier: "
+                + json.dumps(sample, sort_keys=True)
+            )
     else:
-        out["family"] = out["prompt"].map(classify_puzzle).map(canonical_family)
+        out["family"] = derived_family
     out = out[out["family"].isin(WEAK_FAMILIES)].copy()
     out["answer"] = out["answer"].astype(str)
     out["prompt"] = out["prompt"].astype(str)
@@ -483,12 +503,12 @@ def simulate_routers(
         add_strategy(f"single::{candidate}", {str(row_id): candidate for row_id in base["id"].astype(str)}, True)
 
     add_strategy(
-        "family_best_any",
+        "weak_tuned_family_best_any",
         {str(item.id): family_best_any.get(str(item.family), baseline) for item in base.itertuples(index=False)},
         True,
     )
     add_strategy(
-        "family_no_loss_vs_baseline",
+        "family_aggregate_non_regression_vs_baseline",
         {str(item.id): family_no_loss.get(str(item.family), baseline) for item in base.itertuples(index=False)},
         True,
     )
@@ -598,10 +618,10 @@ def choose_decision(
     if len(deployable_pass):
         best = deployable_pass.iloc[0].to_dict()
         return {
-            "decision": "deployable_router_passed_weak_gate_confirm_separately",
+            "decision": "weak_tuned_family_router_passed_weak_gate_confirm_separately",
             "best_candidate": best.get("strategy"),
             "reason": f"correct={as_int(best.get('correct'))}; eq={as_int(best.get('equation_transform_correct'))}; bit={as_int(best.get('bit_manipulation_correct'))}; truncated={as_int(best.get('truncated'))}",
-            "next_action": "Run a separate confirmation/full-eval notebook for the deployable router. Do not package or submit automatically.",
+            "next_action": "Run a separate confirmation/full-eval notebook for the weak-tuned family router. Do not package or submit automatically.",
         }
     if len(single_pass):
         best = single_pass.iloc[0].to_dict()
@@ -621,7 +641,7 @@ def choose_decision(
         }
     if best_deployable and as_int(best_deployable.get("correct")) > baseline_correct:
         return {
-            "decision": "deployable_router_improves_baseline_but_misses_weak_gate",
+            "decision": "weak_tuned_family_router_improves_baseline_but_misses_weak_gate",
             "best_candidate": best_deployable.get("strategy"),
             "reason": f"router_correct={as_int(best_deployable.get('correct'))}; baseline_correct={baseline_correct}; total_gap={as_int(best_deployable.get('gate_total_gap'))}; eq_gap={as_int(best_deployable.get('gate_eq_gap'))}; bit_gap={as_int(best_deployable.get('gate_bit_gap'))}",
             "next_action": "Use the gained/lost rows to build a small verified solver or router, not another blind continuation.",
@@ -664,6 +684,7 @@ def main() -> int:
     parser.add_argument("--weak-trunc-max", type=int, default=3)
     parser.add_argument("--expected-baseline-correct", type=int, default=191)
     parser.add_argument("--expected-baseline-rows", type=int, default=315)
+    parser.add_argument("--expected-shared-row-contract-sha256", default="")
     parser.add_argument("--allow-baseline-fallback", action="store_true")
     parser.add_argument("--allow-rescore-mismatch", action="store_true")
     args = parser.parse_args()
@@ -687,6 +708,7 @@ def main() -> int:
     print("preferred_baseline =", args.preferred_baseline, flush=True)
     print("expected_baseline_correct =", args.expected_baseline_correct, flush=True)
     print("expected_baseline_rows =", args.expected_baseline_rows, flush=True)
+    print("expected_shared_row_contract_sha256 =", args.expected_shared_row_contract_sha256, flush=True)
     print("allow_baseline_fallback =", args.allow_baseline_fallback, flush=True)
     print("allow_rescore_mismatch =", args.allow_rescore_mismatch, flush=True)
     print("thresholds =", json.dumps(thresholds, indent=2, sort_keys=True), flush=True)
@@ -701,6 +723,9 @@ def main() -> int:
     for spec in specs:
         dedup[(spec["name"], spec["predictions_csv"])] = spec
     specs = list(dedup.values())
+    duplicate_names = sorted({spec["name"] for spec in specs if [item["name"] for item in specs].count(spec["name"]) > 1})
+    if duplicate_names:
+        raise RuntimeError("duplicate candidate names after normalization: " + json.dumps(duplicate_names))
     if not specs:
         raise RuntimeError("no prediction specs were loaded")
     source_counts: dict[str, int] = {}
@@ -728,6 +753,16 @@ def main() -> int:
     if len(shared_ids) != 315:
         raise RuntimeError(f"expected exactly 315 shared weak rows, got {len(shared_ids)}")
     validate_shared_row_contract(frames, load_meta, shared_ids)
+    observed_contract_hashes = {str(item["shared_row_contract_sha256"]) for item in load_meta}
+    if len(observed_contract_hashes) != 1:
+        raise RuntimeError("shared row contract hashes diverged after validation")
+    observed_shared_row_contract_sha256 = sorted(observed_contract_hashes)[0]
+    if args.expected_shared_row_contract_sha256:
+        expected = str(args.expected_shared_row_contract_sha256)
+        if observed_shared_row_contract_sha256 != expected:
+            raise RuntimeError(
+                f"shared row contract hash mismatch: expected {expected}, got {observed_shared_row_contract_sha256}"
+            )
     print(
         "validated_shared_row_contracts =",
         json.dumps(
@@ -806,6 +841,7 @@ def main() -> int:
             "preferred_baseline": args.preferred_baseline,
             "expected_baseline_correct": int(args.expected_baseline_correct),
             "expected_baseline_rows": int(args.expected_baseline_rows),
+            "expected_shared_row_contract_sha256": str(args.expected_shared_row_contract_sha256),
             "allow_baseline_fallback": bool(args.allow_baseline_fallback),
             "allow_rescore_mismatch": bool(args.allow_rescore_mismatch),
         },
@@ -815,6 +851,7 @@ def main() -> int:
         "candidate_specs": specs,
         "load_meta": load_meta,
         "resolved_baseline": baseline,
+        "observed_shared_row_contract_sha256": observed_shared_row_contract_sha256,
         "baseline_summary": baseline_summary,
         "family_choice_detail": family_choice_detail,
         "decision": decision,

@@ -120,7 +120,8 @@ ROOT = pathlib.Path('/content/kg1')
 
 DRIVE_ROOT = pathlib.Path('/content/drive/MyDrive/KG1_NVIDIA_V230')
 OUT_ROOT = DRIVE_ROOT / 'output_v230_v226_complementarity'
-ANALYSIS_OUT = OUT_ROOT / 'analysis_v230_v226_complementarity'
+RUN_ID = os.environ.get('KG1_V230_RUN_ID', time.strftime('%Y%m%dT%H%M%SZ', time.gmtime()))
+ANALYSIS_OUT = OUT_ROOT / 'analysis_v230_v226_complementarity' / RUN_ID
 
 V221_BATCH_SUMMARY_JSON = pathlib.Path(os.environ.get(
     'KG1_V230_V221_BATCH_SUMMARY_JSON',
@@ -134,6 +135,7 @@ V229_ANALYSIS_MANIFEST_JSON = pathlib.Path(os.environ.get(
     'KG1_V230_V229_ANALYSIS_MANIFEST_JSON',
     '/content/drive/MyDrive/KG1_NVIDIA_V229/output_v229_v227_only_fast_eval/analysis_v229_v227_only_fast/v229_v227_only_fast_eval_manifest.json',
 ))
+EXPECTED_REPO_COMMIT = os.environ.get('KG1_V230_EXPECTED_REPO_COMMIT', '').strip()
 
 V194_ADAPTER = pathlib.Path('/content/drive/MyDrive/KG1_NVIDIA_V202D/init_adapter_v194_rank19_build/adapter')
 V217_ADAPTER = pathlib.Path('/content/drive/MyDrive/KG1_NVIDIA_V217/output_v217_short_answer_rescue/train_v217_shortans_lr1e8_s16/final_adapter')
@@ -178,6 +180,7 @@ EXPECTED_V194_TARGET_PARAMETERS = ['mlp.experts.gate_up_proj', 'mlp.experts.down
 
 RUN_TRAIN = os.environ.get('KG1_V230_RUN_TRAIN', '0').strip().lower() in {'1', 'true', 'yes', 'on'}
 RUN_ANALYSIS = os.environ.get('KG1_V230_RUN_ANALYSIS', '1').strip().lower() not in {'0', 'false', 'no', 'off'}
+ALLOW_V226_SUMMARY_SYNTHESIS = os.environ.get('KG1_V230_ALLOW_V226_SUMMARY_SYNTHESIS', '1').strip().lower() in {'1', 'true', 'yes', 'on'}
 RUN_FULL_IF_GATE = False
 ALLOW_KAGGLE_SUBMIT = False
 
@@ -197,7 +200,9 @@ print('REPO_URL =', REPO_URL, flush=True)
 print('REPO_BRANCH =', REPO_BRANCH, flush=True)
 print('ROOT =', ROOT, flush=True)
 print('OUT_ROOT =', OUT_ROOT, flush=True)
+print('RUN_ID =', RUN_ID, flush=True)
 print('ANALYSIS_OUT =', ANALYSIS_OUT, flush=True)
+print('EXPECTED_REPO_COMMIT =', EXPECTED_REPO_COMMIT, flush=True)
 print('V221_BATCH_SUMMARY_JSON =', V221_BATCH_SUMMARY_JSON, flush=True)
 print('V226_BATCH_SUMMARY_JSON =', V226_BATCH_SUMMARY_JSON, flush=True)
 print('V229_ANALYSIS_MANIFEST_JSON =', V229_ANALYSIS_MANIFEST_JSON, flush=True)
@@ -219,6 +224,7 @@ print('REQUIRE_OFFSET_MASK =', REQUIRE_OFFSET_MASK, flush=True)
 print('tokenization_offset_mask_contract = not_applicable_for_v230_cpu_only_artifact_analysis', flush=True)
 print('RUN_TRAIN =', RUN_TRAIN, flush=True)
 print('RUN_ANALYSIS =', RUN_ANALYSIS, flush=True)
+print('ALLOW_V226_SUMMARY_SYNTHESIS =', ALLOW_V226_SUMMARY_SYNTHESIS, flush=True)
 print('RUN_FULL_IF_GATE =', RUN_FULL_IF_GATE, flush=True)
 print('ALLOW_KAGGLE_SUBMIT =', ALLOW_KAGGLE_SUBMIT, flush=True)
 print('WEAK_MIN_FOR_FULL =', WEAK_MIN_FOR_FULL, flush=True)
@@ -229,6 +235,8 @@ print('FULL_MIN_CANDIDATE =', FULL_MIN_CANDIDATE, flush=True)
 print('FULL_MAX_TRUNC =', FULL_MAX_TRUNC, flush=True)
 if RUN_TRAIN:
     raise RuntimeError('V230 is CPU-only analysis; RUN_TRAIN must stay false.')
+if not RUN_ANALYSIS:
+    raise RuntimeError('V230 complementarity analysis is mandatory; RUN_ANALYSIS must stay true.')
 if ALLOW_KAGGLE_SUBMIT:
     raise RuntimeError('Kaggle submission is disabled in V230.')
 print('=== V230 CONFIG END ===', flush=True)
@@ -269,6 +277,7 @@ def resource_snapshot_line():
             stdout=subprocess.PIPE,
             stderr=subprocess.DEVNULL,
             check=False,
+            timeout=15,
         ).stdout.strip().splitlines()
         if gpu_line:
             parts.append('gpu=[' + gpu_line[0] + ']')
@@ -375,6 +384,8 @@ def resolve_predictions_from_report(report_json):
     direct = report.get('outputs', {}).get('predictions_csv', '')
     if direct:
         direct_path = pathlib.Path(direct)
+        if not direct_path.is_absolute():
+            direct_path = report_json.parent / direct_path
         if direct_path.exists():
             return direct_path
         raise FileNotFoundError('report predictions_csv does not exist: ' + str(direct_path))
@@ -508,6 +519,8 @@ def resolve_existing_or_synthesize_v226_batch_summary(path):
         print('v226_batch_summary_candidate =', candidate, 'exists =', candidate.exists(), flush=True)
         if candidate.exists():
             return candidate
+    if not ALLOW_V226_SUMMARY_SYNTHESIS:
+        raise FileNotFoundError('V226 batch summary missing and synthesis disabled: ' + str(path))
     return synthesize_batch_summary_from_reports(
         OUT_ROOT / 'v226_synthesized_batch_candidate_summary.json',
         [
@@ -528,8 +541,18 @@ print('=== V230 REPO SETUP START ===', flush=True)
 if ROOT.exists():
     shutil.rmtree(ROOT)
 run_cmd(['git', 'clone', '--depth', '1', '--branch', REPO_BRANCH, REPO_URL, str(ROOT)], cwd='/content', log_path=OUT_ROOT / 'repo_clone.log', check=True, timeout_s=300)
-repo_commit = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=str(ROOT), text=True).strip()
+if EXPECTED_REPO_COMMIT:
+    run_cmd(['git', 'fetch', '--depth', '1', 'origin', EXPECTED_REPO_COMMIT], cwd=ROOT, log_path=OUT_ROOT / 'repo_fetch_expected_commit.log', check=True, timeout_s=300)
+    run_cmd(['git', 'checkout', '--detach', EXPECTED_REPO_COMMIT], cwd=ROOT, log_path=OUT_ROOT / 'repo_checkout_expected_commit.log', check=True, timeout_s=120)
+repo_rev = subprocess.run(['git', 'rev-parse', 'HEAD'], cwd=str(ROOT), text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, check=False, timeout=30)
+print('repo_rev_parse_returncode =', repo_rev.returncode, flush=True)
+print('repo_rev_parse_output =', repo_rev.stdout.strip(), flush=True)
+if repo_rev.returncode != 0:
+    raise RuntimeError('git rev-parse HEAD failed')
+repo_commit = repo_rev.stdout.strip()
 print('repo_commit =', repo_commit, flush=True)
+if EXPECTED_REPO_COMMIT and repo_commit != EXPECTED_REPO_COMMIT:
+    raise RuntimeError('repo commit mismatch after checkout')
 compile_targets = [
     ROOT / 'src/competition_utils.py',
     ROOT / 'scripts/analyze_v230_v226_complementarity.py',
@@ -644,7 +667,7 @@ run_cmd([
     sys.executable,
     '-c',
     "import json, torch; props=torch.cuda.get_device_properties(0) if torch.cuda.is_available() else None; print(json.dumps({'torch': getattr(torch, '__version__', 'unknown'), 'cuda_available': torch.cuda.is_available(), 'gpu_name': props.name if props else '', 'gpu_total_gib': props.total_memory/1024**3 if props else 0.0}))",
-], cwd='/content', log_path=torch_probe_path, check=True)
+], cwd='/content', log_path=torch_probe_path, check=True, timeout_s=120)
 torch_probe = json.loads([line for line in torch_probe_path.read_text(encoding='utf-8').splitlines() if line.strip()][-1])
 cuda_available = bool(torch_probe.get('cuda_available'))
 gpu_name = str(torch_probe.get('gpu_name', ''))
@@ -675,6 +698,8 @@ if not V221_BATCH_SUMMARY_JSON.exists():
     raise FileNotFoundError(V221_BATCH_SUMMARY_JSON)
 if not V226_BATCH_SUMMARY_JSON.exists():
     raise FileNotFoundError(V226_BATCH_SUMMARY_JSON)
+if not V229_ANALYSIS_MANIFEST_JSON.exists():
+    raise FileNotFoundError(V229_ANALYSIS_MANIFEST_JSON)
 
 try:
     from safetensors import safe_open
@@ -792,47 +817,48 @@ print('=== V230 PREDICTION PREFLIGHT END ===', flush=True)
             """# CELL: run V230 complementarity analyzer.
 print('=== V230 COMPLEMENTARITY ANALYSIS START ===', flush=True)
 analysis_manifest_path = ANALYSIS_OUT / 'v230_v226_complementarity_manifest.json'
+if analysis_manifest_path.exists():
+    analysis_manifest_path.unlink()
+    print('removed_stale_analysis_manifest =', analysis_manifest_path, flush=True)
 weak_gate_pass_for_full = False
-if not RUN_ANALYSIS:
-    print('RUN_ANALYSIS is false; skipping V230 analyzer.', flush=True)
-else:
-    cmd = [
-        sys.executable,
-        str(ROOT / 'scripts/analyze_v230_v226_complementarity.py'),
-        '--v221-batch-summary-json', str(V221_BATCH_SUMMARY_JSON),
-        '--v226-batch-summary-json', str(V226_BATCH_SUMMARY_JSON),
-        '--v229-analysis-manifest-json', str(V229_ANALYSIS_MANIFEST_JSON),
-        '--output-dir', str(ANALYSIS_OUT),
-        '--label', 'v230_v226_complementarity',
-        '--preferred-baseline', 'v226__v226_best_checkpoint1_observed_191',
-        '--weak-total-min', str(WEAK_MIN_FOR_FULL),
-        '--weak-eq-min', str(WEAK_EQ_MIN_FOR_FULL),
-        '--weak-bit-min', str(WEAK_BIT_MIN_FOR_FULL),
-        '--weak-trunc-max', str(WEAK_MAX_TRUNC_FOR_FULL),
-    ]
-    run_cmd(cmd, cwd=ROOT, log_path=ANALYSIS_OUT / 'v230_v226_complementarity.log', check=True, heartbeat_s=30, timeout_s=600)
-    if not analysis_manifest_path.exists():
-        raise FileNotFoundError(analysis_manifest_path)
-    analysis_manifest = read_json(analysis_manifest_path)
-    deployable_pass = [
-        row for row in analysis_manifest.get('router_simulation', [])
-        if row.get('deployable_without_row_labels') and row.get('weak_gate_pass_for_full')
-    ]
-    single_pass = [row for row in analysis_manifest.get('candidate_summary', []) if row.get('weak_gate_pass_for_full')]
-    row_level_oracle_pass = [
-        row for row in analysis_manifest.get('router_simulation', [])
-        if (not row.get('deployable_without_row_labels')) and row.get('weak_gate_pass_for_full')
-    ]
-    weak_gate_pass_for_full = bool(deployable_pass or single_pass)
-    print('analysis_manifest_path =', analysis_manifest_path, flush=True)
-    print('resolved_baseline =', analysis_manifest.get('resolved_baseline'), flush=True)
-    print('candidate_source_counts =', json.dumps(analysis_manifest.get('candidate_source_counts', {}), sort_keys=True), flush=True)
-    print('deployable_weak_gate_pass_for_full =', bool(deployable_pass or single_pass), flush=True)
-    print('row_level_oracle_gate_pass =', bool(row_level_oracle_pass), flush=True)
-    print('baseline_summary =', json.dumps(analysis_manifest.get('baseline_summary', {}), indent=2, sort_keys=True), flush=True)
-    print('decision =', json.dumps(analysis_manifest.get('decision', {}), indent=2, sort_keys=True), flush=True)
-    print('router_top =', json.dumps(analysis_manifest.get('router_simulation', [])[:5], indent=2, sort_keys=True), flush=True)
-    print('outputs =', json.dumps(analysis_manifest.get('outputs', {}), indent=2, sort_keys=True), flush=True)
+cmd = [
+    sys.executable,
+    str(ROOT / 'scripts/analyze_v230_v226_complementarity.py'),
+    '--v221-batch-summary-json', str(V221_BATCH_SUMMARY_JSON),
+    '--v226-batch-summary-json', str(V226_BATCH_SUMMARY_JSON),
+    '--v229-analysis-manifest-json', str(V229_ANALYSIS_MANIFEST_JSON),
+    '--output-dir', str(ANALYSIS_OUT),
+    '--label', 'v230_v226_complementarity',
+    '--preferred-baseline', 'v226__v226_best_checkpoint1_observed_191',
+    '--weak-total-min', str(WEAK_MIN_FOR_FULL),
+    '--weak-eq-min', str(WEAK_EQ_MIN_FOR_FULL),
+    '--weak-bit-min', str(WEAK_BIT_MIN_FOR_FULL),
+    '--weak-trunc-max', str(WEAK_MAX_TRUNC_FOR_FULL),
+]
+run_cmd(cmd, cwd=ROOT, log_path=ANALYSIS_OUT / 'v230_v226_complementarity.log', check=True, heartbeat_s=30, timeout_s=600)
+if not analysis_manifest_path.exists():
+    raise FileNotFoundError(analysis_manifest_path)
+analysis_manifest = read_json(analysis_manifest_path)
+deployable_pass = [
+    row for row in analysis_manifest.get('router_simulation', [])
+    if row.get('deployable_without_row_labels') and row.get('weak_gate_pass_for_full')
+]
+single_pass = [row for row in analysis_manifest.get('candidate_summary', []) if row.get('weak_gate_pass_for_full')]
+row_level_oracle_pass = [
+    row for row in analysis_manifest.get('router_simulation', [])
+    if (not row.get('deployable_without_row_labels')) and row.get('weak_gate_pass_for_full')
+]
+weak_gate_pass_for_full = bool(deployable_pass or single_pass)
+print('analysis_manifest_path =', analysis_manifest_path, flush=True)
+print('analysis_manifest_sha256 =', sha256_file(analysis_manifest_path), flush=True)
+print('resolved_baseline =', analysis_manifest.get('resolved_baseline'), flush=True)
+print('candidate_source_counts =', json.dumps(analysis_manifest.get('candidate_source_counts', {}), sort_keys=True), flush=True)
+print('deployable_weak_gate_pass_for_full =', bool(deployable_pass or single_pass), flush=True)
+print('row_level_oracle_gate_pass =', bool(row_level_oracle_pass), flush=True)
+print('baseline_summary =', json.dumps(analysis_manifest.get('baseline_summary', {}), indent=2, sort_keys=True), flush=True)
+print('decision =', json.dumps(analysis_manifest.get('decision', {}), indent=2, sort_keys=True), flush=True)
+print('router_top =', json.dumps(analysis_manifest.get('router_simulation', [])[:5], indent=2, sort_keys=True), flush=True)
+print('outputs =', json.dumps(analysis_manifest.get('outputs', {}), indent=2, sort_keys=True), flush=True)
 print('weak_gate_pass_for_full =', weak_gate_pass_for_full, flush=True)
 print('=== V230 COMPLEMENTARITY ANALYSIS END ===', flush=True)
 """
@@ -840,8 +866,13 @@ print('=== V230 COMPLEMENTARITY ANALYSIS END ===', flush=True)
         code(
             """# CELL: full eval/package hard block and final manifest.
 print('=== V230 FINAL MANIFEST START ===', flush=True)
-analysis_manifest = read_json(analysis_manifest_path) if analysis_manifest_path.exists() else {}
-decision = analysis_manifest.get('decision', {'decision': 'analysis_not_run'})
+if not analysis_manifest_path.exists():
+    raise FileNotFoundError(analysis_manifest_path)
+analysis_manifest = read_json(analysis_manifest_path)
+analysis_manifest_sha256 = sha256_file(analysis_manifest_path)
+decision = analysis_manifest.get('decision', {})
+if not decision or decision.get('decision') == 'analysis_not_run':
+    raise RuntimeError('V230 final manifest requires a completed analysis decision.')
 weak_gate_pass_for_full = bool(weak_gate_pass_for_full)
 row_level_oracle_gate_pass = any(
     (not row.get('deployable_without_row_labels')) and row.get('weak_gate_pass_for_full')
@@ -856,15 +887,39 @@ print('Full eval is intentionally not automatic in V230 complementarity notebook
 print('No package and no Kaggle submit can be created in V230.', flush=True)
 if RUN_FULL_IF_GATE or ALLOW_KAGGLE_SUBMIT:
     raise RuntimeError('V230 hard block violated. Kaggle submission is disabled.')
+blocked_artifacts = []
+for pattern in ['*.zip', '*submission*.csv', '*kaggle*.json']:
+    blocked_artifacts.extend(str(path) for path in OUT_ROOT.glob(pattern))
+if blocked_artifacts:
+    raise RuntimeError('V230 output contains package/submission-like artifacts: ' + json.dumps(blocked_artifacts, sort_keys=True))
+router_rows = analysis_manifest.get('router_simulation', [])
+candidate_rows = analysis_manifest.get('candidate_summary', [])
+best_deployable_summary = next((row for row in router_rows if row.get('deployable_without_row_labels')), {})
+best_oracle_summary = next((row for row in router_rows if not row.get('deployable_without_row_labels')), {})
 final_manifest_path = OUT_ROOT / 'v230_v226_complementarity_final_manifest.json'
 final_manifest = {
     'version': VERSION,
+    'run_id': RUN_ID,
     'repo_branch': REPO_BRANCH,
     'repo_commit': repo_commit,
+    'expected_repo_commit': EXPECTED_REPO_COMMIT,
+    'analysis_complete': True,
     'weak_gate_pass_for_full': weak_gate_pass_for_full,
     'row_level_oracle_gate_pass': row_level_oracle_gate_pass,
     'full_candidate_gate': full_candidate_gate,
+    'allowed_actions': {
+        'train': False,
+        'full_eval': False,
+        'package': False,
+        'kaggle_submit': False,
+    },
     'decision': decision,
+    'baseline_summary': analysis_manifest.get('baseline_summary', {}),
+    'best_deployable_summary': best_deployable_summary,
+    'best_oracle_summary': best_oracle_summary,
+    'observed_shared_row_contract_sha256': analysis_manifest.get('observed_shared_row_contract_sha256', ''),
+    'candidate_source_counts': analysis_manifest.get('candidate_source_counts', {}),
+    'candidate_count': len(candidate_rows),
     'thresholds': {
         'weak_total': WEAK_MIN_FOR_FULL,
         'weak_equation_transform': WEAK_EQ_MIN_FOR_FULL,
@@ -875,7 +930,9 @@ final_manifest = {
     },
     'known_v226_weak_total': KNOWN_V226_WEAK_TOTAL,
     'analysis_manifest': str(analysis_manifest_path),
+    'analysis_manifest_sha256': analysis_manifest_sha256,
     'analysis_out': str(ANALYSIS_OUT),
+    'observed_input_artifacts': analysis_manifest.get('load_meta', []),
     'roadmap_next': decision.get('next_action', 'Review V230 complementarity outputs.'),
 }
 write_json(final_manifest_path, final_manifest)

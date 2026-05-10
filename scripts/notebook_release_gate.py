@@ -28,7 +28,6 @@ import hashlib
 import json
 import re
 import subprocess
-import sys
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
@@ -278,7 +277,13 @@ V230_REQUIRED_SNIPPETS = {
     "cpu-only purpose": "V230 CPU-only path does not install vLLM",
     "v226 preferred baseline": "v226__v226_best_checkpoint1_observed_191",
     "v226 known weak total": "KNOWN_V226_WEAK_TOTAL = 191",
+    "mandatory analysis": "V230 complementarity analysis is mandatory",
+    "analysis complete": "'analysis_complete': True",
+    "allowed actions": "'allowed_actions':",
+    "run id output": "RUN_ID =",
+    "stale manifest removal": "removed_stale_analysis_manifest",
     "v221 nonempty gate": "V221 batch summary has no ok candidates.",
+    "v229 required": "raise FileNotFoundError(V229_ANALYSIS_MANIFEST_JSON)",
     "v226 baseline row gate": "Required V226 baseline row missing: v226_best_checkpoint1_observed_191",
     "jsonl semantic audit": "inspect_short_answer_jsonl",
     "jsonl assistant audit": "assistant_answer_mismatch",
@@ -800,6 +805,10 @@ def audit_v230_v226_complementarity_contract(path: Path, notebook: dict[str, Any
         "csv correct drift gate": "CSV correct disagrees with current verifier",
         "row contract function": "validate_shared_row_contract",
         "row contract hash": "shared_row_contract_sha256",
+        "expected row contract cli": "--expected-shared-row-contract-sha256",
+        "declared family prompt crosscheck": "declared family disagrees with prompt classifier",
+        "relative prediction path": "report_path.parent / path",
+        "duplicate candidate names": "duplicate candidate names after normalization",
         "canonical family": "canonical_family",
         "strict report predictions": "report predictions_csv does not exist",
         "strict ambiguous fallback": "ambiguous prediction CSV fallback",
@@ -825,6 +834,8 @@ def audit_v230_v226_complementarity_contract(path: Path, notebook: dict[str, Any
         "v226 size floor": "MIN_V226_CHECKPOINT_BYTES",
         "v221 nonempty gate": "V221 batch summary has no ok candidates.",
         "preferred v226 correct gate": "Required V226 baseline correct count mismatch",
+        "v229 required": "raise FileNotFoundError(V229_ANALYSIS_MANIFEST_JSON)",
+        "relative prediction path": "direct_path = report_json.parent / direct_path",
     }
     for name, snippet in builder_snippets.items():
         if snippet not in builder_text:
@@ -898,7 +909,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--all", action="store_true", help="Audit all notebooks under notebooks/ and competent-shamir/notebooks/.")
     parser.add_argument("--changed-from", default="", help="Git ref/sha to diff from.")
     parser.add_argument("--changed-to", default="HEAD", help="Git ref/sha to diff to.")
-    parser.add_argument("--output-json", type=Path, default=ROOT / "artifacts" / "notebook_release_gate" / "report.json")
+    parser.add_argument("--output-json", type=Path, default=None)
     return parser.parse_args()
 
 
@@ -911,7 +922,6 @@ def main() -> int:
     else:
         paths = changed_notebooks(args.changed_from or None, args.changed_to)
     paths = [path for path in paths if NOTEBOOK_RE.search(str(path))]
-    args.output_json.parent.mkdir(parents=True, exist_ok=True)
     audits = [audit_notebook(path) for path in paths]
     report = {
         "schema_version": "kg1_notebook_release_gate_v1",
@@ -929,7 +939,9 @@ def main() -> int:
             for audit in audits
         ],
     }
-    args.output_json.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    if args.output_json is not None:
+        args.output_json.parent.mkdir(parents=True, exist_ok=True)
+        args.output_json.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     print(json.dumps(report, indent=2, sort_keys=True))
     return 0 if report["ok"] else 1
 

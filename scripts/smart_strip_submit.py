@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""
+r"""
 Smart strip for v50: THREE submission modes.
 
 Mode A: "v30-replica" — strip ALL expert keys (including shared_experts)
@@ -16,7 +16,6 @@ Mode C: "no-strip" — keep EVERYTHING including routed experts
 import json
 import os
 import re
-import sys
 import zipfile
 import argparse
 import subprocess
