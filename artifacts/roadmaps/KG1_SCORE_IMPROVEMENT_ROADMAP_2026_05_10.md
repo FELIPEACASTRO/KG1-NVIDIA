@@ -2142,3 +2142,78 @@ Decisao:
 - Fixtures estao prontos para revisao de gate de treino.
 - Ainda nao autoriza treino automaticamente.
 - O proximo passo objetivo, se aprovado, e criar um treino curto que consome somente V217 limpo + V242, repetindo o overlap gate antes de carregar modelo/GPU.
+
+## V243 guarded V217 plus V242 training mix and HF execution
+
+Objetivo:
+
+- Executar a opcao mais objetiva e rapida no Hugging Face antes de qualquer treino longo.
+- Criar um mix de treino usando somente:
+  - V217 short-answer limpo ja versionado no repo;
+  - V242 safe equation fixtures publicados no HF dataset.
+- Validar hash, linhas, dedupe, overlap contra weak workitems e tokenizacao antes de gastar GPU.
+- Fazer apenas um smoke train curto em GPU, nao um treino final.
+
+Arquivos:
+
+- Script: `scripts/build_v243_training_mix.py`.
+- Commit GitHub: `c72e95bbf693609698f9df215ef8121d6d870ef1`.
+
+Mix V243 publicado:
+
+- Dataset HF: `felipesp1983/kg1-nemotron-training`.
+- Path: `runtime_artifacts/v243_training_mix/local_upload_20260510T180200Z`.
+- Train rows: `12006`.
+- Validation rows: `921`.
+- Train SHA256: `c290555bffade5f4fa4e5c14f6f66c36745bd31a22c4b004709afd5a5f33f6d1`.
+- Validation SHA256: `54eda74b1ea01e6e3b165af23c99eac5dc6e21f29cbc49888503ea7a3d707764`.
+- Familias no train:
+  - `equation_transform=8735`.
+  - `bit_manipulation=2695`.
+  - demais familias de guarda: `gravity_constant=144`, `numeral_system=144`, `text_encryption=144`, `unit_conversion=144`.
+- Familias na validation:
+  - `equation_transform=693`.
+  - `bit_manipulation=164`.
+  - demais familias de guarda: `16` cada.
+- Overlap contra weak reference:
+  - train `id_overlap=0`, `prompt_overlap=0`.
+  - validation `id_overlap=0`, `prompt_overlap=0`.
+
+HF Jobs executados:
+
+- `6a00c7d6aff1cd33e8f32e66`: CPU build/upload remoto.
+  - Status: `ERROR`.
+  - Achado util: build remoto validou o mix, mas upload falhou porque o token injetado pelo job tinha leitura sem escrita.
+  - Mitigacao: upload feito localmente com token write validado.
+- `6a00c904317220dbbd1a7650`: tokenization dry-run CPU inicial.
+  - Status: `ERROR`.
+  - Causa: comando de pip apontou todos os pacotes para o indice CPU do PyTorch.
+  - Mitigacao: relancado corrigido em `6a00c92e317220dbbd1a7652`.
+- `6a00c92e317220dbbd1a7652`: tokenization dry-run CPU corrigido.
+  - Status: `COMPLETED`.
+  - Train tokenized: `12006/12006`.
+  - Validation tokenized: `921/921`.
+  - Truncation: `0`.
+  - Prompt truncation: `0`.
+  - Offset masks: `12006` train e `921` validation.
+  - Fallback masks: `0`.
+  - Dry-run report publicado em:
+    `felipesp1983/kg1-nemotron-lora-v243-safe-equation-fixtures/dry_runs/v243-tokenize-dryrun-20260510T1808Z/dry_run_model_recipe_report.json`.
+- `6a00c888aff1cd33e8f32e6a`: GPU smoke train em `a100-large`.
+  - Status no momento do registro: `SCHEDULING`.
+  - Run ID: `v243-v188-safe-eq-smoke-s4-20260510T1803Z`.
+  - Init adapter: `felipesp1983/kg1-nemotron-lora-v188-equation-lmhead/checkpoint-40`.
+  - Output repo: `felipesp1983/kg1-nemotron-lora-v243-safe-equation-fixtures`.
+  - Config intencionalmente curta:
+    - `MAX_STEPS=4`.
+    - `MAX_LENGTH=4096`.
+    - `BATCH_SIZE=4`, `MICRO_BATCH_SIZE=1`.
+    - `TRAINABLE_LORA_MODULES=q_proj,k_proj,v_proj,o_proj,lm_head`.
+    - `LEARNING_RATE=1e-7`, `FINAL_LEARNING_RATE=5e-8`.
+  - Motivo de manter `a100-large`: e o menor flavor razoavel para 30B BF16; multi-GPU seria pior em FinOps e L40S/L4/A10G isolados sao arriscados para memoria.
+
+Decisao:
+
+- O mix V243 esta aprovado para smoke train: hash, contagem, overlap, truncation e offset-mask passaram.
+- O smoke train GPU deve ser avaliado por weak eval antes de qualquer treino longo.
+- Se `a100-large` ficar preso em scheduling por muito tempo, a acao correta e aguardar capacidade ou cancelar; nao trocar automaticamente para multi-GPU caro.
