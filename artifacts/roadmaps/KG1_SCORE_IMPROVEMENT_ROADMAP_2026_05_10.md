@@ -1335,3 +1335,56 @@ Proximo passo:
 - Executar o V236 no Colab.
 - Se `deployable_verified_equation_overrides >= 5` e `bit_guardrail_signature_verified_rows` cobrir os workitems sem override incorreto, criar apenas entao um notebook separado de rescue measurement.
 - Se V236 decidir `continue_local_solver_development`, abrir `equation_subtype_audit.csv` e expandir somente os subtipos com parser exato. Nenhuma avaliacao ou pacote deve ser feito antes disso.
+
+## V236 executado - resultado e ajuste pos-log
+
+Execucao analisada em 2026-05-10:
+
+- Notebook executado: `notebooks/KG1_V236_LOCAL_SOLVER_DSL_PROBES_COLAB.ipynb`.
+- Commit Colab observado: `69d2d9725ae194e087d9d37717967eacd3a382df`.
+- Manifest V236 gerado: `/content/drive/MyDrive/KG1_NVIDIA_V236/output_v236_local_solver_dsl_probes/analysis_v236_local_solver_dsl_probes/20260510T154035Z/v236_local_solver_dsl_probes_manifest.json`.
+- Manifest SHA256 observado: `cbdd10850a741941084b1ef135c2ec3bb31bfe5429ee68bd12cb8f7163f37285`.
+- Final manifest SHA256 observado: `3ef90c3cb97adfbde7c52bdb7b4ca0742336ed8ff433f8ed22ba4b8ec7e80a5e`.
+
+Resultados medidos:
+
+- `equation_workitems`: `100`.
+- `bit_guardrail_workitems`: `24`.
+- `deployable_verified_equation_overrides`: `0`.
+- `deployable_incorrect_equation_overrides`: `0`.
+- `bit_guardrail_signature_verified_rows`: `24`.
+- Decisao: `continue_local_solver_development`.
+
+Distribuicao dos subtipos observados:
+
+- `algebraic_equation`: `69`.
+- `symbolic_mixed_token_rewrite`: `22`.
+- `numeric_operator_transform`: `9`.
+
+Interpretacao:
+
+- A execucao foi limpa, sem erro de runtime, artefato ausente ou quebra de contrato V232.
+- O guardrail de `bit_manipulation` esta pronto como verificador de escopo, mas nao emite override.
+- O gargalo permanece `equation_transform`: os probes iniciais foram seguros demais e abstiveram em todos os `100` workitems.
+- Gap encontrado no script: havia classificacao para `algebraic_equation`, mas nao havia probe algebraico; esses itens caiam no probe simbolico e abstinham.
+
+Ajuste aplicado apos a analise:
+
+- `scripts/analyze_v236_local_solver_dsl_probes.py` agora inclui `sympy_single_equation_probe`, restrito a:
+  - equacao unica;
+  - uma variavel alfabetica;
+  - pelo menos um digito;
+  - caracteres algebraicos seguros;
+  - solucao unica;
+  - verificacao por substituicao simbolica.
+- O script agora tambem gera `equation_abstain_reason_summary_csv`, para agrupar motivos concretos de abstain por subtipo/probe/prova.
+- Nenhuma regra nova autoriza treino, full eval, pacote ou submissao. O gate continua exigindo ganho local medido antes de qualquer rescue measurement.
+
+Proximo passo revisado:
+
+- Reexecutar o V236 atualizado no Colab.
+- Se ainda houver `0` overrides, usar `equation_abstain_reason_summary_csv` para decidir o V237 por evidencia, provavelmente focado em:
+  - parser de numeric operator expandido;
+  - parser de symbolic/mixed com mapeamento de token, nao so caractere;
+  - identificacao de casos onde exemplos sao insuficientes e devem permanecer abstain.
+- Criar notebook de rescue eval somente se `deployable_verified_equation_overrides >= 5`, `deployable_incorrect_equation_overrides == 0` e o guardrail bit continuar completo.

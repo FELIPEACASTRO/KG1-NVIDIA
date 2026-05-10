@@ -13,6 +13,7 @@ import argparse
 import csv
 import hashlib
 import json
+import math
 import re
 import tempfile
 from collections import Counter
@@ -48,6 +49,7 @@ PROBE_COLUMNS = [
     "prompt_sha256",
     "proof",
 ]
+ABSTAIN_REASON_COLUMNS = ["subtype", "probe_name", "status", "proof", "rows"]
 BIT_COLUMNS = [
     "schema_version",
     "id",
@@ -148,6 +150,143 @@ def answers_equal(left: Any, right: Any) -> bool:
         return False
 
 
+def format_number(value: Any) -> str:
+    numerator = getattr(value, "p", None)
+    denominator = getattr(value, "q", None)
+    if numerator is not None and denominator is not None:
+        if int(denominator) == 1:
+            return str(int(numerator))
+        return f"{int(numerator)}/{int(denominator)}"
+    try:
+        number = float(value)
+        if math.isfinite(number) and abs(number - round(number)) < 1e-9:
+            return str(int(round(number)))
+    except Exception:
+        pass
+    return str(value).strip()
+
+
+def import_sympy() -> Any | None:
+    try:
+        import sympy as sp  # type: ignore
+
+        return sp
+    except Exception:
+        return None
+
+
+def extract_algebraic_equation_from_text(text: str) -> tuple[str | None, str]:
+    # Conservative extraction: one short equality, one alphabetic variable,
+    # at least one digit, and only algebra-safe characters.
+    candidates = re.findall(
+        r"([A-Za-z0-9_().+\-*/^ ]{1,96}=[A-Za-z0-9_().+\-*/^ ]{1,96})",
+        text,
+    )
+    cleaned: list[str] = []
+    for candidate in candidates:
+        item = re.sub(r"\s+", " ", candidate).strip(" .,:;`")
+        if not item or item.count("=") != 1:
+            continue
+        variables = sorted(set(re.findall(r"[A-Za-z]", item)))
+        if len(variables) == 1 and re.search(r"\d", item):
+            cleaned.append(item)
+    unique = sorted(set(cleaned))
+    if not unique:
+        return None, "no_single_algebraic_equation_found"
+    if len(unique) > 1:
+        return None, "ambiguous_multiple_algebraic_equations"
+    return unique[0], "ok"
+
+
+def extract_single_algebraic_equation(prompt: str, query: str) -> tuple[str | None, str]:
+    if query:
+        equation, reason = extract_algebraic_equation_from_text(query)
+        if equation:
+            return equation, "query:" + reason
+    equation, reason = extract_algebraic_equation_from_text(prompt)
+    return equation, "prompt:" + reason
+
+
+def algebraic_equation_probe(prompt: str, query: str) -> dict[str, Any]:
+    equation, reason = extract_single_algebraic_equation(prompt, query)
+    if not equation:
+        return {
+            "probe_name": "sympy_single_equation_probe",
+            "deployable": True,
+            "status": "abstain",
+            "prediction": "",
+            "proof": reason,
+        }
+    sp = import_sympy()
+    if sp is None:
+        return {
+            "probe_name": "sympy_single_equation_probe",
+            "deployable": True,
+            "status": "abstain",
+            "prediction": "",
+            "proof": "sympy_unavailable",
+        }
+    variables = sorted(set(re.findall(r"[A-Za-z]", equation)))
+    if len(variables) != 1:
+        return {
+            "probe_name": "sympy_single_equation_probe",
+            "deployable": True,
+            "status": "abstain",
+            "prediction": "",
+            "proof": "variable_count_not_one",
+        }
+    var = sp.symbols(variables[0])
+    local_dict = {variables[0]: var}
+    lhs_text, rhs_text = equation.split("=", 1)
+    try:
+        from sympy.parsing.sympy_parser import (
+            implicit_multiplication_application,
+            parse_expr,
+            standard_transformations,
+        )
+
+        transformations = standard_transformations + (implicit_multiplication_application,)
+        lhs = parse_expr(lhs_text.replace("^", "**"), local_dict=local_dict, transformations=transformations)
+        rhs = parse_expr(rhs_text.replace("^", "**"), local_dict=local_dict, transformations=transformations)
+        solutions = sp.solve(sp.Eq(lhs, rhs), var)
+    except Exception as exc:
+        return {
+            "probe_name": "sympy_single_equation_probe",
+            "deployable": True,
+            "status": "abstain",
+            "prediction": "",
+            "proof": "sympy_parse_or_solve_failed: " + repr(exc),
+        }
+    if len(solutions) != 1:
+        return {
+            "probe_name": "sympy_single_equation_probe",
+            "deployable": True,
+            "status": "abstain",
+            "prediction": "",
+            "proof": "solution_count_not_one",
+        }
+    solution = solutions[0]
+    try:
+        verified = sp.simplify(lhs.subs(var, solution) - rhs.subs(var, solution)) == 0
+    except Exception:
+        verified = False
+    if not verified:
+        return {
+            "probe_name": "sympy_single_equation_probe",
+            "deployable": True,
+            "status": "abstain",
+            "prediction": "",
+            "proof": "solution_failed_symbolic_verification",
+        }
+    return {
+        "probe_name": "sympy_single_equation_probe",
+        "deployable": True,
+        "status": "candidate",
+        "prediction": format_number(solution),
+        "proof": f"solved {equation} for {variables[0]} and verified substitution",
+    }
+
+
 def strip_ticks(text: str) -> str:
     return str(text).strip().strip("`").strip()
 
@@ -179,6 +318,9 @@ def split_examples_and_query(prompt: str) -> tuple[list[tuple[str, str]], str, s
 def classify_equation(prompt: str, examples: list[tuple[str, str]], query: str) -> tuple[str, str]:
     example_query_text = " ".join([query, " ".join(x + " " + y for x, y in examples)])
     all_text = " ".join([prompt, example_query_text])
+    algebraic_equation, algebraic_reason = extract_single_algebraic_equation(prompt, query)
+    if algebraic_equation:
+        return "algebraic_equation", "single_equation_parseable;" + algebraic_reason
     if re.search(r"\d+\s*[+\-*/%]\s*\d+", example_query_text):
         return "numeric_operator_transform", "numeric_binary_operator_signature"
     if examples and (
@@ -360,7 +502,11 @@ def numeric_operator_probe(examples: list[tuple[str, str]], query: str) -> dict[
     }
 
 
-def choose_equation_probe(subtype: str, examples: list[tuple[str, str]], query: str) -> dict[str, Any]:
+def choose_equation_probe(subtype: str, examples: list[tuple[str, str]], query: str, prompt: str) -> dict[str, Any]:
+    if subtype == "algebraic_equation":
+        algebraic = algebraic_equation_probe(prompt, query)
+        if algebraic.get("status") == "candidate":
+            return algebraic
     if subtype == "numeric_operator_transform":
         return numeric_operator_probe(examples, query)
     symbolic = symbolic_char_map_probe(examples, query)
@@ -390,7 +536,7 @@ def evaluate_equation_item(item: dict[str, Any]) -> tuple[dict[str, Any], dict[s
         "prompt_sha256": ps,
         "notes": parse_status + ";" + note,
     }
-    result = choose_equation_probe(subtype, examples, query)
+    result = choose_equation_probe(subtype, examples, query, prompt)
     status = str(result.get("status", "abstain"))
     prediction = str(result.get("prediction", ""))
     if status == "candidate":
@@ -479,6 +625,13 @@ def summarize(rows: list[dict[str, Any]], keys: list[str]) -> list[dict[str, Any
     ]
 
 
+def summarize_abstain_reasons(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    return summarize(
+        [row for row in rows if str(row.get("status", "")) == "abstain"],
+        ["subtype", "probe_name", "status", "proof"],
+    )
+
+
 def run_analysis(args: argparse.Namespace) -> dict[str, Any]:
     print("=== V236 LOCAL SOLVER DSL PROBES SCRIPT START ===", flush=True)
     print("generated_at_utc =", utc_now(), flush=True)
@@ -522,6 +675,7 @@ def run_analysis(args: argparse.Namespace) -> dict[str, Any]:
         "equation_solver_probe_results_csv": args.output_dir / f"{prefix}_equation_solver_probe_results.csv",
         "bit_guardrail_probe_results_csv": args.output_dir / f"{prefix}_bit_guardrail_probe_results.csv",
         "equation_probe_summary_csv": args.output_dir / f"{prefix}_equation_probe_summary.csv",
+        "equation_abstain_reason_summary_csv": args.output_dir / f"{prefix}_equation_abstain_reason_summary.csv",
         "manifest_json": args.output_dir / f"{prefix}_manifest.json",
     }
     write_csv(out_paths["equation_subtype_audit_csv"], equation_audit, EQUATION_AUDIT_COLUMNS)
@@ -531,6 +685,11 @@ def run_analysis(args: argparse.Namespace) -> dict[str, Any]:
         out_paths["equation_probe_summary_csv"],
         summarize(equation_probe, ["subtype", "probe_name", "status"]),
         ["subtype", "probe_name", "status", "rows"],
+    )
+    write_csv(
+        out_paths["equation_abstain_reason_summary_csv"],
+        summarize_abstain_reasons(equation_probe),
+        ABSTAIN_REASON_COLUMNS,
     )
 
     verified_count = len(verified_overrides)
@@ -548,7 +707,7 @@ def run_analysis(args: argparse.Namespace) -> dict[str, Any]:
                 f"incorrect_overrides={len(incorrect_overrides)}; "
                 f"target_gain={args.equation_target_gain}; bit_guardrail_ready={bit_guardrail_ready}"
             ),
-            "next_action": "Inspect equation_subtype_audit and extend only routes with exact parsers before any eval.",
+            "next_action": "Inspect equation_subtype_audit and equation_abstain_reason_summary; extend only routes with exact parsers before any eval.",
         }
 
     manifest = {
@@ -575,6 +734,7 @@ def run_analysis(args: argparse.Namespace) -> dict[str, Any]:
         },
         "equation_subtype_summary": summarize(equation_audit, ["subtype"]),
         "equation_probe_summary": summarize(equation_probe, ["subtype", "probe_name", "status"]),
+        "equation_abstain_reason_summary": summarize_abstain_reasons(equation_probe),
         "bit_probe_summary": summarize(bit_probe, ["status"]),
         "outputs": {name: str(path) for name, path in out_paths.items()},
         "output_artifact_hashes": {
@@ -587,6 +747,7 @@ def run_analysis(args: argparse.Namespace) -> dict[str, Any]:
     print("probe_counts =", json.dumps(manifest["probe_counts"], sort_keys=True), flush=True)
     print("equation_subtype_summary =", json.dumps(manifest["equation_subtype_summary"], indent=2, sort_keys=True), flush=True)
     print("equation_probe_summary =", json.dumps(manifest["equation_probe_summary"], indent=2, sort_keys=True), flush=True)
+    print("equation_abstain_reason_summary =", json.dumps(manifest["equation_abstain_reason_summary"], indent=2, sort_keys=True), flush=True)
     print("bit_probe_summary =", json.dumps(manifest["bit_probe_summary"], indent=2, sort_keys=True), flush=True)
     print("decision =", json.dumps(decision, indent=2, sort_keys=True), flush=True)
     print("outputs =", json.dumps({name: str(path) for name, path in out_paths.items()}, indent=2, sort_keys=True), flush=True)
@@ -628,6 +789,13 @@ def self_test() -> int:
                 "baseline_prediction": "6",
                 "prompt": "Below are a few examples: `2 + 3 = 5` `4 + 1 = 5` Now, determine the result for: `3 + 4`",
             },
+            {
+                "id": "eq_algebraic",
+                "family": "equation_transform",
+                "expected_answer": "2",
+                "baseline_prediction": "3",
+                "prompt": "Solve the single equation and return only the value. Now, determine the result for: `2*x + 3 = 7`",
+            },
         ]
         bit_rows = [
             {
@@ -664,11 +832,12 @@ def self_test() -> int:
             output_dir=out_dir,
             label="v236_local_solver_dsl_probes",
             expected_shared_row_contract_sha256=EXPECTED_ROW_CONTRACT_SHA256,
-            equation_target_gain=2,
+            equation_target_gain=3 if import_sympy() is not None else 2,
         )
         manifest = run_analysis(args)
-        if manifest["probe_counts"]["deployable_verified_equation_overrides"] != 2:
-            raise AssertionError("expected two verified equation overrides in self-test")
+        expected_verified = 3 if import_sympy() is not None else 2
+        if manifest["probe_counts"]["deployable_verified_equation_overrides"] != expected_verified:
+            raise AssertionError(f"expected {expected_verified} verified equation overrides in self-test")
         if manifest["probe_counts"]["bit_guardrail_signature_verified_rows"] != 1:
             raise AssertionError("expected bit guardrail signature verification")
     print("v236_local_solver_dsl_probes_self_test=ok", flush=True)

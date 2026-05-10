@@ -68,7 +68,7 @@ Purpose: run CPU-only local solver DSL probes over V232 workitems for `equation_
 
 This notebook does not train, does not run model generation, does not run full scoring, does not package artifacts, does not download external payloads, and does not submit to Kaggle.
 
-Primary outputs: `equation_subtype_audit_csv`, `equation_solver_probe_results_csv`, `bit_guardrail_probe_results_csv`, `equation_probe_summary_csv`, and `manifest_json`.
+Primary outputs: `equation_subtype_audit_csv`, `equation_solver_probe_results_csv`, `bit_guardrail_probe_results_csv`, `equation_probe_summary_csv`, `equation_abstain_reason_summary_csv`, and `manifest_json`.
 
 Colab: __COLAB_URL__
 
