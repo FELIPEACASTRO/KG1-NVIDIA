@@ -60,6 +60,8 @@ def code(source: str) -> dict:
 
 
 def build_notebook() -> dict:
+    global _CELL_COUNTER
+    _CELL_COUNTER = 0
     cells = [
         md(
             """# KG1 V230 V226 Complementarity Colab
@@ -91,10 +93,12 @@ import importlib
 import json
 import os
 import pathlib
+import queue
 import shutil
 import signal
 import subprocess
 import sys
+import threading
 import time
 
 os.environ.setdefault('TOKENIZERS_PARALLELISM', 'false')
@@ -138,8 +142,27 @@ INIT_ADAPTER_DIR = V226_BEST_CHECKPOINT
 
 EXPECTED_TRAIN_SHA256 = '__TRAIN_SHA__'
 EXPECTED_VAL_SHA256 = '__VAL_SHA__'
-MIN_TRAIN_EXAMPLES = 10206
-MIN_VAL_EXAMPLES = 681
+EXPECTED_TRAIN_ROWS = 10206
+EXPECTED_VAL_ROWS = 681
+MIN_TRAIN_EXAMPLES = EXPECTED_TRAIN_ROWS
+MIN_VAL_EXAMPLES = EXPECTED_VAL_ROWS
+EXPECTED_JSONL_KEYS = ['answer', 'family', 'id', 'messages', 'metadata', 'prompt', 'source', 'subcategory']
+EXPECTED_TRAIN_FAMILY_COUNTS = {
+    'bit_manipulation': 2695,
+    'equation_transform': 6935,
+    'gravity_constant': 144,
+    'numeral_system': 144,
+    'text_encryption': 144,
+    'unit_conversion': 144,
+}
+EXPECTED_VAL_FAMILY_COUNTS = {
+    'bit_manipulation': 164,
+    'equation_transform': 453,
+    'gravity_constant': 16,
+    'numeral_system': 16,
+    'text_encryption': 16,
+    'unit_conversion': 16,
+}
 TOKENIZE_ONLY_DRY_RUN = True
 MAX_PROMPT_TRUNCATION_RATE = 0.0
 REQUIRE_OFFSET_MASK = True
@@ -148,6 +171,8 @@ EXPECTED_V194_ADAPTER_BYTES = 4259069440
 EXPECTED_V194_ADAPTER_TENSOR_COUNT = 12011
 MIN_V217_ADAPTER_BYTES = 4250000000
 MIN_V217_ADAPTER_TENSOR_COUNT = 12000
+MIN_V226_CHECKPOINT_BYTES = 4250000000
+MIN_V226_CHECKPOINT_TENSOR_COUNT = 12000
 EXPECTED_V194_TARGET_MODULES = ['k_proj', 'up_proj', 'down_proj', 'out_proj', 'v_proj', 'q_proj', 'lm_head', 'o_proj', 'in_proj']
 EXPECTED_V194_TARGET_PARAMETERS = ['mlp.experts.gate_up_proj', 'mlp.experts.down_proj']
 
@@ -182,11 +207,16 @@ print('V226_BEST_CHECKPOINT =', V226_BEST_CHECKPOINT, flush=True)
 print('INIT_ADAPTER_DIR =', INIT_ADAPTER_DIR, flush=True)
 print('EXPECTED_TRAIN_SHA256 =', EXPECTED_TRAIN_SHA256, flush=True)
 print('EXPECTED_VAL_SHA256 =', EXPECTED_VAL_SHA256, flush=True)
+print('EXPECTED_TRAIN_ROWS =', EXPECTED_TRAIN_ROWS, flush=True)
+print('EXPECTED_VAL_ROWS =', EXPECTED_VAL_ROWS, flush=True)
 print('MIN_TRAIN_EXAMPLES =', MIN_TRAIN_EXAMPLES, flush=True)
 print('MIN_VAL_EXAMPLES =', MIN_VAL_EXAMPLES, flush=True)
+print('EXPECTED_TRAIN_FAMILY_COUNTS =', json.dumps(EXPECTED_TRAIN_FAMILY_COUNTS, sort_keys=True), flush=True)
+print('EXPECTED_VAL_FAMILY_COUNTS =', json.dumps(EXPECTED_VAL_FAMILY_COUNTS, sort_keys=True), flush=True)
 print('TOKENIZE_ONLY_DRY_RUN =', TOKENIZE_ONLY_DRY_RUN, flush=True)
 print('MAX_PROMPT_TRUNCATION_RATE =', MAX_PROMPT_TRUNCATION_RATE, flush=True)
 print('REQUIRE_OFFSET_MASK =', REQUIRE_OFFSET_MASK, flush=True)
+print('tokenization_offset_mask_contract = not_applicable_for_v230_cpu_only_artifact_analysis', flush=True)
 print('RUN_TRAIN =', RUN_TRAIN, flush=True)
 print('RUN_ANALYSIS =', RUN_ANALYSIS, flush=True)
 print('RUN_FULL_IF_GATE =', RUN_FULL_IF_GATE, flush=True)
@@ -273,13 +303,33 @@ def run_cmd(cmd, cwd=None, log_path=None, check=True, heartbeat_s=0, suppress_af
     timed_out = False
     last_heartbeat = time.time()
     assert proc.stdout is not None
-    for line in proc.stdout:
-        lines.append(line.rstrip('\\n'))
-        if log_handle:
-            log_handle.write(line)
-            log_handle.flush()
-        if len(lines) <= suppress_after_lines:
-            print(line, end='', flush=True)
+    output_queue = queue.Queue()
+    stdout_done = object()
+
+    def _reader():
+        try:
+            for stdout_line in proc.stdout:
+                output_queue.put(stdout_line)
+        finally:
+            output_queue.put(stdout_done)
+
+    reader = threading.Thread(target=_reader, name='kg1-run-cmd-reader', daemon=True)
+    reader.start()
+    while True:
+        try:
+            item = output_queue.get(timeout=0.5)
+        except queue.Empty:
+            item = None
+        if item is stdout_done:
+            break
+        if item is not None:
+            line = item
+            lines.append(line.rstrip('\\n'))
+            if log_handle:
+                log_handle.write(line)
+                log_handle.flush()
+            if len(lines) <= suppress_after_lines:
+                print(line, end='', flush=True)
         now = time.time()
         if heartbeat_s and now - last_heartbeat >= heartbeat_s:
             print('[V230 heartbeat] elapsed_s={:.1f} {}'.format(now - started, resource_snapshot_line()), flush=True)
@@ -295,6 +345,8 @@ def run_cmd(cmd, cwd=None, log_path=None, check=True, heartbeat_s=0, suppress_af
             except Exception as exc:
                 print('timeout_kill_warning =', repr(exc), flush=True)
                 proc.kill()
+            break
+        if item is None and proc.poll() is not None and not reader.is_alive():
             break
     returncode = proc.wait()
     if timed_out:
@@ -315,19 +367,22 @@ def run_cmd(cmd, cwd=None, log_path=None, check=True, heartbeat_s=0, suppress_af
 
 def is_complete_adapter_dir(path):
     path = pathlib.Path(path)
-    return path.is_dir() and (path / 'adapter_config.json').exists() and (
-        (path / 'adapter_model.safetensors').exists() or (path / 'adapter_model.bin').exists()
-    )
+    return path.is_dir() and (path / 'adapter_config.json').exists() and (path / 'adapter_model.safetensors').exists()
 
 def resolve_predictions_from_report(report_json):
     report_json = pathlib.Path(report_json)
     report = read_json(report_json)
     direct = report.get('outputs', {}).get('predictions_csv', '')
-    if direct and pathlib.Path(direct).exists():
-        return pathlib.Path(direct)
+    if direct:
+        direct_path = pathlib.Path(direct)
+        if direct_path.exists():
+            return direct_path
+        raise FileNotFoundError('report predictions_csv does not exist: ' + str(direct_path))
     matches = sorted(report_json.parent.glob('*_predictions.csv'))
-    if matches:
+    if len(matches) == 1:
         return matches[0]
+    if len(matches) > 1:
+        raise RuntimeError('ambiguous prediction CSV fallback for ' + str(report_json) + ': ' + json.dumps([str(p) for p in matches]))
     raise FileNotFoundError(report_json)
 
 def csv_data_rows(path):
@@ -493,20 +548,91 @@ print('train_path =', train_path, 'exists =', train_path.exists(), flush=True)
 print('val_path =', val_path, 'exists =', val_path.exists(), flush=True)
 observed_train_sha256 = sha256_file(train_path)
 observed_val_sha256 = sha256_file(val_path)
-train_rows = sum(1 for _ in train_path.open('r', encoding='utf-8'))
-val_rows = sum(1 for _ in val_path.open('r', encoding='utf-8'))
 print('observed_train_sha256 =', observed_train_sha256, flush=True)
 print('observed_val_sha256 =', observed_val_sha256, flush=True)
-print('train_rows =', train_rows, flush=True)
-print('val_rows =', val_rows, flush=True)
 if observed_train_sha256 != EXPECTED_TRAIN_SHA256:
     raise RuntimeError('train sha256 mismatch')
 if observed_val_sha256 != EXPECTED_VAL_SHA256:
     raise RuntimeError('validation sha256 mismatch')
-if train_rows < MIN_TRAIN_EXAMPLES:
-    raise RuntimeError('train row count below minimum')
-if val_rows < MIN_VAL_EXAMPLES:
-    raise RuntimeError('validation row count below minimum')
+
+def inspect_short_answer_jsonl(path, expected_rows, expected_family_counts, split_name):
+    print(split_name, 'jsonl_audit_start =', path, flush=True)
+    rows = 0
+    ids = set()
+    duplicate_ids = 0
+    family_counts = {}
+    source_counts = {}
+    assistant_mismatch = 0
+    bad_rows = []
+    with pathlib.Path(path).open('r', encoding='utf-8') as handle:
+        for line_no, line in enumerate(handle, 1):
+            rows += 1
+            try:
+                item = json.loads(line)
+            except Exception as exc:
+                bad_rows.append({'line': line_no, 'error': 'json_parse', 'detail': repr(exc)})
+                continue
+            if sorted(item.keys()) != EXPECTED_JSONL_KEYS:
+                bad_rows.append({'line': line_no, 'error': 'schema', 'keys': sorted(item.keys())})
+            row_id = str(item.get('id', ''))
+            if row_id in ids:
+                duplicate_ids += 1
+            ids.add(row_id)
+            family = str(item.get('family', ''))
+            source = str(item.get('source', ''))
+            family_counts[family] = family_counts.get(family, 0) + 1
+            source_counts[source] = source_counts.get(source, 0) + 1
+            answer = str(item.get('answer', '')).strip()
+            prompt = str(item.get('prompt', '')).strip()
+            messages = item.get('messages')
+            if not row_id or not answer or not prompt:
+                bad_rows.append({'line': line_no, 'error': 'empty_required_field'})
+            if not isinstance(messages, list) or len(messages) < 3:
+                bad_rows.append({'line': line_no, 'error': 'messages_shape'})
+                continue
+            final_message = messages[-1]
+            if final_message.get('role') != 'assistant':
+                bad_rows.append({'line': line_no, 'error': 'final_message_role', 'role': final_message.get('role')})
+                continue
+            final_text = str(final_message.get('content', '')).strip()
+            expected_final = 'Final answer: ' + answer
+            if final_text != expected_final:
+                assistant_mismatch += 1
+                if len(bad_rows) < 10:
+                    bad_rows.append({'line': line_no, 'error': 'assistant_answer_mismatch', 'expected': expected_final, 'observed': final_text})
+    summary = {
+        'path': str(path),
+        'rows': rows,
+        'unique_ids': len(ids),
+        'duplicate_ids': duplicate_ids,
+        'family_counts': family_counts,
+        'source_counts': source_counts,
+        'assistant_mismatch': assistant_mismatch,
+        'bad_rows_first10': bad_rows[:10],
+    }
+    print(split_name, 'jsonl_audit_summary =', json.dumps(summary, sort_keys=True), flush=True)
+    if rows != expected_rows:
+        raise RuntimeError(split_name + ' row count mismatch')
+    if duplicate_ids:
+        raise RuntimeError(split_name + ' duplicate ids found')
+    if family_counts != expected_family_counts:
+        raise RuntimeError(split_name + ' family counts mismatch')
+    if assistant_mismatch:
+        raise RuntimeError(split_name + ' assistant final answer mismatch')
+    if bad_rows:
+        raise RuntimeError(split_name + ' jsonl audit found bad rows')
+    return summary
+
+manifest_path = ROOT / 'data/v217/v217_short_answer_manifest.json'
+print('manifest_path =', manifest_path, 'exists =', manifest_path.exists(), flush=True)
+manifest = read_json(manifest_path)
+print('manifest_version =', manifest.get('version'), flush=True)
+if manifest.get('train', {}).get('sha256') != EXPECTED_TRAIN_SHA256:
+    raise RuntimeError('manifest train sha256 mismatch')
+if manifest.get('validation', {}).get('sha256') != EXPECTED_VAL_SHA256:
+    raise RuntimeError('manifest validation sha256 mismatch')
+train_audit = inspect_short_answer_jsonl(train_path, EXPECTED_TRAIN_ROWS, EXPECTED_TRAIN_FAMILY_COUNTS, 'train')
+val_audit = inspect_short_answer_jsonl(val_path, EXPECTED_VAL_ROWS, EXPECTED_VAL_FAMILY_COUNTS, 'validation')
 print('=== V230 REPO SETUP END ===', flush=True)
 """
         ),
@@ -585,6 +711,11 @@ for label, adapter_path in [('V194', V194_ADAPTER), ('V217', V217_ADAPTER), ('V2
             raise RuntimeError('V217 final adapter tensor count below expected floor')
         if weights_path.stat().st_size < MIN_V217_ADAPTER_BYTES:
             raise RuntimeError('V217 final_adapter size mismatch')
+    if label in {'V226_BEST', 'INIT'}:
+        if tensor_count < MIN_V226_CHECKPOINT_TENSOR_COUNT:
+            raise RuntimeError(f'{label} checkpoint tensor count below expected floor')
+        if weights_path.stat().st_size < MIN_V226_CHECKPOINT_BYTES:
+            raise RuntimeError(f'{label} checkpoint weight size below expected floor')
 print('=== V230 RUNTIME ARTIFACT AUDIT END ===', flush=True)
 """
         ),
@@ -605,6 +736,7 @@ def summarize_batch_artifacts(summary_json, label):
         predictions_exists = False
         prediction_bytes = 0
         prediction_rows = 0
+        prediction_sha256 = ''
         if report_exists:
             try:
                 prediction_path = resolve_predictions_from_report(report_json)
@@ -612,6 +744,7 @@ def summarize_batch_artifacts(summary_json, label):
                 predictions_exists = prediction_path.exists()
                 prediction_bytes = prediction_path.stat().st_size if predictions_exists else 0
                 prediction_rows = csv_data_rows(prediction_path) if predictions_exists else 0
+                prediction_sha256 = sha256_file(prediction_path) if predictions_exists else ''
             except Exception as exc:
                 predictions_csv = 'resolve_error:' + repr(exc)
         inspected.append({
@@ -627,6 +760,7 @@ def summarize_batch_artifacts(summary_json, label):
             'predictions_exists': predictions_exists,
             'prediction_bytes': prediction_bytes,
             'prediction_rows': prediction_rows,
+            'prediction_sha256': prediction_sha256,
         })
     for item in inspected:
         print(label, 'candidate_artifact =', json.dumps(item, sort_keys=True), flush=True)
@@ -640,8 +774,15 @@ def summarize_batch_artifacts(summary_json, label):
 
 v221_candidates = summarize_batch_artifacts(V221_BATCH_SUMMARY_JSON, 'V221')
 v226_candidates = summarize_batch_artifacts(V226_BATCH_SUMMARY_JSON, 'V226')
+if not v221_candidates:
+    raise RuntimeError('V221 batch summary has no ok candidates.')
 if not v226_candidates:
     raise RuntimeError('V226 batch summary has no ok candidates.')
+preferred_v226 = [row for row in v226_candidates if str(row.get('name', '')) == 'v226_best_checkpoint1_observed_191']
+if not preferred_v226:
+    raise RuntimeError('Required V226 baseline row missing: v226_best_checkpoint1_observed_191')
+if int(preferred_v226[0].get('correct') or 0) != KNOWN_V226_WEAK_TOTAL:
+    raise RuntimeError('Required V226 baseline correct count mismatch')
 known_v226_rows = [row for row in v226_candidates if 'checkpoint' in str(row.get('name', '')).lower()]
 print('known_v226_checkpoint_rows =', json.dumps(known_v226_rows[:5], indent=2, sort_keys=True), flush=True)
 print('=== V230 PREDICTION PREFLIGHT END ===', flush=True)

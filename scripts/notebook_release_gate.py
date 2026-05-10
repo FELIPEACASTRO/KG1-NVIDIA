@@ -263,6 +263,34 @@ V221_REQUIRED_SNIPPETS = {
     "submit lock guard": "Kaggle submission is disabled",
 }
 
+V230_NOTEBOOK_REL = "notebooks/KG1_V230_V226_COMPLEMENTARITY_COLAB.ipynb"
+V230_REQUIRED_FILES = [
+    V218_TRAIN_REL,
+    V218_VAL_REL,
+    "data/v217/v217_short_answer_manifest.json",
+    "scripts/analyze_v230_v226_complementarity.py",
+    "scripts/build_v230_v226_complementarity_colab.py",
+    "scripts/notebook_release_gate.py",
+    "src/competition_utils.py",
+]
+
+V230_REQUIRED_SNIPPETS = {
+    "cpu-only purpose": "V230 CPU-only path does not install vLLM",
+    "v226 preferred baseline": "v226__v226_best_checkpoint1_observed_191",
+    "v226 known weak total": "KNOWN_V226_WEAK_TOTAL = 191",
+    "v221 nonempty gate": "V221 batch summary has no ok candidates.",
+    "v226 baseline row gate": "Required V226 baseline row missing: v226_best_checkpoint1_observed_191",
+    "jsonl semantic audit": "inspect_short_answer_jsonl",
+    "jsonl assistant audit": "assistant_answer_mismatch",
+    "train family counts": "EXPECTED_TRAIN_FAMILY_COUNTS",
+    "silent subprocess queue": "output_queue = queue.Queue()",
+    "silent subprocess reader": "threading.Thread",
+    "strict prediction fallback": "ambiguous prediction CSV fallback",
+    "prediction sha log": "prediction_sha256",
+    "hard submit false": "ALLOW_KAGGLE_SUBMIT = False",
+    "no package submit": "No package and no Kaggle submit can be created in V230.",
+}
+
 
 @dataclass
 class Finding:
@@ -743,6 +771,66 @@ def audit_v221_candidate_registry_contract(path: Path, notebook: dict[str, Any],
             add(findings, "error", "v221_builder_required_snippet_missing", snippet)
 
 
+def audit_v230_v226_complementarity_contract(path: Path, notebook: dict[str, Any], text: str, findings: list[Finding]) -> None:
+    """Strict release gate for the V230 CPU-only complementarity notebook."""
+
+    if repo_rel(path) != V230_NOTEBOOK_REL:
+        return
+
+    code_cells = [cell for cell in notebook.get("cells", []) if cell.get("cell_type") == "code"]
+    if len(code_cells) != 8:
+        add(findings, "error", "v230_code_cell_count", f"expected 8 code cells, found {len(code_cells)}")
+    outputs_total = sum(len(cell.get("outputs", []) or []) for cell in code_cells)
+    if outputs_total:
+        add(findings, "error", "v230_notebook_has_outputs", f"notebook must be committed clean; outputs={outputs_total}")
+
+    for name, snippet in V230_REQUIRED_SNIPPETS.items():
+        if snippet not in text:
+            add(findings, "error", "v230_required_snippet_missing", name)
+
+    for rel_path in V230_REQUIRED_FILES:
+        if not (ROOT / rel_path).exists():
+            add(findings, "error", "v230_required_file_missing", rel_path)
+
+    analyzer = ROOT / "scripts" / "analyze_v230_v226_complementarity.py"
+    analyzer_text = analyzer.read_text(encoding="utf-8") if analyzer.exists() else ""
+    analyzer_snippets = {
+        "raw output required": '{"id", "prompt", "answer", "prediction", "raw_output"}',
+        "extractor drift gate": "raw_output extraction differs from prediction",
+        "csv correct drift gate": "CSV correct disagrees with current verifier",
+        "row contract function": "validate_shared_row_contract",
+        "row contract hash": "shared_row_contract_sha256",
+        "canonical family": "canonical_family",
+        "strict report predictions": "report predictions_csv does not exist",
+        "strict ambiguous fallback": "ambiguous prediction CSV fallback",
+        "required baseline missing": "required preferred baseline was not found",
+        "baseline correct expected": "--expected-baseline-correct",
+        "baseline fallback opt in": "--allow-baseline-fallback",
+        "rescore mismatch opt in": "--allow-rescore-mismatch",
+        "manifest load meta": '"load_meta": load_meta',
+    }
+    for name, snippet in analyzer_snippets.items():
+        if snippet not in analyzer_text:
+            add(findings, "error", "v230_analyzer_contract_missing", name)
+
+    builder = ROOT / "scripts" / "build_v230_v226_complementarity_colab.py"
+    builder_text = builder.read_text(encoding="utf-8") if builder.exists() else ""
+    for snippet in V230_REQUIRED_SNIPPETS.values():
+        if snippet not in builder_text:
+            add(findings, "error", "v230_builder_required_snippet_missing", snippet)
+    builder_snippets = {
+        "idempotent cell ids": "_CELL_COUNTER = 0",
+        "safetensors only adapter completeness": "adapter_model.safetensors').exists()",
+        "v226 tensor floor": "MIN_V226_CHECKPOINT_TENSOR_COUNT",
+        "v226 size floor": "MIN_V226_CHECKPOINT_BYTES",
+        "v221 nonempty gate": "V221 batch summary has no ok candidates.",
+        "preferred v226 correct gate": "Required V226 baseline correct count mismatch",
+    }
+    for name, snippet in builder_snippets.items():
+        if snippet not in builder_text:
+            add(findings, "error", "v230_builder_contract_missing", name)
+
+
 def audit_notebook(path: Path) -> NotebookAudit:
     findings: list[Finding] = []
     rel = repo_rel(path)
@@ -766,6 +854,7 @@ def audit_notebook(path: Path) -> NotebookAudit:
         audit_v219_weak_decode_ab_contract(path, notebook, text, findings)
         audit_v220_public_adapter_probe_contract(path, notebook, text, findings)
         audit_v221_candidate_registry_contract(path, notebook, text, findings)
+        audit_v230_v226_complementarity_contract(path, notebook, text, findings)
     for snippet in GENERIC_REQUIRED_SNIPPETS:
         if is_training_or_eval_notebook(text) and snippet not in text:
             add(findings, "error", "generic_training_snippet_missing", snippet)

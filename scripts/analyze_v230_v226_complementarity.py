@@ -9,6 +9,7 @@ row-level signal can close the weak gate before any new training or full eval.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import sys
 from datetime import datetime, timezone
@@ -21,7 +22,7 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from src.competition_utils import classify_puzzle, verify_answer  # noqa: E402
+from src.competition_utils import canonical_family, classify_puzzle, extract_final_answer, verify_answer  # noqa: E402
 
 
 WEAK_FAMILIES = ("bit_manipulation", "equation_transform")
@@ -38,6 +39,18 @@ def read_json(path: Path) -> dict[str, Any]:
 def write_json(path: Path, payload: Any) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(payload, indent=2, sort_keys=True), encoding="utf-8")
+
+
+def sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def sha256_text(value: object) -> str:
+    return hashlib.sha256(str(value).encode("utf-8", errors="replace")).hexdigest()
 
 
 def safe_name(value: str) -> str:
@@ -68,11 +81,16 @@ def first_existing_column(frame: pd.DataFrame, candidates: list[str]) -> str | N
 def resolve_report_predictions(report_path: Path) -> Path:
     report = read_json(report_path)
     output_path = report.get("outputs", {}).get("predictions_csv", "")
-    if output_path and Path(output_path).exists():
-        return Path(output_path)
+    if output_path:
+        path = Path(output_path)
+        if path.exists():
+            return path
+        raise FileNotFoundError(f"report predictions_csv does not exist: {path}")
     matches = sorted(report_path.parent.glob("*_predictions.csv"))
-    if matches:
+    if len(matches) == 1:
         return matches[0]
+    if len(matches) > 1:
+        raise RuntimeError(f"ambiguous prediction CSV fallback for {report_path}: {[str(path) for path in matches]}")
     raise FileNotFoundError(f"could not resolve predictions csv from report: {report_path}")
 
 
@@ -87,21 +105,10 @@ def specs_from_batch_summary(path: Path, source: str) -> list[dict[str, str]]:
             continue
         original_name = str(row.get("name") or "").strip()
         report_json = Path(str(row.get("report_json") or ""))
-        if not original_name or not report_json.exists():
-            print(
-                "candidate_artifact_skip =",
-                json.dumps(
-                    {
-                        "source": source,
-                        "name": original_name,
-                        "report_json": str(report_json),
-                        "report_exists": report_json.exists(),
-                    },
-                    sort_keys=True,
-                ),
-                flush=True,
-            )
-            continue
+        if not original_name:
+            raise ValueError(f"{path} has an ok row with an empty candidate name")
+        if not report_json.exists():
+            raise FileNotFoundError(f"{path} has an ok row with missing report_json: {report_json}")
         predictions_csv = resolve_report_predictions(report_json)
         specs.append(
             {
@@ -142,21 +149,32 @@ def parse_extra_candidate(raw: str) -> dict[str, str]:
     }
 
 
-def load_predictions(spec: dict[str, str]) -> tuple[pd.DataFrame, dict[str, Any]]:
+def load_predictions(spec: dict[str, str], allow_rescore_mismatch: bool = False) -> tuple[pd.DataFrame, dict[str, Any]]:
     path = Path(spec["predictions_csv"])
     frame = pd.read_csv(path)
-    required = {"id", "prompt", "answer", "prediction"}
+    required = {"id", "prompt", "answer", "prediction", "raw_output"}
     missing = sorted(required - set(frame.columns))
     if missing:
         raise ValueError(f"{path} missing required columns: {missing}")
     out = frame.copy()
     out["id"] = out["id"].astype(str)
+    duplicate_ids = int(out["id"].duplicated().sum())
+    if duplicate_ids:
+        raise RuntimeError(f"{path} has duplicate ids after string normalization: {duplicate_ids}")
     family_col = first_existing_column(out, ["type", "task_type", "family"])
     if family_col:
-        out["family"] = out[family_col].astype(str)
+        out["family"] = out[family_col].map(canonical_family)
     else:
-        out["family"] = out["prompt"].map(classify_puzzle)
+        out["family"] = out["prompt"].map(classify_puzzle).map(canonical_family)
     out = out[out["family"].isin(WEAK_FAMILIES)].copy()
+    out["answer"] = out["answer"].astype(str)
+    out["prompt"] = out["prompt"].astype(str)
+    out["prediction"] = out["prediction"].fillna("").astype(str)
+    out["raw_output"] = out["raw_output"].fillna("").astype(str)
+    out["prompt_sha256"] = out["prompt"].map(sha256_text)
+    extractor_mismatch = int((out["raw_output"].map(extract_final_answer) != out["prediction"]).sum())
+    if extractor_mismatch:
+        raise RuntimeError(f"{path} has {extractor_mismatch} rows where raw_output extraction differs from prediction")
     if "truncated" in out.columns:
         out["truncated_bool"] = out["truncated"].map(parse_bool)
     elif "finish_reason" in out.columns:
@@ -168,6 +186,8 @@ def load_predictions(spec: dict[str, str]) -> tuple[pd.DataFrame, dict[str, Any]
         mismatch = int((out["correct"].map(parse_bool) != out["correct_bool"]).sum())
     else:
         mismatch = 0
+    if mismatch and not allow_rescore_mismatch:
+        raise RuntimeError(f"{path} has {mismatch} rows where CSV correct disagrees with current verifier")
     out["candidate"] = spec["name"]
     out["original_name"] = spec["original_name"]
     out["source"] = spec["source"]
@@ -177,10 +197,57 @@ def load_predictions(spec: dict[str, str]) -> tuple[pd.DataFrame, dict[str, Any]
         "original_name": spec["original_name"],
         "source": spec["source"],
         "predictions_csv": str(path),
+        "predictions_csv_sha256": sha256_file(path),
         "rows": int(len(out)),
+        "family_counts": {str(k): int(v) for k, v in out["family"].value_counts().to_dict().items()},
         "correct_mismatch_vs_csv": mismatch,
+        "extractor_mismatch_vs_prediction": extractor_mismatch,
     }
     return out, meta
+
+
+def validate_shared_row_contract(frames: list[pd.DataFrame], load_meta: list[dict[str, Any]], shared_ids: set[str]) -> None:
+    contract_cols = ["id", "family", "answer", "prompt_sha256"]
+    reference: dict[str, tuple[str, str, str]] | None = None
+    reference_candidate = ""
+    for frame, meta in zip(frames, load_meta):
+        candidate = str(meta["candidate"])
+        contract = frame[frame["id"].isin(shared_ids)][contract_cols].copy().sort_values("id")
+        if int(contract["id"].duplicated().sum()):
+            raise RuntimeError(f"{candidate} has duplicate shared ids")
+        records = {
+            str(row.id): (str(row.family), str(row.answer), str(row.prompt_sha256))
+            for row in contract.itertuples(index=False)
+        }
+        digest_payload = "\n".join(
+            f"{row_id}\t{family}\t{answer}\t{prompt_hash}"
+            for row_id, (family, answer, prompt_hash) in sorted(records.items())
+        )
+        meta["shared_row_contract_sha256"] = sha256_text(digest_payload)
+        if reference is None:
+            reference = records
+            reference_candidate = candidate
+            continue
+        mismatches = []
+        assert reference is not None
+        for row_id, value in records.items():
+            if reference.get(row_id) != value:
+                mismatches.append(
+                    {
+                        "id": row_id,
+                        "reference_candidate": reference_candidate,
+                        "reference": reference.get(row_id),
+                        "candidate": candidate,
+                        "observed": value,
+                    }
+                )
+            if len(mismatches) >= 10:
+                break
+        if mismatches:
+            raise RuntimeError(
+                "prediction CSV row contract mismatch by id: "
+                + json.dumps(mismatches, sort_keys=True, ensure_ascii=True)
+            )
 
 
 def candidate_summary(long_df: pd.DataFrame, thresholds: dict[str, int]) -> pd.DataFrame:
@@ -244,10 +311,12 @@ def per_family_summary(long_df: pd.DataFrame) -> pd.DataFrame:
     return pd.DataFrame(rows)
 
 
-def pick_baseline(summary_df: pd.DataFrame, preferred: str) -> str:
+def pick_baseline(summary_df: pd.DataFrame, preferred: str, allow_fallback: bool = False) -> str:
     candidates = summary_df["candidate"].astype(str).tolist()
     if preferred in candidates:
         return preferred
+    if not allow_fallback:
+        raise RuntimeError(f"required preferred baseline was not found: {preferred}")
     contains = [
         item
         for item in candidates
@@ -445,7 +514,8 @@ def simulate_routers(
                 break
         oracle_any[row_id] = chosen
         baseline_row = group[group["candidate"] == baseline].iloc[0]
-        default_plus_oracle_miss[row_id] = baseline if bool(baseline_row["correct_bool"]) else chosen
+        baseline_effective_ok = bool(baseline_row["correct_bool"]) and not bool(baseline_row["truncated_bool"])
+        default_plus_oracle_miss[row_id] = baseline if baseline_effective_ok else chosen
     add_strategy("oracle_any_candidate_by_row", oracle_any, False)
     add_strategy(f"baseline_plus_oracle_misses::{baseline}", default_plus_oracle_miss, False)
 
@@ -462,7 +532,8 @@ def baseline_miss_hits(long_df: pd.DataFrame, baseline: str) -> pd.DataFrame:
     grouped = {row_id: group for row_id, group in long_df.groupby("id", sort=False)}
     for row_id, group in grouped.items():
         baseline_row = group[group["candidate"] == baseline].iloc[0]
-        if bool(baseline_row["correct_bool"]):
+        baseline_effective_ok = bool(baseline_row["correct_bool"]) and not bool(baseline_row["truncated_bool"])
+        if baseline_effective_ok:
             continue
         hits = group[group["correct_bool"] & ~group["truncated_bool"]]["candidate"].astype(str).tolist()
         rows.append(
@@ -471,6 +542,8 @@ def baseline_miss_hits(long_df: pd.DataFrame, baseline: str) -> pd.DataFrame:
                 "family": baseline_row["family"],
                 "answer": baseline_row["answer"],
                 "baseline_prediction": baseline_row["prediction"],
+                "baseline_correct": bool(baseline_row["correct_bool"]),
+                "baseline_truncated": bool(baseline_row["truncated_bool"]),
                 "correct_alternative_count": len(hits),
                 "correct_alternative_candidates": ";".join(hits),
                 "prompt": baseline_row["prompt"],
@@ -481,6 +554,8 @@ def baseline_miss_hits(long_df: pd.DataFrame, baseline: str) -> pd.DataFrame:
         "family",
         "answer",
         "baseline_prediction",
+        "baseline_correct",
+        "baseline_truncated",
         "correct_alternative_count",
         "correct_alternative_candidates",
         "prompt",
@@ -498,10 +573,14 @@ def choose_decision(
     baseline_summary: dict[str, Any],
     thresholds: dict[str, int],
 ) -> dict[str, Any]:
-    deployable_pass = router_df[router_df["deployable_without_row_labels"] & router_df["weak_gate_pass_for_full"]]
+    router_strategy = router_df["strategy"].astype(str)
+    is_single_strategy = router_strategy.str.startswith("single::")
+    deployable_pass = router_df[
+        router_df["deployable_without_row_labels"] & router_df["weak_gate_pass_for_full"] & ~is_single_strategy
+    ]
     single_pass = summary_df[summary_df["weak_gate_pass_for_full"]]
     row_oracle_pass = router_df[(~router_df["deployable_without_row_labels"]) & router_df["weak_gate_pass_for_full"]]
-    deployable_routers = router_df[router_df["deployable_without_row_labels"]].sort_values(
+    deployable_routers = router_df[router_df["deployable_without_row_labels"] & ~is_single_strategy].sort_values(
         ["correct", "equation_transform_correct", "bit_manipulation_correct", "truncated"],
         ascending=[False, False, False, True],
     )
@@ -512,6 +591,10 @@ def choose_decision(
     best_deployable = deployable_routers.iloc[0].to_dict() if len(deployable_routers) else {}
     best_row_oracle = row_oracle_routers.iloc[0].to_dict() if len(row_oracle_routers) else {}
     baseline_correct = as_int(baseline_summary.get("correct"))
+    best_single = summary_df.sort_values(
+        ["correct", "equation_transform_correct", "bit_manipulation_correct", "truncated"],
+        ascending=[False, False, False, True],
+    ).iloc[0].to_dict()
     if len(deployable_pass):
         best = deployable_pass.iloc[0].to_dict()
         return {
@@ -543,6 +626,13 @@ def choose_decision(
             "reason": f"router_correct={as_int(best_deployable.get('correct'))}; baseline_correct={baseline_correct}; total_gap={as_int(best_deployable.get('gate_total_gap'))}; eq_gap={as_int(best_deployable.get('gate_eq_gap'))}; bit_gap={as_int(best_deployable.get('gate_bit_gap'))}",
             "next_action": "Use the gained/lost rows to build a small verified solver or router, not another blind continuation.",
         }
+    if best_single and as_int(best_single.get("correct")) > baseline_correct:
+        return {
+            "decision": "single_candidate_improves_baseline_but_misses_weak_gate",
+            "best_candidate": best_single.get("candidate"),
+            "reason": f"candidate_correct={as_int(best_single.get('correct'))}; baseline_correct={baseline_correct}; total_gap={as_int(best_single.get('gate_total_gap'))}; eq_gap={as_int(best_single.get('gate_eq_gap'))}; bit_gap={as_int(best_single.get('gate_bit_gap'))}",
+            "next_action": "Use pairwise gained/lost rows to decide whether this adapter deserves a separate confirmation eval.",
+        }
     if best_row_oracle and as_int(best_row_oracle.get("correct")) > baseline_correct:
         return {
             "decision": "row_level_oracle_improves_but_misses_weak_gate",
@@ -572,6 +662,10 @@ def main() -> int:
     parser.add_argument("--weak-eq-min", type=int, default=60)
     parser.add_argument("--weak-bit-min", type=int, default=133)
     parser.add_argument("--weak-trunc-max", type=int, default=3)
+    parser.add_argument("--expected-baseline-correct", type=int, default=191)
+    parser.add_argument("--expected-baseline-rows", type=int, default=315)
+    parser.add_argument("--allow-baseline-fallback", action="store_true")
+    parser.add_argument("--allow-rescore-mismatch", action="store_true")
     args = parser.parse_args()
 
     thresholds = {
@@ -591,6 +685,10 @@ def main() -> int:
     print("output_dir =", args.output_dir, flush=True)
     print("label =", args.label, flush=True)
     print("preferred_baseline =", args.preferred_baseline, flush=True)
+    print("expected_baseline_correct =", args.expected_baseline_correct, flush=True)
+    print("expected_baseline_rows =", args.expected_baseline_rows, flush=True)
+    print("allow_baseline_fallback =", args.allow_baseline_fallback, flush=True)
+    print("allow_rescore_mismatch =", args.allow_rescore_mismatch, flush=True)
     print("thresholds =", json.dumps(thresholds, indent=2, sort_keys=True), flush=True)
 
     specs: list[dict[str, str]] = []
@@ -619,7 +717,7 @@ def main() -> int:
     frames: list[pd.DataFrame] = []
     load_meta: list[dict[str, Any]] = []
     for spec in specs:
-        frame, meta = load_predictions(spec)
+        frame, meta = load_predictions(spec, allow_rescore_mismatch=bool(args.allow_rescore_mismatch))
         print("loaded_candidate =", json.dumps(meta, sort_keys=True), flush=True)
         frames.append(frame)
         load_meta.append(meta)
@@ -629,6 +727,15 @@ def main() -> int:
     print("shared_row_count =", len(shared_ids), flush=True)
     if len(shared_ids) != 315:
         raise RuntimeError(f"expected exactly 315 shared weak rows, got {len(shared_ids)}")
+    validate_shared_row_contract(frames, load_meta, shared_ids)
+    print(
+        "validated_shared_row_contracts =",
+        json.dumps(
+            {str(item["candidate"]): item.get("shared_row_contract_sha256", "") for item in load_meta},
+            sort_keys=True,
+        ),
+        flush=True,
+    )
     long_df = long_df[long_df["id"].isin(shared_ids)].copy()
     family_counts = long_df.drop_duplicates("id")["family"].value_counts().to_dict()
     print("family_counts =", json.dumps(family_counts, sort_keys=True), flush=True)
@@ -639,9 +746,19 @@ def main() -> int:
 
     summary_df = candidate_summary(long_df, thresholds)
     family_df = per_family_summary(long_df)
-    baseline = pick_baseline(summary_df, args.preferred_baseline)
+    baseline = pick_baseline(summary_df, args.preferred_baseline, allow_fallback=bool(args.allow_baseline_fallback))
     print("resolved_baseline =", baseline, flush=True)
     baseline_summary = summary_df[summary_df["candidate"] == baseline].iloc[0].to_dict()
+    if args.expected_baseline_correct >= 0 and as_int(baseline_summary.get("correct")) != args.expected_baseline_correct:
+        raise RuntimeError(
+            f"baseline correct mismatch: expected {args.expected_baseline_correct}, got {as_int(baseline_summary.get('correct'))}"
+        )
+    if args.expected_baseline_rows >= 0 and as_int(baseline_summary.get("rows")) != args.expected_baseline_rows:
+        raise RuntimeError(
+            f"baseline row count mismatch: expected {args.expected_baseline_rows}, got {as_int(baseline_summary.get('rows'))}"
+        )
+    if as_int(baseline_summary.get("truncated")) > thresholds["truncated"]:
+        raise RuntimeError("baseline truncation exceeds weak truncation ceiling")
     pair_summary_df, pair_detail_df = pairwise_vs_baseline(long_df, baseline)
     router_df, assignments_df, family_choice_detail = simulate_routers(long_df, summary_df, family_df, baseline, thresholds)
     misses_df = baseline_miss_hits(long_df, baseline)
@@ -682,9 +799,21 @@ def main() -> int:
     manifest = {
         "generated_at_utc": utc_now(),
         "label": args.label,
+        "inputs": {
+            "v221_batch_summary_json": str(args.v221_batch_summary_json),
+            "v226_batch_summary_json": str(args.v226_batch_summary_json),
+            "v229_analysis_manifest_json": str(args.v229_analysis_manifest_json),
+            "preferred_baseline": args.preferred_baseline,
+            "expected_baseline_correct": int(args.expected_baseline_correct),
+            "expected_baseline_rows": int(args.expected_baseline_rows),
+            "allow_baseline_fallback": bool(args.allow_baseline_fallback),
+            "allow_rescore_mismatch": bool(args.allow_rescore_mismatch),
+        },
         "thresholds": thresholds,
         "candidate_count": len(summary_df),
         "candidate_source_counts": source_counts,
+        "candidate_specs": specs,
+        "load_meta": load_meta,
         "resolved_baseline": baseline,
         "baseline_summary": baseline_summary,
         "family_choice_detail": family_choice_detail,
