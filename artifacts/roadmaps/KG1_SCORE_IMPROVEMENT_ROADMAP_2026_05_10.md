@@ -2884,3 +2884,58 @@ Proxima acao HF-only:
 - V249 deve gerar `train.jsonl`, `val.jsonl`, manifest, hashes e CSV de IDs bloqueados.
 - V249 nao deve treinar; e apenas preparo de dados com gates.
 - Antes de treino, precisa comparar V249 contra V217/V226 para evitar repetir dataset/efeito V244.
+
+## V249 public non-weak target dataset
+
+Script:
+
+- `scripts/run_v249_public_nonweak_target_dataset_hf.py`.
+
+Objetivo:
+
+- Materializar um dataset HF estritamente sem vazamento dos `315` weak IDs.
+- Usar somente as familias que estamos tentando melhorar agora:
+  `bit_manipulation` e `equation_transform`.
+- Gerar `train.jsonl`, `val.jsonl`, CSV de weak IDs bloqueados, manifest e hashes.
+- Nao treinar, nao avaliar modelo, nao gerar pacote e nao submeter Kaggle.
+
+Gates implementados:
+
+- Baixa o mirror publico `jasonkung98/NVIDIA-Nemotron-Model-Reasoning-Challenge`.
+- Baixa o weak CSV canonico V245 do dataset HF privado.
+- Exige SHA exato do weak CSV:
+  `85da758e14d57ea40270de5747f98726a0ad0b6d1795bff7dd46183005e0f9b6`.
+- Exige contagem target apos exclusao weak:
+  - total: `2842`;
+  - `bit_manipulation`: `1442`;
+  - `equation_transform`: `1400`.
+- Valida que nenhum `original_id` de treino/validacao esta no weak set.
+- Valida IDs unicos, formato `messages`, resposta do assistant e split estratificado.
+- Bloqueia explicitamente `train`, `model_generation`, `full_scoring`, `package` e `kaggle_submit` no manifest.
+
+Pre-check local:
+
+- `py_compile`: OK.
+- `--self-test`: OK.
+- Run local CPU: OK.
+- Public train rows: `9500`.
+- Weak rows bloqueados: `315`.
+- Candidate target rows non-weak: `2842`.
+- Train rows: `2558`.
+- Val rows: `284`.
+- Train family counts:
+  - `bit_manipulation`: `1298`;
+  - `equation_transform`: `1260`.
+- Val family counts:
+  - `bit_manipulation`: `144`;
+  - `equation_transform`: `140`.
+- Hashes locais:
+  - train JSONL: `0dd74f29e779cd5877fe27ad4127e59f0874feaff63be6f8894207fcc00182c1`;
+  - val JSONL: `207d22e330ea858fcc2c01be1678b48cac29cfb4e1c59978731434c734736f80`;
+  - blocked weak IDs CSV: `5392c44fda7e0522910735c9a8b560d9c504a136d6141ed25091f4c858c3d4ce`.
+
+Decisao:
+
+- `dataset_ready_for_tokenization_gate_not_training_yet`.
+- Proxima acao HF-only: executar V249 no HF e fazer upload dos artefatos.
+- Depois do V249 remoto, executar gate V250 de tokenizacao/offset-mask/truncation antes de qualquer treino GPU.
