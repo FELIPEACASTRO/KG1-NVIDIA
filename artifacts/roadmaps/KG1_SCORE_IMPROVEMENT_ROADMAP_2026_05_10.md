@@ -2972,3 +2972,70 @@ Status:
 
 - V249 pronto para V250 tokenizer/mask/truncation gate.
 - Ainda nao autorizado para treino GPU: falta provar tokenizacao, labels/offset-mask e comparacao contra V217/V226.
+
+## V250 V249 tokenization gate
+
+Script:
+
+- `scripts/run_v250_v249_tokenization_gate_hf.py`.
+
+Objetivo:
+
+- Validar o dataset V249 remoto antes de qualquer gasto com GPU.
+- Rebaixar risco de V244: nao treinar ate provar hashes, formato, weak exclusion, tokenizacao real, offset masks e truncation zero.
+- Comparar o V249 contra o corpus V217 ja usado, para medir novidade real.
+
+Gates implementados:
+
+- Baixa `train.jsonl`, `val.jsonl`, `v249_blocked_weak_ids.csv` e manifest V249 do HF.
+- Exige hashes canonicos:
+  - train JSONL: `81c8624b7e0a330a720e22b5e4fc254b238a7c618e1c0cdcdea3cf1fd96d9f41`;
+  - val JSONL: `43dd9f5fbb6864e85e60b1a6cc2ad7060a667e914a67dda2aa3a22771efb4783`;
+  - blocked weak IDs CSV: `5392c44fda7e0522910735c9a8b560d9c504a136d6141ed25091f4c858c3d4ce`.
+- Exige contagens:
+  - train rows: `2558`;
+  - val rows: `284`;
+  - blocked weak rows: `315`.
+- Exige family counts:
+  - train: `bit_manipulation=1298`, `equation_transform=1260`;
+  - val: `bit_manipulation=144`, `equation_transform=140`.
+- Exige zero overlap de `original_id` com weak IDs.
+- Exige formato `messages=[system,user,assistant]` e assistant `Final answer: ...`.
+- Usa tokenizer real `nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16` revision `cbd3fa9f933d55ef16a84236559f4ee2a0526848`.
+- Exige offset masks; fallback mask e falha.
+- Exige `MAX_LENGTH=4096` com prompt truncation rate `0.0`.
+- Bloqueia `long_train`, `full_scoring`, `package` e `kaggle_submit`.
+
+Pre-check local:
+
+- `py_compile`: OK.
+- `--self-test`: OK.
+- Run local CPU: OK.
+- Tokenizer: `TokenizersBackend`, fast tokenizer, `eos/pad=<|im_end|>`.
+- Train tokenization:
+  - rows: `2558`;
+  - offset masks: `2558`;
+  - fallback masks: `0`;
+  - prompt truncated: `0`;
+  - token max: `324`.
+- Validation tokenization:
+  - rows: `284`;
+  - offset masks: `284`;
+  - fallback masks: `0`;
+  - prompt truncated: `0`;
+  - token max: `324`.
+- Por familia:
+  - `bit_manipulation`: answer loss tokens fixos em `14`, token max `324`;
+  - `equation_transform`: answer loss tokens `6..10`, token max `157` train / `153` val.
+- Overlap contra V217:
+  - V249 total: `2842`;
+  - prompt+answer overlap V217 train: `900`;
+  - prompt+answer overlap V217 val: `39`;
+  - prompt+answer overlap total: `939`;
+  - novidade prompt+answer vs V217: `1903`.
+
+Interpretacao:
+
+- O V249 e tecnicamente treinavel, mas nao e totalmente novo: `939/2842` linhas ja existem no V217 por prompt+answer.
+- O ganho esperado de treino deve vir dos `1903` exemplos novos e de uma mistura mais cuidadosa, nao de simplesmente repetir V217.
+- Proxima acao HF-only: executar V250 no HF, subir manifest e, se passar, criar um treino smoke muito curto com gate fraco antes de qualquer H200 longo.
