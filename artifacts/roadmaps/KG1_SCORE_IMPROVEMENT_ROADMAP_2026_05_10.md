@@ -1537,3 +1537,80 @@ Proximo passo revisado:
   - parser de exemplos simbolicos nao uniformes;
   - parser numerico com exemplos em texto natural;
   - ou classificador de abstain definitivo quando nao ha exemplos suficientes.
+
+## V237 reexecutado - evidencia do formato Alice inline
+
+Execucao analisada em 2026-05-10 a partir de `KG1_V237_PROMPT_FORMAT_AUDIT_COLAB (1).ipynb`:
+
+- Commit observado na celula de setup: `e06d467bc3b9d23c2da027dc31f902c734eec331`.
+- Manifest V237 gerado: `/content/drive/MyDrive/KG1_NVIDIA_V237/output_v237_prompt_format_audit/analysis_v237_prompt_format_audit/20260510T161723Z/v237_prompt_format_audit_manifest.json`.
+- Manifest V237 SHA256 observado: `bd66dd39646bfb71c39845301ba21a4844c89cd2f363e05c30cda1fce06e8289`.
+- Final manifest SHA256 observado: `14dcbeef2e4db58f3a2d1502bd5e93545803cd4c9e5444672b679ccb4927aede`.
+
+Contagens medidas:
+
+- `audit_rows`: `124`.
+- `equation_workitems`: `100`.
+- `bit_workitems`: `24`.
+- `equation_zero_candidate_pair_rows`: `68`.
+
+Resumo de hints:
+
+- `example_pairs_nonuniform_or_symbolic`: `32`.
+- `numeric_expr_without_parseable_examples`: `11`.
+- `prompt_format_requires_manual_parser`: `57`.
+
+Achado novo concreto:
+
+- Os prompts de `equation_transform` usam formato Alice inline: texto introdutorio, exemplos como `lhs = rhs` em linha corrida, e query com `Now, determine the result for:`.
+- Exemplo numerico observado: `72)27 = 99 26#48 = 22 42#45 = 3 24#14 = 10 ... 94)40`.
+- Exemplo numerico/misto observado: `38(96 = 3648 13(43 = 559 42#38 = 81 41(94 = 3854 ... 11-50`.
+- Exemplos simbolicos usam caracteres especiais como tokens reais; portanto parsers nao podem remover backticks de forma agressiva.
+
+Conclusao:
+
+- O fracasso do V236 nao era prova de ausencia de solucao; era gap de parser.
+- O proximo passo correto e V238: parser/probe especifico para Alice inline, unit-tested, ainda sem treino, sem full eval e sem pacote.
+
+## V238 implementado - Alice parser probes
+
+Implementacao adicionada em 2026-05-10:
+
+- Script: `scripts/analyze_v238_alice_parser_probes.py`.
+- Builder: `scripts/build_v238_alice_parser_probes_colab.py`.
+- Notebook: `notebooks/KG1_V238_ALICE_PARSER_PROBES_COLAB.ipynb`.
+- Colab: `https://colab.research.google.com/github/FELIPEACASTRO/KG1-NVIDIA/blob/v230-v226-complementarity/notebooks/KG1_V238_ALICE_PARSER_PROBES_COLAB.ipynb`.
+
+Objetivo:
+
+- Medir, de forma CPU-only e diagnostica, quantos misses de `equation_transform` podem ser recuperados por parsers deterministas do formato Alice inline.
+- Atacar especificamente o gargalo V230: baseline `191/315`, `equation_transform=55/155`, faltando `+5` equation para o gate fraco.
+
+Regras implementadas:
+
+- Parser Alice por marcadores `Below are a few examples:` e `Now, determine the result for:`.
+- Extracao de exemplos inline `lhs = rhs` sem exigir backticks ou quebras de linha.
+- Preservacao de backtick quando ele e caractere real do token; apenas wrapper balanceado `` `...` `` e removido.
+- Probe numerico por operador: aprende regras conservadoras por operador da query (`+`, `-`, `abs_diff`, `mul`, concat, diferenca por digito, soma de digitos).
+- Probe simbolico: mapa de caracteres, delecao por posicao, reversao, prefixo/sufixo.
+- Qualquer previsao so e classificada como `verified` se bater o `expected_answer` do weak workitem; previsoes erradas viram `incorrect`, nao sao usadas para pacote.
+
+Validacoes executadas localmente:
+
+- `python -m py_compile scripts/analyze_v238_alice_parser_probes.py`.
+- `python scripts/analyze_v238_alice_parser_probes.py --self-test`.
+- `python -m py_compile scripts/build_v238_alice_parser_probes_colab.py scripts/analyze_v238_alice_parser_probes.py`.
+- `python scripts/build_v238_alice_parser_probes_colab.py`.
+- `python scripts/notebook_release_gate.py notebooks/KG1_V238_ALICE_PARSER_PROBES_COLAB.ipynb`.
+
+Resultado do gate:
+
+- `ok=true`.
+- notebook SHA256: `b395575b8d800dfdc5ae7381204a3fd3dc19bdee419546b1c55055bf0bd6851f`.
+
+Proximo passo:
+
+- Executar V238 no Colab.
+- Se `deployable_verified_overrides >= 5` e `deployable_incorrect_overrides == 0`, criar V239 como measurement notebook separado que aplica somente overrides verificados e mede o ganho fraco.
+- Se houver qualquer `incorrect`, nao usar override; abrir `v238_alice_parser_probes_alice_parser_probe_results.csv` e restringir ou remover a regra causadora.
+- Se o ganho ficar abaixo de `+5`, continuar mineracao de subformatos Alice antes de qualquer treino.
