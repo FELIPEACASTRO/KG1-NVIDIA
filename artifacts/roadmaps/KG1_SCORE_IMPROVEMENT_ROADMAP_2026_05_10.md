@@ -2016,3 +2016,40 @@ Decisao de negocio/QA:
 - Proximo passo correto: gerar exemplos/fixtures adicionais para os buckets dominantes antes de nova medicao de rescue:
   - simbolico: focar `symbolic_nonuniform_lengths`, mas exigir regra derivavel de exemplos;
   - numerico: focar operadores sem exemplo do mesmo simbolo, porque 11/15 numericos estao bloqueados por ausencia de evidencia local.
+
+## Data leakage audit - Alice weak workitems versus local datasets
+
+Motivo:
+
+- Antes de qualquer novo treino para `equation_transform`, foi necessario verificar se os workitems fracos V232/V238 ja aparecem em datasets locais.
+- Usar weak IDs/answers como treino contaminaria o gate fraco e inflaria ACC sem validade.
+
+Resultado do overlap exato:
+
+- Referencia auditada: 100 workitems V232/V238 do bridge `runtime_artifacts/v240_hf_bridge/local_drive_mcp_20260510T172421Z`.
+- `data/v217/v217_short_answer_train.jsonl`:
+  - linhas: 10206.
+  - `exact_prompt_overlap=0`.
+  - `id_overlap=0`.
+  - prompts Alice equation por frase: 6935.
+- `data/v217/v217_short_answer_val.jsonl`:
+  - linhas: 681.
+  - `exact_prompt_overlap=0`.
+  - `id_overlap=0`.
+  - prompts Alice equation por frase: 453.
+- `data/sft_v51_complete.jsonl`:
+  - linhas: 9500.
+  - `exact_prompt_overlap=0`.
+  - `id_overlap=100`.
+  - prompts Alice equation por frase: 1555.
+
+Conclusao:
+
+- V217 train/val permanecem limpos contra os 100 workitems V232/V238 auditados.
+- `data/sft_v51_complete.jsonl` contem todos os 100 IDs fracos auditados e deve ficar em quarentena para qualquer treino, calibragem ou selecao que use o weak gate como evidencia.
+- `data/sft_v51_complete.jsonl` pode ser usado somente como source-intel/diagnostico rotulado como potencial leakage, nunca como fonte direta para aumentar ACC medida no weak gate.
+
+Regra para proximos notebooks/gates:
+
+- Qualquer novo dataset de treino para `equation_transform` ou `bit_manipulation` deve executar overlap por `id` e por hash de prompt normalizado contra os workitems weak conhecidos.
+- `id_overlap > 0` com weak/eval artifacts deve bloquear treino automaticamente, exceto em notebook explicitamente marcado como diagnostico de leakage.
