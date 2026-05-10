@@ -1989,6 +1989,26 @@ Outputs V241 publicados no dataset HF:
 - Path: `runtime_artifacts/v241_abstain_rule_candidate_audit/local_drive_mcp_20260510T172421Z`.
 - Commit HF: `fc8d5e956327ddd8635b06cf7c7b212dd5e48535`.
 
+Validacao V241 em HF Jobs:
+
+- Job HF: `6a00c1e7aff1cd33e8f32e2e`.
+- Flavor: `cpu-basic`.
+- Status: `COMPLETED`.
+- Duracao total: `10s`; runtime: `4s`.
+- A validacao remota executou:
+  - clone da branch `v230-v226-complementarity`;
+  - `py_compile` do script V241;
+  - self-test V241;
+  - download dos artefatos V232/V238 do bridge HF;
+  - auditoria real V241.
+- Resultado remoto:
+  - `v238_rows=100`.
+  - `abstain_rows=99`.
+  - `deployable_verified_candidates=0`.
+  - `deployable_incorrect_candidates=0`.
+  - decisao `do_not_promote_v241_candidates`.
+- Observacao operacional: um job anterior tentou subir outputs de dentro do HF Job e recebeu `403`; a publicacao de artefatos deve continuar usando o token local autenticado ou um secret HF com permissao explicita de escrita.
+
 Decisao de negocio/QA:
 
 - Nao promover parser novo agora.
