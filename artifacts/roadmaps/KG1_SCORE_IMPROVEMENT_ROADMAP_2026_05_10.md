@@ -1194,3 +1194,91 @@ Nao fazer:
 - Nao usar dados externos sem licenca/hash.
 - Nao aceitar `equation_transform` medido por extractor regex simples.
 - Nao reduzir `bit_manipulation` abaixo de `136/160` em nome de ganho hipotetico.
+
+## Auditoria do anexo OpenRouter `Sun May 10 2026 (2)` - 2026-05-10
+
+Arquivo auditado:
+
+- `C:\Users\davis\Downloads\OpenRouter Chat Sun May 10 2026 (2).json`
+- SHA256: `F705A612BB848A8588F99826CF7DC4781822DAB0460EEF04B50A9FEE75D8DFC7`
+- Tamanho: `721917` bytes.
+
+Leitura de confiabilidade:
+
+- O anexo contem respostas de multiplos modelos. Algumas respostas declaram acesso real a busca; outras declaram explicitamente ausencia de internet. Portanto, nada do anexo deve ser tratado como fato ate ser verificado em fonte primaria.
+- Validacao externa feita nesta revisao confirmou que os achados mais fortes sao fontes ja acionaveis para engenharia, nao prova de ganho direto de ACC.
+- Nao ha no anexo um adapter pronto que possa ser promovido com seguranca sem weak eval identico, licenca, hash e auditoria de leakage.
+
+Achados confirmados e uteis para ACC:
+
+1. `jasonkung98/NVIDIA-Nemotron-Model-Reasoning-Challenge`
+   - URL: `https://huggingface.co/datasets/jasonkung98/NVIDIA-Nemotron-Model-Reasoning-Challenge`
+   - Evidencia verificada: dataset HF em CSV, `apache-2.0`, cerca de `9.5k` linhas; viewer mostra prompts reais com assinatura de `bit_manipulation` e `equation_transform`.
+   - Uso correto: usar como referencia de schema/prompt signatures e gerador de testes de parser. Nao usar para treino ou avaliacao ate resolver risco de overlap/leakage com weak/test.
+   - Sinal tecnico: `bit_manipulation` aparece como transformacao de numeros binarios de 8 bits com shifts, rotations, XOR, AND, OR, NOT, majority e choice. `equation_transform` aparece como regras sobre simbolos e caracteres especiais, reforcando que SymPy nao e a rota principal para symbolic/mixed.
+
+2. `andy279/nemotron-reasoning-challenge`
+   - URL: `https://huggingface.co/datasets/andy279/nemotron-reasoning-challenge`
+   - Evidencia verificada: dataset HF gated, `apache-2.0`, SFT data com `train=49290` e `validation=1165`; a propria card declara traces de teacher models e solvers.
+   - Sinais relevantes: `Solver-guided transformation=1101`, `Solver-guided bit manipulation=1602`, `GPT-5.4 transformation=85`.
+   - Uso correto: P0/P1 para minerar regras e acceptance predicates; nao usar COT bruto como SFT sem auditoria, porque o risco de truncation/formato/leakage e alto.
+
+3. `andy279/nemotron-reasoning-challenge-raw-traces`
+   - URL: `https://huggingface.co/datasets/andy279/nemotron-reasoning-challenge-raw-traces`
+   - Evidencia verificada: dataset HF gated, `apache-2.0`, com arquivos:
+     - `solver_transformation_traces_merged.jsonl`
+     - `solver_bit_manipulation_traces_merged.jsonl`
+     - `solver_transformation_traces_gpt54.jsonl`
+   - Uso correto: fonte mais forte para extrair DSLs, regras por subtipo e criterios de abstencao. Deve passar por downloader com hash, row count, schema, family count, dedupe, conflito e leakage guard.
+
+4. `tonghuikang/nemotron`
+   - URL: `https://github.com/tonghuikang/nemotron`
+   - Evidencia verificada: repositorio do Progress Prize para NVIDIA Nemotron Model Reasoning Challenge; README aponta writeup/notebook Kaggle e contem pastas como `reasoners`, `problems`, `investigators`, `training/sft`, `corpus`, `metrics`.
+   - Uso correto: estudar engenharia de corpus, min-logprob, reasoners e tabulacoes de problemas. Nao usar adapter, treino ou codigo sem licenca, hash e weak eval isolado.
+
+Consenso tecnico util do anexo:
+
+- `equation_transform` deve ser dividido antes de qualquer novo treino:
+  - numeric operator transform;
+  - symbolic/mixed token rewrite;
+  - sequence/token transform;
+  - algebraic equation;
+  - cryptarithm/constraint-like.
+- O ganho de curto prazo mais plausivel continua sendo `+5` por solver/router conservador em `equation_transform`, nao por troca cega de LoRA.
+- O solver so deve sobrescrever o modelo se:
+  - parseou todos os exemplos do prompt;
+  - encontrou uma regra unica;
+  - a regra explica todos os exemplos;
+  - preserva zeros a esquerda e caracteres especiais;
+  - o extractor balanceado consegue serializar `\boxed{...}` sem cortar braces, pipes, aspas ou barras.
+- `bit_manipulation` deve ficar como guardrail. Qualquer DSL/Z3/CEGIS deve atuar primeiro como validador e detector de regressao. So pode virar override se provar zero regressao contra os `160` exemplos weak e manter pelo menos `136/160`.
+
+Descartes/ajustes feitos a partir do anexo:
+
+- Descartar afirmacoes de ganho garantido como `+3`, `+5` ou `90% probabilidade` sem medicao local.
+- Descartar rollback com limite `bit<134`; o guardrail operacional correto e baseline protegido `bit>=136/160`, salvo weak gate completo provando `total>=193`, `equation>=60`, `bit>=133`, `trunc<=3`.
+- Nao usar SymPy para symbolic/mixed. SymPy fica restrito a algebra clara, variavel unica, solucao unica e substituicao verificada.
+- Nao tratar `cryptarithm` como subtipo dominante sem evidencia local. Implementar apenas se o classificador achar prompts com restricoes explicitas de mapeamento/aritmetica.
+- Nao aceitar adapters HF/Kaggle por popularidade, LB title ou progress-prize label sem reproduzir em weak identico.
+
+Atualizacao P0 para V236:
+
+1. Criar `V236_LOCAL_SOLVER_DSL_PROBES` com tres saidas obrigatorias:
+   - `equation_subtype_audit.csv`;
+   - `equation_solver_probe_results.csv`;
+   - `bit_guardrail_probe_results.csv`.
+2. O subtipo `symbolic/mixed token rewrite` deve ser P0, porque o anexo e o HF viewer reforcam que ha muitos caracteres nao algebricos em `equation_transform`.
+3. O subtipo `numeric operator transform` deve testar no minimo:
+   - operacao direta;
+   - reversao de operandos;
+   - reversao de resultado;
+   - concatenacao;
+   - aritmetica por digito;
+   - base/modulo;
+   - operador remapeado por simbolo.
+4. O `bitvector_dsl_probe` deve incluir exatamente as operacoes do prompt publico: shifts, rotations, XOR, AND, OR, NOT, majority e choice.
+5. Promocao bloqueada ate haver evidencias locais:
+   - `equation_transform >= 60/155`;
+   - `bit_manipulation >= 136/160` preferencialmente, ou `>=133/160` apenas se o gate total completo passar;
+   - `truncated <= 3`;
+   - nenhum ganho medido com extractor regex simples.
