@@ -1,0 +1,15 @@
+{
+  "notebook_count": 1,
+  "notebooks": [
+    {
+      "code_cells": 8,
+      "findings": [],
+      "markdown_cells": 1,
+      "ok": true,
+      "path": "notebooks/KG1_V230_V226_COMPLEMENTARITY_COLAB.ipynb",
+      "sha256": "5be347585ae4a09f9cbfbe1abcba4da285f9dffa59f29e626ab0f00b9fb69f27"
+    }
+  ],
+  "ok": true,
+  "schema_version": "kg1_notebook_release_gate_v1"
+}
