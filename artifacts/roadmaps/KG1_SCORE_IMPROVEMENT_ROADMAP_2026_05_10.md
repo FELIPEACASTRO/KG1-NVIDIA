@@ -3073,3 +3073,53 @@ Status:
 - V250 passou.
 - Permite apenas proximo smoke GPU curto, nao um treino longo direto.
 - O smoke deve ter `MAX_STEPS` baixo, upload de checkpoints, weak eval imediato e bloqueio se nao houver melhora sobre V226 191/315.
+
+## V251 H200 weak eval - V187 public adapter trio
+
+Script/job:
+
+- Reuso do wrapper HF `scripts/hf_job_weak_eval_v245.py`.
+- Job inicial `6a00f6bd317220dbbd1a76fa` falhou antes da avaliacao porque a imagem `pytorch/pytorch:2.8.0-cuda12.8-cudnn9-runtime` nao continha `git`.
+- Job valido: `6a00f748aff1cd33e8f33052`.
+- URL: `https://huggingface.co/jobs/felipesp1983/6a00f748aff1cd33e8f33052`.
+- Flavor: `h200`.
+- Imagem corrigida: `pytorch/pytorch:2.8.0-cuda12.8-cudnn9-devel`.
+- Run ID: `v251-h200-weak-v187-trio-20260510T212219Z`.
+- Repo commit executado: `32454da9d0651b8a3b40a38833a45053f04cd250`.
+- Adapter repo avaliado: `felipesp1983/kg1-nemotron-lora-v187-submission-gain`.
+- Subfolders avaliados: `final`, `checkpoint-20`, `checkpoint-40`.
+- Upload HF:
+  `https://huggingface.co/felipesp1983/kg1-nemotron-lora-v187-submission-gain/commit/9c0b2c70c1eee3a5cfb177f1e9f08d976f982f4b`.
+- Manifest remoto:
+  `evals/v251-h200-weak-v187-trio-20260510T212219Z/v245_hf_weak_eval_manifest.json`.
+
+Gates confirmados:
+
+- CUDA/H200 disponivel e carga vLLM concluida.
+- Weak CSV canonico V245 usado com `315` linhas.
+- `observed_shared_row_contract_sha256`:
+  `bf055e3b9ebce79d4bfc9e48bce5a305b1d83da882f14afddec80d6afaba5fff`.
+- Weak CSV SHA256:
+  `85da758e14d57ea40270de5747f98726a0ad0b6d1795bff7dd46183005e0f9b6`.
+- Families avaliadas: `bit_manipulation=160`, `equation_transform=155`.
+- Full eval, package e Kaggle submit permaneceram bloqueados.
+
+Resultado weak:
+
+| Candidato | Total | ACC | Equation | Bit | Trunc |
+|---|---:|---:|---:|---:|---:|
+| `v187_final` | `17/315` | `5.40%` | `9/155` | `8/160` | `0` |
+| `v187_checkpoint20` | `18/315` | `5.71%` | `9/155` | `9/160` | `0` |
+| `v187_checkpoint40` | `17/315` | `5.40%` | `9/155` | `8/160` | `0` |
+
+Decisao:
+
+- Rejeitar `felipesp1983/kg1-nemotron-lora-v187-submission-gain` como candidato de promocao, baseline, initializer ou fonte de ensemble.
+- O melhor V187 ficou `18/315`, contra baseline V226 `191/315`.
+- A ausencia de truncamento mostra que a falha nao e apenas de output longo; o adapter provavelmente nao esta alinhado ao contrato/prompt/modelo do weak gate atual.
+- Nao gastar novo H200 nesse repositorio.
+
+Impacto no roadmap:
+
+- Prioridade volta para dados V249 + smoke GPU curto, ou para triagem de outro adapter HF somente se houver evidencia independente forte e o custo for limitado.
+- Nao usar `V187` em treino, merge, DARE/TIES, router ou seed sem uma justificativa nova e verificavel.
