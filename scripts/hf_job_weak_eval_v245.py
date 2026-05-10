@@ -2,8 +2,8 @@
 """Run a guarded weak-family LoRA eval inside Hugging Face Jobs.
 
 This runner is intentionally narrow: it validates the V245 weak CSV bridge
-artifact before spending vLLM/model-load time, evaluates one adapter, and
-uploads the eval outputs back to an existing HF model repository.
+artifact before spending vLLM/model-load time, evaluates one or more adapters,
+and uploads the eval outputs back to an existing HF model repository.
 """
 
 from __future__ import annotations
@@ -210,6 +210,55 @@ def validate_adapter(adapter_dir: Path) -> dict[str, Any]:
     }
 
 
+def parse_adapter_specs(adapter_repo: str, adapter_subfolders_raw: str) -> list[dict[str, str]]:
+    specs_raw = env_str("KG1_ADAPTER_SPECS_JSON", "")
+    if specs_raw:
+        try:
+            parsed = json.loads(specs_raw)
+        except json.JSONDecodeError as exc:
+            raise RuntimeError("KG1_ADAPTER_SPECS_JSON must be valid JSON") from exc
+        if not isinstance(parsed, list) or not parsed:
+            raise RuntimeError("KG1_ADAPTER_SPECS_JSON must be a non-empty list")
+        specs: list[dict[str, str]] = []
+        for index, item in enumerate(parsed):
+            if not isinstance(item, dict):
+                raise RuntimeError(f"adapter spec at index {index} must be an object")
+            repo = str(item.get("repo", "")).strip()
+            subfolder = str(item.get("subfolder", "")).strip().strip("/")
+            name = str(item.get("name", "")).strip()
+            if not repo:
+                raise RuntimeError(f"adapter spec at index {index} missing repo")
+            if not name:
+                suffix = subfolder.replace("/", "_") if subfolder else "root"
+                name = f"candidate_{index}_{suffix}"
+            specs.append({"repo": repo, "subfolder": subfolder, "name": name})
+        return specs
+
+    if adapter_subfolders_raw:
+        adapter_subfolders = [part.strip().strip("/") for part in adapter_subfolders_raw.split(",") if part.strip()]
+    else:
+        adapter_subfolders = [env_str("KG1_ADAPTER_SUBFOLDER", DEFAULT_ADAPTER_SUBFOLDER).strip("/")]
+    if not adapter_subfolders:
+        raise RuntimeError("At least one adapter subfolder is required")
+
+    candidate_names_raw = env_str("KG1_CANDIDATE_NAMES", "")
+    candidate_names = [part.strip() for part in candidate_names_raw.split(",") if part.strip()] if candidate_names_raw else []
+    if candidate_names and len(candidate_names) != len(adapter_subfolders):
+        raise RuntimeError(
+            f"KG1_CANDIDATE_NAMES count must match adapter count: {len(candidate_names)} != {len(adapter_subfolders)}"
+        )
+
+    specs = []
+    for index, subfolder in enumerate(adapter_subfolders):
+        name = (
+            candidate_names[index]
+            if candidate_names
+            else env_str("KG1_CANDIDATE_NAME", "v244_" + (subfolder.replace("/", "_") or "adapter"))
+        )
+        specs.append({"repo": adapter_repo, "subfolder": subfolder, "name": name})
+    return specs
+
+
 def ensure_import(module_name: str) -> None:
     __import__(module_name)
     print(f"import_ok = {module_name}", flush=True)
@@ -259,12 +308,7 @@ def run_eval(args: argparse.Namespace) -> dict[str, Any]:
     weak_manifest_file = env_str("KG1_WEAK_MANIFEST_FILE", DEFAULT_WEAK_MANIFEST_FILE)
     adapter_repo = env_str("KG1_ADAPTER_REPO", DEFAULT_ADAPTER_REPO)
     adapter_subfolders_raw = env_str("KG1_ADAPTER_SUBFOLDERS", "")
-    if adapter_subfolders_raw:
-        adapter_subfolders = [part.strip().strip("/") for part in adapter_subfolders_raw.split(",") if part.strip()]
-    else:
-        adapter_subfolders = [env_str("KG1_ADAPTER_SUBFOLDER", DEFAULT_ADAPTER_SUBFOLDER).strip("/")]
-    if not adapter_subfolders:
-        raise RuntimeError("At least one adapter subfolder is required")
+    adapter_specs = parse_adapter_specs(adapter_repo, adapter_subfolders_raw)
     output_repo = env_str("KG1_OUTPUT_REPO", DEFAULT_OUTPUT_REPO)
     run_id = env_str("KG1_RUN_ID", "v245-hf-weak-eval-" + datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ"))
     output_dir = Path(env_str("KG1_OUTPUT_DIR", "/tmp/kg1_v245_weak_eval")) / run_id
@@ -274,7 +318,7 @@ def run_eval(args: argparse.Namespace) -> dict[str, Any]:
     print("weak_csv_file =", weak_csv_file, flush=True)
     print("weak_manifest_file =", weak_manifest_file, flush=True)
     print("adapter_repo =", adapter_repo, flush=True)
-    print("adapter_subfolders =", json.dumps(adapter_subfolders), flush=True)
+    print("adapter_specs =", json.dumps(adapter_specs, indent=2, sort_keys=True), flush=True)
     print("output_repo =", output_repo, flush=True)
     print("run_id =", run_id, flush=True)
     print("output_dir =", output_dir, flush=True)
@@ -297,35 +341,38 @@ def run_eval(args: argparse.Namespace) -> dict[str, Any]:
         },
     )
 
-    allow_patterns = [f"{subfolder}/*" for subfolder in adapter_subfolders if subfolder] or ["*"]
     adapter_cache_dir = Path(env_str("KG1_ADAPTER_CACHE_DIR", "/tmp/kg1_v245_adapter_snapshots")) / run_id
-    adapter_root = Path(
-        snapshot_download(
-            repo_id=adapter_repo,
-            repo_type="model",
-            allow_patterns=allow_patterns,
-            local_dir=str(adapter_cache_dir),
-            token=token or None,
-        )
-    )
-    candidate_names_raw = env_str("KG1_CANDIDATE_NAMES", "")
-    candidate_names = [part.strip() for part in candidate_names_raw.split(",") if part.strip()] if candidate_names_raw else []
-    if candidate_names and len(candidate_names) != len(adapter_subfolders):
-        raise RuntimeError(
-            f"KG1_CANDIDATE_NAMES count must match adapter count: {len(candidate_names)} != {len(adapter_subfolders)}"
+    specs_by_repo: dict[str, list[dict[str, str]]] = {}
+    for spec in adapter_specs:
+        specs_by_repo.setdefault(spec["repo"], []).append(spec)
+
+    repo_roots: dict[str, Path] = {}
+    for repo, specs in specs_by_repo.items():
+        subfolders = sorted({spec["subfolder"] for spec in specs})
+        allow_patterns = [f"{subfolder}/*" for subfolder in subfolders if subfolder] or ["*"]
+        repo_cache_dir = adapter_cache_dir / hashlib.sha256(repo.encode("utf-8")).hexdigest()[:12]
+        print("snapshot_adapter_repo =", repo, flush=True)
+        print("snapshot_allow_patterns =", json.dumps(allow_patterns), flush=True)
+        repo_roots[repo] = Path(
+            snapshot_download(
+                repo_id=repo,
+                repo_type="model",
+                allow_patterns=allow_patterns,
+                local_dir=str(repo_cache_dir),
+                token=token or None,
+            )
         )
 
     adapter_metas: list[dict[str, Any]] = []
     candidate_payload: list[dict[str, str]] = []
-    for index, subfolder in enumerate(adapter_subfolders):
+    for spec in adapter_specs:
+        adapter_root = repo_roots[spec["repo"]]
+        subfolder = spec["subfolder"]
         adapter_dir = adapter_root / subfolder if subfolder else adapter_root
         adapter_meta = validate_adapter(adapter_dir)
+        adapter_meta["repo"] = spec["repo"]
         adapter_meta["subfolder"] = subfolder
-        candidate_name = (
-            candidate_names[index]
-            if candidate_names
-            else env_str("KG1_CANDIDATE_NAME", "v244_" + (subfolder.replace("/", "_") or "adapter"))
-        )
+        candidate_name = spec["name"]
         adapter_meta["candidate_name"] = candidate_name
         adapter_metas.append(adapter_meta)
         candidate_payload.append(
