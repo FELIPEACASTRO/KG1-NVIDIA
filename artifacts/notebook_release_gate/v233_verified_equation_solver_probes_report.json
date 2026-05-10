@@ -1,0 +1,16 @@
+{
+  "findings": [],
+  "notebook_count": 1,
+  "notebooks": [
+    {
+      "code_cells": 7,
+      "findings": [],
+      "markdown_cells": 1,
+      "ok": true,
+      "path": "notebooks/KG1_V233_VERIFIED_EQUATION_SOLVER_PROBES_COLAB.ipynb",
+      "sha256": "1eafc727677e0a73252b24f99854b484a049c7e9c4af5af6dc936364cc4a5620"
+    }
+  ],
+  "ok": true,
+  "schema_version": "kg1_notebook_release_gate_v1"
+}

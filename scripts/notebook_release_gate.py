@@ -402,6 +402,39 @@ V232_REQUIRED_SNIPPETS = {
     "no package submit": "No package and no Kaggle submit can be created in V232.",
 }
 
+V233_NOTEBOOK_REL = "notebooks/KG1_V233_VERIFIED_EQUATION_SOLVER_PROBES_COLAB.ipynb"
+V233_COLAB_URL = (
+    "https://colab.research.google.com/github/FELIPEACASTRO/KG1-NVIDIA/blob/"
+    "v230-v226-complementarity/notebooks/KG1_V233_VERIFIED_EQUATION_SOLVER_PROBES_COLAB.ipynb"
+)
+V233_GITHUB_URL = (
+    "https://github.com/FELIPEACASTRO/KG1-NVIDIA/blob/"
+    "v230-v226-complementarity/notebooks/KG1_V233_VERIFIED_EQUATION_SOLVER_PROBES_COLAB.ipynb"
+)
+V233_REQUIRED_FILES = [
+    "scripts/analyze_v233_verified_equation_solver_probes.py",
+    "scripts/build_v233_verified_equation_solver_probes_colab.py",
+    "scripts/notebook_release_gate.py",
+]
+V233_REQUIRED_SNIPPETS = {
+    "cpu-only purpose": "V233 is CPU-only equation solver probes",
+    "known row contract": "bf055e3b9ebce79d4bfc9e48bce5a305b1d83da882f14afddec80d6afaba5fff",
+    "expected row contract env": "KG1_V233_EXPECTED_SHARED_ROW_CONTRACT_SHA256",
+    "explicit v232 manifest text guard": "V232_ANALYSIS_MANIFEST_JSON_TEXT",
+    "v232 manifest resolver": "resolve_latest_v232_manifest",
+    "v232 artifact metadata logs": "v232_output_artifact_meta",
+    "probe script": "scripts/analyze_v233_verified_equation_solver_probes.py",
+    "probe self test": "v233_verified_equation_solver_probes_self_test.log",
+    "probe results output": "equation_probe_results_jsonl",
+    "probe summary output": "equation_probe_summary_csv",
+    "verified overrides output": "equation_verified_overrides_csv",
+    "oracle evidence output": "equation_oracle_evidence_csv",
+    "hard train false": "RUN_TRAIN = False",
+    "hard full false": "RUN_FULL_IF_GATE = False",
+    "hard submit false": "ALLOW_KAGGLE_SUBMIT = False",
+    "no package submit": "No package and no Kaggle submit can be created in V233.",
+}
+
 RELEASE_NOTEBOOK_RELS = [
     V218_NOTEBOOK_REL,
     V219_NOTEBOOK_REL,
@@ -410,6 +443,7 @@ RELEASE_NOTEBOOK_RELS = [
     V230_NOTEBOOK_REL,
     V231_NOTEBOOK_REL,
     V232_NOTEBOOK_REL,
+    V233_NOTEBOOK_REL,
 ]
 
 
@@ -1338,6 +1372,108 @@ def audit_v232_verified_solver_workbench_contract(path: Path, notebook: dict[str
             add(findings, "error", "v232_builder_notebook_compare_failed", repr(exc))
 
 
+def audit_v233_verified_equation_solver_probes_contract(path: Path, notebook: dict[str, Any], text: str, findings: list[Finding]) -> None:
+    """Strict release gate for the V233 CPU-only verified equation probes."""
+
+    if repo_rel(path) != V233_NOTEBOOK_REL:
+        return
+
+    code_cells = [cell for cell in notebook.get("cells", []) if cell.get("cell_type") == "code"]
+    if len(code_cells) != 7:
+        add(findings, "error", "v233_code_cell_count", f"expected 7 code cells, found {len(code_cells)}")
+    outputs_total = sum(len(cell.get("outputs", []) or []) for cell in code_cells)
+    if outputs_total:
+        add(findings, "error", "v233_notebook_has_outputs", f"notebook must be committed clean; outputs={outputs_total}")
+
+    if V233_COLAB_URL not in text:
+        add(findings, "error", "v233_colab_url_mismatch", V233_COLAB_URL)
+    if V233_GITHUB_URL not in text:
+        add(findings, "error", "v233_github_url_mismatch", V233_GITHUB_URL)
+
+    for name, snippet in V233_REQUIRED_SNIPPETS.items():
+        if snippet not in text:
+            add(findings, "error", "v233_required_snippet_missing", name)
+
+    for rel_path in V233_REQUIRED_FILES:
+        if not (ROOT / rel_path).exists():
+            add(findings, "error", "v233_required_file_missing", rel_path)
+
+    analyzer = ROOT / "scripts" / "analyze_v233_verified_equation_solver_probes.py"
+    analyzer_text = analyzer.read_text(encoding="utf-8") if analyzer.exists() else ""
+    analyzer_snippets = {
+        "self test ok": "v233_verified_equation_solver_probes_self_test=ok",
+        "result schema": "kg1_v233_equation_probe_result_v1",
+        "manifest schema": "kg1_v233_verified_equation_solver_probes_manifest_v1",
+        "single equation probe": "sympy_single_equation_probe",
+        "oracle nondeployable": "oracle_alternative_candidate_probe",
+        "no model generation": "does not train, run model generation",
+        "verified override output": "equation_verified_overrides_csv",
+        "oracle evidence output": "equation_oracle_evidence_csv",
+        "decision prepare eval": "prepare_gated_solver_rescue_eval",
+        "decision improve parsers": "improve_solver_parsers_before_eval",
+    }
+    for name, snippet in analyzer_snippets.items():
+        if snippet not in analyzer_text:
+            add(findings, "error", "v233_analyzer_contract_missing", name)
+    if analyzer.exists():
+        completed = subprocess.run(
+            [
+                sys.executable,
+                str(analyzer),
+                "--self-test",
+                "--v232-analysis-manifest-json",
+                "dummy",
+                "--output-dir",
+                "dummy",
+            ],
+            cwd=str(ROOT),
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            check=False,
+            timeout=120,
+        )
+        if completed.returncode != 0:
+            add(
+                findings,
+                "error",
+                "v233_analyzer_self_test_failed",
+                f"returncode={completed.returncode}; tail={completed.stdout[-4000:]}",
+            )
+        elif "v233_verified_equation_solver_probes_self_test=ok" not in completed.stdout:
+            add(findings, "error", "v233_analyzer_self_test_missing_ok", completed.stdout[-4000:])
+
+    builder = ROOT / "scripts" / "build_v233_verified_equation_solver_probes_colab.py"
+    builder_text = builder.read_text(encoding="utf-8") if builder.exists() else ""
+    for snippet in V233_REQUIRED_SNIPPETS.values():
+        if snippet not in builder_text:
+            add(findings, "error", "v233_builder_required_snippet_missing", snippet)
+    builder_snippets = {
+        "idempotent cell ids": "_CELL_COUNTER = 0",
+        "known row contract constant": "EXPECTED_SHARED_ROW_CONTRACT_SHA256",
+        "latest v232 resolver": "resolve_latest_v232_manifest",
+        "v232 output preflight": "required_outputs = [",
+        "probe command": "analyze_v233_verified_equation_solver_probes.py",
+        "submission artifact scan": "blocked_artifacts",
+        "final manifest": "v233_verified_equation_solver_probes_final_manifest.json",
+    }
+    for name, snippet in builder_snippets.items():
+        if snippet not in builder_text:
+            add(findings, "error", "v233_builder_contract_missing", name)
+    if builder.exists():
+        try:
+            spec = importlib.util.spec_from_file_location("kg1_v233_builder_gate", builder)
+            if spec is None or spec.loader is None:
+                raise RuntimeError("could not load builder module spec")
+            module = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(module)
+            generated = module.build_notebook()
+            if generated != notebook:
+                add(findings, "error", "v233_builder_notebook_mismatch", "builder output differs from committed notebook")
+        except Exception as exc:
+            add(findings, "error", "v233_builder_notebook_compare_failed", repr(exc))
+
+
 def audit_notebook(path: Path) -> NotebookAudit:
     findings: list[Finding] = []
     rel = repo_rel(path)
@@ -1368,6 +1504,7 @@ def audit_notebook(path: Path) -> NotebookAudit:
         audit_v230_v226_complementarity_contract(path, notebook, text, findings)
         audit_v231_miss_pack_mining_contract(path, notebook, text, findings)
         audit_v232_verified_solver_workbench_contract(path, notebook, text, findings)
+        audit_v233_verified_equation_solver_probes_contract(path, notebook, text, findings)
     for snippet in GENERIC_REQUIRED_SNIPPETS:
         if is_training_or_eval_notebook(text) and snippet not in text:
             add(findings, "error", "generic_training_snippet_missing", snippet)

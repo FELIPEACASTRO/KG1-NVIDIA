@@ -322,9 +322,59 @@ O V232:
 - gera `solver_contracts_json`;
 - bloqueia treino, full scoring, package e Kaggle submit.
 
+## Atualizacao executada - V232
+
+V232 foi executado no Colab e terminou com `returncode=0`.
+
+Evidencia da execucao:
+
+- Notebook: `notebooks/KG1_V232_VERIFIED_SOLVER_WORKBENCH_COLAB.ipynb`.
+- Manifest V231 resolvido: `/content/drive/MyDrive/KG1_NVIDIA_V231/output_v231_v230_miss_pack_mining/analysis_v231_miss_pack_mining/20260510T074735Z/v231_v230_miss_pack_mining_manifest.json`.
+- Row contract: `bf055e3b9ebce79d4bfc9e48bce5a305b1d83da882f14afddec80d6afaba5fff`.
+- Manifest V232: `/content/drive/MyDrive/KG1_NVIDIA_V232/output_v232_verified_solver_workbench/analysis_v232_verified_solver_workbench/20260510T080950Z/v232_verified_solver_workbench_manifest.json`.
+- Manifest SHA256: `6415efbad28577c675f8847f6b84eb5a2d63709b6b9e5ae42fdba5a002c9b7bf`.
+
+Resultados V232:
+
+- `equation_solver_workitems=100`.
+- `equation_rows_with_correct_alternative=2`.
+- `bit_guardrail_workitems=24`.
+- `bit_rows_with_correct_alternative=4`.
+
+Decisao V232:
+
+- `build_v233_verified_equation_solver_probes`.
+- Proxima acao: usar os workitems V232 para implementar probes/verificadores deterministas antes de qualquer treino ou full scoring.
+
+## Atualizacao implementada - V233 verified equation solver probes
+
+Arquivos criados/alterados para o proximo passo pos-V232:
+
+- `scripts/analyze_v233_verified_equation_solver_probes.py`
+- `scripts/build_v233_verified_equation_solver_probes_colab.py`
+- `notebooks/KG1_V233_VERIFIED_EQUATION_SOLVER_PROBES_COLAB.ipynb`
+- `scripts/notebook_release_gate.py`
+- `artifacts/notebook_release_gate/v233_verified_equation_solver_probes_report.json`
+
+URL Colab:
+
+`https://colab.research.google.com/github/FELIPEACASTRO/KG1-NVIDIA/blob/v230-v226-complementarity/notebooks/KG1_V233_VERIFIED_EQUATION_SOLVER_PROBES_COLAB.ipynb`
+
+O V233:
+
+- le o manifest V232 mais recente ou o path explicito em `KG1_V233_V232_ANALYSIS_MANIFEST_JSON`;
+- valida artefatos V232 obrigatorios;
+- roda probe deployable conservador `sympy_single_equation_probe`;
+- registra evidencia nao-deployable separada via `oracle_alternative_candidate_probe`;
+- gera `equation_probe_results_jsonl`;
+- gera `equation_probe_summary_csv`;
+- gera `equation_verified_overrides_csv`;
+- gera `equation_oracle_evidence_csv`;
+- bloqueia treino, full scoring, package e Kaggle submit.
+
 Decisao operacional agora:
 
-- executar V232;
-- revisar os workitems com maior prioridade;
-- implementar V233 com probes/verificadores deterministas de equation;
+- executar V233;
+- se `deployable_verified_equation_overrides >= 5`, preparar notebook separado de weak eval com overrides verificados;
+- se ficar abaixo de 5, revisar abstentions e ampliar parsers antes de qualquer weak/full eval;
 - manter treino bloqueado ate existir solver/verifier com prova local.
