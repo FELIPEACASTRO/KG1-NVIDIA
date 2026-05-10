@@ -2636,3 +2636,70 @@ Proximo passo:
 - Encerrar a linha V244.
 - Voltar para rota P0 do roadmap: mineracao deterministica/DSL dos miss-packs e fixtures por familia, antes de novo treino.
 - Qualquer novo treino HF deve partir de um adapter/baseline que ja prove weak ACC perto do V226 (`191/315`) ou entao deve passar primeiro por uma avaliacao weak curta; nao repetir smoke train sem weak gate intermediario.
+
+## V236/V246 HF-only local solver path - status atual
+
+Executor V236 no HF:
+
+- Script: `scripts/run_v236_from_hf_bridge.py`.
+- Job parserfix: `6a00eaa0317220dbbd1a76d0`.
+- URL: `https://huggingface.co/jobs/felipesp1983/6a00eaa0317220dbbd1a76d0`.
+- Upload HF:
+  `https://huggingface.co/datasets/felipesp1983/kg1-nemotron-training/commit/de4942ba75849f84fa4096466c0e341768c90d59`.
+- Path:
+  `runtime_artifacts/v236_local_solver_dsl_probes/v236-hf-cpu-bridge-parserfix-20260510T202819Z/`.
+
+Resultado V236 parserfix:
+
+- `deployable_verified_equation_overrides`: `1`.
+- `deployable_incorrect_equation_overrides`: `0`.
+- `bit_guardrail_signature_verified_rows`: `24/24`.
+- Linha recuperada:
+  - id `c5b058d6`;
+  - baseline `35`;
+  - solver `134`;
+  - expected `134`;
+  - proof `alice_rules=add`.
+- Impacto maximo isolado: V226 baseline iria de `191/315` para `192/315`, ainda abaixo do gate `193/315` e equation `60`.
+
+Novo executor V246:
+
+- Script: `scripts/run_v246_exhaustive_abstain_audit_hf.py`.
+- Objetivo: auditar os `99` abstains restantes da V236 parserfix usando regras locais conservadoras.
+- Custo: CPU-only HF Job.
+- Entradas HF:
+  - V236 parserfix results;
+  - V236 parserfix manifest;
+  - V240 bridge `v232_equation_workitems.jsonl`;
+  - V240 bridge `v232_manifest.json`.
+- Gate de contrato:
+  - expected/observed shared row contract `bf055e3b9ebce79d4bfc9e48bce5a305b1d83da882f14afddec80d6afaba5fff`.
+- Regra de seguranca:
+  - weak label e usado apenas como freio/auditoria;
+  - uma classe de regra so e promovivel se todos os candidatos emitidos pela classe forem verificados e houver `0` incorretos;
+  - se qualquer classe produz incorretos, ela fica bloqueada.
+- Classes auditadas:
+  - numeric same-operator DSL min2/min3/min4;
+  - symbolic char transducer com todos exemplos;
+  - symbolic char transducer por mesmo operador min2;
+  - symbolic positional deletion;
+  - symbolic same-operator positional deletion min2;
+  - symbolic same-operator position-specific char map min2.
+
+Pre-check local consumindo artefatos HF:
+
+- `v236_rows`: `100`.
+- `v236_abstain_rows`: `99`.
+- `audit_rows`: `465`.
+- `verified_candidates`: `0`.
+- `incorrect_candidates`: `11`.
+- `promotable_rows_after_class_gate`: `0`.
+- Decisao local preliminar:
+  `no_safe_local_rule_promotion_found`.
+
+Interpretacao:
+
+- A recuperacao deterministica local atual nao entrega os +5 de equation necessarios.
+- Ha evidencia concreta de que regras simbolicas simples geram incorretos; portanto nao devem ser promovidas.
+- Nao gastar H100/H200 em treino derivado desses candidatos sem uma nova fonte de dados/traços.
+- Proximo passo HF-only: rodar V246 no HF CPU e publicar os artefatos; se confirmar `0` promoviveis, bloquear essa rota e seguir para acesso aos traces externos ou novo desenho de treino.
