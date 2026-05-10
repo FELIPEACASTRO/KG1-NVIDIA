@@ -85,6 +85,7 @@ print('=== V230 DRIVE MOUNT END ===', flush=True)
             """# CELL: global configuration, gates, and hard submit lock.
 print('=== V230 CONFIG START ===', flush=True)
 import datetime
+import csv
 import hashlib
 import importlib
 import json
@@ -329,6 +330,121 @@ def resolve_predictions_from_report(report_json):
         return matches[0]
     raise FileNotFoundError(report_json)
 
+def csv_data_rows(path):
+    path = pathlib.Path(path)
+    with path.open('r', encoding='utf-8', errors='replace') as handle:
+        return max(0, sum(1 for _ in handle) - 1)
+
+def per_task_counts_from_report(report):
+    per_task_csv = pathlib.Path(str(report.get('outputs', {}).get('per_task_csv', '')))
+    counts = {'equation_transform_correct': 0, 'bit_manipulation_correct': 0}
+    if not per_task_csv.exists():
+        return counts
+    with per_task_csv.open('r', encoding='utf-8', errors='replace', newline='') as handle:
+        for row in csv.DictReader(handle):
+            task = str(row.get('task_type') or row.get('family') or '')
+            correct = int(float(row.get('correct') or 0))
+            if task == 'equation_transform':
+                counts['equation_transform_correct'] = correct
+            if task == 'bit_manipulation':
+                counts['bit_manipulation_correct'] = correct
+    return counts
+
+def infer_v226_name(report_path, report):
+    adapter = str(report.get('inputs', {}).get('adapter') or report.get('adapter_dir') or '')
+    label = str(report.get('label') or report_path.stem.replace('_eval_report', ''))
+    correct = int(report.get('correct', 0))
+    lowered = adapter.lower() + ' ' + label.lower() + ' ' + str(report_path).lower()
+    if 'checkpoint-1' in lowered or 'checkpoint_1' in lowered or 'checkpoint1' in lowered:
+        return 'v226_best_checkpoint1_observed_' + str(correct)
+    if 'checkpoint-2' in lowered or 'checkpoint_2' in lowered or 'checkpoint2' in lowered:
+        return 'v226_checkpoint_2_observed_' + str(correct)
+    if 'checkpoint-3' in lowered or 'checkpoint_3' in lowered or 'checkpoint3' in lowered:
+        return 'v226_checkpoint_3_observed_' + str(correct)
+    return 'v226_report_' + label
+
+def synthesize_batch_summary_from_reports(output_json, source_roots):
+    report_paths = []
+    for root in source_roots:
+        root = pathlib.Path(root)
+        print('synthesis_report_root =', root, 'exists =', root.exists(), flush=True)
+        if root.exists():
+            report_paths.extend(sorted(root.rglob('*_eval_report.json')))
+    rows = []
+    seen_reports = set()
+    for report_path in report_paths:
+        report_path = pathlib.Path(report_path)
+        if str(report_path) in seen_reports:
+            continue
+        seen_reports.add(str(report_path))
+        try:
+            report = read_json(report_path)
+            predictions_csv = resolve_predictions_from_report(report_path)
+            prediction_rows = csv_data_rows(predictions_csv)
+            if prediction_rows != 315:
+                print('synthesis_skip_report_rows =', json.dumps({'report_json': str(report_path), 'prediction_rows': prediction_rows}, sort_keys=True), flush=True)
+                continue
+            adapter = str(report.get('inputs', {}).get('adapter') or report.get('adapter_dir') or '')
+            counts = per_task_counts_from_report(report)
+            row = {
+                'name': infer_v226_name(report_path, report),
+                'adapter': adapter,
+                'status': 'ok',
+                'correct': int(report.get('correct', 0)),
+                'accuracy': float(report.get('accuracy', 0.0)),
+                'truncated': int(report.get('truncated', 0)),
+                'truncation_rate': float(report.get('truncation_rate', 0.0)),
+                'equation_transform_correct': counts['equation_transform_correct'],
+                'bit_manipulation_correct': counts['bit_manipulation_correct'],
+                'completion_tokens': int(report.get('completion_tokens', 0)),
+                'tokens_per_second': float(report.get('tokens_per_second', 0.0)),
+                'report_json': str(report_path),
+                'error': '',
+            }
+            rows.append(row)
+            print('synthesis_candidate_row =', json.dumps(row, sort_keys=True), flush=True)
+        except Exception as exc:
+            print('synthesis_report_skip =', json.dumps({'report_json': str(report_path), 'error': repr(exc)}, sort_keys=True), flush=True)
+    if not rows:
+        raise FileNotFoundError('No usable V226 315-row eval reports found under: ' + ', '.join(str(p) for p in source_roots))
+    rows = sorted(rows, key=lambda item: (int(item.get('correct', 0)), -int(item.get('truncated', 999999)), str(item.get('name', ''))), reverse=True)
+    payload = {
+        'generated_at_utc': datetime.datetime.now(datetime.timezone.utc).isoformat(),
+        'source': 'v230_synthesized_from_individual_v226_eval_reports',
+        'rows': rows,
+    }
+    write_json(output_json, payload)
+    print('synthesized_batch_summary_json =', output_json, flush=True)
+    print('synthesized_batch_summary_rows =', len(rows), flush=True)
+    return pathlib.Path(output_json)
+
+def resolve_existing_or_synthesize_v226_batch_summary(path):
+    path = pathlib.Path(path)
+    if path.exists():
+        print('using_existing_v226_batch_summary_json =', path, flush=True)
+        return path
+    output_root = V226_BEST_CHECKPOINT.parents[1]
+    candidates = [
+        output_root / 'eval_v226_checkpoint_sweep' / 'batch_candidate_summary.json',
+        output_root / 'eval_v226_checkpoint1_weak' / 'batch_candidate_summary.json',
+        output_root / 'eval_v226_checkpoint2_weak' / 'batch_candidate_summary.json',
+        output_root / 'eval_v226_checkpoint3_weak' / 'batch_candidate_summary.json',
+    ]
+    for candidate in candidates:
+        print('v226_batch_summary_candidate =', candidate, 'exists =', candidate.exists(), flush=True)
+        if candidate.exists():
+            return candidate
+    return synthesize_batch_summary_from_reports(
+        OUT_ROOT / 'v226_synthesized_batch_candidate_summary.json',
+        [
+            output_root / 'eval_v226_checkpoint_sweep',
+            output_root / 'eval_v226_checkpoint1_weak',
+            output_root / 'eval_v226_checkpoint2_weak',
+            output_root / 'eval_v226_checkpoint3_weak',
+            output_root,
+        ],
+    )
+
 print('=== V230 HELPERS END ===', flush=True)
 """
         ),
@@ -406,8 +522,10 @@ for module_name in ['causal_conv1d', 'mamba_ssm', 'vllm']:
         print(module_name, 'import_warning =', repr(exc), flush=True)
 print('V230 CPU-only path does not install vLLM and runs after all training has been blocked.', flush=True)
 
+V226_BATCH_SUMMARY_JSON = resolve_existing_or_synthesize_v226_batch_summary(V226_BATCH_SUMMARY_JSON)
 print('V221_BATCH_SUMMARY_JSON exists =', V221_BATCH_SUMMARY_JSON.exists(), flush=True)
 print('V226_BATCH_SUMMARY_JSON exists =', V226_BATCH_SUMMARY_JSON.exists(), flush=True)
+print('V226_BATCH_SUMMARY_JSON resolved =', V226_BATCH_SUMMARY_JSON, flush=True)
 print('V229_ANALYSIS_MANIFEST_JSON exists =', V229_ANALYSIS_MANIFEST_JSON.exists(), flush=True)
 if not V221_BATCH_SUMMARY_JSON.exists():
     raise FileNotFoundError(V221_BATCH_SUMMARY_JSON)
