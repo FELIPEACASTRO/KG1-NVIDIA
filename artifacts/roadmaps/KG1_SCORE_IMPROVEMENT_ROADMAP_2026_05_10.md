@@ -2400,3 +2400,58 @@ Decisao esperada:
 
 - Se qualquer V244 atingir o gate weak: preparar full eval controlado em nova versao.
 - Se nenhum V244 atingir o gate, encerrar esta linha de treino curto e voltar para mineracao deterministica dos miss-packs/fixtures, sem treino longo.
+
+## V245 bridge implementado - publicar weak CSV exato no HF dataset
+
+Motivo:
+
+- O weak eval V245 dos adapters V244 precisa do CSV fraco exato de `315` linhas.
+- O dataset HF atual contem manifests/workitems V232/V238/V242/V243, mas nao contem `v221_weak_315.csv`.
+- Busca local, HF dataset e Google Drive connector nao recuperou o arquivo raw diretamente.
+- Recriar a amostra fraca a partir de `data/train.csv` com heuristicas de `seed=42` nao reproduziu o contract hash V230; portanto isso nao pode ser usado para medir ACC.
+
+Implementacao:
+
+- Script: `scripts/upload_v245_weak_csv_bridge_to_hf.py`.
+- Builder: `scripts/build_v245_weak_eval_bridge_colab.py`.
+- Notebook: `notebooks/KG1_V245_WEAK_EVAL_BRIDGE_COLAB.ipynb`.
+- Colab URL:
+  `https://colab.research.google.com/github/FELIPEACASTRO/KG1-NVIDIA/blob/v230-v226-complementarity/notebooks/KG1_V245_WEAK_EVAL_BRIDGE_COLAB.ipynb`.
+
+O que o notebook faz:
+
+- Monta Google Drive.
+- Clona a branch `v230-v226-complementarity`.
+- Roda `py_compile`, self-test do bridge e `notebook_release_gate.py`.
+- Procura primeiro:
+  `/content/drive/MyDrive/KG1_NVIDIA_V221/output_v221_candidate_registry_weak_ab/eval_v221_candidate_registry_weak_ab/v221_weak_315.csv`.
+- Se esse CSV nao existir, reconstrói a partir do CSV exato:
+  `/content/drive/MyDrive/KG1_NVIDIA_V207A/output_v207a_acc_gate/validation/official_train_seed42_stratified10_val.csv`.
+- Valida:
+  - colunas `id`, `prompt`, `answer`, `type/family`;
+  - linhas `315`;
+  - `bit_manipulation=160`;
+  - `equation_transform=155`;
+  - contract hash `bf055e3b9ebce79d4bfc9e48bce5a305b1d83da882f14afddec80d6afaba5fff`.
+- Publica no HF dataset:
+  - repo `felipesp1983/kg1-nemotron-training`;
+  - prefixo `runtime_artifacts/v245_weak_eval_bridge/<RUN_ID>/v221_weak_315.csv`;
+  - manifesto `v245_weak_eval_bridge_manifest.json`.
+
+Validacoes locais:
+
+- `python -m py_compile scripts/upload_v245_weak_csv_bridge_to_hf.py scripts/build_v245_weak_eval_bridge_colab.py`.
+- `python scripts/upload_v245_weak_csv_bridge_to_hf.py --self-test`.
+- `python scripts/build_v245_weak_eval_bridge_colab.py`.
+- `python scripts/notebook_release_gate.py notebooks/KG1_V245_WEAK_EVAL_BRIDGE_COLAB.ipynb`.
+
+Resultado do gate:
+
+- `ok=true`.
+- Notebook SHA256: `738ae203316b9e60111b991ca974291861e594788bc94bfcd9e6603a7288e24a`.
+
+Status:
+
+- Implementado e pronto para executar.
+- A execucao requer acao humana porque precisa montar o Google Drive no Colab e ler arquivos em `/content/drive/MyDrive`.
+- Depois que o bridge publicar o CSV no HF dataset, o proximo passo volta a ser automatico no HF: lançar V245 weak eval dos adapters `final`, `checkpoint-4` e `checkpoint-2`.
