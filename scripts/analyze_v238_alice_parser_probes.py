@@ -363,13 +363,25 @@ def probe_abstain(name: str, proof: str) -> dict[str, Any]:
 
 
 def symbolic_probe(examples: list[tuple[str, str]], query: str) -> dict[str, Any]:
+    deletion_diagnostic = deletion_positions_probe(examples, query)
     probes = [
-        deletion_positions_probe,
         reverse_probe,
         prefix_suffix_probe,
     ]
     candidates: list[dict[str, Any]] = []
     abstains: list[dict[str, Any]] = []
+    if deletion_diagnostic.get("status") == "candidate":
+        abstains.append(
+            probe_abstain(
+                "alice_symbolic_deletion_positions_probe",
+                "diagnostic_only_candidate_disabled prediction="
+                + repr(str(deletion_diagnostic.get("prediction", "")))
+                + "; "
+                + str(deletion_diagnostic.get("proof", "")),
+            )
+        )
+    else:
+        abstains.append(deletion_diagnostic)
     for probe in probes:
         result = probe(examples, query)
         if result.get("status") == "candidate":
@@ -637,10 +649,20 @@ def self_test() -> int:
             target_gain=2,
         )
         manifest = run_analysis(args)
-        if manifest["counts"]["deployable_verified_overrides"] != 2:
-            raise AssertionError("expected two verified overrides in self-test")
+        if manifest["counts"]["deployable_verified_overrides"] != 1:
+            raise AssertionError("expected one verified override in self-test")
         if manifest["counts"]["deployable_incorrect_overrides"] != 0:
             raise AssertionError("expected zero incorrect overrides in self-test")
+        with Path(manifest["outputs"]["alice_parser_probe_results_csv"]).open("r", encoding="utf-8", newline="") as handle:
+            rows = list(csv.DictReader(handle))
+        sym_delete_rows = [row for row in rows if row.get("id") == "sym_delete"]
+        if len(sym_delete_rows) != 1:
+            raise AssertionError("expected one sym_delete self-test row")
+        sym_delete = sym_delete_rows[0]
+        if sym_delete.get("status") != "abstain":
+            raise AssertionError("symbolic deletion probe must remain diagnostic-only")
+        if "diagnostic_only_candidate_disabled" not in sym_delete.get("proof", ""):
+            raise AssertionError("symbolic deletion diagnostic proof missing disabled marker")
     print("v238_alice_parser_probes_self_test=ok", flush=True)
     return 0
 

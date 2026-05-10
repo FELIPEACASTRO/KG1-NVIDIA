@@ -1658,3 +1658,47 @@ Proximo passo revisado:
 - Reexecutar V238 atualizado.
 - Se `deployable_incorrect_overrides` cair para `0`, avaliar quantos `verified` restam.
 - Se continuar abaixo de `5`, criar proximo parser apenas a partir de `abstain_reason_summary_top` e dos previews; nao fazer treino, full eval, pacote ou submissao.
+
+## V238 reexecutado - delecao simbolica tambem e insegura
+
+Execucao analisada em 2026-05-10 a partir de `KG1_V238_ALICE_PARSER_PROBES_COLAB (1).ipynb`:
+
+- Commit Colab observado: `16b91a831a8576effe5df70cc4e9d84eb3f7beec`.
+- Manifest V238 gerado: `/content/drive/MyDrive/KG1_NVIDIA_V238/output_v238_alice_parser_probes/analysis_v238_alice_parser_probes/20260510T163738Z/v238_alice_parser_probes_manifest.json`.
+- Manifest V238 SHA256 observado: `c2e47d33583c20f1127e9aa83a29ebaf7be26b7986cf89bff025dfebb833f853`.
+- Final manifest SHA256 observado: `6ea56a6c8ac299d5e97c3f0bf770f55edf3b08aa7dfd7b39cbd00a1b90a4f79e`.
+
+Resultado medido:
+
+- `equation_workitems`: `100`.
+- `deployable_verified_overrides`: `1`.
+- `deployable_incorrect_overrides`: `1`.
+- `target_gain`: `5`.
+- Decisao: `continue_alice_parser_development`.
+
+Evidencia concreta:
+
+- Verified numerico: id `c5b058d6`, query `94)40`, baseline `35`, expected `134`, prediction `134`, proof `rules=add`.
+- Incorrect simbolico: id `432b1110`, query `\{*<?`, baseline `\{<?`, expected `%[:?`, prediction `\{<?`, proof `candidate_probes=alice_symbolic_deletion_positions_probe`.
+
+Conclusao:
+
+- A regra `alice_symbolic_deletion_positions_probe` tambem e fraca demais para override automatico.
+- Ela consegue encaixar exemplos de treino inline por posicao mantida, mas pode apenas reproduzir uma delecao parecida com o baseline e errar a transformacao real da query.
+- Logo, V238 continua bloqueando qualquer V239/rescue measurement.
+
+Ajuste aplicado apos esta execucao:
+
+- `alice_symbolic_deletion_positions_probe` foi rebaixado para diagnostico apenas.
+- Quando encontra uma delecao consistente, a previsao fica registrada no proof como `diagnostic_only_candidate_disabled`, mas nao entra em `candidates` e nao pode gerar override deployable.
+- Self-test V238 atualizado para exigir:
+  - `deployable_verified_overrides == 1`;
+  - `deployable_incorrect_overrides == 0`;
+  - caso simbolico de delecao classificado como `abstain`;
+  - proof contendo `diagnostic_only_candidate_disabled`.
+
+Proximo passo revisado:
+
+- Reexecutar V238 apos o bloqueio da delecao simbolica.
+- Se o log mostrar `deployable_incorrect_overrides == 0` e `deployable_verified_overrides == 1`, nao criar V239 de rescue ainda: o ganho e insuficiente.
+- Criar a proxima iteracao apenas para minerar os 83 abstains simbolicos e os abstains numericos por `no_examples_for_query_operator`/`candidate_rule_count`, sem permitir override simbolico novo sem teste unitario e evidencia de zero incorretos.
