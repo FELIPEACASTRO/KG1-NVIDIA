@@ -561,3 +561,189 @@ Decisao esperada do V234:
 - `build_solver_from_external_traces` se houver regras/probes concretos para `equation_transform`;
 - `external_intel_not_actionable` se os traces forem ruidosos, conflitantes ou sem mapeamento para weak misses;
 - `manual_access_required` se o dataset HF gated nao estiver autorizado no ambiente.
+
+## Atualizacao rigorosa - segunda auditoria OpenRouter/Kaggle/HF - 2026-05-10
+
+Escopo executado:
+
+- Reprocessados integralmente os anexos:
+  - `OpenRouter Chat Sun May 10 2026 (1).json`: `9,708` linhas, SHA256 `4F87904D23F7988F2CA3F2E2917B7F3355C9F6027FF910C91DDF7D6A50E823BE`.
+  - `OpenRouter Chat Sun May 10 2026.json`: `19,091` linhas, SHA256 `B8AAB44AF917338956F12C2513AE75F309025BBC56D01EF15D972EF33CA3825E`.
+- JSON parse passou para os dois anexos.
+- URLs brutas analisadas: `2,830`.
+- Chaves normalizadas unicas: `576`.
+- Categorias brutas extraidas:
+  - Kaggle: `908` URLs brutas.
+  - Hugging Face/HF: `927` URLs brutas.
+  - GitHub: `302` URLs brutas.
+  - NVIDIA docs/blogs: `123` URLs brutas.
+- OpenRouter live API: nao executada porque `OPENROUTER_API_KEY` nao estava presente no ambiente local. As evidencias OpenRouter usadas vieram dos JSONs anexados.
+- Kaggle CLI publico: executado sem chave para listagem e pull de notebooks publicos selecionados.
+- Hugging Face plugin/API: executado para validar datasets/modelos citados.
+- Web search: executado para verificar paginas publicas e paginas indexadas.
+
+Conclusao adicional:
+
+- A primeira atualizacao do roadmap nao estava errada, mas estava incompleta. Faltavam itens publicos do Kaggle CLI e um gap concreto de metric/extractor.
+- O achado mais importante para ACC continua sendo solver/verifier, nao novo LoRA.
+- Existe um risco real de subcontagem em `equation_transform` se o parser local de `\boxed{}` nao aceitar respostas com `}` literal ou braces aninhados.
+
+### Gap corrigido no codigo local - extractor boxed
+
+Fonte do achado:
+
+- Kaggle kernel: `metric/nvidia-nemotron-metric`.
+- O metric notebook trata cada `\boxed{` pegando o conteudo ate o ultimo `}` antes do proximo `\boxed{` ou fim do texto.
+- Isso cobre respostas como `\boxed{}52}` para answer `}52` e casos com LaTeX aninhado como `\boxed{\frac{1}{2}}`.
+
+Problema local encontrado:
+
+- `src/competition_utils.py` usava regex `\\boxed\{([^}]*)(?:\}|$)`.
+- Esse regex para no primeiro `}` e pode extrair payload errado quando a resposta correta contem brace literal, caso plausivel em `equation_transform` simbolico.
+
+Correcao aplicada:
+
+- `extract_boxed_answers` foi atualizado para seguir o comportamento do metric notebook: varrer todos os starts `\boxed{`, delimitar pelo proximo boxed/fim, e cortar no ultimo `}` do segmento.
+
+Smoke test executado:
+
+- `python -m py_compile src\competition_utils.py`
+- Casos validados:
+  - `\boxed{42}` -> `42`
+  - `\boxed{1} ... \boxed{2}` -> `2`
+  - `\boxed{\frac{1}{2}}` -> `\frac{1}{2}`
+  - `\boxed{}52}` -> `}52`
+  - `\boxed{abc` -> `abc`
+
+Impacto esperado:
+
+- Nao melhora o modelo diretamente, mas reduz risco de avaliacao local divergente da metric publica.
+- Deve ser incorporado a qualquer V234/V235 antes de medir ganho em `equation_transform`.
+
+### Novos achados Kaggle CLI que ainda faltavam no roadmap
+
+Kernels publicos mais relevantes por evidencia de titulo, votos, metadata e pull local selecionado:
+
+| Ref | Evidencia | Valor potencial | Decisao |
+|---|---:|---|---|
+| `huikang/end-to-end-finetuning-for-lb-0-85` | Kaggle CLI; pull local ok | Receita Progress Prize/LB 0.85, mask loss, LoRA, corpus token masks | P0 para leitura metodologica, nao copiar treino |
+| `huikang/tinker-submission-notebook` | Kaggle CLI; pull local ok | Submission com `huikang/nemotron-adapter` versions 20/26 e extractor metric-like | P0 para adapter registry/metric parity |
+| `mohankrishnathalla/nemotron-6-puzzle-types-decoded-rule-solvers` | Kaggle CLI; pull local ok | Classifica 6 familias; solvers rule-based para familias faceis; bit/symbol marcados como dificeis | P0 para V234 taxonomy/verifier |
+| `optiminist/equation-eda-operator-operation-84-solve-rate` | Kaggle CLI; pull local ok | EDA de equation numeric; hipotese Pre-Op/Mid-Op/Post-Op; 84%/99% em subconjunto reportado | P0 para equation numeric verifier |
+| `konbu17/bit-manipulation-solver-cot-generator` | Kaggle CLI; pull local ok | Solver bit por funcao booleana por bit; inclui INHIB/IMPL ausentes em solvers simples | P0 para bit guardrail |
+| `johnnyhyland/nvidia-nemotron-sft-grpo-colab-faster` | Kaggle CLI; pull local ok | Pipeline SFT -> GRPO com solvers como verificadores | P2; usar so depois de solver/verifier local |
+| `kalyankkr/all-6-puzzle-types-decoded-sft-training-data` | Kaggle CLI; pull local ok | Classificacao, formatos de resposta, dados SFT | P2; nao treinar sem dedupe/leakage |
+| `dgxchen/training-with-unsloth-to-achieve-0-85-lb` | Kaggle CLI; pull local ok | Receita Unsloth/LB 0.84-0.85, remove `lm_head`, microbatch/accum | P2; nosso V221 ja mostrou adapter pior em weak local |
+| `metric/nvidia-nemotron-metric` | Kaggle CLI; pull local ok | Extractor/verify publico; paridade de metric | P0; ja gerou correcao local |
+| `hammadfarooq470/think-twice-self-correcting-reasoning` | Kaggle CLI; pull local ok | Self-correction com adapter Huikang | P3; baixo valor ate provar ganho local |
+| `anhtuan299/blackboard-expert-agent-assembly-solving-technique` | Kaggle CLI; pull local ok | Multi-agent/TIR de AIMO3, nao KG1 direto | P3; inspiracao, nao pipeline imediato |
+
+Kernels publicos relevantes ainda nao baixados/analisados profundamente, mas devem entrar na triagem V234:
+
+- `ryanholbrook/nvidia-nemotron-submission-demo`
+- `dennisfong/nvidia-nemotron-sfttrainer-training`
+- `kienngx/nvidia-nemotron-training-cot-labels`
+- `kienngx/nvidia-nemotron-trained-models-submission`
+- `asalhi/tinker-adapter-to-ready-to-submit-adapter`
+- `huikang/adapter-validation-notebook`
+- `kienngx/nvidia-nemotron-training-copy-run-instantly`
+- `mayukh18/unsloth-sft-full-data-training`
+- `llkh0a/nemotron-unsloth-sft-training-3-30-2`
+- `newduck/nvidia-nemotron-soft-balanced-sampling-sft`
+- `konbu17/nemotron-tong-style-cot-sft-updated-v2`
+- `pearpn25/bit-cot-85-1364-sample`
+- `kimberleyduran/solver-verified-cryptarithm-cot-v2-dataset`
+- `mohamedamr992/easy-loading-of-nemotron-3`
+- `bloodymonday/eda-problem-families`
+- `vickymaan/alice-puzzle-solver`
+
+Regra:
+
+- Todo Kaggle kernel entra como inteligencia externa. Nenhum notebook externo vira codigo de producao sem diff review, licenca, hash, teste unitario e weak gate.
+
+### Novos datasets Kaggle/HF que faltavam como candidatos de triagem
+
+Kaggle datasets listados pela API publica:
+
+| Ref | Evidencia | Valor potencial | Decisao |
+|---|---:|---|---|
+| `kishanvavdara/nemotron-reasoning-traj` | `40.8 MB`, `349` downloads, `25` votes | Reasoning trajectories KG1 | P1 triagem; baixar com hash |
+| `kienngx/nemotron-30b-competition-trainingdata-cot-labels` | `3.9 MB`, `1235` downloads, `47` votes | COT + labels de competicao | P1 triagem; alto risco de leakage/overfit |
+| `konbu17/bit-manipulation-cot-dataset` | `625 KB`, `70` downloads | Bit CoT | P1 para bit guardrail, nao SFT bruto |
+| `konbu17/bit-manipulation-synthetic-cot` | `895 KB`, `58` downloads | Bit synthetic CoT | P1 para solver tests |
+| `nctuan/nvidia-nemotron-reasoning-challenge` | `643 KB`, usability `0.94` | Mirror/dataset KG1 | P2, comparar com jasonkung/sebmontreal |
+| `mohammedtanvir/nemotron-reasoning-traces` | `12.8 MB`, `26` downloads | Traces | P2 triagem |
+| `kevpan096/nemotron-reasoning-competition` | `7.5 MB`, `23` downloads | Competition data | P3; verificar origem |
+| `sebmontreal/nvidia-nemotron-model-reasoning-challenge` | `643 KB` | Mirror Kaggle | Baixa prioridade; provavel mirror |
+| `harshmali0403/nvidia-nemotron-model-reasoning-challenge` | `643 KB` | Mirror Kaggle | Baixa prioridade; provavel mirror |
+| `vsnihal/nvidia-nemotron-model-reasoning-challenge-01` | `643 KB` | Mirror Kaggle | Baixa prioridade; provavel mirror |
+
+Hugging Face datasets/modelos validados pela API:
+
+- `andy279/nemotron-reasoning-challenge`: gated, Apache-2.0, `49,290` train, `1,165` validation, relevante.
+- `andy279/nemotron-reasoning-challenge-raw-traces`: gated, Apache-2.0, raw teacher traces, relevante.
+- `jasonkung98/NVIDIA-Nemotron-Model-Reasoning-Challenge`: CSV, `9.5k` train rows + `3` test rows, Apache-2.0, pode servir como mirror/audit de prompt/answer.
+- `justus27/reasoning-gym-bitwise-arithmetic`: pequeno, parquet, bitwise arithmetic, pode virar probe de guardrail.
+- `nvidia/Puzzle-KD-Nemotron-Post-Training-Dataset-v2`: grande e generico; baixa prioridade para o gap atual, mas util como contexto de post-training.
+- `GaryNENE/nemotron-nano-8b-reasoning-lora`: modelo LoRA 8B, nao compativel diretamente com o base 30B; usar apenas como referencia de receita/dados.
+- `AdaptKey/AdaptKey-Nemotron-30b`: gated, telecom LoRA; nao relevante para KG1 ACC.
+- `Taurine511/nvidia-nemotron-model-reasoning-challenge`: apareceu na busca web, mas a API HF retornou `not found`; tratar como instavel/deletado ate verificacao manual.
+
+### Novos modelos Kaggle a triagem
+
+Kaggle model list publico trouxe candidatos ainda nao suficientemente refletidos no roadmap:
+
+- `kienngx/nemotron-nano-30b-trained`: familia de variacoes treinadas com pipeline Kienngx.
+- `atahalam/nvidia-nemotron-model-reasoning-30b-a3b-lora-0-80`: titulo declara LoRA 0.80; precisa validacao, porque titulo nao e evidencia de weak score local.
+- `charancherrychowdary/nemotron-lora-adapter-v1`: adapter LoRA; baixa evidencia.
+- `sluitel/nemotron-70b-reasoning-lora`: outro base/modelo; nao compativel direto.
+- `nathangaskell/llama-3-1-nemotron-nano-8b`: 8B math-focused; nao compativel direto.
+- `metric/nemotron-3-nano-30b-a3b-bf16`: base metric model source ja usado em notebooks Kaggle; manter como referencia de path/metric, nao como novo candidato.
+
+Regra:
+
+- Todo modelo/adaptador novo exige: `adapter_config.json`, tensor count, weight bytes, target_modules, base_model_name_or_path, licenca, hash, weak eval 315 rows, truncation check e no-regression por familia.
+
+### Atualizacao de prioridade V234
+
+O V234 deve ser ampliado alem de `andy279`:
+
+1. Fonte metric/paridade:
+   - `metric/nvidia-nemotron-metric`
+   - objetivo: garantir extractor/verify equivalentes ao Kaggle.
+2. Fonte equation numeric:
+   - `optiminist/equation-eda-operator-operation-84-solve-rate`
+   - objetivo: implementar/verificar Pre-Op/Mid-Op/Post-Op em weak miss-pack.
+3. Fonte bit solver:
+   - `konbu17/bit-manipulation-solver-cot-generator`
+   - objetivo: testar boolean functions por output bit, incluindo INHIB/Rev-INHIB/IMPL/Rev-IMPL.
+4. Fonte taxonomy:
+   - `mohankrishnathalla/nemotron-6-puzzle-types-decoded-rule-solvers`
+   - objetivo: comparar classificacao de familias e solvers faceis contra nosso classificador.
+5. Fonte adapter/corpus de alta evidencia:
+   - `huikang/end-to-end-finetuning-for-lb-0-85`
+   - `huikang/tinker-submission-notebook`
+   - objetivo: extrair criterios de mask loss/corpus/adapter registry, nao copiar treino.
+6. Fonte traces/datasets:
+   - `andy279/nemotron-reasoning-challenge-raw-traces`
+   - `kishanvavdara/nemotron-reasoning-traj`
+   - `kienngx/nemotron-30b-competition-trainingdata-cot-labels`
+   - objetivo: baixar apenas com hash e usar para regra/verifier, nao SFT bruto.
+
+Nova saida esperada do V234:
+
+- `external_metric_parity_report.json`
+- `kaggle_kernel_triage.csv`
+- `kaggle_dataset_triage.csv`
+- `kaggle_model_triage.csv`
+- `equation_numeric_operator_probe_results.csv`
+- `bit_boolean_function_probe_results.csv`
+- `external_adapter_registry_candidates.csv`
+
+Nova decisao possivel:
+
+- `metric_gap_fixed_continue_to_solver`
+- `equation_numeric_probe_promising`
+- `bit_guardrail_probe_promising`
+- `external_adapter_requires_weak_eval`
+- `external_sources_no_actionable_gain`

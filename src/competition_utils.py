@@ -115,7 +115,16 @@ def classify_puzzle(prompt: str) -> str:
 def extract_boxed_answers(text: str | None) -> list[str]:
     if text is None:
         return []
-    return re.findall(r"\\boxed\{([^}]*)(?:\}|$)", str(text))
+    value = str(text)
+    starts = list(re.finditer(r"\\boxed\{", value))
+    matches: list[str] = []
+    for index, match in enumerate(starts):
+        start = match.end()
+        end = starts[index + 1].start() if index + 1 < len(starts) else len(value)
+        segment = value[start:end]
+        last_brace = segment.rfind("}")
+        matches.append(segment[:last_brace] if last_brace != -1 else segment)
+    return matches
 
 
 def extract_final_answer(text: str | None) -> str:
@@ -135,8 +144,8 @@ def extract_final_answer(text: str | None) -> str:
     patterns = [
         r"The final answer is:\s*([^\n]+)",
         r"Final answer is:\s*([^\n]+)",
-        r"Final answer\s*[:：]\s*([^\n]+)",
-        r"final answer\s*[:：]\s*([^\n]+)",
+        r"Final answer\s*[:\uFF1A]\s*([^\n]+)",
+        r"final answer\s*[:\uFF1A]\s*([^\n]+)",
     ]
     for pattern in patterns:
         matches = re.findall(pattern, value, re.IGNORECASE)
@@ -213,4 +222,3 @@ def answers_equivalent(
 
 def box_answer(value: object) -> str:
     return f"\\boxed{{{escape_boxed_answer(value)}}}"
-
