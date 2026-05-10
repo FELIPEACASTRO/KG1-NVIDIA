@@ -246,6 +246,7 @@ if not EXPECTED_REPO_COMMIT:
 
 compile_targets = [
     ROOT / 'scripts' / 'hf_job_train_v90.py',
+    ROOT / 'scripts' / 'hf_job_preflight_gate.py',
     ROOT / 'scripts' / 'build_v243_training_mix.py',
     ROOT / 'scripts' / 'audit_jsonl_overlap.py',
     ROOT / 'scripts' / 'notebook_release_gate.py',
@@ -340,29 +341,13 @@ python - <<'PY'
 import json, torch
 print(json.dumps({'torch_before': torch.__version__, 'cuda': torch.version.cuda, 'cuda_available': torch.cuda.is_available(), 'device': torch.cuda.get_device_name(0) if torch.cuda.is_available() else ''}), flush=True)
 PY
-python -m pip install -q --no-cache-dir 'huggingface_hub>=0.36.0' 'transformers>=4.56.0' 'peft>=0.17.0' 'accelerate>=1.10.0' safetensors sentencepiece protobuf hf_transfer packaging wheel setuptools ninja einops
-python -m pip install -q --no-cache-dir --no-build-isolation --no-deps --no-binary=causal-conv1d 'causal-conv1d==1.6.1'
-python -m pip install -q --no-cache-dir --no-build-isolation --no-deps --no-binary=mamba-ssm 'mamba-ssm==2.3.1'
-python - <<'PY'
-import importlib, json, torch
-expected = '2.8.0+cu128'
-print(json.dumps({'torch_after': torch.__version__, 'cuda': torch.version.cuda, 'cuda_available': torch.cuda.is_available(), 'device': torch.cuda.get_device_name(0) if torch.cuda.is_available() else ''}), flush=True)
-if torch.__version__ != expected:
-    raise SystemExit(f'torch changed unexpectedly: expected {expected}, got {torch.__version__}')
-for name in ['causal_conv1d', 'mamba_ssm']:
-    mod = importlib.import_module(name)
-    print(json.dumps({'import_ok': name, 'version': getattr(mod, '__version__', 'unknown')}), flush=True)
-from mamba_ssm.ops.triton.layernorm_gated import rmsnorm_fn
-from mamba_ssm.ops.selective_scan_interface import selective_scan_fn
-print(json.dumps({'mamba_kernel_imports': 'ok', 'has_rmsnorm_fn': rmsnorm_fn is not None, 'has_selective_scan_fn': selective_scan_fn is not None}), flush=True)
-PY
+python -m pip install -q --no-cache-dir 'huggingface_hub>=0.36.0' packaging wheel setuptools
 rm -rf /tmp/kg1
 git clone --depth 1 --branch "$KG1_BRANCH" https://github.com/FELIPEACASTRO/KG1-NVIDIA.git /tmp/kg1
 cd /tmp/kg1
 observed=$(git rev-parse HEAD)
 echo "repo_commit=$observed"
 if [ "$observed" != "$KG1_EXPECTED_COMMIT" ]; then echo "commit mismatch" >&2; exit 12; fi
-python -m py_compile scripts/hf_job_train_v90.py scripts/build_v243_training_mix.py scripts/audit_jsonl_overlap.py
 export HF_HUB_ENABLE_HF_TRANSFER=1
 export TOKENIZERS_PARALLELISM=false
 export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
@@ -425,12 +410,36 @@ export ATTN_IMPLEMENTATION='eager'
 export TORCH_ALLOW_TF32=1
 export TORCH_FLOAT32_MATMUL_PRECISION='high'
 export GRADIENT_CHECKPOINTING=1
+# hf_job_preflight_gate.py verifies torch_after, mamba_ssm.ops.triton.layernorm_gated,
+# and mamba_ssm.ops.selective_scan_interface before hf_job_train_v90.py starts.
+python scripts/hf_job_preflight_gate.py --phase preinstall
+python scripts/hf_job_preflight_gate.py --phase artifacts
+python -m pip install -q --no-cache-dir 'transformers>=4.56.0' 'peft>=0.17.0' 'accelerate>=1.10.0' safetensors sentencepiece protobuf hf_transfer ninja einops
+python -m pip install -q --no-cache-dir --no-build-isolation --no-deps --no-binary=causal-conv1d 'causal-conv1d==1.6.1'
+python -m pip install -q --no-cache-dir --no-build-isolation --no-deps --no-binary=mamba-ssm 'mamba-ssm==2.3.1'
+python scripts/hf_job_preflight_gate.py --phase postinstall
 python scripts/hf_job_train_v90.py
 '''
 
+selected_hf_hardware = by_name[HF_FLAVOR]
 job_env = {
     'KG1_BRANCH': REPO_BRANCH,
     'KG1_EXPECTED_COMMIT': EXPECTED_REPO_COMMIT,
+    'KG1_EXPECTED_TORCH_VERSION': '2.8.0+cu128',
+    'KG1_EXPECTED_MAX_STEPS': str(MAX_STEPS),
+    'KG1_REQUIRE_CUDA': '1',
+    'KG1_MIN_GPU_TOTAL_GIB': '130',
+    'KG1_REQUIRED_GPU_NAME_REGEX': 'H200',
+    'KG1_HF_FLAVOR': HF_FLAVOR,
+    'KG1_HF_UNIT_COST_USD': str(selected_hf_hardware.get('unit_cost', 0.0)),
+    'KG1_HF_MAX_UNIT_COST_USD': os.environ.get('KG1_V244_HF_MAX_UNIT_COST_USD', '8.0'),
+    'KG1_ALLOWED_HF_FLAVORS': 'h200',
+    'KG1_MAX_PROMPT_TRUNCATION_RATE': str(MAX_PROMPT_TRUNCATION_RATE),
+    'KG1_REQUIRE_OFFSET_MASK': '1',
+    'KG1_REQUIRED_TRAIN_FAMILIES': 'bit_manipulation,equation_transform',
+    'KG1_REQUIRED_VAL_FAMILIES': 'bit_manipulation,equation_transform',
+    'KG1_REQUIRED_TRAIN_SUBCATEGORIES': 'equation_symbolic_mixed_v242,equation_numeric_same_operator_v242',
+    'KG1_STRICT_INIT_ADAPTER_CONFIG': '1',
     'KG1_OUTPUT_REPO': OUTPUT_REPO,
     'KG1_RUN_ID': RUN_ID,
     'KG1_TRAIN_FILE': DATA_FILE,
