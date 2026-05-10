@@ -9,9 +9,13 @@ row-level signal can close the weak gate before any new training or full eval.
 from __future__ import annotations
 
 import argparse
+import csv
 import hashlib
 import json
+import shutil
+import subprocess
 import sys
+import tempfile
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -22,7 +26,7 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from src.competition_utils import canonical_family, classify_puzzle, extract_final_answer, verify_answer  # noqa: E402
+from src.competition_utils import box_answer, canonical_family, classify_puzzle, extract_final_answer, verify_answer  # noqa: E402
 
 
 WEAK_FAMILIES = ("bit_manipulation", "equation_transform")
@@ -744,8 +748,189 @@ def choose_decision(
     }
 
 
+def synthetic_prediction_rows(candidate: str, mutation: str | None = None) -> list[dict[str, Any]]:
+    rows: list[dict[str, Any]] = []
+    for index in range(315):
+        family = "bit_manipulation" if index < 160 else "equation_transform"
+        if family == "bit_manipulation":
+            prompt = f"Solve this bit manipulation puzzle with an 8-bit binary value. Row {index}."
+            answer = "00101010" if index == 0 else "1"
+        else:
+            prompt = f"Apply the transformation rule to this equation puzzle. Row {index}."
+            answer = "1"
+        prediction = answer if (candidate == "baseline" and index < 191) or (candidate == "v221" and index < 12) else "0"
+        correct = prediction == answer
+        raw_output = box_answer(prediction)
+        declared_family = family
+        if mutation == "bad_correct" and candidate == "baseline" and index == 0:
+            correct = False
+        if mutation == "bad_raw" and candidate == "baseline" and index == 0:
+            raw_output = box_answer("9")
+        if mutation == "prompt_mismatch" and candidate == "baseline" and index == 0:
+            prompt = "Solve this bit manipulation puzzle with an 8-bit binary value. Changed row zero."
+        if mutation == "family_mismatch" and candidate == "baseline" and index == 0:
+            declared_family = "equation_transform"
+        rows.append(
+            {
+                "id": f"weak_{index:03d}",
+                "prompt": prompt,
+                "answer": answer,
+                "prediction": prediction,
+                "raw_output": raw_output,
+                "correct": str(correct),
+                "type": declared_family,
+                "truncated": "False",
+            }
+        )
+    return rows
+
+
+def write_synthetic_case(root: Path, name: str, mutation: str | None = None) -> Path:
+    case_dir = root / name
+    case_dir.mkdir(parents=True, exist_ok=True)
+    for source, candidate in [("v221", "v221"), ("v226", "baseline")]:
+        prediction_path = case_dir / f"{source}_predictions.csv"
+        rows = synthetic_prediction_rows(candidate, mutation=mutation)
+        with prediction_path.open("w", newline="", encoding="utf-8") as handle:
+            writer = csv.DictWriter(handle, fieldnames=list(rows[0]))
+            writer.writeheader()
+            writer.writerows(rows)
+        report_path = case_dir / f"{source}_report.json"
+        write_json(report_path, {"outputs": {"predictions_csv": prediction_path.name}})
+        row_name = "v226_best_checkpoint1_observed_191" if source == "v226" else "candidate_a"
+        if mutation == "missing_baseline" and source == "v226":
+            row_name = "checkpoint_without_required_name"
+        write_json(
+            case_dir / f"{source}_summary.json",
+            {"rows": [{"status": "ok", "name": row_name, "adapter": "", "report_json": str(report_path)}]},
+        )
+    return case_dir
+
+
+def run_synthetic_cli_case(
+    root: Path,
+    name: str,
+    *,
+    mutation: str | None = None,
+    extra_args: list[str] | None = None,
+    expect_ok: bool = True,
+    expected_message: str = "",
+) -> None:
+    case_dir = write_synthetic_case(root, name, mutation=mutation)
+    output_dir = case_dir / "out"
+    command = [
+        sys.executable,
+        str(Path(__file__).resolve()),
+        "--v221-batch-summary-json",
+        str(case_dir / "v221_summary.json"),
+        "--v226-batch-summary-json",
+        str(case_dir / "v226_summary.json"),
+        "--output-dir",
+        str(output_dir),
+        "--label",
+        name,
+    ]
+    if extra_args:
+        command.extend(extra_args)
+    completed = subprocess.run(
+        command,
+        cwd=str(ROOT),
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        check=False,
+        timeout=60,
+    )
+    if (completed.returncode == 0) != expect_ok:
+        raise AssertionError(
+            f"{name}: expected ok={expect_ok}, returncode={completed.returncode}, "
+            f"tail={completed.stdout[-4000:]}"
+        )
+    if expected_message and expected_message not in completed.stdout:
+        raise AssertionError(f"{name}: missing expected message {expected_message!r}; tail={completed.stdout[-4000:]}")
+    if expect_ok:
+        manifest = read_json(output_dir / f"{safe_name(name)}_manifest.json")
+        if "family_calibration_summary" not in manifest:
+            raise AssertionError(f"{name}: missing family_calibration_summary")
+        if "family_calibration_csv" not in manifest.get("outputs", {}):
+            raise AssertionError(f"{name}: missing family_calibration_csv output")
+        if int(manifest["load_meta"][0]["rows"]) != 315:
+            raise AssertionError(f"{name}: synthetic row count drift")
+        calibration = manifest["family_calibration_summary"]
+        if not any(row.get("family") == "bit_manipulation" for row in calibration):
+            raise AssertionError(f"{name}: missing bit_manipulation calibration")
+
+
+def run_self_test() -> int:
+    print("=== V230 ANALYZER SELF TEST START ===", flush=True)
+    boxed_binary = box_answer("00101010")
+    if boxed_binary != r"\boxed{00101010}":
+        raise AssertionError(f"boxed binary escape mismatch: {boxed_binary!r}")
+    if extract_final_answer(boxed_binary) != "00101010":
+        raise AssertionError("boxed binary extraction did not preserve leading zeros")
+    if not verify_answer("00101010", "00101010"):
+        raise AssertionError("binary exact verify failed")
+    if verify_answer("00101010", "101010"):
+        raise AssertionError("binary leading-zero verify incorrectly passed")
+
+    root = Path(tempfile.mkdtemp(prefix="v230_analyzer_self_test_"))
+    try:
+        run_synthetic_cli_case(root, "valid_leading_zero_binary")
+        run_synthetic_cli_case(
+            root,
+            "missing_baseline",
+            mutation="missing_baseline",
+            expect_ok=False,
+            expected_message="required preferred baseline was not found",
+        )
+        run_synthetic_cli_case(
+            root,
+            "bad_correct",
+            mutation="bad_correct",
+            expect_ok=False,
+            expected_message="CSV correct disagrees",
+        )
+        run_synthetic_cli_case(
+            root,
+            "bad_raw",
+            mutation="bad_raw",
+            expect_ok=False,
+            expected_message="raw_output extraction differs",
+        )
+        run_synthetic_cli_case(
+            root,
+            "prompt_mismatch",
+            mutation="prompt_mismatch",
+            expect_ok=False,
+            expected_message="row contract mismatch",
+        )
+        run_synthetic_cli_case(
+            root,
+            "family_mismatch",
+            mutation="family_mismatch",
+            expect_ok=False,
+            expected_message="declared family disagrees",
+        )
+        run_synthetic_cli_case(
+            root,
+            "wrong_contract_hash",
+            extra_args=["--expected-shared-row-contract-sha256", "definitely_wrong"],
+            expect_ok=False,
+            expected_message="shared row contract hash mismatch",
+        )
+    finally:
+        shutil.rmtree(root, ignore_errors=True)
+    print("v230_analyzer_self_test=ok", flush=True)
+    print("=== V230 ANALYZER SELF TEST END ===", flush=True)
+    return 0
+
+
 def main() -> int:
+    if "--self-test" in sys.argv[1:]:
+        return run_self_test()
+
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--self-test", action="store_true", help=argparse.SUPPRESS)
     parser.add_argument("--v221-batch-summary-json", type=Path, default=Path(""))
     parser.add_argument("--v226-batch-summary-json", type=Path, required=True)
     parser.add_argument("--v229-analysis-manifest-json", type=Path, default=Path(""))

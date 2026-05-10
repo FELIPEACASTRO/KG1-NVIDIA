@@ -28,6 +28,7 @@ import hashlib
 import json
 import re
 import subprocess
+import sys
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
@@ -282,6 +283,7 @@ V230_REQUIRED_SNIPPETS = {
     "allowed actions": "'allowed_actions':",
     "run id output": "RUN_ID =",
     "expected shared row contract env": "KG1_V230_EXPECTED_SHARED_ROW_CONTRACT_SHA256",
+    "runtime analyzer self test": "v230_analyzer_self_test.log",
     "stale manifest removal": "removed_stale_analysis_manifest",
     "v221 nonempty gate": "V221 batch summary has no ok candidates.",
     "v229 required": "raise FileNotFoundError(V229_ANALYSIS_MANIFEST_JSON)",
@@ -810,6 +812,7 @@ def audit_v230_v226_complementarity_contract(path: Path, notebook: dict[str, Any
         "prediction csv string dtype": "pd.read_csv(path, dtype=str, keep_default_na=False)",
         "gate normalized gap": "gate_normalized_gap",
         "family calibration": "family_calibration_summary",
+        "analyzer self test": "v230_analyzer_self_test=ok",
         "declared family prompt crosscheck": "declared family disagrees with prompt classifier",
         "relative prediction path": "report_path.parent / path",
         "duplicate candidate names": "duplicate candidate names after normalization",
@@ -825,6 +828,25 @@ def audit_v230_v226_complementarity_contract(path: Path, notebook: dict[str, Any
     for name, snippet in analyzer_snippets.items():
         if snippet not in analyzer_text:
             add(findings, "error", "v230_analyzer_contract_missing", name)
+    if analyzer.exists():
+        completed = subprocess.run(
+            [sys.executable, str(analyzer), "--self-test"],
+            cwd=str(ROOT),
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            check=False,
+            timeout=120,
+        )
+        if completed.returncode != 0:
+            add(
+                findings,
+                "error",
+                "v230_analyzer_self_test_failed",
+                f"returncode={completed.returncode}; tail={completed.stdout[-4000:]}",
+            )
+        elif "v230_analyzer_self_test=ok" not in completed.stdout:
+            add(findings, "error", "v230_analyzer_self_test_missing_ok", completed.stdout[-4000:])
 
     builder = ROOT / "scripts" / "build_v230_v226_complementarity_colab.py"
     builder_text = builder.read_text(encoding="utf-8") if builder.exists() else ""
@@ -839,6 +861,7 @@ def audit_v230_v226_complementarity_contract(path: Path, notebook: dict[str, Any
         "v221 nonempty gate": "V221 batch summary has no ok candidates.",
         "preferred v226 correct gate": "Required V226 baseline correct count mismatch",
         "expected row contract cli": "--expected-shared-row-contract-sha256",
+        "runtime analyzer self test": "v230_analyzer_self_test.log",
         "v229 required": "raise FileNotFoundError(V229_ANALYSIS_MANIFEST_JSON)",
         "relative prediction path": "direct_path = report_json.parent / direct_path",
     }

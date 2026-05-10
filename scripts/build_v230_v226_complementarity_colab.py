@@ -567,6 +567,14 @@ for py_path in compile_targets:
     import py_compile
     py_compile.compile(str(py_path), doraise=True)
     print('py_compile ok =', py_path.relative_to(ROOT), flush=True)
+run_cmd(
+    [sys.executable, str(ROOT / 'scripts/analyze_v230_v226_complementarity.py'), '--self-test'],
+    cwd=ROOT,
+    log_path=OUT_ROOT / 'v230_analyzer_self_test.log',
+    check=True,
+    heartbeat_s=30,
+    timeout_s=180,
+)
 train_path = ROOT / 'data/v217/v217_short_answer_train.jsonl'
 val_path = ROOT / 'data/v217/v217_short_answer_val.jsonl'
 print('train_path =', train_path, 'exists =', train_path.exists(), flush=True)
