@@ -44,6 +44,17 @@ RESULT_COLUMNS = [
     "proof",
 ]
 SUMMARY_COLUMNS = ["prompt_kind", "probe_name", "status", "rows"]
+PREVIEW_COLUMNS = [
+    "id",
+    "prompt_kind",
+    "probe_name",
+    "status",
+    "query",
+    "prediction",
+    "expected_answer",
+    "baseline_prediction",
+    "proof",
+]
 
 
 def utc_now() -> str:
@@ -353,7 +364,6 @@ def probe_abstain(name: str, proof: str) -> dict[str, Any]:
 
 def symbolic_probe(examples: list[tuple[str, str]], query: str) -> dict[str, Any]:
     probes = [
-        char_map_probe,
         deletion_positions_probe,
         reverse_probe,
         prefix_suffix_probe,
@@ -455,8 +465,15 @@ def summarize(rows: list[dict[str, Any]], keys: list[str]) -> list[dict[str, Any
         counts[tuple(str(row.get(key, "")) for key in keys)] += 1
     return [
         {**{key: values[idx] for idx, key in enumerate(keys)}, "rows": count}
-        for values, count in sorted(counts.items())
+        for values, count in sorted(counts.items(), key=lambda item: (-item[1], item[0]))
     ]
+
+
+def preview_rows(rows: list[dict[str, Any]], limit: int = 12) -> list[dict[str, Any]]:
+    preview: list[dict[str, Any]] = []
+    for row in rows[:limit]:
+        preview.append({column: row.get(column, "") for column in PREVIEW_COLUMNS})
+    return preview
 
 
 def run_analysis(args: argparse.Namespace) -> dict[str, Any]:
@@ -491,6 +508,13 @@ def run_analysis(args: argparse.Namespace) -> dict[str, Any]:
         "manifest_json": args.output_dir / f"{prefix}_manifest.json",
     }
     summary = summarize(results, ["prompt_kind", "probe_name", "status"])
+    abstain_reason_summary = summarize(
+        [row for row in results if row.get("status") == "abstain"],
+        ["prompt_kind", "probe_name", "proof"],
+    )
+    verified_preview = preview_rows(verified)
+    incorrect_preview = preview_rows(incorrect)
+    abstain_preview = preview_rows([row for row in results if row.get("status") == "abstain"])
     write_csv(out_paths["alice_parser_probe_results_csv"], results, RESULT_COLUMNS)
     write_csv(out_paths["alice_parser_probe_summary_csv"], summary, SUMMARY_COLUMNS)
 
@@ -528,6 +552,10 @@ def run_analysis(args: argparse.Namespace) -> dict[str, Any]:
             "target_gain": int(args.target_gain),
         },
         "summary": summary,
+        "abstain_reason_summary_top": abstain_reason_summary[:30],
+        "verified_preview": verified_preview,
+        "incorrect_preview": incorrect_preview,
+        "abstain_preview": abstain_preview,
         "outputs": {name: str(path) for name, path in out_paths.items()},
         "output_artifact_hashes": {
             name: file_meta(path) for name, path in out_paths.items() if name != "manifest_json"
@@ -538,6 +566,10 @@ def run_analysis(args: argparse.Namespace) -> dict[str, Any]:
     write_json(out_paths["manifest_json"], manifest)
     print("counts =", json.dumps(manifest["counts"], sort_keys=True), flush=True)
     print("summary =", json.dumps(summary, indent=2, sort_keys=True), flush=True)
+    print("abstain_reason_summary_top =", json.dumps(abstain_reason_summary[:30], indent=2, sort_keys=True), flush=True)
+    print("verified_preview =", json.dumps(verified_preview, indent=2, sort_keys=True), flush=True)
+    print("incorrect_preview =", json.dumps(incorrect_preview, indent=2, sort_keys=True), flush=True)
+    print("abstain_preview =", json.dumps(abstain_preview, indent=2, sort_keys=True), flush=True)
     print("decision =", json.dumps(decision, indent=2, sort_keys=True), flush=True)
     print("outputs =", json.dumps({name: str(path) for name, path in out_paths.items()}, indent=2, sort_keys=True), flush=True)
     print("=== V238 ALICE PARSER PROBES SCRIPT END ===", flush=True)

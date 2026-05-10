@@ -1606,7 +1606,7 @@ Validacoes executadas localmente:
 Resultado do gate:
 
 - `ok=true`.
-- notebook SHA256: `b395575b8d800dfdc5ae7381204a3fd3dc19bdee419546b1c55055bf0bd6851f`.
+- notebook SHA256: `622281163cd12d31b49ef09f5fe12d7893e18bffc10b5780317d5cfc150cb0af`.
 
 Proximo passo:
 
@@ -1614,3 +1614,47 @@ Proximo passo:
 - Se `deployable_verified_overrides >= 5` e `deployable_incorrect_overrides == 0`, criar V239 como measurement notebook separado que aplica somente overrides verificados e mede o ganho fraco.
 - Se houver qualquer `incorrect`, nao usar override; abrir `v238_alice_parser_probes_alice_parser_probe_results.csv` e restringir ou remover a regra causadora.
 - Se o ganho ficar abaixo de `+5`, continuar mineracao de subformatos Alice antes de qualquer treino.
+
+## V238 executado - parser Alice ainda insuficiente
+
+Execucao analisada em 2026-05-10 a partir de `KG1_V238_ALICE_PARSER_PROBES_COLAB.ipynb`:
+
+- Commit Colab observado: `dd1d8068402e0f012cb8f4ea09dff3ff3630c192`.
+- Manifest V238 gerado: `/content/drive/MyDrive/KG1_NVIDIA_V238/output_v238_alice_parser_probes/analysis_v238_alice_parser_probes/20260510T163118Z/v238_alice_parser_probes_manifest.json`.
+- Manifest V238 SHA256 observado: `a1b17284ee64006b6d40b6e5a6be8662cdbdd2baa26b31a2695d4ec5b5677ce8`.
+- Final manifest SHA256 observado: `22002ac871de7c991de22c7aad023a25bec62ee215554481a049cc7836e2ed90`.
+
+Resultado medido:
+
+- `equation_workitems`: `100`.
+- `deployable_verified_overrides`: `1`.
+- `deployable_incorrect_overrides`: `1`.
+- `target_gain`: `5`.
+- Decisao: `continue_alice_parser_development`.
+
+Resumo:
+
+- Numerico Alice: `1` verified, `15` abstain.
+- Simbolico Alice: `1` incorrect, `83` abstain.
+- O resultado bloqueia qualquer V239/rescue measurement.
+
+Gap encontrado:
+
+- O log antigo mostrava a existencia de `1` incorreto, mas nao imprimia a linha incorreta nem os principais motivos de abstain.
+- O probe simbolico aceitava `char_map` como candidato deployable. Esse tipo de regra pode encaixar todos os exemplos e ainda errar a query; portanto e fraco demais para uso automatico.
+
+Ajuste aplicado apos o log:
+
+- `char_map_probe` foi removido do conjunto deployable de `symbolic_probe`; permanece como codigo auxiliar, mas nao pode gerar override automatico.
+- V238 agora grava e imprime:
+  - `abstain_reason_summary_top`;
+  - `verified_preview`;
+  - `incorrect_preview`;
+  - `abstain_preview`.
+- O objetivo e tornar o proximo log suficiente para decidir a regra seguinte sem abrir CSV manualmente no Drive.
+
+Proximo passo revisado:
+
+- Reexecutar V238 atualizado.
+- Se `deployable_incorrect_overrides` cair para `0`, avaliar quantos `verified` restam.
+- Se continuar abaixo de `5`, criar proximo parser apenas a partir de `abstain_reason_summary_top` e dos previews; nao fazer treino, full eval, pacote ou submissao.
