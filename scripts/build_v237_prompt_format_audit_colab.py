@@ -125,6 +125,7 @@ EXPECTED_SHARED_ROW_CONTRACT_SHA256 = os.environ.get(
 ).strip()
 EXPECTED_REPO_COMMIT = os.environ.get('KG1_V237_EXPECTED_REPO_COMMIT', '').strip()
 SAMPLE_LIMIT = int(os.environ.get('KG1_V237_SAMPLE_LIMIT', '60'))
+PREVIEW_LIMIT = int(os.environ.get('KG1_V237_PREVIEW_LIMIT', '20'))
 
 RUN_ANALYSIS = os.environ.get('KG1_V237_RUN_ANALYSIS', '1').strip().lower() not in {'0', 'false', 'no', 'off'}
 RUN_TRAIN = False
@@ -150,6 +151,7 @@ print('V232_ANALYSIS_MANIFEST_JSON =', V232_ANALYSIS_MANIFEST_JSON or '', flush=
 print('EXPECTED_SHARED_ROW_CONTRACT_SHA256 =', EXPECTED_SHARED_ROW_CONTRACT_SHA256, flush=True)
 print('EXPECTED_REPO_COMMIT =', EXPECTED_REPO_COMMIT, flush=True)
 print('SAMPLE_LIMIT =', SAMPLE_LIMIT, flush=True)
+print('PREVIEW_LIMIT =', PREVIEW_LIMIT, flush=True)
 print('RUN_ANALYSIS =', RUN_ANALYSIS, flush=True)
 print('RUN_TRAIN =', RUN_TRAIN, flush=True)
 print('RUN_FULL_IF_GATE =', RUN_FULL_IF_GATE, flush=True)
@@ -372,6 +374,7 @@ if RUN_ANALYSIS:
         '--label', 'v237_prompt_format_audit',
         '--expected-shared-row-contract-sha256', EXPECTED_SHARED_ROW_CONTRACT_SHA256,
         '--sample-limit', str(SAMPLE_LIMIT),
+        '--preview-limit', str(PREVIEW_LIMIT),
     ]
     run_cmd(cmd, cwd=ROOT, log_path=ANALYSIS_OUT / 'v237_prompt_format_audit.log', check=True, timeout_s=300)
 else:
@@ -388,6 +391,7 @@ if analysis_manifest:
     print('counts =', json.dumps(analysis_manifest.get('counts', {}), indent=2, sort_keys=True), flush=True)
     print('equation_hint_summary =', json.dumps(analysis_manifest.get('equation_hint_summary', []), indent=2, sort_keys=True), flush=True)
     print('prompt_format_summary =', json.dumps(analysis_manifest.get('prompt_format_summary', []), indent=2, sort_keys=True), flush=True)
+    print('equation_prompt_sample_preview =', json.dumps(analysis_manifest.get('equation_prompt_sample_preview', []), indent=2, sort_keys=True), flush=True)
     print('decision =', json.dumps(analysis_manifest.get('decision', {}), indent=2, sort_keys=True), flush=True)
     print('outputs =', json.dumps(analysis_manifest.get('outputs', {}), indent=2, sort_keys=True), flush=True)
 print('=== V237 PROMPT FORMAT AUDIT END ===', flush=True)

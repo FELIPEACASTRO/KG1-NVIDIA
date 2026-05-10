@@ -51,6 +51,19 @@ AUDIT_COLUMNS = [
     "prompt_excerpt",
 ]
 SUMMARY_COLUMNS = ["family", "solver_route", "first_query_marker", "v236_abstain_hint", "rows"]
+SAMPLE_PREVIEW_KEYS = [
+    "id",
+    "family",
+    "solver_route",
+    "priority_score",
+    "first_query_marker",
+    "query_candidate_excerpt",
+    "total_candidate_pair_count",
+    "single_equation_candidate_count",
+    "numeric_expr_candidate_count",
+    "v236_abstain_hint",
+    "prompt_excerpt",
+]
 
 
 def utc_now() -> str:
@@ -280,6 +293,11 @@ def top_prompt_samples(rows: list[dict[str, Any]], limit: int) -> list[dict[str,
     return selected
 
 
+def preview_prompt_samples(rows: list[dict[str, Any]], limit: int = 20) -> list[dict[str, Any]]:
+    selected = top_prompt_samples(rows, limit)
+    return [{key: row.get(key, "") for key in SAMPLE_PREVIEW_KEYS} for row in selected]
+
+
 def run_analysis(args: argparse.Namespace) -> dict[str, Any]:
     print("=== V237 PROMPT FORMAT AUDIT SCRIPT START ===", flush=True)
     print("generated_at_utc =", utc_now(), flush=True)
@@ -315,9 +333,11 @@ def run_analysis(args: argparse.Namespace) -> dict[str, Any]:
         "manifest_json": args.output_dir / f"{prefix}_manifest.json",
     }
     summary = summarize(audit_rows, ["family", "solver_route", "first_query_marker", "v236_abstain_hint"])
+    equation_prompt_samples = top_prompt_samples(equation_rows, args.sample_limit)
+    equation_prompt_sample_preview = preview_prompt_samples(equation_rows, min(args.preview_limit, args.sample_limit))
     write_csv(out_paths["prompt_format_audit_csv"], audit_rows, AUDIT_COLUMNS)
     write_csv(out_paths["prompt_format_summary_csv"], summary, SUMMARY_COLUMNS)
-    write_csv(out_paths["equation_prompt_sample_csv"], top_prompt_samples(equation_rows, args.sample_limit), AUDIT_COLUMNS)
+    write_csv(out_paths["equation_prompt_sample_csv"], equation_prompt_samples, AUDIT_COLUMNS)
 
     equation_hints = summarize(equation_rows, ["v236_abstain_hint"])
     zero_pair_rows = sum(1 for row in equation_rows if int(row["total_candidate_pair_count"]) == 0)
@@ -348,6 +368,7 @@ def run_analysis(args: argparse.Namespace) -> dict[str, Any]:
         },
         "equation_hint_summary": equation_hints,
         "prompt_format_summary": summary,
+        "equation_prompt_sample_preview": equation_prompt_sample_preview,
         "outputs": {name: str(path) for name, path in out_paths.items()},
         "output_artifact_hashes": {
             name: file_meta(path) for name, path in out_paths.items() if name != "manifest_json"
@@ -359,6 +380,11 @@ def run_analysis(args: argparse.Namespace) -> dict[str, Any]:
     print("counts =", json.dumps(manifest["counts"], sort_keys=True), flush=True)
     print("equation_hint_summary =", json.dumps(equation_hints, indent=2, sort_keys=True), flush=True)
     print("prompt_format_summary =", json.dumps(summary, indent=2, sort_keys=True), flush=True)
+    print(
+        "equation_prompt_sample_preview =",
+        json.dumps(equation_prompt_sample_preview, indent=2, sort_keys=True),
+        flush=True,
+    )
     print("decision =", json.dumps(decision, indent=2, sort_keys=True), flush=True)
     print("outputs =", json.dumps({name: str(path) for name, path in out_paths.items()}, indent=2, sort_keys=True), flush=True)
     print("=== V237 PROMPT FORMAT AUDIT SCRIPT END ===", flush=True)
@@ -372,6 +398,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--label", default="v237_prompt_format_audit")
     parser.add_argument("--expected-shared-row-contract-sha256", default=EXPECTED_ROW_CONTRACT_SHA256)
     parser.add_argument("--sample-limit", type=int, default=30)
+    parser.add_argument("--preview-limit", type=int, default=20)
     parser.add_argument("--self-test", action="store_true")
     return parser
 
@@ -439,12 +466,15 @@ def self_test() -> int:
             label="v237_prompt_format_audit",
             expected_shared_row_contract_sha256=EXPECTED_ROW_CONTRACT_SHA256,
             sample_limit=2,
+            preview_limit=2,
         )
         manifest = run_analysis(args)
         if manifest["counts"]["equation_workitems"] != 2:
             raise AssertionError("expected two equation workitems in self-test")
         if not Path(manifest["outputs"]["prompt_format_audit_csv"]).exists():
             raise AssertionError("prompt format audit output missing")
+        if len(manifest["equation_prompt_sample_preview"]) != 2:
+            raise AssertionError("expected two preview rows in self-test")
     print("v237_prompt_format_audit_self_test=ok", flush=True)
     return 0
 

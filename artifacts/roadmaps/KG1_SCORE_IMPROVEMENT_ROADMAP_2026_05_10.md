@@ -1489,3 +1489,51 @@ Proximo passo:
 - Executar V237 no Colab.
 - Se V237 mostrar que os prompts tem pares de exemplo parseaveis por outro padrao, criar V238 com parser unit-tested antes de qualquer override.
 - Se V237 mostrar ausencia real de exemplos suficientes, manter abstain e voltar para mineracao de dados/treino, sem rescue eval.
+
+## V237 executado - prompt format audit
+
+Execucao analisada em 2026-05-10 a partir de `KG1_V237_PROMPT_FORMAT_AUDIT_COLAB.ipynb`:
+
+- Commit observado na celula de setup: `7d6db5eb045f7ae839367e95c83cc5432f8961a4`.
+- Observacao operacional: a celula de preflight V232 nao foi executada no anexo, mas a celula de audit corrigida resolveu o manifest automaticamente e completou sem erro.
+- Manifest V237 gerado: `/content/drive/MyDrive/KG1_NVIDIA_V237/output_v237_prompt_format_audit/analysis_v237_prompt_format_audit/20260510T160754Z/v237_prompt_format_audit_manifest.json`.
+- Manifest V237 SHA256 observado: `d857c395742b95604b4d41191f39c43c0f5fc464aa9b197ce86127b4f61c1d27`.
+- Final manifest SHA256 observado: `8e723dd6ba771a716088927b1977db4a018db0ba0db8a6f07f080091eb660be8`.
+
+Contagens:
+
+- `audit_rows`: `124`.
+- `equation_workitems`: `100`.
+- `bit_workitems`: `24`.
+- `equation_zero_candidate_pair_rows`: `68`.
+
+Resumo de hints para `equation_transform`:
+
+- `example_pairs_nonuniform_or_symbolic`: `32`.
+- `numeric_expr_without_parseable_examples`: `11`.
+- `prompt_format_requires_manual_parser`: `57`.
+
+Resumo por rota:
+
+- `bit_manipulation` / `bitwise_named_operator_dsl`: `24`, query marker `last_nonempty_line`, hint `example_pairs_nonuniform_or_symbolic`.
+- `equation_transform` / `sympy_symbolic_transform`: `32`, marker `now_determine_result_for`, hint `example_pairs_nonuniform_or_symbolic`.
+- `equation_transform` / `sympy_symbolic_transform`: `11`, marker `now_determine_result_for`, hint `numeric_expr_without_parseable_examples`.
+- `equation_transform` / `sympy_symbolic_transform`: `57`, marker `now_determine_result_for`, hint `prompt_format_requires_manual_parser`.
+
+Conclusao:
+
+- A maioria dos workitems de `equation_transform` (`68/100`) nao possui pares de exemplo candidatos detectados pelos parsers V237 atuais.
+- O proximo passo nao e rescue eval nem treino; e examinar exemplos reais dos prompts para construir parser especifico com testes unitarios.
+
+Ajuste adicional aplicado apos esta execucao:
+
+- V237 agora inclui `equation_prompt_sample_preview` no manifest e imprime essa previa no log do notebook.
+- Objetivo: permitir decidir V238 diretamente pelos logs do Colab, sem depender de abrir manualmente o CSV no Drive.
+
+Proximo passo revisado:
+
+- Reexecutar V237 atualizado.
+- Usar `equation_prompt_sample_preview` para definir se V238 deve implementar:
+  - parser de exemplos simbolicos nao uniformes;
+  - parser numerico com exemplos em texto natural;
+  - ou classificador de abstain definitivo quando nao ha exemplos suficientes.
