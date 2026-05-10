@@ -2788,3 +2788,36 @@ Interpretacao:
 - Os arquivos publicos de `jasonkung98` servem para sanity/source check, mas nao substituem os traces P0.
 - A rota de maior impacto para melhorar `equation_transform` depende dos datasets gated `andy279/*`.
 - Se o job HF V247 confirmar o mesmo 403, a proxima acao nao e tecnica: sera necessario aceitar/liberar acesso aos repos gated no HF.
+
+Execucao HF V247 confirmada:
+
+- HF Job: `6a00f039aff1cd33e8f3300f`.
+- URL: `https://huggingface.co/jobs/felipesp1983/6a00f039aff1cd33e8f3300f`.
+- Run ID: `v247-hf-source-access-gate-20260510T205212Z`.
+- Repo commit executado: `cb9ff271c7a4504314930cf33a937bb8de594979`.
+- Upload HF:
+  `https://huggingface.co/datasets/felipesp1983/kg1-nemotron-training/commit/99eca833c15b9651a55c33c71296f14b6dd9cc94`.
+- Path:
+  `runtime_artifacts/v247_hf_source_access_gate/v247-hf-source-access-gate-20260510T205212Z/`.
+
+Resultado HF V247:
+
+- P0 accessible files: `0`.
+- P0 denied files: `5`.
+- Public accessible files: `2`.
+- `andy279/nemotron-reasoning-challenge-raw-traces`: metadata OK, payload 403/manual review pending.
+- `andy279/nemotron-reasoning-challenge`: metadata OK, payload 403/manual review pending.
+- `jasonkung98/NVIDIA-Nemotron-Model-Reasoning-Challenge`: `train.csv` e `test.csv` acessiveis.
+- Decisao:
+  `p0_gated_terms_required_public_mirror_available`.
+
+Bloqueio atual:
+
+- A rota de traces externos P0 esta bloqueada por review/termos HF dos repos `andy279/*`.
+- O mirror publico `jasonkung98/*` e util para sanity check, mas nao traz os traces/solver SFT que justificariam novo treino.
+- Proxima acao humana necessaria:
+  - abrir `https://huggingface.co/datasets/andy279/nemotron-reasoning-challenge-raw-traces`;
+  - solicitar/aceitar acesso;
+  - abrir `https://huggingface.co/datasets/andy279/nemotron-reasoning-challenge`;
+  - solicitar/aceitar acesso;
+  - depois rerodar V247. Se P0 ficar acessivel, criar job V248 de ingestao/filtragem de traces equation/bit antes de qualquer treino.
