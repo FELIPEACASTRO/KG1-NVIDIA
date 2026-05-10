@@ -339,6 +339,30 @@ print('=== V237 V232 ARTIFACT PREFLIGHT END ===', flush=True)
         code(
             """# CELL: run V237 prompt format audit.
 print('=== V237 PROMPT FORMAT AUDIT START ===', flush=True)
+required_runtime_names = [
+    'ROOT',
+    'ANALYSIS_OUT',
+    'EXPECTED_SHARED_ROW_CONTRACT_SHA256',
+    'SAMPLE_LIMIT',
+    'RUN_ANALYSIS',
+    'resolve_latest_v232_manifest',
+    'run_cmd',
+    'read_json',
+    'sha256_file',
+]
+missing_runtime_names = [name for name in required_runtime_names if name not in globals()]
+if missing_runtime_names:
+    raise RuntimeError('Run V237 config/helper cells before this cell; missing: ' + ', '.join(missing_runtime_names))
+if 'resolved_v232_manifest' not in globals() or not pathlib.Path(resolved_v232_manifest).exists():
+    print('resolved_v232_manifest missing_or_stale; resolving latest V232 manifest now.', flush=True)
+    resolved_v232_manifest = resolve_latest_v232_manifest()
+print('resolved_v232_manifest =', resolved_v232_manifest, flush=True)
+print('resolved_v232_manifest_exists =', pathlib.Path(resolved_v232_manifest).exists(), flush=True)
+print('resolved_v232_manifest_is_file =', pathlib.Path(resolved_v232_manifest).is_file(), flush=True)
+if not pathlib.Path(resolved_v232_manifest).exists():
+    raise FileNotFoundError(resolved_v232_manifest)
+if not pathlib.Path(resolved_v232_manifest).is_file():
+    raise IsADirectoryError('V232 manifest must be a JSON file: ' + str(resolved_v232_manifest))
 if RUN_ANALYSIS:
     cmd = [
         sys.executable,
