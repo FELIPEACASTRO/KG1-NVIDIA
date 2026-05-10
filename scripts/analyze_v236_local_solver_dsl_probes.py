@@ -329,7 +329,7 @@ def classify_equation(prompt: str, examples: list[tuple[str, str]], query: str) 
     ):
         return "symbolic_mixed_token_rewrite", "symbolic_or_special_examples_present"
     if re.search(r"\b[a-zA-Z]\b", all_text) and "=" in all_text:
-        return "algebraic_equation", "single_letter_variable_or_equation_signature"
+        return "algebraic_equation_unparsed", "single_letter_variable_or_equation_signature_without_safe_parse"
     if re.search(r"[{}\\|`'\"!@#$%&<>\[\]]", example_query_text):
         return "symbolic_mixed_token_rewrite", "special_symbols_present"
     if examples:
@@ -503,10 +503,8 @@ def numeric_operator_probe(examples: list[tuple[str, str]], query: str) -> dict[
 
 
 def choose_equation_probe(subtype: str, examples: list[tuple[str, str]], query: str, prompt: str) -> dict[str, Any]:
-    if subtype == "algebraic_equation":
-        algebraic = algebraic_equation_probe(prompt, query)
-        if algebraic.get("status") == "candidate":
-            return algebraic
+    if subtype.startswith("algebraic_equation"):
+        return algebraic_equation_probe(prompt, query)
     if subtype == "numeric_operator_transform":
         return numeric_operator_probe(examples, query)
     symbolic = symbolic_char_map_probe(examples, query)

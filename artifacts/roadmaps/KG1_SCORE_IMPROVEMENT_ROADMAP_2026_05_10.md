@@ -1388,3 +1388,35 @@ Proximo passo revisado:
   - parser de symbolic/mixed com mapeamento de token, nao so caractere;
   - identificacao de casos onde exemplos sao insuficientes e devem permanecer abstain.
 - Criar notebook de rescue eval somente se `deployable_verified_equation_overrides >= 5`, `deployable_incorrect_equation_overrides == 0` e o guardrail bit continuar completo.
+
+## V236 reexecutado - diagnostico apos probe SymPy
+
+Execucao analisada em 2026-05-10 a partir de `KG1_V236_LOCAL_SOLVER_DSL_PROBES_COLAB (1).ipynb`:
+
+- Commit Colab observado: `45592f00e669d32077628a13a001bc4d7e5ccbf1`.
+- Manifest V236 SHA256 observado: `ae615978b1eef3e2d326c450bd20cdac5bd383457aa5af0277817d7d64ebc5a8`.
+- Final manifest SHA256 observado: `55fc968a18ef6bf8bfb8ffaff06913e8a4d1a70e759a1b3cb8dcdbb2e4dfc803`.
+- `equation_workitems`: `100`.
+- `bit_guardrail_workitems`: `24`.
+- `deployable_verified_equation_overrides`: `0`.
+- `deployable_incorrect_equation_overrides`: `0`.
+- `bit_guardrail_signature_verified_rows`: `24`.
+- Decisao: `continue_local_solver_development`.
+
+Diagnostico novo trazido por `equation_abstain_reason_summary`:
+
+- `69` linhas em `algebraic_equation` abstiveram como `missing_examples_or_query` porque o fallback simbolico ainda escondia o motivo real do probe algebraico.
+- `9` linhas em `numeric_operator_transform` abstiveram como `numeric_examples_or_query_not_parseable`.
+- `22` linhas em `symbolic_mixed_token_rewrite` abstiveram como `example_length_mismatch`.
+
+Ajuste adicional aplicado apos esse log:
+
+- `algebraic_equation` agora retorna sempre o resultado do `sympy_single_equation_probe`, mesmo quando abstain.
+- Assinaturas algebricas que nao passam no parser seguro agora sao classificadas como `algebraic_equation_unparsed`.
+- Objetivo: o proximo replay deve revelar o motivo real dos `69` itens, em vez de registrar `symbolic_char_map_probe/missing_examples_or_query`.
+
+Proximo passo:
+
+- Reexecutar V236 mais uma vez para obter `equation_abstain_reason_summary` corrigido.
+- Se os `69` itens forem majoritariamente `no_single_algebraic_equation_found`, o V237 deve priorizar parser do formato real do prompt antes de qualquer solver novo.
+- Se houver equacoes parseaveis com falha SymPy especifica, o V237 deve atacar somente essas falhas com testes unitarios antes de medir rescue.
