@@ -1702,3 +1702,41 @@ Proximo passo revisado:
 - Reexecutar V238 apos o bloqueio da delecao simbolica.
 - Se o log mostrar `deployable_incorrect_overrides == 0` e `deployable_verified_overrides == 1`, nao criar V239 de rescue ainda: o ganho e insuficiente.
 - Criar a proxima iteracao apenas para minerar os 83 abstains simbolicos e os abstains numericos por `no_examples_for_query_operator`/`candidate_rule_count`, sem permitir override simbolico novo sem teste unitario e evidencia de zero incorretos.
+
+## V238 reexecutado apos bloqueio - zero incorretos, ganho insuficiente
+
+Execucao analisada em 2026-05-10 a partir de `KG1_V238_ALICE_PARSER_PROBES_COLAB (2).ipynb`:
+
+- Commit Colab observado: `a31877996a61f9d8f8b3485e6c8fb9fb3c4a16e4`.
+- Manifest V238 gerado: `/content/drive/MyDrive/KG1_NVIDIA_V238/output_v238_alice_parser_probes/analysis_v238_alice_parser_probes/20260510T164430Z/v238_alice_parser_probes_manifest.json`.
+- Manifest V238 SHA256 observado: `a088c00c3a7424e25ea35953ba85fb9afd56dbaaf9f8d2a2fe291d128d5833e6`.
+- Final manifest SHA256 observado: `742d1114ee75fe736b41e7c20559e00068af176f9d9b23c382f9b558e9ac253b`.
+
+Resultado medido:
+
+- `equation_workitems`: `100`.
+- `deployable_verified_overrides`: `1`.
+- `deployable_incorrect_overrides`: `0`.
+- `target_gain`: `5`.
+- Decisao: `continue_alice_parser_development`.
+
+Interpretacao:
+
+- O bloqueio da delecao simbolica funcionou: o caso antes incorreto agora aparece como abstain diagnostico com `diagnostic_only_candidate_disabled`.
+- Ainda nao existe autorizacao para V239 de rescue/measurement, porque o ganho deployable verificado e apenas `+1`, abaixo do alvo `+5`.
+- O unico ganho concreto continua sendo numerico Alice: id `c5b058d6`, query `94)40`, baseline `35`, expected `134`, prediction `134`, proof `rules=add`.
+
+Abstains dominantes que devem guiar a proxima etapa:
+
+- `79` simbolicos: `alice_symbolic_deletion_positions_probe:nonuniform_lengths`; reverse nao bate; prefix/suffix com comprimentos nao uniformes.
+- `4` simbolicos: `alice_symbolic_deletion_positions_probe:ambiguous_or_missing_keep_positions=0`; reverse nao bate; prefix/suffix sem regra candidata.
+- `1` simbolico: delecao consistente, mas bloqueada como `diagnostic_only_candidate_disabled prediction='\\{<?'`; esse e o antigo caso inseguro.
+- Numericos: `3` por `candidate_rule_count=0 unique_prediction_count=0`; `2` por `no_examples_for_query_operator='+'`; varios operadores sem exemplo para a query (`'`, `!`, `%`, `&`, `*`, `-`, `/`, `:`, `@`).
+
+Proximo passo correto:
+
+- Nao criar pacote, nao full eval e nao rescue measurement.
+- Criar uma proxima auditoria V239 focada em minerar os abstains Alice, principalmente:
+  - decompor simbolicos de comprimento nao uniforme por delta de comprimento, posicao do operador inserido/removido e relacao entre baseline/expected;
+  - separar numericos sem exemplo do operador da query de numericos com exemplos ambiguos;
+  - produzir workpacks pequenos com exemplos, query, baseline, expected e motivo de abstain para desenhar novas regras unit-tested.
