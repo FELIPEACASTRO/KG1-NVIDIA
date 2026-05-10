@@ -1782,3 +1782,40 @@ Proximo passo:
 - Executar V239 no Colab.
 - Usar `abstain_bucket_summary` e os workpacks para escolher apenas uma nova regra por vez.
 - Toda regra nova deve entrar primeiro como self-test/fixture negativo, especialmente o antigo caso `432b1110`, antes de voltar para qualquer V240 parser probe.
+
+## HF Jobs / FinOps execution policy
+
+Decisao operacional:
+
+- Sim, os proximos notebooks CPU-only e diagnosticos devem ser executados via Hugging Face Jobs sempre que os artefatos de entrada estiverem acessiveis fora do Google Drive.
+- Evitar GPU para auditorias, parsers, gates, self-tests, mineracao de CSV/JSON e notebooks que nao carregam o modelo base.
+- Usar `cpu-basic` como padrao para jobs curtos; a execucao remota V239 self-test/gate terminou em poucos segundos.
+- Para jobs que precisarem GPU pequena, preferir primeiro `t4-small` ou `l4x1`; subir para `a10g-small` apenas se houver necessidade clara de VRAM/throughput.
+- A100/H100 ou equivalentes ficam bloqueados ate haver uma execucao longa e justificativa explicita; isso protege o credito de USD 15.
+
+Execucao HF validada:
+
+- Conta HF autenticada usada: `felipesp1983`.
+- Job HF: `6a00b9c3317220dbbd1a761e`.
+- Flavor: `cpu-basic`.
+- Imagem: `python:3.12`.
+- Tarefa executada:
+  - clone da branch `v230-v226-complementarity`;
+  - `py_compile` dos scripts V238/V239;
+  - `python scripts/analyze_v239_alice_abstain_mining.py --self-test`;
+  - `python scripts/notebook_release_gate.py notebooks/KG1_V239_ALICE_ABSTAIN_MINING_COLAB.ipynb`.
+- Status: `COMPLETED`.
+- Duracao total observada: `7s`; runtime: `3s`.
+- Resultado: self-test V239 `ok` e notebook gate `ok=true`.
+
+Bloqueio atual para substituir 100% o Colab:
+
+- HF Jobs nao monta `/content/drive/MyDrive/...`.
+- Os artefatos completos V232/V238 usados pelos notebooks (`equation_solver_workitems_jsonl`, `v238_alice_parser_probe_results.csv`, manifests e CSVs completos) ainda vivem no Google Drive do Colab.
+- Busca local nao encontrou copias completas desses artefatos fora do Drive.
+
+Proximo passo para remover trabalho manual:
+
+- Criar um bridge de artefatos para publicar manifests/CSVs diagnosticos em um dataset privado HF ou bucket equivalente.
+- Depois desse bridge, V239 e as proximas auditorias podem rodar integralmente como HF Jobs sem Colab.
+- Enquanto o bridge nao existir, HF consegue validar codigo/gates/self-tests, mas nao consegue executar analises completas que dependem de `/content/drive`.
