@@ -2703,3 +2703,88 @@ Interpretacao:
 - Ha evidencia concreta de que regras simbolicas simples geram incorretos; portanto nao devem ser promovidas.
 - Nao gastar H100/H200 em treino derivado desses candidatos sem uma nova fonte de dados/traços.
 - Proximo passo HF-only: rodar V246 no HF CPU e publicar os artefatos; se confirmar `0` promoviveis, bloquear essa rota e seguir para acesso aos traces externos ou novo desenho de treino.
+
+Execucao HF V246 confirmada:
+
+- HF Job: `6a00ef1aaff1cd33e8f32ff1`.
+- URL: `https://huggingface.co/jobs/felipesp1983/6a00ef1aaff1cd33e8f32ff1`.
+- Run ID: `v246-hf-cpu-exhaustive-abstain-20260510T204724Z`.
+- Repo commit executado: `09bdb266b54bb2ded373814e753af8d20de779f3`.
+- Upload HF:
+  `https://huggingface.co/datasets/felipesp1983/kg1-nemotron-training/commit/f95b5232e8d76df68d180178047ba1273a09e8a5`.
+- Path:
+  `runtime_artifacts/v246_exhaustive_abstain_audit/v246-hf-cpu-exhaustive-abstain-20260510T204724Z/`.
+
+Resultado HF V246:
+
+- `v236_rows`: `100`.
+- `v236_abstain_rows`: `99`.
+- `audit_rows`: `465`.
+- `verified_candidates`: `0`.
+- `incorrect_candidates`: `11`.
+- `promotable_rows_after_class_gate`: `0`.
+- Decisao:
+  `no_safe_local_rule_promotion_found`.
+
+Classes bloqueadas/sem ganho:
+
+- `numeric_same_operator_extended_dsl_min2/min3/min4`: nenhum candidato verificado.
+- `symbolic_all_examples_char_transducer`: nenhum candidato.
+- `symbolic_same_operator_char_transducer_min2`: nenhum candidato.
+- `symbolic_all_examples_positional_deletion`: 1 candidato, 1 incorreto.
+- `symbolic_same_operator_position_char_map_min2`: 10 candidatos, 10 incorretos.
+- `symbolic_same_operator_positional_deletion_min2`: nenhum candidato.
+
+Conclusao de negocio/QA:
+
+- A rota local solver/DSL conservadora esta esgotada para ganho imediato.
+- Nao ha evidencia para promover nova regra sem aumentar falso positivo.
+- Nao gastar H100/H200 nesta rota.
+- Proxima rota objetiva: validar acesso aos datasets/traces externos no HF:
+  - `andy279/nemotron-reasoning-challenge-raw-traces`;
+  - `andy279/nemotron-reasoning-challenge`;
+  - `jasonkung98/NVIDIA-Nemotron-Model-Reasoning-Challenge`.
+- Se os datasets `andy279/*` continuarem gated/403 com o token atual, sera necessaria acao humana para aceitar os termos no HF antes de qualquer treino baseado nesses traces.
+
+## V247 HF source access gate - proxima rota de dados externos
+
+Script:
+
+- `scripts/run_v247_hf_source_access_gate.py`.
+
+Objetivo:
+
+- Validar no HF, com o token atual, quais fontes externas de traces/dados estao realmente acessiveis antes de gastar GPU.
+- Evitar baixar payloads grandes: usa metadata + HTTP range-read pequeno.
+- Nao treina, nao avalia modelo, nao faz pacote e nao submete Kaggle.
+
+Fontes testadas:
+
+- `andy279/nemotron-reasoning-challenge-raw-traces`:
+  - `solver_transformation_traces_gpt54.jsonl`;
+  - `solver_transformation_traces_merged.jsonl`;
+  - `solver_bit_manipulation_traces_merged.jsonl`.
+- `andy279/nemotron-reasoning-challenge`:
+  - `sft_val.jsonl`;
+  - `sft_train.jsonl`.
+- `jasonkung98/NVIDIA-Nemotron-Model-Reasoning-Challenge`:
+  - `train.csv`;
+  - `test.csv`.
+
+Pre-check local usando HF token:
+
+- Metadata `andy279/*`: acessivel, `gated=manual`.
+- Payload `andy279/*`: `403`, mensagem HF: request awaiting review from repo authors.
+- `jasonkung98/*`: acessivel por range-read.
+- Contagem:
+  - P0 accessible files: `0`;
+  - P0 denied files: `5`;
+  - public accessible files: `2`.
+- Decisao preliminar:
+  `p0_gated_terms_required_public_mirror_available`.
+
+Interpretacao:
+
+- Os arquivos publicos de `jasonkung98` servem para sanity/source check, mas nao substituem os traces P0.
+- A rota de maior impacto para melhorar `equation_transform` depende dos datasets gated `andy279/*`.
+- Se o job HF V247 confirmar o mesmo 403, a proxima acao nao e tecnica: sera necessario aceitar/liberar acesso aos repos gated no HF.
