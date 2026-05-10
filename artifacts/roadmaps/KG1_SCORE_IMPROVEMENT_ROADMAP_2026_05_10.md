@@ -2940,3 +2940,35 @@ Decisao:
 - `dataset_ready_for_tokenization_gate_not_training_yet`.
 - Proxima acao HF-only: executar V249 no HF e fazer upload dos artefatos.
 - Depois do V249 remoto, executar gate V250 de tokenizacao/offset-mask/truncation antes de qualquer treino GPU.
+
+Execucao HF V249 confirmada:
+
+- HF Job: `6a00f420317220dbbd1a76f0`.
+- URL: `https://huggingface.co/jobs/felipesp1983/6a00f420317220dbbd1a76f0`.
+- Run ID: `v249-hf-public-nonweak-target-20260510T210850Z`.
+- Repo commit executado: `5660be29f3347e5adefd80c8000d096d334ecca0`.
+- Upload HF folder:
+  `https://huggingface.co/datasets/felipesp1983/kg1-nemotron-training/commit/1bc2b5b1c1e3893e73e570b45ef4860949785d80`.
+- Upload HF manifest refresh:
+  `https://huggingface.co/datasets/felipesp1983/kg1-nemotron-training/commit/8d4510fd7390aa370fad4ae6172e1bd679038be9`.
+- Path:
+  `data/v249_public_nonweak_target/v249-hf-public-nonweak-target-20260510T210850Z/`.
+- Manifest remoto verificado:
+  `data/v249_public_nonweak_target/v249-hf-public-nonweak-target-20260510T210850Z/v249_public_nonweak_target_manifest.json`.
+- Resultado remoto:
+  - public train rows: `9500`;
+  - weak rows bloqueados: `315`;
+  - target non-weak rows: `2842`;
+  - train rows: `2558`;
+  - val rows: `284`;
+  - train counts: `bit_manipulation=1298`, `equation_transform=1260`;
+  - val counts: `bit_manipulation=144`, `equation_transform=140`.
+- Hashes remotos canonicos:
+  - train JSONL: `81c8624b7e0a330a720e22b5e4fc254b238a7c618e1c0cdcdea3cf1fd96d9f41`;
+  - val JSONL: `43dd9f5fbb6864e85e60b1a6cc2ad7060a667e914a67dda2aa3a22771efb4783`;
+  - blocked weak IDs CSV: `5392c44fda7e0522910735c9a8b560d9c504a136d6141ed25091f4c858c3d4ce`.
+
+Status:
+
+- V249 pronto para V250 tokenizer/mask/truncation gate.
+- Ainda nao autorizado para treino GPU: falta provar tokenizacao, labels/offset-mask e comparacao contra V217/V226.
