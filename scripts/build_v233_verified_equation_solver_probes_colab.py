@@ -303,7 +303,16 @@ if not resolved_v232_manifest.exists():
 if not resolved_v232_manifest.is_file():
     raise IsADirectoryError('V232 manifest must be a JSON file, got: ' + str(resolved_v232_manifest))
 v232_manifest = read_json(resolved_v232_manifest)
-observed_contract = str(v232_manifest.get('expected_shared_row_contract_sha256', ''))
+v232_inputs = v232_manifest.get('inputs', {})
+if not isinstance(v232_inputs, dict):
+    v232_inputs = {}
+observed_contract = str(
+    v232_inputs.get('observed_shared_row_contract_sha256')
+    or v232_manifest.get('observed_shared_row_contract_sha256')
+    or v232_inputs.get('expected_shared_row_contract_sha256')
+    or v232_manifest.get('expected_shared_row_contract_sha256')
+    or ''
+)
 print('observed_shared_row_contract_sha256 =', observed_contract, flush=True)
 if observed_contract != EXPECTED_SHARED_ROW_CONTRACT_SHA256:
     raise RuntimeError('V232 shared row contract mismatch: expected ' + EXPECTED_SHARED_ROW_CONTRACT_SHA256 + ', got ' + observed_contract)

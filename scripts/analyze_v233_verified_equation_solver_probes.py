@@ -325,6 +325,19 @@ def load_v232_paths(v232_manifest: dict[str, Any]) -> dict[str, Path]:
     return paths
 
 
+def shared_row_contract_from_v232_manifest(v232_manifest: dict[str, Any]) -> str:
+    inputs = v232_manifest.get("inputs", {})
+    if not isinstance(inputs, dict):
+        inputs = {}
+    return str(
+        inputs.get("observed_shared_row_contract_sha256")
+        or v232_manifest.get("observed_shared_row_contract_sha256")
+        or inputs.get("expected_shared_row_contract_sha256")
+        or v232_manifest.get("expected_shared_row_contract_sha256")
+        or ""
+    )
+
+
 def run_analysis(args: argparse.Namespace) -> dict[str, Any]:
     print("=== V233 VERIFIED EQUATION SOLVER PROBES SCRIPT START ===", flush=True)
     print("generated_at_utc =", utc_now(), flush=True)
@@ -333,7 +346,7 @@ def run_analysis(args: argparse.Namespace) -> dict[str, Any]:
     print("label =", args.label, flush=True)
 
     v232_manifest = read_json(args.v232_analysis_manifest_json)
-    observed_contract = str(v232_manifest.get("expected_shared_row_contract_sha256", ""))
+    observed_contract = shared_row_contract_from_v232_manifest(v232_manifest)
     if args.expected_shared_row_contract_sha256 and observed_contract != args.expected_shared_row_contract_sha256:
         raise RuntimeError(
             "shared row contract mismatch: expected "
