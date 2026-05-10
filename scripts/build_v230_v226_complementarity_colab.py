@@ -136,6 +136,7 @@ V229_ANALYSIS_MANIFEST_JSON = pathlib.Path(os.environ.get(
     '/content/drive/MyDrive/KG1_NVIDIA_V229/output_v229_v227_only_fast_eval/analysis_v229_v227_only_fast/v229_v227_only_fast_eval_manifest.json',
 ))
 EXPECTED_REPO_COMMIT = os.environ.get('KG1_V230_EXPECTED_REPO_COMMIT', '').strip()
+EXPECTED_SHARED_ROW_CONTRACT_SHA256 = os.environ.get('KG1_V230_EXPECTED_SHARED_ROW_CONTRACT_SHA256', '').strip()
 
 V194_ADAPTER = pathlib.Path('/content/drive/MyDrive/KG1_NVIDIA_V202D/init_adapter_v194_rank19_build/adapter')
 V217_ADAPTER = pathlib.Path('/content/drive/MyDrive/KG1_NVIDIA_V217/output_v217_short_answer_rescue/train_v217_shortans_lr1e8_s16/final_adapter')
@@ -203,6 +204,7 @@ print('OUT_ROOT =', OUT_ROOT, flush=True)
 print('RUN_ID =', RUN_ID, flush=True)
 print('ANALYSIS_OUT =', ANALYSIS_OUT, flush=True)
 print('EXPECTED_REPO_COMMIT =', EXPECTED_REPO_COMMIT, flush=True)
+print('EXPECTED_SHARED_ROW_CONTRACT_SHA256 =', EXPECTED_SHARED_ROW_CONTRACT_SHA256, flush=True)
 print('V221_BATCH_SUMMARY_JSON =', V221_BATCH_SUMMARY_JSON, flush=True)
 print('V226_BATCH_SUMMARY_JSON =', V226_BATCH_SUMMARY_JSON, flush=True)
 print('V229_ANALYSIS_MANIFEST_JSON =', V229_ANALYSIS_MANIFEST_JSON, flush=True)
@@ -684,9 +686,9 @@ elif gpu_total_gib < 70:
 for module_name in ['causal_conv1d', 'mamba_ssm', 'vllm']:
     try:
         module = importlib.import_module(module_name)
-        print(module_name, 'version =', getattr(module, '__version__', 'unknown'), flush=True)
+        print(module_name, 'optional_dependency_present_version =', getattr(module, '__version__', 'unknown'), flush=True)
     except Exception as exc:
-        print(module_name, 'import_warning =', repr(exc), flush=True)
+        print(module_name, 'optional_dependency_absent_cpu_only =', repr(exc), flush=True)
 print('V230 CPU-only path does not install vLLM and runs after all training has been blocked.', flush=True)
 
 V226_BATCH_SUMMARY_JSON = resolve_existing_or_synthesize_v226_batch_summary(V226_BATCH_SUMMARY_JSON)
@@ -834,6 +836,7 @@ cmd = [
     '--weak-eq-min', str(WEAK_EQ_MIN_FOR_FULL),
     '--weak-bit-min', str(WEAK_BIT_MIN_FOR_FULL),
     '--weak-trunc-max', str(WEAK_MAX_TRUNC_FOR_FULL),
+    '--expected-shared-row-contract-sha256', EXPECTED_SHARED_ROW_CONTRACT_SHA256,
 ]
 run_cmd(cmd, cwd=ROOT, log_path=ANALYSIS_OUT / 'v230_v226_complementarity.log', check=True, heartbeat_s=30, timeout_s=600)
 if not analysis_manifest_path.exists():
@@ -856,6 +859,7 @@ print('candidate_source_counts =', json.dumps(analysis_manifest.get('candidate_s
 print('deployable_weak_gate_pass_for_full =', bool(deployable_pass or single_pass), flush=True)
 print('row_level_oracle_gate_pass =', bool(row_level_oracle_pass), flush=True)
 print('baseline_summary =', json.dumps(analysis_manifest.get('baseline_summary', {}), indent=2, sort_keys=True), flush=True)
+print('family_calibration_top =', json.dumps(analysis_manifest.get('family_calibration_summary', [])[:8], indent=2, sort_keys=True), flush=True)
 print('decision =', json.dumps(analysis_manifest.get('decision', {}), indent=2, sort_keys=True), flush=True)
 print('router_top =', json.dumps(analysis_manifest.get('router_simulation', [])[:5], indent=2, sort_keys=True), flush=True)
 print('outputs =', json.dumps(analysis_manifest.get('outputs', {}), indent=2, sort_keys=True), flush=True)
@@ -903,6 +907,7 @@ final_manifest = {
     'repo_branch': REPO_BRANCH,
     'repo_commit': repo_commit,
     'expected_repo_commit': EXPECTED_REPO_COMMIT,
+    'expected_shared_row_contract_sha256': EXPECTED_SHARED_ROW_CONTRACT_SHA256,
     'analysis_complete': True,
     'weak_gate_pass_for_full': weak_gate_pass_for_full,
     'row_level_oracle_gate_pass': row_level_oracle_gate_pass,
@@ -915,6 +920,7 @@ final_manifest = {
     },
     'decision': decision,
     'baseline_summary': analysis_manifest.get('baseline_summary', {}),
+    'family_calibration_summary': analysis_manifest.get('family_calibration_summary', []),
     'best_deployable_summary': best_deployable_summary,
     'best_oracle_summary': best_oracle_summary,
     'observed_shared_row_contract_sha256': analysis_manifest.get('observed_shared_row_contract_sha256', ''),

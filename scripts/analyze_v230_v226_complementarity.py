@@ -163,7 +163,7 @@ def parse_extra_candidate(raw: str) -> dict[str, str]:
 
 def load_predictions(spec: dict[str, str], allow_rescore_mismatch: bool = False) -> tuple[pd.DataFrame, dict[str, Any]]:
     path = Path(spec["predictions_csv"])
-    frame = pd.read_csv(path)
+    frame = pd.read_csv(path, dtype=str, keep_default_na=False)
     required = {"id", "prompt", "answer", "prediction", "raw_output"}
     missing = sorted(required - set(frame.columns))
     if missing:
@@ -291,26 +291,18 @@ def candidate_summary(long_df: pd.DataFrame, thresholds: dict[str, int]) -> pd.D
             "equation_transform_truncated": int(trunc_by_family.get("equation_transform", 0)),
             "bit_manipulation_truncated": int(trunc_by_family.get("bit_manipulation", 0)),
         }
-        row["weak_gate_pass_for_full"] = (
-            row["correct"] >= thresholds["total"]
-            and row["equation_transform_correct"] >= thresholds["equation_transform"]
-            and row["bit_manipulation_correct"] >= thresholds["bit_manipulation"]
-            and row["truncated"] <= thresholds["truncated"]
-        )
-        row["gate_total_gap"] = max(0, thresholds["total"] - row["correct"])
-        row["gate_eq_gap"] = max(0, thresholds["equation_transform"] - row["equation_transform_correct"])
-        row["gate_bit_gap"] = max(0, thresholds["bit_manipulation"] - row["bit_manipulation_correct"])
-        row["gate_trunc_gap"] = max(0, row["truncated"] - thresholds["truncated"])
+        add_gate_metrics(row, thresholds)
         rows.append(row)
     return pd.DataFrame(rows).sort_values(
         [
             "weak_gate_pass_for_full",
+            "gate_normalized_gap",
             "correct",
             "equation_transform_correct",
             "bit_manipulation_correct",
             "truncated",
         ],
-        ascending=[False, False, False, False, True],
+        ascending=[False, True, False, False, False, True],
     )
 
 
@@ -325,10 +317,97 @@ def per_family_summary(long_df: pd.DataFrame) -> pd.DataFrame:
                 "family": family,
                 "rows": int(len(group)),
                 "correct": int(group["correct_bool"].sum()),
+                "accuracy": float(group["correct_bool"].sum() / len(group)) if len(group) else 0.0,
                 "truncated": int(group["truncated_bool"].sum()),
             }
         )
     return pd.DataFrame(rows)
+
+
+def add_gate_metrics(row: dict[str, Any], thresholds: dict[str, int]) -> dict[str, Any]:
+    row["weak_gate_pass_for_full"] = (
+        row["correct"] >= thresholds["total"]
+        and row["equation_transform_correct"] >= thresholds["equation_transform"]
+        and row["bit_manipulation_correct"] >= thresholds["bit_manipulation"]
+        and row["truncated"] <= thresholds["truncated"]
+    )
+    row["gate_total_gap"] = max(0, thresholds["total"] - row["correct"])
+    row["gate_eq_gap"] = max(0, thresholds["equation_transform"] - row["equation_transform_correct"])
+    row["gate_bit_gap"] = max(0, thresholds["bit_manipulation"] - row["bit_manipulation_correct"])
+    row["gate_trunc_gap"] = max(0, row["truncated"] - thresholds["truncated"])
+    row["gate_total_margin"] = row["correct"] - thresholds["total"]
+    row["gate_eq_margin"] = row["equation_transform_correct"] - thresholds["equation_transform"]
+    row["gate_bit_margin"] = row["bit_manipulation_correct"] - thresholds["bit_manipulation"]
+    row["gate_trunc_margin"] = thresholds["truncated"] - row["truncated"]
+    normalized_gaps = {
+        "total": row["gate_total_gap"] / max(1, thresholds["total"]),
+        "equation_transform": row["gate_eq_gap"] / max(1, thresholds["equation_transform"]),
+        "bit_manipulation": row["gate_bit_gap"] / max(1, thresholds["bit_manipulation"]),
+        "truncated": row["gate_trunc_gap"] / max(1, thresholds["truncated"]),
+    }
+    row["gate_normalized_gap"] = round(float(sum(normalized_gaps.values())), 9)
+    row["gate_bottleneck"] = "none" if not any(normalized_gaps.values()) else max(normalized_gaps, key=normalized_gaps.get)
+    return row
+
+
+def family_calibration_summary(
+    family_df: pd.DataFrame,
+    summary_df: pd.DataFrame,
+    thresholds: dict[str, int],
+    baseline: str,
+) -> pd.DataFrame:
+    merged = family_df.merge(
+        summary_df[["candidate", "correct", "truncated"]].rename(
+            columns={"correct": "total_correct", "truncated": "total_truncated"}
+        ),
+        on="candidate",
+        how="left",
+        validate="many_to_one",
+    )
+    baseline_rows = family_df[family_df["candidate"] == baseline].set_index("family")
+    rows: list[dict[str, Any]] = []
+    for item in merged.itertuples(index=False):
+        family = str(item.family)
+        threshold = int(thresholds[family])
+        baseline_correct = as_int(baseline_rows.loc[family, "correct"]) if family in baseline_rows.index else 0
+        baseline_truncated = as_int(baseline_rows.loc[family, "truncated"]) if family in baseline_rows.index else 0
+        correct = as_int(item.correct)
+        truncated = as_int(item.truncated)
+        gap = max(0, threshold - correct)
+        rows.append(
+            {
+                "candidate": str(item.candidate),
+                "original_name": str(item.original_name),
+                "source": str(item.source),
+                "family": family,
+                "rows": as_int(item.rows),
+                "family_threshold": threshold,
+                "correct": correct,
+                "accuracy": float(getattr(item, "accuracy", 0.0)),
+                "truncated": truncated,
+                "family_gap": gap,
+                "family_margin": correct - threshold,
+                "family_threshold_attainment": round(float(correct / max(1, threshold)), 9),
+                "baseline_correct": baseline_correct,
+                "baseline_truncated": baseline_truncated,
+                "delta_correct_vs_baseline_family": correct - baseline_correct,
+                "delta_truncated_vs_baseline_family": truncated - baseline_truncated,
+                "total_correct": as_int(getattr(item, "total_correct", 0)),
+                "total_truncated": as_int(getattr(item, "total_truncated", 0)),
+                "calibrated_family_gap_score": round(float(gap / max(1, threshold)), 9),
+            }
+        )
+    return pd.DataFrame(rows).sort_values(
+        [
+            "family",
+            "calibrated_family_gap_score",
+            "correct",
+            "delta_correct_vs_baseline_family",
+            "truncated",
+            "total_correct",
+        ],
+        ascending=[True, True, False, False, True, False],
+    )
 
 
 def pick_baseline(summary_df: pd.DataFrame, preferred: str, allow_fallback: bool = False) -> str:
@@ -414,17 +493,7 @@ def assignment_summary(frame: pd.DataFrame, strategy: str, deployable: bool, thr
         "bit_manipulation_correct": int(by_family.get("bit_manipulation", 0)),
         "truncated": truncated,
     }
-    row["weak_gate_pass_for_full"] = (
-        row["correct"] >= thresholds["total"]
-        and row["equation_transform_correct"] >= thresholds["equation_transform"]
-        and row["bit_manipulation_correct"] >= thresholds["bit_manipulation"]
-        and row["truncated"] <= thresholds["truncated"]
-    )
-    row["gate_total_gap"] = max(0, thresholds["total"] - row["correct"])
-    row["gate_eq_gap"] = max(0, thresholds["equation_transform"] - row["equation_transform_correct"])
-    row["gate_bit_gap"] = max(0, thresholds["bit_manipulation"] - row["bit_manipulation_correct"])
-    row["gate_trunc_gap"] = max(0, row["truncated"] - thresholds["truncated"])
-    return row
+    return add_gate_metrics(row, thresholds)
 
 
 def build_assignments(long_df: pd.DataFrame, chosen_by_id: dict[str, str], strategy: str) -> pd.DataFrame:
@@ -540,8 +609,14 @@ def simulate_routers(
     add_strategy(f"baseline_plus_oracle_misses::{baseline}", default_plus_oracle_miss, False)
 
     router_df = pd.DataFrame(rows).sort_values(
-        ["weak_gate_pass_for_full", "deployable_without_row_labels", "correct", "truncated"],
-        ascending=[False, False, False, True],
+        [
+            "weak_gate_pass_for_full",
+            "deployable_without_row_labels",
+            "gate_normalized_gap",
+            "correct",
+            "truncated",
+        ],
+        ascending=[False, False, True, False, True],
     )
     assignments_df = pd.concat(frames, ignore_index=True)
     return router_df, assignments_df, family_choice_detail
@@ -601,19 +676,19 @@ def choose_decision(
     single_pass = summary_df[summary_df["weak_gate_pass_for_full"]]
     row_oracle_pass = router_df[(~router_df["deployable_without_row_labels"]) & router_df["weak_gate_pass_for_full"]]
     deployable_routers = router_df[router_df["deployable_without_row_labels"] & ~is_single_strategy].sort_values(
-        ["correct", "equation_transform_correct", "bit_manipulation_correct", "truncated"],
-        ascending=[False, False, False, True],
+        ["gate_normalized_gap", "correct", "equation_transform_correct", "bit_manipulation_correct", "truncated"],
+        ascending=[True, False, False, False, True],
     )
     row_oracle_routers = router_df[~router_df["deployable_without_row_labels"]].sort_values(
-        ["correct", "equation_transform_correct", "bit_manipulation_correct", "truncated"],
-        ascending=[False, False, False, True],
+        ["gate_normalized_gap", "correct", "equation_transform_correct", "bit_manipulation_correct", "truncated"],
+        ascending=[True, False, False, False, True],
     )
     best_deployable = deployable_routers.iloc[0].to_dict() if len(deployable_routers) else {}
     best_row_oracle = row_oracle_routers.iloc[0].to_dict() if len(row_oracle_routers) else {}
     baseline_correct = as_int(baseline_summary.get("correct"))
     best_single = summary_df.sort_values(
-        ["correct", "equation_transform_correct", "bit_manipulation_correct", "truncated"],
-        ascending=[False, False, False, True],
+        ["gate_normalized_gap", "correct", "equation_transform_correct", "bit_manipulation_correct", "truncated"],
+        ascending=[True, False, False, False, True],
     ).iloc[0].to_dict()
     if len(deployable_pass):
         best = deployable_pass.iloc[0].to_dict()
@@ -794,6 +869,7 @@ def main() -> int:
         )
     if as_int(baseline_summary.get("truncated")) > thresholds["truncated"]:
         raise RuntimeError("baseline truncation exceeds weak truncation ceiling")
+    calibration_df = family_calibration_summary(family_df, summary_df, thresholds, baseline)
     pair_summary_df, pair_detail_df = pairwise_vs_baseline(long_df, baseline)
     router_df, assignments_df, family_choice_detail = simulate_routers(long_df, summary_df, family_df, baseline, thresholds)
     misses_df = baseline_miss_hits(long_df, baseline)
@@ -812,6 +888,7 @@ def main() -> int:
     paths = {
         "candidate_summary_csv": args.output_dir / f"{prefix}_candidate_summary.csv",
         "per_family_summary_csv": args.output_dir / f"{prefix}_per_family_summary.csv",
+        "family_calibration_csv": args.output_dir / f"{prefix}_family_calibration.csv",
         "pairwise_summary_csv": args.output_dir / f"{prefix}_pairwise_summary.csv",
         "pairwise_detail_csv": args.output_dir / f"{prefix}_pairwise_detail.csv",
         "router_simulation_csv": args.output_dir / f"{prefix}_router_simulation.csv",
@@ -823,6 +900,7 @@ def main() -> int:
     }
     summary_df.to_csv(paths["candidate_summary_csv"], index=False)
     family_df.to_csv(paths["per_family_summary_csv"], index=False)
+    calibration_df.to_csv(paths["family_calibration_csv"], index=False)
     pair_summary_df.to_csv(paths["pairwise_summary_csv"], index=False)
     pair_detail_df.to_csv(paths["pairwise_detail_csv"], index=False)
     router_df.to_csv(paths["router_simulation_csv"], index=False)
@@ -857,6 +935,8 @@ def main() -> int:
         "decision": decision,
         "v229_decision": v229_manifest.get("decision", {}),
         "candidate_summary": summary_df.to_dict(orient="records"),
+        "per_family_summary": family_df.to_dict(orient="records"),
+        "family_calibration_summary": calibration_df.to_dict(orient="records"),
         "router_simulation": router_df.to_dict(orient="records"),
         "outputs": {name: str(path) for name, path in paths.items()},
     }
@@ -864,6 +944,7 @@ def main() -> int:
 
     print("candidate_summary =", summary_df.to_string(index=False), flush=True)
     print("per_family_summary =", family_df.to_string(index=False), flush=True)
+    print("family_calibration_summary =", calibration_df.to_string(index=False), flush=True)
     print("router_simulation =", router_df.to_string(index=False), flush=True)
     print("family_choice_detail =", json.dumps(family_choice_detail, indent=2, sort_keys=True), flush=True)
     print("baseline_miss_hit_counts =", json.dumps(misses_df["family"].value_counts().to_dict(), sort_keys=True), flush=True)
