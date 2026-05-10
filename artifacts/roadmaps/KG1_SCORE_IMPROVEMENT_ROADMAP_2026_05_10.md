@@ -1819,3 +1819,56 @@ Proximo passo para remover trabalho manual:
 - Criar um bridge de artefatos para publicar manifests/CSVs diagnosticos em um dataset privado HF ou bucket equivalente.
 - Depois desse bridge, V239 e as proximas auditorias podem rodar integralmente como HF Jobs sem Colab.
 - Enquanto o bridge nao existir, HF consegue validar codigo/gates/self-tests, mas nao consegue executar analises completas que dependem de `/content/drive`.
+
+## V240 implementado - bridge Drive para HF dataset
+
+Arquivos:
+
+- Script de upload: `scripts/upload_runtime_artifacts_to_hf.py`.
+- Runner HF: `scripts/run_v239_from_hf_bridge.py`.
+- Builder: `scripts/build_v240_hf_artifact_bridge_colab.py`.
+- Notebook: `notebooks/KG1_V240_HF_ARTIFACT_BRIDGE_COLAB.ipynb`.
+- Colab: `https://colab.research.google.com/github/FELIPEACASTRO/KG1-NVIDIA/blob/v230-v226-complementarity/notebooks/KG1_V240_HF_ARTIFACT_BRIDGE_COLAB.ipynb`.
+
+Objetivo:
+
+- Rodar uma unica vez no Colab com Drive montado.
+- Resolver os manifests V232/V238 mais recentes.
+- Validar contrato de linhas compartilhadas.
+- Subir para HF dataset privado os artefatos pequenos necessarios para V239:
+  - V232 manifest;
+  - V238 manifest;
+  - V232 equation workitems;
+  - V232 bit guardrail workitems;
+  - V238 Alice parser probe results;
+  - V238 Alice parser probe summary.
+
+Destino padrao:
+
+- Dataset HF: `felipesp1983/kg1-nemotron-training`.
+- Prefixo: `runtime_artifacts/v240_hf_bridge/<RUN_ID>/`.
+
+Requisito humano minimo:
+
+- O Colab V240 precisa de `HF_TOKEN` com permissao de escrita no dataset.
+- O token deve estar em Colab Secrets ou variavel de ambiente `HF_TOKEN`.
+- A tentativa automatica de criar novo dataset privado via HF Job falhou com `403`; por isso o bridge usa dataset privado existente.
+
+Validacoes locais:
+
+- `python -m py_compile scripts/upload_runtime_artifacts_to_hf.py scripts/run_v239_from_hf_bridge.py scripts/build_v240_hf_artifact_bridge_colab.py`.
+- `python scripts/upload_runtime_artifacts_to_hf.py --self-test`.
+- `python scripts/run_v239_from_hf_bridge.py --self-test`.
+- `python scripts/build_v240_hf_artifact_bridge_colab.py`.
+- `python scripts/notebook_release_gate.py notebooks/KG1_V240_HF_ARTIFACT_BRIDGE_COLAB.ipynb`.
+
+Resultado do gate:
+
+- `ok=true`.
+- notebook SHA256: `bc5aec2d763c58ec873511644ea91f1e7908e547181072fa659f154e932e13e3`.
+
+Proximo passo:
+
+- Executar V240 no Colab.
+- Copiar do log o `bridge_path_in_repo`.
+- A partir desse caminho, executar V239 completo no HF Job com `scripts/run_v239_from_hf_bridge.py`.
