@@ -19,6 +19,9 @@ SCAN_ROOTS = [
     ROOT / "scripts",
     ROOT / "src",
     ROOT / "notebooks" / "KG1_V230_V226_COMPLEMENTARITY_COLAB.ipynb",
+    ROOT / "notebooks" / "KG1_V231_MISS_PACK_MINING_COLAB.ipynb",
+    ROOT / "notebooks" / "KG1_V232_VERIFIED_SOLVER_WORKBENCH_COLAB.ipynb",
+    ROOT / "notebooks" / "KG1_V233_VERIFIED_EQUATION_SOLVER_PROBES_COLAB.ipynb",
 ]
 SK_PREFIX = "s" + "k-"
 PATTERNS = {

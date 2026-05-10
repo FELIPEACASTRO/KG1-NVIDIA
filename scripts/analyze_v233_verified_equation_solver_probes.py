@@ -28,6 +28,21 @@ import pandas as pd
 
 
 EXPECTED_ROW_CONTRACT_SHA256 = "bf055e3b9ebce79d4bfc9e48bce5a305b1d83da882f14afddec80d6afaba5fff"
+PROBE_RESULT_COLUMNS = [
+    "schema_version",
+    "id",
+    "family",
+    "solver_route",
+    "probe_name",
+    "deployable",
+    "status",
+    "prediction",
+    "expected_answer",
+    "baseline_prediction",
+    "correct_alternative_count",
+    "prompt_sha256",
+    "proof",
+]
 
 
 def utc_now() -> str:
@@ -380,8 +395,14 @@ def run_analysis(args: argparse.Namespace) -> dict[str, Any]:
     }
     write_jsonl(out_paths["equation_probe_results_jsonl"], results)
     summary.to_csv(out_paths["equation_probe_summary_csv"], index=False)
-    pd.DataFrame(deployable_verified).to_csv(out_paths["equation_verified_overrides_csv"], index=False)
-    pd.DataFrame(nondeployable_verified).to_csv(out_paths["equation_oracle_evidence_csv"], index=False)
+    pd.DataFrame(deployable_verified, columns=PROBE_RESULT_COLUMNS).to_csv(
+        out_paths["equation_verified_overrides_csv"],
+        index=False,
+    )
+    pd.DataFrame(nondeployable_verified, columns=PROBE_RESULT_COLUMNS).to_csv(
+        out_paths["equation_oracle_evidence_csv"],
+        index=False,
+    )
 
     verified_count = len(deployable_verified)
     oracle_count = len(nondeployable_verified)
@@ -510,6 +531,12 @@ def self_test() -> int:
         manifest = run_analysis(args)
         if manifest["probe_counts"]["deployable_verified_equation_overrides"] != 1:
             raise AssertionError("expected one verified equation override")
+        verified_columns = list(pd.read_csv(manifest["outputs"]["equation_verified_overrides_csv"]).columns)
+        oracle_columns = list(pd.read_csv(manifest["outputs"]["equation_oracle_evidence_csv"]).columns)
+        if verified_columns != PROBE_RESULT_COLUMNS:
+            raise AssertionError("verified override CSV schema drifted")
+        if oracle_columns != PROBE_RESULT_COLUMNS:
+            raise AssertionError("oracle evidence CSV schema drifted")
     print("v233_verified_equation_solver_probes_self_test=ok", flush=True)
     return 0
 

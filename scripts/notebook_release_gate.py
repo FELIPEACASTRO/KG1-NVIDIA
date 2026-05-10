@@ -421,7 +421,9 @@ V233_REQUIRED_SNIPPETS = {
     "known row contract": "bf055e3b9ebce79d4bfc9e48bce5a305b1d83da882f14afddec80d6afaba5fff",
     "expected row contract env": "KG1_V233_EXPECTED_SHARED_ROW_CONTRACT_SHA256",
     "explicit v232 manifest text guard": "V232_ANALYSIS_MANIFEST_JSON_TEXT",
+    "directory placeholder guard": "ignored_directory_placeholder",
     "v232 manifest resolver": "resolve_latest_v232_manifest",
+    "stale runtime manifest self-heal": "resolved_candidate_text",
     "v232 nested row contract": "observed_shared_row_contract_sha256",
     "v232 artifact metadata logs": "v232_output_artifact_meta",
     "probe script": "scripts/analyze_v233_verified_equation_solver_probes.py",
@@ -1408,6 +1410,7 @@ def audit_v233_verified_equation_solver_probes_contract(path: Path, notebook: di
         "v232 row contract reader": "shared_row_contract_from_v232_manifest",
         "single equation probe": "sympy_single_equation_probe",
         "oracle nondeployable": "oracle_alternative_candidate_probe",
+        "stable result csv schema": "PROBE_RESULT_COLUMNS",
         "no model generation": "does not train, run model generation",
         "verified override output": "equation_verified_overrides_csv",
         "oracle evidence output": "equation_oracle_evidence_csv",
@@ -1417,6 +1420,13 @@ def audit_v233_verified_equation_solver_probes_contract(path: Path, notebook: di
     for name, snippet in analyzer_snippets.items():
         if snippet not in analyzer_text:
             add(findings, "error", "v233_analyzer_contract_missing", name)
+    forbidden_analyzer_snippets = {
+        "unstable empty verified override csv": "pd.DataFrame(deployable_verified).to_csv",
+        "unstable empty oracle evidence csv": "pd.DataFrame(nondeployable_verified).to_csv",
+    }
+    for name, snippet in forbidden_analyzer_snippets.items():
+        if snippet in analyzer_text:
+            add(findings, "error", "v233_analyzer_forbidden_pattern", name)
     if analyzer.exists():
         completed = subprocess.run(
             [

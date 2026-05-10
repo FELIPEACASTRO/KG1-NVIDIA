@@ -115,6 +115,9 @@ V232_OUTPUT_ROOT = pathlib.Path(os.environ.get(
     '/content/drive/MyDrive/KG1_NVIDIA_V232/output_v232_verified_solver_workbench',
 ))
 V232_ANALYSIS_MANIFEST_JSON_TEXT = os.environ.get('KG1_V233_V232_ANALYSIS_MANIFEST_JSON', '').strip()
+if V232_ANALYSIS_MANIFEST_JSON_TEXT in {'.', './'}:
+    print('V232_ANALYSIS_MANIFEST_JSON_TEXT ignored_directory_placeholder =', V232_ANALYSIS_MANIFEST_JSON_TEXT, flush=True)
+    V232_ANALYSIS_MANIFEST_JSON_TEXT = ''
 V232_ANALYSIS_MANIFEST_JSON = pathlib.Path(V232_ANALYSIS_MANIFEST_JSON_TEXT) if V232_ANALYSIS_MANIFEST_JSON_TEXT else None
 EXPECTED_SHARED_ROW_CONTRACT_SHA256 = os.environ.get(
     'KG1_V233_EXPECTED_SHARED_ROW_CONTRACT_SHA256',
@@ -342,9 +345,12 @@ print('=== V233 V232 ARTIFACT PREFLIGHT END ===', flush=True)
 print('=== V233 VERIFIED EQUATION SOLVER PROBES START ===', flush=True)
 analysis_manifest_path = ANALYSIS_OUT / 'v233_verified_equation_solver_probes_manifest.json'
 if RUN_ANALYSIS:
-    if 'resolved_v232_manifest' not in globals() or not pathlib.Path(resolved_v232_manifest).is_file():
+    resolved_candidate_text = str(globals().get('resolved_v232_manifest', '')).strip()
+    if resolved_candidate_text in {'', '.', './'} or not pathlib.Path(resolved_candidate_text).is_file():
         print('resolved_v232_manifest missing or invalid before probes; resolving again.', flush=True)
         resolved_v232_manifest = resolve_latest_v232_manifest()
+    else:
+        resolved_v232_manifest = pathlib.Path(resolved_candidate_text)
     resolved_v232_manifest = pathlib.Path(resolved_v232_manifest)
     print('probes_v232_manifest =', resolved_v232_manifest, flush=True)
     print('probes_v232_manifest_exists =', resolved_v232_manifest.exists(), flush=True)
