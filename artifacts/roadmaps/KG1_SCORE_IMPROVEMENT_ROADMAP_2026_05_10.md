@@ -2252,3 +2252,151 @@ Regras obrigatorias para o notebook/executor HF de treino:
 - Deve validar `SAMPLING_MODE` antes de carregar modelo; valores permitidos: `shuffle` ou `weighted_replacement`.
 - Deve manter `MAX_STEPS=4` no smoke train e nao executar treino longo sem novo gate humano.
 - Deve escrever todos os IDs de job, run IDs, URLs HF, status, erro e mitigacao no manifesto/roadmap.
+
+## V244 HF H200 smoke train concluido
+
+Objetivo:
+
+- Executar o primeiro treino remoto curto com o mix V243, em H200, com gates dentro do container antes de qualquer download/carga cara.
+- Validar que o executor HF consegue treinar o Nemotron 30B com adapter V188 inicial, sem quebrar dependencias Mamba/Causal Conv, sem trocar `torch`, e sem gastar com erro ja conhecido.
+- Nao promover adapter, nao rodar full eval e nao criar pacote/submissao.
+
+Job executado:
+
+- Job HF: `6a00d6a9317220dbbd1a7683`.
+- URL: `https://huggingface.co/jobs/felipesp1983/6a00d6a9317220dbbd1a7683`.
+- Status: `COMPLETED`.
+- Flavor: `h200`.
+- Imagem: `pytorch/pytorch:2.8.0-cuda12.8-cudnn9-devel`.
+- Run ID: `v244-h200-smoke-20260510T190308Z`.
+- Commit GitHub fixado: `7f4192d9dfa5e73fd4ccda1c1a15ed7a24a186ee`.
+- Output repo: `felipesp1983/kg1-nemotron-lora-v243-safe-equation-fixtures`.
+- Custo estimado: H200 `0.083333 USD/min`; runtime total observado aproximado `17.9 min`; custo aproximado `US$1.49`.
+
+Gates executados dentro do HF Job:
+
+- `scripts/hf_job_preflight_gate.py --phase preinstall`.
+- `scripts/hf_job_preflight_gate.py --phase artifacts`.
+- `scripts/hf_job_preflight_gate.py --phase postinstall`.
+
+Resultado dos gates:
+
+- Repo/commit: OK.
+- `py_compile` dos scripts criticos: OK.
+- GPU/Torch: OK, H200 CUDA disponivel.
+- Flavor/custo permitido: OK.
+- Modelo base: `nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16`, revision `cbd3fa9f933d55ef16a84236559f4ee2a0526848`.
+- Dataset V243:
+  - train SHA256 `c290555bffade5f4fa4e5c14f6f66c36745bd31a22c4b004709afd5a5f33f6d1`.
+  - validation SHA256 `54eda74b1ea01e6e3b165af23c99eac5dc6e21f29cbc49888503ea7a3d707764`.
+  - train rows `12006`.
+  - validation rows `921`.
+  - familias train: `equation_transform=8735`, `bit_manipulation=2695`, guardas `144` cada.
+  - familias validation: `equation_transform=693`, `bit_manipulation=164`, guardas `16` cada.
+  - subcategorias V242 presentes: train `equation_symbolic_mixed_v242=1126`, `equation_numeric_same_operator_v242=674`; validation `153` e `87`.
+- Init adapter V188:
+  - repo/subfolder: `felipesp1983/kg1-nemotron-lora-v188-equation-lmhead/checkpoint-40`.
+  - `r=32`, `lora_alpha=32`.
+  - target modules: `down_proj,in_proj,k_proj,lm_head,o_proj,out_proj,q_proj,up_proj,v_proj`.
+  - `target_parameters=null` no config remoto aceito para esse adapter.
+- Dependencias pos-instalacao: `huggingface_hub`, `transformers`, `peft`, `accelerate`, `safetensors`, `causal_conv1d`, `mamba_ssm`, `mamba_ssm.ops.triton.layernorm_gated`, `mamba_ssm.ops.selective_scan_interface`.
+
+Resultado do treino:
+
+- Modelo baixado e carregado.
+- Adapter V188 inicial carregado manualmente:
+  - tensors mapeados: `12011`.
+  - tensors nao mapeados: `0`.
+  - cobertura: `1.0000`.
+- Modulos LoRA treinaveis: `q_proj,k_proj,v_proj,o_proj,lm_head`.
+- Parametros treinaveis: `8,015,872`.
+- Parametros totais reportados: `32,466,091,456`.
+- Percentual treinavel: `0.0247%`.
+- Config smoke:
+  - `MAX_STEPS=4`.
+  - `MAX_LENGTH=4096`.
+  - `BATCH_SIZE=4`.
+  - `MICRO_BATCH_SIZE=1`.
+  - `GRADIENT_ACCUMULATION=4`.
+  - `LEARNING_RATE=1e-7`.
+  - `FINAL_LEARNING_RATE=5e-8`.
+  - `SAMPLING_MODE=weighted_replacement`.
+- Loss por step:
+  - step 1: `3.4815`.
+  - step 2: `3.3636`.
+  - step 3: `3.3335`.
+  - step 4: `3.2083`.
+- Eval:
+  - final eval loss: `3.2582213087007403`.
+  - best eval loss: `3.2582213087007403`.
+- VRAM pico reportado: `63.142578125 GiB`.
+- Elapsed do treino no manifest: `284.10246777534485s`.
+
+Artefatos publicados:
+
+- `final/adapter_config.json`.
+- `final/adapter_model.safetensors`.
+- `final/v90_training_manifest.json`.
+- `checkpoint-4/adapter_model.safetensors`.
+- `checkpoint-2/adapter_model.safetensors`.
+- Dry-run anterior preservado: `dry_runs/v243-tokenize-dryrun-20260510T1808Z/dry_run_model_recipe_report.json`.
+
+Decisao QA/negocio:
+
+- V244 prova que o pipeline HF H200 com gates funciona.
+- V244 nao prova ganho de ACC; loss menor em smoke train nao substitui weak eval.
+- Nenhum adapter V244 deve ir para full eval, packaging ou Kaggle antes de passar weak eval identico ao gate V230/V226.
+- O risco principal agora e overfit/regressao em `bit_manipulation`; por isso V245 deve medir `final`, `checkpoint-4` e `checkpoint-2` contra os thresholds e guardrails.
+
+## V245 proximo passo - weak eval dos adapters V244
+
+Objetivo:
+
+- Medir se o smoke train V244 realmente melhorou `equation_transform` sem perder o piso forte de `bit_manipulation`.
+- Avaliar os tres artefatos publicados:
+  - `felipesp1983/kg1-nemotron-lora-v243-safe-equation-fixtures/final`.
+  - `felipesp1983/kg1-nemotron-lora-v243-safe-equation-fixtures/checkpoint-4`.
+  - `felipesp1983/kg1-nemotron-lora-v243-safe-equation-fixtures/checkpoint-2`.
+- Comparar contra baseline V226 observado:
+  - total `191/315`.
+  - `equation_transform=55/155`.
+  - `bit_manipulation=136/160`.
+  - truncation `0`.
+
+Gate minimo para considerar continuidade:
+
+- Weak total `>=193`.
+- `equation_transform >=60`.
+- `bit_manipulation >=133`.
+- truncation `<=3`.
+
+Guardrail adicional recomendado:
+
+- Se `equation_transform <60`, parar; nao gastar com full eval.
+- Se `bit_manipulation <136`, exigir justificativa tecnica antes de qualquer treino longo, porque o baseline ja esta em `85.00%` nessa familia.
+- Se truncation `>0`, inspecionar prompt/output antes de treinar mais, porque o formato final do KG1 e sensivel ao parser `\boxed{...}`.
+
+Preflight obrigatorio para V245:
+
+- Resolver/baixar adapters V244 via `snapshot_download` ou `hf_hub_download` e validar:
+  - `adapter_config.json` existe.
+  - `adapter_model.safetensors` existe.
+  - `r=32`.
+  - `lora_alpha=32`.
+  - target modules compativeis.
+  - tamanho do weights plausivel e nao vazio.
+- Resolver weak CSV de 315 linhas fora do Drive antes de criar job pago.
+- Se o CSV fraco nao estiver publicado no HF dataset, executar primeiro um bridge pequeno Drive -> HF dataset; nao iniciar vLLM/H200 dependendo de `/content/drive`.
+- Reusar `scripts/evaluate_lora_adapters_batch.py` com:
+  - `--max-tokens 96`.
+  - `--max-model-len 4096`.
+  - `--max-num-seqs 8`.
+  - `--warmup-rows 0`.
+  - `--disable-thinking`.
+  - prompt suffix: `Return only one line: \boxed{answer}. No reasoning. No explanation.`
+- Registrar `batch_candidate_summary.json`, predictions CSV, per-task CSV e manifest HF.
+
+Decisao esperada:
+
+- Se qualquer V244 atingir o gate weak: preparar full eval controlado em nova versao.
+- Se nenhum V244 atingir o gate, encerrar esta linha de treino curto e voltar para mineracao deterministica dos miss-packs/fixtures, sem treino longo.
