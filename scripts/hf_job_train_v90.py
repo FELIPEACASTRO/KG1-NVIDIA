@@ -215,6 +215,12 @@ MICRO_LOG_EVERY = env_int("MICRO_LOG_EVERY", 0)
 SEED = env_int("SEED", 90)
 MAX_PROMPT_TRUNCATION_RATE = env_float("MAX_PROMPT_TRUNCATION_RATE", 0.10)
 SAMPLING_MODE = env_str("SAMPLING_MODE", "shuffle")
+VALID_SAMPLING_MODES = {"shuffle", "weighted_replacement"}
+if SAMPLING_MODE not in VALID_SAMPLING_MODES:
+    raise ValueError(
+        "SAMPLING_MODE must be one of "
+        f"{sorted(VALID_SAMPLING_MODES)}, got {SAMPLING_MODE!r}."
+    )
 SUBCATEGORY_WEIGHTS = env_str("SUBCATEGORY_WEIGHTS", "")
 SOURCE_WEIGHTS = env_str("SOURCE_WEIGHTS", "")
 ABORT_EVAL_LOSS_GT = env_float("ABORT_EVAL_LOSS_GT", 0.0)

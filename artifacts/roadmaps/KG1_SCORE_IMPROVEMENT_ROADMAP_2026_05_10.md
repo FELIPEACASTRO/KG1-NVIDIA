@@ -2217,3 +2217,38 @@ Decisao:
 - O mix V243 esta aprovado para smoke train: hash, contagem, overlap, truncation e offset-mask passaram.
 - O smoke train GPU deve ser avaliado por weak eval antes de qualquer treino longo.
 - Se `a100-large` ficar preso em scheduling por muito tempo, a acao correta e aguardar capacidade ou cancelar; nao trocar automaticamente para multi-GPU caro.
+
+Atualizacao HF H200:
+
+- A API local de HF Jobs confirmou flavors com acelerador:
+  - `a100-large`: 1x NVIDIA A100 80GB, custo aproximado `0.041667 USD/min`.
+  - `h200`: 1x NVIDIA H200 141GB, custo aproximado `0.083333 USD/min`.
+  - `h200x2`, `h200x4`, `h200x8` tambem existem, mas nao sao FinOps-correto para smoke train.
+- O job A100 `6a00c888aff1cd33e8f32e6a` foi cancelado enquanto ainda estava em `SCHEDULING`.
+- Tentativas H200 registradas:
+  - `6a00cb86aff1cd33e8f32e8a`: falhou antes de treinar porque `mamba_ssm` nao estava instalado.
+  - `6a00cbea317220dbbd1a765b`: falhou antes de treinar porque `pip install causal-conv1d mamba-ssm` trocou `torch 2.8.0+cu128` por `torch 2.11.0+cu130`, gerando ABI incompatível.
+  - `6a00cc82aff1cd33e8f32e97`: preflight H200 confirmou `torch 2.8.0+cu128` e GPU `NVIDIA H200`, mas `mamba-ssm --no-deps` precisa das dependencias base instaladas antes.
+  - `6a00cce2aff1cd33e8f32e99`: preflight H200 confirmou que `mamba-ssm --no-deps` preserva `torch 2.8.0+cu128`; faltou `transformers` no preflight isolado.
+  - `6a00cd62317220dbbd1a7660`: smoke train H200 relancado com build de fonte para `causal-conv1d==1.6.1` e `mamba-ssm==2.3.1`, `--no-deps`, `--no-build-isolation`, `--no-binary`, e gate que aborta se `torch` mudar.
+    - Resultado util: passou das dependencias, confirmou GPU H200, preservou `torch 2.8.0+cu128`, baixou modelo `63.2GB`, carregou adapter V188 checkpoint-40, aplicou filtro LoRA e iniciou setup de treino.
+    - Falha: `SAMPLING_MODE=weighted` era invalido; `scripts/hf_job_train_v90.py` aceita `shuffle` ou `weighted_replacement`.
+    - Mitigacao implementada: `scripts/hf_job_train_v90.py` agora valida `SAMPLING_MODE` em import/startup, antes de baixar modelo, para evitar repetir erro caro.
+
+Regras obrigatorias para o notebook/executor HF de treino:
+
+- Deve listar flavors disponiveis por `HfApi.list_jobs_hardware()` e logar explicitamente H200/A100, custo por minuto, VRAM e flavor selecionado.
+- Deve cancelar ou bloquear jobs antigos em fila antes de lancar outro treino GPU, para evitar gasto duplicado.
+- Deve instalar dependencias em ordem:
+  - imagem base CUDA/PyTorch fixa;
+  - dependencias Python base (`huggingface_hub`, `transformers`, `peft`, `accelerate`, `safetensors`, `sentencepiece`, `protobuf`, `hf_transfer`, `packaging`, `wheel`, `setuptools`, `ninja`, `einops`);
+  - extensoes Mamba/Causal Conv compiladas contra o torch ja presente, nunca deixando `pip` resolver outro torch.
+- Deve imprimir e validar `torch.__version__`, `torch.version.cuda`, `torch.cuda.is_available()` e nome da GPU antes e depois das instalacoes.
+- Deve abortar se `torch` mudar entre `torch_before` e `torch_after`.
+- Deve importar e logar `causal_conv1d`, `mamba_ssm`, `mamba_ssm.ops.triton.layernorm_gated.rmsnorm_fn` e `mamba_ssm.ops.selective_scan_interface.selective_scan_fn` antes de clonar/carregar o modelo.
+- Deve clonar a branch com commit esperado fixo e abortar em mismatch.
+- Deve rodar `py_compile` em `scripts/hf_job_train_v90.py`, `scripts/build_v243_training_mix.py` e `scripts/audit_jsonl_overlap.py`.
+- Deve validar SHA256 e contagem dos arquivos V243 antes de carregar o modelo.
+- Deve validar `SAMPLING_MODE` antes de carregar modelo; valores permitidos: `shuffle` ou `weighted_replacement`.
+- Deve manter `MAX_STEPS=4` no smoke train e nao executar treino longo sem novo gate humano.
+- Deve escrever todos os IDs de job, run IDs, URLs HF, status, erro e mitigacao no manifesto/roadmap.
