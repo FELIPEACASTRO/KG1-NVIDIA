@@ -237,6 +237,14 @@ def candidate_frequency(taxonomy: pd.DataFrame) -> list[dict[str, Any]]:
 
 
 def run_analysis(args: argparse.Namespace) -> dict[str, Any]:
+    if not args.v230_analysis_manifest_json.exists():
+        raise FileNotFoundError(args.v230_analysis_manifest_json)
+    if not args.v230_analysis_manifest_json.is_file():
+        raise IsADirectoryError(
+            "--v230-analysis-manifest-json must point to a JSON file, got: "
+            + str(args.v230_analysis_manifest_json)
+        )
+
     manifest = read_json(args.v230_analysis_manifest_json)
     observed_contract = str(manifest.get("observed_shared_row_contract_sha256", ""))
     if args.expected_shared_row_contract_sha256 and observed_contract != args.expected_shared_row_contract_sha256:

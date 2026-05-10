@@ -115,7 +115,8 @@ V230_OUTPUT_ROOT = pathlib.Path(os.environ.get(
     'KG1_V231_V230_OUTPUT_ROOT',
     '/content/drive/MyDrive/KG1_NVIDIA_V230/output_v230_v226_complementarity',
 ))
-V230_ANALYSIS_MANIFEST_JSON = pathlib.Path(os.environ.get('KG1_V231_V230_ANALYSIS_MANIFEST_JSON', ''))
+V230_ANALYSIS_MANIFEST_JSON_TEXT = os.environ.get('KG1_V231_V230_ANALYSIS_MANIFEST_JSON', '').strip()
+V230_ANALYSIS_MANIFEST_JSON = pathlib.Path(V230_ANALYSIS_MANIFEST_JSON_TEXT) if V230_ANALYSIS_MANIFEST_JSON_TEXT else None
 EXPECTED_SHARED_ROW_CONTRACT_SHA256 = os.environ.get(
     'KG1_V231_EXPECTED_SHARED_ROW_CONTRACT_SHA256',
     '__EXPECTED_SHARED_ROW_CONTRACT_SHA256__',
@@ -143,7 +144,8 @@ print('OUT_ROOT =', OUT_ROOT, flush=True)
 print('RUN_ID =', RUN_ID, flush=True)
 print('ANALYSIS_OUT =', ANALYSIS_OUT, flush=True)
 print('V230_OUTPUT_ROOT =', V230_OUTPUT_ROOT, flush=True)
-print('V230_ANALYSIS_MANIFEST_JSON =', V230_ANALYSIS_MANIFEST_JSON, flush=True)
+print('V230_ANALYSIS_MANIFEST_JSON_TEXT =', V230_ANALYSIS_MANIFEST_JSON_TEXT, flush=True)
+print('V230_ANALYSIS_MANIFEST_JSON =', V230_ANALYSIS_MANIFEST_JSON or '', flush=True)
 print('EXPECTED_SHARED_ROW_CONTRACT_SHA256 =', EXPECTED_SHARED_ROW_CONTRACT_SHA256, flush=True)
 print('EXPECTED_REPO_COMMIT =', EXPECTED_REPO_COMMIT, flush=True)
 print('RUN_ANALYSIS =', RUN_ANALYSIS, flush=True)
@@ -231,8 +233,12 @@ def run_cmd(cmd, cwd=None, log_path=None, check=True, timeout_s=None):
 
 
 def resolve_latest_v230_manifest():
-    if str(V230_ANALYSIS_MANIFEST_JSON).strip():
+    if V230_ANALYSIS_MANIFEST_JSON is not None:
         print('v230_manifest_explicit =', V230_ANALYSIS_MANIFEST_JSON, flush=True)
+        if not V230_ANALYSIS_MANIFEST_JSON.exists():
+            raise FileNotFoundError(V230_ANALYSIS_MANIFEST_JSON)
+        if not V230_ANALYSIS_MANIFEST_JSON.is_file():
+            raise IsADirectoryError('KG1_V231_V230_ANALYSIS_MANIFEST_JSON must point to a JSON file, got: ' + str(V230_ANALYSIS_MANIFEST_JSON))
         return V230_ANALYSIS_MANIFEST_JSON
     search_root = V230_OUTPUT_ROOT / 'analysis_v230_v226_complementarity'
     print('v230_manifest_search_root =', search_root, 'exists =', search_root.exists(), flush=True)
@@ -325,6 +331,17 @@ print('=== V231 V230 ARTIFACT PREFLIGHT END ===', flush=True)
 print('=== V231 MISS PACK MINING START ===', flush=True)
 analysis_manifest_path = ANALYSIS_OUT / 'v231_v230_miss_pack_mining_manifest.json'
 if RUN_ANALYSIS:
+    if 'resolved_v230_manifest' not in globals() or not pathlib.Path(resolved_v230_manifest).is_file():
+        print('resolved_v230_manifest missing or invalid before mining; resolving again.', flush=True)
+        resolved_v230_manifest = resolve_latest_v230_manifest()
+    resolved_v230_manifest = pathlib.Path(resolved_v230_manifest)
+    print('mining_v230_manifest =', resolved_v230_manifest, flush=True)
+    print('mining_v230_manifest_exists =', resolved_v230_manifest.exists(), flush=True)
+    print('mining_v230_manifest_is_file =', resolved_v230_manifest.is_file(), flush=True)
+    if not resolved_v230_manifest.exists():
+        raise FileNotFoundError(resolved_v230_manifest)
+    if not resolved_v230_manifest.is_file():
+        raise IsADirectoryError('V231 mining requires V230 manifest JSON file, got: ' + str(resolved_v230_manifest))
     cmd = [
         sys.executable,
         str(ROOT / 'scripts/analyze_v231_miss_packs.py'),
