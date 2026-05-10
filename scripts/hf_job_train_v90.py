@@ -766,6 +766,50 @@ def setup_causal_conv1d_stub() -> None:
         print("Injected causal_conv1d stub")
 
 
+def verify_model_runtime_dependencies() -> None:
+    """Fail before model load if Nemotron-H runtime kernels are unavailable.
+
+    Tokenize-only dry runs intentionally skip model import/load. Real training
+    must not rely on the causal_conv1d stub because a broken CUDA extension can
+    otherwise be hidden until the first expensive forward pass.
+    """
+
+    if TOKENIZE_ONLY_DRY_RUN:
+        print("TOKENIZE_ONLY_DRY_RUN=1; skipping Nemotron-H runtime kernel import checks.")
+        return
+
+    import importlib
+
+    checks = [
+        ("causal_conv1d", "causal_conv1d"),
+        ("mamba_ssm", "mamba_ssm"),
+        ("mamba_ssm.ops.triton.layernorm_gated", "mamba_ssm layernorm_gated"),
+        ("mamba_ssm.ops.selective_scan_interface", "mamba_ssm selective_scan"),
+    ]
+    for module_name, label in checks:
+        try:
+            module = importlib.import_module(module_name)
+        except Exception as exc:
+            raise RuntimeError(
+                f"Required runtime dependency failed before model load: {label} "
+                f"({module_name}) -> {type(exc).__name__}: {exc}. "
+                "Install/build mamba-ssm and causal-conv1d against the exact "
+                "active torch/CUDA runtime before running training."
+            ) from exc
+        print(
+            "runtime_dependency_import_ok = "
+            + json.dumps(
+                {
+                    "module": module_name,
+                    "label": label,
+                    "version": str(getattr(module, "__version__", "unknown")),
+                },
+                sort_keys=True,
+            ),
+            flush=True,
+        )
+
+
 def file_sha256(path: Path) -> str:
     digest = hashlib.sha256()
     with path.open("rb") as f:
@@ -1513,7 +1557,10 @@ def train() -> None:
         raise RuntimeError("CUDA GPU is required for this Nemotron v90 training job.")
 
     apply_runtime_performance_settings()
-    setup_causal_conv1d_stub()
+    if TOKENIZE_ONLY_DRY_RUN:
+        setup_causal_conv1d_stub()
+    else:
+        verify_model_runtime_dependencies()
     random.seed(SEED)
     torch.manual_seed(SEED)
     torch.cuda.manual_seed_all(SEED)
@@ -1902,21 +1949,22 @@ def train() -> None:
 
             optimizer.step()
             optimizer.zero_grad(set_to_none=True)
-            if torch.cuda.is_available() and global_step % 5 == 0:
+            completed_step = global_step + 1
+            if torch.cuda.is_available() and completed_step % 5 == 0:
                 torch.cuda.empty_cache()
 
             avg_loss = accum_loss / GRADIENT_ACCUMULATION
             elapsed = time.time() - start_time
-            if LOG_EVERY_STEPS > 0 and global_step % LOG_EVERY_STEPS == 0:
+            if LOG_EVERY_STEPS > 0 and completed_step % LOG_EVERY_STEPS == 0:
                 print(
-                    f"step={global_step}/{total_steps} lr={lr:.2e} "
+                    f"step={completed_step}/{total_steps} lr={lr:.2e} "
                     f"train_loss={avg_loss:.4f} elapsed={elapsed / 60:.1f}m "
                     f"{cuda_memory_line()}",
                     flush=True,
                 )
 
             if ABORT_MAX_RESERVED_GIB > 0 and cuda_reserved_gib() > ABORT_MAX_RESERVED_GIB:
-                checkpoint_dir = Path(OUTPUT_DIR) / f"checkpoint-abort-step{global_step}"
+                checkpoint_dir = Path(OUTPUT_DIR) / f"checkpoint-abort-step{completed_step}"
                 model.save_pretrained(str(checkpoint_dir))
                 tokenizer.save_pretrained(str(checkpoint_dir))
                 print(
@@ -1931,8 +1979,8 @@ def train() -> None:
             if (
                 EVAL_EVERY_STEPS > 0
                 and val_data
-                and global_step > 0
-                and global_step % EVAL_EVERY_STEPS == 0
+                and completed_step > 0
+                and completed_step % EVAL_EVERY_STEPS == 0
             ):
                 train_eval_point_losses.append(avg_loss)
                 if (
@@ -1941,7 +1989,7 @@ def train() -> None:
                 ):
                     window = train_eval_point_losses[-ABORT_TRAIN_RISE_POINTS:]
                     if all(left < right for left, right in zip(window, window[1:])):
-                        checkpoint_dir = Path(OUTPUT_DIR) / f"checkpoint-abort-step{global_step}"
+                        checkpoint_dir = Path(OUTPUT_DIR) / f"checkpoint-abort-step{completed_step}"
                         model.save_pretrained(str(checkpoint_dir))
                         tokenizer.save_pretrained(str(checkpoint_dir))
                         print(
@@ -1954,13 +2002,13 @@ def train() -> None:
                 eval_loss = evaluate_loss(model, val_data, tokenizer, EVAL_MAX_EXAMPLES)
                 best_eval_loss = min(best_eval_loss, eval_loss)
                 print(
-                    f"eval step={global_step} "
+                    f"eval step={completed_step} "
                     f"loss={eval_loss:.4f} best={best_eval_loss:.4f}"
                 )
                 if not math.isfinite(eval_loss):
-                    raise FloatingPointError(f"Non-finite eval loss at step {global_step}")
+                    raise FloatingPointError(f"Non-finite eval loss at step {completed_step}")
                 if ABORT_EVAL_LOSS_GT > 0 and eval_loss > ABORT_EVAL_LOSS_GT:
-                    checkpoint_dir = Path(OUTPUT_DIR) / f"checkpoint-abort-step{global_step}"
+                    checkpoint_dir = Path(OUTPUT_DIR) / f"checkpoint-abort-step{completed_step}"
                     model.save_pretrained(str(checkpoint_dir))
                     tokenizer.save_pretrained(str(checkpoint_dir))
                     print(
@@ -1977,7 +2025,7 @@ def train() -> None:
                     and eval_loss
                     > baseline_eval_loss + ABORT_EVAL_RELATIVE_TO_BASELINE_DELTA
                 ):
-                    checkpoint_dir = Path(OUTPUT_DIR) / f"checkpoint-abort-step{global_step}"
+                    checkpoint_dir = Path(OUTPUT_DIR) / f"checkpoint-abort-step{completed_step}"
                     model.save_pretrained(str(checkpoint_dir))
                     tokenizer.save_pretrained(str(checkpoint_dir))
                     allowed = baseline_eval_loss + ABORT_EVAL_RELATIVE_TO_BASELINE_DELTA
@@ -1993,15 +2041,15 @@ def train() -> None:
                     upload_checkpoint_during_training(checkpoint_dir)
                     raise RuntimeError("abort_eval_loss_regressed_vs_baseline")
 
-            if SAVE_EVERY_STEPS > 0 and global_step > 0 and global_step % SAVE_EVERY_STEPS == 0:
-                checkpoint_dir = Path(OUTPUT_DIR) / f"checkpoint-{global_step}"
+            if SAVE_EVERY_STEPS > 0 and completed_step > 0 and completed_step % SAVE_EVERY_STEPS == 0:
+                checkpoint_dir = Path(OUTPUT_DIR) / f"checkpoint-{completed_step}"
                 model.save_pretrained(str(checkpoint_dir))
                 tokenizer.save_pretrained(str(checkpoint_dir))
                 print(f"Checkpoint saved: {checkpoint_dir}")
                 upload_checkpoint_during_training(checkpoint_dir)
 
             accum_loss = 0.0
-            global_step += 1
+            global_step = completed_step
 
             if global_step % 25 == 0:
                 gc.collect()

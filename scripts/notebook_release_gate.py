@@ -113,6 +113,12 @@ BANNED_SNIPPETS = [
     "kaggle competitions submit",
     "v217_shortans_lr3e8_s24",
     "v217_score_push_train_no_prompt_trunc",
+    "SAMPLING_MODE='weighted'",
+    'SAMPLING_MODE="weighted"',
+    "SAMPLING_MODE = 'weighted'",
+    'SAMPLING_MODE = "weighted"',
+    "'SAMPLING_MODE': 'weighted'",
+    '"SAMPLING_MODE": "weighted"',
 ]
 
 V218_NOTEBOOK_REL = "notebooks/KG1_V218_DECODE_RESCUE_COLAB.ipynb"
@@ -837,6 +843,68 @@ def audit_training_eval_contract(text: str, findings: list[Finding]) -> None:
         ]
         if train_pos >= 0 and call_positions and min(call_positions) < train_pos:
             add(findings, "error", "vllm_eval_before_train", "vLLM install/import must happen after training")
+
+
+def is_hf_jobs_notebook(text: str) -> bool:
+    markers = [
+        "HfApi().run_job",
+        "api.run_job(",
+        "list_jobs_hardware",
+        "Hugging Face Jobs",
+        "HF Jobs",
+        "huggingface.co/jobs",
+    ]
+    return contains_any(text, markers)
+
+
+def audit_hf_jobs_contract(text: str, findings: list[Finding]) -> None:
+    """Static guard for notebooks that launch paid HF Jobs.
+
+    The checks intentionally focus on failures already observed in V243:
+    invalid sampling mode, silent torch replacement by mamba/causal-conv pip
+    resolution, missing H200/A100 cost logging, and launching without cheap
+    preflight gates.
+    """
+
+    if not is_hf_jobs_notebook(text):
+        return
+
+    required = {
+        "hardware listing": "list_jobs_hardware",
+        "h200 flavor": "h200",
+        "a100 flavor": "a100",
+        "cost logging": "unit_cost",
+        "hf job url": "https://huggingface.co/jobs",
+        "commit gate": "KG1_EXPECTED_COMMIT",
+        "py compile": "py_compile",
+        "torch before": "torch_before",
+        "torch after": "torch_after",
+        "torch unchanged gate": "torch changed unexpectedly",
+        "causal conv import": "causal_conv1d",
+        "mamba import": "mamba_ssm",
+        "mamba kernel import": "mamba_ssm.ops.triton.layernorm_gated",
+        "selective scan import": "mamba_ssm.ops.selective_scan_interface",
+        "no deps extension install": "--no-deps",
+        "no build isolation": "--no-build-isolation",
+        "dataset train sha": "KG1_TRAIN_SHA",
+        "dataset val sha": "KG1_VAL_SHA",
+        "sampling mode gate": "weighted_replacement",
+        "smoke train cap": "MAX_STEPS=4",
+        "run train default off": "RUN_TRAIN",
+        "secret token injection": "secrets={'HF_TOKEN'",
+        "job cancel path": "cancel_job",
+    }
+    for name, snippet in required.items():
+        if snippet not in text:
+            add(findings, "error", "hf_jobs_contract_missing", name)
+
+    if "SAMPLING_MODE='weighted'" in text or 'SAMPLING_MODE="weighted"' in text:
+        add(
+            findings,
+            "error",
+            "hf_jobs_invalid_sampling_mode",
+            "SAMPLING_MODE must be 'shuffle' or 'weighted_replacement', never 'weighted'",
+        )
 
 
 def audit_v218_decode_rescue_contract(path: Path, notebook: dict[str, Any], text: str, findings: list[Finding]) -> None:
@@ -1784,6 +1852,7 @@ def audit_notebook(path: Path) -> NotebookAudit:
         audit_local_repo_references(text, findings)
         audit_artifact_dependency_contract(text, findings)
         audit_training_eval_contract(text, findings)
+        audit_hf_jobs_contract(text, findings)
         audit_v218_decode_rescue_contract(path, notebook, text, findings)
         audit_v219_weak_decode_ab_contract(path, notebook, text, findings)
         audit_v220_public_adapter_probe_contract(path, notebook, text, findings)
