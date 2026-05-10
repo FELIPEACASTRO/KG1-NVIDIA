@@ -1740,3 +1740,45 @@ Proximo passo correto:
   - decompor simbolicos de comprimento nao uniforme por delta de comprimento, posicao do operador inserido/removido e relacao entre baseline/expected;
   - separar numericos sem exemplo do operador da query de numericos com exemplos ambiguos;
   - produzir workpacks pequenos com exemplos, query, baseline, expected e motivo de abstain para desenhar novas regras unit-tested.
+
+## V239 implementado - mineracao dos abstains Alice
+
+Arquivos:
+
+- Script: `scripts/analyze_v239_alice_abstain_mining.py`.
+- Builder: `scripts/build_v239_alice_abstain_mining_colab.py`.
+- Notebook: `notebooks/KG1_V239_ALICE_ABSTAIN_MINING_COLAB.ipynb`.
+- Colab: `https://colab.research.google.com/github/FELIPEACASTRO/KG1-NVIDIA/blob/v230-v226-complementarity/notebooks/KG1_V239_ALICE_ABSTAIN_MINING_COLAB.ipynb`.
+
+Objetivo:
+
+- Consumir o manifesto V238 mais recente com `deployable_incorrect_overrides == 0`.
+- Gerar workpacks auditaveis dos abstains antes de qualquer rescue measurement.
+- Separar claramente:
+  - simbolicos com comprimento nao uniforme, keep-positions impossivel ou delecao diagnostica bloqueada;
+  - numericos sem exemplo do operador da query, sem regra candidata ou com regras ambiguas.
+
+Saidas esperadas:
+
+- `v239_alice_abstain_mining_symbolic_abstain_workpack.csv`.
+- `v239_alice_abstain_mining_numeric_abstain_workpack.csv`.
+- `v239_alice_abstain_mining_abstain_bucket_summary.csv`.
+- `v239_alice_abstain_mining_manifest.json`.
+
+Validacoes locais:
+
+- `python -m py_compile scripts/analyze_v239_alice_abstain_mining.py scripts/build_v239_alice_abstain_mining_colab.py`.
+- `python scripts/analyze_v239_alice_abstain_mining.py --self-test`.
+- `python scripts/build_v239_alice_abstain_mining_colab.py`.
+- `python scripts/notebook_release_gate.py notebooks/KG1_V239_ALICE_ABSTAIN_MINING_COLAB.ipynb`.
+
+Resultado do gate:
+
+- `ok=true`.
+- notebook SHA256: `36fb65e8ea9a3d645ab5b2a018ed64a7ccff6026121eaa1a11d96936672600ab`.
+
+Proximo passo:
+
+- Executar V239 no Colab.
+- Usar `abstain_bucket_summary` e os workpacks para escolher apenas uma nova regra por vez.
+- Toda regra nova deve entrar primeiro como self-test/fixture negativo, especialmente o antigo caso `432b1110`, antes de voltar para qualquer V240 parser probe.
