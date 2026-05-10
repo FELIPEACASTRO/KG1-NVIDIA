@@ -300,7 +300,16 @@ if not resolved_v231_manifest.exists():
 if not resolved_v231_manifest.is_file():
     raise IsADirectoryError('V231 manifest must be a JSON file, got: ' + str(resolved_v231_manifest))
 v231_manifest = read_json(resolved_v231_manifest)
-observed_contract = str(v231_manifest.get('expected_shared_row_contract_sha256', ''))
+v231_inputs = v231_manifest.get('inputs', {})
+if not isinstance(v231_inputs, dict):
+    v231_inputs = {}
+observed_contract = str(
+    v231_inputs.get('observed_shared_row_contract_sha256')
+    or v231_manifest.get('observed_shared_row_contract_sha256')
+    or v231_inputs.get('expected_shared_row_contract_sha256')
+    or v231_manifest.get('expected_shared_row_contract_sha256')
+    or ''
+)
 print('observed_shared_row_contract_sha256 =', observed_contract, flush=True)
 if observed_contract != EXPECTED_SHARED_ROW_CONTRACT_SHA256:
     raise RuntimeError('V231 shared row contract mismatch: expected ' + EXPECTED_SHARED_ROW_CONTRACT_SHA256 + ', got ' + observed_contract)

@@ -291,6 +291,19 @@ def load_required_v231_outputs(v231_manifest: dict[str, Any]) -> dict[str, Path]
     return paths
 
 
+def shared_row_contract_from_v231_manifest(v231_manifest: dict[str, Any]) -> str:
+    inputs = v231_manifest.get("inputs", {})
+    if not isinstance(inputs, dict):
+        inputs = {}
+    return str(
+        inputs.get("observed_shared_row_contract_sha256")
+        or v231_manifest.get("observed_shared_row_contract_sha256")
+        or inputs.get("expected_shared_row_contract_sha256")
+        or v231_manifest.get("expected_shared_row_contract_sha256")
+        or ""
+    )
+
+
 def load_v230_miss_pack_paths(v231_manifest: dict[str, Any]) -> dict[str, Path]:
     inputs = v231_manifest.get("inputs", {})
     v230_path = Path(str(inputs.get("v230_analysis_manifest_json", "")))
@@ -317,7 +330,7 @@ def run_analysis(args: argparse.Namespace) -> dict[str, Any]:
     print("label =", args.label, flush=True)
 
     v231_manifest = read_json(args.v231_analysis_manifest_json)
-    observed_contract = str(v231_manifest.get("expected_shared_row_contract_sha256", ""))
+    observed_contract = shared_row_contract_from_v231_manifest(v231_manifest)
     if args.expected_shared_row_contract_sha256 and observed_contract != args.expected_shared_row_contract_sha256:
         raise RuntimeError(
             "shared row contract mismatch: expected "
