@@ -475,6 +475,39 @@ V234_REQUIRED_SNIPPETS = {
     "no package submit": "No package and no Kaggle submit can be created in V234.",
 }
 
+V235_NOTEBOOK_REL = "notebooks/KG1_V235_SOURCE_ACCESS_TRIAGE_COLAB.ipynb"
+V235_COLAB_URL = (
+    "https://colab.research.google.com/github/FELIPEACASTRO/KG1-NVIDIA/blob/"
+    "v230-v226-complementarity/notebooks/KG1_V235_SOURCE_ACCESS_TRIAGE_COLAB.ipynb"
+)
+V235_GITHUB_URL = (
+    "https://github.com/FELIPEACASTRO/KG1-NVIDIA/blob/"
+    "v230-v226-complementarity/notebooks/KG1_V235_SOURCE_ACCESS_TRIAGE_COLAB.ipynb"
+)
+V235_REQUIRED_FILES = [
+    "scripts/analyze_v235_source_access_triage.py",
+    "scripts/build_v235_source_access_triage_colab.py",
+    "scripts/notebook_release_gate.py",
+]
+V235_REQUIRED_SNIPPETS = {
+    "cpu-only purpose": "V235 is CPU-only source access triage",
+    "v234 manifest resolver": "resolve_latest_v234_manifest",
+    "v234 output preflight": "required_outputs = [",
+    "source access script": "scripts/analyze_v235_source_access_triage.py",
+    "source access self test": "v235_source_access_triage_self_test.log",
+    "source inventory output": "source_access_inventory.csv",
+    "hf metadata output": "hf_metadata_audit.csv",
+    "kaggle audit output": "kaggle_access_audit.csv",
+    "download plan output": "source_download_plan.csv",
+    "license gate output": "license_gate_report.json",
+    "hard source download false": "ALLOW_SOURCE_PAYLOAD_DOWNLOAD = False",
+    "hard train false": "RUN_TRAIN = False",
+    "hard full false": "RUN_FULL_IF_GATE = False",
+    "hard submit false": "ALLOW_KAGGLE_SUBMIT = False",
+    "hard model generation false": "ALLOW_MODEL_GENERATION = False",
+    "no package submit": "No package and no Kaggle submit can be created in V235.",
+}
+
 RELEASE_NOTEBOOK_RELS = [
     V218_NOTEBOOK_REL,
     V219_NOTEBOOK_REL,
@@ -485,6 +518,7 @@ RELEASE_NOTEBOOK_RELS = [
     V232_NOTEBOOK_REL,
     V233_NOTEBOOK_REL,
     V234_NOTEBOOK_REL,
+    V235_NOTEBOOK_REL,
 ]
 
 
@@ -1625,6 +1659,108 @@ def audit_v234_external_intel_triage_contract(path: Path, notebook: dict[str, An
             add(findings, "error", "v234_builder_notebook_compare_failed", repr(exc))
 
 
+def audit_v235_source_access_triage_contract(path: Path, notebook: dict[str, Any], text: str, findings: list[Finding]) -> None:
+    """Strict release gate for the V235 CPU-only source access triage."""
+
+    if repo_rel(path) != V235_NOTEBOOK_REL:
+        return
+
+    code_cells = [cell for cell in notebook.get("cells", []) if cell.get("cell_type") == "code"]
+    if len(code_cells) != 7:
+        add(findings, "error", "v235_code_cell_count", f"expected 7 code cells, found {len(code_cells)}")
+    outputs_total = sum(len(cell.get("outputs", []) or []) for cell in code_cells)
+    if outputs_total:
+        add(findings, "error", "v235_notebook_has_outputs", f"notebook must be committed clean; outputs={outputs_total}")
+
+    if V235_COLAB_URL not in text:
+        add(findings, "error", "v235_colab_url_mismatch", V235_COLAB_URL)
+    if V235_GITHUB_URL not in text:
+        add(findings, "error", "v235_github_url_mismatch", V235_GITHUB_URL)
+
+    for name, snippet in V235_REQUIRED_SNIPPETS.items():
+        if snippet not in text:
+            add(findings, "error", "v235_required_snippet_missing", name)
+
+    for rel_path in V235_REQUIRED_FILES:
+        if not (ROOT / rel_path).exists():
+            add(findings, "error", "v235_required_file_missing", rel_path)
+
+    analyzer = ROOT / "scripts" / "analyze_v235_source_access_triage.py"
+    analyzer_text = analyzer.read_text(encoding="utf-8") if analyzer.exists() else ""
+    analyzer_snippets = {
+        "self test ok": "v235_source_access_triage_self_test=ok",
+        "manifest schema": "kg1_v235_source_access_triage_manifest_v1",
+        "license schema": "kg1_v235_license_gate_report_v1",
+        "credential audit": "credential_audit",
+        "hf metadata": "query_hf_metadata",
+        "inventory builder": "build_inventory",
+        "v234 validator": "validate_v234_manifest",
+        "download blocked action": "payload_download_without_license_hash",
+        "decision manual": "manual_source_access_or_license_required_before_download",
+        "decision plan ready": "source_access_plan_ready_needs_controlled_download",
+    }
+    for name, snippet in analyzer_snippets.items():
+        if snippet not in analyzer_text:
+            add(findings, "error", "v235_analyzer_contract_missing", name)
+    if analyzer.exists():
+        completed = subprocess.run(
+            [
+                sys.executable,
+                str(analyzer),
+                "--self-test",
+                "--v234-analysis-manifest-json",
+                "dummy",
+                "--output-dir",
+                "dummy",
+            ],
+            cwd=str(ROOT),
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            check=False,
+            timeout=120,
+        )
+        if completed.returncode != 0:
+            add(
+                findings,
+                "error",
+                "v235_analyzer_self_test_failed",
+                f"returncode={completed.returncode}; tail={completed.stdout[-4000:]}",
+            )
+        elif "v235_source_access_triage_self_test=ok" not in completed.stdout:
+            add(findings, "error", "v235_analyzer_self_test_missing_ok", completed.stdout[-4000:])
+
+    builder = ROOT / "scripts" / "build_v235_source_access_triage_colab.py"
+    builder_text = builder.read_text(encoding="utf-8") if builder.exists() else ""
+    for snippet in V235_REQUIRED_SNIPPETS.values():
+        if snippet not in builder_text:
+            add(findings, "error", "v235_builder_required_snippet_missing", snippet)
+    builder_snippets = {
+        "idempotent cell ids": "_CELL_COUNTER = 0",
+        "latest v234 resolver": "resolve_latest_v234_manifest",
+        "v234 output preflight": "required_outputs = [",
+        "source command": "analyze_v235_source_access_triage.py",
+        "artifact metadata logs": "v235_output_artifact_meta",
+        "submission artifact scan": "blocked_artifacts",
+        "final manifest": "v235_source_access_triage_final_manifest.json",
+    }
+    for name, snippet in builder_snippets.items():
+        if snippet not in builder_text:
+            add(findings, "error", "v235_builder_contract_missing", name)
+    if builder.exists():
+        try:
+            spec = importlib.util.spec_from_file_location("kg1_v235_builder_gate", builder)
+            if spec is None or spec.loader is None:
+                raise RuntimeError("could not load builder module spec")
+            module = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(module)
+            generated = module.build_notebook()
+            if generated != notebook:
+                add(findings, "error", "v235_builder_notebook_mismatch", "builder output differs from committed notebook")
+        except Exception as exc:
+            add(findings, "error", "v235_builder_notebook_compare_failed", repr(exc))
+
+
 def audit_notebook(path: Path) -> NotebookAudit:
     findings: list[Finding] = []
     rel = repo_rel(path)
@@ -1657,6 +1793,7 @@ def audit_notebook(path: Path) -> NotebookAudit:
         audit_v232_verified_solver_workbench_contract(path, notebook, text, findings)
         audit_v233_verified_equation_solver_probes_contract(path, notebook, text, findings)
         audit_v234_external_intel_triage_contract(path, notebook, text, findings)
+        audit_v235_source_access_triage_contract(path, notebook, text, findings)
     for snippet in GENERIC_REQUIRED_SNIPPETS:
         if is_training_or_eval_notebook(text) and snippet not in text:
             add(findings, "error", "generic_training_snippet_missing", snippet)

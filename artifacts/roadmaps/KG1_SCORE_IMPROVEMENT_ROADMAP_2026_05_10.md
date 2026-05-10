@@ -909,3 +909,42 @@ Resultado do dry run local:
 Proximo passo depois de executar no Colab:
 
 - Criar o notebook/script de download controlado das fontes com hash, licenca, linha por linha e mapping para miss-pack antes de implementar qualquer solver novo ou avaliar candidatos externos.
+
+## V235 implementado - source access, hash e license triage
+
+Status:
+
+- Notebook criado: `notebooks/KG1_V235_SOURCE_ACCESS_TRIAGE_COLAB.ipynb`.
+- Script criado: `scripts/analyze_v235_source_access_triage.py`.
+- Builder criado: `scripts/build_v235_source_access_triage_colab.py`.
+- Gate atualizado: `scripts/notebook_release_gate.py` agora valida o contrato especifico V235.
+
+URL Colab:
+
+- `https://colab.research.google.com/github/FELIPEACASTRO/KG1-NVIDIA/blob/v230-v226-complementarity/notebooks/KG1_V235_SOURCE_ACCESS_TRIAGE_COLAB.ipynb`
+
+O que o V235 faz:
+
+- Consome o manifest V234 executado.
+- Valida que V234 passou `coverage` e `metric_parity`.
+- Valida todos os CSVs/JSONs V234 obrigatorios.
+- Audita acesso a Kaggle/HF sem imprimir segredos.
+- Opcionalmente consulta metadata publica Hugging Face para datasets/modelos.
+- Materializa:
+  - `source_access_inventory.csv`
+  - `hf_metadata_audit.csv`
+  - `kaggle_access_audit.csv`
+  - `source_download_plan.csv`
+  - `license_gate_report.json`
+- Bloqueia download de payload, treino, geracao, scoring, pacote e Kaggle submit.
+
+Contrato de seguranca:
+
+- Nenhuma fonte externa pode ser ingerida em treino/solver sem `license_status` conhecido e `hash_status` registrado.
+- Fontes Kaggle seguem bloqueadas para uso direto ate metadata/licenca/hash serem resolvidos.
+- Fontes HF gated exigem token/metadata antes de qualquer payload.
+
+Proximo passo depois de executar no Colab:
+
+- Se o V235 decidir `manual_source_access_or_license_required_before_download`, resolver credenciais/licencas primeiro.
+- Se decidir `source_access_plan_ready_needs_controlled_download`, criar o downloader V236 que baixa apenas fontes permitidas, registra hash, licenca, row counts e mapping para miss-pack.
