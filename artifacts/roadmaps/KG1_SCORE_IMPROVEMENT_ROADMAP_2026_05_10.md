@@ -3185,3 +3185,69 @@ Impacto no roadmap:
   1. localizar/subir para HF o adapter forte conhecido (`V194`/`V226`) para permitir smoke training/eval sem depender de Google Drive;
   2. se o adapter forte nao estiver acessivel no HF, executar um baseline no-LoRA ou uma auditoria HF de candidatos com evidencia independente antes de qualquer treino;
   3. usar V249 apenas em smoke curto com gate imediato, sem treino longo direto.
+
+## V253 H200 weak eval - adapters HF priorizados
+
+Objetivo:
+
+- Medir, no weak gate canonico, os adapters HF priorizados que ainda tinham alguma evidencia historica ou prescore local.
+- Incluir `V189`, `V94`, `V95`, `V96`, `V97` e `V101` em uma unica carga vLLM para reduzir custo.
+- Validar que a nova logica `KG1_ADAPTER_SPECS_JSON` aceita multiplos repositorios/subfolders sem quebrar gates.
+- Bloquear full eval, package e Kaggle submit.
+
+Script/job:
+
+- Wrapper HF: `scripts/hf_job_weak_eval_v245.py`.
+- Mudanca de suporte multi-repo: commit `c944cbb1dbdf36d870afbe215dfc7f4dcef7572f`.
+- Job inicial `6a00fe05aff1cd33e8f3309a` foi cancelado antes da carga do modelo por mismatch no `KG1_EXPECTED_COMMIT`.
+- Job valido: `6a00fe5e317220dbbd1a7717`.
+- URL: `https://huggingface.co/jobs/felipesp1983/6a00fe5e317220dbbd1a7717`.
+- Flavor: `h200`.
+- Run ID: `v253-h200-weak-prioritized-hf-adapters-20260510T215233Z`.
+- Repo commit executado: `c944cbb1dbdf36d870afbe215dfc7f4dcef7572f`.
+- Upload HF:
+  `https://huggingface.co/felipesp1983/kg1-nemotron-training/commit/ff6eaa9dc9ae3990a58bd7c966d696bc7a35c59b`.
+- Manifest remoto:
+  `evals/v253-h200-weak-prioritized-hf-adapters-20260510T215233Z/v245_hf_weak_eval_manifest.json`.
+
+Gates confirmados:
+
+- CUDA/H200 disponivel e carga vLLM concluida.
+- Weak CSV canonico V245 usado com `315` linhas.
+- Weak CSV SHA256:
+  `85da758e14d57ea40270de5747f98726a0ad0b6d1795bff7dd46183005e0f9b6`.
+- Families avaliadas: `bit_manipulation=160`, `equation_transform=155`.
+- Todos os 10 adapters passaram no gate de arquivo/config antes da avaliacao.
+- Full eval, package e Kaggle submit permaneceram bloqueados.
+
+Resultado weak:
+
+| Candidato | Repositorio/subfolder | Total | ACC | Equation | Bit | Trunc |
+|---|---|---:|---:|---:|---:|---:|
+| `v189_checkpoint10_raw` | `felipesp1983/kg1-nemotron-lora-v189-equation-answer-short/checkpoint-10` | `17/315` | `5.40%` | `8/155` | `9/160` | `0` |
+| `v189_checkpoint10_overlay` | `.../packages/v189-checkpoint10/final_full_baseline_overlay` | `15/315` | `4.76%` | `8/155` | `7/160` | `0` |
+| `v189_checkpoint10_stripped` | `.../packages/v189-checkpoint10/final_stripped` | `17/315` | `5.40%` | `8/155` | `9/160` | `0` |
+| `v94_final_raw` | `felipesp1983/kg1-nemotron-lora-v94-equation-crypt/final` | `18/315` | `5.71%` | `9/155` | `9/160` | `0` |
+| `v94_final_overlay` | `.../packages/v094-final/final_full_baseline_overlay` | `16/315` | `5.08%` | `8/155` | `8/160` | `0` |
+| `v95_checkpoint20_bit_rehearsal` | `felipesp1983/kg1-nemotron-lora-v95-bit-rehearsal/checkpoint-20` | `18/315` | `5.71%` | `9/155` | `9/160` | `0` |
+| `v96_a0p020_interp` | `felipesp1983/kg1-nemotron-lora-v96-v95interp/interpolations/v096-v91-v95cp20-interp-a0p020` | `19/315` | `6.03%` | `10/155` | `9/160` | `1` |
+| `v97_last3_uniform_soup` | `felipesp1983/kg1-nemotron-lora-v97-v91-soups/soups/v097-v91-checkpoint-soup-last3_uniform` | `19/315` | `6.03%` | `10/155` | `9/160` | `0` |
+| `v101_checkpoint20_overlay` | `felipesp1983/kg1-nemotron-lora-v101-tong-selector-v2/packages/v101-checkpoint20-lmheadfix/final_full_baseline_overlay` | `17/315` | `5.40%` | `8/155` | `9/160` | `0` |
+| `v101_final_overlay` | `felipesp1983/kg1-nemotron-lora-v101-tong-selector-v2/packages/v101-final-lmheadfix/final_full_baseline_overlay` | `19/315` | `6.03%` | `9/155` | `10/160` | `0` |
+
+Decisao:
+
+- Rejeitar todos os candidatos V253 como rota de promocao, baseline, initializer, merge, DARE/TIES, router ou ensemble deployable.
+- O melhor grupo ficou em `19/315`, contra baseline V226 `191/315`.
+- O prescore historico de V189/V94/V95/V96/V97/V101 nao transferiu para o weak gate canonico atual.
+- O problema nao e truncation: quase todos tiveram `0` truncamento. A falha e desalinhamento de adapter/contrato/prompt/modelo.
+- Nao gastar novo H200 nesses repositorios sem uma evidencia externa nova que explique e corrija o desalinhamento.
+
+Impacto no roadmap:
+
+- Ficam descartados, como melhoria direta, os repositorios publicos locais/HF avaliados em V251, V252 e V253.
+- A rota objetiva agora e remover dependencia de Drive para os pesos fortes conhecidos:
+  1. localizar ou publicar no HF o adapter protegido `V194` e o checkpoint forte `V226`;
+  2. validar esses pesos fortes com o mesmo wrapper HF e weak CSV canonico;
+  3. so depois executar smoke training curto com V249/novos dados, sempre partindo de um initializer forte e com weak eval imediato.
+- Se `V194/V226` nao puderem ser colocados no HF, a proxima acao barata e CPU-only: minerar `equation_transform` simbolico/misto e gerar probes/verifiers; nao ha justificativa para treino H200 longo a partir dos adapters fracos.
