@@ -2116,6 +2116,27 @@ Outputs V242 publicados no HF dataset:
 - Path: `runtime_artifacts/v242_safe_equation_fixtures/local_cpu_20260510T174632Z`.
 - Commit HF: `eb1979dcea095a5b06b5f77c96b03027bea25ece`.
 
+Validacao V242 em HF Jobs:
+
+- Job HF: `6a00c56d317220dbbd1a7644`.
+- Flavor: `cpu-basic`.
+- Status: `COMPLETED`.
+- Duracao total: `10s`; runtime: `5s`.
+- A validacao remota executou:
+  - clone da branch `v230-v226-complementarity`;
+  - `py_compile` dos scripts V242 e overlap audit;
+  - self-tests dos dois scripts;
+  - notebook release gate do V242;
+  - download do weak reference a partir do HF bridge;
+  - geracao completa de `1800` train e `240` validation.
+- Resultado remoto:
+  - train simbolico: 1126.
+  - train numerico: 674.
+  - validation simbolico: 153.
+  - validation numerico: 87.
+  - train `id_overlap=0`, `prompt_overlap=0`.
+  - validation `id_overlap=0`, `prompt_overlap=0`.
+
 Decisao:
 
 - Fixtures estao prontos para revisao de gate de treino.
