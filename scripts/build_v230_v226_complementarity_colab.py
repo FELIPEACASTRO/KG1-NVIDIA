@@ -332,8 +332,17 @@ def resolve_predictions_from_report(report_json):
 
 def csv_data_rows(path):
     path = pathlib.Path(path)
-    with path.open('r', encoding='utf-8', errors='replace') as handle:
-        return max(0, sum(1 for _ in handle) - 1)
+    try:
+        csv.field_size_limit(sys.maxsize)
+    except OverflowError:
+        csv.field_size_limit(2**31 - 1)
+    with path.open('r', encoding='utf-8', errors='replace', newline='') as handle:
+        reader = csv.reader(handle)
+        try:
+            next(reader)
+        except StopIteration:
+            return 0
+        return sum(1 for _ in reader)
 
 def per_task_counts_from_report(report):
     per_task_csv = pathlib.Path(str(report.get('outputs', {}).get('per_task_csv', '')))
