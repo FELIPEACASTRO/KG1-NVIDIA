@@ -3123,3 +3123,65 @@ Impacto no roadmap:
 
 - Prioridade volta para dados V249 + smoke GPU curto, ou para triagem de outro adapter HF somente se houver evidencia independente forte e o custo for limitado.
 - Nao usar `V187` em treino, merge, DARE/TIES, router ou seed sem uma justificativa nova e verificavel.
+
+## V252 H200 weak eval - V188 raw, overlay e stripped
+
+Objetivo:
+
+- Antes de gastar H200 em treino derivado de `V188`, medir se os artefatos publicos `checkpoint-*`, `final_full_baseline_overlay` e `final_stripped` possuem qualquer sinal util no weak gate canonico.
+- Testar os 6 candidatos em uma unica carga vLLM para reduzir custo.
+- Bloquear full eval, package e Kaggle submit.
+
+Script/job:
+
+- Reuso do wrapper HF `scripts/hf_job_weak_eval_v245.py`.
+- Job inicial `6a00f9e5317220dbbd1a7702` falhou antes da avaliacao porque o secret foi passado como string literal `$HF_TOKEN`; o container recebeu token invalido e retornou `401` ao baixar dataset privado.
+- Correcao aplicada: rerun com valor real de `get_token()` injetado em `secrets`.
+- Job valido: `6a00fa83317220dbbd1a7706`.
+- URL: `https://huggingface.co/jobs/felipesp1983/6a00fa83317220dbbd1a7706`.
+- Flavor: `h200`.
+- Run ID: `v252-h200-weak-v188-packages-20260510T213606Z`.
+- Repo commit executado: `6824a0cb978cfe02d25ce979fbd598c62213f692`.
+- Adapter repo avaliado: `felipesp1983/kg1-nemotron-lora-v188-equation-lmhead`.
+- Upload HF:
+  `https://huggingface.co/felipesp1983/kg1-nemotron-lora-v188-equation-lmhead/commit/b1f974fd80212467e5d7f77dca6baf994c67f076`.
+- Manifest remoto:
+  `evals/v252-h200-weak-v188-packages-20260510T213606Z/v245_hf_weak_eval_manifest.json`.
+
+Gates confirmados:
+
+- CUDA/H200 disponivel e carga vLLM concluida.
+- Weak CSV canonico V245 usado com `315` linhas.
+- `observed_shared_row_contract_sha256`:
+  `bf055e3b9ebce79d4bfc9e48bce5a305b1d83da882f14afddec80d6afaba5fff`.
+- Weak CSV SHA256:
+  `85da758e14d57ea40270de5747f98726a0ad0b6d1795bff7dd46183005e0f9b6`.
+- Families avaliadas: `bit_manipulation=160`, `equation_transform=155`.
+- Full eval, package e Kaggle submit permaneceram bloqueados.
+
+Resultado weak:
+
+| Candidato | Artefato | Total | ACC | Equation | Bit | Trunc |
+|---|---|---:|---:|---:|---:|---:|
+| `v188_checkpoint20_raw` | `checkpoint-20` | `16/315` | `5.08%` | `8/155` | `8/160` | `0` |
+| `v188_checkpoint40_raw` | `checkpoint-40` | `18/315` | `5.71%` | `9/155` | `9/160` | `0` |
+| `v188_checkpoint20_overlay` | `packages/v188-checkpoint20/final_full_baseline_overlay` | `17/315` | `5.40%` | `8/155` | `9/160` | `0` |
+| `v188_checkpoint20_stripped` | `packages/v188-checkpoint20/final_stripped` | `18/315` | `5.71%` | `9/155` | `9/160` | `0` |
+| `v188_checkpoint40_overlay` | `packages/v188-checkpoint40/final_full_baseline_overlay` | `18/315` | `5.71%` | `9/155` | `9/160` | `0` |
+| `v188_checkpoint40_stripped` | `packages/v188-checkpoint40/final_stripped` | `16/315` | `5.08%` | `9/155` | `7/160` | `0` |
+
+Decisao:
+
+- Rejeitar `V188` raw, overlay e stripped como candidato de promocao, baseline, initializer, merge, DARE/TIES, router ou fonte de ensemble.
+- O melhor V188 ficou `18/315`, contra baseline V226 `191/315`.
+- O overlay nao recuperou o comportamento do baseline; portanto, o pacote publicado nao deve ser tratado como adapter protegido equivalente a V194/V226.
+- A falha com zero truncamento indica desalinhamento de adapter/contrato/modelo, nao apenas excesso de tokens.
+- Nao gastar novo H200 em treino derivado de `V188` sem uma fonte nova de pesos/dados e uma justificativa verificavel.
+
+Impacto no roadmap:
+
+- V187 e V188 publicos estao descartados como rotas de melhoria direta.
+- A proxima rota HF-only deve ser uma destas, em ordem:
+  1. localizar/subir para HF o adapter forte conhecido (`V194`/`V226`) para permitir smoke training/eval sem depender de Google Drive;
+  2. se o adapter forte nao estiver acessivel no HF, executar um baseline no-LoRA ou uma auditoria HF de candidatos com evidencia independente antes de qualquer treino;
+  3. usar V249 apenas em smoke curto com gate imediato, sem treino longo direto.
