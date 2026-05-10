@@ -258,7 +258,13 @@ def run_eval(args: argparse.Namespace) -> dict[str, Any]:
     weak_csv_file = env_str("KG1_WEAK_CSV_FILE", DEFAULT_WEAK_CSV_FILE)
     weak_manifest_file = env_str("KG1_WEAK_MANIFEST_FILE", DEFAULT_WEAK_MANIFEST_FILE)
     adapter_repo = env_str("KG1_ADAPTER_REPO", DEFAULT_ADAPTER_REPO)
-    adapter_subfolder = env_str("KG1_ADAPTER_SUBFOLDER", DEFAULT_ADAPTER_SUBFOLDER).strip("/")
+    adapter_subfolders_raw = env_str("KG1_ADAPTER_SUBFOLDERS", "")
+    if adapter_subfolders_raw:
+        adapter_subfolders = [part.strip().strip("/") for part in adapter_subfolders_raw.split(",") if part.strip()]
+    else:
+        adapter_subfolders = [env_str("KG1_ADAPTER_SUBFOLDER", DEFAULT_ADAPTER_SUBFOLDER).strip("/")]
+    if not adapter_subfolders:
+        raise RuntimeError("At least one adapter subfolder is required")
     output_repo = env_str("KG1_OUTPUT_REPO", DEFAULT_OUTPUT_REPO)
     run_id = env_str("KG1_RUN_ID", "v245-hf-weak-eval-" + datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ"))
     output_dir = Path(env_str("KG1_OUTPUT_DIR", "/tmp/kg1_v245_weak_eval")) / run_id
@@ -268,7 +274,7 @@ def run_eval(args: argparse.Namespace) -> dict[str, Any]:
     print("weak_csv_file =", weak_csv_file, flush=True)
     print("weak_manifest_file =", weak_manifest_file, flush=True)
     print("adapter_repo =", adapter_repo, flush=True)
-    print("adapter_subfolder =", adapter_subfolder, flush=True)
+    print("adapter_subfolders =", json.dumps(adapter_subfolders), flush=True)
     print("output_repo =", output_repo, flush=True)
     print("run_id =", run_id, flush=True)
     print("output_dir =", output_dir, flush=True)
@@ -291,7 +297,7 @@ def run_eval(args: argparse.Namespace) -> dict[str, Any]:
         },
     )
 
-    allow_patterns = [f"{adapter_subfolder}/*"] if adapter_subfolder else ["*"]
+    allow_patterns = [f"{subfolder}/*" for subfolder in adapter_subfolders if subfolder] or ["*"]
     adapter_cache_dir = Path(env_str("KG1_ADAPTER_CACHE_DIR", "/tmp/kg1_v245_adapter_snapshots")) / run_id
     adapter_root = Path(
         snapshot_download(
@@ -302,18 +308,36 @@ def run_eval(args: argparse.Namespace) -> dict[str, Any]:
             token=token or None,
         )
     )
-    adapter_dir = adapter_root / adapter_subfolder if adapter_subfolder else adapter_root
-    adapter_meta = validate_adapter(adapter_dir)
-    log_json("adapter_gate", adapter_meta)
+    candidate_names_raw = env_str("KG1_CANDIDATE_NAMES", "")
+    candidate_names = [part.strip() for part in candidate_names_raw.split(",") if part.strip()] if candidate_names_raw else []
+    if candidate_names and len(candidate_names) != len(adapter_subfolders):
+        raise RuntimeError(
+            f"KG1_CANDIDATE_NAMES count must match adapter count: {len(candidate_names)} != {len(adapter_subfolders)}"
+        )
+
+    adapter_metas: list[dict[str, Any]] = []
+    candidate_payload: list[dict[str, str]] = []
+    for index, subfolder in enumerate(adapter_subfolders):
+        adapter_dir = adapter_root / subfolder if subfolder else adapter_root
+        adapter_meta = validate_adapter(adapter_dir)
+        adapter_meta["subfolder"] = subfolder
+        candidate_name = (
+            candidate_names[index]
+            if candidate_names
+            else env_str("KG1_CANDIDATE_NAME", "v244_" + (subfolder.replace("/", "_") or "adapter"))
+        )
+        adapter_meta["candidate_name"] = candidate_name
+        adapter_metas.append(adapter_meta)
+        candidate_payload.append(
+            {
+                "name": candidate_name,
+                "adapter": str(adapter_dir),
+                "source_kind": "hf_model_repo",
+            }
+        )
+    log_json("adapter_gates", {"count": len(adapter_metas), "adapters": adapter_metas})
 
     candidate_json = output_dir / "v245_weak_eval_candidates.json"
-    candidate_payload = [
-        {
-            "name": env_str("KG1_CANDIDATE_NAME", "v244_final_adapter"),
-            "adapter": str(adapter_dir),
-            "source_kind": "hf_model_repo",
-        }
-    ]
     candidate_json.write_text(json.dumps(candidate_payload, indent=2, sort_keys=True), encoding="utf-8")
     eval_out = output_dir / "eval"
     cmd = [
@@ -361,7 +385,7 @@ def run_eval(args: argparse.Namespace) -> dict[str, Any]:
         "repo_commit": repo_commit,
         "run_id": run_id,
         "weak_csv": weak_meta,
-        "adapter": adapter_meta,
+        "adapters": adapter_metas,
         "eval_summary_json": str(summary_path),
         "candidate_summary": summary,
         "blocked_actions": ["full_eval", "package", "kaggle_submit"],

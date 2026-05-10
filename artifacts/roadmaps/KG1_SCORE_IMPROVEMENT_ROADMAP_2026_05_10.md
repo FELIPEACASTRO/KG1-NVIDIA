@@ -2579,5 +2579,5 @@ Interpretacao:
 
 Proximo passo:
 
-- Reexecutar `final` uma vez com o prompt suffix corrigido para separar falha de adapter de falha de wrapper.
-- Se continuar muito abaixo do baseline, avaliar `checkpoint-2` e `checkpoint-4` com o mesmo executor corrigido.
+- O executor foi ampliado para aceitar `KG1_ADAPTER_SUBFOLDERS` e `KG1_CANDIDATE_NAMES`, permitindo avaliar `final`, `checkpoint-4` e `checkpoint-2` no mesmo job com um unico model-load.
+- Reexecutar `final`, `checkpoint-4` e `checkpoint-2` juntos com o prompt suffix corrigido para separar falha de adapter de falha de wrapper.
