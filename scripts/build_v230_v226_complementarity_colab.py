@@ -595,12 +595,14 @@ def summarize_batch_artifacts(summary_json, label):
         predictions_csv = ''
         predictions_exists = False
         prediction_bytes = 0
+        prediction_rows = 0
         if report_exists:
             try:
                 prediction_path = resolve_predictions_from_report(report_json)
                 predictions_csv = str(prediction_path)
                 predictions_exists = prediction_path.exists()
                 prediction_bytes = prediction_path.stat().st_size if predictions_exists else 0
+                prediction_rows = csv_data_rows(prediction_path) if predictions_exists else 0
             except Exception as exc:
                 predictions_csv = 'resolve_error:' + repr(exc)
         inspected.append({
@@ -615,12 +617,16 @@ def summarize_batch_artifacts(summary_json, label):
             'predictions_csv': predictions_csv,
             'predictions_exists': predictions_exists,
             'prediction_bytes': prediction_bytes,
+            'prediction_rows': prediction_rows,
         })
     for item in inspected:
         print(label, 'candidate_artifact =', json.dumps(item, sort_keys=True), flush=True)
     missing = [item for item in inspected if not item['report_exists'] or not item['predictions_exists']]
     if missing:
         raise RuntimeError(label + ' missing prediction artifacts: ' + json.dumps(missing[:5], sort_keys=True))
+    wrong_rows = [item for item in inspected if int(item.get('prediction_rows') or 0) != 315]
+    if wrong_rows:
+        raise RuntimeError(label + ' prediction CSV row count mismatch: ' + json.dumps(wrong_rows[:5], sort_keys=True))
     return inspected
 
 v221_candidates = summarize_batch_artifacts(V221_BATCH_SUMMARY_JSON, 'V221')
@@ -663,9 +669,16 @@ else:
         if row.get('deployable_without_row_labels') and row.get('weak_gate_pass_for_full')
     ]
     single_pass = [row for row in analysis_manifest.get('candidate_summary', []) if row.get('weak_gate_pass_for_full')]
+    row_level_oracle_pass = [
+        row for row in analysis_manifest.get('router_simulation', [])
+        if (not row.get('deployable_without_row_labels')) and row.get('weak_gate_pass_for_full')
+    ]
     weak_gate_pass_for_full = bool(deployable_pass or single_pass)
     print('analysis_manifest_path =', analysis_manifest_path, flush=True)
     print('resolved_baseline =', analysis_manifest.get('resolved_baseline'), flush=True)
+    print('candidate_source_counts =', json.dumps(analysis_manifest.get('candidate_source_counts', {}), sort_keys=True), flush=True)
+    print('deployable_weak_gate_pass_for_full =', bool(deployable_pass or single_pass), flush=True)
+    print('row_level_oracle_gate_pass =', bool(row_level_oracle_pass), flush=True)
     print('baseline_summary =', json.dumps(analysis_manifest.get('baseline_summary', {}), indent=2, sort_keys=True), flush=True)
     print('decision =', json.dumps(analysis_manifest.get('decision', {}), indent=2, sort_keys=True), flush=True)
     print('router_top =', json.dumps(analysis_manifest.get('router_simulation', [])[:5], indent=2, sort_keys=True), flush=True)
@@ -680,8 +693,13 @@ print('=== V230 FINAL MANIFEST START ===', flush=True)
 analysis_manifest = read_json(analysis_manifest_path) if analysis_manifest_path.exists() else {}
 decision = analysis_manifest.get('decision', {'decision': 'analysis_not_run'})
 weak_gate_pass_for_full = bool(weak_gate_pass_for_full)
+row_level_oracle_gate_pass = any(
+    (not row.get('deployable_without_row_labels')) and row.get('weak_gate_pass_for_full')
+    for row in analysis_manifest.get('router_simulation', [])
+)
 full_candidate_gate = False
 print('weak_gate_pass_for_full =', weak_gate_pass_for_full, flush=True)
+print('row_level_oracle_gate_pass =', row_level_oracle_gate_pass, flush=True)
 print('full_candidate_gate =', full_candidate_gate, flush=True)
 print('Required weak_total >=', WEAK_MIN_FOR_FULL, 'eq >=', WEAK_EQ_MIN_FOR_FULL, 'bit >=', WEAK_BIT_MIN_FOR_FULL, 'trunc <=', WEAK_MAX_TRUNC_FOR_FULL, flush=True)
 print('Full eval is intentionally not automatic in V230 complementarity notebook.', flush=True)
@@ -694,6 +712,7 @@ final_manifest = {
     'repo_branch': REPO_BRANCH,
     'repo_commit': repo_commit,
     'weak_gate_pass_for_full': weak_gate_pass_for_full,
+    'row_level_oracle_gate_pass': row_level_oracle_gate_pass,
     'full_candidate_gate': full_candidate_gate,
     'decision': decision,
     'thresholds': {

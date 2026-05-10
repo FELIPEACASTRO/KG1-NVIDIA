@@ -476,7 +476,20 @@ def baseline_miss_hits(long_df: pd.DataFrame, baseline: str) -> pd.DataFrame:
                 "prompt": baseline_row["prompt"],
             }
         )
-    return pd.DataFrame(rows).sort_values(["family", "correct_alternative_count", "id"], ascending=[True, False, True])
+    columns = [
+        "id",
+        "family",
+        "answer",
+        "baseline_prediction",
+        "correct_alternative_count",
+        "correct_alternative_candidates",
+        "prompt",
+    ]
+    if not rows:
+        return pd.DataFrame(columns=columns)
+    return pd.DataFrame(rows, columns=columns).sort_values(
+        ["family", "correct_alternative_count", "id"], ascending=[True, False, True]
+    )
 
 
 def choose_decision(
@@ -488,7 +501,16 @@ def choose_decision(
     deployable_pass = router_df[router_df["deployable_without_row_labels"] & router_df["weak_gate_pass_for_full"]]
     single_pass = summary_df[summary_df["weak_gate_pass_for_full"]]
     row_oracle_pass = router_df[(~router_df["deployable_without_row_labels"]) & router_df["weak_gate_pass_for_full"]]
-    best_router = router_df.iloc[0].to_dict()
+    deployable_routers = router_df[router_df["deployable_without_row_labels"]].sort_values(
+        ["correct", "equation_transform_correct", "bit_manipulation_correct", "truncated"],
+        ascending=[False, False, False, True],
+    )
+    row_oracle_routers = router_df[~router_df["deployable_without_row_labels"]].sort_values(
+        ["correct", "equation_transform_correct", "bit_manipulation_correct", "truncated"],
+        ascending=[False, False, False, True],
+    )
+    best_deployable = deployable_routers.iloc[0].to_dict() if len(deployable_routers) else {}
+    best_row_oracle = row_oracle_routers.iloc[0].to_dict() if len(row_oracle_routers) else {}
     baseline_correct = as_int(baseline_summary.get("correct"))
     if len(deployable_pass):
         best = deployable_pass.iloc[0].to_dict()
@@ -514,18 +536,25 @@ def choose_decision(
             "reason": f"oracle_correct={as_int(best.get('correct'))}; deployable=false; baseline_correct={baseline_correct}",
             "next_action": "Build solver/confidence rules from the baseline-miss hit pack before any new training.",
         }
-    if as_int(best_router.get("correct")) > baseline_correct:
+    if best_deployable and as_int(best_deployable.get("correct")) > baseline_correct:
         return {
-            "decision": "router_improves_baseline_but_misses_weak_gate",
-            "best_candidate": best_router.get("strategy"),
-            "reason": f"router_correct={as_int(best_router.get('correct'))}; baseline_correct={baseline_correct}; total_gap={as_int(best_router.get('gate_total_gap'))}; eq_gap={as_int(best_router.get('gate_eq_gap'))}; bit_gap={as_int(best_router.get('gate_bit_gap'))}",
+            "decision": "deployable_router_improves_baseline_but_misses_weak_gate",
+            "best_candidate": best_deployable.get("strategy"),
+            "reason": f"router_correct={as_int(best_deployable.get('correct'))}; baseline_correct={baseline_correct}; total_gap={as_int(best_deployable.get('gate_total_gap'))}; eq_gap={as_int(best_deployable.get('gate_eq_gap'))}; bit_gap={as_int(best_deployable.get('gate_bit_gap'))}",
             "next_action": "Use the gained/lost rows to build a small verified solver or router, not another blind continuation.",
+        }
+    if best_row_oracle and as_int(best_row_oracle.get("correct")) > baseline_correct:
+        return {
+            "decision": "row_level_oracle_improves_but_misses_weak_gate",
+            "best_candidate": best_row_oracle.get("strategy"),
+            "reason": f"oracle_correct={as_int(best_row_oracle.get('correct'))}; baseline_correct={baseline_correct}; total_gap={as_int(best_row_oracle.get('gate_total_gap'))}; eq_gap={as_int(best_row_oracle.get('gate_eq_gap'))}; bit_gap={as_int(best_row_oracle.get('gate_bit_gap'))}",
+            "next_action": "Mine the baseline-miss hit pack for deterministic solver/confidence rules before another training run.",
         }
     total_gap = max(0, thresholds["total"] - baseline_correct)
     return {
         "decision": "no_deployable_oracle_gain_over_v226",
-        "best_candidate": best_router.get("strategy"),
-        "reason": f"baseline_correct={baseline_correct}; total_gap={total_gap}; best_router_correct={as_int(best_router.get('correct'))}",
+        "best_candidate": best_deployable.get("strategy", ""),
+        "reason": f"baseline_correct={baseline_correct}; total_gap={total_gap}; best_deployable_correct={as_int(best_deployable.get('correct'))}; best_oracle_correct={as_int(best_row_oracle.get('correct'))}",
         "next_action": "Create a verified equation/bit solver dataset from baseline misses; do not full-eval or continue V227.",
     }
 
@@ -576,7 +605,15 @@ def main() -> int:
     specs = list(dedup.values())
     if not specs:
         raise RuntimeError("no prediction specs were loaded")
+    source_counts: dict[str, int] = {}
+    for spec in specs:
+        source_counts[spec["source"]] = source_counts.get(spec["source"], 0) + 1
+    if source_counts.get("v226", 0) < 1:
+        raise RuntimeError("at least one V226 prediction artifact is required")
+    if source_counts.get("v221", 0) < 1:
+        raise RuntimeError("at least one V221 prediction artifact is required")
     print("candidate_spec_count =", len(specs), flush=True)
+    print("candidate_source_counts =", json.dumps(source_counts, sort_keys=True), flush=True)
     print("candidate_specs =", json.dumps(specs, indent=2, sort_keys=True), flush=True)
 
     frames: list[pd.DataFrame] = []
@@ -613,9 +650,12 @@ def main() -> int:
     decision = choose_decision(summary_df, router_df, baseline_summary, thresholds)
 
     v229_manifest: dict[str, Any] = {}
-    if str(args.v229_analysis_manifest_json) and args.v229_analysis_manifest_json.exists():
+    v229_path_text = str(args.v229_analysis_manifest_json)
+    if v229_path_text not in {"", "."} and args.v229_analysis_manifest_json.is_file():
         v229_manifest = read_json(args.v229_analysis_manifest_json)
         print("loaded_v229_manifest_decision =", json.dumps(v229_manifest.get("decision", {}), sort_keys=True), flush=True)
+    elif v229_path_text not in {"", "."}:
+        print("v229_manifest_skip_missing_or_not_file =", args.v229_analysis_manifest_json, flush=True)
 
     paths = {
         "candidate_summary_csv": args.output_dir / f"{prefix}_candidate_summary.csv",
@@ -644,6 +684,7 @@ def main() -> int:
         "label": args.label,
         "thresholds": thresholds,
         "candidate_count": len(summary_df),
+        "candidate_source_counts": source_counts,
         "resolved_baseline": baseline,
         "baseline_summary": baseline_summary,
         "family_choice_detail": family_choice_detail,
