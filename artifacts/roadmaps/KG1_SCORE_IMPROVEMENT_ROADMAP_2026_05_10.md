@@ -1886,3 +1886,113 @@ Proximo passo:
 - Executar V240 no Colab.
 - Copiar do log o `bridge_path_in_repo`.
 - A partir desse caminho, executar V239 completo no HF Job com `scripts/run_v239_from_hf_bridge.py`.
+
+## V240/V239 executado sem Colab manual via Drive MCP + HF dataset
+
+Atualizacao:
+
+- Autenticacao HF local confirmada como `felipesp1983`.
+- Os artefatos V232/V238 foram recuperados diretamente via Google Drive MCP, sem depender de uma nova execucao manual no Colab.
+- Artefatos recuperados:
+  - V232 manifest SHA256: `6415efbad28577c675f8847f6b84eb5a2d63709b6b9e5ae42fdba5a002c9b7bf`.
+  - V238 manifest SHA256: `a088c00c3a7424e25ea35953ba85fb9afd56dbaaf9f8d2a2fe291d128d5833e6`.
+  - V232 equation workitems: 100 linhas.
+  - V232 bit workitems: 24 linhas.
+  - V238 Alice results: 100 linhas.
+- Bridge publicado no dataset HF:
+  - Dataset: `felipesp1983/kg1-nemotron-training`.
+  - Path: `runtime_artifacts/v240_hf_bridge/local_drive_mcp_20260510T172421Z`.
+  - Commit HF: `7accc1518c1e3303401cd509aa9388541c4fc421`.
+  - Bridge manifest SHA256: `76d3474ba84fa97014fe7a5887200617f3910483aa00636debd9cf6ac9c01778`.
+
+Execucao V239 completa em HF:
+
+- Job HF: `6a00bff0317220dbbd1a762f`.
+- Flavor: `cpu-basic`.
+- Status: `COMPLETED`.
+- Duracao total: `11s`; runtime: `7s`.
+- Dependencias no job: `huggingface_hub`, `pandas`.
+- Resultado:
+  - `v238_rows=100`.
+  - `verified=1`.
+  - `incorrect=0`.
+  - `abstain=99`.
+  - `symbolic_abstain=84`.
+  - `numeric_abstain=15`.
+  - `target_gain=5`.
+- Decisao V239: `mine_abstains_before_any_rescue_measurement`.
+- Outputs V239 publicados no dataset HF:
+  - Path: `runtime_artifacts/v239_alice_abstain_mining/local_drive_mcp_20260510T172421Z`.
+  - Commit HF: `68bc8c14eb70f446331ed8acb81bade36566e91d`.
+
+Bucket summary V239:
+
+- `symbolic_nonuniform_lengths`: 79.
+- `numeric_no_examples_for_query_operator`: 11.
+- `symbolic_no_keep_positions`: 4.
+- `numeric_no_candidate_rule`: 3.
+- `numeric_ambiguous_candidate_rules`: 1.
+- `symbolic_diagnostic_deletion_disabled`: 1.
+
+Achado operacional:
+
+- Uma tentativa de fazer o HF Job baixar diretamente URLs temporarias do Drive/OpenAI falhou com HTTP `403`.
+- A rota correta e robusta e: Drive MCP/local -> upload autenticado para HF dataset -> HF Jobs consomem o dataset.
+- Isso remove o trabalho manual do Colab para os proximos notebooks CPU-only, preservando FinOps.
+
+## V241 abstain rule candidate audit
+
+Arquivo:
+
+- Script: `scripts/analyze_v241_abstain_rule_candidate_audit.py`.
+
+Objetivo:
+
+- Auditar os 99 abstains V238/V239 com regras candidatas mais fortes, sem promover nada inseguro.
+- Testar dois caminhos:
+  - symbolic char-transducer conservador, derivado apenas dos exemplos do prompt;
+  - numeric DSL expandido, exigindo exemplos do mesmo operador e minimo de evidencia.
+- Usar `expected_answer` apenas para auditoria fraca, nunca para derivar a regra.
+
+Validacoes locais:
+
+- `python -m py_compile scripts/analyze_v241_abstain_rule_candidate_audit.py`.
+- `python scripts/analyze_v241_abstain_rule_candidate_audit.py --self-test`.
+- Execucao real sobre os artefatos V232/V238 recuperados do Drive MCP.
+
+Resultado real V241:
+
+- `v238_rows=100`.
+- `abstain_rows=99`.
+- `symbolic_rows=84`.
+- `numeric_rows=15`.
+- `deployable_verified_candidates=0`.
+- `deployable_incorrect_candidates=0`.
+- `under_evidenced_candidates=0`.
+- Decisao: `do_not_promote_v241_candidates`.
+
+Resumo tecnico V241:
+
+- Simbolico:
+  - `no_global_mapping`: 60.
+  - `no_pair_mapping`: 22.
+  - `char_transducer mappings=1 usable=0 unique_predictions=0`: 1.
+  - `char_transducer mappings=16 usable=16 unique_predictions=9`: 1.
+- Numerico:
+  - `no_same_operator_examples`: 11.
+  - `candidate_rule_count=0 unique_prediction_count=0`: 2.
+  - `candidate_rule_count=2 unique_prediction_count=2`: 1.
+  - `candidate_rule_count=7 unique_prediction_count=5`: 1.
+
+Outputs V241 publicados no dataset HF:
+
+- Path: `runtime_artifacts/v241_abstain_rule_candidate_audit/local_drive_mcp_20260510T172421Z`.
+- Commit HF: `fc8d5e956327ddd8635b06cf7c7b212dd5e48535`.
+
+Decisao de negocio/QA:
+
+- Nao promover parser novo agora.
+- O risco de overfit/leakage e maior que o ganho esperado, porque nenhum candidato deployable foi verificado com zero ambiguidade.
+- Proximo passo correto: gerar exemplos/fixtures adicionais para os buckets dominantes antes de nova medicao de rescue:
+  - simbolico: focar `symbolic_nonuniform_lengths`, mas exigir regra derivavel de exemplos;
+  - numerico: focar operadores sem exemplo do mesmo simbolo, porque 11/15 numericos estao bloqueados por ausencia de evidencia local.
