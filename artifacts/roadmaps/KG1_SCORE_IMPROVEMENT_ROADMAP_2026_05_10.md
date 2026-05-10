@@ -2053,3 +2053,14 @@ Regra para proximos notebooks/gates:
 
 - Qualquer novo dataset de treino para `equation_transform` ou `bit_manipulation` deve executar overlap por `id` e por hash de prompt normalizado contra os workitems weak conhecidos.
 - `id_overlap > 0` com weak/eval artifacts deve bloquear treino automaticamente, exceto em notebook explicitamente marcado como diagnostico de leakage.
+
+Validacao materializada:
+
+- Script: `scripts/audit_jsonl_overlap.py`.
+- Self-test: `python scripts/audit_jsonl_overlap.py --self-test`.
+- Execucao real:
+  - referencia: `runtime_artifacts/v240_hf_bridge/local_drive_mcp_20260510T172421Z/v232_equation_workitems.jsonl`.
+  - candidatos: V217 train, V217 validation, `data/sft_v51_complete.jsonl`.
+- Resultado publicado no HF dataset:
+  - Path: `runtime_artifacts/v241_overlap_audit/local_drive_mcp_20260510T172421Z/v241_overlap_audit.json`.
+  - Commit HF: `b87478307a71b5cfea7c8d65e366b7d6794562da`.
