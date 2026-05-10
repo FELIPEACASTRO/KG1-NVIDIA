@@ -14,6 +14,8 @@ Objetivo: consolidar os achados Kaggle/Hugging Face, resultados V221/V226/V229/V
 - `bit_manipulation` ja passa o gate, mas com margem pequena de `+3`.
 - Oracle V230 por linha melhora para `197/315`, equation `57`, bit `140`, truncation `0`, mas ainda falha o gate de equation por `3`.
 - Conclusao: roteamento entre os adapters ja avaliados nao resolve. O proximo ganho precisa vir de mineracao dos miss-packs, solver/verifier deterministico ou dados/traces filtrados.
+- Auditoria Google Drive 2026-05-10: `1879` arquivos KG1 catalogados, `85` adapters completos, `232` reports, `423` CSVs, `54` JSONLs e `11` notebooks. Nenhum artefato do Drive supera o baseline V226 sob gate weak canonico; o Drive deve ser usado como fonte de pesos fortes conhecidos, reports e dados para triagem, nao como fonte de promocao automatica.
+- Achado Drive mais util: V207A full/validation gate do V194 tem `822/947` com familias nao criticas em `100%`, mas confirma o mesmo gargalo fraco: `bit_manipulation=135/160`, `equation_transform=55/155`. Isso reforca que o problema real continua concentrado em `equation_transform`.
 
 ## Evidencias consolidadas
 
@@ -3251,3 +3253,84 @@ Impacto no roadmap:
   2. validar esses pesos fortes com o mesmo wrapper HF e weak CSV canonico;
   3. so depois executar smoke training curto com V249/novos dados, sempre partindo de um initializer forte e com weak eval imediato.
 - Se `V194/V226` nao puderem ser colocados no HF, a proxima acao barata e CPU-only: minerar `equation_transform` simbolico/misto e gerar probes/verifiers; nao ha justificativa para treino H200 longo a partir dos adapters fracos.
+
+## Auditoria Google Drive KG1 - inventario rigoroso 2026-05-10
+
+Escopo:
+
+- Fonte: Google Drive `MyDrive`, roots KG1 relevantes.
+- Inventario local versionado:
+  - `artifacts/drive_audits/google_drive_kg1_inventory_latest.json`
+  - `artifacts/drive_audits/google_drive_targeted_report_metrics_latest.json`
+  - `artifacts/drive_audits/google_drive_v230_v238_manifest_decisions_latest.json`
+- Total catalogado: `1879` arquivos, `301.446 GiB`.
+- Artefatos por tipo: `85` adapters completos, `85` `.safetensors`, `29` zips, `423` CSVs, `54` JSONLs, `232` reports/manifests de avaliacao, `11` notebooks.
+
+Principais roots por tamanho:
+
+| Root Drive | Arquivos | Tamanho |
+|---|---:|---:|
+| `KG1_NVIDIA_V199` | `41` | `39.301 GiB` |
+| `KG1_NVIDIA_V206C` | `24` | `37.537 GiB` |
+| `KG1_NVIDIA_V198` | `38` | `34.517 GiB` |
+| `KG1_NVIDIA_V201` | `44` | `31.016 GiB` |
+| `KG1_PUBLIC_ADAPTERS` | `62` | `25.611 GiB` |
+| `KG1_NVIDIA_V202C` | `32` | `19.482 GiB` |
+| `KG1_NVIDIA_V221` | `68` | `18.544 GiB` |
+| `KG1_NVIDIA_V202D` | `26` | `15.308 GiB` |
+| `KG1_NVIDIA_V226` | `44` | `11.963 GiB` |
+| `KG1_NVIDIA_V227` | `100` | `8.003 GiB` |
+
+Adapters completos no Drive com maior valor operacional:
+
+| Artefato | Status | Uso correto |
+|---|---|---|
+| `KG1_NVIDIA_V226/output_v226_equation_checkpoint_sweep/train_v226_v194_micro_lr2e9_s6/checkpoint-1` | Melhor baseline weak conhecido: `191/315`, equation `55/155`, bit `136/160`, trunc `0` | P0: publicar/validar no HF como initializer forte; nao rebaixar por adapters HF fracos |
+| `KG1_NVIDIA_V226/.../checkpoint-2` | `189/315`, equation `55`, bit `134`, trunc `1` | Nao promover; manter como comparativo |
+| `KG1_NVIDIA_V226/.../checkpoint-3` | `190/315`, equation `55`, bit `135`, trunc `1` | Nao promover; manter como comparativo |
+| `KG1_NVIDIA_V202D/init_adapter_v194_rank19_build/adapter` | V194 protegido, V221 weak `190/315`, equation `54`, bit `136`, trunc `0` | P0/P1: publicar/validar no HF; bom guardrail de bit |
+| `KG1_NVIDIA_V217/output_v217_short_answer_rescue/train_v217_shortans_lr1e8_s16/final_adapter` | V221 registry weak `190/315`, equation `55`, bit `135`, trunc `0` | Manter como comparativo; nao supera V226 |
+| `KG1_NVIDIA_V227/.../final_adapter` e `checkpoint-1` | V229 weak agregado `16/315` | Rejeitado; nao usar como initializer, merge, router ou treino |
+
+Reports antigos do Drive que nao devem ser confundidos com o gate weak canonico:
+
+| Linha | Resultado observado | Decisao |
+|---|---:|---|
+| V207A `v194_baseline_eval` | `822/947`, per family: bit `135/160`, equation `55/155`, demais familias `100%` | Evidencia util de diagnostico amplo; nao substitui V221/V230 weak canonico |
+| V207A `v206c_s0p100` | `158/315`, trunc `40` | Rejeitar: abaixo de V226 e truncation alto |
+| V207A `v206c_s0p020` | `157/315`, trunc `40` | Rejeitar |
+| V207A `v206b_answer_only` | `150/315`, trunc `43` | Rejeitar |
+| V207B public adapters Kienngx COT | `44/315` e `32/315`, trunc `126/202` | Rejeitar como adapter; COT longo e desalinhado |
+| V214 micro | `137/315`, trunc `55` | Rejeitar |
+| V216 equation push | `124/315`, trunc `57` | Rejeitar |
+| V217 pre-registry eval antigo | `118/315`, trunc `81` | Rejeitar esse decode antigo; usar V221 registry para V217 |
+| V218 decode rescue | `18/315`, trunc `0` | Rejeitar |
+| V219 think decode A/B | `6/315`, trunc `225` | Rejeitar |
+| V223 equation rescue | `107/315`, trunc `97` | Rejeitar |
+
+Achado de decode V225:
+
+- V225 equation-only sweep mostrou que `think_strict_boxed` elevou `v194` e `v217` para `56/155` em `equation_transform`, contra `54-55/155` no registry weak.
+- Esse ganho e pequeno e ainda fica abaixo do gate `60/155`, mas e evidencia concreta de que prompt/decode pode recuperar `+1` linha de equation sem mexer em pesos.
+- Acao: manter como experimento P1 de prompt/parser, mas nao usar como liberacao de full eval.
+
+Manifestos Drive V230-V238:
+
+| Versao | Decisao registrada | Implicacao |
+|---|---|---|
+| V230 | `row_level_oracle_improves_but_misses_weak_gate` | Oracle chega a `197/315`, mas equation so `57/155`; nao deployavel |
+| V231 | `mine_equation_solvers_before_training` | Minerar solver antes de treino |
+| V232 | `build_v233_verified_equation_solver_probes` | Criar probes verificados por rota |
+| V233 | `improve_solver_parsers_before_eval` | Solver ainda sem ganho deployavel |
+| V234 | `external_intel_triage_ready_for_source_download` | Intel externa organizada, mas sem payload aprovado |
+| V235 | `manual_source_access_or_license_required_before_download` | Bloqueio correto por credenciais/licenca/hash |
+| V236 | `continue_local_solver_development` | DSL local ainda sem ganho equation deployavel |
+| V237 | `build_prompt_format_specific_parser_before_solver` | Formato Alice inline precisa parser especifico |
+| V238 | `continue_alice_parser_development` | Apenas `1` override verificado; insuficiente para gate |
+
+Conclusao da auditoria Drive:
+
+- O Drive contem historico rico, mas os unicos pesos fortes comprovados seguem sendo V226 checkpoint-1, V194 protegido e V217 como comparativo.
+- A maior parte dos adapters antigos/publicos tem truncation alto, score fraco ou desalinhamento de prompt/modelo; nao devem ser usados para merge, soup, router ou treino.
+- O melhor uso imediato do Drive e operacional: transferir/publicar V226 checkpoint-1 e V194 para HF com hash/config completos, validar no weak gate HF, e depois usar esses pesos fortes como initializer para qualquer smoke training.
+- O melhor uso analitico do Drive e continuar minerando `equation_transform` simbolico/misto, usando V230 miss packs e V237/V238 parser evidence, porque trocar adapter nao resolveu o gap de `5` linhas em equation.

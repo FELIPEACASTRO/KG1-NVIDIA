@@ -1,0 +1,211 @@
+[
+  {
+    "version": "V230",
+    "path": "KG1_NVIDIA_V230/output_v230_v226_complementarity/v230_v226_complementarity_final_manifest.json",
+    "rc": 0,
+    "decision": "row_level_oracle_improves_but_misses_weak_gate",
+    "next_action": "Mine the baseline-miss hit pack for deterministic solver/confidence rules before another training run.",
+    "reason": "oracle_correct=197; baseline_correct=191; total_gap=0; eq_gap=3; bit_gap=0",
+    "analysis_manifest_path": "/content/drive/MyDrive/KG1_NVIDIA_V230/output_v230_v226_complementarity/analysis_v230_v226_complementarity/20260510T070126Z/v230_v226_complementarity_manifest.json",
+    "weak_gate_pass_for_full": false,
+    "allow_kaggle_submit": null,
+    "blocked_actions": null,
+    "allowed_actions": {
+      "full_eval": false,
+      "kaggle_submit": false,
+      "package": false,
+      "train": false
+    },
+    "repo_commit": "e916eb2111fe5590d6df6aee6186d5d9ea325897",
+    "run_id": "20260510T070126Z"
+  },
+  {
+    "version": "V231",
+    "path": "KG1_NVIDIA_V231/output_v231_v230_miss_pack_mining/v231_miss_pack_mining_final_manifest.json",
+    "rc": 0,
+    "decision": "mine_equation_solvers_before_training",
+    "next_action": "Build verified equation solver candidates from taxonomy outputs; do not train or full-eval yet.",
+    "reason": "equation_misses=100; equation_alt_rows=2; bit_misses=24; bit_alt_rows=4",
+    "analysis_manifest_path": "/content/drive/MyDrive/KG1_NVIDIA_V231/output_v231_v230_miss_pack_mining/analysis_v231_miss_pack_mining/20260510T074735Z/v231_v230_miss_pack_mining_manifest.json",
+    "weak_gate_pass_for_full": null,
+    "allow_kaggle_submit": null,
+    "blocked_actions": [
+      "train",
+      "full_scoring",
+      "package",
+      "kaggle_submit"
+    ],
+    "allowed_actions": [
+      "review_taxonomy",
+      "write_verified_solver_tests",
+      "prepare_separate_gated_rescue_notebook"
+    ],
+    "repo_commit": "33f770d82b5bd25b6c4101b88d18feff2c9c594e",
+    "run_id": "20260510T074735Z"
+  },
+  {
+    "version": "V232",
+    "path": "KG1_NVIDIA_V232/output_v232_verified_solver_workbench/v232_verified_solver_workbench_final_manifest.json",
+    "rc": 0,
+    "decision": "build_v233_verified_equation_solver_probes",
+    "next_action": "Use V232 workitems to implement route-specific verified solver probes before any training or full scoring.",
+    "reason": "equation_workitems=100; equation_alt_rows=2; target_gain=5; bit_workitems=24; bit_alt_rows=4",
+    "analysis_manifest_path": "/content/drive/MyDrive/KG1_NVIDIA_V232/output_v232_verified_solver_workbench/analysis_v232_verified_solver_workbench/20260510T080950Z/v232_verified_solver_workbench_manifest.json",
+    "weak_gate_pass_for_full": null,
+    "allow_kaggle_submit": null,
+    "blocked_actions": [
+      "train",
+      "full_scoring",
+      "package",
+      "kaggle_submit"
+    ],
+    "allowed_actions": [
+      "review_workitems",
+      "implement_verified_solver_probes",
+      "prepare_v233_solver_probe_notebook"
+    ],
+    "repo_commit": "d40a1d53542a7112cbbb4a594daaae2e2f200087",
+    "run_id": "20260510T080950Z"
+  },
+  {
+    "version": "V233",
+    "path": "KG1_NVIDIA_V233/output_v233_verified_equation_solver_probes/v233_verified_equation_solver_probes_final_manifest.json",
+    "rc": 0,
+    "decision": "improve_solver_parsers_before_eval",
+    "next_action": "Inspect V233 abstentions and extend route-specific parsers before any weak/full eval.",
+    "reason": "deployable_verified_equation_overrides=0; target_gain=5; nondeployable_oracle_evidence=2",
+    "analysis_manifest_path": "/content/drive/MyDrive/KG1_NVIDIA_V233/output_v233_verified_equation_solver_probes/analysis_v233_verified_equation_solver_probes/20260510T131326Z/v233_verified_equation_solver_probes_manifest.json",
+    "weak_gate_pass_for_full": null,
+    "allow_kaggle_submit": null,
+    "blocked_actions": [
+      "train",
+      "full_scoring",
+      "package",
+      "kaggle_submit"
+    ],
+    "allowed_actions": [
+      "review_probe_results",
+      "extend_verified_parsers",
+      "prepare_gated_solver_rescue_eval_if_target_passes"
+    ],
+    "repo_commit": "d5cd1c7ab359b94b98111b10fe2346dc36e4f6ad",
+    "run_id": "20260510T131326Z"
+  },
+  {
+    "version": "V234",
+    "path": "KG1_NVIDIA_V234/output_v234_external_intel_triage/v234_external_intel_triage_final_manifest.json",
+    "rc": 0,
+    "decision": "external_intel_triage_ready_for_source_download",
+    "next_action": "Run source download/hash/license triage before implementing solver probes or evaluating external candidates.",
+    "reason": "roadmap references covered, action paths explicit, metric parity passed",
+    "analysis_manifest_path": "/content/drive/MyDrive/KG1_NVIDIA_V234/output_v234_external_intel_triage/analysis_v234_external_intel_triage/20260510T143802Z/v234_external_intel_triage_manifest.json",
+    "weak_gate_pass_for_full": null,
+    "allow_kaggle_submit": null,
+    "blocked_actions": [
+      "train",
+      "model_generation",
+      "scoring",
+      "package",
+      "kaggle_submit"
+    ],
+    "allowed_actions": [
+      "review_triage_artifacts",
+      "download_sources_with_hash_license_guard",
+      "build_solver_probe_implementation"
+    ],
+    "repo_commit": "d3018664481061da55f9cc50d424350199097c36",
+    "run_id": "20260510T143802Z"
+  },
+  {
+    "version": "V235",
+    "path": "KG1_NVIDIA_V235/output_v235_source_access_triage/v235_source_access_triage_final_manifest.json",
+    "rc": 0,
+    "decision": "manual_source_access_or_license_required_before_download",
+    "next_action": "Resolve Kaggle/HF credentials and license metadata for required sources before payload download.",
+    "reason": "required sources still need credentials, license metadata, or download hash: metric/nvidia-nemotron-metric,huikang/end-to-end-finetuning-for-lb-0-85,huikang/tinker-submission-notebook,mohankrishnathalla/nemotron-6-puzzle-types-decoded-rule-solvers,optiminist/equation-eda-operator-operation-84-solve-rate,konbu17/bit-manipulation-solver-cot-generator,kishanvavdara/nemotron-reasoning-traj,kienngx/nemotron-30b-competition-trainingdata-cot-labels,konbu17/bit-manipulation-cot-dataset,konbu17/bit-manipulation-synthetic-cot",
+    "analysis_manifest_path": "/content/drive/MyDrive/KG1_NVIDIA_V235/output_v235_source_access_triage/analysis_v235_source_access_triage/20260510T150248Z/v235_source_access_triage_manifest.json",
+    "weak_gate_pass_for_full": null,
+    "allow_kaggle_submit": null,
+    "blocked_actions": [
+      "payload_download_without_license_hash",
+      "train",
+      "model_generation",
+      "scoring",
+      "package",
+      "kaggle_submit"
+    ],
+    "allowed_actions": [
+      "review_source_access_plan",
+      "resolve_credentials_and_license_metadata",
+      "build_payload_downloader_after_gate"
+    ],
+    "repo_commit": "075da0d9f4e7dfe5096f61f0c28bafcf651832a9",
+    "run_id": "20260510T150248Z"
+  },
+  {
+    "version": "V236",
+    "path": "KG1_NVIDIA_V236/output_v236_local_solver_dsl_probes/v236_local_solver_dsl_probes_final_manifest.json",
+    "rc": 0,
+    "decision": "continue_local_solver_development",
+    "next_action": "Inspect equation_subtype_audit and equation_abstain_reason_summary; extend only routes with exact parsers before any eval.",
+    "reason": "verified_equation_overrides=0; incorrect_overrides=0; target_gain=5; bit_guardrail_ready=True",
+    "analysis_manifest_path": "/content/drive/MyDrive/KG1_NVIDIA_V236/output_v236_local_solver_dsl_probes/analysis_v236_local_solver_dsl_probes/20260510T155704Z/v236_local_solver_dsl_probes_manifest.json",
+    "weak_gate_pass_for_full": null,
+    "allow_kaggle_submit": false,
+    "blocked_actions": [
+      "train",
+      "model_generation",
+      "full_scoring",
+      "package",
+      "kaggle_submit",
+      "external_payload_download"
+    ],
+    "allowed_actions": null,
+    "repo_commit": "9b03e9eef5f1f83e31195602ecfd9a97777456d8",
+    "run_id": "20260510T155704Z"
+  },
+  {
+    "version": "V237",
+    "path": "KG1_NVIDIA_V237/output_v237_prompt_format_audit/v237_prompt_format_audit_final_manifest.json",
+    "rc": 0,
+    "decision": "build_prompt_format_specific_parser_before_solver",
+    "next_action": "Inspect prompt_format_audit and equation_prompt_samples, then implement V238 parser tests before any rescue eval.",
+    "reason": "equation_rows=100; zero_pair_rows=68; sample_limit=60",
+    "analysis_manifest_path": "/content/drive/MyDrive/KG1_NVIDIA_V237/output_v237_prompt_format_audit/analysis_v237_prompt_format_audit/20260510T161723Z/v237_prompt_format_audit_manifest.json",
+    "weak_gate_pass_for_full": null,
+    "allow_kaggle_submit": false,
+    "blocked_actions": [
+      "train",
+      "model_generation",
+      "full_scoring",
+      "package",
+      "kaggle_submit",
+      "external_payload_download"
+    ],
+    "allowed_actions": null,
+    "repo_commit": "e06d467bc3b9d23c2da027dc31f902c734eec331",
+    "run_id": "20260510T161723Z"
+  },
+  {
+    "version": "V238",
+    "path": "KG1_NVIDIA_V238/output_v238_alice_parser_probes/v238_alice_parser_probes_final_manifest.json",
+    "rc": 0,
+    "decision": "continue_alice_parser_development",
+    "next_action": "Inspect incorrect and abstain rows; add only unit-tested rules before any rescue measurement.",
+    "reason": "verified=1; incorrect=0; target_gain=5",
+    "analysis_manifest_path": "/content/drive/MyDrive/KG1_NVIDIA_V238/output_v238_alice_parser_probes/analysis_v238_alice_parser_probes/20260510T164430Z/v238_alice_parser_probes_manifest.json",
+    "weak_gate_pass_for_full": null,
+    "allow_kaggle_submit": false,
+    "blocked_actions": [
+      "train",
+      "model_generation",
+      "full_scoring",
+      "package",
+      "kaggle_submit",
+      "external_payload_download"
+    ],
+    "allowed_actions": null,
+    "repo_commit": "a31877996a61f9d8f8b3485e6c8fb9fb3c4a16e4",
+    "run_id": "20260510T164430Z"
+  }
+]
