@@ -944,6 +944,62 @@ Contrato de seguranca:
 - Fontes Kaggle seguem bloqueadas para uso direto ate metadata/licenca/hash serem resolvidos.
 - Fontes HF gated exigem token/metadata antes de qualquer payload.
 
+Resultado da execucao no Colab:
+
+- Notebook executado: `notebooks/KG1_V235_SOURCE_ACCESS_TRIAGE_COLAB.ipynb`.
+- Run ID: `20260510T145150Z`.
+- Commit clonado no Colab: `65be3e3b5992cfd841c7a075242f5418950932ec`.
+- Manifest V234 consumido: `/content/drive/MyDrive/KG1_NVIDIA_V234/output_v234_external_intel_triage/analysis_v234_external_intel_triage/20260510T143802Z/v234_external_intel_triage_manifest.json`.
+- Manifest V235 gerado: `/content/drive/MyDrive/KG1_NVIDIA_V235/output_v235_source_access_triage/analysis_v235_source_access_triage/20260510T145150Z/v235_source_access_triage_manifest.json`.
+- Manifest V235 SHA256: `d0bf0eb30bf236da0c08e09805b02c808fc5e793170489cd44a8d3b25c60eaf3`.
+- `source_access_inventory.csv`: `51` linhas, SHA256 `eb71efb47fee7bc61a90df2b0ce34371b17ef600896ae95aa92f9c9c26a66396`.
+- `hf_metadata_audit.csv`: `8` linhas, SHA256 `b27bcbedbf0e7ee1175b0764891031e3973ff621187b085ebe5fa9205efb0abd`.
+- `kaggle_access_audit.csv`: `43` linhas, SHA256 `b9075abb3a0231402ffb6fa5a7a8543d0e51e80054d4c22735e1174a54283544`.
+- `source_download_plan.csv`: `46` linhas, SHA256 `858760a2daebc194e6b1d71635463c950d222282525dc436cb18b35e0f2e6732`.
+- `license_gate_report.json`: SHA256 `e7f3b187583b0ba000443871820f112e2ffcfba52856761849271ef0b855180c`.
+- Resumo por tipo de fonte:
+  - `kaggle_kernel`: `27`
+  - `kaggle_dataset`: `10`
+  - `kaggle_model`: `6`
+  - `hf_dataset`: `5`
+  - `hf_model`: `3`
+- Status das fontes:
+  - `v234_required`: `13`
+  - `used_now`: `1`
+  - `future_triage`: `31`
+  - `reference_only`: `4`
+  - `manual_verify`: `1`
+  - `not_actionable`: `1`
+- Metadata HF:
+  - HTTP `200`: `7`
+  - HTTP `401`: `1`
+- Download permitido pelo gate:
+  - `true`: `5`
+  - `false`: `46`
+- Credenciais no runtime:
+  - `kaggle_cli_path=/usr/local/bin/kaggle`
+  - `kaggle_json_exists=false`
+  - `kaggle_username_present=false`
+  - `kaggle_key_present=false`
+  - `hf_token_present=false`
+  - `openrouter_key_present=false`
+- Decisao: `manual_source_access_or_license_required_before_download`.
+- Motivo: fontes obrigatorias ainda precisam de credenciais, metadata de licenca ou hash de download antes de qualquer payload.
+
+Fontes obrigatorias ainda bloqueadas:
+
+- `metric/nvidia-nemotron-metric`
+- `huikang/end-to-end-finetuning-for-lb-0-85`
+- `huikang/tinker-submission-notebook`
+- `mohankrishnathalla/nemotron-6-puzzle-types-decoded-rule-solvers`
+- `optiminist/equation-eda-operator-operation-84-solve-rate`
+- `konbu17/bit-manipulation-solver-cot-generator`
+- `kishanvavdara/nemotron-reasoning-traj`
+- `kienngx/nemotron-30b-competition-trainingdata-cot-labels`
+- `konbu17/bit-manipulation-cot-dataset`
+- `konbu17/bit-manipulation-synthetic-cot`
+- `justus27/reasoning-gym-bitwise-arithmetic`
+
 Proximo passo depois de executar no Colab:
 
 - Se o V235 decidir `manual_source_access_or_license_required_before_download`, resolver credenciais/licencas primeiro.
