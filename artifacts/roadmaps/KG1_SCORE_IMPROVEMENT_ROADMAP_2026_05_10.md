@@ -2821,3 +2821,47 @@ Bloqueio atual:
   - abrir `https://huggingface.co/datasets/andy279/nemotron-reasoning-challenge`;
   - solicitar/aceitar acesso;
   - depois rerodar V247. Se P0 ficar acessivel, criar job V248 de ingestao/filtragem de traces equation/bit antes de qualquer treino.
+
+Recheck HF V247:
+
+- HF Job: `6a00f0f0aff1cd33e8f33018`.
+- URL: `https://huggingface.co/jobs/felipesp1983/6a00f0f0aff1cd33e8f33018`.
+- Run ID: `v247-hf-source-access-recheck-20260510T205514Z`.
+- Upload HF:
+  `https://huggingface.co/datasets/felipesp1983/kg1-nemotron-training/commit/84bb71a1806208a512b8e01edfb297c402036e0a`.
+- Resultado: sem mudanca, `andy279/*` ainda `403` aguardando review; `jasonkung98/*` acessivel.
+
+## V248 public mirror leakage audit
+
+Script:
+
+- `scripts/run_v248_public_mirror_leakage_audit_hf.py`.
+
+Objetivo:
+
+- Auditar o mirror publico `jasonkung98/NVIDIA-Nemotron-Model-Reasoning-Challenge`.
+- Verificar vazamento contra o weak set canonico V245.
+- Contar linhas target-family disponiveis apos excluir qualquer ID weak.
+- Bloquear qualquer uso de labels weak-overlap em treino, calibragem ou selecao de regra.
+
+Pre-check local:
+
+- Public train rows: `9500`.
+- Public test rows: `3`.
+- Weak rows: `315`.
+- Weak overlap rows: `315`.
+- Weak answer mismatches: `0`.
+- Weak prompt mismatches normalizados: `0`.
+- Non-weak target rows: `2842`.
+- Por familia:
+  - `bit_manipulation`: `1602` train, `160` weak-overlap, `1442` nonweak;
+  - `equation_transform`: `1555` train, `155` weak-overlap, `1400` nonweak;
+  - demais familias permanecem P2/P3 para este objetivo.
+- Decisao preliminar:
+  `public_mirror_usable_only_after_weak_id_exclusion`.
+
+Interpretacao:
+
+- O mirror publico confirma que o weak set esta dentro do train publico; usar essas respostas para ajustar regra/modelo e vazamento.
+- O uso permitido e apenas com exclusao explicita dos `315` weak IDs.
+- Como ainda ha `2842` linhas target-family nao weak, a rota possivel sem gated traces e construir um dataset V249 estritamente non-weak, com fixtures de validacao separados e sem usar weak labels para selecao.
