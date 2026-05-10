@@ -1,0 +1,37 @@
+{
+  "blocked_actions": [
+    "train",
+    "full_eval",
+    "package",
+    "kaggle_submit"
+  ],
+  "canonical_weak_csv": {
+    "bytes": 118669,
+    "family_counts": {
+      "bit_manipulation": 160,
+      "equation_transform": 155
+    },
+    "observed_shared_row_contract_sha256": "bf055e3b9ebce79d4bfc9e48bce5a305b1d83da882f14afddec80d6afaba5fff",
+    "rows": 315,
+    "sha256": "85da758e14d57ea40270de5747f98726a0ad0b6d1795bff7dd46183005e0f9b6"
+  },
+  "generated_at_utc": "2026-05-10T19:50:46.369315+00:00",
+  "hf_dataset_repo": "felipesp1983/kg1-nemotron-training",
+  "path_in_repo": "runtime_artifacts/v245_weak_eval_bridge/v245-weak-bridge-hfonly-20260510T1950Z",
+  "schema_version": "kg1_v245_weak_eval_bridge_manifest_v1",
+  "source": {
+    "family_counts": {
+      "bit_manipulation": 160,
+      "equation_transform": 155
+    },
+    "observed_shared_row_contract_sha256": "bf055e3b9ebce79d4bfc9e48bce5a305b1d83da882f14afddec80d6afaba5fff",
+    "rows": 315,
+    "source_csv": "artifacts\\tmp_v207a_reconstructed_weak315.csv",
+    "source_sha256": "29d103a22e83b4705b172b3f00da70bb25b2e6c65381233c02d7cf8690617e9c"
+  },
+  "upload_info": "https://huggingface.co/datasets/felipesp1983/kg1-nemotron-training/commit/d6a0ffe1af8205ba8fa2fb6c633b16c9f0aaf054",
+  "uploaded_files": {
+    "manifest_json": "runtime_artifacts/v245_weak_eval_bridge/v245-weak-bridge-hfonly-20260510T1950Z/v245_weak_eval_bridge_manifest.json",
+    "weak_csv": "runtime_artifacts/v245_weak_eval_bridge/v245-weak-bridge-hfonly-20260510T1950Z/v221_weak_315.csv"
+  }
+}

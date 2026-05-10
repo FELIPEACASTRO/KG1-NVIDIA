@@ -1,0 +1,432 @@
+#!/usr/bin/env python3
+"""Run a guarded weak-family LoRA eval inside Hugging Face Jobs.
+
+This runner is intentionally narrow: it validates the V245 weak CSV bridge
+artifact before spending vLLM/model-load time, evaluates one adapter, and
+uploads the eval outputs back to an existing HF model repository.
+"""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+import os
+import subprocess
+import sys
+from datetime import datetime, timezone
+from pathlib import Path
+from typing import Any
+
+import pandas as pd
+
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from src.competition_utils import classify_puzzle  # noqa: E402
+
+
+EXPECTED_WEAK_COUNTS = {"bit_manipulation": 160, "equation_transform": 155}
+EXPECTED_WEAK_ROWS = 315
+EXPECTED_SHARED_ROW_CONTRACT_SHA256 = "bf055e3b9ebce79d4bfc9e48bce5a305b1d83da882f14afddec80d6afaba5fff"
+EXPECTED_WEAK_CSV_SHA256 = "85da758e14d57ea40270de5747f98726a0ad0b6d1795bff7dd46183005e0f9b6"
+DEFAULT_DATA_REPO = "felipesp1983/kg1-nemotron-training"
+DEFAULT_WEAK_CSV_FILE = (
+    "runtime_artifacts/v245_weak_eval_bridge/"
+    "v245-weak-bridge-hfonly-20260510T1950Z/v221_weak_315.csv"
+)
+DEFAULT_WEAK_MANIFEST_FILE = (
+    "runtime_artifacts/v245_weak_eval_bridge/"
+    "v245-weak-bridge-hfonly-20260510T1950Z/v245_weak_eval_bridge_manifest.json"
+)
+DEFAULT_ADAPTER_REPO = "felipesp1983/kg1-nemotron-lora-v243-safe-equation-fixtures"
+DEFAULT_ADAPTER_SUBFOLDER = "final"
+DEFAULT_OUTPUT_REPO = "felipesp1983/kg1-nemotron-lora-v243-safe-equation-fixtures"
+DEFAULT_MODEL_NAME = "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16"
+DEFAULT_MODEL_REVISION = "cbd3fa9f933d55ef16a84236559f4ee2a0526848"
+DEFAULT_PROMPT_SUFFIX = "\nReturn only one line: `\\boxed{answer}`. No reasoning. No explanation."
+
+
+def utc_now() -> str:
+    return datetime.now(timezone.utc).isoformat()
+
+
+def env_str(name: str, default: str = "") -> str:
+    return os.environ.get(name, default).strip()
+
+
+def env_int(name: str, default: int) -> int:
+    raw = env_str(name, str(default))
+    try:
+        return int(raw)
+    except ValueError as exc:
+        raise RuntimeError(f"{name} must be an integer, got {raw!r}") from exc
+
+
+def env_bool(name: str, default: bool = False) -> bool:
+    raw = env_str(name, "1" if default else "0").lower()
+    return raw in {"1", "true", "yes", "y", "on"}
+
+
+def sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def sha256_text(value: object) -> str:
+    return hashlib.sha256(str(value).encode("utf-8", errors="replace")).hexdigest()
+
+
+def log_json(label: str, payload: dict[str, Any]) -> None:
+    print(f"{label} = {json.dumps(payload, indent=2, sort_keys=True)}", flush=True)
+
+
+def read_json(path: Path) -> dict[str, Any]:
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def torch_status() -> dict[str, Any]:
+    import torch
+
+    props = torch.cuda.get_device_properties(0) if torch.cuda.is_available() else None
+    return {
+        "torch": str(getattr(torch, "__version__", "unknown")),
+        "cuda": str(getattr(torch.version, "cuda", "")),
+        "cuda_available": bool(torch.cuda.is_available()),
+        "gpu_name": str(props.name if props else ""),
+        "gpu_total_gib": float(props.total_memory / 1024**3 if props else 0.0),
+    }
+
+
+def validate_gpu() -> None:
+    status = torch_status()
+    log_json("torch_gpu_status", status)
+    if env_bool("KG1_REQUIRE_CUDA", True) and not status["cuda_available"]:
+        raise RuntimeError("CUDA is required for weak vLLM eval.")
+    min_gib = float(env_str("KG1_MIN_GPU_TOTAL_GIB", "79"))
+    if status["gpu_total_gib"] < min_gib:
+        raise RuntimeError(f"GPU memory below required floor: {status['gpu_total_gib']:.2f} < {min_gib:.2f}")
+    required_regex = env_str("KG1_REQUIRED_GPU_NAME_REGEX", "")
+    if required_regex:
+        import re
+
+        if not re.search(required_regex, status["gpu_name"], re.IGNORECASE):
+            raise RuntimeError(f"GPU name {status['gpu_name']!r} does not match {required_regex!r}")
+
+
+def validate_repo_commit() -> str:
+    observed = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
+    expected = env_str("KG1_EXPECTED_COMMIT", "")
+    print("repo_commit =", observed, flush=True)
+    print("expected_repo_commit =", expected, flush=True)
+    if expected and observed != expected:
+        raise RuntimeError(f"repo commit mismatch: expected {expected}, got {observed}")
+    return observed
+
+
+def validate_weak_csv(path: Path, expected_csv_sha: str, expected_contract: str) -> dict[str, Any]:
+    if not path.exists():
+        raise FileNotFoundError(path)
+    observed_csv_sha = sha256_file(path)
+    if expected_csv_sha and observed_csv_sha != expected_csv_sha:
+        raise RuntimeError(f"weak CSV sha mismatch: expected {expected_csv_sha}, got {observed_csv_sha}")
+
+    frame = pd.read_csv(path, dtype=str)
+    required = {"id", "prompt", "answer"}
+    missing = sorted(required - set(frame.columns))
+    if missing:
+        raise RuntimeError("weak CSV missing required columns: " + json.dumps(missing))
+    if "family" not in frame.columns:
+        if "type" in frame.columns:
+            frame["family"] = frame["type"]
+        else:
+            frame["family"] = frame["prompt"].map(classify_puzzle)
+    frame["family"] = frame["family"].map(str)
+    counts = {str(k): int(v) for k, v in frame["family"].value_counts().sort_index().to_dict().items()}
+    if counts != EXPECTED_WEAK_COUNTS:
+        raise RuntimeError(f"weak family counts mismatch: expected {EXPECTED_WEAK_COUNTS}, got {counts}")
+    if len(frame) != EXPECTED_WEAK_ROWS:
+        raise RuntimeError(f"weak row count mismatch: expected {EXPECTED_WEAK_ROWS}, got {len(frame)}")
+    if int(frame["id"].duplicated().sum()):
+        raise RuntimeError("weak CSV has duplicate ids")
+    frame["prompt_sha256"] = frame["prompt"].map(sha256_text)
+    records = {
+        str(row.id): (str(row.family), str(row.answer), str(row.prompt_sha256))
+        for row in frame.itertuples(index=False)
+    }
+    digest_payload = "\n".join(
+        f"{row_id}\t{family}\t{answer}\t{prompt_hash}"
+        for row_id, (family, answer, prompt_hash) in sorted(records.items())
+    )
+    observed_contract = sha256_text(digest_payload)
+    if expected_contract and observed_contract != expected_contract:
+        raise RuntimeError(f"weak row contract mismatch: expected {expected_contract}, got {observed_contract}")
+    return {
+        "path": str(path),
+        "sha256": observed_csv_sha,
+        "observed_shared_row_contract_sha256": observed_contract,
+        "rows": int(len(frame)),
+        "family_counts": counts,
+    }
+
+
+def validate_weak_manifest(path: Path, expected_contract: str) -> dict[str, Any]:
+    if not path.exists():
+        raise FileNotFoundError(path)
+    payload = read_json(path)
+    observed = str(payload.get("canonical_weak_csv", {}).get("observed_shared_row_contract_sha256", ""))
+    if expected_contract and observed != expected_contract:
+        raise RuntimeError(f"weak manifest contract mismatch: expected {expected_contract}, got {observed}")
+    return payload
+
+
+def validate_adapter(adapter_dir: Path) -> dict[str, Any]:
+    config_path = adapter_dir / "adapter_config.json"
+    weights_path = adapter_dir / "adapter_model.safetensors"
+    if not config_path.exists():
+        raise FileNotFoundError(config_path)
+    if not weights_path.exists():
+        raise FileNotFoundError(weights_path)
+    config = read_json(config_path)
+    expected_r = env_int("KG1_EXPECTED_LORA_R", 32)
+    expected_alpha = env_int("KG1_EXPECTED_LORA_ALPHA", 32)
+    if int(config.get("r", -1)) != expected_r:
+        raise RuntimeError(f"adapter r mismatch: expected {expected_r}, got {config.get('r')}")
+    if int(config.get("lora_alpha", -1)) != expected_alpha:
+        raise RuntimeError(f"adapter alpha mismatch: expected {expected_alpha}, got {config.get('lora_alpha')}")
+    return {
+        "adapter_dir": str(adapter_dir),
+        "adapter_config": str(config_path),
+        "adapter_weights": str(weights_path),
+        "adapter_weights_bytes": int(weights_path.stat().st_size),
+        "target_modules": config.get("target_modules"),
+        "target_parameters": config.get("target_parameters"),
+        "r": config.get("r"),
+        "lora_alpha": config.get("lora_alpha"),
+    }
+
+
+def ensure_import(module_name: str) -> None:
+    __import__(module_name)
+    print(f"import_ok = {module_name}", flush=True)
+
+
+def run_cmd(cmd: list[str], cwd: Path, log_path: Path, timeout_s: int) -> int:
+    printable = " ".join(str(part) for part in cmd)
+    print("--- COMMAND START ---", flush=True)
+    print("cwd =", cwd, flush=True)
+    print("+", printable, flush=True)
+    print("timeout_s =", timeout_s, flush=True)
+    print("log_path =", log_path, flush=True)
+    log_path.parent.mkdir(parents=True, exist_ok=True)
+    with log_path.open("w", encoding="utf-8") as handle:
+        proc = subprocess.Popen(
+            [str(part) for part in cmd],
+            cwd=str(cwd),
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            text=True,
+            bufsize=1,
+        )
+        assert proc.stdout is not None
+        for line in proc.stdout:
+            print(line, end="", flush=True)
+            handle.write(line)
+        rc = proc.wait(timeout=timeout_s)
+    print("returncode =", rc, flush=True)
+    print("--- COMMAND END ---", flush=True)
+    if rc:
+        raise RuntimeError(f"command failed rc={rc}: {printable}")
+    return rc
+
+
+def run_eval(args: argparse.Namespace) -> dict[str, Any]:
+    print("=== V245 HF WEAK EVAL JOB START ===", flush=True)
+    print("generated_at_utc =", utc_now(), flush=True)
+    validate_gpu()
+    repo_commit = validate_repo_commit()
+    ensure_import("vllm")
+
+    from huggingface_hub import HfApi, hf_hub_download, snapshot_download
+
+    token = env_str("HF_TOKEN", "")
+    data_repo = env_str("KG1_DATA_REPO", DEFAULT_DATA_REPO)
+    weak_csv_file = env_str("KG1_WEAK_CSV_FILE", DEFAULT_WEAK_CSV_FILE)
+    weak_manifest_file = env_str("KG1_WEAK_MANIFEST_FILE", DEFAULT_WEAK_MANIFEST_FILE)
+    adapter_repo = env_str("KG1_ADAPTER_REPO", DEFAULT_ADAPTER_REPO)
+    adapter_subfolder = env_str("KG1_ADAPTER_SUBFOLDER", DEFAULT_ADAPTER_SUBFOLDER).strip("/")
+    output_repo = env_str("KG1_OUTPUT_REPO", DEFAULT_OUTPUT_REPO)
+    run_id = env_str("KG1_RUN_ID", "v245-hf-weak-eval-" + datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ"))
+    output_dir = Path(env_str("KG1_OUTPUT_DIR", "/tmp/kg1_v245_weak_eval")) / run_id
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+    print("data_repo =", data_repo, flush=True)
+    print("weak_csv_file =", weak_csv_file, flush=True)
+    print("weak_manifest_file =", weak_manifest_file, flush=True)
+    print("adapter_repo =", adapter_repo, flush=True)
+    print("adapter_subfolder =", adapter_subfolder, flush=True)
+    print("output_repo =", output_repo, flush=True)
+    print("run_id =", run_id, flush=True)
+    print("output_dir =", output_dir, flush=True)
+
+    weak_csv = Path(hf_hub_download(repo_id=data_repo, repo_type="dataset", filename=weak_csv_file, token=token or None))
+    weak_manifest = Path(
+        hf_hub_download(repo_id=data_repo, repo_type="dataset", filename=weak_manifest_file, token=token or None)
+    )
+    expected_csv_sha = env_str("KG1_EXPECTED_WEAK_CSV_SHA256", EXPECTED_WEAK_CSV_SHA256)
+    expected_contract = env_str("KG1_EXPECTED_SHARED_ROW_CONTRACT_SHA256", EXPECTED_SHARED_ROW_CONTRACT_SHA256)
+    weak_meta = validate_weak_csv(weak_csv, expected_csv_sha, expected_contract)
+    manifest_meta = validate_weak_manifest(weak_manifest, expected_contract)
+    log_json("weak_csv_gate", weak_meta)
+    log_json(
+        "weak_manifest_gate",
+        {
+            "schema_version": manifest_meta.get("schema_version"),
+            "path_in_repo": manifest_meta.get("path_in_repo"),
+            "canonical_weak_csv": manifest_meta.get("canonical_weak_csv"),
+        },
+    )
+
+    allow_patterns = [f"{adapter_subfolder}/*"] if adapter_subfolder else ["*"]
+    adapter_root = Path(
+        snapshot_download(
+            repo_id=adapter_repo,
+            repo_type="model",
+            allow_patterns=allow_patterns,
+            local_dir=str(output_dir / "adapter_snapshot"),
+            token=token or None,
+        )
+    )
+    adapter_dir = adapter_root / adapter_subfolder if adapter_subfolder else adapter_root
+    adapter_meta = validate_adapter(adapter_dir)
+    log_json("adapter_gate", adapter_meta)
+
+    candidate_json = output_dir / "v245_weak_eval_candidates.json"
+    candidate_payload = [
+        {
+            "name": env_str("KG1_CANDIDATE_NAME", "v244_final_adapter"),
+            "adapter": str(adapter_dir),
+            "source_kind": "hf_model_repo",
+        }
+    ]
+    candidate_json.write_text(json.dumps(candidate_payload, indent=2, sort_keys=True), encoding="utf-8")
+    eval_out = output_dir / "eval"
+    cmd = [
+        sys.executable,
+        str(ROOT / "scripts" / "evaluate_lora_adapters_batch.py"),
+        "--solution-csv",
+        str(weak_csv),
+        "--questions-csv",
+        str(weak_csv),
+        "--candidates-json",
+        str(candidate_json),
+        "--base-model-path",
+        env_str("KG1_MODEL_NAME", DEFAULT_MODEL_NAME),
+        "--label-prefix",
+        env_str("KG1_LABEL_PREFIX", "v245_hf_weak"),
+        "--seed",
+        env_str("KG1_SEED", "42"),
+        "--limit",
+        "0",
+        "--output-dir",
+        str(eval_out),
+        "--max-tokens",
+        str(env_int("KG1_MAX_TOKENS", 96)),
+        "--max-model-len",
+        str(env_int("KG1_MAX_MODEL_LEN", 4096)),
+        "--max-num-seqs",
+        str(env_int("KG1_MAX_NUM_SEQS", 8)),
+        "--warmup-rows",
+        "0",
+        "--disable-thinking",
+        "--prompt-suffix",
+        env_str("KG1_PROMPT_SUFFIX", DEFAULT_PROMPT_SUFFIX),
+        "--continue-on-error",
+    ]
+    run_cmd(cmd, cwd=ROOT, log_path=output_dir / "v245_hf_weak_eval.log", timeout_s=env_int("KG1_EVAL_TIMEOUT_S", 1800))
+    summary_path = eval_out / "batch_candidate_summary.json"
+    if not summary_path.exists():
+        raise FileNotFoundError(summary_path)
+    summary = read_json(summary_path)
+    log_json("candidate_summary_payload", summary)
+
+    final_manifest = {
+        "schema_version": "kg1_v245_hf_weak_eval_manifest_v1",
+        "generated_at_utc": utc_now(),
+        "repo_commit": repo_commit,
+        "run_id": run_id,
+        "weak_csv": weak_meta,
+        "adapter": adapter_meta,
+        "eval_summary_json": str(summary_path),
+        "candidate_summary": summary,
+        "blocked_actions": ["full_eval", "package", "kaggle_submit"],
+    }
+    final_manifest_path = output_dir / "v245_hf_weak_eval_manifest.json"
+    final_manifest_path.write_text(json.dumps(final_manifest, indent=2, sort_keys=True), encoding="utf-8")
+    print("final_manifest_path =", final_manifest_path, flush=True)
+
+    if env_bool("KG1_UPLOAD_TO_HF", True):
+        api = HfApi(token=token or None)
+        path_in_repo = env_str("KG1_OUTPUT_PATH_IN_REPO", f"evals/{run_id}")
+        print("upload_folder_repo =", output_repo, flush=True)
+        print("upload_folder_path_in_repo =", path_in_repo, flush=True)
+        upload_info = api.upload_folder(
+            repo_id=output_repo,
+            repo_type="model",
+            folder_path=str(output_dir),
+            path_in_repo=path_in_repo,
+            commit_message=f"Add {run_id} weak eval outputs",
+        )
+        final_manifest["upload_info"] = str(upload_info)
+        final_manifest["path_in_repo"] = path_in_repo
+        final_manifest_path.write_text(json.dumps(final_manifest, indent=2, sort_keys=True), encoding="utf-8")
+        print("upload_info =", upload_info, flush=True)
+
+    print("=== V245 HF WEAK EVAL JOB END ===", flush=True)
+    return final_manifest
+
+
+def self_test() -> int:
+    print("=== V245 HF WEAK EVAL SELF TEST START ===", flush=True)
+    tmp = Path(os.environ.get("TMPDIR", "/tmp")) / "kg1_v245_weak_eval_self_test"
+    tmp.mkdir(parents=True, exist_ok=True)
+    csv_path = tmp / "weak.csv"
+    frame = pd.DataFrame(
+        [
+            {"id": "b", "prompt": "Perform bit manipulation on 8-bit binary 00000000.", "answer": "00000000", "type": "bit_manipulation"},
+            {"id": "e", "prompt": "Apply the transformation rule a -> b.", "answer": "b", "type": "equation_transform"},
+        ]
+    )
+    frame.to_csv(csv_path, index=False)
+    try:
+        validate_weak_csv(csv_path, "", "")
+    except RuntimeError as exc:
+        if "weak family counts mismatch" not in str(exc):
+            raise
+    else:
+        raise RuntimeError("self-test expected small weak CSV count failure")
+    print("v245_hf_weak_eval_self_test=ok", flush=True)
+    print("=== V245 HF WEAK EVAL SELF TEST END ===", flush=True)
+    return 0
+
+
+def build_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--self-test", action="store_true")
+    return parser
+
+
+def main(argv: list[str] | None = None) -> int:
+    args = build_parser().parse_args(argv)
+    if args.self_test:
+        return self_test()
+    run_eval(args)
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

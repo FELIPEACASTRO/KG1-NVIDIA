@@ -2452,6 +2452,82 @@ Resultado do gate:
 
 Status:
 
-- Implementado e pronto para executar.
-- A execucao requer acao humana porque precisa montar o Google Drive no Colab e ler arquivos em `/content/drive/MyDrive`.
-- Depois que o bridge publicar o CSV no HF dataset, o proximo passo volta a ser automatico no HF: lançar V245 weak eval dos adapters `final`, `checkpoint-4` e `checkpoint-2`.
+- Implementado.
+- Esta rota Colab fica suspensa enquanto a diretriz operacional for "usar HF para tudo".
+- O weak CSV exato foi reconstruido fora do Colab e publicado diretamente no HF dataset em V245 HF-only, portanto nao ha mais bloqueio de Drive para o proximo weak eval.
+
+## V245 HF-only bridge concluido - weak CSV canonico publicado
+
+Diretriz operacional atual:
+
+- Por decisao do usuario em 2026-05-10, Colab fica suspenso ate segunda ordem.
+- Todo trabalho executavel deve usar Hugging Face Jobs/datasets/model repos sempre que tecnicamente possivel.
+- Antes de qualquer job pago, aplicar gates baratos: existencia de artefatos, hashes, contratos de linhas, adapter config/pesos, GPU/custo, dependencias e commit esperado.
+
+Evidencia:
+
+- O CSV oficial `train.csv` local em `artifacts/api_kaggle_openrouter_audit_2026_05_06/competition_data/extracted/train.csv` tem SHA256 `d204af160633b638448723a437aa51c0db70fd0b64ff92f6ad6f52e5ac6377fa`, igual ao esperado pelo V207A.
+- A celula V207A gera a validacao assim:
+  - baixa `data/kaggle/unzipped/train.csv`;
+  - classifica com `classify_puzzle`;
+  - `random.seed(42)`;
+  - para cada familia em ordem alfabetica, embaralha e pega `int(10%)`;
+  - junta as linhas e embaralha novamente;
+  - filtra as familias weak `bit_manipulation` e `equation_transform`.
+- A reconstrucao produziu:
+  - weak rows `315`;
+  - `bit_manipulation=160`;
+  - `equation_transform=155`;
+  - contract hash `bf055e3b9ebce79d4bfc9e48bce5a305b1d83da882f14afddec80d6afaba5fff`.
+
+Upload HF:
+
+- Dataset repo: `felipesp1983/kg1-nemotron-training`.
+- Commit HF: `https://huggingface.co/datasets/felipesp1983/kg1-nemotron-training/commit/d6a0ffe1af8205ba8fa2fb6c633b16c9f0aaf054`.
+- Prefixo:
+  `runtime_artifacts/v245_weak_eval_bridge/v245-weak-bridge-hfonly-20260510T1950Z/`.
+- CSV publicado:
+  `runtime_artifacts/v245_weak_eval_bridge/v245-weak-bridge-hfonly-20260510T1950Z/v221_weak_315.csv`.
+- Manifest publicado:
+  `runtime_artifacts/v245_weak_eval_bridge/v245-weak-bridge-hfonly-20260510T1950Z/v245_weak_eval_bridge_manifest.json`.
+- Canonical weak CSV SHA256:
+  `85da758e14d57ea40270de5747f98726a0ad0b6d1795bff7dd46183005e0f9b6`.
+
+Novo executor HF:
+
+- Script: `scripts/hf_job_weak_eval_v245.py`.
+- Objetivo: rodar weak eval dos adapters V244 dentro do HF Job sem depender de Drive/Colab.
+- Gates antes de vLLM/model-load:
+  - GPU CUDA e VRAM minima;
+  - branch commit esperado;
+  - import `vllm`;
+  - download do weak CSV do HF;
+  - SHA do CSV `85da758e14d57ea40270de5747f98726a0ad0b6d1795bff7dd46183005e0f9b6`;
+  - contract hash `bf055e3b9ebce79d4bfc9e48bce5a305b1d83da882f14afddec80d6afaba5fff`;
+  - rows/familias `315`, `160/155`;
+  - manifest V245 do bridge;
+  - adapter `adapter_config.json` e `adapter_model.safetensors`;
+  - `r=32`, `lora_alpha=32`.
+- Avaliacao:
+  - usa `scripts/evaluate_lora_adapters_batch.py`;
+  - `max_tokens=96`;
+  - `max_model_len=4096`;
+  - `max_num_seqs=8`;
+  - `disable-thinking`;
+  - prompt suffix de resposta curta boxed.
+
+Validacoes locais:
+
+- `python -m py_compile scripts/hf_job_weak_eval_v245.py scripts/hf_job_preflight_gate.py scripts/evaluate_lora_adapters_batch.py scripts/evaluate_lora_adapter.py`.
+- `python scripts/hf_job_weak_eval_v245.py --self-test`.
+
+Proximo passo automatico HF:
+
+- Commitar/pushar `scripts/hf_job_weak_eval_v245.py` e este roadmap.
+- Lançar HF Job de weak eval para o adapter V244 `final`.
+- Se `final` nao passar ou regredir, repetir para `checkpoint-4` e `checkpoint-2`.
+- So considerar full eval se algum adapter bater o gate:
+  - total `>=193`;
+  - equation `>=60`;
+  - bit `>=133`;
+  - truncation `<=3`.
