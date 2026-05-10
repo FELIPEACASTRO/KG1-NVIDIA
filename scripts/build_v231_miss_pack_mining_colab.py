@@ -331,10 +331,32 @@ print('=== V231 V230 ARTIFACT PREFLIGHT END ===', flush=True)
 print('=== V231 MISS PACK MINING START ===', flush=True)
 analysis_manifest_path = ANALYSIS_OUT / 'v231_v230_miss_pack_mining_manifest.json'
 if RUN_ANALYSIS:
-    if 'resolved_v230_manifest' not in globals() or not pathlib.Path(resolved_v230_manifest).is_file():
-        print('resolved_v230_manifest missing or invalid before mining; resolving again.', flush=True)
-        resolved_v230_manifest = resolve_latest_v230_manifest()
-    resolved_v230_manifest = pathlib.Path(resolved_v230_manifest)
+    def _resolve_v230_manifest_for_mining():
+        existing = pathlib.Path(str(globals().get('resolved_v230_manifest', '')))
+        print('mining_existing_resolved_v230_manifest =', existing, 'is_file =', existing.is_file(), flush=True)
+        if existing.is_file():
+            return existing
+        explicit_text = str(globals().get('V230_ANALYSIS_MANIFEST_JSON_TEXT', os.environ.get('KG1_V231_V230_ANALYSIS_MANIFEST_JSON', ''))).strip()
+        print('mining_v230_manifest_explicit_text =', explicit_text, flush=True)
+        if explicit_text and explicit_text not in {'.', './'}:
+            explicit = pathlib.Path(explicit_text)
+            print('mining_v230_manifest_explicit =', explicit, 'exists =', explicit.exists(), 'is_file =', explicit.is_file(), flush=True)
+            if not explicit.exists():
+                raise FileNotFoundError(explicit)
+            if not explicit.is_file():
+                raise IsADirectoryError('KG1_V231_V230_ANALYSIS_MANIFEST_JSON must point to a JSON file, got: ' + str(explicit))
+            return explicit
+        search_root = pathlib.Path(globals().get('V230_OUTPUT_ROOT', os.environ.get('KG1_V231_V230_OUTPUT_ROOT', '/content/drive/MyDrive/KG1_NVIDIA_V230/output_v230_v226_complementarity'))) / 'analysis_v230_v226_complementarity'
+        print('mining_v230_manifest_search_root =', search_root, 'exists =', search_root.exists(), flush=True)
+        candidates = sorted(search_root.glob('*/v230_v226_complementarity_manifest.json'), key=lambda path: path.stat().st_mtime if path.exists() else 0, reverse=True)
+        print('mining_v230_manifest_candidate_count =', len(candidates), flush=True)
+        for candidate in candidates[:10]:
+            print('mining_v230_manifest_candidate =', candidate, 'mtime =', candidate.stat().st_mtime, flush=True)
+        if not candidates:
+            raise FileNotFoundError('No V230 manifest found under: ' + str(search_root))
+        return candidates[0]
+
+    resolved_v230_manifest = _resolve_v230_manifest_for_mining()
     print('mining_v230_manifest =', resolved_v230_manifest, flush=True)
     print('mining_v230_manifest_exists =', resolved_v230_manifest.exists(), flush=True)
     print('mining_v230_manifest_is_file =', resolved_v230_manifest.is_file(), flush=True)
