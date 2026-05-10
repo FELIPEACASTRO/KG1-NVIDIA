@@ -2064,3 +2064,60 @@ Validacao materializada:
 - Resultado publicado no HF dataset:
   - Path: `runtime_artifacts/v241_overlap_audit/local_drive_mcp_20260510T172421Z/v241_overlap_audit.json`.
   - Commit HF: `b87478307a71b5cfea7c8d65e366b7d6794562da`.
+
+## V242 safe equation fixture generation
+
+Objetivo:
+
+- Caminho mais rapido e objetivo antes de gastar GPU.
+- Gerar fixtures sinteticos independentes para `equation_transform`, focados nos buckets V239/V241:
+  - simbolico com comprimentos nao uniformes;
+  - numerico com exemplos suficientes do mesmo operador.
+- Bloquear automaticamente qualquer overlap por `id` ou hash de prompt normalizado contra weak workitems conhecidos.
+- Nao treinar, nao inferir com modelo, nao pontuar modelo e nao submeter.
+
+Arquivos:
+
+- Gerador: `scripts/generate_v242_safe_equation_fixtures.py`.
+- Builder: `scripts/build_v242_safe_equation_fixtures_colab.py`.
+- Notebook: `notebooks/KG1_V242_SAFE_EQUATION_FIXTURES_COLAB.ipynb`.
+- Colab: `https://colab.research.google.com/github/FELIPEACASTRO/KG1-NVIDIA/blob/v230-v226-complementarity/notebooks/KG1_V242_SAFE_EQUATION_FIXTURES_COLAB.ipynb`.
+
+Validacoes locais:
+
+- `python -m py_compile scripts/generate_v242_safe_equation_fixtures.py scripts/audit_jsonl_overlap.py`.
+- `python scripts/generate_v242_safe_equation_fixtures.py --self-test`.
+- `python -m py_compile scripts/build_v242_safe_equation_fixtures_colab.py`.
+- `python scripts/build_v242_safe_equation_fixtures_colab.py`.
+- `python scripts/notebook_release_gate.py notebooks/KG1_V242_SAFE_EQUATION_FIXTURES_COLAB.ipynb`.
+
+Resultado do notebook gate:
+
+- `ok=true`.
+- notebook SHA256: `27f1a2f4c5bd251479cb0977ea7958133f5fde0b238419307c58452e6ab748dc`.
+
+Execucao local V242:
+
+- Referencia de leakage: `runtime_artifacts/v240_hf_bridge/local_drive_mcp_20260510T172421Z/v232_equation_workitems.jsonl`.
+- `train_rows=1800`.
+- `validation_rows=240`.
+- `seed=242`.
+- Resultado:
+  - train simbolico: 1126.
+  - train numerico: 674.
+  - validation simbolico: 153.
+  - validation numerico: 87.
+  - train `id_overlap=0`, `prompt_overlap=0`.
+  - validation `id_overlap=0`, `prompt_overlap=0`.
+
+Outputs V242 publicados no HF dataset:
+
+- Dataset: `felipesp1983/kg1-nemotron-training`.
+- Path: `runtime_artifacts/v242_safe_equation_fixtures/local_cpu_20260510T174632Z`.
+- Commit HF: `eb1979dcea095a5b06b5f77c96b03027bea25ece`.
+
+Decisao:
+
+- Fixtures estao prontos para revisao de gate de treino.
+- Ainda nao autoriza treino automaticamente.
+- O proximo passo objetivo, se aprovado, e criar um treino curto que consome somente V217 limpo + V242, repetindo o overlap gate antes de carregar modelo/GPU.
