@@ -56,6 +56,54 @@ Objetivo: consolidar os achados Kaggle/Hugging Face, resultados V221/V226/V229/V
 
 ## Achados Kaggle/Hugging Face adicionados
 
+### Auditoria OpenRouter anexada - 2026-05-10
+
+Arquivos analisados:
+
+- `C:\Users\davis\Downloads\OpenRouter Chat Sun May 10 2026 (1).json`
+  - SHA256: `4F87904D23F7988F2CA3F2E2917B7F3355C9F6027FF910C91DDF7D6A50E823BE`
+  - Estrutura: JSON valido com `messages`, `items`, `artifacts`, `artifactFiles`, `artifactVersions`, `artifactFileContents`.
+  - URLs tecnicas extraidas: `69` Hugging Face, `23` GitHub.
+- `C:\Users\davis\Downloads\OpenRouter Chat Sun May 10 2026.json`
+  - SHA256: `B8AAB44AF917338956F12C2513AE75F309025BBC56D01EF15D972EF33CA3825E`
+  - Estrutura: JSON valido com `messages`, `items`, `artifacts`, `artifactFiles`, `artifactVersions`, `artifactFileContents`.
+  - URLs tecnicas extraidas: `146` Kaggle, `204` Hugging Face, `54` GitHub, `35` NVIDIA docs/blogs.
+
+Conclusao para ACC:
+
+- Os anexos reforcam que o alvo principal de ganho e `equation_transform`, nao troca cega de adapter.
+- O dado operacional mais importante registrado nos chats e a quebra interna de equation:
+  - `equation_transform` weak observado: `55/155`.
+  - subfamilia numerica citada: `47/62`.
+  - subfamilia simbolica/mista citada: `8/93`.
+  - leitura: o gargalo real e simbolico/misto; treinar mais exemplos numericos tem baixa prioridade.
+- `bit_manipulation` esta perto do teto local e ja passa gate:
+  - weak observado: `135-136/160`, conforme candidato.
+  - regra de negocio: qualquer melhoria em equation nao pode reduzir bit abaixo de `136` sem nova evidencia de gate total.
+- Nao foi encontrado nos JSONs um peso/adapter pronto com evidencia suficiente para uso direto. Todos os novos modelos/adapters citados entram apenas como candidatos a triagem, nunca como substitutos do V226 sem weak eval.
+
+Fontes externas dos anexos com maior valor potencial para ACC:
+
+| Fonte | Tipo | Valor esperado | Acao |
+|---|---|---|---|
+| `https://huggingface.co/datasets/andy279/nemotron-reasoning-challenge-raw-traces` | HF raw traces | Solver-guided traces de transformation e bit | P0 para V234 ingest/audit |
+| `https://huggingface.co/datasets/andy279/nemotron-reasoning-challenge` | HF SFT dataset | Distribuicao por familias do desafio | Usar so apos hash, dedupe e conflict check |
+| `https://github.com/open-thought/reasoning-gym` | Gerador/benchmark | Geracao controlada de tarefas simbolicas/bit | Usar como fonte de probes, nao treino direto |
+| `https://huggingface.co/datasets/Shalyt/ASyMOB-Algebraic_Symbolic_Mathematical_Operations_Benchmark` | HF symbolic math | Casos de operacoes simbolicas | Extrair somente se schema ajudar equation symbolic/mixed |
+| `https://huggingface.co/datasets/SAIRfoundation/equational-theories-benchmark` | HF equational reasoning | Leis/equivalencias simbolicas | Usar para verifier/DSL, nao SFT bruto |
+| `https://huggingface.co/datasets/nvidia/OpenMathReasoning` | HF math reasoning | Dados gerais de matematica | Baixa prioridade ate provar overlap com equation_transform |
+| `https://github.com/TheAlgorithms/Python/tree/master/bit_manipulation` | Algoritmos bit | DSL/guardrail bitvector | Usar para testes e no-loss guardrail |
+| `https://huggingface.co/datasets/ftajwar/training_bitwise_arithmetic-4` | HF bit arithmetic | Casos bitwise externos | Apenas triagem; risco de nao bater formato KG1 |
+| `https://huggingface.co/datasets/ftajwar/evaluation_bitwise_arithmetic-4` | HF bit arithmetic eval | Probes bitwise | Apenas triagem; nao substituir weak local |
+
+Fontes dos anexos que devem ser tratadas como ruido ou baixo valor para ACC:
+
+- Qualquer resultado de `Huggies`, `faces`, app familiar, imagem, produto ou dataset visual. Isso veio de erro semantico em "Hugging Face" e nao tem relacao com KG1.
+- Metadados OpenRouter/model-provider sem artefato reprodutivel local.
+- Adapters HF/Kaggle sem `adapter_config.json`, hashes, target modules, tamanho, licenca e weak eval identico.
+- Datasets matematicos genericos sem mapeamento para `equation_transform` simbolico/misto.
+- COT bruto longo que aumenta truncation; o historico V221 mostrou Naribow e Konbu COT com truncation severo.
+
 ### Modelo base HF
 
 - Repositorio: `nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16`.
@@ -89,6 +137,70 @@ Objetivo: consolidar os achados Kaggle/Hugging Face, resultados V221/V226/V229/V
   - `solver_bit_manipulation_traces_merged.jsonl`: `1,602` solver-guided bit manipulation traces.
   - `solver_transformation_traces_gpt54.jsonl`: `85` hard transformation traces.
 - Uso correto: fonte P0 para minerar regras/verifiers de `equation_transform` e `bit_manipulation`; nao usar como SFT bruto.
+- Atualizacao OpenRouter 2026-05-10: esta e a fonte externa mais importante para ACC nos anexos, porque contem traces solver-guided alinhados exatamente com as familias problematicas.
+- Prioridade V234:
+  - baixar com revision fixo;
+  - registrar hashes por arquivo;
+  - auditar schema;
+  - separar `solver_transformation_traces_merged.jsonl` e `solver_bit_manipulation_traces_merged.jsonl`;
+  - extrair regras/probes, nao respostas para treino cego;
+  - bloquear uso se houver conflito de answer, leakage ou formato nao verificavel.
+
+### Kaggle notebooks e discussoes citados nos anexos
+
+Entram como inteligencia externa, nao como evidencia de score ate reproducao local.
+
+URLs/ids relevantes extraidos dos anexos:
+
+- Competicao oficial: `https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge`.
+- Discussao citada como possivel reverse-engineering de familias: `https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/688461`.
+- Outros ids citados nos chats: `685462`, `689915`.
+- Notebooks publicos citados:
+  - `https://www.kaggle.com/code/adilshamim8/nvidia-nemotron-model-reasoning-challenge-101`
+  - `https://www.kaggle.com/code/adriano313/nemotron-lora-train-v1`
+  - `https://www.kaggle.com/code/afidhadra/nemotron-optimized-training`
+  - `https://www.kaggle.com/code/damndeepesh/nemotron-sft-lora-with-cot-v2-prep-now-plz-wait`
+  - `https://www.kaggle.com/code/dennisfong/nvidia-nemotron-sfttrainer-training`
+  - `https://www.kaggle.com/code/emanuellcs/nvidia-nemotron-sft`
+  - `https://www.kaggle.com/code/franksunp/nemotron-train-v1`
+  - `https://www.kaggle.com/code/halitta/aimo3-nemotron-3-solver-critique-pipeline`
+  - `https://www.kaggle.com/code/jek1wantaufik/nvidia-nemotron-model-reasoning-0-68`
+  - `https://www.kaggle.com/code/kienngx/nemotron-sft-reasoning-trajectories-dataset`
+  - `https://www.kaggle.com/code/kienngx/nvidia-nemotron-trained-models-submission`
+  - `https://www.kaggle.com/code/kienngx/nvidia-nemotron-training-copy-run-instantly`
+  - `https://www.kaggle.com/code/konbu17/nemotron-sft-lora-with-cot`
+  - `https://www.kaggle.com/code/konbu17/nemotron-sft-lora-with-cot-selected-data`
+
+Uso correto:
+
+- Baixar/copiar metadados so se publico e permitido.
+- Registrar URL, versao, data, hash e arquivos de saida.
+- Procurar apenas:
+  - parser de familias;
+  - solver/verifier;
+  - geracao de traces;
+  - calibragem de prompt que reduza truncation;
+  - exemplos de failure analysis.
+- Nao copiar treino/submission sem auditoria de leakage, licenca, path e weak gate local.
+
+### Repositorios GitHub citados nos anexos
+
+Prioridade de leitura:
+
+- `https://github.com/tonghuikang/nemotron`
+- `https://github.com/Ayman-Sabek/NVIDIA_Kaggle_Nemotron`
+- `https://github.com/Jerry2003826/nivida`
+- `https://github.com/NVIDIA-NeMo/Nemotron`
+- `https://github.com/NVIDIA/NeMo-Skills/tree/b37fe403e6dc6e2f9700a64231247a0d1b33d8a2`
+- `https://github.com/NVIDIA-NeMo/RL`
+- `https://github.com/NVIDIA-NeMo/Evaluator`
+- `https://github.com/huggingface/trl`
+
+Uso correto:
+
+- Tratar `tonghuikang`, `Ayman-Sabek` e `Jerry2003826` como candidatos de engenharia reversa/estrategia; nenhum score entra sem reproducao local.
+- Tratar NeMo/NVIDIA/TRL como referencia de metodo de SFT/RL/GRPO, nao como caminho imediato de ACC.
+- Para o objetivo atual, preferir solver/verifier antes de novo treino RL/SFT.
 
 ### Kaggle model publico `ashok205/nvidia-nemotron-3-nano-30b`
 
@@ -240,6 +352,12 @@ Validacoes locais realizadas:
    - overlap/duplicate/conflict report.
 3. Usar `andy279` primeiro para verifiers e solvers, nao para SFT.
 4. COT Kaggle/Kienngx/DGXChen so entra apos limpeza de resposta e validacao contra metric/extractor.
+5. Prioridade de ingestao apos auditoria OpenRouter:
+   - P0: `andy279/nemotron-reasoning-challenge-raw-traces`.
+   - P1: discussoes/notebooks Kaggle com parser/solver/verifier reproduzivel.
+   - P2: `reasoning-gym` e benchmarks simbolicos para probes externos.
+   - P3: adapters/modelos HF/Kaggle apenas como triagem, nunca como baseline.
+6. Para cada fonte externa, registrar `source_url`, `retrieved_at_utc`, `revision_or_version`, `license_or_access_status`, `sha256`, `row_count`, `family_counts`, `schema`, `duplicate_count`, `conflict_count`, `leakage_check`, `extractor_check` e decisao.
 
 ### P5 - Treino so depois de prova
 
@@ -271,6 +389,10 @@ Full eval so pode rodar se:
 - Nao usar Konbu COT selection como adapter weak: truncation `161/315` e score `58/315`.
 - Nao trocar V226 por Kienngx/DGXChen/Konbu sem novo criterio, pois todos pioram total ou bit/equation.
 - Nao treinar com datasets externos sem manifest, hash, dedupe, conflict check e prova de relevancia por familia.
+- Nao usar achado de chat/OpenRouter como evidencia de score sem baixar o artefato original e reproduzir localmente.
+- Nao usar dados "Huggies/faces" ou qualquer resultado visual/familiar; isso e ruido da busca por Hugging Face.
+- Nao usar COT bruto longo se aumentar truncation; primeiro converter para resposta curta/verificada.
+- Nao aceitar ganho em `equation_transform` se `bit_manipulation` cair abaixo do baseline protegido `136/160`, salvo se um weak gate completo provar total `>=193`, equation `>=60`, bit `>=133` e truncation `<=3`.
 
 ## Atualizacao executada - V231
 
@@ -378,3 +500,64 @@ Decisao operacional agora:
 - se `deployable_verified_equation_overrides >= 5`, preparar notebook separado de weak eval com overrides verificados;
 - se ficar abaixo de 5, revisar abstentions e ampliar parsers antes de qualquer weak/full eval;
 - manter treino bloqueado ate existir solver/verifier com prova local.
+
+## Atualizacao de prioridade - achados OpenRouter/HF/Kaggle para ACC
+
+Esta atualizacao consolida as ultimas interacoes e altera a prioridade do roadmap:
+
+1. O objetivo de curto prazo nao e novo LoRA. E obter `+5` acertos em `equation_transform` preservando `bit_manipulation`.
+2. O caminho mais promissor e uma etapa V234 de ingestao/auditoria de traces externos, com foco em `andy279/nemotron-reasoning-challenge-raw-traces`.
+3. O V234 deve produzir artefatos verificaveis, nao treino:
+   - manifest de fontes externas;
+   - auditoria de schema/hash;
+   - tabela de traces por familia;
+   - candidatos de regra/solver para symbolic/mixed equation;
+   - candidatos de guardrail bitvector;
+   - lista de itens rejeitados por ruido, leakage, conflito ou formato.
+4. O V234 so pode desbloquear treino se houver evidencia concreta de:
+   - ganho potencial em `equation_transform` simbolico/misto;
+   - ausencia de degradacao de `bit_manipulation`;
+   - compatibilidade com resposta curta `\boxed{answer}`;
+   - zero dependencia de label/row-id no deploy.
+
+### Especificacao proposta - V234 external intel ingest
+
+Notebook proposto:
+
+- `notebooks/KG1_V234_EXTERNAL_INTEL_INGEST_AND_SOLVER_TRACE_AUDIT_COLAB.ipynb`
+
+Scripts propostos:
+
+- `scripts/analyze_v234_external_intel_ingest.py`
+- `scripts/build_v234_external_intel_ingest_colab.py`
+
+Inputs P0:
+
+- V230 manifest: `/content/drive/MyDrive/KG1_NVIDIA_V230/output_v230_v226_complementarity/analysis_v230_v226_complementarity/20260510T070126Z/v230_v226_complementarity_manifest.json`.
+- V232/V233 manifests se existirem, para cruzar workitems com traces.
+- HF gated dataset: `andy279/nemotron-reasoning-challenge-raw-traces`, quando autorizado manualmente.
+
+Outputs obrigatorios:
+
+- `external_source_manifest.json`.
+- `raw_trace_file_audit.csv`.
+- `equation_symbolic_trace_candidates.jsonl`.
+- `bit_guardrail_trace_candidates.jsonl`.
+- `trace_to_weak_miss_alignment.csv`.
+- `rejected_external_items.csv`.
+- `v234_external_intel_ingest_manifest.json`.
+
+Gates obrigatorios:
+
+- falhar se qualquer fonte externa nao tiver hash;
+- falhar se row/schema esperado estiver ausente;
+- falhar se houver conflito de answer nao resolvido;
+- falhar se a fonte exigir acesso manual e nao estiver disponivel;
+- falhar se a fonte tentar substituir baseline sem weak eval;
+- bloquear train/full/package/submit por padrao.
+
+Decisao esperada do V234:
+
+- `build_solver_from_external_traces` se houver regras/probes concretos para `equation_transform`;
+- `external_intel_not_actionable` se os traces forem ruidosos, conflitantes ou sem mapeamento para weak misses;
+- `manual_access_required` se o dataset HF gated nao estiver autorizado no ambiente.
