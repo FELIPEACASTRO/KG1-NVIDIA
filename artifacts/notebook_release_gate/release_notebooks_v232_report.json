@@ -1,0 +1,64 @@
+{
+  "findings": [],
+  "notebook_count": 7,
+  "notebooks": [
+    {
+      "code_cells": 9,
+      "findings": [],
+      "markdown_cells": 1,
+      "ok": true,
+      "path": "notebooks/KG1_V218_DECODE_RESCUE_COLAB.ipynb",
+      "sha256": "98a227568c163b47679ca3b1c76f7fe810f34741ff73edcbc64f11c96bc32cfb"
+    },
+    {
+      "code_cells": 8,
+      "findings": [],
+      "markdown_cells": 1,
+      "ok": true,
+      "path": "notebooks/KG1_V219_WEAK_DECODE_AB_COLAB.ipynb",
+      "sha256": "04ef2efba9f0a2f2961d6eb13c1a59498b202a447fecb787c4086891a2a8f52f"
+    },
+    {
+      "code_cells": 8,
+      "findings": [],
+      "markdown_cells": 1,
+      "ok": true,
+      "path": "notebooks/KG1_V220_PUBLIC_ADAPTER_PROBE_COLAB.ipynb",
+      "sha256": "d002f938869a13d8c40a68a36f7ab305ce8c3d48fe6ed4bb2ba23ef1abe76566"
+    },
+    {
+      "code_cells": 8,
+      "findings": [],
+      "markdown_cells": 1,
+      "ok": true,
+      "path": "notebooks/KG1_V221_CANDIDATE_REGISTRY_WEAK_AB_COLAB.ipynb",
+      "sha256": "6c815a8b64e82e4b61b08e351335898315ddd6d1d4a8c0c702a0f5994af6b6cc"
+    },
+    {
+      "code_cells": 8,
+      "findings": [],
+      "markdown_cells": 1,
+      "ok": true,
+      "path": "notebooks/KG1_V230_V226_COMPLEMENTARITY_COLAB.ipynb",
+      "sha256": "f9ce582ecc5e6595018cb154834fec385b9cf36cb0dca2ef9e2561fecebadd0a"
+    },
+    {
+      "code_cells": 7,
+      "findings": [],
+      "markdown_cells": 1,
+      "ok": true,
+      "path": "notebooks/KG1_V231_MISS_PACK_MINING_COLAB.ipynb",
+      "sha256": "d95338ae02dd1c57c29a56fe585a8a833366d0c5363b86d2b389b516ef985abb"
+    },
+    {
+      "code_cells": 7,
+      "findings": [],
+      "markdown_cells": 1,
+      "ok": true,
+      "path": "notebooks/KG1_V232_VERIFIED_SOLVER_WORKBENCH_COLAB.ipynb",
+      "sha256": "80011e9f0bde4e32f33feb5666eed63f15cb1d34bad03be6bdb0c8ff8e03a4e3"
+    }
+  ],
+  "ok": true,
+  "schema_version": "kg1_notebook_release_gate_v1"
+}

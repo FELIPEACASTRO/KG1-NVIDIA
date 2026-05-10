@@ -272,17 +272,59 @@ Full eval so pode rodar se:
 - Nao trocar V226 por Kienngx/DGXChen/Konbu sem novo criterio, pois todos pioram total ou bit/equation.
 - Nao treinar com datasets externos sem manifest, hash, dedupe, conflict check e prova de relevancia por familia.
 
-## Proxima tarefa recomendada
+## Atualizacao executada - V231
 
-Criar um notebook/script V231 CPU-only para minerar:
+V231 foi executado no Colab e terminou com `returncode=0`.
 
-- `v230_v226_complementarity_equation_miss_pack.csv`;
-- `v230_v226_complementarity_baseline_miss_hits.csv`;
-- `v230_v226_complementarity_pairwise_detail.csv`.
+Evidencia da execucao:
 
-Saida esperada do V231:
+- Notebook: `notebooks/KG1_V231_MISS_PACK_MINING_COLAB.ipynb`.
+- Manifest V230 resolvido: `/content/drive/MyDrive/KG1_NVIDIA_V230/output_v230_v226_complementarity/analysis_v230_v226_complementarity/20260510T070126Z/v230_v226_complementarity_manifest.json`.
+- Row contract: `bf055e3b9ebce79d4bfc9e48bce5a305b1d83da882f14afddec80d6afaba5fff`.
+- Manifest V231: `/content/drive/MyDrive/KG1_NVIDIA_V231/output_v231_v230_miss_pack_mining/analysis_v231_miss_pack_mining/20260510T074735Z/v231_v230_miss_pack_mining_manifest.json`.
+- Manifest SHA256: `ffa21f0f9a0e1845bbe4f55143aed7733d2d3933162775a5ab69d32a783f83b3`.
 
-- `equation_miss_taxonomy.csv`;
-- `equation_solver_candidate_rules.json`;
-- `bit_guardrail_candidates.json`;
-- relatorio indicando se ha caminho para recuperar pelo menos `+5` equation sem GPU.
+Resultados V231:
+
+- `baseline_misses=124`.
+- `equation_misses=100`.
+- `equation_rows_with_correct_alternative=2`.
+- `bit_misses=24`.
+- `bit_rows_with_correct_alternative=4`.
+
+Decisao V231:
+
+- `mine_equation_solvers_before_training`.
+- Proxima acao: construir candidatos de solver/verifier de equation antes de qualquer treino ou full scoring.
+
+## Atualizacao implementada - V232 verified solver workbench
+
+Arquivos criados/alterados para o proximo passo pos-V231:
+
+- `scripts/analyze_v232_verified_solver_workbench.py`
+- `scripts/build_v232_verified_solver_workbench_colab.py`
+- `notebooks/KG1_V232_VERIFIED_SOLVER_WORKBENCH_COLAB.ipynb`
+- `scripts/notebook_release_gate.py`
+- `artifacts/notebook_release_gate/v232_verified_solver_workbench_report.json`
+
+URL Colab:
+
+`https://colab.research.google.com/github/FELIPEACASTRO/KG1-NVIDIA/blob/v230-v226-complementarity/notebooks/KG1_V232_VERIFIED_SOLVER_WORKBENCH_COLAB.ipynb`
+
+O V232:
+
+- le o manifest V231 mais recente ou o path explicito em `KG1_V232_V231_ANALYSIS_MANIFEST_JSON`;
+- valida contrato de rows e artefatos V231 obrigatorios;
+- reabre o manifest V230 original para recuperar os prompts completos dos miss-packs;
+- gera `equation_solver_workitems_jsonl`;
+- gera `bit_guardrail_workitems_jsonl`;
+- gera `acceptance_matrix_csv`;
+- gera `solver_contracts_json`;
+- bloqueia treino, full scoring, package e Kaggle submit.
+
+Decisao operacional agora:
+
+- executar V232;
+- revisar os workitems com maior prioridade;
+- implementar V233 com probes/verificadores deterministas de equation;
+- manter treino bloqueado ate existir solver/verifier com prova local.

@@ -368,6 +368,39 @@ V231_REQUIRED_SNIPPETS = {
     "no package submit": "No package and no Kaggle submit can be created in V231.",
 }
 
+V232_NOTEBOOK_REL = "notebooks/KG1_V232_VERIFIED_SOLVER_WORKBENCH_COLAB.ipynb"
+V232_COLAB_URL = (
+    "https://colab.research.google.com/github/FELIPEACASTRO/KG1-NVIDIA/blob/"
+    "v230-v226-complementarity/notebooks/KG1_V232_VERIFIED_SOLVER_WORKBENCH_COLAB.ipynb"
+)
+V232_GITHUB_URL = (
+    "https://github.com/FELIPEACASTRO/KG1-NVIDIA/blob/"
+    "v230-v226-complementarity/notebooks/KG1_V232_VERIFIED_SOLVER_WORKBENCH_COLAB.ipynb"
+)
+V232_REQUIRED_FILES = [
+    "scripts/analyze_v232_verified_solver_workbench.py",
+    "scripts/build_v232_verified_solver_workbench_colab.py",
+    "scripts/notebook_release_gate.py",
+]
+V232_REQUIRED_SNIPPETS = {
+    "cpu-only purpose": "V232 is CPU-only solver workbench",
+    "known row contract": "bf055e3b9ebce79d4bfc9e48bce5a305b1d83da882f14afddec80d6afaba5fff",
+    "expected row contract env": "KG1_V232_EXPECTED_SHARED_ROW_CONTRACT_SHA256",
+    "explicit v231 manifest text guard": "V231_ANALYSIS_MANIFEST_JSON_TEXT",
+    "v231 manifest resolver": "resolve_latest_v231_manifest",
+    "v231 artifact metadata logs": "v231_output_artifact_meta",
+    "workbench script": "scripts/analyze_v232_verified_solver_workbench.py",
+    "workbench self test": "v232_verified_solver_workbench_self_test.log",
+    "equation workitems output": "equation_solver_workitems_jsonl",
+    "bit workitems output": "bit_guardrail_workitems_jsonl",
+    "acceptance matrix output": "acceptance_matrix_csv",
+    "solver contracts output": "solver_contracts_json",
+    "hard train false": "RUN_TRAIN = False",
+    "hard full false": "RUN_FULL_IF_GATE = False",
+    "hard submit false": "ALLOW_KAGGLE_SUBMIT = False",
+    "no package submit": "No package and no Kaggle submit can be created in V232.",
+}
+
 RELEASE_NOTEBOOK_RELS = [
     V218_NOTEBOOK_REL,
     V219_NOTEBOOK_REL,
@@ -375,6 +408,7 @@ RELEASE_NOTEBOOK_RELS = [
     V221_NOTEBOOK_REL,
     V230_NOTEBOOK_REL,
     V231_NOTEBOOK_REL,
+    V232_NOTEBOOK_REL,
 ]
 
 
@@ -1200,6 +1234,108 @@ def audit_v231_miss_pack_mining_contract(path: Path, notebook: dict[str, Any], t
             add(findings, "error", "v231_builder_notebook_compare_failed", repr(exc))
 
 
+def audit_v232_verified_solver_workbench_contract(path: Path, notebook: dict[str, Any], text: str, findings: list[Finding]) -> None:
+    """Strict release gate for the V232 CPU-only verified solver workbench."""
+
+    if repo_rel(path) != V232_NOTEBOOK_REL:
+        return
+
+    code_cells = [cell for cell in notebook.get("cells", []) if cell.get("cell_type") == "code"]
+    if len(code_cells) != 7:
+        add(findings, "error", "v232_code_cell_count", f"expected 7 code cells, found {len(code_cells)}")
+    outputs_total = sum(len(cell.get("outputs", []) or []) for cell in code_cells)
+    if outputs_total:
+        add(findings, "error", "v232_notebook_has_outputs", f"notebook must be committed clean; outputs={outputs_total}")
+
+    if V232_COLAB_URL not in text:
+        add(findings, "error", "v232_colab_url_mismatch", V232_COLAB_URL)
+    if V232_GITHUB_URL not in text:
+        add(findings, "error", "v232_github_url_mismatch", V232_GITHUB_URL)
+
+    for name, snippet in V232_REQUIRED_SNIPPETS.items():
+        if snippet not in text:
+            add(findings, "error", "v232_required_snippet_missing", name)
+
+    for rel_path in V232_REQUIRED_FILES:
+        if not (ROOT / rel_path).exists():
+            add(findings, "error", "v232_required_file_missing", rel_path)
+
+    analyzer = ROOT / "scripts" / "analyze_v232_verified_solver_workbench.py"
+    analyzer_text = analyzer.read_text(encoding="utf-8") if analyzer.exists() else ""
+    analyzer_snippets = {
+        "self test ok": "v232_verified_solver_workbench_self_test=ok",
+        "workitem schema": "kg1_v232_solver_workitem_v1",
+        "contracts schema": "kg1_v232_solver_contracts_v1",
+        "manifest schema": "kg1_v232_verified_solver_workbench_manifest_v1",
+        "v231 output loader": "load_required_v231_outputs",
+        "v230 miss pack loader": "load_v230_miss_pack_paths",
+        "workitem builder": "build_workitems",
+        "acceptance matrix": "acceptance_matrix_rows",
+        "no unverified override": "override_allowed_before_verifier",
+        "next action": "build_v233_verified_equation_solver_probes",
+    }
+    for name, snippet in analyzer_snippets.items():
+        if snippet not in analyzer_text:
+            add(findings, "error", "v232_analyzer_contract_missing", name)
+    if analyzer.exists():
+        completed = subprocess.run(
+            [
+                sys.executable,
+                str(analyzer),
+                "--self-test",
+                "--v231-analysis-manifest-json",
+                "dummy",
+                "--output-dir",
+                "dummy",
+            ],
+            cwd=str(ROOT),
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            check=False,
+            timeout=120,
+        )
+        if completed.returncode != 0:
+            add(
+                findings,
+                "error",
+                "v232_analyzer_self_test_failed",
+                f"returncode={completed.returncode}; tail={completed.stdout[-4000:]}",
+            )
+        elif "v232_verified_solver_workbench_self_test=ok" not in completed.stdout:
+            add(findings, "error", "v232_analyzer_self_test_missing_ok", completed.stdout[-4000:])
+
+    builder = ROOT / "scripts" / "build_v232_verified_solver_workbench_colab.py"
+    builder_text = builder.read_text(encoding="utf-8") if builder.exists() else ""
+    for snippet in V232_REQUIRED_SNIPPETS.values():
+        if snippet not in builder_text:
+            add(findings, "error", "v232_builder_required_snippet_missing", snippet)
+    builder_snippets = {
+        "idempotent cell ids": "_CELL_COUNTER = 0",
+        "known row contract constant": "EXPECTED_SHARED_ROW_CONTRACT_SHA256",
+        "latest v231 resolver": "resolve_latest_v231_manifest",
+        "v231 output preflight": "required_outputs = [",
+        "workbench command": "analyze_v232_verified_solver_workbench.py",
+        "submission artifact scan": "blocked_artifacts",
+        "final manifest": "v232_verified_solver_workbench_final_manifest.json",
+    }
+    for name, snippet in builder_snippets.items():
+        if snippet not in builder_text:
+            add(findings, "error", "v232_builder_contract_missing", name)
+    if builder.exists():
+        try:
+            spec = importlib.util.spec_from_file_location("kg1_v232_builder_gate", builder)
+            if spec is None or spec.loader is None:
+                raise RuntimeError("could not load builder module spec")
+            module = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(module)
+            generated = module.build_notebook()
+            if generated != notebook:
+                add(findings, "error", "v232_builder_notebook_mismatch", "builder output differs from committed notebook")
+        except Exception as exc:
+            add(findings, "error", "v232_builder_notebook_compare_failed", repr(exc))
+
+
 def audit_notebook(path: Path) -> NotebookAudit:
     findings: list[Finding] = []
     rel = repo_rel(path)
@@ -1229,6 +1365,7 @@ def audit_notebook(path: Path) -> NotebookAudit:
         audit_v221_candidate_registry_contract(path, notebook, text, findings)
         audit_v230_v226_complementarity_contract(path, notebook, text, findings)
         audit_v231_miss_pack_mining_contract(path, notebook, text, findings)
+        audit_v232_verified_solver_workbench_contract(path, notebook, text, findings)
     for snippet in GENERIC_REQUIRED_SNIPPETS:
         if is_training_or_eval_notebook(text) and snippet not in text:
             add(findings, "error", "generic_training_snippet_missing", snippet)
