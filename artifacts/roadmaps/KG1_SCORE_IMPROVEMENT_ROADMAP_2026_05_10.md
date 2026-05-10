@@ -1420,3 +1420,72 @@ Proximo passo:
 - Reexecutar V236 mais uma vez para obter `equation_abstain_reason_summary` corrigido.
 - Se os `69` itens forem majoritariamente `no_single_algebraic_equation_found`, o V237 deve priorizar parser do formato real do prompt antes de qualquer solver novo.
 - Se houver equacoes parseaveis com falha SymPy especifica, o V237 deve atacar somente essas falhas com testes unitarios antes de medir rescue.
+
+## V236 terceira execucao - V237 desbloqueado como auditoria
+
+Execucao analisada em 2026-05-10 a partir de `KG1_V236_LOCAL_SOLVER_DSL_PROBES_COLAB (2).ipynb`:
+
+- Commit Colab observado: `9b03e9eef5f1f83e31195602ecfd9a97777456d8`.
+- Manifest V236 gerado: `/content/drive/MyDrive/KG1_NVIDIA_V236/output_v236_local_solver_dsl_probes/analysis_v236_local_solver_dsl_probes/20260510T155704Z/v236_local_solver_dsl_probes_manifest.json`.
+- Manifest V236 SHA256 observado: `ef049b79eeedea09b839147fb1c2d0429a79a03948515b5b765706c714f62e9c`.
+- Final manifest SHA256 observado: `de0d96d879c7ded3560b5d8d73b3aac65f8632637d337edf2c1c574e23d36c5d`.
+- `equation_workitems`: `100`.
+- `bit_guardrail_workitems`: `24`.
+- `deployable_verified_equation_overrides`: `0`.
+- `deployable_incorrect_equation_overrides`: `0`.
+- `bit_guardrail_signature_verified_rows`: `24`.
+- Decisao: `continue_local_solver_development`.
+
+Diagnostico corrigido:
+
+- `69` linhas: `algebraic_equation_unparsed` com `sympy_single_equation_probe` abstain por `prompt:no_single_algebraic_equation_found`.
+- `9` linhas: `numeric_operator_transform` abstain por `numeric_examples_or_query_not_parseable`.
+- `22` linhas: `symbolic_mixed_token_rewrite` abstain por `example_length_mismatch`.
+
+Conclusao:
+
+- Nao ha base para rescue eval.
+- Nao ha base para treino.
+- O gargalo agora e parser de formato real do prompt, nao solver matematico.
+
+## V237 implementado - prompt format audit
+
+Implementacao adicionada em 2026-05-10:
+
+- Script: `scripts/analyze_v237_prompt_format_audit.py`.
+- Builder: `scripts/build_v237_prompt_format_audit_colab.py`.
+- Notebook: `notebooks/KG1_V237_PROMPT_FORMAT_AUDIT_COLAB.ipynb`.
+- Colab: `https://colab.research.google.com/github/FELIPEACASTRO/KG1-NVIDIA/blob/v230-v226-complementarity/notebooks/KG1_V237_PROMPT_FORMAT_AUDIT_COLAB.ipynb`.
+
+Escopo:
+
+- CPU-only.
+- Consome o manifest V232 e os mesmos workitems usados por V236.
+- Audita formato dos prompts por `solver_route`, marcador de query, pares de exemplos candidatos, equacoes candidatas, expressoes numericas candidatas e hint de abstain.
+- Nao treina, nao gera modelo, nao roda scoring, nao empacota, nao baixa payload externo e nao submete ao Kaggle.
+
+Saidas obrigatorias:
+
+- `v237_prompt_format_audit_prompt_format_audit.csv`;
+- `v237_prompt_format_audit_prompt_format_summary.csv`;
+- `v237_prompt_format_audit_equation_prompt_samples.csv`;
+- `v237_prompt_format_audit_manifest.json`.
+
+Validacoes executadas localmente:
+
+- `python -m py_compile scripts/analyze_v237_prompt_format_audit.py`;
+- `python scripts/analyze_v237_prompt_format_audit.py --self-test`;
+- `python -m py_compile scripts/build_v237_prompt_format_audit_colab.py`;
+- `python scripts/build_v237_prompt_format_audit_colab.py`;
+- `python scripts/notebook_release_gate.py notebooks/KG1_V237_PROMPT_FORMAT_AUDIT_COLAB.ipynb`.
+
+Resultado do gate:
+
+- `ok=true`.
+- notebook SHA256: `ce92d2a5aee32e78a3a7c668ba14e8ca98e1d2d65ccff6564061adf32599f5e7`.
+
+Proximo passo:
+
+- Executar V237 no Colab.
+- Se V237 mostrar que os prompts tem pares de exemplo parseaveis por outro padrao, criar V238 com parser unit-tested antes de qualquer override.
+- Se V237 mostrar ausencia real de exemplos suficientes, manter abstain e voltar para mineracao de dados/treino, sem rescue eval.
