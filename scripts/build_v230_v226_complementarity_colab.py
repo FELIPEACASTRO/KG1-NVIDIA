@@ -203,6 +203,10 @@ WEAK_EQ_MIN_FOR_FULL = 60
 WEAK_BIT_MIN_FOR_FULL = 133
 WEAK_MAX_TRUNC_FOR_FULL = 3
 KNOWN_V226_WEAK_TOTAL = 191
+V226_BASELINE_NAME_ALIASES = {
+    'v226_best_checkpoint1_observed_191',
+    'v226_checkpoint_1',
+}
 FULL_MIN_CANDIDATE = 831
 FULL_MAX_TRUNC = 4
 
@@ -557,32 +561,38 @@ def materialize_weak315_report(report_path, report, predictions_csv, reference_i
     fieldnames, rows = read_csv_dict_rows(predictions_csv)
     if not fieldnames:
         raise RuntimeError('prediction CSV has no header: ' + str(predictions_csv))
-    if len(rows) == 315:
-        return pathlib.Path(report_path), rows, False
-    if not reference_ids:
+    source_prediction_rows = len(rows)
+    if source_prediction_rows != 315 and not reference_ids:
         raise RuntimeError('cannot filter large V226 report without a 315-row V221 reference id contract')
-    by_id = {}
-    duplicates = 0
-    for row in rows:
-        row_id = str(row.get('id') or '').strip()
-        if not row_id:
-            continue
-        if row_id in by_id:
-            duplicates += 1
-            continue
-        by_id[row_id] = row
-    missing = [row_id for row_id in reference_ids if row_id not in by_id]
-    if duplicates:
-        raise RuntimeError('prediction CSV has duplicate ids: ' + json.dumps({'path': str(predictions_csv), 'duplicates': duplicates}, sort_keys=True))
-    if missing:
-        raise RuntimeError('large V226 report does not cover V221 315-row contract: ' + json.dumps({'path': str(predictions_csv), 'missing_count': len(missing), 'missing_sample': missing[:5]}, sort_keys=True))
-    filtered_rows = [by_id[row_id] for row_id in reference_ids]
+    if reference_ids:
+        by_id = {}
+        duplicates = 0
+        for row in rows:
+            row_id = str(row.get('id') or '').strip()
+            if not row_id:
+                continue
+            if row_id in by_id:
+                duplicates += 1
+                continue
+            by_id[row_id] = row
+        missing = [row_id for row_id in reference_ids if row_id not in by_id]
+        if duplicates:
+            raise RuntimeError('prediction CSV has duplicate ids: ' + json.dumps({'path': str(predictions_csv), 'duplicates': duplicates}, sort_keys=True))
+        if missing:
+            raise RuntimeError('V226 report does not cover V221 315-row contract: ' + json.dumps({'path': str(predictions_csv), 'source_prediction_rows': source_prediction_rows, 'missing_count': len(missing), 'missing_sample': missing[:5]}, sort_keys=True))
+        filtered_rows = [by_id[row_id] for row_id in reference_ids]
+    else:
+        filtered_rows = rows
     metrics = weak_metrics_from_rows(filtered_rows)
     if metrics['total'] != 315:
         raise RuntimeError('filtered V226 report did not materialize exactly 315 weak rows: ' + json.dumps({'path': str(predictions_csv), 'weak_total': metrics['total']}, sort_keys=True))
+    canonical_report_for_name = dict(report)
+    canonical_report_for_name['correct'] = int(metrics['correct'])
+    candidate_name = infer_v226_name(report_path, canonical_report_for_name)
     output_dir = pathlib.Path(output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
-    stem = safe_slug(pathlib.Path(report_path).parent.name + '_' + pathlib.Path(report_path).stem)
+    source_fingerprint = hashlib.sha256((str(report_path) + '|' + str(predictions_csv)).encode('utf-8')).hexdigest()[:12]
+    stem = safe_slug(candidate_name + '_' + source_fingerprint)
     filtered_csv = output_dir / (stem + '_weak315_predictions.csv')
     filtered_report = output_dir / (stem + '_weak315_eval_report.json')
     per_task_csv = output_dir / (stem + '_weak315_per_task.csv')
@@ -594,15 +604,22 @@ def materialize_weak315_report(report_path, report, predictions_csv, reference_i
     synthetic_outputs['per_task_csv'] = per_task_csv.name
     synthetic_report['outputs'] = synthetic_outputs
     synthetic_report['source_report_json'] = str(report_path)
+    synthetic_report['source_predictions_csv'] = str(predictions_csv)
+    synthetic_report['source_prediction_rows'] = int(source_prediction_rows)
+    synthetic_report['source_fingerprint'] = source_fingerprint
+    synthetic_report['canonical_candidate_name'] = str(candidate_name)
+    synthetic_report['rows'] = 315
     synthetic_report['correct'] = int(metrics['correct'])
     synthetic_report['accuracy'] = float(metrics['accuracy'])
     synthetic_report['truncated'] = int(metrics['truncated'])
     synthetic_report['truncation_rate'] = float(metrics['truncation_rate'])
     if metrics['completion_tokens']:
         synthetic_report['completion_tokens'] = int(metrics['completion_tokens'])
+    elif source_prediction_rows != 315:
+        synthetic_report['completion_tokens'] = 0
     write_json(filtered_report, synthetic_report)
-    print('synthesis_materialized_weak315_report =', json.dumps({'source_report_json': str(report_path), 'filtered_report_json': str(filtered_report), 'filtered_predictions_csv': str(filtered_csv), 'correct': int(metrics['correct'])}, sort_keys=True), flush=True)
-    return filtered_report, filtered_rows, True
+    print('synthesis_materialized_weak315_report =', json.dumps({'candidate_name': str(candidate_name), 'source_report_json': str(report_path), 'source_prediction_rows': int(source_prediction_rows), 'filtered_report_json': str(filtered_report), 'filtered_predictions_csv': str(filtered_csv), 'correct': int(metrics['correct'])}, sort_keys=True), flush=True)
+    return filtered_report, filtered_rows, candidate_name
 
 def per_task_counts_from_report(report_path, report):
     per_task_csv = pathlib.Path(str(report.get('outputs', {}).get('per_task_csv', '')))
@@ -663,26 +680,24 @@ def synthesize_batch_summary_from_reports(output_json, source_roots, reference_i
             report = read_json(report_path)
             predictions_csv = resolve_predictions_from_report(report_path)
             prediction_rows = csv_data_rows(predictions_csv)
-            usable_report_path = report_path
-            usable_rows = None
             if prediction_rows != 315:
                 print('synthesis_filter_large_report_start =', json.dumps({'report_json': str(report_path), 'prediction_rows': prediction_rows, 'reference_ids': len(reference_ids)}, sort_keys=True), flush=True)
-                usable_report_path, usable_rows, materialized = materialize_weak315_report(
-                    report_path,
-                    report,
-                    predictions_csv,
-                    reference_ids,
-                    pathlib.Path(output_json).parent / 'v226_synthesized_weak315_reports',
-                )
-                report = read_json(usable_report_path)
-                prediction_rows = csv_data_rows(resolve_predictions_from_report(usable_report_path))
-                if prediction_rows != 315:
-                    print('synthesis_skip_report_rows =', json.dumps({'report_json': str(usable_report_path), 'prediction_rows': prediction_rows}, sort_keys=True), flush=True)
-                    continue
+            usable_report_path, usable_rows, candidate_name = materialize_weak315_report(
+                report_path,
+                report,
+                predictions_csv,
+                reference_ids,
+                pathlib.Path(output_json).parent / 'v226_synthesized_weak315_reports',
+            )
+            report = read_json(usable_report_path)
+            prediction_rows = csv_data_rows(resolve_predictions_from_report(usable_report_path))
+            if prediction_rows != 315:
+                print('synthesis_skip_report_rows =', json.dumps({'report_json': str(usable_report_path), 'prediction_rows': prediction_rows}, sort_keys=True), flush=True)
+                continue
             adapter = str(report.get('inputs', {}).get('adapter') or report.get('adapter_dir') or '')
             counts = per_task_counts_from_report(usable_report_path, report)
             row = {
-                'name': infer_v226_name(report_path, report),
+                'name': candidate_name,
                 'adapter': adapter,
                 'status': 'ok',
                 'correct': int(report.get('correct', 0)),
@@ -1023,9 +1038,9 @@ if not v221_candidates:
     raise RuntimeError('V221 batch summary has no ok candidates.')
 if not v226_candidates:
     raise RuntimeError('V226 batch summary has no ok candidates.')
-preferred_v226 = [row for row in v226_candidates if str(row.get('name', '')) == 'v226_best_checkpoint1_observed_191']
+preferred_v226 = [row for row in v226_candidates if str(row.get('name', '')) in V226_BASELINE_NAME_ALIASES]
 if not preferred_v226:
-    raise RuntimeError('Required V226 baseline row missing: v226_best_checkpoint1_observed_191')
+    raise RuntimeError('Required V226 baseline row missing: ' + json.dumps(sorted(V226_BASELINE_NAME_ALIASES)))
 if int(preferred_v226[0].get('correct') or 0) != KNOWN_V226_WEAK_TOTAL:
     raise RuntimeError('Required V226 baseline correct count mismatch')
 known_v226_rows = [row for row in v226_candidates if 'checkpoint' in str(row.get('name', '')).lower()]
