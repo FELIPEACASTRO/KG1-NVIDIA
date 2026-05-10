@@ -30,6 +30,7 @@ import json
 import re
 import subprocess
 import sys
+import tempfile
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
@@ -39,6 +40,20 @@ ROOT = Path(__file__).resolve().parents[1]
 NOTEBOOK_RE = re.compile(r"\.ipynb$", re.IGNORECASE)
 COLAB_RE = re.compile(r"https://colab\.research\.google\.com/github/[^\s`)]+\.ipynb")
 GITHUB_BLOB_RE = re.compile(r"https://github\.com/[^\s`)]+/blob/[^\s`)]+\.ipynb")
+LOCAL_REPO_PATH_RE = re.compile(
+    r"(?<![A-Za-z0-9_./-])"
+    r"("
+    r"(?:scripts|src|data|notebooks|artifacts/notebook_release_gate)/[A-Za-z0-9_./-]+"
+    r"|\.github/workflows/[A-Za-z0-9_.-]+\.ya?ml"
+    r"|\.gitattributes"
+    r"|AGENTS\.md"
+    r")"
+)
+SYNTHESIS_DEFAULT_ZERO_RE = re.compile(
+    r"ALLOW_[A-Z0-9_]*SYNTHESIS\s*=\s*os\.environ\.get\(\s*['\"][^'\"]+['\"]\s*,\s*['\"]0['\"]",
+    re.MULTILINE,
+)
+SYNTHESIS_FLAG_RE = re.compile(r"\bALLOW_[A-Z0-9_]*SYNTHESIS\b")
 
 GENERIC_REQUIRED_SNIPPETS = [
     "repo_commit",
@@ -457,6 +472,21 @@ def audit_cells(notebook: dict[str, Any], findings: list[Finding]) -> tuple[list
     return code_cells, markdown_cells
 
 
+def audit_clean_notebook_state(notebook: dict[str, Any], findings: list[Finding]) -> None:
+    code_cells = [cell for cell in notebook.get("cells", []) if cell.get("cell_type") == "code"]
+    outputs_total = sum(len(cell.get("outputs", []) or []) for cell in code_cells)
+    executed_total = sum(1 for cell in code_cells if cell.get("execution_count") is not None)
+    if outputs_total:
+        add(findings, "error", "notebook_has_outputs", f"notebook must be committed clean; outputs={outputs_total}")
+    if executed_total:
+        add(
+            findings,
+            "error",
+            "notebook_has_execution_counts",
+            f"notebook must be committed clean; non-null execution_count cells={executed_total}",
+        )
+
+
 def audit_colab_urls(path: Path, text: str, findings: list[Finding]) -> None:
     rel = repo_rel(path)
     if not (rel.startswith("notebooks/") or rel.startswith("competent-shamir/notebooks/")):
@@ -489,6 +519,103 @@ def audit_logging_and_commands(code_text: str, findings: list[Finding]) -> None:
                 add(findings, "error", "run_cmd_contract_missing", required)
     if "subprocess.run" in code_text and "run_cmd(" not in code_text:
         add(findings, "error", "raw_subprocess_without_wrapper", "use run_cmd so command, log, rc, and heartbeat are visible")
+
+
+def audit_local_repo_references(text: str, findings: list[Finding]) -> None:
+    """Verify literal repo-relative files referenced by notebooks exist now.
+
+    Colab notebooks clone this repo before execution, so a typo in a literal
+    `scripts/...`, `src/...`, or `data/...` reference is statically detectable.
+    Runtime output paths are ignored by extension/name to avoid blocking logs
+    and generated reports.
+    """
+
+    ignored_suffixes = {
+        ".log",
+        ".jsonl",
+        ".csv",
+        ".zip",
+        ".safetensors",
+        ".bin",
+        ".pt",
+        ".pth",
+    }
+    ignored_parts = (
+        "output_",
+        "analysis_",
+        "eval_",
+        "train_",
+        "checkpoint-",
+        "batch_candidate_summary",
+        "candidate_summary",
+        "predictions",
+        "manifest",
+        "report",
+    )
+    seen: set[str] = set()
+    for match in LOCAL_REPO_PATH_RE.finditer(text.replace("\\/", "/")):
+        rel = match.group(1).strip("'\"`),]")
+        if rel in seen:
+            continue
+        seen.add(rel)
+        if "{" in rel or "}" in rel or "*" in rel or "$" in rel:
+            continue
+        path = Path(rel)
+        if path.suffix.lower() in ignored_suffixes and any(part in rel for part in ignored_parts):
+            continue
+        if rel.startswith("artifacts/notebook_release_gate/") and not (ROOT / rel).exists():
+            continue
+        if rel.startswith("notebooks/") and not rel.endswith(".ipynb"):
+            continue
+        if not (ROOT / rel).exists():
+            add(findings, "error", "referenced_repo_file_missing", rel)
+
+
+def audit_artifact_dependency_contract(text: str, findings: list[Finding]) -> None:
+    """Catch the class of failures where a runtime artifact is missing but the
+    notebook has no diagnostic fallback/resolver.
+    """
+
+    if SYNTHESIS_DEFAULT_ZERO_RE.search(text) and "DIAGNOSTIC_MODE" in text:
+        add(
+            findings,
+            "error",
+            "diagnostic_synthesis_default_disabled",
+            "diagnostic notebooks must default synthesis/fallback to diagnostic mode, e.g. '1' if DIAGNOSTIC_MODE else '0'",
+        )
+
+    synthesis_flags = sorted(set(SYNTHESIS_FLAG_RE.findall(text)))
+    for flag in synthesis_flags:
+        release_guard_re = re.compile(rf"if\s+not\s+[A-Z0-9_]*DIAGNOSTIC_MODE\s+and\s+{re.escape(flag)}")
+        if "DIAGNOSTIC_MODE" in text and not release_guard_re.search(text):
+            add(
+                findings,
+                "error",
+                "synthesis_release_guard_missing",
+                f"{flag} must be hard-blocked when diagnostic mode is false",
+            )
+
+    if "resolve_existing_or_synthesize" in text:
+        required = {
+            "candidate existence logs": "exists =",
+            "candidate path probe": "_candidate",
+            "synthesis function": "synthesize_",
+            "clear missing-artifact error": "FileNotFoundError",
+        }
+        for name, snippet in required.items():
+            if snippet not in text:
+                add(findings, "error", "artifact_resolver_contract_missing", name)
+
+    has_external_summary_input = bool(re.search(r"\b[A-Z0-9_]*BATCH_SUMMARY_JSON\b", text)) and "/content/drive/" in text
+    if has_external_summary_input and "resolve_existing_or_synthesize" not in text:
+        for snippet in ["exists =", "FileNotFoundError"]:
+            if snippet not in text:
+                add(
+                    findings,
+                    "error",
+                    "external_batch_summary_without_runtime_check",
+                    f"external Drive batch summary inputs need explicit existence logging and failure context: {snippet}",
+                )
 
 
 def audit_submit_lock(text: str, findings: list[Finding]) -> None:
@@ -940,9 +1067,12 @@ def audit_notebook(path: Path) -> NotebookAudit:
     code_cells, markdown_cells = audit_cells(notebook, findings)
     text = "\n".join(markdown_cells + code_cells)
     if is_generated_colab(path, notebook, text):
+        audit_clean_notebook_state(notebook, findings)
         audit_colab_urls(path, text, findings)
         audit_submit_lock(text, findings)
         audit_logging_and_commands("\n".join(code_cells), findings)
+        audit_local_repo_references(text, findings)
+        audit_artifact_dependency_contract(text, findings)
         audit_training_eval_contract(text, findings)
         audit_v218_decode_rescue_contract(path, notebook, text, findings)
         audit_v219_weak_decode_ab_contract(path, notebook, text, findings)
@@ -986,6 +1116,98 @@ def all_notebooks() -> list[Path]:
     return paths
 
 
+def synthetic_notebook(source: str, outputs: list[dict[str, Any]] | None = None, execution_count: int | None = None) -> dict[str, Any]:
+    return {
+        "nbformat": 4,
+        "nbformat_minor": 5,
+        "metadata": {"colab": {"name": "negative.ipynb"}},
+        "cells": [
+            {
+                "cell_type": "markdown",
+                "metadata": {},
+                "source": [
+                    "https://colab.research.google.com/github/FELIPEACASTRO/KG1-NVIDIA/blob/"
+                    "test/notebooks/negative.ipynb"
+                ],
+            },
+            {
+                "cell_type": "code",
+                "metadata": {},
+                "execution_count": execution_count,
+                "outputs": outputs or [],
+                "source": source.splitlines(True),
+            },
+        ],
+    }
+
+
+def run_self_test() -> int:
+    base_source = """# CELL: synthetic negative gate fixture.
+print('=== SYN START ===')
+ALLOW_KAGGLE_SUBMIT = False
+print('=== SYN END ===')
+"""
+    fixtures = {
+        "outputs": (
+            base_source,
+            [{"output_type": "stream", "name": "stdout", "text": ["bad"]}],
+            None,
+            "notebook_has_outputs",
+        ),
+        "execution_count": (base_source, [], 7, "notebook_has_execution_counts"),
+        "missing_local_ref": (
+            base_source + "print('scripts/does_not_exist_for_gate.py')\n",
+            [],
+            None,
+            "referenced_repo_file_missing",
+        ),
+        "synthesis_default_zero": (
+            base_source
+            + "import os\n"
+            + "V230_DIAGNOSTIC_MODE = True\n"
+            + "ALLOW_FAKE_SYNTHESIS = os.environ.get('KG1_FAKE', '0').strip().lower() in {'1'}\n",
+            [],
+            None,
+            "diagnostic_synthesis_default_disabled",
+        ),
+        "resolver_contract": (
+            base_source + "def resolve_existing_or_synthesize_fake(path):\n    return path\n",
+            [],
+            None,
+            "artifact_resolver_contract_missing",
+        ),
+    }
+    print("=== NOTEBOOK RELEASE GATE SELF TEST START ===", flush=True)
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        tmp = Path(tmp_dir)
+        for name, (source, outputs, execution_count, expected_code) in fixtures.items():
+            path = tmp / f"{name}.ipynb"
+            path.write_text(
+                json.dumps(synthetic_notebook(source, outputs, execution_count), indent=2),
+                encoding="utf-8",
+                newline="\n",
+            )
+            audit = audit_notebook(path)
+            codes = {finding.code for finding in audit.findings}
+            if expected_code not in codes:
+                print(
+                    json.dumps(
+                        {
+                            "fixture": name,
+                            "expected_code": expected_code,
+                            "observed_codes": sorted(codes),
+                        },
+                        sort_keys=True,
+                    ),
+                    flush=True,
+                )
+                return 1
+            print(f"negative_gate_fixture_{name}=ok", flush=True)
+    print("notebook_release_gate_self_test=ok", flush=True)
+    print("=== NOTEBOOK RELEASE GATE SELF TEST END ===", flush=True)
+    return 0
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("paths", nargs="*", type=Path, help="Notebook paths to audit.")
@@ -994,11 +1216,14 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--changed-to", default="HEAD", help="Git ref/sha to diff to.")
     parser.add_argument("--allow-empty", action="store_true", help="Return success when notebook discovery finds no notebooks.")
     parser.add_argument("--output-json", type=Path, default=None)
+    parser.add_argument("--self-test", action="store_true", help="Run gate regression tests for generic notebook validation rules.")
     return parser.parse_args()
 
 
 def main() -> int:
     args = parse_args()
+    if args.self_test:
+        return run_self_test()
     if args.all:
         paths = all_notebooks()
     elif args.paths:

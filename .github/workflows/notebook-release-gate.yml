@@ -22,7 +22,9 @@ jobs:
         run: python -m pip install -q pandas
 
       - name: Validate Gate Script
-        run: python -m py_compile scripts/notebook_release_gate.py scripts/scan_repo_secrets.py
+        run: |
+          python -m py_compile scripts/notebook_release_gate.py scripts/scan_repo_secrets.py
+          python scripts/notebook_release_gate.py --self-test
 
       - name: Secret Scan
         run: python scripts/scan_repo_secrets.py
