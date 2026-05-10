@@ -6,8 +6,8 @@ Resume-capable. Salva em data/api_cots.jsonl.
 import json, os, re, sys, time, urllib.request, pandas as pd
 from pathlib import Path
 
-DEEPSEEK_KEY = "sk-bcb0077df2f14e7c9b9eecbf45ae44a5"
-OPENAI_KEY = "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"
+DEEPSEEK_KEY = os.environ.get("DEEPSEEK_API_KEY", "").strip()
+OPENAI_KEY = os.environ.get("OPENAI_API_KEY", "").strip()
 
 def call_deepseek(prompt):
     url = "https://api.deepseek.com/v1/chat/completions"

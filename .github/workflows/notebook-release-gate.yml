@@ -2,27 +2,7 @@ name: Notebook Release Gate
 
 on:
   push:
-    paths:
-      - "**/*.ipynb"
-      - "AGENTS.md"
-      - "scripts/notebook_release_gate.py"
-      - "scripts/build_*_colab.py"
-      - "scripts/analyze_v230_v226_complementarity.py"
-      - "scripts/evaluate_lora_adapter.py"
-      - "scripts/evaluate_lora_adapters_batch.py"
-      - "src/competition_utils.py"
-      - ".github/workflows/notebook-release-gate.yml"
   pull_request:
-    paths:
-      - "**/*.ipynb"
-      - "AGENTS.md"
-      - "scripts/notebook_release_gate.py"
-      - "scripts/build_*_colab.py"
-      - "scripts/analyze_v230_v226_complementarity.py"
-      - "scripts/evaluate_lora_adapter.py"
-      - "scripts/evaluate_lora_adapters_batch.py"
-      - "src/competition_utils.py"
-      - ".github/workflows/notebook-release-gate.yml"
 
 jobs:
   notebook-release-gate:
@@ -38,8 +18,14 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Install Gate Dependencies
+        run: python -m pip install -q pandas
+
       - name: Validate Gate Script
-        run: python -m py_compile scripts/notebook_release_gate.py
+        run: python -m py_compile scripts/notebook_release_gate.py scripts/scan_repo_secrets.py
+
+      - name: Secret Scan
+        run: python scripts/scan_repo_secrets.py
 
       - name: Select Changed Notebooks
         id: changed
@@ -62,10 +48,35 @@ jobs:
             git diff-tree --no-commit-id --name-only -r "${HEAD}" > artifacts/notebook_release_gate/changed_files.txt
           fi
           grep -E '\.ipynb$' artifacts/notebook_release_gate/changed_files.txt > artifacts/notebook_release_gate/changed_notebooks.txt || true
-          if grep -Eq '^(scripts/build_v230_v226_complementarity_colab\.py|scripts/analyze_v230_v226_complementarity\.py|scripts/notebook_release_gate\.py|src/competition_utils\.py|\.github/workflows/notebook-release-gate\.yml)$' artifacts/notebook_release_gate/changed_files.txt; then
-            if [[ -f notebooks/KG1_V230_V226_COMPLEMENTARITY_COLAB.ipynb ]]; then
-              echo notebooks/KG1_V230_V226_COMPLEMENTARITY_COLAB.ipynb >> artifacts/notebook_release_gate/changed_notebooks.txt
+          append_if_exists() {
+            if [[ -f "$1" ]]; then
+              echo "$1" >> artifacts/notebook_release_gate/changed_notebooks.txt
             fi
+          }
+          append_release_notebooks() {
+            append_if_exists notebooks/KG1_V218_DECODE_RESCUE_COLAB.ipynb
+            append_if_exists notebooks/KG1_V219_WEAK_DECODE_AB_COLAB.ipynb
+            append_if_exists notebooks/KG1_V220_PUBLIC_ADAPTER_PROBE_COLAB.ipynb
+            append_if_exists notebooks/KG1_V221_CANDIDATE_REGISTRY_WEAK_AB_COLAB.ipynb
+            append_if_exists notebooks/KG1_V230_V226_COMPLEMENTARITY_COLAB.ipynb
+          }
+          if grep -Eq '^scripts/build_v218_decode_rescue_colab\.py$' artifacts/notebook_release_gate/changed_files.txt; then
+            append_if_exists notebooks/KG1_V218_DECODE_RESCUE_COLAB.ipynb
+          fi
+          if grep -Eq '^scripts/build_v219_weak_decode_ab_colab\.py$' artifacts/notebook_release_gate/changed_files.txt; then
+            append_if_exists notebooks/KG1_V219_WEAK_DECODE_AB_COLAB.ipynb
+          fi
+          if grep -Eq '^scripts/build_v220_public_adapter_probe_colab\.py$' artifacts/notebook_release_gate/changed_files.txt; then
+            append_if_exists notebooks/KG1_V220_PUBLIC_ADAPTER_PROBE_COLAB.ipynb
+          fi
+          if grep -Eq '^scripts/build_v221_candidate_registry_weak_ab_colab\.py$' artifacts/notebook_release_gate/changed_files.txt; then
+            append_if_exists notebooks/KG1_V221_CANDIDATE_REGISTRY_WEAK_AB_COLAB.ipynb
+          fi
+          if grep -Eq '^scripts/build_v230_v226_complementarity_colab\.py$' artifacts/notebook_release_gate/changed_files.txt; then
+            append_if_exists notebooks/KG1_V230_V226_COMPLEMENTARITY_COLAB.ipynb
+          fi
+          if grep -Eq '^(\.gitattributes|AGENTS\.md|scripts/notebook_release_gate\.py|scripts/scan_repo_secrets\.py|scripts/analyze_eval_predictions\.py|scripts/evaluate_lora_adapter\.py|scripts/evaluate_lora_adapters_batch\.py|src/competition_utils\.py|data/v217/|\.github/workflows/notebook-release-gate\.yml)' artifacts/notebook_release_gate/changed_files.txt; then
+            append_release_notebooks
           fi
           sort -u artifacts/notebook_release_gate/changed_notebooks.txt -o artifacts/notebook_release_gate/changed_notebooks.txt
           echo "Changed release-critical files:"

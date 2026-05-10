@@ -23,6 +23,7 @@ from safetensors.torch import load_file, save_file
 
 
 COMPETITION = "nvidia-nemotron-model-reasoning-challenge"
+ALLOW_KAGGLE_SUBMIT = os.environ.get("KG1_ALLOW_KAGGLE_SUBMIT", "0").strip().lower() in {"1", "true", "yes", "on"}
 
 
 def strip_adapter(adapter_dir, mode="smart-strip"):
@@ -154,6 +155,8 @@ if __name__ == "__main__":
     create_zip(stripped_dir, zip_path)
 
     if args.submit:
+        if not ALLOW_KAGGLE_SUBMIT:
+            raise RuntimeError("Kaggle submit is locked. Set KG1_ALLOW_KAGGLE_SUBMIT=1 only for a manually approved submission.")
         submit_kaggle(zip_path, args.desc or f"v50 {args.mode}")
     else:
         print(f"\nReady to submit: {zip_path}")

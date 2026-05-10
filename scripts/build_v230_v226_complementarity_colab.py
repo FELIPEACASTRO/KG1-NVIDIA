@@ -94,6 +94,7 @@ import json
 import os
 import pathlib
 import queue
+import re
 import shutil
 import signal
 import subprocess
@@ -117,11 +118,19 @@ VERSION = 'V230_V226_COMPLEMENTARITY_20260510'
 REPO_URL = os.environ.get('KG1_REPO_URL', 'https://github.com/FELIPEACASTRO/KG1-NVIDIA.git')
 REPO_BRANCH = os.environ.get('KG1_REPO_BRANCH', '__BRANCH__')
 ROOT = pathlib.Path('/content/kg1')
+EXPECTED_REPO_URL = 'https://github.com/FELIPEACASTRO/KG1-NVIDIA.git'
+EXPECTED_REPO_BRANCH = '__BRANCH__'
 
 DRIVE_ROOT = pathlib.Path('/content/drive/MyDrive/KG1_NVIDIA_V230')
 OUT_ROOT = DRIVE_ROOT / 'output_v230_v226_complementarity'
 RUN_ID = os.environ.get('KG1_V230_RUN_ID', time.strftime('%Y%m%dT%H%M%SZ', time.gmtime()))
+if not re.fullmatch(r'[A-Za-z0-9_.-]+', RUN_ID):
+    raise RuntimeError('KG1_V230_RUN_ID contains unsafe characters: ' + repr(RUN_ID))
 ANALYSIS_OUT = OUT_ROOT / 'analysis_v230_v226_complementarity' / RUN_ID
+resolved_out_root = OUT_ROOT.resolve()
+resolved_analysis_out = ANALYSIS_OUT.resolve()
+if not str(resolved_analysis_out).startswith(str(resolved_out_root) + os.sep):
+    raise RuntimeError('ANALYSIS_OUT escaped OUT_ROOT: ' + str(resolved_analysis_out))
 
 V221_BATCH_SUMMARY_JSON = pathlib.Path(os.environ.get(
     'KG1_V230_V221_BATCH_SUMMARY_JSON',
@@ -182,7 +191,10 @@ EXPECTED_V194_TARGET_PARAMETERS = ['mlp.experts.gate_up_proj', 'mlp.experts.down
 
 RUN_TRAIN = os.environ.get('KG1_V230_RUN_TRAIN', '0').strip().lower() in {'1', 'true', 'yes', 'on'}
 RUN_ANALYSIS = os.environ.get('KG1_V230_RUN_ANALYSIS', '1').strip().lower() not in {'0', 'false', 'no', 'off'}
-ALLOW_V226_SUMMARY_SYNTHESIS = os.environ.get('KG1_V230_ALLOW_V226_SUMMARY_SYNTHESIS', '0').strip().lower() in {'1', 'true', 'yes', 'on'}
+ALLOW_V226_SUMMARY_SYNTHESIS = os.environ.get(
+    'KG1_V230_ALLOW_V226_SUMMARY_SYNTHESIS',
+    '1' if V230_DIAGNOSTIC_MODE else '0',
+).strip().lower() in {'1', 'true', 'yes', 'on'}
 RUN_FULL_IF_GATE = False
 ALLOW_KAGGLE_SUBMIT = False
 
@@ -200,6 +212,10 @@ for path in [DRIVE_ROOT, OUT_ROOT, ANALYSIS_OUT]:
 print('VERSION =', VERSION, flush=True)
 print('REPO_URL =', REPO_URL, flush=True)
 print('REPO_BRANCH =', REPO_BRANCH, flush=True)
+if REPO_URL != EXPECTED_REPO_URL:
+    raise RuntimeError('KG1_REPO_URL override is not allowed in V230: ' + REPO_URL)
+if REPO_BRANCH != EXPECTED_REPO_BRANCH:
+    raise RuntimeError('KG1_REPO_BRANCH override is not allowed in V230: ' + REPO_BRANCH)
 print('ROOT =', ROOT, flush=True)
 print('OUT_ROOT =', OUT_ROOT, flush=True)
 print('RUN_ID =', RUN_ID, flush=True)
@@ -422,9 +438,177 @@ def csv_data_rows(path):
             return 0
         return sum(1 for _ in reader)
 
-def per_task_counts_from_report(report):
+def read_csv_dict_rows(path):
+    path = pathlib.Path(path)
+    try:
+        csv.field_size_limit(sys.maxsize)
+    except OverflowError:
+        csv.field_size_limit(2**31 - 1)
+    with path.open('r', encoding='utf-8', errors='replace', newline='') as handle:
+        reader = csv.DictReader(handle)
+        return list(reader.fieldnames or []), list(reader)
+
+def safe_slug(value):
+    return re.sub(r'[^A-Za-z0-9_.-]+', '_', str(value)).strip('._') or 'artifact'
+
+def parse_csv_bool(value):
+    return str(value).strip().lower() in {'1', 'true', 'yes', 'y', 'on'}
+
+def derive_weak_family(row):
+    direct = str(row.get('family') or row.get('task_type') or row.get('type') or '').strip()
+    if direct in {'equation_transform', 'bit_manipulation'}:
+        return direct
+    prompt = str(row.get('prompt') or '').lower()
+    if 'equation' in prompt:
+        return 'equation_transform'
+    if 'bit' in prompt or 'binary' in prompt:
+        return 'bit_manipulation'
+    return direct
+
+def write_csv_dict_rows(path, fieldnames, rows):
+    path = pathlib.Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open('w', encoding='utf-8', newline='') as handle:
+        writer = csv.DictWriter(handle, fieldnames=fieldnames)
+        writer.writeheader()
+        for row in rows:
+            writer.writerow({field: row.get(field, '') for field in fieldnames})
+
+def weak_metrics_from_rows(rows):
+    counts = {
+        'equation_transform': {'total': 0, 'correct': 0, 'truncated': 0},
+        'bit_manipulation': {'total': 0, 'correct': 0, 'truncated': 0},
+    }
+    total = 0
+    correct = 0
+    truncated = 0
+    completion_tokens = 0
+    for row in rows:
+        family = derive_weak_family(row)
+        if family not in counts:
+            continue
+        is_correct = parse_csv_bool(row.get('correct', ''))
+        is_truncated = parse_csv_bool(row.get('truncated', ''))
+        counts[family]['total'] += 1
+        counts[family]['correct'] += int(is_correct)
+        counts[family]['truncated'] += int(is_truncated)
+        total += 1
+        correct += int(is_correct)
+        truncated += int(is_truncated)
+        try:
+            completion_tokens += int(float(row.get('completion_tokens') or row.get('output_tokens') or 0))
+        except Exception:
+            pass
+    return {
+        'total': total,
+        'correct': correct,
+        'accuracy': (correct / total) if total else 0.0,
+        'truncated': truncated,
+        'truncation_rate': (truncated / total) if total else 0.0,
+        'completion_tokens': completion_tokens,
+        'counts': counts,
+    }
+
+def write_synthetic_per_task_csv(path, metrics):
+    rows = []
+    for family, values in metrics['counts'].items():
+        total = int(values['total'])
+        correct = int(values['correct'])
+        truncated = int(values['truncated'])
+        rows.append({
+            'task_type': family,
+            'total': total,
+            'correct': correct,
+            'accuracy': (correct / total) if total else 0.0,
+            'truncated': truncated,
+            'truncation_rate': (truncated / total) if total else 0.0,
+        })
+    write_csv_dict_rows(path, ['task_type', 'total', 'correct', 'accuracy', 'truncated', 'truncation_rate'], rows)
+
+def load_reference_weak_ids_from_v221_batch_summary(path):
+    path = pathlib.Path(path)
+    if not path.exists():
+        print('reference_weak_ids_v221_summary_missing =', path, flush=True)
+        return []
+    try:
+        batch = read_json(path)
+        for row in batch.get('rows', []):
+            if row.get('status') != 'ok':
+                continue
+            report_json = pathlib.Path(str(row.get('report_json') or ''))
+            if not report_json.is_absolute():
+                report_json = path.parent / report_json
+            if not report_json.exists():
+                continue
+            predictions_csv = resolve_predictions_from_report(report_json)
+            fieldnames, rows = read_csv_dict_rows(predictions_csv)
+            ids = [str(item.get('id') or '').strip() for item in rows]
+            ids = [item for item in ids if item]
+            if len(ids) == 315 and len(set(ids)) == 315:
+                print('reference_weak_ids_source =', predictions_csv, flush=True)
+                print('reference_weak_ids_count =', len(ids), flush=True)
+                return ids
+            print('reference_weak_ids_skip =', json.dumps({'predictions_csv': str(predictions_csv), 'ids': len(ids), 'unique_ids': len(set(ids))}, sort_keys=True), flush=True)
+    except Exception as exc:
+        print('reference_weak_ids_error =', repr(exc), flush=True)
+    return []
+
+def materialize_weak315_report(report_path, report, predictions_csv, reference_ids, output_dir):
+    fieldnames, rows = read_csv_dict_rows(predictions_csv)
+    if not fieldnames:
+        raise RuntimeError('prediction CSV has no header: ' + str(predictions_csv))
+    if len(rows) == 315:
+        return pathlib.Path(report_path), rows, False
+    if not reference_ids:
+        raise RuntimeError('cannot filter large V226 report without a 315-row V221 reference id contract')
+    by_id = {}
+    duplicates = 0
+    for row in rows:
+        row_id = str(row.get('id') or '').strip()
+        if not row_id:
+            continue
+        if row_id in by_id:
+            duplicates += 1
+            continue
+        by_id[row_id] = row
+    missing = [row_id for row_id in reference_ids if row_id not in by_id]
+    if duplicates:
+        raise RuntimeError('prediction CSV has duplicate ids: ' + json.dumps({'path': str(predictions_csv), 'duplicates': duplicates}, sort_keys=True))
+    if missing:
+        raise RuntimeError('large V226 report does not cover V221 315-row contract: ' + json.dumps({'path': str(predictions_csv), 'missing_count': len(missing), 'missing_sample': missing[:5]}, sort_keys=True))
+    filtered_rows = [by_id[row_id] for row_id in reference_ids]
+    metrics = weak_metrics_from_rows(filtered_rows)
+    if metrics['total'] != 315:
+        raise RuntimeError('filtered V226 report did not materialize exactly 315 weak rows: ' + json.dumps({'path': str(predictions_csv), 'weak_total': metrics['total']}, sort_keys=True))
+    output_dir = pathlib.Path(output_dir)
+    output_dir.mkdir(parents=True, exist_ok=True)
+    stem = safe_slug(pathlib.Path(report_path).parent.name + '_' + pathlib.Path(report_path).stem)
+    filtered_csv = output_dir / (stem + '_weak315_predictions.csv')
+    filtered_report = output_dir / (stem + '_weak315_eval_report.json')
+    per_task_csv = output_dir / (stem + '_weak315_per_task.csv')
+    write_csv_dict_rows(filtered_csv, fieldnames, filtered_rows)
+    write_synthetic_per_task_csv(per_task_csv, metrics)
+    synthetic_report = dict(report)
+    synthetic_outputs = dict(synthetic_report.get('outputs') or {})
+    synthetic_outputs['predictions_csv'] = filtered_csv.name
+    synthetic_outputs['per_task_csv'] = per_task_csv.name
+    synthetic_report['outputs'] = synthetic_outputs
+    synthetic_report['source_report_json'] = str(report_path)
+    synthetic_report['correct'] = int(metrics['correct'])
+    synthetic_report['accuracy'] = float(metrics['accuracy'])
+    synthetic_report['truncated'] = int(metrics['truncated'])
+    synthetic_report['truncation_rate'] = float(metrics['truncation_rate'])
+    if metrics['completion_tokens']:
+        synthetic_report['completion_tokens'] = int(metrics['completion_tokens'])
+    write_json(filtered_report, synthetic_report)
+    print('synthesis_materialized_weak315_report =', json.dumps({'source_report_json': str(report_path), 'filtered_report_json': str(filtered_report), 'filtered_predictions_csv': str(filtered_csv), 'correct': int(metrics['correct'])}, sort_keys=True), flush=True)
+    return filtered_report, filtered_rows, True
+
+def per_task_counts_from_report(report_path, report):
     per_task_csv = pathlib.Path(str(report.get('outputs', {}).get('per_task_csv', '')))
     counts = {'equation_transform_correct': 0, 'bit_manipulation_correct': 0}
+    if str(per_task_csv) and not per_task_csv.is_absolute():
+        per_task_csv = pathlib.Path(report_path).parent / per_task_csv
     if not per_task_csv.exists():
         return counts
     with per_task_csv.open('r', encoding='utf-8', errors='replace', newline='') as handle:
@@ -460,7 +644,8 @@ def infer_v226_name(report_path, report):
         return fallback_name
     return 'v226_report_' + label
 
-def synthesize_batch_summary_from_reports(output_json, source_roots):
+def synthesize_batch_summary_from_reports(output_json, source_roots, reference_ids=None):
+    reference_ids = list(reference_ids or [])
     report_paths = []
     for root in source_roots:
         root = pathlib.Path(root)
@@ -478,11 +663,24 @@ def synthesize_batch_summary_from_reports(output_json, source_roots):
             report = read_json(report_path)
             predictions_csv = resolve_predictions_from_report(report_path)
             prediction_rows = csv_data_rows(predictions_csv)
+            usable_report_path = report_path
+            usable_rows = None
             if prediction_rows != 315:
-                print('synthesis_skip_report_rows =', json.dumps({'report_json': str(report_path), 'prediction_rows': prediction_rows}, sort_keys=True), flush=True)
-                continue
+                print('synthesis_filter_large_report_start =', json.dumps({'report_json': str(report_path), 'prediction_rows': prediction_rows, 'reference_ids': len(reference_ids)}, sort_keys=True), flush=True)
+                usable_report_path, usable_rows, materialized = materialize_weak315_report(
+                    report_path,
+                    report,
+                    predictions_csv,
+                    reference_ids,
+                    pathlib.Path(output_json).parent / 'v226_synthesized_weak315_reports',
+                )
+                report = read_json(usable_report_path)
+                prediction_rows = csv_data_rows(resolve_predictions_from_report(usable_report_path))
+                if prediction_rows != 315:
+                    print('synthesis_skip_report_rows =', json.dumps({'report_json': str(usable_report_path), 'prediction_rows': prediction_rows}, sort_keys=True), flush=True)
+                    continue
             adapter = str(report.get('inputs', {}).get('adapter') or report.get('adapter_dir') or '')
-            counts = per_task_counts_from_report(report)
+            counts = per_task_counts_from_report(usable_report_path, report)
             row = {
                 'name': infer_v226_name(report_path, report),
                 'adapter': adapter,
@@ -495,7 +693,7 @@ def synthesize_batch_summary_from_reports(output_json, source_roots):
                 'bit_manipulation_correct': counts['bit_manipulation_correct'],
                 'completion_tokens': int(report.get('completion_tokens', 0)),
                 'tokens_per_second': float(report.get('tokens_per_second', 0.0)),
-                'report_json': str(report_path),
+                'report_json': str(usable_report_path),
                 'error': '',
             }
             rows.append(row)
@@ -533,6 +731,7 @@ def resolve_existing_or_synthesize_v226_batch_summary(path):
             return candidate
     if not ALLOW_V226_SUMMARY_SYNTHESIS:
         raise FileNotFoundError('V226 batch summary missing and synthesis disabled: ' + str(path))
+    reference_ids = load_reference_weak_ids_from_v221_batch_summary(V221_BATCH_SUMMARY_JSON)
     return synthesize_batch_summary_from_reports(
         OUT_ROOT / 'v226_synthesized_batch_candidate_summary.json',
         [
@@ -542,6 +741,7 @@ def resolve_existing_or_synthesize_v226_batch_summary(path):
             output_root / 'eval_v226_checkpoint3_weak',
             output_root,
         ],
+        reference_ids=reference_ids,
     )
 
 print('=== V230 HELPERS END ===', flush=True)
@@ -724,7 +924,7 @@ if not V229_ANALYSIS_MANIFEST_JSON.exists():
 try:
     from safetensors import safe_open
 except Exception:
-    run_cmd([sys.executable, '-m', 'pip', 'install', '-q', 'safetensors'], cwd='/content', log_path=OUT_ROOT / 'pip_install_safetensors.log', check=True, timeout_s=300)
+    run_cmd([sys.executable, '-m', 'pip', 'install', '-q', 'safetensors'], cwd='/content', log_path=OUT_ROOT / 'pip_install_safetensors.log', check=True, heartbeat_s=30, timeout_s=300)
     from safetensors import safe_open
 for label, adapter_path in [('V194', V194_ADAPTER), ('V217', V217_ADAPTER), ('V226_BEST', V226_BEST_CHECKPOINT), ('INIT', INIT_ADAPTER_DIR)]:
     print(label, 'adapter path =', adapter_path, 'complete =', is_complete_adapter_dir(adapter_path), flush=True)
@@ -849,7 +1049,8 @@ cmd = [
     '--v229-analysis-manifest-json', str(V229_ANALYSIS_MANIFEST_JSON),
     '--output-dir', str(ANALYSIS_OUT),
     '--label', 'v230_v226_complementarity',
-    '--preferred-baseline', 'v226__v226_best_checkpoint1_observed_191',
+    '--preferred-baseline', 'v226__v226_best_checkpoint1_observed_191,v226__v226_checkpoint_1',
+    '--expected-baseline-adapter', str(V226_BEST_CHECKPOINT),
     '--weak-total-min', str(WEAK_MIN_FOR_FULL),
     '--weak-eq-min', str(WEAK_EQ_MIN_FOR_FULL),
     '--weak-bit-min', str(WEAK_BIT_MIN_FOR_FULL),
@@ -912,8 +1113,9 @@ print('No package and no Kaggle submit can be created in V230.', flush=True)
 if RUN_FULL_IF_GATE or ALLOW_KAGGLE_SUBMIT:
     raise RuntimeError('V230 hard block violated. Kaggle submission is disabled.')
 blocked_artifacts = []
-for pattern in ['*.zip', '*submission*.csv', '*kaggle*.json']:
-    blocked_artifacts.extend(str(path) for path in OUT_ROOT.glob(pattern))
+for pattern in ['*.zip', '*submission*.csv', '*kaggle*.json', 'kaggle.json']:
+    blocked_artifacts.extend(str(path) for path in OUT_ROOT.rglob(pattern))
+blocked_artifacts.extend(str(path) for path in OUT_ROOT.rglob('*') if path.is_symlink())
 if blocked_artifacts:
     raise RuntimeError('V230 output contains package/submission-like artifacts: ' + json.dumps(blocked_artifacts, sort_keys=True))
 router_rows = analysis_manifest.get('router_simulation', [])
@@ -988,7 +1190,7 @@ print('=== V230 FINAL MANIFEST END ===', flush=True)
 def main() -> None:
     notebook = build_notebook()
     NOTEBOOK_PATH.parent.mkdir(parents=True, exist_ok=True)
-    NOTEBOOK_PATH.write_text(json.dumps(notebook, indent=2, ensure_ascii=False), encoding="utf-8")
+    NOTEBOOK_PATH.write_text(json.dumps(notebook, indent=2, ensure_ascii=False), encoding="utf-8", newline="\n")
     print(f"wrote {NOTEBOOK_PATH}")
     print(COLAB_URL)
 

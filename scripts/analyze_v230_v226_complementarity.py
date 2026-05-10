@@ -12,6 +12,7 @@ import argparse
 import csv
 import hashlib
 import json
+import re
 import shutil
 import subprocess
 import sys
@@ -53,12 +54,32 @@ def sha256_file(path: Path) -> str:
     return digest.hexdigest()
 
 
+def file_meta(path: Path) -> dict[str, Any]:
+    path = Path(path)
+    if not path.exists():
+        return {"path": str(path), "exists": False}
+    return {
+        "path": str(path),
+        "exists": True,
+        "bytes": int(path.stat().st_size),
+        "sha256": sha256_file(path),
+    }
+
+
 def sha256_text(value: object) -> str:
     return hashlib.sha256(str(value).encode("utf-8", errors="replace")).hexdigest()
 
 
 def safe_name(value: str) -> str:
     return "".join(ch if ch.isalnum() or ch in ("-", "_") else "_" for ch in str(value))
+
+
+def json_scalar(value: Any) -> Any:
+    if hasattr(value, "item"):
+        value = value.item()
+    if isinstance(value, (str, int, float, bool)) or value is None:
+        return value
+    return str(value)
 
 
 def parse_bool(value: object) -> bool:
@@ -123,6 +144,8 @@ def specs_from_batch_summary(path: Path, source: str) -> list[dict[str, str]]:
         report_json = Path(str(row.get("report_json") or ""))
         if not original_name:
             raise ValueError(f"{path} has an ok row with an empty candidate name")
+        if not report_json.is_absolute():
+            report_json = path.parent / report_json
         if not report_json.exists():
             raise FileNotFoundError(f"{path} has an ok row with missing report_json: {report_json}")
         predictions_csv = resolve_report_predictions(report_json)
@@ -174,6 +197,13 @@ def load_predictions(spec: dict[str, str], allow_rescore_mismatch: bool = False)
         raise ValueError(f"{path} missing required columns: {missing}")
     out = frame.copy()
     out["id"] = out["id"].astype(str)
+    empty_required: dict[str, int] = {}
+    for column in ["id", "prompt", "answer", "raw_output"]:
+        empty_count = int(out[column].astype(str).str.strip().eq("").sum())
+        if empty_count:
+            empty_required[column] = empty_count
+    if empty_required:
+        raise RuntimeError(f"{path} has empty required fields: " + json.dumps(empty_required, sort_keys=True))
     duplicate_ids = int(out["id"].duplicated().sum())
     if duplicate_ids:
         raise RuntimeError(f"{path} has duplicate ids after string normalization: {duplicate_ids}")
@@ -190,6 +220,9 @@ def load_predictions(spec: dict[str, str], allow_rescore_mismatch: bool = False)
             )
     else:
         out["family"] = derived_family
+    non_weak_rows = int((~out["family"].isin(WEAK_FAMILIES)).sum())
+    if non_weak_rows:
+        raise RuntimeError(f"{path} contains {non_weak_rows} non-weak rows; V230 requires exactly the weak 315-row slice")
     out = out[out["family"].isin(WEAK_FAMILIES)].copy()
     out["answer"] = out["answer"].astype(str)
     out["prompt"] = out["prompt"].astype(str)
@@ -222,6 +255,7 @@ def load_predictions(spec: dict[str, str], allow_rescore_mismatch: bool = False)
         "source": spec["source"],
         "predictions_csv": str(path),
         "predictions_csv_sha256": sha256_file(path),
+        "input_rows": int(len(frame)),
         "rows": int(len(out)),
         "family_counts": {str(k): int(v) for k, v in out["family"].value_counts().to_dict().items()},
         "correct_mismatch_vs_csv": mismatch,
@@ -416,8 +450,10 @@ def family_calibration_summary(
 
 def pick_baseline(summary_df: pd.DataFrame, preferred: str, allow_fallback: bool = False) -> str:
     candidates = summary_df["candidate"].astype(str).tolist()
-    if preferred in candidates:
-        return preferred
+    preferred_names = [item.strip() for item in re.split(r"[,|]", str(preferred)) if item.strip()]
+    for preferred_name in preferred_names:
+        if preferred_name in candidates:
+            return preferred_name
     if not allow_fallback:
         raise RuntimeError(f"required preferred baseline was not found: {preferred}")
     contains = [
@@ -561,7 +597,7 @@ def simulate_routers(
             "baseline_truncated": baseline_trunc,
             "best_any": family_best_any[family],
             "no_loss": family_no_loss[family],
-            "no_loss_row": {k: (int(v) if hasattr(v, "item") else v) for k, v in chosen_row.items()},
+            "no_loss_row": {k: json_scalar(v) for k, v in chosen_row.items()},
         }
 
     frames: list[pd.DataFrame] = []
@@ -770,6 +806,11 @@ def synthetic_prediction_rows(candidate: str, mutation: str | None = None) -> li
             prompt = "Solve this bit manipulation puzzle with an 8-bit binary value. Changed row zero."
         if mutation == "family_mismatch" and candidate == "baseline" and index == 0:
             declared_family = "equation_transform"
+        if mutation == "empty_required_field" and candidate == "baseline" and index == 0:
+            answer = ""
+            prediction = ""
+            raw_output = box_answer(prediction)
+            correct = True
         rows.append(
             {
                 "id": f"weak_{index:03d}",
@@ -779,6 +820,19 @@ def synthetic_prediction_rows(candidate: str, mutation: str | None = None) -> li
                 "raw_output": raw_output,
                 "correct": str(correct),
                 "type": declared_family,
+                "truncated": "False",
+            }
+        )
+    if mutation == "extra_weak_row" and candidate == "baseline":
+        rows.append(
+            {
+                "id": "weak_extra_999",
+                "prompt": "Solve this bit manipulation puzzle with an 8-bit binary value. Extra row.",
+                "answer": "00101010",
+                "prediction": "00101010",
+                "raw_output": box_answer("00101010"),
+                "correct": "True",
+                "type": "bit_manipulation",
                 "truncated": "False",
             }
         )
@@ -913,6 +967,20 @@ def run_self_test() -> int:
         )
         run_synthetic_cli_case(
             root,
+            "empty_required_field",
+            mutation="empty_required_field",
+            expect_ok=False,
+            expected_message="empty required fields",
+        )
+        run_synthetic_cli_case(
+            root,
+            "extra_weak_row",
+            mutation="extra_weak_row",
+            expect_ok=False,
+            expected_message="weak row set differs from shared 315-row contract",
+        )
+        run_synthetic_cli_case(
+            root,
             "wrong_contract_hash",
             extra_args=["--expected-shared-row-contract-sha256", "definitely_wrong"],
             expect_ok=False,
@@ -951,6 +1019,7 @@ def main() -> int:
     parser.add_argument("--weak-trunc-max", type=int, default=3)
     parser.add_argument("--expected-baseline-correct", type=int, default=191)
     parser.add_argument("--expected-baseline-rows", type=int, default=315)
+    parser.add_argument("--expected-baseline-adapter", default="")
     parser.add_argument("--expected-shared-row-contract-sha256", default="")
     parser.add_argument("--require-shared-row-contract-sha256", action="store_true")
     parser.add_argument("--allow-baseline-fallback", action="store_true")
@@ -976,6 +1045,7 @@ def main() -> int:
     print("preferred_baseline =", args.preferred_baseline, flush=True)
     print("expected_baseline_correct =", args.expected_baseline_correct, flush=True)
     print("expected_baseline_rows =", args.expected_baseline_rows, flush=True)
+    print("expected_baseline_adapter =", args.expected_baseline_adapter, flush=True)
     print("expected_shared_row_contract_sha256 =", args.expected_shared_row_contract_sha256, flush=True)
     print("required_shared_row_contract_sha256 =", args.require_shared_row_contract_sha256, flush=True)
     print("allow_baseline_fallback =", args.allow_baseline_fallback, flush=True)
@@ -1026,6 +1096,29 @@ def main() -> int:
     print("shared_row_count =", len(shared_ids), flush=True)
     if len(shared_ids) != 315:
         raise RuntimeError(f"expected exactly 315 shared weak rows, got {len(shared_ids)}")
+    for meta in load_meta:
+        candidate = str(meta["candidate"])
+        candidate_ids = id_sets[candidate]
+        extra_ids = sorted(candidate_ids - shared_ids)
+        missing_ids = sorted(shared_ids - candidate_ids)
+        if extra_ids or missing_ids:
+            raise RuntimeError(
+                f"{candidate} weak row set differs from shared 315-row contract: "
+                + json.dumps(
+                    {
+                        "extra_count": len(extra_ids),
+                        "extra_sample": extra_ids[:5],
+                        "missing_count": len(missing_ids),
+                        "missing_sample": missing_ids[:5],
+                    },
+                    sort_keys=True,
+                )
+            )
+        if int(meta.get("rows", -1)) != 315 or int(meta.get("input_rows", -1)) != 315:
+            raise RuntimeError(
+                f"{candidate} must contain exactly 315 weak rows; "
+                f"input_rows={meta.get('input_rows')}, weak_rows={meta.get('rows')}"
+            )
     validate_shared_row_contract(frames, load_meta, shared_ids)
     observed_contract_hashes = {str(item["shared_row_contract_sha256"]) for item in load_meta}
     if len(observed_contract_hashes) != 1:
@@ -1058,6 +1151,20 @@ def main() -> int:
     baseline = pick_baseline(summary_df, args.preferred_baseline, allow_fallback=bool(args.allow_baseline_fallback))
     print("resolved_baseline =", baseline, flush=True)
     baseline_summary = summary_df[summary_df["candidate"] == baseline].iloc[0].to_dict()
+    baseline_specs = [spec for spec in specs if spec["name"] == baseline]
+    if not baseline_specs:
+        raise RuntimeError("resolved baseline spec missing: " + baseline)
+    baseline_spec = baseline_specs[0]
+    if str(args.expected_baseline_adapter).strip():
+        expected_adapter = Path(str(args.expected_baseline_adapter)).as_posix()
+        observed_adapter = Path(str(baseline_spec.get("adapter") or "")).as_posix()
+        if observed_adapter != expected_adapter:
+            raise RuntimeError(
+                "baseline adapter mismatch: expected "
+                + expected_adapter
+                + ", got "
+                + observed_adapter
+            )
     if args.expected_baseline_correct >= 0 and as_int(baseline_summary.get("correct")) != args.expected_baseline_correct:
         raise RuntimeError(
             f"baseline correct mismatch: expected {args.expected_baseline_correct}, got {as_int(baseline_summary.get('correct'))}"
@@ -1107,6 +1214,18 @@ def main() -> int:
     misses_df.to_csv(paths["baseline_miss_hits_csv"], index=False)
     equation_misses_df.to_csv(paths["equation_miss_pack_csv"], index=False)
     bit_misses_df.to_csv(paths["bit_miss_pack_csv"], index=False)
+    output_artifact_hashes = {name: file_meta(path) for name, path in paths.items() if name != "manifest_json"}
+    input_artifact_hashes: dict[str, Any] = {
+        "v221_batch_summary_json": file_meta(args.v221_batch_summary_json) if str(args.v221_batch_summary_json) else {},
+        "v226_batch_summary_json": file_meta(args.v226_batch_summary_json),
+        "v229_analysis_manifest_json": file_meta(args.v229_analysis_manifest_json)
+        if v229_path_text not in {"", "."}
+        else {},
+        "candidate_reports": {
+            spec["name"]: file_meta(Path(spec["report_json"])) if spec.get("report_json") else {}
+            for spec in specs
+        },
+    }
 
     manifest = {
         "generated_at_utc": utc_now(),
@@ -1118,6 +1237,7 @@ def main() -> int:
             "preferred_baseline": args.preferred_baseline,
             "expected_baseline_correct": int(args.expected_baseline_correct),
             "expected_baseline_rows": int(args.expected_baseline_rows),
+            "expected_baseline_adapter": str(args.expected_baseline_adapter),
             "expected_shared_row_contract_sha256": str(args.expected_shared_row_contract_sha256),
             "required_shared_row_contract_sha256": bool(args.require_shared_row_contract_sha256),
             "allow_baseline_fallback": bool(args.allow_baseline_fallback),
@@ -1127,6 +1247,7 @@ def main() -> int:
         "candidate_count": len(summary_df),
         "candidate_source_counts": source_counts,
         "candidate_specs": specs,
+        "input_artifact_hashes": input_artifact_hashes,
         "load_meta": load_meta,
         "resolved_baseline": baseline,
         "observed_shared_row_contract_sha256": observed_shared_row_contract_sha256,
@@ -1139,6 +1260,7 @@ def main() -> int:
         "family_calibration_summary": calibration_df.to_dict(orient="records"),
         "router_simulation": router_df.to_dict(orient="records"),
         "outputs": {name: str(path) for name, path in paths.items()},
+        "output_artifact_hashes": output_artifact_hashes,
     }
     write_json(paths["manifest_json"], manifest)
 

@@ -25,6 +25,7 @@ from __future__ import annotations
 import argparse
 import ast
 import hashlib
+import importlib.util
 import json
 import re
 import subprocess
@@ -281,13 +282,22 @@ V230_REQUIRED_FILES = [
     "scripts/notebook_release_gate.py",
     "src/competition_utils.py",
 ]
+RELEASE_NOTEBOOK_RELS = [
+    V218_NOTEBOOK_REL,
+    V219_NOTEBOOK_REL,
+    V220_NOTEBOOK_REL,
+    V221_NOTEBOOK_REL,
+    V230_NOTEBOOK_REL,
+]
 
 V230_REQUIRED_SNIPPETS = {
     "cpu-only purpose": "V230 CPU-only path does not install vLLM",
     "diagnostic mode explicit": "V230_DIAGNOSTIC_MODE",
     "diagnostic release block": "V230 diagnostic mode is not a release or submission authorization",
-    "v226 synthesis disabled default": "KG1_V230_ALLOW_V226_SUMMARY_SYNTHESIS', '0'",
+    "v226 diagnostic synthesis default": "'1' if V230_DIAGNOSTIC_MODE else '0'",
     "v226 preferred baseline": "v226__v226_best_checkpoint1_observed_191",
+    "v226 canonical baseline alias": "v226__v226_checkpoint_1",
+    "v226 baseline adapter check": "--expected-baseline-adapter",
     "v226 known weak total": "KNOWN_V226_WEAK_TOTAL = 191",
     "mandatory analysis": "V230 complementarity analysis is mandatory",
     "analysis complete": "'analysis_complete': True",
@@ -305,6 +315,8 @@ V230_REQUIRED_SNIPPETS = {
     "silent subprocess queue": "output_queue = queue.Queue()",
     "silent subprocess reader": "threading.Thread",
     "strict prediction fallback": "ambiguous prediction CSV fallback",
+    "v226 weak315 materialization": "materialize_weak315_report",
+    "v221 reference id contract": "load_reference_weak_ids_from_v221_batch_summary",
     "prediction sha log": "prediction_sha256",
     "hard submit false": "ALLOW_KAGGLE_SUBMIT = False",
     "no package submit": "No package and no Kaggle submit can be created in V230.",
@@ -479,6 +491,18 @@ def audit_logging_and_commands(code_text: str, findings: list[Finding]) -> None:
         add(findings, "error", "raw_subprocess_without_wrapper", "use run_cmd so command, log, rc, and heartbeat are visible")
 
 
+def audit_submit_lock(text: str, findings: list[Finding]) -> None:
+    for banned in BANNED_SNIPPETS:
+        if banned in text:
+            add(findings, "error", "banned_snippet_present", banned)
+    if "kaggle competitions submit" in text:
+        add(findings, "error", "banned_submit_command_present", "kaggle competitions submit")
+    if "ALLOW_KAGGLE_SUBMIT" not in text:
+        add(findings, "error", "hard_submit_lock_missing", "missing ALLOW_KAGGLE_SUBMIT hard lock")
+    elif "ALLOW_KAGGLE_SUBMIT = False" not in text and "ALLOW_KAGGLE_SUBMIT=False" not in text:
+        add(findings, "error", "hard_submit_lock_not_false", "ALLOW_KAGGLE_SUBMIT must be False")
+
+
 def audit_training_eval_contract(text: str, findings: list[Finding]) -> None:
     if not is_training_or_eval_notebook(text):
         return
@@ -502,13 +526,6 @@ def audit_training_eval_contract(text: str, findings: list[Finding]) -> None:
         ]
         if train_pos >= 0 and call_positions and min(call_positions) < train_pos:
             add(findings, "error", "vllm_eval_before_train", "vLLM install/import must happen after training")
-    for banned in BANNED_SNIPPETS:
-        if banned in text:
-            add(findings, "error", "banned_snippet_present", banned)
-    if "ALLOW_KAGGLE_SUBMIT" not in text:
-        add(findings, "error", "hard_submit_lock_missing", "missing ALLOW_KAGGLE_SUBMIT hard lock")
-    elif "ALLOW_KAGGLE_SUBMIT = False" not in text and "ALLOW_KAGGLE_SUBMIT=False" not in text:
-        add(findings, "error", "hard_submit_lock_not_false", "ALLOW_KAGGLE_SUBMIT must be False")
 
 
 def audit_v218_decode_rescue_contract(path: Path, notebook: dict[str, Any], text: str, findings: list[Finding]) -> None:
@@ -839,6 +856,7 @@ def audit_v230_v226_complementarity_contract(path: Path, notebook: dict[str, Any
         "strict ambiguous fallback": "ambiguous prediction CSV fallback",
         "required baseline missing": "required preferred baseline was not found",
         "baseline correct expected": "--expected-baseline-correct",
+        "baseline adapter expected": "--expected-baseline-adapter",
         "baseline fallback opt in": "--allow-baseline-fallback",
         "rescore mismatch opt in": "--allow-rescore-mismatch",
         "manifest load meta": '"load_meta": load_meta',
@@ -879,16 +897,31 @@ def audit_v230_v226_complementarity_contract(path: Path, notebook: dict[str, Any
         "v221 nonempty gate": "V221 batch summary has no ok candidates.",
         "preferred v226 correct gate": "Required V226 baseline correct count mismatch",
         "expected row contract cli": "--expected-shared-row-contract-sha256",
+        "baseline adapter cli": "--expected-baseline-adapter",
         "required row contract release": "--require-shared-row-contract-sha256",
         "diagnostic release block": "V230 diagnostic mode is not a release or submission authorization",
-        "synthesis disabled default": "KG1_V230_ALLOW_V226_SUMMARY_SYNTHESIS', '0'",
+        "diagnostic synthesis default": "'1' if V230_DIAGNOSTIC_MODE else '0'",
         "runtime analyzer self test": "v230_analyzer_self_test.log",
         "v229 required": "raise FileNotFoundError(V229_ANALYSIS_MANIFEST_JSON)",
         "relative prediction path": "direct_path = report_json.parent / direct_path",
+        "v226 weak315 materialization": "materialize_weak315_report",
+        "v221 reference id contract": "load_reference_weak_ids_from_v221_batch_summary",
     }
     for name, snippet in builder_snippets.items():
         if snippet not in builder_text:
             add(findings, "error", "v230_builder_contract_missing", name)
+    if builder.exists():
+        try:
+            spec = importlib.util.spec_from_file_location("kg1_v230_builder_gate", builder)
+            if spec is None or spec.loader is None:
+                raise RuntimeError("could not load builder module spec")
+            module = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(module)
+            generated = module.build_notebook()
+            if generated != notebook:
+                add(findings, "error", "v230_builder_notebook_mismatch", "builder output differs from committed notebook")
+        except Exception as exc:
+            add(findings, "error", "v230_builder_notebook_compare_failed", repr(exc))
 
 
 def audit_notebook(path: Path) -> NotebookAudit:
@@ -908,6 +941,7 @@ def audit_notebook(path: Path) -> NotebookAudit:
     text = "\n".join(markdown_cells + code_cells)
     if is_generated_colab(path, notebook, text):
         audit_colab_urls(path, text, findings)
+        audit_submit_lock(text, findings)
         audit_logging_and_commands("\n".join(code_cells), findings)
         audit_training_eval_contract(text, findings)
         audit_v218_decode_rescue_contract(path, notebook, text, findings)
@@ -1000,7 +1034,7 @@ def main() -> int:
     }
     if args.output_json is not None:
         args.output_json.parent.mkdir(parents=True, exist_ok=True)
-        args.output_json.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+        args.output_json.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8", newline="\n")
     print(json.dumps(report, indent=2, sort_keys=True))
     return 0 if report["ok"] else 1
 

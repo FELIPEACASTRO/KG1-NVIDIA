@@ -16,9 +16,9 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 # ============================================================
 # API KEYS
 # ============================================================
-GEMINI_KEY = os.environ.get("GEMINI_API_KEY", "AIzaSyAoPjfzI5SatMLv0HRCxVdAyB-4VW-rm3s")
-DEEPSEEK_KEY = os.environ.get("DEEPSEEK_API_KEY", "sk-bcb0077df2f14e7c9b9eecbf45ae44a5")
-OPENAI_KEY = os.environ.get("OPENAI_API_KEY", "sk-proj-v00XOfMi0I_YsShv8NXmLocErLAOM7Iax8CGjz0CMiAJwOyXxshPdBGE2oK4Cz8GJwjokUzPDLVT3BlbkFJvKGe6ZIjS3nIphip16siklEzgM-aj5ZzDjINzm1IATjDrPQpf9xbDqInXYPWa_J2eekeJqWHEA")
+GEMINI_KEY = os.environ.get("GEMINI_API_KEY", "").strip()
+DEEPSEEK_KEY = os.environ.get("DEEPSEEK_API_KEY", "").strip()
+OPENAI_KEY = os.environ.get("OPENAI_API_KEY", "").strip()
 
 # ============================================================
 # PROMPT TEMPLATE

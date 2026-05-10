@@ -15,10 +15,10 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 # ============================================================
 # API KEYS
 # ============================================================
-DEEPSEEK_KEY = "sk-bcb0077df2f14e7c9b9eecbf45ae44a5"
-OPENAI_KEY = "sk-proj-v00XOfMi0I_YsShv8NXmLocErLAOM7Iax8CGjz0CMiAJwOyXxshPdBGE2oK4Cz8GJwjokUzPDLVT3BlbkFJvKGe6ZIjS3nIphip16siklEzgM-aj5ZzDjINzm1IATjDrPQpf9xbDqInXYPWa_J2eekeJqWHEA"
-GEMINI_KEY = "AIzaSyAoPjfzI5SatMLv0HRCxVdAyB-4VW-rm3s"
-GROK_KEY = "xai-oabRDoBcQ98p6Npzvfy9zzZrbd3W3ewCIbQ6i0YhnlpAtiudhGK8uHRVn5yV1lSguDZu5PZSNiOJZiHQ"
+DEEPSEEK_KEY = os.environ.get("DEEPSEEK_API_KEY", "").strip()
+OPENAI_KEY = os.environ.get("OPENAI_API_KEY", "").strip()
+GEMINI_KEY = os.environ.get("GEMINI_API_KEY", "").strip()
+GROK_KEY = os.environ.get("XAI_API_KEY", "").strip()
 
 # ============================================================
 # PROMPTS ESPECIALIZADOS POR FAMILIA
