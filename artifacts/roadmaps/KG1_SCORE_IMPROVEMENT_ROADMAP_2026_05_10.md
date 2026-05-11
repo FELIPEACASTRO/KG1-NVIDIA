@@ -4410,6 +4410,68 @@ Achado P1 novo: `nvidia/Nemotron-RL-ReasoningGym-v1`.
   - classificar por subtipo KG1 (`bitwise_hex_signed`, `bitwise_xor_logic`, `base_conversion`, `equation_linear`, `equation_symbolic`, `cryptarithm`);
   - primeiro medir ganho em solver/verifier local; GPU somente se houver evidencia de `losses=0` e ganho sobre V275.
 
+Fonte upstream adicionada: `https://github.com/open-thought/reasoning-gym`.
+
+- Evidencia da pagina GitHub/README:
+  - repositorio `open-thought/reasoning-gym`, Apache-2.0, aproximadamente `1.4k` stars e `119` forks no momento da auditoria;
+  - commit auditado localmente via clone raso: `49b07130b3fcd12f2d064bba7c43869543a0e7e7`;
+  - biblioteca Python de geradores procedurais e ambientes de raciocinio com rewards verificaveis;
+  - galeria com `105` datasets, cobrindo algebra, arithmetic, computation, cognition, geometry, graph theory, logic e games;
+  - interface principal: `create_dataset(...)`, `score_answer(...)`, `get_score_answer_fn(...)`;
+  - scoring cascade com normalizacao LaTeX, string match, float match e `math_match` opcional via `math-verify`.
+- Modulos upstream diretamente relevantes inspecionados:
+  - `reasoning_gym/arithmetic/bitwise_arithmetic.py`: gera expressoes hexadecimais com `+`, `-`, `*`, `<<`, `>>`; aceita resposta decimal ou hex via `int(..., 0)`; util para `bitwise_hex_signed`;
+  - `reasoning_gym/arithmetic/count_bits.py`: conta bits `1`; util para microfixtures de bit counting;
+  - `reasoning_gym/algorithmic/base_conversion.py`: converte bases `2..36`; util para `numeral_system` e como subcaso de bit/binario;
+  - `reasoning_gym/algorithmic/binary_alternation.py`: swaps minimos para string binaria alternante; util para subfamilia binaria;
+  - `reasoning_gym/logic/circuit_logic.py`: gera diagramas logicos com verificacao exata; util para XOR/logic probes;
+  - `reasoning_gym/algebra/simple_equations.py`: equacoes lineares com uma variavel e operadores `+`, `-`, `*`; util para `equation_numeric_operator`;
+  - `reasoning_gym/algorithmic/cryptarithm.py`: solver/verifier aceita qualquer mapeamento valido, nao apenas answer armazenado; util para `equation_symbolic`;
+  - `reasoning_gym/algebra/polynomial_multiplication.py`: usa `sympy.parse_expr` para equivalencia de polinomios; util como referencia de verifier simbolico;
+  - `reasoning_gym/algorithmic/manipulate_matrix.py` e `reasoning_gym/cognition/modulo_grid.py`: uteis apenas se voltarmos a transformation/grid, nao prioridade imediata.
+- Ponto critico para KG1:
+  - O dataset HF `nvidia/Nemotron-RL-ReasoningGym-v1` e um snapshot de exemplos; o repo upstream e melhor para gerar probes parametrizados, reproduziveis por seed e com verificador local.
+  - O treino RL do proprio repo usa `verl`, vLLM e multi-GPU; isso fica bloqueado por FinOps. Nao e rota correta para agora.
+  - A rota correta e importar ou vendorizar minimamente somente os modulos relevantes, sem instalar dependencias pesadas, e executar fixtures CPU-only contra nossos miss-packs.
+- Ajuste no plano V281/V282:
+  - V281 deve registrar `reasoning-gym` upstream commit, dataset names, configs/seeds e hash dos exemplos gerados;
+  - V282 deve usar `score_answer`/equivalentes locais para validar candidatos e reduzir falsos negativos de formato;
+  - qualquer patch de verifier deve provar em weak known: `bit>=136/160`, `equation>=60/155`, `trunc=0`, `losses=0` contra V275 antes de qualquer HF GPU job.
+
+Validacao adicional via Hugging Face Datasets Server, solicitada em 2026-05-11:
+
+- Endpoints executados com `curl.exe` e arquivos temporarios removidos apos analise:
+  - `https://datasets-server.huggingface.co/first-rows?dataset=nvidia%2FNemotron-RL-ReasoningGym-v1&config=default&split=train`
+  - `https://datasets-server.huggingface.co/splits?dataset=nvidia%2FNemotron-RL-ReasoningGym-v1`
+- Evidencia dos arquivos temporarios:
+  - `first_rows.json`: `197835` bytes, SHA256 `c6f3fcbd3dbeff8f857ada441200ab61bcbeab5f89bcae2da714ca49fe8ab097`;
+  - `splits.json`: `121` bytes, SHA256 `8003093aed838eb5791f7629898f585393f3d7492a0f516432b8bf44ffd7c0d9`.
+- Resultado de `splits`:
+  - unico split publicado: `train`;
+  - `pending=[]`;
+  - `failed=[]`.
+- Schema confirmado em `first-rows`:
+  - `responses_create_params`;
+  - `question`;
+  - `answer`;
+  - `metadata`;
+  - `agent_ref`;
+  - `uuid`;
+  - `license`.
+- Amostra retornada: `92` primeiras linhas. Fontes relevantes presentes ja nessa amostra:
+  - `cryptarithm`: `3`;
+  - `simple_equations`: `3`;
+  - `base_conversion`: `2`;
+  - `bitwise_arithmetic`: `2`;
+  - `circuit_logic`: `1`;
+  - `manipulate_matrix`: `1`;
+  - alem de `basic_arithmetic`, `number_format`, `gsm_symbolic` e outras fontes auxiliares.
+- Conclusao operacional:
+  - O endpoint de `first-rows` e suficiente para gate de schema e smoke test sem baixar o JSONL completo.
+  - V281 deve primeiro chamar `splits` e `first-rows`; se schema/split/licenca divergirem, abortar antes de qualquer materializacao.
+  - Apenas depois desse gate leve deve fazer streaming do `data/train.jsonl` para filtro/dedupe.
+  - Nada desses endpoints muda o bloqueio de GPU: continuam sendo insumos de triagem/verifier CPU, nao autorizacao de treino.
+
 Achados P2/P3 novos:
 
 - `nvidia/Nemotron-3-Nano-Omni-30B-A3B-Reasoning-BF16`, `unsloth/NVIDIA-Nemotron-3-Nano-Omni-30B-A3B-Reasoning`, `nvidia/Nemotron-3-Nano-Omni-30B-A3B-Reasoning-FP8`, `nvidia/Nemotron-3-Nano-Omni-30B-A3B-Reasoning-NVFP4`:
