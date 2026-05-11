@@ -3401,9 +3401,33 @@ Diff linha a linha V255 vs V256:
   - `8740ed31`: V194 acerta `01101000` onde V226 erra `01111000`.
 - Conclusao: V226 checkpoint-1 deve ser mantido como initializer forte por historico Drive, mas nao trouxe ganho observavel sobre V194 no contrato HF V221. A proxima melhoria precisa atacar `equation_transform`, especialmente simbolico/misto.
 
+Diff Drive vs HF V221-contract:
+
+- Artefatos locais:
+  - `artifacts/hf_eval_diffs/DRIVE_VS_HF_V221CONTRACT_DIFF_SUMMARY_20260511.md`
+  - `artifacts/hf_eval_diffs/drive_vs_hf_v221contract_diff_summary_20260511.json`
+  - `artifacts/hf_eval_diffs/drive_v221_v194_vs_hf_v255_v194_family_delta_20260511.csv`
+  - `artifacts/hf_eval_diffs/drive_v221_v194_vs_hf_v255_v194_correctness_deltas_20260511.csv`
+  - `artifacts/hf_eval_diffs/drive_v226_vs_hf_v256_v226_family_delta_20260511.csv`
+  - `artifacts/hf_eval_diffs/drive_v226_vs_hf_v256_v226_correctness_deltas_20260511.csv`
+- Drive V221 V194 vs HF V255 V194:
+  - IDs alinhados: `315/315`.
+  - Predicoes diferentes: `14`.
+  - Mudancas de corretude: `5`.
+  - `equation_transform`: Drive `54`, HF `56`, net `+2` HF.
+  - `bit_manipulation`: Drive `136`, HF `135`, net `-1` HF, truncation diff `1`.
+- Drive V226 vs HF V256 V226:
+  - IDs alinhados: `315/315`.
+  - Predicoes diferentes: `11`.
+  - Mudancas de corretude: `4`.
+  - `equation_transform`: Drive `55`, HF `56`, net `+1` HF.
+  - `bit_manipulation`: Drive `136`, HF `135`, net `-1` HF, truncation diff `1`.
+- Interpretacao: a diferenca HF/Drive e pequena e favorece levemente equation, mas custa bit e truncation. Nao e melhoria robusta nem deployable; e evidencia de sensibilidade operacional do contrato longo. Para promocao, o gate deve continuar exigindo total `>=193`, equation `>=60`, bit `>=133`, trunc `<=3`, com preferencia por bit `>=136` como guardrail interno.
+
 Regra de preservacao dos artefatos historicos:
 
 - Muitos arquivos do Drive e dos notebooks anteriores participaram da trajetoria ate o score amplo `0.86`. Eles nao devem ser apagados por tamanho ou idade sem classificacao previa.
+- Observacao operacional: varios artefatos analisados agora foram efetivamente usados para chegar ao score `0.86`; portanto a regra padrao e preservar, auditar e publicar manifest, nao limpar.
 - Antes de qualquer limpeza, classificar cada artefato como:
   - `P0_keep_repro`: peso, prediction CSV, report, manifest, dataset ou notebook que reproduz ou explica scores `0.86`, `190-191/315`, V207A, V221, V226, V230 ou V255.
   - `P1_keep_audit`: logs, CSVs intermediarios e notebooks que ajudam a auditar contrato de prompt, extractor, row contract, hashes ou regressao.
@@ -3420,6 +3444,6 @@ Validacoes:
 
 Proximo passo:
 
-1. Comparar V255/V256 contra os reports Drive V221/V226 para identificar se a diferenca HF (`equation 56`, `bit 135`, trunc `1`) vem de runtime/vLLM/extractor ou de artefato.
-2. Como V255/V256 nao melhoram equation entre si, priorizar dados/regras de `equation_transform` e usar bit apenas como guardrail.
-3. So depois usar `v226_checkpoint1` como initializer para qualquer smoke training curto com V249/novos dados.
+1. Como V255/V256 nao melhoram equation entre si, priorizar dados/regras de `equation_transform` e usar bit apenas como guardrail.
+2. Revisar os artefatos V249/V250/V242 ja publicados no HF e escolher a menor execucao de treino smoke que tenha chance real de subir `equation_transform` sem derrubar bit.
+3. Usar `v226_checkpoint1` como initializer apenas se o gate preflight confirmar dataset sem leakage, hashes, contrato de tokenizacao e estimativa de custo.

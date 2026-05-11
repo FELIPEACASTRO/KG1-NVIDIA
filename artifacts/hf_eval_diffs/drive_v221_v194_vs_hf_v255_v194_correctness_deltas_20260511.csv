@@ -1,0 +1,6 @@
+id,type,answer_drive,prediction_drive,correct_drive,truncated_drive,answer_hf,prediction_hf,correct_hf,truncated_hf,correct_delta_hf_minus_drive
+4ada9150,bit_manipulation,01111011,01111011,True,False,01111011,01111111,False,False,-1
+4bb8c6cd,equation_transform,]}\!,],False,False,]}\!,]}\!,True,False,1
+56343b77,equation_transform,711,91,False,False,711,711,True,False,1
+59bee375,bit_manipulation,10010101,10010101,True,False,10010101,2,False,True,-1
+8740ed31,bit_manipulation,01101000,01111000,False,False,01101000,01101000,True,False,1

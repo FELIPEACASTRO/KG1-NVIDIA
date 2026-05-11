@@ -1,0 +1,117 @@
+{
+  "comparisons": {
+    "drive_v221_v194_vs_hf_v255_v194": {
+      "correct_diff_rows": 5,
+      "correctness_deltas_csv": "artifacts\\hf_eval_diffs\\drive_v221_v194_vs_hf_v255_v194_correctness_deltas_20260511.csv",
+      "family_delta": [
+        {
+          "drive_correct": 136,
+          "hf_correct": 135,
+          "hf_gain_rows": 1,
+          "hf_loss_rows": 2,
+          "net_hf_minus_drive": -1,
+          "prediction_diff_rows": 4,
+          "rows": 160,
+          "truncated_diff_rows": 1,
+          "type": "bit_manipulation"
+        },
+        {
+          "drive_correct": 54,
+          "hf_correct": 56,
+          "hf_gain_rows": 2,
+          "hf_loss_rows": 0,
+          "net_hf_minus_drive": 2,
+          "prediction_diff_rows": 10,
+          "rows": 155,
+          "truncated_diff_rows": 0,
+          "type": "equation_transform"
+        }
+      ],
+      "family_delta_csv": "artifacts\\hf_eval_diffs\\drive_v221_v194_vs_hf_v255_v194_family_delta_20260511.csv",
+      "hf_gain_rows": 3,
+      "hf_loss_rows": 2,
+      "merge_counts": {
+        "both": 315,
+        "left_only": 0,
+        "right_only": 0
+      },
+      "prediction_diff_rows": 14,
+      "rows_drive": 315,
+      "rows_hf": 315,
+      "rows_joined": 315,
+      "truncated_diff_rows": 1
+    },
+    "drive_v226_vs_hf_v256_v226": {
+      "correct_diff_rows": 4,
+      "correctness_deltas_csv": "artifacts\\hf_eval_diffs\\drive_v226_vs_hf_v256_v226_correctness_deltas_20260511.csv",
+      "family_delta": [
+        {
+          "drive_correct": 136,
+          "hf_correct": 135,
+          "hf_gain_rows": 1,
+          "hf_loss_rows": 2,
+          "net_hf_minus_drive": -1,
+          "prediction_diff_rows": 3,
+          "rows": 160,
+          "truncated_diff_rows": 1,
+          "type": "bit_manipulation"
+        },
+        {
+          "drive_correct": 55,
+          "hf_correct": 56,
+          "hf_gain_rows": 1,
+          "hf_loss_rows": 0,
+          "net_hf_minus_drive": 1,
+          "prediction_diff_rows": 8,
+          "rows": 155,
+          "truncated_diff_rows": 0,
+          "type": "equation_transform"
+        }
+      ],
+      "family_delta_csv": "artifacts\\hf_eval_diffs\\drive_v226_vs_hf_v256_v226_family_delta_20260511.csv",
+      "hf_gain_rows": 2,
+      "hf_loss_rows": 2,
+      "merge_counts": {
+        "both": 315,
+        "left_only": 0,
+        "right_only": 0
+      },
+      "prediction_diff_rows": 11,
+      "rows_drive": 315,
+      "rows_hf": 315,
+      "rows_joined": 315,
+      "truncated_diff_rows": 1
+    }
+  },
+  "drive_paths": {
+    "drive_v221_v194_pred": "kg1gdrive:KG1_NVIDIA_V221/output_v221_candidate_registry_weak_ab/eval_v221_candidate_registry_weak_ab/v194_protected_baseline/v221_weak_v194_protected_baseline_predictions.csv",
+    "drive_v221_v194_report": "kg1gdrive:KG1_NVIDIA_V221/output_v221_candidate_registry_weak_ab/eval_v221_candidate_registry_weak_ab/v194_protected_baseline/v221_weak_v194_protected_baseline_eval_report.json",
+    "drive_v226_pred": "kg1gdrive:KG1_NVIDIA_V226/output_v226_equation_checkpoint_sweep/eval_v226_checkpoint1_weak/v226_checkpoint2_weak_predictions.csv",
+    "drive_v226_report": "kg1gdrive:KG1_NVIDIA_V226/output_v226_equation_checkpoint_sweep/eval_v226_checkpoint1_weak/v226_checkpoint2_weak_eval_report.json"
+  },
+  "drive_reports": {
+    "drive_v221_v194_report": {
+      "accuracy": 0.6031746031746031,
+      "adapter": null,
+      "candidate": null,
+      "correct": 190,
+      "per_task": null,
+      "total": 315,
+      "truncated": 0
+    },
+    "drive_v226_report": {
+      "accuracy": 0.6063492063492063,
+      "adapter": null,
+      "candidate": null,
+      "correct": 191,
+      "per_task": null,
+      "total": 315,
+      "truncated": 0
+    }
+  },
+  "hf_paths": {
+    "hf_v255_v194": "evals/v255-h200-v221contract-v194-20260511T005050Z/eval/hf_v194_protected_v221_contract/v245_hf_weak_hf_v194_protected_v221_contract_predictions.csv",
+    "hf_v256_v226": "evals/v256-h200-v221contract-v226ckpt1-20260511T0110Z/eval/hf_v226_checkpoint1_v221_contract/v245_hf_weak_hf_v226_checkpoint1_v221_contract_predictions.csv"
+  },
+  "repo": "felipesp1983/kg1-strong-adapters-v194-v226"
+}
