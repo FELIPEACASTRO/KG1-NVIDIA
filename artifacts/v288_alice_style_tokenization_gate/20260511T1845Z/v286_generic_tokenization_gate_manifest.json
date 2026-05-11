@@ -1,0 +1,169 @@
+{
+  "blocked_actions": [
+    "full_eval",
+    "package",
+    "kaggle_submit"
+  ],
+  "config": {
+    "max_length": 8192,
+    "max_prompt_truncation_rate": 0.0,
+    "min_train_rows": 600,
+    "min_val_rows": 80,
+    "require_offset_mask": true
+  },
+  "dataset_manifest_json": "artifacts\\v287_reasoninggym_alice_style_dataset\\20260511T1840Z\\v287_reasoninggym_alice_style_manifest.json",
+  "dataset_manifest_sha256": "f4942bf953a2c56bea5bdea2ffcdf423f14e60a1a93693c904ad219708596e6a",
+  "decision": {
+    "next_action": "Only consider a tiny HF smoke train if roadmap risk/budget gates approve it.",
+    "reason": "train_rows=651; val_rows=88; train_token_max=313; val_token_max=294; completion_truncation=0",
+    "status": "tokenization_gate_passed"
+  },
+  "generated_at_utc": "2026-05-11T18:37:26.432707+00:00",
+  "model_name": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+  "model_revision": "cbd3fa9f933d55ef16a84236559f4ee2a0526848",
+  "outputs": {
+    "manifest_json": "artifacts\\v288_alice_style_tokenization_gate\\20260511T1845Z\\v286_generic_tokenization_gate_manifest.json"
+  },
+  "schema_version": "kg1_v286_generic_tokenization_gate_v1",
+  "tokenization": {
+    "train": {
+      "completion_tokens_dropped": 0,
+      "fallback_masks": 0,
+      "family_summary": {
+        "bit_manipulation": {
+          "loss_token_max": 20,
+          "loss_token_min": 7,
+          "loss_token_p50": 8,
+          "rows": 394,
+          "token_max": 309,
+          "token_p50": 224,
+          "token_p90": 276,
+          "token_p99": 294
+        },
+        "equation_transform": {
+          "loss_token_max": 38,
+          "loss_token_min": 7,
+          "loss_token_p50": 9,
+          "rows": 257,
+          "token_max": 313,
+          "token_p50": 245,
+          "token_p90": 303,
+          "token_p99": 312
+        }
+      },
+      "loss_token_max": 38,
+      "loss_token_min": 7,
+      "loss_token_p50": 8,
+      "offset_masks": 651,
+      "prompt_truncated": 0,
+      "prompt_truncation_rate": 0.0,
+      "rows": 651,
+      "token_max": 313,
+      "token_mean": 236.925,
+      "token_min": 165,
+      "token_p50": 236,
+      "token_p90": 295,
+      "token_p99": 311
+    },
+    "validation": {
+      "completion_tokens_dropped": 0,
+      "fallback_masks": 0,
+      "family_summary": {
+        "bit_manipulation": {
+          "loss_token_max": 19,
+          "loss_token_min": 7,
+          "loss_token_p50": 8,
+          "rows": 53,
+          "token_max": 292,
+          "token_p50": 229,
+          "token_p90": 263,
+          "token_p99": 280
+        },
+        "equation_transform": {
+          "loss_token_max": 35,
+          "loss_token_min": 7,
+          "loss_token_p50": 9,
+          "rows": 35,
+          "token_max": 294,
+          "token_p50": 246,
+          "token_p90": 287,
+          "token_p99": 294
+        }
+      },
+      "loss_token_max": 35,
+      "loss_token_min": 7,
+      "loss_token_p50": 8,
+      "offset_masks": 88,
+      "prompt_truncated": 0,
+      "prompt_truncation_rate": 0.0,
+      "rows": 88,
+      "token_max": 294,
+      "token_mean": 234.17,
+      "token_min": 166,
+      "token_p50": 238,
+      "token_p90": 282,
+      "token_p99": 292
+    }
+  },
+  "tokenizer_info": {
+    "class": "TokenizersBackend",
+    "eos_token": "<|im_end|>",
+    "is_fast": true,
+    "pad_token": "<|im_end|>",
+    "toy": false
+  },
+  "validation": {
+    "train": {
+      "family_counts": {
+        "bit_manipulation": 394,
+        "equation_transform": 257
+      },
+      "prompt_answer_hash_count": 651,
+      "prompt_hash_count": 651,
+      "rows": 651,
+      "sha256_expected": "591d28e5da7f08434db9d76410d31e61192e5c0f956d8a1f68c99f018d007f01",
+      "source_counts": {
+        "binary_alternation": 136,
+        "bitwise_arithmetic": 126,
+        "count_bits": 132,
+        "cryptarithm": 128,
+        "simple_equations": 129
+      },
+      "subcategory_counts": {
+        "bit_alternation_min_swaps_alice_style": 136,
+        "bit_counting_alice_style": 132,
+        "bitwise_arithmetic_expression_alice_style": 126,
+        "equation_cryptarithm_mapping_alice_style": 128,
+        "equation_linear_numeric_alice_style": 129
+      },
+      "unique_ids": 651
+    },
+    "train_val_prompt_answer_overlap": 0,
+    "train_val_prompt_overlap": 0,
+    "validation": {
+      "family_counts": {
+        "bit_manipulation": 53,
+        "equation_transform": 35
+      },
+      "prompt_answer_hash_count": 88,
+      "prompt_hash_count": 88,
+      "rows": 88,
+      "sha256_expected": "60de034966ccd4f55b06c783273f043e1712d5f4b1f54048ff7c84dbcfc70a0b",
+      "source_counts": {
+        "binary_alternation": 18,
+        "bitwise_arithmetic": 17,
+        "count_bits": 18,
+        "cryptarithm": 17,
+        "simple_equations": 18
+      },
+      "subcategory_counts": {
+        "bit_alternation_min_swaps_alice_style": 18,
+        "bit_counting_alice_style": 18,
+        "bitwise_arithmetic_expression_alice_style": 17,
+        "equation_cryptarithm_mapping_alice_style": 17,
+        "equation_linear_numeric_alice_style": 18
+      },
+      "unique_ids": 88
+    }
+  }
+}
