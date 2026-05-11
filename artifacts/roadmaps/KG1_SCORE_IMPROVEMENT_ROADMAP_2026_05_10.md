@@ -16,6 +16,7 @@ Objetivo: consolidar os achados Kaggle/Hugging Face, resultados V221/V226/V229/V
 - Conclusao: roteamento entre os adapters ja avaliados nao resolve. O proximo ganho precisa vir de mineracao dos miss-packs, solver/verifier deterministico ou dados/traces filtrados.
 - Auditoria Google Drive 2026-05-10: `1879` arquivos KG1 catalogados, `85` adapters completos, `232` reports, `423` CSVs, `54` JSONLs e `11` notebooks. Nenhum artefato do Drive supera o baseline V226 sob gate weak canonico; o Drive deve ser usado como fonte de pesos fortes conhecidos, reports e dados para triagem, nao como fonte de promocao automatica.
 - Achado Drive mais util: V207A full/validation gate do V194 tem `822/947` com familias nao criticas em `100%`, mas confirma o mesmo gargalo fraco: `bit_manipulation=135/160`, `equation_transform=55/155`. Isso reforca que o problema real continua concentrado em `equation_transform`.
+- Importante: muitos arquivos do Drive foram parte da trajetoria que chegou ao score amplo `0.86`. Esse score e valido como evidencia historica de que V194/V202D resolvia muito bem as familias nao criticas, mas nao pode ser interpretado como melhoria atual das duas familias alvo. No recorte decisivo, o proprio V207A mede `equation_transform=55/155` e `bit_manipulation=135/160`, alinhado ao gargalo V230.
 
 ## Evidencias consolidadas
 
@@ -3334,3 +3335,37 @@ Conclusao da auditoria Drive:
 - A maior parte dos adapters antigos/publicos tem truncation alto, score fraco ou desalinhamento de prompt/modelo; nao devem ser usados para merge, soup, router ou treino.
 - O melhor uso imediato do Drive e operacional: transferir/publicar V226 checkpoint-1 e V194 para HF com hash/config completos, validar no weak gate HF, e depois usar esses pesos fortes como initializer para qualquer smoke training.
 - O melhor uso analitico do Drive e continuar minerando `equation_transform` simbolico/misto, usando V230 miss packs e V237/V238 parser evidence, porque trocar adapter nao resolveu o gap de `5` linhas em equation.
+
+## HF bridge concluido - pesos fortes V194/V226
+
+Objetivo:
+
+- Remover a dependencia operacional do Google Drive para os pesos fortes antes de novos jobs HF.
+- Evitar gasto H100/H200 partindo de adapters fracos que ja foram rejeitados.
+
+Repo HF privado:
+
+- `felipesp1983/kg1-strong-adapters-v194-v226`
+- URL: `https://huggingface.co/felipesp1983/kg1-strong-adapters-v194-v226`
+- SHA remoto validado: `1bb23fdbc3f5ccadd36b91e8f7db9d7474bf6312`
+- Registro local: `artifacts/hf_uploads/KG1_STRONG_ADAPTERS_HF_BRIDGE_20260510.md`
+
+Conteudo validado:
+
+| Pasta HF | Origem | Weak conhecido | SHA256 |
+|---|---|---:|---|
+| `v226_checkpoint1` | Drive V226 checkpoint-1 | `191/315`, equation `55`, bit `136`, trunc `0` | `f4e2083d83f13a102cd86e5d1295a8603264856c17ec35c357188e1acde6ea79` |
+| `v194_protected` | Drive V202D/V194 protegido | `190/315`, equation `54`, bit `136`, trunc `0` | `01259fef943bc16c31d8f7907be076cc987381a6a1bbe732b1b33c2d9f2ea95f` |
+
+Validacoes:
+
+- Ambos com `tensor_count=12011`.
+- Ambos sem arquivos `.partial`.
+- Manifest remoto `strong_adapters_validation_manifest.json` lido com sucesso.
+- Staging local `%TEMP%/kg1_drive_strong_adapters_hf_20260510` removido apos upload, liberando `8535403351` bytes logicos.
+
+Proximo passo:
+
+1. Rodar weak eval HF canonico desses dois pesos fortes usando o wrapper de gate atual.
+2. Confirmar que o HF reproduz V226 `191/315` e V194 `190/315`.
+3. So depois usar `v226_checkpoint1` como initializer para qualquer smoke training curto com V249/novos dados.
