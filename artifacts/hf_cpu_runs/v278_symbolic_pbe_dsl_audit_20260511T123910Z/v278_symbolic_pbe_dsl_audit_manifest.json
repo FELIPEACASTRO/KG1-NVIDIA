@@ -1,0 +1,140 @@
+{
+  "candidate_counts": {
+    "all_incorrect_candidates": 3,
+    "all_verified_candidates": 0,
+    "incorrect_promotable_candidates": 0,
+    "verified_promotable_candidates": 0
+  },
+  "decision": {
+    "decision": "no_promotable_symbolic_pbe_signal",
+    "next_action": "Do not spend GPU on this route; request gated andy279 traces or expand the DSL with external solver evidence.",
+    "reason": "equation_misses=99; all_verified=0; all_incorrect=3; verified_promotable=0; incorrect_promotable=0"
+  },
+  "equation_miss_rows": 99,
+  "expected_shared_row_contract_sha256": "bf055e3b9ebce79d4bfc9e48bce5a305b1d83da882f14afddec80d6afaba5fff",
+  "generated_at_utc": "2026-05-11T12:39:12.551303+00:00",
+  "input": {
+    "downloaded_name": "v245_hf_weak_v259_checkpoint_4_v221_contract_predictions.csv",
+    "filename": "evals/v260b-h200-v221contract-v259-eqfocus-eval-20260511T025751Z/eval/v259_checkpoint_4_v221_contract/v245_hf_weak_v259_checkpoint_4_v221_contract_predictions.csv",
+    "repo_id": "felipesp1983/kg1-nemotron-lora-v259-v249-eqfocus-v257ckpt4-smoke",
+    "rows": 315,
+    "sha256": "d682f3a0aabd3624c449c63723deee510b070aa173f11c1102fe6b1b807bbca3"
+  },
+  "observed_shared_row_contract_sha256": "bf055e3b9ebce79d4bfc9e48bce5a305b1d83da882f14afddec80d6afaba5fff",
+  "outputs": {
+    "audit_csv": "artifacts\\hf_cpu_runs\\v278_symbolic_pbe_dsl_audit_20260511T123910Z\\v278_symbolic_pbe_dsl_audit.csv",
+    "manifest_json": "artifacts\\hf_cpu_runs\\v278_symbolic_pbe_dsl_audit_20260511T123910Z\\v278_symbolic_pbe_dsl_audit_manifest.json",
+    "rule_summary_csv": "artifacts\\hf_cpu_runs\\v278_symbolic_pbe_dsl_audit_20260511T123910Z\\v278_rule_class_summary.csv",
+    "verified_candidates_csv": "artifacts\\hf_cpu_runs\\v278_symbolic_pbe_dsl_audit_20260511T123910Z\\v278_verified_candidates.csv",
+    "verified_promotable_csv": "artifacts\\hf_cpu_runs\\v278_symbolic_pbe_dsl_audit_20260511T123910Z\\v278_verified_promotable_candidates.csv"
+  },
+  "parse_status_counts": {
+    "ok": 99
+  },
+  "rule_summary": [
+    {
+      "abstain_rows": 83,
+      "candidate_rows": 0,
+      "incorrect_candidates": 0,
+      "promotable_after_class_gate": false,
+      "rows": 83,
+      "rule_class": "symbolic_suffix_after_marker",
+      "verified_candidates": 0
+    },
+    {
+      "abstain_rows": 83,
+      "candidate_rows": 0,
+      "incorrect_candidates": 0,
+      "promotable_after_class_gate": false,
+      "rows": 83,
+      "rule_class": "symbolic_suffix_after_last_marker",
+      "verified_candidates": 0
+    },
+    {
+      "abstain_rows": 83,
+      "candidate_rows": 0,
+      "incorrect_candidates": 0,
+      "promotable_after_class_gate": false,
+      "rows": 83,
+      "rule_class": "symbolic_remove_first_marker",
+      "verified_candidates": 0
+    },
+    {
+      "abstain_rows": 83,
+      "candidate_rows": 0,
+      "incorrect_candidates": 0,
+      "promotable_after_class_gate": false,
+      "rows": 83,
+      "rule_class": "symbolic_prefix_until_marker",
+      "verified_candidates": 0
+    },
+    {
+      "abstain_rows": 83,
+      "candidate_rows": 0,
+      "incorrect_candidates": 0,
+      "promotable_after_class_gate": false,
+      "rows": 83,
+      "rule_class": "symbolic_prefix_before_last_marker",
+      "verified_candidates": 0
+    },
+    {
+      "abstain_rows": 83,
+      "candidate_rows": 0,
+      "incorrect_candidates": 0,
+      "promotable_after_class_gate": false,
+      "rows": 83,
+      "rule_class": "symbolic_keep_selected_chars",
+      "verified_candidates": 0
+    },
+    {
+      "abstain_rows": 83,
+      "candidate_rows": 0,
+      "incorrect_candidates": 0,
+      "promotable_after_class_gate": false,
+      "rows": 83,
+      "rule_class": "symbolic_char_transducer",
+      "verified_candidates": 0
+    },
+    {
+      "abstain_rows": 16,
+      "candidate_rows": 0,
+      "incorrect_candidates": 0,
+      "promotable_after_class_gate": false,
+      "rows": 16,
+      "rule_class": "numeric_same_operator_extended",
+      "verified_candidates": 0
+    },
+    {
+      "abstain_rows": 82,
+      "candidate_rows": 1,
+      "incorrect_candidates": 1,
+      "promotable_after_class_gate": false,
+      "rows": 83,
+      "rule_class": "symbolic_position_template",
+      "verified_candidates": 0
+    },
+    {
+      "abstain_rows": 82,
+      "candidate_rows": 1,
+      "incorrect_candidates": 1,
+      "promotable_after_class_gate": false,
+      "rows": 83,
+      "rule_class": "symbolic_operator_index_template",
+      "verified_candidates": 0
+    },
+    {
+      "abstain_rows": 82,
+      "candidate_rows": 1,
+      "incorrect_candidates": 1,
+      "promotable_after_class_gate": false,
+      "rows": 83,
+      "rule_class": "symbolic_delete_selected_chars",
+      "verified_candidates": 0
+    }
+  ],
+  "schema_version": "kg1_v278_symbolic_pbe_dsl_audit_v1",
+  "subtype_counts": {
+    "equation_numeric_operator": 16,
+    "equation_symbolic_punct": 83
+  }
+}

@@ -3925,9 +3925,39 @@ V278 web/HF double-check 1000x:
   - RobustFill/DreamCoder/DeepCoder/HYSYNTH/LLM+verifier: LLM pode propor hipoteses ou priorizar DSL, mas o juiz deve ser o verificador local. Nenhuma regra entra no postprocessor sem prova deterministica.
 - Decisao: V278 deve nascer CPU-only, com manifest de regras, contagem de abstencoes, ganhos/perdas por familia, e bloqueio de GPU enquanto nao houver pelo menos `+4` a `+5` ganhos adicionais em `equation_transform` sem reduzir `bit_manipulation` abaixo de `136/160`.
 
+V278 CPU-only symbolic PBE DSL audit:
+
+- Script: `scripts/run_v278_symbolic_pbe_dsl_audit_hf.py`.
+- Validacoes executadas:
+  - `python -m py_compile scripts/run_v278_symbolic_pbe_dsl_audit_hf.py`: ok.
+  - `python scripts/run_v278_symbolic_pbe_dsl_audit_hf.py --self-test`: ok.
+  - Auditoria local CPU: `artifacts/hf_cpu_runs/v278_symbolic_pbe_dsl_audit_20260511T123910Z/`.
+- Contrato validado:
+  - `observed_shared_row_contract_sha256 = bf055e3b9ebce79d4bfc9e48bce5a305b1d83da882f14afddec80d6afaba5fff`.
+  - `parse_status_counts = {"ok": 99}`.
+  - `subtype_counts = {"equation_numeric_operator": 16, "equation_symbolic_punct": 83}`.
+- DSLs testadas:
+  - char transducer;
+  - delete selected chars;
+  - keep selected chars;
+  - prefix/suffix before/after first/last marker;
+  - remove first marker;
+  - position template;
+  - operator-index template;
+  - numeric same-operator baseline.
+- Resultado:
+  - `all_verified_candidates = 0`.
+  - `all_incorrect_candidates = 3`.
+  - `verified_promotable_candidates = 0`.
+  - `incorrect_promotable_candidates = 0`.
+  - As tres regras que emitiram candidato foram bloqueadas por erro no mesmo id `432b1110`; nenhuma regra passou o gate de promocao.
+- Decisao: `no_promotable_symbolic_pbe_signal`.
+- Implicacao: nao gastar H200/GPU nessa rota de DSL local simples. O gargalo `equation_symbolic_punct` exige traces solver-guided externos, uma gramatica substancialmente mais rica, ou avaliacao barata de novos adapters antes de qualquer novo treino.
+
 Proximo passo:
 
-1. Implementar V278 CPU-only para `equation_symbolic_punct`: enumerative/CEGIS DSL inspirada em FlashFill/PROSE/SyGuS, com gramatica pequena para reordenacao, reversao parcial, substring, troca posicional, delimitadores e operadores simbolicos. So promover regra se gerar overrides label-free e zero-loss no weak audit; GPU so entra se houver ganho concreto acima dos `+4` numericos V274/V275.
-2. Se V278 nao produzir nenhum override simbolico zero-loss, parar novos gastos de GPU e priorizar acao humana para liberar os datasets gated `andy279/nemotron-reasoning-challenge-raw-traces` e `andy279/nemotron-reasoning-challenge`.
-3. Nao treinar novo LoRA, nao repetir adapter soup, nao repetir prompt `no suffix` e nao usar os adapters externos V277; essas rotas ja foram negativas ou neutras.
-4. Reusar V249/V250/V242/V268 somente com preflight de hashes, anti-leakage, row-contract, tokenizacao, estimativa de custo e kill-switch por primeiro candidato.
+1. Rodar static gate CPU-only nos quatro LoRAs publicos `passagereptile455/*` antes de qualquer weak eval. Se algum repo nao tiver `adapter_config.json` + `adapter_model.safetensors` compativeis, descartar sem GPU.
+2. Se algum `passagereptile455/*` passar o static gate, decidir se vale um weak eval curto em H200. Gate minimo para continuar: aproximar-se de `193/315`, `equation>=60`, `bit>=133`, trunc `<=3`; caso contrario, descartar.
+3. Priorizar acao humana para liberar os datasets gated `andy279/nemotron-reasoning-challenge-raw-traces` e `andy279/nemotron-reasoning-challenge`; eles continuam a fonte P0 para traces teacher/solver.
+4. Nao treinar novo LoRA, nao repetir adapter soup, nao repetir prompt `no suffix`, nao gastar GPU em V278 local DSL e nao usar os adapters externos V277; essas rotas ja foram negativas ou neutras.
+5. Reusar V249/V250/V242/V268 somente com preflight de hashes, anti-leakage, row-contract, tokenizacao, estimativa de custo e kill-switch por primeiro candidato.
