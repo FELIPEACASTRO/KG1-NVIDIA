@@ -4286,3 +4286,79 @@ Gates obrigatorios antes de qualquer uso futuro:
 - tokenization gate V250 com truncation `0.0`;
 - weak gate com `bit>=136/160`, `equation>=60/155`, `losses=0` para qualquer postprocessor/verifier;
 - FinOps gate: primeiro CPU-only, depois no maximo smoke curto; nenhum treino longo sem sinal CPU verificavel.
+
+## Auditoria de URLs externas - arquivo URLs.txt
+
+Arquivo auditado: `C:\Users\davis\Downloads\URLs.txt`.
+
+Evidencia local:
+
+- SHA256: `b77b6d1c882090287fdb19f68e3f662fd467fa5ff8666d8299c59410a485d2ad`.
+- Tamanho: `7343` bytes.
+- URLs brutas extraidas: `94`.
+- URLs unicas apos dedupe: `57`.
+- Hosts: `huggingface.co=40`, `github.com=2`, `openrouter.ai=2`, e demais hosts com `1` URL cada.
+
+Achados que podem ajudar a ACC:
+
+1. `https://huggingface.co/datasets/jasonkung98/NVIDIA-Nemotron-Model-Reasoning-Challenge`
+   - Relevancia: P0 como mirror publico do dataset oficial do desafio, nao como novo dado bruto.
+   - Evidencia da pagina HF: `default` com `9.5k` linhas, splits `train` e `test`, formato CSV, licenca `apache-2.0`.
+   - A pagina mostra exemplos das familias do desafio: `bit manipulation`, `secret encryption`, `numeral system`, `unit conversion`, `gravity constant` e `transformation/equation`.
+   - O conteudo confirma o mesmo formato Alice/Wonderland usado no zip oficial e na rota V268.
+   - Decisao: manter como fonte de auditoria/fixtures e sanity-check de parser; nao usar para treinar em cima do weak/full sem anti-leakage. O hash do `train.csv` oficial ja foi validado anteriormente como `d204af160633b638448723a437aa51c0db70fd0b64ff92f6ad6f52e5ac6377fa`.
+
+2. `https://github.com/tonghuikang/nemotron` e `https://nemotron.huikang.dev/`
+   - Relevancia: P0/P1 ja usado e ainda util para mineracao de regra/verifier.
+   - Evidencia da pagina GitHub: repositorio da submissao Progress Prize vencedora; inclui `train.csv`, `problems.jsonl`, `corpus.jsonl`, `generation.jsonl`, `reasoning.py`, `augmentation.py`, `corpus.py`, `train_sft.py`, `notebook_tinker.py`, pastas `augmenters`, `investigators`, `reasoners`, `training/sft`.
+   - O README descreve tabs `Base`, `Synthetic`, `Corpus`, `Training` e `Metrics`, com prompt, tabela de transformacao parseada, resposta, traces por token/logprob, mascaramento e metricas por run.
+   - Decisao: continuar usando como fonte publica de engenharia reversa, corpus/verifier e interpretabilidade. O V268/V269 ja provou que SFT bruto empata o melhor score, mas nao melhora equation; a proxima utilidade e extrair regras e validadores, nao novo treino longo.
+
+3. `https://huggingface.co/datasets/nvidia/Nemotron-Cascade-2-SFT-Data`
+   - Relevancia: P2.
+   - Evidencia HF: dataset JSON sob NVIDIA Open Model License; subsets grandes como `chat`, `instruction_following`, `math`, `science`, `swe`, `terminal_agent`; a pagina mostra exemplos com `messages` e formato boxed em algumas tarefas.
+   - Possivel uso: amostras muito pequenas de `math`/`swe` para estudar formato de resposta, nao para mistura direta.
+   - Bloqueio: dataset enorme e generico, sem labels KG1; licenca `nvidia-open-model-license`; exige filtro, hash, dedupe, anti-leakage e tokenization gate antes de qualquer materializacao.
+
+4. `https://huggingface.co/datasets/nvidia/Nemotron-Cascade-2-RL-data`
+   - Relevancia: P2 para metodologia de reward/verifier.
+   - Evidencia HF: dataset RL com subsets `IF-RL`, `multi-domain-RL`, `MOPD`, `SWE-RL`; quantificacao informada no card: `73,809` amostras, formato JSONL, colunas como `prompt`, `ground_truth`, `pass_rate`, `pass_rate_total`, `pass_rate_passed`, `metadata`.
+   - Possivel uso: inspirar schema de avaliacao/reward e pass-rate para futuros verifiers; nao e dataset KG1.
+   - Decisao: nao baixar nem treinar agora. Se usado, primeiro gate CPU de dominio/licenca e amostra minima.
+
+5. Modelos Nemotron oficiais e rotas de inferencia:
+   - URLs: `nvidia/Nemotron-Cascade-2-30B-A3B`, `nvidia/NVIDIA-Nemotron-3-Super-120B-A12B-*`, `modelfix/NVIDIA-Nemotron-3-Nano-30B-A3B-FP8-GGUF`, `nvidia/NVIDIA-Nemotron-3-Nano-4B-GGUF`, `unsloth/NVIDIA-Nemotron-3-Super-120B-A12B-GGUF`, `LM Studio`, `Unsloth`, `NVIDIA NIM`, `NVIDIA-NeMo/Nemotron usage-cookbook`.
+   - Evidencia util: modelos suportam reasoning/tool-use/chat; paginas oficiais indicam uso via Transformers/vLLM/SGLang/llama.cpp; Nemotron 3 usa tokens `<think>`/`</think>`; Unsloth documenta parametros recomendados (`temperature=1.0`, `top_p=1.0` para chat geral; `temperature=0.6`, `top_p=0.95` para tool calling).
+   - Decisao KG1: servem como infraestrutura/teacher offline, nao como candidato direto de submissao. V261 ja mostrou que alterar thinking/prompt suffix pode destruir bit; qualquer uso de teacher externo deve gerar candidatos offline validados por verifier, nao substituir o pipeline V275.
+
+6. OpenRouter collections:
+   - URLs: `free-models` e `programming`.
+   - Evidencia: OpenRouter lista `NVIDIA: Nemotron 3 Super (free)` e `NVIDIA: Nemotron 3 Nano 30B A3B (free)` entre modelos gratuitos; programming leaderboard tambem lista Nemotron 3 Super.
+   - Decisao: util como rota barata para consultas offline/triagem de ideias, respeitando politica de nao depender de resposta nao reproduzida. Nenhum ganho de ACC entra sem reproduzir em script local/HF e passar gates.
+
+7. Hugging Face search pages `equation`, `manipulation`, `transformation`, `symbolic`:
+   - `equation` trouxe modelos como `kinit/equational-reasoning-stepwise-konst`, `kinit/equational-reasoning-sft`, `Menouar/falcon7b-linear-equations-merged` e `sergiones/Qwen2.5-1.5B-4bit-equation-chat-ft`.
+   - Esses modelos sao Qwen/Falcon/peft nao compativeis com `NVIDIA-Nemotron-3-Nano-30B-A3B-BF16`.
+   - Decisao: nao avaliar como adapters. Podem inspirar datasets/metodologia de equational reasoning, mas nao entram em H200.
+
+Itens descartados como nao acionaveis para ACC KG1:
+
+- `bitmanagerai/qwen3-tts-*` e `bitmanagerai/uzbek-youtube-podcast-dataset`: TTS/audio/Uzbek; fora do alvo.
+- `nvidia/GN1x-Tuned-Arena-*Manipulation`, `nvidia/Arena-GR1-Manipulation-Task`, `nvidia/PhysicalAI-Robotics-Manipulation-Kitchen-Demos`: robotics/manipulacao fisica; nao tem relacao com `bit_manipulation`.
+- `Anonymous-2024/manipulation-mfc-bench`: manipulacao textual/social, nao bit manipulation.
+- `simonschoe/TransformationTransformer`: RoBERTa text-classification, nao solver de equation transform.
+- `Remade-AI/Hulk-Transformation`: image/video LoRA; irrelevante.
+- `nvidia/Nemotron-Personas-France`: personas em frances; sem relacao com as familias alvo.
+- `news.elata.bio`, `jclibrary.org`, `x.com/...`, Reddit apagado e blogs nao primarios: sem artefato concreto para treino/eval; no maximo anedota/metodologia.
+- `arxiv.org/html/2604.10905v1`: Audio Flamingo Next; paper de audio-language, nao aplicavel ao desafio textual KG1.
+
+Decisao apos auditoria do `URLs.txt`:
+
+- Nenhuma URL nova autoriza treino longo ou full eval adicional.
+- O unico item com impacto direto ja conhecido e `jasonkung98/NVIDIA-Nemotron-Model-Reasoning-Challenge`, que confirma o dataset oficial e as familias; ele deve alimentar apenas gates, fixtures e sanity checks com anti-leakage.
+- O item mais forte para ganho real continua sendo `tonghuikang/nemotron`, mas a rota correta e solver/verifier e nao SFT bruto.
+- Proxima acao tecnica coerente:
+  1. criar um gate CPU que gere amostras de fixtures por familia a partir do mirror `jasonkung98`, bloqueando todos os IDs weak/full conhecidos;
+  2. usar `tonghuikang` para enriquecer o parser/verifier dos subtipos `equation_symbolic_punct` e `equation_numeric_operator`;
+  3. manter V275/V274 como candidato deployable atual (`196/315`, `equation=60/155`, `bit=136/160`, `trunc=0`);
+  4. nao gastar H100/H200 ate um novo verifier CPU provar `losses=0` e ganho incremental.
