@@ -1,0 +1,22 @@
+{
+  "bytes": 321195,
+  "columns": [
+    "id",
+    "prompt",
+    "answer",
+    "family"
+  ],
+  "duplicate_ids": 0,
+  "family_counts": {
+    "bit_manipulation": 160,
+    "equation_transform": 155,
+    "gravity_constant": 159,
+    "numeral_system": 157,
+    "text_encryption": 157,
+    "unit_conversion": 159
+  },
+  "path": "artifacts\\drive_bridge\\v276_full947_validation_20260511T1235Z\\official_train_seed42_stratified10_val.csv",
+  "rows": 947,
+  "sha256": "84e90b5b4d9adad6fdd9028aae3161d1b8991f2eab11e292b32d920c0ec3c935",
+  "unique_ids": 947
+}
