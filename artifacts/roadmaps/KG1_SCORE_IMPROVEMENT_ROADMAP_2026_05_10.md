@@ -3906,6 +3906,25 @@ V277 H200 external adapter weak eval:
 - Upload de artefatos: `https://huggingface.co/felipesp1983/kg1-nemotron-lora-v259-v249-eqfocus-v257ckpt4-smoke/commit/707bcb9ac5637c783fdfdc0437a75a49c604cd28`, path `evals/v277-h200-external-weak-eval-20260511T120632Z`.
 - Decisao: rota de adapters externos completos descartada para o objetivo atual. Nenhum candidato chega perto do baseline V259/V275 (`196/315` com postprocessor; `equation=60`, `bit=136`). Nao rodar full eval, soup, treino ou distilacao com esses adapters.
 
+V278 web/HF double-check 1000x:
+
+- Busca adicional em Hugging Face confirmou tres datasets relevantes:
+  - `andy279/nemotron-reasoning-challenge-raw-traces`: gated, `10K<n<100K`, raw teacher traces de multiplos teacher models e deterministic solvers; P0 se o acesso for liberado.
+  - `andy279/nemotron-reasoning-challenge`: gated, `49,290` exemplos de treino e `1,165` validacao; P0 se o acesso for liberado.
+  - `jasonkung98/NVIDIA-Nemotron-Model-Reasoning-Challenge`: mirror publico CSV; util apenas para auditoria/contrato, sem traces solver-guided.
+- Busca adicional em Hugging Face encontrou quatro LoRAs publicos `passagereptile455/*` ainda nao avaliados:
+  - `passagereptile455/nemotron-reasoning-lora-v8-kaggle`
+  - `passagereptile455/nemotron-reasoning-lora-v9-kaggle-alpha64`
+  - `passagereptile455/nemotron-reasoning-lora-v10-kaggle-1epoch`
+  - `passagereptile455/nemotron-reasoning-lora-v11-kaggle-alpha64-1epoch`
+- Regra de negocio para esses quatro LoRAs: so avaliar com V277-style static gate primeiro. Exigir `adapter_config.json`, `adapter_model.safetensors`, base model `nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16`, tensor/shape compativel, ausencia de `.partial`, e estimativa de custo. Como V277 mostrou que adapters publicos podem ficar muito abaixo do baseline, rodar no maximo um weak eval curto; nao fazer full/soup/treino antes de evidenciar `>=193`, `equation>=60`, `bit>=133`, trunc `<=3`.
+- Double-check de literatura reforca que a rota com maior valor para `equation_transform` nao e novo prompt nem treino cego:
+  - FlashFill/PROSE/FlashMeta/BlinkFill: Program-by-Example com DSL, version spaces e ranking. Aplicacao direta: sintetizar transformacoes simbolicas a partir dos exemplos do prompt e promover apenas quando todos os exemplos forem satisfeitos e a regra for label-free.
+  - SyGuS/CEGIS/CVC5/Z3/Rosette/SKETCH: usar busca enumerativa/contraexemplos e solver-aided programming para limitar hipoteses. Aplicacao direta: V278 deve gerar candidatos de substring, reorder, reverse, mask/delete, delimiter split, map por posicao, e rejeitar qualquer regra ambigua.
+  - Bit-vector SMT/Boolector/Z3/Hacker's Delight/Bit Twiddling Hacks: `bit_manipulation` deve ser tratada como sintese de expressoes bit-vector verificaveis, nao como memorizacao. Aplicacao direta: gramaticas pequenas com `xor/and/or/not`, shifts/rotates, masks, popcount/parity e rightmost-bit idioms, todas verificadas contra exemplos.
+  - RobustFill/DreamCoder/DeepCoder/HYSYNTH/LLM+verifier: LLM pode propor hipoteses ou priorizar DSL, mas o juiz deve ser o verificador local. Nenhuma regra entra no postprocessor sem prova deterministica.
+- Decisao: V278 deve nascer CPU-only, com manifest de regras, contagem de abstencoes, ganhos/perdas por familia, e bloqueio de GPU enquanto nao houver pelo menos `+4` a `+5` ganhos adicionais em `equation_transform` sem reduzir `bit_manipulation` abaixo de `136/160`.
+
 Proximo passo:
 
 1. Implementar V278 CPU-only para `equation_symbolic_punct`: enumerative/CEGIS DSL inspirada em FlashFill/PROSE/SyGuS, com gramatica pequena para reordenacao, reversao parcial, substring, troca posicional, delimitadores e operadores simbolicos. So promover regra se gerar overrides label-free e zero-loss no weak audit; GPU so entra se houver ganho concreto acima dos `+4` numericos V274/V275.
