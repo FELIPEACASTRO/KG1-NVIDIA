@@ -1,0 +1,27 @@
+{
+  "counts": {
+    "inspected_rows": 4,
+    "inspection_errors": 0,
+    "static_gate_pass": 0
+  },
+  "decision": {
+    "decision": "discard_passagereptile_static_gate",
+    "next_action": "Do not spend GPU on these repos.",
+    "reason": "static_pass=0; inspected_rows=4; errors=0"
+  },
+  "errors": [],
+  "expected_base_model_token": "NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+  "generated_at_utc": "2026-05-11T12:42:25.597376+00:00",
+  "outputs": {
+    "manifest_json": "artifacts\\hf_cpu_runs\\v279_external_lora_static_gate_20260511T1245Z\\v279_external_lora_static_gate_manifest.json",
+    "static_gate_csv": "artifacts\\hf_cpu_runs\\v279_external_lora_static_gate_20260511T1245Z\\v279_external_lora_static_gate.csv"
+  },
+  "passed_rows": [],
+  "repos": [
+    "passagereptile455/nemotron-reasoning-lora-v8-kaggle",
+    "passagereptile455/nemotron-reasoning-lora-v9-kaggle-alpha64",
+    "passagereptile455/nemotron-reasoning-lora-v10-kaggle-1epoch",
+    "passagereptile455/nemotron-reasoning-lora-v11-kaggle-alpha64-1epoch"
+  ],
+  "schema_version": "kg1_v279_external_lora_static_gate_v1"
+}

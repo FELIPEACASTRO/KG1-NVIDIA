@@ -3954,10 +3954,30 @@ V278 CPU-only symbolic PBE DSL audit:
 - Decisao: `no_promotable_symbolic_pbe_signal`.
 - Implicacao: nao gastar H200/GPU nessa rota de DSL local simples. O gargalo `equation_symbolic_punct` exige traces solver-guided externos, uma gramatica substancialmente mais rica, ou avaliacao barata de novos adapters antes de qualquer novo treino.
 
+V279 external LoRA static gate - `passagereptile455/*`:
+
+- Script: `scripts/run_v279_external_lora_static_gate_hf.py`.
+- Validacoes executadas:
+  - `python -m py_compile scripts/run_v279_external_lora_static_gate_hf.py`: ok.
+  - `python scripts/run_v279_external_lora_static_gate_hf.py --self-test`: ok.
+  - Auditoria local CPU/HF metadata: `artifacts/hf_cpu_runs/v279_external_lora_static_gate_20260511T1245Z/`.
+- Repos inspecionados:
+  - `passagereptile455/nemotron-reasoning-lora-v8-kaggle`;
+  - `passagereptile455/nemotron-reasoning-lora-v9-kaggle-alpha64`;
+  - `passagereptile455/nemotron-reasoning-lora-v10-kaggle-1epoch`;
+  - `passagereptile455/nemotron-reasoning-lora-v11-kaggle-alpha64-1epoch`.
+- Resultado:
+  - `inspected_rows = 4`.
+  - `inspection_errors = 0`.
+  - `static_gate_pass = 0`.
+  - Todos falharam por `missing_adapter_config_json`.
+- Decisao: `discard_passagereptile_static_gate`.
+- Implicacao: nao gastar H200/weak eval nesses quatro repos. A busca de adapters externos publicos fica encerrada ate aparecer repo com `adapter_config.json` + `adapter_model.safetensors` compativeis.
+
 Proximo passo:
 
-1. Rodar static gate CPU-only nos quatro LoRAs publicos `passagereptile455/*` antes de qualquer weak eval. Se algum repo nao tiver `adapter_config.json` + `adapter_model.safetensors` compativeis, descartar sem GPU.
-2. Se algum `passagereptile455/*` passar o static gate, decidir se vale um weak eval curto em H200. Gate minimo para continuar: aproximar-se de `193/315`, `equation>=60`, `bit>=133`, trunc `<=3`; caso contrario, descartar.
-3. Priorizar acao humana para liberar os datasets gated `andy279/nemotron-reasoning-challenge-raw-traces` e `andy279/nemotron-reasoning-challenge`; eles continuam a fonte P0 para traces teacher/solver.
-4. Nao treinar novo LoRA, nao repetir adapter soup, nao repetir prompt `no suffix`, nao gastar GPU em V278 local DSL e nao usar os adapters externos V277; essas rotas ja foram negativas ou neutras.
+1. Priorizar acao humana para liberar os datasets gated `andy279/nemotron-reasoning-challenge-raw-traces` e `andy279/nemotron-reasoning-challenge`; eles continuam a fonte P0 para traces teacher/solver.
+2. Se o acesso `andy279/*` for liberado, rodar primeiro um downloader/audit CPU com schema, hashes, family counts, dedupe, leakage guard contra os `315` weak IDs e amostra verificavel de traces corretos. GPU so depois desse gate.
+3. Se `andy279/*` continuar bloqueado, a unica rota tecnica restante sem novo dado e expandir V278 com uma gramatica externa comprovada por traces/repo, nao por tentativa cega no weak.
+4. Nao treinar novo LoRA, nao repetir adapter soup, nao repetir prompt `no suffix`, nao gastar GPU em V278 local DSL, nao usar os adapters externos V277 e nao usar os quatro `passagereptile455/*`; essas rotas ja foram negativas, neutras ou falharam static gate.
 5. Reusar V249/V250/V242/V268 somente com preflight de hashes, anti-leakage, row-contract, tokenizacao, estimativa de custo e kill-switch por primeiro candidato.

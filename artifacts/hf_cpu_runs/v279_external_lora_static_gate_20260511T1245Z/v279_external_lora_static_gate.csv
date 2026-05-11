@@ -1,0 +1,5 @@
+repo_id,config_path,weights_path,weights_size,has_partial_files,base_model_name_or_path,peft_type,r,lora_alpha,target_modules,target_parameters,static_gate_pass,failure_reasons,next_action
+passagereptile455/nemotron-reasoning-lora-v8-kaggle,,,0,False,,,,,,,False,missing_adapter_config_json,discard_without_gpu
+passagereptile455/nemotron-reasoning-lora-v9-kaggle-alpha64,,,0,False,,,,,,,False,missing_adapter_config_json,discard_without_gpu
+passagereptile455/nemotron-reasoning-lora-v10-kaggle-1epoch,,,0,False,,,,,,,False,missing_adapter_config_json,discard_without_gpu
+passagereptile455/nemotron-reasoning-lora-v11-kaggle-alpha64-1epoch,,,0,False,,,,,,,False,missing_adapter_config_json,discard_without_gpu
