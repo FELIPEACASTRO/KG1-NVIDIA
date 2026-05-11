@@ -1,0 +1,15 @@
+{
+  "adapter_repo": "felipesp1983/kg1-nemotron-lora-v289-v287-alice-style-v259ckpt4-smoke",
+  "adapter_subfolders": [
+    "checkpoint-4",
+    "final"
+  ],
+  "flavor": "a100-large",
+  "generated_at_utc": "2026-05-11T19:05:00.025751+00:00",
+  "hardware_cost_usd_per_hour": 2.5,
+  "job_id": "6a022898317220dbbd1a7bb3",
+  "job_url": "https://huggingface.co/jobs/felipesp1983/6a022898317220dbbd1a7bb3",
+  "output_path_in_repo": "evals/v289-v287-alice-style-weak-eval-20260511T190459Z",
+  "run_id": "v289-v287-alice-style-weak-eval-20260511T190459Z",
+  "version": "v289_weak_eval_launch"
+}

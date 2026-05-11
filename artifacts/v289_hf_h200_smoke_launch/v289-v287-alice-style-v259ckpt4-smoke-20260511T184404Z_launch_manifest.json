@@ -1,0 +1,30 @@
+{
+  "branch": "v230-v226-complementarity",
+  "dataset": {
+    "train_file": "data/v287_reasoninggym_alice_style/20260511T1840Z/v287_reasoninggym_alice_style_train.jsonl",
+    "train_sha256": "591d28e5da7f08434db9d76410d31e61192e5c0f956d8a1f68c99f018d007f01",
+    "val_file": "data/v287_reasoninggym_alice_style/20260511T1840Z/v287_reasoninggym_alice_style_val.jsonl",
+    "val_sha256": "60de034966ccd4f55b06c783273f043e1712d5f4b1f54048ff7c84dbcfc70a0b"
+  },
+  "expected_commit": "a04b04a7dcbdd464def6b750ceffbfe765556377",
+  "flavor": "h200",
+  "gates": [
+    "hf_job_preflight_gate:preinstall",
+    "hf_job_preflight_gate:artifacts",
+    "hf_job_preflight_gate:postinstall",
+    "hf_job_train_v90 tokenization/truncation/offset-mask gate"
+  ],
+  "generated_at_utc": "2026-05-11T18:44:04.828882+00:00",
+  "hardware_cost_usd_per_hour": 5.0,
+  "image": "pytorch/pytorch:2.8.0-cuda12.8-cudnn9-devel",
+  "init_adapter": {
+    "repo": "felipesp1983/kg1-nemotron-lora-v259-v249-eqfocus-v257ckpt4-smoke",
+    "subfolder": "checkpoint-4"
+  },
+  "job_id": "6a0223b1317220dbbd1a7b9d",
+  "job_url": "https://huggingface.co/jobs/felipesp1983/6a0223b1317220dbbd1a7b9d",
+  "max_steps": 4,
+  "output_repo": "felipesp1983/kg1-nemotron-lora-v289-v287-alice-style-v259ckpt4-smoke",
+  "run_id": "v289-v287-alice-style-v259ckpt4-smoke-20260511T184404Z",
+  "version": "v289_v287_alice_style_h200_smoke"
+}

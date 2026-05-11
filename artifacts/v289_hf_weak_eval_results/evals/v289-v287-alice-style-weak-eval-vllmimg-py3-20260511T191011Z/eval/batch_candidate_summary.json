@@ -1,0 +1,58 @@
+{
+  "base_model_path": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+  "candidates_json": "/tmp/kg1_v245_weak_eval/v289-v287-alice-style-weak-eval-vllmimg-py3-20260511T191011Z/v245_weak_eval_candidates.json",
+  "config": {
+    "dtype": "auto",
+    "enable_chunked_prefill": true,
+    "enable_prefix_caching": true,
+    "enable_thinking": false,
+    "gpu_memory_utilization": 0.85,
+    "max_lora_rank": 32,
+    "max_model_len": 4096,
+    "max_num_seqs": 8,
+    "max_tokens": 96,
+    "model_name": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+    "model_revision": "cbd3fa9f933d55ef16a84236559f4ee2a0526848",
+    "prompt_suffix": "\nReturn only one line: `\\boxed{answer}`. No reasoning. No explanation.",
+    "temperature": 0.0,
+    "top_p": 1.0,
+    "trust_remote_code": true,
+    "warmup_rows": 0
+  },
+  "elapsed_s": 291.19329953193665,
+  "generated_at_utc": "2026-05-11T19:16:45.207802+00:00",
+  "questions_csv": "/root/.cache/huggingface/hub/datasets--felipesp1983--kg1-nemotron-training/snapshots/c431f71af0b4df45c3207c29c6066655113e4fe0/runtime_artifacts/v245_weak_eval_bridge/v245-weak-bridge-hfonly-20260510T1950Z/v221_weak_315.csv",
+  "rows": [
+    {
+      "accuracy": 0.05396825396825397,
+      "adapter": "/tmp/kg1_v245_adapter_snapshots/v289-v287-alice-style-weak-eval-vllmimg-py3-20260511T191011Z/372675115a0b/checkpoint-4",
+      "bit_manipulation_correct": 8,
+      "completion_tokens": 3529,
+      "correct": 17,
+      "equation_transform_correct": 9,
+      "error": "",
+      "name": "v289_checkpoint_4",
+      "report_json": "/tmp/kg1_v245_weak_eval/v289-v287-alice-style-weak-eval-vllmimg-py3-20260511T191011Z/eval/v289_checkpoint_4/v289_hf_weak_v289_checkpoint_4_eval_report.json",
+      "status": "ok",
+      "tokens_per_second": 32.38743998010659,
+      "truncated": 0,
+      "truncation_rate": 0.0
+    },
+    {
+      "accuracy": 0.050793650793650794,
+      "adapter": "/tmp/kg1_v245_adapter_snapshots/v289-v287-alice-style-weak-eval-vllmimg-py3-20260511T191011Z/372675115a0b/final",
+      "bit_manipulation_correct": 7,
+      "completion_tokens": 3532,
+      "correct": 16,
+      "equation_transform_correct": 9,
+      "error": "",
+      "name": "v289_final",
+      "report_json": "/tmp/kg1_v245_weak_eval/v289-v287-alice-style-weak-eval-vllmimg-py3-20260511T191011Z/eval/v289_final/v289_hf_weak_v289_final_eval_report.json",
+      "status": "ok",
+      "tokens_per_second": 78.81139382327049,
+      "truncated": 0,
+      "truncation_rate": 0.0
+    }
+  ],
+  "solution_csv": "/root/.cache/huggingface/hub/datasets--felipesp1983--kg1-nemotron-training/snapshots/c431f71af0b4df45c3207c29c6066655113e4fe0/runtime_artifacts/v245_weak_eval_bridge/v245-weak-bridge-hfonly-20260510T1950Z/v221_weak_315.csv"
+}
