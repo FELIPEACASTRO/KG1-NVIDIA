@@ -1,0 +1,52 @@
+# V270 V269 reasoning smoke diff
+
+Baseline: V259 checkpoint-4 V221-contract (`192/315`, equation 56, bit 136, trunc 0).
+
+V269 checkpoint-2 matched the baseline score and V269 final regressed. The changed-row CSVs are intentionally small diagnostic artifacts; raw prediction downloads are not retained.
+
+## v269_checkpoint2_vs_v259_checkpoint4
+
+Rows: 315 | changed predictions: 7 | gains: 1 | losses: 1 | net: 0
+
+```json
+{
+  "bit_manipulation": {
+    "changed_predictions": 3,
+    "gains": 1,
+    "losses": 1,
+    "net": 0,
+    "rows": 160
+  },
+  "equation_transform": {
+    "changed_predictions": 4,
+    "gains": 0,
+    "losses": 0,
+    "net": 0,
+    "rows": 155
+  }
+}
+```
+
+## v269_final_vs_v259_checkpoint4
+
+Rows: 315 | changed predictions: 10 | gains: 0 | losses: 2 | net: -2
+
+```json
+{
+  "bit_manipulation": {
+    "changed_predictions": 3,
+    "gains": 0,
+    "losses": 2,
+    "net": -2,
+    "rows": 160
+  },
+  "equation_transform": {
+    "changed_predictions": 7,
+    "gains": 0,
+    "losses": 0,
+    "net": 0,
+    "rows": 155
+  }
+}
+```
+

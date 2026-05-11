@@ -21,6 +21,8 @@ Objetivo: consolidar os achados Kaggle/Hugging Face, resultados V221/V226/V229/V
 - Atualizacao V264 2026-05-11: recheck HF CPU confirmou que os traces P0 `andy279/*` continuam bloqueados por review/termos (`403`). A rota mais promissora agora precisa de acao humana para liberar esses datasets no HF; o mirror publico sozinho ja foi usado e nao entregou equation suficiente.
 - Atualizacao V265 2026-05-11: foi criado o mix `score086_filtered_mix`, usando V249 publico nao-weak mais o corpus historico V189 que participou da trajetoria do score amplo `0.86`, mas com bloqueio por `weak_id`, `prompt_sha256` normalizado e dedupe. O builder CPU manteve `3442` linhas (`2000` equation, `1442` bit) e bloqueou `807` linhas (`83` overlaps exatos com weak por prompt hash e `724` duplicatas). O split final ficou em train `3098` (`1800` equation, `1298` bit) e val `344` (`200` equation, `144` bit). Esse dataset passou o V250 tokenization gate no HF: truncation `0.0`, offset masks completos e nenhum token de completion descartado. Proximo passo autorizado: smoke train curto em H200, nao treino longo.
 - Atualizacao V266 2026-05-11: o primeiro smoke H200 sobre V265, iniciado de `v259_checkpoint_4`, falhou no objetivo e foi interrompido por FinOps quando `final` foi confirmado identico ao `checkpoint-4` via SHA LFS. Resultados weak V221-contract: `checkpoint-2 = 155/315, equation 56/155, bit 99/160, trunc 0`; `checkpoint-4 = 154/315, equation 56/155, bit 98/160, trunc 2`. Diagnostico: a receita `all target modules + equation_transform=3.0 + bit=0.8` destruiu a familia `bit_manipulation` sem ganhar equation. O V265 nao esta descartado, mas so pode voltar em smoke ultra-conservador, com trainable limitado a atencao/lm_head, bit replay reforcado, source key V189 corrigida para `v189_score086_equation_answer_short_filtered`, e weak eval parcial antes de qualquer novo gasto longo.
+- Atualizacao V268/V269/V270 2026-05-11: o corpus publico `tonghuikang/nemotron` foi ingerido com bloqueio de todos os 315 weak IDs e so aceitou linhas cujo `\boxed{}` final batia com `train.csv`. O builder V268 gerou `1789` linhas (`1105` bit, `506` equation em treino), passou tokenization gate V250 com `max_length=8192`, e o smoke V269 em H200 a partir do melhor V259 checkpoint-4 empatou o melhor score: `v269_checkpoint_2 = 192/315`, equation `56/155`, bit `136/160`, trunc `0`. O `final` regrediu para `190/315`, bit `134/160`, trunc `2`. Conclusao: V268 e util como fonte de raciocinio/verifier, mas a receita SFT curta nao trouxe ganho novo de equation.
+- Atualizacao V271 2026-05-11: a mineracao CPU-only dos erros atuais validou o contrato V221 e confirmou que o V269 mudou `4` respostas de `equation_transform`, todas de errado para errado. Nos `99` erros restantes do melhor atual (`v259_checkpoint_4`), a taxonomia ficou: `83` `equation_symbolic_punct` com resposta simbolica, `15` `equation_numeric_operator` com resposta numerica, e `1` `equation_numeric_operator` misto. Regra de negocio: nao gastar H200 novamente ate existir um solver/verifier CPU que gere pelo menos `+4` a `+5` overrides de equation sem violar `bit>=136/160`, ou ate os traces gated `andy279` serem liberados.
 - Auditoria Google Drive 2026-05-10: `1879` arquivos KG1 catalogados, `85` adapters completos, `232` reports, `423` CSVs, `54` JSONLs e `11` notebooks. Nenhum artefato do Drive supera o baseline V226 sob gate weak canonico; o Drive deve ser usado como fonte de pesos fortes conhecidos, reports e dados para triagem, nao como fonte de promocao automatica.
 - Achado Drive mais util: V207A full/validation gate do V194 tem `822/947` com familias nao criticas em `100%`, mas confirma o mesmo gargalo fraco: `bit_manipulation=135/160`, `equation_transform=55/155`. Isso reforca que o problema real continua concentrado em `equation_transform`.
 - Importante: muitos arquivos do Drive foram parte da trajetoria que chegou ao score amplo `0.86`. Esse score e valido como evidencia historica de que V194/V202D resolvia muito bem as familias nao criticas, mas nao pode ser interpretado como melhoria atual das duas familias alvo. No recorte decisivo, o proprio V207A mede `equation_transform=55/155` e `bit_manipulation=135/160`, alinhado ao gargalo V230.
@@ -105,6 +107,76 @@ Decisao apos V266:
   - source key corrigida (`v189_score086_equation_answer_short_filtered`);
   - eval parcial do primeiro checkpoint antes de avaliar checkpoints adicionais.
 - Se esse smoke conservador nao mantiver bit `>=136/160` e nao aumentar equation acima de `56/155`, encerrar V265 e voltar para solver/verifier ou traces `andy279`.
+
+### V268/V269/V270 tonghuikang reasoning mix - HF-only
+
+Objetivo: testar se o corpus publico `tonghuikang/nemotron`, que inclui problemas, corpus, reasoning, treino e metricas da submissao Progress Prize, adiciona sinal real para as duas familias criticas sem contaminar o contrato weak.
+
+Evidencia concreta:
+
+- Fonte publica auditada: `https://github.com/tonghuikang/nemotron`.
+- Script builder: `scripts/run_v268_tonghuikang_reasoning_mix_hf.py`.
+- Job builder HF CPU: `https://huggingface.co/jobs/felipesp1983/6a018728317220dbbd1a7958`.
+- Dataset publicado: `felipesp1983/kg1-nemotron-training/data/v268_tonghuikang_reasoning_mix/v268-hf-cpu-tonghuikang-reasoning-20260511T0730Z`.
+- Commit HF dataset: `https://huggingface.co/datasets/felipesp1983/kg1-nemotron-training/commit/fabb7f3d3a7f3bf730b79422e49dc961f2ea2501`.
+- Hashes de fonte auditados:
+  - `train.csv`: `d204af160633b638448723a437aa51c0db70fd0b64ff92f6ad6f52e5ac6377fa`.
+  - `problems.jsonl`: `5b536b97b402fab985312003983bf4c59a928eb08dbb2705ca77d1030d4cf24e`.
+  - `corpus.jsonl`: `7ac9e8e267397f1dbcce8d015c253460fec543cab20a078fcf64a53c6000de23`.
+  - `generation.jsonl`: `42eb76d13bd81ea3ce6b55120a3e2a23782c18563e05dd4ac9eea59d631b9fbc`.
+- Linhas aceitas: `1789`; train `1611`, val `178`.
+- Train family counts: `bit_manipulation=1105`, `equation_transform=506`.
+- Val family counts: `bit_manipulation=123`, `equation_transform=55`.
+- Rejeicoes: `missing_synthetic=798`, `boxed_answer_mismatch=255`.
+- Hash train: `e45041d7a4e3d83026d4131d4b6aceb58eddf76ba642266ddc6b08a3943ee86d`.
+- Hash val: `0c34a3ea1c6c3e400a76bd9aaa534089fce5f87128398ead73d27c403886fb34`.
+
+Gate V250 no HF:
+
+- Job: `https://huggingface.co/jobs/felipesp1983/6a01881b317220dbbd1a795e`.
+- Resultado: `prompt_truncated=0`, `fallback_masks=0`, offset masks completos, nenhum token de completion descartado.
+- Max tokens: train `8015`, val `7731`; `max_length=8192`.
+- Estilo assistant: `reasoning_boxed`.
+
+Smoke V269/V270:
+
+- Train H200: `https://huggingface.co/jobs/felipesp1983/6a019ad0aff1cd33e8f337b3`.
+- Eval H200: `https://huggingface.co/jobs/felipesp1983/6a019f17317220dbbd1a79a7`.
+- Output repo: `felipesp1983/kg1-nemotron-lora-v269-v268-reasoning-v259ckpt4-smoke`.
+- Upload commit eval: `https://huggingface.co/felipesp1983/kg1-nemotron-lora-v269-v268-reasoning-v259ckpt4-smoke/commit/a2e5587a30dcfada448dd43458eec10170350d60`.
+- Resultado `v269_checkpoint_2_v221_contract`: `192/315`, equation `56/155`, bit `136/160`, trunc `0`.
+- Resultado `v269_final_v221_contract`: `190/315`, equation `56/155`, bit `134/160`, trunc `2`.
+
+Decisao apos V270:
+
+- O V269 checkpoint-2 empatou o melhor atual, mas nao trouxe ganho liquido.
+- O V269 final perdeu `2` acertos em bit e violou o guardrail `bit>=136`.
+- O diff V270 mostra `4` mudancas em equation, todas errado-para-errado; logo o corpus V268 nao autoriza treino longo em H200.
+- V268 permanece util para extrair regras/verifiers e exemplos de raciocinio, mas nao como SFT bruto adicional.
+
+### V271 current-best error miner - HF CPU gate
+
+Objetivo: transformar o resultado V270 em decisao de FinOps e taxonomia acionavel dos erros restantes.
+
+Evidencia concreta local:
+
+- Script: `scripts/run_v271_current_best_error_miner_hf.py`.
+- Baseline analisado: `v259_checkpoint4_current_best`.
+- Contrato V221 observado: `bf055e3b9ebce79d4bfc9e48bce5a305b1d83da882f14afddec80d6afaba5fff`.
+- Melhor atual: `192/315`, equation `56/155`, bit `136/160`, trunc `0`.
+- V269 checkpoint-2: `192/315`, equation `56/155`, bit `136/160`, trunc `0`.
+- V269 final: `190/315`, equation `56/155`, bit `134/160`, trunc `2`.
+- Taxonomia dos `99` erros atuais de equation:
+  - `83` `equation_symbolic_punct` com resposta simbolica.
+  - `15` `equation_numeric_operator` com resposta numerica.
+  - `1` `equation_numeric_operator` misto.
+
+Decisao:
+
+- O gargalo real deixou de ser equation numerico; e `equation_symbolic_punct`.
+- A proxima melhoria tem que vir de parser/solver/verifier para simbolos/pontuacao ou de traces solver-guided.
+- Nao iniciar novo H200 ate o V271/V246/V241 produzir pelo menos `+4` a `+5` overrides verificaveis em equation ou ate liberar os datasets gated `andy279`.
+- Se o dataset `andy279/nemotron-reasoning-challenge-raw-traces` for liberado, priorizar os arquivos `solver_transformation_traces_merged.jsonl`, `solver_transformation_traces_gpt54.jsonl` e `solver_bit_manipulation_traces_merged.jsonl`.
 
 ### Auditoria OpenRouter anexada - 2026-05-10
 
