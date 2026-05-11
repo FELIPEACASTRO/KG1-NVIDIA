@@ -1,0 +1,109 @@
+{
+  "blocked_actions": [
+    "gpu_train_without_v286_tokenization_gate",
+    "model_generation",
+    "full_eval",
+    "package",
+    "kaggle_submit"
+  ],
+  "config": {
+    "core_sources": [
+      "binary_alternation",
+      "bitwise_arithmetic",
+      "count_bits",
+      "cryptarithm",
+      "simple_equations"
+    ],
+    "include_support": false,
+    "included_sources": [
+      "binary_alternation",
+      "bitwise_arithmetic",
+      "count_bits",
+      "cryptarithm",
+      "simple_equations"
+    ],
+    "min_val_per_source": 12,
+    "seed": 285,
+    "support_sources": [
+      "base_conversion",
+      "number_format"
+    ],
+    "val_fraction": 0.12
+  },
+  "decision": {
+    "next_action": "Run V286 generic tokenization/leakage gate before any HF GPU ablation.",
+    "reason": "candidate_rows=739; train=651; validation=88; verified_mismatch=0; weak_overlap=0",
+    "status": "dataset_ready_for_tokenization_gate"
+  },
+  "generated_at_utc": "2026-05-11T18:27:24.281844+00:00",
+  "inputs": {
+    "selected_rows_jsonl": "artifacts\\v281_reasoninggym_cpu_triage\\20260511T1835Z\\v281_reasoninggym_selected_rows.jsonl",
+    "selected_rows_sha256": "1070293208b52a03aa7f44f520a030437cd61f0712039ab58d37e6a66afbdc01",
+    "v281_manifest_json": "artifacts\\v281_reasoninggym_cpu_triage\\20260511T1835Z\\v281_reasoninggym_cpu_triage_manifest.json",
+    "v281_manifest_sha256": "0cb948d91353086f38f2a3007deca21d18b32c954a7af3ceaee45f738eb7cbac",
+    "v281_shared_row_contract_sha256": "bf055e3b9ebce79d4bfc9e48bce5a305b1d83da882f14afddec80d6afaba5fff",
+    "v281_stream_filter_overlap_counts": {},
+    "verifier_audit_csv": "artifacts\\v282_reasoninggym_verifier_probes\\20260511T1855Z\\v282_reasoninggym_verifier_audit.csv",
+    "verifier_audit_sha256": "2ca194c33a36b6933d18253e05a8bd23ac709de1024d13195f5794db3847d76c"
+  },
+  "label": "v285_reasoninggym_auxiliary",
+  "outputs": {
+    "manifest_json": "artifacts\\v285_reasoninggym_auxiliary_dataset\\20260511T1830Z\\v285_reasoninggym_auxiliary_manifest.json",
+    "train_jsonl": "artifacts\\v285_reasoninggym_auxiliary_dataset\\20260511T1830Z\\v285_reasoninggym_auxiliary_train.jsonl",
+    "train_sha256": "5aa4cf3ad8d7f7439dc786a46f03ea915f7285ad67966332c5b7f4a7414a6205",
+    "val_jsonl": "artifacts\\v285_reasoninggym_auxiliary_dataset\\20260511T1830Z\\v285_reasoninggym_auxiliary_val.jsonl",
+    "val_sha256": "5c9b99fe1386f5b243bea46d7ee7745d3d8ee75a09009be01c3b486b2893a08e"
+  },
+  "schema_version": "kg1_v285_reasoninggym_auxiliary_dataset_v1",
+  "selection": {
+    "candidate_rows": 739,
+    "selected_rows": 1326,
+    "skipped_source_counts": {
+      "base_conversion": 116,
+      "number_format": 161
+    },
+    "skipped_status_counts": {
+      "error": 17,
+      "unsupported": 293
+    },
+    "verifier_audit_rows": 1326
+  },
+  "source_dataset": "nvidia/Nemotron-RL-ReasoningGym-v1",
+  "validation": {
+    "train": {
+      "family_counts": {
+        "bit_manipulation": 394,
+        "equation_transform": 257
+      },
+      "prompt_answer_hash_count": 651,
+      "prompt_hash_count": 651,
+      "rows": 651,
+      "source_counts": {
+        "binary_alternation": 136,
+        "bitwise_arithmetic": 126,
+        "count_bits": 132,
+        "cryptarithm": 128,
+        "simple_equations": 129
+      },
+      "unique_ids": 651
+    },
+    "train_val_prompt_answer_overlap": 0,
+    "validation": {
+      "family_counts": {
+        "bit_manipulation": 53,
+        "equation_transform": 35
+      },
+      "prompt_answer_hash_count": 88,
+      "prompt_hash_count": 88,
+      "rows": 88,
+      "source_counts": {
+        "binary_alternation": 18,
+        "bitwise_arithmetic": 17,
+        "count_bits": 18,
+        "cryptarithm": 17,
+        "simple_equations": 18
+      },
+      "unique_ids": 88
+    }
+  }
+}

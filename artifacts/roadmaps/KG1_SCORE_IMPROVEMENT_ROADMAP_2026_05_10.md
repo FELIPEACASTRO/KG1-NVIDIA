@@ -41,6 +41,8 @@ Objetivo: consolidar os achados Kaggle/Hugging Face, resultados V221/V226/V229/V
 - Atualizacao V278 recheck 2026-05-11: a auditoria CPU-only `scripts/run_v278_symbolic_pbe_dsl_audit_hf.py` foi reexecutada localmente na worktree limpa, output `artifacts/v278_symbolic_pbe_dsl_audit/20260511T1825Z`. O contrato V221 bateu, `parse_status_counts={"ok":99}`, `subtype_counts={"equation_numeric_operator":16,"equation_symbolic_punct":83}`, `all_verified_candidates=0`, `all_incorrect_candidates=3`, `verified_promotable_candidates=0`. Decisao reconfirmada: `no_promotable_symbolic_pbe_signal`; nao gastar GPU na DSL local simples.
 - Atualizacao V281 2026-05-11: foi implementado e executado `scripts/run_v281_reasoninggym_cpu_triage.py` para o dataset `nvidia/Nemotron-RL-ReasoningGym-v1`. Gates: split `train` unico, schema esperado, licenca `cc-by-4.0`, weak CSV V221 validado (`315`, SHA `85da758e14d57ea40270de5747f98726a0ad0b6d1795bff7dd46183005e0f9b6`) e overlap fraco `0`. Output `artifacts/v281_reasoninggym_cpu_triage/20260511T1835Z` selecionou `1326` fixtures: `bitwise_arithmetic=143`, `circuit_logic=141`, `count_bits=150`, `binary_alternation=154`, `simple_equations=147`, `cryptarithm=145`, `polynomial_multiplication=152`, alem de `base_conversion=133` e `number_format=161`. Decisao: pronto para V282 verifier probes CPU; ainda nao autoriza treino LoRA direto.
 - Atualizacao V282 2026-05-11: foi implementado e executado `scripts/run_v282_reasoninggym_verifier_probes.py` sobre o output V281. Resultado final `artifacts/v282_reasoninggym_verifier_probes/20260511T1855Z`: `1016/1326` fixtures verificados localmente com `0` mismatches. Cobertura validada: `binary_alternation=154/154`, `bitwise_arithmetic=143/143`, `count_bits=150/150`, `cryptarithm=145/145`, `number_format=161/161`, `simple_equations=147/147`, `base_conversion=116/133`; `circuit_logic` e `polynomial_multiplication` ficaram unsupported. Decisao: `reasoninggym_verified_fixtures_ready_for_probe_design`; usar apenas como probes/fixture design CPU, nao como autorizacao de treino direto.
+- Atualizacao V285 2026-05-11: como `andy279/*` segue dependente de aprovacao humana, foi criado o caminho publico alternativo `scripts/build_v285_reasoninggym_auxiliary_dataset.py`. Ele consome somente linhas V281 que passaram no audit V282 com `verified_match`, filtra as familias centrais `binary_alternation`, `bitwise_arithmetic`, `count_bits`, `cryptarithm` e `simple_equations`, valida contrato weak V221 `bf055e3b9ebce79d4bfc9e48bce5a305b1d83da882f14afddec80d6afaba5fff`, e gera `739` fixtures auxiliares sem overlap fraco: train `651` (`bit=394`, `equation=257`) e validation `88` (`bit=53`, `equation=35`). Output: `artifacts/v285_reasoninggym_auxiliary_dataset/20260511T1830Z`. Bloqueio mantido: nao e autorizacao de treino direto, full eval, package ou Kaggle submit.
+- Atualizacao V286 2026-05-11: foi criado e executado `scripts/run_v286_generic_tokenization_gate.py` sobre o V285 com tokenizer real `nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16@cbd3fa9f933d55ef16a84236559f4ee2a0526848`. Resultado: `offset_masks=739/739`, `fallback_masks=0`, `prompt_truncation_rate=0.0`, `completion_tokens_dropped=0`, `train_token_max=191`, `validation_token_max=191`, `train_val_prompt_overlap=0`. Output: `artifacts/v286_generic_tokenization_gate/20260511T1835Z`. Decisao: o dataset esta tecnicamente pronto para um smoke HF muito pequeno, mas ainda precisa de decisao FinOps/risco porque os exemplos sao prompts diretos ReasoningGym, nao prompts Alice KG1.
 
 ## Evidencias consolidadas
 
@@ -4497,15 +4499,21 @@ Achados P2/P3 novos:
 
 Nova acao de roadmap derivada da reauditoria:
 
-1. Criar `V281_REASONINGGYM_CPU_TRIAGE`:
+1. `V281_REASONINGGYM_CPU_TRIAGE` - concluido:
    - objetivo: filtrar `Nemotron-RL-ReasoningGym-v1` por subfontes relevantes e produzir manifest de mini-fixtures sem download persistente grande;
-   - esperado: lista de exemplos candidatos por subtipo, hashes, licenca, dedupe e estimativa de cobertura para `bit_manipulation` e `equation_transform`.
-2. Criar `V282_REASONINGGYM_VERIFIER_PROBES`:
+   - resultado: `1326` fixtures selecionados, licenca `cc-by-4.0`, weak overlap `0`, contrato V221 validado.
+2. `V282_REASONINGGYM_VERIFIER_PROBES` - concluido:
    - objetivo: testar se os exemplos filtrados melhoram regras/verificadores locais, principalmente signed hex/bitwise, circuit XOR, linear equations, cryptarithm e operator transforms;
-   - esperado: ganho medido em miss-packs sem regressao contra V275.
-3. Manter GPU bloqueada:
+   - resultado: `1016/1326` fixtures verificados com `0` mismatches; `circuit_logic` e `polynomial_multiplication` ficaram fora por falta de verifier.
+3. `V285_REASONINGGYM_AUXILIARY_DATASET` - concluido:
+   - objetivo: materializar apenas fixtures centrais com `verified_match` em formato chat JSONL compativel com os scripts SFT;
+   - resultado: train `651` e validation `88`, sem overlap train/val, sem weak overlap, familias `bit_manipulation` e `equation_transform` preservadas.
+4. `V286_GENERIC_TOKENIZATION_GATE` - concluido:
+   - objetivo: aplicar as regras de gate/tokenizacao usadas nos Colabs e jobs HF antes de qualquer gasto GPU;
+   - resultado: tokenizer Nemotron real carregou, offset masks completos, prompt truncation `0.0`, completion truncation `0`, token max `191`.
+5. Manter GPU bloqueada ate decisao de risco:
    - objetivo: preservar budget HF;
-   - esperado: nenhum job H100/H200 ate haver evidencia CPU de ganho deployable.
+   - esperado: nenhum job H100/H200 para V285/V286 ate aprovar explicitamente uma receita smoke muito pequena, porque esses fixtures sao prompts diretos ReasoningGym e ainda nao provaram ganho deployable em weak.
 
 ## Atualizacao 2026-05-11 - V284 official-like HF gate
 
