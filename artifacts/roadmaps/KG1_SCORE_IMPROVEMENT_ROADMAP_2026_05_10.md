@@ -4026,3 +4026,93 @@ Proximo passo:
 3. Se `andy279/*` continuar bloqueado, a unica rota tecnica restante sem novo dado e expandir V278 com uma gramatica externa comprovada por traces/repo, nao por tentativa cega no weak.
 4. Nao treinar novo LoRA, nao repetir adapter soup, nao repetir prompt `no suffix`, nao gastar GPU em V278 local DSL, nao usar os adapters externos V277 e nao usar os quatro `passagereptile455/*`; essas rotas ja foram negativas, neutras ou falharam static gate.
 5. Reusar V249/V250/V242/V268 somente com preflight de hashes, anti-leakage, row-contract, tokenizacao, estimativa de custo e kill-switch por primeiro candidato.
+
+OpenRouter Chat Mon May 11 2026 (2) audit - literature and URL verification:
+
+- Arquivo auditado: `C:\Users\davis\Downloads\OpenRouter Chat Mon May 11 2026 (2).json`.
+- SHA256: `055fc803a482b8959213480f082bb8ad01fecf1c2ec5a5933d0954c7d7d83cde`.
+- Tamanho: `747225` bytes.
+- Estrutura parseada:
+  - `messages=33`;
+  - `items=130`;
+  - `web_search_items=77`;
+  - `completed_web_search_items=70`;
+  - `unique_urls_by_regex=398`;
+  - `artifacts/artifactFiles/artifactVersions/artifactFileContents` vazios.
+- Contexto operacional informado no anexo:
+  - `bit_manipulation`: `136/160 = 85.00%`;
+  - `equation_transform`: `55/155 = 35.48%`;
+  - `overall weak`: `191/315 = 60.63%`.
+- Conclusao de confianca:
+  - respostas de outras IAs no export sao tratadas como hipoteses, nao como evidencia de score;
+  - apenas URLs/fontes primarias verificadas e artefatos locais/HF/Kaggle entram como decisao operacional;
+  - estimativas soltas de ganho percentual foram descartadas se nao tinham paper, dataset, codigo ou reproducao local.
+
+Fontes primarias verificadas nesta auditoria:
+
+1. `https://huggingface.co/datasets/andy279/nemotron-reasoning-challenge`
+   - Confirma dataset SFT especifico do Kaggle/NVIDIA Nemotron Reasoning Challenge.
+   - Card informa `49,290` exemplos de treino e `1,165` de validacao.
+   - Distribuicao de treino: `bit_manipulation=17,285`, `transformation=10,741`, alem de cipher/gravity/numeral/unit_conversion.
+   - Fontes incluem teacher models e deterministic solvers; pontos diretamente uteis: `Solver-guided transformation=1,101`, `Solver-guided bit manipulation=1,602`, `GPT-5.4 transformation=85`.
+   - Observacao critica: repo e `gated=manual`; V280 ja confirmou payload `403` aguardando aprovacao. Nao gastar GPU ate liberar acesso e rodar gate de download/auditoria.
+
+2. `https://huggingface.co/datasets/andy279/nemotron-reasoning-challenge-raw-traces`
+   - Confirma raw traces do proprio desafio, com tentativas corretas e incorretas, metadata e flags `is_correct` / `is_correct_official`.
+   - Arquivos mais relevantes para ACC:
+     - `solver_transformation_traces_merged.jsonl`: `1,101` puzzles, solver-guided transformation traces;
+     - `solver_bit_manipulation_traces_merged.jsonl`: `1,602` puzzles, solver-guided bit traces;
+     - `solver_transformation_traces_gpt54.jsonl`: `85` hardest transformation traces.
+   - Card afirma que deterministic brute-force solvers descobrem a regra antes dos teachers gerarem traces. Isso e exatamente alinhado ao gargalo atual de `equation_transform`.
+   - Observacao critica: tambem `gated=manual`; desbloqueio humano continua P0.
+
+3. `https://huggingface.co/datasets/nvidia/Puzzle-KD-Nemotron-Post-Training-Dataset-v2`
+   - Publico, `cc-by-4.0`, `851k` linhas, categorias math/code/stem/chat.
+   - Valor: referencia de formato/teacher-data/post-training da NVIDIA.
+   - Limite: nao e KG1-specific, e grande demais para baixar/treinar sem gate de dominio, licenca, dedupe e leakage. Classificacao P2, nao P0.
+
+4. `https://arxiv.org/abs/2201.11903`
+   - Chain-of-thought melhora tarefas aritmeticas, simbolicas e de commonsense em LLMs grandes.
+   - Aplicacao KG1: usar CoT como fonte de traces/treino, nao como inferencia final livre; nosso output precisa ser uma linha boxed e o custo de self-consistency em full e alto.
+
+5. `https://openreview.net/pdf?id=M1fd9Z00sj`
+   - PAL: LLM decompõe o problema em programa e delega a solucao a runtime Python.
+   - Aplicacao KG1: priorizar DSL/program-aided/verifier para `equation_transform` e bit; nao confiar em texto CoT como autoridade.
+
+6. `https://docs.sympy.org/latest/guides/solving/index.html`
+   - SymPy cobre solvers algebricos, numericos, sistemas, polinomios, matrizes, desigualdades e diofantinas.
+   - Aplicacao KG1: util para subcasos `equation_numeric_operator`; insuficiente sozinho para `equation_symbolic_punct`, que exige DSL de transformacoes de string/simbolos.
+
+7. `https://arxiv.org/abs/2410.21272`
+   - "Arithmetic Without Algorithms" indica que LLMs podem usar heuristicas esparsas em vez de algoritmos robustos.
+   - Aplicacao KG1: explica por que novos LoRAs/prompting podem oscilar e por que o verifier deterministico V274/V275 e mais confiavel do que treino cego.
+
+8. `https://openreview.net/pdf?id=tIlDF5B6T4`
+   - "Learning Mathematical Rules with Large Language Models" mostra metodologia de dados sinteticos para regras matematicas e generalizacao.
+   - Aplicacao KG1: se houver novo treino, ele deve ser rule-targeted e gerado por familia/subtipo, nao mistura grande generica.
+
+9. `https://arxiv.org/abs/2504.10415` e `https://github.com/deep-symbolic-mathematics/llm-srbench`
+   - LLM-SRBench confirma dificuldade de descobrir equacoes/transformacoes fora de formas memorizadas; melhor sistema reportado na card arXiv fica em `31.5%` de symbolic accuracy.
+   - Aplicacao KG1: reforca que `equation_transform=35.48%` nao e anomalia simples; caminho correto e busca/verificacao simbolica, nao apenas mais amostras genericas.
+
+10. `https://arxiv.org/abs/2409.12183`
+    - Meta-analise de CoT: beneficios fortes principalmente em math/logica; paper tambem aponta que CoT fica abaixo de solvers simbolicos para execucao simbolica.
+    - Aplicacao KG1: CoT e secundario; solver/verifier continua prioridade.
+
+Decisoes incorporadas ao roadmap:
+
+- P0 imediato permanece V275/V274 deployavel: e a unica rota ja medida com ganho real (`196/315`, `equation=60/155`, `bit=136/160`, `trunc=0`), acima do baseline adapter-only.
+- P0 bloqueado por humano: liberar `andy279/*` no HF. Depois, rodar V280 com `--allow-full-download`, hashes, schema, anti-leakage e family counts antes de qualquer H100/H200.
+- P1 CPU sem novo dado: expandir V278 de DSL simples para um "term rewriting verifier" com:
+  - parse de exemplos input/output;
+  - inducao de regras candidatas;
+  - execucao deterministica;
+  - selector com regra de promocao `gains>=4/5`, `losses=0`, `bit>=136/160`.
+- P1 treinamento: somente apos prova CPU/verifier ou acesso `andy279`. Treino deve ser curriculum/rule-targeted para `equation_transform`, com guardrail de bit, nao novo sweep amplo.
+- P2: usar `nvidia/Puzzle-KD-Nemotron-Post-Training-Dataset-v2` apenas como referencia de formato ou amostra pequena; nao baixar full nem misturar em treino sem gate.
+- Descartado agora:
+  - CoT/self-consistency como inferencia final principal;
+  - GNN/nova arquitetura;
+  - dataset generico enorme;
+  - model merging/adapters externos que ja falharam gate;
+  - qualquer estimativa OpenRouter sem fonte primaria ou reproducao local.
