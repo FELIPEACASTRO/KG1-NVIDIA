@@ -1,0 +1,63 @@
+{
+  "adapter_repo": "felipesp1983/kg1-nemotron-lora-v290-rank19-micro-patch-smoke",
+  "adapter_subfolders": [
+    "checkpoint-3",
+    "checkpoint-6",
+    "final_adapter"
+  ],
+  "branch": "v230-v226-complementarity",
+  "candidate_names": [
+    "v290_checkpoint_3_v221_contract",
+    "v290_checkpoint_6_v221_contract",
+    "v290_final_v221_contract"
+  ],
+  "decision_gate_after_eval": {
+    "minimum_bit_manipulation_correct": 135,
+    "minimum_equation_transform_correct": 56,
+    "minimum_total_correct": 191,
+    "preferred_submit_threshold": {
+      "minimum_bit_manipulation_correct": 136,
+      "minimum_equation_transform_correct": 60,
+      "minimum_total_correct": 193
+    }
+  },
+  "eval_contract": {
+    "disable_thinking": false,
+    "max_model_len": 8192,
+    "max_num_seqs": 64,
+    "max_tokens": 7680,
+    "name": "V221 reproduced weak contract",
+    "no_prompt_suffix": false,
+    "shared_row_contract_sha256": "bf055e3b9ebce79d4bfc9e48bce5a305b1d83da882f14afddec80d6afaba5fff",
+    "weak_csv_sha256": "85da758e14d57ea40270de5747f98726a0ad0b6d1795bff7dd46183005e0f9b6"
+  },
+  "expected_commit": "e32449c1d752c9315e9b556f650297413b257dd5",
+  "flavor": "h200",
+  "gates": [
+    "hf_job_weak_eval_v245 GPU gate",
+    "hf_job_weak_eval_v245 repo commit gate",
+    "hf_job_weak_eval_v245 weak CSV hash and shared-row contract gate",
+    "adapter r/alpha/config/weights gate for all candidates"
+  ],
+  "generated_at_utc": "2026-05-11T20:03:00.089815+00:00",
+  "hardware": {
+    "accelerator_model": "H200",
+    "accelerator_quantity": "1",
+    "accelerator_vram": "141 GB",
+    "cpu": "23 vCPU",
+    "name": "h200",
+    "pretty_name": "Nvidia H200",
+    "ram": "256 GB",
+    "unit_cost_usd": 0.083333,
+    "unit_label": "minute"
+  },
+  "image": "vllm/vllm-openai:v0.20.1",
+  "job_id": "6a023630aff1cd33e8f33ed2",
+  "job_status": "RUNNING",
+  "job_url": "https://huggingface.co/jobs/felipesp1983/6a023630aff1cd33e8f33ed2",
+  "namespace": "felipesp1983",
+  "output_path_in_repo": "evals/v290-h200-v221contract-rank19-micro-patch-20260511T200259Z",
+  "output_repo": "felipesp1983/kg1-nemotron-lora-v290-rank19-micro-patch-smoke",
+  "run_id": "v290-h200-v221contract-rank19-micro-patch-20260511T200259Z",
+  "version": "v290_rank19_micro_patch_v221_weak_eval"
+}
