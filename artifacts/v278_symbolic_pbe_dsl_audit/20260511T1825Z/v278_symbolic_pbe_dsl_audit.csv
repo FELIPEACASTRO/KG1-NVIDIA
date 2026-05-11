@@ -1,0 +1,847 @@
+id,subtype,rule_class,status,prediction,answer,baseline_prediction,verified_by_weak_label,incorrect_by_weak_label,promotable_after_class_gate,query,example_count,candidate_program_count,unique_prediction_count,proof
+09d5ee68,equation_symbolic_punct,symbolic_char_transducer,abstain,,!?'!,|:>>,False,False,False,|:*>>,4,0,0,no_pair_mapping
+09d5ee68,equation_symbolic_punct,symbolic_delete_selected_chars,abstain,,!?'!,|:>>,False,False,False,|:*>>,4,0,0,delete_char_sets=; unique_prediction_count=0
+09d5ee68,equation_symbolic_punct,symbolic_keep_selected_chars,abstain,,!?'!,|:>>,False,False,False,|:*>>,4,0,0,keep_char_sets=; unique_prediction_count=0
+09d5ee68,equation_symbolic_punct,symbolic_prefix_until_marker,abstain,,!?'!,|:>>,False,False,False,|:*>>,4,0,0,markers=''; unique_prediction_count=0
+09d5ee68,equation_symbolic_punct,symbolic_suffix_after_marker,abstain,,!?'!,|:>>,False,False,False,|:*>>,4,0,0,markers=''; unique_prediction_count=0
+09d5ee68,equation_symbolic_punct,symbolic_prefix_before_last_marker,abstain,,!?'!,|:>>,False,False,False,|:*>>,4,0,0,markers=''; unique_prediction_count=0
+09d5ee68,equation_symbolic_punct,symbolic_suffix_after_last_marker,abstain,,!?'!,|:>>,False,False,False,|:*>>,4,0,0,markers=''; unique_prediction_count=0
+09d5ee68,equation_symbolic_punct,symbolic_remove_first_marker,abstain,,!?'!,|:>>,False,False,False,|:*>>,4,0,0,markers=''; unique_prediction_count=0
+09d5ee68,equation_symbolic_punct,symbolic_position_template,abstain,,!?'!,|:>>,False,False,False,|:*>>,4,0,0,nonuniform_rhs_lengths
+09d5ee68,equation_symbolic_punct,symbolic_operator_index_template,abstain,,!?'!,|:>>,False,False,False,|:*>>,4,0,0,programs=; unique_prediction_count=0
+00457d26,equation_symbolic_punct,symbolic_char_transducer,abstain,,@&,[[!',False,False,False,[[-!',4,0,0,no_global_mapping
+00457d26,equation_symbolic_punct,symbolic_delete_selected_chars,abstain,,@&,[[!',False,False,False,[[-!',4,0,0,delete_char_sets=; unique_prediction_count=0
+00457d26,equation_symbolic_punct,symbolic_keep_selected_chars,abstain,,@&,[[!',False,False,False,[[-!',4,0,0,keep_char_sets=; unique_prediction_count=0
+00457d26,equation_symbolic_punct,symbolic_prefix_until_marker,abstain,,@&,[[!',False,False,False,[[-!',4,0,0,markers=''; unique_prediction_count=0
+00457d26,equation_symbolic_punct,symbolic_suffix_after_marker,abstain,,@&,[[!',False,False,False,[[-!',4,0,0,markers=''; unique_prediction_count=0
+00457d26,equation_symbolic_punct,symbolic_prefix_before_last_marker,abstain,,@&,[[!',False,False,False,[[-!',4,0,0,markers=''; unique_prediction_count=0
+00457d26,equation_symbolic_punct,symbolic_suffix_after_last_marker,abstain,,@&,[[!',False,False,False,[[-!',4,0,0,markers=''; unique_prediction_count=0
+00457d26,equation_symbolic_punct,symbolic_remove_first_marker,abstain,,@&,[[!',False,False,False,[[-!',4,0,0,markers=''; unique_prediction_count=0
+00457d26,equation_symbolic_punct,symbolic_position_template,abstain,,@&,[[!',False,False,False,[[-!',4,0,0,nonuniform_rhs_lengths
+00457d26,equation_symbolic_punct,symbolic_operator_index_template,abstain,,@&,[[!',False,False,False,[[-!',4,0,0,programs=; unique_prediction_count=0
+518deb39,equation_symbolic_punct,symbolic_char_transducer,abstain,,$,{}$>,False,False,False,$$-<>,4,0,0,no_global_mapping
+518deb39,equation_symbolic_punct,symbolic_delete_selected_chars,abstain,,$,{}$>,False,False,False,$$-<>,4,0,0,delete_char_sets=; unique_prediction_count=0
+518deb39,equation_symbolic_punct,symbolic_keep_selected_chars,abstain,,$,{}$>,False,False,False,$$-<>,4,0,0,keep_char_sets=; unique_prediction_count=0
+518deb39,equation_symbolic_punct,symbolic_prefix_until_marker,abstain,,$,{}$>,False,False,False,$$-<>,4,0,0,markers=''; unique_prediction_count=0
+518deb39,equation_symbolic_punct,symbolic_suffix_after_marker,abstain,,$,{}$>,False,False,False,$$-<>,4,0,0,markers=''; unique_prediction_count=0
+518deb39,equation_symbolic_punct,symbolic_prefix_before_last_marker,abstain,,$,{}$>,False,False,False,$$-<>,4,0,0,markers=''; unique_prediction_count=0
+518deb39,equation_symbolic_punct,symbolic_suffix_after_last_marker,abstain,,$,{}$>,False,False,False,$$-<>,4,0,0,markers=''; unique_prediction_count=0
+518deb39,equation_symbolic_punct,symbolic_remove_first_marker,abstain,,$,{}$>,False,False,False,$$-<>,4,0,0,markers=''; unique_prediction_count=0
+518deb39,equation_symbolic_punct,symbolic_position_template,abstain,,$,{}$>,False,False,False,$$-<>,4,0,0,nonuniform_rhs_lengths
+518deb39,equation_symbolic_punct,symbolic_operator_index_template,abstain,,$,{}$>,False,False,False,$$-<>,4,0,0,programs=; unique_prediction_count=0
+82109e34,equation_symbolic_punct,symbolic_char_transducer,abstain,,-@>,'^^^',False,False,False,'^-^^,4,0,0,no_global_mapping
+82109e34,equation_symbolic_punct,symbolic_delete_selected_chars,abstain,,-@>,'^^^',False,False,False,'^-^^,4,0,0,delete_char_sets=; unique_prediction_count=0
+82109e34,equation_symbolic_punct,symbolic_keep_selected_chars,abstain,,-@>,'^^^',False,False,False,'^-^^,4,0,0,keep_char_sets=; unique_prediction_count=0
+82109e34,equation_symbolic_punct,symbolic_prefix_until_marker,abstain,,-@>,'^^^',False,False,False,'^-^^,4,0,0,markers=''; unique_prediction_count=0
+82109e34,equation_symbolic_punct,symbolic_suffix_after_marker,abstain,,-@>,'^^^',False,False,False,'^-^^,4,0,0,markers=''; unique_prediction_count=0
+82109e34,equation_symbolic_punct,symbolic_prefix_before_last_marker,abstain,,-@>,'^^^',False,False,False,'^-^^,4,0,0,markers=''; unique_prediction_count=0
+82109e34,equation_symbolic_punct,symbolic_suffix_after_last_marker,abstain,,-@>,'^^^',False,False,False,'^-^^,4,0,0,markers=''; unique_prediction_count=0
+82109e34,equation_symbolic_punct,symbolic_remove_first_marker,abstain,,-@>,'^^^',False,False,False,'^-^^,4,0,0,markers=''; unique_prediction_count=0
+82109e34,equation_symbolic_punct,symbolic_position_template,abstain,,-@>,'^^^',False,False,False,'^-^^,4,0,0,nonuniform_rhs_lengths
+82109e34,equation_symbolic_punct,symbolic_operator_index_template,abstain,,-@>,'^^^',False,False,False,'^-^^,4,0,0,programs=; unique_prediction_count=0
+e1728524,equation_numeric_operator,numeric_same_operator_extended,abstain,,1089,0,False,False,False,99/99,5,0,0,same_operator_examples=0 below_min=2
+e3bf0c2c,equation_symbolic_punct,symbolic_char_transducer,abstain,,"""`",@`',False,False,False,@`}'',5,0,0,no_global_mapping
+e3bf0c2c,equation_symbolic_punct,symbolic_delete_selected_chars,abstain,,"""`",@`',False,False,False,@`}'',5,0,0,delete_char_sets=; unique_prediction_count=0
+e3bf0c2c,equation_symbolic_punct,symbolic_keep_selected_chars,abstain,,"""`",@`',False,False,False,@`}'',5,0,0,keep_char_sets=; unique_prediction_count=0
+e3bf0c2c,equation_symbolic_punct,symbolic_prefix_until_marker,abstain,,"""`",@`',False,False,False,@`}'',5,0,0,markers=''; unique_prediction_count=0
+e3bf0c2c,equation_symbolic_punct,symbolic_suffix_after_marker,abstain,,"""`",@`',False,False,False,@`}'',5,0,0,markers=''; unique_prediction_count=0
+e3bf0c2c,equation_symbolic_punct,symbolic_prefix_before_last_marker,abstain,,"""`",@`',False,False,False,@`}'',5,0,0,markers=''; unique_prediction_count=0
+e3bf0c2c,equation_symbolic_punct,symbolic_suffix_after_last_marker,abstain,,"""`",@`',False,False,False,@`}'',5,0,0,markers=''; unique_prediction_count=0
+e3bf0c2c,equation_symbolic_punct,symbolic_remove_first_marker,abstain,,"""`",@`',False,False,False,@`}'',5,0,0,markers=''; unique_prediction_count=0
+e3bf0c2c,equation_symbolic_punct,symbolic_position_template,abstain,,"""`",@`',False,False,False,@`}'',5,0,0,nonuniform_rhs_lengths
+e3bf0c2c,equation_symbolic_punct,symbolic_operator_index_template,abstain,,"""`",@`',False,False,False,@`}'',5,0,0,programs=; unique_prediction_count=0
+fdbdf50c,equation_symbolic_punct,symbolic_char_transducer,abstain,,"-\""",|?|,False,False,False,|\-?|,5,0,0,no_global_mapping
+fdbdf50c,equation_symbolic_punct,symbolic_delete_selected_chars,abstain,,"-\""",|?|,False,False,False,|\-?|,5,0,0,delete_char_sets=; unique_prediction_count=0
+fdbdf50c,equation_symbolic_punct,symbolic_keep_selected_chars,abstain,,"-\""",|?|,False,False,False,|\-?|,5,0,0,keep_char_sets=; unique_prediction_count=0
+fdbdf50c,equation_symbolic_punct,symbolic_prefix_until_marker,abstain,,"-\""",|?|,False,False,False,|\-?|,5,0,0,markers=''; unique_prediction_count=0
+fdbdf50c,equation_symbolic_punct,symbolic_suffix_after_marker,abstain,,"-\""",|?|,False,False,False,|\-?|,5,0,0,markers=''; unique_prediction_count=0
+fdbdf50c,equation_symbolic_punct,symbolic_prefix_before_last_marker,abstain,,"-\""",|?|,False,False,False,|\-?|,5,0,0,markers=''; unique_prediction_count=0
+fdbdf50c,equation_symbolic_punct,symbolic_suffix_after_last_marker,abstain,,"-\""",|?|,False,False,False,|\-?|,5,0,0,markers=''; unique_prediction_count=0
+fdbdf50c,equation_symbolic_punct,symbolic_remove_first_marker,abstain,,"-\""",|?|,False,False,False,|\-?|,5,0,0,markers=''; unique_prediction_count=0
+fdbdf50c,equation_symbolic_punct,symbolic_position_template,abstain,,"-\""",|?|,False,False,False,|\-?|,5,0,0,nonuniform_rhs_lengths
+fdbdf50c,equation_symbolic_punct,symbolic_operator_index_template,abstain,,"-\""",|?|,False,False,False,|\-?|,5,0,0,programs=; unique_prediction_count=0
+47c1d8f5,equation_symbolic_punct,symbolic_char_transducer,abstain,,]%],/`%`,False,False,False,/`#%`,4,0,0,no_global_mapping
+47c1d8f5,equation_symbolic_punct,symbolic_delete_selected_chars,abstain,,]%],/`%`,False,False,False,/`#%`,4,0,0,delete_char_sets=; unique_prediction_count=0
+47c1d8f5,equation_symbolic_punct,symbolic_keep_selected_chars,abstain,,]%],/`%`,False,False,False,/`#%`,4,0,0,keep_char_sets=; unique_prediction_count=0
+47c1d8f5,equation_symbolic_punct,symbolic_prefix_until_marker,abstain,,]%],/`%`,False,False,False,/`#%`,4,0,0,markers=''; unique_prediction_count=0
+47c1d8f5,equation_symbolic_punct,symbolic_suffix_after_marker,abstain,,]%],/`%`,False,False,False,/`#%`,4,0,0,markers=''; unique_prediction_count=0
+47c1d8f5,equation_symbolic_punct,symbolic_prefix_before_last_marker,abstain,,]%],/`%`,False,False,False,/`#%`,4,0,0,markers=''; unique_prediction_count=0
+47c1d8f5,equation_symbolic_punct,symbolic_suffix_after_last_marker,abstain,,]%],/`%`,False,False,False,/`#%`,4,0,0,markers=''; unique_prediction_count=0
+47c1d8f5,equation_symbolic_punct,symbolic_remove_first_marker,abstain,,]%],/`%`,False,False,False,/`#%`,4,0,0,markers=''; unique_prediction_count=0
+47c1d8f5,equation_symbolic_punct,symbolic_position_template,abstain,,]%],/`%`,False,False,False,/`#%`,4,0,0,nonuniform_rhs_lengths
+47c1d8f5,equation_symbolic_punct,symbolic_operator_index_template,abstain,,]%],/`%`,False,False,False,/`#%`,4,0,0,programs=; unique_prediction_count=0
+f9a33aa1,equation_symbolic_punct,symbolic_char_transducer,abstain,,/((`,@($/,False,False,False,@(\$/,4,0,0,no_pair_mapping
+f9a33aa1,equation_symbolic_punct,symbolic_delete_selected_chars,abstain,,/((`,@($/,False,False,False,@(\$/,4,0,0,delete_char_sets=; unique_prediction_count=0
+f9a33aa1,equation_symbolic_punct,symbolic_keep_selected_chars,abstain,,/((`,@($/,False,False,False,@(\$/,4,0,0,keep_char_sets=; unique_prediction_count=0
+f9a33aa1,equation_symbolic_punct,symbolic_prefix_until_marker,abstain,,/((`,@($/,False,False,False,@(\$/,4,0,0,markers=''; unique_prediction_count=0
+f9a33aa1,equation_symbolic_punct,symbolic_suffix_after_marker,abstain,,/((`,@($/,False,False,False,@(\$/,4,0,0,markers=''; unique_prediction_count=0
+f9a33aa1,equation_symbolic_punct,symbolic_prefix_before_last_marker,abstain,,/((`,@($/,False,False,False,@(\$/,4,0,0,markers=''; unique_prediction_count=0
+f9a33aa1,equation_symbolic_punct,symbolic_suffix_after_last_marker,abstain,,/((`,@($/,False,False,False,@(\$/,4,0,0,markers=''; unique_prediction_count=0
+f9a33aa1,equation_symbolic_punct,symbolic_remove_first_marker,abstain,,/((`,@($/,False,False,False,@(\$/,4,0,0,markers=''; unique_prediction_count=0
+f9a33aa1,equation_symbolic_punct,symbolic_position_template,abstain,,/((`,@($/,False,False,False,@(\$/,4,0,0,nonuniform_rhs_lengths
+f9a33aa1,equation_symbolic_punct,symbolic_operator_index_template,abstain,,/((`,@($/,False,False,False,@(\$/,4,0,0,programs=; unique_prediction_count=0
+f9799a68,equation_symbolic_punct,symbolic_char_transducer,abstain,,&:/?,:^?\,False,False,False,:^*?\,4,0,0,no_global_mapping
+f9799a68,equation_symbolic_punct,symbolic_delete_selected_chars,abstain,,&:/?,:^?\,False,False,False,:^*?\,4,0,0,delete_char_sets=; unique_prediction_count=0
+f9799a68,equation_symbolic_punct,symbolic_keep_selected_chars,abstain,,&:/?,:^?\,False,False,False,:^*?\,4,0,0,keep_char_sets=; unique_prediction_count=0
+f9799a68,equation_symbolic_punct,symbolic_prefix_until_marker,abstain,,&:/?,:^?\,False,False,False,:^*?\,4,0,0,markers=''; unique_prediction_count=0
+f9799a68,equation_symbolic_punct,symbolic_suffix_after_marker,abstain,,&:/?,:^?\,False,False,False,:^*?\,4,0,0,markers=''; unique_prediction_count=0
+f9799a68,equation_symbolic_punct,symbolic_prefix_before_last_marker,abstain,,&:/?,:^?\,False,False,False,:^*?\,4,0,0,markers=''; unique_prediction_count=0
+f9799a68,equation_symbolic_punct,symbolic_suffix_after_last_marker,abstain,,&:/?,:^?\,False,False,False,:^*?\,4,0,0,markers=''; unique_prediction_count=0
+f9799a68,equation_symbolic_punct,symbolic_remove_first_marker,abstain,,&:/?,:^?\,False,False,False,:^*?\,4,0,0,markers=''; unique_prediction_count=0
+f9799a68,equation_symbolic_punct,symbolic_position_template,abstain,,&:/?,:^?\,False,False,False,:^*?\,4,0,0,nonuniform_rhs_lengths
+f9799a68,equation_symbolic_punct,symbolic_operator_index_template,abstain,,&:/?,:^?\,False,False,False,:^*?\,4,0,0,programs=; unique_prediction_count=0
+c24074a8,equation_symbolic_punct,symbolic_char_transducer,abstain,,&/,]]]%,False,False,False,]]`]%,5,0,0,no_global_mapping
+c24074a8,equation_symbolic_punct,symbolic_delete_selected_chars,abstain,,&/,]]]%,False,False,False,]]`]%,5,0,0,delete_char_sets=; unique_prediction_count=0
+c24074a8,equation_symbolic_punct,symbolic_keep_selected_chars,abstain,,&/,]]]%,False,False,False,]]`]%,5,0,0,keep_char_sets=; unique_prediction_count=0
+c24074a8,equation_symbolic_punct,symbolic_prefix_until_marker,abstain,,&/,]]]%,False,False,False,]]`]%,5,0,0,markers=''; unique_prediction_count=0
+c24074a8,equation_symbolic_punct,symbolic_suffix_after_marker,abstain,,&/,]]]%,False,False,False,]]`]%,5,0,0,markers=''; unique_prediction_count=0
+c24074a8,equation_symbolic_punct,symbolic_prefix_before_last_marker,abstain,,&/,]]]%,False,False,False,]]`]%,5,0,0,markers=''; unique_prediction_count=0
+c24074a8,equation_symbolic_punct,symbolic_suffix_after_last_marker,abstain,,&/,]]]%,False,False,False,]]`]%,5,0,0,markers=''; unique_prediction_count=0
+c24074a8,equation_symbolic_punct,symbolic_remove_first_marker,abstain,,&/,]]]%,False,False,False,]]`]%,5,0,0,markers=''; unique_prediction_count=0
+c24074a8,equation_symbolic_punct,symbolic_position_template,abstain,,&/,]]]%,False,False,False,]]`]%,5,0,0,nonuniform_rhs_lengths
+c24074a8,equation_symbolic_punct,symbolic_operator_index_template,abstain,,&/,]]]%,False,False,False,]]`]%,5,0,0,programs=; unique_prediction_count=0
+893ffb06,equation_symbolic_punct,symbolic_char_transducer,abstain,,-@',@``:,False,False,False,@`-`:,4,0,0,no_global_mapping
+893ffb06,equation_symbolic_punct,symbolic_delete_selected_chars,abstain,,-@',@``:,False,False,False,@`-`:,4,0,0,delete_char_sets=; unique_prediction_count=0
+893ffb06,equation_symbolic_punct,symbolic_keep_selected_chars,abstain,,-@',@``:,False,False,False,@`-`:,4,0,0,keep_char_sets=; unique_prediction_count=0
+893ffb06,equation_symbolic_punct,symbolic_prefix_until_marker,abstain,,-@',@``:,False,False,False,@`-`:,4,0,0,markers=''; unique_prediction_count=0
+893ffb06,equation_symbolic_punct,symbolic_suffix_after_marker,abstain,,-@',@``:,False,False,False,@`-`:,4,0,0,markers=''; unique_prediction_count=0
+893ffb06,equation_symbolic_punct,symbolic_prefix_before_last_marker,abstain,,-@',@``:,False,False,False,@`-`:,4,0,0,markers=''; unique_prediction_count=0
+893ffb06,equation_symbolic_punct,symbolic_suffix_after_last_marker,abstain,,-@',@``:,False,False,False,@`-`:,4,0,0,markers=''; unique_prediction_count=0
+893ffb06,equation_symbolic_punct,symbolic_remove_first_marker,abstain,,-@',@``:,False,False,False,@`-`:,4,0,0,markers=''; unique_prediction_count=0
+893ffb06,equation_symbolic_punct,symbolic_position_template,abstain,,-@',@``:,False,False,False,@`-`:,4,0,0,nonuniform_rhs_lengths
+893ffb06,equation_symbolic_punct,symbolic_operator_index_template,abstain,,-@',@``:,False,False,False,@`-`:,4,0,0,programs=; unique_prediction_count=0
+cf4c04c0,equation_symbolic_punct,symbolic_char_transducer,abstain,,-[,@|#|,False,False,False,@|-#|,5,0,0,no_pair_mapping
+cf4c04c0,equation_symbolic_punct,symbolic_delete_selected_chars,abstain,,-[,@|#|,False,False,False,@|-#|,5,0,0,delete_char_sets=; unique_prediction_count=0
+cf4c04c0,equation_symbolic_punct,symbolic_keep_selected_chars,abstain,,-[,@|#|,False,False,False,@|-#|,5,0,0,keep_char_sets=; unique_prediction_count=0
+cf4c04c0,equation_symbolic_punct,symbolic_prefix_until_marker,abstain,,-[,@|#|,False,False,False,@|-#|,5,0,0,markers=''; unique_prediction_count=0
+cf4c04c0,equation_symbolic_punct,symbolic_suffix_after_marker,abstain,,-[,@|#|,False,False,False,@|-#|,5,0,0,markers=''; unique_prediction_count=0
+cf4c04c0,equation_symbolic_punct,symbolic_prefix_before_last_marker,abstain,,-[,@|#|,False,False,False,@|-#|,5,0,0,markers=''; unique_prediction_count=0
+cf4c04c0,equation_symbolic_punct,symbolic_suffix_after_last_marker,abstain,,-[,@|#|,False,False,False,@|-#|,5,0,0,markers=''; unique_prediction_count=0
+cf4c04c0,equation_symbolic_punct,symbolic_remove_first_marker,abstain,,-[,@|#|,False,False,False,@|-#|,5,0,0,markers=''; unique_prediction_count=0
+cf4c04c0,equation_symbolic_punct,symbolic_position_template,abstain,,-[,@|#|,False,False,False,@|-#|,5,0,0,nonuniform_rhs_lengths
+cf4c04c0,equation_symbolic_punct,symbolic_operator_index_template,abstain,,-[,@|#|,False,False,False,@|-#|,5,0,0,programs=; unique_prediction_count=0
+8e411cc7,equation_symbolic_punct,symbolic_char_transducer,abstain,,]]],$&&,False,False,False,$&!&},4,0,0,no_global_mapping
+8e411cc7,equation_symbolic_punct,symbolic_delete_selected_chars,abstain,,]]],$&&,False,False,False,$&!&},4,0,0,delete_char_sets=; unique_prediction_count=0
+8e411cc7,equation_symbolic_punct,symbolic_keep_selected_chars,abstain,,]]],$&&,False,False,False,$&!&},4,0,0,keep_char_sets=; unique_prediction_count=0
+8e411cc7,equation_symbolic_punct,symbolic_prefix_until_marker,abstain,,]]],$&&,False,False,False,$&!&},4,0,0,markers=''; unique_prediction_count=0
+8e411cc7,equation_symbolic_punct,symbolic_suffix_after_marker,abstain,,]]],$&&,False,False,False,$&!&},4,0,0,markers=''; unique_prediction_count=0
+8e411cc7,equation_symbolic_punct,symbolic_prefix_before_last_marker,abstain,,]]],$&&,False,False,False,$&!&},4,0,0,markers=''; unique_prediction_count=0
+8e411cc7,equation_symbolic_punct,symbolic_suffix_after_last_marker,abstain,,]]],$&&,False,False,False,$&!&},4,0,0,markers=''; unique_prediction_count=0
+8e411cc7,equation_symbolic_punct,symbolic_remove_first_marker,abstain,,]]],$&&,False,False,False,$&!&},4,0,0,markers=''; unique_prediction_count=0
+8e411cc7,equation_symbolic_punct,symbolic_position_template,abstain,,]]],$&&,False,False,False,$&!&},4,0,0,nonuniform_rhs_lengths
+8e411cc7,equation_symbolic_punct,symbolic_operator_index_template,abstain,,]]],$&&,False,False,False,$&!&},4,0,0,programs=; unique_prediction_count=0
+48c25e0e,equation_numeric_operator,numeric_same_operator_extended,abstain,,53,32,False,False,False,43&11,3,0,0,same_operator_examples=0 below_min=2
+a98d4d53,equation_symbolic_punct,symbolic_char_transducer,abstain,,-),!$$[,False,False,False,!$-$[,3,0,0,no_global_mapping
+a98d4d53,equation_symbolic_punct,symbolic_delete_selected_chars,abstain,,-),!$$[,False,False,False,!$-$[,3,0,0,delete_char_sets=; unique_prediction_count=0
+a98d4d53,equation_symbolic_punct,symbolic_keep_selected_chars,abstain,,-),!$$[,False,False,False,!$-$[,3,0,0,keep_char_sets=; unique_prediction_count=0
+a98d4d53,equation_symbolic_punct,symbolic_prefix_until_marker,abstain,,-),!$$[,False,False,False,!$-$[,3,0,0,markers=''; unique_prediction_count=0
+a98d4d53,equation_symbolic_punct,symbolic_suffix_after_marker,abstain,,-),!$$[,False,False,False,!$-$[,3,0,0,markers=''; unique_prediction_count=0
+a98d4d53,equation_symbolic_punct,symbolic_prefix_before_last_marker,abstain,,-),!$$[,False,False,False,!$-$[,3,0,0,markers=''; unique_prediction_count=0
+a98d4d53,equation_symbolic_punct,symbolic_suffix_after_last_marker,abstain,,-),!$$[,False,False,False,!$-$[,3,0,0,markers=''; unique_prediction_count=0
+a98d4d53,equation_symbolic_punct,symbolic_remove_first_marker,abstain,,-),!$$[,False,False,False,!$-$[,3,0,0,markers=''; unique_prediction_count=0
+a98d4d53,equation_symbolic_punct,symbolic_position_template,abstain,,-),!$$[,False,False,False,!$-$[,3,0,0,nonuniform_rhs_lengths
+a98d4d53,equation_symbolic_punct,symbolic_operator_index_template,abstain,,-),!$$[,False,False,False,!$-$[,3,0,0,programs=; unique_prediction_count=0
+59733f94,equation_symbolic_punct,symbolic_char_transducer,abstain,,/,$/>/,False,False,False,$/->/,5,0,0,no_global_mapping
+59733f94,equation_symbolic_punct,symbolic_delete_selected_chars,abstain,,/,$/>/,False,False,False,$/->/,5,0,0,delete_char_sets=; unique_prediction_count=0
+59733f94,equation_symbolic_punct,symbolic_keep_selected_chars,abstain,,/,$/>/,False,False,False,$/->/,5,0,0,keep_char_sets=; unique_prediction_count=0
+59733f94,equation_symbolic_punct,symbolic_prefix_until_marker,abstain,,/,$/>/,False,False,False,$/->/,5,0,0,markers=''; unique_prediction_count=0
+59733f94,equation_symbolic_punct,symbolic_suffix_after_marker,abstain,,/,$/>/,False,False,False,$/->/,5,0,0,markers=''; unique_prediction_count=0
+59733f94,equation_symbolic_punct,symbolic_prefix_before_last_marker,abstain,,/,$/>/,False,False,False,$/->/,5,0,0,markers=''; unique_prediction_count=0
+59733f94,equation_symbolic_punct,symbolic_suffix_after_last_marker,abstain,,/,$/>/,False,False,False,$/->/,5,0,0,markers=''; unique_prediction_count=0
+59733f94,equation_symbolic_punct,symbolic_remove_first_marker,abstain,,/,$/>/,False,False,False,$/->/,5,0,0,markers=''; unique_prediction_count=0
+59733f94,equation_symbolic_punct,symbolic_position_template,abstain,,/,$/>/,False,False,False,$/->/,5,0,0,nonuniform_rhs_lengths
+59733f94,equation_symbolic_punct,symbolic_operator_index_template,abstain,,/,$/>/,False,False,False,$/->/,5,0,0,programs=; unique_prediction_count=0
+9dae880f,equation_symbolic_punct,symbolic_char_transducer,abstain,,))[,:<`\,False,False,False,:<}`\,5,0,0,no_global_mapping
+9dae880f,equation_symbolic_punct,symbolic_delete_selected_chars,abstain,,))[,:<`\,False,False,False,:<}`\,5,0,0,delete_char_sets=; unique_prediction_count=0
+9dae880f,equation_symbolic_punct,symbolic_keep_selected_chars,abstain,,))[,:<`\,False,False,False,:<}`\,5,0,0,keep_char_sets=; unique_prediction_count=0
+9dae880f,equation_symbolic_punct,symbolic_prefix_until_marker,abstain,,))[,:<`\,False,False,False,:<}`\,5,0,0,markers=''; unique_prediction_count=0
+9dae880f,equation_symbolic_punct,symbolic_suffix_after_marker,abstain,,))[,:<`\,False,False,False,:<}`\,5,0,0,markers=''; unique_prediction_count=0
+9dae880f,equation_symbolic_punct,symbolic_prefix_before_last_marker,abstain,,))[,:<`\,False,False,False,:<}`\,5,0,0,markers=''; unique_prediction_count=0
+9dae880f,equation_symbolic_punct,symbolic_suffix_after_last_marker,abstain,,))[,:<`\,False,False,False,:<}`\,5,0,0,markers=''; unique_prediction_count=0
+9dae880f,equation_symbolic_punct,symbolic_remove_first_marker,abstain,,))[,:<`\,False,False,False,:<}`\,5,0,0,markers=''; unique_prediction_count=0
+9dae880f,equation_symbolic_punct,symbolic_position_template,abstain,,))[,:<`\,False,False,False,:<}`\,5,0,0,nonuniform_rhs_lengths
+9dae880f,equation_symbolic_punct,symbolic_operator_index_template,abstain,,))[,:<`\,False,False,False,:<}`\,5,0,0,programs=; unique_prediction_count=0
+ae6be599,equation_symbolic_punct,symbolic_char_transducer,abstain,,#`,$?]$,False,False,False,$?+]$,3,0,0,no_global_mapping
+ae6be599,equation_symbolic_punct,symbolic_delete_selected_chars,abstain,,#`,$?]$,False,False,False,$?+]$,3,0,0,delete_char_sets=; unique_prediction_count=0
+ae6be599,equation_symbolic_punct,symbolic_keep_selected_chars,abstain,,#`,$?]$,False,False,False,$?+]$,3,0,0,keep_char_sets=; unique_prediction_count=0
+ae6be599,equation_symbolic_punct,symbolic_prefix_until_marker,abstain,,#`,$?]$,False,False,False,$?+]$,3,0,0,markers=''; unique_prediction_count=0
+ae6be599,equation_symbolic_punct,symbolic_suffix_after_marker,abstain,,#`,$?]$,False,False,False,$?+]$,3,0,0,markers=''; unique_prediction_count=0
+ae6be599,equation_symbolic_punct,symbolic_prefix_before_last_marker,abstain,,#`,$?]$,False,False,False,$?+]$,3,0,0,markers=''; unique_prediction_count=0
+ae6be599,equation_symbolic_punct,symbolic_suffix_after_last_marker,abstain,,#`,$?]$,False,False,False,$?+]$,3,0,0,markers=''; unique_prediction_count=0
+ae6be599,equation_symbolic_punct,symbolic_remove_first_marker,abstain,,#`,$?]$,False,False,False,$?+]$,3,0,0,markers=''; unique_prediction_count=0
+ae6be599,equation_symbolic_punct,symbolic_position_template,abstain,,#`,$?]$,False,False,False,$?+]$,3,0,0,nonuniform_rhs_lengths
+ae6be599,equation_symbolic_punct,symbolic_operator_index_template,abstain,,#`,$?]$,False,False,False,$?+]$,3,0,0,programs=; unique_prediction_count=0
+8494aad3,equation_symbolic_punct,symbolic_char_transducer,abstain,,"""`#&","])<""",False,False,False,"])*<""",4,0,0,no_pair_mapping
+8494aad3,equation_symbolic_punct,symbolic_delete_selected_chars,abstain,,"""`#&","])<""",False,False,False,"])*<""",4,0,0,delete_char_sets=; unique_prediction_count=0
+8494aad3,equation_symbolic_punct,symbolic_keep_selected_chars,abstain,,"""`#&","])<""",False,False,False,"])*<""",4,0,0,keep_char_sets=; unique_prediction_count=0
+8494aad3,equation_symbolic_punct,symbolic_prefix_until_marker,abstain,,"""`#&","])<""",False,False,False,"])*<""",4,0,0,markers=''; unique_prediction_count=0
+8494aad3,equation_symbolic_punct,symbolic_suffix_after_marker,abstain,,"""`#&","])<""",False,False,False,"])*<""",4,0,0,markers=''; unique_prediction_count=0
+8494aad3,equation_symbolic_punct,symbolic_prefix_before_last_marker,abstain,,"""`#&","])<""",False,False,False,"])*<""",4,0,0,markers=''; unique_prediction_count=0
+8494aad3,equation_symbolic_punct,symbolic_suffix_after_last_marker,abstain,,"""`#&","])<""",False,False,False,"])*<""",4,0,0,markers=''; unique_prediction_count=0
+8494aad3,equation_symbolic_punct,symbolic_remove_first_marker,abstain,,"""`#&","])<""",False,False,False,"])*<""",4,0,0,markers=''; unique_prediction_count=0
+8494aad3,equation_symbolic_punct,symbolic_position_template,abstain,,"""`#&","])<""",False,False,False,"])*<""",4,0,0,no_source_for_output_index=0
+8494aad3,equation_symbolic_punct,symbolic_operator_index_template,abstain,,"""`#&","])<""",False,False,False,"])*<""",4,0,0,programs=; unique_prediction_count=0
+e3890bf7,equation_symbolic_punct,symbolic_char_transducer,abstain,,{@%],(^@{,False,False,False,(^*{@,3,0,0,no_global_mapping
+e3890bf7,equation_symbolic_punct,symbolic_delete_selected_chars,abstain,,{@%],(^@{,False,False,False,(^*{@,3,0,0,delete_char_sets=; unique_prediction_count=0
+e3890bf7,equation_symbolic_punct,symbolic_keep_selected_chars,abstain,,{@%],(^@{,False,False,False,(^*{@,3,0,0,keep_char_sets=; unique_prediction_count=0
+e3890bf7,equation_symbolic_punct,symbolic_prefix_until_marker,abstain,,{@%],(^@{,False,False,False,(^*{@,3,0,0,markers=''; unique_prediction_count=0
+e3890bf7,equation_symbolic_punct,symbolic_suffix_after_marker,abstain,,{@%],(^@{,False,False,False,(^*{@,3,0,0,markers=''; unique_prediction_count=0
+e3890bf7,equation_symbolic_punct,symbolic_prefix_before_last_marker,abstain,,{@%],(^@{,False,False,False,(^*{@,3,0,0,markers=''; unique_prediction_count=0
+e3890bf7,equation_symbolic_punct,symbolic_suffix_after_last_marker,abstain,,{@%],(^@{,False,False,False,(^*{@,3,0,0,markers=''; unique_prediction_count=0
+e3890bf7,equation_symbolic_punct,symbolic_remove_first_marker,abstain,,{@%],(^@{,False,False,False,(^*{@,3,0,0,markers=''; unique_prediction_count=0
+e3890bf7,equation_symbolic_punct,symbolic_position_template,abstain,,{@%],(^@{,False,False,False,(^*{@,3,0,0,nonuniform_rhs_lengths
+e3890bf7,equation_symbolic_punct,symbolic_operator_index_template,abstain,,{@%],(^@{,False,False,False,(^*{@,3,0,0,programs=; unique_prediction_count=0
+d29e19a4,equation_symbolic_punct,symbolic_char_transducer,abstain,,?|,|''>,False,False,False,|'$>',4,0,0,no_global_mapping
+d29e19a4,equation_symbolic_punct,symbolic_delete_selected_chars,abstain,,?|,|''>,False,False,False,|'$>',4,0,0,delete_char_sets=; unique_prediction_count=0
+d29e19a4,equation_symbolic_punct,symbolic_keep_selected_chars,abstain,,?|,|''>,False,False,False,|'$>',4,0,0,keep_char_sets=; unique_prediction_count=0
+d29e19a4,equation_symbolic_punct,symbolic_prefix_until_marker,abstain,,?|,|''>,False,False,False,|'$>',4,0,0,markers=''; unique_prediction_count=0
+d29e19a4,equation_symbolic_punct,symbolic_suffix_after_marker,abstain,,?|,|''>,False,False,False,|'$>',4,0,0,markers=''; unique_prediction_count=0
+d29e19a4,equation_symbolic_punct,symbolic_prefix_before_last_marker,abstain,,?|,|''>,False,False,False,|'$>',4,0,0,markers=''; unique_prediction_count=0
+d29e19a4,equation_symbolic_punct,symbolic_suffix_after_last_marker,abstain,,?|,|''>,False,False,False,|'$>',4,0,0,markers=''; unique_prediction_count=0
+d29e19a4,equation_symbolic_punct,symbolic_remove_first_marker,abstain,,?|,|''>,False,False,False,|'$>',4,0,0,markers=''; unique_prediction_count=0
+d29e19a4,equation_symbolic_punct,symbolic_position_template,abstain,,?|,|''>,False,False,False,|'$>',4,0,0,nonuniform_rhs_lengths
+d29e19a4,equation_symbolic_punct,symbolic_operator_index_template,abstain,,?|,|''>,False,False,False,|'$>',4,0,0,programs=; unique_prediction_count=0
+b06625c4,equation_symbolic_punct,symbolic_char_transducer,abstain,,^&/,"""$ $]""",False,False,False,"""$*$]",4,0,0,no_pair_mapping
+b06625c4,equation_symbolic_punct,symbolic_delete_selected_chars,abstain,,^&/,"""$ $]""",False,False,False,"""$*$]",4,0,0,delete_char_sets=; unique_prediction_count=0
+b06625c4,equation_symbolic_punct,symbolic_keep_selected_chars,abstain,,^&/,"""$ $]""",False,False,False,"""$*$]",4,0,0,keep_char_sets=; unique_prediction_count=0
+b06625c4,equation_symbolic_punct,symbolic_prefix_until_marker,abstain,,^&/,"""$ $]""",False,False,False,"""$*$]",4,0,0,markers=''; unique_prediction_count=0
+b06625c4,equation_symbolic_punct,symbolic_suffix_after_marker,abstain,,^&/,"""$ $]""",False,False,False,"""$*$]",4,0,0,markers=''; unique_prediction_count=0
+b06625c4,equation_symbolic_punct,symbolic_prefix_before_last_marker,abstain,,^&/,"""$ $]""",False,False,False,"""$*$]",4,0,0,markers=''; unique_prediction_count=0
+b06625c4,equation_symbolic_punct,symbolic_suffix_after_last_marker,abstain,,^&/,"""$ $]""",False,False,False,"""$*$]",4,0,0,markers=''; unique_prediction_count=0
+b06625c4,equation_symbolic_punct,symbolic_remove_first_marker,abstain,,^&/,"""$ $]""",False,False,False,"""$*$]",4,0,0,markers=''; unique_prediction_count=0
+b06625c4,equation_symbolic_punct,symbolic_position_template,abstain,,^&/,"""$ $]""",False,False,False,"""$*$]",4,0,0,nonuniform_rhs_lengths
+b06625c4,equation_symbolic_punct,symbolic_operator_index_template,abstain,,^&/,"""$ $]""",False,False,False,"""$*$]",4,0,0,programs=; unique_prediction_count=0
+52be4988,equation_symbolic_punct,symbolic_char_transducer,abstain,,'!,&&&`,False,False,False,&&+&`,5,0,0,no_global_mapping
+52be4988,equation_symbolic_punct,symbolic_delete_selected_chars,abstain,,'!,&&&`,False,False,False,&&+&`,5,0,0,delete_char_sets=; unique_prediction_count=0
+52be4988,equation_symbolic_punct,symbolic_keep_selected_chars,abstain,,'!,&&&`,False,False,False,&&+&`,5,0,0,keep_char_sets=; unique_prediction_count=0
+52be4988,equation_symbolic_punct,symbolic_prefix_until_marker,abstain,,'!,&&&`,False,False,False,&&+&`,5,0,0,markers=''; unique_prediction_count=0
+52be4988,equation_symbolic_punct,symbolic_suffix_after_marker,abstain,,'!,&&&`,False,False,False,&&+&`,5,0,0,markers=''; unique_prediction_count=0
+52be4988,equation_symbolic_punct,symbolic_prefix_before_last_marker,abstain,,'!,&&&`,False,False,False,&&+&`,5,0,0,markers=''; unique_prediction_count=0
+52be4988,equation_symbolic_punct,symbolic_suffix_after_last_marker,abstain,,'!,&&&`,False,False,False,&&+&`,5,0,0,markers=''; unique_prediction_count=0
+52be4988,equation_symbolic_punct,symbolic_remove_first_marker,abstain,,'!,&&&`,False,False,False,&&+&`,5,0,0,markers=''; unique_prediction_count=0
+52be4988,equation_symbolic_punct,symbolic_position_template,abstain,,'!,&&&`,False,False,False,&&+&`,5,0,0,nonuniform_rhs_lengths
+52be4988,equation_symbolic_punct,symbolic_operator_index_template,abstain,,'!,&&&`,False,False,False,&&+&`,5,0,0,programs=; unique_prediction_count=0
+99d6a3b5,equation_symbolic_punct,symbolic_char_transducer,abstain,,?()<,(<)),False,False,False,(<%)),4,0,0,no_pair_mapping
+99d6a3b5,equation_symbolic_punct,symbolic_delete_selected_chars,abstain,,?()<,(<)),False,False,False,(<%)),4,0,0,delete_char_sets=; unique_prediction_count=0
+99d6a3b5,equation_symbolic_punct,symbolic_keep_selected_chars,abstain,,?()<,(<)),False,False,False,(<%)),4,0,0,keep_char_sets=; unique_prediction_count=0
+99d6a3b5,equation_symbolic_punct,symbolic_prefix_until_marker,abstain,,?()<,(<)),False,False,False,(<%)),4,0,0,markers=''; unique_prediction_count=0
+99d6a3b5,equation_symbolic_punct,symbolic_suffix_after_marker,abstain,,?()<,(<)),False,False,False,(<%)),4,0,0,markers=''; unique_prediction_count=0
+99d6a3b5,equation_symbolic_punct,symbolic_prefix_before_last_marker,abstain,,?()<,(<)),False,False,False,(<%)),4,0,0,markers=''; unique_prediction_count=0
+99d6a3b5,equation_symbolic_punct,symbolic_suffix_after_last_marker,abstain,,?()<,(<)),False,False,False,(<%)),4,0,0,markers=''; unique_prediction_count=0
+99d6a3b5,equation_symbolic_punct,symbolic_remove_first_marker,abstain,,?()<,(<)),False,False,False,(<%)),4,0,0,markers=''; unique_prediction_count=0
+99d6a3b5,equation_symbolic_punct,symbolic_position_template,abstain,,?()<,(<)),False,False,False,(<%)),4,0,0,nonuniform_rhs_lengths
+99d6a3b5,equation_symbolic_punct,symbolic_operator_index_template,abstain,,?()<,(<)),False,False,False,(<%)),4,0,0,programs=; unique_prediction_count=0
+2d3547af,equation_symbolic_punct,symbolic_char_transducer,abstain,,))^),\$\\,False,False,False,\$&\\,4,0,0,no_global_mapping
+2d3547af,equation_symbolic_punct,symbolic_delete_selected_chars,abstain,,))^),\$\\,False,False,False,\$&\\,4,0,0,delete_char_sets=; unique_prediction_count=0
+2d3547af,equation_symbolic_punct,symbolic_keep_selected_chars,abstain,,))^),\$\\,False,False,False,\$&\\,4,0,0,keep_char_sets=; unique_prediction_count=0
+2d3547af,equation_symbolic_punct,symbolic_prefix_until_marker,abstain,,))^),\$\\,False,False,False,\$&\\,4,0,0,markers=''; unique_prediction_count=0
+2d3547af,equation_symbolic_punct,symbolic_suffix_after_marker,abstain,,))^),\$\\,False,False,False,\$&\\,4,0,0,markers=''; unique_prediction_count=0
+2d3547af,equation_symbolic_punct,symbolic_prefix_before_last_marker,abstain,,))^),\$\\,False,False,False,\$&\\,4,0,0,markers=''; unique_prediction_count=0
+2d3547af,equation_symbolic_punct,symbolic_suffix_after_last_marker,abstain,,))^),\$\\,False,False,False,\$&\\,4,0,0,markers=''; unique_prediction_count=0
+2d3547af,equation_symbolic_punct,symbolic_remove_first_marker,abstain,,))^),\$\\,False,False,False,\$&\\,4,0,0,markers=''; unique_prediction_count=0
+2d3547af,equation_symbolic_punct,symbolic_position_template,abstain,,))^),\$\\,False,False,False,\$&\\,4,0,0,nonuniform_rhs_lengths
+2d3547af,equation_symbolic_punct,symbolic_operator_index_template,abstain,,))^),\$\\,False,False,False,\$&\\,4,0,0,programs=; unique_prediction_count=0
+28b0ff48,equation_symbolic_punct,symbolic_char_transducer,abstain,,'],|^^^,False,False,False,|^-^^,3,0,0,no_global_mapping
+28b0ff48,equation_symbolic_punct,symbolic_delete_selected_chars,abstain,,'],|^^^,False,False,False,|^-^^,3,0,0,delete_char_sets=; unique_prediction_count=0
+28b0ff48,equation_symbolic_punct,symbolic_keep_selected_chars,abstain,,'],|^^^,False,False,False,|^-^^,3,0,0,keep_char_sets=; unique_prediction_count=0
+28b0ff48,equation_symbolic_punct,symbolic_prefix_until_marker,abstain,,'],|^^^,False,False,False,|^-^^,3,0,0,markers=''; unique_prediction_count=0
+28b0ff48,equation_symbolic_punct,symbolic_suffix_after_marker,abstain,,'],|^^^,False,False,False,|^-^^,3,0,0,markers=''; unique_prediction_count=0
+28b0ff48,equation_symbolic_punct,symbolic_prefix_before_last_marker,abstain,,'],|^^^,False,False,False,|^-^^,3,0,0,markers=''; unique_prediction_count=0
+28b0ff48,equation_symbolic_punct,symbolic_suffix_after_last_marker,abstain,,'],|^^^,False,False,False,|^-^^,3,0,0,markers=''; unique_prediction_count=0
+28b0ff48,equation_symbolic_punct,symbolic_remove_first_marker,abstain,,'],|^^^,False,False,False,|^-^^,3,0,0,markers=''; unique_prediction_count=0
+28b0ff48,equation_symbolic_punct,symbolic_position_template,abstain,,'],|^^^,False,False,False,|^-^^,3,0,0,nonuniform_rhs_lengths
+28b0ff48,equation_symbolic_punct,symbolic_operator_index_template,abstain,,'],|^^^,False,False,False,|^-^^,3,0,0,programs=; unique_prediction_count=0
+61557701,equation_symbolic_punct,symbolic_char_transducer,abstain,,|&,'{),False,False,False,'{+{),4,0,0,no_global_mapping
+61557701,equation_symbolic_punct,symbolic_delete_selected_chars,abstain,,|&,'{),False,False,False,'{+{),4,0,0,delete_char_sets=; unique_prediction_count=0
+61557701,equation_symbolic_punct,symbolic_keep_selected_chars,abstain,,|&,'{),False,False,False,'{+{),4,0,0,keep_char_sets=; unique_prediction_count=0
+61557701,equation_symbolic_punct,symbolic_prefix_until_marker,abstain,,|&,'{),False,False,False,'{+{),4,0,0,markers=''; unique_prediction_count=0
+61557701,equation_symbolic_punct,symbolic_suffix_after_marker,abstain,,|&,'{),False,False,False,'{+{),4,0,0,markers=''; unique_prediction_count=0
+61557701,equation_symbolic_punct,symbolic_prefix_before_last_marker,abstain,,|&,'{),False,False,False,'{+{),4,0,0,markers=''; unique_prediction_count=0
+61557701,equation_symbolic_punct,symbolic_suffix_after_last_marker,abstain,,|&,'{),False,False,False,'{+{),4,0,0,markers=''; unique_prediction_count=0
+61557701,equation_symbolic_punct,symbolic_remove_first_marker,abstain,,|&,'{),False,False,False,'{+{),4,0,0,markers=''; unique_prediction_count=0
+61557701,equation_symbolic_punct,symbolic_position_template,abstain,,|&,'{),False,False,False,'{+{),4,0,0,nonuniform_rhs_lengths
+61557701,equation_symbolic_punct,symbolic_operator_index_template,abstain,,|&,'{),False,False,False,'{+{),4,0,0,programs=; unique_prediction_count=0
+02902eb3,equation_symbolic_punct,symbolic_char_transducer,abstain,,>/,!!$>,False,False,False,!!+$>,3,0,0,no_pair_mapping
+02902eb3,equation_symbolic_punct,symbolic_delete_selected_chars,abstain,,>/,!!$>,False,False,False,!!+$>,3,0,0,delete_char_sets=; unique_prediction_count=0
+02902eb3,equation_symbolic_punct,symbolic_keep_selected_chars,abstain,,>/,!!$>,False,False,False,!!+$>,3,0,0,keep_char_sets=; unique_prediction_count=0
+02902eb3,equation_symbolic_punct,symbolic_prefix_until_marker,abstain,,>/,!!$>,False,False,False,!!+$>,3,0,0,markers=''; unique_prediction_count=0
+02902eb3,equation_symbolic_punct,symbolic_suffix_after_marker,abstain,,>/,!!$>,False,False,False,!!+$>,3,0,0,markers=''; unique_prediction_count=0
+02902eb3,equation_symbolic_punct,symbolic_prefix_before_last_marker,abstain,,>/,!!$>,False,False,False,!!+$>,3,0,0,markers=''; unique_prediction_count=0
+02902eb3,equation_symbolic_punct,symbolic_suffix_after_last_marker,abstain,,>/,!!$>,False,False,False,!!+$>,3,0,0,markers=''; unique_prediction_count=0
+02902eb3,equation_symbolic_punct,symbolic_remove_first_marker,abstain,,>/,!!$>,False,False,False,!!+$>,3,0,0,markers=''; unique_prediction_count=0
+02902eb3,equation_symbolic_punct,symbolic_position_template,abstain,,>/,!!$>,False,False,False,!!+$>,3,0,0,nonuniform_rhs_lengths
+02902eb3,equation_symbolic_punct,symbolic_operator_index_template,abstain,,>/,!!$>,False,False,False,!!+$>,3,0,0,programs=; unique_prediction_count=0
+0d90736f,equation_symbolic_punct,symbolic_char_transducer,abstain,,:,::)[,False,False,False,::-)[,5,0,0,no_pair_mapping
+0d90736f,equation_symbolic_punct,symbolic_delete_selected_chars,abstain,,:,::)[,False,False,False,::-)[,5,0,0,delete_char_sets=; unique_prediction_count=0
+0d90736f,equation_symbolic_punct,symbolic_keep_selected_chars,abstain,,:,::)[,False,False,False,::-)[,5,0,0,keep_char_sets=; unique_prediction_count=0
+0d90736f,equation_symbolic_punct,symbolic_prefix_until_marker,abstain,,:,::)[,False,False,False,::-)[,5,0,0,markers=''; unique_prediction_count=0
+0d90736f,equation_symbolic_punct,symbolic_suffix_after_marker,abstain,,:,::)[,False,False,False,::-)[,5,0,0,markers=''; unique_prediction_count=0
+0d90736f,equation_symbolic_punct,symbolic_prefix_before_last_marker,abstain,,:,::)[,False,False,False,::-)[,5,0,0,markers=''; unique_prediction_count=0
+0d90736f,equation_symbolic_punct,symbolic_suffix_after_last_marker,abstain,,:,::)[,False,False,False,::-)[,5,0,0,markers=''; unique_prediction_count=0
+0d90736f,equation_symbolic_punct,symbolic_remove_first_marker,abstain,,:,::)[,False,False,False,::-)[,5,0,0,markers=''; unique_prediction_count=0
+0d90736f,equation_symbolic_punct,symbolic_position_template,abstain,,:,::)[,False,False,False,::-)[,5,0,0,nonuniform_rhs_lengths
+0d90736f,equation_symbolic_punct,symbolic_operator_index_template,abstain,,:,::)[,False,False,False,::-)[,5,0,0,programs=; unique_prediction_count=0
+294453b5,equation_symbolic_punct,symbolic_char_transducer,abstain,,&(,##!),False,False,False,##-!),3,0,0,no_global_mapping
+294453b5,equation_symbolic_punct,symbolic_delete_selected_chars,abstain,,&(,##!),False,False,False,##-!),3,0,0,delete_char_sets=; unique_prediction_count=0
+294453b5,equation_symbolic_punct,symbolic_keep_selected_chars,abstain,,&(,##!),False,False,False,##-!),3,0,0,keep_char_sets=; unique_prediction_count=0
+294453b5,equation_symbolic_punct,symbolic_prefix_until_marker,abstain,,&(,##!),False,False,False,##-!),3,0,0,markers=''; unique_prediction_count=0
+294453b5,equation_symbolic_punct,symbolic_suffix_after_marker,abstain,,&(,##!),False,False,False,##-!),3,0,0,markers=''; unique_prediction_count=0
+294453b5,equation_symbolic_punct,symbolic_prefix_before_last_marker,abstain,,&(,##!),False,False,False,##-!),3,0,0,markers=''; unique_prediction_count=0
+294453b5,equation_symbolic_punct,symbolic_suffix_after_last_marker,abstain,,&(,##!),False,False,False,##-!),3,0,0,markers=''; unique_prediction_count=0
+294453b5,equation_symbolic_punct,symbolic_remove_first_marker,abstain,,&(,##!),False,False,False,##-!),3,0,0,markers=''; unique_prediction_count=0
+294453b5,equation_symbolic_punct,symbolic_position_template,abstain,,&(,##!),False,False,False,##-!),3,0,0,nonuniform_rhs_lengths
+294453b5,equation_symbolic_punct,symbolic_operator_index_template,abstain,,&(,##!),False,False,False,##-!),3,0,0,programs=; unique_prediction_count=0
+386b6d03,equation_numeric_operator,numeric_same_operator_extended,abstain,,671,18,False,False,False,79'97,3,0,0,same_operator_examples=0 below_min=2
+57f6878e,equation_symbolic_punct,symbolic_char_transducer,abstain,,%{{,|@(!,False,False,False,|@<:(,5,0,0,no_global_mapping
+57f6878e,equation_symbolic_punct,symbolic_delete_selected_chars,abstain,,%{{,|@(!,False,False,False,|@<:(,5,0,0,delete_char_sets=; unique_prediction_count=0
+57f6878e,equation_symbolic_punct,symbolic_keep_selected_chars,abstain,,%{{,|@(!,False,False,False,|@<:(,5,0,0,keep_char_sets=; unique_prediction_count=0
+57f6878e,equation_symbolic_punct,symbolic_prefix_until_marker,abstain,,%{{,|@(!,False,False,False,|@<:(,5,0,0,markers=''; unique_prediction_count=0
+57f6878e,equation_symbolic_punct,symbolic_suffix_after_marker,abstain,,%{{,|@(!,False,False,False,|@<:(,5,0,0,markers=''; unique_prediction_count=0
+57f6878e,equation_symbolic_punct,symbolic_prefix_before_last_marker,abstain,,%{{,|@(!,False,False,False,|@<:(,5,0,0,markers=''; unique_prediction_count=0
+57f6878e,equation_symbolic_punct,symbolic_suffix_after_last_marker,abstain,,%{{,|@(!,False,False,False,|@<:(,5,0,0,markers=''; unique_prediction_count=0
+57f6878e,equation_symbolic_punct,symbolic_remove_first_marker,abstain,,%{{,|@(!,False,False,False,|@<:(,5,0,0,markers=''; unique_prediction_count=0
+57f6878e,equation_symbolic_punct,symbolic_position_template,abstain,,%{{,|@(!,False,False,False,|@<:(,5,0,0,nonuniform_rhs_lengths
+57f6878e,equation_symbolic_punct,symbolic_operator_index_template,abstain,,%{{,|@(!,False,False,False,|@<:(,5,0,0,programs=; unique_prediction_count=0
+a361a1b7,equation_numeric_operator,numeric_same_operator_extended,abstain,,:46,46,False,False,False,53:99,5,0,0,same_operator_examples=0 below_min=2
+d911e8e1,equation_symbolic_punct,symbolic_char_transducer,abstain,,:\:,@}<',False,False,False,@})<',3,0,0,no_pair_mapping
+d911e8e1,equation_symbolic_punct,symbolic_delete_selected_chars,abstain,,:\:,@}<',False,False,False,@})<',3,0,0,delete_char_sets=; unique_prediction_count=0
+d911e8e1,equation_symbolic_punct,symbolic_keep_selected_chars,abstain,,:\:,@}<',False,False,False,@})<',3,0,0,keep_char_sets=; unique_prediction_count=0
+d911e8e1,equation_symbolic_punct,symbolic_prefix_until_marker,abstain,,:\:,@}<',False,False,False,@})<',3,0,0,markers=''; unique_prediction_count=0
+d911e8e1,equation_symbolic_punct,symbolic_suffix_after_marker,abstain,,:\:,@}<',False,False,False,@})<',3,0,0,markers=''; unique_prediction_count=0
+d911e8e1,equation_symbolic_punct,symbolic_prefix_before_last_marker,abstain,,:\:,@}<',False,False,False,@})<',3,0,0,markers=''; unique_prediction_count=0
+d911e8e1,equation_symbolic_punct,symbolic_suffix_after_last_marker,abstain,,:\:,@}<',False,False,False,@})<',3,0,0,markers=''; unique_prediction_count=0
+d911e8e1,equation_symbolic_punct,symbolic_remove_first_marker,abstain,,:\:,@}<',False,False,False,@})<',3,0,0,markers=''; unique_prediction_count=0
+d911e8e1,equation_symbolic_punct,symbolic_position_template,abstain,,:\:,@}<',False,False,False,@})<',3,0,0,nonuniform_rhs_lengths
+d911e8e1,equation_symbolic_punct,symbolic_operator_index_template,abstain,,:\:,@}<',False,False,False,@})<',3,0,0,programs=; unique_prediction_count=0
+7688e06e,equation_numeric_operator,numeric_same_operator_extended,abstain,,-55,55,False,False,False,63-19,5,0,0,same_operator_examples=5; rules=; unique_prediction_count=0
+5f9f0ed7,equation_symbolic_punct,symbolic_char_transducer,abstain,,}/!},|!@[,False,False,False,|!*@[,5,0,0,no_global_mapping
+5f9f0ed7,equation_symbolic_punct,symbolic_delete_selected_chars,abstain,,}/!},|!@[,False,False,False,|!*@[,5,0,0,delete_char_sets=; unique_prediction_count=0
+5f9f0ed7,equation_symbolic_punct,symbolic_keep_selected_chars,abstain,,}/!},|!@[,False,False,False,|!*@[,5,0,0,keep_char_sets=; unique_prediction_count=0
+5f9f0ed7,equation_symbolic_punct,symbolic_prefix_until_marker,abstain,,}/!},|!@[,False,False,False,|!*@[,5,0,0,markers=''; unique_prediction_count=0
+5f9f0ed7,equation_symbolic_punct,symbolic_suffix_after_marker,abstain,,}/!},|!@[,False,False,False,|!*@[,5,0,0,markers=''; unique_prediction_count=0
+5f9f0ed7,equation_symbolic_punct,symbolic_prefix_before_last_marker,abstain,,}/!},|!@[,False,False,False,|!*@[,5,0,0,markers=''; unique_prediction_count=0
+5f9f0ed7,equation_symbolic_punct,symbolic_suffix_after_last_marker,abstain,,}/!},|!@[,False,False,False,|!*@[,5,0,0,markers=''; unique_prediction_count=0
+5f9f0ed7,equation_symbolic_punct,symbolic_remove_first_marker,abstain,,}/!},|!@[,False,False,False,|!*@[,5,0,0,markers=''; unique_prediction_count=0
+5f9f0ed7,equation_symbolic_punct,symbolic_position_template,abstain,,}/!},|!@[,False,False,False,|!*@[,5,0,0,nonuniform_rhs_lengths
+5f9f0ed7,equation_symbolic_punct,symbolic_operator_index_template,abstain,,}/!},|!@[,False,False,False,|!*@[,5,0,0,programs=; unique_prediction_count=0
+c43b5a13,equation_symbolic_punct,symbolic_char_transducer,abstain,,)|,$):$,False,False,False,$)+:$,3,16,9,char_transducer mappings=16 usable=16 unique_predictions=9
+c43b5a13,equation_symbolic_punct,symbolic_delete_selected_chars,abstain,,)|,$):$,False,False,False,$)+:$,3,0,0,delete_char_sets=; unique_prediction_count=0
+c43b5a13,equation_symbolic_punct,symbolic_keep_selected_chars,abstain,,)|,$):$,False,False,False,$)+:$,3,0,0,keep_char_sets=; unique_prediction_count=0
+c43b5a13,equation_symbolic_punct,symbolic_prefix_until_marker,abstain,,)|,$):$,False,False,False,$)+:$,3,0,0,markers=''; unique_prediction_count=0
+c43b5a13,equation_symbolic_punct,symbolic_suffix_after_marker,abstain,,)|,$):$,False,False,False,$)+:$,3,0,0,markers=''; unique_prediction_count=0
+c43b5a13,equation_symbolic_punct,symbolic_prefix_before_last_marker,abstain,,)|,$):$,False,False,False,$)+:$,3,0,0,markers=''; unique_prediction_count=0
+c43b5a13,equation_symbolic_punct,symbolic_suffix_after_last_marker,abstain,,)|,$):$,False,False,False,$)+:$,3,0,0,markers=''; unique_prediction_count=0
+c43b5a13,equation_symbolic_punct,symbolic_remove_first_marker,abstain,,)|,$):$,False,False,False,$)+:$,3,0,0,markers=''; unique_prediction_count=0
+c43b5a13,equation_symbolic_punct,symbolic_position_template,abstain,,)|,$):$,False,False,False,$)+:$,3,0,0,no_source_for_output_index=0
+c43b5a13,equation_symbolic_punct,symbolic_operator_index_template,abstain,,)|,$):$,False,False,False,$)+:$,3,0,0,programs=; unique_prediction_count=0
+b0206bb7,equation_symbolic_punct,symbolic_char_transducer,abstain,,]$!,$){,False,False,False,${*)},5,0,0,no_global_mapping
+b0206bb7,equation_symbolic_punct,symbolic_delete_selected_chars,abstain,,]$!,$){,False,False,False,${*)},5,0,0,delete_char_sets=; unique_prediction_count=0
+b0206bb7,equation_symbolic_punct,symbolic_keep_selected_chars,abstain,,]$!,$){,False,False,False,${*)},5,0,0,keep_char_sets=; unique_prediction_count=0
+b0206bb7,equation_symbolic_punct,symbolic_prefix_until_marker,abstain,,]$!,$){,False,False,False,${*)},5,0,0,markers=''; unique_prediction_count=0
+b0206bb7,equation_symbolic_punct,symbolic_suffix_after_marker,abstain,,]$!,$){,False,False,False,${*)},5,0,0,markers=''; unique_prediction_count=0
+b0206bb7,equation_symbolic_punct,symbolic_prefix_before_last_marker,abstain,,]$!,$){,False,False,False,${*)},5,0,0,markers=''; unique_prediction_count=0
+b0206bb7,equation_symbolic_punct,symbolic_suffix_after_last_marker,abstain,,]$!,$){,False,False,False,${*)},5,0,0,markers=''; unique_prediction_count=0
+b0206bb7,equation_symbolic_punct,symbolic_remove_first_marker,abstain,,]$!,$){,False,False,False,${*)},5,0,0,markers=''; unique_prediction_count=0
+b0206bb7,equation_symbolic_punct,symbolic_position_template,abstain,,]$!,$){,False,False,False,${*)},5,0,0,nonuniform_rhs_lengths
+b0206bb7,equation_symbolic_punct,symbolic_operator_index_template,abstain,,]$!,$){,False,False,False,${*)},5,0,0,programs=; unique_prediction_count=0
+638f93ca,equation_symbolic_punct,symbolic_char_transducer,abstain,,@,$<]$,False,False,False,$<-]$,4,0,0,no_global_mapping
+638f93ca,equation_symbolic_punct,symbolic_delete_selected_chars,abstain,,@,$<]$,False,False,False,$<-]$,4,0,0,delete_char_sets=; unique_prediction_count=0
+638f93ca,equation_symbolic_punct,symbolic_keep_selected_chars,abstain,,@,$<]$,False,False,False,$<-]$,4,0,0,keep_char_sets=; unique_prediction_count=0
+638f93ca,equation_symbolic_punct,symbolic_prefix_until_marker,abstain,,@,$<]$,False,False,False,$<-]$,4,0,0,markers=''; unique_prediction_count=0
+638f93ca,equation_symbolic_punct,symbolic_suffix_after_marker,abstain,,@,$<]$,False,False,False,$<-]$,4,0,0,markers=''; unique_prediction_count=0
+638f93ca,equation_symbolic_punct,symbolic_prefix_before_last_marker,abstain,,@,$<]$,False,False,False,$<-]$,4,0,0,markers=''; unique_prediction_count=0
+638f93ca,equation_symbolic_punct,symbolic_suffix_after_last_marker,abstain,,@,$<]$,False,False,False,$<-]$,4,0,0,markers=''; unique_prediction_count=0
+638f93ca,equation_symbolic_punct,symbolic_remove_first_marker,abstain,,@,$<]$,False,False,False,$<-]$,4,0,0,markers=''; unique_prediction_count=0
+638f93ca,equation_symbolic_punct,symbolic_position_template,abstain,,@,$<]$,False,False,False,$<-]$,4,0,0,nonuniform_rhs_lengths
+638f93ca,equation_symbolic_punct,symbolic_operator_index_template,abstain,,@,$<]$,False,False,False,$<-]$,4,0,0,programs=; unique_prediction_count=0
+4bfd095a,equation_symbolic_punct,symbolic_char_transducer,abstain,,{<<<,@/[@,False,False,False,@/*[@,4,0,0,no_global_mapping
+4bfd095a,equation_symbolic_punct,symbolic_delete_selected_chars,abstain,,{<<<,@/[@,False,False,False,@/*[@,4,0,0,delete_char_sets=; unique_prediction_count=0
+4bfd095a,equation_symbolic_punct,symbolic_keep_selected_chars,abstain,,{<<<,@/[@,False,False,False,@/*[@,4,0,0,keep_char_sets=; unique_prediction_count=0
+4bfd095a,equation_symbolic_punct,symbolic_prefix_until_marker,abstain,,{<<<,@/[@,False,False,False,@/*[@,4,0,0,markers=''; unique_prediction_count=0
+4bfd095a,equation_symbolic_punct,symbolic_suffix_after_marker,abstain,,{<<<,@/[@,False,False,False,@/*[@,4,0,0,markers=''; unique_prediction_count=0
+4bfd095a,equation_symbolic_punct,symbolic_prefix_before_last_marker,abstain,,{<<<,@/[@,False,False,False,@/*[@,4,0,0,markers=''; unique_prediction_count=0
+4bfd095a,equation_symbolic_punct,symbolic_suffix_after_last_marker,abstain,,{<<<,@/[@,False,False,False,@/*[@,4,0,0,markers=''; unique_prediction_count=0
+4bfd095a,equation_symbolic_punct,symbolic_remove_first_marker,abstain,,{<<<,@/[@,False,False,False,@/*[@,4,0,0,markers=''; unique_prediction_count=0
+4bfd095a,equation_symbolic_punct,symbolic_position_template,abstain,,{<<<,@/[@,False,False,False,@/*[@,4,0,0,nonuniform_rhs_lengths
+4bfd095a,equation_symbolic_punct,symbolic_operator_index_template,abstain,,{<<<,@/[@,False,False,False,@/*[@,4,0,0,programs=; unique_prediction_count=0
+7a422e17,equation_symbolic_punct,symbolic_char_transducer,abstain,,%'!,"#`""",False,False,False,"#`@{""",4,0,0,no_pair_mapping
+7a422e17,equation_symbolic_punct,symbolic_delete_selected_chars,abstain,,%'!,"#`""",False,False,False,"#`@{""",4,0,0,delete_char_sets=; unique_prediction_count=0
+7a422e17,equation_symbolic_punct,symbolic_keep_selected_chars,abstain,,%'!,"#`""",False,False,False,"#`@{""",4,0,0,keep_char_sets=; unique_prediction_count=0
+7a422e17,equation_symbolic_punct,symbolic_prefix_until_marker,abstain,,%'!,"#`""",False,False,False,"#`@{""",4,0,0,markers=''; unique_prediction_count=0
+7a422e17,equation_symbolic_punct,symbolic_suffix_after_marker,abstain,,%'!,"#`""",False,False,False,"#`@{""",4,0,0,markers=''; unique_prediction_count=0
+7a422e17,equation_symbolic_punct,symbolic_prefix_before_last_marker,abstain,,%'!,"#`""",False,False,False,"#`@{""",4,0,0,markers=''; unique_prediction_count=0
+7a422e17,equation_symbolic_punct,symbolic_suffix_after_last_marker,abstain,,%'!,"#`""",False,False,False,"#`@{""",4,0,0,markers=''; unique_prediction_count=0
+7a422e17,equation_symbolic_punct,symbolic_remove_first_marker,abstain,,%'!,"#`""",False,False,False,"#`@{""",4,0,0,markers=''; unique_prediction_count=0
+7a422e17,equation_symbolic_punct,symbolic_position_template,abstain,,%'!,"#`""",False,False,False,"#`@{""",4,0,0,nonuniform_rhs_lengths
+7a422e17,equation_symbolic_punct,symbolic_operator_index_template,abstain,,%'!,"#`""",False,False,False,"#`@{""",4,0,0,programs=; unique_prediction_count=0
+5b2523e6,equation_symbolic_punct,symbolic_char_transducer,abstain,,&&,><\$,False,False,False,><-\$,4,0,0,no_pair_mapping
+5b2523e6,equation_symbolic_punct,symbolic_delete_selected_chars,abstain,,&&,><\$,False,False,False,><-\$,4,0,0,delete_char_sets=; unique_prediction_count=0
+5b2523e6,equation_symbolic_punct,symbolic_keep_selected_chars,abstain,,&&,><\$,False,False,False,><-\$,4,0,0,keep_char_sets=; unique_prediction_count=0
+5b2523e6,equation_symbolic_punct,symbolic_prefix_until_marker,abstain,,&&,><\$,False,False,False,><-\$,4,0,0,markers=''; unique_prediction_count=0
+5b2523e6,equation_symbolic_punct,symbolic_suffix_after_marker,abstain,,&&,><\$,False,False,False,><-\$,4,0,0,markers=''; unique_prediction_count=0
+5b2523e6,equation_symbolic_punct,symbolic_prefix_before_last_marker,abstain,,&&,><\$,False,False,False,><-\$,4,0,0,markers=''; unique_prediction_count=0
+5b2523e6,equation_symbolic_punct,symbolic_suffix_after_last_marker,abstain,,&&,><\$,False,False,False,><-\$,4,0,0,markers=''; unique_prediction_count=0
+5b2523e6,equation_symbolic_punct,symbolic_remove_first_marker,abstain,,&&,><\$,False,False,False,><-\$,4,0,0,markers=''; unique_prediction_count=0
+5b2523e6,equation_symbolic_punct,symbolic_position_template,abstain,,&&,><\$,False,False,False,><-\$,4,0,0,nonuniform_rhs_lengths
+5b2523e6,equation_symbolic_punct,symbolic_operator_index_template,abstain,,&&,><\$,False,False,False,><-\$,4,0,0,programs=; unique_prediction_count=0
+0fe53bac,equation_symbolic_punct,symbolic_char_transducer,abstain,,"(""",^?(|,False,False,False,^?+(|,4,0,0,no_global_mapping
+0fe53bac,equation_symbolic_punct,symbolic_delete_selected_chars,abstain,,"(""",^?(|,False,False,False,^?+(|,4,0,0,delete_char_sets=; unique_prediction_count=0
+0fe53bac,equation_symbolic_punct,symbolic_keep_selected_chars,abstain,,"(""",^?(|,False,False,False,^?+(|,4,0,0,keep_char_sets=; unique_prediction_count=0
+0fe53bac,equation_symbolic_punct,symbolic_prefix_until_marker,abstain,,"(""",^?(|,False,False,False,^?+(|,4,0,0,markers=''; unique_prediction_count=0
+0fe53bac,equation_symbolic_punct,symbolic_suffix_after_marker,abstain,,"(""",^?(|,False,False,False,^?+(|,4,0,0,markers=''; unique_prediction_count=0
+0fe53bac,equation_symbolic_punct,symbolic_prefix_before_last_marker,abstain,,"(""",^?(|,False,False,False,^?+(|,4,0,0,markers=''; unique_prediction_count=0
+0fe53bac,equation_symbolic_punct,symbolic_suffix_after_last_marker,abstain,,"(""",^?(|,False,False,False,^?+(|,4,0,0,markers=''; unique_prediction_count=0
+0fe53bac,equation_symbolic_punct,symbolic_remove_first_marker,abstain,,"(""",^?(|,False,False,False,^?+(|,4,0,0,markers=''; unique_prediction_count=0
+0fe53bac,equation_symbolic_punct,symbolic_position_template,abstain,,"(""",^?(|,False,False,False,^?+(|,4,0,0,nonuniform_rhs_lengths
+0fe53bac,equation_symbolic_punct,symbolic_operator_index_template,abstain,,"(""",^?(|,False,False,False,^?+(|,4,0,0,programs=; unique_prediction_count=0
+274def88,equation_numeric_operator,numeric_same_operator_extended,abstain,,92,-92,False,False,False,85-92,5,0,0,same_operator_examples=2; rules=; unique_prediction_count=0
+03a3437f,equation_symbolic_punct,symbolic_char_transducer,abstain,,-!,'}>/,False,False,False,'}-/>,3,0,0,no_global_mapping
+03a3437f,equation_symbolic_punct,symbolic_delete_selected_chars,abstain,,-!,'}>/,False,False,False,'}-/>,3,0,0,delete_char_sets=; unique_prediction_count=0
+03a3437f,equation_symbolic_punct,symbolic_keep_selected_chars,abstain,,-!,'}>/,False,False,False,'}-/>,3,0,0,keep_char_sets=; unique_prediction_count=0
+03a3437f,equation_symbolic_punct,symbolic_prefix_until_marker,abstain,,-!,'}>/,False,False,False,'}-/>,3,0,0,markers=''; unique_prediction_count=0
+03a3437f,equation_symbolic_punct,symbolic_suffix_after_marker,abstain,,-!,'}>/,False,False,False,'}-/>,3,0,0,markers=''; unique_prediction_count=0
+03a3437f,equation_symbolic_punct,symbolic_prefix_before_last_marker,abstain,,-!,'}>/,False,False,False,'}-/>,3,0,0,markers=''; unique_prediction_count=0
+03a3437f,equation_symbolic_punct,symbolic_suffix_after_last_marker,abstain,,-!,'}>/,False,False,False,'}-/>,3,0,0,markers=''; unique_prediction_count=0
+03a3437f,equation_symbolic_punct,symbolic_remove_first_marker,abstain,,-!,'}>/,False,False,False,'}-/>,3,0,0,markers=''; unique_prediction_count=0
+03a3437f,equation_symbolic_punct,symbolic_position_template,abstain,,-!,'}>/,False,False,False,'}-/>,3,0,0,nonuniform_rhs_lengths
+03a3437f,equation_symbolic_punct,symbolic_operator_index_template,abstain,,-!,'}>/,False,False,False,'}-/>,3,0,0,programs=; unique_prediction_count=0
+30ac5c8e,equation_symbolic_punct,symbolic_char_transducer,abstain,,)#?,@\}?,False,False,False,@\+}?,5,0,0,no_pair_mapping
+30ac5c8e,equation_symbolic_punct,symbolic_delete_selected_chars,abstain,,)#?,@\}?,False,False,False,@\+}?,5,0,0,delete_char_sets=; unique_prediction_count=0
+30ac5c8e,equation_symbolic_punct,symbolic_keep_selected_chars,abstain,,)#?,@\}?,False,False,False,@\+}?,5,0,0,keep_char_sets=; unique_prediction_count=0
+30ac5c8e,equation_symbolic_punct,symbolic_prefix_until_marker,abstain,,)#?,@\}?,False,False,False,@\+}?,5,0,0,markers=''; unique_prediction_count=0
+30ac5c8e,equation_symbolic_punct,symbolic_suffix_after_marker,abstain,,)#?,@\}?,False,False,False,@\+}?,5,0,0,markers=''; unique_prediction_count=0
+30ac5c8e,equation_symbolic_punct,symbolic_prefix_before_last_marker,abstain,,)#?,@\}?,False,False,False,@\+}?,5,0,0,markers=''; unique_prediction_count=0
+30ac5c8e,equation_symbolic_punct,symbolic_suffix_after_last_marker,abstain,,)#?,@\}?,False,False,False,@\+}?,5,0,0,markers=''; unique_prediction_count=0
+30ac5c8e,equation_symbolic_punct,symbolic_remove_first_marker,abstain,,)#?,@\}?,False,False,False,@\+}?,5,0,0,markers=''; unique_prediction_count=0
+30ac5c8e,equation_symbolic_punct,symbolic_position_template,abstain,,)#?,@\}?,False,False,False,@\+}?,5,0,0,nonuniform_rhs_lengths
+30ac5c8e,equation_symbolic_punct,symbolic_operator_index_template,abstain,,)#?,@\}?,False,False,False,@\+}?,5,0,0,programs=; unique_prediction_count=0
+ff121f08,equation_symbolic_punct,symbolic_char_transducer,abstain,,#<,!%<<,False,False,False,!%+<<,5,0,0,no_global_mapping
+ff121f08,equation_symbolic_punct,symbolic_delete_selected_chars,abstain,,#<,!%<<,False,False,False,!%+<<,5,0,0,delete_char_sets=; unique_prediction_count=0
+ff121f08,equation_symbolic_punct,symbolic_keep_selected_chars,abstain,,#<,!%<<,False,False,False,!%+<<,5,0,0,keep_char_sets=; unique_prediction_count=0
+ff121f08,equation_symbolic_punct,symbolic_prefix_until_marker,abstain,,#<,!%<<,False,False,False,!%+<<,5,0,0,markers=''; unique_prediction_count=0
+ff121f08,equation_symbolic_punct,symbolic_suffix_after_marker,abstain,,#<,!%<<,False,False,False,!%+<<,5,0,0,markers=''; unique_prediction_count=0
+ff121f08,equation_symbolic_punct,symbolic_prefix_before_last_marker,abstain,,#<,!%<<,False,False,False,!%+<<,5,0,0,markers=''; unique_prediction_count=0
+ff121f08,equation_symbolic_punct,symbolic_suffix_after_last_marker,abstain,,#<,!%<<,False,False,False,!%+<<,5,0,0,markers=''; unique_prediction_count=0
+ff121f08,equation_symbolic_punct,symbolic_remove_first_marker,abstain,,#<,!%<<,False,False,False,!%+<<,5,0,0,markers=''; unique_prediction_count=0
+ff121f08,equation_symbolic_punct,symbolic_position_template,abstain,,#<,!%<<,False,False,False,!%+<<,5,0,0,nonuniform_rhs_lengths
+ff121f08,equation_symbolic_punct,symbolic_operator_index_template,abstain,,#<,!%<<,False,False,False,!%+<<,5,0,0,programs=; unique_prediction_count=0
+ec8b4875,equation_symbolic_punct,symbolic_char_transducer,abstain,,"|""]",|@<!,False,False,False,|@*<!,3,0,0,no_pair_mapping
+ec8b4875,equation_symbolic_punct,symbolic_delete_selected_chars,abstain,,"|""]",|@<!,False,False,False,|@*<!,3,0,0,delete_char_sets=; unique_prediction_count=0
+ec8b4875,equation_symbolic_punct,symbolic_keep_selected_chars,abstain,,"|""]",|@<!,False,False,False,|@*<!,3,0,0,keep_char_sets=; unique_prediction_count=0
+ec8b4875,equation_symbolic_punct,symbolic_prefix_until_marker,abstain,,"|""]",|@<!,False,False,False,|@*<!,3,0,0,markers=''; unique_prediction_count=0
+ec8b4875,equation_symbolic_punct,symbolic_suffix_after_marker,abstain,,"|""]",|@<!,False,False,False,|@*<!,3,0,0,markers=''; unique_prediction_count=0
+ec8b4875,equation_symbolic_punct,symbolic_prefix_before_last_marker,abstain,,"|""]",|@<!,False,False,False,|@*<!,3,0,0,markers=''; unique_prediction_count=0
+ec8b4875,equation_symbolic_punct,symbolic_suffix_after_last_marker,abstain,,"|""]",|@<!,False,False,False,|@*<!,3,0,0,markers=''; unique_prediction_count=0
+ec8b4875,equation_symbolic_punct,symbolic_remove_first_marker,abstain,,"|""]",|@<!,False,False,False,|@*<!,3,0,0,markers=''; unique_prediction_count=0
+ec8b4875,equation_symbolic_punct,symbolic_position_template,abstain,,"|""]",|@<!,False,False,False,|@*<!,3,0,0,nonuniform_rhs_lengths
+ec8b4875,equation_symbolic_punct,symbolic_operator_index_template,abstain,,"|""]",|@<!,False,False,False,|@*<!,3,0,0,programs=; unique_prediction_count=0
+e3fbc768,equation_symbolic_punct,symbolic_char_transducer,abstain,,'(^),%??,False,False,False,{%/??,3,0,0,no_pair_mapping
+e3fbc768,equation_symbolic_punct,symbolic_delete_selected_chars,abstain,,'(^),%??,False,False,False,{%/??,3,0,0,delete_char_sets=; unique_prediction_count=0
+e3fbc768,equation_symbolic_punct,symbolic_keep_selected_chars,abstain,,'(^),%??,False,False,False,{%/??,3,0,0,keep_char_sets=; unique_prediction_count=0
+e3fbc768,equation_symbolic_punct,symbolic_prefix_until_marker,abstain,,'(^),%??,False,False,False,{%/??,3,0,0,markers=''; unique_prediction_count=0
+e3fbc768,equation_symbolic_punct,symbolic_suffix_after_marker,abstain,,'(^),%??,False,False,False,{%/??,3,0,0,markers=''; unique_prediction_count=0
+e3fbc768,equation_symbolic_punct,symbolic_prefix_before_last_marker,abstain,,'(^),%??,False,False,False,{%/??,3,0,0,markers=''; unique_prediction_count=0
+e3fbc768,equation_symbolic_punct,symbolic_suffix_after_last_marker,abstain,,'(^),%??,False,False,False,{%/??,3,0,0,markers=''; unique_prediction_count=0
+e3fbc768,equation_symbolic_punct,symbolic_remove_first_marker,abstain,,'(^),%??,False,False,False,{%/??,3,0,0,markers=''; unique_prediction_count=0
+e3fbc768,equation_symbolic_punct,symbolic_position_template,abstain,,'(^),%??,False,False,False,{%/??,3,0,0,nonuniform_rhs_lengths
+e3fbc768,equation_symbolic_punct,symbolic_operator_index_template,abstain,,'(^),%??,False,False,False,{%/??,3,0,0,programs=; unique_prediction_count=0
+6cc5dafb,equation_symbolic_punct,symbolic_char_transducer,abstain,,)(,^&>),False,False,False,^&!>),4,0,0,no_global_mapping
+6cc5dafb,equation_symbolic_punct,symbolic_delete_selected_chars,abstain,,)(,^&>),False,False,False,^&!>),4,0,0,delete_char_sets=; unique_prediction_count=0
+6cc5dafb,equation_symbolic_punct,symbolic_keep_selected_chars,abstain,,)(,^&>),False,False,False,^&!>),4,0,0,keep_char_sets=; unique_prediction_count=0
+6cc5dafb,equation_symbolic_punct,symbolic_prefix_until_marker,abstain,,)(,^&>),False,False,False,^&!>),4,0,0,markers=''; unique_prediction_count=0
+6cc5dafb,equation_symbolic_punct,symbolic_suffix_after_marker,abstain,,)(,^&>),False,False,False,^&!>),4,0,0,markers=''; unique_prediction_count=0
+6cc5dafb,equation_symbolic_punct,symbolic_prefix_before_last_marker,abstain,,)(,^&>),False,False,False,^&!>),4,0,0,markers=''; unique_prediction_count=0
+6cc5dafb,equation_symbolic_punct,symbolic_suffix_after_last_marker,abstain,,)(,^&>),False,False,False,^&!>),4,0,0,markers=''; unique_prediction_count=0
+6cc5dafb,equation_symbolic_punct,symbolic_remove_first_marker,abstain,,)(,^&>),False,False,False,^&!>),4,0,0,markers=''; unique_prediction_count=0
+6cc5dafb,equation_symbolic_punct,symbolic_position_template,abstain,,)(,^&>),False,False,False,^&!>),4,0,0,nonuniform_rhs_lengths
+6cc5dafb,equation_symbolic_punct,symbolic_operator_index_template,abstain,,)(,^&>),False,False,False,^&!>),4,0,0,programs=; unique_prediction_count=0
+d5a03a2e,equation_symbolic_punct,symbolic_char_transducer,abstain,,>>,""")&&",False,False,False,""""")&&",4,0,0,no_global_mapping
+d5a03a2e,equation_symbolic_punct,symbolic_delete_selected_chars,abstain,,>>,""")&&",False,False,False,""""")&&",4,0,0,delete_char_sets=; unique_prediction_count=0
+d5a03a2e,equation_symbolic_punct,symbolic_keep_selected_chars,abstain,,>>,""")&&",False,False,False,""""")&&",4,0,0,keep_char_sets=; unique_prediction_count=0
+d5a03a2e,equation_symbolic_punct,symbolic_prefix_until_marker,abstain,,>>,""")&&",False,False,False,""""")&&",4,0,0,markers=''; unique_prediction_count=0
+d5a03a2e,equation_symbolic_punct,symbolic_suffix_after_marker,abstain,,>>,""")&&",False,False,False,""""")&&",4,0,0,markers=''; unique_prediction_count=0
+d5a03a2e,equation_symbolic_punct,symbolic_prefix_before_last_marker,abstain,,>>,""")&&",False,False,False,""""")&&",4,0,0,markers=''; unique_prediction_count=0
+d5a03a2e,equation_symbolic_punct,symbolic_suffix_after_last_marker,abstain,,>>,""")&&",False,False,False,""""")&&",4,0,0,markers=''; unique_prediction_count=0
+d5a03a2e,equation_symbolic_punct,symbolic_remove_first_marker,abstain,,>>,""")&&",False,False,False,""""")&&",4,0,0,markers=''; unique_prediction_count=0
+d5a03a2e,equation_symbolic_punct,symbolic_position_template,abstain,,>>,""")&&",False,False,False,""""")&&",4,0,0,nonuniform_rhs_lengths
+d5a03a2e,equation_symbolic_punct,symbolic_operator_index_template,abstain,,>>,""")&&",False,False,False,""""")&&",4,0,0,programs=; unique_prediction_count=0
+fb623471,equation_numeric_operator,numeric_same_operator_extended,abstain,,-21,21,False,False,False,08-29,3,0,0,same_operator_examples=1 below_min=2
+d129b085,equation_symbolic_punct,symbolic_char_transducer,abstain,,##$,!>``,False,False,False,"!>+`""",4,0,0,no_global_mapping
+d129b085,equation_symbolic_punct,symbolic_delete_selected_chars,abstain,,##$,!>``,False,False,False,"!>+`""",4,0,0,delete_char_sets=; unique_prediction_count=0
+d129b085,equation_symbolic_punct,symbolic_keep_selected_chars,abstain,,##$,!>``,False,False,False,"!>+`""",4,0,0,keep_char_sets=; unique_prediction_count=0
+d129b085,equation_symbolic_punct,symbolic_prefix_until_marker,abstain,,##$,!>``,False,False,False,"!>+`""",4,0,0,markers=''; unique_prediction_count=0
+d129b085,equation_symbolic_punct,symbolic_suffix_after_marker,abstain,,##$,!>``,False,False,False,"!>+`""",4,0,0,markers=''; unique_prediction_count=0
+d129b085,equation_symbolic_punct,symbolic_prefix_before_last_marker,abstain,,##$,!>``,False,False,False,"!>+`""",4,0,0,markers=''; unique_prediction_count=0
+d129b085,equation_symbolic_punct,symbolic_suffix_after_last_marker,abstain,,##$,!>``,False,False,False,"!>+`""",4,0,0,markers=''; unique_prediction_count=0
+d129b085,equation_symbolic_punct,symbolic_remove_first_marker,abstain,,##$,!>``,False,False,False,"!>+`""",4,0,0,markers=''; unique_prediction_count=0
+d129b085,equation_symbolic_punct,symbolic_position_template,abstain,,##$,!>``,False,False,False,"!>+`""",4,0,0,nonuniform_rhs_lengths
+d129b085,equation_symbolic_punct,symbolic_operator_index_template,abstain,,##$,!>``,False,False,False,"!>+`""",4,0,0,programs=; unique_prediction_count=0
+e582df31,equation_symbolic_punct,symbolic_char_transducer,abstain,,}@,"""']@",False,False,False,"""'?]@",3,0,0,no_global_mapping
+e582df31,equation_symbolic_punct,symbolic_delete_selected_chars,abstain,,}@,"""']@",False,False,False,"""'?]@",3,0,0,delete_char_sets=; unique_prediction_count=0
+e582df31,equation_symbolic_punct,symbolic_keep_selected_chars,abstain,,}@,"""']@",False,False,False,"""'?]@",3,0,0,keep_char_sets=; unique_prediction_count=0
+e582df31,equation_symbolic_punct,symbolic_prefix_until_marker,abstain,,}@,"""']@",False,False,False,"""'?]@",3,0,0,markers=''; unique_prediction_count=0
+e582df31,equation_symbolic_punct,symbolic_suffix_after_marker,abstain,,}@,"""']@",False,False,False,"""'?]@",3,0,0,markers=''; unique_prediction_count=0
+e582df31,equation_symbolic_punct,symbolic_prefix_before_last_marker,abstain,,}@,"""']@",False,False,False,"""'?]@",3,0,0,markers=''; unique_prediction_count=0
+e582df31,equation_symbolic_punct,symbolic_suffix_after_last_marker,abstain,,}@,"""']@",False,False,False,"""'?]@",3,0,0,markers=''; unique_prediction_count=0
+e582df31,equation_symbolic_punct,symbolic_remove_first_marker,abstain,,}@,"""']@",False,False,False,"""'?]@",3,0,0,markers=''; unique_prediction_count=0
+e582df31,equation_symbolic_punct,symbolic_position_template,abstain,,}@,"""']@",False,False,False,"""'?]@",3,0,0,nonuniform_rhs_lengths
+e582df31,equation_symbolic_punct,symbolic_operator_index_template,abstain,,}@,"""']@",False,False,False,"""'?]@",3,0,0,programs=; unique_prediction_count=0
+a77be9fa,equation_symbolic_punct,symbolic_char_transducer,abstain,,"[""",{>$[,False,False,False,{>|$[,3,0,0,no_global_mapping
+a77be9fa,equation_symbolic_punct,symbolic_delete_selected_chars,abstain,,"[""",{>$[,False,False,False,{>|$[,3,0,0,delete_char_sets=; unique_prediction_count=0
+a77be9fa,equation_symbolic_punct,symbolic_keep_selected_chars,abstain,,"[""",{>$[,False,False,False,{>|$[,3,0,0,keep_char_sets=; unique_prediction_count=0
+a77be9fa,equation_symbolic_punct,symbolic_prefix_until_marker,abstain,,"[""",{>$[,False,False,False,{>|$[,3,0,0,markers=''; unique_prediction_count=0
+a77be9fa,equation_symbolic_punct,symbolic_suffix_after_marker,abstain,,"[""",{>$[,False,False,False,{>|$[,3,0,0,markers=''; unique_prediction_count=0
+a77be9fa,equation_symbolic_punct,symbolic_prefix_before_last_marker,abstain,,"[""",{>$[,False,False,False,{>|$[,3,0,0,markers=''; unique_prediction_count=0
+a77be9fa,equation_symbolic_punct,symbolic_suffix_after_last_marker,abstain,,"[""",{>$[,False,False,False,{>|$[,3,0,0,markers=''; unique_prediction_count=0
+a77be9fa,equation_symbolic_punct,symbolic_remove_first_marker,abstain,,"[""",{>$[,False,False,False,{>|$[,3,0,0,markers=''; unique_prediction_count=0
+a77be9fa,equation_symbolic_punct,symbolic_position_template,abstain,,"[""",{>$[,False,False,False,{>|$[,3,0,0,nonuniform_rhs_lengths
+a77be9fa,equation_symbolic_punct,symbolic_operator_index_template,abstain,,"[""",{>$[,False,False,False,{>|$[,3,0,0,programs=; unique_prediction_count=0
+4ed6b56f,equation_symbolic_punct,symbolic_char_transducer,abstain,,"(""/""",!:`(,False,False,False,!:*`(,4,0,0,no_global_mapping
+4ed6b56f,equation_symbolic_punct,symbolic_delete_selected_chars,abstain,,"(""/""",!:`(,False,False,False,!:*`(,4,0,0,delete_char_sets=; unique_prediction_count=0
+4ed6b56f,equation_symbolic_punct,symbolic_keep_selected_chars,abstain,,"(""/""",!:`(,False,False,False,!:*`(,4,0,0,keep_char_sets=; unique_prediction_count=0
+4ed6b56f,equation_symbolic_punct,symbolic_prefix_until_marker,abstain,,"(""/""",!:`(,False,False,False,!:*`(,4,0,0,markers=''; unique_prediction_count=0
+4ed6b56f,equation_symbolic_punct,symbolic_suffix_after_marker,abstain,,"(""/""",!:`(,False,False,False,!:*`(,4,0,0,markers=''; unique_prediction_count=0
+4ed6b56f,equation_symbolic_punct,symbolic_prefix_before_last_marker,abstain,,"(""/""",!:`(,False,False,False,!:*`(,4,0,0,markers=''; unique_prediction_count=0
+4ed6b56f,equation_symbolic_punct,symbolic_suffix_after_last_marker,abstain,,"(""/""",!:`(,False,False,False,!:*`(,4,0,0,markers=''; unique_prediction_count=0
+4ed6b56f,equation_symbolic_punct,symbolic_remove_first_marker,abstain,,"(""/""",!:`(,False,False,False,!:*`(,4,0,0,markers=''; unique_prediction_count=0
+4ed6b56f,equation_symbolic_punct,symbolic_position_template,abstain,,"(""/""",!:`(,False,False,False,!:*`(,4,0,0,nonuniform_rhs_lengths
+4ed6b56f,equation_symbolic_punct,symbolic_operator_index_template,abstain,,"(""/""",!:`(,False,False,False,!:*`(,4,0,0,programs=; unique_prediction_count=0
+208d7838,equation_symbolic_punct,symbolic_char_transducer,abstain,,[:,[&<>,False,False,False,[&-<>,5,0,0,no_pair_mapping
+208d7838,equation_symbolic_punct,symbolic_delete_selected_chars,abstain,,[:,[&<>,False,False,False,[&-<>,5,0,0,delete_char_sets=; unique_prediction_count=0
+208d7838,equation_symbolic_punct,symbolic_keep_selected_chars,abstain,,[:,[&<>,False,False,False,[&-<>,5,0,0,keep_char_sets=; unique_prediction_count=0
+208d7838,equation_symbolic_punct,symbolic_prefix_until_marker,abstain,,[:,[&<>,False,False,False,[&-<>,5,0,0,markers=''; unique_prediction_count=0
+208d7838,equation_symbolic_punct,symbolic_suffix_after_marker,abstain,,[:,[&<>,False,False,False,[&-<>,5,0,0,markers=''; unique_prediction_count=0
+208d7838,equation_symbolic_punct,symbolic_prefix_before_last_marker,abstain,,[:,[&<>,False,False,False,[&-<>,5,0,0,markers=''; unique_prediction_count=0
+208d7838,equation_symbolic_punct,symbolic_suffix_after_last_marker,abstain,,[:,[&<>,False,False,False,[&-<>,5,0,0,markers=''; unique_prediction_count=0
+208d7838,equation_symbolic_punct,symbolic_remove_first_marker,abstain,,[:,[&<>,False,False,False,[&-<>,5,0,0,markers=''; unique_prediction_count=0
+208d7838,equation_symbolic_punct,symbolic_position_template,abstain,,[:,[&<>,False,False,False,[&-<>,5,0,0,nonuniform_rhs_lengths
+208d7838,equation_symbolic_punct,symbolic_operator_index_template,abstain,,[:,[&<>,False,False,False,[&-<>,5,0,0,programs=; unique_prediction_count=0
+58c099d2,equation_symbolic_punct,symbolic_char_transducer,abstain,,-)\,^!#\,False,False,False,^!-#\,3,0,0,no_global_mapping
+58c099d2,equation_symbolic_punct,symbolic_delete_selected_chars,abstain,,-)\,^!#\,False,False,False,^!-#\,3,0,0,delete_char_sets=; unique_prediction_count=0
+58c099d2,equation_symbolic_punct,symbolic_keep_selected_chars,abstain,,-)\,^!#\,False,False,False,^!-#\,3,0,0,keep_char_sets=; unique_prediction_count=0
+58c099d2,equation_symbolic_punct,symbolic_prefix_until_marker,abstain,,-)\,^!#\,False,False,False,^!-#\,3,0,0,markers=''; unique_prediction_count=0
+58c099d2,equation_symbolic_punct,symbolic_suffix_after_marker,abstain,,-)\,^!#\,False,False,False,^!-#\,3,0,0,markers=''; unique_prediction_count=0
+58c099d2,equation_symbolic_punct,symbolic_prefix_before_last_marker,abstain,,-)\,^!#\,False,False,False,^!-#\,3,0,0,markers=''; unique_prediction_count=0
+58c099d2,equation_symbolic_punct,symbolic_suffix_after_last_marker,abstain,,-)\,^!#\,False,False,False,^!-#\,3,0,0,markers=''; unique_prediction_count=0
+58c099d2,equation_symbolic_punct,symbolic_remove_first_marker,abstain,,-)\,^!#\,False,False,False,^!-#\,3,0,0,markers=''; unique_prediction_count=0
+58c099d2,equation_symbolic_punct,symbolic_position_template,abstain,,-)\,^!#\,False,False,False,^!-#\,3,0,0,nonuniform_rhs_lengths
+58c099d2,equation_symbolic_punct,symbolic_operator_index_template,abstain,,-)\,^!#\,False,False,False,^!-#\,3,0,0,programs=; unique_prediction_count=0
+3cb3fd89,equation_symbolic_punct,symbolic_char_transducer,abstain,,[[&],]$$),False,False,False,]$*$),4,0,0,no_pair_mapping
+3cb3fd89,equation_symbolic_punct,symbolic_delete_selected_chars,abstain,,[[&],]$$),False,False,False,]$*$),4,0,0,delete_char_sets=; unique_prediction_count=0
+3cb3fd89,equation_symbolic_punct,symbolic_keep_selected_chars,abstain,,[[&],]$$),False,False,False,]$*$),4,0,0,keep_char_sets=; unique_prediction_count=0
+3cb3fd89,equation_symbolic_punct,symbolic_prefix_until_marker,abstain,,[[&],]$$),False,False,False,]$*$),4,0,0,markers=''; unique_prediction_count=0
+3cb3fd89,equation_symbolic_punct,symbolic_suffix_after_marker,abstain,,[[&],]$$),False,False,False,]$*$),4,0,0,markers=''; unique_prediction_count=0
+3cb3fd89,equation_symbolic_punct,symbolic_prefix_before_last_marker,abstain,,[[&],]$$),False,False,False,]$*$),4,0,0,markers=''; unique_prediction_count=0
+3cb3fd89,equation_symbolic_punct,symbolic_suffix_after_last_marker,abstain,,[[&],]$$),False,False,False,]$*$),4,0,0,markers=''; unique_prediction_count=0
+3cb3fd89,equation_symbolic_punct,symbolic_remove_first_marker,abstain,,[[&],]$$),False,False,False,]$*$),4,0,0,markers=''; unique_prediction_count=0
+3cb3fd89,equation_symbolic_punct,symbolic_position_template,abstain,,[[&],]$$),False,False,False,]$*$),4,0,0,nonuniform_rhs_lengths
+3cb3fd89,equation_symbolic_punct,symbolic_operator_index_template,abstain,,[[&],]$$),False,False,False,]$*$),4,0,0,programs=; unique_prediction_count=0
+a26065d4,equation_symbolic_punct,symbolic_char_transducer,abstain,,<',<&<#,False,False,False,<&+<#,5,0,0,no_global_mapping
+a26065d4,equation_symbolic_punct,symbolic_delete_selected_chars,abstain,,<',<&<#,False,False,False,<&+<#,5,0,0,delete_char_sets=; unique_prediction_count=0
+a26065d4,equation_symbolic_punct,symbolic_keep_selected_chars,abstain,,<',<&<#,False,False,False,<&+<#,5,0,0,keep_char_sets=; unique_prediction_count=0
+a26065d4,equation_symbolic_punct,symbolic_prefix_until_marker,abstain,,<',<&<#,False,False,False,<&+<#,5,0,0,markers=''; unique_prediction_count=0
+a26065d4,equation_symbolic_punct,symbolic_suffix_after_marker,abstain,,<',<&<#,False,False,False,<&+<#,5,0,0,markers=''; unique_prediction_count=0
+a26065d4,equation_symbolic_punct,symbolic_prefix_before_last_marker,abstain,,<',<&<#,False,False,False,<&+<#,5,0,0,markers=''; unique_prediction_count=0
+a26065d4,equation_symbolic_punct,symbolic_suffix_after_last_marker,abstain,,<',<&<#,False,False,False,<&+<#,5,0,0,markers=''; unique_prediction_count=0
+a26065d4,equation_symbolic_punct,symbolic_remove_first_marker,abstain,,<',<&<#,False,False,False,<&+<#,5,0,0,markers=''; unique_prediction_count=0
+a26065d4,equation_symbolic_punct,symbolic_position_template,abstain,,<',<&<#,False,False,False,<&+<#,5,0,0,nonuniform_rhs_lengths
+a26065d4,equation_symbolic_punct,symbolic_operator_index_template,abstain,,<',<&<#,False,False,False,<&+<#,5,0,0,programs=; unique_prediction_count=0
+194695e8,equation_symbolic_punct,symbolic_char_transducer,abstain,,%,!\{<,False,False,False,!\-{<,3,0,0,no_pair_mapping
+194695e8,equation_symbolic_punct,symbolic_delete_selected_chars,abstain,,%,!\{<,False,False,False,!\-{<,3,0,0,delete_char_sets=; unique_prediction_count=0
+194695e8,equation_symbolic_punct,symbolic_keep_selected_chars,abstain,,%,!\{<,False,False,False,!\-{<,3,0,0,keep_char_sets=; unique_prediction_count=0
+194695e8,equation_symbolic_punct,symbolic_prefix_until_marker,abstain,,%,!\{<,False,False,False,!\-{<,3,0,0,markers=''; unique_prediction_count=0
+194695e8,equation_symbolic_punct,symbolic_suffix_after_marker,abstain,,%,!\{<,False,False,False,!\-{<,3,0,0,markers=''; unique_prediction_count=0
+194695e8,equation_symbolic_punct,symbolic_prefix_before_last_marker,abstain,,%,!\{<,False,False,False,!\-{<,3,0,0,markers=''; unique_prediction_count=0
+194695e8,equation_symbolic_punct,symbolic_suffix_after_last_marker,abstain,,%,!\{<,False,False,False,!\-{<,3,0,0,markers=''; unique_prediction_count=0
+194695e8,equation_symbolic_punct,symbolic_remove_first_marker,abstain,,%,!\{<,False,False,False,!\-{<,3,0,0,markers=''; unique_prediction_count=0
+194695e8,equation_symbolic_punct,symbolic_position_template,abstain,,%,!\{<,False,False,False,!\-{<,3,0,0,nonuniform_rhs_lengths
+194695e8,equation_symbolic_punct,symbolic_operator_index_template,abstain,,%,!\{<,False,False,False,!\-{<,3,0,0,programs=; unique_prediction_count=0
+528ec0d8,equation_numeric_operator,numeric_same_operator_extended,abstain,,-39,39,False,False,False,11-50,4,0,0,same_operator_examples=0 below_min=2
+57712d01,equation_symbolic_punct,symbolic_char_transducer,abstain,,-/<,$/'{,False,False,False,$/-'{,5,0,0,no_global_mapping
+57712d01,equation_symbolic_punct,symbolic_delete_selected_chars,abstain,,-/<,$/'{,False,False,False,$/-'{,5,0,0,delete_char_sets=; unique_prediction_count=0
+57712d01,equation_symbolic_punct,symbolic_keep_selected_chars,abstain,,-/<,$/'{,False,False,False,$/-'{,5,0,0,keep_char_sets=; unique_prediction_count=0
+57712d01,equation_symbolic_punct,symbolic_prefix_until_marker,abstain,,-/<,$/'{,False,False,False,$/-'{,5,0,0,markers=''; unique_prediction_count=0
+57712d01,equation_symbolic_punct,symbolic_suffix_after_marker,abstain,,-/<,$/'{,False,False,False,$/-'{,5,0,0,markers=''; unique_prediction_count=0
+57712d01,equation_symbolic_punct,symbolic_prefix_before_last_marker,abstain,,-/<,$/'{,False,False,False,$/-'{,5,0,0,markers=''; unique_prediction_count=0
+57712d01,equation_symbolic_punct,symbolic_suffix_after_last_marker,abstain,,-/<,$/'{,False,False,False,$/-'{,5,0,0,markers=''; unique_prediction_count=0
+57712d01,equation_symbolic_punct,symbolic_remove_first_marker,abstain,,-/<,$/'{,False,False,False,$/-'{,5,0,0,markers=''; unique_prediction_count=0
+57712d01,equation_symbolic_punct,symbolic_position_template,abstain,,-/<,$/'{,False,False,False,$/-'{,5,0,0,nonuniform_rhs_lengths
+57712d01,equation_symbolic_punct,symbolic_operator_index_template,abstain,,-/<,$/'{,False,False,False,$/-'{,5,0,0,programs=; unique_prediction_count=0
+d98d85c0,equation_symbolic_punct,symbolic_char_transducer,abstain,,?(&@,(@@?,False,False,False,(@+@?,3,0,0,no_global_mapping
+d98d85c0,equation_symbolic_punct,symbolic_delete_selected_chars,abstain,,?(&@,(@@?,False,False,False,(@+@?,3,0,0,delete_char_sets=; unique_prediction_count=0
+d98d85c0,equation_symbolic_punct,symbolic_keep_selected_chars,abstain,,?(&@,(@@?,False,False,False,(@+@?,3,0,0,keep_char_sets=; unique_prediction_count=0
+d98d85c0,equation_symbolic_punct,symbolic_prefix_until_marker,abstain,,?(&@,(@@?,False,False,False,(@+@?,3,0,0,markers=''; unique_prediction_count=0
+d98d85c0,equation_symbolic_punct,symbolic_suffix_after_marker,abstain,,?(&@,(@@?,False,False,False,(@+@?,3,0,0,markers=''; unique_prediction_count=0
+d98d85c0,equation_symbolic_punct,symbolic_prefix_before_last_marker,abstain,,?(&@,(@@?,False,False,False,(@+@?,3,0,0,markers=''; unique_prediction_count=0
+d98d85c0,equation_symbolic_punct,symbolic_suffix_after_last_marker,abstain,,?(&@,(@@?,False,False,False,(@+@?,3,0,0,markers=''; unique_prediction_count=0
+d98d85c0,equation_symbolic_punct,symbolic_remove_first_marker,abstain,,?(&@,(@@?,False,False,False,(@+@?,3,0,0,markers=''; unique_prediction_count=0
+d98d85c0,equation_symbolic_punct,symbolic_position_template,abstain,,?(&@,(@@?,False,False,False,(@+@?,3,0,0,nonuniform_rhs_lengths
+d98d85c0,equation_symbolic_punct,symbolic_operator_index_template,abstain,,?(&@,(@@?,False,False,False,(@+@?,3,0,0,programs=; unique_prediction_count=0
+491b8ea5,equation_symbolic_punct,symbolic_char_transducer,abstain,,)!,@|]!,False,False,False,@|-]!,3,0,0,no_global_mapping
+491b8ea5,equation_symbolic_punct,symbolic_delete_selected_chars,abstain,,)!,@|]!,False,False,False,@|-]!,3,0,0,delete_char_sets=; unique_prediction_count=0
+491b8ea5,equation_symbolic_punct,symbolic_keep_selected_chars,abstain,,)!,@|]!,False,False,False,@|-]!,3,0,0,keep_char_sets=; unique_prediction_count=0
+491b8ea5,equation_symbolic_punct,symbolic_prefix_until_marker,abstain,,)!,@|]!,False,False,False,@|-]!,3,0,0,markers=''; unique_prediction_count=0
+491b8ea5,equation_symbolic_punct,symbolic_suffix_after_marker,abstain,,)!,@|]!,False,False,False,@|-]!,3,0,0,markers=''; unique_prediction_count=0
+491b8ea5,equation_symbolic_punct,symbolic_prefix_before_last_marker,abstain,,)!,@|]!,False,False,False,@|-]!,3,0,0,markers=''; unique_prediction_count=0
+491b8ea5,equation_symbolic_punct,symbolic_suffix_after_last_marker,abstain,,)!,@|]!,False,False,False,@|-]!,3,0,0,markers=''; unique_prediction_count=0
+491b8ea5,equation_symbolic_punct,symbolic_remove_first_marker,abstain,,)!,@|]!,False,False,False,@|-]!,3,0,0,markers=''; unique_prediction_count=0
+491b8ea5,equation_symbolic_punct,symbolic_position_template,abstain,,)!,@|]!,False,False,False,@|-]!,3,0,0,nonuniform_rhs_lengths
+491b8ea5,equation_symbolic_punct,symbolic_operator_index_template,abstain,,)!,@|]!,False,False,False,@|-]!,3,0,0,programs=; unique_prediction_count=0
+eb1a62f7,equation_symbolic_punct,symbolic_char_transducer,abstain,,>!>},){>),False,False,False,)}*>),3,0,0,no_global_mapping
+eb1a62f7,equation_symbolic_punct,symbolic_delete_selected_chars,abstain,,>!>},){>),False,False,False,)}*>),3,0,0,delete_char_sets=; unique_prediction_count=0
+eb1a62f7,equation_symbolic_punct,symbolic_keep_selected_chars,abstain,,>!>},){>),False,False,False,)}*>),3,0,0,keep_char_sets=; unique_prediction_count=0
+eb1a62f7,equation_symbolic_punct,symbolic_prefix_until_marker,abstain,,>!>},){>),False,False,False,)}*>),3,0,0,markers=''; unique_prediction_count=0
+eb1a62f7,equation_symbolic_punct,symbolic_suffix_after_marker,abstain,,>!>},){>),False,False,False,)}*>),3,0,0,markers=''; unique_prediction_count=0
+eb1a62f7,equation_symbolic_punct,symbolic_prefix_before_last_marker,abstain,,>!>},){>),False,False,False,)}*>),3,0,0,markers=''; unique_prediction_count=0
+eb1a62f7,equation_symbolic_punct,symbolic_suffix_after_last_marker,abstain,,>!>},){>),False,False,False,)}*>),3,0,0,markers=''; unique_prediction_count=0
+eb1a62f7,equation_symbolic_punct,symbolic_remove_first_marker,abstain,,>!>},){>),False,False,False,)}*>),3,0,0,markers=''; unique_prediction_count=0
+eb1a62f7,equation_symbolic_punct,symbolic_position_template,abstain,,>!>},){>),False,False,False,)}*>),3,0,0,no_source_for_output_index=0
+eb1a62f7,equation_symbolic_punct,symbolic_operator_index_template,abstain,,>!>},){>),False,False,False,)}*>),3,0,0,programs=; unique_prediction_count=0
+0bb591e6,equation_symbolic_punct,symbolic_char_transducer,abstain,,%?<,"""$%%""",False,False,False,"""$+%%",4,0,0,no_global_mapping
+0bb591e6,equation_symbolic_punct,symbolic_delete_selected_chars,abstain,,%?<,"""$%%""",False,False,False,"""$+%%",4,0,0,delete_char_sets=; unique_prediction_count=0
+0bb591e6,equation_symbolic_punct,symbolic_keep_selected_chars,abstain,,%?<,"""$%%""",False,False,False,"""$+%%",4,0,0,keep_char_sets=; unique_prediction_count=0
+0bb591e6,equation_symbolic_punct,symbolic_prefix_until_marker,abstain,,%?<,"""$%%""",False,False,False,"""$+%%",4,0,0,markers=''; unique_prediction_count=0
+0bb591e6,equation_symbolic_punct,symbolic_suffix_after_marker,abstain,,%?<,"""$%%""",False,False,False,"""$+%%",4,0,0,markers=''; unique_prediction_count=0
+0bb591e6,equation_symbolic_punct,symbolic_prefix_before_last_marker,abstain,,%?<,"""$%%""",False,False,False,"""$+%%",4,0,0,markers=''; unique_prediction_count=0
+0bb591e6,equation_symbolic_punct,symbolic_suffix_after_last_marker,abstain,,%?<,"""$%%""",False,False,False,"""$+%%",4,0,0,markers=''; unique_prediction_count=0
+0bb591e6,equation_symbolic_punct,symbolic_remove_first_marker,abstain,,%?<,"""$%%""",False,False,False,"""$+%%",4,0,0,markers=''; unique_prediction_count=0
+0bb591e6,equation_symbolic_punct,symbolic_position_template,abstain,,%?<,"""$%%""",False,False,False,"""$+%%",4,0,0,nonuniform_rhs_lengths
+0bb591e6,equation_symbolic_punct,symbolic_operator_index_template,abstain,,%?<,"""$%%""",False,False,False,"""$+%%",4,0,0,programs=; unique_prediction_count=0
+9a19fc2d,equation_symbolic_punct,symbolic_char_transducer,abstain,,#>[,!&)#,False,False,False,!&+)#,5,0,0,no_global_mapping
+9a19fc2d,equation_symbolic_punct,symbolic_delete_selected_chars,abstain,,#>[,!&)#,False,False,False,!&+)#,5,0,0,delete_char_sets=; unique_prediction_count=0
+9a19fc2d,equation_symbolic_punct,symbolic_keep_selected_chars,abstain,,#>[,!&)#,False,False,False,!&+)#,5,0,0,keep_char_sets=; unique_prediction_count=0
+9a19fc2d,equation_symbolic_punct,symbolic_prefix_until_marker,abstain,,#>[,!&)#,False,False,False,!&+)#,5,0,0,markers=''; unique_prediction_count=0
+9a19fc2d,equation_symbolic_punct,symbolic_suffix_after_marker,abstain,,#>[,!&)#,False,False,False,!&+)#,5,0,0,markers=''; unique_prediction_count=0
+9a19fc2d,equation_symbolic_punct,symbolic_prefix_before_last_marker,abstain,,#>[,!&)#,False,False,False,!&+)#,5,0,0,markers=''; unique_prediction_count=0
+9a19fc2d,equation_symbolic_punct,symbolic_suffix_after_last_marker,abstain,,#>[,!&)#,False,False,False,!&+)#,5,0,0,markers=''; unique_prediction_count=0
+9a19fc2d,equation_symbolic_punct,symbolic_remove_first_marker,abstain,,#>[,!&)#,False,False,False,!&+)#,5,0,0,markers=''; unique_prediction_count=0
+9a19fc2d,equation_symbolic_punct,symbolic_position_template,abstain,,#>[,!&)#,False,False,False,!&+)#,5,0,0,nonuniform_rhs_lengths
+9a19fc2d,equation_symbolic_punct,symbolic_operator_index_template,abstain,,#>[,!&)#,False,False,False,!&+)#,5,0,0,programs=; unique_prediction_count=0
+528b694b,equation_symbolic_punct,symbolic_char_transducer,abstain,,"""'",>]]),False,False,False,>]<]),4,0,0,no_global_mapping
+528b694b,equation_symbolic_punct,symbolic_delete_selected_chars,abstain,,"""'",>]]),False,False,False,>]<]),4,0,0,delete_char_sets=; unique_prediction_count=0
+528b694b,equation_symbolic_punct,symbolic_keep_selected_chars,abstain,,"""'",>]]),False,False,False,>]<]),4,0,0,keep_char_sets=; unique_prediction_count=0
+528b694b,equation_symbolic_punct,symbolic_prefix_until_marker,abstain,,"""'",>]]),False,False,False,>]<]),4,0,0,markers=''; unique_prediction_count=0
+528b694b,equation_symbolic_punct,symbolic_suffix_after_marker,abstain,,"""'",>]]),False,False,False,>]<]),4,0,0,markers=''; unique_prediction_count=0
+528b694b,equation_symbolic_punct,symbolic_prefix_before_last_marker,abstain,,"""'",>]]),False,False,False,>]<]),4,0,0,markers=''; unique_prediction_count=0
+528b694b,equation_symbolic_punct,symbolic_suffix_after_last_marker,abstain,,"""'",>]]),False,False,False,>]<]),4,0,0,markers=''; unique_prediction_count=0
+528b694b,equation_symbolic_punct,symbolic_remove_first_marker,abstain,,"""'",>]]),False,False,False,>]<]),4,0,0,markers=''; unique_prediction_count=0
+528b694b,equation_symbolic_punct,symbolic_position_template,abstain,,"""'",>]]),False,False,False,>]<]),4,0,0,nonuniform_rhs_lengths
+528b694b,equation_symbolic_punct,symbolic_operator_index_template,abstain,,"""'",>]]),False,False,False,>]<]),4,0,0,programs=; unique_prediction_count=0
+d1bd7478,equation_numeric_operator,numeric_same_operator_extended,abstain,,30,03,False,False,False,37:67,4,0,0,same_operator_examples=1 below_min=2
+fba40625,equation_symbolic_punct,symbolic_char_transducer,abstain,,'>&,{>?#,False,False,False,{>'?#,4,0,0,no_global_mapping
+fba40625,equation_symbolic_punct,symbolic_delete_selected_chars,abstain,,'>&,{>?#,False,False,False,{>'?#,4,0,0,delete_char_sets=; unique_prediction_count=0
+fba40625,equation_symbolic_punct,symbolic_keep_selected_chars,abstain,,'>&,{>?#,False,False,False,{>'?#,4,0,0,keep_char_sets=; unique_prediction_count=0
+fba40625,equation_symbolic_punct,symbolic_prefix_until_marker,abstain,,'>&,{>?#,False,False,False,{>'?#,4,0,0,markers=''; unique_prediction_count=0
+fba40625,equation_symbolic_punct,symbolic_suffix_after_marker,abstain,,'>&,{>?#,False,False,False,{>'?#,4,0,0,markers=''; unique_prediction_count=0
+fba40625,equation_symbolic_punct,symbolic_prefix_before_last_marker,abstain,,'>&,{>?#,False,False,False,{>'?#,4,0,0,markers=''; unique_prediction_count=0
+fba40625,equation_symbolic_punct,symbolic_suffix_after_last_marker,abstain,,'>&,{>?#,False,False,False,{>'?#,4,0,0,markers=''; unique_prediction_count=0
+fba40625,equation_symbolic_punct,symbolic_remove_first_marker,abstain,,'>&,{>?#,False,False,False,{>'?#,4,0,0,markers=''; unique_prediction_count=0
+fba40625,equation_symbolic_punct,symbolic_position_template,abstain,,'>&,{>?#,False,False,False,{>'?#,4,0,0,nonuniform_rhs_lengths
+fba40625,equation_symbolic_punct,symbolic_operator_index_template,abstain,,'>&,{>?#,False,False,False,{>'?#,4,0,0,programs=; unique_prediction_count=0
+c5b058d6,equation_numeric_operator,numeric_same_operator_extended,abstain,,134,35,False,False,False,94)40,4,0,0,same_operator_examples=1 below_min=2
+837a6ae7,equation_symbolic_punct,symbolic_char_transducer,abstain,,<>\>,"<:{""",False,False,False,"<{*:""",5,0,0,no_global_mapping
+837a6ae7,equation_symbolic_punct,symbolic_delete_selected_chars,abstain,,<>\>,"<:{""",False,False,False,"<{*:""",5,0,0,delete_char_sets=; unique_prediction_count=0
+837a6ae7,equation_symbolic_punct,symbolic_keep_selected_chars,abstain,,<>\>,"<:{""",False,False,False,"<{*:""",5,0,0,keep_char_sets=; unique_prediction_count=0
+837a6ae7,equation_symbolic_punct,symbolic_prefix_until_marker,abstain,,<>\>,"<:{""",False,False,False,"<{*:""",5,0,0,markers=''; unique_prediction_count=0
+837a6ae7,equation_symbolic_punct,symbolic_suffix_after_marker,abstain,,<>\>,"<:{""",False,False,False,"<{*:""",5,0,0,markers=''; unique_prediction_count=0
+837a6ae7,equation_symbolic_punct,symbolic_prefix_before_last_marker,abstain,,<>\>,"<:{""",False,False,False,"<{*:""",5,0,0,markers=''; unique_prediction_count=0
+837a6ae7,equation_symbolic_punct,symbolic_suffix_after_last_marker,abstain,,<>\>,"<:{""",False,False,False,"<{*:""",5,0,0,markers=''; unique_prediction_count=0
+837a6ae7,equation_symbolic_punct,symbolic_remove_first_marker,abstain,,<>\>,"<:{""",False,False,False,"<{*:""",5,0,0,markers=''; unique_prediction_count=0
+837a6ae7,equation_symbolic_punct,symbolic_position_template,abstain,,<>\>,"<:{""",False,False,False,"<{*:""",5,0,0,nonuniform_rhs_lengths
+837a6ae7,equation_symbolic_punct,symbolic_operator_index_template,abstain,,<>\>,"<:{""",False,False,False,"<{*:""",5,0,0,programs=; unique_prediction_count=0
+d0e1010b,equation_symbolic_punct,symbolic_char_transducer,abstain,,!&&},|&$|,False,False,False,|&*$|,4,0,0,no_global_mapping
+d0e1010b,equation_symbolic_punct,symbolic_delete_selected_chars,abstain,,!&&},|&$|,False,False,False,|&*$|,4,0,0,delete_char_sets=; unique_prediction_count=0
+d0e1010b,equation_symbolic_punct,symbolic_keep_selected_chars,abstain,,!&&},|&$|,False,False,False,|&*$|,4,0,0,keep_char_sets=; unique_prediction_count=0
+d0e1010b,equation_symbolic_punct,symbolic_prefix_until_marker,abstain,,!&&},|&$|,False,False,False,|&*$|,4,0,0,markers=''; unique_prediction_count=0
+d0e1010b,equation_symbolic_punct,symbolic_suffix_after_marker,abstain,,!&&},|&$|,False,False,False,|&*$|,4,0,0,markers=''; unique_prediction_count=0
+d0e1010b,equation_symbolic_punct,symbolic_prefix_before_last_marker,abstain,,!&&},|&$|,False,False,False,|&*$|,4,0,0,markers=''; unique_prediction_count=0
+d0e1010b,equation_symbolic_punct,symbolic_suffix_after_last_marker,abstain,,!&&},|&$|,False,False,False,|&*$|,4,0,0,markers=''; unique_prediction_count=0
+d0e1010b,equation_symbolic_punct,symbolic_remove_first_marker,abstain,,!&&},|&$|,False,False,False,|&*$|,4,0,0,markers=''; unique_prediction_count=0
+d0e1010b,equation_symbolic_punct,symbolic_position_template,abstain,,!&&},|&$|,False,False,False,|&*$|,4,0,0,nonuniform_rhs_lengths
+d0e1010b,equation_symbolic_punct,symbolic_operator_index_template,abstain,,!&&},|&$|,False,False,False,|&*$|,4,0,0,programs=; unique_prediction_count=0
+5a0d5d2a,equation_numeric_operator,numeric_same_operator_extended,abstain,,341,55,False,False,False,39+94,3,0,0,same_operator_examples=0 below_min=2
+5a9fcf68,equation_numeric_operator,numeric_same_operator_extended,abstain,,4443,4,False,False,False,24@28,3,0,0,same_operator_examples=0 below_min=2
+6e56b39a,equation_symbolic_punct,symbolic_char_transducer,abstain,,-/#,&#!,False,False,False,&#-!],4,0,0,no_global_mapping
+6e56b39a,equation_symbolic_punct,symbolic_delete_selected_chars,abstain,,-/#,&#!,False,False,False,&#-!],4,0,0,delete_char_sets=; unique_prediction_count=0
+6e56b39a,equation_symbolic_punct,symbolic_keep_selected_chars,abstain,,-/#,&#!,False,False,False,&#-!],4,0,0,keep_char_sets=; unique_prediction_count=0
+6e56b39a,equation_symbolic_punct,symbolic_prefix_until_marker,abstain,,-/#,&#!,False,False,False,&#-!],4,0,0,markers=''; unique_prediction_count=0
+6e56b39a,equation_symbolic_punct,symbolic_suffix_after_marker,abstain,,-/#,&#!,False,False,False,&#-!],4,0,0,markers=''; unique_prediction_count=0
+6e56b39a,equation_symbolic_punct,symbolic_prefix_before_last_marker,abstain,,-/#,&#!,False,False,False,&#-!],4,0,0,markers=''; unique_prediction_count=0
+6e56b39a,equation_symbolic_punct,symbolic_suffix_after_last_marker,abstain,,-/#,&#!,False,False,False,&#-!],4,0,0,markers=''; unique_prediction_count=0
+6e56b39a,equation_symbolic_punct,symbolic_remove_first_marker,abstain,,-/#,&#!,False,False,False,&#-!],4,0,0,markers=''; unique_prediction_count=0
+6e56b39a,equation_symbolic_punct,symbolic_position_template,abstain,,-/#,&#!,False,False,False,&#-!],4,0,0,no_source_for_output_index=1
+6e56b39a,equation_symbolic_punct,symbolic_operator_index_template,abstain,,-/#,&#!,False,False,False,&#-!],4,0,0,programs=; unique_prediction_count=0
+a5f1991c,equation_symbolic_punct,symbolic_char_transducer,abstain,,/|',!&&&,False,False,False,!?/&&,5,0,0,no_global_mapping
+a5f1991c,equation_symbolic_punct,symbolic_delete_selected_chars,abstain,,/|',!&&&,False,False,False,!?/&&,5,0,0,delete_char_sets=; unique_prediction_count=0
+a5f1991c,equation_symbolic_punct,symbolic_keep_selected_chars,abstain,,/|',!&&&,False,False,False,!?/&&,5,0,0,keep_char_sets=; unique_prediction_count=0
+a5f1991c,equation_symbolic_punct,symbolic_prefix_until_marker,abstain,,/|',!&&&,False,False,False,!?/&&,5,0,0,markers=''; unique_prediction_count=0
+a5f1991c,equation_symbolic_punct,symbolic_suffix_after_marker,abstain,,/|',!&&&,False,False,False,!?/&&,5,0,0,markers=''; unique_prediction_count=0
+a5f1991c,equation_symbolic_punct,symbolic_prefix_before_last_marker,abstain,,/|',!&&&,False,False,False,!?/&&,5,0,0,markers=''; unique_prediction_count=0
+a5f1991c,equation_symbolic_punct,symbolic_suffix_after_last_marker,abstain,,/|',!&&&,False,False,False,!?/&&,5,0,0,markers=''; unique_prediction_count=0
+a5f1991c,equation_symbolic_punct,symbolic_remove_first_marker,abstain,,/|',!&&&,False,False,False,!?/&&,5,0,0,markers=''; unique_prediction_count=0
+a5f1991c,equation_symbolic_punct,symbolic_position_template,abstain,,/|',!&&&,False,False,False,!?/&&,5,0,0,nonuniform_rhs_lengths
+a5f1991c,equation_symbolic_punct,symbolic_operator_index_template,abstain,,/|',!&&&,False,False,False,!?/&&,5,0,0,programs=; unique_prediction_count=0
+c7aae192,equation_symbolic_punct,symbolic_char_transducer,abstain,,">""(","\""]",False,False,False,"\""*}}",2,0,0,no_pair_mapping
+c7aae192,equation_symbolic_punct,symbolic_delete_selected_chars,abstain,,">""(","\""]",False,False,False,"\""*}}",2,0,0,delete_char_sets=; unique_prediction_count=0
+c7aae192,equation_symbolic_punct,symbolic_keep_selected_chars,abstain,,">""(","\""]",False,False,False,"\""*}}",2,0,0,keep_char_sets=; unique_prediction_count=0
+c7aae192,equation_symbolic_punct,symbolic_prefix_until_marker,abstain,,">""(","\""]",False,False,False,"\""*}}",2,0,0,markers=''; unique_prediction_count=0
+c7aae192,equation_symbolic_punct,symbolic_suffix_after_marker,abstain,,">""(","\""]",False,False,False,"\""*}}",2,0,0,markers=''; unique_prediction_count=0
+c7aae192,equation_symbolic_punct,symbolic_prefix_before_last_marker,abstain,,">""(","\""]",False,False,False,"\""*}}",2,0,0,markers=''; unique_prediction_count=0
+c7aae192,equation_symbolic_punct,symbolic_suffix_after_last_marker,abstain,,">""(","\""]",False,False,False,"\""*}}",2,0,0,markers=''; unique_prediction_count=0
+c7aae192,equation_symbolic_punct,symbolic_remove_first_marker,abstain,,">""(","\""]",False,False,False,"\""*}}",2,0,0,markers=''; unique_prediction_count=0
+c7aae192,equation_symbolic_punct,symbolic_position_template,abstain,,">""(","\""]",False,False,False,"\""*}}",2,0,0,nonuniform_rhs_lengths
+c7aae192,equation_symbolic_punct,symbolic_operator_index_template,abstain,,">""(","\""]",False,False,False,"\""*}}",2,0,0,programs=; unique_prediction_count=0
+e4cc7639,equation_numeric_operator,numeric_same_operator_extended,abstain,,113,16,False,False,False,48*64,5,0,0,same_operator_examples=0 below_min=2
+844f826c,equation_symbolic_punct,symbolic_char_transducer,abstain,,"/""",`@>`,False,False,False,@*>,5,0,0,no_global_mapping
+844f826c,equation_symbolic_punct,symbolic_delete_selected_chars,abstain,,"/""",`@>`,False,False,False,@*>,5,0,0,delete_char_sets=; unique_prediction_count=0
+844f826c,equation_symbolic_punct,symbolic_keep_selected_chars,abstain,,"/""",`@>`,False,False,False,@*>,5,0,0,keep_char_sets=; unique_prediction_count=0
+844f826c,equation_symbolic_punct,symbolic_prefix_until_marker,abstain,,"/""",`@>`,False,False,False,@*>,5,0,0,markers=''; unique_prediction_count=0
+844f826c,equation_symbolic_punct,symbolic_suffix_after_marker,abstain,,"/""",`@>`,False,False,False,@*>,5,0,0,markers=''; unique_prediction_count=0
+844f826c,equation_symbolic_punct,symbolic_prefix_before_last_marker,abstain,,"/""",`@>`,False,False,False,@*>,5,0,0,markers=''; unique_prediction_count=0
+844f826c,equation_symbolic_punct,symbolic_suffix_after_last_marker,abstain,,"/""",`@>`,False,False,False,@*>,5,0,0,markers=''; unique_prediction_count=0
+844f826c,equation_symbolic_punct,symbolic_remove_first_marker,abstain,,"/""",`@>`,False,False,False,@*>,5,0,0,markers=''; unique_prediction_count=0
+844f826c,equation_symbolic_punct,symbolic_position_template,abstain,,"/""",`@>`,False,False,False,@*>,5,0,0,nonuniform_rhs_lengths
+844f826c,equation_symbolic_punct,symbolic_operator_index_template,abstain,,"/""",`@>`,False,False,False,@*>,5,0,0,programs=; unique_prediction_count=0
+8193e7e0,equation_symbolic_punct,symbolic_char_transducer,abstain,,??{`,#?&`,False,False,False,#?*&`,4,0,0,no_pair_mapping
+8193e7e0,equation_symbolic_punct,symbolic_delete_selected_chars,abstain,,??{`,#?&`,False,False,False,#?*&`,4,0,0,delete_char_sets=; unique_prediction_count=0
+8193e7e0,equation_symbolic_punct,symbolic_keep_selected_chars,abstain,,??{`,#?&`,False,False,False,#?*&`,4,0,0,keep_char_sets=; unique_prediction_count=0
+8193e7e0,equation_symbolic_punct,symbolic_prefix_until_marker,abstain,,??{`,#?&`,False,False,False,#?*&`,4,0,0,markers=''; unique_prediction_count=0
+8193e7e0,equation_symbolic_punct,symbolic_suffix_after_marker,abstain,,??{`,#?&`,False,False,False,#?*&`,4,0,0,markers=''; unique_prediction_count=0
+8193e7e0,equation_symbolic_punct,symbolic_prefix_before_last_marker,abstain,,??{`,#?&`,False,False,False,#?*&`,4,0,0,markers=''; unique_prediction_count=0
+8193e7e0,equation_symbolic_punct,symbolic_suffix_after_last_marker,abstain,,??{`,#?&`,False,False,False,#?*&`,4,0,0,markers=''; unique_prediction_count=0
+8193e7e0,equation_symbolic_punct,symbolic_remove_first_marker,abstain,,??{`,#?&`,False,False,False,#?*&`,4,0,0,markers=''; unique_prediction_count=0
+8193e7e0,equation_symbolic_punct,symbolic_position_template,abstain,,??{`,#?&`,False,False,False,#?*&`,4,0,0,nonuniform_rhs_lengths
+8193e7e0,equation_symbolic_punct,symbolic_operator_index_template,abstain,,??{`,#?&`,False,False,False,#?*&`,4,0,0,programs=; unique_prediction_count=0
+5bcb572e,equation_symbolic_punct,symbolic_char_transducer,abstain,,-!#,"""{!",False,False,False,"""{-{!",3,0,0,no_global_mapping
+5bcb572e,equation_symbolic_punct,symbolic_delete_selected_chars,abstain,,-!#,"""{!",False,False,False,"""{-{!",3,0,0,delete_char_sets=; unique_prediction_count=0
+5bcb572e,equation_symbolic_punct,symbolic_keep_selected_chars,abstain,,-!#,"""{!",False,False,False,"""{-{!",3,0,0,keep_char_sets=; unique_prediction_count=0
+5bcb572e,equation_symbolic_punct,symbolic_prefix_until_marker,abstain,,-!#,"""{!",False,False,False,"""{-{!",3,0,0,markers=''; unique_prediction_count=0
+5bcb572e,equation_symbolic_punct,symbolic_suffix_after_marker,abstain,,-!#,"""{!",False,False,False,"""{-{!",3,0,0,markers=''; unique_prediction_count=0
+5bcb572e,equation_symbolic_punct,symbolic_prefix_before_last_marker,abstain,,-!#,"""{!",False,False,False,"""{-{!",3,0,0,markers=''; unique_prediction_count=0
+5bcb572e,equation_symbolic_punct,symbolic_suffix_after_last_marker,abstain,,-!#,"""{!",False,False,False,"""{-{!",3,0,0,markers=''; unique_prediction_count=0
+5bcb572e,equation_symbolic_punct,symbolic_remove_first_marker,abstain,,-!#,"""{!",False,False,False,"""{-{!",3,0,0,markers=''; unique_prediction_count=0
+5bcb572e,equation_symbolic_punct,symbolic_position_template,abstain,,-!#,"""{!",False,False,False,"""{-{!",3,0,0,nonuniform_rhs_lengths
+5bcb572e,equation_symbolic_punct,symbolic_operator_index_template,abstain,,-!#,"""{!",False,False,False,"""{-{!",3,0,0,programs=; unique_prediction_count=0
+cdec898a,equation_symbolic_punct,symbolic_char_transducer,abstain,,<?/,>}][?,False,False,False,>}+]?,4,0,0,no_global_mapping
+cdec898a,equation_symbolic_punct,symbolic_delete_selected_chars,abstain,,<?/,>}][?,False,False,False,>}+]?,4,0,0,delete_char_sets=; unique_prediction_count=0
+cdec898a,equation_symbolic_punct,symbolic_keep_selected_chars,abstain,,<?/,>}][?,False,False,False,>}+]?,4,0,0,keep_char_sets=; unique_prediction_count=0
+cdec898a,equation_symbolic_punct,symbolic_prefix_until_marker,abstain,,<?/,>}][?,False,False,False,>}+]?,4,0,0,markers=''; unique_prediction_count=0
+cdec898a,equation_symbolic_punct,symbolic_suffix_after_marker,abstain,,<?/,>}][?,False,False,False,>}+]?,4,0,0,markers=''; unique_prediction_count=0
+cdec898a,equation_symbolic_punct,symbolic_prefix_before_last_marker,abstain,,<?/,>}][?,False,False,False,>}+]?,4,0,0,markers=''; unique_prediction_count=0
+cdec898a,equation_symbolic_punct,symbolic_suffix_after_last_marker,abstain,,<?/,>}][?,False,False,False,>}+]?,4,0,0,markers=''; unique_prediction_count=0
+cdec898a,equation_symbolic_punct,symbolic_remove_first_marker,abstain,,<?/,>}][?,False,False,False,>}+]?,4,0,0,markers=''; unique_prediction_count=0
+cdec898a,equation_symbolic_punct,symbolic_position_template,abstain,,<?/,>}][?,False,False,False,>}+]?,4,0,0,nonuniform_rhs_lengths
+cdec898a,equation_symbolic_punct,symbolic_operator_index_template,abstain,,<?/,>}][?,False,False,False,>}+]?,4,0,0,programs=; unique_prediction_count=0
+edf364da,equation_symbolic_punct,symbolic_char_transducer,abstain,,$(%,::{[,False,False,False,::*{[,3,0,0,no_pair_mapping
+edf364da,equation_symbolic_punct,symbolic_delete_selected_chars,abstain,,$(%,::{[,False,False,False,::*{[,3,0,0,delete_char_sets=; unique_prediction_count=0
+edf364da,equation_symbolic_punct,symbolic_keep_selected_chars,abstain,,$(%,::{[,False,False,False,::*{[,3,0,0,keep_char_sets=; unique_prediction_count=0
+edf364da,equation_symbolic_punct,symbolic_prefix_until_marker,abstain,,$(%,::{[,False,False,False,::*{[,3,0,0,markers=''; unique_prediction_count=0
+edf364da,equation_symbolic_punct,symbolic_suffix_after_marker,abstain,,$(%,::{[,False,False,False,::*{[,3,0,0,markers=''; unique_prediction_count=0
+edf364da,equation_symbolic_punct,symbolic_prefix_before_last_marker,abstain,,$(%,::{[,False,False,False,::*{[,3,0,0,markers=''; unique_prediction_count=0
+edf364da,equation_symbolic_punct,symbolic_suffix_after_last_marker,abstain,,$(%,::{[,False,False,False,::*{[,3,0,0,markers=''; unique_prediction_count=0
+edf364da,equation_symbolic_punct,symbolic_remove_first_marker,abstain,,$(%,::{[,False,False,False,::*{[,3,0,0,markers=''; unique_prediction_count=0
+edf364da,equation_symbolic_punct,symbolic_position_template,abstain,,$(%,::{[,False,False,False,::*{[,3,0,0,nonuniform_rhs_lengths
+edf364da,equation_symbolic_punct,symbolic_operator_index_template,abstain,,$(%,::{[,False,False,False,::*{[,3,0,0,programs=; unique_prediction_count=0
+0e009c6d,equation_symbolic_punct,symbolic_char_transducer,abstain,,`?\!,@?`?,False,False,False,@?'`?,4,0,0,no_pair_mapping
+0e009c6d,equation_symbolic_punct,symbolic_delete_selected_chars,abstain,,`?\!,@?`?,False,False,False,@?'`?,4,0,0,delete_char_sets=; unique_prediction_count=0
+0e009c6d,equation_symbolic_punct,symbolic_keep_selected_chars,abstain,,`?\!,@?`?,False,False,False,@?'`?,4,0,0,keep_char_sets=; unique_prediction_count=0
+0e009c6d,equation_symbolic_punct,symbolic_prefix_until_marker,abstain,,`?\!,@?`?,False,False,False,@?'`?,4,0,0,markers=''; unique_prediction_count=0
+0e009c6d,equation_symbolic_punct,symbolic_suffix_after_marker,abstain,,`?\!,@?`?,False,False,False,@?'`?,4,0,0,markers=''; unique_prediction_count=0
+0e009c6d,equation_symbolic_punct,symbolic_prefix_before_last_marker,abstain,,`?\!,@?`?,False,False,False,@?'`?,4,0,0,markers=''; unique_prediction_count=0
+0e009c6d,equation_symbolic_punct,symbolic_suffix_after_last_marker,abstain,,`?\!,@?`?,False,False,False,@?'`?,4,0,0,markers=''; unique_prediction_count=0
+0e009c6d,equation_symbolic_punct,symbolic_remove_first_marker,abstain,,`?\!,@?`?,False,False,False,@?'`?,4,0,0,markers=''; unique_prediction_count=0
+0e009c6d,equation_symbolic_punct,symbolic_position_template,abstain,,`?\!,@?`?,False,False,False,@?'`?,4,0,0,nonuniform_rhs_lengths
+0e009c6d,equation_symbolic_punct,symbolic_operator_index_template,abstain,,`?\!,@?`?,False,False,False,@?'`?,4,0,0,programs=; unique_prediction_count=0
+b4b73143,equation_symbolic_punct,symbolic_char_transducer,abstain,,>\:,>!!/,False,False,False,>!%!/,3,0,0,no_global_mapping
+b4b73143,equation_symbolic_punct,symbolic_delete_selected_chars,abstain,,>\:,>!!/,False,False,False,>!%!/,3,0,0,delete_char_sets=; unique_prediction_count=0
+b4b73143,equation_symbolic_punct,symbolic_keep_selected_chars,abstain,,>\:,>!!/,False,False,False,>!%!/,3,0,0,keep_char_sets=; unique_prediction_count=0
+b4b73143,equation_symbolic_punct,symbolic_prefix_until_marker,abstain,,>\:,>!!/,False,False,False,>!%!/,3,0,0,markers=''; unique_prediction_count=0
+b4b73143,equation_symbolic_punct,symbolic_suffix_after_marker,abstain,,>\:,>!!/,False,False,False,>!%!/,3,0,0,markers=''; unique_prediction_count=0
+b4b73143,equation_symbolic_punct,symbolic_prefix_before_last_marker,abstain,,>\:,>!!/,False,False,False,>!%!/,3,0,0,markers=''; unique_prediction_count=0
+b4b73143,equation_symbolic_punct,symbolic_suffix_after_last_marker,abstain,,>\:,>!!/,False,False,False,>!%!/,3,0,0,markers=''; unique_prediction_count=0
+b4b73143,equation_symbolic_punct,symbolic_remove_first_marker,abstain,,>\:,>!!/,False,False,False,>!%!/,3,0,0,markers=''; unique_prediction_count=0
+b4b73143,equation_symbolic_punct,symbolic_position_template,abstain,,>\:,>!!/,False,False,False,>!%!/,3,0,0,nonuniform_rhs_lengths
+b4b73143,equation_symbolic_punct,symbolic_operator_index_template,abstain,,>\:,>!!/,False,False,False,>!%!/,3,0,0,programs=; unique_prediction_count=0
+861cb154,equation_numeric_operator,numeric_same_operator_extended,abstain,,2271,10,False,False,False,14!24,3,0,0,same_operator_examples=0 below_min=2
+90feb0c5,equation_symbolic_punct,symbolic_char_transducer,abstain,,:<],?>>>,False,False,False,?>'>>,3,0,0,no_global_mapping
+90feb0c5,equation_symbolic_punct,symbolic_delete_selected_chars,abstain,,:<],?>>>,False,False,False,?>'>>,3,0,0,delete_char_sets=; unique_prediction_count=0
+90feb0c5,equation_symbolic_punct,symbolic_keep_selected_chars,abstain,,:<],?>>>,False,False,False,?>'>>,3,0,0,keep_char_sets=; unique_prediction_count=0
+90feb0c5,equation_symbolic_punct,symbolic_prefix_until_marker,abstain,,:<],?>>>,False,False,False,?>'>>,3,0,0,markers=''; unique_prediction_count=0
+90feb0c5,equation_symbolic_punct,symbolic_suffix_after_marker,abstain,,:<],?>>>,False,False,False,?>'>>,3,0,0,markers=''; unique_prediction_count=0
+90feb0c5,equation_symbolic_punct,symbolic_prefix_before_last_marker,abstain,,:<],?>>>,False,False,False,?>'>>,3,0,0,markers=''; unique_prediction_count=0
+90feb0c5,equation_symbolic_punct,symbolic_suffix_after_last_marker,abstain,,:<],?>>>,False,False,False,?>'>>,3,0,0,markers=''; unique_prediction_count=0
+90feb0c5,equation_symbolic_punct,symbolic_remove_first_marker,abstain,,:<],?>>>,False,False,False,?>'>>,3,0,0,markers=''; unique_prediction_count=0
+90feb0c5,equation_symbolic_punct,symbolic_position_template,abstain,,:<],?>>>,False,False,False,?>'>>,3,0,0,nonuniform_rhs_lengths
+90feb0c5,equation_symbolic_punct,symbolic_operator_index_template,abstain,,:<],?>>>,False,False,False,?>'>>,3,0,0,programs=; unique_prediction_count=0
+b9f1d959,equation_symbolic_punct,symbolic_char_transducer,abstain,,:>,"$""\[""",False,False,False,"$\+""[",5,0,0,no_global_mapping
+b9f1d959,equation_symbolic_punct,symbolic_delete_selected_chars,abstain,,:>,"$""\[""",False,False,False,"$\+""[",5,0,0,delete_char_sets=; unique_prediction_count=0
+b9f1d959,equation_symbolic_punct,symbolic_keep_selected_chars,abstain,,:>,"$""\[""",False,False,False,"$\+""[",5,0,0,keep_char_sets=; unique_prediction_count=0
+b9f1d959,equation_symbolic_punct,symbolic_prefix_until_marker,abstain,,:>,"$""\[""",False,False,False,"$\+""[",5,0,0,markers=''; unique_prediction_count=0
+b9f1d959,equation_symbolic_punct,symbolic_suffix_after_marker,abstain,,:>,"$""\[""",False,False,False,"$\+""[",5,0,0,markers=''; unique_prediction_count=0
+b9f1d959,equation_symbolic_punct,symbolic_prefix_before_last_marker,abstain,,:>,"$""\[""",False,False,False,"$\+""[",5,0,0,markers=''; unique_prediction_count=0
+b9f1d959,equation_symbolic_punct,symbolic_suffix_after_last_marker,abstain,,:>,"$""\[""",False,False,False,"$\+""[",5,0,0,markers=''; unique_prediction_count=0
+b9f1d959,equation_symbolic_punct,symbolic_remove_first_marker,abstain,,:>,"$""\[""",False,False,False,"$\+""[",5,0,0,markers=''; unique_prediction_count=0
+b9f1d959,equation_symbolic_punct,symbolic_position_template,abstain,,:>,"$""\[""",False,False,False,"$\+""[",5,0,0,nonuniform_rhs_lengths
+b9f1d959,equation_symbolic_punct,symbolic_operator_index_template,abstain,,:>,"$""\[""",False,False,False,"$\+""[",5,0,0,programs=; unique_prediction_count=0
+ca5db1c0,equation_symbolic_punct,symbolic_char_transducer,abstain,,^,"(""'|",False,False,False,"(""-'|",3,0,0,no_global_mapping
+ca5db1c0,equation_symbolic_punct,symbolic_delete_selected_chars,abstain,,^,"(""'|",False,False,False,"(""-'|",3,0,0,delete_char_sets=; unique_prediction_count=0
+ca5db1c0,equation_symbolic_punct,symbolic_keep_selected_chars,abstain,,^,"(""'|",False,False,False,"(""-'|",3,0,0,keep_char_sets=; unique_prediction_count=0
+ca5db1c0,equation_symbolic_punct,symbolic_prefix_until_marker,abstain,,^,"(""'|",False,False,False,"(""-'|",3,0,0,markers=''; unique_prediction_count=0
+ca5db1c0,equation_symbolic_punct,symbolic_suffix_after_marker,abstain,,^,"(""'|",False,False,False,"(""-'|",3,0,0,markers=''; unique_prediction_count=0
+ca5db1c0,equation_symbolic_punct,symbolic_prefix_before_last_marker,abstain,,^,"(""'|",False,False,False,"(""-'|",3,0,0,markers=''; unique_prediction_count=0
+ca5db1c0,equation_symbolic_punct,symbolic_suffix_after_last_marker,abstain,,^,"(""'|",False,False,False,"(""-'|",3,0,0,markers=''; unique_prediction_count=0
+ca5db1c0,equation_symbolic_punct,symbolic_remove_first_marker,abstain,,^,"(""'|",False,False,False,"(""-'|",3,0,0,markers=''; unique_prediction_count=0
+ca5db1c0,equation_symbolic_punct,symbolic_position_template,abstain,,^,"(""'|",False,False,False,"(""-'|",3,0,0,nonuniform_rhs_lengths
+ca5db1c0,equation_symbolic_punct,symbolic_operator_index_template,abstain,,^,"(""'|",False,False,False,"(""-'|",3,0,0,programs=; unique_prediction_count=0
+9f1ff166,equation_symbolic_punct,symbolic_char_transducer,abstain,,[,"""]'/",False,False,False,"""]-'/",4,0,0,no_global_mapping
+9f1ff166,equation_symbolic_punct,symbolic_delete_selected_chars,abstain,,[,"""]'/",False,False,False,"""]-'/",4,0,0,delete_char_sets=; unique_prediction_count=0
+9f1ff166,equation_symbolic_punct,symbolic_keep_selected_chars,abstain,,[,"""]'/",False,False,False,"""]-'/",4,0,0,keep_char_sets=; unique_prediction_count=0
+9f1ff166,equation_symbolic_punct,symbolic_prefix_until_marker,abstain,,[,"""]'/",False,False,False,"""]-'/",4,0,0,markers=''; unique_prediction_count=0
+9f1ff166,equation_symbolic_punct,symbolic_suffix_after_marker,abstain,,[,"""]'/",False,False,False,"""]-'/",4,0,0,markers=''; unique_prediction_count=0
+9f1ff166,equation_symbolic_punct,symbolic_prefix_before_last_marker,abstain,,[,"""]'/",False,False,False,"""]-'/",4,0,0,markers=''; unique_prediction_count=0
+9f1ff166,equation_symbolic_punct,symbolic_suffix_after_last_marker,abstain,,[,"""]'/",False,False,False,"""]-'/",4,0,0,markers=''; unique_prediction_count=0
+9f1ff166,equation_symbolic_punct,symbolic_remove_first_marker,abstain,,[,"""]'/",False,False,False,"""]-'/",4,0,0,markers=''; unique_prediction_count=0
+9f1ff166,equation_symbolic_punct,symbolic_position_template,abstain,,[,"""]'/",False,False,False,"""]-'/",4,0,0,nonuniform_rhs_lengths
+9f1ff166,equation_symbolic_punct,symbolic_operator_index_template,abstain,,[,"""]'/",False,False,False,"""]-'/",4,0,0,programs=; unique_prediction_count=0
+432b1110,equation_symbolic_punct,symbolic_char_transducer,abstain,,%[:?,\{<?,False,False,False,\{*<?,4,1,0,char_transducer mappings=1 usable=0 unique_predictions=0
+432b1110,equation_symbolic_punct,symbolic_delete_selected_chars,candidate,\{*<?,%[:?,\{<?,False,True,False,\{*<?,4,1,1,delete_char_sets=+
+432b1110,equation_symbolic_punct,symbolic_keep_selected_chars,abstain,,%[:?,\{<?,False,False,False,\{*<?,4,0,0,keep_char_sets=; unique_prediction_count=0
+432b1110,equation_symbolic_punct,symbolic_prefix_until_marker,abstain,,%[:?,\{<?,False,False,False,\{*<?,4,0,0,markers=''; unique_prediction_count=0
+432b1110,equation_symbolic_punct,symbolic_suffix_after_marker,abstain,,%[:?,\{<?,False,False,False,\{*<?,4,0,0,markers=''; unique_prediction_count=0
+432b1110,equation_symbolic_punct,symbolic_prefix_before_last_marker,abstain,,%[:?,\{<?,False,False,False,\{*<?,4,0,0,markers=''; unique_prediction_count=0
+432b1110,equation_symbolic_punct,symbolic_suffix_after_last_marker,abstain,,%[:?,\{<?,False,False,False,\{*<?,4,0,0,markers=''; unique_prediction_count=0
+432b1110,equation_symbolic_punct,symbolic_remove_first_marker,abstain,,%[:?,\{<?,False,False,False,\{*<?,4,0,0,markers=''; unique_prediction_count=0
+432b1110,equation_symbolic_punct,symbolic_position_template,candidate,\{<?,%[:?,\{<?,False,True,False,\{*<?,4,16,1,"choice_counts=2,2,2,2"
+432b1110,equation_symbolic_punct,symbolic_operator_index_template,candidate,\{<?,%[:?,\{<?,False,True,False,\{*<?,4,1,1,programs=drop_op@2
+f7d26b8d,equation_symbolic_punct,symbolic_char_transducer,abstain,,/@,[}}\,False,False,False,[}-}\,5,0,0,no_global_mapping
+f7d26b8d,equation_symbolic_punct,symbolic_delete_selected_chars,abstain,,/@,[}}\,False,False,False,[}-}\,5,0,0,delete_char_sets=; unique_prediction_count=0
+f7d26b8d,equation_symbolic_punct,symbolic_keep_selected_chars,abstain,,/@,[}}\,False,False,False,[}-}\,5,0,0,keep_char_sets=; unique_prediction_count=0
+f7d26b8d,equation_symbolic_punct,symbolic_prefix_until_marker,abstain,,/@,[}}\,False,False,False,[}-}\,5,0,0,markers=''; unique_prediction_count=0
+f7d26b8d,equation_symbolic_punct,symbolic_suffix_after_marker,abstain,,/@,[}}\,False,False,False,[}-}\,5,0,0,markers=''; unique_prediction_count=0
+f7d26b8d,equation_symbolic_punct,symbolic_prefix_before_last_marker,abstain,,/@,[}}\,False,False,False,[}-}\,5,0,0,markers=''; unique_prediction_count=0
+f7d26b8d,equation_symbolic_punct,symbolic_suffix_after_last_marker,abstain,,/@,[}}\,False,False,False,[}-}\,5,0,0,markers=''; unique_prediction_count=0
+f7d26b8d,equation_symbolic_punct,symbolic_remove_first_marker,abstain,,/@,[}}\,False,False,False,[}-}\,5,0,0,markers=''; unique_prediction_count=0
+f7d26b8d,equation_symbolic_punct,symbolic_position_template,abstain,,/@,[}}\,False,False,False,[}-}\,5,0,0,nonuniform_rhs_lengths
+f7d26b8d,equation_symbolic_punct,symbolic_operator_index_template,abstain,,/@,[}}\,False,False,False,[}-}\,5,0,0,programs=; unique_prediction_count=0
+20f0fac9,equation_numeric_operator,numeric_same_operator_extended,abstain,,2976,65,False,False,False,31%96,4,0,0,same_operator_examples=0 below_min=2
+26e48e98,equation_symbolic_punct,symbolic_char_transducer,abstain,,){|,"""%]%{""",False,False,False,"""])%{",5,0,0,no_pair_mapping
+26e48e98,equation_symbolic_punct,symbolic_delete_selected_chars,abstain,,){|,"""%]%{""",False,False,False,"""])%{",5,0,0,delete_char_sets=; unique_prediction_count=0
+26e48e98,equation_symbolic_punct,symbolic_keep_selected_chars,abstain,,){|,"""%]%{""",False,False,False,"""])%{",5,0,0,keep_char_sets=; unique_prediction_count=0
+26e48e98,equation_symbolic_punct,symbolic_prefix_until_marker,abstain,,){|,"""%]%{""",False,False,False,"""])%{",5,0,0,markers=''; unique_prediction_count=0
+26e48e98,equation_symbolic_punct,symbolic_suffix_after_marker,abstain,,){|,"""%]%{""",False,False,False,"""])%{",5,0,0,markers=''; unique_prediction_count=0
+26e48e98,equation_symbolic_punct,symbolic_prefix_before_last_marker,abstain,,){|,"""%]%{""",False,False,False,"""])%{",5,0,0,markers=''; unique_prediction_count=0
+26e48e98,equation_symbolic_punct,symbolic_suffix_after_last_marker,abstain,,){|,"""%]%{""",False,False,False,"""])%{",5,0,0,markers=''; unique_prediction_count=0
+26e48e98,equation_symbolic_punct,symbolic_remove_first_marker,abstain,,){|,"""%]%{""",False,False,False,"""])%{",5,0,0,markers=''; unique_prediction_count=0
+26e48e98,equation_symbolic_punct,symbolic_position_template,abstain,,){|,"""%]%{""",False,False,False,"""])%{",5,0,0,nonuniform_rhs_lengths
+26e48e98,equation_symbolic_punct,symbolic_operator_index_template,abstain,,){|,"""%]%{""",False,False,False,"""])%{",5,0,0,programs=; unique_prediction_count=0
+5501c054,equation_symbolic_punct,symbolic_char_transducer,abstain,,[#>#,!##^,False,False,False,!#$#^,5,0,0,no_global_mapping
+5501c054,equation_symbolic_punct,symbolic_delete_selected_chars,abstain,,[#>#,!##^,False,False,False,!#$#^,5,0,0,delete_char_sets=; unique_prediction_count=0
+5501c054,equation_symbolic_punct,symbolic_keep_selected_chars,abstain,,[#>#,!##^,False,False,False,!#$#^,5,0,0,keep_char_sets=; unique_prediction_count=0
+5501c054,equation_symbolic_punct,symbolic_prefix_until_marker,abstain,,[#>#,!##^,False,False,False,!#$#^,5,0,0,markers=''; unique_prediction_count=0
+5501c054,equation_symbolic_punct,symbolic_suffix_after_marker,abstain,,[#>#,!##^,False,False,False,!#$#^,5,0,0,markers=''; unique_prediction_count=0
+5501c054,equation_symbolic_punct,symbolic_prefix_before_last_marker,abstain,,[#>#,!##^,False,False,False,!#$#^,5,0,0,markers=''; unique_prediction_count=0
+5501c054,equation_symbolic_punct,symbolic_suffix_after_last_marker,abstain,,[#>#,!##^,False,False,False,!#$#^,5,0,0,markers=''; unique_prediction_count=0
+5501c054,equation_symbolic_punct,symbolic_remove_first_marker,abstain,,[#>#,!##^,False,False,False,!#$#^,5,0,0,markers=''; unique_prediction_count=0
+5501c054,equation_symbolic_punct,symbolic_position_template,abstain,,[#>#,!##^,False,False,False,!#$#^,5,0,0,nonuniform_rhs_lengths
+5501c054,equation_symbolic_punct,symbolic_operator_index_template,abstain,,[#>#,!##^,False,False,False,!#$#^,5,0,0,programs=; unique_prediction_count=0
+ea6d926a,equation_numeric_operator,numeric_same_operator_extended,abstain,,87,37,False,False,False,25+62,4,0,0,same_operator_examples=0 below_min=2
