@@ -1,0 +1,117 @@
+{
+  "adapters": [
+    {
+      "adapter_dir": "/tmp/kg1_v284_adapter_snapshots/v291-h200-officiallike-v290ckpt6-full947-20260511T212028Z/bfdcd356ac1c/checkpoint-6",
+      "adapter_weights_bytes": 4259063856,
+      "candidate_name": "v291_v290_checkpoint_6_official_like_full947",
+      "lora_alpha": 32,
+      "r": 32,
+      "repo": "felipesp1983/kg1-nemotron-lora-v290-rank19-micro-patch-smoke",
+      "subfolder": "checkpoint-6",
+      "target_modules": [
+        "v_proj",
+        "up_proj",
+        "in_proj",
+        "k_proj",
+        "lm_head",
+        "o_proj",
+        "down_proj",
+        "q_proj",
+        "out_proj"
+      ],
+      "target_parameters": [
+        "mlp.experts.gate_up_proj",
+        "mlp.experts.down_proj"
+      ]
+    }
+  ],
+  "best_full_candidate": {
+    "accuracy": 0.8690601900739177,
+    "adapter": "/tmp/kg1_v284_adapter_snapshots/v291-h200-officiallike-v290ckpt6-full947-20260511T212028Z/bfdcd356ac1c/checkpoint-6",
+    "bit_manipulation_correct": 135,
+    "completion_tokens": 3080941,
+    "correct": 823,
+    "equation_transform_correct": 56,
+    "error": "",
+    "name": "v291_v290_checkpoint_6_official_like_full947",
+    "report_json": "/tmp/kg1_v284_official_like_eval_gate/v291-h200-officiallike-v290ckpt6-full947-20260511T212028Z/eval/v291_v290_checkpoint_6_official_like_full947/v291_hf_official_like_v291_v290_checkpoint_6_official_like_full947_eval_report.json",
+    "status": "ok",
+    "tokens_per_second": 2997.0330820148706,
+    "truncated": 1,
+    "truncation_rate": 0.0010559662090813093
+  },
+  "blocked_actions": [
+    "package",
+    "kaggle_submit"
+  ],
+  "candidate_summary": {
+    "base_model_path": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+    "candidates_json": "/tmp/kg1_v284_official_like_eval_gate/v291-h200-officiallike-v290ckpt6-full947-20260511T212028Z/v284_official_like_eval_candidates.json",
+    "config": {
+      "dtype": "auto",
+      "enable_chunked_prefill": true,
+      "enable_prefix_caching": true,
+      "gpu_memory_utilization": 0.85,
+      "max_lora_rank": 32,
+      "max_model_len": 8192,
+      "max_num_seqs": 64,
+      "max_tokens": 7680,
+      "model_name": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+      "model_revision": "cbd3fa9f933d55ef16a84236559f4ee2a0526848",
+      "prompt_suffix": "\nPlease put your final answer inside `\\boxed{}`. For example: `\\boxed{your answer}`",
+      "temperature": 0.0,
+      "top_p": 1.0,
+      "trust_remote_code": true,
+      "warmup_rows": 0
+    },
+    "elapsed_s": 1150.0351114273071,
+    "generated_at_utc": "2026-05-11T21:56:33.600471+00:00",
+    "questions_csv": "/root/.cache/huggingface/hub/datasets--felipesp1983--kg1-nemotron-training/snapshots/79263f6cb845d0d2f77654212be105a96e0433cf/runtime_artifacts/v276_full_eval_bridge/v276-full947-bridge-20260511T1245Z/official_train_seed42_stratified10_val.csv",
+    "rows": [
+      {
+        "accuracy": 0.8690601900739177,
+        "adapter": "/tmp/kg1_v284_adapter_snapshots/v291-h200-officiallike-v290ckpt6-full947-20260511T212028Z/bfdcd356ac1c/checkpoint-6",
+        "bit_manipulation_correct": 135,
+        "completion_tokens": 3080941,
+        "correct": 823,
+        "equation_transform_correct": 56,
+        "error": "",
+        "name": "v291_v290_checkpoint_6_official_like_full947",
+        "report_json": "/tmp/kg1_v284_official_like_eval_gate/v291-h200-officiallike-v290ckpt6-full947-20260511T212028Z/eval/v291_v290_checkpoint_6_official_like_full947/v291_hf_official_like_v291_v290_checkpoint_6_official_like_full947_eval_report.json",
+        "status": "ok",
+        "tokens_per_second": 2997.0330820148706,
+        "truncated": 1,
+        "truncation_rate": 0.0010559662090813093
+      }
+    ],
+    "solution_csv": "/root/.cache/huggingface/hub/datasets--felipesp1983--kg1-nemotron-training/snapshots/79263f6cb845d0d2f77654212be105a96e0433cf/runtime_artifacts/v276_full_eval_bridge/v276-full947-bridge-20260511T1245Z/official_train_seed42_stratified10_val.csv"
+  },
+  "eval_prompt_controls": {
+    "disable_thinking": false,
+    "no_prompt_suffix": false,
+    "prediction_postprocessor": "none",
+    "prompt_suffix": "\nPlease put your final answer inside `\\boxed{}`. For example: `\\boxed{your answer}`"
+  },
+  "eval_summary_json": "/tmp/kg1_v284_official_like_eval_gate/v291-h200-officiallike-v290ckpt6-full947-20260511T212028Z/eval/batch_candidate_summary.json",
+  "full_candidate_gate": true,
+  "full_csv": {
+    "duplicate_ids": 0,
+    "family_counts": {
+      "bit_manipulation": 160,
+      "equation_transform": 155,
+      "gravity_constant": 159,
+      "numeral_system": 157,
+      "text_encryption": 157,
+      "unit_conversion": 159
+    },
+    "path": "/root/.cache/huggingface/hub/datasets--felipesp1983--kg1-nemotron-training/snapshots/79263f6cb845d0d2f77654212be105a96e0433cf/runtime_artifacts/v276_full_eval_bridge/v276-full947-bridge-20260511T1245Z/official_train_seed42_stratified10_val.csv",
+    "row_contract_sha256": "5441932fc270eb9621a32b4d7e85ff444c45aa31d75e2bb7aea0de96cd638f21",
+    "rows": 947,
+    "sha256": "84e90b5b4d9adad6fdd9028aae3161d1b8991f2eab11e292b32d920c0ec3c935"
+  },
+  "generated_at_utc": "2026-05-11T21:56:36.274432+00:00",
+  "path_in_repo": "evals/v291-h200-officiallike-v290ckpt6-full947-20260511T212028Z",
+  "repo_commit": "c15bf7ade35e1be2840b14911a1aad3773d2256c",
+  "run_id": "v291-h200-officiallike-v290ckpt6-full947-20260511T212028Z",
+  "schema_version": "kg1_v284_hf_official_like_eval_gate_manifest_v1"
+}

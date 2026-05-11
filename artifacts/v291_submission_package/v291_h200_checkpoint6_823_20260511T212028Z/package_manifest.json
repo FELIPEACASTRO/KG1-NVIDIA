@@ -1,0 +1,44 @@
+{
+  "adapter": {
+    "adapter_config_sha256": "a3d74c5a52ce75f71a8406222d877b9760ea18a40a772bcf407686c8ea19f11d",
+    "adapter_dir": "artifacts\\v291_submission_package\\v291_h200_checkpoint6_823_20260511T212028Z\\adapter",
+    "adapter_model_bytes": 4259063856,
+    "adapter_model_sha256": "0a7b6144231d9358ae73a5e57d8778b32be1520fa47e3041414b3e025aaa1aa1",
+    "lora_alpha": 32,
+    "r": 32,
+    "target_modules": [
+      "v_proj",
+      "up_proj",
+      "in_proj",
+      "k_proj",
+      "lm_head",
+      "o_proj",
+      "down_proj",
+      "q_proj",
+      "out_proj"
+    ],
+    "target_parameters": [
+      "mlp.experts.gate_up_proj",
+      "mlp.experts.down_proj"
+    ]
+  },
+  "full_manifest_gate": {
+    "max_full_trunc": 4,
+    "min_full_correct": 823,
+    "validated": true
+  },
+  "full_manifest_json": "artifacts\\v291_official_like_v290_full_eval_results\\v291_h200_20260511T212028Z\\v284_hf_official_like_eval_gate_manifest.json",
+  "kaggle_submit_attempted": false,
+  "repo": "felipesp1983/kg1-nemotron-lora-v290-rank19-micro-patch-smoke",
+  "schema_version": "kg1_package_hf_adapter_submission_v1",
+  "subfolder": "checkpoint-6",
+  "submission_zip": {
+    "zip_bytes": 3831458002,
+    "zip_entries": [
+      "adapter_config.json",
+      "adapter_model.safetensors"
+    ],
+    "zip_path": "artifacts\\v291_submission_package\\v291_h200_checkpoint6_823_20260511T212028Z\\submission.zip",
+    "zip_sha256": "293b414f316330db7ac12c4f3001e7796b0a087ed5dd86af6e13d98620b43433"
+  }
+}
