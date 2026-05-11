@@ -1,0 +1,3 @@
+family,rows,v256_v226ckpt1_correct,v258_ckpt4_correct,delta_correct,v256_v226ckpt1_truncated,v258_ckpt4_truncated,delta_truncated
+bit_manipulation,160,135,136,1,1,1,0
+equation_transform,155,56,56,0,0,0,0

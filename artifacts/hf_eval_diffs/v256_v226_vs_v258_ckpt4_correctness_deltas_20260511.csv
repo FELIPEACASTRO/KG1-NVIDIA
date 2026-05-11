@@ -1,0 +1,2 @@
+row_key,family,v256_v226ckpt1_correct,v258_ckpt4_correct,delta_correct,v256_v226ckpt1_answer,v258_ckpt4_answer,expected,v256_v226ckpt1_truncated,v258_ckpt4_truncated
+4ada9150,bit_manipulation,0,1,1,01111111,01111011,01111011,False,False

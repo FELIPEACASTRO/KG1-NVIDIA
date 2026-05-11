@@ -1,0 +1,115 @@
+{
+  "decision": {
+    "accuracy": 0.6095238095238096,
+    "best_v258_candidate": "v257_checkpoint_4_v221_contract",
+    "bit_manipulation_correct": 136,
+    "correct": 192,
+    "equation_transform_correct": 56,
+    "reason": "total 192 is one below weak gate 193 and equation 56 is four below equation gate 60; bit guardrail 136 is recovered.",
+    "truncated": 1,
+    "weak_gate_pass": false
+  },
+  "generated_at_local": "2026-05-10 America/Sao_Paulo",
+  "v255_predictions_sha256": "5ae6ca1f84e388d5918bdb184e8152a23eee30b0a4d5863ea520cd29ce0f61f5",
+  "v255_vs_v258_ckpt4_correctness_delta_count": 3,
+  "v255_vs_v258_ckpt4_family_delta": [
+    {
+      "delta_correct": 1,
+      "delta_truncated": 0,
+      "family": "bit_manipulation",
+      "rows": 160,
+      "v255_v194_correct": 135,
+      "v255_v194_truncated": 1,
+      "v258_ckpt4_correct": 136,
+      "v258_ckpt4_truncated": 1
+    },
+    {
+      "delta_correct": 0,
+      "delta_truncated": 0,
+      "family": "equation_transform",
+      "rows": 155,
+      "v255_v194_correct": 56,
+      "v255_v194_truncated": 0,
+      "v258_ckpt4_correct": 56,
+      "v258_ckpt4_truncated": 0
+    }
+  ],
+  "v256_predictions_sha256": "4c627f895f9da0a35ae91c5ca67518c41e8e9d5bf12822c4ba57710c5a3f4aba",
+  "v256_vs_v258_ckpt4_correctness_delta_count": 1,
+  "v256_vs_v258_ckpt4_family_delta": [
+    {
+      "delta_correct": 1,
+      "delta_truncated": 0,
+      "family": "bit_manipulation",
+      "rows": 160,
+      "v256_v226ckpt1_correct": 135,
+      "v256_v226ckpt1_truncated": 1,
+      "v258_ckpt4_correct": 136,
+      "v258_ckpt4_truncated": 1
+    },
+    {
+      "delta_correct": 0,
+      "delta_truncated": 0,
+      "family": "equation_transform",
+      "rows": 155,
+      "v256_v226ckpt1_correct": 56,
+      "v256_v226ckpt1_truncated": 0,
+      "v258_ckpt4_correct": 56,
+      "v258_ckpt4_truncated": 0
+    }
+  ],
+  "v258_ckpt4_predictions_sha256": "5349cddfa7b11fa42d1309caa481bf5e44cf8bfefd75715308bc226f2cbd84d4",
+  "v258_eval_prefix": "evals/v258-h200-v221contract-v257-smoke-eval-20260511T015236Z",
+  "v258_eval_repo": "felipesp1983/kg1-nemotron-lora-v257-v249-v226-smoke",
+  "v258_job_id": "6a0136a1317220dbbd1a77e5",
+  "v258_job_url": "https://huggingface.co/jobs/felipesp1983/6a0136a1317220dbbd1a77e5",
+  "v258_rows": [
+    {
+      "accuracy": 0.6063492063492063,
+      "adapter": "/tmp/kg1_v245_adapter_snapshots/v258-h200-v221contract-v257-smoke-eval-20260511T015236Z/934ad907844e/checkpoint-2",
+      "bit_manipulation_correct": 135,
+      "completion_tokens": 1504244,
+      "correct": 191,
+      "equation_transform_correct": 56,
+      "error": "",
+      "name": "v257_checkpoint_2_v221_contract",
+      "report_json": "/tmp/kg1_v258_weak_eval/v258-h200-v221contract-v257-smoke-eval-20260511T015236Z/eval/v257_checkpoint_2_v221_contract/v245_hf_weak_v257_checkpoint_2_v221_contract_eval_report.json",
+      "status": "ok",
+      "tokens_per_second": 2918.3977303658216,
+      "truncated": 1,
+      "truncation_rate": 0.0031746031746031746
+    },
+    {
+      "accuracy": 0.6095238095238096,
+      "adapter": "/tmp/kg1_v245_adapter_snapshots/v258-h200-v221contract-v257-smoke-eval-20260511T015236Z/934ad907844e/checkpoint-4",
+      "bit_manipulation_correct": 136,
+      "completion_tokens": 1504241,
+      "correct": 192,
+      "equation_transform_correct": 56,
+      "error": "",
+      "name": "v257_checkpoint_4_v221_contract",
+      "report_json": "/tmp/kg1_v258_weak_eval/v258-h200-v221contract-v257-smoke-eval-20260511T015236Z/eval/v257_checkpoint_4_v221_contract/v245_hf_weak_v257_checkpoint_4_v221_contract_eval_report.json",
+      "status": "ok",
+      "tokens_per_second": 3179.293695197983,
+      "truncated": 1,
+      "truncation_rate": 0.0031746031746031746
+    },
+    {
+      "accuracy": 0.6063492063492063,
+      "adapter": "/tmp/kg1_v245_adapter_snapshots/v258-h200-v221contract-v257-smoke-eval-20260511T015236Z/934ad907844e/final",
+      "bit_manipulation_correct": 135,
+      "completion_tokens": 1511281,
+      "correct": 191,
+      "equation_transform_correct": 56,
+      "error": "",
+      "name": "v257_final_v221_contract",
+      "report_json": "/tmp/kg1_v258_weak_eval/v258-h200-v221contract-v257-smoke-eval-20260511T015236Z/eval/v257_final_v221_contract/v245_hf_weak_v257_final_v221_contract_eval_report.json",
+      "status": "ok",
+      "tokens_per_second": 3176.2736130485932,
+      "truncated": 2,
+      "truncation_rate": 0.006349206349206349
+    }
+  ],
+  "v258_summary_sha256": "e879d4a14c6d9780bf5f951edaed8ebc5e4a10cc89d0bc82e829afda1d5782d6",
+  "v258_upload_commit": "be437d3f431e0c46998243e573cda53fa68f26c6"
+}
