@@ -19,6 +19,7 @@ Objetivo: consolidar os achados Kaggle/Hugging Face, resultados V221/V226/V229/V
 - Atualizacao V261 2026-05-11: a varredura operacional `thinking on + no prompt suffix` foi cortada cedo no H200 por gate de FinOps. O primeiro candidato (`v259_checkpoint4_nosuffix`) regrediu para `155/315`, equation `55/155`, bit `100/160`, truncation `1`; sem ganho em equation e com queda severa em bit. Esta familia de prompt esta descartada para novos gastos.
 - Atualizacao V262/V263 2026-05-11: adapter soups entre V226/V257/V259 foram gerados em CPU e avaliados no H200. Melhor soup (`soup_v226_050_v257_050`) ficou em `192/315`, equation `56/155`, bit `136/160`, truncation `1`; os outros regrediram para `191` e `190`. Adapter soup nao resolveu o gargalo e nao deve consumir novo H200 sem um preflight que prove alvo novo em equation.
 - Atualizacao V264 2026-05-11: recheck HF CPU confirmou que os traces P0 `andy279/*` continuam bloqueados por review/termos (`403`). A rota mais promissora agora precisa de acao humana para liberar esses datasets no HF; o mirror publico sozinho ja foi usado e nao entregou equation suficiente.
+- Atualizacao V265 2026-05-11: foi criado o mix `score086_filtered_mix`, usando V249 publico nao-weak mais o corpus historico V189 que participou da trajetoria do score amplo `0.86`, mas com bloqueio por `weak_id`, `prompt_sha256` normalizado e dedupe. O builder CPU manteve `3442` linhas (`2000` equation, `1442` bit) e bloqueou `807` linhas (`83` overlaps exatos com weak por prompt hash e `724` duplicatas). O split final ficou em train `3098` (`1800` equation, `1298` bit) e val `344` (`200` equation, `144` bit). Esse dataset passou o V250 tokenization gate no HF: truncation `0.0`, offset masks completos e nenhum token de completion descartado. Proximo passo autorizado: smoke train curto em H200, nao treino longo.
 - Auditoria Google Drive 2026-05-10: `1879` arquivos KG1 catalogados, `85` adapters completos, `232` reports, `423` CSVs, `54` JSONLs e `11` notebooks. Nenhum artefato do Drive supera o baseline V226 sob gate weak canonico; o Drive deve ser usado como fonte de pesos fortes conhecidos, reports e dados para triagem, nao como fonte de promocao automatica.
 - Achado Drive mais util: V207A full/validation gate do V194 tem `822/947` com familias nao criticas em `100%`, mas confirma o mesmo gargalo fraco: `bit_manipulation=135/160`, `equation_transform=55/155`. Isso reforca que o problema real continua concentrado em `equation_transform`.
 - Importante: muitos arquivos do Drive foram parte da trajetoria que chegou ao score amplo `0.86`. Esse score e valido como evidencia historica de que V194/V202D resolvia muito bem as familias nao criticas, mas nao pode ser interpretado como melhoria atual das duas familias alvo. No recorte decisivo, o proprio V207A mede `equation_transform=55/155` e `bit_manipulation=135/160`, alinhado ao gargalo V230.
@@ -63,6 +64,37 @@ Objetivo: consolidar os achados Kaggle/Hugging Face, resultados V221/V226/V229/V
 | `v227_final_adapter` | V229 | 16 | 9 | 7 | 0 | regressao severa | Nao usar |
 
 ## Achados Kaggle/Hugging Face adicionados
+
+### V265 score086 filtered mix - HF-only
+
+Objetivo: reaproveitar a evidencia historica dos arquivos que ajudaram a chegar no score amplo `0.86`, sem contaminar o contrato weak atual.
+
+Evidencia concreta:
+
+- Script: `scripts/run_v265_score086_filtered_mix_hf.py`.
+- Job builder HF CPU: `https://huggingface.co/jobs/felipesp1983/6a016d5eaff1cd33e8f3357e`.
+- Dataset publicado: `felipesp1983/kg1-nemotron-training/data/v265_score086_filtered_mix/v265-hf-cpu-score086-filtered-mix-20260511T054800Z`.
+- Commits HF dataset:
+  - `https://huggingface.co/datasets/felipesp1983/kg1-nemotron-training/commit/5d8a06dece7c1eedc3531397a0da4b0a0b1d97d2`
+  - `https://huggingface.co/datasets/felipesp1983/kg1-nemotron-training/commit/d5c14abe7e70814d030406d1c64535bf501ba83d`
+- Hash train: `df301fb9c9813d8ada3884e3e17e277668af9d2738d138f944b7f87d86fd9f32`.
+- Hash val: `90e5e595bd7a0861ced23f1575f4b17efcac3c134b8aa0f4e543dc9b52c2e3be`.
+- Hash weak blocked ids: `2694de160962cc34c3b8e6cd0443ea92d1b93fb02003f3f3494f324ce6715dfc`.
+
+Gate V250 no HF:
+
+- Job: `https://huggingface.co/jobs/felipesp1983/6a016d9c317220dbbd1a78f4`.
+- Commits HF dataset:
+  - `https://huggingface.co/datasets/felipesp1983/kg1-nemotron-training/commit/c0852f022565d4ae870eafe25054bb8eb315cfbe`
+  - `https://huggingface.co/datasets/felipesp1983/kg1-nemotron-training/commit/f687c8d2e97bbd71a08c181bf69269ee8ab86fb9`
+- Train tokenization: rows `3098`, prompt truncation `0`, prompt truncation rate `0.0`, completion tokens dropped `0`, offset masks `3098`, fallback masks `0`, max tokens `324`.
+- Validation tokenization: rows `344`, prompt truncation `0`, prompt truncation rate `0.0`, completion tokens dropped `0`, offset masks `344`, fallback masks `0`, max tokens `324`.
+
+Decisao:
+
+- Usar V265 para um smoke train curto e barato em H200, iniciando do adapter V226 checkpoint-1 forte.
+- Nao executar treino longo antes de weak eval do smoke.
+- Se o smoke nao aumentar `equation_transform` acima de `56/155` sem derrubar `bit_manipulation <136/160`, encerrar essa rota e voltar para solver/verifier ou traces `andy279`.
 
 ### Auditoria OpenRouter anexada - 2026-05-10
 
