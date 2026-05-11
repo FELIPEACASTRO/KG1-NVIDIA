@@ -35,6 +35,7 @@ Objetivo: consolidar os achados Kaggle/Hugging Face, resultados V221/V226/V229/V
 - Achado Drive mais util: V207A full/validation gate do V194 tem `822/947` com familias nao criticas em `100%`, mas confirma o mesmo gargalo fraco: `bit_manipulation=135/160`, `equation_transform=55/155`. Isso reforca que o problema real continua concentrado em `equation_transform`.
 - Importante: muitos arquivos do Drive foram parte da trajetoria que chegou ao score amplo `0.86`. Esse score e valido como evidencia historica de que V194/V202D resolvia muito bem as familias nao criticas, mas nao pode ser interpretado como melhoria atual das duas familias alvo. No recorte decisivo, o proprio V207A mede `equation_transform=55/155` e `bit_manipulation=135/160`, alinhado ao gargalo V230.
 - Atualizacao V280 2026-05-11: foi criado e executado um gate CPU-only para os datasets P0 `andy279/*`, validando primeiro o contrato weak (`315` linhas, SHA `85da758e14d57ea40270de5747f98726a0ad0b6d1795bff7dd46183005e0f9b6`, familias `bit=160`, `equation=155`). Resultado atual: `andy279/nemotron-reasoning-challenge-raw-traces` e `andy279/nemotron-reasoning-challenge` continuam `gated=manual`; `p0_accessible_files=0`, `p0_blocked_files=5`. O mirror publico `jasonkung98/*` esta acessivel, mas o sample de `train.csv` tem overlap com weak e continua servindo apenas como sanity/source audit, nao como autorizacao de treino. Decisao: `p0_gated_terms_required_no_gpu`; nao gastar H200/GPU nessa rota ate liberar acesso humano aos datasets P0.
+- Atualizacao OpenRouter 2026-05-11: o export `C:\Users\davis\Downloads\OpenRouter Chat Mon May 11 2026.json` foi auditado contra a meta das familias `equation_transform` e `bit_manipulation`. Ele confirma que a busca externa por arquivos exatos `sft_train.jsonl` e `sft_val.jsonl` nao encontrou espelho publico acionavel do KG1/Andy279. Os hits publicos (`garg-aayush/sft-cs336-assign5-datasets`, `Satori-reasoning/Satori-SWE-two-stage-SFT-data`, `SakanaAI/FishMath-SFT-Data`, `prabinh/Superior-Reasoning-SFT-gpt-oss-120b`, `AlgorithmicResearchGroup/ai-sft`, `norallm/normistral-11b-thinking-training`, `agentlans/HuggingFaceH4-ultrachat_200k`) sao SFT/reasoning genericos ou de dominio divergente; podem inspirar pipeline/metodologia, mas nao justificam download pesado, H200, treino ou mistura de dados sem novo gate de dominio/licenca/leakage.
 
 ## Evidencias consolidadas
 
@@ -3999,6 +4000,24 @@ V280 Andy279 trace access/schema gate:
   - Os diretorios parciais gerados pelo HF CLI foram removidos para nao deixar cache/lixo no disco local.
 - Decisao: `p0_gated_terms_required_no_gpu`.
 - Implicacao: a rota `andy279/*` so volta a andar depois de acao humana no HF para liberar os termos/review dos datasets. A partir dai, o proximo comando correto e o mesmo V280 com `--allow-full-download` e limite de bytes antes de construir dataset ou usar H200.
+
+OpenRouter Chat Mon May 11 2026 audit - exact SFT filename search:
+
+- Arquivo auditado: `C:\Users\davis\Downloads\OpenRouter Chat Mon May 11 2026.json`.
+- Escopo: validar se a busca externa por `sft_train.jsonl` e `sft_val.jsonl` trouxe algum dado, notebook, adapter, dataset ou tecnica nova que possa melhorar `equation_transform` sem perder `bit_manipulation`.
+- Evidencia do export:
+  - ha multiplas buscas por `"sft_train.jsonl"`, `"sft_val.jsonl"`, `"sft_train.jsonl" "sft_val.jsonl"`, GitHub, Hugging Face e Kaggle;
+  - as respostas consistentes dizem que nao foi encontrado par publico com esses nomes exatos;
+  - um trecho final do export sobre `Satori`/`MOSS` contem texto corrompido e nao verificavel; ele deve ser descartado como evidencia.
+- Hits classificados:
+  - `garg-aayush/sft-cs336-assign5-datasets`: publico e util como referencia de pipeline SFT/CS336, mas os dados sao UltraChat/math genericos; nao e KG1 nem deve entrar em treino direto.
+  - `Satori-reasoning/Satori-SWE-two-stage-SFT-data`: publico, Apache-2.0, mas dominio SWE/code; nao e transformation/equation KG1.
+  - `SakanaAI/FishMath-SFT-Data`: math/AIMO e pode inspirar filtragem de traces corretos, mas nao cobre as regras simbolicas/pontuacao do KG1.
+  - `prabinh/Superior-Reasoning-SFT-gpt-oss-120b`: reasoning geral, muito grande; custo/risco alto e sem evidencia de ganhos nas familias alvo.
+  - `AlgorithmicResearchGroup/ai-sft`: dataset amplo e grande, licenca/escopo inadequados para acao rapida.
+  - `norallm/normistral-11b-thinking-training` e `agentlans/HuggingFaceH4-ultrachat_200k`: nomes parecidos (`train_sft.jsonl`, `train_sft.jsonl.zst`), mas dominio generico; nao sao substitutos dos arquivos Andy279.
+- Decisao: `no_new_public_kg1_sft_mirror_found`.
+- Implicacao: nao gastar GPU nem baixar datasets grandes baseados nesses hits. O unico valor pratico e metodologico: manter gates de dominio, licenca, schema, dedupe, anti-leakage e verifier antes de qualquer uso de dados externos. A rota P0 continua sendo liberar `andy279/nemotron-reasoning-challenge` e `andy279/nemotron-reasoning-challenge-raw-traces`.
 
 Proximo passo:
 
