@@ -19,11 +19,10 @@ FLAVOR = "h200"
 RUN_ID = "v292-h200-v221contract-eq-continuation-" + datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
 
 ADAPTER_REPO = "felipesp1983/kg1-nemotron-lora-v292-eq-continuation-v290ckpt6"
-ADAPTER_SUBFOLDERS = ["checkpoint-3", "checkpoint-6", "final"]
-CANDIDATE_NAMES = [
-    "v292_checkpoint_3_v221_contract",
-    "v292_checkpoint_6_v221_contract",
-    "v292_final_v221_contract",
+REQUESTED_ADAPTERS = [
+    ("checkpoint-3", "v292_checkpoint_3_v221_contract"),
+    ("checkpoint-6", "v292_checkpoint_6_v221_contract"),
+    ("final", "v292_final_v221_contract"),
 ]
 OUTPUT_REPO = ADAPTER_REPO
 OUTPUT_PATH_IN_REPO = f"evals/{RUN_ID}"
@@ -93,11 +92,30 @@ def main() -> int:
     if hardware[FLAVOR]["unit_cost_usd"] > 0.09:
         raise RuntimeError(f"H200 unit cost above gate: {hardware[FLAVOR]}")
 
+    repo_files = set(api.list_repo_files(ADAPTER_REPO, repo_type="model"))
+    available_adapters = [
+        (subfolder, name)
+        for subfolder, name in REQUESTED_ADAPTERS
+        if f"{subfolder}/adapter_config.json" in repo_files and f"{subfolder}/adapter_model.safetensors" in repo_files
+    ]
+    missing_adapters = [
+        subfolder
+        for subfolder, _name in REQUESTED_ADAPTERS
+        if f"{subfolder}/adapter_config.json" not in repo_files or f"{subfolder}/adapter_model.safetensors" not in repo_files
+    ]
+    if not available_adapters:
+        raise RuntimeError(f"No complete V292 adapters found in {ADAPTER_REPO}: {sorted(repo_files)}")
+    adapter_subfolders = [subfolder for subfolder, _name in available_adapters]
+    candidate_names = [name for _subfolder, name in available_adapters]
+    print("requested_adapter_subfolders =", [subfolder for subfolder, _name in REQUESTED_ADAPTERS], flush=True)
+    print("available_adapter_subfolders =", adapter_subfolders, flush=True)
+    print("missing_adapter_subfolders =", missing_adapters, flush=True)
+
     job_env = {
         "KG1_ADAPTER_REPO": ADAPTER_REPO,
-        "KG1_ADAPTER_SUBFOLDERS": ",".join(ADAPTER_SUBFOLDERS),
+        "KG1_ADAPTER_SUBFOLDERS": ",".join(adapter_subfolders),
         "KG1_BRANCH": REPO_BRANCH,
-        "KG1_CANDIDATE_NAMES": ",".join(CANDIDATE_NAMES),
+        "KG1_CANDIDATE_NAMES": ",".join(candidate_names),
         "KG1_DISABLE_THINKING": "0",
         "KG1_NO_PROMPT_SUFFIX": "0",
         "KG1_EVAL_TIMEOUT_S": "4200",
@@ -142,8 +160,10 @@ def main() -> int:
         "branch": REPO_BRANCH,
         "run_id": RUN_ID,
         "adapter_repo": ADAPTER_REPO,
-        "adapter_subfolders": ADAPTER_SUBFOLDERS,
-        "candidate_names": CANDIDATE_NAMES,
+        "adapter_subfolders": adapter_subfolders,
+        "candidate_names": candidate_names,
+        "requested_adapter_subfolders": [subfolder for subfolder, _name in REQUESTED_ADAPTERS],
+        "missing_adapter_subfolders": missing_adapters,
         "output_repo": OUTPUT_REPO,
         "output_path_in_repo": OUTPUT_PATH_IN_REPO,
         "eval_contract": {
