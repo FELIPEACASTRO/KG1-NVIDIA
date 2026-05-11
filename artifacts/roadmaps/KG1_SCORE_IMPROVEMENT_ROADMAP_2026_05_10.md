@@ -2836,6 +2836,31 @@ Recheck HF V247:
   `https://huggingface.co/datasets/felipesp1983/kg1-nemotron-training/commit/84bb71a1806208a512b8e01edfb297c402036e0a`.
 - Resultado: sem mudanca, `andy279/*` ainda `403` aguardando review; `jasonkung98/*` acessivel.
 
+Recheck HF V247 em 2026-05-11:
+
+- Tentativa inicial de launch:
+  - HF Job: `6a014e3a317220dbbd1a784b`.
+  - URL: `https://huggingface.co/jobs/felipesp1983/6a014e3a317220dbbd1a784b`.
+  - Status: falhou imediatamente por parsing do CLI (`bash` recebeu o script inteiro como caminho). Custo operacional esperado: minimo; nenhum payload baixado, nenhum treino.
+- Launch corrigido:
+  - HF Job: `6a014e51aff1cd33e8f333fa`.
+  - URL: `https://huggingface.co/jobs/felipesp1983/6a014e51aff1cd33e8f333fa`.
+  - Flavor: `cpu-basic`.
+  - Status: `COMPLETED`.
+  - Upload HF:
+    `https://huggingface.co/datasets/felipesp1983/kg1-nemotron-training/commit/08e73a970662e93ec38db2189570977e2bfa8922`.
+  - Path:
+    `runtime_artifacts/v247_hf_source_access_gate/v247-hf-source-access-recheck-20260511T033339Z/`.
+- Resultado:
+  - P0 accessible files: `0`.
+  - P0 denied files: `5`.
+  - Public accessible files: `2`.
+  - `andy279/nemotron-reasoning-challenge-raw-traces`: metadata OK, arquivos existem, payload `403` com mensagem de review pendente.
+  - `andy279/nemotron-reasoning-challenge`: metadata OK, arquivos existem, payload `403` com mensagem de review pendente.
+  - `jasonkung98/NVIDIA-Nemotron-Model-Reasoning-Challenge`: `train.csv` e `test.csv` acessiveis.
+- Decisao: `p0_gated_terms_required_public_mirror_available`.
+- Implicacao: a rota de traces externos segue bloqueada por acesso humano aos repos `andy279/*`. Ate liberar esse acesso, nao iniciar treino H200 baseado nesses traces.
+
 ## V248 public mirror leakage audit
 
 Script:
