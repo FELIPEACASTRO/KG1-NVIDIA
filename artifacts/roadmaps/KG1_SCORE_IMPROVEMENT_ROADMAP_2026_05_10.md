@@ -3888,10 +3888,27 @@ V276 H200 full eval bridge:
 - Upload de artefatos: `https://huggingface.co/felipesp1983/kg1-nemotron-lora-v259-v249-eqfocus-v257ckpt4-smoke/commit/719225764307c8916eaeaedddafff6d57e0ffeef`, path `evals/v276-h200-full-v259ckpt4-postprocessor-20260511T115754Z`.
 - Decisao: V276 esta descartado como candidato full direto. Ele continua util como diagnostico/teacher weak, mas nao justifica package/submission. A discrepancia weak (`196/315` com postprocessor) versus full (`322/947`, bit/equation muito baixos) reforca que o weak tuning atual esta superespecializado e nao cobre a distribuicao full das familias problemáticas.
 
+V277 H200 external adapter weak eval:
+
+- Job HF: `https://huggingface.co/jobs/felipesp1983/6a01c6a9aff1cd33e8f339c0`.
+- Commit fixado pelo gate: `a71e092e6dc6780766614f76ba38ed6f69bc54c1`.
+- Ambiente validado: `h200`, GPU `NVIDIA H200`, vLLM `0.20.1`, contrato V221 `315` linhas, `max_tokens=96`, `disable_thinking=true`, postprocessor `none`.
+- Adapters avaliados:
+  - `gfinin/nemotron-reasoning-lora` root: LoRA `r=16`, `alpha=32`, target modules amplos + MoE `target_parameters`, weights `1.77 GB`.
+  - `etencore/nemotron-30b-reasoning-lora` root: LoRA `r=32`, `alpha=64`, target modules `q_proj/v_proj/o_proj/k_proj`, weights `14.9 MB`.
+  - `etencore/nemotron-30b-reasoning-lora/checkpoint-1000`.
+  - `etencore/nemotron-30b-reasoning-lora/checkpoint-1188`.
+- Resultados weak V221:
+  - `gfinin_nemotron_reasoning_lora_root`: `38/315`, equation `10/155`, bit `28/160`, trunc `2`.
+  - `etencore_nemotron_30b_reasoning_lora_root`: `78/315`, equation `28/155`, bit `50/160`, trunc `0`.
+  - `etencore_nemotron_30b_reasoning_lora_checkpoint_1000`: `74/315`, equation `25/155`, bit `49/160`, trunc `0`.
+  - `etencore_nemotron_30b_reasoning_lora_checkpoint_1188`: `79/315`, equation `29/155`, bit `50/160`, trunc `0`.
+- Upload de artefatos: `https://huggingface.co/felipesp1983/kg1-nemotron-lora-v259-v249-eqfocus-v257ckpt4-smoke/commit/707bcb9ac5637c783fdfdc0437a75a49c604cd28`, path `evals/v277-h200-external-weak-eval-20260511T120632Z`.
+- Decisao: rota de adapters externos completos descartada para o objetivo atual. Nenhum candidato chega perto do baseline V259/V275 (`196/315` com postprocessor; `equation=60`, `bit=136`). Nao rodar full eval, soup, treino ou distilacao com esses adapters.
+
 Proximo passo:
 
-1. Rodar V277 como weak eval agrupado dos adapters externos completos recem-triados: `gfinin/nemotron-reasoning-lora`, `etencore/nemotron-30b-reasoning-lora` root, `etencore` `checkpoint-1000` e `checkpoint-1188`. Script: `scripts/hf_job_weak_eval_v277_external_adapters.py`. Gate obrigatorio: contrato V221, `max_tokens=96`, `disable_thinking`, `continue-on-error`, sem full eval, sem treino, sem package, sem Kaggle submit.
-2. Se V277 nao produzir ganho concreto em `equation_transform` sem derrubar `bit_manipulation`, parar gastos de GPU nessa rota externa.
-3. Implementar V278 CPU-only para `equation_symbolic_punct`: enumerative/CEGIS DSL inspirada em FlashFill/PROSE/SyGuS, com gramatica pequena para reordenacao, reversao parcial, substring, troca posicional, delimitadores e operadores simbolicos. So promover regra se gerar overrides label-free e zero-loss no weak audit; GPU so entra se houver ganho concreto acima dos `+4` numericos V274/V275.
-4. Nao treinar novo LoRA, nao repetir adapter soup e nao repetir prompt `no suffix`; essas rotas ja foram negativas ou neutras. Qualquer treino futuro precisa vir apos V277/V278 ou apos liberacao humana dos datasets gated `andy279/nemotron-reasoning-challenge-raw-traces` e `andy279/nemotron-reasoning-challenge`.
-5. Reusar V249/V250/V242/V268 somente com preflight de hashes, anti-leakage, row-contract, tokenizacao, estimativa de custo e kill-switch por primeiro candidato.
+1. Implementar V278 CPU-only para `equation_symbolic_punct`: enumerative/CEGIS DSL inspirada em FlashFill/PROSE/SyGuS, com gramatica pequena para reordenacao, reversao parcial, substring, troca posicional, delimitadores e operadores simbolicos. So promover regra se gerar overrides label-free e zero-loss no weak audit; GPU so entra se houver ganho concreto acima dos `+4` numericos V274/V275.
+2. Se V278 nao produzir nenhum override simbolico zero-loss, parar novos gastos de GPU e priorizar acao humana para liberar os datasets gated `andy279/nemotron-reasoning-challenge-raw-traces` e `andy279/nemotron-reasoning-challenge`.
+3. Nao treinar novo LoRA, nao repetir adapter soup, nao repetir prompt `no suffix` e nao usar os adapters externos V277; essas rotas ja foram negativas ou neutras.
+4. Reusar V249/V250/V242/V268 somente com preflight de hashes, anti-leakage, row-contract, tokenizacao, estimativa de custo e kill-switch por primeiro candidato.
