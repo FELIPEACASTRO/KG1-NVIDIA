@@ -1,0 +1,44 @@
+{
+  "version": "v292_eq_continuation_observed_weak_results",
+  "generated_at_local": "2026-05-11",
+  "train_job_url": "https://huggingface.co/jobs/felipesp1983/6a0258ac317220dbbd1a7d04",
+  "weak_eval_job_url": "https://huggingface.co/jobs/felipesp1983/6a026043aff1cd33e8f34169",
+  "weak_eval_job_status": "CANCELED",
+  "cancel_reason": "Stopped after checkpoint-6 regressed versus V290/V291; final was not worth additional H200 spend.",
+  "adapter_repo": "felipesp1983/kg1-nemotron-lora-v292-eq-continuation-v290ckpt6",
+  "continuation_from": "felipesp1983/kg1-nemotron-lora-v290-rank19-micro-patch-smoke/checkpoint-6",
+  "weak_contract": {
+    "rows": 315,
+    "bit_manipulation_rows": 160,
+    "equation_transform_rows": 155,
+    "baseline_reference": "V290 checkpoint-6 / V291 full candidate",
+    "reference_total_correct": 192,
+    "reference_equation_transform_correct": 56,
+    "reference_bit_manipulation_correct": 136,
+    "reference_truncated": 0
+  },
+  "observed_candidates": [
+    {
+      "name": "v292_checkpoint_3_v221_contract",
+      "total_correct": 191,
+      "equation_transform_correct": 56,
+      "bit_manipulation_correct": 135,
+      "truncated": 0,
+      "decision": "reject_regressed_total_and_bit"
+    },
+    {
+      "name": "v292_checkpoint_6_v221_contract",
+      "total_correct": 190,
+      "equation_transform_correct": 56,
+      "bit_manipulation_correct": 134,
+      "truncated": 1,
+      "decision": "reject_regressed_total_bit_and_truncation"
+    }
+  ],
+  "decision": {
+    "status": "rejected",
+    "full_eval_authorized": false,
+    "kaggle_submit_authorized": false,
+    "next_action": "Do not continue this equation-heavy V290 checkpoint-6 recipe; return to safer micro-patch or solver/verifier routes."
+  }
+}
