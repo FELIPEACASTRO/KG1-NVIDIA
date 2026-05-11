@@ -1,0 +1,55 @@
+{
+  "branch": "v230-v226-complementarity",
+  "dataset": {
+    "data_repo": "felipesp1983/kg1-nemotron-training",
+    "train_file": "data/v290_rank19_micro_patch/20260511T1925Z/v282_rank19_micro_patch_train.jsonl",
+    "train_rows": 11286,
+    "train_sha256": "801334d510d923e233f382b78d42e853d87d75bfc235e676b2f247975b6b845d",
+    "val_file": "data/v290_rank19_micro_patch/20260511T1925Z/v282_rank19_micro_patch_val.jsonl",
+    "val_rows": 801,
+    "val_sha256": "d39bc9c0e4051fe7d212de109d580614c1774c6f10833246a70e8b4018c2252b"
+  },
+  "expected_commit": "442b9ada424bfb8e2ab07d19f6c9b5fcae48565c",
+  "flavor": "h200",
+  "gates": [
+    "hf_job_preflight_gate:preinstall",
+    "hf_job_preflight_gate:artifacts",
+    "hf_job_preflight_gate:postinstall",
+    "hf_job_train_v90 tokenization/truncation/offset-mask gate"
+  ],
+  "generated_at_utc": "2026-05-11T19:31:31.249246+00:00",
+  "hardware": {
+    "accelerator_model": "H200",
+    "accelerator_quantity": "1",
+    "accelerator_vram": "141 GB",
+    "cpu": "23 vCPU",
+    "name": "h200",
+    "pretty_name": "Nvidia H200",
+    "ram": "256 GB",
+    "unit_cost_usd": 0.083333,
+    "unit_label": "minute"
+  },
+  "image": "pytorch/pytorch:2.8.0-cuda12.8-cudnn9-devel",
+  "init_adapter": {
+    "repo": "felipesp1983/kg1-strong-adapters-v194-v226",
+    "subfolder": "v194_protected"
+  },
+  "job_id": "6a022ecfaff1cd33e8f33e6c",
+  "job_status": "RUNNING",
+  "job_url": "https://huggingface.co/jobs/felipesp1983/6a022ecfaff1cd33e8f33e6c",
+  "namespace": "felipesp1983",
+  "next_action": "Monitor every 30 seconds; weak-eval checkpoint-3, checkpoint-6, and final only if training completes.",
+  "output_repo": "felipesp1983/kg1-nemotron-lora-v290-rank19-micro-patch-smoke",
+  "recipe": {
+    "eval_every_steps": 3,
+    "eval_max_examples": 192,
+    "final_learning_rate": "1e-8",
+    "learning_rate": "2e-8",
+    "max_steps": 6,
+    "sampling_mode": "weighted_replacement",
+    "save_every_steps": 3,
+    "trainable_lora_modules": "lm_head"
+  },
+  "run_id": "v290-rank19-micro-patch-smoke-20260511T193130Z",
+  "version": "v290_rank19_micro_patch_h200_smoke"
+}
