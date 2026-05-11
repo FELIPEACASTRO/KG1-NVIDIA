@@ -1,0 +1,316 @@
+id,rule,status,family,answer,baseline_prediction,override_prediction,baseline_correct,override_correct,query,example_count,proof
+e518256e,operator_not_guarded,abstain,equation_transform,84,84,,True,True,"94""10",3,"query_op='""'"
+09d5ee68,not_numeric_query,abstain,equation_transform,!?'!,|:>>,,False,False,|:*>>,4,query is not a numeric binary expression
+7e5b8c12,not_attempted,abstain,bit_manipulation,10110000,10110000,,True,True,,0,non-equation row
+00457d26,not_numeric_query,abstain,equation_transform,@&,[[!',,False,False,[[-!',4,query is not a numeric binary expression
+518deb39,not_numeric_query,abstain,equation_transform,$,{}$>,,False,False,$$-<>,4,query is not a numeric binary expression
+78616706,not_attempted,abstain,bit_manipulation,00000111,00000111,,True,True,,0,non-equation row
+82109e34,not_numeric_query,abstain,equation_transform,-@>,'^^^',,False,False,'^-^^,4,query is not a numeric binary expression
+5e67b1a1,operator_not_guarded,abstain,equation_transform,63,63,,True,True,32{31,4,query_op='{'
+c7077b21,not_attempted,abstain,bit_manipulation,00010110,00010110,,True,True,,0,non-equation row
+fb5a7b9e,not_attempted,abstain,bit_manipulation,11111010,11111010,,True,True,,0,non-equation row
+e1728524,query_operator_unseen,abstain,equation_transform,1089,0,,False,False,99/99,5,query_op='/' not present in examples
+839e7350,not_attempted,abstain,bit_manipulation,00111011,00111011,,True,True,,0,non-equation row
+a365e304,not_attempted,abstain,bit_manipulation,11011011,11011011,,True,True,,0,non-equation row
+e3bf0c2c,not_numeric_query,abstain,equation_transform,"""`",@`',,False,False,@`}'',5,query is not a numeric binary expression
+fdbdf50c,not_numeric_query,abstain,equation_transform,"-\""",|?|,,False,False,|\-?|,5,query is not a numeric binary expression
+f3971b9a,not_attempted,abstain,bit_manipulation,00011001,00011001,,True,True,,0,non-equation row
+ab71eaa0,not_attempted,abstain,bit_manipulation,00010010,00010010,,True,True,,0,non-equation row
+47c1d8f5,not_numeric_query,abstain,equation_transform,]%],/`%`,,False,False,/`#%`,4,query is not a numeric binary expression
+bfee75d5,not_attempted,abstain,bit_manipulation,01000010,01000010,,True,True,,0,non-equation row
+f9a33aa1,not_numeric_query,abstain,equation_transform,/((`,@($/,,False,False,@(\$/,4,query is not a numeric binary expression
+1abaffca,not_attempted,abstain,bit_manipulation,01000000,01011000,,False,False,,0,non-equation row
+9f2fae58,operator_not_guarded,abstain,equation_transform,7272,7272,,True,True,88$13,5,query_op='$'
+f9799a68,not_numeric_query,abstain,equation_transform,&:/?,:^?\,,False,False,:^*?\,4,query is not a numeric binary expression
+c24074a8,not_numeric_query,abstain,equation_transform,&/,]]]%,,False,False,]]`]%,5,query is not a numeric binary expression
+bc7618a7,not_attempted,abstain,bit_manipulation,00001100,00001100,,True,True,,0,non-equation row
+893ffb06,not_numeric_query,abstain,equation_transform,-@',@``:,,False,False,@`-`:,4,query is not a numeric binary expression
+cf4c04c0,not_numeric_query,abstain,equation_transform,-[,@|#|,,False,False,@|-#|,5,query is not a numeric binary expression
+8e411cc7,not_numeric_query,abstain,equation_transform,]]],$&&,,False,False,$&!&},4,query is not a numeric binary expression
+892d73b5,not_attempted,abstain,bit_manipulation,00010101,00010101,,True,True,,0,non-equation row
+41e6cbfc,add_no_unique_direct_variant,abstain,equation_transform,9318,9318,,True,True,18+93,4,direct_add=[]; baseline=9318
+dea42835,not_numeric_query,abstain,equation_transform,['[/,['[/,,True,True,[/*[',5,query is not a numeric binary expression
+48c25e0e,query_operator_unseen,abstain,equation_transform,53,32,,False,False,43&11,3,query_op='&' not present in examples
+e6d2a064,not_attempted,abstain,bit_manipulation,11100011,11100010,,False,False,,0,non-equation row
+a1d2bb0c,not_attempted,abstain,bit_manipulation,00100010,00100010,,True,True,,0,non-equation row
+4e4fb429,not_attempted,abstain,bit_manipulation,10111110,10111110,,True,True,,0,non-equation row
+7ef4d5d6,operator_not_guarded,abstain,equation_transform,>42,>42,,True,True,66>24,4,query_op='>'
+3ee36e0a,minus_model_not_opposite_sign,abstain,equation_transform,-51,-51,,True,True,48-99,3,candidate=-51; baseline=-51
+39c237c7,not_numeric_query,abstain,equation_transform,{]``,{]``,,True,True,{]+``,3,query is not a numeric binary expression
+963e85bb,operator_not_guarded,abstain,equation_transform,76,76,,True,True,52$24,4,query_op='$'
+a98d4d53,not_numeric_query,abstain,equation_transform,-),!$$[,,False,False,!$-$[,3,query is not a numeric binary expression
+0e70c867,not_attempted,abstain,bit_manipulation,01000000,01001100,,False,False,,0,non-equation row
+59733f94,not_numeric_query,abstain,equation_transform,/,$/>/,,False,False,$/->/,5,query is not a numeric binary expression
+b1bc3731,operator_not_guarded,abstain,equation_transform,63,63,,True,True,"07""43",3,"query_op='""'"
+54b895c1,not_attempted,abstain,bit_manipulation,10111011,10111011,,True,True,,0,non-equation row
+ed24e7af,not_attempted,abstain,bit_manipulation,00001001,00001001,,True,True,,0,non-equation row
+3cd80c64,not_attempted,abstain,bit_manipulation,01100100,01100100,,True,True,,0,non-equation row
+a1523a63,operator_not_guarded,abstain,equation_transform,87,87,,True,True,66%31,3,query_op='%'
+f2b23d11,not_attempted,abstain,bit_manipulation,10000000,10000000,,True,True,,0,non-equation row
+5cbe919f,not_attempted,abstain,bit_manipulation,00000000,00000000,,True,True,,0,non-equation row
+3383d4ec,minus_signed_ambiguous,abstain,equation_transform,66,66,,True,True,39-72,3,"signed_predictions=['-33', '66']"
+9dae880f,not_numeric_query,abstain,equation_transform,))[,:<`\,,False,False,:<}`\,5,query is not a numeric binary expression
+b43d9cd5,not_attempted,abstain,bit_manipulation,11100100,11100100,,True,True,,0,non-equation row
+64890e18,not_attempted,abstain,bit_manipulation,00001100,00001100,,True,True,,0,non-equation row
+d6187157,not_attempted,abstain,bit_manipulation,01001000,01001000,,True,True,,0,non-equation row
+de91def4,not_attempted,abstain,bit_manipulation,10000111,10000111,,True,True,,0,non-equation row
+2af7134e,add_no_unique_direct_variant,abstain,equation_transform,20,20,,True,True,61+41,4,direct_add=[]; baseline=20
+ae6be599,not_numeric_query,abstain,equation_transform,#`,$?]$,,False,False,$?+]$,3,query is not a numeric binary expression
+b26d8818,operator_not_guarded,abstain,equation_transform,5983,5983,,True,True,68]88,3,query_op=']'
+8494aad3,not_numeric_query,abstain,equation_transform,"""`#&","])<""",,False,False,"])*<""",4,query is not a numeric binary expression
+8df3daad,query_operator_unseen,abstain,equation_transform,34,34,,True,True,45|11,3,query_op='|' not present in examples
+791056ce,operator_not_guarded,abstain,equation_transform,4922,4922,,True,True,58{72,5,query_op='{'
+29e458d6,not_attempted,abstain,bit_manipulation,00010010,00010010,,True,True,,0,non-equation row
+3c12aeb9,operator_not_guarded,abstain,equation_transform,321,321,,True,True,27$15,5,query_op='$'
+69aa57b3,add_no_unique_direct_variant,abstain,equation_transform,4472,4472,,True,True,72+44,3,direct_add=[]; baseline=4472
+e3890bf7,not_numeric_query,abstain,equation_transform,{@%],(^@{,,False,False,(^*{@,3,query is not a numeric binary expression
+d204b9cc,add_no_unique_direct_variant,abstain,equation_transform,231,231,,True,True,75)57,5,direct_add=[]; baseline=231
+7a79ac09,not_attempted,abstain,bit_manipulation,11111111,11111111,,True,True,,0,non-equation row
+d29e19a4,not_numeric_query,abstain,equation_transform,?|,|''>,,False,False,|'$>',4,query is not a numeric binary expression
+b06625c4,not_numeric_query,abstain,equation_transform,^&/,"""$ $]""",,False,False,"""$*$]",4,query is not a numeric binary expression
+84030b0b,add_no_unique_direct_variant,abstain,equation_transform,24,24,,True,True,36)12,5,direct_add=[]; baseline=24
+3a67aa26,not_attempted,abstain,bit_manipulation,00101110,00101110,,True,True,,0,non-equation row
+710cf035,not_attempted,abstain,bit_manipulation,10000011,10000011,,True,True,,0,non-equation row
+52be4988,not_numeric_query,abstain,equation_transform,'!,&&&`,,False,False,&&+&`,5,query is not a numeric binary expression
+b8722d19,not_attempted,abstain,bit_manipulation,00100100,11110100,,False,False,,0,non-equation row
+99d6a3b5,not_numeric_query,abstain,equation_transform,?()<,(<)),,False,False,(<%)),4,query is not a numeric binary expression
+2d3547af,not_numeric_query,abstain,equation_transform,))^),\$\\,,False,False,\$&\\,4,query is not a numeric binary expression
+8c9fcc6b,not_attempted,abstain,bit_manipulation,11110111,11110111,,True,True,,0,non-equation row
+28b0ff48,not_numeric_query,abstain,equation_transform,'],|^^^,,False,False,|^-^^,3,query is not a numeric binary expression
+3fa49035,operator_not_guarded,abstain,equation_transform,696,696,,True,True,24>29,4,query_op='>'
+61557701,not_numeric_query,abstain,equation_transform,|&,'{),,False,False,'{+{),4,query is not a numeric binary expression
+8c0f9291,not_attempted,abstain,bit_manipulation,00001111,00001111,,True,True,,0,non-equation row
+d6e6f8b5,not_attempted,abstain,bit_manipulation,11100001,11100001,,True,True,,0,non-equation row
+3a90fdf6,not_attempted,abstain,bit_manipulation,10100000,10100000,,True,True,,0,non-equation row
+56343b77,add_no_unique_direct_variant,abstain,equation_transform,711,711,,True,True,17+74,5,direct_add=[]; baseline=711
+08df5363,not_attempted,abstain,bit_manipulation,01011100,01011100,,True,True,,0,non-equation row
+d50746e7,not_attempted,abstain,bit_manipulation,01000010,01000010,,True,True,,0,non-equation row
+2facfaa4,not_attempted,abstain,bit_manipulation,00111110,00111110,,True,True,,0,non-equation row
+7ac90433,minus_guard_all_negative_examples,abstain,equation_transform,-23,-23,,True,True,48-25,3,single '-' rule with all negative examples was a known unsafe pattern
+8abcff0f,not_attempted,abstain,bit_manipulation,11110111,11110111,,True,True,,0,non-equation row
+02902eb3,not_numeric_query,abstain,equation_transform,>/,!!$>,,False,False,!!+$>,3,query is not a numeric binary expression
+ddc5aefe,not_attempted,abstain,bit_manipulation,00000001,00000001,,True,True,,0,non-equation row
+0d90736f,not_numeric_query,abstain,equation_transform,:,::)[,,False,False,::-)[,5,query is not a numeric binary expression
+294453b5,not_numeric_query,abstain,equation_transform,&(,##!),,False,False,##-!),3,query is not a numeric binary expression
+75ecd32c,not_attempted,abstain,bit_manipulation,11100011,11100011,,True,True,,0,non-equation row
+12e0ac8c,not_attempted,abstain,bit_manipulation,10101001,10101001,,True,True,,0,non-equation row
+386b6d03,query_operator_unseen,abstain,equation_transform,671,18,,False,False,79'97,3,"query_op=""'"" not present in examples"
+2ead53dc,not_attempted,abstain,bit_manipulation,00000101,00000101,,True,True,,0,non-equation row
+57f6878e,not_numeric_query,abstain,equation_transform,%{{,|@(!,,False,False,|@<:(,5,query is not a numeric binary expression
+05ca617c,not_attempted,abstain,bit_manipulation,11011011,01011011,,False,False,,0,non-equation row
+6890870d,not_attempted,abstain,bit_manipulation,01110000,01110000,,True,True,,0,non-equation row
+1c566511,not_attempted,abstain,bit_manipulation,01010010,01010010,,True,True,,0,non-equation row
+bc83b0a1,not_numeric_query,abstain,equation_transform,(/&{,(/&{,,True,True,(/*&{,5,query is not a numeric binary expression
+a361a1b7,query_operator_unseen,abstain,equation_transform,:46,46,,False,False,53:99,5,query_op=':' not present in examples
+d911e8e1,not_numeric_query,abstain,equation_transform,:\:,@}<',,False,False,@})<',3,query is not a numeric binary expression
+4353cd0b,not_attempted,abstain,bit_manipulation,00100001,00100001,,True,True,,0,non-equation row
+7688e06e,minus_signed_opposite_sign_guarded,candidate,equation_transform,-55,55,-55,False,True,63-19,5,candidate=-55; baseline=55
+30ba0cf4,not_attempted,abstain,bit_manipulation,01101101,01101101,,True,True,,0,non-equation row
+dbd0e3c9,operator_not_guarded,abstain,equation_transform,5631,5631,,True,True,56*31,5,query_op='*'
+8fbd2477,not_attempted,abstain,bit_manipulation,01011010,01011010,,True,True,,0,non-equation row
+ba61b815,not_attempted,abstain,bit_manipulation,00001101,00001101,,True,True,,0,non-equation row
+2e2d60b2,add_no_unique_direct_variant,abstain,equation_transform,07,07,,True,True,85+11,4,direct_add=[]; baseline=07
+5f9f0ed7,not_numeric_query,abstain,equation_transform,}/!},|!@[,,False,False,|!*@[,5,query is not a numeric binary expression
+333d93ec,minus_signed_ambiguous,abstain,equation_transform,7,7,,True,True,44-73,5,signed_predictions=[]
+74fff108,operator_not_guarded,abstain,equation_transform,49,49,,True,True,65^16,5,query_op='^'
+c43b5a13,not_numeric_query,abstain,equation_transform,)|,$):$,,False,False,$)+:$,3,query is not a numeric binary expression
+b0206bb7,not_numeric_query,abstain,equation_transform,]$!,$){,,False,False,${*)},5,query is not a numeric binary expression
+638f93ca,not_numeric_query,abstain,equation_transform,@,$<]$,,False,False,$<-]$,4,query is not a numeric binary expression
+5b9964c7,not_attempted,abstain,bit_manipulation,00011011,00011011,,True,True,,0,non-equation row
+a6f7139f,not_attempted,abstain,bit_manipulation,11000000,11000000,,True,True,,0,non-equation row
+b2fb65cf,not_attempted,abstain,bit_manipulation,11000011,11000011,,True,True,,0,non-equation row
+4bfd095a,not_numeric_query,abstain,equation_transform,{<<<,@/[@,,False,False,@/*[@,4,query is not a numeric binary expression
+7a422e17,not_numeric_query,abstain,equation_transform,%'!,"#`""",,False,False,"#`@{""",4,query is not a numeric binary expression
+7192535b,not_attempted,abstain,bit_manipulation,00000010,00001010,,False,False,,0,non-equation row
+5b2523e6,not_numeric_query,abstain,equation_transform,&&,><\$,,False,False,><-\$,4,query is not a numeric binary expression
+dbb611da,not_attempted,abstain,bit_manipulation,00000001,00000001,,True,True,,0,non-equation row
+0fe53bac,not_numeric_query,abstain,equation_transform,"(""",^?(|,,False,False,^?+(|,4,query is not a numeric binary expression
+07ceed47,not_attempted,abstain,bit_manipulation,10000101,10000101,,True,True,,0,non-equation row
+274def88,minus_signed_opposite_sign_guarded,candidate,equation_transform,92,-92,92,False,True,85-92,5,candidate=92; baseline=-92
+7aa4fdf0,not_attempted,abstain,bit_manipulation,00000001,00000001,,True,True,,0,non-equation row
+03a3437f,not_numeric_query,abstain,equation_transform,-!,'}>/,,False,False,'}-/>,3,query is not a numeric binary expression
+f2014638,not_attempted,abstain,bit_manipulation,10011010,10011010,,True,True,,0,non-equation row
+a8ea0e29,not_attempted,abstain,bit_manipulation,00000000,00000000,,True,True,,0,non-equation row
+30ac5c8e,not_numeric_query,abstain,equation_transform,)#?,@\}?,,False,False,@\+}?,5,query is not a numeric binary expression
+3cfc5f9c,not_attempted,abstain,bit_manipulation,01110111,01110111,,True,True,,0,non-equation row
+08d8d7e1,add_no_unique_direct_variant,abstain,equation_transform,88,88,,True,True,65+23,4,direct_add=[]; baseline=88
+ff121f08,not_numeric_query,abstain,equation_transform,#<,!%<<,,False,False,!%+<<,5,query is not a numeric binary expression
+114a7439,not_attempted,abstain,bit_manipulation,01110001,01110001,,True,True,,0,non-equation row
+343095d3,not_attempted,abstain,bit_manipulation,01010100,01010100,,True,True,,0,non-equation row
+a4dd4cce,not_attempted,abstain,bit_manipulation,10110010,10110010,,True,True,,0,non-equation row
+6b11c05f,not_attempted,abstain,bit_manipulation,00100010,00100010,,True,True,,0,non-equation row
+42cb233d,add_no_unique_direct_variant,abstain,equation_transform,881,881,,True,True,59+29,3,direct_add=[]; baseline=881
+ec8b4875,not_numeric_query,abstain,equation_transform,"|""]",|@<!,,False,False,|@*<!,3,query is not a numeric binary expression
+e3fbc768,not_numeric_query,abstain,equation_transform,'(^),%??,,False,False,{%/??,3,query is not a numeric binary expression
+6cc5dafb,not_numeric_query,abstain,equation_transform,)(,^&>),,False,False,^&!>),4,query is not a numeric binary expression
+d5a03a2e,not_numeric_query,abstain,equation_transform,>>,""")&&",,False,False,""""")&&",4,query is not a numeric binary expression
+eea91b82,not_attempted,abstain,bit_manipulation,00101111,00101111,,True,True,,0,non-equation row
+4736daab,not_attempted,abstain,bit_manipulation,01000111,01000111,,True,True,,0,non-equation row
+8bebef83,operator_not_guarded,abstain,equation_transform,3388,3388,,True,True,44{77,4,query_op='{'
+efc2b69d,not_attempted,abstain,bit_manipulation,10111100,10111100,,True,True,,0,non-equation row
+a794d193,not_attempted,abstain,bit_manipulation,01011101,01011101,,True,True,,0,non-equation row
+0f7ddd75,not_attempted,abstain,bit_manipulation,11110110,11110110,,True,True,,0,non-equation row
+27cec7a9,colon_no_unique_unreverse,abstain,equation_transform,3341,3341,,True,True,33:41,5,candidate_predictions=[]
+a6704625,not_attempted,abstain,bit_manipulation,00001101,00011111,,False,False,,0,non-equation row
+d117113e,not_attempted,abstain,bit_manipulation,00000000,00000000,,True,True,,0,non-equation row
+4aeed935,operator_not_guarded,abstain,equation_transform,1455,1455,,True,True,55*14,4,query_op='*'
+6f7a9048,not_attempted,abstain,bit_manipulation,00101000,00101000,,True,True,,0,non-equation row
+8740ed31,not_attempted,abstain,bit_manipulation,01101000,01111000,,False,False,,0,non-equation row
+fb623471,minus_signed_ambiguous,abstain,equation_transform,-21,21,,False,False,08-29,3,"signed_predictions=['-12', '-21']"
+88b43464,add_no_unique_direct_variant,abstain,equation_transform,5311,5311,,True,True,11+53,5,direct_add=[]; baseline=5311
+209c43f0,operator_not_guarded,abstain,equation_transform,101,101,,True,True,18^84,4,query_op='^'
+8ac52d78,not_attempted,abstain,bit_manipulation,00010000,00010000,,True,True,,0,non-equation row
+f507b7f1,not_attempted,abstain,bit_manipulation,11001100,11011100,,False,False,,0,non-equation row
+d129b085,not_numeric_query,abstain,equation_transform,##$,!>``,,False,False,"!>+`""",4,query is not a numeric binary expression
+368f20dd,not_attempted,abstain,bit_manipulation,10000101,10000101,,True,True,,0,non-equation row
+e582df31,not_numeric_query,abstain,equation_transform,}@,"""']@",,False,False,"""'?]@",3,query is not a numeric binary expression
+a77be9fa,not_numeric_query,abstain,equation_transform,"[""",{>$[,,False,False,{>|$[,3,query is not a numeric binary expression
+5a19f71a,not_attempted,abstain,bit_manipulation,11100010,11100010,,True,True,,0,non-equation row
+78d02fc5,not_attempted,abstain,bit_manipulation,11001001,11001011,,False,False,,0,non-equation row
+4166067c,not_attempted,abstain,bit_manipulation,01110110,01110110,,True,True,,0,non-equation row
+49fb46e8,not_attempted,abstain,bit_manipulation,01001110,01001110,,True,True,,0,non-equation row
+779bb1f3,not_attempted,abstain,bit_manipulation,10000001,10000001,,True,True,,0,non-equation row
+e2b02e13,not_attempted,abstain,bit_manipulation,01111110,01111110,,True,True,,0,non-equation row
+f8d6abd1,colon_no_unique_unreverse,abstain,equation_transform,5543,5543,,True,True,63:88,3,candidate_predictions=[]
+21245d76,not_attempted,abstain,bit_manipulation,01111111,01111111,,True,True,,0,non-equation row
+4ed6b56f,not_numeric_query,abstain,equation_transform,"(""/""",!:`(,,False,False,!:*`(,4,query is not a numeric binary expression
+e0eba119,not_attempted,abstain,bit_manipulation,00010010,00010010,,True,True,,0,non-equation row
+55014a7a,not_attempted,abstain,bit_manipulation,01010000,01010000,,True,True,,0,non-equation row
+0fe06e8c,not_attempted,abstain,bit_manipulation,10010010,10010010,,True,True,,0,non-equation row
+f8fc43d2,not_attempted,abstain,bit_manipulation,11100100,11100100,,True,True,,0,non-equation row
+208d7838,not_numeric_query,abstain,equation_transform,[:,[&<>,,False,False,[&-<>,5,query is not a numeric binary expression
+58c099d2,not_numeric_query,abstain,equation_transform,-)\,^!#\,,False,False,^!-#\,3,query is not a numeric binary expression
+d40ce15d,not_attempted,abstain,bit_manipulation,00010000,00010000,,True,True,,0,non-equation row
+3cb3fd89,not_numeric_query,abstain,equation_transform,[[&],]$$),,False,False,]$*$),4,query is not a numeric binary expression
+c711f9dd,not_attempted,abstain,bit_manipulation,11000000,11000000,,True,True,,0,non-equation row
+a26065d4,not_numeric_query,abstain,equation_transform,<',<&<#,,False,False,<&+<#,5,query is not a numeric binary expression
+55d834d1,not_attempted,abstain,bit_manipulation,00111111,10111111,,False,False,,0,non-equation row
+194695e8,not_numeric_query,abstain,equation_transform,%,!\{<,,False,False,!\-{<,3,query is not a numeric binary expression
+4ef88f92,not_attempted,abstain,bit_manipulation,01010111,01011111,,False,False,,0,non-equation row
+5d77eff6,not_attempted,abstain,bit_manipulation,00011100,00011100,,True,True,,0,non-equation row
+1a7c8520,not_attempted,abstain,bit_manipulation,01100000,01100110,,False,False,,0,non-equation row
+1c671acc,not_attempted,abstain,bit_manipulation,11111101,11111101,,True,True,,0,non-equation row
+528ec0d8,query_operator_unseen,abstain,equation_transform,-39,39,,False,False,11-50,4,query_op='-' not present in examples
+4bb8c6cd,not_numeric_query,abstain,equation_transform,]}\!,]}\!,,True,True,]}*\!,5,query is not a numeric binary expression
+57712d01,not_numeric_query,abstain,equation_transform,-/<,$/'{,,False,False,$/-'{,5,query is not a numeric binary expression
+d98d85c0,not_numeric_query,abstain,equation_transform,?(&@,(@@?,,False,False,(@+@?,3,query is not a numeric binary expression
+b62f2e75,not_attempted,abstain,bit_manipulation,00111111,00111111,,True,True,,0,non-equation row
+7ed40e8a,operator_not_guarded,abstain,equation_transform,180,180,,True,True,99&82,3,query_op='&'
+491b8ea5,not_numeric_query,abstain,equation_transform,)!,@|]!,,False,False,@|-]!,3,query is not a numeric binary expression
+eb1a62f7,not_numeric_query,abstain,equation_transform,>!>},){>),,False,False,)}*>),3,query is not a numeric binary expression
+0bb591e6,not_numeric_query,abstain,equation_transform,%?<,"""$%%""",,False,False,"""$+%%",4,query is not a numeric binary expression
+c869b4f6,not_attempted,abstain,bit_manipulation,10010001,10010001,,True,True,,0,non-equation row
+3c424916,operator_not_guarded,abstain,equation_transform,9351,9351,,True,True,82*55,3,query_op='*'
+575f9709,not_attempted,abstain,bit_manipulation,01111111,01111111,,True,True,,0,non-equation row
+691608b9,not_attempted,abstain,bit_manipulation,00101000,00101000,,True,True,,0,non-equation row
+72336119,operator_not_guarded,abstain,equation_transform,3316,3316,,True,True,85>39,4,query_op='>'
+202af98d,not_attempted,abstain,bit_manipulation,11111101,11111111,,False,False,,0,non-equation row
+3ace787f,not_attempted,abstain,bit_manipulation,11111011,11111111,,False,False,,0,non-equation row
+9a19fc2d,not_numeric_query,abstain,equation_transform,#>[,!&)#,,False,False,!&+)#,5,query is not a numeric binary expression
+dc7f150a,not_attempted,abstain,bit_manipulation,11001011,11001011,,True,True,,0,non-equation row
+12e947ca,not_attempted,abstain,bit_manipulation,00111110,00111110,,True,True,,0,non-equation row
+2a5d4790,not_attempted,abstain,bit_manipulation,11111111,11111111,,True,True,,0,non-equation row
+59bee375,not_attempted,abstain,bit_manipulation,10010101,10010101,,True,True,,0,non-equation row
+528b694b,not_numeric_query,abstain,equation_transform,"""'",>]]),,False,False,>]<]),4,query is not a numeric binary expression
+d3b20e29,add_no_unique_direct_variant,abstain,equation_transform,3922,3922,,True,True,22+39,4,direct_add=[]; baseline=3922
+d1bd7478,colon_absdiff_unreverse_same_len,candidate,equation_transform,30,03,30,False,True,37:67,4,candidate=30; baseline=03
+21519be7,operator_not_guarded,abstain,equation_transform,35,35,,True,True,82@52,3,query_op='@'
+fe6d3aa3,not_attempted,abstain,bit_manipulation,10100010,10100010,,True,True,,0,non-equation row
+01248b76,not_attempted,abstain,bit_manipulation,11000101,11000101,,True,True,,0,non-equation row
+0dfd7674,not_attempted,abstain,bit_manipulation,01001110,01001110,,True,True,,0,non-equation row
+7306613b,add_no_unique_direct_variant,abstain,equation_transform,251,251,,True,True,79+65,5,direct_add=[]; baseline=251
+8243c91e,not_attempted,abstain,bit_manipulation,01000101,01000101,,True,True,,0,non-equation row
+fba40625,not_numeric_query,abstain,equation_transform,'>&,{>?#,,False,False,{>'?#,4,query is not a numeric binary expression
+9aa8dc92,not_numeric_query,abstain,equation_transform,/#</,/#</,,True,True,/#+</,3,query is not a numeric binary expression
+ef2fe526,not_attempted,abstain,bit_manipulation,01011010,01011010,,True,True,,0,non-equation row
+c5b058d6,add_direct_over_model_add_variant,candidate,equation_transform,134,35,134,False,True,94)40,4,candidate=134; baseline=35
+b4342b90,operator_not_guarded,abstain,equation_transform,66,66,,True,True,40\25,5,query_op='\\'
+837a6ae7,not_numeric_query,abstain,equation_transform,<>\>,"<:{""",,False,False,"<{*:""",5,query is not a numeric binary expression
+9d3e7f1a,not_attempted,abstain,bit_manipulation,01101010,01101010,,True,True,,0,non-equation row
+00fdc0be,not_attempted,abstain,bit_manipulation,11111111,11111111,,True,True,,0,non-equation row
+3a7dd604,not_attempted,abstain,bit_manipulation,01001010,01001011,,False,False,,0,non-equation row
+d0e1010b,not_numeric_query,abstain,equation_transform,!&&},|&$|,,False,False,|&*$|,4,query is not a numeric binary expression
+3feeabea,not_attempted,abstain,bit_manipulation,10010010,10010010,,True,True,,0,non-equation row
+34c563c5,operator_not_guarded,abstain,equation_transform,04`,04`,,True,True,45`41,3,query_op='`'
+5a0d5d2a,query_operator_unseen,abstain,equation_transform,341,55,,False,False,39+94,3,query_op='+' not present in examples
+5a9fcf68,query_operator_unseen,abstain,equation_transform,4443,4,,False,False,24@28,3,query_op='@' not present in examples
+6e56b39a,not_numeric_query,abstain,equation_transform,-/#,&#!,,False,False,&#-!],4,query is not a numeric binary expression
+4ada9150,not_attempted,abstain,bit_manipulation,01111011,01111011,,True,True,,0,non-equation row
+a5f1991c,not_numeric_query,abstain,equation_transform,/|',!&&&,,False,False,!?/&&,5,query is not a numeric binary expression
+455b6b61,not_attempted,abstain,bit_manipulation,00111011,00111011,,True,True,,0,non-equation row
+1d08947a,not_attempted,abstain,bit_manipulation,10010100,10010100,,True,True,,0,non-equation row
+d26f22c3,not_attempted,abstain,bit_manipulation,11101100,11101100,,True,True,,0,non-equation row
+c7aae192,not_numeric_query,abstain,equation_transform,">""(","\""]",,False,False,"\""*}}",2,query is not a numeric binary expression
+a6192d29,not_attempted,abstain,bit_manipulation,00001000,01111110,,False,False,,0,non-equation row
+e4cc7639,query_operator_unseen,abstain,equation_transform,113,16,,False,False,48*64,5,query_op='*' not present in examples
+eeb60061,not_attempted,abstain,bit_manipulation,00000101,00000101,,True,True,,0,non-equation row
+844f826c,not_numeric_query,abstain,equation_transform,"/""",`@>`,,False,False,@*>,5,query is not a numeric binary expression
+048cc279,not_attempted,abstain,bit_manipulation,01010000,01111000,,False,False,,0,non-equation row
+20052c2f,not_attempted,abstain,bit_manipulation,01100110,01100110,,True,True,,0,non-equation row
+89dfa4c2,not_attempted,abstain,bit_manipulation,00111010,00111010,,True,True,,0,non-equation row
+53329505,not_attempted,abstain,bit_manipulation,11011111,11011111,,True,True,,0,non-equation row
+ced947c8,not_attempted,abstain,bit_manipulation,01001011,01001011,,True,True,,0,non-equation row
+0440e6ab,not_attempted,abstain,bit_manipulation,01100000,01100000,,True,True,,0,non-equation row
+e641791f,not_attempted,abstain,bit_manipulation,00010001,00010001,,True,True,,0,non-equation row
+bcdf9198,not_attempted,abstain,bit_manipulation,11111111,11111111,,True,True,,0,non-equation row
+b69391b8,operator_not_guarded,abstain,equation_transform,66,66,,True,True,52'14,4,"query_op=""'"""
+8193e7e0,not_numeric_query,abstain,equation_transform,??{`,#?&`,,False,False,#?*&`,4,query is not a numeric binary expression
+20cdbdb1,not_attempted,abstain,bit_manipulation,11100001,11100001,,True,True,,0,non-equation row
+48ae04f6,not_attempted,abstain,bit_manipulation,00000010,00000010,,True,True,,0,non-equation row
+3595c82c,not_attempted,abstain,bit_manipulation,10011011,10011011,,True,True,,0,non-equation row
+5bcb572e,not_numeric_query,abstain,equation_transform,-!#,"""{!",,False,False,"""{-{!",3,query is not a numeric binary expression
+8c1529e1,minus_signed_ambiguous,abstain,equation_transform,-52,-52,,True,True,65-18,3,"signed_predictions=['-52', '47']"
+cdec898a,not_numeric_query,abstain,equation_transform,<?/,>}][?,,False,False,>}+]?,4,query is not a numeric binary expression
+bca238ee,not_attempted,abstain,bit_manipulation,00000000,00000000,,True,True,,0,non-equation row
+5dffe751,not_attempted,abstain,bit_manipulation,01100000,01100000,,True,True,,0,non-equation row
+44398869,operator_not_guarded,abstain,equation_transform,5913,5913,,True,True,54^17,5,query_op='^'
+06120e47,not_attempted,abstain,bit_manipulation,11110010,11111110,,False,False,,0,non-equation row
+1f7407ed,not_attempted,abstain,bit_manipulation,00101101,00101101,,True,True,,0,non-equation row
+46dd0f22,not_attempted,abstain,bit_manipulation,01010000,01010000,,True,True,,0,non-equation row
+edf364da,not_numeric_query,abstain,equation_transform,$(%,::{[,,False,False,::*{[,3,query is not a numeric binary expression
+d6e5cd59,not_attempted,abstain,bit_manipulation,01101111,01101111,,True,True,,0,non-equation row
+339149c9,minus_signed_ambiguous,abstain,equation_transform,3,3,,True,True,32-62,5,signed_predictions=[]
+e1f3ffbb,not_attempted,abstain,bit_manipulation,11111010,11111011,,False,False,,0,non-equation row
+4c327b55,not_attempted,abstain,bit_manipulation,11011100,11011110,,False,False,,0,non-equation row
+0f2dec86,not_attempted,abstain,bit_manipulation,10111000,10111000,,True,True,,0,non-equation row
+e36a0065,not_attempted,abstain,bit_manipulation,01110110,01110110,,True,True,,0,non-equation row
+c7844441,not_numeric_query,abstain,equation_transform,:/$^,:/$^,,True,True,:/[$^,5,query is not a numeric binary expression
+21261dc6,minus_signed_ambiguous,abstain,equation_transform,-25,-25,,True,True,02-27,3,signed_predictions=[]
+70bc42af,not_attempted,abstain,bit_manipulation,10101010,10101010,,True,True,,0,non-equation row
+4dbec546,add_no_unique_direct_variant,abstain,equation_transform,611,611,,True,True,06+65,5,direct_add=[]; baseline=611
+0c2407ef,not_attempted,abstain,bit_manipulation,11000011,11000011,,True,True,,0,non-equation row
+939273d7,not_attempted,abstain,bit_manipulation,11100110,11100110,,True,True,,0,non-equation row
+8082a958,not_attempted,abstain,bit_manipulation,00000000,00000000,,True,True,,0,non-equation row
+fd48ee2f,not_attempted,abstain,bit_manipulation,10110100,10110100,,True,True,,0,non-equation row
+4eb990f6,not_attempted,abstain,bit_manipulation,00000001,00000001,,True,True,,0,non-equation row
+85af23eb,not_attempted,abstain,bit_manipulation,00001111,00001111,,True,True,,0,non-equation row
+0e009c6d,not_numeric_query,abstain,equation_transform,`?\!,@?`?,,False,False,@?'`?,4,query is not a numeric binary expression
+d2ac699b,not_attempted,abstain,bit_manipulation,10001011,10001011,,True,True,,0,non-equation row
+b4b73143,not_numeric_query,abstain,equation_transform,>\:,>!!/,,False,False,>!%!/,3,query is not a numeric binary expression
+3a148f6a,not_attempted,abstain,bit_manipulation,00100111,00100111,,True,True,,0,non-equation row
+861cb154,query_operator_unseen,abstain,equation_transform,2271,10,,False,False,14!24,3,query_op='!' not present in examples
+90feb0c5,not_numeric_query,abstain,equation_transform,:<],?>>>,,False,False,?>'>>,3,query is not a numeric binary expression
+c541eb82,minus_model_not_opposite_sign,abstain,equation_transform,-01,-01,,True,True,47-48,4,candidate=-01; baseline=-01
+b9f1d959,not_numeric_query,abstain,equation_transform,:>,"$""\[""",,False,False,"$\+""[",5,query is not a numeric binary expression
+5374b4ba,not_attempted,abstain,bit_manipulation,10101100,10101100,,True,True,,0,non-equation row
+ca5db1c0,not_numeric_query,abstain,equation_transform,^,"(""'|",,False,False,"(""-'|",3,query is not a numeric binary expression
+16e73f0e,not_attempted,abstain,bit_manipulation,00000001,00000001,,True,True,,0,non-equation row
+87007054,not_attempted,abstain,bit_manipulation,10111111,10111111,,True,True,,0,non-equation row
+b8aa3072,not_attempted,abstain,bit_manipulation,00000011,00000111,,False,False,,0,non-equation row
+9f1ff166,not_numeric_query,abstain,equation_transform,[,"""]'/",,False,False,"""]-'/",4,query is not a numeric binary expression
+82ae858c,not_attempted,abstain,bit_manipulation,11001101,11111101,,False,False,,0,non-equation row
+1282c5c5,not_attempted,abstain,bit_manipulation,00001110,00001110,,True,True,,0,non-equation row
+432b1110,not_numeric_query,abstain,equation_transform,%[:?,\{<?,,False,False,\{*<?,4,query is not a numeric binary expression
+f333b67f,operator_not_guarded,abstain,equation_transform,100,100,,True,True,48<51,4,query_op='<'
+f7d26b8d,not_numeric_query,abstain,equation_transform,/@,[}}\,,False,False,[}-}\,5,query is not a numeric binary expression
+5ba26f21,not_attempted,abstain,bit_manipulation,01011100,01111110,,False,False,,0,non-equation row
+a00fe76a,not_attempted,abstain,bit_manipulation,10111011,10111011,,True,True,,0,non-equation row
+8e56a42e,not_numeric_query,abstain,equation_transform,%/<>,%/<>,,True,True,%/[<>,3,query is not a numeric binary expression
+0e3962f6,not_attempted,abstain,bit_manipulation,11111110,11111110,,True,True,,0,non-equation row
+20f0fac9,query_operator_unseen,abstain,equation_transform,2976,65,,False,False,31%96,4,query_op='%' not present in examples
+26e48e98,not_numeric_query,abstain,equation_transform,){|,"""%]%{""",,False,False,"""])%{",5,query is not a numeric binary expression
+0290f51a,not_attempted,abstain,bit_manipulation,10101111,10101111,,True,True,,0,non-equation row
+c30a782a,not_attempted,abstain,bit_manipulation,01000110,01000110,,True,True,,0,non-equation row
+3d24aef4,not_attempted,abstain,bit_manipulation,10100101,10100101,,True,True,,0,non-equation row
+5501c054,not_numeric_query,abstain,equation_transform,[#>#,!##^,,False,False,!#$#^,5,query is not a numeric binary expression
+ea6d926a,query_operator_unseen,abstain,equation_transform,87,37,,False,False,25+62,4,query_op='+' not present in examples

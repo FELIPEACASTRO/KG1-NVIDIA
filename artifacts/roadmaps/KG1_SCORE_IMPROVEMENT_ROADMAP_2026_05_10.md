@@ -25,6 +25,7 @@ Objetivo: consolidar os achados Kaggle/Hugging Face, resultados V221/V226/V229/V
 - Atualizacao V271 2026-05-11: a mineracao CPU-only dos erros atuais validou o contrato V221 e confirmou que o V269 mudou `4` respostas de `equation_transform`, todas de errado para errado. Nos `99` erros restantes do melhor atual (`v259_checkpoint_4`), a taxonomia ficou: `83` `equation_symbolic_punct` com resposta simbolica, `15` `equation_numeric_operator` com resposta numerica, e `1` `equation_numeric_operator` misto. Regra de negocio: nao gastar H200 novamente ate existir um solver/verifier CPU que gere pelo menos `+4` a `+5` overrides de equation sem violar `bit>=136/160`, ou ate os traces gated `andy279` serem liberados.
 - Atualizacao V272 2026-05-11: auditoria CPU dos solvers atuais sobre os `99` misses de equation parseou todos os prompts (`parse_status=ok`), confirmou `83` simbolicos de pontuacao e `16` numericos, mas encontrou `0` candidatos verificados promotaveis. Regras testadas: char transducer, reverse, prefix/suffix, deletion posicional audit-only e numeric same-operator. Conclusao: os solvers simples V238/V241/V246 nao bastam; a rota agora e liberar traces solver-guided externos ou implementar busca simbolica mais forte antes de qualquer GPU.
 - Atualizacao V273 2026-05-11: auditoria CPU de solver cryptarithm inspirada no repositorio publico `tonghuikang/nemotron` foi adicionada para testar a hipotese `AB op CD -> resultado` com inferencia de digitos/operadores. O gate endurecido validou o contrato V221, auditou os mesmos `99` misses de equation, bloqueou casos subdeterminados e encontrou `0` candidatos verificados promotaveis; classes com candidatos produziram `7` incorretos e foram descartadas. Conclusao: cryptarithm simples tambem nao e deployable; nao gastar H200 nessa rota sem uma familia simbolica mais rica ou traces solver-guided.
+- Atualizacao V274 2026-05-11: a primeira rota deterministica finalmente passou o weak gate sem GPU. O postprocessor numerico label-free, inspirado na gramatica publica `tonghuikang/nemotron` e nos principios de DSL/verifier da literatura, aplicou somente `4` overrides guardados sobre as predicoes do melhor V259 checkpoint-4 e elevou o contrato V221 para `196/315`, `equation_transform=60/155`, `bit_manipulation=136/160`, truncation `0`. O audit local registrou `gains=4`, `losses=0`, `wrong_on_baseline_misses=0` e `weak_gate.pass=true`. Decisao: validar o mesmo script em HF CPU e, se reproduzir, empacotar esse postprocessor como candidato deployable antes de qualquer H200 full eval.
 - Auditoria Google Drive 2026-05-10: `1879` arquivos KG1 catalogados, `85` adapters completos, `232` reports, `423` CSVs, `54` JSONLs e `11` notebooks. Nenhum artefato do Drive supera o baseline V226 sob gate weak canonico; o Drive deve ser usado como fonte de pesos fortes conhecidos, reports e dados para triagem, nao como fonte de promocao automatica.
 - Achado Drive mais util: V207A full/validation gate do V194 tem `822/947` com familias nao criticas em `100%`, mas confirma o mesmo gargalo fraco: `bit_manipulation=135/160`, `equation_transform=55/155`. Isso reforca que o problema real continua concentrado em `equation_transform`.
 - Importante: muitos arquivos do Drive foram parte da trajetoria que chegou ao score amplo `0.86`. Esse score e valido como evidencia historica de que V194/V202D resolvia muito bem as familias nao criticas, mas nao pode ser interpretado como melhoria atual das duas familias alvo. No recorte decisivo, o proprio V207A mede `equation_transform=55/155` e `bit_manipulation=135/160`, alinhado ao gargalo V230.
@@ -259,16 +260,26 @@ Fontes com impacto direto:
 | ASyMOB / symbolic math benchmark | Mostra queda forte de LLMs sob perturbacoes simbolicas e necessidade de combinar LLM com CAS/solvers. URL: `https://arxiv.org/abs/2505.23851` | Confirma que `equation_symbolic_punct` precisa de solver/verifier, nao apenas prompt/training numerico. | P1: usar como justificativa de DSL/verifier e evitar treino matematico generico. |
 | Nemotron CrossThink/Cascade | NVIDIA enfatiza curadoria, templates estruturados, filtering por dificuldade e controle thinking/non-thinking. URLs: `https://research.nvidia.com/labs/adlr/Nemotron-CrossThink/`, `https://research.nvidia.com/labs/nemotron/nemotron-cascade/` | Nosso V261 mostrou que mexer em prompt/thinking sem gate derruba bit; aplicar so com eval parcial e filtros. | P2: usar principios de filtering e templates; nao repetir prompt sweep cego. |
 
+Busca web adicional 2026-05-11:
+
+- `Enhanced Enumeration Techniques for Syntax-Guided Synthesis of Bit-Vector Manipulations` (POPL 2024, DOI `10.1145/3632913`) reforca que bit-vector synthesis melhora com enumeracao especializada. Aplicacao KG1: manter como P1/P2 para guardrail de `bit_manipulation`; nao gastar H200 porque bit ja esta `136/160`.
+- `Rewrites for SMT Solvers using Syntax-Guided Enumeration` mostra uso de SyGuS para sugerir rewrites em bit-vectors e strings. Aplicacao KG1: a rota correta e gerar regras pequenas e verificaveis, exatamente o padrao V274; nao aceitar rewrite sem zero-loss audit.
+- `nvidia/OpenMath-Nemotron-14B-Kaggle` e modelos math Kaggle correlatos sao relevantes como evidencia de curadoria e verificacao em matematica, mas nao sao schema KG1 Nemotron-3-Nano-30B LoRA; uso direto como modelo/adaptador fica fora do caminho deployable atual.
+- HF mirrors do desafio (`jasonkung98`, `Taurine511`, `GaryNENE`) servem para triagem de dados e adapters publicos, mas qualquer uso precisa passar por bloqueio de weak IDs, hash de prompt, dedupe e gate local. Nao entram no treino/postprocessor sem manifest.
+
 Decisao operacional pos-literatura:
 
-- O proximo passo nao deve ser H200 nem novo LoRA.
-- V274 deve ser CPU-only e implementar um `symbolic_pbe_dsl_audit` inspirado em FlashFill/PROSE/SyGuS:
-  - entrada: os `99` misses atuais de equation;
-  - alvo primario: os `83` `equation_symbolic_punct`;
-  - DSL minima: tokenizacao `AB op CD`, operadores por classe, copy/select, concat, reverse-concat, constants guardadas, homomorfismo simbolico, transdutor de posicoes e fallback SMT/automata se instalavel;
-  - acceptance: classe so promove se gerar `>=4` acertos verificados e `0` incorretos no weak audit;
-  - se houver qualquer incorreto em uma classe, essa classe fica audit-only.
-- So liberar H200 quando V274 ou traces `andy279` produzirem `+4` a `+5` candidatos de equation com `0` incorretos e mantendo bit atual `136/160`.
+- O proximo passo ainda nao deve ser novo LoRA: V274 provou que um solver/verifier pequeno pode entregar o ganho que os treinos V259/V269 nao entregaram.
+- Resultado V274 local:
+  - script: `scripts/run_v274_numeric_operator_override_audit_hf.py`;
+  - artefatos: `artifacts/hf_cpu_runs/v274_numeric_operator_override_audit_20260511T1115Z/`;
+  - baseline V259 checkpoint-4: `192/315`, equation `56/155`, bit `136/160`, trunc `0`;
+  - postprocessor numerico guardado: `196/315`, equation `60/155`, bit `136/160`, trunc `0`;
+  - regras promovidas: `minus_signed_opposite_sign_guarded` (`+2`), `colon_absdiff_unreverse_same_len` (`+1`), `add_direct_over_model_add_variant` (`+1`);
+  - regras rejeitadas/abstain: casos ambiguos, operadores nao vistos, padroes sem unicidade e qualquer classe com risco de erro;
+  - auditoria: `gains=4`, `losses=0`, `wrong_on_baseline_misses=0`, `weak_gate.pass=true`.
+- Interpretacao: a literatura de FlashFill/PROSE/SyGuS foi mais util como disciplina de engenharia do que como implementacao literal: sintetizar uma DSL pequena, exigir unicidade nos exemplos e promover apenas regras com abstain seguro. O alvo simbolico `equation_symbolic_punct` continua aberto, mas o subtipo numerico ja fornece `+4` acertos medidos.
+- Proxima acao obrigatoria antes de gastar H200: reproduzir V274 em HF CPU a partir da branch, registrar job URL e manifest. Depois disso, criar V275 como pacote de inferencia/postprocessamento label-free; full eval so deve rodar se o gate confirmar que a regra nao usa labels weak e que o bit guardrail fica `>=136/160`.
 
 ### Auditoria OpenRouter anexada - 2026-05-10
 
@@ -3850,10 +3861,10 @@ Validacoes:
 
 Proximo passo:
 
-1. Nao promover V259/V261/V263 para full eval/submissao; nenhum checkpoint ou soup passou o weak gate.
-2. Manter `v257_checkpoint_4`, `v259_checkpoint_4` e `soup_v226_050_v257_050` como seeds tecnicos reproduziveis, mas nao investir em continuacao longa, adapter soup ou prompts `no suffix` sem novo sinal de equation.
-3. Priorizar HF-only CPU/low-cost para minerar `equation_transform` simbolico/misto: V230 miss packs, V232/V238 workitems, raw traces auditados e regras/verifiers com abstain.
-4. Executar V268 como proxima rota barata: publicar o dataset `tonghuikang` reasoning non-weak no HF, rodar V250 `reasoning_boxed`, e so usar H200 se o gate provar truncation/offset-mask corretos.
-5. So voltar a H200 quando houver candidato deterministico ou dataset filtrado que, em preflight, mire explicitamente os `+4` acertos de equation sem derrubar bit abaixo de `136/160`.
+1. Promover V274 para validacao HF CPU imediata. O objetivo e reproduzir `196/315`, equation `60/155`, bit `136/160`, trunc `0`, com o mesmo row contract `bf055e3b9ebce79d4bfc9e48bce5a305b1d83da882f14afddec80d6afaba5fff`.
+2. Se HF CPU reproduzir V274, criar V275 como pacote deployable de inferencia/postprocessamento label-free: base V259 checkpoint-4 + regras numericas guardadas + manifest que prove que a regra usa apenas prompt, predicao do modelo e parser local.
+3. Antes de qualquer H200/full eval, rodar gate V275 de custo baixo: sintaxe, hashes, row-contract, anti-leakage, output schema, zero label access no caminho deployable, abstain default, bit guardrail `>=136/160`, equation `>=60/155`, trunc `<=3`.
+4. So entao rodar um unico full eval H200 com kill-switch e budget guard. Nao treinar novo LoRA, nao repetir adapter soup e nao repetir prompt `no suffix`; essas rotas ja foram negativas ou neutras.
+5. Em paralelo, continuar a rota CPU para `equation_symbolic_punct`: FlashFill/PROSE/SyGuS-style PBE com DSL pequena, mas essa passa a ser V276+. Ela so entra em GPU se entregar novos overrides verificados alem dos `+4` numericos de V274.
 6. Antes de novo treino util, liberar acesso humano aos datasets HF gated `andy279/nemotron-reasoning-challenge-raw-traces` e `andy279/nemotron-reasoning-challenge`; V264 confirmou `403` em todos os `5` arquivos P0.
 7. Reusar V249/V250/V242 somente com preflight de hashes, anti-leakage, row-contract, tokenizacao, estimativa de custo e kill-switch por primeiro candidato.

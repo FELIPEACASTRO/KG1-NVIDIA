@@ -1,0 +1,13 @@
+rule,rows,candidate_rows,baseline_correct,override_correct,gains,losses,wrong_on_baseline_miss
+minus_signed_opposite_sign_guarded,2,2,,2,2,,
+add_direct_over_model_add_variant,1,1,,1,1,,
+colon_absdiff_unreverse_same_len,1,1,,1,1,,
+add_no_unique_direct_variant,13,,13,13,,,
+colon_no_unique_unreverse,2,,2,2,,,
+minus_guard_all_negative_examples,1,,1,1,,,
+minus_model_not_opposite_sign,2,,2,2,,,
+minus_signed_ambiguous,6,,5,5,,,
+not_attempted,160,,136,136,,,
+not_numeric_query,90,,7,7,,,
+operator_not_guarded,25,,25,25,,,
+query_operator_unseen,12,,1,1,,,

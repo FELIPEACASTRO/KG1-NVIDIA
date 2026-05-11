@@ -1,0 +1,151 @@
+{
+  "audit_summary": [
+    {
+      "candidate_rows": 2,
+      "gains": 2,
+      "override_correct": 2,
+      "rows": 2,
+      "rule": "minus_signed_opposite_sign_guarded"
+    },
+    {
+      "candidate_rows": 1,
+      "gains": 1,
+      "override_correct": 1,
+      "rows": 1,
+      "rule": "add_direct_over_model_add_variant"
+    },
+    {
+      "candidate_rows": 1,
+      "gains": 1,
+      "override_correct": 1,
+      "rows": 1,
+      "rule": "colon_absdiff_unreverse_same_len"
+    },
+    {
+      "baseline_correct": 13,
+      "override_correct": 13,
+      "rows": 13,
+      "rule": "add_no_unique_direct_variant"
+    },
+    {
+      "baseline_correct": 2,
+      "override_correct": 2,
+      "rows": 2,
+      "rule": "colon_no_unique_unreverse"
+    },
+    {
+      "baseline_correct": 1,
+      "override_correct": 1,
+      "rows": 1,
+      "rule": "minus_guard_all_negative_examples"
+    },
+    {
+      "baseline_correct": 2,
+      "override_correct": 2,
+      "rows": 2,
+      "rule": "minus_model_not_opposite_sign"
+    },
+    {
+      "baseline_correct": 5,
+      "override_correct": 5,
+      "rows": 6,
+      "rule": "minus_signed_ambiguous"
+    },
+    {
+      "baseline_correct": 136,
+      "override_correct": 136,
+      "rows": 160,
+      "rule": "not_attempted"
+    },
+    {
+      "baseline_correct": 7,
+      "override_correct": 7,
+      "rows": 90,
+      "rule": "not_numeric_query"
+    },
+    {
+      "baseline_correct": 25,
+      "override_correct": 25,
+      "rows": 25,
+      "rule": "operator_not_guarded"
+    },
+    {
+      "baseline_correct": 1,
+      "override_correct": 1,
+      "rows": 12,
+      "rule": "query_operator_unseen"
+    }
+  ],
+  "baseline_summary": {
+    "accuracy": 0.6095238095238096,
+    "correct": 192,
+    "family": {
+      "bit_manipulation": {
+        "correct": 136,
+        "rows": 160,
+        "truncated": 0
+      },
+      "equation_transform": {
+        "correct": 56,
+        "rows": 155,
+        "truncated": 0
+      }
+    },
+    "rows": 315,
+    "truncated": 0
+  },
+  "candidate_rows": 4,
+  "decision": {
+    "decision": "guarded_numeric_overrides_pass_weak_gate",
+    "next_action": "Package the same label-free postprocessor into an HF full-eval candidate with the V259 checkpoint-4 base predictions.",
+    "reason": "baseline=192; override=196; eq=60; bit=136; gains=4; losses=0; wrong_on_misses=0"
+  },
+  "gains": 4,
+  "generated_at_utc": "2026-05-11T10:42:57.153175+00:00",
+  "inputs": {
+    "baseline": {
+      "downloaded_name": "v245_hf_weak_v259_checkpoint_4_v221_contract_predictions.csv",
+      "filename": "evals/v260b-h200-v221contract-v259-eqfocus-eval-20260511T025751Z/eval/v259_checkpoint_4_v221_contract/v245_hf_weak_v259_checkpoint_4_v221_contract_predictions.csv",
+      "repo_id": "felipesp1983/kg1-nemotron-lora-v259-v249-eqfocus-v257ckpt4-smoke",
+      "rows": 315,
+      "sha256": "d682f3a0aabd3624c449c63723deee510b070aa173f11c1102fe6b1b807bbca3"
+    },
+    "expected_shared_row_contract_sha256": "bf055e3b9ebce79d4bfc9e48bce5a305b1d83da882f14afddec80d6afaba5fff",
+    "observed_shared_row_contract_sha256": "bf055e3b9ebce79d4bfc9e48bce5a305b1d83da882f14afddec80d6afaba5fff"
+  },
+  "losses": 0,
+  "outputs": {
+    "audit_csv": "artifacts\\hf_cpu_runs\\v274_numeric_operator_override_audit_20260511T1115Z\\v274_numeric_override_audit.csv",
+    "manifest_json": "artifacts\\hf_cpu_runs\\v274_numeric_operator_override_audit_20260511T1115Z\\v274_numeric_operator_override_audit_manifest.json",
+    "override_predictions_csv": "artifacts\\hf_cpu_runs\\v274_numeric_operator_override_audit_20260511T1115Z\\v274_numeric_override_predictions.csv",
+    "rule_summary_csv": "artifacts\\hf_cpu_runs\\v274_numeric_operator_override_audit_20260511T1115Z\\v274_numeric_override_rule_summary.csv"
+  },
+  "override_summary": {
+    "accuracy": 0.6222222222222222,
+    "correct": 196,
+    "family": {
+      "bit_manipulation": {
+        "correct": 136,
+        "rows": 160,
+        "truncated": 0
+      },
+      "equation_transform": {
+        "correct": 60,
+        "rows": 155,
+        "truncated": 0
+      }
+    },
+    "rows": 315,
+    "truncated": 0
+  },
+  "run_id": "v274-local-numeric-operator-override-audit-20260511T1115Z",
+  "schema_version": "kg1_v274_numeric_operator_override_audit_v1",
+  "weak_gate": {
+    "pass": true,
+    "weak_bit_min": 133,
+    "weak_eq_min": 60,
+    "weak_total_min": 193,
+    "weak_trunc_max": 3
+  },
+  "wrong_on_baseline_misses": 0
+}
