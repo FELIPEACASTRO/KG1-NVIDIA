@@ -34,6 +34,7 @@ Objetivo: consolidar os achados Kaggle/Hugging Face, resultados V221/V226/V229/V
 - Auditoria Google Drive 2026-05-10: `1879` arquivos KG1 catalogados, `85` adapters completos, `232` reports, `423` CSVs, `54` JSONLs e `11` notebooks. Nenhum artefato do Drive supera o baseline V226 sob gate weak canonico; o Drive deve ser usado como fonte de pesos fortes conhecidos, reports e dados para triagem, nao como fonte de promocao automatica.
 - Achado Drive mais util: V207A full/validation gate do V194 tem `822/947` com familias nao criticas em `100%`, mas confirma o mesmo gargalo fraco: `bit_manipulation=135/160`, `equation_transform=55/155`. Isso reforca que o problema real continua concentrado em `equation_transform`.
 - Importante: muitos arquivos do Drive foram parte da trajetoria que chegou ao score amplo `0.86`. Esse score e valido como evidencia historica de que V194/V202D resolvia muito bem as familias nao criticas, mas nao pode ser interpretado como melhoria atual das duas familias alvo. No recorte decisivo, o proprio V207A mede `equation_transform=55/155` e `bit_manipulation=135/160`, alinhado ao gargalo V230.
+- Atualizacao V280 2026-05-11: foi criado e executado um gate CPU-only para os datasets P0 `andy279/*`, validando primeiro o contrato weak (`315` linhas, SHA `85da758e14d57ea40270de5747f98726a0ad0b6d1795bff7dd46183005e0f9b6`, familias `bit=160`, `equation=155`). Resultado atual: `andy279/nemotron-reasoning-challenge-raw-traces` e `andy279/nemotron-reasoning-challenge` continuam `gated=manual`; `p0_accessible_files=0`, `p0_blocked_files=5`. O mirror publico `jasonkung98/*` esta acessivel, mas o sample de `train.csv` tem overlap com weak e continua servindo apenas como sanity/source audit, nao como autorizacao de treino. Decisao: `p0_gated_terms_required_no_gpu`; nao gastar H200/GPU nessa rota ate liberar acesso humano aos datasets P0.
 
 ## Evidencias consolidadas
 
@@ -3974,10 +3975,31 @@ V279 external LoRA static gate - `passagereptile455/*`:
 - Decisao: `discard_passagereptile_static_gate`.
 - Implicacao: nao gastar H200/weak eval nesses quatro repos. A busca de adapters externos publicos fica encerrada ate aparecer repo com `adapter_config.json` + `adapter_model.safetensors` compativeis.
 
+V280 Andy279 trace access/schema gate:
+
+- Script: `scripts/run_v280_andy279_trace_access_gate_hf.py`.
+- Objetivo: transformar a rota P0 `andy279/*` em gate objetivo antes de qualquer GPU. O gate valida o CSV weak canonico, consulta metadata HF, testa range access, audita schema de amostra, detecta overlap de sample por `id` e `prompt_hash`, e possui modo opcional `--allow-full-download` para auditoria completa com hashes/row counts/leakage antes de treino.
+- Validacoes executadas:
+  - `python -m py_compile scripts/run_v280_andy279_trace_access_gate_hf.py`: ok.
+  - `python scripts/run_v280_andy279_trace_access_gate_hf.py --self-test`: ok.
+  - Auditoria local CPU/HF metadata: `artifacts/hf_cpu_runs/v280_andy279_trace_access_gate_local/`.
+- Contrato weak validado:
+  - rows `315`;
+  - SHA256 `85da758e14d57ea40270de5747f98726a0ad0b6d1795bff7dd46183005e0f9b6`;
+  - familias `bit_manipulation=160`, `equation_transform=155`;
+  - `id_count=315`, `prompt_hash_count=315`.
+- Resultado atual:
+  - `andy279/nemotron-reasoning-challenge-raw-traces`: metadata ok, `gated=manual`, `sha=d313612e92d62755e00f2382037b22da57ec5a8b`, `0/3` arquivos P0 acessiveis por range.
+  - `andy279/nemotron-reasoning-challenge`: metadata ok, `gated=manual`, `sha=ddc95b9bd46a12298e3e82900f9f8bdfb926a4f4`, `0/2` arquivos P0 acessiveis por range.
+  - `jasonkung98/NVIDIA-Nemotron-Model-Reasoning-Challenge`: metadata ok e publico, mas `train.csv` tem overlap no sample contra weak; portanto segue apenas como fonte de sanity/contrato, nao como autorizacao de treino.
+  - Contagem final: `p0_accessible_files=0`, `p0_blocked_files=5`, `public_accessible_files=2`.
+- Decisao: `p0_gated_terms_required_no_gpu`.
+- Implicacao: a rota `andy279/*` so volta a andar depois de acao humana no HF para liberar os termos/review dos datasets. A partir dai, o proximo comando correto e o mesmo V280 com `--allow-full-download` e limite de bytes antes de construir dataset ou usar H200.
+
 Proximo passo:
 
 1. Priorizar acao humana para liberar os datasets gated `andy279/nemotron-reasoning-challenge-raw-traces` e `andy279/nemotron-reasoning-challenge`; eles continuam a fonte P0 para traces teacher/solver.
-2. Se o acesso `andy279/*` for liberado, rodar primeiro um downloader/audit CPU com schema, hashes, family counts, dedupe, leakage guard contra os `315` weak IDs e amostra verificavel de traces corretos. GPU so depois desse gate.
+2. Se o acesso `andy279/*` for liberado, rodar primeiro `scripts/run_v280_andy279_trace_access_gate_hf.py --allow-full-download` com limite de bytes seguro, schema, hashes, family counts, dedupe, leakage guard contra os `315` weak IDs e amostra verificavel de traces corretos. GPU so depois desse gate passar.
 3. Se `andy279/*` continuar bloqueado, a unica rota tecnica restante sem novo dado e expandir V278 com uma gramatica externa comprovada por traces/repo, nao por tentativa cega no weak.
 4. Nao treinar novo LoRA, nao repetir adapter soup, nao repetir prompt `no suffix`, nao gastar GPU em V278 local DSL, nao usar os adapters externos V277 e nao usar os quatro `passagereptile455/*`; essas rotas ja foram negativas, neutras ou falharam static gate.
 5. Reusar V249/V250/V242/V268 somente com preflight de hashes, anti-leakage, row-contract, tokenizacao, estimativa de custo e kill-switch por primeiro candidato.

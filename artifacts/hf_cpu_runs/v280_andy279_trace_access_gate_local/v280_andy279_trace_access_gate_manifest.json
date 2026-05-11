@@ -1,0 +1,122 @@
+{
+  "blocked_actions": [
+    "gpu_train",
+    "model_generation",
+    "full_eval",
+    "package",
+    "kaggle_submit"
+  ],
+  "counts": {
+    "p0_accessible_files": 0,
+    "p0_blocked_files": 5,
+    "p0_full_passed_files": 0,
+    "p0_rows": 5,
+    "p0_sample_passed_files": 0,
+    "public_accessible_files": 2,
+    "rows": 7
+  },
+  "decision": {
+    "decision": "p0_gated_terms_required_no_gpu",
+    "next_action": "Human must request/accept access to andy279 gated datasets before this route can continue.",
+    "reason": "p0_accessible_files=0; p0_blocked_files=5; public_accessible_files=2"
+  },
+  "generated_at_utc": "2026-05-11T12:49:02.391713+00:00",
+  "hf_upload": {
+    "enabled": false,
+    "path_in_repo": "",
+    "repo_id": "felipesp1983/kg1-nemotron-training",
+    "upload_info": "upload_disabled"
+  },
+  "inputs": {
+    "allow_full_download": false,
+    "expected_weak_csv_sha256": "85da758e14d57ea40270de5747f98726a0ad0b6d1795bff7dd46183005e0f9b6",
+    "expected_weak_family_counts": {
+      "bit_manipulation": 160,
+      "equation_transform": 155
+    },
+    "expected_weak_rows": 315,
+    "hf_dataset_repo": "felipesp1983/kg1-nemotron-training",
+    "max_full_download_bytes": 536870912,
+    "max_sample_bytes": 65536,
+    "max_sample_rows": 25,
+    "targets": [
+      {
+        "family_focus": "equation_transform,bit_manipulation",
+        "files": [
+          "solver_transformation_traces_gpt54.jsonl",
+          "solver_transformation_traces_merged.jsonl",
+          "solver_bit_manipulation_traces_merged.jsonl"
+        ],
+        "priority": "P0",
+        "reason": "raw teacher/solver traces named for transformation and bit-manipulation routes",
+        "repo_id": "andy279/nemotron-reasoning-challenge-raw-traces",
+        "repo_type": "dataset"
+      },
+      {
+        "family_focus": "equation_transform,bit_manipulation",
+        "files": [
+          "sft_train.jsonl",
+          "sft_val.jsonl"
+        ],
+        "priority": "P0",
+        "reason": "SFT train/validation data advertised for the same challenge",
+        "repo_id": "andy279/nemotron-reasoning-challenge",
+        "repo_type": "dataset"
+      },
+      {
+        "family_focus": "source_sanity_only",
+        "files": [
+          "train.csv",
+          "test.csv"
+        ],
+        "priority": "P1",
+        "reason": "public challenge mirror already audited; never enough by itself to justify GPU",
+        "repo_id": "jasonkung98/NVIDIA-Nemotron-Model-Reasoning-Challenge",
+        "repo_type": "dataset"
+      }
+    ],
+    "weak_csv_path": "runtime_artifacts/v245_weak_eval_bridge/v245-weak-bridge-hfonly-20260510T1950Z/v221_weak_315.csv"
+  },
+  "label": "v280_andy279_trace_access_gate",
+  "output_artifact_hashes": {
+    "access_gate_csv": {
+      "bytes": 4403,
+      "exists": true,
+      "path": "artifacts\\hf_cpu_runs\\v280_andy279_trace_access_gate_local\\v280_andy279_trace_access_gate_access_gate.csv",
+      "sha256": "5413bb84c5fac62fd570c230f914d89d80ccd032be1db990f999a4f40d5a629f"
+    }
+  },
+  "outputs": {
+    "access_gate_csv": "artifacts\\hf_cpu_runs\\v280_andy279_trace_access_gate_local\\v280_andy279_trace_access_gate_access_gate.csv",
+    "manifest_json": "artifacts\\hf_cpu_runs\\v280_andy279_trace_access_gate_local\\v280_andy279_trace_access_gate_manifest.json"
+  },
+  "repo_status": {
+    "andy279/nemotron-reasoning-challenge": {
+      "gated": "manual",
+      "metadata_status": "ok",
+      "sha": "ddc95b9bd46a12298e3e82900f9f8bdfb926a4f4"
+    },
+    "andy279/nemotron-reasoning-challenge-raw-traces": {
+      "gated": "manual",
+      "metadata_status": "ok",
+      "sha": "d313612e92d62755e00f2382037b22da57ec5a8b"
+    },
+    "jasonkung98/NVIDIA-Nemotron-Model-Reasoning-Challenge": {
+      "gated": "False",
+      "metadata_status": "ok",
+      "sha": "0c8b90ec46067cdd943a83771be602c4c86092e2"
+    }
+  },
+  "schema_version": "kg1_v280_andy279_trace_access_gate_manifest_v1",
+  "weak_contract": {
+    "family_counts": {
+      "bit_manipulation": 160,
+      "equation_transform": 155
+    },
+    "id_count": 315,
+    "path": "runtime_artifacts/v245_weak_eval_bridge/v245-weak-bridge-hfonly-20260510T1950Z/v221_weak_315.csv",
+    "prompt_hash_count": 315,
+    "rows": 315,
+    "sha256": "85da758e14d57ea40270de5747f98726a0ad0b6d1795bff7dd46183005e0f9b6"
+  }
+}
