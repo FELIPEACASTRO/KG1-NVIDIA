@@ -1,0 +1,57 @@
+{
+  "branch": "v230-v226-complementarity",
+  "dataset": {
+    "data_repo": "felipesp1983/kg1-nemotron-training",
+    "train_file": "data/v290_rank19_micro_patch/20260511T1925Z/v282_rank19_micro_patch_train.jsonl",
+    "train_rows": 11286,
+    "train_sha256": "801334d510d923e233f382b78d42e853d87d75bfc235e676b2f247975b6b845d",
+    "val_file": "data/v290_rank19_micro_patch/20260511T1925Z/v282_rank19_micro_patch_val.jsonl",
+    "val_rows": 801,
+    "val_sha256": "d39bc9c0e4051fe7d212de109d580614c1774c6f10833246a70e8b4018c2252b"
+  },
+  "expected_commit": "95be5ac1e76441b547b88b21e0e6e3b2831b6179",
+  "flavor": "h200",
+  "gates": [
+    "hf_job_preflight_gate:preinstall",
+    "hf_job_preflight_gate:artifacts",
+    "hf_job_preflight_gate:postinstall",
+    "hf_job_train_v90 tokenization/truncation/offset-mask gate"
+  ],
+  "generated_at_utc": "2026-05-11T22:30:08.379212+00:00",
+  "hardware": {
+    "accelerator_model": "H200",
+    "accelerator_quantity": "1",
+    "accelerator_vram": "141 GB",
+    "cpu": "23 vCPU",
+    "name": "h200",
+    "pretty_name": "Nvidia H200",
+    "ram": "256 GB",
+    "unit_cost_usd": 0.083333,
+    "unit_label": "minute"
+  },
+  "image": "pytorch/pytorch:2.8.0-cuda12.8-cudnn9-devel",
+  "init_adapter": {
+    "repo": "felipesp1983/kg1-nemotron-lora-v290-rank19-micro-patch-smoke",
+    "subfolder": "checkpoint-6"
+  },
+  "job_id": "6a0258ac317220dbbd1a7d04",
+  "job_status": "RUNNING",
+  "job_url": "https://huggingface.co/jobs/felipesp1983/6a0258ac317220dbbd1a7d04",
+  "namespace": "felipesp1983",
+  "next_action": "Monitor every 30 seconds; weak-eval checkpoint-3, checkpoint-6, and final only if training completes.",
+  "output_repo": "felipesp1983/kg1-nemotron-lora-v292-eq-continuation-v290ckpt6",
+  "recipe": {
+    "continuation_from": "felipesp1983/kg1-nemotron-lora-v290-rank19-micro-patch-smoke/checkpoint-6",
+    "eval_every_steps": 3,
+    "eval_max_examples": 256,
+    "final_learning_rate": "5e-9",
+    "learning_rate": "1e-8",
+    "max_steps": 6,
+    "objective": "gain additional equation_transform rows while preserving bit_manipulation and 100% side families",
+    "sampling_mode": "weighted_replacement",
+    "save_every_steps": 3,
+    "trainable_lora_modules": "lm_head"
+  },
+  "run_id": "v292-eq-continuation-v290ckpt6-20260511T223007Z",
+  "version": "v292_eq_continuation_from_v290_checkpoint6_h200"
+}
