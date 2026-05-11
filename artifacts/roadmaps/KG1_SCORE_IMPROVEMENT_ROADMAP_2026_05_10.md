@@ -17,6 +17,7 @@ Objetivo: consolidar os achados Kaggle/Hugging Face, resultados V221/V226/V229/V
 - Atualizacao HF-only 2026-05-11: o smoke V257/V249 em H200 produziu o melhor resultado operacional ate agora no contrato V221: `v257_checkpoint_4_v221_contract` com `192/315`, equation `56/155`, bit `136/160`, truncation `1`. Ainda nao passa o gate (`193/315`, equation `60`), mas prova ganho real de `+1` em bit sem perder equation frente ao V256 HF.
 - Atualizacao V259/V260B 2026-05-11: o treino equation-focused a partir do V257 checkpoint-4 repetiu `192/315`, equation `56/155`, bit `136/160`, truncation `0` no melhor checkpoint. Ele reduziu truncation, mas nao aumentou `equation_transform`; portanto nao justifica continuacao longa em H200 sem novo dado/verifier.
 - Atualizacao V261 2026-05-11: a varredura operacional `thinking on + no prompt suffix` foi cortada cedo no H200 por gate de FinOps. O primeiro candidato (`v259_checkpoint4_nosuffix`) regrediu para `155/315`, equation `55/155`, bit `100/160`, truncation `1`; sem ganho em equation e com queda severa em bit. Esta familia de prompt esta descartada para novos gastos.
+- Atualizacao V262/V263 2026-05-11: adapter soups entre V226/V257/V259 foram gerados em CPU e avaliados no H200. Melhor soup (`soup_v226_050_v257_050`) ficou em `192/315`, equation `56/155`, bit `136/160`, truncation `1`; os outros regrediram para `191` e `190`. Adapter soup nao resolveu o gargalo e nao deve consumir novo H200 sem um preflight que prove alvo novo em equation.
 - Auditoria Google Drive 2026-05-10: `1879` arquivos KG1 catalogados, `85` adapters completos, `232` reports, `423` CSVs, `54` JSONLs e `11` notebooks. Nenhum artefato do Drive supera o baseline V226 sob gate weak canonico; o Drive deve ser usado como fonte de pesos fortes conhecidos, reports e dados para triagem, nao como fonte de promocao automatica.
 - Achado Drive mais util: V207A full/validation gate do V194 tem `822/947` com familias nao criticas em `100%`, mas confirma o mesmo gargalo fraco: `bit_manipulation=135/160`, `equation_transform=55/155`. Isso reforca que o problema real continua concentrado em `equation_transform`.
 - Importante: muitos arquivos do Drive foram parte da trajetoria que chegou ao score amplo `0.86`. Esse score e valido como evidencia historica de que V194/V202D resolvia muito bem as familias nao criticas, mas nao pode ser interpretado como melhoria atual das duas familias alvo. No recorte decisivo, o proprio V207A mede `equation_transform=55/155` e `bit_manipulation=135/160`, alinhado ao gargalo V230.
@@ -3530,6 +3531,40 @@ V261 HF-only prompt/decode sweep:
   - Artefatos remotos: nenhum manifest foi publicado antes do cancelamento; a evidencia canonica desta execucao e o log HF do job com `candidate_summary` completo.
 - Interpretacao: remover o sufixo `Return only one line: \boxed{answer}` e liberar pensamento nao melhora o gargalo de equation no contrato weak; ao contrario, degrada extraction/bit. Nao repetir varreduras `no suffix` em H200 dentro do budget atual.
 
+V262/V263 HF-only adapter soup:
+
+- V262 CPU `v262-hf-cpu-adapter-soups-20260511T044654Z`
+  - Job HF: `https://huggingface.co/jobs/felipesp1983/6a015f7c317220dbbd1a78a1`.
+  - Status: `COMPLETED`.
+  - Output repo: `felipesp1983/kg1-nemotron-lora-v262-adapter-soups`.
+  - Inputs validados:
+    - `v226_checkpoint1` SHA `f4e2083d83f13a102cd86e5d1295a8603264856c17ec35c357188e1acde6ea79`.
+    - `v257_checkpoint4` SHA `87b52699231f35823afd23f8d0326bbfe2de742a13cb06771f759d45488007fd`.
+    - `v259_checkpoint4` SHA `01b90c1745e5eb3a7fb47fc4c81ff1fdacc17098cc79faf533b05f7b91913163`.
+  - Tensor contract: `12011` tensors, contract SHA `3419375a77ddf718fcec58e0ed3da179b25cbae2ed22d74de87fad51994925fb`.
+  - Soups publicados:
+    - `soup_v226_050_v257_050` weights SHA `b309a740469a0a435afba9bd42cc3d800cc2b1bc42685f58d8ce8c9e5294c33b`.
+    - `soup_v226_050_v259_050` weights SHA `965160a7811ce44209123d46ac33d05174caf294d729b887a259bd9b59873cd7`.
+    - `soup_v226_034_v257_033_v259_033` weights SHA `233c06c2a2499045fb0c017e0245e39e344262619e4d14125d245b083f7ebbaf`.
+- V263 H200 `v263-h200-v262-soups-v221contract-eval-20260511T050000Z`
+  - Job HF: `https://huggingface.co/jobs/felipesp1983/6a01628faff1cd33e8f334fc`.
+  - Status: `COMPLETED`.
+  - Upload HF: `https://huggingface.co/felipesp1983/kg1-nemotron-lora-v262-adapter-soups/commit/f723dde4cba16e92c5561f6ebf09d602dd22af83`.
+  - Contrato: V221 reproduzido, H200 validado, vLLM `0.20.1`, `max_tokens=7680`, `max_model_len=8192`, `max_num_seqs=64`.
+  - Weak CSV SHA256: `85da758e14d57ea40270de5747f98726a0ad0b6d1795bff7dd46183005e0f9b6`.
+  - Shared row contract: `bf055e3b9ebce79d4bfc9e48bce5a305b1d83da882f14afddec80d6afaba5fff`.
+  - Resultados:
+    - `soup_v226_050_v257_050_v221_contract`: `192/315`, equation `56/155`, bit `136/160`, trunc `1`.
+    - `soup_v226_050_v259_050_v221_contract`: `191/315`, equation `56/155`, bit `135/160`, trunc `1`.
+    - `soup_v226_034_v257_033_v259_033_v221_contract`: `190/315`, equation `56/155`, bit `134/160`, trunc `2`.
+  - Melhor candidato: `soup_v226_050_v257_050_v221_contract`, mas ele apenas empata o melhor total V258/V260B e piora truncation contra V260B checkpoint-4.
+  - Gate: nao passa. Total fica `1` abaixo de `193`; equation fica `4` abaixo de `60`.
+- Comparacao linha-a-linha V263 vs V260B:
+  - Artefatos locais: `artifacts/hf_eval_diffs/v263_soups_vs_v260b_20260511/`.
+  - Melhor soup vs V260B checkpoint-4: `1` ganho e `1` perda, ambos em `bit_manipulation`; `0` ganhos e `0` perdas em `equation_transform`.
+  - Oracle V260B + melhor soup: total `193`, bit `137`, equation `56`. Esse oracle ainda falha o gate de equation por `4`, entao nao justifica novo roteador/soup deployable.
+- Decisao FinOps/QA: nao repetir adapter soup em H200 dentro do budget atual. A rota nao mudou `equation_transform`; o proximo gasto em GPU so deve ocorrer apos um preflight barato que gere evidencia concreta de `+4` ou mais em equation sem reduzir bit abaixo de `136/160`.
+
 Regra de preservacao dos artefatos historicos:
 
 - Muitos arquivos do Drive e dos notebooks anteriores participaram da trajetoria ate o score amplo `0.86`. Eles nao devem ser apagados por tamanho ou idade sem classificacao previa.
@@ -3550,8 +3585,8 @@ Validacoes:
 
 Proximo passo:
 
-1. Nao promover V259/V261 para full eval/submissao; nenhum checkpoint passou o weak gate.
-2. Manter `v257_checkpoint_4`/`v259_checkpoint_4` como seeds tecnicos reproduziveis, mas nao investir em continuacao longa nem em prompts `no suffix` sem novo sinal de equation.
+1. Nao promover V259/V261/V263 para full eval/submissao; nenhum checkpoint ou soup passou o weak gate.
+2. Manter `v257_checkpoint_4`, `v259_checkpoint_4` e `soup_v226_050_v257_050` como seeds tecnicos reproduziveis, mas nao investir em continuacao longa, adapter soup ou prompts `no suffix` sem novo sinal de equation.
 3. Priorizar HF-only CPU/low-cost para minerar `equation_transform` simbolico/misto: V230 miss packs, V232/V238 workitems, raw traces auditados e regras/verifiers com abstain.
 4. So voltar a H200 quando houver candidato deterministico ou dataset filtrado que, em preflight, mire explicitamente os `+4` acertos de equation sem derrubar bit abaixo de `136/160`.
 5. Reusar V249/V250/V242 somente com preflight de hashes, anti-leakage, row-contract, tokenizacao, estimativa de custo e kill-switch por primeiro candidato.
