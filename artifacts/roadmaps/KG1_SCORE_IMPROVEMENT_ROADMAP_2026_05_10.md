@@ -4501,3 +4501,40 @@ Nova acao de roadmap derivada da reauditoria:
 3. Manter GPU bloqueada:
    - objetivo: preservar budget HF;
    - esperado: nenhum job H100/H200 ate haver evidencia CPU de ganho deployable.
+
+## Atualizacao 2026-05-11 - V284 official-like HF gate
+
+Reauditoria devastadora contra Kaggle CLI/API, notebook oficial de metrica e branch HF `v230-v226-complementarity`:
+
+- Confirmacao oficial:
+  - submissao esperada: `submission.zip` com LoRA adapter, nao CSV de predicoes nem solver externo;
+  - arquivo exigido: `submission.zip`;
+  - limite diario: `5` submissoes;
+  - submissoes pontuadas: `2`;
+  - deadline: `2026-06-15T23:59:00Z`;
+  - team/new entrant deadline: `2026-06-08T23:59:00Z`;
+  - metrica oficial usa `\boxed{}` com extracao robusta e tolerancia numerica `rel_tol=1e-2`, `abs_tol=1e-5`.
+- Parametros oficiais de inferencia, que devem governar qualquer gate de submissao:
+  - `max_lora_rank=32`;
+  - `max_tokens=7680`;
+  - `temperature=0.0`;
+  - `top_p=1.0`;
+  - `max_num_seqs=64`;
+  - `gpu_memory_utilization=0.85`;
+  - `max_model_len=8192`.
+- Achado critico:
+  - `scripts/hf_job_full_eval_v276.py` e seguro como diagnostico full-bridge, mas nao e submission gate;
+  - seus defaults ainda sao baratos: `max_tokens=96`, `max_model_len=4096`, `max_num_seqs=8`, `KG1_DISABLE_THINKING=True`;
+  - tambem usa `DEFAULT_POSTPROCESSOR=v274_numeric_operator_overrides`, que nao e packageable em adapter-only zip;
+  - decisao: nenhum resultado V276 com defaults pode autorizar Kaggle submit.
+- Acao implementada:
+  - novo script `scripts/hf_job_official_like_eval_gate_v284.py`;
+  - objetivo: rodar HF Job official-like depois do weak gate e antes de qualquer pacote/submissao;
+  - defaults oficiais: `7680/8192/64`, `gpu_memory_utilization=0.85`, thinking ligado, suffix oficial;
+  - postprocessor externo bloqueado por padrao;
+  - `package` e `kaggle_submit` permanecem bloqueados no manifest;
+  - self-test prova rejeicao de `max_tokens=96` e de `v274_numeric_operator_overrides`.
+- Decisao operacional:
+  - V283/V282 nao devem ser submetidos sem passar primeiro no weak V245 e depois no V284 official-like;
+  - se V283 nao recuperar o patamar weak de V194/V226, descartar;
+  - se recuperar, rodar V284 em A100/H100 somente uma vez para preservar budget HF.
