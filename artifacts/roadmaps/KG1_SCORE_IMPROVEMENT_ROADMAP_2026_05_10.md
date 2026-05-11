@@ -16,6 +16,7 @@ Objetivo: consolidar os achados Kaggle/Hugging Face, resultados V221/V226/V229/V
 - Conclusao: roteamento entre os adapters ja avaliados nao resolve. O proximo ganho precisa vir de mineracao dos miss-packs, solver/verifier deterministico ou dados/traces filtrados.
 - Atualizacao HF-only 2026-05-11: o smoke V257/V249 em H200 produziu o melhor resultado operacional ate agora no contrato V221: `v257_checkpoint_4_v221_contract` com `192/315`, equation `56/155`, bit `136/160`, truncation `1`. Ainda nao passa o gate (`193/315`, equation `60`), mas prova ganho real de `+1` em bit sem perder equation frente ao V256 HF.
 - Atualizacao V259/V260B 2026-05-11: o treino equation-focused a partir do V257 checkpoint-4 repetiu `192/315`, equation `56/155`, bit `136/160`, truncation `0` no melhor checkpoint. Ele reduziu truncation, mas nao aumentou `equation_transform`; portanto nao justifica continuacao longa em H200 sem novo dado/verifier.
+- Atualizacao V261 2026-05-11: a varredura operacional `thinking on + no prompt suffix` foi cortada cedo no H200 por gate de FinOps. O primeiro candidato (`v259_checkpoint4_nosuffix`) regrediu para `155/315`, equation `55/155`, bit `100/160`, truncation `1`; sem ganho em equation e com queda severa em bit. Esta familia de prompt esta descartada para novos gastos.
 - Auditoria Google Drive 2026-05-10: `1879` arquivos KG1 catalogados, `85` adapters completos, `232` reports, `423` CSVs, `54` JSONLs e `11` notebooks. Nenhum artefato do Drive supera o baseline V226 sob gate weak canonico; o Drive deve ser usado como fonte de pesos fortes conhecidos, reports e dados para triagem, nao como fonte de promocao automatica.
 - Achado Drive mais util: V207A full/validation gate do V194 tem `822/947` com familias nao criticas em `100%`, mas confirma o mesmo gargalo fraco: `bit_manipulation=135/160`, `equation_transform=55/155`. Isso reforca que o problema real continua concentrado em `equation_transform`.
 - Importante: muitos arquivos do Drive foram parte da trajetoria que chegou ao score amplo `0.86`. Esse score e valido como evidencia historica de que V194/V202D resolvia muito bem as familias nao criticas, mas nao pode ser interpretado como melhoria atual das duas familias alvo. No recorte decisivo, o proprio V207A mede `equation_transform=55/155` e `bit_manipulation=135/160`, alinhado ao gargalo V230.
@@ -3513,6 +3514,22 @@ V259/V260B HF-only equation-focused smoke:
     - `artifacts/hf_eval_diffs/v260b_v259_eqfocus_20260511/v260b_vs_v258_checkpoint4_changed_rows.csv`
 - Interpretacao: a receita V259 nao melhorou o gargalo. Continuar esse treino por mais steps e gasto H200 sem novo dado/verifier provavelmente so degrada bit ou mantem equation em `56/155`. O proximo passo deve voltar para mineracao deterministica de `equation_transform` simbolico/misto, parser/verifier e dados externos auditados, nao treino cego.
 
+V261 HF-only prompt/decode sweep:
+
+- V261 H200 `v261-h200-v221contract-nosuffix-prompt-sweep-20260511T034434Z`
+  - Job HF: `https://huggingface.co/jobs/felipesp1983/6a0150e0317220dbbd1a785b`.
+  - Status: `CANCELED` por gate de FinOps apos o primeiro candidato completo.
+  - Motivo do cancelamento: a variante `thinking habilitado + sem prompt suffix` gerou resposta longa, manteve `equation_transform` sem ganho e derrubou `bit_manipulation` de forma severa; continuar os outros candidatos repetiria o mesmo risco de custo sem sinal de melhoria.
+  - Contrato: V221 reproduzido, H200 validado, vLLM `0.20.1`, `max_tokens=7680`, `max_model_len=8192`, `max_num_seqs=64`, `KG1_NO_PROMPT_SUFFIX=1`, `KG1_DISABLE_THINKING=0`.
+  - Resultado completo antes do cancelamento:
+    - `v259_checkpoint4_nosuffix`: `155/315`, equation `55/155`, bit `100/160`, trunc `1`.
+  - Delta vs melhor V260B/V258:
+    - total `-37`;
+    - equation `-1` contra `56/155` do V259/V258, e `0` contra o baseline historico `55/155`;
+    - bit `-36` contra `136/160`.
+  - Artefatos remotos: nenhum manifest foi publicado antes do cancelamento; a evidencia canonica desta execucao e o log HF do job com `candidate_summary` completo.
+- Interpretacao: remover o sufixo `Return only one line: \boxed{answer}` e liberar pensamento nao melhora o gargalo de equation no contrato weak; ao contrario, degrada extraction/bit. Nao repetir varreduras `no suffix` em H200 dentro do budget atual.
+
 Regra de preservacao dos artefatos historicos:
 
 - Muitos arquivos do Drive e dos notebooks anteriores participaram da trajetoria ate o score amplo `0.86`. Eles nao devem ser apagados por tamanho ou idade sem classificacao previa.
@@ -3533,8 +3550,8 @@ Validacoes:
 
 Proximo passo:
 
-1. Nao promover V259 para full eval/submissao; nenhum checkpoint passou o weak gate.
-2. Manter `v257_checkpoint_4`/`v259_checkpoint_4` como seeds tecnicos reproduziveis, mas nao investir em continuacao longa sem novo sinal de equation.
+1. Nao promover V259/V261 para full eval/submissao; nenhum checkpoint passou o weak gate.
+2. Manter `v257_checkpoint_4`/`v259_checkpoint_4` como seeds tecnicos reproduziveis, mas nao investir em continuacao longa nem em prompts `no suffix` sem novo sinal de equation.
 3. Priorizar HF-only CPU/low-cost para minerar `equation_transform` simbolico/misto: V230 miss packs, V232/V238 workitems, raw traces auditados e regras/verifiers com abstain.
 4. So voltar a H200 quando houver candidato deterministico ou dataset filtrado que, em preflight, mire explicitamente os `+4` acertos de equation sem derrubar bit abaixo de `136/160`.
-5. Reusar V249/V250/V242 somente com preflight de hashes, anti-leakage, row-contract, tokenizacao e estimativa de custo.
+5. Reusar V249/V250/V242 somente com preflight de hashes, anti-leakage, row-contract, tokenizacao, estimativa de custo e kill-switch por primeiro candidato.
