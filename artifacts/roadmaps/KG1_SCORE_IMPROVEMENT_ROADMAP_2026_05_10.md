@@ -3869,11 +3869,29 @@ Validacoes:
 - Manifest remoto `strong_adapters_validation_manifest.json` lido com sucesso.
 - Staging local `%TEMP%/kg1_drive_strong_adapters_hf_20260510` removido apos upload, liberando `8535403351` bytes logicos.
 
+V276 H200 full eval bridge:
+
+- Job HF: `https://huggingface.co/jobs/felipesp1983/6a01c49baff1cd33e8f3398a`.
+- Commit fixado pelo gate: `589fb891b6b7d96f52ae5b4cebb6cc2d15ebe535`.
+- Ambiente validado: `h200`, GPU `NVIDIA H200`, Torch apos vLLM `2.11.0+cu130`, CUDA disponivel, vLLM `0.20.1`.
+- Full CSV validado: `947` linhas, SHA256 `84e90b5b4d9adad6fdd9028aae3161d1b8991f2eab11e292b32d920c0ec3c935`, family counts `bit=160`, `equation=155`, `gravity=159`, `numeral=157`, `text_encryption=157`, `unit=159`.
+- Adapter avaliado: `felipesp1983/kg1-nemotron-lora-v259-v249-eqfocus-v257ckpt4-smoke/checkpoint-4`, com `v274_numeric_operator_overrides`.
+- Resultado full:
+  - Overall: `322/947` (`34.00%`), trunc `0`.
+  - `bit_manipulation`: `7/160` (`4.38%`).
+  - `equation_transform`: `8/155` (`5.16%`).
+  - `gravity_constant`: `3/159` (`1.89%`).
+  - `numeral_system`: `151/157` (`96.18%`).
+  - `text_encryption`: `0/157` (`0.00%`).
+  - `unit_conversion`: `153/159` (`96.23%`).
+- Postprocessor aplicado: `0` linhas no full bridge.
+- Upload de artefatos: `https://huggingface.co/felipesp1983/kg1-nemotron-lora-v259-v249-eqfocus-v257ckpt4-smoke/commit/719225764307c8916eaeaedddafff6d57e0ffeef`, path `evals/v276-h200-full-v259ckpt4-postprocessor-20260511T115754Z`.
+- Decisao: V276 esta descartado como candidato full direto. Ele continua util como diagnostico/teacher weak, mas nao justifica package/submission. A discrepancia weak (`196/315` com postprocessor) versus full (`322/947`, bit/equation muito baixos) reforca que o weak tuning atual esta superespecializado e nao cobre a distribuicao full das familias problemáticas.
+
 Proximo passo:
 
-1. Aguardar o V276 full eval HF em fila (`https://huggingface.co/jobs/felipesp1983/6a01bb6b317220dbbd1a7a11`). Ele esta protegido por gate de flavor/custo/GPU/commit/CSV/adapter e usa `--prediction-postprocessor v274_numeric_operator_overrides`. Se passar `FULL_MIN_CANDIDATE=831` e `FULL_MAX_TRUNC=4`, registrar manifest e decidir se o caminho de inferencia realmente aceita postprocessor; se o formato final for adapter-only, V275/V276 vira teacher/diagnostico para distilacao, nao submissao direta.
-2. Se o V276 ficar muito tempo em `SCHEDULING`, nao abrir execucoes caras paralelas. A fila nao entrega evidencia nova; o proximo gasto de GPU deve ser unico e medido.
-3. Preparar V277 como weak eval agrupado e barato dos adapters externos completos recem-triados: `gfinin/nemotron-reasoning-lora`, `etencore/nemotron-30b-reasoning-lora` root, `etencore` `checkpoint-1000` e `checkpoint-1188`. Script: `scripts/hf_job_weak_eval_v277_external_adapters.py`. Gate obrigatorio: contrato V221, `max_tokens=96`, `disable_thinking`, `continue-on-error`, sem full eval, sem treino, sem package, sem Kaggle submit.
-4. Implementar V278 CPU-only para `equation_symbolic_punct`: enumerative/CEGIS DSL inspirada em FlashFill/PROSE/SyGuS, com gramatica pequena para reordenacao, reversao parcial, substring, troca posicional, delimitadores e operadores simbolicos. So promover regra se gerar overrides label-free e zero-loss no weak audit; GPU so entra se houver ganho concreto acima dos `+4` numericos V274/V275.
-5. Nao treinar novo LoRA, nao repetir adapter soup e nao repetir prompt `no suffix`; essas rotas ja foram negativas ou neutras. Qualquer treino futuro precisa vir apos V277/V278 ou apos liberacao humana dos datasets gated `andy279/nemotron-reasoning-challenge-raw-traces` e `andy279/nemotron-reasoning-challenge`.
-6. Reusar V249/V250/V242/V268 somente com preflight de hashes, anti-leakage, row-contract, tokenizacao, estimativa de custo e kill-switch por primeiro candidato.
+1. Rodar V277 como weak eval agrupado dos adapters externos completos recem-triados: `gfinin/nemotron-reasoning-lora`, `etencore/nemotron-30b-reasoning-lora` root, `etencore` `checkpoint-1000` e `checkpoint-1188`. Script: `scripts/hf_job_weak_eval_v277_external_adapters.py`. Gate obrigatorio: contrato V221, `max_tokens=96`, `disable_thinking`, `continue-on-error`, sem full eval, sem treino, sem package, sem Kaggle submit.
+2. Se V277 nao produzir ganho concreto em `equation_transform` sem derrubar `bit_manipulation`, parar gastos de GPU nessa rota externa.
+3. Implementar V278 CPU-only para `equation_symbolic_punct`: enumerative/CEGIS DSL inspirada em FlashFill/PROSE/SyGuS, com gramatica pequena para reordenacao, reversao parcial, substring, troca posicional, delimitadores e operadores simbolicos. So promover regra se gerar overrides label-free e zero-loss no weak audit; GPU so entra se houver ganho concreto acima dos `+4` numericos V274/V275.
+4. Nao treinar novo LoRA, nao repetir adapter soup e nao repetir prompt `no suffix`; essas rotas ja foram negativas ou neutras. Qualquer treino futuro precisa vir apos V277/V278 ou apos liberacao humana dos datasets gated `andy279/nemotron-reasoning-challenge-raw-traces` e `andy279/nemotron-reasoning-challenge`.
+5. Reusar V249/V250/V242/V268 somente com preflight de hashes, anti-leakage, row-contract, tokenizacao, estimativa de custo e kill-switch por primeiro candidato.
