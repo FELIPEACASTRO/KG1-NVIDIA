@@ -4116,3 +4116,77 @@ Decisoes incorporadas ao roadmap:
   - dataset generico enorme;
   - model merging/adapters externos que ja falharam gate;
   - qualquer estimativa OpenRouter sem fonte primaria ou reproducao local.
+
+ANALISE_DESAFIO_IAS_14 audit - literature consolidation:
+
+- Arquivo auditado: `C:\Users\davis\Downloads\ANALISE_DESAFIO_IAS_14.txt`.
+- SHA256: `da1eb90e9f2b5c0a714091ec6cfa440214206eb3e0ac34676e820a7844ee3696`.
+- Tamanho: `116175` bytes, `2710` linhas, UTF-8.
+- URLs unicas extraidas: `119`.
+- Termos recorrentes:
+  - `SymPy`: `77`;
+  - `GRPO`: `22`;
+  - `PAL`: `15`;
+  - `SymCode`: `11`;
+  - `LLM-SRBench`: `9`;
+  - `DPO`: `7`;
+  - `PRM`: `8`;
+  - `Test-Time Training`: `6`;
+  - `Product of Experts`: `5`;
+  - `NVARC`: `10`.
+- O arquivo nao trouxe novos adapters, notebooks executaveis, datasets KG1 publicos ou arquivos `andy279` desbloqueados. Ele trouxe consolidacao teorica/metodologica.
+
+Achados aceitos como uteis:
+
+1. SymCode / SymPy / self-debugging
+   - Fonte primaria: `https://arxiv.org/html/2510.25975v2`.
+   - Evidencia: SymCode troca raciocinio em prosa por script Python verificavel com SymPy, sandbox e loop de debug; o paper reporta ganhos de ate `13.6pp` sobre baselines e ate `16.8pp` com SymCode+ em benchmarks matematicos.
+   - Aplicacao KG1: P1 para criar um evaluator/solver CPU que force a solucao a virar codigo/verificador. Deve ser usado primeiro como gate/verifier para `equation_numeric_operator`; para `equation_symbolic_punct`, precisa DSL de reescrita/string, pois SymPy puro nao cobre pontuacao/simbolos arbitrarios.
+
+2. Tool-integrated reasoning / ToRA / PAL
+   - Fonte primaria: `https://arxiv.org/abs/2309.17452`.
+   - Evidencia: ToRA integra raciocinio em linguagem com ferramentas externas como computation libraries e symbolic solvers.
+   - Aplicacao KG1: reforca que o modelo deve interpretar a regra e delegar execucao/verificacao a runtime deterministico. Nao autoriza prompt livre nem self-consistency caro como rota principal.
+
+3. GRPO / RL com recompensas verificaveis
+   - Fonte validada: `https://huggingface.co/docs/course/chapter12/3`.
+   - Evidencia: DeepSeek-R1 usa fases com RL baseado em tarefas verificaveis; para matematica, a correcao pode ser checada por solver. GRPO usa multiplas solucoes em grupo e normaliza recompensas relativas.
+   - Aplicacao KG1: P2/P1 depois de existir reward confiavel. Nao rodar GRPO antes de termos verifier local para equation; caso contrario, risco de reward hacking e gasto GPU sem sinal.
+
+4. Test-Time Training
+   - Fonte primaria: `https://proceedings.mlr.press/v267/akyurek25a.html`.
+   - Evidencia: TTT melhora adaptabilidade em ARC/BBH, mas exige update temporario de parametros em inferencia.
+   - Aplicacao KG1: P3/futuro. Pode inspirar "per-family/per-task adaptation", mas nao e imediato para Kaggle package por custo, complexidade e risco de runtime.
+
+5. Product of Experts / ARC low-cost search
+   - Fonte primaria: `https://proceedings.mlr.press/v267/franzen25a.html`.
+   - Evidencia: combina augmentations, DFS, geracao/scoring e LLM como scorer para ARC, com foco em custo baixo.
+   - Aplicacao KG1: P2 para selector/combiner CPU-only entre candidatos/verifiers. Nao substitui V275 nem libera GPU nova.
+
+6. NVARC / ARC solution methodology
+   - Fonte primaria: `https://github.com/1ytic/NVARC`.
+   - Evidencia: solucao ARC usa synthetic data generation, augmentation massivo e componentes especializados.
+   - Aplicacao KG1: somente inspiracao metodologica para data generation + gate. ARC nao e KG1; nao baixar datasets ARC grandes nem treinar sem experimento isolado.
+
+7. ComputeEval benchmark discipline
+   - Fonte primaria: `https://github.com/nvidia/compute-eval`.
+   - Evidencia: separa contexto visivel pelo modelo de testes/solucoes ocultas; valida build/test antes de medir performance.
+   - Aplicacao KG1: reforca nossos gates: separacao labels/test, held-out harness, logs, comandos, manifests, hashes e guardrails antes de qualquer treino/full eval.
+
+Pontos descartados ou rebaixados:
+
+- Ganhos prometidos no arquivo como `+15-25pp`, `>70%`, `>90%` ou `+30-40%` nao entram como meta operacional; sao estimativas sem reproducao no KG1.
+- GNNs, atencao estrutural customizada, activation steering e interpretabilidade pesada ficam P3. Exigem arquitetura/tempo/compute e nao batem o budget atual.
+- Self-consistency N=5/N=10 para full inference fica rebaixado por custo e risco de formato; usar apenas em geracao offline de traces, se validado por checker.
+- Fine-tuning em hard negatives so entra apos:
+  - verifier CPU passar com `losses=0`;
+  - holdout bit confirmar `bit>=136/160`;
+  - anti-leakage/dedupe/hashes completos;
+  - budget HF aprovado.
+
+Decisao apos esta auditoria:
+
+- Manter V275/V274 como unica melhoria ja medida e gateada: `196/315`, `equation=60/155`, `bit=136/160`, `trunc=0`.
+- Priorizar duas frentes:
+  1. desbloquear `andy279/*` e rodar V280 full audit;
+  2. se `andy279/*` continuar bloqueado, criar uma etapa CPU P1 inspirada em SymCode/ToRA, mas orientada ao nosso subtipo real: term-rewriting/verifier para `equation_symbolic_punct` e SymPy/Python para `equation_numeric_operator`.
