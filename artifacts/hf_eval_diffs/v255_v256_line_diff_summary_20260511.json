@@ -1,0 +1,35 @@
+{
+  "correct_diff_rows": 2,
+  "family_delta": [
+    {
+      "net_v226_minus_v194": 0,
+      "prediction_diff_rows": 3,
+      "rows": 160,
+      "type": "bit_manipulation",
+      "v194_correct": 135,
+      "v226_correct": 135,
+      "v226_gain_rows": 1,
+      "v226_loss_rows": 1
+    },
+    {
+      "net_v226_minus_v194": 0,
+      "prediction_diff_rows": 2,
+      "rows": 155,
+      "type": "equation_transform",
+      "v194_correct": 56,
+      "v226_correct": 56,
+      "v226_gain_rows": 0,
+      "v226_loss_rows": 0
+    }
+  ],
+  "join_key": "id",
+  "prediction_diff_rows": 5,
+  "repo": "felipesp1983/kg1-strong-adapters-v194-v226",
+  "rows_joined": 315,
+  "same_correctness": 313,
+  "truncated_diff_rows": 0,
+  "v194_correct_v226_wrong": 1,
+  "v226_correct_v194_wrong": 1,
+  "v255_predictions": "evals/v255-h200-v221contract-v194-20260511T005050Z/eval/hf_v194_protected_v221_contract/v245_hf_weak_hf_v194_protected_v221_contract_predictions.csv",
+  "v256_predictions": "evals/v256-h200-v221contract-v226ckpt1-20260511T0110Z/eval/hf_v226_checkpoint1_v221_contract/v245_hf_weak_hf_v226_checkpoint1_v221_contract_predictions.csv"
+}

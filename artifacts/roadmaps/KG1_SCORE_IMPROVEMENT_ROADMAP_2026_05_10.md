@@ -3347,7 +3347,7 @@ Repo HF privado:
 
 - `felipesp1983/kg1-strong-adapters-v194-v226`
 - URL: `https://huggingface.co/felipesp1983/kg1-strong-adapters-v194-v226`
-- SHA remoto validado: `1bb23fdbc3f5ccadd36b91e8f7db9d7474bf6312`
+- SHA remoto base dos pesos validado: `1bb23fdbc3f5ccadd36b91e8f7db9d7474bf6312`
 - Registro local: `artifacts/hf_uploads/KG1_STRONG_ADAPTERS_HF_BRIDGE_20260510.md`
 
 Conteudo validado:
@@ -3367,6 +3367,50 @@ Nota de contrato de inferencia:
 - Interpretacao: esse resultado nao invalida os adapters fortes; ele prova que a weak-eval curta nao reproduz o contrato que gerou os scores fortes. O wrapper HF precisa suportar ambos os contratos e rotular explicitamente qual foi usado.
 - Ajuste implementado em `scripts/hf_job_weak_eval_v245.py`: `KG1_DISABLE_THINKING`, `KG1_NO_PROMPT_SUFFIX` e `KG1_PROMPT_SUFFIX` agora controlam o modo de prompt; o default continua preservando o modo curto V245 para compatibilidade.
 
+Reproducao HF com contrato V221:
+
+- V255 H200 `v255-h200-v221contract-v194-20260511T005050Z`
+  - Job HF: `https://huggingface.co/jobs/felipesp1983/6a0128f9aff1cd33e8f33271`.
+  - Commit de codigo exigido: `6dd0936bc47496fcfc6201446f73c0db15df54b3`.
+  - Contrato: thinking habilitado, `max_tokens=7680`, `max_model_len=8192`, `max_num_seqs=64`, sufixo V221.
+  - Resultado: `191/315`, equation `56/155`, bit `135/160`, trunc `1`, ACC `60.63%`.
+  - Upload HF: `https://huggingface.co/felipesp1983/kg1-strong-adapters-v194-v226/commit/82760153d0eacc365e4c037d50610931236605e7`.
+  - Interpretacao: o HF reproduz o patamar historico sob o contrato V221. A divergencia pequena vs V221 Drive (`190/315`, equation `54`, bit `136`, trunc `0`) e aceitavel como variacao de runtime/extracao ate auditoria linha a linha, mas confirma que o modo curto V254 era o erro principal.
+- V256 H200 `v256-h200-v221contract-v226ckpt1-20260511T0110Z`
+  - Job HF: `https://huggingface.co/jobs/felipesp1983/6a012c1f317220dbbd1a7798`.
+  - Status: `COMPLETED`.
+  - Contrato: thinking habilitado, `max_tokens=7680`, `max_model_len=8192`, `max_num_seqs=64`, sufixo V221.
+  - Resultado: `191/315`, equation `56/155`, bit `135/160`, trunc `1`, ACC `60.63%`.
+  - Upload HF: `https://huggingface.co/felipesp1983/kg1-strong-adapters-v194-v226/commit/1469bb73c0d4f31638ac59fb0c08ec2e42237ed6`.
+  - Interpretacao: no HF, `v226_checkpoint1` e `v194_protected` empatam no agregado sob o contrato V221 reproduzido. A decisao agora depende de diff linha a linha e comparacao contra os reports Drive V221/V226, nao de novo treino.
+
+Diff linha a linha V255 vs V256:
+
+- Artefatos locais:
+  - `artifacts/hf_eval_diffs/V255_V256_LINE_DIFF_SUMMARY_20260511.md`
+  - `artifacts/hf_eval_diffs/v255_v256_line_diff_summary_20260511.json`
+  - `artifacts/hf_eval_diffs/v255_v256_family_delta_20260511.csv`
+  - `artifacts/hf_eval_diffs/v255_v256_correctness_deltas_20260511.csv`
+- IDs alinhados: `315/315`.
+- Predicoes textuais diferentes: `5`.
+- Linhas com mudanca de corretude: `2`.
+- `equation_transform`: V194 `56`, V226 `56`, net `0`, predicoes diferentes `2`, sem mudanca de corretude.
+- `bit_manipulation`: V194 `135`, V226 `135`, net `0`, V226 ganha `1` linha e perde `1` linha.
+- Linhas de delta:
+  - `4ef88f92`: V226 corrige `01010111` onde V194 errou `01011111`.
+  - `8740ed31`: V194 acerta `01101000` onde V226 erra `01111000`.
+- Conclusao: V226 checkpoint-1 deve ser mantido como initializer forte por historico Drive, mas nao trouxe ganho observavel sobre V194 no contrato HF V221. A proxima melhoria precisa atacar `equation_transform`, especialmente simbolico/misto.
+
+Regra de preservacao dos artefatos historicos:
+
+- Muitos arquivos do Drive e dos notebooks anteriores participaram da trajetoria ate o score amplo `0.86`. Eles nao devem ser apagados por tamanho ou idade sem classificacao previa.
+- Antes de qualquer limpeza, classificar cada artefato como:
+  - `P0_keep_repro`: peso, prediction CSV, report, manifest, dataset ou notebook que reproduz ou explica scores `0.86`, `190-191/315`, V207A, V221, V226, V230 ou V255.
+  - `P1_keep_audit`: logs, CSVs intermediarios e notebooks que ajudam a auditar contrato de prompt, extractor, row contract, hashes ou regressao.
+  - `P2_archive`: duplicatas grandes com hash identico e copia canonical ja publicada em HF/Drive com manifest.
+  - `P3_delete_candidate`: apenas cache, download parcial, snapshot duplicado sob `evals/`, arquivo `.partial`, ou artefato comprovadamente fraco e reproduzivel em outro local.
+- Exclusao so e permitida para `P3_delete_candidate`, com registro de path, bytes, hash quando aplicavel e motivo. Arquivos ligados ao score `0.86` entram como `P0_keep_repro` ate prova contraria.
+
 Validacoes:
 
 - Ambos com `tensor_count=12011`.
@@ -3376,6 +3420,6 @@ Validacoes:
 
 Proximo passo:
 
-1. Rodar V255 HF canonical-thinking reproduction com `KG1_DISABLE_THINKING=0`, `KG1_MAX_TOKENS=7680`, `KG1_MAX_MODEL_LEN=8192`, `KG1_MAX_NUM_SEQS=64` e o sufixo V221.
-2. Confirmar que o HF reproduz V194 `190/315` e, se reproduzir, rodar V226 checkpoint-1 no mesmo contrato.
+1. Comparar V255/V256 contra os reports Drive V221/V226 para identificar se a diferenca HF (`equation 56`, `bit 135`, trunc `1`) vem de runtime/vLLM/extractor ou de artefato.
+2. Como V255/V256 nao melhoram equation entre si, priorizar dados/regras de `equation_transform` e usar bit apenas como guardrail.
 3. So depois usar `v226_checkpoint1` como initializer para qualquer smoke training curto com V249/novos dados.

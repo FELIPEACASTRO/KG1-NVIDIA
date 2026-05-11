@@ -1,0 +1,3 @@
+id,type,answer_v194,prediction_v194,correct_v194,truncated_v194,answer_v226,prediction_v226,correct_v226,truncated_v226,correct_delta
+4ef88f92,bit_manipulation,01010111,01011111,False,False,01010111,01010111,True,False,1
+8740ed31,bit_manipulation,01101000,01101000,True,False,01101000,01111000,False,False,-1
