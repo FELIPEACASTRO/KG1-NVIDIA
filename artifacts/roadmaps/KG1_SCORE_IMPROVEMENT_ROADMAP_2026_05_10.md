@@ -4190,3 +4190,99 @@ Decisao apos esta auditoria:
 - Priorizar duas frentes:
   1. desbloquear `andy279/*` e rodar V280 full audit;
   2. se `andy279/*` continuar bloqueado, criar uma etapa CPU P1 inspirada em SymCode/ToRA, mas orientada ao nosso subtipo real: term-rewriting/verifier para `equation_symbolic_punct` e SymPy/Python para `equation_numeric_operator`.
+
+## Auditoria local HF cache - NVIDIA Puzzle-KD Nemotron Post-Training Dataset v2
+
+Solicitacao auditada: analisar `C:\Users\davis\.cache\huggingface\hub\datasets--nvidia--Puzzle-KD-Nemotron-Post-Training-Dataset-v2` e todos os arquivos em diretorios/subdiretorios.
+
+Evidencia local:
+
+- Ref local `refs/main`: `7d7a14dbc1ec673e9fad558785d6d2ccd4651fe8`.
+- Snapshot auditado: `snapshots/7d7a14dbc1ec673e9fad558785d6d2ccd4651fe8`.
+- Estrutura: `blobs`, `refs`, `snapshots`.
+- Arquivos no snapshot:
+  - `.gitattributes`;
+  - `dataset_dict.json`;
+  - `README.md`;
+  - `train/state.json`;
+  - `train/dataset_info.json`;
+  - `train/data-00000-of-00048.arrow` ate `train/data-00047-of-00048.arrow`;
+  - `validation/state.json`;
+  - `validation/dataset_info.json`;
+  - `validation/data-00000-of-00003.arrow` ate `validation/data-00002-of-00003.arrow`.
+- `dataset_dict.json`: `{"splits":["train","validation"]}`.
+- `train/state.json`: 48 shards Arrow, fingerprint `c2c952f586636249`, colunas `category/generator/license/messages/reasoning/uuid/version`.
+- `validation/state.json`: 3 shards Arrow, fingerprint `88686810bc8ca650`, mesmas colunas.
+- README local: dataset publico derivado de `nvidia/Nemotron-Post-Training-Dataset-v2`, criado para Puzzle NAS/KD, com `reasoning="off"`, split deterministico 95/5 e categorias `code/math/stem/chat`.
+
+Integridade estrutural medida em todos os shards Arrow:
+
+- Total global: `851343` linhas, UUIDs duplicados `0`.
+- Train: `808775` linhas em `48` shards; row count por shard entre `16849` e `16850`; bytes Arrow aparentes `2607591184`.
+- Validation: `42568` linhas em `3` shards; row count por shard entre `14189` e `14190`; bytes Arrow aparentes `137228072`.
+- Schema Arrow consistente em todos os shards: `uuid`, `license`, `generator`, `version`, `category`, `reasoning`, `messages`.
+- Todos os registros seguem roles `system/user/assistant`.
+- O campo `system` esta vazio em `851343` linhas; isso e esperado para este dataset e nao indica perda de assistant/user.
+- Nenhum assistant vazio foi encontrado.
+- `assistant` com prefixo `<think></think>`: `784343` linhas.
+- `assistant` contendo `\boxed`: `595749` linhas.
+- License observada em todos os registros: `CC BY 4.0`.
+- `reasoning`: `off` em todos os registros.
+
+Distribuicao por split:
+
+| Split | Rows | code | math | stem | chat |
+|---|---:|---:|---:|---:|---:|
+| train | 808775 | 166243 | 227512 | 337213 | 77807 |
+| validation | 42568 | 8757 | 11955 | 17787 | 4069 |
+
+Geradores observados:
+
+| Split | DeepSeek-R1-0528 | Qwen3-235B-A22B, Qwen3-30B-A3B |
+|---|---:|---:|
+| train | 730968 | 77807 |
+| validation | 38499 | 4069 |
+
+Varredura de termos ligados as familias KG1:
+
+| Termo | Train rows | Validation rows | Observacao |
+|---|---:|---:|---|
+| `bit_manipulation` | 0 | 0 | Nao ha label KG1 literal. |
+| `equation_transform` | 0 | 0 | Nao ha label KG1 literal. |
+| `transformation/equation` | 0 | 0 | Nao ha label KG1 literal. |
+| `bit manipulation` | 1508 | 84 | Quase tudo em `code`, nao em puzzles KG1. |
+| `equation transform` | 154 | 10 | Majoritariamente `math`, sem contrato KG1. |
+| `bitwise` | 5122 | 267 | Forte sinal de programacao competitiva/bitwise. |
+| `xor` | 5990 | 300 | Forte sinal de programacao competitiva/bitwise. |
+| `binary` | 26941 | 1399 | Sinal amplo, misturado em `code/stem/math/chat`. |
+| `cipher` | 1847 | 102 | Sinal amplo, nao necessariamente family KG1. |
+| `numeral` | 770 | 43 | Sinal amplo. |
+| `unit conversion` | 93 | 1 | Baixo sinal. |
+| `gravity` | 5405 | 304 | Sinal STEM amplo. |
+| `alice` | 4799 | 246 | Principalmente nomes em problemas de programacao/chat; nao implica dataset Alice/KG1. |
+| `wonderland` | 196 | 12 | Sinal pequeno e ruidoso. |
+| `kaggle` | 70 | 2 | Conversas gerais, nao desafio KG1. |
+| `boxed` | 566019 | 29806 | Formato matematico amplo util como referencia, nao como fonte direta. |
+
+Exemplos inspecionados confirmam que os hits de `bit manipulation`, `xor` e `bitwise` sao majoritariamente problemas de programacao competitiva generica, como interval XOR, flags 64-bit, conversao binaria e bitwise AND/XOR. Os hits de `equation transform` sao problemas matematicos genericos, por exemplo transformacoes algebricas em contagem de solucoes inteiras. Nao apareceu evidencia local de `sft_train.jsonl`, `sft_val.jsonl`, traces `andy279`, labels `bit_manipulation/equation_transform` ou dados especificos do KG1 dentro deste cache.
+
+Decisao operacional:
+
+- Classificacao: P2, referencia auxiliar.
+- Nao usar este dataset full em treino LoRA agora. Ele e grande, generico e nao ataca diretamente o gargalo atual `equation_symbolic_punct`.
+- Nao gastar H100/H200 neste dataset sem um filtro CPU que prove ganho esperado em IDs nao-weak e sem gate de dominio/licenca/leakage.
+- Uso permitido:
+  - extrair amostras pequenas de `code` com `xor/bitwise/bit manipulation` para estudar estilo de resposta e possiveis verificadores de bit;
+  - extrair amostras pequenas de `math` com `equation transform` para formatacao/teacher style;
+  - usar apenas como referencia de formato para distilacao futura, nunca como substituto dos traces solver-guided `andy279`.
+
+Gates obrigatorios antes de qualquer uso futuro:
+
+- filtrar por termos e categoria antes de materializar JSONL;
+- registrar hash de todos os shards/filtros usados;
+- dedupe por `uuid`, prompt normalizado e hashes contra weak/full/train oficiais;
+- bloquear qualquer overlap por ID/prompt com o contrato V221/V276;
+- validar licenca por linha e manifest de fonte;
+- tokenization gate V250 com truncation `0.0`;
+- weak gate com `bit>=136/160`, `equation>=60/155`, `losses=0` para qualquer postprocessor/verifier;
+- FinOps gate: primeiro CPU-only, depois no maximo smoke curto; nenhum treino longo sem sinal CPU verificavel.
