@@ -3993,6 +3993,10 @@ V280 Andy279 trace access/schema gate:
   - `andy279/nemotron-reasoning-challenge`: metadata ok, `gated=manual`, `sha=ddc95b9bd46a12298e3e82900f9f8bdfb926a4f4`, `0/2` arquivos P0 acessiveis por range.
   - `jasonkung98/NVIDIA-Nemotron-Model-Reasoning-Challenge`: metadata ok e publico, mas `train.csv` tem overlap no sample contra weak; portanto segue apenas como fonte de sanity/contrato, nao como autorizacao de treino.
   - Contagem final: `p0_accessible_files=0`, `p0_blocked_files=5`, `public_accessible_files=2`.
+- Double-check por comandos diretos do HF CLI:
+  - `hf download andy279/nemotron-reasoning-challenge --repo-type=dataset --local-dir artifacts\hf_external_sources\andy279_nemotron_reasoning_challenge`: falhou com `Access denied. This repository requires approval.`
+  - `hf download andy279/nemotron-reasoning-challenge-raw-traces --repo-type=dataset --local-dir artifacts\hf_external_sources\andy279_nemotron_reasoning_challenge_raw_traces`: falhou com `Access denied. This repository requires approval.`
+  - Os diretorios parciais gerados pelo HF CLI foram removidos para nao deixar cache/lixo no disco local.
 - Decisao: `p0_gated_terms_required_no_gpu`.
 - Implicacao: a rota `andy279/*` so volta a andar depois de acao humana no HF para liberar os termos/review dos datasets. A partir dai, o proximo comando correto e o mesmo V280 com `--allow-full-download` e limite de bytes antes de construir dataset ou usar H200.
 
