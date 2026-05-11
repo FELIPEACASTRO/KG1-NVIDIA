@@ -1,0 +1,3087 @@
+id,prompt,answer,prediction,family,truncated,baseline_prediction,postprocessor,postprocessor_applied,postprocessor_rule,postprocessor_proof
+e518256e,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+60[58 = 3480
+89""28 = 61
+36%68 = 105
+Now, determine the result for: 94""10",84,84,equation_transform,False,84,v274_numeric_operator_overrides,False,operator_not_guarded,"query_op='""'"
+09d5ee68,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+<:+|& = <:|&
+'&+>? = '&>?
+$!*!| = !!:&
+|:-?' = -&$
+Now, determine the result for: |:*>>",!?'!,|:>>,equation_transform,False,|:>>,v274_numeric_operator_overrides,False,not_numeric_query,query is not a numeric binary expression
+7e5b8c12,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+01011001 -> 01010110
+00011101 -> 01000111
+11110111 -> 11111101
+00100100 -> 00001001
+00010100 -> 00000101
+10000001 -> 01100000
+01001011 -> 11010010
+10110100 -> 00101101
+
+Now, determine the output for: 11000010",10110000,10110000,bit_manipulation,False,10110000,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+00457d26,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+`!*[{ = '""[`
+\'*'> = ![@
+\'-!` = \\
+`!*\& = '@'{
+Now, determine the result for: [[-!'",@&,[[!',equation_transform,False,[[!',v274_numeric_operator_overrides,False,not_numeric_query,query is not a numeric binary expression
+518deb39,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+<'+<"" = (>
+""'-$< = '<
+(""*(< = <<!!
+!$*<> = !^\
+Now, determine the result for: $$-<>",$,{}$>,equation_transform,False,{}$>,v274_numeric_operator_overrides,False,not_numeric_query,query is not a numeric binary expression
+78616706,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+01101001 -> 00001101
+01111111 -> 10001111
+10000001 -> 00010000
+00111111 -> 10000111
+10011100 -> 00010011
+11011100 -> 00011011
+10001110 -> 00010001
+01110100 -> 00001110
+
+Now, determine the output for: 00111001",00000111,00000111,bit_manipulation,False,00000111,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+82109e34,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+''+:@ = @:>
+^\+?^ = @$#
+#?+$> = /?
+^\*?# = $#>/
+Now, determine the result for: '^-^^",-@>,'^^^',equation_transform,False,'^^^',v274_numeric_operator_overrides,False,not_numeric_query,query is not a numeric binary expression
+5e67b1a1,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+93{16 = 001
+18}99 = 9108
+99{97 = 871
+11<35 = 24<
+Now, determine the result for: 32{31",63,63,equation_transform,False,63,v274_numeric_operator_overrides,False,operator_not_guarded,query_op='{'
+c7077b21,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+11010101 -> 01011101
+01010001 -> 00010101
+11101011 -> 10011110
+11011100 -> 01001101
+01110000 -> 00000111
+11011111 -> 00011101
+01001110 -> 00100100
+11011000 -> 10001101
+11010000 -> 00001101
+
+Now, determine the output for: 01100011",00010110,00010110,bit_manipulation,False,00010110,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+fb5a7b9e,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+10010011 -> 00101001
+01101101 -> 10010110
+00110000 -> 00011000
+11101111 -> 10010111
+01011010 -> 01101101
+00000111 -> 11100011
+01000111 -> 11000011
+11101101 -> 11010110
+01011000 -> 00101100
+01000010 -> 01100001
+
+Now, determine the output for: 11110100",11111010,11111010,bit_manipulation,False,11111010,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+e1728524,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+12&13 = 01
+57:58 = 161
+06&91 = 14&
+64:92 = 67
+87&89 = 02
+Now, determine the result for: 99/99",1089,0,equation_transform,False,0,v274_numeric_operator_overrides,False,query_operator_unseen,query_op='/' not present in examples
+839e7350,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+10110010 -> 01110111
+00011110 -> 01000111
+10001001 -> 11111011
+11110000 -> 00111111
+01001100 -> 01001111
+00110111 -> 11000011
+10101111 -> 10100011
+10110000 -> 00111111
+11000000 -> 11111111
+
+Now, determine the output for: 01111001",00111011,00111011,bit_manipulation,False,00111011,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+a365e304,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+11110101 -> 10111001
+10110100 -> 10010011
+01001111 -> 11101011
+11111010 -> 01011000
+00100001 -> 00100101
+00100110 -> 11000101
+10011010 -> 01010111
+
+Now, determine the output for: 11100110",11011011,11011011,bit_manipulation,False,11011011,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+e3bf0c2c,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+@"")`[ = ^^`[
+/`)@& = \'""""
+'')'& = '`&
+`/)""( = @&\&
+\/}@` = `[
+Now, determine the result for: @`}''","""`",@`',equation_transform,False,@`',v274_numeric_operator_overrides,False,not_numeric_query,query is not a numeric binary expression
+fdbdf50c,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+%?-)\ = ^]
+??-?? = %
+<^}""| = ?<
+]^(?] = ""'<
+)'-?"" = ^|
+Now, determine the result for: |\-?|","-\""",|?|,equation_transform,False,|?|,v274_numeric_operator_overrides,False,not_numeric_query,query is not a numeric binary expression
+f3971b9a,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+11000000 -> 00000011
+01111010 -> 01001001
+11111001 -> 01100111
+01011111 -> 00001101
+10110110 -> 10011010
+10110001 -> 11000110
+00111011 -> 01001100
+00110011 -> 11001100
+11000010 -> 00001011
+10010100 -> 00010010
+
+Now, determine the output for: 01111110",00011001,00011001,bit_manipulation,False,00011001,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+ab71eaa0,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+11011100 -> 10100011
+01010110 -> 10100110
+10001100 -> 00001001
+01101010 -> 11011001
+10110001 -> 01110100
+00001111 -> 00011111
+10001110 -> 00001101
+11100011 -> 11011010
+
+Now, determine the output for: 10000001",00010010,00010010,bit_manipulation,False,00010010,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+47c1d8f5,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+{/*@] = {(
+@%#]] = ]^
+]^#]` = {@]
+>(*^} = *}]
+Now, determine the result for: /`#%`",]%],/`%`,equation_transform,False,/`%`,v274_numeric_operator_overrides,False,not_numeric_query,query is not a numeric binary expression
+bfee75d5,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+11010110 -> 10110101
+00110111 -> 11001101
+10011011 -> 11100110
+10001001 -> 01100010
+11110111 -> 11111101
+00011101 -> 01000111
+11111101 -> 01111111
+00001110 -> 10000011
+10110111 -> 11101101
+01101111 -> 11011011
+
+Now, determine the output for: 00001001",01000010,01000010,bit_manipulation,False,01000010,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+f9a33aa1,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+(}\@@ = %(`}
+}}'%% = '((
+&}\$` = }#$#
+%/'&( = '}/
+Now, determine the result for: @(\$/",/((`,@($/,equation_transform,False,@($/,v274_numeric_operator_overrides,False,not_numeric_query,query is not a numeric binary expression
+1abaffca,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+10010110 -> 00110101
+00010010 -> 00100100
+10001111 -> 00010011
+01000110 -> 10001100
+00111001 -> 00010110
+10111100 -> 00011001
+11111010 -> 00011101
+
+Now, determine the output for: 00100000",01000000,01011000,bit_manipulation,False,01011000,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+9f2fae58,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+88+71 = 501
+76$06 = 9104
+99+56 = 461
+86+56 = 331
+93$23 = 7421
+Now, determine the result for: 88$13",7272,7272,equation_transform,False,7272,v274_numeric_operator_overrides,False,operator_not_guarded,query_op='$'
+f9799a68,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+/&+`& = `&/&
+|`+`| = `||`
+?&+[` = [`?&
+`[-|$ = &?
+Now, determine the result for: :^*?\",&:/?,:^?\,equation_transform,False,:^?\,v274_numeric_operator_overrides,False,not_numeric_query,query is not a numeric binary expression
+c24074a8,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+??#(& = #]/
+]/#|/ = #}<
+?|>?] = /()}
+}}>?< = ?|%
+}/>?) = )&}
+Now, determine the result for: ]]`]%",&/,]]]%,equation_transform,False,]]]%,v274_numeric_operator_overrides,False,not_numeric_query,query is not a numeric binary expression
+bc7618a7,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+10101100 -> 10001010
+01011000 -> 00000101
+00110110 -> 11000011
+11111011 -> 01101111
+00000110 -> 11000000
+00001110 -> 11000000
+01110101 -> 10100111
+
+Now, determine the output for: 11000000",00001100,00001100,bit_manipulation,False,00001100,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+893ffb06,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+))+}: = ))}:
+{@-'! = -{`
+'}+@| = '}@|
+::*:' = {||{
+Now, determine the result for: @`-`:",-@',@``:,equation_transform,False,@``:,v274_numeric_operator_overrides,False,not_numeric_query,query is not a numeric binary expression
+cf4c04c0,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+${*#{ = '@@{
+'{*[[ = $:/[
+{$-[# = |(
+|:-[: = (
+([*:[ = /(:
+Now, determine the result for: @|-#|",-[,@|#|,equation_transform,False,@|#|,v274_numeric_operator_overrides,False,not_numeric_query,query is not a numeric binary expression
+8e411cc7,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+^}-]] = (&$
+}:#:$ = &$
+]:!$$ = /]
+:}!("" = ]]<
+Now, determine the result for: $&!&}",]]],$&&,equation_transform,False,$&&,v274_numeric_operator_overrides,False,not_numeric_query,query is not a numeric binary expression
+892d73b5,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+00000100 -> 10000000
+01110010 -> 01001110
+00011111 -> 11100011
+01100011 -> 01101100
+01001001 -> 00101001
+10110111 -> 11110110
+01110001 -> 00101110
+10111101 -> 10110111
+10100101 -> 10110100
+
+Now, determine the output for: 10101000",00010101,00010101,bit_manipulation,False,00010101,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+41e6cbfc,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+05+12 = 1205
+02*63 = 6302
+69+97 = 9769
+61+47 = 4761
+Now, determine the result for: 18+93",9318,9318,equation_transform,False,9318,v274_numeric_operator_overrides,False,add_no_unique_direct_variant,direct_add=[]; baseline=9318
+dea42835,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+''-/> = )
+/`*:[ = :[/`
+>:*)$ = )$>:
+:[*'/ = '/:[
+`$+<[ = )<
+Now, determine the result for: [/*['",['[/,['[/,equation_transform,False,['[/,v274_numeric_operator_overrides,False,not_numeric_query,query is not a numeric binary expression
+48c25e0e,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+82-18 = 1476
+93^50 = ^43
+26-61 = 1586
+Now, determine the result for: 43&11",53,32,equation_transform,False,32,v274_numeric_operator_overrides,False,query_operator_unseen,query_op='&' not present in examples
+e6d2a064,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+11010110 -> 01111101
+01011011 -> 11111000
+00001111 -> 00100010
+10001101 -> 01111011
+11011011 -> 11101001
+11101011 -> 00101111
+11010100 -> 00110101
+
+Now, determine the output for: 01100100",11100011,11100010,bit_manipulation,False,11100010,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+a1d2bb0c,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+11111110 -> 11111011
+10011010 -> 00110000
+11101010 -> 11010011
+01111111 -> 11111101
+00100000 -> 01000001
+00111110 -> 01111101
+00101000 -> 01010001
+
+Now, determine the output for: 10010011",00100010,00100010,bit_manipulation,False,00100010,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+4e4fb429,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+10010000 -> 01001001
+00010111 -> 01111101
+11101001 -> 10111110
+00101011 -> 10111110
+01000011 -> 00111100
+10110101 -> 11011111
+01100111 -> 11111110
+11001111 -> 11111100
+
+Now, determine the output for: 01100011",10111110,10111110,bit_manipulation,False,10111110,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+7ef4d5d6,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+58!25 = 1451
+69>37 = >32
+93>34 = >59
+37!39 = 1444
+Now, determine the result for: 66>24",>42,>42,equation_transform,False,>42,v274_numeric_operator_overrides,False,operator_not_guarded,query_op='>'
+3ee36e0a,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+15-69 = -54
+74)02 = 149
+24>42 = 66
+Now, determine the result for: 48-99",-51,-51,equation_transform,False,-51,v274_numeric_operator_overrides,False,minus_model_not_opposite_sign,candidate=-51; baseline=-51
+39c237c7,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+)\*// = ])`\
+/{+'{ = /{'{
+]&+/` = ]&/`
+Now, determine the result for: {]+``",{]``,{]``,equation_transform,False,{]``,v274_numeric_operator_overrides,False,not_numeric_query,query is not a numeric binary expression
+963e85bb,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+70@44 = 3081
+93$33 = 126
+94@73 = 6863
+43@37 = 1592
+Now, determine the result for: 52$24",76,76,equation_transform,False,76,v274_numeric_operator_overrides,False,operator_not_guarded,query_op='$'
+a98d4d53,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+||*[/ = #[|
+:)-)$ = -[/
+$$+[) = $$[)
+Now, determine the result for: !$-$[",-),!$$[,equation_transform,False,!$$[,v274_numeric_operator_overrides,False,not_numeric_query,query is not a numeric binary expression
+0e70c867,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+01010011 -> 00000000
+00111100 -> 11000000
+00001100 -> 00000000
+10110101 -> 01010100
+00111101 -> 11010000
+00111110 -> 11100000
+11101001 -> 10000111
+
+Now, determine the output for: 10010110",01000000,01001100,bit_manipulation,False,01001100,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+59733f94,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+>#*{^ = {?#$
+[?-^# = -#[
+:>-/$ = -}>
+[>*#[ = #$/
+$[-#^ = ->#
+Now, determine the result for: $/->/",/,$/>/,equation_transform,False,$/>/,v274_numeric_operator_overrides,False,not_numeric_query,query is not a numeric binary expression
+b1bc3731,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+47""22 = 25
+65)12 = 67
+02""87 = ""85
+Now, determine the result for: 07""43",63,63,equation_transform,False,63,v274_numeric_operator_overrides,False,operator_not_guarded,"query_op='""'"
+54b895c1,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+11011011 -> 00110110
+10011101 -> 01111111
+11000001 -> 11111000
+00101011 -> 11101011
+10100101 -> 00111001
+01111011 -> 10111110
+01111001 -> 10011110
+00010001 -> 10101111
+
+Now, determine the output for: 00000101",10111011,10111011,bit_manipulation,False,10111011,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+ed24e7af,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+10111000 -> 00010111
+00010110 -> 00000010
+10011011 -> 10010011
+11001111 -> 10011001
+11010010 -> 00011010
+11011111 -> 10011011
+01001011 -> 10001001
+00001001 -> 10000001
+11111001 -> 10011111
+10010111 -> 10010010
+
+Now, determine the output for: 01001010",00001001,00001001,bit_manipulation,False,00001001,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+3cd80c64,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+00011101 -> 00001110
+00100101 -> 00010010
+11111111 -> 01111111
+00100000 -> 00010000
+00001011 -> 00000101
+00000100 -> 00000010
+10110101 -> 01011010
+
+Now, determine the output for: 11001000",01100100,01100100,bit_manipulation,False,01100100,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+a1523a63,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+77(78 = 01
+03%18 = 011
+05%08 = 921
+Now, determine the result for: 66%31",87,87,equation_transform,False,87,v274_numeric_operator_overrides,False,operator_not_guarded,query_op='%'
+f2b23d11,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+10111010 -> 01000000
+10010101 -> 10100000
+01011000 -> 00000000
+11000111 -> 00100000
+10001110 -> 01000000
+11110000 -> 00000000
+01100101 -> 00100000
+00011011 -> 01000000
+
+Now, determine the output for: 01111100",10000000,10000000,bit_manipulation,False,10000000,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+5cbe919f,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+10110110 -> 00001001
+01101111 -> 00000010
+10111111 -> 00001011
+00001000 -> 00000000
+00111010 -> 00000010
+11001011 -> 00000000
+01000111 -> 00000000
+
+Now, determine the output for: 10011001",00000000,00000000,bit_manipulation,False,00000000,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+3383d4ec,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+88-12 = 76
+32+44 = 4432
+32+72 = 7232
+Now, determine the result for: 39-72",66,66,equation_transform,False,66,v274_numeric_operator_overrides,False,minus_signed_ambiguous,"signed_predictions=['-33', '66']"
+9dae880f,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+:'""`# = <""
+[:>\[ = \)#
+`#""$| = [)
+:\}[# = <)[
+#:>#` = #)::
+Now, determine the result for: :<}`\",))[,:<`\,equation_transform,False,:<`\,v274_numeric_operator_overrides,False,not_numeric_query,query is not a numeric binary expression
+b43d9cd5,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+01010000 -> 01000001
+10000000 -> 00000010
+10011010 -> 01101010
+11010100 -> 01010011
+01101110 -> 10111001
+11110100 -> 11010011
+11100000 -> 10000011
+
+Now, determine the output for: 00111001",11100100,11100100,bit_manipulation,False,11100100,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+64890e18,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+10010100 -> 01011001
+11100100 -> 10011110
+11110101 -> 11011011
+11001010 -> 00100100
+00011000 -> 01100001
+10011100 -> 01111001
+01011010 -> 01101101
+11111111 -> 11110011
+
+Now, determine the output for: 00000011",00001100,00001100,bit_manipulation,False,00001100,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+d6187157,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+10101001 -> 01001010
+01001011 -> 00010100
+01100111 -> 00001110
+11100110 -> 00001100
+01010100 -> 10100000
+01110100 -> 10100000
+01010110 -> 10100100
+
+Now, determine the output for: 11101100",01001000,01001000,bit_manipulation,False,01001000,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+de91def4,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+00011110 -> 00000000
+01101110 -> 00000011
+11111100 -> 00000111
+11110101 -> 10000111
+00110110 -> 00000001
+10101011 -> 10000101
+00110101 -> 10000001
+10001101 -> 10000100
+
+Now, determine the output for: 11101001",10000111,10000111,bit_manipulation,False,10000111,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+2af7134e,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+13+14 = 1
+92+33 = 59
+95}54 = 9554
+56+21 = 35
+Now, determine the result for: 61+41",20,20,equation_transform,False,20,v274_numeric_operator_overrides,False,add_no_unique_direct_variant,direct_add=[]; baseline=20
+ae6be599,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+$|*?] = $|?]
+$$+|# = %%]
+%#-""\ = -%%
+Now, determine the result for: $?+]$",#`,$?]$,equation_transform,False,$?]$,v274_numeric_operator_overrides,False,not_numeric_query,query is not a numeric binary expression
+b26d8818,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+23]23 = 528
+23]21 = 482
+21]31 = 650
+Now, determine the result for: 68]88",5983,5983,equation_transform,False,5983,v274_numeric_operator_overrides,False,operator_not_guarded,query_op=']'
+8494aad3,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+""<*""# = ))^&
+""!+@! = ""!@!
+""^+&"" = ""^&""
+#@*## = """")`
+Now, determine the result for: ])*<""","""`#&","])<""",equation_transform,False,"])<""",v274_numeric_operator_overrides,False,not_numeric_query,query is not a numeric binary expression
+8df3daad,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+73@78 = 7378
+60+19 = 6019
+69+97 = 6997
+Now, determine the result for: 45|11",34,34,equation_transform,False,34,v274_numeric_operator_overrides,False,query_operator_unseen,query_op='|' not present in examples
+791056ce,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+15)47 = 521
+06{81 = 9701
+46*29 = *82
+96*02 = 94
+57)31 = 88
+Now, determine the result for: 58{72",4922,4922,equation_transform,False,4922,v274_numeric_operator_overrides,False,operator_not_guarded,query_op='{'
+29e458d6,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+10110101 -> 10010000
+01110101 -> 00010000
+10001100 -> 01000110
+11000010 -> 01100001
+01001011 -> 00100001
+10100111 -> 10010001
+00011010 -> 00001001
+10010101 -> 11000000
+00111001 -> 10001100
+
+Now, determine the output for: 00100100",00010010,00010010,bit_manipulation,False,00010010,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+3c12aeb9,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+68|06 = 62
+12$29 = 311
+29$51 = 701
+98|25 = 73
+27$85 = 031
+Now, determine the result for: 27$15",321,321,equation_transform,False,321,v274_numeric_operator_overrides,False,operator_not_guarded,query_op='$'
+69aa57b3,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+65+83 = 8365
+62-23 = -6
+69*72 = 2952
+Now, determine the result for: 72+44",4472,4472,equation_transform,False,4472,v274_numeric_operator_overrides,False,add_no_unique_direct_variant,direct_add=[]; baseline=4472
+e3890bf7,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+(^}#% = @$(
+?^*#? = ^@#^
+{(}&? = &{(
+Now, determine the result for: (^*{@",{@%],(^@{,equation_transform,False,(^@{,v274_numeric_operator_overrides,False,not_numeric_query,query is not a numeric binary expression
+d204b9cc,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+69%51 = 18
+11*77 = 648
+81*94 = 188
+22*12 = 164
+49)04 = 431
+Now, determine the result for: 75)57",231,231,equation_transform,False,231,v274_numeric_operator_overrides,False,add_no_unique_direct_variant,direct_add=[]; baseline=231
+7a79ac09,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+10000011 -> 01011101
+01001011 -> 01111111
+00000010 -> 00010001
+10110011 -> 11011101
+00100001 -> 00011001
+11111011 -> 11111111
+11100111 -> 01111111
+10100000 -> 01010101
+
+Now, determine the output for: 01011011",11111111,11111111,bit_manipulation,False,11111111,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+d29e19a4,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+>&]?\ = ]&:
+?}$|? = #}:
+&}$>} = ?\
+|\+?| = |^#|
+Now, determine the result for: |'$>'",?|,|''>,equation_transform,False,|''>,v274_numeric_operator_overrides,False,not_numeric_query,query is not a numeric binary expression
+b06625c4,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+""""*$"" = <&#
+$]-<# = $<
+&&+^) = ]&
+/&-^$ = $$
+Now, determine the result for: ""$*$]",^&/,"""$ $]""",equation_transform,False,"""$ $]""",v274_numeric_operator_overrides,False,not_numeric_query,query is not a numeric binary expression
+84030b0b,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+86)76 = 1
+02""54 = 009
+14""39 = 3183
+84)76 = )91
+55)21 = 34
+Now, determine the result for: 36)12",24,24,equation_transform,False,24,v274_numeric_operator_overrides,False,add_no_unique_direct_variant,direct_add=[]; baseline=24
+3a67aa26,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+01101110 -> 01011011
+11011110 -> 00110111
+11001000 -> 10111011
+10011001 -> 01110111
+10100000 -> 10101111
+01111011 -> 10011110
+01001110 -> 01011011
+00001111 -> 10111011
+11101011 -> 11111010
+11110010 -> 00111110
+
+Now, determine the output for: 10111010",00101110,00101110,bit_manipulation,False,00101110,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+710cf035,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+00000110 -> 00001100
+11111111 -> 11111101
+01000110 -> 10001101
+00000011 -> 00000110
+00011000 -> 00110000
+11110000 -> 11100011
+00100000 -> 01000000
+10101000 -> 01010010
+11101001 -> 11010001
+01101010 -> 11010101
+
+Now, determine the output for: 11000000",10000011,10000011,bit_manipulation,False,10000011,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+52be4988,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+[&+/` = '!
+<\-<\ = \
+`|-'' = -<|
+/&*?\ = &/|
+//-?? = -``
+Now, determine the result for: &&+&`",'!,&&&`,equation_transform,False,&&&`,v274_numeric_operator_overrides,False,not_numeric_query,query is not a numeric binary expression
+b8722d19,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+00011101 -> 10001100
+11101011 -> 01110111
+10101100 -> 01010101
+10100000 -> 00000101
+00110101 -> 00111001
+00011110 -> 10001000
+10010010 -> 11011100
+
+Now, determine the output for: 10000100",00100100,11110100,bit_manipulation,False,11110100,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+99d6a3b5,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+#[%[< = #{^<
+[)%![ = !)?(
+))%?? = [(`
+)#%`? = {([<
+Now, determine the result for: (<%))",?()<,(<)),equation_transform,False,(<)),v274_numeric_operator_overrides,False,not_numeric_query,query is not a numeric binary expression
+2d3547af,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+#}`)$ = }\
+$<(>/ = (^/
+!}&#< = $)^}
+>\`## = )$<
+Now, determine the result for: \$&\\",))^),\$\\,equation_transform,False,\$\\,v274_numeric_operator_overrides,False,not_numeric_query,query is not a numeric binary expression
+8c9fcc6b,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+11101000 -> 11101010
+01010000 -> 10110100
+10101110 -> 01110111
+01011101 -> 10101101
+01001010 -> 10000110
+01010110 -> 10111001
+01101001 -> 11001000
+00010010 -> 00100000
+
+Now, determine the output for: 11100111",11110111,11110111,bit_manipulation,False,11110111,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+28b0ff48,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+/'+|# = ""/
+(?-(' = '
+^""*'# = /]|(
+Now, determine the result for: |^-^^",'],|^^^,equation_transform,False,|^^^,v274_numeric_operator_overrides,False,not_numeric_query,query is not a numeric binary expression
+3fa49035,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+73/78 = 150
+96#58 = 38
+88>60 = 5280
+23/75 = 97
+Now, determine the result for: 24>29",696,696,equation_transform,False,696,v274_numeric_operator_overrides,False,operator_not_guarded,query_op='>'
+61557701,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+((+|: = ::
+$'+&| = ((&
+'}+'& = ):
+($-{| = -'""
+Now, determine the result for: '{+{)",|&,'{),equation_transform,False,'{),v274_numeric_operator_overrides,False,not_numeric_query,query is not a numeric binary expression
+8c0f9291,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+00000000 -> 11111111
+00110101 -> 11000111
+11011011 -> 11111101
+01011000 -> 11001111
+01011111 -> 10110101
+00001101 -> 00110101
+10011001 -> 01011101
+01100011 -> 00001111
+11100101 -> 01101111
+
+Now, determine the output for: 11100011",00001111,00001111,bit_manipulation,False,00001111,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+d6e6f8b5,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+00101111 -> 11100000
+10001011 -> 01100001
+00101101 -> 10100000
+00010010 -> 01000000
+00010100 -> 10000000
+10100001 -> 00100001
+11101100 -> 10000001
+10100111 -> 11100001
+10001001 -> 00100001
+00100101 -> 10100000
+
+Now, determine the output for: 11100111",11100001,11100001,bit_manipulation,False,11100001,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+3a90fdf6,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+00100011 -> 00000000
+11111000 -> 00000000
+01100010 -> 00000000
+11011010 -> 01000000
+00101000 -> 00000000
+00001100 -> 00000000
+01000111 -> 00000000
+01001001 -> 00100000
+11101001 -> 00100000
+
+Now, determine the output for: 11111101",10100000,10100000,bit_manipulation,False,10100000,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+56343b77,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+02+35 = 27
+34-08 = -73
+79*44 = 4479
+05-21 = 83
+43*73 = 7343
+Now, determine the result for: 17+74",711,711,equation_transform,False,711,v274_numeric_operator_overrides,False,add_no_unique_direct_variant,direct_add=[]; baseline=711
+08df5363,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+01001101 -> 00101001
+01010111 -> 01101010
+00101001 -> 00100101
+10100011 -> 01110100
+11110001 -> 00111110
+00010000 -> 00000010
+00000110 -> 11000000
+00000001 -> 00100000
+00101100 -> 10000101
+
+Now, determine the output for: 11100010",01011100,01011100,bit_manipulation,False,01011100,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+d50746e7,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+00110010 -> 00100011
+11100011 -> 00111110
+01100010 -> 00100110
+00000001 -> 00010000
+11000100 -> 01001100
+11001110 -> 11001100
+01011101 -> 10000101
+01101101 -> 01000110
+
+Now, determine the output for: 00101100",01000010,01000010,bit_manipulation,False,01000010,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+2facfaa4,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+01111110 -> 11111101
+00111110 -> 01111100
+00110001 -> 01100010
+10011100 -> 00111010
+10110000 -> 01100010
+10110111 -> 01101100
+10001010 -> 00010110
+
+Now, determine the output for: 10011110",00111110,00111110,bit_manipulation,False,00111110,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+7ac90433,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+02-23 = -21
+33-66 = -33
+75-58 = -82
+Now, determine the result for: 48-25",-23,-23,equation_transform,False,-23,v274_numeric_operator_overrides,False,minus_guard_all_negative_examples,single '-' rule with all negative examples is blocked
+8abcff0f,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+10111100 -> 11001111
+01011101 -> 11010111
+10010110 -> 01101101
+10010101 -> 01011101
+10100001 -> 00011111
+11000101 -> 01011110
+01011111 -> 11110111
+01010001 -> 00010111
+10110101 -> 01011111
+10000011 -> 00111100
+
+Now, determine the output for: 01101111",11110111,11110111,bit_manipulation,False,11110111,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+02902eb3,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+!&*%% = }%>%
+%&-/> = $)
+$]*&& = }&&}
+Now, determine the result for: !!+$>",>/,!!$>,equation_transform,False,!!$>,v274_numeric_operator_overrides,False,not_numeric_query,query is not a numeric binary expression
+ddc5aefe,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+11001111 -> 10000001
+01010010 -> 00000000
+01011100 -> 10000000
+01110001 -> 00100000
+10000101 -> 00000001
+11110000 -> 00000001
+01110111 -> 11100000
+
+Now, determine the output for: 10000011",00000001,00000001,bit_manipulation,False,00000001,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+0d90736f,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+[|*|` = \$()
+!|-$) = )/
+/$+|/ = :\
+\/+): = [`
+`$*|! = `[|`
+Now, determine the result for: ::-)[",:,::)[,equation_transform,False,::)[,v274_numeric_operator_overrides,False,not_numeric_query,query is not a numeric binary expression
+294453b5,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+@!->: = `
+&@*:` = &`&(
+@!-)! = !`
+Now, determine the result for: ##-!)",&(,##!),equation_transform,False,##!),v274_numeric_operator_overrides,False,not_numeric_query,query is not a numeric binary expression
+75ecd32c,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+01111011 -> 11011110
+11011000 -> 00110110
+00011110 -> 10000111
+00000100 -> 00000001
+10011001 -> 01100110
+01100110 -> 10011001
+11011011 -> 11110110
+11101001 -> 01111010
+11111111 -> 11111111
+11110101 -> 01111101
+
+Now, determine the output for: 10001111",11100011,11100011,bit_manipulation,False,11100011,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+12e0ac8c,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+11111101 -> 01110101
+01010000 -> 10101011
+11011001 -> 11101101
+10001010 -> 01110101
+01111110 -> 10011000
+10110001 -> 01010111
+10100100 -> 01000111
+10100110 -> 11001111
+01010111 -> 01110110
+01011100 -> 10011000
+
+Now, determine the output for: 10011100",10101001,10101001,bit_manipulation,False,10101001,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+386b6d03,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+47[35 = 2293
+82-68 = -85
+09[97 = 0117
+Now, determine the result for: 79'97",671,18,equation_transform,False,18,v274_numeric_operator_overrides,False,query_operator_unseen,"query_op=""'"" not present in examples"
+2ead53dc,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+10001010 -> 00001000
+10011111 -> 00001001
+01101000 -> 00000110
+11110001 -> 00001111
+10011100 -> 00001001
+11111011 -> 00001111
+10101100 -> 00001010
+00101101 -> 00000010
+11000111 -> 00001100
+
+Now, determine the output for: 01011010",00000101,00000101,bit_manipulation,False,00000101,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+57f6878e,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+/%<@{ = %(
+$@&^) = /$
+{@&|/ = @$
+$:<:@ = ()
+%:&@@ = /|&
+Now, determine the result for: |@<:(",%{{,|@(!,equation_transform,False,|@(!,v274_numeric_operator_overrides,False,not_numeric_query,query is not a numeric binary expression
+05ca617c,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+01111111 -> 10111111
+01011101 -> 11101111
+01001111 -> 11100111
+01100001 -> 10111101
+10001011 -> 01101101
+01111100 -> 00111111
+10111001 -> 01011100
+01010000 -> 01111111
+
+Now, determine the output for: 10010010",11011011,01011011,bit_manipulation,False,01011011,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+6890870d,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+01011000 -> 10110000
+01010001 -> 10100010
+10001110 -> 00011101
+00010100 -> 00101000
+11111111 -> 11111111
+00000100 -> 00001000
+11010100 -> 10101001
+00110101 -> 01101010
+10011111 -> 00111111
+
+Now, determine the output for: 00111000",01110000,01110000,bit_manipulation,False,01110000,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+1c566511,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+10100001 -> 10010000
+11111011 -> 00111101
+01000111 -> 01100011
+01110000 -> 00111000
+11011100 -> 01101110
+10010110 -> 11001011
+00000001 -> 11000000
+01100101 -> 11110010
+00001100 -> 00000110
+11000100 -> 01100010
+
+Now, determine the output for: 10100100",01010010,01010010,bit_manipulation,False,01010010,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+bc83b0a1,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+!!*>( = !!>(
+&{*!/ = &{!/
+&{*{) = &{{)
+&|?(& = &\{[
+>)""&! = {/
+Now, determine the result for: (/*&{",(/&{,(/&{,equation_transform,False,(/&{,v274_numeric_operator_overrides,False,not_numeric_query,query is not a numeric binary expression
+a361a1b7,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+90@12 = 9012
+99@42 = 9942
+88<41 = 3609
+74<61 = 4515
+64<35 = 2241
+Now, determine the result for: 53:99",:46,46,equation_transform,False,46,v274_numeric_operator_overrides,False,query_operator_unseen,query_op=':' not present in examples
+d911e8e1,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+""#)@& = :#:
+}'('' = \'""}
+:>$:} = $}
+Now, determine the result for: @})<'",:\:,@}<',equation_transform,False,@}<',v274_numeric_operator_overrides,False,not_numeric_query,query is not a numeric binary expression
+4353cd0b,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+01110010 -> 11000110
+10001011 -> 00111101
+11101110 -> 10100101
+00101111 -> 10111001
+11001100 -> 00101001
+01011000 -> 01101011
+00110011 -> 11001010
+
+Now, determine the output for: 01001010",00100001,00100001,bit_manipulation,False,00100001,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+7688e06e,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+06-63 = 42
+96-32 = 64
+87-15 = 72
+58-64 = 93
+87-63 = 24
+Now, determine the result for: 63-19",-55,-55,equation_transform,False,55,v274_numeric_operator_overrides,True,minus_signed_opposite_sign_guarded,candidate=-55; baseline=55
+30ba0cf4,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+10110110 -> 10101101
+10101011 -> 11101011
+00111011 -> 11001110
+01001010 -> 10010010
+11001001 -> 01110011
+01100110 -> 10011001
+11100010 -> 10111001
+11011000 -> 00110111
+
+Now, determine the output for: 10110101",01101101,01101101,bit_manipulation,False,01101101,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+dbd0e3c9,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+68*11 = 6811
+31*85 = 3185
+82`11 = 901
+46#14 = 32
+43`30 = 1289
+Now, determine the result for: 56*31",5631,5631,equation_transform,False,5631,v274_numeric_operator_overrides,False,operator_not_guarded,query_op='*'
+8fbd2477,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+01010101 -> 00000010
+00111010 -> 10100100
+01001001 -> 11011010
+00110101 -> 11000010
+01000100 -> 10101000
+10011001 -> 11111011
+10010110 -> 10011101
+01100001 -> 11001010
+10010000 -> 10100001
+
+Now, determine the output for: 00001001",01011010,01011010,bit_manipulation,False,01011010,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+ba61b815,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+01001001 -> 10000100
+10000001 -> 10001000
+00001000 -> 00000000
+00010010 -> 00000001
+01011000 -> 00000101
+11001011 -> 10001100
+00111110 -> 00000011
+00001110 -> 00000000
+
+Now, determine the output for: 11010000",00001101,00001101,bit_manipulation,False,00001101,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+2e2d60b2,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+24*52 = 1501
+31*51 = 691
+05+52 = 67
+41+52 = 04
+Now, determine the result for: 85+11",07,07,equation_transform,False,07,v274_numeric_operator_overrides,False,add_no_unique_direct_variant,direct_add=[]; baseline=07
+5f9f0ed7,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+@/*`/ = }`]`
+@]+}/ = }|
+/]-[| = ->>
+}!*@` = }`@]
+[>*[] = @`!}
+Now, determine the result for: |!*@[",}/!},|!@[,equation_transform,False,|!@[,v274_numeric_operator_overrides,False,not_numeric_query,query is not a numeric binary expression
+333d93ec,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+85+27 = 131
+16+97 = 141
+16+76 = 921
+86-28 = 41
+63-52 = 11
+Now, determine the result for: 44-73",7,7,equation_transform,False,7,v274_numeric_operator_overrides,False,minus_signed_ambiguous,signed_predictions=[]
+74fff108,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+69-27 = 95
+58^91 = 33
+71?49 = 3479
+41?10 = 410
+26-82 = 107
+Now, determine the result for: 65^16",49,49,equation_transform,False,49,v274_numeric_operator_overrides,False,operator_not_guarded,query_op='^'
+c43b5a13,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+/:+<{ = |<
+|&-/| = {|
+$(+){ = |{
+Now, determine the result for: $)+:$",)|,$):$,equation_transform,False,$):$,v274_numeric_operator_overrides,False,not_numeric_query,query is not a numeric binary expression
+b0206bb7,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+){+&# = //
+!/*&@ = /{@}
+{)-&! = -/#
+{}*)} = &#{#
+]!-}{ = -@&
+Now, determine the result for: ${*)}",]$!,$){,equation_transform,False,$){,v274_numeric_operator_overrides,False,not_numeric_query,query is not a numeric binary expression
+638f93ca,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+#>*?? = /<@
+$<*<' = ?<?'
+$$*]` = ?]<?
+$]-<@ = ?#
+Now, determine the result for: $<-]$",@,$<]$,equation_transform,False,$<]$,v274_numeric_operator_overrides,False,not_numeric_query,query is not a numeric binary expression
+5b9964c7,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+00100011 -> 01101100
+11011111 -> 11111111
+11101001 -> 00111111
+11110011 -> 01111110
+10010011 -> 01110110
+10000111 -> 11110001
+00010010 -> 01000110
+
+Now, determine the output for: 01001000",00011011,00011011,bit_manipulation,False,00011011,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+a6f7139f,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+01101010 -> 10000110
+10000010 -> 10001000
+00100010 -> 10000010
+11110010 -> 10001111
+11001011 -> 11001100
+10111010 -> 10001011
+11110110 -> 10001111
+11010100 -> 00001101
+
+Now, determine the output for: 00000111",11000000,11000000,bit_manipulation,False,11000000,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+b2fb65cf,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+10101000 -> 01011111
+00000000 -> 11111111
+01101010 -> 11010111
+01101111 -> 10000011
+00000001 -> 10111011
+00011111 -> 01000011
+00001010 -> 01010111
+00001001 -> 10011011
+11000000 -> 11111111
+
+Now, determine the output for: 01111111",11000011,11000011,bit_manipulation,False,11000011,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+4bfd095a,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+{%*)) = )){
+)/*/"" = [^^{
+)""-\[ = -\\
+{)*[{ = \\@
+Now, determine the result for: @/*[@",{<<<,@/[@,equation_transform,False,@/[@,v274_numeric_operator_overrides,False,not_numeric_query,query is not a numeric binary expression
+7a422e17,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+"":@%# = %&{
+'}+'' = &'""
+'{-%! = }
+``-#{ = -{:
+Now, determine the result for: #`@{""",%'!,"#`""",equation_transform,False,"#`""",v274_numeric_operator_overrides,False,not_numeric_query,query is not a numeric binary expression
+7192535b,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+01001000 -> 00000000
+00101101 -> 00000010
+10100100 -> 00001000
+00011100 -> 00000001
+00111011 -> 01100111
+11010000 -> 00001000
+10011000 -> 00010001
+01001010 -> 00000100
+11000110 -> 10001100
+
+Now, determine the output for: 00100101",00000010,00001010,bit_manipulation,False,00001010,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+5b2523e6,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+?>+') = :<
+!&*$< = &'\:
+&\+\& = ><
+?$+:! = ><
+Now, determine the result for: ><-\$",&&,><\$,equation_transform,False,><\$,v274_numeric_operator_overrides,False,not_numeric_query,query is not a numeric binary expression
+dbb611da,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+11111000 -> 00000001
+00101100 -> 00000000
+10011011 -> 00000100
+01000101 -> 10000010
+01001000 -> 00000000
+11000011 -> 10000110
+11101001 -> 10000011
+10001101 -> 00000000
+10010011 -> 00000100
+
+Now, determine the output for: 10100000",00000001,00000001,bit_manipulation,False,00000001,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+0fe53bac,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+(@+!| = @""
+}(-^} = }}
+?""+): = ()@
+@@-""@ = -)
+Now, determine the result for: ^?+(|","(""",^?(|,equation_transform,False,^?(|,v274_numeric_operator_overrides,False,not_numeric_query,query is not a numeric binary expression
+07ceed47,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+10001010 -> 00010001
+00100111 -> 10000100
+00011011 -> 10000011
+00101011 -> 10000101
+00101101 -> 10000101
+01000010 -> 00001000
+00010111 -> 10000010
+
+Now, determine the output for: 00101001",10000101,10000101,bit_manipulation,False,10000101,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+274def88,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+33*74 = 2551
+29-79 = -5
+17+69 = 861
+01-72 = -71
+42*38 = 3991
+Now, determine the result for: 85-92",92,92,equation_transform,False,-92,v274_numeric_operator_overrides,True,minus_signed_opposite_sign_guarded,candidate=92; baseline=-92
+7aa4fdf0,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+11110001 -> 00010111
+00111110 -> 00000011
+01011100 -> 00000101
+11110101 -> 01010111
+11100001 -> 00010110
+11001011 -> 10100100
+11101111 -> 10000110
+11110100 -> 01001111
+00100001 -> 00010010
+
+Now, determine the output for: 00010000",00000001,00000001,bit_manipulation,False,00000001,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+03a3437f,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+/>-|/ = ':
+'>+/! = '>/!
+}!-'` = >'
+Now, determine the result for: '}-/>",-!,'}>/,equation_transform,False,'}>/,v274_numeric_operator_overrides,False,not_numeric_query,query is not a numeric binary expression
+f2014638,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+10110001 -> 01101100
+10100011 -> 11101000
+11111111 -> 11111111
+00100111 -> 11001001
+00110100 -> 00001101
+11000100 -> 00110001
+01011011 -> 11010110
+11101110 -> 10111011
+10001010 -> 10100010
+
+Now, determine the output for: 01101010",10011010,10011010,bit_manipulation,False,10011010,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+a8ea0e29,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+00010110 -> 00000000
+01110111 -> 10000000
+00011111 -> 10000000
+10011111 -> 10000000
+11010111 -> 10000000
+00011011 -> 10000000
+01111011 -> 10000000
+01110110 -> 00000000
+
+Now, determine the output for: 00101000",00000000,00000000,bit_manipulation,False,00000000,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+30ac5c8e,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+&}-@) = -\@
+:/*/} = #/&?
+}&*#"" = #&\}
+\}*)@ = &&#?
+""\+#\ = ::?
+Now, determine the result for: @\+}?",)#?,@\}?,equation_transform,False,@\}?,v274_numeric_operator_overrides,False,not_numeric_query,query is not a numeric binary expression
+3cfc5f9c,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+00100010 -> 11001111
+00001000 -> 00111111
+10001010 -> 00001111
+11110101 -> 00000111
+01001001 -> 00100111
+01110100 -> 00011111
+11101011 -> 00010111
+
+Now, determine the output for: 11101111",01110111,01110111,bit_manipulation,False,01110111,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+08d8d7e1,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+41+98 = 301
+94+07 = 911
+06*49 = 4906
+95*27 = 2795
+Now, determine the result for: 65+23",88,88,equation_transform,False,88,v274_numeric_operator_overrides,False,add_no_unique_direct_variant,direct_add=[]; baseline=88
+ff121f08,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+%`+^< = +<%
+#!(!< = %#@
+`^(%^ = %[`>
+#^\!! = /#
+`>\`` = #^`
+Now, determine the result for: !%+<<",#<,!%<<,equation_transform,False,!%<<,v274_numeric_operator_overrides,False,not_numeric_query,query is not a numeric binary expression
+114a7439,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+10101100 -> 01100101
+00100011 -> 00011001
+10111001 -> 10001101
+01110100 -> 10100011
+11000000 -> 00000110
+00001110 -> 01110000
+10011001 -> 10001100
+
+Now, determine the output for: 00111110",01110001,01110001,bit_manipulation,False,01110001,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+343095d3,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+01100111 -> 10001110
+11011100 -> 00111001
+01101111 -> 00001110
+10010010 -> 00000101
+00101101 -> 00001010
+01001001 -> 00000010
+01000110 -> 10001100
+00000001 -> 00000010
+10101100 -> 00011001
+01100011 -> 11000110
+
+Now, determine the output for: 01111010",01010100,01010100,bit_manipulation,False,01010100,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+a4dd4cce,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+11010110 -> 01100110
+10101111 -> 11110101
+01011000 -> 10000010
+11010010 -> 00100110
+11110101 -> 01010111
+11100011 -> 00110111
+11110111 -> 01110111
+01101010 -> 10100011
+
+Now, determine the output for: 01001011",10110010,10110010,bit_manipulation,False,10110010,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+6b11c05f,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+10111110 -> 00001111
+00001110 -> 10000011
+00101101 -> 00000011
+10110101 -> 01000101
+00101110 -> 10001011
+11101100 -> 00011011
+11101110 -> 10001011
+
+Now, determine the output for: 10001001",00100010,00100010,bit_manipulation,False,00100010,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+42cb233d,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+81*84 = 368
+17+26 = 431
+41-94 = -53
+Now, determine the result for: 59+29",881,881,equation_transform,False,881,v274_numeric_operator_overrides,False,add_no_unique_direct_variant,direct_add=[]; baseline=881
+ec8b4875,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+%?*:? = ?""::
+""<*<% = <]]?
+@:-:: = -""
+Now, determine the result for: |@*<!","|""]",|@<!,equation_transform,False,|@<!,v274_numeric_operator_overrides,False,not_numeric_query,query is not a numeric binary expression
+e3fbc768,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+??/:^ = ){)?
+:'`^) = [
+{!`)( = %
+Now, determine the result for: {%/??",'(^),%??,equation_transform,False,%??,v274_numeric_operator_overrides,False,not_numeric_query,query is not a numeric binary expression
+6cc5dafb,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+>&-'& = #%
+)#\^( = ##']
+))-&^ = "")
+>#\""& = ^#)
+Now, determine the result for: ^&!>)",)(,^&>),equation_transform,False,^&>),v274_numeric_operator_overrides,False,not_numeric_query,query is not a numeric binary expression
+d5a03a2e,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+?{+&% = @/^
+!?)>^ = &
+@{`&/ = ?!{
+^{`?? = &>
+Now, determine the result for: """")&&",>>,""")&&",equation_transform,False,""")&&",v274_numeric_operator_overrides,False,not_numeric_query,query is not a numeric binary expression
+eea91b82,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+10110011 -> 10001111
+11000010 -> 01011111
+00001101 -> 11010100
+10010000 -> 01011111
+00101001 -> 11111101
+10000100 -> 11111110
+00111010 -> 10100001
+00000000 -> 11111111
+10100000 -> 11010111
+11000001 -> 10000111
+
+Now, determine the output for: 11110101",00101111,00101111,bit_manipulation,False,00101111,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+4736daab,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+00111101 -> 11010001
+11001101 -> 11010110
+01100111 -> 01110011
+01001011 -> 10110010
+11101110 -> 11100111
+00110010 -> 00100001
+10111011 -> 10110101
+10011011 -> 10110100
+01000101 -> 01010010
+
+Now, determine the output for: 11110100",01000111,01000111,bit_manipulation,False,01000111,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+8bebef83,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+55{76 = 4180
+75{33 = 2475
+95*43 = 9
+73/97 = 169
+Now, determine the result for: 44{77",3388,3388,equation_transform,False,3388,v274_numeric_operator_overrides,False,operator_not_guarded,query_op='{'
+efc2b69d,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+00101110 -> 11000101
+11101001 -> 00111101
+11110000 -> 00011110
+00100001 -> 00100100
+00111111 -> 11100111
+10001110 -> 11010001
+11011101 -> 10111011
+
+Now, determine the output for: 11100101",10111100,10111100,bit_manipulation,False,10111100,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+a794d193,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+00011110 -> 00111100
+11101010 -> 11010011
+10111001 -> 01110111
+10011011 -> 00110010
+01011000 -> 10110010
+10011010 -> 00110000
+11111010 -> 11110011
+01101100 -> 11011011
+
+Now, determine the output for: 10101100",01011101,01011101,bit_manipulation,False,01011101,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+0f7ddd75,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+01110101 -> 11111111
+10111001 -> 11110110
+10110110 -> 11111110
+01100100 -> 11011001
+00100111 -> 11011110
+00001100 -> 00111000
+11011111 -> 11111111
+01001100 -> 10111001
+00101011 -> 11111110
+01010010 -> 11101101
+
+Now, determine the output for: 00111001",11110110,11110110,bit_manipulation,False,11110110,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+27cec7a9,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+62!34 = 95
+17%40 = %23
+52:35 = 5235
+52%99 = %47
+90:55 = 9055
+Now, determine the result for: 33:41",3341,3341,equation_transform,False,3341,v274_numeric_operator_overrides,False,colon_no_unique_unreverse,candidate_predictions=[]
+a6704625,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+00010001 -> 11001110
+01111000 -> 10001111
+01100101 -> 01101111
+10111000 -> 00010111
+10001000 -> 01110111
+01111100 -> 11001111
+10100100 -> 11111101
+01100111 -> 01001111
+01110101 -> 01001110
+11010001 -> 01011010
+
+Now, determine the output for: 01000111",00001101,00011111,bit_manipulation,False,00011111,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+d117113e,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+10010011 -> 00000000
+00111111 -> 00001111
+00001000 -> 00000000
+10110110 -> 00001001
+11011010 -> 00100100
+00111100 -> 00001110
+10001101 -> 00000010
+00000110 -> 00000001
+
+Now, determine the output for: 01010101",00000000,00000000,bit_manipulation,False,00000000,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+4aeed935,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+24*74 = 7424
+75+78 = 7875
+31+96 = 9631
+07-19 = -12
+Now, determine the result for: 55*14",1455,1455,equation_transform,False,1455,v274_numeric_operator_overrides,False,operator_not_guarded,query_op='*'
+6f7a9048,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+10111110 -> 10111111
+01001000 -> 10100100
+00011000 -> 10001100
+01100010 -> 00010001
+01111111 -> 11001111
+11111110 -> 10011111
+10001111 -> 10110111
+00101110 -> 11110111
+01101011 -> 10000101
+01000110 -> 01000011
+
+Now, determine the output for: 01010000",00101000,00101000,bit_manipulation,False,00101000,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+8740ed31,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+00100110 -> 00010000
+01010101 -> 10101010
+01100011 -> 00011000
+10011010 -> 01010001
+10011011 -> 11011001
+11010000 -> 00001000
+00111101 -> 10001110
+
+Now, determine the output for: 11001101",01101000,01111000,bit_manipulation,False,01111000,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+fb623471,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+84*57 = 1063
+67-37 = 3
+77*65 = 3134
+Now, determine the result for: 08-29",-21,21,equation_transform,False,21,v274_numeric_operator_overrides,False,minus_signed_ambiguous,"signed_predictions=['-12', '-21']"
+88b43464,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+34*04 = 0271
+85*32 = 4331
+15-15 = 0
+97*77 = 3806
+76+05 = 0576
+Now, determine the result for: 11+53",5311,5311,equation_transform,False,5311,v274_numeric_operator_overrides,False,add_no_unique_direct_variant,direct_add=[]; baseline=5311
+209c43f0,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+10^12 = 21
+92!90 = 8280
+98^33 = 130
+48:26 = 22
+Now, determine the result for: 18^84",101,101,equation_transform,False,101,v274_numeric_operator_overrides,False,operator_not_guarded,query_op='^'
+8ac52d78,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+00010110 -> 01000000
+00000010 -> 00000000
+01110011 -> 00100000
+00111011 -> 00100000
+11010101 -> 00010000
+10011110 -> 11000000
+10101101 -> 10010000
+11101101 -> 10010000
+
+Now, determine the output for: 11100001",00010000,00010000,bit_manipulation,False,00010000,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+f507b7f1,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+11000100 -> 11011100
+11101010 -> 00011101
+00111011 -> 11001111
+01000010 -> 11101110
+10101000 -> 00011101
+01101100 -> 00101111
+10111100 -> 11111111
+
+Now, determine the output for: 11000110",11001100,11011100,bit_manipulation,False,11011100,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+d129b085,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+@\+!"" = `$$
+#\+>! = \@
+<@*>"" = @#`]
+!]*@] = #>``
+Now, determine the result for: !>+`""",##$,!>``,equation_transform,False,!>``,v274_numeric_operator_overrides,False,not_numeric_query,query is not a numeric binary expression
+368f20dd,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+00000100 -> 00100000
+11100110 -> 00111110
+11000101 -> 00100100
+00111101 -> 11101011
+00101110 -> 01110010
+10110111 -> 10110011
+11101111 -> 01110110
+00110111 -> 10111011
+11111010 -> 11011111
+
+Now, determine the output for: 01010000",10000101,10000101,bit_manipulation,False,10000101,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+e582df31,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+}#[""' = :@}'
+]]!^"" = #""
+]/?}] = ?@#
+Now, determine the result for: ""'?]@",}@,"""']@",equation_transform,False,"""']@",v274_numeric_operator_overrides,False,not_numeric_query,query is not a numeric binary expression
+a77be9fa,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+(^&$"" = [}\
+\^!^[ = {[}
+""$|:^ = ^\
+Now, determine the result for: {>|$[","[""",{>$[,equation_transform,False,{>$[,v274_numeric_operator_overrides,False,not_numeric_query,query is not a numeric binary expression
+5a19f71a,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+10001001 -> 01101100
+00111100 -> 01100001
+10110101 -> 00001101
+01010000 -> 10000010
+11000100 -> 10100110
+11110101 -> 00001111
+11000011 -> 01111110
+01111000 -> 11000011
+
+Now, determine the output for: 01001100",11100010,11100010,bit_manipulation,False,11100010,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+78d02fc5,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+01010011 -> 01110010
+00010010 -> 00110111
+00110011 -> 11110011
+11101000 -> 01011101
+11001010 -> 01010101
+00101110 -> 11000111
+00101011 -> 10010011
+00011010 -> 00010111
+11100100 -> 01101101
+
+Now, determine the output for: 11011101",11001001,11001011,bit_manipulation,False,11001011,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+4166067c,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+01100101 -> 01011001
+11110111 -> 01111101
+01100110 -> 10011001
+01110110 -> 10011101
+11101101 -> 01111011
+11000001 -> 01110000
+00110101 -> 01001101
+
+Now, determine the output for: 11011011",01110110,01110110,bit_manipulation,False,01110110,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+49fb46e8,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+00001100 -> 00110000
+11001010 -> 00101110
+01000110 -> 00011010
+01100001 -> 10000111
+01110010 -> 11001011
+01100010 -> 10001011
+11010111 -> 01011010
+
+Now, determine the output for: 11010010",01001110,01001110,bit_manipulation,False,01001110,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+779bb1f3,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+00010000 -> 00000000
+00000010 -> 10000000
+00010101 -> 01000000
+00101110 -> 10000000
+11110011 -> 11000001
+10101010 -> 10000001
+00011100 -> 00000000
+
+Now, determine the output for: 10100010",10000001,10000001,bit_manipulation,False,10000001,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+e2b02e13,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+01111000 -> 00001111
+10100011 -> 01110100
+10110110 -> 11010110
+00100111 -> 01100100
+01000100 -> 10001000
+10100100 -> 10010100
+01111110 -> 11001111
+01000001 -> 00101000
+00110001 -> 00100110
+
+Now, determine the output for: 11110011",01111110,01111110,bit_manipulation,False,01111110,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+f8d6abd1,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+36:34 = 1223
+59:82 = 4837
+34%21 = 55
+Now, determine the result for: 63:88",5543,5543,equation_transform,False,5543,v274_numeric_operator_overrides,False,colon_no_unique_unreverse,candidate_predictions=[]
+21245d76,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+00101100 -> 01011011
+11110101 -> 11011111
+01111101 -> 10110111
+11000010 -> 10011110
+00000110 -> 11100100
+11101110 -> 00111110
+10011100 -> 11001001
+11111000 -> 01101111
+
+Now, determine the output for: 11011011",01111111,01111111,bit_manipulation,False,01111111,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+4ed6b56f,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+`'+:' = (`]
+]:*}> = !""(/
+:}*:' = :/(/
+>]-(( = '!
+Now, determine the result for: !:*`(","(""/""",!:`(,equation_transform,False,!:`(,v274_numeric_operator_overrides,False,not_numeric_query,query is not a numeric binary expression
+e0eba119,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+01011001 -> 01001000
+00111111 -> 10000001
+10110001 -> 10001101
+01010001 -> 00001000
+11101001 -> 00001101
+11101000 -> 00000111
+00000010 -> 00010000
+
+Now, determine the output for: 01010010",00010010,00010010,bit_manipulation,False,00010010,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+55014a7a,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+10111100 -> 11000010
+11110001 -> 00000111
+01001100 -> 00000000
+01000101 -> 00010100
+10010101 -> 01010000
+11010011 -> 00001101
+11011000 -> 00000001
+00001100 -> 00000000
+
+Now, determine the output for: 00110101",01010000,01010000,bit_manipulation,False,01010000,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+0fe06e8c,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+11001000 -> 10000011
+11101101 -> 11010011
+01001101 -> 11010001
+11010110 -> 01100011
+11010101 -> 01010011
+01011000 -> 10000001
+01001010 -> 10100001
+00001111 -> 11110000
+11010000 -> 00000011
+00000111 -> 01110000
+
+Now, determine the output for: 10111001",10010010,10010010,bit_manipulation,False,10010010,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+f8fc43d2,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+11101010 -> 01101101
+10110110 -> 10011000
+11111111 -> 11000000
+01000111 -> 00101011
+10000000 -> 00100100
+11110111 -> 10000010
+01101111 -> 01100000
+10110101 -> 10000000
+
+Now, determine the output for: 01111111",11100100,11100100,bit_manipulation,False,11100100,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+208d7838,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+#}+{% = }$$
+%#*%[ = &:[[
+}%-&[ = [$
+<&+:$ = :#
+}%*&# = }[$%
+Now, determine the result for: [&-<>",[:,[&<>,equation_transform,False,[&<>,v274_numeric_operator_overrides,False,not_numeric_query,query is not a numeric binary expression
+58c099d2,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+`|+\& = &]
+`]+|^ = &|
+#&-]& = -)!
+Now, determine the result for: ^!-#\",-)\,^!#\,equation_transform,False,^!#\,v274_numeric_operator_overrides,False,not_numeric_query,query is not a numeric binary expression
+d40ce15d,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+01011011 -> 01100111
+01101100 -> 10111101
+11100011 -> 10010000
+10011100 -> 01100011
+10111100 -> 11100111
+01110111 -> 11010010
+11010011 -> 01010110
+11111100 -> 11101111
+10001010 -> 00111001
+
+Now, determine the output for: 00000100",00010000,00010000,bit_manipulation,False,00010000,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+3cb3fd89,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+@)-@\ = -)
+[$*$$ = [|{\
+$]+!\ = |$|
+$[*$& = &@![
+Now, determine the result for: ]$*$)",[[&],]$$),equation_transform,False,]$$),v274_numeric_operator_overrides,False,not_numeric_query,query is not a numeric binary expression
+c711f9dd,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+00101110 -> 01011100
+10010011 -> 00100111
+10101000 -> 01010001
+00100110 -> 01001100
+11011111 -> 00111111
+01110110 -> 01101100
+10110100 -> 01101001
+01110011 -> 00100110
+00111000 -> 01110000
+
+Now, determine the output for: 01100000",11000000,11000000,bit_manipulation,False,11000000,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+a26065d4,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+[|+<$ = [&
+<#-'# = '
+<&-<$ = <
+&|+&` = <@
+[`+<] = [#$
+Now, determine the result for: <&+<#",<',<&<#,equation_transform,False,<&<#,v274_numeric_operator_overrides,False,not_numeric_query,query is not a numeric binary expression
+55d834d1,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+10100000 -> 11110101
+11110011 -> 01011110
+11011111 -> 10011011
+00110001 -> 01101110
+10001100 -> 00110111
+01000010 -> 11011011
+01100000 -> 11111101
+
+Now, determine the output for: 00011100",00111111,10111111,bit_manipulation,False,10111111,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+194695e8,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+{|*<\ = {%!|
+]|*!] = {<|%
+]$-<% = |!
+Now, determine the result for: !\-{<",%,!\{<,equation_transform,False,!\{<,v274_numeric_operator_overrides,False,not_numeric_query,query is not a numeric binary expression
+4ef88f92,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+01101101 -> 10010111
+01000001 -> 01111101
+11001110 -> 01011110
+10011110 -> 10111011
+01111010 -> 11100111
+01110101 -> 11000111
+00110100 -> 01000111
+01101100 -> 10010111
+10010101 -> 10001001
+11011000 -> 00101111
+
+Now, determine the output for: 00110011",01010111,01011111,bit_manipulation,False,01011111,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+5d77eff6,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+11111101 -> 10111111
+01010010 -> 00011011
+00100011 -> 11011101
+00001000 -> 11101111
+10111110 -> 01010111
+11011000 -> 01011111
+10110110 -> 01010110
+11110101 -> 10111110
+00010010 -> 10011011
+01100111 -> 11011101
+
+Now, determine the output for: 11100001",00011100,00011100,bit_manipulation,False,00011100,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+1a7c8520,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+01101101 -> 10010011
+10001000 -> 00000000
+00001011 -> 00000100
+00000111 -> 00001100
+01011101 -> 00110010
+11011101 -> 00110110
+00100101 -> 00000000
+
+Now, determine the output for: 10111000",01100000,01100110,bit_manipulation,False,01100110,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+1c671acc,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+10110010 -> 11011101
+10010011 -> 11011100
+00100000 -> 10000001
+01101100 -> 11110011
+11110000 -> 11000111
+00000111 -> 00111100
+00011011 -> 11111100
+11011101 -> 11111110
+11111000 -> 11100111
+
+Now, determine the output for: 00101011",11111101,11111101,bit_manipulation,False,11111101,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+528ec0d8,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+38(96 = 3648
+13(43 = 559
+42#38 = 81
+41(94 = 3854
+Now, determine the result for: 11-50",-39,39,equation_transform,False,39,v274_numeric_operator_overrides,False,query_operator_unseen,query_op='-' not present in examples
+4bb8c6cd,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+`!-|: = -]!
+]/-]: = `
+'`-\' = -`/
+]`+\| = ]`\|
+]^-|/ = -`|
+Now, determine the result for: ]}*\!",]}\!,]}\!,equation_transform,False,]}\!,v274_numeric_operator_overrides,False,not_numeric_query,query is not a numeric binary expression
+57712d01,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+$'+`` = ""`(
+{<*/( = """"/(
+!<-`` = -?
+{""-'< = -{{
+'<+""' = /?
+Now, determine the result for: $/-'{",-/<,$/'{,equation_transform,False,$/'{,v274_numeric_operator_overrides,False,not_numeric_query,query is not a numeric binary expression
+d98d85c0,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+(#-`> = ''
+|'-'# = ||
+@&+'> = '&&&
+Now, determine the result for: (@+@?",?(&@,(@@?,equation_transform,False,(@@?,v274_numeric_operator_overrides,False,not_numeric_query,query is not a numeric binary expression
+b62f2e75,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+00100010 -> 00001000
+10011111 -> 00100111
+10001011 -> 00100010
+11111100 -> 00111111
+00111010 -> 00001110
+10111010 -> 00101110
+11101010 -> 00111010
+
+Now, determine the output for: 11111101",00111111,00111111,bit_manipulation,False,00111111,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+7ed40e8a,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+56*48 = 2688
+81/77 = /4
+16&69 = 84
+Now, determine the result for: 99&82",180,180,equation_transform,False,180,v274_numeric_operator_overrides,False,operator_not_guarded,query_op='&'
+491b8ea5,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+!^+){ = |}
+]/*|| = ]/||
+]@-|] = !)
+Now, determine the result for: @|-]!",)!,@|]!,equation_transform,False,@|]!,v274_numeric_operator_overrides,False,not_numeric_query,query is not a numeric binary expression
+eb1a62f7,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+)^-{! = -(@
+>)+}@ = }}{
+%%+?^ = )@{
+Now, determine the result for: )}*>)",>!>},){>),equation_transform,False,){>),v274_numeric_operator_overrides,False,not_numeric_query,query is not a numeric binary expression
+0bb591e6,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+)(-)( = ""
+&(-(( = <
+$(-(% = )<
+<%-%$ = ??
+Now, determine the result for: ""$+%%",%?<,"""$%%""",equation_transform,False,"""$%%""",v274_numeric_operator_overrides,False,not_numeric_query,query is not a numeric binary expression
+c869b4f6,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+01110100 -> 00111010
+11101100 -> 01110110
+10001001 -> 00000100
+00001010 -> 10000101
+10110011 -> 10011001
+10001011 -> 10000101
+00100111 -> 11010011
+00100001 -> 01010000
+10011001 -> 00001100
+
+Now, determine the output for: 10100011",10010001,10010001,bit_manipulation,False,10010001,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+3c424916,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+26*84 = 5792
+22+78 = 901
+49*64 = 3234
+Now, determine the result for: 82*55",9351,9351,equation_transform,False,9351,v274_numeric_operator_overrides,False,operator_not_guarded,query_op='*'
+575f9709,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+00101111 -> 01111011
+01101000 -> 01011011
+11110001 -> 10111111
+00011001 -> 11001110
+10111110 -> 11111111
+10100011 -> 00111101
+10010010 -> 10110100
+10010000 -> 10100100
+00001101 -> 01101011
+
+Now, determine the output for: 10101011",01111111,01111111,bit_manipulation,False,01111111,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+691608b9,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+10010100 -> 00100101
+01011100 -> 00010111
+10000100 -> 00100001
+00111010 -> 00001110
+01010100 -> 00010101
+11111010 -> 00111110
+10100110 -> 00101001
+00100001 -> 00001000
+10001010 -> 00100010
+
+Now, determine the output for: 10100000",00101000,00101000,bit_manipulation,False,00101000,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+72336119,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+77>12 = 925
+99?83 = 9983
+92*43 = 49
+69>92 = 6349
+Now, determine the result for: 85>39",3316,3316,equation_transform,False,3316,v274_numeric_operator_overrides,False,operator_not_guarded,query_op='>'
+202af98d,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+01000101 -> 01111111
+00000110 -> 11000011
+01000100 -> 01110111
+10011001 -> 01001101
+10101111 -> 11011111
+10101011 -> 11110101
+10001000 -> 11101111
+10111001 -> 01011100
+01001001 -> 00100111
+
+Now, determine the output for: 11110010",11111101,11111111,bit_manipulation,False,11111111,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+3ace787f,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+11101100 -> 10100111
+11011000 -> 00001111
+11010101 -> 00100110
+00101111 -> 01001101
+01011001 -> 01100011
+11110101 -> 00101111
+11100101 -> 10101111
+01100101 -> 10001111
+
+Now, determine the output for: 01111011",11111011,11111111,bit_manipulation,False,11111111,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+9a19fc2d,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+{{-># = {#
+[!-)[ = !{
+}/+&{ = &'
+[[+') = >&
+/'+// = &[[
+Now, determine the result for: !&+)#",#>[,!&)#,equation_transform,False,!&)#,v274_numeric_operator_overrides,False,not_numeric_query,query is not a numeric binary expression
+dc7f150a,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+11101001 -> 11110100
+00000011 -> 10000001
+11111001 -> 11111100
+01001000 -> 00100100
+01001110 -> 00100111
+01110111 -> 10111011
+10101010 -> 01010101
+
+Now, determine the output for: 10010111",11001011,11001011,bit_manipulation,False,11001011,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+12e947ca,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+10010001 -> 00001000
+00011101 -> 01001110
+10010101 -> 00001010
+11110001 -> 00111000
+01001000 -> 00100100
+01010100 -> 00101010
+00010010 -> 10001001
+11100101 -> 00110010
+11101100 -> 01110110
+10110001 -> 00011000
+
+Now, determine the output for: 11111101",00111110,00111110,bit_manipulation,False,00111110,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+2a5d4790,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+00000111 -> 01110011
+11011110 -> 11101111
+01000000 -> 00100100
+01111100 -> 11111111
+11100110 -> 01111111
+10111100 -> 11011111
+00000011 -> 00110001
+00101100 -> 11010110
+
+Now, determine the output for: 01111111",11111111,11111111,bit_manipulation,False,11111111,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+59bee375,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+11001100 -> 10111011
+11001101 -> 10011011
+01110000 -> 11111110
+10000110 -> 01010111
+00100001 -> 11001101
+10111110 -> 11010111
+00110000 -> 11111110
+
+Now, determine the output for: 10101101",10010101,10010101,bit_manipulation,False,10010101,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+528b694b,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+@>+^\ = @@^>
+]@<@\ = <')
+'>+^$ = @]{)
+@'<)> = "")
+Now, determine the result for: >]<])","""'",>]]),equation_transform,False,>]]),v274_numeric_operator_overrides,False,not_numeric_query,query is not a numeric binary expression
+d3b20e29,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+59-11 = 48
+91-22 = -3
+03+35 = 3503
+15+69 = 6915
+Now, determine the result for: 22+39",3922,3922,equation_transform,False,3922,v274_numeric_operator_overrides,False,add_no_unique_direct_variant,direct_add=[]; baseline=3922
+d1bd7478,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+89$90 = 8010
+88:77 = 11
+10|87 = 98
+41|87 = 129
+Now, determine the result for: 37:67",30,30,equation_transform,False,03,v274_numeric_operator_overrides,True,colon_absdiff_unreverse_same_len,candidate=30; baseline=03
+21519be7,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+58@52 = 011
+31>55 = 24
+85>27 = 41
+Now, determine the result for: 82@52",35,35,equation_transform,False,35,v274_numeric_operator_overrides,False,operator_not_guarded,query_op='@'
+fe6d3aa3,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+11011001 -> 10100110
+01011000 -> 10010110
+01110110 -> 01111101
+00001011 -> 10110010
+11111001 -> 10101110
+00010001 -> 00010100
+10110111 -> 01011101
+11010100 -> 01110101
+10111011 -> 10011110
+10101101 -> 11111011
+
+Now, determine the output for: 11001001",10100010,10100010,bit_manipulation,False,10100010,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+01248b76,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+01101100 -> 00011000
+01010011 -> 10010110
+00000000 -> 00000000
+11011010 -> 00010101
+00011010 -> 10010100
+00000001 -> 00010010
+11110110 -> 10001101
+01100110 -> 10101100
+
+Now, determine the output for: 11110010",11000101,11000101,bit_manipulation,False,11000101,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+0dfd7674,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+00110100 -> 01100101
+00010001 -> 01100110
+10011000 -> 00010110
+00101111 -> 10010101
+00001010 -> 10010110
+01111111 -> 00100001
+11001110 -> 00101111
+11111001 -> 10001100
+11010110 -> 00011001
+00110011 -> 10101010
+
+Now, determine the output for: 01101010",01001110,01001110,bit_manipulation,False,01001110,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+7306613b,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+59+02 = 411
+91+62 = 44
+94+64 = 49
+86-82 = 04
+39*01 = 139
+Now, determine the result for: 79+65",251,251,equation_transform,False,251,v274_numeric_operator_overrides,False,add_no_unique_direct_variant,direct_add=[]; baseline=251
+8243c91e,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+11011010 -> 10100100
+01010100 -> 00000000
+11110001 -> 00000011
+10101100 -> 01000001
+00000111 -> 00000000
+11010010 -> 00100100
+10000010 -> 00000100
+11010110 -> 00100100
+00000001 -> 00000000
+
+Now, determine the output for: 10100110",01000101,01000101,bit_manipulation,False,01000101,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+fba40625,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+?>/)] = ?>)]
+#?'{% = {?
+>{'#^ = '&&
+>>`#] = {#?>
+Now, determine the result for: {>'?#",'>&,{>?#,equation_transform,False,{>?#,v274_numeric_operator_overrides,False,not_numeric_query,query is not a numeric binary expression
+9aa8dc92,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+\|+<# = \|<#
+#:+#: = #:#:
+/@-{/ = -\""
+Now, determine the result for: /#+</",/#</,/#</,equation_transform,False,/#</,v274_numeric_operator_overrides,False,not_numeric_query,query is not a numeric binary expression
+ef2fe526,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+10011100 -> 00001000
+11000111 -> 00001100
+01101011 -> 10010110
+10010110 -> 00101000
+11000100 -> 00001000
+10000101 -> 00001000
+11110110 -> 01101100
+10000011 -> 00000000
+11011101 -> 10011000
+
+Now, determine the output for: 10101101",01011010,01011010,bit_manipulation,False,01011010,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+c5b058d6,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+72)27 = 99
+26#48 = 22
+42#45 = 3
+24#14 = 10
+Now, determine the result for: 94)40",134,134,equation_transform,False,35,v274_numeric_operator_overrides,True,add_direct_over_model_add_variant,candidate=134; baseline=35
+b4342b90,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+64\49 = 114
+66%87 = 21
+30%84 = 54
+77\30 = 108
+81)74 = 5994
+Now, determine the result for: 40\25",66,66,equation_transform,False,66,v274_numeric_operator_overrides,False,operator_not_guarded,query_op='\\'
+837a6ae7,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+:@-&# = <:
+&>-:< = -<:
+&#+{{ = @<""
+%>+&& = @@:
+""#-<> = %""
+Now, determine the result for: <{*:""",<>\>,"<:{""",equation_transform,False,"<:{""",v274_numeric_operator_overrides,False,not_numeric_query,query is not a numeric binary expression
+9d3e7f1a,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+10111100 -> 11100010
+00100001 -> 00001000
+00101111 -> 01111000
+11111001 -> 11001011
+00111101 -> 11101000
+11101001 -> 01001011
+10010111 -> 10111010
+10001110 -> 01110010
+01101100 -> 01100001
+
+Now, determine the output for: 10101101",01101010,01101010,bit_manipulation,False,01101010,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+00fdc0be,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+01101111 -> 10111111
+01001110 -> 00111111
+01111101 -> 11111110
+10111111 -> 11111111
+01101011 -> 10111101
+00010101 -> 11011110
+11011111 -> 11111111
+
+Now, determine the output for: 10101111",11111111,11111111,bit_manipulation,False,11111111,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+3a7dd604,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+00001011 -> 10111010
+01110001 -> 00000111
+00110011 -> 10100110
+10111111 -> 11100001
+11110011 -> 11000111
+00101100 -> 11101001
+00000011 -> 10111110
+
+Now, determine the output for: 01101010",01001010,01001011,bit_manipulation,False,01001011,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+d0e1010b,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+''+^> = !^&
+>^+>! = !%^
+'#*>| = >}&$
+^'*%| = !$^#
+Now, determine the result for: |&*$|",!&&},|&$|,equation_transform,False,|&$|,v274_numeric_operator_overrides,False,not_numeric_query,query is not a numeric binary expression
+3feeabea,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+10000001 -> 00010010
+11010000 -> 00000011
+10110011 -> 00110010
+11111011 -> 10110011
+01001111 -> 11110001
+00100101 -> 01010000
+01001000 -> 10000001
+10010000 -> 00000010
+01010010 -> 00100001
+
+Now, determine the output for: 10101001",10010010,10010010,bit_manipulation,False,10010010,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+34c563c5,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+28`44 = 83`
+77\54 = 221
+84\34 = 19
+Now, determine the result for: 45`41",04`,04`,equation_transform,False,04`,v274_numeric_operator_overrides,False,operator_not_guarded,query_op='`'
+5a0d5d2a,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+27-65 = 61
+47*42 = 7771
+81-09 = -27
+Now, determine the result for: 39+94",341,55,equation_transform,False,55,v274_numeric_operator_overrides,False,query_operator_unseen,query_op='+' not present in examples
+5a9fcf68,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+36?55 = 8?
+97?14 = 83?
+23?74 = 51?
+Now, determine the result for: 24@28",4443,4,equation_transform,False,4,v274_numeric_operator_overrides,False,query_operator_unseen,query_op='@' not present in examples
+6e56b39a,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+)>-]] = -#/
+]&-%^ = -]>
+[!-]) = -]/
+!>-%/ = -[]
+Now, determine the result for: &#-!]",-/#,&#!,equation_transform,False,&#!,v274_numeric_operator_overrides,False,not_numeric_query,query is not a numeric binary expression
+4ada9150,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+10001111 -> 11111110
+01000100 -> 01010001
+10111100 -> 11110010
+10000001 -> 00010110
+01011100 -> 11110001
+10110110 -> 11111010
+10000010 -> 00101010
+00100101 -> 11010100
+11000011 -> 00111111
+00100111 -> 11111100
+
+Now, determine the output for: 11000110",01111011,01111011,bit_manipulation,False,01111011,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+a5f1991c,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+'>""&' = '>&'
+&?/?} = '?
+@'[!' = ''!
+?&""|| = ?&||
+>^""@@ = >^@@
+Now, determine the result for: !?/&&",/|',!&&&,equation_transform,False,!&&&,v274_numeric_operator_overrides,False,not_numeric_query,query is not a numeric binary expression
+455b6b61,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+11001111 -> 00001100
+11001101 -> 00000100
+00101010 -> 10100010
+11101000 -> 10011001
+10101011 -> 10000100
+01101000 -> 10111011
+10110011 -> 11100010
+01101010 -> 10110011
+
+Now, determine the output for: 00001110",00111011,00111011,bit_manipulation,False,00111011,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+1d08947a,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+00111110 -> 11111000
+11110110 -> 11011000
+11100110 -> 10011000
+10101100 -> 10110000
+11111010 -> 11101000
+10001111 -> 00111100
+00010011 -> 01001100
+
+Now, determine the output for: 01100101",10010100,10010100,bit_manipulation,False,10010100,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+d26f22c3,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+11011000 -> 11001110
+01010100 -> 00010111
+00011101 -> 00010101
+10010110 -> 10110110
+01010000 -> 01011111
+10111110 -> 01100111
+00111010 -> 00101011
+
+Now, determine the output for: 10010011",11101100,11101100,bit_manipulation,False,11101100,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+c7aae192,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+""}+{"" = ``
+#{-{# = >}
+{>*(# = {`{\
+Now, determine the result for: \""*}}",">""(","\""]",equation_transform,False,"\""]",v274_numeric_operator_overrides,False,not_numeric_query,query is not a numeric binary expression
+a6192d29,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+00101010 -> 00010100
+10011011 -> 01100110
+00110001 -> 01001000
+11100011 -> 11110000
+00011001 -> 00000110
+10100111 -> 01001011
+10000000 -> 00000000
+01101100 -> 00011010
+10001110 -> 00000111
+11011001 -> 01110110
+
+Now, determine the output for: 00110000",00001000,01111110,bit_manipulation,False,01111110,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+e4cc7639,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+62[83 = 5146
+99[39 = 3861
+14[53 = 742
+33[43 = 1419
+80!25 = 5
+Now, determine the result for: 48*64",113,16,equation_transform,False,16,v274_numeric_operator_overrides,False,query_operator_unseen,query_op='*' not present in examples
+eeb60061,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+11011110 -> 11101101
+00011000 -> 10000001
+11100011 -> 10111110
+11001011 -> 00111100
+10011001 -> 00011001
+11101101 -> 01011110
+11000110 -> 01101100
+11100110 -> 01101110
+01000100 -> 01000100
+
+Now, determine the output for: 01010000",00000101,00000101,bit_manipulation,False,00000101,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+844f826c,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+>#$@"" = >#@""
+>`$@> = >`@>
+)/*#` = >)
+^""-`> = @/]""
+/@$/) = /@/)
+Now, determine the result for: `@*>`","/""",`@>`,equation_transform,False,`@>`,v274_numeric_operator_overrides,False,not_numeric_query,query is not a numeric binary expression
+048cc279,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+10000110 -> 00100001
+11111111 -> 11111111
+01011100 -> 10110000
+11011010 -> 10110100
+11110101 -> 10101001
+00011001 -> 00000010
+11110010 -> 10110100
+01011101 -> 10111010
+
+Now, determine the output for: 11101010",01010000,01111000,bit_manipulation,False,01111000,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+20052c2f,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+10010110 -> 11010011
+01110011 -> 01101110
+11110011 -> 01111111
+10010011 -> 01110011
+11010001 -> 00111011
+11001000 -> 00011001
+11101100 -> 10011101
+11011000 -> 00011011
+01111010 -> 01001111
+
+Now, determine the output for: 00110011",01100110,01100110,bit_manipulation,False,01100110,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+89dfa4c2,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+01001010 -> 00101001
+01110000 -> 11000001
+01101001 -> 10100101
+00001010 -> 00101000
+00101010 -> 00101000
+10100000 -> 10000010
+01100001 -> 10000101
+01111101 -> 10110101
+00000111 -> 00011100
+10011010 -> 01101010
+
+Now, determine the output for: 10101110",00111010,00111010,bit_manipulation,False,00111010,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+53329505,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+01111101 -> 11111011
+01110010 -> 11100101
+01000111 -> 10001111
+00110100 -> 01101000
+00101100 -> 01011000
+11011000 -> 10110011
+00010000 -> 00100000
+00001111 -> 00011110
+00101111 -> 01011110
+
+Now, determine the output for: 01101111",11011111,11011111,bit_manipulation,False,11011111,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+ced947c8,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+00000111 -> 00001000
+00011101 -> 00101000
+11001100 -> 00100110
+01110011 -> 10001011
+11000011 -> 00001110
+01110010 -> 10010011
+10001111 -> 00001100
+10111001 -> 01001101
+10001000 -> 01000100
+00111111 -> 00001001
+
+Now, determine the output for: 01101011",01001011,01001011,bit_manipulation,False,01001011,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+0440e6ab,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+00101101 -> 10100000
+00001011 -> 01100000
+11011000 -> 00000001
+00111000 -> 00000000
+11110100 -> 10000001
+10001110 -> 11000001
+01001000 -> 00000000
+00101111 -> 11100000
+
+Now, determine the output for: 01110011",01100000,01100000,bit_manipulation,False,01100000,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+e641791f,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+11111100 -> 11100110
+00111110 -> 01111011
+11010001 -> 10111001
+10110010 -> 01110011
+11110101 -> 11110101
+00100100 -> 01001100
+01100011 -> 11001010
+01010010 -> 10101110
+
+Now, determine the output for: 10000000",00010001,00010001,bit_manipulation,False,00010001,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+bcdf9198,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+10001011 -> 11111111
+00011111 -> 11111111
+01011100 -> 11111111
+10101000 -> 11111111
+11110010 -> 11111111
+10111000 -> 11111111
+01111100 -> 11111111
+11011010 -> 11111111
+10101111 -> 11111111
+
+Now, determine the output for: 01100010",11111111,11111111,bit_manipulation,False,11111111,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+b69391b8,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+30{78 = 2339
+66'98 = 164
+96{56 = 5375
+87{88 = 7655
+Now, determine the result for: 52'14",66,66,equation_transform,False,66,v274_numeric_operator_overrides,False,operator_not_guarded,"query_op=""'"""
+8193e7e0,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+'{*#/ = #!''
+`]-#` = ]{
+&!*]! = ?&!!
+?!+// = ?!//
+Now, determine the result for: #?*&`",??{`,#?&`,equation_transform,False,#?&`,v274_numeric_operator_overrides,False,not_numeric_query,query is not a numeric binary expression
+20cdbdb1,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+01100110 -> 01100000
+11001101 -> 11010001
+10101000 -> 10000001
+00100001 -> 00010000
+10100010 -> 00100001
+10101111 -> 11110001
+11111000 -> 10000001
+01101100 -> 11000000
+11110011 -> 00110001
+00111010 -> 10100000
+
+Now, determine the output for: 10001110",11100001,11100001,bit_manipulation,False,11100001,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+48ae04f6,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+11000001 -> 00010000
+00011011 -> 00100000
+11000111 -> 01110000
+10110101 -> 00010100
+00001101 -> 10000000
+11110111 -> 01110110
+10111101 -> 10010101
+11010110 -> 01000010
+01101011 -> 00100001
+11001000 -> 00000000
+
+Now, determine the output for: 01011001",00000010,00000010,bit_manipulation,False,00000010,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+3595c82c,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+11110110 -> 01111101
+10100001 -> 10100111
+11100011 -> 00000111
+01011110 -> 10100110
+10010100 -> 10011111
+10011100 -> 00001111
+00011111 -> 00110000
+
+Now, determine the output for: 10000110",10011011,10011011,bit_manipulation,False,10011011,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+5bcb572e,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+)!*]( = /{!!
+""(+""{ = ){{
+])-([ = ({
+Now, determine the result for: ""{-{!",-!#,"""{!",equation_transform,False,"""{!",v274_numeric_operator_overrides,False,not_numeric_query,query is not a numeric binary expression
+8c1529e1,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+71-86 = -15
+62*67 = 7791
+02+49 = 311
+Now, determine the result for: 65-18",-52,-52,equation_transform,False,-52,v274_numeric_operator_overrides,False,minus_signed_ambiguous,"signed_predictions=['-52', '47']"
+cdec898a,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+)>-}] = -<%
+%`-/` = /
+`>+%/ = )?
+<}+)] = }?/
+Now, determine the result for: >}+]?",<?/,>}][?,equation_transform,False,>}][?,v274_numeric_operator_overrides,False,not_numeric_query,query is not a numeric binary expression
+bca238ee,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+01111110 -> 10000000
+10101000 -> 00000001
+10110110 -> 10000001
+10000011 -> 00000000
+11111010 -> 10000001
+01101001 -> 01000000
+01011111 -> 11000000
+11110010 -> 10000001
+
+Now, determine the output for: 00100111",00000000,00000000,bit_manipulation,False,00000000,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+5dffe751,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+00010110 -> 01100000
+00101111 -> 11110000
+01101000 -> 10000000
+01011100 -> 11000000
+01111001 -> 10010000
+11101110 -> 11100000
+10111000 -> 10000000
+
+Now, determine the output for: 11010110",01100000,01100000,bit_manipulation,False,01100000,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+44398869,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+09^83 = 0243
+97^26 = 8984
+37^04 = 0292
+77^69 = 2937
+67+97 = 551
+Now, determine the result for: 54^17",5913,5913,equation_transform,False,5913,v274_numeric_operator_overrides,False,operator_not_guarded,query_op='^'
+06120e47,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+01010100 -> 11101111
+10000011 -> 11111101
+11110110 -> 11100101
+10010111 -> 11111001
+10101101 -> 11011111
+00111010 -> 11110111
+11101111 -> 11000111
+00100110 -> 11110111
+01001000 -> 11111110
+
+Now, determine the output for: 01110011",11110010,11111110,bit_manipulation,False,11111110,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+1f7407ed,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+11010110 -> 10001011
+10101000 -> 10111010
+01010011 -> 00000101
+00110101 -> 11110110
+11101000 -> 10111011
+00010101 -> 11110111
+11111101 -> 10110011
+01110000 -> 01111101
+00000001 -> 11010111
+
+Now, determine the output for: 01110010",00101101,00101101,bit_manipulation,False,00101101,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+46dd0f22,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+11011110 -> 10111101
+11011010 -> 10110100
+01001100 -> 10011000
+00111100 -> 01111000
+11111010 -> 11110100
+00111111 -> 01111110
+01010111 -> 10101110
+01010000 -> 10100000
+00110001 -> 01100010
+
+Now, determine the output for: 00101000",01010000,01010000,bit_manipulation,False,01010000,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+edf364da,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+[!+$! = {:$
+??*!{ = {:[?
+{|+?] = ][
+Now, determine the result for: ::*{[",$(%,::{[,equation_transform,False,::{[,v274_numeric_operator_overrides,False,not_numeric_query,query is not a numeric binary expression
+d6e5cd59,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+00001000 -> 11101111
+10110100 -> 10010111
+00011111 -> 00000001
+11100001 -> 01111101
+00100111 -> 01110001
+10110011 -> 01011001
+00110001 -> 11011101
+11000010 -> 11111011
+01110001 -> 01011101
+
+Now, determine the output for: 01001000",01101111,01101111,bit_manipulation,False,01101111,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+339149c9,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+34-93 = 4
+53+23 = 2353
+81*69 = 8271
+99-34 = 31
+34-63 = 7
+Now, determine the result for: 32-62",3,3,equation_transform,False,3,v274_numeric_operator_overrides,False,minus_signed_ambiguous,signed_predictions=[]
+e1f3ffbb,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+11110011 -> 11111001
+10000001 -> 11111110
+00101111 -> 11111101
+00101010 -> 11111111
+01111101 -> 11111101
+00110000 -> 11111111
+11101000 -> 11111110
+
+Now, determine the output for: 11000010",11111010,11111011,bit_manipulation,False,11111011,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+4c327b55,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+10001000 -> 00011000
+10100110 -> 01000110
+00101110 -> 01011110
+10011010 -> 00111101
+10100001 -> 01001000
+00000000 -> 00000000
+10101110 -> 01010110
+11010010 -> 10101001
+
+Now, determine the output for: 01101101",11011100,11011110,bit_manipulation,False,11011110,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+0f2dec86,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+00011011 -> 01100001
+11110001 -> 10111100
+11101011 -> 11011001
+11010111 -> 00110111
+10111000 -> 10111100
+00011101 -> 01111010
+11100111 -> 11101111
+
+Now, determine the output for: 11110000",10111000,10111000,bit_manipulation,False,10111000,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+e36a0065,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+00001000 -> 00100000
+11010011 -> 01001111
+01101110 -> 10111001
+10110110 -> 11011010
+10110010 -> 11001010
+00101010 -> 10101000
+10100110 -> 10011010
+10101001 -> 10100110
+11110111 -> 11011111
+
+Now, determine the output for: 10011101",01110110,01110110,bit_manipulation,False,01110110,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+c7844441,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+^%|:> = |%<
+<:|/: = |&`
+/&|<: = @$
+&>}%% = $@
+:`}>$ = %<$
+Now, determine the result for: :/[$^",:/$^,:/$^,equation_transform,False,:/$^,v274_numeric_operator_overrides,False,not_numeric_query,query is not a numeric binary expression
+21261dc6,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+05-25 = -2
+74*67 = 2753
+89-85 = -04
+Now, determine the result for: 02-27",-25,-25,equation_transform,False,-25,v274_numeric_operator_overrides,False,minus_signed_ambiguous,signed_predictions=[]
+70bc42af,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+10001100 -> 11110001
+11110111 -> 11111110
+10011000 -> 11010011
+10000111 -> 11111000
+00110011 -> 11111110
+10110010 -> 11010110
+00100001 -> 00101100
+11010010 -> 11011010
+01101000 -> 01001101
+
+Now, determine the output for: 01010001",10101010,10101010,bit_manipulation,False,10101010,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+4dbec546,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+61-22 = -6
+51+72 = 24
+63*47 = 4763
+18*63 = 6318
+08*67 = 6708
+Now, determine the result for: 06+65",611,611,equation_transform,False,611,v274_numeric_operator_overrides,False,add_no_unique_direct_variant,direct_add=[]; baseline=611
+0c2407ef,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+11001100 -> 00010001
+01101001 -> 01001000
+11101000 -> 00011000
+11111001 -> 01011110
+01101111 -> 11001001
+00110110 -> 10000100
+01011001 -> 01000010
+10110111 -> 11000100
+01010000 -> 00000000
+
+Now, determine the output for: 10011111",11000011,11000011,bit_manipulation,False,11000011,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+939273d7,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+11100011 -> 10110111
+11010011 -> 10110111
+01100000 -> 11110011
+11001100 -> 10100110
+00100110 -> 01011011
+11000111 -> 01110111
+10011111 -> 11111100
+11001110 -> 11000110
+
+Now, determine the output for: 01001111",11100110,11100110,bit_manipulation,False,11100110,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+8082a958,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+01110001 -> 00000000
+01100000 -> 00000000
+11111111 -> 00000001
+10011100 -> 00000000
+10111010 -> 00000001
+11000010 -> 00000000
+11000011 -> 00000000
+01000011 -> 00000000
+01110000 -> 00000000
+
+Now, determine the output for: 11010001",00000000,00000000,bit_manipulation,False,00000000,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+fd48ee2f,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+10111101 -> 11110100
+11110010 -> 11001000
+10011100 -> 01110000
+01010101 -> 01010100
+01101001 -> 10100100
+10101100 -> 10110000
+11010000 -> 01000000
+11000100 -> 00010000
+10010011 -> 01001100
+10111000 -> 11100000
+
+Now, determine the output for: 01101101",10110100,10110100,bit_manipulation,False,10110100,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+4eb990f6,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+10001110 -> 01000111
+01010111 -> 00101011
+00100010 -> 00010001
+11010100 -> 01101010
+11000011 -> 01100001
+11100010 -> 01110001
+11011101 -> 01101110
+00010100 -> 00001010
+00000001 -> 00000000
+
+Now, determine the output for: 00000011",00000001,00000001,bit_manipulation,False,00000001,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+85af23eb,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+00010011 -> 11100111
+00000110 -> 11001111
+00010100 -> 01011111
+01000011 -> 01100111
+10000000 -> 11111111
+11011111 -> 10000111
+10110100 -> 01011111
+00111000 -> 00111111
+
+Now, determine the output for: 11111110",00001111,00001111,bit_manipulation,False,00001111,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+0e009c6d,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+>@'>> = )?>
+\%*\` = #!
+\>'@\ = \!?>
+`\*)> = @/
+Now, determine the result for: @?'`?",`?\!,@?`?,equation_transform,False,@?`?,v274_numeric_operator_overrides,False,not_numeric_query,query is not a numeric binary expression
+d2ac699b,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+10000010 -> 00011000
+10111111 -> 11110011
+01001110 -> 01110100
+11110010 -> 10011111
+00100010 -> 00010010
+00101110 -> 01110010
+00101011 -> 01011010
+00101111 -> 01111010
+11011101 -> 11100101
+
+Now, determine the output for: 00110001",10001011,10001011,bit_manipulation,False,10001011,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+b4b73143,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+?{%["" = ?\!{
+:!*""{ = ?##
+/#*{# = #/
+Now, determine the result for: >!%!/",>\:,>!!/,equation_transform,False,>!!/,v274_numeric_operator_overrides,False,not_numeric_query,query is not a numeric binary expression
+3a148f6a,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+00100011 -> 00101000
+10100000 -> 11101111
+10011000 -> 10000011
+11001010 -> 00001111
+00111000 -> 10010011
+01001011 -> 11001100
+10000111 -> 00110011
+00110001 -> 00000101
+00000100 -> 11110101
+01111101 -> 10111011
+
+Now, determine the output for: 10001111",00100111,00100111,bit_manipulation,False,00100111,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+861cb154,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+69(06 = 63(
+77`94 = 621
+76(36 = 4(
+Now, determine the result for: 14!24",2271,10,equation_transform,False,10,v274_numeric_operator_overrides,False,query_operator_unseen,query_op='!' not present in examples
+90feb0c5,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+\}+)` = \})`
+:>'>} = :``
+])+)\ = ]))\
+Now, determine the result for: ?>'>>",:<],?>>>,equation_transform,False,?>>>,v274_numeric_operator_overrides,False,not_numeric_query,query is not a numeric binary expression
+c541eb82,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+68-93 = 74
+39-26 = 13
+93-46 = -52
+81-67 = -85
+Now, determine the result for: 47-48",-01,-01,equation_transform,False,-01,v274_numeric_operator_overrides,False,minus_model_not_opposite_sign,candidate=-01; baseline=-01
+b9f1d959,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+:>+(( = [&[
+{{-(: = `\
+>[-:( = -\>
+[\+{[ = ""`
+&`+""[ = "">
+Now, determine the result for: $\+""[",:>,"$""\[""",equation_transform,False,"$""\[""",v274_numeric_operator_overrides,False,not_numeric_query,query is not a numeric binary expression
+5374b4ba,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+10111101 -> 10101011
+01001111 -> 11100100
+11010110 -> 11001101
+10011101 -> 10101001
+11010000 -> 00001101
+00010101 -> 10100001
+00011010 -> 01000001
+00100000 -> 00000010
+10101111 -> 11101010
+01010000 -> 00000101
+
+Now, determine the output for: 11000101",10101100,10101100,bit_manipulation,False,10101100,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+ca5db1c0,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+^%-""` = ""|
+""@*?` = ?""^
+%@*`) = ""%""
+Now, determine the result for: (""-'|",^,"(""'|",equation_transform,False,"(""'|",v274_numeric_operator_overrides,False,not_numeric_query,query is not a numeric binary expression
+16e73f0e,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+00001010 -> 00000000
+00001000 -> 00000000
+11000011 -> 00000000
+00001011 -> 00000000
+11110011 -> 00001100
+01011100 -> 00000101
+01000111 -> 00000000
+10001011 -> 00000000
+00010000 -> 00000000
+10100011 -> 00001000
+
+Now, determine the output for: 10011100",00000001,00000001,bit_manipulation,False,00000001,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+87007054,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+10111101 -> 10001111
+10110001 -> 11001111
+00001100 -> 10111111
+01001101 -> 10001111
+11011010 -> 00011111
+11101011 -> 00101111
+00010111 -> 01101111
+11110111 -> 01101111
+11000011 -> 10101111
+
+Now, determine the output for: 01001100",10111111,10111111,bit_manipulation,False,10111111,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+b8aa3072,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+11001101 -> 11000110
+01111111 -> 00000111
+00110010 -> 00010001
+11110100 -> 00101010
+00110110 -> 00000011
+10100010 -> 01011001
+00111010 -> 00010101
+
+Now, determine the output for: 00101111",00000011,00000111,bit_manipulation,False,00000111,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+9f1ff166,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+}#-'> = >""
+?""-#' = /
+""'*'] = '""}""
+'/*>' = /'#""
+Now, determine the result for: ""]-'/",[,"""]'/",equation_transform,False,"""]'/",v274_numeric_operator_overrides,False,not_numeric_query,query is not a numeric binary expression
+82ae858c,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+10001001 -> 11101010
+11011010 -> 11111110
+00010111 -> 01000101
+10101011 -> 00101110
+00100000 -> 01111011
+11110111 -> 11111101
+10000111 -> 00110011
+10010100 -> 00111101
+10111011 -> 01101110
+11010001 -> 10110101
+
+Now, determine the output for: 00110111",11001101,11111101,bit_manipulation,False,11111101,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+1282c5c5,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+11110000 -> 10001111
+11000111 -> 11111100
+00101000 -> 11101011
+10100010 -> 11101110
+11000100 -> 00011101
+01001010 -> 10011110
+10001110 -> 01111000
+00010011 -> 00010111
+
+Now, determine the output for: 01101110",00001110,00001110,bit_manipulation,False,00001110,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+432b1110,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+]{+/] = ]{/]
+/[+%\ = /[%\
+@[+{@ = @[{@
+%/+]% = %/]%
+Now, determine the result for: \{*<?",%[:?,\{<?,equation_transform,False,\{<?,v274_numeric_operator_overrides,False,not_numeric_query,query is not a numeric binary expression
+f333b67f,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+36^58 = ^22
+35$47 = 1644
+59^79 = ^20
+90<20 = 111
+Now, determine the result for: 48<51",100,100,equation_transform,False,100,v274_numeric_operator_overrides,False,operator_not_guarded,query_op='<'
+f7d26b8d,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+%[-]% = }\
+\}-%` = -\}
+/[+}[ = [`@
+``*$] = /$\]
+$}*}\ = $[/@
+Now, determine the result for: [}-}\",/@,[}}\,equation_transform,False,[}}\,v274_numeric_operator_overrides,False,not_numeric_query,query is not a numeric binary expression
+5ba26f21,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+00110011 -> 00010001
+01010011 -> 00110001
+00001101 -> 11000010
+10000010 -> 00101000
+01011101 -> 01101111
+11000010 -> 00101000
+01010100 -> 01101101
+10110010 -> 01001011
+
+Now, determine the output for: 11101001",01011100,01111110,bit_manipulation,False,01111110,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+a00fe76a,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+11010011 -> 11110100
+10010001 -> 01100100
+00100001 -> 01001000
+10101011 -> 11101010
+10010111 -> 11100101
+11010010 -> 10110100
+01100110 -> 10011001
+10101010 -> 10101010
+00111101 -> 01001111
+
+Now, determine the output for: 11101110",10111011,10111011,bit_manipulation,False,10111011,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+8e56a42e,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+<$@}\ = \%{
+{%[$} = {%$}
+<$^>> = ""\
+Now, determine the result for: %/[<>",%/<>,%/<>,equation_transform,False,%/<>,v274_numeric_operator_overrides,False,not_numeric_query,query is not a numeric binary expression
+0e3962f6,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+00101110 -> 01110001
+00100110 -> 00110001
+01101001 -> 01001011
+01110111 -> 10111011
+01001011 -> 01011010
+11000010 -> 00010110
+10000100 -> 00100100
+01010111 -> 10111010
+11001010 -> 01010110
+
+Now, determine the output for: 11011111",11111110,11111110,bit_manipulation,False,11111110,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+20f0fac9,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+78]18 = 6
+95]24 = 23
+52*94 = 145
+21]91 = 7
+Now, determine the result for: 31%96",2976,65,equation_transform,False,65,v274_numeric_operator_overrides,False,query_operator_unseen,query_op='%' not present in examples
+26e48e98,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+%]`]< = ]""<%
+""#/|< = {""%
+]@)@| = @
+#|`({ = {<@#
+#|){( = )#]
+Now, determine the result for: ""])%{",){|,"""%]%{""",equation_transform,False,"""%]%{""",v274_numeric_operator_overrides,False,not_numeric_query,query is not a numeric binary expression
+0290f51a,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+01011010 -> 00101011
+10100100 -> 01010111
+10110001 -> 10110111
+00011001 -> 10011001
+11101011 -> 01100111
+11100001 -> 10100111
+10000001 -> 10111111
+01001101 -> 00001110
+11101111 -> 11100111
+
+Now, determine the output for: 11010001",10101111,10101111,bit_manipulation,False,10101111,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+c30a782a,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+00101001 -> 00100101
+00101111 -> 00000101
+01000010 -> 01001000
+10010011 -> 01000010
+00111000 -> 00000111
+00001011 -> 01000001
+11110110 -> 10011110
+01011011 -> 01001011
+10111001 -> 00100111
+01100011 -> 01001100
+
+Now, determine the output for: 00110011",01000110,01000110,bit_manipulation,False,01000110,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+3d24aef4,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+00111001 -> 11001001
+00101000 -> 01000001
+01111001 -> 11001011
+10000011 -> 00011101
+11011111 -> 11111111
+11110000 -> 10000110
+01110011 -> 10011011
+00001000 -> 01000000
+01101100 -> 01100011
+
+Now, determine the output for: 10010100",10100101,10100101,bit_manipulation,False,10100101,v274_numeric_operator_overrides,False,not_attempted,non-equation row
+5501c054,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+'){^' = #[
+""!{#^ = ^>
+[#}\"" = #>
+!&}"""" = ^[""
+#)}'\ = ^!>
+Now, determine the result for: !#$#^",[#>#,!##^,equation_transform,False,!##^,v274_numeric_operator_overrides,False,not_numeric_query,query is not a numeric binary expression
+ea6d926a,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+15-77 = 62
+78*32 = 2002
+41-05 = 8
+95*11 = 056
+Now, determine the result for: 25+62",87,37,equation_transform,False,37,v274_numeric_operator_overrides,False,query_operator_unseen,query_op='+' not present in examples

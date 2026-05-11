@@ -26,6 +26,7 @@ if str(ROOT) not in sys.path:
 
 from scripts.evaluate_lora_adapter import (  # noqa: E402
     _sampling_params,
+    apply_prediction_postprocessor,
     apply_vllm_runtime_safety_settings,
     normalize_questions,
     prepare_merged_predictions,
@@ -110,6 +111,12 @@ def main() -> int:
     parser.add_argument("--disable-thinking", action="store_true")
     parser.add_argument("--prompt-suffix", default="")
     parser.add_argument("--no-prompt-suffix", action="store_true")
+    parser.add_argument(
+        "--prediction-postprocessor",
+        default="none",
+        choices=["none", "v274_numeric_operator_overrides"],
+        help="Optional label-free postprocessor applied after generation and before scoring.",
+    )
     parser.add_argument("--continue-on-error", action="store_true")
     args = parser.parse_args()
 
@@ -248,6 +255,12 @@ def main() -> int:
             pred = pd.DataFrame(rows)
             raw_predictions_path = candidate_dir / f"{label}_raw_predictions_pre_score.csv"
             pred.to_csv(raw_predictions_path, index=False)
+            pred = apply_prediction_postprocessor(pred, args.prediction_postprocessor)
+            postprocessed_raw_predictions_path = ""
+            if args.prediction_postprocessor != "none":
+                post_path = candidate_dir / f"{label}_postprocessed_raw_predictions_pre_score.csv"
+                pred.to_csv(post_path, index=False)
+                postprocessed_raw_predictions_path = str(post_path)
             merged = prepare_merged_predictions(solution, pred)
             if "answer" in merged.columns:
                 merged["correct"] = merged.apply(lambda r: verify_answer(r["answer"], r["prediction"]), axis=1)
@@ -279,8 +292,10 @@ def main() -> int:
                 "candidate_elapsed_s": time.time() - cand_start,
                 "seed": int(args.seed),
                 "config": config,
+                "prediction_postprocessor": str(args.prediction_postprocessor or "none"),
                 "outputs": {
                     "raw_predictions_pre_score_csv": str(raw_predictions_path),
+                    "postprocessed_raw_predictions_pre_score_csv": postprocessed_raw_predictions_path,
                     "predictions_csv": str(predictions_path),
                     "per_task_csv": str(per_task_path),
                     "report_json": str(report_path),

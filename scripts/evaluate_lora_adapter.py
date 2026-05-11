@@ -35,6 +35,7 @@ from src.competition_utils import (  # noqa: E402
     extract_final_answer,
     verify_answer,
 )
+from src.kg1_v274_numeric_postprocessor import postprocess_rows as v274_postprocess_rows  # noqa: E402
 
 
 def utc_now() -> str:
@@ -238,6 +239,20 @@ def prepare_merged_predictions(solution: pd.DataFrame, pred: pd.DataFrame) -> pd
     return merged
 
 
+def apply_prediction_postprocessor(pred: pd.DataFrame, name: str) -> pd.DataFrame:
+    mode = str(name or "none").strip()
+    if mode in {"", "none"}:
+        return pred
+    if mode != "v274_numeric_operator_overrides":
+        raise ValueError(f"unknown prediction postprocessor: {mode}")
+    rows = v274_postprocess_rows(pred.to_dict(orient="records"))
+    out = pd.DataFrame(rows)
+    applied = int(out.get("postprocessor_applied", pd.Series(dtype=bool)).fillna(False).astype(bool).sum())
+    print("prediction_postprocessor =", mode, flush=True)
+    print("prediction_postprocessor_applied_rows =", applied, flush=True)
+    return out
+
+
 def evaluate_adapter(
     solution: pd.DataFrame,
     questions: pd.DataFrame,
@@ -247,6 +262,7 @@ def evaluate_adapter(
     config: dict[str, Any] | None = None,
     seed: int = 42,
     raw_predictions_path: str | Path | None = None,
+    prediction_postprocessor: str = "none",
 ) -> tuple[dict[str, Any], pd.DataFrame]:
     """Run vLLM adapter inference and return a summary plus row predictions."""
 
@@ -349,6 +365,8 @@ def evaluate_adapter(
         print("raw_predictions_pre_score_csv =", raw_path)
         print("raw_predictions_pre_score_rows =", len(pred))
 
+    pred = apply_prediction_postprocessor(pred, prediction_postprocessor)
+
     merged = prepare_merged_predictions(solution, pred)
     if "answer" in merged.columns:
         merged["correct"] = merged.apply(lambda r: verify_answer(r["answer"], r["prediction"]), axis=1)
@@ -371,6 +389,7 @@ def evaluate_adapter(
         "tokens_per_second": float(total_tokens / gen_elapsed) if gen_elapsed > 0 else 0.0,
         "seed": int(seed),
         "config": config,
+        "prediction_postprocessor": str(prediction_postprocessor or "none"),
     }
     print("summary =", json.dumps(summary, indent=2, sort_keys=True))
     return summary, merged
@@ -427,6 +446,12 @@ def main() -> int:
     parser.add_argument("--disable-thinking", action="store_true", help="Diagnostic prompt rendering with enable_thinking=False.")
     parser.add_argument("--prompt-suffix", default="", help="Diagnostic override for the prompt suffix.")
     parser.add_argument("--no-prompt-suffix", action="store_true", help="Diagnostic override: render prompts without the default suffix.")
+    parser.add_argument(
+        "--prediction-postprocessor",
+        default="none",
+        choices=["none", "v274_numeric_operator_overrides"],
+        help="Optional label-free postprocessor applied after generation and before scoring.",
+    )
     args = parser.parse_args()
 
     args.output_dir.mkdir(parents=True, exist_ok=True)
@@ -466,6 +491,7 @@ def main() -> int:
         config=eval_config,
         seed=args.seed,
         raw_predictions_path=raw_predictions_path,
+        prediction_postprocessor=args.prediction_postprocessor,
     )
     predictions_path = args.output_dir / f"{label}_predictions.csv"
     per_task_path = args.output_dir / f"{label}_per_task.csv"
