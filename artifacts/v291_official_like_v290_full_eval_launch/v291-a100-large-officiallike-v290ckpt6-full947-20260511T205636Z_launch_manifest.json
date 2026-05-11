@@ -1,0 +1,48 @@
+{
+  "adapter_repo": "felipesp1983/kg1-nemotron-lora-v290-rank19-micro-patch-smoke",
+  "adapter_subfolders": [
+    "checkpoint-6"
+  ],
+  "branch": "v230-v226-complementarity",
+  "candidate_names": [
+    "v291_v290_checkpoint_6_official_like_full947"
+  ],
+  "expected_commit": "c15bf7ade35e1be2840b14911a1aad3773d2256c",
+  "flavor": "a100-large",
+  "full_eval_contract": {
+    "csv_sha256": "84e90b5b4d9adad6fdd9028aae3161d1b8991f2eab11e292b32d920c0ec3c935",
+    "gpu_memory_utilization": 0.85,
+    "max_model_len": 8192,
+    "max_num_seqs": 64,
+    "max_tokens": 7680,
+    "prediction_postprocessor": "none",
+    "rows": 947,
+    "thinking_enabled": true
+  },
+  "generated_at_utc": "2026-05-11T20:56:37.118845+00:00",
+  "hardware": {
+    "accelerator_model": "A100",
+    "accelerator_quantity": "1",
+    "accelerator_vram": "80 GB",
+    "cpu": "12 vCPU",
+    "name": "a100-large",
+    "pretty_name": "Nvidia A100 - large",
+    "ram": "142 GB",
+    "unit_cost_usd": 0.041667,
+    "unit_label": "minute"
+  },
+  "image": "vllm/vllm-openai:v0.20.1",
+  "job_id": "6a0242c1aff1cd33e8f33f7b",
+  "job_status": "RUNNING",
+  "job_url": "https://huggingface.co/jobs/felipesp1983/6a0242c1aff1cd33e8f33f7b",
+  "namespace": "felipesp1983",
+  "output_path_in_repo": "evals/v291-a100-large-officiallike-v290ckpt6-full947-20260511T205636Z",
+  "output_repo": "felipesp1983/kg1-nemotron-lora-v290-rank19-micro-patch-smoke",
+  "promotion_gate": {
+    "baseline_v207a_correct": 822,
+    "full_candidate_gate": "correct>=823 and truncated<=4",
+    "minimum_correct_for_small_gain": 823
+  },
+  "run_id": "v291-a100-large-officiallike-v290ckpt6-full947-20260511T205636Z",
+  "version": "v291_official_like_v290_checkpoint6_full_eval"
+}
