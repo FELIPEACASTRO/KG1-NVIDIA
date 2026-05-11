@@ -182,13 +182,21 @@ def upload_outputs(repo_id: str, output_dir: Path, path_in_repo: str, token: str
     except ImportError as exc:
         raise RuntimeError("huggingface_hub is required to upload V271 outputs") from exc
     api = HfApi(token=token)
-    info = api.upload_folder(
-        repo_id=repo_id,
-        repo_type="dataset",
-        folder_path=str(output_dir),
-        path_in_repo=path_in_repo.strip("/"),
-        commit_message=f"Upload KG1 V271 current-best error miner {path_in_repo.strip('/')}",
-    )
+    kwargs = {
+        "repo_id": repo_id,
+        "repo_type": "dataset",
+        "folder_path": str(output_dir),
+        "path_in_repo": path_in_repo.strip("/"),
+        "commit_message": f"Upload KG1 V271 current-best error miner {path_in_repo.strip('/')}",
+    }
+    try:
+        info = api.upload_folder(**kwargs)
+    except Exception as exc:
+        message = repr(exc)
+        if "create_pr=1" not in message and "create_pr" not in message:
+            raise
+        print("hf_upload_direct_forbidden_falling_back_to_pr =", message[:500], flush=True)
+        info = api.upload_folder(**kwargs, create_pr=True)
     return str(info)
 
 
