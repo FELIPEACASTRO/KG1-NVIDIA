@@ -4362,3 +4362,80 @@ Decisao apos auditoria do `URLs.txt`:
   2. usar `tonghuikang` para enriquecer o parser/verifier dos subtipos `equation_symbolic_punct` e `equation_numeric_operator`;
   3. manter V275/V274 como candidato deployable atual (`196/315`, `equation=60/155`, `bit=136/160`, `trunc=0`);
   4. nao gastar H100/H200 ate um novo verifier CPU provar `losses=0` e ganho incremental.
+
+### Reauditoria 2026-05-11 do `URLs.txt` - 10 URLs novas
+
+Arquivo reprocessado: `C:\Users\davis\Downloads\URLs.txt`.
+
+Evidencia local nova:
+
+- SHA256: `c1839bbfc4266d871de28daef54051b45196365a8d490392527ca75b1542bf8e`.
+- Tamanho: `8262` bytes.
+- URLs brutas extraidas: `106`.
+- URLs unicas apos dedupe: `67`.
+- Delta contra a auditoria anterior: `10` URLs novas, `0` URLs removidas.
+- Hosts dominantes: `huggingface.co=50`; demais hosts permanecem como referencia secundaria.
+
+URLs novas identificadas:
+
+- `https://huggingface.co/datasets?search=nvidia-nemotron`
+- `https://huggingface.co/datasets?search=NVIDIA%20Nemotron%20Reasoning`
+- `https://huggingface.co/nvidia/Nemotron-3-Nano-Omni-30B-A3B-Reasoning-BF16`
+- `https://huggingface.co/nvidia/Nemotron-Content-Safety-Reasoning-4B`
+- `https://huggingface.co/unsloth/NVIDIA-Nemotron-3-Nano-Omni-30B-A3B-Reasoning`
+- `https://huggingface.co/nvidia/Nemotron-3-Nano-Omni-30B-A3B-Reasoning-FP8`
+- `https://huggingface.co/nvidia/Nemotron-3-Nano-Omni-30B-A3B-Reasoning-NVFP4`
+- `https://huggingface.co/datasets/nvidia/Nemotron-Content-Safety-Reasoning-Dataset`
+- `https://huggingface.co/datasets/nvidia/Nemotron-RL-ReasoningGym-v1`
+- `https://huggingface.co/datasets/AmanPriyanshu/tool-reasoning-sft-CODING-nvidia-Nemotron-Agentic-v1`
+
+Achado P1 novo: `nvidia/Nemotron-RL-ReasoningGym-v1`.
+
+- Evidencia HF: dataset publico CC-BY-4.0, `15,000` exemplos, `data/train.jsonl` com aproximadamente `30.7 MB`, voltado a tarefas de raciocinio com ambientes algoritmicamente verificaveis.
+- Auditoria por streaming local, sem download persistente:
+  - linhas lidas: `15,000`;
+  - campos presentes em todas as linhas: `responses_create_params`, `question`, `answer`, `metadata`, `agent_ref`, `uuid`, `license`;
+  - licenca por linha: `cc-by-4.0` em `15,000/15,000`;
+  - fontes mais relevantes para KG1: `bitwise_arithmetic`, `simple_equations`, `cryptarithm`, `base_conversion`, `binary_alternation`, `circuit_logic`, `modulo_grid`, `manipulate_matrix`, `number_format`, `basic_arithmetic`, `polynomial_multiplication`;
+  - termos detectados no dataset: `bit=457`, `xor=144`, `binary=597`, `equation=434`, `cryptarithm=145`, `operator=282`, `arithmetic=1249`, `base=472`, `hex=172`, `modulo=157`, `matrix=1303`, `string=2068`.
+- Relevancia para as familias alvo:
+  - `bit_manipulation`: usar como gerador de fixtures e testes de verifier para operacoes bitwise, hexadecimal, signed integer, XOR/circuit logic, base conversion e binary alternation;
+  - `equation_transform`: usar como referencia de verificadores e geracao controlada para `simple_equations`, `cryptarithm`, `operator`, `polynomial_multiplication` e transformacoes simbolicas simples;
+  - familias auxiliares: pode ajudar indiretamente `numeral_system` e `unit_conversion` via base/format arithmetic, mas nao deve ser tratado como dataset KG1.
+- Decisao: P1 CPU-only. Nao treinar LoRA direto, nao fazer full download persistente e nao gastar H100/H200 ainda. O uso correto e criar um notebook/script de triagem que filtre subfontes relevantes, gere mini-fixtures, dedupe contra train/weak/full conhecidos e rode verifiers locais.
+- Gate obrigatorio antes de qualquer treino:
+  - materializar apenas subset filtrado, com hash do filtro e manifest;
+  - dedupe por `uuid`, prompt normalizado e n-gram contra Kaggle `train.csv`, weak V221/V230/V275 e artefatos `tonghuikang`;
+  - bloquear exemplos cujo answer/format induza leakage do desafio;
+  - classificar por subtipo KG1 (`bitwise_hex_signed`, `bitwise_xor_logic`, `base_conversion`, `equation_linear`, `equation_symbolic`, `cryptarithm`);
+  - primeiro medir ganho em solver/verifier local; GPU somente se houver evidencia de `losses=0` e ganho sobre V275.
+
+Achados P2/P3 novos:
+
+- `nvidia/Nemotron-3-Nano-Omni-30B-A3B-Reasoning-BF16`, `unsloth/NVIDIA-Nemotron-3-Nano-Omni-30B-A3B-Reasoning`, `nvidia/Nemotron-3-Nano-Omni-30B-A3B-Reasoning-FP8`, `nvidia/Nemotron-3-Nano-Omni-30B-A3B-Reasoning-NVFP4`:
+  - modelos full/quantizados Omni Reasoning, nao adapters KG1;
+  - tamanhos aproximados auditados por metadados HF: BF16/Unsloth por volta de `66 GB`, FP8 por volta de `35 GB`, NVFP4 por volta de `22 GB`;
+  - utilidade: teacher/offline inference ou comparacao metodologica somente se houver endpoint barato. Nao substituir o base KG1 e nao iniciar job caro sem mini-benchmark.
+- `nvidia/Nemotron-Content-Safety-Reasoning-4B` e `nvidia/Nemotron-Content-Safety-Reasoning-Dataset`:
+  - dominio de safety/moderation; nao ataca `bit_manipulation` nem `equation_transform`;
+  - decisao: descartar para ACC KG1, exceto como exemplo de formato de justificativa/rotulagem se necessario.
+- `AmanPriyanshu/tool-reasoning-sft-CODING-nvidia-Nemotron-Agentic-v1`:
+  - dataset grande de trajetorias de tool-use/coding, aproximadamente `1.57 GB`;
+  - utilidade possivel: metodologia de FSM/tool-call e validacao de chamadas a ferramentas, nao dados diretos KG1;
+  - decisao: P3, nao baixar agora.
+- Search pages `datasets?search=nvidia-nemotron` e `datasets?search=NVIDIA%20Nemotron%20Reasoning`:
+  - confirmaram `Nemotron-RL-ReasoningGym-v1` como unico achado novo acionavel imediato;
+  - tambem apontaram datasets grandes/gated/genericos como `Nemotron-CC-Math`, `Nemotron-Pretraining-Code`, `Nemotron-MIND`, `Nemotron-Post-Training-Dataset-v1/v2`;
+  - decisao: manter como backlog P2/P3, sem uso operacional antes de filtro e prova de ganho.
+
+Nova acao de roadmap derivada da reauditoria:
+
+1. Criar `V281_REASONINGGYM_CPU_TRIAGE`:
+   - objetivo: filtrar `Nemotron-RL-ReasoningGym-v1` por subfontes relevantes e produzir manifest de mini-fixtures sem download persistente grande;
+   - esperado: lista de exemplos candidatos por subtipo, hashes, licenca, dedupe e estimativa de cobertura para `bit_manipulation` e `equation_transform`.
+2. Criar `V282_REASONINGGYM_VERIFIER_PROBES`:
+   - objetivo: testar se os exemplos filtrados melhoram regras/verificadores locais, principalmente signed hex/bitwise, circuit XOR, linear equations, cryptarithm e operator transforms;
+   - esperado: ganho medido em miss-packs sem regressao contra V275.
+3. Manter GPU bloqueada:
+   - objetivo: preservar budget HF;
+   - esperado: nenhum job H100/H200 ate haver evidencia CPU de ganho deployable.
