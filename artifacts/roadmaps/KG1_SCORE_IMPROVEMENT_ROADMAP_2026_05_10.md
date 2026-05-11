@@ -3357,6 +3357,16 @@ Conteudo validado:
 | `v226_checkpoint1` | Drive V226 checkpoint-1 | `191/315`, equation `55`, bit `136`, trunc `0` | `f4e2083d83f13a102cd86e5d1295a8603264856c17ec35c357188e1acde6ea79` |
 | `v194_protected` | Drive V202D/V194 protegido | `190/315`, equation `54`, bit `136`, trunc `0` | `01259fef943bc16c31d8f7907be076cc987381a6a1bbe732b1b33c2d9f2ea95f` |
 
+Nota de contrato de inferencia:
+
+- Os scores historicos `190-191/315` foram medidos no contrato V221: thinking habilitado, `max_tokens=7680`, `max_model_len=8192`, `V221_PROMPT_SUFFIX = "\nPlease put your final answer inside ..."` e respostas longas com raciocinio antes do ultimo `\boxed{}`.
+- O job HF V254 curto (`v254-h200-weak-strong-bridge-20260511T004420Z`) rodou com contrato V245/V230 curto: thinking desabilitado, `max_tokens=96`, `max_model_len=4096` e sufixo "Return only one line".
+- Resultado V254 curto:
+  - `hf_v226_checkpoint1_strong_bridge`: `16/315`, equation `8`, bit `8`, trunc `0`.
+  - `hf_v194_protected_strong_bridge`: `17/315`, equation `9`, bit `8`, trunc `0`.
+- Interpretacao: esse resultado nao invalida os adapters fortes; ele prova que a weak-eval curta nao reproduz o contrato que gerou os scores fortes. O wrapper HF precisa suportar ambos os contratos e rotular explicitamente qual foi usado.
+- Ajuste implementado em `scripts/hf_job_weak_eval_v245.py`: `KG1_DISABLE_THINKING`, `KG1_NO_PROMPT_SUFFIX` e `KG1_PROMPT_SUFFIX` agora controlam o modo de prompt; o default continua preservando o modo curto V245 para compatibilidade.
+
 Validacoes:
 
 - Ambos com `tensor_count=12011`.
@@ -3366,6 +3376,6 @@ Validacoes:
 
 Proximo passo:
 
-1. Rodar weak eval HF canonico desses dois pesos fortes usando o wrapper de gate atual.
-2. Confirmar que o HF reproduz V226 `191/315` e V194 `190/315`.
+1. Rodar V255 HF canonical-thinking reproduction com `KG1_DISABLE_THINKING=0`, `KG1_MAX_TOKENS=7680`, `KG1_MAX_MODEL_LEN=8192`, `KG1_MAX_NUM_SEQS=64` e o sufixo V221.
+2. Confirmar que o HF reproduz V194 `190/315` e, se reproduzir, rodar V226 checkpoint-1 no mesmo contrato.
 3. So depois usar `v226_checkpoint1` como initializer para qualquer smoke training curto com V249/novos dados.

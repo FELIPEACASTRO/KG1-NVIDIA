@@ -387,6 +387,17 @@ def run_eval(args: argparse.Namespace) -> dict[str, Any]:
     candidate_json = output_dir / "v245_weak_eval_candidates.json"
     candidate_json.write_text(json.dumps(candidate_payload, indent=2, sort_keys=True), encoding="utf-8")
     eval_out = output_dir / "eval"
+    disable_thinking = env_bool("KG1_DISABLE_THINKING", True)
+    no_prompt_suffix = env_bool("KG1_NO_PROMPT_SUFFIX", False)
+    prompt_suffix = os.environ.get("KG1_PROMPT_SUFFIX", DEFAULT_PROMPT_SUFFIX)
+    log_json(
+        "eval_prompt_controls",
+        {
+            "disable_thinking": disable_thinking,
+            "no_prompt_suffix": no_prompt_suffix,
+            "prompt_suffix": "" if no_prompt_suffix else prompt_suffix,
+        },
+    )
     cmd = [
         sys.executable,
         str(ROOT / "scripts" / "evaluate_lora_adapters_batch.py"),
@@ -414,11 +425,14 @@ def run_eval(args: argparse.Namespace) -> dict[str, Any]:
         str(env_int("KG1_MAX_NUM_SEQS", 8)),
         "--warmup-rows",
         "0",
-        "--disable-thinking",
-        "--prompt-suffix",
-        os.environ.get("KG1_PROMPT_SUFFIX", DEFAULT_PROMPT_SUFFIX),
         "--continue-on-error",
     ]
+    if disable_thinking:
+        cmd.append("--disable-thinking")
+    if no_prompt_suffix:
+        cmd.append("--no-prompt-suffix")
+    elif prompt_suffix:
+        cmd.extend(["--prompt-suffix", prompt_suffix])
     run_cmd(cmd, cwd=ROOT, log_path=output_dir / "v245_hf_weak_eval.log", timeout_s=env_int("KG1_EVAL_TIMEOUT_S", 1800))
     summary_path = eval_out / "batch_candidate_summary.json"
     if not summary_path.exists():
@@ -435,6 +449,11 @@ def run_eval(args: argparse.Namespace) -> dict[str, Any]:
         "adapters": adapter_metas,
         "eval_summary_json": str(summary_path),
         "candidate_summary": summary,
+        "eval_prompt_controls": {
+            "disable_thinking": disable_thinking,
+            "no_prompt_suffix": no_prompt_suffix,
+            "prompt_suffix": "" if no_prompt_suffix else prompt_suffix,
+        },
         "blocked_actions": ["full_eval", "package", "kaggle_submit"],
     }
     final_manifest_path = output_dir / "v245_hf_weak_eval_manifest.json"
