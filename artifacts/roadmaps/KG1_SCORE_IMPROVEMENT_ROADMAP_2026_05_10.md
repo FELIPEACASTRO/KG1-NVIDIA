@@ -188,6 +188,7 @@ Objetivo: testar se as regras deployable ja existentes (`V238/V241/V246`) conseg
 Evidencia concreta:
 
 - Script: `scripts/run_v272_current_equation_solver_audit_hf.py`.
+- Job HF CPU concluido: `https://huggingface.co/jobs/felipesp1983/6a01a89baff1cd33e8f33844`.
 - Artefatos locais versionados: `artifacts/hf_cpu_runs/v272_current_equation_solver_audit_20260511T1020Z`.
 - Baseline: `v259_checkpoint4_current_best`.
 - Contrato V221 observado: `bf055e3b9ebce79d4bfc9e48bce5a305b1d83da882f14afddec80d6afaba5fff`.
