@@ -15,6 +15,7 @@ Objetivo: consolidar os achados Kaggle/Hugging Face, resultados V221/V226/V229/V
 - Oracle V230 por linha melhora para `197/315`, equation `57`, bit `140`, truncation `0`, mas ainda falha o gate de equation por `3`.
 - Conclusao: roteamento entre os adapters ja avaliados nao resolve. O proximo ganho precisa vir de mineracao dos miss-packs, solver/verifier deterministico ou dados/traces filtrados.
 - Atualizacao HF-only 2026-05-11: o smoke V257/V249 em H200 produziu o melhor resultado operacional ate agora no contrato V221: `v257_checkpoint_4_v221_contract` com `192/315`, equation `56/155`, bit `136/160`, truncation `1`. Ainda nao passa o gate (`193/315`, equation `60`), mas prova ganho real de `+1` em bit sem perder equation frente ao V256 HF.
+- Atualizacao V259/V260B 2026-05-11: o treino equation-focused a partir do V257 checkpoint-4 repetiu `192/315`, equation `56/155`, bit `136/160`, truncation `0` no melhor checkpoint. Ele reduziu truncation, mas nao aumentou `equation_transform`; portanto nao justifica continuacao longa em H200 sem novo dado/verifier.
 - Auditoria Google Drive 2026-05-10: `1879` arquivos KG1 catalogados, `85` adapters completos, `232` reports, `423` CSVs, `54` JSONLs e `11` notebooks. Nenhum artefato do Drive supera o baseline V226 sob gate weak canonico; o Drive deve ser usado como fonte de pesos fortes conhecidos, reports e dados para triagem, nao como fonte de promocao automatica.
 - Achado Drive mais util: V207A full/validation gate do V194 tem `822/947` com familias nao criticas em `100%`, mas confirma o mesmo gargalo fraco: `bit_manipulation=135/160`, `equation_transform=55/155`. Isso reforca que o problema real continua concentrado em `equation_transform`.
 - Importante: muitos arquivos do Drive foram parte da trajetoria que chegou ao score amplo `0.86`. Esse score e valido como evidencia historica de que V194/V202D resolvia muito bem as familias nao criticas, mas nao pode ser interpretado como melhoria atual das duas familias alvo. No recorte decisivo, o proprio V207A mede `equation_transform=55/155` e `bit_manipulation=135/160`, alinhado ao gargalo V230.
@@ -3456,6 +3457,37 @@ V257/V258 HF-only smoke training com V249:
     - `artifacts/hf_eval_diffs/v255_v194_vs_v258_ckpt4_correctness_deltas_20260511.csv`
 - Interpretacao: V249 smoke curto produziu sinal positivo real, mas nao resolveu o bottleneck. O proximo passo nao deve ser treino longo cego; deve ser um smoke pequeno, equation-targeted, usando `checkpoint-4` como seed somente se o gate HF repetir hashes, contrato V221 e weak eval imediato.
 
+V259/V260B HF-only equation-focused smoke:
+
+- V259 H200 `v259-h200-v249-eqfocus-v257ckpt4-smoke-20260511T023318Z`
+  - Job HF: `https://huggingface.co/jobs/felipesp1983/6a01402d317220dbbd1a7819`.
+  - Status: `COMPLETED`.
+  - Output repo: `felipesp1983/kg1-nemotron-lora-v259-v249-eqfocus-v257ckpt4-smoke`.
+  - Initializer: `felipesp1983/kg1-nemotron-lora-v257-v249-v226-smoke/checkpoint-4@be437d3f431e0c46998243e573cda53fa68f26c6`.
+  - Dataset: V249 public non-weak target, train `2558`, val `284`, hashes e family counts validados antes de treino.
+  - Receita: `MAX_STEPS=8`, `lr=2e-8 -> 1e-8`, LoRA trainable `q_proj,k_proj,v_proj,o_proj,lm_head,up_proj,down_proj`, `equation_transform=3.00`, `bit_manipulation=0.80`.
+  - Gates: H200, CUDA, dataset hashes, tokenizacao sem truncation, offset masks, import `causal_conv1d`, `mamba_ssm`, adapter load coverage `12011/12011`, trainable ratio `2.6908%`.
+  - Upload HF: checkpoint-4, checkpoint-8 e final completos.
+- V260B H200 `v260b-h200-v221contract-v259-eqfocus-eval-20260511T025751Z`
+  - Job HF: `https://huggingface.co/jobs/felipesp1983/6a0145edaff1cd33e8f333a0`.
+  - Status: `COMPLETED`, `failureCount=0`, running `1684s`.
+  - Upload HF: `https://huggingface.co/felipesp1983/kg1-nemotron-lora-v259-v249-eqfocus-v257ckpt4-smoke/commit/496d31f4284ec45b278e561aee4543005767a661`.
+  - Contrato: V221 reproduzido, thinking habilitado, `max_tokens=7680`, `max_model_len=8192`, `max_num_seqs=64`.
+  - Weak CSV SHA256: `85da758e14d57ea40270de5747f98726a0ad0b6d1795bff7dd46183005e0f9b6`.
+  - Shared row contract: `bf055e3b9ebce79d4bfc9e48bce5a305b1d83da882f14afddec80d6afaba5fff`.
+  - Resultados:
+    - `v259_checkpoint_4_v221_contract`: `192/315`, equation `56/155`, bit `136/160`, trunc `0`.
+    - `v259_checkpoint_8_v221_contract`: `191/315`, equation `56/155`, bit `135/160`, trunc `1`.
+    - `v259_final_v221_contract`: `190/315`, equation `56/155`, bit `134/160`, trunc `1`.
+  - Melhor candidato: `checkpoint-4`; ele empata o V258 checkpoint-4 no total e em equation/bit, melhorando apenas truncation de `1` para `0`.
+  - Delta vs V258 checkpoint-4: `7` linhas com predicao alterada; net score `0`. Perdeu um bit previamente correto (`4ef88f92`) e ganhou um bit (`59bee375`); quatro predicoes de equation mudaram, mas continuaram incorretas.
+  - Gate: nao passa. Total fica `1` abaixo de `193`; equation fica `4` abaixo de `60`.
+  - Artefatos locais:
+    - `artifacts/hf_eval_diffs/v260b_v259_eqfocus_20260511/README.md`
+    - `artifacts/hf_eval_diffs/v260b_v259_eqfocus_20260511/v260b_v259_eqfocus_summary.json`
+    - `artifacts/hf_eval_diffs/v260b_v259_eqfocus_20260511/v260b_vs_v258_checkpoint4_changed_rows.csv`
+- Interpretacao: a receita V259 nao melhorou o gargalo. Continuar esse treino por mais steps e gasto H200 sem novo dado/verifier provavelmente so degrada bit ou mantem equation em `56/155`. O proximo passo deve voltar para mineracao deterministica de `equation_transform` simbolico/misto, parser/verifier e dados externos auditados, nao treino cego.
+
 Regra de preservacao dos artefatos historicos:
 
 - Muitos arquivos do Drive e dos notebooks anteriores participaram da trajetoria ate o score amplo `0.86`. Eles nao devem ser apagados por tamanho ou idade sem classificacao previa.
@@ -3476,7 +3508,8 @@ Validacoes:
 
 Proximo passo:
 
-1. Promover `v257_checkpoint_4_v221_contract` para candidato seed de experimento, nao para full eval/submissao.
-2. Rodar proximo smoke HF-only pequeno e equation-targeted, mirando `+4` em equation sem cair abaixo de bit `136/160`; manter gate fraco obrigatorio antes de qualquer full eval.
-3. Evitar treino H200 longo ate existir ganho em `equation_transform`; o sinal V258 veio de bit, nao do gargalo principal.
-4. Reusar V249/V250/V242 somente com preflight de hashes, anti-leakage, row-contract, tokenizacao e estimativa de custo.
+1. Nao promover V259 para full eval/submissao; nenhum checkpoint passou o weak gate.
+2. Manter `v257_checkpoint_4`/`v259_checkpoint_4` como seeds tecnicos reproduziveis, mas nao investir em continuacao longa sem novo sinal de equation.
+3. Priorizar HF-only CPU/low-cost para minerar `equation_transform` simbolico/misto: V230 miss packs, V232/V238 workitems, raw traces auditados e regras/verifiers com abstain.
+4. So voltar a H200 quando houver candidato deterministico ou dataset filtrado que, em preflight, mire explicitamente os `+4` acertos de equation sem derrubar bit abaixo de `136/160`.
+5. Reusar V249/V250/V242 somente com preflight de hashes, anti-leakage, row-contract, tokenizacao e estimativa de custo.
