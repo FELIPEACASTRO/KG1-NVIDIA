@@ -18,6 +18,7 @@ Objetivo: consolidar os achados Kaggle/Hugging Face, resultados V221/V226/V229/V
 - Atualizacao V259/V260B 2026-05-11: o treino equation-focused a partir do V257 checkpoint-4 repetiu `192/315`, equation `56/155`, bit `136/160`, truncation `0` no melhor checkpoint. Ele reduziu truncation, mas nao aumentou `equation_transform`; portanto nao justifica continuacao longa em H200 sem novo dado/verifier.
 - Atualizacao V261 2026-05-11: a varredura operacional `thinking on + no prompt suffix` foi cortada cedo no H200 por gate de FinOps. O primeiro candidato (`v259_checkpoint4_nosuffix`) regrediu para `155/315`, equation `55/155`, bit `100/160`, truncation `1`; sem ganho em equation e com queda severa em bit. Esta familia de prompt esta descartada para novos gastos.
 - Atualizacao V262/V263 2026-05-11: adapter soups entre V226/V257/V259 foram gerados em CPU e avaliados no H200. Melhor soup (`soup_v226_050_v257_050`) ficou em `192/315`, equation `56/155`, bit `136/160`, truncation `1`; os outros regrediram para `191` e `190`. Adapter soup nao resolveu o gargalo e nao deve consumir novo H200 sem um preflight que prove alvo novo em equation.
+- Atualizacao V264 2026-05-11: recheck HF CPU confirmou que os traces P0 `andy279/*` continuam bloqueados por review/termos (`403`). A rota mais promissora agora precisa de acao humana para liberar esses datasets no HF; o mirror publico sozinho ja foi usado e nao entregou equation suficiente.
 - Auditoria Google Drive 2026-05-10: `1879` arquivos KG1 catalogados, `85` adapters completos, `232` reports, `423` CSVs, `54` JSONLs e `11` notebooks. Nenhum artefato do Drive supera o baseline V226 sob gate weak canonico; o Drive deve ser usado como fonte de pesos fortes conhecidos, reports e dados para triagem, nao como fonte de promocao automatica.
 - Achado Drive mais util: V207A full/validation gate do V194 tem `822/947` com familias nao criticas em `100%`, mas confirma o mesmo gargalo fraco: `bit_manipulation=135/160`, `equation_transform=55/155`. Isso reforca que o problema real continua concentrado em `equation_transform`.
 - Importante: muitos arquivos do Drive foram parte da trajetoria que chegou ao score amplo `0.86`. Esse score e valido como evidencia historica de que V194/V202D resolvia muito bem as familias nao criticas, mas nao pode ser interpretado como melhoria atual das duas familias alvo. No recorte decisivo, o proprio V207A mede `equation_transform=55/155` e `bit_manipulation=135/160`, alinhado ao gargalo V230.
@@ -2863,6 +2864,26 @@ Recheck HF V247 em 2026-05-11:
 - Decisao: `p0_gated_terms_required_public_mirror_available`.
 - Implicacao: a rota de traces externos segue bloqueada por acesso humano aos repos `andy279/*`. Ate liberar esse acesso, nao iniciar treino H200 baseado nesses traces.
 
+Recheck HF V264 em 2026-05-11:
+
+- HF Job: `6a016a74317220dbbd1a78e4`.
+- URL: `https://huggingface.co/jobs/felipesp1983/6a016a74317220dbbd1a78e4`.
+- Run ID: `v264-hf-source-access-recheck-20260511T053342Z`.
+- Repo commit executado: `c1efe6af76918145a16a9a96423ee4e2b19c5dd5`.
+- Upload HF:
+  `https://huggingface.co/datasets/felipesp1983/kg1-nemotron-training/commit/049b6afe57041eeb9b36424ee03c341a9e3b7c07`.
+- Path:
+  `runtime_artifacts/v247_hf_source_access_gate/v264-hf-source-access-recheck-20260511T053342Z/`.
+- Resultado:
+  - P0 accessible files: `0`.
+  - P0 denied files: `5`.
+  - Public accessible files: `2`.
+  - `andy279/nemotron-reasoning-challenge-raw-traces`: metadata OK, payload `403`, review pendente.
+  - `andy279/nemotron-reasoning-challenge`: metadata OK, payload `403`, review pendente.
+  - `jasonkung98/NVIDIA-Nemotron-Model-Reasoning-Challenge`: `train.csv` e `test.csv` acessiveis.
+- Decisao: `p0_gated_terms_required_public_mirror_available`.
+- Implicacao: sem aceitar/liberar acesso aos datasets gated `andy279/*`, a rota de traces P0 permanece bloqueada. Novo H200 baseado no mirror publico ou em soups nao e justificado pelos resultados V257-V263.
+
 ## V248 public mirror leakage audit
 
 Script:
@@ -3589,4 +3610,5 @@ Proximo passo:
 2. Manter `v257_checkpoint_4`, `v259_checkpoint_4` e `soup_v226_050_v257_050` como seeds tecnicos reproduziveis, mas nao investir em continuacao longa, adapter soup ou prompts `no suffix` sem novo sinal de equation.
 3. Priorizar HF-only CPU/low-cost para minerar `equation_transform` simbolico/misto: V230 miss packs, V232/V238 workitems, raw traces auditados e regras/verifiers com abstain.
 4. So voltar a H200 quando houver candidato deterministico ou dataset filtrado que, em preflight, mire explicitamente os `+4` acertos de equation sem derrubar bit abaixo de `136/160`.
-5. Reusar V249/V250/V242 somente com preflight de hashes, anti-leakage, row-contract, tokenizacao, estimativa de custo e kill-switch por primeiro candidato.
+5. Antes de novo treino util, liberar acesso humano aos datasets HF gated `andy279/nemotron-reasoning-challenge-raw-traces` e `andy279/nemotron-reasoning-challenge`; V264 confirmou `403` em todos os `5` arquivos P0.
+6. Reusar V249/V250/V242 somente com preflight de hashes, anti-leakage, row-contract, tokenizacao, estimativa de custo e kill-switch por primeiro candidato.
