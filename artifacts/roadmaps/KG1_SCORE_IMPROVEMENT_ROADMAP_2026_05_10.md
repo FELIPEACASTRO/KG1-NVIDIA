@@ -20,6 +20,7 @@ Objetivo: consolidar os achados Kaggle/Hugging Face, resultados V221/V226/V229/V
 - Atualizacao V262/V263 2026-05-11: adapter soups entre V226/V257/V259 foram gerados em CPU e avaliados no H200. Melhor soup (`soup_v226_050_v257_050`) ficou em `192/315`, equation `56/155`, bit `136/160`, truncation `1`; os outros regrediram para `191` e `190`. Adapter soup nao resolveu o gargalo e nao deve consumir novo H200 sem um preflight que prove alvo novo em equation.
 - Atualizacao V264 2026-05-11: recheck HF CPU confirmou que os traces P0 `andy279/*` continuam bloqueados por review/termos (`403`). A rota mais promissora agora precisa de acao humana para liberar esses datasets no HF; o mirror publico sozinho ja foi usado e nao entregou equation suficiente.
 - Atualizacao V265 2026-05-11: foi criado o mix `score086_filtered_mix`, usando V249 publico nao-weak mais o corpus historico V189 que participou da trajetoria do score amplo `0.86`, mas com bloqueio por `weak_id`, `prompt_sha256` normalizado e dedupe. O builder CPU manteve `3442` linhas (`2000` equation, `1442` bit) e bloqueou `807` linhas (`83` overlaps exatos com weak por prompt hash e `724` duplicatas). O split final ficou em train `3098` (`1800` equation, `1298` bit) e val `344` (`200` equation, `144` bit). Esse dataset passou o V250 tokenization gate no HF: truncation `0.0`, offset masks completos e nenhum token de completion descartado. Proximo passo autorizado: smoke train curto em H200, nao treino longo.
+- Atualizacao V266 2026-05-11: o primeiro smoke H200 sobre V265, iniciado de `v259_checkpoint_4`, falhou no objetivo e foi interrompido por FinOps quando `final` foi confirmado identico ao `checkpoint-4` via SHA LFS. Resultados weak V221-contract: `checkpoint-2 = 155/315, equation 56/155, bit 99/160, trunc 0`; `checkpoint-4 = 154/315, equation 56/155, bit 98/160, trunc 2`. Diagnostico: a receita `all target modules + equation_transform=3.0 + bit=0.8` destruiu a familia `bit_manipulation` sem ganhar equation. O V265 nao esta descartado, mas so pode voltar em smoke ultra-conservador, com trainable limitado a atencao/lm_head, bit replay reforcado, source key V189 corrigida para `v189_score086_equation_answer_short_filtered`, e weak eval parcial antes de qualquer novo gasto longo.
 - Auditoria Google Drive 2026-05-10: `1879` arquivos KG1 catalogados, `85` adapters completos, `232` reports, `423` CSVs, `54` JSONLs e `11` notebooks. Nenhum artefato do Drive supera o baseline V226 sob gate weak canonico; o Drive deve ser usado como fonte de pesos fortes conhecidos, reports e dados para triagem, nao como fonte de promocao automatica.
 - Achado Drive mais util: V207A full/validation gate do V194 tem `822/947` com familias nao criticas em `100%`, mas confirma o mesmo gargalo fraco: `bit_manipulation=135/160`, `equation_transform=55/155`. Isso reforca que o problema real continua concentrado em `equation_transform`.
 - Importante: muitos arquivos do Drive foram parte da trajetoria que chegou ao score amplo `0.86`. Esse score e valido como evidencia historica de que V194/V202D resolvia muito bem as familias nao criticas, mas nao pode ser interpretado como melhoria atual das duas familias alvo. No recorte decisivo, o proprio V207A mede `equation_transform=55/155` e `bit_manipulation=135/160`, alinhado ao gargalo V230.
@@ -90,11 +91,20 @@ Gate V250 no HF:
 - Train tokenization: rows `3098`, prompt truncation `0`, prompt truncation rate `0.0`, completion tokens dropped `0`, offset masks `3098`, fallback masks `0`, max tokens `324`.
 - Validation tokenization: rows `344`, prompt truncation `0`, prompt truncation rate `0.0`, completion tokens dropped `0`, offset masks `344`, fallback masks `0`, max tokens `324`.
 
-Decisao:
+Decisao apos V266:
 
-- Usar V265 para um smoke train curto e barato em H200, iniciando do adapter V226 checkpoint-1 forte.
-- Nao executar treino longo antes de weak eval do smoke.
-- Se o smoke nao aumentar `equation_transform` acima de `56/155` sem derrubar `bit_manipulation <136/160`, encerrar essa rota e voltar para solver/verifier ou traces `andy279`.
+- O primeiro smoke V265 em H200 foi negativo e esta rejeitado como candidato deployable.
+- Resultado observado: `v266_checkpoint_2_v221_contract = 155/315, equation 56/155, bit 99/160, trunc 0`; `v266_checkpoint_4_v221_contract = 154/315, equation 56/155, bit 98/160, trunc 2`.
+- Causa operacional provavel: a receita treinou todos os modulos LoRA (`down/in/k/lm/o/out/q/up/v`) com `equation_transform=3.0` e `bit_manipulation=0.8`, reduzindo demais o replay de bit. Tambem havia erro de chave em `SOURCE_WEIGHTS`: o dataset usa `v189_score086_equation_answer_short_filtered`, mas a receita usou `v189_equation_answer_short_filtered`.
+- O job de weak eval V266 foi cancelado com status `CANCELED` para poupar H200 depois que `final/adapter_model.safetensors` foi confirmado byte-identical a `checkpoint-4/adapter_model.safetensors` via SHA256 LFS `875e18bc336975adcf8eaef26ff76c3f89043583981c867d915b809bb955bc99`.
+- V265 so pode ser tentado mais uma vez dentro do budget atual com receita ultra-conservadora:
+  - initializer `v259_checkpoint_4`, que e o melhor conhecido (`192/315`, equation `56`, bit `136`, trunc `0`);
+  - `TRAINABLE_LORA_MODULES=q_proj,k_proj,v_proj,o_proj,lm_head`;
+  - bit replay reforcado (`bit_manipulation >= 1.15`);
+  - equation menos agressivo (`equation_transform <= 2.0`);
+  - source key corrigida (`v189_score086_equation_answer_short_filtered`);
+  - eval parcial do primeiro checkpoint antes de avaliar checkpoints adicionais.
+- Se esse smoke conservador nao mantiver bit `>=136/160` e nao aumentar equation acima de `56/155`, encerrar V265 e voltar para solver/verifier ou traces `andy279`.
 
 ### Auditoria OpenRouter anexada - 2026-05-10
 
@@ -3618,6 +3628,44 @@ V262/V263 HF-only adapter soup:
   - Oracle V260B + melhor soup: total `193`, bit `137`, equation `56`. Esse oracle ainda falha o gate de equation por `4`, entao nao justifica novo roteador/soup deployable.
 - Decisao FinOps/QA: nao repetir adapter soup em H200 dentro do budget atual. A rota nao mudou `equation_transform`; o proximo gasto em GPU so deve ocorrer apos um preflight barato que gere evidencia concreta de `+4` ou mais em equation sem reduzir bit abaixo de `136/160`.
 
+V266/V267B HF-only V265 score086 filtered mix:
+
+- V266 H200 treinou o mix V265 de forma agressiva a partir de `v259_checkpoint_4`.
+  - Resultado weak V221-contract:
+    - `v266_checkpoint_2_v221_contract`: `155/315`, equation `56/155`, bit `99/160`, trunc `0`.
+    - `v266_checkpoint_4_v221_contract`: `154/315`, equation `56/155`, bit `98/160`, trunc `2`.
+  - Diagnostico: a receita preservou `equation=56`, mas destruiu `bit_manipulation`; foi encerrada por FinOps.
+- V267B H200 testou uma receita ultra-conservadora a partir do mesmo seed:
+  - Job treino HF: `https://huggingface.co/jobs/felipesp1983/6a017b4a317220dbbd1a7941`.
+  - Output repo: `felipesp1983/kg1-nemotron-lora-v267b-v265-conservative-v259ckpt4-smoke`.
+  - Receita: `MAX_STEPS=4`, `lr=2e-8 -> 1e-8`, trainable apenas `q_proj,k_proj,v_proj,o_proj,lm_head`, source key V189 corrigida e replay bit reforcado.
+  - Eval checkpoint-2 HF: `https://huggingface.co/jobs/felipesp1983/6a018046aff1cd33e8f33696`.
+  - Resultado: `155/315`, equation `56/155`, bit `99/160`, trunc `1`.
+  - Decisao: nao avaliar checkpoint-4 nem continuar V265 dentro do budget atual. A regressao de bit e grande demais e nao houve nenhum ganho de equation.
+
+V268 novo achado publico - `tonghuikang/nemotron` reasoning corpus:
+
+- Fonte auditada: `https://github.com/tonghuikang/nemotron`.
+- Arquivos publicos relevantes:
+  - `train.csv` SHA256 local observado: `d204af160633b638448723a437aa51c0db70fd0b64ff92f6ad6f52e5ac6377fa`.
+  - `problems.jsonl` SHA256 local observado: `5b536b97b402fab985312003983bf4c59a928eb08dbb2705ca77d1030d4cf24e`.
+  - `corpus.jsonl` SHA256 local observado: `7ac9e8e267397f1dbcce8d015c253460fec543cab20a078fcf64a53c6000de23`.
+  - `generation.jsonl` SHA256 local observado: `42eb76d13bd81ea3ce6b55120a3e2a23782c18563e05dd4ac9eea59d631b9fbc`.
+- Auditoria contra weak V221:
+  - O repo contem todos os `315` weak IDs em `train.csv/problems.jsonl/corpus.jsonl`; uso direto e proibido.
+  - Builder V268 bloqueia todos os weak IDs antes de qualquer decode.
+- Piloto local sem persistencia:
+  - IDs target nao-weak no indice: `2842` (`bit=1442`, `cryptarithm_deduce=582`, `equation_numeric_deduce=543`, `cryptarithm_guess=151`, `equation_numeric_guess=124`).
+  - Linhas aceitas apos baixar `corpus/<id>/synthetic.jsonl`, decodificar tokens e exigir `\boxed{}` final igual ao `train.csv`: `1789`.
+  - Aceitas por familia: `bit_manipulation=1228`, `equation_transform=561`.
+  - Aceitas por subtipo: `bit_manipulation=1228`, `equation_numeric_deduce=492`, `cryptarithm_deduce=43`, `equation_numeric_guess=17`, `cryptarithm_guess=9`.
+  - Rejeitadas: `798` sem `synthetic.jsonl`, `255` com `boxed_answer_mismatch`.
+- Valor para ACC:
+  - Este e o primeiro corpus publico auditado que contem reasoning longo verificavel por `\boxed{answer}` e bloqueio de weak IDs, diferente do V265 que treinou majoritariamente short-answer.
+  - Risco: equation simbolico/misto ainda tem pouca cobertura (`52` cryptarithm aceitos), entao a expectativa de ganho em `equation_transform` e moderada, nao garantida.
+  - Gate antes de GPU: V268 deve publicar dataset HF e rodar V250 com `assistant_style=reasoning_boxed`, `max_length=8192`, hashes esperados, family counts e truncation `0`.
+  - So depois de V250 passar, rodar um smoke H200 curtissimo com kill-switch no primeiro checkpoint. Se bit cair abaixo de `136/160` ou equation nao passar de `56/155`, encerrar esta rota.
+
 Regra de preservacao dos artefatos historicos:
 
 - Muitos arquivos do Drive e dos notebooks anteriores participaram da trajetoria ate o score amplo `0.86`. Eles nao devem ser apagados por tamanho ou idade sem classificacao previa.
@@ -3641,6 +3689,7 @@ Proximo passo:
 1. Nao promover V259/V261/V263 para full eval/submissao; nenhum checkpoint ou soup passou o weak gate.
 2. Manter `v257_checkpoint_4`, `v259_checkpoint_4` e `soup_v226_050_v257_050` como seeds tecnicos reproduziveis, mas nao investir em continuacao longa, adapter soup ou prompts `no suffix` sem novo sinal de equation.
 3. Priorizar HF-only CPU/low-cost para minerar `equation_transform` simbolico/misto: V230 miss packs, V232/V238 workitems, raw traces auditados e regras/verifiers com abstain.
-4. So voltar a H200 quando houver candidato deterministico ou dataset filtrado que, em preflight, mire explicitamente os `+4` acertos de equation sem derrubar bit abaixo de `136/160`.
-5. Antes de novo treino util, liberar acesso humano aos datasets HF gated `andy279/nemotron-reasoning-challenge-raw-traces` e `andy279/nemotron-reasoning-challenge`; V264 confirmou `403` em todos os `5` arquivos P0.
-6. Reusar V249/V250/V242 somente com preflight de hashes, anti-leakage, row-contract, tokenizacao, estimativa de custo e kill-switch por primeiro candidato.
+4. Executar V268 como proxima rota barata: publicar o dataset `tonghuikang` reasoning non-weak no HF, rodar V250 `reasoning_boxed`, e so usar H200 se o gate provar truncation/offset-mask corretos.
+5. So voltar a H200 quando houver candidato deterministico ou dataset filtrado que, em preflight, mire explicitamente os `+4` acertos de equation sem derrubar bit abaixo de `136/160`.
+6. Antes de novo treino util, liberar acesso humano aos datasets HF gated `andy279/nemotron-reasoning-challenge-raw-traces` e `andy279/nemotron-reasoning-challenge`; V264 confirmou `403` em todos os `5` arquivos P0.
+7. Reusar V249/V250/V242 somente com preflight de hashes, anti-leakage, row-contract, tokenizacao, estimativa de custo e kill-switch por primeiro candidato.

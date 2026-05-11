@@ -15,6 +15,7 @@ import csv
 import hashlib
 import json
 import os
+import re
 import statistics
 import tempfile
 from collections import Counter
@@ -171,6 +172,7 @@ def validate_rows(
     expected_rows: int,
     expected_family_counts: dict[str, int],
     weak_ids: set[str],
+    assistant_style: str,
 ) -> dict[str, Any]:
     if len(rows) != expected_rows:
         raise RuntimeError(f"{split} row count mismatch: expected {expected_rows}, got {len(rows)}")
@@ -186,6 +188,16 @@ def validate_rows(
         raise RuntimeError(
             f"{split} family count mismatch: expected {expected_family_counts}, got {family_counts}"
         )
+    def assistant_matches(row: dict[str, Any], content: Any) -> bool:
+        answer = str(row.get("answer", "")).strip()
+        text = str(content)
+        if assistant_style == "final_answer":
+            return text == "Final answer: " + answer
+        if assistant_style == "reasoning_boxed":
+            boxed = re.findall(r"\\boxed\{([^{}]*)\}", text)
+            return bool(boxed) and normalize_answer(boxed[-1]) == normalize_answer(answer)
+        raise RuntimeError(f"unsupported assistant_style: {assistant_style}")
+
     bad_messages: list[str] = []
     for row in rows:
         messages = row.get("messages")
@@ -198,7 +210,7 @@ def validate_rows(
         if messages[1].get("content") != row.get("prompt"):
             bad_messages.append(str(row.get("id", "")))
             continue
-        if messages[2].get("content") != "Final answer: " + str(row.get("answer", "")):
+        if not assistant_matches(row, messages[2].get("content", "")):
             bad_messages.append(str(row.get("id", "")))
     if bad_messages:
         raise RuntimeError(f"{split} bad message rows: {bad_messages[:20]}")
@@ -463,6 +475,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         args.expected_train_rows,
         args.expected_train_family_counts,
         weak_ids,
+        args.assistant_style,
     )
     val_validation = validate_rows(
         val_rows,
@@ -470,6 +483,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         args.expected_val_rows,
         args.expected_val_family_counts,
         weak_ids,
+        args.assistant_style,
     )
     if {row["original_id"] for row in train_rows} & {row["original_id"] for row in val_rows}:
         raise RuntimeError("train/validation original_id overlap detected")
@@ -541,6 +555,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             "max_length": args.max_length,
             "max_prompt_truncation_rate": args.max_prompt_truncation_rate,
             "require_offset_mask": args.require_offset_mask,
+            "assistant_style": args.assistant_style,
         },
         "input_artifact_hashes": input_artifact_hashes,
         "v249_manifest_counts": v249_manifest.get("counts", {}),
@@ -600,6 +615,11 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--max-length", type=int, default=4096)
     parser.add_argument("--max-prompt-truncation-rate", type=float, default=0.0)
     parser.add_argument("--require-offset-mask", action=argparse.BooleanOptionalAction, default=True)
+    parser.add_argument(
+        "--assistant-style",
+        choices=["final_answer", "reasoning_boxed"],
+        default="final_answer",
+    )
     parser.add_argument("--repo-root", type=Path, default=Path("."))
     parser.add_argument("--output-dir", type=Path)
     parser.add_argument("--label", default="v250_v249_tokenization_gate")
@@ -644,7 +664,15 @@ def self_test() -> int:
             {"role": "assistant", "content": "Final answer: 42"},
         ],
     }
-    validate_rows([row], "self", 1, {"equation_transform": 1}, set())
+    validate_rows([row], "self", 1, {"equation_transform": 1}, set(), "final_answer")
+    reasoning_row = dict(row)
+    reasoning_row["id"] = "v249_train_reasoning"
+    reasoning_row["messages"] = [
+        {"role": "system", "content": "system"},
+        {"role": "user", "content": "Solve this equation transform."},
+        {"role": "assistant", "content": "reasoning\n\\boxed{42}"},
+    ]
+    validate_rows([reasoning_row], "self_reasoning", 1, {"equation_transform": 1}, set(), "reasoning_boxed")
     report = tokenize_rows([row], "self", ToyTokenizer(), 4096, 0.0, True)
     if report["fallback_masks"] != 0 or report["offset_masks"] != 1:
         raise AssertionError("offset mask self-test failed")
