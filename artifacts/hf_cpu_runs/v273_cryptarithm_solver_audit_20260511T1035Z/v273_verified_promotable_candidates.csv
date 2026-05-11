@@ -1,0 +1,1 @@
+id,status,prediction,answer,baseline_prediction,verified_by_weak_label,incorrect_by_weak_label,promotable_after_class_gate,solver_mode,query,example_count,answer_vote_count,total_solution_votes,mapping,operator_mapping,proof

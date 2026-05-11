@@ -24,6 +24,7 @@ Objetivo: consolidar os achados Kaggle/Hugging Face, resultados V221/V226/V229/V
 - Atualizacao V268/V269/V270 2026-05-11: o corpus publico `tonghuikang/nemotron` foi ingerido com bloqueio de todos os 315 weak IDs e so aceitou linhas cujo `\boxed{}` final batia com `train.csv`. O builder V268 gerou `1789` linhas (`1105` bit, `506` equation em treino), passou tokenization gate V250 com `max_length=8192`, e o smoke V269 em H200 a partir do melhor V259 checkpoint-4 empatou o melhor score: `v269_checkpoint_2 = 192/315`, equation `56/155`, bit `136/160`, trunc `0`. O `final` regrediu para `190/315`, bit `134/160`, trunc `2`. Conclusao: V268 e util como fonte de raciocinio/verifier, mas a receita SFT curta nao trouxe ganho novo de equation.
 - Atualizacao V271 2026-05-11: a mineracao CPU-only dos erros atuais validou o contrato V221 e confirmou que o V269 mudou `4` respostas de `equation_transform`, todas de errado para errado. Nos `99` erros restantes do melhor atual (`v259_checkpoint_4`), a taxonomia ficou: `83` `equation_symbolic_punct` com resposta simbolica, `15` `equation_numeric_operator` com resposta numerica, e `1` `equation_numeric_operator` misto. Regra de negocio: nao gastar H200 novamente ate existir um solver/verifier CPU que gere pelo menos `+4` a `+5` overrides de equation sem violar `bit>=136/160`, ou ate os traces gated `andy279` serem liberados.
 - Atualizacao V272 2026-05-11: auditoria CPU dos solvers atuais sobre os `99` misses de equation parseou todos os prompts (`parse_status=ok`), confirmou `83` simbolicos de pontuacao e `16` numericos, mas encontrou `0` candidatos verificados promotaveis. Regras testadas: char transducer, reverse, prefix/suffix, deletion posicional audit-only e numeric same-operator. Conclusao: os solvers simples V238/V241/V246 nao bastam; a rota agora e liberar traces solver-guided externos ou implementar busca simbolica mais forte antes de qualquer GPU.
+- Atualizacao V273 2026-05-11: auditoria CPU de solver cryptarithm inspirada no repositorio publico `tonghuikang/nemotron` foi adicionada para testar a hipotese `AB op CD -> resultado` com inferencia de digitos/operadores. O gate endurecido validou o contrato V221, auditou os mesmos `99` misses de equation, bloqueou casos subdeterminados e encontrou `0` candidatos verificados promotaveis; classes com candidatos produziram `7` incorretos e foram descartadas. Conclusao: cryptarithm simples tambem nao e deployable; nao gastar H200 nessa rota sem uma familia simbolica mais rica ou traces solver-guided.
 - Auditoria Google Drive 2026-05-10: `1879` arquivos KG1 catalogados, `85` adapters completos, `232` reports, `423` CSVs, `54` JSONLs e `11` notebooks. Nenhum artefato do Drive supera o baseline V226 sob gate weak canonico; o Drive deve ser usado como fonte de pesos fortes conhecidos, reports e dados para triagem, nao como fonte de promocao automatica.
 - Achado Drive mais util: V207A full/validation gate do V194 tem `822/947` com familias nao criticas em `100%`, mas confirma o mesmo gargalo fraco: `bit_manipulation=135/160`, `equation_transform=55/155`. Isso reforca que o problema real continua concentrado em `equation_transform`.
 - Importante: muitos arquivos do Drive foram parte da trajetoria que chegou ao score amplo `0.86`. Esse score e valido como evidencia historica de que V194/V202D resolvia muito bem as familias nao criticas, mas nao pode ser interpretado como melhoria atual das duas familias alvo. No recorte decisivo, o proprio V207A mede `equation_transform=55/155` e `bit_manipulation=135/160`, alinhado ao gargalo V230.
@@ -209,6 +210,65 @@ Decisao:
 - O caminho correto agora e uma das duas rotas:
   - liberar `andy279/nemotron-reasoning-challenge-raw-traces`, pois a propria card informa traces solver-guided para transformation e bit;
   - implementar uma busca simbolica de regras mais forte que char-map/reverse/prefix/suffix/deletion simples, com auditoria zero-incorreto antes de qualquer eval ou treino.
+
+### V273 cryptarithm solver audit - CPU gate
+
+Objetivo: testar, sem custo de GPU, a hipotese derivada do repositorio publico `tonghuikang/nemotron`: varios misses simbolicos de `equation_transform` podem ser problemas do tipo `AB op CD`, em que simbolos representam digitos e o operador pode mapear para soma, diferenca absoluta, multiplicacao, concatenacao ou concatenacao reversa.
+
+Evidencia concreta:
+
+- Script: `scripts/run_v273_cryptarithm_solver_audit_hf.py`.
+- Artefatos locais versionados: `artifacts/hf_cpu_runs/v273_cryptarithm_solver_audit_20260511T1035Z`.
+- Fonte externa usada como base de implementacao: `https://github.com/tonghuikang/nemotron`, arquivo `investigators/cryptarithm_deduce.py`.
+- Baseline auditado: `v259_checkpoint_4`, melhor atual no contrato V221 (`192/315`, equation `56/155`, bit `136/160`, trunc `0`).
+- Contrato V221 observado: `bf055e3b9ebce79d4bfc9e48bce5a305b1d83da882f14afddec80d6afaba5fff`.
+- `equation_miss_rows`: `99`.
+
+Resultado do audit endurecido:
+
+| Solver mode | Rows | Candidatos | Verificados | Incorretos | Promovivel |
+|---|---:|---:|---:|---:|---|
+| `parse_gate` | 3 | 0 | 0 | 0 | nao |
+| `constraint_gate` | 54 | 0 | 0 | 0 | nao |
+| `cryptarithm_solver` | 35 | 0 | 0 | 0 | nao |
+| `cryptarithm_unique_digit` | 2 | 2 | 0 | 2 | nao |
+| `cryptarithm_nonunique_digit` | 5 | 5 | 0 | 5 | nao |
+
+Decisao:
+
+- `no_cryptarithm_solver_signal`.
+- O gate bloqueou candidatos subdeterminados e descartou classes que geraram erro contra weak label.
+- Nao existe override seguro vindo do cryptarithm simples.
+- Proxima acao objetiva: buscar traces solver-guided `andy279` ou implementar um enumerador simbolico mais geral que aprenda familias de operacoes sobre strings/pontuacao, com regra de promocao `0` incorretos antes de qualquer H200.
+
+### Pesquisa aplicada de literatura - decisao V274
+
+Objetivo: converter a busca em literatura de program synthesis, SMT, e reasoning procedural em acoes que possam aumentar ACC sem treino cego.
+
+Fontes com impacto direto:
+
+| Fonte | Evidencia tecnica | Aplicacao no KG1 | Decisao |
+|---|---|---|---|
+| Microsoft PROSE / FlashFill | Programacao por exemplos para transformacoes de string; FlashFill++ usa DSLs guardadas, cortes e ranking para tornar busca em DSL grande viavel. URLs: `https://www.microsoft.com/en-us/research/project/prose-text-transformation/`, `https://www.microsoft.com/en-us/research/publication/flashfill-scaling-programming-by-example-by-cutting-to-the-chase/` | `equation_symbolic_punct` e exatamente PBE: varios exemplos `lhs = rhs` e uma query. | P0: V274 deve implementar sintetizador PBE/DSL conservador para strings simbolicas, com zero-incorreto por classe antes de override. |
+| Minimal synthesis de string-to-string por DFA + SMT | Hamza/Kuncak modelam funcoes string-to-string a partir de exemplos e reduzem sintese minima a SMT. URL: `https://arxiv.org/abs/1710.09208` | Pode cobrir transformacoes Alice onde a saida nao e simples copia/reverse/prefix. | P0/P1: adicionar transducer/automata audit, mas promover so se houver unicidade ou consenso forte nos exemplos. |
+| SyGuS / enumerative synthesis guiada por LLM | Li/Parsert/Polgreen mostram que LLM sozinho perde para sintetizadores formais, mas melhora quando guia busca enumerativa. URL: `https://arxiv.org/abs/2403.03997` | Usar OpenRouter/LLM apenas para priorizar primitivas DSL, nunca como fonte direta de resposta. | P1: se V274 DSL crescer, usar LLM como ranking de busca, mantendo verificador local como autoridade. |
+| DreamCoder / library learning | Ellis et al. aprendem bibliotecas composicionais para resolver tarefas por programas interpretaveis. URL: `https://arxiv.org/abs/2006.08381` | Agrupar misses por operadores/padroes e comprimir solucoes recorrentes em primitivas reutilizaveis. | P1: depois do V274, minerar primitivas recorrentes a partir de acertos verificaveis; nao treinar LoRA sem esse sinal. |
+| Rosette / solver-aided DSL | Rosette compila DSLs para restricoes SMT e usa solvers off-the-shelf para sintese/verificacao. URL: `https://emina.github.io/rosette/` | Bit e algumas equacoes podem virar DSL com restricoes, reduzindo falsos positivos. | P1: V275 pode usar Z3/bit-vector para bit guardrail, mas bit ja esta em 136/160; prioridade segue equation. |
+| E-graphs / equality saturation | Equality saturation e `egg` representam muitas expressoes equivalentes e usam regras locais para achar rewrites globais. URLs: `https://www.cs.cornell.edu/~ross/publications/eqsat/`, `https://arxiv.org/abs/2004.03082` | Util para `equation_transform` quando a tarefa for rewrite algebraico, nao para todos os prompts Alice. | P2: manter como rota para `equation_numeric/operator` e DSL de rewrite, apos PBE simbolico. |
+| Reasoning Gym | Gera dados e verificadores procedurais com recompensas verificaveis em muitos dominios. URLs: `https://arxiv.org/abs/2505.24760`, `https://pypi.org/project/reasoning-gym/` | Fonte para probes e RL/verifier, especialmente bitwise arithmetic; nao e schema KG1 nativo. | P2: triagem de dados/probes; nao SFT direto. |
+| ASyMOB / symbolic math benchmark | Mostra queda forte de LLMs sob perturbacoes simbolicas e necessidade de combinar LLM com CAS/solvers. URL: `https://arxiv.org/abs/2505.23851` | Confirma que `equation_symbolic_punct` precisa de solver/verifier, nao apenas prompt/training numerico. | P1: usar como justificativa de DSL/verifier e evitar treino matematico generico. |
+| Nemotron CrossThink/Cascade | NVIDIA enfatiza curadoria, templates estruturados, filtering por dificuldade e controle thinking/non-thinking. URLs: `https://research.nvidia.com/labs/adlr/Nemotron-CrossThink/`, `https://research.nvidia.com/labs/nemotron/nemotron-cascade/` | Nosso V261 mostrou que mexer em prompt/thinking sem gate derruba bit; aplicar so com eval parcial e filtros. | P2: usar principios de filtering e templates; nao repetir prompt sweep cego. |
+
+Decisao operacional pos-literatura:
+
+- O proximo passo nao deve ser H200 nem novo LoRA.
+- V274 deve ser CPU-only e implementar um `symbolic_pbe_dsl_audit` inspirado em FlashFill/PROSE/SyGuS:
+  - entrada: os `99` misses atuais de equation;
+  - alvo primario: os `83` `equation_symbolic_punct`;
+  - DSL minima: tokenizacao `AB op CD`, operadores por classe, copy/select, concat, reverse-concat, constants guardadas, homomorfismo simbolico, transdutor de posicoes e fallback SMT/automata se instalavel;
+  - acceptance: classe so promove se gerar `>=4` acertos verificados e `0` incorretos no weak audit;
+  - se houver qualquer incorreto em uma classe, essa classe fica audit-only.
+- So liberar H200 quando V274 ou traces `andy279` produzirem `+4` a `+5` candidatos de equation com `0` incorretos e mantendo bit atual `136/160`.
 
 ### Auditoria OpenRouter anexada - 2026-05-10
 

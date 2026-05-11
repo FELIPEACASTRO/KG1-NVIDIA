@@ -1,0 +1,79 @@
+{
+  "decision": {
+    "decision": "no_cryptarithm_solver_signal",
+    "next_action": "Use gated solver traces or add richer symbolic operation families.",
+    "reason": "equation_misses=99; verified_promotable=0; incorrect_promotable=0"
+  },
+  "equation_miss_rows": 99,
+  "expected_shared_row_contract_sha256": "bf055e3b9ebce79d4bfc9e48bce5a305b1d83da882f14afddec80d6afaba5fff",
+  "external_basis": {
+    "file": "investigators/cryptarithm_deduce.py",
+    "note": "Public progress-prize repository models AB op CD symbolic equations as digit/operator cryptarithms.",
+    "repo": "https://github.com/tonghuikang/nemotron"
+  },
+  "generated_at_utc": "2026-05-11T10:13:06.025443+00:00",
+  "incorrect_promotable_candidates": 0,
+  "input": {
+    "downloaded_name": "v245_hf_weak_v259_checkpoint_4_v221_contract_predictions.csv",
+    "filename": "evals/v260b-h200-v221contract-v259-eqfocus-eval-20260511T025751Z/eval/v259_checkpoint_4_v221_contract/v245_hf_weak_v259_checkpoint_4_v221_contract_predictions.csv",
+    "repo_id": "felipesp1983/kg1-nemotron-lora-v259-v249-eqfocus-v257ckpt4-smoke",
+    "rows": 315,
+    "sha256": "d682f3a0aabd3624c449c63723deee510b070aa173f11c1102fe6b1b807bbca3"
+  },
+  "observed_shared_row_contract_sha256": "bf055e3b9ebce79d4bfc9e48bce5a305b1d83da882f14afddec80d6afaba5fff",
+  "outputs": {
+    "audit_csv": "artifacts\\hf_cpu_runs\\v273_cryptarithm_solver_audit_20260511T1035Z\\v273_cryptarithm_solver_candidate_audit.csv",
+    "manifest_json": "artifacts\\hf_cpu_runs\\v273_cryptarithm_solver_audit_20260511T1035Z\\v273_cryptarithm_solver_audit_manifest.json",
+    "summary_csv": "artifacts\\hf_cpu_runs\\v273_cryptarithm_solver_audit_20260511T1035Z\\v273_cryptarithm_solver_summary.csv",
+    "verified_promotable_csv": "artifacts\\hf_cpu_runs\\v273_cryptarithm_solver_audit_20260511T1035Z\\v273_verified_promotable_candidates.csv"
+  },
+  "schema_version": "kg1_v273_cryptarithm_solver_audit_v1",
+  "summary": [
+    {
+      "abstain_rows": 3,
+      "candidate_rows": 0,
+      "incorrect_candidates": 0,
+      "promotable_after_class_gate": false,
+      "rows": 3,
+      "solver_mode": "parse_gate",
+      "verified_candidates": 0
+    },
+    {
+      "abstain_rows": 35,
+      "candidate_rows": 0,
+      "incorrect_candidates": 0,
+      "promotable_after_class_gate": false,
+      "rows": 35,
+      "solver_mode": "cryptarithm_solver",
+      "verified_candidates": 0
+    },
+    {
+      "abstain_rows": 54,
+      "candidate_rows": 0,
+      "incorrect_candidates": 0,
+      "promotable_after_class_gate": false,
+      "rows": 54,
+      "solver_mode": "constraint_gate",
+      "verified_candidates": 0
+    },
+    {
+      "abstain_rows": 0,
+      "candidate_rows": 2,
+      "incorrect_candidates": 2,
+      "promotable_after_class_gate": false,
+      "rows": 2,
+      "solver_mode": "cryptarithm_unique_digit",
+      "verified_candidates": 0
+    },
+    {
+      "abstain_rows": 0,
+      "candidate_rows": 5,
+      "incorrect_candidates": 5,
+      "promotable_after_class_gate": false,
+      "rows": 5,
+      "solver_mode": "cryptarithm_nonunique_digit",
+      "verified_candidates": 0
+    }
+  ],
+  "verified_promotable_candidates": 0
+}

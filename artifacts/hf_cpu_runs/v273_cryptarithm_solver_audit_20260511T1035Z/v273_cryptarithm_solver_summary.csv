@@ -1,0 +1,6 @@
+solver_mode,rows,candidate_rows,verified_candidates,incorrect_candidates,abstain_rows,promotable_after_class_gate
+parse_gate,3,0,0,0,3,False
+cryptarithm_solver,35,0,0,0,35,False
+constraint_gate,54,0,0,0,54,False
+cryptarithm_unique_digit,2,2,0,2,0,False
+cryptarithm_nonunique_digit,5,5,0,5,0,False
