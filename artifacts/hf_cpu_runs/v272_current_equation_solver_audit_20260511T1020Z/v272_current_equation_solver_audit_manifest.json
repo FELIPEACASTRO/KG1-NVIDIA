@@ -1,0 +1,82 @@
+{
+  "decision": {
+    "decision": "no_deployable_solver_signal",
+    "next_action": "Unlock solver-guided external traces or design stronger symbolic-punctuation search.",
+    "reason": "equation_misses=99; verified_promotable=0; under_evidenced_verified=0; incorrect_promotable=0"
+  },
+  "equation_miss_rows": 99,
+  "expected_shared_row_contract_sha256": "bf055e3b9ebce79d4bfc9e48bce5a305b1d83da882f14afddec80d6afaba5fff",
+  "generated_at_utc": "2026-05-11T09:57:49.768995+00:00",
+  "incorrect_promotable_candidates": 0,
+  "input": {
+    "downloaded_name": "v245_hf_weak_v259_checkpoint_4_v221_contract_predictions.csv",
+    "filename": "evals/v260b-h200-v221contract-v259-eqfocus-eval-20260511T025751Z/eval/v259_checkpoint_4_v221_contract/v245_hf_weak_v259_checkpoint_4_v221_contract_predictions.csv",
+    "repo_id": "felipesp1983/kg1-nemotron-lora-v259-v249-eqfocus-v257ckpt4-smoke",
+    "rows": 315,
+    "sha256": "d682f3a0aabd3624c449c63723deee510b070aa173f11c1102fe6b1b807bbca3"
+  },
+  "observed_shared_row_contract_sha256": "bf055e3b9ebce79d4bfc9e48bce5a305b1d83da882f14afddec80d6afaba5fff",
+  "outputs": {
+    "audit_csv": "artifacts\\hf_cpu_runs\\v272_current_equation_solver_audit_20260511T1020Z\\v272_equation_solver_candidate_audit.csv",
+    "manifest_json": "artifacts\\hf_cpu_runs\\v272_current_equation_solver_audit_20260511T1020Z\\v272_current_equation_solver_audit_manifest.json",
+    "rule_summary_csv": "artifacts\\hf_cpu_runs\\v272_current_equation_solver_audit_20260511T1020Z\\v272_rule_class_summary.csv",
+    "verified_promotable_csv": "artifacts\\hf_cpu_runs\\v272_current_equation_solver_audit_20260511T1020Z\\v272_verified_promotable_candidates.csv"
+  },
+  "parse_status_counts": {
+    "ok": 99
+  },
+  "rule_summary": [
+    {
+      "abstain_rows": 83,
+      "candidate_rows": 0,
+      "incorrect_candidates": 0,
+      "promotable_after_class_gate": false,
+      "rows": 83,
+      "rule_class": "symbolic_reverse",
+      "verified_candidates": 0
+    },
+    {
+      "abstain_rows": 83,
+      "candidate_rows": 0,
+      "incorrect_candidates": 0,
+      "promotable_after_class_gate": false,
+      "rows": 83,
+      "rule_class": "symbolic_prefix_suffix",
+      "verified_candidates": 0
+    },
+    {
+      "abstain_rows": 83,
+      "candidate_rows": 0,
+      "incorrect_candidates": 0,
+      "promotable_after_class_gate": false,
+      "rows": 83,
+      "rule_class": "symbolic_all_examples_char_transducer",
+      "verified_candidates": 0
+    },
+    {
+      "abstain_rows": 16,
+      "candidate_rows": 0,
+      "incorrect_candidates": 0,
+      "promotable_after_class_gate": false,
+      "rows": 16,
+      "rule_class": "numeric_same_operator_rule",
+      "verified_candidates": 0
+    },
+    {
+      "abstain_rows": 82,
+      "candidate_rows": 1,
+      "incorrect_candidates": 1,
+      "promotable_after_class_gate": false,
+      "rows": 83,
+      "rule_class": "symbolic_positional_deletion_audit_only",
+      "verified_candidates": 0
+    }
+  ],
+  "schema_version": "kg1_v272_current_equation_solver_audit_v1",
+  "subtype_counts": {
+    "equation_numeric_operator": 16,
+    "equation_symbolic_punct": 83
+  },
+  "under_evidenced_verified_promotable_candidates": 0,
+  "verified_promotable_candidates": 0
+}

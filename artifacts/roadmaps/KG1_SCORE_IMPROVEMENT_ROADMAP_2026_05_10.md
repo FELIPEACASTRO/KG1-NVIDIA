@@ -23,6 +23,7 @@ Objetivo: consolidar os achados Kaggle/Hugging Face, resultados V221/V226/V229/V
 - Atualizacao V266 2026-05-11: o primeiro smoke H200 sobre V265, iniciado de `v259_checkpoint_4`, falhou no objetivo e foi interrompido por FinOps quando `final` foi confirmado identico ao `checkpoint-4` via SHA LFS. Resultados weak V221-contract: `checkpoint-2 = 155/315, equation 56/155, bit 99/160, trunc 0`; `checkpoint-4 = 154/315, equation 56/155, bit 98/160, trunc 2`. Diagnostico: a receita `all target modules + equation_transform=3.0 + bit=0.8` destruiu a familia `bit_manipulation` sem ganhar equation. O V265 nao esta descartado, mas so pode voltar em smoke ultra-conservador, com trainable limitado a atencao/lm_head, bit replay reforcado, source key V189 corrigida para `v189_score086_equation_answer_short_filtered`, e weak eval parcial antes de qualquer novo gasto longo.
 - Atualizacao V268/V269/V270 2026-05-11: o corpus publico `tonghuikang/nemotron` foi ingerido com bloqueio de todos os 315 weak IDs e so aceitou linhas cujo `\boxed{}` final batia com `train.csv`. O builder V268 gerou `1789` linhas (`1105` bit, `506` equation em treino), passou tokenization gate V250 com `max_length=8192`, e o smoke V269 em H200 a partir do melhor V259 checkpoint-4 empatou o melhor score: `v269_checkpoint_2 = 192/315`, equation `56/155`, bit `136/160`, trunc `0`. O `final` regrediu para `190/315`, bit `134/160`, trunc `2`. Conclusao: V268 e util como fonte de raciocinio/verifier, mas a receita SFT curta nao trouxe ganho novo de equation.
 - Atualizacao V271 2026-05-11: a mineracao CPU-only dos erros atuais validou o contrato V221 e confirmou que o V269 mudou `4` respostas de `equation_transform`, todas de errado para errado. Nos `99` erros restantes do melhor atual (`v259_checkpoint_4`), a taxonomia ficou: `83` `equation_symbolic_punct` com resposta simbolica, `15` `equation_numeric_operator` com resposta numerica, e `1` `equation_numeric_operator` misto. Regra de negocio: nao gastar H200 novamente ate existir um solver/verifier CPU que gere pelo menos `+4` a `+5` overrides de equation sem violar `bit>=136/160`, ou ate os traces gated `andy279` serem liberados.
+- Atualizacao V272 2026-05-11: auditoria CPU dos solvers atuais sobre os `99` misses de equation parseou todos os prompts (`parse_status=ok`), confirmou `83` simbolicos de pontuacao e `16` numericos, mas encontrou `0` candidatos verificados promotaveis. Regras testadas: char transducer, reverse, prefix/suffix, deletion posicional audit-only e numeric same-operator. Conclusao: os solvers simples V238/V241/V246 nao bastam; a rota agora e liberar traces solver-guided externos ou implementar busca simbolica mais forte antes de qualquer GPU.
 - Auditoria Google Drive 2026-05-10: `1879` arquivos KG1 catalogados, `85` adapters completos, `232` reports, `423` CSVs, `54` JSONLs e `11` notebooks. Nenhum artefato do Drive supera o baseline V226 sob gate weak canonico; o Drive deve ser usado como fonte de pesos fortes conhecidos, reports e dados para triagem, nao como fonte de promocao automatica.
 - Achado Drive mais util: V207A full/validation gate do V194 tem `822/947` com familias nao criticas em `100%`, mas confirma o mesmo gargalo fraco: `bit_manipulation=135/160`, `equation_transform=55/155`. Isso reforca que o problema real continua concentrado em `equation_transform`.
 - Importante: muitos arquivos do Drive foram parte da trajetoria que chegou ao score amplo `0.86`. Esse score e valido como evidencia historica de que V194/V202D resolvia muito bem as familias nao criticas, mas nao pode ser interpretado como melhoria atual das duas familias alvo. No recorte decisivo, o proprio V207A mede `equation_transform=55/155` e `bit_manipulation=135/160`, alinhado ao gargalo V230.
@@ -179,6 +180,34 @@ Decisao:
 - A proxima melhoria tem que vir de parser/solver/verifier para simbolos/pontuacao ou de traces solver-guided.
 - Nao iniciar novo H200 ate o V271/V246/V241 produzir pelo menos `+4` a `+5` overrides verificaveis em equation ou ate liberar os datasets gated `andy279`.
 - Se o dataset `andy279/nemotron-reasoning-challenge-raw-traces` for liberado, priorizar os arquivos `solver_transformation_traces_merged.jsonl`, `solver_transformation_traces_gpt54.jsonl` e `solver_bit_manipulation_traces_merged.jsonl`.
+
+### V272 current equation solver audit - CPU gate
+
+Objetivo: testar se as regras deployable ja existentes (`V238/V241/V246`) conseguem gerar overrides verificados nos `99` erros atuais de `equation_transform`.
+
+Evidencia concreta:
+
+- Script: `scripts/run_v272_current_equation_solver_audit_hf.py`.
+- Artefatos locais versionados: `artifacts/hf_cpu_runs/v272_current_equation_solver_audit_20260511T1020Z`.
+- Baseline: `v259_checkpoint4_current_best`.
+- Contrato V221 observado: `bf055e3b9ebce79d4bfc9e48bce5a305b1d83da882f14afddec80d6afaba5fff`.
+- `equation_miss_rows`: `99`.
+- `parse_status_counts`: `{"ok": 99}`.
+- `subtype_counts`: `{"equation_numeric_operator": 16, "equation_symbolic_punct": 83}`.
+- Regras auditadas:
+  - `symbolic_all_examples_char_transducer`: `0` candidatos.
+  - `symbolic_reverse`: `0` candidatos.
+  - `symbolic_prefix_suffix`: `0` candidatos.
+  - `symbolic_positional_deletion_audit_only`: `1` candidato, `1` incorreto.
+  - `numeric_same_operator_rule`: `0` candidatos.
+
+Decisao:
+
+- `no_deployable_solver_signal`.
+- Nao existe override seguro a partir dos solvers simples ja implementados.
+- O caminho correto agora e uma das duas rotas:
+  - liberar `andy279/nemotron-reasoning-challenge-raw-traces`, pois a propria card informa traces solver-guided para transformation e bit;
+  - implementar uma busca simbolica de regras mais forte que char-map/reverse/prefix/suffix/deletion simples, com auditoria zero-incorreto antes de qualquer eval ou treino.
 
 ### Auditoria OpenRouter anexada - 2026-05-10
 

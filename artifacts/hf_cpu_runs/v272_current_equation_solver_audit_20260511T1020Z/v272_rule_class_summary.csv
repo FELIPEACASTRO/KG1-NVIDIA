@@ -1,0 +1,6 @@
+rule_class,rows,candidate_rows,verified_candidates,incorrect_candidates,abstain_rows,promotable_after_class_gate
+symbolic_reverse,83,0,0,0,83,False
+symbolic_prefix_suffix,83,0,0,0,83,False
+symbolic_all_examples_char_transducer,83,0,0,0,83,False
+numeric_same_operator_rule,16,0,0,0,16,False
+symbolic_positional_deletion_audit_only,83,1,0,1,82,False
