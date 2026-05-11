@@ -1,0 +1,271 @@
+{
+  "blocked_actions": [
+    "full_eval",
+    "package",
+    "kaggle_submit"
+  ],
+  "config": {
+    "max_length": 1024,
+    "max_prompt_truncation_rate": 0.0,
+    "min_train_rows": 11286,
+    "min_val_rows": 801,
+    "require_offset_mask": true
+  },
+  "dataset_manifest_json": "artifacts\\v290_rank19_micro_patch_dataset\\20260511T1925Z\\v282_rank19_micro_patch_manifest.json",
+  "dataset_manifest_sha256": "ff4fd49c00a967e05c015e142375041e61cfe61ac96e19b2667123c55cf3ebca",
+  "decision": {
+    "next_action": "Only consider a tiny HF smoke train if roadmap risk/budget gates approve it.",
+    "reason": "train_rows=11286; val_rows=801; train_token_max=327; val_token_max=327; completion_truncation=0",
+    "status": "tokenization_gate_passed"
+  },
+  "generated_at_utc": "2026-05-11T19:22:57.822452+00:00",
+  "model_name": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+  "model_revision": "cbd3fa9f933d55ef16a84236559f4ee2a0526848",
+  "outputs": {
+    "manifest_json": "artifacts\\v290_rank19_micro_patch_tokenization_gate\\20260511T1925Z\\v286_generic_tokenization_gate_manifest.json"
+  },
+  "schema_version": "kg1_v286_generic_tokenization_gate_v1",
+  "tokenization": {
+    "train": {
+      "completion_tokens_dropped": 0,
+      "fallback_masks": 0,
+      "family_summary": {
+        "bit_manipulation": {
+          "loss_token_max": 14,
+          "loss_token_min": 14,
+          "loss_token_p50": 14,
+          "rows": 2695,
+          "token_max": 327,
+          "token_p50": 289,
+          "token_p90": 327,
+          "token_p99": 327
+        },
+        "equation_transform": {
+          "loss_token_max": 17,
+          "loss_token_min": 6,
+          "loss_token_p50": 8,
+          "rows": 8015,
+          "token_max": 186,
+          "token_p50": 133,
+          "token_p90": 154,
+          "token_p99": 172
+        },
+        "gravity_constant": {
+          "loss_token_max": 12,
+          "loss_token_min": 9,
+          "loss_token_p50": 11,
+          "rows": 144,
+          "token_max": 213,
+          "token_p50": 188,
+          "token_p90": 209,
+          "token_p99": 213
+        },
+        "numeral_system": {
+          "loss_token_max": 8,
+          "loss_token_min": 6,
+          "loss_token_p50": 7,
+          "rows": 144,
+          "token_max": 128,
+          "token_p50": 118,
+          "token_p90": 126,
+          "token_p99": 128
+        },
+        "text_encryption": {
+          "loss_token_max": 12,
+          "loss_token_min": 8,
+          "loss_token_p50": 9,
+          "rows": 144,
+          "token_max": 215,
+          "token_p50": 178,
+          "token_p90": 201,
+          "token_p99": 211
+        },
+        "unit_conversion": {
+          "loss_token_max": 11,
+          "loss_token_min": 8,
+          "loss_token_p50": 11,
+          "rows": 144,
+          "token_max": 164,
+          "token_p50": 146,
+          "token_p90": 163,
+          "token_p99": 164
+        }
+      },
+      "loss_token_max": 17,
+      "loss_token_min": 6,
+      "loss_token_p50": 9,
+      "offset_masks": 11286,
+      "prompt_truncated": 0,
+      "prompt_truncation_rate": 0.0,
+      "rows": 11286,
+      "token_max": 327,
+      "token_mean": 173.525,
+      "token_min": 108,
+      "token_p50": 143,
+      "token_p90": 289,
+      "token_p99": 327
+    },
+    "validation": {
+      "completion_tokens_dropped": 0,
+      "fallback_masks": 0,
+      "family_summary": {
+        "bit_manipulation": {
+          "loss_token_max": 14,
+          "loss_token_min": 14,
+          "loss_token_p50": 14,
+          "rows": 164,
+          "token_max": 327,
+          "token_p50": 286,
+          "token_p90": 324,
+          "token_p99": 327
+        },
+        "equation_transform": {
+          "loss_token_max": 14,
+          "loss_token_min": 6,
+          "loss_token_p50": 8,
+          "rows": 573,
+          "token_max": 181,
+          "token_p50": 140,
+          "token_p90": 157,
+          "token_p99": 174
+        },
+        "gravity_constant": {
+          "loss_token_max": 12,
+          "loss_token_min": 10,
+          "loss_token_p50": 11,
+          "rows": 16,
+          "token_max": 210,
+          "token_p50": 189,
+          "token_p90": 210,
+          "token_p99": 210
+        },
+        "numeral_system": {
+          "loss_token_max": 8,
+          "loss_token_min": 6,
+          "loss_token_p50": 7,
+          "rows": 16,
+          "token_max": 127,
+          "token_p50": 117,
+          "token_p90": 127,
+          "token_p99": 127
+        },
+        "text_encryption": {
+          "loss_token_max": 11,
+          "loss_token_min": 8,
+          "loss_token_p50": 9,
+          "rows": 16,
+          "token_max": 204,
+          "token_p50": 172,
+          "token_p90": 202,
+          "token_p99": 204
+        },
+        "unit_conversion": {
+          "loss_token_max": 11,
+          "loss_token_min": 8,
+          "loss_token_p50": 11,
+          "rows": 16,
+          "token_max": 164,
+          "token_p50": 149,
+          "token_p90": 164,
+          "token_p99": 164
+        }
+      },
+      "loss_token_max": 14,
+      "loss_token_min": 6,
+      "loss_token_p50": 9,
+      "offset_masks": 801,
+      "prompt_truncated": 0,
+      "prompt_truncation_rate": 0.0,
+      "rows": 801,
+      "token_max": 327,
+      "token_mean": 171.218,
+      "token_min": 111,
+      "token_p50": 145,
+      "token_p90": 286,
+      "token_p99": 327
+    }
+  },
+  "tokenizer_info": {
+    "class": "TokenizersBackend",
+    "eos_token": "<|im_end|>",
+    "is_fast": true,
+    "pad_token": "<|im_end|>",
+    "toy": false
+  },
+  "validation": {
+    "train": {
+      "family_counts": {
+        "bit_manipulation": 2695,
+        "equation_transform": 8015,
+        "gravity_constant": 144,
+        "numeral_system": 144,
+        "text_encryption": 144,
+        "unit_conversion": 144
+      },
+      "prompt_answer_hash_count": 11286,
+      "prompt_hash_count": 11286,
+      "rows": 11286,
+      "sha256_expected": "801334d510d923e233f382b78d42e853d87d75bfc235e676b2f247975b6b845d",
+      "source_counts": {
+        "v215_replay_anchor": 859,
+        "v216_base_clean_safe_strict_bit": 1796,
+        "v216_base_clean_safe_strict_equation": 3200,
+        "v216_synthetic_kg1_bit_rules": 646,
+        "v216_synthetic_kg1_numeric_rules": 639,
+        "v216_synthetic_kg1_symbolic_rules": 3066,
+        "v282_v274_rule_synthetic": 1080
+      },
+      "subcategory_counts": {
+        "bit_manipulation": 646,
+        "equation numeric": 176,
+        "equation symbolic/mixed": 3024,
+        "equation_numeric": 639,
+        "equation_numeric_add_direct": 360,
+        "equation_numeric_colon_absdiff": 360,
+        "equation_numeric_minus_signed": 360,
+        "equation_symbolic_binary": 1574,
+        "equation_symbolic_unary": 1492,
+        "unknown": 2655
+      },
+      "unique_ids": 11286
+    },
+    "train_val_prompt_answer_overlap": 0,
+    "train_val_prompt_overlap": 0,
+    "validation": {
+      "family_counts": {
+        "bit_manipulation": 164,
+        "equation_transform": 573,
+        "gravity_constant": 16,
+        "numeral_system": 16,
+        "text_encryption": 16,
+        "unit_conversion": 16
+      },
+      "prompt_answer_hash_count": 801,
+      "prompt_hash_count": 801,
+      "rows": 801,
+      "sha256_expected": "d39bc9c0e4051fe7d212de109d580614c1774c6f10833246a70e8b4018c2252b",
+      "source_counts": {
+        "v215_replay_anchor": 98,
+        "v216_base_clean_safe_strict_bit": 80,
+        "v216_base_clean_safe_strict_equation": 120,
+        "v216_synthetic_kg1_bit_rules": 54,
+        "v216_synthetic_kg1_numeric_rules": 61,
+        "v216_synthetic_kg1_symbolic_rules": 268,
+        "v282_v274_rule_synthetic": 120
+      },
+      "subcategory_counts": {
+        "bit_manipulation": 54,
+        "equation numeric": 6,
+        "equation symbolic/mixed": 114,
+        "equation_numeric": 61,
+        "equation_numeric_add_direct": 40,
+        "equation_numeric_colon_absdiff": 40,
+        "equation_numeric_minus_signed": 40,
+        "equation_symbolic_binary": 152,
+        "equation_symbolic_unary": 116,
+        "unknown": 178
+      },
+      "unique_ids": 801
+    }
+  }
+}

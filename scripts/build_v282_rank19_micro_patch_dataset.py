@@ -329,6 +329,25 @@ def validate_rows(rows: list[dict[str, Any]], label: str) -> dict[str, Any]:
     return {"label": label, "bad_rows": 0, **summarize(rows)}
 
 
+def normalize_replay_rows(rows: list[dict[str, Any]], split: str) -> list[dict[str, Any]]:
+    normalized: list[dict[str, Any]] = []
+    for row in rows:
+        item = dict(row)
+        prompt = str(item.get("prompt", ""))
+        answer = str(item.get("answer", ""))
+        item["messages"] = make_messages(prompt, answer)
+        metadata = dict(item.get("metadata") or {})
+        metadata["weak_gate_rows_used_for_training"] = False
+        metadata.setdefault("source", str(item.get("source", "")))
+        metadata.setdefault("split", split)
+        metadata.setdefault("family", str(item.get("family", "")))
+        metadata.setdefault("subcategory", str(item.get("subcategory", "")))
+        metadata.setdefault("v282_replay_role", split)
+        item["metadata"] = metadata
+        normalized.append(item)
+    return normalized
+
+
 def build(args: argparse.Namespace) -> dict[str, Any]:
     print("=== V282 RANK19 MICRO PATCH DATASET START ===", flush=True)
     print("generated_at_utc =", utc_now(), flush=True)
@@ -336,8 +355,8 @@ def build(args: argparse.Namespace) -> dict[str, Any]:
     print("seed =", args.seed, flush=True)
     args.output_dir.mkdir(parents=True, exist_ok=True)
 
-    replay_train = read_jsonl(args.replay_train_jsonl)
-    replay_val = read_jsonl(args.replay_val_jsonl)
+    replay_train = normalize_replay_rows(read_jsonl(args.replay_train_jsonl), "train")
+    replay_val = normalize_replay_rows(read_jsonl(args.replay_val_jsonl), "validation")
     patch_train = generate_patch_rows(args.patch_train_per_rule, "train", args.seed)
     patch_val = generate_patch_rows(args.patch_val_per_rule, "validation", args.seed + 10000)
 
