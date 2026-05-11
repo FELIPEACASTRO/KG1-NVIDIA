@@ -1,0 +1,8 @@
+id,family,answer,baseline_prediction,candidate_prediction,baseline_correct,candidate_correct,gain,loss,changed_prediction
+4ada9150,bit_manipulation,01111011,01111011,01111111,True,False,False,True,True
+61557701,equation_transform,|&,'{),'{}),False,False,False,False,True
+844f826c,equation_transform,"/""",`@>`,`*``,False,False,False,False,True
+8740ed31,bit_manipulation,01101000,01111000,01101000,False,True,True,False,True
+d1bd7478,equation_transform,30,03,3,False,False,False,False,True
+e3bf0c2c,equation_transform,"""`",@`',@`'',False,False,False,False,True
+f507b7f1,bit_manipulation,11001100,11011100,11111100,False,False,False,False,True

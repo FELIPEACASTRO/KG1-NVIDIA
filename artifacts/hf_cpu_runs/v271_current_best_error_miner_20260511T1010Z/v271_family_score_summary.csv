@@ -1,0 +1,4 @@
+candidate,rows,correct,accuracy,equation_transform_rows,equation_transform_correct,bit_manipulation_rows,bit_manipulation_correct,truncated,weak_total_gap,weak_eq_gap,weak_bit_gap,bit_guardrail_gap
+v259_checkpoint4_current_best,315,192,0.60952381,155,56,160,136,0,1,4,0,0
+v269_checkpoint2_reasoning_smoke,315,192,0.60952381,155,56,160,136,0,1,4,0,0
+v269_final_reasoning_smoke,315,190,0.603174603,155,56,160,134,2,3,4,0,2

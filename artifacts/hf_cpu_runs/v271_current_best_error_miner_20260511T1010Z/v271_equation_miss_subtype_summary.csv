@@ -1,0 +1,4 @@
+subtype,answer_kind,rows
+equation_symbolic_punct,symbolic,83
+equation_numeric_operator,numeric,15
+equation_numeric_operator,mixed,1

@@ -161,6 +161,8 @@ Objetivo: transformar o resultado V270 em decisao de FinOps e taxonomia acionave
 Evidencia concreta local:
 
 - Script: `scripts/run_v271_current_best_error_miner_hf.py`.
+- Job HF CPU concluido: `https://huggingface.co/jobs/felipesp1983/6a01a761317220dbbd1a79d1`.
+- Tentativas de upload HF direto/PR falharam por permissao de escrita do token do job; os artefatos foram materializados e versionados na branch em `artifacts/hf_cpu_runs/v271_current_best_error_miner_20260511T1010Z`.
 - Baseline analisado: `v259_checkpoint4_current_best`.
 - Contrato V221 observado: `bf055e3b9ebce79d4bfc9e48bce5a305b1d83da882f14afddec80d6afaba5fff`.
 - Melhor atual: `192/315`, equation `56/155`, bit `136/160`, trunc `0`.

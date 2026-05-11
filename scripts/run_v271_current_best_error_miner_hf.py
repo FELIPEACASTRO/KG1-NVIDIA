@@ -230,7 +230,7 @@ def load_predictions(spec: dict[str, str], path: Path) -> tuple[list[dict[str, A
         "repo_id": spec["repo_id"],
         "repo_type": spec["repo_type"],
         "filename": spec["filename"],
-        "local_path": str(path),
+        "downloaded_name": path.name,
         "sha256": sha256_file(path),
         "rows": len(rows),
         "family_counts": dict(Counter(row["family"] for row in rows)),

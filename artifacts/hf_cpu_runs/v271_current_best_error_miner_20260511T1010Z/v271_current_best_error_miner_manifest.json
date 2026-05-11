@@ -1,0 +1,302 @@
+{
+  "baseline_candidate": "v259_checkpoint4_current_best",
+  "decision": {
+    "decision": "no_new_gpu_training_signal",
+    "next_action": "Do CPU-only equation solver/verifier mining or unlock gated solver traces before spending H200 again.",
+    "reason": "baseline=192/315 eq=56 bit=136; v269_checkpoint2=192/315 eq=56 bit=136; equation_net=0; bit_net=0"
+  },
+  "diff_summaries": {
+    "v269_checkpoint2_reasoning_smoke": {
+      "bit_manipulation": {
+        "changed_predictions": 3,
+        "gains": 1,
+        "losses": 1,
+        "net": 0
+      },
+      "equation_transform": {
+        "changed_predictions": 4,
+        "gains": 0,
+        "losses": 0,
+        "net": 0
+      }
+    },
+    "v269_final_reasoning_smoke": {
+      "bit_manipulation": {
+        "changed_predictions": 3,
+        "gains": 0,
+        "losses": 2,
+        "net": -2
+      },
+      "equation_transform": {
+        "changed_predictions": 7,
+        "gains": 0,
+        "losses": 0,
+        "net": 0
+      }
+    }
+  },
+  "equation_miss_count": 99,
+  "equation_miss_subtype_summary": [
+    {
+      "answer_kind": "symbolic",
+      "rows": 83,
+      "subtype": "equation_symbolic_punct"
+    },
+    {
+      "answer_kind": "numeric",
+      "rows": 15,
+      "subtype": "equation_numeric_operator"
+    },
+    {
+      "answer_kind": "mixed",
+      "rows": 1,
+      "subtype": "equation_numeric_operator"
+    }
+  ],
+  "equation_operator_summary": [
+    {
+      "operator_set": "*+-=",
+      "rows": 3,
+      "subtype": "equation_numeric_operator"
+    },
+    {
+      "operator_set": "@",
+      "rows": 2,
+      "subtype": "equation_symbolic_punct"
+    },
+    {
+      "operator_set": "!'-[",
+      "rows": 1,
+      "subtype": "equation_symbolic_punct"
+    },
+    {
+      "operator_set": "!$+>",
+      "rows": 1,
+      "subtype": "equation_symbolic_punct"
+    },
+    {
+      "operator_set": "'-/>}",
+      "rows": 1,
+      "subtype": "equation_symbolic_punct"
+    },
+    {
+      "operator_set": "*:>|",
+      "rows": 1,
+      "subtype": "equation_symbolic_punct"
+    },
+    {
+      "operator_set": "\"$%+",
+      "rows": 1,
+      "subtype": "equation_symbolic_punct"
+    },
+    {
+      "operator_set": ")-:[",
+      "rows": 1,
+      "subtype": "equation_symbolic_punct"
+    },
+    {
+      "operator_set": "'?@",
+      "rows": 1,
+      "subtype": "equation_symbolic_punct"
+    },
+    {
+      "operator_set": "(+?^|",
+      "rows": 1,
+      "subtype": "equation_symbolic_punct"
+    },
+    {
+      "operator_set": "!-<\\{",
+      "rows": 1,
+      "subtype": "equation_symbolic_punct"
+    },
+    {
+      "operator_set": "&-<>[",
+      "rows": 1,
+      "subtype": "equation_symbolic_punct"
+    },
+    {
+      "operator_set": "%*=]",
+      "rows": 1,
+      "subtype": "equation_numeric_operator"
+    },
+    {
+      "operator_set": "\"%)]{",
+      "rows": 1,
+      "subtype": "equation_symbolic_punct"
+    },
+    {
+      "operator_set": "-^|",
+      "rows": 1,
+      "subtype": "equation_symbolic_punct"
+    },
+    {
+      "operator_set": "!#)-",
+      "rows": 1,
+      "subtype": "equation_symbolic_punct"
+    },
+    {
+      "operator_set": "$&\\",
+      "rows": 1,
+      "subtype": "equation_symbolic_punct"
+    },
+    {
+      "operator_set": "+?@\\}",
+      "rows": 1,
+      "subtype": "equation_symbolic_punct"
+    },
+    {
+      "operator_set": "'-=[",
+      "rows": 1,
+      "subtype": "equation_numeric_operator"
+    },
+    {
+      "operator_set": "$)*]",
+      "rows": 1,
+      "subtype": "equation_symbolic_punct"
+    },
+    {
+      "operator_set": "*<?\\{",
+      "rows": 1,
+      "subtype": "equation_symbolic_punct"
+    },
+    {
+      "operator_set": "/",
+      "rows": 1,
+      "subtype": "equation_symbolic_punct"
+    },
+    {
+      "operator_set": "&-=^",
+      "rows": 1,
+      "subtype": "equation_numeric_operator"
+    },
+    {
+      "operator_set": "!-@]|",
+      "rows": 1,
+      "subtype": "equation_symbolic_punct"
+    },
+    {
+      "operator_set": "*/@[",
+      "rows": 1,
+      "subtype": "equation_symbolic_punct"
+    }
+  ],
+  "expected_shared_row_contract_sha256": "bf055e3b9ebce79d4bfc9e48bce5a305b1d83da882f14afddec80d6afaba5fff",
+  "external_evidence_used": [
+    {
+      "finding": "Gated raw traces include solver-guided transformation and bit-manipulation files; access is required before use.",
+      "source": "https://huggingface.co/datasets/andy279/nemotron-reasoning-challenge-raw-traces"
+    },
+    {
+      "finding": "Public progress-prize repo exposes problem, corpus, reasoning, training, and metrics artifacts; V268 ingestion already tested a leak-filtered subset.",
+      "source": "https://github.com/tonghuikang/nemotron"
+    },
+    {
+      "finding": "NVIDIA points to open training datasets, data processing pipelines, tokenizer configuration, long-context setup, and RL recipes as supported routes.",
+      "source": "https://developer.nvidia.com/blog/inside-nvidia-nemotron-3-techniques-tools-and-data-that-make-it-efficient-and-accurate/"
+    }
+  ],
+  "family_score_summary": [
+    {
+      "accuracy": 0.60952381,
+      "bit_guardrail_gap": 0,
+      "bit_manipulation_correct": 136,
+      "bit_manipulation_rows": 160,
+      "candidate": "v259_checkpoint4_current_best",
+      "correct": 192,
+      "equation_transform_correct": 56,
+      "equation_transform_rows": 155,
+      "rows": 315,
+      "truncated": 0,
+      "weak_bit_gap": 0,
+      "weak_eq_gap": 4,
+      "weak_total_gap": 1
+    },
+    {
+      "accuracy": 0.60952381,
+      "bit_guardrail_gap": 0,
+      "bit_manipulation_correct": 136,
+      "bit_manipulation_rows": 160,
+      "candidate": "v269_checkpoint2_reasoning_smoke",
+      "correct": 192,
+      "equation_transform_correct": 56,
+      "equation_transform_rows": 155,
+      "rows": 315,
+      "truncated": 0,
+      "weak_bit_gap": 0,
+      "weak_eq_gap": 4,
+      "weak_total_gap": 1
+    },
+    {
+      "accuracy": 0.603174603,
+      "bit_guardrail_gap": 2,
+      "bit_manipulation_correct": 134,
+      "bit_manipulation_rows": 160,
+      "candidate": "v269_final_reasoning_smoke",
+      "correct": 190,
+      "equation_transform_correct": 56,
+      "equation_transform_rows": 155,
+      "rows": 315,
+      "truncated": 2,
+      "weak_bit_gap": 0,
+      "weak_eq_gap": 4,
+      "weak_total_gap": 3
+    }
+  ],
+  "generated_at_utc": "2026-05-11T09:54:46.273740+00:00",
+  "inputs": [
+    {
+      "candidate": "v259_checkpoint4_current_best",
+      "downloaded_name": "v245_hf_weak_v259_checkpoint_4_v221_contract_predictions.csv",
+      "family_counts": {
+        "bit_manipulation": 160,
+        "equation_transform": 155
+      },
+      "filename": "evals/v260b-h200-v221contract-v259-eqfocus-eval-20260511T025751Z/eval/v259_checkpoint_4_v221_contract/v245_hf_weak_v259_checkpoint_4_v221_contract_predictions.csv",
+      "repo_id": "felipesp1983/kg1-nemotron-lora-v259-v249-eqfocus-v257ckpt4-smoke",
+      "repo_type": "model",
+      "rows": 315,
+      "sha256": "d682f3a0aabd3624c449c63723deee510b070aa173f11c1102fe6b1b807bbca3"
+    },
+    {
+      "candidate": "v269_checkpoint2_reasoning_smoke",
+      "downloaded_name": "v270_hf_weak_v269_checkpoint_2_v221_contract_predictions.csv",
+      "family_counts": {
+        "bit_manipulation": 160,
+        "equation_transform": 155
+      },
+      "filename": "evals/v270-h200-v221contract-v269-v268-reasoning-eval-20260511T0925Z/eval/v269_checkpoint_2_v221_contract/v270_hf_weak_v269_checkpoint_2_v221_contract_predictions.csv",
+      "repo_id": "felipesp1983/kg1-nemotron-lora-v269-v268-reasoning-v259ckpt4-smoke",
+      "repo_type": "model",
+      "rows": 315,
+      "sha256": "c2977ddf95a8b59ad321b0ff50c912246e67a0c9d93c86e462cc4aa36ecee921"
+    },
+    {
+      "candidate": "v269_final_reasoning_smoke",
+      "downloaded_name": "v270_hf_weak_v269_final_v221_contract_predictions.csv",
+      "family_counts": {
+        "bit_manipulation": 160,
+        "equation_transform": 155
+      },
+      "filename": "evals/v270-h200-v221contract-v269-v268-reasoning-eval-20260511T0925Z/eval/v269_final_v221_contract/v270_hf_weak_v269_final_v221_contract_predictions.csv",
+      "repo_id": "felipesp1983/kg1-nemotron-lora-v269-v268-reasoning-v259ckpt4-smoke",
+      "repo_type": "model",
+      "rows": 315,
+      "sha256": "74c59215e02d7897d395f371b852d70d3f4b37ac5d62c19880b17f9850e14984"
+    }
+  ],
+  "observed_shared_row_contract_sha256": "bf055e3b9ebce79d4bfc9e48bce5a305b1d83da882f14afddec80d6afaba5fff",
+  "outputs": {
+    "equation_current_best_misses_csv": "artifacts\\hf_cpu_runs\\v271_current_best_error_miner_20260511T1010Z\\v271_equation_current_best_misses.csv",
+    "equation_miss_subtype_summary_csv": "artifacts\\hf_cpu_runs\\v271_current_best_error_miner_20260511T1010Z\\v271_equation_miss_subtype_summary.csv",
+    "equation_operator_summary_csv": "artifacts\\hf_cpu_runs\\v271_current_best_error_miner_20260511T1010Z\\v271_equation_operator_summary.csv",
+    "family_score_summary_csv": "artifacts\\hf_cpu_runs\\v271_current_best_error_miner_20260511T1010Z\\v271_family_score_summary.csv",
+    "manifest_json": "artifacts\\hf_cpu_runs\\v271_current_best_error_miner_20260511T1010Z\\v271_current_best_error_miner_manifest.json"
+  },
+  "schema_version": "kg1_v271_current_best_error_miner_v1",
+  "thresholds": {
+    "bit_guardrail_min": 136,
+    "weak_bit_min": 133,
+    "weak_eq_min": 60,
+    "weak_total_min": 193
+  }
+}
