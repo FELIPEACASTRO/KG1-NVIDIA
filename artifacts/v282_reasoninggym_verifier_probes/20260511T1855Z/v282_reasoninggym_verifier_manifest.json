@@ -1,0 +1,111 @@
+{
+  "blocked_actions": [
+    "gpu_train",
+    "model_generation",
+    "full_eval",
+    "package",
+    "kaggle_submit"
+  ],
+  "decision": {
+    "decision": "reasoninggym_verified_fixtures_ready_for_probe_design",
+    "next_action": "Use verified source families only for CPU probes/dataset design; do not train directly.",
+    "reason": "verified_match=1016; verified_mismatch=0; rows=1326"
+  },
+  "generated_at_utc": "2026-05-11T18:16:27.198578+00:00",
+  "outputs": {
+    "audit_csv": "artifacts\\v282_reasoninggym_verifier_probes\\20260511T1855Z\\v282_reasoninggym_verifier_audit.csv",
+    "manifest_json": "artifacts\\v282_reasoninggym_verifier_probes\\20260511T1855Z\\v282_reasoninggym_verifier_manifest.json",
+    "summary_csv": "artifacts\\v282_reasoninggym_verifier_probes\\20260511T1855Z\\v282_reasoninggym_verifier_summary.csv"
+  },
+  "rows": 1326,
+  "schema_version": "kg1_v282_reasoninggym_verifier_probes_v1",
+  "selected_rows_jsonl": "artifacts\\v281_reasoninggym_cpu_triage\\20260511T1835Z\\v281_reasoninggym_selected_rows.jsonl",
+  "summary": [
+    {
+      "error": 17,
+      "source_dataset": "base_conversion",
+      "total": 133,
+      "unsupported": 0,
+      "verified_match": 116,
+      "verified_match_rate": 0.87218,
+      "verified_mismatch": 0
+    },
+    {
+      "error": 0,
+      "source_dataset": "binary_alternation",
+      "total": 154,
+      "unsupported": 0,
+      "verified_match": 154,
+      "verified_match_rate": 1.0,
+      "verified_mismatch": 0
+    },
+    {
+      "error": 0,
+      "source_dataset": "bitwise_arithmetic",
+      "total": 143,
+      "unsupported": 0,
+      "verified_match": 143,
+      "verified_match_rate": 1.0,
+      "verified_mismatch": 0
+    },
+    {
+      "error": 0,
+      "source_dataset": "circuit_logic",
+      "total": 141,
+      "unsupported": 141,
+      "verified_match": 0,
+      "verified_match_rate": 0.0,
+      "verified_mismatch": 0
+    },
+    {
+      "error": 0,
+      "source_dataset": "count_bits",
+      "total": 150,
+      "unsupported": 0,
+      "verified_match": 150,
+      "verified_match_rate": 1.0,
+      "verified_mismatch": 0
+    },
+    {
+      "error": 0,
+      "source_dataset": "cryptarithm",
+      "total": 145,
+      "unsupported": 0,
+      "verified_match": 145,
+      "verified_match_rate": 1.0,
+      "verified_mismatch": 0
+    },
+    {
+      "error": 0,
+      "source_dataset": "number_format",
+      "total": 161,
+      "unsupported": 0,
+      "verified_match": 161,
+      "verified_match_rate": 1.0,
+      "verified_mismatch": 0
+    },
+    {
+      "error": 0,
+      "source_dataset": "polynomial_multiplication",
+      "total": 152,
+      "unsupported": 152,
+      "verified_match": 0,
+      "verified_match_rate": 0.0,
+      "verified_mismatch": 0
+    },
+    {
+      "error": 0,
+      "source_dataset": "simple_equations",
+      "total": 147,
+      "unsupported": 0,
+      "verified_match": 147,
+      "verified_match_rate": 1.0,
+      "verified_mismatch": 0
+    }
+  ],
+  "totals": {
+    "unsupported_or_error": 310,
+    "verified_match": 1016,
+    "verified_mismatch": 0
+  }
+}

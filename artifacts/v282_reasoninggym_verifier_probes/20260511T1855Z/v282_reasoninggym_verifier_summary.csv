@@ -1,0 +1,10 @@
+source_dataset,total,verified_match,verified_mismatch,error,unsupported,verified_match_rate
+base_conversion,133,116,0,17,0,0.87218
+binary_alternation,154,154,0,0,0,1.0
+bitwise_arithmetic,143,143,0,0,0,1.0
+circuit_logic,141,0,0,0,141,0.0
+count_bits,150,150,0,0,0,1.0
+cryptarithm,145,145,0,0,0,1.0
+number_format,161,161,0,0,0,1.0
+polynomial_multiplication,152,0,0,0,152,0.0
+simple_equations,147,147,0,0,0,1.0
