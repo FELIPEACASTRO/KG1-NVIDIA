@@ -365,7 +365,14 @@ def train() -> None:
     started = time.time()
     rng = random.Random(base.SEED)
     base.apply_runtime_performance_settings()
-    base.verify_model_runtime_dependencies()
+    if env_bool("KG1_REQUIRE_MAMBA_IMPORTS", True):
+        base.verify_model_runtime_dependencies()
+    else:
+        print(
+            "KG1_REQUIRE_MAMBA_IMPORTS=0; skipping V90 Mamba/causal-conv1d runtime import check "
+            "for V315 single-policy preference trainer.",
+            flush=True,
+        )
     print("=== V315 PREFERENCE TRAIN START ===", flush=True)
     print(f"run_id={base.RUN_ID}", flush=True)
     print(f"preference_train_file={PREF_TRAIN_FILE}", flush=True)
