@@ -5230,3 +5230,75 @@ Proxima acao tecnica:
 3. Se weak repetir V291/V303 (`bit=135`, `equation=56`), parar caminho V304 e voltar para dataset/trace; nao gastar budget longo.
 4. Se weak mostrar qualquer ganho real em `bit_manipulation` ou `equation_transform`, rodar checkpoint adicional com LR conservador e gate por familia.
 5. Promover para full eval/package somente se weak ou full official-like provar ganho real contra V291 sem regressao lateral.
+
+### V308 attention/lm_head continuation on V304
+
+Artefatos:
+
+- launcher: `artifacts/v308_hf_h200_v304_attention_lmhead_launch/launch_v308_hf_h200_v304_attention_lmhead.py`
+- launch manifest: `artifacts/v308_hf_h200_v304_attention_lmhead_launch/v308-v304-attn-lmhead-v290ckpt6-20260512T165004Z_launch_manifest.json`
+- HF training job: `https://huggingface.co/jobs/felipesp1983/6a035a7b72518a06598ff795`
+- output repo previsto: `felipesp1983/kg1-nemotron-lora-v308-v304-attn-lmhead-v290ckpt6`
+
+Objetivo:
+
+- testar se abrir treino para `q_proj,k_proj,v_proj,o_proj,lm_head` transfere melhor os ganhos locais V306/V302 que o smoke V307 `lm_head`-only;
+- manter FinOps ainda controlado: H200, `36` steps, checkpoint/eval a cada `6` steps;
+- manter guardrail de parametro treinavel: `MAX_TRAINABLE_PARAM_RATIO=0.025`.
+
+Gates observados:
+
+- H200 detectado e custo dentro do teto configurado;
+- dataset V304 conferido por SHA e contagem:
+  - train SHA `7935ff999cdd8318de67538922de3651170c59baa2664a10beac3334dfcf9082`, `12822` linhas;
+  - val SHA `2b06224afe035c5085798f4a4be27e764ffaebde3ff7eee11c558c0cd5bdd29d`, `969` linhas;
+- init adapter V290 `checkpoint-6` carregado com `12011/12011` pesos mapeados;
+- tokenizacao sem truncation;
+- parametros treinaveis `8,015,872` de `32,466,091,456` (`0.0247%`), abaixo do teto;
+- gap observado: `target_parameters=['mlp.experts.gate_up_proj','mlp.experts.down_proj']` foram configurados, mas nao houve match de parametro expert no caminho PEFT atual.
+
+Status observado:
+
+- baseline eval_loss `2.6376`;
+- step 6: `eval_loss=2.6358`;
+- step 12: `eval_loss=2.6398`;
+- step 18: `eval_loss=2.6380`;
+- step 24: `eval_loss=2.6379`;
+- step 30: `eval_loss=2.6341`, novo melhor checkpoint observado.
+- step 36: `eval_loss=2.6328`, melhor checkpoint observado ao fim do treino.
+
+Decisao:
+
+- job concluiu o treino ate o step 36 com melhoria de eval_loss;
+- weak-evaluar no minimo `checkpoint-30` e `checkpoint-36`;
+- promover somente se houver ganho real de weak/full contra V291/V303, medido por familia, sem regressao lateral.
+
+### V309 Kaggle kernel review requested 2026-05-12
+
+Resumo versionado:
+
+- `artifacts/v309_kaggle_kernel_review/KG1_V309_KAGGLE_KERNEL_REVIEW_SUMMARY.md`
+
+Paginas/notebooks auditados via Kaggle CLI quando disponiveis:
+
+- `huikang/end-to-end-finetuning-for-lb-0-85`;
+- `huikang/tinker-submission-notebook`;
+- `sorokin/aimo2-tir-rm`;
+- `aerdem4/eedi-qwen32b-vllm-with-logits-processor-zoo`;
+- `siddhvr/lmsys-cahpp-llama3-8b-inference-baseline`;
+- `kishanvavdara/inference-llama-3-8b`;
+- `emiz6413/inference-gemma-2-9b-4-bit-qlora`.
+
+Achado mais importante:
+
+- O caminho Huikang LB `0.85` nao e apenas uma mudanca de LR. Ele usa uma pilha de treino diferente: `RESET_WEIGHTS=True`, `LR=2e-4`, `MAX_SEQ_LEN=8192`, target modules completos, loss mascarada por token, Cut Cross Entropy e tying Tinker-style dos experts MoE.
+- O notebook de submissao Huikang confirma que um adapter treinado nesse formato exige conversao/validacao propria: renomear chaves, desfazer fuse de `w1/w2` para experts, converter `gate_proj+x_proj` para `in_proj` via SVD e validar shapes/chaves contra referencia.
+- Isso explica um gap atual: V308 treinou atencao + `lm_head`, mas ainda nao treinou experts MoE apesar de configurar `target_parameters`; portanto o proximo salto real nao deve ser apenas "mais steps" no mesmo script.
+
+Impacto no roadmap:
+
+1. Weak-evaluar V308 porque demonstrou melhoria de eval_loss nos steps 30 e 36.
+2. Se V308 nao gerar ganho de weak accuracy, parar continuacoes PEFT simples.
+3. Criar um smoke V309/V310 Huikang-style somente depois de implementar gate de empacotamento expert/Mamba/lm_head.
+4. Usar `aimo2-tir-rm` como inspiracao para teacher/verifier de `equation_transform`, nao como submissao direta.
+5. Usar logits processors apenas em probes/teacher data para reduzir saida malformada; nao considerar como pacote KG1 oficial enquanto a avaliacao for adapter-only.
