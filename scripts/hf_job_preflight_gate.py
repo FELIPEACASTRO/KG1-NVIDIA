@@ -429,11 +429,16 @@ def check_postinstall_imports() -> None:
         "peft",
         "accelerate",
         "safetensors",
-        "causal_conv1d",
-        "mamba_ssm",
-        "mamba_ssm.ops.triton.layernorm_gated",
-        "mamba_ssm.ops.selective_scan_interface",
     ]
+    if env_bool("KG1_REQUIRE_MAMBA_IMPORTS", True):
+        required.extend(
+            [
+                "causal_conv1d",
+                "mamba_ssm",
+                "mamba_ssm.ops.triton.layernorm_gated",
+                "mamba_ssm.ops.selective_scan_interface",
+            ]
+        )
     for module_name in required:
         module = importlib.import_module(module_name)
         log_json(

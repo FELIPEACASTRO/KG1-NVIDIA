@@ -139,11 +139,10 @@ export ATTN_IMPLEMENTATION='eager'
 export TORCH_ALLOW_TF32=1
 export TORCH_FLOAT32_MATMUL_PRECISION='high'
 export GRADIENT_CHECKPOINTING=1
+export KG1_REQUIRE_MAMBA_IMPORTS=0
 python scripts/hf_job_preflight_gate.py --phase preinstall
 python scripts/hf_job_preflight_gate.py --phase artifacts
 python -m pip install -q --no-cache-dir 'transformers>=4.56.0' 'peft>=0.17.0' 'accelerate>=1.10.0' safetensors sentencepiece protobuf hf_transfer ninja einops
-python -m pip install -q --no-cache-dir --no-build-isolation --no-deps --no-binary=causal-conv1d 'causal-conv1d==1.6.1'
-python -m pip install -q --no-cache-dir --no-build-isolation --no-deps --no-binary=mamba-ssm 'mamba-ssm==2.3.1'
 python scripts/hf_job_preflight_gate.py --phase postinstall
 python scripts/hf_job_train_v315_preference.py
 """
@@ -180,6 +179,7 @@ def main() -> int:
         "KG1_EXPECTED_COMMIT": EXPECTED_COMMIT,
         "KG1_EXPECTED_TORCH_VERSION": "2.8.0+cu128",
         "KG1_EXPECTED_MAX_STEPS": str(MAX_STEPS),
+        "KG1_REQUIRE_MAMBA_IMPORTS": "0",
         "KG1_REQUIRE_CUDA": "1",
         "KG1_MIN_GPU_TOTAL_GIB": "130",
         "KG1_REQUIRED_GPU_NAME_REGEX": "H200",
