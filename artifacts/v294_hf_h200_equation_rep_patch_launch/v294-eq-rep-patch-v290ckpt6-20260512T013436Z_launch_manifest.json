@@ -1,0 +1,58 @@
+{
+  "branch": "v230-v226-complementarity",
+  "dataset": {
+    "data_repo": "felipesp1983/kg1-nemotron-training",
+    "train_file": "data/v294_verified_equation_patch/20260512T012919Z/v294_verified_equation_patch_train.jsonl",
+    "train_rows": 7776,
+    "train_sha256": "e31e400552dec414b37a287b104e0d09ac132b14365a8fe601df0b9357709691",
+    "val_file": "data/v294_verified_equation_patch/20260512T012919Z/v294_verified_equation_patch_val.jsonl",
+    "val_rows": 678,
+    "val_sha256": "4a664f64f5fab3907279a44d6ff07b43565227bc01fe38787e0e6bdbdf308dd5"
+  },
+  "expected_commit": "ac7c3fed75e07847df884a7e23d9795e621a2dfa",
+  "flavor": "h200",
+  "gates": [
+    "hf_job_preflight_gate:preinstall",
+    "hf_job_preflight_gate:artifacts",
+    "hf_job_preflight_gate:postinstall",
+    "hf_job_train_v90 tokenization/truncation/offset-mask gate",
+    "trainable parameter ratio <= 8%"
+  ],
+  "generated_at_utc": "2026-05-12T01:34:37.116817+00:00",
+  "hardware": {
+    "accelerator_model": "H200",
+    "accelerator_quantity": "1",
+    "accelerator_vram": "141 GB",
+    "cpu": "23 vCPU",
+    "name": "h200",
+    "pretty_name": "Nvidia H200",
+    "ram": "256 GB",
+    "unit_cost_usd": 0.083333,
+    "unit_label": "minute"
+  },
+  "image": "pytorch/pytorch:2.8.0-cuda12.8-cudnn9-devel",
+  "init_adapter": {
+    "repo": "felipesp1983/kg1-nemotron-lora-v290-rank19-micro-patch-smoke",
+    "subfolder": "checkpoint-6"
+  },
+  "job_id": "6a0283e9aff1cd33e8f34377",
+  "job_status": "RUNNING",
+  "job_url": "https://huggingface.co/jobs/felipesp1983/6a0283e9aff1cd33e8f34377",
+  "namespace": "felipesp1983",
+  "next_action": "Monitor every 30 seconds; weak-eval checkpoint-3/6/9/12/final if training completes.",
+  "output_repo": "felipesp1983/kg1-nemotron-lora-v294-equation-rep-patch-v290ckpt6",
+  "recipe": {
+    "continuation_from": "felipesp1983/kg1-nemotron-lora-v290-rank19-micro-patch-smoke/checkpoint-6",
+    "eval_every_steps": 3,
+    "eval_max_examples": 256,
+    "final_learning_rate": "8e-10",
+    "learning_rate": "2e-9",
+    "max_steps": 12,
+    "objective": "recover equation_transform using verified V274 rules while keeping bit >= V291 level",
+    "sampling_mode": "weighted_replacement",
+    "save_every_steps": 3,
+    "trainable_lora_modules": "lm_head,o_proj,q_proj,k_proj"
+  },
+  "run_id": "v294-eq-rep-patch-v290ckpt6-20260512T013436Z",
+  "version": "v294_equation_rep_patch_from_v290_checkpoint6_h200"
+}
