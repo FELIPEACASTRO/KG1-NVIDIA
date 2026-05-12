@@ -1,0 +1,65 @@
+{
+  "branch": "v230-v226-complementarity",
+  "dataset": {
+    "data_repo": "felipesp1983/kg1-nemotron-training",
+    "train_file": "data/v312_verifier_synthetic_distill/20260512T1545Z/v312_verifier_synthetic_distill_sft_train.jsonl",
+    "train_rows": 204,
+    "train_sha256": "352fb0cdcf8bf1505e81a2cc2c0b24bae790cfe1c1441a811d12db0b27594f5c",
+    "val_file": "data/v312_verifier_synthetic_distill/20260512T1545Z/v312_verifier_synthetic_distill_sft_val.jsonl",
+    "val_rows": 51,
+    "val_sha256": "7e9d76277fc5adab680c5a6e53877880c14bcc6265b6469ef9e9737ee26b4153"
+  },
+  "expected_commit": "c81796556513b47ec47e59c6c261fcb02080cdc3",
+  "flavor": "h200",
+  "gates": [
+    "local V312 tokenization gate passed with boxed_suffix",
+    "hf_job_preflight_gate:preinstall",
+    "hf_job_preflight_gate:artifacts",
+    "hf_job_preflight_gate:postinstall",
+    "hf_job_train_v90 tokenization/truncation/offset-mask gate"
+  ],
+  "generated_at_utc": "2026-05-12T19:22:36.949136+00:00",
+  "hardware": {
+    "accelerator_model": "H200",
+    "accelerator_quantity": "1",
+    "accelerator_vram": "141 GB",
+    "cpu": "23 vCPU",
+    "name": "h200",
+    "pretty_name": "Nvidia H200",
+    "ram": "256 GB",
+    "unit_cost_usd": 0.083333,
+    "unit_label": "minute"
+  },
+  "image": "pytorch/pytorch:2.8.0-cuda12.8-cudnn9-devel",
+  "init_adapter": {
+    "repo": "felipesp1983/kg1-nemotron-lora-v290-rank19-micro-patch-smoke",
+    "subfolder": "checkpoint-6"
+  },
+  "job_id": "6a037e3a7618f125ee2b7955",
+  "job_status": "RUNNING",
+  "job_url": "https://huggingface.co/jobs/felipesp1983/6a037e3a7618f125ee2b7955",
+  "namespace": "felipesp1983",
+  "next_action": "Monitor every 30 seconds; weak-eval checkpoints only if training completes.",
+  "output_repo": "felipesp1983/kg1-nemotron-lora-v313-v312-verifier-synthetic-smoke",
+  "recipe": {
+    "abort_policy": {
+      "baseline_eval_before_train": true,
+      "eval_relative_to_baseline_delta": 0.08,
+      "max_reserved_gib": 118,
+      "train_rise_points": 3
+    },
+    "continuation_from": "felipesp1983/kg1-nemotron-lora-v290-rank19-micro-patch-smoke/checkpoint-6",
+    "continuation_gate": "continue only if weak bit >=136 and equation >=60, or any adapter-only family gain without regression",
+    "eval_every_steps": 3,
+    "eval_max_examples": 51,
+    "final_learning_rate": "2e-9",
+    "learning_rate": "1e-8",
+    "max_steps": 12,
+    "objective": "test whether V312 verifier-synthetic boxed traces transfer V306 local gains into adapter-only behavior",
+    "sampling_mode": "weighted_replacement",
+    "save_every_steps": 3,
+    "trainable_lora_modules": "q_proj,k_proj,v_proj,o_proj,lm_head"
+  },
+  "run_id": "v313-v312-verifier-synth-v290ckpt6-20260512T192236Z",
+  "version": "v313_v312_verifier_synthetic_distill_from_v290_checkpoint6_h200"
+}
