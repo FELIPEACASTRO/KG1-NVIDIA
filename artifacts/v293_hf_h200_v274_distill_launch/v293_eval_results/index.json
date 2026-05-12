@@ -1,0 +1,75 @@
+{
+  "files": [
+    {
+      "bytes": 1733,
+      "local": "artifacts\\v293_hf_h200_v274_distill_launch\\v293_eval_results\\01_bfdbbc0904_batch_candidate_summary.csv",
+      "sha256": "0b268c67bf72f12162447a98cc78318c98c177559e69c2ba319eb8aa33b57407"
+    },
+    {
+      "bytes": 4215,
+      "local": "artifacts\\v293_hf_h200_v274_distill_launch\\v293_eval_results\\02_238d6de51d_batch_candidate_summary.json",
+      "sha256": "373c4fa8a5765a3b1920f91191ba159cc29f06ae531123a1c82d31e594f2479e"
+    },
+    {
+      "bytes": 630,
+      "local": "artifacts\\v293_hf_h200_v274_distill_launch\\v293_eval_results\\03_3b0f364cb1_candidate_preflight.csv",
+      "sha256": "72a5e463dee8d2450aa956c661b707612a6189202776ed14921d5c32f092d6ae"
+    },
+    {
+      "bytes": 2174,
+      "local": "artifacts\\v293_hf_h200_v274_distill_launch\\v293_eval_results\\04_b773ad6913_v293_hf_weak_v293_checkpoint_12_v221_contract_eval_report.json",
+      "sha256": "3848cb2204492f46a3a84dd724b980d93da4a3135f8594524a17f1d7a85430bd"
+    },
+    {
+      "bytes": 188,
+      "local": "artifacts\\v293_hf_h200_v274_distill_launch\\v293_eval_results\\05_0e83978c8b_v293_hf_weak_v293_checkpoint_12_v221_contract_per_task.csv",
+      "sha256": "d22d73ce3b8ae88225cc1e5cf6515597146595ac2bd2657ba2576a3d4b97fd2f"
+    },
+    {
+      "bytes": 2163,
+      "local": "artifacts\\v293_hf_h200_v274_distill_launch\\v293_eval_results\\08_a0c09e3ac4_v293_hf_weak_v293_checkpoint_3_v221_contract_eval_report.json",
+      "sha256": "2dfdb3cceb6b4ab09128e23b18147477c1eb1ee5aa893db09cb029d803c4d6f1"
+    },
+    {
+      "bytes": 191,
+      "local": "artifacts\\v293_hf_h200_v274_distill_launch\\v293_eval_results\\09_15cd38d517_v293_hf_weak_v293_checkpoint_3_v221_contract_per_task.csv",
+      "sha256": "e3b8949fd1ba4d258965009d89beb02cb35724a8ada7178caa490d396f128689"
+    },
+    {
+      "bytes": 2163,
+      "local": "artifacts\\v293_hf_h200_v274_distill_launch\\v293_eval_results\\12_b63000c511_v293_hf_weak_v293_checkpoint_6_v221_contract_eval_report.json",
+      "sha256": "42571187f76d4ec7a10efdbe9b71fa143122e7721e2409d67c91bf9f056abd52"
+    },
+    {
+      "bytes": 191,
+      "local": "artifacts\\v293_hf_h200_v274_distill_launch\\v293_eval_results\\13_3163177535_v293_hf_weak_v293_checkpoint_6_v221_contract_per_task.csv",
+      "sha256": "e3b8949fd1ba4d258965009d89beb02cb35724a8ada7178caa490d396f128689"
+    },
+    {
+      "bytes": 2181,
+      "local": "artifacts\\v293_hf_h200_v274_distill_launch\\v293_eval_results\\16_98f64cacb2_v293_hf_weak_v293_checkpoint_9_v221_contract_eval_report.json",
+      "sha256": "f60ed95bf59f4bfed252fc78b06483f851a11586ef052d43d60cbaa18edad723"
+    },
+    {
+      "bytes": 212,
+      "local": "artifacts\\v293_hf_h200_v274_distill_launch\\v293_eval_results\\17_870928b6ba_v293_hf_weak_v293_checkpoint_9_v221_contract_per_task.csv",
+      "sha256": "33f14031f41d760fc3df76ea0b1226e18a0c9529ff4f8e7a889db2ed11d73ade"
+    },
+    {
+      "bytes": 103539,
+      "local": "artifacts\\v293_hf_h200_v274_distill_launch\\v293_eval_results\\20_a9e018d6f7_v245_hf_weak_eval.log",
+      "sha256": "a44f076caf4f54824c4cd6002847e340f6354c05548ef7857da0dfb2813fd0f1"
+    },
+    {
+      "bytes": 9860,
+      "local": "artifacts\\v293_hf_h200_v274_distill_launch\\v293_eval_results\\21_ffa27233b2_v245_hf_weak_eval_manifest.json",
+      "sha256": "e672d9e0d89bfe071b0f3caf32d35105d9b8b3c822e9b6194237763f5cbfd0ed"
+    },
+    {
+      "bytes": 884,
+      "local": "artifacts\\v293_hf_h200_v274_distill_launch\\v293_eval_results\\22_8c62aa066c_v245_weak_eval_candidates.json",
+      "sha256": "caae9fb41071df711cb25640cd4f281730a2188151f57e85545916623b0ba5b9"
+    }
+  ],
+  "note": "Raw prediction CSVs were intentionally removed after summary/report download to keep the repo light. Full files remain in the HF model repo eval path."
+}

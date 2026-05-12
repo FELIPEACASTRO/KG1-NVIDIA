@@ -1,0 +1,457 @@
+[
+  {
+    "accelerator": null,
+    "data_sources": [],
+    "internet": null,
+    "kaggle_input_refs": [
+      "/kaggle/input`"
+    ],
+    "kernel_dir": "afr1ste__nemotron-0-86-tinker-adapter-guide",
+    "learning_rate_literals": [],
+    "notebook": "artifacts\\external_intel\\kaggle_kernels_20260512\\afr1ste__nemotron-0-86-tinker-adapter-guide\\nemotron-0-86-tinker-adapter-guide.ipynb",
+    "score_mentions": [
+      "0.85",
+      "0.86"
+    ],
+    "step_literals": [],
+    "target_modules": []
+  },
+  {
+    "accelerator": "none",
+    "data_sources": [
+      {
+        "sourceId": "kienngx/nemotron-nano-30b-trained/Triton/tinker-adapter/1",
+        "sourceType": "modelInstanceVersion"
+      }
+    ],
+    "internet": null,
+    "kaggle_input_refs": [],
+    "kernel_dir": "bbobwayne__nemotron-tier-1-lora-baseline",
+    "learning_rate_literals": [],
+    "notebook": "artifacts\\external_intel\\kaggle_kernels_20260512\\bbobwayne__nemotron-tier-1-lora-baseline\\nemotron-tier-1-lora-baseline.ipynb",
+    "score_mentions": [
+      "0.86"
+    ],
+    "step_literals": [],
+    "target_modules": []
+  },
+  {
+    "accelerator": null,
+    "data_sources": [],
+    "internet": null,
+    "kaggle_input_refs": [
+      "/kaggle/input/:",
+      "/kaggle/input/<your-dataset-slug>/problem_ids_matched_v2.csv`",
+      "/kaggle/input/competitions/nvidia-nemotron-model-reasoning-challenge/train.csv",
+      "/kaggle/input/datasets/dgxchen/nemotron-cot-tong/problem_ids_matched.csv",
+      "/kaggle/input/dgxchen/nemotron-cot-tong/problem_ids_matched.csv",
+      "/kaggle/input/nemotron-cot-tong/problem_ids_matched.csv",
+      "/kaggle/input/nvidia-nemotron-model-reasoning-challenge/train.csv"
+    ],
+    "kernel_dir": "kimberleyduran__solver-verified-cryptarithm-cot-v2-dataset",
+    "learning_rate_literals": [
+      "2e-4"
+    ],
+    "notebook": "artifacts\\external_intel\\kaggle_kernels_20260512\\kimberleyduran__solver-verified-cryptarithm-cot-v2-dataset\\solver-verified-cryptarithm-cot-v2-dataset.ipynb",
+    "score_mentions": [
+      "0.83",
+      "0.84",
+      "0.87"
+    ],
+    "step_literals": [],
+    "target_modules": []
+  },
+  {
+    "accelerator": "none",
+    "data_sources": [
+      {
+        "databundleVersionId": 16082784,
+        "sourceId": 129716,
+        "sourceType": "competition"
+      },
+      {
+        "databundleVersionId": 16526052,
+        "modelId": 619204,
+        "modelInstanceId": 607259,
+        "sourceId": 823163,
+        "sourceType": "modelInstanceVersion"
+      }
+    ],
+    "internet": true,
+    "kaggle_input_refs": [
+      "/kaggle/input/models/huikang/nemotron-adapter/transformers/default/20"
+    ],
+    "kernel_dir": "rauffauzanrambe__lora-adapter-fusion-and-rank-compression-pipeline",
+    "learning_rate_literals": [],
+    "notebook": "artifacts\\external_intel\\kaggle_kernels_20260512\\rauffauzanrambe__lora-adapter-fusion-and-rank-compression-pipeline\\lora-adapter-fusion-and-rank-compression-pipeline.ipynb",
+    "score_mentions": [],
+    "step_literals": [],
+    "target_modules": []
+  },
+  {
+    "accelerator": "nvidiaRtxPro6000",
+    "data_sources": [
+      {
+        "databundleVersionId": 16082784,
+        "sourceId": 129716,
+        "sourceType": "competition"
+      },
+      {
+        "databundleVersionId": 13803708,
+        "datasetId": 8310444,
+        "sourceId": 13118847,
+        "sourceType": "datasetVersion"
+      },
+      {
+        "databundleVersionId": 16059913,
+        "modelId": 611168,
+        "modelInstanceId": 598905,
+        "sourceId": 784907,
+        "sourceType": "modelInstanceVersion"
+      },
+      {
+        "sourceId": 303162475,
+        "sourceType": "kernelVersion"
+      },
+      {
+        "sourceId": 306236690,
+        "sourceType": "kernelVersion"
+      },
+      {
+        "sourceId": 311068689,
+        "sourceType": "kernelVersion"
+      },
+      {
+        "sourceId": 311453803,
+        "sourceType": "kernelVersion"
+      }
+    ],
+    "internet": false,
+    "kaggle_input_refs": [
+      "/kaggle/input/notebooks/huikang/tinker-submission-notebook/submission.zip",
+      "/kaggle/input/nvidia-nemotron-3-reasoning-challenge/train.csv"
+    ],
+    "kernel_dir": "rn8205__adapter-validation-notebook",
+    "learning_rate_literals": [],
+    "notebook": "artifacts\\external_intel\\kaggle_kernels_20260512\\rn8205__adapter-validation-notebook\\adapter-validation-notebook.ipynb",
+    "score_mentions": [
+      "0.85"
+    ],
+    "step_literals": [],
+    "target_modules": []
+  },
+  {
+    "accelerator": "nvidiaRtxPro6000",
+    "data_sources": [
+      {
+        "databundleVersionId": 16082784,
+        "sourceId": 129716,
+        "sourceType": "competition"
+      },
+      {
+        "sourceId": 311453803,
+        "sourceType": "kernelVersion"
+      },
+      {
+        "sourceId": 311711908,
+        "sourceType": "kernelVersion"
+      },
+      {
+        "sourceId": 313142027,
+        "sourceType": "kernelVersion"
+      },
+      {
+        "sourceId": 314978451,
+        "sourceType": "kernelVersion"
+      },
+      {
+        "sourceId": 316073969,
+        "sourceType": "kernelVersion"
+      },
+      {
+        "sourceId": 316683474,
+        "sourceType": "kernelVersion"
+      },
+      {
+        "sourceId": 316776851,
+        "sourceType": "kernelVersion"
+      },
+      {
+        "sourceId": 317024885,
+        "sourceType": "kernelVersion"
+      },
+      {
+        "sourceId": 317336288,
+        "sourceType": "kernelVersion"
+      },
+      {
+        "sourceId": 317876801,
+        "sourceType": "kernelVersion"
+      }
+    ],
+    "internet": false,
+    "kaggle_input_refs": [
+      "/kaggle/input/borgqueen",
+      "/kaggle/input/lora-adapter-fusion-and-rank-compression-pipeline",
+      "/kaggle/input/models/metric/nemotron-3-nano-30b-a3b-bf16/transformers/default/1",
+      "/kaggle/input/nemotron-tinker-adapter-repro",
+      "/kaggle/input/notebooks/drchenb/nvidia-nemotron-trained-models-submission",
+      "/kaggle/input/notebooks/hammadfarooq470/think-twice-self-correcting-reasoning",
+      "/kaggle/input/notebooks/huikang/tinker-submission-notebook",
+      "/kaggle/input/notebooks/matthewblakeward/borgqueen",
+      "/kaggle/input/notebooks/michaelkong537/tinker-adapter-solved-some-internet-issues",
+      "/kaggle/input/notebooks/mirzayasirabdullah07/nvidia-nemotron-model-notebook",
+      "/kaggle/input/notebooks/rauffauzanrambe/lora-adapter-fusion-and-rank-compression-pipeline",
+      "/kaggle/input/notebooks/rohanrk1813/nvidia-comp",
+      "/kaggle/input/notebooks/ulyanovantonamaranta/nemotron-tinker-adapter-repro",
+      "/kaggle/input/nvidia-comp",
+      "/kaggle/input/nvidia-nemotron-model-notebook",
+      "/kaggle/input/nvidia-nemotron-trained-models-submission",
+      "/kaggle/input/think-twice-self-correcting-reasoning",
+      "/kaggle/input/tinker-adapter-solved-some-internet-issues",
+      "/kaggle/input/tinker-submission-notebook",
+      "/kaggle/input:"
+    ],
+    "kernel_dir": "svanikkolli__nemotron-engine-ensembler",
+    "learning_rate_literals": [],
+    "notebook": "artifacts\\external_intel\\kaggle_kernels_20260512\\svanikkolli__nemotron-engine-ensembler\\nemotron-engine-ensembler.ipynb",
+    "score_mentions": [
+      "0.85",
+      "0.86"
+    ],
+    "step_literals": [],
+    "target_modules": []
+  },
+  {
+    "accelerator": "none",
+    "data_sources": [
+      {
+        "databundleVersionId": 16082784,
+        "sourceId": 129716,
+        "sourceType": "competition"
+      },
+      {
+        "databundleVersionId": 16351222,
+        "datasetId": 9785342,
+        "sourceId": 15432120,
+        "sourceType": "datasetVersion"
+      },
+      {
+        "databundleVersionId": 16884101,
+        "datasetId": 10143499,
+        "sourceId": 15927042,
+        "sourceType": "datasetVersion"
+      },
+      {
+        "databundleVersionId": 16763296,
+        "datasetId": 10073520,
+        "sourceId": 15815024,
+        "sourceType": "datasetVersion"
+      },
+      {
+        "databundleVersionId": 17022784,
+        "datasetId": 10296207,
+        "sourceId": 16055247,
+        "sourceType": "datasetVersion"
+      },
+      {
+        "databundleVersionId": 16280072,
+        "datasetId": 9830950,
+        "sourceId": 15368643,
+        "sourceType": "datasetVersion"
+      },
+      {
+        "databundleVersionId": 16059913,
+        "modelId": 611168,
+        "modelInstanceId": 598905,
+        "sourceId": 784907,
+        "sourceType": "modelInstanceVersion"
+      },
+      {
+        "sourceId": 303162475,
+        "sourceType": "kernelVersion"
+      },
+      {
+        "sourceId": 306236690,
+        "sourceType": "kernelVersion"
+      }
+    ],
+    "internet": false,
+    "kaggle_input_refs": [
+      "/kaggle/input/**/*triton*.whl",
+      "/kaggle/input/**/causal*conv1d*.whl",
+      "/kaggle/input/**/mamba_ssm-*.whl",
+      "/kaggle/input/datasets/dgxchen/nemotron-cot-tong/problem_ids_matched.csv",
+      "/kaggle/input/datasets/llkh0a/rtx-wheels/wheels",
+      "/kaggle/input/datasets/mayukh18/nemotron-packages/packages",
+      "/kaggle/input/datasets/tahaalam2009/nemotron-0-90/problem_ids_matched.csv",
+      "/kaggle/input/nemotron-0-90/dataset_generated.csv"
+    ],
+    "kernel_dir": "tahaalam2009__end-to-end-finetuning-for-lb-0-82-csv-custom",
+    "learning_rate_literals": [
+      ".2e",
+      "2e-4"
+    ],
+    "notebook": "artifacts\\external_intel\\kaggle_kernels_20260512\\tahaalam2009__end-to-end-finetuning-for-lb-0-82-csv-custom\\end-to-end-finetuning-for-lb-0-82-csv-custom.ipynb",
+    "score_mentions": [
+      "0.85"
+    ],
+    "step_literals": [
+      "1000"
+    ],
+    "target_modules": [
+      "down_proj",
+      "gate_up_proj",
+      "in_proj",
+      "k_proj",
+      "lm_head",
+      "o_proj",
+      "out_proj",
+      "q_proj",
+      "up_proj",
+      "v_proj"
+    ]
+  },
+  {
+    "accelerator": "none",
+    "data_sources": [
+      {
+        "databundleVersionId": 16082784,
+        "sourceId": 129716,
+        "sourceType": "competition"
+      },
+      {
+        "databundleVersionId": 16059913,
+        "modelId": 611168,
+        "modelInstanceId": 598905,
+        "sourceId": 784907,
+        "sourceType": "modelInstanceVersion"
+      },
+      {
+        "databundleVersionId": 16526052,
+        "modelId": 619204,
+        "modelInstanceId": 607259,
+        "sourceId": 823163,
+        "sourceType": "modelInstanceVersion"
+      },
+      {
+        "sourceId": 303162475,
+        "sourceType": "kernelVersion"
+      },
+      {
+        "sourceId": 305616567,
+        "sourceType": "kernelVersion"
+      },
+      {
+        "sourceId": 306236690,
+        "sourceType": "kernelVersion"
+      }
+    ],
+    "internet": false,
+    "kaggle_input_refs": [
+      "/kaggle/input/competition_evaluation",
+      "/kaggle/input/models/huikang/nemotron-adapter/transformers/default/20",
+      "/kaggle/input/models/metric/nemotron-3-nano-30b-a3b-bf16/transformers/default/1/*.safetensors",
+      "/kaggle/input/notebooks/huikang/nvidia-nemotron-all-linear",
+      "/kaggle/input/nvidia-nemotron-3-reasoning-challenge",
+      "/kaggle/input/nvidia-nemotron-3-reasoning-challenge/train.csv"
+    ],
+    "kernel_dir": "teasue05__tinker-submission-notebook",
+    "learning_rate_literals": [],
+    "notebook": "artifacts\\external_intel\\kaggle_kernels_20260512\\teasue05__tinker-submission-notebook\\tinker-submission-notebook.ipynb",
+    "score_mentions": [
+      "0.85"
+    ],
+    "step_literals": [],
+    "target_modules": [
+      "down_proj",
+      "in_proj",
+      "k_proj",
+      "lm_head",
+      "o_proj",
+      "out_proj",
+      "q_proj",
+      "up_proj",
+      "v_proj"
+    ]
+  },
+  {
+    "accelerator": "nvidiaRtxPro6000",
+    "data_sources": [
+      {
+        "databundleVersionId": 16082784,
+        "sourceId": 129716,
+        "sourceType": "competition"
+      },
+      {
+        "databundleVersionId": 16351222,
+        "datasetId": 9785342,
+        "sourceId": 15432120,
+        "sourceType": "datasetVersion"
+      },
+      {
+        "databundleVersionId": 16763296,
+        "datasetId": 10073520,
+        "sourceId": 15815024,
+        "sourceType": "datasetVersion"
+      },
+      {
+        "databundleVersionId": 16399540,
+        "datasetId": 9901078,
+        "sourceId": 15476059,
+        "sourceType": "datasetVersion"
+      },
+      {
+        "databundleVersionId": 16346404,
+        "datasetId": 9762543,
+        "sourceId": 15427911,
+        "sourceType": "datasetVersion"
+      },
+      {
+        "databundleVersionId": 16263135,
+        "datasetId": 9820572,
+        "sourceId": 15353167,
+        "sourceType": "datasetVersion"
+      },
+      {
+        "databundleVersionId": 16059913,
+        "modelId": 611168,
+        "modelInstanceId": 598905,
+        "sourceId": 784907,
+        "sourceType": "modelInstanceVersion"
+      }
+    ],
+    "internet": false,
+    "kaggle_input_refs": [
+      "/kaggle/input.",
+      "/kaggle/input/**/*triton*.whl",
+      "/kaggle/input/**/{pattern}",
+      "/kaggle/input/datasets/dgxchen/nemotron-cot-tong/problem_ids_matched.csv",
+      "/kaggle/input/datasets/konbu17/nemotron-sft-lora-cot-selection",
+      "/kaggle/input/datasets/mayukh18/nemotron-packages/packages"
+    ],
+    "kernel_dir": "warmtea__lb-training",
+    "learning_rate_literals": [
+      "2e-4"
+    ],
+    "notebook": "artifacts\\external_intel\\kaggle_kernels_20260512\\warmtea__lb-training\\lb-training.ipynb",
+    "score_mentions": [
+      "0.84",
+      "0.85"
+    ],
+    "step_literals": [
+      "1"
+    ],
+    "target_modules": [
+      "down_proj",
+      "in_proj",
+      "k_proj",
+      "lm_head",
+      "o_proj",
+      "out_proj",
+      "q_proj",
+      "up_proj",
+      "v_proj"
+    ]
+  }
+]

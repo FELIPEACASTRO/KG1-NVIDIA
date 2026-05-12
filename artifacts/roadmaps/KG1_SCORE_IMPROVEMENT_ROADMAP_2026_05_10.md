@@ -4575,3 +4575,88 @@ Reauditoria devastadora contra Kaggle CLI/API, notebook oficial de metrica e bra
   - V283/V282-config nao recuperou o patamar weak de V194/V226; fez `7/315` com truncation `225/315`;
   - descartar V283/V282-config para full eval, package e Kaggle submit;
   - manter V284 como gate futuro apenas para candidato adapter-only que primeiro passe o weak historico sem postprocessor externo.
+
+## Atualizacao 2026-05-12 - pesquisa externa bit/equation e V293 rejeitado
+
+Escopo: consolidar literatura operacional, Kaggle CLI/API, Hugging Face, ReasoningGym e OpenRouter para atacar as familias fracas `bit_manipulation` e `equation_transform`.
+
+### Evidencia medida
+
+- Melhor linha submetida segue sendo V291/V290 checkpoint-6:
+  - Kaggle public score `0.86`;
+  - full official-like local `823/947 = 0.8690601901`;
+  - `bit_manipulation = 135/160`;
+  - `equation_transform = 56/155`;
+  - familias laterais em `100%`;
+  - `truncation = 1`.
+- V274/V275 provou sinal real, mas nao packageable:
+  - weak com postprocessador: `196/315`, `equation=60`, `bit=136`;
+  - full V291 com postprocessador: `827/947`, `equation=60`, `bit=135`;
+  - decisao: usar como sinal de treino, nao como submissao direta.
+- V293 tentou distilar V274 em adapter-only via `lm_head`:
+  - checkpoint-3: `191/315`, `bit=135`, `equation=56`;
+  - checkpoint-6: `191/315`, `bit=135`, `equation=56`;
+  - checkpoint-9: `190/315`, `bit=134`, `equation=56`, `trunc=1`;
+  - checkpoint-12: `192/315`, `bit=136`, `equation=56`;
+  - decisao: rejeitado para full/package/submit. O treino `lm_head`-only nao internalizou as regras.
+
+### Achados Kaggle/HF
+
+- Kaggle CLI confirmou que os arquivos oficiais sao `train.csv` e `test.csv`.
+- Historico de submissoes confirma o plato `0.86`: V291, V281, V199B, V194, V193, V192.
+- Leaderboard exibida via CLI mostra top visivel `0.87` e muitos times empatados em `0.86`; portanto `+1` a `+4` acertos podem mover ranking.
+- Kernels publicos puxados e resumidos em:
+  - `artifacts/external_intel/kaggle_kernel_summary_20260512.md`
+  - `artifacts/external_intel/kaggle_kernel_summary_20260512.json`
+- Datasets publicos resumidos em:
+  - `artifacts/external_intel/kaggle_external_dataset_summary_20260512.json`
+- Principais leituras:
+  - notebooks publicos fortes sao majoritariamente empacotamento/auditoria do Tinker adapter `0.86`;
+  - kernels de treino usam target modules amplos (`q/k/v/o/in/out/up/down/lm_head`), mas precisam de gate forte para nao destruir side families;
+  - `kishanvavdara/nemotron-reasoning-traj` nao deve ser usado como positivo cru nas familias alvo: bit e equation estao majoritariamente incorretos;
+  - `kienngx` CoT+labels e `konbu17` bit datasets sao uteis somente com verifier/filtro;
+  - `nvidia/Nemotron-RL-ReasoningGym-v1` e `open-thought/reasoning-gym` sao acionaveis porque geram tarefas verificaveis.
+
+### Literatura operacional aplicada
+
+- Chain-of-thought/self-consistency/least-to-most/program-of-thoughts sao uteis como metodologia, mas nao bastam para submissao adapter-only.
+- A traducao correta para KG1 e:
+  - gerar dados sinteticos verificaveis;
+  - treinar o adapter a reproduzir resposta final correta;
+  - usar replay de side families para nao degradar o `100%`;
+  - validar por weak gate antes de qualquer full/HF caro.
+- ReasoningGym reforca a direcao de verifier-first: gerar tarefas com `question`, `answer`, `metadata` e scorer programatico/cascade scorer.
+
+### Proximo roteiro
+
+1. `V294_VERIFIED_EQUATION_REPRESENTATION_PATCH`
+   - objetivo: transformar os ganhos V274/V275 em comportamento adapter-only;
+   - dados: templates de equation equivalence, signed-minus/opposite-sign, direct-add variant, colon absdiff/unreverse, ReasoningGym `simple_equations` e `cryptarithm`, todos verificados;
+   - treino: nao usar `lm_head`-only; usar top attention + MLP LoRA controlado;
+   - gate weak minimo: `overall >= 193`, `equation >= 57`, `bit >= 136`, `trunc <= 1`;
+   - gate ideal para full: `equation >= 60` sem perda de bit.
+2. `V295_VERIFIED_BIT_HARD_CASE_PATCH`
+   - objetivo: buscar `+1` a `+2` em bit sem perder equation;
+   - dados: Konbu17 filtrado, gerador Alice-style bitwise, hard negatives por operacao/bit;
+   - gate weak: `bit >= 137`, `equation >= 56`, `trunc <= 1`.
+3. `V296_VERIFIER_DPO_OR_ORPO`
+   - objetivo: se V294/V295 plateau, formar pares correto/incorreto com verifier e treinar preferencia pequena;
+   - so executar se os pares tiverem qualidade comprovada e custo previsto baixo.
+
+### Stop/go financeiro
+
+- Nao iniciar full official-like em H100/H200 sem weak gate.
+- Nao submeter se o full official-like nao superar V291:
+  - minimo operacional: `>= 824/947` com side families intactas;
+  - alvo para tentar sair do plato: `>= 827/947`;
+  - hard reject: `bit < 135`, `equation < 56`, qualquer side-family regression relevante.
+
+### Artefatos
+
+- Prompt cirurgico para usar em outras IAs:
+  - `artifacts/external_intel/KG1_EXTERNAL_RESEARCH_PROMPT_2026_05_12.md`
+- Triage de literatura/dados externos:
+  - `artifacts/external_intel/KG1_BIT_EQUATION_LITERATURE_TRIAGE_2026_05_12.md`
+- Respostas OpenRouter advisory:
+  - `artifacts/external_intel/openrouter_20260512/openai__gpt-5.4_kg1_strategy_response.md`
+  - `artifacts/external_intel/openrouter_20260512/deepseek__deepseek-v4-pro_kg1_strategy_response.md`

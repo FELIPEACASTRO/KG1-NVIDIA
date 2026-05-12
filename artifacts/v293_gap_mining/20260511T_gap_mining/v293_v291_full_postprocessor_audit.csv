@@ -1,0 +1,948 @@
+id,family,answer,baseline_prediction,postprocessed_prediction,postprocessor_applied,postprocessor_rule,postprocessor_proof,baseline_correct,postprocessed_correct,gain,loss,truncated
+e518256e,equation_transform,84,84,84,False,operator_not_guarded,"query_op='""'",True,True,False,False,False
+09d5ee68,equation_transform,!?'!,|:>>,|:>>,False,not_numeric_query,query is not a numeric binary expression,False,False,False,False,False
+b39c8082,text_encryption,princess reads treasure,princess reads treasure,princess reads treasure,False,not_attempted,non-equation row,True,True,False,False,False
+4a085720,unit_conversion,40.13,40.11,40.11,False,not_attempted,non-equation row,True,True,False,False,False
+a4df85b7,text_encryption,dragon imagines the colorful crystal,dragon imagines the colorful crystal,dragon imagines the colorful crystal,False,not_attempted,non-equation row,True,True,False,False,False
+d70beb33,text_encryption,princess imagines door,princess imagines door,princess imagines door,False,not_attempted,non-equation row,True,True,False,False,False
+b9a748ac,text_encryption,the strange knight follows,the strange knight follows,the strange knight follows,False,not_attempted,non-equation row,True,True,False,False,False
+70c29179,numeral_system,LXXXIII,LXXXIII,LXXXIII,False,not_attempted,non-equation row,True,True,False,False,False
+7e5b8c12,bit_manipulation,10110000,10110000,10110000,False,not_attempted,non-equation row,True,True,False,False,False
+a261169e,text_encryption,student imagines the silver message,student imagines the silver message,student imagines the silver message,False,not_attempted,non-equation row,True,True,False,False,False
+a027a729,unit_conversion,7.31,7.31,7.31,False,not_attempted,non-equation row,True,True,False,False,False
+00457d26,equation_transform,@&,[[!',[[!',False,not_numeric_query,query is not a numeric binary expression,False,False,False,False,False
+9f657a70,numeral_system,XI,XI,XI,False,not_attempted,non-equation row,True,True,False,False,False
+518deb39,equation_transform,$,{}$>,{}$>,False,not_numeric_query,query is not a numeric binary expression,False,False,False,False,False
+78616706,bit_manipulation,00000111,00000111,00000111,False,not_attempted,non-equation row,True,True,False,False,False
+82109e34,equation_transform,-@>,'^^^','^^^',False,not_numeric_query,query is not a numeric binary expression,False,False,False,False,False
+d4d4a2c2,gravity_constant,185.8,185.81,185.81,False,not_attempted,non-equation row,True,True,False,False,False
+5e67b1a1,equation_transform,63,63,63,False,operator_not_guarded,query_op='{',True,True,False,False,False
+c7077b21,bit_manipulation,00010110,00010110,00010110,False,not_attempted,non-equation row,True,True,False,False,False
+fb5a7b9e,bit_manipulation,11111010,11111010,11111010,False,not_attempted,non-equation row,True,True,False,False,False
+26fe52a0,text_encryption,alice chases the curious castle,alice chases the curious castle,alice chases the curious castle,False,not_attempted,non-equation row,True,True,False,False,False
+4a30dd44,text_encryption,rabbit chases puzzle,rabbit chases puzzle,rabbit chases puzzle,False,not_attempted,non-equation row,True,True,False,False,False
+e1728524,equation_transform,1089,0,0,False,query_operator_unseen,query_op='/' not present in examples,False,False,False,False,False
+839e7350,bit_manipulation,00111011,00111011,00111011,False,not_attempted,non-equation row,True,True,False,False,False
+ed56c862,text_encryption,alice watches key,alice watches key,alice watches key,False,not_attempted,non-equation row,True,True,False,False,False
+a365e304,bit_manipulation,11011011,11011011,11011011,False,not_attempted,non-equation row,True,True,False,False,False
+a6672f83,text_encryption,turtle watches the golden potion,turtle watches the golden potion,turtle watches the golden potion,False,not_attempted,non-equation row,True,True,False,False,False
+5765a947,numeral_system,XXXIV,XXXIV,XXXIV,False,not_attempted,non-equation row,True,True,False,False,False
+04b818d2,unit_conversion,41.70,41.70,41.70,False,not_attempted,non-equation row,True,True,False,False,False
+e3bf0c2c,equation_transform,"""`",@`',@`',False,not_numeric_query,query is not a numeric binary expression,False,False,False,False,False
+2c3368cf,text_encryption,cat explores door,cat explores door,cat explores door,False,not_attempted,non-equation row,True,True,False,False,False
+f1106935,text_encryption,mouse sees near school,mouse sees near school,mouse sees near school,False,not_attempted,non-equation row,True,True,False,False,False
+df8b803c,numeral_system,XLV,XLV,XLV,False,not_attempted,non-equation row,True,True,False,False,False
+01714be2,gravity_constant,140.44,140.47,140.47,False,not_attempted,non-equation row,True,True,False,False,False
+ee07fd5c,numeral_system,XV,XV,XV,False,not_attempted,non-equation row,True,True,False,False,False
+c2ebca34,gravity_constant,32.81,32.81,32.81,False,not_attempted,non-equation row,True,True,False,False,False
+fdbdf50c,equation_transform,"-\""",|?|,|?|,False,not_numeric_query,query is not a numeric binary expression,False,False,False,False,False
+f3971b9a,bit_manipulation,00011001,00011001,00011001,False,not_attempted,non-equation row,True,True,False,False,False
+9c62e8ed,unit_conversion,46.81,46.80,46.80,False,not_attempted,non-equation row,True,True,False,False,False
+ab71eaa0,bit_manipulation,00010010,00010010,00010010,False,not_attempted,non-equation row,True,True,False,False,False
+b1686291,gravity_constant,63.64,63.64,63.64,False,not_attempted,non-equation row,True,True,False,False,False
+e75d6620,unit_conversion,27.89,27.88,27.88,False,not_attempted,non-equation row,True,True,False,False,False
+47c1d8f5,equation_transform,]%],/`%`,/`%`,False,not_numeric_query,query is not a numeric binary expression,False,False,False,False,False
+54589e31,numeral_system,XIX,XIX,XIX,False,not_attempted,non-equation row,True,True,False,False,False
+9bddd8d4,gravity_constant,36.01,36.01,36.01,False,not_attempted,non-equation row,True,True,False,False,False
+f6a05295,gravity_constant,25.69,25.69,25.69,False,not_attempted,non-equation row,True,True,False,False,False
+bf786304,gravity_constant,145.82,145.83,145.83,False,not_attempted,non-equation row,True,True,False,False,False
+bfee75d5,bit_manipulation,01000010,01000010,01000010,False,not_attempted,non-equation row,True,True,False,False,False
+f9a33aa1,equation_transform,/((`,@($/,@($/,False,not_numeric_query,query is not a numeric binary expression,False,False,False,False,False
+1abaffca,bit_manipulation,01000000,01011000,01011000,False,not_attempted,non-equation row,False,False,False,False,False
+de98159a,unit_conversion,38.22,38.23,38.23,False,not_attempted,non-equation row,True,True,False,False,False
+9f2fae58,equation_transform,7272,7272,7272,False,operator_not_guarded,query_op='$',True,True,False,False,False
+f9799a68,equation_transform,&:/?,:^?\,:^?\,False,not_numeric_query,query is not a numeric binary expression,False,False,False,False,False
+5f0da536,text_encryption,the colorful king reads,the colorful king reads,the colorful king reads,False,not_attempted,non-equation row,True,True,False,False,False
+07735828,unit_conversion,4.65,4.66,4.66,False,not_attempted,non-equation row,True,True,False,False,False
+b6127826,numeral_system,XXII,XXII,XXII,False,not_attempted,non-equation row,True,True,False,False,False
+1af4f53a,numeral_system,XXXII,XXXII,XXXII,False,not_attempted,non-equation row,True,True,False,False,False
+c24074a8,equation_transform,&/,]]]%,]]]%,False,not_numeric_query,query is not a numeric binary expression,False,False,False,False,False
+ea34e037,numeral_system,XXIII,XXIII,XXIII,False,not_attempted,non-equation row,True,True,False,False,False
+bc7618a7,bit_manipulation,00001100,00001100,00001100,False,not_attempted,non-equation row,True,True,False,False,False
+65470a41,unit_conversion,20.45,20.45,20.45,False,not_attempted,non-equation row,True,True,False,False,False
+893ffb06,equation_transform,-@',@``:,@``:,False,not_numeric_query,query is not a numeric binary expression,False,False,False,False,False
+af652c7d,numeral_system,LXXIX,LXXIX,LXXIX,False,not_attempted,non-equation row,True,True,False,False,False
+cf4c04c0,equation_transform,-[,@|#|,@|#|,False,not_numeric_query,query is not a numeric binary expression,False,False,False,False,False
+8e411cc7,equation_transform,]]],$&&,$&&,False,not_numeric_query,query is not a numeric binary expression,False,False,False,False,False
+e2bd1d40,numeral_system,XXIX,XXIX,XXIX,False,not_attempted,non-equation row,True,True,False,False,False
+96291987,text_encryption,mouse explores in village,mouse explores in village,mouse explores in village,False,not_attempted,non-equation row,True,True,False,False,False
+892d73b5,bit_manipulation,00010101,00010101,00010101,False,not_attempted,non-equation row,True,True,False,False,False
+efdbb83a,text_encryption,dragon studies garden,dragon studies garden,dragon studies garden,False,not_attempted,non-equation row,True,True,False,False,False
+df9609fd,numeral_system,XXIV,XXIV,XXIV,False,not_attempted,non-equation row,True,True,False,False,False
+f7d53288,numeral_system,LXXXII,LXXXII,LXXXII,False,not_attempted,non-equation row,True,True,False,False,False
+5434ef33,numeral_system,XCV,XCV,XCV,False,not_attempted,non-equation row,True,True,False,False,False
+7207c649,unit_conversion,29.53,29.53,29.53,False,not_attempted,non-equation row,True,True,False,False,False
+a12354e3,unit_conversion,2.63,2.63,2.63,False,not_attempted,non-equation row,True,True,False,False,False
+5ad55b3e,text_encryption,cat writes the wise secret,cat writes the wise secret,cat writes the wise secret,False,not_attempted,non-equation row,True,True,False,False,False
+41e6cbfc,equation_transform,9318,9318,9318,False,add_no_unique_direct_variant,direct_add=[]; baseline=9318,True,True,False,False,False
+c0648741,unit_conversion,10.02,10.03,10.03,False,not_attempted,non-equation row,True,True,False,False,False
+dea42835,equation_transform,['[/,['[/,['[/,False,not_numeric_query,query is not a numeric binary expression,True,True,False,False,False
+a6046287,numeral_system,LXXV,LXXV,LXXV,False,not_attempted,non-equation row,True,True,False,False,False
+48c25e0e,equation_transform,53,32,32,False,query_operator_unseen,query_op='&' not present in examples,False,False,False,False,False
+e6d2a064,bit_manipulation,11100011,11100010,11100010,False,not_attempted,non-equation row,False,False,False,False,False
+c2a7b266,gravity_constant,151.11,151.1,151.1,False,not_attempted,non-equation row,True,True,False,False,False
+a1d2bb0c,bit_manipulation,00100010,00100010,00100010,False,not_attempted,non-equation row,True,True,False,False,False
+aa37b5db,gravity_constant,54.2,54.19,54.19,False,not_attempted,non-equation row,True,True,False,False,False
+b977b320,text_encryption,bird draws the secret castle,bird draws the secret castle,bird draws the secret castle,False,not_attempted,non-equation row,True,True,False,False,False
+0f26a837,unit_conversion,5.43,5.43,5.43,False,not_attempted,non-equation row,True,True,False,False,False
+abfd833f,unit_conversion,57.14,57.12,57.12,False,not_attempted,non-equation row,True,True,False,False,False
+186cccdf,gravity_constant,139.97,139.98,139.98,False,not_attempted,non-equation row,True,True,False,False,False
+572053c7,gravity_constant,8.3,8.3,8.3,False,not_attempted,non-equation row,True,True,False,False,False
+a8dbe0c6,gravity_constant,19.79,19.79,19.79,False,not_attempted,non-equation row,True,True,False,False,False
+ad599007,unit_conversion,18.11,18.11,18.11,False,not_attempted,non-equation row,True,True,False,False,False
+f06051ac,text_encryption,the magical bird writes,the magical bird writes,the magical bird writes,False,not_attempted,non-equation row,True,True,False,False,False
+4e4fb429,bit_manipulation,10111110,10111110,10111110,False,not_attempted,non-equation row,True,True,False,False,False
+70259bd0,text_encryption,turtle explores the bright crystal,turtle explores the bright crystal,turtle explores the bright crystal,False,not_attempted,non-equation row,True,True,False,False,False
+7ef4d5d6,equation_transform,>42,>42,>42,False,operator_not_guarded,query_op='>',True,True,False,False,False
+46284574,numeral_system,LXXV,LXXV,LXXV,False,not_attempted,non-equation row,True,True,False,False,False
+e477385c,numeral_system,VII,VII,VII,False,not_attempted,non-equation row,True,True,False,False,False
+8cba814f,gravity_constant,41.12,41.11,41.11,False,not_attempted,non-equation row,True,True,False,False,False
+3416dfa4,numeral_system,XXIV,XXIV,XXIV,False,not_attempted,non-equation row,True,True,False,False,False
+3ee36e0a,equation_transform,-51,-51,-51,False,minus_model_not_opposite_sign,candidate=-51; baseline=-51,True,True,False,False,False
+0bc7de44,unit_conversion,31.24,31.24,31.24,False,not_attempted,non-equation row,True,True,False,False,False
+bc60a72a,unit_conversion,37.86,37.88,37.88,False,not_attempted,non-equation row,True,True,False,False,False
+39c237c7,equation_transform,{]``,{]``,{]``,False,not_numeric_query,query is not a numeric binary expression,True,True,False,False,False
+b037cf33,gravity_constant,63.59,63.59,63.59,False,not_attempted,non-equation row,True,True,False,False,False
+963e85bb,equation_transform,76,76,76,False,operator_not_guarded,query_op='$',True,True,False,False,False
+556fddce,numeral_system,LVI,LVI,LVI,False,not_attempted,non-equation row,True,True,False,False,False
+a98d4d53,equation_transform,-),!$$[,!$$[,False,not_numeric_query,query is not a numeric binary expression,False,False,False,False,False
+458b8092,unit_conversion,61.98,61.98,61.98,False,not_attempted,non-equation row,True,True,False,False,False
+0e70c867,bit_manipulation,01000000,01001100,01001100,False,not_attempted,non-equation row,False,False,False,False,False
+fd3920e2,text_encryption,hatter watches in island,hatter watches in island,hatter watches in island,False,not_attempted,non-equation row,True,True,False,False,False
+b003a657,numeral_system,V,V,V,False,not_attempted,non-equation row,True,True,False,False,False
+d7f56a8c,text_encryption,king found above castle,king found above castle,king found above castle,False,not_attempted,non-equation row,True,True,False,False,False
+330dc435,numeral_system,XVIII,XVIII,XVIII,False,not_attempted,non-equation row,True,True,False,False,False
+ad3558db,text_encryption,the ancient king writes,the ancient king writes,the ancient king writes,False,not_attempted,non-equation row,True,True,False,False,False
+59733f94,equation_transform,/,$/>/,$/>/,False,not_numeric_query,query is not a numeric binary expression,False,False,False,False,False
+b1bc3731,equation_transform,63,63,63,False,operator_not_guarded,"query_op='""'",True,True,False,False,False
+faf4865b,numeral_system,LXVII,LXVII,LXVII,False,not_attempted,non-equation row,True,True,False,False,False
+54b895c1,bit_manipulation,10111011,10111011,10111011,False,not_attempted,non-equation row,True,True,False,False,False
+ed24e7af,bit_manipulation,00001001,00001001,00001001,False,not_attempted,non-equation row,True,True,False,False,False
+40d98aca,text_encryption,rabbit found the strange secret,rabbit found the strange secret,rabbit found the strange secret,False,not_attempted,non-equation row,True,True,False,False,False
+254f9885,text_encryption,the secret teacher sees,the secret teacher sees,the secret teacher sees,False,not_attempted,non-equation row,True,True,False,False,False
+ac3ab4d3,text_encryption,rabbit sees the strange treasure,rabbit sees the strange treasure,rabbit sees the strange treasure,False,not_attempted,non-equation row,True,True,False,False,False
+9d28a7ca,text_encryption,teacher studies map,teacher studies map,teacher studies map,False,not_attempted,non-equation row,True,True,False,False,False
+487f62c4,gravity_constant,97.97,97.97,97.97,False,not_attempted,non-equation row,True,True,False,False,False
+3cd80c64,bit_manipulation,01100100,01100100,01100100,False,not_attempted,non-equation row,True,True,False,False,False
+a1523a63,equation_transform,87,87,87,False,operator_not_guarded,query_op='%',True,True,False,False,False
+4ecacf23,unit_conversion,23.81,23.82,23.82,False,not_attempted,non-equation row,True,True,False,False,False
+6bbfc336,text_encryption,the silver princess chases,the silver princess chases,the silver princess chases,False,not_attempted,non-equation row,True,True,False,False,False
+f2b23d11,bit_manipulation,10000000,10000000,10000000,False,not_attempted,non-equation row,True,True,False,False,False
+560b2396,gravity_constant,68.97,68.96,68.96,False,not_attempted,non-equation row,True,True,False,False,False
+5cbe919f,bit_manipulation,00000000,00000000,00000000,False,not_attempted,non-equation row,True,True,False,False,False
+3383d4ec,equation_transform,66,66,66,False,minus_signed_ambiguous,"signed_predictions=['-33', '66']",True,True,False,False,False
+cacc0b56,gravity_constant,47.92,47.91,47.91,False,not_attempted,non-equation row,True,True,False,False,False
+ab3352fa,text_encryption,queen chases the wise key,queen chases the wise key,queen chases the wise key,False,not_attempted,non-equation row,True,True,False,False,False
+0af037a5,text_encryption,student studies near valley,student studies near valley,student studies near valley,False,not_attempted,non-equation row,True,True,False,False,False
+91adf788,numeral_system,XCIII,XCIII,XCIII,False,not_attempted,non-equation row,True,True,False,False,False
+71fc0560,gravity_constant,65.24,65.25,65.25,False,not_attempted,non-equation row,True,True,False,False,False
+ff937315,text_encryption,turtle reads potion,turtle reads potion,turtle reads potion,False,not_attempted,non-equation row,True,True,False,False,False
+8ee54e57,gravity_constant,46.86,46.86,46.86,False,not_attempted,non-equation row,True,True,False,False,False
+48266347,unit_conversion,80.17,80.16,80.16,False,not_attempted,non-equation row,True,True,False,False,False
+9dae880f,equation_transform,))[,:<`\,:<`\,False,not_numeric_query,query is not a numeric binary expression,False,False,False,False,False
+b43d9cd5,bit_manipulation,11100100,11100100,11100100,False,not_attempted,non-equation row,True,True,False,False,False
+3a02997b,unit_conversion,26.19,26.19,26.19,False,not_attempted,non-equation row,True,True,False,False,False
+46a8a0fc,gravity_constant,39.7,39.7,39.7,False,not_attempted,non-equation row,True,True,False,False,False
+aac9bfab,text_encryption,the bright student reads,the bright student reads,the bright student reads,False,not_attempted,non-equation row,True,True,False,False,False
+5c7d8aed,gravity_constant,29.83,29.83,29.83,False,not_attempted,non-equation row,True,True,False,False,False
+cf821623,text_encryption,turtle writes door,turtle writes door,turtle writes door,False,not_attempted,non-equation row,True,True,False,False,False
+64890e18,bit_manipulation,00001100,00001100,00001100,False,not_attempted,non-equation row,True,True,False,False,False
+e20b6ce3,numeral_system,C,C,C,False,not_attempted,non-equation row,True,True,False,False,False
+d6187157,bit_manipulation,01001000,01001000,01001000,False,not_attempted,non-equation row,True,True,False,False,False
+a57bcd23,numeral_system,LVII,LVII,LVII,False,not_attempted,non-equation row,True,True,False,False,False
+6f6a3ae0,unit_conversion,10.03,10.03,10.03,False,not_attempted,non-equation row,True,True,False,False,False
+905184e7,text_encryption,dragon reads message,dragon reads message,dragon reads message,False,not_attempted,non-equation row,True,True,False,False,False
+de91def4,bit_manipulation,10000111,10000111,10000111,False,not_attempted,non-equation row,True,True,False,False,False
+a642a3a1,text_encryption,the bright hatter draws,the bright hatter draws,the bright hatter draws,False,not_attempted,non-equation row,True,True,False,False,False
+2af7134e,equation_transform,20,20,20,False,add_no_unique_direct_variant,direct_add=[]; baseline=20,True,True,False,False,False
+fc7d8708,text_encryption,the mysterious mouse creates,the mysterious mouse creates,the mysterious mouse creates,False,not_attempted,non-equation row,True,True,False,False,False
+ae6be599,equation_transform,#`,$?]$,$?]$,False,not_numeric_query,query is not a numeric binary expression,False,False,False,False,False
+b26d8818,equation_transform,5983,5983,5983,False,operator_not_guarded,query_op=']',True,True,False,False,False
+621a9353,text_encryption,teacher imagines the secret secret,teacher imagines the secret secret,teacher imagines the secret secret,False,not_attempted,non-equation row,True,True,False,False,False
+882153ed,unit_conversion,25.63,25.63,25.63,False,not_attempted,non-equation row,True,True,False,False,False
+8494aad3,equation_transform,"""`#&","])<""","])<""",False,not_numeric_query,query is not a numeric binary expression,False,False,False,False,False
+898e4973,numeral_system,XXVIII,XXVIII,XXVIII,False,not_attempted,non-equation row,True,True,False,False,False
+8df3daad,equation_transform,34,34,34,False,query_operator_unseen,query_op='|' not present in examples,True,True,False,False,False
+4f06eee8,unit_conversion,40.34,40.33,40.33,False,not_attempted,non-equation row,True,True,False,False,False
+bab19053,gravity_constant,40.61,40.63,40.63,False,not_attempted,non-equation row,True,True,False,False,False
+9a9f5fef,text_encryption,wizard sees the golden key,wizard sees the golden key,wizard sees the golden key,False,not_attempted,non-equation row,True,True,False,False,False
+a25f86f4,numeral_system,LXXXIV,LXXXIV,LXXXIV,False,not_attempted,non-equation row,True,True,False,False,False
+589f4e37,unit_conversion,21.20,21.20,21.20,False,not_attempted,non-equation row,True,True,False,False,False
+8be3f8e3,numeral_system,XVIII,XVIII,XVIII,False,not_attempted,non-equation row,True,True,False,False,False
+791056ce,equation_transform,4922,4922,4922,False,operator_not_guarded,query_op='{',True,True,False,False,False
+eff63b8c,unit_conversion,17.95,17.95,17.95,False,not_attempted,non-equation row,True,True,False,False,False
+ee891900,unit_conversion,10.82,10.82,10.82,False,not_attempted,non-equation row,True,True,False,False,False
+29e458d6,bit_manipulation,00010010,00010010,00010010,False,not_attempted,non-equation row,True,True,False,False,False
+3c12aeb9,equation_transform,321,321,321,False,operator_not_guarded,query_op='$',True,True,False,False,False
+8ffacd86,gravity_constant,70.34,70.33,70.33,False,not_attempted,non-equation row,True,True,False,False,False
+9372da3d,text_encryption,knight watches the colorful castle,knight watches the colorful castle,knight watches the colorful castle,False,not_attempted,non-equation row,True,True,False,False,False
+69aa57b3,equation_transform,4472,4472,4472,False,add_no_unique_direct_variant,direct_add=[]; baseline=4472,True,True,False,False,False
+7ee39525,gravity_constant,145.57,145.57,145.57,False,not_attempted,non-equation row,True,True,False,False,False
+e3890bf7,equation_transform,{@%],(^@{,(^@{,False,not_numeric_query,query is not a numeric binary expression,False,False,False,False,False
+5164f026,text_encryption,teacher chases the mysterious treasure,teacher chases the mysterious treasure,teacher chases the mysterious treasure,False,not_attempted,non-equation row,True,True,False,False,False
+d204b9cc,equation_transform,231,231,231,False,add_no_unique_direct_variant,direct_add=[]; baseline=231,True,True,False,False,False
+7a79ac09,bit_manipulation,11111111,11111111,11111111,False,not_attempted,non-equation row,True,True,False,False,False
+d29e19a4,equation_transform,?|,|''>,|''>,False,not_numeric_query,query is not a numeric binary expression,False,False,False,False,False
+36c93216,numeral_system,LXXVII,LXXVII,LXXVII,False,not_attempted,non-equation row,True,True,False,False,False
+bf7c64dd,numeral_system,XL,XL,XL,False,not_attempted,non-equation row,True,True,False,False,False
+215050ec,numeral_system,LIV,LIV,LIV,False,not_attempted,non-equation row,True,True,False,False,False
+480997bb,unit_conversion,72.37,72.35,72.35,False,not_attempted,non-equation row,True,True,False,False,False
+531f3777,unit_conversion,8.87,8.87,8.87,False,not_attempted,non-equation row,True,True,False,False,False
+812ebe7e,unit_conversion,7.12,7.12,7.12,False,not_attempted,non-equation row,True,True,False,False,False
+b06625c4,equation_transform,^&/,"""$ $]""","""$ $]""",False,not_numeric_query,query is not a numeric binary expression,False,False,False,False,False
+91059046,unit_conversion,43.86,43.85,43.85,False,not_attempted,non-equation row,True,True,False,False,False
+9d6d8b52,numeral_system,LXIII,LXIII,LXIII,False,not_attempted,non-equation row,True,True,False,False,False
+84030b0b,equation_transform,24,24,24,False,add_no_unique_direct_variant,direct_add=[]; baseline=24,True,True,False,False,False
+3a67aa26,bit_manipulation,00101110,00101110,00101110,False,not_attempted,non-equation row,True,True,False,False,False
+e2896720,text_encryption,rabbit discovers mirror,rabbit discovers mirror,rabbit discovers mirror,False,not_attempted,non-equation row,True,True,False,False,False
+710cf035,bit_manipulation,10000011,10000011,10000011,False,not_attempted,non-equation row,True,True,False,False,False
+3aef986b,unit_conversion,68.55,68.55,68.55,False,not_attempted,non-equation row,True,True,False,False,False
+52be4988,equation_transform,'!,&&&`,&&&`,False,not_numeric_query,query is not a numeric binary expression,False,False,False,False,False
+63316c38,gravity_constant,168.43,168.44,168.44,False,not_attempted,non-equation row,True,True,False,False,False
+d3daee34,unit_conversion,2.74,2.74,2.74,False,not_attempted,non-equation row,True,True,False,False,False
+27e7a8dc,numeral_system,X,X,X,False,not_attempted,non-equation row,True,True,False,False,False
+27bd81c8,numeral_system,LXXIX,LXXIX,LXXIX,False,not_attempted,non-equation row,True,True,False,False,False
+b8722d19,bit_manipulation,00100100,11110100,11110100,False,not_attempted,non-equation row,False,False,False,False,False
+c7f785b6,unit_conversion,31.44,31.43,31.43,False,not_attempted,non-equation row,True,True,False,False,False
+65f356f9,unit_conversion,50.09,50.09,50.09,False,not_attempted,non-equation row,True,True,False,False,False
+5e502d98,unit_conversion,8.31,8.32,8.32,False,not_attempted,non-equation row,True,True,False,False,False
+99d6a3b5,equation_transform,?()<,(<)),(<)),False,not_numeric_query,query is not a numeric binary expression,False,False,False,False,False
+2d3547af,equation_transform,))^),\$\\,\$\\,False,not_numeric_query,query is not a numeric binary expression,False,False,False,False,False
+8c9fcc6b,bit_manipulation,11110111,11110111,11110111,False,not_attempted,non-equation row,True,True,False,False,False
+10f1809a,text_encryption,cat draws key,cat draws key,cat draws key,False,not_attempted,non-equation row,True,True,False,False,False
+d6b2525a,gravity_constant,63.74,63.73,63.73,False,not_attempted,non-equation row,True,True,False,False,False
+28b0ff48,equation_transform,'],|^^^,|^^^,False,not_numeric_query,query is not a numeric binary expression,False,False,False,False,False
+25bdf5be,text_encryption,rabbit follows the dark garden,rabbit follows the dark garden,rabbit follows the dark garden,False,not_attempted,non-equation row,True,True,False,False,False
+a5047680,text_encryption,the strange rabbit chases,the strange rabbit chases,the strange rabbit chases,False,not_attempted,non-equation row,True,True,False,False,False
+44c71228,gravity_constant,146.33,146.32,146.32,False,not_attempted,non-equation row,True,True,False,False,False
+54a20616,gravity_constant,4.49,4.49,4.49,False,not_attempted,non-equation row,True,True,False,False,False
+861a8c1d,unit_conversion,82.63,82.63,82.63,False,not_attempted,non-equation row,True,True,False,False,False
+c2540e41,numeral_system,LXIX,LXIX,LXIX,False,not_attempted,non-equation row,True,True,False,False,False
+3fa49035,equation_transform,696,696,696,False,operator_not_guarded,query_op='>',True,True,False,False,False
+b0184ec1,unit_conversion,61.57,61.56,61.56,False,not_attempted,non-equation row,True,True,False,False,False
+04732729,unit_conversion,22.45,22.45,22.45,False,not_attempted,non-equation row,True,True,False,False,False
+a187872d,text_encryption,king reads the strange mirror,king reads the strange mirror,king reads the strange mirror,False,not_attempted,non-equation row,True,True,False,False,False
+2fa5e04e,numeral_system,XXV,XXV,XXV,False,not_attempted,non-equation row,True,True,False,False,False
+c38256ce,text_encryption,queen discovers the hidden treasure,queen discovers the hidden treasure,queen discovers the hidden treasure,False,not_attempted,non-equation row,True,True,False,False,False
+61557701,equation_transform,|&,'{),'{),False,not_numeric_query,query is not a numeric binary expression,False,False,False,False,False
+92087c7c,text_encryption,the magical rabbit follows,the magical rabbit follows,the magical rabbit follows,False,not_attempted,non-equation row,True,True,False,False,False
+60332605,numeral_system,XXXV,XXXV,XXXV,False,not_attempted,non-equation row,True,True,False,False,False
+bb8a739b,gravity_constant,61.81,61.81,61.81,False,not_attempted,non-equation row,True,True,False,False,False
+85d800c7,numeral_system,XXXI,XXXI,XXXI,False,not_attempted,non-equation row,True,True,False,False,False
+8c0f9291,bit_manipulation,00001111,00001111,00001111,False,not_attempted,non-equation row,True,True,False,False,False
+d6e6f8b5,bit_manipulation,11100001,11100001,11100001,False,not_attempted,non-equation row,True,True,False,False,False
+955d71c5,text_encryption,hatter discovers the bright door,hatter discovers the bright door,hatter discovers the bright door,False,not_attempted,non-equation row,True,True,False,False,False
+3a90fdf6,bit_manipulation,10100000,10100000,10100000,False,not_attempted,non-equation row,True,True,False,False,False
+2def3dad,unit_conversion,6.87,6.88,6.88,False,not_attempted,non-equation row,True,True,False,False,False
+9b4ecc42,unit_conversion,17.04,17.05,17.05,False,not_attempted,non-equation row,True,True,False,False,False
+0bd41b01,numeral_system,LXXXV,LXXXV,LXXXV,False,not_attempted,non-equation row,True,True,False,False,False
+7bc77ef3,gravity_constant,143.12,143.15,143.15,False,not_attempted,non-equation row,True,True,False,False,False
+56343b77,equation_transform,711,711,711,False,add_no_unique_direct_variant,direct_add=[]; baseline=711,True,True,False,False,False
+f639a4f1,unit_conversion,62.70,62.71,62.71,False,not_attempted,non-equation row,True,True,False,False,False
+14570aeb,unit_conversion,53.05,53.05,53.05,False,not_attempted,non-equation row,True,True,False,False,False
+34390bf1,gravity_constant,29.85,29.85,29.85,False,not_attempted,non-equation row,True,True,False,False,False
+6feba18a,unit_conversion,23.20,23.20,23.20,False,not_attempted,non-equation row,True,True,False,False,False
+49322650,numeral_system,XVIII,XVIII,XVIII,False,not_attempted,non-equation row,True,True,False,False,False
+08df5363,bit_manipulation,01011100,01011100,01011100,False,not_attempted,non-equation row,True,True,False,False,False
+43a5b607,numeral_system,V,V,V,False,not_attempted,non-equation row,True,True,False,False,False
+a84f60fd,gravity_constant,71.51,71.51,71.51,False,not_attempted,non-equation row,True,True,False,False,False
+d50746e7,bit_manipulation,01000010,01000010,01000010,False,not_attempted,non-equation row,True,True,False,False,False
+6789bfc2,numeral_system,LXXXVI,LXXXVI,LXXXVI,False,not_attempted,non-equation row,True,True,False,False,False
+2facfaa4,bit_manipulation,00111110,00111110,00111110,False,not_attempted,non-equation row,True,True,False,False,False
+cbd76ba8,gravity_constant,86.27,86.27,86.27,False,not_attempted,non-equation row,True,True,False,False,False
+44a43f6c,unit_conversion,35.17,35.18,35.18,False,not_attempted,non-equation row,True,True,False,False,False
+e4fc9ec8,gravity_constant,34.75,34.75,34.75,False,not_attempted,non-equation row,True,True,False,False,False
+7ac90433,equation_transform,-23,-23,-23,False,minus_guard_all_negative_examples,single '-' rule with all negative examples is blocked,True,True,False,False,False
+8abcff0f,bit_manipulation,11110111,11110111,11110111,False,not_attempted,non-equation row,True,True,False,False,False
+02902eb3,equation_transform,>/,!!$>,!!$>,False,not_numeric_query,query is not a numeric binary expression,False,False,False,False,False
+ddc5aefe,bit_manipulation,00000001,00000001,00000001,False,not_attempted,non-equation row,True,True,False,False,False
+0d90736f,equation_transform,:,::)[,::)[,False,not_numeric_query,query is not a numeric binary expression,False,False,False,False,False
+294453b5,equation_transform,&(,##!),##!),False,not_numeric_query,query is not a numeric binary expression,False,False,False,False,False
+0e897e03,gravity_constant,30.74,30.74,30.74,False,not_attempted,non-equation row,True,True,False,False,False
+fa106ea3,gravity_constant,120.02,120.13,120.13,False,not_attempted,non-equation row,True,True,False,False,False
+75ecd32c,bit_manipulation,11100011,11100011,11100011,False,not_attempted,non-equation row,True,True,False,False,False
+1ef440dc,gravity_constant,16.15,16.15,16.15,False,not_attempted,non-equation row,True,True,False,False,False
+cfe89737,numeral_system,XCI,XCI,XCI,False,not_attempted,non-equation row,True,True,False,False,False
+5092f0e0,numeral_system,XXIX,XXIX,XXIX,False,not_attempted,non-equation row,True,True,False,False,False
+5f135096,text_encryption,the strange teacher explores,the strange teacher explores,the strange teacher explores,False,not_attempted,non-equation row,True,True,False,False,False
+dd2549dd,text_encryption,rabbit watches inside garden,rabbit watches inside garden,rabbit watches inside garden,False,not_attempted,non-equation row,True,True,False,False,False
+72ab36fc,numeral_system,IX,IX,IX,False,not_attempted,non-equation row,True,True,False,False,False
+12e0ac8c,bit_manipulation,10101001,10101001,10101001,False,not_attempted,non-equation row,True,True,False,False,False
+a5ea81bb,unit_conversion,13.29,13.29,13.29,False,not_attempted,non-equation row,True,True,False,False,False
+6b19d0fd,text_encryption,rabbit studies key,rabbit studies key,rabbit studies key,False,not_attempted,non-equation row,True,True,False,False,False
+7b1f2422,unit_conversion,47.86,47.85,47.85,False,not_attempted,non-equation row,True,True,False,False,False
+1029ef5a,gravity_constant,33.22,33.22,33.22,False,not_attempted,non-equation row,True,True,False,False,False
+386b6d03,equation_transform,671,18,18,False,query_operator_unseen,"query_op=""'"" not present in examples",False,False,False,False,False
+2ead53dc,bit_manipulation,00000101,00000101,00000101,False,not_attempted,non-equation row,True,True,False,False,False
+00ed1836,gravity_constant,24.28,24.28,24.28,False,not_attempted,non-equation row,True,True,False,False,False
+63491be4,text_encryption,turtle draws the colorful secret,turtle draws the colorful secret,turtle draws the colorful secret,False,not_attempted,non-equation row,True,True,False,False,False
+a7b9b0bf,numeral_system,XXXVII,XXXVII,XXXVII,False,not_attempted,non-equation row,True,True,False,False,False
+57f6878e,equation_transform,%{{,|@(!,|@(!,False,not_numeric_query,query is not a numeric binary expression,False,False,False,False,False
+05ca617c,bit_manipulation,11011011,01011011,01011011,False,not_attempted,non-equation row,False,False,False,False,False
+157f8266,text_encryption,bird watches inside island,bird watches inside island,bird watches inside island,False,not_attempted,non-equation row,True,True,False,False,False
+6890870d,bit_manipulation,01110000,01110000,01110000,False,not_attempted,non-equation row,True,True,False,False,False
+7104dd31,numeral_system,XXVII,XXVII,XXVII,False,not_attempted,non-equation row,True,True,False,False,False
+1c566511,bit_manipulation,01010010,01010010,01010010,False,not_attempted,non-equation row,True,True,False,False,False
+00efa37c,text_encryption,turtle watches the mysterious garden,turtle watches the mysterious garden,turtle watches the mysterious garden,False,not_attempted,non-equation row,True,True,False,False,False
+bc83b0a1,equation_transform,(/&{,(/&{,(/&{,False,not_numeric_query,query is not a numeric binary expression,True,True,False,False,False
+03e3c7b6,unit_conversion,40.32,40.33,40.33,False,not_attempted,non-equation row,True,True,False,False,False
+d855f20e,gravity_constant,4.54,4.54,4.54,False,not_attempted,non-equation row,True,True,False,False,False
+f1d60ece,unit_conversion,71.35,71.35,71.35,False,not_attempted,non-equation row,True,True,False,False,False
+a361a1b7,equation_transform,:46,46,46,False,query_operator_unseen,query_op=':' not present in examples,False,False,False,False,False
+4f655edc,gravity_constant,101.14,101.12,101.12,False,not_attempted,non-equation row,True,True,False,False,False
+51309101,numeral_system,C,C,C,False,not_attempted,non-equation row,True,True,False,False,False
+906f7b85,numeral_system,LXIV,LXIV,LXIV,False,not_attempted,non-equation row,True,True,False,False,False
+34f49b7d,gravity_constant,105.55,105.56,105.56,False,not_attempted,non-equation row,True,True,False,False,False
+04f569be,numeral_system,LXXXVII,LXXXVII,LXXXVII,False,not_attempted,non-equation row,True,True,False,False,False
+d911e8e1,equation_transform,:\:,@}<',@}<',False,not_numeric_query,query is not a numeric binary expression,False,False,False,False,False
+4353cd0b,bit_manipulation,00100001,00100001,00100001,False,not_attempted,non-equation row,True,True,False,False,False
+7688e06e,equation_transform,-55,55,-55,True,minus_signed_opposite_sign_guarded,candidate=-55; baseline=55,False,True,True,False,False
+30ba0cf4,bit_manipulation,01101101,01101101,01101101,False,not_attempted,non-equation row,True,True,False,False,False
+dbd0e3c9,equation_transform,5631,5631,5631,False,operator_not_guarded,query_op='*',True,True,False,False,False
+8fbd2477,bit_manipulation,01011010,01011010,01011010,False,not_attempted,non-equation row,True,True,False,False,False
+ba61b815,bit_manipulation,00001101,00001101,00001101,False,not_attempted,non-equation row,True,True,False,False,False
+2e2d60b2,equation_transform,07,07,07,False,add_no_unique_direct_variant,direct_add=[]; baseline=07,True,True,False,False,False
+5f9f0ed7,equation_transform,}/!},|!@[,|!@[,False,not_numeric_query,query is not a numeric binary expression,False,False,False,False,False
+333d93ec,equation_transform,7,7,7,False,minus_signed_ambiguous,signed_predictions=[],True,True,False,False,False
+74fff108,equation_transform,49,49,49,False,operator_not_guarded,query_op='^',True,True,False,False,False
+c43b5a13,equation_transform,)|,$):$,$):$,False,not_numeric_query,query is not a numeric binary expression,False,False,False,False,False
+b0206bb7,equation_transform,]$!,$){,$){,False,not_numeric_query,query is not a numeric binary expression,False,False,False,False,False
+638f93ca,equation_transform,@,$<]$,$<]$,False,not_numeric_query,query is not a numeric binary expression,False,False,False,False,False
+12fe3d99,gravity_constant,17.8,17.8,17.8,False,not_attempted,non-equation row,True,True,False,False,False
+9bee3f4d,gravity_constant,64.19,64.2,64.2,False,not_attempted,non-equation row,True,True,False,False,False
+5b9964c7,bit_manipulation,00011011,00011011,00011011,False,not_attempted,non-equation row,True,True,False,False,False
+cff450fd,unit_conversion,38.42,38.43,38.43,False,not_attempted,non-equation row,True,True,False,False,False
+a6f7139f,bit_manipulation,11000000,11000000,11000000,False,not_attempted,non-equation row,True,True,False,False,False
+b2fb65cf,bit_manipulation,11000011,11000011,11000011,False,not_attempted,non-equation row,True,True,False,False,False
+52545905,unit_conversion,13.14,13.15,13.15,False,not_attempted,non-equation row,True,True,False,False,False
+4bfd095a,equation_transform,{<<<,@/[@,@/[@,False,not_numeric_query,query is not a numeric binary expression,False,False,False,False,False
+7a422e17,equation_transform,%'!,"#`{""","#`{""",False,not_numeric_query,query is not a numeric binary expression,False,False,False,False,False
+3dd5fcd2,gravity_constant,52.28,52.27,52.27,False,not_attempted,non-equation row,True,True,False,False,False
+ba469498,unit_conversion,46.87,46.86,46.86,False,not_attempted,non-equation row,True,True,False,False,False
+7192535b,bit_manipulation,00000010,00001010,00001010,False,not_attempted,non-equation row,False,False,False,False,False
+5b2523e6,equation_transform,&&,><\$,><\$,False,not_numeric_query,query is not a numeric binary expression,False,False,False,False,False
+dbb611da,bit_manipulation,00000001,00000001,00000001,False,not_attempted,non-equation row,True,True,False,False,False
+0fe53bac,equation_transform,"(""",^?(|,^?(|,False,not_numeric_query,query is not a numeric binary expression,False,False,False,False,False
+a1cc9071,text_encryption,wizard writes the secret mirror,wizard writes the secret mirror,wizard writes the secret mirror,False,not_attempted,non-equation row,True,True,False,False,False
+acc0955e,text_encryption,bird dreams the dark treasure,bird dreams the dark treasure,bird dreams the dark treasure,False,not_attempted,non-equation row,True,True,False,False,False
+07ceed47,bit_manipulation,10000101,10000101,10000101,False,not_attempted,non-equation row,True,True,False,False,False
+274def88,equation_transform,92,-92,92,True,minus_signed_opposite_sign_guarded,candidate=92; baseline=-92,False,True,True,False,False
+7aa4fdf0,bit_manipulation,00000001,00000001,00000001,False,not_attempted,non-equation row,True,True,False,False,False
+270c6986,numeral_system,XXIX,XXIX,XXIX,False,not_attempted,non-equation row,True,True,False,False,False
+9db72c8e,numeral_system,IX,IX,IX,False,not_attempted,non-equation row,True,True,False,False,False
+357974d4,gravity_constant,31.16,31.16,31.16,False,not_attempted,non-equation row,True,True,False,False,False
+03a3437f,equation_transform,-!,'}/>,'}/>,False,not_numeric_query,query is not a numeric binary expression,False,False,False,False,False
+d61269a7,gravity_constant,85.79,85.78,85.78,False,not_attempted,non-equation row,True,True,False,False,False
+327cb428,gravity_constant,60.72,60.72,60.72,False,not_attempted,non-equation row,True,True,False,False,False
+67aa8dc6,text_encryption,turtle dreams beyond forest,turtle dreams beyond forest,turtle dreams beyond forest,False,not_attempted,non-equation row,True,True,False,False,False
+f2014638,bit_manipulation,10011010,10011010,10011010,False,not_attempted,non-equation row,True,True,False,False,False
+0d3974ba,unit_conversion,40.11,40.12,40.12,False,not_attempted,non-equation row,True,True,False,False,False
+a72514a7,text_encryption,queen sees secret,queen sees secret,queen sees secret,False,not_attempted,non-equation row,True,True,False,False,False
+a8ea0e29,bit_manipulation,00000000,00000000,00000000,False,not_attempted,non-equation row,True,True,False,False,False
+1d32836c,gravity_constant,28.01,28.01,28.01,False,not_attempted,non-equation row,True,True,False,False,False
+8995b70e,text_encryption,teacher follows the magical treasure,teacher follows the magical treasure,teacher follows the magical treasure,False,not_attempted,non-equation row,True,True,False,False,False
+27282440,unit_conversion,43.72,43.71,43.71,False,not_attempted,non-equation row,True,True,False,False,False
+30ac5c8e,equation_transform,)#?,@\}?,@\}?,False,not_numeric_query,query is not a numeric binary expression,False,False,False,False,False
+bfcb26ab,text_encryption,the curious queen studies,the curious queen studies,the curious queen studies,False,not_attempted,non-equation row,True,True,False,False,False
+1564de32,numeral_system,VIII,VIII,VIII,False,not_attempted,non-equation row,True,True,False,False,False
+8d791e8b,unit_conversion,40.70,40.70,40.70,False,not_attempted,non-equation row,True,True,False,False,False
+ae554b7f,unit_conversion,13.87,13.87,13.87,False,not_attempted,non-equation row,True,True,False,False,False
+53df550e,numeral_system,XXV,XXV,XXV,False,not_attempted,non-equation row,True,True,False,False,False
+dd7893f2,unit_conversion,9.52,9.52,9.52,False,not_attempted,non-equation row,True,True,False,False,False
+3cfc5f9c,bit_manipulation,01110111,01110111,01110111,False,not_attempted,non-equation row,True,True,False,False,False
+7969952e,unit_conversion,6.31,6.31,6.31,False,not_attempted,non-equation row,True,True,False,False,False
+e0ee5c99,text_encryption,bird discovers garden,bird discovers garden,bird discovers garden,False,not_attempted,non-equation row,True,True,False,False,False
+9cd69c91,numeral_system,XIX,XIX,XIX,False,not_attempted,non-equation row,True,True,False,False,False
+08d8d7e1,equation_transform,88,88,88,False,add_no_unique_direct_variant,direct_add=[]; baseline=88,True,True,False,False,False
+ff121f08,equation_transform,#<,!%<<,!%<<,False,not_numeric_query,query is not a numeric binary expression,False,False,False,False,False
+5e5c4b8d,unit_conversion,20.73,20.74,20.74,False,not_attempted,non-equation row,True,True,False,False,False
+58e63752,gravity_constant,35.87,35.87,35.87,False,not_attempted,non-equation row,True,True,False,False,False
+c5c16455,gravity_constant,73.06,73.06,73.06,False,not_attempted,non-equation row,True,True,False,False,False
+a4a91d08,gravity_constant,63.43,63.42,63.42,False,not_attempted,non-equation row,True,True,False,False,False
+c83ef461,gravity_constant,88.25,88.25,88.25,False,not_attempted,non-equation row,True,True,False,False,False
+114a7439,bit_manipulation,01110001,01110001,01110001,False,not_attempted,non-equation row,True,True,False,False,False
+9108ad00,text_encryption,teacher found beyond castle,teacher found beyond castle,teacher found beyond castle,False,not_attempted,non-equation row,True,True,False,False,False
+fd663423,gravity_constant,73.18,73.18,73.18,False,not_attempted,non-equation row,True,True,False,False,False
+fc83f7b4,numeral_system,VII,VII,VII,False,not_attempted,non-equation row,True,True,False,False,False
+79c84e68,text_encryption,mouse sees the magical crystal,mouse sees the magical crystal,mouse sees the magical crystal,False,not_attempted,non-equation row,True,True,False,False,False
+343095d3,bit_manipulation,01010100,01010100,01010100,False,not_attempted,non-equation row,True,True,False,False,False
+f598a715,text_encryption,the dark bird discovers,the dark bird discovers,the dark bird discovers,False,not_attempted,non-equation row,True,True,False,False,False
+ddb4bc42,unit_conversion,32.01,32.00,32.00,False,not_attempted,non-equation row,True,True,False,False,False
+9da4282a,gravity_constant,41.78,41.77,41.77,False,not_attempted,non-equation row,True,True,False,False,False
+e03315c8,numeral_system,VII,VII,VII,False,not_attempted,non-equation row,True,True,False,False,False
+cb2d7718,numeral_system,LII,LII,LII,False,not_attempted,non-equation row,True,True,False,False,False
+81042133,gravity_constant,152.24,152.24,152.24,False,not_attempted,non-equation row,True,True,False,False,False
+37d90651,unit_conversion,17.41,17.41,17.41,False,not_attempted,non-equation row,True,True,False,False,False
+7672adf0,text_encryption,queen discovers book,queen discovers book,queen discovers book,False,not_attempted,non-equation row,True,True,False,False,False
+a4dd4cce,bit_manipulation,10110010,10110010,10110010,False,not_attempted,non-equation row,True,True,False,False,False
+f7f91582,numeral_system,LXXXVI,LXXXVI,LXXXVI,False,not_attempted,non-equation row,True,True,False,False,False
+6b11c05f,bit_manipulation,00100010,00100010,00100010,False,not_attempted,non-equation row,True,True,False,False,False
+e9461e93,unit_conversion,33.61,33.60,33.60,False,not_attempted,non-equation row,True,True,False,False,False
+0da5e774,numeral_system,LXXXIX,LXXXIX,LXXXIX,False,not_attempted,non-equation row,True,True,False,False,False
+42cb233d,equation_transform,881,881,881,False,add_no_unique_direct_variant,direct_add=[]; baseline=881,True,True,False,False,False
+eca3925a,gravity_constant,44.07,44.07,44.07,False,not_attempted,non-equation row,True,True,False,False,False
+0e653f2b,unit_conversion,25.28,25.28,25.28,False,not_attempted,non-equation row,True,True,False,False,False
+ec8b4875,equation_transform,"|""]",|@<!,|@<!,False,not_numeric_query,query is not a numeric binary expression,False,False,False,False,False
+1950808e,text_encryption,turtle studies near island,turtle studies near island,turtle studies near island,False,not_attempted,non-equation row,True,True,False,False,False
+ad789984,numeral_system,XLIV,XLIV,XLIV,False,not_attempted,non-equation row,True,True,False,False,False
+98f3c5cf,numeral_system,XLIV,XLIV,XLIV,False,not_attempted,non-equation row,True,True,False,False,False
+8f16da79,unit_conversion,16.53,16.54,16.54,False,not_attempted,non-equation row,True,True,False,False,False
+e3fbc768,equation_transform,'(^),%??,%??,False,not_numeric_query,query is not a numeric binary expression,False,False,False,False,False
+6cc5dafb,equation_transform,)(,^&>),^&>),False,not_numeric_query,query is not a numeric binary expression,False,False,False,False,False
+2764222d,text_encryption,bird draws the wise story,bird draws the wise story,bird draws the wise story,False,not_attempted,non-equation row,True,True,False,False,False
+d5a03a2e,equation_transform,>>,""")&&",""")&&",False,not_numeric_query,query is not a numeric binary expression,False,False,False,False,False
+eea91b82,bit_manipulation,00101111,00101111,00101111,False,not_attempted,non-equation row,True,True,False,False,False
+13912aeb,text_encryption,the dark alice discovers,the dark alice discovers,the dark alice discovers,False,not_attempted,non-equation row,True,True,False,False,False
+4736daab,bit_manipulation,01000111,01000111,01000111,False,not_attempted,non-equation row,True,True,False,False,False
+288437a0,numeral_system,I,I,I,False,not_attempted,non-equation row,True,True,False,False,False
+a919756f,numeral_system,XCIII,XCIII,XCIII,False,not_attempted,non-equation row,True,True,False,False,False
+96c231d2,text_encryption,wizard draws crystal,wizard draws crystal,wizard draws crystal,False,not_attempted,non-equation row,True,True,False,False,False
+bdd2f990,gravity_constant,23.23,23.23,23.23,False,not_attempted,non-equation row,True,True,False,False,False
+8bebef83,equation_transform,3388,3388,3388,False,operator_not_guarded,query_op='{',True,True,False,False,False
+62daec42,text_encryption,king follows key,king follows key,king follows key,False,not_attempted,non-equation row,True,True,False,False,False
+ac2189ae,gravity_constant,158.41,158.39,158.39,False,not_attempted,non-equation row,True,True,False,False,False
+22045c05,text_encryption,queen found key,queen found key,queen found key,False,not_attempted,non-equation row,True,True,False,False,False
+efc2b69d,bit_manipulation,10111100,10111100,10111100,False,not_attempted,non-equation row,True,True,False,False,False
+1b3891f3,text_encryption,the clever hatter imagines,the clever hatter imagines,the clever hatter imagines,False,not_attempted,non-equation row,True,True,False,False,False
+44415184,gravity_constant,12.04,12.04,12.04,False,not_attempted,non-equation row,True,True,False,False,False
+6799cb43,gravity_constant,6.11,6.11,6.11,False,not_attempted,non-equation row,True,True,False,False,False
+a794d193,bit_manipulation,01011101,01011101,01011101,False,not_attempted,non-equation row,True,True,False,False,False
+0f7ddd75,bit_manipulation,11110110,11110110,11110110,False,not_attempted,non-equation row,True,True,False,False,False
+27cec7a9,equation_transform,3341,3341,3341,False,colon_no_unique_unreverse,candidate_predictions=[],True,True,False,False,False
+a6704625,bit_manipulation,00001101,00011111,00011111,False,not_attempted,non-equation row,False,False,False,False,False
+6ff5f86d,numeral_system,XIV,XIV,XIV,False,not_attempted,non-equation row,True,True,False,False,False
+19291958,numeral_system,LXXXVII,LXXXVII,LXXXVII,False,not_attempted,non-equation row,True,True,False,False,False
+d117113e,bit_manipulation,00000000,00000000,00000000,False,not_attempted,non-equation row,True,True,False,False,False
+4aeed935,equation_transform,1455,1455,1455,False,operator_not_guarded,query_op='*',True,True,False,False,False
+c04024c2,gravity_constant,144.53,144.52,144.52,False,not_attempted,non-equation row,True,True,False,False,False
+6f7a9048,bit_manipulation,00101000,00101000,00101000,False,not_attempted,non-equation row,True,True,False,False,False
+4246eb0b,gravity_constant,7.62,7.62,7.62,False,not_attempted,non-equation row,True,True,False,False,False
+8740ed31,bit_manipulation,01101000,01111000,01111000,False,not_attempted,non-equation row,False,False,False,False,False
+4688f0fa,gravity_constant,47.86,47.86,47.86,False,not_attempted,non-equation row,True,True,False,False,False
+095b3eab,text_encryption,knight draws the curious potion,knight draws the curious potion,knight draws the curious potion,False,not_attempted,non-equation row,True,True,False,False,False
+522f94ac,text_encryption,the dark dragon follows,the dark dragon follows,the dark dragon follows,False,not_attempted,non-equation row,True,True,False,False,False
+5473bb28,text_encryption,mouse draws beyond school,mouse draws beyond school,mouse draws beyond school,False,not_attempted,non-equation row,True,True,False,False,False
+1cf8fadd,numeral_system,LI,LI,LI,False,not_attempted,non-equation row,True,True,False,False,False
+fb623471,equation_transform,-21,21,21,False,minus_signed_ambiguous,"signed_predictions=['-12', '-21']",False,False,False,False,False
+b2285221,numeral_system,XLVII,XLVII,XLVII,False,not_attempted,non-equation row,True,True,False,False,False
+88b43464,equation_transform,5311,5311,5311,False,add_no_unique_direct_variant,direct_add=[]; baseline=5311,True,True,False,False,False
+209c43f0,equation_transform,101,101,101,False,operator_not_guarded,query_op='^',True,True,False,False,False
+eee99d16,gravity_constant,83.25,83.25,83.25,False,not_attempted,non-equation row,True,True,False,False,False
+af593008,text_encryption,knight chases secret,knight chases secret,knight chases secret,False,not_attempted,non-equation row,True,True,False,False,False
+cb7e15f1,text_encryption,the silver knight dreams,the silver knight dreams,the silver knight dreams,False,not_attempted,non-equation row,True,True,False,False,False
+3a221bb6,text_encryption,student explores under castle,student explores under castle,student explores under castle,False,not_attempted,non-equation row,True,True,False,False,False
+8ac52d78,bit_manipulation,00010000,00010000,00010000,False,not_attempted,non-equation row,True,True,False,False,False
+677055ae,unit_conversion,25.07,25.07,25.07,False,not_attempted,non-equation row,True,True,False,False,False
+f507b7f1,bit_manipulation,11001100,11011100,11011100,False,not_attempted,non-equation row,False,False,False,False,False
+51ac2b8c,gravity_constant,113.81,113.81,113.81,False,not_attempted,non-equation row,True,True,False,False,False
+4c3c612c,unit_conversion,12.18,12.18,12.18,False,not_attempted,non-equation row,True,True,False,False,False
+606609ad,text_encryption,the colorful mouse sees,the colorful mouse sees,the colorful mouse sees,False,not_attempted,non-equation row,True,True,False,False,False
+fd5bb962,unit_conversion,73.45,73.44,73.44,False,not_attempted,non-equation row,True,True,False,False,False
+e040cfe6,text_encryption,knight draws the mysterious door,knight draws the mysterious door,knight draws the mysterious door,False,not_attempted,non-equation row,True,True,False,False,False
+305e1cb5,unit_conversion,15.27,15.26,15.26,False,not_attempted,non-equation row,True,True,False,False,False
+0b1e1afc,gravity_constant,78.08,78.06,78.06,False,not_attempted,non-equation row,True,True,False,False,False
+3fca2abc,numeral_system,LXXIII,LXXIII,LXXIII,False,not_attempted,non-equation row,True,True,False,False,False
+37c4e709,unit_conversion,33.17,33.15,33.15,False,not_attempted,non-equation row,True,True,False,False,False
+90b06730,text_encryption,princess studies around cave,princess studies around cave,princess studies around cave,False,not_attempted,non-equation row,True,True,False,False,False
+d9a4924d,unit_conversion,53.22,53.20,53.20,False,not_attempted,non-equation row,True,True,False,False,False
+d129b085,equation_transform,##$,!>``,!>``,False,not_numeric_query,query is not a numeric binary expression,False,False,False,False,False
+050492a9,unit_conversion,73.06,73.07,73.07,False,not_attempted,non-equation row,True,True,False,False,False
+e78796d3,gravity_constant,158.41,158.4,158.4,False,not_attempted,non-equation row,True,True,False,False,False
+368f20dd,bit_manipulation,10000101,10000101,10000101,False,not_attempted,non-equation row,True,True,False,False,False
+7b060b56,gravity_constant,22.59,22.59,22.59,False,not_attempted,non-equation row,True,True,False,False,False
+0c4e7430,numeral_system,XLVI,XLVI,XLVI,False,not_attempted,non-equation row,True,True,False,False,False
+1e6792e6,unit_conversion,30.30,30.28,30.28,False,not_attempted,non-equation row,True,True,False,False,False
+c87a87ec,unit_conversion,28.07,28.08,28.08,False,not_attempted,non-equation row,True,True,False,False,False
+8c352bcf,numeral_system,XIV,XIV,XIV,False,not_attempted,non-equation row,True,True,False,False,False
+e582df31,equation_transform,}@,"""']@","""']@",False,not_numeric_query,query is not a numeric binary expression,False,False,False,False,False
+f67b8172,gravity_constant,24.16,24.16,24.16,False,not_attempted,non-equation row,True,True,False,False,False
+826b7024,unit_conversion,9.59,9.58,9.58,False,not_attempted,non-equation row,True,True,False,False,False
+98724121,text_encryption,the hidden hatter creates,the hidden hatter creates,the hidden hatter creates,False,not_attempted,non-equation row,True,True,False,False,False
+f622a8c3,unit_conversion,46.64,46.65,46.65,False,not_attempted,non-equation row,True,True,False,False,False
+5e84cf1a,text_encryption,princess explores potion,princess explores potion,princess explores potion,False,not_attempted,non-equation row,True,True,False,False,False
+a77be9fa,equation_transform,"[""",{>$[,{>$[,False,not_numeric_query,query is not a numeric binary expression,False,False,False,False,False
+cd84db78,unit_conversion,29.42,29.40,29.40,False,not_attempted,non-equation row,True,True,False,False,False
+b7b61c0b,gravity_constant,32.57,32.57,32.57,False,not_attempted,non-equation row,True,True,False,False,False
+5a19f71a,bit_manipulation,11100010,11100010,11100010,False,not_attempted,non-equation row,True,True,False,False,False
+c455f908,text_encryption,turtle creates key,turtle creates key,turtle creates key,False,not_attempted,non-equation row,True,True,False,False,False
+1a6c0053,gravity_constant,3.53,3.53,3.53,False,not_attempted,non-equation row,True,True,False,False,False
+78d02fc5,bit_manipulation,11001001,11001011,11001011,False,not_attempted,non-equation row,False,False,False,False,False
+4166067c,bit_manipulation,01110110,01110110,01110110,False,not_attempted,non-equation row,True,True,False,False,False
+b2cbea0f,gravity_constant,176.57,176.56,176.56,False,not_attempted,non-equation row,True,True,False,False,False
+8e922a3a,gravity_constant,16.48,16.48,16.48,False,not_attempted,non-equation row,True,True,False,False,False
+4027a3ae,text_encryption,student reads puzzle,student reads puzzle,student reads puzzle,False,not_attempted,non-equation row,True,True,False,False,False
+4601649f,gravity_constant,93.92,93.91,93.91,False,not_attempted,non-equation row,True,True,False,False,False
+49fb46e8,bit_manipulation,01001110,01001110,01001110,False,not_attempted,non-equation row,True,True,False,False,False
+e3b8096e,gravity_constant,29.29,29.29,29.29,False,not_attempted,non-equation row,True,True,False,False,False
+63b63698,unit_conversion,18.16,18.16,18.16,False,not_attempted,non-equation row,True,True,False,False,False
+00208201,unit_conversion,16.65,16.65,16.65,False,not_attempted,non-equation row,True,True,False,False,False
+f7074a8f,numeral_system,LXXIX,LXXIX,LXXIX,False,not_attempted,non-equation row,True,True,False,False,False
+105255db,numeral_system,XLIX,XLIX,XLIX,False,not_attempted,non-equation row,True,True,False,False,False
+985ec868,unit_conversion,46.18,46.16,46.16,False,not_attempted,non-equation row,True,True,False,False,False
+779bb1f3,bit_manipulation,10000001,10000001,10000001,False,not_attempted,non-equation row,True,True,False,False,False
+2bd4edeb,text_encryption,the wise hatter draws,the wise hatter draws,the wise hatter draws,False,not_attempted,non-equation row,True,True,False,False,False
+9a291cc3,unit_conversion,39.55,39.56,39.56,False,not_attempted,non-equation row,True,True,False,False,False
+e2b02e13,bit_manipulation,01111110,01111110,01111110,False,not_attempted,non-equation row,True,True,False,False,False
+354e4fb6,numeral_system,LXXXIX,LXXXIX,LXXXIX,False,not_attempted,non-equation row,True,True,False,False,False
+ca9db731,unit_conversion,36.34,36.36,36.36,False,not_attempted,non-equation row,True,True,False,False,False
+3dd50b34,numeral_system,LXXIII,LXXIII,LXXIII,False,not_attempted,non-equation row,True,True,False,False,False
+dbc31a23,gravity_constant,28.12,28.12,28.12,False,not_attempted,non-equation row,True,True,False,False,False
+f8d6abd1,equation_transform,5543,5543,5543,False,colon_no_unique_unreverse,candidate_predictions=[],True,True,False,False,False
+1d79fe85,text_encryption,rabbit chases in garden,rabbit chases in garden,rabbit chases in garden,False,not_attempted,non-equation row,True,True,False,False,False
+3d6a080f,gravity_constant,36.04,36.04,36.04,False,not_attempted,non-equation row,True,True,False,False,False
+21245d76,bit_manipulation,01111111,01111111,01111111,False,not_attempted,non-equation row,True,True,False,False,False
+4ed6b56f,equation_transform,"(""/""",!:`(,!:`(,False,not_numeric_query,query is not a numeric binary expression,False,False,False,False,False
+1df786ed,text_encryption,the magical student draws,the magical student draws,the magical student draws,False,not_attempted,non-equation row,True,True,False,False,False
+328f099c,unit_conversion,22.49,22.49,22.49,False,not_attempted,non-equation row,True,True,False,False,False
+0aaf8d39,numeral_system,LXI,LXI,LXI,False,not_attempted,non-equation row,True,True,False,False,False
+f1e4b165,unit_conversion,26.55,26.55,26.55,False,not_attempted,non-equation row,True,True,False,False,False
+e0eba119,bit_manipulation,00010010,00010010,00010010,False,not_attempted,non-equation row,True,True,False,False,False
+6df4b5e1,gravity_constant,90.92,90.91,90.91,False,not_attempted,non-equation row,True,True,False,False,False
+55014a7a,bit_manipulation,01010000,01010000,01010000,False,not_attempted,non-equation row,True,True,False,False,False
+c8d6d308,unit_conversion,54.90,54.92,54.92,False,not_attempted,non-equation row,True,True,False,False,False
+73a82df5,gravity_constant,41.24,41.23,41.23,False,not_attempted,non-equation row,True,True,False,False,False
+8d5d4262,gravity_constant,53.22,53.22,53.22,False,not_attempted,non-equation row,True,True,False,False,False
+eba7b40a,text_encryption,the golden cat sees,the golden cat sees,the golden cat sees,False,not_attempted,non-equation row,True,True,False,False,False
+ef904eeb,unit_conversion,32.29,32.30,32.30,False,not_attempted,non-equation row,True,True,False,False,False
+0fe06e8c,bit_manipulation,10010010,10010010,10010010,False,not_attempted,non-equation row,True,True,False,False,False
+f53719ce,unit_conversion,27.38,27.38,27.38,False,not_attempted,non-equation row,True,True,False,False,False
+75421960,numeral_system,XXXIV,XXXIV,XXXIV,False,not_attempted,non-equation row,True,True,False,False,False
+11a3d729,numeral_system,XXXII,XXXII,XXXII,False,not_attempted,non-equation row,True,True,False,False,False
+8387401f,gravity_constant,177.24,177.23,177.23,False,not_attempted,non-equation row,True,True,False,False,False
+5ba5b166,numeral_system,XLIX,XLIX,XLIX,False,not_attempted,non-equation row,True,True,False,False,False
+e04f0fb4,numeral_system,LXVIII,LXVIII,LXVIII,False,not_attempted,non-equation row,True,True,False,False,False
+4a7f0ede,numeral_system,LXVIII,LXVIII,LXVIII,False,not_attempted,non-equation row,True,True,False,False,False
+b414004c,unit_conversion,68.26,68.25,68.25,False,not_attempted,non-equation row,True,True,False,False,False
+89af5175,gravity_constant,29.78,29.78,29.78,False,not_attempted,non-equation row,True,True,False,False,False
+476f0bb7,numeral_system,LXXVI,LXXVI,LXXVI,False,not_attempted,non-equation row,True,True,False,False,False
+6e318a02,numeral_system,XXII,XXII,XXII,False,not_attempted,non-equation row,True,True,False,False,False
+8e715328,numeral_system,XLIX,XLIX,XLIX,False,not_attempted,non-equation row,True,True,False,False,False
+539bea51,unit_conversion,40.61,40.60,40.60,False,not_attempted,non-equation row,True,True,False,False,False
+f8fc43d2,bit_manipulation,11100100,11100100,11100100,False,not_attempted,non-equation row,True,True,False,False,False
+208d7838,equation_transform,[:,[&<>,[&<>,False,not_numeric_query,query is not a numeric binary expression,False,False,False,False,False
+21bd1251,text_encryption,turtle discovers puzzle,turtle discovers puzzle,turtle discovers puzzle,False,not_attempted,non-equation row,True,True,False,False,False
+58c099d2,equation_transform,-)\,^!#\,^!#\,False,not_numeric_query,query is not a numeric binary expression,False,False,False,False,False
+d40ce15d,bit_manipulation,00010000,00010000,00010000,False,not_attempted,non-equation row,True,True,False,False,False
+3cb3fd89,equation_transform,[[&],]$$),]$$),False,not_numeric_query,query is not a numeric binary expression,False,False,False,False,False
+45c0e0a1,numeral_system,XXXV,XXXV,XXXV,False,not_attempted,non-equation row,True,True,False,False,False
+b80a1a12,unit_conversion,14.46,14.46,14.46,False,not_attempted,non-equation row,True,True,False,False,False
+17d4aac4,unit_conversion,28.84,28.85,28.85,False,not_attempted,non-equation row,True,True,False,False,False
+8a2c5a6a,gravity_constant,26.51,26.51,26.51,False,not_attempted,non-equation row,True,True,False,False,False
+331f4d30,gravity_constant,57.29,57.29,57.29,False,not_attempted,non-equation row,True,True,False,False,False
+f0bc64ea,unit_conversion,75.83,75.82,75.82,False,not_attempted,non-equation row,True,True,False,False,False
+c711f9dd,bit_manipulation,11000000,11000000,11000000,False,not_attempted,non-equation row,True,True,False,False,False
+a26065d4,equation_transform,<',<&<#,<&<#,False,not_numeric_query,query is not a numeric binary expression,False,False,False,False,False
+a06d06a4,text_encryption,hatter discovers the wise door,hatter discovers the wise door,hatter discovers the wise door,False,not_attempted,non-equation row,True,True,False,False,False
+2d4c4625,gravity_constant,45.83,45.85,45.85,False,not_attempted,non-equation row,True,True,False,False,False
+ed43dd53,gravity_constant,31.05,31.05,31.05,False,not_attempted,non-equation row,True,True,False,False,False
+01a065bb,gravity_constant,45.0,45.01,45.01,False,not_attempted,non-equation row,True,True,False,False,False
+6e6db0ef,text_encryption,princess found near mountain,princess found near mountain,princess found near mountain,False,not_attempted,non-equation row,True,True,False,False,False
+c7a95fda,gravity_constant,22.8,22.8,22.8,False,not_attempted,non-equation row,True,True,False,False,False
+55d834d1,bit_manipulation,00111111,10111111,10111111,False,not_attempted,non-equation row,False,False,False,False,False
+e0d2db0b,unit_conversion,9.01,9.02,9.02,False,not_attempted,non-equation row,True,True,False,False,False
+94934452,unit_conversion,53.82,53.81,53.81,False,not_attempted,non-equation row,True,True,False,False,False
+90afd579,gravity_constant,34.94,34.94,34.94,False,not_attempted,non-equation row,True,True,False,False,False
+e513f990,text_encryption,turtle found under mountain,turtle found under mountain,turtle found under mountain,False,not_attempted,non-equation row,True,True,False,False,False
+277cdbcf,gravity_constant,39.18,39.18,39.18,False,not_attempted,non-equation row,True,True,False,False,False
+194695e8,equation_transform,%,!\{<,!\{<,False,not_numeric_query,query is not a numeric binary expression,False,False,False,False,False
+4ef88f92,bit_manipulation,01010111,01011111,01011111,False,not_attempted,non-equation row,False,False,False,False,False
+5d77eff6,bit_manipulation,00011100,00011100,00011100,False,not_attempted,non-equation row,True,True,False,False,False
+490884a0,text_encryption,knight follows under castle,knight follows under castle,knight follows under castle,False,not_attempted,non-equation row,True,True,False,False,False
+fab7251a,text_encryption,the mysterious turtle reads,the mysterious turtle reads,the mysterious turtle reads,False,not_attempted,non-equation row,True,True,False,False,False
+1a7c8520,bit_manipulation,01100000,01100110,01100110,False,not_attempted,non-equation row,False,False,False,False,False
+1c671acc,bit_manipulation,11111101,11111101,11111101,False,not_attempted,non-equation row,True,True,False,False,False
+21e2511d,gravity_constant,49.61,49.61,49.61,False,not_attempted,non-equation row,True,True,False,False,False
+51ccb149,gravity_constant,210.86,210.86,210.86,False,not_attempted,non-equation row,True,True,False,False,False
+499b6f06,numeral_system,VIII,VIII,VIII,False,not_attempted,non-equation row,True,True,False,False,False
+2f7b6e82,gravity_constant,14.08,14.09,14.09,False,not_attempted,non-equation row,True,True,False,False,False
+5b30b755,gravity_constant,12.11,12.11,12.11,False,not_attempted,non-equation row,True,True,False,False,False
+5d499a7b,unit_conversion,77.34,77.35,77.35,False,not_attempted,non-equation row,True,True,False,False,False
+0b2877ce,numeral_system,XL,XL,XL,False,not_attempted,non-equation row,True,True,False,False,False
+ccff9e13,text_encryption,rabbit follows the secret book,rabbit follows the secret book,rabbit follows the secret book,False,not_attempted,non-equation row,True,True,False,False,False
+528ec0d8,equation_transform,-39,39,39,False,query_operator_unseen,query_op='-' not present in examples,False,False,False,False,False
+65044291,gravity_constant,131.29,131.28,131.28,False,not_attempted,non-equation row,True,True,False,False,False
+ad121190,numeral_system,LXXVII,LXXVII,LXXVII,False,not_attempted,non-equation row,True,True,False,False,False
+c9c5c755,numeral_system,XLII,XLII,XLII,False,not_attempted,non-equation row,True,True,False,False,False
+4bb8c6cd,equation_transform,]}\!,]}\!,]}\!,False,not_numeric_query,query is not a numeric binary expression,True,True,False,False,False
+b99c2ca0,gravity_constant,19.21,19.21,19.21,False,not_attempted,non-equation row,True,True,False,False,False
+57712d01,equation_transform,-/<,$/'{,$/'{,False,not_numeric_query,query is not a numeric binary expression,False,False,False,False,False
+d0b6dc53,unit_conversion,11.53,11.53,11.53,False,not_attempted,non-equation row,True,True,False,False,False
+42ebc277,text_encryption,teacher watches story,teacher watches story,teacher watches story,False,not_attempted,non-equation row,True,True,False,False,False
+ed5a4c11,text_encryption,the curious cat draws,the curious cat draws,the curious cat draws,False,not_attempted,non-equation row,True,True,False,False,False
+3e60d8bf,text_encryption,princess imagines the secret book,princess imagines the secret book,princess imagines the secret book,False,not_attempted,non-equation row,True,True,False,False,False
+d98d85c0,equation_transform,?(&@,(@@?,(@@?,False,not_numeric_query,query is not a numeric binary expression,False,False,False,False,False
+b62f2e75,bit_manipulation,00111111,00111111,00111111,False,not_attempted,non-equation row,True,True,False,False,False
+eebbd231,unit_conversion,5.72,5.72,5.72,False,not_attempted,non-equation row,True,True,False,False,False
+7ed40e8a,equation_transform,180,180,180,False,operator_not_guarded,query_op='&',True,True,False,False,False
+188111de,text_encryption,princess watches through garden,princess watches through garden,princess watches through garden,False,not_attempted,non-equation row,True,True,False,False,False
+491b8ea5,equation_transform,)!,@|]!,@|]!,False,not_numeric_query,query is not a numeric binary expression,False,False,False,False,False
+93e52b8a,numeral_system,LI,LI,LI,False,not_attempted,non-equation row,True,True,False,False,False
+8463d65e,unit_conversion,19.02,19.02,19.02,False,not_attempted,non-equation row,True,True,False,False,False
+a24ec2e5,gravity_constant,71.67,71.66,71.66,False,not_attempted,non-equation row,True,True,False,False,False
+c82c0984,gravity_constant,14.3,14.3,14.3,False,not_attempted,non-equation row,True,True,False,False,False
+eb1a62f7,equation_transform,>!>},){>),){>),False,not_numeric_query,query is not a numeric binary expression,False,False,False,False,False
+0bb591e6,equation_transform,%?<,"""$%%""","""$%%""",False,not_numeric_query,query is not a numeric binary expression,False,False,False,False,False
+b91f7b38,numeral_system,VIII,VIII,VIII,False,not_attempted,non-equation row,True,True,False,False,False
+91f639c4,unit_conversion,22.00,21.99,21.99,False,not_attempted,non-equation row,True,True,False,False,False
+c869b4f6,bit_manipulation,10010001,10010001,10010001,False,not_attempted,non-equation row,True,True,False,False,False
+3c424916,equation_transform,9351,9351,9351,False,operator_not_guarded,query_op='*',True,True,False,False,False
+fbe70ef5,text_encryption,student studies potion,student studies potion,student studies potion,False,not_attempted,non-equation row,True,True,False,False,False
+c964ad34,numeral_system,XX,XX,XX,False,not_attempted,non-equation row,True,True,False,False,False
+575f9709,bit_manipulation,01111111,01111111,01111111,False,not_attempted,non-equation row,True,True,False,False,False
+691608b9,bit_manipulation,00101000,00101000,00101000,False,not_attempted,non-equation row,True,True,False,False,False
+6f59b884,gravity_constant,23.38,23.38,23.38,False,not_attempted,non-equation row,True,True,False,False,False
+7d54dff5,numeral_system,XXIX,XXIX,XXIX,False,not_attempted,non-equation row,True,True,False,False,False
+09eb1f7e,unit_conversion,30.64,30.65,30.65,False,not_attempted,non-equation row,True,True,False,False,False
+016482c8,unit_conversion,62.33,62.33,62.33,False,not_attempted,non-equation row,True,True,False,False,False
+a2bfdf29,text_encryption,alice creates the dark secret,alice creates the dark secret,alice creates the dark secret,False,not_attempted,non-equation row,True,True,False,False,False
+9e25daf9,text_encryption,teacher reads through wonderland,teacher reads through wonderland,teacher reads through wonderland,False,not_attempted,non-equation row,True,True,False,False,False
+f9483351,text_encryption,princess chases beyond palace,princess chases beyond palace,princess chases beyond palace,False,not_attempted,non-equation row,True,True,False,False,False
+9b9ccb27,gravity_constant,11.5,11.5,11.5,False,not_attempted,non-equation row,True,True,False,False,False
+427d4619,unit_conversion,50.46,50.46,50.46,False,not_attempted,non-equation row,True,True,False,False,False
+72336119,equation_transform,3316,3316,3316,False,operator_not_guarded,query_op='>',True,True,False,False,False
+42716da3,numeral_system,X,X,X,False,not_attempted,non-equation row,True,True,False,False,False
+202af98d,bit_manipulation,11111101,11111111,11111111,False,not_attempted,non-equation row,False,False,False,False,False
+d8b028ad,unit_conversion,27.39,27.38,27.38,False,not_attempted,non-equation row,True,True,False,False,False
+a992d5f1,unit_conversion,13.31,13.32,13.32,False,not_attempted,non-equation row,True,True,False,False,False
+f304e11f,numeral_system,VIII,VIII,VIII,False,not_attempted,non-equation row,True,True,False,False,False
+519b702d,unit_conversion,30.43,30.45,30.45,False,not_attempted,non-equation row,True,True,False,False,False
+3ace787f,bit_manipulation,11111011,11111111,11111111,False,not_attempted,non-equation row,False,False,False,False,False
+084757f1,numeral_system,LXXXVI,LXXXVI,LXXXVI,False,not_attempted,non-equation row,True,True,False,False,False
+9a19fc2d,equation_transform,#>[,!&)#,!&)#,False,not_numeric_query,query is not a numeric binary expression,False,False,False,False,False
+dc7f150a,bit_manipulation,11001011,11001011,11001011,False,not_attempted,non-equation row,True,True,False,False,False
+6cc637ea,text_encryption,cat studies the strange book,cat studies the strange book,cat studies the strange book,False,not_attempted,non-equation row,True,True,False,False,False
+5e5a5245,numeral_system,XXI,XXI,XXI,False,not_attempted,non-equation row,True,True,False,False,False
+aa248cfd,numeral_system,XXX,XXX,XXX,False,not_attempted,non-equation row,True,True,False,False,False
+eb6a20e4,text_encryption,dragon chases inside cave,dragon chases inside cave,dragon chases inside cave,False,not_attempted,non-equation row,True,True,False,False,False
+02356cb8,unit_conversion,28.23,28.23,28.23,False,not_attempted,non-equation row,True,True,False,False,False
+201255d5,text_encryption,the silver rabbit discovers,the silver rabbit discovers,the silver rabbit discovers,False,not_attempted,non-equation row,True,True,False,False,False
+12e947ca,bit_manipulation,00111110,00111110,00111110,False,not_attempted,non-equation row,True,True,False,False,False
+a3af84eb,numeral_system,LXXVI,LXXVI,LXXVI,False,not_attempted,non-equation row,True,True,False,False,False
+2a5d4790,bit_manipulation,11111111,11111111,11111111,False,not_attempted,non-equation row,True,True,False,False,False
+adb33564,gravity_constant,128.8,128.79,128.79,False,not_attempted,non-equation row,True,True,False,False,False
+bdc10997,numeral_system,XCV,XCV,XCV,False,not_attempted,non-equation row,True,True,False,False,False
+059bced5,numeral_system,LXIII,LXIII,LXIII,False,not_attempted,non-equation row,True,True,False,False,False
+4b9e883a,gravity_constant,108.43,108.42,108.42,False,not_attempted,non-equation row,True,True,False,False,False
+59bee375,bit_manipulation,10010101,2,2,False,truncated_abstain,generation finished by length,False,False,False,False,True
+528b694b,equation_transform,"""'",>]]),>]]),False,not_numeric_query,query is not a numeric binary expression,False,False,False,False,False
+c36667cc,text_encryption,student studies book,student studies book,student studies book,False,not_attempted,non-equation row,True,True,False,False,False
+68450646,gravity_constant,15.15,15.15,15.15,False,not_attempted,non-equation row,True,True,False,False,False
+3860736d,text_encryption,the wise teacher writes,the wise teacher writes,the wise teacher writes,False,not_attempted,non-equation row,True,True,False,False,False
+ff1518be,numeral_system,XXXVII,XXXVII,XXXVII,False,not_attempted,non-equation row,True,True,False,False,False
+c8a8aaab,numeral_system,XXXII,XXXII,XXXII,False,not_attempted,non-equation row,True,True,False,False,False
+d3b20e29,equation_transform,3922,3922,3922,False,add_no_unique_direct_variant,direct_add=[]; baseline=3922,True,True,False,False,False
+e125822b,numeral_system,XVII,XVII,XVII,False,not_attempted,non-equation row,True,True,False,False,False
+e918d7a0,numeral_system,LXXIII,LXXIII,LXXIII,False,not_attempted,non-equation row,True,True,False,False,False
+d1bd7478,equation_transform,30,03,30,True,colon_absdiff_unreverse_same_len,candidate=30; baseline=03,False,True,True,False,False
+21519be7,equation_transform,35,35,35,False,operator_not_guarded,query_op='@',True,True,False,False,False
+fe6d3aa3,bit_manipulation,10100010,10100010,10100010,False,not_attempted,non-equation row,True,True,False,False,False
+a1d4a894,text_encryption,the golden knight follows,the golden knight follows,the golden knight follows,False,not_attempted,non-equation row,True,True,False,False,False
+fb81a733,gravity_constant,26.64,26.64,26.64,False,not_attempted,non-equation row,True,True,False,False,False
+96a607cc,unit_conversion,22.68,22.67,22.67,False,not_attempted,non-equation row,True,True,False,False,False
+3a36841a,gravity_constant,51.56,51.56,51.56,False,not_attempted,non-equation row,True,True,False,False,False
+8b929fd5,gravity_constant,8.55,8.55,8.55,False,not_attempted,non-equation row,True,True,False,False,False
+42e06571,text_encryption,knight sees the golden key,knight sees the golden key,knight sees the golden key,False,not_attempted,non-equation row,True,True,False,False,False
+9be2a93a,gravity_constant,97.17,97.18,97.18,False,not_attempted,non-equation row,True,True,False,False,False
+ba285d3d,unit_conversion,14.52,14.52,14.52,False,not_attempted,non-equation row,True,True,False,False,False
+83cdf5f5,unit_conversion,29.61,29.60,29.60,False,not_attempted,non-equation row,True,True,False,False,False
+85610cf5,unit_conversion,38.98,38.99,38.99,False,not_attempted,non-equation row,True,True,False,False,False
+01248b76,bit_manipulation,11000101,11000101,11000101,False,not_attempted,non-equation row,True,True,False,False,False
+0dfd7674,bit_manipulation,01001110,01001110,01001110,False,not_attempted,non-equation row,True,True,False,False,False
+7306613b,equation_transform,251,251,251,False,add_no_unique_direct_variant,direct_add=[]; baseline=251,True,True,False,False,False
+297c5a69,text_encryption,queen sees the strange door,queen sees the strange door,queen sees the strange door,False,not_attempted,non-equation row,True,True,False,False,False
+539bfe7c,numeral_system,XLVII,XLVII,XLVII,False,not_attempted,non-equation row,True,True,False,False,False
+8243c91e,bit_manipulation,01000101,01000101,01000101,False,not_attempted,non-equation row,True,True,False,False,False
+fba40625,equation_transform,'>&,{>?#,{>?#,False,not_numeric_query,query is not a numeric binary expression,False,False,False,False,False
+76983293,gravity_constant,76.49,76.5,76.5,False,not_attempted,non-equation row,True,True,False,False,False
+9aa8dc92,equation_transform,/#</,/#</,/#</,False,not_numeric_query,query is not a numeric binary expression,True,True,False,False,False
+ef2fe526,bit_manipulation,01011010,01011010,01011010,False,not_attempted,non-equation row,True,True,False,False,False
+fc027060,unit_conversion,14.44,14.45,14.45,False,not_attempted,non-equation row,True,True,False,False,False
+c5b058d6,equation_transform,134,35,134,True,add_direct_over_model_add_variant,candidate=134; baseline=35,False,True,True,False,False
+bae87600,text_encryption,king writes near forest,king writes near forest,king writes near forest,False,not_attempted,non-equation row,True,True,False,False,False
+2e6cf33f,unit_conversion,62.99,63.00,63.00,False,not_attempted,non-equation row,True,True,False,False,False
+b4342b90,equation_transform,66,66,66,False,operator_not_guarded,query_op='\\',True,True,False,False,False
+837a6ae7,equation_transform,<>\>,"<:{""","<:{""",False,not_numeric_query,query is not a numeric binary expression,False,False,False,False,False
+e6de0ad5,text_encryption,turtle discovers through mountain,turtle discovers through mountain,turtle discovers through mountain,False,not_attempted,non-equation row,True,True,False,False,False
+9d3e7f1a,bit_manipulation,01101010,01101010,01101010,False,not_attempted,non-equation row,True,True,False,False,False
+00fdc0be,bit_manipulation,11111111,11111111,11111111,False,not_attempted,non-equation row,True,True,False,False,False
+3a7dd604,bit_manipulation,01001010,01001011,01001011,False,not_attempted,non-equation row,False,False,False,False,False
+d0e1010b,equation_transform,!&&},|&$|,|&$|,False,not_numeric_query,query is not a numeric binary expression,False,False,False,False,False
+59aa67c2,gravity_constant,86.95,86.95,86.95,False,not_attempted,non-equation row,True,True,False,False,False
+996b88d6,gravity_constant,15.43,15.43,15.43,False,not_attempted,non-equation row,True,True,False,False,False
+f4f41e1c,numeral_system,LXXXI,LXXXI,LXXXI,False,not_attempted,non-equation row,True,True,False,False,False
+3feeabea,bit_manipulation,10010010,10010010,10010010,False,not_attempted,non-equation row,True,True,False,False,False
+3685d906,gravity_constant,8.76,8.76,8.76,False,not_attempted,non-equation row,True,True,False,False,False
+c67e461d,text_encryption,hatter studies key,hatter studies key,hatter studies key,False,not_attempted,non-equation row,True,True,False,False,False
+3a322ba8,gravity_constant,9.93,9.93,9.93,False,not_attempted,non-equation row,True,True,False,False,False
+d102679b,unit_conversion,21.97,21.98,21.98,False,not_attempted,non-equation row,True,True,False,False,False
+0e19e1bb,unit_conversion,48.92,48.93,48.93,False,not_attempted,non-equation row,True,True,False,False,False
+3d508e3b,numeral_system,XLIX,XLIX,XLIX,False,not_attempted,non-equation row,True,True,False,False,False
+9ca96a88,text_encryption,dragon reads the strange treasure,dragon reads the strange treasure,dragon reads the strange treasure,False,not_attempted,non-equation row,True,True,False,False,False
+78e6dfa5,text_encryption,teacher found the silver book,teacher found the silver book,teacher found the silver book,False,not_attempted,non-equation row,True,True,False,False,False
+13c36657,gravity_constant,9.86,9.86,9.86,False,not_attempted,non-equation row,True,True,False,False,False
+f0ccc56e,gravity_constant,22.93,22.93,22.93,False,not_attempted,non-equation row,True,True,False,False,False
+cf6dcfce,numeral_system,LI,LI,LI,False,not_attempted,non-equation row,True,True,False,False,False
+c7178491,unit_conversion,11.78,11.78,11.78,False,not_attempted,non-equation row,True,True,False,False,False
+b0e8cd3e,unit_conversion,41.03,41.02,41.02,False,not_attempted,non-equation row,True,True,False,False,False
+a33efcb6,gravity_constant,55.0,55.0,55.0,False,not_attempted,non-equation row,True,True,False,False,False
+04f03c7e,numeral_system,LXXXII,LXXXII,LXXXII,False,not_attempted,non-equation row,True,True,False,False,False
+34c563c5,equation_transform,04`,04`,04`,False,operator_not_guarded,query_op='`',True,True,False,False,False
+5a0d5d2a,equation_transform,341,55,55,False,query_operator_unseen,query_op='+' not present in examples,False,False,False,False,False
+5a9fcf68,equation_transform,4443,4,4,False,query_operator_unseen,query_op='@' not present in examples,False,False,False,False,False
+fad3219a,text_encryption,student creates door,student creates door,student creates door,False,not_attempted,non-equation row,True,True,False,False,False
+6e56b39a,equation_transform,-/#,&#!,&#!,False,not_numeric_query,query is not a numeric binary expression,False,False,False,False,False
+888c8e78,numeral_system,LXXI,LXXI,LXXI,False,not_attempted,non-equation row,True,True,False,False,False
+7bca3456,text_encryption,queen watches inside ocean,queen watches inside ocean,queen watches inside ocean,False,not_attempted,non-equation row,True,True,False,False,False
+9e5a758b,text_encryption,princess discovers the curious crystal,princess discovers the curious crystal,princess discovers the curious crystal,False,not_attempted,non-equation row,True,True,False,False,False
+4ada9150,bit_manipulation,01111011,01111011,01111011,False,not_attempted,non-equation row,True,True,False,False,False
+2f671c98,numeral_system,LV,LV,LV,False,not_attempted,non-equation row,True,True,False,False,False
+732ac4b4,unit_conversion,23.92,23.90,23.90,False,not_attempted,non-equation row,True,True,False,False,False
+a5f1991c,equation_transform,/|',!&&&,!&&&,False,not_numeric_query,query is not a numeric binary expression,False,False,False,False,False
+e9675928,numeral_system,LXIV,LXIV,LXIV,False,not_attempted,non-equation row,True,True,False,False,False
+a4679943,numeral_system,LIII,LIII,LIII,False,not_attempted,non-equation row,True,True,False,False,False
+455b6b61,bit_manipulation,00111011,00111011,00111011,False,not_attempted,non-equation row,True,True,False,False,False
+2087df86,numeral_system,XXXVI,XXXVI,XXXVI,False,not_attempted,non-equation row,True,True,False,False,False
+91cd33f5,numeral_system,LXI,LXI,LXI,False,not_attempted,non-equation row,True,True,False,False,False
+9443e78b,text_encryption,the strange dragon chases,the strange dragon chases,the strange dragon chases,False,not_attempted,non-equation row,True,True,False,False,False
+76c43525,unit_conversion,33.37,33.38,33.38,False,not_attempted,non-equation row,True,True,False,False,False
+1d08947a,bit_manipulation,10010100,10010100,10010100,False,not_attempted,non-equation row,True,True,False,False,False
+7958e2ea,unit_conversion,45.90,45.90,45.90,False,not_attempted,non-equation row,True,True,False,False,False
+db88075e,text_encryption,bird found the silver message,bird found the silver message,bird found the silver message,False,not_attempted,non-equation row,True,True,False,False,False
+cda3796e,unit_conversion,46.58,46.60,46.60,False,not_attempted,non-equation row,True,True,False,False,False
+4ccc4137,text_encryption,mouse explores beyond wonderland,mouse explores beyond wonderland,mouse explores beyond wonderland,False,not_attempted,non-equation row,True,True,False,False,False
+d9a46958,numeral_system,LXXXVI,LXXXVI,LXXXVI,False,not_attempted,non-equation row,True,True,False,False,False
+bf6249ea,gravity_constant,67.37,67.39,67.39,False,not_attempted,non-equation row,True,True,False,False,False
+0866671e,text_encryption,the strange alice follows,the strange alice follows,the strange alice follows,False,not_attempted,non-equation row,True,True,False,False,False
+7d301a45,text_encryption,king reads around castle,king reads around castle,king reads around castle,False,not_attempted,non-equation row,True,True,False,False,False
+d26f22c3,bit_manipulation,11101100,11101100,11101100,False,not_attempted,non-equation row,True,True,False,False,False
+c7aae192,equation_transform,">""(","\""]","\""]",False,not_numeric_query,query is not a numeric binary expression,False,False,False,False,False
+a6192d29,bit_manipulation,00001000,01111110,01111110,False,not_attempted,non-equation row,False,False,False,False,False
+326532e7,text_encryption,turtle reads inside mountain,turtle reads inside mountain,turtle reads inside mountain,False,not_attempted,non-equation row,True,True,False,False,False
+e4cc7639,equation_transform,113,16,16,False,query_operator_unseen,query_op='*' not present in examples,False,False,False,False,False
+29a8ac06,gravity_constant,32.87,32.87,32.87,False,not_attempted,non-equation row,True,True,False,False,False
+c51cfc80,text_encryption,dragon chases the clever story,dragon chases the clever story,dragon chases the clever story,False,not_attempted,non-equation row,True,True,False,False,False
+eeb60061,bit_manipulation,00000101,00000101,00000101,False,not_attempted,non-equation row,True,True,False,False,False
+67e7b96d,unit_conversion,5.56,5.56,5.56,False,not_attempted,non-equation row,True,True,False,False,False
+c4d9c1cb,unit_conversion,24.94,24.92,24.92,False,not_attempted,non-equation row,True,True,False,False,False
+0d10d1ae,unit_conversion,73.13,73.10,73.10,False,not_attempted,non-equation row,True,True,False,False,False
+844f826c,equation_transform,"/""",`@>``,`@>``,False,not_numeric_query,query is not a numeric binary expression,False,False,False,False,False
+c14582f7,gravity_constant,106.16,106.16,106.16,False,not_attempted,non-equation row,True,True,False,False,False
+6606d605,gravity_constant,200.38,200.39,200.39,False,not_attempted,non-equation row,True,True,False,False,False
+d1e79ef8,text_encryption,the colorful student reads,the colorful student reads,the colorful student reads,False,not_attempted,non-equation row,True,True,False,False,False
+867b8d6c,text_encryption,mouse draws the mysterious mirror,mouse draws the mysterious mirror,mouse draws the mysterious mirror,False,not_attempted,non-equation row,True,True,False,False,False
+f0039d4e,text_encryption,bird reads message,bird reads message,bird reads message,False,not_attempted,non-equation row,True,True,False,False,False
+048cc279,bit_manipulation,01010000,01111000,01111000,False,not_attempted,non-equation row,False,False,False,False,False
+73955ecf,gravity_constant,20.99,20.99,20.99,False,not_attempted,non-equation row,True,True,False,False,False
+20052c2f,bit_manipulation,01100110,01100110,01100110,False,not_attempted,non-equation row,True,True,False,False,False
+1bf3f0f1,unit_conversion,6.97,6.97,6.97,False,not_attempted,non-equation row,True,True,False,False,False
+63500e84,text_encryption,knight explores inside school,knight explores inside school,knight explores inside school,False,not_attempted,non-equation row,True,True,False,False,False
+26e2d26a,gravity_constant,94.29,94.28,94.28,False,not_attempted,non-equation row,True,True,False,False,False
+ce3b9926,gravity_constant,51.0,51.0,51.0,False,not_attempted,non-equation row,True,True,False,False,False
+023739fe,unit_conversion,21.09,21.09,21.09,False,not_attempted,non-equation row,True,True,False,False,False
+c2ef4b48,numeral_system,XXI,XXI,XXI,False,not_attempted,non-equation row,True,True,False,False,False
+89dfa4c2,bit_manipulation,00111010,00111010,00111010,False,not_attempted,non-equation row,True,True,False,False,False
+53329505,bit_manipulation,11011111,11011111,11011111,False,not_attempted,non-equation row,True,True,False,False,False
+93e6fcf8,numeral_system,XIII,XIII,XIII,False,not_attempted,non-equation row,True,True,False,False,False
+0c2243ff,text_encryption,bird writes inside garden,bird writes inside garden,bird writes inside garden,False,not_attempted,non-equation row,True,True,False,False,False
+daae01eb,numeral_system,XCV,XCV,XCV,False,not_attempted,non-equation row,True,True,False,False,False
+46219232,unit_conversion,13.91,13.91,13.91,False,not_attempted,non-equation row,True,True,False,False,False
+127b232a,gravity_constant,43.06,43.06,43.06,False,not_attempted,non-equation row,True,True,False,False,False
+6bf09c5e,gravity_constant,36.6,36.6,36.6,False,not_attempted,non-equation row,True,True,False,False,False
+56acd7ad,unit_conversion,30.19,30.19,30.19,False,not_attempted,non-equation row,True,True,False,False,False
+507c634f,gravity_constant,147.16,147.17,147.17,False,not_attempted,non-equation row,True,True,False,False,False
+b360e5fe,unit_conversion,56.64,56.63,56.63,False,not_attempted,non-equation row,True,True,False,False,False
+360b11e2,numeral_system,XCIV,XCIV,XCIV,False,not_attempted,non-equation row,True,True,False,False,False
+07c96a99,gravity_constant,39.47,39.47,39.47,False,not_attempted,non-equation row,True,True,False,False,False
+ced947c8,bit_manipulation,01001011,01001011,01001011,False,not_attempted,non-equation row,True,True,False,False,False
+0440e6ab,bit_manipulation,01100000,01100000,01100000,False,not_attempted,non-equation row,True,True,False,False,False
+6d4c44d1,gravity_constant,11.95,11.95,11.95,False,not_attempted,non-equation row,True,True,False,False,False
+119fa9e1,numeral_system,XCIII,XCIII,XCIII,False,not_attempted,non-equation row,True,True,False,False,False
+e641791f,bit_manipulation,00010001,00010001,00010001,False,not_attempted,non-equation row,True,True,False,False,False
+bcdf9198,bit_manipulation,11111111,11111111,11111111,False,not_attempted,non-equation row,True,True,False,False,False
+094b8eea,numeral_system,LXXXVI,LXXXVI,LXXXVI,False,not_attempted,non-equation row,True,True,False,False,False
+ce5e0fc1,unit_conversion,13.11,13.11,13.11,False,not_attempted,non-equation row,True,True,False,False,False
+b69391b8,equation_transform,66,66,66,False,operator_not_guarded,"query_op=""'""",True,True,False,False,False
+8193e7e0,equation_transform,??{`,#?&`,#?&`,False,not_numeric_query,query is not a numeric binary expression,False,False,False,False,False
+76de5b28,unit_conversion,17.65,17.65,17.65,False,not_attempted,non-equation row,True,True,False,False,False
+e11a18af,text_encryption,student found in library,student found in library,student found in library,False,not_attempted,non-equation row,True,True,False,False,False
+20cdbdb1,bit_manipulation,11100001,11100001,11100001,False,not_attempted,non-equation row,True,True,False,False,False
+15e79ae0,gravity_constant,15.75,15.75,15.75,False,not_attempted,non-equation row,True,True,False,False,False
+a7f5d296,numeral_system,LXIV,LXIV,LXIV,False,not_attempted,non-equation row,True,True,False,False,False
+48ae04f6,bit_manipulation,00000010,00000010,00000010,False,not_attempted,non-equation row,True,True,False,False,False
+3595c82c,bit_manipulation,10011011,10011011,10011011,False,not_attempted,non-equation row,True,True,False,False,False
+3fc1c520,unit_conversion,10.55,10.55,10.55,False,not_attempted,non-equation row,True,True,False,False,False
+daa00e4c,numeral_system,LXXXIX,LXXXIX,LXXXIX,False,not_attempted,non-equation row,True,True,False,False,False
+5bcb572e,equation_transform,-!#,"""{!","""{!",False,not_numeric_query,query is not a numeric binary expression,False,False,False,False,False
+8c1529e1,equation_transform,-52,-52,-52,False,minus_signed_ambiguous,"signed_predictions=['-52', '47']",True,True,False,False,False
+8fea2d50,gravity_constant,10.96,10.96,10.96,False,not_attempted,non-equation row,True,True,False,False,False
+cdec898a,equation_transform,<?/,>}][?,>}][?,False,not_numeric_query,query is not a numeric binary expression,False,False,False,False,False
+6d32ffae,gravity_constant,60.77,60.77,60.77,False,not_attempted,non-equation row,True,True,False,False,False
+56e1dfa5,unit_conversion,33.48,33.48,33.48,False,not_attempted,non-equation row,True,True,False,False,False
+bca238ee,bit_manipulation,00000000,00000000,00000000,False,not_attempted,non-equation row,True,True,False,False,False
+00d9f682,numeral_system,C,C,C,False,not_attempted,non-equation row,True,True,False,False,False
+5dffe751,bit_manipulation,01100000,01100000,01100000,False,not_attempted,non-equation row,True,True,False,False,False
+44398869,equation_transform,5913,5913,5913,False,operator_not_guarded,query_op='^',True,True,False,False,False
+cf463245,numeral_system,LVI,LVI,LVI,False,not_attempted,non-equation row,True,True,False,False,False
+e9096a58,unit_conversion,15.03,15.04,15.04,False,not_attempted,non-equation row,True,True,False,False,False
+06120e47,bit_manipulation,11110010,11111110,11111110,False,not_attempted,non-equation row,False,False,False,False,False
+1f7407ed,bit_manipulation,00101101,00101101,00101101,False,not_attempted,non-equation row,True,True,False,False,False
+31c04c70,gravity_constant,78.26,78.27,78.27,False,not_attempted,non-equation row,True,True,False,False,False
+cf4de024,numeral_system,LXI,LXI,LXI,False,not_attempted,non-equation row,True,True,False,False,False
+46dd0f22,bit_manipulation,01010000,01010000,01010000,False,not_attempted,non-equation row,True,True,False,False,False
+15b1b62e,unit_conversion,9.20,9.20,9.20,False,not_attempted,non-equation row,True,True,False,False,False
+59b42cc4,unit_conversion,81.25,81.23,81.23,False,not_attempted,non-equation row,True,True,False,False,False
+edf364da,equation_transform,$(%,::{[,::{[,False,not_numeric_query,query is not a numeric binary expression,False,False,False,False,False
+7a9561b2,text_encryption,wizard sees near cave,wizard sees near cave,wizard sees near cave,False,not_attempted,non-equation row,True,True,False,False,False
+d6e5cd59,bit_manipulation,01101111,01101111,01101111,False,not_attempted,non-equation row,True,True,False,False,False
+cad363de,numeral_system,LXXIV,LXXIV,LXXIV,False,not_attempted,non-equation row,True,True,False,False,False
+1a2ac571,gravity_constant,13.94,13.94,13.94,False,not_attempted,non-equation row,True,True,False,False,False
+339149c9,equation_transform,3,3,3,False,minus_signed_ambiguous,signed_predictions=[],True,True,False,False,False
+290cc78d,text_encryption,teacher draws through castle,teacher draws through castle,teacher draws through castle,False,not_attempted,non-equation row,True,True,False,False,False
+e1f3ffbb,bit_manipulation,11111010,11111011,11111011,False,not_attempted,non-equation row,False,False,False,False,False
+a989f88c,numeral_system,XCVII,XCVII,XCVII,False,not_attempted,non-equation row,True,True,False,False,False
+336399f4,numeral_system,LXXIV,LXXIV,LXXIV,False,not_attempted,non-equation row,True,True,False,False,False
+3051bffe,text_encryption,hatter found crystal,hatter found crystal,hatter found crystal,False,not_attempted,non-equation row,True,True,False,False,False
+4c327b55,bit_manipulation,11011100,11011110,11011110,False,not_attempted,non-equation row,False,False,False,False,False
+ab9e5b48,gravity_constant,15.92,15.92,15.92,False,not_attempted,non-equation row,True,True,False,False,False
+0429104b,unit_conversion,29.61,29.62,29.62,False,not_attempted,non-equation row,True,True,False,False,False
+f82a6f1c,numeral_system,LXXXV,LXXXV,LXXXV,False,not_attempted,non-equation row,True,True,False,False,False
+0f2dec86,bit_manipulation,10111000,10111000,10111000,False,not_attempted,non-equation row,True,True,False,False,False
+14cca3a2,unit_conversion,78.58,78.58,78.58,False,not_attempted,non-equation row,True,True,False,False,False
+e36a0065,bit_manipulation,01110110,01110110,01110110,False,not_attempted,non-equation row,True,True,False,False,False
+c7844441,equation_transform,:/$^,:/$^,:/$^,False,not_numeric_query,query is not a numeric binary expression,True,True,False,False,False
+7e47c718,gravity_constant,62.61,62.62,62.62,False,not_attempted,non-equation row,True,True,False,False,False
+84437fac,unit_conversion,7.95,7.95,7.95,False,not_attempted,non-equation row,True,True,False,False,False
+5201041d,numeral_system,VII,VII,VII,False,not_attempted,non-equation row,True,True,False,False,False
+005ad22a,text_encryption,king chases castle,king chases castle,king chases castle,False,not_attempted,non-equation row,True,True,False,False,False
+c3fb6417,gravity_constant,57.81,57.81,57.81,False,not_attempted,non-equation row,True,True,False,False,False
+16d0c65e,gravity_constant,73.6,73.59,73.59,False,not_attempted,non-equation row,True,True,False,False,False
+017a161b,text_encryption,rabbit creates in ocean,rabbit creates in ocean,rabbit creates in ocean,False,not_attempted,non-equation row,True,True,False,False,False
+fdada8cd,numeral_system,XXIII,XXIII,XXIII,False,not_attempted,non-equation row,True,True,False,False,False
+3a5c564c,numeral_system,LXXVIII,LXXVIII,LXXVIII,False,not_attempted,non-equation row,True,True,False,False,False
+21261dc6,equation_transform,-25,-25,-25,False,minus_signed_ambiguous,signed_predictions=[],True,True,False,False,False
+53aca3d8,gravity_constant,50.9,50.9,50.9,False,not_attempted,non-equation row,True,True,False,False,False
+1c4fe8b4,unit_conversion,23.25,23.24,23.24,False,not_attempted,non-equation row,True,True,False,False,False
+c0d3279f,numeral_system,LXXIII,LXXIII,LXXIII,False,not_attempted,non-equation row,True,True,False,False,False
+0e3d5b3d,numeral_system,XLVII,XLVII,XLVII,False,not_attempted,non-equation row,True,True,False,False,False
+6eadf9a5,numeral_system,XI,XI,XI,False,not_attempted,non-equation row,True,True,False,False,False
+5f06f595,gravity_constant,7.8,7.8,7.8,False,not_attempted,non-equation row,True,True,False,False,False
+cce4b469,numeral_system,I,I,I,False,not_attempted,non-equation row,True,True,False,False,False
+79a02d7d,text_encryption,rabbit dreams the wise map,rabbit dreams the wise map,rabbit dreams the wise map,False,not_attempted,non-equation row,True,True,False,False,False
+0978d9f3,gravity_constant,52.38,52.37,52.37,False,not_attempted,non-equation row,True,True,False,False,False
+70bc42af,bit_manipulation,10101010,10101010,10101010,False,not_attempted,non-equation row,True,True,False,False,False
+0848cbc0,gravity_constant,127.07,127.06,127.06,False,not_attempted,non-equation row,True,True,False,False,False
+4dbec546,equation_transform,611,611,611,False,add_no_unique_direct_variant,direct_add=[]; baseline=611,True,True,False,False,False
+4f8d87f5,numeral_system,XIII,XIII,XIII,False,not_attempted,non-equation row,True,True,False,False,False
+0c2407ef,bit_manipulation,11000011,11000011,11000011,False,not_attempted,non-equation row,True,True,False,False,False
+18ad64a2,unit_conversion,36.44,36.43,36.43,False,not_attempted,non-equation row,True,True,False,False,False
+939273d7,bit_manipulation,11100110,11100110,11100110,False,not_attempted,non-equation row,True,True,False,False,False
+8082a958,bit_manipulation,00000000,00000000,00000000,False,not_attempted,non-equation row,True,True,False,False,False
+fd48ee2f,bit_manipulation,10110100,10110100,10110100,False,not_attempted,non-equation row,True,True,False,False,False
+c7e1ae7d,gravity_constant,99.81,99.83,99.83,False,not_attempted,non-equation row,True,True,False,False,False
+65a42d6a,gravity_constant,87.62,87.62,87.62,False,not_attempted,non-equation row,True,True,False,False,False
+1dd697e1,text_encryption,the curious bird creates,the curious bird creates,the curious bird creates,False,not_attempted,non-equation row,True,True,False,False,False
+4eb990f6,bit_manipulation,00000001,00000001,00000001,False,not_attempted,non-equation row,True,True,False,False,False
+85af23eb,bit_manipulation,00001111,00001111,00001111,False,not_attempted,non-equation row,True,True,False,False,False
+2f18b11f,gravity_constant,118.49,118.49,118.49,False,not_attempted,non-equation row,True,True,False,False,False
+30227ca4,gravity_constant,15.61,15.61,15.61,False,not_attempted,non-equation row,True,True,False,False,False
+9147f188,unit_conversion,40.55,40.55,40.55,False,not_attempted,non-equation row,True,True,False,False,False
+56693c1b,unit_conversion,78.61,78.60,78.60,False,not_attempted,non-equation row,True,True,False,False,False
+0e009c6d,equation_transform,`?\!,@?`?,@?`?,False,not_numeric_query,query is not a numeric binary expression,False,False,False,False,False
+7e184ef2,numeral_system,LIII,LIII,LIII,False,not_attempted,non-equation row,True,True,False,False,False
+b0bf8ae4,numeral_system,IV,IV,IV,False,not_attempted,non-equation row,True,True,False,False,False
+c143db59,gravity_constant,26.28,26.28,26.28,False,not_attempted,non-equation row,True,True,False,False,False
+d2ac699b,bit_manipulation,10001011,10001011,10001011,False,not_attempted,non-equation row,True,True,False,False,False
+b4b73143,equation_transform,>\:,>!!/,>!!/,False,not_numeric_query,query is not a numeric binary expression,False,False,False,False,False
+7faeba59,text_encryption,teacher studies inside forest,teacher studies inside forest,teacher studies inside forest,False,not_attempted,non-equation row,True,True,False,False,False
+8f1887d6,unit_conversion,27.92,27.92,27.92,False,not_attempted,non-equation row,True,True,False,False,False
+411a11d5,gravity_constant,72.05,72.07,72.07,False,not_attempted,non-equation row,True,True,False,False,False
+53db9c58,unit_conversion,67.60,67.60,67.60,False,not_attempted,non-equation row,True,True,False,False,False
+3a148f6a,bit_manipulation,00100111,00100111,00100111,False,not_attempted,non-equation row,True,True,False,False,False
+51c682af,text_encryption,queen sees door,queen sees door,queen sees door,False,not_attempted,non-equation row,True,True,False,False,False
+0e467c7b,unit_conversion,53.29,53.30,53.30,False,not_attempted,non-equation row,True,True,False,False,False
+468ea73b,text_encryption,bird writes the wise castle,bird writes the wise castle,bird writes the wise castle,False,not_attempted,non-equation row,True,True,False,False,False
+0047365c,unit_conversion,10.62,10.61,10.61,False,not_attempted,non-equation row,True,True,False,False,False
+66c64e8f,unit_conversion,19.31,19.30,19.30,False,not_attempted,non-equation row,True,True,False,False,False
+7b8e4432,text_encryption,queen creates treasure,queen creates treasure,queen creates treasure,False,not_attempted,non-equation row,True,True,False,False,False
+861cb154,equation_transform,2271,10,10,False,query_operator_unseen,query_op='!' not present in examples,False,False,False,False,False
+90feb0c5,equation_transform,:<],?>>>,?>>>,False,not_numeric_query,query is not a numeric binary expression,False,False,False,False,False
+e43520a7,gravity_constant,3.89,3.89,3.89,False,not_attempted,non-equation row,True,True,False,False,False
+c541eb82,equation_transform,-01,-01,-01,False,minus_model_not_opposite_sign,candidate=-01; baseline=-01,True,True,False,False,False
+70a270e6,numeral_system,VIII,VIII,VIII,False,not_attempted,non-equation row,True,True,False,False,False
+54892cac,unit_conversion,71.91,71.90,71.90,False,not_attempted,non-equation row,True,True,False,False,False
+ddc0b4e2,numeral_system,XIII,XIII,XIII,False,not_attempted,non-equation row,True,True,False,False,False
+a42848d1,text_encryption,wizard discovers the strange key,wizard discovers the strange key,wizard discovers the strange key,False,not_attempted,non-equation row,True,True,False,False,False
+755b92f8,unit_conversion,61.05,61.03,61.03,False,not_attempted,non-equation row,True,True,False,False,False
+ec466776,text_encryption,teacher creates the magical castle,teacher creates the magical castle,teacher creates the magical castle,False,not_attempted,non-equation row,True,True,False,False,False
+17a00c5a,numeral_system,LXI,LXI,LXI,False,not_attempted,non-equation row,True,True,False,False,False
+b0dc045a,numeral_system,XCIX,XCIX,XCIX,False,not_attempted,non-equation row,True,True,False,False,False
+190b9dad,text_encryption,rabbit studies the colorful crystal,rabbit studies the colorful crystal,rabbit studies the colorful crystal,False,not_attempted,non-equation row,True,True,False,False,False
+f9e92cb2,unit_conversion,58.32,58.33,58.33,False,not_attempted,non-equation row,True,True,False,False,False
+b9f1d959,equation_transform,:>,"$""\[""","$""\[""",False,not_numeric_query,query is not a numeric binary expression,False,False,False,False,False
+215fda9c,gravity_constant,18.29,18.29,18.29,False,not_attempted,non-equation row,True,True,False,False,False
+66e4acb6,gravity_constant,25.39,25.39,25.39,False,not_attempted,non-equation row,True,True,False,False,False
+5374b4ba,bit_manipulation,10101100,10101100,10101100,False,not_attempted,non-equation row,True,True,False,False,False
+b318276f,text_encryption,queen follows near palace,queen follows near palace,queen follows near palace,False,not_attempted,non-equation row,True,True,False,False,False
+05195c8e,numeral_system,XCIV,XCIV,XCIV,False,not_attempted,non-equation row,True,True,False,False,False
+ca5db1c0,equation_transform,^,"(""'|","(""'|",False,not_numeric_query,query is not a numeric binary expression,False,False,False,False,False
+8eaf760c,gravity_constant,57.81,57.81,57.81,False,not_attempted,non-equation row,True,True,False,False,False
+16e73f0e,bit_manipulation,00000001,00000001,00000001,False,not_attempted,non-equation row,True,True,False,False,False
+e8e3924d,text_encryption,dragon discovers the magical message,dragon discovers the magical message,dragon discovers the magical message,False,not_attempted,non-equation row,True,True,False,False,False
+684013e1,text_encryption,student explores the bright crystal,student explores the bright crystal,student explores the bright crystal,False,not_attempted,non-equation row,True,True,False,False,False
+87007054,bit_manipulation,10111111,10111111,10111111,False,not_attempted,non-equation row,True,True,False,False,False
+b8aa3072,bit_manipulation,00000011,00000111,00000111,False,not_attempted,non-equation row,False,False,False,False,False
+5b43f7fc,gravity_constant,92.16,92.16,92.16,False,not_attempted,non-equation row,True,True,False,False,False
+5b90765a,numeral_system,XXI,XXI,XXI,False,not_attempted,non-equation row,True,True,False,False,False
+5e5ebad6,text_encryption,the magical king follows,the magical king follows,the magical king follows,False,not_attempted,non-equation row,True,True,False,False,False
+9f1ff166,equation_transform,[,"""]'/","""]'/",False,not_numeric_query,query is not a numeric binary expression,False,False,False,False,False
+0a3c8962,gravity_constant,54.36,54.37,54.37,False,not_attempted,non-equation row,True,True,False,False,False
+9916e79d,unit_conversion,53.26,53.25,53.25,False,not_attempted,non-equation row,True,True,False,False,False
+82ae858c,bit_manipulation,11001101,11111101,11111101,False,not_attempted,non-equation row,False,False,False,False,False
+a189d177,text_encryption,teacher watches beyond wonderland,teacher watches beyond wonderland,teacher watches beyond wonderland,False,not_attempted,non-equation row,True,True,False,False,False
+1282c5c5,bit_manipulation,00001110,00001110,00001110,False,not_attempted,non-equation row,True,True,False,False,False
+2ffd3f41,numeral_system,XXXV,XXXV,XXXV,False,not_attempted,non-equation row,True,True,False,False,False
+b61bb6c6,gravity_constant,7.75,7.75,7.75,False,not_attempted,non-equation row,True,True,False,False,False
+4f8039dc,text_encryption,mouse explores the hidden mirror,mouse explores the hidden mirror,mouse explores the hidden mirror,False,not_attempted,non-equation row,True,True,False,False,False
+432b1110,equation_transform,%[:?,\{<?,\{<?,False,not_numeric_query,query is not a numeric binary expression,False,False,False,False,False
+3ee352fa,unit_conversion,12.18,12.18,12.18,False,not_attempted,non-equation row,True,True,False,False,False
+8273103b,unit_conversion,55.10,55.09,55.09,False,not_attempted,non-equation row,True,True,False,False,False
+f333b67f,equation_transform,100,100,100,False,operator_not_guarded,query_op='<',True,True,False,False,False
+f7d26b8d,equation_transform,/@,[}}\,[}}\,False,not_numeric_query,query is not a numeric binary expression,False,False,False,False,False
+e89c56a6,numeral_system,XI,XI,XI,False,not_attempted,non-equation row,True,True,False,False,False
+30196117,numeral_system,LXXIX,LXXIX,LXXIX,False,not_attempted,non-equation row,True,True,False,False,False
+c2b9bbcf,unit_conversion,33.01,33.03,33.03,False,not_attempted,non-equation row,True,True,False,False,False
+f5631f08,unit_conversion,61.92,61.90,61.90,False,not_attempted,non-equation row,True,True,False,False,False
+5ba26f21,bit_manipulation,01011100,01111110,01111110,False,not_attempted,non-equation row,False,False,False,False,False
+a00fe76a,bit_manipulation,10111011,10111011,10111011,False,not_attempted,non-equation row,True,True,False,False,False
+8e56a42e,equation_transform,%/<>,%/<>,%/<>,False,not_numeric_query,query is not a numeric binary expression,True,True,False,False,False
+ef6b6bc3,text_encryption,alice writes message,alice writes message,alice writes message,False,not_attempted,non-equation row,True,True,False,False,False
+22844f06,text_encryption,wizard found mirror,wizard found mirror,wizard found mirror,False,not_attempted,non-equation row,True,True,False,False,False
+fab9831d,gravity_constant,181.79,181.8,181.8,False,not_attempted,non-equation row,True,True,False,False,False
+c42412f4,numeral_system,LXXIV,LXXIV,LXXIV,False,not_attempted,non-equation row,True,True,False,False,False
+5eb5a358,gravity_constant,8.41,8.41,8.41,False,not_attempted,non-equation row,True,True,False,False,False
+03ed28b0,numeral_system,XCIV,XCIV,XCIV,False,not_attempted,non-equation row,True,True,False,False,False
+77393a4b,numeral_system,LIV,LIV,LIV,False,not_attempted,non-equation row,True,True,False,False,False
+0e3962f6,bit_manipulation,11111110,11111110,11111110,False,not_attempted,non-equation row,True,True,False,False,False
+20f0fac9,equation_transform,2976,65,65,False,query_operator_unseen,query_op='%' not present in examples,False,False,False,False,False
+26e48e98,equation_transform,){|,"""%]%{""","""%]%{""",False,not_numeric_query,query is not a numeric binary expression,False,False,False,False,False
+80a09335,numeral_system,LXXXVI,LXXXVI,LXXXVI,False,not_attempted,non-equation row,True,True,False,False,False
+a2c36fcf,numeral_system,XXXII,XXXII,XXXII,False,not_attempted,non-equation row,True,True,False,False,False
+0290f51a,bit_manipulation,10101111,10101111,10101111,False,not_attempted,non-equation row,True,True,False,False,False
+2f767212,unit_conversion,77.99,78.00,78.00,False,not_attempted,non-equation row,True,True,False,False,False
+ee4ed522,text_encryption,the bright rabbit dreams,the bright rabbit dreams,the bright rabbit dreams,False,not_attempted,non-equation row,True,True,False,False,False
+c4293a0d,text_encryption,the colorful hatter writes,the colorful hatter writes,the colorful hatter writes,False,not_attempted,non-equation row,True,True,False,False,False
+3da50553,text_encryption,bird follows beyond forest,bird follows beyond forest,bird follows beyond forest,False,not_attempted,non-equation row,True,True,False,False,False
+12e6f711,gravity_constant,102.92,102.93,102.93,False,not_attempted,non-equation row,True,True,False,False,False
+f846fc66,gravity_constant,201.31,201.31,201.31,False,not_attempted,non-equation row,True,True,False,False,False
+9c16fd02,numeral_system,LXXIII,LXXIII,LXXIII,False,not_attempted,non-equation row,True,True,False,False,False
+c30a782a,bit_manipulation,01000110,01000110,01000110,False,not_attempted,non-equation row,True,True,False,False,False
+3d24aef4,bit_manipulation,10100101,10100101,10100101,False,not_attempted,non-equation row,True,True,False,False,False
+5501c054,equation_transform,[#>#,!##^,!##^,False,not_numeric_query,query is not a numeric binary expression,False,False,False,False,False
+b5539826,unit_conversion,11.04,11.04,11.04,False,not_attempted,non-equation row,True,True,False,False,False
+ea6d926a,equation_transform,87,37,37,False,query_operator_unseen,query_op='+' not present in examples,False,False,False,False,False
+88afd9a7,unit_conversion,15.67,15.67,15.67,False,not_attempted,non-equation row,True,True,False,False,False
+2306289a,gravity_constant,58.72,58.71,58.71,False,not_attempted,non-equation row,True,True,False,False,False
+dd24b691,text_encryption,alice writes inside castle,alice writes inside castle,alice writes inside castle,False,not_attempted,non-equation row,True,True,False,False,False
+b8084b36,unit_conversion,43.47,43.48,43.48,False,not_attempted,non-equation row,True,True,False,False,False
+67ccce4b,unit_conversion,23.19,23.20,23.20,False,not_attempted,non-equation row,True,True,False,False,False
+7e19acde,unit_conversion,15.69,15.69,15.69,False,not_attempted,non-equation row,True,True,False,False,False

@@ -1,0 +1,5 @@
+name,adapter,preflight_ok,error
+v293_checkpoint_3_v221_contract,/tmp/kg1_v245_adapter_snapshots/v293-h200-v221contract-v274-distill-20260512T002353Z/fb2ce5474b4f/checkpoint-3,True,
+v293_checkpoint_6_v221_contract,/tmp/kg1_v245_adapter_snapshots/v293-h200-v221contract-v274-distill-20260512T002353Z/fb2ce5474b4f/checkpoint-6,True,
+v293_checkpoint_9_v221_contract,/tmp/kg1_v245_adapter_snapshots/v293-h200-v221contract-v274-distill-20260512T002353Z/fb2ce5474b4f/checkpoint-9,True,
+v293_checkpoint_12_v221_contract,/tmp/kg1_v245_adapter_snapshots/v293-h200-v221contract-v274-distill-20260512T002353Z/fb2ce5474b4f/checkpoint-12,True,

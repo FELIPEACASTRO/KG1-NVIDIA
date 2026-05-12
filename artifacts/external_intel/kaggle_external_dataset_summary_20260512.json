@@ -1,0 +1,97 @@
+{
+  "artifacts\\external_intel\\kaggle_datasets_20260512\\kienngx__nemotron-30b-competition-trainingdata-cot-labels\\final_Nemotron_training_data.csv": {
+    "columns": [
+      "id",
+      "prompt",
+      "answer",
+      "generated_cot",
+      "label"
+    ],
+    "label_counts": {
+      "UNKNOWN_NEEDS_RECLASSIFY": 696,
+      "bitwise and binary transformation tasks": 1489,
+      "numerical representation conversion tasks": 1461,
+      "physics-based quantitative reasoning tasks": 1477,
+      "symbolic and algebraic manipulation tasks": 1022,
+      "textual cipher and string transformation tasks": 1853,
+      "unit and measurement transformation tasks": 1502
+    },
+    "path": "artifacts\\external_intel\\kaggle_datasets_20260512\\kienngx__nemotron-30b-competition-trainingdata-cot-labels\\final_Nemotron_training_data.csv",
+    "rows": 9500,
+    "sha256": "61d9e23ceab048ff7549082fb1f46c4fc8260971ffe8bb0f0d487990f0650cde"
+  },
+  "artifacts\\external_intel\\kaggle_datasets_20260512\\kishanvavdara__nemotron-reasoning-traj\\nemotron_traj.csv": {
+    "columns": [
+      "id",
+      "prompt",
+      "generated",
+      "correct answer",
+      "generated answer",
+      "correctness",
+      "problem type"
+    ],
+    "correctness_counts": {
+      "false": 4738,
+      "partial": 339,
+      "true": 4423
+    },
+    "path": "artifacts\\external_intel\\kaggle_datasets_20260512\\kishanvavdara__nemotron-reasoning-traj\\nemotron_traj.csv",
+    "problem type_counts": {
+      "bit_manipulation": 1602,
+      "cipher": 1576,
+      "equation_numeric": 732,
+      "equation_symbolic": 823,
+      "gravity": 1597,
+      "numeral": 1576,
+      "unit_conversion": 1594
+    },
+    "rows": 9500,
+    "sha256": "01da9b309daedf18c9bcff9e0766b3deb7d736a1d350c73ded47775a8b66685e"
+  },
+  "artifacts\\external_intel\\kaggle_datasets_20260512\\konbu17__bit-manipulation-cot-dataset\\bit_manipulation_cot_failed.csv": {
+    "columns": [
+      "id",
+      "prompt",
+      "answer",
+      "generated_cot",
+      "type",
+      "confidence",
+      "method",
+      "n_ambig_bits"
+    ],
+    "path": "artifacts\\external_intel\\kaggle_datasets_20260512\\konbu17__bit-manipulation-cot-dataset\\bit_manipulation_cot_failed.csv",
+    "rows": 374,
+    "sha256": "04bf32a77280398b417b98a71ed93d10f6c9d8e045e2aa072ebdd5d42be76b14"
+  },
+  "artifacts\\external_intel\\kaggle_datasets_20260512\\konbu17__bit-manipulation-cot-dataset\\bit_manipulation_cot_success.csv": {
+    "columns": [
+      "id",
+      "prompt",
+      "answer",
+      "generated_cot",
+      "type",
+      "confidence",
+      "method",
+      "n_ambig_bits"
+    ],
+    "path": "artifacts\\external_intel\\kaggle_datasets_20260512\\konbu17__bit-manipulation-cot-dataset\\bit_manipulation_cot_success.csv",
+    "rows": 1134,
+    "sha256": "8ae7568393acabee873f23b32d3fe701af5906c24927072b69174770f6701e51"
+  },
+  "artifacts\\external_intel\\kaggle_datasets_20260512\\konbu17__bit-manipulation-synthetic-cot\\synthetic_bit_manipulation.csv": {
+    "columns": [
+      "id",
+      "prompt",
+      "answer",
+      "generated_cot",
+      "confidence",
+      "method",
+      "n_ambig_bits",
+      "true_rule",
+      "solver_correct"
+    ],
+    "path": "artifacts\\external_intel\\kaggle_datasets_20260512\\konbu17__bit-manipulation-synthetic-cot\\synthetic_bit_manipulation.csv",
+    "rows": 3000,
+    "sha256": "42c193b35a5f9d2e450c008d4410f7259b44a3b50291b72b7fbe54f7a6647c22"
+  }
+}

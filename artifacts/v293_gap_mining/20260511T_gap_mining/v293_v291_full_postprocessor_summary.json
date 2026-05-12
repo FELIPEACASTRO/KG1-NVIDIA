@@ -1,0 +1,115 @@
+{
+  "applied_rows": 4,
+  "baseline_summary": {
+    "OVERALL": {
+      "accuracy": 0.8690601900739177,
+      "correct": 823,
+      "rows": 947,
+      "truncated": 1
+    },
+    "bit_manipulation": {
+      "accuracy": 0.84375,
+      "correct": 135,
+      "rows": 160,
+      "truncated": 1
+    },
+    "equation_transform": {
+      "accuracy": 0.36129032258064514,
+      "correct": 56,
+      "rows": 155,
+      "truncated": 0
+    },
+    "gravity_constant": {
+      "accuracy": 1.0,
+      "correct": 159,
+      "rows": 159,
+      "truncated": 0
+    },
+    "numeral_system": {
+      "accuracy": 1.0,
+      "correct": 157,
+      "rows": 157,
+      "truncated": 0
+    },
+    "text_encryption": {
+      "accuracy": 1.0,
+      "correct": 157,
+      "rows": 157,
+      "truncated": 0
+    },
+    "unit_conversion": {
+      "accuracy": 1.0,
+      "correct": 159,
+      "rows": 159,
+      "truncated": 0
+    }
+  },
+  "decision": "v274_rules_still_recover_four_equation_rows_on_v291_full_predictions_but_are_not_adapter_only",
+  "gain_ids": [
+    "7688e06e",
+    "274def88",
+    "d1bd7478",
+    "c5b058d6"
+  ],
+  "gains": 4,
+  "input_csv": "artifacts\\v293_gap_mining\\inputs\\v291_full_predictions.csv",
+  "input_sha256": "d9634ea15cb55e17bbfb90229f1cdbfd9b0f5a4cdba0d61848e6f746393dde20",
+  "loss_ids": [],
+  "losses": 0,
+  "postprocessed_summary": {
+    "OVERALL": {
+      "accuracy": 0.8732840549102429,
+      "correct": 827,
+      "rows": 947,
+      "truncated": 1
+    },
+    "bit_manipulation": {
+      "accuracy": 0.84375,
+      "correct": 135,
+      "rows": 160,
+      "truncated": 1
+    },
+    "equation_transform": {
+      "accuracy": 0.3870967741935484,
+      "correct": 60,
+      "rows": 155,
+      "truncated": 0
+    },
+    "gravity_constant": {
+      "accuracy": 1.0,
+      "correct": 159,
+      "rows": 159,
+      "truncated": 0
+    },
+    "numeral_system": {
+      "accuracy": 1.0,
+      "correct": 157,
+      "rows": 157,
+      "truncated": 0
+    },
+    "text_encryption": {
+      "accuracy": 1.0,
+      "correct": 157,
+      "rows": 157,
+      "truncated": 0
+    },
+    "unit_conversion": {
+      "accuracy": 1.0,
+      "correct": 159,
+      "rows": 159,
+      "truncated": 0
+    }
+  },
+  "rule_applied": {
+    "add_direct_over_model_add_variant": 1,
+    "colon_absdiff_unreverse_same_len": 1,
+    "minus_signed_opposite_sign_guarded": 2
+  },
+  "rule_gains": {
+    "add_direct_over_model_add_variant": 1,
+    "colon_absdiff_unreverse_same_len": 1,
+    "minus_signed_opposite_sign_guarded": 2
+  },
+  "rule_losses": {},
+  "schema_version": "kg1_v293_v291_full_postprocessor_signal_v2"
+}

@@ -1,0 +1,42 @@
+{
+  "accuracy": 0.6095238095238096,
+  "adapter_dir": "/tmp/kg1_v245_adapter_snapshots/v293-h200-v221contract-v274-distill-20260512T002353Z/fb2ce5474b4f/checkpoint-12",
+  "base_model_path": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+  "candidate_elapsed_s": 473.3901493549347,
+  "candidate_name": "v293_checkpoint_12_v221_contract",
+  "completion_tokens": 1503067,
+  "config": {
+    "dtype": "auto",
+    "enable_chunked_prefill": true,
+    "enable_prefix_caching": true,
+    "gpu_memory_utilization": 0.85,
+    "max_lora_rank": 32,
+    "max_model_len": 8192,
+    "max_num_seqs": 64,
+    "max_tokens": 7680,
+    "model_name": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+    "model_revision": "cbd3fa9f933d55ef16a84236559f4ee2a0526848",
+    "prompt_suffix": "\nReturn only one line: `\\boxed{answer}`. No reasoning. No explanation.",
+    "temperature": 0.0,
+    "top_p": 1.0,
+    "trust_remote_code": true,
+    "warmup_rows": 0
+  },
+  "correct": 192,
+  "generated_at_utc": "2026-05-12T00:59:46.287678+00:00",
+  "generation_elapsed_s": 473.3170087337494,
+  "label": "v293_hf_weak_v293_checkpoint_12_v221_contract",
+  "outputs": {
+    "per_task_csv": "/tmp/kg1_v245_weak_eval/v293-h200-v221contract-v274-distill-20260512T002353Z/eval/v293_checkpoint_12_v221_contract/v293_hf_weak_v293_checkpoint_12_v221_contract_per_task.csv",
+    "postprocessed_raw_predictions_pre_score_csv": "",
+    "predictions_csv": "/tmp/kg1_v245_weak_eval/v293-h200-v221contract-v274-distill-20260512T002353Z/eval/v293_checkpoint_12_v221_contract/v293_hf_weak_v293_checkpoint_12_v221_contract_predictions.csv",
+    "raw_predictions_pre_score_csv": "/tmp/kg1_v245_weak_eval/v293-h200-v221contract-v274-distill-20260512T002353Z/eval/v293_checkpoint_12_v221_contract/v293_hf_weak_v293_checkpoint_12_v221_contract_raw_predictions_pre_score.csv",
+    "report_json": "/tmp/kg1_v245_weak_eval/v293-h200-v221contract-v274-distill-20260512T002353Z/eval/v293_checkpoint_12_v221_contract/v293_hf_weak_v293_checkpoint_12_v221_contract_eval_report.json"
+  },
+  "prediction_postprocessor": "none",
+  "rows": 315,
+  "seed": 42,
+  "tokens_per_second": 3175.603184050177,
+  "truncated": 0,
+  "truncation_rate": 0.0
+}

@@ -1,0 +1,9 @@
+# Generated caches
+__pycache__/
+*.pyc
+
+# Large/generated V293 local artifacts; manifests and summaries are tracked instead.
+artifacts/v293_gap_mining/inputs/
+artifacts/v293_v274_distill_dataset/*/*_train.jsonl
+artifacts/v293_v274_distill_dataset/*/*_val.jsonl
+artifacts/v293_hf_h200_v274_distill_launch/v293_eval_results/*.log
