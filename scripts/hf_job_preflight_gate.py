@@ -232,7 +232,13 @@ def check_training_env() -> None:
         "lora_r": env_int("LORA_R"),
         "lora_alpha": env_int("LORA_ALPHA"),
         "target_modules": env_str("LORA_TARGET_MODULES"),
+        "target_parameters": env_str("LORA_TARGET_PARAMETERS"),
         "trainable_lora_modules": env_str("TRAINABLE_LORA_MODULES"),
+        "trainable_lora_name_substrings": env_str("TRAINABLE_LORA_NAME_SUBSTRINGS"),
+        "require_lora_target_parameter_match": env_bool("REQUIRE_LORA_TARGET_PARAMETER_MATCH", False),
+        "required_trainable_lora_name_substrings": env_str(
+            "REQUIRED_TRAINABLE_LORA_NAME_SUBSTRINGS"
+        ),
     }
     log_json("training_env_gate", summary)
 

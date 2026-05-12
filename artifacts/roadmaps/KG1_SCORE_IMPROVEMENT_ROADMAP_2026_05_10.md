@@ -5270,8 +5270,12 @@ Status observado:
 Decisao:
 
 - job concluiu o treino ate o step 36 com melhoria de eval_loss;
-- weak-evaluar no minimo `checkpoint-30` e `checkpoint-36`;
-- promover somente se houver ganho real de weak/full contra V291/V303, medido por familia, sem regressao lateral.
+- weak eval H200 concluido em `https://huggingface.co/jobs/felipesp1983/6a03680b7618f125ee2b78bf`;
+- upload de resultados: `https://huggingface.co/felipesp1983/kg1-nemotron-lora-v308-v304-attn-lmhead-v290ckpt6/commit/b37affb1ed7ef1e364d03458e06862a8820a26b1`;
+- `checkpoint-30 = 190/315`, `equation_transform=56/155`, `bit_manipulation=134/160`, truncation `1`;
+- `checkpoint-36 = 189/315`, `equation_transform=56/155`, `bit_manipulation=133/160`, truncation `0`;
+- decisao: rejeitar V308 para full/package/submit. A melhoria de `eval_loss` nao transferiu para ACC; ela corroeu `bit_manipulation`.
+- implicacao: nao rodar continuacao simples attention/lm_head com mais steps. O proximo treino so pode ser mais ousado se mudar a area treinavel com gate de experts/MoE e kill-switch por familia.
 
 ### V309 Kaggle kernel review requested 2026-05-12
 
@@ -5302,3 +5306,41 @@ Impacto no roadmap:
 3. Criar um smoke V309/V310 Huikang-style somente depois de implementar gate de empacotamento expert/Mamba/lm_head.
 4. Usar `aimo2-tir-rm` como inspiracao para teacher/verifier de `equation_transform`, nao como submissao direta.
 5. Usar logits processors apenas em probes/teacher data para reduzir saida malformada; nao considerar como pacote KG1 oficial enquanto a avaliacao for adapter-only.
+
+### V310 roadmap revision - bolder but guarded expert-aware training
+
+Motivo do ajuste:
+
+- O primeiro resultado weak do V308 durante a avaliacao H200 foi negativo: `v308_checkpoint_30_v221_contract = 190/315`, `equation_transform=56/155`, `bit_manipulation=134/160`, truncation `1`.
+- Esse resultado melhora pouco ou nada em equation e perde `bit_manipulation` contra o baseline operacional `v290_checkpoint_6`/V291 (`bit=135-136`). Logo, aumentar simplesmente steps/LR no mesmo PEFT path nao e aceitavel.
+- A revisao V309 mostrou um gap tecnico concreto: a receita Huikang forte usa experts MoE e conversao/validacao propria, enquanto o caminho V308 registrou `target_parameters` configurados sem evidencia de match treinavel efetivo.
+
+Nova decisao:
+
+1. Rejeitar V308 inteiro para full/package/submit: `checkpoint-30` e `checkpoint-36` ficaram abaixo de V291/V290 no weak gate.
+2. Nao rodar continuacao simples `attention/lm_head` com mais steps.
+3. Implementar V310 como smoke mais ousado na arquitetura, nao no LR:
+   - init: V290 `checkpoint-6`;
+   - dataset: V304, mesmos hashes ja validados;
+   - trainable principal: `q_proj,k_proj,v_proj,o_proj,lm_head`;
+   - trainable adicional por nome: `mlp.experts.gate_up_proj,mlp.experts.down_proj`;
+   - gate novo: falhar se `LORA_TARGET_PARAMETERS` nao gerar tensores LoRA correspondentes;
+   - gate novo: falhar se os substrings de experts nao ficarem realmente treinaveis;
+   - LR menor que V308 (`6e-9 -> 2e-9`) para compensar maior area treinavel;
+   - steps curtos (`18`) com checkpoint a cada `3`;
+   - weak eval inicial somente de `checkpoint-6/12/18` para controlar custo.
+4. Promover V310 apenas se bater um destes criterios sem regressao:
+   - `total>=193` com `equation>=56` e `bit>=135`;
+   - ou `equation>=57` com `bit>=135`;
+   - ou `bit>=136` com `equation>=56` e total acima de V291.
+5. Se V310 falhar, parar treinos LoRA PEFT incrementais e mover para um dos dois caminhos:
+   - gate de empacotamento Huikang/Tinker-style completo antes de qualquer treino longo;
+   - ou ampliar solver/verifier CPU de `equation_symbolic_punct`, porque o ganho V302/V306 ainda parece depender de regra/verifier em inferencia.
+
+Implementacao iniciada:
+
+- `scripts/hf_job_train_v90.py` agora aceita `TRAINABLE_LORA_NAME_SUBSTRINGS`, `REQUIRED_TRAINABLE_LORA_NAME_SUBSTRINGS` e `REQUIRE_LORA_TARGET_PARAMETER_MATCH`.
+- O filtro de LoRA agora reporta tensores/parametros treinaveis por modulo e por substring, alem de contar se cada `LORA_TARGET_PARAMETERS` realmente apareceu no modelo vivo.
+- `scripts/hf_job_preflight_gate.py` agora loga esses novos campos para auditoria antes de gasto em HF.
+- Novo launcher: `artifacts/v310_hf_h200_v304_expert_attn_launch/launch_v310_hf_h200_v304_expert_attn.py`.
+- Novo launcher de weak eval: `artifacts/v310_hf_h200_v304_expert_attn_launch/launch_v310_hf_weak_eval.py`.
