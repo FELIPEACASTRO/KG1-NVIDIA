@@ -5344,3 +5344,44 @@ Implementacao iniciada:
 - `scripts/hf_job_preflight_gate.py` agora loga esses novos campos para auditoria antes de gasto em HF.
 - Novo launcher: `artifacts/v310_hf_h200_v304_expert_attn_launch/launch_v310_hf_h200_v304_expert_attn.py`.
 - Novo launcher de weak eval: `artifacts/v310_hf_h200_v304_expert_attn_launch/launch_v310_hf_weak_eval.py`.
+
+Resultado V310:
+
+- HF job: `https://huggingface.co/jobs/felipesp1983/6a036e497618f125ee2b78ec`.
+- O job validou CUDA/H200, dataset V304, hashes, contagens, tokenizacao e carregou o init adapter V290 `checkpoint-6` com `12011/12011` pesos mapeados.
+- O gate falhou antes do treino, com a mensagem: `LORA_TARGET_PARAMETERS were configured but no matching LoRA tensors were found: mlp.experts.gate_up_proj, mlp.experts.down_proj`.
+- Decisao: falha correta e economica. Ela prova que a rota PEFT incremental atual nao esta treinando os experts MoE que a receita Huikang/Tinker-style parece depender. Nao repetir `target_parameters` nesse script sem prova de tensor vivo e treinavel.
+- Implicacao: parar treinos PEFT incrementais simples ate existir uma das duas coisas:
+  - conversao/empacotamento Huikang/Tinker-style validado por shape/key gate;
+  - ou um novo dataset verifier-distilled que gere ganho sem depender de experts MoE.
+
+### V311 verifier/postprocessor-to-LoRA analysis - ANALISE_DESAFIO_IAS_15
+
+Artefato:
+
+- `artifacts/v311_verifier_to_lora_analysis/KG1_V311_VERIFIER_TO_LORA_ANALYSIS.md`
+
+Veredito:
+
+- Nao existe conversao literal de postprocessor/verifier Python para LoRA. O caminho utilizavel e destilacao offline: verifier/postprocessor como professor, nao runtime.
+- Isso valida a tese operacional que ja apareceu em V303/V304: transformar regras V274/V300/V306 em dados de treino adapter-only.
+- O arquivo tambem expoe um gap que ainda nao fechamos: falta pack de negativos/correcoes e pares `chosen/rejected`; V303/V304 foram SFT/trace, mas nao DPO/ORPO nem hard-negative training.
+
+Evidencia cruzada:
+
+- `competition_utils.py` ja fornece extractor/verifier local.
+- `hf_job_train_v90.py` ja suporta loss masking em tokens de resposta.
+- V306 provou sinal local forte: baseline full `823/947` para `838/947`, com `bit_manipulation 135->146` e `equation_transform 56->60`, mas isso ainda e postprocessor/verifier, nao adapter-only.
+- V303 e V304 tentaram internalizar esse sinal em LoRA; V303 nao transferiu ganho e V304 ainda aguarda resultado final/weak. V310 provou que simplesmente abrir experts via PEFT atual nao funciona.
+
+Decisao para roadmap:
+
+1. Nao fazer mais H200 ate o V310 ser encerrado formalmente e seus logs/manifest entrarem no historico.
+2. Implementar primeiro um builder CPU-only `V311/V312 verifier-distillation preference pack`:
+   - positivos: regras V274/V300/V306 e variantes sinteticas fora do weak;
+   - negativos: predicao baseline errada, bit quase certo, sinal numerico invertido, output sem box, multiplos boxes, texto depois do box;
+   - formato canonico novo: exatamente uma saida `Final answer: \boxed{ANSWER}` ou `\boxed{ANSWER}`;
+   - gates: zero weak-row training, prompt hash/dedupe, tokenizacao real, formato canonico, source guard, e manifest com contagem de positivos/negativos por familia.
+3. So depois considerar DPO/ORPO/KTO em HF. Antes disso, DPO e custo/complexidade sem pack auditado.
+4. Nao usar `merge_and_unload()` como caminho de submissao; manter adapter-only.
+5. Nao usar `r > 32` enquanto o runtime/competicao mantiver limite efetivo `max_lora_rank=32`.
