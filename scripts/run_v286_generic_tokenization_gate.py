@@ -121,13 +121,21 @@ def validate_rows(
             continue
         assistant_content = str(messages[2].get("content", ""))
         final_answer_line = "Final answer: " + answer
+        if assistant_final_answer_mode.startswith("boxed_"):
+            final_answer_line = "Final answer: " + r"\boxed{" + answer + "}"
         if assistant_final_answer_mode == "exact" and assistant_content != final_answer_line:
             bad_rows.append(rid)
             continue
         if assistant_final_answer_mode == "suffix" and not assistant_content.rstrip().endswith(final_answer_line):
             bad_rows.append(rid)
             continue
-        if assistant_final_answer_mode not in {"exact", "suffix"}:
+        if assistant_final_answer_mode == "boxed_exact" and assistant_content != final_answer_line:
+            bad_rows.append(rid)
+            continue
+        if assistant_final_answer_mode == "boxed_suffix" and not assistant_content.rstrip().endswith(final_answer_line):
+            bad_rows.append(rid)
+            continue
+        if assistant_final_answer_mode not in {"exact", "suffix", "boxed_exact", "boxed_suffix"}:
             raise RuntimeError(f"unknown assistant_final_answer_mode={assistant_final_answer_mode!r}")
         if metadata.get("weak_gate_rows_used_for_training") is not False:
             bad_rows.append(rid)
@@ -583,6 +591,62 @@ def self_test() -> int:
         )
         trace_manifest_out = run(trace_args)
         assert trace_manifest_out["decision"]["status"] == "tokenization_gate_passed"
+        boxed_row = {
+            "id": "boxed_trace",
+            "prompt": "Boxed trace question",
+            "answer": "00000101",
+            "family": "bit_manipulation",
+            "subcategory": "toy_boxed_trace",
+            "source": "toy",
+            "messages": [
+                {"role": "system", "content": "system"},
+                {"role": "user", "content": "Boxed trace question"},
+                {"role": "assistant", "content": r"Reason with a boxed rule." + "\n" + r"Final answer: \boxed{00000101}"},
+            ],
+            "metadata": {"source_dataset": "toy", "weak_gate_rows_used_for_training": False},
+        }
+        boxed_train = tmp / "boxed_train.jsonl"
+        boxed_val = tmp / "boxed_val.jsonl"
+        boxed_train.write_text(json.dumps(boxed_row, sort_keys=True) + "\n", encoding="utf-8")
+        boxed_val_row = {
+            **boxed_row,
+            "id": "boxed_trace_val",
+            "prompt": "Boxed trace validation question",
+            "answer": "00000110",
+            "messages": [
+                {"role": "system", "content": "system"},
+                {"role": "user", "content": "Boxed trace validation question"},
+                {"role": "assistant", "content": r"Reason with a boxed validation rule." + "\n" + r"Final answer: \boxed{00000110}"},
+            ],
+        }
+        boxed_val.write_text(json.dumps(boxed_val_row, sort_keys=True) + "\n", encoding="utf-8")
+        boxed_manifest = tmp / "boxed_dataset_manifest.json"
+        write_json(
+            boxed_manifest,
+            {
+                "outputs": {
+                    "train_jsonl": str(boxed_train),
+                    "train_sha256": sha256_file(boxed_train),
+                    "val_jsonl": str(boxed_val),
+                    "val_sha256": sha256_file(boxed_val),
+                }
+            },
+        )
+        boxed_args = argparse.Namespace(
+            dataset_manifest_json=boxed_manifest,
+            output_dir=tmp / "boxed_out",
+            model_name="toy",
+            model_revision="",
+            max_length=2048,
+            max_prompt_truncation_rate=0.0,
+            require_offset_mask=True,
+            min_train_rows=1,
+            min_val_rows=1,
+            use_toy_tokenizer=True,
+            assistant_final_answer_mode="boxed_suffix",
+        )
+        boxed_manifest_out = run(boxed_args)
+        assert boxed_manifest_out["decision"]["status"] == "tokenization_gate_passed"
     print("v286_generic_tokenization_gate_self_test=ok", flush=True)
     return 0
 
@@ -601,9 +665,9 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--min-val-rows", type=int, default=60)
     parser.add_argument(
         "--assistant-final-answer-mode",
-        choices=("exact", "suffix"),
+        choices=("exact", "suffix", "boxed_exact", "boxed_suffix"),
         default="exact",
-        help="Use exact for short-answer rows, suffix for solver traces that end with the final answer line.",
+        help="Use exact for short-answer rows, suffix for solver traces, boxed_* for rows ending in \\boxed{answer}.",
     )
     parser.add_argument("--use-toy-tokenizer", action="store_true")
     parser.add_argument("--self-test", action="store_true")

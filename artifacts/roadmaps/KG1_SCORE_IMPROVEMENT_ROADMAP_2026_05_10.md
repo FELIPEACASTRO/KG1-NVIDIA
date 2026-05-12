@@ -5396,3 +5396,64 @@ Implementacao V311 CPU-only:
 - Resultado: `15` seed gain rows (`bit_manipulation=11`, `equation_transform=4`) e `60` preference rows.
 - Regras capturadas: `fullbyte_safe_ternary=10`, `fullbyte_binary=1`, `minus_signed_opposite_sign_guarded=2`, `colon_absdiff_unreverse_same_len=1`, `add_direct_over_model_add_variant=1`.
 - Importante: `training_authorization=blocked_seed_only_until_synthetic_out_of_gate_variants`. Este pack e seed/diagnostico; nao e dataset final de treino. Proximo passo continua sendo gerar variantes sinteticas fora dos gate rows, tokenizar com tokenizer real e provar que nenhum weak/full-gate row foi usado como treino antes de qualquer HF smoke.
+
+### V312 OpenRouter + verifier synthetic distillation dataset
+
+Artefatos:
+
+- Analise: `artifacts/v312_openrouter_verifier_lora_triage/KG1_V312_OPENROUTER_VERIFIER_LORA_TRIAGE.md`.
+- Builder: `scripts/build_v312_verifier_synthetic_distill_dataset.py`.
+- Output: `artifacts/v312_verifier_synthetic_distill_dataset/20260512T1545Z/`.
+
+Inputs externos auditados:
+
+- `OpenRouter Chat Tue May 12 2026.json`: SHA `8e4bc64d30567ae496cbc2a8dce4c3ade0eba1b00375bc5cb04b486aafe1a03b`, `36` mensagens e `156` itens parseados. Sinal util: consenso contra conversao literal parser/verifier -> LoRA; caminho correto continua sendo destilacao comportamental com professor offline.
+- `ANALISE_DESAFIO_IAS_15.txt`: SHA `26c803e4a5f2bb9a2461ce4c20ab55dc6fe2d05460e71df50f44186afa9362d8`, `5160` linhas. Novos achados incorporados: medir `absorption_ratio`, classificar candidatos como `accepted/postprocess_rescued/hard_negative/format_negative/garbage`, comecar por `check+final` e terminar em `answer-only`, usar DPO/ORPO/RAFT somente depois de pack limpo.
+
+Implementacao V312 CPU-only:
+
+- O builder valida o manifest V311 e bloqueia treino se o seed ainda for usado diretamente.
+- Gera variantes sinteticas fora dos gate rows conhecidos, usando as regras verificadas V311:
+  - `fullbyte_safe_ternary`;
+  - `fullbyte_binary`;
+  - `minus_signed_opposite_sign_guarded`;
+  - `colon_absdiff_unreverse_same_len`;
+  - `add_direct_over_model_add_variant`.
+- Gera SFT canonico com trace curto e final exatamente no formato `Final answer: \boxed{ANSWER}`.
+- Gera pares de preferencia para hard negatives e format negatives:
+  - `hard_negative_bit_flip_one`;
+  - `hard_negative_equation_near_miss`;
+  - `format_negative_no_box`;
+  - `format_negative_multiple_boxes`;
+  - `format_negative_trailing_text`.
+
+Resultado V312:
+
+- `sft_train`: `204` linhas, `bit_manipulation=132`, `equation_transform=72`.
+- `sft_val`: `51` linhas, `bit_manipulation=33`, `equation_transform=18`.
+- `preferences_train`: `816` pares.
+- `preferences_val`: `204` pares.
+- `reference_id_overlap=0` e `reference_prompt_overlap=0` contra V221 weak `315` e V291 full predictions `947`.
+- Hashes:
+  - SFT train `352fb0cdcf8bf1505e81a2cc2c0b24bae790cfe1c1441a811d12db0b27594f5c`;
+  - SFT val `7e9d76277fc5adab680c5a6e53877880c14bcc6265b6469ef9e9737ee26b4153`;
+  - preferences train `f923b465a29c634f90e6d9ddf9075a0f33c1d5a2f3914ce9c725f0a18804b871`;
+  - preferences val `55c9632b6d65cf475b4acab952a3947249b44365b2e72cd68083aee5445c57be`.
+
+Decisao:
+
+- V312 fecha o gap de "seed-only" do V311, mas ainda nao autoriza H100/H200.
+- `training_authorization=blocked_until_real_tokenization_and_no_regression_gate`.
+- Gate de tokenizacao real executado em `artifacts/v312_verifier_synthetic_tokenization_gate/20260512T1545Z/` com `scripts/run_v286_generic_tokenization_gate.py` em modo `boxed_suffix`:
+  - tokenizer `nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16`, revision `cbd3fa9f933d55ef16a84236559f4ee2a0526848`;
+  - `train_rows=204`, `val_rows=51`;
+  - offset masks `204/204` treino e `51/51` validacao;
+  - `prompt_truncation_rate=0.0`, `completion_tokens_dropped=0`;
+  - `train_token_max=752`, `val_token_max=752`;
+  - decisao do gate: `tokenization_gate_passed`.
+- Antes de qualquer full eval ou pacote, ainda falta:
+  1. treino curto SFT adapter-only em HF com kill-switch por familia;
+  2. weak eval antes de qualquer full eval;
+  3. medir `absorption_ratio = (adapter_raw - base_raw) / (postprocessor_teacher - base_raw)`;
+  4. bloquear DPO/ORPO/RAFT ate existir um SFT que demonstre transferencia parcial sem regressao.
+- Criterio minimo para continuar: qualquer ganho adapter-only deve manter `bit_manipulation>=136/160`, `equation_transform>=60/155`, truncation `0` e nenhuma regressao contra V291/V306 nos rows conhecidos.
