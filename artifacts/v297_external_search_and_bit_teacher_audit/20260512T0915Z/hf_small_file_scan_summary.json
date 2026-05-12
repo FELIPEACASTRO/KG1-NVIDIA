@@ -1,0 +1,15 @@
+[
+  {
+    "repo_id": "jasonkung98/NVIDIA-Nemotron-Model-Reasoning-Challenge",
+    "filename": "train.csv",
+    "size": 3069304,
+    "sha256": "d204af160633b638448723a437aa51c0db70fd0b64ff92f6ad6f52e5ac6377fa",
+    "rows": 9500,
+    "columns": [
+      "id",
+      "prompt",
+      "answer"
+    ],
+    "weak_overlap_ids": 315
+  }
+]

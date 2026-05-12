@@ -1,0 +1,20 @@
+{
+  "schema_version": "kg1_v297_external_bit_reference_weak_audit_v1",
+  "weak_csv": "artifacts\\v290_rank19_micro_patch_reference\\runtime_artifacts\\v245_weak_eval_bridge\\v245-weak-bridge-hfonly-20260510T1950Z\\v221_weak_315.csv",
+  "weak_sha256": "85da758e14d57ea40270de5747f98726a0ad0b6d1795bff7dd46183005e0f9b6",
+  "reference_url": "https://raw.githubusercontent.com/tonghuikang/nemotron/82bd1880aa8a8986ad572ccd17ae35b2b5c7da85/reasoners/bit_manipulation.py",
+  "reference_source_sha256": "6a94cf1f4b1cea4823c1787f4cd9aa57cc091b27904b9a5d8fe3c146100efe43",
+  "license_observation": "GitHub API reports license=null for tonghuikang/nemotron; use as external evidence only.",
+  "rows_total": 315,
+  "bit_rows": 160,
+  "reference_correct": 136,
+  "reference_accuracy": 0.85,
+  "current_correct": 125,
+  "current_accuracy": 0.78125,
+  "both_correct": 122,
+  "reference_gain_vs_current": 14,
+  "reference_loss_vs_current": 3,
+  "parse_failed": 0,
+  "none_answer": 0,
+  "detail_csv": "artifacts\\v297_external_search_and_bit_teacher_audit\\20260512T0915Z\\v297_external_bit_reference_weak_audit_details.csv"
+}

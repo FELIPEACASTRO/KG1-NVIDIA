@@ -4764,3 +4764,120 @@ Escopo: buscar via Kaggle SDK autenticado tudo que `Tong Hui Kang` / `huikang` p
   - weak gate minimo para liberar full: `overall >= 193`, `equation >= 56`, `bit >= 137`, `trunc <= 1`;
   - se o treino for equation-first, manter `bit >= 136`.
 - A rota `min logprob` deve entrar como diagnostico, nao como unico criterio de selecao: adapter so avanca se weak/full medidos melhorarem.
+
+## Atualizacao 2026-05-12 - V297 busca HF/Kaggle e auditoria externa bit weak
+
+Escopo: repetir a varredura externa com foco estrito em ganho mensuravel para `bit_manipulation` e `equation_transform`, sem baixar arquivos grandes nem gastar GPU HF sem prova CPU.
+
+### Evidencia HF
+
+- Repos confirmados pela busca HF/API:
+  - `andy279/nemotron-reasoning-challenge`: contem `sft_train.jsonl` e `sft_val.jsonl`; o README declara `49,290` exemplos SFT de treino e `1,165` exemplos de validacao.
+  - `andy279/nemotron-reasoning-challenge-raw-traces`: contem traces relevantes como `solver_bit_manipulation_traces_merged.jsonl`, `solver_transformation_traces_merged.jsonl` e `solver_transformation_traces_gpt54.jsonl`.
+  - `nvidia/Puzzle-KD-Nemotron-Post-Training-Dataset-v2`: dataset amplo de post-training, util apenas como fonte secundaria de raciocinio/verifier.
+  - `jasonkung98/NVIDIA-Nemotron-Model-Reasoning-Challenge`: espelho pequeno do `train.csv`; SHA256 igual ao oficial `d204af160633b638448723a437aa51c0db70fd0b64ff92f6ad6f52e5ac6377fa`.
+- Estado de acesso:
+  - os datasets `andy279` estao gated e o token local nao tem aprovacao; tentativas de baixar apenas arquivos pequenos (`sft_val.jsonl`, `solver_transformation_traces_gpt54.jsonl`, `ds_traces_thinking_distilled.jsonl`) retornaram `403`.
+  - nenhum arquivo grande gated foi mantido no disco.
+- Decisao:
+  - `andy279` permanece P0 se o acesso for liberado, porque e a fonte mais alinhada a SFT/traces das familias fracas;
+  - sem acesso, nao usar HF GPU para tentar compensar com treino cego.
+
+### Evidencia Kaggle de discussoes bit/equation
+
+Artefatos:
+
+- `artifacts/v297_external_search_and_bit_teacher_audit/20260512T0915Z/kaggle_relevant_bit_equation_discussions_dump.json`
+- `artifacts/v297_external_search_and_bit_teacher_audit/20260512T0915Z/kaggle_relevant_bit_equation_discussions_summary.md`
+
+Achados acionaveis:
+
+- `bit_manipulation`:
+  - a discussao `690307` continua sendo a principal evidencia: solver por relacao de bits e stride atinge `1364/1602 = 85.14%` no train oficial.
+  - a discussao `688461` amplia o espaco util: resolver cada bit como funcao booleana independente e testar constantes, identidade, NOT, gates de 2 entradas, depois 3 entradas (`MAJ`, `CHO`, `PAR3`, combinadores AO/OA/AX/OX/XA/XO) e 4 entradas.
+  - as discussoes `683866` e `690756` alertam que busca per-bit muito livre pode divergir: existem varias regras que encaixam exemplos e predizem query diferente. Portanto a hierarquia deve ser conservadora e medir perdas, nao apenas cobertura.
+- `equation_transform`:
+  - `684432` e `689877` confirmam o gargalo: muitos problemas tem poucos exemplos por operador, output de tamanho variavel e query operator ausente nos exemplos.
+  - `688461` sugere um caminho programatico para parte numerica/simbolica: decompor `AB op CD`, varrer orientacao dos operandos (`AB`, `BA`, `CD`, `DC`), familias de operacao e formatos de saida, usando segunda verificacao (`EX2`) para evitar match casual.
+  - `690891` separa problemas dedutivos dos informacionalmente ambiguuos: se o operador da query nao aparece e nao ha regra inferivel por eliminacao/prior, a resposta correta pode depender de prior aprendido, nao de deducao pura.
+
+### V297 weak audit externo de bit
+
+Artefatos:
+
+- `scripts/run_v297_external_bit_reference_weak_audit.py`
+- `artifacts/v297_external_search_and_bit_teacher_audit/20260512T0915Z/v297_external_bit_reference_weak_audit_summary.json`
+- `artifacts/v297_external_search_and_bit_teacher_audit/20260512T0915Z/v297_external_bit_reference_weak_audit_details.csv`
+
+Resultado no weak `315` usado como ponte:
+
+- linhas bit: `160`;
+- referencia publica Tong: `136/160 = 85.00%`;
+- solver local atual: `125/160 = 78.125%`;
+- ambos corretos: `122`;
+- referencia acerta e solver local erra: `14`;
+- referencia erra e solver local acerta: `3`;
+- parse failed: `0`.
+
+Decisao:
+
+- Isto nao autoriza copiar codigo externo nem submeter solver direto; a API GitHub reporta `license=null` para `tonghuikang/nemotron`.
+- O valor real e teacher/verifier:
+  - usar os `14` gains weak e os `157` gains train da V296 como material de treino/diagnostico;
+  - bloquear qualquer patch que absorva as `3` perdas weak ou as `58` perdas train sem politica de abstencao.
+
+### Loop tecnico ate ganho mensuravel
+
+1. `V298_CPU_BIT_BOOLEAN_GRAMMAR_AUDIT`
+   - implementar uma versao propria, sem copiar codigo externo, da hierarquia booleana por bit:
+     - constantes, identidade, NOT;
+     - gates 2-input;
+     - gates 3-input/4-input somente apos falha dos niveis anteriores;
+     - desempate por menor complexidade e menor divergencia em holdout sintetico.
+   - meta CPU:
+     - train bit acima de `1265/1602` sem queda grande;
+     - weak bit `>= 136/160`;
+     - ideal para liberar treino: weak bit `>= 137/160` com `equation >= 56`.
+2. `V299_CPU_EQUATION_OPERATOR_FORMAT_AUDIT`
+   - implementar varredura propria `AB op CD`:
+     - orientacoes dos operandos;
+     - operacoes numericas/simbolicas frequentes;
+     - formatos de saida;
+     - verificacao em todos exemplos e rejeicao se query operator ausente sem regra inferivel.
+   - meta CPU:
+     - encontrar `+1` a `+5` em equation weak sem mexer em bit;
+     - priorizar regras com prova por exemplos, nao respostas de modelo.
+3. So depois de V298/V299:
+   - gerar dataset teacher minimo e verificado;
+   - treino HF curto somente se o patch CPU demonstrar ganho liquido;
+   - budget HF permanece protegido: sem H100/H200 para busca cega.
+
+### Limpeza
+
+- Arquivos temporarios de download externo foram apagados.
+- A varredura V297 manteve apenas artefatos pequenos de auditoria; nenhum arquivo HF grande gated foi salvo.
+
+### Resultado V298 CPU bit boolean grammar
+
+Artefatos:
+
+- `scripts/run_v298_bit_boolean_grammar_audit.py`
+- `artifacts/v298_bit_boolean_grammar_audit/20260512T1000Z/weak_level2_v298_bit_boolean_grammar_summary.json`
+- `artifacts/v298_bit_boolean_grammar_audit/20260512T1000Z/weak_level3_v298_bit_boolean_grammar_summary.json`
+- `artifacts/v298_bit_boolean_grammar_audit/20260512T1000Z/weak_level4_v298_bit_boolean_grammar_summary.json`
+
+Resultado no weak bit (`160` linhas):
+
+- nivel 2: `85/160 = 53.125%`, `+5` ganhos vs solver local, `45` perdas;
+- nivel 3: `85/160 = 53.125%`, `+5` ganhos vs solver local, `45` perdas;
+- nivel 4: `85/160 = 53.125%`, `+5` ganhos vs solver local, `45` perdas.
+
+Decisao:
+
+- A gramatica per-bit livre confirma o alerta das discussoes: ela encaixa exemplos, mas diverge demais na query.
+- V298 esta rejeitado como politica direta e nao autoriza HF GPU.
+- Os `5` gains podem ser examinados apenas como candidatos de teacher, mas qualquer uso precisa de filtro conservador com zero perda no weak.
+- A rota de bit continua sendo:
+  - referencia Tong como teacher/verifier externo;
+  - implementacao propria com restricao full-byte/stride, nao per-bit livre;
+  - medicao de perda antes de treino.
