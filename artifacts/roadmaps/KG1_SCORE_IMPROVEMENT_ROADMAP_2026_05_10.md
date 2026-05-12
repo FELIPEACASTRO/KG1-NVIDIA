@@ -5135,12 +5135,67 @@ Achados mantidos como P2/P3, sem acao imediata:
 - `684289`: dataset de unit tests bit pode virar preflight barato, mas nao treino direto sem anti-leakage/proveniencia.
 - `685031`, `688482`: topicos logisticos, sem ganho tecnico.
 
+### V306 solver promotion gate
+
+Artefatos:
+
+- `scripts/run_v306_solver_promotion_gate.py`
+- `artifacts/v306_solver_promotion_gate/20260512T1530Z/v306_v291_full_v306_solver_promotion_manifest.json`
+- `artifacts/v306_solver_promotion_gate/20260512T1530Z/v306_v291_full_v306_solver_promotion_audit.csv`
+- `artifacts/v306_solver_promotion_gate/20260512T1530Z/v306_v291_full_v306_equation_candidates_baseline.csv`
+- `artifacts/v306_solver_promotion_gate/20260512T1530Z/v306_v291_full_v306_equation_candidates_after_combined.csv`
+
+Objetivo:
+
+- transformar os achados das Kaggle Discussions em gate operacional antes de gastar HF;
+- separar sinal `deployable/no-loss`, sinal `diagnostic-only`, e sinal que precisa virar adapter-only por destilacao;
+- impedir que o solver stride e candidatos numericos amplos entrem no pacote com perdas escondidas.
+
+Resultado no conjunto rotulado V291 full-like (`947` linhas):
+
+- baseline V291:
+  - overall `823/947 = 86.91%`;
+  - `bit_manipulation`: `135/160`;
+  - `equation_transform`: `56/155`;
+  - truncation total: `1`.
+- V274+V300 combinado:
+  - overall `838/947 = 88.49%`;
+  - `bit_manipulation`: `146/160`, ganho `+11`;
+  - `equation_transform`: `60/155`, ganho `+4`;
+  - side families sem regressao: gravity `159/159`, numeral `157/157`, text `157/157`, unit `159/159`;
+  - perdas locais: `0`.
+
+Regras responsaveis pelos ganhos:
+
+- equation V274:
+  - `minus_signed_opposite_sign_guarded`: `2`;
+  - `colon_absdiff_unreverse_same_len`: `1`;
+  - `add_direct_over_model_add_variant`: `1`.
+- bit V300:
+  - `fullbyte_safe_ternary`: `10`;
+  - `fullbyte_binary`: `1`.
+
+Achados bloqueados:
+
+- stride V296/Discussion `690307` isolado ficou `diagnostic_only_lossy`:
+  - ganhos contra baseline: `2`;
+  - perdas contra baseline: `13`;
+  - portanto nao pode ser promovido diretamente.
+- fallback numerico amplo V299 apos V274/V300:
+  - `same_operator_unique_numeric_dsl`: `31` candidatos, `30` corretos, mas ainda `1` perda;
+  - `all_numeric_examples_unique_dsl`: `4` candidatos, `2` corretos, `2` perdas;
+  - nenhum candidato adicional foi promovido apos o combinado.
+
+Decisao:
+
+- V306 confirma que o ganho local real disponivel continua sendo `+15` (`+11 bit`, `+4 equation`) sem perda no conjunto rotulado.
+- Esse ganho nao e Kaggle-submit ready como CSV/postprocessor se o pacote oficial aceitar apenas adapter LoRA; precisa ser destilado para comportamento adapter-only.
+- V304 e o dataset atual mais adequado para tentar essa transferencia, mas o proximo smoke HF precisa usar V306 como gate de sucesso: continuar somente se o adapter aumentar `bit_manipulation` acima de `135/160` ou `equation_transform` acima de `56/155` sem regressao.
+
 Proxima acao tecnica:
 
 1. Rodar preflight HF para V304 com os mesmos gates do Colab adaptados a job HF.
-2. Rodar um smoke H200 curto.
-3. Em paralelo ou antes de treino longo, implementar V305 CPU-only:
-   - bit `bitsum/stride/pair-scan` derivado de `690307`;
-   - equation numeric fallback audit derivado de `691641/690891`;
-   - min-logprob/token-risk audit derivado de `689915/697491`.
-4. Promover para full eval/package somente se weak ou full official-like provar ganho real contra V291.
+2. Rodar um smoke H200 curto e barato, usando V306 como criterio de continuidade.
+3. Se smoke repetir V291/V303 (`bit=135`, `equation=56`), parar treino e voltar para dataset/trace; nao gastar budget longo.
+4. Se smoke mostrar qualquer ganho real em `bit_manipulation` ou `equation_transform`, rodar checkpoint adicional com LR conservador e gate por familia.
+5. Promover para full eval/package somente se weak ou full official-like provar ganho real contra V291 sem regressao lateral.
