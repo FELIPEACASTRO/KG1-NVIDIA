@@ -1,0 +1,30 @@
+id,title,author,body_chars,comment_count,json_bytes
+681745,How to Get Started + Nemotron Model Reasoning Challenge Resources,Jamil C Semaan,4638,33,62679
+698106,Metric Update,Ryan Holbrook,479,13,18933
+687798,Rescore After Metric Update,Ryan Holbrook,1260,19,38556
+681714,How to get started + Competition's Official Discord,Ashley Oldacre,2366,7,19016
+688360,"[update] Read CPMP's reply. [original] Do not distill models that do not allow distillation (e.g. gemini, gpt5)",c-number,413,27,44687
+698293,97.2% Gold-Conditioned Symbolic Solver Exposing Digit Mappings and Operators,lkevincc,2401,3,10895
+694556,symbol_transformation class problem can have multiple valid candidate answer,toolazyhhh123,10268,14,64628
+688461,Answers To Everything Data: Read Me! 100% Solve Rate,Donald Galliano III,18157,49,186555
+694975,GRPO is must for this competition,Murugesan Narayanaswamy,2677,25,38571
+689915,[Open Progress Prize Publication] SFT to maximize minimum logprob,Tong Hui Kang,24256,52,137183
+685920,Something wrong -- My notebook of 0.80+ now scores 0.77,JK-Piece,146,25,43096
+684212,Visualize the problems and completions from the base model,Tong Hui Kang,937,24,34158
+693260,90.7% Synthetic CoT Accuracy -> LB Drop: A Warning on Data Generation & Thanks to Donald,Taha,3167,20,33649
+685031,Open Progress Prize question,lakshmig82,407,15,21700
+685710,"Compute partner needed - deterministic solvers for all puzzle categories built, budget-constrained",Donald Galliano III,939,7,12529
+691318,Why are we seeing 0.84 – 0.86 score variance with the 0.85 winning zip?,Svanik Kolli,917,8,18492
+688482,Midpoint Cut-off Date and the Open Progress Prize,Tong Hui Kang,1004,8,18554
+691641,corrupted or puzzel (numeric equations),Sangram Patil,1119,9,26977
+689257,How many examples are there in the public leaderboard?,Tong Hui Kang,413,9,18948
+687961,Training Nemotron-3-Nano-30B-A3B-BF16 with rank 32 LoRA on length 8192 sequences,Tong Hui Kang,6410,9,40035
+684289,Unit testing model on simple bit transformations,lucian kucera,781,0,3804
+688277,Any idea about Equation Transformation reasoning ,Adarsh Kumar,427,2,6396
+683866, Bit manipulation puzzles: are transformations uniquely determined?,External,1711,5,12500
+698649,Stuck at 0.56 — Need advice on improving SFT approach,Anjana mohan,928,0,4325
+697491,"Why a ""Better"" Dataset Scored Worse: Lessons on Logprobs, Gradient Saturation, and SFT Bugs",Taha,4452,10,32172
+696735,CoT length on bit_manipulation? ,M3haRban,188,0,2427
+690307,Strategy to solve 85% of bit manipulation,Tong Hui Kang,9698,11,41438
+690891,There are still many missing pieces of the puzzle: equation and cryptarithm.,Zejun_,982,2,13445
+689840,Is RLVR worth it? or should I work on SFT only?,m4nocha,854,5,11730

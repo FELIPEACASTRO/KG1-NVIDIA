@@ -88,6 +88,7 @@ def validate_rows(
     split: str,
     min_rows: int,
     expected_sha256: str,
+    assistant_final_answer_mode: str,
 ) -> dict[str, Any]:
     if len(rows) < min_rows:
         raise RuntimeError(f"{split} row count below minimum: {len(rows)} < {min_rows}")
@@ -118,9 +119,16 @@ def validate_rows(
         if messages[1].get("content") != prompt:
             bad_rows.append(rid)
             continue
-        if messages[2].get("content") != "Final answer: " + answer:
+        assistant_content = str(messages[2].get("content", ""))
+        final_answer_line = "Final answer: " + answer
+        if assistant_final_answer_mode == "exact" and assistant_content != final_answer_line:
             bad_rows.append(rid)
             continue
+        if assistant_final_answer_mode == "suffix" and not assistant_content.rstrip().endswith(final_answer_line):
+            bad_rows.append(rid)
+            continue
+        if assistant_final_answer_mode not in {"exact", "suffix"}:
+            raise RuntimeError(f"unknown assistant_final_answer_mode={assistant_final_answer_mode!r}")
         if metadata.get("weak_gate_rows_used_for_training") is not False:
             bad_rows.append(rid)
     if answer_empty:
@@ -331,6 +339,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
     print("max_length =", args.max_length, flush=True)
     print("max_prompt_truncation_rate =", args.max_prompt_truncation_rate, flush=True)
     print("require_offset_mask =", args.require_offset_mask, flush=True)
+    print("assistant_final_answer_mode =", args.assistant_final_answer_mode, flush=True)
     print("output_dir =", args.output_dir, flush=True)
     args.output_dir.mkdir(parents=True, exist_ok=True)
 
@@ -352,8 +361,20 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
 
     train_rows = read_jsonl(train_path)
     val_rows = read_jsonl(val_path)
-    train_validation = validate_rows(train_rows, "train", args.min_train_rows, expected_train_sha)
-    val_validation = validate_rows(val_rows, "validation", args.min_val_rows, expected_val_sha)
+    train_validation = validate_rows(
+        train_rows,
+        "train",
+        args.min_train_rows,
+        expected_train_sha,
+        args.assistant_final_answer_mode,
+    )
+    val_validation = validate_rows(
+        val_rows,
+        "validation",
+        args.min_val_rows,
+        expected_val_sha,
+        args.assistant_final_answer_mode,
+    )
     train_prompt_answer = {prompt_answer_key(row) for row in train_rows}
     val_prompt_answer = {prompt_answer_key(row) for row in val_rows}
     train_prompt = {prompt_key(row) for row in train_rows}
@@ -405,6 +426,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             "max_length": args.max_length,
             "max_prompt_truncation_rate": args.max_prompt_truncation_rate,
             "require_offset_mask": args.require_offset_mask,
+            "assistant_final_answer_mode": args.assistant_final_answer_mode,
             "min_train_rows": args.min_train_rows,
             "min_val_rows": args.min_val_rows,
         },
@@ -501,9 +523,66 @@ def self_test() -> int:
             min_train_rows=2,
             min_val_rows=1,
             use_toy_tokenizer=True,
+            assistant_final_answer_mode="exact",
         )
         manifest = run(args)
         assert manifest["decision"]["status"] == "tokenization_gate_passed"
+        trace_row = {
+            "id": "trace",
+            "prompt": "Trace question",
+            "answer": "42",
+            "family": "equation_transform",
+            "subcategory": "toy_trace",
+            "source": "toy",
+            "messages": [
+                {"role": "system", "content": "system"},
+                {"role": "user", "content": "Trace question"},
+                {"role": "assistant", "content": "Reason with a rule.\nFinal answer: 42"},
+            ],
+            "metadata": {"source_dataset": "toy", "weak_gate_rows_used_for_training": False},
+        }
+        trace_train = tmp / "trace_train.jsonl"
+        trace_val = tmp / "trace_val.jsonl"
+        trace_train.write_text(json.dumps(trace_row, sort_keys=True) + "\n", encoding="utf-8")
+        trace_val_row = {
+            **trace_row,
+            "id": "trace_val",
+            "prompt": "Trace validation question",
+            "answer": "43",
+            "messages": [
+                {"role": "system", "content": "system"},
+                {"role": "user", "content": "Trace validation question"},
+                {"role": "assistant", "content": "Reason with a validation rule.\nFinal answer: 43"},
+            ],
+        }
+        trace_val.write_text(json.dumps(trace_val_row, sort_keys=True) + "\n", encoding="utf-8")
+        trace_manifest = tmp / "trace_dataset_manifest.json"
+        write_json(
+            trace_manifest,
+            {
+                "outputs": {
+                    "train_jsonl": str(trace_train),
+                    "train_sha256": sha256_file(trace_train),
+                    "val_jsonl": str(trace_val),
+                    "val_sha256": sha256_file(trace_val),
+                }
+            },
+        )
+        trace_args = argparse.Namespace(
+            dataset_manifest_json=trace_manifest,
+            output_dir=tmp / "trace_out",
+            model_name="toy",
+            model_revision="",
+            max_length=2048,
+            max_prompt_truncation_rate=0.0,
+            require_offset_mask=True,
+            min_train_rows=1,
+            min_val_rows=1,
+            use_toy_tokenizer=True,
+            assistant_final_answer_mode="suffix",
+        )
+        trace_manifest_out = run(trace_args)
+        assert trace_manifest_out["decision"]["status"] == "tokenization_gate_passed"
     print("v286_generic_tokenization_gate_self_test=ok", flush=True)
     return 0
 
@@ -520,6 +599,12 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--allow-fallback-mask", dest="require_offset_mask", action="store_false")
     parser.add_argument("--min-train-rows", type=int, default=600)
     parser.add_argument("--min-val-rows", type=int, default=60)
+    parser.add_argument(
+        "--assistant-final-answer-mode",
+        choices=("exact", "suffix"),
+        default="exact",
+        help="Use exact for short-answer rows, suffix for solver traces that end with the final answer line.",
+    )
     parser.add_argument("--use-toy-tokenizer", action="store_true")
     parser.add_argument("--self-test", action="store_true")
     return parser

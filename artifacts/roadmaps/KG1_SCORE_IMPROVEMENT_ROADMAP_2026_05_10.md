@@ -52,6 +52,7 @@ Objetivo: consolidar os achados Kaggle/Hugging Face, resultados V221/V226/V229/V
 - Atualizacao V291 full/package/submit 2026-05-11: o H200 completou o full eval official-like do `checkpoint-6` sem postprocessor externo. Resultado: `823/947 = 0.8690601901`, truncation `1`, `equation_transform=56/155`, `bit_manipulation=135/160`, e `gravity_constant/numeral_system/text_encryption/unit_conversion=100%`. Esse resultado supera o baseline full conhecido V207A/V194 `822/947` por `+1` linha e passou o gate `full_candidate_gate=true`. O pacote adapter-only foi criado em `artifacts/v291_submission_package/v291_h200_checkpoint6_823_20260511T212028Z/submission.zip`, SHA256 `293b414f316330db7ac12c4f3001e7796b0a087ed5dd86af6e13d98620b43433`, entries `adapter_config.json` e `adapter_model.safetensors`, adapter SHA `0a7b6144231d9358ae73a5e57d8778b32be1520fa47e3041414b3e025aaa1aa1`, `r=32`, `alpha=32`. Submissao Kaggle enviada em `2026-05-11 22:19:17.163000` com descricao `V291 V290 checkpoint-6 adapter-only full823 trunc1 official-like gate`; status `COMPLETE`, public score `0.86`. Decisao: manter no historico como primeira submissao packageable com evidencia full local/HF `+1`, mas continuar buscando ganhos adicionais porque o score publico permaneceu no mesmo patamar arredondado.
 - Atualizacao V292 2026-05-11: foi testada uma continuacao curta e barata do V290 checkpoint-6 em H200, com `lm_head` treinavel, 6 steps, LR `1e-8 -> 5e-9`, sampling mais pesado para `equation_transform` e guardrails de dataset/tokenizacao/adaptador. Treino: `https://huggingface.co/jobs/felipesp1983/6a0258ac317220dbbd1a7d04`, output repo `felipesp1983/kg1-nemotron-lora-v292-eq-continuation-v290ckpt6`. Weak eval: `https://huggingface.co/jobs/felipesp1983/6a026043aff1cd33e8f34169`, cancelado depois de `checkpoint-6` por FinOps. Resultados observados: `checkpoint-3 = 191/315`, equation `56/155`, bit `135/160`, trunc `0`; `checkpoint-6 = 190/315`, equation `56/155`, bit `134/160`, trunc `1`. Decisao: rejeitar V292, nao rodar full eval, nao empacotar e nao submeter. Diagnostico: a continuacao equation-heavy nao aumentou equation e corroeu bit; nao repetir essa receita sem novo solver/verifier ou dado verificado.
 - Atualizacao V303 2026-05-12: foi testada a hipotese de converter o ganho local V302 (`bit_manipulation 135->146`, `equation_transform 56->60` no full official-like com postprocessamento/verifier) em comportamento adapter-only via destilacao curta de bit full-byte sobre o V290 checkpoint-6. Dataset V303 passou gates de hash, JSONL, tokenizacao e offset masks (`12822` train, `969` val; train SHA `c8142742a0c98c4fa368da1a35d16d366b3d499bd66e5b7716408909f7977d27`, val SHA `3711e717eac66ba052697ea42387feb94fddec1a7916d3c67`). Treino H200: `https://huggingface.co/jobs/felipesp1983/6a02ff78aff1cd33e8f34829`, output repo `felipesp1983/kg1-nemotron-lora-v303-bit-fullbyte-distill-v290ckpt6`. Weak eval H200: `https://huggingface.co/jobs/felipesp1983/6a032388c827d2ad86f16afc`, commit de upload `https://huggingface.co/felipesp1983/kg1-nemotron-lora-v303-bit-fullbyte-distill-v290ckpt6/commit/8baa5b2f44cb5b561cdc6a59c460c8e38e46b183`. Resultados: `checkpoint-3=191/315`, equation `56/155`, bit `135/160`, trunc `0`; `checkpoint-6=190/315`, equation `56/155`, bit `134/160`, trunc `0`; `checkpoint-9=190/315`, equation `56/155`, bit `134/160`, trunc `1`; `checkpoint-12=190/315`, equation `56/155`, bit `134/160`, trunc `1`; `final=191/315`, equation `56/155`, bit `135/160`, trunc `0`. Decisao: V303 nao transferiu os ganhos V302 para adapter-only; rejeitar para full eval/package/Kaggle. Diagnostico: o ganho V302 parece depender de regra/verifier em inferencia, nao de sinal facilmente internalizado por LoRA curto em `lm_head`; nova tentativa de destilacao so deve ocorrer com teacher traces completos e gate que prove melhoria em weak antes de qualquer full.
+- Atualizacao V304/V305 2026-05-12: a auditoria ampliada das Kaggle Discussions (`29` topicos deduplicados, cache em `artifacts/v305_requested_kaggle_discussion_audit/20260512T0000Z`) confirmou que V303 falhou pelo motivo esperado: answer/full-byte trace nao ensina a politica bit-serial/verifier. A nova V304 substitui esse sinal por `bit_serial_target_verification_trace_v2`, preserva replay das familias ja saturadas, mantem os patches numericos V274/V290 e passa o tokenization gate real em modo suffix: train `12822`, validation `969`, train SHA `7935ff999cdd8318de67538922de3651170c59baa2664a10beac3334dfcf9082`, val SHA `2b06224afe035c5085798f4a4be27e764ffaebde3ff7eee11c558c0cd5bdd29d`, trace rows train `2616`, validation `288`, duplicate assistant conflicts `0`, prompt truncation `0.0`, token max `745`. Decisao: V304 substitui V303 como proxima tentativa adapter-only, mas so autoriza um smoke HF H200 curto com kill-switch; antes de treino longo, implementar V305 CPU-only para o algoritmo completo de bitsum/stride de `690307` e fallback numerico de `691641/690891`.
 
 ## Evidencias consolidadas
 
@@ -5042,10 +5043,104 @@ Gates:
 
 Decisao:
 
-- V303 passa o gate local e esta pronto para um treino HF curto e budget-capped.
-- A metrica de sucesso nao e loss isolado: o adapter precisa recuperar no minimo parte do sinal V302 em avaliacao weak/full sem regredir side families.
-- Gate alvo para continuar:
-  - weak bit `> 136/160`, ideal `>= 146/160`;
-  - weak equation `>= 60/155`;
-  - full local `> 823/947`, ideal aproximar `838/947`;
-  - zero regressao em side families.
+- V303 passou os gates locais, mas o treino HF ja foi executado e nao transferiu os ganhos V302 para adapter-only.
+- Resultado observado: melhor checkpoint/final ficou em `191/315`, `equation_transform=56/155`, `bit_manipulation=135/160`, truncation `0`, sem ganho contra o baseline fraco.
+- Rejeitar V303 para full eval, package ou Kaggle submit.
+- Diagnostico: o trace full-byte/final-answer e curto demais para ensinar a politica operacional que gerou V302. A proxima tentativa precisa treinar o modelo a executar verificacao bit-serial e regras de equation, nao apenas memorizar a expressao final.
+
+### V304 solver trace distillation dataset
+
+Artefatos:
+
+- `scripts/build_v304_solver_trace_distill_dataset.py`
+- `scripts/run_v286_generic_tokenization_gate.py`
+- `artifacts/v304_solver_trace_distill_dataset/20260512T1430Z/v304_solver_trace_distill_manifest.json`
+- `artifacts/v304_solver_trace_tokenization_gate/20260512T1430Z/v286_generic_tokenization_gate_manifest.json`
+
+Objetivo:
+
+- corrigir a falha V303 com traces teacher mais proximos da politica descrita nas Kaggle Discussions `688461` e `690307`;
+- transformar parte do ganho local V302 (`bit_manipulation 135->146`, `equation_transform 56->60`) em comportamento adapter-only;
+- manter replay do V290/V274 para reduzir esquecimento das familias saturadas e preservar o formato de resposta que ja chegou a public score `0.86`.
+
+Composicao:
+
+- base V290/V274 preservada;
+- rows finais: train `12822`, validation `969`;
+- trace rows: train `2616`, validation `288`;
+- formatos train:
+  - `exact_final_answer`: `10206`;
+  - `equation_numeric_rule_trace_v1`: `1080`;
+  - `bit_serial_target_verification_trace_v2`: `1536`;
+- formatos validation:
+  - `exact_final_answer`: `681`;
+  - `equation_numeric_rule_trace_v1`: `120`;
+  - `bit_serial_target_verification_trace_v2`: `168`;
+- hashes:
+  - train SHA256 `7935ff999cdd8318de67538922de3651170c59baa2664a10beac3334dfcf9082`;
+  - validation SHA256 `2b06224afe035c5085798f4a4be27e764ffaebde3ff7eee11c558c0cd5bdd29d`.
+
+Gates:
+
+- tokenizer real `nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16@cbd3fa9f933d55ef16a84236559f4ee2a0526848`;
+- assistant suffix mode validado: traces podem terminar em `Final answer: <answer>`;
+- offset masks: train `12822/12822`, validation `969/969`;
+- fallback masks: `0`;
+- prompt truncation rate: `0.0`;
+- completion tokens dropped: `0`;
+- token max: train `745`, validation `744`;
+- duplicate assistant groups existem por replay, mas conflicting duplicate assistant groups: `0`.
+
+Decisao:
+
+- V304 substitui V303 como a proxima tentativa adapter-only.
+- Autorizado somente smoke HF H200 curto e budget-capped, com preflight de hashes/tokenizacao/adaptador/GPU e kill-switch por weak eval.
+- Criterio minimo para continuar:
+  - weak bit `> 135/160` ou equation `> 56/155`;
+  - sem regressao em side families;
+  - sem aumento relevante de truncation;
+  - full eval somente se o weak superar V291/V303 com margem real.
+- Nao iniciar treino longo se o primeiro checkpoint repetir `191/315`, `56/155`, `135/160`.
+
+### V305 Kaggle discussion audit
+
+Artefatos:
+
+- `artifacts/v305_requested_kaggle_discussion_audit/20260512T0000Z/v305_requested_kaggle_discussion_audit_summary.md`
+- `artifacts/v305_requested_kaggle_discussion_audit/20260512T0000Z/v305_requested_kaggle_discussion_audit_summary.json`
+- indices e fetch summary sem raw dumps completos: `discussion_index_normalized.csv`, `requested_discussion_index.csv`, `fetch_summary_master_20260512.json`
+
+Topicos analisados:
+
+- `681745`, `698106`, `687798`, `681714`, `688360`, `698293`, `694556`, `688461`, `694975`, `689915`, `685920`, `684212`, `693260`, `685031`, `685710`, `691318`, `688482`, `691641`, `689257`, `687961`, `684289`, `688277`, `683866`, `698649`, `697491`, `696735`, `690307`, `690891`, `689840`.
+
+Achados que mudam implementacao:
+
+- `690307`: melhor blueprint publico para `bit_manipulation`; iterar pares de bits, usar `bitsum` como hash, stride esquerda/direita e preencher lacunas com regra consistente. V304 ainda nao implementa o scan completo; isso vira V305/V306 CPU-only antes de outro treino longo.
+- `688461`: confirma bit-serial target verification e verificacao por etapa. V304 ja incorporou essa direcao no trace `bit_serial_target_verification_trace_v2`.
+- `697491` e `693260`: dataset correto pode piorar LB se for dificil de aprender, oversampled, com LR alto, conflito de formato ou duplicate CoT. Portanto V304 precisa de replay, LR conservador, oversampling limitado, duplicate-conflict gate e kill-switch.
+- `689915`: loss medio nao basta; o objetivo correto e elevar confianca/min-logprob dos tokens criticos. Adicionar auditoria de min-logprob antes de treino longo.
+- `691641` e `690891`: parte de `equation_transform` nao e deducao direta quando o operador da query nao aparece; usar fallback por prior, comprimento, sinal, reversao e ausencia de operador, sempre com no-loss gate.
+- `683866`: exemplos de bit podem ser subdeterminados; solver deve medir ambiguidade e evitar treinar labels nao resolvidos.
+- `698106` e `687798`: metric/extraction exige resposta final limpa e bit como string binaria exata.
+- `681714`: submissao continua sendo adapter-only; postprocessor/verifier local so melhora ranking se for destilado para LoRA ou se o pacote oficial permitir inferencia customizada.
+- `687961`: H200 com rank-32/contexto longo exige microbatch pequeno e gates de memoria; evitar traces longos sem evidencia.
+- `691318` e `685920`: vLLM pode variar mesmo com temperatura `0`; comparar por familias e repetir weak quando a diferenca for pequena.
+
+Achados mantidos como P2/P3, sem acao imediata:
+
+- `694975`: GRPO pode ajudar, mas e caro e sem prova suficiente para nosso budget; manter depois de SFT/verifier com sinal.
+- `698293`: gold-conditioned symbolic solver e fonte de pesquisa, nao preditor deployable.
+- `684212`: visualizacoes do base model ajudam diagnostico/logprob, nao fornecem labels.
+- `684289`: dataset de unit tests bit pode virar preflight barato, mas nao treino direto sem anti-leakage/proveniencia.
+- `685031`, `688482`: topicos logisticos, sem ganho tecnico.
+
+Proxima acao tecnica:
+
+1. Rodar preflight HF para V304 com os mesmos gates do Colab adaptados a job HF.
+2. Rodar um smoke H200 curto.
+3. Em paralelo ou antes de treino longo, implementar V305 CPU-only:
+   - bit `bitsum/stride/pair-scan` derivado de `690307`;
+   - equation numeric fallback audit derivado de `691641/690891`;
+   - min-logprob/token-risk audit derivado de `689915/697491`.
+4. Promover para full eval/package somente se weak ou full official-like provar ganho real contra V291.

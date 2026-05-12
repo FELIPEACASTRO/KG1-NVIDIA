@@ -1,0 +1,251 @@
+{
+  "discussion_count": 29,
+  "generated_at_utc": "2026-05-12T15:10:00Z",
+  "implementation_changes": [
+    "V304 bit traces were changed from full-byte final-answer style to bit_serial_target_verification_trace_v2.",
+    "V304 dataset regenerated at artifacts/v304_solver_trace_distill_dataset/20260512T1430Z with train SHA 7935ff999cdd8318de67538922de3651170c59baa2664a10beac3334dfcf9082 and val SHA 2b06224afe035c5085798f4a4be27e764ffaebde3ff7eee11c558c0cd5bdd29d.",
+    "V286 tokenizer gate passed for V304 suffix-mode traces with real Nemotron tokenizer, zero prompt truncation, zero fallback masks and max token length 745."
+  ],
+  "items": [
+    {
+      "action": "Keep as background; do not drive training changes from this thread alone.",
+      "finding": "Resource hub. The actionable signal is not algorithmic; comments and linked resources reinforce using official NeMo/Nemotron docs and not treating public notebooks/traces as authoritative without verification.",
+      "id": "681745",
+      "impact": "No direct score gain; useful only as source index.",
+      "priority": "P3",
+      "title": "How to Get Started + resources"
+    },
+    {
+      "action": "Keep final-answer suffix/boxed gates and avoid extra braces/noisy completions.",
+      "finding": "Metric extraction changed around boxed answer handling and brace parsing.",
+      "id": "698106",
+      "impact": "Submissions can differ only by formatting; local gates must preserve final answer extraction exactly.",
+      "priority": "P0",
+      "title": "Metric Update"
+    },
+    {
+      "action": "Maintain exact binary string scorer and regression tests for bit outputs.",
+      "finding": "Binary answers were corrected to exact-string comparison rather than float-like matching.",
+      "id": "687798",
+      "impact": "Bit outputs must be exact 8-character binary strings; numeric coercion is invalid.",
+      "priority": "P0",
+      "title": "Rescore After Metric Update"
+    },
+    {
+      "action": "Distill V302/V300 gains into adapter-only behavior; package gate remains adapter_config + safetensors only.",
+      "finding": "Official submission path is a LoRA adapter package, rank constrained.",
+      "id": "681714",
+      "impact": "Postprocessor/verifier gains are not directly submitable unless competition packaging allows them.",
+      "priority": "P0",
+      "title": "Official getting started / Discord"
+    },
+    {
+      "action": "Use generated, deterministic, locally verifiable traces; record provenance in manifests.",
+      "finding": "Thread discusses which external/model-generated data can be distilled; no universally safe shortcut is provided.",
+      "id": "688360",
+      "impact": "Legal/rules risk if using closed-model outputs blindly.",
+      "priority": "P1",
+      "title": "Distillation legality discussion"
+    },
+    {
+      "action": "Use only for trace design and held-out verifier research; no submit/full eval directly from gold-conditioned outputs.",
+      "finding": "Symbolic solver uses the known answer as a constraint; it is a research oracle, not inference-time solver.",
+      "id": "698293",
+      "impact": "Useful for understanding equation/symbolic latent rules and generating checked traces, but unsafe as direct predictor.",
+      "priority": "P2",
+      "title": "Gold-conditioned symbolic solver"
+    },
+    {
+      "action": "Keep symbolic work CPU-only until no-loss gates prove a deployable rule.",
+      "finding": "Finite examples can support multiple valid transformations; public DSL/LLM traces can regress held-out score.",
+      "id": "694556",
+      "impact": "Broad symbolic trace ingestion is high risk.",
+      "priority": "P2",
+      "title": "Symbol transformation ambiguity"
+    },
+    {
+      "action": "Use as blueprint for V304/V305: bit-serial traces now implemented; next add full THK-style pair/stride/bitsum scan and numeric equation scan-stop audit.",
+      "finding": "Most actionable playbook: bit is solved as eight independent boolean functions with ordered gates, bit-serial computation and target verification; equation numeric/symbolic uses scan orders, second-example verification and hard-stop behavior.",
+      "id": "688461",
+      "impact": "Explains why V303 answer/full-byte traces failed and why V304 moved to bit_serial_target_verification_trace_v2.",
+      "priority": "P0",
+      "title": "Answers To Everything Data"
+    },
+    {
+      "action": "Keep GRPO as P2 only after SFT/verifier traces show weak gains and loss/logprob bottlenecks.",
+      "finding": "GRPO may help after cold-start SFT, but evidence is debated and compute-heavy.",
+      "id": "694975",
+      "impact": "Not the next move under small HF budget.",
+      "priority": "P2",
+      "title": "GRPO is must debate"
+    },
+    {
+      "action": "Add min-logprob audit before long HF runs; keep V304 traces under 1300 tokens and use weak gates as primary success metric.",
+      "finding": "Tong emphasizes deterministic CoT, token budget, min-logprob inspection, loss masking, rare-operation coverage and training-serving alignment; winning target was around 0.877 with bit as key driver.",
+      "id": "689915",
+      "impact": "Loss alone is insufficient; inspect token-level low-confidence points and keep traces short/learnable.",
+      "priority": "P0",
+      "title": "SFT to maximize minimum logprob"
+    },
+    {
+      "action": "Compare family-level artifacts and repeat weak/full where affordable before submit.",
+      "finding": "Participants saw score drift from metric update and vLLM behavior.",
+      "id": "685920",
+      "impact": "Public 0.86 plateau can hide small gains/losses.",
+      "priority": "P1",
+      "title": "Score drop / metric nondeterminism"
+    },
+    {
+      "action": "Optional P2: mine base-model completions only for prompt/logprob diagnostics, not labels.",
+      "finding": "Base-model generations over train are available from Tong; useful as diagnostic/logprob reference, not a direct new solver.",
+      "id": "684212",
+      "impact": "Can help find prompts where the model already has priors vs where training must teach exact algorithms.",
+      "priority": "P2",
+      "title": "Base model visualization"
+    },
+    {
+      "action": "Cap oversampling, preserve replay, check duplicate assistant conflicts, use low LR and stop on weak regression.",
+      "finding": "Correct synthetic solver data can lower leaderboard if traces are hard to learn, duplicate/conflicting, oversampled, or format-shift the baseline.",
+      "id": "693260",
+      "impact": "Directly explains V303/V292 risks and imposes gates on V304+.",
+      "priority": "P0",
+      "title": "Synthetic CoT accuracy -> LB drop"
+    },
+    {
+      "action": "Document as no-op.",
+      "finding": "Prize/logistics thread only.",
+      "id": "685031",
+      "impact": "No score/ACC signal.",
+      "priority": "P4",
+      "title": "Open Progress Prize question"
+    },
+    {
+      "action": "Use as design confirmation only.",
+      "finding": "Donald claims factories and structured traces for all categories but provides no public artifact.",
+      "id": "685710",
+      "impact": "Supports solver-trace direction, but cannot be imported as evidence/data.",
+      "priority": "P2",
+      "title": "Deterministic solvers compute partner"
+    },
+    {
+      "action": "Repeat weak eval or require bigger-than-noise local family gains before submit.",
+      "finding": "vLLM nondeterminism can change scores even at temperature 0.",
+      "id": "691318",
+      "impact": "Small deltas require controlled local evaluation, not one public score.",
+      "priority": "P1",
+      "title": "0.84-0.86 variance with winning zip"
+    },
+    {
+      "action": "No implementation change.",
+      "finding": "Leaderboard/prize timing; no algorithmic content.",
+      "id": "688482",
+      "impact": "No score/ACC action.",
+      "priority": "P4",
+      "title": "Midpoint cutoff logistics"
+    },
+    {
+      "action": "Build CPU-only V305 numeric guess fallback audit before any equation-heavy training.",
+      "finding": "Some numeric equation cases have query operators absent from examples; fallback can depend on output length, reversal, sign and learned priors rather than pure deduction.",
+      "id": "691641",
+      "impact": "Equation_transform +4 local postprocessor gains are plausible but must be no-loss gated.",
+      "priority": "P0",
+      "title": "Numeric equations ambiguity"
+    },
+    {
+      "action": "Keep +1/+2 no-loss gates; do not submit unvalidated broad changes.",
+      "finding": "Participants infer public LB may be only a few hundred examples, so one or two correct answers can move rank.",
+      "id": "689257",
+      "impact": "Micro-gains matter, but they must avoid hidden regressions.",
+      "priority": "P1",
+      "title": "Public leaderboard size"
+    },
+    {
+      "action": "Use H200 short smoke with strict GPU/memory and checkpoint weak gates; no long run without signal.",
+      "finding": "Rank-32 LoRA at 8192 context is memory heavy; H200/microbatch planning matters.",
+      "id": "687961",
+      "impact": "Long traces and broad datasets can burn HF budget quickly.",
+      "priority": "P1",
+      "title": "Rank32 LoRA memory at 8192"
+    },
+    {
+      "action": "Use simple bit unit tests as a cheap pretrain/gate source only if provenance/no-overlap is clean.",
+      "finding": "Base model is only about half-correct on simple one-operation bit transforms.",
+      "id": "684289",
+      "impact": "Bit requires explicit SFT/verifier traces; relying on base reasoning is not enough.",
+      "priority": "P2",
+      "title": "Unit testing simple bit transforms"
+    },
+    {
+      "action": "Route equation work through scan/verifier/fallback rules, not LLM prompting.",
+      "finding": "Community confirms bit and equation are the hardest; one participant decoded many bit samples but still lacked reproducible equation reasoning.",
+      "id": "688277",
+      "impact": "Supports prioritizing deterministic equation audit rather than generic prompting.",
+      "priority": "P1",
+      "title": "Equation Transformation reasoning"
+    },
+    {
+      "action": "Add ambiguity/no-loss checks to bit solvers and do not train on unresolved ambiguous labels.",
+      "finding": "Some bit examples are underdetermined; multiple rules fit examples but predict different queries.",
+      "id": "683866",
+      "impact": "Example-fit alone is unsafe; target verification and conservative rule ordering are necessary.",
+      "priority": "P0",
+      "title": "Bit transformations uniquely determined?"
+    },
+    {
+      "action": "Keep V304 traces compact; validate prompt masking and family replay before GPU spend.",
+      "finding": "Short CoT beat longer CoT for one participant; rank32/lower LR did not help without better data/masking.",
+      "id": "698649",
+      "impact": "More tokens/rank is not a solution by itself.",
+      "priority": "P1",
+      "title": "Stuck at 0.56 SFT approach"
+    },
+    {
+      "action": "Use low-risk smoke, min-logprob/token audit, replay anchoring, oversampling cap and early kill-switch.",
+      "finding": "Algorithmic accuracy 95.8% still failed to beat 0.85 due learnability, oversampling, LR/gradient saturation and masking; traces under about 1300 tokens were reported as more practical.",
+      "id": "697491",
+      "impact": "This is the main training-risk warning for V304/V305.",
+      "priority": "P0",
+      "title": "Better dataset scored worse"
+    },
+    {
+      "action": "Keep as supporting note for trace compression.",
+      "finding": "Raises token-budget tradeoff; no concrete answer in thread.",
+      "id": "696735",
+      "impact": "No direct new data, but consistent with compact trace policy.",
+      "priority": "P3",
+      "title": "CoT length on bit"
+    },
+    {
+      "action": "Implement V305/V306 THK-style pair/stride/bitsum trace generator and evaluate before long SFT.",
+      "finding": "Tong describes a bit algorithm solving 1364/1602 train bit puzzles using pair-of-input-bit iteration, bitsum hash, stride matching and compact token budget. Comment reports even stronger bit/numeric equation solver numbers, unverified by us.",
+      "id": "690307",
+      "impact": "Best public blueprint for turning bit 135/160 into higher adapter behavior. V304 only implements target verification, not full bitsum/stride scan yet.",
+      "priority": "P0",
+      "title": "Strategy to solve 85% of bit manipulation"
+    },
+    {
+      "action": "Add numeric/equation fallback audit with sign, length, reversal and same-op absence features.",
+      "finding": "Equation/cryptarithm guess cases may be information-theoretic unless priors or output-format clues are learned.",
+      "id": "690891",
+      "impact": "Equation improvements need fallback priors and confidence routing, not only exact-rule deduction.",
+      "priority": "P1",
+      "title": "Missing pieces: equation and cryptarithm"
+    },
+    {
+      "action": "Keep V221 weak/full official-like contracts; do not trust ad hoc local CV.",
+      "finding": "Local SFT/CV can be misleading when category distribution is nonuniform; high local bit/equation subsets may not translate to LB.",
+      "id": "689840",
+      "impact": "Need stratified official-like gates.",
+      "priority": "P1",
+      "title": "RLVR worth it?"
+    }
+  ],
+  "next_actions": [
+    "Commit and push discussion audit, V304 dataset/gate, and roadmap updates.",
+    "Before a paid HF run, implement/verify a HF preflight gate: dataset hash, tokenizer suffix mode, adapter path/config, GPU/memory, replay/duplicate conflict, weak kill-switch.",
+    "Run one short H200 V304 smoke only; continue only if weak bit improves above 135/160 or equation above 56/155 without side-family regression.",
+    "Build CPU-only V305 THK bitsum/stride and numeric equation fallback audits before any longer train."
+  ],
+  "schema_version": "v305_requested_kaggle_discussion_audit.v2",
+  "source_cache_dir": "artifacts/v305_requested_kaggle_discussion_audit/20260512T0000Z"
+}

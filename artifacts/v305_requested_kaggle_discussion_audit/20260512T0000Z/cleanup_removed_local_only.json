@@ -1,0 +1,29 @@
+{
+  "generated_at_utc": "2026-05-12T15:15:00Z",
+  "removed": [
+    {
+      "path": "artifacts/v304_solver_trace_distill_dataset/20260512T1400Z",
+      "reason": "Intermediate V304 dataset superseded by 20260512T1430Z; not referenced by roadmap or gates."
+    },
+    {
+      "path": "artifacts/v305_requested_kaggle_discussion_audit/20260512T0000Z/lkevincc0_equation_symbolic",
+      "reason": "Temporary cloned research repo from discussion 698293. The actionable finding is summarized in the audit; raw clone is not required for the roadmap and should not be committed as artifact noise."
+    },
+    {
+      "path": "artifacts/v305_requested_kaggle_discussion_audit/20260512T0000Z/*_topic.json, *_full_markdown.txt, *_raw_status.txt",
+      "reason": "Raw Kaggle discussion caches were used for analysis but are not committed. The committed summary keeps the actionable findings and source URLs without publishing full discussion dumps."
+    },
+    {
+      "path": "artifacts/v305_requested_kaggle_discussion_audit/20260512T0000Z/fetch_summary.json, fetch_summary_latest.json, fetch_summary_third_batch.json",
+      "reason": "Intermediate fetch summaries superseded by fetch_summary_master_20260512.json."
+    }
+  ],
+  "kept": [
+    "artifacts/v304_solver_trace_distill_dataset/20260512T1430Z",
+    "artifacts/v304_solver_trace_tokenization_gate/20260512T1430Z",
+    "artifacts/v305_requested_kaggle_discussion_audit/20260512T0000Z/v305_requested_kaggle_discussion_audit_summary.*",
+    "artifacts/v305_requested_kaggle_discussion_audit/20260512T0000Z/discussion_index_normalized.csv",
+    "artifacts/v305_requested_kaggle_discussion_audit/20260512T0000Z/requested_discussion_index.csv",
+    "artifacts/v305_requested_kaggle_discussion_audit/20260512T0000Z/fetch_summary_master_20260512.json"
+  ]
+}
