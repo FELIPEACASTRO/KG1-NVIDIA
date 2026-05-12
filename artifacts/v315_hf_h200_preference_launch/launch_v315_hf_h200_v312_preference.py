@@ -126,6 +126,7 @@ export PREF_LOSS_WEIGHT=1.0
 export CHOSEN_CE_WEIGHT=0.15
 export REJECTED_CE_WEIGHT=0.0
 export PAIR_SCORE_MODE='mean_nll'
+export SAMPLING_MODE='shuffle'
 export ABORT_TRAIN_RISE_POINTS=0
 export ABORT_MAX_RESERVED_GIB=118
 export MAX_PROMPT_TRUNCATION_RATE=0.0
@@ -262,6 +263,7 @@ def main() -> int:
             "preference_loss": "single-policy contrastive chosen/rejected plus chosen CE",
             "preference_beta": 0.10,
             "chosen_ce_weight": 0.15,
+            "sampling_mode": "shuffle",
             "continuation_from": f"{INIT_ADAPTER_REPO}/{INIT_ADAPTER_SUBFOLDER}",
             "promotion_gate": "weak eval only; promote only if bit>=136 and equation improves or total>=193",
         },
