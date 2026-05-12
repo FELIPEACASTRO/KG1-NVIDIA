@@ -5457,3 +5457,48 @@ Decisao:
   3. medir `absorption_ratio = (adapter_raw - base_raw) / (postprocessor_teacher - base_raw)`;
   4. bloquear DPO/ORPO/RAFT ate existir um SFT que demonstre transferencia parcial sem regressao.
 - Criterio minimo para continuar: qualquer ganho adapter-only deve manter `bit_manipulation>=136/160`, `equation_transform>=60/155`, truncation `0` e nenhuma regressao contra V291/V306 nos rows conhecidos.
+
+### V313 V312 verifier-synthetic HF smoke
+
+Objetivo:
+
+- testar se o dataset V312, pequeno e limpo, consegue absorver em LoRA parte do ganho V306 (`+11 bit`, `+4 equation`) sem postprocessor em runtime;
+- manter custo baixo: H200, `12` steps, checkpoint/eval a cada `3` steps;
+- iniciar do melhor adapter packageable atual, V290 `checkpoint-6`.
+
+Execucao:
+
+- Treino HF: `https://huggingface.co/jobs/felipesp1983/6a037e3a7618f125ee2b7955`.
+- Weak eval HF: `https://huggingface.co/jobs/felipesp1983/6a03853d72518a06598ff981`.
+- Output repo: `felipesp1983/kg1-nemotron-lora-v313-v312-verifier-synthetic-smoke`.
+- Output eval path: `evals/v313-h200-v221contract-v312-verifier-synth-20260512T195231Z`.
+- Artefatos locais pequenos: `artifacts/v313_hf_h200_v312_verifier_synthetic_launch/results_20260512T202832Z/`.
+
+Resultados weak V221:
+
+- `checkpoint-3`: `191/315`, `equation_transform=56/155`, `bit_manipulation=135/160`, truncation `0`;
+- `checkpoint-6`: `190/315`, `equation_transform=56/155`, `bit_manipulation=134/160`, truncation `1`;
+- `checkpoint-9`: `190/315`, `equation_transform=56/155`, `bit_manipulation=134/160`, truncation `1`;
+- `checkpoint-12`: `190/315`, `equation_transform=56/155`, `bit_manipulation=134/160`, truncation `1`.
+
+Decisao:
+
+- Rejeitar V313 para full eval, package e Kaggle submit.
+- O melhor V313 ficou abaixo do baseline operacional V290 checkpoint-6 (`192/315`, `equation=56`, `bit=136`).
+- Observacao importante para proximos treinos: `eval_loss` baixo perto de `lr=8.55e-09` nao e criterio de promocao. V308 e V313 mostram que loss pode melhorar ou ficar baixo enquanto a ACC por familia cai. O gate soberano continua sendo ACC weak/full por familia, com `bit>=136` e ganho real em `equation` ou total.
+
+### V314 V308 early checkpoint sweep
+
+Objetivo:
+
+- antes de novo treino pago, avaliar os checkpoints intermediarios ja existentes do V308 (`checkpoint-6/12/18/24`);
+- testar se algum checkpoint cedo preservou `bit_manipulation=136/160` e trouxe ganho em total/equation antes da queda observada nos checkpoints tardios;
+- evitar gastar H200 em mais epochs/steps sem evidencia, porque V308 tardio melhorou `eval_loss` mas regrediu ACC.
+
+Plano:
+
+- Launcher: `artifacts/v314_hf_h200_existing_checkpoint_sweep_launch/launch_v314_hf_v308_early_checkpoint_eval.py`.
+- Adapter repo: `felipesp1983/kg1-nemotron-lora-v308-v304-attn-lmhead-v290ckpt6`.
+- Avaliar somente adapters existentes e completos: `checkpoint-6`, `checkpoint-12`, `checkpoint-18`, `checkpoint-24`.
+- Mesmo contrato V221 official-like: thinking on, prompt suffix on, `max_tokens=7680`, `max_model_len=8192`, H200, commit gate e adapter `r=32/alpha=32`.
+- Gate de decisao: promover somente se `total>=192`, `equation>=56`, `bit>=136`; preferir full eval apenas com `total>=193` ou `equation>56` sem perda de bit.

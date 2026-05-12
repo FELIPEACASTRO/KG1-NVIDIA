@@ -1,0 +1,209 @@
+{
+  "adapters": [
+    {
+      "adapter_config": "/tmp/kg1_v245_adapter_snapshots/v313-h200-v221contract-v312-verifier-synth-20260512T195231Z/ba53c1d8290d/checkpoint-3/adapter_config.json",
+      "adapter_dir": "/tmp/kg1_v245_adapter_snapshots/v313-h200-v221contract-v312-verifier-synth-20260512T195231Z/ba53c1d8290d/checkpoint-3",
+      "adapter_weights": "/tmp/kg1_v245_adapter_snapshots/v313-h200-v221contract-v312-verifier-synth-20260512T195231Z/ba53c1d8290d/checkpoint-3/adapter_model.safetensors",
+      "adapter_weights_bytes": 4259063856,
+      "candidate_name": "v313_checkpoint_3_v221_contract",
+      "lora_alpha": 32,
+      "r": 32,
+      "repo": "felipesp1983/kg1-nemotron-lora-v313-v312-verifier-synthetic-smoke",
+      "subfolder": "checkpoint-3",
+      "target_modules": [
+        "down_proj",
+        "up_proj",
+        "v_proj",
+        "q_proj",
+        "out_proj",
+        "lm_head",
+        "in_proj",
+        "o_proj",
+        "k_proj"
+      ],
+      "target_parameters": null
+    },
+    {
+      "adapter_config": "/tmp/kg1_v245_adapter_snapshots/v313-h200-v221contract-v312-verifier-synth-20260512T195231Z/ba53c1d8290d/checkpoint-6/adapter_config.json",
+      "adapter_dir": "/tmp/kg1_v245_adapter_snapshots/v313-h200-v221contract-v312-verifier-synth-20260512T195231Z/ba53c1d8290d/checkpoint-6",
+      "adapter_weights": "/tmp/kg1_v245_adapter_snapshots/v313-h200-v221contract-v312-verifier-synth-20260512T195231Z/ba53c1d8290d/checkpoint-6/adapter_model.safetensors",
+      "adapter_weights_bytes": 4259063856,
+      "candidate_name": "v313_checkpoint_6_v221_contract",
+      "lora_alpha": 32,
+      "r": 32,
+      "repo": "felipesp1983/kg1-nemotron-lora-v313-v312-verifier-synthetic-smoke",
+      "subfolder": "checkpoint-6",
+      "target_modules": [
+        "down_proj",
+        "up_proj",
+        "v_proj",
+        "q_proj",
+        "out_proj",
+        "lm_head",
+        "in_proj",
+        "o_proj",
+        "k_proj"
+      ],
+      "target_parameters": null
+    },
+    {
+      "adapter_config": "/tmp/kg1_v245_adapter_snapshots/v313-h200-v221contract-v312-verifier-synth-20260512T195231Z/ba53c1d8290d/checkpoint-9/adapter_config.json",
+      "adapter_dir": "/tmp/kg1_v245_adapter_snapshots/v313-h200-v221contract-v312-verifier-synth-20260512T195231Z/ba53c1d8290d/checkpoint-9",
+      "adapter_weights": "/tmp/kg1_v245_adapter_snapshots/v313-h200-v221contract-v312-verifier-synth-20260512T195231Z/ba53c1d8290d/checkpoint-9/adapter_model.safetensors",
+      "adapter_weights_bytes": 4259063856,
+      "candidate_name": "v313_checkpoint_9_v221_contract",
+      "lora_alpha": 32,
+      "r": 32,
+      "repo": "felipesp1983/kg1-nemotron-lora-v313-v312-verifier-synthetic-smoke",
+      "subfolder": "checkpoint-9",
+      "target_modules": [
+        "down_proj",
+        "up_proj",
+        "v_proj",
+        "q_proj",
+        "out_proj",
+        "lm_head",
+        "in_proj",
+        "o_proj",
+        "k_proj"
+      ],
+      "target_parameters": null
+    },
+    {
+      "adapter_config": "/tmp/kg1_v245_adapter_snapshots/v313-h200-v221contract-v312-verifier-synth-20260512T195231Z/ba53c1d8290d/checkpoint-12/adapter_config.json",
+      "adapter_dir": "/tmp/kg1_v245_adapter_snapshots/v313-h200-v221contract-v312-verifier-synth-20260512T195231Z/ba53c1d8290d/checkpoint-12",
+      "adapter_weights": "/tmp/kg1_v245_adapter_snapshots/v313-h200-v221contract-v312-verifier-synth-20260512T195231Z/ba53c1d8290d/checkpoint-12/adapter_model.safetensors",
+      "adapter_weights_bytes": 4259063856,
+      "candidate_name": "v313_checkpoint_12_v221_contract",
+      "lora_alpha": 32,
+      "r": 32,
+      "repo": "felipesp1983/kg1-nemotron-lora-v313-v312-verifier-synthetic-smoke",
+      "subfolder": "checkpoint-12",
+      "target_modules": [
+        "down_proj",
+        "up_proj",
+        "v_proj",
+        "q_proj",
+        "out_proj",
+        "lm_head",
+        "in_proj",
+        "o_proj",
+        "k_proj"
+      ],
+      "target_parameters": null
+    }
+  ],
+  "blocked_actions": [
+    "full_eval",
+    "package",
+    "kaggle_submit"
+  ],
+  "candidate_summary": {
+    "base_model_path": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+    "candidates_json": "/tmp/kg1_v245_weak_eval/v313-h200-v221contract-v312-verifier-synth-20260512T195231Z/v245_weak_eval_candidates.json",
+    "config": {
+      "dtype": "auto",
+      "enable_chunked_prefill": true,
+      "enable_prefix_caching": true,
+      "gpu_memory_utilization": 0.85,
+      "max_lora_rank": 32,
+      "max_model_len": 8192,
+      "max_num_seqs": 64,
+      "max_tokens": 7680,
+      "model_name": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+      "model_revision": "cbd3fa9f933d55ef16a84236559f4ee2a0526848",
+      "prompt_suffix": "\nReturn only one line: `\\boxed{answer}`. No reasoning. No explanation.",
+      "temperature": 0.0,
+      "top_p": 1.0,
+      "trust_remote_code": true,
+      "warmup_rows": 0
+    },
+    "elapsed_s": 2055.506673336029,
+    "generated_at_utc": "2026-05-12T20:28:32.611550+00:00",
+    "questions_csv": "/root/.cache/huggingface/hub/datasets--felipesp1983--kg1-nemotron-training/snapshots/fe43506387681bda17d512de70f9d4291830a025/runtime_artifacts/v245_weak_eval_bridge/v245-weak-bridge-hfonly-20260510T1950Z/v221_weak_315.csv",
+    "rows": [
+      {
+        "accuracy": 0.6063492063492063,
+        "adapter": "/tmp/kg1_v245_adapter_snapshots/v313-h200-v221contract-v312-verifier-synth-20260512T195231Z/ba53c1d8290d/checkpoint-3",
+        "bit_manipulation_correct": 135,
+        "completion_tokens": 1502963,
+        "correct": 191,
+        "equation_transform_correct": 56,
+        "error": "",
+        "name": "v313_checkpoint_3_v221_contract",
+        "report_json": "/tmp/kg1_v245_weak_eval/v313-h200-v221contract-v312-verifier-synth-20260512T195231Z/eval/v313_checkpoint_3_v221_contract/v313_hf_weak_v313_checkpoint_3_v221_contract_eval_report.json",
+        "status": "ok",
+        "tokens_per_second": 2933.006909489614,
+        "truncated": 0,
+        "truncation_rate": 0.0
+      },
+      {
+        "accuracy": 0.6031746031746031,
+        "adapter": "/tmp/kg1_v245_adapter_snapshots/v313-h200-v221contract-v312-verifier-synth-20260512T195231Z/ba53c1d8290d/checkpoint-6",
+        "bit_manipulation_correct": 134,
+        "completion_tokens": 1504105,
+        "correct": 190,
+        "equation_transform_correct": 56,
+        "error": "",
+        "name": "v313_checkpoint_6_v221_contract",
+        "report_json": "/tmp/kg1_v245_weak_eval/v313-h200-v221contract-v312-verifier-synth-20260512T195231Z/eval/v313_checkpoint_6_v221_contract/v313_hf_weak_v313_checkpoint_6_v221_contract_eval_report.json",
+        "status": "ok",
+        "tokens_per_second": 3202.9146532115724,
+        "truncated": 1,
+        "truncation_rate": 0.0031746031746031746
+      },
+      {
+        "accuracy": 0.6031746031746031,
+        "adapter": "/tmp/kg1_v245_adapter_snapshots/v313-h200-v221contract-v312-verifier-synth-20260512T195231Z/ba53c1d8290d/checkpoint-9",
+        "bit_manipulation_correct": 134,
+        "completion_tokens": 1504134,
+        "correct": 190,
+        "equation_transform_correct": 56,
+        "error": "",
+        "name": "v313_checkpoint_9_v221_contract",
+        "report_json": "/tmp/kg1_v245_weak_eval/v313-h200-v221contract-v312-verifier-synth-20260512T195231Z/eval/v313_checkpoint_9_v221_contract/v313_hf_weak_v313_checkpoint_9_v221_contract_eval_report.json",
+        "status": "ok",
+        "tokens_per_second": 3202.5971230016057,
+        "truncated": 1,
+        "truncation_rate": 0.0031746031746031746
+      },
+      {
+        "accuracy": 0.6031746031746031,
+        "adapter": "/tmp/kg1_v245_adapter_snapshots/v313-h200-v221contract-v312-verifier-synth-20260512T195231Z/ba53c1d8290d/checkpoint-12",
+        "bit_manipulation_correct": 134,
+        "completion_tokens": 1504181,
+        "correct": 190,
+        "equation_transform_correct": 56,
+        "error": "",
+        "name": "v313_checkpoint_12_v221_contract",
+        "report_json": "/tmp/kg1_v245_weak_eval/v313-h200-v221contract-v312-verifier-synth-20260512T195231Z/eval/v313_checkpoint_12_v221_contract/v313_hf_weak_v313_checkpoint_12_v221_contract_eval_report.json",
+        "status": "ok",
+        "tokens_per_second": 3209.9297778928153,
+        "truncated": 1,
+        "truncation_rate": 0.0031746031746031746
+      }
+    ],
+    "solution_csv": "/root/.cache/huggingface/hub/datasets--felipesp1983--kg1-nemotron-training/snapshots/fe43506387681bda17d512de70f9d4291830a025/runtime_artifacts/v245_weak_eval_bridge/v245-weak-bridge-hfonly-20260510T1950Z/v221_weak_315.csv"
+  },
+  "eval_prompt_controls": {
+    "disable_thinking": false,
+    "no_prompt_suffix": false,
+    "prompt_suffix": "\nReturn only one line: `\\boxed{answer}`. No reasoning. No explanation."
+  },
+  "eval_summary_json": "/tmp/kg1_v245_weak_eval/v313-h200-v221contract-v312-verifier-synth-20260512T195231Z/eval/batch_candidate_summary.json",
+  "generated_at_utc": "2026-05-12T20:28:35.146294+00:00",
+  "path_in_repo": "evals/v313-h200-v221contract-v312-verifier-synth-20260512T195231Z",
+  "repo_commit": "69ee517d5808ab501845ad13416739e736ccc630",
+  "run_id": "v313-h200-v221contract-v312-verifier-synth-20260512T195231Z",
+  "schema_version": "kg1_v245_hf_weak_eval_manifest_v1",
+  "weak_csv": {
+    "family_counts": {
+      "bit_manipulation": 160,
+      "equation_transform": 155
+    },
+    "observed_shared_row_contract_sha256": "bf055e3b9ebce79d4bfc9e48bce5a305b1d83da882f14afddec80d6afaba5fff",
+    "path": "/root/.cache/huggingface/hub/datasets--felipesp1983--kg1-nemotron-training/snapshots/fe43506387681bda17d512de70f9d4291830a025/runtime_artifacts/v245_weak_eval_bridge/v245-weak-bridge-hfonly-20260510T1950Z/v221_weak_315.csv",
+    "rows": 315,
+    "sha256": "85da758e14d57ea40270de5747f98726a0ad0b6d1795bff7dd46183005e0f9b6"
+  }
+}
