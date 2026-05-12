@@ -1,0 +1,19 @@
+{
+  "schema_version": "kg1_v296_reference_exact_delta_v1",
+  "source": "tonghuikang/nemotron reasoners/bit_manipulation.py via public GitHub reference execution",
+  "license_observation": "GitHub API reports license=null; treat as external reference/teacher evidence, not copied production code.",
+  "train_sha256": "d204af160633b638448723a437aa51c0db70fd0b64ff92f6ad6f52e5ac6377fa",
+  "bit_rows": 1602,
+  "reference_correct": 1364,
+  "current_correct": 1265,
+  "both_correct": 1207,
+  "reference_gain_vs_current": 157,
+  "reference_loss_vs_current": 58,
+  "potential_oracle_union_correct": 1422,
+  "potential_oracle_union_accuracy": 0.8876404494382022,
+  "outputs": {
+    "diff_csv": "artifacts\\v296_bit_stride_solver_audit\\20260512T0450Z\\reference_exact_comparison.csv",
+    "gain_rows_csv": "artifacts\\v296_bit_stride_solver_audit\\20260512T0450Z\\reference_exact_gain_rows_vs_current.csv",
+    "loss_rows_csv": "artifacts\\v296_bit_stride_solver_audit\\20260512T0450Z\\reference_exact_loss_rows_vs_current.csv"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "schema_version": "kg1_v296_bit_stride_solver_audit_v1",
+  "train_csv": "artifacts\\tmp_v296_official_kaggle_download\\train.csv",
+  "train_sha256": "d204af160633b638448723a437aa51c0db70fd0b64ff92f6ad6f52e5ac6377fa",
+  "rows_total": 9500,
+  "bit_rows": 1602,
+  "stride_correct": 1201,
+  "stride_accuracy": 0.7496878901373284,
+  "current_correct": 1265,
+  "current_accuracy": 0.7896379525593009,
+  "both_correct": 1047,
+  "stride_gain_vs_current": 154,
+  "stride_loss_vs_current": 218,
+  "parse_failed": 0,
+  "elapsed_s": 51.025,
+  "details_rows_written": 1602
+}

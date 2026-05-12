@@ -4720,6 +4720,41 @@ Escopo: buscar via Kaggle SDK autenticado tudo que `Tong Hui Kang` / `huikang` p
   3. gerar apenas artefatos de verifier/teacher, nunca submissao direta de codigo sem autorizacao de regra/package;
   4. se houver novos acertos seguros em bit, criar dados sinteticos/CoT filtrados para LoRA adapter-only.
 
+### Resultado V296 CPU audit
+
+- Artefatos:
+  - `scripts/run_v296_bit_stride_solver_audit.py`
+  - `artifacts/v296_bit_stride_solver_audit/20260512T0450Z/v296_bit_stride_solver_audit_summary.json`
+  - `artifacts/v296_bit_stride_solver_audit/20260512T0450Z/v296_bit_stride_solver_audit_details.csv`
+- Base oficial usada: `train.csv` SHA256 `d204af160633b638448723a437aa51c0db70fd0b64ff92f6ad6f52e5ac6377fa`.
+- Resultado no recorte oficial `bit_manipulation` (`1602` linhas):
+  - solver local atual: `1265/1602 = 78.96%`;
+  - V296 stride audit corrigido: `1201/1602 = 74.97%`;
+  - ambos corretos: `1047`;
+  - V296 acerta e solver atual erra: `154`;
+  - V296 erra e solver atual acerta: `218`;
+  - parse failed: `0`.
+- Decisao: V296, como implementado a partir da descricao publica, ainda nao substitui o solver local e nao autoriza treino caro isolado. O valor acionavel e o conjunto complementar de `154` linhas, que deve virar teacher/verifier filtrado somente se uma politica de selecao provar no-loss contra weak/full.
+- Proximo passo tecnico: portar/validar a implementacao publica exata `tonghuikang/nemotron/reasoners/bit_manipulation.py` ou derivar um ensemble conservador `current OR stride` com abstencao, medindo perdas antes de qualquer HF GPU.
+
+### Validacao da referencia publica exata
+
+- A implementacao publica exata `tonghuikang/nemotron` foi executada apenas como referencia externa sobre o `train.csv` oficial, com stub local do tipo `Problem`.
+- A API do GitHub reporta `license=null`; portanto o codigo deve ser tratado como referencia/teacher evidence, nao como codigo copiavel para pacote final.
+- Resultado da referencia exata no recorte `bit_manipulation`:
+  - referencia Tong: `1364/1602 = 85.14%`, reproduzindo o claim publico;
+  - solver local atual: `1265/1602 = 78.96%`;
+  - ambos corretos: `1207`;
+  - referencia acerta e solver local erra: `157`;
+  - referencia erra e solver local acerta: `58`;
+  - uniao oracular potencial: `1422/1602 = 88.76%`.
+- Artefatos:
+  - `artifacts/v296_bit_stride_solver_audit/20260512T0450Z/reference_exact_comparison_summary.json`
+  - `artifacts/v296_bit_stride_solver_audit/20260512T0450Z/reference_exact_delta_manifest.json`
+  - `artifacts/v296_bit_stride_solver_audit/20260512T0450Z/reference_exact_gain_rows_vs_current.csv`
+  - `artifacts/v296_bit_stride_solver_audit/20260512T0450Z/reference_exact_loss_rows_vs_current.csv`
+- Decisao: este e o maior achado novo de `bit_manipulation` desde V291. Nao deve virar submissao direta, mas deve virar V297: teacher dataset/abstention policy para transferir os `157` gains sem absorver as `58` perdas.
+
 ### Regras operacionais adicionadas
 
 - Nao gastar H100/H200 em novo treino de bit antes do V296 CPU provar ganho ou cobertura nova.
