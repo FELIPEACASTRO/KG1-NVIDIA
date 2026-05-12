@@ -13,7 +13,7 @@ from huggingface_hub import HfApi, get_token
 VERSION = "v294_equation_rep_patch_v221_weak_eval"
 NAMESPACE = "felipesp1983"
 REPO_BRANCH = "v230-v226-complementarity"
-EXPECTED_COMMIT = "d529dfdc293b9e52dc14d8e4f061fd9854c47aaf"
+EXPECTED_COMMIT = "ac7c3fed75e07847df884a7e23d9795e621a2dfa"
 IMAGE = "vllm/vllm-openai:v0.20.1"
 FLAVOR = "h200"
 RUN_ID = "v294-h200-v221contract-eq-rep-patch-" + datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")

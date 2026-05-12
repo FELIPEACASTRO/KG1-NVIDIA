@@ -13,7 +13,7 @@ from huggingface_hub import HfApi, get_token
 VERSION = "v294_equation_rep_patch_from_v290_checkpoint6_h200"
 NAMESPACE = "felipesp1983"
 REPO_BRANCH = "v230-v226-complementarity"
-EXPECTED_COMMIT = "d529dfdc293b9e52dc14d8e4f061fd9854c47aaf"
+EXPECTED_COMMIT = "ac7c3fed75e07847df884a7e23d9795e621a2dfa"
 IMAGE = "pytorch/pytorch:2.8.0-cuda12.8-cudnn9-devel"
 FLAVOR = "h200"
 RUN_ID = "v294-eq-rep-patch-v290ckpt6-" + datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
