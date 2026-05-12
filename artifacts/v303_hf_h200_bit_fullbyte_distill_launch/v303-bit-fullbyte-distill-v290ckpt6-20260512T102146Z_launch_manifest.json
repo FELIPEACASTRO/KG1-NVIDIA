@@ -1,0 +1,57 @@
+{
+  "branch": "v230-v226-complementarity",
+  "dataset": {
+    "data_repo": "felipesp1983/kg1-nemotron-training",
+    "train_file": "data/v303_bit_fullbyte_distill/20260512T1010Z/v303_bit_fullbyte_distill_train.jsonl",
+    "train_rows": 12822,
+    "train_sha256": "c8142742a0c98c4fa368da1a35d16d366b3d499bd66e5b7716408909f7977d27",
+    "val_file": "data/v303_bit_fullbyte_distill/20260512T1010Z/v303_bit_fullbyte_distill_val.jsonl",
+    "val_rows": 969,
+    "val_sha256": "3711e717eac66ba052697ea42387feb94fddec1a7916d3c67fd89393bb098021"
+  },
+  "expected_commit": "d70048eac31cc4f143da018652a69e174f3507b4",
+  "flavor": "h200",
+  "gates": [
+    "hf_job_preflight_gate:preinstall",
+    "hf_job_preflight_gate:artifacts",
+    "hf_job_preflight_gate:postinstall",
+    "hf_job_train_v90 tokenization/truncation/offset-mask gate"
+  ],
+  "generated_at_utc": "2026-05-12T10:21:46.778773+00:00",
+  "hardware": {
+    "accelerator_model": "H200",
+    "accelerator_quantity": "1",
+    "accelerator_vram": "141 GB",
+    "cpu": "23 vCPU",
+    "name": "h200",
+    "pretty_name": "Nvidia H200",
+    "ram": "256 GB",
+    "unit_cost_usd": 0.083333,
+    "unit_label": "minute"
+  },
+  "image": "pytorch/pytorch:2.8.0-cuda12.8-cudnn9-devel",
+  "init_adapter": {
+    "repo": "felipesp1983/kg1-nemotron-lora-v290-rank19-micro-patch-smoke",
+    "subfolder": "checkpoint-6"
+  },
+  "job_id": "6a02ff78aff1cd33e8f34829",
+  "job_status": "RUNNING",
+  "job_url": "https://huggingface.co/jobs/felipesp1983/6a02ff78aff1cd33e8f34829",
+  "namespace": "felipesp1983",
+  "next_action": "Monitor every 30 seconds; weak-eval checkpoint-3/6/9/12/final if training completes.",
+  "output_repo": "felipesp1983/kg1-nemotron-lora-v303-bit-fullbyte-distill-v290ckpt6",
+  "recipe": {
+    "continuation_from": "felipesp1983/kg1-nemotron-lora-v290-rank19-micro-patch-smoke/checkpoint-6",
+    "eval_every_steps": 3,
+    "eval_max_examples": 256,
+    "final_learning_rate": "2e-9",
+    "learning_rate": "6e-9",
+    "max_steps": 12,
+    "objective": "distill V300/V302 full-byte bit gains into adapter-only behavior while preserving V274 equation gains",
+    "sampling_mode": "weighted_replacement",
+    "save_every_steps": 3,
+    "trainable_lora_modules": "lm_head"
+  },
+  "run_id": "v303-bit-fullbyte-distill-v290ckpt6-20260512T102146Z",
+  "version": "v303_bit_fullbyte_distill_from_v290_checkpoint6_h200"
+}

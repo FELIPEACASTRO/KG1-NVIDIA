@@ -1,0 +1,12 @@
+{
+  "data_repo": "felipesp1983/kg1-nemotron-training",
+  "dataset_dir": "artifacts\\v303_bit_fullbyte_distill_dataset\\20260512T1010Z",
+  "dataset_path_in_repo": "data/v303_bit_fullbyte_distill/20260512T1010Z",
+  "dataset_upload": "https://huggingface.co/datasets/felipesp1983/kg1-nemotron-training/commit/c0017ed66e1dc96fe3f76905a8d94859d13fd892",
+  "gate_dir": "artifacts\\v303_bit_fullbyte_tokenization_gate\\20260512T1010Z",
+  "gate_path_in_repo": "runtime_artifacts/v303_bit_fullbyte_tokenization_gate/20260512T1010Z",
+  "gate_upload": "https://huggingface.co/datasets/felipesp1983/kg1-nemotron-training/commit/9f4b32f007ae8a363576fce4fdfb86a0fb604832",
+  "generated_at_utc": "2026-05-12T10:21:33.657203+00:00",
+  "next_action": "Launch V303 H200 distillation job after upload is visible to HF Jobs.",
+  "version": "v303_hf_dataset_upload"
+}
