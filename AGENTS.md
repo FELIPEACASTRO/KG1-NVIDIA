@@ -17,3 +17,8 @@
 - Training/evaluation notebooks must include executable checks for H100/CUDA capacity, `causal-conv1d`, `mamba_ssm`, vLLM install ordering, exact dataset hashes, exact Drive adapter path, adapter tensor/config compatibility, tokenization/truncation/offset-mask contracts, final adapter completeness, and quality gates before full eval/submission.
 - The CI workflow `.github/workflows/notebook-release-gate.yml` enforces this gate for every changed notebook on push and pull request.
 - Historical notebooks are not retroactively required to pass until they are edited; once edited, they must satisfy the current gate.
+
+## HF Job Log Monitoring
+
+- While actively analyzing a running HF/Kaggle/Colab job, check job status and logs every ~30 seconds unless a command is blocked, a human explicitly pauses monitoring, or the job reaches a terminal state.
+- Each monitoring update should identify the current stage, any new progress markers, and whether there is a failure, regression, or next automated action.
