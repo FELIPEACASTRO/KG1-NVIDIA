@@ -1,0 +1,92 @@
+{
+  "generated_at_utc": "2026-05-12T23:06:56.709341+00:00",
+  "evidence": {
+    "task": "Kaggle NVIDIA Nemotron Model Reasoning Challenge; LoRA-only submit, no external postprocessor allowed unless distilled into adapter behavior.",
+    "current_submit_baseline_full947": {
+      "overall_correct": 823,
+      "rows": 947,
+      "accuracy": 0.8690601900739177,
+      "bit_manipulation_correct": "135/160",
+      "equation_transform_correct": "56/155",
+      "truncated": 1
+    },
+    "verified_postprocessor_oracle_full947": {
+      "overall_correct": 838,
+      "accuracy": 0.8848996832101372,
+      "bit_manipulation_correct": "146/160",
+      "equation_transform_correct": "60/155",
+      "gains": 15,
+      "losses": 0
+    },
+    "equation_gain_rules": [
+      {
+        "id": "7688e06e",
+        "rule": "minus_signed_opposite_sign_guarded",
+        "baseline": "55",
+        "target": "-55"
+      },
+      {
+        "id": "274def88",
+        "rule": "minus_signed_opposite_sign_guarded",
+        "baseline": "-92",
+        "target": "92"
+      },
+      {
+        "id": "d1bd7478",
+        "rule": "colon_absdiff_unreverse_same_len",
+        "baseline": "03",
+        "target": "30"
+      },
+      {
+        "id": "c5b058d6",
+        "rule": "add_direct_over_model_add_variant",
+        "baseline": "35",
+        "target": "134"
+      }
+    ],
+    "bit_gain_rules": {
+      "fullbyte_safe_ternary": 10,
+      "fullbyte_binary": 1,
+      "gain_ids": [
+        "1abaffca",
+        "0e70c867",
+        "b8722d19",
+        "7192535b",
+        "8740ed31",
+        "1a7c8520",
+        "a6192d29",
+        "048cc279",
+        "4c327b55",
+        "b8aa3072",
+        "5ba26f21"
+      ]
+    },
+    "failed_distillation_attempts": [
+      {
+        "version": "V313 SFT verifier synthetic",
+        "best_weak": "191/315 eq=56 bit=135; no eq gain; bit -1"
+      },
+      {
+        "version": "V315 preference on V312",
+        "closed_checkpoints": "ckpt4/8/12 all 191 eq=56 bit=135; ckpt16 190 eq=56 bit=134"
+      }
+    ],
+    "promotion_gate": "Promote only if weak eq>=60, bit>=136, total>=193, truncation acceptable; full eval no family regression."
+  },
+  "calls": [
+    {
+      "model": "deepseek/deepseek-r1-distill-qwen-32b",
+      "status": 200,
+      "path": "artifacts\\v316_openrouter_distill_triage\\20260512T2305Z\\deepseek__deepseek-r1-distill-qwen-32b.json",
+      "bytes": 9755,
+      "content_preview": "ĊĊ```jsonĊ{ĊĠĠ\"root_cause_hypotheses\":Ġ[ĊĠĠĠĠ\"TheĠSFTĠandĠpreferenceĠdistillationĠmethodsĠfailedĠtoĠeffectivelyĠinternalizeĠtheĠequation_transformĠgainsĠdueĠtoĠinsufficientĠsyntheticĠdataĠgenerationĠorĠimproperĠlossĠweighting.\",ĊĠĠĠĠ\"TheĠslightĠregressionĠinĠbitĠaccuracyĠmayĠbeĠdueĠtoĠoverfittingĠorĠinadequateĠguardrailsĠinĠtheĠdistillationĠprocess.\"ĊĠĠ],ĊĠĠ\"equation_transform_plan\":Ġ{ĊĠĠĠĠ\"data_mix\":Ġ{ĊĠĠĠĠĠĠ\"synthetic\":Ġ0.7,ĊĠĠĠĠĠĠ\"real\":Ġ0.3ĊĠĠĠĠ},ĊĠĠĠĠ\"loss_weighting\":Ġ{ĊĠĠĠĠĠĠ\"equation_transform\":Ġ0.6,ĊĠĠĠĠĠĠ\"bit_manipulation\":Ġ0.4ĊĠĠĠĠ},ĊĠĠĠĠ\"guardrails\":Ġ[ĊĠĠĠĠĠĠ\"ImplementĠrule-basedĠconstraintsĠforĠequation_transformĠtoĠpreventĠoverfitting.\",ĊĠĠĠĠĠĠ\"UseĠearlyĠstoppingĠbasedĠonĠvalidationĠmetricsĠtoĠpreventĠdegradation.\"ĊĠĠĠĠ],ĊĠĠĠĠ\"trace_style\":Ġ\"DetailedĠtracingĠofĠequation_transformĠstepsĠtoĠensureĠaccurateĠinternalization.\"ĊĠĠ},ĊĠĠ\"bit_manipulation_plan\":Ġ{ĊĠĠĠĠ\"data_mix\":Ġ{ĊĠĠĠĠĠĠ\"synthetic\":Ġ0.6,ĊĠĠĠĠĠĠ\"real\":Ġ0.4ĊĠĠĠĠ},ĊĠĠĠĠ\"loss_weighting\":Ġ{ĊĠĠĠĠĠĠ\"bit_manipulation\":Ġ0.7,ĊĠĠĠĠĠĠ\"equation_transform\":Ġ0.3ĊĠĠĠĠ},ĊĠĠĠĠ\"guardrails\":Ġ[ĊĠĠĠĠĠĠ\"MaintainĠexistingĠbitĠaccuracyĠbyĠusingĠconservativeĠlearningĠrates.\",ĊĠĠĠĠĠĠ\"ImplementĠvalidationĠchecksĠtoĠensureĠnoĠlossĠinĠbitĠ"
+    },
+    {
+      "model": "deepseek/deepseek-r1-distill-llama-70b",
+      "status": 200,
+      "path": "artifacts\\v316_openrouter_distill_triage\\20260512T2305Z\\deepseek__deepseek-r1-distill-llama-70b.json",
+      "bytes": 10579,
+      "content_preview": "```json\n{\n  \"root_cause_hypotheses\": [\n    \"Insufficient equation-specific training data leading to stagnation at 56.\",\n    \"Inadequate loss weighting for equation transformation tasks.\",\n    \"Overfitting to synthetic data patterns without generalization.\",\n    \"Inadequate training duration or learning rate schedule.\"\n  ],\n  \"equation_transform_plan\": [\n    {\n      \"rule_id\": \"7688e06e\",\n      \"trace_style\": \"highlighted_operation\",\n      \"data_mix\": \"80% baseline, 20% new\",\n      \"loss_weighting\": 1.5,\n      \"guardrails\": \"monitor for overfitting\"\n    },\n    {\n      \"rule_id\": \"274def88\",\n      \"trace_style\": \"inverse_pair\",\n      \"data_mix\": \"70% baseline, 30% new\",\n      \"loss_weighting\": 1.5,\n      \"guardrails\": \"check generalization\"\n    },\n    {\n      \"rule_id\": \"d1bd7478\",\n      \"trace_style\": \"mirror_pair\",\n      \"data_mix\": \"60% baseline, 40% new\",\n      \"loss_weighting\": 1.2,\n      \"guardrails\": \"prevent underfitting\"\n    },\n    {\n      \"rule_id\": \"c5b058d6\",\n      \"trace_style\": \"operation_chain\",\n      \"data_mix\": \"50% baseline, 50% new\",\n      \"loss_weighting\": 1.0,\n      \"guardrails\": \"ensure convergence\"\n    }\n  ],\n  \"bit_manipulation_plan\": [\n    {\n      \"gain_id\": "
+    }
+  ]
+}

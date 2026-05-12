@@ -1,0 +1,23 @@
+{
+  "version": "v315_v312_preference_result_summary",
+  "generated_at_utc": "2026-05-12T23:07:00Z",
+  "hf_job_url": "https://huggingface.co/jobs/felipesp1983/6a03a8b972518a06598ffb45",
+  "output_repo": "felipesp1983/kg1-nemotron-lora-v315-v312-preference-v290ckpt6",
+  "eval_upload_commit": "https://huggingface.co/felipesp1983/kg1-nemotron-lora-v315-v312-preference-v290ckpt6/commit/c3363b38eee25c7315cc669da47180229f715ae2",
+  "decision": "reject_for_full_package_submit",
+  "baseline_to_beat": {
+    "name": "v290_checkpoint_6_v221_contract",
+    "correct": 192,
+    "equation_transform_correct": 56,
+    "bit_manipulation_correct": 136,
+    "truncated": 0
+  },
+  "weak_v221_results": [
+    {"adapter": "checkpoint-4", "correct": 191, "equation_transform_correct": 56, "bit_manipulation_correct": 135, "truncated": 0},
+    {"adapter": "checkpoint-8", "correct": 191, "equation_transform_correct": 56, "bit_manipulation_correct": 135, "truncated": 0},
+    {"adapter": "checkpoint-12", "correct": 191, "equation_transform_correct": 56, "bit_manipulation_correct": 135, "truncated": 0},
+    {"adapter": "checkpoint-16", "correct": 190, "equation_transform_correct": 56, "bit_manipulation_correct": 134, "truncated": 0},
+    {"adapter": "final", "correct": 191, "equation_transform_correct": 56, "bit_manipulation_correct": 135, "truncated": 1}
+  ],
+  "heavy_prediction_artifacts_policy": "not_committed; retained in HF output repo commit above to avoid adding ~1.5M CSV rows to Git"
+}

@@ -5556,3 +5556,107 @@ Gate de decisao:
 - V315 nao autoriza full/package/submission por si so.
 - Depois do treino, rodar weak V221.
 - Promover somente se bater o baseline adapter-only V290 checkpoint-6: preservar `bit_manipulation>=136/160` e melhorar `equation_transform` ou total, com alvo minimo pratico `total>=193` ou `equation>56` sem perda de bit.
+
+Execucao e resultado:
+
+- Treino HF: `https://huggingface.co/jobs/felipesp1983/6a03a8b972518a06598ffb45`.
+- Output repo: `felipesp1983/kg1-nemotron-lora-v315-v312-preference-v290ckpt6`.
+- Eval upload: `https://huggingface.co/felipesp1983/kg1-nemotron-lora-v315-v312-preference-v290ckpt6/commit/c3363b38eee25c7315cc669da47180229f715ae2`.
+- Artefatos locais pequenos: `artifacts/v315_hf_h200_preference_launch/results_20260512T2307Z/`.
+- Resultado weak V221:
+  - `checkpoint-4`: `191/315`, `equation_transform=56/155`, `bit_manipulation=135/160`, truncation `0`;
+  - `checkpoint-8`: `191/315`, `equation_transform=56/155`, `bit_manipulation=135/160`, truncation `0`;
+  - `checkpoint-12`: `191/315`, `equation_transform=56/155`, `bit_manipulation=135/160`, truncation `0`;
+  - `checkpoint-16`: `190/315`, `equation_transform=56/155`, `bit_manipulation=134/160`, truncation `0`;
+  - `final`: `191/315`, `equation_transform=56/155`, `bit_manipulation=135/160`, truncation `1`.
+
+Decisao:
+
+- Rejeitar V315 para full eval, package e Kaggle submit.
+- V315 confirmou que contrastive/preference sobre V312 pequeno estabiliza o comportamento em `191`, mas nao recupera o baseline operacional V290 `checkpoint-6` (`192/315`, `bit=136`, `equation=56`).
+- Nao repetir preference pequeno sem nova informacao; o problema nao parece ser ranking chosen/rejected isolado, e sim absorver algoritmo no adapter.
+
+### V316 V304 MLP/expert-LoRA distillation
+
+Motivo:
+
+- V308 ja testou V304 com `q_proj,k_proj,v_proj,o_proj,lm_head` por ate `36` steps e nao promoveu (`190/191`, `equation=56`, `bit=134/135`).
+- V313/V315 testaram V312 pequeno em SFT/preference e tambem nao promoveram.
+- Portanto, o proximo passo efetivo nao e mais epochs/steps do mesmo eixo. A nova hipotese e treinar a fatia MLP/expert do adapter (`up_proj/down_proj`), mantendo o V290 `checkpoint-6` como base ativa.
+
+Implementacao preparada:
+
+- Launcher: `artifacts/v316_hf_h200_v304_mlp_launch/launch_v316_hf_h200_v304_mlp.py`.
+- Weak eval launcher: `artifacts/v316_hf_h200_v304_mlp_launch/launch_v316_hf_weak_eval.py`.
+- Dataset: V304 solver-trace completo ja validado e enviado ao HF:
+  - train `data/v304_solver_trace_distill/20260512T1430Z/v304_solver_trace_distill_train.jsonl`;
+  - val `data/v304_solver_trace_distill/20260512T1430Z/v304_solver_trace_distill_val.jsonl`;
+  - train SHA `7935ff999cdd8318de67538922de3651170c59baa2664a10beac3334dfcf9082`;
+  - val SHA `2b06224afe035c5085798f4a4be27e764ffaebde3ff7eee11c558c0cd5bdd29d`.
+- Receita:
+  - H200 gated a `<= $0.09/min`;
+  - iniciar de `felipesp1983/kg1-nemotron-lora-v290-rank19-micro-patch-smoke/checkpoint-6`;
+  - treinar somente LoRA `up_proj,down_proj`;
+  - `18` steps, checkpoint a cada `3`;
+  - LR `1.5e-8 -> 4e-9`;
+  - pesos maiores para `bit_fullbyte_*` e `equation_numeric_*`, com replay das familias preservadas.
+
+Gates:
+
+- O job roda `hf_job_preflight_gate.py` nas fases `preinstall`, `artifacts` e `postinstall`.
+- O treino roda gate de hash, contagem, tokenizacao, offset-mask e truncation antes de step pago real.
+- A selecao de LoRA precisa provar que `up_proj` e `down_proj` foram encontrados como tensores treinaveis.
+- Promover somente se weak V221 atingir pelo menos `total>=192`, `bit_manipulation>=136`, `equation_transform>=56`; preferir full/package apenas com `total>=193` ou `equation_transform>56` sem perda de bit.
+
+Predicao antes do run:
+
+- Risco alto-moderado: treinar MLP/expert e mais caro e pode deslocar comportamento.
+- Beneficio esperado se a hipotese estiver correta: recuperar `bit=136` e talvez `equation=57`; esse seria o primeiro sinal real de absorcao adapter-only.
+- Se V316 tambem ficar em `191/135/56`, o roadmap deve parar treinos SFT/preference com V304/V312 e voltar para CPU-only: expandir verifier/DSL em `equation_transform` e criar dados answer-aligned novos, nao treinar mais a mesma familia de datasets.
+
+### V316 OpenRouter multi-model distill triage - 2026-05-12
+
+Fonte auditada:
+
+- `C:\Users\davis\Downloads\OpenRouter Chat Tue May 12 2026 (1).json`, `199244` bytes.
+- Artefato local: `artifacts/v316_openrouter_distill_triage/20260512T2318Z/v316_openrouter_chat_20260512_1_triage.md`.
+- Modelos no anexo: `deepseek/deepseek-r1-distill-qwen-32b`, `deepseek/deepseek-r1-distill-llama-70b`, `deepseek/deepseek-v4-pro`, `qwen/qwen3.6-max-preview`, `qwen/qwen3.6-plus`, `openai/gpt-5.3-codex`.
+
+Conclusao rigorosa:
+
+- O anexo nao contem nova evidencia empirica de score. Ele contem hipoteses de IAs sobre o mesmo pacote de evidencias V302/V306/V313/V315.
+- O consenso util e consistente com os logs locais: `V313`/`V315` falharam provavelmente por diluicao de sinal, baixa separabilidade dos pares preference, subpeso dos tokens finais de resposta e interferencia catastrofica em `bit_manipulation`.
+- A recomendacao acionavel agora e manter `V316` como experimento diferente dos anteriores: mudar a fatia treinavel para `up_proj/down_proj`, preservar replay, e usar gates por familia. Isso evita gastar H200 repetindo o eixo que ja falhou (`q/k/v/o/lm_head` SFT/preference).
+
+Achados aceitos no roadmap:
+
+- `signal dilution`: datasets futuros devem concentrar os 4 ganhos `equation_transform` e 11 ganhos `bit_manipulation`, com keepers suficientes para nao regredir.
+- `hard negatives`: contrastar exatamente os erros observados, nao negativos genericos:
+  - `55` vs `-55`;
+  - `-92` vs `92`;
+  - `03` vs `30`;
+  - `35` vs `134`;
+  - bit fullbyte safe ternary/binary com as saidas erradas reais do baseline.
+- `answer-token underweighting`: se V316 nao mover ACC, abrir V317 para SFT com completion curta/answer-aligned ou perda ponderada no span final da resposta, porque os alvos numericos sao poucos tokens e podem estar sendo diluidos por traces longos.
+- `bit keeper replay`: qualquer treino que nao mantenha `bit>=135` no weak deve ser interrompido; qualquer promocao para full/package exige `bit>=136`.
+- `loss nao decide`: `train_loss`/`eval_loss` baixo nao e suficiente; o gate real continua sendo weak/full ACC por familia, truncation e nao-regressao.
+
+Achados rejeitados ou adiados:
+
+- LRs genericos como `8e-5` a `1.5e-4` e `10000+` steps: incompatíveis com a linhagem PEFT local de LR muito baixo e alto risco de destruir o adapter 0.86+.
+- Treinar apenas em entradas empobrecidas como `55 -> -55`: risco alto de memorizar strings fora do formato real do Kaggle.
+- Curriculo sequencial `100% equation` sem replay de bit: contradiz a regressao observada em V315 (`bit=134` no checkpoint tardio).
+- Usar resposta de IA como autorizacao de submit: so resultados reproduzidos por gate local/HF podem entrar em package/submission.
+
+Proximo ramo se V316 falhar:
+
+- `V317 answer-span weighted distillation`: implementar ou adaptar trainer para elevar peso dos tokens da resposta final e reduzir trace livre.
+- Dataset V317 deve ser menor que V304, com linhas:
+  - positivos dos 15 ganhos verificados;
+  - hard negatives com respostas erradas reais;
+  - keepers de `bit_manipulation` corretos do V290 checkpoint-6;
+  - keepers globais de familias nao problemáticas.
+- Gate V317:
+  - parar se dois checkpoints consecutivos ficarem `equation=56` e `bit<=135`;
+  - rollback imediato se `bit<135`;
+  - promover somente com `total>=193` ou `equation>56` mantendo `bit>=136` e truncation sem piora.
