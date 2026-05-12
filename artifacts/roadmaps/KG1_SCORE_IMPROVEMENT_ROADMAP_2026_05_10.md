@@ -4881,3 +4881,22 @@ Decisao:
   - referencia Tong como teacher/verifier externo;
   - implementacao propria com restricao full-byte/stride, nao per-bit livre;
   - medicao de perda antes de treino.
+
+### Estado equation apos V275
+
+- Baseline V275 weak ja conhecido:
+  - total `196/315`;
+  - `bit_manipulation = 136/160`;
+  - `equation_transform = 60/155`;
+  - ganhos V274/V275: `+4` equation, `0` perdas.
+- Erros restantes apos V275:
+  - `95` linhas de `equation_transform`;
+  - `12` sao queries numericas;
+  - a maioria restante e simbolica/pontuacao.
+- Observacao cirurgica:
+  - ha casos numericos em que o label sugere prior simples (`+` como soma direta, `-` com diferenca assinada), mas o operador da query frequentemente nao aparece nos exemplos;
+  - isso nao e uma regra deployavel segura sem treino ou prior aprendido, porque violaria o criterio de derivar a resposta somente dos exemplos.
+- Decisao:
+  - nao transformar esses casos em postprocessor direto;
+  - usar como exemplos teacher de equation somente se o dataset/treino conseguir aprender o prior sem regredir bit e side families;
+  - manter V274/V275 como melhor ganho equation comprovado ate agora.
