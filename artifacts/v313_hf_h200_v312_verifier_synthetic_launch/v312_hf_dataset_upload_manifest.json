@@ -1,0 +1,12 @@
+{
+  "data_repo": "felipesp1983/kg1-nemotron-training",
+  "dataset_dir": "artifacts\\v312_verifier_synthetic_distill_dataset\\20260512T1545Z",
+  "dataset_path_in_repo": "data/v312_verifier_synthetic_distill/20260512T1545Z",
+  "dataset_upload": "https://huggingface.co/datasets/felipesp1983/kg1-nemotron-training/commit/725c8e2c0f1e4439d971dc20cb508335d11eca7f",
+  "gate_dir": "artifacts\\v312_verifier_synthetic_tokenization_gate\\20260512T1545Z",
+  "gate_path_in_repo": "runtime_artifacts/v312_verifier_synthetic_tokenization_gate/20260512T1545Z",
+  "gate_upload": "https://huggingface.co/datasets/felipesp1983/kg1-nemotron-training/commit/fe43506387681bda17d512de70f9d4291830a025",
+  "generated_at_utc": "2026-05-12T19:14:36.037173+00:00",
+  "next_action": "Launch V313 H200 smoke train after upload is visible to HF Jobs.",
+  "version": "v312_hf_dataset_upload"
+}
