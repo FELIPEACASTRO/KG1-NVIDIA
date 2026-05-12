@@ -1,0 +1,71 @@
+{
+  "adapter_repo": "felipesp1983/kg1-nemotron-lora-v315-v312-preference-v290ckpt6",
+  "adapter_subfolders": [
+    "checkpoint-4",
+    "checkpoint-8",
+    "checkpoint-12",
+    "checkpoint-16",
+    "final"
+  ],
+  "branch": "v230-v226-complementarity",
+  "candidate_names": [
+    "v315_preference_checkpoint_4_v221_contract",
+    "v315_preference_checkpoint_8_v221_contract",
+    "v315_preference_checkpoint_12_v221_contract",
+    "v315_preference_checkpoint_16_v221_contract",
+    "v315_preference_final_v221_contract"
+  ],
+  "decision_gate_after_eval": {
+    "minimum_bit_manipulation_correct": 136,
+    "minimum_equation_transform_correct": 56,
+    "minimum_total_correct": 192,
+    "preferred_submit_threshold": {
+      "minimum_bit_manipulation_correct": 136,
+      "minimum_equation_transform_correct": 57,
+      "minimum_total_correct": 193
+    },
+    "protected_baseline": "v290_checkpoint_6_v221_contract"
+  },
+  "eval_contract": {
+    "disable_thinking": false,
+    "max_model_len": 8192,
+    "max_num_seqs": 64,
+    "max_tokens": 7680,
+    "name": "V221 reproduced weak contract",
+    "no_prompt_suffix": false,
+    "shared_row_contract_sha256": "bf055e3b9ebce79d4bfc9e48bce5a305b1d83da882f14afddec80d6afaba5fff",
+    "weak_csv_sha256": "85da758e14d57ea40270de5747f98726a0ad0b6d1795bff7dd46183005e0f9b6"
+  },
+  "expected_commit": "4a4a5e6ddd18fb4f09f439dba0ae0c52a37ba615",
+  "finops_reason": "Evaluate all V315 preference checkpoints before any additional training. The internal preference metric did not improve bit pairs, so promotion requires measured V221 weak non-regression or gain.",
+  "flavor": "h200",
+  "generated_at_utc": "2026-05-12T22:23:55.658163+00:00",
+  "hardware": {
+    "accelerator_model": "H200",
+    "accelerator_quantity": "1",
+    "accelerator_vram": "141 GB",
+    "cpu": "23 vCPU",
+    "name": "h200",
+    "pretty_name": "Nvidia H200",
+    "ram": "256 GB",
+    "unit_cost_usd": 0.083333,
+    "unit_label": "minute"
+  },
+  "image": "vllm/vllm-openai:v0.20.1",
+  "job_id": "6a03a8b972518a06598ffb45",
+  "job_status": "RUNNING",
+  "job_url": "https://huggingface.co/jobs/felipesp1983/6a03a8b972518a06598ffb45",
+  "missing_adapter_subfolders": [],
+  "namespace": "felipesp1983",
+  "output_path_in_repo": "evals/v315-h200-v221contract-v312-pref-20260512T222354Z",
+  "output_repo": "felipesp1983/kg1-nemotron-lora-v315-v312-preference-v290ckpt6",
+  "requested_adapter_subfolders": [
+    "checkpoint-4",
+    "checkpoint-8",
+    "checkpoint-12",
+    "checkpoint-16",
+    "final"
+  ],
+  "run_id": "v315-h200-v221contract-v312-pref-20260512T222354Z",
+  "version": "v315_preference_v221_weak_eval"
+}
