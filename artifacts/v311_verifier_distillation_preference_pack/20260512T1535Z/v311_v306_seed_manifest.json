@@ -1,0 +1,39 @@
+{
+  "audit_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v306_solver_promotion_gate\\20260512T1530Z\\v306_v291_full_v306_solver_promotion_audit.csv",
+  "audit_csv_sha256": "e52a46ccfb5c53100aee0d72805ec7f346b98e332e5a02e96544e3b345b3726a",
+  "blocked_losses": 0,
+  "family_counts": {
+    "bit_manipulation": 11,
+    "equation_transform": 4
+  },
+  "input_summary": {
+    "audit_rows": 947,
+    "duplicate_audit_ids": 0,
+    "duplicate_prediction_ids": 0,
+    "prediction_rows": 947
+  },
+  "outputs": {
+    "manifest_json": "artifacts\\v311_verifier_distillation_preference_pack\\20260512T1535Z\\v311_v306_seed_manifest.json",
+    "preferences_jsonl": "artifacts\\v311_verifier_distillation_preference_pack\\20260512T1535Z\\v311_v306_seed_preferences.jsonl",
+    "sft_seed_jsonl": "artifacts\\v311_verifier_distillation_preference_pack\\20260512T1535Z\\v311_v306_seed_sft_seed.jsonl"
+  },
+  "predictions_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v293_gap_mining\\inputs\\v291_full_predictions.csv",
+  "predictions_csv_sha256": "d9634ea15cb55e17bbfb90229f1cdbfd9b0f5a4cdba0d61848e6f746393dde20",
+  "preference_rows": 60,
+  "required_next_gate": [
+    "generate_synthetic_out_of_gate_variants",
+    "run_real_tokenization_gate",
+    "prove_no_weak_or_full_gate_rows_used_as_train",
+    "weak_eval_before_any_full_eval_or_submit"
+  ],
+  "rule_counts": {
+    "add_direct_over_model_add_variant": 1,
+    "colon_absdiff_unreverse_same_len": 1,
+    "fullbyte_binary": 1,
+    "fullbyte_safe_ternary": 10,
+    "minus_signed_opposite_sign_guarded": 2
+  },
+  "schema_version": "kg1_v311_verifier_distillation_preference_pack_v1",
+  "seed_gain_rows": 15,
+  "training_authorization": "blocked_seed_only_until_synthetic_out_of_gate_variants"
+}

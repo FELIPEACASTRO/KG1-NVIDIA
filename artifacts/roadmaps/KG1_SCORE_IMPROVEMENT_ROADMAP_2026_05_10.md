@@ -5385,3 +5385,14 @@ Decisao para roadmap:
 3. So depois considerar DPO/ORPO/KTO em HF. Antes disso, DPO e custo/complexidade sem pack auditado.
 4. Nao usar `merge_and_unload()` como caminho de submissao; manter adapter-only.
 5. Nao usar `r > 32` enquanto o runtime/competicao mantiver limite efetivo `max_lora_rank=32`.
+
+Implementacao V311 CPU-only:
+
+- Script: `scripts/build_v311_verifier_distillation_preference_pack.py`.
+- Output: `artifacts/v311_verifier_distillation_preference_pack/20260512T1535Z/`.
+- Inputs auditados:
+  - V306 audit SHA `e52a46ccfb5c53100aee0d72805ec7f346b98e332e5a02e96544e3b345b3726a`;
+  - V291 full predictions SHA `d9634ea15cb55e17bbfb90229f1cdbfd9b0f5a4cdba0d61848e6f746393dde20`.
+- Resultado: `15` seed gain rows (`bit_manipulation=11`, `equation_transform=4`) e `60` preference rows.
+- Regras capturadas: `fullbyte_safe_ternary=10`, `fullbyte_binary=1`, `minus_signed_opposite_sign_guarded=2`, `colon_absdiff_unreverse_same_len=1`, `add_direct_over_model_add_variant=1`.
+- Importante: `training_authorization=blocked_seed_only_until_synthetic_out_of_gate_variants`. Este pack e seed/diagnostico; nao e dataset final de treino. Proximo passo continua sendo gerar variantes sinteticas fora dos gate rows, tokenizar com tokenizer real e provar que nenhum weak/full-gate row foi usado como treino antes de qualquer HF smoke.

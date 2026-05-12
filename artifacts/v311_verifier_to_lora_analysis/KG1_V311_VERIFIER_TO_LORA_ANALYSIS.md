@@ -106,3 +106,16 @@ Objetivo:
 - medir quantos exemplos positivos, negativos e correcoes podem ser gerados sem usar weak rows como treino;
 - rodar tokenization/format gate;
 - so depois decidir se vale um smoke HF pequeno.
+
+## Implementacao CPU realizada
+
+O builder foi implementado e executado sem HF/GPU:
+
+- script: `scripts/build_v311_verifier_distillation_preference_pack.py`;
+- output: `artifacts/v311_verifier_distillation_preference_pack/20260512T1535Z/`;
+- seed gain rows: `15`;
+- preference rows: `60`;
+- familias: `bit_manipulation=11`, `equation_transform=4`;
+- status: `training_authorization=blocked_seed_only_until_synthetic_out_of_gate_variants`.
+
+Esse pack e intencionalmente bloqueado para treino direto. Ele serve como semente auditada para gerar variantes sinteticas fora dos gate rows, exatamente para evitar transformar o gate local em memorization dataset.
