@@ -1,0 +1,66 @@
+{
+  "adapter_repo": "felipesp1983/kg1-nemotron-lora-v308-v304-attn-lmhead-v290ckpt6",
+  "adapter_subfolders": [
+    "checkpoint-30",
+    "checkpoint-36"
+  ],
+  "branch": "v230-v226-complementarity",
+  "candidate_names": [
+    "v308_checkpoint_30_v221_contract",
+    "v308_checkpoint_36_v221_contract"
+  ],
+  "decision_gate_after_eval": {
+    "baseline_reference": {
+      "bit_manipulation_correct": 135,
+      "equation_transform_correct": 56,
+      "name": "v291_full_like_baseline",
+      "total_correct": 191
+    },
+    "minimum_bit_manipulation_correct": 135,
+    "minimum_equation_transform_correct": 56,
+    "minimum_total_correct": 192,
+    "preferred_submit_threshold": {
+      "minimum_bit_manipulation_correct": 136,
+      "minimum_equation_transform_correct": 57,
+      "minimum_total_correct": 193
+    }
+  },
+  "eval_contract": {
+    "disable_thinking": false,
+    "max_model_len": 8192,
+    "max_num_seqs": 64,
+    "max_tokens": 7680,
+    "name": "V221 reproduced weak contract",
+    "no_prompt_suffix": false,
+    "shared_row_contract_sha256": "bf055e3b9ebce79d4bfc9e48bce5a305b1d83da882f14afddec80d6afaba5fff",
+    "weak_csv_sha256": "85da758e14d57ea40270de5747f98726a0ad0b6d1795bff7dd46183005e0f9b6"
+  },
+  "expected_commit": "5b0e40e3cf16fb4cf9b46643ece33a43e1c0bb03",
+  "flavor": "h200",
+  "generated_at_utc": "2026-05-12T17:47:57.747313+00:00",
+  "hardware": {
+    "accelerator_model": "H200",
+    "accelerator_quantity": "1",
+    "accelerator_vram": "141 GB",
+    "cpu": "23 vCPU",
+    "name": "h200",
+    "pretty_name": "Nvidia H200",
+    "ram": "256 GB",
+    "unit_cost_usd": 0.083333,
+    "unit_label": "minute"
+  },
+  "image": "vllm/vllm-openai:v0.20.1",
+  "job_id": "6a03680b7618f125ee2b78bf",
+  "job_status": "RUNNING",
+  "job_url": "https://huggingface.co/jobs/felipesp1983/6a03680b7618f125ee2b78bf",
+  "missing_adapter_subfolders": [],
+  "namespace": "felipesp1983",
+  "output_path_in_repo": "evals/v308-h200-v221contract-v304-attn-lmhead-20260512T174756Z",
+  "output_repo": "felipesp1983/kg1-nemotron-lora-v308-v304-attn-lmhead-v290ckpt6",
+  "requested_adapter_subfolders": [
+    "checkpoint-30",
+    "checkpoint-36"
+  ],
+  "run_id": "v308-h200-v221contract-v304-attn-lmhead-20260512T174756Z",
+  "version": "v308_v304_attention_lmhead_v221_weak_eval"
+}
