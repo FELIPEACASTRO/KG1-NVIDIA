@@ -5192,10 +5192,41 @@ Decisao:
 - Esse ganho nao e Kaggle-submit ready como CSV/postprocessor se o pacote oficial aceitar apenas adapter LoRA; precisa ser destilado para comportamento adapter-only.
 - V304 e o dataset atual mais adequado para tentar essa transferencia, mas o proximo smoke HF precisa usar V306 como gate de sucesso: continuar somente se o adapter aumentar `bit_manipulation` acima de `135/160` ou `equation_transform` acima de `56/155` sem regressao.
 
+### V307 V304 solver trace HF smoke
+
+Artefatos:
+
+- launcher: `artifacts/v307_hf_h200_v304_solver_trace_launch/launch_v307_hf_h200_v304_solver_trace.py`
+- launch manifest: `artifacts/v307_hf_h200_v304_solver_trace_launch/v307-v304-solver-trace-v290ckpt6-20260512T152448Z_launch_manifest.json`
+- HF dataset upload: `https://huggingface.co/datasets/felipesp1983/kg1-nemotron-training/commit/41b8afa26ed15ec65a842e00fd0de059fe105526`
+- HF training job: `https://huggingface.co/jobs/felipesp1983/6a03467f72518a06598ff68b`
+- output repo previsto: `felipesp1983/kg1-nemotron-lora-v307-v304-solver-trace-v290ckpt6`
+
+Objetivo:
+
+- testar se os traces V304 transferem o ganho local V306/V302 para comportamento adapter-only;
+- manter FinOps controlado: H200, `12` steps, checkpoint/eval a cada `3` steps, timeout `7200s`;
+- isolar a variavel nova: mesmo init adapter V290 `checkpoint-6`, `TRAINABLE_LORA_MODULES=lm_head`, LR baixo `6e-9 -> 2e-9`.
+
+Gates ja observados no job:
+
+- commit remoto fixado em `a68064e5ebb983a8a131579e9ea4f581bb5932d4`;
+- H200 detectado, `139.80 GiB`, custo `$0.083333/min`, abaixo do teto `$0.09/min`;
+- train V304 baixado do HF com SHA `7935ff999cdd8318de67538922de3651170c59baa2664a10beac3334dfcf9082`;
+- validation V304 baixado do HF com SHA `2b06224afe035c5085798f4a4be27e764ffaebde3ff7eee11c558c0cd5bdd29d`;
+- contagens por familia e subcategoria conferidas;
+- init adapter V290 `checkpoint-6` validado com `r=32`, `alpha=32`, target modules esperados e target parameters de experts.
+
+Status atual:
+
+- job em andamento na etapa de instalacao `causal-conv1d` / `mamba_ssm`;
+- criterio de continuidade apos treino: weak eval deve superar `bit_manipulation > 135/160` ou `equation_transform > 56/155`, sem regressao lateral;
+- se repetir V303/V291, interromper caminho V304 sem treino longo.
+
 Proxima acao tecnica:
 
-1. Rodar preflight HF para V304 com os mesmos gates do Colab adaptados a job HF.
-2. Rodar um smoke H200 curto e barato, usando V306 como criterio de continuidade.
-3. Se smoke repetir V291/V303 (`bit=135`, `equation=56`), parar treino e voltar para dataset/trace; nao gastar budget longo.
-4. Se smoke mostrar qualquer ganho real em `bit_manipulation` ou `equation_transform`, rodar checkpoint adicional com LR conservador e gate por familia.
+1. Monitorar V307 a cada ~30s enquanto estiver ativo.
+2. Se V307 concluir treino, rodar weak eval H200 nos checkpoints `3/6/9/12/final`.
+3. Se weak repetir V291/V303 (`bit=135`, `equation=56`), parar caminho V304 e voltar para dataset/trace; nao gastar budget longo.
+4. Se weak mostrar qualquer ganho real em `bit_manipulation` ou `equation_transform`, rodar checkpoint adicional com LR conservador e gate por familia.
 5. Promover para full eval/package somente se weak ou full official-like provar ganho real contra V291 sem regressao lateral.
