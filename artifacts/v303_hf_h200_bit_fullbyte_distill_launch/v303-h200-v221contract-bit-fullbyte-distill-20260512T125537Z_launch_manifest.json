@@ -1,0 +1,69 @@
+{
+  "adapter_repo": "felipesp1983/kg1-nemotron-lora-v303-bit-fullbyte-distill-v290ckpt6",
+  "adapter_subfolders": [
+    "checkpoint-3",
+    "checkpoint-6",
+    "checkpoint-9",
+    "checkpoint-12",
+    "final"
+  ],
+  "branch": "v230-v226-complementarity",
+  "candidate_names": [
+    "v303_checkpoint_3_v221_contract",
+    "v303_checkpoint_6_v221_contract",
+    "v303_checkpoint_9_v221_contract",
+    "v303_checkpoint_12_v221_contract",
+    "v303_final_v221_contract"
+  ],
+  "decision_gate_after_eval": {
+    "minimum_bit_manipulation_correct": 136,
+    "minimum_equation_transform_correct": 56,
+    "minimum_total_correct": 192,
+    "preferred_submit_threshold": {
+      "minimum_bit_manipulation_correct": 137,
+      "minimum_equation_transform_correct": 60,
+      "minimum_total_correct": 193
+    }
+  },
+  "eval_contract": {
+    "disable_thinking": false,
+    "max_model_len": 8192,
+    "max_num_seqs": 64,
+    "max_tokens": 7680,
+    "name": "V221 reproduced weak contract",
+    "no_prompt_suffix": false,
+    "shared_row_contract_sha256": "bf055e3b9ebce79d4bfc9e48bce5a305b1d83da882f14afddec80d6afaba5fff",
+    "weak_csv_sha256": "85da758e14d57ea40270de5747f98726a0ad0b6d1795bff7dd46183005e0f9b6"
+  },
+  "expected_commit": "d1d0281bfaf99d534163a7b0a5b0399e0f3bc9e3",
+  "flavor": "h200",
+  "generated_at_utc": "2026-05-12T12:55:38.964500+00:00",
+  "hardware": {
+    "accelerator_model": "H200",
+    "accelerator_quantity": "1",
+    "accelerator_vram": "141 GB",
+    "cpu": "23 vCPU",
+    "name": "h200",
+    "pretty_name": "Nvidia H200",
+    "ram": "256 GB",
+    "unit_cost_usd": 0.083333,
+    "unit_label": "minute"
+  },
+  "image": "vllm/vllm-openai:v0.20.1",
+  "job_id": "6a032388c827d2ad86f16afc",
+  "job_status": "RUNNING",
+  "job_url": "https://huggingface.co/jobs/felipesp1983/6a032388c827d2ad86f16afc",
+  "missing_adapter_subfolders": [],
+  "namespace": "felipesp1983",
+  "output_path_in_repo": "evals/v303-h200-v221contract-bit-fullbyte-distill-20260512T125537Z",
+  "output_repo": "felipesp1983/kg1-nemotron-lora-v303-bit-fullbyte-distill-v290ckpt6",
+  "requested_adapter_subfolders": [
+    "checkpoint-3",
+    "checkpoint-6",
+    "checkpoint-9",
+    "checkpoint-12",
+    "final"
+  ],
+  "run_id": "v303-h200-v221contract-bit-fullbyte-distill-20260512T125537Z",
+  "version": "v303_bit_fullbyte_distill_v221_weak_eval"
+}
