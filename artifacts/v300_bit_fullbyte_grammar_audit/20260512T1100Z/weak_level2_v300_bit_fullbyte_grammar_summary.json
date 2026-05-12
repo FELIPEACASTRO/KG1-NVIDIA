@@ -1,0 +1,26 @@
+{
+  "bit_rows": 160,
+  "current_accuracy": 0.78125,
+  "current_correct": 125,
+  "detail_csv": "artifacts\\v300_bit_fullbyte_grammar_audit\\20260512T1100Z\\weak_level2_v300_bit_fullbyte_grammar_details.csv",
+  "detail_rows": 13,
+  "elapsed_s": 6.112,
+  "ensemble_accuracy": 0.78125,
+  "ensemble_correct": 125,
+  "ensemble_gain_vs_current": 0,
+  "ensemble_loss_vs_current": 0,
+  "expression_rows": 112,
+  "fullbyte_accuracy": 0.7,
+  "fullbyte_correct": 112,
+  "input_csv": "artifacts\\v290_rank19_micro_patch_reference\\runtime_artifacts\\v245_weak_eval_bridge\\v245-weak-bridge-hfonly-20260510T1950Z\\v221_weak_315.csv",
+  "input_sha256": "85da758e14d57ea40270de5747f98726a0ad0b6d1795bff7dd46183005e0f9b6",
+  "label": "weak_level2",
+  "level_counts": {
+    "binary": 91,
+    "none": 48,
+    "unary": 21
+  },
+  "max_level": 2,
+  "rows_total": 315,
+  "schema_version": "kg1_v300_bit_fullbyte_grammar_audit_v1"
+}

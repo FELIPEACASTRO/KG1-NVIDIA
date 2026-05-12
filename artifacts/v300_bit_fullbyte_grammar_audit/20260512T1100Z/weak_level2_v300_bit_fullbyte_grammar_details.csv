@@ -1,0 +1,14 @@
+id,expected,fullbyte_answer,current_answer,chosen_answer,fullbyte_correct,current_correct,ensemble_correct,status,level,expr,gain,loss
+78616706,00000111,,00000111,00000111,False,True,True,no_expression,,,False,False
+3a67aa26,00101110,,00101110,00101110,False,True,True,no_expression,,,False,False
+d50746e7,01000010,,01000010,01000010,False,True,True,no_expression,,,False,False
+ddc5aefe,00000001,,00000001,00000001,False,True,True,no_expression,,,False,False
+dbb611da,00000001,,00000001,00000001,False,True,True,no_expression,,,False,False
+55d834d1,00111111,,00111111,00111111,False,True,True,no_expression,,,False,False
+59bee375,10010101,,10010101,10010101,False,True,True,no_expression,,,False,False
+48ae04f6,00000010,,00000010,00000010,False,True,True,no_expression,,,False,False
+3595c82c,10011011,,10011011,10011011,False,True,True,no_expression,,,False,False
+bca238ee,00000000,,00000000,00000000,False,True,True,no_expression,,,False,False
+46dd0f22,01010000,,01010000,01010000,False,True,True,no_expression,,,False,False
+0c2407ef,11000011,,11000011,11000011,False,True,True,no_expression,,,False,False
+0290f51a,10101111,,10101111,10101111,False,True,True,no_expression,,,False,False

@@ -1,0 +1,316 @@
+id,family,baseline_prediction,postprocessed_prediction,applied,rule,proof,baseline_correct,postprocessed_correct,gain,loss
+e518256e,equation_transform,84,84,False,not_attempted,non-bit row,True,True,False,False
+09d5ee68,equation_transform,|:>>,|:>>,False,not_attempted,non-bit row,False,False,False,False
+7e5b8c12,bit_manipulation,10110000,10110000,False,already_matches_fullbyte,ROL6,True,True,False,False
+00457d26,equation_transform,[[!',[[!',False,not_attempted,non-bit row,False,False,False,False
+518deb39,equation_transform,{}$>,{}$>,False,not_attempted,non-bit row,False,False,False,False
+78616706,bit_manipulation,00000111,00000111,False,already_matches_fullbyte,"MAJ3(ROL5,SHL7,SHR3)",True,True,False,False
+82109e34,equation_transform,'^^^','^^^',False,not_attempted,non-bit row,False,False,False,False
+5e67b1a1,equation_transform,63,63,False,not_attempted,non-bit row,True,True,False,False
+c7077b21,bit_manipulation,00010110,00010110,False,already_matches_fullbyte,"AND_NOT(ROL4,SHL5)",True,True,False,False
+fb5a7b9e,bit_manipulation,11111010,11111010,False,already_matches_fullbyte,"XOR(SHL5,SHR1)",True,True,False,False
+e1728524,equation_transform,0,0,False,not_attempted,non-bit row,False,False,False,False
+839e7350,bit_manipulation,00111011,00111011,False,already_matches_fullbyte,"XNOR(SHL2,SHL5)",True,True,False,False
+a365e304,bit_manipulation,11011011,11011011,False,already_matches_fullbyte,"XOR(ROL5,SHR5)",True,True,False,False
+e3bf0c2c,equation_transform,@`',@`',False,not_attempted,non-bit row,False,False,False,False
+fdbdf50c,equation_transform,|?|,|?|,False,not_attempted,non-bit row,False,False,False,False
+f3971b9a,bit_manipulation,00011001,00011001,False,already_matches_fullbyte,"AND_NOT(ROL2,SHL4)",True,True,False,False
+ab71eaa0,bit_manipulation,00010010,00010010,False,already_matches_fullbyte,"XOR(SHL1,SHR3)",True,True,False,False
+47c1d8f5,equation_transform,/`%`,/`%`,False,not_attempted,non-bit row,False,False,False,False
+bfee75d5,bit_manipulation,01000010,01000010,False,already_matches_fullbyte,ROL6,True,True,False,False
+f9a33aa1,equation_transform,@($/,@($/,False,not_attempted,non-bit row,False,False,False,False
+1abaffca,bit_manipulation,01011000,01000000,True,fullbyte_safe_ternary,"CHO(SHL2,SHR3,ROL1)",False,True,True,False
+9f2fae58,equation_transform,7272,7272,False,not_attempted,non-bit row,True,True,False,False
+f9799a68,equation_transform,:^?\,:^?\,False,not_attempted,non-bit row,False,False,False,False
+c24074a8,equation_transform,]]]%,]]]%,False,not_attempted,non-bit row,False,False,False,False
+bc7618a7,bit_manipulation,00001100,00001100,False,already_matches_fullbyte,"OR(SHL5,SHR4)",True,True,False,False
+893ffb06,equation_transform,@``:,@``:,False,not_attempted,non-bit row,False,False,False,False
+cf4c04c0,equation_transform,@|#|,@|#|,False,not_attempted,non-bit row,False,False,False,False
+8e411cc7,equation_transform,$&&,$&&,False,not_attempted,non-bit row,False,False,False,False
+892d73b5,bit_manipulation,00010101,00010101,False,already_matches_fullbyte,ROL5,True,True,False,False
+41e6cbfc,equation_transform,9318,9318,False,not_attempted,non-bit row,True,True,False,False
+dea42835,equation_transform,['[/,['[/,False,not_attempted,non-bit row,True,True,False,False
+48c25e0e,equation_transform,32,32,False,not_attempted,non-bit row,False,False,False,False
+e6d2a064,bit_manipulation,11100010,11100010,False,no_fullbyte_expression,no accepted full-byte expression matched all examples,False,False,False,False
+a1d2bb0c,bit_manipulation,00100010,00100010,False,already_matches_fullbyte,"XOR(SHL1,SHR5)",True,True,False,False
+4e4fb429,bit_manipulation,10111110,10111110,False,already_matches_fullbyte,"OR(ROL4,SHL2)",True,True,False,False
+7ef4d5d6,equation_transform,>42,>42,False,not_attempted,non-bit row,True,True,False,False
+3ee36e0a,equation_transform,-51,-51,False,not_attempted,non-bit row,True,True,False,False
+39c237c7,equation_transform,{]``,{]``,False,not_attempted,non-bit row,True,True,False,False
+963e85bb,equation_transform,76,76,False,not_attempted,non-bit row,True,True,False,False
+a98d4d53,equation_transform,!$$[,!$$[,False,not_attempted,non-bit row,False,False,False,False
+0e70c867,bit_manipulation,01001100,01000000,True,fullbyte_safe_ternary,"MAJ3(ROL2,SHL4,SHR5)",False,True,True,False
+59733f94,equation_transform,$/>/,$/>/,False,not_attempted,non-bit row,False,False,False,False
+b1bc3731,equation_transform,63,63,False,not_attempted,non-bit row,True,True,False,False
+54b895c1,bit_manipulation,10111011,10111011,False,no_fullbyte_expression,no accepted full-byte expression matched all examples,True,True,False,False
+ed24e7af,bit_manipulation,00001001,00001001,False,already_matches_fullbyte,"OR(SHL7,SHR3)",True,True,False,False
+3cd80c64,bit_manipulation,01100100,01100100,False,already_matches_fullbyte,SHR1,True,True,False,False
+a1523a63,equation_transform,87,87,False,not_attempted,non-bit row,True,True,False,False
+f2b23d11,bit_manipulation,10000000,10000000,False,already_matches_fullbyte,"AND(ROL3,SHL5)",True,True,False,False
+5cbe919f,bit_manipulation,00000000,00000000,False,already_matches_fullbyte,"AND(ROL6,SHR4)",True,True,False,False
+3383d4ec,equation_transform,66,66,False,not_attempted,non-bit row,True,True,False,False
+9dae880f,equation_transform,:<`\,:<`\,False,not_attempted,non-bit row,False,False,False,False
+b43d9cd5,bit_manipulation,11100100,11100100,False,already_matches_fullbyte,ROL2,True,True,False,False
+64890e18,bit_manipulation,00001100,00001100,False,already_matches_fullbyte,"XOR(SHL2,SHR4)",True,True,False,False
+d6187157,bit_manipulation,01001000,01001000,False,already_matches_fullbyte,"MAJ3(ROL1,SHL3,SHR4)",True,True,False,False
+de91def4,bit_manipulation,10000111,10000111,False,already_matches_fullbyte,"OR(SHL7,SHR5)",True,True,False,False
+2af7134e,equation_transform,20,20,False,not_attempted,non-bit row,True,True,False,False
+ae6be599,equation_transform,$?]$,$?]$,False,not_attempted,non-bit row,False,False,False,False
+b26d8818,equation_transform,5983,5983,False,not_attempted,non-bit row,True,True,False,False
+8494aad3,equation_transform,"])<""","])<""",False,not_attempted,non-bit row,False,False,False,False
+8df3daad,equation_transform,34,34,False,not_attempted,non-bit row,True,True,False,False
+791056ce,equation_transform,4922,4922,False,not_attempted,non-bit row,True,True,False,False
+29e458d6,bit_manipulation,00010010,00010010,False,already_matches_fullbyte,"AND_NOT(ROL7,SHL1)",True,True,False,False
+3c12aeb9,equation_transform,321,321,False,not_attempted,non-bit row,True,True,False,False
+69aa57b3,equation_transform,4472,4472,False,not_attempted,non-bit row,True,True,False,False
+e3890bf7,equation_transform,(^@{,(^@{,False,not_attempted,non-bit row,False,False,False,False
+d204b9cc,equation_transform,231,231,False,not_attempted,non-bit row,True,True,False,False
+7a79ac09,bit_manipulation,11111111,11111111,False,already_matches_fullbyte,"OR(ROL3,SHR1)",True,True,False,False
+d29e19a4,equation_transform,|''>,|''>,False,not_attempted,non-bit row,False,False,False,False
+b06625c4,equation_transform,"""$ $]""","""$ $]""",False,not_attempted,non-bit row,False,False,False,False
+84030b0b,equation_transform,24,24,False,not_attempted,non-bit row,True,True,False,False
+3a67aa26,bit_manipulation,00101110,00101110,False,no_fullbyte_expression,no accepted full-byte expression matched all examples,True,True,False,False
+710cf035,bit_manipulation,10000011,10000011,False,already_matches_fullbyte,"XOR(SHL1,SHR6)",True,True,False,False
+52be4988,equation_transform,&&&`,&&&`,False,not_attempted,non-bit row,False,False,False,False
+b8722d19,bit_manipulation,11110100,00100100,True,fullbyte_safe_ternary,"CHO(SHL2,SHR1,ROL3)",False,True,True,False
+99d6a3b5,equation_transform,(<)),(<)),False,not_attempted,non-bit row,False,False,False,False
+2d3547af,equation_transform,\$\\,\$\\,False,not_attempted,non-bit row,False,False,False,False
+8c9fcc6b,bit_manipulation,11110111,11110111,False,already_matches_fullbyte,"XOR(SHL1,SHR2)",True,True,False,False
+28b0ff48,equation_transform,|^^^,|^^^,False,not_attempted,non-bit row,False,False,False,False
+3fa49035,equation_transform,696,696,False,not_attempted,non-bit row,True,True,False,False
+61557701,equation_transform,'{),'{),False,not_attempted,non-bit row,False,False,False,False
+8c0f9291,bit_manipulation,00001111,00001111,False,no_fullbyte_expression,no accepted full-byte expression matched all examples,True,True,False,False
+d6e6f8b5,bit_manipulation,11100001,11100001,False,already_matches_fullbyte,"OR(SHL5,SHR7)",True,True,False,False
+3a90fdf6,bit_manipulation,10100000,10100000,False,already_matches_fullbyte,"AND(ROL2,SHL5)",True,True,False,False
+56343b77,equation_transform,711,711,False,not_attempted,non-bit row,True,True,False,False
+08df5363,bit_manipulation,01011100,01011100,False,already_matches_fullbyte,"AND_NOT(ROL5,SHL7)",True,True,False,False
+d50746e7,bit_manipulation,01000010,01000010,False,already_matches_fullbyte,"CHO(ROL2,SHR4,ROL4)",True,True,False,False
+2facfaa4,bit_manipulation,00111110,00111110,False,already_matches_fullbyte,"XOR(SHL1,SHR6)",True,True,False,False
+7ac90433,equation_transform,-23,-23,False,not_attempted,non-bit row,True,True,False,False
+8abcff0f,bit_manipulation,11110111,11110111,False,already_matches_fullbyte,"OR(ROL4,SHR5)",True,True,False,False
+02902eb3,equation_transform,!!$>,!!$>,False,not_attempted,non-bit row,False,False,False,False
+ddc5aefe,bit_manipulation,00000001,00000001,False,already_matches_fullbyte,"MAJ3(ROL1,SHL5,SHR7)",True,True,False,False
+0d90736f,equation_transform,::)[,::)[,False,not_attempted,non-bit row,False,False,False,False
+294453b5,equation_transform,##!),##!),False,not_attempted,non-bit row,False,False,False,False
+75ecd32c,bit_manipulation,11100011,11100011,False,already_matches_fullbyte,ROL6,True,True,False,False
+12e0ac8c,bit_manipulation,10101001,10101001,False,no_fullbyte_expression,no accepted full-byte expression matched all examples,True,True,False,False
+386b6d03,equation_transform,18,18,False,not_attempted,non-bit row,False,False,False,False
+2ead53dc,bit_manipulation,00000101,00000101,False,already_matches_fullbyte,SHR4,True,True,False,False
+57f6878e,equation_transform,|@(!,|@(!,False,not_attempted,non-bit row,False,False,False,False
+05ca617c,bit_manipulation,01011011,01011011,False,no_fullbyte_expression,no accepted full-byte expression matched all examples,False,False,False,False
+6890870d,bit_manipulation,01110000,01110000,False,already_matches_fullbyte,ROL1,True,True,False,False
+1c566511,bit_manipulation,01010010,01010010,False,already_matches_fullbyte,"XOR(ROL7,SHL6)",True,True,False,False
+bc83b0a1,equation_transform,(/&{,(/&{,False,not_attempted,non-bit row,True,True,False,False
+a361a1b7,equation_transform,46,46,False,not_attempted,non-bit row,False,False,False,False
+d911e8e1,equation_transform,@}<',@}<',False,not_attempted,non-bit row,False,False,False,False
+4353cd0b,bit_manipulation,00100001,00100001,False,already_matches_fullbyte,"XOR(SHL2,SHR3)",True,True,False,False
+7688e06e,equation_transform,-55,-55,False,not_attempted,non-bit row,True,True,False,False
+30ba0cf4,bit_manipulation,01101101,01101101,False,already_matches_fullbyte,"OR(ROL6,SHR7)",True,True,False,False
+dbd0e3c9,equation_transform,5631,5631,False,not_attempted,non-bit row,True,True,False,False
+8fbd2477,bit_manipulation,01011010,01011010,False,already_matches_fullbyte,"XOR(ROL1,SHL3)",True,True,False,False
+ba61b815,bit_manipulation,00001101,00001101,False,already_matches_fullbyte,"OR(SHL7,SHR4)",True,True,False,False
+2e2d60b2,equation_transform,07,07,False,not_attempted,non-bit row,True,True,False,False
+5f9f0ed7,equation_transform,|!@[,|!@[,False,not_attempted,non-bit row,False,False,False,False
+333d93ec,equation_transform,7,7,False,not_attempted,non-bit row,True,True,False,False
+74fff108,equation_transform,49,49,False,not_attempted,non-bit row,True,True,False,False
+c43b5a13,equation_transform,$):$,$):$,False,not_attempted,non-bit row,False,False,False,False
+b0206bb7,equation_transform,$){,$){,False,not_attempted,non-bit row,False,False,False,False
+638f93ca,equation_transform,$<]$,$<]$,False,not_attempted,non-bit row,False,False,False,False
+5b9964c7,bit_manipulation,00011011,00011011,False,already_matches_fullbyte,"OR(ROL5,SHR2)",True,True,False,False
+a6f7139f,bit_manipulation,11000000,11000000,False,already_matches_fullbyte,"OR(SHL6,SHR4)",True,True,False,False
+b2fb65cf,bit_manipulation,11000011,11000011,False,already_matches_fullbyte,"XNOR(SHL2,SHL6)",True,True,False,False
+4bfd095a,equation_transform,@/[@,@/[@,False,not_attempted,non-bit row,False,False,False,False
+7a422e17,equation_transform,"#`""","#`""",False,not_attempted,non-bit row,False,False,False,False
+7192535b,bit_manipulation,00001010,00000010,True,fullbyte_safe_ternary,"MAJ3(ROL5,SHL1,SHR4)",False,True,True,False
+5b2523e6,equation_transform,><\$,><\$,False,not_attempted,non-bit row,False,False,False,False
+dbb611da,bit_manipulation,00000001,00000001,False,already_matches_fullbyte,"MAJ3(ROL1,SHL7,SHR5)",True,True,False,False
+0fe53bac,equation_transform,^?(|,^?(|,False,not_attempted,non-bit row,False,False,False,False
+07ceed47,bit_manipulation,10000101,10000101,False,already_matches_fullbyte,"OR(SHL7,SHR3)",True,True,False,False
+274def88,equation_transform,92,92,False,not_attempted,non-bit row,True,True,False,False
+7aa4fdf0,bit_manipulation,00000001,00000001,False,already_matches_fullbyte,"AND_NOT(ROL4,SHL3)",True,True,False,False
+03a3437f,equation_transform,'}>/,'}>/,False,not_attempted,non-bit row,False,False,False,False
+f2014638,bit_manipulation,10011010,10011010,False,already_matches_fullbyte,ROL6,True,True,False,False
+a8ea0e29,bit_manipulation,00000000,00000000,False,already_matches_fullbyte,SHL7,True,True,False,False
+30ac5c8e,equation_transform,@\}?,@\}?,False,not_attempted,non-bit row,False,False,False,False
+3cfc5f9c,bit_manipulation,01110111,01110111,False,already_matches_fullbyte,"XNOR(SHL3,SHL4)",True,True,False,False
+08d8d7e1,equation_transform,88,88,False,not_attempted,non-bit row,True,True,False,False
+ff121f08,equation_transform,!%<<,!%<<,False,not_attempted,non-bit row,False,False,False,False
+114a7439,bit_manipulation,01110001,01110001,False,already_matches_fullbyte,"AND_NOT(ROL3,SHL6)",True,True,False,False
+343095d3,bit_manipulation,01010100,01010100,False,already_matches_fullbyte,"AND_NOT(ROL1,SHL4)",True,True,False,False
+a4dd4cce,bit_manipulation,10110010,10110010,False,already_matches_fullbyte,"OR(SHL4,SHR5)",True,True,False,False
+6b11c05f,bit_manipulation,00100010,00100010,False,already_matches_fullbyte,"AND_NOT(ROL6,SHL3)",True,True,False,False
+42cb233d,equation_transform,881,881,False,not_attempted,non-bit row,True,True,False,False
+ec8b4875,equation_transform,|@<!,|@<!,False,not_attempted,non-bit row,False,False,False,False
+e3fbc768,equation_transform,%??,%??,False,not_attempted,non-bit row,False,False,False,False
+6cc5dafb,equation_transform,^&>),^&>),False,not_attempted,non-bit row,False,False,False,False
+d5a03a2e,equation_transform,""")&&",""")&&",False,not_attempted,non-bit row,False,False,False,False
+eea91b82,bit_manipulation,00101111,00101111,False,no_fullbyte_expression,no accepted full-byte expression matched all examples,True,True,False,False
+4736daab,bit_manipulation,01000111,01000111,False,already_matches_fullbyte,"OR(SHL4,SHR5)",True,True,False,False
+8bebef83,equation_transform,3388,3388,False,not_attempted,non-bit row,True,True,False,False
+efc2b69d,bit_manipulation,10111100,10111100,False,already_matches_fullbyte,ROL5,True,True,False,False
+a794d193,bit_manipulation,01011101,01011101,False,already_matches_fullbyte,"XOR(SHL1,SHR5)",True,True,False,False
+0f7ddd75,bit_manipulation,11110110,11110110,False,already_matches_fullbyte,"OR(ROL2,SHL1)",True,True,False,False
+27cec7a9,equation_transform,3341,3341,False,not_attempted,non-bit row,True,True,False,False
+a6704625,bit_manipulation,00011111,00011111,False,no_fullbyte_expression,no accepted full-byte expression matched all examples,False,False,False,False
+d117113e,bit_manipulation,00000000,00000000,False,already_matches_fullbyte,"AND(ROL7,SHR2)",True,True,False,False
+4aeed935,equation_transform,1455,1455,False,not_attempted,non-bit row,True,True,False,False
+6f7a9048,bit_manipulation,00101000,00101000,False,already_matches_fullbyte,"XOR(SHL4,SHR1)",True,True,False,False
+8740ed31,bit_manipulation,01111000,01101000,True,fullbyte_safe_ternary,"MAJ3(ROL7,SHL3,SHR3)",False,True,True,False
+fb623471,equation_transform,21,21,False,not_attempted,non-bit row,False,False,False,False
+88b43464,equation_transform,5311,5311,False,not_attempted,non-bit row,True,True,False,False
+209c43f0,equation_transform,101,101,False,not_attempted,non-bit row,True,True,False,False
+8ac52d78,bit_manipulation,00010000,00010000,False,already_matches_fullbyte,"AND(ROL5,SHL4)",True,True,False,False
+f507b7f1,bit_manipulation,11011100,11011100,False,no_fullbyte_expression,no accepted full-byte expression matched all examples,False,False,False,False
+d129b085,equation_transform,!>``,!>``,False,not_attempted,non-bit row,False,False,False,False
+368f20dd,bit_manipulation,10000101,10000101,False,already_matches_fullbyte,"XOR(SHL3,SHR4)",True,True,False,False
+e582df31,equation_transform,"""']@","""']@",False,not_attempted,non-bit row,False,False,False,False
+a77be9fa,equation_transform,{>$[,{>$[,False,not_attempted,non-bit row,False,False,False,False
+5a19f71a,bit_manipulation,11100010,11100010,False,already_matches_fullbyte,"XOR(ROL3,SHL5)",True,True,False,False
+78d02fc5,bit_manipulation,11001011,11001011,False,no_fullbyte_expression,no accepted full-byte expression matched all examples,False,False,False,False
+4166067c,bit_manipulation,01110110,01110110,False,already_matches_fullbyte,"AND_NOT(ROL6,SHL7)",True,True,False,False
+49fb46e8,bit_manipulation,01001110,01001110,False,already_matches_fullbyte,"XOR(SHL2,SHR5)",True,True,False,False
+779bb1f3,bit_manipulation,10000001,10000001,False,already_matches_fullbyte,"OR(SHL6,SHR7)",True,True,False,False
+e2b02e13,bit_manipulation,01111110,01111110,False,already_matches_fullbyte,"AND_NOT(ROL5,SHL7)",True,True,False,False
+f8d6abd1,equation_transform,5543,5543,False,not_attempted,non-bit row,True,True,False,False
+21245d76,bit_manipulation,01111111,01111111,False,no_fullbyte_expression,no accepted full-byte expression matched all examples,True,True,False,False
+4ed6b56f,equation_transform,!:`(,!:`(,False,not_attempted,non-bit row,False,False,False,False
+e0eba119,bit_manipulation,00010010,00010010,False,already_matches_fullbyte,"AND_NOT(ROL3,SHL1)",True,True,False,False
+55014a7a,bit_manipulation,01010000,01010000,False,already_matches_fullbyte,"AND(ROL2,ROL4)",True,True,False,False
+0fe06e8c,bit_manipulation,10010010,10010010,False,already_matches_fullbyte,"OR(SHL4,SHR6)",True,True,False,False
+f8fc43d2,bit_manipulation,11100100,11100100,False,already_matches_fullbyte,"XOR(ROL3,SHR2)",True,True,False,False
+208d7838,equation_transform,[&<>,[&<>,False,not_attempted,non-bit row,False,False,False,False
+58c099d2,equation_transform,^!#\,^!#\,False,not_attempted,non-bit row,False,False,False,False
+d40ce15d,bit_manipulation,00010000,00010000,False,already_matches_fullbyte,"XOR(SHL2,SHR3)",True,True,False,False
+3cb3fd89,equation_transform,]$$),]$$),False,not_attempted,non-bit row,False,False,False,False
+c711f9dd,bit_manipulation,11000000,11000000,False,already_matches_fullbyte,"AND_NOT(ROL1,SHL6)",True,True,False,False
+a26065d4,equation_transform,<&<#,<&<#,False,not_attempted,non-bit row,False,False,False,False
+55d834d1,bit_manipulation,10111111,10111111,False,no_fullbyte_expression,no accepted full-byte expression matched all examples,False,False,False,False
+194695e8,equation_transform,!\{<,!\{<,False,not_attempted,non-bit row,False,False,False,False
+4ef88f92,bit_manipulation,01011111,01011111,False,no_fullbyte_expression,no accepted full-byte expression matched all examples,False,False,False,False
+5d77eff6,bit_manipulation,00011100,00011100,False,no_fullbyte_expression,no accepted full-byte expression matched all examples,True,True,False,False
+1a7c8520,bit_manipulation,01100110,01100000,True,fullbyte_safe_ternary,"MAJ3(ROL2,SHL1,SHR5)",False,True,True,False
+1c671acc,bit_manipulation,11111101,11111101,False,already_matches_fullbyte,"OR(ROL3,SHL2)",True,True,False,False
+528ec0d8,equation_transform,39,39,False,not_attempted,non-bit row,False,False,False,False
+4bb8c6cd,equation_transform,]}\!,]}\!,False,not_attempted,non-bit row,True,True,False,False
+57712d01,equation_transform,$/'{,$/'{,False,not_attempted,non-bit row,False,False,False,False
+d98d85c0,equation_transform,(@@?,(@@?,False,not_attempted,non-bit row,False,False,False,False
+b62f2e75,bit_manipulation,00111111,00111111,False,already_matches_fullbyte,SHR2,True,True,False,False
+7ed40e8a,equation_transform,180,180,False,not_attempted,non-bit row,True,True,False,False
+491b8ea5,equation_transform,@|]!,@|]!,False,not_attempted,non-bit row,False,False,False,False
+eb1a62f7,equation_transform,){>),){>),False,not_attempted,non-bit row,False,False,False,False
+0bb591e6,equation_transform,"""$%%""","""$%%""",False,not_attempted,non-bit row,False,False,False,False
+c869b4f6,bit_manipulation,10010001,10010001,False,already_matches_fullbyte,"XOR(SHL6,SHR1)",True,True,False,False
+3c424916,equation_transform,9351,9351,False,not_attempted,non-bit row,True,True,False,False
+575f9709,bit_manipulation,01111111,01111111,False,already_matches_fullbyte,"OR(ROL3,SHR2)",True,True,False,False
+691608b9,bit_manipulation,00101000,00101000,False,already_matches_fullbyte,SHR2,True,True,False,False
+72336119,equation_transform,3316,3316,False,not_attempted,non-bit row,True,True,False,False
+202af98d,bit_manipulation,11111111,11111111,False,no_fullbyte_expression,no accepted full-byte expression matched all examples,False,False,False,False
+3ace787f,bit_manipulation,11111111,11111111,False,no_fullbyte_expression,no accepted full-byte expression matched all examples,False,False,False,False
+9a19fc2d,equation_transform,!&)#,!&)#,False,not_attempted,non-bit row,False,False,False,False
+dc7f150a,bit_manipulation,11001011,11001011,False,already_matches_fullbyte,ROL7,True,True,False,False
+12e947ca,bit_manipulation,00111110,00111110,False,already_matches_fullbyte,"XOR(SHL6,SHR1)",True,True,False,False
+2a5d4790,bit_manipulation,11111111,11111111,False,already_matches_fullbyte,"OR(ROL4,SHR1)",True,True,False,False
+59bee375,bit_manipulation,10010101,10010101,False,no_fullbyte_expression,no accepted full-byte expression matched all examples,True,True,False,False
+528b694b,equation_transform,>]]),>]]),False,not_attempted,non-bit row,False,False,False,False
+d3b20e29,equation_transform,3922,3922,False,not_attempted,non-bit row,True,True,False,False
+d1bd7478,equation_transform,30,30,False,not_attempted,non-bit row,True,True,False,False
+21519be7,equation_transform,35,35,False,not_attempted,non-bit row,True,True,False,False
+fe6d3aa3,bit_manipulation,10100010,10100010,False,already_matches_fullbyte,"XOR(SHL4,SHR2)",True,True,False,False
+01248b76,bit_manipulation,11000101,11000101,False,already_matches_fullbyte,"XOR(ROL1,SHL4)",True,True,False,False
+0dfd7674,bit_manipulation,01001110,01001110,False,already_matches_fullbyte,"XOR(ROL6,SHL1)",True,True,False,False
+7306613b,equation_transform,251,251,False,not_attempted,non-bit row,True,True,False,False
+8243c91e,bit_manipulation,01000101,01000101,False,already_matches_fullbyte,"MAJ3(ROL1,SHL4,SHR5)",True,True,False,False
+fba40625,equation_transform,{>?#,{>?#,False,not_attempted,non-bit row,False,False,False,False
+9aa8dc92,equation_transform,/#</,/#</,False,not_attempted,non-bit row,True,True,False,False
+ef2fe526,bit_manipulation,01011010,01011010,False,already_matches_fullbyte,"AND(ROL4,SHL1)",True,True,False,False
+c5b058d6,equation_transform,134,134,False,not_attempted,non-bit row,True,True,False,False
+b4342b90,equation_transform,66,66,False,not_attempted,non-bit row,True,True,False,False
+837a6ae7,equation_transform,"<:{""","<:{""",False,not_attempted,non-bit row,False,False,False,False
+9d3e7f1a,bit_manipulation,01101010,01101010,False,already_matches_fullbyte,"OR(SHL3,SHR6)",True,True,False,False
+00fdc0be,bit_manipulation,11111111,11111111,False,already_matches_fullbyte,"OR(ROL7,SHL2)",True,True,False,False
+3a7dd604,bit_manipulation,01001011,01001011,False,no_fullbyte_expression,no accepted full-byte expression matched all examples,False,False,False,False
+d0e1010b,equation_transform,|&$|,|&$|,False,not_attempted,non-bit row,False,False,False,False
+3feeabea,bit_manipulation,10010010,10010010,False,already_matches_fullbyte,"OR(SHL4,SHR6)",True,True,False,False
+34c563c5,equation_transform,04`,04`,False,not_attempted,non-bit row,True,True,False,False
+5a0d5d2a,equation_transform,55,55,False,not_attempted,non-bit row,False,False,False,False
+5a9fcf68,equation_transform,4,4,False,not_attempted,non-bit row,False,False,False,False
+6e56b39a,equation_transform,&#!,&#!,False,not_attempted,non-bit row,False,False,False,False
+4ada9150,bit_manipulation,01111011,01111011,False,already_matches_fullbyte,"OR(ROL2,SHL4)",True,True,False,False
+a5f1991c,equation_transform,!&&&,!&&&,False,not_attempted,non-bit row,False,False,False,False
+455b6b61,bit_manipulation,00111011,00111011,False,already_matches_fullbyte,"XOR(ROL2,SHR2)",True,True,False,False
+1d08947a,bit_manipulation,10010100,10010100,False,already_matches_fullbyte,SHL2,True,True,False,False
+d26f22c3,bit_manipulation,11101100,11101100,False,no_fullbyte_expression,no accepted full-byte expression matched all examples,True,True,False,False
+c7aae192,equation_transform,"\""]","\""]",False,not_attempted,non-bit row,False,False,False,False
+a6192d29,bit_manipulation,01111110,00001000,True,fullbyte_safe_ternary,"MAJ3(ROL6,SHL1,SHR1)",False,True,True,False
+e4cc7639,equation_transform,16,16,False,not_attempted,non-bit row,False,False,False,False
+eeb60061,bit_manipulation,00000101,00000101,False,already_matches_fullbyte,"XOR(ROL4,SHL7)",True,True,False,False
+844f826c,equation_transform,`@>`,`@>`,False,not_attempted,non-bit row,False,False,False,False
+048cc279,bit_manipulation,01111000,01010000,True,fullbyte_safe_ternary,"MAJ3(ROL1,SHL3,SHR2)",False,True,True,False
+20052c2f,bit_manipulation,01100110,01100110,False,already_matches_fullbyte,"OR(ROL5,SHR7)",True,True,False,False
+89dfa4c2,bit_manipulation,00111010,00111010,False,already_matches_fullbyte,"AND_NOT(ROL2,SHL6)",True,True,False,False
+53329505,bit_manipulation,11011111,11011111,False,already_matches_fullbyte,"OR(ROL1,SHR6)",True,True,False,False
+ced947c8,bit_manipulation,01001011,01001011,False,already_matches_fullbyte,"AND_NOT(ROL3,SHL4)",True,True,False,False
+0440e6ab,bit_manipulation,01100000,01100000,False,already_matches_fullbyte,"OR(SHL5,SHR7)",True,True,False,False
+e641791f,bit_manipulation,00010001,00010001,False,already_matches_fullbyte,"XOR(ROL1,SHR3)",True,True,False,False
+bcdf9198,bit_manipulation,11111111,11111111,False,already_matches_fullbyte,"XNOR(ID,ID)",True,True,False,False
+b69391b8,equation_transform,66,66,False,not_attempted,non-bit row,True,True,False,False
+8193e7e0,equation_transform,#?&`,#?&`,False,not_attempted,non-bit row,False,False,False,False
+20cdbdb1,bit_manipulation,11100001,11100001,False,already_matches_fullbyte,"OR(SHL4,SHR7)",True,True,False,False
+48ae04f6,bit_manipulation,00000010,00000010,False,already_matches_fullbyte,"MAJ3(ROL5,SHL4,SHR5)",True,True,False,False
+3595c82c,bit_manipulation,10011011,10011011,False,no_fullbyte_expression,no accepted full-byte expression matched all examples,True,True,False,False
+5bcb572e,equation_transform,"""{!","""{!",False,not_attempted,non-bit row,False,False,False,False
+8c1529e1,equation_transform,-52,-52,False,not_attempted,non-bit row,True,True,False,False
+cdec898a,equation_transform,>}][?,>}][?,False,not_attempted,non-bit row,False,False,False,False
+bca238ee,bit_manipulation,00000000,00000000,False,already_matches_fullbyte,"MAJ3(ROL3,SHL6,SHR7)",True,True,False,False
+5dffe751,bit_manipulation,01100000,01100000,False,already_matches_fullbyte,SHL4,True,True,False,False
+44398869,equation_transform,5913,5913,False,not_attempted,non-bit row,True,True,False,False
+06120e47,bit_manipulation,11111110,11111110,False,no_fullbyte_expression,no accepted full-byte expression matched all examples,False,False,False,False
+1f7407ed,bit_manipulation,00101101,00101101,False,no_fullbyte_expression,no accepted full-byte expression matched all examples,True,True,False,False
+46dd0f22,bit_manipulation,01010000,01010000,False,already_matches_fullbyte,"MAJ3(ROL1,ROL6,SHL1)",True,True,False,False
+edf364da,equation_transform,::{[,::{[,False,not_attempted,non-bit row,False,False,False,False
+d6e5cd59,bit_manipulation,01101111,01101111,False,already_matches_fullbyte,"XNOR(SHL1,SHL6)",True,True,False,False
+339149c9,equation_transform,3,3,False,not_attempted,non-bit row,True,True,False,False
+e1f3ffbb,bit_manipulation,11111011,11111011,False,no_fullbyte_expression,no accepted full-byte expression matched all examples,False,False,False,False
+4c327b55,bit_manipulation,11011110,11011100,True,fullbyte_binary,"XOR(SHL1,SHR4)",False,True,True,False
+0f2dec86,bit_manipulation,10111000,10111000,False,already_matches_fullbyte,"XOR(SHL2,SHR1)",True,True,False,False
+e36a0065,bit_manipulation,01110110,01110110,False,already_matches_fullbyte,ROL2,True,True,False,False
+c7844441,equation_transform,:/$^,:/$^,False,not_attempted,non-bit row,True,True,False,False
+21261dc6,equation_transform,-25,-25,False,not_attempted,non-bit row,True,True,False,False
+70bc42af,bit_manipulation,10101010,10101010,False,already_matches_fullbyte,"OR(ROL5,SHL3)",True,True,False,False
+4dbec546,equation_transform,611,611,False,not_attempted,non-bit row,True,True,False,False
+0c2407ef,bit_manipulation,11000011,11000011,False,already_matches_fullbyte,"MAJ3(ROL6,SHL6,SHR3)",True,True,False,False
+939273d7,bit_manipulation,11100110,11100110,False,no_fullbyte_expression,no accepted full-byte expression matched all examples,True,True,False,False
+8082a958,bit_manipulation,00000000,00000000,False,already_matches_fullbyte,"AND(ROL3,SHR7)",True,True,False,False
+fd48ee2f,bit_manipulation,10110100,10110100,False,already_matches_fullbyte,SHL2,True,True,False,False
+4eb990f6,bit_manipulation,00000001,00000001,False,already_matches_fullbyte,SHR1,True,True,False,False
+85af23eb,bit_manipulation,00001111,00001111,False,already_matches_fullbyte,"XNOR(SHL3,SHL7)",True,True,False,False
+0e009c6d,equation_transform,@?`?,@?`?,False,not_attempted,non-bit row,False,False,False,False
+d2ac699b,bit_manipulation,10001011,10001011,False,already_matches_fullbyte,"XOR(SHL3,SHR4)",True,True,False,False
+b4b73143,equation_transform,>!!/,>!!/,False,not_attempted,non-bit row,False,False,False,False
+3a148f6a,bit_manipulation,00100111,00100111,False,no_fullbyte_expression,no accepted full-byte expression matched all examples,True,True,False,False
+861cb154,equation_transform,10,10,False,not_attempted,non-bit row,False,False,False,False
+90feb0c5,equation_transform,?>>>,?>>>,False,not_attempted,non-bit row,False,False,False,False
+c541eb82,equation_transform,-01,-01,False,not_attempted,non-bit row,True,True,False,False
+b9f1d959,equation_transform,"$""\[""","$""\[""",False,not_attempted,non-bit row,False,False,False,False
+5374b4ba,bit_manipulation,10101100,10101100,False,already_matches_fullbyte,"OR(SHL5,SHR4)",True,True,False,False
+ca5db1c0,equation_transform,"(""'|","(""'|",False,not_attempted,non-bit row,False,False,False,False
+16e73f0e,bit_manipulation,00000001,00000001,False,already_matches_fullbyte,"AND(ROL6,SHR4)",True,True,False,False
+87007054,bit_manipulation,10111111,10111111,False,already_matches_fullbyte,"XNOR(SHL4,SHL5)",True,True,False,False
+b8aa3072,bit_manipulation,00000111,00000011,True,fullbyte_safe_ternary,"CHO(SHL2,SHR4,ROL7)",False,True,True,False
+9f1ff166,equation_transform,"""]'/","""]'/",False,not_attempted,non-bit row,False,False,False,False
+82ae858c,bit_manipulation,11111101,11111101,False,no_fullbyte_expression,no accepted full-byte expression matched all examples,False,False,False,False
+1282c5c5,bit_manipulation,00001110,00001110,False,no_fullbyte_expression,no accepted full-byte expression matched all examples,True,True,False,False
+432b1110,equation_transform,\{<?,\{<?,False,not_attempted,non-bit row,False,False,False,False
+f333b67f,equation_transform,100,100,False,not_attempted,non-bit row,True,True,False,False
+f7d26b8d,equation_transform,[}}\,[}}\,False,not_attempted,non-bit row,False,False,False,False
+5ba26f21,bit_manipulation,01111110,01011100,True,fullbyte_safe_ternary,"CHO(SHL1,SHR1,ROL4)",False,True,True,False
+a00fe76a,bit_manipulation,10111011,10111011,False,already_matches_fullbyte,ROL6,True,True,False,False
+8e56a42e,equation_transform,%/<>,%/<>,False,not_attempted,non-bit row,True,True,False,False
+0e3962f6,bit_manipulation,11111110,11111110,False,already_matches_fullbyte,ROL3,True,True,False,False
+20f0fac9,equation_transform,65,65,False,not_attempted,non-bit row,False,False,False,False
+26e48e98,equation_transform,"""%]%{""","""%]%{""",False,not_attempted,non-bit row,False,False,False,False
+0290f51a,bit_manipulation,10101111,10101111,False,no_fullbyte_expression,no accepted full-byte expression matched all examples,True,True,False,False
+c30a782a,bit_manipulation,01000110,01000110,False,already_matches_fullbyte,"AND_NOT(ROL5,SHL4)",True,True,False,False
+3d24aef4,bit_manipulation,10100101,10100101,False,already_matches_fullbyte,"XOR(ROL3,SHR7)",True,True,False,False
+5501c054,equation_transform,!##^,!##^,False,not_attempted,non-bit row,False,False,False,False
+ea6d926a,equation_transform,37,37,False,not_attempted,non-bit row,False,False,False,False

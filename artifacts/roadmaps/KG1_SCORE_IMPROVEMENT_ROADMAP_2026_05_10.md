@@ -4900,3 +4900,96 @@ Decisao:
   - nao transformar esses casos em postprocessor direto;
   - usar como exemplos teacher de equation somente se o dataset/treino conseguir aprender o prior sem regredir bit e side families;
   - manter V274/V275 como melhor ganho equation comprovado ate agora.
+
+## Atualizacao 2026-05-12 - V299/V300/V301/V302 postprocessor signals
+
+Escopo: continuar a busca por ganhos pequenos, usando apenas CPU/local antes de qualquer gasto HF.
+
+### V299 equation numeric candidate audit
+
+Artefatos:
+
+- `scripts/run_v299_equation_numeric_candidate_audit.py`
+- `artifacts/v299_equation_numeric_candidate_audit/20260512T1030Z/v299_equation_numeric_candidate_manifest.json`
+
+Resultado:
+
+- entrada: `v275_postprocessed_predictions.csv`, que ja tinha `196/315`, `equation=60/155`, `bit=136/160`;
+- `same_operator_unique_numeric_dsl`: `31` candidatos, `30` corretos, `1` perda;
+- `all_numeric_examples_unique_dsl`: `4` candidatos, `2` corretos, `2` perdas;
+- `conventional_operator_prior_unique`: nenhum candidato promovivel;
+- decisao: bloqueado como postprocessor. Ha sinal para treino/teacher, mas nao para regra direta.
+
+### V300 full-byte bit grammar
+
+Artefatos:
+
+- `scripts/run_v300_bit_fullbyte_grammar_audit.py`
+- `artifacts/v300_bit_fullbyte_grammar_audit/20260512T1100Z/`
+
+Resultados principais:
+
+- V300 full-byte nivel 3 contra solver local no weak:
+  - full-byte sozinho: `131/160`;
+  - ensemble com solver local: `136/160`, `+12/-1`.
+- Guardrail seguro removendo ternarios instaveis e aceitando so `MAJ3`, `CHO`, `PAR3`:
+  - sobre V275 weak: bit sobe de `136/160` para `147/160`;
+  - `+11` ganhos;
+  - `0` perdas.
+
+Decisao:
+
+- Este e um ganho real de bit, label-free no algoritmo, derivado apenas dos exemplos do prompt.
+- A regra que causava perda (`AND_OR`) foi bloqueada; o conjunto seguro ficou `MAJ3`, `CHO`, `PAR3` + unary/binary full-byte.
+
+### V301 weak gate do bit postprocessor
+
+Artefatos:
+
+- `src/kg1_v300_bit_fullbyte_postprocessor.py`
+- `scripts/run_v301_bit_postprocessor_gate.py`
+- `artifacts/v301_bit_postprocessor_gate/20260512T1130Z/v301_bit_postprocessor_gate_manifest.json`
+
+Resultado no weak V275:
+
+- baseline: `196/315`;
+- postprocessed: `207/315`;
+- `bit_manipulation`: `147/160`;
+- `equation_transform`: `60/155`;
+- ganhos: `11`;
+- perdas: `0`;
+- source guard: sem hits para termos proibidos (`answer`, `correct`, `verify_answer`, `solution`) no modulo postprocessor.
+
+Decisao:
+
+- V301 passa weak gate e e a primeira rota recente com ganho material em bit sem perda local.
+- Se a submissao aceitar pipeline com postprocessamento, V301/V274 combinados sao candidatos fortes.
+- Se a submissao for adapter-only, V301 vira dataset teacher/distillation target para tentar transferir o comportamento ao LoRA.
+
+### V302 combined full local gate
+
+Artefatos:
+
+- `scripts/run_v302_combined_postprocessor_gate.py`
+- `artifacts/v302_combined_postprocessor_gate/20260512T1200Z/v302_combined_postprocessor_gate_manifest.json`
+- entrada: `artifacts/v293_gap_mining/inputs/v291_full_predictions.csv`
+
+Resultado no full local rotulado `947`:
+
+- baseline V291: `823/947 = 0.8690601901`;
+- V274 equation + V300 bit combinados: `838/947 = 0.8848996832`;
+- ganhos: `15`;
+- perdas: `0`;
+- `bit_manipulation`: `135/160` -> `146/160`;
+- `equation_transform`: `56/155` -> `60/155`;
+- side families mantidas em `100%`;
+- truncation permanece `1`.
+
+Decisao:
+
+- Este e o melhor sinal objetivo ate agora para sair do plato `0.86`.
+- Risco principal: a competicao/submissao final pode exigir adapter-only; nesse caso o postprocessor nao e diretamente submetivel.
+- Proximo passo correto:
+  1. confirmar regra de submissao/package atual;
+  2. se postprocessor for permitido, montar pacote/inferencia com V274+V300 e gate final;
+  3. se adapter-only, gerar dataset teacher dos `15` ganhos e fazer distillation curta em HF, mantendo replay das side families e gates `bit>=146`, `eq>=60`, `full>=838` como alvo local.

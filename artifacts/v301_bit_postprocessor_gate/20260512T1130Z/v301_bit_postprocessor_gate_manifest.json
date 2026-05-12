@@ -1,0 +1,70 @@
+{
+  "applied_rows": 11,
+  "baseline_summary": {
+    "accuracy": 0.6222222222222222,
+    "correct": 196,
+    "family": {
+      "bit_manipulation": {
+        "correct": 136,
+        "rows": 160,
+        "truncated": 0
+      },
+      "equation_transform": {
+        "correct": 60,
+        "rows": 155,
+        "truncated": 0
+      }
+    },
+    "rows": 315,
+    "truncated": 0
+  },
+  "decision": {
+    "decision": "v301_bit_postprocessor_passes_weak_gate",
+    "reason": "baseline=196; postprocessed=207; bit=147; eq=60; gains=11; losses=0"
+  },
+  "gains": 11,
+  "input_csv": "artifacts\\hf_cpu_runs\\v275_deployable_postprocessor_gate_20260511T1210Z\\v275_postprocessed_predictions.csv",
+  "input_sha256": "df847b149c1bfde44aace000d5dd23c72289300298b39f974bb9e52a5e41e3f1",
+  "losses": 0,
+  "outputs": {
+    "audit_csv": "artifacts\\v301_bit_postprocessor_gate\\20260512T1130Z\\v301_bit_postprocessor_audit.csv",
+    "manifest_json": "artifacts\\v301_bit_postprocessor_gate\\20260512T1130Z\\v301_bit_postprocessor_gate_manifest.json",
+    "postprocessed_predictions_csv": "artifacts\\v301_bit_postprocessor_gate\\20260512T1130Z\\v301_bit_postprocessed_predictions.csv"
+  },
+  "postprocessed_summary": {
+    "accuracy": 0.6571428571428571,
+    "correct": 207,
+    "family": {
+      "bit_manipulation": {
+        "correct": 147,
+        "rows": 160,
+        "truncated": 0
+      },
+      "equation_transform": {
+        "correct": 60,
+        "rows": 155,
+        "truncated": 0
+      }
+    },
+    "rows": 315,
+    "truncated": 0
+  },
+  "schema_version": "kg1_v301_bit_postprocessor_gate_v1",
+  "source_guard": {
+    "forbidden_hits": [],
+    "forbidden_terms": [
+      "answer",
+      "correct",
+      "verify_answer",
+      "solution"
+    ],
+    "module_path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\src\\kg1_v300_bit_fullbyte_postprocessor.py",
+    "sha256": "9a3a812817f0d6a5c8fb9f9d07eefab0d568644d84bd60de74bbf3bcbe6eb569"
+  },
+  "weak_gate": {
+    "pass": true,
+    "weak_bit_min": 137,
+    "weak_eq_min": 60,
+    "weak_total_min": 193
+  }
+}

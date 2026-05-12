@@ -1,0 +1,39 @@
+{
+  "baseline_ensemble_accuracy": 0.91875,
+  "baseline_ensemble_correct": 147,
+  "baseline_ensemble_gain_vs_input_prediction": 11,
+  "baseline_ensemble_loss_vs_input_prediction": 0,
+  "baseline_prediction_accuracy": 0.85,
+  "baseline_prediction_correct": 136,
+  "bit_rows": 160,
+  "compare_input_prediction": true,
+  "current_accuracy": 0.78125,
+  "current_correct": 125,
+  "detail_csv": "artifacts\\v300_bit_fullbyte_grammar_audit\\20260512T1100Z\\v275_level3_safe_ternary_v300_bit_fullbyte_grammar_details.csv",
+  "detail_rows": 18,
+  "elapsed_s": 13.279,
+  "ensemble_accuracy": 0.85625,
+  "ensemble_correct": 137,
+  "ensemble_gain_vs_current": 12,
+  "ensemble_loss_vs_current": 0,
+  "expression_rows": 132,
+  "fullbyte_accuracy": 0.825,
+  "fullbyte_correct": 132,
+  "input_csv": "artifacts\\hf_cpu_runs\\v275_deployable_postprocessor_gate_20260511T1210Z\\v275_postprocessed_predictions.csv",
+  "input_sha256": "df847b149c1bfde44aace000d5dd23c72289300298b39f974bb9e52a5e41e3f1",
+  "label": "v275_level3_safe_ternary",
+  "level_counts": {
+    "binary": 91,
+    "none": 28,
+    "ternary": 20,
+    "unary": 21
+  },
+  "max_level": 3,
+  "rows_total": 315,
+  "schema_version": "kg1_v300_bit_fullbyte_grammar_audit_v1",
+  "ternary_op_allowlist": [
+    "CHO",
+    "MAJ3",
+    "PAR3"
+  ]
+}

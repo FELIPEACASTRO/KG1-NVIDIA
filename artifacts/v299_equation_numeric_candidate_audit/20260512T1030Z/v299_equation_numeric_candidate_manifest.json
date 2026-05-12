@@ -1,0 +1,38 @@
+{
+  "baseline_equation_correct": 60,
+  "decision": {
+    "decision": "no_numeric_candidate_promoted_until_zero_loss",
+    "reason": "Candidate classes are diagnostic unless they have gains, zero losses, and no wrong_on_baseline_miss."
+  },
+  "equation_rows": 155,
+  "input_csv": "artifacts\\hf_cpu_runs\\v275_deployable_postprocessor_gate_20260511T1210Z\\v275_postprocessed_predictions.csv",
+  "input_sha256": "df847b149c1bfde44aace000d5dd23c72289300298b39f974bb9e52a5e41e3f1",
+  "numeric_audit_rows": 195,
+  "outputs": {
+    "audit_csv": "artifacts\\v299_equation_numeric_candidate_audit\\20260512T1030Z\\v299_equation_numeric_candidate_audit.csv",
+    "manifest_json": "artifacts\\v299_equation_numeric_candidate_audit\\20260512T1030Z\\v299_equation_numeric_candidate_manifest.json",
+    "summary_csv": "artifacts\\v299_equation_numeric_candidate_audit\\20260512T1030Z\\v299_equation_numeric_candidate_summary.csv"
+  },
+  "rows": 315,
+  "schema_version": "kg1_v299_equation_numeric_candidate_audit_v1",
+  "summary": [
+    {
+      "candidate_class": "all_numeric_examples_unique_dsl",
+      "candidate_correct": 2,
+      "candidate_rows": 4,
+      "losses": 2,
+      "rows": 65
+    },
+    {
+      "candidate_class": "conventional_operator_prior_unique",
+      "rows": 65
+    },
+    {
+      "candidate_class": "same_operator_unique_numeric_dsl",
+      "candidate_correct": 30,
+      "candidate_rows": 31,
+      "losses": 1,
+      "rows": 65
+    }
+  ]
+}
