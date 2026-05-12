@@ -4993,3 +4993,53 @@ Decisao:
   1. confirmar regra de submissao/package atual;
   2. se postprocessor for permitido, montar pacote/inferencia com V274+V300 e gate final;
   3. se adapter-only, gerar dataset teacher dos `15` ganhos e fazer distillation curta em HF, mantendo replay das side families e gates `bit>=146`, `eq>=60`, `full>=838` como alvo local.
+
+### V303 bit full-byte distillation dataset
+
+Artefatos:
+
+- `scripts/build_v303_bit_fullbyte_distill_dataset.py`
+- `artifacts/v303_bit_fullbyte_distill_dataset/20260512T1010Z/v303_bit_fullbyte_distill_manifest.json`
+- `artifacts/v303_bit_fullbyte_tokenization_gate/20260512T1010Z/v286_generic_tokenization_gate_manifest.json`
+
+Objetivo:
+
+- transferir o ganho V300/V302 para um LoRA adapter-only, porque o pacote oficial atual rejeita `prediction_postprocessor`;
+- usar somente prompts sinteticos de bit full-byte, sem treinar em linhas weak/full rotuladas;
+- manter V290/V274 como base para nao perder os ganhos de equation ja comprovados.
+
+Composicao:
+
+- base V290:
+  - train `11286`, validation `801`;
+  - equation patch V274 ja incluido.
+- patch V303:
+  - train `1536` linhas bit full-byte;
+  - validation `168` linhas bit full-byte;
+  - padroes exatos derivados dos ganhos V302: `CHO`, `MAJ3` e `XOR(SHL1,SHR4)`;
+  - variacoes sinteticas conservadoras com `MAJ3`, `CHO`, `PAR3` e `XOR`.
+- dataset final:
+  - train `12822`;
+  - validation `969`;
+  - family train bit: `4231`;
+  - family validation bit: `332`.
+
+Gates:
+
+- overlap contra weak bridge `315`: `0` ids e `0` prompts;
+- train/validation prompt overlap: `0`;
+- tokenizer real Nemotron `cbd3fa9f933d55ef16a84236559f4ee2a0526848`;
+- offset masks: `12822/12822` train e `969/969` validation;
+- prompt truncation: `0.0`;
+- token max: `327`;
+- completion tokens dropped: `0`.
+
+Decisao:
+
+- V303 passa o gate local e esta pronto para um treino HF curto e budget-capped.
+- A metrica de sucesso nao e loss isolado: o adapter precisa recuperar no minimo parte do sinal V302 em avaliacao weak/full sem regredir side families.
+- Gate alvo para continuar:
+  - weak bit `> 136/160`, ideal `>= 146/160`;
+  - weak equation `>= 60/155`;
+  - full local `> 823/947`, ideal aproximar `838/947`;
+  - zero regressao em side families.
