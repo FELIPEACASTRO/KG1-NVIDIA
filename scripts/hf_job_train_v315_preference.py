@@ -473,6 +473,7 @@ def train() -> None:
     grad_accum = max(1, base.GRADIENT_ACCUMULATION)
     micro = max(1, base.MICRO_BATCH_SIZE)
 
+    print(f"baseline_preference_eval_start max_examples={base.EVAL_MAX_EXAMPLES}", flush=True)
     baseline_eval = evaluate_preferences(model, val_pairs, pad_token_id, base.EVAL_MAX_EXAMPLES)
     print("baseline_preference_eval =", json.dumps(baseline_eval, sort_keys=True), flush=True)
     best_eval_accuracy = max(best_eval_accuracy, float(baseline_eval["preference_accuracy"]))
@@ -530,6 +531,10 @@ def train() -> None:
             flush=True,
         )
         if global_step % base.EVAL_EVERY_STEPS == 0 or global_step == base.MAX_STEPS:
+            print(
+                f"preference_eval_step_{global_step}_start max_examples={base.EVAL_MAX_EXAMPLES}",
+                flush=True,
+            )
             eval_report = evaluate_preferences(model, val_pairs, pad_token_id, base.EVAL_MAX_EXAMPLES)
             best_eval_accuracy = max(best_eval_accuracy, float(eval_report["preference_accuracy"]))
             print(f"preference_eval_step_{global_step} = {json.dumps(eval_report, sort_keys=True)}", flush=True)
@@ -542,6 +547,7 @@ def train() -> None:
         if base.ABORT_MAX_RESERVED_GIB > 0 and base.cuda_reserved_gib() > base.ABORT_MAX_RESERVED_GIB:
             raise RuntimeError("abort_cuda_reserved_guard_exceeded")
 
+    print(f"final_preference_eval_start max_examples={base.EVAL_MAX_EXAMPLES}", flush=True)
     final_eval = evaluate_preferences(model, val_pairs, pad_token_id, base.EVAL_MAX_EXAMPLES)
     final_dir = Path(base.OUTPUT_DIR) / "final_adapter"
     model.save_pretrained(str(final_dir))
