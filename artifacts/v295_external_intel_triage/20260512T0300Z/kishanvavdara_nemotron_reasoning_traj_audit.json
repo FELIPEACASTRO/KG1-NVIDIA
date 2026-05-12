@@ -1,0 +1,104 @@
+{
+  "assessment": {
+    "direct_training_allowed_without_filter": false,
+    "potential_use": "mine generated trajectories and aggregate correctness to identify rule families and prompt patterns; compare solved/partial/false examples for bit_manipulation and equation_symbolic/numeric",
+    "reason": "contains official train-problem ids and overlaps weak ids; use only after weak-id/prompt-hash anti-leakage gates and preferably for analysis/verifier design, not blind SFT"
+  },
+  "columns": [
+    "id",
+    "prompt",
+    "generated",
+    "correct answer",
+    "generated answer",
+    "correctness",
+    "problem type"
+  ],
+  "correctness_counts": {
+    "false": 4738,
+    "partial": 339,
+    "true": 4423
+  },
+  "csv_bytes": 139456207,
+  "csv_sha256": "01da9b309daedf18c9bcff9e0766b3deb7d736a1d350c73ded47775a8b66685e",
+  "dataset": "kishanvavdara/nemotron-reasoning-traj",
+  "duplicate_ids": 0,
+  "head_redacted": [
+    {
+      "correct answer": "10010111",
+      "correctness": "false",
+      "generated": "We need to find the rule mapping 8-bit binary strings to another 8-bit string according to some bit manipulation rule presumably deterministic. Given many examples. Let's analyze mapping patterns.\n\nWe have input -> output pairs:\n\n1. 01010001 -> 11011101\n2. 00001001 -> 01101101\n3. 00010101 -> 0101010",
+      "generated answer": "11011101",
+      "id": "00066667",
+      "problem type": "bit_manipulation",
+      "prompt": "In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.\n\nHere are some examples of input -> output:\n01010001 -> 11011101\n00001001 -> 0110110"
+    },
+    {
+      "correct answer": "01000011",
+      "correctness": "false",
+      "generated": "We need to infer mapping of 8-bit binary strings (as characters like \"10001110\") to outputs. We have list of inputs and outputs. Let's enumerate:\n\nInput (binary) -> Output\n1) 10001110 -> 00100110\n2) 10011001 -> 01000100\n3) 01100100 -> 00010001\n4) 10000010 -> 00001010\n5) 00011011 -> 01001100\n6) 00111",
+      "generated answer": "3",
+      "id": "000b53cf",
+      "problem type": "bit_manipulation",
+      "prompt": "In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.\n\nHere are some examples of input -> output:\n10001110 -> 00100110\n10011001 -> 0100010"
+    },
+    {
+      "correct answer": "cat imagines book",
+      "correctness": "false",
+      "generated": "We have a problem: \"secret encryption rules\" used on text, with examples. Need to decrypt \"trb wzrswvog hffk\". The phrase likely some English words.\n\nWe have some provided translations:\n\nExamples (given in cipher? Or the original plaintext? Actually given examples: \"ucoov pwgtfyoqg vorq yrjjoe -> qu",
+      "generated answer": "5",
+      "id": "00189f6a",
+      "problem type": "cipher",
+      "prompt": "In Alice's Wonderland, secret encryption rules are used on text. Here are some examples:\nucoov pwgtfyoqg vorq yrjjoe -> queen discovers near valley\npqrsfv pqorzg wvgwpo trgbjo -> dragon dreams inside castle\ngbcpovb tqorbog bxo zrswtrj pffq -> student creates the magical door\nbxo sfjpov pqrsfv dfjjfi"
+    }
+  ],
+  "license": "MIT (per Kaggle CLI)",
+  "problem_type_by_correctness": {
+    "bit_manipulation": {
+      "false": 1449,
+      "partial": 25,
+      "true": 128
+    },
+    "cipher": {
+      "false": 1003,
+      "partial": 90,
+      "true": 483
+    },
+    "equation_numeric": {
+      "false": 543,
+      "partial": 13,
+      "true": 176
+    },
+    "equation_symbolic": {
+      "false": 821,
+      "true": 2
+    },
+    "gravity": {
+      "false": 542,
+      "partial": 120,
+      "true": 935
+    },
+    "numeral": {
+      "false": 45,
+      "partial": 20,
+      "true": 1511
+    },
+    "unit_conversion": {
+      "false": 335,
+      "partial": 71,
+      "true": 1188
+    }
+  },
+  "problem_type_counts": {
+    "bit_manipulation": 1602,
+    "cipher": 1576,
+    "equation_numeric": 732,
+    "equation_symbolic": 823,
+    "gravity": 1597,
+    "numeral": 1576,
+    "unit_conversion": 1594
+  },
+  "rows": 9500,
+  "source_url": "https://www.kaggle.com/datasets/kishanvavdara/nemotron-reasoning-traj",
+  "unique_ids": 9500,
+  "weak_id_overlap": 315
+}

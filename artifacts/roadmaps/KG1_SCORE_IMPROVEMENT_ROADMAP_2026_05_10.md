@@ -4660,3 +4660,72 @@ Escopo: consolidar literatura operacional, Kaggle CLI/API, Hugging Face, Reasoni
 - Respostas OpenRouter advisory:
   - `artifacts/external_intel/openrouter_20260512/openai__gpt-5.4_kg1_strategy_response.md`
   - `artifacts/external_intel/openrouter_20260512/deepseek__deepseek-v4-pro_kg1_strategy_response.md`
+
+## Atualizacao 2026-05-12 - varredura Kaggle API das discussoes de Tong Hui Kang
+
+Escopo: buscar via Kaggle SDK autenticado tudo que `Tong Hui Kang` / `huikang` publicou nas discussoes da competicao `NVIDIA Nemotron Model Reasoning Challenge`, com foco em evidencias que possam melhorar `bit_manipulation` e `equation_transform`.
+
+### Metodo auditavel
+
+- O HTML publico da pagina de discussao nao expunha o corpo do topico para scraping simples.
+- A CLI `kaggle competitions pages` so expunha paginas oficiais (`rules`, `data-description`, etc.), nao discussoes.
+- A rota correta foi o SDK novo:
+  - `kagglesdk.discussions.services.discussions_api_service.DiscussionApiClient`
+  - `GetTopic`, `ListComments` e `ListTopics`.
+- Artefatos salvos:
+  - `artifacts/v295_external_intel_triage/20260512T0400Z/kaggle_discussion_690307_bit_strategy_api_dump.json`
+  - `artifacts/v295_external_intel_triage/20260512T0400Z/kaggle_discussion_690307_bit_strategy_summary.md`
+  - `artifacts/v295_external_intel_triage/20260512T0415Z/tong_hui_kang_nemotron_discussion_author_dump.json`
+  - `artifacts/v295_external_intel_triage/20260512T0415Z/tong_hui_kang_nemotron_discussion_author_summary.md`
+
+### Itens encontrados
+
+- Foram coletados `29` topicos candidatos por queries de autor/competicao e filtrados `24` itens escritos pelo autor dentro da competicao.
+- Topicos/comentarios de maior relevancia:
+  - `684212` - visualizacao de problemas e completions do modelo base:
+    - base model rodado nos `9500` problemas;
+    - cerca de `48,217,898` tokens gerados no ultimo run por problema;
+    - throughput citado: `2.5k tokens/s`, cerca de `5.35h`;
+    - solve rate do modelo base quase `50%`;
+    - observacao do autor: muitos `equation_numeric` e quase todos `equation_symbolic` ficaram sem padrao claro.
+  - `687961` - limites de treino Nemotron rank-32 LoRA em sequencias `8192`:
+    - nao ha motivo para treinar `16384`, pois o limite da competicao e `8192`;
+    - microbatch `2` e plausivel quando limitado a `8192`;
+    - perda/logits precisam de implementacao eficiente para caber memoria.
+  - `689915` - publicacao Open Progress Prize, SFT para maximizar minimo logprob:
+    - score alvo reportado pelo autor: `0.877`;
+    - tokens usados na submissao vencedora: `27,850,703`;
+    - tokens totais treinados: `598,958,637`;
+    - segredo declarado: `bit manipulation`, SFT, CoT deterministico, objetivo de `min logprob`, Tinker;
+    - aposta tecnica: Nemotron consegue agir como computador simples depois de LoRA;
+    - contra-aposta: nao depender de RL nem de destilar modelo maior quando politica otima pode ser gerada por codigo;
+    - comentario tecnico: loss masking e necessario; treinar o modelo a memorizar pergunta reduz eficiencia em memorizar abordagem de solucao.
+  - `690307` - estrategia de `85%` para `bit_manipulation`:
+    - algoritmo declarado: `1364/1602 = 85.1%` em bit;
+    - comentario externo no mesmo topico reporta solver ainda mais forte: `1584/1602 = 98.9%` em bit e `553/596 = 92.8%` em `equation_numeric_deduce`;
+    - tecnica: enumerar relacoes por bit de saida, nao expressoes completas;
+    - espaco testado: `18` combinacoes unarias + `336` binarias = `354`;
+    - usar bitsum como hash e continuidade de stride esquerda/direita para reduzir ambiguidades.
+
+### Implicacao para nossa solucao
+
+- O achado muda a prioridade de `bit_manipulation`: ela nao deve ser tratada apenas como guardrail; existe evidencia publica de que ha espaco para `+1` a `+20` no recorte train, se a representacao for correta.
+- Nosso solver local atual `src/solvers/bit_manipulation_solver.py` foi medido no `train.csv` oficial e fez `1265/1602 = 78.96%`, abaixo dos `1364/1602` declarados pelo autor e muito abaixo do `1584/1602` citado em comentario.
+- Portanto existe gap real de implementacao:
+  - nosso solver tem busca global/per-bit/consenso;
+  - mas ainda nao replica integralmente o algoritmo de bitsum + stride + preenchimento de meio do Tong Hui Kang.
+- V296 deve ser CPU-only e barato:
+  1. implementar/auditar um solver bit de relacao por bit com `18+336` candidatos, bitsum e stride;
+  2. medir contra `train.csv` oficial e contra o weak/full local;
+  3. gerar apenas artefatos de verifier/teacher, nunca submissao direta de codigo sem autorizacao de regra/package;
+  4. se houver novos acertos seguros em bit, criar dados sinteticos/CoT filtrados para LoRA adapter-only.
+
+### Regras operacionais adicionadas
+
+- Nao gastar H100/H200 em novo treino de bit antes do V296 CPU provar ganho ou cobertura nova.
+- Para qualquer treino derivado do achado:
+  - treinar somente tokens de raciocinio/resposta, com offset-mask estrito;
+  - preservar side families com replay;
+  - weak gate minimo para liberar full: `overall >= 193`, `equation >= 56`, `bit >= 137`, `trunc <= 1`;
+  - se o treino for equation-first, manter `bit >= 136`.
+- A rota `min logprob` deve entrar como diagnostico, nao como unico criterio de selecao: adapter so avanca se weak/full medidos melhorarem.

@@ -1,0 +1,6 @@
+name,adapter,preflight_ok,error
+v294_checkpoint_3_v221_contract,/tmp/kg1_v245_adapter_snapshots/v294-h200-v221contract-eq-rep-patch-20260512T022129Z/f05865dfbfa9/checkpoint-3,True,
+v294_checkpoint_6_v221_contract,/tmp/kg1_v245_adapter_snapshots/v294-h200-v221contract-eq-rep-patch-20260512T022129Z/f05865dfbfa9/checkpoint-6,True,
+v294_checkpoint_9_v221_contract,/tmp/kg1_v245_adapter_snapshots/v294-h200-v221contract-eq-rep-patch-20260512T022129Z/f05865dfbfa9/checkpoint-9,True,
+v294_checkpoint_12_v221_contract,/tmp/kg1_v245_adapter_snapshots/v294-h200-v221contract-eq-rep-patch-20260512T022129Z/f05865dfbfa9/checkpoint-12,True,
+v294_final_v221_contract,/tmp/kg1_v245_adapter_snapshots/v294-h200-v221contract-eq-rep-patch-20260512T022129Z/f05865dfbfa9/final,True,
