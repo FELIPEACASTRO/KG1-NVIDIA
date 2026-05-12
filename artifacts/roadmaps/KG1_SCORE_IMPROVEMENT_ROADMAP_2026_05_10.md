@@ -5502,3 +5502,27 @@ Plano:
 - Avaliar somente adapters existentes e completos: `checkpoint-6`, `checkpoint-12`, `checkpoint-18`, `checkpoint-24`.
 - Mesmo contrato V221 official-like: thinking on, prompt suffix on, `max_tokens=7680`, `max_model_len=8192`, H200, commit gate e adapter `r=32/alpha=32`.
 - Gate de decisao: promover somente se `total>=192`, `equation>=56`, `bit>=136`; preferir full eval apenas com `total>=193` ou `equation>56` sem perda de bit.
+
+Execucao:
+
+- HF job: `https://huggingface.co/jobs/felipesp1983/6a038f8972518a06598ff9fd`.
+- Output repo: `felipesp1983/kg1-nemotron-lora-v308-v304-attn-lmhead-v290ckpt6`.
+- Output eval path: `evals/v314-h200-v221contract-v308-early-ckpt-sweep-20260512T203626Z`.
+- Upload commit: `https://huggingface.co/felipesp1983/kg1-nemotron-lora-v308-v304-attn-lmhead-v290ckpt6/commit/df2e8d9d122cedf56966fae240ec211469cb701d`.
+- Artefatos locais pequenos: `artifacts/v314_hf_h200_existing_checkpoint_sweep_launch/results_20260512T211233Z/`.
+
+Resultados weak V221:
+
+- `checkpoint-6`: `190/315`, `equation_transform=56/155`, `bit_manipulation=134/160`, truncation `0`;
+- `checkpoint-12`: `190/315`, `equation_transform=56/155`, `bit_manipulation=134/160`, truncation `1`;
+- `checkpoint-18`: `190/315`, `equation_transform=56/155`, `bit_manipulation=134/160`, truncation `0`;
+- `checkpoint-24`: `191/315`, `equation_transform=56/155`, `bit_manipulation=135/160`, truncation `0`.
+
+Decisao:
+
+- Rejeitar V314 para full eval, package e Kaggle submit.
+- Melhor V314 (`checkpoint-24`) ainda fica abaixo do baseline operacional V290 checkpoint-6 (`192/315`, `equation=56/155`, `bit=136/160`, truncation `0`).
+- O sweep foi util como gate FinOps: evitou gastar mais H200 em uma linha de treino que melhora/perde loss de forma enganosa, mas nao recupera ACC por familia.
+- Proximo passo efetivo: sair de SFT simples/mais epochs e priorizar uma das duas rotas:
+  1. `V315` preference/hard-negative distillation usando o pack V312 (`816` pares train, `204` pares val), com chosen/rejected verificados e gate por familia;
+  2. expansao CPU-only do verifier para `equation_symbolic_punct` antes de qualquer novo treino pago.

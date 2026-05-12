@@ -1,0 +1,22 @@
+[
+  {
+    "adapter": "/tmp/kg1_v245_adapter_snapshots/v314-h200-v221contract-v308-early-ckpt-sweep-20260512T203626Z/1c392ecf5aa4/checkpoint-6",
+    "name": "v308_checkpoint_6_v221_contract",
+    "source_kind": "hf_model_repo"
+  },
+  {
+    "adapter": "/tmp/kg1_v245_adapter_snapshots/v314-h200-v221contract-v308-early-ckpt-sweep-20260512T203626Z/1c392ecf5aa4/checkpoint-12",
+    "name": "v308_checkpoint_12_v221_contract",
+    "source_kind": "hf_model_repo"
+  },
+  {
+    "adapter": "/tmp/kg1_v245_adapter_snapshots/v314-h200-v221contract-v308-early-ckpt-sweep-20260512T203626Z/1c392ecf5aa4/checkpoint-18",
+    "name": "v308_checkpoint_18_v221_contract",
+    "source_kind": "hf_model_repo"
+  },
+  {
+    "adapter": "/tmp/kg1_v245_adapter_snapshots/v314-h200-v221contract-v308-early-ckpt-sweep-20260512T203626Z/1c392ecf5aa4/checkpoint-24",
+    "name": "v308_checkpoint_24_v221_contract",
+    "source_kind": "hf_model_repo"
+  }
+]
