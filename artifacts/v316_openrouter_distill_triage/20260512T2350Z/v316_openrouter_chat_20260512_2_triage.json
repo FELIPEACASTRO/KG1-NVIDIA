@@ -1,0 +1,74 @@
+{
+  "source_file": "C:\\Users\\davis\\Downloads\\OpenRouter Chat Tue May 12 2026 (2).json",
+  "local_extract_dir": "artifacts/v316_openrouter_distill_triage/20260512T2350Z",
+  "baseline": {
+    "full_correct": 823,
+    "full_rows": 947,
+    "bit_manipulation_correct": 135,
+    "bit_manipulation_rows": 160,
+    "equation_transform_correct": 56,
+    "equation_transform_rows": 155
+  },
+  "verified_oracle": {
+    "full_correct": 838,
+    "full_rows": 947,
+    "bit_manipulation_correct": 146,
+    "bit_manipulation_rows": 160,
+    "equation_transform_correct": 60,
+    "equation_transform_rows": 155
+  },
+  "accepted_findings": [
+    {
+      "finding": "signal_dilution",
+      "impact": "Future datasets must keep the 4 equation gains and 11 bit gains highly visible instead of burying them in broad synthetic data."
+    },
+    {
+      "finding": "final_answer_token_starvation",
+      "impact": "Use short traces and answer-span/token weighting in the next trainer if V316 fails."
+    },
+    {
+      "finding": "hard_negatives_from_actual_wrong_outputs",
+      "impact": "Rejected DPO/preference outputs should be the frozen adapter's observed wrong outputs, not random wrong strings."
+    },
+    {
+      "finding": "full_bit_keeper_replay",
+      "impact": "Replay all 135 baseline-correct bit rows, keep all 160 bit rows represented, and reject checkpoints that regress bit."
+    },
+    {
+      "finding": "fast_targeted_probes",
+      "impact": "Probe the exact 4 equation gain IDs, exact 11 bit gain IDs, keeper sets, and truncation before expensive full promotion."
+    }
+  ],
+  "rejected_or_deferred": [
+    {
+      "finding": "high_lr_generic_recipes",
+      "reason": "Not supported by the local PEFT lineage and high risk for the current 0.86+ adapter."
+    },
+    {
+      "finding": "exact_rows_only_sft",
+      "reason": "Can memorize local probes without learning a deployable rule."
+    },
+    {
+      "finding": "sequential_equation_only_training",
+      "reason": "Conflicts with observed bit regression and should not be used without bit replay."
+    },
+    {
+      "finding": "dual_lora_router",
+      "reason": "Adds submission and merge complexity; defer until simpler single-adapter route fails."
+    },
+    {
+      "finding": "kl_regularization_first",
+      "reason": "Potentially useful but more complex than mandatory bit replay; defer unless replay is insufficient."
+    }
+  ],
+  "next_if_v316_fails": {
+    "version": "V317",
+    "recipe": "answer-span weighted SFT plus hard-negative preference/contrastive rows and mandatory full bit keeper replay",
+    "minimum_gate": {
+      "bit_manipulation_correct_min": 136,
+      "equation_transform_must_improve_over": 56,
+      "weak_total_preferred_min": 193,
+      "reject_if_bit_below": 135
+    }
+  }
+}

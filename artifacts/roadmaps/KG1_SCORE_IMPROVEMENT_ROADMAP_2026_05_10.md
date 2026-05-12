@@ -5660,3 +5660,38 @@ Proximo ramo se V316 falhar:
   - parar se dois checkpoints consecutivos ficarem `equation=56` e `bit<=135`;
   - rollback imediato se `bit<135`;
   - promover somente com `total>=193` ou `equation>56` mantendo `bit>=136` e truncation sem piora.
+
+### V316 OpenRouter updated distillation triage - 2026-05-12 late
+
+Fonte auditada:
+
+- `C:\Users\davis\Downloads\OpenRouter Chat Tue May 12 2026 (2).json`, `618942` bytes.
+- Artefato local: `artifacts/v316_openrouter_distill_triage/20260512T2350Z/v316_openrouter_chat_20260512_2_triage.md`.
+- O anexo contem respostas adicionais de modelos de destilacao/planejamento, incluindo DeepSeek, Qwen, OpenAI, Codestral, NVIDIA Nemotron, Phi, Ring, Laguna e Mistral.
+
+Conclusao rigorosa:
+
+- O anexo nao traz novo score medido. Ele traz recomendacoes de treinamento derivadas do mesmo pacote de evidencias: baseline `823/947`, `bit=135/160`, `equation=56/155`; oracle/verifier `838/947`, `bit=146/160`, `equation=60/155`.
+- O consenso novo e util e mais especifico que o anterior: a proxima tentativa depois do V316 precisa atacar a falta de gradiente no token final de resposta e proteger bit com replay completo.
+- `eval_loss` baixo continua insuficiente; a unica promocao valida continua sendo por ACC bruta por familia, sem postprocessor.
+
+Achados aceitos:
+
+- `answer-span/token weighting`: os alvos de ganho sao muito curtos (`-55`, `92`, `30`, `134`, strings binarias). Traces longos podem diluir o gradiente. V317 deve usar trace curto e peso maior no span `Answer:`.
+- `hard negatives reais`: DPO/preference so deve usar como rejected a saida errada observada do adapter congelado, nao uma resposta errada aleatoria.
+- `bit keeper replay completo`: os 135 bits ja corretos precisam entrar como keepers obrigatorios; os 11 ganhos devem ser oversampled; os 14 ainda errados devem ficar em baixa dose para preservar distribuicao.
+- `mix minimo de bit`: se KL contra baseline for caro/complexo, garantir pelo menos `30-35%` de linhas bit por batch.
+- `probes baratos`: antes de gastar full eval, avaliar os 4 IDs de equation gain, os 11 IDs de bit gain, os keepers de bit/equation e truncation em todo checkpoint.
+
+Achados rejeitados ou adiados:
+
+- LRs altos como `1e-4`, `1.5e-4`, `8e-5`, `5e-5` e similares: incompatíveis com a linhagem local e muito arriscados para o adapter 0.86+.
+- Treino sequencial `equation-only`: risco de repetir a regressao de bit observada em V313/V315.
+- Usar os IDs exatos como unico SFT target: pode memorizar a validacao local; usar os exatos para probes/hard-negative e variantes verificadas para SFT.
+- Dual LoRA/router: interessante como pesquisa, mas adiado porque aumenta risco de merge/submission e ainda nao temos prova de necessidade.
+
+Impacto no plano:
+
+- Aguardar o resultado do V316, porque ele testa um eixo realmente diferente (`up_proj/down_proj`).
+- Se V316 nao promover, implementar V317 com trainer answer-span weighted, hard negatives reais, replay completo de bit e gate de parada antecipada.
+- Gate V317 minimo: rejeitar se `bit<135`; promover apenas se `bit>=136` e `equation>56` ou `total>=193`, com truncation sem piora.

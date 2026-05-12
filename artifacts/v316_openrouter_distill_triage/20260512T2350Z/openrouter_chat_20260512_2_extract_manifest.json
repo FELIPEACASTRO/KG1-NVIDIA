@@ -1,0 +1,223 @@
+{
+  "source_file": "C:\\Users\\davis\\Downloads\\OpenRouter Chat Tue May 12 2026 (2).json",
+  "source_sha256": "015fc4832c0fca26789392c99714ab038b05a67a59f58279c828ab6f68e9fc12",
+  "source_bytes": 618942,
+  "records": [
+    {
+      "index": 1,
+      "message_id": "msg-1778627383-zq33N4zN9bbkGsGmYMSX",
+      "role": "user",
+      "model": "USER",
+      "chars": 3034,
+      "sha256": "324b9f47abc7b728985d479f2fa505169acd4a8d54db62ef2fd031684d516802",
+      "file": "artifacts\\v316_openrouter_distill_triage\\20260512T2350Z\\01_USER.md"
+    },
+    {
+      "index": 2,
+      "message_id": "msg-1778627383-6DgAjJJeIBLp39AU1Gz0",
+      "role": "assistant",
+      "model": "deepseek/deepseek-r1-distill-qwen-32b",
+      "chars": 7090,
+      "sha256": "6554453f80db02bd9299c50cee5d38cf1eb4dfc0c27bcbedc7b84b91d91bb2fc",
+      "file": "artifacts\\v316_openrouter_distill_triage\\20260512T2350Z\\02_deepseek__deepseek-r1-distill-qwen-32b.md"
+    },
+    {
+      "index": 3,
+      "message_id": "msg-1778627383-zyG90uAwYju295wape7M",
+      "role": "assistant",
+      "model": "deepseek/deepseek-r1-distill-llama-70b",
+      "chars": 7251,
+      "sha256": "e5ae9ab651172010271db32d1b01fbb4f2e2c68141b6c52ecd0992bf6495c587",
+      "file": "artifacts\\v316_openrouter_distill_triage\\20260512T2350Z\\03_deepseek__deepseek-r1-distill-llama-70b.md"
+    },
+    {
+      "index": 4,
+      "message_id": "msg-1778627383-eDhFnNOaq1WXEzlvSCrP",
+      "role": "assistant",
+      "model": "deepseek/deepseek-v4-pro",
+      "chars": 34917,
+      "sha256": "2103bd168821562ed1aff8a767649a468621b839983b59dd1564be5650b36400",
+      "file": "artifacts\\v316_openrouter_distill_triage\\20260512T2350Z\\04_deepseek__deepseek-v4-pro.md"
+    },
+    {
+      "index": 5,
+      "message_id": "msg-1778627383-UMre6PK5vqCuhr8TTQ83",
+      "role": "assistant",
+      "model": "qwen/qwen3.6-max-preview",
+      "chars": 16593,
+      "sha256": "3d9e4debbaf0404c734f30535d7d415c015b8a1fe3257a02d42b6a6a405aea72",
+      "file": "artifacts\\v316_openrouter_distill_triage\\20260512T2350Z\\05_qwen__qwen3.6-max-preview.md"
+    },
+    {
+      "index": 6,
+      "message_id": "msg-1778627383-aYAzcK4t4QhtDokyvek1",
+      "role": "assistant",
+      "model": "qwen/qwen3.6-plus",
+      "chars": 21922,
+      "sha256": "dc731af2977eb467709307cabb7d28c684a25ecf98dafdf21f6dd835ffa3193f",
+      "file": "artifacts\\v316_openrouter_distill_triage\\20260512T2350Z\\06_qwen__qwen3.6-plus.md"
+    },
+    {
+      "index": 7,
+      "message_id": "msg-1778627383-2n6RN3qBj6DRYRE4pGge",
+      "role": "assistant",
+      "model": "openai/gpt-5.3-codex",
+      "chars": 10835,
+      "sha256": "9904231eda97071800f8d329c7b74571170cb66a679406ba72f1f59c41596df1",
+      "file": "artifacts\\v316_openrouter_distill_triage\\20260512T2350Z\\07_openai__gpt-5.3-codex.md"
+    },
+    {
+      "index": 8,
+      "message_id": "msg-1778629061-oBsIbI8k7ZW7nvJ8j8yp",
+      "role": "user",
+      "model": "USER",
+      "chars": 3089,
+      "sha256": "74480a2a87c389b0081966ca6310e150d64a62b68fed823d31381aa5bda45fa9",
+      "file": "artifacts\\v316_openrouter_distill_triage\\20260512T2350Z\\08_USER.md"
+    },
+    {
+      "index": 9,
+      "message_id": "msg-1778629061-e5tzZp0TK3HA5AIbFAe6",
+      "role": "assistant",
+      "model": "deepseek/deepseek-r1-distill-llama-70b",
+      "chars": 8917,
+      "sha256": "b34f1a59706e120d4e79dc2d45e8fdb5bf9cbc1907591b29945af4cd062e13fa",
+      "file": "artifacts\\v316_openrouter_distill_triage\\20260512T2350Z\\09_deepseek__deepseek-r1-distill-llama-70b.md"
+    },
+    {
+      "index": 10,
+      "message_id": "msg-1778629061-bHtPma0Pm1dxR4hNWNsG",
+      "role": "assistant",
+      "model": "deepseek/deepseek-v4-pro",
+      "chars": 69513,
+      "sha256": "1cbf280253fce4f3c7d46c8132ebc33a85275b887b2b2b0d11a2534caa2eeb21",
+      "file": "artifacts\\v316_openrouter_distill_triage\\20260512T2350Z\\10_deepseek__deepseek-v4-pro.md"
+    },
+    {
+      "index": 11,
+      "message_id": "msg-1778629061-mrOuYVnpLSsfjbLxDi49",
+      "role": "assistant",
+      "model": "qwen/qwen3.6-max-preview",
+      "chars": 34953,
+      "sha256": "223f624ede3cec092a830d1ac39841d0bf6b9b7a764067b0afd4da9a950df788",
+      "file": "artifacts\\v316_openrouter_distill_triage\\20260512T2350Z\\11_qwen__qwen3.6-max-preview.md"
+    },
+    {
+      "index": 12,
+      "message_id": "msg-1778629061-SsGQGPb5jByeVhhunZdm",
+      "role": "assistant",
+      "model": "qwen/qwen3.6-plus",
+      "chars": 34269,
+      "sha256": "793ccc76d77595afca61850ed5320b6b139b3f75cc54bd050de32a9af137b1a0",
+      "file": "artifacts\\v316_openrouter_distill_triage\\20260512T2350Z\\12_qwen__qwen3.6-plus.md"
+    },
+    {
+      "index": 13,
+      "message_id": "msg-1778629061-5ZiFBMzRgpR1G3pZXpL4",
+      "role": "assistant",
+      "model": "openai/gpt-5.3-codex",
+      "chars": 10545,
+      "sha256": "ad926013f024e94db3c2d6920a90e3d09a5288886cf21ba62243bc6b7bac4859",
+      "file": "artifacts\\v316_openrouter_distill_triage\\20260512T2350Z\\13_openai__gpt-5.3-codex.md"
+    },
+    {
+      "index": 14,
+      "message_id": "msg-1778629061-O0okvgKzhSLymVwY9prW",
+      "role": "assistant",
+      "model": "anthropic/claude-opus-4.7-fast",
+      "chars": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "file": "artifacts\\v316_openrouter_distill_triage\\20260512T2350Z\\14_anthropic__claude-opus-4.7-fast.md"
+    },
+    {
+      "index": 15,
+      "message_id": "msg-1778629061-RLNF2D8v8OV3OP9ZRf8g",
+      "role": "assistant",
+      "model": "mistralai/codestral-2508",
+      "chars": 3990,
+      "sha256": "9cd3f6869773d4955805c59a42f5f99e09c755d19cbf20f41b5dc571f148c189",
+      "file": "artifacts\\v316_openrouter_distill_triage\\20260512T2350Z\\15_mistralai__codestral-2508.md"
+    },
+    {
+      "index": 16,
+      "message_id": "msg-1778629061-n8D6J2xcoF2O3Zv5Qh7Y",
+      "role": "assistant",
+      "model": "nvidia/llama-3.3-nemotron-super-49b-v1.5",
+      "chars": 10586,
+      "sha256": "c252c7ef83d423765ca0007f33ddf2d554ca3570889c4191a4e62570ee38b9d3",
+      "file": "artifacts\\v316_openrouter_distill_triage\\20260512T2350Z\\16_nvidia__llama-3.3-nemotron-super-49b-v1.5.md"
+    },
+    {
+      "index": 17,
+      "message_id": "msg-1778629061-Zxqg3cMPoordhGSn5FCH",
+      "role": "assistant",
+      "model": "openai/gpt-4.1",
+      "chars": 7016,
+      "sha256": "ce53c80c444d27281bca2946cb0960954efad647f25bae046d9efdcdc28c4f23",
+      "file": "artifacts\\v316_openrouter_distill_triage\\20260512T2350Z\\17_openai__gpt-4.1.md"
+    },
+    {
+      "index": 18,
+      "message_id": "msg-1778629061-5wilnIOwVFv5y5OevbHO",
+      "role": "assistant",
+      "model": "microsoft/phi-4-mini-instruct",
+      "chars": 4145,
+      "sha256": "e1f80e7d1ebc3a41887b3b8e157b71676c70fe029da7786f2c021a4f74d50a46",
+      "file": "artifacts\\v316_openrouter_distill_triage\\20260512T2350Z\\18_microsoft__phi-4-mini-instruct.md"
+    },
+    {
+      "index": 19,
+      "message_id": "msg-1778629061-zULxaJ0FZfzsPuXjl4dC",
+      "role": "assistant",
+      "model": "baidu/cobuddy:free",
+      "chars": 11582,
+      "sha256": "681fdd16e2cd8ebf57044d325a5990e79203dd0c4114244b8d80de05c9b07103",
+      "file": "artifacts\\v316_openrouter_distill_triage\\20260512T2350Z\\19_baidu__cobuddy__free.md"
+    },
+    {
+      "index": 20,
+      "message_id": "msg-1778629061-wuUEPXUWbptaOcEgC9v1",
+      "role": "assistant",
+      "model": "inclusionai/ring-2.6-1t:free",
+      "chars": 22645,
+      "sha256": "38644563422ea0a6e4a5cdb31ade97973fb6930e3c67d40fad9850103fb8d073",
+      "file": "artifacts\\v316_openrouter_distill_triage\\20260512T2350Z\\20_inclusionai__ring-2.6-1t__free.md"
+    },
+    {
+      "index": 21,
+      "message_id": "msg-1778629061-SzI7XBjnUndfeAxUqdsy",
+      "role": "assistant",
+      "model": "poolside/laguna-xs.2:free",
+      "chars": 7813,
+      "sha256": "3b56f8b6ad3c80baca327c44f402cb7552550508d4d7ce623c4aef0f295ff430",
+      "file": "artifacts\\v316_openrouter_distill_triage\\20260512T2350Z\\21_poolside__laguna-xs.2__free.md"
+    },
+    {
+      "index": 22,
+      "message_id": "msg-1778629061-Hm7OduP9wxto04KguwAs",
+      "role": "assistant",
+      "model": "qwen/qwen3-next-80b-a3b-instruct:free",
+      "chars": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "file": "artifacts\\v316_openrouter_distill_triage\\20260512T2350Z\\22_qwen__qwen3-next-80b-a3b-instruct__free.md"
+    },
+    {
+      "index": 23,
+      "message_id": "msg-1778629061-YB0UulmJNXyFDETF1FEI",
+      "role": "assistant",
+      "model": "nvidia/llama-3.3-nemotron-super-49b-v1.5",
+      "chars": 12621,
+      "sha256": "380c4995ccc11f1a6c6911874915ff590c8a57b29beb4b69ae0430240085b33b",
+      "file": "artifacts\\v316_openrouter_distill_triage\\20260512T2350Z\\23_nvidia__llama-3.3-nemotron-super-49b-v1.5.md"
+    },
+    {
+      "index": 24,
+      "message_id": "msg-1778629061-1agWeSwjEyLFBCiGjMkg",
+      "role": "assistant",
+      "model": "mistralai/mistral-nemo",
+      "chars": 4165,
+      "sha256": "4063645a6daf8fd1923a25d8bbf6120354df6a61966a3599cda8873f703c20b7",
+      "file": "artifacts\\v316_openrouter_distill_triage\\20260512T2350Z\\24_mistralai__mistral-nemo.md"
+    }
+  ]
+}
