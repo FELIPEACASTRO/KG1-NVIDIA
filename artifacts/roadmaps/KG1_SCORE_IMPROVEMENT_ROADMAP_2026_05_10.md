@@ -5526,3 +5526,33 @@ Decisao:
 - Proximo passo efetivo: sair de SFT simples/mais epochs e priorizar uma das duas rotas:
   1. `V315` preference/hard-negative distillation usando o pack V312 (`816` pares train, `204` pares val), com chosen/rejected verificados e gate por familia;
   2. expansao CPU-only do verifier para `equation_symbolic_punct` antes de qualquer novo treino pago.
+
+### V315 V312 preference contrastive smoke
+
+Objetivo:
+
+- testar uma rota mais efetiva que "mais epochs": treinar diretamente a preferencia `chosen > rejected` dos pares V312;
+- evitar DPO classico com modelo de referencia duplicado, porque duplicar o Nemotron 30B BF16 e caro e arriscado dentro do budget;
+- usar uma perda single-policy: contraste chosen/rejected por log-probabilidade media da completion + CE leve no chosen.
+
+Implementacao:
+
+- Script HF: `scripts/hf_job_train_v315_preference.py`.
+- Launcher: `artifacts/v315_hf_h200_preference_launch/launch_v315_hf_h200_v312_preference.py`.
+- Dados:
+  - SFT gate rows V312: `204` train / `51` val, usados pelo preflight generico;
+  - preference rows V312: `816` train / `204` val, usados pelo treino V315;
+  - hashes preference: train `f923b465a29c634f90e6d9ddf9075a0f33c1d5a2f3914ce9c725f0a18804b871`, val `55c9632b6d65cf475b4acab952a3947249b44365b2e72cd68083aee5445c57be`.
+- Receita:
+  - iniciar do V290 `checkpoint-6`;
+  - H200, `16` steps, checkpoints a cada `4`;
+  - trainable LoRA `q_proj,k_proj,v_proj,o_proj,lm_head`;
+  - LR `8e-9 -> 1e-9`;
+  - preference beta `0.10`, chosen CE weight `0.15`;
+  - `max_length=1024`, offset-mask/truncation gate para chosen e rejected.
+
+Gate de decisao:
+
+- V315 nao autoriza full/package/submission por si so.
+- Depois do treino, rodar weak V221.
+- Promover somente se bater o baseline adapter-only V290 checkpoint-6: preservar `bit_manipulation>=136/160` e melhorar `equation_transform` ou total, com alvo minimo pratico `total>=193` ou `equation>56` sem perda de bit.
