@@ -137,6 +137,19 @@ def patched_command_script() -> str:
         if old not in script:
             raise RuntimeError("V315 command script changed; missing replacement target: " + old)
         script = script.replace(old, new)
+    source_build_block = (
+        "python -m pip install -q --no-cache-dir --no-build-isolation --no-deps --no-binary=causal-conv1d 'causal-conv1d==1.6.1'\n"
+        "python -m pip install -q --no-cache-dir --no-build-isolation --no-deps --no-binary=mamba-ssm 'mamba-ssm==2.3.1'\n"
+        "python scripts/hf_job_preflight_gate.py --phase postinstall\n"
+    )
+    smoke_fast_block = (
+        "export KG1_REQUIRE_MAMBA_IMPORTS=0\n"
+        "echo 'V341 smoke: skipping source builds for causal-conv1d and mamba-ssm; trainer will fail fast if runtime requires them.'\n"
+        "python scripts/hf_job_preflight_gate.py --phase postinstall\n"
+    )
+    if source_build_block not in script:
+        raise RuntimeError("V315 command script changed; missing Mamba source-build block.")
+    script = script.replace(source_build_block, smoke_fast_block)
     return script
 
 
@@ -166,6 +179,7 @@ def build_job_env(hardware: dict[str, object]) -> dict[str, str]:
             "equation_symbolic_cryptarithm_single_operator_mul,bit_manipulation,unknown"
         ),
         "KG1_STRICT_INIT_ADAPTER_CONFIG": "1",
+        "KG1_REQUIRE_MAMBA_IMPORTS": "0",
         "KG1_OUTPUT_REPO": OUTPUT_REPO,
         "KG1_RUN_ID": RUN_ID,
         "KG1_SFT_TRAIN_FILE": SFT_TRAIN_FILE,
@@ -248,6 +262,11 @@ def main() -> int:
             "preference_loss": "single-policy contrastive chosen/rejected plus chosen CE",
             "trainable_lora_modules": "q_proj,k_proj,v_proj,o_proj,lm_head",
             "promotion_gate": "weak eval only; promote if total>192, equation>56, bit>=136",
+            "dependency_strategy": (
+                "V341 A100 smoke skips causal-conv1d/mamba-ssm source builds to avoid "
+                "burning paid GPU time before training; runtime is allowed to fail fast "
+                "if the preference path truly requires those packages."
+            ),
         },
         "cpu_gate_summary": cpu_gate_summary,
         "job_env": job_env,

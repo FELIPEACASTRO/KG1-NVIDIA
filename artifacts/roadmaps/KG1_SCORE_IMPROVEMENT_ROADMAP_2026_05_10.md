@@ -252,6 +252,8 @@ Status 2026-05-13:
   - proximo smoke permitido apenas em A100, curto, com kill-switch no primeiro checkpoint.
 - Launcher criado em `artifacts/v341_hf_a100_clean_preference_launch/launch_v341_hf_a100_clean_preference.py`.
 - Debug local do launcher passou em `a100-large`, custo `0.041667`, com `MAX_STEPS=8`, checkpoints a cada `2` steps e gate de promocao `total>192`, `equation>56`, `bit>=136`.
+- Primeiro launch HF V341 `felipesp1983/6a04e8e2e48bea4538b9c040` foi cancelado por FinOps: o job passou pelos gates de GPU/dados/adapter, mas ficou preso antes de treino na compilacao source de `causal-conv1d`. Nao houve checkpoint e nao houve ganho medido.
+- Launcher V341 ajustado para smoke rapido com `KG1_REQUIRE_MAMBA_IMPORTS=0` e sem compilacao source obrigatoria de `causal-conv1d`/`mamba-ssm`. Se o runtime realmente exigir esses pacotes, o job deve falhar rapido e barato; se nao exigir, segue para checkpoint.
 
 Decisao:
 
@@ -291,4 +293,4 @@ Os itens abaixo ficam apenas no arquivo historico. Eles nao fazem parte do plano
 
 ## Proxima acao unica
 
-Commitar e enviar a branch com V340/V341 e, em seguida, executar o smoke HF V341 limpo em A100. Monitorar logs a cada aproximadamente `40s`; apos o primeiro checkpoint disponivel, rodar weak eval. Se `total<=192`, `equation<=56` ou `bit<136`, cancelar o job e nao avaliar checkpoints restantes.
+Commitar e enviar o ajuste FinOps do launcher V341 e relancar smoke HF V341 limpo em A100. Monitorar logs a cada aproximadamente `40s`; se falhar por falta real de Mamba, parar e trocar para imagem prebuilt em vez de compilar em A100 paga. Apos o primeiro checkpoint disponivel, rodar weak eval. Se `total<=192`, `equation<=56` ou `bit<136`, cancelar o job e nao avaliar checkpoints restantes.
