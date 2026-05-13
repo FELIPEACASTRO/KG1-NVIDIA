@@ -1,0 +1,12 @@
+{
+  "data_repo": "felipesp1983/kg1-nemotron-training",
+  "dataset_dir": "artifacts\\v326_equation_bit_replay_mix_dataset\\20260513T_cpu_gate",
+  "dataset_path_in_repo": "data/v326_equation_bit_replay_mix/20260513T_cpu_gate",
+  "dataset_upload": "https://huggingface.co/datasets/felipesp1983/kg1-nemotron-training/commit/da3396ab87ad8b81bae6edb66e26576dd0ce3778",
+  "gate_dir": "artifacts\\v326_equation_bit_replay_mix_dataset\\20260513T_cpu_gate\\tokenization_gate",
+  "gate_path_in_repo": "runtime_artifacts/v326_equation_bit_replay_tokenization_gate/20260513T_cpu_gate",
+  "gate_upload": "https://huggingface.co/datasets/felipesp1983/kg1-nemotron-training/commit/9fbb9119259dd9e25e143db484b1a31278a4cccc",
+  "generated_at_utc": "2026-05-13T12:43:56.458627+00:00",
+  "next_action": "Commit/push V326 scripts and launch a short A100 smoke train.",
+  "version": "v326_hf_dataset_upload"
+}

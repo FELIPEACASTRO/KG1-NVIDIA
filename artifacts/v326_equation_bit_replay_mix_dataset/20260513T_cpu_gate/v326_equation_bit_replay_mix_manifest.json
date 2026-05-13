@@ -1,0 +1,125 @@
+{
+  "generated_at_utc": "2026-05-13T12:40:37.510438+00:00",
+  "inputs": {
+    "v304_manifest_json": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v304_solver_trace_distill_dataset\\20260512T1430Z\\v304_solver_trace_distill_manifest.json",
+    "v304_manifest_sha256": "8b226d63304328fc7baae296e3ecb2ab0c65d6a0b197d82b7c43769a8963109e",
+    "v304_train": {
+      "path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v304_solver_trace_distill_dataset\\20260512T1430Z\\v304_solver_trace_distill_train.jsonl",
+      "sha256": "7935ff999cdd8318de67538922de3651170c59baa2664a10beac3334dfcf9082"
+    },
+    "v304_val": {
+      "path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v304_solver_trace_distill_dataset\\20260512T1430Z\\v304_solver_trace_distill_val.jsonl",
+      "sha256": "2b06224afe035c5085798f4a4be27e764ffaebde3ff7eee11c558c0cd5bdd29d"
+    },
+    "v325_manifest_json": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v325_equation_no_loss_distill_dataset\\20260513T_cpu_gate\\v325_equation_no_loss_distill_manifest.json",
+    "v325_manifest_sha256": "664c74b1ebbb7adef97c6d09b2fa8e37a45266978d09d7a7e40608b79276984c",
+    "v325_train": {
+      "path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v325_equation_no_loss_distill_dataset\\20260513T_cpu_gate\\v325_equation_no_loss_distill_sft_train.jsonl",
+      "sha256": "34f155a14f6b9ab6b89329bc1c9e7287e102cb60a63e4dca09429221941b83a3"
+    },
+    "v325_val": {
+      "path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v325_equation_no_loss_distill_dataset\\20260513T_cpu_gate\\v325_equation_no_loss_distill_sft_val.jsonl",
+      "sha256": "0ffbdfdd8600fe9ca5b38e9675243c9cca1cf87a854ad0c204dc4cd4893eb7b6"
+    }
+  },
+  "outputs": {
+    "manifest_json": "artifacts\\v326_equation_bit_replay_mix_dataset\\20260513T_cpu_gate\\v326_equation_bit_replay_mix_manifest.json",
+    "train_jsonl": "artifacts\\v326_equation_bit_replay_mix_dataset\\20260513T_cpu_gate\\v326_equation_bit_replay_mix_train.jsonl",
+    "train_sha256": "53ffd0a661729c7f7da8492f6e9a45a2a611d78542515c93f96bfe935fcb00f9",
+    "val_jsonl": "artifacts\\v326_equation_bit_replay_mix_dataset\\20260513T_cpu_gate\\v326_equation_bit_replay_mix_val.jsonl",
+    "val_sha256": "a8e6e360cc98a92e9ae681725960487d17c0e423953bbd48d1a0d2b58cf7754d"
+  },
+  "overlap_summary": {
+    "train_val_id_overlap": 0,
+    "train_val_id_overlap_sample": [],
+    "train_val_prompt_overlap": 0,
+    "train_val_prompt_overlap_sample": []
+  },
+  "recommended_hf_controls": {
+    "first_checkpoint_kill_switch": "bit>=136 and equation>56 on weak gate",
+    "no_full_eval_or_submit_until": "adapter-only weak gate shows measured gain with no bit regression",
+    "suggested_source_weights": {
+      "v304_bit_replay_only": 1.0,
+      "v325_equation_no_loss_distill": 4.0
+    }
+  },
+  "schema_version": "kg1_v326_equation_bit_replay_mix_dataset_v1",
+  "source_policy": {
+    "bit_rows": "all V304 bit_manipulation rows retained for non-regression replay",
+    "equation_rows": "V325 only; V304 broad equation replay intentionally excluded",
+    "final_answer_format": "boxed_suffix",
+    "physical_duplicates": false,
+    "weak_or_full_gate_rows_used_for_training": false
+  },
+  "train_summary": {
+    "bad_rows_first10": [],
+    "duplicate_ids": 0,
+    "duplicate_prompts": 0,
+    "family_counts": {
+      "bit_manipulation": 4231,
+      "equation_transform": 480
+    },
+    "label": "train",
+    "origin_counts": {
+      "v304_bit_replay_only": 4231,
+      "v325_equation_no_loss_distill": 480
+    },
+    "rows": 4711,
+    "source_counts": {
+      "v215_replay_anchor": 253,
+      "v216_base_clean_safe_strict_bit": 1796,
+      "v216_synthetic_kg1_bit_rules": 646,
+      "v304_solver_trace_bit_fullbyte_distill_exact": 1056,
+      "v304_solver_trace_bit_fullbyte_distill_random": 480,
+      "v325_equation_no_loss_distill": 480
+    },
+    "subcategory_counts": {
+      "bit_fullbyte_binary": 120,
+      "bit_fullbyte_safe_ternary": 360,
+      "bit_fullbyte_v300_gain_pattern": 1056,
+      "bit_manipulation": 646,
+      "equation_numeric_add_direct": 160,
+      "equation_numeric_colon_absdiff": 160,
+      "equation_numeric_minus_signed": 160,
+      "unknown": 2049
+    },
+    "unique_ids": 4711,
+    "unique_prompt_hashes": 4711
+  },
+  "training_authorization": "blocked_until_v286_tokenization_gate_and_hf_smoke_kill_switch",
+  "validation_summary": {
+    "bad_rows_first10": [],
+    "duplicate_ids": 0,
+    "duplicate_prompts": 0,
+    "family_counts": {
+      "bit_manipulation": 332,
+      "equation_transform": 120
+    },
+    "label": "validation",
+    "origin_counts": {
+      "v304_bit_replay_only": 332,
+      "v325_equation_no_loss_distill": 120
+    },
+    "rows": 452,
+    "source_counts": {
+      "v215_replay_anchor": 30,
+      "v216_base_clean_safe_strict_bit": 80,
+      "v216_synthetic_kg1_bit_rules": 54,
+      "v304_solver_trace_bit_fullbyte_distill_exact": 88,
+      "v304_solver_trace_bit_fullbyte_distill_random": 80,
+      "v325_equation_no_loss_distill": 120
+    },
+    "subcategory_counts": {
+      "bit_fullbyte_binary": 20,
+      "bit_fullbyte_safe_ternary": 60,
+      "bit_fullbyte_v300_gain_pattern": 88,
+      "bit_manipulation": 54,
+      "equation_numeric_add_direct": 40,
+      "equation_numeric_colon_absdiff": 40,
+      "equation_numeric_minus_signed": 40,
+      "unknown": 110
+    },
+    "unique_ids": 452,
+    "unique_prompt_hashes": 452
+  }
+}

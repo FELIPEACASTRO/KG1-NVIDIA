@@ -6024,3 +6024,160 @@ Decisao:
 
 - O roadmap passa a tratar V324/V325 CPU solver-gate como proximo passo obrigatorio antes de qualquer novo treino HF.
 - Nenhum novo submit deve ser feito com base nesse OpenRouter export isoladamente. Submit so volta a ser permitido com ganho medido em weak/full gate e sem regressao por familia.
+
+### V324/V325 CPU gate executado - 2026-05-13
+
+V324 implementado:
+
+- Script: `scripts/run_v324_equation_expanded_solver_gate.py`.
+- Artefatos: `artifacts/v324_equation_expanded_solver_gate/20260513T_cpu_gate/`.
+- Input auditado: HF repo `felipesp1983/kg1-nemotron-lora-v259-v249-eqfocus-v257ckpt4-smoke`, CSV `v245_hf_weak_v259_checkpoint_4_v221_contract_predictions.csv`.
+- Input SHA: `d682f3a0aabd3624c449c63723deee510b070aa173f11c1102fe6b1b807bbca3`.
+- Shared row contract observado: `bf055e3b9ebce79d4bfc9e48bce5a305b1d83da882f14afddec80d6afaba5fff`.
+- Baseline weak confirmado: `192/315`, `equation_transform=56/155`, `bit_manipulation=136/160`, truncation `0`.
+- Misses de equation auditados: `99`; parse Alice OK em `99/99`; subtipos: `83` `equation_symbolic_punct`, `16` `equation_numeric_operator`.
+- Resultado V324: `4` candidatos aceitos, `0` perdas, `0` conflitos.
+- IDs aceitos: `274def88`, `7688e06e`, `c5b058d6`, `d1bd7478`.
+- Regras aceitas:
+  - `minus_signed_opposite_sign_guarded`: `2`;
+  - `colon_absdiff_unreverse_same_len`: `1`;
+  - `add_direct_over_model_add_variant`: `1`.
+- Projecao weak se o solver/verifier for absorvido: `196/315`, `equation_transform=60/155`, `bit_manipulation=136/160`.
+- Decisao: `equation_cpu_gate_found_distillation_signal`.
+
+V325 implementado:
+
+- Script: `scripts/build_v325_equation_no_loss_distill_dataset.py`.
+- Artefatos: `artifacts/v325_equation_no_loss_distill_dataset/20260513T_cpu_gate/`.
+- Objetivo: transformar o sinal V324 em variantes sinteticas fora dos rows weak/full, sem usar os `4` rows aceitos como treino direto.
+- Dataset SFT:
+  - train `480` linhas, todas `equation_transform`;
+  - validation `120` linhas, todas `equation_transform`;
+  - subcategorias balanceadas: `equation_numeric_add_direct`, `equation_numeric_colon_absdiff`, `equation_numeric_minus_signed`;
+  - train SHA `34f155a14f6b9ab6b89329bc1c9e7287e102cb60a63e4dca09429221941b83a3`;
+  - validation SHA `0ffbdfdd8600fe9ca5b38e9675243c9cca1cf87a854ad0c204dc4cd4893eb7b6`.
+- Preference pack:
+  - train `1920` pares;
+  - validation `480` pares;
+  - negatives: near-miss numerico, no-box, multiple-boxes, trailing text.
+- Anti-leakage:
+  - referencia weak/full: `947` IDs e `947` prompt hashes;
+  - overlap por ID: `0`;
+  - overlap por prompt: `0`;
+  - train/val prompt overlap: `0`.
+- Tokenization gate V286 real:
+  - manifest: `artifacts/v325_equation_no_loss_distill_dataset/20260513T_cpu_gate/tokenization_gate/v286_generic_tokenization_gate_manifest.json`;
+  - tokenizer: `nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16`, revision `cbd3fa9f933d55ef16a84236559f4ee2a0526848`;
+  - `max_length=1024`;
+  - train token max `262`;
+  - validation token max `262`;
+  - prompt truncation `0.0`;
+  - completion tokens dropped `0`;
+  - offset masks `480/480` train e `120/120` validation;
+  - decision: `tokenization_gate_passed`.
+
+Interpretacao:
+
+- Este e o primeiro passo pos-OpenRouter que converte o alvo `equation_transform=60/155` em um artefato de treino CPU-gated.
+- O ganho ainda nao e adapter-only. Ele continua sendo sinal de solver/verifier que precisa ser absorvido por LoRA.
+- O V325 sozinho nao deve ser treinado isoladamente, porque e equation-only e pode destruir `bit_manipulation`. Qualquer HF smoke deve combinar V325 com replay forte de bit e manter kill-switch no primeiro checkpoint.
+
+Proximo passo tecnico:
+
+1. Construir V326 como mix estreito: V325 equation no-loss + replay forte V304/V303/V217 para proteger `bit>=136`.
+2. Rodar tokenization gate V286 no mix V326.
+3. Se V326 passar, fazer apenas smoke HF curto, com A100/H200 conforme disponibilidade e FinOps:
+   - seed adapter: melhor adapter-only atual (`192/315`, `equation=56`, `bit=136`);
+   - modulos estreitos primeiro, sem SFT amplo;
+   - checkpoint cedo;
+   - matar o job se `bit<136` ou `equation<=56` no primeiro weak eval.
+4. Full/package/submit continuam bloqueados ate existir weak gain real adapter-only sem regressao por familia.
+
+### V326 mix estreito equation+bit replay - 2026-05-13
+
+V326 implementado:
+
+- Script: `scripts/build_v326_equation_bit_replay_mix_dataset.py`.
+- Artefatos: `artifacts/v326_equation_bit_replay_mix_dataset/20260513T_cpu_gate/`.
+- Objetivo: converter o sinal V324/V325 em um dataset treinavel sem repetir SFT amplo:
+  - manter apenas `bit_manipulation` de V304 para replay anti-regressao;
+  - adicionar apenas `equation_transform` V325, que veio do CPU gate `+4 equation`;
+  - excluir `equation_transform` amplo de V304 porque ele ja mostrou teto persistente em `56/155`.
+- Normalizacao aplicada: todas as linhas terminam em `Final answer: \boxed{...}` para evitar conflito entre respostas boxed/unboxed.
+
+Composicao:
+
+- Train: `4711` linhas:
+  - `bit_manipulation`: `4231`;
+  - `equation_transform`: `480`.
+- Validation: `452` linhas:
+  - `bit_manipulation`: `332`;
+  - `equation_transform`: `120`.
+- Source counts de treino:
+  - `v304_solver_trace_bit_fullbyte_distill_exact`: `1056`;
+  - `v304_solver_trace_bit_fullbyte_distill_random`: `480`;
+  - `v216_base_clean_safe_strict_bit`: `1796`;
+  - `v216_synthetic_kg1_bit_rules`: `646`;
+  - `v215_replay_anchor`: `253`;
+  - `v325_equation_no_loss_distill`: `480`.
+- Dedupe/overlap:
+  - train duplicate IDs: `0`;
+  - train duplicate prompts: `0`;
+  - validation duplicate IDs: `0`;
+  - validation duplicate prompts: `0`;
+  - train/validation ID overlap: `0`;
+  - train/validation prompt overlap: `0`.
+- Hashes:
+  - train SHA `53ffd0a661729c7f7da8492f6e9a45a2a611d78542515c93f96bfe935fcb00f9`;
+  - validation SHA `a8e6e360cc98a92e9ae681725960487d17c0e423953bbd48d1a0d2b58cf7754d`.
+
+V286 tokenization gate real:
+
+- Manifest: `artifacts/v326_equation_bit_replay_mix_dataset/20260513T_cpu_gate/tokenization_gate/v286_generic_tokenization_gate_manifest.json`.
+- Tokenizer: `nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16`, revision `cbd3fa9f933d55ef16a84236559f4ee2a0526848`.
+- `max_length=2048`.
+- Train token max `749`; validation token max `748`.
+- Prompt truncation: `0.0`.
+- Completion tokens dropped: `0`.
+- Offset masks: `4711/4711` train e `452/452` validation.
+- Decision: `tokenization_gate_passed`.
+
+Interpretacao:
+
+- V326 e o primeiro dataset pos-V324 que esta pronto para um smoke HF controlado: ele preserva replay forte de bit e concentra equation no unico sinal novo comprovado.
+- Ainda nao existe ganho adapter-only medido. O proximo job deve ser curto e descartavel, com kill-switch no primeiro checkpoint.
+- Source weighting recomendado no trainer:
+  - `v325_equation_no_loss_distill`: peso `4.0`;
+  - `v304_bit_replay_only`: peso `1.0`.
+
+Proximo passo tecnico:
+
+1. Rodar um HF smoke V326 curto usando o melhor adapter-only atual como seed (`192/315`, `equation=56`, `bit=136`).
+2. Avaliar o primeiro checkpoint no weak gate.
+3. Continuar somente se `equation>56`, `bit>=136`, truncation `0` e total `>=192`.
+4. Matar imediatamente se `bit<136` ou se equation continuar em `56`, porque isso confirma que o patch V325 nao foi absorvido pelo LoRA.
+
+Debug HF V326 executado:
+
+- Upload HF dataset:
+  - dataset commit: `https://huggingface.co/datasets/felipesp1983/kg1-nemotron-training/commit/da3396ab87ad8b81bae6edb66e26576dd0ce3778`;
+  - tokenization-gate commit: `https://huggingface.co/datasets/felipesp1983/kg1-nemotron-training/commit/9fbb9119259dd9e25e143db484b1a31278a4cccc`.
+- Launcher: `artifacts/v326_hf_nemo_a100_equation_bit_replay_launch/launch_v326_hf_nemo_a100_equation_bit_replay.py`.
+- Segurança do launcher: modo padrao e `debug_only_no_job_launched`; job pago so e criado com `--launch`.
+- Debug local do launcher passou:
+  - HF flavor disponivel: `a100-large`, `A100 80GB`, custo `0.041667/min`, abaixo do gate `0.05/min`;
+  - train/validation baixados do HF com SHA correto;
+  - adapter seed `felipesp1983/kg1-nemotron-lora-v290-rank19-micro-patch-smoke/checkpoint-6` contem `adapter_config.json` e `adapter_model.safetensors`;
+  - comando nao contem paths/stale snippets de V321/V322;
+  - trainable modules planejados: `q_proj,k_proj,v_proj,o_proj,lm_head`;
+  - `MAX_STEPS=8`, checkpoint a cada `2` steps.
+- O mesmo `scripts/hf_job_preflight_gate.py --phase artifacts` usado dentro do container pago tambem passou localmente com o ambiente real:
+  - train `4711`, family counts `bit_manipulation=4231`, `equation_transform=480`;
+  - validation `452`, family counts `bit_manipulation=332`, `equation_transform=120`;
+  - subcategorias exigidas presentes;
+  - adapter init validado com `r=32`, `alpha=32`, target modules esperados e target parameters de experts.
+
+Decisao atual:
+
+- O script esta pronto para launch tecnico, mas o job ainda nao foi iniciado nesta etapa de debug.
+- Antes do launch, commitar e enviar a branch para que `KG1_EXPECTED_COMMIT` exista no GitHub e o HF clone exatamente o codigo auditado.
