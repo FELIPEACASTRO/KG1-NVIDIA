@@ -6384,6 +6384,58 @@ Decisao:
 - Criterio de matar: `equation=56` sem ganho ou `bit<136`.
 - Ainda nao autoriza full eval, package ou Kaggle submit; primeiro precisa provar ganho adapter-only.
 
+### V331 HF A100 smoke live FinOps monitor - 2026-05-13
+
+Regra operacional fixa:
+
+- Sempre que um job HF estiver em execucao, monitorar logs/checkpoints periodicamente.
+- Se os checkpoints/proxies indicarem baixa expectativa razoavel de ganho, cancelar o job por FinOps em vez de gastar ate o fim.
+- Se houver novo sinal positivo antes do fim de um smoke curto, deixar completar o checkpoint final e decidir pelo weak eval, nao por intuicao.
+
+Job monitorado:
+
+- HF job: `https://huggingface.co/jobs/felipesp1983/6a0498e9e48bea4538b9bc26`.
+- Output repo: `felipesp1983/kg1-nemotron-lora-v331-nemo-a100-equation-bit-symbolic-v290ckpt6`.
+- Flavor: `a100-large`.
+- Base: V290 checkpoint-6.
+- Dataset: V331 mixed replay (`V304 bit replay + V325 numeric equation + V330 symbolic cryptarithm`).
+- Steps planejados: `10`.
+
+Logs observados:
+
+- Baseline eval loss: `1.3451`.
+- Checkpoint-2:
+  - train loss step 2: `1.2536`;
+  - eval loss: `1.3464`;
+  - decisao: nao promover; pior que baseline.
+- Checkpoint-4:
+  - eval loss: `1.3465`;
+  - decisao: nao promover; pior que baseline.
+- Checkpoint-6:
+  - eval loss: `1.3477`;
+  - decisao: nao promover; pior que baseline.
+- Checkpoint-8:
+  - eval loss: `1.3436`;
+  - decisao: primeiro sinal positivo de proxy; nao cancelar antes do checkpoint final.
+- Step 10 observado:
+  - train loss: `1.7799`;
+  - eval loss final: `1.3434`;
+  - melhor proxy do smoke.
+- Status HF final verificado:
+  - job status: `COMPLETED`;
+  - upload reportado como completo pelo job;
+  - `checkpoint-10/adapter_model.safetensors` existe no HF com `4,259,063,856` bytes e SHA256 `f50636ed4ca4937529b4e13cb7adbfe800c54b9e02370566e27b2066d36769e2`;
+  - `checkpoint-10/adapter_config.json` e `checkpoint-10/tokenizer.json` existem;
+  - `final_adapter/*` nao apareceu no repo HF na checagem via API, portanto nao deve ser usado como caminho de avaliacao.
+
+Decisao FinOps:
+
+- O job teria sido candidato a cancelamento no checkpoint-6, mas o checkpoint-8 recuperou e ficou melhor que o baseline no proxy local.
+- O checkpoint final/step-10 confirmou leve melhora de eval loss: `1.3434` contra baseline `1.3451`.
+- Decisao: nao cancelar; rodar weak eval somente nos melhores checkpoints (`checkpoint-8` e `checkpoint-10`).
+- Candidato primario de avaliacao: `felipesp1983/kg1-nemotron-lora-v331-nemo-a100-equation-bit-symbolic-v290ckpt6`, subfolder `checkpoint-10`.
+- Nenhum checkpoint V331 autoriza submit sem weak eval real provando `equation>56`, `bit>=136`, truncation `0`, total `>=192`.
+
 ### V332 Kaggle discussion 140/140 resume audit - 2026-05-13
 
 Objetivo:

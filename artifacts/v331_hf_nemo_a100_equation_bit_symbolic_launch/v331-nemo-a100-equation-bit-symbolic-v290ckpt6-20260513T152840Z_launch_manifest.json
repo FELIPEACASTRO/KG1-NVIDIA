@@ -1,0 +1,66 @@
+{
+  "branch": "v230-v226-complementarity",
+  "dataset": {
+    "data_repo": "felipesp1983/kg1-nemotron-training",
+    "dataset_upload_commit": "1cc0c6c23909f59cf2659a5eb2e503bef466c5ab",
+    "train_file": "data/v331_equation_bit_symbolic_mix/20260513T_cpu_gate/v331_equation_bit_symbolic_mix_train.jsonl",
+    "train_rows": 4951,
+    "train_sha256": "bbf073a291a15b5c52c05f60771df0a746bd60ecd42d0deb3e92e10e7bb54c4a",
+    "val_file": "data/v331_equation_bit_symbolic_mix/20260513T_cpu_gate/v331_equation_bit_symbolic_mix_val.jsonl",
+    "val_rows": 512,
+    "val_sha256": "de1774cf1ad4f15533d95ed24a6031f5b3b5353a8ce64de769827034fc6d5dd0"
+  },
+  "expected_commit": "8f1d9cb487d71e1f2fef70e26837ef297225d9d6",
+  "flavor": "a100-large",
+  "generated_at_utc": "2026-05-13T15:28:42.293870+00:00",
+  "hardware": {
+    "accelerator_model": "A100",
+    "accelerator_quantity": "1",
+    "accelerator_vram": "80 GB",
+    "cpu": "12 vCPU",
+    "name": "a100-large",
+    "pretty_name": "Nvidia A100 - large",
+    "ram": "142 GB",
+    "unit_cost_usd": 0.041667,
+    "unit_label": "minute"
+  },
+  "image": "nvcr.io/nvidia/nemo:25.11.nemotron_3_nano",
+  "init_adapter": {
+    "repo": "felipesp1983/kg1-nemotron-lora-v290-rank19-micro-patch-smoke",
+    "subfolder": "checkpoint-6"
+  },
+  "job_id": "6a0498e9e48bea4538b9bc26",
+  "job_status": "COMPLETED",
+  "job_url": "https://huggingface.co/jobs/felipesp1983/6a0498e9e48bea4538b9bc26",
+  "mode": "launched",
+  "namespace": "felipesp1983",
+  "next_action": "Run weak eval on checkpoint-10 first, then checkpoint-8 only if checkpoint-10 fails to improve. Do not use final_adapter because it was not present in the HF repo during API verification.",
+  "output_repo": "felipesp1983/kg1-nemotron-lora-v331-nemo-a100-equation-bit-symbolic-v290ckpt6",
+  "post_run_verification": {
+    "checkpoint_10_adapter_model_sha256": "f50636ed4ca4937529b4e13cb7adbfe800c54b9e02370566e27b2066d36769e2",
+    "checkpoint_10_adapter_model_size": 4259063856,
+    "checkpoint_10_adapter_present": true,
+    "checkpoint_10_config_present": true,
+    "checkpoint_10_tokenizer_present": true,
+    "final_adapter_present": false,
+    "best_observed_eval_loss": "1.3434",
+    "baseline_eval_loss": "1.3451",
+    "finops_decision": "complete_job_and_weak_eval_checkpoint_10"
+  },
+  "recipe": {
+    "answer_span_loss_weight": "12.0",
+    "answer_span_min_weighted_tokens": "1200",
+    "eval_every_steps": 2,
+    "eval_max_examples": 96,
+    "final_learning_rate": "1.0e-8",
+    "learning_rate": "4.0e-8",
+    "max_steps": 10,
+    "promotion_gate": "reject if total<192 or bit<136; inspect only if equation>56 or total>=193; promote only if equation>=60 and bit>=136",
+    "save_every_steps": 2,
+    "source_weights": "v325_equation_no_loss_distill=4.00,v330_symbolic_cryptarithm_distill=5.00,v304_solver_trace_bit_fullbyte_distill_exact=1.50,v304_solver_trace_bit_fullbyte_distill_random=1.25,v216_base_clean_safe_strict_bit=1.20,v216_synthetic_kg1_bit_rules=1.20,v215_replay_anchor=1.00",
+    "subcategory_weights": "equation_numeric_add_direct=8.00,equation_numeric_colon_absdiff=8.00,equation_numeric_minus_signed=8.00,equation_symbolic_cryptarithm_single_operator_mul=10.00,bit_fullbyte_v300_gain_pattern=2.00,bit_fullbyte_safe_ternary=2.00,bit_fullbyte_binary=1.50,bit_manipulation=1.10,unknown=1.00",
+    "trainable_lora_modules": "q_proj,k_proj,v_proj,o_proj,lm_head"
+  },
+  "run_id": "v331-nemo-a100-equation-bit-symbolic-v290ckpt6-20260513T152840Z",
+  "version": "v331_equation_bit_symbolic_from_v290_checkpoint6_nemo_a100"
+}
