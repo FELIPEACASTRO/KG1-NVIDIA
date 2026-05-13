@@ -6338,3 +6338,48 @@ Decisao:
   - no weak/full leakage;
   - plano de kill-switch no primeiro checkpoint.
 - Gate de sucesso do primeiro checkpoint HF: `equation>56`, `bit>=136`, truncation `0`, total `>=192`. Se `equation` continuar `56` ou `bit<136`, encerrar o job.
+
+### V331 mixed replay dataset - 2026-05-13
+
+Objetivo:
+
+- Preparar o primeiro dataset treinavel pos-V330 sem expor `bit_manipulation` a regressao.
+- Misturar somente sinais com evidencia:
+  - V304 bit replay para preservar `bit>=136`;
+  - V325 numeric equation no-loss para os `+4` de V324;
+  - V330 symbolic cryptarithm para o `+1` de V329.
+
+Implementacao:
+
+- Script: `scripts/build_v331_equation_bit_symbolic_mix_dataset.py`.
+- Artefatos: `artifacts/v331_equation_bit_symbolic_mix_dataset/20260513T_cpu_gate/`.
+- Train: `4951` linhas:
+  - `4231` bit;
+  - `480` equation numeric V325;
+  - `240` equation symbolic V330.
+- Validation: `512` linhas:
+  - `332` bit;
+  - `120` equation numeric V325;
+  - `60` equation symbolic V330.
+- Overlap train/validation: `0` por id e `0` por prompt hash.
+- Bad rows: `0`.
+
+Gate real:
+
+- `python -m py_compile scripts/build_v331_equation_bit_symbolic_mix_dataset.py`: ok.
+- `python scripts/build_v331_equation_bit_symbolic_mix_dataset.py --self-test`: ok.
+- Tokenization gate V286 real com `nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16`:
+  - status `tokenization_gate_passed`;
+  - train token max `749`;
+  - validation token max `748`;
+  - prompt truncation `0.0`;
+  - completion truncation `0`;
+  - offset masks `4951/4951` train e `512/512` validation.
+
+Decisao:
+
+- V331 e o primeiro mix pos-V329 tecnicamente apto para smoke HF curto.
+- O smoke deve partir do melhor adapter-only atual (`192/315`, `equation=56`, `bit=136`) e usar kill-switch no primeiro checkpoint.
+- Criterio de continuar: `equation>56`, `bit>=136`, truncation `0`, total `>=192`.
+- Criterio de matar: `equation=56` sem ganho ou `bit<136`.
+- Ainda nao autoriza full eval, package ou Kaggle submit; primeiro precisa provar ganho adapter-only.
