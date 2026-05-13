@@ -1,0 +1,54 @@
+{
+  "branch": "v230-v226-complementarity",
+  "dataset": {
+    "data_repo": "felipesp1983/kg1-nemotron-training",
+    "dataset_upload_commit": "b05b2bfb9f4eed0f412a5595bb34d70ebb751f66",
+    "train_file": "data/v321_hybrid_answer_span/20260513T0400Z/v321_hybrid_answer_span_train.jsonl",
+    "train_rows": 13026,
+    "train_sha256": "703bc037d446243c6fc8cc5db4aa9a3ff98230cd71aa385080c2aaecce52cb8d",
+    "val_file": "data/v321_hybrid_answer_span/20260513T0400Z/v321_hybrid_answer_span_val.jsonl",
+    "val_rows": 1020,
+    "val_sha256": "70710acbd27074aa643ea4bcfebf3f38476756a24abb483b1416f4c5777ed34c"
+  },
+  "expected_commit": "c2290b300dc2d48ca45ee7584e0d277a4b1c85fa",
+  "flavor": "a100-large",
+  "generated_at_utc": "2026-05-13T04:27:22.772184+00:00",
+  "hardware": {
+    "accelerator_model": "A100",
+    "accelerator_quantity": "1",
+    "accelerator_vram": "80 GB",
+    "cpu": "12 vCPU",
+    "name": "a100-large",
+    "pretty_name": "Nvidia A100 - large",
+    "ram": "142 GB",
+    "unit_cost_usd": 0.041667,
+    "unit_label": "minute"
+  },
+  "image": "nvcr.io/nvidia/nemo:25.11.nemotron_3_nano",
+  "init_adapter": {
+    "repo": "felipesp1983/kg1-nemotron-lora-v290-rank19-micro-patch-smoke",
+    "subfolder": "checkpoint-6"
+  },
+  "job_id": "6a03fde872518a06598ffeea",
+  "job_status": "RUNNING",
+  "job_url": "https://huggingface.co/jobs/felipesp1983/6a03fde872518a06598ffeea",
+  "namespace": "felipesp1983",
+  "next_action": "Monitor every 30 seconds; weak-eval checkpoint-2/4/6/8/10/final if training completes.",
+  "output_repo": "felipesp1983/kg1-nemotron-lora-v321-nemo-a100-v304-v312-attn-lmhead-v290ckpt6",
+  "recipe": {
+    "answer_span_loss_weight": "8.0",
+    "answer_span_min_weighted_tokens": "1000",
+    "eval_every_steps": 2,
+    "eval_max_examples": 96,
+    "final_learning_rate": "4e-9",
+    "finops": "A100 first; H200 reserved for weak eval or A100 failure.",
+    "learning_rate": "1.5e-8",
+    "max_steps": 10,
+    "objective": "hybrid V304 replay plus focused V312 verifier-synthetic signal into attention/lm_head behavior",
+    "promotion_gate": "reject if total<192 or bit<136; inspect only if equation>56 or total>=193; promote only if equation>=60 and bit>=136",
+    "save_every_steps": 2,
+    "trainable_lora_modules": "q_proj,k_proj,v_proj,o_proj,lm_head"
+  },
+  "run_id": "v321-nemo-a100-v304-v312-attn-lmhead-v290ckpt6-20260513T042722Z",
+  "version": "v321_hybrid_v304_v312_attn_lmhead_from_v290_checkpoint6_nemo_a100"
+}
