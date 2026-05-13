@@ -1,0 +1,47 @@
+{
+  "adapter_repo": "felipesp1983/kg1-nemotron-lora-v320-nemo-a100-v312-answer-span-lmhead-v290ckpt6",
+  "adapter_subfolders": [
+    "checkpoint-2",
+    "checkpoint-4",
+    "checkpoint-6",
+    "checkpoint-8",
+    "final"
+  ],
+  "branch": "v230-v226-complementarity",
+  "candidate_names": [
+    "v320_v312_lmhead_checkpoint_2_v221_contract",
+    "v320_v312_lmhead_checkpoint_4_v221_contract",
+    "v320_v312_lmhead_checkpoint_6_v221_contract",
+    "v320_v312_lmhead_checkpoint_8_v221_contract",
+    "v320_v312_lmhead_final_v221_contract"
+  ],
+  "decision_gate_after_eval": {
+    "diagnostic_signal": "equation_transform > 56 or total >= 193",
+    "full_or_submit_gate": "total>=193, equation_transform>=60, bit_manipulation>=136, no truncation regression, no full-family regression",
+    "reject": "bit_manipulation < 136 or total < 192"
+  },
+  "expected_commit": "ae4d330b890eee366f1c13543354935910b18f1e",
+  "flavor": "h200",
+  "generated_at_utc": "2026-05-13T03:39:47.814012+00:00",
+  "hardware": {
+    "accelerator_model": "H200",
+    "accelerator_quantity": "1",
+    "accelerator_vram": "141 GB",
+    "cpu": "23 vCPU",
+    "name": "h200",
+    "pretty_name": "Nvidia H200",
+    "ram": "256 GB",
+    "unit_cost_usd": 0.083333,
+    "unit_label": "minute"
+  },
+  "image": "vllm/vllm-openai:v0.20.1",
+  "job_id": "6a03f2c17618f125ee2b7af1",
+  "job_status": "RUNNING",
+  "job_url": "https://huggingface.co/jobs/felipesp1983/6a03f2c17618f125ee2b7af1",
+  "missing_adapter_subfolders": [],
+  "namespace": "felipesp1983",
+  "output_path_in_repo": "evals/v320-h200-v221contract-v312-answer-span-lmhead-20260513T033945Z",
+  "output_repo": "felipesp1983/kg1-nemotron-lora-v320-nemo-a100-v312-answer-span-lmhead-v290ckpt6",
+  "run_id": "v320-h200-v221contract-v312-answer-span-lmhead-20260513T033945Z",
+  "version": "v320_v312_answer_span_lmhead_v221_weak_eval"
+}
