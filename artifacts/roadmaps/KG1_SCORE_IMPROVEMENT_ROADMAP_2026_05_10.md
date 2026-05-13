@@ -6559,3 +6559,59 @@ Decisao:
 
 - Bloquear novos HF GPU jobs ate V333/V334 encontrarem sinal CPU novo.
 - Proxima implementacao efetiva: V333 bit gate + V334 equation numeric DSL expandida + V335 EvoTD-style verified fixture builder.
+
+### V333B Kienngx Kaggle + anexos audit - 2026-05-13
+
+Artefato:
+
+- `artifacts/v333_kienngx_attachment_audit/KG1_V333_KIENNGX_ATTACHMENT_AUDIT_2026_05_13.md`.
+
+Fonte Kaggle auditada:
+
+- Notebook: `https://www.kaggle.com/code/kienngx/nemotron-sft-reasoning-trajectories-dataset`.
+- Status via Kaggle CLI: `COMPLETE`.
+- Machine shape: `NvidiaRtxPro6000`.
+- Dataset principal: `kishanvavdara/nemotron-reasoning-traj`, licenca `MIT`, arquivo `nemotron_traj.csv`.
+- Dataset de adapter/CoT: `konbu17/nemotron-sft-lora-cot-selection`, licenca `CC0-1.0`, arquivos `train_split_with_cot.csv`, `adapter_config.json`, `adapter_model.safetensors`.
+
+Achados do notebook:
+
+- O notebook confirma a tese que estamos seguindo: qualidade de dados e verificacao por regra importam mais que volume.
+- Ele usa CoT filtrado por corretude, LoRA `r=32/alpha=32`, target modules `.*\.(in_proj|out_proj|up_proj|down_proj)$`, LR `1e-5`, `2` epochs e `max_length=4096`.
+- O proprio markdown admite que `Equation Transformation` nao recebeu solver especifico; portanto e uma fonte de evidencia para V334, nao uma solucao pronta.
+- Gap observado: a descricao fala em `607` bit e `200` equation no dataset preparado, mas o codigo executavel sobre `nemotron_traj.csv` filtra `correctness=true` e efetivamente dispoe de apenas `128` bit e `178` equation para o treino daquele caminho.
+
+Triagem de dados:
+
+- `nemotron_traj.csv`:
+  - SHA256 `01da9b309daedf18c9bcff9e0766b3deb7d736a1d350c73ded47775a8b66685e`;
+  - `9500` linhas e todos os IDs oficiais;
+  - familias: bit `1602`, equation numeric `732`, equation symbolic `823`;
+  - `correctness=true` total `4423`;
+  - `bit_manipulation=true` apenas `128`;
+  - `equation_numeric=true` `176`, `equation_symbolic=true` `2`;
+  - overlap com weak V221: `315/315`.
+- `train_split_with_cot.csv`:
+  - SHA256 `31a8667f23f68a1745cb777f63b32e0b32e8aea324f12935d23540cf5356d3e7`;
+  - `6558` linhas, IDs unicos `6558`;
+  - bit `607`, equation `200`;
+  - overlap com weak V221: `74/315` (`56` bit, `18` equation);
+  - sem mismatch de label contra `correct answer`, mas nao e apenas subset `correctness=true` do `nemotron_traj.csv`: em bit, `514/607` rows vinham como `false` no raw trajectory; em equation, `80/200` rows vinham como `false`.
+
+Decisao de seguranca/anti-leak:
+
+- Proibido usar `nemotron_traj.csv` ou `train_split_with_cot.csv` em treino bruto.
+- Usar somente como fonte de templates/taxonomia depois de excluir weak/full IDs e `prompt_sha256`.
+- Nao baixar o adapter de `3.5GB` agora; ele ja foi avaliado historicamente como `konbu17_sft_lora_cot_selection` e nao superou o baseline weak.
+
+Achados dos anexos:
+
+- `2605.11666v1.pdf` confirma EvoTD: skill-based seeding, attribute mutation, skill crossover, executability/skill alignment/ZPD learnability. Aplicacao KG1: V335 deve gerar fixtures sinteticos por regra aceita e verificar tudo por executor antes de qualquer LoRA.
+- `tls.pdf` e `tl.pptx` sao o material `Tensor Logic: The Language of AI`. Utilidade P2: reforca representar regras como programas/equacoes auditaveis, com forward/backward chaining e transparencia; nao fornece algoritmo novo direto para bit/equation.
+
+Impacto no roadmap:
+
+- V333: completar bit solver Tong-style; `konbu17` bit CoTs podem ajudar wording/template, mas nao substituem bitsum/stride.
+- V334: minerar os `200` equation CoTs nao-overlap para taxonomia DSL, depois expandir V324/V329 com classes sem conflito.
+- V335: implementar fixture builder EvoTD-style com anti-leak, executor/verifier e filtro ZPD.
+- HF GPU continua bloqueado ate CPU gate mostrar novo sinal real.
