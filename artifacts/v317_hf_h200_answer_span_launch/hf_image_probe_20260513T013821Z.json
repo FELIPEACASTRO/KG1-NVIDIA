@@ -1,0 +1,45 @@
+{
+  "expected_commit": "72015202d7e3031becf2649ef68a69776a04e6f7",
+  "flavor": "a10g-small",
+  "generated_at_utc": "2026-05-13T01:38:21.136472+00:00",
+  "jobs": [
+    {
+      "expected_commit": "72015202d7e3031becf2649ef68a69776a04e6f7",
+      "image": "nvcr.io/nvidia/nemo:25.11.nemotron_3_nano",
+      "job_id": "6a03d6497618f125ee2b7aa7",
+      "job_url": "https://huggingface.co/jobs/felipesp1983/6a03d6497618f125ee2b7aa7",
+      "name": "nemo_nemotron3_nano_official",
+      "reason": "NVIDIA official Nemotron 3 Nano training container.",
+      "stage": "RUNNING"
+    },
+    {
+      "expected_commit": "72015202d7e3031becf2649ef68a69776a04e6f7",
+      "image": "vllm/vllm-openai:v0.20.1",
+      "job_id": "6a03d64a72518a06598ffd42",
+      "job_url": "https://huggingface.co/jobs/felipesp1983/6a03d64a72518a06598ffd42",
+      "name": "vllm_openai_0201",
+      "reason": "Known to run V221 weak eval; may contain model runtime kernels.",
+      "stage": "RUNNING"
+    },
+    {
+      "expected_commit": "72015202d7e3031becf2649ef68a69776a04e6f7",
+      "image": "vllm/vllm-openai:latest",
+      "job_id": "6a03d64a72518a06598ffd44",
+      "job_url": "https://huggingface.co/jobs/felipesp1983/6a03d64a72518a06598ffd44",
+      "name": "vllm_openai_latest",
+      "reason": "Newest official vLLM image may have newer Nemotron/Mamba support.",
+      "stage": "RUNNING"
+    },
+    {
+      "expected_commit": "72015202d7e3031becf2649ef68a69776a04e6f7",
+      "image": "pytorch/pytorch:2.8.0-cuda12.8-cudnn9-devel",
+      "job_id": "6a03d64a72518a06598ffd46",
+      "job_url": "https://huggingface.co/jobs/felipesp1983/6a03d64a72518a06598ffd46",
+      "name": "pytorch_280_cuda128",
+      "reason": "Current baseline image; included for control.",
+      "stage": "RUNNING"
+    }
+  ],
+  "selection_rule": "Use the cheapest image that imports torch/transformers/peft/causal_conv1d/mamba_ssm or installs them within 8 minutes.",
+  "timeout_s": 900
+}
