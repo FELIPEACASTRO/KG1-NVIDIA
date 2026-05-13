@@ -5905,3 +5905,12 @@ V321 aprovado:
   - rejeitar se `total<192` ou `bit<136`;
   - inspecionar somente se `equation_transform>56` ou `total>=193`;
   - promover para full/package/submission somente com `total>=193`, `equation_transform>=60`, `bit_manipulation>=136`, truncation sem piora e full-family no-regression.
+
+Atualizacao V321 weak-eval QA - 2026-05-13:
+
+- O primeiro weak eval V321 (`https://huggingface.co/jobs/felipesp1983/6a04068772518a06598fff53`) terminou `COMPLETED`, mas foi invalidado para decisao de modelo.
+- Motivo concreto: o launcher exportava variaveis sem prefixo (`MAX_TOKENS`, `MAX_MODEL_LEN`, `MAX_NUM_SEQS`, `PROMPT_SUFFIX`, `REQUIRE_CUDA`) enquanto `scripts/hf_job_weak_eval_v245.py` le apenas variaveis `KG1_*`.
+- Efeito observado no log: o job caiu nos defaults (`max_tokens=96`, `max_model_len=4096`, `max_num_seqs=8`, thinking desabilitado), diferente do contrato comparavel V290/V320 (`KG1_MAX_TOKENS=7680`, `KG1_MAX_MODEL_LEN=8192`, `KG1_MAX_NUM_SEQS=64`, thinking habilitado).
+- Resultados invalidos desse job: melhor `17/315`, `equation_transform=9/155`, `bit_manipulation=8/160`, truncation `0`; esses numeros nao devem ser usados para descartar o treino V321.
+- Ajuste aplicado: `artifacts/v321_hf_nemo_a100_v304_v312_attn_lmhead_launch/launch_v321_hf_weak_eval.py` agora usa `vllm/vllm-openai:v0.20.1` como V290/V320 e injeta `KG1_MAX_TOKENS=7680`, `KG1_MAX_MODEL_LEN=8192`, `KG1_MAX_NUM_SEQS=64`, `KG1_DISABLE_THINKING=0`, `KG1_NO_PROMPT_SUFFIX=0`, `KG1_EXPECTED_LORA_R=32` e `KG1_EXPECTED_LORA_ALPHA=32`.
+- Decisao: relancar o weak eval corrigido antes de rejeitar ou promover V321.

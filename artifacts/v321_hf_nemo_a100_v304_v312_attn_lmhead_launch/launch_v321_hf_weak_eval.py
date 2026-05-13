@@ -16,7 +16,7 @@ NAMESPACE = "felipesp1983"
 REPO_BRANCH = "v230-v226-complementarity"
 REPO_ROOT = Path(__file__).resolve().parents[2]
 EXPECTED_COMMIT = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=REPO_ROOT, text=True).strip()
-IMAGE = "vllm/vllm-openai:latest"
+IMAGE = "vllm/vllm-openai:v0.20.1"
 FLAVOR = "h200"
 RUN_ID = "v321-h200-v221contract-v304-v312-attn-lmhead-" + datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
 ADAPTER_REPO = "felipesp1983/kg1-nemotron-lora-v321-nemo-a100-v304-v312-attn-lmhead-v290ckpt6"
@@ -37,9 +37,24 @@ COMMAND_SCRIPT = r"""set -eux
 export DEBIAN_FRONTEND=noninteractive
 PYBIN=$(command -v python || command -v python3)
 echo "python_bin=$PYBIN"
+$PYBIN - <<'PY'
+import json, torch
+try:
+    import vllm
+    vllm_version = getattr(vllm, "__version__", "unknown")
+except Exception as exc:
+    vllm_version = repr(exc)
+print(json.dumps({
+    "torch_before": getattr(torch, "__version__", "unknown"),
+    "cuda": getattr(torch.version, "cuda", ""),
+    "cuda_available": torch.cuda.is_available(),
+    "device": torch.cuda.get_device_name(0) if torch.cuda.is_available() else "",
+    "vllm": vllm_version,
+}, sort_keys=True), flush=True)
+PY
 apt-get update -qq && apt-get install -y -qq git >/dev/null
 $PYBIN -m pip install -q --no-cache-dir --upgrade pip
-$PYBIN -m pip install -q --no-cache-dir --upgrade 'huggingface_hub>=0.36.0' pandas peft safetensors hf_transfer
+$PYBIN -m pip install -q --no-cache-dir 'huggingface_hub>=0.36.0' pandas packaging peft safetensors hf_transfer
 rm -rf /tmp/kg1
 git clone --depth 1 --branch "$KG1_BRANCH" https://github.com/FELIPEACASTRO/KG1-NVIDIA.git /tmp/kg1
 cd /tmp/kg1
@@ -51,39 +66,12 @@ if [ "$observed" != "$KG1_EXPECTED_COMMIT" ]; then echo "commit mismatch: expect
 $PYBIN -m py_compile scripts/hf_job_weak_eval_v245.py scripts/hf_job_preflight_gate.py
 export HF_HUB_ENABLE_HF_TRANSFER=1
 export TOKENIZERS_PARALLELISM=false
-export MODEL_NAME='nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16'
-export MODEL_REVISION='cbd3fa9f933d55ef16a84236559f4ee2a0526848'
-export QUESTIONS_REPO='felipesp1983/kg1-nemotron-training'
-export QUESTIONS_FILE='runtime_artifacts/v245_weak_eval_bridge/v245-weak-bridge-hfonly-20260510T1950Z/v221_weak_315.csv'
-export SOLUTION_REPO='felipesp1983/kg1-nemotron-training'
-export SOLUTION_FILE='runtime_artifacts/v245_weak_eval_bridge/v245-weak-bridge-hfonly-20260510T1950Z/v221_weak_315.csv'
-export QUESTIONS_SHA256='47c3aa6be236b819d96f41ff22d0fa1a1d84a58a643e7e02e21496e8a6c2db47'
-export EXPECTED_ROWS=315
-export EXPECTED_FAMILY_COUNTS='{"bit_manipulation":160,"equation_transform":155}'
-export ADAPTER_REPO="$KG1_ADAPTER_REPO"
-export ADAPTER_SPECS_JSON="$KG1_ADAPTER_SPECS_JSON"
-export OUTPUT_DIR="/tmp/kg1_v245_weak_eval/$KG1_RUN_ID"
-export OUTPUT_REPO="$KG1_OUTPUT_REPO"
-export OUTPUT_PATH_IN_REPO="$KG1_OUTPUT_PATH_IN_REPO"
-export UPLOAD_TO_HF=1
-export MAX_TOKENS=7680
-export TEMPERATURE=0.0
-export TOP_P=1.0
-export MAX_MODEL_LEN=8192
-export MAX_NUM_SEQS=64
-export GPU_MEMORY_UTILIZATION=0.85
-export MAX_LORA_RANK=32
-export DTYPE='auto'
-export ENABLE_PREFIX_CACHING=1
-export ENABLE_CHUNKED_PREFILL=1
-export PROMPT_SUFFIX=$'\nReturn only one line: `\\boxed{answer}`. No reasoning. No explanation.'
-export REQUIRE_CUDA=1
-export MIN_GPU_TOTAL_GIB=130
-export REQUIRED_GPU_NAME_REGEX='H200'
-export HF_FLAVOR="$KG1_HF_FLAVOR"
-export HF_UNIT_COST_USD="$KG1_HF_UNIT_COST_USD"
-export HF_MAX_UNIT_COST_USD="$KG1_HF_MAX_UNIT_COST_USD"
-export ALLOWED_HF_FLAVORS="$KG1_ALLOWED_HF_FLAVORS"
+export VLLM_USE_DEEP_GEMM=0
+export VLLM_MOE_USE_DEEP_GEMM=0
+export VLLM_USE_DEEP_GEMM_E8M0=0
+export VLLM_USE_DEEP_GEMM_TMA_ALIGNED_SCALES=0
+export VLLM_DEEP_GEMM_WARMUP=skip
+export VLLM_MEMORY_PROFILER_ESTIMATE_CUDAGRAPHS=0
 $PYBIN scripts/hf_job_weak_eval_v245.py
 """
 
@@ -136,6 +124,8 @@ def main() -> int:
         "KG1_BRANCH": REPO_BRANCH,
         "KG1_EXPECTED_COMMIT": EXPECTED_COMMIT,
         "KG1_REQUIRE_CUDA": "1",
+        "KG1_MIN_GPU_TOTAL_GIB": "130",
+        "KG1_REQUIRED_GPU_NAME_REGEX": "H200",
         "KG1_HF_FLAVOR": FLAVOR,
         "KG1_HF_UNIT_COST_USD": str(hardware[FLAVOR]["unit_cost_usd"]),
         "KG1_HF_MAX_UNIT_COST_USD": "0.09",
@@ -145,6 +135,18 @@ def main() -> int:
         "KG1_ADAPTER_SPECS_JSON": json.dumps(specs, sort_keys=True),
         "KG1_OUTPUT_REPO": OUTPUT_REPO,
         "KG1_OUTPUT_PATH_IN_REPO": OUTPUT_PATH_IN_REPO,
+        "KG1_UPLOAD_TO_HF": "1",
+        "KG1_MODEL_NAME": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+        "KG1_LABEL_PREFIX": "v321_hf_weak",
+        "KG1_DISABLE_THINKING": "0",
+        "KG1_NO_PROMPT_SUFFIX": "0",
+        "KG1_PROMPT_SUFFIX": "\nReturn only one line: `\\boxed{answer}`. No reasoning. No explanation.",
+        "KG1_MAX_TOKENS": "7680",
+        "KG1_MAX_MODEL_LEN": "8192",
+        "KG1_MAX_NUM_SEQS": "64",
+        "KG1_EVAL_TIMEOUT_S": "7200",
+        "KG1_EXPECTED_LORA_R": "32",
+        "KG1_EXPECTED_LORA_ALPHA": "32",
     }
     print("hf_job_env =", json.dumps(job_env, indent=2, sort_keys=True), flush=True)
     print("hf_hardware_selected =", json.dumps(hardware[FLAVOR], indent=2, sort_keys=True), flush=True)
