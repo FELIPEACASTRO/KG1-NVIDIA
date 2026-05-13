@@ -195,14 +195,20 @@ def main() -> int:
         },
         "decision_gate_after_eval": {
             "protected_baseline": "v290_checkpoint_6_v221_contract",
-            "minimum_total_correct": 192,
-            "minimum_equation_transform_correct": 56,
-            "minimum_bit_manipulation_correct": 136,
-            "preferred_submit_threshold": {
-                "minimum_total_correct": 193,
-                "minimum_equation_transform_correct": 57,
+            "diagnostic_floor": {
+                "minimum_total_correct": 192,
+                "minimum_equation_transform_correct": 56,
                 "minimum_bit_manipulation_correct": 136,
+                "meaning": "Only enough to inspect row-level movement; not enough for full/package/submit promotion.",
             },
+            "strict_full_or_submit_promotion_threshold": {
+                "minimum_total_correct": 193,
+                "minimum_equation_transform_correct": 60,
+                "minimum_bit_manipulation_correct": 136,
+                "requires_no_truncation_regression": True,
+                "requires_no_full_family_regression": True,
+            },
+            "partial_signal_only": "equation_transform_correct > 56 or bit target-ID movement requires row-diff inspection before more HF spend.",
         },
     }
     out_dir = Path(__file__).resolve().parent
