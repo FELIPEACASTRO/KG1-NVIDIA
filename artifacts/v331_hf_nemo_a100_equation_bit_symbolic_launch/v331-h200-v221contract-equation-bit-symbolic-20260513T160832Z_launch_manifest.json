@@ -24,7 +24,7 @@
   },
   "image": "vllm/vllm-openai:v0.20.1",
   "job_id": "6a04a23fe48bea4538b9bcc7",
-  "job_status": "RUNNING",
+  "job_status": "COMPLETED",
   "job_url": "https://huggingface.co/jobs/felipesp1983/6a04a23fe48bea4538b9bcc7",
   "missing_optional_adapters": [],
   "namespace": "felipesp1983",
@@ -40,6 +40,23 @@
     "promote_if_total_gte": 193,
     "reject_if_bit_lt": 136,
     "reject_if_total_lt": 192
+  },
+  "result": {
+    "accuracy": 0.6063492063492063,
+    "bit_manipulation_correct": 135,
+    "bit_manipulation_rows": 160,
+    "correct": 191,
+    "equation_transform_correct": 56,
+    "equation_transform_rows": 155,
+    "output_commit": "444cf6ec0af4f8083da63e17cb00cad180769e8a",
+    "output_commit_url": "https://huggingface.co/felipesp1983/kg1-nemotron-lora-v331-nemo-a100-equation-bit-symbolic-v290ckpt6/commit/444cf6ec0af4f8083da63e17cb00cad180769e8a",
+    "rows": 315,
+    "truncated": 0
+  },
+  "final_decision": {
+    "action": "reject_for_full_eval_package_and_submit",
+    "reason": "Weak eval stayed at equation=56 and regressed bit from 136 to 135 versus the current best adapter-only baseline.",
+    "next_action": "Return to CPU solver/verifier gate before any new HF GPU training."
   },
   "run_id": "v331-h200-v221contract-equation-bit-symbolic-20260513T160832Z",
   "version": "v331_equation_bit_symbolic_v221_weak_eval"

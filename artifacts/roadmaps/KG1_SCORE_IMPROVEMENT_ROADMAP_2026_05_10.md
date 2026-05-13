@@ -6436,6 +6436,25 @@ Decisao FinOps:
 - Candidato primario de avaliacao: `felipesp1983/kg1-nemotron-lora-v331-nemo-a100-equation-bit-symbolic-v290ckpt6`, subfolder `checkpoint-10`.
 - Nenhum checkpoint V331 autoriza submit sem weak eval real provando `equation>56`, `bit>=136`, truncation `0`, total `>=192`.
 
+### V331 weak eval real - 2026-05-13
+
+Resultado HF:
+
+- HF job: `https://huggingface.co/jobs/felipesp1983/6a04a23fe48bea4538b9bcc7`.
+- Output commit: `https://huggingface.co/felipesp1983/kg1-nemotron-lora-v331-nemo-a100-equation-bit-symbolic-v290ckpt6/commit/444cf6ec0af4f8083da63e17cb00cad180769e8a`.
+- Adapter avaliado: `felipesp1983/kg1-nemotron-lora-v331-nemo-a100-equation-bit-symbolic-v290ckpt6/checkpoint-10`.
+- Weak contract: `315` rows, `160` bit, `155` equation.
+- Resultado: `191/315`, accuracy `0.6063492063`, `equation_transform=56/155`, `bit_manipulation=135/160`, truncation `0`.
+- Comparacao contra melhor adapter-only atual: piora `-1` total e `-1` bit; equation continua travado em `56`.
+
+Decisao:
+
+- Rejeitar V331 para full eval, package e Kaggle submit.
+- Nao rodar outro checkpoint V331 agora: o melhor proxy de loss (`checkpoint-10`) nao converteu em ganho real no weak gate.
+- Reforco de FinOps: leve melhora de `eval_loss` nao e suficiente para promover; o gate real por familia manda.
+- Predicao atual para novos HF jobs baseados em SFT amplo ou mais epocas sem novo sinal CPU: baixa probabilidade de ganho material, com risco recorrente de `bit` cair de `136` para `135`.
+- Proximo caminho efetivo: voltar para CPU solver/verifier gate V333/V334, ampliar DSL de `equation_transform` e completar bit-pair/bitsum/stride antes de qualquer novo gasto GPU.
+
 ### V332 Kaggle discussion 140/140 resume audit - 2026-05-13
 
 Objetivo:
