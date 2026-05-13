@@ -6003,6 +6003,15 @@ Achados acionaveis:
 - Para `bit_manipulation`, completar primeiro o algoritmo CPU bit-pair/bitsum/stride inspirado na discussao Kaggle 690307 e no repositorio `tonghuikang/nemotron`. So gerar novo dataset LoRA se os traces deterministico-curtos cobrirem casos que V304/V303 nao cobriram.
 - Para LoRA, usar apenas dados verificados com hard negatives: resposta solver correta, resposta baseline errada e explicacao curta/mecanica. Manter prompt/template oficial, replay de bit forte e kill-switch no primeiro checkpoint se `bit<136` ou `equation_transform` continuar em `56`.
 
+Double check adicional frase-a-frase:
+
+- `min logprob` deve ser diagnostico obrigatorio dos proximos traces, nao criterio isolado de promocao. A publicacao de Tong enfatiza revisar tokens/traces com minimo logprob ruim, em vez de apenas aumentar epochs; o export cita o limiar operacional `0.69` como sinal de que tokens semelhantes podem nao ser gerados no submit.
+- O ponto recorrente de maior consenso e iterar no gerador de CoT deterministico, nao no treino: se o modelo nao aprende um passo, simplificar o passo, quebrar a operacao em subpassos mecanicos e revalidar o trace antes de novo HF job.
+- DPO/ORPO/PRM/RLVR aparecem varias vezes, mas continuam hipotese P2/P3: so considerar depois de existir pack auditado de `chosen/rejected` com hard negatives reais do adapter congelado, solver-correct traces e prova CPU de que o pack nao introduz regressao de bit.
+- Constrained decoding/grammar/Outlines/CFG aparece como hipotese para reduzir erro de formato/truncation, mas nao e evidencia de ganho de `equation_transform`; nao promover como rota principal de ACC sem um probe separado.
+- Rank alto (`64/128`) e TIES/weighted merge aparecem como sugestoes externas, mas conflitam com restricoes/package e historico de regressao. Manter como P2 experimental somente se V324/V325 produzir dado novo e o gate de package/adapter aceitar o formato.
+- `codelion/logical-puzzles-cot` deve ser tratado como corpus complementar, nao substituto dos traces deterministico-publicos: o proprio material indica cobertura parcial em bit e equation. Usar apenas para comparar estilo/formatacao ou para um probe anti-overlap pequeno.
+
 Fontes externas classificadas:
 
 - `https://github.com/tonghuikang/nemotron`: P0 como referencia de reasoners, corpus, metricas e treino; ja auditado antes e reconfirmado pelo export.
