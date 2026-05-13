@@ -261,6 +261,7 @@ Status 2026-05-13:
   - `mamba_ssm=2.2.6.post3`;
   - imports `mamba_ssm.ops.triton.layernorm_gated` e `mamba_ssm.ops.selective_scan_interface` OK.
 - Launcher V341 ajustado para usar a imagem NeMo/Nemotron com Mamba prebuilt e sem compilacao source em A100.
+- Primeiro launch com imagem NeMo/Nemotron `felipesp1983/6a04ed3be48bea4538b9c05f` falhou antes do treino por ordem de instalacao: `HF_HUB_ENABLE_HF_TRANSFER=1` estava ativo antes de instalar `hf_transfer`. Corrigir launcher instalando `hf_transfer` no bloco inicial antes do artifact gate.
 
 Decisao:
 

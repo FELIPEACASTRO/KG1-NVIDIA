@@ -149,6 +149,13 @@ def patched_command_script() -> str:
     if source_build_block not in script:
         raise RuntimeError("V315 command script changed; missing Mamba source-build block.")
     script = script.replace(source_build_block, smoke_fast_block)
+    early_hub_install = "python -m pip install -q --no-cache-dir 'huggingface_hub>=0.36.0' packaging wheel setuptools\n"
+    early_hub_install_with_transfer = (
+        "python -m pip install -q --no-cache-dir 'huggingface_hub>=0.36.0' packaging wheel setuptools hf_transfer\n"
+    )
+    if early_hub_install not in script:
+        raise RuntimeError("V315 command script changed; missing early Hugging Face install block.")
+    script = script.replace(early_hub_install, early_hub_install_with_transfer)
     return script
 
 
