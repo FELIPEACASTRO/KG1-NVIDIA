@@ -1,0 +1,42 @@
+{
+  "adapter_repo": "felipesp1983/kg1-nemotron-lora-v319-nemo-a100-answer-span-fast-eval-v290ckpt6",
+  "adapter_subfolders": [
+    "checkpoint-6"
+  ],
+  "branch": "v230-v226-complementarity",
+  "candidate_names": [
+    "v319_answer_span_checkpoint_6_v221_contract"
+  ],
+  "decision_gate_after_eval": {
+    "diagnostic_signal": "bit_manipulation >= 136 and equation_transform > 56 or total >= 193",
+    "full_or_submit_gate": "total>=193, equation_transform>=60, bit_manipulation>=136, no truncation regression, no full-family regression",
+    "reject": "bit_manipulation < 135 or total < 191"
+  },
+  "expected_commit": "a2e056c4693faa2eeb86eed31e43fac35f42e2a8",
+  "flavor": "h200",
+  "generated_at_utc": "2026-05-13T02:35:45.115057+00:00",
+  "hardware": {
+    "accelerator_model": "H200",
+    "accelerator_quantity": "1",
+    "accelerator_vram": "141 GB",
+    "cpu": "23 vCPU",
+    "name": "h200",
+    "pretty_name": "Nvidia H200",
+    "ram": "256 GB",
+    "unit_cost_usd": 0.083333,
+    "unit_label": "minute"
+  },
+  "image": "vllm/vllm-openai:v0.20.1",
+  "job_id": "6a03e3be7618f125ee2b7ace",
+  "job_status": "RUNNING",
+  "job_url": "https://huggingface.co/jobs/felipesp1983/6a03e3be7618f125ee2b7ace",
+  "missing_adapter_subfolders": [
+    "checkpoint-12",
+    "final"
+  ],
+  "namespace": "felipesp1983",
+  "output_path_in_repo": "evals/v319-h200-v221contract-answer-span-fast-eval-20260513T023544Z",
+  "output_repo": "felipesp1983/kg1-nemotron-lora-v319-nemo-a100-answer-span-fast-eval-v290ckpt6",
+  "run_id": "v319-h200-v221contract-answer-span-fast-eval-20260513T023544Z",
+  "version": "v319_answer_span_v221_weak_eval"
+}
