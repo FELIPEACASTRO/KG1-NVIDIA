@@ -27,6 +27,7 @@ ADAPTERS = [
     ("checkpoint-8", "v321_hybrid_attn_lmhead_checkpoint_8_v221_contract"),
     ("checkpoint-10", "v321_hybrid_attn_lmhead_checkpoint_10_v221_contract"),
     ("final", "v321_hybrid_attn_lmhead_final_v221_contract"),
+    ("final_adapter", "v321_hybrid_attn_lmhead_final_adapter_v221_contract"),
 ]
 OUTPUT_REPO = ADAPTER_REPO
 OUTPUT_PATH_IN_REPO = f"evals/{RUN_ID}"
@@ -123,11 +124,14 @@ def main() -> int:
     if hardware[FLAVOR]["unit_cost_usd"] > 0.09:
         raise RuntimeError(f"H200 unit cost above gate: {hardware[FLAVOR]}")
 
-    missing_adapters = [subfolder for subfolder, _ in ADAPTERS if not adapter_exists(api, ADAPTER_REPO, subfolder)]
-    if missing_adapters:
+    existing_adapters = [(subfolder, name) for subfolder, name in ADAPTERS if adapter_exists(api, ADAPTER_REPO, subfolder)]
+    missing_adapters = [subfolder for subfolder, _ in ADAPTERS if subfolder not in {item[0] for item in existing_adapters}]
+    if not existing_adapters:
         raise RuntimeError(f"No complete V321 adapters found in {ADAPTER_REPO}. Missing={missing_adapters}")
+    if missing_adapters:
+        print("missing_optional_adapters =", json.dumps(missing_adapters, sort_keys=True), flush=True)
 
-    specs = [{"subfolder": subfolder, "name": name} for subfolder, name in ADAPTERS]
+    specs = [{"subfolder": subfolder, "name": name} for subfolder, name in existing_adapters]
     job_env = {
         "KG1_BRANCH": REPO_BRANCH,
         "KG1_EXPECTED_COMMIT": EXPECTED_COMMIT,
@@ -168,6 +172,7 @@ def main() -> int:
         "run_id": RUN_ID,
         "adapter_repo": ADAPTER_REPO,
         "adapters": specs,
+        "missing_optional_adapters": missing_adapters,
         "output_repo": OUTPUT_REPO,
         "output_path_in_repo": OUTPUT_PATH_IN_REPO,
         "promotion_gate": {
