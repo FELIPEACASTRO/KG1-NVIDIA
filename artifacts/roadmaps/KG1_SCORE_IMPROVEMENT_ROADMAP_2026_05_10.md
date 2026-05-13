@@ -21,6 +21,7 @@ As evidencias fortes reunidas hoje mostram que ha ganho possivel, mas o ganho co
 | V306/V302 full verifier local | `838/947` potencial | `60/155` | `146/160` | depende de verifier/postprocessor |
 | V335 LoRA mixed trace replay | `190/315` | `56/155` | `134/160` | falhou; cancelado por FinOps |
 | V338B LoRA minimal transfer weak eval | `190/315` | `56/155` | `134/160` | checkpoints 2 e 4 falharam; cancelado por FinOps |
+| V341 clean preference checkpoint-2 | `190/315` | `56/155` | `134/160` | falhou; preferencia interna saturada, cancelado por FinOps |
 
 Conclusao: a busca/documentacao gerou conhecimento util e ganho tecnico real. O erro foi assumir que SFT curto/misto transferiria automaticamente essas regras para LoRA. V303, V326, V331 e V335 falsificaram essa hipotese.
 
@@ -262,11 +263,21 @@ Status 2026-05-13:
   - imports `mamba_ssm.ops.triton.layernorm_gated` e `mamba_ssm.ops.selective_scan_interface` OK.
 - Launcher V341 ajustado para usar a imagem NeMo/Nemotron com Mamba prebuilt e sem compilacao source em A100.
 - Primeiro launch com imagem NeMo/Nemotron `felipesp1983/6a04ed3be48bea4538b9c05f` falhou antes do treino por ordem de instalacao: `HF_HUB_ENABLE_HF_TRANSFER=1` estava ativo antes de instalar `hf_transfer`. Corrigir launcher instalando `hf_transfer` no bloco inicial antes do artifact gate.
+- Launch corrigido `felipesp1983/6a04eda83308d79117b8f2aa` passou todos os gates, carregou adapter V290 checkpoint-6 e gerou `checkpoint-2`; o treino foi cancelado por FinOps assim que o primeiro checkpoint ficou disponivel.
+- Sinal negativo importante: antes do treino, o baseline ja fazia `96/96` na metrica interna de preferencia (`preference_accuracy=1.0`, `chosen_mean_nll=1.6799`, `rejected_mean_nll=3.1616`). Portanto, a preferencia V341 nao media uma lacuna real do adapter atual.
+- Weak eval H200 `felipesp1983/6a04f2b43308d79117b8f2c7` avaliou apenas `checkpoint-2`:
+  - `190/315`;
+  - `equation_transform=56/155`;
+  - `bit_manipulation=134/160`;
+  - `truncated=1`;
+  - commit HF do resultado: `e891636bc215a2e8e3af7de72a3f38b6258470ef`.
+- Decisao: V341 falhou. Nao promover para full/package/submit. Nao rodar mais preference/CE nessa familia de dataset sem um gate CPU que prove uma preferencia nao saturada e ganho de ACC esperado.
 
 Decisao:
 
-- Esta e a primeira rota pos-V338B que nao repete SFT generico. Ela usa preferencia contrastiva escolhida/rejeitada e corrige o defeito real encontrado nos hard negatives.
-- Ainda nao autoriza full/package/submit. Autoriza apenas smoke HF curto; se o primeiro weak checkpoint nao melhorar ACC por familia, cancelar por FinOps.
+- A correcao dos hard negatives foi necessaria, mas insuficiente para ganho adapter-only.
+- O criterio de promocao volta a ser exclusivamente ACC por familia no weak/full gate.
+- Proximo HF GPU fica bloqueado ate existir nova evidencia CPU: ou nova regra no-loss, ou dataset cujo baseline nao esteja saturado na propria metrica de selecao.
 
 ## Itens removidos do roadmap ativo
 
@@ -301,4 +312,13 @@ Os itens abaixo ficam apenas no arquivo historico. Eles nao fazem parte do plano
 
 ## Proxima acao unica
 
-Commitar e enviar o launcher V341 com imagem NeMo/Nemotron prebuilt e relancar smoke HF V341 limpo em A100. Monitorar logs a cada aproximadamente `40s`; apos o primeiro checkpoint disponivel, rodar weak eval. Se `total<=192`, `equation<=56` ou `bit<136`, cancelar o job e nao avaliar checkpoints restantes.
+Executar V342 CPU ACC-first diagnostic:
+
+1. Baixar os artefatos de weak eval V341 checkpoint-2.
+2. Comparar linha a linha contra o melhor adapter-only (`192/315`, `equation=56`, `bit=136`) e contra o solver/verifier V336A (`197/315`, `equation=61`, `bit=136`).
+3. Identificar somente exemplos onde existe caminho de ganho sem perda:
+   - baseline adapter erra;
+   - V336A solver acerta;
+   - V341/treino nao corrigiu;
+   - regra/verifier tem `candidate_count` baixo e `conflict_count=0`.
+4. Se esse diagnostico nao produzir novo conjunto nao saturado e verificavel, parar GPU e trabalhar apenas em DSL/verifier CPU.
