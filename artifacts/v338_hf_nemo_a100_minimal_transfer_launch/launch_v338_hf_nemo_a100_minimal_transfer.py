@@ -39,8 +39,8 @@ def read_dataset_upload_commit() -> str:
 
 
 def patch_launcher(module: Any) -> None:
-    run_id = "v338-nemo-a100-minimal-transfer-v290ckpt6-" + datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
-    module.VERSION = "v338_minimal_transfer_from_v290_checkpoint6_nemo_a100"
+    run_id = "v338b-nemo-a100-minimal-transfer-balanced-v290ckpt6-" + datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+    module.VERSION = "v338b_minimal_transfer_balanced_from_v290_checkpoint6_nemo_a100"
     module.RUN_ID = run_id
     module.DATASET_UPLOAD_COMMIT = read_dataset_upload_commit()
     module.TRAIN_FILE = "data/v337d_minimal_transfer/20260513T_cpu_gate/v337d_minimal_transfer_train.jsonl"
@@ -49,25 +49,25 @@ def patch_launcher(module: Any) -> None:
     module.VAL_SHA256 = "50d4ee05a377ed4e111d27f9de0e1109eb0c09bfe01a9bce0717b63d704dbf80"
     module.TRAIN_ROWS = 1440
     module.VAL_ROWS = 340
-    module.OUTPUT_REPO = "felipesp1983/kg1-nemotron-lora-v338-nemo-a100-minimal-transfer-v290ckpt6"
+    module.OUTPUT_REPO = "felipesp1983/kg1-nemotron-lora-v338b-nemo-a100-minimal-transfer-balanced-v290ckpt6"
     module.MAX_STEPS = 14
     module.SAVE_EVERY_STEPS = 2
     module.EVAL_EVERY_STEPS = 2
     module.EVAL_MAX_EXAMPLES = 96
-    module.ANSWER_SPAN_LOSS_WEIGHT = "18.0"
+    module.ANSWER_SPAN_LOSS_WEIGHT = "16.0"
     module.ANSWER_SPAN_MIN_WEIGHTED_TOKENS = "900"
     module.SOURCE_WEIGHTS = (
-        "v330_symbolic_cryptarithm_distill=10.00,"
-        "v325_equation_no_loss_distill=8.00,"
-        "v337d_v217_bit_replay=1.40"
+        "v330_symbolic_cryptarithm_distill=5.00,"
+        "v325_equation_no_loss_distill=4.00,"
+        "v337d_v217_bit_replay=8.00"
     )
     module.SUBCATEGORY_WEIGHTS = (
-        "equation_symbolic_cryptarithm_single_operator_mul=16.00,"
-        "equation_numeric_add_direct=12.00,"
-        "equation_numeric_colon_absdiff=12.00,"
-        "equation_numeric_minus_signed=12.00,"
-        "bit_manipulation=1.20,"
-        "unknown=1.00"
+        "equation_symbolic_cryptarithm_single_operator_mul=10.00,"
+        "equation_numeric_add_direct=8.00,"
+        "equation_numeric_colon_absdiff=8.00,"
+        "equation_numeric_minus_signed=8.00,"
+        "bit_manipulation=3.00,"
+        "unknown=3.00"
     )
 
     command_script = module.COMMAND_SCRIPT

@@ -178,7 +178,9 @@ Status 2026-05-13:
 
 - Launcher criado em `artifacts/v338_hf_nemo_a100_minimal_transfer_launch/launch_v338_hf_nemo_a100_minimal_transfer.py`.
 - Debug local passou: hardware `a100-large`, custo `0.041667`, dataset HF com hashes corretos, adapter inicial `checkpoint-6` presente, snippets antigos V331/V335 ausentes.
-- Job pago ainda depende de commit/push do estado atual para que o HF clone exatamente o `EXPECTED_COMMIT`.
+- Primeiro launch V338 foi cancelado por FinOps antes do treino: o log mostrou share efetivo de bit muito baixo (`~1.23%`), incompatível com o guardrail `bit>=136`.
+- V338B corrige a rota: pesos balanceados para preservar bit (`v337d_v217_bit_replay=8.0`, `bit_manipulation=3.0`, `unknown=3.0`) e reduzir equation para um smoke responsavel.
+- Proximo launch deve usar o prefixo `v338b-nemo-a100-minimal-transfer-balanced`.
 
 ### 5. V339 - Full eval, package e Kaggle submit adapter-only
 
