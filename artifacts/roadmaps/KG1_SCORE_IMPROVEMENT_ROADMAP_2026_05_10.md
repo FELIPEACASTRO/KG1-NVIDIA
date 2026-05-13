@@ -5834,6 +5834,13 @@ Atualizacao FinOps:
   - hardware inicial `a100-large`, custo `0.041667/min`, metade do H200;
   - instalar apenas dependencias Python leves/PEFT atualizado; nao compilar `mamba_ssm` ou `causal-conv1d`;
   - se A100 falhar por memoria, relancar a mesma receita/imagem em H200.
+- V318 runtime observado em A100: preinstall, CUDA, repo commit e treino passaram; baseline eval `2.8786`, steps `1/12` e `2/12` rodaram, mas `EVAL_MAX_EXAMPLES=256` a cada `2` steps saturou a A100 (`~80.77/81.15GB`) e deixou a primeira eval lenta demais para FinOps.
+- V319 aprovado como ajuste objetivo antes de escalar para H200:
+  - launcher `artifacts/v319_hf_nemo_a100_answer_span_fast_eval_launch/launch_v319_hf_nemo_a100_answer_span_fast_eval.py`;
+  - mesma imagem NeMo oficial, mesmo dataset V304 e mesmo objetivo answer-span weighted;
+  - reduzir `EVAL_MAX_EXAMPLES` de `256` para `64`;
+  - reduzir eval/checkpoint de cada `2` steps para cada `6` steps;
+  - manter A100 primeiro; H200 fica fallback se A100 continuar lenta/OOM.
 - Itens rejeitados pelo quintuple-check:
   - conversao literal de `postprocessor/verifier` para LoRA;
   - usar postprocessor em inferencia e chamar de LoRA puro;
