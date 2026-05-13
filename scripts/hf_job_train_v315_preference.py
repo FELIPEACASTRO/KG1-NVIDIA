@@ -519,13 +519,14 @@ def train() -> None:
             step_chosen_value += float(chosen_ce.detach().cpu())
             step_rejected_value += float(rejected_ce.detach().cpu())
             del chosen_mean, chosen_sum, rejected_mean, rejected_sum, loss, preference_loss
-        global_step += 1
+        completed_step = global_step + 1
         lr = base.get_lr(global_step, base.MAX_STEPS)
         for group in optimizer.param_groups:
             group["lr"] = lr
         if base.GRAD_CLIP_NORM > 0:
             torch.nn.utils.clip_grad_norm_(trainable_params, base.GRAD_CLIP_NORM)
         optimizer.step()
+        global_step = completed_step
         if torch.cuda.is_available():
             torch.cuda.empty_cache()
         print(

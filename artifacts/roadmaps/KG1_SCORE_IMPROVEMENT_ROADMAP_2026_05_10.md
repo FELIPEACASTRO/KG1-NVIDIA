@@ -20,6 +20,8 @@ As evidencias fortes reunidas hoje mostram que ha ganho possivel, mas o ganho co
 | V324+V329 solver/verifier integrado no V336A | `197/315` confirmado | `61/155` | `136/160` | ganho real CPU, ainda nao LoRA puro |
 | V343 solver/verifier expandido sobre baseline V290 | `199/315` confirmado | `63/155` | `136/160` | ganho real CPU, `7` ganhos, `0` perdas; ainda nao LoRA puro |
 | V344 dataset transfer + V340 hard-negative gate | assets validos | dataset cobre `7` regras | replay bit preservado | launcher preference/abstain criado; primeiro launch cancelado por FinOps antes de checkpoint |
+| V344 preference/abstain checkpoint-2 | `192/315` | `56/155` | `136/160` | sem ganho; mudou `7` predicoes mas `0` ganhos e `0` perdas contra baseline |
+| V345 failure audit sobre V344 | diagnostico concluido | `7` ganhos V343 nao transferidos | bit preservado | dataset cobria classes de regra, mas treino nao alterou os IDs-alvo; bloquear repeticao do objetivo |
 | V306/V302 full verifier local | `838/947` potencial | `60/155` | `146/160` | depende de verifier/postprocessor |
 | V335 LoRA mixed trace replay | `190/315` | `56/155` | `134/160` | falhou; cancelado por FinOps |
 | V338B LoRA minimal transfer weak eval | `190/315` | `56/155` | `134/160` | checkpoints 2 e 4 falharam; cancelado por FinOps |
@@ -33,6 +35,12 @@ Atualizacao V338B: a queda de `eval_loss` tambem nao foi evidencia suficiente. O
 Atualizacao V343/V344: o ganho tecnico real subiu de `197/315` para `199/315`, com `equation_transform=63/155`, `bit_manipulation=136/160`, `7` ganhos e `0` perdas. Isso veio de regras CPU verificadas, nao de loss. O proximo HF so pode rodar se o script consumir explicitamente as preferencias/hard negatives e aplicar kill-switch por ACC no primeiro checkpoint.
 
 Atualizacao V344 HF FinOps: o primeiro launch A100 `felipesp1983/6a04fe603308d79117b8f2fb` foi cancelado antes de checkpoint. Nao houve erro de dados, adapter ou ambiente; o problema foi custo/tempo excessivo no `baseline_preference_eval_start max_examples=128`, sem progresso interno. Correcao obrigatoria: reduzir `EVAL_MAX_EXAMPLES` do smoke, imprimir `preference_eval_progress` durante a avaliacao e manter a regra de promocao somente por weak ACC.
+
+Atualizacao V344 HF resultado: o relaunch A100 `felipesp1983/6a0501f03308d79117b8f310` treinou `MAX_STEPS=2` com `lr=1e-09`, gerou `checkpoint-2` e passou para weak eval H200 `felipesp1983/6a0504c43308d79117b8f31f`. Resultado weak: `192/315`, `equation_transform=56/155`, `bit_manipulation=136/160`, `truncated=0`. Comparacao linha a linha contra o baseline V290 checkpoint-6: `7` predicoes mudaram (`6` equation, `1` bit), com `0` ganhos e `0` perdas. Decisao: nao promover, nao rodar full eval, nao submeter e nao gastar mais H200 nesse checkpoint.
+
+Atualizacao V345: a auditoria ACC-first confirmou que os `7` ganhos CPU V343 tinham cobertura por classe de regra no dataset V344 (`1000` linhas para cada classe numerica relevante e `1500` para symbolic cryptarithm), mas `0` overlap direto por `id` ou `prompt` com o weak, por desenho anti-leakage. O V344 checkpoint-2 nao mudou a predicao de nenhum dos `7` IDs que o V343 resolveria; as `7` mudancas ocorreram em outros IDs e continuaram incorretas. Diagnostico: repetir o mesmo objetivo de preferencia nao deve ser feito.
+
+Atualizacao trainer preference: foi encontrado um bug objetivo no schedule de LR em `scripts/hf_job_train_v315_preference.py`. O loop incrementava `global_step` antes de calcular `base.get_lr`; com `MAX_STEPS=2`, o primeiro update ja usava `FINAL_LEARNING_RATE=1e-09`. Isso explica por que o log do V344 mostrou `lr=1.000e-09` em todos os steps. Correcao aplicada: calcular LR com o step anterior ao update e so depois marcar o step como concluido.
 
 ## Metas
 
@@ -185,6 +193,36 @@ Status 2026-05-13:
   - limite: `MAX_STEPS=2`, checkpoint unico no step 2, kill-switch por weak ACC.
 - Debug local do launcher passou em `a100-large`, custo `0.041667/min`, imagem `nvcr.io/nvidia/nemo:25.11.nemotron_3_nano`, dados/hashes V344 corretos.
 - Primeiro launch HF A100 V344 `felipesp1983/6a04fe603308d79117b8f2fb` foi cancelado por FinOps antes de checkpoint: ficou sem progresso apos `baseline_preference_eval_start max_examples=128`. Correcao aplicada: `EVAL_MAX_EXAMPLES=8` para smoke e logs `preference_eval_progress` durante a avaliacao.
+- Relaunch HF A100 V344 `felipesp1983/6a0501f03308d79117b8f310` passou pelos gates, treinou `2` steps e fez upload de `checkpoint-2` para `felipesp1983/kg1-nemotron-lora-v344-pref-abstain-a100-v290ckpt6`.
+- Weak eval H200 V344 `felipesp1983/6a0504c43308d79117b8f31f` concluiu:
+  - `192/315`;
+  - `equation_transform=56/155`;
+  - `bit_manipulation=136/160`;
+  - `truncated=0`;
+  - output HF: `evals/v344-h200-v221contract-pref-abstain-checkpoint2-20260513T230852Z`;
+  - commit HF do resultado: `e2c51ca14e4d1ffd5ab3b56a214c8eb1a96973fb`.
+- Diagnostico contra V290 baseline: `7` predicoes mudaram, mas todas continuaram incorretas; portanto a preferencia/abstain V344 nao transferiu nenhum dos `7` ganhos CPU V343 para LoRA.
+- V345 audit implementado em `scripts/analyze_v345_v344_failure_audit.py`.
+- Artefato: `artifacts/v345_v344_failure_audit/20260513T_acc_first/v345_v344_failure_audit_manifest.json`.
+- Resultado V345:
+  - baseline V290: `192/315`, equation `56`, bit `136`;
+  - V343 CPU solver/verifier: `199/315`, equation `63`, bit `136`;
+  - V344 checkpoint-2: `192/315`, equation `56`, bit `136`;
+  - `v343_gain_not_transferred=7`;
+  - `v344_changed_no_accuracy_delta=7`;
+  - nos `7` ganhos V343: `direct_id_count=0`, `prompt_overlap_count=0`, `rule_count>0`, `v344_changed_prediction=false`.
+- Decisao V345: bloquear repeticao de V344 preference objective. Proxima tentativa GPU so pode ser um V346 com sinal de answer exact-match/hard-positive ou LR/schedule mais agressivo e kill-switch no primeiro checkpoint.
+- Bug de LR no trainer de preferencia corrigido em `scripts/hf_job_train_v315_preference.py`: o primeiro update agora usa `LEARNING_RATE`, nao `FINAL_LEARNING_RATE`. Isso permite V346 ser mais ousado sem repetir o erro do V344.
+- V346 answer-exact-match dataset implementado em `scripts/build_v346_answer_exact_match_dataset.py`.
+- Artefatos V346 CPU:
+  - dataset: `artifacts/v346_answer_exact_match_dataset/20260513T_cpu_gate/v346_answer_exact_match_manifest.json`;
+  - treino `1760` linhas, validation `420` linhas;
+  - familias: treino `720` bit + `1040` equation; validation `160` bit + `260` equation;
+  - hashes: train `cb2e244c04b88e4aa81e726a8a89740aa6ab554c07eb8778f6f2d2aa57cb1d34`, val `d9f8f7b7c2f3106f7e2f6bf88a531f0fe895bd7a8b16ea84501c3d2c21897087`;
+  - V286 tokenization gate passou com `boxed_exact`, `prompt_truncation_rate=0.0`, `completion_tokens_dropped=0`, `fallback_masks=0`.
+- Upload HF V346 concluido para `felipesp1983/kg1-nemotron-training`, path `data/v346_answer_exact_match/20260513T_cpu_gate`, commit `9ecf0f758bfb4fd8abf3d2d2f4df235947d30e98`.
+- Launcher V346 criado em `artifacts/v346_hf_a100_answer_exact_match_launch/launch_v346_hf_a100_answer_exact_match.py`.
+- Debug local V346 passou em `a100-large`, imagem `nvcr.io/nvidia/nemo:25.11.nemotron_3_nano`, custo `0.041667/min`, adapter inicial V290 checkpoint-6 presente, dados HF com hash correto. Receita: `MAX_STEPS=6`, `LEARNING_RATE=8e-8`, `FINAL_LEARNING_RATE=2e-8`, answer-span loss `24.0`, checkpoint a cada `2` steps.
 
 ### 4. V338 - Tiny LoRA absorption smoke
 
@@ -318,7 +356,8 @@ Decisao:
 - A correcao dos hard negatives foi necessaria, mas insuficiente para ganho adapter-only.
 - O criterio de promocao volta a ser exclusivamente ACC por familia no weak/full gate.
 - V343 produziu nova evidencia CPU (`199/315`), mas V344/V340 bloqueou GPU ate existir trainer que consuma preferencia/abstain de verdade.
-- Proximo HF GPU fica bloqueado para SFT comum. Ele so e permitido para um launcher V344 especifico com preference/abstain e kill-switch de ACC no primeiro checkpoint.
+- V344 consumiu preference/abstain de verdade, mas com `lr=1e-09` e `2` steps nao moveu ACC. Proximo HF GPU fica bloqueado ate um diagnostico ACC-first provar uma mudanca concreta no desenho do treino; repetir o mesmo launcher, mais epochs ou `eval_loss` menor nao e permitido.
+- V345 provou que o problema nao foi falta bruta de classes sinteticas, e sim transferencia fraca para answer exact-match. A proxima rota deve otimizar diretamente resposta final curta e medir ACC imediatamente.
 
 ## Itens removidos do roadmap ativo
 
@@ -353,15 +392,17 @@ Os itens abaixo ficam apenas no arquivo historico. Eles nao fazem parte do plano
 
 ## Proxima acao unica
 
-Implementar V344 preference/abstain launcher, sem SFT comum:
+Implementar V346 answer-exact-match transfer smoke:
 
-1. Usar somente o dataset V344 que ja passou anti-leakage, tokenization e V340 hard-negative gate.
-2. O launcher precisa consumir `preferences_train_jsonl` e `preferences_val_jsonl`; se consumir apenas SFT, esta bloqueado.
-3. O primeiro checkpoint deve ser avaliado por weak ACC, nao por `eval_loss`.
-4. Continuar somente se:
-   - `total > 192`;
-   - `equation > 56`;
-   - `bit >= 136`;
-   - `truncated=0` ou nao regressivo.
-5. Cancelar por FinOps se o primeiro checkpoint repetir V341/V338B: `190/315`, `equation=56`, `bit=134`, ou se a metrica interna estiver saturada sem ganho de ACC.
-6. Se o launcher nao puder implementar preference/abstain real, voltar para CPU DSL/verifier e nao gastar HF.
+1. Construir dataset minimo apenas com rule classes que V345 mostrou cobertas mas nao transferidas:
+   - `add_direct_over_model_add_variant`;
+   - `minus_direct_negative_restore_sign`;
+   - `minus_signed_opposite_sign_guarded`;
+   - `colon_absdiff_restore_trailing_zero`;
+   - `symbolic_cryptarithm_single_operator_digits_mul`.
+2. Usar resposta final curta, sem CoT longo, priorizando `Final answer: \boxed{...}` e hard negatives so como regularizador leve.
+3. Subir LR/schedule em relacao a V344, porque `1e-09` nao moveu os IDs-alvo; ainda assim manter smoke curto.
+4. Primeiro checkpoint precisa weak eval imediato:
+   - continuar se `total > 192`, `equation > 56`, `bit >= 136`, `truncated=0`;
+   - cancelar se repetir `192/315`, `equation=56`, ou se `bit<136`.
+5. Nao repetir objective V344 de preferencia saturada; se V346 nao mover ACC, voltar para CPU DSL/verifier e encerrar GPU LoRA nessa linha.

@@ -1,0 +1,238 @@
+{
+  "changed_prediction_count": 7,
+  "changed_prediction_ids": [
+    "518deb39",
+    "fdbdf50c",
+    "b06625c4",
+    "b0206bb7",
+    "4ef88f92",
+    "844f826c",
+    "ca5db1c0"
+  ],
+  "dataset_audit": {
+    "direct_id_counts_for_v343_gains": {
+      "274def88": 0,
+      "528ec0d8": 0,
+      "7688e06e": 0,
+      "99d6a3b5": 0,
+      "c5b058d6": 0,
+      "d1bd7478": 0,
+      "fb623471": 0
+    },
+    "metadata_seed_counts_for_v343_gains": {
+      "274def88": 0,
+      "528ec0d8": 0,
+      "7688e06e": 0,
+      "99d6a3b5": 1500,
+      "c5b058d6": 0,
+      "d1bd7478": 0,
+      "fb623471": 0
+    },
+    "preference_rows": 5200,
+    "prompt_overlap_counts_for_v343_gains": {
+      "274def88": 0,
+      "528ec0d8": 0,
+      "7688e06e": 0,
+      "99d6a3b5": 0,
+      "c5b058d6": 0,
+      "d1bd7478": 0,
+      "fb623471": 0
+    },
+    "rule_counts": {
+      "add_direct_over_model_add_variant": 1000,
+      "colon_absdiff_restore_trailing_zero": 1000,
+      "colon_absdiff_unreverse_same_len": 1000,
+      "minus_direct_negative_restore_sign": 1000,
+      "minus_signed_opposite_sign_guarded": 1000,
+      "symbolic_cryptarithm_single_operator_digits_mul": 1500
+    }
+  },
+  "decision": {
+    "decision": "block_repeated_v344_gpu_until_training_signal_changes",
+    "next_action": "Build an ACC-sensitive V346 trainer/gate: either answer-only hard-positive micro-overfit on rule-class synthetic rows with higher LR and immediate weak eval, or return to CPU solver DSL. Do not rerun the same preference objective.",
+    "reason": "V344 checkpoint-2 preserved bit but produced 0 weak gains. The V343 rule classes are covered by synthetic transfer rows, but exact weak rows and prompts are intentionally absent; LR=1e-09 plus saturated preference accuracy did not transfer the rules."
+  },
+  "delta_counts": {
+    "neutral": 301,
+    "v343_gain_not_transferred": 7,
+    "v344_changed_no_accuracy_delta": 7
+  },
+  "delta_counts_by_family": {
+    "bit_manipulation": {
+      "neutral": 159,
+      "v344_changed_no_accuracy_delta": 1
+    },
+    "equation_transform": {
+      "neutral": 142,
+      "v343_gain_not_transferred": 7,
+      "v344_changed_no_accuracy_delta": 6
+    }
+  },
+  "inputs": {
+    "baseline_predictions_csv": "artifacts\\v342_acc_first_diagnostic\\v290_checkpoint6_baseline_predictions.csv",
+    "baseline_predictions_sha256": "910a051d8b8e652e37c0b0814ac59fe4a400b95cb432945b6a0244f97f5b31bf",
+    "v343_candidate_trace_csv": "artifacts\\v343_equation_residual_solver_audit\\20260513T_integrated_on_v290_v3\\v336a_integrated_no_loss_candidate_trace.csv",
+    "v343_candidate_trace_sha256": "dd6bd421f3e78908fa22127037c8ff8e7a06b9bf2362240b20e3992073f6d7ec",
+    "v343_predictions_csv": "artifacts\\v343_equation_residual_solver_audit\\20260513T_integrated_on_v290_v3\\v336a_integrated_no_loss_predictions.csv",
+    "v343_predictions_sha256": "5ceaef012326b29af7a52e21485f78254719622107d0884d4cdacbc735d9f330",
+    "v344_dataset_jsonl": [
+      "artifacts\\v344_v343_transfer_dataset\\20260513T_minimal_transfer_v343\\v344_v343_minimal_transfer_preferences_train.jsonl",
+      "artifacts\\v344_v343_transfer_dataset\\20260513T_minimal_transfer_v343\\v344_v343_minimal_transfer_preferences_val.jsonl",
+      "artifacts\\v344_v343_transfer_dataset\\20260513T_minimal_transfer_v343\\v344_v343_minimal_transfer_train.jsonl",
+      "artifacts\\v344_v343_transfer_dataset\\20260513T_minimal_transfer_v343\\v344_v343_minimal_transfer_val.jsonl"
+    ],
+    "v344_dataset_sha256": {
+      "artifacts\\v344_v343_transfer_dataset\\20260513T_minimal_transfer_v343\\v344_v343_minimal_transfer_preferences_train.jsonl": "cd2c3021731ff141173cd05bed51cb3086320ce4996cd5a55b8e38b678cfee90",
+      "artifacts\\v344_v343_transfer_dataset\\20260513T_minimal_transfer_v343\\v344_v343_minimal_transfer_preferences_val.jsonl": "c9fe097ccebfeb9de895abda139688bb0256bcc00f35fb1fd292f53fdbce23a2",
+      "artifacts\\v344_v343_transfer_dataset\\20260513T_minimal_transfer_v343\\v344_v343_minimal_transfer_train.jsonl": "cab6b8370f2208c3e3fa954527967683be06639d7c556ae7697077d1d2bf8e03",
+      "artifacts\\v344_v343_transfer_dataset\\20260513T_minimal_transfer_v343\\v344_v343_minimal_transfer_val.jsonl": "a2df22315cbd837d6b15c9ff646d76fb7b8d8e3930485ac0b02677b9ed9c87cc"
+    },
+    "v344_predictions_csv": "\\\\?\\C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v344_hf_a100_preference_abstain_launch\\downloaded_eval\\evals\\v344-h200-v221contract-pref-abstain-checkpoint2-20260513T230852Z\\eval\\v344_pref_abstain_checkpoint_2_v221_contract\\v344_pref_abstain_hf_weak_v344_pref_abstain_checkpoint_2_v221_contract_predictions.csv",
+    "v344_predictions_sha256": "4dafaa47ced097e9ad51dfaa2954ca327c6966350da8d325eba5d35f8bc1557b"
+  },
+  "outputs": {
+    "changed_predictions_csv": "artifacts\\v345_v344_failure_audit\\20260513T_acc_first\\v345_v344_changed_predictions.csv",
+    "manifest_json": "artifacts\\v345_v344_failure_audit\\20260513T_acc_first\\v345_v344_failure_audit_manifest.json",
+    "row_comparison_csv": "artifacts\\v345_v344_failure_audit\\20260513T_acc_first\\v345_v344_failure_row_comparison.csv",
+    "v343_gains_not_transferred_csv": "artifacts\\v345_v344_failure_audit\\20260513T_acc_first\\v345_v343_gains_not_transferred.csv"
+  },
+  "schema_version": "kg1_v345_v344_failure_audit_v1",
+  "summaries": {
+    "baseline_adapter_only": {
+      "accuracy": 0.6095238095238096,
+      "correct": 192,
+      "family": {
+        "bit_manipulation": {
+          "correct": 136,
+          "rows": 160,
+          "truncated": 0
+        },
+        "equation_transform": {
+          "correct": 56,
+          "rows": 155,
+          "truncated": 0
+        }
+      },
+      "rows": 315,
+      "truncated": 0
+    },
+    "v343_cpu_solver_verifier": {
+      "accuracy": 0.6317460317460317,
+      "correct": 199,
+      "family": {
+        "bit_manipulation": {
+          "correct": 136,
+          "rows": 160,
+          "truncated": 0
+        },
+        "equation_transform": {
+          "correct": 63,
+          "rows": 155,
+          "truncated": 0
+        }
+      },
+      "rows": 315,
+      "truncated": 0
+    },
+    "v344_preference_abstain_checkpoint2": {
+      "accuracy": 0.6095238095238096,
+      "correct": 192,
+      "family": {
+        "bit_manipulation": {
+          "correct": 136,
+          "rows": 160,
+          "truncated": 0
+        },
+        "equation_transform": {
+          "correct": 56,
+          "rows": 155,
+          "truncated": 0
+        }
+      },
+      "rows": 315,
+      "truncated": 0
+    }
+  },
+  "v343_gain_count": 7,
+  "v343_gain_coverage": {
+    "274def88": {
+      "direct_id_count": 0,
+      "metadata_seed_count": 0,
+      "normalized_rule": "minus_signed_opposite_sign_guarded",
+      "prompt_overlap_count": 0,
+      "rule_class": "v274_guarded_numeric_minus_signed_opposite_sign_guarded",
+      "rule_count": 1000,
+      "v344_changed_prediction": false,
+      "v344_correct": false
+    },
+    "528ec0d8": {
+      "direct_id_count": 0,
+      "metadata_seed_count": 0,
+      "normalized_rule": "minus_direct_negative_restore_sign",
+      "prompt_overlap_count": 0,
+      "rule_class": "v274_guarded_numeric_minus_direct_negative_restore_sign",
+      "rule_count": 1000,
+      "v344_changed_prediction": false,
+      "v344_correct": false
+    },
+    "7688e06e": {
+      "direct_id_count": 0,
+      "metadata_seed_count": 0,
+      "normalized_rule": "minus_signed_opposite_sign_guarded",
+      "prompt_overlap_count": 0,
+      "rule_class": "v274_guarded_numeric_minus_signed_opposite_sign_guarded",
+      "rule_count": 1000,
+      "v344_changed_prediction": false,
+      "v344_correct": false
+    },
+    "99d6a3b5": {
+      "direct_id_count": 0,
+      "metadata_seed_count": 1500,
+      "normalized_rule": "symbolic_cryptarithm_single_operator_digits_mul",
+      "prompt_overlap_count": 0,
+      "rule_class": "symbolic_cryptarithm_single_operator_digits_mul",
+      "rule_count": 1500,
+      "v344_changed_prediction": false,
+      "v344_correct": false
+    },
+    "c5b058d6": {
+      "direct_id_count": 0,
+      "metadata_seed_count": 0,
+      "normalized_rule": "add_direct_over_model_add_variant",
+      "prompt_overlap_count": 0,
+      "rule_class": "v274_guarded_numeric_add_direct_over_model_add_variant",
+      "rule_count": 1000,
+      "v344_changed_prediction": false,
+      "v344_correct": false
+    },
+    "d1bd7478": {
+      "direct_id_count": 0,
+      "metadata_seed_count": 0,
+      "normalized_rule": "colon_absdiff_restore_trailing_zero",
+      "prompt_overlap_count": 0,
+      "rule_class": "v274_guarded_numeric_colon_absdiff_restore_trailing_zero",
+      "rule_count": 1000,
+      "v344_changed_prediction": false,
+      "v344_correct": false
+    },
+    "fb623471": {
+      "direct_id_count": 0,
+      "metadata_seed_count": 0,
+      "normalized_rule": "minus_direct_negative_restore_sign",
+      "prompt_overlap_count": 0,
+      "rule_class": "v274_guarded_numeric_minus_direct_negative_restore_sign",
+      "rule_count": 1000,
+      "v344_changed_prediction": false,
+      "v344_correct": false
+    }
+  },
+  "v343_gain_ids": [
+    "99d6a3b5",
+    "7688e06e",
+    "274def88",
+    "fb623471",
+    "528ec0d8",
+    "d1bd7478",
+    "c5b058d6"
+  ]
+}

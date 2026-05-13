@@ -1,0 +1,14 @@
+{
+  "dataset_dir": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v346_answer_exact_match_dataset\\20260513T_cpu_gate",
+  "dataset_repo": "felipesp1983/kg1-nemotron-training",
+  "generated_at_utc": "2026-05-13T23:34:24.382894+00:00",
+  "hashes": {
+    "train_sha256": "cb2e244c04b88e4aa81e726a8a89740aa6ab554c07eb8778f6f2d2aa57cb1d34",
+    "val_sha256": "d9f8f7b7c2f3106f7e2f6bf88a531f0fe895bd7a8b16ea84501c3d2c21897087"
+  },
+  "manifest_json": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v346_answer_exact_match_dataset\\20260513T_cpu_gate\\v346_answer_exact_match_manifest.json",
+  "path_in_repo": "data/v346_answer_exact_match/20260513T_cpu_gate",
+  "tokenization_gate_manifest": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v346_answer_exact_match_dataset\\20260513T_cpu_gate\\tokenization_gate_real\\v286_generic_tokenization_gate_manifest.json",
+  "upload": "https://huggingface.co/datasets/felipesp1983/kg1-nemotron-training/commit/9ecf0f758bfb4fd8abf3d2d2f4df235947d30e98",
+  "version": "v346_answer_exact_match_hf_upload"
+}
