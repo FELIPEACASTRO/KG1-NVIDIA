@@ -1,0 +1,324 @@
+{
+  "assets_valid": true,
+  "baseline": {
+    "bit_manipulation_correct": 136,
+    "correct": 192,
+    "equation_transform_correct": 56
+  },
+  "candidate_trace": {
+    "accepted_ids": [
+      "274def88",
+      "528ec0d8",
+      "7688e06e",
+      "99d6a3b5",
+      "c5b058d6",
+      "d1bd7478",
+      "fb623471"
+    ],
+    "accepted_rows": 7,
+    "accepted_rule_classes": {
+      "symbolic_cryptarithm_single_operator_digits_mul": 1,
+      "v274_guarded_numeric_add_direct_over_model_add_variant": 1,
+      "v274_guarded_numeric_colon_absdiff_restore_trailing_zero": 1,
+      "v274_guarded_numeric_minus_direct_negative_restore_sign": 2,
+      "v274_guarded_numeric_minus_signed_opposite_sign_guarded": 2
+    },
+    "accepted_subtypes": {
+      "equation_numeric_operator": 6,
+      "equation_symbolic_punct": 1
+    },
+    "gain_rows": 7,
+    "loss_rows": 0,
+    "rows": 7,
+    "sha256": "dd6bd421f3e78908fa22127037c8ff8e7a06b9bf2362240b20e3992073f6d7ec"
+  },
+  "decision": {
+    "decision": "v340_preference_assets_valid_preference_trainer_required_smoke_allowed",
+    "hf_gpu_allowed": true,
+    "next_action": "Run a tiny preference-training smoke with strict first-checkpoint FinOps kill-switch.",
+    "preference_training_allowed": true,
+    "reason": "CPU assets passed and a preference trainer launcher exists. Only a tiny preference smoke is allowed; first-checkpoint kill-switch remains total>192, equation>56, bit>=136."
+  },
+  "generated_at_utc": "2026-05-13T22:40:15.561382+00:00",
+  "inputs": {
+    "allow_derived_preferences": true,
+    "candidate_trace_csv": "artifacts\\v343_equation_residual_solver_audit\\20260513T_integrated_on_v290_v3\\v336a_integrated_no_loss_candidate_trace.csv",
+    "candidate_trace_sha256": "dd6bd421f3e78908fa22127037c8ff8e7a06b9bf2362240b20e3992073f6d7ec",
+    "expected_accepted_candidates": 7,
+    "expected_train_bit_rows": 720,
+    "expected_train_equation_rows": 1040,
+    "expected_v336a": {
+      "bit_manipulation_correct": 136,
+      "correct": 199,
+      "equation_transform_correct": 63,
+      "loss_count": 0
+    },
+    "expected_val_bit_rows": 160,
+    "expected_val_equation_rows": 260,
+    "min_hard_negative_train": 650,
+    "min_hard_negative_val": 170,
+    "preference_launcher": "artifacts\\v344_hf_a100_preference_abstain_launch\\launch_v344_hf_a100_preference_abstain.py",
+    "preference_launcher_exists": true,
+    "preferences_train_jsonl": "artifacts\\v344_v343_transfer_dataset\\20260513T_minimal_transfer_v343\\v344_v343_minimal_transfer_preferences_train.jsonl",
+    "preferences_train_sha256": "cd2c3021731ff141173cd05bed51cb3086320ce4996cd5a55b8e38b678cfee90",
+    "preferences_val_jsonl": "artifacts\\v344_v343_transfer_dataset\\20260513T_minimal_transfer_v343\\v344_v343_minimal_transfer_preferences_val.jsonl",
+    "preferences_val_sha256": "c9fe097ccebfeb9de895abda139688bb0256bcc00f35fb1fd292f53fdbce23a2",
+    "tokenization_manifest_json": "artifacts\\v344_v343_transfer_dataset\\20260513T_minimal_transfer_v343\\tokenization_gate_real\\v286_generic_tokenization_gate_manifest.json",
+    "tokenization_manifest_sha256": "2491839dacbb8479caaba3343c859851c90513e1bcda3dda3f6205ee854b5f70",
+    "train_jsonl": "artifacts\\v344_v343_transfer_dataset\\20260513T_minimal_transfer_v343\\v344_v343_minimal_transfer_train.jsonl",
+    "train_sha256": "cab6b8370f2208c3e3fa954527967683be06639d7c556ae7697077d1d2bf8e03",
+    "v336a_manifest_json": "artifacts\\v343_equation_residual_solver_audit\\20260513T_integrated_on_v290_v3\\v336a_integrated_no_loss_solver_gate_manifest.json",
+    "v336a_manifest_sha256": "60cec1af59a28e541b4318fe008d0cc206d8a07770f09c598ab92b9f2082fab1",
+    "v337d_manifest_json": "artifacts\\v344_v343_transfer_dataset\\20260513T_minimal_transfer_v343\\v344_v343_minimal_transfer_manifest.json",
+    "v337d_manifest_sha256": "05471b6beb34b949bccdcbf80fef5849531c8de31302d0570ef87c65964c35f4",
+    "val_jsonl": "artifacts\\v344_v343_transfer_dataset\\20260513T_minimal_transfer_v343\\v344_v343_minimal_transfer_val.jsonl",
+    "val_sha256": "a2df22315cbd837d6b15c9ff646d76fb7b8d8e3930485ac0b02677b9ed9c87cc"
+  },
+  "outputs": {
+    "manifest_json": "artifacts\\v344_v343_transfer_dataset\\20260513T_hard_negative_gate_with_launcher\\v344_v343_hard_negative_abstain_gate_manifest.json",
+    "summary_md": "artifacts\\v344_v343_transfer_dataset\\20260513T_hard_negative_gate_with_launcher\\v344_v343_hard_negative_abstain_gate_summary.md"
+  },
+  "preference_audit": {
+    "train": {
+      "chosen_box_count_distribution": {
+        "1": 4160
+      },
+      "family_counts": {
+        "equation_transform": 4160
+      },
+      "format_negative_count": 3120,
+      "hard_negative_same_box_count": 0,
+      "hard_negative_wrong_box_count": 1040,
+      "issue_count": 0,
+      "issue_examples": [],
+      "negative_type_counts": {
+        "format_negative_multiple_boxes": 1040,
+        "format_negative_no_box": 1040,
+        "format_negative_trailing_text": 1040,
+        "hard_negative_equation_near_miss": 1040
+      },
+      "rejected_box_count_distribution": {
+        "0": 1040,
+        "1": 2080,
+        "2": 1040
+      },
+      "rows": 4160,
+      "rule_class_counts": {
+        "add_direct_over_model_add_variant": 640,
+        "colon_absdiff_restore_trailing_zero": 640,
+        "colon_absdiff_unreverse_same_len": 640,
+        "minus_direct_negative_restore_sign": 640,
+        "minus_signed_opposite_sign_guarded": 640,
+        "symbolic_cryptarithm_single_operator_digits_mul": 960
+      },
+      "sha256": "cd2c3021731ff141173cd05bed51cb3086320ce4996cd5a55b8e38b678cfee90",
+      "source_counts": {
+        "v325_equation_no_loss_distill": 3200,
+        "v330_symbolic_cryptarithm_distill": 960
+      },
+      "unique_ids": 4160,
+      "unique_source_rows": 1040
+    },
+    "validation": {
+      "chosen_box_count_distribution": {
+        "1": 1040
+      },
+      "family_counts": {
+        "equation_transform": 1040
+      },
+      "format_negative_count": 780,
+      "hard_negative_same_box_count": 0,
+      "hard_negative_wrong_box_count": 260,
+      "issue_count": 0,
+      "issue_examples": [],
+      "negative_type_counts": {
+        "format_negative_multiple_boxes": 260,
+        "format_negative_no_box": 260,
+        "format_negative_trailing_text": 260,
+        "hard_negative_equation_near_miss": 260
+      },
+      "rejected_box_count_distribution": {
+        "0": 260,
+        "1": 520,
+        "2": 260
+      },
+      "rows": 1040,
+      "rule_class_counts": {
+        "add_direct_over_model_add_variant": 160,
+        "colon_absdiff_restore_trailing_zero": 160,
+        "colon_absdiff_unreverse_same_len": 160,
+        "minus_direct_negative_restore_sign": 160,
+        "minus_signed_opposite_sign_guarded": 160,
+        "symbolic_cryptarithm_single_operator_digits_mul": 240
+      },
+      "sha256": "c9fe097ccebfeb9de895abda139688bb0256bcc00f35fb1fd292f53fdbce23a2",
+      "source_counts": {
+        "v325_equation_no_loss_distill": 800,
+        "v330_symbolic_cryptarithm_distill": 240
+      },
+      "unique_ids": 1040,
+      "unique_source_rows": 260
+    }
+  },
+  "rule_coverage": {
+    "accepted_rules": [
+      "symbolic_cryptarithm_single_operator_digits_mul",
+      "v274_guarded_numeric_add_direct_over_model_add_variant",
+      "v274_guarded_numeric_colon_absdiff_restore_trailing_zero",
+      "v274_guarded_numeric_minus_direct_negative_restore_sign",
+      "v274_guarded_numeric_minus_signed_opposite_sign_guarded"
+    ],
+    "accepted_rules_covered_by_preferences": [
+      "add_direct_over_model_add_variant",
+      "colon_absdiff_restore_trailing_zero",
+      "cryptarithm_single_operator_digits_mul",
+      "minus_direct_negative_restore_sign",
+      "minus_signed_opposite_sign_guarded"
+    ],
+    "accepted_rules_covered_by_sft": [
+      "add_direct_over_model_add_variant",
+      "colon_absdiff_restore_trailing_zero",
+      "cryptarithm_single_operator_digits_mul",
+      "minus_direct_negative_restore_sign",
+      "minus_signed_opposite_sign_guarded"
+    ],
+    "accepted_rules_missing_from_preferences": [],
+    "accepted_rules_missing_from_sft": [],
+    "normalized_accepted_rules": [
+      "add_direct_over_model_add_variant",
+      "colon_absdiff_restore_trailing_zero",
+      "cryptarithm_single_operator_digits_mul",
+      "minus_direct_negative_restore_sign",
+      "minus_signed_opposite_sign_guarded"
+    ],
+    "preference_rules": [
+      "add_direct_over_model_add_variant",
+      "colon_absdiff_restore_trailing_zero",
+      "colon_absdiff_unreverse_same_len",
+      "minus_direct_negative_restore_sign",
+      "minus_signed_opposite_sign_guarded",
+      "symbolic_cryptarithm_single_operator_digits_mul"
+    ],
+    "sft_rules": [
+      "",
+      "add_direct_over_model_add_variant",
+      "colon_absdiff_restore_trailing_zero",
+      "colon_absdiff_unreverse_same_len",
+      "minus_direct_negative_restore_sign",
+      "minus_signed_opposite_sign_guarded",
+      "symbolic_cryptarithm_single_operator_digits_mul"
+    ]
+  },
+  "schema_version": "kg1_v340_hard_negative_abstain_gate_v1",
+  "sft_audit": {
+    "train": {
+      "component_counts": {
+        "v325_equation_numeric_no_loss": 800,
+        "v330_symbolic_cryptarithm_no_loss": 240,
+        "v337d_v217_bit_replay": 720
+      },
+      "family_counts": {
+        "bit_manipulation": 720,
+        "equation_transform": 1040
+      },
+      "rows": 1760,
+      "rule_class_counts": {
+        "": 720,
+        "add_direct_over_model_add_variant": 160,
+        "colon_absdiff_restore_trailing_zero": 160,
+        "colon_absdiff_unreverse_same_len": 160,
+        "minus_direct_negative_restore_sign": 160,
+        "minus_signed_opposite_sign_guarded": 160,
+        "symbolic_cryptarithm_single_operator_digits_mul": 240
+      },
+      "sha256": "cab6b8370f2208c3e3fa954527967683be06639d7c556ae7697077d1d2bf8e03",
+      "source_counts": {
+        "v325_equation_no_loss_distill": 800,
+        "v330_symbolic_cryptarithm_distill": 240,
+        "v337d_v217_bit_replay": 720
+      },
+      "subcategory_counts": {
+        "bit_manipulation": 168,
+        "equation_numeric_add_direct": 160,
+        "equation_numeric_colon_absdiff": 160,
+        "equation_numeric_colon_trailing_zero": 160,
+        "equation_numeric_minus_direct_negative": 160,
+        "equation_numeric_minus_signed": 160,
+        "equation_symbolic_cryptarithm_single_operator_mul": 240,
+        "unknown": 552
+      },
+      "unique_ids": 1760,
+      "unique_prompt_hashes": 1760
+    },
+    "validation": {
+      "component_counts": {
+        "v325_equation_numeric_no_loss": 200,
+        "v330_symbolic_cryptarithm_no_loss": 60,
+        "v337d_v217_bit_replay": 160
+      },
+      "family_counts": {
+        "bit_manipulation": 160,
+        "equation_transform": 260
+      },
+      "rows": 420,
+      "rule_class_counts": {
+        "": 160,
+        "add_direct_over_model_add_variant": 40,
+        "colon_absdiff_restore_trailing_zero": 40,
+        "colon_absdiff_unreverse_same_len": 40,
+        "minus_direct_negative_restore_sign": 40,
+        "minus_signed_opposite_sign_guarded": 40,
+        "symbolic_cryptarithm_single_operator_digits_mul": 60
+      },
+      "sha256": "a2df22315cbd837d6b15c9ff646d76fb7b8d8e3930485ac0b02677b9ed9c87cc",
+      "source_counts": {
+        "v325_equation_no_loss_distill": 200,
+        "v330_symbolic_cryptarithm_distill": 60,
+        "v337d_v217_bit_replay": 160
+      },
+      "subcategory_counts": {
+        "bit_manipulation": 54,
+        "equation_numeric_add_direct": 40,
+        "equation_numeric_colon_absdiff": 40,
+        "equation_numeric_colon_trailing_zero": 40,
+        "equation_numeric_minus_direct_negative": 40,
+        "equation_numeric_minus_signed": 40,
+        "equation_symbolic_cryptarithm_single_operator_mul": 60,
+        "unknown": 106
+      },
+      "unique_ids": 420,
+      "unique_prompt_hashes": 420
+    }
+  },
+  "tokenization_gate": {
+    "status": "tokenization_gate_passed",
+    "train_prompt_truncation_rate": 0.0,
+    "train_rows": 1760,
+    "validation_prompt_truncation_rate": 0.0,
+    "validation_rows": 420
+  },
+  "v336a_signal": {
+    "accepted_candidate_count": 7,
+    "bit_manipulation_correct": 136,
+    "correct": 199,
+    "equation_transform_correct": 63,
+    "loss_count": 0
+  },
+  "v338b_observed_weak_eval": [
+    {
+      "bit_manipulation_correct": 134,
+      "checkpoint": "checkpoint-2",
+      "correct": 190,
+      "equation_transform_correct": 56,
+      "truncated": 1
+    },
+    {
+      "bit_manipulation_correct": 134,
+      "checkpoint": "checkpoint-4",
+      "correct": 190,
+      "equation_transform_correct": 56,
+      "truncated": 0
+    }
+  ],
+  "validation_issues": []
+}

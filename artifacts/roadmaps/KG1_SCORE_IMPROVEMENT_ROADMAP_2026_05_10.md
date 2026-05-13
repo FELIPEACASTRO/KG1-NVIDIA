@@ -174,6 +174,14 @@ Status 2026-05-13:
   - anti-leakage: `id_overlap=0`, `prompt_overlap=0`;
   - V286 tokenization gate passou com `prompt_truncation_rate=0.0`, `completion_tokens_dropped=0`, `fallback_masks=0`.
 - V340 hard-negative gate sobre V344 passou nos assets, mas bloqueou GPU porque ainda falta launcher de preference/abstain real.
+- Upload HF V344 concluido para `felipesp1983/kg1-nemotron-training`, path `data/v344_v343_minimal_transfer/20260513T_minimal_transfer_v343`, commit `6df9a5c7f997f4b0da61fa9a1eb7871449a77d7e`.
+- Launcher V344 criado em `artifacts/v344_hf_a100_preference_abstain_launch/launch_v344_hf_a100_preference_abstain.py`.
+- V340 reexecutado com o launcher V344 passou e liberou apenas smoke curto:
+  - `assets_valid=True`;
+  - `preference_training_allowed=True`;
+  - `hf_gpu_allowed=True`;
+  - limite: `MAX_STEPS=2`, checkpoint unico no step 2, kill-switch por weak ACC.
+- Debug local do launcher passou em `a100-large`, custo `0.041667/min`, imagem `nvcr.io/nvidia/nemo:25.11.nemotron_3_nano`, dados/hashes V344 corretos.
 
 ### 4. V338 - Tiny LoRA absorption smoke
 
