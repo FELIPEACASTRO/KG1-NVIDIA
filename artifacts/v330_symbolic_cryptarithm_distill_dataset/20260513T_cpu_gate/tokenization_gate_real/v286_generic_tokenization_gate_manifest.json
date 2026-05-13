@@ -1,0 +1,132 @@
+{
+  "blocked_actions": [
+    "full_eval",
+    "package",
+    "kaggle_submit"
+  ],
+  "config": {
+    "assistant_final_answer_mode": "boxed_suffix",
+    "max_length": 4096,
+    "max_prompt_truncation_rate": 0.0,
+    "min_train_rows": 240,
+    "min_val_rows": 60,
+    "require_offset_mask": true
+  },
+  "dataset_manifest_json": "artifacts\\v330_symbolic_cryptarithm_distill_dataset\\20260513T_cpu_gate\\v330_symbolic_cryptarithm_distill_manifest.json",
+  "dataset_manifest_sha256": "21b5e69d6dcdaa1609af39dbb640e077d6c4e5cc2a7a56fe85267eff2c22cb30",
+  "decision": {
+    "next_action": "Only consider a tiny HF smoke train if roadmap risk/budget gates approve it.",
+    "reason": "train_rows=240; val_rows=60; train_token_max=349; val_token_max=341; completion_truncation=0",
+    "status": "tokenization_gate_passed"
+  },
+  "generated_at_utc": "2026-05-13T15:15:51.631534+00:00",
+  "model_name": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+  "model_revision": "cbd3fa9f933d55ef16a84236559f4ee2a0526848",
+  "outputs": {
+    "manifest_json": "artifacts\\v330_symbolic_cryptarithm_distill_dataset\\20260513T_cpu_gate\\tokenization_gate_real\\v286_generic_tokenization_gate_manifest.json"
+  },
+  "schema_version": "kg1_v286_generic_tokenization_gate_v1",
+  "tokenization": {
+    "train": {
+      "completion_tokens_dropped": 0,
+      "fallback_masks": 0,
+      "family_summary": {
+        "equation_transform": {
+          "loss_token_max": 199,
+          "loss_token_min": 179,
+          "loss_token_p50": 190,
+          "rows": 240,
+          "token_max": 349,
+          "token_p50": 325,
+          "token_p90": 337,
+          "token_p99": 346
+        }
+      },
+      "loss_token_max": 199,
+      "loss_token_min": 179,
+      "loss_token_p50": 190,
+      "offset_masks": 240,
+      "prompt_truncated": 0,
+      "prompt_truncation_rate": 0.0,
+      "rows": 240,
+      "token_max": 349,
+      "token_mean": 325.858,
+      "token_min": 308,
+      "token_p50": 325,
+      "token_p90": 337,
+      "token_p99": 346
+    },
+    "validation": {
+      "completion_tokens_dropped": 0,
+      "fallback_masks": 0,
+      "family_summary": {
+        "equation_transform": {
+          "loss_token_max": 199,
+          "loss_token_min": 182,
+          "loss_token_p50": 190,
+          "rows": 60,
+          "token_max": 341,
+          "token_p50": 326,
+          "token_p90": 337,
+          "token_p99": 340
+        }
+      },
+      "loss_token_max": 199,
+      "loss_token_min": 182,
+      "loss_token_p50": 190,
+      "offset_masks": 60,
+      "prompt_truncated": 0,
+      "prompt_truncation_rate": 0.0,
+      "rows": 60,
+      "token_max": 341,
+      "token_mean": 326.05,
+      "token_min": 307,
+      "token_p50": 326,
+      "token_p90": 337,
+      "token_p99": 340
+    }
+  },
+  "tokenizer_info": {
+    "class": "TokenizersBackend",
+    "eos_token": "<|im_end|>",
+    "is_fast": true,
+    "pad_token": "<|im_end|>",
+    "toy": false
+  },
+  "validation": {
+    "train": {
+      "family_counts": {
+        "equation_transform": 240
+      },
+      "prompt_answer_hash_count": 240,
+      "prompt_hash_count": 240,
+      "rows": 240,
+      "sha256_expected": "5dc407b627ba246a49c1177251c077b583e520941d92bfe354225eac531a0e30",
+      "source_counts": {
+        "v330_symbolic_cryptarithm_distill": 240
+      },
+      "subcategory_counts": {
+        "equation_symbolic_cryptarithm_single_operator_mul": 240
+      },
+      "unique_ids": 240
+    },
+    "train_val_prompt_answer_overlap": 0,
+    "train_val_prompt_overlap": 0,
+    "validation": {
+      "family_counts": {
+        "equation_transform": 60
+      },
+      "prompt_answer_hash_count": 60,
+      "prompt_hash_count": 60,
+      "rows": 60,
+      "sha256_expected": "1462f154c178c7cf87e28f945f57927099c1f34130eede8ef411afa50b75cf66",
+      "source_counts": {
+        "v330_symbolic_cryptarithm_distill": 60
+      },
+      "subcategory_counts": {
+        "equation_symbolic_cryptarithm_single_operator_mul": 60
+      },
+      "unique_ids": 60
+    }
+  }
+}

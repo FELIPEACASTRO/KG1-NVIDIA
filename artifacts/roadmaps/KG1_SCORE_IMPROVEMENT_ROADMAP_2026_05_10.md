@@ -6285,3 +6285,56 @@ Decisao:
 - Nao autoriza Kaggle submit nem novo HF GPU isolado.
 - Proximo passo obrigatorio: V330 deve gerar linhas de distilacao apenas para `symbolic_cryptarithm_single_operator_digits_mul`, com hard negatives e replay forte de bit; depois rodar tokenization/no-regression gate.
 - Kill-switch de qualquer HF posterior: parar no primeiro checkpoint se `equation` continuar em `56` ou se `bit<136`.
+
+### V330 symbolic cryptarithm distillation dataset - 2026-05-13
+
+Objetivo:
+
+- Transformar o unico ganho novo do V329 em dados SFT sinteticos fora do weak/full, sem treinar diretamente no puzzle `99d6a3b5`.
+- Manter a autorizacao HF bloqueada ate existir dataset misto com replay de bit e gate de nao-regressao.
+
+Implementacao:
+
+- Script: `scripts/build_v330_symbolic_cryptarithm_distill_dataset.py`.
+- Artefatos: `artifacts/v330_symbolic_cryptarithm_distill_dataset/20260513T_cpu_gate/`.
+- Fonte de regra: V329 `symbolic_cryptarithm_single_operator_digits_mul`.
+- Linhas geradas:
+  - train: `240` linhas `equation_transform`;
+  - validation: `60` linhas `equation_transform`;
+  - preferences: `960` train e `240` validation com hard negatives/format negatives.
+- Anti-leakage:
+  - `reference_id_count=947`;
+  - `reference_prompt_hash_count=947`;
+  - `reference_id_overlap=0`;
+  - `reference_prompt_overlap=0`;
+  - `weak_gate_rows_used_for_training=false`;
+  - `full_gate_rows_used_for_training=false`;
+  - `v329_seed_rows_used_for_training=false`.
+- Prova por linha: todas as `300` linhas SFT foram revalidadas pelo mesmo CP-SAT V329 antes da escrita.
+
+Gates executados:
+
+- `python -m py_compile scripts/build_v330_symbolic_cryptarithm_distill_dataset.py`: ok.
+- `python scripts/build_v330_symbolic_cryptarithm_distill_dataset.py --self-test`: ok.
+- Tokenization gate V286 com tokenizer toy:
+  - status `tokenization_gate_passed`;
+  - train token max `805`;
+  - validation token max `805`;
+  - completion truncation `0`.
+- Tokenization gate V286 com tokenizer real `nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16` revision `cbd3fa9f933d55ef16a84236559f4ee2a0526848`:
+  - status `tokenization_gate_passed`;
+  - train token max `349`;
+  - validation token max `341`;
+  - completion truncation `0`;
+  - offset masks completos.
+
+Decisao:
+
+- V330 e um dataset valido e auditado para o sinal simbolico novo, mas ainda nao deve ser treinado sozinho.
+- Proximo passo: construir V331 como dataset misto `V304 bit replay + V325 numeric equation + V330 symbolic cryptarithm`, com pesos conservadores para preservar `bit>=136`.
+- HF GPU so fica autorizado para smoke curto se V331 passar:
+  - tokenization/offset-mask gate real;
+  - no train/val overlap;
+  - no weak/full leakage;
+  - plano de kill-switch no primeiro checkpoint.
+- Gate de sucesso do primeiro checkpoint HF: `equation>56`, `bit>=136`, truncation `0`, total `>=192`. Se `equation` continuar `56` ou `bit<136`, encerrar o job.

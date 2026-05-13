@@ -1,0 +1,111 @@
+{
+  "generated_at_utc": "2026-05-13T15:14:52.631456+00:00",
+  "label": "v330_symbolic_cryptarithm_distill",
+  "outputs": {
+    "manifest_json": "artifacts\\v330_symbolic_cryptarithm_distill_dataset\\20260513T_cpu_gate\\v330_symbolic_cryptarithm_distill_manifest.json",
+    "preferences_train_jsonl": "artifacts\\v330_symbolic_cryptarithm_distill_dataset\\20260513T_cpu_gate\\v330_symbolic_cryptarithm_distill_preferences_train.jsonl",
+    "preferences_train_sha256": "1fd3ba5dfc3b23867f431eca2a40aa0645cf07835922b81797766ccd6c439bca",
+    "preferences_val_jsonl": "artifacts\\v330_symbolic_cryptarithm_distill_dataset\\20260513T_cpu_gate\\v330_symbolic_cryptarithm_distill_preferences_val.jsonl",
+    "preferences_val_sha256": "d9ecfc740c62085676c32b2c564cd61ff00635bdbed53367c7b57a55715842a2",
+    "train_jsonl": "artifacts\\v330_symbolic_cryptarithm_distill_dataset\\20260513T_cpu_gate\\v330_symbolic_cryptarithm_distill_sft_train.jsonl",
+    "train_sha256": "5dc407b627ba246a49c1177251c077b583e520941d92bfe354225eac531a0e30",
+    "val_jsonl": "artifacts\\v330_symbolic_cryptarithm_distill_dataset\\20260513T_cpu_gate\\v330_symbolic_cryptarithm_distill_sft_val.jsonl",
+    "val_sha256": "1462f154c178c7cf87e28f945f57927099c1f34130eede8ef411afa50b75cf66"
+  },
+  "reference_summary": [
+    {
+      "path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v290_rank19_micro_patch_reference\\runtime_artifacts\\v245_weak_eval_bridge\\v245-weak-bridge-hfonly-20260510T1950Z\\v221_weak_315.csv",
+      "rows": 315,
+      "sha256": "85da758e14d57ea40270de5747f98726a0ad0b6d1795bff7dd46183005e0f9b6"
+    },
+    {
+      "path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v293_gap_mining\\inputs\\v291_full_predictions.csv",
+      "rows": 947,
+      "sha256": "d9634ea15cb55e17bbfb90229f1cdbfd9b0f5a4cdba0d61848e6f746393dde20"
+    }
+  ],
+  "required_next_gate": [
+    "scripts/run_v286_generic_tokenization_gate.py --assistant-final-answer-mode boxed_suffix",
+    "build a mixed replay dataset with V304/V325/V330 before HF",
+    "weak no-regression gate: bit>=136 equation>=61 total>=197"
+  ],
+  "schema_version": "kg1_v330_symbolic_cryptarithm_distill_dataset_v1",
+  "seed": 330,
+  "source_gate": {
+    "accepted_candidate_ids": [
+      "99d6a3b5"
+    ],
+    "projected_equation_correct": 61,
+    "projected_weak_correct_if_equation_only": 197
+  },
+  "train_preference_summary": {
+    "negative_type_counts": {
+      "format_negative_multiple_boxes": 240,
+      "format_negative_no_box": 240,
+      "format_negative_trailing_text": 240,
+      "hard_negative_equation_near_miss": 240
+    },
+    "rows": 960
+  },
+  "train_summary": {
+    "family_counts": {
+      "equation_transform": 240
+    },
+    "operator_counts": {
+      "%": 41,
+      "*": 32,
+      "+": 45,
+      "-": 40,
+      "/": 39,
+      ":": 43
+    },
+    "reference_id_overlap": 0,
+    "reference_prompt_overlap": 0,
+    "rows": 240,
+    "solver_validated_rows": 240,
+    "subcategory_counts": {
+      "equation_symbolic_cryptarithm_single_operator_mul": 240
+    },
+    "unique_ids": 240,
+    "unique_prompt_hashes": 240
+  },
+  "training_authorization": "blocked_until_tokenization_gate_and_no_regression_mixed_dataset",
+  "v329_decision": {
+    "decision": "symbolic_cryptarithm_cpu_gate_found_new_signal",
+    "next_action": "Build V330 distillation rows for this cryptarithm rule, then run tokenization/no-regression gates before any HF job.",
+    "reason": "new_symbolic_gain=1; v324_gain=4; combined_gain=5; projected_equation_correct=61; bit_correct_guardrail=136>=136; conflicts=0"
+  },
+  "v329_manifest_json": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v329_symbolic_cryptarithm_gate\\20260513T_cpu_gate_r2\\v329_symbolic_cryptarithm_manifest.json",
+  "v329_manifest_sha256": "555a2944d3fbc5f085b699a19f567f2f2cbe1a0507d3c2a31832badcb079ad69",
+  "validation_preference_summary": {
+    "negative_type_counts": {
+      "format_negative_multiple_boxes": 60,
+      "format_negative_no_box": 60,
+      "format_negative_trailing_text": 60,
+      "hard_negative_equation_near_miss": 60
+    },
+    "rows": 240
+  },
+  "validation_summary": {
+    "family_counts": {
+      "equation_transform": 60
+    },
+    "operator_counts": {
+      "%": 13,
+      "*": 12,
+      "+": 14,
+      "-": 9,
+      "/": 7,
+      ":": 5
+    },
+    "reference_id_overlap": 0,
+    "reference_prompt_overlap": 0,
+    "rows": 60,
+    "solver_validated_rows": 60,
+    "subcategory_counts": {
+      "equation_symbolic_cryptarithm_single_operator_mul": 60
+    },
+    "unique_ids": 60,
+    "unique_prompt_hashes": 60
+  }
+}
