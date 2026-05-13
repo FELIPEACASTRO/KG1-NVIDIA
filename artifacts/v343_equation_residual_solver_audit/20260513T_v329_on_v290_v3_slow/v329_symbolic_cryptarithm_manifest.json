@@ -1,0 +1,139 @@
+{
+  "baseline_family_counts": {
+    "bit_manipulation": {
+      "correct": 136,
+      "rows": 160,
+      "truncated": 0
+    },
+    "equation_transform": {
+      "correct": 56,
+      "rows": 155,
+      "truncated": 0
+    }
+  },
+  "combined_accepted_candidate_count": 7,
+  "combined_accepted_candidate_ids": [
+    "274def88",
+    "528ec0d8",
+    "7688e06e",
+    "c5b058d6",
+    "d1bd7478",
+    "fb623471",
+    "99d6a3b5"
+  ],
+  "conflict_count": 0,
+  "decision": {
+    "decision": "symbolic_cryptarithm_cpu_gate_found_new_signal",
+    "next_action": "Build V330 distillation rows for this cryptarithm rule, then run tokenization/no-regression gates before any HF job.",
+    "reason": "new_symbolic_gain=1; v324_gain=6; combined_gain=7; projected_equation_correct=63; bit_correct_guardrail=136>=136; conflicts=0"
+  },
+  "expected_shared_row_contract_sha256": "bf055e3b9ebce79d4bfc9e48bce5a305b1d83da882f14afddec80d6afaba5fff",
+  "generated_at_utc": "2026-05-13T22:21:25.014394+00:00",
+  "input": {
+    "path": "artifacts\\v342_acc_first_diagnostic\\v290_checkpoint6_baseline_predictions.csv",
+    "rows": 315,
+    "sha256": "910a051d8b8e652e37c0b0814ac59fe4a400b95cb432945b6a0244f97f5b31bf",
+    "source": "local_csv"
+  },
+  "new_accepted_candidate_count": 1,
+  "new_accepted_candidate_ids": [
+    "99d6a3b5"
+  ],
+  "observed_shared_row_contract_sha256": "bf055e3b9ebce79d4bfc9e48bce5a305b1d83da882f14afddec80d6afaba5fff",
+  "outputs": {
+    "accepted_candidates_csv": "artifacts\\v343_equation_residual_solver_audit\\20260513T_v329_on_v290_v3_slow\\v329_symbolic_cryptarithm_accepted_candidates.csv",
+    "audit_csv": "artifacts\\v343_equation_residual_solver_audit\\20260513T_v329_on_v290_v3_slow\\v329_symbolic_cryptarithm_audit.csv",
+    "conflicts_csv": "artifacts\\v343_equation_residual_solver_audit\\20260513T_v329_on_v290_v3_slow\\v329_symbolic_cryptarithm_conflicts.csv",
+    "manifest_json": "artifacts\\v343_equation_residual_solver_audit\\20260513T_v329_on_v290_v3_slow\\v329_symbolic_cryptarithm_manifest.json",
+    "rule_summary_csv": "artifacts\\v343_equation_residual_solver_audit\\20260513T_v329_on_v290_v3_slow\\v329_symbolic_cryptarithm_rule_summary.csv"
+  },
+  "projected_equation_correct": 63,
+  "projected_weak_correct_if_equation_only": 199,
+  "rule_summary": [
+    {
+      "abstain_rows": 0,
+      "candidate_rows": 1,
+      "incorrect_candidates": 0,
+      "promotable_after_class_gate": true,
+      "rows": 1,
+      "rule_class": "symbolic_cryptarithm_single_operator_digits_mul",
+      "verified_candidates": 1
+    },
+    {
+      "abstain_rows": 2,
+      "candidate_rows": 3,
+      "incorrect_candidates": 2,
+      "promotable_after_class_gate": false,
+      "rows": 5,
+      "rule_class": "symbolic_cryptarithm_multi_operator_digits_mul",
+      "verified_candidates": 1
+    },
+    {
+      "abstain_rows": 2,
+      "candidate_rows": 3,
+      "incorrect_candidates": 2,
+      "promotable_after_class_gate": false,
+      "rows": 5,
+      "rule_class": "symbolic_cryptarithm_multi_operator_digits_add",
+      "verified_candidates": 1
+    },
+    {
+      "abstain_rows": 72,
+      "candidate_rows": 0,
+      "incorrect_candidates": 0,
+      "promotable_after_class_gate": false,
+      "rows": 72,
+      "rule_class": "symbolic_cryptarithm_operator_digits",
+      "verified_candidates": 0
+    },
+    {
+      "abstain_rows": 3,
+      "candidate_rows": 0,
+      "incorrect_candidates": 0,
+      "promotable_after_class_gate": false,
+      "rows": 3,
+      "rule_class": "symbolic_cryptarithm_gate",
+      "verified_candidates": 0
+    },
+    {
+      "abstain_rows": 0,
+      "candidate_rows": 2,
+      "incorrect_candidates": 2,
+      "promotable_after_class_gate": false,
+      "rows": 2,
+      "rule_class": "symbolic_cryptarithm_multi_operator_digits_sub_ba",
+      "verified_candidates": 0
+    },
+    {
+      "abstain_rows": 1,
+      "candidate_rows": 2,
+      "incorrect_candidates": 2,
+      "promotable_after_class_gate": false,
+      "rows": 3,
+      "rule_class": "symbolic_cryptarithm_multi_operator_digits_sub_ab",
+      "verified_candidates": 0
+    },
+    {
+      "abstain_rows": 1,
+      "candidate_rows": 4,
+      "incorrect_candidates": 4,
+      "promotable_after_class_gate": false,
+      "rows": 5,
+      "rule_class": "symbolic_cryptarithm_multi_operator_digits_abs_diff",
+      "verified_candidates": 0
+    }
+  ],
+  "schema_version": "kg1_v329_symbolic_cryptarithm_gate_v1",
+  "symbolic_equation_miss_rows": 83,
+  "v324_accepted_candidate_count": 6,
+  "v324_accepted_candidate_ids": [
+    "274def88",
+    "528ec0d8",
+    "7688e06e",
+    "c5b058d6",
+    "d1bd7478",
+    "fb623471"
+  ],
+  "v324_manifest_json": "artifacts\\v343_equation_residual_solver_audit\\20260513T_v324_on_v290_v3\\v324_equation_expanded_solver_manifest.json",
+  "v324_manifest_sha256": "996557a7e4ce45ab2ad4ca3d3b6ddb929e1de5b29d5551101bdae6a2edf818db"
+}

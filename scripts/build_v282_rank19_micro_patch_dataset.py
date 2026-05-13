@@ -169,6 +169,32 @@ def build_minus_signed(rng: random.Random, index: int, split: str) -> dict[str, 
     )
 
 
+def build_minus_direct_negative_restore_sign(rng: random.Random, index: int, split: str) -> dict[str, Any]:
+    examples: list[tuple[str, str]] = []
+    seen: set[str] = set()
+    while len(examples) < 4:
+        a, b = rand_pair(rng)
+        lhs = f"{fmt2(a)}-{fmt2(b)}"
+        if lhs in seen:
+            continue
+        seen.add(lhs)
+        examples.append((lhs, str(a - b)))
+    qa, qb = rand_pair(rng)
+    if qa > qb:
+        qa, qb = qb, qa
+    answer = str(qa - qb)
+    prompt = alice_prompt(examples, f"{fmt2(qa)}-{fmt2(qb)}")
+    return make_row(
+        row_id=f"v282_{split}_minus_direct_negative_{index:05d}",
+        prompt=prompt,
+        answer=answer,
+        split=split,
+        source="v282_v343_rule_synthetic",
+        subcategory="equation_numeric_minus_direct_negative",
+        rule_name="minus_direct_negative_restore_sign",
+    )
+
+
 def build_colon_absdiff(rng: random.Random, index: int, split: str) -> dict[str, Any]:
     examples: list[tuple[str, str]] = []
     seen: set[str] = set()
@@ -190,6 +216,32 @@ def build_colon_absdiff(rng: random.Random, index: int, split: str) -> dict[str,
         source="v282_v274_rule_synthetic",
         subcategory="equation_numeric_colon_absdiff",
         rule_name="colon_absdiff_unreverse_same_len",
+    )
+
+
+def build_colon_absdiff_restore_trailing_zero(rng: random.Random, index: int, split: str) -> dict[str, Any]:
+    examples: list[tuple[str, str]] = []
+    seen: set[str] = set()
+    while len(examples) < 4:
+        a, b = rand_pair(rng)
+        lhs = f"{fmt2(a)}:{fmt2(b)}"
+        if lhs in seen:
+            continue
+        seen.add(lhs)
+        examples.append((lhs, str(abs(a - b))))
+    qa, qb = rand_pair(rng)
+    while abs(qa - qb) % 10 != 0 or qa == qb:
+        qa, qb = rand_pair(rng)
+    answer = str(abs(qa - qb))
+    prompt = alice_prompt(examples, f"{fmt2(qa)}:{fmt2(qb)}")
+    return make_row(
+        row_id=f"v282_{split}_colon_trailing_zero_{index:05d}",
+        prompt=prompt,
+        answer=answer,
+        split=split,
+        source="v282_v343_rule_synthetic",
+        subcategory="equation_numeric_colon_trailing_zero",
+        rule_name="colon_absdiff_restore_trailing_zero",
     )
 
 

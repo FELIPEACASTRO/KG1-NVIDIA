@@ -199,10 +199,22 @@ def choose_guarded_numeric_override(examples: list[tuple[str, str]], query: str,
         return None, "not_all_numeric_examples", "one or more examples are not numeric binary expressions"
     grouped, op_sequence = grouped_result
     query_op = parsed_query[1]
+    base = normalize_payload(model_prediction)
+    if query_op == "-":
+        query_left, _, query_right = parsed_query
+        try:
+            direct_difference = int(query_left) - int(query_right)
+        except ValueError:
+            direct_difference = 0
+        direct_candidate = str(direct_difference)
+        if direct_candidate.startswith("-") and base == direct_candidate[1:]:
+            return (
+                direct_candidate,
+                "minus_direct_negative_restore_sign",
+                f"candidate={direct_candidate}; baseline={model_prediction}",
+            )
     if query_op not in grouped:
         return None, "query_operator_unseen", f"query_op={query_op!r} not present in examples"
-
-    base = normalize_payload(model_prediction)
     group = grouped[query_op]
 
     if query_op == "-":
@@ -235,6 +247,24 @@ def choose_guarded_numeric_override(examples: list[tuple[str, str]], query: str,
         predictions = sorted(set(same_len_unreversed))
         if len(predictions) == 1:
             return predictions[0], "colon_absdiff_unreverse_same_len", f"candidate={predictions[0]}; baseline={model_prediction}"
+        direct_unreversed = sorted(
+            {
+                normalize_payload(item["prediction"])
+                for item in abs_family
+                if not item["reverse_operands"] and not item["reverse_result"]
+            }
+        )
+        trailing_zero_restore = [
+            prediction
+            for prediction in direct_unreversed
+            if prediction.endswith("0") and (prediction.rstrip("0") or "0") == base and prediction != base
+        ]
+        if len(trailing_zero_restore) == 1:
+            return (
+                trailing_zero_restore[0],
+                "colon_absdiff_restore_trailing_zero",
+                f"candidate={trailing_zero_restore[0]}; baseline={model_prediction}",
+            )
         return None, "colon_no_unique_unreverse", f"candidate_predictions={predictions}"
 
     if query_op in {")", "+"}:

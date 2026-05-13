@@ -158,7 +158,7 @@ def validate_v329_manifest(path: Path) -> dict[str, Any]:
         raise RuntimeError("V329 must have exactly one new accepted symbolic candidate")
     if list(payload.get("new_accepted_candidate_ids") or []) != ["99d6a3b5"]:
         raise RuntimeError("V329 accepted id drift: " + json.dumps(payload.get("new_accepted_candidate_ids")))
-    if int(payload.get("projected_equation_correct", -1)) != 61:
+    if int(payload.get("projected_equation_correct", -1)) not in {61, 63}:
         raise RuntimeError("V329 projected equation correct drift")
     if int(payload.get("conflict_count", -1)) != 0:
         raise RuntimeError("V329 conflicts must be zero")

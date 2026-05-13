@@ -1,0 +1,9 @@
+rule_class,rows,candidate_rows,verified_candidates,incorrect_candidates,abstain_rows,promotable_after_class_gate
+symbolic_cryptarithm_single_operator_digits_mul,1,1,1,0,0,True
+symbolic_cryptarithm_multi_operator_digits_mul,5,3,1,2,2,False
+symbolic_cryptarithm_multi_operator_digits_add,5,3,1,2,2,False
+symbolic_cryptarithm_operator_digits,72,0,0,0,72,False
+symbolic_cryptarithm_gate,3,0,0,0,3,False
+symbolic_cryptarithm_multi_operator_digits_sub_ba,2,2,0,2,0,False
+symbolic_cryptarithm_multi_operator_digits_sub_ab,3,2,0,2,1,False
+symbolic_cryptarithm_multi_operator_digits_abs_diff,5,4,0,4,1,False

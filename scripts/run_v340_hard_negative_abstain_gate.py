@@ -68,7 +68,7 @@ EXPECTED_BASELINE = {
     "equation_transform_correct": 56,
     "bit_manipulation_correct": 136,
 }
-EXPECTED_V336A = {
+DEFAULT_EXPECTED_V336A = {
     "correct": 197,
     "equation_transform_correct": 61,
     "bit_manipulation_correct": 136,
@@ -168,7 +168,7 @@ def normalize_rule_class(rule: str) -> str:
     return value
 
 
-def assert_v336a(path: Path) -> dict[str, Any]:
+def assert_v336a(path: Path, expected: dict[str, int]) -> dict[str, Any]:
     payload = read_json(path)
     if payload.get("schema_version") != "kg1_v336a_integrated_no_loss_solver_gate_v1":
         raise RuntimeError("unexpected V336A schema: " + str(payload.get("schema_version")))
@@ -182,8 +182,8 @@ def assert_v336a(path: Path) -> dict[str, Any]:
         "bit_manipulation_correct": int(family.get("bit_manipulation", {}).get("correct", -1)),
         "loss_count": int(integrated.get("loss_count", -1)),
     }
-    if observed != EXPECTED_V336A:
-        raise RuntimeError(f"V336A expected {EXPECTED_V336A}, got {observed}")
+    if observed != expected:
+        raise RuntimeError(f"V336A expected {expected}, got {observed}")
     return payload
 
 
@@ -469,7 +469,13 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
     print("output_dir =", args.output_dir, flush=True)
 
     args.output_dir.mkdir(parents=True, exist_ok=True)
-    v336a = assert_v336a(args.v336a_manifest_json)
+    expected_v336a = {
+        "correct": args.expected_v336a_correct,
+        "equation_transform_correct": args.expected_v336a_equation,
+        "bit_manipulation_correct": args.expected_v336a_bit,
+        "loss_count": args.expected_v336a_loss_count,
+    }
+    v336a = assert_v336a(args.v336a_manifest_json, expected_v336a)
     v337d = assert_v337d(args.v337d_manifest_json)
     tokenization = assert_tokenization(args.tokenization_manifest_json)
     manifest_hash_paths = {
@@ -493,16 +499,20 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
     coverage = compare_rule_coverage(trace_summary, train_summary, pref_train_summary)
 
     validation_issues: list[str] = []
-    if trace_summary["accepted_rows"] != 5 or trace_summary["gain_rows"] != 5 or trace_summary["loss_rows"] != 0:
+    if (
+        trace_summary["accepted_rows"] != args.expected_accepted_candidates
+        or trace_summary["gain_rows"] != args.expected_accepted_candidates
+        or trace_summary["loss_rows"] != 0
+    ):
         validation_issues.append("unexpected_v336a_candidate_trace_counts")
-    if train_summary["family_counts"].get("bit_manipulation") != 720:
-        validation_issues.append("train_bit_replay_not_720")
-    if train_summary["family_counts"].get("equation_transform") != 720:
-        validation_issues.append("train_equation_not_720")
-    if val_summary["family_counts"].get("bit_manipulation") != 160:
-        validation_issues.append("validation_bit_replay_not_160")
-    if val_summary["family_counts"].get("equation_transform") != 180:
-        validation_issues.append("validation_equation_not_180")
+    if train_summary["family_counts"].get("bit_manipulation") != args.expected_train_bit_rows:
+        validation_issues.append("train_bit_replay_unexpected_count")
+    if train_summary["family_counts"].get("equation_transform") != args.expected_train_equation_rows:
+        validation_issues.append("train_equation_unexpected_count")
+    if val_summary["family_counts"].get("bit_manipulation") != args.expected_val_bit_rows:
+        validation_issues.append("validation_bit_replay_unexpected_count")
+    if val_summary["family_counts"].get("equation_transform") != args.expected_val_equation_rows:
+        validation_issues.append("validation_equation_unexpected_count")
     if pref_train_summary["negative_type_counts"].get("hard_negative_equation_near_miss", 0) < args.min_hard_negative_train:
         validation_issues.append("preference_train_hard_negative_below_min")
     if pref_val_summary["negative_type_counts"].get("hard_negative_equation_near_miss", 0) < args.min_hard_negative_val:
@@ -584,6 +594,12 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             "allow_derived_preferences": args.allow_derived_preferences,
             "min_hard_negative_train": args.min_hard_negative_train,
             "min_hard_negative_val": args.min_hard_negative_val,
+            "expected_v336a": expected_v336a,
+            "expected_accepted_candidates": args.expected_accepted_candidates,
+            "expected_train_bit_rows": args.expected_train_bit_rows,
+            "expected_train_equation_rows": args.expected_train_equation_rows,
+            "expected_val_bit_rows": args.expected_val_bit_rows,
+            "expected_val_equation_rows": args.expected_val_equation_rows,
         },
         "baseline": EXPECTED_BASELINE,
         "v336a_signal": {
@@ -662,6 +678,23 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument("--min-hard-negative-train", type=int, default=650)
     parser.add_argument("--min-hard-negative-val", type=int, default=170)
+    parser.add_argument("--expected-v336a-correct", type=int, default=DEFAULT_EXPECTED_V336A["correct"])
+    parser.add_argument(
+        "--expected-v336a-equation",
+        type=int,
+        default=DEFAULT_EXPECTED_V336A["equation_transform_correct"],
+    )
+    parser.add_argument(
+        "--expected-v336a-bit",
+        type=int,
+        default=DEFAULT_EXPECTED_V336A["bit_manipulation_correct"],
+    )
+    parser.add_argument("--expected-v336a-loss-count", type=int, default=DEFAULT_EXPECTED_V336A["loss_count"])
+    parser.add_argument("--expected-accepted-candidates", type=int, default=5)
+    parser.add_argument("--expected-train-bit-rows", type=int, default=720)
+    parser.add_argument("--expected-train-equation-rows", type=int, default=720)
+    parser.add_argument("--expected-val-bit-rows", type=int, default=160)
+    parser.add_argument("--expected-val-equation-rows", type=int, default=180)
     parser.add_argument(
         "--output-dir",
         type=Path,

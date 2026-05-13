@@ -1,0 +1,317 @@
+{
+  "component_normalization": {
+    "bit_train": {
+      "available_bit_rows": 2695,
+      "eligible_bit_rows": 2695,
+      "normalization": {
+        "replaced_final_answer_suffix": 720
+      },
+      "path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\data\\v217\\v217_short_answer_train.jsonl",
+      "selected_bit_rows": 720,
+      "skipped_id_overlap": 0,
+      "skipped_prompt_overlap": 0
+    },
+    "bit_validation": {
+      "available_bit_rows": 164,
+      "eligible_bit_rows": 164,
+      "normalization": {
+        "replaced_final_answer_suffix": 160
+      },
+      "path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\data\\v217\\v217_short_answer_val.jsonl",
+      "selected_bit_rows": 160,
+      "skipped_id_overlap": 0,
+      "skipped_prompt_overlap": 0
+    },
+    "v325_train": {
+      "replaced_final_answer_suffix": 800
+    },
+    "v325_validation": {
+      "replaced_final_answer_suffix": 200
+    },
+    "v330_train": {
+      "replaced_final_answer_suffix": 240
+    },
+    "v330_validation": {
+      "replaced_final_answer_suffix": 60
+    }
+  },
+  "dedupe": {
+    "train": {
+      "duplicate_ids": 0,
+      "duplicate_prompts": 0
+    },
+    "validation": {
+      "duplicate_ids": 0,
+      "duplicate_prompts": 0
+    }
+  },
+  "generated_at_utc": "2026-05-13T22:26:31.768518+00:00",
+  "inputs": {
+    "v217_train_jsonl": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\data\\v217\\v217_short_answer_train.jsonl",
+    "v217_train_sha256": "a56938b1ae9eb471b779ebfc415ee88c05322941732128752680317495157984",
+    "v217_val_jsonl": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\data\\v217\\v217_short_answer_val.jsonl",
+    "v217_val_sha256": "65c4cb88b8ff2fc96940ccea33b8ca493769790c7ae80d27f2b69ac818fc6451",
+    "v325_manifest_json": "artifacts\\v344_v343_transfer_dataset\\20260513T_v325_equation_v343\\v344_v343_equation_no_loss_distill_manifest.json",
+    "v325_manifest_sha256": "90a736aeff1b9fdad465f177cff2bb53239567746fcbe4dfec9f205dd8b0dafb",
+    "v330_manifest_json": "artifacts\\v344_v343_transfer_dataset\\20260513T_v330_symbolic_v343\\v344_v343_symbolic_cryptarithm_distill_manifest.json",
+    "v330_manifest_sha256": "f922c0a0ddb87bbd85abd777961cca8c2571700d4b188a8eed038367902e25b8",
+    "v336a_manifest_json": "artifacts\\v343_equation_residual_solver_audit\\20260513T_integrated_on_v290_v3\\v336a_integrated_no_loss_solver_gate_manifest.json",
+    "v336a_manifest_sha256": "60cec1af59a28e541b4318fe008d0cc206d8a07770f09c598ab92b9f2082fab1",
+    "v336b_manifest_json": "artifacts\\v343_equation_residual_solver_audit\\20260513T_package_permission_v3\\v336b_package_permission_gate_manifest.json",
+    "v336b_manifest_sha256": "cb2cce663cba868bd997bcf111eabf6b23d9a5039d89a7f8f866beafb766893b"
+  },
+  "label": "v344_v343_minimal_transfer",
+  "outputs": {
+    "manifest_json": "artifacts\\v344_v343_transfer_dataset\\20260513T_minimal_transfer_v343\\v344_v343_minimal_transfer_manifest.json",
+    "preferences_train_jsonl": "artifacts\\v344_v343_transfer_dataset\\20260513T_minimal_transfer_v343\\v344_v343_minimal_transfer_preferences_train.jsonl",
+    "preferences_train_sha256": "cd2c3021731ff141173cd05bed51cb3086320ce4996cd5a55b8e38b678cfee90",
+    "preferences_val_jsonl": "artifacts\\v344_v343_transfer_dataset\\20260513T_minimal_transfer_v343\\v344_v343_minimal_transfer_preferences_val.jsonl",
+    "preferences_val_sha256": "c9fe097ccebfeb9de895abda139688bb0256bcc00f35fb1fd292f53fdbce23a2",
+    "train_jsonl": "artifacts\\v344_v343_transfer_dataset\\20260513T_minimal_transfer_v343\\v344_v343_minimal_transfer_train.jsonl",
+    "train_sha256": "cab6b8370f2208c3e3fa954527967683be06639d7c556ae7697077d1d2bf8e03",
+    "val_jsonl": "artifacts\\v344_v343_transfer_dataset\\20260513T_minimal_transfer_v343\\v344_v343_minimal_transfer_val.jsonl",
+    "val_sha256": "a2df22315cbd837d6b15c9ff646d76fb7b8d8e3930485ac0b02677b9ed9c87cc"
+  },
+  "preference_summary": {
+    "train": {
+      "negative_type_counts": {
+        "format_negative_multiple_boxes": 1040,
+        "format_negative_no_box": 1040,
+        "format_negative_trailing_text": 1040,
+        "hard_negative_equation_near_miss": 1040
+      },
+      "rows": 4160,
+      "sha256": "cd2c3021731ff141173cd05bed51cb3086320ce4996cd5a55b8e38b678cfee90"
+    },
+    "validation": {
+      "negative_type_counts": {
+        "format_negative_multiple_boxes": 260,
+        "format_negative_no_box": 260,
+        "format_negative_trailing_text": 260,
+        "hard_negative_equation_near_miss": 260
+      },
+      "rows": 1040,
+      "sha256": "c9fe097ccebfeb9de895abda139688bb0256bcc00f35fb1fd292f53fdbce23a2"
+    }
+  },
+  "reference_summary": [
+    {
+      "exists": true,
+      "path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v290_rank19_micro_patch_reference\\runtime_artifacts\\v245_weak_eval_bridge\\v245-weak-bridge-hfonly-20260510T1950Z\\v221_weak_315.csv",
+      "rows": 315,
+      "sha256": "85da758e14d57ea40270de5747f98726a0ad0b6d1795bff7dd46183005e0f9b6"
+    },
+    {
+      "exists": true,
+      "path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v293_gap_mining\\inputs\\v291_full_predictions.csv",
+      "rows": 947,
+      "sha256": "d9634ea15cb55e17bbfb90229f1cdbfd9b0f5a4cdba0d61848e6f746393dde20"
+    }
+  ],
+  "required_next_gate": [
+    "scripts/run_v286_generic_tokenization_gate.py --assistant-final-answer-mode boxed_suffix",
+    "HF smoke only; first checkpoint kill-switch: total>192, equation>56, bit>=136",
+    "no full eval/package/submit until adapter-only weak gate improves without family regression"
+  ],
+  "schema_version": "kg1_v337d_minimal_transfer_dataset_v1",
+  "seed": 337,
+  "source_gate": {
+    "v325_source_gate": {
+      "accepted_candidate_ids": [
+        "274def88",
+        "528ec0d8",
+        "7688e06e",
+        "c5b058d6",
+        "d1bd7478",
+        "fb623471"
+      ]
+    },
+    "v330_source_gate": {
+      "accepted_candidate_ids": [
+        "99d6a3b5"
+      ],
+      "projected_equation_correct": 63,
+      "projected_weak_correct_if_equation_only": 199
+    },
+    "v336a_decision": {
+      "decision": "v336a_cpu_integrated_no_loss_gate_passed",
+      "hf_gpu_allowed": false,
+      "next_action": "Run V336B package-permission gate before any package, submit, or HF GPU training.",
+      "reason": "integrated=199/315; equation=63/155; bit=136/160; gains=7; losses=0"
+    },
+    "v336a_integrated": {
+      "accepted_candidate_count": 7,
+      "accepted_candidate_ids": [
+        "274def88",
+        "528ec0d8",
+        "7688e06e",
+        "99d6a3b5",
+        "c5b058d6",
+        "d1bd7478",
+        "fb623471"
+      ],
+      "candidate_source_summary": [
+        {
+          "accepted_rows": 1,
+          "rule_class": "v274_guarded_numeric_add_direct_over_model_add_variant",
+          "source_gate": "v324_equation_expanded_solver_gate"
+        },
+        {
+          "accepted_rows": 1,
+          "rule_class": "v274_guarded_numeric_colon_absdiff_restore_trailing_zero",
+          "source_gate": "v324_equation_expanded_solver_gate"
+        },
+        {
+          "accepted_rows": 2,
+          "rule_class": "v274_guarded_numeric_minus_direct_negative_restore_sign",
+          "source_gate": "v324_equation_expanded_solver_gate"
+        },
+        {
+          "accepted_rows": 2,
+          "rule_class": "v274_guarded_numeric_minus_signed_opposite_sign_guarded",
+          "source_gate": "v324_equation_expanded_solver_gate"
+        },
+        {
+          "accepted_rows": 1,
+          "rule_class": "symbolic_cryptarithm_single_operator_digits_mul",
+          "source_gate": "v329_symbolic_cryptarithm_gate"
+        }
+      ],
+      "correct": 199,
+      "family_counts": {
+        "bit_manipulation": {
+          "correct": 136,
+          "rows": 160,
+          "truncated": 0
+        },
+        "equation_transform": {
+          "correct": 63,
+          "rows": 155,
+          "truncated": 0
+        }
+      },
+      "family_summary": [
+        {
+          "baseline_correct": 136,
+          "baseline_truncated": 0,
+          "delta_correct": 0,
+          "family": "bit_manipulation",
+          "integrated_correct": 136,
+          "integrated_truncated": 0,
+          "rows": 160
+        },
+        {
+          "baseline_correct": 56,
+          "baseline_truncated": 0,
+          "delta_correct": 7,
+          "family": "equation_transform",
+          "integrated_correct": 63,
+          "integrated_truncated": 0,
+          "rows": 155
+        }
+      ],
+      "gain_count": 7,
+      "gain_ids": [
+        "99d6a3b5",
+        "7688e06e",
+        "274def88",
+        "fb623471",
+        "528ec0d8",
+        "d1bd7478",
+        "c5b058d6"
+      ],
+      "loss_count": 0,
+      "loss_ids": [],
+      "rejected_candidate_count": 0
+    },
+    "v336b_decision": {
+      "adapter_only_required": true,
+      "decision": "solver_verifier_direct_package_blocked_adapter_only_required",
+      "direct_solver_package_allowed": false,
+      "hf_gpu_allowed": false,
+      "next_action": "Proceed to V337D minimal transfer dataset; do not submit solver/verifier package.",
+      "reason": "Official extracted pages require submission.zip containing a rank<=32 LoRA adapter; the valid local package contains only adapter_config.json and adapter_model.safetensors; the package script rejects prediction_postprocessor, keeps Kaggle submit hard-locked, and the reference package rank is <=32. V336A gain must be transferred into adapter-only behavior before Kaggle submit."
+    }
+  },
+  "source_policy": {
+    "bit_rows": "balanced V217 bit replay slice with reference-overlap filtering",
+    "equation_rows": "V325 numeric no-loss and V330 symbolic cryptarithm only",
+    "excluded": [
+      "V304 broad equation replay",
+      "V335 broad mixed replay",
+      "weak/full gate rows as train rows"
+    ],
+    "final_answer_format": "boxed_suffix",
+    "purpose": "minimal adapter-only transfer after direct solver package was blocked",
+    "weak_or_full_gate_rows_used_for_training": false
+  },
+  "train_val_overlap": {
+    "id_overlap": 0,
+    "prompt_overlap": 0
+  },
+  "training_authorization": "blocked_until_v286_boxed_suffix_tokenization_gate",
+  "validation": {
+    "train": {
+      "component_counts": {
+        "v325_equation_numeric_no_loss": 800,
+        "v330_symbolic_cryptarithm_no_loss": 240,
+        "v337d_v217_bit_replay": 720
+      },
+      "family_counts": {
+        "bit_manipulation": 720,
+        "equation_transform": 1040
+      },
+      "reference_id_overlap": 0,
+      "reference_prompt_overlap": 0,
+      "rows": 1760,
+      "source_counts": {
+        "v325_equation_no_loss_distill": 800,
+        "v330_symbolic_cryptarithm_distill": 240,
+        "v337d_v217_bit_replay": 720
+      },
+      "subcategory_counts": {
+        "bit_manipulation": 168,
+        "equation_numeric_add_direct": 160,
+        "equation_numeric_colon_absdiff": 160,
+        "equation_numeric_colon_trailing_zero": 160,
+        "equation_numeric_minus_direct_negative": 160,
+        "equation_numeric_minus_signed": 160,
+        "equation_symbolic_cryptarithm_single_operator_mul": 240,
+        "unknown": 552
+      },
+      "unique_ids": 1760,
+      "unique_prompt_hashes": 1760
+    },
+    "validation": {
+      "component_counts": {
+        "v325_equation_numeric_no_loss": 200,
+        "v330_symbolic_cryptarithm_no_loss": 60,
+        "v337d_v217_bit_replay": 160
+      },
+      "family_counts": {
+        "bit_manipulation": 160,
+        "equation_transform": 260
+      },
+      "reference_id_overlap": 0,
+      "reference_prompt_overlap": 0,
+      "rows": 420,
+      "source_counts": {
+        "v325_equation_no_loss_distill": 200,
+        "v330_symbolic_cryptarithm_distill": 60,
+        "v337d_v217_bit_replay": 160
+      },
+      "subcategory_counts": {
+        "bit_manipulation": 54,
+        "equation_numeric_add_direct": 40,
+        "equation_numeric_colon_absdiff": 40,
+        "equation_numeric_colon_trailing_zero": 40,
+        "equation_numeric_minus_direct_negative": 40,
+        "equation_numeric_minus_signed": 40,
+        "equation_symbolic_cryptarithm_single_operator_mul": 60,
+        "unknown": 106
+      },
+      "unique_ids": 420,
+      "unique_prompt_hashes": 420
+    }
+  }
+}

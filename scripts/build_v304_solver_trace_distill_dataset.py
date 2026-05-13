@@ -136,9 +136,9 @@ def bit_trace(prompt: str, answer: str, rule_name: str) -> str:
 def equation_rule_value(rule_name: str, left: str, right: str) -> str:
     a = int(left)
     b = int(right)
-    if rule_name == "minus_signed_opposite_sign_guarded":
+    if rule_name in {"minus_signed_opposite_sign_guarded", "minus_direct_negative_restore_sign"}:
         return str(a - b)
-    if rule_name == "colon_absdiff_unreverse_same_len":
+    if rule_name in {"colon_absdiff_unreverse_same_len", "colon_absdiff_restore_trailing_zero"}:
         return str(abs(a - b))
     if rule_name == "add_direct_over_model_add_variant":
         return str(a + b)
@@ -148,8 +148,12 @@ def equation_rule_value(rule_name: str, left: str, right: str) -> str:
 def equation_rule_description(rule_name: str) -> str:
     if rule_name == "minus_signed_opposite_sign_guarded":
         return "For this '-' operator, compute left minus right and preserve the sign."
+    if rule_name == "minus_direct_negative_restore_sign":
+        return "For this '-' operator, compute left minus right; if the result is negative, keep the minus sign."
     if rule_name == "colon_absdiff_unreverse_same_len":
         return "For this ':' operator, compute the absolute difference and keep the natural digit order."
+    if rule_name == "colon_absdiff_restore_trailing_zero":
+        return "For this ':' operator, compute the absolute difference and keep any trailing zero."
     if rule_name == "add_direct_over_model_add_variant":
         return "For this additive operator, compute the direct sum of the two numbers."
     raise RuntimeError(f"unsupported V304 equation rule: {rule_name}")

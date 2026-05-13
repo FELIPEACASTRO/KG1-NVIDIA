@@ -18,6 +18,8 @@ As evidencias fortes reunidas hoje mostram que ha ganho possivel, mas o ganho co
 | Melhor full adapter-only conhecido/packageado | `823/947` | `56/155` | `135/160` | V291 package rank<=32; referencia associada ao melhor score conhecido `0.86` |
 | V274/V275 solver/verifier | `196/315` | `60/155` | `136/160` | ganho real CPU, ainda nao LoRA puro |
 | V324+V329 solver/verifier integrado no V336A | `197/315` confirmado | `61/155` | `136/160` | ganho real CPU, ainda nao LoRA puro |
+| V343 solver/verifier expandido sobre baseline V290 | `199/315` confirmado | `63/155` | `136/160` | ganho real CPU, `7` ganhos, `0` perdas; ainda nao LoRA puro |
+| V344 dataset transfer + V340 hard-negative gate | assets validos | dataset cobre `7` regras | replay bit preservado | GPU bloqueada ate existir launcher preference/abstain real |
 | V306/V302 full verifier local | `838/947` potencial | `60/155` | `146/160` | depende de verifier/postprocessor |
 | V335 LoRA mixed trace replay | `190/315` | `56/155` | `134/160` | falhou; cancelado por FinOps |
 | V338B LoRA minimal transfer weak eval | `190/315` | `56/155` | `134/160` | checkpoints 2 e 4 falharam; cancelado por FinOps |
@@ -27,6 +29,8 @@ As evidencias fortes reunidas hoje mostram que ha ganho possivel, mas o ganho co
 Conclusao: a busca/documentacao gerou conhecimento util e ganho tecnico real. O erro foi assumir que SFT curto/misto transferiria automaticamente essas regras para LoRA. V303, V326, V331 e V335 falsificaram essa hipotese.
 
 Atualizacao V338B: a queda de `eval_loss` tambem nao foi evidencia suficiente. O treino V338B caiu de `0.9057` para melhor `0.8996`, mas o weak eval dos checkpoints 2 e 4 ficou em `190/315`, `equation_transform=56/155`, `bit_manipulation=134/160`. Isso confirma que loss menor pode melhorar imitacao/formato sem mover as regras discretas que decidem ACC por familia.
+
+Atualizacao V343/V344: o ganho tecnico real subiu de `197/315` para `199/315`, com `equation_transform=63/155`, `bit_manipulation=136/160`, `7` ganhos e `0` perdas. Isso veio de regras CPU verificadas, nao de loss. O proximo HF so pode rodar se o script consumir explicitamente as preferencias/hard negatives e aplicar kill-switch por ACC no primeiro checkpoint.
 
 ## Metas
 
@@ -51,6 +55,8 @@ Meta para submit novo:
 |---|---|---|
 | V274/V275 numeric postprocessor | `+4` equation, `0` perdas, `196/315` | regra/verifier e teacher |
 | V329 symbolic cryptarithm | `+1` equation adicional projetado, `0` perdas | regra/verifier e teacher |
+| V343 numeric/symbolic expansion | `+7` equation contra V290, `199/315`, `0` perdas | fonte primaria para transfer dataset V344 |
+| V344/V340 hard-negative gate | dados validos, mas GPU bloqueada sem preference/abstain launcher | liberar apenas treino que use ACC gate, nao SFT comum |
 | Tong Hui Kang bit solver | `1364/1602` train, mas `+1/-1` no weak | teacher/taxonomia, nao override direto |
 | `equation-solver-swap-v1` | classes uteis, mas overlap com gates | taxonomia/fixture sintetico verificado |
 | Discussions `690307`, `688461` | bit-pair/bitsum/stride e boolean gate taxonomy | implementar CPU bit gate |
@@ -88,6 +94,12 @@ Status 2026-05-13:
 - Artefato: `artifacts/v336_integrated_no_loss_solver_gate/20260513T_cpu_gate/v336a_integrated_no_loss_solver_gate_manifest.json`.
 - Resultado weak integrado: `197/315`, `equation_transform=61/155`, `bit_manipulation=136/160`, `5` ganhos, `0` perdas.
 - Decisao: V336A passou. Proximo passo obrigatorio e V336B. HF GPU continua bloqueado ate o gate de permissao/package.
+- V343 reexecutou a trilha sobre o baseline exato V290 checkpoint-6 e expandiu a DSL:
+  - `colon_absdiff_restore_trailing_zero`: `+1` equation;
+  - `minus_direct_negative_restore_sign`: `+2` equation;
+  - regras anteriores preservadas: add direct, minus signed opposite sign, symbolic cryptarithm.
+- Resultado V343 integrado: `199/315`, `equation_transform=63/155`, `bit_manipulation=136/160`, `7` ganhos, `0` perdas.
+- Artefato: `artifacts/v343_equation_residual_solver_audit/20260513T_integrated_on_v290_v3/v336a_integrated_no_loss_solver_gate_manifest.json`.
 
 ### 2. V336B - Gate de permissao/package do solver/verifier
 
@@ -155,6 +167,13 @@ Status 2026-05-13:
 - Upload HF concluido em `felipesp1983/kg1-nemotron-training`, caminho `data/v337d_minimal_transfer/20260513T_cpu_gate`.
 - Hard negatives existem nos arquivos de preferencia, mas o V338B SFT atual ainda nao os usa. Eles so entram em uma proxima rota se o smoke provar sinal ou se for criado treino de preferencia especifico.
 - Hardening aplicado: referencias anti-leakage agora sao obrigatorias; hashes dos componentes V325/V330 agora precisam bater com os manifests antes de montar o dataset.
+- V344 reconstruiu o dataset de transferencia usando o ganho V343:
+  - treino: `1760` linhas, sendo `720` bit replay e `1040` equation;
+  - validacao: `420` linhas, sendo `160` bit replay e `260` equation;
+  - hashes: train `cab6b8370f2208c3e3fa954527967683be06639d7c556ae7697077d1d2bf8e03`, val `a2df22315cbd837d6b15c9ff646d76fb7b8d8e3930485ac0b02677b9ed9c87cc`;
+  - anti-leakage: `id_overlap=0`, `prompt_overlap=0`;
+  - V286 tokenization gate passou com `prompt_truncation_rate=0.0`, `completion_tokens_dropped=0`, `fallback_masks=0`.
+- V340 hard-negative gate sobre V344 passou nos assets, mas bloqueou GPU porque ainda falta launcher de preference/abstain real.
 
 ### 4. V338 - Tiny LoRA absorption smoke
 
@@ -287,7 +306,8 @@ Decisao:
 
 - A correcao dos hard negatives foi necessaria, mas insuficiente para ganho adapter-only.
 - O criterio de promocao volta a ser exclusivamente ACC por familia no weak/full gate.
-- Proximo HF GPU fica bloqueado ate existir nova evidencia CPU: ou nova regra no-loss, ou dataset cujo baseline nao esteja saturado na propria metrica de selecao.
+- V343 produziu nova evidencia CPU (`199/315`), mas V344/V340 bloqueou GPU ate existir trainer que consuma preferencia/abstain de verdade.
+- Proximo HF GPU fica bloqueado para SFT comum. Ele so e permitido para um launcher V344 especifico com preference/abstain e kill-switch de ACC no primeiro checkpoint.
 
 ## Itens removidos do roadmap ativo
 
@@ -322,20 +342,15 @@ Os itens abaixo ficam apenas no arquivo historico. Eles nao fazem parte do plano
 
 ## Proxima acao unica
 
-Executar V343 CPU solver expansion, sem GPU:
+Implementar V344 preference/abstain launcher, sem SFT comum:
 
-1. Partir dos `5` IDs de regra verificada que V342 mostrou como nao aprendidos por V341:
-   - `99d6a3b5`;
-   - `7688e06e`;
-   - `274def88`;
-   - `d1bd7478`;
-   - `c5b058d6`.
-2. Transformar as classes V336A em regras DSL mais gerais, mantendo `candidate_count=1` e `conflict_count=0`.
-3. Tratar `4ada9150` apenas como alerta de diferenca entre referencias; nao usar como ganho do solver e nao fazer override direto.
-4. Rodar gate CPU com os criterios:
-   - `total > 197` ou novo conjunto que mantenha `197/315` com regra mais geral e auditavel;
-   - `equation >= 61`;
+1. Usar somente o dataset V344 que ja passou anti-leakage, tokenization e V340 hard-negative gate.
+2. O launcher precisa consumir `preferences_train_jsonl` e `preferences_val_jsonl`; se consumir apenas SFT, esta bloqueado.
+3. O primeiro checkpoint deve ser avaliado por weak ACC, nao por `eval_loss`.
+4. Continuar somente se:
+   - `total > 192`;
+   - `equation > 56`;
    - `bit >= 136`;
-   - `losses=0`;
-   - `truncated=0`.
-5. Continuar bloqueando HF GPU ate o CPU gate produzir ganho no-loss novo ou uma preferencia nao saturada comprovada por ACC, nao por loss.
+   - `truncated=0` ou nao regressivo.
+5. Cancelar por FinOps se o primeiro checkpoint repetir V341/V338B: `190/315`, `equation=56`, `bit=134`, ou se a metrica interna estiver saturada sem ganho de ACC.
+6. Se o launcher nao puder implementar preference/abstain real, voltar para CPU DSL/verifier e nao gastar HF.

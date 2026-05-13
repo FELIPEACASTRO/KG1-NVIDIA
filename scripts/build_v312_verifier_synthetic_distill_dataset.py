@@ -221,7 +221,9 @@ def build_bit_row(rng: random.Random, *, split: str, pattern_index: int, row_ind
 def build_equation_row(rng: random.Random, *, split: str, rule_index: int, row_index: int) -> dict[str, Any]:
     builders = [
         v282.build_minus_signed,
+        v282.build_minus_direct_negative_restore_sign,
         v282.build_colon_absdiff,
+        v282.build_colon_absdiff_restore_trailing_zero,
         v282.build_add_direct,
     ]
     raw = builders[rule_index](rng, row_index, split)

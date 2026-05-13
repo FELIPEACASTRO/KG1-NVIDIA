@@ -37,7 +37,14 @@ DEFAULT_V324_MANIFEST = (
     / "artifacts/v324_equation_expanded_solver_gate/20260513T_cpu_gate/v324_equation_expanded_solver_manifest.json"
 )
 DEFAULT_OUTPUT_DIR = REPO_ROOT / "artifacts/v325_equation_no_loss_distill_dataset"
-EXPECTED_V324_ACCEPTED_IDS = {"274def88", "7688e06e", "c5b058d6", "d1bd7478"}
+EXPECTED_V324_ACCEPTED_IDS = {
+    "274def88",
+    "528ec0d8",
+    "7688e06e",
+    "c5b058d6",
+    "d1bd7478",
+    "fb623471",
+}
 
 
 def utc_now() -> str:
@@ -61,10 +68,10 @@ def validate_v324_manifest(path: Path) -> dict[str, Any]:
     ids = set(str(item) for item in payload.get("accepted_candidate_ids", []))
     if ids != EXPECTED_V324_ACCEPTED_IDS:
         raise RuntimeError("unexpected V324 accepted ids: " + json.dumps(sorted(ids)))
-    if int(payload.get("accepted_candidate_count", -1)) != 4:
-        raise RuntimeError("V324 accepted candidate count must be 4")
-    if int(payload.get("projected_equation_correct", -1)) != 60:
-        raise RuntimeError("V324 projected equation correct must be 60")
+    if int(payload.get("accepted_candidate_count", -1)) != 6:
+        raise RuntimeError("V324 accepted candidate count must be 6")
+    if int(payload.get("projected_equation_correct", -1)) != 62:
+        raise RuntimeError("V324 projected equation correct must be 62")
     decision = payload.get("decision") or {}
     if decision.get("decision") != "equation_cpu_gate_found_distillation_signal":
         raise RuntimeError("V324 decision does not authorize distillation seed: " + str(decision))
@@ -110,7 +117,7 @@ def build_split(
 ) -> list[dict[str, Any]]:
     rng = random.Random(seed)
     rows: list[dict[str, Any]] = []
-    for rule_index in range(3):
+    for rule_index in range(5):
         for row_index in range(rows_per_rule):
             row = v312.build_equation_row(
                 rng,
@@ -240,9 +247,9 @@ def run_self_test() -> None:
             fake_v324,
             {
                 "schema_version": "kg1_v324_equation_expanded_solver_gate_v1",
-                "accepted_candidate_count": 4,
+                "accepted_candidate_count": 6,
                 "accepted_candidate_ids": sorted(EXPECTED_V324_ACCEPTED_IDS),
-                "projected_equation_correct": 60,
+                "projected_equation_correct": 62,
                 "baseline_family_counts": {
                     "bit_manipulation": {"correct": 136},
                     "equation_transform": {"correct": 56},
@@ -251,11 +258,11 @@ def run_self_test() -> None:
             },
         )
         payload = validate_v324_manifest(fake_v324)
-        if int(payload["projected_equation_correct"]) != 60:
+        if int(payload["projected_equation_correct"]) != 62:
             raise AssertionError(payload)
         rows = build_split(split="train", rows_per_rule=1, seed=123, v324_manifest=fake_v324)
         summary = v312.validate_rows(rows, ref_ids=set(), ref_prompt_hashes=set(), label="self_test")
-        if summary["rows"] != 3:
+        if summary["rows"] != 5:
             raise AssertionError(summary)
     print("v325_equation_no_loss_distill_self_test=ok", flush=True)
 

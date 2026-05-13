@@ -191,7 +191,7 @@ def validate_v336_inputs(v336a_path: Path, v336b_path: Path) -> tuple[dict[str, 
     if v336a.get("decision", {}).get("decision") != "v336a_cpu_integrated_no_loss_gate_passed":
         raise RuntimeError("V336A did not pass")
     integrated = v336a.get("integrated", {})
-    if int(integrated.get("correct", -1)) != 197 or int(integrated.get("loss_count", -1)) != 0:
+    if int(integrated.get("correct", -1)) < 199 or int(integrated.get("loss_count", -1)) != 0:
         raise RuntimeError("V336A integrated gate drift")
     if v336b.get("schema_version") != "kg1_v336b_package_permission_gate_v1":
         raise RuntimeError("unexpected V336B schema")
