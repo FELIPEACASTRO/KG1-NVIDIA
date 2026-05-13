@@ -43,16 +43,27 @@ Conclusao honesta: a documentacao e as buscas produziram ganho tecnico real em s
 - Todo dataset externo com overlap por `id` ou `prompt_sha256` fica bloqueado para treino bruto; no maximo entra como taxonomia.
 - O proximo ganho precisa ser primeiro demonstrado como programa/verifier no-loss; LoRA so vem depois, como tentativa de absorcao controlada.
 
+### Checklist anti-gap do roadmap
+
+- Estado atual sempre deve citar tres numeros: adapter-only weak, full adapter-only e solver/verifier CPU.
+- Toda evidencia externa deve cair em uma destas classes: `ganho medido`, `taxonomia/teacher`, `bloqueado por overlap`, `rejeitado por gate`, `metodologico P2`.
+- Todo "proximo passo" antigo que ja foi executado deve virar resultado e decisao; nao pode continuar como plano.
+- Nenhum job HF pode ser aprovado apenas por `eval_loss`; precisa de weak eval por familia.
+- Nenhum dataset externo pode entrar cru sem `id_overlap=0`, `prompt_sha256_overlap=0`, verifier correctness e manifest de source/family counts.
+- Nenhum treino pode ser chamado de promissor se repetir `equation=56` ou derrubar `bit<136`.
+- Nenhum submit pode ser feito se a diferenca para V291 nao estiver medida em full/package gate.
+
 ## Resumo executivo
 
-- Baseline protegido atual: `v226__v226_best_checkpoint1_observed_191`.
-- Weak score observado: `191/315`.
-- Gate para liberar full eval: total `>=193`, `equation_transform>=60`, `bit_manipulation>=133`, truncation `<=3`.
-- Resultado do baseline: total `191`, equation `55`, bit `136`, truncation `0`.
-- Gargalo: `equation_transform`, com gap `5`.
-- `bit_manipulation` ja passa o gate, mas com margem pequena de `+3`.
+- Baseline historico protegido: `v226__v226_best_checkpoint1_observed_191`, com `191/315`, equation `55/155`, bit `136/160`, truncation `0`.
+- Melhor adapter-only atual: `v290_checkpoint_6_v221_contract`, com `192/315`, equation `56/155`, bit `136/160`, truncation `0`.
+- Full adapter-only submitado: V291/V290 checkpoint-6, com `823/947 = 0.8690601901`, public score `0.86`.
+- Gate para liberar full eval/submit novo: total weak `>=193`, `equation_transform>=60`, `bit_manipulation>=136`, truncation `0` ou nao regressiva.
+- Gargalo real atual: `equation_transform`, travado em `56/155` em LoRA; precisa de `+4` para o gate fraco.
+- `bit_manipulation` esta no limite: `136/160` no weak, mas cai para `134-135` em varios SFTs recentes.
 - Oracle V230 por linha melhora para `197/315`, equation `57`, bit `140`, truncation `0`, mas ainda falha o gate de equation por `3`.
-- Conclusao: roteamento entre os adapters ja avaliados nao resolve. O proximo ganho precisa vir de mineracao dos miss-packs, solver/verifier deterministico ou dados/traces filtrados.
+- Conclusao atualizada: roteamento/adapters/SFT amplo ja avaliados nao resolvem. O ganho real medido vem de solver/verifier (`196-197/315` CPU). O proximo trabalho deve provar primeiro um novo ganho no-loss em CPU e so depois tentar transferencia LoRA minima.
+- Nota de leitura: as atualizacoes datadas abaixo sao historico tecnico. Quando uma atualizacao antiga disser "proximo passo", ela fica supersedida pelos blocos `Estado real`, `Checklist anti-gap` e `V336 roadmap cirurgico pos-V335`.
 - Atualizacao HF-only 2026-05-11: o smoke V257/V249 em H200 produziu o melhor resultado operacional ate agora no contrato V221: `v257_checkpoint_4_v221_contract` com `192/315`, equation `56/155`, bit `136/160`, truncation `1`. Ainda nao passa o gate (`193/315`, equation `60`), mas prova ganho real de `+1` em bit sem perder equation frente ao V256 HF.
 - Atualizacao V259/V260B 2026-05-11: o treino equation-focused a partir do V257 checkpoint-4 repetiu `192/315`, equation `56/155`, bit `136/160`, truncation `0` no melhor checkpoint. Ele reduziu truncation, mas nao aumentou `equation_transform`; portanto nao justifica continuacao longa em H200 sem novo dado/verifier.
 - Atualizacao V261 2026-05-11: a varredura operacional `thinking on + no prompt suffix` foi cortada cedo no H200 por gate de FinOps. O primeiro candidato (`v259_checkpoint4_nosuffix`) regrediu para `155/315`, equation `55/155`, bit `100/160`, truncation `1`; sem ganho em equation e com queda severa em bit. Esta familia de prompt esta descartada para novos gastos.
@@ -6650,10 +6661,10 @@ Achados dos anexos:
 
 Impacto no roadmap:
 
-- V333: completar bit solver Tong-style; `konbu17` bit CoTs podem ajudar wording/template, mas nao substituem bitsum/stride.
-- V334: minerar os `200` equation CoTs nao-overlap para taxonomia DSL, depois expandir V324/V329 com classes sem conflito.
-- V335: implementar fixture builder EvoTD-style com anti-leak, executor/verifier e filtro ZPD.
-- HF GPU continua bloqueado ate CPU gate mostrar novo sinal real.
+- V333C ja testou o bit reasoner Tong-style como gate direto: util como teacher, mas sem ganho deployable (`+1/-1`).
+- V334 ja testou `equation_numeric.py` como gate direto: util como taxonomia, mas sem ganho deployable (`0` ganhos, `16` candidatos errados).
+- V335 ja implementou o fixture/mixed trace builder e testou a transferencia LoRA; o resultado foi negativo (`190/315`, bit `134`).
+- HF GPU volta a ficar bloqueado ate o V336 CPU integrated no-loss solver gate mostrar novo ganho verificavel.
 
 ### V333C Tong bit reasoner CPU gate - 2026-05-13
 
@@ -6683,7 +6694,7 @@ Decisao:
 - Bloquear Tong como postprocessor/router direto: existe perda auditada e ganho liquido `0` no weak atual.
 - Manter Tong como fonte de professor/fixture para bit-pair, bitsum, stride e traces curtos.
 - Antes de HF GPU para bit, ainda falta uma regra de confianca label-free que selecione o ganho `8740ed31` sem aplicar a perda `ef2fe526`, ou um novo CPU gate no-loss com `bit>=136` e total maior que `192`.
-- Como nao ha job HF ativo neste momento (`hf jobs ps` retornou `No jobs found`), o proximo gasto deve continuar bloqueado ate o gate combinado V324/V329/V333 indicar dataset misto com no-regression.
+- Este bloqueio levou ao desenho V335; apos a falha V335, o criterio foi endurecido: o proximo gasto HF deve ficar bloqueado ate V336 demonstrar novo ganho no-loss em CPU, nao apenas dataset misto tecnicamente valido.
 
 ### V334 Tong equation numeric direct gate - 2026-05-13
 
@@ -6756,7 +6767,7 @@ Revisao pelos skills:
 
 Decisao:
 
-- V335 e o primeiro dataset misto que passa CPU data gate + tokenization gate real com os sinais V324/V329 integrados.
+- V335 foi o primeiro dataset misto que passou CPU data gate + tokenization gate real com os sinais V324/V329 integrados, mas o smoke HF provou que essa mistura nao transferiu o ganho para LoRA.
 - Upload HF concluido:
   - dataset commit `ec42d6afb1d6a6b1f8243e7ea776fa3d496a8e9f`;
   - tokenization gate commit `2b8bb3b6edf1dc2d3a9cfc445a1d06a9c201a97e`.
@@ -6767,13 +6778,21 @@ Decisao:
   - custo unitario `0.041667 USD/min`, abaixo do gate `0.05 USD/min`;
   - dataset e validation baixados do HF com hashes exatos;
   - adapter inicial `felipesp1983/kg1-nemotron-lora-v290-rank19-micro-patch-smoke/checkpoint-6` completo.
-- Proximo passo permitido: commit/push dos artefatos V333/V334/V335 e smoke A100/HF curto.
-- Kill-switch obrigatorio no primeiro checkpoint:
-  - `total > 192`;
-  - `equation_transform > 56`;
-  - `bit_manipulation >= 136`;
-  - `0` regressao de truncation/template/adapter.
-- Se o primeiro checkpoint nao satisfizer esses criterios, cancelar o job e nao gastar GPU adicional.
+- Train A100 executado no HF:
+  - job `6a04b8423308d79117b8f19c`;
+  - output repo `felipesp1983/kg1-nemotron-lora-v335-nemo-a100-mixed-trace-replay-v290ckpt6`;
+  - checkpoints/final materializados;
+  - melhor `eval_loss` interno observado `2.3326`, mas loss nao e gate de promocao.
+- Weak eval H200 executado no HF:
+  - job `6a04c3f8e48bea4538b9be9a`;
+  - `checkpoint-4`: `190/315`, equation `56/155`, bit `134/160`, truncation `1`;
+  - `checkpoint-6`: `190/315`, equation `56/155`, bit `134/160`, truncation `1`;
+  - job cancelado por FinOps antes de avaliar os demais checkpoints, porque os dois primeiros violaram `bit>=136` e nao moveram equation acima de `56`.
+- Decisao final V335:
+  - rejeitar para full eval, package e Kaggle submit;
+  - nao rodar outro V335-like com mais steps, epochs, LR ou H200;
+  - manter V335 apenas como evidencia negativa de transferencia LoRA;
+  - proximo passo obrigatorio e V336 CPU integrated no-loss solver gate.
 
 ### V335 external resource triage from attached compilations - 2026-05-13
 
