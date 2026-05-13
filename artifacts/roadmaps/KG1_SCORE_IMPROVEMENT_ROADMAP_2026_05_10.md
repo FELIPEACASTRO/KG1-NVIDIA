@@ -17,7 +17,7 @@ As evidencias fortes reunidas hoje mostram que ha ganho possivel, mas o ganho co
 | Melhor adapter-only weak atual | `192/315` | `56/155` | `136/160` | baseline operacional LoRA |
 | Melhor full adapter-only submitado | `823/947` | `56/155` | `135/160` | V291, public score `0.86` |
 | V274/V275 solver/verifier | `196/315` | `60/155` | `136/160` | ganho real CPU, ainda nao LoRA puro |
-| V324+V329 solver/verifier | `197/315` projetado | `61/155` | `136/160` | ganho real CPU, ainda nao LoRA puro |
+| V324+V329 solver/verifier integrado no V336A | `197/315` confirmado | `61/155` | `136/160` | ganho real CPU, ainda nao LoRA puro |
 | V306/V302 full verifier local | `838/947` potencial | `60/155` | `146/160` | depende de verifier/postprocessor |
 | V335 LoRA mixed trace replay | `190/315` | `56/155` | `134/160` | falhou; cancelado por FinOps |
 
@@ -38,6 +38,7 @@ Meta para submit novo:
 - Sem queda nas familias criticas.
 - Package permitido pelas regras do desafio.
 - Manifest com diff por familia.
+- Se o candidato passar todos os gates, submeter sem atraso especulativo: pelas regras, empate e decidido pela submissao enviada primeiro.
 
 ## Evidencias aceitas no roadmap ativo
 
@@ -69,12 +70,19 @@ Saida obrigatoria:
 
 - Manifest por candidato com `id`, `family`, `rule_class`, `old_prediction`, `new_prediction`, `candidate_count`, `conflict_count`, `accepted/rejected`, `reason`.
 - Reproducao de V274/V275: `196/315`.
-- Reproducao de V324+V329: `197/315` projetado.
+- Reproducao de V324+V329: `197/315` confirmado no V336A.
 - Novo ganho so vale se `losses=0`, `bit>=136` e `equation>=61`.
 
 Bloqueio:
 
 - Se V336A nao demonstrar ganho no-loss, nao rodar HF GPU.
+
+Status 2026-05-13:
+
+- Implementado em `scripts/run_v336_integrated_no_loss_solver_gate.py`.
+- Artefato: `artifacts/v336_integrated_no_loss_solver_gate/20260513T_cpu_gate/v336a_integrated_no_loss_solver_gate_manifest.json`.
+- Resultado weak integrado: `197/315`, `equation_transform=61/155`, `bit_manipulation=136/160`, `5` ganhos, `0` perdas.
+- Decisao: V336A passou. Proximo passo obrigatorio e V336B. HF GPU continua bloqueado ate o gate de permissao/package.
 
 ### 2. V336B - Gate de permissao/package do solver/verifier
 
@@ -89,39 +97,21 @@ Checagens:
 
 Decisao:
 
-- Se solver/verifier for permitido: seguir para V337S, que tem maior chance de ganho porque ja existe ganho CPU medido.
-- Se nao for permitido: seguir para V337D/V338 e tentar absorcao LoRA minima.
+- Se solver/verifier fosse permitido, seria a rota de maior chance porque ja existe ganho CPU medido.
+- Como V336B bloqueou a rota direta, seguir para V337D/V338 e tentar absorcao LoRA minima.
 
 Bloqueio:
 
 - Nenhum submit com solver/verifier sem esse gate.
 
-### 3. V337S - Full eval/package do solver-verifier, somente se permitido
+Status 2026-05-13:
 
-Objetivo: transformar o ganho CPU ja medido em candidato submitavel antes de gastar GPU tentando LoRA.
+- Implementado em `scripts/run_v336b_package_permission_gate.py`.
+- Artefato: `artifacts/v336b_package_permission_gate/20260513T_cpu_gate/v336b_package_permission_gate_manifest.json`.
+- Resultado: rota solver/verifier direta bloqueada. A evidencia oficial/local confirma que a submissao deve ser `submission.zip` com LoRA adapter rank `<=32`, contendo `adapter_config.json` e pesos; o pacote local rejeita `prediction_postprocessor`.
+- Decisao: seguir para V337D. Nao submeter package solver/verifier. Nao rodar HF ate existir dataset minimo transferivel e gateado.
 
-Executar somente se:
-
-- V336A passou com `losses=0`.
-- V336B confirmou que o formato de submissao permite o caminho solver/verifier/postprocessor.
-
-Passos:
-
-1. Rodar full official-like com V274/V275/V329/V336A.
-2. Comparar contra V291 `823/947`.
-3. Exigir melhora real nas familias:
-   - `equation_transform >=60/155`;
-   - `bit_manipulation >=135/160` no full e sem regressao contra o melhor package atual.
-4. Gerar package somente se full `>823/947`.
-5. Validar estrutura do package.
-6. Submeter ao Kaggle somente com manifest de diff por familia.
-
-Bloqueio:
-
-- Se o package oficial precisar ser adapter-only, parar V337S e ir para V337D.
-- Se full nao superar V291, nao submeter.
-
-### 4. V337D - Dataset minimo de transferencia, somente se solver/package direto for bloqueado
+### 3. V337D - Dataset minimo de transferencia
 
 Objetivo: criar dataset pequeno que ensine exatamente os casos em que o solver acerta e o adapter erra.
 
@@ -149,7 +139,16 @@ Gate:
 - tokenization/offset-mask gate.
 - manifest de source/family counts.
 
-### 5. V338 - Tiny LoRA absorption smoke
+Status 2026-05-13:
+
+- Implementado em `scripts/build_v337d_minimal_transfer_dataset.py`.
+- Artefato: `artifacts/v337d_minimal_transfer_dataset/20260513T_cpu_gate/v337d_minimal_transfer_manifest.json`.
+- Dataset: `1440` treino, `340` validacao; treino `720` bit + `720` equation; validacao `160` bit + `180` equation.
+- Anti-leakage contra referencias: `id_overlap=0`, `prompt_overlap=0`.
+- Gate real V286 com tokenizer Nemotron passou: `prompt_truncation_rate=0.0`, `completion_tokens_dropped=0`, `offset_masks=1440/340`, `train_token_max=349`, `val_token_max=341`.
+- Upload HF concluido em `felipesp1983/kg1-nemotron-training`, caminho `data/v337d_minimal_transfer/20260513T_cpu_gate`.
+
+### 4. V338 - Tiny LoRA absorption smoke
 
 Objetivo: testar absorcao real com gasto minimo.
 
@@ -175,7 +174,13 @@ Cancelar por FinOps se:
 - `equation=56`;
 - OOM, erro runtime, upload travado ou perda de contrato.
 
-### 6. V339 - Full eval, package e Kaggle submit adapter-only
+Status 2026-05-13:
+
+- Launcher criado em `artifacts/v338_hf_nemo_a100_minimal_transfer_launch/launch_v338_hf_nemo_a100_minimal_transfer.py`.
+- Debug local passou: hardware `a100-large`, custo `0.041667`, dataset HF com hashes corretos, adapter inicial `checkpoint-6` presente, snippets antigos V331/V335 ausentes.
+- Job pago ainda depende de commit/push do estado atual para que o HF clone exatamente o `EXPECTED_COMMIT`.
+
+### 5. V339 - Full eval, package e Kaggle submit adapter-only
 
 Executar apenas se V338 passar weak gate.
 
@@ -186,21 +191,24 @@ Passos:
 3. Gerar package somente se full `>823/947`.
 4. Validar estrutura do pacote.
 5. Submeter ao Kaggle somente com ganho medido.
+6. Se o pacote estiver valido e houver cota diaria, submeter imediatamente; nao esperar nova rodada de treino sem evidencia, porque o desempate favorece envio mais cedo.
 
 Bloqueio:
 
 - Nao submeter adapter que mantem `equation=56` por expectativa.
 - Nao submeter candidato que reduz bit contra V291/V290.
 
-### 7. V340 - Se LoRA continuar falhando
+### 6. V340 - Se LoRA continuar falhando
 
 Se V338 falhar de novo:
 
 - Parar SFT curto/misto.
 - Nao gastar HF com variacao de LR, epochs ou pesos.
-- Voltar para uma das duas rotas:
-  - rota A: se V336B permitir, package com solver/verifier;
-  - rota B: aguardar/liberar fonte realmente nova de traces, como `andy279/*`, com aprovacao humana.
+- Voltar apenas para CPU gate ou nova fonte concreta:
+  - nova regra/verifier no-loss demonstrada em CPU;
+  - fonte realmente nova de traces com acesso liberado e triagem anti-leakage;
+  - dataset/teacher que aumente coverage de V337D sem repetir a mistura V335-like.
+- Sem uma dessas evidencias, parar GPU por FinOps.
 
 ## Itens removidos do roadmap ativo
 
@@ -217,6 +225,7 @@ Os itens abaixo ficam apenas no arquivo historico. Eles nao fazem parte do plano
 | V326 equation+bit replay | equation ficou `56`, bit caiu |
 | V331 symbolic mix | equation ficou `56`, bit caiu |
 | V335 mixed trace replay | `190/315`, bit `134`; cancelado |
+| V337S package solver/verifier direto | V336B confirmou package adapter-only; rota direta nao sera usada |
 | Raw `kienngx` / `konbu17` / `furkankesen` datasets | overlap ou flags incorretas; usar so taxonomia |
 | Generic distillation papers/datasets | P2 metodologico, sem acao direta |
 | OpenRouter/destilacao como item proprio | conclusao metodologica ja incorporada nas regras; nao e acao executavel |
@@ -234,6 +243,6 @@ Os itens abaixo ficam apenas no arquivo historico. Eles nao fazem parte do plano
 
 ## Proxima acao unica
 
-Implementar `V336A - CPU integrated no-loss solver gate`.
+Commitar/pushar V336A/V336B/V337D/V338 e, em seguida, lancar o V338 A100 smoke.
 
-Nao iniciar HF GPU antes disso.
+Monitorar logs a cada aproximadamente `40s` e cancelar por FinOps se o primeiro checkpoint nao puder bater `total>192`, `equation>56`, `bit>=136`.

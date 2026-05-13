@@ -1,0 +1,247 @@
+{
+  "baseline": {
+    "correct": 192,
+    "family_counts": {
+      "bit_manipulation": {
+        "correct": 136,
+        "rows": 160,
+        "truncated": 0
+      },
+      "equation_transform": {
+        "correct": 56,
+        "rows": 155,
+        "truncated": 0
+      }
+    }
+  },
+  "blocked_routes": [
+    {
+      "available": true,
+      "decision": {
+        "decision": "tong_bit_teacher_trace_signal_only",
+        "direct_replace_deployable": false,
+        "next_action": "Promote Tong bit replacement only if direct_replace_gate passes; otherwise use gain rows as teacher-trace fixtures and keep searching for a label-free confidence rule.",
+        "reason": "baseline=192; tong_replace=192; tong_gains=1; tong_losses=1",
+        "teacher_trace_signal": true
+      },
+      "path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v333_tong_bit_reasoner_gate\\20260513T171304Z\\v333_tong_bit_reasoner_gate_manifest.json",
+      "route": "v333_tong_bit_reasoner",
+      "sha256": "ce4247662a7059eace8059ab068a6727f01eb4038b9da7964ed02ae18db1db9e",
+      "summary": {
+        "weak_gate": {
+          "baseline_summary": {
+            "accuracy": 0.6095238095238096,
+            "correct": 192,
+            "family": {
+              "bit_manipulation": {
+                "correct": 136,
+                "rows": 160,
+                "truncated": 0
+              },
+              "equation_transform": {
+                "correct": 56,
+                "rows": 155,
+                "truncated": 0
+              }
+            },
+            "rows": 315,
+            "truncated": 0
+          },
+          "current_solver_bit_replace_summary": {
+            "accuracy": 0.5746031746031746,
+            "correct": 181,
+            "family": {
+              "bit_manipulation": {
+                "correct": 125,
+                "rows": 160,
+                "truncated": 0
+              },
+              "equation_transform": {
+                "correct": 56,
+                "rows": 155,
+                "truncated": 0
+              }
+            },
+            "rows": 315,
+            "truncated": 0
+          },
+          "current_solver_gains_vs_baseline": 2,
+          "current_solver_losses_vs_baseline": 13,
+          "direct_replace_gate": {
+            "max_losses": 0,
+            "note": "Deployable only if the label audit shows no losses and a weak total gain.",
+            "pass": false,
+            "weak_bit_min": 136,
+            "weak_total_min": 193
+          },
+          "teacher_trace_gate": {
+            "note": "Label-audited signal only; use for deterministic trace distillation, not direct routing.",
+            "pass": true,
+            "teacher_rows": 1
+          },
+          "tong_bit_replace_summary": {
+            "accuracy": 0.6095238095238096,
+            "correct": 192,
+            "family": {
+              "bit_manipulation": {
+                "correct": 136,
+                "rows": 160,
+                "truncated": 0
+              },
+              "equation_transform": {
+                "correct": 56,
+                "rows": 155,
+                "truncated": 0
+              }
+            },
+            "rows": 315,
+            "truncated": 0
+          },
+          "tong_gain_ids": [
+            "8740ed31"
+          ],
+          "tong_gains_vs_baseline": 1,
+          "tong_loss_ids": [
+            "ef2fe526"
+          ],
+          "tong_losses_vs_baseline": 1
+        }
+      }
+    },
+    {
+      "available": true,
+      "decision": {
+        "decision": "tong_equation_direct_reasoner_blocked",
+        "next_action": "Use Tong equation_numeric.py only as a DSL source for guarded no-loss classes; do not use its direct predictions as overrides or training authorization.",
+        "reason": "baseline=192; tong_replace=192; gains=0; losses=0; wrong_on_misses=16"
+      },
+      "path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v334_tong_equation_numeric_reasoner_gate\\20260513T172300Z\\v334_tong_equation_numeric_reasoner_gate_manifest.json",
+      "route": "v334_tong_equation_numeric_reasoner",
+      "sha256": "42d5e991495537e9059924aabd71c68968c104b4b68e9b830468413f69ffc11b",
+      "summary": {
+        "gain_ids": [],
+        "gains_vs_baseline": 0,
+        "loss_ids": [],
+        "losses_vs_baseline": 0,
+        "wrong_on_baseline_misses": 16
+      }
+    }
+  ],
+  "decision": {
+    "decision": "v336a_cpu_integrated_no_loss_gate_passed",
+    "hf_gpu_allowed": false,
+    "next_action": "Run V336B package-permission gate before any package, submit, or HF GPU training.",
+    "reason": "integrated=197/315; equation=61/155; bit=136/160; gains=5; losses=0"
+  },
+  "expected_shared_row_contract_sha256": "bf055e3b9ebce79d4bfc9e48bce5a305b1d83da882f14afddec80d6afaba5fff",
+  "generated_at_utc": "2026-05-13T19:17:24.924785+00:00",
+  "input": {
+    "downloaded_name": "v245_hf_weak_v259_checkpoint_4_v221_contract_predictions.csv",
+    "filename": "evals/v260b-h200-v221contract-v259-eqfocus-eval-20260511T025751Z/eval/v259_checkpoint_4_v221_contract/v245_hf_weak_v259_checkpoint_4_v221_contract_predictions.csv",
+    "repo_id": "felipesp1983/kg1-nemotron-lora-v259-v249-eqfocus-v257ckpt4-smoke",
+    "rows": 315,
+    "sha256": "d682f3a0aabd3624c449c63723deee510b070aa173f11c1102fe6b1b807bbca3",
+    "source": "hf_hub"
+  },
+  "integrated": {
+    "accepted_candidate_count": 5,
+    "accepted_candidate_ids": [
+      "274def88",
+      "7688e06e",
+      "99d6a3b5",
+      "c5b058d6",
+      "d1bd7478"
+    ],
+    "candidate_source_summary": [
+      {
+        "accepted_rows": 1,
+        "rule_class": "v274_guarded_numeric_add_direct_over_model_add_variant",
+        "source_gate": "v324_equation_expanded_solver_gate"
+      },
+      {
+        "accepted_rows": 1,
+        "rule_class": "v274_guarded_numeric_colon_absdiff_unreverse_same_len",
+        "source_gate": "v324_equation_expanded_solver_gate"
+      },
+      {
+        "accepted_rows": 2,
+        "rule_class": "v274_guarded_numeric_minus_signed_opposite_sign_guarded",
+        "source_gate": "v324_equation_expanded_solver_gate"
+      },
+      {
+        "accepted_rows": 1,
+        "rule_class": "symbolic_cryptarithm_single_operator_digits_mul",
+        "source_gate": "v329_symbolic_cryptarithm_gate"
+      }
+    ],
+    "correct": 197,
+    "family_counts": {
+      "bit_manipulation": {
+        "correct": 136,
+        "rows": 160,
+        "truncated": 0
+      },
+      "equation_transform": {
+        "correct": 61,
+        "rows": 155,
+        "truncated": 0
+      }
+    },
+    "family_summary": [
+      {
+        "baseline_correct": 136,
+        "baseline_truncated": 0,
+        "delta_correct": 0,
+        "family": "bit_manipulation",
+        "integrated_correct": 136,
+        "integrated_truncated": 0,
+        "rows": 160
+      },
+      {
+        "baseline_correct": 56,
+        "baseline_truncated": 0,
+        "delta_correct": 5,
+        "family": "equation_transform",
+        "integrated_correct": 61,
+        "integrated_truncated": 0,
+        "rows": 155
+      }
+    ],
+    "gain_count": 5,
+    "gain_ids": [
+      "99d6a3b5",
+      "7688e06e",
+      "274def88",
+      "d1bd7478",
+      "c5b058d6"
+    ],
+    "loss_count": 0,
+    "loss_ids": [],
+    "rejected_candidate_count": 0
+  },
+  "observed_shared_row_contract_sha256": "bf055e3b9ebce79d4bfc9e48bce5a305b1d83da882f14afddec80d6afaba5fff",
+  "outputs": {
+    "candidate_trace_csv": "artifacts\\v336_integrated_no_loss_solver_gate\\20260513T_cpu_gate\\v336a_integrated_no_loss_candidate_trace.csv",
+    "family_summary_csv": "artifacts\\v336_integrated_no_loss_solver_gate\\20260513T_cpu_gate\\v336a_integrated_no_loss_family_summary.csv",
+    "integrated_predictions_csv": "artifacts\\v336_integrated_no_loss_solver_gate\\20260513T_cpu_gate\\v336a_integrated_no_loss_predictions.csv",
+    "manifest_json": "artifacts\\v336_integrated_no_loss_solver_gate\\20260513T_cpu_gate\\v336a_integrated_no_loss_solver_gate_manifest.json"
+  },
+  "reproduction": {
+    "v274_v324_projected_correct": 196,
+    "v324_candidate_count": 4,
+    "v324_manifest_json": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v324_equation_expanded_solver_gate\\20260513T_cpu_gate\\v324_equation_expanded_solver_manifest.json",
+    "v324_manifest_sha256": "578ba66e7c90283c65f429f5d5d30ed1d774575e92926e7b258ab1d42c620fd9",
+    "v329_candidate_count": 1,
+    "v329_manifest_json": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v329_symbolic_cryptarithm_gate\\20260513T_cpu_gate_r2\\v329_symbolic_cryptarithm_manifest.json",
+    "v329_manifest_sha256": "555a2944d3fbc5f085b699a19f567f2f2cbe1a0507d3c2a31832badcb079ad69",
+    "v329_projected_correct": 197,
+    "v329_projected_equation_correct": 61
+  },
+  "schema_version": "kg1_v336a_integrated_no_loss_solver_gate_v1",
+  "thresholds": {
+    "max_losses": 0,
+    "weak_bit_min": 136,
+    "weak_equation_min": 61,
+    "weak_total_min": 193
+  }
+}

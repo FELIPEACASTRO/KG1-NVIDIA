@@ -1,0 +1,168 @@
+{
+  "blocked_actions": [
+    "full_eval",
+    "package",
+    "kaggle_submit"
+  ],
+  "config": {
+    "assistant_final_answer_mode": "boxed_suffix",
+    "max_length": 8192,
+    "max_prompt_truncation_rate": 0.0,
+    "min_train_rows": 1400,
+    "min_val_rows": 300,
+    "require_offset_mask": true
+  },
+  "dataset_manifest_json": "artifacts\\v337d_minimal_transfer_dataset\\20260513T_cpu_gate\\v337d_minimal_transfer_manifest.json",
+  "dataset_manifest_sha256": "6ccd686686b4022247393816fb502af63b4a6567b41f28d25c9803f8dc067ca6",
+  "decision": {
+    "next_action": "Only consider a tiny HF smoke train if roadmap risk/budget gates approve it.",
+    "reason": "train_rows=1440; val_rows=340; train_token_max=349; val_token_max=341; completion_truncation=0",
+    "status": "tokenization_gate_passed"
+  },
+  "generated_at_utc": "2026-05-13T19:32:04.614166+00:00",
+  "model_name": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+  "model_revision": "cbd3fa9f933d55ef16a84236559f4ee2a0526848",
+  "outputs": {
+    "manifest_json": "artifacts\\v337d_minimal_transfer_dataset\\20260513T_cpu_gate\\tokenization_gate_real\\v286_generic_tokenization_gate_manifest.json"
+  },
+  "schema_version": "kg1_v286_generic_tokenization_gate_v1",
+  "tokenization": {
+    "train": {
+      "completion_tokens_dropped": 0,
+      "fallback_masks": 0,
+      "family_summary": {
+        "bit_manipulation": {
+          "loss_token_max": 18,
+          "loss_token_min": 18,
+          "loss_token_p50": 18,
+          "rows": 720,
+          "token_max": 331,
+          "token_p50": 293,
+          "token_p90": 331,
+          "token_p99": 331
+        },
+        "equation_transform": {
+          "loss_token_max": 199,
+          "loss_token_min": 92,
+          "loss_token_p50": 114,
+          "rows": 720,
+          "token_max": 349,
+          "token_p50": 260,
+          "token_p90": 330,
+          "token_p99": 343
+        }
+      },
+      "loss_token_max": 199,
+      "loss_token_min": 18,
+      "loss_token_p50": 92,
+      "offset_masks": 1440,
+      "prompt_truncated": 0,
+      "prompt_truncation_rate": 0.0,
+      "rows": 1440,
+      "token_max": 349,
+      "token_mean": 283.596,
+      "token_min": 233,
+      "token_p50": 283,
+      "token_p90": 331,
+      "token_p99": 341
+    },
+    "validation": {
+      "completion_tokens_dropped": 0,
+      "fallback_masks": 0,
+      "family_summary": {
+        "bit_manipulation": {
+          "loss_token_max": 18,
+          "loss_token_min": 18,
+          "loss_token_p50": 18,
+          "rows": 160,
+          "token_max": 331,
+          "token_p50": 290,
+          "token_p90": 328,
+          "token_p99": 331
+        },
+        "equation_transform": {
+          "loss_token_max": 199,
+          "loss_token_min": 92,
+          "loss_token_p50": 114,
+          "rows": 180,
+          "token_max": 341,
+          "token_p50": 260,
+          "token_p90": 331,
+          "token_p99": 339
+        }
+      },
+      "loss_token_max": 199,
+      "loss_token_min": 18,
+      "loss_token_p50": 93,
+      "offset_masks": 340,
+      "prompt_truncated": 0,
+      "prompt_truncation_rate": 0.0,
+      "rows": 340,
+      "token_max": 341,
+      "token_mean": 281.085,
+      "token_min": 237,
+      "token_p50": 274,
+      "token_p90": 330,
+      "token_p99": 339
+    }
+  },
+  "tokenizer_info": {
+    "class": "TokenizersBackend",
+    "eos_token": "<|im_end|>",
+    "is_fast": true,
+    "pad_token": "<|im_end|>",
+    "toy": false
+  },
+  "validation": {
+    "train": {
+      "family_counts": {
+        "bit_manipulation": 720,
+        "equation_transform": 720
+      },
+      "prompt_answer_hash_count": 1440,
+      "prompt_hash_count": 1440,
+      "rows": 1440,
+      "sha256_expected": "df67214d3fdbb74ada96a9fc24609db5a3f5f6dc1d26dea5d4449eb39eb4147c",
+      "source_counts": {
+        "v325_equation_no_loss_distill": 480,
+        "v330_symbolic_cryptarithm_distill": 240,
+        "v337d_v217_bit_replay": 720
+      },
+      "subcategory_counts": {
+        "bit_manipulation": 168,
+        "equation_numeric_add_direct": 160,
+        "equation_numeric_colon_absdiff": 160,
+        "equation_numeric_minus_signed": 160,
+        "equation_symbolic_cryptarithm_single_operator_mul": 240,
+        "unknown": 552
+      },
+      "unique_ids": 1440
+    },
+    "train_val_prompt_answer_overlap": 0,
+    "train_val_prompt_overlap": 0,
+    "validation": {
+      "family_counts": {
+        "bit_manipulation": 160,
+        "equation_transform": 180
+      },
+      "prompt_answer_hash_count": 340,
+      "prompt_hash_count": 340,
+      "rows": 340,
+      "sha256_expected": "50d4ee05a377ed4e111d27f9de0e1109eb0c09bfe01a9bce0717b63d704dbf80",
+      "source_counts": {
+        "v325_equation_no_loss_distill": 120,
+        "v330_symbolic_cryptarithm_distill": 60,
+        "v337d_v217_bit_replay": 160
+      },
+      "subcategory_counts": {
+        "bit_manipulation": 54,
+        "equation_numeric_add_direct": 40,
+        "equation_numeric_colon_absdiff": 40,
+        "equation_numeric_minus_signed": 40,
+        "equation_symbolic_cryptarithm_single_operator_mul": 60,
+        "unknown": 106
+      },
+      "unique_ids": 340
+    }
+  }
+}

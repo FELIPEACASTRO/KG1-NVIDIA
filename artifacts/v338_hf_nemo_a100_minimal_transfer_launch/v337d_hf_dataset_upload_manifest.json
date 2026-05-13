@@ -1,0 +1,12 @@
+{
+  "data_repo": "felipesp1983/kg1-nemotron-training",
+  "dataset_dir": "artifacts\\v337d_minimal_transfer_dataset\\20260513T_cpu_gate",
+  "dataset_path_in_repo": "data/v337d_minimal_transfer/20260513T_cpu_gate",
+  "dataset_upload": "https://huggingface.co/datasets/felipesp1983/kg1-nemotron-training/commit/73c1584d0cf60ae29cf241fae33aa69cc314daa6",
+  "gate_dir": "artifacts\\v337d_minimal_transfer_dataset\\20260513T_cpu_gate\\tokenization_gate_real",
+  "gate_path_in_repo": "runtime_artifacts/v337d_minimal_transfer_tokenization_gate/20260513T_cpu_gate",
+  "gate_upload": "https://huggingface.co/datasets/felipesp1983/kg1-nemotron-training/commit/aa4e72282b96dda701a1414e59e4cafb8e44109b",
+  "generated_at_utc": "2026-05-13T19:34:42.109085+00:00",
+  "next_action": "Commit/push V338 launcher and run a short A100 smoke train with first-checkpoint FinOps kill-switch.",
+  "version": "v337d_hf_dataset_upload"
+}

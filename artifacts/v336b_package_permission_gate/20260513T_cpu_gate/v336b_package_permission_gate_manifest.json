@@ -1,0 +1,152 @@
+{
+  "decision": {
+    "adapter_only_required": true,
+    "decision": "solver_verifier_direct_package_blocked_adapter_only_required",
+    "direct_solver_package_allowed": false,
+    "hf_gpu_allowed": false,
+    "next_action": "Proceed to V337D minimal transfer dataset; do not submit solver/verifier package.",
+    "reason": "Official extracted pages require submission.zip containing a rank<=32 LoRA adapter; the valid local package contains only adapter_config.json and adapter_model.safetensors; the package script rejects prediction_postprocessor. V336A gain must be transferred into adapter-only behavior before Kaggle submit."
+  },
+  "generated_at_utc": "2026-05-13T19:22:50.030159+00:00",
+  "inputs": {
+    "competition_pages_json": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v327_kaggle_rules_audit\\competition_pages.json",
+    "competition_pages_sha256": "772541edd46d2e8d3d2ff37ac6b93bf41cedd300ac617416c76fe276a77e9304",
+    "package_script": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\scripts\\package_hf_adapter_submission.py",
+    "package_script_sha256": "3a95db80221f81455a5abd1dfae62c9a03ed42d09ad43b9d172f0381c4bccbd2",
+    "v291_package_manifest": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v291_submission_package\\v291_h200_checkpoint6_823_20260511T212028Z\\package_manifest.json",
+    "v291_package_manifest_sha256": "e8946af503c124e7c15ac4f9c06f84e42a83b1ecce4eda2f9928533aa0587d38",
+    "v327_audit_md": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v327_kaggle_rules_audit\\KG1_V327_KAGGLE_RULES_AUDIT.md",
+    "v327_audit_sha256": "7d18304b8367ebf9d3acdefe6d0132fd9b7b1da4ea82601c329e5ba2eaa43e55",
+    "v336a_manifest_json": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v336_integrated_no_loss_solver_gate\\20260513T_cpu_gate\\v336a_integrated_no_loss_solver_gate_manifest.json",
+    "v336a_manifest_sha256": "88a2be9340e91c59976c7d418a757f56fa0beb9a46cae90d39cd4a01bfdcb16e"
+  },
+  "local_packaging": {
+    "package_script_sha256": "3a95db80221f81455a5abd1dfae62c9a03ed42d09ad43b9d172f0381c4bccbd2",
+    "script_rejects_prediction_postprocessor": true,
+    "script_required_files_adapter_only": true,
+    "script_submit_hard_locked": true,
+    "v291_adapter_alpha": 32,
+    "v291_adapter_rank": 32,
+    "v291_adapter_rank_ok": true,
+    "v291_package_manifest_sha256": "e8946af503c124e7c15ac4f9c06f84e42a83b1ecce4eda2f9928533aa0587d38",
+    "v291_zip_adapter_only": true,
+    "v291_zip_entries": [
+      "adapter_config.json",
+      "adapter_model.safetensors"
+    ]
+  },
+  "official_requirements": {
+    "data_mentions_submission_zip_adapter": true,
+    "description_mentions_final_lora_adapter": true,
+    "evaluation_mentions_lora_adapter": true,
+    "evaluation_mentions_rank_32": true,
+    "evaluation_mentions_submission_zip": true,
+    "evaluation_mentions_vllm_loads_adapter": true,
+    "official_adapter_only_requirement_confirmed": true,
+    "rules_allow_external_tools_with_constraints": true
+  },
+  "outputs": {
+    "manifest_json": "artifacts\\v336b_package_permission_gate\\20260513T_cpu_gate\\v336b_package_permission_gate_manifest.json",
+    "summary_md": "artifacts\\v336b_package_permission_gate\\20260513T_cpu_gate\\KG1_V336B_PACKAGE_PERMISSION_GATE.md"
+  },
+  "schema_version": "kg1_v336b_package_permission_gate_v1",
+  "v336a": {
+    "baseline": {
+      "correct": 192,
+      "family_counts": {
+        "bit_manipulation": {
+          "correct": 136,
+          "rows": 160,
+          "truncated": 0
+        },
+        "equation_transform": {
+          "correct": 56,
+          "rows": 155,
+          "truncated": 0
+        }
+      }
+    },
+    "decision": {
+      "decision": "v336a_cpu_integrated_no_loss_gate_passed",
+      "hf_gpu_allowed": false,
+      "next_action": "Run V336B package-permission gate before any package, submit, or HF GPU training.",
+      "reason": "integrated=197/315; equation=61/155; bit=136/160; gains=5; losses=0"
+    },
+    "integrated": {
+      "accepted_candidate_count": 5,
+      "accepted_candidate_ids": [
+        "274def88",
+        "7688e06e",
+        "99d6a3b5",
+        "c5b058d6",
+        "d1bd7478"
+      ],
+      "candidate_source_summary": [
+        {
+          "accepted_rows": 1,
+          "rule_class": "v274_guarded_numeric_add_direct_over_model_add_variant",
+          "source_gate": "v324_equation_expanded_solver_gate"
+        },
+        {
+          "accepted_rows": 1,
+          "rule_class": "v274_guarded_numeric_colon_absdiff_unreverse_same_len",
+          "source_gate": "v324_equation_expanded_solver_gate"
+        },
+        {
+          "accepted_rows": 2,
+          "rule_class": "v274_guarded_numeric_minus_signed_opposite_sign_guarded",
+          "source_gate": "v324_equation_expanded_solver_gate"
+        },
+        {
+          "accepted_rows": 1,
+          "rule_class": "symbolic_cryptarithm_single_operator_digits_mul",
+          "source_gate": "v329_symbolic_cryptarithm_gate"
+        }
+      ],
+      "correct": 197,
+      "family_counts": {
+        "bit_manipulation": {
+          "correct": 136,
+          "rows": 160,
+          "truncated": 0
+        },
+        "equation_transform": {
+          "correct": 61,
+          "rows": 155,
+          "truncated": 0
+        }
+      },
+      "family_summary": [
+        {
+          "baseline_correct": 136,
+          "baseline_truncated": 0,
+          "delta_correct": 0,
+          "family": "bit_manipulation",
+          "integrated_correct": 136,
+          "integrated_truncated": 0,
+          "rows": 160
+        },
+        {
+          "baseline_correct": 56,
+          "baseline_truncated": 0,
+          "delta_correct": 5,
+          "family": "equation_transform",
+          "integrated_correct": 61,
+          "integrated_truncated": 0,
+          "rows": 155
+        }
+      ],
+      "gain_count": 5,
+      "gain_ids": [
+        "99d6a3b5",
+        "7688e06e",
+        "274def88",
+        "d1bd7478",
+        "c5b058d6"
+      ],
+      "loss_count": 0,
+      "loss_ids": [],
+      "rejected_candidate_count": 0
+    }
+  }
+}
