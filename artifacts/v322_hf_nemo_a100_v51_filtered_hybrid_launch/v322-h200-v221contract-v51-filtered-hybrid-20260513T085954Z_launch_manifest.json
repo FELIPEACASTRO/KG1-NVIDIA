@@ -1,0 +1,64 @@
+{
+  "adapter_repo": "felipesp1983/kg1-nemotron-lora-v322-nemo-a100-v51-filtered-hybrid-v290ckpt6",
+  "adapters": [
+    {
+      "name": "v322_v51_filtered_hybrid_checkpoint_4_v221_contract",
+      "repo": "felipesp1983/kg1-nemotron-lora-v322-nemo-a100-v51-filtered-hybrid-v290ckpt6",
+      "subfolder": "checkpoint-4"
+    },
+    {
+      "name": "v322_v51_filtered_hybrid_checkpoint_8_v221_contract",
+      "repo": "felipesp1983/kg1-nemotron-lora-v322-nemo-a100-v51-filtered-hybrid-v290ckpt6",
+      "subfolder": "checkpoint-8"
+    },
+    {
+      "name": "v322_v51_filtered_hybrid_checkpoint_12_v221_contract",
+      "repo": "felipesp1983/kg1-nemotron-lora-v322-nemo-a100-v51-filtered-hybrid-v290ckpt6",
+      "subfolder": "checkpoint-12"
+    },
+    {
+      "name": "v322_v51_filtered_hybrid_checkpoint_16_v221_contract",
+      "repo": "felipesp1983/kg1-nemotron-lora-v322-nemo-a100-v51-filtered-hybrid-v290ckpt6",
+      "subfolder": "checkpoint-16"
+    },
+    {
+      "name": "v322_v51_filtered_hybrid_final_v221_contract",
+      "repo": "felipesp1983/kg1-nemotron-lora-v322-nemo-a100-v51-filtered-hybrid-v290ckpt6",
+      "subfolder": "final"
+    }
+  ],
+  "branch": "v230-v226-complementarity",
+  "expected_commit": "312d802442804652a2b2b7ac467e3ed09abfad86",
+  "flavor": "h200",
+  "generated_at_utc": "2026-05-13T08:59:56.766933+00:00",
+  "hardware": {
+    "accelerator_model": "H200",
+    "accelerator_quantity": "1",
+    "accelerator_vram": "141 GB",
+    "cpu": "23 vCPU",
+    "name": "h200",
+    "pretty_name": "Nvidia H200",
+    "ram": "256 GB",
+    "unit_cost_usd": 0.083333,
+    "unit_label": "minute"
+  },
+  "image": "vllm/vllm-openai:v0.20.1",
+  "job_id": "6a043dca72518a0659900371",
+  "job_status": "RUNNING",
+  "job_url": "https://huggingface.co/jobs/felipesp1983/6a043dca72518a0659900371",
+  "missing_optional_adapters": [],
+  "namespace": "felipesp1983",
+  "output_path_in_repo": "evals/v322-h200-v221contract-v51-filtered-hybrid-20260513T085954Z",
+  "output_repo": "felipesp1983/kg1-nemotron-lora-v322-nemo-a100-v51-filtered-hybrid-v290ckpt6",
+  "promotion_gate": {
+    "inspect_if_equation_gt": 56,
+    "inspect_if_total_gte": 193,
+    "promote_if_bit_gte": 136,
+    "promote_if_equation_gte": 60,
+    "promote_if_total_gte": 193,
+    "reject_if_bit_lt": 136,
+    "reject_if_total_lt": 192
+  },
+  "run_id": "v322-h200-v221contract-v51-filtered-hybrid-20260513T085954Z",
+  "version": "v322_v51_filtered_hybrid_v221_weak_eval"
+}
