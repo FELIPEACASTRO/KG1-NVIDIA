@@ -1,0 +1,1522 @@
+{
+  "topic_id": 681745,
+  "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/681745",
+  "topic": {
+    "authorId": 14529580,
+    "authorThumbnailName": "default-thumb.png",
+    "authorUserDisplayName": "Jamil C Semaan",
+    "authorUserName": "jamilcsemaan",
+    "firstMessageId": 3422112,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 681745,
+    "isStickied": true,
+    "name": "How to Get Started + Nemotron Model Reasoning Challenge Resources",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-03-17T00:08:37.322550Z",
+    "totalVotes": 56,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/681745",
+    "totalMessages": 33,
+    "authorPerformanceTier": "CONTRIBUTOR",
+    "authorProgressionOptOut": false
+  },
+  "first_message": {
+    "id": 3422112,
+    "postDate": "2026-03-17T00:08:37.323Z",
+    "rawMarkdown": "## Information for First-Timers\nNew to NVIDIA Nemotron open model family and its NeMo open libraries? If you’re just starting to explore these models, tools, or docs, feel free to start a new thread in this channel, or drop any first-timer questions here and folks can help you get unblocked.\nIf you’re new to Nemotron and NeMo, skim the official Nemotron model pages, NeMo docs, and the resources listed below, then come back with specific questions about setup, fine-tuning, RL, or evaluation.\nHappy reasoning with Nemotron, and good luck climbing the leaderboard!\n\n### 1. Core Nemotron model family (models & baselines)\n- [Nemotron overview (model family, capabilities, benchmarks)](https://developer.nvidia.com/nemotron)\n- [Nemotron GitHub](https://github.com/NVIDIA-NeMo/Nemotron)(main repo and examples)\n- Nemotron 3 Nano[ technical blog](https://developer.nvidia.com/blog/inside-nvidia-nemotron-3-techniques-tools-and-data-that-make-it-efficient-and-accurate/) (architecture, efficiency, training details) \n- Nemotron v3 collection on [Hugging Face](https://huggingface.co/collections/nvidia/nvidia-nemotron-v3) (ready-to-use checkpoints)\n \n\n### 2. Nemotron open libraries for data & RL\n\n**Synthetic data generation**\nNeMo Data Designer (generate domain/task-specific synthetic data):\n - GitHub: https://github.com/NVIDIA-NeMo/DataDesigner\n - Docs: https://nvidia-nemo.github.io/DataDesigner/latest/\n - Recipes: https://nvidia-nemo.github.io/DataDesigner/latest/recipes/cards/\n\n**Data filtering and curation**\nNeMo Curator (multi‑modal data curation: text, images, video, audio):\n - GitHub: https://github.com/NVIDIA-NeMo/Curator\n - Docs: https://docs.nvidia.com/nemo/curator/latest/\n\n**RL & Gym (reasoning, behavior, agents)** \nNeMo RL (RL training at scale with SOTA algorithms):\n - GitHub: https://github.com/NVIDIA-NeMo/RL\n\n**NeMo Gym (build/manage RL environments)**\n - GitHub: https://github.com/NVIDIA-NeMo/gym\n - Available environments:\n https://github.com/NVIDIA-NeMo/Gym?tab=readme-ov-file#-available-environments\n\n**Guides & tutorials**\nNemotron 3 Super – multi‑stage RLVR & RLHF recipe with NeMo RL:\n - Guide: https://github.com/NVIDIA-NeMo/RL/blob/super-v3/docs/guides/nemotron-3-super.md\n - GRPO RLVR Jupyter notebook:\nhttps://github.com/NVIDIA-NeMo/Nemotron/tree/main/usage-cookbook/Nemotron-3-Super/grpo-dapo\n\n**Nemotron 3 Nano RL guide**\n https://docs.nvidia.com/nemo/rl/nightly/guides/nemotron-3-nano.html\n\n### 3. Nemotron open datasets (instruction-following & reasoning)\n- Pre‑training datasets collection: [Link](https://huggingface.co/collections/nvidia/nemotron-pre-training-datasets)\n- Post‑training datasets: [Link](https://huggingface.co/collections/nvidia/nemotron-post-training-v3)\n- RL instruction‑following dataset: [Link](https://huggingface.co/datasets/nvidia/Nemotron-RL-instruction_following)\n- Agentic dataset:[Link](https://huggingface.co/datasets/nvidia/Nemotron-Agentic-v1)\n- RAG dataset: [Link](https://huggingface.co/datasets/nvidia/embed-nemotron-dataset-v1)\n- Personas collection: [Link]( https://huggingface.co/collections/nvidia/nemotron-personas)\n- More NVIDIA datasets: [Link](https://huggingface.co/datasets?search=nvidia)\n\n### 4. Cookbooks, recipes, and evaluation\n- Nemotron main repo (cookbooks, training recipes, deployment examples): https://github.com/NVIDIA-NeMo/Nemotron\n- Nemotron 3 Nano reproducibility / eval guide with NeMo Evaluator: https://github.com/NVIDIA-NeMo/Evaluator/blob/main/packages/nemo-evaluator-launcher/examples/nemotron/nano-v3-reproducibility.md\n\n### 5. Community & learning paths\nIf you get stuck, want feedback on an idea, or just want to see how others are approaching the challenge, these are great next stops:\n\n**Nemotron / NVIDIA Developer Discord (join + Nemotron channel):**\n Join: https://discord.com/invite/nvidiadeveloper\n \n**Nemotron Reasoning Challenge Discord channel:** https://discord.gg/udbkJyWk \n\n**NVIDIA community email** (questions, feedback, sharing work):\n community@nvidia.com\n\n**Learning paths**\n- Build an AI agent (guide + code):\n https://developer.nvidia.com/topics/ai/how-to-build-an-ai-agent\n- GitHub: https://github.com/NVIDIA-NeMo\n- Build a RAG agent (guide + code):\n https://developer.nvidia.com/topics/ai/how-to-build-agentic-ai-rag\n- GitHub: https://github.com/NVIDIA-NeMo\n- Launchable environment for Nemotron (pre‑configured cloud env):\nhttps://brev.nvidia.com/launchable/deploy?launchableID=env-32kC34ErT9wsqTcJyaKMxBEuhr2\n- GitHub: https://github.com/NVIDIA-NeMo\n- Nemotron Labs livestreams playlist (deep dives, demos, Q&A):\nhttps://youtube.com/playlist?list=PL5B692fm6--vEL0FwctKghCpyEnBGAQJA&si=jhVNZVfdj_91hpEJ\n",
+    "content": "<h2>Information for First-Timers</h2>\n<p>New to NVIDIA Nemotron open model family and its NeMo open libraries? If you’re just starting to explore these models, tools, or docs, feel free to start a new thread in this channel, or drop any first-timer questions here and folks can help you get unblocked.\nIf you’re new to Nemotron and NeMo, skim the official Nemotron model pages, NeMo docs, and the resources listed below, then come back with specific questions about setup, fine-tuning, RL, or evaluation.\nHappy reasoning with Nemotron, and good luck climbing the leaderboard!</p>\n<h3>1. Core Nemotron model family (models &amp; baselines)</h3>\n<ul>\n<li><a href=\"https://developer.nvidia.com/nemotron\" target=\"_blank\">Nemotron overview (model family, capabilities, benchmarks)</a></li>\n<li><a href=\"https://github.com/NVIDIA-NeMo/Nemotron\" target=\"_blank\">Nemotron GitHub</a>(main repo and examples)</li>\n<li>Nemotron 3 Nano<a href=\"https://developer.nvidia.com/blog/inside-nvidia-nemotron-3-techniques-tools-and-data-that-make-it-efficient-and-accurate/\" target=\"_blank\"> technical blog</a> (architecture, efficiency, training details) </li>\n<li>Nemotron v3 collection on <a href=\"https://huggingface.co/collections/nvidia/nvidia-nemotron-v3\" target=\"_blank\">Hugging Face</a> (ready-to-use checkpoints)</li>\n</ul>\n<h3>2. Nemotron open libraries for data &amp; RL</h3>\n<p><strong>Synthetic data generation</strong>\nNeMo Data Designer (generate domain/task-specific synthetic data):</p>\n<ul>\n<li>GitHub: <a href=\"https://github.com/NVIDIA-NeMo/DataDesigner\" target=\"_blank\">https://github.com/NVIDIA-NeMo/DataDesigner</a></li>\n<li>Docs: <a href=\"https://nvidia-nemo.github.io/DataDesigner/latest/\" target=\"_blank\">https://nvidia-nemo.github.io/DataDesigner/latest/</a></li>\n<li>Recipes: <a href=\"https://nvidia-nemo.github.io/DataDesigner/latest/recipes/cards/\" target=\"_blank\">https://nvidia-nemo.github.io/DataDesigner/latest/recipes/cards/</a></li>\n</ul>\n<p><strong>Data filtering and curation</strong>\nNeMo Curator (multi‑modal data curation: text, images, video, audio):</p>\n<ul>\n<li>GitHub: <a href=\"https://github.com/NVIDIA-NeMo/Curator\" target=\"_blank\">https://github.com/NVIDIA-NeMo/Curator</a></li>\n<li>Docs: <a href=\"https://docs.nvidia.com/nemo/curator/latest/\" target=\"_blank\">https://docs.nvidia.com/nemo/curator/latest/</a></li>\n</ul>\n<p><strong>RL &amp; Gym (reasoning, behavior, agents)</strong> \nNeMo RL (RL training at scale with SOTA algorithms):</p>\n<ul>\n<li>GitHub: <a href=\"https://github.com/NVIDIA-NeMo/RL\" target=\"_blank\">https://github.com/NVIDIA-NeMo/RL</a></li>\n</ul>\n<p><strong>NeMo Gym (build/manage RL environments)</strong></p>\n<ul>\n<li>GitHub: <a href=\"https://github.com/NVIDIA-NeMo/gym\" target=\"_blank\">https://github.com/NVIDIA-NeMo/gym</a></li>\n<li>Available environments:\n<a href=\"https://github.com/NVIDIA-NeMo/Gym?tab=readme-ov-file#-available-environments\" target=\"_blank\">https://github.com/NVIDIA-NeMo/Gym?tab=readme-ov-file#-available-environments</a></li>\n</ul>\n<p><strong>Guides &amp; tutorials</strong>\nNemotron 3 Super – multi‑stage RLVR &amp; RLHF recipe with NeMo RL:</p>\n<ul>\n<li>Guide: <a href=\"https://github.com/NVIDIA-NeMo/RL/blob/super-v3/docs/guides/nemotron-3-super.md\" target=\"_blank\">https://github.com/NVIDIA-NeMo/RL/blob/super-v3/docs/guides/nemotron-3-super.md</a></li>\n<li>GRPO RLVR Jupyter notebook:\n<a href=\"https://github.com/NVIDIA-NeMo/Nemotron/tree/main/usage-cookbook/Nemotron-3-Super/grpo-dapo\" target=\"_blank\">https://github.com/NVIDIA-NeMo/Nemotron/tree/main/usage-cookbook/Nemotron-3-Super/grpo-dapo</a></li>\n</ul>\n<p><strong>Nemotron 3 Nano RL guide</strong>\n <a href=\"https://docs.nvidia.com/nemo/rl/nightly/guides/nemotron-3-nano.html\" target=\"_blank\">https://docs.nvidia.com/nemo/rl/nightly/guides/nemotron-3-nano.html</a></p>\n<h3>3. Nemotron open datasets (instruction-following &amp; reasoning)</h3>\n<ul>\n<li>Pre‑training datasets collection: <a href=\"https://huggingface.co/collections/nvidia/nemotron-pre-training-datasets\" target=\"_blank\">Link</a></li>\n<li>Post‑training datasets: <a href=\"https://huggingface.co/collections/nvidia/nemotron-post-training-v3\" target=\"_blank\">Link</a></li>\n<li>RL instruction‑following dataset: <a href=\"https://huggingface.co/datasets/nvidia/Nemotron-RL-instruction_following\" target=\"_blank\">Link</a></li>\n<li>Agentic dataset:<a href=\"https://huggingface.co/datasets/nvidia/Nemotron-Agentic-v1\" target=\"_blank\">Link</a></li>\n<li>RAG dataset: <a href=\"https://huggingface.co/datasets/nvidia/embed-nemotron-dataset-v1\" target=\"_blank\">Link</a></li>\n<li>Personas collection: <a href=\"https://huggingface.co/collections/nvidia/nemotron-personas\" target=\"_blank\">Link</a></li>\n<li>More NVIDIA datasets: <a href=\"https://huggingface.co/datasets?search=nvidia\" target=\"_blank\">Link</a></li>\n</ul>\n<h3>4. Cookbooks, recipes, and evaluation</h3>\n<ul>\n<li>Nemotron main repo (cookbooks, training recipes, deployment examples): <a href=\"https://github.com/NVIDIA-NeMo/Nemotron\" target=\"_blank\">https://github.com/NVIDIA-NeMo/Nemotron</a></li>\n<li>Nemotron 3 Nano reproducibility / eval guide with NeMo Evaluator: <a href=\"https://github.com/NVIDIA-NeMo/Evaluator/blob/main/packages/nemo-evaluator-launcher/examples/nemotron/nano-v3-reproducibility.md\" target=\"_blank\">https://github.com/NVIDIA-NeMo/Evaluator/blob/main/packages/nemo-evaluator-launcher/examples/nemotron/nano-v3-reproducibility.md</a></li>\n</ul>\n<h3>5. Community &amp; learning paths</h3>\n<p>If you get stuck, want feedback on an idea, or just want to see how others are approaching the challenge, these are great next stops:</p>\n<p><strong>Nemotron / NVIDIA Developer Discord (join + Nemotron channel):</strong>\n Join: <a href=\"https://discord.com/invite/nvidiadeveloper\" target=\"_blank\">https://discord.com/invite/nvidiadeveloper</a></p>\n<p><strong>Nemotron Reasoning Challenge Discord channel:</strong> <a href=\"https://discord.gg/udbkJyWk\" target=\"_blank\">https://discord.gg/udbkJyWk</a> </p>\n<p><strong>NVIDIA community email</strong> (questions, feedback, sharing work):\n <a href=\"mailto:community@nvidia.com\">community@nvidia.com</a></p>\n<p><strong>Learning paths</strong></p>\n<ul>\n<li>Build an AI agent (guide + code):\n<a href=\"https://developer.nvidia.com/topics/ai/how-to-build-an-ai-agent\" target=\"_blank\">https://developer.nvidia.com/topics/ai/how-to-build-an-ai-agent</a></li>\n<li>GitHub: <a href=\"https://github.com/NVIDIA-NeMo\" target=\"_blank\">https://github.com/NVIDIA-NeMo</a></li>\n<li>Build a RAG agent (guide + code):\n<a href=\"https://developer.nvidia.com/topics/ai/how-to-build-agentic-ai-rag\" target=\"_blank\">https://developer.nvidia.com/topics/ai/how-to-build-agentic-ai-rag</a></li>\n<li>GitHub: <a href=\"https://github.com/NVIDIA-NeMo\" target=\"_blank\">https://github.com/NVIDIA-NeMo</a></li>\n<li>Launchable environment for Nemotron (pre‑configured cloud env):\n<a href=\"https://brev.nvidia.com/launchable/deploy?launchableID=env-32kC34ErT9wsqTcJyaKMxBEuhr2\" target=\"_blank\">https://brev.nvidia.com/launchable/deploy?launchableID=env-32kC34ErT9wsqTcJyaKMxBEuhr2</a></li>\n<li>GitHub: <a href=\"https://github.com/NVIDIA-NeMo\" target=\"_blank\">https://github.com/NVIDIA-NeMo</a></li>\n<li>Nemotron Labs livestreams playlist (deep dives, demos, Q&amp;A):\n<a href=\"https://youtube.com/playlist?list=PL5B692fm6--vEL0FwctKghCpyEnBGAQJA&amp;si=jhVNZVfdj_91hpEJ\" target=\"_blank\">https://youtube.com/playlist?list=PL5B692fm6--vEL0FwctKghCpyEnBGAQJA&amp;si=jhVNZVfdj_91hpEJ</a></li>\n</ul>",
+    "parent": {
+      "url": "#"
+    },
+    "author": {
+      "displayName": "Jamil C Semaan",
+      "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+      "url": "/jamilcsemaan",
+      "tier": "CONTRIBUTOR",
+      "id": 14529580,
+      "progressionOptOut": false
+    },
+    "authorType": "HOST",
+    "votes": {
+      "totalVotes": 56,
+      "canUpvote": true,
+      "totalUpvotes": 56
+    },
+    "kernelVersion": 0,
+    "feedbackTrackingData": {},
+    "reactions": [
+      {
+        "emoji": "THANK_YOU",
+        "featuredUserNames": [
+          "hyzhak",
+          "watts2",
+          "lpoint",
+          "javihm77",
+          "soumya9977",
+          "hechtjp",
+          "bloodymonday",
+          "swami93",
+          "tidemoon",
+          "hassantamer",
+          "yottantokushima",
+          "atomstack001",
+          "vladyslavmorozov",
+          "peerapatsetsuk",
+          "badaju",
+          "hzubair122",
+          "sanjidh090",
+          "didogrigorov88",
+          "sreeharshak101",
+          "salmansas"
+        ],
+        "userCount": 20
+      },
+      {
+        "emoji": "LOVE",
+        "featuredUserNames": [
+          "danger44",
+          "soumya9977",
+          "abcbum",
+          "bloodymonday",
+          "truthisneverlinear",
+          "kapturovalexander",
+          "atomstack001",
+          "bryanchenyueming",
+          "dataywang",
+          "hzubair122",
+          "manishkkn",
+          "amit070",
+          "salmansas",
+          "damndeepesh",
+          "fengjixing",
+          "alamirays"
+        ],
+        "userCount": 16
+      }
+    ]
+  },
+  "messages": [
+    {
+      "id": 3422112,
+      "postDate": "2026-03-17T00:08:37.323Z",
+      "rawMarkdown": "## Information for First-Timers\nNew to NVIDIA Nemotron open model family and its NeMo open libraries? If you’re just starting to explore these models, tools, or docs, feel free to start a new thread in this channel, or drop any first-timer questions here and folks can help you get unblocked.\nIf you’re new to Nemotron and NeMo, skim the official Nemotron model pages, NeMo docs, and the resources listed below, then come back with specific questions about setup, fine-tuning, RL, or evaluation.\nHappy reasoning with Nemotron, and good luck climbing the leaderboard!\n\n### 1. Core Nemotron model family (models & baselines)\n- [Nemotron overview (model family, capabilities, benchmarks)](https://developer.nvidia.com/nemotron)\n- [Nemotron GitHub](https://github.com/NVIDIA-NeMo/Nemotron)(main repo and examples)\n- Nemotron 3 Nano[ technical blog](https://developer.nvidia.com/blog/inside-nvidia-nemotron-3-techniques-tools-and-data-that-make-it-efficient-and-accurate/) (architecture, efficiency, training details) \n- Nemotron v3 collection on [Hugging Face](https://huggingface.co/collections/nvidia/nvidia-nemotron-v3) (ready-to-use checkpoints)\n \n\n### 2. Nemotron open libraries for data & RL\n\n**Synthetic data generation**\nNeMo Data Designer (generate domain/task-specific synthetic data):\n - GitHub: https://github.com/NVIDIA-NeMo/DataDesigner\n - Docs: https://nvidia-nemo.github.io/DataDesigner/latest/\n - Recipes: https://nvidia-nemo.github.io/DataDesigner/latest/recipes/cards/\n\n**Data filtering and curation**\nNeMo Curator (multi‑modal data curation: text, images, video, audio):\n - GitHub: https://github.com/NVIDIA-NeMo/Curator\n - Docs: https://docs.nvidia.com/nemo/curator/latest/\n\n**RL & Gym (reasoning, behavior, agents)** \nNeMo RL (RL training at scale with SOTA algorithms):\n - GitHub: https://github.com/NVIDIA-NeMo/RL\n\n**NeMo Gym (build/manage RL environments)**\n - GitHub: https://github.com/NVIDIA-NeMo/gym\n - Available environments:\n https://github.com/NVIDIA-NeMo/Gym?tab=readme-ov-file#-available-environments\n\n**Guides & tutorials**\nNemotron 3 Super – multi‑stage RLVR & RLHF recipe with NeMo RL:\n - Guide: https://github.com/NVIDIA-NeMo/RL/blob/super-v3/docs/guides/nemotron-3-super.md\n - GRPO RLVR Jupyter notebook:\nhttps://github.com/NVIDIA-NeMo/Nemotron/tree/main/usage-cookbook/Nemotron-3-Super/grpo-dapo\n\n**Nemotron 3 Nano RL guide**\n https://docs.nvidia.com/nemo/rl/nightly/guides/nemotron-3-nano.html\n\n### 3. Nemotron open datasets (instruction-following & reasoning)\n- Pre‑training datasets collection: [Link](https://huggingface.co/collections/nvidia/nemotron-pre-training-datasets)\n- Post‑training datasets: [Link](https://huggingface.co/collections/nvidia/nemotron-post-training-v3)\n- RL instruction‑following dataset: [Link](https://huggingface.co/datasets/nvidia/Nemotron-RL-instruction_following)\n- Agentic dataset:[Link](https://huggingface.co/datasets/nvidia/Nemotron-Agentic-v1)\n- RAG dataset: [Link](https://huggingface.co/datasets/nvidia/embed-nemotron-dataset-v1)\n- Personas collection: [Link]( https://huggingface.co/collections/nvidia/nemotron-personas)\n- More NVIDIA datasets: [Link](https://huggingface.co/datasets?search=nvidia)\n\n### 4. Cookbooks, recipes, and evaluation\n- Nemotron main repo (cookbooks, training recipes, deployment examples): https://github.com/NVIDIA-NeMo/Nemotron\n- Nemotron 3 Nano reproducibility / eval guide with NeMo Evaluator: https://github.com/NVIDIA-NeMo/Evaluator/blob/main/packages/nemo-evaluator-launcher/examples/nemotron/nano-v3-reproducibility.md\n\n### 5. Community & learning paths\nIf you get stuck, want feedback on an idea, or just want to see how others are approaching the challenge, these are great next stops:\n\n**Nemotron / NVIDIA Developer Discord (join + Nemotron channel):**\n Join: https://discord.com/invite/nvidiadeveloper\n \n**Nemotron Reasoning Challenge Discord channel:** https://discord.gg/udbkJyWk \n\n**NVIDIA community email** (questions, feedback, sharing work):\n community@nvidia.com\n\n**Learning paths**\n- Build an AI agent (guide + code):\n https://developer.nvidia.com/topics/ai/how-to-build-an-ai-agent\n- GitHub: https://github.com/NVIDIA-NeMo\n- Build a RAG agent (guide + code):\n https://developer.nvidia.com/topics/ai/how-to-build-agentic-ai-rag\n- GitHub: https://github.com/NVIDIA-NeMo\n- Launchable environment for Nemotron (pre‑configured cloud env):\nhttps://brev.nvidia.com/launchable/deploy?launchableID=env-32kC34ErT9wsqTcJyaKMxBEuhr2\n- GitHub: https://github.com/NVIDIA-NeMo\n- Nemotron Labs livestreams playlist (deep dives, demos, Q&A):\nhttps://youtube.com/playlist?list=PL5B692fm6--vEL0FwctKghCpyEnBGAQJA&si=jhVNZVfdj_91hpEJ\n",
+      "content": "<h2>Information for First-Timers</h2>\n<p>New to NVIDIA Nemotron open model family and its NeMo open libraries? If you’re just starting to explore these models, tools, or docs, feel free to start a new thread in this channel, or drop any first-timer questions here and folks can help you get unblocked.\nIf you’re new to Nemotron and NeMo, skim the official Nemotron model pages, NeMo docs, and the resources listed below, then come back with specific questions about setup, fine-tuning, RL, or evaluation.\nHappy reasoning with Nemotron, and good luck climbing the leaderboard!</p>\n<h3>1. Core Nemotron model family (models &amp; baselines)</h3>\n<ul>\n<li><a href=\"https://developer.nvidia.com/nemotron\" target=\"_blank\">Nemotron overview (model family, capabilities, benchmarks)</a></li>\n<li><a href=\"https://github.com/NVIDIA-NeMo/Nemotron\" target=\"_blank\">Nemotron GitHub</a>(main repo and examples)</li>\n<li>Nemotron 3 Nano<a href=\"https://developer.nvidia.com/blog/inside-nvidia-nemotron-3-techniques-tools-and-data-that-make-it-efficient-and-accurate/\" target=\"_blank\"> technical blog</a> (architecture, efficiency, training details) </li>\n<li>Nemotron v3 collection on <a href=\"https://huggingface.co/collections/nvidia/nvidia-nemotron-v3\" target=\"_blank\">Hugging Face</a> (ready-to-use checkpoints)</li>\n</ul>\n<h3>2. Nemotron open libraries for data &amp; RL</h3>\n<p><strong>Synthetic data generation</strong>\nNeMo Data Designer (generate domain/task-specific synthetic data):</p>\n<ul>\n<li>GitHub: <a href=\"https://github.com/NVIDIA-NeMo/DataDesigner\" target=\"_blank\">https://github.com/NVIDIA-NeMo/DataDesigner</a></li>\n<li>Docs: <a href=\"https://nvidia-nemo.github.io/DataDesigner/latest/\" target=\"_blank\">https://nvidia-nemo.github.io/DataDesigner/latest/</a></li>\n<li>Recipes: <a href=\"https://nvidia-nemo.github.io/DataDesigner/latest/recipes/cards/\" target=\"_blank\">https://nvidia-nemo.github.io/DataDesigner/latest/recipes/cards/</a></li>\n</ul>\n<p><strong>Data filtering and curation</strong>\nNeMo Curator (multi‑modal data curation: text, images, video, audio):</p>\n<ul>\n<li>GitHub: <a href=\"https://github.com/NVIDIA-NeMo/Curator\" target=\"_blank\">https://github.com/NVIDIA-NeMo/Curator</a></li>\n<li>Docs: <a href=\"https://docs.nvidia.com/nemo/curator/latest/\" target=\"_blank\">https://docs.nvidia.com/nemo/curator/latest/</a></li>\n</ul>\n<p><strong>RL &amp; Gym (reasoning, behavior, agents)</strong> \nNeMo RL (RL training at scale with SOTA algorithms):</p>\n<ul>\n<li>GitHub: <a href=\"https://github.com/NVIDIA-NeMo/RL\" target=\"_blank\">https://github.com/NVIDIA-NeMo/RL</a></li>\n</ul>\n<p><strong>NeMo Gym (build/manage RL environments)</strong></p>\n<ul>\n<li>GitHub: <a href=\"https://github.com/NVIDIA-NeMo/gym\" target=\"_blank\">https://github.com/NVIDIA-NeMo/gym</a></li>\n<li>Available environments:\n<a href=\"https://github.com/NVIDIA-NeMo/Gym?tab=readme-ov-file#-available-environments\" target=\"_blank\">https://github.com/NVIDIA-NeMo/Gym?tab=readme-ov-file#-available-environments</a></li>\n</ul>\n<p><strong>Guides &amp; tutorials</strong>\nNemotron 3 Super – multi‑stage RLVR &amp; RLHF recipe with NeMo RL:</p>\n<ul>\n<li>Guide: <a href=\"https://github.com/NVIDIA-NeMo/RL/blob/super-v3/docs/guides/nemotron-3-super.md\" target=\"_blank\">https://github.com/NVIDIA-NeMo/RL/blob/super-v3/docs/guides/nemotron-3-super.md</a></li>\n<li>GRPO RLVR Jupyter notebook:\n<a href=\"https://github.com/NVIDIA-NeMo/Nemotron/tree/main/usage-cookbook/Nemotron-3-Super/grpo-dapo\" target=\"_blank\">https://github.com/NVIDIA-NeMo/Nemotron/tree/main/usage-cookbook/Nemotron-3-Super/grpo-dapo</a></li>\n</ul>\n<p><strong>Nemotron 3 Nano RL guide</strong>\n <a href=\"https://docs.nvidia.com/nemo/rl/nightly/guides/nemotron-3-nano.html\" target=\"_blank\">https://docs.nvidia.com/nemo/rl/nightly/guides/nemotron-3-nano.html</a></p>\n<h3>3. Nemotron open datasets (instruction-following &amp; reasoning)</h3>\n<ul>\n<li>Pre‑training datasets collection: <a href=\"https://huggingface.co/collections/nvidia/nemotron-pre-training-datasets\" target=\"_blank\">Link</a></li>\n<li>Post‑training datasets: <a href=\"https://huggingface.co/collections/nvidia/nemotron-post-training-v3\" target=\"_blank\">Link</a></li>\n<li>RL instruction‑following dataset: <a href=\"https://huggingface.co/datasets/nvidia/Nemotron-RL-instruction_following\" target=\"_blank\">Link</a></li>\n<li>Agentic dataset:<a href=\"https://huggingface.co/datasets/nvidia/Nemotron-Agentic-v1\" target=\"_blank\">Link</a></li>\n<li>RAG dataset: <a href=\"https://huggingface.co/datasets/nvidia/embed-nemotron-dataset-v1\" target=\"_blank\">Link</a></li>\n<li>Personas collection: <a href=\"https://huggingface.co/collections/nvidia/nemotron-personas\" target=\"_blank\">Link</a></li>\n<li>More NVIDIA datasets: <a href=\"https://huggingface.co/datasets?search=nvidia\" target=\"_blank\">Link</a></li>\n</ul>\n<h3>4. Cookbooks, recipes, and evaluation</h3>\n<ul>\n<li>Nemotron main repo (cookbooks, training recipes, deployment examples): <a href=\"https://github.com/NVIDIA-NeMo/Nemotron\" target=\"_blank\">https://github.com/NVIDIA-NeMo/Nemotron</a></li>\n<li>Nemotron 3 Nano reproducibility / eval guide with NeMo Evaluator: <a href=\"https://github.com/NVIDIA-NeMo/Evaluator/blob/main/packages/nemo-evaluator-launcher/examples/nemotron/nano-v3-reproducibility.md\" target=\"_blank\">https://github.com/NVIDIA-NeMo/Evaluator/blob/main/packages/nemo-evaluator-launcher/examples/nemotron/nano-v3-reproducibility.md</a></li>\n</ul>\n<h3>5. Community &amp; learning paths</h3>\n<p>If you get stuck, want feedback on an idea, or just want to see how others are approaching the challenge, these are great next stops:</p>\n<p><strong>Nemotron / NVIDIA Developer Discord (join + Nemotron channel):</strong>\n Join: <a href=\"https://discord.com/invite/nvidiadeveloper\" target=\"_blank\">https://discord.com/invite/nvidiadeveloper</a></p>\n<p><strong>Nemotron Reasoning Challenge Discord channel:</strong> <a href=\"https://discord.gg/udbkJyWk\" target=\"_blank\">https://discord.gg/udbkJyWk</a> </p>\n<p><strong>NVIDIA community email</strong> (questions, feedback, sharing work):\n <a href=\"mailto:community@nvidia.com\">community@nvidia.com</a></p>\n<p><strong>Learning paths</strong></p>\n<ul>\n<li>Build an AI agent (guide + code):\n<a href=\"https://developer.nvidia.com/topics/ai/how-to-build-an-ai-agent\" target=\"_blank\">https://developer.nvidia.com/topics/ai/how-to-build-an-ai-agent</a></li>\n<li>GitHub: <a href=\"https://github.com/NVIDIA-NeMo\" target=\"_blank\">https://github.com/NVIDIA-NeMo</a></li>\n<li>Build a RAG agent (guide + code):\n<a href=\"https://developer.nvidia.com/topics/ai/how-to-build-agentic-ai-rag\" target=\"_blank\">https://developer.nvidia.com/topics/ai/how-to-build-agentic-ai-rag</a></li>\n<li>GitHub: <a href=\"https://github.com/NVIDIA-NeMo\" target=\"_blank\">https://github.com/NVIDIA-NeMo</a></li>\n<li>Launchable environment for Nemotron (pre‑configured cloud env):\n<a href=\"https://brev.nvidia.com/launchable/deploy?launchableID=env-32kC34ErT9wsqTcJyaKMxBEuhr2\" target=\"_blank\">https://brev.nvidia.com/launchable/deploy?launchableID=env-32kC34ErT9wsqTcJyaKMxBEuhr2</a></li>\n<li>GitHub: <a href=\"https://github.com/NVIDIA-NeMo\" target=\"_blank\">https://github.com/NVIDIA-NeMo</a></li>\n<li>Nemotron Labs livestreams playlist (deep dives, demos, Q&amp;A):\n<a href=\"https://youtube.com/playlist?list=PL5B692fm6--vEL0FwctKghCpyEnBGAQJA&amp;si=jhVNZVfdj_91hpEJ\" target=\"_blank\">https://youtube.com/playlist?list=PL5B692fm6--vEL0FwctKghCpyEnBGAQJA&amp;si=jhVNZVfdj_91hpEJ</a></li>\n</ul>",
+      "parent": {
+        "url": "#"
+      },
+      "author": {
+        "displayName": "Jamil C Semaan",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+        "url": "/jamilcsemaan",
+        "tier": "CONTRIBUTOR",
+        "id": 14529580,
+        "progressionOptOut": false
+      },
+      "authorType": "HOST",
+      "votes": {
+        "totalVotes": 56,
+        "canUpvote": true,
+        "totalUpvotes": 56
+      },
+      "kernelVersion": 0,
+      "feedbackTrackingData": {},
+      "reactions": [
+        {
+          "emoji": "THANK_YOU",
+          "featuredUserNames": [
+            "hyzhak",
+            "watts2",
+            "lpoint",
+            "javihm77",
+            "soumya9977",
+            "hechtjp",
+            "bloodymonday",
+            "swami93",
+            "tidemoon",
+            "hassantamer",
+            "yottantokushima",
+            "atomstack001",
+            "vladyslavmorozov",
+            "peerapatsetsuk",
+            "badaju",
+            "hzubair122",
+            "sanjidh090",
+            "didogrigorov88",
+            "sreeharshak101",
+            "salmansas"
+          ],
+          "userCount": 20
+        },
+        {
+          "emoji": "LOVE",
+          "featuredUserNames": [
+            "danger44",
+            "soumya9977",
+            "abcbum",
+            "bloodymonday",
+            "truthisneverlinear",
+            "kapturovalexander",
+            "atomstack001",
+            "bryanchenyueming",
+            "dataywang",
+            "hzubair122",
+            "manishkkn",
+            "amit070",
+            "salmansas",
+            "damndeepesh",
+            "fengjixing",
+            "alamirays"
+          ],
+          "userCount": 16
+        }
+      ],
+      "depth": 0,
+      "is_first_message": true
+    },
+    {
+      "id": 3428335,
+      "postDate": "2026-03-25T09:42:48.897Z",
+      "rawMarkdown": "Hi Jamil,\n\nThere appears to be some trainining data bug which I identified lately, as the model was being trained on buggy data and gave wrong answer.\n\nBelow are the areas critical:\n- Bit manipulation: 50.5% of training traces are WRONG (764/1513 mismatches between computed Result and answer)\n- Equation transformation: 49% have I/O length mismatches making char_map fundamentally broken, 44% have unknown chars\n\nBit Manipulation:\n\n1988 total training examples\n1513 have a Result line\n764 have MISMATCHES between computed Result and \\boxed{} answer\n50.5% mismatch rate - HALF the training data teaches WRONG reasoning!\n344 examples have f() unknowns (where we couldn't determine the rule)\nEquation Transformation:\n\n3157 total training examples\n\n1555 (49%) have input/output lengths that differ - char_map approach is fundamentally wrong for these\n\nAnother 1382 (44%) have unknown '?' characters when applying the char_map to the query\n\n77 (2%) the char_map fails to even predict any of the given examples\n\nThe pattern is unmistakable: bit_manipulation is poisoning the model with wrong answers in half its examples, and equation_transformation's char_map strategy simply doesn't work for nearly half the data due to length mismatches and missing characters.\n\nWas this left on purpose ?\n\nIs there any plan to fix these bugs or we don't intend to fix ?\n\nI used this script to find the issues and bugs in training data.",
+      "content": "<p>Hi Jamil,</p>\n<p>There appears to be some trainining data bug which I identified lately, as the model was being trained on buggy data and gave wrong answer.</p>\n<p>Below are the areas critical:</p>\n<ul>\n<li>Bit manipulation: 50.5% of training traces are WRONG (764/1513 mismatches between computed Result and answer)</li>\n<li>Equation transformation: 49% have I/O length mismatches making char_map fundamentally broken, 44% have unknown chars</li>\n</ul>\n<p>Bit Manipulation:</p>\n<p>1988 total training examples\n1513 have a Result line\n764 have MISMATCHES between computed Result and \\boxed{} answer\n50.5% mismatch rate - HALF the training data teaches WRONG reasoning!\n344 examples have f() unknowns (where we couldn't determine the rule)\nEquation Transformation:</p>\n<p>3157 total training examples</p>\n<p>1555 (49%) have input/output lengths that differ - char_map approach is fundamentally wrong for these</p>\n<p>Another 1382 (44%) have unknown '?' characters when applying the char_map to the query</p>\n<p>77 (2%) the char_map fails to even predict any of the given examples</p>\n<p>The pattern is unmistakable: bit_manipulation is poisoning the model with wrong answers in half its examples, and equation_transformation's char_map strategy simply doesn't work for nearly half the data due to length mismatches and missing characters.</p>\n<p>Was this left on purpose ?</p>\n<p>Is there any plan to fix these bugs or we don't intend to fix ?</p>\n<p>I used this script to find the issues and bugs in training data.</p>",
+      "attachments": [
+        {
+          "fileType": ".py",
+          "id": 39613,
+          "name": "check_bugs.py",
+          "totalBytes": 3848,
+          "url": "https://storage.googleapis.com/kaggle-forum-message-attachments/3428335/39613/check_bugs.py"
+        }
+      ],
+      "parent": {},
+      "author": {
+        "displayName": "Ashutosh Kumar",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+        "url": "/ashutoshkumar432",
+        "tier": "CONTRIBUTOR",
+        "id": 11379547,
+        "progressionOptOut": false
+      },
+      "authorType": "COMMENT",
+      "votes": {
+        "totalVotes": 9,
+        "canUpvote": true,
+        "totalUpvotes": 9
+      },
+      "kernelVersion": 0,
+      "competitionRanking": 1296,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "Ashutosh Kumar",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "url": "/ashutoshkumar432",
+          "userName": "ashutoshkumar432",
+          "tier": "CONTRIBUTOR",
+          "id": 11379547,
+          "profileUrl": "/ashutoshkumar432",
+          "performanceTier": "CONTRIBUTOR",
+          "userId": 11379547,
+          "progressionOptOut": false
+        },
+        "intro": ""
+      },
+      "depth": 0,
+      "is_first_message": false
+    },
+    {
+      "id": 3433361,
+      "postDate": "2026-04-01T15:52:13.607Z",
+      "rawMarkdown": "I am getting started with learning nemo libs.\n\nwhen I launch the brev/lab environment (https://brev.nvidia.com/launchable/deploy?launchableID=env-32kC34ErT9wsqTcJyaKMxBEuhr2)....It is asking me to buy credits.\n\nIs that the only way to use the lab is buying credits or for this competition is there a free lab environment?",
+      "content": "<p>I am getting started with learning nemo libs.</p>\n<p>when I launch the brev/lab environment (<a href=\"https://brev.nvidia.com/launchable/deploy?launchableID=env-32kC34ErT9wsqTcJyaKMxBEuhr2)….It\" target=\"_blank\">https://brev.nvidia.com/launchable/deploy?launchableID=env-32kC34ErT9wsqTcJyaKMxBEuhr2)….It</a> is asking me to buy credits.</p>\n<p>Is that the only way to use the lab is buying credits or for this competition is there a free lab environment?</p>",
+      "parent": {},
+      "author": {
+        "displayName": "NoorMazhar",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/709754-gp.jpg",
+        "url": "/noorneo",
+        "tier": "CONTRIBUTOR",
+        "id": 709754,
+        "progressionOptOut": false
+      },
+      "authorType": "COMMENT",
+      "votes": {
+        "totalVotes": 1,
+        "canUpvote": true,
+        "totalUpvotes": 1
+      },
+      "kernelVersion": 0,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "NoorMazhar",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/709754-gp.jpg",
+          "url": "/noorneo",
+          "userName": "noorneo",
+          "tier": "CONTRIBUTOR",
+          "id": 709754,
+          "profileUrl": "/noorneo",
+          "performanceTier": "CONTRIBUTOR",
+          "userId": 709754,
+          "progressionOptOut": false
+        },
+        "intro": ""
+      },
+      "depth": 0,
+      "is_first_message": false
+    },
+    {
+      "id": 3432904,
+      "postDate": "2026-04-01T02:19:17.263Z",
+      "rawMarkdown": "> Nemotron Reasoning Challenge Discord channel: https://discord.gg/kRwhDfTW NVIDIA community email (questions, feedback, sharing work): community@nvidia.com\n\n![](https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F111065%2F0ba6a62bed260b3de7b46b3d68e179eb%2FScreenshot%202026-03-31%20at%2019.17.07.png?generation=1775009942116373&alt=media)",
+      "content": "<blockquote>\n  <p>Nemotron Reasoning Challenge Discord channel: <a href=\"https://discord.gg/kRwhDfTW\" target=\"_blank\">https://discord.gg/kRwhDfTW</a> NVIDIA community email (questions, feedback, sharing work): <a href=\"mailto:community@nvidia.com\">community@nvidia.com</a></p>\n</blockquote>\n<p><img src=\"https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F111065%2F0ba6a62bed260b3de7b46b3d68e179eb%2FScreenshot%202026-03-31%20at%2019.17.07.png?generation=1775009942116373&amp;alt=media\" alt=\"\"></p>",
+      "attachments": [
+        {
+          "fileType": ".png",
+          "id": 39958,
+          "name": "Screenshot 2026-03-31 at 19.17.07.png",
+          "totalBytes": 147527,
+          "url": "https://storage.googleapis.com/kaggle-forum-message-attachments/3432904/39958/Screenshot 2026-03-31 at 19.17.07.png"
+        }
+      ],
+      "parent": {},
+      "author": {
+        "displayName": "Ievgenii Krevenets",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/111065-gr.jpg",
+        "url": "/hyzhak",
+        "tier": "CONTRIBUTOR",
+        "id": 111065,
+        "progressionOptOut": false
+      },
+      "authorType": "COMMENT",
+      "votes": {
+        "totalVotes": 1,
+        "canUpvote": true,
+        "totalUpvotes": 1
+      },
+      "kernelVersion": 0,
+      "competitionRanking": 2747,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "Ievgenii Krevenets",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/111065-gr.jpg",
+          "url": "/hyzhak",
+          "userName": "hyzhak",
+          "tier": "CONTRIBUTOR",
+          "id": 111065,
+          "profileUrl": "/hyzhak",
+          "performanceTier": "CONTRIBUTOR",
+          "userId": 111065,
+          "progressionOptOut": false
+        },
+        "intro": ""
+      },
+      "depth": 0,
+      "is_first_message": false
+    },
+    {
+      "id": 3429639,
+      "postDate": "2026-03-27T02:44:33.653Z",
+      "rawMarkdown": "If my solution isnt able to run on the RTX Pro 6000 is that a me problem?",
+      "content": "<p>If my solution isnt able to run on the RTX Pro 6000 is that a me problem?</p>",
+      "parent": {},
+      "author": {
+        "displayName": "Asadullah Baig",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+        "url": "/asadullahbeg",
+        "tier": "CONTRIBUTOR",
+        "id": 3762503,
+        "progressionOptOut": false
+      },
+      "authorType": "COMMENT",
+      "votes": {
+        "totalVotes": 1,
+        "canUpvote": true,
+        "totalUpvotes": 1
+      },
+      "kernelVersion": 0,
+      "competitionRanking": 2383,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "Asadullah Baig",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "url": "/asadullahbeg",
+          "userName": "asadullahbeg",
+          "tier": "CONTRIBUTOR",
+          "id": 3762503,
+          "profileUrl": "/asadullahbeg",
+          "performanceTier": "CONTRIBUTOR",
+          "userId": 3762503,
+          "progressionOptOut": false
+        },
+        "intro": ""
+      },
+      "depth": 0,
+      "is_first_message": false
+    },
+    {
+      "id": 3424394,
+      "postDate": "2026-03-19T16:38:48.610Z",
+      "rawMarkdown": "Hi, I submitted the same output twice and got different results. Is this expected? ",
+      "content": "<p>Hi, I submitted the same output twice and got different results. Is this expected? </p>",
+      "parent": {},
+      "author": {
+        "displayName": "cg",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+        "url": "/chaitanyagarg2",
+        "tier": "EXPERT",
+        "id": 20886088,
+        "progressionOptOut": false
+      },
+      "authorType": "COMMENT",
+      "votes": {
+        "totalVotes": 3,
+        "canUpvote": true,
+        "totalUpvotes": 3
+      },
+      "kernelVersion": 0,
+      "competitionRanking": 1919,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "cg",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "url": "/chaitanyagarg2",
+          "userName": "chaitanyagarg2",
+          "tier": "EXPERT",
+          "id": 20886088,
+          "profileUrl": "/chaitanyagarg2",
+          "performanceTier": "EXPERT",
+          "userId": 20886088,
+          "progressionOptOut": false
+        },
+        "intro": ""
+      },
+      "depth": 0,
+      "is_first_message": false
+    },
+    {
+      "id": 3425992,
+      "postDate": "2026-03-21T16:59:52.567Z",
+      "rawMarkdown": "That's strange.\n\nAre you sure you submitted the EXACT same `submission.zip` file twice?\n\nOr did you run a notebook twice, and then submitted the output file of both versions twice? If this is the case, then the `submission.zip` file may not be the exactly the same due to randomness in the notebook.",
+      "content": "<p>That's strange.</p>\n<p>Are you sure you submitted the EXACT same <code>submission.zip</code> file twice?</p>\n<p>Or did you run a notebook twice, and then submitted the output file of both versions twice? If this is the case, then the <code>submission.zip</code> file may not be the exactly the same due to randomness in the notebook.</p>",
+      "parent": {},
+      "author": {
+        "displayName": "MD Mushfirat Mohaimin",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/5956875-kg.jpg?t=2024-04-26-21-54-01",
+        "url": "/mushfirat",
+        "tier": "EXPERT",
+        "id": 5956875,
+        "progressionOptOut": false
+      },
+      "authorType": "COMMENT",
+      "votes": {
+        "canUpvote": true
+      },
+      "kernelVersion": 0,
+      "competitionRanking": 1878,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "MD Mushfirat Mohaimin",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/5956875-kg.jpg?t=2024-04-26-21-54-01",
+          "url": "/mushfirat",
+          "userName": "mushfirat",
+          "tier": "EXPERT",
+          "id": 5956875,
+          "profileUrl": "/mushfirat",
+          "performanceTier": "EXPERT",
+          "userId": 5956875,
+          "progressionOptOut": false
+        },
+        "intro": ""
+      },
+      "depth": 1,
+      "is_first_message": false
+    },
+    {
+      "id": 3426162,
+      "postDate": "2026-03-22T01:39:40.060Z",
+      "rawMarkdown": "I submitted the ouput of the same version of my notebook 4 times. I got 0.66,0.67,0.66,0.62 score. It is the publically available notebook by Dennis. I just modified max seq len to 640.",
+      "content": "<p>I submitted the ouput of the same version of my notebook 4 times. I got 0.66,0.67,0.66,0.62 score. It is the publically available notebook by Dennis. I just modified max seq len to 640.</p>",
+      "parent": {},
+      "author": {
+        "displayName": "cg",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+        "url": "/chaitanyagarg2",
+        "tier": "EXPERT",
+        "id": 20886088,
+        "progressionOptOut": false
+      },
+      "authorType": "COMMENT",
+      "votes": {
+        "canUpvote": true
+      },
+      "kernelVersion": 0,
+      "competitionRanking": 1919,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "cg",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "url": "/chaitanyagarg2",
+          "userName": "chaitanyagarg2",
+          "tier": "EXPERT",
+          "id": 20886088,
+          "profileUrl": "/chaitanyagarg2",
+          "performanceTier": "EXPERT",
+          "userId": 20886088,
+          "progressionOptOut": false
+        },
+        "intro": ""
+      },
+      "depth": 2,
+      "is_first_message": false
+    },
+    {
+      "id": 3426384,
+      "postDate": "2026-03-22T13:48:31.063Z",
+      "rawMarkdown": "why might that be due to selection of random 600 samples?\n",
+      "content": "<p>why might that be due to selection of random 600 samples?</p>",
+      "parent": {},
+      "author": {
+        "displayName": "Nabid Nur",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/25840540-kg.jpeg?t=2025-09-18-14-19-23",
+        "url": "/nabidnur",
+        "tier": "CONTRIBUTOR",
+        "id": 25840540,
+        "progressionOptOut": false
+      },
+      "authorType": "COMMENT",
+      "votes": {
+        "totalVotes": 1,
+        "canUpvote": true,
+        "totalUpvotes": 1
+      },
+      "kernelVersion": 0,
+      "competitionRanking": 181,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "isCollapsed": true,
+      "teamUpInfo": {
+        "enabled": true,
+        "teamLeader": {
+          "displayName": "Nabid Nur",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/25840540-kg.jpeg?t=2025-09-18-14-19-23",
+          "url": "/nabidnur",
+          "userName": "nabidnur",
+          "tier": "CONTRIBUTOR",
+          "id": 25840540,
+          "profileUrl": "/nabidnur",
+          "performanceTier": "CONTRIBUTOR",
+          "userId": 25840540,
+          "progressionOptOut": false
+        },
+        "intro": "scoring 0.8 or 0.85 and above , needs enthusiasm and send me a mail in : nurnabid754@gmail.com we can chat and think ( from own approach and new insights)"
+      },
+      "depth": 2,
+      "is_first_message": false
+    },
+    {
+      "id": 3434029,
+      "postDate": "2026-04-02T13:43:58.627Z",
+      "rawMarkdown": "may I ask if the notebooks can be run locally? Or I have to buy brev credits to run?",
+      "content": "<p>may I ask if the notebooks can be run locally? Or I have to buy brev credits to run?</p>",
+      "parent": {},
+      "author": {
+        "displayName": "NoorMazhar",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/709754-gp.jpg",
+        "url": "/noorneo",
+        "tier": "CONTRIBUTOR",
+        "id": 709754,
+        "progressionOptOut": false
+      },
+      "authorType": "COMMENT",
+      "votes": {
+        "canUpvote": true
+      },
+      "kernelVersion": 0,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "isCollapsed": true,
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "NoorMazhar",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/709754-gp.jpg",
+          "url": "/noorneo",
+          "userName": "noorneo",
+          "tier": "CONTRIBUTOR",
+          "id": 709754,
+          "profileUrl": "/noorneo",
+          "performanceTier": "CONTRIBUTOR",
+          "userId": 709754,
+          "progressionOptOut": false
+        },
+        "intro": ""
+      },
+      "depth": 2,
+      "is_first_message": false
+    },
+    {
+      "id": 3434086,
+      "postDate": "2026-04-02T15:11:51.967Z",
+      "rawMarkdown": "The notebooks cant be run locally And you dont have to buy credits. each week you get 30 hrs for the 4 different GPUs.",
+      "content": "<p>The notebooks cant be run locally And you dont have to buy credits. each week you get 30 hrs for the 4 different GPUs.</p>",
+      "parent": {},
+      "author": {
+        "displayName": "Asadullah Baig",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+        "url": "/asadullahbeg",
+        "tier": "CONTRIBUTOR",
+        "id": 3762503,
+        "progressionOptOut": false
+      },
+      "authorType": "COMMENT",
+      "votes": {
+        "canUpvote": true
+      },
+      "kernelVersion": 0,
+      "competitionRanking": 2383,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "isCollapsed": true,
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "Asadullah Baig",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "url": "/asadullahbeg",
+          "userName": "asadullahbeg",
+          "tier": "CONTRIBUTOR",
+          "id": 3762503,
+          "profileUrl": "/asadullahbeg",
+          "performanceTier": "CONTRIBUTOR",
+          "userId": 3762503,
+          "progressionOptOut": false
+        },
+        "intro": ""
+      },
+      "depth": 2,
+      "is_first_message": false
+    },
+    {
+      "id": 3434108,
+      "postDate": "2026-04-02T15:58:05.383Z",
+      "rawMarkdown": "locally ij a mac mini?",
+      "content": "<p>locally ij a mac mini?</p>",
+      "parent": {},
+      "author": {
+        "displayName": "jerryv69",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+        "url": "/jerryv69",
+        "tier": "CONTRIBUTOR",
+        "id": 26862542,
+        "progressionOptOut": false
+      },
+      "authorType": "COMMENT",
+      "votes": {
+        "canUpvote": true
+      },
+      "kernelVersion": 0,
+      "competitionRanking": 1994,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "isCollapsed": true,
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "jerryv69",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "url": "/jerryv69",
+          "userName": "jerryv69",
+          "tier": "CONTRIBUTOR",
+          "id": 26862542,
+          "profileUrl": "/jerryv69",
+          "performanceTier": "CONTRIBUTOR",
+          "userId": 26862542,
+          "progressionOptOut": false
+        },
+        "intro": ""
+      },
+      "depth": 2,
+      "is_first_message": false
+    },
+    {
+      "id": 3422126,
+      "postDate": "2026-03-17T01:36:49.803Z",
+      "rawMarkdown": " NVIDIA Nemotron Submission Demo page is not working",
+      "content": "<p>NVIDIA Nemotron Submission Demo page is not working</p>",
+      "parent": {},
+      "author": {
+        "displayName": "Muhammad",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2853990-kg.jpg?t=2023-10-24-11-46-05",
+        "url": "/hark99",
+        "tier": "EXPERT",
+        "id": 2853990,
+        "progressionOptOut": false
+      },
+      "authorType": "COMMENT",
+      "votes": {
+        "totalVotes": 3,
+        "canUpvote": true,
+        "totalUpvotes": 3
+      },
+      "kernelVersion": 0,
+      "competitionRanking": 2813,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "Muhammad",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2853990-kg.jpg?t=2023-10-24-11-46-05",
+          "url": "/hark99",
+          "userName": "hark99",
+          "tier": "EXPERT",
+          "id": 2853990,
+          "profileUrl": "/hark99",
+          "performanceTier": "EXPERT",
+          "userId": 2853990,
+          "progressionOptOut": false
+        },
+        "intro": ""
+      },
+      "depth": 0,
+      "is_first_message": false
+    },
+    {
+      "id": 3422242,
+      "postDate": "2026-03-17T09:39:20.073Z",
+      "rawMarkdown": "Fixed! Thank you.",
+      "content": "<p>Fixed! Thank you.</p>",
+      "parent": {},
+      "author": {
+        "displayName": "Ryan Holbrook",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2003505-kg.jpg",
+        "url": "/ryanholbrook",
+        "tier": "STAFF",
+        "id": 2003505,
+        "progressionOptOut": false
+      },
+      "authorType": "ADMIN",
+      "votes": {
+        "canUpvote": true
+      },
+      "kernelVersion": 0,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "Ryan Holbrook",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2003505-kg.jpg",
+          "url": "/ryanholbrook",
+          "userName": "ryanholbrook",
+          "tier": "STAFF",
+          "id": 2003505,
+          "profileUrl": "/ryanholbrook",
+          "performanceTier": "STAFF",
+          "userId": 2003505,
+          "progressionOptOut": false
+        },
+        "intro": ""
+      },
+      "depth": 1,
+      "is_first_message": false
+    },
+    {
+      "id": 3428123,
+      "postDate": "2026-03-25T01:33:36.063Z",
+      "rawMarkdown": "despite updating the utility Script,\"\"\"ModuleNotFoundError: No module named 'cutlass'\"\"\"",
+      "content": "<p>despite updating the utility Script,\"\"\"ModuleNotFoundError: No module named 'cutlass'\"\"\"</p>",
+      "parent": {},
+      "author": {
+        "displayName": "Muhammad",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2853990-kg.jpg?t=2023-10-24-11-46-05",
+        "url": "/hark99",
+        "tier": "EXPERT",
+        "id": 2853990,
+        "progressionOptOut": false
+      },
+      "authorType": "COMMENT",
+      "votes": {
+        "totalVotes": 2,
+        "canUpvote": true,
+        "totalUpvotes": 2
+      },
+      "kernelVersion": 0,
+      "competitionRanking": 2813,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "Muhammad",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2853990-kg.jpg?t=2023-10-24-11-46-05",
+          "url": "/hark99",
+          "userName": "hark99",
+          "tier": "EXPERT",
+          "id": 2853990,
+          "profileUrl": "/hark99",
+          "performanceTier": "EXPERT",
+          "userId": 2853990,
+          "progressionOptOut": false
+        },
+        "intro": ""
+      },
+      "depth": 2,
+      "is_first_message": false
+    },
+    {
+      "id": 3424040,
+      "postDate": "2026-03-19T09:45:46.643Z",
+      "rawMarkdown": "\nThe official mirror cannot use sm_120, and the inference token speed is only 1.7/s. Can the mirror be updated?",
+      "content": "<p>The official mirror cannot use sm_120, and the inference token speed is only 1.7/s. Can the mirror be updated?</p>",
+      "parent": {},
+      "author": {
+        "displayName": "xianxu qiu",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+        "url": "/xianxuqiu",
+        "tier": "CONTRIBUTOR",
+        "id": 29856570,
+        "progressionOptOut": false
+      },
+      "authorType": "COMMENT",
+      "votes": {
+        "totalVotes": 1,
+        "canUpvote": true,
+        "totalUpvotes": 1
+      },
+      "kernelVersion": 0,
+      "competitionRanking": 1976,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "xianxu qiu",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "url": "/xianxuqiu",
+          "userName": "xianxuqiu",
+          "tier": "CONTRIBUTOR",
+          "id": 29856570,
+          "profileUrl": "/xianxuqiu",
+          "performanceTier": "CONTRIBUTOR",
+          "userId": 29856570,
+          "progressionOptOut": false
+        },
+        "intro": ""
+      },
+      "depth": 0,
+      "is_first_message": false
+    },
+    {
+      "id": 3422150,
+      "postDate": "2026-03-17T02:43:08.190Z",
+      "rawMarkdown": "The max input tokens for the eval model is 128k. In the main page, inference parameters setting is showing with max_model_len = 8192  while in the metric code, it is 4096. Similarly, for other parameters as well. Please tell me which settings will be used to evaluate the final results, except for LORA.",
+      "content": "<p>The max input tokens for the eval model is 128k. In the main page, inference parameters setting is showing with max_model_len = 8192  while in the metric code, it is 4096. Similarly, for other parameters as well. Please tell me which settings will be used to evaluate the final results, except for LORA.</p>",
+      "parent": {},
+      "author": {
+        "displayName": "Muhammad",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2853990-kg.jpg?t=2023-10-24-11-46-05",
+        "url": "/hark99",
+        "tier": "EXPERT",
+        "id": 2853990,
+        "progressionOptOut": false
+      },
+      "authorType": "COMMENT",
+      "votes": {
+        "totalVotes": 1,
+        "canUpvote": true,
+        "totalUpvotes": 1
+      },
+      "kernelVersion": 0,
+      "competitionRanking": 2813,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "Muhammad",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2853990-kg.jpg?t=2023-10-24-11-46-05",
+          "url": "/hark99",
+          "userName": "hark99",
+          "tier": "EXPERT",
+          "id": 2853990,
+          "profileUrl": "/hark99",
+          "performanceTier": "EXPERT",
+          "userId": 2853990,
+          "progressionOptOut": false
+        },
+        "intro": ""
+      },
+      "depth": 0,
+      "is_first_message": false
+    },
+    {
+      "id": 3422243,
+      "postDate": "2026-03-17T09:40:07.447Z",
+      "rawMarkdown": "The parameters on the Evaluation page are what the metric is currently running with. They override the default values in the code.",
+      "content": "<p>The parameters on the Evaluation page are what the metric is currently running with. They override the default values in the code.</p>",
+      "parent": {},
+      "author": {
+        "displayName": "Ryan Holbrook",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2003505-kg.jpg",
+        "url": "/ryanholbrook",
+        "tier": "STAFF",
+        "id": 2003505,
+        "progressionOptOut": false
+      },
+      "authorType": "ADMIN",
+      "votes": {
+        "totalVotes": 1,
+        "canUpvote": true,
+        "totalUpvotes": 1
+      },
+      "kernelVersion": 0,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "Ryan Holbrook",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2003505-kg.jpg",
+          "url": "/ryanholbrook",
+          "userName": "ryanholbrook",
+          "tier": "STAFF",
+          "id": 2003505,
+          "profileUrl": "/ryanholbrook",
+          "performanceTier": "STAFF",
+          "userId": 2003505,
+          "progressionOptOut": false
+        },
+        "intro": ""
+      },
+      "depth": 1,
+      "is_first_message": false
+    },
+    {
+      "id": 3422338,
+      "postDate": "2026-03-17T14:20:52.233Z",
+      "rawMarkdown": "Hi Seeman,\n\nunfortunately, many (almost all) NVidia GitHub pages that I tried to open, resulted in: Error Loading Page  \n\n![](https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F3012786%2Fd02612157f637595fad3da2dbd79e1fd%2FCaptura%20de%20tela%202026-03-17%20111703.png?generation=1773757106251490&alt=media)",
+      "content": "<p>Hi Seeman,</p>\n<p>unfortunately, many (almost all) NVidia GitHub pages that I tried to open, resulted in: Error Loading Page  </p>\n<p><img src=\"https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F3012786%2Fd02612157f637595fad3da2dbd79e1fd%2FCaptura%20de%20tela%202026-03-17%20111703.png?generation=1773757106251490&amp;alt=media\" alt=\"\"></p>",
+      "parent": {},
+      "author": {
+        "displayName": "Marília Prata",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/3012786-kg.jpg",
+        "url": "/mpwolke",
+        "tier": "GRANDMASTER",
+        "id": 3012786,
+        "progressionOptOut": false
+      },
+      "authorType": "COMMENT",
+      "votes": {
+        "totalVotes": -1,
+        "canUpvote": true,
+        "totalUpvotes": 1
+      },
+      "kernelVersion": 0,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "Marília Prata",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/3012786-kg.jpg",
+          "url": "/mpwolke",
+          "userName": "mpwolke",
+          "tier": "GRANDMASTER",
+          "id": 3012786,
+          "profileUrl": "/mpwolke",
+          "performanceTier": "GRANDMASTER",
+          "userId": 3012786,
+          "progressionOptOut": false
+        },
+        "intro": ""
+      },
+      "depth": 0,
+      "is_first_message": false
+    },
+    {
+      "id": 3424150,
+      "postDate": "2026-03-19T12:00:11.183Z",
+      "rawMarkdown": "> Hi Seeman,\n> \n> unfortunately, many (almost all) NVidia GitHub pages that I tried to open, resulted in: Error Loading Page  \n> \n> ![](https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F3012786%2Fd02612157f637595fad3da2dbd79e1fd%2FCaptura%20de%20tela%202026-03-17%20111703.png?generation=1773757106251490&alt=media)\n\n\n*The \"Error loading page\" message on GitHub often stems from browser cache issues, network problems, or extensions blocking content.* (https://www.perplexity.ai/search/when-accessing-a-page-on-githu-HCOLk.MqRKyHUFYvIszm9g)\n",
+      "content": "<blockquote>\n  <p>Hi Seeman,</p>\n  <p>unfortunately, many (almost all) NVidia GitHub pages that I tried to open, resulted in: Error Loading Page  </p>\n  <p><img src=\"https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F3012786%2Fd02612157f637595fad3da2dbd79e1fd%2FCaptura%20de%20tela%202026-03-17%20111703.png?generation=1773757106251490&amp;alt=media\" alt=\"\"></p>\n</blockquote>\n<p><em>The \"Error loading page\" message on GitHub often stems from browser cache issues, network problems, or extensions blocking content.</em> (<a href=\"https://www.perplexity.ai/search/when-accessing-a-page-on-githu-HCOLk.MqRKyHUFYvIszm9g\" target=\"_blank\">https://www.perplexity.ai/search/when-accessing-a-page-on-githu-HCOLk.MqRKyHUFYvIszm9g</a>)</p>",
+      "parent": {},
+      "author": {
+        "displayName": "Marcelo",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+        "url": "/msc2021",
+        "tier": "CONTRIBUTOR",
+        "id": 4675140,
+        "progressionOptOut": false
+      },
+      "authorType": "COMMENT",
+      "votes": {
+        "totalVotes": 2,
+        "canUpvote": true,
+        "totalUpvotes": 2
+      },
+      "kernelVersion": 0,
+      "competitionRanking": 1547,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "reactions": [
+        {
+          "emoji": "THANK_YOU",
+          "featuredUserNames": [
+            "mpwolke"
+          ],
+          "userCount": 1
+        }
+      ],
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "Marcelo",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "url": "/msc2021",
+          "userName": "msc2021",
+          "tier": "CONTRIBUTOR",
+          "id": 4675140,
+          "profileUrl": "/msc2021",
+          "performanceTier": "CONTRIBUTOR",
+          "userId": 4675140,
+          "progressionOptOut": false
+        },
+        "intro": ""
+      },
+      "depth": 1,
+      "is_first_message": false
+    },
+    {
+      "id": 3427192,
+      "postDate": "2026-03-23T20:07:13.350Z",
+      "rawMarkdown": "Hi Marilia - can you confirm if you're still experiencing this issue?\nI just clicked through the links and they seem to be working correctly, but happy to help investigate further if needed.",
+      "content": "<p>Hi Marilia - can you confirm if you're still experiencing this issue?\nI just clicked through the links and they seem to be working correctly, but happy to help investigate further if needed.</p>",
+      "parent": {},
+      "author": {
+        "displayName": "Jamil C Semaan",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+        "url": "/jamilcsemaan",
+        "tier": "CONTRIBUTOR",
+        "id": 14529580,
+        "progressionOptOut": false
+      },
+      "authorType": "HOST",
+      "votes": {
+        "totalVotes": 1,
+        "canUpvote": true,
+        "totalUpvotes": 1
+      },
+      "kernelVersion": 0,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "depth": 2,
+      "is_first_message": false
+    },
+    {
+      "id": 3427226,
+      "postDate": "2026-03-23T20:58:34.687Z",
+      "rawMarkdown": "Thank you Jamil.\nEvery link is working now. No issue at all. ",
+      "content": "<p>Thank you Jamil.\nEvery link is working now. No issue at all. </p>",
+      "parent": {},
+      "author": {
+        "displayName": "Marília Prata",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/3012786-kg.jpg",
+        "url": "/mpwolke",
+        "tier": "GRANDMASTER",
+        "id": 3012786,
+        "progressionOptOut": false
+      },
+      "authorType": "COMMENT",
+      "votes": {
+        "canUpvote": true
+      },
+      "kernelVersion": 0,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "reactions": [
+        {
+          "emoji": "YAY",
+          "featuredUserNames": [
+            "jamilcsemaan"
+          ],
+          "userCount": 1
+        }
+      ],
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "Marília Prata",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/3012786-kg.jpg",
+          "url": "/mpwolke",
+          "userName": "mpwolke",
+          "tier": "GRANDMASTER",
+          "id": 3012786,
+          "profileUrl": "/mpwolke",
+          "performanceTier": "GRANDMASTER",
+          "userId": 3012786,
+          "progressionOptOut": false
+        },
+        "intro": ""
+      },
+      "depth": 2,
+      "is_first_message": false
+    },
+    {
+      "id": 3453107,
+      "postDate": "2026-05-05T00:06:01.513Z",
+      "rawMarkdown": "Hello there! I am having this issue Requirement already satisfied: transformers in /usr/local/lib/python3.12/dist-packages (5.0.0)\nCollecting transformers\n  Downloading transformers-5.7.0-py3-none-any.whl.metadata (33 kB)\nCollecting mamba-ssm\n  Downloading mamba_ssm-2.3.1.tar.gz (121 kB)\n     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 121.7/121.7 kB 4.6 MB/s eta 0:00:00\n  Installing build dependencies ... done\n  error: subprocess-exited-with-error\n  \n  × Getting requirements to build wheel did not run successfully.\n  │ exit code: 1\n  ╰─> See above for output.\n  \n  note: This error originates from a subprocess, and is likely not a problem with pip.\n  Getting requirements to build wheel ... error\nerror: subprocess-exited-with-error\n\n× Getting requirements to build wheel did not run successfully.\n│ exit code: 1\n╰─> See above for output.\n\nnote: This error originates from a subprocess, and is likely not a problem with pip.. Can anybody to help?",
+      "content": "<p>Hello there! I am having this issue Requirement already satisfied: transformers in /usr/local/lib/python3.12/dist-packages (5.0.0)\nCollecting transformers\n  Downloading transformers-5.7.0-py3-none-any.whl.metadata (33 kB)\nCollecting mamba-ssm\n  Downloading mamba_ssm-2.3.1.tar.gz (121 kB)\n     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 121.7/121.7 kB 4.6 MB/s eta 0:00:00\n  Installing build dependencies … done\n  error: subprocess-exited-with-error</p>\n<p>× Getting requirements to build wheel did not run successfully.\n  │ exit code: 1\n  ╰─&gt; See above for output.</p>\n<p>note: This error originates from a subprocess, and is likely not a problem with pip.\n  Getting requirements to build wheel … error\nerror: subprocess-exited-with-error</p>\n<p>× Getting requirements to build wheel did not run successfully.\n│ exit code: 1\n╰─&gt; See above for output.</p>\n<p>note: This error originates from a subprocess, and is likely not a problem with pip.. Can anybody to help?</p>",
+      "parent": {},
+      "author": {
+        "displayName": "Gerves François Baniakina",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+        "url": "/gbaniaki",
+        "tier": "CONTRIBUTOR",
+        "id": 19735847,
+        "progressionOptOut": false
+      },
+      "authorType": "COMMENT",
+      "votes": {
+        "canUpvote": true
+      },
+      "kernelVersion": 0,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "Gerves François Baniakina",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "url": "/gbaniaki",
+          "userName": "gbaniaki",
+          "tier": "CONTRIBUTOR",
+          "id": 19735847,
+          "profileUrl": "/gbaniaki",
+          "performanceTier": "CONTRIBUTOR",
+          "userId": 19735847,
+          "progressionOptOut": false
+        },
+        "intro": ""
+      },
+      "depth": 0,
+      "is_first_message": false
+    },
+    {
+      "id": 3453015,
+      "postDate": "2026-05-04T19:19:04.083Z",
+      "rawMarkdown": "## Rookie Getting started\n\nHello I am it new to this. I have been trainning & fine tuning LLMs. But here with this I am bit confused with the tasks. I have below questions. Kindly please give me some answers for them to start the competition. 😇\n\n1. Do I have to train the any LLM with give dataset ?\n2. Or I have to use Nemo-tron model train and evaluate with `metric/nemotron-3-nano-30b-a3b-bf16`",
+      "content": "<h2>Rookie Getting started</h2>\n<p>Hello I am it new to this. I have been trainning &amp; fine tuning LLMs. But here with this I am bit confused with the tasks. I have below questions. Kindly please give me some answers for them to start the competition. 😇</p>\n<ol>\n<li>Do I have to train the any LLM with give dataset ?</li>\n<li>Or I have to use Nemo-tron model train and evaluate with <code>metric/nemotron-3-nano-30b-a3b-bf16</code></li>\n</ol>",
+      "parent": {},
+      "author": {
+        "displayName": "UoM23MLMSc239362l",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+        "url": "/uomml23msc239362l",
+        "tier": "CONTRIBUTOR",
+        "id": 15892727,
+        "progressionOptOut": false
+      },
+      "authorType": "COMMENT",
+      "votes": {
+        "canUpvote": true
+      },
+      "kernelVersion": 0,
+      "competitionRanking": 2904,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "UoM23MLMSc239362l",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "url": "/uomml23msc239362l",
+          "userName": "uomml23msc239362l",
+          "tier": "CONTRIBUTOR",
+          "id": 15892727,
+          "profileUrl": "/uomml23msc239362l",
+          "performanceTier": "CONTRIBUTOR",
+          "userId": 15892727,
+          "progressionOptOut": false
+        },
+        "intro": ""
+      },
+      "depth": 0,
+      "is_first_message": false
+    },
+    {
+      "id": 3444741,
+      "postDate": "2026-04-18T10:39:53.243Z",
+      "rawMarkdown": "Neither of the workshops appear to work - both the \"Build an AI agent\" and \"Build a RAG agent\" just get stuck on a loading page.",
+      "content": "<p>Neither of the workshops appear to work - both the \"Build an AI agent\" and \"Build a RAG agent\" just get stuck on a loading page.</p>",
+      "parent": {},
+      "author": {
+        "displayName": "Steve Roberts",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1650068-kg.png",
+        "url": "/steveroberts",
+        "tier": "EXPERT",
+        "id": 1650068,
+        "progressionOptOut": false
+      },
+      "authorType": "COMMENT",
+      "votes": {
+        "canUpvote": true
+      },
+      "kernelVersion": 0,
+      "competitionRanking": 424,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "Steve Roberts",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1650068-kg.png",
+          "url": "/steveroberts",
+          "userName": "steveroberts",
+          "tier": "EXPERT",
+          "id": 1650068,
+          "profileUrl": "/steveroberts",
+          "performanceTier": "EXPERT",
+          "userId": 1650068,
+          "progressionOptOut": false
+        },
+        "intro": ""
+      },
+      "depth": 0,
+      "is_first_message": false
+    },
+    {
+      "id": 3432684,
+      "postDate": "2026-03-31T20:56:39.683Z",
+      "rawMarkdown": "discord link for the competition seems to be broken",
+      "content": "<p>discord link for the competition seems to be broken</p>",
+      "parent": {},
+      "author": {
+        "displayName": "Alpaca",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+        "url": "/aggshourya",
+        "tier": "CONTRIBUTOR",
+        "id": 18079680,
+        "progressionOptOut": false
+      },
+      "authorType": "COMMENT",
+      "votes": {
+        "canUpvote": true
+      },
+      "kernelVersion": 0,
+      "competitionRanking": 2566,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "Alpaca",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "url": "/aggshourya",
+          "userName": "aggshourya",
+          "tier": "CONTRIBUTOR",
+          "id": 18079680,
+          "profileUrl": "/aggshourya",
+          "performanceTier": "CONTRIBUTOR",
+          "userId": 18079680,
+          "progressionOptOut": false
+        },
+        "intro": ""
+      },
+      "depth": 0,
+      "is_first_message": false
+    },
+    {
+      "id": 3433362,
+      "postDate": "2026-04-01T15:53:49.283Z",
+      "rawMarkdown": "same for me too, getting invalid discord link.\n\nwas there a resolution for this?",
+      "content": "<p>same for me too, getting invalid discord link.</p>\n<p>was there a resolution for this?</p>",
+      "parent": {},
+      "author": {
+        "displayName": "NoorMazhar",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/709754-gp.jpg",
+        "url": "/noorneo",
+        "tier": "CONTRIBUTOR",
+        "id": 709754,
+        "progressionOptOut": false
+      },
+      "authorType": "COMMENT",
+      "votes": {
+        "canUpvote": true
+      },
+      "kernelVersion": 0,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "NoorMazhar",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/709754-gp.jpg",
+          "url": "/noorneo",
+          "userName": "noorneo",
+          "tier": "CONTRIBUTOR",
+          "id": 709754,
+          "profileUrl": "/noorneo",
+          "performanceTier": "CONTRIBUTOR",
+          "userId": 709754,
+          "progressionOptOut": false
+        },
+        "intro": ""
+      },
+      "depth": 1,
+      "is_first_message": false
+    },
+    {
+      "id": 3434146,
+      "postDate": "2026-04-02T16:35:53.833Z",
+      "rawMarkdown": "Hi @aggshourya @noorneo - please use this link to Discord channel and let us know if issue persists https://discord.gg/udbkJyWk",
+      "content": "<p>Hi <a href=\"https://www.kaggle.com/aggshourya\" target=\"_blank\">@aggshourya</a> <a href=\"https://www.kaggle.com/noorneo\" target=\"_blank\">@noorneo</a> - please use this link to Discord channel and let us know if issue persists <a href=\"https://discord.gg/udbkJyWk\" target=\"_blank\">https://discord.gg/udbkJyWk</a></p>",
+      "parent": {},
+      "author": {
+        "displayName": "Jamil C Semaan",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+        "url": "/jamilcsemaan",
+        "tier": "CONTRIBUTOR",
+        "id": 14529580,
+        "progressionOptOut": false
+      },
+      "authorType": "HOST",
+      "votes": {
+        "canUpvote": true
+      },
+      "kernelVersion": 0,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "depth": 2,
+      "is_first_message": false
+    },
+    {
+      "id": 3429087,
+      "postDate": "2026-03-26T10:53:58.987Z",
+      "rawMarkdown": "Hello everyone, my name is Ra'uf. I need some help regarding my submission for the NVIDIA Nemotron Model Reasoning Challenge.\n\nAlthough my code runs successfully and performs well in my local environment, the submission keeps failing or isn't ranking as expected. Does anyone have advice on how to optimize my code for a successful submission or how to improve my ranking in this specific challenge?\n\nThank you very much!",
+      "content": "<p>Hello everyone, my name is Ra'uf. I need some help regarding my submission for the NVIDIA Nemotron Model Reasoning Challenge.</p>\n<p>Although my code runs successfully and performs well in my local environment, the submission keeps failing or isn't ranking as expected. Does anyone have advice on how to optimize my code for a successful submission or how to improve my ranking in this specific challenge?</p>\n<p>Thank you very much!</p>",
+      "parent": {},
+      "author": {
+        "displayName": "Ra'uf Fauzan Rambe",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/31589109-kg.png?t=2026-01-18-04-00-38",
+        "url": "/rauffauzanrambe",
+        "tier": "EXPERT",
+        "id": 31589109,
+        "progressionOptOut": false
+      },
+      "authorType": "COMMENT",
+      "votes": {
+        "canUpvote": true
+      },
+      "kernelVersion": 0,
+      "competitionRanking": 91,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "Ra'uf Fauzan Rambe",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/31589109-kg.png?t=2026-01-18-04-00-38",
+          "url": "/rauffauzanrambe",
+          "userName": "rauffauzanrambe",
+          "tier": "EXPERT",
+          "id": 31589109,
+          "profileUrl": "/rauffauzanrambe",
+          "performanceTier": "EXPERT",
+          "userId": 31589109,
+          "progressionOptOut": false
+        },
+        "intro": ""
+      },
+      "depth": 0,
+      "is_first_message": false
+    },
+    {
+      "id": 3429636,
+      "postDate": "2026-03-27T02:40:35.647Z",
+      "rawMarkdown": "For each test case, the model is prompted to generate a response and instructed to place its final answer within a \\boxed{} LaTeX command. The metric extracts the final answer from the generated text, prioritizing content within the boxed format while falling back to other heuristic patterns or the last numeric value found. ",
+      "content": "<p>For each test case, the model is prompted to generate a response and instructed to place its final answer within a \\boxed{} LaTeX command. The metric extracts the final answer from the generated text, prioritizing content within the boxed format while falling back to other heuristic patterns or the last numeric value found. </p>",
+      "parent": {},
+      "author": {
+        "displayName": "Asadullah Baig",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+        "url": "/asadullahbeg",
+        "tier": "CONTRIBUTOR",
+        "id": 3762503,
+        "progressionOptOut": false
+      },
+      "authorType": "COMMENT",
+      "votes": {
+        "canUpvote": true
+      },
+      "kernelVersion": 0,
+      "competitionRanking": 2383,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "Asadullah Baig",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "url": "/asadullahbeg",
+          "userName": "asadullahbeg",
+          "tier": "CONTRIBUTOR",
+          "id": 3762503,
+          "profileUrl": "/asadullahbeg",
+          "performanceTier": "CONTRIBUTOR",
+          "userId": 3762503,
+          "progressionOptOut": false
+        },
+        "intro": ""
+      },
+      "depth": 1,
+      "is_first_message": false
+    },
+    {
+      "id": 3444784,
+      "postDate": "2026-04-18T12:30:59.273Z",
+      "rawMarkdown": "Thanks sir\n",
+      "content": "<p>Thanks sir</p>",
+      "parent": {},
+      "author": {
+        "displayName": "Ra'uf Fauzan Rambe",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/31589109-kg.png?t=2026-01-18-04-00-38",
+        "url": "/rauffauzanrambe",
+        "tier": "EXPERT",
+        "id": 31589109,
+        "progressionOptOut": false
+      },
+      "authorType": "COMMENT",
+      "votes": {
+        "canUpvote": true
+      },
+      "kernelVersion": 0,
+      "competitionRanking": 91,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "Ra'uf Fauzan Rambe",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/31589109-kg.png?t=2026-01-18-04-00-38",
+          "url": "/rauffauzanrambe",
+          "userName": "rauffauzanrambe",
+          "tier": "EXPERT",
+          "id": 31589109,
+          "profileUrl": "/rauffauzanrambe",
+          "performanceTier": "EXPERT",
+          "userId": 31589109,
+          "progressionOptOut": false
+        },
+        "intro": ""
+      },
+      "depth": 2,
+      "is_first_message": false
+    },
+    {
+      "id": 3428195,
+      "postDate": "2026-03-25T04:10:36.840Z",
+      "rawMarkdown": "Evaluation metric raised an unexpected error. I submitted submission.zip, but it showed an error both times. What could be the reason?",
+      "content": "<p>Evaluation metric raised an unexpected error. I submitted submission.zip, but it showed an error both times. What could be the reason?</p>",
+      "parent": {},
+      "author": {
+        "displayName": "Liangjie Zhao",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/25920728-kg.png?t=2025-05-15-13-53-02",
+        "url": "/liangjiezhao",
+        "tier": "EXPERT",
+        "id": 25920728,
+        "progressionOptOut": false
+      },
+      "authorType": "COMMENT",
+      "votes": {
+        "canUpvote": true
+      },
+      "kernelVersion": 0,
+      "competitionRanking": 2850,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "Liangjie Zhao",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/25920728-kg.png?t=2025-05-15-13-53-02",
+          "url": "/liangjiezhao",
+          "userName": "liangjiezhao",
+          "tier": "EXPERT",
+          "id": 25920728,
+          "profileUrl": "/liangjiezhao",
+          "performanceTier": "EXPERT",
+          "userId": 25920728,
+          "progressionOptOut": false
+        },
+        "intro": ""
+      },
+      "depth": 0,
+      "is_first_message": false
+    },
+    {
+      "id": 3424976,
+      "postDate": "2026-03-20T06:35:11.230Z",
+      "rawMarkdown": "",
+      "attachments": [
+        {
+          "fileType": ".png",
+          "id": 39434,
+          "name": "Screenshot 2026-03-20 013425.png",
+          "totalBytes": 43290,
+          "url": "https://storage.googleapis.com/kaggle-forum-message-attachments/3424976/39434/Screenshot 2026-03-20 013425.png"
+        }
+      ],
+      "parent": {},
+      "author": {
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+        "url": "/"
+      },
+      "authorType": "COMMENT",
+      "votes": {
+        "totalVotes": 1,
+        "totalUpvotes": 1
+      },
+      "canDelete": true,
+      "isUserAuthor": true,
+      "isDeleted": true,
+      "kernelVersion": 0,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "depth": 0,
+      "is_first_message": false
+    },
+    {
+      "id": 3425084,
+      "postDate": "2026-03-20T10:17:39.530Z",
+      "rawMarkdown": "go to code section in the competition, and make a new notebook you will find it ",
+      "content": "<p>go to code section in the competition, and make a new notebook you will find it </p>",
+      "parent": {},
+      "author": {
+        "displayName": "HADY",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+        "url": "/johnhady101",
+        "tier": "CONTRIBUTOR",
+        "id": 28656359,
+        "progressionOptOut": false
+      },
+      "authorType": "COMMENT",
+      "votes": {
+        "canUpvote": true
+      },
+      "kernelVersion": 0,
+      "competitionRanking": 2873,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "HADY",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "url": "/johnhady101",
+          "userName": "johnhady101",
+          "tier": "CONTRIBUTOR",
+          "id": 28656359,
+          "profileUrl": "/johnhady101",
+          "performanceTier": "CONTRIBUTOR",
+          "userId": 28656359,
+          "progressionOptOut": false
+        },
+        "intro": ""
+      },
+      "depth": 1,
+      "is_first_message": false
+    }
+  ],
+  "message_count_observed": 34,
+  "text_sha256": "009bcf91a0c7730efbc29b77070fd424cbe4af6899c2cd2230f1b59d96eedffc",
+  "full_text": "[message_id=3422112 author= first=True]\n## Information for First-Timers\nNew to NVIDIA Nemotron open model family and its NeMo open libraries? If you’re just starting to explore these models, tools, or docs, feel free to start a new thread in this channel, or drop any first-timer questions here and folks can help you get unblocked.\nIf you’re new to Nemotron and NeMo, skim the official Nemotron model pages, NeMo docs, and the resources listed below, then come back with specific questions about setup, fine-tuning, RL, or evaluation.\nHappy reasoning with Nemotron, and good luck climbing the leaderboard!\n\n### 1. Core Nemotron model family (models & baselines)\n- [Nemotron overview (model family, capabilities, benchmarks)](https://developer.nvidia.com/nemotron)\n- [Nemotron GitHub](https://github.com/NVIDIA-NeMo/Nemotron)(main repo and examples)\n- Nemotron 3 Nano[ technical blog](https://developer.nvidia.com/blog/inside-nvidia-nemotron-3-techniques-tools-and-data-that-make-it-efficient-and-accurate/) (architecture, efficiency, training details) \n- Nemotron v3 collection on [Hugging Face](https://huggingface.co/collections/nvidia/nvidia-nemotron-v3) (ready-to-use checkpoints)\n \n\n### 2. Nemotron open libraries for data & RL\n\n**Synthetic data generation**\nNeMo Data Designer (generate domain/task-specific synthetic data):\n - GitHub: https://github.com/NVIDIA-NeMo/DataDesigner\n - Docs: https://nvidia-nemo.github.io/DataDesigner/latest/\n - Recipes: https://nvidia-nemo.github.io/DataDesigner/latest/recipes/cards/\n\n**Data filtering and curation**\nNeMo Curator (multi‑modal data curation: text, images, video, audio):\n - GitHub: https://github.com/NVIDIA-NeMo/Curator\n - Docs: https://docs.nvidia.com/nemo/curator/latest/\n\n**RL & Gym (reasoning, behavior, agents)** \nNeMo RL (RL training at scale with SOTA algorithms):\n - GitHub: https://github.com/NVIDIA-NeMo/RL\n\n**NeMo Gym (build/manage RL environments)**\n - GitHub: https://github.com/NVIDIA-NeMo/gym\n - Available environments:\n https://github.com/NVIDIA-NeMo/Gym?tab=readme-ov-file#-available-environments\n\n**Guides & tutorials**\nNemotron 3 Super – multi‑stage RLVR & RLHF recipe with NeMo RL:\n - Guide: https://github.com/NVIDIA-NeMo/RL/blob/super-v3/docs/guides/nemotron-3-super.md\n - GRPO RLVR Jupyter notebook:\nhttps://github.com/NVIDIA-NeMo/Nemotron/tree/main/usage-cookbook/Nemotron-3-Super/grpo-dapo\n\n**Nemotron 3 Nano RL guide**\n https://docs.nvidia.com/nemo/rl/nightly/guides/nemotron-3-nano.html\n\n### 3. Nemotron open datasets (instruction-following & reasoning)\n- Pre‑training datasets collection: [Link](https://huggingface.co/collections/nvidia/nemotron-pre-training-datasets)\n- Post‑training datasets: [Link](https://huggingface.co/collections/nvidia/nemotron-post-training-v3)\n- RL instruction‑following dataset: [Link](https://huggingface.co/datasets/nvidia/Nemotron-RL-instruction_following)\n- Agentic dataset:[Link](https://huggingface.co/datasets/nvidia/Nemotron-Agentic-v1)\n- RAG dataset: [Link](https://huggingface.co/datasets/nvidia/embed-nemotron-dataset-v1)\n- Personas collection: [Link]( https://huggingface.co/collections/nvidia/nemotron-personas)\n- More NVIDIA datasets: [Link](https://huggingface.co/datasets?search=nvidia)\n\n### 4. Cookbooks, recipes, and evaluation\n- Nemotron main repo (cookbooks, training recipes, deployment examples): https://github.com/NVIDIA-NeMo/Nemotron\n- Nemotron 3 Nano reproducibility / eval guide with NeMo Evaluator: https://github.com/NVIDIA-NeMo/Evaluator/blob/main/packages/nemo-evaluator-launcher/examples/nemotron/nano-v3-reproducibility.md\n\n### 5. Community & learning paths\nIf you get stuck, want feedback on an idea, or just want to see how others are approaching the challenge, these are great next stops:\n\n**Nemotron / NVIDIA Developer Discord (join + Nemotron channel):**\n Join: https://discord.com/invite/nvidiadeveloper\n \n**Nemotron Reasoning Challenge Discord channel:** https://discord.gg/udbkJyWk \n\n**NVIDIA community email** (questions, feedback, sharing work):\n community@nvidia.com\n\n**Learning paths**\n- Build an AI agent (guide + code):\n https://developer.nvidia.com/topics/ai/how-to-build-an-ai-agent\n- GitHub: https://github.com/NVIDIA-NeMo\n- Build a RAG agent (guide + code):\n https://developer.nvidia.com/topics/ai/how-to-build-agentic-ai-rag\n- GitHub: https://github.com/NVIDIA-NeMo\n- Launchable environment for Nemotron (pre‑configured cloud env):\nhttps://brev.nvidia.com/launchable/deploy?launchableID=env-32kC34ErT9wsqTcJyaKMxBEuhr2\n- GitHub: https://github.com/NVIDIA-NeMo\n- Nemotron Labs livestreams playlist (deep dives, demos, Q&A):\nhttps://youtube.com/playlist?list=PL5B692fm6--vEL0FwctKghCpyEnBGAQJA&si=jhVNZVfdj_91hpEJ\n\n\n[message_id=3428335 author= first=False]\nHi Jamil,\n\nThere appears to be some trainining data bug which I identified lately, as the model was being trained on buggy data and gave wrong answer.\n\nBelow are the areas critical:\n- Bit manipulation: 50.5% of training traces are WRONG (764/1513 mismatches between computed Result and answer)\n- Equation transformation: 49% have I/O length mismatches making char_map fundamentally broken, 44% have unknown chars\n\nBit Manipulation:\n\n1988 total training examples\n1513 have a Result line\n764 have MISMATCHES between computed Result and \\boxed{} answer\n50.5% mismatch rate - HALF the training data teaches WRONG reasoning!\n344 examples have f() unknowns (where we couldn't determine the rule)\nEquation Transformation:\n\n3157 total training examples\n\n1555 (49%) have input/output lengths that differ - char_map approach is fundamentally wrong for these\n\nAnother 1382 (44%) have unknown '?' characters when applying the char_map to the query\n\n77 (2%) the char_map fails to even predict any of the given examples\n\nThe pattern is unmistakable: bit_manipulation is poisoning the model with wrong answers in half its examples, and equation_transformation's char_map strategy simply doesn't work for nearly half the data due to length mismatches and missing characters.\n\nWas this left on purpose ?\n\nIs there any plan to fix these bugs or we don't intend to fix ?\n\nI used this script to find the issues and bugs in training data.\n\n[message_id=3433361 author= first=False]\nI am getting started with learning nemo libs.\n\nwhen I launch the brev/lab environment (https://brev.nvidia.com/launchable/deploy?launchableID=env-32kC34ErT9wsqTcJyaKMxBEuhr2)....It is asking me to buy credits.\n\nIs that the only way to use the lab is buying credits or for this competition is there a free lab environment?\n\n[message_id=3432904 author= first=False]\n> Nemotron Reasoning Challenge Discord channel: https://discord.gg/kRwhDfTW NVIDIA community email (questions, feedback, sharing work): community@nvidia.com\n\n![](https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F111065%2F0ba6a62bed260b3de7b46b3d68e179eb%2FScreenshot%202026-03-31%20at%2019.17.07.png?generation=1775009942116373&alt=media)\n\n[message_id=3429639 author= first=False]\nIf my solution isnt able to run on the RTX Pro 6000 is that a me problem?\n\n[message_id=3424394 author= first=False]\nHi, I submitted the same output twice and got different results. Is this expected? \n\n[message_id=3425992 author= first=False]\nThat's strange.\n\nAre you sure you submitted the EXACT same `submission.zip` file twice?\n\nOr did you run a notebook twice, and then submitted the output file of both versions twice? If this is the case, then the `submission.zip` file may not be the exactly the same due to randomness in the notebook.\n\n[message_id=3426162 author= first=False]\nI submitted the ouput of the same version of my notebook 4 times. I got 0.66,0.67,0.66,0.62 score. It is the publically available notebook by Dennis. I just modified max seq len to 640.\n\n[message_id=3426384 author= first=False]\nwhy might that be due to selection of random 600 samples?\n\n\n[message_id=3434029 author= first=False]\nmay I ask if the notebooks can be run locally? Or I have to buy brev credits to run?\n\n[message_id=3434086 author= first=False]\nThe notebooks cant be run locally And you dont have to buy credits. each week you get 30 hrs for the 4 different GPUs.\n\n[message_id=3434108 author= first=False]\nlocally ij a mac mini?\n\n[message_id=3422126 author= first=False]\n NVIDIA Nemotron Submission Demo page is not working\n\n[message_id=3422242 author= first=False]\nFixed! Thank you.\n\n[message_id=3428123 author= first=False]\ndespite updating the utility Script,\"\"\"ModuleNotFoundError: No module named 'cutlass'\"\"\"\n\n[message_id=3424040 author= first=False]\n\nThe official mirror cannot use sm_120, and the inference token speed is only 1.7/s. Can the mirror be updated?\n\n[message_id=3422150 author= first=False]\nThe max input tokens for the eval model is 128k. In the main page, inference parameters setting is showing with max_model_len = 8192  while in the metric code, it is 4096. Similarly, for other parameters as well. Please tell me which settings will be used to evaluate the final results, except for LORA.\n\n[message_id=3422243 author= first=False]\nThe parameters on the Evaluation page are what the metric is currently running with. They override the default values in the code.\n\n[message_id=3422338 author= first=False]\nHi Seeman,\n\nunfortunately, many (almost all) NVidia GitHub pages that I tried to open, resulted in: Error Loading Page  \n\n![](https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F3012786%2Fd02612157f637595fad3da2dbd79e1fd%2FCaptura%20de%20tela%202026-03-17%20111703.png?generation=1773757106251490&alt=media)\n\n[message_id=3424150 author= first=False]\n> Hi Seeman,\n> \n> unfortunately, many (almost all) NVidia GitHub pages that I tried to open, resulted in: Error Loading Page  \n> \n> ![](https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F3012786%2Fd02612157f637595fad3da2dbd79e1fd%2FCaptura%20de%20tela%202026-03-17%20111703.png?generation=1773757106251490&alt=media)\n\n\n*The \"Error loading page\" message on GitHub often stems from browser cache issues, network problems, or extensions blocking content.* (https://www.perplexity.ai/search/when-accessing-a-page-on-githu-HCOLk.MqRKyHUFYvIszm9g)\n\n\n[message_id=3427192 author= first=False]\nHi Marilia - can you confirm if you're still experiencing this issue?\nI just clicked through the links and they seem to be working correctly, but happy to help investigate further if needed.\n\n[message_id=3427226 author= first=False]\nThank you Jamil.\nEvery link is working now. No issue at all. \n\n[message_id=3453107 author= first=False]\nHello there! I am having this issue Requirement already satisfied: transformers in /usr/local/lib/python3.12/dist-packages (5.0.0)\nCollecting transformers\n  Downloading transformers-5.7.0-py3-none-any.whl.metadata (33 kB)\nCollecting mamba-ssm\n  Downloading mamba_ssm-2.3.1.tar.gz (121 kB)\n     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 121.7/121.7 kB 4.6 MB/s eta 0:00:00\n  Installing build dependencies ... done\n  error: subprocess-exited-with-error\n  \n  × Getting requirements to build wheel did not run successfully.\n  │ exit code: 1\n  ╰─> See above for output.\n  \n  note: This error originates from a subprocess, and is likely not a problem with pip.\n  Getting requirements to build wheel ... error\nerror: subprocess-exited-with-error\n\n× Getting requirements to build wheel did not run successfully.\n│ exit code: 1\n╰─> See above for output.\n\nnote: This error originates from a subprocess, and is likely not a problem with pip.. Can anybody to help?\n\n[message_id=3453015 author= first=False]\n## Rookie Getting started\n\nHello I am it new to this. I have been trainning & fine tuning LLMs. But here with this I am bit confused with the tasks. I have below questions. Kindly please give me some answers for them to start the competition. 😇\n\n1. Do I have to train the any LLM with give dataset ?\n2. Or I have to use Nemo-tron model train and evaluate with `metric/nemotron-3-nano-30b-a3b-bf16`\n\n[message_id=3444741 author= first=False]\nNeither of the workshops appear to work - both the \"Build an AI agent\" and \"Build a RAG agent\" just get stuck on a loading page.\n\n[message_id=3432684 author= first=False]\ndiscord link for the competition seems to be broken\n\n[message_id=3433362 author= first=False]\nsame for me too, getting invalid discord link.\n\nwas there a resolution for this?\n\n[message_id=3434146 author= first=False]\nHi @aggshourya @noorneo - please use this link to Discord channel and let us know if issue persists https://discord.gg/udbkJyWk\n\n[message_id=3429087 author= first=False]\nHello everyone, my name is Ra'uf. I need some help regarding my submission for the NVIDIA Nemotron Model Reasoning Challenge.\n\nAlthough my code runs successfully and performs well in my local environment, the submission keeps failing or isn't ranking as expected. Does anyone have advice on how to optimize my code for a successful submission or how to improve my ranking in this specific challenge?\n\nThank you very much!\n\n[message_id=3429636 author= first=False]\nFor each test case, the model is prompted to generate a response and instructed to place its final answer within a \\boxed{} LaTeX command. The metric extracts the final answer from the generated text, prioritizing content within the boxed format while falling back to other heuristic patterns or the last numeric value found. \n\n[message_id=3444784 author= first=False]\nThanks sir\n\n\n[message_id=3428195 author= first=False]\nEvaluation metric raised an unexpected error. I submitted submission.zip, but it showed an error both times. What could be the reason?\n\n[message_id=3424976 author= first=False]\n\n\n[message_id=3425084 author= first=False]\ngo to code section in the competition, and make a new notebook you will find it "
+}

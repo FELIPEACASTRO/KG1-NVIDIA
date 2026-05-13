@@ -1,0 +1,1154 @@
+{
+  "topic_id": 685920,
+  "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/685920",
+  "topic": {
+    "authorId": 3937164,
+    "authorThumbnailName": "3937164-kg.png?t=2023-11-07-17-35-27",
+    "authorUserDisplayName": "JK-Piece",
+    "authorUserName": "jeannkouagou",
+    "firstMessageId": 3431206,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 685920,
+    "name": "Something wrong -- My notebook of 0.80+ now scores 0.77",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-03-29T16:59:04.940030Z",
+    "totalVotes": 17,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/685920",
+    "totalMessages": 25,
+    "authorPerformanceTier": "MASTER",
+    "authorProgressionOptOut": false
+  },
+  "first_message": {
+    "id": 3431206,
+    "postDate": "2026-03-29T16:59:04.940Z",
+    "rawMarkdown": "Did anyone else notice a decrease in their score?\n\nMy previous notebook with score 0.80+ now scores 0.77\n\nCan the hosts provide any insights here?",
+    "content": "<p>Did anyone else notice a decrease in their score?</p>\n<p>My previous notebook with score 0.80+ now scores 0.77</p>\n<p>Can the hosts provide any insights here?</p>",
+    "parent": {
+      "url": "#"
+    },
+    "author": {
+      "displayName": "JK-Piece",
+      "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/3937164-kg.png?t=2023-11-07-17-35-27",
+      "url": "/jeannkouagou",
+      "tier": "MASTER",
+      "id": 3937164,
+      "progressionOptOut": false
+    },
+    "authorType": "TOPIC",
+    "votes": {
+      "totalVotes": 17,
+      "canUpvote": true,
+      "totalUpvotes": 17
+    },
+    "kernelVersion": 0,
+    "competitionRanking": 136,
+    "feedbackTrackingData": {},
+    "teamUpInfo": {
+      "teamLeader": {
+        "displayName": "JK-Piece",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/3937164-kg.png?t=2023-11-07-17-35-27",
+        "url": "/jeannkouagou",
+        "userName": "jeannkouagou",
+        "tier": "MASTER",
+        "id": 3937164,
+        "profileUrl": "/jeannkouagou",
+        "performanceTier": "MASTER",
+        "userId": 3937164,
+        "progressionOptOut": false
+      },
+      "intro": "Hey Kagglers. I am looking for a teammate with current score around 0.78-0.80. I have strong checkpoints and great training data that would benefit the team to be formed. Feel free to reach out."
+    }
+  },
+  "messages": [
+    {
+      "id": 3431206,
+      "postDate": "2026-03-29T16:59:04.940Z",
+      "rawMarkdown": "Did anyone else notice a decrease in their score?\n\nMy previous notebook with score 0.80+ now scores 0.77\n\nCan the hosts provide any insights here?",
+      "content": "<p>Did anyone else notice a decrease in their score?</p>\n<p>My previous notebook with score 0.80+ now scores 0.77</p>\n<p>Can the hosts provide any insights here?</p>",
+      "parent": {
+        "url": "#"
+      },
+      "author": {
+        "displayName": "JK-Piece",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/3937164-kg.png?t=2023-11-07-17-35-27",
+        "url": "/jeannkouagou",
+        "tier": "MASTER",
+        "id": 3937164,
+        "progressionOptOut": false
+      },
+      "authorType": "TOPIC",
+      "votes": {
+        "totalVotes": 17,
+        "canUpvote": true,
+        "totalUpvotes": 17
+      },
+      "kernelVersion": 0,
+      "competitionRanking": 136,
+      "feedbackTrackingData": {},
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "JK-Piece",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/3937164-kg.png?t=2023-11-07-17-35-27",
+          "url": "/jeannkouagou",
+          "userName": "jeannkouagou",
+          "tier": "MASTER",
+          "id": 3937164,
+          "profileUrl": "/jeannkouagou",
+          "performanceTier": "MASTER",
+          "userId": 3937164,
+          "progressionOptOut": false
+        },
+        "intro": "Hey Kagglers. I am looking for a teammate with current score around 0.78-0.80. I have strong checkpoints and great training data that would benefit the team to be formed. Feel free to reach out."
+      },
+      "depth": 0,
+      "is_first_message": true
+    },
+    {
+      "id": 3431654,
+      "postDate": "2026-03-30T13:01:47.200Z",
+      "rawMarkdown": "Thanks, @jeannkouagou. I am looking into a rescore. Since this requires the RTX GPUs, I need to ensure we still have availability for ordinary scoring.",
+      "content": "<p>Thanks, <a href=\"https://www.kaggle.com/jeannkouagou\" target=\"_blank\">@jeannkouagou</a>. I am looking into a rescore. Since this requires the RTX GPUs, I need to ensure we still have availability for ordinary scoring.</p>",
+      "parent": {},
+      "author": {
+        "displayName": "Ryan Holbrook",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2003505-kg.jpg",
+        "url": "/ryanholbrook",
+        "tier": "STAFF",
+        "id": 2003505,
+        "progressionOptOut": false
+      },
+      "authorType": "ADMIN",
+      "votes": {
+        "totalVotes": 7,
+        "canUpvote": true,
+        "totalUpvotes": 7
+      },
+      "kernelVersion": 0,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "Ryan Holbrook",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2003505-kg.jpg",
+          "url": "/ryanholbrook",
+          "userName": "ryanholbrook",
+          "tier": "STAFF",
+          "id": 2003505,
+          "profileUrl": "/ryanholbrook",
+          "performanceTier": "STAFF",
+          "userId": 2003505,
+          "progressionOptOut": false
+        },
+        "intro": ""
+      },
+      "depth": 0,
+      "is_first_message": false
+    },
+    {
+      "id": 3432045,
+      "postDate": "2026-03-31T02:21:16.127Z",
+      "rawMarkdown": "From my observation, I believe the evaluation is not running with `temperature=0`  \nCan you please update the default parameter of `temperature` to `0` in the evaluation notebook? Right now, it is set to `1.0`\n\nEach submission is currently returning different scores. Because of this, we have to submit our solution multiple times just to get back the maximum score. ",
+      "content": "<p>From my observation, I believe the evaluation is not running with <code>temperature=0</code><br>\nCan you please update the default parameter of <code>temperature</code> to <code>0</code> in the evaluation notebook? Right now, it is set to <code>1.0</code></p>\n<p>Each submission is currently returning different scores. Because of this, we have to submit our solution multiple times just to get back the maximum score. </p>",
+      "parent": {},
+      "author": {
+        "displayName": "MD Mushfirat Mohaimin",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/5956875-kg.jpg?t=2024-04-26-21-54-01",
+        "url": "/mushfirat",
+        "tier": "EXPERT",
+        "id": 5956875,
+        "progressionOptOut": false
+      },
+      "authorType": "COMMENT",
+      "votes": {
+        "totalVotes": 3,
+        "canUpvote": true,
+        "totalUpvotes": 3
+      },
+      "kernelVersion": 0,
+      "competitionRanking": 1878,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "MD Mushfirat Mohaimin",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/5956875-kg.jpg?t=2024-04-26-21-54-01",
+          "url": "/mushfirat",
+          "userName": "mushfirat",
+          "tier": "EXPERT",
+          "id": 5956875,
+          "profileUrl": "/mushfirat",
+          "performanceTier": "EXPERT",
+          "userId": 5956875,
+          "progressionOptOut": false
+        },
+        "intro": ""
+      },
+      "depth": 1,
+      "is_first_message": false
+    },
+    {
+      "id": 3432219,
+      "postDate": "2026-03-31T08:55:14.420Z",
+      "rawMarkdown": "Yes, this is true. The temperature value is now ```1.0``` instead of the initial ```0.0``` . @ryanholbrook could you please also fix this?",
+      "content": "<p>Yes, this is true. The temperature value is now <code>1.0</code> instead of the initial <code>0.0</code> . <a href=\"https://www.kaggle.com/ryanholbrook\" target=\"_blank\">@ryanholbrook</a> could you please also fix this?</p>",
+      "parent": {},
+      "author": {
+        "displayName": "JK-Piece",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/3937164-kg.png?t=2023-11-07-17-35-27",
+        "url": "/jeannkouagou",
+        "tier": "MASTER",
+        "id": 3937164,
+        "progressionOptOut": false
+      },
+      "authorType": "TOPIC",
+      "votes": {
+        "totalVotes": 2,
+        "canUpvote": true,
+        "totalUpvotes": 2
+      },
+      "kernelVersion": 0,
+      "competitionRanking": 136,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "JK-Piece",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/3937164-kg.png?t=2023-11-07-17-35-27",
+          "url": "/jeannkouagou",
+          "userName": "jeannkouagou",
+          "tier": "MASTER",
+          "id": 3937164,
+          "profileUrl": "/jeannkouagou",
+          "performanceTier": "MASTER",
+          "userId": 3937164,
+          "progressionOptOut": false
+        },
+        "intro": "Hey Kagglers. I am looking for a teammate with current score around 0.78-0.80. I have strong checkpoints and great training data that would benefit the team to be formed. Feel free to reach out."
+      },
+      "depth": 2,
+      "is_first_message": false
+    },
+    {
+      "id": 3432357,
+      "postDate": "2026-03-31T13:49:36.403Z",
+      "rawMarkdown": "![](https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F2003505%2Fed0fee6d9df708289c49fcaa3a7c3123%2FScreenshot%202026-03-31%20at%209.48.26AM.png?generation=1774964917962828&alt=media)\n\nI'm still seeing `0.0`. Could you elaborate on why you think it's `1.0`?",
+      "content": "<p><img src=\"https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F2003505%2Fed0fee6d9df708289c49fcaa3a7c3123%2FScreenshot%202026-03-31%20at%209.48.26AM.png?generation=1774964917962828&amp;alt=media\" alt=\"\"></p>\n<p>I'm still seeing <code>0.0</code>. Could you elaborate on why you think it's <code>1.0</code>?</p>",
+      "parent": {},
+      "author": {
+        "displayName": "Ryan Holbrook",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2003505-kg.jpg",
+        "url": "/ryanholbrook",
+        "tier": "STAFF",
+        "id": 2003505,
+        "progressionOptOut": false
+      },
+      "authorType": "ADMIN",
+      "votes": {
+        "totalVotes": 1,
+        "canUpvote": true,
+        "totalUpvotes": 1
+      },
+      "kernelVersion": 0,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "isCollapsed": true,
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "Ryan Holbrook",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2003505-kg.jpg",
+          "url": "/ryanholbrook",
+          "userName": "ryanholbrook",
+          "tier": "STAFF",
+          "id": 2003505,
+          "profileUrl": "/ryanholbrook",
+          "performanceTier": "STAFF",
+          "userId": 2003505,
+          "progressionOptOut": false
+        },
+        "intro": ""
+      },
+      "depth": 2,
+      "is_first_message": false
+    },
+    {
+      "id": 3432367,
+      "postDate": "2026-03-31T14:10:36.537Z",
+      "rawMarkdown": "Hi Ryan @ryanholbrook , thank you for checking this. Could you please clarify whether the recent score drop on resubmission is due to a metric change or evaluation nondeterminism?\n\nIf it is a metric change, could you share exactly what changed, especially around binary-answer verification? It would help us understand how to adapt to the new metric.\n\nThank you. ",
+      "content": "<p>Hi Ryan <a href=\"https://www.kaggle.com/ryanholbrook\" target=\"_blank\">@ryanholbrook</a> , thank you for checking this. Could you please clarify whether the recent score drop on resubmission is due to a metric change or evaluation nondeterminism?</p>\n<p>If it is a metric change, could you share exactly what changed, especially around binary-answer verification? It would help us understand how to adapt to the new metric.</p>\n<p>Thank you. </p>",
+      "parent": {},
+      "author": {
+        "displayName": "Tony Li",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/22938014-kg.png?t=2024-10-15-22-21-41",
+        "url": "/tonylica",
+        "tier": "MASTER",
+        "id": 22938014,
+        "progressionOptOut": false
+      },
+      "authorType": "COMMENT",
+      "votes": {
+        "canUpvote": true
+      },
+      "kernelVersion": 0,
+      "competitionRanking": 147,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "isCollapsed": true,
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "Aneesh",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/18445905-kg.jpeg?t=2025-05-12-17-38-43",
+          "url": "/aneeshmukkamala",
+          "userName": "aneeshmukkamala",
+          "tier": "EXPERT",
+          "id": 18445905,
+          "profileUrl": "/aneeshmukkamala",
+          "performanceTier": "EXPERT",
+          "userId": 18445905,
+          "progressionOptOut": false
+        },
+        "intro": ""
+      },
+      "depth": 2,
+      "is_first_message": false
+    },
+    {
+      "id": 3432392,
+      "postDate": "2026-03-31T14:32:59.837Z",
+      "rawMarkdown": "I thought we are using this notebook for the metric: https://www.kaggle.com/code/metric/nvidia-nemotron-metric\n\nIts latest version 14 shows a temperature of 1.0 in the function \n```python\ndef score(\n    solution: pd.DataFrame,\n    submission: pd.DataFrame,\n    row_id_column_name: str,\n    max_lora_rank: int = 32,\n    max_tokens: int = 3584,\n    top_p: float = 1.0,\n    temperature: float = 1.0,\n    max_num_seqs: int = 128,\n    gpu_memory_utilization: float = 0.85,\n    max_model_len: int = 4096,\n    debug: bool = False,\n) -> float:\n    r\"\"\"Evaluate the generated predictions against the ground truth.\n\n    Submissions are evaluated based on their **Accuracy** in solving the provided\n    tasks. The NVIDIA Nemotron-3-Nano-30B model is loaded with the participant's\n    submitted LoRA adapter (which must include an `adapter_config.json`) using\n    the vLLM inference engine. For each test case, the model is prompted to\n    generate a response and instructed to place its final answer within a `\\boxed{}`\n    LaTeX command. The metric extracts the final answer from the generated text,\n    prioritizing content within the boxed format while falling back to other\n    heuristic patterns or the first numeric value found. A prediction is graded as\n    correct if it matches the ground truth either exactly as a string or within a\n    relative numerical tolerance of $10^{-2}$. The final score is the proportion of\n    correctly answered questions.\n\n    Args:\n        solution: DataFrame containing the ground truth answers. Must include the\n            row_id_column_name and an 'answer' column.\n        submission: DataFrame containing the predicted answers. Must include the\n            row_id_column_name and a 'prediction' column.\n        row_id_column_name: The name of the ID column used to join solution and\n            submission.\n        max_lora_rank: Maximum rank for LoRA adapters.\n        max_tokens: Maximum number of tokens to generate.\n        top_p: Top-p sampling parameter.\n        temperature: Temperature sampling parameter.\n        max_num_seqs: Maximum number of sequences to process concurrently.\n        gpu_memory_utilization: Fraction of GPU memory to allocate for the vLLM execution.\n        max_model_len: Maximum context length (input + output tokens).\n        debug: If True, writes raw outputs and extracted predictions to a CSV file.\n\n    Returns:\n        The accuracy score (fraction of matches) as a float.\n    \"\"\"\n    lora_path = submission['prediction'].iloc[0]\n\n    # Load test data and filter it to only include rows present in the solution\n    test_df = pd.read_csv(DATA_PATH / 'test.csv', index_col=None)\n    row_id_col = str(test_df.columns.to_list()[0])\n    test_df = test_df[test_df[row_id_col].isin(solution[row_id_column_name])]\n\n    submission = generate_predictions(\n        test_df=test_df,\n        lora_path=lora_path,\n        row_id_col=row_id_column_name,\n        max_lora_rank=max_lora_rank,\n        max_tokens=max_tokens,\n        top_p=top_p,\n        temperature=temperature,\n        max_num_seqs=max_num_seqs,\n        gpu_memory_utilization=gpu_memory_utilization,\n        max_model_len=max_model_len,\n        debug=debug,\n    )\n\n    dataset = solution.merge(submission, on=row_id_column_name)\n    num_correct = 0\n\n    # Verify the predictions\n    for item in dataset.itertuples(index=False):\n        ground_truth = item.answer\n        extracted_answer = item.prediction\n\n        match = verify(str(ground_truth), str(extracted_answer))\n        if match:\n            num_correct += 1\n\n    accuracy = num_correct / len(solution)\n    return float(accuracy)\n```",
+      "content": "<p>I thought we are using this notebook for the metric: <a href=\"https://www.kaggle.com/code/metric/nvidia-nemotron-metric\" target=\"_blank\">https://www.kaggle.com/code/metric/nvidia-nemotron-metric</a></p>\n<p>Its latest version 14 shows a temperature of 1.0 in the function </p>\n<pre><code>def score(\n    solution: pd.DataFrame,\n    submission: pd.DataFrame,\n    row_id_column_name: str,\n    max_lora_rank: int = 32,\n    max_tokens: int = 3584,\n    top_p: float = 1.0,\n    temperature: float = 1.0,\n    max_num_seqs: int = 128,\n    gpu_memory_utilization: float = 0.85,\n    max_model_len: int = 4096,\n    debug: bool = False,\n) -&gt; float:\n    r\"\"\"Evaluate the generated predictions against the ground truth.\n\n    Submissions are evaluated based on their **Accuracy** in solving the provided\n    tasks. The NVIDIA Nemotron-3-Nano-30B model is loaded with the participant's\n    submitted LoRA adapter (which must include an `adapter_config.json`) using\n    the vLLM inference engine. For each test case, the model is prompted to\n    generate a response and instructed to place its final answer within a `\\boxed{}`\n    LaTeX command. The metric extracts the final answer from the generated text,\n    prioritizing content within the boxed format while falling back to other\n    heuristic patterns or the first numeric value found. A prediction is graded as\n    correct if it matches the ground truth either exactly as a string or within a\n    relative numerical tolerance of $10^{-2}$. The final score is the proportion of\n    correctly answered questions.\n\n    Args:\n        solution: DataFrame containing the ground truth answers. Must include the\n            row_id_column_name and an 'answer' column.\n        submission: DataFrame containing the predicted answers. Must include the\n            row_id_column_name and a 'prediction' column.\n        row_id_column_name: The name of the ID column used to join solution and\n            submission.\n        max_lora_rank: Maximum rank for LoRA adapters.\n        max_tokens: Maximum number of tokens to generate.\n        top_p: Top-p sampling parameter.\n        temperature: Temperature sampling parameter.\n        max_num_seqs: Maximum number of sequences to process concurrently.\n        gpu_memory_utilization: Fraction of GPU memory to allocate for the vLLM execution.\n        max_model_len: Maximum context length (input + output tokens).\n        debug: If True, writes raw outputs and extracted predictions to a CSV file.\n\n    Returns:\n        The accuracy score (fraction of matches) as a float.\n    \"\"\"\n    lora_path = submission['prediction'].iloc[0]\n\n    # Load test data and filter it to only include rows present in the solution\n    test_df = pd.read_csv(DATA_PATH / 'test.csv', index_col=None)\n    row_id_col = str(test_df.columns.to_list()[0])\n    test_df = test_df[test_df[row_id_col].isin(solution[row_id_column_name])]\n\n    submission = generate_predictions(\n        test_df=test_df,\n        lora_path=lora_path,\n        row_id_col=row_id_column_name,\n        max_lora_rank=max_lora_rank,\n        max_tokens=max_tokens,\n        top_p=top_p,\n        temperature=temperature,\n        max_num_seqs=max_num_seqs,\n        gpu_memory_utilization=gpu_memory_utilization,\n        max_model_len=max_model_len,\n        debug=debug,\n    )\n\n    dataset = solution.merge(submission, on=row_id_column_name)\n    num_correct = 0\n\n    # Verify the predictions\n    for item in dataset.itertuples(index=False):\n        ground_truth = item.answer\n        extracted_answer = item.prediction\n\n        match = verify(str(ground_truth), str(extracted_answer))\n        if match:\n            num_correct += 1\n\n    accuracy = num_correct / len(solution)\n    return float(accuracy)\n</code></pre>",
+      "parent": {},
+      "author": {
+        "displayName": "JK-Piece",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/3937164-kg.png?t=2023-11-07-17-35-27",
+        "url": "/jeannkouagou",
+        "tier": "MASTER",
+        "id": 3937164,
+        "progressionOptOut": false
+      },
+      "authorType": "TOPIC",
+      "votes": {
+        "canUpvote": true
+      },
+      "kernelVersion": 0,
+      "competitionRanking": 136,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "isCollapsed": true,
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "JK-Piece",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/3937164-kg.png?t=2023-11-07-17-35-27",
+          "url": "/jeannkouagou",
+          "userName": "jeannkouagou",
+          "tier": "MASTER",
+          "id": 3937164,
+          "profileUrl": "/jeannkouagou",
+          "performanceTier": "MASTER",
+          "userId": 3937164,
+          "progressionOptOut": false
+        },
+        "intro": "Hey Kagglers. I am looking for a teammate with current score around 0.78-0.80. I have strong checkpoints and great training data that would benefit the team to be formed. Feel free to reach out."
+      },
+      "depth": 2,
+      "is_first_message": false
+    },
+    {
+      "id": 3432398,
+      "postDate": "2026-03-31T14:53:53.430Z",
+      "rawMarkdown": "That's just the default value. We set the actual values the `score` function runs with separately. You can see the actual values on the [Evaluation](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/overview/evaluation) page.",
+      "content": "<p>That's just the default value. We set the actual values the <code>score</code> function runs with separately. You can see the actual values on the <a href=\"https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/overview/evaluation\" target=\"_blank\">Evaluation</a> page.</p>",
+      "parent": {},
+      "author": {
+        "displayName": "Ryan Holbrook",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2003505-kg.jpg",
+        "url": "/ryanholbrook",
+        "tier": "STAFF",
+        "id": 2003505,
+        "progressionOptOut": false
+      },
+      "authorType": "ADMIN",
+      "votes": {
+        "totalVotes": 1,
+        "canUpvote": true,
+        "totalUpvotes": 1
+      },
+      "kernelVersion": 0,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "isCollapsed": true,
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "Ryan Holbrook",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2003505-kg.jpg",
+          "url": "/ryanholbrook",
+          "userName": "ryanholbrook",
+          "tier": "STAFF",
+          "id": 2003505,
+          "profileUrl": "/ryanholbrook",
+          "performanceTier": "STAFF",
+          "userId": 2003505,
+          "progressionOptOut": false
+        },
+        "intro": ""
+      },
+      "depth": 2,
+      "is_first_message": false
+    },
+    {
+      "id": 3432400,
+      "postDate": "2026-03-31T14:57:35.823Z",
+      "rawMarkdown": "I believe the change is due to the binary-answer verification. You can see the code segment in another comment below. The change was meant to correctly identify binary answers as strings instead of floats. The float comparison was scoring some incorrect answers as correct. You shouldn't need to adapt your submissions to the change if you were already optimizing for correctness.",
+      "content": "<p>I believe the change is due to the binary-answer verification. You can see the code segment in another comment below. The change was meant to correctly identify binary answers as strings instead of floats. The float comparison was scoring some incorrect answers as correct. You shouldn't need to adapt your submissions to the change if you were already optimizing for correctness.</p>",
+      "parent": {},
+      "author": {
+        "displayName": "Ryan Holbrook",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2003505-kg.jpg",
+        "url": "/ryanholbrook",
+        "tier": "STAFF",
+        "id": 2003505,
+        "progressionOptOut": false
+      },
+      "authorType": "ADMIN",
+      "votes": {
+        "totalVotes": 2,
+        "canUpvote": true,
+        "totalUpvotes": 2
+      },
+      "kernelVersion": 0,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "isCollapsed": true,
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "Ryan Holbrook",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2003505-kg.jpg",
+          "url": "/ryanholbrook",
+          "userName": "ryanholbrook",
+          "tier": "STAFF",
+          "id": 2003505,
+          "profileUrl": "/ryanholbrook",
+          "performanceTier": "STAFF",
+          "userId": 2003505,
+          "progressionOptOut": false
+        },
+        "intro": ""
+      },
+      "depth": 2,
+      "is_first_message": false
+    },
+    {
+      "id": 3432670,
+      "postDate": "2026-03-31T20:44:33.340Z",
+      "rawMarkdown": "I'm sorry, but 2 days ago I submitted the exact same adapter 4 times, and got 3 different scores. How else can such variance be explained, if the temperature is 0?\n![](https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F11905020%2Fa9b173e0fae6154921d0417630cd7898%2Fdasda.jpg?generation=1774989850359898&alt=media)",
+      "content": "<p>I'm sorry, but 2 days ago I submitted the exact same adapter 4 times, and got 3 different scores. How else can such variance be explained, if the temperature is 0?\n<img src=\"https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F11905020%2Fa9b173e0fae6154921d0417630cd7898%2Fdasda.jpg?generation=1774989850359898&amp;alt=media\" alt=\"\"></p>",
+      "parent": {},
+      "author": {
+        "displayName": "ImperfectKitto",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/11905020-kg.jpg",
+        "url": "/defdet",
+        "tier": "EXPERT",
+        "id": 11905020,
+        "progressionOptOut": false
+      },
+      "authorType": "COMMENT",
+      "votes": {
+        "totalVotes": 4,
+        "canUpvote": true,
+        "totalUpvotes": 4
+      },
+      "kernelVersion": 0,
+      "competitionRanking": 473,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "isCollapsed": true,
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "ImperfectKitto",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/11905020-kg.jpg",
+          "url": "/defdet",
+          "userName": "defdet",
+          "tier": "EXPERT",
+          "id": 11905020,
+          "profileUrl": "/defdet",
+          "performanceTier": "EXPERT",
+          "userId": 11905020,
+          "progressionOptOut": false
+        },
+        "intro": ""
+      },
+      "depth": 2,
+      "is_first_message": false
+    },
+    {
+      "id": 3432722,
+      "postDate": "2026-03-31T21:51:59.093Z",
+      "rawMarkdown": "Ooh this is a common misconception. I think the result variability is a matter of 1 or 2 intermediate steps leading to different boxed score. LLMs are non deterministic and temperature only controls sampling log probs but not the reductions. ",
+      "content": "<p>Ooh this is a common misconception. I think the result variability is a matter of 1 or 2 intermediate steps leading to different boxed score. LLMs are non deterministic and temperature only controls sampling log probs but not the reductions. </p>",
+      "parent": {},
+      "author": {
+        "displayName": "Mayank Researcher",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+        "url": "/mayankresearcher",
+        "tier": "CONTRIBUTOR",
+        "id": 33106866,
+        "progressionOptOut": false
+      },
+      "authorType": "COMMENT",
+      "votes": {
+        "totalVotes": 3,
+        "canUpvote": true,
+        "totalUpvotes": 3
+      },
+      "kernelVersion": 0,
+      "competitionRanking": 1886,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "isCollapsed": true,
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "Mayank Researcher",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "url": "/mayankresearcher",
+          "userName": "mayankresearcher",
+          "tier": "CONTRIBUTOR",
+          "id": 33106866,
+          "profileUrl": "/mayankresearcher",
+          "performanceTier": "CONTRIBUTOR",
+          "userId": 33106866,
+          "progressionOptOut": false
+        },
+        "intro": ""
+      },
+      "depth": 2,
+      "is_first_message": false
+    },
+    {
+      "id": 3432737,
+      "postDate": "2026-03-31T22:20:50.520Z",
+      "rawMarkdown": "What? I'm pretty sure temp=0 makes LLMs completely determenistic. They start selecting the token with highest probability each time.",
+      "content": "<p>What? I'm pretty sure temp=0 makes LLMs completely determenistic. They start selecting the token with highest probability each time.</p>",
+      "parent": {},
+      "author": {
+        "displayName": "ImperfectKitto",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/11905020-kg.jpg",
+        "url": "/defdet",
+        "tier": "EXPERT",
+        "id": 11905020,
+        "progressionOptOut": false
+      },
+      "authorType": "COMMENT",
+      "votes": {
+        "canUpvote": true,
+        "totalUpvotes": 1
+      },
+      "kernelVersion": 0,
+      "competitionRanking": 473,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "isCollapsed": true,
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "ImperfectKitto",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/11905020-kg.jpg",
+          "url": "/defdet",
+          "userName": "defdet",
+          "tier": "EXPERT",
+          "id": 11905020,
+          "profileUrl": "/defdet",
+          "performanceTier": "EXPERT",
+          "userId": 11905020,
+          "progressionOptOut": false
+        },
+        "intro": ""
+      },
+      "depth": 2,
+      "is_first_message": false
+    },
+    {
+      "id": 3432758,
+      "postDate": "2026-03-31T22:53:19.553Z",
+      "rawMarkdown": "There can be some nondeterminism due to variations in the order of operations within GPU kernels. `(A + B) + C != A + (B + C)`.\n\nIts been a couple years since I last checked empirically, but vLLM at least used to be nondeterministic even with temperature=0.",
+      "content": "<p>There can be some nondeterminism due to variations in the order of operations within GPU kernels. <code>(A + B) + C != A + (B + C)</code>.</p>\n<p>Its been a couple years since I last checked empirically, but vLLM at least used to be nondeterministic even with temperature=0.</p>",
+      "parent": {},
+      "author": {
+        "displayName": "James Day",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+        "url": "/jsday96",
+        "tier": "GRANDMASTER",
+        "id": 3512350,
+        "progressionOptOut": false
+      },
+      "authorType": "COMMENT",
+      "votes": {
+        "totalVotes": 4,
+        "canUpvote": true,
+        "totalUpvotes": 4
+      },
+      "kernelVersion": 0,
+      "competitionRanking": 679,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "isCollapsed": true,
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "James Day",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "url": "/jsday96",
+          "userName": "jsday96",
+          "tier": "GRANDMASTER",
+          "id": 3512350,
+          "profileUrl": "/jsday96",
+          "performanceTier": "GRANDMASTER",
+          "userId": 3512350,
+          "progressionOptOut": false
+        },
+        "intro": ""
+      },
+      "depth": 2,
+      "is_first_message": false
+    },
+    {
+      "id": 3432792,
+      "postDate": "2026-03-31T23:25:31.557Z",
+      "rawMarkdown": "I've just run my benchmark with the same adapter 5 times locally - yep, you're correct. Completely different results with temperature = 0. My bad.\nLooks like submitting the same adapter 5 times over will be a good idea for now.",
+      "content": "<p>I've just run my benchmark with the same adapter 5 times locally - yep, you're correct. Completely different results with temperature = 0. My bad.\nLooks like submitting the same adapter 5 times over will be a good idea for now.</p>",
+      "parent": {},
+      "author": {
+        "displayName": "ImperfectKitto",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/11905020-kg.jpg",
+        "url": "/defdet",
+        "tier": "EXPERT",
+        "id": 11905020,
+        "progressionOptOut": false
+      },
+      "authorType": "COMMENT",
+      "votes": {
+        "totalVotes": 4,
+        "canUpvote": true,
+        "totalUpvotes": 4
+      },
+      "kernelVersion": 0,
+      "competitionRanking": 473,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "isCollapsed": true,
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "ImperfectKitto",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/11905020-kg.jpg",
+          "url": "/defdet",
+          "userName": "defdet",
+          "tier": "EXPERT",
+          "id": 11905020,
+          "profileUrl": "/defdet",
+          "performanceTier": "EXPERT",
+          "userId": 11905020,
+          "progressionOptOut": false
+        },
+        "intro": ""
+      },
+      "depth": 2,
+      "is_first_message": false
+    },
+    {
+      "id": 3432802,
+      "postDate": "2026-03-31T23:37:11.127Z",
+      "rawMarkdown": "I've just realized that better public score really doesn't mean better hidden score. Oh man, I'm getting Open Polymer competition vibes",
+      "content": "<p>I've just realized that better public score really doesn't mean better hidden score. Oh man, I'm getting Open Polymer competition vibes</p>",
+      "parent": {},
+      "author": {
+        "displayName": "ImperfectKitto",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/11905020-kg.jpg",
+        "url": "/defdet",
+        "tier": "EXPERT",
+        "id": 11905020,
+        "progressionOptOut": false
+      },
+      "authorType": "COMMENT",
+      "votes": {
+        "totalVotes": 1,
+        "canUpvote": true,
+        "totalUpvotes": 1
+      },
+      "kernelVersion": 0,
+      "competitionRanking": 473,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "isCollapsed": true,
+      "reactions": [
+        {
+          "emoji": "FUNNY",
+          "featuredUserNames": [
+            "jsday96"
+          ],
+          "userCount": 1
+        }
+      ],
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "ImperfectKitto",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/11905020-kg.jpg",
+          "url": "/defdet",
+          "userName": "defdet",
+          "tier": "EXPERT",
+          "id": 11905020,
+          "profileUrl": "/defdet",
+          "performanceTier": "EXPERT",
+          "userId": 11905020,
+          "progressionOptOut": false
+        },
+        "intro": ""
+      },
+      "depth": 2,
+      "is_first_message": false
+    },
+    {
+      "id": 3432952,
+      "postDate": "2026-04-01T03:27:54.800Z",
+      "rawMarkdown": "In LB, it varies depending on the model's \"moving parts.\"(MoE)",
+      "content": "<p>In LB, it varies depending on the model's \"moving parts.\"(MoE)</p>",
+      "parent": {},
+      "author": {
+        "displayName": "Giovanny Rodríguez",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+        "url": "/giovannyrodrguez",
+        "tier": "EXPERT",
+        "id": 23653385,
+        "progressionOptOut": false
+      },
+      "authorType": "COMMENT",
+      "votes": {
+        "canUpvote": true
+      },
+      "kernelVersion": 0,
+      "competitionRanking": 743,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "isCollapsed": true,
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "Giovanny Rodríguez",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "url": "/giovannyrodrguez",
+          "userName": "giovannyrodrguez",
+          "tier": "EXPERT",
+          "id": 23653385,
+          "profileUrl": "/giovannyrodrguez",
+          "performanceTier": "EXPERT",
+          "userId": 23653385,
+          "progressionOptOut": false
+        },
+        "intro": ""
+      },
+      "depth": 2,
+      "is_first_message": false
+    },
+    {
+      "id": 3432973,
+      "postDate": "2026-04-01T04:08:25.410Z",
+      "rawMarkdown": "@defdet Sorry but How do you know? We don't have access to the private LB, am I wrong?",
+      "content": "<p><a href=\"https://www.kaggle.com/defdet\" target=\"_blank\">@defdet</a> Sorry but How do you know? We don't have access to the private LB, am I wrong?</p>",
+      "parent": {},
+      "author": {
+        "displayName": "trantrikien239",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1507553-kg.jpeg",
+        "url": "/trantrikien239",
+        "tier": "CONTRIBUTOR",
+        "id": 1507553,
+        "progressionOptOut": false
+      },
+      "authorType": "COMMENT",
+      "votes": {
+        "canUpvote": true
+      },
+      "kernelVersion": 0,
+      "competitionRanking": 748,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "isCollapsed": true,
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "Duc Nguyen",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1039460-kg.jpg",
+          "url": "/mathormad",
+          "userName": "mathormad",
+          "tier": "GRANDMASTER",
+          "id": 1039460,
+          "profileUrl": "/mathormad",
+          "performanceTier": "GRANDMASTER",
+          "userId": 1039460,
+          "progressionOptOut": false
+        },
+        "intro": ""
+      },
+      "depth": 2,
+      "is_first_message": false
+    },
+    {
+      "id": 3433130,
+      "postDate": "2026-04-01T09:08:21.963Z",
+      "rawMarkdown": "me too :)))",
+      "content": "<p>me too :)))</p>",
+      "parent": {},
+      "author": {
+        "displayName": "TranBAn",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+        "url": "/tranban",
+        "tier": "CONTRIBUTOR",
+        "id": 26302911,
+        "progressionOptOut": false
+      },
+      "authorType": "COMMENT",
+      "votes": {
+        "canUpvote": true
+      },
+      "kernelVersion": 0,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "isCollapsed": true,
+      "depth": 2,
+      "is_first_message": false
+    },
+    {
+      "id": 3433559,
+      "postDate": "2026-04-01T20:08:48.417Z",
+      "rawMarkdown": "In your scoring Metric code there is no per request seed set, this make the score non-deterministic and keep on changing even with no code change. Can you set the seed to make the score more deterministic? @ryanholbrook ",
+      "content": "<p>In your scoring Metric code there is no per request seed set, this make the score non-deterministic and keep on changing even with no code change. Can you set the seed to make the score more deterministic? <a href=\"https://www.kaggle.com/ryanholbrook\" target=\"_blank\">@ryanholbrook</a> </p>",
+      "parent": {},
+      "author": {
+        "displayName": "Chew Kok Wah",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+        "url": "/chewkokwahibrainai",
+        "tier": "EXPERT",
+        "id": 3967558,
+        "progressionOptOut": false
+      },
+      "authorType": "COMMENT",
+      "votes": {
+        "totalVotes": 2,
+        "canUpvote": true,
+        "totalUpvotes": 2
+      },
+      "kernelVersion": 0,
+      "competitionRanking": 60,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "Chew Kok Wah",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "url": "/chewkokwahibrainai",
+          "userName": "chewkokwahibrainai",
+          "tier": "EXPERT",
+          "id": 3967558,
+          "profileUrl": "/chewkokwahibrainai",
+          "performanceTier": "EXPERT",
+          "userId": 3967558,
+          "progressionOptOut": false
+        },
+        "intro": ""
+      },
+      "depth": 1,
+      "is_first_message": false
+    },
+    {
+      "id": 3431234,
+      "postDate": "2026-03-29T17:53:49.500Z",
+      "rawMarkdown": "The verify function (https://www.kaggle.com/code/metric/nvidia-nemotron-metric) is changed. See discussion at https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/683853",
+      "content": "<p>The verify function (<a href=\"https://www.kaggle.com/code/metric/nvidia-nemotron-metric\" target=\"_blank\">https://www.kaggle.com/code/metric/nvidia-nemotron-metric</a>) is changed. See discussion at <a href=\"https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/683853\" target=\"_blank\">https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/683853</a></p>",
+      "parent": {},
+      "author": {
+        "displayName": "bliao",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/4636881-kg.png",
+        "url": "/baohaoliao",
+        "tier": "MASTER",
+        "id": 4636881,
+        "progressionOptOut": false
+      },
+      "authorType": "COMMENT",
+      "votes": {
+        "totalVotes": 3,
+        "canUpvote": true,
+        "totalUpvotes": 3
+      },
+      "kernelVersion": 0,
+      "competitionRanking": 1533,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "bliao",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/4636881-kg.png",
+          "url": "/baohaoliao",
+          "userName": "baohaoliao",
+          "tier": "MASTER",
+          "id": 4636881,
+          "profileUrl": "/baohaoliao",
+          "performanceTier": "MASTER",
+          "userId": 4636881,
+          "progressionOptOut": false
+        },
+        "intro": ""
+      },
+      "depth": 0,
+      "is_first_message": false
+    },
+    {
+      "id": 3431239,
+      "postDate": "2026-03-29T18:00:58.897Z",
+      "rawMarkdown": "I note that this part was added\n\n```\n    # If the answer is a binary string, compare strictly as strings\n    if re.fullmatch(r\"[01]+\", stored_answer):\n        return predicted.lower() == stored_answer.lower()\n```\n\nIf this is indeed the case, I think we should rescore (just rescore, not rerun) the leaderboard",
+      "content": "<p>I note that this part was added</p>\n<pre><code>    # If the answer is a binary string, compare strictly as strings\n    if re.fullmatch(r\"[01]+\", stored_answer):\n        return predicted.lower() == stored_answer.lower()\n</code></pre>\n<p>If this is indeed the case, I think we should rescore (just rescore, not rerun) the leaderboard</p>",
+      "parent": {},
+      "author": {
+        "displayName": "Tong Hui Kang",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1680925-kg.jpg",
+        "url": "/huikang",
+        "tier": "MASTER",
+        "id": 1680925,
+        "progressionOptOut": false
+      },
+      "authorType": "COMMENT",
+      "votes": {
+        "totalVotes": 6,
+        "canUpvote": true,
+        "totalUpvotes": 6
+      },
+      "kernelVersion": 0,
+      "competitionRanking": 677,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "Tong Hui Kang",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1680925-kg.jpg",
+          "url": "/huikang",
+          "userName": "huikang",
+          "tier": "MASTER",
+          "id": 1680925,
+          "profileUrl": "/huikang",
+          "performanceTier": "MASTER",
+          "userId": 1680925,
+          "progressionOptOut": false
+        },
+        "intro": ""
+      },
+      "depth": 1,
+      "is_first_message": false
+    },
+    {
+      "id": 3431242,
+      "postDate": "2026-03-29T18:08:49.747Z",
+      "rawMarkdown": "agree to rescore the LB, since the metric is different.\nIn addition, the same notebook gets different scores, although temp=0. There might be some issues about deterministic. ",
+      "content": "<p>agree to rescore the LB, since the metric is different.\nIn addition, the same notebook gets different scores, although temp=0. There might be some issues about deterministic. </p>",
+      "parent": {},
+      "author": {
+        "displayName": "bliao",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/4636881-kg.png",
+        "url": "/baohaoliao",
+        "tier": "MASTER",
+        "id": 4636881,
+        "progressionOptOut": false
+      },
+      "authorType": "COMMENT",
+      "votes": {
+        "totalVotes": 1,
+        "canUpvote": true,
+        "totalUpvotes": 1
+      },
+      "kernelVersion": 0,
+      "competitionRanking": 1533,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "bliao",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/4636881-kg.png",
+          "url": "/baohaoliao",
+          "userName": "baohaoliao",
+          "tier": "MASTER",
+          "id": 4636881,
+          "profileUrl": "/baohaoliao",
+          "performanceTier": "MASTER",
+          "userId": 4636881,
+          "progressionOptOut": false
+        },
+        "intro": ""
+      },
+      "depth": 2,
+      "is_first_message": false
+    },
+    {
+      "id": 3431258,
+      "postDate": "2026-03-29T19:11:35.137Z",
+      "rawMarkdown": "I dont think its needed, since scores will improve and rescoring will be naturally done. I doubt top scores will stay this low. Iam about to publish comprahensivve dataset for bit problems, with very good traces.\n\nIam currently running vllm inference with gpt oss 120B, so I hope to share my dataset today. Lets see what others think.\n",
+      "content": "<p>I dont think its needed, since scores will improve and rescoring will be naturally done. I doubt top scores will stay this low. Iam about to publish comprahensivve dataset for bit problems, with very good traces.</p>\n<p>Iam currently running vllm inference with gpt oss 120B, so I hope to share my dataset today. Lets see what others think.</p>",
+      "parent": {},
+      "author": {
+        "displayName": "lucian kucera",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+        "url": "/luciankucera",
+        "tier": "CONTRIBUTOR",
+        "id": 17819385,
+        "progressionOptOut": false
+      },
+      "authorType": "COMMENT",
+      "votes": {
+        "totalVotes": -1,
+        "canUpvote": true,
+        "totalUpvotes": 2
+      },
+      "kernelVersion": 0,
+      "competitionRanking": 1566,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "lucian kucera",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "url": "/luciankucera",
+          "userName": "luciankucera",
+          "tier": "CONTRIBUTOR",
+          "id": 17819385,
+          "profileUrl": "/luciankucera",
+          "performanceTier": "CONTRIBUTOR",
+          "userId": 17819385,
+          "progressionOptOut": false
+        },
+        "intro": ""
+      },
+      "depth": 2,
+      "is_first_message": false
+    },
+    {
+      "id": 3432267,
+      "postDate": "2026-03-31T10:28:53.360Z",
+      "rawMarkdown": "Yah everyones score fell by 0.03-0.04 approx. likely due to the evaluation change\n",
+      "content": "<p>Yah everyones score fell by 0.03-0.04 approx. likely due to the evaluation change</p>",
+      "parent": {},
+      "author": {
+        "displayName": "pranavpoduval",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1246160-gp.jpg",
+        "url": "/pranavpoduval",
+        "tier": "CONTRIBUTOR",
+        "id": 1246160,
+        "progressionOptOut": false
+      },
+      "authorType": "COMMENT",
+      "votes": {
+        "totalVotes": 1,
+        "canUpvote": true,
+        "totalUpvotes": 1
+      },
+      "kernelVersion": 0,
+      "competitionRanking": 1322,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "pranavpoduval",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1246160-gp.jpg",
+          "url": "/pranavpoduval",
+          "userName": "pranavpoduval",
+          "tier": "CONTRIBUTOR",
+          "id": 1246160,
+          "profileUrl": "/pranavpoduval",
+          "performanceTier": "CONTRIBUTOR",
+          "userId": 1246160,
+          "progressionOptOut": false
+        },
+        "intro": ""
+      },
+      "depth": 0,
+      "is_first_message": false
+    },
+    {
+      "id": 3431572,
+      "postDate": "2026-03-30T10:14:43.473Z",
+      "rawMarkdown": "Wow, thanks! I resubmit my best submission.csv, 0.82 -> 0.8",
+      "content": "<p>Wow, thanks! I resubmit my best submission.csv, 0.82 -&gt; 0.8</p>",
+      "parent": {},
+      "author": {
+        "displayName": "muyouqian4",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/21117951-kg.jpg?t=2025-10-24-07-18-09",
+        "url": "/muyouqian4",
+        "tier": "EXPERT",
+        "id": 21117951,
+        "progressionOptOut": false
+      },
+      "authorType": "COMMENT",
+      "votes": {
+        "totalVotes": 1,
+        "canUpvote": true,
+        "totalUpvotes": 1
+      },
+      "kernelVersion": 0,
+      "competitionRanking": 1256,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "muyouqian4",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/21117951-kg.jpg?t=2025-10-24-07-18-09",
+          "url": "/muyouqian4",
+          "userName": "muyouqian4",
+          "tier": "EXPERT",
+          "id": 21117951,
+          "profileUrl": "/muyouqian4",
+          "performanceTier": "EXPERT",
+          "userId": 21117951,
+          "progressionOptOut": false
+        },
+        "intro": ""
+      },
+      "depth": 0,
+      "is_first_message": false
+    },
+    {
+      "id": 3431476,
+      "postDate": "2026-03-30T07:28:19.870Z",
+      "rawMarkdown": "I also tried resubmitting the best model in kernel public, but it only achieved 0.64.",
+      "content": "<p>I also tried resubmitting the best model in kernel public, but it only achieved 0.64.</p>",
+      "parent": {},
+      "author": {
+        "displayName": "datnt114",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2730329-kg.jpg",
+        "url": "/kingkong153",
+        "tier": "EXPERT",
+        "id": 2730329,
+        "progressionOptOut": true
+      },
+      "authorType": "COMMENT",
+      "votes": {
+        "totalVotes": 1,
+        "canUpvote": true,
+        "totalUpvotes": 1
+      },
+      "kernelVersion": 0,
+      "competitionRanking": 73,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "datnt114",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2730329-kg.jpg",
+          "url": "/kingkong153",
+          "userName": "kingkong153",
+          "tier": "EXPERT",
+          "id": 2730329,
+          "profileUrl": "/kingkong153",
+          "performanceTier": "EXPERT",
+          "userId": 2730329,
+          "progressionOptOut": true
+        },
+        "intro": ""
+      },
+      "depth": 0,
+      "is_first_message": false
+    }
+  ],
+  "message_count_observed": 26,
+  "text_sha256": "9c688071bbc6cdb45656c1b79b3889ed08588f6aa82e13ea12c7cd5a313685e0",
+  "full_text": "[message_id=3431206 author= first=True]\nDid anyone else notice a decrease in their score?\n\nMy previous notebook with score 0.80+ now scores 0.77\n\nCan the hosts provide any insights here?\n\n[message_id=3431654 author= first=False]\nThanks, @jeannkouagou. I am looking into a rescore. Since this requires the RTX GPUs, I need to ensure we still have availability for ordinary scoring.\n\n[message_id=3432045 author= first=False]\nFrom my observation, I believe the evaluation is not running with `temperature=0`  \nCan you please update the default parameter of `temperature` to `0` in the evaluation notebook? Right now, it is set to `1.0`\n\nEach submission is currently returning different scores. Because of this, we have to submit our solution multiple times just to get back the maximum score. \n\n[message_id=3432219 author= first=False]\nYes, this is true. The temperature value is now ```1.0``` instead of the initial ```0.0``` . @ryanholbrook could you please also fix this?\n\n[message_id=3432357 author= first=False]\n![](https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F2003505%2Fed0fee6d9df708289c49fcaa3a7c3123%2FScreenshot%202026-03-31%20at%209.48.26AM.png?generation=1774964917962828&alt=media)\n\nI'm still seeing `0.0`. Could you elaborate on why you think it's `1.0`?\n\n[message_id=3432367 author= first=False]\nHi Ryan @ryanholbrook , thank you for checking this. Could you please clarify whether the recent score drop on resubmission is due to a metric change or evaluation nondeterminism?\n\nIf it is a metric change, could you share exactly what changed, especially around binary-answer verification? It would help us understand how to adapt to the new metric.\n\nThank you. \n\n[message_id=3432392 author= first=False]\nI thought we are using this notebook for the metric: https://www.kaggle.com/code/metric/nvidia-nemotron-metric\n\nIts latest version 14 shows a temperature of 1.0 in the function \n```python\ndef score(\n    solution: pd.DataFrame,\n    submission: pd.DataFrame,\n    row_id_column_name: str,\n    max_lora_rank: int = 32,\n    max_tokens: int = 3584,\n    top_p: float = 1.0,\n    temperature: float = 1.0,\n    max_num_seqs: int = 128,\n    gpu_memory_utilization: float = 0.85,\n    max_model_len: int = 4096,\n    debug: bool = False,\n) -> float:\n    r\"\"\"Evaluate the generated predictions against the ground truth.\n\n    Submissions are evaluated based on their **Accuracy** in solving the provided\n    tasks. The NVIDIA Nemotron-3-Nano-30B model is loaded with the participant's\n    submitted LoRA adapter (which must include an `adapter_config.json`) using\n    the vLLM inference engine. For each test case, the model is prompted to\n    generate a response and instructed to place its final answer within a `\\boxed{}`\n    LaTeX command. The metric extracts the final answer from the generated text,\n    prioritizing content within the boxed format while falling back to other\n    heuristic patterns or the first numeric value found. A prediction is graded as\n    correct if it matches the ground truth either exactly as a string or within a\n    relative numerical tolerance of $10^{-2}$. The final score is the proportion of\n    correctly answered questions.\n\n    Args:\n        solution: DataFrame containing the ground truth answers. Must include the\n            row_id_column_name and an 'answer' column.\n        submission: DataFrame containing the predicted answers. Must include the\n            row_id_column_name and a 'prediction' column.\n        row_id_column_name: The name of the ID column used to join solution and\n            submission.\n        max_lora_rank: Maximum rank for LoRA adapters.\n        max_tokens: Maximum number of tokens to generate.\n        top_p: Top-p sampling parameter.\n        temperature: Temperature sampling parameter.\n        max_num_seqs: Maximum number of sequences to process concurrently.\n        gpu_memory_utilization: Fraction of GPU memory to allocate for the vLLM execution.\n        max_model_len: Maximum context length (input + output tokens).\n        debug: If True, writes raw outputs and extracted predictions to a CSV file.\n\n    Returns:\n        The accuracy score (fraction of matches) as a float.\n    \"\"\"\n    lora_path = submission['prediction'].iloc[0]\n\n    # Load test data and filter it to only include rows present in the solution\n    test_df = pd.read_csv(DATA_PATH / 'test.csv', index_col=None)\n    row_id_col = str(test_df.columns.to_list()[0])\n    test_df = test_df[test_df[row_id_col].isin(solution[row_id_column_name])]\n\n    submission = generate_predictions(\n        test_df=test_df,\n        lora_path=lora_path,\n        row_id_col=row_id_column_name,\n        max_lora_rank=max_lora_rank,\n        max_tokens=max_tokens,\n        top_p=top_p,\n        temperature=temperature,\n        max_num_seqs=max_num_seqs,\n        gpu_memory_utilization=gpu_memory_utilization,\n        max_model_len=max_model_len,\n        debug=debug,\n    )\n\n    dataset = solution.merge(submission, on=row_id_column_name)\n    num_correct = 0\n\n    # Verify the predictions\n    for item in dataset.itertuples(index=False):\n        ground_truth = item.answer\n        extracted_answer = item.prediction\n\n        match = verify(str(ground_truth), str(extracted_answer))\n        if match:\n            num_correct += 1\n\n    accuracy = num_correct / len(solution)\n    return float(accuracy)\n```\n\n[message_id=3432398 author= first=False]\nThat's just the default value. We set the actual values the `score` function runs with separately. You can see the actual values on the [Evaluation](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/overview/evaluation) page.\n\n[message_id=3432400 author= first=False]\nI believe the change is due to the binary-answer verification. You can see the code segment in another comment below. The change was meant to correctly identify binary answers as strings instead of floats. The float comparison was scoring some incorrect answers as correct. You shouldn't need to adapt your submissions to the change if you were already optimizing for correctness.\n\n[message_id=3432670 author= first=False]\nI'm sorry, but 2 days ago I submitted the exact same adapter 4 times, and got 3 different scores. How else can such variance be explained, if the temperature is 0?\n![](https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F11905020%2Fa9b173e0fae6154921d0417630cd7898%2Fdasda.jpg?generation=1774989850359898&alt=media)\n\n[message_id=3432722 author= first=False]\nOoh this is a common misconception. I think the result variability is a matter of 1 or 2 intermediate steps leading to different boxed score. LLMs are non deterministic and temperature only controls sampling log probs but not the reductions. \n\n[message_id=3432737 author= first=False]\nWhat? I'm pretty sure temp=0 makes LLMs completely determenistic. They start selecting the token with highest probability each time.\n\n[message_id=3432758 author= first=False]\nThere can be some nondeterminism due to variations in the order of operations within GPU kernels. `(A + B) + C != A + (B + C)`.\n\nIts been a couple years since I last checked empirically, but vLLM at least used to be nondeterministic even with temperature=0.\n\n[message_id=3432792 author= first=False]\nI've just run my benchmark with the same adapter 5 times locally - yep, you're correct. Completely different results with temperature = 0. My bad.\nLooks like submitting the same adapter 5 times over will be a good idea for now.\n\n[message_id=3432802 author= first=False]\nI've just realized that better public score really doesn't mean better hidden score. Oh man, I'm getting Open Polymer competition vibes\n\n[message_id=3432952 author= first=False]\nIn LB, it varies depending on the model's \"moving parts.\"(MoE)\n\n[message_id=3432973 author= first=False]\n@defdet Sorry but How do you know? We don't have access to the private LB, am I wrong?\n\n[message_id=3433130 author= first=False]\nme too :)))\n\n[message_id=3433559 author= first=False]\nIn your scoring Metric code there is no per request seed set, this make the score non-deterministic and keep on changing even with no code change. Can you set the seed to make the score more deterministic? @ryanholbrook \n\n[message_id=3431234 author= first=False]\nThe verify function (https://www.kaggle.com/code/metric/nvidia-nemotron-metric) is changed. See discussion at https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/683853\n\n[message_id=3431239 author= first=False]\nI note that this part was added\n\n```\n    # If the answer is a binary string, compare strictly as strings\n    if re.fullmatch(r\"[01]+\", stored_answer):\n        return predicted.lower() == stored_answer.lower()\n```\n\nIf this is indeed the case, I think we should rescore (just rescore, not rerun) the leaderboard\n\n[message_id=3431242 author= first=False]\nagree to rescore the LB, since the metric is different.\nIn addition, the same notebook gets different scores, although temp=0. There might be some issues about deterministic. \n\n[message_id=3431258 author= first=False]\nI dont think its needed, since scores will improve and rescoring will be naturally done. I doubt top scores will stay this low. Iam about to publish comprahensivve dataset for bit problems, with very good traces.\n\nIam currently running vllm inference with gpt oss 120B, so I hope to share my dataset today. Lets see what others think.\n\n\n[message_id=3432267 author= first=False]\nYah everyones score fell by 0.03-0.04 approx. likely due to the evaluation change\n\n\n[message_id=3431572 author= first=False]\nWow, thanks! I resubmit my best submission.csv, 0.82 -> 0.8\n\n[message_id=3431476 author= first=False]\nI also tried resubmitting the best model in kernel public, but it only achieved 0.64."
+}

@@ -1,0 +1,51 @@
+{
+  "topic_id": 685971,
+  "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/685971",
+  "topic": {
+    "authorId": 17819385,
+    "authorThumbnailName": "default-thumb.png",
+    "authorUserDisplayName": "lucian kucera",
+    "authorUserName": "luciankucera",
+    "firstMessageId": 3431330,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 685971,
+    "name": "Brand new comprahensive dataset, that teaches model to solve bit problems[created using SOTA techinques][Will improve your model reasoning]",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-03-29T22:45:03.779462400Z",
+    "tags": [
+      {
+        "id": 16696,
+        "name": "text generation",
+        "listingUrl": "/search?q=text+generation+tag%3A%22text+generation%22",
+        "tagUrl": "/tags/text-generation",
+        "displayName": "Text Generation"
+      },
+      {
+        "id": 14104,
+        "name": "text",
+        "listingUrl": "/search?q=text+tag%3A%22text%22",
+        "tagUrl": "/tags/text-data",
+        "displayName": "Text"
+      },
+      {
+        "id": 13204,
+        "name": "nlp",
+        "listingUrl": "/search?q=nlp+tag%3A%22nlp%22",
+        "tagUrl": "/tags/nlp",
+        "displayName": "NLP"
+      }
+    ],
+    "totalVotes": 1,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/685971",
+    "totalMessages": 5,
+    "authorPerformanceTier": "CONTRIBUTOR",
+    "authorProgressionOptOut": false
+  },
+  "first_message": {},
+  "messages": [],
+  "message_count_observed": 0,
+  "text_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "full_text": ""
+}

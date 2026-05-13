@@ -1,0 +1,15 @@
+{
+  "errors": [],
+  "errors_this_run": 0,
+  "expected_topic_ids": 140,
+  "generated_at_utc": "2026-05-13T15:47:41.181485+00:00",
+  "input_ids_path": "C:\\Users\\davis\\Downloads\\NVIDIA Nemotron Model Reasoning Challenge - Discussion Topic IDs.md",
+  "input_urls_path": "C:\\Users\\davis\\Downloads\\NVIDIA Nemotron Model Reasoning Challenge - Discussion Topics URLs.md",
+  "missing_after_count": 0,
+  "missing_after_first50": [],
+  "missing_before_count": 15,
+  "previous_raw_dir": "artifacts\\v328_kaggle_discussion_140_audit\\raw_topics",
+  "raw_dir": "artifacts\\v332_kaggle_discussion_resume_audit\\20260513T_batch01\\raw_topics",
+  "records_fetched_this_run": 15,
+  "records_total_after": 140
+}

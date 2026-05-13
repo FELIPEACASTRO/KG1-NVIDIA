@@ -1,0 +1,47 @@
+{
+  "fetched_at_utc": "2026-05-13T15:43:08.408452+00:00",
+  "full_text": "[message_id=685421 author=Adarsh Kumar first=True]\nIn this competition it is not specified what is the maximum session time on rtx 6000 pro can we run session for 20 hour straight?\n\n[message_id=3430834 author=TwangyGarlic449 first=False]\nIn this competition, the submission is a .zip file containing a Lora adapter. This is run by a script made by the hosts, not by the submitter. Thus, there is no use in imposing a run time limit.\nTraining runs used to create this Lora adapter may run for as long as you wish (although scripts run on Kaggle are limited to 12 hours; that's just how the platform is).\nHopefully this helps!\n\n[message_id=3430923 author=Adarsh Kumar first=False]\nThank you",
+  "message_count_observed": 3,
+  "messages": [
+    {
+      "authorName": "Adarsh Kumar",
+      "content": "<p>In this competition it is not specified what is the maximum session time on rtx 6000 pro can we run session for 20 hour straight?</p>",
+      "depth": 0,
+      "first": true,
+      "id": 685421,
+      "postDate": "2026-03-28T03:24:44.495Z"
+    },
+    {
+      "authorName": "TwangyGarlic449",
+      "content": "<p>In this competition, the submission is a .zip file containing a Lora adapter. This is run by a script made by the hosts, not by the submitter. Thus, there is no use in imposing a run time limit.\nTraining runs used to create this Lora adapter may run for as long as you wish (although scripts run on Kaggle are limited to 12 hours; that's just how the platform is).\nHopefully this helps!</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3430834,
+      "postDate": "2026-03-28T22:14:31.020Z",
+      "votes": 1
+    },
+    {
+      "authorName": "Adarsh Kumar",
+      "content": "<p>Thank you </p>",
+      "depth": 1,
+      "first": false,
+      "id": 3430923,
+      "postDate": "2026-03-29T02:53:02.963Z"
+    }
+  ],
+  "text_sha256": "a4775d93787e89b340572124eca3644426d1f67aa7c2c43be8b2f2e9efb023b0",
+  "topic": {
+    "authorName": "Adarsh Kumar",
+    "authorUrl": "https://www.kaggle.com/adarsh2626",
+    "commentCount": 2,
+    "content": "<p>In this competition it is not specified what is the maximum session time on rtx 6000 pro can we run session for 20 hour straight?</p>",
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 685421,
+    "postDate": "2026-03-28T03:24:44.495Z",
+    "title": "Max session time",
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/685421"
+  },
+  "topic_id": 685421,
+  "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/685421"
+}

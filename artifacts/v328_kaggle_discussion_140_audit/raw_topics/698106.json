@@ -1,0 +1,595 @@
+{
+  "topic_id": 698106,
+  "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/698106",
+  "topic": {
+    "authorId": 2003505,
+    "authorThumbnailName": "2003505-kg.jpg",
+    "authorUserDisplayName": "Ryan Holbrook",
+    "authorUserName": "ryanholbrook",
+    "firstMessageId": 3455054,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 698106,
+    "isStickied": true,
+    "name": "Metric Update",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-05-08T14:02:56.743573Z",
+    "totalVotes": 20,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/698106",
+    "totalMessages": 13,
+    "authorPerformanceTier": "STAFF",
+    "authorProgressionOptOut": false
+  },
+  "first_message": {
+    "id": 3455054,
+    "postDate": "2026-05-08T14:02:56.743Z",
+    "rawMarkdown": "Hi everyone,\n\nI just deployed a fix to the metric that should address the issue of answers with the `'}'` character not being correctly extracted. I've tested it against a variety of inputs, and I believe it should be robust. If it seems like it's not working though, please let me know.\n\nAlso, since this fix should only improve scores, I won't be doing a rescore. Instead, just resubmit anything you want scored again.\n\nPlease let me know if you have any questions or concerns.",
+    "content": "<p>Hi everyone,</p>\n<p>I just deployed a fix to the metric that should address the issue of answers with the <code>'}'</code> character not being correctly extracted. I've tested it against a variety of inputs, and I believe it should be robust. If it seems like it's not working though, please let me know.</p>\n<p>Also, since this fix should only improve scores, I won't be doing a rescore. Instead, just resubmit anything you want scored again.</p>\n<p>Please let me know if you have any questions or concerns.</p>",
+    "parent": {
+      "url": "#"
+    },
+    "author": {
+      "displayName": "Ryan Holbrook",
+      "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2003505-kg.jpg",
+      "url": "/ryanholbrook",
+      "tier": "STAFF",
+      "id": 2003505,
+      "progressionOptOut": false
+    },
+    "authorType": "ADMIN",
+    "votes": {
+      "totalVotes": 20,
+      "canUpvote": true,
+      "totalUpvotes": 20
+    },
+    "kernelVersion": 0,
+    "feedbackTrackingData": {},
+    "teamUpInfo": {
+      "teamLeader": {
+        "displayName": "Ryan Holbrook",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2003505-kg.jpg",
+        "url": "/ryanholbrook",
+        "userName": "ryanholbrook",
+        "tier": "STAFF",
+        "id": 2003505,
+        "profileUrl": "/ryanholbrook",
+        "performanceTier": "STAFF",
+        "userId": 2003505,
+        "progressionOptOut": false
+      },
+      "intro": ""
+    }
+  },
+  "messages": [
+    {
+      "id": 3455054,
+      "postDate": "2026-05-08T14:02:56.743Z",
+      "rawMarkdown": "Hi everyone,\n\nI just deployed a fix to the metric that should address the issue of answers with the `'}'` character not being correctly extracted. I've tested it against a variety of inputs, and I believe it should be robust. If it seems like it's not working though, please let me know.\n\nAlso, since this fix should only improve scores, I won't be doing a rescore. Instead, just resubmit anything you want scored again.\n\nPlease let me know if you have any questions or concerns.",
+      "content": "<p>Hi everyone,</p>\n<p>I just deployed a fix to the metric that should address the issue of answers with the <code>'}'</code> character not being correctly extracted. I've tested it against a variety of inputs, and I believe it should be robust. If it seems like it's not working though, please let me know.</p>\n<p>Also, since this fix should only improve scores, I won't be doing a rescore. Instead, just resubmit anything you want scored again.</p>\n<p>Please let me know if you have any questions or concerns.</p>",
+      "parent": {
+        "url": "#"
+      },
+      "author": {
+        "displayName": "Ryan Holbrook",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2003505-kg.jpg",
+        "url": "/ryanholbrook",
+        "tier": "STAFF",
+        "id": 2003505,
+        "progressionOptOut": false
+      },
+      "authorType": "ADMIN",
+      "votes": {
+        "totalVotes": 20,
+        "canUpvote": true,
+        "totalUpvotes": 20
+      },
+      "kernelVersion": 0,
+      "feedbackTrackingData": {},
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "Ryan Holbrook",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2003505-kg.jpg",
+          "url": "/ryanholbrook",
+          "userName": "ryanholbrook",
+          "tier": "STAFF",
+          "id": 2003505,
+          "profileUrl": "/ryanholbrook",
+          "performanceTier": "STAFF",
+          "userId": 2003505,
+          "progressionOptOut": false
+        },
+        "intro": ""
+      },
+      "depth": 0,
+      "is_first_message": true
+    },
+    {
+      "id": 3455975,
+      "postDate": "2026-05-10T21:01:35.313Z",
+      "rawMarkdown": "I am also seeing some kind of 1% drop in scores.\n\nIf my understanding is correct, the update is to fix such cases, right? \n\n```python\nTrue answer: +}\nModel output: \\boxed{+}}\nOld metric extracted: +\nNew metric extracts: +}\nResult: now correct\n```\n\nBut if for some reason the model added } at the end of boxed, like this : \n\n```python\nTrue answer: 42\nModel output: \\boxed{42}}\nOld metric extracted: 42\nNew metric extracts: 42}\nResult: wrong\n```\nThen our score will go down with the new update. \n\nSo maybe this is the case? The public LB does not have problems with \"}\" in the answer (or our models can't handle it correctly in the first place), but might have some outputs with multiple }} in the boxed output, which causes the wrong answer to other problems.\n\nPS: In my local tests, I see an increase of 2%, but my local validation set outputs do not include a case with }} beside the ones needed fix. \n",
+      "content": "<p>I am also seeing some kind of 1% drop in scores.</p>\n<p>If my understanding is correct, the update is to fix such cases, right? </p>\n<pre><code>True answer: +}\nModel output: \\boxed{+}}\nOld metric extracted: +\nNew metric extracts: +}\nResult: now correct\n</code></pre>\n<p>But if for some reason the model added } at the end of boxed, like this : </p>\n<pre><code>True answer: 42\nModel output: \\boxed{42}}\nOld metric extracted: 42\nNew metric extracts: 42}\nResult: wrong\n</code></pre>\n<p>Then our score will go down with the new update. </p>\n<p>So maybe this is the case? The public LB does not have problems with \"}\" in the answer (or our models can't handle it correctly in the first place), but might have some outputs with multiple }} in the boxed output, which causes the wrong answer to other problems.</p>\n<p>PS: In my local tests, I see an increase of 2%, but my local validation set outputs do not include a case with }} beside the ones needed fix. </p>",
+      "parent": {},
+      "author": {
+        "displayName": "Ali",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/6915758-kg.png",
+        "url": "/asalhi",
+        "tier": "MASTER",
+        "id": 6915758,
+        "progressionOptOut": false
+      },
+      "authorType": "COMMENT",
+      "votes": {
+        "totalVotes": 5,
+        "canUpvote": true,
+        "totalUpvotes": 5
+      },
+      "kernelVersion": 0,
+      "competitionRanking": 12,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "Ali",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/6915758-kg.png",
+          "url": "/asalhi",
+          "userName": "asalhi",
+          "tier": "MASTER",
+          "id": 6915758,
+          "profileUrl": "/asalhi",
+          "performanceTier": "MASTER",
+          "userId": 6915758,
+          "progressionOptOut": false
+        },
+        "intro": ""
+      },
+      "depth": 0,
+      "is_first_message": false
+    },
+    {
+      "id": 3456263,
+      "postDate": "2026-05-11T15:28:54.617Z",
+      "rawMarkdown": "This seems like an ambiguity that doesn't have a clear resolution. I'm still in favor of keeping the fix, though, since it allows a larger subset of problems to be correctly answered which were simply impossible before.",
+      "content": "<p>This seems like an ambiguity that doesn't have a clear resolution. I'm still in favor of keeping the fix, though, since it allows a larger subset of problems to be correctly answered which were simply impossible before.</p>",
+      "parent": {},
+      "author": {
+        "displayName": "Ryan Holbrook",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2003505-kg.jpg",
+        "url": "/ryanholbrook",
+        "tier": "STAFF",
+        "id": 2003505,
+        "progressionOptOut": false
+      },
+      "authorType": "ADMIN",
+      "votes": {
+        "totalVotes": 3,
+        "canUpvote": true,
+        "totalUpvotes": 3
+      },
+      "kernelVersion": 0,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "Ryan Holbrook",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2003505-kg.jpg",
+          "url": "/ryanholbrook",
+          "userName": "ryanholbrook",
+          "tier": "STAFF",
+          "id": 2003505,
+          "profileUrl": "/ryanholbrook",
+          "performanceTier": "STAFF",
+          "userId": 2003505,
+          "progressionOptOut": false
+        },
+        "intro": ""
+      },
+      "depth": 1,
+      "is_first_message": false
+    },
+    {
+      "id": 3455463,
+      "postDate": "2026-05-09T13:17:39.753Z",
+      "rawMarkdown": "Thanks for the update. My first feedback is that it has dropped my score by 1%. So from 0.86 to 0.85. But you expected it to increase scores! There is something wrong probably. I will do some tests with the new metric and provide updates here.",
+      "content": "<p>Thanks for the update. My first feedback is that it has dropped my score by 1%. So from 0.86 to 0.85. But you expected it to increase scores! There is something wrong probably. I will do some tests with the new metric and provide updates here.</p>",
+      "parent": {},
+      "author": {
+        "displayName": "JK-Piece",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/3937164-kg.png?t=2023-11-07-17-35-27",
+        "url": "/jeannkouagou",
+        "tier": "MASTER",
+        "id": 3937164,
+        "progressionOptOut": false
+      },
+      "authorType": "COMMENT",
+      "votes": {
+        "totalVotes": 3,
+        "canUpvote": true,
+        "totalUpvotes": 3
+      },
+      "kernelVersion": 0,
+      "competitionRanking": 136,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "JK-Piece",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/3937164-kg.png?t=2023-11-07-17-35-27",
+          "url": "/jeannkouagou",
+          "userName": "jeannkouagou",
+          "tier": "MASTER",
+          "id": 3937164,
+          "profileUrl": "/jeannkouagou",
+          "performanceTier": "MASTER",
+          "userId": 3937164,
+          "progressionOptOut": false
+        },
+        "intro": "Hey Kagglers. I am looking for a teammate with current score around 0.78-0.80. I have strong checkpoints and great training data that would benefit the team to be formed. Feel free to reach out."
+      },
+      "depth": 0,
+      "is_first_message": false
+    },
+    {
+      "id": 3456264,
+      "postDate": "2026-05-11T15:29:24.570Z",
+      "rawMarkdown": "If you discover an error, please let me know!",
+      "content": "<p>If you discover an error, please let me know!</p>",
+      "parent": {},
+      "author": {
+        "displayName": "Ryan Holbrook",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2003505-kg.jpg",
+        "url": "/ryanholbrook",
+        "tier": "STAFF",
+        "id": 2003505,
+        "progressionOptOut": false
+      },
+      "authorType": "ADMIN",
+      "votes": {
+        "totalVotes": 1,
+        "canUpvote": true,
+        "totalUpvotes": 1
+      },
+      "kernelVersion": 0,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "Ryan Holbrook",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2003505-kg.jpg",
+          "url": "/ryanholbrook",
+          "userName": "ryanholbrook",
+          "tier": "STAFF",
+          "id": 2003505,
+          "profileUrl": "/ryanholbrook",
+          "performanceTier": "STAFF",
+          "userId": 2003505,
+          "progressionOptOut": false
+        },
+        "intro": ""
+      },
+      "depth": 1,
+      "is_first_message": false
+    },
+    {
+      "id": 3456267,
+      "postDate": "2026-05-11T15:40:35.153Z",
+      "rawMarkdown": "My tests did not reveal any issue yet. So I guess the answer extraction script works well.",
+      "content": "<p>My tests did not reveal any issue yet. So I guess the answer extraction script works well.</p>",
+      "parent": {},
+      "author": {
+        "displayName": "JK-Piece",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/3937164-kg.png?t=2023-11-07-17-35-27",
+        "url": "/jeannkouagou",
+        "tier": "MASTER",
+        "id": 3937164,
+        "progressionOptOut": false
+      },
+      "authorType": "COMMENT",
+      "votes": {
+        "canUpvote": true
+      },
+      "kernelVersion": 0,
+      "competitionRanking": 136,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "JK-Piece",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/3937164-kg.png?t=2023-11-07-17-35-27",
+          "url": "/jeannkouagou",
+          "userName": "jeannkouagou",
+          "tier": "MASTER",
+          "id": 3937164,
+          "profileUrl": "/jeannkouagou",
+          "performanceTier": "MASTER",
+          "userId": 3937164,
+          "progressionOptOut": false
+        },
+        "intro": "Hey Kagglers. I am looking for a teammate with current score around 0.78-0.80. I have strong checkpoints and great training data that would benefit the team to be formed. Feel free to reach out."
+      },
+      "depth": 2,
+      "is_first_message": false
+    },
+    {
+      "id": 3455146,
+      "postDate": "2026-05-08T18:11:08.793Z",
+      "rawMarkdown": "I'm not sure what went wrong; the same file submission is now getting a score 0.02 lower than before.",
+      "content": "<p>I'm not sure what went wrong; the same file submission is now getting a score 0.02 lower than before.</p>",
+      "parent": {},
+      "author": {
+        "displayName": "NoOneAhead",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/31723762-kg.png?t=2026-04-16-12-41-34",
+        "url": "/jerrlu",
+        "tier": "CONTRIBUTOR",
+        "id": 31723762,
+        "progressionOptOut": false
+      },
+      "authorType": "COMMENT",
+      "votes": {
+        "totalVotes": 1,
+        "canUpvote": true,
+        "totalUpvotes": 1
+      },
+      "kernelVersion": 0,
+      "competitionRanking": 162,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "NoOneAhead",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/31723762-kg.png?t=2026-04-16-12-41-34",
+          "url": "/jerrlu",
+          "userName": "jerrlu",
+          "tier": "CONTRIBUTOR",
+          "id": 31723762,
+          "profileUrl": "/jerrlu",
+          "performanceTier": "CONTRIBUTOR",
+          "userId": 31723762,
+          "progressionOptOut": false
+        },
+        "intro": ""
+      },
+      "depth": 0,
+      "is_first_message": false
+    },
+    {
+      "id": 3455208,
+      "postDate": "2026-05-08T20:26:46.460Z",
+      "rawMarkdown": "Maybe try submitting it again? There is some non-determinism inherent in the evaluation. It's possible the metric change didn't affect you much, but you're just seeing variation in vLLM.",
+      "content": "<p>Maybe try submitting it again? There is some non-determinism inherent in the evaluation. It's possible the metric change didn't affect you much, but you're just seeing variation in vLLM.</p>",
+      "parent": {},
+      "author": {
+        "displayName": "Ryan Holbrook",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2003505-kg.jpg",
+        "url": "/ryanholbrook",
+        "tier": "STAFF",
+        "id": 2003505,
+        "progressionOptOut": false
+      },
+      "authorType": "ADMIN",
+      "votes": {
+        "totalVotes": 1,
+        "canUpvote": true,
+        "totalUpvotes": 1
+      },
+      "kernelVersion": 0,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "Ryan Holbrook",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2003505-kg.jpg",
+          "url": "/ryanholbrook",
+          "userName": "ryanholbrook",
+          "tier": "STAFF",
+          "id": 2003505,
+          "profileUrl": "/ryanholbrook",
+          "performanceTier": "STAFF",
+          "userId": 2003505,
+          "progressionOptOut": false
+        },
+        "intro": ""
+      },
+      "depth": 1,
+      "is_first_message": false
+    },
+    {
+      "id": 3455257,
+      "postDate": "2026-05-08T23:09:55.087Z",
+      "rawMarkdown": "PSA that the metric notebook is at https://www.kaggle.com/code/metric/nvidia-nemotron-metric/notebook\n\n",
+      "content": "<p>PSA that the metric notebook is at <a href=\"https://www.kaggle.com/code/metric/nvidia-nemotron-metric/notebook\" target=\"_blank\">https://www.kaggle.com/code/metric/nvidia-nemotron-metric/notebook</a></p>",
+      "parent": {},
+      "author": {
+        "displayName": "Tong Hui Kang",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1680925-kg.jpg",
+        "url": "/huikang",
+        "tier": "MASTER",
+        "id": 1680925,
+        "progressionOptOut": false
+      },
+      "authorType": "COMMENT",
+      "votes": {
+        "totalVotes": 2,
+        "canUpvote": true,
+        "totalUpvotes": 2
+      },
+      "kernelVersion": 0,
+      "competitionRanking": 677,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "Tong Hui Kang",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1680925-kg.jpg",
+          "url": "/huikang",
+          "userName": "huikang",
+          "tier": "MASTER",
+          "id": 1680925,
+          "profileUrl": "/huikang",
+          "performanceTier": "MASTER",
+          "userId": 1680925,
+          "progressionOptOut": false
+        },
+        "intro": ""
+      },
+      "depth": 0,
+      "is_first_message": false
+    },
+    {
+      "id": 3455287,
+      "postDate": "2026-05-09T02:44:06.970Z",
+      "rawMarkdown": "Sure I am give a solution in this the problems:\n\nCan have make code into character answer correctly this the import Library this import re to handle the patterns, but I'll make sure my regex is now robust enough to match your fix. \n\nThis is mine solutions ",
+      "content": "<p>Sure I am give a solution in this the problems:</p>\n<p>Can have make code into character answer correctly this the import Library this import re to handle the patterns, but I'll make sure my regex is now robust enough to match your fix. </p>\n<p>This is mine solutions </p>",
+      "parent": {},
+      "author": {
+        "displayName": "Ra'uf Fauzan Rambe",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/31589109-kg.png?t=2026-01-18-04-00-38",
+        "url": "/rauffauzanrambe",
+        "tier": "EXPERT",
+        "id": 31589109,
+        "progressionOptOut": false
+      },
+      "authorType": "COMMENT",
+      "votes": {
+        "totalVotes": -1,
+        "canUpvote": true
+      },
+      "kernelVersion": 0,
+      "competitionRanking": 91,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "Ra'uf Fauzan Rambe",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/31589109-kg.png?t=2026-01-18-04-00-38",
+          "url": "/rauffauzanrambe",
+          "userName": "rauffauzanrambe",
+          "tier": "EXPERT",
+          "id": 31589109,
+          "profileUrl": "/rauffauzanrambe",
+          "performanceTier": "EXPERT",
+          "userId": 31589109,
+          "progressionOptOut": false
+        },
+        "intro": ""
+      },
+      "depth": 0,
+      "is_first_message": false
+    },
+    {
+      "id": 3455194,
+      "postDate": "2026-05-08T20:05:41.337Z",
+      "rawMarkdown": "Any chance you can allocate more compute for the  metric calculation takes 2 hrs  to test one adapter ;)",
+      "content": "<p>Any chance you can allocate more compute for the  metric calculation takes 2 hrs  to test one adapter ;)</p>",
+      "parent": {},
+      "author": {
+        "displayName": "Harshit samrat",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+        "url": "/harshitsamrat",
+        "tier": "CONTRIBUTOR",
+        "id": 20911817,
+        "progressionOptOut": false
+      },
+      "authorType": "COMMENT",
+      "votes": {
+        "canUpvote": true
+      },
+      "kernelVersion": 0,
+      "competitionRanking": 1390,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "Harshit samrat",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "url": "/harshitsamrat",
+          "userName": "harshitsamrat",
+          "tier": "CONTRIBUTOR",
+          "id": 20911817,
+          "profileUrl": "/harshitsamrat",
+          "performanceTier": "CONTRIBUTOR",
+          "userId": 20911817,
+          "progressionOptOut": false
+        },
+        "intro": ""
+      },
+      "depth": 0,
+      "is_first_message": false
+    },
+    {
+      "id": 3455222,
+      "postDate": "2026-05-08T21:03:28.487Z",
+      "rawMarkdown": "You should rely on local CV to evaluate your adapter. Relying on public leaderboard is a recipe for overfitting.\n\nRemember that what matters is your score on the private test data, not the public test data.\n\nBack to why evaluation takes two hours is because we kept enough samples for the test data to avoid to much instability in scoring. There is still some instability. If we were to modify it then I'd advocate for using more samples in test data, which would mean longer scoring.",
+      "content": "<p>You should rely on local CV to evaluate your adapter. Relying on public leaderboard is a recipe for overfitting.</p>\n<p>Remember that what matters is your score on the private test data, not the public test data.</p>\n<p>Back to why evaluation takes two hours is because we kept enough samples for the test data to avoid to much instability in scoring. There is still some instability. If we were to modify it then I'd advocate for using more samples in test data, which would mean longer scoring.</p>",
+      "parent": {},
+      "author": {
+        "displayName": "CPMP",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/75976-gr.jpg",
+        "url": "/cpmpml",
+        "tier": "GRANDMASTER",
+        "id": 75976,
+        "progressionOptOut": false
+      },
+      "authorType": "HOST",
+      "votes": {
+        "totalVotes": 4,
+        "canUpvote": true,
+        "totalUpvotes": 4
+      },
+      "kernelVersion": 0,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "depth": 1,
+      "is_first_message": false
+    },
+    {
+      "id": 3455623,
+      "postDate": "2026-05-09T21:31:51.180Z",
+      "rawMarkdown": "",
+      "parent": {},
+      "author": {
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+        "url": "/"
+      },
+      "authorType": "COMMENT",
+      "votes": {},
+      "canDelete": true,
+      "isUserAuthor": true,
+      "isDeleted": true,
+      "kernelVersion": 0,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "depth": 0,
+      "is_first_message": false
+    },
+    {
+      "id": 3455133,
+      "postDate": "2026-05-08T16:58:36.183Z",
+      "rawMarkdown": "Thank you Ryan.",
+      "content": "<p>Thank you Ryan.</p>",
+      "parent": {},
+      "author": {
+        "displayName": "CPMP",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/75976-gr.jpg",
+        "url": "/cpmpml",
+        "tier": "GRANDMASTER",
+        "id": 75976,
+        "progressionOptOut": false
+      },
+      "authorType": "HOST",
+      "votes": {
+        "totalVotes": 1,
+        "canUpvote": true,
+        "totalUpvotes": 1
+      },
+      "kernelVersion": 0,
+      "feedbackTrackingData": {},
+      "isThankYou": true,
+      "depth": 0,
+      "is_first_message": false
+    }
+  ],
+  "message_count_observed": 14,
+  "text_sha256": "3ee2c54fcae9f3f33fed081cc04de5f53c3b1cdaab643f0da0cbf4c4a6464e67",
+  "full_text": "[message_id=3455054 author= first=True]\nHi everyone,\n\nI just deployed a fix to the metric that should address the issue of answers with the `'}'` character not being correctly extracted. I've tested it against a variety of inputs, and I believe it should be robust. If it seems like it's not working though, please let me know.\n\nAlso, since this fix should only improve scores, I won't be doing a rescore. Instead, just resubmit anything you want scored again.\n\nPlease let me know if you have any questions or concerns.\n\n[message_id=3455975 author= first=False]\nI am also seeing some kind of 1% drop in scores.\n\nIf my understanding is correct, the update is to fix such cases, right? \n\n```python\nTrue answer: +}\nModel output: \\boxed{+}}\nOld metric extracted: +\nNew metric extracts: +}\nResult: now correct\n```\n\nBut if for some reason the model added } at the end of boxed, like this : \n\n```python\nTrue answer: 42\nModel output: \\boxed{42}}\nOld metric extracted: 42\nNew metric extracts: 42}\nResult: wrong\n```\nThen our score will go down with the new update. \n\nSo maybe this is the case? The public LB does not have problems with \"}\" in the answer (or our models can't handle it correctly in the first place), but might have some outputs with multiple }} in the boxed output, which causes the wrong answer to other problems.\n\nPS: In my local tests, I see an increase of 2%, but my local validation set outputs do not include a case with }} beside the ones needed fix. \n\n\n[message_id=3456263 author= first=False]\nThis seems like an ambiguity that doesn't have a clear resolution. I'm still in favor of keeping the fix, though, since it allows a larger subset of problems to be correctly answered which were simply impossible before.\n\n[message_id=3455463 author= first=False]\nThanks for the update. My first feedback is that it has dropped my score by 1%. So from 0.86 to 0.85. But you expected it to increase scores! There is something wrong probably. I will do some tests with the new metric and provide updates here.\n\n[message_id=3456264 author= first=False]\nIf you discover an error, please let me know!\n\n[message_id=3456267 author= first=False]\nMy tests did not reveal any issue yet. So I guess the answer extraction script works well.\n\n[message_id=3455146 author= first=False]\nI'm not sure what went wrong; the same file submission is now getting a score 0.02 lower than before.\n\n[message_id=3455208 author= first=False]\nMaybe try submitting it again? There is some non-determinism inherent in the evaluation. It's possible the metric change didn't affect you much, but you're just seeing variation in vLLM.\n\n[message_id=3455257 author= first=False]\nPSA that the metric notebook is at https://www.kaggle.com/code/metric/nvidia-nemotron-metric/notebook\n\n\n\n[message_id=3455287 author= first=False]\nSure I am give a solution in this the problems:\n\nCan have make code into character answer correctly this the import Library this import re to handle the patterns, but I'll make sure my regex is now robust enough to match your fix. \n\nThis is mine solutions \n\n[message_id=3455194 author= first=False]\nAny chance you can allocate more compute for the  metric calculation takes 2 hrs  to test one adapter ;)\n\n[message_id=3455222 author= first=False]\nYou should rely on local CV to evaluate your adapter. Relying on public leaderboard is a recipe for overfitting.\n\nRemember that what matters is your score on the private test data, not the public test data.\n\nBack to why evaluation takes two hours is because we kept enough samples for the test data to avoid to much instability in scoring. There is still some instability. If we were to modify it then I'd advocate for using more samples in test data, which would mean longer scoring.\n\n[message_id=3455623 author= first=False]\n\n\n[message_id=3455133 author= first=False]\nThank you Ryan."
+}

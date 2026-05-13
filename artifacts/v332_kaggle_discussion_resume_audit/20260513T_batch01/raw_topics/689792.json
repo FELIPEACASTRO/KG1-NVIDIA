@@ -1,0 +1,163 @@
+{
+  "fetched_at_utc": "2026-05-13T15:45:56.436999+00:00",
+  "full_text": "[message_id=689792 author=MAJ0RT0M first=True]\nI'm sure we are all familiar w/ this error by now: NemotronH requires an initialized NemotronHHybridDynamicCache to return a cache. None was provided, so no cache will be returned. \nIt makes generating reasonable length (2000 tokens+) infeasible - generation speed is ~2toks/sec - so this would take 15m\nGPRO becomes impossible - local evaluation also impossible. Even sanity checks to see if the model is producing reasonable output and learning thinking formats become expensive\nBut I see people w/ code to evaluate locally and run GRPO - how? I also see that when people share notebooks w/ output enabled and generation code - they are getting this cache error also. Are they just eating the huge generation time?\nHas anyone managed to fix this cache error? Or find a workaround?\nI'm open to solutions on or off kaggle hardware\n\n[message_id=3439035 author=ImperfectKitto first=False]\none quick google search\n\n[message_id=3439431 author=MAJ0RT0M first=False]\nI think the link might be broken - this guide doesnt look specific to nemotron\n\n[message_id=3439437 author=ImperfectKitto first=False]\nit's not broken. nemotron model is no different\n\n[message_id=3438768 author=Russell Kirk first=False]\nhttps://www.kaggle.com/code/russcore/fork-of-eval-dna37000-final \ntakes about 40 min for me.\n\n[message_id=3438826 author=MAJ0RT0M first=False]\nThis is using vllm though\nDo you know how to integrate vllm w/ trl for some grpo training?\n\n[message_id=3438832 author=Russell Kirk first=False]\nIs async GRPO not a thing? I really don't know. I know what GRPO is but I haven't tried using it yet.\n\n[message_id=3438839 author=m4nocha first=False]\ndid you use RLVR, or did you achieve your best score with SFT only?\n\n[message_id=3438870 author=Russell Kirk first=False]\nI've only been doing SFT\n\n[message_id=3439429 author=MAJ0RT0M first=False]\nI dont think so? Or at least I don't think anyone does async RLVR in the sense that they load a model into an inference engine, compute reward - then load the model into a training engine and backprop using the reward\n\n[message_id=3439438 author=ImperfectKitto first=False]\ni do do that successfully\n\n[message_id=3439441 author=Russell Kirk first=False]\nYea, that was how I was always trying to do it -- but I don't come from an ML background. I'll have to look more into it, but naively, that's how I would have approached it.\n\n[message_id=3438755 author=MAJ0RT0M first=False]\nI tried installing unsloth but ran into version incompatibility problems - but I heard that it works - can anyone confirm?\n\n[message_id=3438797 author=m4nocha first=False]\nIt works and the training speed for 3000 token sequence is 2 hours/epoch\nthe inference speed using vllm is 3000-4000 tokens/sec\n\n[message_id=3438825 author=MAJ0RT0M first=False]\nnice!\nyour epoch is the full 9000 rows?\nIf you are using vllm for inference I guess you would need to halt training first - flush memory and then load model into vllm?\nEdit: also - are you able to use unsloth for inference? If so - do you see any speedup?\n\n[message_id=3438836 author=m4nocha first=False]\nI perform inference on my validation dataset after SFT is completed. instead of flushing memory I delete the model and then reload it with LoRA adapter\nInference with only the model gives 3000-4000 tokens/sec\nbut on loading the LoRA adapter it drops to 2000 tokens/sec\nhere is my inference script\n# ============================================================\n# STEP 5 — INFERENCE CONFIG & VRAM NUKE\n# ============================================================\nimport gc, torch, os, time, json, re, math\nfrom vllm import LLM, SamplingParams\nfrom vllm.lora.request import LoRARequest\nUSE_LORA = True\nOUTPUT_JSON = \"/kaggle/working/evaluation_results.json\"\nprint(\"Clearing VRAM for inference...\")\n# Clean up training objects to free memory for vLLM\nfor var in ['trainer', 'model']:\nif var in globals(): del globals()[var]\ngc.collect()\ntorch.cuda.empty_cache()\ntorch.cuda.synchronize()\nos.environ['VLLM_WORKER_MULTIPROC_METHOD'] = 'spawn'\n# ============================================================\n# STEP 6 — UPDATED HELPERS & PROMPT PREP\n# ============================================================\ndef classify_puzzle(prompt):\nif not isinstance(prompt, str): return 'Unknown'\np = prompt.lower()\nif re.search(r'numeral system|base[- ]?\\d|number.*convert|radix|secret number', p):\nreturn 'Number Base Conversion'\nelif re.search(r'gravit|gravity|falling|free.?fall|acceleration due to', p):\nreturn 'Gravitational Constant'\nelif re.search(r'transformation rule|equation.*transform|secret.*rule.*equation|rule.*applied.*equation', p):\nreturn 'Equation Transformation'\nelif re.search(r'encrypt|cipher|secret.*code.*letter|coded.*message|secret.*text', p):\nreturn 'Text Encryption'\nelif re.search(r'bit.?manipul|binary|8.?bit|bitwise|bit.*transform', p):\nreturn 'Bit Manipulation'\nelif re.search(r'unit.?conver|measurement|becomes.*\\d|secret.*conver.*measur', p):\nreturn 'Unit Conversion'\nreturn 'Unknown'\ndef extract_final_answer(text: str | None) -> str:\nr\"\"\"Extracts the final answer from the model response.\nPrioritizes extracting answers inside `\\boxed{}`.\n\"\"\"\nif text is None:\nreturn 'NOT_FOUND'\n# Search for boxed answer\nmatches = re.findall(r'\\\\boxed\\{([^}]*)(?:\\}|$)', text)\nif matches:\nnon_empty = [m.strip() for m in matches if m.strip()]\nif non_empty:\nreturn non_empty[-1]\nreturn matches[-1].strip()\n# Other common formats if \\boxed{} is not found\npatterns = [\nr'The final answer is:\\s*([^\\n]+)',\nr'Final answer is:\\s*([^\\n]+)',\nr'Final answer\\s*[:：]\\s*([^\\n]+)',\nr'final answer\\s*[:：]\\s*([^\\n]+)',\n]\nfor pattern in patterns:\nmatches = re.findall(pattern, text, re.IGNORECASE)\nif matches:\nreturn matches[-1].strip()\n# If no structured format is found, extract the last valid number\nmatches = re.findall(r'-?\\d+(?:\\.\\d+)?', text)\nif matches:\nreturn matches[-1]\n# Fallback to the last line of text\nlines = [line.strip() for line in text.splitlines() if line.strip()]\nreturn lines[-1] if lines else 'NOT_FOUND'\ndef verify(stored_answer: str, predicted: str) -> bool:\n\"\"\"Verify if the answer matches with binary and numeric tolerance.\"\"\"\nstored_answer = stored_answer.strip()\npredicted = predicted.strip()\n# If the answer is a binary string, compare strictly as strings\nif re.fullmatch(r'[01]+', stored_answer):\nreturn predicted.lower() == stored_answer.lower()\ntry:\n# Try to convert the answers to floating point numbers\nstored_num = float(stored_answer)\npredicted_num = float(predicted)\nreturn math.isclose(stored_num, predicted_num, rel_tol=1e-2, abs_tol=1e-5)\nexcept Exception:\n# Fallback to case-insensitive string comparison\nreturn predicted.lower() == stored_answer.lower()\neval_records = []\nprint(\"Preparing evaluation records...\")\nfor i, ex in enumerate(eval_dataset):\norig_prompt = ex[\"prompt\"]\ngt_answer = str(ex[\"answer\"])\nchat_messages = [{\"role\": \"user\", \"content\": orig_prompt}]\nformatted_prompt = tokenizer.apply_chat_template(\nchat_messages, \ntokenize=False, \nadd_generation_prompt=True\n)\neval_records.append({\n\"id\": ex.get(\"id\", i), \n\"prompt\": formatted_prompt, \n\"answer\": gt_answer, \n\"category\": classify_puzzle(orig_prompt)\n})\n# ============================================================\n# STEP 7 — vLLM GENERATION\n# ============================================================\nprint(f\"\\nStarting vLLM Engine... (LoRA Enabled: {USE_LORA})\")\nllm = LLM(\nmodel=MODEL_PATH,\ntensor_parallel_size=1,\nmax_num_seqs=128,\ngpu_memory_utilization=0.9,\ndtype='auto',\nmax_model_len=7000, \ntrust_remote_code=True,\nenable_lora=USE_LORA,\nmax_lora_rank=LORA_RANK if USE_LORA else None,\n)\nsampling_params = SamplingParams(temperature=0, top_p=1.0, max_tokens=MAX_SEQ_LEN)\nprompts = [item[\"prompt\"] for item in eval_records]\nprint(f\"Generating {len(prompts)} predictions...\")\nstart_time = time.time()\nlora_req = LoRARequest('adapter', 1, OUTPUT_DIR) if USE_LORA else None\noutputs = llm.generate(prompts, sampling_params=sampling_params, lora_request=lora_req)\nelapsed = time.time() - start_time\n# ============================================================\n# STEP 8 — SCORING & JSON EXPORT\n# ============================================================\nresults = []\nnum_correct = 0\ncategory_stats = {}\ntotal_tokens = sum(len(o.outputs[0].token_ids) for o in outputs)\ntps = total_tokens / elapsed if elapsed > 0 else 0\nfor item, output in zip(eval_records, outputs):\nraw_generated_text = output.outputs[0].text\npredicted = extract_final_answer(raw_generated_text)\n# Use the updated verify function\nis_correct = verify(item[\"answer\"], predicted)\ncat = item[\"category\"]\nif cat not in category_stats:\ncategory_stats[cat] = {\"correct\": 0, \"total\": 0}\ncategory_stats[cat][\"total\"] += 1\nif is_correct:\nnum_correct += 1\ncategory_stats[cat][\"correct\"] += 1\nresults.append({\n\"id\": item[\"id\"],\n\"category\": cat,\n\"ground_truth\": item[\"answer\"],\n\"predicted\": predicted,\n\"is_correct\": is_correct,\n\"full_output\": raw_generated_text\n})\naccuracy = num_correct / len(eval_records) if eval_records else 0\n# Save to JSON\njson_data = {\n\"summary\": {\n\"overall_accuracy\": accuracy,\n\"correct\": num_correct,\n\"total_samples\": len(eval_records),\n\"category_metrics\": category_stats,\n\"tokens_per_second\": round(tps, 2),\n\"elapsed_seconds\": round(elapsed, 2)\n},\n\"results\": results\n}\nwith open(OUTPUT_JSON, \"w\") as f:\njson.dump(json_data, f, indent=4)\nprint(\"\\n\" + \"=\"*55)\nprint(f\"✅ OVERALL ACCURACY : {accuracy:.2%} ({num_correct}/{len(eval_records)})\")\nprint(\"-\" * 55)\nfor cat, stats in sorted(category_stats.items()):\ncat_acc = stats[\"correct\"] / stats[\"total\"] if stats[\"total\"] > 0 else 0\nprint(f\" > {cat:<25}: {cat_acc:>6.2%} ({stats['correct']}/{stats['total']})\")\nprint(\"-\" * 55)\nprint(f\"🚀 SPEED : {tps:.2f} tokens/s | 💾 SAVED TO : {OUTPUT_JSON}\")\nprint(\"=\"*55)\nand here is the result it got\n=======================================================\n✅ OVERALL ACCURACY : 81.34% (693/852)\n-------------------------------------------------------\n> Bit Manipulation : 9.23% (12/130)\n> Equation Transformation : 52.11% (37/71)\n> Gravitational Constant : 100.00% (148/148)\n> Number Base Conversion : 100.00% (162/162)\n> Text Encryption : 95.86% (162/169)\n> Unit Conversion : 100.00% (172/172)\n-------------------------------------------------------\n🚀 SPEED : 1815.43 tokens/s | 💾 SAVED TO : /kaggle/working/evaluation_results.json\n=======================================================\n\n[message_id=3439780 author=Komil Parmar first=False]\nI am trying to do the same but I am bound by the input tokens/s rather than the output tokens/s .\nHave you encountered the same earlier? If yes, please provide the fix. \n1032/38000 [19:45<12:00:46,  1.17s/it, est. speed input: 134.58 toks/s, output: 1736.83 toks/s]",
+  "message_count_observed": 17,
+  "messages": [
+    {
+      "authorName": "MAJ0RT0M",
+      "content": "<p>I'm sure we are all familiar w/ this error by now: <code>NemotronH requires an initialized</code>NemotronHHybridDynamicCache<code>to return a cache. None was provided, so no cache will be returned.</code></p>\n<p>It makes generating reasonable length (2000 tokens+) infeasible - generation speed is ~2toks/sec - so this would take 15m</p>\n<p>GPRO becomes impossible - local evaluation also impossible. Even sanity checks to see if the model is producing reasonable output and learning thinking formats become expensive</p>\n<p>But I see people w/ code to evaluate locally and run GRPO - how?  I also see that when people share notebooks w/ output enabled and generation code - they are getting this cache error also. Are they just eating the huge generation time?</p>\n<p>Has anyone managed to fix this cache error? Or find a workaround?</p>\n<p>I'm open to solutions on or off kaggle hardware</p>",
+      "depth": 0,
+      "first": true,
+      "id": 689792,
+      "postDate": "2026-04-09T17:07:04.553Z"
+    },
+    {
+      "authorName": "ImperfectKitto",
+      "content": "<p>one quick <a href=\"https://huggingface.co/learn/cookbook/en/grpo_vllm_online_training\" target=\"_blank\">google search</a></p>",
+      "depth": 0,
+      "first": false,
+      "id": 3439035,
+      "postDate": "2026-04-10T06:17:37.637Z",
+      "votes": 1
+    },
+    {
+      "authorName": "MAJ0RT0M",
+      "content": "<p>I think the link might be broken - this guide doesnt look specific to nemotron</p>",
+      "depth": 1,
+      "first": false,
+      "id": 3439431,
+      "postDate": "2026-04-10T17:43:03.283Z"
+    },
+    {
+      "authorName": "ImperfectKitto",
+      "content": "<p>it's not broken. nemotron model is no different</p>",
+      "depth": 2,
+      "first": false,
+      "id": 3439437,
+      "postDate": "2026-04-10T18:00:00.957Z"
+    },
+    {
+      "authorName": "Russell Kirk",
+      "content": "<p><a href=\"https://www.kaggle.com/code/russcore/fork-of-eval-dna37000-final\" target=\"_blank\">https://www.kaggle.com/code/russcore/fork-of-eval-dna37000-final</a></p>\n<p>takes about 40 min for me.</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3438768,
+      "postDate": "2026-04-09T17:25:22.730Z",
+      "votes": 1
+    },
+    {
+      "authorName": "MAJ0RT0M",
+      "content": "<p>This is using vllm though</p>\n<p>Do you know how to integrate vllm w/ trl for some grpo training?</p>",
+      "depth": 1,
+      "first": false,
+      "id": 3438826,
+      "postDate": "2026-04-09T18:52:22.627Z"
+    },
+    {
+      "authorName": "Russell Kirk",
+      "content": "<p>Is async GRPO not a thing? I really don't know.  I know what GRPO is but I haven't tried using it yet.</p>",
+      "depth": 2,
+      "first": false,
+      "id": 3438832,
+      "postDate": "2026-04-09T19:00:20.190Z"
+    },
+    {
+      "authorName": "m4nocha",
+      "content": "<p>did you use RLVR, or did you achieve your best score with SFT only?</p>",
+      "depth": 2,
+      "first": false,
+      "id": 3438839,
+      "postDate": "2026-04-09T19:08:02.880Z"
+    },
+    {
+      "authorName": "Russell Kirk",
+      "content": "<p>I've only been doing SFT</p>",
+      "depth": 2,
+      "first": false,
+      "id": 3438870,
+      "postDate": "2026-04-09T20:23:10.233Z"
+    },
+    {
+      "authorName": "MAJ0RT0M",
+      "content": "<p>I dont think so? Or at least I don't think anyone does async RLVR in the sense that they load a model into an inference engine, compute reward - then load the model into a training engine and backprop using the reward</p>",
+      "depth": 2,
+      "first": false,
+      "id": 3439429,
+      "postDate": "2026-04-10T17:42:10.070Z"
+    },
+    {
+      "authorName": "ImperfectKitto",
+      "content": "<p>i do do that successfully </p>",
+      "depth": 2,
+      "first": false,
+      "id": 3439438,
+      "postDate": "2026-04-10T18:00:18.640Z"
+    },
+    {
+      "authorName": "Russell Kirk",
+      "content": "<p>Yea, that was how I was always trying to do it -- but I don't come from an ML background.  I'll have to look more into it, but naively, that's how I would have approached it. </p>",
+      "depth": 2,
+      "first": false,
+      "id": 3439441,
+      "postDate": "2026-04-10T18:05:33.717Z"
+    },
+    {
+      "authorName": "MAJ0RT0M",
+      "content": "<p>I tried installing unsloth but ran into version incompatibility problems - but I heard that it works - can anyone confirm?</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3438755,
+      "postDate": "2026-04-09T17:09:46.037Z",
+      "votes": 1
+    },
+    {
+      "authorName": "m4nocha",
+      "content": "<p>It works and the training speed for 3000 token sequence is 2 hours/epoch\nthe inference speed using vllm is 3000-4000 tokens/sec</p>",
+      "depth": 1,
+      "first": false,
+      "id": 3438797,
+      "postDate": "2026-04-09T18:11:38.617Z",
+      "votes": 1
+    },
+    {
+      "authorName": "MAJ0RT0M",
+      "content": "<p>nice!</p>\n<p>your epoch is the full 9000 rows?</p>\n<p>If you are using vllm for inference I guess you would need to halt training first - flush memory and then load model into vllm?</p>\n<p>Edit: also - are you able to use unsloth for inference? If so - do you see any speedup?</p>",
+      "depth": 2,
+      "first": false,
+      "id": 3438825,
+      "postDate": "2026-04-09T18:51:31.357Z"
+    },
+    {
+      "authorName": "m4nocha",
+      "content": "<p>I perform inference on my validation dataset after SFT is completed. instead of flushing memory I delete the model and then reload it with LoRA adapter\nInference with only the model gives 3000-4000 tokens/sec\nbut on loading the LoRA adapter it drops to 2000 tokens/sec\nhere is my inference script</p>\n<pre><code># ============================================================\n# STEP 5 — INFERENCE CONFIG &amp; VRAM NUKE\n# ============================================================\nimport gc, torch, os, time, json, re, math\nfrom vllm import LLM, SamplingParams\nfrom vllm.lora.request import LoRARequest\n\nUSE_LORA = True\nOUTPUT_JSON = \"/kaggle/working/evaluation_results.json\"\n\nprint(\"Clearing VRAM for inference...\")\n# Clean up training objects to free memory for vLLM\nfor var in ['trainer', 'model']:\n    if var in globals(): del globals()[var]\n\ngc.collect()\ntorch.cuda.empty_cache()\ntorch.cuda.synchronize()\n\nos.environ['VLLM_WORKER_MULTIPROC_METHOD'] = 'spawn'\n\n# ============================================================\n# STEP 6 — UPDATED HELPERS &amp; PROMPT PREP\n# ============================================================\n\ndef classify_puzzle(prompt):\n    if not isinstance(prompt, str): return 'Unknown'\n    p = prompt.lower()\n    if re.search(r'numeral system|base[- ]?\\d|number.*convert|radix|secret number', p):\n        return 'Number Base Conversion'\n    elif re.search(r'gravit|gravity|falling|free.?fall|acceleration due to', p):\n        return 'Gravitational Constant'\n    elif re.search(r'transformation rule|equation.*transform|secret.*rule.*equation|rule.*applied.*equation', p):\n        return 'Equation Transformation'\n    elif re.search(r'encrypt|cipher|secret.*code.*letter|coded.*message|secret.*text', p):\n        return 'Text Encryption'\n    elif re.search(r'bit.?manipul|binary|8.?bit|bitwise|bit.*transform', p):\n        return 'Bit Manipulation'\n    elif re.search(r'unit.?conver|measurement|becomes.*\\d|secret.*conver.*measur', p):\n        return 'Unit Conversion'\n    return 'Unknown'\n\ndef extract_final_answer(text: str | None) -&gt; str:\n    r\"\"\"Extracts the final answer from the model response.\n    Prioritizes extracting answers inside `\\boxed{}`.\n    \"\"\"\n    if text is None:\n        return 'NOT_FOUND'\n\n    # Search for boxed answer\n    matches = re.findall(r'\\\\boxed\\{([^}]*)(?:\\}|$)', text)\n    if matches:\n        non_empty = [m.strip() for m in matches if m.strip()]\n        if non_empty:\n            return non_empty[-1]\n        return matches[-1].strip()\n\n    # Other common formats if \\boxed{} is not found\n    patterns = [\n        r'The final answer is:\\s*([^\\n]+)',\n        r'Final answer is:\\s*([^\\n]+)',\n        r'Final answer\\s*[:：]\\s*([^\\n]+)',\n        r'final answer\\s*[:：]\\s*([^\\n]+)',\n    ]\n    for pattern in patterns:\n        matches = re.findall(pattern, text, re.IGNORECASE)\n        if matches:\n            return matches[-1].strip()\n\n    # If no structured format is found, extract the last valid number\n    matches = re.findall(r'-?\\d+(?:\\.\\d+)?', text)\n    if matches:\n        return matches[-1]\n\n    # Fallback to the last line of text\n    lines = [line.strip() for line in text.splitlines() if line.strip()]\n    return lines[-1] if lines else 'NOT_FOUND'\n\ndef verify(stored_answer: str, predicted: str) -&gt; bool:\n    \"\"\"Verify if the answer matches with binary and numeric tolerance.\"\"\"\n    stored_answer = stored_answer.strip()\n    predicted = predicted.strip()\n\n    # If the answer is a binary string, compare strictly as strings\n    if re.fullmatch(r'[01]+', stored_answer):\n        return predicted.lower() == stored_answer.lower()\n\n    try:\n        # Try to convert the answers to floating point numbers\n        stored_num = float(stored_answer)\n        predicted_num = float(predicted)\n        return math.isclose(stored_num, predicted_num, rel_tol=1e-2, abs_tol=1e-5)\n    except Exception:\n        # Fallback to case-insensitive string comparison\n        return predicted.lower() == stored_answer.lower()\n\neval_records = []\nprint(\"Preparing evaluation records...\")\n\nfor i, ex in enumerate(eval_dataset):\n    orig_prompt = ex[\"prompt\"]\n    gt_answer   = str(ex[\"answer\"])\n\n    chat_messages = [{\"role\": \"user\", \"content\": orig_prompt}]\n    formatted_prompt = tokenizer.apply_chat_template(\n        chat_messages, \n        tokenize=False, \n        add_generation_prompt=True\n    )\n\n    eval_records.append({\n        \"id\": ex.get(\"id\", i), \n        \"prompt\": formatted_prompt, \n        \"answer\": gt_answer, \n        \"category\": classify_puzzle(orig_prompt)\n    })\n\n# ============================================================\n# STEP 7 — vLLM GENERATION\n# ============================================================\nprint(f\"\\nStarting vLLM Engine... (LoRA Enabled: {USE_LORA})\")\nllm = LLM(\n    model=MODEL_PATH,\n    tensor_parallel_size=1,\n    max_num_seqs=128,\n    gpu_memory_utilization=0.9,\n    dtype='auto',\n    max_model_len=7000, \n    trust_remote_code=True,\n    enable_lora=USE_LORA,\n    max_lora_rank=LORA_RANK if USE_LORA else None,\n)\n\nsampling_params = SamplingParams(temperature=0, top_p=1.0, max_tokens=MAX_SEQ_LEN)\nprompts = [item[\"prompt\"] for item in eval_records]\n\nprint(f\"Generating {len(prompts)} predictions...\")\nstart_time = time.time()\n\nlora_req = LoRARequest('adapter', 1, OUTPUT_DIR) if USE_LORA else None\noutputs = llm.generate(prompts, sampling_params=sampling_params, lora_request=lora_req)\n\nelapsed = time.time() - start_time\n\n# ============================================================\n# STEP 8 — SCORING &amp; JSON EXPORT\n# ============================================================\nresults = []\nnum_correct = 0\ncategory_stats = {}\ntotal_tokens = sum(len(o.outputs[0].token_ids) for o in outputs)\ntps = total_tokens / elapsed if elapsed &gt; 0 else 0\n\nfor item, output in zip(eval_records, outputs):\n    raw_generated_text = output.outputs[0].text\n    predicted = extract_final_answer(raw_generated_text)\n\n    # Use the updated verify function\n    is_correct = verify(item[\"answer\"], predicted)\n    cat = item[\"category\"]\n\n    if cat not in category_stats:\n        category_stats[cat] = {\"correct\": 0, \"total\": 0}\n\n    category_stats[cat][\"total\"] += 1\n    if is_correct:\n        num_correct += 1\n        category_stats[cat][\"correct\"] += 1\n\n    results.append({\n        \"id\": item[\"id\"],\n        \"category\": cat,\n        \"ground_truth\": item[\"answer\"],\n        \"predicted\": predicted,\n        \"is_correct\": is_correct,\n        \"full_output\": raw_generated_text\n    })\n\naccuracy = num_correct / len(eval_records) if eval_records else 0\n\n# Save to JSON\njson_data = {\n    \"summary\": {\n        \"overall_accuracy\": accuracy,\n        \"correct\": num_correct,\n        \"total_samples\": len(eval_records),\n        \"category_metrics\": category_stats,\n        \"tokens_per_second\": round(tps, 2),\n        \"elapsed_seconds\": round(elapsed, 2)\n    },\n    \"results\": results\n}\n\nwith open(OUTPUT_JSON, \"w\") as f:\n    json.dump(json_data, f, indent=4)\n\nprint(\"\\n\" + \"=\"*55)\nprint(f\"✅ OVERALL ACCURACY : {accuracy:.2%} ({num_correct}/{len(eval_records)})\")\nprint(\"-\" * 55)\nfor cat, stats in sorted(category_stats.items()):\n    cat_acc = stats[\"correct\"] / stats[\"total\"] if stats[\"total\"] &gt; 0 else 0\n    print(f\"  &gt; {cat:&lt;25}: {cat_acc:&gt;6.2%}  ({stats['correct']}/{stats['total']})\")\n\nprint(\"-\" * 55)\nprint(f\"🚀 SPEED    : {tps:.2f} tokens/s | 💾 SAVED TO : {OUTPUT_JSON}\")\nprint(\"=\"*55)\n</code></pre>\n<p>and here is the result it got</p>\n<pre><code>=======================================================\n✅ OVERALL ACCURACY : 81.34% (693/852)\n-------------------------------------------------------\n  &gt; Bit Manipulation         :  9.23%  (12/130)\n  &gt; Equation Transformation  : 52.11%  (37/71)\n  &gt; Gravitational Constant   : 100.00%  (148/148)\n  &gt; Number Base Conversion   : 100.00%  (162/162)\n  &gt; Text Encryption          : 95.86%  (162/169)\n  &gt; Unit Conversion          : 100.00%  (172/172)\n-------------------------------------------------------\n🚀 SPEED    : 1815.43 tokens/s | 💾 SAVED TO : /kaggle/working/evaluation_results.json\n=======================================================\n</code></pre>",
+      "depth": 2,
+      "first": false,
+      "id": 3438836,
+      "postDate": "2026-04-09T19:06:31.053Z",
+      "votes": 1
+    },
+    {
+      "authorName": "Komil Parmar",
+      "content": "<p>I am trying to do the same but I am bound by the input tokens/s rather than the output tokens/s .\nHave you encountered the same earlier? If yes, please provide the fix. </p>\n<p>1032/38000 [19:45&lt;12:00:46,  1.17s/it, est. speed input: 134.58 toks/s, output: 1736.83 toks/s]</p>",
+      "depth": 2,
+      "first": false,
+      "id": 3439780,
+      "postDate": "2026-04-11T08:08:43.313Z"
+    }
+  ],
+  "text_sha256": "3da3028ed86f7d491de770f4973bfbb031c5b03f3e7f45be7bac5477001c97fa",
+  "topic": {
+    "authorName": "MAJ0RT0M",
+    "authorUrl": "https://www.kaggle.com/maj0rt0m",
+    "commentCount": 16,
+    "content": "<p>I'm sure we are all familiar w/ this error by now: <code>NemotronH requires an initialized</code>NemotronHHybridDynamicCache<code>to return a cache. None was provided, so no cache will be returned.</code></p>\n<p>It makes generating reasonable length (2000 tokens+) infeasible - generation speed is ~2toks/sec - so this would take 15m</p>\n<p>GPRO becomes impossible - local evaluation also impossible. Even sanity checks to see if the model is producing reasonable output and learning thinking formats become expensive</p>\n<p>But I see people w/ code to evaluate locally and run GRPO - how?  I also see that when people share notebooks w/ output enabled and generation code - they are getting this cache error also. Are they just eating the huge generation time?</p>\n<p>Has anyone managed to fix this cache error? Or find a workaround?</p>\n<p>I'm open to solutions on or off kaggle hardware</p>",
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 689792,
+    "postDate": "2026-04-09T17:07:04.553Z",
+    "title": "Is anyone able to get inference/generation speeds >2 tokens/sec?",
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/689792"
+  },
+  "topic_id": 689792,
+  "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/689792"
+}

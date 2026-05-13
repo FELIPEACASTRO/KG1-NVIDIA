@@ -1,0 +1,56 @@
+{
+  "fetched_at_utc": "2026-05-13T15:43:20.395230+00:00",
+  "full_text": "[message_id=685910 author=lucian kucera first=True]\nWhy am i getting downvoted when sharing a prompts? I dont get are there kaggle bots that downvote poeple that try to help others?\n\n[message_id=3433211 author=CPMP first=False]\nDon't try understanding downvotes.\nI had some serial downvoters downvoting every single post and reply I was making at a time. This happens, some people are just mad at you for unknown reasons.\nJust move on and focus on positive things.\n\n[message_id=3432809 author=Mohamed Amr992 first=False]\nrelease negative energy\n\n[message_id=3431197 author=Alhasan Abdellatif first=False]\nI don't know. It is annoying!",
+  "message_count_observed": 4,
+  "messages": [
+    {
+      "authorName": "lucian kucera",
+      "content": "<p>Why am i getting downvoted when sharing a prompts? I dont get are there kaggle bots that downvote poeple that try to help others?</p>",
+      "depth": 0,
+      "first": true,
+      "id": 685910,
+      "postDate": "2026-03-29T16:15:26.666Z"
+    },
+    {
+      "authorName": "CPMP",
+      "content": "<p>Don't try understanding downvotes.</p>\n<p>I had some serial downvoters downvoting every single post and reply I was making at a time. This happens, some people are just mad at you for unknown reasons.</p>\n<p>Just move on and focus on positive things.</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3433211,
+      "postDate": "2026-04-01T11:59:16.230Z",
+      "votes": 1
+    },
+    {
+      "authorName": "Mohamed Amr992",
+      "content": "<p>release negative energy </p>",
+      "depth": 0,
+      "first": false,
+      "id": 3432809,
+      "postDate": "2026-03-31T23:50:18.943Z"
+    },
+    {
+      "authorName": "Alhasan Abdellatif",
+      "content": "<p>I don't know. It is annoying!</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3431197,
+      "postDate": "2026-03-29T16:42:37.090Z"
+    }
+  ],
+  "text_sha256": "ca1a6bba20bbcdbfedde9cd4d3c7ac2738bb2b6c01bab0945af0b564ca0660e1",
+  "topic": {
+    "authorName": "lucian kucera",
+    "authorUrl": "https://www.kaggle.com/luciankucera",
+    "commentCount": 3,
+    "content": "<p>Why am i getting downvoted when sharing a prompts? I dont get are there kaggle bots that downvote poeple that try to help others?</p>",
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 685910,
+    "postDate": "2026-03-29T16:15:26.666Z",
+    "title": "Why people downvote?",
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/685910",
+    "votes": -12
+  },
+  "topic_id": 685910,
+  "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/685910"
+}

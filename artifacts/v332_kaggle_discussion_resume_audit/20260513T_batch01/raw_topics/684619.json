@@ -1,0 +1,83 @@
+{
+  "fetched_at_utc": "2026-05-13T15:42:00.833882+00:00",
+  "full_text": "[message_id=684619 author=Javier Hernández first=True]\nWhat can I do if google colab pro says that is not available in my country? \n@ryanholbrook\n\n[message_id=3429593 author=WWWWZZ first=False]\nyou need a vpn\n\n[message_id=3429669 author=Javier Hernández first=False]\nI'm laughing a bit, I tried and indeed it works 😄\nthanks for the reminder of the tip\n\n[message_id=3434586 author=Javier Hernández first=False]\nAt the end the VPN wasn't enough, Google is requesting me a government ID of the USA\n\n[message_id=3428987 author=Komil Parmar first=False]\nThere are many other sites like vast, lambda, lightningai and more.\n\n[message_id=3429577 author=Javier Hernández first=False]\n@komilparmar Which one do you recommend me? \nSorry to ask a beginner question, I don't understand how do you run the Kaggle environment using the GPU RTX Pro 6000\n\n[message_id=3448084 author=AI-Cat first=False]\nThe best place is where you can install the Dockers yourself. For this competition, you'll need a Docker 168. You can watch it here.\nhttps://github.com/Kaggle/docker-python/releases/tag/v168-GPU-9bc2d69e4dc6caba1c4e45952d4bec429911b514ab22c2ab1bff8dccfa8a3063",
+  "message_count_observed": 7,
+  "messages": [
+    {
+      "authorName": "Javier Hernández",
+      "content": "<p>What can I do if google colab pro says that is not available in my country? \n<a href=\"https://www.kaggle.com/ryanholbrook\" target=\"_blank\">@ryanholbrook</a> </p>\n<p><img src=\"https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F3098761%2F89daff6cddcacd53f984aa4e278367bd%2FCaptura%20de%20pantalla%202026-03-25%20a%20la(s)%2010.22.06a.m..png?generation=1774456023544435&amp;alt=media\" alt=\"\"></p>",
+      "depth": 0,
+      "first": true,
+      "id": 684619,
+      "postDate": "2026-03-25T16:27:14.451Z"
+    },
+    {
+      "authorName": "WWWWZZ",
+      "content": "<p>you need a vpn</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3429593,
+      "postDate": "2026-03-26T23:52:45.790Z",
+      "votes": 1
+    },
+    {
+      "authorName": "Javier Hernández",
+      "content": "<p>I'm laughing a bit, I tried and indeed it works 😄\nthanks for the reminder of the tip</p>",
+      "depth": 1,
+      "first": false,
+      "id": 3429669,
+      "postDate": "2026-03-27T04:06:57.450Z"
+    },
+    {
+      "authorName": "Javier Hernández",
+      "content": "<p>At the end the VPN wasn't enough, Google is requesting me a government ID of the USA\n<img src=\"https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F3098761%2F8a78614a869303dc5658d8e9cbc1fed5%2FCaptura%20de%20pantalla%202026-04-02%20a%20la(s)%209.34.13p.m..png?generation=1775187475202200&amp;alt=media\" alt=\"\"></p>",
+      "depth": 1,
+      "first": false,
+      "id": 3434586,
+      "postDate": "2026-04-03T03:38:00.350Z",
+      "votes": 1
+    },
+    {
+      "authorName": "Komil Parmar",
+      "content": "<p>There are many other sites like vast, lambda, lightningai and more.</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3428987,
+      "postDate": "2026-03-26T06:59:29.777Z",
+      "votes": 1
+    },
+    {
+      "authorName": "Javier Hernández",
+      "content": "<p><a href=\"https://www.kaggle.com/komilparmar\" target=\"_blank\">@komilparmar</a> Which one do you recommend me? \nSorry to ask a beginner question, I don't understand how do you run the Kaggle environment using the GPU RTX Pro 6000 </p>",
+      "depth": 1,
+      "first": false,
+      "id": 3429577,
+      "postDate": "2026-03-26T23:06:43.843Z"
+    },
+    {
+      "authorName": "AI-Cat",
+      "content": "<p>The best place is where you can install the Dockers yourself. For this competition, you'll need a Docker 168. You can watch it here.</p>\n<p><a href=\"https://github.com/Kaggle/docker-python/releases/tag/v168-GPU-9bc2d69e4dc6caba1c4e45952d4bec429911b514ab22c2ab1bff8dccfa8a3063\" target=\"_blank\">https://github.com/Kaggle/docker-python/releases/tag/v168-GPU-9bc2d69e4dc6caba1c4e45952d4bec429911b514ab22c2ab1bff8dccfa8a3063</a></p>",
+      "depth": 2,
+      "first": false,
+      "id": 3448084,
+      "postDate": "2026-04-24T15:54:46.113Z",
+      "votes": 3
+    }
+  ],
+  "text_sha256": "e7f48d63ee39cc6d3c6b5e091ff5b8d6b8103cdffc6251f924c58c531c8c5291",
+  "topic": {
+    "authorName": "Javier Hernández",
+    "authorUrl": "https://www.kaggle.com/javihm77",
+    "commentCount": 6,
+    "content": "<p>What can I do if google colab pro says that is not available in my country? \n<a href=\"https://www.kaggle.com/ryanholbrook\" target=\"_blank\">@ryanholbrook</a> </p>\n<p><img src=\"https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F3098761%2F89daff6cddcacd53f984aa4e278367bd%2FCaptura%20de%20pantalla%202026-03-25%20a%20la(s)%2010.22.06a.m..png?generation=1774456023544435&amp;alt=media\" alt=\"\"></p>",
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 684619,
+    "postDate": "2026-03-25T16:27:14.451Z",
+    "title": "Google Colab Pro not available in my country",
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/684619",
+    "votes": 1
+  },
+  "topic_id": 684619,
+  "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/684619"
+}

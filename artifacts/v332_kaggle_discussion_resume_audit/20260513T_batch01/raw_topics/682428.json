@@ -1,0 +1,98 @@
+{
+  "fetched_at_utc": "2026-05-13T15:38:38.466454+00:00",
+  "full_text": "[message_id=682428 author=Harsh Rajbhar first=True]\nHow to fix this ?\n[ERROR] Training error: CUDA error: no kernel image is available for execution on the device\nSearch for cudaErrorNoKernelImageForDevice' in https://docs.nvidia.com/cuda/cuda-runtime-api/group__CUDART__TYPES.html for more information.\nCUDA kernel errors might be asynchronously reported at some other API call, so the stacktrace below might be incorrect.\nFor debugging consider passing CUDA_LAUNCH_BLOCKING=1\nCompile with TORCH_USE_CUDA_DSA` to enable device-side assertions.\n\n[message_id=3424392 author=Abhigyan Srivastava first=False]\nThe error is still here. Kaggle team says they are working on it. I only hope that they send out a shoutout mail to all of us once it is fixed.\n\n[message_id=3423940 author=Timmy Juicehouse first=False]\nIf I'm not mistaken, you plan to train with PyTorch, but the PyTorch version in your environment is incompatible with the CUDA version required for the RTX Pro 6000. When I ran it on my workstation, I had to update the CUDA environment.\n\n[message_id=3423947 author=Harsh Rajbhar first=False]\nCould you plz explain in detail , how you fixed it ? Since , i can't use pip because internet is disabled on GPU RTX Pro 6000 .\n\n[message_id=3423950 author=Timmy Juicehouse first=False]\nAre you training in a Kaggle environment? Try downloading the offline PyTorch installation package and then installing it in the online environment.\n\n[message_id=3423980 author=Harsh Rajbhar first=False]\nI’ve already updated to PyTorch nightly with CUDA 12.8, and torch.cuda.get_arch_list() correctly shows sm_120, so PyTorch itself supports the GPU. However, training still fails with:\nCUDA error: no kernel image is available for execution on the device\nThis seems to come from causal_conv1d, which appears to be compiled for older architectures and not SM120.\nSince Kaggle does not allow proper CUDA compilation (nvcc), I’m unable to rebuild causal_conv1d from source inside the environment.\nCould you please clarify:\nIs there a precompiled version of causal_conv1d that supports SM120?\nShould we disable causal_conv1d and use a fallback implementation instead?\nIf disabling is expected, what is the recommended way/config flag to do so in this competition setup?\n\n[message_id=3425886 author=Sulavss7 first=False]\ni am not able to use p100 gpu . T4 is working fine . what the hell is happening\n\n[message_id=3445591 author=chenchen2 first=False]\nI also encountered this problem. How did you solve it\n\n[message_id=3424032 author=xianxu qiu first=False]\nI encountered the same problem; without using sm_120, the inference speed was only 1.7 tokens/s.",
+  "message_count_observed": 9,
+  "messages": [
+    {
+      "authorName": "Harsh Rajbhar",
+      "content": "<p>How to fix this ?</p>\n<p>[ERROR] Training error: CUDA error: no kernel image is available for execution on the device\nSearch for <code>cudaErrorNoKernelImageForDevice' in https://docs.nvidia.com/cuda/cuda-runtime-api/group__CUDART__TYPES.html for more information.\nCUDA kernel errors might be asynchronously reported at some other API call, so the stacktrace below might be incorrect.\nFor debugging consider passing CUDA_LAUNCH_BLOCKING=1\nCompile with</code>TORCH_USE_CUDA_DSA` to enable device-side assertions.</p>",
+      "depth": 0,
+      "first": true,
+      "id": 682428,
+      "postDate": "2026-03-18T09:17:13.104Z"
+    },
+    {
+      "authorName": "Abhigyan Srivastava",
+      "content": "<p>The error is still here. Kaggle team says they are working on it. I only hope that they send out a shoutout mail to all of us once it is fixed.</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3424392,
+      "postDate": "2026-03-19T16:36:39.863Z",
+      "votes": 1
+    },
+    {
+      "authorName": "Timmy Juicehouse",
+      "content": "<p>If I'm not mistaken, you plan to train with PyTorch, but the PyTorch version in your environment is incompatible with the CUDA version required for the RTX Pro 6000. When I ran it on my workstation, I had to update the CUDA environment.</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3423940,
+      "postDate": "2026-03-19T06:31:56.123Z",
+      "votes": 1
+    },
+    {
+      "authorName": "Harsh Rajbhar",
+      "content": "<p>Could you plz explain in detail , how you fixed it ? Since , i can't use pip because internet is disabled on GPU RTX Pro 6000 .</p>",
+      "depth": 1,
+      "first": false,
+      "id": 3423947,
+      "postDate": "2026-03-19T06:48:01.833Z"
+    },
+    {
+      "authorName": "Timmy Juicehouse",
+      "content": "<p>Are you training in a Kaggle environment? Try downloading the offline PyTorch installation package and then installing it in the online environment.</p>",
+      "depth": 2,
+      "first": false,
+      "id": 3423950,
+      "postDate": "2026-03-19T07:02:43.493Z"
+    },
+    {
+      "authorName": "Harsh Rajbhar",
+      "content": "<p>I’ve already updated to PyTorch nightly with CUDA 12.8, and torch.cuda.get_arch_list() correctly shows sm_120, so PyTorch itself supports the GPU. However, training still fails with:</p>\n<p>CUDA error: no kernel image is available for execution on the device</p>\n<p>This seems to come from causal_conv1d, which appears to be compiled for older architectures and not SM120.</p>\n<p>Since Kaggle does not allow proper CUDA compilation (nvcc), I’m unable to rebuild causal_conv1d from source inside the environment.</p>\n<p>Could you please clarify:</p>\n<p>Is there a precompiled version of causal_conv1d that supports SM120?</p>\n<p>Should we disable causal_conv1d and use a fallback implementation instead?</p>\n<p>If disabling is expected, what is the recommended way/config flag to do so in this competition setup?</p>",
+      "depth": 2,
+      "first": false,
+      "id": 3423980,
+      "postDate": "2026-03-19T08:15:34.457Z",
+      "votes": 1
+    },
+    {
+      "authorName": "Sulavss7",
+      "content": "<p>i am not able to use p100 gpu . T4 is working fine . what the hell is happening </p>",
+      "depth": 0,
+      "first": false,
+      "id": 3425886,
+      "postDate": "2026-03-21T13:29:15.697Z"
+    },
+    {
+      "authorName": "chenchen2",
+      "content": "<p>I also encountered this problem. How did you solve it</p>",
+      "depth": 1,
+      "first": false,
+      "id": 3445591,
+      "postDate": "2026-04-20T06:33:02.573Z"
+    },
+    {
+      "authorName": "xianxu qiu",
+      "content": "<p>I encountered the same problem; without using sm_120, the inference speed was only 1.7 tokens/s.</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3424032,
+      "postDate": "2026-03-19T09:36:47.317Z"
+    }
+  ],
+  "text_sha256": "69c6fb8aba58c78d235b1ffa81146e8cf511f3edd0f6c5b682db41b67e5d1635",
+  "topic": {
+    "authorName": "Harsh Rajbhar",
+    "authorUrl": "https://www.kaggle.com/harshrajbhar",
+    "commentCount": 8,
+    "content": "<p>How to fix this ?</p>\n<p>[ERROR] Training error: CUDA error: no kernel image is available for execution on the device\nSearch for <code>cudaErrorNoKernelImageForDevice' in https://docs.nvidia.com/cuda/cuda-runtime-api/group__CUDART__TYPES.html for more information.\nCUDA kernel errors might be asynchronously reported at some other API call, so the stacktrace below might be incorrect.\nFor debugging consider passing CUDA_LAUNCH_BLOCKING=1\nCompile with</code>TORCH_USE_CUDA_DSA` to enable device-side assertions.</p>",
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 682428,
+    "postDate": "2026-03-18T09:17:13.104Z",
+    "title": " Training error: CUDA error: no kernel image is available for execution on the device",
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/682428",
+    "votes": 8
+  },
+  "topic_id": 682428,
+  "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/682428"
+}

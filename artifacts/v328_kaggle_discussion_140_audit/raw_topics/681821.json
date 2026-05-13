@@ -1,0 +1,112 @@
+{
+  "topic_id": 681821,
+  "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/681821",
+  "topic": {
+    "authorId": 17819385,
+    "authorThumbnailName": "default-thumb.png",
+    "authorUserDisplayName": "lucian kucera",
+    "authorUserName": "luciankucera",
+    "firstMessageId": 3422306,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 681821,
+    "name": "Downloading packeges using pip doesn't work![FIX INCLUDED][FIX DOESN'T WORK ANYMORE] ",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-03-17T12:49:17.010398100Z",
+    "totalVotes": 7,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/681821",
+    "totalMessages": 6,
+    "authorPerformanceTier": "CONTRIBUTOR",
+    "authorProgressionOptOut": false
+  },
+  "first_message": {
+    "id": 3422306,
+    "postDate": "2026-03-17T12:49:17.010Z",
+    "rawMarkdown": "Am I the only one?\n\nI always get:\n\n```\nWARNING: Retrying (Retry(total=4, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x79967ff024b0>: Failed to establish a new connection: [Errno -3] Temporary failure in name resolution')': /simple/torch/\n```\n\nFixed it by using this trick:  turning internet off and then on",
+    "content": "<p>Am I the only one?</p>\n<p>I always get:</p>\n<pre><code>WARNING: Retrying (Retry(total=4, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('&lt;pip._vendor.urllib3.connection.HTTPSConnection object at 0x79967ff024b0&gt;: Failed to establish a new connection: [Errno -3] Temporary failure in name resolution')': /simple/torch/\n</code></pre>\n<p>Fixed it by using this trick:  turning internet off and then on</p>",
+    "parent": {
+      "url": "#"
+    },
+    "author": {
+      "displayName": "lucian kucera",
+      "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+      "url": "/luciankucera",
+      "tier": "CONTRIBUTOR",
+      "id": 17819385,
+      "progressionOptOut": false
+    },
+    "authorType": "TOPIC",
+    "votes": {
+      "totalVotes": 7,
+      "canUpvote": true,
+      "totalUpvotes": 7
+    },
+    "kernelVersion": 0,
+    "competitionRanking": 1566,
+    "feedbackTrackingData": {},
+    "teamUpInfo": {
+      "teamLeader": {
+        "displayName": "lucian kucera",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+        "url": "/luciankucera",
+        "userName": "luciankucera",
+        "tier": "CONTRIBUTOR",
+        "id": 17819385,
+        "profileUrl": "/luciankucera",
+        "performanceTier": "CONTRIBUTOR",
+        "userId": 17819385,
+        "progressionOptOut": false
+      },
+      "intro": ""
+    }
+  },
+  "messages": [
+    {
+      "id": 3422306,
+      "postDate": "2026-03-17T12:49:17.010Z",
+      "rawMarkdown": "Am I the only one?\n\nI always get:\n\n```\nWARNING: Retrying (Retry(total=4, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x79967ff024b0>: Failed to establish a new connection: [Errno -3] Temporary failure in name resolution')': /simple/torch/\n```\n\nFixed it by using this trick:  turning internet off and then on",
+      "content": "<p>Am I the only one?</p>\n<p>I always get:</p>\n<pre><code>WARNING: Retrying (Retry(total=4, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('&lt;pip._vendor.urllib3.connection.HTTPSConnection object at 0x79967ff024b0&gt;: Failed to establish a new connection: [Errno -3] Temporary failure in name resolution')': /simple/torch/\n</code></pre>\n<p>Fixed it by using this trick:  turning internet off and then on</p>",
+      "parent": {
+        "url": "#"
+      },
+      "author": {
+        "displayName": "lucian kucera",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+        "url": "/luciankucera",
+        "tier": "CONTRIBUTOR",
+        "id": 17819385,
+        "progressionOptOut": false
+      },
+      "authorType": "TOPIC",
+      "votes": {
+        "totalVotes": 7,
+        "canUpvote": true,
+        "totalUpvotes": 7
+      },
+      "kernelVersion": 0,
+      "competitionRanking": 1566,
+      "feedbackTrackingData": {},
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "lucian kucera",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "url": "/luciankucera",
+          "userName": "luciankucera",
+          "tier": "CONTRIBUTOR",
+          "id": 17819385,
+          "profileUrl": "/luciankucera",
+          "performanceTier": "CONTRIBUTOR",
+          "userId": 17819385,
+          "progressionOptOut": false
+        },
+        "intro": ""
+      },
+      "depth": 0,
+      "is_first_message": true
+    }
+  ],
+  "message_count_observed": 1,
+  "text_sha256": "257bee7b40623ca64960eed01f0483b47fdc643f7fb0cf63ca02d3024520eed5",
+  "full_text": "[message_id=3422306 author= first=True]\nAm I the only one?\n\nI always get:\n\n```\nWARNING: Retrying (Retry(total=4, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x79967ff024b0>: Failed to establish a new connection: [Errno -3] Temporary failure in name resolution')': /simple/torch/\n```\n\nFixed it by using this trick:  turning internet off and then on"
+}

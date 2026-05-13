@@ -1,0 +1,57 @@
+{
+  "fetched_at_utc": "2026-05-13T15:40:56.518079+00:00",
+  "full_text": "[message_id=684515 author=Huy Nguyễnq first=True]\nWith synthetic data generation for data enrichment, can i use close source like OpenAI API or only use opensource model\n\n[message_id=3429582 author=CPMP first=False]\nYou must comply with the license of the LLM you use. Some allow the use of output to train other models. Some don't allow this. It is your responsibility to comply with these licenses.\n\n[message_id=3428971 author=Komil Parmar first=False]\nSome companies were recently sued for doing what they call a 'Distillation Attack' (Knowledge Distillation) on OpenAI's ChatGPT and Anthropic Clade. So you decide.\n\n[message_id=3435015 author=GokuIt first=False]\n@cpmpml How can we install data_designer in the kernel given that the RTX accelerator does not allow pip installs? \nWas planning to use this for synth data gen - https://nvidia-nemo.github.io/DataDesigner/latest/notebooks/3-seeding-with-a-dataset/ . Please suggest an alternative if not this.",
+  "message_count_observed": 4,
+  "messages": [
+    {
+      "authorName": "Huy Nguyễnq",
+      "content": "<p>With synthetic data generation for data enrichment, can i use close source like OpenAI API or only use opensource model</p>",
+      "depth": 0,
+      "first": true,
+      "id": 684515,
+      "postDate": "2026-03-25T08:40:32.717Z"
+    },
+    {
+      "authorName": "CPMP",
+      "content": "<p>You must comply with the license of the LLM you use. Some allow the use of output to train other models. Some don't allow this. It is your responsibility  to comply with these licenses.</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3429582,
+      "postDate": "2026-03-26T23:10:40.497Z",
+      "votes": 3
+    },
+    {
+      "authorName": "Komil Parmar",
+      "content": "<p>Some companies were recently sued for doing what they call a 'Distillation Attack' (Knowledge Distillation) on OpenAI's ChatGPT and Anthropic Clade. So you decide. </p>",
+      "depth": 0,
+      "first": false,
+      "id": 3428971,
+      "postDate": "2026-03-26T06:30:54.913Z",
+      "votes": -2
+    },
+    {
+      "authorName": "GokuIt",
+      "content": "<p><a href=\"https://www.kaggle.com/cpmpml\" target=\"_blank\">@cpmpml</a> How can we install data_designer in the kernel given that the RTX accelerator does not allow pip installs? \nWas planning to use this for synth data gen - <a href=\"https://nvidia-nemo.github.io/DataDesigner/latest/notebooks/3-seeding-with-a-dataset/\" target=\"_blank\">https://nvidia-nemo.github.io/DataDesigner/latest/notebooks/3-seeding-with-a-dataset/</a>. Please suggest an alternative if not this.</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3435015,
+      "postDate": "2026-04-03T15:26:04.810Z"
+    }
+  ],
+  "text_sha256": "c17c9cb5b6eb42ec32775aa90db6c8dc3989f15d25c88043e646079e99f34771",
+  "topic": {
+    "authorName": "Huy Nguyễnq",
+    "authorUrl": "https://www.kaggle.com/huynguynq",
+    "commentCount": 3,
+    "content": "<p>With synthetic data generation for data enrichment, can i use close source like OpenAI API or only use opensource model</p>",
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 684515,
+    "postDate": "2026-03-25T08:40:32.717Z",
+    "title": "Synthetic data generation allowed",
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/684515",
+    "votes": -3
+  },
+  "topic_id": 684515,
+  "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/684515"
+}

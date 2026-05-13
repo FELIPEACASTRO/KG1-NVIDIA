@@ -1,0 +1,63 @@
+{
+  "fetched_at_utc": "2026-05-13T15:39:34.992681+00:00",
+  "full_text": "[message_id=682926 author=Aurorcys first=True]\nWhen I turn on the Blackwell, I just can't pip install the mama-ssm, it just says theres no internet. But when I don't select any accelerators, I can download the mamba-ssm, how should I fix this?\n\n[message_id=3424097 author=hwe owe first=False]\nyou can use another notebook with internet and download the wheel file,then you can install it offfline\n\n[message_id=3424098 author=Aurorcys first=False]\nYeah, thank you for the suggestion. I also found a offline package dataset so thanks for the help 🙏🙏\n\n[message_id=3425820 author=HADY first=False]\ncan you provide me with the dataset?\n\n[message_id=3427349 author=badwolfe first=False]\nHow do I add datasets I have on kaggle then?",
+  "message_count_observed": 5,
+  "messages": [
+    {
+      "authorName": "Aurorcys",
+      "content": "<p>When I turn on the Blackwell, I just can't pip install the mama-ssm, it just says theres no internet. But when I don't select any accelerators, I can download the mamba-ssm, how should I fix this?</p>",
+      "depth": 0,
+      "first": true,
+      "id": 682926,
+      "postDate": "2026-03-19T10:44:21.258Z"
+    },
+    {
+      "authorName": "hwe owe",
+      "content": "<p>you can use another notebook with internet and download the wheel file,then you can install it offfline</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3424097,
+      "postDate": "2026-03-19T11:05:05.800Z"
+    },
+    {
+      "authorName": "Aurorcys",
+      "content": "<p>Yeah, thank you for the suggestion. I also found a offline package dataset so thanks for the help 🙏🙏</p>",
+      "depth": 1,
+      "first": false,
+      "id": 3424098,
+      "postDate": "2026-03-19T11:07:47.120Z"
+    },
+    {
+      "authorName": "HADY",
+      "content": "<p>can you provide me with the dataset?</p>",
+      "depth": 2,
+      "first": false,
+      "id": 3425820,
+      "postDate": "2026-03-21T10:42:49.743Z"
+    },
+    {
+      "authorName": "badwolfe",
+      "content": "<p>How do I add datasets I have on kaggle then?</p>",
+      "depth": 1,
+      "first": false,
+      "id": 3427349,
+      "postDate": "2026-03-24T01:39:27.660Z"
+    }
+  ],
+  "text_sha256": "9382c8659d1de2db84989947817358940c6bd589f060f387625797d81c4ea00e",
+  "topic": {
+    "authorName": "Aurorcys",
+    "authorUrl": "https://www.kaggle.com/aurorcys",
+    "commentCount": 4,
+    "content": "<p>When I turn on the Blackwell, I just can't pip install the mama-ssm, it just says theres no internet. But when I don't select any accelerators, I can download the mamba-ssm, how should I fix this?</p>",
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 682926,
+    "postDate": "2026-03-19T10:44:21.258Z",
+    "title": "BlackWell Kaggle Internet Issue",
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/682926",
+    "votes": 3
+  },
+  "topic_id": 682926,
+  "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/682926"
+}

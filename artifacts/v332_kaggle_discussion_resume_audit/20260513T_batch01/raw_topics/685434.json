@@ -1,0 +1,39 @@
+{
+  "fetched_at_utc": "2026-05-13T15:43:11.378740+00:00",
+  "full_text": "[message_id=685434 author=Ghost@N first=True]\nCan we train the model outside the notebook and use notebook/submission zip for submission?\nCan we use closed source models like gpt to create a synthetic data and fine-tune the nemotron model?\ncan we use external datasets to train this model apart from what's given in competition ?\ndoes anyone know about these?\n\n[message_id=3430969 author=Van Dong Tran first=False]\nYou can only submit the zip file of lora adapter, not necessary a notebook. The evaluation metric will check and you only your submission zip file. For dataset, as i read and know, you can use what ever you want as long as it's legal",
+  "message_count_observed": 2,
+  "messages": [
+    {
+      "authorName": "Ghost@N",
+      "content": "<p>Can we train the model outside the notebook and use notebook/submission zip for submission?\nCan we use closed source models like gpt to create a synthetic data and fine-tune the nemotron model?\ncan we use external datasets to train this model apart from what's given in competition ?</p>\n<p>does anyone know about these?</p>",
+      "depth": 0,
+      "first": true,
+      "id": 685434,
+      "postDate": "2026-03-28T04:11:12.517Z"
+    },
+    {
+      "authorName": "Van Dong Tran",
+      "content": "<p>You can only submit the zip file of lora adapter, not necessary a notebook. The evaluation metric will check and you only your submission zip file. For dataset, as i read and know, you can use what ever you want as long as it's legal</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3430969,
+      "postDate": "2026-03-29T06:30:01.030Z",
+      "votes": 2
+    }
+  ],
+  "text_sha256": "43a0b6b54b803ac6a72173c629e4b74c42c8e40c68a98df837c1412b374db0bb",
+  "topic": {
+    "authorName": "Ghost@N",
+    "authorUrl": "https://www.kaggle.com/nishanthkc",
+    "commentCount": 1,
+    "content": "<p>Can we train the model outside the notebook and use notebook/submission zip for submission?\nCan we use closed source models like gpt to create a synthetic data and fine-tune the nemotron model?\ncan we use external datasets to train this model apart from what's given in competition ?</p>\n<p>does anyone know about these?</p>",
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 685434,
+    "postDate": "2026-03-28T04:11:12.517Z",
+    "title": "Doubts regarding the competition ",
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/685434"
+  },
+  "topic_id": 685434,
+  "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/685434"
+}

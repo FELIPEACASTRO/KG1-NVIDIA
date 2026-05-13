@@ -1,0 +1,81 @@
+{
+  "fetched_at_utc": "2026-05-13T15:43:29.454113+00:00",
+  "full_text": "[message_id=686069 author=EnDream first=True]\nI ran error analysis on 300 stratified samples (50 per category) after SFT training (1200 samples, LoRA rank 32, 2 epochs). Here are the per-category accuracy numbers:\nCategory \nAccuracy \nError Pattern \nnumeral \n100% \n— \nunit_conv \n100% \n— \nbit_ops \n30% \nModel guesses plausible but wrong bit patterns \ngravity \n12% \nNumerical errors of 10-25%, model doesn't compute g correctly \ncipher \n0% \nOutputs random plausible words, no actual decryption \nsymbol \n6% \nCompletely wrong outputs \nKey observations: \nFormat is not the issue. All 176 errors had properly formatted \\boxed{} output — the model learned the output format perfectly. The problem is purely about reasoning quality.\ncipher at 0% is the most striking. The model outputs grammatically correct phrases with the right number of words (e.g., predicts \"the wise mouse draws\" when the answer is \"the clever turtle sees\"), but it's not actually doing any letter-by-letter substitution. It's generating plausible-sounding text.\ngravity errors are systematic, not random. The predicted values are always in a reasonable range but off by 10-25%. The model seems to be \"estimating\" rather than computing g = 2d/t² from the examples. \nsymbol data quality may be a factor. Consistent with other threads discussing dataset hallucination — many symbol problems may not have uniquely determinable answers from the given examples.\nWhat I'm trying next: \nProgrammatic CoT for cipher and gravity (writing out the actual computation steps, not just \"The answer is X\")\nSynthetic data generation for gravity/unit_conv/cipher (we can generate unlimited training examples with verified answers)\nGRPO with task-specific reward functions (continuous reward for gravity based on numerical error, per-word reward for cipher)\nWould be curious if others see similar per-category breakdowns. Is anyone having success with cipher specifically?\n\n[message_id=3432754 author=James Day first=False]\nYour SFT results are quite a bit different from mine… I'm having more trouble with the bit manipulation puzzles and less trouble with the cipher & gravity ones.\nCV results from my best model (0.68 LB) are included below. These were measured with 1K questions from outside the training dataset.\nCategory \nAccuracy with 8K token limit \nAccuracy with 16K token limit \nbit_manipulation \n9.9% \n18.8% \nnumeral_system \n100.0% \n100.0% \nphysics_gravity \n98.8% \n98.8% \nsymbol_transform \n17.3% \n20.7% \ntext_cipher \n75.5% \n76.1% \nunit_conversion \n100.0% \n100.0% \noverall \n67.1% \n69.3% \nI suspect my bit manipulation failures largely stem from distilling models which yap too much. Qwen3.5 27B with thinking \"disabled\" and no special instructions can solve 49% of those problems within 16K tokens, but accuracy drops to 10% at 8K, so I likely have some poisonous examples in my training data 🙃\n\n[message_id=3433074 author=MD Mushfirat Mohaimin first=False]\n@endream is training the model to directly output \\boxed{answer} , no thinking.\nAnd you're distilling Qwen3.5 27B \nthat's causing the difference.\n\n[message_id=3437774 author=EnDream first=False]\nThanks for sharing your breakdown — this is really valuable! Your gravity at 98.8% vs my 12% confirms the issue is my training approach, not the task itself. \nThe key difference seems to be CoT quality. I was training with \"The answer is X.\\boxed{X}\" (basically no reasoning), while your distilled CoT likely teaches the model the actual computation steps.\nInteresting that your bit_ops drops from 18.8% to 9.9% at 8K tokens — I hadn't considered token truncation as a major factor. Are you doing anything specific to keep outputs concise?\nI'm now experimenting with higher-quality CoT data and will report back.\n\n[message_id=3437950 author=James Day first=False]\nAre you doing anything specific to keep outputs concise?\nNothing besides setting thinking to disabled, running it multiple times to cherry pick the shortest correct answer, and switching to Gemma 4.\nPopulating the system prompt with examples of the patterns that frequently appear in the current type of question generally makes the reasoning traces longer, not shorter. I haven't put much effort into prompt engineering.\n\n[message_id=3438059 author=EnDream first=False]\nGot it, thanks.\n\n[message_id=3431708 author=lucian kucera first=False]\nInteresting, since in zero shot setting it seems to do well on ciphers.",
+  "message_count_observed": 7,
+  "messages": [
+    {
+      "authorName": "EnDream",
+      "content": "<p>I ran error analysis on 300 stratified samples (50 per category) after SFT training (1200 samples, LoRA rank 32, 2 epochs). Here are the per-category accuracy numbers:</p>\n<table>\n<thead>\n<tr>\n<th>Category</th>\n<th>Accuracy</th>\n<th>Error Pattern</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>numeral</td>\n<td>100%</td>\n<td>—</td>\n</tr>\n<tr>\n<td>unit_conv</td>\n<td>100%</td>\n<td>—</td>\n</tr>\n<tr>\n<td>bit_ops</td>\n<td>30%</td>\n<td>Model guesses plausible but wrong bit patterns</td>\n</tr>\n<tr>\n<td>gravity</td>\n<td>12%</td>\n<td>Numerical errors of 10-25%, model doesn't compute g correctly</td>\n</tr>\n<tr>\n<td>cipher</td>\n<td>0%</td>\n<td>Outputs random plausible words, no actual decryption</td>\n</tr>\n<tr>\n<td>symbol</td>\n<td>6%</td>\n<td>Completely wrong outputs</td>\n</tr>\n</tbody>\n</table>\n<p><strong>Key observations:</strong></p>\n<ol>\n<li><p><strong>Format is not the issue.</strong> All 176 errors had properly formatted <code>\\boxed{}</code> output — the model learned the output format perfectly. The problem is purely about reasoning quality.</p></li>\n<li><p><strong>cipher at 0% is the most striking.</strong> The model outputs grammatically correct phrases with the right number of words (e.g., predicts \"the wise mouse draws\" when the answer is \"the clever turtle sees\"), but it's not actually doing any letter-by-letter substitution. It's generating plausible-sounding text.</p></li>\n<li><p><strong>gravity errors are systematic, not random.</strong> The predicted values are always in a reasonable range but off by 10-25%. The model seems to be \"estimating\" rather than computing <code>g = 2d/t²</code> from the examples. </p></li>\n<li><p><strong>symbol data quality may be a factor.</strong> Consistent with other threads discussing dataset hallucination — many symbol problems may not have uniquely determinable answers from the given examples.</p></li>\n</ol>\n<p><strong>What I'm trying next:</strong></p>\n<ul>\n<li>Programmatic CoT for cipher and gravity (writing out the actual computation steps, not just \"The answer is X\")</li>\n<li>Synthetic data generation for gravity/unit_conv/cipher (we can generate unlimited training examples with verified answers)</li>\n<li>GRPO with task-specific reward functions (continuous reward for gravity based on numerical error, per-word reward for cipher)</li>\n</ul>\n<p>Would be curious if others see similar per-category breakdowns. Is anyone having success with cipher specifically?</p>",
+      "depth": 0,
+      "first": true,
+      "id": 686069,
+      "postDate": "2026-03-30T10:21:50.553Z"
+    },
+    {
+      "authorName": "James Day",
+      "content": "<p>Your SFT results are quite a bit different from mine… I'm having more trouble with the bit manipulation puzzles and less trouble with the cipher &amp; gravity ones.</p>\n<p>CV results from my best model (0.68 LB) are included below. These were measured with 1K questions from outside the training dataset.</p>\n<table>\n<thead>\n<tr>\n<th>Category</th>\n<th>Accuracy with 8K token limit</th>\n<th>Accuracy with 16K token limit</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>bit_manipulation</td>\n<td>9.9%</td>\n<td>18.8%</td>\n</tr>\n<tr>\n<td>numeral_system</td>\n<td>100.0%</td>\n<td>100.0%</td>\n</tr>\n<tr>\n<td>physics_gravity</td>\n<td>98.8%</td>\n<td>98.8%</td>\n</tr>\n<tr>\n<td>symbol_transform</td>\n<td>17.3%</td>\n<td>20.7%</td>\n</tr>\n<tr>\n<td>text_cipher</td>\n<td>75.5%</td>\n<td>76.1%</td>\n</tr>\n<tr>\n<td>unit_conversion</td>\n<td>100.0%</td>\n<td>100.0%</td>\n</tr>\n<tr>\n<td>overall</td>\n<td>67.1%</td>\n<td>69.3%</td>\n</tr>\n</tbody>\n</table>\n<hr>\n<p>I suspect my bit manipulation failures largely stem from distilling models which yap too much. Qwen3.5 27B with thinking \"disabled\" and no special instructions can solve 49% of those problems within 16K tokens, but accuracy drops to 10% at 8K, so I likely have some poisonous examples in my training data 🙃</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3432754,
+      "postDate": "2026-03-31T22:44:25.753Z",
+      "votes": 3
+    },
+    {
+      "authorName": "MD Mushfirat Mohaimin",
+      "content": "<p><a href=\"https://www.kaggle.com/endream\" target=\"_blank\">@endream</a> is training the model to directly output <code>\\boxed{answer}</code>, no thinking.<br>\nAnd you're distilling Qwen3.5 27B  </p>\n<p>that's causing the difference.  </p>",
+      "depth": 1,
+      "first": false,
+      "id": 3433074,
+      "postDate": "2026-04-01T06:40:16.173Z"
+    },
+    {
+      "authorName": "EnDream",
+      "content": "<p>Thanks for sharing your breakdown — this is really valuable! Your gravity at 98.8% vs my 12% confirms the issue is my training approach, not the task itself. </p>\n<p>The key difference seems to be CoT quality. I was training with \"The answer is X.\\boxed{X}\" (basically no reasoning), while your distilled CoT likely teaches the model the actual computation steps.</p>\n<p>Interesting that your bit_ops drops from 18.8% to 9.9% at 8K tokens — I hadn't considered token truncation as a major factor. Are you doing anything specific to keep outputs concise?</p>\n<p>I'm now experimenting with higher-quality CoT data and will report back.</p>",
+      "depth": 1,
+      "first": false,
+      "id": 3437774,
+      "postDate": "2026-04-08T04:38:44.803Z",
+      "votes": 1
+    },
+    {
+      "authorName": "James Day",
+      "content": "<blockquote>\n  <p>Are you doing anything specific to keep outputs concise?</p>\n</blockquote>\n<p>Nothing besides setting thinking to disabled, running it multiple times to cherry pick the shortest correct answer, and switching to Gemma 4.</p>\n<p>Populating the system prompt with examples of the patterns that frequently appear in the current type of question generally makes the reasoning traces longer, not shorter. I haven't put much effort into prompt engineering.</p>",
+      "depth": 2,
+      "first": false,
+      "id": 3437950,
+      "postDate": "2026-04-08T12:15:53.163Z"
+    },
+    {
+      "authorName": "EnDream",
+      "content": "<p>Got it, thanks.</p>",
+      "depth": 2,
+      "first": false,
+      "id": 3438059,
+      "postDate": "2026-04-08T15:48:44.507Z"
+    },
+    {
+      "authorName": "lucian kucera",
+      "content": "<p>Interesting, since in zero shot setting it seems to do well on ciphers.</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3431708,
+      "postDate": "2026-03-30T14:47:09.223Z"
+    }
+  ],
+  "text_sha256": "50fe92b1eabbebeec3982e8908d54f306730f7915c70656b2f82e117c7942f01",
+  "topic": {
+    "authorName": "EnDream",
+    "authorUrl": "https://www.kaggle.com/endream",
+    "commentCount": 6,
+    "content": "<p>I ran error analysis on 300 stratified samples (50 per category) after SFT training (1200 samples, LoRA rank 32, 2 epochs). Here are the per-category accuracy numbers:</p>\n<table>\n<thead>\n<tr>\n<th>Category</th>\n<th>Accuracy</th>\n<th>Error Pattern</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>numeral</td>\n<td>100%</td>\n<td>—</td>\n</tr>\n<tr>\n<td>unit_conv</td>\n<td>100%</td>\n<td>—</td>\n</tr>\n<tr>\n<td>bit_ops</td>\n<td>30%</td>\n<td>Model guesses plausible but wrong bit patterns</td>\n</tr>\n<tr>\n<td>gravity</td>\n<td>12%</td>\n<td>Numerical errors of 10-25%, model doesn't compute g correctly</td>\n</tr>\n<tr>\n<td>cipher</td>\n<td>0%</td>\n<td>Outputs random plausible words, no actual decryption</td>\n</tr>\n<tr>\n<td>symbol</td>\n<td>6%</td>\n<td>Completely wrong outputs</td>\n</tr>\n</tbody>\n</table>\n<p><strong>Key observations:</strong></p>\n<ol>\n<li><p><strong>Format is not the issue.</strong> All 176 errors had properly formatted <code>\\boxed{}</code> output — the model learned the output format perfectly. The problem is purely about reasoning quality.</p></li>\n<li><p><strong>cipher at 0% is the most striking.</strong> The model outputs grammatically correct phrases with the right number of words (e.g., predicts \"the wise mouse draws\" when the answer is \"the clever turtle sees\"), but it's not actually doing any letter-by-letter substitution. It's generating plausible-sounding text.</p></li>\n<li><p><strong>gravity errors are systematic, not random.</strong> The predicted values are always in a reasonable range but off by 10-25%. The model seems to be \"estimating\" rather than computing <code>g = 2d/t²</code> from the examples. </p></li>\n<li><p><strong>symbol data quality may be a factor.</strong> Consistent with other threads discussing dataset hallucination — many symbol problems may not have uniquely determinable answers from the given examples.</p></li>\n</ol>\n<p><strong>What I'm trying next:</strong></p>\n<ul>\n<li>Programmatic CoT for cipher and gravity (writing out the actual computation steps, not just \"The answer is X\")</li>\n<li>Synthetic data generation for gravity/unit_conv/cipher (we can generate unlimited training examples with verified answers)</li>\n<li>GRPO with task-specific reward functions (continuous reward for gravity based on numerical error, per-word reward for cipher)</li>\n</ul>\n<p>Would be curious if others see similar per-category breakdowns. Is anyone having success with cipher specifically?</p>",
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 686069,
+    "postDate": "2026-03-30T10:21:50.553Z",
+    "title": "Per-Category Error Analysis After SFT (0.63 LB) — Where the Real Bottlenecks Are",
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/686069",
+    "votes": 16
+  },
+  "topic_id": 686069,
+  "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/686069"
+}

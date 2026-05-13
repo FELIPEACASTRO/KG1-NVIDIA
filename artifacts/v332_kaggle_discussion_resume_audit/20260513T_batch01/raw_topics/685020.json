@@ -1,0 +1,63 @@
+{
+  "fetched_at_utc": "2026-05-13T15:43:02.252571+00:00",
+  "full_text": "[message_id=685020 author=Asadullah Baig first=True]\nSo the method I am following right now is to first create around 1000 high-quality expert reasoning entries. After that i am feeding those to the SFTTTrainer and getting the Lora Adaptor. Right now i am creating the 1000 high quality export reasoning entries.\n\n[message_id=3429527 author=Asadullah Baig first=False]\nNow I am also adding the train.csv but first i am adding the tag in the answers and then merging the training with my own rich reasoning questions.\n\n[message_id=3429498 author=Asadullah Baig first=False]\nI have only reached 200 samples and it has cost me around 2$ uptil now\n\n[message_id=3429426 author=Asadullah Baig first=False]\nchosen \n\"nousresearch/hermes-3-llama-3.1-405b\",\n\"deepseek/deepseek-r1\",\n\"openai/gpt-5.4-pro\",\n\"qwen/qwq-32b\",\n\"anthropic/claude-3.5-sonnet\"\nas the teachers and now running the code to gather samples\n\n[message_id=3429411 author=Asadullah Baig first=False]\nI have modified my method now to create 1000 samples from different teachers and then create a Lora Adaptor.",
+  "message_count_observed": 5,
+  "messages": [
+    {
+      "authorName": "Asadullah Baig",
+      "content": "<p>So the method I am following right now is to first create around 1000 high-quality expert reasoning entries. After that i am feeding those to the SFTTTrainer and getting the Lora Adaptor. Right now i am creating the 1000 high quality export reasoning entries.</p>",
+      "depth": 0,
+      "first": true,
+      "id": 685020,
+      "postDate": "2026-03-26T17:12:23.679Z"
+    },
+    {
+      "authorName": "Asadullah Baig",
+      "content": "<p>Now I am also adding the train.csv but first i am adding the  tag in the answers and then merging the training with my own rich reasoning questions.</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3429527,
+      "postDate": "2026-03-26T20:51:15.687Z"
+    },
+    {
+      "authorName": "Asadullah Baig",
+      "content": "<p>I have only reached 200 samples and it has cost me around 2$ uptil now</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3429498,
+      "postDate": "2026-03-26T20:02:53.420Z"
+    },
+    {
+      "authorName": "Asadullah Baig",
+      "content": "<p>chosen \n\"nousresearch/hermes-3-llama-3.1-405b\",\n    \"deepseek/deepseek-r1\",\n    \"openai/gpt-5.4-pro\",\n    \"qwen/qwq-32b\",\n    \"anthropic/claude-3.5-sonnet\"\nas the teachers and now running the code to gather samples</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3429426,
+      "postDate": "2026-03-26T18:11:03.960Z"
+    },
+    {
+      "authorName": "Asadullah Baig",
+      "content": "<p>I have modified my method now to create 1000 samples from different teachers and then create a Lora Adaptor.</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3429411,
+      "postDate": "2026-03-26T17:51:12.933Z"
+    }
+  ],
+  "text_sha256": "9b45c83078a457b4ae0e15864208cdaadd57b43773496e2815dd4a341232b526",
+  "topic": {
+    "authorName": "Asadullah Baig",
+    "authorUrl": "https://www.kaggle.com/asadullahbeg",
+    "commentCount": 4,
+    "content": "<p>So the method I am following right now is to first create around 1000 high-quality expert reasoning entries. After that i am feeding those to the SFTTTrainer and getting the Lora Adaptor. Right now i am creating the 1000 high quality export reasoning entries.</p>",
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 685020,
+    "postDate": "2026-03-26T17:12:23.679Z",
+    "title": "method to solve",
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/685020",
+    "votes": -1
+  },
+  "topic_id": 685020,
+  "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/685020"
+}

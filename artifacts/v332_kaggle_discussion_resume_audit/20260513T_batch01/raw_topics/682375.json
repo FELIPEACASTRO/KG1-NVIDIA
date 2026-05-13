@@ -1,0 +1,48 @@
+{
+  "fetched_at_utc": "2026-05-13T15:38:35.392164+00:00",
+  "full_text": "[message_id=682375 author=Ali first=True]\nHi, \nMaybe this is not new to some, but maybe new to others. \nYou can get an extra 15 or 30 hours (a total of 45 or 60 hours GPU per week) if you have a paid account on Colab.\nMore details here : \nhttps://www.kaggle.com/discussions/product-announcements/575468\n\n[message_id=3428077 author=Javier Hernández first=False]\n@asalhi after your recommendation I searched the option but is not available for my country, Guatemala 🇬🇹 🥲\n\n[message_id=3429948 author=jerryv69 first=False]\nIs the GPU RTX Pro 6000 included in the extra hours?",
+  "message_count_observed": 3,
+  "messages": [
+    {
+      "authorName": "Ali",
+      "content": "<p>Hi, </p>\n<p>Maybe this is not new to some, but maybe new to others. </p>\n<p>You can get an extra 15 or 30 hours (a total of 45 or 60 hours GPU per week) if you have a paid account on Colab.</p>\n<p>More details here : \n<a href=\"https://www.kaggle.com/discussions/product-announcements/575468\" target=\"_blank\">https://www.kaggle.com/discussions/product-announcements/575468</a></p>",
+      "depth": 0,
+      "first": true,
+      "id": 682375,
+      "postDate": "2026-03-18T07:24:48.398Z"
+    },
+    {
+      "authorName": "Javier Hernández",
+      "content": "<p><a href=\"https://www.kaggle.com/asalhi\" target=\"_blank\">@asalhi</a> after your recommendation I searched the option but is not available for my country, Guatemala 🇬🇹 🥲</p>\n<p><img src=\"https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F3098761%2Ff894923dffffa8e9a2aa2c98c2bddf8e%2FCaptura%20de%20pantalla%202026-03-24%20a%20la(s)%202.11.40p.m..png?generation=1774394680821143&amp;alt=media\" alt=\"\"></p>",
+      "depth": 0,
+      "first": false,
+      "id": 3428077,
+      "postDate": "2026-03-24T23:24:44.127Z",
+      "votes": 1
+    },
+    {
+      "authorName": "jerryv69",
+      "content": "<p>Is the GPU RTX Pro 6000 included in the extra hours?</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3429948,
+      "postDate": "2026-03-27T15:59:47.663Z"
+    }
+  ],
+  "text_sha256": "80a08fa5f71a1a4e9289998e7d7e3ad4b200f46d25558094979063618d50711c",
+  "topic": {
+    "authorName": "Ali",
+    "authorUrl": "https://www.kaggle.com/asalhi",
+    "commentCount": 2,
+    "content": "<p>Hi, </p>\n<p>Maybe this is not new to some, but maybe new to others. </p>\n<p>You can get an extra 15 or 30 hours (a total of 45 or 60 hours GPU per week) if you have a paid account on Colab.</p>\n<p>More details here : \n<a href=\"https://www.kaggle.com/discussions/product-announcements/575468\" target=\"_blank\">https://www.kaggle.com/discussions/product-announcements/575468</a></p>",
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 682375,
+    "postDate": "2026-03-18T07:24:48.398Z",
+    "title": "Unlock 15 or 30 extra GPU hours per week (connect Colab Pro) ",
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/682375",
+    "votes": 11
+  },
+  "topic_id": 682375,
+  "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/682375"
+}

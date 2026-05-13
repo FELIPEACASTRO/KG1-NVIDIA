@@ -1,0 +1,169 @@
+{
+  "fetched_at_utc": "2026-05-13T15:43:26.482719+00:00",
+  "full_text": "[message_id=686036 author=Youhei Tomio first=True]\nI tried copying high-scoring notebooks and making small adjustments, such as tuning parameters or modifying the training approach, but I quickly run into out-of-memory errors. For participants with scores around 0.8, are they achieving those results using only Kaggle’s provided resources, or are they relying on external computing resources?\n\n[message_id=3433006 author=Irving Ernesto first=False]\nHonestly, no. Lately the competitions have downgraded into people who have the necessary compute being able to win. I'm not saying they don't put effort, they put a massive amount of effort, but the barrier to win has increased massively in terms of having the right amount of VRAM, not only for this but for a lot of competitions where Deep Learning is king.\nYou can get a good ranking, though.\n\n[message_id=3437668 author= first=False]\n\n\n[message_id=3431788 author=Donald Galliano III first=False]\nFrom what im seeing? Absolutely not. Even with perfect data training SFT, you still need to do other things ( i wont list here because its a free ticket to 1st ) that eat so much vram it doesnt fit on the provided stuff.\n\n[message_id=3437096 author=Kiki first=False]\nHello, I'd like to ask you how you destructure high-quality datasets.\n\n[message_id=3431507 author=Ravi Ramakrishnan first=False]\n99% no @youheitomio\n\n[message_id=3431550 author=JK-Piece first=False]\nWhy not? One can train for 30h on the right data.\n\n[message_id=3432118 author=Muhammad Haaris 27083 first=False]\nI think we cant bypass the 12 hr notebook limit for GPU runtime .\n\n[message_id=3432142 author=JK-Piece first=False]\nOf course you can. Simple hit the save button, 12h is only for interactive session\n\n[message_id=3432174 author=Muhammad Haaris 27083 first=False]\nhi well, GPU notebooks auto timeout after 12 hrs, but I am unsure if thats the case here as well , \ni ll try out .\n\n[message_id=3432478 author=akshit manocha first=False]\ncan you please tell me about this in detail?\n\n[message_id=3437599 author=ImperfectKitto first=False]\nIt's not. Notebook gets cancelled after 12 hours anyway.\n\n[message_id=3432137 author=zkhdGuoFeng first=False]\nhow to get the free GPU that the competition provided？\n\n[message_id=3432160 author=Youhei Tomio first=False]\nYou can change it from the Session options within the notebook.\n\n[message_id=3431700 author=ducnh279 first=False]\nThe right question might be \"Is it possible to win this competition using synthetic data from open-sourced models that we can load and do inference with Kaggle-provided machine resources?\" 😅\n\n[message_id=3431701 author=lucian kucera first=False]\nThats the right question, synthetic data creation is main challange of this competition. So far Iam using GPT-OSS 120B. Not sure If there is better option. \nIf anybody finds better model for generating synthetic data let me know.\n\n[message_id=3439038 author=QianYuu first=False]\nCan I complete this competition using only one A100-80G graphics card, or three 5090 graphics cards? Has anyone tried multi-GPU training?",
+  "message_count_observed": 17,
+  "messages": [
+    {
+      "authorName": "Youhei Tomio",
+      "content": "<p>I tried copying high-scoring notebooks and making small adjustments, such as tuning parameters or modifying the training approach, but I quickly run into out-of-memory errors. For participants with scores around 0.8, are they achieving those results using only Kaggle’s provided resources, or are they relying on external computing resources?</p>",
+      "depth": 0,
+      "first": true,
+      "id": 686036,
+      "postDate": "2026-03-30T07:13:31.246Z"
+    },
+    {
+      "authorName": "Irving Ernesto",
+      "content": "<p>Honestly, no. Lately the competitions have downgraded into people who have the necessary compute being able to win. I'm not saying they don't put effort, they put a massive amount of effort, but the barrier to win has increased massively in terms of having the right amount of VRAM, not only for this but for a lot of competitions where Deep Learning is king.\nYou can get a good ranking, though.</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3433006,
+      "postDate": "2026-04-01T04:52:45.297Z",
+      "votes": 8
+    },
+    {
+      "depth": 1,
+      "first": false,
+      "id": 3437668,
+      "postDate": "2026-04-07T22:00:33.847Z",
+      "votes": -1
+    },
+    {
+      "authorName": "Donald Galliano III",
+      "content": "<p>From what im seeing? Absolutely not. Even with perfect data training SFT, you still need to do other things ( i wont list here because its a free ticket to 1st ) that eat so much vram it doesnt fit on the provided stuff. </p>",
+      "depth": 0,
+      "first": false,
+      "id": 3431788,
+      "postDate": "2026-03-30T17:16:07.193Z",
+      "votes": 2
+    },
+    {
+      "authorName": "Kiki",
+      "content": "<p>Hello, I'd like to ask you how you destructure high-quality datasets.</p>",
+      "depth": 1,
+      "first": false,
+      "id": 3437096,
+      "postDate": "2026-04-07T06:41:25.910Z"
+    },
+    {
+      "authorName": "Ravi Ramakrishnan",
+      "content": "<p>99% no <a href=\"https://www.kaggle.com/youheitomio\" target=\"_blank\">@youheitomio</a> </p>",
+      "depth": 0,
+      "first": false,
+      "id": 3431507,
+      "postDate": "2026-03-30T08:55:39.967Z",
+      "votes": 2
+    },
+    {
+      "authorName": "JK-Piece",
+      "content": "<p>Why not? One can train for 30h on the right data.</p>",
+      "depth": 1,
+      "first": false,
+      "id": 3431550,
+      "postDate": "2026-03-30T09:36:11.640Z",
+      "votes": 6
+    },
+    {
+      "authorName": "Muhammad Haaris 27083",
+      "content": "<p>I think we cant bypass the 12 hr notebook limit for GPU runtime .</p>",
+      "depth": 2,
+      "first": false,
+      "id": 3432118,
+      "postDate": "2026-03-31T05:26:46.027Z",
+      "votes": 2
+    },
+    {
+      "authorName": "JK-Piece",
+      "content": "<p>Of course you can. Simple hit the save button, 12h is only for interactive session </p>",
+      "depth": 2,
+      "first": false,
+      "id": 3432142,
+      "postDate": "2026-03-31T06:01:13.813Z",
+      "votes": 1
+    },
+    {
+      "authorName": "Muhammad Haaris 27083",
+      "content": "<p>hi well, GPU notebooks auto timeout after 12 hrs, but I am unsure if thats the case here as well , \ni ll try out .</p>",
+      "depth": 2,
+      "first": false,
+      "id": 3432174,
+      "postDate": "2026-03-31T07:00:44.633Z",
+      "votes": 1
+    },
+    {
+      "authorName": "akshit manocha",
+      "content": "<p>can you please tell me about this in detail?</p>",
+      "depth": 2,
+      "first": false,
+      "id": 3432478,
+      "postDate": "2026-03-31T16:59:19.750Z"
+    },
+    {
+      "authorName": "ImperfectKitto",
+      "content": "<p>It's not. Notebook gets cancelled after 12 hours anyway.</p>",
+      "depth": 2,
+      "first": false,
+      "id": 3437599,
+      "postDate": "2026-04-07T20:09:14.853Z"
+    },
+    {
+      "authorName": "zkhdGuoFeng",
+      "content": "<p>how to get  the free GPU that  the competition provided？</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3432137,
+      "postDate": "2026-03-31T05:57:31.470Z",
+      "votes": 1
+    },
+    {
+      "authorName": "Youhei Tomio",
+      "content": "<p>You can change it from the Session options within the notebook.</p>\n<p><img src=\"https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F7583266%2F155a720781d2b76567b025073ee6acac%2F2026-03-31%20151131.png?generation=1774938159791188&amp;alt=media\" alt=\"\"></p>",
+      "depth": 1,
+      "first": false,
+      "id": 3432160,
+      "postDate": "2026-03-31T06:23:31.877Z",
+      "votes": 1
+    },
+    {
+      "authorName": "ducnh279",
+      "content": "<p>The right question might be \"Is it possible to win this competition using synthetic data from open-sourced models that we can load and do inference with Kaggle-provided machine resources?\" 😅</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3431700,
+      "postDate": "2026-03-30T14:21:45.627Z",
+      "votes": 2
+    },
+    {
+      "authorName": "lucian kucera",
+      "content": "<p>Thats the right question, synthetic data creation is main challange of this competition. So far Iam using GPT-OSS 120B. Not sure If there is better option. </p>\n<p>If anybody finds better model for generating synthetic data let me know.</p>",
+      "depth": 1,
+      "first": false,
+      "id": 3431701,
+      "postDate": "2026-03-30T14:23:40.537Z",
+      "votes": 3
+    },
+    {
+      "authorName": "QianYuu",
+      "content": "<p>Can I complete this competition using only one A100-80G graphics card, or three 5090 graphics cards? Has anyone tried multi-GPU training?</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3439038,
+      "postDate": "2026-04-10T06:21:40.287Z"
+    }
+  ],
+  "text_sha256": "f0bb6a766f14a983865fa9454e439f3e58f83a971f8e6897fe1112bdbb03bb54",
+  "topic": {
+    "authorName": "Youhei Tomio",
+    "authorUrl": "https://www.kaggle.com/youheitomio",
+    "commentCount": 16,
+    "content": "<p>I tried copying high-scoring notebooks and making small adjustments, such as tuning parameters or modifying the training approach, but I quickly run into out-of-memory errors. For participants with scores around 0.8, are they achieving those results using only Kaggle’s provided resources, or are they relying on external computing resources?</p>",
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 686036,
+    "postDate": "2026-03-30T07:13:31.246Z",
+    "title": "Is it possible to win this competition using only Kaggle-provided machine resources?",
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/686036",
+    "votes": 12
+  },
+  "topic_id": 686036,
+  "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/686036"
+}

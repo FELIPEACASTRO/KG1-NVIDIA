@@ -1,0 +1,38 @@
+{
+  "fetched_at_utc": "2026-05-13T15:42:03.897686+00:00",
+  "full_text": "[message_id=684641 author=shoulderpain first=True]\nI used Submit Prediction -> File Upload -> submission.zip to submit a model I trained locally.\nMy submission.zip is 3GB. If I make 5 submissions a day, this will quickly use up my Kaggle storage. \nIs it possible to delete the old submission.zip from Submissions to save space? Unlike notebook submissions, the file submissions are huge.\n\n[message_id=3428587 author=shoulderpain first=False]\nNow I switched to Datasets + notebook submission, as unused Datasets can be completely deleted. But I still want to delete the old submission.zip from Submissions because they're huge.",
+  "message_count_observed": 2,
+  "messages": [
+    {
+      "authorName": "shoulderpain",
+      "content": "<p>I used Submit Prediction -&gt; File Upload -&gt; submission.zip to submit a model I trained locally.</p>\n<p>My submission.zip is 3GB. If I make 5 submissions a day, this will quickly use up my Kaggle storage. </p>\n<p>Is it possible to delete the old submission.zip from Submissions to save space? Unlike notebook submissions, the file submissions are huge.</p>",
+      "depth": 0,
+      "first": true,
+      "id": 684641,
+      "postDate": "2026-03-25T17:30:49.049Z"
+    },
+    {
+      "authorName": "shoulderpain",
+      "content": "<p>Now I switched to Datasets + notebook submission, as unused Datasets can be completely deleted. But I still want to delete the old submission.zip from Submissions because they're huge.</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3428587,
+      "postDate": "2026-03-25T17:33:19.463Z"
+    }
+  ],
+  "text_sha256": "29411c8cf545ce18a75d2148c96ad8cf3bdc823d76b98c3d27abde57ce49d10c",
+  "topic": {
+    "authorName": "shoulderpain",
+    "authorUrl": "https://www.kaggle.com/horsepurve",
+    "commentCount": 1,
+    "content": "<p>I used Submit Prediction -&gt; File Upload -&gt; submission.zip to submit a model I trained locally.</p>\n<p>My submission.zip is 3GB. If I make 5 submissions a day, this will quickly use up my Kaggle storage. </p>\n<p>Is it possible to delete the old submission.zip from Submissions to save space? Unlike notebook submissions, the file submissions are huge.</p>",
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 684641,
+    "postDate": "2026-03-25T17:30:49.049Z",
+    "title": "How to delete old submission.zip to save space?",
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/684641"
+  },
+  "topic_id": 684641,
+  "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/684641"
+}

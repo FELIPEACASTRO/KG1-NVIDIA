@@ -1,0 +1,38 @@
+{
+  "fetched_at_utc": "2026-05-13T15:47:17.128010+00:00",
+  "full_text": "[message_id=696734 author=MattiasLiljenzin first=True]\nGetting one of these?\nModuleNotFoundError: No module named 'cutlass'\nModuleNotFoundError: No module named 'mamba_ssm'\nYou might get lucky and fix the issues, or you will spend over an hour (like myself) trying to implement fixes and recommendations that dont work. Sure, you will probably resolve the issue sooner or later, but do yourself a favour and clone a template notebook and start fresh from there instead. \nTLDR; Don't try to fix them manually. Instead, clone a fully-functional notebook by clicking \"Copy & Edit\" on the official nemotron demo notebook below:\nhttps://www.kaggle.com/code/ryanholbrook/nvidia-nemotron-submission-demo\n\n[message_id=3456861 author=srujanprabhu12345 first=False]\nyou are goat, thank u😎",
+  "message_count_observed": 2,
+  "messages": [
+    {
+      "authorName": "MattiasLiljenzin",
+      "content": "<p>Getting one of these?</p>\n<ul>\n<li>ModuleNotFoundError: No module named 'cutlass'</li>\n<li>ModuleNotFoundError: No module named 'mamba_ssm'</li>\n</ul>\n<p>You might get lucky and fix the issues, or you will spend over an hour (like myself) trying to implement fixes and recommendations that dont work. Sure, you will probably resolve the issue sooner or later, but do yourself a favour and clone a template notebook and start fresh from there instead. </p>\n<p><strong>TLDR;</strong> Don't try to fix them manually. Instead, clone a fully-functional notebook by clicking \"Copy &amp; Edit\" on the official nemotron demo notebook below:</p>\n<p><a href=\"https://www.kaggle.com/code/ryanholbrook/nvidia-nemotron-submission-demo\" target=\"_blank\">https://www.kaggle.com/code/ryanholbrook/nvidia-nemotron-submission-demo</a></p>",
+      "depth": 0,
+      "first": true,
+      "id": 696734,
+      "postDate": "2026-05-03T19:20:20.326Z"
+    },
+    {
+      "authorName": "srujanprabhu12345",
+      "content": "<p>you are goat, thank u😎</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3456861,
+      "postDate": "2026-05-12T17:20:49.080Z"
+    }
+  ],
+  "text_sha256": "1efe834e685176a93b8417492fbc216d8c6b33cf393d949d340d90ddcc73e111",
+  "topic": {
+    "authorName": "MattiasLiljenzin",
+    "authorUrl": "https://www.kaggle.com/liljenzin",
+    "commentCount": 1,
+    "content": "<p>Getting one of these?</p>\n<ul>\n<li>ModuleNotFoundError: No module named 'cutlass'</li>\n<li>ModuleNotFoundError: No module named 'mamba_ssm'</li>\n</ul>\n<p>You might get lucky and fix the issues, or you will spend over an hour (like myself) trying to implement fixes and recommendations that dont work. Sure, you will probably resolve the issue sooner or later, but do yourself a favour and clone a template notebook and start fresh from there instead. </p>\n<p><strong>TLDR;</strong> Don't try to fix them manually. Instead, clone a fully-functional notebook by clicking \"Copy &amp; Edit\" on the official nemotron demo notebook below:</p>\n<p><a href=\"https://www.kaggle.com/code/ryanholbrook/nvidia-nemotron-submission-demo\" target=\"_blank\">https://www.kaggle.com/code/ryanholbrook/nvidia-nemotron-submission-demo</a></p>",
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 696734,
+    "postDate": "2026-05-03T19:20:20.326Z",
+    "title": "Having trouble with mamba_ssm or cutlass? Read here",
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/696734"
+  },
+  "topic_id": 696734,
+  "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/696734"
+}

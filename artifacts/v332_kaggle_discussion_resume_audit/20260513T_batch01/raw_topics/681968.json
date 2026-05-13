@@ -1,0 +1,80 @@
+{
+  "fetched_at_utc": "2026-05-13T15:38:16.569909+00:00",
+  "full_text": "[message_id=681968 author=mindset324 first=True]\nI’m facing an issue while trying to load the Nemotron-3-Nano-30B-A3B-BF16 model.\nFrom what I understand, this model relies on Mamba SSM components, which require the mamba_ssm library. Since the Kaggle GPU RTX PRO 6000 environment has internet access disabled, I’m unable to install this dependency using pip, which prevents the model from loading successfully.\nIssue:\nModel: Nemotron-3-Nano-30B-A3B-BF16\nError: Missing mamba_ssm dependency\nConstraint: No internet access → cannot install required package\nWhat I’ve tried:\nAttempted standard pip install mamba-ssm (fails due to no internet)\nChecked for preinstalled packages (not available)\nQuestions:\nIs there a preinstalled or offline-compatible version of mamba_ssm available in this environment?\nAre we expected to vendor the dependency manually (e.g., upload wheels or source code as a dataset)?\nIs there an alternative way to run Nemotron-3 models in this setup (e.g., prebuilt runtime, container, or supported inference framework)?\nHas anyone successfully run this model in the competition environment?\nAny guidance from organizers or participants would be really helpful.\n\n[message_id=3422901 author=Kh0a first=False]\nYou can add this utility script to your notebook https://www.kaggle.com/code/ryanholbrook/nvidia-utility-script\n\n[message_id=3423498 author=HADY first=False]\nit didn't work for me\n\n[message_id=3423871 author=water joe first=False]\nUse the official script directly, do not create your own.\n\n[message_id=3438379 author=badwolfe first=False]\nso can we not use unsloth?\n\n[message_id=3440517 author=Fusion Flux first=False]\nIt is not working for me; please suggest any other method\n\n[message_id=3440533 author=Komil Parmar first=False]\nThere are lots and lots of Amazing Public notebooks that people have shared. Use one of them for reference, or make a replica and then update it to do your experiments. In the practice, You will notice how to set up the environment properly.",
+  "message_count_observed": 7,
+  "messages": [
+    {
+      "authorName": "mindset324",
+      "content": "<p>I’m facing an issue while trying to load the Nemotron-3-Nano-30B-A3B-BF16 model.</p>\n<p>From what I understand, this model relies on Mamba SSM components, which require the mamba_ssm library. Since the Kaggle GPU RTX PRO 6000 environment has internet access disabled, I’m unable to install this dependency using pip, which prevents the model from loading successfully.</p>\n<p>Issue:</p>\n<p>Model: Nemotron-3-Nano-30B-A3B-BF16</p>\n<p>Error: Missing mamba_ssm dependency</p>\n<p>Constraint: No internet access → cannot install required package</p>\n<p>What I’ve tried:</p>\n<p>Attempted standard pip install mamba-ssm (fails due to no internet)</p>\n<p>Checked for preinstalled packages (not available)</p>\n<p>Questions:</p>\n<p>Is there a preinstalled or offline-compatible version of mamba_ssm available in this environment?</p>\n<p>Are we expected to vendor the dependency manually (e.g., upload wheels or source code as a dataset)?</p>\n<p>Is there an alternative way to run Nemotron-3 models in this setup (e.g., prebuilt runtime, container, or supported inference framework)?</p>\n<p>Has anyone successfully run this model in the competition environment?</p>\n<p>Any guidance from organizers or participants would be really helpful.</p>",
+      "depth": 0,
+      "first": true,
+      "id": 681968,
+      "postDate": "2026-03-17T19:16:11.563Z"
+    },
+    {
+      "authorName": "Kh0a",
+      "content": "<p>You can add this utility script to your notebook <a href=\"https://www.kaggle.com/code/ryanholbrook/nvidia-utility-script\" target=\"_blank\">https://www.kaggle.com/code/ryanholbrook/nvidia-utility-script</a></p>",
+      "depth": 0,
+      "first": false,
+      "id": 3422901,
+      "postDate": "2026-03-18T02:57:56.117Z",
+      "votes": 1
+    },
+    {
+      "authorName": "HADY",
+      "content": "<p>it didn't work for me</p>",
+      "depth": 1,
+      "first": false,
+      "id": 3423498,
+      "postDate": "2026-03-18T16:15:32.383Z"
+    },
+    {
+      "authorName": "water joe",
+      "content": "<p>Use the official script directly, do not create your own.</p>",
+      "depth": 2,
+      "first": false,
+      "id": 3423871,
+      "postDate": "2026-03-19T04:40:08.043Z"
+    },
+    {
+      "authorName": "badwolfe",
+      "content": "<p>so can we not use unsloth?</p>",
+      "depth": 2,
+      "first": false,
+      "id": 3438379,
+      "postDate": "2026-04-09T02:46:40.390Z"
+    },
+    {
+      "authorName": "Fusion Flux",
+      "content": "<p>It is not working for me; please suggest any other method</p>",
+      "depth": 2,
+      "first": false,
+      "id": 3440517,
+      "postDate": "2026-04-12T14:30:00.497Z"
+    },
+    {
+      "authorName": "Komil Parmar",
+      "content": "<p>There are lots and lots of Amazing Public notebooks that people have shared. Use one of them for reference, or make a replica and then update it to do your experiments. In the practice, You will notice how to set up the environment properly. </p>",
+      "depth": 0,
+      "first": false,
+      "id": 3440533,
+      "postDate": "2026-04-12T15:17:57.657Z"
+    }
+  ],
+  "text_sha256": "af57bf4a6a657c1ec4072ccc48063255d0f11e2c1e9bfefe19e9eca7c0b3c514",
+  "topic": {
+    "authorName": "mindset324",
+    "authorUrl": "https://www.kaggle.com/mindset324",
+    "commentCount": 6,
+    "content": "<p>I’m facing an issue while trying to load the Nemotron-3-Nano-30B-A3B-BF16 model.</p>\n<p>From what I understand, this model relies on Mamba SSM components, which require the mamba_ssm library. Since the Kaggle GPU RTX PRO 6000 environment has internet access disabled, I’m unable to install this dependency using pip, which prevents the model from loading successfully.</p>\n<p>Issue:</p>\n<p>Model: Nemotron-3-Nano-30B-A3B-BF16</p>\n<p>Error: Missing mamba_ssm dependency</p>\n<p>Constraint: No internet access → cannot install required package</p>\n<p>What I’ve tried:</p>\n<p>Attempted standard pip install mamba-ssm (fails due to no internet)</p>\n<p>Checked for preinstalled packages (not available)</p>\n<p>Questions:</p>\n<p>Is there a preinstalled or offline-compatible version of mamba_ssm available in this environment?</p>\n<p>Are we expected to vendor the dependency manually (e.g., upload wheels or source code as a dataset)?</p>\n<p>Is there an alternative way to run Nemotron-3 models in this setup (e.g., prebuilt runtime, container, or supported inference framework)?</p>\n<p>Has anyone successfully run this model in the competition environment?</p>\n<p>Any guidance from organizers or participants would be really helpful.</p>",
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 681968,
+    "postDate": "2026-03-17T19:16:11.563Z",
+    "title": "Unable to load Nemotron-3-Nano-30B-A3B-BF16 due to mamba_ssm dependency (No Internet Environment)",
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/681968",
+    "votes": 3
+  },
+  "topic_id": 681968,
+  "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/681968"
+}

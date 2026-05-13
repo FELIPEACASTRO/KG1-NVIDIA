@@ -1,0 +1,27 @@
+{
+  "topic_id": 692877,
+  "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/692877",
+  "topic": {
+    "authorId": 20851032,
+    "authorThumbnailName": "20851032-kg.png?t=2026-05-06-14-39-14",
+    "authorUserDisplayName": "Mohamed Amr992",
+    "authorUserName": "mohamedamr992",
+    "firstMessageId": 3444755,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 692877,
+    "name": "how can I download the model from the /kaggle/working?",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-04-18T10:49:47.455885500Z",
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/692877",
+    "totalMessages": 9,
+    "authorPerformanceTier": "CONTRIBUTOR",
+    "authorProgressionOptOut": false
+  },
+  "first_message": {},
+  "messages": [],
+  "message_count_observed": 0,
+  "text_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "full_text": ""
+}

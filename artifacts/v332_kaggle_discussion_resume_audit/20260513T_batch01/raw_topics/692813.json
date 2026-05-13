@@ -1,0 +1,47 @@
+{
+  "fetched_at_utc": "2026-05-13T15:46:17.736133+00:00",
+  "full_text": "[message_id=692813 author=JinchengZhang1 first=True]\nIs 0.86 already the limit?\n\n[message_id=3446725 author=YePing Lin first=False]\nno,the 1st competitor get 0.87 now!😄\n\n[message_id=3447835 author=Brandonioti first=False]\nTwo with 0.87 now. Things will defnitely slow down but i believe people will keep improving. Remember there's still 2 months left of this comp a lot can happen in that time. We'll be up to the 0.88's before too long then 0.89. Just have some patience",
+  "message_count_observed": 3,
+  "messages": [
+    {
+      "authorName": "JinchengZhang1",
+      "content": "<p>Is 0.86 already the limit?</p>",
+      "depth": 0,
+      "first": true,
+      "id": 692813,
+      "postDate": "2026-04-18T01:38:17.951Z"
+    },
+    {
+      "authorName": "YePing Lin",
+      "content": "<p>no,the 1st competitor get 0.87 now!😄</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3446725,
+      "postDate": "2026-04-22T02:23:40.650Z"
+    },
+    {
+      "authorName": "Brandonioti",
+      "content": "<p>Two with 0.87 now. Things will defnitely slow down but i believe people will keep improving. Remember there's still 2 months left of this comp a lot can happen in that time. We'll be up to the 0.88's before too long then 0.89. Just have some patience</p>",
+      "depth": 1,
+      "first": false,
+      "id": 3447835,
+      "postDate": "2026-04-24T04:24:36.900Z"
+    }
+  ],
+  "text_sha256": "53717a3bb37333fa38c8938543f812e517f18f5258afcf8948aed4919aff0273",
+  "topic": {
+    "authorName": "JinchengZhang1",
+    "authorUrl": "https://www.kaggle.com/jinchengzhang1",
+    "commentCount": 2,
+    "content": "<p>Is 0.86 already the limit?</p>",
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 692813,
+    "postDate": "2026-04-18T01:38:17.951Z",
+    "title": "Is 0.86 already the limit?",
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/692813",
+    "votes": -2
+  },
+  "topic_id": 692813,
+  "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/692813"
+}

@@ -1,0 +1,56 @@
+{
+  "fetched_at_utc": "2026-05-13T15:44:33.884415+00:00",
+  "full_text": "[message_id=687740 author=Chew Kok Wah first=True]\nI check the scoring Metric and found that there is no per request seed and Batch Invariance setting for VLLM, this make the scoring metric non-deterministic, please @ryanholbrook @cpmpml make it more deterministic before the rescore.\nThe above setting had been experimentally proven to 100% guarantee deterministic output.\nIf it is too expensive to rescore, can you enable the setting after the 9 April Midpoint award date? By then, all participants score will be very near, a non-deterministic score will make this Competition into a LOTTERY game.\n\n[message_id=3439299 author=Ryan Holbrook first=False]\nHi @chewkokwahibrainai ,\nWe have investigated the possibility of deterministic scoring in vLLM. Unfortunately, it appears that this will lead to a significant throughput drop on the order of 35% to 55%. With our current stock of GPUs, this would lead to significant queueing. As such, we will not be changing the metric.\nAlso, it's worth noting that determinism in vLLM doesn't solve the problem of order variance in the questions. Scores on the private test set are still subject to order variance, it's just that the order is the same for all submissions. You still have no way of knowing which submission was \"lucky\" and got a higher score on the private lb by chance.\n\n[message_id=3439307 author=Ertuğrul Demir first=False]\nThanks for clarifying. Could you share the rough magnitude of the score variance you’ve seen from order effects in practice? It would help us understand how noisy the scores may be.\n\n[message_id=3439314 author=Ryan Holbrook first=False]\n@datafan07 I'm afraid I don't have a good estimate. I've seen some discussion about it though, and just observing your own submission variance on train CV or the public LB could be informative too, of course.",
+  "message_count_observed": 4,
+  "messages": [
+    {
+      "authorName": "Chew Kok Wah",
+      "content": "<p>I check the scoring Metric and found that there is no per request seed and Batch Invariance setting for VLLM, this make the scoring metric non-deterministic, please <a href=\"https://www.kaggle.com/ryanholbrook\" target=\"_blank\">@ryanholbrook</a> <a href=\"https://www.kaggle.com/cpmpml\" target=\"_blank\">@cpmpml</a> make it more deterministic before the rescore.</p>\n<p>The above setting had been experimentally proven to <strong>100% guarantee deterministic</strong> output.</p>\n<p>If it is too expensive to rescore, can you enable the setting after the <strong>9 April Midpoint</strong> award date? By then, all participants score will be very near, a non-deterministic score will make this Competition into a <strong>LOTTERY</strong> game. </p>",
+      "depth": 0,
+      "first": true,
+      "id": 687740,
+      "postDate": "2026-04-03T15:21:55.549Z"
+    },
+    {
+      "authorName": "Ryan Holbrook",
+      "content": "<p>Hi <a href=\"https://www.kaggle.com/chewkokwahibrainai\" target=\"_blank\">@chewkokwahibrainai</a>,</p>\n<p>We have investigated the possibility of deterministic scoring in vLLM. Unfortunately, it appears that this will lead to a significant throughput drop on the order of 35% to 55%. With our current stock of GPUs, this would lead to significant queueing. As such, we will not be changing the metric.</p>\n<p>Also, it's worth noting that determinism in vLLM doesn't solve the problem of order variance in the questions. Scores on the private test set are still subject to order variance, it's just that the order is the same for all submissions. You still have no way of knowing which submission was \"lucky\" and got a higher score on the private lb by chance.</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3439299,
+      "postDate": "2026-04-10T13:30:32.953Z",
+      "votes": 2
+    },
+    {
+      "authorName": "Ertuğrul Demir",
+      "content": "<p>Thanks for clarifying. Could you share the rough magnitude of the score variance you’ve seen from order effects in practice? It would help us understand how noisy the scores may be.</p>",
+      "depth": 1,
+      "first": false,
+      "id": 3439307,
+      "postDate": "2026-04-10T13:52:17.647Z"
+    },
+    {
+      "authorName": "Ryan Holbrook",
+      "content": "<p><a href=\"https://www.kaggle.com/datafan07\" target=\"_blank\">@datafan07</a> I'm afraid I don't have a good estimate. I've seen some discussion about it though, and just observing your own submission variance on train CV or the public LB could be informative too, of course.</p>",
+      "depth": 2,
+      "first": false,
+      "id": 3439314,
+      "postDate": "2026-04-10T14:06:33.807Z"
+    }
+  ],
+  "text_sha256": "564200556f6a5ef1c4b12ef087b0e665f9a4d69b3234088a66544ef03803a670",
+  "topic": {
+    "authorName": "Chew Kok Wah",
+    "authorUrl": "https://www.kaggle.com/chewkokwahibrainai",
+    "commentCount": 3,
+    "content": "<p>I check the scoring Metric and found that there is no per request seed and Batch Invariance setting for VLLM, this make the scoring metric non-deterministic, please <a href=\"https://www.kaggle.com/ryanholbrook\" target=\"_blank\">@ryanholbrook</a> <a href=\"https://www.kaggle.com/cpmpml\" target=\"_blank\">@cpmpml</a> make it more deterministic before the rescore.</p>\n<p>The above setting had been experimentally proven to <strong>100% guarantee deterministic</strong> output.</p>\n<p>If it is too expensive to rescore, can you enable the setting after the <strong>9 April Midpoint</strong> award date? By then, all participants score will be very near, a non-deterministic score will make this Competition into a <strong>LOTTERY</strong> game. </p>",
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 687740,
+    "postDate": "2026-04-03T15:21:55.549Z",
+    "title": "Official Scoring Metric Code were not set to be Deterministic",
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/687740",
+    "votes": 4
+  },
+  "topic_id": 687740,
+  "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/687740"
+}

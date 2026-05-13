@@ -1,0 +1,48 @@
+{
+  "fetched_at_utc": "2026-05-13T15:43:38.500596+00:00",
+  "full_text": "[message_id=686431 author=Noizersam first=True]\nI am attempting to fine-tune a model using QLoRA, but I am encountering the following error when training on a model that has been quantized using bitsandbytes:\nRuntimeError: mat1 and mat2 shapes cannot be multiplied (302x4096 and 1x2752512) \nHas anyone else encountered this same error, or does anyone have a solution?\n\n[message_id=3433012 author=MAJ0RT0M first=False]\nNeed to patch in pytorch code - otherwise the model doesnt support quantized layers\n# Force the slow (pure PyTorch) code path for Nemotron-H layers\n# The fast CUDA kernels may not work on all container versions\nfor name, mod in sys.modules.items():\nif 'modeling_nemotron_h' in name and hasattr(mod, 'is_fast_path_available'):\nmod.is_fast_path_available = False\nprint(f'Patched {name}: using slow path') \nThe reasoning starter notebook has a snippet for this (where I got the code from above)\n\n[message_id=3455527 author=The Swimmer first=False]\ninteresting, but where exactly would this code be put in the whole process? \nedit: I tried this code right before the line where I call trainer.train() and it seems to have fixed the dimension error, but i now get an error called \"RuntimeError: index_add_(): self (Half) and source (Float) must have the same scalar type\"",
+  "message_count_observed": 3,
+  "messages": [
+    {
+      "authorName": "Noizersam",
+      "content": "<p>I am attempting to fine-tune a model using QLoRA, but I am encountering the following error when training on a model that has been quantized using bitsandbytes:\n<code>RuntimeError: mat1 and mat2 shapes cannot be multiplied (302x4096 and 1x2752512)</code>\nHas anyone else encountered this same error, or does anyone have a solution?</p>",
+      "depth": 0,
+      "first": true,
+      "id": 686431,
+      "postDate": "2026-03-31T08:42:04.018Z"
+    },
+    {
+      "authorName": "MAJ0RT0M",
+      "content": "<p>Need to patch in pytorch code - otherwise the model doesnt support quantized layers</p>\n<pre><code># Force the slow (pure PyTorch) code path for Nemotron-H layers\n    # The fast CUDA kernels may not work on all container versions\n    for name, mod in sys.modules.items():\n        if 'modeling_nemotron_h' in name and hasattr(mod, 'is_fast_path_available'):\n            mod.is_fast_path_available = False\n            print(f'Patched {name}: using slow path') \n</code></pre>\n<p>The reasoning starter notebook has a snippet for this (where I got the code from above)</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3433012,
+      "postDate": "2026-04-01T04:56:02.140Z",
+      "votes": 1
+    },
+    {
+      "authorName": "The Swimmer",
+      "content": "<p>interesting, but where exactly would this code be put in the whole process? </p>\n<p>edit: I tried this code right before the line where I call trainer.train() and it seems to have fixed the dimension error, but i now get an error called \"RuntimeError: index_add_(): self (Half) and source (Float) must have the same scalar type\"</p>",
+      "depth": 1,
+      "first": false,
+      "id": 3455527,
+      "postDate": "2026-05-09T15:46:17.090Z"
+    }
+  ],
+  "text_sha256": "5bc31adb75a1e60c238abc43b80552857688cdc2d93bdfa8343b2bed7cb85d11",
+  "topic": {
+    "authorName": "Noizersam",
+    "authorUrl": "https://www.kaggle.com/noizersam",
+    "commentCount": 2,
+    "content": "<p>I am attempting to fine-tune a model using QLoRA, but I am encountering the following error when training on a model that has been quantized using bitsandbytes:\n<code>RuntimeError: mat1 and mat2 shapes cannot be multiplied (302x4096 and 1x2752512)</code>\nHas anyone else encountered this same error, or does anyone have a solution?</p>",
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 686431,
+    "postDate": "2026-03-31T08:42:04.018Z",
+    "title": "QLoRA Fine-tuning Bug",
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/686431",
+    "votes": 2
+  },
+  "topic_id": 686431,
+  "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/686431"
+}

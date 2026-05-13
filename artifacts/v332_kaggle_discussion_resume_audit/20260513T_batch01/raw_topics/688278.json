@@ -1,0 +1,39 @@
+{
+  "fetched_at_utc": "2026-05-13T15:44:46.290512+00:00",
+  "full_text": "[message_id=688278 author=Adarsh Kumar first=True]\nI have a doubt on same score how is leaderboard rank decided?\n\n[message_id=3436043 author=Fabian Henning first=False]\nUsually earlier submission is the tie breaker",
+  "message_count_observed": 2,
+  "messages": [
+    {
+      "authorName": "Adarsh Kumar",
+      "content": "<p>I have a doubt on same score how is leaderboard rank decided?</p>",
+      "depth": 0,
+      "first": true,
+      "id": 688278,
+      "postDate": "2026-04-05T08:08:08.176Z"
+    },
+    {
+      "authorName": "Fabian Henning",
+      "content": "<p>Usually earlier submission is the tie breaker</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3436043,
+      "postDate": "2026-04-05T08:17:16.700Z"
+    }
+  ],
+  "text_sha256": "729f42f627a0ccde936f690f09290b6ec852a46dc7557129c1d4c9b4ead3e690",
+  "topic": {
+    "authorName": "Adarsh Kumar",
+    "authorUrl": "https://www.kaggle.com/adarsh2626",
+    "commentCount": 1,
+    "content": "<p>I have a doubt on same score how is leaderboard rank decided?</p>",
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 688278,
+    "postDate": "2026-04-05T08:08:08.176Z",
+    "title": "How is leaderboard rank decided on same score",
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/688278",
+    "votes": 3
+  },
+  "topic_id": 688278,
+  "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/688278"
+}

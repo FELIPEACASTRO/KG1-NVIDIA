@@ -1,0 +1,47 @@
+{
+  "fetched_at_utc": "2026-05-13T15:39:47.074574+00:00",
+  "full_text": "[message_id=683484 author=ulasdesouza first=True]\nWhat is your average submission time?\n\n[message_id=3425483 author=lucian kucera first=False]\nSubmission time can be around a minute, if u store lora inside a dataset. Or just link ur training notebook.\n\n[message_id=3425485 author=ulasdesouza first=False]\nMy training output is around 6 GB. I save it and submit it by selecting the notebook. Is there a more efficient and faster way? What would you recommend?",
+  "message_count_observed": 3,
+  "messages": [
+    {
+      "authorName": "ulasdesouza",
+      "content": "<p>What is your average submission time?</p>",
+      "depth": 0,
+      "first": true,
+      "id": 683484,
+      "postDate": "2026-03-20T19:48:59.495Z"
+    },
+    {
+      "authorName": "lucian kucera",
+      "content": "<p>Submission time can be around a minute, if u store lora inside a dataset. Or just link ur training notebook.</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3425483,
+      "postDate": "2026-03-20T21:36:33.483Z"
+    },
+    {
+      "authorName": "ulasdesouza",
+      "content": "<p>My training output is around 6 GB. I save it and submit it by selecting the notebook. Is there a more efficient and faster way? What would you recommend?</p>",
+      "depth": 1,
+      "first": false,
+      "id": 3425485,
+      "postDate": "2026-03-20T21:39:58.573Z"
+    }
+  ],
+  "text_sha256": "1f50d7b40b835c50f9cade69309714bd242689b71d5d0792884499523cc14940",
+  "topic": {
+    "authorName": "ulasdesouza",
+    "authorUrl": "https://www.kaggle.com/ulasdesouza",
+    "commentCount": 2,
+    "content": "<p>What is your average submission time?</p>",
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 683484,
+    "postDate": "2026-03-20T19:48:59.495Z",
+    "title": "submission time",
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/683484",
+    "votes": 2
+  },
+  "topic_id": 683484,
+  "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/683484"
+}

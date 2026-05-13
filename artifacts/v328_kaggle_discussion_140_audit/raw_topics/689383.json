@@ -1,0 +1,112 @@
+{
+  "topic_id": 689383,
+  "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/689383",
+  "topic": {
+    "authorId": 3967558,
+    "authorThumbnailName": "default-thumb.png",
+    "authorUserDisplayName": "Chew Kok Wah",
+    "authorUserName": "chewkokwahibrainai",
+    "firstMessageId": 3438012,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 689383,
+    "name": "Will This Competition become a Lottery Game after 9 April ",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-04-08T14:07:21.222779500Z",
+    "totalVotes": 1,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/689383",
+    "totalMessages": 6,
+    "authorPerformanceTier": "EXPERT",
+    "authorProgressionOptOut": false
+  },
+  "first_message": {
+    "id": 3438012,
+    "postDate": "2026-04-08T14:07:21.223Z",
+    "rawMarkdown": "After 9 April, when 0.84 become the baseline, and the around 4 point score variance of same code submission, will this make the Competition effectively turn into a Lottery Game ?\n\nWill the Host consider making the scoring a little bit more deterministic for period after 9 April by setting per request seed for vLLM in the Metric code? @cpmpml ",
+    "content": "<p>After 9 April, when 0.84 become the baseline, and the around 4 point score variance of same code submission, will this make the Competition effectively turn into a Lottery Game ?</p>\n<p>Will the Host consider making the scoring a little bit more deterministic for period after 9 April by setting per request seed for vLLM in the Metric code? <a href=\"https://www.kaggle.com/cpmpml\" target=\"_blank\">@cpmpml</a> </p>",
+    "parent": {
+      "url": "#"
+    },
+    "author": {
+      "displayName": "Chew Kok Wah",
+      "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+      "url": "/chewkokwahibrainai",
+      "tier": "EXPERT",
+      "id": 3967558,
+      "progressionOptOut": false
+    },
+    "authorType": "TOPIC",
+    "votes": {
+      "totalVotes": 1,
+      "canUpvote": true,
+      "totalUpvotes": 1
+    },
+    "kernelVersion": 0,
+    "competitionRanking": 60,
+    "feedbackTrackingData": {},
+    "teamUpInfo": {
+      "teamLeader": {
+        "displayName": "Chew Kok Wah",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+        "url": "/chewkokwahibrainai",
+        "userName": "chewkokwahibrainai",
+        "tier": "EXPERT",
+        "id": 3967558,
+        "profileUrl": "/chewkokwahibrainai",
+        "performanceTier": "EXPERT",
+        "userId": 3967558,
+        "progressionOptOut": false
+      },
+      "intro": ""
+    }
+  },
+  "messages": [
+    {
+      "id": 3438012,
+      "postDate": "2026-04-08T14:07:21.223Z",
+      "rawMarkdown": "After 9 April, when 0.84 become the baseline, and the around 4 point score variance of same code submission, will this make the Competition effectively turn into a Lottery Game ?\n\nWill the Host consider making the scoring a little bit more deterministic for period after 9 April by setting per request seed for vLLM in the Metric code? @cpmpml ",
+      "content": "<p>After 9 April, when 0.84 become the baseline, and the around 4 point score variance of same code submission, will this make the Competition effectively turn into a Lottery Game ?</p>\n<p>Will the Host consider making the scoring a little bit more deterministic for period after 9 April by setting per request seed for vLLM in the Metric code? <a href=\"https://www.kaggle.com/cpmpml\" target=\"_blank\">@cpmpml</a> </p>",
+      "parent": {
+        "url": "#"
+      },
+      "author": {
+        "displayName": "Chew Kok Wah",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+        "url": "/chewkokwahibrainai",
+        "tier": "EXPERT",
+        "id": 3967558,
+        "progressionOptOut": false
+      },
+      "authorType": "TOPIC",
+      "votes": {
+        "totalVotes": 1,
+        "canUpvote": true,
+        "totalUpvotes": 1
+      },
+      "kernelVersion": 0,
+      "competitionRanking": 60,
+      "feedbackTrackingData": {},
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "Chew Kok Wah",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "url": "/chewkokwahibrainai",
+          "userName": "chewkokwahibrainai",
+          "tier": "EXPERT",
+          "id": 3967558,
+          "profileUrl": "/chewkokwahibrainai",
+          "performanceTier": "EXPERT",
+          "userId": 3967558,
+          "progressionOptOut": false
+        },
+        "intro": ""
+      },
+      "depth": 0,
+      "is_first_message": true
+    }
+  ],
+  "message_count_observed": 1,
+  "text_sha256": "8b56b3dbfe6bc00de7cc5e5b944f891a3acad547f03a9f65507b38f2723c6575",
+  "full_text": "[message_id=3438012 author= first=True]\nAfter 9 April, when 0.84 become the baseline, and the around 4 point score variance of same code submission, will this make the Competition effectively turn into a Lottery Game ?\n\nWill the Host consider making the scoring a little bit more deterministic for period after 9 April by setting per request seed for vLLM in the Metric code? @cpmpml "
+}

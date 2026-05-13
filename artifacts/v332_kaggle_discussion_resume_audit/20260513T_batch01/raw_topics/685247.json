@@ -1,0 +1,64 @@
+{
+  "fetched_at_utc": "2026-05-13T15:43:05.324150+00:00",
+  "full_text": "[message_id=685247 author=Dongyong Lee first=True]\nHi, the rules state:\n▎ \"To be eligible for any prize, teams must publish a public Kaggle notebook and solution Writeup documenting the methods used to generate their submission.\"\nCould you clarify when this needs to happen — before the competition deadline, or after the competition ends?\nThank you!\n\n[message_id=3433972 author=CPMP first=False]\nBefore prizes are awarded. Mid point prize are there to encourage sharing. It is your call to go for these prize or wait till competition end.\n\n[message_id=3431249 author=James Weatherhead first=False]\nThis is a good question… I had the same thought for the mid-point prize too.\n\n[message_id=3430136 author=HADY first=False]\nI wonder why would someone downvote for this. Very valid question!\n\n[message_id=3429881 author=Brisa Marina first=False]\nWe won't know if we are competition winners until after the competition ends. Any required documentation would be submitted after the competition ends.",
+  "message_count_observed": 5,
+  "messages": [
+    {
+      "authorName": "Dongyong Lee",
+      "content": "<p>Hi, the rules state:\n ▎ \"To be eligible for any prize, teams must publish a public Kaggle notebook and solution Writeup documenting the methods used to generate their submission.\"\n Could you clarify when this needs to happen — before the competition deadline, or after the competition ends?\n Thank you!</p>",
+      "depth": 0,
+      "first": true,
+      "id": 685247,
+      "postDate": "2026-03-27T13:16:18.881Z"
+    },
+    {
+      "authorName": "CPMP",
+      "content": "<p>Before prizes are awarded. Mid point prize are there to encourage sharing. It is your call to go for these prize or wait till competition end.</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3433972,
+      "postDate": "2026-04-02T11:51:41.427Z",
+      "votes": 1
+    },
+    {
+      "authorName": "James Weatherhead",
+      "content": "<p>This is a good question… I had the same thought for the mid-point prize too.</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3431249,
+      "postDate": "2026-03-29T18:23:43.570Z"
+    },
+    {
+      "authorName": "HADY",
+      "content": "<p>I wonder why would someone downvote for this. Very valid question!</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3430136,
+      "postDate": "2026-03-27T22:34:00.477Z"
+    },
+    {
+      "authorName": "Brisa Marina",
+      "content": "<p>We won't know if we are competition winners until <strong>after</strong> the competition ends.  Any required documentation would be submitted after the competition ends.  </p>",
+      "depth": 0,
+      "first": false,
+      "id": 3429881,
+      "postDate": "2026-03-27T13:37:04.060Z"
+    }
+  ],
+  "text_sha256": "2071a5d797dd90820ee5b21308c54233eea4e77d18b3ebe1b156008ea433ba6a",
+  "topic": {
+    "authorName": "Dongyong Lee",
+    "authorUrl": "https://www.kaggle.com/shemissmebutidont",
+    "commentCount": 4,
+    "content": "<p>Hi, the rules state:\n ▎ \"To be eligible for any prize, teams must publish a public Kaggle notebook and solution Writeup documenting the methods used to generate their submission.\"\n Could you clarify when this needs to happen — before the competition deadline, or after the competition ends?\n Thank you!</p>",
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 685247,
+    "postDate": "2026-03-27T13:16:18.881Z",
+    "title": " When should winners publish their public notebook and writeup?",
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/685247",
+    "votes": 7
+  },
+  "topic_id": 685247,
+  "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/685247"
+}

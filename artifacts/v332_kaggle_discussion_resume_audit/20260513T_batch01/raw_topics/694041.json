@@ -1,0 +1,49 @@
+{
+  "fetched_at_utc": "2026-05-13T15:46:32.385631+00:00",
+  "full_text": "[message_id=694041 author=shark first=True]\nHelp needed: I’m doing vibe coding in Cursor and submitting via the Kaggle CLI, but it seems I can’t change the GPU type locally. Every time I have to manually open the webpage, switch the GPU to RTX 6000, and then click “Save Version.” Is there a better way to handle this?\n\n[message_id=3447429 author=Ken first=False]\nYou should be able to use the --accelerator NvidiaRtxPro6000 flag. Note that since it's only available for this competition, you need to ensure your kernel metadata includes\n\"competition_sources\": [\n\"nvidia-nemotron-model-reasoning-challenge\"\n]\n\n[message_id=3447455 author=shark first=False]\nkaggle kernels push --accelerator NvidiaRtxPro6000 can run success.",
+  "message_count_observed": 3,
+  "messages": [
+    {
+      "authorName": "shark",
+      "content": "<p>Help needed: I’m doing vibe coding in Cursor and submitting via the Kaggle CLI, but it seems I can’t change the GPU type locally. Every time I have to manually open the webpage, switch the GPU to RTX 6000, and then click “Save Version.” Is there a better way to handle this?</p>",
+      "depth": 0,
+      "first": true,
+      "id": 694041,
+      "postDate": "2026-04-23T03:48:18.590Z"
+    },
+    {
+      "authorName": "Ken",
+      "content": "<p>You should be able to use the <code>--accelerator NvidiaRtxPro6000</code> flag. Note that since it's only available for this competition, you need to ensure your kernel metadata includes\n<code>\"competition_sources\": [\n    \"nvidia-nemotron-model-reasoning-challenge\"\n  ]</code></p>",
+      "depth": 0,
+      "first": false,
+      "id": 3447429,
+      "postDate": "2026-04-23T05:37:20.763Z",
+      "votes": 1
+    },
+    {
+      "authorName": "shark",
+      "content": "<p><code>kaggle kernels push --accelerator NvidiaRtxPro6000</code> can run success.</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3447455,
+      "postDate": "2026-04-23T06:58:12.853Z",
+      "votes": 2
+    }
+  ],
+  "text_sha256": "a4c273eabf26d2426c6088834575c3a1de4a689fc3cd1f154cf942ac1dd7cf52",
+  "topic": {
+    "authorName": "shark",
+    "authorUrl": "https://www.kaggle.com/zhixing629",
+    "commentCount": 2,
+    "content": "<p>Help needed: I’m doing vibe coding in Cursor and submitting via the Kaggle CLI, but it seems I can’t change the GPU type locally. Every time I have to manually open the webpage, switch the GPU to RTX 6000, and then click “Save Version.” Is there a better way to handle this?</p>",
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 694041,
+    "postDate": "2026-04-23T03:48:18.590Z",
+    "title": "Kaggle CLI Can’t Set GPU Type? Tired of Manually Switching to RTX 6000 Every Time 😩",
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/694041",
+    "votes": 1
+  },
+  "topic_id": 694041,
+  "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/694041"
+}

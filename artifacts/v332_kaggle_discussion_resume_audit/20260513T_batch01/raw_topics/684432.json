@@ -1,0 +1,74 @@
+{
+  "fetched_at_utc": "2026-05-13T15:40:41.245606+00:00",
+  "full_text": "[message_id=684432 author=Шерхан Масакбаев first=True]\nI've been analyzing the problem types and wanted to share some findings on what seems to be the hardest category.\nBased on @huikang 's visualization, the base model solves only 2 out of 823 Equation Symbolic problems (0.2%). For comparison, Numeral is at 96%, Unit Conversion at 75%, Gravity at 59%.\nI did some deeper analysis of the structure:\nFormat: Each problem has equations like AB_CD = result where _ is an operator character and A,B,C,D are ASCII characters (printable range).\nWhat makes it so hard:\nOn average only 1.6 examples per operator per problem - very few data points to infer a rule\nVariable output length - the same operator within the same problem can produce outputs of length 1, 2, 3, or 4. This rules out simple per-position mappings\n137 out of 813 problems have a query operator that doesn't appear in any example at all - you need to infer the rule with zero examples\nThe rules appear to be unique per problem - the + operator means identity in one problem and something completely different in another\nWhat I've tried (programmatically):\nPer-position char mappings with 50+ expressions (addition, XOR, AND, OR, modular arithmetic on char values)\nBase-93 arithmetic (treating AB and CD as two-digit base-93 numbers)\nSigned base-93 with carry\nAll 24 permutations of (a,b,c,d)\nBrute-force with 3-operand combinations\nOnly ~5% are solvable (identity and swap permutations). The remaining 95% resist all approaches I've tried.\nHas anyone had more success with this type? Or is the consensus that these ~820 problems are essentially noise in the leaderboard - a fixed ~8.7% accuracy loss that everyone shares?\nCurious to hear if anyone found patterns I'm missing.\n\n[message_id=3428586 author=SwiftyOS first=False]\nI've managed to programmatically solve all but 55 of the bit manipulation ones. The symbol transformations have been much harder with most unsolved still. Just a matter of time as they all must follow logical rules\n\n[message_id=3428869 author= first=False]\n\n\n[message_id=3428282 author=m4nocha first=False]\nI was able to solve quite a lot of bit manipulation using brute force\n🏁 FINAL REPORT\nTotal Solved: 934\nStill Unsolved: 668\nSaved successful results to 'solved_results.json'\n\n[message_id=3444740 author=Boris Polishchuk first=False]\nMy best is 8 correct solutions out of 50 rollouts for one random Bit Transformation task. Only two of them demonstrates the well-pronounced non-trivial reasoning, the rest of 6 are just like [\\boxed{00000011}.] which render them useless for RL. Most of the runs ended with 0 corrects out of 50, so it's still a long way to DeepSeek \"aha moment\".. :)\n\n[message_id=3428867 author= first=False]\n\n\n[message_id=3428281 author= first=False]",
+  "message_count_observed": 7,
+  "messages": [
+    {
+      "authorName": "Шерхан Масакбаев",
+      "content": "<p>I've been analyzing the problem types and wanted to share some findings on what seems to be the hardest category.\nBased on <a href=\"https://www.kaggle.com/huikang\" target=\"_blank\">@huikang</a> 's visualization, the base model solves only 2 out of 823 Equation Symbolic problems (0.2%). For comparison, Numeral is at 96%, Unit Conversion at 75%, Gravity at 59%.\nI did some deeper analysis of the structure:\nFormat: Each problem has equations like <code>AB_CD = result</code> where _ is an operator character and A,B,C,D are ASCII characters (printable range).\nWhat makes it so hard:</p>\n<p>On average only 1.6 examples per operator per problem - very few data points to infer a rule\nVariable output length - the same operator within the same problem can produce outputs of length 1, 2, 3, or 4. This rules out simple per-position mappings\n137 out of 813 problems have a query operator that doesn't appear in any example at all - you need to infer the rule with zero examples\nThe rules appear to be unique per problem - the + operator means identity in one problem and something completely different in another</p>\n<p>What I've tried (programmatically):</p>\n<p>Per-position char mappings with 50+ expressions (addition, XOR, AND, OR, modular arithmetic on char values)\nBase-93 arithmetic (treating AB and CD as two-digit base-93 numbers)\nSigned base-93 with carry\nAll 24 permutations of (a,b,c,d)\nBrute-force with 3-operand combinations</p>\n<p>Only ~5% are solvable (identity and swap permutations). The remaining 95% resist all approaches I've tried.\nHas anyone had more success with this type? Or is the consensus that these ~820 problems are essentially noise in the leaderboard - a fixed ~8.7% accuracy loss that everyone shares?\nCurious to hear if anyone found patterns I'm missing.</p>",
+      "depth": 0,
+      "first": true,
+      "id": 684432,
+      "postDate": "2026-03-24T20:27:05.144Z"
+    },
+    {
+      "authorName": "SwiftyOS",
+      "content": "<p>I've managed to programmatically solve all but 55 of the bit manipulation ones. The symbol transformations have been much harder with most unsolved still. Just a matter of time as they all must follow logical rules</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3428586,
+      "postDate": "2026-03-25T17:31:01.780Z",
+      "votes": 1
+    },
+    {
+      "depth": 1,
+      "first": false,
+      "id": 3428869,
+      "postDate": "2026-03-26T02:20:18.003Z"
+    },
+    {
+      "authorName": "m4nocha",
+      "content": "<p>I was able to solve quite a lot of bit manipulation using brute force</p>\n<pre><code>🏁 FINAL REPORT\nTotal Solved: 934\nStill Unsolved: 668\nSaved successful results to 'solved_results.json'\n</code></pre>",
+      "depth": 0,
+      "first": false,
+      "id": 3428282,
+      "postDate": "2026-03-25T07:47:22.563Z"
+    },
+    {
+      "authorName": "Boris Polishchuk",
+      "content": "<p>My best is 8 correct solutions out of 50 rollouts for one random Bit Transformation task. Only two of them demonstrates the well-pronounced non-trivial reasoning, the rest of 6 are just like  [\\boxed{00000011}.] which render them useless for RL. Most of the runs ended with 0 corrects out of 50, so it's still a long way to DeepSeek \"aha moment\".. :)</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3444740,
+      "postDate": "2026-04-18T10:37:31.487Z"
+    },
+    {
+      "depth": 0,
+      "first": false,
+      "id": 3428867,
+      "postDate": "2026-03-26T02:13:53.457Z"
+    },
+    {
+      "depth": 0,
+      "first": false,
+      "id": 3428281,
+      "postDate": "2026-03-25T07:46:55.473Z"
+    }
+  ],
+  "text_sha256": "1bb3b6ed7e45bb63193fbc6b43deaee80850756b1813af6cd95bc566727977ae",
+  "topic": {
+    "authorName": "Шерхан Масакбаев",
+    "authorUrl": "https://www.kaggle.com/sherkhango",
+    "commentCount": 6,
+    "content": "<p>I've been analyzing the problem types and wanted to share some findings on what seems to be the hardest category.\nBased on <a href=\"https://www.kaggle.com/huikang\" target=\"_blank\">@huikang</a> 's visualization, the base model solves only 2 out of 823 Equation Symbolic problems (0.2%). For comparison, Numeral is at 96%, Unit Conversion at 75%, Gravity at 59%.\nI did some deeper analysis of the structure:\nFormat: Each problem has equations like <code>AB_CD = result</code> where _ is an operator character and A,B,C,D are ASCII characters (printable range).\nWhat makes it so hard:</p>\n<p>On average only 1.6 examples per operator per problem - very few data points to infer a rule\nVariable output length - the same operator within the same problem can produce outputs of length 1, 2, 3, or 4. This rules out simple per-position mappings\n137 out of 813 problems have a query operator that doesn't appear in any example at all - you need to infer the rule with zero examples\nThe rules appear to be unique per problem - the + operator means identity in one problem and something completely different in another</p>\n<p>What I've tried (programmatically):</p>\n<p>Per-position char mappings with 50+ expressions (addition, XOR, AND, OR, modular arithmetic on char values)\nBase-93 arithmetic (treating AB and CD as two-digit base-93 numbers)\nSigned base-93 with carry\nAll 24 permutations of (a,b,c,d)\nBrute-force with 3-operand combinations</p>\n<p>Only ~5% are solvable (identity and swap permutations). The remaining 95% resist all approaches I've tried.\nHas anyone had more success with this type? Or is the consensus that these ~820 problems are essentially noise in the leaderboard - a fixed ~8.7% accuracy loss that everyone shares?\nCurious to hear if anyone found patterns I'm missing.</p>",
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 684432,
+    "postDate": "2026-03-24T20:27:05.144Z",
+    "title": "Equation Symbolic has anyone figured out the pattern?",
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/684432",
+    "votes": 9
+  },
+  "topic_id": 684432,
+  "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/684432"
+}

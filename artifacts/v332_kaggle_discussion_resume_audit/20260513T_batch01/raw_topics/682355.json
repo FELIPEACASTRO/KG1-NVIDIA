@@ -1,0 +1,54 @@
+{
+  "fetched_at_utc": "2026-05-13T15:38:32.319773+00:00",
+  "full_text": "[message_id=682355 author=Kamal Raj Kanakarajan first=True]\nHi,\nI have a question regarding how we can experiment with prompting strategies given the fixed evaluation pipeline and some strict constraints on sequence length. \nModel Sequence Length Constraints \nBased on the submission demo and competition overview, we are working with very specific length limits:\nPrompt Limit: The input prompt length is strictly capped at <512 tokens.\nTotal Max Length: The model's max_length is fixed at 8192. \nReasoning Overhead: This means the model's entire reasoning process, plus the final answer, must fit within the remaining token limit without us having the option to adjust the max_length .\nThe Evaluation Pipeline & Submission Format \nAdditionally, the inference pipeline is locked down:\nThe following string is automatically appended to all evaluation prompts: '\\nPlease put your final answer inside \\\\boxed{}. For example: \\\\boxed{your answer}' \nWe are only submitting the LoRA adapter weights ( adapter_config.json and adapter_model.safetensors ).\nMy Question \nGiven that the inference/evaluation pipeline is locked and we are only submitting the adapters, what exactly is meant by \"experimenting with prompting strategies\"? \nSince we cannot modify the prompt template used during the hidden test set evaluation (and have a strict 512-token budget for the input), does this refer strictly to how we format our prompts during the training phase so that the adapter learns a specific reasoning behavior? Or is there a way to inject inference-time prompting strategies that I am missing?\nAny clarification would be greatly appreciated. Thanks!\n\n[message_id=3427214 author=CPMP first=False]\nYou are right that the prompt used in the evaluation is fixed. You can't experiment with it. \nWe did not disclose the prompt used in the evaluation to limit reverse engineering. We expected some reverse engineering on the problem structures, and it already happened. It is why we wanted to coerce people into training the model instead of implementing a specific problem solver.\nDoes this mean that no prompt experimentation is doable during training? Maybe. Maybe not. You tell us.\n\n[message_id=3424419 author=Stefano viel first=False]\nA follow-up question on this is if we can have the prompt that will be used in evaluation (so that we can replicate the same settings locally).\n\n[message_id=3424960 author= first=False]",
+  "message_count_observed": 4,
+  "messages": [
+    {
+      "authorName": "Kamal Raj Kanakarajan",
+      "content": "<p>Hi,</p>\n<p>I have a question regarding how we can experiment with prompting strategies given the fixed evaluation pipeline and some strict constraints on sequence length. </p>\n<h3>Model Sequence Length Constraints</h3>\n<p>Based on the submission demo and competition overview, we are working with very specific length limits:</p>\n<ul>\n<li><strong>Prompt Limit:</strong> The input prompt length is strictly capped at &lt;512 tokens.</li>\n<li><strong>Total Max Length:</strong> The model's <code>max_length</code> is fixed at 8192. </li>\n<li><strong>Reasoning Overhead:</strong> This means the model's entire reasoning process, plus the final answer, must fit within the remaining token limit without us having the option to adjust the <code>max_length</code>.</li>\n</ul>\n<h3>The Evaluation Pipeline &amp; Submission Format</h3>\n<p>Additionally, the inference pipeline is locked down:</p>\n<ul>\n<li>The following string is automatically appended to all evaluation prompts: <code>'\\nPlease put your final answer inside \\\\boxed{}. For example: \\\\boxed{your answer}'</code></li>\n<li>We are only submitting the LoRA adapter weights (<code>adapter_config.json</code> and <code>adapter_model.safetensors</code>).</li>\n</ul>\n<h3>My Question</h3>\n<p>Given that the inference/evaluation pipeline is locked and we are only submitting the adapters, what exactly is meant by \"experimenting with prompting strategies\"? </p>\n<p>Since we cannot modify the prompt template used during the hidden test set evaluation (and have a strict 512-token budget for the input), does this refer strictly to how we format our prompts <em>during the training phase</em> so that the adapter learns a specific reasoning behavior? Or is there a way to inject inference-time prompting strategies that I am missing?</p>\n<p>Any clarification would be greatly appreciated. Thanks!</p>",
+      "depth": 0,
+      "first": true,
+      "id": 682355,
+      "postDate": "2026-03-18T06:34:10.945Z"
+    },
+    {
+      "authorName": "CPMP",
+      "content": "<p>You are right that the prompt used in the evaluation is fixed. You can't experiment with it. </p>\n<p>We did not disclose the prompt used in the evaluation to limit reverse engineering. We expected some reverse engineering on the problem structures, and it already happened.  It is why we wanted to coerce people into training the model instead of implementing a specific problem solver.</p>\n<p>Does this mean that no prompt experimentation is doable during training? Maybe. Maybe not. You tell us.</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3427214,
+      "postDate": "2026-03-23T20:45:07.163Z",
+      "votes": 1
+    },
+    {
+      "authorName": "Stefano viel",
+      "content": "<p>A follow-up question on this is if we can have the prompt that will be used in evaluation (so that we can replicate the same settings locally). </p>",
+      "depth": 0,
+      "first": false,
+      "id": 3424419,
+      "postDate": "2026-03-19T17:01:36.690Z"
+    },
+    {
+      "depth": 0,
+      "first": false,
+      "id": 3424960,
+      "postDate": "2026-03-20T06:17:08.870Z"
+    }
+  ],
+  "text_sha256": "02fd4e03a805ac16fb54468972e22a56205bd32c44585c19d8f9ee1944d17606",
+  "topic": {
+    "authorName": "Kamal Raj Kanakarajan",
+    "authorUrl": "https://www.kaggle.com/kamalkraj",
+    "commentCount": 3,
+    "content": "<p>Hi,</p>\n<p>I have a question regarding how we can experiment with prompting strategies given the fixed evaluation pipeline and some strict constraints on sequence length. </p>\n<h3>Model Sequence Length Constraints</h3>\n<p>Based on the submission demo and competition overview, we are working with very specific length limits:</p>\n<ul>\n<li><strong>Prompt Limit:</strong> The input prompt length is strictly capped at &lt;512 tokens.</li>\n<li><strong>Total Max Length:</strong> The model's <code>max_length</code> is fixed at 8192. </li>\n<li><strong>Reasoning Overhead:</strong> This means the model's entire reasoning process, plus the final answer, must fit within the remaining token limit without us having the option to adjust the <code>max_length</code>.</li>\n</ul>\n<h3>The Evaluation Pipeline &amp; Submission Format</h3>\n<p>Additionally, the inference pipeline is locked down:</p>\n<ul>\n<li>The following string is automatically appended to all evaluation prompts: <code>'\\nPlease put your final answer inside \\\\boxed{}. For example: \\\\boxed{your answer}'</code></li>\n<li>We are only submitting the LoRA adapter weights (<code>adapter_config.json</code> and <code>adapter_model.safetensors</code>).</li>\n</ul>\n<h3>My Question</h3>\n<p>Given that the inference/evaluation pipeline is locked and we are only submitting the adapters, what exactly is meant by \"experimenting with prompting strategies\"? </p>\n<p>Since we cannot modify the prompt template used during the hidden test set evaluation (and have a strict 512-token budget for the input), does this refer strictly to how we format our prompts <em>during the training phase</em> so that the adapter learns a specific reasoning behavior? Or is there a way to inject inference-time prompting strategies that I am missing?</p>\n<p>Any clarification would be greatly appreciated. Thanks!</p>",
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 682355,
+    "postDate": "2026-03-18T06:34:10.945Z",
+    "title": "Clarification needed: Experimenting with prompting strategies vs. strict sequence length constraints?",
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/682355",
+    "votes": 14
+  },
+  "topic_id": 682355,
+  "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/682355"
+}

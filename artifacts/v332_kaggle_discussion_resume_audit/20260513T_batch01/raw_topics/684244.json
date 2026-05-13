@@ -1,0 +1,48 @@
+{
+  "fetched_at_utc": "2026-05-13T15:40:29.155763+00:00",
+  "full_text": "[message_id=684244 author=Sai Srikanth first=True]\nHello, I am facing the below import error while loading and running the Nemotron Nano model.\nImportError: mamba-ssm is required by the Mamba model but cannot be imported\nCan anyone help me with this, I am using RTX6000 GPU and the below code.\nimport torch\nimport torch.nn.functional as F\nimport kagglehub\nfrom datasets import Dataset\nfrom transformers import AutoModelForCausalLM, AutoTokenizer, TrainingArguments\nfrom peft import LoraConfig, get_peft_model, TaskType\nfrom trl import SFTTrainer, SFTConfig\nMODEL_PATH = kagglehub.model_download(\"metric/nemotron-3-nano-30b-a3b-bf16/transformers/default\")\nmodel = AutoModelForCausalLM.from_pretrained(\nMODEL_PATH, \ndevice_map=\"auto\", \ntrust_remote_code=True, \ndtype=torch.bfloat16,\nuse_mamba = False\n)\n\n[message_id=3428227 author=tiffanyseah first=False]\nyou have to include the utility scripts in your inputs (see the image below)\ncheck this \"https://www.kaggle.com/code/ryanholbrook/nvidia-utility-script\"\n\n[message_id=3428319 author=Sai Srikanth first=False]\nYeah checked it, It is working.",
+  "message_count_observed": 3,
+  "messages": [
+    {
+      "authorName": "Sai Srikanth",
+      "content": "<p>Hello, I am facing the below import error while loading and running the Nemotron Nano model.\nImportError: mamba-ssm is required by the Mamba model but cannot be imported</p>\n<p>Can anyone help me with this, I am using RTX6000 GPU and the below code.</p>\n<p>import torch\nimport torch.nn.functional as F\nimport kagglehub\nfrom datasets import Dataset\nfrom transformers import AutoModelForCausalLM, AutoTokenizer, TrainingArguments\nfrom peft import LoraConfig, get_peft_model, TaskType\nfrom trl import SFTTrainer, SFTConfig</p>\n<p>MODEL_PATH = kagglehub.model_download(\"metric/nemotron-3-nano-30b-a3b-bf16/transformers/default\")</p>\n<p>model = AutoModelForCausalLM.from_pretrained(\n    MODEL_PATH, \n    device_map=\"auto\", \n    trust_remote_code=True, \n    dtype=torch.bfloat16,\n    use_mamba = False\n)</p>",
+      "depth": 0,
+      "first": true,
+      "id": 684244,
+      "postDate": "2026-03-24T07:04:32.327Z"
+    },
+    {
+      "authorName": "tiffanyseah",
+      "content": "<p>you have to include the utility scripts in your inputs (see the image below)</p>\n<p>check this \"https://www.kaggle.com/code/ryanholbrook/nvidia-utility-script\"</p>\n<p><img src=\"https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F9655925%2F6f9a6ceca09d98c89ceaf979a0a6130c%2FScreenshot%202026-03-25%20133239.jpg?generation=1774416774640783&amp;alt=media\" alt=\"\"></p>",
+      "depth": 0,
+      "first": false,
+      "id": 3428227,
+      "postDate": "2026-03-25T05:32:02.200Z",
+      "votes": 1
+    },
+    {
+      "authorName": "Sai Srikanth",
+      "content": "<p>Yeah checked it, It is working.</p>",
+      "depth": 1,
+      "first": false,
+      "id": 3428319,
+      "postDate": "2026-03-25T09:09:03.253Z"
+    }
+  ],
+  "text_sha256": "2ba78db3a50630fe21bdf3b93ff3ac8ad1790734203c6be9eeebddfc2f9945b2",
+  "topic": {
+    "authorName": "Sai Srikanth",
+    "authorUrl": "https://www.kaggle.com/twinklesai",
+    "commentCount": 2,
+    "content": "<p>Hello, I am facing the below import error while loading and running the Nemotron Nano model.\nImportError: mamba-ssm is required by the Mamba model but cannot be imported</p>\n<p>Can anyone help me with this, I am using RTX6000 GPU and the below code.</p>\n<p>import torch\nimport torch.nn.functional as F\nimport kagglehub\nfrom datasets import Dataset\nfrom transformers import AutoModelForCausalLM, AutoTokenizer, TrainingArguments\nfrom peft import LoraConfig, get_peft_model, TaskType\nfrom trl import SFTTrainer, SFTConfig</p>\n<p>MODEL_PATH = kagglehub.model_download(\"metric/nemotron-3-nano-30b-a3b-bf16/transformers/default\")</p>\n<p>model = AutoModelForCausalLM.from_pretrained(\n    MODEL_PATH, \n    device_map=\"auto\", \n    trust_remote_code=True, \n    dtype=torch.bfloat16,\n    use_mamba = False\n)</p>",
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 684244,
+    "postDate": "2026-03-24T07:04:32.327Z",
+    "title": "ModuleNotFound Error for mamba-ssm",
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/684244",
+    "votes": 4
+  },
+  "topic_id": 684244,
+  "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/684244"
+}

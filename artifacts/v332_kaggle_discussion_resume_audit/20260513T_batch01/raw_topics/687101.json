@@ -1,0 +1,55 @@
+{
+  "fetched_at_utc": "2026-05-13T15:44:21.919287+00:00",
+  "full_text": "[message_id=687101 author=NatSwamin first=True]\nHi,\nAll the answers in the column are rounded off just to two place alone in training. This results in rounding off errors when the prompt gets solved. Is there a tolerance built in to accept the answers if so what is it? I am wondering what needs to be consistent treatment in train and test dataset. can the challenge organiser clarify?\nMany Thanks\nNat!\n\n[message_id=3433851 author=MD Mushfirat Mohaimin first=False]\nFor numerical values, the tolerance is 1%.\nThis is the evaluation code: https://www.kaggle.com/code/metric/nvidia-nemotron-metric\n\n[message_id=3433931 author=NatSwamin first=False]\nHi ,\nThanks for your response.\nWhere is this 0.01 tolerance is mentioned? Not all training examples confirm to this tolerance either? Does this mean train dataset is not validated for confirmance?\nMany Thanks\nNat!\n\n[message_id=3433962 author=CPMP first=False]\nIt is in the notebook you were pointed to.",
+  "message_count_observed": 4,
+  "messages": [
+    {
+      "authorName": "NatSwamin",
+      "content": "<p>Hi,</p>\n<p>All the answers in  the column are rounded off just to two place alone in training. This results in rounding off errors when the prompt gets solved.  Is there a tolerance built in to accept the answers if so what is it? I am wondering what needs to be consistent treatment in train and test dataset. can the challenge organiser clarify?</p>\n<p>Many Thanks\nNat!</p>",
+      "depth": 0,
+      "first": true,
+      "id": 687101,
+      "postDate": "2026-04-02T08:04:05.143Z"
+    },
+    {
+      "authorName": "MD Mushfirat Mohaimin",
+      "content": "<p>For numerical values, the tolerance is 1%.</p>\n<p>This is the evaluation code: <a href=\"https://www.kaggle.com/code/metric/nvidia-nemotron-metric\" target=\"_blank\">https://www.kaggle.com/code/metric/nvidia-nemotron-metric</a></p>",
+      "depth": 0,
+      "first": false,
+      "id": 3433851,
+      "postDate": "2026-04-02T08:09:55.730Z",
+      "votes": 1
+    },
+    {
+      "authorName": "NatSwamin",
+      "content": "<p>Hi ,</p>\n<p>Thanks for your response.</p>\n<p>Where is this 0.01 tolerance is mentioned? Not all training examples confirm to this tolerance either? Does this mean train dataset is not validated for confirmance?</p>\n<p>Many Thanks\nNat!</p>",
+      "depth": 1,
+      "first": false,
+      "id": 3433931,
+      "postDate": "2026-04-02T10:44:45.457Z"
+    },
+    {
+      "authorName": "CPMP",
+      "content": "<p>It is in the notebook you were pointed to.</p>",
+      "depth": 2,
+      "first": false,
+      "id": 3433962,
+      "postDate": "2026-04-02T11:41:19.967Z"
+    }
+  ],
+  "text_sha256": "58e832e66e031ee3dd416285dc0807fa0387891df3340b12591694c8eb1ec372",
+  "topic": {
+    "authorName": "NatSwamin",
+    "authorUrl": "https://www.kaggle.com/natswamin",
+    "commentCount": 3,
+    "content": "<p>Hi,</p>\n<p>All the answers in  the column are rounded off just to two place alone in training. This results in rounding off errors when the prompt gets solved.  Is there a tolerance built in to accept the answers if so what is it? I am wondering what needs to be consistent treatment in train and test dataset. can the challenge organiser clarify?</p>\n<p>Many Thanks\nNat!</p>",
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 687101,
+    "postDate": "2026-04-02T08:04:05.143Z",
+    "title": "Rounding off issues numerical problems",
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/687101"
+  },
+  "topic_id": 687101,
+  "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/687101"
+}

@@ -1,0 +1,104 @@
+{
+  "fetched_at_utc": "2026-05-13T15:40:35.310697+00:00",
+  "full_text": "[message_id=684271 author=qqqqqqqqqqqp first=True]\nhow to finish this quesion\n\n[message_id=3428879 author=newduck first=False]\nI had the same \"No module named 'cutlass'\" error and fixed it in my notebook.\nNot sure if this applies to your case, but it might help.\nPlease see the comments in the notebook below.\nhttps://www.kaggle.com/code/newduck/nvidia-nemotron-soft-balanced-sampling-sft/comments\n\n[message_id=3427706 author= first=False]\n\n\n[message_id=3427750 author=qqqqqqqqqqqp first=False]\nI've already resolved it using my own approach—thank you for your reply!\n\n[message_id=3427766 author=Zhuang Jia first=False]\nhow to …..?\n\n[message_id=3427781 author=Pradeep Boopathy first=False]\nCan you add your approach here?\n\n[message_id=3427898 author=HADY first=False]\ncan you provide us with it?\n\n[message_id=3428004 author=HARSHIN RAMESH first=False]\nplease add the approch\n\n[message_id=3428262 author=Minh Tâm first=False]\nTry : \nimport site\ncutlass_pkg_path = \"/kaggle/usr/lib/notebooks/ryanholbrook/nvidia-utility-script/nvidia_cutlass_dsl/python_packages/\"\nsite.addsitedir(cutlass_pkg_path)\n\n[message_id=3428284 author=kunal_wagh2703 first=False]\nThis still results in:\nModuleNotFoundError: No module named 'cutlass.cute'",
+  "message_count_observed": 10,
+  "messages": [
+    {
+      "authorName": "qqqqqqqqqqqp",
+      "content": "<p>how to finish this quesion</p>",
+      "depth": 0,
+      "first": true,
+      "id": 684271,
+      "postDate": "2026-03-24T09:20:19.523Z"
+    },
+    {
+      "authorName": "newduck",
+      "content": "<p>I had the same \"No module named 'cutlass'\" error and fixed it in my notebook.\nNot sure if this applies to your case, but it might help.\nPlease see the comments in the notebook below.\n<a href=\"https://www.kaggle.com/code/newduck/nvidia-nemotron-soft-balanced-sampling-sft/comments\" target=\"_blank\">https://www.kaggle.com/code/newduck/nvidia-nemotron-soft-balanced-sampling-sft/comments</a></p>",
+      "depth": 0,
+      "first": false,
+      "id": 3428879,
+      "postDate": "2026-03-26T03:00:04.287Z"
+    },
+    {
+      "depth": 0,
+      "first": false,
+      "id": 3427706,
+      "postDate": "2026-03-24T12:50:46.773Z"
+    },
+    {
+      "authorName": "qqqqqqqqqqqp",
+      "content": "<p>I've already resolved it using my own approach—thank you for your reply!</p>",
+      "depth": 1,
+      "first": false,
+      "id": 3427750,
+      "postDate": "2026-03-24T13:43:35.590Z",
+      "votes": 2
+    },
+    {
+      "authorName": "Zhuang Jia",
+      "content": "<p>how to …..?</p>",
+      "depth": 2,
+      "first": false,
+      "id": 3427766,
+      "postDate": "2026-03-24T14:09:44.510Z"
+    },
+    {
+      "authorName": "Pradeep Boopathy",
+      "content": "<p>Can you add your approach here?</p>",
+      "depth": 2,
+      "first": false,
+      "id": 3427781,
+      "postDate": "2026-03-24T14:34:45.320Z",
+      "votes": 1
+    },
+    {
+      "authorName": "HADY",
+      "content": "<p>can you provide us with it?</p>",
+      "depth": 2,
+      "first": false,
+      "id": 3427898,
+      "postDate": "2026-03-24T16:53:04.707Z"
+    },
+    {
+      "authorName": "HARSHIN RAMESH",
+      "content": "<p>please add the approch</p>",
+      "depth": 2,
+      "first": false,
+      "id": 3428004,
+      "postDate": "2026-03-24T19:12:22.407Z"
+    },
+    {
+      "authorName": "Minh Tâm",
+      "content": "<p>Try : </p>\n<p><code>\nimport site\n</code></p>\n<p><code>\ncutlass_pkg_path = \"/kaggle/usr/lib/notebooks/ryanholbrook/nvidia-utility-script/nvidia_cutlass_dsl/python_packages/\"\n</code></p>\n<p><code>\nsite.addsitedir(cutlass_pkg_path)\n</code></p>",
+      "depth": 2,
+      "first": false,
+      "id": 3428262,
+      "postDate": "2026-03-25T07:02:05.483Z",
+      "votes": 2
+    },
+    {
+      "authorName": "kunal_wagh2703",
+      "content": "<p>This still results in:\nModuleNotFoundError: No module named 'cutlass.cute'</p>",
+      "depth": 2,
+      "first": false,
+      "id": 3428284,
+      "postDate": "2026-03-25T07:53:56.563Z"
+    }
+  ],
+  "text_sha256": "809c8d4058d815b8f71c4a62911502a922b613cbfe25c73bd9daf6702748f556",
+  "topic": {
+    "authorName": "qqqqqqqqqqqp",
+    "authorUrl": "https://www.kaggle.com/qqqqqqqqqqqp",
+    "commentCount": 9,
+    "content": "<p>how to finish this quesion</p>",
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 684271,
+    "postDate": "2026-03-24T09:20:19.523Z",
+    "title": "ModuleNotFoundError: No module named 'cutlass'",
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/684271",
+    "votes": 11
+  },
+  "topic_id": 684271,
+  "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/684271"
+}

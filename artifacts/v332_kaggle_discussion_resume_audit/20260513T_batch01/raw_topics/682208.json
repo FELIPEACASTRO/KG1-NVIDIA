@@ -1,0 +1,56 @@
+{
+  "fetched_at_utc": "2026-05-13T15:38:29.261476+00:00",
+  "full_text": "[message_id=682208 author=lucian kucera first=True]\nIf ur intereseted i created notebook, where I test models zero shot capability.\nnotebook \nInteresting findings:\nnumber conversion 100% accuracy\nbit,equaton and ecryption it does horribly\ngravitation and mesurement it has like 33% success\nAlso notebook contains csv with model predictions as raw text if u want to analyze it more.\n\n[message_id=3425979 author=Javier Hernández first=False]\nThanks for sharing @luciankucera , I tried to run your notebook but had some issues with the vLLM and the dataset you are calling, seems to be private\n\n[message_id=3426489 author=lucian kucera first=False]\nMade the dataset public, my mistake.\n\n[message_id=3427019 author=Javier Hernández first=False]\nThanks a lot Lucian!",
+  "message_count_observed": 4,
+  "messages": [
+    {
+      "authorName": "lucian kucera",
+      "content": "<p>If ur intereseted i created notebook, where I test models zero shot capability.</p>\n<p><a href=\"https://www.kaggle.com/code/luciankucera/train-set-zero-shot-inference-exploration\" target=\"_blank\">notebook</a></p>\n<p>Interesting findings:</p>\n<ol>\n<li>number conversion 100% accuracy</li>\n<li>bit,equaton and ecryption it does horribly</li>\n<li>gravitation and mesurement it has like 33% success</li>\n</ol>\n<p>Also notebook contains csv with model predictions as raw text if u want to analyze it more.</p>",
+      "depth": 0,
+      "first": true,
+      "id": 682208,
+      "postDate": "2026-03-18T02:32:23.267Z"
+    },
+    {
+      "authorName": "Javier Hernández",
+      "content": "<p>Thanks for sharing <a href=\"https://www.kaggle.com/luciankucera\" target=\"_blank\">@luciankucera</a>, I tried to run your notebook but had some issues with the vLLM and the dataset you are calling, seems to be private</p>\n<p><img src=\"https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F3098761%2F91eeb5ce81de54dd4028ce86e8cec9c9%2FCaptura%20de%20pantalla%202026-03-21%20a%20la(s)%2010.22.13a.m..png?generation=1774110588640105&amp;alt=media\" alt=\"\">\n<img src=\"https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F3098761%2F4d846e439dcf0b39ef7ded9904629162%2FCaptura%20de%20pantalla%202026-03-21%20a%20la(s)%2010.30.40a.m..png?generation=1774110654381258&amp;alt=media\" alt=\"\"></p>",
+      "depth": 0,
+      "first": false,
+      "id": 3425979,
+      "postDate": "2026-03-21T16:30:59.017Z"
+    },
+    {
+      "authorName": "lucian kucera",
+      "content": "<p>Made the dataset public, my mistake.</p>",
+      "depth": 1,
+      "first": false,
+      "id": 3426489,
+      "postDate": "2026-03-22T17:16:54.470Z",
+      "votes": 1
+    },
+    {
+      "authorName": "Javier Hernández",
+      "content": "<p>Thanks a lot Lucian! </p>",
+      "depth": 2,
+      "first": false,
+      "id": 3427019,
+      "postDate": "2026-03-23T16:32:54.820Z"
+    }
+  ],
+  "text_sha256": "b888423c6c2cd95e4728308023a3ce273fbf8cac6b51d060db77d9f6a3eac5b0",
+  "topic": {
+    "authorName": "lucian kucera",
+    "authorUrl": "https://www.kaggle.com/luciankucera",
+    "commentCount": 3,
+    "content": "<p>If ur intereseted i created notebook, where I test models zero shot capability.</p>\n<p><a href=\"https://www.kaggle.com/code/luciankucera/train-set-zero-shot-inference-exploration\" target=\"_blank\">notebook</a></p>\n<p>Interesting findings:</p>\n<ol>\n<li>number conversion 100% accuracy</li>\n<li>bit,equaton and ecryption it does horribly</li>\n<li>gravitation and mesurement it has like 33% success</li>\n</ol>\n<p>Also notebook contains csv with model predictions as raw text if u want to analyze it more.</p>",
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 682208,
+    "postDate": "2026-03-18T02:32:23.267Z",
+    "title": "Zero shot predictions",
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/682208",
+    "votes": 17
+  },
+  "topic_id": 682208,
+  "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/682208"
+}

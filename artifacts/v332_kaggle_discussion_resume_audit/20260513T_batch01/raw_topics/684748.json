@@ -1,0 +1,55 @@
+{
+  "fetched_at_utc": "2026-05-13T15:42:59.183902+00:00",
+  "full_text": "[message_id=684748 author=Aurorcys first=True]\nThe version of the mamba ssm changed from 2.2.2 when downloaded, to 2.3.1 recently, its giving me cutlass errors where I have to mock cutlass, and all my previous submissions that I reuse are worse now. Is there any reason why the mamba 2.3.1 that is now in the utility script is messing stuff up?\n\n[message_id=3432194 author=ForcewithMe first=False]\nHi @aurorcys , I trained the model on my local machine and get terrible scores.\nI report this issues in https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/686419 .\nThe mamba is 2.3.1 in my training environment. Do you think mamba version is why my score are bad?\n\n[message_id=3432241 author=Aurorcys first=False]\nI think it might've been the utility script updating, which directly affects the mamba ver and other stuff, not sure if it is exactly that, but makes the most sense considering that was the thing that changed\n\n[message_id=3428812 author=Shoto first=False]\nI am in the very same situation, I saw the change, tried to install cutlass but figure out internet is off in this competition. I mocked the function and submission was 53 with training loss .4 something.",
+  "message_count_observed": 4,
+  "messages": [
+    {
+      "authorName": "Aurorcys",
+      "content": "<p>The version of the mamba ssm changed from 2.2.2 when downloaded, to 2.3.1 recently, its giving me cutlass errors where I have to mock cutlass, and all my previous submissions that I reuse are worse now. Is there any reason why the mamba 2.3.1 that is now in the utility script is messing stuff up?</p>",
+      "depth": 0,
+      "first": true,
+      "id": 684748,
+      "postDate": "2026-03-25T23:26:50.780Z"
+    },
+    {
+      "authorName": "ForcewithMe",
+      "content": "<p>Hi <a href=\"https://www.kaggle.com/aurorcys\" target=\"_blank\">@aurorcys</a> , I trained the model on my local machine and get terrible scores.\nI report this issues in <a href=\"https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/686419\" target=\"_blank\">https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/686419</a>.</p>\n<p>The mamba is 2.3.1 in my training environment. Do you think mamba version is why my score are bad?</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3432194,
+      "postDate": "2026-03-31T07:43:52.587Z"
+    },
+    {
+      "authorName": "Aurorcys",
+      "content": "<p>I think it might've been the utility script updating, which directly affects the mamba ver and other stuff, not sure if it is exactly that, but makes the most sense considering that was the thing that changed</p>",
+      "depth": 1,
+      "first": false,
+      "id": 3432241,
+      "postDate": "2026-03-31T09:30:51.470Z"
+    },
+    {
+      "authorName": "Shoto",
+      "content": "<p>I am in the very same situation, I saw the change, tried to install cutlass but figure out internet is off in this competition. I mocked the function and submission was 53 with training loss .4 something.</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3428812,
+      "postDate": "2026-03-26T00:34:35.117Z"
+    }
+  ],
+  "text_sha256": "f6c3e4762fdcfa6e09c5a4b2ad953ee7cc3db039892aea9e1f239e093772c8ff",
+  "topic": {
+    "authorName": "Aurorcys",
+    "authorUrl": "https://www.kaggle.com/aurorcys",
+    "commentCount": 3,
+    "content": "<p>The version of the mamba ssm changed from 2.2.2 when downloaded, to 2.3.1 recently, its giving me cutlass errors where I have to mock cutlass, and all my previous submissions that I reuse are worse now. Is there any reason why the mamba 2.3.1 that is now in the utility script is messing stuff up?</p>",
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 684748,
+    "postDate": "2026-03-25T23:26:50.780Z",
+    "title": "MAMBA 2.3.1 from 2.2.2 lowering performance and cutlass mock",
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/684748",
+    "votes": 6
+  },
+  "topic_id": 684748,
+  "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/684748"
+}

@@ -1,0 +1,28 @@
+{
+  "topic_id": 687063,
+  "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/687063",
+  "topic": {
+    "authorId": 21691005,
+    "authorThumbnailName": "21691005-kg.png?t=2025-08-27-03-21-25",
+    "authorUserDisplayName": "Kh0a",
+    "authorUserName": "llkh0a",
+    "firstMessageId": 3433718,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 687063,
+    "name": "Inquiry regarding inference non-determinism and Open Progress Prize fairness",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-04-02T02:18:07.087283Z",
+    "totalVotes": 10,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/687063",
+    "totalMessages": 5,
+    "authorPerformanceTier": "MASTER",
+    "authorProgressionOptOut": false
+  },
+  "first_message": {},
+  "messages": [],
+  "message_count_observed": 0,
+  "text_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "full_text": ""
+}

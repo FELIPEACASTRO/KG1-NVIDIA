@@ -1,0 +1,112 @@
+{
+  "topic_id": 689257,
+  "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/689257",
+  "topic": {
+    "authorId": 1680925,
+    "authorThumbnailName": "1680925-kg.jpg",
+    "authorUserDisplayName": "Tong Hui Kang",
+    "authorUserName": "huikang",
+    "firstMessageId": 3437745,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 689257,
+    "name": "How many examples are there in the public leaderboard?",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-04-08T02:54:47.312717Z",
+    "totalVotes": 5,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/689257",
+    "totalMessages": 9,
+    "authorPerformanceTier": "MASTER",
+    "authorProgressionOptOut": false
+  },
+  "first_message": {
+    "id": 3437745,
+    "postDate": "2026-04-08T02:54:47.313Z",
+    "rawMarkdown": "I think first ranked below \"Alice's Wonderland\" with 0.82, and then I ranked above them with 0.82.\n\nIf there are 250 examples in the public leaderboard, the scores would look like this\n\n- 205 / 250 -> 0.820 -> 0.82\n- 206 / 250 -> 0.824 -> 0.82\n- 207 / 250 -> 0.828 -> 0.82\n\nThe training set is 9500, it felt like 10000 were generated and 250 goes to the public leaderboard and 250 goes to the private leaderboard.",
+    "content": "<p>I think first ranked below \"Alice's Wonderland\" with 0.82, and then I ranked above them with 0.82.</p>\n<p>If there are 250 examples in the public leaderboard, the scores would look like this</p>\n<ul>\n<li>205 / 250 -&gt; 0.820 -&gt; 0.82</li>\n<li>206 / 250 -&gt; 0.824 -&gt; 0.82</li>\n<li>207 / 250 -&gt; 0.828 -&gt; 0.82</li>\n</ul>\n<p>The training set is 9500, it felt like 10000 were generated and 250 goes to the public leaderboard and 250 goes to the private leaderboard.</p>",
+    "parent": {
+      "url": "#"
+    },
+    "author": {
+      "displayName": "Tong Hui Kang",
+      "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1680925-kg.jpg",
+      "url": "/huikang",
+      "tier": "MASTER",
+      "id": 1680925,
+      "progressionOptOut": false
+    },
+    "authorType": "TOPIC",
+    "votes": {
+      "totalVotes": 5,
+      "canUpvote": true,
+      "totalUpvotes": 5
+    },
+    "kernelVersion": 0,
+    "competitionRanking": 677,
+    "feedbackTrackingData": {},
+    "teamUpInfo": {
+      "teamLeader": {
+        "displayName": "Tong Hui Kang",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1680925-kg.jpg",
+        "url": "/huikang",
+        "userName": "huikang",
+        "tier": "MASTER",
+        "id": 1680925,
+        "profileUrl": "/huikang",
+        "performanceTier": "MASTER",
+        "userId": 1680925,
+        "progressionOptOut": false
+      },
+      "intro": ""
+    }
+  },
+  "messages": [
+    {
+      "id": 3437745,
+      "postDate": "2026-04-08T02:54:47.313Z",
+      "rawMarkdown": "I think first ranked below \"Alice's Wonderland\" with 0.82, and then I ranked above them with 0.82.\n\nIf there are 250 examples in the public leaderboard, the scores would look like this\n\n- 205 / 250 -> 0.820 -> 0.82\n- 206 / 250 -> 0.824 -> 0.82\n- 207 / 250 -> 0.828 -> 0.82\n\nThe training set is 9500, it felt like 10000 were generated and 250 goes to the public leaderboard and 250 goes to the private leaderboard.",
+      "content": "<p>I think first ranked below \"Alice's Wonderland\" with 0.82, and then I ranked above them with 0.82.</p>\n<p>If there are 250 examples in the public leaderboard, the scores would look like this</p>\n<ul>\n<li>205 / 250 -&gt; 0.820 -&gt; 0.82</li>\n<li>206 / 250 -&gt; 0.824 -&gt; 0.82</li>\n<li>207 / 250 -&gt; 0.828 -&gt; 0.82</li>\n</ul>\n<p>The training set is 9500, it felt like 10000 were generated and 250 goes to the public leaderboard and 250 goes to the private leaderboard.</p>",
+      "parent": {
+        "url": "#"
+      },
+      "author": {
+        "displayName": "Tong Hui Kang",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1680925-kg.jpg",
+        "url": "/huikang",
+        "tier": "MASTER",
+        "id": 1680925,
+        "progressionOptOut": false
+      },
+      "authorType": "TOPIC",
+      "votes": {
+        "totalVotes": 5,
+        "canUpvote": true,
+        "totalUpvotes": 5
+      },
+      "kernelVersion": 0,
+      "competitionRanking": 677,
+      "feedbackTrackingData": {},
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "Tong Hui Kang",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1680925-kg.jpg",
+          "url": "/huikang",
+          "userName": "huikang",
+          "tier": "MASTER",
+          "id": 1680925,
+          "profileUrl": "/huikang",
+          "performanceTier": "MASTER",
+          "userId": 1680925,
+          "progressionOptOut": false
+        },
+        "intro": ""
+      },
+      "depth": 0,
+      "is_first_message": true
+    }
+  ],
+  "message_count_observed": 1,
+  "text_sha256": "0829c1028433cb2a12330732185de145166233971eeb9429a6aca192c7e0fb1b",
+  "full_text": "[message_id=3437745 author= first=True]\nI think first ranked below \"Alice's Wonderland\" with 0.82, and then I ranked above them with 0.82.\n\nIf there are 250 examples in the public leaderboard, the scores would look like this\n\n- 205 / 250 -> 0.820 -> 0.82\n- 206 / 250 -> 0.824 -> 0.82\n- 207 / 250 -> 0.828 -> 0.82\n\nThe training set is 9500, it felt like 10000 were generated and 250 goes to the public leaderboard and 250 goes to the private leaderboard."
+}

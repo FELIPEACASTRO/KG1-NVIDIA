@@ -1,0 +1,67 @@
+{
+  "fetched_at_utc": "2026-05-13T15:39:44.084400+00:00",
+  "full_text": "[message_id=683401 author=lucian kucera first=True]\nI created this notebook, that shows few example of outputs after applying Naive SFT. It absolutelly kills models reasoning and makes it dumb as rocks. notebook \nPlease don't give me dislikes, if u do please share your reason, beacause disliking without reasoning is not constructive.\nIam getting review bombed for telling the truth pls give me upvote, so we can counter reviewbombing.\n\n[message_id=3429041 author=ImperfectKitto first=False]\nDon't know about others, but I gave you dislike just for the clickbaity title\n\n[message_id=3428942 author=Komil Parmar first=False]\nI am just starting the competition so I am not familiar with the data yet. But, SFT as I know definitely can hurt if not configured properly. It is better suited for tasks that does not require unpredictable steps, and hence not reasoning task at least. It can suite the objectives like aligning a LLM to be nice, or tuning its output for a certain style for example. Reasoning can take very different turns at each step, so RL works better because it cares about the outputs and not the path. SFT still might work if one takes a huge model, like opus, and save its reasoning, and then train this smaller model to do reasoning like it. But simply applying it on dataset provided, can hence kill the performance. I am quite sure top rankers that are already way beyond the reach of highest scoring public notebook are definitely using RL methods like GRPO. Please let me know if you think my reasoning is right.\n\n[message_id=3425468 author=NNMax first=False]\nafter applying Naive SFT\nThe reason's in your post itself. For this kind of reasoning task, naive SFT barely works and there's a lot of methods out there for LoRA SFT itself. Have you experimented with adjusting hyperparameters first?\nI'm seeing a massive difference in tuning the hyperparameters itself and there's still a lot of other things to explore like finetuning methods, two-stage approaches, LoRA rank vs alpha tradeoff tuning and much more.\n\n[message_id=3425482 author=lucian kucera first=False]\nBro most people are trying naive SFT, so iam trying to help them to stop. Since it is a dead end. Look at most notebooks, with lot of upvotes, all of them use naive SFT. My message is to stop doing it.",
+  "message_count_observed": 5,
+  "messages": [
+    {
+      "authorName": "lucian kucera",
+      "content": "<p>I created this notebook, that shows few example of outputs after applying Naive SFT. It absolutelly kills models reasoning and makes it dumb as rocks. <a href=\"https://www.kaggle.com/code/luciankucera/impactofnaivesftonmodelreasoning\" target=\"_blank\">notebook</a></p>\n<p>Please don't give me dislikes, if u do please share your reason, beacause disliking without reasoning is not constructive.</p>\n<p>Iam getting review bombed for telling the truth pls give me upvote, so we can counter reviewbombing.</p>",
+      "depth": 0,
+      "first": true,
+      "id": 683401,
+      "postDate": "2026-03-20T15:17:25.194Z"
+    },
+    {
+      "authorName": "ImperfectKitto",
+      "content": "<p>Don't know about others, but I gave you dislike just for the clickbaity title</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3429041,
+      "postDate": "2026-03-26T09:19:38.423Z",
+      "votes": 1
+    },
+    {
+      "authorName": "Komil Parmar",
+      "content": "<p>I am just starting the competition so I am not familiar with the data yet. But, SFT as I know definitely can hurt if not configured properly. It is better suited for tasks that does not require unpredictable steps, and hence not reasoning task at least. It can suite the objectives like aligning a LLM to be nice, or tuning its output for a certain style for example. Reasoning can take very different turns at each step, so RL works better because it cares about the outputs and not the path. SFT still might work if one takes a huge model, like opus, and save its reasoning, and then train this smaller model to do reasoning like it. But simply applying it on dataset provided, can hence kill the performance. I am quite sure top rankers that are already way beyond the reach of highest scoring public notebook are definitely using RL methods like GRPO. Please let me know if you think my reasoning is right. </p>",
+      "depth": 0,
+      "first": false,
+      "id": 3428942,
+      "postDate": "2026-03-26T05:30:26.883Z",
+      "votes": 1
+    },
+    {
+      "authorName": "NNMax",
+      "content": "<blockquote>\n  <p>after applying Naive SFT</p>\n</blockquote>\n<p>The reason's in your post itself. For this kind of reasoning task, naive SFT barely works and there's a lot of methods out there for LoRA SFT itself. Have you experimented with adjusting hyperparameters first?</p>\n<p>I'm seeing a massive difference in tuning the hyperparameters itself and there's still a lot of other things to explore like finetuning methods, two-stage approaches, LoRA rank vs alpha tradeoff tuning and much more.</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3425468,
+      "postDate": "2026-03-20T20:58:40.260Z",
+      "votes": 1
+    },
+    {
+      "authorName": "lucian kucera",
+      "content": "<p>Bro most people are trying naive SFT, so iam trying to help them to stop. Since it is a dead end. Look at most notebooks, with lot of upvotes, all of them use naive SFT. My message is to stop doing it.</p>",
+      "depth": 1,
+      "first": false,
+      "id": 3425482,
+      "postDate": "2026-03-20T21:33:58.497Z",
+      "votes": 1
+    }
+  ],
+  "text_sha256": "a488cad97eebf74c3f4d70bc1113f38604ec29e402f66ec87ddfa29f196d69bd",
+  "topic": {
+    "authorName": "lucian kucera",
+    "authorUrl": "https://www.kaggle.com/luciankucera",
+    "commentCount": 4,
+    "content": "<p>I created this notebook, that shows few example of outputs after applying Naive SFT. It absolutelly kills models reasoning and makes it dumb as rocks. <a href=\"https://www.kaggle.com/code/luciankucera/impactofnaivesftonmodelreasoning\" target=\"_blank\">notebook</a></p>\n<p>Please don't give me dislikes, if u do please share your reason, beacause disliking without reasoning is not constructive.</p>\n<p>Iam getting review bombed for telling the truth pls give me upvote, so we can counter reviewbombing.</p>",
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 683401,
+    "postDate": "2026-03-20T15:17:25.194Z",
+    "title": "Ground Breaking Discovery regarding SFT[MUST WATCH]",
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/683401",
+    "votes": -16
+  },
+  "topic_id": 683401,
+  "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/683401"
+}

@@ -6383,3 +6383,47 @@ Decisao:
 - Criterio de continuar: `equation>56`, `bit>=136`, truncation `0`, total `>=192`.
 - Criterio de matar: `equation=56` sem ganho ou `bit<136`.
 - Ainda nao autoriza full eval, package ou Kaggle submit; primeiro precisa provar ganho adapter-only.
+
+### V332 Kaggle discussion 140/140 resume audit - 2026-05-13
+
+Objetivo:
+
+- Completar o cache local dos `140` topicos de discussion fornecidos pelo usuario e reclassificar somente o que ajuda `bit_manipulation` e `equation_transform`.
+- Evitar novo gasto HF baseado em opiniao: todo achado precisa ter URL, topico, cache bruto e implicacao tecnica clara.
+
+Implementacao:
+
+- Script: `scripts/run_v332_kaggle_discussion_resume_audit.py`.
+- Artefatos: `artifacts/v332_kaggle_discussion_resume_audit/20260513T_batch01/`.
+- Entrada:
+  - `C:\Users\davis\Downloads\NVIDIA Nemotron Model Reasoning Challenge - Discussion Topics URLs.md`;
+  - `C:\Users\davis\Downloads\NVIDIA Nemotron Model Reasoning Challenge - Discussion Topic IDs.md`.
+- Resultado:
+  - `140/140` topicos em cache combinado V328+V332;
+  - `106` topicos novos baixados nesta retomada;
+  - erros: `0`;
+  - rate limit: `0`;
+  - resumo: `v332_kaggle_discussion_relevance_summary.json`;
+  - manifest: `v332_kaggle_discussion_resume_manifest.json`.
+
+Achados acionaveis:
+
+- `690307` (`Strategy to solve 85% of bit manipulation`): confirma que bit deve ser tratado por relacoes por bit, `bitsum`, `stride` e selecao de operadores, nao por enumeracao textual ampla nem SFT generico. Isso reforca V305/V304 e bloqueia novos treinos de bit que nao aumentem coverage do algoritmo bit-pair.
+- `690756` (`2 interpretations of the bit manipulation problem`): diferencia duas leituras de bit, funcao sobre byte inteiro e funcao por bit. Decisao: manter as duas como candidatos de solver, mas promover para treino apenas regras com contrato por linha e no-regression contra `bit>=136`.
+- `685886` (`sharing high quality synthetic data generation prompt`): reforca que trace de bit precisa mostrar delta, filtro de plausibilidade e falha por indice. Nao substitui `690307`, mas pode melhorar templates de trace curto.
+- `690891` (`equation and cryptarithm missing pieces`): confirma que `cryptarithm_deduce` e atacavel por brute force/permutacao de cifra + operadores; `cryptarithm_guess` e `equation_numeric_guess` podem ser parcialmente info-teoricos. Decisao: separar deduce de guess nos gates e nao misturar em SFT amplo.
+- `689877`, `684192`, `684432`, `696059`: confirmam que equation/symbolic frequentemente envolve operador nao visto, respostas ambiguas ou regra latente nao identificavel por exemplos finitos. Decisao: DSL deve gerar multiplos candidatos e usar verifier/gate; nao usar loss menor como autorizacao de submit.
+- `694556`: explicita o risco matematico de multiplas respostas validas quando a classe de regra nao e restrita. Decisao: qualquer solver simbolico novo deve registrar `rule_class`, quantidade de candidatos e conflito; classe com conflito fica bloqueada como ocorreu no V329 amplo.
+- `698293`: solver simbolico condicionado por ouro resolveu `800/823` train symbolic, mas e oracle de pesquisa, nao submetivel. Utilidade: diagnosticar familias de regra e criar fixtures sinteticas sem usar target weak/full.
+- `686069`: SFT direto sem raciocinio derruba categorias dificeis; CoT ruim/yapping tambem prejudica bit sob limite de tokens. Decisao: traces precisam ser curtos, deterministas e verificaveis.
+- `691380`: proposta ATLAS combina solver traces, LoRA em modulos sempre ativos e weighted loss. Status: hipotese externa sem reproducao local; so entra como inspiracao de arquitetura/pesos, nao como novo treino automatico.
+
+Decisao tecnica:
+
+- O caminho certo permanece solver/verifier primeiro, LoRA depois.
+- Proximo passo V333:
+  - expandir CPU gate de equation symbolic com classes separadas: operador nao visto por familia, reverse/concat, absdiff/rev, digit mapping, cryptarithm deduce e single/multi-operator;
+  - cada classe deve reportar conflitos e bloquear se houver predicoes corretas e incorretas na mesma regra;
+  - promover para dataset somente classes `no_loss` com `+1` ou mais em equation e `0` perda em bit.
+- Para bit, completar o solver bitsum/stride e usar V332 apenas para refinar templates; nao rodar outro HF bit SFT se o CPU solver nao aumentar coverage acima de V304.
+- Para HF, V331 deve ser julgado por weak eval real. Checkpoints com eval loss pior que baseline nao podem ser promovidos sem melhoria medida de `equation>56` e `bit>=136`.

@@ -1,0 +1,47 @@
+{
+  "fetched_at_utc": "2026-05-13T15:39:29.051070+00:00",
+  "full_text": "[message_id=682877 author=Anton Kratz first=True]\nOn Kaggle notebook runtime GPU RTX Pro 6000, fine-tuning metric/nemotron-3-nano-30b-a3b-bf16/transformers/default fails at trainer.train() with:\nAcceleratorError: CUDA error: no kernel image is available for execution on the device \nThe actual failing call in the traceback is:\ncausal_conv1d_cuda.causal_conv1d_fwd(…)\nfrom Kaggle’s preinstalled causal_conv1d / mamba_ssm path.\nThis looks like the CUDA extension was built without support for the assigned GPU architecture. Model load works; the crash starts on the first training forward pass.\nI have made a public notebook documenting this : https://www.kaggle.com/code/antonkratz/nvidia-nemotron-finetune-ipynb \nI already spent over 10 GPU hours on this issue.\nCan you confirm whether the GPU RTX Pro 6000 runtime image is missing a compatible build of causal_conv1d / mamba_ssm for this competition? \nTricks like turning internet off/on and then trying to install did not work for me. This issue should be fixed in the base environment I think.\n\n[message_id=3426501 author=aemad first=False]\ncheck this notebook> it applies a Triton ptxas fix\nhttps://www.kaggle.com/code/kienngx/nvidia-nemotron-training-copy-run-instantly\n\n[message_id=3426249 author=Ashish Kumar Jha first=False]\nI'm also facing the same issue and the fix for this issue is inprogress refer: https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/683067 , Thanks",
+  "message_count_observed": 3,
+  "messages": [
+    {
+      "authorName": "Anton Kratz",
+      "content": "<p>On Kaggle notebook runtime GPU RTX Pro 6000, fine-tuning metric/nemotron-3-nano-30b-a3b-bf16/transformers/default fails at trainer.train() with:</p>\n<p><code>AcceleratorError: CUDA error: no kernel image is available for execution on the device</code></p>\n<p>The actual failing call in the traceback is:</p>\n<p>causal_conv1d_cuda.causal_conv1d_fwd(…)</p>\n<p>from Kaggle’s preinstalled causal_conv1d / mamba_ssm path.</p>\n<p><strong>This looks like the CUDA extension was built without support for the assigned GPU architecture.</strong> Model load works; the crash starts on the first training forward pass.</p>\n<p><strong>I have made a public notebook documenting this</strong>: <a href=\"https://www.kaggle.com/code/antonkratz/nvidia-nemotron-finetune-ipynb\" target=\"_blank\">https://www.kaggle.com/code/antonkratz/nvidia-nemotron-finetune-ipynb</a></p>\n<p>I already spent over 10 GPU hours on this issue.</p>\n<p><strong>Can you confirm whether the GPU RTX Pro 6000 runtime image is missing a compatible build of causal_conv1d / mamba_ssm for this competition?</strong></p>\n<p>Tricks like turning internet off/on and then trying to install did not work for me. This issue should be fixed in the base environment I think.</p>",
+      "depth": 0,
+      "first": true,
+      "id": 682877,
+      "postDate": "2026-03-19T07:49:45.648Z"
+    },
+    {
+      "authorName": "aemad",
+      "content": "<p>check this notebook&gt; it applies a Triton ptxas fix\n<a href=\"https://www.kaggle.com/code/kienngx/nvidia-nemotron-training-copy-run-instantly\" target=\"_blank\">https://www.kaggle.com/code/kienngx/nvidia-nemotron-training-copy-run-instantly</a></p>",
+      "depth": 0,
+      "first": false,
+      "id": 3426501,
+      "postDate": "2026-03-22T17:46:31.467Z"
+    },
+    {
+      "authorName": "Ashish Kumar Jha",
+      "content": "<p>I'm also facing the same issue and the fix for this issue is inprogress refer: <a href=\"https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/683067\" target=\"_blank\">https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/683067</a>, Thanks</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3426249,
+      "postDate": "2026-03-22T08:09:35.610Z"
+    }
+  ],
+  "text_sha256": "056aa6efd3340fcc1e1d7036b1d398299704f52de11b2ce79b6bb0008cc747cf",
+  "topic": {
+    "authorName": "Anton Kratz",
+    "authorUrl": "https://www.kaggle.com/antonkratz",
+    "commentCount": 2,
+    "content": "<p>On Kaggle notebook runtime GPU RTX Pro 6000, fine-tuning metric/nemotron-3-nano-30b-a3b-bf16/transformers/default fails at trainer.train() with:</p>\n<p><code>AcceleratorError: CUDA error: no kernel image is available for execution on the device</code></p>\n<p>The actual failing call in the traceback is:</p>\n<p>causal_conv1d_cuda.causal_conv1d_fwd(…)</p>\n<p>from Kaggle’s preinstalled causal_conv1d / mamba_ssm path.</p>\n<p><strong>This looks like the CUDA extension was built without support for the assigned GPU architecture.</strong> Model load works; the crash starts on the first training forward pass.</p>\n<p><strong>I have made a public notebook documenting this</strong>: <a href=\"https://www.kaggle.com/code/antonkratz/nvidia-nemotron-finetune-ipynb\" target=\"_blank\">https://www.kaggle.com/code/antonkratz/nvidia-nemotron-finetune-ipynb</a></p>\n<p>I already spent over 10 GPU hours on this issue.</p>\n<p><strong>Can you confirm whether the GPU RTX Pro 6000 runtime image is missing a compatible build of causal_conv1d / mamba_ssm for this competition?</strong></p>\n<p>Tricks like turning internet off/on and then trying to install did not work for me. This issue should be fixed in the base environment I think.</p>",
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 682877,
+    "postDate": "2026-03-19T07:49:45.648Z",
+    "title": "AcceleratorError: CUDA error: no kernel image is available for execution on the device; causal_conv1d; mamba_ssm",
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/682877",
+    "votes": 13
+  },
+  "topic_id": 682877,
+  "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/682877"
+}

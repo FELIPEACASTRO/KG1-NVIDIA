@@ -1,0 +1,47 @@
+{
+  "fetched_at_utc": "2026-05-13T15:38:04.390247+00:00",
+  "full_text": "[message_id=681773 author=BeyondBirthday first=True]\nHi NVIDIA Team,\nThank you for organizing this competition. While going through the competition details, I noticed an inconsistency in the Midpoint Cut-off Date between two sections:\nIn the Prizes section (Open Progress Prize): \n\"Awarded to the team with the highest leaderboard score as of the Midpoint Cut-off Date: April 9, 2026.\"\nIn the Timeline section: \n\"April 16, 2026 - Midpoint Cut-off Date\"\nCould you please confirm which date is the correct Midpoint Cut-off Date for the Open Progress Prize?\nThank you!\n\n[message_id=3422316 author=Addison Howard first=False]\nApril 9 is correct - we moved the date up to ensure that a prospective winning team had a chance to provide documentation in advance of the announcement at Google Cloud NEXT.\nI've updated the inconsistency\n\n[message_id=3423264 author=BeyondBirthday first=False]\nThank you!",
+  "message_count_observed": 3,
+  "messages": [
+    {
+      "authorName": "BeyondBirthday",
+      "content": "<p>Hi NVIDIA Team,</p>\n<p>Thank you for organizing this competition. While going through the competition details, I noticed an inconsistency in the Midpoint Cut-off Date between two sections:</p>\n<p><strong>In the Prizes section (Open Progress Prize):</strong></p>\n<blockquote>\n  <p>\"Awarded to the team with the highest leaderboard score as of the Midpoint Cut-off Date: April 9, 2026.\"</p>\n</blockquote>\n<p><strong>In the Timeline section:</strong></p>\n<blockquote>\n  <p>\"April 16, 2026 - Midpoint Cut-off Date\"</p>\n</blockquote>\n<p>Could you please confirm which date is the correct Midpoint Cut-off Date for the Open Progress Prize?</p>\n<p>Thank you!</p>",
+      "depth": 0,
+      "first": true,
+      "id": 681773,
+      "postDate": "2026-03-17T05:48:09.197Z"
+    },
+    {
+      "authorName": "Addison Howard",
+      "content": "<p>April 9 is correct - we moved the date up to ensure that a prospective winning team had a chance to provide documentation in advance of the announcement at Google Cloud NEXT.</p>\n<p>I've updated the inconsistency</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3422316,
+      "postDate": "2026-03-17T13:07:52.430Z"
+    },
+    {
+      "authorName": "BeyondBirthday",
+      "content": "<p>Thank you!</p>",
+      "depth": 1,
+      "first": false,
+      "id": 3423264,
+      "postDate": "2026-03-18T11:05:15.503Z"
+    }
+  ],
+  "text_sha256": "16c4f2391cbf24bb318fc7be194c5586442d8bbd94bd705c5bb8642bb8bda5ea",
+  "topic": {
+    "authorName": "BeyondBirthday",
+    "authorUrl": "https://www.kaggle.com/near07",
+    "commentCount": 2,
+    "content": "<p>Hi NVIDIA Team,</p>\n<p>Thank you for organizing this competition. While going through the competition details, I noticed an inconsistency in the Midpoint Cut-off Date between two sections:</p>\n<p><strong>In the Prizes section (Open Progress Prize):</strong></p>\n<blockquote>\n  <p>\"Awarded to the team with the highest leaderboard score as of the Midpoint Cut-off Date: April 9, 2026.\"</p>\n</blockquote>\n<p><strong>In the Timeline section:</strong></p>\n<blockquote>\n  <p>\"April 16, 2026 - Midpoint Cut-off Date\"</p>\n</blockquote>\n<p>Could you please confirm which date is the correct Midpoint Cut-off Date for the Open Progress Prize?</p>\n<p>Thank you!</p>",
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 681773,
+    "postDate": "2026-03-17T05:48:09.197Z",
+    "title": "Date Conflict: Midpoint Cut-off Date in Prizes vs Timeline section",
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/681773",
+    "votes": 4
+  },
+  "topic_id": 681773,
+  "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/681773"
+}

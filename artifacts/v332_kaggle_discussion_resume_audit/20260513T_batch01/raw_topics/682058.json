@@ -1,0 +1,47 @@
+{
+  "fetched_at_utc": "2026-05-13T15:38:19.828410+00:00",
+  "full_text": "[message_id=682058 author=Saurabh Dasgupta first=True]\nHi\nI hope you are well. This may have already been answered but I wanted to check.\nIn order to do this challenge, the competitors will be using Kaggle compute and machines, which will have the \"G4 VMs powered by NVIDIA RTX PRO 6000 Blackwell Server Edition GPUs as the compute backbone for this challenge\". Hence, I do not have to worry about getting GPU compute from the cloud (unless additional work is needed).\nPlease let me know.\nMany thanks in advance\nSaurabh\n\n[message_id=3426251 author=Ashish Kumar Jha first=False]\nYes - You don't have to worry about getting the compute and pay anywhere.\nCopy: https://www.kaggle.com/code/ryanholbrook/nvidia-nemotron-submission-demo , then if you want to manually select / change accelerator go to settings -> Accelerator -> GPU RTX Pro 6000\n\n[message_id=3426776 author=Saurabh Dasgupta first=False]\nThank you Ashish. If there are any issues, I will definitely let you know.\nThank you again.",
+  "message_count_observed": 3,
+  "messages": [
+    {
+      "authorName": "Saurabh Dasgupta",
+      "content": "<p>Hi</p>\n<p>I hope you are well. This may have already been answered but I wanted to check.\nIn order to do this challenge, the competitors will be using Kaggle compute and machines, which will have the \"G4 VMs powered by NVIDIA RTX PRO 6000 Blackwell Server Edition GPUs as the compute backbone for this challenge\". Hence, I do not have to worry about getting GPU compute from the cloud (unless additional work is needed).\nPlease let me know.</p>\n<p>Many thanks in advance\nSaurabh</p>",
+      "depth": 0,
+      "first": true,
+      "id": 682058,
+      "postDate": "2026-03-17T21:42:05.581Z"
+    },
+    {
+      "authorName": "Ashish Kumar Jha",
+      "content": "<p>Yes - You don't have to worry about getting the compute and pay anywhere.</p>\n<p>Copy: <a href=\"https://www.kaggle.com/code/ryanholbrook/nvidia-nemotron-submission-demo\" target=\"_blank\">https://www.kaggle.com/code/ryanholbrook/nvidia-nemotron-submission-demo</a>, then if you want to manually select / change accelerator go to settings -&gt; Accelerator -&gt; GPU RTX Pro 6000</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3426251,
+      "postDate": "2026-03-22T08:14:10.083Z"
+    },
+    {
+      "authorName": "Saurabh Dasgupta",
+      "content": "<p>Thank you Ashish. If there are any issues, I will definitely let you know.\nThank you again.</p>",
+      "depth": 1,
+      "first": false,
+      "id": 3426776,
+      "postDate": "2026-03-23T07:44:01.133Z"
+    }
+  ],
+  "text_sha256": "71b2b361f45b6fae8a843d5c0884285db51175bdf3d713fab1d7aad356716684",
+  "topic": {
+    "authorName": "Saurabh Dasgupta",
+    "authorUrl": "https://www.kaggle.com/dasgupsa500",
+    "commentCount": 2,
+    "content": "<p>Hi</p>\n<p>I hope you are well. This may have already been answered but I wanted to check.\nIn order to do this challenge, the competitors will be using Kaggle compute and machines, which will have the \"G4 VMs powered by NVIDIA RTX PRO 6000 Blackwell Server Edition GPUs as the compute backbone for this challenge\". Hence, I do not have to worry about getting GPU compute from the cloud (unless additional work is needed).\nPlease let me know.</p>\n<p>Many thanks in advance\nSaurabh</p>",
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 682058,
+    "postDate": "2026-03-17T21:42:05.581Z",
+    "title": "Compute Access",
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/682058",
+    "votes": 3
+  },
+  "topic_id": 682058,
+  "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/682058"
+}

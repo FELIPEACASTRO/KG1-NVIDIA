@@ -1,0 +1,40 @@
+{
+  "fetched_at_utc": "2026-05-13T15:45:53.344355+00:00",
+  "full_text": "[message_id=689284 author=Shivam Shinde first=True]\nWhile going through the dataset I noticed a few rows where the answer itself contains }.\nThe metric prioritizes answers inside \\boxed{} using the regex:\n\\boxed{([^}]*)}\nSince the capture stops at the first }, the extractor cannot include } inside the boxed content.\nHowever some dataset answers contain } as part of the final string. Example:\n65}27 = }38\n11}59 = }48\n46}23 = }23\nNow determine: 28}58\nAnswer: }30\nIf a model tries to output:\n\\boxed{}30}\nthe regex extracts an empty string instead of }30.\nIf the metric then falls back to other heuristic patterns or the last numeric value, the extracted answer becomes something like 30 (or 30}), while the ground truth is }30, so it would still be marked incorrect.\n\n[message_id=3454216 author=Shivam Shinde first=False]\nI wanted to suggest a fix for the metric.\nThe root cause is that the current regex [^}]* stops at the first } , so any answer containing } (like }30 , `}:} , //:} , etc.) gets incorrectly extracted.\nSince \\boxed{} is always the last thing in the model output (no text follows it), the fix is:\nFind the last \\boxed{ in the output \nTake everything after it\nFind the last } in the output \nEverything between them is the answer\ndef extract_final_answer(text: str) -> str:\nif text is None:\nreturn 'NOT_FOUND'\nlast_boxed_idx = text.rfind(r'\\boxed{')\nif last_boxed_idx != -1:\nafter_open = text[last_boxed_idx + len(r'\\boxed{'):]\nlast_brace = after_open.rfind('}')\nif last_brace != -1:\nreturn after_open[:last_brace]\nreturn after_open.strip() # unclosed box fallback\n# existing heuristic fallbacks...\nThis correctly handles all edge cases:\n\\boxed{}30} → }30 \n\\boxed{`}:}} → `}:} \n\\boxed{//:}} → //:} \n\\boxed{42} → 42 \nImportant caveat: This approach relies on the assumption that the model outputs nothing after \\boxed{} . If the model adds any trailing text containing } such as \\boxed{42} therefore the set is {1, 2, 3} the rfind would incorrectly grab the last } from that trailing text, capturing 42} therefore the set is {1, 2, 3 instead of just 42.\nSo this fix is valid as long as the prompt instruction and sampling are set up such that the model stops immediately after closing the box which appears to be the case here based on the current prompt template . If that assumption ever changes, a more robust approach would be needed.",
+  "message_count_observed": 2,
+  "messages": [
+    {
+      "authorName": "Shivam Shinde",
+      "content": "<p>While going through the dataset I noticed a few rows where the answer itself contains }.</p>\n<p>The metric prioritizes answers inside \\boxed{} using the regex:</p>\n<p>\\boxed{([^}]*)}</p>\n<p>Since the capture stops at the first }, the extractor cannot include } inside the boxed content.</p>\n<p>However some dataset answers contain } as part of the final string. Example:</p>\n<p>65}27 = }38\n11}59 = }48\n46}23 = }23</p>\n<p>Now determine: 28}58\nAnswer: }30</p>\n<p>If a model tries to output:</p>\n<p>\\boxed{}30}</p>\n<p>the regex extracts an empty string instead of }30.</p>\n<p>If the metric then falls back to other heuristic patterns or the last numeric value, the extracted answer becomes something like 30 (or 30}), while the ground truth is }30, so it would still be marked incorrect.</p>",
+      "depth": 0,
+      "first": true,
+      "id": 689284,
+      "postDate": "2026-04-08T05:53:15.969Z"
+    },
+    {
+      "authorName": "Shivam Shinde",
+      "content": "<p>I wanted to suggest a fix for the metric.\nThe root cause is that the current regex <code>[^}]*</code> stops at the first <code>}</code>, so any answer containing <code>}</code> (like <code>}30</code>, <code>`}:}</code>, <code>//:}</code>, etc.) gets incorrectly extracted.\nSince <code>\\boxed{}</code> is always the last thing in the model output (no text follows it), the fix is:</p>\n<ol>\n<li>Find the last <code>\\boxed{</code> in the output </li>\n<li>Take everything after it</li>\n<li>Find the last <code>}</code> in the output </li>\n<li>Everything between them is the answer</li>\n</ol>\n<pre><code>def extract_final_answer(text: str) -&gt; str:\n  if text is None:\n      return 'NOT_FOUND'\n   last_boxed_idx = text.rfind(r'\\boxed{')\n  if last_boxed_idx != -1:\n      after_open = text[last_boxed_idx + len(r'\\boxed{'):]\n      last_brace = after_open.rfind('}')\n      if last_brace != -1:\n          return after_open[:last_brace]\n      return after_open.strip()  # unclosed box fallback\n   # existing heuristic fallbacks...\n</code></pre>\n<p>This correctly handles all edge cases:</p>\n<ul>\n<li><code>\\boxed{}30}</code> → <code>}30</code> </li>\n<li><code>\\boxed{`}:}}</code> → <code>`}:}</code> </li>\n<li><code>\\boxed{//:}}</code> → <code>//:}</code> </li>\n<li><code>\\boxed{42}</code> → <code>42</code>\n<strong>Important caveat:</strong> This approach relies on the assumption that the model outputs nothing after <code>\\boxed{}</code>. If the model adds any trailing text containing } such as \\boxed{42} therefore the set is {1, 2, 3} the rfind would incorrectly grab the last } from that trailing text, capturing 42} therefore the set is {1, 2, 3 instead of just 42.\nSo this fix is valid as long as the prompt instruction and sampling are set up such that the model stops immediately after closing the box <strong>which appears to be the case here based on the current prompt template</strong>. If that assumption ever changes, a more robust approach would be needed.</li>\n</ul>",
+      "depth": 0,
+      "first": false,
+      "id": 3454216,
+      "postDate": "2026-05-06T18:26:17.837Z",
+      "votes": 1
+    }
+  ],
+  "text_sha256": "264eac1957a1a6416fa9f15f1684ceaeb177fd660c10ca350cd81eba608384b2",
+  "topic": {
+    "authorName": "Shivam Shinde",
+    "authorUrl": "https://www.kaggle.com/shindeshivam",
+    "commentCount": 1,
+    "content": "<p>While going through the dataset I noticed a few rows where the answer itself contains }.</p>\n<p>The metric prioritizes answers inside \\boxed{} using the regex:</p>\n<p>\\boxed{([^}]*)}</p>\n<p>Since the capture stops at the first }, the extractor cannot include } inside the boxed content.</p>\n<p>However some dataset answers contain } as part of the final string. Example:</p>\n<p>65}27 = }38\n11}59 = }48\n46}23 = }23</p>\n<p>Now determine: 28}58\nAnswer: }30</p>\n<p>If a model tries to output:</p>\n<p>\\boxed{}30}</p>\n<p>the regex extracts an empty string instead of }30.</p>\n<p>If the metric then falls back to other heuristic patterns or the last numeric value, the extracted answer becomes something like 30 (or 30}), while the ground truth is }30, so it would still be marked incorrect.</p>",
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 689284,
+    "postDate": "2026-04-08T05:53:15.969Z",
+    "title": "Edge case in metric: \\boxed{} cannot contain }",
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/689284",
+    "votes": 19
+  },
+  "topic_id": 689284,
+  "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/689284"
+}

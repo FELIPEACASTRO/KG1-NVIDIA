@@ -1,0 +1,47 @@
+{
+  "fetched_at_utc": "2026-05-13T15:40:47.286485+00:00",
+  "full_text": "[message_id=684469 author=tiffanyseah first=True]\nmy notebook failed to save draft and I am not able to turn on the Internet. I have this error\n\n[message_id=3428295 author=Shoto first=False]\nTurn off internet use from right tab\n\n[message_id=3428519 author=tiffanyseah first=False]\nokie, noted. Thank you",
+  "message_count_observed": 3,
+  "messages": [
+    {
+      "authorName": "tiffanyseah",
+      "content": "<p>my notebook failed to save draft and I am not able to turn on the Internet. I have this error </p>\n<p><img src=\"https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F9655925%2Fb460f343fa7b7184aaa72011c176d926%2FScreenshot%202026-03-25%20104538.jpg?generation=1774406768762445&amp;alt=media\" alt=\"\"></p>",
+      "depth": 0,
+      "first": true,
+      "id": 684469,
+      "postDate": "2026-03-25T02:46:19.194Z"
+    },
+    {
+      "authorName": "Shoto",
+      "content": "<p>Turn off internet use from right tab</p>\n<p><img src=\"https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F5578954%2F8591b6930574029831fae6f3ed090a1a%2FScreenshot%202026-03-25%20at%205.14.34PM.png?generation=1774426566981453&amp;alt=media\"></p>",
+      "depth": 0,
+      "first": false,
+      "id": 3428295,
+      "postDate": "2026-03-25T08:16:10.423Z"
+    },
+    {
+      "authorName": "tiffanyseah",
+      "content": "<p>okie, noted. Thank you</p>",
+      "depth": 1,
+      "first": false,
+      "id": 3428519,
+      "postDate": "2026-03-25T15:41:18.717Z"
+    }
+  ],
+  "text_sha256": "e133404a34a10dcfe9d1c82fb995d114d3d4b91f85a506bcc1042f39110cfa8f",
+  "topic": {
+    "authorName": "tiffanyseah",
+    "authorUrl": "https://www.kaggle.com/tiffanyseah",
+    "commentCount": 2,
+    "content": "<p>my notebook failed to save draft and I am not able to turn on the Internet. I have this error </p>\n<p><img src=\"https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F9655925%2Fb460f343fa7b7184aaa72011c176d926%2FScreenshot%202026-03-25%20104538.jpg?generation=1774406768762445&amp;alt=media\" alt=\"\"></p>",
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 684469,
+    "postDate": "2026-03-25T02:46:19.194Z",
+    "title": "Error: Internet cannot be enabled for this competition with the current accelerator.",
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/684469",
+    "votes": 2
+  },
+  "topic_id": 684469,
+  "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/684469"
+}

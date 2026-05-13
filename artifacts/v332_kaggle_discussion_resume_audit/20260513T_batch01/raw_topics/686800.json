@@ -1,0 +1,49 @@
+{
+  "fetched_at_utc": "2026-05-13T15:44:12.791012+00:00",
+  "full_text": "[message_id=686800 author=Alpaca first=True]\nPermissionError: [Errno 13] Permission denied: '/kaggle/usr/lib/notebooks/ryanholbrook/nvidia-utility-script/triton/backends/nvidia/bin/ptxas-blackwell'\nRunning on Rtx-6000\n\n[message_id=3433531 author=Vish Ramamurthy first=False]\n+1 this is affecting me as well, unable to generate model output\n\n[message_id=3433106 author=Alpaca first=False]\n@ryanholbrook pls suggest!",
+  "message_count_observed": 3,
+  "messages": [
+    {
+      "authorName": "Alpaca",
+      "content": "<p>PermissionError: [Errno 13] Permission denied: '/kaggle/usr/lib/notebooks/ryanholbrook/nvidia-utility-script/triton/backends/nvidia/bin/ptxas-blackwell'</p>\n<p>Running on Rtx-6000</p>",
+      "depth": 0,
+      "first": true,
+      "id": 686800,
+      "postDate": "2026-04-01T08:28:26.564Z"
+    },
+    {
+      "authorName": "Vish Ramamurthy",
+      "content": "<p>+1 this is affecting me as well, unable to generate model output</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3433531,
+      "postDate": "2026-04-01T19:28:48.623Z",
+      "votes": 1
+    },
+    {
+      "authorName": "Alpaca",
+      "content": "<p><a href=\"https://www.kaggle.com/ryanholbrook\" target=\"_blank\">@ryanholbrook</a> pls suggest!</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3433106,
+      "postDate": "2026-04-01T08:28:56.467Z",
+      "votes": 1
+    }
+  ],
+  "text_sha256": "2d0563582d642c80bc2f3b28754490322e15bbbd96ad69edd50e5e06a41a4f20",
+  "topic": {
+    "authorName": "Alpaca",
+    "authorUrl": "https://www.kaggle.com/aggshourya",
+    "commentCount": 2,
+    "content": "<p>PermissionError: [Errno 13] Permission denied: '/kaggle/usr/lib/notebooks/ryanholbrook/nvidia-utility-script/triton/backends/nvidia/bin/ptxas-blackwell'</p>\n<p>Running on Rtx-6000</p>",
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 686800,
+    "postDate": "2026-04-01T08:28:26.564Z",
+    "title": "Permission error",
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/686800",
+    "votes": 2
+  },
+  "topic_id": 686800,
+  "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/686800"
+}

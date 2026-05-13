@@ -1,0 +1,47 @@
+{
+  "fetched_at_utc": "2026-05-13T15:40:32.234858+00:00",
+  "full_text": "[message_id=684251 author=DaoHe Liu first=True]\nUnsloth's official documentation has added an adapter for Nemotron, but Kaggle shows that the trainable parameters seem to differ from the official documentation. Has anyone encountered this issue?\nThe official documents are as follows：\nmodel = FastLanguageModel.get_peft_model(\nmodel,\nr = 8, # Choose any number > 0 ! Suggested 8, 16, 32, 64, 128\ntarget_modules = [\"q_proj\", \"k_proj\", \"v_proj\", \"o_proj\",\n\"gate_proj\", \"up_proj\", \"down_proj\",\n\"in_proj\", \"out_proj\",],\nlora_alpha = 16,\nlora_dropout = 0, # Supports any, but = 0 is optimized\nbias = \"none\", # Supports any, but = \"none\" is optimized\n# [NEW] \"unsloth\" uses 30% less VRAM, fits 2x larger batch sizes!\nuse_gradient_checkpointing = \"unsloth\", # True or \"unsloth\" for very long context\nrandom_state = 3407,\nuse_rslora = False, # We support rank stabilized LoRA\nloftq_config = None, # And LoftQ\n)\nHowever, the results show:\nUnsloth: Detected MoE model with num_experts = 128 and target_modules = ['q_proj', 'k_proj', 'v_proj', 'o_proj', 'gate_proj', 'up_proj', 'down_proj', 'in_proj', 'out_proj']. Enabling LoRA on MoE parameters: ['mlp.experts.gate_up_proj', 'mlp.experts.down_proj']\nIs this normal? Unsloth only performed LoRa on a small number of layers instead of the layers we specified, resulting in very few trainable parameters.\n\n[message_id=3427831 author=lucian kucera first=False]\n@DaoHe Liu Not sure, that iam using the newest version of unsloth, but to me it seems lora adapters are applied. Would be nice if u show screenshot of notebook output after applying peft config. With layers with no lora adapters. If there are some layers without adapters, that would be concerning.\n\n[message_id=3428150 author=DaoHe Liu first=False]\nI think I roughly know what to do.",
+  "message_count_observed": 3,
+  "messages": [
+    {
+      "authorName": "DaoHe Liu",
+      "content": "<p>Unsloth's official documentation has added an adapter for Nemotron, but Kaggle shows that the trainable parameters seem to differ from the official documentation. Has anyone encountered this issue?\nThe official documents are as follows：</p>\n<pre><code>model = FastLanguageModel.get_peft_model(\n    model,\n    r = 8, # Choose any number &gt; 0 ! Suggested 8, 16, 32, 64, 128\n    target_modules = [\"q_proj\", \"k_proj\", \"v_proj\", \"o_proj\",\n                      \"gate_proj\", \"up_proj\", \"down_proj\",\n                      \"in_proj\", \"out_proj\",],\n    lora_alpha = 16,\n    lora_dropout = 0, # Supports any, but = 0 is optimized\n    bias = \"none\",    # Supports any, but = \"none\" is optimized\n    # [NEW] \"unsloth\" uses 30% less VRAM, fits 2x larger batch sizes!\n    use_gradient_checkpointing = \"unsloth\", # True or \"unsloth\" for very long context\n    random_state = 3407,\n    use_rslora = False,  # We support rank stabilized LoRA\n    loftq_config = None, # And LoftQ\n)\n</code></pre>\n<p>However, the results show:\nUnsloth: Detected MoE model with num_experts = 128 and target_modules = ['q_proj', 'k_proj', 'v_proj', 'o_proj', 'gate_proj', 'up_proj', 'down_proj', 'in_proj', 'out_proj']. Enabling LoRA on MoE parameters: ['mlp.experts.gate_up_proj', 'mlp.experts.down_proj']</p>\n<p>Is this normal? Unsloth only performed LoRa on a small number of layers instead of the layers we specified, resulting in very few trainable parameters.</p>",
+      "depth": 0,
+      "first": true,
+      "id": 684251,
+      "postDate": "2026-03-24T07:43:34.801Z"
+    },
+    {
+      "authorName": "lucian kucera",
+      "content": "<p><a href=\"https://www.kaggle.com/DaoHe\" target=\"_blank\">@DaoHe</a> Liu Not sure, that iam using the newest version of unsloth, but to me it seems lora adapters are applied. Would be nice if u show screenshot of notebook output after applying peft config. With layers with no lora adapters. If there are some layers without adapters, that would be concerning.</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3427831,
+      "postDate": "2026-03-24T15:52:22.963Z"
+    },
+    {
+      "authorName": "DaoHe Liu",
+      "content": "<p>I think I roughly know what to do.</p>",
+      "depth": 1,
+      "first": false,
+      "id": 3428150,
+      "postDate": "2026-03-25T02:28:19.007Z"
+    }
+  ],
+  "text_sha256": "ca20957159b10e5e700e92d36378f3ff82a572604d6e34367840c4dc1ea4033f",
+  "topic": {
+    "authorName": "DaoHe Liu",
+    "authorUrl": "https://www.kaggle.com/daoheliu",
+    "commentCount": 2,
+    "content": "<p>Unsloth's official documentation has added an adapter for Nemotron, but Kaggle shows that the trainable parameters seem to differ from the official documentation. Has anyone encountered this issue?\nThe official documents are as follows：</p>\n<pre><code>model = FastLanguageModel.get_peft_model(\n    model,\n    r = 8, # Choose any number &gt; 0 ! Suggested 8, 16, 32, 64, 128\n    target_modules = [\"q_proj\", \"k_proj\", \"v_proj\", \"o_proj\",\n                      \"gate_proj\", \"up_proj\", \"down_proj\",\n                      \"in_proj\", \"out_proj\",],\n    lora_alpha = 16,\n    lora_dropout = 0, # Supports any, but = 0 is optimized\n    bias = \"none\",    # Supports any, but = \"none\" is optimized\n    # [NEW] \"unsloth\" uses 30% less VRAM, fits 2x larger batch sizes!\n    use_gradient_checkpointing = \"unsloth\", # True or \"unsloth\" for very long context\n    random_state = 3407,\n    use_rslora = False,  # We support rank stabilized LoRA\n    loftq_config = None, # And LoftQ\n)\n</code></pre>\n<p>However, the results show:\nUnsloth: Detected MoE model with num_experts = 128 and target_modules = ['q_proj', 'k_proj', 'v_proj', 'o_proj', 'gate_proj', 'up_proj', 'down_proj', 'in_proj', 'out_proj']. Enabling LoRA on MoE parameters: ['mlp.experts.gate_up_proj', 'mlp.experts.down_proj']</p>\n<p>Is this normal? Unsloth only performed LoRa on a small number of layers instead of the layers we specified, resulting in very few trainable parameters.</p>",
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 684251,
+    "postDate": "2026-03-24T07:43:34.801Z",
+    "title": "The fit of unsloth to the Nemotron model",
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/684251",
+    "votes": 1
+  },
+  "topic_id": 684251,
+  "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/684251"
+}

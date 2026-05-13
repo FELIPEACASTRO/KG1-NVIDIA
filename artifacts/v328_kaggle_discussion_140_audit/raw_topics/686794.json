@@ -1,0 +1,112 @@
+{
+  "topic_id": 686794,
+  "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/686794",
+  "topic": {
+    "authorId": 10290345,
+    "authorThumbnailName": "10290345-kg.jpg?t=2026-03-17-04-10-40",
+    "authorUserDisplayName": "Darren Amadeus Martin",
+    "authorUserName": "darrenamadeusmartin",
+    "firstMessageId": 3433089,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 686794,
+    "name": "RL/GRPO difficulty",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-04-01T07:51:58.829584700Z",
+    "totalVotes": 5,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/686794",
+    "totalMessages": 13,
+    "authorPerformanceTier": "CONTRIBUTOR",
+    "authorProgressionOptOut": false
+  },
+  "first_message": {
+    "id": 3433089,
+    "postDate": "2026-04-01T07:51:58.830Z",
+    "rawMarkdown": "Has anybody tried using RL techniques such as GRPO ? Since on RL, we basically need to hold 2 copies of the model, training in bf16 is absolutely impossible and training with quantized model can lower performance. I tried using unsloth where it said that you don't need 2 copies of the model to be loaded at the gpu at the same time but the debugging is super hard and is very prone to errors. Has anybody managed to do RL and if you had done it, how slow was it ?",
+    "content": "<p>Has anybody tried using RL techniques such as GRPO ? Since on RL, we basically need to hold 2 copies of the model, training in bf16 is absolutely impossible and training with quantized model can lower performance. I tried using unsloth where it said that you don't need 2 copies of the model to be loaded at the gpu at the same time but the debugging is super hard and is very prone to errors. Has anybody managed to do RL and if you had done it, how slow was it ?</p>",
+    "parent": {
+      "url": "#"
+    },
+    "author": {
+      "displayName": "Darren Amadeus Martin",
+      "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/10290345-kg.jpg?t=2026-03-17-04-10-40",
+      "url": "/darrenamadeusmartin",
+      "tier": "CONTRIBUTOR",
+      "id": 10290345,
+      "progressionOptOut": false
+    },
+    "authorType": "TOPIC",
+    "votes": {
+      "totalVotes": 5,
+      "canUpvote": true,
+      "totalUpvotes": 5
+    },
+    "kernelVersion": 0,
+    "competitionRanking": 1315,
+    "feedbackTrackingData": {},
+    "teamUpInfo": {
+      "teamLeader": {
+        "displayName": "Darren Amadeus Martin",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/10290345-kg.jpg?t=2026-03-17-04-10-40",
+        "url": "/darrenamadeusmartin",
+        "userName": "darrenamadeusmartin",
+        "tier": "CONTRIBUTOR",
+        "id": 10290345,
+        "profileUrl": "/darrenamadeusmartin",
+        "performanceTier": "CONTRIBUTOR",
+        "userId": 10290345,
+        "progressionOptOut": false
+      },
+      "intro": ""
+    }
+  },
+  "messages": [
+    {
+      "id": 3433089,
+      "postDate": "2026-04-01T07:51:58.830Z",
+      "rawMarkdown": "Has anybody tried using RL techniques such as GRPO ? Since on RL, we basically need to hold 2 copies of the model, training in bf16 is absolutely impossible and training with quantized model can lower performance. I tried using unsloth where it said that you don't need 2 copies of the model to be loaded at the gpu at the same time but the debugging is super hard and is very prone to errors. Has anybody managed to do RL and if you had done it, how slow was it ?",
+      "content": "<p>Has anybody tried using RL techniques such as GRPO ? Since on RL, we basically need to hold 2 copies of the model, training in bf16 is absolutely impossible and training with quantized model can lower performance. I tried using unsloth where it said that you don't need 2 copies of the model to be loaded at the gpu at the same time but the debugging is super hard and is very prone to errors. Has anybody managed to do RL and if you had done it, how slow was it ?</p>",
+      "parent": {
+        "url": "#"
+      },
+      "author": {
+        "displayName": "Darren Amadeus Martin",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/10290345-kg.jpg?t=2026-03-17-04-10-40",
+        "url": "/darrenamadeusmartin",
+        "tier": "CONTRIBUTOR",
+        "id": 10290345,
+        "progressionOptOut": false
+      },
+      "authorType": "TOPIC",
+      "votes": {
+        "totalVotes": 5,
+        "canUpvote": true,
+        "totalUpvotes": 5
+      },
+      "kernelVersion": 0,
+      "competitionRanking": 1315,
+      "feedbackTrackingData": {},
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "Darren Amadeus Martin",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/10290345-kg.jpg?t=2026-03-17-04-10-40",
+          "url": "/darrenamadeusmartin",
+          "userName": "darrenamadeusmartin",
+          "tier": "CONTRIBUTOR",
+          "id": 10290345,
+          "profileUrl": "/darrenamadeusmartin",
+          "performanceTier": "CONTRIBUTOR",
+          "userId": 10290345,
+          "progressionOptOut": false
+        },
+        "intro": ""
+      },
+      "depth": 0,
+      "is_first_message": true
+    }
+  ],
+  "message_count_observed": 1,
+  "text_sha256": "3a834ed7d30bab0b6acd9762bf43235576c73d04211c4f163dce677ca43325e7",
+  "full_text": "[message_id=3433089 author= first=True]\nHas anybody tried using RL techniques such as GRPO ? Since on RL, we basically need to hold 2 copies of the model, training in bf16 is absolutely impossible and training with quantized model can lower performance. I tried using unsloth where it said that you don't need 2 copies of the model to be loaded at the gpu at the same time but the debugging is super hard and is very prone to errors. Has anybody managed to do RL and if you had done it, how slow was it ?"
+}

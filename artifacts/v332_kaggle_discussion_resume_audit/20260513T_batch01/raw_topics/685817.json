@@ -1,0 +1,61 @@
+{
+  "fetched_at_utc": "2026-05-13T15:43:14.355369+00:00",
+  "full_text": "[message_id=685817 author=MD Mushfirat Mohaimin first=True]\nI submitted the same submission.zip multiple times, and got different scores.\nAs per comments in other threads, many other participants can also observe this.\nThis is only possible if the temperature parameter during evaluation is something other than 0 . In the evaluation section of the competition overview, it's written that temparature is supposed to be 0 . Perhaps, there's a mistake in the evaluation code? It's possible because the default value of temparature is set to 1.0 in the evaluation metric notebook. \n@ryanholbrook can you please look into this? Can you please make sure that the evaluation code is correctly overriding the function's default temperature parameter?\n\n[message_id=3430994 author=MD Mushfirat Mohaimin first=False]\nI used the code from the evaluation metric notebook, and tried to do inference using temperature=1.0 and temperature=0 \nUsing temperature=1.0 gives much lower accuracy compared to temparature=0 \nAnd the accuracy spread with temperature=1.0 is comparable to what's happening with the public LB\nI'm getting more confident that evaluation runs are using temperature=1.0 instead of 0 \n@ryanholbrook plz investigate\n\n[message_id=3430984 author= first=False]\n\n\n[message_id=3430985 author=MD Mushfirat Mohaimin first=False]\nare you sure? can you plz let me know the source behind that info?\n\n[message_id=3430991 author= first=False]",
+  "message_count_observed": 5,
+  "messages": [
+    {
+      "authorName": "MD Mushfirat Mohaimin",
+      "content": "<p>I submitted the same <code>submission.zip</code> multiple times, and got different scores.<br>\nAs per comments in other threads, many other participants can also observe this.</p>\n<p>This is only possible if the <code>temperature</code> parameter during evaluation is something other than <code>0</code>. In the evaluation section of the competition overview, it's written that <code>temparature</code> is supposed to be <code>0</code>. Perhaps, there's a mistake in the evaluation code? It's possible because the default value of <code>temparature</code> is set to <code>1.0</code> in the evaluation metric notebook.  </p>\n<p><a href=\"https://www.kaggle.com/ryanholbrook\" target=\"_blank\">@ryanholbrook</a> can you please look into this? Can you please make sure that the evaluation code is correctly overriding the function's default temperature parameter?</p>",
+      "depth": 0,
+      "first": true,
+      "id": 685817,
+      "postDate": "2026-03-29T06:49:15.215Z"
+    },
+    {
+      "authorName": "MD Mushfirat Mohaimin",
+      "content": "<p>I used the code from the evaluation metric notebook, and tried to do inference using <code>temperature=1.0</code> and <code>temperature=0</code></p>\n<p>Using <code>temperature=1.0</code> gives much lower accuracy compared to <code>temparature=0</code></p>\n<p>And the accuracy spread with <code>temperature=1.0</code> is comparable to what's happening with the public LB</p>\n<p>I'm getting more confident that evaluation runs are using <code>temperature=1.0</code> instead of <code>0</code></p>\n<p><a href=\"https://www.kaggle.com/ryanholbrook\" target=\"_blank\">@ryanholbrook</a> plz investigate</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3430994,
+      "postDate": "2026-03-29T07:40:39.857Z"
+    },
+    {
+      "depth": 0,
+      "first": false,
+      "id": 3430984,
+      "postDate": "2026-03-29T07:09:50.627Z",
+      "votes": -1
+    },
+    {
+      "authorName": "MD Mushfirat Mohaimin",
+      "content": "<p>are you sure? can you plz let me know the source behind that info?</p>",
+      "depth": 1,
+      "first": false,
+      "id": 3430985,
+      "postDate": "2026-03-29T07:12:25.403Z",
+      "votes": 1
+    },
+    {
+      "depth": 2,
+      "first": false,
+      "id": 3430991,
+      "postDate": "2026-03-29T07:27:41.127Z"
+    }
+  ],
+  "text_sha256": "026aacd0c4013760bdd355d620bd3045cbec516a72c40896976ce7f7ef277d5b",
+  "topic": {
+    "authorName": "MD Mushfirat Mohaimin",
+    "authorUrl": "https://www.kaggle.com/mushfirat",
+    "commentCount": 4,
+    "content": "<p>I submitted the same <code>submission.zip</code> multiple times, and got different scores.<br>\nAs per comments in other threads, many other participants can also observe this.</p>\n<p>This is only possible if the <code>temperature</code> parameter during evaluation is something other than <code>0</code>. In the evaluation section of the competition overview, it's written that <code>temparature</code> is supposed to be <code>0</code>. Perhaps, there's a mistake in the evaluation code? It's possible because the default value of <code>temparature</code> is set to <code>1.0</code> in the evaluation metric notebook.  </p>\n<p><a href=\"https://www.kaggle.com/ryanholbrook\" target=\"_blank\">@ryanholbrook</a> can you please look into this? Can you please make sure that the evaluation code is correctly overriding the function's default temperature parameter?</p>",
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 685817,
+    "postDate": "2026-03-29T06:49:15.215Z",
+    "title": "Submission re-runs give different scores",
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/685817",
+    "votes": 11
+  },
+  "topic_id": 685817,
+  "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/685817"
+}

@@ -1,0 +1,37 @@
+{
+  "fetched_at_utc": "2026-05-13T15:47:23.176698+00:00",
+  "full_text": "[message_id=696993 author=Anjana mohan first=True]\nHi everyone,\nI’ve been working on fine-tuning Nemotron-3-Nano-30B with LoRA on the 4 deterministic puzzle types (gravity, numeral, unit_conversion, cipher) and experiencing score drops below baseline.\nMy setup:\n• Base model score: 0.51\n• Training data: 6,343 real train.csv examples with programmatically generated CoT traces\n• 100% solver accuracy on all 4 types locally\n• LoRA rank 16, 3 epochs, lr=2e-4\n• Prompt format includes the competition suffix: Please put your final answer inside \\boxed{}\nResults:\n• Attempt 1 (synthetic data, no suffix): 0.50\n• Attempt 2 (real data + system prompt): 0.44\n• Attempt 3 (real data + correct suffix, no system prompt): 0.31\nMy questions:\n1. Is the reasoning trace format critical? Mine is very short (~234 tokens mean). Should it be longer?\n2. Should the tags be included in the assistant response during training?\n3. Is enable_thinking=True needed in the chat template?\n4. Any advice on why training on correct examples causes score to drop?\nThanks in advance! 🙏\n@huikang and @donaldgalliano\n\n[message_id=3455316 author= first=False]",
+  "message_count_observed": 2,
+  "messages": [
+    {
+      "authorName": "Anjana mohan",
+      "content": "<p>Hi everyone,\nI’ve been working on fine-tuning Nemotron-3-Nano-30B with LoRA on the 4 deterministic puzzle types (gravity, numeral, unit_conversion, cipher) and experiencing score drops below baseline.\nMy setup:\n    •   Base model score: 0.51\n    •   Training data: 6,343 real train.csv examples with programmatically generated CoT traces\n    •   100% solver accuracy on all 4 types locally\n    •   LoRA rank 16, 3 epochs, lr=2e-4\n    •   Prompt format includes the competition suffix: Please put your final answer inside \\boxed{}\nResults:\n    •   Attempt 1 (synthetic data, no suffix): 0.50\n    •   Attempt 2 (real data + system prompt): 0.44\n    •   Attempt 3 (real data + correct suffix, no system prompt): 0.31\nMy questions:\n    1.  Is the reasoning trace format critical? Mine is very short (~234 tokens mean). Should it be longer?\n    2.  Should the  tags be included in the assistant response during training?\n    3.  Is enable_thinking=True needed in the chat template?\n    4.  Any advice on why training on correct examples causes score to drop?\nThanks in advance! 🙏</p>\n<p><a href=\"https://www.kaggle.com/huikang\" target=\"_blank\">@huikang</a> and <a href=\"https://www.kaggle.com/donaldgalliano\" target=\"_blank\">@donaldgalliano</a> </p>",
+      "depth": 0,
+      "first": true,
+      "id": 696993,
+      "postDate": "2026-05-04T22:26:16.496Z"
+    },
+    {
+      "depth": 0,
+      "first": false,
+      "id": 3455316,
+      "postDate": "2026-05-09T04:58:43.633Z"
+    }
+  ],
+  "text_sha256": "3082e88dad39e50255b1da797e501ef8d6240a230846f0b0147dcb4f04ac293a",
+  "topic": {
+    "authorName": "Anjana mohan",
+    "authorUrl": "https://www.kaggle.com/anjanamohan13",
+    "commentCount": 1,
+    "content": "<p>Hi everyone,\nI’ve been working on fine-tuning Nemotron-3-Nano-30B with LoRA on the 4 deterministic puzzle types (gravity, numeral, unit_conversion, cipher) and experiencing score drops below baseline.\nMy setup:\n    •   Base model score: 0.51\n    •   Training data: 6,343 real train.csv examples with programmatically generated CoT traces\n    •   100% solver accuracy on all 4 types locally\n    •   LoRA rank 16, 3 epochs, lr=2e-4\n    •   Prompt format includes the competition suffix: Please put your final answer inside \\boxed{}\nResults:\n    •   Attempt 1 (synthetic data, no suffix): 0.50\n    •   Attempt 2 (real data + system prompt): 0.44\n    •   Attempt 3 (real data + correct suffix, no system prompt): 0.31\nMy questions:\n    1.  Is the reasoning trace format critical? Mine is very short (~234 tokens mean). Should it be longer?\n    2.  Should the  tags be included in the assistant response during training?\n    3.  Is enable_thinking=True needed in the chat template?\n    4.  Any advice on why training on correct examples causes score to drop?\nThanks in advance! 🙏</p>\n<p><a href=\"https://www.kaggle.com/huikang\" target=\"_blank\">@huikang</a> and <a href=\"https://www.kaggle.com/donaldgalliano\" target=\"_blank\">@donaldgalliano</a> </p>",
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 696993,
+    "postDate": "2026-05-04T22:26:16.496Z",
+    "title": " Feedback Needed: SFT on Deterministic Puzzles Dropping Score Below Baseline",
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/696993",
+    "votes": -1
+  },
+  "topic_id": 696993,
+  "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/696993"
+}

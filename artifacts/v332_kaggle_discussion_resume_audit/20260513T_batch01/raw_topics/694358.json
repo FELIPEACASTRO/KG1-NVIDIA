@@ -1,0 +1,47 @@
+{
+  "fetched_at_utc": "2026-05-13T15:47:01.974539+00:00",
+  "full_text": "[message_id=694358 author=Boris Polishchuk first=True]\nHello!\nI cannot install unsloth when running new Kaggle notebook GPU RTX Pro 6000. It looks like internet is off, but in fact it's on. When I set accelerator to None in Session options, everything is fine, pip install works.\nDo anybody has a chance to run RL training with the one of NVIDIA frameworks like Unsloth in the Kaggle notebook with GPU? Could you please share your settings?\n\n[message_id=3448281 author=dz first=False]\nThis is due to the limitations of the Kaggle GPU environment for this competition. In a GPU session, external network access, such as pip install, is disabled, so dependencies cannot be installed online.\nTherefore, the dependencies need to be installed offline, for example by uploading the required packages to a Kaggle Dataset.\nYou can refer to my notebook , where I used Unsloth to complete SFT training.\n\n[message_id=3448403 author=Boris Polishchuk first=False]\nThanks a lot! That's what I need.",
+  "message_count_observed": 3,
+  "messages": [
+    {
+      "authorName": "Boris Polishchuk",
+      "content": "<p>Hello!</p>\n<p>I cannot install unsloth when running new Kaggle notebook GPU RTX Pro 6000. It looks like internet is off, but in fact it's on. When I set accelerator to None in Session options, everything is fine, pip install works.</p>\n<p>Do anybody has a chance to run RL training with the one of NVIDIA frameworks like Unsloth in the Kaggle notebook with GPU? Could you please share your settings?</p>",
+      "depth": 0,
+      "first": true,
+      "id": 694358,
+      "postDate": "2026-04-24T14:06:54.248Z"
+    },
+    {
+      "authorName": "dz",
+      "content": "<p>This is due to the limitations of the Kaggle GPU environment for this competition. In a GPU session, external network access, such as pip install, is disabled, so dependencies cannot be installed online.</p>\n<p>Therefore, the dependencies need to be installed offline, for example by uploading the required packages to a Kaggle Dataset.</p>\n<p>You can refer to <a href=\"https://www.kaggle.com/code/dgxchen/training-with-unsloth-to-achieve-0-85-lb\" target=\"_blank\">my notebook</a>, where I used Unsloth to complete SFT training.</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3448281,
+      "postDate": "2026-04-25T04:47:05.137Z",
+      "votes": 2
+    },
+    {
+      "authorName": "Boris Polishchuk",
+      "content": "<p>Thanks a lot! That's what I need.</p>",
+      "depth": 1,
+      "first": false,
+      "id": 3448403,
+      "postDate": "2026-04-25T11:45:40.827Z"
+    }
+  ],
+  "text_sha256": "c9c15b6d8cc137aa7c3e6d32aa0b1cd0ab3d9ff980fe33cd6b6a866a597e3c2d",
+  "topic": {
+    "authorName": "Boris Polishchuk",
+    "authorUrl": "https://www.kaggle.com/polishch",
+    "commentCount": 2,
+    "content": "<p>Hello!</p>\n<p>I cannot install unsloth when running new Kaggle notebook GPU RTX Pro 6000. It looks like internet is off, but in fact it's on. When I set accelerator to None in Session options, everything is fine, pip install works.</p>\n<p>Do anybody has a chance to run RL training with the one of NVIDIA frameworks like Unsloth in the Kaggle notebook with GPU? Could you please share your settings?</p>",
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 694358,
+    "postDate": "2026-04-24T14:06:54.248Z",
+    "title": "Cannot install unsloth on the GPU RTX Pro 6000 notebook",
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/694358"
+  },
+  "topic_id": 694358,
+  "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/694358"
+}

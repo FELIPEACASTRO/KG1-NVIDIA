@@ -1,0 +1,39 @@
+{
+  "fetched_at_utc": "2026-05-13T15:44:15.879019+00:00",
+  "full_text": "[message_id=686839 author=Divyam Singh first=True]\nI saw recently on the architecture of nemotron and realised it needs something called mamba ssm as a part of its architcture to fine tune the lora although somehow im not able to install them and when i try to connect to internet it says that internet is not allowed for the competition , is me not being able to install the mamba packagae issue or is it intended that way\n\n[message_id=3434791 author=blckvia first=False]\n@divyamsingh2356 Hey, you just need to click \"Add Input\" after that write \"nvidia utility script\" and add it to your notebook and problem will be solved.",
+  "message_count_observed": 2,
+  "messages": [
+    {
+      "authorName": "Divyam Singh",
+      "content": "<p>I saw recently on the architecture of nemotron and realised it needs something called mamba ssm as a part of its architcture to fine tune the lora although somehow im not able to install them and when i try to connect to internet it says that internet is not allowed for the competition , is me not being able to install the mamba packagae issue or is it intended that way </p>",
+      "depth": 0,
+      "first": true,
+      "id": 686839,
+      "postDate": "2026-04-01T11:29:02.565Z"
+    },
+    {
+      "authorName": "blckvia",
+      "content": "<p><a href=\"https://www.kaggle.com/divyamsingh2356\" target=\"_blank\">@divyamsingh2356</a> Hey, you just need to click \"Add Input\" after that write \"nvidia utility script\" and add it to your notebook and problem will be solved.</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3434791,
+      "postDate": "2026-04-03T08:30:02.253Z"
+    }
+  ],
+  "text_sha256": "d1a995a683655652932aea22cb1b66046353f47e5c7b49affbd67895442e4600",
+  "topic": {
+    "authorName": "Divyam Singh",
+    "authorUrl": "https://www.kaggle.com/divyamsingh2356",
+    "commentCount": 1,
+    "content": "<p>I saw recently on the architecture of nemotron and realised it needs something called mamba ssm as a part of its architcture to fine tune the lora although somehow im not able to install them and when i try to connect to internet it says that internet is not allowed for the competition , is me not being able to install the mamba packagae issue or is it intended that way </p>",
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 686839,
+    "postDate": "2026-04-01T11:29:02.565Z",
+    "title": "Mamba_ssm  modules not installing",
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/686839",
+    "votes": 1
+  },
+  "topic_id": 686839,
+  "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/686839"
+}

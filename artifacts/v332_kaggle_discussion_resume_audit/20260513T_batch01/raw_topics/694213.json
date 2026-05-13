@@ -1,0 +1,40 @@
+{
+  "fetched_at_utc": "2026-05-13T15:46:55.921527+00:00",
+  "full_text": "[message_id=694213 author=JK-Piece first=True]\nHi all. Are you experiencing a queue when saving your notebook?\nMine is queued for 2 hours now and still counting.\n\n[message_id=3447759 author=agenlu first=False]\nSometimes if you stop and try again, it works",
+  "message_count_observed": 2,
+  "messages": [
+    {
+      "authorName": "JK-Piece",
+      "content": "<p>Hi all. Are you experiencing a queue when saving your notebook?</p>\n<p>Mine is queued for 2 hours now and still counting.</p>",
+      "depth": 0,
+      "first": true,
+      "id": 694213,
+      "postDate": "2026-04-23T20:29:21.430Z"
+    },
+    {
+      "authorName": "agenlu",
+      "content": "<p>Sometimes if you stop and try again, it works</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3447759,
+      "postDate": "2026-04-23T20:55:36.103Z",
+      "votes": 2
+    }
+  ],
+  "text_sha256": "ec257db25ab06cec7c20e58da81ecabe08d307ffe0db3038b925935101304924",
+  "topic": {
+    "authorName": "JK-Piece",
+    "authorUrl": "https://www.kaggle.com/jeannkouagou",
+    "commentCount": 1,
+    "content": "<p>Hi all. Are you experiencing a queue when saving your notebook?</p>\n<p>Mine is queued for 2 hours now and still counting.</p>",
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 694213,
+    "postDate": "2026-04-23T20:29:21.430Z",
+    "title": "Queued for hours for the first time!",
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/694213",
+    "votes": 5
+  },
+  "topic_id": 694213,
+  "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/694213"
+}

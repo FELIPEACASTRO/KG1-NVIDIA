@@ -1,0 +1,63 @@
+{
+  "fetched_at_utc": "2026-05-13T15:40:50.358913+00:00",
+  "full_text": "[message_id=684490 author=Liangjie Zhao first=True]\nMy training process was completed on my private server, and I obtained the adapter's config.json, tensor, and other files. However, after uploading them, I encountered an \"Evaluation metric raised an unexpected error\" error. Therefore, I would like to obtain guidelines for external training submissions.\n\n[message_id=3450699 author=JacobWu15 first=False]\nI have the same problem. Does someone slove it?\n\n[message_id=3444033 author=SANNNNN first=False]\nadapter_config.json and adapter_model.safetensors are essential. Make sure they finish uploading before submitting. If submission.zip is less than 3GB, it's not fully uploaded when submission.\n\n[message_id=3450702 author=Russell Kirk first=False]\nDepends on what modules you target!\n\n[message_id=3443376 author=Rishabh first=False]\nhey, facing similar issue today, were you able to figure out the way?",
+  "message_count_observed": 5,
+  "messages": [
+    {
+      "authorName": "Liangjie Zhao",
+      "content": "<p>My training process was completed on my private server, and I obtained the adapter's config.json, tensor, and other files. However, after uploading them, I encountered an \"Evaluation metric raised an unexpected error\" error. Therefore, I would like to obtain guidelines for external training submissions.</p>",
+      "depth": 0,
+      "first": true,
+      "id": 684490,
+      "postDate": "2026-03-25T05:49:47.879Z"
+    },
+    {
+      "authorName": "JacobWu15",
+      "content": "<p>I have the same problem. Does someone slove it?</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3450699,
+      "postDate": "2026-04-30T08:28:13.557Z"
+    },
+    {
+      "authorName": "SANNNNN",
+      "content": "<p><code>adapter_config.json</code> and <code>adapter_model.safetensors</code> are essential. Make sure they finish uploading before submitting. If submission.zip is less than 3GB, it's not fully uploaded when submission.</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3444033,
+      "postDate": "2026-04-17T07:19:04.777Z"
+    },
+    {
+      "authorName": "Russell Kirk",
+      "content": "<p>Depends on what modules you target! </p>",
+      "depth": 1,
+      "first": false,
+      "id": 3450702,
+      "postDate": "2026-04-30T08:31:47.303Z"
+    },
+    {
+      "authorName": "Rishabh",
+      "content": "<p>hey, facing similar issue today, were you able to figure out the way?</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3443376,
+      "postDate": "2026-04-16T13:22:00.717Z"
+    }
+  ],
+  "text_sha256": "d66495580c1e5ef159969c8c3232c04f0352e46bc6a2d6ba52f3529da1e80515",
+  "topic": {
+    "authorName": "Liangjie Zhao",
+    "authorUrl": "https://www.kaggle.com/liangjiezhao",
+    "commentCount": 4,
+    "content": "<p>My training process was completed on my private server, and I obtained the adapter's config.json, tensor, and other files. However, after uploading them, I encountered an \"Evaluation metric raised an unexpected error\" error. Therefore, I would like to obtain guidelines for external training submissions.</p>",
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 684490,
+    "postDate": "2026-03-25T05:49:47.879Z",
+    "title": "What should be included in submission.zip?",
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/684490",
+    "votes": 4
+  },
+  "topic_id": 684490,
+  "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/684490"
+}

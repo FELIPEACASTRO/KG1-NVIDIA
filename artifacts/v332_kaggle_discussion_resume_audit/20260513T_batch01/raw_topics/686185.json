@@ -1,0 +1,66 @@
+{
+  "fetched_at_utc": "2026-05-13T15:43:32.464405+00:00",
+  "full_text": "[message_id=686185 author=CS Major first=True]\nWas looking through some of the questions where my CoT generating code failed (mostly in the symbolic algebra question types) and I noticed a few questions such as the following:\n\"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:\n34/44 = 1\n41/32 = 9\n34|25 = 69\n87\\64 = 8853\nNow, determine the result for: 69/52\" and the solution is \"17/\"\nand \n\"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:\n45^08 = 0234\n37}95 = 131\n99^88 = 2178\nNow, determine the result for: 52}51\" and the solution is \"93\"\nIs this just a dataset quality issue or am I missing something? I got a higher score (0.7) leaving these unsolved examples in compared to excluding them (0.63) so I'm not too sure honestly.\n\n[message_id=3432076 author=Kh0a first=False]\nthe puzzles are very rule-consistent. \"/\" appeared since is it defined as negative sign.\n69/52 = rev(rev(52) - rev(69)) = rev(25 - 96) = rev(-71) = 17- => 17/ \n52}51 = rev(rev(52) + rev(51) - 1) = rev(25 + 15 -1) = rev(39) = 93\n\n[message_id=3431794 author=CS Major first=False]\nIf it helps, this is the log for success/failure\nbit_manipulation: 842 success, 760 failed (52.6% success)\ngravity_physics: 1590 success, 7 failed (99.6% success)\nnumeral_conversion: 1576 success, 0 failed (100.0% success)\nsymbolic_algebra: 1004 success, 551 failed (64.6% success)\ntext_encryption: 1576 success, 0 failed (100.0% success)\nunit_conversion: 1593 success, 1 failed (99.9% success)\n\n[message_id=3434699 author=akshit manocha first=False]\nthis is for the brute force? or was your fine tuned model able to solve this?\n\n[message_id=3434724 author=CS Major first=False]\nThis was produced by my deterministic CoT generating code. I haven’t actually tested my model against a validation set yet (probably not best practice) but once my solver is strong enough I’m planning on using that to produce synthetic example’s following the same logic in the provided set and train + validate on that.",
+  "message_count_observed": 5,
+  "messages": [
+    {
+      "authorName": "CS Major",
+      "content": "<p>Was looking through some of the questions where my CoT generating code failed (mostly in the symbolic algebra question types) and I noticed a few questions such as the following:</p>\n<p>\"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:\n34/44 = 1\n41/32 = 9\n34|25 = 69\n87\\64 = 8853\nNow, determine the result for: 69/52\"    and the solution is \"17/\"</p>\n<p>and </p>\n<p>\"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:\n45^08 = 0234\n37}95 = 131\n99^88 = 2178\nNow, determine the result for: 52}51\" and the solution is \"93\"</p>\n<p>Is this just a dataset quality issue or am I missing something? I got a higher score (0.7) leaving these unsolved examples in compared to excluding them (0.63) so I'm not too sure honestly.</p>",
+      "depth": 0,
+      "first": true,
+      "id": 686185,
+      "postDate": "2026-03-30T17:17:57.426Z"
+    },
+    {
+      "authorName": "Kh0a",
+      "content": "<p>the puzzles are very rule-consistent. \"/\" appeared since is it defined as negative sign.</p>\n<p><code>69/52 = rev(rev(52) - rev(69)) = rev(25 - 96) = rev(-71) = 17- =&gt; 17/</code></p>\n<p><code>52}51 = rev(rev(52) + rev(51) - 1) = rev(25 + 15 -1) = rev(39) = 93</code></p>",
+      "depth": 0,
+      "first": false,
+      "id": 3432076,
+      "postDate": "2026-03-31T04:12:04.327Z",
+      "votes": 5
+    },
+    {
+      "authorName": "CS Major",
+      "content": "<p>If it helps, this is the log for success/failure</p>\n<p>bit_manipulation: 842 success, 760 failed (52.6% success)</p>\n<p>gravity_physics: 1590 success, 7 failed (99.6% success)</p>\n<p>numeral_conversion: 1576 success, 0 failed (100.0% success)</p>\n<p>symbolic_algebra: 1004 success, 551 failed (64.6% success)</p>\n<p>text_encryption: 1576 success, 0 failed (100.0% success)</p>\n<p>unit_conversion: 1593 success, 1 failed (99.9% success)</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3431794,
+      "postDate": "2026-03-30T17:21:19.443Z",
+      "votes": 2
+    },
+    {
+      "authorName": "akshit manocha",
+      "content": "<p>this is for the brute force? or was your fine tuned model able to solve this?</p>",
+      "depth": 1,
+      "first": false,
+      "id": 3434699,
+      "postDate": "2026-04-03T06:17:11.220Z",
+      "votes": 1
+    },
+    {
+      "authorName": "CS Major",
+      "content": "<p>This was produced by my deterministic CoT generating code. I haven’t actually tested my model against a validation set yet (probably not best practice) but once my solver is strong enough I’m planning on using that to produce synthetic example’s following the same logic in the provided set and train + validate on that. </p>",
+      "depth": 2,
+      "first": false,
+      "id": 3434724,
+      "postDate": "2026-04-03T06:54:04.927Z"
+    }
+  ],
+  "text_sha256": "80406fbbbbe101494ea1fd17d7d6d6f72126c242181d033d3301cfece23fdfb5",
+  "topic": {
+    "authorName": "CS Major",
+    "authorUrl": "https://www.kaggle.com/aaditsingh7",
+    "commentCount": 4,
+    "content": "<p>Was looking through some of the questions where my CoT generating code failed (mostly in the symbolic algebra question types) and I noticed a few questions such as the following:</p>\n<p>\"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:\n34/44 = 1\n41/32 = 9\n34|25 = 69\n87\\64 = 8853\nNow, determine the result for: 69/52\"    and the solution is \"17/\"</p>\n<p>and </p>\n<p>\"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:\n45^08 = 0234\n37}95 = 131\n99^88 = 2178\nNow, determine the result for: 52}51\" and the solution is \"93\"</p>\n<p>Is this just a dataset quality issue or am I missing something? I got a higher score (0.7) leaving these unsolved examples in compared to excluding them (0.63) so I'm not too sure honestly.</p>",
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 686185,
+    "postDate": "2026-03-30T17:17:57.426Z",
+    "title": "Seemingly Impossible Questions in Dataset?",
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/686185",
+    "votes": 3
+  },
+  "topic_id": 686185,
+  "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/686185"
+}

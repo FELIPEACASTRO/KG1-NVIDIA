@@ -1,0 +1,112 @@
+{
+  "topic_id": 685380,
+  "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/685380",
+  "topic": {
+    "authorId": 636309,
+    "authorThumbnailName": "636309-fb.jpg",
+    "authorUserDisplayName": "VaidehiPandey",
+    "authorUserName": "bauapandey",
+    "firstMessageId": 3430111,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 685380,
+    "name": "Permission denied error for ptxas-blackwell",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-03-27T21:26:44.566230400Z",
+    "totalVotes": 4,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/685380",
+    "totalMessages": 14,
+    "authorPerformanceTier": "CONTRIBUTOR",
+    "authorProgressionOptOut": false
+  },
+  "first_message": {
+    "id": 3430111,
+    "postDate": "2026-03-27T21:26:44.567Z",
+    "rawMarkdown": "I am getting this error when I try to train my lora adapter: \n\nPermissionError: [Errno 13] Permission denied: '/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/triton/backends/nvidia/bin/ptxas-blackwell'",
+    "content": "<p>I am getting this error when I try to train my lora adapter: </p>\n<p>PermissionError: [Errno 13] Permission denied: '/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/triton/backends/nvidia/bin/ptxas-blackwell'</p>",
+    "parent": {
+      "url": "#"
+    },
+    "author": {
+      "displayName": "VaidehiPandey",
+      "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/636309-fb.jpg",
+      "url": "/bauapandey",
+      "tier": "CONTRIBUTOR",
+      "id": 636309,
+      "progressionOptOut": false
+    },
+    "authorType": "TOPIC",
+    "votes": {
+      "totalVotes": 4,
+      "canUpvote": true,
+      "totalUpvotes": 4
+    },
+    "kernelVersion": 0,
+    "competitionRanking": 2448,
+    "feedbackTrackingData": {},
+    "teamUpInfo": {
+      "teamLeader": {
+        "displayName": "VaidehiPandey",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/636309-fb.jpg",
+        "url": "/bauapandey",
+        "userName": "bauapandey",
+        "tier": "CONTRIBUTOR",
+        "id": 636309,
+        "profileUrl": "/bauapandey",
+        "performanceTier": "CONTRIBUTOR",
+        "userId": 636309,
+        "progressionOptOut": false
+      },
+      "intro": ""
+    }
+  },
+  "messages": [
+    {
+      "id": 3430111,
+      "postDate": "2026-03-27T21:26:44.567Z",
+      "rawMarkdown": "I am getting this error when I try to train my lora adapter: \n\nPermissionError: [Errno 13] Permission denied: '/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/triton/backends/nvidia/bin/ptxas-blackwell'",
+      "content": "<p>I am getting this error when I try to train my lora adapter: </p>\n<p>PermissionError: [Errno 13] Permission denied: '/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/triton/backends/nvidia/bin/ptxas-blackwell'</p>",
+      "parent": {
+        "url": "#"
+      },
+      "author": {
+        "displayName": "VaidehiPandey",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/636309-fb.jpg",
+        "url": "/bauapandey",
+        "tier": "CONTRIBUTOR",
+        "id": 636309,
+        "progressionOptOut": false
+      },
+      "authorType": "TOPIC",
+      "votes": {
+        "totalVotes": 4,
+        "canUpvote": true,
+        "totalUpvotes": 4
+      },
+      "kernelVersion": 0,
+      "competitionRanking": 2448,
+      "feedbackTrackingData": {},
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "VaidehiPandey",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/636309-fb.jpg",
+          "url": "/bauapandey",
+          "userName": "bauapandey",
+          "tier": "CONTRIBUTOR",
+          "id": 636309,
+          "profileUrl": "/bauapandey",
+          "performanceTier": "CONTRIBUTOR",
+          "userId": 636309,
+          "progressionOptOut": false
+        },
+        "intro": ""
+      },
+      "depth": 0,
+      "is_first_message": true
+    }
+  ],
+  "message_count_observed": 1,
+  "text_sha256": "e3dc930aa4d75f8daa959a666b062a83092fb48e522ec1ee5645049907b8e490",
+  "full_text": "[message_id=3430111 author= first=True]\nI am getting this error when I try to train my lora adapter: \n\nPermissionError: [Errno 13] Permission denied: '/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/triton/backends/nvidia/bin/ptxas-blackwell'"
+}

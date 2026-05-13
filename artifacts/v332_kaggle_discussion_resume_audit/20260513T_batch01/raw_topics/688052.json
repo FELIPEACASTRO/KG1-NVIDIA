@@ -1,0 +1,80 @@
+{
+  "fetched_at_utc": "2026-05-13T15:44:40.176995+00:00",
+  "full_text": "[message_id=688052 author=blckvia first=True]\nI trained a model but the submission.zip file is too large to download and then upload to Kaggle. I also tried Save & Run All (Commit), but it runs on a P100 GPU which doesn't have enough memory, so it fails as well. How can I submit my output file?\n\n[message_id=3435623 author=CPMP first=False]\nyou must use the RTX Pro 6000 Blackwell GPU.\n\n[message_id=3435634 author=blckvia first=False]\nWhen I trained, I used a Blackwell GPU, but when I tried to commit and submit, I selected \"Run with GPU for all/this sessions\" and Kaggle used a P100 instead. I also have submission.zip in my working directory in Kaggle but it's 3GB and I can't download it through the browser. Is there another way to submit this file?\npic\n\n[message_id=3435681 author=CPMP first=False]\nsleect the blackwell when you submit.\n\n[message_id=3435755 author=Vedrin Jeliazkov first=False]\nWhen I trained, I used a Blackwell GPU, but when I tried to commit and submit, I selected \"Run with GPU for all/this sessions\" and Kaggle used a P100 instead. I also have submission.zip in my working directory in Kaggle but it's 3GB and I can't download it through the browser. Is there another way to submit this file?\nWith persistence enabled (files only) you could start a new CPU-only session (without any accelerator and with Internet enabled) and submit to the competition by running a command like:\n!kaggle competitions submit -c nvidia-nemotron-model-reasoning-challenge -f submission.zip -m \"My first submission\" \nIn such a way you would avoid consuming some of your GPU quota in the submission process.\n\n[message_id=3436000 author=blckvia first=False]\nThank you a lot\n\n[message_id=3436001 author=blckvia first=False]\nI finally found where I can choose GPU for \"Save & Run All\"",
+  "message_count_observed": 7,
+  "messages": [
+    {
+      "authorName": "blckvia",
+      "content": "<p>I trained a model but the submission.zip file is too large to download and then upload to Kaggle. I also tried Save &amp; Run All (Commit), but it runs on a P100 GPU which doesn't have enough memory, so it fails as well. How can I submit my output file?</p>",
+      "depth": 0,
+      "first": true,
+      "id": 688052,
+      "postDate": "2026-04-04T13:13:35.877Z"
+    },
+    {
+      "authorName": "CPMP",
+      "content": "<p>you must use the RTX Pro 6000 Blackwell GPU.</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3435623,
+      "postDate": "2026-04-04T13:35:51.023Z"
+    },
+    {
+      "authorName": "blckvia",
+      "content": "<p>When I trained, I used a Blackwell GPU, but when I tried to commit and submit, I selected \"Run with GPU for all/this sessions\" and Kaggle used a P100 instead. I also have submission.zip in my working directory in Kaggle but it's 3GB and I can't download it through the browser. Is there another way to submit this file?\n<a href=\"https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F7885022%2Fabf0089d3b10efc66c50681c99b5bff7%2FScreenshot%202026-04-04%20at%2016.40.07.png?generation=1775310034257947&amp;alt=media\" target=\"_blank\">pic</a></p>",
+      "depth": 1,
+      "first": false,
+      "id": 3435634,
+      "postDate": "2026-04-04T13:45:12.877Z"
+    },
+    {
+      "authorName": "CPMP",
+      "content": "<p>sleect the blackwell when you submit.</p>",
+      "depth": 2,
+      "first": false,
+      "id": 3435681,
+      "postDate": "2026-04-04T14:54:49.987Z",
+      "votes": 1
+    },
+    {
+      "authorName": "Vedrin Jeliazkov",
+      "content": "<blockquote>\n  <p>When I trained, I used a Blackwell GPU, but when I tried to commit and submit, I selected \"Run with GPU for all/this sessions\" and Kaggle used a P100 instead. I also have submission.zip in my working directory in Kaggle but it's 3GB and I can't download it through the browser. Is there another way to submit this file?</p>\n</blockquote>\n<p>With persistence enabled (files only) you could start a new CPU-only session (without any accelerator and with Internet enabled) and submit to the competition by running a command like:</p>\n<p><code>!kaggle competitions submit -c nvidia-nemotron-model-reasoning-challenge -f submission.zip -m \"My first submission\"</code></p>\n<p>In such a way you would avoid consuming some of your GPU quota in the submission process. </p>",
+      "depth": 2,
+      "first": false,
+      "id": 3435755,
+      "postDate": "2026-04-04T17:20:59.157Z",
+      "votes": 2
+    },
+    {
+      "authorName": "blckvia",
+      "content": "<p>Thank you a lot</p>",
+      "depth": 2,
+      "first": false,
+      "id": 3436000,
+      "postDate": "2026-04-05T06:02:24.150Z"
+    },
+    {
+      "authorName": "blckvia",
+      "content": "<p>I finally found where I can choose GPU for \"Save &amp; Run All\"</p>",
+      "depth": 2,
+      "first": false,
+      "id": 3436001,
+      "postDate": "2026-04-05T06:03:43.093Z"
+    }
+  ],
+  "text_sha256": "54bc36f80a002d9545244ab47b0c6f70c24804937a59f06bf474a090b4d22386",
+  "topic": {
+    "authorName": "blckvia",
+    "authorUrl": "https://www.kaggle.com/blckvia",
+    "commentCount": 6,
+    "content": "<p>I trained a model but the submission.zip file is too large to download and then upload to Kaggle. I also tried Save &amp; Run All (Commit), but it runs on a P100 GPU which doesn't have enough memory, so it fails as well. How can I submit my output file?</p>",
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 688052,
+    "postDate": "2026-04-04T13:13:35.877Z",
+    "title": "Large submission.zip can't be downloaded and Commit fails due to insufficient GPU memory",
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/688052"
+  },
+  "topic_id": 688052,
+  "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/688052"
+}

@@ -1,0 +1,70 @@
+{
+  "fetched_at_utc": "2026-05-13T15:41:57.840402+00:00",
+  "full_text": "[message_id=689840 author=m4nocha first=True]\nhere are my results with SFT\n=======================================================\n✅ OVERALL ACCURACY : 81.34% (693/852)\n-------------------------------------------------------\n> Bit Manipulation : 9.23% (12/130)\n> Equation Transformation : 52.11% (37/71)\n> Gravitational Constant : 100.00% (148/148)\n> Number Base Conversion : 100.00% (162/162)\n> Text Encryption : 95.86% (162/169)\n> Unit Conversion : 100.00% (172/172)\n-------------------------------------------------------\n🚀 SPEED : 1815.43 tokens/s | 💾 SAVED TO : /kaggle/working/evaluation_results.json\n=======================================================\nshould I work on making better CoT reasoning traces. or should I now go with GRPO + PRM\ngiven I have revere engineered almost the entire data except the symbol transformation\n\n[message_id=3439093 author=Komil Parmar first=False]\nThe results are very satisfying. Can you share if the CoT reasoning traces were generated manually (i.e. algorithmicly) or using a bigger and much better teacher model?\n\n[message_id=3439090 author=QianYuu first=False]\nHow did you achieve such a high local CV? Why is your LB only 0.72?\n\n[message_id=3439107 author=Ankith Savio first=False]\nthe sample size from each category is not uniformly distributed in this validation set\n\n[message_id=3439121 author=m4nocha first=False]\nYou're right\nThe thing is I was able to brute force 1443 bitwise problems\n100% for gravity text unit conversion and roman\nFor equation transformation I was able to to crack only the numeric ones\nI got 100% (732 problems) \nThe evaluation was performed on 10% of the training set\nSo if you add those numbers up (12+37+148+162+162+172+0 [assuming 0% on symbolic equation transformation)/950\nThen the accuracy on val set is 73%\n\n[message_id=3439099 author= first=False]",
+  "message_count_observed": 6,
+  "messages": [
+    {
+      "authorName": "m4nocha",
+      "content": "<p>here are my results with SFT</p>\n<pre><code>=======================================================\n✅ OVERALL ACCURACY : 81.34% (693/852)\n-------------------------------------------------------\n  &gt; Bit Manipulation         :  9.23%  (12/130)\n  &gt; Equation Transformation  : 52.11%  (37/71)\n  &gt; Gravitational Constant   : 100.00%  (148/148)\n  &gt; Number Base Conversion   : 100.00%  (162/162)\n  &gt; Text Encryption          : 95.86%  (162/169)\n  &gt; Unit Conversion          : 100.00%  (172/172)\n-------------------------------------------------------\n🚀 SPEED    : 1815.43 tokens/s | 💾 SAVED TO : /kaggle/working/evaluation_results.json\n=======================================================\n</code></pre>\n<p>should I work on making better CoT reasoning traces. or should I now go with GRPO + PRM\ngiven I have revere engineered almost the entire data except the symbol transformation</p>",
+      "depth": 0,
+      "first": true,
+      "id": 689840,
+      "postDate": "2026-04-09T19:12:39.328Z"
+    },
+    {
+      "authorName": "Komil Parmar",
+      "content": "<p>The results are very satisfying. Can you share if the CoT reasoning traces were generated manually (i.e. algorithmicly) or using a bigger and much better teacher model?</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3439093,
+      "postDate": "2026-04-10T07:53:43.193Z"
+    },
+    {
+      "authorName": "QianYuu",
+      "content": "<p>How did you achieve such a high local CV? Why is your LB only 0.72?</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3439090,
+      "postDate": "2026-04-10T07:48:25.893Z"
+    },
+    {
+      "authorName": "Ankith Savio",
+      "content": "<p>the sample size from each category is not uniformly distributed in this validation set</p>",
+      "depth": 1,
+      "first": false,
+      "id": 3439107,
+      "postDate": "2026-04-10T08:15:14.457Z"
+    },
+    {
+      "authorName": "m4nocha",
+      "content": "<p>You're right\nThe thing is I was able to brute force 1443 bitwise problems\n100% for gravity text unit conversion and roman\nFor equation transformation I was able to to crack only the numeric ones\nI got 100% (732 problems) \nThe evaluation was performed on 10% of the training set\nSo if you add those numbers up (12+37+148+162+162+172+0 [assuming 0% on symbolic equation transformation)/950\nThen the accuracy on val set is 73%</p>",
+      "depth": 2,
+      "first": false,
+      "id": 3439121,
+      "postDate": "2026-04-10T08:40:03.627Z",
+      "votes": 2
+    },
+    {
+      "depth": 0,
+      "first": false,
+      "id": 3439099,
+      "postDate": "2026-04-10T08:03:34.783Z"
+    }
+  ],
+  "text_sha256": "a051a854445fdcd45258b805c9089477eeb8274211fa1719bdf23645fddb8dce",
+  "topic": {
+    "authorName": "m4nocha",
+    "authorUrl": "https://www.kaggle.com/aksh1t",
+    "commentCount": 5,
+    "content": "<p>here are my results with SFT</p>\n<pre><code>=======================================================\n✅ OVERALL ACCURACY : 81.34% (693/852)\n-------------------------------------------------------\n  &gt; Bit Manipulation         :  9.23%  (12/130)\n  &gt; Equation Transformation  : 52.11%  (37/71)\n  &gt; Gravitational Constant   : 100.00%  (148/148)\n  &gt; Number Base Conversion   : 100.00%  (162/162)\n  &gt; Text Encryption          : 95.86%  (162/169)\n  &gt; Unit Conversion          : 100.00%  (172/172)\n-------------------------------------------------------\n🚀 SPEED    : 1815.43 tokens/s | 💾 SAVED TO : /kaggle/working/evaluation_results.json\n=======================================================\n</code></pre>\n<p>should I work on making better CoT reasoning traces. or should I now go with GRPO + PRM\ngiven I have revere engineered almost the entire data except the symbol transformation</p>",
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 689840,
+    "postDate": "2026-04-09T19:12:39.328Z",
+    "title": "Is RLVR worth it? or should I work on SFT only?",
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/689840",
+    "votes": 3
+  },
+  "topic_id": 689840,
+  "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/689840"
+}

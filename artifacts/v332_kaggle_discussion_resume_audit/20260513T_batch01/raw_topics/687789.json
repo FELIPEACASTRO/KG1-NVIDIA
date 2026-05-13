@@ -1,0 +1,38 @@
+{
+  "fetched_at_utc": "2026-05-13T15:44:36.974306+00:00",
+  "full_text": "[message_id=687789 author=Svanik Kolli first=True]\nHey everyone, quick question about scoring in the NVIDIA Nemotron Model Reasoning Challenge \nDoes anyone have a clear understanding of how the evaluation metric actually works?\nFrom what I’ve observed, it seems heavily tied to whether the final answer is correct (especially formatting like boxed answers), but I’m not sure how much partial reasoning or intermediate steps are considered in the score.\nIs it purely exact-match on the final answer, or is there some tolerance / grading for reasoning quality as well?\nAlso curious if small formatting differences (like missing \\boxed{}) can significantly impact the score.\nAlso, I’m working locally on a MacBook M3 Pro (16 GB Memory) and trying to push into the 0.75+ range without relying on Kaggle notebooks. Has anyone managed to reach that level locally, or is external compute basically required at that point?\nWould really appreciate any insights or experiences. Thanks\n\n[message_id=3435540 author=m4nocha first=False]\n1% relative error for numerical questions. else no relief is given and the Score is calculated using Pass@1 at 0 temperature",
+  "message_count_observed": 2,
+  "messages": [
+    {
+      "authorName": "Svanik Kolli",
+      "content": "<p>Hey everyone, quick question about scoring in the NVIDIA Nemotron Model Reasoning Challenge </p>\n<p>Does anyone have a clear understanding of how the evaluation metric actually works?</p>\n<p>From what I’ve observed, it seems heavily tied to whether the final answer is correct (especially formatting like boxed answers), but I’m not sure how much partial reasoning or intermediate steps are considered in the score.</p>\n<p>Is it purely exact-match on the final answer, or is there some tolerance / grading for reasoning quality as well?</p>\n<p>Also curious if small formatting differences (like missing \\boxed{}) can significantly impact the score.</p>\n<p>Also, I’m working locally on a MacBook M3 Pro (16 GB Memory) and trying to push into the 0.75+ range without relying on Kaggle notebooks. Has anyone managed to reach that level locally, or is external compute basically required at that point?</p>\n<p>Would really appreciate any insights or experiences. Thanks </p>",
+      "depth": 0,
+      "first": true,
+      "id": 687789,
+      "postDate": "2026-04-03T17:02:02.070Z"
+    },
+    {
+      "authorName": "m4nocha",
+      "content": "<p>1% relative error for numerical questions. else no relief is given and the Score is calculated using Pass@1 at 0 temperature</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3435540,
+      "postDate": "2026-04-04T11:19:26.243Z"
+    }
+  ],
+  "text_sha256": "86cb43f1112bc9a7e25f7b9153284374a75bb10e518c57565113db8d84174d93",
+  "topic": {
+    "authorName": "Svanik Kolli",
+    "authorUrl": "https://www.kaggle.com/svanikkolli",
+    "commentCount": 1,
+    "content": "<p>Hey everyone, quick question about scoring in the NVIDIA Nemotron Model Reasoning Challenge </p>\n<p>Does anyone have a clear understanding of how the evaluation metric actually works?</p>\n<p>From what I’ve observed, it seems heavily tied to whether the final answer is correct (especially formatting like boxed answers), but I’m not sure how much partial reasoning or intermediate steps are considered in the score.</p>\n<p>Is it purely exact-match on the final answer, or is there some tolerance / grading for reasoning quality as well?</p>\n<p>Also curious if small formatting differences (like missing \\boxed{}) can significantly impact the score.</p>\n<p>Also, I’m working locally on a MacBook M3 Pro (16 GB Memory) and trying to push into the 0.75+ range without relying on Kaggle notebooks. Has anyone managed to reach that level locally, or is external compute basically required at that point?</p>\n<p>Would really appreciate any insights or experiences. Thanks </p>",
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 687789,
+    "postDate": "2026-04-03T17:02:02.070Z",
+    "title": "Kaggle Scoring ",
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/687789"
+  },
+  "topic_id": 687789,
+  "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/687789"
+}

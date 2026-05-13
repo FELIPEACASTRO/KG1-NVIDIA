@@ -1,0 +1,55 @@
+{
+  "fetched_at_utc": "2026-05-13T15:46:58.958677+00:00",
+  "full_text": "[message_id=694350 author=adityaghai07 first=True]\nI made a submission and it shows pending for about 2 hrs, is that normal? What is the average time when we get a score or it gives an error?\nThank You!\n\n[message_id=3448025 author=Svanik Kolli first=False]\nIt usally takes 70-90 mins\n\n[message_id=3448050 author=adityaghai07 first=False]\nthank you so much!\n\n[message_id=3452955 author=Rustam Bazarbayev first=False]\nHow can I make training faster? Mine is running ~10 hours",
+  "message_count_observed": 4,
+  "messages": [
+    {
+      "authorName": "adityaghai07",
+      "content": "<p>I made a submission and it shows pending for about 2 hrs, is that normal? What is the average time when we get a score or it gives an error?\nThank You!</p>",
+      "depth": 0,
+      "first": true,
+      "id": 694350,
+      "postDate": "2026-04-24T13:00:19.242Z"
+    },
+    {
+      "authorName": "Svanik Kolli",
+      "content": "<p>It usally takes 70-90 mins </p>",
+      "depth": 0,
+      "first": false,
+      "id": 3448025,
+      "postDate": "2026-04-24T13:01:29.033Z"
+    },
+    {
+      "authorName": "adityaghai07",
+      "content": "<p>thank you so much!</p>",
+      "depth": 1,
+      "first": false,
+      "id": 3448050,
+      "postDate": "2026-04-24T14:23:16.033Z"
+    },
+    {
+      "authorName": "Rustam Bazarbayev",
+      "content": "<p>How can I make training faster? Mine is running ~10 hours</p>",
+      "depth": 1,
+      "first": false,
+      "id": 3452955,
+      "postDate": "2026-05-04T16:30:02.867Z"
+    }
+  ],
+  "text_sha256": "82702fbe3c69519ed7510a8366e9831eff2f93430c9924c66be91c6248272469",
+  "topic": {
+    "authorName": "adityaghai07",
+    "authorUrl": "https://www.kaggle.com/adityaghai01",
+    "commentCount": 3,
+    "content": "<p>I made a submission and it shows pending for about 2 hrs, is that normal? What is the average time when we get a score or it gives an error?\nThank You!</p>",
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 694350,
+    "postDate": "2026-04-24T13:00:19.242Z",
+    "title": "Submission taking too long?",
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/694350",
+    "votes": 1
+  },
+  "topic_id": 694350,
+  "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/694350"
+}

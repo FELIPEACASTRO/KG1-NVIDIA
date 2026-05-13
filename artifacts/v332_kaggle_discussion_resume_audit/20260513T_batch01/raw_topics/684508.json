@@ -1,0 +1,73 @@
+{
+  "fetched_at_utc": "2026-05-13T15:40:53.535931+00:00",
+  "full_text": "[message_id=684508 author=m4nocha first=True]\nI saw that people are achieving 69% accuracy with only prompt -> boxed answer mapping\non the other hand i am able to achieve only 65% accuracy with synthetic CoT SFT (for 4 easy categories only)?\ndo you think there is something wrong with my training pipeline? or do I need to move forward with RL?\nI analysed the answer prompt on the validation set and the output reasoning trace is quite different from the training input\n\n[message_id=3430305 author=tamura_aicon first=False]\nIn my experiments, I've confirmed that SFT with an improved dataset can reach a score of 0.76.\n\n[message_id=3430315 author=Bianco Chiu first=False]\nHi, may I ask what do you mean by improved dataset, with CoT?\n\n[message_id=3430334 author=tamura_aicon first=False]\nYes, with CoT. In my experience, data quality matters far more than quantity. Not every category benefits from the same training approach.\n\n[message_id=3428589 author=SwiftyOS first=False]\nThis is something I'm wondering too. Where does RL play a part if its possible to programatically solve all the problems.\n\n[message_id=3429812 author=m4nocha first=False]\nhow much did you achieve with SFT then?",
+  "message_count_observed": 6,
+  "messages": [
+    {
+      "authorName": "m4nocha",
+      "content": "<p>I saw that people are achieving 69% accuracy with only prompt -&gt; boxed answer mapping\non the other hand i am able to achieve only 65% accuracy with synthetic CoT SFT (for 4 easy categories only)?<br>\ndo you think there is something wrong with my training pipeline? or do I need to move forward with RL?\nI analysed the answer prompt on the validation set and the output reasoning trace is quite different from the training input</p>",
+      "depth": 0,
+      "first": true,
+      "id": 684508,
+      "postDate": "2026-03-25T07:54:10.030Z"
+    },
+    {
+      "authorName": "tamura_aicon",
+      "content": "<p>In my experiments, I've confirmed that SFT with an improved dataset can reach a score of 0.76.</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3430305,
+      "postDate": "2026-03-28T08:22:29.657Z",
+      "votes": 4
+    },
+    {
+      "authorName": "Bianco Chiu",
+      "content": "<p>Hi, may I ask what do you mean by improved dataset, with CoT?</p>",
+      "depth": 1,
+      "first": false,
+      "id": 3430315,
+      "postDate": "2026-03-28T08:54:54.263Z"
+    },
+    {
+      "authorName": "tamura_aicon",
+      "content": "<p>Yes, with CoT. In my experience, data quality matters far more than quantity. Not every category benefits from the same training approach.</p>",
+      "depth": 2,
+      "first": false,
+      "id": 3430334,
+      "postDate": "2026-03-28T09:39:57.810Z",
+      "votes": 1
+    },
+    {
+      "authorName": "SwiftyOS",
+      "content": "<p>This is something I'm wondering too. Where does RL play a part if its possible to programatically solve all the problems.</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3428589,
+      "postDate": "2026-03-25T17:34:27.340Z"
+    },
+    {
+      "authorName": "m4nocha",
+      "content": "<p>how  much did you achieve with SFT then?</p>",
+      "depth": 1,
+      "first": false,
+      "id": 3429812,
+      "postDate": "2026-03-27T10:51:09.677Z"
+    }
+  ],
+  "text_sha256": "f42265b9174d3c9c9a758e38de4aaffc92a14ebee86066478ca82a5c904224ab",
+  "topic": {
+    "authorName": "m4nocha",
+    "authorUrl": "https://www.kaggle.com/aksh1t",
+    "commentCount": 5,
+    "content": "<p>I saw that people are achieving 69% accuracy with only prompt -&gt; boxed answer mapping\non the other hand i am able to achieve only 65% accuracy with synthetic CoT SFT (for 4 easy categories only)?<br>\ndo you think there is something wrong with my training pipeline? or do I need to move forward with RL?\nI analysed the answer prompt on the validation set and the output reasoning trace is quite different from the training input</p>",
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 684508,
+    "postDate": "2026-03-25T07:54:10.030Z",
+    "title": "maximum achievable performance with SFT only",
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/684508",
+    "votes": 2
+  },
+  "topic_id": 684508,
+  "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/684508"
+}

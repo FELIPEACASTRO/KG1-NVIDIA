@@ -1,0 +1,147 @@
+{
+  "fetched_at_utc": "2026-05-13T15:45:59.510115+00:00",
+  "full_text": "[message_id=690689 author=EISLab_hwlee first=True]\nI would like to bring the community's attention to a deceptive practice currently happening in the notebooks section to farm upvotes.\nnvidianemotron 0.81 new making 0.85 public soon \nWhy this notebook is fake and deceptive: \nOutput Copying (Plagiarism): The code inside this notebook is completely fake and does not generate the score it claims through actual modeling. Instead, it simply copies the submission.zip or outputs from other hard-working Kagglers' top-performing public notebooks directly into /kaggle/working/ . \nClickbait Titles: The author intentionally uses misleading titles like \"making 0.85 public soon\" to deceive users and farm upvotes. Furthermore, they have a history of writing fabricated scores in the titles that are completely different from what the actual code inside achieves.\nDisabled Comments: To prevent anyone from pointing out these issues or warning others, the author has deliberately disabled the comments section on the notebook.\nThis behavior disrespects the hard work of original authors and clutters the platform with spam. \nPlease be careful, always check the code before upvoting, and let's not reward this kind of cheating behavior.\n\n[message_id=3440609 author=CPMP first=False]\nI have proposed to allow downvotes on notebooks for fighting plagiarism, see https://www.kaggle.com/discussions/product-feedback/76394 \nIt was rejected by Kaggle. Maybe if enough people support this request then it will be implemented.\nI think it would be much simpler and more effective than finger pointing posts like yours. Even though I agree with why you posted it.\n\n[message_id=3440614 author=EISLab_hwlee first=False]\nThank you! I totally agree that a downvote button is the best solution, and I just upvoted your proposal. Since the author disabled comments, making this post was the only way to warn others right now. I really hope Kaggle implements your idea soon!\n\n[message_id=3440635 author=CPMP first=False]\nWell, my suggestion is 7 years old…\n\n[message_id=3440683 author=EISLab_hwlee first=False]\nOh, I just saw it…\n\n[message_id=3440578 author=Chew Kok Wah first=False]\nPlease click report at notebook for plagiarism so that Kaggle will remove it. Need more people to report in order to alert Kaggle properly.\n\n[message_id=3441274 author=Atah Alam first=False]\nI’ve posted a public apology addressing this issue here \nI take full responsibility for my actions and understand why this was wrong. I’ve removed the misleading content and will make sure anything I share going forward is genuine and reproducible.\nI appreciate the community calling this out.\n\n[message_id=3441720 author=Noizersam first=False]\nThen why did you delete the post🤣\n\n[message_id=3443459 author=Bhawesh Sinha 07 first=False]\nvery highlighted updates for us\n\n[message_id=3442682 author=Wasiq Ali first=False]\nOk well that's a very highlighted updates for us\n\n[message_id=3441734 author= first=False]\n\n\n[message_id=3441771 author=Tong Hui Kang first=False]\nI think there is some value to the community in sharing that it is possible that a public notebook can score 44/50 or 0.86/1.00, as long as it is well-attributed (it is a fork so that you can easily checked what exactly was changed).\nThe value of doing that in AIMO3 is much much bigger though, there was an ongoing contest for a prize.\n\n[message_id=3441810 author= first=False]\n\n\n[message_id=3441708 author= first=False]\n\n\n[message_id=3441111 author= first=False]",
+  "message_count_observed": 15,
+  "messages": [
+    {
+      "authorName": "EISLab_hwlee",
+      "content": "<p>I would like to bring the community's attention to a deceptive practice currently happening in the notebooks section to farm upvotes.</p>\n<p><a href=\"https://www.kaggle.com/code/atahalam/nvidianemotron-0-81-new-making-0-85-public-soon\" target=\"_blank\">nvidianemotron 0.81 new making 0.85 public soon</a></p>\n<p><strong>Why this notebook is fake and deceptive:</strong></p>\n<ol>\n<li><strong>Output Copying (Plagiarism):</strong> The code inside this notebook is completely fake and does not generate the score it claims through actual modeling. Instead, it simply copies the <code>submission.zip</code> or outputs from other hard-working Kagglers' top-performing public notebooks directly into <code>/kaggle/working/</code>. </li>\n<li><strong>Clickbait Titles:</strong> The author intentionally uses misleading titles like <em>\"making 0.85 public soon\"</em> to deceive users and farm upvotes. Furthermore, they have a history of writing fabricated scores in the titles that are completely different from what the actual code inside achieves.</li>\n<li><strong>Disabled Comments:</strong> To prevent anyone from pointing out these issues or warning others, the author has deliberately disabled the comments section on the notebook.</li>\n</ol>\n<p><strong>This behavior disrespects the hard work of original authors and clutters the platform with spam.</strong></p>\n<p>Please be careful, always check the code before upvoting, and let's not reward this kind of cheating behavior.</p>",
+      "depth": 0,
+      "first": true,
+      "id": 690689,
+      "postDate": "2026-04-12T16:01:29.320Z"
+    },
+    {
+      "authorName": "CPMP",
+      "content": "<p>I have proposed to allow downvotes on notebooks for fighting plagiarism, see <a href=\"https://www.kaggle.com/discussions/product-feedback/76394\" target=\"_blank\">https://www.kaggle.com/discussions/product-feedback/76394</a></p>\n<p>It was rejected by Kaggle. Maybe if enough people support this request then it will be implemented.</p>\n<p>I think it would be much simpler and more effective than finger pointing posts like yours. Even though I agree with why you posted it.</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3440609,
+      "postDate": "2026-04-12T17:50:33.723Z",
+      "votes": 13
+    },
+    {
+      "authorName": "EISLab_hwlee",
+      "content": "<p>Thank you! I totally agree that a downvote button is the best solution, and I just upvoted your proposal. Since the author disabled comments, making this post was the only way to warn others right now. I really hope Kaggle implements your idea soon!</p>",
+      "depth": 1,
+      "first": false,
+      "id": 3440614,
+      "postDate": "2026-04-12T18:01:21.593Z",
+      "votes": 1
+    },
+    {
+      "authorName": "CPMP",
+      "content": "<p>Well, my suggestion is 7 years old…</p>",
+      "depth": 2,
+      "first": false,
+      "id": 3440635,
+      "postDate": "2026-04-12T18:32:59.747Z",
+      "votes": 2
+    },
+    {
+      "authorName": "EISLab_hwlee",
+      "content": "<p>Oh, I just saw it…</p>",
+      "depth": 2,
+      "first": false,
+      "id": 3440683,
+      "postDate": "2026-04-12T20:47:59.503Z",
+      "votes": 1
+    },
+    {
+      "authorName": "Chew Kok Wah",
+      "content": "<p>Please click report at notebook for plagiarism so that Kaggle will remove it. Need more people to report in order to alert Kaggle properly.</p>\n<p><img src=\"https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F3967558%2Fe9a5903b334f66e3fa8f2b973d9f0972%2Fimage_2026-04-13_010333919.png?generation=1776013416452085&amp;alt=media\" alt=\"\"></p>",
+      "depth": 0,
+      "first": false,
+      "id": 3440578,
+      "postDate": "2026-04-12T16:59:16.243Z",
+      "votes": 4
+    },
+    {
+      "authorName": "Atah Alam",
+      "content": "<p>I’ve posted a public apology addressing this <a href=\"https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/691057\" target=\"_blank\">issue here </a></p>\n<p>I take full responsibility for my actions and understand why this was wrong. I’ve removed the misleading content and will make sure anything I share going forward is genuine and reproducible.</p>\n<p>I appreciate the community calling this out.</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3441274,
+      "postDate": "2026-04-13T18:27:13.873Z"
+    },
+    {
+      "authorName": "Noizersam",
+      "content": "<p>Then why did you delete the post🤣</p>",
+      "depth": 1,
+      "first": false,
+      "id": 3441720,
+      "postDate": "2026-04-14T13:43:51.450Z",
+      "votes": 2
+    },
+    {
+      "authorName": "Bhawesh Sinha 07",
+      "content": "<p>very highlighted updates for us</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3443459,
+      "postDate": "2026-04-16T15:35:09.047Z",
+      "votes": -1
+    },
+    {
+      "authorName": "Wasiq Ali",
+      "content": "<p>Ok well that's a very highlighted updates for us </p>",
+      "depth": 0,
+      "first": false,
+      "id": 3442682,
+      "postDate": "2026-04-15T18:58:33.103Z",
+      "votes": -1
+    },
+    {
+      "depth": 0,
+      "first": false,
+      "id": 3441734,
+      "postDate": "2026-04-14T14:15:32.513Z",
+      "votes": -1
+    },
+    {
+      "authorName": "Tong Hui Kang",
+      "content": "<p>I think there is some value to the community in sharing that it is possible that a public notebook can score 44/50 or 0.86/1.00, as long as it is well-attributed (it is a fork so that you can easily checked what exactly was changed).</p>\n<p>The value of doing that in AIMO3 is much much bigger though, there was an ongoing contest for a prize.</p>",
+      "depth": 1,
+      "first": false,
+      "id": 3441771,
+      "postDate": "2026-04-14T15:03:29.217Z",
+      "votes": 3
+    },
+    {
+      "depth": 2,
+      "first": false,
+      "id": 3441810,
+      "postDate": "2026-04-14T16:14:41.170Z",
+      "votes": 1
+    },
+    {
+      "depth": 0,
+      "first": false,
+      "id": 3441708,
+      "postDate": "2026-04-14T13:09:48.070Z"
+    },
+    {
+      "depth": 0,
+      "first": false,
+      "id": 3441111,
+      "postDate": "2026-04-13T14:14:59.550Z",
+      "votes": -1
+    }
+  ],
+  "text_sha256": "312b0ce3c3475612ede136565ac0500133d6fb9e66541d191d319413e4f5dc65",
+  "topic": {
+    "authorName": "EISLab_hwlee",
+    "authorUrl": "https://www.kaggle.com/leeheewon01",
+    "commentCount": 14,
+    "content": "<p>I would like to bring the community's attention to a deceptive practice currently happening in the notebooks section to farm upvotes.</p>\n<p><a href=\"https://www.kaggle.com/code/atahalam/nvidianemotron-0-81-new-making-0-85-public-soon\" target=\"_blank\">nvidianemotron 0.81 new making 0.85 public soon</a></p>\n<p><strong>Why this notebook is fake and deceptive:</strong></p>\n<ol>\n<li><strong>Output Copying (Plagiarism):</strong> The code inside this notebook is completely fake and does not generate the score it claims through actual modeling. Instead, it simply copies the <code>submission.zip</code> or outputs from other hard-working Kagglers' top-performing public notebooks directly into <code>/kaggle/working/</code>. </li>\n<li><strong>Clickbait Titles:</strong> The author intentionally uses misleading titles like <em>\"making 0.85 public soon\"</em> to deceive users and farm upvotes. Furthermore, they have a history of writing fabricated scores in the titles that are completely different from what the actual code inside achieves.</li>\n<li><strong>Disabled Comments:</strong> To prevent anyone from pointing out these issues or warning others, the author has deliberately disabled the comments section on the notebook.</li>\n</ol>\n<p><strong>This behavior disrespects the hard work of original authors and clutters the platform with spam.</strong></p>\n<p>Please be careful, always check the code before upvoting, and let's not reward this kind of cheating behavior.</p>",
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 690689,
+    "postDate": "2026-04-12T16:01:29.320Z",
+    "title": "[Fake Notebook Alert] Watch out for fake laptops that copy and upload other people's submission.",
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/690689",
+    "votes": 24
+  },
+  "topic_id": 690689,
+  "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/690689"
+}

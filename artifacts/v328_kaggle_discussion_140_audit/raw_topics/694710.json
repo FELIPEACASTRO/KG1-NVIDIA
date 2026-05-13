@@ -1,0 +1,28 @@
+{
+  "topic_id": 694710,
+  "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/694710",
+  "topic": {
+    "authorId": 33728306,
+    "authorThumbnailName": "33728306-kg.png?t=2026-04-25-07-15-05",
+    "authorUserDisplayName": "Taha",
+    "authorUserName": "tahaalam2009",
+    "firstMessageId": 3448732,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 694710,
+    "name": "How to Cut Nemotron Training from 11 Hours to 5h 40m (And Fix the \"Loss Illusion\")",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-04-26T13:56:00.393436100Z",
+    "totalVotes": 12,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/694710",
+    "totalMessages": 6,
+    "authorPerformanceTier": "CONTRIBUTOR",
+    "authorProgressionOptOut": false
+  },
+  "first_message": {},
+  "messages": [],
+  "message_count_observed": 0,
+  "text_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "full_text": ""
+}

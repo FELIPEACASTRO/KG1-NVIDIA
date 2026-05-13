@@ -1,0 +1,53 @@
+{
+  "fetched_at_utc": "2026-05-13T15:40:38.253693+00:00",
+  "full_text": "[message_id=684385 author=LEI ALEX first=True]\nThe actual cutlass code is hidden inside nvidia_cutlass_dsl/python_packages/. The package uses a .pth file to tell Python where to find it. However, simply adding your target directory to sys.path does not parse .pth files in non-standard directories. Python completely ignores the .pth file and fails to find the hidden folder.\nJust replace the first cell in your notebook with this code:\nimport subprocess, sys, os\nfrom pathlib import Path\ndef resolve_python_path(target_dir):\nfor pth_file in Path(target_dir).glob(\"*.pth\"):\nwith pth_file.open() as fp:\nrelpath = fp.read()\nrel_pack_path = (pth_file.parent/relpath)\nif rel_pack_path.exists():\nprint(f\"append {rel_pack_path}\")\nsys.path.append(str(rel_pack_path))\noffline_dir = \"/kaggle/input/nvidia-nemotron-offline-packages/offline_packages\"\ntarget_dir = \"/kaggle/working/packages\"\nos.makedirs(target_dir, exist_ok=True)\nresolve_python_path(\"/kaggle/usr/lib/notebooks/ryanholbrook/nvidia-utility-script/\")\nif os.path.exists(offline_dir):\nsubprocess.check_call([\nsys.executable, \"-m\", \"pip\", \"install\", \"-q\",\n\"--no-index\",\n\"--find-links\", offline_dir,\n\"--target\", target_dir,\n\"datasets\", \"trl\"\n])\nprint(\"Installed from offline packages\")\nelse:\nsubprocess.check_call([\nsys.executable, \"-m\", \"pip\", \"install\", \"-q\",\n\"--target\", target_dir,\n\"datasets\", \"trl\"\n])\nprint(\"Installed from PyPI\")\n# Add to Python path\nsys.path.append(target_dir)\nresolve_python_path(target_dir)\nimport datasets, trl, cutlass\nprint(\"datasets:\", datasets.__version__, \"trl:\", trl.__version__, \"cutlass:\", cutlass.__version__)\n\n[message_id=3428409 author= first=False]\n\n\n[message_id=3428186 author=Arthur Yu first=False]\nGreat thanks👍 fantastic work done！\n\n[message_id=3428016 author=Javier Hernández first=False]\nThanks a lot! it works! 👍",
+  "message_count_observed": 4,
+  "messages": [
+    {
+      "authorName": "LEI ALEX",
+      "content": "<p>The actual cutlass code is hidden inside nvidia_cutlass_dsl/python_packages/. The package uses a .pth file to tell Python where to find it. However, simply adding your target directory to sys.path does not parse .pth files in non-standard directories. Python completely ignores the .pth file and fails to find the hidden folder.</p>\n<p>Just replace the first cell in your notebook with this code:</p>\n<pre><code>import subprocess, sys, os\nfrom pathlib import Path\ndef resolve_python_path(target_dir):\n    for pth_file in Path(target_dir).glob(\"*.pth\"):\n        with pth_file.open() as fp:\n            relpath = fp.read()\n            rel_pack_path = (pth_file.parent/relpath)\n            if rel_pack_path.exists():\n                print(f\"append {rel_pack_path}\")\n                sys.path.append(str(rel_pack_path))\n\n\n\noffline_dir = \"/kaggle/input/nvidia-nemotron-offline-packages/offline_packages\"\ntarget_dir = \"/kaggle/working/packages\"\n\nos.makedirs(target_dir, exist_ok=True)\nresolve_python_path(\"/kaggle/usr/lib/notebooks/ryanholbrook/nvidia-utility-script/\")\n\nif os.path.exists(offline_dir):\n    subprocess.check_call([\n        sys.executable, \"-m\", \"pip\", \"install\", \"-q\",\n        \"--no-index\",\n        \"--find-links\", offline_dir,\n        \"--target\", target_dir,\n        \"datasets\", \"trl\"\n    ])\n    print(\"Installed from offline packages\")\nelse:\n    subprocess.check_call([\n        sys.executable, \"-m\", \"pip\", \"install\", \"-q\",\n        \"--target\", target_dir,\n        \"datasets\", \"trl\"\n    ])\n    print(\"Installed from PyPI\")\n\n# Add to Python path\nsys.path.append(target_dir)\nresolve_python_path(target_dir)\n\nimport datasets, trl, cutlass\nprint(\"datasets:\", datasets.__version__, \"trl:\", trl.__version__, \"cutlass:\", cutlass.__version__)\n</code></pre>",
+      "depth": 0,
+      "first": true,
+      "id": 684385,
+      "postDate": "2026-03-24T17:00:13.707Z"
+    },
+    {
+      "depth": 0,
+      "first": false,
+      "id": 3428409,
+      "postDate": "2026-03-25T13:20:30.260Z"
+    },
+    {
+      "authorName": "Arthur Yu",
+      "content": "<p>Great thanks👍 fantastic work done！</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3428186,
+      "postDate": "2026-03-25T03:46:40.147Z"
+    },
+    {
+      "authorName": "Javier Hernández",
+      "content": "<p>Thanks a lot! it works! 👍</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3428016,
+      "postDate": "2026-03-24T19:41:00.410Z"
+    }
+  ],
+  "text_sha256": "5983b15065fad7be16010e1e9fcaef7b9e68f88f1c18edb5feeaa8b9b5cc0fd4",
+  "topic": {
+    "authorName": "LEI ALEX",
+    "authorUrl": "https://www.kaggle.com/leialex",
+    "commentCount": 3,
+    "content": "<p>The actual cutlass code is hidden inside nvidia_cutlass_dsl/python_packages/. The package uses a .pth file to tell Python where to find it. However, simply adding your target directory to sys.path does not parse .pth files in non-standard directories. Python completely ignores the .pth file and fails to find the hidden folder.</p>\n<p>Just replace the first cell in your notebook with this code:</p>\n<pre><code>import subprocess, sys, os\nfrom pathlib import Path\ndef resolve_python_path(target_dir):\n    for pth_file in Path(target_dir).glob(\"*.pth\"):\n        with pth_file.open() as fp:\n            relpath = fp.read()\n            rel_pack_path = (pth_file.parent/relpath)\n            if rel_pack_path.exists():\n                print(f\"append {rel_pack_path}\")\n                sys.path.append(str(rel_pack_path))\n\n\n\noffline_dir = \"/kaggle/input/nvidia-nemotron-offline-packages/offline_packages\"\ntarget_dir = \"/kaggle/working/packages\"\n\nos.makedirs(target_dir, exist_ok=True)\nresolve_python_path(\"/kaggle/usr/lib/notebooks/ryanholbrook/nvidia-utility-script/\")\n\nif os.path.exists(offline_dir):\n    subprocess.check_call([\n        sys.executable, \"-m\", \"pip\", \"install\", \"-q\",\n        \"--no-index\",\n        \"--find-links\", offline_dir,\n        \"--target\", target_dir,\n        \"datasets\", \"trl\"\n    ])\n    print(\"Installed from offline packages\")\nelse:\n    subprocess.check_call([\n        sys.executable, \"-m\", \"pip\", \"install\", \"-q\",\n        \"--target\", target_dir,\n        \"datasets\", \"trl\"\n    ])\n    print(\"Installed from PyPI\")\n\n# Add to Python path\nsys.path.append(target_dir)\nresolve_python_path(target_dir)\n\nimport datasets, trl, cutlass\nprint(\"datasets:\", datasets.__version__, \"trl:\", trl.__version__, \"cutlass:\", cutlass.__version__)\n</code></pre>",
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 684385,
+    "postDate": "2026-03-24T17:00:13.707Z",
+    "title": "Fix ModuleNotFoundError for cutlass",
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/684385",
+    "votes": 8
+  },
+  "topic_id": 684385,
+  "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/684385"
+}

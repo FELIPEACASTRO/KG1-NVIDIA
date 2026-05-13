@@ -1,0 +1,72 @@
+{
+  "fetched_at_utc": "2026-05-13T15:44:24.891167+00:00",
+  "full_text": "[message_id=687117 author=JK-Piece first=True]\nThe following is written for the Open Progress Prize:\nOpen Progress Prize: $5,000 + 1 DGX Sparks \nAwarded to the team with the highest leaderboard score as of the Midpoint Cut-off Date: April 9, 2026.\nMethodology submissions Cut-off Date: April 16, 2026.\nWinners will be announced during Cloud NEXT (April 22-24, 2026)\nEach eligible participant may receive no more than one (1) DGX Spark.\nBecause many participants may want to form teams to compete for this prize, **will each member of a team receive 1 DGX Sparks? **\nThe question is crucial because 1 DGX Spark cannot be shared among different members of a team.\n\n[message_id=3433990 author=Addison Howard first=False]\nHi there-\nOnly 1 DGX Spark is available for the Open Progress prize. If you are on a team with multiple members, you can choose how to divide the prize (cash and DGX spark) accordingly.\n\n[message_id=3434225 author=Donald Galliano III first=False]\nHi. I made a post a few days ago about this. Is the prize awarded based on the private or public leaderboard?\n\n[message_id=3434233 author=JK-Piece first=False]\nBased on the public leaderboard for sure\n\n[message_id=3434255 author=Donald Galliano III first=False]\nAwesome! Thanks. That lets us know the winners basically end of April 9th then for the midpoint.\n\n[message_id=3433936 author=lakshmig82 first=False]\nAnd also re scoring must be done as soon as possible to refine solutions. Otherwise we are optimizing blindly for the next 2 weeks.",
+  "message_count_observed": 6,
+  "messages": [
+    {
+      "authorName": "JK-Piece",
+      "content": "<p>The following is written for the Open Progress Prize:</p>\n<p><strong>Open Progress Prize: $5,000 + 1 DGX Sparks</strong></p>\n<ul>\n<li>Awarded to the team with the highest leaderboard score as of the Midpoint Cut-off Date: April 9, 2026.</li>\n<li>Methodology submissions Cut-off Date: April 16, 2026.</li>\n<li>Winners will be announced during Cloud NEXT (April 22-24, 2026)</li>\n<li>Each eligible participant may receive no more than one (1) DGX Spark.</li>\n</ul>\n<p>Because many participants may want to form teams to compete for this prize, **will each member of a team receive 1 DGX Sparks? **</p>\n<p>The question is crucial because 1 DGX Spark cannot be shared among different members of a team.</p>",
+      "depth": 0,
+      "first": true,
+      "id": 687117,
+      "postDate": "2026-04-02T09:08:43.494Z"
+    },
+    {
+      "authorName": "Addison Howard",
+      "content": "<p>Hi there-</p>\n<p>Only 1 DGX Spark is available for the Open Progress prize. If you are on a team with multiple members, you can choose how to divide the prize (cash and DGX spark) accordingly.</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3433990,
+      "postDate": "2026-04-02T12:47:16.640Z",
+      "votes": 2
+    },
+    {
+      "authorName": "Donald Galliano III",
+      "content": "<p>Hi. I made a post a few days ago about this. Is the prize awarded based on the private or public leaderboard? </p>",
+      "depth": 1,
+      "first": false,
+      "id": 3434225,
+      "postDate": "2026-04-02T18:17:51.803Z"
+    },
+    {
+      "authorName": "JK-Piece",
+      "content": "<p>Based on the public leaderboard for sure </p>",
+      "depth": 2,
+      "first": false,
+      "id": 3434233,
+      "postDate": "2026-04-02T18:28:06.290Z"
+    },
+    {
+      "authorName": "Donald Galliano III",
+      "content": "<p>Awesome! Thanks. That lets us know the winners basically end of April 9th then for the midpoint. </p>",
+      "depth": 2,
+      "first": false,
+      "id": 3434255,
+      "postDate": "2026-04-02T18:58:04.800Z"
+    },
+    {
+      "authorName": "lakshmig82",
+      "content": "<p>And also re scoring must be done as soon as possible to refine solutions. Otherwise we are optimizing blindly for the next 2 weeks.</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3433936,
+      "postDate": "2026-04-02T10:58:47.050Z"
+    }
+  ],
+  "text_sha256": "23388cc811ec9570529a304cde9ac289ae85bbd36232aa3c3e09849d878344c0",
+  "topic": {
+    "authorName": "JK-Piece",
+    "authorUrl": "https://www.kaggle.com/jeannkouagou",
+    "commentCount": 5,
+    "content": "<p>The following is written for the Open Progress Prize:</p>\n<p><strong>Open Progress Prize: $5,000 + 1 DGX Sparks</strong></p>\n<ul>\n<li>Awarded to the team with the highest leaderboard score as of the Midpoint Cut-off Date: April 9, 2026.</li>\n<li>Methodology submissions Cut-off Date: April 16, 2026.</li>\n<li>Winners will be announced during Cloud NEXT (April 22-24, 2026)</li>\n<li>Each eligible participant may receive no more than one (1) DGX Spark.</li>\n</ul>\n<p>Because many participants may want to form teams to compete for this prize, **will each member of a team receive 1 DGX Sparks? **</p>\n<p>The question is crucial because 1 DGX Spark cannot be shared among different members of a team.</p>",
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 687117,
+    "postDate": "2026-04-02T09:08:43.494Z",
+    "title": "Clarification Regarding Open Progress Prize -- Hosts Needed ",
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/687117",
+    "votes": 1
+  },
+  "topic_id": 687117,
+  "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/687117"
+}

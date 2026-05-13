@@ -1,0 +1,47 @@
+{
+  "fetched_at_utc": "2026-05-13T15:46:05.549834+00:00",
+  "full_text": "[message_id=691125 author=Deval Mukherjee1 first=True]\nI saw the post from Tong about his attempt and he mentioned that he got a score of .84 twice and .85 once or something like that. If the evaluation is deterministic how does that happen ? am I missing something ?\n\n[message_id=3443280 author=Mark Cooper first=False]\nYes, it's non-deterministic in practice even though Kaggle sets temperature=0. You're not missing anything. Sources of variance:\nCUDA kernel non-determinism. torch.backends.cudnn.deterministic=False is the default, and several ops (attention, softmax reductions, batched matmul) have tiny float-order differences across runs. At temperature=0 these rarely matter, but over 7680 tokens × 34 puzzles a single\nflipped greedy decision cascades into a completely different answer.\nBatch composition. If Kaggle batches your 34 puzzles with different padding arrangements or ordering, logits for identical inputs can shift by ~1e-6. Usually harmless, but at exact greedy boundaries it flips the picked token.\nGPU hardware drift. Kaggle's grading infrastructure isn't guaranteed to route you to the same physical GPU / driver version between submissions. Different CUDA versions produce subtly different results.\nvLLM's prefix caching & scheduling. If prefix caching is enabled server-side, concurrent request arrival order affects KV cache hits.\nPractical impact: THK's 0.84/0.84/0.85 pattern suggests ~1 puzzle out of 34 flipping correct/wrong between runs = ~3% score variance. Matches your 0.64→0.66 (≈1 puzzle).\nWhat to do about it: \nKaggle lets you pick 2 submissions for the final private leaderboard. Submit your best adapter 3-5 times, pick the highest-scoring two.\nFor your own local benchmarking, expect ±1-2% just from this — don't chase changes smaller than that as if they're real.\nIf you really need determinism, set torch.use_deterministic_algorithms(True) and torch.backends.cudnn.deterministic=True in your training/inference stack — hurts speed but pins outputs.\nIt's a known feature of large-model inference at exact greedy, not a bug in the competition's grader.\n\n[message_id=3441518 author=Trishanth Mellimi first=False]\neven i got non deterministic score, 0.64 and 0.66 for the same submission a week back",
+  "message_count_observed": 3,
+  "messages": [
+    {
+      "authorName": "Deval Mukherjee1",
+      "content": "<p>I saw the post from Tong about his attempt and he mentioned that he got a score of .84 twice and .85 once or something like that. If the evaluation is deterministic how does that happen ? am I missing something ?</p>",
+      "depth": 0,
+      "first": true,
+      "id": 691125,
+      "postDate": "2026-04-13T23:50:06.907Z"
+    },
+    {
+      "authorName": "Mark Cooper",
+      "content": "<p>Yes, it's non-deterministic in practice even though Kaggle sets temperature=0. You're not missing anything. Sources of variance:</p>\n<ol>\n<li><p><strong>CUDA kernel non-determinism.</strong> <code>torch.backends.cudnn.deterministic=False</code> is the default, and several ops (attention, softmax reductions, batched matmul) have tiny float-order differences across runs. At temperature=0 these rarely matter, but over 7680 tokens × 34 puzzles a single<br>\nflipped greedy decision cascades into a completely different answer.</p></li>\n<li><p><strong>Batch composition.</strong> If Kaggle batches your 34 puzzles with different padding arrangements or ordering, logits for identical inputs can shift by ~1e-6. Usually harmless, but at exact greedy boundaries it flips the picked token.</p></li>\n<li><p><strong>GPU hardware drift.</strong> Kaggle's grading infrastructure isn't guaranteed to route you to the same physical GPU / driver version between submissions. Different CUDA versions produce subtly different results.</p></li>\n<li><p><strong>vLLM's prefix caching &amp; scheduling.</strong> If prefix caching is enabled server-side, concurrent request arrival order affects KV cache hits.</p>\n<p><strong>Practical impact:</strong> THK's 0.84/0.84/0.85 pattern suggests ~1 puzzle out of 34 flipping correct/wrong between runs = ~3% score variance. Matches your 0.64→0.66 (≈1 puzzle).</p>\n<p><strong>What to do about it:</strong></p></li>\n<li><p>Kaggle lets you pick 2 submissions for the final private leaderboard. Submit your best adapter 3-5 times, pick the highest-scoring two.</p></li>\n<li><p>For your own local benchmarking, expect ±1-2% just from this — don't chase changes smaller than that as if they're real.</p></li>\n<li><p>If you really need determinism, set <code>torch.use_deterministic_algorithms(True)</code> and <code>torch.backends.cudnn.deterministic=True</code> in your training/inference stack — hurts speed but pins outputs.</p>\n<p>It's a known feature of large-model inference at exact greedy, not a bug in the competition's grader.</p></li>\n</ol>",
+      "depth": 0,
+      "first": false,
+      "id": 3443280,
+      "postDate": "2026-04-16T10:22:05.097Z",
+      "votes": -2
+    },
+    {
+      "authorName": "Trishanth Mellimi",
+      "content": "<p>even i got non deterministic score, 0.64 and 0.66 for the same submission a week back</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3441518,
+      "postDate": "2026-04-14T06:11:38.823Z"
+    }
+  ],
+  "text_sha256": "3db6f247fc800c0d1cdda140b37e019f6c13b511b95ef088098041b888230dc0",
+  "topic": {
+    "authorName": "Deval Mukherjee1",
+    "authorUrl": "https://www.kaggle.com/devalmukherjee1",
+    "commentCount": 2,
+    "content": "<p>I saw the post from Tong about his attempt and he mentioned that he got a score of .84 twice and .85 once or something like that. If the evaluation is deterministic how does that happen ? am I missing something ?</p>",
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 691125,
+    "postDate": "2026-04-13T23:50:06.907Z",
+    "title": "Is the evaluation deterministic ?",
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/691125"
+  },
+  "topic_id": 691125,
+  "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/691125"
+}

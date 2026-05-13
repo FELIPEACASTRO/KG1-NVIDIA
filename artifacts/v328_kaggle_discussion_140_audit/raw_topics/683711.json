@@ -1,0 +1,112 @@
+{
+  "topic_id": 683711,
+  "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/683711",
+  "topic": {
+    "authorId": 2596066,
+    "authorThumbnailName": "2596066-gp.jpg",
+    "authorUserDisplayName": "Ioannis M",
+    "authorUserName": "imeintanis",
+    "firstMessageId": 3426060,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 683711,
+    "name": "[BUG] Utility script permission error",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-03-21T19:56:29.294499500Z",
+    "totalVotes": 7,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/683711",
+    "totalMessages": 6,
+    "authorPerformanceTier": "MASTER",
+    "authorProgressionOptOut": false
+  },
+  "first_message": {
+    "id": 3426060,
+    "postDate": "2026-03-21T19:56:29.293Z",
+    "rawMarkdown": "any ideas how this can be solved? I think until yesterday was fine\n\n> PermissionError: [Errno 13] Permission denied: '/kaggle/usr/lib/notebooks/ryanholbrook/nvidia-utility-script/triton/backends/nvidia/bin/ptxas-blackwell'\n\n\nThanks in advance\n",
+    "content": "<p>any ideas how this can be solved? I think until yesterday was fine</p>\n<blockquote>\n  <p>PermissionError: [Errno 13] Permission denied: '/kaggle/usr/lib/notebooks/ryanholbrook/nvidia-utility-script/triton/backends/nvidia/bin/ptxas-blackwell'</p>\n</blockquote>\n<p>Thanks in advance</p>",
+    "parent": {
+      "url": "#"
+    },
+    "author": {
+      "displayName": "Ioannis M",
+      "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2596066-gp.jpg",
+      "url": "/imeintanis",
+      "tier": "MASTER",
+      "id": 2596066,
+      "progressionOptOut": false
+    },
+    "authorType": "TOPIC",
+    "votes": {
+      "totalVotes": 7,
+      "canUpvote": true,
+      "totalUpvotes": 7
+    },
+    "kernelVersion": 0,
+    "competitionRanking": 1340,
+    "feedbackTrackingData": {},
+    "teamUpInfo": {
+      "teamLeader": {
+        "displayName": "Ioannis M",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2596066-gp.jpg",
+        "url": "/imeintanis",
+        "userName": "imeintanis",
+        "tier": "MASTER",
+        "id": 2596066,
+        "profileUrl": "/imeintanis",
+        "performanceTier": "MASTER",
+        "userId": 2596066,
+        "progressionOptOut": false
+      },
+      "intro": ""
+    }
+  },
+  "messages": [
+    {
+      "id": 3426060,
+      "postDate": "2026-03-21T19:56:29.293Z",
+      "rawMarkdown": "any ideas how this can be solved? I think until yesterday was fine\n\n> PermissionError: [Errno 13] Permission denied: '/kaggle/usr/lib/notebooks/ryanholbrook/nvidia-utility-script/triton/backends/nvidia/bin/ptxas-blackwell'\n\n\nThanks in advance\n",
+      "content": "<p>any ideas how this can be solved? I think until yesterday was fine</p>\n<blockquote>\n  <p>PermissionError: [Errno 13] Permission denied: '/kaggle/usr/lib/notebooks/ryanholbrook/nvidia-utility-script/triton/backends/nvidia/bin/ptxas-blackwell'</p>\n</blockquote>\n<p>Thanks in advance</p>",
+      "parent": {
+        "url": "#"
+      },
+      "author": {
+        "displayName": "Ioannis M",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2596066-gp.jpg",
+        "url": "/imeintanis",
+        "tier": "MASTER",
+        "id": 2596066,
+        "progressionOptOut": false
+      },
+      "authorType": "TOPIC",
+      "votes": {
+        "totalVotes": 7,
+        "canUpvote": true,
+        "totalUpvotes": 7
+      },
+      "kernelVersion": 0,
+      "competitionRanking": 1340,
+      "feedbackTrackingData": {},
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "Ioannis M",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2596066-gp.jpg",
+          "url": "/imeintanis",
+          "userName": "imeintanis",
+          "tier": "MASTER",
+          "id": 2596066,
+          "profileUrl": "/imeintanis",
+          "performanceTier": "MASTER",
+          "userId": 2596066,
+          "progressionOptOut": false
+        },
+        "intro": ""
+      },
+      "depth": 0,
+      "is_first_message": true
+    }
+  ],
+  "message_count_observed": 1,
+  "text_sha256": "e989783b4e81989f8008184024cdcdfc45b4aab2464677754165409602eb4211",
+  "full_text": "[message_id=3426060 author= first=True]\nany ideas how this can be solved? I think until yesterday was fine\n\n> PermissionError: [Errno 13] Permission denied: '/kaggle/usr/lib/notebooks/ryanholbrook/nvidia-utility-script/triton/backends/nvidia/bin/ptxas-blackwell'\n\n\nThanks in advance\n"
+}

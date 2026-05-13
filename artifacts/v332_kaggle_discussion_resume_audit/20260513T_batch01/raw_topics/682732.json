@@ -1,0 +1,48 @@
+{
+  "fetched_at_utc": "2026-05-13T15:39:25.919385+00:00",
+  "full_text": "[message_id=682732 author=Andrew H. Bond first=True]\nAccelerator Quota Exceeded\nYou've exceeded the number of hours allowed to use GPU. Your quota will reset to 30 hours in 2 days. You can continue working in this session until you've reached your 9 hour limit. You will not be able to commit unless you turn off GPU.\nDoes anyone know how to set it up correctly?\n\n[message_id=3423858 author=Ravi Ramakrishnan first=False]\nPay for Pro+ membership on Colab - your quota will be extended by another 30 hours @ahbond\n\n[message_id=3424923 author=newduck first=False]\nHello @ahbond , as @ravi20076 said, you get an extra 30 hours/week on Colab Pro+ and 15 hours on Pro,\nhere's how: https://www.kaggle.com/discussions/product-announcements/575468",
+  "message_count_observed": 3,
+  "messages": [
+    {
+      "authorName": "Andrew H. Bond",
+      "content": "<p>Accelerator Quota Exceeded\nYou've exceeded the number of hours allowed to use GPU. Your quota will reset to 30 hours in 2 days. You can continue working in this session until you've reached your 9 hour limit. You will not be able to commit unless you turn off GPU.</p>\n<p>Does anyone know how to set it up correctly?</p>",
+      "depth": 0,
+      "first": true,
+      "id": 682732,
+      "postDate": "2026-03-18T22:00:43.771Z"
+    },
+    {
+      "authorName": "Ravi Ramakrishnan",
+      "content": "<p>Pay for Pro+ membership on Colab - your quota will be extended by another 30 hours <a href=\"https://www.kaggle.com/ahbond\" target=\"_blank\">@ahbond</a> </p>",
+      "depth": 0,
+      "first": false,
+      "id": 3423858,
+      "postDate": "2026-03-19T04:30:25.017Z",
+      "votes": 1
+    },
+    {
+      "authorName": "newduck",
+      "content": "<p>Hello <a href=\"https://www.kaggle.com/ahbond\" target=\"_blank\">@ahbond</a>, as <a href=\"https://www.kaggle.com/ravi20076\" target=\"_blank\">@ravi20076</a> said, you get an extra 30 hours/week on Colab Pro+ and 15 hours on Pro,\nhere's how: <a href=\"https://www.kaggle.com/discussions/product-announcements/575468\" target=\"_blank\">https://www.kaggle.com/discussions/product-announcements/575468</a></p>",
+      "depth": 1,
+      "first": false,
+      "id": 3424923,
+      "postDate": "2026-03-20T05:10:14.040Z"
+    }
+  ],
+  "text_sha256": "6fa65555da20e658ed90ba2cff7702e9b8a2b6a8427210a7b0468f61455a28c6",
+  "topic": {
+    "authorName": "Andrew H. Bond",
+    "authorUrl": "https://www.kaggle.com/ahbond",
+    "commentCount": 2,
+    "content": "<p>Accelerator Quota Exceeded\nYou've exceeded the number of hours allowed to use GPU. Your quota will reset to 30 hours in 2 days. You can continue working in this session until you've reached your 9 hour limit. You will not be able to commit unless you turn off GPU.</p>\n<p>Does anyone know how to set it up correctly?</p>",
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 682732,
+    "postDate": "2026-03-18T22:00:43.771Z",
+    "title": "How do you get the GPU resources for this Competition?",
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/682732",
+    "votes": 3
+  },
+  "topic_id": 682732,
+  "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/682732"
+}

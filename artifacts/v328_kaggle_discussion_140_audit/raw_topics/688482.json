@@ -1,0 +1,112 @@
+{
+  "topic_id": 688482,
+  "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/688482",
+  "topic": {
+    "authorId": 1680925,
+    "authorThumbnailName": "1680925-kg.jpg",
+    "authorUserDisplayName": "Tong Hui Kang",
+    "authorUserName": "huikang",
+    "firstMessageId": 3436449,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 688482,
+    "name": "Midpoint Cut-off Date and the Open Progress Prize",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-04-06T01:12:02.640337200Z",
+    "totalVotes": 12,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/688482",
+    "totalMessages": 8,
+    "authorPerformanceTier": "MASTER",
+    "authorProgressionOptOut": false
+  },
+  "first_message": {
+    "id": 3436449,
+    "postDate": "2026-04-06T01:12:02.640Z",
+    "rawMarkdown": "Congratulations to @yiyangzheng for scoring 0.84, whose [team](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-3/discussion/671835) also won the AIMO3 Longest Leader Prize.\n\nFor the [Open Progress Prize](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/overview) of this competition\n\n> Awarded to the team with the highest leaderboard score as of the Midpoint Cut-off Date: April 9, 2026.\n\nHow exactly is April 9, 2026 defined - **is it ~~the start of the day or~~ the end of the day**? Also, is the defined by the submission time as well?\n\nEdit: \"The deadline is 11:59pm UTC unless otherwise noted\", see comment\n\nI also presume that winning the Open Progress Prize requires sharing the submissions by April 16, 2026, as this section of the rules apply to the prize.\n\n> To be eligible for any prize, teams must publish a public Kaggle notebook and solution write-up documenting the methods, datasets, and techniques used to produce the submission.",
+    "content": "<p>Congratulations to <a href=\"https://www.kaggle.com/yiyangzheng\" target=\"_blank\">@yiyangzheng</a> for scoring 0.84, whose <a href=\"https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-3/discussion/671835\" target=\"_blank\">team</a> also won the AIMO3 Longest Leader Prize.</p>\n<p>For the <a href=\"https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/overview\" target=\"_blank\">Open Progress Prize</a> of this competition</p>\n<blockquote>\n  <p>Awarded to the team with the highest leaderboard score as of the Midpoint Cut-off Date: April 9, 2026.</p>\n</blockquote>\n<p>How exactly is April 9, 2026 defined - <strong>is it  the end of the day</strong>? Also, is the defined by the submission time as well?</p>\n<p>Edit: \"The deadline is 11:59pm UTC unless otherwise noted\", see comment</p>\n<p>I also presume that winning the Open Progress Prize requires sharing the submissions by April 16, 2026, as this section of the rules apply to the prize.</p>\n<blockquote>\n  <p>To be eligible for any prize, teams must publish a public Kaggle notebook and solution write-up documenting the methods, datasets, and techniques used to produce the submission.</p>\n</blockquote>",
+    "parent": {
+      "url": "#"
+    },
+    "author": {
+      "displayName": "Tong Hui Kang",
+      "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1680925-kg.jpg",
+      "url": "/huikang",
+      "tier": "MASTER",
+      "id": 1680925,
+      "progressionOptOut": false
+    },
+    "authorType": "TOPIC",
+    "votes": {
+      "totalVotes": 12,
+      "canUpvote": true,
+      "totalUpvotes": 12
+    },
+    "kernelVersion": 0,
+    "competitionRanking": 677,
+    "feedbackTrackingData": {},
+    "teamUpInfo": {
+      "teamLeader": {
+        "displayName": "Tong Hui Kang",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1680925-kg.jpg",
+        "url": "/huikang",
+        "userName": "huikang",
+        "tier": "MASTER",
+        "id": 1680925,
+        "profileUrl": "/huikang",
+        "performanceTier": "MASTER",
+        "userId": 1680925,
+        "progressionOptOut": false
+      },
+      "intro": ""
+    }
+  },
+  "messages": [
+    {
+      "id": 3436449,
+      "postDate": "2026-04-06T01:12:02.640Z",
+      "rawMarkdown": "Congratulations to @yiyangzheng for scoring 0.84, whose [team](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-3/discussion/671835) also won the AIMO3 Longest Leader Prize.\n\nFor the [Open Progress Prize](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/overview) of this competition\n\n> Awarded to the team with the highest leaderboard score as of the Midpoint Cut-off Date: April 9, 2026.\n\nHow exactly is April 9, 2026 defined - **is it ~~the start of the day or~~ the end of the day**? Also, is the defined by the submission time as well?\n\nEdit: \"The deadline is 11:59pm UTC unless otherwise noted\", see comment\n\nI also presume that winning the Open Progress Prize requires sharing the submissions by April 16, 2026, as this section of the rules apply to the prize.\n\n> To be eligible for any prize, teams must publish a public Kaggle notebook and solution write-up documenting the methods, datasets, and techniques used to produce the submission.",
+      "content": "<p>Congratulations to <a href=\"https://www.kaggle.com/yiyangzheng\" target=\"_blank\">@yiyangzheng</a> for scoring 0.84, whose <a href=\"https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-3/discussion/671835\" target=\"_blank\">team</a> also won the AIMO3 Longest Leader Prize.</p>\n<p>For the <a href=\"https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/overview\" target=\"_blank\">Open Progress Prize</a> of this competition</p>\n<blockquote>\n  <p>Awarded to the team with the highest leaderboard score as of the Midpoint Cut-off Date: April 9, 2026.</p>\n</blockquote>\n<p>How exactly is April 9, 2026 defined - <strong>is it  the end of the day</strong>? Also, is the defined by the submission time as well?</p>\n<p>Edit: \"The deadline is 11:59pm UTC unless otherwise noted\", see comment</p>\n<p>I also presume that winning the Open Progress Prize requires sharing the submissions by April 16, 2026, as this section of the rules apply to the prize.</p>\n<blockquote>\n  <p>To be eligible for any prize, teams must publish a public Kaggle notebook and solution write-up documenting the methods, datasets, and techniques used to produce the submission.</p>\n</blockquote>",
+      "parent": {
+        "url": "#"
+      },
+      "author": {
+        "displayName": "Tong Hui Kang",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1680925-kg.jpg",
+        "url": "/huikang",
+        "tier": "MASTER",
+        "id": 1680925,
+        "progressionOptOut": false
+      },
+      "authorType": "TOPIC",
+      "votes": {
+        "totalVotes": 12,
+        "canUpvote": true,
+        "totalUpvotes": 12
+      },
+      "kernelVersion": 0,
+      "competitionRanking": 677,
+      "feedbackTrackingData": {},
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "Tong Hui Kang",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1680925-kg.jpg",
+          "url": "/huikang",
+          "userName": "huikang",
+          "tier": "MASTER",
+          "id": 1680925,
+          "profileUrl": "/huikang",
+          "performanceTier": "MASTER",
+          "userId": 1680925,
+          "progressionOptOut": false
+        },
+        "intro": ""
+      },
+      "depth": 0,
+      "is_first_message": true
+    }
+  ],
+  "message_count_observed": 1,
+  "text_sha256": "881f614a125b2eb40ae5567d075c137caf9f96125500d7881f8a44d0595d69f4",
+  "full_text": "[message_id=3436449 author= first=True]\nCongratulations to @yiyangzheng for scoring 0.84, whose [team](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-3/discussion/671835) also won the AIMO3 Longest Leader Prize.\n\nFor the [Open Progress Prize](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/overview) of this competition\n\n> Awarded to the team with the highest leaderboard score as of the Midpoint Cut-off Date: April 9, 2026.\n\nHow exactly is April 9, 2026 defined - **is it ~~the start of the day or~~ the end of the day**? Also, is the defined by the submission time as well?\n\nEdit: \"The deadline is 11:59pm UTC unless otherwise noted\", see comment\n\nI also presume that winning the Open Progress Prize requires sharing the submissions by April 16, 2026, as this section of the rules apply to the prize.\n\n> To be eligible for any prize, teams must publish a public Kaggle notebook and solution write-up documenting the methods, datasets, and techniques used to produce the submission."
+}

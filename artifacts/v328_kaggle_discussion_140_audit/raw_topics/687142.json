@@ -1,0 +1,28 @@
+{
+  "topic_id": 687142,
+  "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/687142",
+  "topic": {
+    "authorId": 75976,
+    "authorThumbnailName": "75976-gr.jpg",
+    "authorUserDisplayName": "CPMP",
+    "authorUserName": "cpmpml",
+    "firstMessageId": 3433969,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 687142,
+    "name": "Pip install with internet disabled: install dependencies feature",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-04-02T11:50:32.905913600Z",
+    "totalVotes": 22,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/687142",
+    "totalMessages": 5,
+    "authorPerformanceTier": "GRANDMASTER",
+    "authorProgressionOptOut": false
+  },
+  "first_message": {},
+  "messages": [],
+  "message_count_observed": 0,
+  "text_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "full_text": ""
+}

@@ -1,0 +1,40 @@
+{
+  "fetched_at_utc": "2026-05-13T15:44:06.879541+00:00",
+  "full_text": "[message_id=686615 author=Ashutosh Kumar first=True]\nThere's the bug in the model itself! Look at line 1659:\n\"past_key_values\": past_key_values,\nBut the .forward() method (line 1695) expects cache_params, NOT past_key_values:\ndef forward(self, …, cache_params=None, …)\nThe prepare_inputs_for_generation returns {\"past_key_values\": cache} but forward() receives it as **kwargs — it gets lost! The cache is created but never used.\nHowever, this is the model code on the HF Hub — it works in the competition evaluation because vLLM handles caching differently. The model file on the training server might be different.\nThe forward() has cache_params in its signature but prepare_inputs_for_generation passes past_key_values. Since forward() has args, the past_key_values goes into kwargs and is silently ignored. cache_params stays None.\nThis is a bug in NVIDIA's model code. The fix: patch forward() to extract past_key_values from kwargs and use it as cache_params\n\n[message_id=3438863 author=CPMP first=False]\nThis bug is fixed in transformers library for versions 5.3.0+.",
+  "message_count_observed": 2,
+  "messages": [
+    {
+      "authorName": "Ashutosh Kumar",
+      "content": "<p>There's the bug in the model itself! Look at line 1659:\n\"past_key_values\": past_key_values,</p>\n<p>But the .forward() method (line 1695) expects cache_params, NOT past_key_values:\ndef forward(self, …, cache_params=None, …)</p>\n<p>The prepare_inputs_for_generation returns {\"past_key_values\": cache} but forward() receives it as **kwargs — it gets lost! The cache is created but never used.</p>\n<p>However, this is the model code on the HF Hub — it works in the competition evaluation because vLLM handles caching differently. The model file on the training server might be different.</p>\n<p>The forward() has cache_params in its signature but prepare_inputs_for_generation passes past_key_values. Since forward() has args, the past_key_values goes into kwargs and is silently ignored. cache_params stays None.</p>\n<p>This is a bug in NVIDIA's model code. The fix: patch forward() to extract past_key_values from kwargs and use it as cache_params</p>",
+      "depth": 0,
+      "first": true,
+      "id": 686615,
+      "postDate": "2026-03-31T20:39:44.111Z"
+    },
+    {
+      "authorName": "CPMP",
+      "content": "<p>This bug is fixed in transformers library for versions 5.3.0+.</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3438863,
+      "postDate": "2026-04-09T20:15:57.490Z",
+      "votes": 5
+    }
+  ],
+  "text_sha256": "86a75046d0c7c2b0a1888df4de1a545d5335ce806038f9ed5bb38e987f223746",
+  "topic": {
+    "authorName": "Ashutosh Kumar",
+    "authorUrl": "https://www.kaggle.com/ashutoshkumar432",
+    "commentCount": 1,
+    "content": "<p>There's the bug in the model itself! Look at line 1659:\n\"past_key_values\": past_key_values,</p>\n<p>But the .forward() method (line 1695) expects cache_params, NOT past_key_values:\ndef forward(self, …, cache_params=None, …)</p>\n<p>The prepare_inputs_for_generation returns {\"past_key_values\": cache} but forward() receives it as **kwargs — it gets lost! The cache is created but never used.</p>\n<p>However, this is the model code on the HF Hub — it works in the competition evaluation because vLLM handles caching differently. The model file on the training server might be different.</p>\n<p>The forward() has cache_params in its signature but prepare_inputs_for_generation passes past_key_values. Since forward() has args, the past_key_values goes into kwargs and is silently ignored. cache_params stays None.</p>\n<p>This is a bug in NVIDIA's model code. The fix: patch forward() to extract past_key_values from kwargs and use it as cache_params</p>",
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 686615,
+    "postDate": "2026-03-31T20:39:44.111Z",
+    "title": "BUG in Nemotron Model file://Models/modeling_nemotron_h.py",
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/686615",
+    "votes": 8
+  },
+  "topic_id": 686615,
+  "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/686615"
+}

@@ -1,0 +1,47 @@
+{
+  "fetched_at_utc": "2026-05-13T15:38:10.511694+00:00",
+  "full_text": "[message_id=681824 author=Ritwika Kancharla first=True]\nThe causal_conv1d_cuda.so binary in the environment is not compiled \nfor SM120 (Blackwell). Getting cudaErrorNoKernelImageForDevice on every \ntraining attempt. ptxas chmod fixes the triton issue but causal_conv1d \nstill fails. We cannot install a new version because the filesystem is \nread-only and pip has no internet. How are we supposed to fine-tune on \nthis GPU?\n\n[message_id=3423926 author=Anton Kratz first=False]\nI also run into this exact issue.\n\n[message_id=3422320 author=Adarsh Kumar first=False]\nTurn of the internet and then again on then install it worked for me",
+  "message_count_observed": 3,
+  "messages": [
+    {
+      "authorName": "Ritwika Kancharla",
+      "content": "<p>The causal_conv1d_cuda.so binary in the environment is not compiled \nfor SM120 (Blackwell). Getting cudaErrorNoKernelImageForDevice on every \ntraining attempt. ptxas chmod fixes the triton issue but causal_conv1d \nstill fails. We cannot install a new version because the filesystem is \nread-only and pip has no internet. How are we supposed to fine-tune on \nthis GPU?</p>",
+      "depth": 0,
+      "first": true,
+      "id": 681824,
+      "postDate": "2026-03-17T13:07:20.273Z"
+    },
+    {
+      "authorName": "Anton Kratz",
+      "content": "<p>I also run into this exact issue.</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3423926,
+      "postDate": "2026-03-19T06:05:34.980Z"
+    },
+    {
+      "authorName": "Adarsh Kumar",
+      "content": "<p>Turn of the internet and then again on then install it worked for me</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3422320,
+      "postDate": "2026-03-17T13:16:29.073Z"
+    }
+  ],
+  "text_sha256": "f109f9e3512549c4ab668089bb30fb685157b10be13f9ee24f61ce9f50f79c96",
+  "topic": {
+    "authorName": "Ritwika Kancharla",
+    "authorUrl": "https://www.kaggle.com/ritwikakancharla",
+    "commentCount": 2,
+    "content": "<p>The causal_conv1d_cuda.so binary in the environment is not compiled \nfor SM120 (Blackwell). Getting cudaErrorNoKernelImageForDevice on every \ntraining attempt. ptxas chmod fixes the triton issue but causal_conv1d \nstill fails. We cannot install a new version because the filesystem is \nread-only and pip has no internet. How are we supposed to fine-tune on \nthis GPU?</p>",
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 681824,
+    "postDate": "2026-03-17T13:07:20.273Z",
+    "title": "causal_conv1d_cuda not compiled for Blackwell SM120 - training impossible",
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/681824",
+    "votes": 8
+  },
+  "topic_id": 681824,
+  "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/681824"
+}

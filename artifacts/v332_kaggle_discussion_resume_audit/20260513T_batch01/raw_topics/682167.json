@@ -1,0 +1,58 @@
+{
+  "fetched_at_utc": "2026-05-13T15:38:23.106785+00:00",
+  "full_text": "[message_id=682167 author=c-number first=True]\nI tried training with unsloth using my RTX 5090, but failed due to OOM.\nHas anyone been able to train locally?\n\n[message_id=3422854 author=lucian kucera first=False]\nBruh u have RTX PRO 6000 on kaggle, there is no point in using 5090. Kaggle GPU has 3 times the vram.\nModel is in BF16 and has 30B params so simple math u need 60GB vram to load model. Than ofc when u train lora u add additional params + activations. Optimizer has copy of each trainable param so u double the params for lora.\nIF u used 4bit precison for entire model u would need 15GB vram + vram for aditional params.\nAlso if u check Unsloth mentions requriements for qlora on their website. requirements \nFor 32B model it says for qlora u need 26GB vram, which should fit into 5090. So i guess u can use 4Bit qlora.\nBut i would strongly advise u agianst using qlora, u dont stand a chance in this competition if u lower precision.\nIn reasoning precision is exteremly important, low precision llm thinks like unwell person. Hope it helps. For ur own sake just use nvdia provided GPU.\nYou could try CPU offloading, sadly as fair as i know Unsloth doesn't support offloading natively, u would have to write code for it yourself or try to use Claude to write the code for it. Tho i expect it to be quite difficult task, if u decide to extend hugginface trainer, because of monkeypatching done by unsloth. Maybe writing ur own custom trainer would be the wisest choice in this case.(this is my guess cpu offloading issue )\n\n[message_id=3422899 author=c-number first=False]\nThanks! I couldn't get QLoRA work, but maybe I did something wrong. It's always good if you can train every day, so I think I'll use QLoRA locally while training using bf16 on kaggle.\n\n[message_id=3423112 author=Victor Merckle first=False]\nThe Lora adapter trained on a quantized model will have reduced performance or terrible performance when used on the BF16 model.",
+  "message_count_observed": 4,
+  "messages": [
+    {
+      "authorName": "c-number",
+      "content": "<p>I tried training with unsloth using my RTX 5090, but failed due to OOM.\nHas anyone been able to train locally?</p>",
+      "depth": 0,
+      "first": true,
+      "id": 682167,
+      "postDate": "2026-03-18T01:15:04.928Z"
+    },
+    {
+      "authorName": "lucian kucera",
+      "content": "<p>Bruh u have RTX PRO 6000 on kaggle, there is no point in using 5090.  Kaggle GPU has  3 times the vram.</p>\n<p>Model is in BF16 and has 30B params so simple math u need 60GB vram to load model. Than ofc when u train lora u add additional params + activations. Optimizer has copy of each trainable param so u double the params for lora.</p>\n<p>IF u used 4bit precison for entire model u would need 15GB vram + vram for aditional params.</p>\n<p>Also if u check Unsloth mentions requriements for qlora on their website. <a href=\"https://unsloth.ai/docs/get-started/fine-tuning-for-beginners/unsloth-requirements\" target=\"_blank\">requirements</a></p>\n<p>For 32B model it says for qlora u need 26GB vram, which should fit into 5090. So i guess u can use 4Bit qlora.</p>\n<p>But i would strongly advise u agianst using qlora, u dont stand a chance in this competition if u lower precision.</p>\n<p>In reasoning precision is exteremly important, low precision llm thinks like unwell person. Hope it helps. For ur own sake just use nvdia provided GPU.</p>\n<p>You could try CPU offloading, sadly as fair as i know Unsloth doesn't support offloading natively, u would have to write code for it yourself or try to use Claude to write the code for it. Tho i expect it to be quite difficult task, if u decide to extend hugginface trainer, because of monkeypatching done by unsloth. Maybe writing ur own custom trainer would be the wisest choice in this case.(this is my guess<a href=\"https://github.com/unslothai/unsloth/issues/1158\" target=\"_blank\">cpu offloading issue</a>)</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3422854,
+      "postDate": "2026-03-18T01:50:12.597Z",
+      "votes": 7
+    },
+    {
+      "authorName": "c-number",
+      "content": "<p>Thanks! I couldn't get QLoRA work, but maybe I did something wrong. It's always good if you can train every day, so I think I'll use QLoRA locally while training using bf16 on kaggle.</p>",
+      "depth": 1,
+      "first": false,
+      "id": 3422899,
+      "postDate": "2026-03-18T02:52:17.213Z",
+      "votes": 2
+    },
+    {
+      "authorName": "Victor Merckle",
+      "content": "<p>The Lora adapter trained on a quantized model will have reduced performance or terrible performance when used on the BF16 model.</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3423112,
+      "postDate": "2026-03-18T07:00:10.867Z",
+      "votes": 1
+    }
+  ],
+  "text_sha256": "3c1ee3531577f48a9d0c9d9a7df7735118af2cb28eaf91851d546d2a89bdffeb",
+  "topic": {
+    "authorName": "c-number",
+    "authorUrl": "https://www.kaggle.com/cnumber",
+    "commentCount": 3,
+    "content": "<p>I tried training with unsloth using my RTX 5090, but failed due to OOM.\nHas anyone been able to train locally?</p>",
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 682167,
+    "postDate": "2026-03-18T01:15:04.928Z",
+    "title": "What is the minimum VRAM for training?",
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/682167",
+    "votes": 16
+  },
+  "topic_id": 682167,
+  "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/682167"
+}

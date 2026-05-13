@@ -1,0 +1,89 @@
+{
+  "fetched_at_utc": "2026-05-13T15:42:06.864889+00:00",
+  "full_text": "[message_id=684654 author=Pradeep Boopathy first=True]\nAdd this in the first cell\nalso add dataset: /kaggle/input/datasets/pradeepboopathy/nvidia-nemotron-offline-package\nin the dataset panel\nimport subprocess, sys, os\nfrom pathlib import Path\ndef resolve_python_path(target_dir):\nfor pth_file in Path(target_dir).glob(\"*.pth\"):\nwith pth_file.open() as fp:\nrelpath = fp.read()\nrel_pack_path = (pth_file.parent/relpath)\nif rel_pack_path.exists():\nprint(f\"append {rel_pack_path}\")\nsys.path.append(str(rel_pack_path))\noffline_dir = \"/kaggle/input/datasets/pradeepboopathy/nvidia-nemotron-offline-package/extra_packages\"\ntarget_dir = \"/kaggle/working/packages\"\nos.makedirs(target_dir, exist_ok=True)\nresolve_python_path(\"/kaggle/usr/lib/notebooks/ryanholbrook/nvidia-utility-script/\")\nif os.path.exists(offline_dir):\nsubprocess.check_call([\nsys.executable, \"-m\", \"pip\", \"install\", \"-q\",\n\"--no-index\",\n\"--find-links\", offline_dir,\n\"--target\", target_dir,\n\"datasets\", \"trl\"\n])\nprint(\"Installed from offline packages\")\n# Add to Python path\nsys.path.append(target_dir)\nresolve_python_path(target_dir)\nimport datasets, cutlass\n\n[message_id=3431018 author=Yann first=False]\nFor the TRL import, I was using https://www.kaggle.com/datasets/dennisfong/nvidia-nemotron-offline-packages \n, but the new version no longer includes TRL.\n\n[message_id=3431231 author=Yann first=False]\nI'm using https://www.kaggle.com/datasets/mayukh18/nemotron-packages now. \nThe following code should be in top cell:\nimport os, sys\nos.environ[\"WANDB_DISABLED\"] = \"true\"\nos.environ[\"WANDB_MODE\"] = \"disabled\"\n!pip install -q --no-index --find-links /kaggle/input/datasets/mayukh18/nemotron-packages/packages \\\n--ignore-installed \\\nunsloth trl peft transformers datasets accelerate bitsandbytes\n!pip install -q /kaggle/input/datasets/mayukh18/nemotron-packages/causal_conv1d-1.6.1+cu12torch2.10cxx11abiTRUE-cp312-cp312-linux_x86_64.whl\n!pip install -q /kaggle/input/datasets/mayukh18/nemotron-packages/mamba_ssm-2.3.1+cu12torch2.10cxx11abiTRUE-cp312-cp312-linux_x86_64.whl\nfrom trl import SFTTrainer\nYou may need to uninstall wandb juste before with: !pip uninstall -y wandb\n\n[message_id=3431034 author=Ralph Neumann first=False]\nI am facing the same problem.\n\n[message_id=3431055 author=Pradeep Boopathy first=False]\nFixed. Please add the above code.\n\n[message_id=3431058 author=Ralph Neumann first=False]\nWhich above code?\nThanks for your reply\n\n[message_id=3431002 author=Noizersam first=False]\nI've encountered the same problem. Have you solved it?\n\n[message_id=3431056 author=Pradeep Boopathy first=False]\nFixed. Check above",
+  "message_count_observed": 8,
+  "messages": [
+    {
+      "authorName": "Pradeep Boopathy",
+      "content": "<p>Add this in the first cell\nalso add dataset: /kaggle/input/datasets/pradeepboopathy/nvidia-nemotron-offline-package\nin the dataset panel</p>\n<pre><code>import subprocess, sys, os\nfrom pathlib import Path\ndef resolve_python_path(target_dir):\n    for pth_file in Path(target_dir).glob(\"*.pth\"):\n        with pth_file.open() as fp:\n            relpath = fp.read()\n            rel_pack_path = (pth_file.parent/relpath)\n            if rel_pack_path.exists():\n                print(f\"append {rel_pack_path}\")\n                sys.path.append(str(rel_pack_path))\n\n\n\noffline_dir = \"/kaggle/input/datasets/pradeepboopathy/nvidia-nemotron-offline-package/extra_packages\"\ntarget_dir = \"/kaggle/working/packages\"\n\nos.makedirs(target_dir, exist_ok=True)\nresolve_python_path(\"/kaggle/usr/lib/notebooks/ryanholbrook/nvidia-utility-script/\")\n\nif os.path.exists(offline_dir):\n    subprocess.check_call([\n        sys.executable, \"-m\", \"pip\", \"install\", \"-q\",\n        \"--no-index\",\n        \"--find-links\", offline_dir,\n        \"--target\", target_dir,\n        \"datasets\", \"trl\"\n    ])\n    print(\"Installed from offline packages\")\n\n\n# Add to Python path\nsys.path.append(target_dir)\nresolve_python_path(target_dir)\n\nimport datasets, cutlass\n</code></pre>",
+      "depth": 0,
+      "first": true,
+      "id": 684654,
+      "postDate": "2026-03-25T18:16:35.602Z"
+    },
+    {
+      "authorName": "Yann",
+      "content": "<p>For the TRL import, I was using <a href=\"https://www.kaggle.com/datasets/dennisfong/nvidia-nemotron-offline-packages\" target=\"_blank\">https://www.kaggle.com/datasets/dennisfong/nvidia-nemotron-offline-packages</a>\n, but the new version no longer includes TRL.</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3431018,
+      "postDate": "2026-03-29T08:50:38.113Z",
+      "votes": 3
+    },
+    {
+      "authorName": "Yann",
+      "content": "<p>I'm using <a href=\"https://www.kaggle.com/datasets/mayukh18/nemotron-packages\" target=\"_blank\">https://www.kaggle.com/datasets/mayukh18/nemotron-packages</a> now. \nThe following code should be in top cell:</p>\n<pre><code>import os, sys\nos.environ[\"WANDB_DISABLED\"] = \"true\"\nos.environ[\"WANDB_MODE\"] = \"disabled\"\n\n!pip install -q --no-index --find-links /kaggle/input/datasets/mayukh18/nemotron-packages/packages \\\n    --ignore-installed \\\n    unsloth trl peft transformers datasets accelerate bitsandbytes\n\n!pip install -q /kaggle/input/datasets/mayukh18/nemotron-packages/causal_conv1d-1.6.1+cu12torch2.10cxx11abiTRUE-cp312-cp312-linux_x86_64.whl\n!pip install -q /kaggle/input/datasets/mayukh18/nemotron-packages/mamba_ssm-2.3.1+cu12torch2.10cxx11abiTRUE-cp312-cp312-linux_x86_64.whl\n\nfrom trl import SFTTrainer\n</code></pre>\n<p>You may need to uninstall wandb juste before with: <code>!pip uninstall -y wandb</code></p>",
+      "depth": 0,
+      "first": false,
+      "id": 3431231,
+      "postDate": "2026-03-29T17:44:01.933Z",
+      "votes": 1
+    },
+    {
+      "authorName": "Ralph Neumann",
+      "content": "<p>I am facing the same problem.</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3431034,
+      "postDate": "2026-03-29T09:49:38.840Z"
+    },
+    {
+      "authorName": "Pradeep Boopathy",
+      "content": "<p>Fixed. Please add the above code.</p>",
+      "depth": 1,
+      "first": false,
+      "id": 3431055,
+      "postDate": "2026-03-29T10:34:59.493Z"
+    },
+    {
+      "authorName": "Ralph Neumann",
+      "content": "<p>Which above code?\nThanks for your reply</p>",
+      "depth": 2,
+      "first": false,
+      "id": 3431058,
+      "postDate": "2026-03-29T10:38:20.830Z"
+    },
+    {
+      "authorName": "Noizersam",
+      "content": "<p>I've encountered the same problem. Have you solved it?</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3431002,
+      "postDate": "2026-03-29T08:03:04.090Z"
+    },
+    {
+      "authorName": "Pradeep Boopathy",
+      "content": "<p>Fixed. Check above</p>",
+      "depth": 1,
+      "first": false,
+      "id": 3431056,
+      "postDate": "2026-03-29T10:35:22.793Z"
+    }
+  ],
+  "text_sha256": "fd877aba1cfc44863e9c4ff941b546c4b76ccdba68943681b5137a35bb4b1e9e",
+  "topic": {
+    "authorName": "Pradeep Boopathy",
+    "authorUrl": "https://www.kaggle.com/pradeepboopathy",
+    "commentCount": 7,
+    "content": "<p>Add this in the first cell\nalso add dataset: /kaggle/input/datasets/pradeepboopathy/nvidia-nemotron-offline-package\nin the dataset panel</p>\n<pre><code>import subprocess, sys, os\nfrom pathlib import Path\ndef resolve_python_path(target_dir):\n    for pth_file in Path(target_dir).glob(\"*.pth\"):\n        with pth_file.open() as fp:\n            relpath = fp.read()\n            rel_pack_path = (pth_file.parent/relpath)\n            if rel_pack_path.exists():\n                print(f\"append {rel_pack_path}\")\n                sys.path.append(str(rel_pack_path))\n\n\n\noffline_dir = \"/kaggle/input/datasets/pradeepboopathy/nvidia-nemotron-offline-package/extra_packages\"\ntarget_dir = \"/kaggle/working/packages\"\n\nos.makedirs(target_dir, exist_ok=True)\nresolve_python_path(\"/kaggle/usr/lib/notebooks/ryanholbrook/nvidia-utility-script/\")\n\nif os.path.exists(offline_dir):\n    subprocess.check_call([\n        sys.executable, \"-m\", \"pip\", \"install\", \"-q\",\n        \"--no-index\",\n        \"--find-links\", offline_dir,\n        \"--target\", target_dir,\n        \"datasets\", \"trl\"\n    ])\n    print(\"Installed from offline packages\")\n\n\n# Add to Python path\nsys.path.append(target_dir)\nresolve_python_path(target_dir)\n\nimport datasets, cutlass\n</code></pre>",
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 684654,
+    "postDate": "2026-03-25T18:16:35.602Z",
+    "title": "Fixed: Any fix for trl installation?",
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/684654",
+    "votes": 5
+  },
+  "topic_id": 684654,
+  "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/684654"
+}

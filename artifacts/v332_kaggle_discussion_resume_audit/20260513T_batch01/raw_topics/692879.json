@@ -1,0 +1,90 @@
+{
+  "fetched_at_utc": "2026-05-13T15:46:23.617136+00:00",
+  "full_text": "[message_id=692879 author=Taha first=True]\nHey everyone,\nI’m currently prepping a final training run and wanted to get the community's thoughts on using DoRA (Weight-Decomposed Low-Rank Adaptation) instead of standard LoRA for this specific reasoning challenge.\nI’ve managed to hit a solid baseline (around 0.84 - 0.85) using standard SFT with a carefully balanced data mix and a cosine scheduler. However, I'm looking for that last 1-2% push to handle the harder algorithmic categories (like cryptarithms). \nTheoretically, DoRA should be perfect here. By separating the weight updates into magnitude and direction, it usually performs much closer to full fine-tuning, which seems critical for rigid mathematical reasoning tasks where standard LoRA tends to plateau , the extra VRAM overhead from tracking the magnitude vectors isn't a bottleneck for me.\nMy main hesitation is Kaggle's submission evaluator. As we know, Kaggle spins up a vanilla vLLM instance and injects our adapter_model.safetensors . Unsloth/PEFT handles DoRA beautifully during training, and it should mathematically fold the magnitude and direction back into standard $A$ and $B$ matrices when calling save_pretrained() . \nBut Kaggle's backend can be notoriously finicky. I've had issues in the past with adapters throwing errors or scoring abysmally low because of slight formatting or merging quirks.\nHas anyone here successfully submitted a DoRA-trained adapter to the leaderboard? \nDid it load correctly in the hidden vLLM environment, or did it trigger an evaluation error / 0.0 score? \nIf it worked, did you actually see a tangible LB boost over standard LoRA (assuming the same rank/alpha)? \nI only have enough compute budget for a couple more serious runs, so I’m trying to decide if flipping use_dora=True is a smart calculated bet or a technical trap. \nAny insights would be hugely appreciated!\n\n[message_id=3444782 author=CPMP first=False]\nIt is allowed provided you can use the submission format.\nOn a personal note, I tried DORA in a previous competition, and the extra training time did not translate into better LB score. It would be nice to see if you get a positive outcome.\n\n[message_id=3444930 author=Taha first=False]\nThanks for the real-world experience! Even if DoRA saves correctly to standard LoRA format via Unsloth/PEFT, vLLM's config detection likely kills it anyway no confirmed successful Kaggle LBs with DoRA yet. Your note on no LB boost despite extra time seals it for me; with limited compute, I'll skip use_dora=True and optimize standard LoRA (higher rank/alpha, data tweaks) for cryptarithms instead. Appreciate the heads-up\n\n[message_id=3444869 author=NNMax first=False]\nDoesn't current versions of vllm do not support native DoRA? \nI think the possible ways are either mimicking DoRA finetuning but by using LoRA alone or some really complex engineering?\n\n[message_id=3444927 author=Taha first=False]\nYes, you're spot on current standard vLLM versions (including Kaggle's vanilla setup) don't natively support DoRA. The PEFT helper explicitly errors with \"vLLM does not yet support DoRA\" when it detects DoRA configs. PR #14389 for DoRA support is still open with merge conflicts, no merge by April 2026, and recent issues show inference failures for DoRA models.\nMimicking DoRA with plain LoRA misses the core benefit (separate magnitude training), so gains would be suboptimal. Complex forks like vllm-dora work locally but won't fly in Kaggle's locked env. Best bet: stick to standard LoRA for safe LB submits.\nI Did a bit of research and got to know that While vLLM does not yet natively support DoRA (Weight-Decomposed Low-Rank Adaptation) adapters for dynamic serving as of early 2026\n\n[message_id=3444838 author=Noizersam first=False]\nHave you tested how many epochs of training yield the best results?\n\n[message_id=3444872 author=Taha first=False]\ni dont have heavy compute , i just have modal and few dollars in tinker , so i havent tested yet\n\n[message_id=3444979 author=Giovanny Rodríguez first=False]\nI'll try to make them a couple of weeks ago, Pissa and Dora LB: 0",
+  "message_count_observed": 8,
+  "messages": [
+    {
+      "authorName": "Taha",
+      "content": "<p>Hey everyone,</p>\n<p>I’m currently prepping a final training run and wanted to get the community's thoughts on using <strong>DoRA (Weight-Decomposed Low-Rank Adaptation)</strong> instead of standard LoRA for this specific reasoning challenge.</p>\n<p>I’ve managed to hit a solid baseline (around 0.84 - 0.85) using standard SFT with a carefully balanced data mix and a cosine scheduler. However, I'm looking for that last 1-2% push to handle the harder algorithmic categories (like cryptarithms). </p>\n<p>Theoretically, DoRA should be perfect here. By separating the weight updates into magnitude and direction, it usually performs much closer to full fine-tuning, which seems critical for rigid mathematical reasoning tasks where standard LoRA tends to plateau , the extra VRAM overhead from tracking the magnitude vectors isn't a bottleneck for me.</p>\n<p>My main hesitation is <strong>Kaggle's submission evaluator.</strong> As we know, Kaggle spins up a vanilla <code>vLLM</code> instance and injects our <code>adapter_model.safetensors</code>. Unsloth/PEFT handles DoRA beautifully during training, and it <em>should</em> mathematically fold the magnitude and direction back into standard $A$ and $B$ matrices when calling <code>save_pretrained()</code>. </p>\n<p>But Kaggle's backend can be notoriously finicky. I've had issues in the past with adapters throwing errors or scoring abysmally low because of slight formatting or merging quirks.</p>\n<p>Has anyone here successfully submitted a DoRA-trained adapter to the leaderboard? </p>\n<ol>\n<li><strong>Did it load correctly in the hidden vLLM environment, or did it trigger an evaluation error / 0.0 score?</strong></li>\n<li><strong>If it worked, did you actually see a tangible LB boost over standard LoRA (assuming the same rank/alpha)?</strong></li>\n</ol>\n<p>I only have enough compute budget for a couple more serious runs, so I’m trying to decide if flipping <code>use_dora=True</code> is a smart calculated bet or a technical trap. </p>\n<p>Any insights would be hugely appreciated!</p>",
+      "depth": 0,
+      "first": true,
+      "id": 692879,
+      "postDate": "2026-04-18T10:51:51.982Z"
+    },
+    {
+      "authorName": "CPMP",
+      "content": "<p>It is allowed provided you can use the submission format.</p>\n<p>On a personal note, I tried DORA in a previous competition, and the extra training time did not translate into better LB score. It would be nice to see if you get a positive outcome.</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3444782,
+      "postDate": "2026-04-18T12:22:51.773Z",
+      "votes": 4
+    },
+    {
+      "authorName": "Taha",
+      "content": "<p>Thanks for the real-world experience! Even if DoRA saves correctly to standard LoRA format via Unsloth/PEFT, vLLM's config detection likely kills it anyway no confirmed successful Kaggle LBs with DoRA yet. Your note on no LB boost despite extra time seals it for me; with limited compute, I'll skip use_dora=True and optimize standard LoRA (higher rank/alpha, data tweaks) for cryptarithms instead. Appreciate the heads-up</p>",
+      "depth": 1,
+      "first": false,
+      "id": 3444930,
+      "postDate": "2026-04-18T17:45:41.953Z"
+    },
+    {
+      "authorName": "NNMax",
+      "content": "<p>Doesn't current versions of vllm do not support native DoRA? </p>\n<p>I think the possible ways are either mimicking DoRA finetuning but by using LoRA alone or some really complex engineering?</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3444869,
+      "postDate": "2026-04-18T15:35:21.167Z",
+      "votes": 1
+    },
+    {
+      "authorName": "Taha",
+      "content": "<p>Yes, you're spot on current standard vLLM versions (including Kaggle's vanilla setup) don't natively support DoRA. The PEFT helper explicitly errors with \"vLLM does not yet support DoRA\" when it detects DoRA configs. PR #14389 for DoRA support is still open with merge conflicts, no merge by April 2026, and recent issues show inference failures for DoRA models.</p>\n<p>Mimicking DoRA with plain LoRA misses the core benefit (separate magnitude training), so gains would be suboptimal. Complex forks like vllm-dora work locally but won't fly in Kaggle's locked env. Best bet: stick to standard LoRA for safe LB submits.\nI Did a bit of research and got to know that <code>While vLLM does not yet natively support DoRA (Weight-Decomposed Low-Rank Adaptation) adapters for dynamic serving as of early 2026</code></p>",
+      "depth": 1,
+      "first": false,
+      "id": 3444927,
+      "postDate": "2026-04-18T17:44:26.617Z"
+    },
+    {
+      "authorName": "Noizersam",
+      "content": "<p>Have you tested how many epochs of training yield the best results?</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3444838,
+      "postDate": "2026-04-18T15:14:09.720Z",
+      "votes": 1
+    },
+    {
+      "authorName": "Taha",
+      "content": "<p>i dont have heavy compute , i just have modal and few dollars in tinker , so i havent tested yet</p>",
+      "depth": 1,
+      "first": false,
+      "id": 3444872,
+      "postDate": "2026-04-18T15:43:25.607Z"
+    },
+    {
+      "authorName": "Giovanny Rodríguez",
+      "content": "<p>I'll try to make them a couple of weeks ago, Pissa and Dora LB: 0</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3444979,
+      "postDate": "2026-04-18T20:59:00.293Z"
+    }
+  ],
+  "text_sha256": "cbae33cdbf47e7f0733602367a36c4bcb7fbdcecb2a446ed4733da2e7f574257",
+  "topic": {
+    "authorName": "Taha",
+    "authorUrl": "https://www.kaggle.com/tahaalam2009",
+    "commentCount": 7,
+    "content": "<p>Hey everyone,</p>\n<p>I’m currently prepping a final training run and wanted to get the community's thoughts on using <strong>DoRA (Weight-Decomposed Low-Rank Adaptation)</strong> instead of standard LoRA for this specific reasoning challenge.</p>\n<p>I’ve managed to hit a solid baseline (around 0.84 - 0.85) using standard SFT with a carefully balanced data mix and a cosine scheduler. However, I'm looking for that last 1-2% push to handle the harder algorithmic categories (like cryptarithms). </p>\n<p>Theoretically, DoRA should be perfect here. By separating the weight updates into magnitude and direction, it usually performs much closer to full fine-tuning, which seems critical for rigid mathematical reasoning tasks where standard LoRA tends to plateau , the extra VRAM overhead from tracking the magnitude vectors isn't a bottleneck for me.</p>\n<p>My main hesitation is <strong>Kaggle's submission evaluator.</strong> As we know, Kaggle spins up a vanilla <code>vLLM</code> instance and injects our <code>adapter_model.safetensors</code>. Unsloth/PEFT handles DoRA beautifully during training, and it <em>should</em> mathematically fold the magnitude and direction back into standard $A$ and $B$ matrices when calling <code>save_pretrained()</code>. </p>\n<p>But Kaggle's backend can be notoriously finicky. I've had issues in the past with adapters throwing errors or scoring abysmally low because of slight formatting or merging quirks.</p>\n<p>Has anyone here successfully submitted a DoRA-trained adapter to the leaderboard? </p>\n<ol>\n<li><strong>Did it load correctly in the hidden vLLM environment, or did it trigger an evaluation error / 0.0 score?</strong></li>\n<li><strong>If it worked, did you actually see a tangible LB boost over standard LoRA (assuming the same rank/alpha)?</strong></li>\n</ol>\n<p>I only have enough compute budget for a couple more serious runs, so I’m trying to decide if flipping <code>use_dora=True</code> is a smart calculated bet or a technical trap. </p>\n<p>Any insights would be hugely appreciated!</p>",
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 692879,
+    "postDate": "2026-04-18T10:51:51.982Z",
+    "title": " Is DoRA allowed does it actually improve LB scores?",
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/692879",
+    "votes": 1
+  },
+  "topic_id": 692879,
+  "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/692879"
+}

@@ -1,0 +1,38 @@
+{
+  "fetched_at_utc": "2026-05-13T15:46:35.452125+00:00",
+  "full_text": "[message_id=694074 author=einherjer first=True]\nI have made a copy of the NVIDIA Utility Script (version 6, https://www.kaggle.com/code/ryanholbrook/nvidia-utility-script?scriptVersionId=306236690 ) and wanted to run it so that I can use it in my training notebook. However it takes forever to complete. Currently it is running for 3 hours on the T4 x2. @ryanholbrook is that normal that it takes this long? I assume I am supposed to run it on an accelerator but this will kill my remaining GPU hours. The last few lines of the log show:\n13.1s 403 Checking system NVCC version:\n13.1s 404 nvcc: NVIDIA (R) Cuda compiler driver\n13.1s 405 Copyright (c) 2005-2025 NVIDIA Corporation\n13.1s 406 Built on Fri_Feb_21_20:23:50_PST_2025\n13.1s 407 Cuda compilation tools, release 12.8, V12.8.93\n13.1s 408 Build cuda_12.8.r12.8/compiler.35583870_0\n13.1s 409 --------------------------------------------------\n13.1s 410 Running: uv pip uninstall torch torchvision torchaudio\n14.6s 411 Running: uv pip install --target=/kaggle/working --system nvidia-cutlass\n16.3s 412 Running: uv pip install --target=/kaggle/working --system --pre torch torchvision torchaudio --index-url https://download.pytorch.org/whl/nightly/cu128\n73.1s 413 Running: uv pip install --target=/kaggle/working --system --no-build-isolation 'causal-conv1d>=1.4.0' 'flash-attn'\n\n[message_id=3448372 author=a14iiiii first=False]\nThis is because your dependency files are too much, taking a long time to finish the notebook. For utility script, just cpu is fine.",
+  "message_count_observed": 2,
+  "messages": [
+    {
+      "authorName": "einherjer",
+      "content": "<p>I have made a copy of the NVIDIA Utility Script (version 6, <a href=\"https://www.kaggle.com/code/ryanholbrook/nvidia-utility-script?scriptVersionId=306236690\" target=\"_blank\">https://www.kaggle.com/code/ryanholbrook/nvidia-utility-script?scriptVersionId=306236690</a>) and wanted to run it so that I can use it in my training notebook. However it takes forever to complete. Currently it is running for 3 hours on the T4 x2. <a href=\"https://www.kaggle.com/ryanholbrook\" target=\"_blank\">@ryanholbrook</a> is that normal that it takes this long? I assume I am supposed to run it on an accelerator but this will kill my remaining GPU hours. The last few lines of the log show:</p>\n<pre><code>13.1s    403 Checking system NVCC version:\n13.1s    404 nvcc: NVIDIA (R) Cuda compiler driver\n13.1s    405 Copyright (c) 2005-2025 NVIDIA Corporation\n13.1s    406 Built on Fri_Feb_21_20:23:50_PST_2025\n13.1s    407 Cuda compilation tools, release 12.8, V12.8.93\n13.1s    408 Build cuda_12.8.r12.8/compiler.35583870_0\n13.1s    409 --------------------------------------------------\n13.1s    410 Running: uv pip uninstall torch torchvision torchaudio\n14.6s    411 Running: uv pip install --target=/kaggle/working --system nvidia-cutlass\n16.3s    412 Running: uv pip install --target=/kaggle/working --system --pre torch torchvision torchaudio --index-url https://download.pytorch.org/whl/nightly/cu128\n73.1s    413 Running: uv pip install --target=/kaggle/working --system --no-build-isolation 'causal-conv1d&gt;=1.4.0' 'flash-attn'\n</code></pre>",
+      "depth": 0,
+      "first": true,
+      "id": 694074,
+      "postDate": "2026-04-23T08:35:58.092Z"
+    },
+    {
+      "authorName": "a14iiiii",
+      "content": "<p>This is because your dependency files are too much, taking a long time to finish the notebook. For utility script, just cpu is fine.</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3448372,
+      "postDate": "2026-04-25T09:29:55.603Z"
+    }
+  ],
+  "text_sha256": "fabf661fcc4dd769637400c95a3f4c3e7cf891957b6980243b6305362399ea2b",
+  "topic": {
+    "authorName": "einherjer",
+    "authorUrl": "https://www.kaggle.com/einherjer",
+    "commentCount": 1,
+    "content": "<p>I have made a copy of the NVIDIA Utility Script (version 6, <a href=\"https://www.kaggle.com/code/ryanholbrook/nvidia-utility-script?scriptVersionId=306236690\" target=\"_blank\">https://www.kaggle.com/code/ryanholbrook/nvidia-utility-script?scriptVersionId=306236690</a>) and wanted to run it so that I can use it in my training notebook. However it takes forever to complete. Currently it is running for 3 hours on the T4 x2. <a href=\"https://www.kaggle.com/ryanholbrook\" target=\"_blank\">@ryanholbrook</a> is that normal that it takes this long? I assume I am supposed to run it on an accelerator but this will kill my remaining GPU hours. The last few lines of the log show:</p>\n<pre><code>13.1s    403 Checking system NVCC version:\n13.1s    404 nvcc: NVIDIA (R) Cuda compiler driver\n13.1s    405 Copyright (c) 2005-2025 NVIDIA Corporation\n13.1s    406 Built on Fri_Feb_21_20:23:50_PST_2025\n13.1s    407 Cuda compilation tools, release 12.8, V12.8.93\n13.1s    408 Build cuda_12.8.r12.8/compiler.35583870_0\n13.1s    409 --------------------------------------------------\n13.1s    410 Running: uv pip uninstall torch torchvision torchaudio\n14.6s    411 Running: uv pip install --target=/kaggle/working --system nvidia-cutlass\n16.3s    412 Running: uv pip install --target=/kaggle/working --system --pre torch torchvision torchaudio --index-url https://download.pytorch.org/whl/nightly/cu128\n73.1s    413 Running: uv pip install --target=/kaggle/working --system --no-build-isolation 'causal-conv1d&gt;=1.4.0' 'flash-attn'\n</code></pre>",
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 694074,
+    "postDate": "2026-04-23T08:35:58.092Z",
+    "title": "Nvidia utility script takes forever to run",
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/694074"
+  },
+  "topic_id": 694074,
+  "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/694074"
+}

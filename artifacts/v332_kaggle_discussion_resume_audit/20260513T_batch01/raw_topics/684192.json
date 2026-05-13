@@ -1,0 +1,187 @@
+{
+  "fetched_at_utc": "2026-05-13T15:40:26.197762+00:00",
+  "full_text": "[message_id=684192 author=Dennis first=True]\neeae398e \nIn Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:\n63]67 = 4\n18]81 = 9\n72-22 = 95\n64]48 = 16\n65]15 = 5\nNow, determine the result for: 65/58\nWhen we look at the above question, slash has never appeared in the example. How can we deduce the solution?\nWe know that ] is max(A, B) % min(A, B). No example is given for /\ne7cf0394 \nIn Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:\n88\\87 = 7656\n30]47 = 3047\n52*15 = *37\nNow, determine the result for: 97]83\nIf the symbol works across the \"Alice Wonderland\", here 30] 47 should not use concat.\nIt seems that the training dataset has hallucination?\nOne more thing,\n7993452d \nIn Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:\n`!-`/ = -[]\n[/-:( = -](\n^`*<! = :%[!\n%/-<< = -/(\n!<+^^ = %((\nNow, determine the result for: :<-]!\nWould anyone share how to reason this kind of problem? I have asked some LLM, they spent many tokens but unable to find the solution. I have also tried to deduce it but in vain.\nIt seems the data is unbalanced and there are some hallucinations (I think it is severe) in the dataset.\n\n[message_id=3429708 author=Yuchen20 first=False]\nThis one is not even solvable, id : 4e840a1a\nIn Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:\n58*93 = 152\n26*21 = 48\n56*65 = 122\nNow, determine the result for: 15+53\nthe + is not even in the multi-shot example\n\n[message_id=3436420 author=Donald Galliano III first=False]\nSolved here : https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/688461\n\n[message_id=3431812 author=Durga Kumari first=False]\nNice Dataset\n\n[message_id=3430332 author=Navneet first=False]\nCool Dataset @dennisfong\n\n[message_id=3431860 author=Ashutosh Kumar first=False]\nExactly, for bit_manipulation and equation_transformation, despite so many rotations and handlings model hallucinates and its not fit for arithmetic operations \nBit manipulation (46% per-bit, 100% rotation):\nRotation: 9/9 = 100% — model recognizes rotation patterns perfectly\nPer-bit: 42/91 = 46% — model writes correct format but derives WRONG boolean rules\nFailed predictions heavily use complex ops (xnor: 80, or_not: 42, and_not: 33)\nCorrect predictions dominated by simple ops (COPY: 290, AND: 90)\nThe model can't actually compute boolean operations — this is a 3B model capability limit\nEquation transformation (54% numeric, 4% symbolic):\n28/100 equations have numeric answers, 72/100 have symbolic\nNumeric: 15/28 correct (54%) — model gets arithmetic wrong in 13 cases\nSymbolic: 3/72 correct (4%) — arbitrary character substitutions are fundamentally impossible\nCommon failure: model claims \"a+b+1: 26,93→120? no → MATCH\" — hallucinates verification\n\n[message_id=3430319 author=Asadullah Baig first=False]\nIn short training on this dataset is not recommended. Either correct it and then train on a different set?\n\n[message_id=3431082 author=ImperfectKitto first=False]\nWhat about the hidden testing dataset?\n\n[message_id=3428304 author=George first=False]\nWho can solve this puzzle? * not present in the examples at all\nIn Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:\n81+79 = 511\n19-41 = 7\n58-87 = 7\nNow, determine the result for: 07*79\n\n[message_id=3429907 author=zoey first=False]\nImpossible, my opus-4.6 failed\n\n[message_id=3427478 author=Đăng Nguyễn Hồng first=False]\nI found the provided dataset is quite consistent in rule, but some questions indeed unsolvable in mathematical term (such as a query operator is unseen in example equations-there are many cases, but not sure if there are hidden rules to find it out, but until now it seems random to me). \nBy this nature, think about it as a puzzle intead of mathematic :D\n\n[message_id=3428175 author=Dennis first=False]\n@dangnh0611 , can you give some hints on solving this?\nIn Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:\n`!-`/ = -[]\n[/-:( = -](\n^`*<! = :%[!\n%/-<< = -/(\n!<+^^ = %((\nNow, determine the result for: :<-]!\n\n[message_id=3428212 author=Đăng Nguyễn Hồng first=False]\nThis result obtained from a LLM by provide a detailed prompt/instructions about how to solve this kind of puzzle. Share you my obtained response, with long-CoT-thinking prunned, strip to the final result:\nDigits mapping: \n[ = 0, ( = 1\n< = 2\n/ = 3\n] = 4\n% = 5\n: = 6\n! = 7\n^ = 8\n` = 9\nOperators: \n+ = standard addition\n* = multiplication\n- = negative absolute difference ( neg_abs_diff )\nWe can substitute the assigned digits into the equations to verify:\nEq 1: 97 - 93 = -04 → -|79 - 39| = -40 → reverses to -04 . (Matches -[] )\nEq 2: 03 - 61 = -41 → -|30 - 16| = -14 → reverses to -41 . (Matches -]( )\nEq 3: 89 * 27 = 6507 → 98 * 72 = 7056 → reverses to 6507 . (Matches :%[! )\nEq 4: 53 - 22 = -31 → -|35 - 22| = -13 → reverses to -31 . (Matches -/( )\nEq 5: 72 + 88 = 511 → 27 + 88 = 115 → reverses to 511 . (Matches %(( )\nPHASE 3: COMPUTE ANSWER \nWe need to determine the result for the query: :< - ]! \nTranslate the operands: \n: = 6, < = 2 → 62 \n] = 4, ! = 7 → 47 \nApply reverse mode (reverse operands): \nA' = 26\nB' = 74\nApply the operator - ( neg_abs_diff ): \n-|26 - 74| = -|-48| = -48 \nReverse the magnitude for the final result:\n48 reversed is 84 . Sign is preserved as -84 .\nRe-encode into symbols:\n8 = ^ \n4 = ] \nResult = -^]\n\n[message_id=3428221 author= first=False]\n\n\n[message_id=3428232 author=Dennis first=False]\n@dangnh0611 . Thanks for sharing. It inspired me how to teach my model to fine tune.\n\n[message_id=3429641 author=yash bhaskar first=False]\n@dangnh0611 Whats the logic here?\nIn Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:\n#[!}} = >#\n]]-?< = >\"]\n]](>> = <<\n>#-<} = <#>}\nNow, determine the result for: >}-<\"\n\n[message_id=3429748 author=Kh0a first=False]\nI asked gemini\nWonderland Math Puzzle Solution \nDigits mapping: \n\" = 0, < = 1\n] = 2\n# = 3\n? = 4\n} = 5\n[ = 8\n> = 9\nOperators: \n! = standard addition\n- = multiplication\n( = Greatest Common Divisor (GCD)\nWe can substitute the assigned digits into the equations to verify: \nEq 1: 38 + 55 = 93 (Matches >#) \nEq 2: 22 * 41 = 902 (Matches >\"]) \nEq 3: GCD(22, 99) = 11 (Matches <<) \nEq 4: 93 * 15 = 1395 (Matches <#>}) \nPHASE 3: COMPUTE ANSWER \nWe need to determine the result for the query: >}-<\" \nTranslate the operands: > = 9, } = 5 → 95 | < = 1, \" = 0 → 10 \nApply the operator - (multiplication): 95 * 10 = 950 \nRe-encode into symbols: 9 = > , 5 = } , 0 = \" → Result = >}\"\n\n[message_id=3427411 author=MD Mushfirat Mohaimin first=False]\nI found another example. \n026106f5 \nIn Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:\n52{43 = 9\n31*15 = 46\n37{26 = 11\n17{92 = 24\nNow, determine the result for: 75*97\nHere, we can observe that { acts like a minus for two examples, but for the last example the mapping is NOT a minus.\nWe can also observe that * seems to act like a plus from the only one example where this operator is used.\nSo, the answer to 75*97 would be the sum of 75 and 97, which is 172, right? \nBut, in the dataset, the answer to this prompt is 631 \nWhat's the logic behind it?\n\n[message_id=3427417 author=Dennis first=False]\nI tried to solve it by hand.\n31*15=46\nseems like 3+1 =4 , 1+5 = 6 , and then concat = 46\n@ryanholbrook , could you please provide some insights ? Thanks in advance.\n\n[message_id=3427473 author=Đăng Nguyễn Hồng first=False]\nAbout this example:\n{ means digit-reverse then take abs(B-A) -> reverse: 9=34-25; 11=abs(62-73), 42=abs(29-71)\n* means reverse -> add -> reverse: 64=51+13; 136=79+57",
+  "message_count_observed": 20,
+  "messages": [
+    {
+      "authorName": "Dennis",
+      "content": "<p><strong>eeae398e</strong></p>\n<pre><code>In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:\n63]67 = 4\n18]81 = 9\n72-22 = 95\n64]48 = 16\n65]15 = 5\nNow, determine the result for: 65/58\n</code></pre>\n<p>When we look at the above question, slash has never appeared in the example. How can we deduce the solution?\nWe know that ] is max(A, B) % min(A, B). No example is given for /</p>\n<p><strong>e7cf0394</strong></p>\n<pre><code>In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:\n88\\87 = 7656\n30]47 = 3047\n52*15 = *37\nNow, determine the result for: 97]83\n</code></pre>\n<p>If the symbol works across the \"Alice Wonderland\", here 30] 47 should not use concat.</p>\n<p>It seems that the training dataset has hallucination?</p>\n<p>One more thing,\n<strong>7993452d</strong></p>\n<pre><code>In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:\n`!-`/ = -[]\n[/-:( = -](\n^`*&lt;! = :%[!\n%/-&lt;&lt; = -/(\n!&lt;+^^ = %((\nNow, determine the result for: :&lt;-]!\n</code></pre>\n<p>Would anyone share how to reason this kind of problem? I have asked some LLM, they spent many tokens but unable to find the solution. I have also tried to deduce it but in vain.</p>\n<p>It seems the data is unbalanced and there are some hallucinations (I think it is severe) in the dataset.\n<img src=\"https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F145164%2Fcb7ae8b9240d5418b30f437e8e7f292d%2Fnvda.png?generation=1774324860344503&amp;alt=media\" alt=\"\"></p>",
+      "depth": 0,
+      "first": true,
+      "id": 684192,
+      "postDate": "2026-03-24T01:13:54.919Z"
+    },
+    {
+      "authorName": "Yuchen20",
+      "content": "<p>This one is not even solvable, id : 4e840a1a</p>\n<pre><code>In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:\n58*93 = 152\n26*21 = 48\n56*65 = 122\nNow, determine the result for: 15+53\n</code></pre>\n<p>the <code>+</code> is not even in the multi-shot example</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3429708,
+      "postDate": "2026-03-27T05:41:59.650Z",
+      "votes": 4
+    },
+    {
+      "authorName": "Donald Galliano III",
+      "content": "<p>Solved here : <a href=\"https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/688461\" target=\"_blank\">https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/688461</a></p>",
+      "depth": 0,
+      "first": false,
+      "id": 3436420,
+      "postDate": "2026-04-05T22:45:35.597Z",
+      "votes": -6
+    },
+    {
+      "authorName": "Durga Kumari",
+      "content": "<p>Nice Dataset</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3431812,
+      "postDate": "2026-03-30T17:48:37.473Z",
+      "votes": -3
+    },
+    {
+      "authorName": "Navneet",
+      "content": "<p>Cool Dataset <a href=\"https://www.kaggle.com/dennisfong\" target=\"_blank\">@dennisfong</a> </p>",
+      "depth": 0,
+      "first": false,
+      "id": 3430332,
+      "postDate": "2026-03-28T09:29:50.447Z",
+      "votes": -4
+    },
+    {
+      "authorName": "Ashutosh Kumar",
+      "content": "<p>Exactly, for bit_manipulation and equation_transformation, despite so many rotations and handlings model hallucinates and its not fit for arithmetic operations </p>\n<p>Bit manipulation (46% per-bit, 100% rotation):</p>\n<p>Rotation: 9/9 = 100% — model recognizes rotation patterns perfectly\nPer-bit: 42/91 = 46% — model writes correct format but derives WRONG boolean rules\nFailed predictions heavily use complex ops (xnor: 80, or_not: 42, and_not: 33)\nCorrect predictions dominated by simple ops (COPY: 290, AND: 90)\nThe model can't actually compute boolean operations — this is a 3B model capability limit\nEquation transformation (54% numeric, 4% symbolic):</p>\n<p>28/100 equations have numeric answers, 72/100 have symbolic\nNumeric: 15/28 correct (54%) — model gets arithmetic wrong in 13 cases\nSymbolic: 3/72 correct (4%) — arbitrary character substitutions are fundamentally impossible\nCommon failure: model claims \"a+b+1: 26,93→120? no → MATCH\" — hallucinates verification</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3431860,
+      "postDate": "2026-03-30T19:15:15.820Z"
+    },
+    {
+      "authorName": "Asadullah Baig",
+      "content": "<p>In short training on this dataset is not recommended. Either correct it and then train on a different set?</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3430319,
+      "postDate": "2026-03-28T09:01:47.010Z"
+    },
+    {
+      "authorName": "ImperfectKitto",
+      "content": "<p>What about the hidden testing dataset?</p>",
+      "depth": 1,
+      "first": false,
+      "id": 3431082,
+      "postDate": "2026-03-29T11:48:48.723Z"
+    },
+    {
+      "authorName": "George",
+      "content": "<p>Who can solve this puzzle? * not present in the examples at all</p>\n<pre><code>In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:\n81+79 = 511\n19-41 = 7\n58-87 = 7\nNow, determine the result for: 07*79\n</code></pre>",
+      "depth": 0,
+      "first": false,
+      "id": 3428304,
+      "postDate": "2026-03-25T08:32:01.653Z"
+    },
+    {
+      "authorName": "zoey",
+      "content": "<p>Impossible, my opus-4.6 failed</p>",
+      "depth": 1,
+      "first": false,
+      "id": 3429907,
+      "postDate": "2026-03-27T14:32:45.980Z"
+    },
+    {
+      "authorName": "Đăng Nguyễn Hồng",
+      "content": "<p>I found the provided dataset is quite consistent in rule, but some questions indeed unsolvable in mathematical term (such as a query operator is unseen in example equations-there are many cases, but not sure if there are hidden rules to find it out, but until now it seems random to me). \nBy this nature, think about it as a puzzle intead of mathematic :D</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3427478,
+      "postDate": "2026-03-24T06:05:10.610Z"
+    },
+    {
+      "authorName": "Dennis",
+      "content": "<p><a href=\"https://www.kaggle.com/dangnh0611\" target=\"_blank\">@dangnh0611</a> , can you give some hints on solving this?</p>\n<pre><code>In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:\n`!-`/ = -[]\n[/-:( = -](\n^`*&lt;! = :%[!\n%/-&lt;&lt; = -/(\n!&lt;+^^ = %((\nNow, determine the result for: :&lt;-]!\n</code></pre>",
+      "depth": 1,
+      "first": false,
+      "id": 3428175,
+      "postDate": "2026-03-25T03:22:36.203Z"
+    },
+    {
+      "authorName": "Đăng Nguyễn Hồng",
+      "content": "<p>This result obtained from a LLM by provide a detailed prompt/instructions about how to solve this kind of puzzle. Share you my obtained response, with long-CoT-thinking prunned, strip to the final result:</p>\n<p><strong>Digits mapping:</strong></p>\n<ul>\n<li><code>[</code> = 0, <code>(</code> = 1</li>\n<li><code>&lt;</code> = 2</li>\n<li><code>/</code> = 3</li>\n<li><code>]</code> = 4</li>\n<li><code>%</code> = 5</li>\n<li><code>:</code> = 6</li>\n<li><code>!</code> = 7</li>\n<li><code>^</code> = 8</li>\n<li><code>`</code> = 9</li>\n</ul>\n<p><strong>Operators:</strong></p>\n<ul>\n<li><code>+</code> = standard addition</li>\n<li><code>*</code> = multiplication</li>\n<li><code>-</code> = negative absolute difference (<code>neg_abs_diff</code>)</li>\n</ul>\n<p>We can substitute the assigned digits into the equations to verify:</p>\n<ul>\n<li><strong>Eq 1:</strong> <code>97 - 93 = -04</code> → <code>-|79 - 39| = -40</code> → reverses to <code>-04</code>. (Matches <code>-[]</code>)</li>\n<li><strong>Eq 2:</strong> <code>03 - 61 = -41</code> → <code>-|30 - 16| = -14</code> → reverses to <code>-41</code>. (Matches <code>-](</code>)</li>\n<li><strong>Eq 3:</strong> <code>89 * 27 = 6507</code> → <code>98 * 72 = 7056</code> → reverses to <code>6507</code>. (Matches <code>:%[!</code>)</li>\n<li><strong>Eq 4:</strong> <code>53 - 22 = -31</code> → <code>-|35 - 22| = -13</code> → reverses to <code>-31</code>. (Matches <code>-/(</code>)</li>\n<li><strong>Eq 5:</strong> <code>72 + 88 = 511</code> → <code>27 + 88 = 115</code> → reverses to <code>511</code>. (Matches <code>%((</code>)</li>\n</ul>\n<p><strong>PHASE 3: COMPUTE ANSWER</strong>\nWe need to determine the result for the query: <code>:&lt; - ]!</code></p>\n<ol>\n<li>Translate the operands: \n<code>:</code> = 6, <code>&lt;</code> = 2  → <strong>62</strong>\n<code>]</code> = 4, <code>!</code> = 7  → <strong>47</strong></li>\n<li>Apply reverse mode (reverse operands): \nA' = 26\nB' = 74</li>\n<li>Apply the operator <code>-</code> (<code>neg_abs_diff</code>): \n-|26 - 74| = -|-48| = <strong>-48</strong></li>\n<li>Reverse the magnitude for the final result:\n48 reversed is <strong>84</strong>. Sign is preserved as <code>-84</code>.</li>\n<li>Re-encode into symbols:\n8 = <code>^</code>\n4 = <code>]</code>\nResult = <code>-^]</code></li>\n</ol>",
+      "depth": 2,
+      "first": false,
+      "id": 3428212,
+      "postDate": "2026-03-25T04:59:02.723Z",
+      "votes": 15
+    },
+    {
+      "depth": 2,
+      "first": false,
+      "id": 3428221,
+      "postDate": "2026-03-25T05:20:45.883Z"
+    },
+    {
+      "authorName": "Dennis",
+      "content": "<p><a href=\"https://www.kaggle.com/dangnh0611\" target=\"_blank\">@dangnh0611</a> . Thanks for sharing. It inspired me how to teach my model to fine tune. </p>",
+      "depth": 2,
+      "first": false,
+      "id": 3428232,
+      "postDate": "2026-03-25T05:43:38.470Z"
+    },
+    {
+      "authorName": "yash bhaskar",
+      "content": "<p><a href=\"https://www.kaggle.com/dangnh0611\" target=\"_blank\">@dangnh0611</a> Whats the logic here?</p>\n<pre><code>In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:\n#[!}} = &gt;#\n]]-?&lt; = &gt;\"]\n]](&gt;&gt; = &lt;&lt;\n&gt;#-&lt;} = &lt;#&gt;}\nNow, determine the result for: &gt;}-&lt;\"\n</code></pre>",
+      "depth": 1,
+      "first": false,
+      "id": 3429641,
+      "postDate": "2026-03-27T02:51:28.650Z"
+    },
+    {
+      "authorName": "Kh0a",
+      "content": "<p>I asked gemini</p>\n<h1>Wonderland Math Puzzle Solution</h1>\n<p><strong>Digits mapping:</strong>\n<strong>\"</strong> = 0, <strong>&lt;</strong> = 1\n<strong>]</strong> = 2\n<strong>#</strong> = 3\n<strong>?</strong> = 4\n<strong>}</strong> = 5\n<strong>[</strong> = 8\n<strong>&gt;</strong> = 9</p>\n<p><strong>Operators:</strong>\n<strong>!</strong> = standard addition\n<strong>-</strong> = multiplication\n<strong>(</strong> = Greatest Common Divisor (GCD)</p>\n<p><strong>We can substitute the assigned digits into the equations to verify:</strong></p>\n<ul>\n<li><strong>Eq 1:</strong> 38 + 55 = 93 <em>(Matches &gt;#)</em></li>\n<li><strong>Eq 2:</strong> 22 * 41 = 902 <em>(Matches &gt;\"])</em></li>\n<li><strong>Eq 3:</strong> GCD(22, 99) = 11 <em>(Matches &lt;&lt;)</em></li>\n<li><strong>Eq 4:</strong> 93 * 15 = 1395 <em>(Matches &lt;#&gt;})</em></li>\n</ul>\n<h3>PHASE 3: COMPUTE ANSWER</h3>\n<p><strong>We need to determine the result for the query:</strong> <code>&gt;}-&lt;\"</code></p>\n<ul>\n<li><strong>Translate the operands:</strong> <code>&gt;</code> = 9, <code>}</code> = 5 → <strong>95</strong> | <code>&lt;</code> = 1, <code>\"</code> = 0 → <strong>10</strong></li>\n<li><strong>Apply the operator <code>-</code> (multiplication):</strong> 95 * 10 = <strong>950</strong></li>\n<li><strong>Re-encode into symbols:</strong> 9 = <code>&gt;</code>, 5 = <code>}</code>, 0 = <code>\"</code> → <strong>Result = <code>&gt;}\"</code></strong></li>\n</ul>",
+      "depth": 2,
+      "first": false,
+      "id": 3429748,
+      "postDate": "2026-03-27T07:51:26.883Z"
+    },
+    {
+      "authorName": "MD Mushfirat Mohaimin",
+      "content": "<p>I found another example.  </p>\n<p><strong>026106f5</strong></p>\n<pre><code>In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:\n52{43 = 9\n31*15 = 46\n37{26 = 11\n17{92 = 24\nNow, determine the result for: 75*97\n</code></pre>\n<p>Here, we can observe that <code>{</code> acts like a minus for two examples, but for the last example the mapping is NOT a minus.<br>\nWe can also observe that <code>*</code> seems to act like a plus from the only one example where this operator is used.<br>\nSo, the answer to <code>75*97</code> would be the sum of 75 and 97, which is 172, right?  </p>\n<p>But, in the dataset, the answer to this prompt is 631  </p>\n<p>What's the logic behind it?</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3427411,
+      "postDate": "2026-03-24T03:45:13.297Z"
+    },
+    {
+      "authorName": "Dennis",
+      "content": "<p>I tried to solve it by hand.</p>\n<p>31*15=46\nseems like 3+1 =4 , 1+5 = 6 , and then concat  = 46</p>\n<p><a href=\"https://www.kaggle.com/ryanholbrook\" target=\"_blank\">@ryanholbrook</a> , could you please provide some insights ? Thanks in advance.</p>",
+      "depth": 1,
+      "first": false,
+      "id": 3427417,
+      "postDate": "2026-03-24T03:54:27.510Z"
+    },
+    {
+      "authorName": "Đăng Nguyễn Hồng",
+      "content": "<p>About this example:</p>\n<ul>\n<li>{ means digit-reverse then take abs(B-A) -&gt; reverse: 9=34-25; 11=abs(62-73), 42=abs(29-71)</li>\n<li>* means reverse -&gt; add -&gt; reverse: 64=51+13; 136=79+57</li>\n</ul>",
+      "depth": 2,
+      "first": false,
+      "id": 3427473,
+      "postDate": "2026-03-24T05:55:02.867Z",
+      "votes": 9
+    }
+  ],
+  "text_sha256": "6e32bfd7b69a8b2192d75839577f9a354d981ca8d5f7f6aaee1fb683b3e8c2d2",
+  "topic": {
+    "authorName": "Dennis",
+    "authorUrl": "https://www.kaggle.com/dennisfong",
+    "commentCount": 19,
+    "content": "<p><strong>eeae398e</strong></p>\n<pre><code>In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:\n63]67 = 4\n18]81 = 9\n72-22 = 95\n64]48 = 16\n65]15 = 5\nNow, determine the result for: 65/58\n</code></pre>\n<p>When we look at the above question, slash has never appeared in the example. How can we deduce the solution?\nWe know that ] is max(A, B) % min(A, B). No example is given for /</p>\n<p><strong>e7cf0394</strong></p>\n<pre><code>In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:\n88\\87 = 7656\n30]47 = 3047\n52*15 = *37\nNow, determine the result for: 97]83\n</code></pre>\n<p>If the symbol works across the \"Alice Wonderland\", here 30] 47 should not use concat.</p>\n<p>It seems that the training dataset has hallucination?</p>\n<p>One more thing,\n<strong>7993452d</strong></p>\n<pre><code>In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:\n`!-`/ = -[]\n[/-:( = -](\n^`*&lt;! = :%[!\n%/-&lt;&lt; = -/(\n!&lt;+^^ = %((\nNow, determine the result for: :&lt;-]!\n</code></pre>\n<p>Would anyone share how to reason this kind of problem? I have asked some LLM, they spent many tokens but unable to find the solution. I have also tried to deduce it but in vain.</p>\n<p>It seems the data is unbalanced and there are some hallucinations (I think it is severe) in the dataset.\n<img src=\"https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F145164%2Fcb7ae8b9240d5418b30f437e8e7f292d%2Fnvda.png?generation=1774324860344503&amp;alt=media\" alt=\"\"></p>",
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 684192,
+    "postDate": "2026-03-24T01:13:54.919Z",
+    "title": "[Dataset Hallucination?] How did you resolve these problems by human?",
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/684192",
+    "votes": 51
+  },
+  "topic_id": 684192,
+  "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/684192"
+}

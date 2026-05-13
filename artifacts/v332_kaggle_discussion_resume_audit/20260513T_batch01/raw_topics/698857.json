@@ -1,0 +1,39 @@
+{
+  "fetched_at_utc": "2026-05-13T15:47:38.433609+00:00",
+  "full_text": "[message_id=698857 author=Penguin first=True]\nHi Host,\nTo ensure I'm aligned with the rules for prize eligibility, I have a follow-up regarding data generation.\nI am currently using GPT-5 family model as a 'teacher' model to generate high-quality Chain-of-Thought (CoT) reasoning for the training dataset. \nThese reasoning traces are then used to fine-tune the Nemotron-3-Nano-30B-A3B via LoRA.\nGiven that some proprietary model TOS (like OpenAI's) have restrictions on 'developing competing models,' but the host team has noted that NVIDIA does not intend to reuse these adapters or compete with commercial models through this challenge, is there any concern regarding this specific distillation pipeline? \nThe purpose of this competition is not to train models that would compete with commercial models. NVIDIA will not reuse the adapters produced by participants. After all, we could train models ourselves if that was our intent, given we have the data generator.\nThe goal of the competition is to see how people manage to fine tune Nemotron model. The pipelines are more interesting to us than the outcome.\n\n[message_id=3456423 author=CPMP first=False]\nI can only repeat https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/688360#3439425 \nYou quoted only part of it and not the conclusion. If you still have doubts then contact an IP lawyer.",
+  "message_count_observed": 2,
+  "messages": [
+    {
+      "authorName": "Penguin",
+      "content": "<p>Hi Host,<br><br>To ensure I'm aligned with the rules for prize eligibility, I have a follow-up regarding data generation.<br>I am currently using GPT-5 family model as a 'teacher' model to generate high-quality Chain-of-Thought (CoT) reasoning for the training dataset. <br>These reasoning traces are then used to fine-tune the Nemotron-3-Nano-30B-A3B via LoRA.<br>Given that some proprietary model TOS (like OpenAI's) have restrictions on 'developing competing models,' but the host team has noted that NVIDIA does not intend to reuse these adapters or compete with commercial models through this challenge, is there any concern regarding this specific distillation pipeline? <br></p>\n<blockquote>\n  <p>The purpose of this competition is not to train models that would compete with commercial models. NVIDIA will not reuse the adapters produced by participants. After all, we could train models ourselves if that was our intent, given we have the data generator.</p>\n  <p>The goal of the competition is to see how people manage to fine tune Nemotron model. The pipelines are more interesting to us than the outcome.</p>\n</blockquote>",
+      "depth": 0,
+      "first": true,
+      "id": 698857,
+      "postDate": "2026-05-11T19:52:46.713Z"
+    },
+    {
+      "authorName": "CPMP",
+      "content": "<p>I can only repeat <a href=\"https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/688360#3439425\" target=\"_blank\">https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/688360#3439425</a></p>\n<p>You quoted only part of it and not the conclusion. If you still have doubts then contact an IP lawyer.</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3456423,
+      "postDate": "2026-05-11T20:42:13.073Z",
+      "votes": 1
+    }
+  ],
+  "text_sha256": "da7e31b36d4e54a274f219a70e444d3755bdfd074716e10010602bfb7f1a3a9f",
+  "topic": {
+    "authorName": "Penguin",
+    "authorUrl": "https://www.kaggle.com/penguin069",
+    "commentCount": 1,
+    "content": "<p>Hi Host,<br><br>To ensure I'm aligned with the rules for prize eligibility, I have a follow-up regarding data generation.<br>I am currently using GPT-5 family model as a 'teacher' model to generate high-quality Chain-of-Thought (CoT) reasoning for the training dataset. <br>These reasoning traces are then used to fine-tune the Nemotron-3-Nano-30B-A3B via LoRA.<br>Given that some proprietary model TOS (like OpenAI's) have restrictions on 'developing competing models,' but the host team has noted that NVIDIA does not intend to reuse these adapters or compete with commercial models through this challenge, is there any concern regarding this specific distillation pipeline? <br></p>\n<blockquote>\n  <p>The purpose of this competition is not to train models that would compete with commercial models. NVIDIA will not reuse the adapters produced by participants. After all, we could train models ourselves if that was our intent, given we have the data generator.</p>\n  <p>The goal of the competition is to see how people manage to fine tune Nemotron model. The pipelines are more interesting to us than the outcome.</p>\n</blockquote>",
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 698857,
+    "postDate": "2026-05-11T19:52:46.713Z",
+    "title": "Clarification on using Synthetic CoT from proprietary Teacher Models (e.g., GPT-5 family) for distillation",
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/698857"
+  },
+  "topic_id": 698857,
+  "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/698857"
+}

@@ -1,0 +1,39 @@
+{
+  "fetched_at_utc": "2026-05-13T15:46:14.766367+00:00",
+  "full_text": "[message_id=692667 author=VanyaRekunov first=True]\nHas anyone noticed that there are mistakes in the provided train.csv? In the photo I attached, there is an example of incorrect tasks in the numeric equation task, where some operations are just missing or given incorrectly. How to deal with this? There might also be mistakes in other tasks. Should i do sth about this, or just skip?\n\n[message_id=3444578 author=Dennis first=False]\nThere is a pattern. I think able to find it is the glod medal points.",
+  "message_count_observed": 2,
+  "messages": [
+    {
+      "authorName": "VanyaRekunov",
+      "content": "<p>Has anyone noticed that there are mistakes in the provided train.csv? In the photo I attached, there is an example of incorrect tasks in the numeric equation task, where some operations are just missing or given incorrectly. How to deal with this? There might also be mistakes in other tasks. Should i do sth about this, or just skip? </p>",
+      "depth": 0,
+      "first": true,
+      "id": 692667,
+      "postDate": "2026-04-17T14:08:14.578Z"
+    },
+    {
+      "authorName": "Dennis",
+      "content": "<p>There is a pattern. I think able to find it is the glod medal points.</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3444578,
+      "postDate": "2026-04-18T02:03:47.193Z"
+    }
+  ],
+  "text_sha256": "120e6c3521e5af778c57faacedc29eff8ba3a149a28cba2dac1204e7261ff448",
+  "topic": {
+    "authorName": "VanyaRekunov",
+    "authorUrl": "https://www.kaggle.com/vanyarekunov",
+    "commentCount": 1,
+    "content": "<p>Has anyone noticed that there are mistakes in the provided train.csv? In the photo I attached, there is an example of incorrect tasks in the numeric equation task, where some operations are just missing or given incorrectly. How to deal with this? There might also be mistakes in other tasks. Should i do sth about this, or just skip? </p>",
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 692667,
+    "postDate": "2026-04-17T14:08:14.578Z",
+    "title": "Incorrect tasks in train.csv",
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/692667",
+    "votes": -1
+  },
+  "topic_id": 692667,
+  "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/692667"
+}

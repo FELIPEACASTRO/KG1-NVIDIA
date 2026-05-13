@@ -1,0 +1,74 @@
+{
+  "fetched_at_utc": "2026-05-13T15:38:26.177959+00:00",
+  "full_text": "[message_id=682197 author=ISAKA Tsuyoshi first=True]\nWhen saving and committing a notebook via the Kaggle API, the GPU is automatically set to P100.\nIs there a way to set it to RTX Pro 6000 instead?\n\n[message_id=3422892 author=c-number first=False]\nI haven't checked myself, but this may work.\nhttps://github.com/Kaggle/kaggle-cli/blob/main/docs/kernels.md#:~:text=NvidiaH100-,NvidiaRtxPro6000,-Some%20of%20these\n\n[message_id=3423144 author=ISAKA Tsuyoshi first=False]\nIt worked with @cnumber ’s method! Thank you!\nI’d also like to thank @ravi20076 and @luciankucera for their comments.\n\n[message_id=3423644 author=YashasGunderia first=False]\nhey, comment link?\n\n[message_id=3422875 author=lucian kucera first=False]\nNo there is no way. Just use kaggle notebooks.\n\n[message_id=3423028 author=Ravi Ramakrishnan first=False]\n@isakatsuyoshi use kaggle notebooks - this is the easiest and safest way to ensure A6000 is selected",
+  "message_count_observed": 6,
+  "messages": [
+    {
+      "authorName": "ISAKA Tsuyoshi",
+      "content": "<p>When saving and committing a notebook via the Kaggle API, the GPU is automatically set to P100.\nIs there a way to set it to RTX Pro 6000 instead?</p>",
+      "depth": 0,
+      "first": true,
+      "id": 682197,
+      "postDate": "2026-03-18T02:10:18.548Z"
+    },
+    {
+      "authorName": "c-number",
+      "content": "<p>I haven't checked myself, but this may work.\n<a href=\"https://github.com/Kaggle/kaggle-cli/blob/main/docs/kernels.md#:~:text=NvidiaH100-,NvidiaRtxPro6000,-Some%20of%20these\" target=\"_blank\">https://github.com/Kaggle/kaggle-cli/blob/main/docs/kernels.md#:~:text=NvidiaH100-,NvidiaRtxPro6000,-Some%20of%20these</a></p>",
+      "depth": 0,
+      "first": false,
+      "id": 3422892,
+      "postDate": "2026-03-18T02:47:42.597Z",
+      "votes": 6
+    },
+    {
+      "authorName": "ISAKA Tsuyoshi",
+      "content": "<p>It worked with <a href=\"https://www.kaggle.com/cnumber\" target=\"_blank\">@cnumber</a> ’s method! Thank you!</p>\n<p>I’d also like to thank <a href=\"https://www.kaggle.com/ravi20076\" target=\"_blank\">@ravi20076</a> and <a href=\"https://www.kaggle.com/luciankucera\" target=\"_blank\">@luciankucera</a> for their comments.</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3423144,
+      "postDate": "2026-03-18T07:46:03.127Z",
+      "votes": 3
+    },
+    {
+      "authorName": "YashasGunderia",
+      "content": "<p>hey, comment link?</p>",
+      "depth": 1,
+      "first": false,
+      "id": 3423644,
+      "postDate": "2026-03-18T20:00:09.377Z"
+    },
+    {
+      "authorName": "lucian kucera",
+      "content": "<p>No there is no way. Just use kaggle notebooks.</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3422875,
+      "postDate": "2026-03-18T02:25:32.273Z",
+      "votes": 1
+    },
+    {
+      "authorName": "Ravi Ramakrishnan",
+      "content": "<p><a href=\"https://www.kaggle.com/isakatsuyoshi\" target=\"_blank\">@isakatsuyoshi</a> use kaggle notebooks - this is the easiest and safest way to ensure A6000 is selected</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3423028,
+      "postDate": "2026-03-18T05:22:41.290Z"
+    }
+  ],
+  "text_sha256": "6d59126b8c1ae9175aa64c85dac5390d08e8ea9b4b661faf2e2b68594a69dd86",
+  "topic": {
+    "authorName": "ISAKA Tsuyoshi",
+    "authorUrl": "https://www.kaggle.com/isakatsuyoshi",
+    "commentCount": 5,
+    "content": "<p>When saving and committing a notebook via the Kaggle API, the GPU is automatically set to P100.\nIs there a way to set it to RTX Pro 6000 instead?</p>",
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 682197,
+    "postDate": "2026-03-18T02:10:18.548Z",
+    "title": "[RESOLVED] How to use RTX Pro 6000 instead of P100 with the Kaggle API?",
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/682197",
+    "votes": 12
+  },
+  "topic_id": 682197,
+  "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/682197"
+}

@@ -1,0 +1,40 @@
+{
+  "fetched_at_utc": "2026-05-13T15:44:09.837710+00:00",
+  "full_text": "[message_id=686691 author=AMITH NAIR first=True]\nI am under the legal age in my jurisdiction, according to the competition rules, participants must be at least 18 years old or the age of majority in their jurisdiction. My parent/guardian has provided a consent form allowing me to participate in the competition. I would like to confirm in the event that I win a prize, can my parent/guardian legally sign the required prize acceptance forms on my behalf? Thank you for your guidance. I would like to kindly request a written confirmation from the competition sponsor or administrator regarding prize acceptance.\nI want to ensure full compliance with all competition rules and legal requirements before participating.\nThank you in advance for your time and assistance.\n\n[message_id=3432848 author=Addison Howard first=False]\nHi there,\nIn the event that a minor is a) permitted to enter by the host, b) has their parent/guardian out the appropriate forms (one for Kaggle.com and one for the specific competition), and c) wins a cash prize, then the parent will be allowed to accept the prize on behalf of the minor.",
+  "message_count_observed": 2,
+  "messages": [
+    {
+      "authorName": "AMITH NAIR",
+      "content": "<p>I am under the legal age in my jurisdiction, according to the competition rules, participants must be at least 18 years old or the age of majority in their jurisdiction. My parent/guardian has provided a consent form allowing me to participate in the competition. I would like to confirm in the event that I win a prize, can my parent/guardian legally sign the required prize acceptance forms on my behalf? Thank you for your guidance. I would like to kindly request a written confirmation from the competition sponsor or administrator regarding prize acceptance.\nI want to ensure full compliance with all competition rules and legal requirements before participating.</p>\n<p>Thank you in advance for your time and assistance.</p>",
+      "depth": 0,
+      "first": true,
+      "id": 686691,
+      "postDate": "2026-04-01T00:13:35.497Z"
+    },
+    {
+      "authorName": "Addison Howard",
+      "content": "<p>Hi there,</p>\n<p>In the event that a minor is a) permitted to enter by the host, b) has their parent/guardian out the appropriate forms (one for Kaggle.com and one for the specific competition), and c) wins a cash prize, then the parent will be allowed to accept the prize on behalf of the minor.</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3432848,
+      "postDate": "2026-04-01T00:23:41.713Z",
+      "votes": 1
+    }
+  ],
+  "text_sha256": "be52498ee0144f45c5eb6b87eee0aa4179dd44df5bb07bdbec75e95bb1b7daa6",
+  "topic": {
+    "authorName": "AMITH NAIR",
+    "authorUrl": "https://www.kaggle.com/amith1707",
+    "commentCount": 1,
+    "content": "<p>I am under the legal age in my jurisdiction, according to the competition rules, participants must be at least 18 years old or the age of majority in their jurisdiction. My parent/guardian has provided a consent form allowing me to participate in the competition. I would like to confirm in the event that I win a prize, can my parent/guardian legally sign the required prize acceptance forms on my behalf? Thank you for your guidance. I would like to kindly request a written confirmation from the competition sponsor or administrator regarding prize acceptance.\nI want to ensure full compliance with all competition rules and legal requirements before participating.</p>\n<p>Thank you in advance for your time and assistance.</p>",
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 686691,
+    "postDate": "2026-04-01T00:13:35.497Z",
+    "title": "Minor Claiming Prizes",
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/686691",
+    "votes": 1
+  },
+  "topic_id": 686691,
+  "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/686691"
+}

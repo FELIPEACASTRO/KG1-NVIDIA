@@ -1,0 +1,133 @@
+{
+  "fetched_at_utc": "2026-05-13T15:47:14.161434+00:00",
+  "full_text": "[message_id=696059 author=Birtley Doru (DB) first=True]\nfa5dfa46,\"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:\n$< &@ = &$@\\\n}->@ = -!$\n}>+@< = !}}\n\\@ @@ = &<>$\nNow, determine the result for: }^-`}\",-^}\nWhat if the answer contains square brackets?\nCan putting a box over a character correctly identify whether it's right or wrong?\n\n[message_id=3453927 author=Ogurtsov first=False]\n@ryanholbrook \nIf we have any chance to get fixed train dataset, please also inspect such cases (task 00d8b3db ):\nIn Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:\n34/44 = 1\n41/32 = 9\n34|25 = 69\n87\\64 = 8853\nNow, determine the result for: 69/52\nIt assumes answer 17/ but where does the symbol / come from?\nAnother example (task 0c8a8a16 ): answer {17 contains redundant { .\nOne more example is reported here https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/697333\n\n[message_id=3454506 author=Kh0a first=False]\nI have explained it in this discussion:\nhttps://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/686185#3432076\n\n[message_id=3454544 author=daulettoibazar first=False]\nAssuming model encounters this sample in inference time, applying abs(rev(a) - rev(b)) = output:\nabs(rev(34) - rev(44)) = 1 correct 🟩\nabs(rev(41) - rev(32)) = 9 correct 🟩\nwhich leads to\nabs(rev(69) - rev(52)) = 71 incorrect 🟥 \nThis indicates that the issue is not a case of multiple valid solution paths converging on the same final answer. Instead, different solution approaches can lead to different answers, which makes the problem insufficiently represented in the dataset. The only way to reliably obtain the specific ground-truth answer provided here would be to train directly on this formulation and effectively overfit to it.\n\n[message_id=3454612 author=Ogurtsov first=False]\nDifferent meanings of the same symbol in different parts of an equation is very counterintuitive. It even violates the entire definition of equation.\n\n[message_id=3452293 author=Shivam Shinde first=False]\nI had posted about this a month ago as well:\nhttps://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/689284 \nStill no response from the hosts.\n\n[message_id=3452294 author=CPMP first=False]\nWe missed it obviously.\nWe'll look into that.\n\n[message_id=3452435 author=Russell Kirk first=False]\nAnother quick question: Because our eval/submission path loads the adapter through vLLM LoRA, the final submitted adapter cannot rely on lm_head or embedding LoRA tensors --- was that intended?\n\n[message_id=3452456 author=CPMP first=False]\nYes, we aimed for simplicity.\n\n[message_id=3452791 author=Ryan Holbrook first=False]\nThanks for flagging, and apologies for missing this the first time. I will look into it.\n\n[message_id=3454221 author=Shivam Shinde first=False]\n@cpmpml @ryanholbrook \nI have a suggestion to fix this : https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/689284#3454216\n\n[message_id=3452165 author=Giovanny Rodríguez first=False]\ndef _extract_last_boxed(text: str) -> str | None:\nif not starts:\nreturn None\nstart = starts[-1]\ndepth = 1\ni = start\nwhile i < len(text):\nc = text[i]\nif c == \"{\":\ndepth += 1\nelif c == \"}\":\ndepth -= 1\nif depth == 0:\nif text[i + 1 :].strip():\nreturn None\nreturn text[start:i]\ni += 1\nreturn None\nHi @ryanholbrook , the metric regex \\boxed{([^}]*)(?:}|$) stops at the first }. In cryptarithm puzzles { and } can be valid answer characters — about 20% of cryptarithm puzzles in train.csv (169/823) have such answers and can never be marked correct.\n\n[message_id=3456857 author=faizan first=False]\nNot really — the box itself doesn't do anything, it's just a visual thing. What actually tells you if a character is right or wrong is the logic running behind it. The box is just how that result gets shown to you.",
+  "message_count_observed": 13,
+  "messages": [
+    {
+      "authorName": "Birtley Doru (DB)",
+      "content": "<p>fa5dfa46,\"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:\n$&lt;<em>&amp;@ = &amp;$@\\\n}-&gt;@ = -!$\n}&gt;+@&lt; = !}}\n\\@</em>@@ = &amp;&lt;&gt;$\nNow, determine the result for: }^-`}\",-^}</p>\n<p>What if the answer contains square brackets?\nCan putting a box over a character correctly identify whether it's right or wrong?</p>",
+      "depth": 0,
+      "first": true,
+      "id": 696059,
+      "postDate": "2026-05-01T06:21:40.283Z"
+    },
+    {
+      "authorName": "Ogurtsov",
+      "content": "<p><a href=\"https://www.kaggle.com/ryanholbrook\" target=\"_blank\">@ryanholbrook</a> \nIf we have any chance to get fixed train dataset, please also inspect such cases (task <strong>00d8b3db</strong>):</p>\n<pre><code>In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:\n34/44 = 1\n41/32 = 9\n34|25 = 69\n87\\64 = 8853\nNow, determine the result for: 69/52\n</code></pre>\n<p>It assumes answer <code>17/</code> but where does the symbol <code>/</code> come from?\nAnother example (task <strong>0c8a8a16</strong>): answer <code>{17</code> contains redundant <code>{</code>.\nOne more example is reported here <a href=\"https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/697333\" target=\"_blank\">https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/697333</a></p>",
+      "depth": 0,
+      "first": false,
+      "id": 3453927,
+      "postDate": "2026-05-06T07:37:11.657Z",
+      "votes": 1
+    },
+    {
+      "authorName": "Kh0a",
+      "content": "<p>I have explained it in this discussion:\n<a href=\"https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/686185#3432076\" target=\"_blank\">https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/686185#3432076</a></p>",
+      "depth": 1,
+      "first": false,
+      "id": 3454506,
+      "postDate": "2026-05-07T11:33:29.663Z"
+    },
+    {
+      "authorName": "daulettoibazar",
+      "content": "<p>Assuming model encounters this sample in inference time, applying abs(rev(a) - rev(b)) = output:</p>\n<p>abs(rev(34) - rev(44)) = 1 correct 🟩\nabs(rev(41) - rev(32)) = 9 correct 🟩</p>\n<p>which leads to\nabs(rev(69) - rev(52)) = 71 incorrect 🟥 </p>\n<p>This indicates that the issue is not a case of multiple valid solution paths converging on the same final answer. Instead, different solution approaches can lead to different answers, which makes the problem insufficiently represented in the dataset. The only way to reliably obtain the specific ground-truth answer provided here would be to train directly on this formulation and effectively overfit to it.</p>",
+      "depth": 2,
+      "first": false,
+      "id": 3454544,
+      "postDate": "2026-05-07T12:43:49.427Z",
+      "votes": 2
+    },
+    {
+      "authorName": "Ogurtsov",
+      "content": "<p>Different meanings of the same symbol in different parts of an equation is very counterintuitive. It even violates the entire definition of equation.</p>",
+      "depth": 2,
+      "first": false,
+      "id": 3454612,
+      "postDate": "2026-05-07T14:54:14.403Z"
+    },
+    {
+      "authorName": "Shivam Shinde",
+      "content": "<p>I had posted about this a month ago as well:</p>\n<p><a href=\"https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/689284\" target=\"_blank\">https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/689284</a></p>\n<p>Still no response from the hosts.</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3452293,
+      "postDate": "2026-05-03T03:03:09.523Z",
+      "votes": 5
+    },
+    {
+      "authorName": "CPMP",
+      "content": "<p>We missed it obviously.</p>\n<p>We'll look into that.</p>",
+      "depth": 1,
+      "first": false,
+      "id": 3452294,
+      "postDate": "2026-05-03T03:04:52.220Z",
+      "votes": 4
+    },
+    {
+      "authorName": "Russell Kirk",
+      "content": "<p>Another quick question: Because our eval/submission path loads the adapter through vLLM LoRA, the final submitted adapter cannot rely on lm_head or embedding LoRA tensors --- was that intended?</p>",
+      "depth": 2,
+      "first": false,
+      "id": 3452435,
+      "postDate": "2026-05-03T11:46:12.510Z"
+    },
+    {
+      "authorName": "CPMP",
+      "content": "<p>Yes, we aimed for simplicity.</p>",
+      "depth": 2,
+      "first": false,
+      "id": 3452456,
+      "postDate": "2026-05-03T12:50:12.240Z"
+    },
+    {
+      "authorName": "Ryan Holbrook",
+      "content": "<p>Thanks for flagging, and apologies for missing this the first time. I will look into it.</p>",
+      "depth": 1,
+      "first": false,
+      "id": 3452791,
+      "postDate": "2026-05-04T10:34:40.897Z",
+      "votes": 2
+    },
+    {
+      "authorName": "Shivam Shinde",
+      "content": "<p><a href=\"https://www.kaggle.com/cpmpml\" target=\"_blank\">@cpmpml</a> <a href=\"https://www.kaggle.com/ryanholbrook\" target=\"_blank\">@ryanholbrook</a> \nI have a suggestion to fix this :<a href=\"https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/689284#3454216\" target=\"_blank\">https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/689284#3454216</a></p>",
+      "depth": 1,
+      "first": false,
+      "id": 3454221,
+      "postDate": "2026-05-06T18:34:38.343Z"
+    },
+    {
+      "authorName": "Giovanny Rodríguez",
+      "content": "<pre><code> def _extract_last_boxed(text: str) -&gt; str | None:\n        if not starts:\n            return None\n        start = starts[-1]\n        depth = 1\n        i = start\n        while i &lt; len(text):\n            c = text[i]\n            if c == \"{\":\n                depth += 1\n            elif c == \"}\":\n                depth -= 1\n                if depth == 0:\n                    if text[i + 1 :].strip():\n                        return None\n                    return text[start:i]\n            i += 1\n        return None\n</code></pre>\n<p>Hi <a href=\"https://www.kaggle.com/ryanholbrook\" target=\"_blank\">@ryanholbrook</a>, the metric regex \\boxed{([^}]*)(?:}|$) stops at the first }. In cryptarithm puzzles { and } can be valid answer characters — about 20% of cryptarithm puzzles in train.csv (169/823) have such answers and can never be marked correct.</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3452165,
+      "postDate": "2026-05-02T17:57:23.663Z",
+      "votes": 4
+    },
+    {
+      "authorName": "faizan",
+      "content": "<p>Not really — the box itself doesn't do anything, it's just a visual thing. What actually tells you if a character is right or wrong is the logic running behind it. The box is just how that result gets shown to you.</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3456857,
+      "postDate": "2026-05-12T17:12:32.523Z"
+    }
+  ],
+  "text_sha256": "2cd8b399e9bfb1e19cb081feffb5beab1624812f12924ce6da94d6dba8ed4c3b",
+  "topic": {
+    "authorName": "Birtley Doru (DB)",
+    "authorUrl": "https://www.kaggle.com/hastws",
+    "commentCount": 12,
+    "content": "<p>fa5dfa46,\"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:\n$&lt;<em>&amp;@ = &amp;$@\\\n}-&gt;@ = -!$\n}&gt;+@&lt; = !}}\n\\@</em>@@ = &amp;&lt;&gt;$\nNow, determine the result for: }^-`}\",-^}</p>\n<p>What if the answer contains square brackets?\nCan putting a box over a character correctly identify whether it's right or wrong?</p>",
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 696059,
+    "postDate": "2026-05-01T06:21:40.283Z",
+    "title": "What if the answer contains square brackets?",
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/696059",
+    "votes": 11
+  },
+  "topic_id": 696059,
+  "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/696059"
+}

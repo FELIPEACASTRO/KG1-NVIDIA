@@ -1,0 +1,28 @@
+{
+  "topic_id": 685031,
+  "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/685031",
+  "topic": {
+    "authorId": 32391938,
+    "authorThumbnailName": "32391938-kg.png?t=2026-03-26-17-36-44",
+    "authorUserDisplayName": "lakshmig82",
+    "authorUserName": "lakshmig82",
+    "firstMessageId": 3429395,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 685031,
+    "name": "Open Progress Prize question",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-03-26T17:33:14.935635Z",
+    "totalVotes": 2,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/685031",
+    "totalMessages": 15,
+    "authorPerformanceTier": "CONTRIBUTOR",
+    "authorProgressionOptOut": false
+  },
+  "first_message": {},
+  "messages": [],
+  "message_count_observed": 0,
+  "text_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "full_text": ""
+}

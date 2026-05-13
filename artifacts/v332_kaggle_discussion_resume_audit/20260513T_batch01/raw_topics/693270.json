@@ -1,0 +1,98 @@
+{
+  "fetched_at_utc": "2026-05-13T15:46:29.466256+00:00",
+  "full_text": "[message_id=693270 author=Svanik Kolli first=True]\nHey everyone,\nIs it just me, or has the momentum for the Nemotron Reasoning Challenge hit a massive brick wall? \nLooking at the leaderboard, it feels like the entire community has collectively stalled out at the 0.85–0.86 range. The rapid-fire updates we saw in the first few weeks have slowed to a crawl, and it seems like we’re all staring at the same bottlenecks (looking at you, Cryptarithms and logic-trace bugs).\nIt feels like the \"low-hanging fruit\" of prompt engineering and standard fine-tuning is officially gone. We’ve reached the point of diminishing returns where grinding for a +0.001 gain feels like a full-time job, and I’m starting to see that competition fatigue set in.\nThe big question: Is 0.86 the theoretical ceiling for the Nano-30B architecture on these tasks, or are we just one moment away from a new baseline?\nHow are you guys holding up? Are you still burning GPU hours trying to break 0.87, or have you shifted your focus to other projects until someone finds a new path forward?\n\n[message_id=3445812 author=fate first=False]\nI don’t think it has really started yet. CV and LB are still highly correlated, and the strongest competitors usually only start to emerge in the final 1–2 weeks.\n\n[message_id=3445887 author=Ravi Ramakrishnan first=False]\nThis is a compute heavy competition, so expect results to be updated with some lags between experiments @svanikkolli \n0.87++ is coming very soon\n\n[message_id=3446782 author=Murugesan Narayanaswamy first=False]\nAt the first look, I thought the solution for this challenge lies in GRPO but came to know that there were some bugs and then about a new release that fixed the bugs. On further investigation, I think pure GRPO is unlikely solve this problem easily even if speed / latency problem is resolved. However, SFT using generated CoT traces + GRPO could be right solution - as is the case with most of the reinforced training solutions. I understand SFT using elaborate synthetically generated data has given upto 0.86 in the leaderboard - has anybody tried GRPO on the 0.86 SFT Model? (I was busy in an another competition and not involved in this competition right now).\n\n[message_id=3446931 author=Taha first=False]\nGPRO is too slow and i feel its not worth once sft brings results i would move to gpro\n\n[message_id=3446992 author=Murugesan Narayanaswamy first=False]\nI think GRPO should be done for each challenge separately after generating additional test data. The reasoning patterns required would be different for bit manipulation compared to cypher decryption etc. But I think quantity of training data is not uniform for each category of problems.\nOn the other hand, the score of 0.86 could be limitation of dataset in some rare cases i.e. that is the maximum possible in the test dataset owing to errors or inefficient formulations etc (requiring overfitting)! :-)\n(I am trying to learn something without deeply involved in the competition! :-))\n\n[message_id=3447839 author=Brandonioti first=False]\nJust go for it bro. There's plenty of notebooks that have been shared. Look through them all, make a submission and see what you liked and disliked about each one. Get a score in the competition and learn\n\n[message_id=3448027 author=Murugesan Narayanaswamy first=False]\nThanks for imbibing me with that kaggle spirit! But as @cpmpml says it is a legal drug! Thats why I am thinking!\n\n[message_id=3445761 author=Taha first=False]\nEveryone has been working lately hard ; so dont say that",
+  "message_count_observed": 9,
+  "messages": [
+    {
+      "authorName": "Svanik Kolli",
+      "content": "<p>Hey everyone,</p>\n<p>Is it just me, or has the momentum for the Nemotron Reasoning Challenge hit a massive brick wall? </p>\n<p>Looking at the leaderboard, it feels like the entire community has collectively stalled out at the 0.85–0.86 range. The rapid-fire updates we saw in the first few weeks have slowed to a crawl, and it seems like we’re all staring at the same bottlenecks (looking at you, Cryptarithms and logic-trace bugs).</p>\n<p>It feels like the \"low-hanging fruit\" of prompt engineering and standard fine-tuning is officially gone. We’ve reached the point of diminishing returns where grinding for a +0.001 gain feels like a full-time job, and I’m starting to see that competition fatigue set in.</p>\n<p>The big question: Is 0.86 the theoretical ceiling for the Nano-30B architecture on these tasks, or are we just one moment away from a new baseline?</p>\n<p>How are you guys holding up? Are you still burning GPU hours trying to break 0.87, or have you shifted your focus to other projects until someone finds a new path forward?</p>",
+      "depth": 0,
+      "first": true,
+      "id": 693270,
+      "postDate": "2026-04-20T13:22:53.181Z"
+    },
+    {
+      "authorName": "fate",
+      "content": "<p>I don’t think it has really started yet. CV and LB are still highly correlated, and the strongest competitors usually only start to emerge in the final 1–2 weeks.</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3445812,
+      "postDate": "2026-04-20T15:02:29.020Z",
+      "votes": 2
+    },
+    {
+      "authorName": "Ravi Ramakrishnan",
+      "content": "<p>This is a compute heavy competition, so expect results to be updated with some lags between experiments <a href=\"https://www.kaggle.com/svanikkolli\" target=\"_blank\">@svanikkolli</a> \n0.87++ is coming very soon</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3445887,
+      "postDate": "2026-04-20T16:21:07.690Z",
+      "votes": -1
+    },
+    {
+      "authorName": "Murugesan Narayanaswamy",
+      "content": "<p>At the first look, I thought the solution for this challenge lies in GRPO but came to know that there were some bugs and then about a new release that fixed the bugs. On further investigation, I think pure GRPO is unlikely solve this problem easily even if speed / latency problem is resolved. However, SFT using generated CoT traces + GRPO could be right solution - as is the case with most of the reinforced training solutions. I understand SFT using elaborate synthetically generated data has given upto 0.86 in the leaderboard - has anybody tried GRPO on the 0.86 SFT Model? (I was busy in an another competition and not involved in this competition right now). </p>",
+      "depth": 1,
+      "first": false,
+      "id": 3446782,
+      "postDate": "2026-04-22T05:37:27.797Z"
+    },
+    {
+      "authorName": "Taha",
+      "content": "<p>GPRO is too slow and i feel its not worth once sft brings results i would move to gpro</p>",
+      "depth": 2,
+      "first": false,
+      "id": 3446931,
+      "postDate": "2026-04-22T12:36:56.700Z",
+      "votes": -1
+    },
+    {
+      "authorName": "Murugesan Narayanaswamy",
+      "content": "<p>I think GRPO should be done for each challenge separately after generating additional test data. The reasoning patterns required would be different for bit manipulation compared to cypher decryption etc. But I think quantity of training data is not uniform for each category of problems.</p>\n<p>On the other hand, the score of 0.86 could be limitation of dataset in some rare cases i.e. that is the maximum possible in the test dataset owing to errors or inefficient formulations etc (requiring overfitting)! :-)</p>\n<p>(I am trying to learn something without deeply involved in the competition! :-))</p>",
+      "depth": 2,
+      "first": false,
+      "id": 3446992,
+      "postDate": "2026-04-22T15:08:58.390Z"
+    },
+    {
+      "authorName": "Brandonioti",
+      "content": "<p>Just go for it bro. There's plenty of notebooks that have been shared. Look through them all, make a submission and see what you liked and disliked about each one. Get a score in the competition and learn</p>",
+      "depth": 2,
+      "first": false,
+      "id": 3447839,
+      "postDate": "2026-04-24T04:27:54.020Z",
+      "votes": 1
+    },
+    {
+      "authorName": "Murugesan Narayanaswamy",
+      "content": "<p>Thanks for imbibing me with that kaggle spirit! But as <a href=\"https://www.kaggle.com/cpmpml\" target=\"_blank\">@cpmpml</a> says it is a legal drug! Thats why I am thinking!</p>",
+      "depth": 2,
+      "first": false,
+      "id": 3448027,
+      "postDate": "2026-04-24T13:08:20.000Z"
+    },
+    {
+      "authorName": "Taha",
+      "content": "<p>Everyone has been working lately hard ; so dont say that</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3445761,
+      "postDate": "2026-04-20T13:30:19.307Z"
+    }
+  ],
+  "text_sha256": "fbb22451c62e4184d532315e6b47fe0ca364830bf5080382f84a7a1c882127fb",
+  "topic": {
+    "authorName": "Svanik Kolli",
+    "authorUrl": "https://www.kaggle.com/svanikkolli",
+    "commentCount": 8,
+    "content": "<p>Hey everyone,</p>\n<p>Is it just me, or has the momentum for the Nemotron Reasoning Challenge hit a massive brick wall? </p>\n<p>Looking at the leaderboard, it feels like the entire community has collectively stalled out at the 0.85–0.86 range. The rapid-fire updates we saw in the first few weeks have slowed to a crawl, and it seems like we’re all staring at the same bottlenecks (looking at you, Cryptarithms and logic-trace bugs).</p>\n<p>It feels like the \"low-hanging fruit\" of prompt engineering and standard fine-tuning is officially gone. We’ve reached the point of diminishing returns where grinding for a +0.001 gain feels like a full-time job, and I’m starting to see that competition fatigue set in.</p>\n<p>The big question: Is 0.86 the theoretical ceiling for the Nano-30B architecture on these tasks, or are we just one moment away from a new baseline?</p>\n<p>How are you guys holding up? Are you still burning GPU hours trying to break 0.87, or have you shifted your focus to other projects until someone finds a new path forward?</p>",
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 693270,
+    "postDate": "2026-04-20T13:22:53.181Z",
+    "title": "Competition has dramatically slowed down ",
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/693270"
+  },
+  "topic_id": 693270,
+  "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/693270"
+}

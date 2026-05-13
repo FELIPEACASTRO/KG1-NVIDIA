@@ -1,0 +1,80 @@
+{
+  "topic_id": 682200,
+  "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/682200",
+  "topic": {
+    "authorId": 30501742,
+    "authorThumbnailName": "30501742-kg.jpg?t=2026-04-11-18-48-22",
+    "authorUserDisplayName": "Monruho",
+    "authorUserName": "monruho",
+    "firstMessageId": 3422868,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 682200,
+    "name": "Question about minor participation",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-03-18T02:13:57.523074500Z",
+    "totalVotes": 2,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/682200",
+    "totalMessages": 6,
+    "authorPerformanceTier": "CONTRIBUTOR",
+    "authorProgressionOptOut": false
+  },
+  "first_message": {
+    "id": 3422868,
+    "postDate": "2026-03-18T02:13:57.523Z",
+    "rawMarkdown": "Hello,\n\nI am a high school student under 18 and I am very interested in participating in this competition.\n\nI noticed that the rules state participants must be 18 or older unless the competition sponsor allows minors with parental/guardian consent.\n\nCould you please let me know if minors are allowed to participate in this competition with parental consent?\n\nI also noticed that it is possible to post in the discussion without joining the competition, so I am asking here.\n\nThank you for your time.\n\n![](https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F30501742%2Fb2d42f92b6c9b5ad407d959e2d9c3ee9%2FIMG_0362.jpeg?generation=1773799707087561&alt=media)",
+    "content": "<p>Hello,</p>\n<p>I am a high school student under 18 and I am very interested in participating in this competition.</p>\n<p>I noticed that the rules state participants must be 18 or older unless the competition sponsor allows minors with parental/guardian consent.</p>\n<p>Could you please let me know if minors are allowed to participate in this competition with parental consent?</p>\n<p>I also noticed that it is possible to post in the discussion without joining the competition, so I am asking here.</p>\n<p>Thank you for your time.</p>\n<p><img src=\"https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F30501742%2Fb2d42f92b6c9b5ad407d959e2d9c3ee9%2FIMG_0362.jpeg?generation=1773799707087561&amp;alt=media\" alt=\"\"></p>",
+    "parent": {
+      "url": "#"
+    },
+    "author": {
+      "displayName": "Monruho",
+      "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/30501742-kg.jpg?t=2026-04-11-18-48-22",
+      "url": "/monruho",
+      "tier": "CONTRIBUTOR",
+      "id": 30501742,
+      "progressionOptOut": false
+    },
+    "authorType": "TOPIC",
+    "votes": {
+      "totalVotes": 2,
+      "canUpvote": true,
+      "totalUpvotes": 2
+    },
+    "kernelVersion": 0,
+    "feedbackTrackingData": {}
+  },
+  "messages": [
+    {
+      "id": 3422868,
+      "postDate": "2026-03-18T02:13:57.523Z",
+      "rawMarkdown": "Hello,\n\nI am a high school student under 18 and I am very interested in participating in this competition.\n\nI noticed that the rules state participants must be 18 or older unless the competition sponsor allows minors with parental/guardian consent.\n\nCould you please let me know if minors are allowed to participate in this competition with parental consent?\n\nI also noticed that it is possible to post in the discussion without joining the competition, so I am asking here.\n\nThank you for your time.\n\n![](https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F30501742%2Fb2d42f92b6c9b5ad407d959e2d9c3ee9%2FIMG_0362.jpeg?generation=1773799707087561&alt=media)",
+      "content": "<p>Hello,</p>\n<p>I am a high school student under 18 and I am very interested in participating in this competition.</p>\n<p>I noticed that the rules state participants must be 18 or older unless the competition sponsor allows minors with parental/guardian consent.</p>\n<p>Could you please let me know if minors are allowed to participate in this competition with parental consent?</p>\n<p>I also noticed that it is possible to post in the discussion without joining the competition, so I am asking here.</p>\n<p>Thank you for your time.</p>\n<p><img src=\"https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F30501742%2Fb2d42f92b6c9b5ad407d959e2d9c3ee9%2FIMG_0362.jpeg?generation=1773799707087561&amp;alt=media\" alt=\"\"></p>",
+      "parent": {
+        "url": "#"
+      },
+      "author": {
+        "displayName": "Monruho",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/30501742-kg.jpg?t=2026-04-11-18-48-22",
+        "url": "/monruho",
+        "tier": "CONTRIBUTOR",
+        "id": 30501742,
+        "progressionOptOut": false
+      },
+      "authorType": "TOPIC",
+      "votes": {
+        "totalVotes": 2,
+        "canUpvote": true,
+        "totalUpvotes": 2
+      },
+      "kernelVersion": 0,
+      "feedbackTrackingData": {},
+      "depth": 0,
+      "is_first_message": true
+    }
+  ],
+  "message_count_observed": 1,
+  "text_sha256": "b13f80844110ad768e23da76d9aa80f3a277de835e11f232e1e23b56de539824",
+  "full_text": "[message_id=3422868 author= first=True]\nHello,\n\nI am a high school student under 18 and I am very interested in participating in this competition.\n\nI noticed that the rules state participants must be 18 or older unless the competition sponsor allows minors with parental/guardian consent.\n\nCould you please let me know if minors are allowed to participate in this competition with parental consent?\n\nI also noticed that it is possible to post in the discussion without joining the competition, so I am asking here.\n\nThank you for your time.\n\n![](https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F30501742%2Fb2d42f92b6c9b5ad407d959e2d9c3ee9%2FIMG_0362.jpeg?generation=1773799707087561&alt=media)"
+}

@@ -1,0 +1,80 @@
+{
+  "fetched_at_utc": "2026-05-13T15:41:54.771820+00:00",
+  "full_text": "[message_id=685710 author=Donald Galliano III first=True]\nI've spent the last two weeks reverse-engineering all 8 puzzle categories in this benchmark. \nI have:\nWorking factories that generate unlimited verified training samples for every category\nStructured reasoning traces (not naive SFT) with Python-verified ground truth\nFull understanding of the binary boolean decomposition, cipher substitutions, symbol transforms, digit pairings, gravity/roman/unitconv formulas\nA 50k sample synthetic dataset ready to train on\nCorrect chat template, sensitive layer targeting, and training pipeline ready to execute\nI haven't been able to run a clean training job yet. The Kaggle RTX 6000 environment has been broken for the entirety of this competition, and I don't have the budget for cloud GPUs to iterate.\nWhat I need: a partner with GPU access willing to run training jobs. The data pipeline, problem analysis, and training scripts are complete.\nDM me if interested. Targeting April 9 midpoint.\n\n[message_id=3430774 author=lucian kucera first=False]\nWhat the hell, you have so many public notebooks, that show u how to do sft. Environment isnt really broken just fork a notebook.\n\n[message_id=3430797 author=Donald Galliano III first=False]\nI’ve forked and run multiple notebooks. The environment issues with mamba_ssm, causal_conv1d, and ptxas on the RTX 6000 are well-documented across several threads here, including my own post from 9 days ago that got staff acknowledgment. The recent Docker update helped but didn’t fully resolve things (cutlass still missing, mamba_ssm still needs workarounds). My constraint is compute budget, not knowledge. Looking for a partner, not a tutorial.\n\n[message_id=3430856 author= first=False]\n\n\n[message_id=3430863 author= first=False]\n\n\n[message_id=3430870 author=Donald Galliano III first=False]\nYes, I have all categories covered including transformations (100% solved). Happy to share details in DM when I get off work tonight!\n\n[message_id=3430876 author= first=False]\n\n\n[message_id=3430879 author= first=False]",
+  "message_count_observed": 8,
+  "messages": [
+    {
+      "authorName": "Donald Galliano III",
+      "content": "<p>I've spent the last two weeks reverse-engineering all 8 puzzle categories in this benchmark. </p>\n<p>I have:</p>\n<p>Working factories that generate unlimited verified training samples for every category\nStructured reasoning traces (not naive SFT) with Python-verified ground truth\nFull understanding of the binary boolean decomposition, cipher substitutions, symbol transforms, digit pairings, gravity/roman/unitconv formulas\nA 50k sample synthetic dataset ready to train on\nCorrect chat template, sensitive layer targeting, and training pipeline ready to execute</p>\n<p>I haven't been able to run a clean training job yet. The Kaggle RTX 6000 environment has been broken for the entirety of this competition, and I don't have the budget for cloud GPUs to iterate.</p>\n<p>What I need: a partner with GPU access willing to run training jobs. The data pipeline, problem analysis, and training scripts are complete.</p>\n<p>DM me if interested. Targeting April 9 midpoint.</p>",
+      "depth": 0,
+      "first": true,
+      "id": 685710,
+      "postDate": "2026-03-28T20:01:51.246Z"
+    },
+    {
+      "authorName": "lucian kucera",
+      "content": "<p>What the hell, you have so many public notebooks, that show u how to do sft. Environment isnt really broken just fork a notebook.</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3430774,
+      "postDate": "2026-03-28T20:44:35.387Z",
+      "votes": -1
+    },
+    {
+      "authorName": "Donald Galliano III",
+      "content": "<p>I’ve forked and run multiple notebooks. The environment issues with mamba_ssm, causal_conv1d, and ptxas on the RTX 6000 are well-documented across several threads here, including my own post from 9 days ago that got staff acknowledgment. The recent Docker update helped but didn’t fully resolve things (cutlass still missing, mamba_ssm still needs workarounds). My constraint is compute budget, not knowledge. Looking for a partner, not a tutorial.</p>",
+      "depth": 1,
+      "first": false,
+      "id": 3430797,
+      "postDate": "2026-03-28T20:58:29.103Z"
+    },
+    {
+      "depth": 0,
+      "first": false,
+      "id": 3430856,
+      "postDate": "2026-03-28T22:59:18.740Z"
+    },
+    {
+      "depth": 1,
+      "first": false,
+      "id": 3430863,
+      "postDate": "2026-03-28T23:02:48.263Z"
+    },
+    {
+      "authorName": "Donald Galliano III",
+      "content": "<p>Yes, I have all categories covered including transformations (100% solved). Happy to share details in DM when I get off work tonight!</p>",
+      "depth": 1,
+      "first": false,
+      "id": 3430870,
+      "postDate": "2026-03-28T23:14:53.317Z"
+    },
+    {
+      "depth": 2,
+      "first": false,
+      "id": 3430876,
+      "postDate": "2026-03-28T23:36:21.800Z"
+    },
+    {
+      "depth": 2,
+      "first": false,
+      "id": 3430879,
+      "postDate": "2026-03-28T23:46:14.560Z"
+    }
+  ],
+  "text_sha256": "0f1b7b04262a1dbdfa41e1b375e892bb49b929e1427ab03c3106c892da97b30e",
+  "topic": {
+    "authorName": "Donald Galliano III",
+    "authorUrl": "https://www.kaggle.com/donaldgalliano",
+    "commentCount": 7,
+    "content": "<p>I've spent the last two weeks reverse-engineering all 8 puzzle categories in this benchmark. </p>\n<p>I have:</p>\n<p>Working factories that generate unlimited verified training samples for every category\nStructured reasoning traces (not naive SFT) with Python-verified ground truth\nFull understanding of the binary boolean decomposition, cipher substitutions, symbol transforms, digit pairings, gravity/roman/unitconv formulas\nA 50k sample synthetic dataset ready to train on\nCorrect chat template, sensitive layer targeting, and training pipeline ready to execute</p>\n<p>I haven't been able to run a clean training job yet. The Kaggle RTX 6000 environment has been broken for the entirety of this competition, and I don't have the budget for cloud GPUs to iterate.</p>\n<p>What I need: a partner with GPU access willing to run training jobs. The data pipeline, problem analysis, and training scripts are complete.</p>\n<p>DM me if interested. Targeting April 9 midpoint.</p>",
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 685710,
+    "postDate": "2026-03-28T20:01:51.246Z",
+    "title": "Compute partner needed - deterministic solvers for all puzzle categories built, budget-constrained",
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/685710",
+    "votes": -6
+  },
+  "topic_id": 685710,
+  "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/685710"
+}

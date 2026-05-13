@@ -1,0 +1,55 @@
+{
+  "fetched_at_utc": "2026-05-13T15:39:56.085324+00:00",
+  "full_text": "[message_id=683853 author=Gerwyn first=True]\nBinary string answers (e.g. \"11111011\") are parsed as decimal integers by float(), so verify() uses numeric 1% tolerance instead of exact string matching; meaning \"11111011\" and \"11111000\" are scored as equal.\nI made a notebook with minimal reproducible examples: https://www.kaggle.com/code/gerwynng/competition-metric-verify-method-bug?scriptVersionId=305629662\n\n[message_id=3426893 author=Ryan Holbrook first=False]\nThanks for the heads up. I will investigate and update the metric as needed.\n\n[message_id=3429687 author= first=False]\n\n\n[message_id=3426561 author=Tong Hui Kang first=False]\nIt also classifies 00000001 and 0001 to be the same",
+  "message_count_observed": 4,
+  "messages": [
+    {
+      "authorName": "Gerwyn",
+      "content": "<p>Binary string answers (e.g. \"11111011\") are parsed as decimal integers by float(), so verify() uses numeric 1% tolerance instead of exact string matching; meaning \"11111011\" and \"11111000\" are scored as equal.</p>\n<p>I made a notebook with minimal reproducible examples:  <a href=\"https://www.kaggle.com/code/gerwynng/competition-metric-verify-method-bug?scriptVersionId=305629662\" target=\"_blank\">https://www.kaggle.com/code/gerwynng/competition-metric-verify-method-bug?scriptVersionId=305629662</a></p>",
+      "depth": 0,
+      "first": true,
+      "id": 683853,
+      "postDate": "2026-03-22T15:30:30.229Z"
+    },
+    {
+      "authorName": "Ryan Holbrook",
+      "content": "<p>Thanks for the heads up. I will investigate and update the metric as needed.</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3426893,
+      "postDate": "2026-03-23T13:00:41.913Z",
+      "votes": 3
+    },
+    {
+      "depth": 1,
+      "first": false,
+      "id": 3429687,
+      "postDate": "2026-03-27T04:47:30.877Z"
+    },
+    {
+      "authorName": "Tong Hui Kang",
+      "content": "<p>It also classifies <code>00000001</code> and <code>0001</code> to be the same</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3426561,
+      "postDate": "2026-03-22T20:47:07.857Z",
+      "votes": 2
+    }
+  ],
+  "text_sha256": "02aadf4cd7729b9e944bcbea7302d339734d661552ccd4c9e047547c63bec3af",
+  "topic": {
+    "authorName": "Gerwyn",
+    "authorUrl": "https://www.kaggle.com/gerwynng",
+    "commentCount": 3,
+    "content": "<p>Binary string answers (e.g. \"11111011\") are parsed as decimal integers by float(), so verify() uses numeric 1% tolerance instead of exact string matching; meaning \"11111011\" and \"11111000\" are scored as equal.</p>\n<p>I made a notebook with minimal reproducible examples:  <a href=\"https://www.kaggle.com/code/gerwynng/competition-metric-verify-method-bug?scriptVersionId=305629662\" target=\"_blank\">https://www.kaggle.com/code/gerwynng/competition-metric-verify-method-bug?scriptVersionId=305629662</a></p>",
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 683853,
+    "postDate": "2026-03-22T15:30:30.229Z",
+    "title": "Competition Metric Bug: verify method fails for Binary String Problem (?)",
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/683853",
+    "votes": 20
+  },
+  "topic_id": 683853,
+  "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/683853"
+}

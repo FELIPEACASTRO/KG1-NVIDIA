@@ -1,0 +1,1387 @@
+{
+  "topic_id": 681820,
+  "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/681820",
+  "topic": {
+    "authorId": 25818777,
+    "authorThumbnailName": "25818777-kg.png?t=2026-04-20-16-49-43",
+    "authorUserDisplayName": "Adarsh Kumar",
+    "authorUserName": "adarsh2626",
+    "firstMessageId": 3422303,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 681820,
+    "name": "Fix for “CUDA error: no kernel image is available for execution on the device” on RTX PRO 6000 Blackwell ",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-03-17T12:42:20.790101400Z",
+    "totalVotes": 23,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/681820",
+    "totalMessages": 32,
+    "authorPerformanceTier": "MASTER",
+    "authorProgressionOptOut": false
+  },
+  "first_message": {
+    "id": 3422303,
+    "postDate": "2026-03-17T12:42:20.790Z",
+    "rawMarkdown": "This competition provides an **NVIDIA RTX PRO 6000 Blackwell** GPU. When trying to fine-tune the Nemotron model with LoRA, you may encounter the following error during training:\n\n```\nAcceleratorError: CUDA error: no kernel image is available for execution on the device\n```\n\nI initially thought something was wrong in my training pipeline and spent **2–3 hours debugging** tokenization, Trainer setup, LoRA configuration, etc. However, the issue is actually much simpler.\n\n**Reason:**\nThe default PyTorch build in the environment supports CUDA architectures up to **sm_90**, but the RTX PRO 6000 (Blackwell) uses **sm_120**. Because of this mismatch, CUDA kernels cannot run and training fails.\n\n**Solution:**\nInstall a PyTorch build compiled with CUDA 12.8+ (nightly) that includes support for the Blackwell architecture.\n\nRun this before importing `torch` or `transformers`:\n\n```bash\n!pip uninstall -y torch torchvision torchaudio\n!pip install --no-cache-dir torch torchvision torchaudio --index-url\nhttps://download.pytorch.org/whl/nightly/cu128\n!pip install mamba-ssm --no-build-isolation\n```\n\nAfter installing, **restart the kernel from the Run menu**, and the training should start normally.\n\nHope this saves others some debugging time 🙂\n",
+    "content": "<p>This competition provides an <strong>NVIDIA RTX PRO 6000 Blackwell</strong> GPU. When trying to fine-tune the Nemotron model with LoRA, you may encounter the following error during training:</p>\n<pre><code>AcceleratorError: CUDA error: no kernel image is available for execution on the device\n</code></pre>\n<p>I initially thought something was wrong in my training pipeline and spent <strong>2–3 hours debugging</strong> tokenization, Trainer setup, LoRA configuration, etc. However, the issue is actually much simpler.</p>\n<p><strong>Reason:</strong>\nThe default PyTorch build in the environment supports CUDA architectures up to <strong>sm_90</strong>, but the RTX PRO 6000 (Blackwell) uses <strong>sm_120</strong>. Because of this mismatch, CUDA kernels cannot run and training fails.</p>\n<p><strong>Solution:</strong>\nInstall a PyTorch build compiled with CUDA 12.8+ (nightly) that includes support for the Blackwell architecture.</p>\n<p>Run this before importing <code>torch</code> or <code>transformers</code>:</p>\n<pre><code>!pip uninstall -y torch torchvision torchaudio\n!pip install --no-cache-dir torch torchvision torchaudio --index-url\nhttps://download.pytorch.org/whl/nightly/cu128\n!pip install mamba-ssm --no-build-isolation\n</code></pre>\n<p>After installing, <strong>restart the kernel from the Run menu</strong>, and the training should start normally.</p>\n<p>Hope this saves others some debugging time 🙂</p>",
+    "parent": {
+      "url": "#"
+    },
+    "author": {
+      "displayName": "Adarsh Kumar",
+      "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/25818777-kg.png?t=2026-04-20-16-49-43",
+      "url": "/adarsh2626",
+      "tier": "MASTER",
+      "id": 25818777,
+      "progressionOptOut": false
+    },
+    "authorType": "TOPIC",
+    "votes": {
+      "totalVotes": 23,
+      "canUpvote": true,
+      "totalUpvotes": 23
+    },
+    "kernelVersion": 0,
+    "competitionRanking": 639,
+    "feedbackTrackingData": {},
+    "reactions": [
+      {
+        "emoji": "THANK_YOU",
+        "featuredUserNames": [
+          "beinggakash",
+          "runhuixu",
+          "lucasfu132674"
+        ],
+        "userCount": 3
+      }
+    ],
+    "teamUpInfo": {
+      "teamLeader": {
+        "displayName": "Muhammad Ibrahim Qasmi",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/24946333-kg.jpeg?t=2025-12-22-22-44-57",
+        "url": "/ibrahimqasimi",
+        "userName": "ibrahimqasimi",
+        "tier": "GRANDMASTER",
+        "id": 24946333,
+        "profileUrl": "/ibrahimqasimi",
+        "performanceTier": "GRANDMASTER",
+        "userId": 24946333,
+        "progressionOptOut": false
+      },
+      "intro": ""
+    }
+  },
+  "messages": [
+    {
+      "id": 3422303,
+      "postDate": "2026-03-17T12:42:20.790Z",
+      "rawMarkdown": "This competition provides an **NVIDIA RTX PRO 6000 Blackwell** GPU. When trying to fine-tune the Nemotron model with LoRA, you may encounter the following error during training:\n\n```\nAcceleratorError: CUDA error: no kernel image is available for execution on the device\n```\n\nI initially thought something was wrong in my training pipeline and spent **2–3 hours debugging** tokenization, Trainer setup, LoRA configuration, etc. However, the issue is actually much simpler.\n\n**Reason:**\nThe default PyTorch build in the environment supports CUDA architectures up to **sm_90**, but the RTX PRO 6000 (Blackwell) uses **sm_120**. Because of this mismatch, CUDA kernels cannot run and training fails.\n\n**Solution:**\nInstall a PyTorch build compiled with CUDA 12.8+ (nightly) that includes support for the Blackwell architecture.\n\nRun this before importing `torch` or `transformers`:\n\n```bash\n!pip uninstall -y torch torchvision torchaudio\n!pip install --no-cache-dir torch torchvision torchaudio --index-url\nhttps://download.pytorch.org/whl/nightly/cu128\n!pip install mamba-ssm --no-build-isolation\n```\n\nAfter installing, **restart the kernel from the Run menu**, and the training should start normally.\n\nHope this saves others some debugging time 🙂\n",
+      "content": "<p>This competition provides an <strong>NVIDIA RTX PRO 6000 Blackwell</strong> GPU. When trying to fine-tune the Nemotron model with LoRA, you may encounter the following error during training:</p>\n<pre><code>AcceleratorError: CUDA error: no kernel image is available for execution on the device\n</code></pre>\n<p>I initially thought something was wrong in my training pipeline and spent <strong>2–3 hours debugging</strong> tokenization, Trainer setup, LoRA configuration, etc. However, the issue is actually much simpler.</p>\n<p><strong>Reason:</strong>\nThe default PyTorch build in the environment supports CUDA architectures up to <strong>sm_90</strong>, but the RTX PRO 6000 (Blackwell) uses <strong>sm_120</strong>. Because of this mismatch, CUDA kernels cannot run and training fails.</p>\n<p><strong>Solution:</strong>\nInstall a PyTorch build compiled with CUDA 12.8+ (nightly) that includes support for the Blackwell architecture.</p>\n<p>Run this before importing <code>torch</code> or <code>transformers</code>:</p>\n<pre><code>!pip uninstall -y torch torchvision torchaudio\n!pip install --no-cache-dir torch torchvision torchaudio --index-url\nhttps://download.pytorch.org/whl/nightly/cu128\n!pip install mamba-ssm --no-build-isolation\n</code></pre>\n<p>After installing, <strong>restart the kernel from the Run menu</strong>, and the training should start normally.</p>\n<p>Hope this saves others some debugging time 🙂</p>",
+      "parent": {
+        "url": "#"
+      },
+      "author": {
+        "displayName": "Adarsh Kumar",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/25818777-kg.png?t=2026-04-20-16-49-43",
+        "url": "/adarsh2626",
+        "tier": "MASTER",
+        "id": 25818777,
+        "progressionOptOut": false
+      },
+      "authorType": "TOPIC",
+      "votes": {
+        "totalVotes": 23,
+        "canUpvote": true,
+        "totalUpvotes": 23
+      },
+      "kernelVersion": 0,
+      "competitionRanking": 639,
+      "feedbackTrackingData": {},
+      "reactions": [
+        {
+          "emoji": "THANK_YOU",
+          "featuredUserNames": [
+            "beinggakash",
+            "runhuixu",
+            "lucasfu132674"
+          ],
+          "userCount": 3
+        }
+      ],
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "Muhammad Ibrahim Qasmi",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/24946333-kg.jpeg?t=2025-12-22-22-44-57",
+          "url": "/ibrahimqasimi",
+          "userName": "ibrahimqasimi",
+          "tier": "GRANDMASTER",
+          "id": 24946333,
+          "profileUrl": "/ibrahimqasimi",
+          "performanceTier": "GRANDMASTER",
+          "userId": 24946333,
+          "progressionOptOut": false
+        },
+        "intro": ""
+      },
+      "depth": 0,
+      "is_first_message": true
+    },
+    {
+      "id": 3426962,
+      "postDate": "2026-03-23T15:02:57.093Z",
+      "rawMarkdown": "The new Docker image with CUDA 12.8 and updated PyTorch is rolled out now! Thanks everyone for your patience :)",
+      "content": "<p>The new Docker image with CUDA 12.8 and updated PyTorch is rolled out now! Thanks everyone for your patience :)</p>",
+      "parent": {},
+      "author": {
+        "displayName": "Tiffany Xiang",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/16010057-kg.jpg?t=2024-01-16-18-04-29",
+        "url": "/tifftoff",
+        "tier": "STAFF",
+        "id": 16010057,
+        "progressionOptOut": false
+      },
+      "authorType": "ADMIN",
+      "votes": {
+        "totalVotes": 4,
+        "canUpvote": true,
+        "totalUpvotes": 4
+      },
+      "kernelVersion": 0,
+      "feedbackTrackingData": {},
+      "isPinned": true,
+      "isThankYou": false,
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "Tiffany Xiang",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/16010057-kg.jpg?t=2024-01-16-18-04-29",
+          "url": "/tifftoff",
+          "userName": "tifftoff",
+          "tier": "STAFF",
+          "id": 16010057,
+          "profileUrl": "/tifftoff",
+          "performanceTier": "STAFF",
+          "userId": 16010057,
+          "progressionOptOut": false
+        },
+        "intro": ""
+      },
+      "depth": 0,
+      "is_first_message": false
+    },
+    {
+      "id": 3427176,
+      "postDate": "2026-03-23T19:44:26.763Z",
+      "rawMarkdown": "Still it is showing “CUDA error: no kernel image is available for execution on the device” on RTX PRO 6000 Blackwell . Could you please explain in detail how to fix this ?",
+      "content": "<p>Still it is showing “CUDA error: no kernel image is available for execution on the device” on RTX PRO 6000 Blackwell . Could you please explain in detail how to fix this ?</p>",
+      "parent": {},
+      "author": {
+        "displayName": "mindset324",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+        "url": "/mindset324",
+        "tier": "CONTRIBUTOR",
+        "id": 25887013,
+        "progressionOptOut": false
+      },
+      "authorType": "COMMENT",
+      "votes": {
+        "canUpvote": true
+      },
+      "kernelVersion": 0,
+      "competitionRanking": 1050,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "mindset324",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "url": "/mindset324",
+          "userName": "mindset324",
+          "tier": "CONTRIBUTOR",
+          "id": 25887013,
+          "profileUrl": "/mindset324",
+          "performanceTier": "CONTRIBUTOR",
+          "userId": 25887013,
+          "progressionOptOut": false
+        },
+        "intro": ""
+      },
+      "depth": 1,
+      "is_first_message": false
+    },
+    {
+      "id": 3427183,
+      "postDate": "2026-03-23T19:57:23.717Z",
+      "rawMarkdown": "@mindset324 Please share a minimal notebook which demonstrates the issue, thats the best way for us to be able to evaluate whats going on.",
+      "content": "<p><a href=\"https://www.kaggle.com/mindset324\" target=\"_blank\">@mindset324</a> Please share a minimal notebook which demonstrates the issue, thats the best way for us to be able to evaluate whats going on.</p>",
+      "parent": {},
+      "author": {
+        "displayName": "Dustin",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2039816-kg.jpg",
+        "url": "/herbison",
+        "tier": "STAFF",
+        "id": 2039816,
+        "progressionOptOut": false
+      },
+      "authorType": "ADMIN",
+      "votes": {
+        "canUpvote": true
+      },
+      "kernelVersion": 0,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "depth": 2,
+      "is_first_message": false
+    },
+    {
+      "id": 3427201,
+      "postDate": "2026-03-23T20:25:09.913Z",
+      "rawMarkdown": "Still getting those same errors for the Docker Filer!\nAnd when you try to: !pip uninstall -y torch torchvision torchaudio\nIt says read only file system ofc!\nI have a minimal and basic pipeline for now.\n\n``---------------------------------------------------------------------------\nAcceleratorError                          Traceback (most recent call last)\n/tmp/ipykernel_161/874017041.py in <cell line: 0>()\n----> 1 train_result = trainer.train()\n      2 print(train_result)\n\n/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/transformers/trainer.py in train(self, resume_from_checkpoint, trial, ignore_keys_for_eval)\n   1422         ctx = suppress_progress_bars() if args.push_to_hub else contextlib.nullcontext()\n   1423         with ctx:\n-> 1424             return inner_training_loop(\n   1425                 args=args,\n   1426                 resume_from_checkpoint=resume_from_checkpoint,\n\n/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/transformers/trainer.py in _inner_training_loop(self, batch_size, args, resume_from_checkpoint, trial, ignore_keys_for_eval)\n   1504         for epoch in range(epochs_trained, num_train_epochs):\n   1505             self.control = self.callback_handler.on_epoch_begin(self.args, self.state, self.control)\n-> 1506             self._run_epoch(\n   1507                 model=model,\n   1508                 epoch=epoch,\n\n/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/transformers/trainer.py in _run_epoch(self, model, epoch, train_dataloader, steps_in_epoch, num_update_steps_per_epoch, trial, ignore_keys_for_eval, start_time, resume_from_checkpoint, epochs_trained, steps_trained_in_current_epoch)\n   1732                     sync_context = functools.partial(self.accelerator.no_sync, model=model)\n   1733                 with sync_context():\n-> 1734                     tr_loss_step = self.training_step(model, inputs, num_items_in_batch)\n   1735 \n   1736                 if (\n\n/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/transformers/trainer.py in training_step(self, model, inputs, num_items_in_batch)\n   1904 \n   1905             with self.compute_loss_context_manager():\n-> 1906                 loss = self.compute_loss(model, inputs, num_items_in_batch=num_items_in_batch)\n   1907 \n   1908             del inputs\n\n/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/transformers/trainer.py in compute_loss(self, model, inputs, return_outputs, num_items_in_batch)\n   1976                 kwargs[\"num_items_in_batch\"] = num_items_in_batch\n   1977             inputs = {**inputs, **kwargs}\n-> 1978         outputs = model(**inputs)\n   1979 \n   1980         # User-defined compute_loss function\n\n/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/torch/nn/modules/module.py in _wrapped_call_impl(self, *args, **kwargs)\n   1776             return self._compiled_call_impl(*args, **kwargs)  # type: ignore[misc]\n   1777         else:\n-> 1778             return self._call_impl(*args, **kwargs)\n   1779 \n   1780     # torchrec tests the code consistency with the following code\n\n/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/torch/nn/modules/module.py in _call_impl(self, *args, **kwargs)\n   1787                 or _global_backward_pre_hooks or _global_backward_hooks\n   1788                 or _global_forward_hooks or _global_forward_pre_hooks):\n-> 1789             return forward_call(*args, **kwargs)\n   1790 \n   1791         result = None\n\n/usr/local/lib/python3.12/dist-packages/accelerate/utils/operations.py in forward(*args, **kwargs)\n    817 \n    818     def forward(*args, **kwargs):\n--> 819         return model_forward(*args, **kwargs)\n    820 \n    821     # To act like a decorator so that it can be popped when doing `extract_model_from_parallel`\n\n/usr/local/lib/python3.12/dist-packages/accelerate/utils/operations.py in __call__(self, *args, **kwargs)\n    805 \n    806     def __call__(self, *args, **kwargs):\n--> 807         return convert_to_fp32(self.model_forward(*args, **kwargs))\n    808 \n    809     def __getstate__(self):\n\n/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/torch/amp/autocast_mode.py in decorate_autocast(*args, **kwargs)\n     42     def decorate_autocast(*args, **kwargs):\n     43         with autocast_instance:\n---> 44             return func(*args, **kwargs)\n     45 \n     46     decorate_autocast.__script_unsupported = (  # type: ignore[attr-defined]\n\n/usr/local/lib/python3.12/dist-packages/accelerate/utils/operations.py in forward(*args, **kwargs)\n    817 \n    818     def forward(*args, **kwargs):\n--> 819         return model_forward(*args, **kwargs)\n    820 \n    821     # To act like a decorator so that it can be popped when doing `extract_model_from_parallel`\n\n/usr/local/lib/python3.12/dist-packages/accelerate/utils/operations.py in __call__(self, *args, **kwargs)\n    805 \n    806     def __call__(self, *args, **kwargs):\n--> 807         return convert_to_fp32(self.model_forward(*args, **kwargs))\n    808 \n    809     def __getstate__(self):\n\n/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/torch/amp/autocast_mode.py in decorate_autocast(*args, **kwargs)\n     42     def decorate_autocast(*args, **kwargs):\n     43         with autocast_instance:\n---> 44             return func(*args, **kwargs)\n     45 \n     46     decorate_autocast.__script_unsupported = (  # type: ignore[attr-defined]\n\n/usr/local/lib/python3.12/dist-packages/peft/peft_model.py in forward(self, input_ids, attention_mask, inputs_embeds, labels, output_attentions, output_hidden_states, return_dict, task_ids, **kwargs)\n   1921             with self._enable_peft_forward_hooks(**kwargs):\n   1922                 kwargs = {k: v for k, v in kwargs.items() if k not in self.special_peft_forward_args}\n-> 1923                 return self.base_model(\n   1924                     input_ids=input_ids,\n   1925                     attention_mask=attention_mask,\n\n/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/torch/nn/modules/module.py in _wrapped_call_impl(self, *args, **kwargs)\n   1776             return self._compiled_call_impl(*args, **kwargs)  # type: ignore[misc]\n   1777         else:\n-> 1778             return self._call_impl(*args, **kwargs)\n   1779 \n   1780     # torchrec tests the code consistency with the following code\n\n/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/torch/nn/modules/module.py in _call_impl(self, *args, **kwargs)\n   1787                 or _global_backward_pre_hooks or _global_backward_hooks\n   1788                 or _global_forward_hooks or _global_forward_pre_hooks):\n-> 1789             return forward_call(*args, **kwargs)\n   1790 \n   1791         result = None\n\n/usr/local/lib/python3.12/dist-packages/peft/tuners/tuners_utils.py in forward(self, *args, **kwargs)\n    309 \n    310     def forward(self, *args: Any, **kwargs: Any):\n--> 311         return self.model.forward(*args, **kwargs)\n    312 \n    313     def _pre_injection_hook(self, model: nn.Module, config: PeftConfig, adapter_name: str) -> None:\n\n~/.cache/huggingface/modules/transformers_modules/_1/modeling_nemotron_h.py in forward(self, input_ids, inputs_embeds, position_ids, cache_params, labels, output_attentions, output_hidden_states, return_dict, use_cache, cache_position, attention_mask, **kwargs)\n   1700         return_dict = return_dict if return_dict is not None else self.config.use_return_dict\n   1701 \n-> 1702         nemotron_h_outputs = self.backbone(\n   1703             input_ids,\n   1704             cache_params=cache_params,\n\n/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/torch/nn/modules/module.py in _wrapped_call_impl(self, *args, **kwargs)\n   1776             return self._compiled_call_impl(*args, **kwargs)  # type: ignore[misc]\n   1777         else:\n-> 1778             return self._call_impl(*args, **kwargs)\n   1779 \n   1780     # torchrec tests the code consistency with the following code\n\n/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/torch/nn/modules/module.py in _call_impl(self, *args, **kwargs)\n   1787                 or _global_backward_pre_hooks or _global_backward_hooks\n   1788                 or _global_forward_hooks or _global_forward_pre_hooks):\n-> 1789             return forward_call(*args, **kwargs)\n   1790 \n   1791         result = None\n\n~/.cache/huggingface/modules/transformers_modules/_1/modeling_nemotron_h.py in forward(self, input_ids, inputs_embeds, position_ids, cache_params, use_cache, output_attentions, output_hidden_states, return_dict, cache_position, attention_mask, **kwargs)\n   1491                 )\n   1492             else:\n-> 1493                 hidden_states = mixer_block(\n   1494                     hidden_states,\n   1495                     cache_params=cache_params,\n\n/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/torch/nn/modules/module.py in _wrapped_call_impl(self, *args, **kwargs)\n   1776             return self._compiled_call_impl(*args, **kwargs)  # type: ignore[misc]\n   1777         else:\n-> 1778             return self._call_impl(*args, **kwargs)\n   1779 \n   1780     # torchrec tests the code consistency with the following code\n\n/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/torch/nn/modules/module.py in _call_impl(self, *args, **kwargs)\n   1787                 or _global_backward_pre_hooks or _global_backward_hooks\n   1788                 or _global_forward_hooks or _global_forward_pre_hooks):\n-> 1789             return forward_call(*args, **kwargs)\n   1790 \n   1791         result = None\n\n~/.cache/huggingface/modules/transformers_modules/_1/modeling_nemotron_h.py in forward(self, hidden_states, cache_params, cache_position, attention_mask)\n    775 \n    776             if self.block_type == \"mamba\":\n--> 777                 hidden_states = self.mixer(\n    778                     hidden_states, cache_params=cache_params, cache_position=cache_position\n    779                 )\n\n/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/torch/nn/modules/module.py in _wrapped_call_impl(self, *args, **kwargs)\n   1776             return self._compiled_call_impl(*args, **kwargs)  # type: ignore[misc]\n   1777         else:\n-> 1778             return self._call_impl(*args, **kwargs)\n   1779 \n   1780     # torchrec tests the code consistency with the following code\n\n/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/torch/nn/modules/module.py in _call_impl(self, *args, **kwargs)\n   1787                 or _global_backward_pre_hooks or _global_backward_hooks\n   1788                 or _global_forward_hooks or _global_forward_pre_hooks):\n-> 1789             return forward_call(*args, **kwargs)\n   1790 \n   1791         result = None\n\n~/.cache/huggingface/modules/transformers_modules/_1/modeling_nemotron_h.py in forward(self, hidden_states, cache_params, cache_position, attention_mask)\n    713     ):\n    714         if is_fast_path_available and \"cuda\" in self.in_proj.weight.device.type:\n--> 715             return self.cuda_kernels_forward(hidden_states, cache_params, cache_position, attention_mask)\n    716         dtype = hidden_states.dtype\n    717         if attention_mask is not None and attention_mask.shape[1] > 1 and attention_mask.shape[0] > 1:\n\n~/.cache/huggingface/modules/transformers_modules/_1/modeling_nemotron_h.py in cuda_kernels_forward(self, hidden_states, cache_params, cache_position, attention_mask)\n    427             # 2-4. Fused kernel for conv1d, SSM, and the final projection\n    428             if self.training and cache_params is None:\n--> 429                 out = mamba_split_conv1d_scan_combined(\n    430                     projected_states,\n    431                     self.conv1d.weight.squeeze(1),\n\n/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/mamba_ssm/ops/triton/ssd_combined.py in mamba_split_conv1d_scan_combined(zxbcdt, conv1d_weight, conv1d_bias, dt_bias, A, D, chunk_size, initial_states, seq_idx, dt_limit, return_final_states, activation, rmsnorm_weight, rmsnorm_eps, outproj_weight, outproj_bias, headdim, ngroups, norm_before_gate)\n    995         out: (batch, seqlen, dim)\n    996     \"\"\"\n--> 997     return MambaSplitConv1dScanCombinedFn.apply(zxbcdt, conv1d_weight, conv1d_bias, dt_bias, A, D, chunk_size, initial_states, seq_idx, dt_limit, return_final_states, activation, rmsnorm_weight, rmsnorm_eps, outproj_weight, outproj_bias, headdim, ngroups, norm_before_gate)\n    998 \n    999 \n\n/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/torch/autograd/function.py in apply(cls, *args, **kwargs)\n    594             # See NOTE: [functorch vjp and autograd interaction]\n    595             args = _functorch.utils.unwrap_dead_wrappers(args)\n--> 596             return super().apply(*args, **kwargs)  # type: ignore[misc]\n    597 \n    598         if not is_setup_ctx_defined:\n\n/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/torch/amp/autocast_mode.py in decorate_fwd(*args, **kwargs)\n    486         if cast_inputs is None:\n    487             args[0]._fwd_used_autocast = torch.is_autocast_enabled(device_type)\n--> 488             return fwd(*args, **kwargs)  # pyrefly: ignore [not-callable]\n    489         else:\n    490             autocast_context = torch.is_autocast_enabled(device_type)\n\n/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/mamba_ssm/ops/triton/ssd_combined.py in forward(ctx, zxbcdt, conv1d_weight, conv1d_bias, dt_bias, A, D, chunk_size, initial_states, seq_idx, dt_limit, return_final_states, activation, rmsnorm_weight, rmsnorm_eps, outproj_weight, outproj_bias, headdim, ngroups, norm_before_gate)\n    839         seq_idx = seq_idx.contiguous() if seq_idx is not None else None\n    840         xBC_conv = rearrange(\n--> 841             causal_conv1d_fwd_function(rearrange(ensure_stride(xBC), \"b s d -> b d s\"),\n    842                 conv1d_weight, conv1d_bias, seq_idx, None, None, activation in [\"silu\", \"swish\"]),\n    843             \"b d s -> b s d\"\n\n/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/causal_conv1d/cpp_functions.py in causal_conv1d_fwd_function(x, weight, bias, seq_idx, initial_states, final_states_out, silu_activation)\n    102 ) -> torch.Tensor:\n    103     out = torch.empty_like(x)\n--> 104     _causal_conv1d_fwd_cpp(\n    105         x=x,\n    106         weight=weight,\n\n/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/torch/_library/custom_ops.py in __call__(self, *args, **kwargs)\n    724 \n    725     def __call__(self, *args, **kwargs):\n--> 726         return self._opoverload(*args, **kwargs)\n    727 \n    728     def register_vmap(\n\n/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/torch/_ops.py in __call__(self, *args, **kwargs)\n    869     # that are named \"self\". This way, all the aten ops can be called by kwargs.\n    870     def __call__(self, /, *args: _P.args, **kwargs: _P.kwargs) -> _T:\n--> 871         return self._op(*args, **kwargs)\n    872 \n    873     # Use positional-only argument to avoid naming collision with aten ops arguments\n\n/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/torch/_library/autograd.py in autograd_impl(keyset, *args, **keyword_only_args)\n    110             result = Generated.apply(*args, Metadata(keyset, keyword_only_args))  # type: ignore[attr-defined]\n    111         else:\n--> 112             result = forward_no_grad(*args, Metadata(keyset, keyword_only_args))\n    113         return result\n    114 \n\n/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/torch/_library/autograd.py in forward_no_grad(*args)\n     39             keyset = metadata.keyset\n     40             kwargs = metadata.keyword_only_args\n---> 41             result = op.redispatch(keyset & _C._after_autograd_keyset, *args, **kwargs)\n     42             return result\n     43 \n\n/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/torch/_ops.py in redispatch(self, keyset, *args, **kwargs)\n    876         self, /, keyset: torch._C.DispatchKeySet, *args: _P.args, **kwargs: _P.kwargs\n    877     ) -> _T:\n--> 878         return self._handle.redispatch_boxed(keyset, *args, **kwargs)  # type: ignore[return-value]\n    879 \n    880     def __hash__(self):\n\n/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/torch/_library/custom_ops.py in adinplaceorview_impl(keyset, *args, **kwargs)\n    688                     increment_version(kwargs[key])\n    689                 # Handle view + mutation that are in the schema\n--> 690                 return original_kernel.call_boxed(keyset, *args, **kwargs)\n    691 \n    692             with warnings.catch_warnings():\n\n/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/torch/_library/custom_ops.py in backend_impl(*args, **kwargs)\n    373 \n    374                     def backend_impl(*args, **kwargs):\n--> 375                         result = self._backend_fns[device_type](*args, **kwargs)\n    376 \n    377                         def get_module():\n\n/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/torch/_compile.py in inner(*args, **kwargs)\n     52                 fn.__dynamo_disable = disable_fn  # type: ignore[attr-defined]\n     53 \n---> 54             return disable_fn(*args, **kwargs)\n     55 \n     56         return inner\n\n/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/torch/_dynamo/eval_frame.py in _fn(*args, **kwargs)\n   1270                         ):\n   1271                             return fn(*args, **kwargs)\n-> 1272                     return fn(*args, **kwargs)\n   1273                 finally:\n   1274                     set_eval_frame(None)\n\n/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/torch/_library/custom_ops.py in wrapped_fn(*args, **kwargs)\n    408                         return self._init_fn(*args, **kwargs)\n    409                     else:\n--> 410                         return fn(*args, **kwargs)\n    411 \n    412                 self._backend_fns[device_type] = wrapped_fn\n\n/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/causal_conv1d/cpp_functions.py in _causal_conv1d_fwd_cpp(x, weight, bias, seq_idx, initial_states, out, final_states_out, silu_activation)\n     20     silu_activation: bool,\n     21 ) -> None:\n---> 22     causal_conv1d_cuda.causal_conv1d_fwd(\n     23         x,\n     24         weight,\n\nAcceleratorError: CUDA error: no kernel image is available for execution on the device\nSearch for `cudaErrorNoKernelImageForDevice' in https://docs.nvidia.com/cuda/cuda-runtime-api/group__CUDART__TYPES.html for more information.\nCUDA kernel errors might be asynchronously reported at some other API call, so the stacktrace below might be incorrect.\nFor debugging consider passing CUDA_LAUNCH_BLOCKING=1\nCompile with `TORCH_USE_CUDA_DSA` to enable device-side assertions.",
+      "content": "<p>Still getting those same errors for the Docker Filer!\nAnd when you try to: !pip uninstall -y torch torchvision torchaudio\nIt says read only file system ofc!\nI have a minimal and basic pipeline for now.</p>\n<p>``---------------------------------------------------------------------------\nAcceleratorError                          Traceback (most recent call last)\n/tmp/ipykernel_161/874017041.py in ()\n----&gt; 1 train_result = trainer.train()\n      2 print(train_result)</p>\n<p>/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/transformers/trainer.py in train(self, resume_from_checkpoint, trial, ignore_keys_for_eval)\n   1422         ctx = suppress_progress_bars() if args.push_to_hub else contextlib.nullcontext()\n   1423         with ctx:\n-&gt; 1424             return inner_training_loop(\n   1425                 args=args,\n   1426                 resume_from_checkpoint=resume_from_checkpoint,</p>\n<p>/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/transformers/trainer.py in _inner_training_loop(self, batch_size, args, resume_from_checkpoint, trial, ignore_keys_for_eval)\n   1504         for epoch in range(epochs_trained, num_train_epochs):\n   1505             self.control = self.callback_handler.on_epoch_begin(self.args, self.state, self.control)\n-&gt; 1506             self._run_epoch(\n   1507                 model=model,\n   1508                 epoch=epoch,</p>\n<p>/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/transformers/trainer.py in _run_epoch(self, model, epoch, train_dataloader, steps_in_epoch, num_update_steps_per_epoch, trial, ignore_keys_for_eval, start_time, resume_from_checkpoint, epochs_trained, steps_trained_in_current_epoch)\n   1732                     sync_context = functools.partial(self.accelerator.no_sync, model=model)\n   1733                 with sync_context():\n-&gt; 1734                     tr_loss_step = self.training_step(model, inputs, num_items_in_batch)\n   1735 \n   1736                 if (</p>\n<p>/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/transformers/trainer.py in training_step(self, model, inputs, num_items_in_batch)\n   1904 \n   1905             with self.compute_loss_context_manager():\n-&gt; 1906                 loss = self.compute_loss(model, inputs, num_items_in_batch=num_items_in_batch)\n   1907 \n   1908             del inputs</p>\n<p>/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/transformers/trainer.py in compute_loss(self, model, inputs, return_outputs, num_items_in_batch)\n   1976                 kwargs[\"num_items_in_batch\"] = num_items_in_batch\n   1977             inputs = {**inputs, *<em>kwargs}\n-&gt; 1978         outputs = model(</em>*inputs)\n   1979 \n   1980         # User-defined compute_loss function</p>\n<p>/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/torch/nn/modules/module.py in _wrapped_call_impl(self, *args, *<em>kwargs)\n   1776             return self._compiled_call_impl(</em>args, *<em>kwargs)  # type: ignore[misc]\n   1777         else:\n-&gt; 1778             return self._call_impl(</em>args, **kwargs)\n   1779 \n   1780     # torchrec tests the code consistency with the following code</p>\n<p>/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/torch/nn/modules/module.py in _call_impl(self, *args, *<em>kwargs)\n   1787                 or _global_backward_pre_hooks or _global_backward_hooks\n   1788                 or _global_forward_hooks or _global_forward_pre_hooks):\n-&gt; 1789             return forward_call(</em>args, **kwargs)\n   1790 \n   1791         result = None</p>\n<p>/usr/local/lib/python3.12/dist-packages/accelerate/utils/operations.py in forward(*args, *<em>kwargs)\n    817 \n    818     def forward(</em>args, *<em>kwargs):\n--&gt; 819         return model_forward(</em>args, **kwargs)\n    820 \n    821     # To act like a decorator so that it can be popped when doing <code>extract_model_from_parallel</code></p>\n<p>/usr/local/lib/python3.12/dist-packages/accelerate/utils/operations.py in <strong>call</strong>(self, *args, **kwargs)\n    805 \n    806     def <strong>call</strong>(self, *args, *<em>kwargs):\n--&gt; 807         return convert_to_fp32(self.model_forward(</em>args, **kwargs))\n    808 \n    809     def <strong>getstate</strong>(self):</p>\n<p>/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/torch/amp/autocast_mode.py in decorate_autocast(*args, *<em>kwargs)\n     42     def decorate_autocast(</em>args, *<em>kwargs):\n     43         with autocast_instance:\n---&gt; 44             return func(</em>args, **kwargs)\n     45 \n     46     decorate_autocast.__script_unsupported = (  # type: ignore[attr-defined]</p>\n<p>/usr/local/lib/python3.12/dist-packages/accelerate/utils/operations.py in forward(*args, *<em>kwargs)\n    817 \n    818     def forward(</em>args, *<em>kwargs):\n--&gt; 819         return model_forward(</em>args, **kwargs)\n    820 \n    821     # To act like a decorator so that it can be popped when doing <code>extract_model_from_parallel</code></p>\n<p>/usr/local/lib/python3.12/dist-packages/accelerate/utils/operations.py in <strong>call</strong>(self, *args, **kwargs)\n    805 \n    806     def <strong>call</strong>(self, *args, *<em>kwargs):\n--&gt; 807         return convert_to_fp32(self.model_forward(</em>args, **kwargs))\n    808 \n    809     def <strong>getstate</strong>(self):</p>\n<p>/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/torch/amp/autocast_mode.py in decorate_autocast(*args, *<em>kwargs)\n     42     def decorate_autocast(</em>args, *<em>kwargs):\n     43         with autocast_instance:\n---&gt; 44             return func(</em>args, **kwargs)\n     45 \n     46     decorate_autocast.__script_unsupported = (  # type: ignore[attr-defined]</p>\n<p>/usr/local/lib/python3.12/dist-packages/peft/peft_model.py in forward(self, input_ids, attention_mask, inputs_embeds, labels, output_attentions, output_hidden_states, return_dict, task_ids, <strong>kwargs)\n   1921             with self._enable_peft_forward_hooks(</strong>kwargs):\n   1922                 kwargs = {k: v for k, v in kwargs.items() if k not in self.special_peft_forward_args}\n-&gt; 1923                 return self.base_model(\n   1924                     input_ids=input_ids,\n   1925                     attention_mask=attention_mask,</p>\n<p>/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/torch/nn/modules/module.py in _wrapped_call_impl(self, *args, *<em>kwargs)\n   1776             return self._compiled_call_impl(</em>args, *<em>kwargs)  # type: ignore[misc]\n   1777         else:\n-&gt; 1778             return self._call_impl(</em>args, **kwargs)\n   1779 \n   1780     # torchrec tests the code consistency with the following code</p>\n<p>/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/torch/nn/modules/module.py in _call_impl(self, *args, *<em>kwargs)\n   1787                 or _global_backward_pre_hooks or _global_backward_hooks\n   1788                 or _global_forward_hooks or _global_forward_pre_hooks):\n-&gt; 1789             return forward_call(</em>args, **kwargs)\n   1790 \n   1791         result = None</p>\n<p>/usr/local/lib/python3.12/dist-packages/peft/tuners/tuners_utils.py in forward(self, *args, **kwargs)\n    309 \n    310     def forward(self, *args: Any, *<em>kwargs: Any):\n--&gt; 311         return self.model.forward(</em>args, **kwargs)\n    312 \n    313     def _pre_injection_hook(self, model: nn.Module, config: PeftConfig, adapter_name: str) -&gt; None:</p>\n<p>~/.cache/huggingface/modules/transformers_modules/_1/modeling_nemotron_h.py in forward(self, input_ids, inputs_embeds, position_ids, cache_params, labels, output_attentions, output_hidden_states, return_dict, use_cache, cache_position, attention_mask, **kwargs)\n   1700         return_dict = return_dict if return_dict is not None else self.config.use_return_dict\n   1701 \n-&gt; 1702         nemotron_h_outputs = self.backbone(\n   1703             input_ids,\n   1704             cache_params=cache_params,</p>\n<p>/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/torch/nn/modules/module.py in _wrapped_call_impl(self, *args, *<em>kwargs)\n   1776             return self._compiled_call_impl(</em>args, *<em>kwargs)  # type: ignore[misc]\n   1777         else:\n-&gt; 1778             return self._call_impl(</em>args, **kwargs)\n   1779 \n   1780     # torchrec tests the code consistency with the following code</p>\n<p>/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/torch/nn/modules/module.py in _call_impl(self, *args, *<em>kwargs)\n   1787                 or _global_backward_pre_hooks or _global_backward_hooks\n   1788                 or _global_forward_hooks or _global_forward_pre_hooks):\n-&gt; 1789             return forward_call(</em>args, **kwargs)\n   1790 \n   1791         result = None</p>\n<p>~/.cache/huggingface/modules/transformers_modules/_1/modeling_nemotron_h.py in forward(self, input_ids, inputs_embeds, position_ids, cache_params, use_cache, output_attentions, output_hidden_states, return_dict, cache_position, attention_mask, **kwargs)\n   1491                 )\n   1492             else:\n-&gt; 1493                 hidden_states = mixer_block(\n   1494                     hidden_states,\n   1495                     cache_params=cache_params,</p>\n<p>/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/torch/nn/modules/module.py in _wrapped_call_impl(self, *args, *<em>kwargs)\n   1776             return self._compiled_call_impl(</em>args, *<em>kwargs)  # type: ignore[misc]\n   1777         else:\n-&gt; 1778             return self._call_impl(</em>args, **kwargs)\n   1779 \n   1780     # torchrec tests the code consistency with the following code</p>\n<p>/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/torch/nn/modules/module.py in _call_impl(self, *args, *<em>kwargs)\n   1787                 or _global_backward_pre_hooks or _global_backward_hooks\n   1788                 or _global_forward_hooks or _global_forward_pre_hooks):\n-&gt; 1789             return forward_call(</em>args, **kwargs)\n   1790 \n   1791         result = None</p>\n<p>~/.cache/huggingface/modules/transformers_modules/_1/modeling_nemotron_h.py in forward(self, hidden_states, cache_params, cache_position, attention_mask)\n    775 \n    776             if self.block_type == \"mamba\":\n--&gt; 777                 hidden_states = self.mixer(\n    778                     hidden_states, cache_params=cache_params, cache_position=cache_position\n    779                 )</p>\n<p>/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/torch/nn/modules/module.py in _wrapped_call_impl(self, *args, *<em>kwargs)\n   1776             return self._compiled_call_impl(</em>args, *<em>kwargs)  # type: ignore[misc]\n   1777         else:\n-&gt; 1778             return self._call_impl(</em>args, **kwargs)\n   1779 \n   1780     # torchrec tests the code consistency with the following code</p>\n<p>/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/torch/nn/modules/module.py in _call_impl(self, *args, *<em>kwargs)\n   1787                 or _global_backward_pre_hooks or _global_backward_hooks\n   1788                 or _global_forward_hooks or _global_forward_pre_hooks):\n-&gt; 1789             return forward_call(</em>args, **kwargs)\n   1790 \n   1791         result = None</p>\n<p>~/.cache/huggingface/modules/transformers_modules/_1/modeling_nemotron_h.py in forward(self, hidden_states, cache_params, cache_position, attention_mask)\n    713     ):\n    714         if is_fast_path_available and \"cuda\" in self.in_proj.weight.device.type:\n--&gt; 715             return self.cuda_kernels_forward(hidden_states, cache_params, cache_position, attention_mask)\n    716         dtype = hidden_states.dtype\n    717         if attention_mask is not None and attention_mask.shape[1] &gt; 1 and attention_mask.shape[0] &gt; 1:</p>\n<p>~/.cache/huggingface/modules/transformers_modules/_1/modeling_nemotron_h.py in cuda_kernels_forward(self, hidden_states, cache_params, cache_position, attention_mask)\n    427             # 2-4. Fused kernel for conv1d, SSM, and the final projection\n    428             if self.training and cache_params is None:\n--&gt; 429                 out = mamba_split_conv1d_scan_combined(\n    430                     projected_states,\n    431                     self.conv1d.weight.squeeze(1),</p>\n<p>/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/mamba_ssm/ops/triton/ssd_combined.py in mamba_split_conv1d_scan_combined(zxbcdt, conv1d_weight, conv1d_bias, dt_bias, A, D, chunk_size, initial_states, seq_idx, dt_limit, return_final_states, activation, rmsnorm_weight, rmsnorm_eps, outproj_weight, outproj_bias, headdim, ngroups, norm_before_gate)\n    995         out: (batch, seqlen, dim)\n    996     \"\"\"\n--&gt; 997     return MambaSplitConv1dScanCombinedFn.apply(zxbcdt, conv1d_weight, conv1d_bias, dt_bias, A, D, chunk_size, initial_states, seq_idx, dt_limit, return_final_states, activation, rmsnorm_weight, rmsnorm_eps, outproj_weight, outproj_bias, headdim, ngroups, norm_before_gate)\n    998 \n    999 </p>\n<p>/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/torch/autograd/function.py in apply(cls, *args, *<em>kwargs)\n    594             # See NOTE: [functorch vjp and autograd interaction]\n    595             args = _functorch.utils.unwrap_dead_wrappers(args)\n--&gt; 596             return super().apply(</em>args, **kwargs)  # type: ignore[misc]\n    597 \n    598         if not is_setup_ctx_defined:</p>\n<p>/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/torch/amp/autocast_mode.py in decorate_fwd(*args, *<em>kwargs)\n    486         if cast_inputs is None:\n    487             args[0]._fwd_used_autocast = torch.is_autocast_enabled(device_type)\n--&gt; 488             return fwd(</em>args, **kwargs)  # pyrefly: ignore [not-callable]\n    489         else:\n    490             autocast_context = torch.is_autocast_enabled(device_type)</p>\n<p>/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/mamba_ssm/ops/triton/ssd_combined.py in forward(ctx, zxbcdt, conv1d_weight, conv1d_bias, dt_bias, A, D, chunk_size, initial_states, seq_idx, dt_limit, return_final_states, activation, rmsnorm_weight, rmsnorm_eps, outproj_weight, outproj_bias, headdim, ngroups, norm_before_gate)\n    839         seq_idx = seq_idx.contiguous() if seq_idx is not None else None\n    840         xBC_conv = rearrange(\n--&gt; 841             causal_conv1d_fwd_function(rearrange(ensure_stride(xBC), \"b s d -&gt; b d s\"),\n    842                 conv1d_weight, conv1d_bias, seq_idx, None, None, activation in [\"silu\", \"swish\"]),\n    843             \"b d s -&gt; b s d\"</p>\n<p>/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/causal_conv1d/cpp_functions.py in causal_conv1d_fwd_function(x, weight, bias, seq_idx, initial_states, final_states_out, silu_activation)\n    102 ) -&gt; torch.Tensor:\n    103     out = torch.empty_like(x)\n--&gt; 104     _causal_conv1d_fwd_cpp(\n    105         x=x,\n    106         weight=weight,</p>\n<p>/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/torch/_library/custom_ops.py in <strong>call</strong>(self, *args, **kwargs)\n    724 \n    725     def <strong>call</strong>(self, *args, *<em>kwargs):\n--&gt; 726         return self._opoverload(</em>args, **kwargs)\n    727 \n    728     def register_vmap(</p>\n<p>/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/torch/_ops.py in <strong>call</strong>(self, *args, **kwargs)\n    869     # that are named \"self\". This way, all the aten ops can be called by kwargs.\n    870     def <strong>call</strong>(self, /, *args: _P.args, *<em>kwargs: _P.kwargs) -&gt; _T:\n--&gt; 871         return self._op(</em>args, **kwargs)\n    872 \n    873     # Use positional-only argument to avoid naming collision with aten ops arguments</p>\n<p>/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/torch/_library/autograd.py in autograd_impl(keyset, *args, *<em>keyword_only_args)\n    110             result = Generated.apply(</em>args, Metadata(keyset, keyword_only_args))  # type: ignore[attr-defined]\n    111         else:\n--&gt; 112             result = forward_no_grad(*args, Metadata(keyset, keyword_only_args))\n    113         return result\n    114 </p>\n<p>/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/torch/_library/autograd.py in forward_no_grad(*args)\n     39             keyset = metadata.keyset\n     40             kwargs = metadata.keyword_only_args\n---&gt; 41             result = op.redispatch(keyset &amp; _C._after_autograd_keyset, *args, **kwargs)\n     42             return result\n     43 </p>\n<p>/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/torch/_ops.py in redispatch(self, keyset, *args, **kwargs)\n    876         self, /, keyset: torch._C.DispatchKeySet, *args: _P.args, **kwargs: _P.kwargs\n    877     ) -&gt; _T:\n--&gt; 878         return self._handle.redispatch_boxed(keyset, *args, **kwargs)  # type: ignore[return-value]\n    879 \n    880     def <strong>hash</strong>(self):</p>\n<p>/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/torch/_library/custom_ops.py in adinplaceorview_impl(keyset, *args, **kwargs)\n    688                     increment_version(kwargs[key])\n    689                 # Handle view + mutation that are in the schema\n--&gt; 690                 return original_kernel.call_boxed(keyset, *args, **kwargs)\n    691 \n    692             with warnings.catch_warnings():</p>\n<p>/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/torch/_library/custom_ops.py in backend_impl(*args, *<em>kwargs)\n    373 \n    374                     def backend_impl(</em>args, *<em>kwargs):\n--&gt; 375                         result = self._backend_fns[device_type](</em>args, **kwargs)\n    376 \n    377                         def get_module():</p>\n<p>/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/torch/_compile.py in inner(*args, *<em>kwargs)\n     52                 fn.__dynamo_disable = disable_fn  # type: ignore[attr-defined]\n     53 \n---&gt; 54             return disable_fn(</em>args, **kwargs)\n     55 \n     56         return inner</p>\n<p>/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/torch/_dynamo/eval_frame.py in _fn(*args, *<em>kwargs)\n   1270                         ):\n   1271                             return fn(</em>args, *<em>kwargs)\n-&gt; 1272                     return fn(</em>args, **kwargs)\n   1273                 finally:\n   1274                     set_eval_frame(None)</p>\n<p>/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/torch/_library/custom_ops.py in wrapped_fn(*args, *<em>kwargs)\n    408                         return self._init_fn(</em>args, *<em>kwargs)\n    409                     else:\n--&gt; 410                         return fn(</em>args, **kwargs)\n    411 \n    412                 self._backend_fns[device_type] = wrapped_fn</p>\n<p>/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/causal_conv1d/cpp_functions.py in _causal_conv1d_fwd_cpp(x, weight, bias, seq_idx, initial_states, out, final_states_out, silu_activation)\n     20     silu_activation: bool,\n     21 ) -&gt; None:\n---&gt; 22     causal_conv1d_cuda.causal_conv1d_fwd(\n     23         x,\n     24         weight,</p>\n<p>AcceleratorError: CUDA error: no kernel image is available for execution on the device\nSearch for <code>cudaErrorNoKernelImageForDevice' in https://docs.nvidia.com/cuda/cuda-runtime-api/group__CUDART__TYPES.html for more information.\nCUDA kernel errors might be asynchronously reported at some other API call, so the stacktrace below might be incorrect.\nFor debugging consider passing CUDA_LAUNCH_BLOCKING=1\nCompile with</code>TORCH_USE_CUDA_DSA` to enable device-side assertions.</p>",
+      "parent": {},
+      "author": {
+        "displayName": "kunal_wagh2703",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+        "url": "/kunalwagh2703",
+        "tier": "CONTRIBUTOR",
+        "id": 12818266,
+        "progressionOptOut": false
+      },
+      "authorType": "COMMENT",
+      "votes": {
+        "canUpvote": true
+      },
+      "kernelVersion": 0,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "kunal_wagh2703",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "url": "/kunalwagh2703",
+          "userName": "kunalwagh2703",
+          "tier": "CONTRIBUTOR",
+          "id": 12818266,
+          "profileUrl": "/kunalwagh2703",
+          "performanceTier": "CONTRIBUTOR",
+          "userId": 12818266,
+          "progressionOptOut": false
+        },
+        "intro": ""
+      },
+      "depth": 2,
+      "is_first_message": false
+    },
+    {
+      "id": 3427996,
+      "postDate": "2026-03-24T18:59:32.317Z",
+      "rawMarkdown": "    \n2026-03-24 18:58:00,171 - INFO - Initializing device manager...\n2026-03-24 18:58:16,456 - INFO - GPU detected: NVIDIA RTX PRO 6000 Blackwell Server Edition\n2026-03-24 18:58:16,457 - INFO - CUDA version: 12.8\n2026-03-24 18:58:16,457 - INFO - Compute capability: 12.0\n2026-03-24 18:58:16,457 - INFO - GPU memory: 94.97 GB\n2026-03-24 18:58:16,458 - INFO - Detecting available attention mechanisms...\n2026-03-24 18:58:16,511 - INFO - Flash Attention 2: Available\n2026-03-24 18:58:16,512 - INFO - SDPA (PyTorch): Available\n2026-03-24 18:58:26,119 - INFO - Mamba SSM: Not available (No module named 'cutlass')",
+      "content": "<p>2026-03-24 18:58:00,171 - INFO - Initializing device manager…\n2026-03-24 18:58:16,456 - INFO - GPU detected: NVIDIA RTX PRO 6000 Blackwell Server Edition\n2026-03-24 18:58:16,457 - INFO - CUDA version: 12.8\n2026-03-24 18:58:16,457 - INFO - Compute capability: 12.0\n2026-03-24 18:58:16,457 - INFO - GPU memory: 94.97 GB\n2026-03-24 18:58:16,458 - INFO - Detecting available attention mechanisms…\n2026-03-24 18:58:16,511 - INFO - Flash Attention 2: Available\n2026-03-24 18:58:16,512 - INFO - SDPA (PyTorch): Available\n2026-03-24 18:58:26,119 - INFO - Mamba SSM: Not available (No module named 'cutlass')</p>",
+      "parent": {},
+      "author": {
+        "displayName": "mindset324",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+        "url": "/mindset324",
+        "tier": "CONTRIBUTOR",
+        "id": 25887013,
+        "progressionOptOut": false
+      },
+      "authorType": "COMMENT",
+      "votes": {
+        "canUpvote": true
+      },
+      "kernelVersion": 0,
+      "competitionRanking": 1050,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "mindset324",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "url": "/mindset324",
+          "userName": "mindset324",
+          "tier": "CONTRIBUTOR",
+          "id": 25887013,
+          "profileUrl": "/mindset324",
+          "performanceTier": "CONTRIBUTOR",
+          "userId": 25887013,
+          "progressionOptOut": false
+        },
+        "intro": ""
+      },
+      "depth": 2,
+      "is_first_message": false
+    },
+    {
+      "id": 3427842,
+      "postDate": "2026-03-24T15:58:17.167Z",
+      "rawMarkdown": "Thank you for the update! Now I got `ModuleNotFoundError: No module named 'cutlass'`\nShould I recreate the notebook somehow?\n![I use the latest environment it seems.](https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F10467836%2F8c3fa0ec576e177f0ac9827e038f6768%2FScreenshot%202026-03-24%20at%2017.00.17.png?generation=1774368044900957&alt=media)",
+      "content": "<p>Thank you for the update! Now I got <code>ModuleNotFoundError: No module named 'cutlass'</code>\nShould I recreate the notebook somehow?\n<img src=\"https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F10467836%2F8c3fa0ec576e177f0ac9827e038f6768%2FScreenshot%202026-03-24%20at%2017.00.17.png?generation=1774368044900957&amp;alt=media\" alt=\"I use the latest environment it seems.\"></p>",
+      "parent": {},
+      "author": {
+        "displayName": "Evgeniy Glukhov",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+        "url": "/evgeniyglukhov",
+        "tier": "CONTRIBUTOR",
+        "id": 10467836,
+        "progressionOptOut": false
+      },
+      "authorType": "COMMENT",
+      "votes": {
+        "totalVotes": 1,
+        "canUpvote": true,
+        "totalUpvotes": 1
+      },
+      "kernelVersion": 0,
+      "competitionRanking": 2951,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "Evgeniy Glukhov",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "url": "/evgeniyglukhov",
+          "userName": "evgeniyglukhov",
+          "tier": "CONTRIBUTOR",
+          "id": 10467836,
+          "profileUrl": "/evgeniyglukhov",
+          "performanceTier": "CONTRIBUTOR",
+          "userId": 10467836,
+          "progressionOptOut": false
+        },
+        "intro": ""
+      },
+      "depth": 1,
+      "is_first_message": false
+    },
+    {
+      "id": 3427897,
+      "postDate": "2026-03-24T16:52:49.580Z",
+      "rawMarkdown": "Same here, have you got any solution to this??",
+      "content": "<p>Same here, have you got any solution to this??</p>",
+      "parent": {},
+      "author": {
+        "displayName": "kunal_wagh2703",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+        "url": "/kunalwagh2703",
+        "tier": "CONTRIBUTOR",
+        "id": 12818266,
+        "progressionOptOut": false
+      },
+      "authorType": "COMMENT",
+      "votes": {
+        "canUpvote": true
+      },
+      "kernelVersion": 0,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "kunal_wagh2703",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "url": "/kunalwagh2703",
+          "userName": "kunalwagh2703",
+          "tier": "CONTRIBUTOR",
+          "id": 12818266,
+          "profileUrl": "/kunalwagh2703",
+          "performanceTier": "CONTRIBUTOR",
+          "userId": 12818266,
+          "progressionOptOut": false
+        },
+        "intro": ""
+      },
+      "depth": 2,
+      "is_first_message": false
+    },
+    {
+      "id": 3428206,
+      "postDate": "2026-03-25T04:38:33.270Z",
+      "rawMarkdown": "!pip install nvidia-cutlass-dsl\n\nJust do it, it will work then ",
+      "content": "<p>!pip install nvidia-cutlass-dsl</p>\n<p>Just do it, it will work then </p>",
+      "parent": {},
+      "author": {
+        "displayName": "Adarsh Kumar",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/25818777-kg.png?t=2026-04-20-16-49-43",
+        "url": "/adarsh2626",
+        "tier": "MASTER",
+        "id": 25818777,
+        "progressionOptOut": false
+      },
+      "authorType": "TOPIC",
+      "votes": {
+        "canUpvote": true
+      },
+      "kernelVersion": 0,
+      "competitionRanking": 639,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "Muhammad Ibrahim Qasmi",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/24946333-kg.jpeg?t=2025-12-22-22-44-57",
+          "url": "/ibrahimqasimi",
+          "userName": "ibrahimqasimi",
+          "tier": "GRANDMASTER",
+          "id": 24946333,
+          "profileUrl": "/ibrahimqasimi",
+          "performanceTier": "GRANDMASTER",
+          "userId": 24946333,
+          "progressionOptOut": false
+        },
+        "intro": ""
+      },
+      "depth": 2,
+      "is_first_message": false
+    },
+    {
+      "id": 3422400,
+      "postDate": "2026-03-17T16:33:34.397Z",
+      "rawMarkdown": "@tifftoff Can you look into upgrading these in the base env for the next release? May need to check in with our base image since I think they are installed there.",
+      "content": "<p><a href=\"https://www.kaggle.com/tifftoff\" target=\"_blank\">@tifftoff</a> Can you look into upgrading these in the base env for the next release? May need to check in with our base image since I think they are installed there.</p>",
+      "parent": {},
+      "author": {
+        "displayName": "Dustin",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2039816-kg.jpg",
+        "url": "/herbison",
+        "tier": "STAFF",
+        "id": 2039816,
+        "progressionOptOut": false
+      },
+      "authorType": "ADMIN",
+      "votes": {
+        "totalVotes": 5,
+        "canUpvote": true,
+        "totalUpvotes": 5
+      },
+      "kernelVersion": 0,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "reactions": [
+        {
+          "emoji": "KAGGLE",
+          "featuredUserNames": [
+            "antonkratz",
+            "judith007",
+            "tifftoff",
+            "xianxuqiu"
+          ],
+          "userCount": 4
+        },
+        {
+          "emoji": "SURPRISE",
+          "featuredUserNames": [
+            "jazivxt",
+            "adarsh2626"
+          ],
+          "userCount": 2
+        }
+      ],
+      "depth": 0,
+      "is_first_message": false
+    },
+    {
+      "id": 3423832,
+      "postDate": "2026-03-19T04:01:16.013Z",
+      "rawMarkdown": "\nThe inference speed is too slow, only 1.7 tokens/s. It seems the CUDA version is incompatible. Can the official mirror be updated?",
+      "content": "<p>The inference speed is too slow, only 1.7 tokens/s. It seems the CUDA version is incompatible. Can the official mirror be updated?</p>",
+      "parent": {},
+      "author": {
+        "displayName": "xianxu qiu",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+        "url": "/xianxuqiu",
+        "tier": "CONTRIBUTOR",
+        "id": 29856570,
+        "progressionOptOut": false
+      },
+      "authorType": "COMMENT",
+      "votes": {
+        "totalVotes": 1,
+        "canUpvote": true,
+        "totalUpvotes": 1
+      },
+      "kernelVersion": 0,
+      "competitionRanking": 1976,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "xianxu qiu",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "url": "/xianxuqiu",
+          "userName": "xianxuqiu",
+          "tier": "CONTRIBUTOR",
+          "id": 29856570,
+          "profileUrl": "/xianxuqiu",
+          "performanceTier": "CONTRIBUTOR",
+          "userId": 29856570,
+          "progressionOptOut": false
+        },
+        "intro": ""
+      },
+      "depth": 0,
+      "is_first_message": false
+    },
+    {
+      "id": 3423175,
+      "postDate": "2026-03-18T08:40:26.097Z",
+      "rawMarkdown": "me too. I can't solve this problem",
+      "content": "<p>me too. I can't solve this problem</p>",
+      "parent": {},
+      "author": {
+        "displayName": "HanJunseo",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/16929687-kg.png?t=2026-02-13-14-38-37",
+        "url": "/hanjunseo",
+        "tier": "CONTRIBUTOR",
+        "id": 16929687,
+        "progressionOptOut": false
+      },
+      "authorType": "COMMENT",
+      "votes": {
+        "totalVotes": 1,
+        "canUpvote": true,
+        "totalUpvotes": 1
+      },
+      "kernelVersion": 0,
+      "competitionRanking": 1706,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "HanJunseo",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/16929687-kg.png?t=2026-02-13-14-38-37",
+          "url": "/hanjunseo",
+          "userName": "hanjunseo",
+          "tier": "CONTRIBUTOR",
+          "id": 16929687,
+          "profileUrl": "/hanjunseo",
+          "performanceTier": "CONTRIBUTOR",
+          "userId": 16929687,
+          "progressionOptOut": false
+        },
+        "intro": ""
+      },
+      "depth": 0,
+      "is_first_message": false
+    },
+    {
+      "id": 3423183,
+      "postDate": "2026-03-18T08:45:13.480Z",
+      "rawMarkdown": "Thanks for speaking up. I have spent ~5 of the weekly GPU hours on this already plus additional troubleshooting. This is a blocker.",
+      "content": "<p>Thanks for speaking up. I have spent ~5 of the weekly GPU hours on this already plus additional troubleshooting. This is a blocker.</p>",
+      "parent": {},
+      "author": {
+        "displayName": "Anton Kratz",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1423843-kg.png?t=2026-03-17-23-53-30",
+        "url": "/antonkratz",
+        "tier": "CONTRIBUTOR",
+        "id": 1423843,
+        "progressionOptOut": false
+      },
+      "authorType": "COMMENT",
+      "votes": {
+        "canUpvote": true
+      },
+      "kernelVersion": 0,
+      "competitionRanking": 2511,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "Anton Kratz",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1423843-kg.png?t=2026-03-17-23-53-30",
+          "url": "/antonkratz",
+          "userName": "antonkratz",
+          "tier": "CONTRIBUTOR",
+          "id": 1423843,
+          "profileUrl": "/antonkratz",
+          "performanceTier": "CONTRIBUTOR",
+          "userId": 1423843,
+          "progressionOptOut": false
+        },
+        "intro": ""
+      },
+      "depth": 1,
+      "is_first_message": false
+    },
+    {
+      "id": 3422857,
+      "postDate": "2026-03-18T01:58:13.113Z",
+      "rawMarkdown": "Thank you @adarsh2626 for posting this. I am indeed running into this exact error, however the solution does not work for me, when I try your solution I get:\n\n```python\nFound existing installation: torch 2.12.0.dev20260315+cu128\nUninstalling torch-2.12.0.dev20260315+cu128:\nERROR: Exception:\nTraceback (most recent call last):\n  File \"/usr/lib/python3.12/shutil.py\", line 847, in move\n    os.rename(src, real_dst)\nOSError: [Errno 18] Invalid cross-device link: '/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/bin/torchfrtrace' -> '/tmp/pip-uninstall-jrvck2ey/torchfrtrace'\n\nDuring handling of the above exception, another exception occurred:\n\nTraceback (most recent call last):\n  File \"/usr/local/lib/python3.12/dist-packages/pip/_internal/cli/base_command.py\", line 179, in exc_logging_wrapper\n    status = run_func(*args)\n             ^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/dist-packages/pip/_internal/commands/uninstall.py\", line 106, in run\n    uninstall_pathset = req.uninstall(\n                        ^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/dist-packages/pip/_internal/req/req_install.py\", line 722, in uninstall\n    uninstalled_pathset.remove(auto_confirm, verbose)\n  File \"/usr/local/lib/python3.12/dist-packages/pip/_internal/req/req_uninstall.py\", line 370, in remove\n    moved.stash(path)\n  File \"/usr/local/lib/python3.12/dist-packages/pip/_internal/req/req_uninstall.py\", line 261, in stash\n    renames(path, new_path)\n  File \"/usr/local/lib/python3.12/dist-packages/pip/_internal/utils/misc.py\", line 356, in renames\n    shutil.move(old, new)\n  File \"/usr/lib/python3.12/shutil.py\", line 868, in move\n    os.unlink(src)\nOSError: [Errno 30] Read-only file system: '/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/bin/torchfrtrace'\n```",
+      "content": "<p>Thank you <a href=\"https://www.kaggle.com/adarsh2626\" target=\"_blank\">@adarsh2626</a> for posting this. I am indeed running into this exact error, however the solution does not work for me, when I try your solution I get:</p>\n<pre><code>Found existing installation: torch 2.12.0.dev20260315+cu128\nUninstalling torch-2.12.0.dev20260315+cu128:\nERROR: Exception:\nTraceback (most recent call last):\n  File \"/usr/lib/python3.12/shutil.py\", line 847, in move\n    os.rename(src, real_dst)\nOSError: [Errno 18] Invalid cross-device link: '/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/bin/torchfrtrace' -&gt; '/tmp/pip-uninstall-jrvck2ey/torchfrtrace'\n\nDuring handling of the above exception, another exception occurred:\n\nTraceback (most recent call last):\n  File \"/usr/local/lib/python3.12/dist-packages/pip/_internal/cli/base_command.py\", line 179, in exc_logging_wrapper\n    status = run_func(*args)\n             ^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/dist-packages/pip/_internal/commands/uninstall.py\", line 106, in run\n    uninstall_pathset = req.uninstall(\n                        ^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/dist-packages/pip/_internal/req/req_install.py\", line 722, in uninstall\n    uninstalled_pathset.remove(auto_confirm, verbose)\n  File \"/usr/local/lib/python3.12/dist-packages/pip/_internal/req/req_uninstall.py\", line 370, in remove\n    moved.stash(path)\n  File \"/usr/local/lib/python3.12/dist-packages/pip/_internal/req/req_uninstall.py\", line 261, in stash\n    renames(path, new_path)\n  File \"/usr/local/lib/python3.12/dist-packages/pip/_internal/utils/misc.py\", line 356, in renames\n    shutil.move(old, new)\n  File \"/usr/lib/python3.12/shutil.py\", line 868, in move\n    os.unlink(src)\nOSError: [Errno 30] Read-only file system: '/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/bin/torchfrtrace'\n</code></pre>",
+      "parent": {},
+      "author": {
+        "displayName": "Anton Kratz",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1423843-kg.png?t=2026-03-17-23-53-30",
+        "url": "/antonkratz",
+        "tier": "CONTRIBUTOR",
+        "id": 1423843,
+        "progressionOptOut": false
+      },
+      "authorType": "COMMENT",
+      "votes": {
+        "totalVotes": 1,
+        "canUpvote": true,
+        "totalUpvotes": 1
+      },
+      "kernelVersion": 0,
+      "competitionRanking": 2511,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "Anton Kratz",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1423843-kg.png?t=2026-03-17-23-53-30",
+          "url": "/antonkratz",
+          "userName": "antonkratz",
+          "tier": "CONTRIBUTOR",
+          "id": 1423843,
+          "profileUrl": "/antonkratz",
+          "performanceTier": "CONTRIBUTOR",
+          "userId": 1423843,
+          "progressionOptOut": false
+        },
+        "intro": ""
+      },
+      "depth": 0,
+      "is_first_message": false
+    },
+    {
+      "id": 3422889,
+      "postDate": "2026-03-18T02:44:41.237Z",
+      "rawMarkdown": "",
+      "parent": {},
+      "author": {
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+        "url": "/"
+      },
+      "authorType": "COMMENT",
+      "votes": {},
+      "canDelete": true,
+      "isUserAuthor": true,
+      "isDeleted": true,
+      "kernelVersion": 0,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "depth": 1,
+      "is_first_message": false
+    },
+    {
+      "id": 3422893,
+      "postDate": "2026-03-18T02:48:08.913Z",
+      "rawMarkdown": "@antonkratz can you try\n```bash\n!pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu128\n```\nOR\n```bash\n!pip install torch torchvision torchaudio \\\n--index-url https://download.pytorch.org/whl/cu128 \\\n--force-reinstall --no-deps\n```\nThe problem is the pytorch version it should be 128\n\nAnd you need this to load model\n```bash\n!pip install mamba-ssm --no-build-isolation\n```\nIf you get retrying or internetconnection error turn off and again on the notebooks internet it will work",
+      "content": "<p><a href=\"https://www.kaggle.com/antonkratz\" target=\"_blank\">@antonkratz</a> can you try</p>\n<pre><code>!pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu128\n</code></pre>\n<p>OR</p>\n<pre><code>!pip install torch torchvision torchaudio \\\n--index-url https://download.pytorch.org/whl/cu128 \\\n--force-reinstall --no-deps\n</code></pre>\n<p>The problem is the pytorch version it should be 128</p>\n<p>And you need this to load model</p>\n<pre><code>!pip install mamba-ssm --no-build-isolation\n</code></pre>\n<p>If you get retrying or internetconnection error turn off and again on the notebooks internet it will work</p>",
+      "parent": {},
+      "author": {
+        "displayName": "Adarsh Kumar",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/25818777-kg.png?t=2026-04-20-16-49-43",
+        "url": "/adarsh2626",
+        "tier": "MASTER",
+        "id": 25818777,
+        "progressionOptOut": false
+      },
+      "authorType": "TOPIC",
+      "votes": {
+        "totalVotes": 1,
+        "canUpvote": true,
+        "totalUpvotes": 1
+      },
+      "kernelVersion": 0,
+      "competitionRanking": 639,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "Muhammad Ibrahim Qasmi",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/24946333-kg.jpeg?t=2025-12-22-22-44-57",
+          "url": "/ibrahimqasimi",
+          "userName": "ibrahimqasimi",
+          "tier": "GRANDMASTER",
+          "id": 24946333,
+          "profileUrl": "/ibrahimqasimi",
+          "performanceTier": "GRANDMASTER",
+          "userId": 24946333,
+          "progressionOptOut": false
+        },
+        "intro": ""
+      },
+      "depth": 1,
+      "is_first_message": false
+    },
+    {
+      "id": 3422914,
+      "postDate": "2026-03-18T03:07:47.170Z",
+      "rawMarkdown": "Thank you, but somehow I can't seem to get it to work. I tried the these two fixes just now.\n\nIt seems I do have 128 installed already?!\n\nI took the freedom to share my notebook with you, I hope that's okay. Maybe I could kindly ask you to take a look?\n\nP.S.:\n```python\n!pip install torch torchvision torchaudio \\\n--index-url https://download.pytorch.org/whl/cu128 \\\n--force-reinstall --no-deps\n```\nresults in \n`ERROR: Could not install packages due to an OSError: [Errno 30] Read-only file system: '/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/torchaudio-2.11.0.dev20260315+cu128.dist-info/'`\n\nWhat does work for me is\n```\n!pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu128\n```\nhowever it will ultimately result in `AcceleratorError: CUDA error: no kernel image is available for execution on the device`.",
+      "content": "<p>Thank you, but somehow I can't seem to get it to work. I tried the these two fixes just now.</p>\n<p>It seems I do have 128 installed already?!</p>\n<p>I took the freedom to share my notebook with you, I hope that's okay. Maybe I could kindly ask you to take a look?</p>\n<p>P.S.:</p>\n<pre><code>!pip install torch torchvision torchaudio \\\n--index-url https://download.pytorch.org/whl/cu128 \\\n--force-reinstall --no-deps\n</code></pre>\n<p>results in \n<code>ERROR: Could not install packages due to an OSError: [Errno 30] Read-only file system: '/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/torchaudio-2.11.0.dev20260315+cu128.dist-info/'</code></p>\n<p>What does work for me is</p>\n<pre><code>!pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu128\n</code></pre>\n<p>however it will ultimately result in <code>AcceleratorError: CUDA error: no kernel image is available for execution on the device</code>.</p>",
+      "parent": {},
+      "author": {
+        "displayName": "Anton Kratz",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1423843-kg.png?t=2026-03-17-23-53-30",
+        "url": "/antonkratz",
+        "tier": "CONTRIBUTOR",
+        "id": 1423843,
+        "progressionOptOut": false
+      },
+      "authorType": "COMMENT",
+      "votes": {
+        "canUpvote": true
+      },
+      "kernelVersion": 0,
+      "competitionRanking": 2511,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "Anton Kratz",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1423843-kg.png?t=2026-03-17-23-53-30",
+          "url": "/antonkratz",
+          "userName": "antonkratz",
+          "tier": "CONTRIBUTOR",
+          "id": 1423843,
+          "profileUrl": "/antonkratz",
+          "performanceTier": "CONTRIBUTOR",
+          "userId": 1423843,
+          "progressionOptOut": false
+        },
+        "intro": ""
+      },
+      "depth": 2,
+      "is_first_message": false
+    },
+    {
+      "id": 3422939,
+      "postDate": "2026-03-18T03:29:33.430Z",
+      "rawMarkdown": "@antonkratz it seem that you already have that verson so you just need it may take upto 5min of build time and also restart the kernal from run menu\n```bash\n!pip install mamba-ssm --no-build-isolation\n```\n",
+      "content": "<p><a href=\"https://www.kaggle.com/antonkratz\" target=\"_blank\">@antonkratz</a> it seem that you already have that verson so you just need it may take upto 5min of build time and also restart the kernal from run menu</p>\n<pre><code>!pip install mamba-ssm --no-build-isolation\n</code></pre>",
+      "parent": {},
+      "author": {
+        "displayName": "Adarsh Kumar",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/25818777-kg.png?t=2026-04-20-16-49-43",
+        "url": "/adarsh2626",
+        "tier": "MASTER",
+        "id": 25818777,
+        "progressionOptOut": false
+      },
+      "authorType": "TOPIC",
+      "votes": {
+        "canUpvote": true
+      },
+      "kernelVersion": 0,
+      "competitionRanking": 639,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "isCollapsed": true,
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "Muhammad Ibrahim Qasmi",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/24946333-kg.jpeg?t=2025-12-22-22-44-57",
+          "url": "/ibrahimqasimi",
+          "userName": "ibrahimqasimi",
+          "tier": "GRANDMASTER",
+          "id": 24946333,
+          "profileUrl": "/ibrahimqasimi",
+          "performanceTier": "GRANDMASTER",
+          "userId": 24946333,
+          "progressionOptOut": false
+        },
+        "intro": ""
+      },
+      "depth": 2,
+      "is_first_message": false
+    },
+    {
+      "id": 3422947,
+      "postDate": "2026-03-18T03:38:52.580Z",
+      "rawMarkdown": "Thanks 💯 @adarsh2626 ! Please where can I find the working notebook / comment? (I am still new to the interface... somehow I don't see it.)",
+      "content": "<p>Thanks 💯 <a href=\"https://www.kaggle.com/adarsh2626\" target=\"_blank\">@adarsh2626</a> ! Please where can I find the working notebook / comment? (I am still new to the interface… somehow I don't see it.)</p>",
+      "parent": {},
+      "author": {
+        "displayName": "Anton Kratz",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1423843-kg.png?t=2026-03-17-23-53-30",
+        "url": "/antonkratz",
+        "tier": "CONTRIBUTOR",
+        "id": 1423843,
+        "progressionOptOut": false
+      },
+      "authorType": "COMMENT",
+      "votes": {
+        "canUpvote": true
+      },
+      "kernelVersion": 0,
+      "competitionRanking": 2511,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "isCollapsed": true,
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "Anton Kratz",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1423843-kg.png?t=2026-03-17-23-53-30",
+          "url": "/antonkratz",
+          "userName": "antonkratz",
+          "tier": "CONTRIBUTOR",
+          "id": 1423843,
+          "profileUrl": "/antonkratz",
+          "performanceTier": "CONTRIBUTOR",
+          "userId": 1423843,
+          "progressionOptOut": false
+        },
+        "intro": ""
+      },
+      "depth": 2,
+      "is_first_message": false
+    },
+    {
+      "id": 3422953,
+      "postDate": "2026-03-18T03:46:13.550Z",
+      "rawMarkdown": "@antonkratz just do not run that pytorch one run \n```bash\n!pip install mamba-ssm --no-build-isolation\n```\nand check if your pytorch version is 12.8 and if not working then make a new notebook with same steps",
+      "content": "<p><a href=\"https://www.kaggle.com/antonkratz\" target=\"_blank\">@antonkratz</a> just do not run that pytorch one run </p>\n<pre><code>!pip install mamba-ssm --no-build-isolation\n</code></pre>\n<p>and check if your pytorch version is 12.8 and if not working then make a new notebook with same steps</p>",
+      "parent": {},
+      "author": {
+        "displayName": "Adarsh Kumar",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/25818777-kg.png?t=2026-04-20-16-49-43",
+        "url": "/adarsh2626",
+        "tier": "MASTER",
+        "id": 25818777,
+        "progressionOptOut": false
+      },
+      "authorType": "TOPIC",
+      "votes": {
+        "canUpvote": true
+      },
+      "kernelVersion": 0,
+      "competitionRanking": 639,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "isCollapsed": true,
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "Muhammad Ibrahim Qasmi",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/24946333-kg.jpeg?t=2025-12-22-22-44-57",
+          "url": "/ibrahimqasimi",
+          "userName": "ibrahimqasimi",
+          "tier": "GRANDMASTER",
+          "id": 24946333,
+          "profileUrl": "/ibrahimqasimi",
+          "performanceTier": "GRANDMASTER",
+          "userId": 24946333,
+          "progressionOptOut": false
+        },
+        "intro": ""
+      },
+      "depth": 2,
+      "is_first_message": false
+    },
+    {
+      "id": 3423033,
+      "postDate": "2026-03-18T05:28:21.697Z",
+      "rawMarkdown": "Thank you. I tried it, didn't work, also tried an entirely new notebook from scratch (two times to make sure). I am confident that I use pytorch version is 12.8:\n```python\nimport torch\nprint(torch.__version__)\nprint(torch.__file__)\n```\n\n```python\n2.12.0.dev20260315+cu128\n/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/torch/__init__.py\n```\n\nI also added the \"NVIDIA Utility Script\" provided by Kaggle.\n\nNo success. I still get: \"AcceleratorError: CUDA error: no kernel image is available for execution on the device\"\n\n*I think there is something wrong with the base environment.* At the same time, people are moving up in the leaderboard  so somehow they must have gotten it working... could the organizers maybe look into this or post a minimal working example that does *not* trigger the CUDA error?",
+      "content": "<p>Thank you. I tried it, didn't work, also tried an entirely new notebook from scratch (two times to make sure). I am confident that I use pytorch version is 12.8:</p>\n<pre><code>import torch\nprint(torch.__version__)\nprint(torch.__file__)\n</code></pre>\n<pre><code>2.12.0.dev20260315+cu128\n/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/torch/__init__.py\n</code></pre>\n<p>I also added the \"NVIDIA Utility Script\" provided by Kaggle.</p>\n<p>No success. I still get: \"AcceleratorError: CUDA error: no kernel image is available for execution on the device\"</p>\n<p><em>I think there is something wrong with the base environment.</em> At the same time, people are moving up in the leaderboard  so somehow they must have gotten it working… could the organizers maybe look into this or post a minimal working example that does <em>not</em> trigger the CUDA error?</p>",
+      "parent": {},
+      "author": {
+        "displayName": "Anton Kratz",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1423843-kg.png?t=2026-03-17-23-53-30",
+        "url": "/antonkratz",
+        "tier": "CONTRIBUTOR",
+        "id": 1423843,
+        "progressionOptOut": false
+      },
+      "authorType": "COMMENT",
+      "votes": {
+        "canUpvote": true
+      },
+      "kernelVersion": 0,
+      "competitionRanking": 2511,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "isCollapsed": true,
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "Anton Kratz",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1423843-kg.png?t=2026-03-17-23-53-30",
+          "url": "/antonkratz",
+          "userName": "antonkratz",
+          "tier": "CONTRIBUTOR",
+          "id": 1423843,
+          "profileUrl": "/antonkratz",
+          "performanceTier": "CONTRIBUTOR",
+          "userId": 1423843,
+          "progressionOptOut": false
+        },
+        "intro": ""
+      },
+      "depth": 2,
+      "is_first_message": false
+    },
+    {
+      "id": 3424225,
+      "postDate": "2026-03-19T13:20:49.873Z",
+      "rawMarkdown": "We're working on getting the base environment upgraded to support this.\n\nInternet access is disabled on powerful accelerators during some competitions to prevent abuse.\n\nIn order to get around this, you should download dependencies into a dataset or notebook, and install them \"offline\" in the notebook that has the accelerator attached.",
+      "content": "<p>We're working on getting the base environment upgraded to support this.</p>\n<p>Internet access is disabled on powerful accelerators during some competitions to prevent abuse.</p>\n<p>In order to get around this, you should download dependencies into a dataset or notebook, and install them \"offline\" in the notebook that has the accelerator attached.</p>",
+      "parent": {},
+      "author": {
+        "displayName": "Dustin",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2039816-kg.jpg",
+        "url": "/herbison",
+        "tier": "STAFF",
+        "id": 2039816,
+        "progressionOptOut": false
+      },
+      "authorType": "ADMIN",
+      "votes": {
+        "canUpvote": true,
+        "totalUpvotes": 1
+      },
+      "kernelVersion": 0,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "isCollapsed": true,
+      "reactions": [
+        {
+          "emoji": "KAGGLE",
+          "featuredUserNames": [
+            "haruiig",
+            "adarsh2626"
+          ],
+          "userCount": 2
+        }
+      ],
+      "depth": 2,
+      "is_first_message": false
+    },
+    {
+      "id": 3424362,
+      "postDate": "2026-03-19T16:08:01.763Z",
+      "rawMarkdown": "Will you be kind enough to announce this to all the participants through emails. We all have wasted several hours of our time and GPU resources as well. In order to save every one time and resources, a shoutout email announcing fix of the issue, will be immensely helpful to all of us.",
+      "content": "<p>Will you be kind enough to announce this to all the participants through emails. We all have wasted several hours of our time and GPU resources as well. In order to save every one time and resources, a shoutout email announcing fix of the issue, will be immensely helpful to all of us.</p>",
+      "parent": {},
+      "author": {
+        "displayName": "Abhigyan Srivastava",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+        "url": "/srivastavaabhigyan",
+        "tier": "CONTRIBUTOR",
+        "id": 4923504,
+        "progressionOptOut": false
+      },
+      "authorType": "COMMENT",
+      "votes": {
+        "totalVotes": 1,
+        "canUpvote": true,
+        "totalUpvotes": 1
+      },
+      "kernelVersion": 0,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "isCollapsed": true,
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "Abhigyan Srivastava",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "url": "/srivastavaabhigyan",
+          "userName": "srivastavaabhigyan",
+          "tier": "CONTRIBUTOR",
+          "id": 4923504,
+          "profileUrl": "/srivastavaabhigyan",
+          "performanceTier": "CONTRIBUTOR",
+          "userId": 4923504,
+          "progressionOptOut": false
+        },
+        "intro": ""
+      },
+      "depth": 2,
+      "is_first_message": false
+    },
+    {
+      "id": 3423776,
+      "postDate": "2026-03-19T02:16:44.253Z",
+      "rawMarkdown": "I tried again today, and it seems that internet access is blocked in the competition notebook environment. Is this happening only to me, or are others seeing the same issue as well?",
+      "content": "<p>I tried again today, and it seems that internet access is blocked in the competition notebook environment. Is this happening only to me, or are others seeing the same issue as well?</p>",
+      "parent": {},
+      "author": {
+        "displayName": "HanJunseo",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/16929687-kg.png?t=2026-02-13-14-38-37",
+        "url": "/hanjunseo",
+        "tier": "CONTRIBUTOR",
+        "id": 16929687,
+        "progressionOptOut": false
+      },
+      "authorType": "COMMENT",
+      "votes": {
+        "totalVotes": 2,
+        "canUpvote": true,
+        "totalUpvotes": 2
+      },
+      "kernelVersion": 0,
+      "competitionRanking": 1706,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "HanJunseo",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/16929687-kg.png?t=2026-02-13-14-38-37",
+          "url": "/hanjunseo",
+          "userName": "hanjunseo",
+          "tier": "CONTRIBUTOR",
+          "id": 16929687,
+          "profileUrl": "/hanjunseo",
+          "performanceTier": "CONTRIBUTOR",
+          "userId": 16929687,
+          "progressionOptOut": false
+        },
+        "intro": ""
+      },
+      "depth": 0,
+      "is_first_message": false
+    },
+    {
+      "id": 3423782,
+      "postDate": "2026-03-19T02:36:49.367Z",
+      "rawMarkdown": "got this message:\nError: Internet cannot be enabled for this competition with the current accelerator.",
+      "content": "<p>got this message:\nError: Internet cannot be enabled for this competition with the current accelerator.</p>",
+      "parent": {},
+      "author": {
+        "displayName": "Keanan",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/16601819-kg.png?t=2025-10-01-00-40-35",
+        "url": "/citerne",
+        "tier": "CONTRIBUTOR",
+        "id": 16601819,
+        "progressionOptOut": false
+      },
+      "authorType": "COMMENT",
+      "votes": {
+        "totalVotes": 2,
+        "canUpvote": true,
+        "totalUpvotes": 2
+      },
+      "kernelVersion": 0,
+      "competitionRanking": 1406,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "Keanan",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/16601819-kg.png?t=2025-10-01-00-40-35",
+          "url": "/citerne",
+          "userName": "citerne",
+          "tier": "CONTRIBUTOR",
+          "id": 16601819,
+          "profileUrl": "/citerne",
+          "performanceTier": "CONTRIBUTOR",
+          "userId": 16601819,
+          "progressionOptOut": false
+        },
+        "intro": ""
+      },
+      "depth": 1,
+      "is_first_message": false
+    },
+    {
+      "id": 3423990,
+      "postDate": "2026-03-19T08:29:54.033Z",
+      "rawMarkdown": "I fixed this by copying and editing 'demo code' in link:\nhttps://www.kaggle.com/code/ryanholbrook/nvidia-nemotron-submission-demo\n\nI copied this and turned internet on, and changed accelerator to blackwell, it worked.",
+      "content": "<p>I fixed this by copying and editing 'demo code' in link:\n<a href=\"https://www.kaggle.com/code/ryanholbrook/nvidia-nemotron-submission-demo\" target=\"_blank\">https://www.kaggle.com/code/ryanholbrook/nvidia-nemotron-submission-demo</a></p>\n<p>I copied this and turned internet on, and changed accelerator to blackwell, it worked.</p>",
+      "parent": {},
+      "author": {
+        "displayName": "YellwoJune083",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+        "url": "/yellwojune083",
+        "tier": "CONTRIBUTOR",
+        "id": 29758094,
+        "progressionOptOut": false
+      },
+      "authorType": "COMMENT",
+      "votes": {
+        "totalVotes": 1,
+        "canUpvote": true,
+        "totalUpvotes": 1
+      },
+      "kernelVersion": 0,
+      "competitionRanking": 2968,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "YellwoJune083",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "url": "/yellwojune083",
+          "userName": "yellwojune083",
+          "tier": "CONTRIBUTOR",
+          "id": 29758094,
+          "profileUrl": "/yellwojune083",
+          "performanceTier": "CONTRIBUTOR",
+          "userId": 29758094,
+          "progressionOptOut": false
+        },
+        "intro": ""
+      },
+      "depth": 2,
+      "is_first_message": false
+    },
+    {
+      "id": 3424006,
+      "postDate": "2026-03-19T08:49:08.700Z",
+      "rawMarkdown": "",
+      "parent": {},
+      "author": {
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+        "url": "/"
+      },
+      "authorType": "COMMENT",
+      "votes": {},
+      "canDelete": true,
+      "isUserAuthor": true,
+      "isDeleted": true,
+      "kernelVersion": 0,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "isCollapsed": true,
+      "depth": 2,
+      "is_first_message": false
+    },
+    {
+      "id": 3424007,
+      "postDate": "2026-03-19T08:49:28.947Z",
+      "rawMarkdown": "Copying https://www.kaggle.com/code/ryanholbrook/nvidia-nemotron-submission-demo (at this time, Session Options are Accelerator:None,  Internet: Internet on) -> select RTX Pro 6000 -> Run\n\ndidn't work....\n\nHave anyone bypassed?",
+      "content": "<p>Copying <a href=\"https://www.kaggle.com/code/ryanholbrook/nvidia-nemotron-submission-demo\" target=\"_blank\">https://www.kaggle.com/code/ryanholbrook/nvidia-nemotron-submission-demo</a> (at this time, Session Options are Accelerator:None,  Internet: Internet on) -&gt; select RTX Pro 6000 -&gt; Run</p>\n<p>didn't work….</p>\n<p>Have anyone bypassed?</p>",
+      "parent": {},
+      "author": {
+        "displayName": "Harui-ig",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/22004535-kg.jpg?t=2025-05-03-05-56-45",
+        "url": "/haruiig",
+        "tier": "CONTRIBUTOR",
+        "id": 22004535,
+        "progressionOptOut": false
+      },
+      "authorType": "COMMENT",
+      "votes": {
+        "canUpvote": true
+      },
+      "kernelVersion": 0,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "isCollapsed": true,
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "Harui-ig",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/22004535-kg.jpg?t=2025-05-03-05-56-45",
+          "url": "/haruiig",
+          "userName": "haruiig",
+          "tier": "CONTRIBUTOR",
+          "id": 22004535,
+          "profileUrl": "/haruiig",
+          "performanceTier": "CONTRIBUTOR",
+          "userId": 22004535,
+          "progressionOptOut": false
+        },
+        "intro": ""
+      },
+      "depth": 2,
+      "is_first_message": false
+    },
+    {
+      "id": 3424120,
+      "postDate": "2026-03-19T11:27:10.057Z",
+      "rawMarkdown": "Not working? When I duplicated the session and changed the acceleration from None to RTX 6000 Pro, the session turns off. At that time, I checked and activated the Internet, and then I restarted session, which maintained the Internet on state and enabled communication. ",
+      "content": "<p>Not working? When I duplicated the session and changed the acceleration from None to RTX 6000 Pro, the session turns off. At that time, I checked and activated the Internet, and then I restarted session, which maintained the Internet on state and enabled communication. </p>",
+      "parent": {},
+      "author": {
+        "displayName": "YellwoJune083",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+        "url": "/yellwojune083",
+        "tier": "CONTRIBUTOR",
+        "id": 29758094,
+        "progressionOptOut": false
+      },
+      "authorType": "COMMENT",
+      "votes": {
+        "canUpvote": true
+      },
+      "kernelVersion": 0,
+      "competitionRanking": 2968,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "isCollapsed": true,
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "YellwoJune083",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "url": "/yellwojune083",
+          "userName": "yellwojune083",
+          "tier": "CONTRIBUTOR",
+          "id": 29758094,
+          "profileUrl": "/yellwojune083",
+          "performanceTier": "CONTRIBUTOR",
+          "userId": 29758094,
+          "progressionOptOut": false
+        },
+        "intro": ""
+      },
+      "depth": 2,
+      "is_first_message": false
+    },
+    {
+      "id": 3423915,
+      "postDate": "2026-03-19T05:43:22.717Z",
+      "rawMarkdown": "Exactly the same happened to me today, too.",
+      "content": "<p>Exactly the same happened to me today, too.</p>",
+      "parent": {},
+      "author": {
+        "displayName": "Anton Kratz",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1423843-kg.png?t=2026-03-17-23-53-30",
+        "url": "/antonkratz",
+        "tier": "CONTRIBUTOR",
+        "id": 1423843,
+        "progressionOptOut": false
+      },
+      "authorType": "COMMENT",
+      "votes": {
+        "totalVotes": 1,
+        "canUpvote": true,
+        "totalUpvotes": 1
+      },
+      "kernelVersion": 0,
+      "competitionRanking": 2511,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "Anton Kratz",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1423843-kg.png?t=2026-03-17-23-53-30",
+          "url": "/antonkratz",
+          "userName": "antonkratz",
+          "tier": "CONTRIBUTOR",
+          "id": 1423843,
+          "profileUrl": "/antonkratz",
+          "performanceTier": "CONTRIBUTOR",
+          "userId": 1423843,
+          "progressionOptOut": false
+        },
+        "intro": ""
+      },
+      "depth": 1,
+      "is_first_message": false
+    },
+    {
+      "id": 3422312,
+      "postDate": "2026-03-17T13:01:30.423Z",
+      "rawMarkdown": "How did you access the rtx pro 6000?\n",
+      "content": "<p>How did you access the rtx pro 6000?</p>",
+      "parent": {},
+      "author": {
+        "displayName": "HADY",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+        "url": "/johnhady101",
+        "tier": "CONTRIBUTOR",
+        "id": 28656359,
+        "progressionOptOut": false
+      },
+      "authorType": "COMMENT",
+      "votes": {
+        "totalVotes": -1,
+        "canUpvote": true
+      },
+      "kernelVersion": 0,
+      "competitionRanking": 2873,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "HADY",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "url": "/johnhady101",
+          "userName": "johnhady101",
+          "tier": "CONTRIBUTOR",
+          "id": 28656359,
+          "profileUrl": "/johnhady101",
+          "performanceTier": "CONTRIBUTOR",
+          "userId": 28656359,
+          "progressionOptOut": false
+        },
+        "intro": ""
+      },
+      "depth": 0,
+      "is_first_message": false
+    },
+    {
+      "id": 3422314,
+      "postDate": "2026-03-17T13:05:00.730Z",
+      "rawMarkdown": "Ver simple in code tab u create notebook, which is asociated with this competition and u can use rtx pro 6000.",
+      "content": "<p>Ver simple in code tab u create notebook, which is asociated with this competition and u can use rtx pro 6000.</p>",
+      "parent": {},
+      "author": {
+        "displayName": "lucian kucera",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+        "url": "/luciankucera",
+        "tier": "CONTRIBUTOR",
+        "id": 17819385,
+        "progressionOptOut": false
+      },
+      "authorType": "COMMENT",
+      "votes": {
+        "canUpvote": true
+      },
+      "kernelVersion": 0,
+      "competitionRanking": 1566,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "lucian kucera",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "url": "/luciankucera",
+          "userName": "luciankucera",
+          "tier": "CONTRIBUTOR",
+          "id": 17819385,
+          "profileUrl": "/luciankucera",
+          "performanceTier": "CONTRIBUTOR",
+          "userId": 17819385,
+          "progressionOptOut": false
+        },
+        "intro": ""
+      },
+      "depth": 1,
+      "is_first_message": false
+    },
+    {
+      "id": 3424710,
+      "postDate": "2026-03-19T23:05:41.287Z",
+      "rawMarkdown": "here is my [fix](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/683172)",
+      "content": "<p>here is my <a href=\"https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/683172\" target=\"_blank\">fix</a></p>",
+      "parent": {},
+      "author": {
+        "displayName": "Keanan",
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/16601819-kg.png?t=2025-10-01-00-40-35",
+        "url": "/citerne",
+        "tier": "CONTRIBUTOR",
+        "id": 16601819,
+        "progressionOptOut": false
+      },
+      "authorType": "COMMENT",
+      "votes": {
+        "canUpvote": true
+      },
+      "kernelVersion": 0,
+      "competitionRanking": 1406,
+      "feedbackTrackingData": {},
+      "isThankYou": false,
+      "teamUpInfo": {
+        "teamLeader": {
+          "displayName": "Keanan",
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/16601819-kg.png?t=2025-10-01-00-40-35",
+          "url": "/citerne",
+          "userName": "citerne",
+          "tier": "CONTRIBUTOR",
+          "id": 16601819,
+          "profileUrl": "/citerne",
+          "performanceTier": "CONTRIBUTOR",
+          "userId": 16601819,
+          "progressionOptOut": false
+        },
+        "intro": ""
+      },
+      "depth": 0,
+      "is_first_message": false
+    }
+  ],
+  "message_count_observed": 33,
+  "text_sha256": "4d18ce9f366456c5d95bc6544ed592583388891b4673f17c181beb79705400e0",
+  "full_text": "[message_id=3422303 author= first=True]\nThis competition provides an **NVIDIA RTX PRO 6000 Blackwell** GPU. When trying to fine-tune the Nemotron model with LoRA, you may encounter the following error during training:\n\n```\nAcceleratorError: CUDA error: no kernel image is available for execution on the device\n```\n\nI initially thought something was wrong in my training pipeline and spent **2–3 hours debugging** tokenization, Trainer setup, LoRA configuration, etc. However, the issue is actually much simpler.\n\n**Reason:**\nThe default PyTorch build in the environment supports CUDA architectures up to **sm_90**, but the RTX PRO 6000 (Blackwell) uses **sm_120**. Because of this mismatch, CUDA kernels cannot run and training fails.\n\n**Solution:**\nInstall a PyTorch build compiled with CUDA 12.8+ (nightly) that includes support for the Blackwell architecture.\n\nRun this before importing `torch` or `transformers`:\n\n```bash\n!pip uninstall -y torch torchvision torchaudio\n!pip install --no-cache-dir torch torchvision torchaudio --index-url\nhttps://download.pytorch.org/whl/nightly/cu128\n!pip install mamba-ssm --no-build-isolation\n```\n\nAfter installing, **restart the kernel from the Run menu**, and the training should start normally.\n\nHope this saves others some debugging time 🙂\n\n\n[message_id=3426962 author= first=False]\nThe new Docker image with CUDA 12.8 and updated PyTorch is rolled out now! Thanks everyone for your patience :)\n\n[message_id=3427176 author= first=False]\nStill it is showing “CUDA error: no kernel image is available for execution on the device” on RTX PRO 6000 Blackwell . Could you please explain in detail how to fix this ?\n\n[message_id=3427183 author= first=False]\n@mindset324 Please share a minimal notebook which demonstrates the issue, thats the best way for us to be able to evaluate whats going on.\n\n[message_id=3427201 author= first=False]\nStill getting those same errors for the Docker Filer!\nAnd when you try to: !pip uninstall -y torch torchvision torchaudio\nIt says read only file system ofc!\nI have a minimal and basic pipeline for now.\n\n``---------------------------------------------------------------------------\nAcceleratorError                          Traceback (most recent call last)\n/tmp/ipykernel_161/874017041.py in <cell line: 0>()\n----> 1 train_result = trainer.train()\n      2 print(train_result)\n\n/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/transformers/trainer.py in train(self, resume_from_checkpoint, trial, ignore_keys_for_eval)\n   1422         ctx = suppress_progress_bars() if args.push_to_hub else contextlib.nullcontext()\n   1423         with ctx:\n-> 1424             return inner_training_loop(\n   1425                 args=args,\n   1426                 resume_from_checkpoint=resume_from_checkpoint,\n\n/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/transformers/trainer.py in _inner_training_loop(self, batch_size, args, resume_from_checkpoint, trial, ignore_keys_for_eval)\n   1504         for epoch in range(epochs_trained, num_train_epochs):\n   1505             self.control = self.callback_handler.on_epoch_begin(self.args, self.state, self.control)\n-> 1506             self._run_epoch(\n   1507                 model=model,\n   1508                 epoch=epoch,\n\n/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/transformers/trainer.py in _run_epoch(self, model, epoch, train_dataloader, steps_in_epoch, num_update_steps_per_epoch, trial, ignore_keys_for_eval, start_time, resume_from_checkpoint, epochs_trained, steps_trained_in_current_epoch)\n   1732                     sync_context = functools.partial(self.accelerator.no_sync, model=model)\n   1733                 with sync_context():\n-> 1734                     tr_loss_step = self.training_step(model, inputs, num_items_in_batch)\n   1735 \n   1736                 if (\n\n/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/transformers/trainer.py in training_step(self, model, inputs, num_items_in_batch)\n   1904 \n   1905             with self.compute_loss_context_manager():\n-> 1906                 loss = self.compute_loss(model, inputs, num_items_in_batch=num_items_in_batch)\n   1907 \n   1908             del inputs\n\n/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/transformers/trainer.py in compute_loss(self, model, inputs, return_outputs, num_items_in_batch)\n   1976                 kwargs[\"num_items_in_batch\"] = num_items_in_batch\n   1977             inputs = {**inputs, **kwargs}\n-> 1978         outputs = model(**inputs)\n   1979 \n   1980         # User-defined compute_loss function\n\n/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/torch/nn/modules/module.py in _wrapped_call_impl(self, *args, **kwargs)\n   1776             return self._compiled_call_impl(*args, **kwargs)  # type: ignore[misc]\n   1777         else:\n-> 1778             return self._call_impl(*args, **kwargs)\n   1779 \n   1780     # torchrec tests the code consistency with the following code\n\n/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/torch/nn/modules/module.py in _call_impl(self, *args, **kwargs)\n   1787                 or _global_backward_pre_hooks or _global_backward_hooks\n   1788                 or _global_forward_hooks or _global_forward_pre_hooks):\n-> 1789             return forward_call(*args, **kwargs)\n   1790 \n   1791         result = None\n\n/usr/local/lib/python3.12/dist-packages/accelerate/utils/operations.py in forward(*args, **kwargs)\n    817 \n    818     def forward(*args, **kwargs):\n--> 819         return model_forward(*args, **kwargs)\n    820 \n    821     # To act like a decorator so that it can be popped when doing `extract_model_from_parallel`\n\n/usr/local/lib/python3.12/dist-packages/accelerate/utils/operations.py in __call__(self, *args, **kwargs)\n    805 \n    806     def __call__(self, *args, **kwargs):\n--> 807         return convert_to_fp32(self.model_forward(*args, **kwargs))\n    808 \n    809     def __getstate__(self):\n\n/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/torch/amp/autocast_mode.py in decorate_autocast(*args, **kwargs)\n     42     def decorate_autocast(*args, **kwargs):\n     43         with autocast_instance:\n---> 44             return func(*args, **kwargs)\n     45 \n     46     decorate_autocast.__script_unsupported = (  # type: ignore[attr-defined]\n\n/usr/local/lib/python3.12/dist-packages/accelerate/utils/operations.py in forward(*args, **kwargs)\n    817 \n    818     def forward(*args, **kwargs):\n--> 819         return model_forward(*args, **kwargs)\n    820 \n    821     # To act like a decorator so that it can be popped when doing `extract_model_from_parallel`\n\n/usr/local/lib/python3.12/dist-packages/accelerate/utils/operations.py in __call__(self, *args, **kwargs)\n    805 \n    806     def __call__(self, *args, **kwargs):\n--> 807         return convert_to_fp32(self.model_forward(*args, **kwargs))\n    808 \n    809     def __getstate__(self):\n\n/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/torch/amp/autocast_mode.py in decorate_autocast(*args, **kwargs)\n     42     def decorate_autocast(*args, **kwargs):\n     43         with autocast_instance:\n---> 44             return func(*args, **kwargs)\n     45 \n     46     decorate_autocast.__script_unsupported = (  # type: ignore[attr-defined]\n\n/usr/local/lib/python3.12/dist-packages/peft/peft_model.py in forward(self, input_ids, attention_mask, inputs_embeds, labels, output_attentions, output_hidden_states, return_dict, task_ids, **kwargs)\n   1921             with self._enable_peft_forward_hooks(**kwargs):\n   1922                 kwargs = {k: v for k, v in kwargs.items() if k not in self.special_peft_forward_args}\n-> 1923                 return self.base_model(\n   1924                     input_ids=input_ids,\n   1925                     attention_mask=attention_mask,\n\n/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/torch/nn/modules/module.py in _wrapped_call_impl(self, *args, **kwargs)\n   1776             return self._compiled_call_impl(*args, **kwargs)  # type: ignore[misc]\n   1777         else:\n-> 1778             return self._call_impl(*args, **kwargs)\n   1779 \n   1780     # torchrec tests the code consistency with the following code\n\n/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/torch/nn/modules/module.py in _call_impl(self, *args, **kwargs)\n   1787                 or _global_backward_pre_hooks or _global_backward_hooks\n   1788                 or _global_forward_hooks or _global_forward_pre_hooks):\n-> 1789             return forward_call(*args, **kwargs)\n   1790 \n   1791         result = None\n\n/usr/local/lib/python3.12/dist-packages/peft/tuners/tuners_utils.py in forward(self, *args, **kwargs)\n    309 \n    310     def forward(self, *args: Any, **kwargs: Any):\n--> 311         return self.model.forward(*args, **kwargs)\n    312 \n    313     def _pre_injection_hook(self, model: nn.Module, config: PeftConfig, adapter_name: str) -> None:\n\n~/.cache/huggingface/modules/transformers_modules/_1/modeling_nemotron_h.py in forward(self, input_ids, inputs_embeds, position_ids, cache_params, labels, output_attentions, output_hidden_states, return_dict, use_cache, cache_position, attention_mask, **kwargs)\n   1700         return_dict = return_dict if return_dict is not None else self.config.use_return_dict\n   1701 \n-> 1702         nemotron_h_outputs = self.backbone(\n   1703             input_ids,\n   1704             cache_params=cache_params,\n\n/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/torch/nn/modules/module.py in _wrapped_call_impl(self, *args, **kwargs)\n   1776             return self._compiled_call_impl(*args, **kwargs)  # type: ignore[misc]\n   1777         else:\n-> 1778             return self._call_impl(*args, **kwargs)\n   1779 \n   1780     # torchrec tests the code consistency with the following code\n\n/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/torch/nn/modules/module.py in _call_impl(self, *args, **kwargs)\n   1787                 or _global_backward_pre_hooks or _global_backward_hooks\n   1788                 or _global_forward_hooks or _global_forward_pre_hooks):\n-> 1789             return forward_call(*args, **kwargs)\n   1790 \n   1791         result = None\n\n~/.cache/huggingface/modules/transformers_modules/_1/modeling_nemotron_h.py in forward(self, input_ids, inputs_embeds, position_ids, cache_params, use_cache, output_attentions, output_hidden_states, return_dict, cache_position, attention_mask, **kwargs)\n   1491                 )\n   1492             else:\n-> 1493                 hidden_states = mixer_block(\n   1494                     hidden_states,\n   1495                     cache_params=cache_params,\n\n/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/torch/nn/modules/module.py in _wrapped_call_impl(self, *args, **kwargs)\n   1776             return self._compiled_call_impl(*args, **kwargs)  # type: ignore[misc]\n   1777         else:\n-> 1778             return self._call_impl(*args, **kwargs)\n   1779 \n   1780     # torchrec tests the code consistency with the following code\n\n/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/torch/nn/modules/module.py in _call_impl(self, *args, **kwargs)\n   1787                 or _global_backward_pre_hooks or _global_backward_hooks\n   1788                 or _global_forward_hooks or _global_forward_pre_hooks):\n-> 1789             return forward_call(*args, **kwargs)\n   1790 \n   1791         result = None\n\n~/.cache/huggingface/modules/transformers_modules/_1/modeling_nemotron_h.py in forward(self, hidden_states, cache_params, cache_position, attention_mask)\n    775 \n    776             if self.block_type == \"mamba\":\n--> 777                 hidden_states = self.mixer(\n    778                     hidden_states, cache_params=cache_params, cache_position=cache_position\n    779                 )\n\n/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/torch/nn/modules/module.py in _wrapped_call_impl(self, *args, **kwargs)\n   1776             return self._compiled_call_impl(*args, **kwargs)  # type: ignore[misc]\n   1777         else:\n-> 1778             return self._call_impl(*args, **kwargs)\n   1779 \n   1780     # torchrec tests the code consistency with the following code\n\n/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/torch/nn/modules/module.py in _call_impl(self, *args, **kwargs)\n   1787                 or _global_backward_pre_hooks or _global_backward_hooks\n   1788                 or _global_forward_hooks or _global_forward_pre_hooks):\n-> 1789             return forward_call(*args, **kwargs)\n   1790 \n   1791         result = None\n\n~/.cache/huggingface/modules/transformers_modules/_1/modeling_nemotron_h.py in forward(self, hidden_states, cache_params, cache_position, attention_mask)\n    713     ):\n    714         if is_fast_path_available and \"cuda\" in self.in_proj.weight.device.type:\n--> 715             return self.cuda_kernels_forward(hidden_states, cache_params, cache_position, attention_mask)\n    716         dtype = hidden_states.dtype\n    717         if attention_mask is not None and attention_mask.shape[1] > 1 and attention_mask.shape[0] > 1:\n\n~/.cache/huggingface/modules/transformers_modules/_1/modeling_nemotron_h.py in cuda_kernels_forward(self, hidden_states, cache_params, cache_position, attention_mask)\n    427             # 2-4. Fused kernel for conv1d, SSM, and the final projection\n    428             if self.training and cache_params is None:\n--> 429                 out = mamba_split_conv1d_scan_combined(\n    430                     projected_states,\n    431                     self.conv1d.weight.squeeze(1),\n\n/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/mamba_ssm/ops/triton/ssd_combined.py in mamba_split_conv1d_scan_combined(zxbcdt, conv1d_weight, conv1d_bias, dt_bias, A, D, chunk_size, initial_states, seq_idx, dt_limit, return_final_states, activation, rmsnorm_weight, rmsnorm_eps, outproj_weight, outproj_bias, headdim, ngroups, norm_before_gate)\n    995         out: (batch, seqlen, dim)\n    996     \"\"\"\n--> 997     return MambaSplitConv1dScanCombinedFn.apply(zxbcdt, conv1d_weight, conv1d_bias, dt_bias, A, D, chunk_size, initial_states, seq_idx, dt_limit, return_final_states, activation, rmsnorm_weight, rmsnorm_eps, outproj_weight, outproj_bias, headdim, ngroups, norm_before_gate)\n    998 \n    999 \n\n/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/torch/autograd/function.py in apply(cls, *args, **kwargs)\n    594             # See NOTE: [functorch vjp and autograd interaction]\n    595             args = _functorch.utils.unwrap_dead_wrappers(args)\n--> 596             return super().apply(*args, **kwargs)  # type: ignore[misc]\n    597 \n    598         if not is_setup_ctx_defined:\n\n/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/torch/amp/autocast_mode.py in decorate_fwd(*args, **kwargs)\n    486         if cast_inputs is None:\n    487             args[0]._fwd_used_autocast = torch.is_autocast_enabled(device_type)\n--> 488             return fwd(*args, **kwargs)  # pyrefly: ignore [not-callable]\n    489         else:\n    490             autocast_context = torch.is_autocast_enabled(device_type)\n\n/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/mamba_ssm/ops/triton/ssd_combined.py in forward(ctx, zxbcdt, conv1d_weight, conv1d_bias, dt_bias, A, D, chunk_size, initial_states, seq_idx, dt_limit, return_final_states, activation, rmsnorm_weight, rmsnorm_eps, outproj_weight, outproj_bias, headdim, ngroups, norm_before_gate)\n    839         seq_idx = seq_idx.contiguous() if seq_idx is not None else None\n    840         xBC_conv = rearrange(\n--> 841             causal_conv1d_fwd_function(rearrange(ensure_stride(xBC), \"b s d -> b d s\"),\n    842                 conv1d_weight, conv1d_bias, seq_idx, None, None, activation in [\"silu\", \"swish\"]),\n    843             \"b d s -> b s d\"\n\n/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/causal_conv1d/cpp_functions.py in causal_conv1d_fwd_function(x, weight, bias, seq_idx, initial_states, final_states_out, silu_activation)\n    102 ) -> torch.Tensor:\n    103     out = torch.empty_like(x)\n--> 104     _causal_conv1d_fwd_cpp(\n    105         x=x,\n    106         weight=weight,\n\n/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/torch/_library/custom_ops.py in __call__(self, *args, **kwargs)\n    724 \n    725     def __call__(self, *args, **kwargs):\n--> 726         return self._opoverload(*args, **kwargs)\n    727 \n    728     def register_vmap(\n\n/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/torch/_ops.py in __call__(self, *args, **kwargs)\n    869     # that are named \"self\". This way, all the aten ops can be called by kwargs.\n    870     def __call__(self, /, *args: _P.args, **kwargs: _P.kwargs) -> _T:\n--> 871         return self._op(*args, **kwargs)\n    872 \n    873     # Use positional-only argument to avoid naming collision with aten ops arguments\n\n/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/torch/_library/autograd.py in autograd_impl(keyset, *args, **keyword_only_args)\n    110             result = Generated.apply(*args, Metadata(keyset, keyword_only_args))  # type: ignore[attr-defined]\n    111         else:\n--> 112             result = forward_no_grad(*args, Metadata(keyset, keyword_only_args))\n    113         return result\n    114 \n\n/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/torch/_library/autograd.py in forward_no_grad(*args)\n     39             keyset = metadata.keyset\n     40             kwargs = metadata.keyword_only_args\n---> 41             result = op.redispatch(keyset & _C._after_autograd_keyset, *args, **kwargs)\n     42             return result\n     43 \n\n/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/torch/_ops.py in redispatch(self, keyset, *args, **kwargs)\n    876         self, /, keyset: torch._C.DispatchKeySet, *args: _P.args, **kwargs: _P.kwargs\n    877     ) -> _T:\n--> 878         return self._handle.redispatch_boxed(keyset, *args, **kwargs)  # type: ignore[return-value]\n    879 \n    880     def __hash__(self):\n\n/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/torch/_library/custom_ops.py in adinplaceorview_impl(keyset, *args, **kwargs)\n    688                     increment_version(kwargs[key])\n    689                 # Handle view + mutation that are in the schema\n--> 690                 return original_kernel.call_boxed(keyset, *args, **kwargs)\n    691 \n    692             with warnings.catch_warnings():\n\n/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/torch/_library/custom_ops.py in backend_impl(*args, **kwargs)\n    373 \n    374                     def backend_impl(*args, **kwargs):\n--> 375                         result = self._backend_fns[device_type](*args, **kwargs)\n    376 \n    377                         def get_module():\n\n/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/torch/_compile.py in inner(*args, **kwargs)\n     52                 fn.__dynamo_disable = disable_fn  # type: ignore[attr-defined]\n     53 \n---> 54             return disable_fn(*args, **kwargs)\n     55 \n     56         return inner\n\n/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/torch/_dynamo/eval_frame.py in _fn(*args, **kwargs)\n   1270                         ):\n   1271                             return fn(*args, **kwargs)\n-> 1272                     return fn(*args, **kwargs)\n   1273                 finally:\n   1274                     set_eval_frame(None)\n\n/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/torch/_library/custom_ops.py in wrapped_fn(*args, **kwargs)\n    408                         return self._init_fn(*args, **kwargs)\n    409                     else:\n--> 410                         return fn(*args, **kwargs)\n    411 \n    412                 self._backend_fns[device_type] = wrapped_fn\n\n/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/causal_conv1d/cpp_functions.py in _causal_conv1d_fwd_cpp(x, weight, bias, seq_idx, initial_states, out, final_states_out, silu_activation)\n     20     silu_activation: bool,\n     21 ) -> None:\n---> 22     causal_conv1d_cuda.causal_conv1d_fwd(\n     23         x,\n     24         weight,\n\nAcceleratorError: CUDA error: no kernel image is available for execution on the device\nSearch for `cudaErrorNoKernelImageForDevice' in https://docs.nvidia.com/cuda/cuda-runtime-api/group__CUDART__TYPES.html for more information.\nCUDA kernel errors might be asynchronously reported at some other API call, so the stacktrace below might be incorrect.\nFor debugging consider passing CUDA_LAUNCH_BLOCKING=1\nCompile with `TORCH_USE_CUDA_DSA` to enable device-side assertions.\n\n[message_id=3427996 author= first=False]\n    \n2026-03-24 18:58:00,171 - INFO - Initializing device manager...\n2026-03-24 18:58:16,456 - INFO - GPU detected: NVIDIA RTX PRO 6000 Blackwell Server Edition\n2026-03-24 18:58:16,457 - INFO - CUDA version: 12.8\n2026-03-24 18:58:16,457 - INFO - Compute capability: 12.0\n2026-03-24 18:58:16,457 - INFO - GPU memory: 94.97 GB\n2026-03-24 18:58:16,458 - INFO - Detecting available attention mechanisms...\n2026-03-24 18:58:16,511 - INFO - Flash Attention 2: Available\n2026-03-24 18:58:16,512 - INFO - SDPA (PyTorch): Available\n2026-03-24 18:58:26,119 - INFO - Mamba SSM: Not available (No module named 'cutlass')\n\n[message_id=3427842 author= first=False]\nThank you for the update! Now I got `ModuleNotFoundError: No module named 'cutlass'`\nShould I recreate the notebook somehow?\n![I use the latest environment it seems.](https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F10467836%2F8c3fa0ec576e177f0ac9827e038f6768%2FScreenshot%202026-03-24%20at%2017.00.17.png?generation=1774368044900957&alt=media)\n\n[message_id=3427897 author= first=False]\nSame here, have you got any solution to this??\n\n[message_id=3428206 author= first=False]\n!pip install nvidia-cutlass-dsl\n\nJust do it, it will work then \n\n[message_id=3422400 author= first=False]\n@tifftoff Can you look into upgrading these in the base env for the next release? May need to check in with our base image since I think they are installed there.\n\n[message_id=3423832 author= first=False]\n\nThe inference speed is too slow, only 1.7 tokens/s. It seems the CUDA version is incompatible. Can the official mirror be updated?\n\n[message_id=3423175 author= first=False]\nme too. I can't solve this problem\n\n[message_id=3423183 author= first=False]\nThanks for speaking up. I have spent ~5 of the weekly GPU hours on this already plus additional troubleshooting. This is a blocker.\n\n[message_id=3422857 author= first=False]\nThank you @adarsh2626 for posting this. I am indeed running into this exact error, however the solution does not work for me, when I try your solution I get:\n\n```python\nFound existing installation: torch 2.12.0.dev20260315+cu128\nUninstalling torch-2.12.0.dev20260315+cu128:\nERROR: Exception:\nTraceback (most recent call last):\n  File \"/usr/lib/python3.12/shutil.py\", line 847, in move\n    os.rename(src, real_dst)\nOSError: [Errno 18] Invalid cross-device link: '/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/bin/torchfrtrace' -> '/tmp/pip-uninstall-jrvck2ey/torchfrtrace'\n\nDuring handling of the above exception, another exception occurred:\n\nTraceback (most recent call last):\n  File \"/usr/local/lib/python3.12/dist-packages/pip/_internal/cli/base_command.py\", line 179, in exc_logging_wrapper\n    status = run_func(*args)\n             ^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/dist-packages/pip/_internal/commands/uninstall.py\", line 106, in run\n    uninstall_pathset = req.uninstall(\n                        ^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/dist-packages/pip/_internal/req/req_install.py\", line 722, in uninstall\n    uninstalled_pathset.remove(auto_confirm, verbose)\n  File \"/usr/local/lib/python3.12/dist-packages/pip/_internal/req/req_uninstall.py\", line 370, in remove\n    moved.stash(path)\n  File \"/usr/local/lib/python3.12/dist-packages/pip/_internal/req/req_uninstall.py\", line 261, in stash\n    renames(path, new_path)\n  File \"/usr/local/lib/python3.12/dist-packages/pip/_internal/utils/misc.py\", line 356, in renames\n    shutil.move(old, new)\n  File \"/usr/lib/python3.12/shutil.py\", line 868, in move\n    os.unlink(src)\nOSError: [Errno 30] Read-only file system: '/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/bin/torchfrtrace'\n```\n\n[message_id=3422889 author= first=False]\n\n\n[message_id=3422893 author= first=False]\n@antonkratz can you try\n```bash\n!pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu128\n```\nOR\n```bash\n!pip install torch torchvision torchaudio \\\n--index-url https://download.pytorch.org/whl/cu128 \\\n--force-reinstall --no-deps\n```\nThe problem is the pytorch version it should be 128\n\nAnd you need this to load model\n```bash\n!pip install mamba-ssm --no-build-isolation\n```\nIf you get retrying or internetconnection error turn off and again on the notebooks internet it will work\n\n[message_id=3422914 author= first=False]\nThank you, but somehow I can't seem to get it to work. I tried the these two fixes just now.\n\nIt seems I do have 128 installed already?!\n\nI took the freedom to share my notebook with you, I hope that's okay. Maybe I could kindly ask you to take a look?\n\nP.S.:\n```python\n!pip install torch torchvision torchaudio \\\n--index-url https://download.pytorch.org/whl/cu128 \\\n--force-reinstall --no-deps\n```\nresults in \n`ERROR: Could not install packages due to an OSError: [Errno 30] Read-only file system: '/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/torchaudio-2.11.0.dev20260315+cu128.dist-info/'`\n\nWhat does work for me is\n```\n!pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu128\n```\nhowever it will ultimately result in `AcceleratorError: CUDA error: no kernel image is available for execution on the device`.\n\n[message_id=3422939 author= first=False]\n@antonkratz it seem that you already have that verson so you just need it may take upto 5min of build time and also restart the kernal from run menu\n```bash\n!pip install mamba-ssm --no-build-isolation\n```\n\n\n[message_id=3422947 author= first=False]\nThanks 💯 @adarsh2626 ! Please where can I find the working notebook / comment? (I am still new to the interface... somehow I don't see it.)\n\n[message_id=3422953 author= first=False]\n@antonkratz just do not run that pytorch one run \n```bash\n!pip install mamba-ssm --no-build-isolation\n```\nand check if your pytorch version is 12.8 and if not working then make a new notebook with same steps\n\n[message_id=3423033 author= first=False]\nThank you. I tried it, didn't work, also tried an entirely new notebook from scratch (two times to make sure). I am confident that I use pytorch version is 12.8:\n```python\nimport torch\nprint(torch.__version__)\nprint(torch.__file__)\n```\n\n```python\n2.12.0.dev20260315+cu128\n/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/torch/__init__.py\n```\n\nI also added the \"NVIDIA Utility Script\" provided by Kaggle.\n\nNo success. I still get: \"AcceleratorError: CUDA error: no kernel image is available for execution on the device\"\n\n*I think there is something wrong with the base environment.* At the same time, people are moving up in the leaderboard  so somehow they must have gotten it working... could the organizers maybe look into this or post a minimal working example that does *not* trigger the CUDA error?\n\n[message_id=3424225 author= first=False]\nWe're working on getting the base environment upgraded to support this.\n\nInternet access is disabled on powerful accelerators during some competitions to prevent abuse.\n\nIn order to get around this, you should download dependencies into a dataset or notebook, and install them \"offline\" in the notebook that has the accelerator attached.\n\n[message_id=3424362 author= first=False]\nWill you be kind enough to announce this to all the participants through emails. We all have wasted several hours of our time and GPU resources as well. In order to save every one time and resources, a shoutout email announcing fix of the issue, will be immensely helpful to all of us.\n\n[message_id=3423776 author= first=False]\nI tried again today, and it seems that internet access is blocked in the competition notebook environment. Is this happening only to me, or are others seeing the same issue as well?\n\n[message_id=3423782 author= first=False]\ngot this message:\nError: Internet cannot be enabled for this competition with the current accelerator.\n\n[message_id=3423990 author= first=False]\nI fixed this by copying and editing 'demo code' in link:\nhttps://www.kaggle.com/code/ryanholbrook/nvidia-nemotron-submission-demo\n\nI copied this and turned internet on, and changed accelerator to blackwell, it worked.\n\n[message_id=3424006 author= first=False]\n\n\n[message_id=3424007 author= first=False]\nCopying https://www.kaggle.com/code/ryanholbrook/nvidia-nemotron-submission-demo (at this time, Session Options are Accelerator:None,  Internet: Internet on) -> select RTX Pro 6000 -> Run\n\ndidn't work....\n\nHave anyone bypassed?\n\n[message_id=3424120 author= first=False]\nNot working? When I duplicated the session and changed the acceleration from None to RTX 6000 Pro, the session turns off. At that time, I checked and activated the Internet, and then I restarted session, which maintained the Internet on state and enabled communication. \n\n[message_id=3423915 author= first=False]\nExactly the same happened to me today, too.\n\n[message_id=3422312 author= first=False]\nHow did you access the rtx pro 6000?\n\n\n[message_id=3422314 author= first=False]\nVer simple in code tab u create notebook, which is asociated with this competition and u can use rtx pro 6000.\n\n[message_id=3424710 author= first=False]\nhere is my [fix](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/683172)"
+}

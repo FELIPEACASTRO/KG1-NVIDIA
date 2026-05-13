@@ -1,0 +1,39 @@
+{
+  "fetched_at_utc": "2026-05-13T15:44:03.912669+00:00",
+  "full_text": "[message_id=686591 author=AlexxxSem first=True]\nTo resolve offline dependency installation issues, you need to create two new notebooks with identical preinstalled library versions: \nUtility Notebook (Setup Environment) Example \nFile/Set as Utility Script\nAccelerator: GPU T4\nInternet: On\nCompetition Notebook (Offline Execution) ( Example )\nAttach to competition\nAccelerator: GPU RTX Pro 6000\nInternet: Off\nAdd Input/Utility Scripts/ Your Utility Notebook \nYou can use my notebooks, but over time version mismatch issues may appear.\n\n[message_id=3444635 author=einherjer first=False]\nThis solution works. It is also the only example that makes sense. Thanks for sharing!",
+  "message_count_observed": 2,
+  "messages": [
+    {
+      "authorName": "AlexxxSem",
+      "content": "<p><strong>To resolve offline dependency installation issues, you need to create two new notebooks with identical preinstalled library versions:</strong></p>\n<ol>\n<li>Utility Notebook (Setup Environment) <a href=\"https://www.kaggle.com/code/alexxxsem/nemotron-offline-dependencies\" target=\"_blank\">Example</a></li>\n</ol>\n<ul>\n<li>File/Set as Utility Script</li>\n<li>Accelerator: GPU T4</li>\n<li>Internet: On</li>\n</ul>\n<ol>\n<li>Competition Notebook (Offline Execution) (<a href=\"https://www.kaggle.com/code/alexxxsem/nemotron-simple-offline-working-demo\" target=\"_blank\">Example</a>)</li>\n</ol>\n<ul>\n<li><p>Attach to competition</p></li>\n<li><p>Accelerator: GPU RTX Pro 6000</p></li>\n<li><p>Internet: Off</p></li>\n<li><p>Add Input/Utility Scripts/<em>Your Utility Notebook</em></p>\n<p>You can use my notebooks, but over time version mismatch issues may appear.</p></li>\n</ul>",
+      "depth": 0,
+      "first": true,
+      "id": 686591,
+      "postDate": "2026-03-31T19:52:26.867Z"
+    },
+    {
+      "authorName": "einherjer",
+      "content": "<p>This solution works. It is also the only example that makes sense. Thanks for sharing!</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3444635,
+      "postDate": "2026-04-18T05:20:50.703Z"
+    }
+  ],
+  "text_sha256": "2f8315ac86cc068af00949264dab3e1690cf6df115c64c5a1a994e498ca04575",
+  "topic": {
+    "authorName": "AlexxxSem",
+    "authorUrl": "https://www.kaggle.com/alexxxsem",
+    "commentCount": 1,
+    "content": "<p><strong>To resolve offline dependency installation issues, you need to create two new notebooks with identical preinstalled library versions:</strong></p>\n<ol>\n<li>Utility Notebook (Setup Environment) <a href=\"https://www.kaggle.com/code/alexxxsem/nemotron-offline-dependencies\" target=\"_blank\">Example</a></li>\n</ol>\n<ul>\n<li>File/Set as Utility Script</li>\n<li>Accelerator: GPU T4</li>\n<li>Internet: On</li>\n</ul>\n<ol>\n<li>Competition Notebook (Offline Execution) (<a href=\"https://www.kaggle.com/code/alexxxsem/nemotron-simple-offline-working-demo\" target=\"_blank\">Example</a>)</li>\n</ol>\n<ul>\n<li><p>Attach to competition</p></li>\n<li><p>Accelerator: GPU RTX Pro 6000</p></li>\n<li><p>Internet: Off</p></li>\n<li><p>Add Input/Utility Scripts/<em>Your Utility Notebook</em></p>\n<p>You can use my notebooks, but over time version mismatch issues may appear.</p></li>\n</ul>",
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 686591,
+    "postDate": "2026-03-31T19:52:26.867Z",
+    "title": "Offline Dependencies and a Simple Fix for ModuleNotFoundError and PermissionError",
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/686591",
+    "votes": 3
+  },
+  "topic_id": 686591,
+  "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/686591"
+}

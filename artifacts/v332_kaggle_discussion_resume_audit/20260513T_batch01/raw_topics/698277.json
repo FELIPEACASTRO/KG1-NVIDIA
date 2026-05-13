@@ -1,0 +1,40 @@
+{
+  "fetched_at_utc": "2026-05-13T15:47:32.197814+00:00",
+  "full_text": "[message_id=698277 author=Hardik Yerne first=True]\nHi everyone,\nI'm fine-tuning DeepSeek Math 7B with LoRA for this competition and running into \npackage compatibility issues on Kaggle's environment.\nMy setup:\nModel: deepseek-math-7b-instruct (4-bit NF4 quantization)\nLoRA: r=8, target q_proj + v_proj\nTraining: 600 steps, cosine LR, batch=1, grad_accum=8\nVal loss reached 0.6889 at step 600\nIssues faced:\ntrl/transformers/bitsandbytes version conflicts\ntokenizer path validation errors with local Kaggle model paths\nnumpy binary incompatibility after force reinstalls\nQuestions:\nWhat trl + transformers + bitsandbytes versions work cleanly on Kaggle GPU T4?\nHow are others loading local Kaggle model datasets with from_pretrained?\nAny tips for the Save & Run All full run succeeding?\nHappy to share my notebook if it helps others. Thanks!\n\n[message_id=3455355 author=a14iiiii first=False]\nThis competition does not include traing ds model, you are supposed to train lora adapter for NVIDIA Nemotron-3-Nano-30B. For dependencies, it is better to install libraries via 'uv pip install' to automatically find the best versions for you.",
+  "message_count_observed": 2,
+  "messages": [
+    {
+      "authorName": "Hardik Yerne",
+      "content": "<p>Hi everyone,</p>\n<p>I'm fine-tuning DeepSeek Math 7B with LoRA for this competition and running into \npackage compatibility issues on Kaggle's environment.</p>\n<p>My setup:</p>\n<ul>\n<li>Model: deepseek-math-7b-instruct (4-bit NF4 quantization)</li>\n<li>LoRA: r=8, target q_proj + v_proj</li>\n<li>Training: 600 steps, cosine LR, batch=1, grad_accum=8</li>\n<li>Val loss reached 0.6889 at step 600</li>\n</ul>\n<p>Issues faced:</p>\n<ul>\n<li>trl/transformers/bitsandbytes version conflicts</li>\n<li>tokenizer path validation errors with local Kaggle model paths</li>\n<li>numpy binary incompatibility after force reinstalls</li>\n</ul>\n<p>Questions:</p>\n<ol>\n<li>What trl + transformers + bitsandbytes versions work cleanly on Kaggle GPU T4?</li>\n<li>How are others loading local Kaggle model datasets with from_pretrained?</li>\n<li>Any tips for the Save &amp; Run All full run succeeding?</li>\n</ol>\n<p>Happy to share my notebook if it helps others. Thanks!</p>",
+      "depth": 0,
+      "first": true,
+      "id": 698277,
+      "postDate": "2026-05-09T05:36:15.850Z"
+    },
+    {
+      "authorName": "a14iiiii",
+      "content": "<p>This competition does not include traing ds model, you are supposed to train lora adapter for NVIDIA Nemotron-3-Nano-30B. For dependencies, it is better to install libraries via 'uv pip install' to automatically find the best versions for you.</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3455355,
+      "postDate": "2026-05-09T07:41:38.560Z",
+      "votes": 3
+    }
+  ],
+  "text_sha256": "eb90a4e94b21e9a4b144b0e71e8c88b824799eea083e80946977971b4496f3fa",
+  "topic": {
+    "authorName": "Hardik Yerne",
+    "authorUrl": "https://www.kaggle.com/hardikyerne",
+    "commentCount": 1,
+    "content": "<p>Hi everyone,</p>\n<p>I'm fine-tuning DeepSeek Math 7B with LoRA for this competition and running into \npackage compatibility issues on Kaggle's environment.</p>\n<p>My setup:</p>\n<ul>\n<li>Model: deepseek-math-7b-instruct (4-bit NF4 quantization)</li>\n<li>LoRA: r=8, target q_proj + v_proj</li>\n<li>Training: 600 steps, cosine LR, batch=1, grad_accum=8</li>\n<li>Val loss reached 0.6889 at step 600</li>\n</ul>\n<p>Issues faced:</p>\n<ul>\n<li>trl/transformers/bitsandbytes version conflicts</li>\n<li>tokenizer path validation errors with local Kaggle model paths</li>\n<li>numpy binary incompatibility after force reinstalls</li>\n</ul>\n<p>Questions:</p>\n<ol>\n<li>What trl + transformers + bitsandbytes versions work cleanly on Kaggle GPU T4?</li>\n<li>How are others loading local Kaggle model datasets with from_pretrained?</li>\n<li>Any tips for the Save &amp; Run All full run succeeding?</li>\n</ol>\n<p>Happy to share my notebook if it helps others. Thanks!</p>",
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 698277,
+    "postDate": "2026-05-09T05:36:15.850Z",
+    "title": "DeepSeek Math 7B LoRA fine-tuning — dependency issues on Kaggle environment",
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/698277",
+    "votes": -4
+  },
+  "topic_id": 698277,
+  "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/698277"
+}

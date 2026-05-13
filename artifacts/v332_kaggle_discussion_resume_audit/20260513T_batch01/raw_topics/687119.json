@@ -1,0 +1,63 @@
+{
+  "fetched_at_utc": "2026-05-13T15:44:27.859413+00:00",
+  "full_text": "[message_id=687119 author=[RU] Evgeniy Kamyshan (sharing) first=True]\nI don't understand what the point of banning Internet access here. I'd understand if you had to send submissions with solved tasks, it'd be fair, but here you need to send an exact LoRA adapter of the exact model, prohibiting Internet usage js requires to spend a lot more time on things not connected with research. Or am i dumb and Internet access can be turned on while using RTX 6000?\n\n[message_id=3433891 author=CPMP first=False]\nWhat are the things not connected with research you would not do if you had internet access?\n\n[message_id=3433947 author=Darren Amadeus Martin first=False]\nI understand that disabling internet is a way to prevent GPU abuse or exploit that is unrelated to the competition. However, with internet access, pip installations can be much easier done without having to create multiple notebooks or wheels and it would definitely make researches or trial and error faster.\n\n[message_id=3433967 author=CPMP first=False]\nwhen running notebooks before submitting you can allow internet access ofc. When you submit, or save for submission, with internet access disabled, then you can just put your pip installs as indicated in this screenshot. Just click on the dots at the right of the submit button, click on \"install dependencies\", and put all your pip install commands there. More info: https://www.kaggle.com/docs/notebooks#modifying-a-notebook-specific-environment\n\n[message_id=3438373 author=badwolfe first=False]\nThis does not work, it still fails. \nError:\nSession is starting…\nRequirement already satisfied: wandb in /usr/local/lib/python3.12/dist-packages (0.25.0)\nWARNING: Retrying (Retry(total=4, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError(': Failed to establish a new connection: [Errno -3] Temporary failure in name resolution')': /simple/unsloth/",
+  "message_count_observed": 5,
+  "messages": [
+    {
+      "authorName": "[RU] Evgeniy Kamyshan (sharing)",
+      "content": "<p>I don't understand what the point of banning Internet access here. I'd understand if you had to send submissions with solved tasks, it'd be fair, but here you need to send an exact LoRA adapter of the exact model, prohibiting Internet usage js requires to spend a lot more time on things not connected with research. Or am i dumb and Internet access can be turned on while using RTX 6000?</p>",
+      "depth": 0,
+      "first": true,
+      "id": 687119,
+      "postDate": "2026-04-02T09:15:40.976Z"
+    },
+    {
+      "authorName": "CPMP",
+      "content": "<p>What are the things not connected with research you would not do if you had internet access?</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3433891,
+      "postDate": "2026-04-02T09:20:50.700Z"
+    },
+    {
+      "authorName": "Darren Amadeus Martin",
+      "content": "<p>I understand that disabling internet is a way to prevent GPU abuse or exploit that is unrelated to the competition. However, with internet access, pip installations can be much easier done without having to create multiple notebooks or wheels and it would definitely make researches or trial and error faster. </p>",
+      "depth": 1,
+      "first": false,
+      "id": 3433947,
+      "postDate": "2026-04-02T11:28:33.397Z"
+    },
+    {
+      "authorName": "CPMP",
+      "content": "<p>when running notebooks before submitting you can allow internet access ofc. When you submit, or save for submission, with internet access disabled, then you can just put your pip installs as indicated in this screenshot. Just click on the dots at the right of the submit button, click on \"install dependencies\", and put all your pip install commands there. More info: <a href=\"https://www.kaggle.com/docs/notebooks#modifying-a-notebook-specific-environment\" target=\"_blank\">https://www.kaggle.com/docs/notebooks#modifying-a-notebook-specific-environment</a></p>\n<p><img src=\"https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F75976%2Ff3148ed096e177604b322416d6caecb6%2FScreenshot%202026-04-02%20at%2013-42-25%20Kaggle%20Notebook%20Editor.png?generation=1775130229811286&amp;alt=media\" alt=\"\"></p>\n<p><img src=\"https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F75976%2F230f3f8026ee43a9f757f5755e32404a%2FScreenshot%202026-04-02%20at%2013-45-42%20Kaggle%20Notebook%20Editor.png?generation=1775130373656759&amp;alt=media\" alt=\"\"></p>",
+      "depth": 2,
+      "first": false,
+      "id": 3433967,
+      "postDate": "2026-04-02T11:46:41.117Z",
+      "votes": 1
+    },
+    {
+      "authorName": "badwolfe",
+      "content": "<p>This does not work, it still fails. \nError:</p>\n<p>Session is starting…\nRequirement already satisfied: wandb in /usr/local/lib/python3.12/dist-packages (0.25.0)\nWARNING: Retrying (Retry(total=4, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError(': Failed to establish a new connection: [Errno -3] Temporary failure in name resolution')': /simple/unsloth/</p>",
+      "depth": 2,
+      "first": false,
+      "id": 3438373,
+      "postDate": "2026-04-09T02:30:11.437Z"
+    }
+  ],
+  "text_sha256": "559237d8ce9964bd916cf083e16a0b3d2aa47c1fc5f62409de5a1e96848edda0",
+  "topic": {
+    "authorName": "[RU] Evgeniy Kamyshan (sharing)",
+    "authorUrl": "https://www.kaggle.com/svo1488zov",
+    "commentCount": 4,
+    "content": "<p>I don't understand what the point of banning Internet access here. I'd understand if you had to send submissions with solved tasks, it'd be fair, but here you need to send an exact LoRA adapter of the exact model, prohibiting Internet usage js requires to spend a lot more time on things not connected with research. Or am i dumb and Internet access can be turned on while using RTX 6000?</p>",
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 687119,
+    "postDate": "2026-04-02T09:15:40.976Z",
+    "title": "WHY is internet access banned if free GPU provided by competition is used?",
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/687119"
+  },
+  "topic_id": 687119,
+  "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/687119"
+}

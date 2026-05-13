@@ -1,0 +1,64 @@
+{
+  "fetched_at_utc": "2026-05-13T15:47:29.109093+00:00",
+  "full_text": "[message_id=697746 author=Harshita Kumari first=True]\nI have tried cot finetuning, generated custom reasoning from deepseek/qwen-30b model for bit manipulation and other complex tasks it generated reasoning but it was not complete but still i collected all of them and finetuned but the score is .52 which is very low\nhttps://www.kaggle.com/code/harshitakumari256/notebook633554d240\n\n[message_id=3455320 author=Manish Swami first=False]\ntarget_modules = [\n'out_proj', 'v_proj', 'q_proj', 'down_proj', 'embed_tokens',\n'k_proj', 'in_proj', 'up_proj', 'o_proj', 'lm_head', 'gate_proj'\n]\nremove embed_tokens , gate_proj and lm_head and then try again\n\n[message_id=3455485 author=Harshita Kumari first=False]\nstill the same score\n\n[message_id=3455722 author=Manish Swami first=False]\nThen its is CoT improve it\n\n[message_id=3456628 author=SHUBHAM KUMAR first=False]\ncheck you token length for input if its too low the cot will get cut off before reaching the boxed answer!!",
+  "message_count_observed": 5,
+  "messages": [
+    {
+      "authorName": "Harshita Kumari",
+      "content": "<p>I have tried cot finetuning, generated custom reasoning from deepseek/qwen-30b model for bit manipulation and other complex tasks it generated reasoning but it was not complete but still i collected all of them and finetuned but the score is .52 which is very low</p>\n<p><a href=\"https://www.kaggle.com/code/harshitakumari256/notebook633554d240\" target=\"_blank\">https://www.kaggle.com/code/harshitakumari256/notebook633554d240</a></p>",
+      "depth": 0,
+      "first": true,
+      "id": 697746,
+      "postDate": "2026-05-07T05:33:53.469Z"
+    },
+    {
+      "authorName": "Manish Swami",
+      "content": "<p>target_modules = [\n    'out_proj', 'v_proj', 'q_proj', 'down_proj', 'embed_tokens',\n    'k_proj', 'in_proj', 'up_proj', 'o_proj', 'lm_head', 'gate_proj'\n]\nremove embed_tokens , gate_proj and lm_head and then try again </p>",
+      "depth": 0,
+      "first": false,
+      "id": 3455320,
+      "postDate": "2026-05-09T05:14:34.983Z",
+      "votes": 2
+    },
+    {
+      "authorName": "Harshita Kumari",
+      "content": "<p>still the same score</p>",
+      "depth": 1,
+      "first": false,
+      "id": 3455485,
+      "postDate": "2026-05-09T14:44:06.757Z"
+    },
+    {
+      "authorName": "Manish Swami",
+      "content": "<p>Then its is CoT improve it </p>",
+      "depth": 2,
+      "first": false,
+      "id": 3455722,
+      "postDate": "2026-05-10T06:03:14.747Z"
+    },
+    {
+      "authorName": "SHUBHAM KUMAR",
+      "content": "<p>check you token length for input if its too low the cot will get cut off before reaching the boxed answer!!</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3456628,
+      "postDate": "2026-05-12T10:08:54.407Z"
+    }
+  ],
+  "text_sha256": "3c91ad5fcd2f9f435b26907785fffaee7432be69a7905d4b4cc62a1fdcf38259",
+  "topic": {
+    "authorName": "Harshita Kumari",
+    "authorUrl": "https://www.kaggle.com/harshitakumari256",
+    "commentCount": 4,
+    "content": "<p>I have tried cot finetuning, generated custom reasoning from deepseek/qwen-30b model for bit manipulation and other complex tasks it generated reasoning but it was not complete but still i collected all of them and finetuned but the score is .52 which is very low</p>\n<p><a href=\"https://www.kaggle.com/code/harshitakumari256/notebook633554d240\" target=\"_blank\">https://www.kaggle.com/code/harshitakumari256/notebook633554d240</a></p>",
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 697746,
+    "postDate": "2026-05-07T05:33:53.469Z",
+    "title": "SCORE NOT IMPROVING EVEN WITH REASONING+ANSWER FINETUNING",
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/697746",
+    "votes": 2
+  },
+  "topic_id": 697746,
+  "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/697746"
+}

@@ -1,0 +1,48 @@
+{
+  "fetched_at_utc": "2026-05-13T15:40:44.316950+00:00",
+  "full_text": "[message_id=684459 author=Anton Kratz first=True]\nI made a public notebook where I try to just predict test.csv: https://www.kaggle.com/code/antonkratz/notebookdf0d07f28b \nI reach about 79 tokens/second. I believe that a GTX Blackwell 6000 should reach almost 2000 tokens/second.\nHow can I use vllm with the official Kaggle infrastructure? I tried many different ways and workarounds, it seems not possible to install it. How can we best make use of the GTX Blackwell 6000 at full speed? I am orders of magnitude off in the current setup. I believe that I am not the only one facing this.\n\n[message_id=3430112 author=Deval Mukherjee1 first=False]\nI tried a lot to do this, and I have no clue how to get vllm. I wasted like 20 hours of gpu time doing it. Please keep me posted\n\n[message_id=3430117 author=Deval Mukherjee1 first=False]\nTry this notebook : https://www.kaggle.com/code/luciankucera/more-tokens-doesn-t-help-massive-sft-ftw",
+  "message_count_observed": 3,
+  "messages": [
+    {
+      "authorName": "Anton Kratz",
+      "content": "<p>I made a public notebook where I try to just predict test.csv: <a href=\"https://www.kaggle.com/code/antonkratz/notebookdf0d07f28b\" target=\"_blank\">https://www.kaggle.com/code/antonkratz/notebookdf0d07f28b</a></p>\n<p>I reach about 79 tokens/second. I believe that a GTX Blackwell 6000 should reach almost 2000 tokens/second.</p>\n<p>How can I use vllm with the official Kaggle infrastructure? I tried many different ways and workarounds, it seems not possible to install it. How can we best make use of the GTX Blackwell 6000 at full speed? I am orders of magnitude off in the current setup. I believe that I am not the only one facing this.</p>",
+      "depth": 0,
+      "first": true,
+      "id": 684459,
+      "postDate": "2026-03-25T01:05:26.798Z"
+    },
+    {
+      "authorName": "Deval Mukherjee1",
+      "content": "<p>I tried a lot to do this, and I have no clue how to get vllm. I wasted like 20 hours of gpu time doing it. Please keep me posted </p>",
+      "depth": 0,
+      "first": false,
+      "id": 3430112,
+      "postDate": "2026-03-27T21:27:22.733Z"
+    },
+    {
+      "authorName": "Deval Mukherjee1",
+      "content": "<p>Try this notebook :<a href=\"https://www.kaggle.com/code/luciankucera/more-tokens-doesn-t-help-massive-sft-ftw\" target=\"_blank\">https://www.kaggle.com/code/luciankucera/more-tokens-doesn-t-help-massive-sft-ftw</a></p>",
+      "depth": 1,
+      "first": false,
+      "id": 3430117,
+      "postDate": "2026-03-27T21:34:49.983Z",
+      "votes": 1
+    }
+  ],
+  "text_sha256": "74031134641d112579325a7968e950ae0bb64ecf9be4b3324f451372532f36f1",
+  "topic": {
+    "authorName": "Anton Kratz",
+    "authorUrl": "https://www.kaggle.com/antonkratz",
+    "commentCount": 2,
+    "content": "<p>I made a public notebook where I try to just predict test.csv: <a href=\"https://www.kaggle.com/code/antonkratz/notebookdf0d07f28b\" target=\"_blank\">https://www.kaggle.com/code/antonkratz/notebookdf0d07f28b</a></p>\n<p>I reach about 79 tokens/second. I believe that a GTX Blackwell 6000 should reach almost 2000 tokens/second.</p>\n<p>How can I use vllm with the official Kaggle infrastructure? I tried many different ways and workarounds, it seems not possible to install it. How can we best make use of the GTX Blackwell 6000 at full speed? I am orders of magnitude off in the current setup. I believe that I am not the only one facing this.</p>",
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 684459,
+    "postDate": "2026-03-25T01:05:26.798Z",
+    "title": "How can I use vLLM to speed up test.csv inference on Kaggle?",
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/684459",
+    "votes": 6
+  },
+  "topic_id": 684459,
+  "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/684459"
+}
