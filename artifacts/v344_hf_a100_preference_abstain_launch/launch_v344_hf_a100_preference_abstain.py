@@ -62,7 +62,7 @@ OUTPUT_REPO = "felipesp1983/kg1-nemotron-lora-v344-pref-abstain-a100-v290ckpt6"
 MAX_STEPS = 2
 SAVE_EVERY_STEPS = 2
 EVAL_EVERY_STEPS = 2
-EVAL_MAX_EXAMPLES = 128
+EVAL_MAX_EXAMPLES = 8
 
 
 def load_v341_launcher() -> Any:
@@ -144,7 +144,10 @@ def patched_command_script() -> str:
         "export MAX_STEPS=8": f"export MAX_STEPS={MAX_STEPS}",
         "export SAVE_EVERY_STEPS=2": f"export SAVE_EVERY_STEPS={SAVE_EVERY_STEPS}",
         "export EVAL_EVERY_STEPS=2": f"export EVAL_EVERY_STEPS={EVAL_EVERY_STEPS}",
-        "export EVAL_MAX_EXAMPLES=96": f"export EVAL_MAX_EXAMPLES={EVAL_MAX_EXAMPLES}",
+        "export EVAL_MAX_EXAMPLES=96": (
+            f"export EVAL_MAX_EXAMPLES={EVAL_MAX_EXAMPLES}\n"
+            "export PREFERENCE_EVAL_PROGRESS_EVERY=2"
+        ),
     }
     for old, new in replacements.items():
         if old not in script:

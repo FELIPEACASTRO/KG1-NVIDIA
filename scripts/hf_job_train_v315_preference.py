@@ -250,6 +250,7 @@ def evaluate_preferences(
     family_totals: dict[str, int] = {}
     family_correct: dict[str, int] = {}
     micro = max(1, base.MICRO_BATCH_SIZE)
+    progress_every = max(1, int(os.environ.get("PREFERENCE_EVAL_PROGRESS_EVERY", "8")))
     for start in range(0, len(sample), micro):
         batch_pairs = sample[start : start + micro]
         chosen_items = [item["chosen"] for item in batch_pairs]
@@ -272,6 +273,13 @@ def evaluate_preferences(
             family_correct[family] = family_correct.get(family, 0) + int(bool(win))
             chosen_losses.append(float(c_loss))
             rejected_losses.append(float(r_loss))
+        if total == len(sample) or total % progress_every == 0:
+            print(
+                "preference_eval_progress "
+                f"rows={total}/{len(sample)} correct={correct} "
+                f"accuracy={correct / max(1, total):.4f}",
+                flush=True,
+            )
     model.train()
     return {
         "rows": total,

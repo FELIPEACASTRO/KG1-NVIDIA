@@ -19,7 +19,7 @@ As evidencias fortes reunidas hoje mostram que ha ganho possivel, mas o ganho co
 | V274/V275 solver/verifier | `196/315` | `60/155` | `136/160` | ganho real CPU, ainda nao LoRA puro |
 | V324+V329 solver/verifier integrado no V336A | `197/315` confirmado | `61/155` | `136/160` | ganho real CPU, ainda nao LoRA puro |
 | V343 solver/verifier expandido sobre baseline V290 | `199/315` confirmado | `63/155` | `136/160` | ganho real CPU, `7` ganhos, `0` perdas; ainda nao LoRA puro |
-| V344 dataset transfer + V340 hard-negative gate | assets validos | dataset cobre `7` regras | replay bit preservado | GPU bloqueada ate existir launcher preference/abstain real |
+| V344 dataset transfer + V340 hard-negative gate | assets validos | dataset cobre `7` regras | replay bit preservado | launcher preference/abstain criado; primeiro launch cancelado por FinOps antes de checkpoint |
 | V306/V302 full verifier local | `838/947` potencial | `60/155` | `146/160` | depende de verifier/postprocessor |
 | V335 LoRA mixed trace replay | `190/315` | `56/155` | `134/160` | falhou; cancelado por FinOps |
 | V338B LoRA minimal transfer weak eval | `190/315` | `56/155` | `134/160` | checkpoints 2 e 4 falharam; cancelado por FinOps |
@@ -31,6 +31,8 @@ Conclusao: a busca/documentacao gerou conhecimento util e ganho tecnico real. O 
 Atualizacao V338B: a queda de `eval_loss` tambem nao foi evidencia suficiente. O treino V338B caiu de `0.9057` para melhor `0.8996`, mas o weak eval dos checkpoints 2 e 4 ficou em `190/315`, `equation_transform=56/155`, `bit_manipulation=134/160`. Isso confirma que loss menor pode melhorar imitacao/formato sem mover as regras discretas que decidem ACC por familia.
 
 Atualizacao V343/V344: o ganho tecnico real subiu de `197/315` para `199/315`, com `equation_transform=63/155`, `bit_manipulation=136/160`, `7` ganhos e `0` perdas. Isso veio de regras CPU verificadas, nao de loss. O proximo HF so pode rodar se o script consumir explicitamente as preferencias/hard negatives e aplicar kill-switch por ACC no primeiro checkpoint.
+
+Atualizacao V344 HF FinOps: o primeiro launch A100 `felipesp1983/6a04fe603308d79117b8f2fb` foi cancelado antes de checkpoint. Nao houve erro de dados, adapter ou ambiente; o problema foi custo/tempo excessivo no `baseline_preference_eval_start max_examples=128`, sem progresso interno. Correcao obrigatoria: reduzir `EVAL_MAX_EXAMPLES` do smoke, imprimir `preference_eval_progress` durante a avaliacao e manter a regra de promocao somente por weak ACC.
 
 ## Metas
 
@@ -56,7 +58,7 @@ Meta para submit novo:
 | V274/V275 numeric postprocessor | `+4` equation, `0` perdas, `196/315` | regra/verifier e teacher |
 | V329 symbolic cryptarithm | `+1` equation adicional projetado, `0` perdas | regra/verifier e teacher |
 | V343 numeric/symbolic expansion | `+7` equation contra V290, `199/315`, `0` perdas | fonte primaria para transfer dataset V344 |
-| V344/V340 hard-negative gate | dados validos, mas GPU bloqueada sem preference/abstain launcher | liberar apenas treino que use ACC gate, nao SFT comum |
+| V344/V340 hard-negative gate | dados validos; launcher preference/abstain existe; primeiro launch cancelado por eval interna cara | liberar apenas smoke barato com progresso e ACC gate, nao SFT comum |
 | Tong Hui Kang bit solver | `1364/1602` train, mas `+1/-1` no weak | teacher/taxonomia, nao override direto |
 | `equation-solver-swap-v1` | classes uteis, mas overlap com gates | taxonomia/fixture sintetico verificado |
 | Discussions `690307`, `688461` | bit-pair/bitsum/stride e boolean gate taxonomy | implementar CPU bit gate |
@@ -173,7 +175,7 @@ Status 2026-05-13:
   - hashes: train `cab6b8370f2208c3e3fa954527967683be06639d7c556ae7697077d1d2bf8e03`, val `a2df22315cbd837d6b15c9ff646d76fb7b8d8e3930485ac0b02677b9ed9c87cc`;
   - anti-leakage: `id_overlap=0`, `prompt_overlap=0`;
   - V286 tokenization gate passou com `prompt_truncation_rate=0.0`, `completion_tokens_dropped=0`, `fallback_masks=0`.
-- V340 hard-negative gate sobre V344 passou nos assets, mas bloqueou GPU porque ainda falta launcher de preference/abstain real.
+- V340 hard-negative gate sobre V344 passou nos assets. A liberacao GPU exige launcher de preference/abstain real e smoke curto; SFT comum segue bloqueado.
 - Upload HF V344 concluido para `felipesp1983/kg1-nemotron-training`, path `data/v344_v343_minimal_transfer/20260513T_minimal_transfer_v343`, commit `6df9a5c7f997f4b0da61fa9a1eb7871449a77d7e`.
 - Launcher V344 criado em `artifacts/v344_hf_a100_preference_abstain_launch/launch_v344_hf_a100_preference_abstain.py`.
 - V340 reexecutado com o launcher V344 passou e liberou apenas smoke curto:
@@ -182,6 +184,7 @@ Status 2026-05-13:
   - `hf_gpu_allowed=True`;
   - limite: `MAX_STEPS=2`, checkpoint unico no step 2, kill-switch por weak ACC.
 - Debug local do launcher passou em `a100-large`, custo `0.041667/min`, imagem `nvcr.io/nvidia/nemo:25.11.nemotron_3_nano`, dados/hashes V344 corretos.
+- Primeiro launch HF A100 V344 `felipesp1983/6a04fe603308d79117b8f2fb` foi cancelado por FinOps antes de checkpoint: ficou sem progresso apos `baseline_preference_eval_start max_examples=128`. Correcao aplicada: `EVAL_MAX_EXAMPLES=8` para smoke e logs `preference_eval_progress` durante a avaliacao.
 
 ### 4. V338 - Tiny LoRA absorption smoke
 
