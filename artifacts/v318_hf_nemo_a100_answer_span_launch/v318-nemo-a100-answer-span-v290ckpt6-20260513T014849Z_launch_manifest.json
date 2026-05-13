@@ -1,0 +1,54 @@
+{
+  "branch": "v230-v226-complementarity",
+  "dataset": {
+    "data_repo": "felipesp1983/kg1-nemotron-training",
+    "dataset_upload_commit": "41b8afa26ed15ec65a842e00fd0de059fe105526",
+    "train_file": "data/v304_solver_trace_distill/20260512T1430Z/v304_solver_trace_distill_train.jsonl",
+    "train_rows": 12822,
+    "train_sha256": "7935ff999cdd8318de67538922de3651170c59baa2664a10beac3334dfcf9082",
+    "val_file": "data/v304_solver_trace_distill/20260512T1430Z/v304_solver_trace_distill_val.jsonl",
+    "val_rows": 969,
+    "val_sha256": "2b06224afe035c5085798f4a4be27e764ffaebde3ff7eee11c558c0cd5bdd29d"
+  },
+  "expected_commit": "f5ba7b3a6ddaee8489cbdd1d175b15ccaaebf966",
+  "flavor": "a100-large",
+  "generated_at_utc": "2026-05-13T01:48:49.817075+00:00",
+  "hardware": {
+    "accelerator_model": "A100",
+    "accelerator_quantity": "1",
+    "accelerator_vram": "80 GB",
+    "cpu": "12 vCPU",
+    "name": "a100-large",
+    "pretty_name": "Nvidia A100 - large",
+    "ram": "142 GB",
+    "unit_cost_usd": 0.041667,
+    "unit_label": "minute"
+  },
+  "image": "nvcr.io/nvidia/nemo:25.11.nemotron_3_nano",
+  "init_adapter": {
+    "repo": "felipesp1983/kg1-nemotron-lora-v290-rank19-micro-patch-smoke",
+    "subfolder": "checkpoint-6"
+  },
+  "job_id": "6a03d8bf72518a06598ffd5c",
+  "job_status": "RUNNING",
+  "job_url": "https://huggingface.co/jobs/felipesp1983/6a03d8bf72518a06598ffd5c",
+  "namespace": "felipesp1983",
+  "next_action": "Monitor every 30 seconds; if A100 OOMs, relaunch the same NeMo image on H200.",
+  "output_repo": "felipesp1983/kg1-nemotron-lora-v318-nemo-a100-answer-span-v290ckpt6",
+  "recipe": {
+    "answer_span_loss_weight": "5.0",
+    "answer_span_min_weighted_tokens": "1000",
+    "eval_every_steps": 2,
+    "eval_max_examples": 256,
+    "final_learning_rate": "3e-9",
+    "image_dependency_strategy": "Use NVIDIA official Nemotron 3 Nano image; do not build causal-conv1d/mamba-ssm on paid GPU.",
+    "learning_rate": "1.2e-8",
+    "max_steps": 12,
+    "objective": "answer-span weighted distillation of V306/V304 solver signal with bit keeper replay",
+    "promotion_gate": "reject if bit<135; inspect only if bit>=136 and equation>56 or total>=193",
+    "save_every_steps": 2,
+    "trainable_lora_modules": "lm_head,up_proj,down_proj"
+  },
+  "run_id": "v318-nemo-a100-answer-span-v290ckpt6-20260513T014849Z",
+  "version": "v318_answer_span_weighted_distill_from_v290_checkpoint6_nemo_a100"
+}
