@@ -5841,6 +5841,18 @@ Atualizacao FinOps:
   - reduzir `EVAL_MAX_EXAMPLES` de `256` para `64`;
   - reduzir eval/checkpoint de cada `2` steps para cada `6` steps;
   - manter A100 primeiro; H200 fica fallback se A100 continuar lenta/OOM.
+- V319 resultado observado:
+  - treino A100 completou em `https://huggingface.co/jobs/felipesp1983/6a03e0667618f125ee2b7aba`;
+  - weak eval H200 completou em `https://huggingface.co/jobs/felipesp1983/6a03e69f72518a06598ffde2`;
+  - `checkpoint-12`: `191/315`, `equation_transform=56/155`, `bit_manipulation=135/160`, trunc `0`;
+  - `final`: `190/315`, `equation_transform=56/155`, `bit_manipulation=134/160`, trunc `0`;
+  - decisao: rejeitar para full/package/submit, pois nao supera V290 checkpoint-6 (`192/315`, `eq=56`, `bit=136`).
+- V320 aprovado como proximo smoke agressivo, mas de menor raio de dano:
+  - launcher `artifacts/v320_hf_nemo_a100_v312_answer_span_lmhead_launch/launch_v320_hf_nemo_a100_v312_answer_span_lmhead.py`;
+  - dataset V312 pequeno/focado nas classes V306, nao o V304 amplo;
+  - treinar somente `lm_head` para tentar mover tokens finais sem reescrever MLP/attention;
+  - `ANSWER_SPAN_LOSS_WEIGHT=12`, `LR=8e-8 -> 2e-8`, `MAX_STEPS=8`, checkpoints a cada `2`;
+  - gate: rejeitar se `total<192` ou `bit<136`; so inspecionar se `equation_transform>56` ou `total>=193`; promover apenas com `equation_transform>=60`, `bit>=136`, sem regressao/truncamento.
 - Itens rejeitados pelo quintuple-check:
   - conversao literal de `postprocessor/verifier` para LoRA;
   - usar postprocessor em inferencia e chamar de LoRA puro;
