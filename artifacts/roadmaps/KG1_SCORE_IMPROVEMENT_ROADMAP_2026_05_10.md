@@ -5970,3 +5970,48 @@ Objetivo: testar um sinal novo, nao apenas outra variacao pequena de LR/modulos.
   - `ANSWER_SPAN_LOSS_WEIGHT=9.0`;
   - pesos fortes para `v51_equation_solver_cot_compact`, `v51_bit_solver_cot_compact`, `v312_verifier_synthetic`, `v304_solver_trace_*` e patches numericos V274.
 - Gate de promocao permanece estrito: rejeitar se `total<192` ou `bit<136`; inspecionar somente se `equation_transform>56` ou `total>=193`; promover para full/package/submission somente com `total>=193`, `equation_transform>=60`, `bit_manipulation>=136`, truncation sem piora e sem regressao no full.
+- Resultado V322 weak eval H200 (`https://huggingface.co/jobs/felipesp1983/6a043dca72518a0659900371`):
+  - `checkpoint-4`: `189/315`, `equation_transform=56/155`, `bit_manipulation=133/160`, truncation `1`.
+  - `checkpoint-8`: `191/315`, `equation_transform=56/155`, `bit_manipulation=135/160`, truncation `0`.
+  - `checkpoint-12`: `189/315`, `equation_transform=56/155`, `bit_manipulation=133/160`, truncation `1`.
+  - `checkpoint-16`: `189/315`, `equation_transform=56/155`, `bit_manipulation=133/160`, truncation `1`.
+  - `final`: `190/315`, `equation_transform=56/155`, `bit_manipulation=134/160`, truncation `1`.
+- Decisao: V322 rejeitado para full/package/submit. O sinal V51 filtrado e amplo nao elevou `equation_transform` acima de `56` e reduziu `bit_manipulation` frente ao baseline V290/V321 protegido (`192/315`, `equation=56`, `bit=136`, truncation `0`).
+- Proxima direcao: nao gastar novo H200 em mais steps do mesmo mix V51/V304/V312. O proximo smoke deve usar objetivo mais estreito e verificavel, com `bit` protegido por replay forte, para tentar mover apenas os tokens finais dos subtipos numericos/simbolicos de `equation_transform` sem destruir o bit gate.
+
+### Atualizacao OpenRouter 2026-05-13 - double check externo
+
+Fonte auditada:
+
+- Arquivo: `C:\Users\davis\Downloads\OpenRouter Chat Wed May 13 2026.json`.
+- SHA256: `5694ca3c46c5ecc6b5f2ed0040ba1c6763c7208c285f29df99ef563800372b56`.
+- Export title: `Voce e um especialista senior em Kaggle,`.
+- Estrutura observada: `11` character/model slots e `44` blocos longos de texto acima de `200` caracteres.
+
+Conclusao do double check:
+
+- O arquivo nao traz ganho adapter-only novo ja medido. Ele reforca que o melhor estado LoRA/deployable segue `192/315`, `equation_transform=56/155`, `bit_manipulation=136/160`, truncation `0`.
+- O ganho comprovado `196/315`, `equation_transform=60/155`, `bit_manipulation=136/160` continua vindo do postprocessor/verifier V274/V275, nao de LoRA puro.
+- O potencial full local `823/947 -> 838/947`, com `bit_manipulation 135->146` e `equation_transform 56->60`, continua dependente de solver/verifier/postprocessor.
+- As respostas externas convergem no mesmo diagnostico: `equation_transform` e problema de sintese/verificacao por exemplos, nao de treino generico; `bit_manipulation` exige raciocinio bit-pair/bitsum/stride, nao enumeracao cega de expressoes.
+
+Achados acionaveis:
+
+- Rejeitar novo SFT amplo ou "mais epochs" sem dado novo. V313/V315/V319/V320/V321/V322/V303 ja mostram teto persistente em `equation_transform=56` e queda frequente de `bit_manipulation` para `133-135`.
+- Priorizar um gate CPU V324/V325 antes de qualquer HF GPU. O gate deve testar os `99` misses de `equation_transform` contra uma DSL expandida com concatenacao, reverse concatenation, soma, subtracao, multiplicacao, `+1/-1`, divisao, modulo, padroes simbolicos/pontuacao e candidatos inspirados em `tonghuikang/nemotron/reasoners/equation_numeric.py`.
+- Promover para HF somente se o gate CPU encontrar pelo menos `+4` em `equation_transform`, `0` perdas verificadas, `bit_manipulation>=136/160` e truncation sem regressao.
+- Para `bit_manipulation`, completar primeiro o algoritmo CPU bit-pair/bitsum/stride inspirado na discussao Kaggle 690307 e no repositorio `tonghuikang/nemotron`. So gerar novo dataset LoRA se os traces deterministico-curtos cobrirem casos que V304/V303 nao cobriram.
+- Para LoRA, usar apenas dados verificados com hard negatives: resposta solver correta, resposta baseline errada e explicacao curta/mecanica. Manter prompt/template oficial, replay de bit forte e kill-switch no primeiro checkpoint se `bit<136` ou `equation_transform` continuar em `56`.
+
+Fontes externas classificadas:
+
+- `https://github.com/tonghuikang/nemotron`: P0 como referencia de reasoners, corpus, metricas e treino; ja auditado antes e reconfirmado pelo export.
+- `https://github.com/tonghuikang/nemotron/blob/master/reasoners/equation_numeric.py`: P0 para ampliar DSL numerica de `equation_numeric_operator`, com candidatos como concatenation, reverse concatenation, arithmetic, division/modulo e variantes raras.
+- `https://huggingface.co/datasets/nvidia/Nemotron-RL-ReasoningGym-v1`: P1 para fixtures/probes procedurais verificaveis; nao autoriza treino direto sem anti-leakage, family mapping e tokenization gate.
+- `https://huggingface.co/datasets/codelion/logical-puzzles-cot`: P2 como referencia de CoT verificado e estilo complementar; nao promover para treino sem triagem de dominio, licenca, overlap e ganho mensuravel.
+- `andy279/nemotron-reasoning-challenge-raw-traces`: P0 se o acesso humano for liberado; enquanto bloqueado por permissao/review, nao gastar GPU nessa rota.
+
+Decisao:
+
+- O roadmap passa a tratar V324/V325 CPU solver-gate como proximo passo obrigatorio antes de qualquer novo treino HF.
+- Nenhum novo submit deve ser feito com base nesse OpenRouter export isoladamente. Submit so volta a ser permitido com ganho medido em weak/full gate e sem regressao por familia.
