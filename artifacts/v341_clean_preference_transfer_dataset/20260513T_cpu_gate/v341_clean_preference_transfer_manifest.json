@@ -1,0 +1,128 @@
+{
+  "cleaning_policy": {
+    "kept": "format negatives and hard negatives with a different boxed final answer",
+    "reason": "same-box hard negatives provide contradictory preference signal and were caught by V340",
+    "removed": "hard_negative_equation_near_miss rows where rejected boxed answer equals chosen boxed answer"
+  },
+  "generated_at_utc": "2026-05-13T21:03:53.009103+00:00",
+  "label": "v341_clean_preference_transfer",
+  "next_gate": "Run V340 with --allow-derived-preferences using these cleaned files.",
+  "outputs": {
+    "manifest_json": "artifacts\\v341_clean_preference_transfer_dataset\\20260513T_cpu_gate\\v341_clean_preference_transfer_manifest.json",
+    "preferences_train_jsonl": "artifacts\\v341_clean_preference_transfer_dataset\\20260513T_cpu_gate\\v341_clean_preference_transfer_preferences_train.jsonl",
+    "preferences_train_sha256": "217068058e723063178c00e5b9de697a1a669839e85abdb86154663543a71ae2",
+    "preferences_val_jsonl": "artifacts\\v341_clean_preference_transfer_dataset\\20260513T_cpu_gate\\v341_clean_preference_transfer_preferences_val.jsonl",
+    "preferences_val_sha256": "6aa1bfcd795a6bb11fa50551067e0744159a697331f2fff3bdd9084ce912cd8a"
+  },
+  "schema_version": "kg1_v341_clean_preference_transfer_dataset_v1",
+  "source": {
+    "input_preferences_train_jsonl": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v337d_minimal_transfer_dataset\\20260513T_cpu_gate\\v337d_minimal_transfer_preferences_train.jsonl",
+    "input_preferences_train_sha256": "ae9d0888ea3ec6471dda5d22c753a7cc8fdd340cb5d0d6cd74b378615a7202c7",
+    "input_preferences_val_jsonl": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v337d_minimal_transfer_dataset\\20260513T_cpu_gate\\v337d_minimal_transfer_preferences_val.jsonl",
+    "input_preferences_val_sha256": "6862c97ff44579a1f4441d5a4531b8217afbd9386c49d8a2d873cf457bfd6e5c",
+    "v337d_manifest_json": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v337d_minimal_transfer_dataset\\20260513T_cpu_gate\\v337d_minimal_transfer_manifest.json",
+    "v337d_manifest_sha256": "6ccd686686b4022247393816fb502af63b4a6567b41f28d25c9803f8dc067ca6",
+    "v337d_train_sha256": "df67214d3fdbb74ada96a9fc24609db5a3f5f6dc1d26dea5d4449eb39eb4147c",
+    "v337d_val_sha256": "50d4ee05a377ed4e111d27f9de0e1109eb0c09bfe01a9bce0717b63d704dbf80"
+  },
+  "summary": {
+    "train": {
+      "input_rows": 2880,
+      "kept_negative_type_counts": {
+        "format_negative_multiple_boxes": 720,
+        "format_negative_no_box": 720,
+        "format_negative_trailing_text": 720,
+        "hard_negative_equation_near_miss": 683
+      },
+      "kept_rows": 2843,
+      "negative_type_counts": {
+        "format_negative_multiple_boxes": 720,
+        "format_negative_no_box": 720,
+        "format_negative_trailing_text": 720,
+        "hard_negative_equation_near_miss": 720
+      },
+      "removed_id_examples": [
+        "v325_train_equation_02_00080_hard_negative_equation_near_miss",
+        "v325_train_equation_00_00107_hard_negative_equation_near_miss",
+        "v325_train_equation_02_00069_hard_negative_equation_near_miss",
+        "v325_train_equation_01_00134_hard_negative_equation_near_miss",
+        "v325_train_equation_02_00089_hard_negative_equation_near_miss",
+        "v325_train_equation_02_00158_hard_negative_equation_near_miss",
+        "v325_train_equation_01_00058_hard_negative_equation_near_miss",
+        "v325_train_equation_02_00121_hard_negative_equation_near_miss",
+        "v325_train_equation_01_00100_hard_negative_equation_near_miss",
+        "v325_train_equation_02_00103_hard_negative_equation_near_miss",
+        "v325_train_equation_02_00005_hard_negative_equation_near_miss",
+        "v325_train_equation_02_00140_hard_negative_equation_near_miss",
+        "v325_train_equation_00_00149_hard_negative_equation_near_miss",
+        "v325_train_equation_02_00052_hard_negative_equation_near_miss",
+        "v325_train_equation_02_00010_hard_negative_equation_near_miss",
+        "v325_train_equation_02_00060_hard_negative_equation_near_miss",
+        "v325_train_equation_02_00087_hard_negative_equation_near_miss",
+        "v325_train_equation_01_00146_hard_negative_equation_near_miss",
+        "v325_train_equation_02_00026_hard_negative_equation_near_miss",
+        "v325_train_equation_02_00126_hard_negative_equation_near_miss",
+        "v325_train_equation_00_00005_hard_negative_equation_near_miss",
+        "v325_train_equation_01_00040_hard_negative_equation_near_miss",
+        "v325_train_equation_02_00155_hard_negative_equation_near_miss",
+        "v325_train_equation_02_00051_hard_negative_equation_near_miss",
+        "v325_train_equation_02_00031_hard_negative_equation_near_miss",
+        "v325_train_equation_00_00009_hard_negative_equation_near_miss",
+        "v325_train_equation_00_00097_hard_negative_equation_near_miss",
+        "v325_train_equation_02_00004_hard_negative_equation_near_miss",
+        "v325_train_equation_00_00069_hard_negative_equation_near_miss",
+        "v325_train_equation_01_00121_hard_negative_equation_near_miss",
+        "v325_train_equation_01_00150_hard_negative_equation_near_miss",
+        "v325_train_equation_01_00029_hard_negative_equation_near_miss",
+        "v325_train_equation_02_00056_hard_negative_equation_near_miss",
+        "v325_train_equation_01_00021_hard_negative_equation_near_miss",
+        "v325_train_equation_00_00079_hard_negative_equation_near_miss",
+        "v325_train_equation_00_00049_hard_negative_equation_near_miss",
+        "v325_train_equation_01_00017_hard_negative_equation_near_miss"
+      ],
+      "removed_negative_type_counts": {
+        "hard_negative_equation_near_miss": 37
+      },
+      "removed_rows": 37,
+      "rule_class_counts": {
+        "add_direct_over_model_add_variant": 621,
+        "colon_absdiff_unreverse_same_len": 630,
+        "minus_signed_opposite_sign_guarded": 632,
+        "symbolic_cryptarithm_single_operator_digits_mul": 960
+      }
+    },
+    "validation": {
+      "input_rows": 720,
+      "kept_negative_type_counts": {
+        "format_negative_multiple_boxes": 180,
+        "format_negative_no_box": 180,
+        "format_negative_trailing_text": 180,
+        "hard_negative_equation_near_miss": 175
+      },
+      "kept_rows": 715,
+      "negative_type_counts": {
+        "format_negative_multiple_boxes": 180,
+        "format_negative_no_box": 180,
+        "format_negative_trailing_text": 180,
+        "hard_negative_equation_near_miss": 180
+      },
+      "removed_id_examples": [
+        "v325_validation_equation_00_00035_hard_negative_equation_near_miss",
+        "v325_validation_equation_01_00010_hard_negative_equation_near_miss",
+        "v325_validation_equation_02_00027_hard_negative_equation_near_miss",
+        "v325_validation_equation_01_00003_hard_negative_equation_near_miss",
+        "v325_validation_equation_01_00008_hard_negative_equation_near_miss"
+      ],
+      "removed_negative_type_counts": {
+        "hard_negative_equation_near_miss": 5
+      },
+      "removed_rows": 5,
+      "rule_class_counts": {
+        "add_direct_over_model_add_variant": 159,
+        "colon_absdiff_unreverse_same_len": 157,
+        "minus_signed_opposite_sign_guarded": 159,
+        "symbolic_cryptarithm_single_operator_digits_mul": 240
+      }
+    }
+  }
+}

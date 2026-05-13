@@ -397,11 +397,17 @@ def validate_rows(
 
 def equation_near_miss(answer: str) -> str:
     text = str(answer)
+    candidates: list[str] = []
     if len(text) > 1:
-        return text[:-1]
+        candidates.append(text[:-1])
+        candidates.append(text[::-1])
     if text.isdigit():
-        return str((int(text) + 1) % 10)
-    return text + "?"
+        candidates.append(str((int(text) + 1) % 10))
+    candidates.append(text + "?")
+    for candidate in candidates:
+        if candidate != text:
+            return candidate
+    return text + "x"
 
 
 def format_negative(answer: str, mode: str) -> str:
@@ -456,8 +462,12 @@ def validate_preferences(rows: list[dict[str, Any]], label: str) -> dict[str, An
             bad.append(f"{row_id}:missing_field")
         if chosen == rejected:
             bad.append(f"{row_id}:chosen_equals_rejected")
-        if len(re.findall(r"\\boxed\{([^{}]*)\}", chosen)) != 1:
+        chosen_boxes = re.findall(r"\\boxed\{([^{}]*)\}", chosen)
+        rejected_boxes = re.findall(r"\\boxed\{([^{}]*)\}", rejected)
+        if len(chosen_boxes) != 1:
             bad.append(f"{row_id}:chosen_box_count")
+        if negative_type.startswith("hard_negative_") and len(rejected_boxes) == 1 and chosen_boxes == rejected_boxes:
+            bad.append(f"{row_id}:hard_negative_same_box")
         negative_counts[negative_type] += 1
     if bad:
         raise RuntimeError(f"{label} preference validation failed: " + json.dumps(bad[:20], ensure_ascii=False))

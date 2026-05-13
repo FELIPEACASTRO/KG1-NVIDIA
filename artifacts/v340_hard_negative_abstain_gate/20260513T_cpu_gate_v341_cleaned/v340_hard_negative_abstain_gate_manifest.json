@@ -1,0 +1,290 @@
+{
+  "assets_valid": true,
+  "baseline": {
+    "bit_manipulation_correct": 136,
+    "correct": 192,
+    "equation_transform_correct": 56
+  },
+  "candidate_trace": {
+    "accepted_ids": [
+      "274def88",
+      "7688e06e",
+      "99d6a3b5",
+      "c5b058d6",
+      "d1bd7478"
+    ],
+    "accepted_rows": 5,
+    "accepted_rule_classes": {
+      "symbolic_cryptarithm_single_operator_digits_mul": 1,
+      "v274_guarded_numeric_add_direct_over_model_add_variant": 1,
+      "v274_guarded_numeric_colon_absdiff_unreverse_same_len": 1,
+      "v274_guarded_numeric_minus_signed_opposite_sign_guarded": 2
+    },
+    "accepted_subtypes": {
+      "equation_numeric_operator": 4,
+      "equation_symbolic_punct": 1
+    },
+    "gain_rows": 5,
+    "loss_rows": 0,
+    "rows": 5,
+    "sha256": "46ab6f26f119d6224dbb650022fa47fc5ecaf5f1a61bc46a6319c3683bdf6fc9"
+  },
+  "decision": {
+    "decision": "v340_preference_assets_valid_preference_trainer_required_smoke_allowed",
+    "hf_gpu_allowed": true,
+    "next_action": "Run a tiny preference-training smoke with strict first-checkpoint FinOps kill-switch.",
+    "preference_training_allowed": true,
+    "reason": "CPU assets passed and a preference trainer launcher exists. Only a tiny preference smoke is allowed; first-checkpoint kill-switch remains total>192, equation>56, bit>=136."
+  },
+  "generated_at_utc": "2026-05-13T21:04:35.506545+00:00",
+  "inputs": {
+    "allow_derived_preferences": true,
+    "candidate_trace_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v336_integrated_no_loss_solver_gate\\20260513T_cpu_gate\\v336a_integrated_no_loss_candidate_trace.csv",
+    "candidate_trace_sha256": "46ab6f26f119d6224dbb650022fa47fc5ecaf5f1a61bc46a6319c3683bdf6fc9",
+    "min_hard_negative_train": 650,
+    "min_hard_negative_val": 170,
+    "preference_launcher": "scripts\\hf_job_train_v315_preference.py",
+    "preference_launcher_exists": true,
+    "preferences_train_jsonl": "artifacts\\v341_clean_preference_transfer_dataset\\20260513T_cpu_gate\\v341_clean_preference_transfer_preferences_train.jsonl",
+    "preferences_train_sha256": "217068058e723063178c00e5b9de697a1a669839e85abdb86154663543a71ae2",
+    "preferences_val_jsonl": "artifacts\\v341_clean_preference_transfer_dataset\\20260513T_cpu_gate\\v341_clean_preference_transfer_preferences_val.jsonl",
+    "preferences_val_sha256": "6aa1bfcd795a6bb11fa50551067e0744159a697331f2fff3bdd9084ce912cd8a",
+    "tokenization_manifest_json": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v337d_minimal_transfer_dataset\\20260513T_cpu_gate\\tokenization_gate_real\\v286_generic_tokenization_gate_manifest.json",
+    "tokenization_manifest_sha256": "c7eb98ccee46306d3451b44cb583c8ee7073b40f55c48ff12b91468e99fa60e2",
+    "train_jsonl": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v337d_minimal_transfer_dataset\\20260513T_cpu_gate\\v337d_minimal_transfer_train.jsonl",
+    "train_sha256": "df67214d3fdbb74ada96a9fc24609db5a3f5f6dc1d26dea5d4449eb39eb4147c",
+    "v336a_manifest_json": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v336_integrated_no_loss_solver_gate\\20260513T_cpu_gate\\v336a_integrated_no_loss_solver_gate_manifest.json",
+    "v336a_manifest_sha256": "88a2be9340e91c59976c7d418a757f56fa0beb9a46cae90d39cd4a01bfdcb16e",
+    "v337d_manifest_json": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v337d_minimal_transfer_dataset\\20260513T_cpu_gate\\v337d_minimal_transfer_manifest.json",
+    "v337d_manifest_sha256": "6ccd686686b4022247393816fb502af63b4a6567b41f28d25c9803f8dc067ca6",
+    "val_jsonl": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v337d_minimal_transfer_dataset\\20260513T_cpu_gate\\v337d_minimal_transfer_val.jsonl",
+    "val_sha256": "50d4ee05a377ed4e111d27f9de0e1109eb0c09bfe01a9bce0717b63d704dbf80"
+  },
+  "outputs": {
+    "manifest_json": "artifacts\\v340_hard_negative_abstain_gate\\20260513T_cpu_gate_v341_cleaned\\v340_hard_negative_abstain_gate_manifest.json",
+    "summary_md": "artifacts\\v340_hard_negative_abstain_gate\\20260513T_cpu_gate_v341_cleaned\\v340_hard_negative_abstain_gate_summary.md"
+  },
+  "preference_audit": {
+    "train": {
+      "chosen_box_count_distribution": {
+        "1": 2843
+      },
+      "family_counts": {
+        "equation_transform": 2843
+      },
+      "format_negative_count": 2160,
+      "hard_negative_same_box_count": 0,
+      "hard_negative_wrong_box_count": 683,
+      "issue_count": 0,
+      "issue_examples": [],
+      "negative_type_counts": {
+        "format_negative_multiple_boxes": 720,
+        "format_negative_no_box": 720,
+        "format_negative_trailing_text": 720,
+        "hard_negative_equation_near_miss": 683
+      },
+      "rejected_box_count_distribution": {
+        "0": 720,
+        "1": 1403,
+        "2": 720
+      },
+      "rows": 2843,
+      "rule_class_counts": {
+        "add_direct_over_model_add_variant": 621,
+        "colon_absdiff_unreverse_same_len": 630,
+        "minus_signed_opposite_sign_guarded": 632,
+        "symbolic_cryptarithm_single_operator_digits_mul": 960
+      },
+      "sha256": "217068058e723063178c00e5b9de697a1a669839e85abdb86154663543a71ae2",
+      "source_counts": {
+        "v325_equation_no_loss_distill": 1883,
+        "v330_symbolic_cryptarithm_distill": 960
+      },
+      "unique_ids": 2843,
+      "unique_source_rows": 720
+    },
+    "validation": {
+      "chosen_box_count_distribution": {
+        "1": 715
+      },
+      "family_counts": {
+        "equation_transform": 715
+      },
+      "format_negative_count": 540,
+      "hard_negative_same_box_count": 0,
+      "hard_negative_wrong_box_count": 175,
+      "issue_count": 0,
+      "issue_examples": [],
+      "negative_type_counts": {
+        "format_negative_multiple_boxes": 180,
+        "format_negative_no_box": 180,
+        "format_negative_trailing_text": 180,
+        "hard_negative_equation_near_miss": 175
+      },
+      "rejected_box_count_distribution": {
+        "0": 180,
+        "1": 355,
+        "2": 180
+      },
+      "rows": 715,
+      "rule_class_counts": {
+        "add_direct_over_model_add_variant": 159,
+        "colon_absdiff_unreverse_same_len": 157,
+        "minus_signed_opposite_sign_guarded": 159,
+        "symbolic_cryptarithm_single_operator_digits_mul": 240
+      },
+      "sha256": "6aa1bfcd795a6bb11fa50551067e0744159a697331f2fff3bdd9084ce912cd8a",
+      "source_counts": {
+        "v325_equation_no_loss_distill": 475,
+        "v330_symbolic_cryptarithm_distill": 240
+      },
+      "unique_ids": 715,
+      "unique_source_rows": 180
+    }
+  },
+  "rule_coverage": {
+    "accepted_rules": [
+      "symbolic_cryptarithm_single_operator_digits_mul",
+      "v274_guarded_numeric_add_direct_over_model_add_variant",
+      "v274_guarded_numeric_colon_absdiff_unreverse_same_len",
+      "v274_guarded_numeric_minus_signed_opposite_sign_guarded"
+    ],
+    "accepted_rules_covered_by_preferences": [
+      "add_direct_over_model_add_variant",
+      "colon_absdiff_unreverse_same_len",
+      "cryptarithm_single_operator_digits_mul",
+      "minus_signed_opposite_sign_guarded"
+    ],
+    "accepted_rules_covered_by_sft": [
+      "add_direct_over_model_add_variant",
+      "colon_absdiff_unreverse_same_len",
+      "cryptarithm_single_operator_digits_mul",
+      "minus_signed_opposite_sign_guarded"
+    ],
+    "accepted_rules_missing_from_preferences": [],
+    "accepted_rules_missing_from_sft": [],
+    "normalized_accepted_rules": [
+      "add_direct_over_model_add_variant",
+      "colon_absdiff_unreverse_same_len",
+      "cryptarithm_single_operator_digits_mul",
+      "minus_signed_opposite_sign_guarded"
+    ],
+    "preference_rules": [
+      "add_direct_over_model_add_variant",
+      "colon_absdiff_unreverse_same_len",
+      "minus_signed_opposite_sign_guarded",
+      "symbolic_cryptarithm_single_operator_digits_mul"
+    ],
+    "sft_rules": [
+      "",
+      "add_direct_over_model_add_variant",
+      "colon_absdiff_unreverse_same_len",
+      "minus_signed_opposite_sign_guarded",
+      "symbolic_cryptarithm_single_operator_digits_mul"
+    ]
+  },
+  "schema_version": "kg1_v340_hard_negative_abstain_gate_v1",
+  "sft_audit": {
+    "train": {
+      "component_counts": {
+        "v325_equation_numeric_no_loss": 480,
+        "v330_symbolic_cryptarithm_no_loss": 240,
+        "v337d_v217_bit_replay": 720
+      },
+      "family_counts": {
+        "bit_manipulation": 720,
+        "equation_transform": 720
+      },
+      "rows": 1440,
+      "rule_class_counts": {
+        "": 720,
+        "add_direct_over_model_add_variant": 160,
+        "colon_absdiff_unreverse_same_len": 160,
+        "minus_signed_opposite_sign_guarded": 160,
+        "symbolic_cryptarithm_single_operator_digits_mul": 240
+      },
+      "sha256": "df67214d3fdbb74ada96a9fc24609db5a3f5f6dc1d26dea5d4449eb39eb4147c",
+      "source_counts": {
+        "v325_equation_no_loss_distill": 480,
+        "v330_symbolic_cryptarithm_distill": 240,
+        "v337d_v217_bit_replay": 720
+      },
+      "subcategory_counts": {
+        "bit_manipulation": 168,
+        "equation_numeric_add_direct": 160,
+        "equation_numeric_colon_absdiff": 160,
+        "equation_numeric_minus_signed": 160,
+        "equation_symbolic_cryptarithm_single_operator_mul": 240,
+        "unknown": 552
+      },
+      "unique_ids": 1440,
+      "unique_prompt_hashes": 1440
+    },
+    "validation": {
+      "component_counts": {
+        "v325_equation_numeric_no_loss": 120,
+        "v330_symbolic_cryptarithm_no_loss": 60,
+        "v337d_v217_bit_replay": 160
+      },
+      "family_counts": {
+        "bit_manipulation": 160,
+        "equation_transform": 180
+      },
+      "rows": 340,
+      "rule_class_counts": {
+        "": 160,
+        "add_direct_over_model_add_variant": 40,
+        "colon_absdiff_unreverse_same_len": 40,
+        "minus_signed_opposite_sign_guarded": 40,
+        "symbolic_cryptarithm_single_operator_digits_mul": 60
+      },
+      "sha256": "50d4ee05a377ed4e111d27f9de0e1109eb0c09bfe01a9bce0717b63d704dbf80",
+      "source_counts": {
+        "v325_equation_no_loss_distill": 120,
+        "v330_symbolic_cryptarithm_distill": 60,
+        "v337d_v217_bit_replay": 160
+      },
+      "subcategory_counts": {
+        "bit_manipulation": 54,
+        "equation_numeric_add_direct": 40,
+        "equation_numeric_colon_absdiff": 40,
+        "equation_numeric_minus_signed": 40,
+        "equation_symbolic_cryptarithm_single_operator_mul": 60,
+        "unknown": 106
+      },
+      "unique_ids": 340,
+      "unique_prompt_hashes": 340
+    }
+  },
+  "tokenization_gate": {
+    "status": "tokenization_gate_passed",
+    "train_prompt_truncation_rate": 0.0,
+    "train_rows": 1440,
+    "validation_prompt_truncation_rate": 0.0,
+    "validation_rows": 340
+  },
+  "v336a_signal": {
+    "accepted_candidate_count": 5,
+    "bit_manipulation_correct": 136,
+    "correct": 197,
+    "equation_transform_correct": 61,
+    "loss_count": 0
+  },
+  "v338b_observed_weak_eval": [
+    {
+      "bit_manipulation_correct": 134,
+      "checkpoint": "checkpoint-2",
+      "correct": 190,
+      "equation_transform_correct": 56,
+      "truncated": 1
+    },
+    {
+      "bit_manipulation_correct": 134,
+      "checkpoint": "checkpoint-4",
+      "correct": 190,
+      "equation_transform_correct": 56,
+      "truncated": 0
+    }
+  ],
+  "validation_issues": []
+}

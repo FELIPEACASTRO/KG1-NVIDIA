@@ -218,7 +218,7 @@ Bloqueio:
 - Nao submeter adapter que mantem `equation=56` por expectativa.
 - Nao submeter candidato que reduz bit contra V291/V290.
 
-### 6. V340 - Se LoRA continuar falhando
+### 6. V340/V341 - Preferencia limpa antes de novo HF
 
 Como V338B falhou:
 
@@ -235,6 +235,28 @@ Proxima rota permitida:
 1. Construir CPU gate de transferencia com hard negatives reais: para cada miss que o solver acerta e o adapter erra, adicionar contraexemplos parecidos onde o solver deve abster.
 2. Testar selector/abstain em CPU antes de qualquer LoRA: ganho so vale com `losses=0`, `equation>61` ou novo coverage comprovado, e `bit>=136`.
 3. So voltar ao HF se existir manifest CPU mostrando que o dataset novo contem informacao que V337D nao continha.
+
+Status 2026-05-13:
+
+- Implementado `scripts/run_v340_hard_negative_abstain_gate.py`.
+- O primeiro V340 contra V337D bruto bloqueou HF com evidencia concreta: `37/720` hard negatives de treino e `5/180` de validacao tinham `rejected` com a mesma resposta em `\boxed{}` que o `chosen`. Esses pares eram contraditorios e podiam ensinar preferencia errada.
+- Implementado `scripts/build_v341_clean_preference_transfer_dataset.py`.
+- V341 removeu apenas esses pares invalidos:
+  - treino: `2880 -> 2843` preference rows; hard negatives validos `683`;
+  - validacao: `720 -> 715` preference rows; hard negatives validos `175`.
+- Upload HF concluido para `felipesp1983/kg1-nemotron-training`, path `data/v341_clean_preference_transfer/20260513T_cpu_gate`.
+- V340 reexecutado com V341 limpo passou:
+  - `assets_valid=True`;
+  - `preference_training_allowed=True`;
+  - trainer existente: `scripts/hf_job_train_v315_preference.py`;
+  - proximo smoke permitido apenas em A100, curto, com kill-switch no primeiro checkpoint.
+- Launcher criado em `artifacts/v341_hf_a100_clean_preference_launch/launch_v341_hf_a100_clean_preference.py`.
+- Debug local do launcher passou em `a100-large`, custo `0.041667`, com `MAX_STEPS=8`, checkpoints a cada `2` steps e gate de promocao `total>192`, `equation>56`, `bit>=136`.
+
+Decisao:
+
+- Esta e a primeira rota pos-V338B que nao repete SFT generico. Ela usa preferencia contrastiva escolhida/rejeitada e corrige o defeito real encontrado nos hard negatives.
+- Ainda nao autoriza full/package/submit. Autoriza apenas smoke HF curto; se o primeiro weak checkpoint nao melhorar ACC por familia, cancelar por FinOps.
 
 ## Itens removidos do roadmap ativo
 
@@ -269,6 +291,4 @@ Os itens abaixo ficam apenas no arquivo historico. Eles nao fazem parte do plano
 
 ## Proxima acao unica
 
-Implementar o CPU gate de hard negatives/abstain para V340 antes de qualquer novo job HF.
-
-Entrada obrigatoria: misses V336A/V337D, predicoes adapter-only baseline, regras solver/verifier aceitas e contraexemplos por classe. Saida obrigatoria: manifest com `accepted/rejected`, `conflict_count`, `losses`, `equation_delta`, `bit_delta` e hashes anti-leakage. HF GPU continua bloqueado ate esse manifest mostrar novo sinal verificavel.
+Commitar e enviar a branch com V340/V341 e, em seguida, executar o smoke HF V341 limpo em A100. Monitorar logs a cada aproximadamente `40s`; apos o primeiro checkpoint disponivel, rodar weak eval. Se `total<=192`, `equation<=56` ou `bit<136`, cancelar o job e nao avaliar checkpoints restantes.

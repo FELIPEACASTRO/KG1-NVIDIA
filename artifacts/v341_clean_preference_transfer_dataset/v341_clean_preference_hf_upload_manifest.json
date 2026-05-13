@@ -1,0 +1,16 @@
+{
+  "data_repo": "felipesp1983/kg1-nemotron-training",
+  "dataset_dir": "artifacts\\v341_clean_preference_transfer_dataset\\20260513T_cpu_gate",
+  "generated_at_utc": "2026-05-13T21:06:02.428892+00:00",
+  "local_summary": {
+    "manifest_sha256": "10f80a61cd95b56d442f89c4da556f4c939c682845e488b8f7ef8d5912b80d32",
+    "preferences_train_rows": 2843,
+    "preferences_train_sha256": "217068058e723063178c00e5b9de697a1a669839e85abdb86154663543a71ae2",
+    "preferences_val_rows": 715,
+    "preferences_val_sha256": "6aa1bfcd795a6bb11fa50551067e0744159a697331f2fff3bdd9084ce912cd8a"
+  },
+  "next_action": "Run V340 cleaned gate, then a tiny preference smoke if still allowed.",
+  "path_in_repo": "data/v341_clean_preference_transfer/20260513T_cpu_gate",
+  "upload": "https://huggingface.co/datasets/felipesp1983/kg1-nemotron-training/commit/2f6d683d497422d56827e8e7902874670b9c7d06",
+  "version": "v341_clean_preference_hf_upload"
+}
