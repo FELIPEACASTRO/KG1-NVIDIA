@@ -171,7 +171,7 @@ def read_reference_csv(path: Path) -> dict[str, Any]:
     ids: set[str] = set()
     prompts: set[str] = set()
     if not path.exists():
-        return {"path": str(path), "exists": False, "rows": 0, "ids": ids, "prompt_hashes": prompts}
+        raise FileNotFoundError(f"required anti-leakage reference CSV is missing: {path}")
     with path.open("r", encoding="utf-8", newline="") as handle:
         for row in csv.DictReader(handle):
             rid = str(row.get("id", "")).strip()
@@ -205,6 +205,27 @@ def validate_component_manifest(path: Path, schema: str) -> dict[str, Any]:
     if payload.get("schema_version") != schema:
         raise RuntimeError(f"unexpected schema for {path}: {payload.get('schema_version')}")
     return payload
+
+
+def manifest_sha(payload: dict[str, Any], *keys: str) -> str:
+    for section_name in ("outputs", "hashes"):
+        section = payload.get(section_name)
+        if not isinstance(section, dict):
+            continue
+        for key in keys:
+            value = str(section.get(key, "")).strip()
+            if value:
+                return value
+    return ""
+
+
+def assert_manifest_file_hash(payload: dict[str, Any], path: Path, *keys: str) -> None:
+    expected = manifest_sha(payload, *keys)
+    if not expected:
+        raise RuntimeError(f"component manifest has no hash for {path}: keys={keys}")
+    observed = sha256_file(path)
+    if observed != expected:
+        raise RuntimeError(f"component file hash mismatch for {path}: expected {expected}, got {observed}")
 
 
 def normalize_row(row: dict[str, Any], component: str, split: str) -> tuple[dict[str, Any], str]:
@@ -415,6 +436,14 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
     v336a, v336b = validate_v336_inputs(args.v336a_manifest_json, args.v336b_manifest_json)
     v325 = validate_component_manifest(args.v325_manifest_json, "kg1_v325_equation_no_loss_distill_dataset_v1")
     v330 = validate_component_manifest(args.v330_manifest_json, "kg1_v330_symbolic_cryptarithm_distill_dataset_v1")
+    assert_manifest_file_hash(v325, args.v325_train_jsonl, "train_sha256", "sft_train_sha256")
+    assert_manifest_file_hash(v325, args.v325_val_jsonl, "val_sha256", "sft_val_sha256")
+    assert_manifest_file_hash(v325, args.v325_pref_train_jsonl, "preferences_train_sha256")
+    assert_manifest_file_hash(v325, args.v325_pref_val_jsonl, "preferences_val_sha256")
+    assert_manifest_file_hash(v330, args.v330_train_jsonl, "train_sha256", "sft_train_sha256")
+    assert_manifest_file_hash(v330, args.v330_val_jsonl, "val_sha256", "sft_val_sha256")
+    assert_manifest_file_hash(v330, args.v330_pref_train_jsonl, "preferences_train_sha256")
+    assert_manifest_file_hash(v330, args.v330_pref_val_jsonl, "preferences_val_sha256")
     if sha256_file(args.v217_train_jsonl) != EXPECTED_V217_TRAIN_SHA256:
         raise RuntimeError("V217 train SHA mismatch")
     if sha256_file(args.v217_val_jsonl) != EXPECTED_V217_VAL_SHA256:

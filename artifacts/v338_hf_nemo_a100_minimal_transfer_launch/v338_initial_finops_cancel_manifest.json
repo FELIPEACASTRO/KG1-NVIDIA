@@ -1,0 +1,22 @@
+{
+  "version": "v338_initial_finops_cancel_v1",
+  "generated_at_utc": "2026-05-13T20:03:00Z",
+  "job_id": "6a04d3093308d79117b8f24a",
+  "job_url": "https://huggingface.co/jobs/felipesp1983/6a04d3093308d79117b8f24a",
+  "status_observed_after_cancel": "CANCELED",
+  "cancel_reason": "The first V338 sampler made bit replay effectively too small for the bit>=136 guardrail; continuing would spend HF credit on a route that could not responsibly protect the no-regression family.",
+  "observed_weighted_share_by_source": {
+    "v325_equation_no_loss_distill": 0.538727,
+    "v330_symbolic_cryptarithm_distill": 0.448939,
+    "v337d_v217_bit_replay": 0.012335
+  },
+  "observed_weighted_share_by_subcategory": {
+    "bit_manipulation": 0.002881,
+    "equation_numeric_add_direct": 0.179576,
+    "equation_numeric_colon_absdiff": 0.179576,
+    "equation_numeric_minus_signed": 0.179576,
+    "equation_symbolic_cryptarithm_single_operator_mul": 0.448939,
+    "unknown": 0.009454
+  },
+  "followup": "V338B balanced sampler launched as 6a04d4a1e48bea4538b9bf6f."
+}

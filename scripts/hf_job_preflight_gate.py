@@ -378,6 +378,7 @@ def check_hub_artifacts() -> None:
     check_required_counts(train_summary, "KG1_REQUIRED_TRAIN_FAMILIES", "family_counts")
     check_required_counts(train_summary, "KG1_REQUIRED_TRAIN_SUBCATEGORIES", "subcategory_counts")
     check_required_counts(val_summary, "KG1_REQUIRED_VAL_FAMILIES", "family_counts")
+    check_required_counts(val_summary, "KG1_REQUIRED_VAL_SUBCATEGORIES", "subcategory_counts")
 
     adapter_repo = env_str("INIT_ADAPTER_REPO")
     adapter_subfolder = env_str("INIT_ADAPTER_SUBFOLDER").strip("/")

@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import importlib.util
 import json
+import hashlib
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -18,6 +19,19 @@ from typing import Any
 RUN_DIR = Path(__file__).resolve().parent
 REPO_ROOT = RUN_DIR.parents[1]
 V331_LAUNCHER = REPO_ROOT / "artifacts" / "v331_hf_nemo_a100_equation_bit_symbolic_launch" / "launch_v331_hf_nemo_a100_equation_bit_symbolic.py"
+DATASET_DIR = REPO_ROOT / "artifacts/v337d_minimal_transfer_dataset/20260513T_cpu_gate"
+DATASET_MANIFEST = DATASET_DIR / "v337d_minimal_transfer_manifest.json"
+TOKENIZATION_GATE_MANIFEST = DATASET_DIR / "tokenization_gate_real/v286_generic_tokenization_gate_manifest.json"
+EXPECTED_TRAIN_SHA256 = "df67214d3fdbb74ada96a9fc24609db5a3f5f6dc1d26dea5d4449eb39eb4147c"
+EXPECTED_VAL_SHA256 = "50d4ee05a377ed4e111d27f9de0e1109eb0c09bfe01a9bce0717b63d704dbf80"
+
+
+def sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
 
 
 def load_v331_launcher() -> Any:
@@ -32,13 +46,53 @@ def load_v331_launcher() -> Any:
 def read_dataset_upload_commit() -> str:
     manifest_path = RUN_DIR / "v337d_hf_dataset_upload_manifest.json"
     if not manifest_path.exists():
-        return "not_uploaded_yet"
+        raise FileNotFoundError("V337D HF upload manifest is required before V338 launch: " + str(manifest_path))
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     upload_url = str(manifest.get("dataset_upload", ""))
-    return upload_url.rstrip("/").split("/")[-1] if upload_url else "unknown"
+    if not upload_url:
+        raise RuntimeError("V337D HF upload manifest is missing dataset_upload URL.")
+    gate_summary = manifest.get("local_gate_summary")
+    if isinstance(gate_summary, dict) and gate_summary.get("train_sha256") != EXPECTED_TRAIN_SHA256:
+        raise RuntimeError("V337D HF upload manifest local gate summary points at an unexpected dataset.")
+    return upload_url.rstrip("/").split("/")[-1]
+
+
+def verify_v337d_tokenization_gate() -> dict[str, Any]:
+    if not DATASET_MANIFEST.is_file():
+        raise FileNotFoundError(DATASET_MANIFEST)
+    if not TOKENIZATION_GATE_MANIFEST.is_file():
+        raise FileNotFoundError(TOKENIZATION_GATE_MANIFEST)
+    dataset_manifest = json.loads(DATASET_MANIFEST.read_text(encoding="utf-8"))
+    gate_manifest = json.loads(TOKENIZATION_GATE_MANIFEST.read_text(encoding="utf-8"))
+    if dataset_manifest.get("schema_version") != "kg1_v337d_minimal_transfer_dataset_v1":
+        raise RuntimeError("Unexpected V337D dataset schema.")
+    if gate_manifest.get("decision", {}).get("status") != "tokenization_gate_passed":
+        raise RuntimeError("V337D tokenization gate did not pass.")
+    if gate_manifest.get("dataset_manifest_sha256") != sha256_file(DATASET_MANIFEST):
+        raise RuntimeError("V337D tokenization gate is stale relative to dataset manifest.")
+    outputs = dataset_manifest.get("outputs", {})
+    if outputs.get("train_sha256") != EXPECTED_TRAIN_SHA256 or outputs.get("val_sha256") != EXPECTED_VAL_SHA256:
+        raise RuntimeError("V337D dataset hashes drifted.")
+    if gate_manifest.get("config", {}).get("assistant_final_answer_mode") != "boxed_suffix":
+        raise RuntimeError("V337D tokenization gate must use boxed_suffix mode.")
+    for split in ("train", "validation"):
+        token_summary = gate_manifest.get("tokenization", {}).get(split, {})
+        if int(token_summary.get("prompt_truncated", -1)) != 0:
+            raise RuntimeError(f"V337D {split} prompt truncation is not zero.")
+        if int(token_summary.get("completion_tokens_dropped", -1)) != 0:
+            raise RuntimeError(f"V337D {split} completion token drop is not zero.")
+        if int(token_summary.get("fallback_masks", -1)) != 0:
+            raise RuntimeError(f"V337D {split} used fallback masks.")
+    return {
+        "dataset_manifest_sha256": sha256_file(DATASET_MANIFEST),
+        "tokenization_gate_manifest_sha256": sha256_file(TOKENIZATION_GATE_MANIFEST),
+        "train_sha256": outputs.get("train_sha256"),
+        "val_sha256": outputs.get("val_sha256"),
+    }
 
 
 def patch_launcher(module: Any) -> None:
+    local_gate_summary = verify_v337d_tokenization_gate()
     run_id = "v338b-nemo-a100-minimal-transfer-balanced-v290ckpt6-" + datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
     module.VERSION = "v338b_minimal_transfer_balanced_from_v290_checkpoint6_nemo_a100"
     module.RUN_ID = run_id
@@ -117,6 +171,7 @@ def patch_launcher(module: Any) -> None:
             "first_checkpoint_bit_min": 136,
             "action": "cancel HF job if first weak checkpoint cannot beat baseline gates",
         }
+        payload["v337d_local_gate_summary"] = local_gate_summary
         out_path = RUN_DIR / f"{module.RUN_ID}_launch_manifest.json"
         out_path.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
         print("launch_manifest_path =", out_path, flush=True)

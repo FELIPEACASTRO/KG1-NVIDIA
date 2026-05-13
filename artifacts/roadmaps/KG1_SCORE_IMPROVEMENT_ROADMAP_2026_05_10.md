@@ -15,13 +15,16 @@ As evidencias fortes reunidas hoje mostram que ha ganho possivel, mas o ganho co
 | Estado | Weak / Full | Equation | Bit | Decisao |
 |---|---:|---:|---:|---|
 | Melhor adapter-only weak atual | `192/315` | `56/155` | `136/160` | baseline operacional LoRA |
-| Melhor full adapter-only submitado | `823/947` | `56/155` | `135/160` | V291, public score `0.86` |
+| Melhor full adapter-only conhecido/packageado | `823/947` | `56/155` | `135/160` | V291 package rank<=32; referencia associada ao melhor score conhecido `0.86` |
 | V274/V275 solver/verifier | `196/315` | `60/155` | `136/160` | ganho real CPU, ainda nao LoRA puro |
 | V324+V329 solver/verifier integrado no V336A | `197/315` confirmado | `61/155` | `136/160` | ganho real CPU, ainda nao LoRA puro |
 | V306/V302 full verifier local | `838/947` potencial | `60/155` | `146/160` | depende de verifier/postprocessor |
 | V335 LoRA mixed trace replay | `190/315` | `56/155` | `134/160` | falhou; cancelado por FinOps |
+| V338B LoRA minimal transfer weak eval | `190/315` | `56/155` | `134/160` | checkpoints 2 e 4 falharam; cancelado por FinOps |
 
 Conclusao: a busca/documentacao gerou conhecimento util e ganho tecnico real. O erro foi assumir que SFT curto/misto transferiria automaticamente essas regras para LoRA. V303, V326, V331 e V335 falsificaram essa hipotese.
+
+Atualizacao V338B: a queda de `eval_loss` tambem nao foi evidencia suficiente. O treino V338B caiu de `0.9057` para melhor `0.8996`, mas o weak eval dos checkpoints 2 e 4 ficou em `190/315`, `equation_transform=56/155`, `bit_manipulation=134/160`. Isso confirma que loss menor pode melhorar imitacao/formato sem mover as regras discretas que decidem ACC por familia.
 
 ## Metas
 
@@ -110,6 +113,7 @@ Status 2026-05-13:
 - Artefato: `artifacts/v336b_package_permission_gate/20260513T_cpu_gate/v336b_package_permission_gate_manifest.json`.
 - Resultado: rota solver/verifier direta bloqueada. A evidencia oficial/local confirma que a submissao deve ser `submission.zip` com LoRA adapter rank `<=32`, contendo `adapter_config.json` e pesos; o pacote local rejeita `prediction_postprocessor`.
 - Decisao: seguir para V337D. Nao submeter package solver/verifier. Nao rodar HF ate existir dataset minimo transferivel e gateado.
+- Hardening aplicado: a decisao agora tambem exige package hard-lock ativo e rank `<=32` no pacote de referencia; se algum desses sinais cair, o gate bloqueia.
 
 ### 3. V337D - Dataset minimo de transferencia
 
@@ -147,6 +151,8 @@ Status 2026-05-13:
 - Anti-leakage contra referencias: `id_overlap=0`, `prompt_overlap=0`.
 - Gate real V286 com tokenizer Nemotron passou: `prompt_truncation_rate=0.0`, `completion_tokens_dropped=0`, `offset_masks=1440/340`, `train_token_max=349`, `val_token_max=341`.
 - Upload HF concluido em `felipesp1983/kg1-nemotron-training`, caminho `data/v337d_minimal_transfer/20260513T_cpu_gate`.
+- Hard negatives existem nos arquivos de preferencia, mas o V338B SFT atual ainda nao os usa. Eles so entram em uma proxima rota se o smoke provar sinal ou se for criado treino de preferencia especifico.
+- Hardening aplicado: referencias anti-leakage agora sao obrigatorias; hashes dos componentes V325/V330 agora precisam bater com os manifests antes de montar o dataset.
 
 ### 4. V338 - Tiny LoRA absorption smoke
 
@@ -180,20 +186,32 @@ Status 2026-05-13:
 - Debug local passou: hardware `a100-large`, custo `0.041667`, dataset HF com hashes corretos, adapter inicial `checkpoint-6` presente, snippets antigos V331/V335 ausentes.
 - Primeiro launch V338 foi cancelado por FinOps antes do treino: o log mostrou share efetivo de bit muito baixo (`~1.23%`), incompatível com o guardrail `bit>=136`.
 - V338B corrige a rota: pesos balanceados para preservar bit (`v337d_v217_bit_replay=8.0`, `bit_manipulation=3.0`, `unknown=3.0`) e reduzir equation para um smoke responsavel.
-- Proximo launch deve usar o prefixo `v338b-nemo-a100-minimal-transfer-balanced`.
+- V338B treinou no HF em `felipesp1983/6a04d4a1e48bea4538b9bf6f`.
+- Logs confirmaram: modelo carregou na A100, memoria ficou estavel em torno de `62-63 GiB`, tokenization sem truncation, checkpoints 2/4/6/8/10/12/14 e `final` foram enviados ao repo `felipesp1983/kg1-nemotron-lora-v338b-nemo-a100-minimal-transfer-balanced-v290ckpt6`.
+- Loss: baseline `0.9057`, melhor eval_loss `0.8996` no checkpoint 8, final `0.9014`.
+- Weak eval H200 `felipesp1983/6a04df073308d79117b8f267` foi cancelado por FinOps apos dois checkpoints:
+  - checkpoint-2: `190/315`, `equation=56/155`, `bit=134/160`, `truncated=1`;
+  - checkpoint-4: `190/315`, `equation=56/155`, `bit=134/160`, `truncated=0`.
+- Decisao: V338B falhou. Nao promover para full, package ou submit. Nao avaliar checkpoints restantes sem uma nova hipotese de selector ou subset que tenha evidencia independente.
+- O launcher agora exige upload manifest existente e tokenization gate V286 local real antes de novo launch.
+- O preflight HF agora valida tambem `KG1_REQUIRED_VAL_SUBCATEGORIES`, evitando validacao sem cobertura de subtipo na validacao.
+- O launcher `launch_v338b_hf_weak_eval.py` foi criado em modo seguro: por padrao faz debug e manifest local; so cria job H200 com `--launch`.
+- Promocao nao pode ser decidida por `eval_loss`; precisa weak eval dos checkpoints.
 
 ### 5. V339 - Full eval, package e Kaggle submit adapter-only
 
-Executar apenas se V338 passar weak gate.
+Executar apenas se algum candidato futuro passar weak gate.
 
 Passos:
 
-1. Full eval official-like.
-2. Comparar contra V291 `823/947`.
-3. Gerar package somente se full `>823/947`.
-4. Validar estrutura do pacote.
-5. Submeter ao Kaggle somente com ganho medido.
-6. Se o pacote estiver valido e houver cota diaria, submeter imediatamente; nao esperar nova rodada de treino sem evidencia, porque o desempate favorece envio mais cedo.
+1. Weak eval de candidato adapter-only que tenha sinal previo concreto.
+2. Promover apenas checkpoint com `total>192`, `equation>56`, `bit>=136`, truncation nao regressiva.
+3. Full eval official-like.
+4. Comparar contra V291 `823/947`.
+5. Gerar package somente se full `>823/947`.
+6. Validar estrutura do pacote.
+7. Submeter ao Kaggle somente com ganho medido.
+8. Se o pacote estiver valido e houver cota diaria, submeter imediatamente; nao esperar nova rodada de treino sem evidencia, porque o desempate favorece envio mais cedo.
 
 Bloqueio:
 
@@ -202,7 +220,7 @@ Bloqueio:
 
 ### 6. V340 - Se LoRA continuar falhando
 
-Se V338 falhar de novo:
+Como V338B falhou:
 
 - Parar SFT curto/misto.
 - Nao gastar HF com variacao de LR, epochs ou pesos.
@@ -211,6 +229,12 @@ Se V338 falhar de novo:
   - fonte realmente nova de traces com acesso liberado e triagem anti-leakage;
   - dataset/teacher que aumente coverage de V337D sem repetir a mistura V335-like.
 - Sem uma dessas evidencias, parar GPU por FinOps.
+
+Proxima rota permitida:
+
+1. Construir CPU gate de transferencia com hard negatives reais: para cada miss que o solver acerta e o adapter erra, adicionar contraexemplos parecidos onde o solver deve abster.
+2. Testar selector/abstain em CPU antes de qualquer LoRA: ganho so vale com `losses=0`, `equation>61` ou novo coverage comprovado, e `bit>=136`.
+3. So voltar ao HF se existir manifest CPU mostrando que o dataset novo contem informacao que V337D nao continha.
 
 ## Itens removidos do roadmap ativo
 
@@ -245,6 +269,6 @@ Os itens abaixo ficam apenas no arquivo historico. Eles nao fazem parte do plano
 
 ## Proxima acao unica
 
-Commitar/pushar V336A/V336B/V337D/V338 e, em seguida, lancar o V338 A100 smoke.
+Implementar o CPU gate de hard negatives/abstain para V340 antes de qualquer novo job HF.
 
-Monitorar logs a cada aproximadamente `40s` e cancelar por FinOps se o primeiro checkpoint nao puder bater `total>192`, `equation>56`, `bit>=136`.
+Entrada obrigatoria: misses V336A/V337D, predicoes adapter-only baseline, regras solver/verifier aceitas e contraexemplos por classe. Saida obrigatoria: manifest com `accepted/rejected`, `conflict_count`, `losses`, `equation_delta`, `bit_delta` e hashes anti-leakage. HF GPU continua bloqueado ate esse manifest mostrar novo sinal verificavel.

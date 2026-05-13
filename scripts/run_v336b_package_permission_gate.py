@@ -190,6 +190,8 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         and local_packaging["v291_zip_adapter_only"]
         and local_packaging["script_required_files_adapter_only"]
         and local_packaging["script_rejects_prediction_postprocessor"]
+        and local_packaging["script_submit_hard_locked"]
+        and local_packaging["v291_adapter_rank_ok"]
     )
 
     if adapter_only_required:
@@ -198,8 +200,9 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             "reason": (
                 "Official extracted pages require submission.zip containing a rank<=32 LoRA adapter; "
                 "the valid local package contains only adapter_config.json and adapter_model.safetensors; "
-                "the package script rejects prediction_postprocessor. V336A gain must be transferred "
-                "into adapter-only behavior before Kaggle submit."
+                "the package script rejects prediction_postprocessor, keeps Kaggle submit hard-locked, "
+                "and the reference package rank is <=32. V336A gain must be transferred into "
+                "adapter-only behavior before Kaggle submit."
             ),
             "next_action": "Proceed to V337D minimal transfer dataset; do not submit solver/verifier package.",
             "direct_solver_package_allowed": direct_solver_package_allowed,
