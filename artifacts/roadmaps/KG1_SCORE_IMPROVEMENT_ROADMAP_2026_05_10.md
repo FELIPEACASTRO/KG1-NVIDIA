@@ -6181,3 +6181,39 @@ Decisao atual:
 
 - O script esta pronto para launch tecnico, mas o job ainda nao foi iniciado nesta etapa de debug.
 - Antes do launch, commitar e enviar a branch para que `KG1_EXPECTED_COMMIT` exista no GitHub e o HF clone exatamente o codigo auditado.
+
+### V326 weak eval concluido e auditoria Kaggle V327 - 2026-05-13
+
+V326 foi executado no HF e avaliado no contrato weak V221:
+
+- Train job: `https://huggingface.co/jobs/felipesp1983/6a0474384f7d89ac5e217d38`.
+- Weak eval job: `https://huggingface.co/jobs/felipesp1983/6a047ae74f7d89ac5e217d81`.
+- Upload de eval: `https://huggingface.co/felipesp1983/kg1-nemotron-lora-v326-nemo-a100-equation-bit-replay-v290ckpt6/commit/edcac4df8b02cf7dccba12c62c09f89ca2b50241`.
+- Resultados:
+  - `checkpoint-2`: `190/315`, equation `56/155`, bit `134/160`, trunc `0`.
+  - `checkpoint-4`: `191/315`, equation `56/155`, bit `135/160`, trunc `0`.
+  - `checkpoint-6`: `191/315`, equation `56/155`, bit `135/160`, trunc `0`.
+  - `checkpoint-8`: `191/315`, equation `56/155`, bit `135/160`, trunc `0`.
+- Decisao: rejeitar V326 para full eval, package e Kaggle submit. Ele nao absorveu o ganho V324/V325 de equation e ainda perdeu `1` acerto de bit contra o melhor adapter-only atual (`192/315`, equation `56`, bit `136`).
+
+Auditoria oficial Kaggle V327:
+
+- Artefato: `artifacts/v327_kaggle_rules_audit/KG1_V327_KAGGLE_RULES_AUDIT.md`.
+- Fonte: Kaggle API autenticada para paginas oficiais da competicao; Kaggle CLI para arquivos, submissions, leaderboard, kernels e modelos publicos.
+- Regras confirmadas:
+  - submissao e `submission.zip`, nao CSV/prediction file;
+  - payload precisa ser LoRA adapter para `NVIDIA Nemotron-3-Nano-30B`;
+  - `adapter_config.json` e obrigatorio;
+  - `max_lora_rank=32`;
+  - metrica oficial usa vLLM, final answer em `\boxed{}`, `max_tokens=7680`, `temperature=0.0`, `top_p=1.0`, `max_num_seqs=64`, `gpu_memory_utilization=0.85`, `max_model_len=8192`;
+  - maximo de `5` submissions por dia e ate `2` final submissions;
+  - premio exige notebook Kaggle publico e write-up reproducivel;
+  - dados externos so sao aceitaveis se publicos/equivalentes para todos ou razoavelmente acessiveis, com custo minimo e reproducibilidade;
+  - proibido usar hand labeling ou predicao humana sobre validation/test.
+
+Implicacao para o roadmap:
+
+- V274/V275/V324 continuam sendo ganhos reais de solver/verifier, mas nao sao Kaggle-submit-ready enquanto nao forem absorvidos por LoRA adapter-only ou por um caminho permitido pelo formato oficial.
+- Nao repetir SFT amplo ou novo HF GPU job apenas por variacao de peso/LR/epochs: V303, V313-V322 e V326 ja mostraram teto persistente em equation `56`.
+- Proximo passo obrigatorio: criar novo sinal CPU verificavel para os `99` misses de equation, com DSL/synthesizer mais forte, e so treinar se o gate local mostrar `equation>56` sem reduzir `bit>=136`.
+- Caminhos bloqueados ate nova evidencia: datasets gated `andy279/*`, GGUF/Spaces, postprocessor externo puro, APIs fechadas sem documentacao de custo/reproducibilidade e qualquer pacote que nao seja adapter-only.
