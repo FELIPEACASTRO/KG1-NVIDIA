@@ -1,0 +1,141 @@
+{
+  "filter_reasons": {
+    "known_gate_reference": 947
+  },
+  "outputs": {
+    "train_jsonl": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v322_v51_filtered_hybrid_dataset\\20260513T0620Z\\v322_v51_filtered_hybrid_train.jsonl",
+    "train_sha256": "2bafab700a3f6baebb8313644785d7ddfacbf629aeee2e2e122ef0396a85c21b",
+    "val_jsonl": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v322_v51_filtered_hybrid_dataset\\20260513T0620Z\\v322_v51_filtered_hybrid_val.jsonl",
+    "val_sha256": "dacb20c8cff73159d14336abdc5d6fa505435643184033ac2d4a85f0408ce5f1"
+  },
+  "policy": {
+    "assistant_format": "compact RULE/CHECK/Final answer boxed suffix",
+    "known_gate_reference_ids": 947,
+    "known_gate_reference_prompt_hashes": 947,
+    "known_weak_full_gate_rows_filtered": true,
+    "promotion_gate": "weak total>=193, equation>=60, bit>=136, truncation no worse"
+  },
+  "reference_summaries": [
+    {
+      "path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v290_rank19_micro_patch_reference\\runtime_artifacts\\v245_weak_eval_bridge\\v245-weak-bridge-hfonly-20260510T1950Z\\v221_weak_315.csv",
+      "rows": 315,
+      "sha256": "85da758e14d57ea40270de5747f98726a0ad0b6d1795bff7dd46183005e0f9b6"
+    },
+    {
+      "path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v293_gap_mining\\inputs\\v291_full_predictions.csv",
+      "rows": 947,
+      "sha256": "d9634ea15cb55e17bbfb90229f1cdbfd9b0f5a4cdba0d61848e6f746393dde20"
+    }
+  ],
+  "schema_version": "kg1_v322_v51_filtered_hybrid_dataset_v1",
+  "train_audit": {
+    "bad_rows_first10": [],
+    "family_counts": {
+      "bit_manipulation": 5734,
+      "equation_transform": 9412,
+      "gravity_constant": 1513,
+      "numeral_system": 1500,
+      "text_encryption": 1497,
+      "unit_conversion": 1498
+    },
+    "label": "train",
+    "rows": 21154,
+    "source_counts": {
+      "v215_replay_anchor": 859,
+      "v216_base_clean_safe_strict_bit": 1796,
+      "v216_base_clean_safe_strict_equation": 3200,
+      "v216_synthetic_kg1_bit_rules": 646,
+      "v216_synthetic_kg1_numeric_rules": 639,
+      "v216_synthetic_kg1_symbolic_rules": 3066,
+      "v282_v274_rule_synthetic": 1080,
+      "v304_solver_trace_bit_fullbyte_distill_exact": 1056,
+      "v304_solver_trace_bit_fullbyte_distill_random": 480,
+      "v312_verifier_synthetic": 204,
+      "v51_complete_filtered": 8128
+    },
+    "subcategory_counts": {
+      "bit_fullbyte_binary": 120,
+      "bit_fullbyte_safe_ternary": 360,
+      "bit_fullbyte_v300_gain_pattern": 1056,
+      "bit_fullbyte_v311_rule_variant": 132,
+      "bit_manipulation": 646,
+      "equation numeric": 176,
+      "equation symbolic/mixed": 3024,
+      "equation_numeric": 639,
+      "equation_numeric_add_direct": 384,
+      "equation_numeric_colon_absdiff": 384,
+      "equation_numeric_minus_signed": 384,
+      "equation_symbolic_binary": 1574,
+      "equation_symbolic_unary": 1492,
+      "unknown": 2655,
+      "v51_bit_solver_cot_compact": 1371,
+      "v51_cipher_solver_cot_compact": 1353,
+      "v51_equation_solver_cot_compact": 1325,
+      "v51_gravity_solver_cot_compact": 1369,
+      "v51_numeral_solver_cot_compact": 1356,
+      "v51_unit_solver_cot_compact": 1354
+    },
+    "unique_ids": 21154,
+    "unique_prompt_hashes": 21154
+  },
+  "train_jsonl": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v322_v51_filtered_hybrid_dataset\\20260513T0620Z\\v322_v51_filtered_hybrid_train.jsonl",
+  "train_rows": 21154,
+  "train_sha256": "2bafab700a3f6baebb8313644785d7ddfacbf629aeee2e2e122ef0396a85c21b",
+  "v51_filtered_rows": 8553,
+  "v51_input_rows": 9500,
+  "v51_train_rows": 8128,
+  "v51_val_rows": 425,
+  "val_audit": {
+    "bad_rows_first10": [],
+    "family_counts": {
+      "bit_manipulation": 436,
+      "equation_transform": 666,
+      "gravity_constant": 85,
+      "numeral_system": 79,
+      "text_encryption": 82,
+      "unit_conversion": 97
+    },
+    "label": "validation",
+    "rows": 1445,
+    "source_counts": {
+      "v215_replay_anchor": 98,
+      "v216_base_clean_safe_strict_bit": 80,
+      "v216_base_clean_safe_strict_equation": 120,
+      "v216_synthetic_kg1_bit_rules": 54,
+      "v216_synthetic_kg1_numeric_rules": 61,
+      "v216_synthetic_kg1_symbolic_rules": 268,
+      "v282_v274_rule_synthetic": 120,
+      "v304_solver_trace_bit_fullbyte_distill_exact": 88,
+      "v304_solver_trace_bit_fullbyte_distill_random": 80,
+      "v312_verifier_synthetic": 51,
+      "v51_complete_filtered": 425
+    },
+    "subcategory_counts": {
+      "bit_fullbyte_binary": 20,
+      "bit_fullbyte_safe_ternary": 60,
+      "bit_fullbyte_v300_gain_pattern": 88,
+      "bit_fullbyte_v311_rule_variant": 33,
+      "bit_manipulation": 54,
+      "equation numeric": 6,
+      "equation symbolic/mixed": 114,
+      "equation_numeric": 61,
+      "equation_numeric_add_direct": 46,
+      "equation_numeric_colon_absdiff": 46,
+      "equation_numeric_minus_signed": 46,
+      "equation_symbolic_binary": 152,
+      "equation_symbolic_unary": 116,
+      "unknown": 178,
+      "v51_bit_solver_cot_compact": 71,
+      "v51_cipher_solver_cot_compact": 66,
+      "v51_equation_solver_cot_compact": 75,
+      "v51_gravity_solver_cot_compact": 69,
+      "v51_numeral_solver_cot_compact": 63,
+      "v51_unit_solver_cot_compact": 81
+    },
+    "unique_ids": 1445,
+    "unique_prompt_hashes": 1445
+  },
+  "val_jsonl": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v322_v51_filtered_hybrid_dataset\\20260513T0620Z\\v322_v51_filtered_hybrid_val.jsonl",
+  "val_rows": 1445,
+  "val_sha256": "dacb20c8cff73159d14336abdc5d6fa505435643184033ac2d4a85f0408ce5f1"
+}

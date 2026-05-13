@@ -5937,3 +5937,36 @@ Atualizacao V321 weak-eval corrigido - 2026-05-13:
   - `v321_ckpt10`: `0` ganhos, `1` perda, oracle `192/315`.
   - `v321_final`: `0` ganhos, `2` perdas, oracle `192/315`.
 - Decisao: V321 rejeitado para full eval/package/Kaggle. Nao ha ganho por familia, nao ha complementaridade exploravel por router/soup simples, e o checkpoint com melhor `eval_loss` regrediu no weak gate. Proxima acao deve abandonar variacoes pequenas de SFT no mesmo sinal V304/V312 e voltar para dado/objetivo novo ou solver/verifier CPU que gere evidencia nova antes de qualquer GPU longa.
+
+### V322 V51-filtered hybrid - 2026-05-13
+
+Objetivo: testar um sinal novo, nao apenas outra variacao pequena de LR/modulos. O V322 adiciona linhas V51 solver-enhanced do `train.csv` oficial, mas remove todos os `947` IDs/hashes conhecidos do weak/full gate antes do treino. As linhas V51 sao compactadas para `RULE/CHECK/Final answer: \boxed{}` para nao diluir o answer-span loss com CoT longo.
+
+- Builder: `scripts/build_v322_v51_filtered_hybrid_dataset.py`.
+- Dataset local: `artifacts/v322_v51_filtered_hybrid_dataset/20260513T0620Z/v322_v51_filtered_hybrid_manifest.json`.
+- Filtro anti-leakage: `9500` linhas V51 lidas, `8553` mantidas, `947` removidas por `known_gate_reference`.
+- Dataset final:
+  - train `21154` linhas, `bit_manipulation=5734`, `equation_transform=9412`;
+  - validation `1445` linhas, `bit_manipulation=436`, `equation_transform=666`;
+  - train SHA `2bafab700a3f6baebb8313644785d7ddfacbf629aeee2e2e122ef0396a85c21b`;
+  - val SHA `dacb20c8cff73159d14336abdc5d6fa505435643184033ac2d4a85f0408ce5f1`.
+- Tokenization gate V286 aprovado com tokenizer real Nemotron:
+  - output `artifacts/v322_v51_filtered_tokenization_gate/20260513T0620Z/v286_generic_tokenization_gate_manifest.json`;
+  - `prompt_truncation_rate=0.0`;
+  - `offset_masks=21154/21154` train e `1445/1445` validation;
+  - `completion_tokens_dropped=0`;
+  - `token_max=752` com `max_length=1024`;
+  - `train_val_prompt_overlap=0`.
+- Upload HF:
+  - dataset commit `https://huggingface.co/datasets/felipesp1983/kg1-nemotron-training/commit/6f544b9fd6e82ccf39514df0bb479686113f8f46`;
+  - gate commit `https://huggingface.co/datasets/felipesp1983/kg1-nemotron-training/commit/c17219390b6b067e2464c4eaa7246c49adb394a3`.
+- Receita autorizada:
+  - imagem `nvcr.io/nvidia/nemo:25.11.nemotron_3_nano`;
+  - A100 por FinOps para treino, H200 apenas para weak eval;
+  - iniciar do V290 `checkpoint-6`;
+  - treinar `q_proj,k_proj,v_proj,o_proj,lm_head`;
+  - `MAX_STEPS=16`, checkpoints a cada `4`;
+  - `LR=2.0e-8 -> 5e-9`;
+  - `ANSWER_SPAN_LOSS_WEIGHT=9.0`;
+  - pesos fortes para `v51_equation_solver_cot_compact`, `v51_bit_solver_cot_compact`, `v312_verifier_synthetic`, `v304_solver_trace_*` e patches numericos V274.
+- Gate de promocao permanece estrito: rejeitar se `total<192` ou `bit<136`; inspecionar somente se `equation_transform>56` ou `total>=193`; promover para full/package/submission somente com `total>=193`, `equation_transform>=60`, `bit_manipulation>=136`, truncation sem piora e sem regressao no full.

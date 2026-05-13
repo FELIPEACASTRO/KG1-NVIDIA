@@ -1,0 +1,12 @@
+{
+  "data_repo": "felipesp1983/kg1-nemotron-training",
+  "dataset_dir": "artifacts\\v322_v51_filtered_hybrid_dataset\\20260513T0620Z",
+  "dataset_path_in_repo": "data/v322_v51_filtered_hybrid/20260513T0620Z",
+  "dataset_upload": "https://huggingface.co/datasets/felipesp1983/kg1-nemotron-training/commit/6f544b9fd6e82ccf39514df0bb479686113f8f46",
+  "gate_dir": "artifacts\\v322_v51_filtered_tokenization_gate\\20260513T0620Z",
+  "gate_path_in_repo": "runtime_artifacts/v322_v51_filtered_tokenization_gate/20260513T0620Z",
+  "gate_upload": "https://huggingface.co/datasets/felipesp1983/kg1-nemotron-training/commit/c17219390b6b067e2464c4eaa7246c49adb394a3",
+  "generated_at_utc": "2026-05-13T06:25:39.376811+00:00",
+  "next_action": "Launch V322 A100 training job after upload is visible to HF Jobs.",
+  "version": "v322_hf_dataset_upload"
+}

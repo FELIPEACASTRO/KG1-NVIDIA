@@ -1,0 +1,300 @@
+{
+  "blocked_actions": [
+    "full_eval",
+    "package",
+    "kaggle_submit"
+  ],
+  "config": {
+    "assistant_final_answer_mode": "boxed_suffix",
+    "max_length": 1024,
+    "max_prompt_truncation_rate": 0.0,
+    "min_train_rows": 20000,
+    "min_val_rows": 1000,
+    "require_offset_mask": true
+  },
+  "dataset_manifest_json": "artifacts\\v322_v51_filtered_hybrid_dataset\\20260513T0620Z\\v322_v51_filtered_hybrid_manifest.json",
+  "dataset_manifest_sha256": "2d536cfeedba263364bdea0e3b2b5127945089ac9a799156b832a830f88e965c",
+  "decision": {
+    "next_action": "Only consider a tiny HF smoke train if roadmap risk/budget gates approve it.",
+    "reason": "train_rows=21154; val_rows=1445; train_token_max=752; val_token_max=752; completion_truncation=0",
+    "status": "tokenization_gate_passed"
+  },
+  "generated_at_utc": "2026-05-13T06:24:12.044872+00:00",
+  "model_name": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+  "model_revision": "cbd3fa9f933d55ef16a84236559f4ee2a0526848",
+  "outputs": {
+    "manifest_json": "artifacts\\v322_v51_filtered_tokenization_gate\\20260513T0620Z\\v286_generic_tokenization_gate_manifest.json"
+  },
+  "schema_version": "kg1_v286_generic_tokenization_gate_v1",
+  "tokenization": {
+    "train": {
+      "completion_tokens_dropped": 0,
+      "fallback_masks": 0,
+      "family_summary": {
+        "bit_manipulation": {
+          "loss_token_max": 479,
+          "loss_token_min": 18,
+          "loss_token_p50": 54,
+          "rows": 5734,
+          "token_max": 752,
+          "token_p50": 339,
+          "token_p90": 748,
+          "token_p99": 748
+        },
+        "equation_transform": {
+          "loss_token_max": 116,
+          "loss_token_min": 9,
+          "loss_token_p50": 13,
+          "rows": 9412,
+          "token_max": 262,
+          "token_p50": 149,
+          "token_p90": 237,
+          "token_p99": 258
+        },
+        "gravity_constant": {
+          "loss_token_max": 96,
+          "loss_token_min": 13,
+          "loss_token_p50": 85,
+          "rows": 1513,
+          "token_max": 329,
+          "token_p50": 293,
+          "token_p90": 325,
+          "token_p99": 327
+        },
+        "numeral_system": {
+          "loss_token_max": 45,
+          "loss_token_min": 10,
+          "loss_token_p50": 43,
+          "rows": 1500,
+          "token_max": 198,
+          "token_p50": 184,
+          "token_p90": 192,
+          "token_p99": 196
+        },
+        "text_encryption": {
+          "loss_token_max": 54,
+          "loss_token_min": 13,
+          "loss_token_p50": 51,
+          "rows": 1497,
+          "token_max": 304,
+          "token_p50": 249,
+          "token_p90": 276,
+          "token_p99": 291
+        },
+        "unit_conversion": {
+          "loss_token_max": 94,
+          "loss_token_min": 12,
+          "loss_token_p50": 84,
+          "rows": 1498,
+          "token_max": 278,
+          "token_p50": 252,
+          "token_p90": 277,
+          "token_p99": 278
+        }
+      },
+      "loss_token_max": 479,
+      "loss_token_min": 9,
+      "loss_token_p50": 42,
+      "offset_masks": 21154,
+      "prompt_truncated": 0,
+      "prompt_truncation_rate": 0.0,
+      "rows": 21154,
+      "token_max": 752,
+      "token_mean": 261.107,
+      "token_min": 117,
+      "token_p50": 229,
+      "token_p90": 390,
+      "token_p99": 748
+    },
+    "validation": {
+      "completion_tokens_dropped": 0,
+      "fallback_masks": 0,
+      "family_summary": {
+        "bit_manipulation": {
+          "loss_token_max": 478,
+          "loss_token_min": 18,
+          "loss_token_p50": 74,
+          "rows": 436,
+          "token_max": 752,
+          "token_p50": 395,
+          "token_p90": 748,
+          "token_p99": 752
+        },
+        "equation_transform": {
+          "loss_token_max": 116,
+          "loss_token_min": 10,
+          "loss_token_p50": 13,
+          "rows": 666,
+          "token_max": 262,
+          "token_p50": 156,
+          "token_p90": 239,
+          "token_p99": 258
+        },
+        "gravity_constant": {
+          "loss_token_max": 96,
+          "loss_token_min": 14,
+          "loss_token_p50": 86,
+          "rows": 85,
+          "token_max": 327,
+          "token_p50": 296,
+          "token_p90": 325,
+          "token_p99": 327
+        },
+        "numeral_system": {
+          "loss_token_max": 45,
+          "loss_token_min": 11,
+          "loss_token_p50": 43,
+          "rows": 79,
+          "token_max": 194,
+          "token_p50": 183,
+          "token_p90": 190,
+          "token_p99": 193
+        },
+        "text_encryption": {
+          "loss_token_max": 54,
+          "loss_token_min": 13,
+          "loss_token_p50": 51,
+          "rows": 82,
+          "token_max": 295,
+          "token_p50": 243,
+          "token_p90": 275,
+          "token_p99": 290
+        },
+        "unit_conversion": {
+          "loss_token_max": 94,
+          "loss_token_min": 12,
+          "loss_token_p50": 84,
+          "rows": 97,
+          "token_max": 278,
+          "token_p50": 250,
+          "token_p90": 277,
+          "token_p99": 278
+        }
+      },
+      "loss_token_max": 478,
+      "loss_token_min": 10,
+      "loss_token_p50": 44,
+      "offset_masks": 1445,
+      "prompt_truncated": 0,
+      "prompt_truncation_rate": 0.0,
+      "rows": 1445,
+      "token_max": 752,
+      "token_mean": 289.297,
+      "token_min": 121,
+      "token_p50": 237,
+      "token_p90": 733,
+      "token_p99": 748
+    }
+  },
+  "tokenizer_info": {
+    "class": "TokenizersBackend",
+    "eos_token": "<|im_end|>",
+    "is_fast": true,
+    "pad_token": "<|im_end|>",
+    "toy": false
+  },
+  "validation": {
+    "train": {
+      "family_counts": {
+        "bit_manipulation": 5734,
+        "equation_transform": 9412,
+        "gravity_constant": 1513,
+        "numeral_system": 1500,
+        "text_encryption": 1497,
+        "unit_conversion": 1498
+      },
+      "prompt_answer_hash_count": 21154,
+      "prompt_hash_count": 21154,
+      "rows": 21154,
+      "sha256_expected": "2bafab700a3f6baebb8313644785d7ddfacbf629aeee2e2e122ef0396a85c21b",
+      "source_counts": {
+        "v215_replay_anchor": 859,
+        "v216_base_clean_safe_strict_bit": 1796,
+        "v216_base_clean_safe_strict_equation": 3200,
+        "v216_synthetic_kg1_bit_rules": 646,
+        "v216_synthetic_kg1_numeric_rules": 639,
+        "v216_synthetic_kg1_symbolic_rules": 3066,
+        "v282_v274_rule_synthetic": 1080,
+        "v304_solver_trace_bit_fullbyte_distill_exact": 1056,
+        "v304_solver_trace_bit_fullbyte_distill_random": 480,
+        "v312_verifier_synthetic": 204,
+        "v51_complete_filtered": 8128
+      },
+      "subcategory_counts": {
+        "bit_fullbyte_binary": 120,
+        "bit_fullbyte_safe_ternary": 360,
+        "bit_fullbyte_v300_gain_pattern": 1056,
+        "bit_fullbyte_v311_rule_variant": 132,
+        "bit_manipulation": 646,
+        "equation numeric": 176,
+        "equation symbolic/mixed": 3024,
+        "equation_numeric": 639,
+        "equation_numeric_add_direct": 384,
+        "equation_numeric_colon_absdiff": 384,
+        "equation_numeric_minus_signed": 384,
+        "equation_symbolic_binary": 1574,
+        "equation_symbolic_unary": 1492,
+        "unknown": 2655,
+        "v51_bit_solver_cot_compact": 1371,
+        "v51_cipher_solver_cot_compact": 1353,
+        "v51_equation_solver_cot_compact": 1325,
+        "v51_gravity_solver_cot_compact": 1369,
+        "v51_numeral_solver_cot_compact": 1356,
+        "v51_unit_solver_cot_compact": 1354
+      },
+      "unique_ids": 21154
+    },
+    "train_val_prompt_answer_overlap": 0,
+    "train_val_prompt_overlap": 0,
+    "validation": {
+      "family_counts": {
+        "bit_manipulation": 436,
+        "equation_transform": 666,
+        "gravity_constant": 85,
+        "numeral_system": 79,
+        "text_encryption": 82,
+        "unit_conversion": 97
+      },
+      "prompt_answer_hash_count": 1445,
+      "prompt_hash_count": 1445,
+      "rows": 1445,
+      "sha256_expected": "dacb20c8cff73159d14336abdc5d6fa505435643184033ac2d4a85f0408ce5f1",
+      "source_counts": {
+        "v215_replay_anchor": 98,
+        "v216_base_clean_safe_strict_bit": 80,
+        "v216_base_clean_safe_strict_equation": 120,
+        "v216_synthetic_kg1_bit_rules": 54,
+        "v216_synthetic_kg1_numeric_rules": 61,
+        "v216_synthetic_kg1_symbolic_rules": 268,
+        "v282_v274_rule_synthetic": 120,
+        "v304_solver_trace_bit_fullbyte_distill_exact": 88,
+        "v304_solver_trace_bit_fullbyte_distill_random": 80,
+        "v312_verifier_synthetic": 51,
+        "v51_complete_filtered": 425
+      },
+      "subcategory_counts": {
+        "bit_fullbyte_binary": 20,
+        "bit_fullbyte_safe_ternary": 60,
+        "bit_fullbyte_v300_gain_pattern": 88,
+        "bit_fullbyte_v311_rule_variant": 33,
+        "bit_manipulation": 54,
+        "equation numeric": 6,
+        "equation symbolic/mixed": 114,
+        "equation_numeric": 61,
+        "equation_numeric_add_direct": 46,
+        "equation_numeric_colon_absdiff": 46,
+        "equation_numeric_minus_signed": 46,
+        "equation_symbolic_binary": 152,
+        "equation_symbolic_unary": 116,
+        "unknown": 178,
+        "v51_bit_solver_cot_compact": 71,
+        "v51_cipher_solver_cot_compact": 66,
+        "v51_equation_solver_cot_compact": 75,
+        "v51_gravity_solver_cot_compact": 69,
+        "v51_numeral_solver_cot_compact": 63,
+        "v51_unit_solver_cot_compact": 81
+      },
+      "unique_ids": 1445
+    }
+  }
+}
