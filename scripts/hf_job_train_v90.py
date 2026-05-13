@@ -28,7 +28,8 @@ Optional env:
   TOKENIZE_ONLY_DRY_RUN, UPLOAD_TO_HF,
   UPLOAD_CHECKPOINTS_DURING_TRAINING, SAMPLING_MODE, SUBCATEGORY_WEIGHTS, SOURCE_WEIGHTS,
   TRAINABLE_LORA_MODULES, TRAINABLE_LORA_NAME_SUBSTRINGS,
-  REQUIRE_LORA_TARGET_PARAMETER_MATCH, REQUIRED_TRAINABLE_LORA_NAME_SUBSTRINGS
+  REQUIRE_LORA_TARGET_PARAMETER_MATCH, REQUIRED_TRAINABLE_LORA_NAME_SUBSTRINGS,
+  ANSWER_SPAN_LOSS_WEIGHT, ANSWER_SPAN_MIN_WEIGHTED_TOKENS
 """
 
 from __future__ import annotations
@@ -41,6 +42,7 @@ import json
 import math
 import os
 import random
+import re
 import sys
 import time
 import warnings
@@ -224,6 +226,8 @@ if SAMPLING_MODE not in VALID_SAMPLING_MODES:
     )
 SUBCATEGORY_WEIGHTS = env_str("SUBCATEGORY_WEIGHTS", "")
 SOURCE_WEIGHTS = env_str("SOURCE_WEIGHTS", "")
+ANSWER_SPAN_LOSS_WEIGHT = env_float("ANSWER_SPAN_LOSS_WEIGHT", 1.0)
+ANSWER_SPAN_MIN_WEIGHTED_TOKENS = env_int("ANSWER_SPAN_MIN_WEIGHTED_TOKENS", 0)
 ABORT_EVAL_LOSS_GT = env_float("ABORT_EVAL_LOSS_GT", 0.0)
 BASELINE_EVAL_BEFORE_TRAIN = env_bool("BASELINE_EVAL_BEFORE_TRAIN", False)
 ABORT_EVAL_RELATIVE_TO_BASELINE_DELTA = env_float(
@@ -1096,7 +1100,7 @@ def build_completion_mask(
     full_text: str,
     messages: list[dict[str, Any]],
     tokenizer: Any,
-) -> tuple[list[int], list[int], bool, bool]:
+) -> tuple[list[int], list[float], bool, bool, int]:
     """Tokenize a chat transcript and mask loss to assistant completion tokens.
 
     Offset mappings are preferred because separate tokenization of the prompt
@@ -1109,9 +1113,36 @@ def build_completion_mask(
             assistant_text = str(message.get("content", ""))
             break
     if not assistant_text:
-        return [], [], False, False
+        return [], [], False, False, 0
+
+    def answer_char_span() -> tuple[int, int] | None:
+        """Return the assistant-relative final-answer span, when explicit."""
+
+        boxed_matches = list(re.finditer(r"\\boxed\{", assistant_text))
+        if boxed_matches:
+            start = boxed_matches[-1].start()
+            depth = 0
+            for idx in range(start, len(assistant_text)):
+                ch = assistant_text[idx]
+                if ch == "{":
+                    depth += 1
+                elif ch == "}":
+                    depth -= 1
+                    if depth == 0:
+                        return start, idx + 1
+            return start, len(assistant_text)
+
+        marker_positions: list[int] = []
+        for marker in ("Final answer:", "ANSWER:"):
+            pos = assistant_text.rfind(marker)
+            if pos >= 0:
+                marker_positions.append(pos)
+        if marker_positions:
+            return max(marker_positions), len(assistant_text)
+        return None
 
     assistant_start = full_text.rfind(assistant_text)
+    weighted_tokens = 0
     if assistant_start >= 0:
         try:
             encoded = tokenizer(
@@ -1122,11 +1153,27 @@ def build_completion_mask(
             input_ids = list(encoded["input_ids"])
             offsets = encoded.get("offset_mapping")
             if offsets and len(offsets) == len(input_ids):
-                loss_mask = [
-                    1 if int(end) > assistant_start else 0
-                    for _, end in offsets
-                ]
-                return input_ids, loss_mask, True, False
+                loss_mask: list[float] = []
+                answer_span = answer_char_span()
+                answer_start = answer_end = -1
+                if answer_span is not None and ANSWER_SPAN_LOSS_WEIGHT > 1.0:
+                    answer_start = assistant_start + answer_span[0]
+                    answer_end = assistant_start + answer_span[1]
+                for start, end in offsets:
+                    token_start = int(start)
+                    token_end = int(end)
+                    if token_end <= assistant_start:
+                        loss_mask.append(0.0)
+                    elif (
+                        answer_end > answer_start
+                        and token_end > answer_start
+                        and token_start < answer_end
+                    ):
+                        loss_mask.append(float(ANSWER_SPAN_LOSS_WEIGHT))
+                        weighted_tokens += 1
+                    else:
+                        loss_mask.append(1.0)
+                return input_ids, loss_mask, True, False, weighted_tokens
         except (NotImplementedError, TypeError, ValueError):
             pass
 
@@ -1149,8 +1196,8 @@ def build_completion_mask(
     prompt_ids = tokenizer.encode(prompt_text, add_special_tokens=False)
     prefix_mismatch = full_ids[: len(prompt_ids)] != prompt_ids
     prompt_len = min(len(prompt_ids), len(full_ids))
-    loss_mask = [0] * prompt_len + [1] * (len(full_ids) - prompt_len)
-    return full_ids, loss_mask, False, prefix_mismatch
+    loss_mask = [0.0] * prompt_len + [1.0] * (len(full_ids) - prompt_len)
+    return full_ids, loss_mask, False, prefix_mismatch, 0
 
 
 def tokenize_examples(
@@ -1167,6 +1214,8 @@ def tokenize_examples(
     offset_mask_count = 0
     fallback_mask_count = 0
     fallback_prefix_mismatch_count = 0
+    answer_span_weighted_examples = 0
+    answer_span_weighted_tokens = 0
     for ex in examples:
         msgs = ex.get("messages", [])
         if not msgs:
@@ -1184,7 +1233,7 @@ def tokenize_examples(
             full_text = tokenizer.apply_chat_template(
                 msgs, tokenize=False, add_generation_prompt=False
             )
-        full_ids, loss_mask, used_offsets, prefix_mismatch = build_completion_mask(
+        full_ids, loss_mask, used_offsets, prefix_mismatch, weighted_tokens = build_completion_mask(
             full_text, msgs, tokenizer
         )
         if used_offsets:
@@ -1193,6 +1242,9 @@ def tokenize_examples(
             fallback_mask_count += 1
         if prefix_mismatch:
             fallback_prefix_mismatch_count += 1
+        if weighted_tokens:
+            answer_span_weighted_examples += 1
+            answer_span_weighted_tokens += weighted_tokens
 
         if len(full_ids) > MAX_LENGTH:
             first_loss_idx = next((idx for idx, value in enumerate(loss_mask) if value), len(loss_mask))
@@ -1233,8 +1285,25 @@ def tokenize_examples(
         f"skipped_missing_messages={skipped_missing_messages} "
         f"skipped_no_loss={skipped_no_loss} offset_masks={offset_mask_count} "
         f"fallback_masks={fallback_mask_count} "
-        f"fallback_prefix_mismatches={fallback_prefix_mismatch_count}"
+        f"fallback_prefix_mismatches={fallback_prefix_mismatch_count} "
+        f"answer_span_loss_weight={ANSWER_SPAN_LOSS_WEIGHT} "
+        f"answer_span_weighted_examples={answer_span_weighted_examples} "
+        f"answer_span_weighted_tokens={answer_span_weighted_tokens}"
     )
+    if ANSWER_SPAN_LOSS_WEIGHT > 1.0 and answer_span_weighted_examples <= 0:
+        raise RuntimeError(
+            f"{label} ANSWER_SPAN_LOSS_WEIGHT={ANSWER_SPAN_LOSS_WEIGHT} "
+            "but no explicit Final answer/ANSWER/boxed spans were weighted."
+        )
+    if (
+        ANSWER_SPAN_LOSS_WEIGHT > 1.0
+        and ANSWER_SPAN_MIN_WEIGHTED_TOKENS > 0
+        and answer_span_weighted_tokens < ANSWER_SPAN_MIN_WEIGHTED_TOKENS
+    ):
+        raise RuntimeError(
+            f"{label} weighted answer-span tokens below floor: "
+            f"{answer_span_weighted_tokens} < {ANSWER_SPAN_MIN_WEIGHTED_TOKENS}"
+        )
     if REQUIRE_OFFSET_MASK and fallback_mask_count:
         raise RuntimeError(
             f"{label} tokenization used {fallback_mask_count} fallback completion masks. "
@@ -1336,7 +1405,7 @@ def tensorize_batch(
     max_len = max(len(ex["input_ids"]) for ex in batch)
     input_ids_batch: list[list[int]] = []
     attention_mask_batch: list[list[int]] = []
-    loss_mask_batch: list[list[int]] = []
+    loss_mask_batch: list[list[float]] = []
     for ex in batch:
         pad_len = max_len - len(ex["input_ids"])
         input_ids_batch.append(ex["input_ids"] + [pad_token_id] * pad_len)
@@ -1345,7 +1414,7 @@ def tensorize_batch(
 
     input_ids = torch.tensor(input_ids_batch, dtype=torch.long, device="cuda")
     attention_mask = torch.tensor(attention_mask_batch, dtype=torch.long, device="cuda")
-    loss_mask = torch.tensor(loss_mask_batch, dtype=torch.long, device="cuda")
+    loss_mask = torch.tensor(loss_mask_batch, dtype=torch.float32, device="cuda")
     return input_ids, attention_mask, loss_mask
 
 
@@ -1494,6 +1563,11 @@ def make_manifest(
                 "mode": SAMPLING_MODE,
                 "subcategory_weights": SUBCATEGORY_WEIGHT_MAP,
                 "source_weights": SOURCE_WEIGHT_MAP,
+            },
+            "answer_span_loss": {
+                "weight": ANSWER_SPAN_LOSS_WEIGHT,
+                "min_weighted_tokens": ANSWER_SPAN_MIN_WEIGHTED_TOKENS,
+                "markers": ["Final answer:", "ANSWER:", "\\boxed{...}"],
             },
         },
         "output_repo": OUTPUT_REPO,
@@ -1760,6 +1834,10 @@ def train() -> None:
                 "max_trainable_param_ratio": MAX_TRAINABLE_PARAM_RATIO,
                 "max_prompt_truncation_rate": MAX_PROMPT_TRUNCATION_RATE,
                 "sampling": weighted_sample_report(train_data),
+                "answer_span_loss": {
+                    "weight": ANSWER_SPAN_LOSS_WEIGHT,
+                    "min_weighted_tokens": ANSWER_SPAN_MIN_WEIGHTED_TOKENS,
+                },
             },
             "runtime": {
                 "cuda_available": bool(torch.cuda.is_available()),
@@ -1894,6 +1972,10 @@ def train() -> None:
                 "max_trainable_param_ratio": MAX_TRAINABLE_PARAM_RATIO,
                 "max_prompt_truncation_rate": MAX_PROMPT_TRUNCATION_RATE,
                 "sampling": weighted_sample_report(train_data),
+                "answer_span_loss": {
+                    "weight": ANSWER_SPAN_LOSS_WEIGHT,
+                    "min_weighted_tokens": ANSWER_SPAN_MIN_WEIGHTED_TOKENS,
+                },
             },
             "runtime": cuda_runtime_report(),
             "trainable_parameters": trainable_report,

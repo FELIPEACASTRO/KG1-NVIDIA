@@ -5789,6 +5789,35 @@ Quintuple-check 1000x cruzando todos os anexos recentes:
   2. promover somente se bater o gate estrito;
   3. se houver sinal parcial, inspecionar diff por linha;
   4. se V316 ficar flat ou regredir, iniciar V317 com `target_probe_manifest`, outputs errados reais do adapter congelado, hard negatives reais, answer-span weighting, replay completo de bit keepers e gate por target ID antes de weak eval.
+
+### V316 encerrado e V317 agressivo responsavel - 2026-05-13
+
+Status V316:
+
+- Job HF weak eval: `https://huggingface.co/jobs/felipesp1983/6a03c77d72518a06598ffcb1`.
+- Cancelado por FinOps depois de dois checkpoints negativos.
+- `checkpoint-3`: `190/315`, `equation_transform=56/155`, `bit_manipulation=134/160`, truncation `0`.
+- `checkpoint-6`: `190/315`, `equation_transform=56/155`, `bit_manipulation=134/160`, truncation `1`.
+- Decisao: rejeitar V316 para full eval/package/Kaggle e nao gastar H200 com checkpoints posteriores.
+
+V317 aprovado:
+
+- Launcher de treino: `artifacts/v317_hf_h200_answer_span_launch/launch_v317_hf_h200_answer_span.py`.
+- Launcher de weak eval: `artifacts/v317_hf_h200_answer_span_launch/launch_v317_hf_weak_eval.py`.
+- Mudanca estrutural: trainer `scripts/hf_job_train_v90.py` agora aceita `ANSWER_SPAN_LOSS_WEIGHT` e `ANSWER_SPAN_MIN_WEIGHTED_TOKENS`, ponderando tokens em `Final answer:`, `ANSWER:` ou `\boxed{...}`.
+- Receita:
+  - dataset V304 validado;
+  - init adapter V290 `checkpoint-6`;
+  - H200 com gate de custo `<= $0.09/min`;
+  - `MAX_STEPS=12`, checkpoints a cada `2`;
+  - `TRAINABLE_LORA_MODULES=lm_head,up_proj,down_proj`;
+  - `ANSWER_SPAN_LOSS_WEIGHT=5.0`;
+  - oversampling forte nos subtipos `bit_fullbyte_*` e `equation_numeric_*`;
+  - replay bit reforcado para evitar repetir a regressao `bit=134`.
+- Gate:
+  - rejeitar se `bit_manipulation < 135` ou `total < 191`;
+  - sinal diagnostico apenas se `bit_manipulation >= 136` e `equation_transform > 56` ou `total >= 193`;
+  - full/package/submission somente com `total>=193`, `equation_transform>=60`, `bit_manipulation>=136`, truncation sem piora e full-family no-regression.
 - Itens rejeitados pelo quintuple-check:
   - conversao literal de `postprocessor/verifier` para LoRA;
   - usar postprocessor em inferencia e chamar de LoRA puro;
