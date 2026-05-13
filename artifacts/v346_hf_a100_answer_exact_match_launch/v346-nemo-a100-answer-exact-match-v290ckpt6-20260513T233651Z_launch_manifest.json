@@ -1,0 +1,63 @@
+{
+  "branch": "v230-v226-complementarity",
+  "dataset": {
+    "data_repo": "felipesp1983/kg1-nemotron-training",
+    "dataset_upload_commit": "9ecf0f758bfb4fd8abf3d2d2f4df235947d30e98",
+    "train_file": "data/v346_answer_exact_match/20260513T_cpu_gate/v346_answer_exact_match_train.jsonl",
+    "train_rows": 1760,
+    "train_sha256": "cb2e244c04b88e4aa81e726a8a89740aa6ab554c07eb8778f6f2d2aa57cb1d34",
+    "val_file": "data/v346_answer_exact_match/20260513T_cpu_gate/v346_answer_exact_match_val.jsonl",
+    "val_rows": 420,
+    "val_sha256": "d9f8f7b7c2f3106f7e2f6bf88a531f0fe895bd7a8b16ea84501c3d2c21897087"
+  },
+  "expected_commit": "e71d58cd051c4cb528af3dbb26996b7435be8f8a",
+  "flavor": "a100-large",
+  "generated_at_utc": "2026-05-13T23:36:52.775327+00:00",
+  "hardware": {
+    "accelerator_model": "A100",
+    "accelerator_quantity": "1",
+    "accelerator_vram": "80 GB",
+    "cpu": "12 vCPU",
+    "name": "a100-large",
+    "pretty_name": "Nvidia A100 - large",
+    "ram": "142 GB",
+    "unit_cost_usd": 0.041667,
+    "unit_label": "minute"
+  },
+  "image": "nvcr.io/nvidia/nemo:25.11.nemotron_3_nano",
+  "init_adapter": {
+    "repo": "felipesp1983/kg1-nemotron-lora-v290-rank19-micro-patch-smoke",
+    "subfolder": "checkpoint-6"
+  },
+  "job_id": "6a050b53e48bea4538b9c1e3",
+  "job_status": "RUNNING",
+  "job_url": "https://huggingface.co/jobs/felipesp1983/6a050b53e48bea4538b9c1e3",
+  "mode": "launched",
+  "namespace": "felipesp1983",
+  "next_action": "Monitor every 30 seconds; weak-eval checkpoint-2/4/6/8/final after training completes.",
+  "output_repo": "felipesp1983/kg1-nemotron-lora-v346-answer-exact-match-a100-v290ckpt6",
+  "recipe": {
+    "answer_span_loss_weight": "24.0",
+    "answer_span_min_weighted_tokens": "700",
+    "eval_every_steps": 2,
+    "eval_max_examples": 96,
+    "final_learning_rate": "2.0e-8",
+    "finops_kill_switch": "cancel after first weak checkpoint if gate is not beaten",
+    "learning_rate": "8.0e-8",
+    "max_steps": 6,
+    "promotion_gate": "weak eval only; continue only if total>192, equation>56, bit>=136, truncated=0",
+    "save_every_steps": 2,
+    "source_weights": "v325_equation_no_loss_distill=6.00,v330_symbolic_cryptarithm_distill=6.00,v337d_v217_bit_replay=8.00",
+    "subcategory_weights": "equation_numeric_add_direct=12.00,equation_numeric_colon_absdiff=12.00,equation_numeric_colon_trailing_zero=12.00,equation_numeric_minus_direct_negative=12.00,equation_numeric_minus_signed=12.00,equation_symbolic_cryptarithm_single_operator_mul=12.00,bit_manipulation=4.00,unknown=4.00",
+    "trainable_lora_modules": "q_proj,k_proj,v_proj,o_proj,lm_head"
+  },
+  "run_id": "v346-nemo-a100-answer-exact-match-v290ckpt6-20260513T233651Z",
+  "v346_local_gate_summary": {
+    "dataset_manifest_sha256": "f20e84cf9a20982e99e5b6077aec8f58714a766036e4c3a0051ed08005ba1731",
+    "tokenization_gate_manifest_sha256": "bcc51405e4f9e8b472fa81e28b08003b12f0fc43baa98e149db36274c47af7b7",
+    "train_sha256": "cb2e244c04b88e4aa81e726a8a89740aa6ab554c07eb8778f6f2d2aa57cb1d34",
+    "upload_url": "https://huggingface.co/datasets/felipesp1983/kg1-nemotron-training/commit/9ecf0f758bfb4fd8abf3d2d2f4df235947d30e98",
+    "val_sha256": "d9f8f7b7c2f3106f7e2f6bf88a531f0fe895bd7a8b16ea84501c3d2c21897087"
+  },
+  "version": "v346_answer_exact_match_from_v290_checkpoint6_nemo_a100"
+}
