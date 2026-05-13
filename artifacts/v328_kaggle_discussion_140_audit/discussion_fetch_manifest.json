@@ -1,0 +1,11 @@
+{
+  "generated_at_utc": "2026-05-13T14:27:11.186437+00:00",
+  "input_urls_path": "C:\\Users\\davis\\Downloads\\NVIDIA Nemotron Model Reasoning Challenge - Discussion Topics URLs.md",
+  "input_ids_path": "C:\\Users\\davis\\Downloads\\NVIDIA Nemotron Model Reasoning Challenge - Discussion Topic IDs.md",
+  "urls_count": 140,
+  "ids_count": 140,
+  "unique_topic_ids": 140,
+  "records_fetched": 34,
+  "errors": 134,
+  "raw_dir": "artifacts\\v328_kaggle_discussion_140_audit\\raw_topics"
+}

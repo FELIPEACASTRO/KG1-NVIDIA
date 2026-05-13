@@ -6217,3 +6217,34 @@ Implicacao para o roadmap:
 - Nao repetir SFT amplo ou novo HF GPU job apenas por variacao de peso/LR/epochs: V303, V313-V322 e V326 ja mostraram teto persistente em equation `56`.
 - Proximo passo obrigatorio: criar novo sinal CPU verificavel para os `99` misses de equation, com DSL/synthesizer mais forte, e so treinar se o gate local mostrar `equation>56` sem reduzir `bit>=136`.
 - Caminhos bloqueados ate nova evidencia: datasets gated `andy279/*`, GGUF/Spaces, postprocessor externo puro, APIs fechadas sem documentacao de custo/reproducibilidade e qualquer pacote que nao seja adapter-only.
+
+### V328 Kaggle discussion 140-topic audit - 2026-05-13
+
+Entradas do usuario:
+
+- `NVIDIA Nemotron Model Reasoning Challenge - Discussion Topics URLs.md`
+- `NVIDIA Nemotron Model Reasoning Challenge - Discussion Topic IDs.md`
+
+Resultado da coleta:
+
+- Os arquivos contem `140` URLs e `140` IDs, com `140` topicos unicos.
+- A Kaggle CLI instalada nao expoe comando direto para discussions/topics.
+- Foram descobertos e usados endpoints internos do web app Kaggle: `GetForumTopicById`, `GetForumMessagesInTopic` e `BatchGetForumMessages`.
+- Cache bruto completo salvo para `34/140` topicos em `artifacts/v328_kaggle_discussion_140_audit/raw_topics/`.
+- A API passou a retornar `429 RESOURCE_EXHAUSTED`; portanto esta rodada nao pode ser declarada como leitura completa dos 140 topicos.
+- Resumo documentado em `artifacts/v328_kaggle_discussion_140_audit/KG1_V328_KAGGLE_DISCUSSION_140_AUDIT.md`.
+
+Achados acionaveis:
+
+- Nada nesta rodada autoriza novo HF GPU job. Pelo contrario, os topicos reforcam que treino sem novo sinal CPU e o erro operacional central.
+- `688461` reforca que bit deve ser resolvido como oito problemas booleanos independentes por bit, com scan deterministico de constantes, identidade, NOT, gates de 2 entradas e gates 3/4 entradas. Isso fortalece a prioridade do V329 CPU bit solver antes de outro bit LoRA.
+- `689915` reforca que o caminho vencedor foi SFT com COT deterministico, cobertura de operacoes raras, token-level simplicity e auditoria de minimo logprob; isso explica por que V303/V326 answer-only/full-byte nao internalizaram o solver.
+- `687798` e `698106` reforcam que metric/boxed/exact string importam: bit e string exata, e brace extra em `\boxed{}` pode derrubar score.
+- `693260` reforca o risco ja observado: dados sinteticos corretos podem reduzir LB se trace for dificil, duplicado/conflitante, oversampled ou format-shifted.
+- `694975`/`690161` reforcam que GRPO nao e proximo passo barato; so faz sentido depois de uma politica SFT/verifier forte.
+
+Proxima acao mantida:
+
+- Implementar V328/V329 CPU-only equation DSL + bit solver completo.
+- Nao gastar HF ate o CPU gate achar novo ganho no-loss: `equation>56`, `bit>=136`, truncation `0`.
+- Retomar os topicos faltantes depois do cooldown de rate limit, com rate limiter lento e prioridade para `690307`, `694556`, `698293`, `688277`, `684289`, `690891`, `689840`, `685710`, `687961`.
