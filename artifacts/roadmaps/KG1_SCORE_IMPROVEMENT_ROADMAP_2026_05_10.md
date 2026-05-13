@@ -5818,6 +5818,12 @@ V317 aprovado:
   - rejeitar se `bit_manipulation < 135` ou `total < 191`;
   - sinal diagnostico apenas se `bit_manipulation >= 136` e `equation_transform > 56` ou `total >= 193`;
   - full/package/submission somente com `total>=193`, `equation_transform>=60`, `bit_manipulation>=136`, truncation sem piora e full-family no-regression.
+
+Atualizacao FinOps:
+
+- Primeiro launch V317 `https://huggingface.co/jobs/felipesp1983/6a03d08172518a06598ffd11` foi cancelado antes do treino, pois ficou varios ciclos preso no build local de `causal-conv1d`.
+- Ajuste aplicado no launcher: remover `--no-binary`, preferir wheels/binarios, adicionar marcadores `install_*_start/end` e timeout duro por dependencia para nao queimar H200 em build silencioso.
+- Relancar somente depois de commit/push desse ajuste.
 - Itens rejeitados pelo quintuple-check:
   - conversao literal de `postprocessor/verifier` para LoRA;
   - usar postprocessor em inferencia e chamar de LoRA puro;

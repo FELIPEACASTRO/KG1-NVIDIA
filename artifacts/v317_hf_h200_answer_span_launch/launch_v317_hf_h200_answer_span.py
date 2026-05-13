@@ -143,8 +143,12 @@ export GRADIENT_CHECKPOINTING=1
 python scripts/hf_job_preflight_gate.py --phase preinstall
 python scripts/hf_job_preflight_gate.py --phase artifacts
 python -m pip install -q --no-cache-dir 'transformers>=4.56.0' 'peft>=0.17.0' 'accelerate>=1.10.0' safetensors sentencepiece protobuf hf_transfer ninja einops
-python -m pip install -q --no-cache-dir --no-build-isolation --no-deps --no-binary=causal-conv1d 'causal-conv1d==1.6.1'
-python -m pip install -q --no-cache-dir --no-build-isolation --no-deps --no-binary=mamba-ssm 'mamba-ssm==2.3.1'
+echo "install_causal_conv1d_start=$(date -u +%FT%TZ)"
+timeout 420 python -m pip install -q --no-cache-dir --prefer-binary --no-build-isolation --no-deps 'causal-conv1d==1.6.1'
+echo "install_causal_conv1d_end=$(date -u +%FT%TZ)"
+echo "install_mamba_ssm_start=$(date -u +%FT%TZ)"
+timeout 600 python -m pip install -q --no-cache-dir --prefer-binary --no-build-isolation --no-deps 'mamba-ssm==2.3.1'
+echo "install_mamba_ssm_end=$(date -u +%FT%TZ)"
 python scripts/hf_job_preflight_gate.py --phase postinstall
 python scripts/hf_job_train_v90.py
 """
