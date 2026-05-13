@@ -1,0 +1,3 @@
+id,family,answer,baseline_prediction,v341_prediction,v336_prediction,baseline_correct,v341_correct,v336_integrated_correct,baseline_truncated,v341_truncated,v341_delta_vs_baseline,v336_delta_vs_baseline,bucket,v336_rule_class,v336_candidate_count,v336_conflict_count,v336_reason
+8740ed31,bit_manipulation,01101000,01101000,01111000,01111000,True,False,False,False,False,-1,-1,v341_loss_vs_baseline,,,,
+59bee375,bit_manipulation,10010101,10010101,2,10010101,True,False,True,False,True,-1,0,v341_loss_vs_baseline,,,,

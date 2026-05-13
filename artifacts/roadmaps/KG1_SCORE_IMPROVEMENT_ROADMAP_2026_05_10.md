@@ -22,6 +22,7 @@ As evidencias fortes reunidas hoje mostram que ha ganho possivel, mas o ganho co
 | V335 LoRA mixed trace replay | `190/315` | `56/155` | `134/160` | falhou; cancelado por FinOps |
 | V338B LoRA minimal transfer weak eval | `190/315` | `56/155` | `134/160` | checkpoints 2 e 4 falharam; cancelado por FinOps |
 | V341 clean preference checkpoint-2 | `190/315` | `56/155` | `134/160` | falhou; preferencia interna saturada, cancelado por FinOps |
+| V342 ACC-first diagnostic | V341 nao ganha; V336A preserva `197/315` | V341 `56`, V336A `61` | V341 `134`, V336A `136` | GPU preference bloqueado; voltar para CPU DSL/verifier |
 
 Conclusao: a busca/documentacao gerou conhecimento util e ganho tecnico real. O erro foi assumir que SFT curto/misto transferiria automaticamente essas regras para LoRA. V303, V326, V331 e V335 falsificaram essa hipotese.
 
@@ -271,6 +272,15 @@ Status 2026-05-13:
   - `bit_manipulation=134/160`;
   - `truncated=1`;
   - commit HF do resultado: `e891636bc215a2e8e3af7de72a3f38b6258470ef`.
+- Implementado `scripts/analyze_v342_acc_first_diagnostic.py`.
+- V342 comparou linha a linha o baseline adapter-only V290 checkpoint-6, V341 checkpoint-2 e V336A:
+  - baseline adapter-only: `192/315`, `equation=56/155`, `bit=136/160`, `truncated=0`;
+  - V341 checkpoint-2: `190/315`, `equation=56/155`, `bit=134/160`, `truncated=1`;
+  - V336A solver/verifier: `197/315`, `equation=61/155`, `bit=136/160`, `truncated=0`;
+  - V341 teve `0` ganhos contra baseline e `2` perdas em `bit_manipulation`;
+  - V336A tem `5` ganhos de regra verificada que V341 nao aprendeu, todos em `equation_transform`;
+  - ha `1` caso de `bit_manipulation` correto na referencia V336A sem `rule_class`/trace aceito; isso nao e ganho de solver e nao pode virar override sem nova regra label-free;
+  - artefato: `artifacts/v342_acc_first_diagnostic/20260513T_cpu_gate/v342_acc_first_diagnostic_manifest.json`.
 - Decisao: V341 falhou. Nao promover para full/package/submit. Nao rodar mais preference/CE nessa familia de dataset sem um gate CPU que prove uma preferencia nao saturada e ganho de ACC esperado.
 
 Decisao:
@@ -312,13 +322,20 @@ Os itens abaixo ficam apenas no arquivo historico. Eles nao fazem parte do plano
 
 ## Proxima acao unica
 
-Executar V342 CPU ACC-first diagnostic:
+Executar V343 CPU solver expansion, sem GPU:
 
-1. Baixar os artefatos de weak eval V341 checkpoint-2.
-2. Comparar linha a linha contra o melhor adapter-only (`192/315`, `equation=56`, `bit=136`) e contra o solver/verifier V336A (`197/315`, `equation=61`, `bit=136`).
-3. Identificar somente exemplos onde existe caminho de ganho sem perda:
-   - baseline adapter erra;
-   - V336A solver acerta;
-   - V341/treino nao corrigiu;
-   - regra/verifier tem `candidate_count` baixo e `conflict_count=0`.
-4. Se esse diagnostico nao produzir novo conjunto nao saturado e verificavel, parar GPU e trabalhar apenas em DSL/verifier CPU.
+1. Partir dos `5` IDs de regra verificada que V342 mostrou como nao aprendidos por V341:
+   - `99d6a3b5`;
+   - `7688e06e`;
+   - `274def88`;
+   - `d1bd7478`;
+   - `c5b058d6`.
+2. Transformar as classes V336A em regras DSL mais gerais, mantendo `candidate_count=1` e `conflict_count=0`.
+3. Tratar `4ada9150` apenas como alerta de diferenca entre referencias; nao usar como ganho do solver e nao fazer override direto.
+4. Rodar gate CPU com os criterios:
+   - `total > 197` ou novo conjunto que mantenha `197/315` com regra mais geral e auditavel;
+   - `equation >= 61`;
+   - `bit >= 136`;
+   - `losses=0`;
+   - `truncated=0`.
+5. Continuar bloqueando HF GPU ate o CPU gate produzir ganho no-loss novo ou uma preferencia nao saturada comprovada por ACC, nao por loss.

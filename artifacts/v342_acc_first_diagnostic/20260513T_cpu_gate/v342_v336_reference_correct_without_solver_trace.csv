@@ -1,0 +1,2 @@
+id,family,answer,baseline_prediction,v341_prediction,v336_prediction,baseline_correct,v341_correct,v336_integrated_correct,baseline_truncated,v341_truncated,v341_delta_vs_baseline,v336_delta_vs_baseline,bucket,v336_rule_class,v336_candidate_count,v336_conflict_count,v336_reason
+4ada9150,bit_manipulation,01111011,01111111,01111111,01111011,False,False,True,False,False,0,1,v336_reference_correct_without_solver_trace,,,,

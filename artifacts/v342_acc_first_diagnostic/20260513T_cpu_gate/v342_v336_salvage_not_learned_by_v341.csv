@@ -1,0 +1,7 @@
+id,family,answer,baseline_prediction,v341_prediction,v336_prediction,baseline_correct,v341_correct,v336_integrated_correct,baseline_truncated,v341_truncated,v341_delta_vs_baseline,v336_delta_vs_baseline,bucket,v336_rule_class,v336_candidate_count,v336_conflict_count,v336_reason
+99d6a3b5,equation_transform,?()<,(<)),(<)),?()<,False,False,True,False,False,0,1,v336_salvage_not_learned_by_v341,symbolic_cryptarithm_single_operator_digits_mul,1,0,accepted_no_loss_solver_candidate
+7688e06e,equation_transform,-55,55,55,-55,False,False,True,False,False,0,1,v336_salvage_not_learned_by_v341,v274_guarded_numeric_minus_signed_opposite_sign_guarded,1,0,accepted_no_loss_solver_candidate
+274def88,equation_transform,92,-92,-92,92,False,False,True,False,False,0,1,v336_salvage_not_learned_by_v341,v274_guarded_numeric_minus_signed_opposite_sign_guarded,1,0,accepted_no_loss_solver_candidate
+d1bd7478,equation_transform,30,3,3,30,False,False,True,False,False,0,1,v336_salvage_not_learned_by_v341,v274_guarded_numeric_colon_absdiff_unreverse_same_len,1,0,accepted_no_loss_solver_candidate
+c5b058d6,equation_transform,134,35,35,134,False,False,True,False,False,0,1,v336_salvage_not_learned_by_v341,v274_guarded_numeric_add_direct_over_model_add_variant,1,0,accepted_no_loss_solver_candidate
+4ada9150,bit_manipulation,01111011,01111111,01111111,01111011,False,False,True,False,False,0,1,v336_salvage_not_learned_by_v341,,,,

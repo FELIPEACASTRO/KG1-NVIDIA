@@ -1,0 +1,120 @@
+{
+  "decision": {
+    "decision": "stop_gpu_preference_path_and_return_to_cpu_solver_gate",
+    "next_action": "Use V336A accepted rows/rule classes as CPU no-loss solver/package inputs; only launch GPU if a new CPU gate creates a non-saturated training set with no-loss weak gain over 192/315.",
+    "reason": "V341 checkpoint-2 regressed weak ACC versus baseline; the verified V336A solver rule gains were not learned by the adapter."
+  },
+  "delta_counts": {
+    "neutral": 307,
+    "v336_reference_correct_without_solver_trace": 1,
+    "v336_solver_salvage_not_learned_by_v341": 5,
+    "v341_loss_vs_baseline": 2
+  },
+  "delta_counts_by_family": {
+    "bit_manipulation": {
+      "neutral": 157,
+      "v336_reference_correct_without_solver_trace": 1,
+      "v341_loss_vs_baseline": 2
+    },
+    "equation_transform": {
+      "neutral": 150,
+      "v336_solver_salvage_not_learned_by_v341": 5
+    }
+  },
+  "inputs": {
+    "baseline_predictions_csv": "artifacts\\v342_acc_first_diagnostic\\v290_checkpoint6_baseline_predictions.csv",
+    "baseline_predictions_sha256": "910a051d8b8e652e37c0b0814ac59fe4a400b95cb432945b6a0244f97f5b31bf",
+    "v336_candidate_trace_csv": "artifacts\\v336_integrated_no_loss_solver_gate\\20260513T_cpu_gate\\v336a_integrated_no_loss_candidate_trace.csv",
+    "v336_candidate_trace_sha256": "46ab6f26f119d6224dbb650022fa47fc5ecaf5f1a61bc46a6319c3683bdf6fc9",
+    "v336_predictions_csv": "artifacts\\v336_integrated_no_loss_solver_gate\\20260513T_cpu_gate\\v336a_integrated_no_loss_predictions.csv",
+    "v336_predictions_sha256": "55293e3c159ac861c82039bafcfb39b98ddc7cdfcd27de59757ef206e2f89ee2",
+    "v341_predictions_csv": "artifacts\\v342_acc_first_diagnostic\\v341_checkpoint2_predictions.csv",
+    "v341_predictions_sha256": "333d387cc97c415e4a4b3adea1cad0e35b86cab30e3e529eb2e8cc238ff7856d"
+  },
+  "outputs": {
+    "comparison_csv": "artifacts\\v342_acc_first_diagnostic\\20260513T_cpu_gate\\v342_acc_first_row_comparison.csv",
+    "manifest_json": "artifacts\\v342_acc_first_diagnostic\\20260513T_cpu_gate\\v342_acc_first_diagnostic_manifest.json",
+    "v336_reference_correct_without_solver_trace_csv": "artifacts\\v342_acc_first_diagnostic\\20260513T_cpu_gate\\v342_v336_reference_correct_without_solver_trace.csv",
+    "v336_solver_salvage_not_learned_csv": "artifacts\\v342_acc_first_diagnostic\\20260513T_cpu_gate\\v342_v336_solver_salvage_not_learned_by_v341.csv",
+    "v341_gains_csv": "artifacts\\v342_acc_first_diagnostic\\20260513T_cpu_gate\\v342_v341_gains_vs_baseline.csv",
+    "v341_losses_csv": "artifacts\\v342_acc_first_diagnostic\\20260513T_cpu_gate\\v342_v341_losses_vs_baseline.csv"
+  },
+  "schema_version": "kg1_v342_acc_first_diagnostic_v1",
+  "summaries": {
+    "baseline_adapter_only": {
+      "accuracy": 0.6095238095238096,
+      "correct": 192,
+      "family": {
+        "bit_manipulation": {
+          "correct": 136,
+          "rows": 160,
+          "truncated": 0
+        },
+        "equation_transform": {
+          "correct": 56,
+          "rows": 155,
+          "truncated": 0
+        }
+      },
+      "rows": 315,
+      "truncated": 0
+    },
+    "v336a_integrated_no_loss_solver": {
+      "accuracy": 0.6253968253968254,
+      "correct": 197,
+      "family": {
+        "bit_manipulation": {
+          "correct": 136,
+          "rows": 160,
+          "truncated": 0
+        },
+        "equation_transform": {
+          "correct": 61,
+          "rows": 155,
+          "truncated": 0
+        }
+      },
+      "rows": 315,
+      "truncated": 0
+    },
+    "v341_clean_preference_checkpoint2": {
+      "accuracy": 0.6031746031746031,
+      "correct": 190,
+      "family": {
+        "bit_manipulation": {
+          "correct": 134,
+          "rows": 160,
+          "truncated": 1
+        },
+        "equation_transform": {
+          "correct": 56,
+          "rows": 155,
+          "truncated": 0
+        }
+      },
+      "rows": 315,
+      "truncated": 1
+    }
+  },
+  "v336_reference_correct_without_solver_trace_ids": [
+    "4ada9150"
+  ],
+  "v336_solver_salvage_not_learned_ids": [
+    "99d6a3b5",
+    "7688e06e",
+    "274def88",
+    "d1bd7478",
+    "c5b058d6"
+  ],
+  "v336_solver_salvage_rule_classes": {
+    "symbolic_cryptarithm_single_operator_digits_mul": 1,
+    "v274_guarded_numeric_add_direct_over_model_add_variant": 1,
+    "v274_guarded_numeric_colon_absdiff_unreverse_same_len": 1,
+    "v274_guarded_numeric_minus_signed_opposite_sign_guarded": 2
+  },
+  "v341_gain_ids": [],
+  "v341_loss_ids": [
+    "8740ed31",
+    "59bee375"
+  ]
+}
