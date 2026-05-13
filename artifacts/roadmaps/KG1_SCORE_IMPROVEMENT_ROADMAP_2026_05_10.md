@@ -6248,3 +6248,40 @@ Proxima acao mantida:
 - Implementar V328/V329 CPU-only equation DSL + bit solver completo.
 - Nao gastar HF ate o CPU gate achar novo ganho no-loss: `equation>56`, `bit>=136`, truncation `0`.
 - Retomar os topicos faltantes depois do cooldown de rate limit, com rate limiter lento e prioridade para `690307`, `694556`, `698293`, `688277`, `684289`, `690891`, `689840`, `685710`, `687961`.
+
+### V329 symbolic cryptarithm CPU gate - 2026-05-13
+
+Novo achado concreto em `equation_transform`:
+
+- Script: `scripts/run_v329_symbolic_cryptarithm_gate.py`.
+- Artefatos: `artifacts/v329_symbolic_cryptarithm_gate/20260513T_cpu_gate_r2/`.
+- Hipotese testada: parte dos `83` misses `equation_symbolic_punct` pode ser tratada como criptaritmo simbolico, onde uma expressao de 5 caracteres codifica dois numeros de dois digitos e o RHS codifica o resultado decimal.
+- Solver: CPU-only CP-SAT/OR-Tools com `AllDifferent` nos simbolos e operadores aritmeticos candidatos.
+- Contrato weak validado: `bf055e3b9ebce79d4bfc9e48bce5a305b1d83da882f14afddec80d6afaba5fff`.
+
+Resultado do gate:
+
+- Baseline adapter-only usado pelo gate: `192/315`, `equation_transform=56/155`, `bit_manipulation=136/160`, truncation `0`.
+- V324 ja havia aceitado `+4 equation`, projetando `196/315`, `equation=60/155`.
+- V329 adicionou `+1` novo ganho simbolico no-loss:
+  - id `99d6a3b5`;
+  - classe `symbolic_cryptarithm_single_operator_digits_mul`;
+  - baseline `(<))`;
+  - predicao V329 `?()<`;
+  - answer `?()<`.
+- V324+V329 projetado: `197/315`, `equation_transform=61/155`, `bit_manipulation=136/160`.
+- Conflitos: `0`.
+- Sensibilidade: rerun com `solver_time_limit_s=0.2` e `max_solutions_per_assignment=10` preservou accepted candidates e rule summary identicos.
+
+Achado QA importante:
+
+- A primeira classe ampla `symbolic_cryptarithm_operator_digits_mul` foi corretamente bloqueada porque tinha candidatos corretos e incorretos.
+- O ganho so ficou promotable depois de separar uma subclasse objetiva derivada do prompt: `single_operator_digits_mul`.
+- Classes multi-operador continuam bloqueadas por erro observado. Nao usar em treino nem submit.
+
+Decisao:
+
+- V329 e ganho real de solver/verifier CPU, mas ainda nao e adapter-only.
+- Nao autoriza Kaggle submit nem novo HF GPU isolado.
+- Proximo passo obrigatorio: V330 deve gerar linhas de distilacao apenas para `symbolic_cryptarithm_single_operator_digits_mul`, com hard negatives e replay forte de bit; depois rodar tokenization/no-regression gate.
+- Kill-switch de qualquer HF posterior: parar no primeiro checkpoint se `equation` continuar em `56` ou se `bit<136`.
