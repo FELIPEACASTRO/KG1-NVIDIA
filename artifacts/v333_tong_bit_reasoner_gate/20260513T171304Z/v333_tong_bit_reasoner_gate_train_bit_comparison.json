@@ -1,0 +1,12 @@
+{
+  "both_correct": 1207,
+  "current_solver_accuracy": 0.7896379525593009,
+  "current_solver_correct": 1265,
+  "max_rows": 0,
+  "parse_missing": 0,
+  "rows": 1602,
+  "tong_accuracy": 0.8514357053682896,
+  "tong_correct": 1364,
+  "tong_gain_vs_current": 157,
+  "tong_loss_vs_current": 58
+}

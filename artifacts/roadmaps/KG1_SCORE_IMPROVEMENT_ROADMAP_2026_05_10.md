@@ -6615,3 +6615,123 @@ Impacto no roadmap:
 - V334: minerar os `200` equation CoTs nao-overlap para taxonomia DSL, depois expandir V324/V329 com classes sem conflito.
 - V335: implementar fixture builder EvoTD-style com anti-leak, executor/verifier e filtro ZPD.
 - HF GPU continua bloqueado ate CPU gate mostrar novo sinal real.
+
+### V333C Tong bit reasoner CPU gate - 2026-05-13
+
+Artefato:
+
+- `artifacts/v333_tong_bit_reasoner_gate/KG1_V333_TONG_BIT_REASONER_GATE_2026_05_13.md`.
+
+Implementacao:
+
+- Script novo: `scripts/run_v333_tong_bit_reasoner_gate.py`.
+- Execucao CPU-only: `artifacts/v333_tong_bit_reasoner_gate/20260513T171304Z/`.
+- O script clona temporariamente `https://github.com/tonghuikang/nemotron`, fixa o commit `82bd1880aa8a8986ad572ccd17ae35b2b5c7da85`, valida o contrato V221 e remove o clone temporario ao final.
+- Baseline auditado: `v259_checkpoint_4_v221_contract`, SHA do CSV `d682f3a0aabd3624c449c63723deee510b070aa173f11c1102fe6b1b807bbca3`.
+- Contrato observado: `bf055e3b9ebce79d4bfc9e48bce5a305b1d83da882f14afddec80d6afaba5fff`.
+
+Resultado:
+
+- Train oficial `bit_manipulation`: Tong `1364/1602 = 85.1436%`; solver KG1 local `1265/1602 = 78.9638%`; ganho liquido Tong vs solver local `+99`.
+- Weak V221 atual:
+  - baseline: `192/315`, `bit=136/160`, `equation=56/155`;
+  - troca direta por Tong apenas em bit: `192/315`, `bit=136/160`, `equation=56/155`;
+  - ganhos Tong vs baseline: `1` linha (`8740ed31`);
+  - perdas Tong vs baseline: `1` linha (`ef2fe526`).
+
+Decisao:
+
+- Bloquear Tong como postprocessor/router direto: existe perda auditada e ganho liquido `0` no weak atual.
+- Manter Tong como fonte de professor/fixture para bit-pair, bitsum, stride e traces curtos.
+- Antes de HF GPU para bit, ainda falta uma regra de confianca label-free que selecione o ganho `8740ed31` sem aplicar a perda `ef2fe526`, ou um novo CPU gate no-loss com `bit>=136` e total maior que `192`.
+- Como nao ha job HF ativo neste momento (`hf jobs ps` retornou `No jobs found`), o proximo gasto deve continuar bloqueado ate o gate combinado V324/V329/V333 indicar dataset misto com no-regression.
+
+### V334 Tong equation numeric direct gate - 2026-05-13
+
+Artefato:
+
+- `artifacts/v334_tong_equation_numeric_reasoner_gate/KG1_V334_TONG_EQUATION_NUMERIC_REASONER_GATE_2026_05_13.md`.
+
+Implementacao:
+
+- Script novo: `scripts/run_v334_tong_equation_numeric_reasoner_gate.py`.
+- Execucao CPU-only: `artifacts/v334_tong_equation_numeric_reasoner_gate/20260513T172300Z/`.
+- Usa o mesmo Tong commit fixo `82bd1880aa8a8986ad572ccd17ae35b2b5c7da85`, mesmo baseline V259 checkpoint-4 e mesmo contrato V221.
+
+Resultado:
+
+- Baseline: `192/315`, `equation=56/155`, `bit=136/160`.
+- Troca direta usando `reasoners/equation_numeric.py`: `192/315`, `equation=56/155`, `bit=136/160`.
+- `155/155` linhas equation foram parseadas.
+- Status Tong: `65` traces gerados, `90` sem trace.
+- Nos misses de equation: `0` ganhos, `16` candidatos errados.
+
+Decisao:
+
+- Bloquear o reasoner Tong de equation como override direto e como autorizacao de treino.
+- A utilidade concreta dele permanece como fonte de DSL para V324/V329/V334 guardado, principalmente operacoes raras (`division`, `modulo`, `reverse modulo`, `digit multiply`, `cross multiply`, `determinant`, reverse result e formatacao de negativos).
+- Proximo passo nao e rodar GPU; e integrar apenas classes que passem `no-loss` em CPU. O estado CPU comprovado ainda e:
+  - V324: `+4` equation, projetado `196/315`, `equation=60`, `bit=136`;
+  - V329: `+1` adicional simbolico, projetado `197/315`, `equation=61`, `bit=136`;
+  - V333 bit: sinal de professor, mas sem ganho deployable (`+1/-1`).
+
+### V335 mixed trace replay dataset - 2026-05-13
+
+Artefato:
+
+- `artifacts/v335_mixed_trace_replay_dataset/KG1_V335_MIXED_TRACE_REPLAY_DATASET_2026_05_13.md`.
+
+Implementacao:
+
+- Script novo: `scripts/build_v335_mixed_trace_replay_dataset.py`.
+- Dataset gerado em `artifacts/v335_mixed_trace_replay_dataset/20260513T_cpu_gate/`.
+- Fontes combinadas:
+  - V304 broad solver trace replay;
+  - V325 numeric equation no-loss traces;
+  - V330 symbolic/cryptarithm no-loss traces.
+- Normalizacao aplicada: todas as respostas finais foram convertidas para o sufixo `Final answer: \boxed{answer}`.
+
+Contrato de dados:
+
+- Train: `13542` linhas, SHA256 `fed84002b6f9104869c743cce816a81e279400c8031ac3545846871fecc50654`.
+- Validation: `1149` linhas, SHA256 `1af6a221d3539294163cd684ded1a0de49d3631d2357d8a8aa0f560de1f1866d`.
+- Train family counts: `bit_manipulation=4231`, `equation_transform=8735`, demais familias `144` cada.
+- Validation family counts: `bit_manipulation=332`, `equation_transform=753`, demais familias `16` cada.
+
+Gates:
+
+- `python -m py_compile` aprovado para o builder.
+- Anti-leakage aprovado contra V221 weak e V291 full reference: `0` overlap por `id` e `0` overlap por prompt hash.
+- Dedupe aprovado: `0` ids duplicados e `0` prompts normalizados duplicados.
+- Tokenization gate real aprovado com `nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16` revision `cbd3fa9f933d55ef16a84236559f4ee2a0526848`.
+- Tokenizacao: `0` prompt truncation, `0` completion tokens dropped, offset masks em todas as linhas.
+- Max tokens observado: train `749`, validation `748`.
+
+Revisao pelos skills:
+
+- Data science: o criterio de sucesso nao e loss baixo; e ganho medido no weak gate acima de `192/315`, com `equation>56` e `bit>=136`.
+- Data engineering: V335 tem contratos de dados auditaveis por hash, contagem, source/family counts e anti-leakage.
+- ML engineering: autorizar apenas smoke curto em HF; qualquer treino longo sem ganho no primeiro checkpoint deve ser cancelado por FinOps.
+- PyTorch/Lightning: comprimentos estao seguros para o caminho LoRA planejado; o risco restante e runtime/adapter/checkpoint/eval, nao tokenizacao.
+- QA: sem notebook alterado; portanto `notebook_release_gate.py` nao se aplica nesta etapa.
+
+Decisao:
+
+- V335 e o primeiro dataset misto que passa CPU data gate + tokenization gate real com os sinais V324/V329 integrados.
+- Upload HF concluido:
+  - dataset commit `ec42d6afb1d6a6b1f8243e7ea776fa3d496a8e9f`;
+  - tokenization gate commit `2b8bb3b6edf1dc2d3a9cfc445a1d06a9c201a97e`.
+- Launcher V335 criado em `artifacts/v335_hf_nemo_a100_mixed_trace_replay_launch/launch_v335_hf_nemo_a100_mixed_trace_replay.py`.
+- Debug local do launcher aprovado:
+  - HF flavor `a100-large`;
+  - hardware `Nvidia A100 - large`, `80 GB`, `142 GB RAM`;
+  - custo unitario `0.041667 USD/min`, abaixo do gate `0.05 USD/min`;
+  - dataset e validation baixados do HF com hashes exatos;
+  - adapter inicial `felipesp1983/kg1-nemotron-lora-v290-rank19-micro-patch-smoke/checkpoint-6` completo.
+- Proximo passo permitido: commit/push dos artefatos V333/V334/V335 e smoke A100/HF curto.
+- Kill-switch obrigatorio no primeiro checkpoint:
+  - `total > 192`;
+  - `equation_transform > 56`;
+  - `bit_manipulation >= 136`;
+  - `0` regressao de truncation/template/adapter.
+- Se o primeiro checkpoint nao satisfizer esses criterios, cancelar o job e nao gastar GPU adicional.

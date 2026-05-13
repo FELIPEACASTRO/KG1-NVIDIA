@@ -1,0 +1,12 @@
+{
+  "data_repo": "felipesp1983/kg1-nemotron-training",
+  "dataset_dir": "artifacts\\v335_mixed_trace_replay_dataset\\20260513T_cpu_gate",
+  "dataset_path_in_repo": "data/v335_mixed_trace_replay/20260513T_cpu_gate",
+  "dataset_upload": "https://huggingface.co/datasets/felipesp1983/kg1-nemotron-training/commit/ec42d6afb1d6a6b1f8243e7ea776fa3d496a8e9f",
+  "gate_dir": "artifacts\\v335_mixed_trace_replay_dataset\\20260513T_cpu_gate\\tokenization_gate_real",
+  "gate_path_in_repo": "runtime_artifacts/v335_mixed_trace_replay_tokenization_gate/20260513T_cpu_gate",
+  "gate_upload": "https://huggingface.co/datasets/felipesp1983/kg1-nemotron-training/commit/2b8bb3b6edf1dc2d3a9cfc445a1d06a9c201a97e",
+  "generated_at_utc": "2026-05-13T17:39:00.008193+00:00",
+  "next_action": "Commit/push V335 scripts and launch a short A100 smoke train with first-checkpoint kill-switch.",
+  "version": "v335_hf_dataset_upload"
+}

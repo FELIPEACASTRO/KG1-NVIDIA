@@ -1,0 +1,209 @@
+{
+  "components": [
+    {
+      "name": "v304_solver_trace",
+      "train_jsonl": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v304_solver_trace_distill_dataset\\20260512T1430Z\\v304_solver_trace_distill_train.jsonl",
+      "val_jsonl": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v304_solver_trace_distill_dataset\\20260512T1430Z\\v304_solver_trace_distill_val.jsonl"
+    },
+    {
+      "name": "v325_equation_numeric_no_loss",
+      "train_jsonl": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v325_equation_no_loss_distill_dataset\\20260513T_cpu_gate\\v325_equation_no_loss_distill_sft_train.jsonl",
+      "val_jsonl": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v325_equation_no_loss_distill_dataset\\20260513T_cpu_gate\\v325_equation_no_loss_distill_sft_val.jsonl"
+    },
+    {
+      "name": "v330_symbolic_cryptarithm_no_loss",
+      "train_jsonl": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v330_symbolic_cryptarithm_distill_dataset\\20260513T_cpu_gate\\v330_symbolic_cryptarithm_distill_sft_train.jsonl",
+      "val_jsonl": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v330_symbolic_cryptarithm_distill_dataset\\20260513T_cpu_gate\\v330_symbolic_cryptarithm_distill_sft_val.jsonl"
+    }
+  ],
+  "generated_at_utc": "2026-05-13T17:28:22.505649+00:00",
+  "label": "v335_mixed_trace_replay",
+  "merge": {
+    "train": {
+      "duplicate_ids": {},
+      "duplicate_prompts": {},
+      "input_rows": {
+        "v304_solver_trace": 12822,
+        "v325_equation_numeric_no_loss": 480,
+        "v330_symbolic_cryptarithm_no_loss": 240
+      },
+      "kept_rows": {
+        "v304_solver_trace": 12822,
+        "v325_equation_numeric_no_loss": 480,
+        "v330_symbolic_cryptarithm_no_loss": 240
+      },
+      "normalization": {
+        "replaced_final_answer_suffix": 13542
+      }
+    },
+    "validation": {
+      "duplicate_ids": {},
+      "duplicate_prompts": {},
+      "input_rows": {
+        "v304_solver_trace": 969,
+        "v325_equation_numeric_no_loss": 120,
+        "v330_symbolic_cryptarithm_no_loss": 60
+      },
+      "kept_rows": {
+        "v304_solver_trace": 969,
+        "v325_equation_numeric_no_loss": 120,
+        "v330_symbolic_cryptarithm_no_loss": 60
+      },
+      "normalization": {
+        "replaced_final_answer_suffix": 1149
+      }
+    }
+  },
+  "outputs": {
+    "manifest_json": "artifacts\\v335_mixed_trace_replay_dataset\\20260513T_cpu_gate\\v335_mixed_trace_replay_manifest.json",
+    "train_jsonl": "artifacts\\v335_mixed_trace_replay_dataset\\20260513T_cpu_gate\\v335_mixed_trace_replay_train.jsonl",
+    "train_sha256": "fed84002b6f9104869c743cce816a81e279400c8031ac3545846871fecc50654",
+    "val_jsonl": "artifacts\\v335_mixed_trace_replay_dataset\\20260513T_cpu_gate\\v335_mixed_trace_replay_val.jsonl",
+    "val_sha256": "1af6a221d3539294163cd684ded1a0de49d3631d2357d8a8aa0f560de1f1866d"
+  },
+  "reference_overlap": {
+    "train": [
+      {
+        "exists": true,
+        "id_overlap_count": 0,
+        "id_overlap_sample": [],
+        "path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v290_rank19_micro_patch_reference\\runtime_artifacts\\v245_weak_eval_bridge\\v245-weak-bridge-hfonly-20260510T1950Z\\v221_weak_315.csv",
+        "prompt_overlap_count": 0,
+        "prompt_overlap_sample": [],
+        "reference_rows": 315
+      },
+      {
+        "exists": true,
+        "id_overlap_count": 0,
+        "id_overlap_sample": [],
+        "path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v293_gap_mining\\inputs\\v291_full_predictions.csv",
+        "prompt_overlap_count": 0,
+        "prompt_overlap_sample": [],
+        "reference_rows": 947
+      }
+    ],
+    "validation": [
+      {
+        "exists": true,
+        "id_overlap_count": 0,
+        "id_overlap_sample": [],
+        "path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v290_rank19_micro_patch_reference\\runtime_artifacts\\v245_weak_eval_bridge\\v245-weak-bridge-hfonly-20260510T1950Z\\v221_weak_315.csv",
+        "prompt_overlap_count": 0,
+        "prompt_overlap_sample": [],
+        "reference_rows": 315
+      },
+      {
+        "exists": true,
+        "id_overlap_count": 0,
+        "id_overlap_sample": [],
+        "path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v293_gap_mining\\inputs\\v291_full_predictions.csv",
+        "prompt_overlap_count": 0,
+        "prompt_overlap_sample": [],
+        "reference_rows": 947
+      }
+    ]
+  },
+  "required_next_gate": [
+    "scripts/run_v286_generic_tokenization_gate.py --assistant-final-answer-mode boxed_suffix",
+    "HF smoke only with first-checkpoint weak kill-switch: total>192, equation>56, bit>=136",
+    "no full eval or submit until weak gate improves over V259/V290 adapter-only baseline"
+  ],
+  "schema_version": "kg1_v335_mixed_trace_replay_dataset_v1",
+  "training_authorization": "blocked_until_v286_boxed_suffix_tokenization_gate_and_weak_no_regression_smoke",
+  "validation": {
+    "train": {
+      "component_counts": {
+        "v304_solver_trace": 12822,
+        "v325_equation_numeric_no_loss": 480,
+        "v330_symbolic_cryptarithm_no_loss": 240
+      },
+      "family_counts": {
+        "bit_manipulation": 4231,
+        "equation_transform": 8735,
+        "gravity_constant": 144,
+        "numeral_system": 144,
+        "text_encryption": 144,
+        "unit_conversion": 144
+      },
+      "rows": 13542,
+      "source_counts_top40": {
+        "v215_replay_anchor": 859,
+        "v216_base_clean_safe_strict_bit": 1796,
+        "v216_base_clean_safe_strict_equation": 3200,
+        "v216_synthetic_kg1_bit_rules": 646,
+        "v216_synthetic_kg1_numeric_rules": 639,
+        "v216_synthetic_kg1_symbolic_rules": 3066,
+        "v282_v274_rule_synthetic": 1080,
+        "v304_solver_trace_bit_fullbyte_distill_exact": 1056,
+        "v304_solver_trace_bit_fullbyte_distill_random": 480,
+        "v325_equation_no_loss_distill": 480,
+        "v330_symbolic_cryptarithm_distill": 240
+      },
+      "subcategory_counts_top40": {
+        "bit_fullbyte_binary": 120,
+        "bit_fullbyte_safe_ternary": 360,
+        "bit_fullbyte_v300_gain_pattern": 1056,
+        "bit_manipulation": 646,
+        "equation numeric": 176,
+        "equation symbolic/mixed": 3024,
+        "equation_numeric": 639,
+        "equation_numeric_add_direct": 520,
+        "equation_numeric_colon_absdiff": 520,
+        "equation_numeric_minus_signed": 520,
+        "equation_symbolic_binary": 1574,
+        "equation_symbolic_cryptarithm_single_operator_mul": 240,
+        "equation_symbolic_unary": 1492,
+        "unknown": 2655
+      },
+      "unique_ids": 13542,
+      "unique_prompt_hashes": 13542
+    },
+    "validation": {
+      "component_counts": {
+        "v304_solver_trace": 969,
+        "v325_equation_numeric_no_loss": 120,
+        "v330_symbolic_cryptarithm_no_loss": 60
+      },
+      "family_counts": {
+        "bit_manipulation": 332,
+        "equation_transform": 753,
+        "gravity_constant": 16,
+        "numeral_system": 16,
+        "text_encryption": 16,
+        "unit_conversion": 16
+      },
+      "rows": 1149,
+      "source_counts_top40": {
+        "v215_replay_anchor": 98,
+        "v216_base_clean_safe_strict_bit": 80,
+        "v216_base_clean_safe_strict_equation": 120,
+        "v216_synthetic_kg1_bit_rules": 54,
+        "v216_synthetic_kg1_numeric_rules": 61,
+        "v216_synthetic_kg1_symbolic_rules": 268,
+        "v282_v274_rule_synthetic": 120,
+        "v304_solver_trace_bit_fullbyte_distill_exact": 88,
+        "v304_solver_trace_bit_fullbyte_distill_random": 80,
+        "v325_equation_no_loss_distill": 120,
+        "v330_symbolic_cryptarithm_distill": 60
+      },
+      "subcategory_counts_top40": {
+        "bit_fullbyte_binary": 20,
+        "bit_fullbyte_safe_ternary": 60,
+        "bit_fullbyte_v300_gain_pattern": 88,
+        "bit_manipulation": 54,
+        "equation numeric": 6,
+        "equation symbolic/mixed": 114,
+        "equation_numeric": 61,
+        "equation_numeric_add_direct": 80,
+        "equation_numeric_colon_absdiff": 80,
+        "equation_numeric_minus_signed": 80,
+        "equation_symbolic_binary": 152,
+        "equation_symbolic_cryptarithm_single_operator_mul": 60,
+        "equation_symbolic_unary": 116,
+        "unknown": 178
+      },
+      "unique_ids": 1149,
+      "unique_prompt_hashes": 1149
+    }
+  }
+}

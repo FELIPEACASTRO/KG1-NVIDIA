@@ -1,0 +1,73 @@
+{
+  "baseline_summary": {
+    "accuracy": 0.6095238095238096,
+    "correct": 192,
+    "family": {
+      "bit_manipulation": {
+        "correct": 136,
+        "rows": 160
+      },
+      "equation_transform": {
+        "correct": 56,
+        "rows": 155
+      }
+    },
+    "rows": 315
+  },
+  "decision": {
+    "decision": "tong_equation_direct_reasoner_blocked",
+    "next_action": "Use Tong equation_numeric.py only as a DSL source for guarded no-loss classes; do not use its direct predictions as overrides or training authorization.",
+    "reason": "baseline=192; tong_replace=192; gains=0; losses=0; wrong_on_misses=16"
+  },
+  "direct_replace_gate": {
+    "max_losses": 0,
+    "pass": false,
+    "weak_total_min": 193
+  },
+  "equation_rows": 155,
+  "gain_ids": [],
+  "gains_vs_baseline": 0,
+  "generated_at_utc": "2026-05-13T17:24:15.525773+00:00",
+  "inputs": {
+    "baseline_csv": "hf://felipesp1983/kg1-nemotron-lora-v259-v249-eqfocus-v257ckpt4-smoke/evals/v260b-h200-v221contract-v259-eqfocus-eval-20260511T025751Z/eval/v259_checkpoint_4_v221_contract/v245_hf_weak_v259_checkpoint_4_v221_contract_predictions.csv",
+    "baseline_csv_sha256": "d682f3a0aabd3624c449c63723deee510b070aa173f11c1102fe6b1b807bbca3",
+    "baseline_runtime_path": "\\\\?\\C:\\Users\\davis\\AppData\\Local\\Temp\\kg1_v334_tong_equation_gate_ivay5jra\\baseline_download\\evals\\v260b-h200-v221contract-v259-eqfocus-eval-20260511T025751Z\\eval\\v259_checkpoint_4_v221_contract\\v245_hf_weak_v259_checkpoint_4_v221_contract_predictions.csv",
+    "expected_shared_row_contract_sha256": "bf055e3b9ebce79d4bfc9e48bce5a305b1d83da882f14afddec80d6afaba5fff",
+    "expected_tong_commit": "82bd1880aa8a8986ad572ccd17ae35b2b5c7da85",
+    "observed_shared_row_contract_sha256": "bf055e3b9ebce79d4bfc9e48bce5a305b1d83da882f14afddec80d6afaba5fff",
+    "resolved_tong_commit": "82bd1880aa8a8986ad572ccd17ae35b2b5c7da85",
+    "tong_repo_url": "https://github.com/tonghuikang/nemotron"
+  },
+  "label": "v334_tong_equation_numeric_reasoner_gate",
+  "loss_ids": [],
+  "losses_vs_baseline": 0,
+  "outputs": {
+    "detail_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v334_tong_equation_numeric_reasoner_gate\\20260513T172300Z\\v334_tong_equation_numeric_reasoner_gate_tong_equation_detail.csv",
+    "manifest_json": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v334_tong_equation_numeric_reasoner_gate\\20260513T172300Z\\v334_tong_equation_numeric_reasoner_gate_manifest.json",
+    "predictions_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v334_tong_equation_numeric_reasoner_gate\\20260513T172300Z\\v334_tong_equation_numeric_reasoner_gate_tong_equation_replace_predictions.csv"
+  },
+  "parse_status_counts": {
+    "ok": 155
+  },
+  "schema_version": "kg1_v334_tong_equation_numeric_reasoner_gate_v1",
+  "tong_direct_replace_summary": {
+    "accuracy": 0.6095238095238096,
+    "correct": 192,
+    "family": {
+      "bit_manipulation": {
+        "correct": 136,
+        "rows": 160
+      },
+      "equation_transform": {
+        "correct": 56,
+        "rows": 155
+      }
+    },
+    "rows": 315
+  },
+  "tong_status_counts": {
+    "no_trace": 90,
+    "ok": 65
+  },
+  "wrong_on_baseline_misses": 16
+}
