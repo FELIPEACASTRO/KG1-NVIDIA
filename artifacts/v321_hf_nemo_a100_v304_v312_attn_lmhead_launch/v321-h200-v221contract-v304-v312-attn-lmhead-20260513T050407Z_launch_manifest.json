@@ -1,0 +1,71 @@
+{
+  "adapter_repo": "felipesp1983/kg1-nemotron-lora-v321-nemo-a100-v304-v312-attn-lmhead-v290ckpt6",
+  "adapters": [
+    {
+      "name": "v321_hybrid_attn_lmhead_checkpoint_2_v221_contract",
+      "repo": "felipesp1983/kg1-nemotron-lora-v321-nemo-a100-v304-v312-attn-lmhead-v290ckpt6",
+      "subfolder": "checkpoint-2"
+    },
+    {
+      "name": "v321_hybrid_attn_lmhead_checkpoint_4_v221_contract",
+      "repo": "felipesp1983/kg1-nemotron-lora-v321-nemo-a100-v304-v312-attn-lmhead-v290ckpt6",
+      "subfolder": "checkpoint-4"
+    },
+    {
+      "name": "v321_hybrid_attn_lmhead_checkpoint_6_v221_contract",
+      "repo": "felipesp1983/kg1-nemotron-lora-v321-nemo-a100-v304-v312-attn-lmhead-v290ckpt6",
+      "subfolder": "checkpoint-6"
+    },
+    {
+      "name": "v321_hybrid_attn_lmhead_checkpoint_8_v221_contract",
+      "repo": "felipesp1983/kg1-nemotron-lora-v321-nemo-a100-v304-v312-attn-lmhead-v290ckpt6",
+      "subfolder": "checkpoint-8"
+    },
+    {
+      "name": "v321_hybrid_attn_lmhead_checkpoint_10_v221_contract",
+      "repo": "felipesp1983/kg1-nemotron-lora-v321-nemo-a100-v304-v312-attn-lmhead-v290ckpt6",
+      "subfolder": "checkpoint-10"
+    },
+    {
+      "name": "v321_hybrid_attn_lmhead_final_v221_contract",
+      "repo": "felipesp1983/kg1-nemotron-lora-v321-nemo-a100-v304-v312-attn-lmhead-v290ckpt6",
+      "subfolder": "final"
+    }
+  ],
+  "branch": "v230-v226-complementarity",
+  "expected_commit": "b1565b07ba33dc948f430943ae2ed19f110cf07f",
+  "flavor": "h200",
+  "generated_at_utc": "2026-05-13T05:04:10.141031+00:00",
+  "hardware": {
+    "accelerator_model": "H200",
+    "accelerator_quantity": "1",
+    "accelerator_vram": "141 GB",
+    "cpu": "23 vCPU",
+    "name": "h200",
+    "pretty_name": "Nvidia H200",
+    "ram": "256 GB",
+    "unit_cost_usd": 0.083333,
+    "unit_label": "minute"
+  },
+  "image": "vllm/vllm-openai:latest",
+  "job_id": "6a04068772518a06598fff53",
+  "job_status": "RUNNING",
+  "job_url": "https://huggingface.co/jobs/felipesp1983/6a04068772518a06598fff53",
+  "missing_optional_adapters": [
+    "final_adapter"
+  ],
+  "namespace": "felipesp1983",
+  "output_path_in_repo": "evals/v321-h200-v221contract-v304-v312-attn-lmhead-20260513T050407Z",
+  "output_repo": "felipesp1983/kg1-nemotron-lora-v321-nemo-a100-v304-v312-attn-lmhead-v290ckpt6",
+  "promotion_gate": {
+    "inspect_if_equation_gt": 56,
+    "inspect_if_total_gte": 193,
+    "promote_if_bit_gte": 136,
+    "promote_if_equation_gte": 60,
+    "promote_if_total_gte": 193,
+    "reject_if_bit_lt": 136,
+    "reject_if_total_lt": 192
+  },
+  "run_id": "v321-h200-v221contract-v304-v312-attn-lmhead-20260513T050407Z",
+  "version": "v321_hybrid_v304_v312_attn_lmhead_v221_weak_eval"
+}
