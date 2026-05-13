@@ -1,0 +1,122 @@
+{
+  "inputs": {
+    "v304_train": {
+      "path": "artifacts\\v304_solver_trace_distill_dataset\\20260512T1430Z\\v304_solver_trace_distill_train.jsonl",
+      "sha256": "7935ff999cdd8318de67538922de3651170c59baa2664a10beac3334dfcf9082"
+    },
+    "v304_val": {
+      "path": "artifacts\\v304_solver_trace_distill_dataset\\20260512T1430Z\\v304_solver_trace_distill_val.jsonl",
+      "sha256": "2b06224afe035c5085798f4a4be27e764ffaebde3ff7eee11c558c0cd5bdd29d"
+    },
+    "v312_train": {
+      "path": "artifacts\\v312_verifier_synthetic_distill_dataset\\20260512T1545Z\\v312_verifier_synthetic_distill_sft_train.jsonl",
+      "sha256": "352fb0cdcf8bf1505e81a2cc2c0b24bae790cfe1c1441a811d12db0b27594f5c"
+    },
+    "v312_val": {
+      "path": "artifacts\\v312_verifier_synthetic_distill_dataset\\20260512T1545Z\\v312_verifier_synthetic_distill_sft_val.jsonl",
+      "sha256": "7e9d76277fc5adab680c5a6e53877880c14bcc6265b6469ef9e9737ee26b4153"
+    }
+  },
+  "output_root": "artifacts\\v321_hybrid_answer_span_dataset\\20260513T0400Z",
+  "policy": {
+    "oversampling_location": "HF trainer weighted sampler only",
+    "physical_duplicate_rows": false,
+    "promotion_gate": "weak total>=193, equation>=60, bit>=136, truncation no worse",
+    "weak_gate_rows_used_for_training": false
+  },
+  "train_audit": {
+    "bad_rows_first10": [],
+    "duplicate_ids": 0,
+    "family_counts": {
+      "bit_manipulation": 4363,
+      "equation_transform": 8087,
+      "gravity_constant": 144,
+      "numeral_system": 144,
+      "text_encryption": 144,
+      "unit_conversion": 144
+    },
+    "label": "train",
+    "rows": 13026,
+    "source_counts": {
+      "v215_replay_anchor": 859,
+      "v216_base_clean_safe_strict_bit": 1796,
+      "v216_base_clean_safe_strict_equation": 3200,
+      "v216_synthetic_kg1_bit_rules": 646,
+      "v216_synthetic_kg1_numeric_rules": 639,
+      "v216_synthetic_kg1_symbolic_rules": 3066,
+      "v282_v274_rule_synthetic": 1080,
+      "v304_solver_trace_bit_fullbyte_distill_exact": 1056,
+      "v304_solver_trace_bit_fullbyte_distill_random": 480,
+      "v312_verifier_synthetic": 204
+    },
+    "subcategory_counts": {
+      "bit_fullbyte_binary": 120,
+      "bit_fullbyte_safe_ternary": 360,
+      "bit_fullbyte_v300_gain_pattern": 1056,
+      "bit_fullbyte_v311_rule_variant": 132,
+      "bit_manipulation": 646,
+      "equation numeric": 176,
+      "equation symbolic/mixed": 3024,
+      "equation_numeric": 639,
+      "equation_numeric_add_direct": 384,
+      "equation_numeric_colon_absdiff": 384,
+      "equation_numeric_minus_signed": 384,
+      "equation_symbolic_binary": 1574,
+      "equation_symbolic_unary": 1492,
+      "unknown": 2655
+    },
+    "unique_ids": 13026,
+    "weak_training_flags": {}
+  },
+  "train_file": "artifacts\\v321_hybrid_answer_span_dataset\\20260513T0400Z\\v321_hybrid_answer_span_train.jsonl",
+  "train_rows": 13026,
+  "train_sha256": "703bc037d446243c6fc8cc5db4aa9a3ff98230cd71aa385080c2aaecce52cb8d",
+  "val_audit": {
+    "bad_rows_first10": [],
+    "duplicate_ids": 0,
+    "family_counts": {
+      "bit_manipulation": 365,
+      "equation_transform": 591,
+      "gravity_constant": 16,
+      "numeral_system": 16,
+      "text_encryption": 16,
+      "unit_conversion": 16
+    },
+    "label": "validation",
+    "rows": 1020,
+    "source_counts": {
+      "v215_replay_anchor": 98,
+      "v216_base_clean_safe_strict_bit": 80,
+      "v216_base_clean_safe_strict_equation": 120,
+      "v216_synthetic_kg1_bit_rules": 54,
+      "v216_synthetic_kg1_numeric_rules": 61,
+      "v216_synthetic_kg1_symbolic_rules": 268,
+      "v282_v274_rule_synthetic": 120,
+      "v304_solver_trace_bit_fullbyte_distill_exact": 88,
+      "v304_solver_trace_bit_fullbyte_distill_random": 80,
+      "v312_verifier_synthetic": 51
+    },
+    "subcategory_counts": {
+      "bit_fullbyte_binary": 20,
+      "bit_fullbyte_safe_ternary": 60,
+      "bit_fullbyte_v300_gain_pattern": 88,
+      "bit_fullbyte_v311_rule_variant": 33,
+      "bit_manipulation": 54,
+      "equation numeric": 6,
+      "equation symbolic/mixed": 114,
+      "equation_numeric": 61,
+      "equation_numeric_add_direct": 46,
+      "equation_numeric_colon_absdiff": 46,
+      "equation_numeric_minus_signed": 46,
+      "equation_symbolic_binary": 152,
+      "equation_symbolic_unary": 116,
+      "unknown": 178
+    },
+    "unique_ids": 1020,
+    "weak_training_flags": {}
+  },
+  "val_file": "artifacts\\v321_hybrid_answer_span_dataset\\20260513T0400Z\\v321_hybrid_answer_span_val.jsonl",
+  "val_rows": 1020,
+  "val_sha256": "70710acbd27074aa643ea4bcfebf3f38476756a24abb483b1416f4c5777ed34c",
+  "version": "v321_hybrid_answer_span_dataset"
+}

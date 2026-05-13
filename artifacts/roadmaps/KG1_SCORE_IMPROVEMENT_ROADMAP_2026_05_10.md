@@ -5862,3 +5862,46 @@ Atualizacao FinOps:
   - GRPO/RAFT antes de trainer com probes;
   - dual LoRA/router antes de esgotar single-adapter answer-span;
   - promocao por `train_loss`/`eval_loss`.
+
+### V320 rejeitado e V321 hibrido agressivo responsavel - 2026-05-13
+
+Status V320:
+
+- Treino HF A100 NeMo oficial: `https://huggingface.co/jobs/felipesp1983/6a03ed3f72518a06598ffe30`.
+- Weak eval HF H200: `https://huggingface.co/jobs/felipesp1983/6a03f2c17618f125ee2b7af1`.
+- Objetivo testado: V312 pequeno/focado, `answer-span`, somente `lm_head`, `LR=8e-8 -> 2e-8`, checkpoints a cada 2 steps.
+- Resultado weak V221:
+  - `checkpoint-2`: `190/315`, `equation_transform=56/155`, `bit_manipulation=134/160`, truncation `1`.
+  - `checkpoint-4`: `191/315`, `equation_transform=56/155`, `bit_manipulation=135/160`, truncation `0`.
+  - `checkpoint-6`: `191/315`, `equation_transform=56/155`, `bit_manipulation=135/160`, truncation `0`.
+  - `checkpoint-8`: `190/315`, `equation_transform=56/155`, `bit_manipulation=134/160`, truncation `1`.
+  - `final`: `190/315`, `equation_transform=56/155`, `bit_manipulation=134/160`, truncation `1`.
+- Decisao: rejeitado para full/package/submit. V320 nao converteu o sinal V306/V312 em ganho de `equation_transform` e ainda reduziu `bit_manipulation` contra o baseline protegido V290 (`192/315`, `eq=56`, `bit=136`, trunc `0`).
+
+V321 aprovado:
+
+- Dataset local gerado: `artifacts/v321_hybrid_answer_span_dataset/20260513T0400Z/v321_hybrid_answer_span_manifest.json`.
+- Dataset publicado no HF: `felipesp1983/kg1-nemotron-training`, commit `b05b2bfb9f4eed0f412a5595bb34d70ebb751f66`.
+- Treino V321 combina:
+  - V304 solver-trace amplo para replay e estabilidade;
+  - V312 verifier-synthetic focado nas classes que explicam os 15 ganhos locais V306;
+  - sem duplicatas fisicas; oversampling fica no sampler ponderado do trainer;
+  - sem linhas marcadas como `weak_gate_rows_used_for_training`, `gate_rows_used_for_training` ou `full_gate_rows_used_for_training`.
+- Auditoria do dataset:
+  - train `13026` linhas: `bit_manipulation=4363`, `equation_transform=8087`, demais familias `144` cada.
+  - validation `1020` linhas: `bit_manipulation=365`, `equation_transform=591`, demais familias `16` cada.
+  - train SHA `703bc037d446243c6fc8cc5db4aa9a3ff98230cd71aa385080c2aaecce52cb8d`.
+  - val SHA `70710acbd27074aa643ea4bcfebf3f38476756a24abb483b1416f4c5777ed34c`.
+- Receita V321:
+  - imagem `nvcr.io/nvidia/nemo:25.11.nemotron_3_nano`;
+  - A100 primeiro por FinOps; H200 reservado para weak eval;
+  - iniciar do V290 `checkpoint-6`;
+  - treinar `q_proj,k_proj,v_proj,o_proj,lm_head`;
+  - `MAX_STEPS=10`, checkpoints a cada `2`;
+  - `ANSWER_SPAN_LOSS_WEIGHT=8.0`;
+  - `LR=1.5e-8 -> 4e-9`;
+  - source/subcategory weights fortes para `v312_verifier_synthetic`, `bit_fullbyte_*` e `equation_numeric_*`.
+- Gate V321:
+  - rejeitar se `total<192` ou `bit<136`;
+  - inspecionar somente se `equation_transform>56` ou `total>=193`;
+  - promover para full/package/submission somente com `total>=193`, `equation_transform>=60`, `bit_manipulation>=136`, truncation sem piora e full-family no-regression.
