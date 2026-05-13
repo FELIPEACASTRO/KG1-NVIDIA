@@ -37,7 +37,7 @@ VERSION = "v341_clean_preference_contrastive_from_v290_checkpoint6_a100"
 NAMESPACE = "felipesp1983"
 REPO_BRANCH = "v230-v226-complementarity"
 EXPECTED_COMMIT = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=REPO_ROOT, text=True).strip()
-IMAGE = "pytorch/pytorch:2.8.0-cuda12.8-cudnn9-devel"
+IMAGE = "nvcr.io/nvidia/nemo:25.11.nemotron_3_nano"
 FLAVOR = "a100-large"
 MAX_UNIT_COST_USD = 0.05
 RUN_ID = "v341-clean-pref-a100-v290ckpt6-" + datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
@@ -143,8 +143,7 @@ def patched_command_script() -> str:
         "python scripts/hf_job_preflight_gate.py --phase postinstall\n"
     )
     smoke_fast_block = (
-        "export KG1_REQUIRE_MAMBA_IMPORTS=0\n"
-        "echo 'V341 smoke: skipping source builds for causal-conv1d and mamba-ssm; trainer will fail fast if runtime requires them.'\n"
+        "echo 'V341 smoke: using prebuilt causal-conv1d and mamba-ssm from NVIDIA NeMo/Nemotron image; no source builds.'\n"
         "python scripts/hf_job_preflight_gate.py --phase postinstall\n"
     )
     if source_build_block not in script:
@@ -157,7 +156,7 @@ def build_job_env(hardware: dict[str, object]) -> dict[str, str]:
     return {
         "KG1_BRANCH": REPO_BRANCH,
         "KG1_EXPECTED_COMMIT": EXPECTED_COMMIT,
-        "KG1_EXPECTED_TORCH_VERSION": "2.8.0+cu128",
+        "KG1_EXPECTED_TORCH_VERSION": "2.9.0a0+50eac811a6.nv25.09",
         "KG1_EXPECTED_MAX_STEPS": str(MAX_STEPS),
         "KG1_REQUIRE_CUDA": "1",
         "KG1_MIN_GPU_TOTAL_GIB": "70",
@@ -179,7 +178,7 @@ def build_job_env(hardware: dict[str, object]) -> dict[str, str]:
             "equation_symbolic_cryptarithm_single_operator_mul,bit_manipulation,unknown"
         ),
         "KG1_STRICT_INIT_ADAPTER_CONFIG": "1",
-        "KG1_REQUIRE_MAMBA_IMPORTS": "0",
+        "KG1_REQUIRE_MAMBA_IMPORTS": "1",
         "KG1_OUTPUT_REPO": OUTPUT_REPO,
         "KG1_RUN_ID": RUN_ID,
         "KG1_SFT_TRAIN_FILE": SFT_TRAIN_FILE,
@@ -263,9 +262,9 @@ def main() -> int:
             "trainable_lora_modules": "q_proj,k_proj,v_proj,o_proj,lm_head",
             "promotion_gate": "weak eval only; promote if total>192, equation>56, bit>=136",
             "dependency_strategy": (
-                "V341 A100 smoke skips causal-conv1d/mamba-ssm source builds to avoid "
-                "burning paid GPU time before training; runtime is allowed to fail fast "
-                "if the preference path truly requires those packages."
+                "V341 A100 smoke uses nvcr.io/nvidia/nemo:25.11.nemotron_3_nano "
+                "because CPU probe confirmed prebuilt causal_conv1d=1.5.3 and "
+                "mamba_ssm=2.2.6.post3 with required Nemotron import modules."
             ),
         },
         "cpu_gate_summary": cpu_gate_summary,

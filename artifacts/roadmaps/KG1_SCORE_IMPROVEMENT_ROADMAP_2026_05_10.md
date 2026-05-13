@@ -253,7 +253,14 @@ Status 2026-05-13:
 - Launcher criado em `artifacts/v341_hf_a100_clean_preference_launch/launch_v341_hf_a100_clean_preference.py`.
 - Debug local do launcher passou em `a100-large`, custo `0.041667`, com `MAX_STEPS=8`, checkpoints a cada `2` steps e gate de promocao `total>192`, `equation>56`, `bit>=136`.
 - Primeiro launch HF V341 `felipesp1983/6a04e8e2e48bea4538b9c040` foi cancelado por FinOps: o job passou pelos gates de GPU/dados/adapter, mas ficou preso antes de treino na compilacao source de `causal-conv1d`. Nao houve checkpoint e nao houve ganho medido.
-- Launcher V341 ajustado para smoke rapido com `KG1_REQUIRE_MAMBA_IMPORTS=0` e sem compilacao source obrigatoria de `causal-conv1d`/`mamba-ssm`. Se o runtime realmente exigir esses pacotes, o job deve falhar rapido e barato; se nao exigir, segue para checkpoint.
+- Segundo launch HF V341 `felipesp1983/6a04eb833308d79117b8f29e` falhou rapido e barato no load do modelo: Nemotron exige `mamba_ssm`. O job confirmou que nao existe caminho de treino desse modelo sem Mamba.
+- Probe CPU barato da imagem `nvcr.io/nvidia/nemo:25.11.nemotron_3_nano` passou e confirmou dependencias prebuilt:
+  - `torch=2.9.0a0+50eac811a6.nv25.09`;
+  - `transformers=4.57.6`;
+  - `causal_conv1d=1.5.3`;
+  - `mamba_ssm=2.2.6.post3`;
+  - imports `mamba_ssm.ops.triton.layernorm_gated` e `mamba_ssm.ops.selective_scan_interface` OK.
+- Launcher V341 ajustado para usar a imagem NeMo/Nemotron com Mamba prebuilt e sem compilacao source em A100.
 
 Decisao:
 
@@ -293,4 +300,4 @@ Os itens abaixo ficam apenas no arquivo historico. Eles nao fazem parte do plano
 
 ## Proxima acao unica
 
-Commitar e enviar o ajuste FinOps do launcher V341 e relancar smoke HF V341 limpo em A100. Monitorar logs a cada aproximadamente `40s`; se falhar por falta real de Mamba, parar e trocar para imagem prebuilt em vez de compilar em A100 paga. Apos o primeiro checkpoint disponivel, rodar weak eval. Se `total<=192`, `equation<=56` ou `bit<136`, cancelar o job e nao avaliar checkpoints restantes.
+Commitar e enviar o launcher V341 com imagem NeMo/Nemotron prebuilt e relancar smoke HF V341 limpo em A100. Monitorar logs a cada aproximadamente `40s`; apos o primeiro checkpoint disponivel, rodar weak eval. Se `total<=192`, `equation<=56` ou `bit<136`, cancelar o job e nao avaliar checkpoints restantes.
