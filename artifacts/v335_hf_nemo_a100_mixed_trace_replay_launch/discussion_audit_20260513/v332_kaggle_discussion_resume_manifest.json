@@ -1,0 +1,15 @@
+{
+  "errors": [],
+  "errors_this_run": 0,
+  "expected_topic_ids": 11,
+  "generated_at_utc": "2026-05-13T17:58:35.833414+00:00",
+  "input_ids_path": "c:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v335_hf_nemo_a100_mixed_trace_replay_launch\\discussion_urls_20260513.txt",
+  "input_urls_path": "c:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v335_hf_nemo_a100_mixed_trace_replay_launch\\discussion_urls_20260513.txt",
+  "missing_after_count": 0,
+  "missing_after_first50": [],
+  "missing_before_count": 7,
+  "previous_raw_dir": "artifacts\\v332_kaggle_discussion_resume_audit\\20260513T_batch01\\raw_topics",
+  "raw_dir": "artifacts\\v335_hf_nemo_a100_mixed_trace_replay_launch\\discussion_audit_20260513\\raw_topics",
+  "records_fetched_this_run": 7,
+  "records_total_after": 113
+}

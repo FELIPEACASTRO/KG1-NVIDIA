@@ -1,0 +1,1799 @@
+[
+  {
+    "expected_input": true,
+    "keyword_hits": {
+      "accuracy": 25,
+      "bit": 123,
+      "bitwise": 3,
+      "chain of thought": 1,
+      "equation": 12,
+      "eval": 10,
+      "numeric": 2,
+      "operator": 23,
+      "prompt": 10,
+      "solver": 1,
+      "symbol": 47,
+      "synthetic": 1,
+      "token": 2,
+      "train": 25
+    },
+    "message_count_observed": 50,
+    "preview": "[message_id=688461 author=Donald Galliano III first=True] I reverse engineered 100% of the dataset. It's all solvable. Below I'm going to show exactly how. Since my compute isn't good enough to actually run this (Kaggle GPU environment is still broken for me), I'm bowing out of the comp. My only goal was the midpoint prize given my time constraints, and that's clearly off the table, so I'm opening up the playbook for anyone who can run it. I'll break this into sections by category type, with my ",
+    "relevance_score": 285,
+    "text_sha256": "16763a40b16680ac0fd0a727090e0230ed182272cf24590ea89c757c6c16d607",
+    "title": "Answers To Everything Data: Read Me! 100% Solve Rate",
+    "topic_id": 688461,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/688461"
+  },
+  {
+    "expected_input": true,
+    "keyword_hits": {
+      "accuracy": 1,
+      "adapter": 15,
+      "bit": 15,
+      "bit_manipulation": 2,
+      "chain of thought": 11,
+      "cot": 4,
+      "cryptarithm": 16,
+      "equation": 7,
+      "eval": 3,
+      "lora": 8,
+      "loss": 18,
+      "numeric": 4,
+      "operator": 11,
+      "solver": 1,
+      "symbol": 4,
+      "symbolic": 1,
+      "synthetic": 4,
+      "token": 35,
+      "train": 75
+    },
+    "message_count_observed": 53,
+    "preview": "[message_id=689915 author=Tong Hui Kang first=True] I would like to thank the competition hosts and Kaggle for organizing this competition. I did manage to find something interesting to bet on, and I am happy to see my gamble paying off. You might have made some predictions that I have asked for. These are the answers. The score I was aiming for - 0.877 How many tokens are used to train - 27,850,703 tokens for the winning solution, 598,958,637 in total How much money I have spent - $212.48 in Ti",
+    "relevance_score": 235,
+    "text_sha256": "cf063141330c112624ea97841587245c0464857b5436d2cada3c81d3b3ec6a24",
+    "title": "[Open Progress Prize Publication] SFT to maximize minimum logprob",
+    "topic_id": 689915,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/689915"
+  },
+  {
+    "expected_input": true,
+    "keyword_hits": {
+      "accuracy": 1,
+      "bit": 29,
+      "bit_manipulation": 3,
+      "bitsum": 7,
+      "bitwise": 2,
+      "chain of thought": 3,
+      "cot": 4,
+      "cryptarithm": 2,
+      "equation": 3,
+      "numeric": 3,
+      "operator": 4,
+      "solver": 2,
+      "stride": 5,
+      "symbol": 5,
+      "symbolic": 2,
+      "synthetic": 2,
+      "token": 16,
+      "train": 8
+    },
+    "message_count_observed": 12,
+    "preview": "[message_id=690307 author=Tong Hui Kang first=True] This is part of my publication for the Open Progress Prize. I read the 0.73 scoring notebook from @llkh0a / Kh0a. The approach described in Kh0a's notebook is actually very similar to mine Use code to write synthetic CoT traces Train SFT on the synthetic CoT traces Make the submission Kh0a reports the following validation score. Per-category: bit_manipulation: 35/160 = 21.88% gravity_physics: 160/160 = 100.00% numeral_system: 158/158 = 100.00% ",
+    "relevance_score": 101,
+    "text_sha256": "2dfffd202805efa59dd2fad5212f4bc47935ce7212e5821740f93b6f4bf1253c",
+    "title": "Strategy to solve 85% of bit manipulation",
+    "topic_id": 690307,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/690307"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {
+      "accuracy": 1,
+      "bit": 6,
+      "cot": 5,
+      "cryptarithm": 2,
+      "equation": 3,
+      "eval": 4,
+      "lora": 1,
+      "numeric": 1,
+      "operator": 21,
+      "prompt": 10,
+      "solver": 8,
+      "symbol": 11,
+      "synthetic": 1,
+      "train": 27
+    },
+    "message_count_observed": 15,
+    "preview": "[message_id=694556 author=toolazyhhh123 first=True] symbol_transformation would benefit from a stated rule class: finite examples cannot identify arbitrary operations First off — thank you to the organizers for putting this benchmark together. Rule-induction puzzles are a great testbed, and I've enjoyed working on this category. I'd like to share a concern in the spirit of making the task even stronger, and I'd love to hear the team's thoughts. Quick terminology note: I don't mean to imply that ",
+    "relevance_score": 101,
+    "text_sha256": "4bf273a23bdf2d57e72f5c5ccac26a1e8cb0f5dd7fd5a1497c71bd8240ee5e9f",
+    "title": "symbol_transformation class problem can have multiple valid candidate answer",
+    "topic_id": 694556,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/694556"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {
+      "accuracy": 6,
+      "adapter": 3,
+      "bit": 6,
+      "bitwise": 1,
+      "equation": 5,
+      "eval": 15,
+      "lora": 17,
+      "numeric": 1,
+      "prompt": 16,
+      "token": 16,
+      "train": 6
+    },
+    "message_count_observed": 17,
+    "preview": "[message_id=689792 author=MAJ0RT0M first=True] I'm sure we are all familiar w/ this error by now: NemotronH requires an initialized NemotronHHybridDynamicCache to return a cache. None was provided, so no cache will be returned. It makes generating reasonable length (2000 tokens+) infeasible - generation speed is ~2toks/sec - so this would take 15m GPRO becomes impossible - local evaluation also impossible. Even sanity checks to see if the model is producing reasonable output and learning thinkin",
+    "relevance_score": 92,
+    "text_sha256": "3da3028ed86f7d491de770f4973bfbb031c5b03f3e7f45be7bac5477001c97fa",
+    "title": "Is anyone able to get inference/generation speeds >2 tokens/sec?",
+    "topic_id": 689792,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/689792"
+  },
+  {
+    "expected_input": true,
+    "keyword_hits": {
+      "accuracy": 4,
+      "adapter": 2,
+      "bit": 28,
+      "bit_manipulation": 2,
+      "bitwise": 1,
+      "cot": 13,
+      "cryptarithm": 1,
+      "lora": 5,
+      "solver": 5,
+      "synthetic": 2,
+      "token": 12,
+      "train": 9
+    },
+    "message_count_observed": 21,
+    "preview": "[message_id=693260 author=Taha first=True] First, a massive shoutout to Donald Galliano III for his incredible 100% Solve Rate / Reverse Engineering post . His insights completely changed how I was approaching the dataset. I wanted to share my experience of implementing his methodology to build a custom synthetic Chain-of-Thought (CoT) dataset, how I hit 98.9% on Bit Manipulation , and the catastrophic mistake I made that actually caused my LB score to drop—plus how I'm fixing it. The Win: Solvi",
+    "relevance_score": 84,
+    "text_sha256": "60d6a233f6e84bf58c1c79dd8ff309026e513dc07ccc8bf4cb506e6af67ba70a",
+    "title": "90.7% Synthetic CoT Accuracy -> LB Drop: A Warning on Data Generation & Thanks to Donald",
+    "topic_id": 693260,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/693260"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {
+      "bit": 59,
+      "bitwise": 9,
+      "chain of thought": 1,
+      "prompt": 2,
+      "symbol": 1,
+      "symbolic": 1,
+      "synthetic": 1,
+      "train": 3
+    },
+    "message_count_observed": 4,
+    "preview": "[message_id=685886 author=lucian kucera first=True] Use this prompt to generate high quality bit data reasoning trace, when Iam done with generating traces I will share dataset. ```\"\"\" SYSTEM ROLE: You are a deterministic logic-trace engine. Your goal is to generate high-fidelity Supervised Fine-Tuning (SFT) data that explicitly demonstrates the search and verification process of symbolic logic. ATOMIC EXECUTION RULES: Bitwise Delta Analysis : Before proposing any hypothesis, you must compare In",
+    "relevance_score": 77,
+    "text_sha256": "cbbd041926788ba61f9d2b4c8e3c937dbf234bf30abe011c90543abe885a018d",
+    "title": "sharing high quality synthetic data generation prompt ",
+    "topic_id": 685886,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/685886"
+  },
+  {
+    "expected_input": true,
+    "keyword_hits": {
+      "accuracy": 6,
+      "bit": 4,
+      "bit_manipulation": 2,
+      "chain of thought": 1,
+      "cot": 5,
+      "cryptarithm": 13,
+      "equation": 10,
+      "eval": 2,
+      "loss": 3,
+      "numeric": 10,
+      "solver": 7,
+      "synthetic": 3,
+      "token": 4,
+      "train": 4
+    },
+    "message_count_observed": 13,
+    "preview": "[message_id=697491 author=Taha first=True] Hey everyone, Over the last week, I went down a massive rabbit hole trying to improve the synthetic Chain of Thought (CoT) generation for the hard categories in this competition ( cryptarithm_deduce , cryptarithm_guess , equation_numeric_guess ). I managed to write a much better deterministic algorithm to solve these, pushing my synthetic dataset accuracy from the baseline 87.7% to 95.8% . I assumed this would guarantee a leaderboard boost. Instead, my ",
+    "relevance_score": 74,
+    "text_sha256": "5e2291a6068ebd9da37642decaecd775eb3b8450775e38dcda06b44e038097df",
+    "title": "Why a \"Better\" Dataset Scored Worse: Lessons on Logprobs, Gradient Saturation, and SFT Bugs",
+    "topic_id": 697491,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/697491"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {
+      "accuracy": 1,
+      "bit": 26,
+      "bit_manipulation": 1,
+      "bitsum": 2,
+      "cot": 2,
+      "operator": 3,
+      "solver": 5,
+      "stride": 4,
+      "token": 5,
+      "train": 6
+    },
+    "message_count_observed": 2,
+    "preview": "[message_id=690756 author=Darren Amadeus Martin first=True] After seeing fhe discussions and analyzing the bit manipulation problems for many times, there can be 2 ways to tackle the bit problem FUNCTION ON FULL BITS This is the first way which I think kinda aligns with the first LB winner. The approach is first we take an unary function which is rotate, shift, and their not variations and call it U. U is applied not to a single bit but to the whole number. So NOT(11100111) would simply be (0001",
+    "relevance_score": 55,
+    "text_sha256": "1e23b687b632ced330f5d5aa39e4d43eddc85a165ab50c9b08497627d10d6b8e",
+    "title": "2 interpretations of the bit manipulation problem",
+    "topic_id": 690756,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/690756"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {
+      "bit": 5,
+      "bit_manipulation": 1,
+      "cot": 1,
+      "equation": 14,
+      "equation_transform": 1,
+      "numeric": 3,
+      "operator": 6,
+      "prompt": 2,
+      "symbol": 6,
+      "symbolic": 3,
+      "token": 1,
+      "train": 3
+    },
+    "message_count_observed": 20,
+    "preview": "[message_id=684192 author=Dennis first=True] eeae398e In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples: 63]67 = 4 18]81 = 9 72-22 = 95 64]48 = 16 65]15 = 5 Now, determine the result for: 65/58 When we look at the above question, slash has never appeared in the example. How can we deduce the solution? We know that ] is max(A, B) % min(A, B). No example is given for / e7cf0394 In Alice's Wonderland, a secret set of transformation rules i",
+    "relevance_score": 46,
+    "text_sha256": "6e32bfd7b69a8b2192d75839577f9a354d981ca8d5f7f6aaee1fb683b3e8c2d2",
+    "title": "[Dataset Hallucination?] How did you resolve these problems by human?",
+    "topic_id": 684192,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/684192"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {
+      "adapter": 1,
+      "cot": 1,
+      "equation": 4,
+      "equation_transform": 3,
+      "lora": 6,
+      "loss": 7,
+      "operator": 1,
+      "prompt": 2,
+      "solver": 8,
+      "token": 2,
+      "train": 9
+    },
+    "message_count_observed": 5,
+    "preview": "[message_id=691380 author=Shehab Anwer first=True] Hi Kaggle community & NVIDIA team 👋 I'd like to share ATLAS , my end-to-end pipeline for the NVIDIA Nemotron Reasoning Challenge. NOTEBOOK LINK ATLAS stands for Architecture-Targeting LoRA with Augmented Solvers . It combines high-quality programmatic reasoning traces with efficient LoRA targeting tailored to Nemotron’s hybrid Mamba-2 + MoE + Attention architecture. Key Techniques Solver-Augmented Training (SAT) Programmatic solvers generated ve",
+    "relevance_score": 44,
+    "text_sha256": "97ce399795aedf843fcc07f33a20a13b0a303ab2e7c81522e0c225536d3aaa11",
+    "title": "Nemotron ATLAS: Architecture-Targeting LoRA with Augmented Solvers",
+    "topic_id": 691380,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/691380"
+  },
+  {
+    "expected_input": true,
+    "keyword_hits": {
+      "cot": 1,
+      "equation": 5,
+      "lora": 1,
+      "numeric": 1,
+      "operator": 3,
+      "prompt": 2,
+      "solver": 7,
+      "symbol": 11,
+      "symbolic": 10,
+      "train": 2
+    },
+    "message_count_observed": 4,
+    "preview": "[message_id=698293 author=lkevincc first=True] I have been using this gold-conditioned symbolic solver to study the rule structure of the equation_symbolic category. To be clear, this is not an inference-time competition solution. The solver uses the known target answer as a constraint, so it should be viewed as a research oracle rather than something directly usable in a Kaggle submission. What it shows is that for many examples, there exists a latent symbolic rule that can explain the puzzle. ",
+    "relevance_score": 43,
+    "text_sha256": "e16ca17c06a8e59e5f743474aed86078d6c4a57e0432d0c164fcfe5be1171f66",
+    "title": "97.2% Gold-Conditioned Symbolic Solver Exposing Digit Mappings and Operators",
+    "topic_id": 698293,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/698293"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {
+      "accuracy": 5,
+      "bit": 7,
+      "bit_manipulation": 1,
+      "cot": 4,
+      "lora": 1,
+      "numeric": 2,
+      "prompt": 2,
+      "symbol": 4,
+      "synthetic": 1,
+      "token": 5,
+      "train": 7
+    },
+    "message_count_observed": 7,
+    "preview": "[message_id=686069 author=EnDream first=True] I ran error analysis on 300 stratified samples (50 per category) after SFT training (1200 samples, LoRA rank 32, 2 epochs). Here are the per-category accuracy numbers: Category Accuracy Error Pattern numeral 100% — unit_conv 100% — bit_ops 30% Model guesses plausible but wrong bit patterns gravity 12% Numerical errors of 10-25%, model doesn't compute g correctly cipher 0% Outputs random plausible words, no actual decryption symbol 6% Completely wrong",
+    "relevance_score": 39,
+    "text_sha256": "50fe92b1eabbebeec3982e8908d54f306730f7915c70656b2f82e117c7942f01",
+    "title": "Per-Category Error Analysis After SFT (0.63 LB) — Where the Real Bottlenecks Are",
+    "topic_id": 686069,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/686069"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {
+      "adapter": 3,
+      "lora": 7,
+      "loss": 2,
+      "symbol": 1,
+      "token": 4,
+      "train": 19
+    },
+    "message_count_observed": 10,
+    "preview": "[message_id=687961 author=Tong Hui Kang first=True] I want to understand the theoretical limitations when training Nemotron-3-Nano-30B-A3B-BF16 with rank 32 LoRA on length 8192 sequences. I have not proven that any of the configurations listed here works in practice. I am making my own training implementation, and I want to understand whether my inefficiencies are avoidable with better implementation. Please help me check if I have missed any theoretical limits, thanks! This table calculates how",
+    "relevance_score": 36,
+    "text_sha256": "498accee3cd693824bd47c80c2217bef9ceeec56fb5a65b05e2e92dfdd4fb711",
+    "title": "Training Nemotron-3-Nano-30B-A3B-BF16 with rank 32 LoRA on length 8192 sequences",
+    "topic_id": 687961,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/687961"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {
+      "adapter": 5,
+      "eval": 8,
+      "lora": 1,
+      "prompt": 12,
+      "solver": 1,
+      "token": 3,
+      "train": 5
+    },
+    "message_count_observed": 4,
+    "preview": "[message_id=682355 author=Kamal Raj Kanakarajan first=True] Hi, I have a question regarding how we can experiment with prompting strategies given the fixed evaluation pipeline and some strict constraints on sequence length. Model Sequence Length Constraints Based on the submission demo and competition overview, we are working with very specific length limits: Prompt Limit: The input prompt length is strictly capped at <512 tokens. Total Max Length: The model's max_length is fixed at 8192. Reason",
+    "relevance_score": 35,
+    "text_sha256": "02fd4e03a805ac16fb54468972e22a56205bd32c44585c19d8f9ee1944d17606",
+    "title": "Clarification needed: Experimenting with prompting strategies vs. strict sequence length constraints?",
+    "topic_id": 682355,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/682355"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {
+      "adapter": 10,
+      "bit": 1,
+      "eval": 1,
+      "lora": 7,
+      "prompt": 4,
+      "token": 7,
+      "train": 5
+    },
+    "message_count_observed": 5,
+    "preview": "[message_id=686444 author=WillTLing first=True] I encountered the following issue: transformers_modules.nemotron_model.modeling_nemotron_h|WARNING] NemotronH requires an initialized `NemotronHHybridDynamicCache` to return a cache. None was provided, so no cache will be returned When I was conducting GRPO training, the training speed was very slow. I suspect this might be related to the issue mentioned above. I noticed that a similar problem was also mentioned in this discussion , but I'm not sur",
+    "relevance_score": 35,
+    "text_sha256": "0cc777c9206f46639cd4da676ede72e4346ed6c80d0aae7855b5051c73088e61",
+    "title": "It seems the KV cache is not enabled during RL training",
+    "topic_id": 686444,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/686444"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {
+      "accuracy": 1,
+      "bit": 4,
+      "bit_manipulation": 2,
+      "bitsum": 1,
+      "cot": 5,
+      "cryptarithm": 6,
+      "equation": 2,
+      "numeric": 2,
+      "operator": 4,
+      "solver": 3,
+      "token": 3,
+      "train": 1
+    },
+    "message_count_observed": 3,
+    "preview": "[message_id=690891 author=Zejun_ first=True] Thank huikang for providing such a powerful new starting point for the latter part of this competition. Congratulations! If you run the longer notebook and look at the report results, you will find that the accuracy rates for the three categories of problems, cryptarithm_deduce , cryptarithm_guess , and equation_numeric_guess , are all very low. These will be the main directions for everyone's efforts after this incredibly powerful baseline. To solve ",
+    "relevance_score": 34,
+    "text_sha256": "fcfba1075fe01bf71059aa369a40f10c8934b55c53ffe63aab0cd2fe950a0241",
+    "title": "There are still many missing pieces of the puzzle: equation and cryptarithm.",
+    "topic_id": 690891,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/690891"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {
+      "adapter": 1,
+      "bit": 1,
+      "eval": 1,
+      "lora": 2,
+      "prompt": 2,
+      "token": 21,
+      "train": 4
+    },
+    "message_count_observed": 3,
+    "preview": "[message_id=692092 author=zkhdGuoFeng first=True] blow is my predict code, it's too slow that predicting 1token/second. My server is 4 cards of L20(48G GPU): PyTorch: 2.6.0+cu118 CUDA available: True CUDA version: 11.8 GPU count: 4 GPU name: NVIDIA L20 nvidia-smi Thu Apr 16 16:28:16 2026 +-----------------------------------------------------------------------------------------+ | NVIDIA-SMI 580.126.20 Driver Version: 580.126.20 CUDA Version: 13.0 | +-----------------------------------------+----",
+    "relevance_score": 32,
+    "text_sha256": "cd5e6f741268f613052aaf18059c8a7886426560db34e2420cb907e743248f68",
+    "title": "Please help me, my predict code as slow as 1 token/second",
+    "topic_id": 692092,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/692092"
+  },
+  {
+    "expected_input": true,
+    "keyword_hits": {
+      "accuracy": 1,
+      "bit": 9,
+      "equation": 2,
+      "eval": 2,
+      "lora": 2,
+      "symbol": 4,
+      "symbolic": 2,
+      "token": 2,
+      "train": 5
+    },
+    "message_count_observed": 20,
+    "preview": "[message_id=687798 author=Ryan Holbrook first=True] Hi everyone, Recently, there was an update to the evaluation metric that fixed a bug that was causing binary answers to match as floats instead of exactly as strings. This update led to a drop of about 0.3-0.4 points on new submissions. (The update is in the verify() function of the linked notebook.) So that the leaderboard will only reflect submissions using the new metric, I will be initiating a rescore on Monday. This rescore will only evalu",
+    "relevance_score": 29,
+    "text_sha256": "6689bf229093840565d641b0d7451b8ee4c99a68a3cbbb575e9b2adf16c15166",
+    "title": "Rescore After Metric Update",
+    "topic_id": 687798,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/687798"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {
+      "bit": 1,
+      "cot": 6,
+      "cryptarithm": 3,
+      "lora": 2,
+      "prompt": 1,
+      "synthetic": 5,
+      "token": 5,
+      "train": 5
+    },
+    "message_count_observed": 8,
+    "preview": "[message_id=692950 author=Taha first=True] I’ve been experimenting quite a bit with the Nemotron reasoning setup over the past few days, and I’m starting to feel like many of us might be hitting a similar ceiling around ~0.86. From what I can tell, a lot of current approaches seem to fall into two buckets: building directly on top of strong public notebooks (which already reach ~0.86), or trying to reproduce / adapt methods like Tong Hui Kang’s pipeline I’ve personally tried a mix of things on t",
+    "relevance_score": 28,
+    "text_sha256": "d4e74b88844b222e42b1ea290e04b5afb69c92aed44d6d66a3fcbe4979e1be23",
+    "title": "Is ~0.86 a current ceiling for most approaches? ",
+    "topic_id": 692950,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/692950"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {
+      "adapter": 2,
+      "bit": 2,
+      "chain of thought": 1,
+      "cot": 2,
+      "equation": 4,
+      "eval": 4,
+      "lora": 5,
+      "train": 6
+    },
+    "message_count_observed": 2,
+    "preview": "[message_id=688120 author=Sahil Patil first=True] Hi everyone, A lot of participants here are new to LoRA/PEFT and training adapters. This comp’s setup-Nemotron base + LoRA zip submission + exact-match puzzle eval-is a concrete goal, but the learning curve is still steep without a good reading order and a few battle-tested patterns. If you’ve fine-tuned LLMs before (especially LoRA on HF stacks, Kaggle GPUs, or similar reasoning/supervised setups), it would help a lot if you could pay it forward",
+    "relevance_score": 26,
+    "text_sha256": "de0dc6b761a524fa49127a1f5a09b267ecbbb8e410212a5ec80e73a1a44ed6ac",
+    "title": "Calling experienced fine-tuners: share LoRA / PEFT resources for newcomers in this challenge",
+    "topic_id": 688120,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/688120"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {
+      "adapter": 1,
+      "eval": 5,
+      "lora": 1,
+      "token": 2,
+      "train": 16
+    },
+    "message_count_observed": 14,
+    "preview": "[message_id=683172 author=Keanan first=True] I have also added a notebook version for easier navigation (table of contents): [ https://www.kaggle.com/code/citerne/from-local-dev-rtx-6000-kaggle-cli-guide ] Practical guide for the NVIDIA Nemotron Model Reasoning Challenge . Hard-won lessons on setting up a CLI → Kaggle GPU workflow, pitfalls to avoid, and everything you need to get started. Why This Workflow? The Kaggle web interface is great for exploration, but once you want to: Iterate quickly",
+    "relevance_score": 25,
+    "text_sha256": "06b3f80240395079cfce370e0efa3688f9003e4613ee38c722ee1690723cbba7",
+    "title": "Kaggle CLI — Develop Locally and Run on RTX Pro 6000 GPU",
+    "topic_id": 683172,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/683172"
+  },
+  {
+    "expected_input": true,
+    "keyword_hits": {
+      "adapter": 4,
+      "bit": 2,
+      "cot": 1,
+      "lora": 3,
+      "synthetic": 2,
+      "train": 13
+    },
+    "message_count_observed": 28,
+    "preview": "[message_id=688360 author=c-number first=True] https://www.kaggle.com/datasets/kienngx/nemotron-30b-competition-trainingdata-cot-labels It seems it's okay. [message_id=3439425 author=CPMP first=False] @cnumber Thanks for raising this, it is a recurring issue in Kaggle competitions. Not kaggle fault, rather the complexity of IP laws and regulations. Disclaimer: We cannot provide legal advice. Contact someone trained on US IP laws if you need advice. With the above disclaimer, here is our thought.",
+    "relevance_score": 25,
+    "text_sha256": "9f8f84229cf3c454a4f0112e3a76d75c5421f525360f574686a5825c0ab17a84",
+    "title": "[update] Read CPMP's reply. [original] Do not distill models that do not allow distillation (e.g. gemini, gpt5)",
+    "topic_id": 688360,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/688360"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {
+      "adapter": 4,
+      "bit": 1,
+      "cryptarithm": 2,
+      "eval": 2,
+      "lora": 8,
+      "train": 7
+    },
+    "message_count_observed": 8,
+    "preview": "[message_id=692879 author=Taha first=True] Hey everyone, I’m currently prepping a final training run and wanted to get the community's thoughts on using DoRA (Weight-Decomposed Low-Rank Adaptation) instead of standard LoRA for this specific reasoning challenge. I’ve managed to hit a solid baseline (around 0.84 - 0.85) using standard SFT with a carefully balanced data mix and a cosine scheduler. However, I'm looking for that last 1-2% push to handle the harder algorithmic categories (like cryptar",
+    "relevance_score": 24,
+    "text_sha256": "cbae33cdbf47e7f0733602367a36c4bcb7fbdcecb2a446ed4733da2e7f574257",
+    "title": " Is DoRA allowed does it actually improve LB scores?",
+    "topic_id": 692879,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/692879"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {
+      "bit": 1,
+      "loss": 1,
+      "token": 1,
+      "train": 19
+    },
+    "message_count_observed": 4,
+    "preview": "[message_id=686865 author=HaoKwok first=True] Hi everyone, I am seeking advice on a persistent issue when transitioning from DeepSpeed ZeRO-2 to ZeRO-3 for fine-tuning Nemotron-30B on a local setup with 2x NVIDIA A100 (80GB). Current Context & Motivation Previously, I was using ZeRO-2, which works but is pushed to the absolute physical limit. With per_device_train_batch_size=2 and max_seq_len=3072, my VRAM usage sits at 79.5GB / 80GB. To gain more headroom for larger batches or longer sequences,",
+    "relevance_score": 22,
+    "text_sha256": "69fd4022617381e445d91ff6560032a5d83f3f283b9d912e426f627745645bee",
+    "title": "Has anyone successfully run NVIDIA Nemotron using DeepSpeed ZeRO-3?",
+    "topic_id": 686865,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/686865"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {
+      "adapter": 2,
+      "bit": 2,
+      "equation": 1,
+      "eval": 2,
+      "lora": 4,
+      "prompt": 5,
+      "train": 5
+    },
+    "message_count_observed": 7,
+    "preview": "[message_id=681793 author=Devin Anzelmo first=True] There appear to be six different problem types in the training set: numbers are secretly converted into a different numeral system the gravitational constant has been secretly changed a secret set of transformation rules is applied to equations secret encryption rules are used on text a secret bit manipulation rule transforms 8-bit binary numbers a secret unit conversion is applied to measurements Are these the same set of problem types that ap",
+    "relevance_score": 21,
+    "text_sha256": "35c5354e3955c6440baa49863b0c046afcf52c1b35d5890310077b0dbd62c295",
+    "title": "Are problem types the same for train and test?",
+    "topic_id": 681793,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/681793"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {
+      "adapter": 1,
+      "bit": 2,
+      "lora": 9,
+      "train": 9
+    },
+    "message_count_observed": 4,
+    "preview": "[message_id=682167 author=c-number first=True] I tried training with unsloth using my RTX 5090, but failed due to OOM. Has anyone been able to train locally? [message_id=3422854 author=lucian kucera first=False] Bruh u have RTX PRO 6000 on kaggle, there is no point in using 5090. Kaggle GPU has 3 times the vram. Model is in BF16 and has 30B params so simple math u need 60GB vram to load model. Than ofc when u train lora u add additional params + activations. Optimizer has copy of each trainable ",
+    "relevance_score": 21,
+    "text_sha256": "3c1ee3531577f48a9d0c9d9a7df7735118af2cb28eaf91851d546d2a89bdffeb",
+    "title": "What is the minimum VRAM for training?",
+    "topic_id": 682167,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/682167"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {
+      "accuracy": 2,
+      "bit": 2,
+      "bitwise": 1,
+      "cot": 2,
+      "equation": 3,
+      "eval": 2,
+      "numeric": 1,
+      "symbol": 2,
+      "symbolic": 1,
+      "token": 1,
+      "train": 1
+    },
+    "message_count_observed": 6,
+    "preview": "[message_id=689840 author=m4nocha first=True] here are my results with SFT ======================================================= ✅ OVERALL ACCURACY : 81.34% (693/852) ------------------------------------------------------- > Bit Manipulation : 9.23% (12/130) > Equation Transformation : 52.11% (37/71) > Gravitational Constant : 100.00% (148/148) > Number Base Conversion : 100.00% (162/162) > Text Encryption : 95.86% (162/169) > Unit Conversion : 100.00% (172/172) -------------------------------",
+    "relevance_score": 18,
+    "text_sha256": "a051a854445fdcd45258b805c9089477eeb8274211fa1719bdf23645fddb8dce",
+    "title": "Is RLVR worth it? or should I work on SFT only?",
+    "topic_id": 689840,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/689840"
+  },
+  {
+    "expected_input": true,
+    "keyword_hits": {
+      "equation": 3,
+      "eval": 1,
+      "operator": 8,
+      "prompt": 3,
+      "symbol": 1
+    },
+    "message_count_observed": 3,
+    "preview": "[message_id=689877 author=Darren Amadeus Martin first=True] I have noticed that on some of the equations problem, around 20% of the prompt asks for equations that did not even have any examples at all. For example is id 260f20c1 where the problem is In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples: 84[69 = 153 13+97 = 1260 46+47 = 2161 52[80 = 132 Now, determine the result for: 22\\65 Answer: 43 Since the sign '\\' did not appear in the ",
+    "relevance_score": 16,
+    "text_sha256": "6db9a34970890e7bf9d641362823a2f2b758ff5214e2850d8d9f12f2604e789a",
+    "title": "Hallucination in equation problems?",
+    "topic_id": 689877,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/689877"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {
+      "adapter": 2,
+      "cryptarithm": 2,
+      "equation": 4,
+      "eval": 1,
+      "lora": 2,
+      "symbol": 2,
+      "train": 3
+    },
+    "message_count_observed": 13,
+    "preview": "[message_id=696059 author=Birtley Doru (DB) first=True] fa5dfa46,\"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples: $< &@ = &$@\\ }->@ = -!$ }>+@< = !}} \\@ @@ = &<>$ Now, determine the result for: }^-`}\",-^} What if the answer contains square brackets? Can putting a box over a character correctly identify whether it's right or wrong? [message_id=3453927 author=Ogurtsov first=False] @ryanholbrook If we have any chance to get fixed train ",
+    "relevance_score": 16,
+    "text_sha256": "2cd8b399e9bfb1e19cb081feffb5beab1624812f12924ce6da94d6dba8ed4c3b",
+    "title": "What if the answer contains square brackets?",
+    "topic_id": 696059,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/696059"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {
+      "accuracy": 1,
+      "bit": 3,
+      "equation": 2,
+      "loss": 1,
+      "operator": 5,
+      "symbol": 2,
+      "symbolic": 1
+    },
+    "message_count_observed": 7,
+    "preview": "[message_id=684432 author=Шерхан Масакбаев first=True] I've been analyzing the problem types and wanted to share some findings on what seems to be the hardest category. Based on @huikang 's visualization, the base model solves only 2 out of 823 Equation Symbolic problems (0.2%). For comparison, Numeral is at 96%, Unit Conversion at 75%, Gravity at 59%. I did some deeper analysis of the structure: Format: Each problem has equations like AB_CD = result where _ is an operator character and A,B,C,D ",
+    "relevance_score": 15,
+    "text_sha256": "1bb3b6ed7e45bb63193fbc6b43deaee80850756b1813af6cd95bc566727977ae",
+    "title": "Equation Symbolic has anyone figured out the pattern?",
+    "topic_id": 684432,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/684432"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {
+      "accuracy": 1,
+      "adapter": 3,
+      "cot": 1,
+      "lora": 1,
+      "prompt": 1,
+      "symbol": 1,
+      "symbolic": 1,
+      "synthetic": 1,
+      "train": 5
+    },
+    "message_count_observed": 2,
+    "preview": "[message_id=694859 author=Taha first=True] Hi everyone, The NVIDIA Nemotron Model Reasoning Challenge is meant to push forward practical reasoning improvements on a shared Nemotron-3-Nano-30B baseline through better data, prompting, synthetic generation, fine-tuning recipes, etc. I've come across a few notebooks that are getting a lot of upvotes despite containing very little actual advancement on the model side. One prominent example is titled something like \"NVIDIA Hybrid AI: LightBoost + Logi",
+    "relevance_score": 15,
+    "text_sha256": "3166acce241ac0dd2d3c3940a5eec7930ae82dcbb9d2f6eeca4743dc4942e90f",
+    "title": "Observations on high-visibility notebooks with minimal model contribution in the Nemotron Reasoning Challenge",
+    "topic_id": 694859,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/694859"
+  },
+  {
+    "expected_input": true,
+    "keyword_hits": {
+      "accuracy": 2,
+      "cot": 3,
+      "token": 1,
+      "train": 8
+    },
+    "message_count_observed": 2,
+    "preview": "[message_id=682313 author=Shoto first=True] The Google Tunix Hack focused on post-training and fine-tuning techniques for eliciting reasoning traces from language models , with Tunix presented as a JAX-native library for LLM post-training . Nemotron is not the same competition, but it is close in spirit: its central goal is also improving reasoning performance . Because of that overlap, many of the ideas that emerged from Tunix are either directly transferable or at least highly adaptable. Two-S",
+    "relevance_score": 14,
+    "text_sha256": "d829f49ba080e3a3ca2c5c7e08d423a78d6d5fdf54373f426e3e419215815e0c",
+    "title": "Let's learn from Google Tunix Hack for Nemotron",
+    "topic_id": 682313,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/682313"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {
+      "adapter": 4,
+      "lora": 8,
+      "train": 2
+    },
+    "message_count_observed": 3,
+    "preview": "[message_id=684251 author=DaoHe Liu first=True] Unsloth's official documentation has added an adapter for Nemotron, but Kaggle shows that the trainable parameters seem to differ from the official documentation. Has anyone encountered this issue? The official documents are as follows： model = FastLanguageModel.get_peft_model( model, r = 8, # Choose any number > 0 ! Suggested 8, 16, 32, 64, 128 target_modules = [\"q_proj\", \"k_proj\", \"v_proj\", \"o_proj\", \"gate_proj\", \"up_proj\", \"down_proj\", \"in_proj\"",
+    "relevance_score": 14,
+    "text_sha256": "ca20957159b10e5e700e92d36378f3ff82a572604d6e34367840c4dc1ea4033f",
+    "title": "The fit of unsloth to the Nemotron model",
+    "topic_id": 684251,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/684251"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {
+      "accuracy": 1,
+      "cot": 1,
+      "lora": 2,
+      "prompt": 3,
+      "solver": 1,
+      "synthetic": 1,
+      "token": 1,
+      "train": 4
+    },
+    "message_count_observed": 2,
+    "preview": "[message_id=696993 author=Anjana mohan first=True] Hi everyone, I’ve been working on fine-tuning Nemotron-3-Nano-30B with LoRA on the 4 deterministic puzzle types (gravity, numeral, unit_conversion, cipher) and experiencing score drops below baseline. My setup: • Base model score: 0.51 • Training data: 6,343 real train.csv examples with programmatically generated CoT traces • 100% solver accuracy on all 4 types locally • LoRA rank 16, 3 epochs, lr=2e-4 • Prompt format includes the competition su",
+    "relevance_score": 14,
+    "text_sha256": "3082e88dad39e50255b1da797e501ef8d6240a230846f0b0147dcb4f04ac293a",
+    "title": " Feedback Needed: SFT on Deterministic Puzzles Dropping Score Below Baseline",
+    "topic_id": 696993,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/696993"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {
+      "adapter": 2,
+      "cryptarithm": 1,
+      "eval": 1,
+      "lora": 3,
+      "prompt": 1,
+      "solver": 1,
+      "synthetic": 1,
+      "train": 4
+    },
+    "message_count_observed": 4,
+    "preview": "[message_id=697139 author=Taha first=True] Kaggle Competition Integrity: The Nemotron \"Wall of Shame\" I’ve noticed a significant uptick in low-effort, plagiarized, or \"word-farmed\" notebooks being published in this competition. Specifically, users are: Plagiarizing Baselines: Simply copying existing high-LB (Leaderboard) notebooks and changing the title or adding random comments. Word Farming: Adding large blocks of AI-generated or irrelevant text to notebooks to bypass spam filters or game the ",
+    "relevance_score": 14,
+    "text_sha256": "c5c57e7f74233d31e9c273409cf4128c0babcfec9fdea9efbedf5b29190adb8f",
+    "title": "The Rise of \"Brain Rot\" Submissions in Nemotron Challenge (Updated Daily)",
+    "topic_id": 697139,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/697139"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {
+      "bit": 1,
+      "bit_manipulation": 1,
+      "cot": 2,
+      "equation": 2,
+      "solver": 1,
+      "symbol": 2,
+      "symbolic": 2,
+      "synthetic": 1,
+      "train": 1
+    },
+    "message_count_observed": 5,
+    "preview": "[message_id=686185 author=CS Major first=True] Was looking through some of the questions where my CoT generating code failed (mostly in the symbolic algebra question types) and I noticed a few questions such as the following: \"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples: 34/44 = 1 41/32 = 9 34|25 = 69 87\\64 = 8853 Now, determine the result for: 69/52\" and the solution is \"17/\" and \"In Alice's Wonderland, a secret set of transforma",
+    "relevance_score": 13,
+    "text_sha256": "80406fbbbbe101494ea1fd17d7d6d6f72126c242181d033d3301cfece23fdfb5",
+    "title": "Seemingly Impossible Questions in Dataset?",
+    "topic_id": 686185,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/686185"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {
+      "cot": 7,
+      "lora": 2,
+      "train": 4
+    },
+    "message_count_observed": 11,
+    "preview": "[message_id=686419 author=ForcewithMe first=True] I trained models with all 9500 samples with/without cot on my local machine. Upload the lora weight to kagge dataset, and submit with the following code: import os os.chdir('kaggle_lora_path') !zip -r /kaggle/working/submission.zip ./* No mater with/without cot, no matter how many iterations, the score is always lower than 0.6. I noticed that public notebook easily score 0.6x with 600 samples. My score doesn't make any sense! Has anyone faced the",
+    "relevance_score": 13,
+    "text_sha256": "f4ebbf13829bce2086118fe0914b8a976cf737f0835100d1433b9d1408cde922",
+    "title": "Train locally and get lower scores.",
+    "topic_id": 686419,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/686419"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {
+      "adapter": 1,
+      "bit": 3,
+      "lora": 3,
+      "loss": 1,
+      "token": 1,
+      "train": 4
+    },
+    "message_count_observed": 2,
+    "preview": "[message_id=698277 author=Hardik Yerne first=True] Hi everyone, I'm fine-tuning DeepSeek Math 7B with LoRA for this competition and running into package compatibility issues on Kaggle's environment. My setup: Model: deepseek-math-7b-instruct (4-bit NF4 quantization) LoRA: r=8, target q_proj + v_proj Training: 600 steps, cosine LR, batch=1, grad_accum=8 Val loss reached 0.6889 at step 600 Issues faced: trl/transformers/bitsandbytes version conflicts tokenizer path validation errors with local Kag",
+    "relevance_score": 13,
+    "text_sha256": "eb90a4e94b21e9a4b144b0e71e8c88b824799eea083e80946977971b4496f3fa",
+    "title": "DeepSeek Math 7B LoRA fine-tuning — dependency issues on Kaggle environment",
+    "topic_id": 698277,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/698277"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {
+      "accuracy": 2,
+      "cot": 3,
+      "prompt": 2,
+      "synthetic": 1,
+      "train": 3
+    },
+    "message_count_observed": 6,
+    "preview": "[message_id=684508 author=m4nocha first=True] I saw that people are achieving 69% accuracy with only prompt -> boxed answer mapping on the other hand i am able to achieve only 65% accuracy with synthetic CoT SFT (for 4 easy categories only)? do you think there is something wrong with my training pipeline? or do I need to move forward with RL? I analysed the answer prompt on the validation set and the output reasoning trace is quite different from the training input [message_id=3430305 author=tam",
+    "relevance_score": 11,
+    "text_sha256": "f42265b9174d3c9c9a758e38de4aaffc92a14ebee86066478ca82a5c904224ab",
+    "title": "maximum achievable performance with SFT only",
+    "topic_id": 684508,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/684508"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {
+      "bit": 1,
+      "eval": 2,
+      "solver": 2,
+      "synthetic": 1,
+      "train": 5
+    },
+    "message_count_observed": 3,
+    "preview": "[message_id=694446 author=Ghazi Boumediene Ghaouti first=True] Is it possible to use my own new training data? [message_id=3455588 author=AMITH NAIR first=False] Your question is a bit vague regarding what you mean by \"my own training data.\" If you are asking whether you can perform feature engineering on the provided competition dataset (train.csv), then yes absolutely. In fact, that is essentially the core objective of the competition and one of the main ways to improve performance. However, i",
+    "relevance_score": 11,
+    "text_sha256": "35812784595b76f8ed7abb9746b9bec148f058baef28ab6d4188235baea908f3",
+    "title": "Is it possible to use my own new training data?",
+    "topic_id": 694446,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/694446"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {
+      "bit": 7,
+      "equation": 1,
+      "prompt": 1,
+      "train": 1
+    },
+    "message_count_observed": 3,
+    "preview": "[message_id=683573 author=Dennis first=True] (1) In Alice's Wonderland, a secret unit conversion is applied to measurements. For example: 22.27 m becomes 16.31 1a) can I expect \"In Alice's Wonderland, a secret unit conversion is applied to measurements. For example:\" must appear in all public and private datasets for the same type of unit conversion question? 1b) can I expect the example will have varied \"unit\", or the unit is the same (must be \"m\") in all public and private datasets for the sam",
+    "relevance_score": 10,
+    "text_sha256": "4eaded5ef2fb667a58930f62369a8b5a5cab689859e3a5e718e653e2bdc24f95",
+    "title": "Exactly same \"types\" of the prompts?",
+    "topic_id": 683573,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/683573"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {
+      "eval": 3,
+      "token": 3,
+      "train": 3
+    },
+    "message_count_observed": 6,
+    "preview": "[message_id=682878 author=ducnh279 first=True] Hi, I have a question regarding inference/runtime constraints for this competition. In many Kaggle competitions, we usually have limits like: CPU Notebook ≤ 9 hours runtime GPU Notebook ≤ 5 hours runtime However, I couldn’t find any explicit information about runtime limits for this competition’s evaluation setup. Could the organizers clarify: Is there a total runtime limit during evaluation? Are there any constraints on inference time per submissio",
+    "relevance_score": 9,
+    "text_sha256": "22f8450d06e9294b369e26302ae21844c5bef5fd9d71a7e7d909c9c8d3c06d63",
+    "title": "Runtime Limits During Evaluation? (CPU/GPU Constraints)",
+    "topic_id": 682878,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/682878"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {
+      "symbol": 1,
+      "synthetic": 1,
+      "train": 7
+    },
+    "message_count_observed": 8,
+    "preview": "[message_id=685710 author=Donald Galliano III first=True] I've spent the last two weeks reverse-engineering all 8 puzzle categories in this benchmark. I have: Working factories that generate unlimited verified training samples for every category Structured reasoning traces (not naive SFT) with Python-verified ground truth Full understanding of the binary boolean decomposition, cipher substitutions, symbol transforms, digit pairings, gravity/roman/unitconv formulas A 50k sample synthetic dataset ",
+    "relevance_score": 9,
+    "text_sha256": "0f1b7b04262a1dbdfa41e1b375e892bb49b929e1427ab03c3106c892da97b30e",
+    "title": "Compute partner needed - deterministic solvers for all puzzle categories built, budget-constrained",
+    "topic_id": 685710,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/685710"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {
+      "accuracy": 2,
+      "eval": 7
+    },
+    "message_count_observed": 5,
+    "preview": "[message_id=685817 author=MD Mushfirat Mohaimin first=True] I submitted the same submission.zip multiple times, and got different scores. As per comments in other threads, many other participants can also observe this. This is only possible if the temperature parameter during evaluation is something other than 0 . In the evaluation section of the competition overview, it's written that temparature is supposed to be 0 . Perhaps, there's a mistake in the evaluation code? It's possible because the ",
+    "relevance_score": 9,
+    "text_sha256": "026aacd0c4013760bdd355d620bd3045cbec516a72c40896976ce7f7ef277d5b",
+    "title": "Submission re-runs give different scores",
+    "topic_id": 685817,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/685817"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {
+      "adapter": 2,
+      "eval": 1,
+      "lora": 5
+    },
+    "message_count_observed": 4,
+    "preview": "[message_id=687547 author=Caspian Lin first=True] Can we use DoRA (Weight-Decomposed Low-Rank Adaptation) to improve LoRA performance? I tried setting use_dora=True in the LoRA config, but I encountered an unknown error after submitting. Is DoRA supported in the final test submission? Or is this competition limited to using basic LoRA configurations? [message_id=3435050 author=NNMax first=False] Unfortunately I dont think DoRA is supported by vllm yet. You can see more details in this github iss",
+    "relevance_score": 8,
+    "text_sha256": "9a21bbd37cdf6f03dc98dd9f1063703da88710cabd4a1c3f76ef5f120a06e8f3",
+    "title": "Can we use DoRA (Weight-Decomposed Low-Rank Adaptation) to improve LoRA performance?",
+    "topic_id": 687547,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/687547"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {
+      "adapter": 2,
+      "lora": 2,
+      "train": 3
+    },
+    "message_count_observed": 7,
+    "preview": "[message_id=683394 author=lucian kucera first=True] Lets say I train model on reasoning traces of much larger model, is that allowed? IF we can distill larger models, can we get rough list which models are allowed? For example someone generates 100k of reasoning traces using claude opus 4.6, since they don't have obfuscated reasoning traces. Than does SFT on those traces, would have imense advantage. Maybe even disilling nvidia/Nemotron-4-340B-Instruct or some other ultra large opensource model ",
+    "relevance_score": 7,
+    "text_sha256": "86de312128c43a17b23d16a576ddca62966cceb3cfbfd2a7a9ec49b62ec757d1",
+    "title": "Are we allowed to distil larger models?[KAGGLE STAFF NEEDED]",
+    "topic_id": 683394,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/683394"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {
+      "synthetic": 3,
+      "train": 4
+    },
+    "message_count_observed": 17,
+    "preview": "[message_id=686036 author=Youhei Tomio first=True] I tried copying high-scoring notebooks and making small adjustments, such as tuning parameters or modifying the training approach, but I quickly run into out-of-memory errors. For participants with scores around 0.8, are they achieving those results using only Kaggle’s provided resources, or are they relying on external computing resources? [message_id=3433006 author=Irving Ernesto first=False] Honestly, no. Lately the competitions have downgrad",
+    "relevance_score": 7,
+    "text_sha256": "f0bb6a766f14a983865fa9454e439f3e58f83a971f8e6897fe1112bdbb03bb54",
+    "title": "Is it possible to win this competition using only Kaggle-provided machine resources?",
+    "topic_id": 686036,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/686036"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {
+      "eval": 1,
+      "numeric": 1,
+      "prompt": 1,
+      "train": 4
+    },
+    "message_count_observed": 4,
+    "preview": "[message_id=687101 author=NatSwamin first=True] Hi, All the answers in the column are rounded off just to two place alone in training. This results in rounding off errors when the prompt gets solved. Is there a tolerance built in to accept the answers if so what is it? I am wondering what needs to be consistent treatment in train and test dataset. can the challenge organiser clarify? Many Thanks Nat! [message_id=3433851 author=MD Mushfirat Mohaimin first=False] For numerical values, the toleranc",
+    "relevance_score": 7,
+    "text_sha256": "58e832e66e031ee3dd416285dc0807fa0387891df3340b12591694c8eb1ec372",
+    "title": "Rounding off issues numerical problems",
+    "topic_id": 687101,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/687101"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {
+      "bit": 1,
+      "cot": 1,
+      "cryptarithm": 1,
+      "prompt": 1,
+      "synthetic": 1,
+      "train": 2
+    },
+    "message_count_observed": 9,
+    "preview": "[message_id=693270 author=Svanik Kolli first=True] Hey everyone, Is it just me, or has the momentum for the Nemotron Reasoning Challenge hit a massive brick wall? Looking at the leaderboard, it feels like the entire community has collectively stalled out at the 0.85–0.86 range. The rapid-fire updates we saw in the first few weeks have slowed to a crawl, and it seems like we’re all staring at the same bottlenecks (looking at you, Cryptarithms and logic-trace bugs). It feels like the \"low-hanging ",
+    "relevance_score": 7,
+    "text_sha256": "fbb22451c62e4184d532315e6b47fe0ca364830bf5080382f84a7a1c882127fb",
+    "title": "Competition has dramatically slowed down ",
+    "topic_id": 693270,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/693270"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {
+      "bit": 1,
+      "cot": 3,
+      "token": 3
+    },
+    "message_count_observed": 5,
+    "preview": "[message_id=697746 author=Harshita Kumari first=True] I have tried cot finetuning, generated custom reasoning from deepseek/qwen-30b model for bit manipulation and other complex tasks it generated reasoning but it was not complete but still i collected all of them and finetuned but the score is .52 which is very low https://www.kaggle.com/code/harshitakumari256/notebook633554d240 [message_id=3455320 author=Manish Swami first=False] target_modules = [ 'out_proj', 'v_proj', 'q_proj', 'down_proj', ",
+    "relevance_score": 7,
+    "text_sha256": "3c91ad5fcd2f9f435b26907785fffaee7432be69a7905d4b4cc62a1fdcf38259",
+    "title": "SCORE NOT IMPROVING EVEN WITH REASONING+ANSWER FINETUNING",
+    "topic_id": 697746,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/697746"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {
+      "adapter": 2,
+      "cot": 1,
+      "lora": 1,
+      "train": 3
+    },
+    "message_count_observed": 2,
+    "preview": "[message_id=698857 author=Penguin first=True] Hi Host, To ensure I'm aligned with the rules for prize eligibility, I have a follow-up regarding data generation. I am currently using GPT-5 family model as a 'teacher' model to generate high-quality Chain-of-Thought (CoT) reasoning for the training dataset. These reasoning traces are then used to fine-tune the Nemotron-3-Nano-30B-A3B via LoRA. Given that some proprietary model TOS (like OpenAI's) have restrictions on 'developing competing models,' ",
+    "relevance_score": 7,
+    "text_sha256": "da7e31b36d4e54a274f219a70e444d3755bdfd074716e10010602bfb7f1a3a9f",
+    "title": "Clarification on using Synthetic CoT from proprietary Teacher Models (e.g., GPT-5 family) for distillation",
+    "topic_id": 698857,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/698857"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {
+      "bit": 3,
+      "bit_manipulation": 1,
+      "train": 2
+    },
+    "message_count_observed": 6,
+    "preview": "[message_id=683866 author=External first=True] I've been working on the bit_manipulation puzzles and found that some appear to have multiple valid solutions. an example with puzzle 009a74b6 : Examples: 01110101 -> 00000111 01101101 -> 10000110 10001000 -> 01101110 11101010 -> 00001110 10100101 -> 00011011 10001011 -> 00111110 10101101 -> 10011010 11101101 -> 10011110 10110001 -> 11011011 01100001 -> 11000111 Query: 00110000 -> ? Per-bit: Solution A (predicts 11000011 ): out[0] = 1 XOR x[4] XOR x",
+    "relevance_score": 6,
+    "text_sha256": "88d69046a588f13cd8e0a0cb58cf985f4298cd38f0eb2ace10dda72bddfe9135",
+    "title": " Bit manipulation puzzles: are transformations uniquely determined?",
+    "topic_id": 683866,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/683866"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {
+      "adapter": 3,
+      "eval": 1,
+      "train": 2
+    },
+    "message_count_observed": 5,
+    "preview": "[message_id=684490 author=Liangjie Zhao first=True] My training process was completed on my private server, and I obtained the adapter's config.json, tensor, and other files. However, after uploading them, I encountered an \"Evaluation metric raised an unexpected error\" error. Therefore, I would like to obtain guidelines for external training submissions. [message_id=3450699 author=JacobWu15 first=False] I have the same problem. Does someone slove it? [message_id=3444033 author=SANNNNN first=Fals",
+    "relevance_score": 6,
+    "text_sha256": "d66495580c1e5ef159969c8c3232c04f0352e46bc6a2d6ba52f3529da1e80515",
+    "title": "What should be included in submission.zip?",
+    "topic_id": 684490,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/684490"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {
+      "adapter": 1,
+      "eval": 1,
+      "lora": 1,
+      "synthetic": 1,
+      "train": 2
+    },
+    "message_count_observed": 2,
+    "preview": "[message_id=685434 author=Ghost@N first=True] Can we train the model outside the notebook and use notebook/submission zip for submission? Can we use closed source models like gpt to create a synthetic data and fine-tune the nemotron model? can we use external datasets to train this model apart from what's given in competition ? does anyone know about these? [message_id=3430969 author=Van Dong Tran first=False] You can only submit the zip file of lora adapter, not necessary a notebook. The evalua",
+    "relevance_score": 6,
+    "text_sha256": "43a0b6b54b803ac6a72173c629e4b74c42c8e40c68a98df837c1412b374db0bb",
+    "title": "Doubts regarding the competition ",
+    "topic_id": 685434,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/685434"
+  },
+  {
+    "expected_input": true,
+    "keyword_hits": {
+      "bit": 3,
+      "equation": 2,
+      "prompt": 1
+    },
+    "message_count_observed": 3,
+    "preview": "[message_id=688277 author=Adarsh Kumar first=True] Out of all type Bit Manipulation and Equation Transformation are the hardest to reason while it is possible to decode Bit Manipulation and i am successful in decoding 816 sample of Bit Manipulation but after many try i am not able to get the reasoning for Equation Transformation If any one has decoded it (Most generated by LLMs are wrong with simple prompt) with reproducibility and right reasoning please give me some hints [message_id=3436406 au",
+    "relevance_score": 6,
+    "text_sha256": "a8b9a3a7577215fad2beffd050f6ec9346c432ac1e0dc84c0bb60038414066f5",
+    "title": "Any idea about Equation Transformation reasoning ",
+    "topic_id": 688277,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/688277"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {
+      "adapter": 1,
+      "eval": 2,
+      "token": 2,
+      "train": 1
+    },
+    "message_count_observed": 3,
+    "preview": "[message_id=691125 author=Deval Mukherjee1 first=True] I saw the post from Tong about his attempt and he mentioned that he got a score of .84 twice and .85 once or something like that. If the evaluation is deterministic how does that happen ? am I missing something ? [message_id=3443280 author=Mark Cooper first=False] Yes, it's non-deterministic in practice even though Kaggle sets temperature=0. You're not missing anything. Sources of variance: CUDA kernel non-determinism. torch.backends.cudnn.d",
+    "relevance_score": 6,
+    "text_sha256": "3db6f247fc800c0d1cdda140b37e019f6c13b511b95ef088098041b888230dc0",
+    "title": "Is the evaluation deterministic ?",
+    "topic_id": 691125,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/691125"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {
+      "token": 1,
+      "train": 4
+    },
+    "message_count_observed": 9,
+    "preview": "[message_id=682428 author=Harsh Rajbhar first=True] How to fix this ? [ERROR] Training error: CUDA error: no kernel image is available for execution on the device Search for cudaErrorNoKernelImageForDevice' in https://docs.nvidia.com/cuda/cuda-runtime-api/group__CUDART__TYPES.html for more information. CUDA kernel errors might be asynchronously reported at some other API call, so the stacktrace below might be incorrect. For debugging consider passing CUDA_LAUNCH_BLOCKING=1 Compile with TORCH_USE",
+    "relevance_score": 5,
+    "text_sha256": "69c6fb8aba58c78d235b1ffa81146e8cf511f3edd0f6c5b682db41b67e5d1635",
+    "title": " Training error: CUDA error: no kernel image is available for execution on the device",
+    "topic_id": 682428,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/682428"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {
+      "lora": 1,
+      "token": 1,
+      "train": 3
+    },
+    "message_count_observed": 3,
+    "preview": "[message_id=684244 author=Sai Srikanth first=True] Hello, I am facing the below import error while loading and running the Nemotron Nano model. ImportError: mamba-ssm is required by the Mamba model but cannot be imported Can anyone help me with this, I am using RTX6000 GPU and the below code. import torch import torch.nn.functional as F import kagglehub from datasets import Dataset from transformers import AutoModelForCausalLM, AutoTokenizer, TrainingArguments from peft import LoraConfig, get_pe",
+    "relevance_score": 5,
+    "text_sha256": "2ba78db3a50630fe21bdf3b93ff3ac8ad1790734203c6be9eeebddfc2f9945b2",
+    "title": "ModuleNotFound Error for mamba-ssm",
+    "topic_id": 684244,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/684244"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {
+      "eval": 2,
+      "token": 3
+    },
+    "message_count_observed": 3,
+    "preview": "[message_id=684459 author=Anton Kratz first=True] I made a public notebook where I try to just predict test.csv: https://www.kaggle.com/code/antonkratz/notebookdf0d07f28b I reach about 79 tokens/second. I believe that a GTX Blackwell 6000 should reach almost 2000 tokens/second. How can I use vllm with the official Kaggle infrastructure? I tried many different ways and workarounds, it seems not possible to install it. How can we best make use of the GTX Blackwell 6000 at full speed? I am orders o",
+    "relevance_score": 5,
+    "text_sha256": "74031134641d112579325a7968e950ae0bb64ecf9be4b3324f451372532f36f1",
+    "title": "How can I use vLLM to speed up test.csv inference on Kaggle?",
+    "topic_id": 684459,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/684459"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {
+      "lora": 2,
+      "train": 3
+    },
+    "message_count_observed": 5,
+    "preview": "[message_id=685020 author=Asadullah Baig first=True] So the method I am following right now is to first create around 1000 high-quality expert reasoning entries. After that i am feeding those to the SFTTTrainer and getting the Lora Adaptor. Right now i am creating the 1000 high quality export reasoning entries. [message_id=3429527 author=Asadullah Baig first=False] Now I am also adding the train.csv but first i am adding the tag in the answers and then merging the training with my own rich reaso",
+    "relevance_score": 5,
+    "text_sha256": "9b45c83078a457b4ae0e15864208cdaadd57b43773496e2815dd4a341232b526",
+    "title": "method to solve",
+    "topic_id": 685020,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/685020"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {
+      "adapter": 2,
+      "lora": 2,
+      "train": 1
+    },
+    "message_count_observed": 3,
+    "preview": "[message_id=685421 author=Adarsh Kumar first=True] In this competition it is not specified what is the maximum session time on rtx 6000 pro can we run session for 20 hour straight? [message_id=3430834 author=TwangyGarlic449 first=False] In this competition, the submission is a .zip file containing a Lora adapter. This is run by a script made by the hosts, not by the submitter. Thus, there is no use in imposing a run time limit. Training runs used to create this Lora adapter may run for as long a",
+    "relevance_score": 5,
+    "text_sha256": "a4775d93787e89b340572124eca3644426d1f67aa7c2c43be8b2f2e9efb023b0",
+    "title": "Max session time",
+    "topic_id": 685421,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/685421"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {
+      "bit": 1,
+      "lora": 1,
+      "train": 3
+    },
+    "message_count_observed": 3,
+    "preview": "[message_id=686431 author=Noizersam first=True] I am attempting to fine-tune a model using QLoRA, but I am encountering the following error when training on a model that has been quantized using bitsandbytes: RuntimeError: mat1 and mat2 shapes cannot be multiplied (302x4096 and 1x2752512) Has anyone else encountered this same error, or does anyone have a solution? [message_id=3433012 author=MAJ0RT0M first=False] Need to patch in pytorch code - otherwise the model doesnt support quantized layers ",
+    "relevance_score": 5,
+    "text_sha256": "5bc31adb75a1e60c238abc43b80552857688cdc2d93bdfa8343b2bed7cb85d11",
+    "title": "QLoRA Fine-tuning Bug",
+    "topic_id": 686431,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/686431"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {
+      "train": 4
+    },
+    "message_count_observed": 3,
+    "preview": "[message_id=682877 author=Anton Kratz first=True] On Kaggle notebook runtime GPU RTX Pro 6000, fine-tuning metric/nemotron-3-nano-30b-a3b-bf16/transformers/default fails at trainer.train() with: AcceleratorError: CUDA error: no kernel image is available for execution on the device The actual failing call in the traceback is: causal_conv1d_cuda.causal_conv1d_fwd(…) from Kaggle’s preinstalled causal_conv1d / mamba_ssm path. This looks like the CUDA extension was built without support for the assig",
+    "relevance_score": 4,
+    "text_sha256": "056aa6efd3340fcc1e1d7036b1d398299704f52de11b2ce79b6bb0008cc747cf",
+    "title": "AcceleratorError: CUDA error: no kernel image is available for execution on the device; causal_conv1d; mamba_ssm",
+    "topic_id": 682877,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/682877"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {
+      "bit": 3,
+      "train": 1
+    },
+    "message_count_observed": 8,
+    "preview": "[message_id=684654 author=Pradeep Boopathy first=True] Add this in the first cell also add dataset: /kaggle/input/datasets/pradeepboopathy/nvidia-nemotron-offline-package in the dataset panel import subprocess, sys, os from pathlib import Path def resolve_python_path(target_dir): for pth_file in Path(target_dir).glob(\"*.pth\"): with pth_file.open() as fp: relpath = fp.read() rel_pack_path = (pth_file.parent/relpath) if rel_pack_path.exists(): print(f\"append {rel_pack_path}\") sys.path.append(str(r",
+    "relevance_score": 4,
+    "text_sha256": "fd877aba1cfc44863e9c4ff941b546c4b76ccdba68943681b5137a35bb4b1e9e",
+    "title": "Fixed: Any fix for trl installation?",
+    "topic_id": 684654,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/684654"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {
+      "loss": 1,
+      "train": 3
+    },
+    "message_count_observed": 4,
+    "preview": "[message_id=684748 author=Aurorcys first=True] The version of the mamba ssm changed from 2.2.2 when downloaded, to 2.3.1 recently, its giving me cutlass errors where I have to mock cutlass, and all my previous submissions that I reuse are worse now. Is there any reason why the mamba 2.3.1 that is now in the utility script is messing stuff up? [message_id=3432194 author=ForcewithMe first=False] Hi @aurorcys , I trained the model on my local machine and get terrible scores. I report this issues in",
+    "relevance_score": 4,
+    "text_sha256": "f6c3e4762fdcfa6e09c5a4b2ad953ee7cc3db039892aea9e1f239e093772c8ff",
+    "title": "MAMBA 2.3.1 from 2.2.2 lowering performance and cutlass mock",
+    "topic_id": 684748,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/684748"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {
+      "adapter": 1,
+      "lora": 1,
+      "train": 2
+    },
+    "message_count_observed": 3,
+    "preview": "[message_id=685922 author=Dr. Ahmed M Abdelsalam first=True] Hi everyone, I'm trying to load the NVIDIA Nemotron-3-Nano-30B model on Kaggle using trust_remote_code=True, but I keep running into the following error: *ImportError: mamba-ssm is required by the Mamba model but cannot be imported * What I’ve already tried: Installing mamba-ssm and causal-conv1d via pip Using --no-build-isolation Installing into /kaggle/working and updating PYTHONPATH Restarting the session after installation However,",
+    "relevance_score": 4,
+    "text_sha256": "05c38a36621381c5ded5e418c9e835d52fbf1068090dc958241b46c9e04756f3",
+    "title": "Issue running NVIDIA Nemotron model on Kaggle (mamba_ssm import error)",
+    "topic_id": 685922,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/685922"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {
+      "bit": 4
+    },
+    "message_count_observed": 2,
+    "preview": "[message_id=692815 author=Gerves François Baniakina first=True] can anybody help em with this issue --------------------------------------------------------------------------- ValueError Traceback (most recent call last) /tmp/ipykernel_16681/4065505671.py in () 4 5 import numpy as np # linear algebra ----> 6 import pandas as pd # data processing, CSV file I/O (e.g. pd.read_csv) 7 8 /usr/local/lib/python3.12/dist-packages/pandas/ init .py in 32 ) from _err 33 ---> 34 from pandas._config import ( ",
+    "relevance_score": 4,
+    "text_sha256": "9a6d18ffd0b434a7c98c91cc8f0f72ab097aee9508aeebfb6b59c9665ce066f7",
+    "title": "runnung issues ",
+    "topic_id": 692815,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/692815"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {
+      "lora": 2,
+      "train": 1
+    },
+    "message_count_observed": 5,
+    "preview": "[message_id=683401 author=lucian kucera first=True] I created this notebook, that shows few example of outputs after applying Naive SFT. It absolutelly kills models reasoning and makes it dumb as rocks. notebook Please don't give me dislikes, if u do please share your reason, beacause disliking without reasoning is not constructive. Iam getting review bombed for telling the truth pls give me upvote, so we can counter reviewbombing. [message_id=3429041 author=ImperfectKitto first=False] Don't kno",
+    "relevance_score": 3,
+    "text_sha256": "a488cad97eebf74c3f4d70bc1113f38604ec29e402f66ec87ddfa29f196d69bd",
+    "title": "Ground Breaking Discovery regarding SFT[MUST WATCH]",
+    "topic_id": 683401,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/683401"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {
+      "lora": 1,
+      "train": 2
+    },
+    "message_count_observed": 3,
+    "preview": "[message_id=683484 author=ulasdesouza first=True] What is your average submission time? [message_id=3425483 author=lucian kucera first=False] Submission time can be around a minute, if u store lora inside a dataset. Or just link ur training notebook. [message_id=3425485 author=ulasdesouza first=False] My training output is around 6 GB. I save it and submit it by selecting the notebook. Is there a more efficient and faster way? What would you recommend?",
+    "relevance_score": 3,
+    "text_sha256": "1f50d7b40b835c50f9cade69309714bd242689b71d5d0792884499523cc14940",
+    "title": "submission time",
+    "topic_id": 683484,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/683484"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {
+      "adapter": 1,
+      "bit": 1,
+      "lora": 1
+    },
+    "message_count_observed": 5,
+    "preview": "[message_id=687119 author=[RU] Evgeniy Kamyshan (sharing) first=True] I don't understand what the point of banning Internet access here. I'd understand if you had to send submissions with solved tasks, it'd be fair, but here you need to send an exact LoRA adapter of the exact model, prohibiting Internet usage js requires to spend a lot more time on things not connected with research. Or am i dumb and Internet access can be turned on while using RTX 6000? [message_id=3433891 author=CPMP first=Fal",
+    "relevance_score": 3,
+    "text_sha256": "559237d8ce9964bd916cf083e16a0b3d2aa47c1fc5f62409de5a1e96848edda0",
+    "title": "WHY is internet access banned if free GPU provided by competition is used?",
+    "topic_id": 687119,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/687119"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {
+      "train": 3
+    },
+    "message_count_observed": 7,
+    "preview": "[message_id=688052 author=blckvia first=True] I trained a model but the submission.zip file is too large to download and then upload to Kaggle. I also tried Save & Run All (Commit), but it runs on a P100 GPU which doesn't have enough memory, so it fails as well. How can I submit my output file? [message_id=3435623 author=CPMP first=False] you must use the RTX Pro 6000 Blackwell GPU. [message_id=3435634 author=blckvia first=False] When I trained, I used a Blackwell GPU, but when I tried to commit",
+    "relevance_score": 3,
+    "text_sha256": "54bc36f80a002d9545244ab47b0c6f70c24804937a59f06bf474a090b4d22386",
+    "title": "Large submission.zip can't be downloaded and Commit fails due to insufficient GPU memory",
+    "topic_id": 688052,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/688052"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {
+      "numeric": 1,
+      "prompt": 2
+    },
+    "message_count_observed": 2,
+    "preview": "[message_id=689284 author=Shivam Shinde first=True] While going through the dataset I noticed a few rows where the answer itself contains }. The metric prioritizes answers inside \\boxed{} using the regex: \\boxed{([^}]*)} Since the capture stops at the first }, the extractor cannot include } inside the boxed content. However some dataset answers contain } as part of the final string. Example: 65}27 = }38 11}59 = }48 46}23 = }23 Now determine: 28}58 Answer: }30 If a model tries to output: \\boxed{}",
+    "relevance_score": 3,
+    "text_sha256": "264eac1957a1a6416fa9f15f1684ceaeb177fd660c10ca350cd81eba608384b2",
+    "title": "Edge case in metric: \\boxed{} cannot contain }",
+    "topic_id": 689284,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/689284"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {
+      "equation": 1,
+      "numeric": 1,
+      "train": 1
+    },
+    "message_count_observed": 2,
+    "preview": "[message_id=692667 author=VanyaRekunov first=True] Has anyone noticed that there are mistakes in the provided train.csv? In the photo I attached, there is an example of incorrect tasks in the numeric equation task, where some operations are just missing or given incorrectly. How to deal with this? There might also be mistakes in other tasks. Should i do sth about this, or just skip? [message_id=3444578 author=Dennis first=False] There is a pattern. I think able to find it is the glod medal point",
+    "relevance_score": 3,
+    "text_sha256": "120e6c3521e5af778c57faacedc29eff8ba3a149a28cba2dac1204e7261ff448",
+    "title": "Incorrect tasks in train.csv",
+    "topic_id": 692667,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/692667"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {
+      "accuracy": 1,
+      "bit": 1
+    },
+    "message_count_observed": 4,
+    "preview": "[message_id=682208 author=lucian kucera first=True] If ur intereseted i created notebook, where I test models zero shot capability. notebook Interesting findings: number conversion 100% accuracy bit,equaton and ecryption it does horribly gravitation and mesurement it has like 33% success Also notebook contains csv with model predictions as raw text if u want to analyze it more. [message_id=3425979 author=Javier Hernández first=False] Thanks for sharing @luciankucera , I tried to run your noteboo",
+    "relevance_score": 2,
+    "text_sha256": "b888423c6c2cd95e4728308023a3ce273fbf8cac6b51d060db77d9f6a3eac5b0",
+    "title": "Zero shot predictions",
+    "topic_id": 682208,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/682208"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {
+      "synthetic": 1,
+      "train": 1
+    },
+    "message_count_observed": 4,
+    "preview": "[message_id=684515 author=Huy Nguyễnq first=True] With synthetic data generation for data enrichment, can i use close source like OpenAI API or only use opensource model [message_id=3429582 author=CPMP first=False] You must comply with the license of the LLM you use. Some allow the use of output to train other models. Some don't allow this. It is your responsibility to comply with these licenses. [message_id=3428971 author=Komil Parmar first=False] Some companies were recently sued for doing wha",
+    "relevance_score": 2,
+    "text_sha256": "c17c9cb5b6eb42ec32775aa90db6c8dc3989f15d25c88043e646079e99f34771",
+    "title": "Synthetic data generation allowed",
+    "topic_id": 684515,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/684515"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {
+      "eval": 1,
+      "train": 1
+    },
+    "message_count_observed": 2,
+    "preview": "[message_id=686615 author=Ashutosh Kumar first=True] There's the bug in the model itself! Look at line 1659: \"past_key_values\": past_key_values, But the .forward() method (line 1695) expects cache_params, NOT past_key_values: def forward(self, …, cache_params=None, …) The prepare_inputs_for_generation returns {\"past_key_values\": cache} but forward() receives it as **kwargs — it gets lost! The cache is created but never used. However, this is the model code on the HF Hub — it works in the competi",
+    "relevance_score": 2,
+    "text_sha256": "86a75046d0c7c2b0a1888df4de1a545d5335ce806038f9ed5bb38e987f223746",
+    "title": "BUG in Nemotron Model file://Models/modeling_nemotron_h.py",
+    "topic_id": 686615,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/686615"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {
+      "eval": 1,
+      "numeric": 1
+    },
+    "message_count_observed": 2,
+    "preview": "[message_id=687789 author=Svanik Kolli first=True] Hey everyone, quick question about scoring in the NVIDIA Nemotron Model Reasoning Challenge Does anyone have a clear understanding of how the evaluation metric actually works? From what I’ve observed, it seems heavily tied to whether the final answer is correct (especially formatting like boxed answers), but I’m not sure how much partial reasoning or intermediate steps are considered in the score. Is it purely exact-match on the final answer, or",
+    "relevance_score": 2,
+    "text_sha256": "86cb43f1112bc9a7e25f7b9153284374a75bb10e518c57565113db8d84174d93",
+    "title": "Kaggle Scoring ",
+    "topic_id": 687789,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/687789"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {
+      "train": 2
+    },
+    "message_count_observed": 3,
+    "preview": "[message_id=694358 author=Boris Polishchuk first=True] Hello! I cannot install unsloth when running new Kaggle notebook GPU RTX Pro 6000. It looks like internet is off, but in fact it's on. When I set accelerator to None in Session options, everything is fine, pip install works. Do anybody has a chance to run RL training with the one of NVIDIA frameworks like Unsloth in the Kaggle notebook with GPU? Could you please share your settings? [message_id=3448281 author=dz first=False] This is due to t",
+    "relevance_score": 2,
+    "text_sha256": "c9c15b6d8cc137aa7c3e6d32aa0b1cd0ab3d9ff980fe33cd6b6a866a597e3c2d",
+    "title": "Cannot install unsloth on the GPU RTX Pro 6000 notebook",
+    "topic_id": 694358,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/694358"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {
+      "train": 1
+    },
+    "message_count_observed": 3,
+    "preview": "[message_id=681824 author=Ritwika Kancharla first=True] The causal_conv1d_cuda.so binary in the environment is not compiled for SM120 (Blackwell). Getting cudaErrorNoKernelImageForDevice on every training attempt. ptxas chmod fixes the triton issue but causal_conv1d still fails. We cannot install a new version because the filesystem is read-only and pip has no internet. How are we supposed to fine-tune on this GPU? [message_id=3423926 author=Anton Kratz first=False] I also run into this exact is",
+    "relevance_score": 1,
+    "text_sha256": "f109f9e3512549c4ab668089bb30fb685157b10be13f9ee24f61ce9f50f79c96",
+    "title": "causal_conv1d_cuda not compiled for Blackwell SM120 - training impossible",
+    "topic_id": 681824,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/681824"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {
+      "train": 1
+    },
+    "message_count_observed": 7,
+    "preview": "[message_id=681968 author=mindset324 first=True] I’m facing an issue while trying to load the Nemotron-3-Nano-30B-A3B-BF16 model. From what I understand, this model relies on Mamba SSM components, which require the mamba_ssm library. Since the Kaggle GPU RTX PRO 6000 environment has internet access disabled, I’m unable to install this dependency using pip, which prevents the model from loading successfully. Issue: Model: Nemotron-3-Nano-30B-A3B-BF16 Error: Missing mamba_ssm dependency Constraint",
+    "relevance_score": 1,
+    "text_sha256": "af57bf4a6a657c1ec4072ccc48063255d0f11e2c1e9bfefe19e9eca7c0b3c514",
+    "title": "Unable to load Nemotron-3-Nano-30B-A3B-BF16 due to mamba_ssm dependency (No Internet Environment)",
+    "topic_id": 681968,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/681968"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {
+      "prompt": 1
+    },
+    "message_count_observed": 5,
+    "preview": "[message_id=682542 author=yuki first=True] Hi everyone, I’m a Japanese engineer looking for teammates for this competition. I’m still a beginner and not very familiar with standard Kaggle practices yet, but I’m motivated and would be happy to work together. Please let me know if you’re interested. [message_id=3423973 author=hwe owe first=False] hi,can you add me:) [message_id=3423809 author=aichu tan first=False] Hi! I’d love to join your team. I’m currently learning data science and have experi",
+    "relevance_score": 1,
+    "text_sha256": "6ed7483a657f9c48be48be0ad9083bebfd3a0d1be49c5e6ad54b0b52586244ab",
+    "title": "Looking for Teammates",
+    "topic_id": 682542,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/682542"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {
+      "lora": 1
+    },
+    "message_count_observed": 3,
+    "preview": "[message_id=683820 author=Ko first=True] Hi everyone, I'm running into the following error when executing my PyTorch code on Kaggle's GPU environment: AcceleratorError: CUDA error: no kernel image is available for execution on the device (cudaErrorNoKernelImageForDevice) What I understand so far: This error typically means the compiled CUDA kernel doesn't support the GPU architecture on the current device. However, I'm not sure what the best fix is in Kaggle's managed environment where I have li",
+    "relevance_score": 1,
+    "text_sha256": "6a092ae6ba2ec60ada1375125de9e421519ca833ee8ba84ca858c57268ece28c",
+    "title": "CUDA error: no kernel image is available for execution on the device — How to resolve CUDA/GPU architecture mismatch?",
+    "topic_id": 683820,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/683820"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {
+      "numeric": 1
+    },
+    "message_count_observed": 4,
+    "preview": "[message_id=683853 author=Gerwyn first=True] Binary string answers (e.g. \"11111011\") are parsed as decimal integers by float(), so verify() uses numeric 1% tolerance instead of exact string matching; meaning \"11111011\" and \"11111000\" are scored as equal. I made a notebook with minimal reproducible examples: https://www.kaggle.com/code/gerwynng/competition-metric-verify-method-bug?scriptVersionId=305629662 [message_id=3426893 author=Ryan Holbrook first=False] Thanks for the heads up. I will inves",
+    "relevance_score": 1,
+    "text_sha256": "02aadf4cd7729b9e944bcbea7302d339734d661552ccd4c9e047547c63bec3af",
+    "title": "Competition Metric Bug: verify method fails for Binary String Problem (?)",
+    "topic_id": 683853,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/683853"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {
+      "bit": 1
+    },
+    "message_count_observed": 7,
+    "preview": "[message_id=684619 author=Javier Hernández first=True] What can I do if google colab pro says that is not available in my country? @ryanholbrook [message_id=3429593 author=WWWWZZ first=False] you need a vpn [message_id=3429669 author=Javier Hernández first=False] I'm laughing a bit, I tried and indeed it works 😄 thanks for the reminder of the tip [message_id=3434586 author=Javier Hernández first=False] At the end the VPN wasn't enough, Google is requesting me a government ID of the USA [message_",
+    "relevance_score": 1,
+    "text_sha256": "e7f48d63ee39cc6d3c6b5e091ff5b8d6b8103cdffc6251f924c58c531c8c5291",
+    "title": "Google Colab Pro not available in my country",
+    "topic_id": 684619,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/684619"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {
+      "train": 1
+    },
+    "message_count_observed": 2,
+    "preview": "[message_id=684641 author=shoulderpain first=True] I used Submit Prediction -> File Upload -> submission.zip to submit a model I trained locally. My submission.zip is 3GB. If I make 5 submissions a day, this will quickly use up my Kaggle storage. Is it possible to delete the old submission.zip from Submissions to save space? Unlike notebook submissions, the file submissions are huge. [message_id=3428587 author=shoulderpain first=False] Now I switched to Datasets + notebook submission, as unused ",
+    "relevance_score": 1,
+    "text_sha256": "29411c8cf545ce18a75d2148c96ad8cf3bdc823d76b98c3d27abde57ce49d10c",
+    "title": "How to delete old submission.zip to save space?",
+    "topic_id": 684641,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/684641"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {
+      "prompt": 1
+    },
+    "message_count_observed": 4,
+    "preview": "[message_id=685910 author=lucian kucera first=True] Why am i getting downvoted when sharing a prompts? I dont get are there kaggle bots that downvote poeple that try to help others? [message_id=3433211 author=CPMP first=False] Don't try understanding downvotes. I had some serial downvoters downvoting every single post and reply I was making at a time. This happens, some people are just mad at you for unknown reasons. Just move on and focus on positive things. [message_id=3432809 author=Mohamed A",
+    "relevance_score": 1,
+    "text_sha256": "ca1a6bba20bbcdbfedde9cd4d3c7ac2738bb2b6c01bab0945af0b564ca0660e1",
+    "title": "Why people downvote?",
+    "topic_id": 685910,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/685910"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {
+      "lora": 1
+    },
+    "message_count_observed": 2,
+    "preview": "[message_id=686839 author=Divyam Singh first=True] I saw recently on the architecture of nemotron and realised it needs something called mamba ssm as a part of its architcture to fine tune the lora although somehow im not able to install them and when i try to connect to internet it says that internet is not allowed for the competition , is me not being able to install the mamba packagae issue or is it intended that way [message_id=3434791 author=blckvia first=False] @divyamsingh2356 Hey, you ju",
+    "relevance_score": 1,
+    "text_sha256": "d1a995a683655652932aea22cb1b66046353f47e5c7b49affbd67895442e4600",
+    "title": "Mamba_ssm  modules not installing",
+    "topic_id": 686839,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/686839"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {
+      "train": 1
+    },
+    "message_count_observed": 4,
+    "preview": "[message_id=687740 author=Chew Kok Wah first=True] I check the scoring Metric and found that there is no per request seed and Batch Invariance setting for VLLM, this make the scoring metric non-deterministic, please @ryanholbrook @cpmpml make it more deterministic before the rescore. The above setting had been experimentally proven to 100% guarantee deterministic output. If it is too expensive to rescore, can you enable the setting after the 9 April Midpoint award date? By then, all participants",
+    "relevance_score": 1,
+    "text_sha256": "564200556f6a5ef1c4b12ef087b0e665f9a4d69b3234088a66544ef03803a670",
+    "title": "Official Scoring Metric Code were not set to be Deterministic",
+    "topic_id": 687740,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/687740"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {
+      "train": 1
+    },
+    "message_count_observed": 2,
+    "preview": "[message_id=694074 author=einherjer first=True] I have made a copy of the NVIDIA Utility Script (version 6, https://www.kaggle.com/code/ryanholbrook/nvidia-utility-script?scriptVersionId=306236690 ) and wanted to run it so that I can use it in my training notebook. However it takes forever to complete. Currently it is running for 3 hours on the T4 x2. @ryanholbrook is that normal that it takes this long? I assume I am supposed to run it on an accelerator but this will kill my remaining GPU hours",
+    "relevance_score": 1,
+    "text_sha256": "fabf661fcc4dd769637400c95a3f4c3e7cf891957b6980243b6305362399ea2b",
+    "title": "Nvidia utility script takes forever to run",
+    "topic_id": 694074,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/694074"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {
+      "train": 1
+    },
+    "message_count_observed": 4,
+    "preview": "[message_id=694350 author=adityaghai07 first=True] I made a submission and it shows pending for about 2 hrs, is that normal? What is the average time when we get a score or it gives an error? Thank You! [message_id=3448025 author=Svanik Kolli first=False] It usally takes 70-90 mins [message_id=3448050 author=adityaghai07 first=False] thank you so much! [message_id=3452955 author=Rustam Bazarbayev first=False] How can I make training faster? Mine is running ~10 hours",
+    "relevance_score": 1,
+    "text_sha256": "82702fbe3c69519ed7510a8366e9831eff2f93430c9924c66be91c6248272469",
+    "title": "Submission taking too long?",
+    "topic_id": 694350,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/694350"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {},
+    "message_count_observed": 3,
+    "preview": "[message_id=681773 author=BeyondBirthday first=True] Hi NVIDIA Team, Thank you for organizing this competition. While going through the competition details, I noticed an inconsistency in the Midpoint Cut-off Date between two sections: In the Prizes section (Open Progress Prize): \"Awarded to the team with the highest leaderboard score as of the Midpoint Cut-off Date: April 9, 2026.\" In the Timeline section: \"April 16, 2026 - Midpoint Cut-off Date\" Could you please confirm which date is the correc",
+    "relevance_score": 0,
+    "text_sha256": "16c4f2391cbf24bb318fc7be194c5586442d8bbd94bd705c5bb8642bb8bda5ea",
+    "title": "Date Conflict: Midpoint Cut-off Date in Prizes vs Timeline section",
+    "topic_id": 681773,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/681773"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {},
+    "message_count_observed": 4,
+    "preview": "[message_id=681853 author=Andreas Bisiadis first=True] Since in AIMO3 participants could not use Internet with the H100 selected, is this the case in this competition as well? [message_id=3422394 author=Dustin first=False] Correct, internet access is disabled on this accelerator for similar reasons to the previous comps. [message_id=3422948 author=Mani Ratan first=False] Hii buddy, In most Kaggle competitions, internet access is disabled during submission runs, regardless of the accelerator (lik",
+    "relevance_score": 0,
+    "text_sha256": "2057f720a68ea1445df36818e716c4d7b75427d258f76a55021bcd271888b25a",
+    "title": "Is Internet access allowed with the RTX PRO 6000 accelerator?",
+    "topic_id": 681853,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/681853"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {},
+    "message_count_observed": 3,
+    "preview": "[message_id=682058 author=Saurabh Dasgupta first=True] Hi I hope you are well. This may have already been answered but I wanted to check. In order to do this challenge, the competitors will be using Kaggle compute and machines, which will have the \"G4 VMs powered by NVIDIA RTX PRO 6000 Blackwell Server Edition GPUs as the compute backbone for this challenge\". Hence, I do not have to worry about getting GPU compute from the cloud (unless additional work is needed). Please let me know. Many thanks",
+    "relevance_score": 0,
+    "text_sha256": "71b2b361f45b6fae8a843d5c0884285db51175bdf3d713fab1d7aad356716684",
+    "title": "Compute Access",
+    "topic_id": 682058,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/682058"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {},
+    "message_count_observed": 6,
+    "preview": "[message_id=682197 author=ISAKA Tsuyoshi first=True] When saving and committing a notebook via the Kaggle API, the GPU is automatically set to P100. Is there a way to set it to RTX Pro 6000 instead? [message_id=3422892 author=c-number first=False] I haven't checked myself, but this may work. https://github.com/Kaggle/kaggle-cli/blob/main/docs/kernels.md#:~:text=NvidiaH100-,NvidiaRtxPro6000,-Some%20of%20these [message_id=3423144 author=ISAKA Tsuyoshi first=False] It worked with @cnumber ’s method",
+    "relevance_score": 0,
+    "text_sha256": "6d59126b8c1ae9175aa64c85dac5390d08e8ea9b4b661faf2e2b68594a69dd86",
+    "title": "[RESOLVED] How to use RTX Pro 6000 instead of P100 with the Kaggle API?",
+    "topic_id": 682197,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/682197"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {},
+    "message_count_observed": 3,
+    "preview": "[message_id=682375 author=Ali first=True] Hi, Maybe this is not new to some, but maybe new to others. You can get an extra 15 or 30 hours (a total of 45 or 60 hours GPU per week) if you have a paid account on Colab. More details here : https://www.kaggle.com/discussions/product-announcements/575468 [message_id=3428077 author=Javier Hernández first=False] @asalhi after your recommendation I searched the option but is not available for my country, Guatemala 🇬🇹 🥲 [message_id=3429948 author=jerryv69",
+    "relevance_score": 0,
+    "text_sha256": "80a08fa5f71a1a4e9289998e7d7e3ad4b200f46d25558094979063618d50711c",
+    "title": "Unlock 15 or 30 extra GPU hours per week (connect Colab Pro) ",
+    "topic_id": 682375,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/682375"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {},
+    "message_count_observed": 3,
+    "preview": "[message_id=682732 author=Andrew H. Bond first=True] Accelerator Quota Exceeded You've exceeded the number of hours allowed to use GPU. Your quota will reset to 30 hours in 2 days. You can continue working in this session until you've reached your 9 hour limit. You will not be able to commit unless you turn off GPU. Does anyone know how to set it up correctly? [message_id=3423858 author=Ravi Ramakrishnan first=False] Pay for Pro+ membership on Colab - your quota will be extended by another 30 ho",
+    "relevance_score": 0,
+    "text_sha256": "6fa65555da20e658ed90ba2cff7702e9b8a2b6a8427210a7b0468f61455a28c6",
+    "title": "How do you get the GPU resources for this Competition?",
+    "topic_id": 682732,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/682732"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {},
+    "message_count_observed": 5,
+    "preview": "[message_id=682926 author=Aurorcys first=True] When I turn on the Blackwell, I just can't pip install the mama-ssm, it just says theres no internet. But when I don't select any accelerators, I can download the mamba-ssm, how should I fix this? [message_id=3424097 author=hwe owe first=False] you can use another notebook with internet and download the wheel file,then you can install it offfline [message_id=3424098 author=Aurorcys first=False] Yeah, thank you for the suggestion. I also found a offl",
+    "relevance_score": 0,
+    "text_sha256": "9382c8659d1de2db84989947817358940c6bd589f060f387625797d81c4ea00e",
+    "title": "BlackWell Kaggle Internet Issue",
+    "topic_id": 682926,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/682926"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {},
+    "message_count_observed": 10,
+    "preview": "[message_id=684271 author=qqqqqqqqqqqp first=True] how to finish this quesion [message_id=3428879 author=newduck first=False] I had the same \"No module named 'cutlass'\" error and fixed it in my notebook. Not sure if this applies to your case, but it might help. Please see the comments in the notebook below. https://www.kaggle.com/code/newduck/nvidia-nemotron-soft-balanced-sampling-sft/comments [message_id=3427706 author= first=False] [message_id=3427750 author=qqqqqqqqqqqp first=False] I've alre",
+    "relevance_score": 0,
+    "text_sha256": "809c8d4058d815b8f71c4a62911502a922b613cbfe25c73bd9daf6702748f556",
+    "title": "ModuleNotFoundError: No module named 'cutlass'",
+    "topic_id": 684271,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/684271"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {},
+    "message_count_observed": 4,
+    "preview": "[message_id=684385 author=LEI ALEX first=True] The actual cutlass code is hidden inside nvidia_cutlass_dsl/python_packages/. The package uses a .pth file to tell Python where to find it. However, simply adding your target directory to sys.path does not parse .pth files in non-standard directories. Python completely ignores the .pth file and fails to find the hidden folder. Just replace the first cell in your notebook with this code: import subprocess, sys, os from pathlib import Path def resolve",
+    "relevance_score": 0,
+    "text_sha256": "5983b15065fad7be16010e1e9fcaef7b9e68f88f1c18edb5feeaa8b9b5cc0fd4",
+    "title": "Fix ModuleNotFoundError for cutlass",
+    "topic_id": 684385,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/684385"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {},
+    "message_count_observed": 3,
+    "preview": "[message_id=684469 author=tiffanyseah first=True] my notebook failed to save draft and I am not able to turn on the Internet. I have this error [message_id=3428295 author=Shoto first=False] Turn off internet use from right tab [message_id=3428519 author=tiffanyseah first=False] okie, noted. Thank you",
+    "relevance_score": 0,
+    "text_sha256": "e133404a34a10dcfe9d1c82fb995d114d3d4b91f85a506bcc1042f39110cfa8f",
+    "title": "Error: Internet cannot be enabled for this competition with the current accelerator.",
+    "topic_id": 684469,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/684469"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {},
+    "message_count_observed": 5,
+    "preview": "[message_id=685247 author=Dongyong Lee first=True] Hi, the rules state: ▎ \"To be eligible for any prize, teams must publish a public Kaggle notebook and solution Writeup documenting the methods used to generate their submission.\" Could you clarify when this needs to happen — before the competition deadline, or after the competition ends? Thank you! [message_id=3433972 author=CPMP first=False] Before prizes are awarded. Mid point prize are there to encourage sharing. It is your call to go for the",
+    "relevance_score": 0,
+    "text_sha256": "2071a5d797dd90820ee5b21308c54233eea4e77d18b3ebe1b156008ea433ba6a",
+    "title": " When should winners publish their public notebook and writeup?",
+    "topic_id": 685247,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/685247"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {},
+    "message_count_observed": 2,
+    "preview": "[message_id=686591 author=AlexxxSem first=True] To resolve offline dependency installation issues, you need to create two new notebooks with identical preinstalled library versions: Utility Notebook (Setup Environment) Example File/Set as Utility Script Accelerator: GPU T4 Internet: On Competition Notebook (Offline Execution) ( Example ) Attach to competition Accelerator: GPU RTX Pro 6000 Internet: Off Add Input/Utility Scripts/ Your Utility Notebook You can use my notebooks, but over time versi",
+    "relevance_score": 0,
+    "text_sha256": "2f8315ac86cc068af00949264dab3e1690cf6df115c64c5a1a994e498ca04575",
+    "title": "Offline Dependencies and a Simple Fix for ModuleNotFoundError and PermissionError",
+    "topic_id": 686591,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/686591"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {},
+    "message_count_observed": 2,
+    "preview": "[message_id=686691 author=AMITH NAIR first=True] I am under the legal age in my jurisdiction, according to the competition rules, participants must be at least 18 years old or the age of majority in their jurisdiction. My parent/guardian has provided a consent form allowing me to participate in the competition. I would like to confirm in the event that I win a prize, can my parent/guardian legally sign the required prize acceptance forms on my behalf? Thank you for your guidance. I would like to",
+    "relevance_score": 0,
+    "text_sha256": "be52498ee0144f45c5eb6b87eee0aa4179dd44df5bb07bdbec75e95bb1b7daa6",
+    "title": "Minor Claiming Prizes",
+    "topic_id": 686691,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/686691"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {},
+    "message_count_observed": 3,
+    "preview": "[message_id=686800 author=Alpaca first=True] PermissionError: [Errno 13] Permission denied: '/kaggle/usr/lib/notebooks/ryanholbrook/nvidia-utility-script/triton/backends/nvidia/bin/ptxas-blackwell' Running on Rtx-6000 [message_id=3433531 author=Vish Ramamurthy first=False] +1 this is affecting me as well, unable to generate model output [message_id=3433106 author=Alpaca first=False] @ryanholbrook pls suggest!",
+    "relevance_score": 0,
+    "text_sha256": "2d0563582d642c80bc2f3b28754490322e15bbbd96ad69edd50e5e06a41a4f20",
+    "title": "Permission error",
+    "topic_id": 686800,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/686800"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {},
+    "message_count_observed": 6,
+    "preview": "[message_id=687117 author=JK-Piece first=True] The following is written for the Open Progress Prize: Open Progress Prize: $5,000 + 1 DGX Sparks Awarded to the team with the highest leaderboard score as of the Midpoint Cut-off Date: April 9, 2026. Methodology submissions Cut-off Date: April 16, 2026. Winners will be announced during Cloud NEXT (April 22-24, 2026) Each eligible participant may receive no more than one (1) DGX Spark. Because many participants may want to form teams to compete for t",
+    "relevance_score": 0,
+    "text_sha256": "23388cc811ec9570529a304cde9ac289ae85bbd36232aa3c3e09849d878344c0",
+    "title": "Clarification Regarding Open Progress Prize -- Hosts Needed ",
+    "topic_id": 687117,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/687117"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {},
+    "message_count_observed": 2,
+    "preview": "[message_id=688278 author=Adarsh Kumar first=True] I have a doubt on same score how is leaderboard rank decided? [message_id=3436043 author=Fabian Henning first=False] Usually earlier submission is the tie breaker",
+    "relevance_score": 0,
+    "text_sha256": "729f42f627a0ccde936f690f09290b6ec852a46dc7557129c1d4c9b4ead3e690",
+    "title": "How is leaderboard rank decided on same score",
+    "topic_id": 688278,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/688278"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {},
+    "message_count_observed": 15,
+    "preview": "[message_id=690689 author=EISLab_hwlee first=True] I would like to bring the community's attention to a deceptive practice currently happening in the notebooks section to farm upvotes. nvidianemotron 0.81 new making 0.85 public soon Why this notebook is fake and deceptive: Output Copying (Plagiarism): The code inside this notebook is completely fake and does not generate the score it claims through actual modeling. Instead, it simply copies the submission.zip or outputs from other hard-working K",
+    "relevance_score": 0,
+    "text_sha256": "312b0ce3c3475612ede136565ac0500133d6fb9e66541d191d319413e4f5dc65",
+    "title": "[Fake Notebook Alert] Watch out for fake laptops that copy and upload other people's submission.",
+    "topic_id": 690689,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/690689"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {},
+    "message_count_observed": 3,
+    "preview": "[message_id=692813 author=JinchengZhang1 first=True] Is 0.86 already the limit? [message_id=3446725 author=YePing Lin first=False] no,the 1st competitor get 0.87 now!😄 [message_id=3447835 author=Brandonioti first=False] Two with 0.87 now. Things will defnitely slow down but i believe people will keep improving. Remember there's still 2 months left of this comp a lot can happen in that time. We'll be up to the 0.88's before too long then 0.89. Just have some patience",
+    "relevance_score": 0,
+    "text_sha256": "53717a3bb37333fa38c8938543f812e517f18f5258afcf8948aed4919aff0273",
+    "title": "Is 0.86 already the limit?",
+    "topic_id": 692813,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/692813"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {},
+    "message_count_observed": 3,
+    "preview": "[message_id=694041 author=shark first=True] Help needed: I’m doing vibe coding in Cursor and submitting via the Kaggle CLI, but it seems I can’t change the GPU type locally. Every time I have to manually open the webpage, switch the GPU to RTX 6000, and then click “Save Version.” Is there a better way to handle this? [message_id=3447429 author=Ken first=False] You should be able to use the --accelerator NvidiaRtxPro6000 flag. Note that since it's only available for this competition, you need to ",
+    "relevance_score": 0,
+    "text_sha256": "a4c273eabf26d2426c6088834575c3a1de4a689fc3cd1f154cf942ac1dd7cf52",
+    "title": "Kaggle CLI Can’t Set GPU Type? Tired of Manually Switching to RTX 6000 Every Time 😩",
+    "topic_id": 694041,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/694041"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {},
+    "message_count_observed": 2,
+    "preview": "[message_id=694213 author=JK-Piece first=True] Hi all. Are you experiencing a queue when saving your notebook? Mine is queued for 2 hours now and still counting. [message_id=3447759 author=agenlu first=False] Sometimes if you stop and try again, it works",
+    "relevance_score": 0,
+    "text_sha256": "ec257db25ab06cec7c20e58da81ecabe08d307ffe0db3038b925935101304924",
+    "title": "Queued for hours for the first time!",
+    "topic_id": 694213,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/694213"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {},
+    "message_count_observed": 2,
+    "preview": "[message_id=696734 author=MattiasLiljenzin first=True] Getting one of these? ModuleNotFoundError: No module named 'cutlass' ModuleNotFoundError: No module named 'mamba_ssm' You might get lucky and fix the issues, or you will spend over an hour (like myself) trying to implement fixes and recommendations that dont work. Sure, you will probably resolve the issue sooner or later, but do yourself a favour and clone a template notebook and start fresh from there instead. TLDR; Don't try to fix them ma",
+    "relevance_score": 0,
+    "text_sha256": "1efe834e685176a93b8417492fbc216d8c6b33cf393d949d340d90ddcc73e111",
+    "title": "Having trouble with mamba_ssm or cutlass? Read here",
+    "topic_id": 696734,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/696734"
+  },
+  {
+    "expected_input": false,
+    "keyword_hits": {},
+    "message_count_observed": 5,
+    "preview": "[message_id=696854 author=william.wu first=True] All credit to Public Notebooks + Claude Code + kaggle CLI + an auto-research loop :) If anyone's doing similar agentic setups for this competition, drop a comment 👋 [message_id=3452854 author=Russell Kirk first=False] I think it's basically, \"Who has copied the public notebook and who hasn't?\" [message_id=3453351 author=klimagapov first=False] How much do you pay for Claude? [message_id=3455650 author=william.wu first=False] Here's my daily cost, ",
+    "relevance_score": 0,
+    "text_sha256": "eee38a3cfcf3f8914846ec3a4c26c334d97d7d2c76bb94d993f8819ba611311c",
+    "title": " Just noticed I'm in the golden zone — and I know almost nothing about this competition",
+    "topic_id": 696854,
+    "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/696854"
+  }
+]

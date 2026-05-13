@@ -1,0 +1,263 @@
+{
+  "fetched_at_utc": "2026-05-13T17:58:26.468502+00:00",
+  "full_text": "[message_id=688360 author=c-number first=True]\nhttps://www.kaggle.com/datasets/kienngx/nemotron-30b-competition-trainingdata-cot-labels \nIt seems it's okay.\n\n[message_id=3439425 author=CPMP first=False]\n@cnumber Thanks for raising this, it is a recurring issue in Kaggle competitions. Not kaggle fault, rather the complexity of IP laws and regulations.\nDisclaimer: We cannot provide legal advice. Contact someone trained on US IP laws if you need advice.\nWith the above disclaimer, here is our thought.\nThe purpose of this competition is not to train models that would compete with commercial models. NVIDIA will not reuse the adapters produced by participants. After all, we could train models ourselves if that was our intent, given we have the data generator.\nThe goal of the competition is to see how people manage to fine tune Nemotron model. The pipelines are more interesting to us than the outcome.\nGiven the above, we won't bother if people distill models for this competition provided that the only limit to model output use is to forbid training competing models. In particular, distilling Gemini Flash 2.0 outputs looks fine for this competition. For any other use please check with someone trained in IP law.\n\n[message_id=3439627 author=c-number first=False]\nThank you for the confirmation!\nI am now confident that top players will distill frontier models for some tasks, but still there will be a huge gap between a simple distilation solution and the top solutions.\n\n[message_id=3441383 author=Saicharan Ramineni first=False]\nAnthropic, Open AI, and Google don't allow distillation for training models that will COMPETE with them, does that mean for this competitions we can distill them because a LORA adapter is not competing with them?\n\n[message_id=3437179 author=Chew Kok Wah first=False]\nNo, using such data will NOT lead to your account being deleted from the LB, there is no such rule.\nThe only possible worst case scenario is that you will not eligible to receive the monetary prize.\nBut some past Competition winner had been using output from Gemini to train their model and there is no words from either Google or Kaggle that it is not allow.\n\n[message_id=3438446 author=c-number first=False]\nMaybe you would want to have a look at this competition.\nDeepfake Detection Challenge\nhttps://www.kaggle.com/c/deepfake-detection-challenge/discussion/157925 \nhttps://www.kaggle.com/c/deepfake-detection-challenge/discussion/158506\n\n[message_id=3438459 author=Sangram Patil first=False]\n6 years ago, There is no use debating unless the host can confirm this. @cpmpml\n\n[message_id=3438493 author=Dieter first=False]\nIts in judgement of host to remove participants from LB that do not comply with rules. And although we will discuss such cases internally I can tell you I am personally very much against that people would get medals when they are not eligible for a monetary prize\n\n[message_id=3438721 author=CPMP first=False]\nThe only possible worst case scenario is that you will not eligible to receive the monetary prize.\nNope. We can remove anyone who doesn't comply with the rules.\n\n[message_id=3438798 author=Halla Yang first=False]\nIn the 2025 edition of ARC-AGI-2, it looked as though NVARC (NVIDIA's 1st place solution) found it permissible to use Claude to generate some limited types of synthetic data (see https://www.kaggle.com/datasets/sorokin/nvarc-artifacts-puzzles ). The creator of that dataset wrote:\nLicense concerns: In case you need to filter the records created using Claude model, you have to filter all the records that contain [\"summary1\", \"summary5\", \"summary6\"] or [\"mix\"]. \nThat text suggests that they were aware that Claude usage could lead to license concerns. Maybe there are some nuances about how synthetic data from Claude can be used, e.g. perhaps it's okay to generate text summaries that then generate code, but it's not okay to generate reasoning traces, though I would be interested in more certainty on where that boundary is located.\n\n[message_id=3438873 author=CPMP first=False]\nAnthropic prohibits the use of Claude models output to train models that compete with them. That's why we put this warning in case people use our data to train models that could compete with Anthropic.\n\n[message_id=3438874 author=Halla Yang first=False]\nThanks, your response makes perfect sense. I don't believe a LoRA adapter for this Kaggle contest competes with Anthropic, so by the same reasoning it seems we should be permitted to use Claude here.\n\n[message_id=3440504 author= first=False]\n\n\n[message_id=3436211 author=Sangram Patil first=False]\nWait, is Gemini-2.0-flash does not allow for that ?\nComp. are not prohibiting closed-source APIs like Gemini or OpenAI for data generation\nAnd i gues ONLY Anthropic (Claude) Very strict!! so is fine!?\nhttps://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/684515#3429582\n\n[message_id=3436223 author=c-number first=False]\nGoogle, OpenAI, and Anthropic all very strict about how their models are used.\nhttps://cloud.google.com/terms/service-terms \nb. ​​Model Restrictions. Customer will not, and will not allow End Users to, use output from an AI/ML Service (including Generated Output) to: (i) substitute, replace, or circumvent the use of a Google Model, directly or indirectly, or (ii) create or improve models similar to a Google Model.\nInstead, you can use models that allow distilation, for example DeepSeek.\n\n[message_id=3436227 author=Sangram Patil first=False]\nwhat about this:\nUse of Generated Content\nSome of our Services allow you to generate original content. Google won't claim ownership over that content. You acknowledge that Google may generate the same or similar content for others and that we reserve all rights to do so.\n...\nSome of our Services allow you to generate original content. ->> Paid API Service\nGoogle won't claim ownership over that content. \nhttps://ai.google.dev/gemini-api/terms\n\n[message_id=3436239 author=c-number first=False]\nThat is about ownership, not permitted use.\nGoogle saying it does not claim ownership over generated content does not mean distillation is allowed. The separate AI/ML terms still restrict using generated output to create or improve models similar to a Google Model.\n\n[message_id=3436240 author=Yurnero first=False]\nThanks for a remainder. I'm just curious how 'similar' is being defined?\n\n[message_id=3436330 author=Kishan Vavdara first=False]\nYou may not use the Services to develop models that compete with the Services (e.g., Gemini API or Google AI Studio). You also may not attempt to reverse engineer, extract or replicate any component of the Services, including the underlying data or models (e.g., parameter weights). \nThat page also has this. IMO Distilling here is not a violation. In previous competition's like llm detect ai generated content, competitor's have used gemini for essay writing and training models on it. \n@cpmpml is gemini generated data allowed here?\n\n[message_id=3438723 author=CPMP first=False]\nb. ​​Model Restrictions. Customer will not, and will not allow End Users to, use output from an AI/ML Service (including Generated Output) to: (i) substitute, replace, or circumvent the use of a Google Model, directly or indirectly, or (ii) create or improve models similar to a Google Model.\nThis is a fair observation. Participants should only use data for which they have proper license.\nIn this specific case, the competitions is not about creating a substitute for a Google model. NVIDIA is not going to use the LORA adapters from the participants. We are more interested in seeing how participants find ways to fine tune our model effectively.\nWe will come back for clarification on the license topic ASAP.\n\n[message_id=3436342 author=Adarsh Kumar first=False]\nhttps://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/684515#3429582 \nHere is said by host we must comply by the term of LLM we use and the terms are we must not use the data generated by it to train model which would compete with them in market but for kaggle competition it's allowed\n\n[message_id=3436354 author=Paritosh Kumar Tripathi first=False]\nWhere does it say that for Kaggle Competition it's allowed?\n\n[message_id=3436459 author=Adarsh Kumar first=False]\nYou can google it or ask the LLM it self, it's not allowed if the model is competing with LLM itself but for competitions there is no such problem for LLM in fact in competition many people purchase API which ultimately turns in their profit\n\n[message_id=3436563 author=Deepak Saldanha first=False]\nPaying for an API isn't a license to ignore its TOS. Since distillation is banned by closed-source providers, its better to use open-source models to keep your solution eligible and safe from disqualification.\n\n[message_id=3436618 author=Adarsh Kumar first=False]\n@deepaksaldanha Maybe you are right but only open source model that could produce good reasoning at this level is deekseek r1(as per my knowledge) and its 671B model need 1TB vram thats not possible for us and also rtx 6000 pro's env in offline so we even cannot use its 30B and 70B variants so in end we need to buy api to access the model\n\n[message_id=3436587 author=Arunodhayan first=False]\n@cpmpml can you clarify whether we are allowed to use api from models like gemini GPT, etc., to geenrate some datas\n\n[message_id=3437009 author=Navneet first=False]\nBravo update @cnumber\n\n[message_id=3439664 author=Komil Parmar first=False]\nWhile I was not really focusing on which model can be used for distillation and which cannot be, I had a slightly different question.\nLet's say I use DeepSeek R1 model for distillation (as it has MIT license). \nDoes that mean I have to also make the dataset public to everyone that I am using to train Nemotron?\nAlso, the rules mention \nBecause of the potential costs or restrictions (e.g., “geo restrictions”) associated with obtaining rights to use external data or certain software and associated tools, their use must be “reasonably accessible to all” and of “minimal cost”.\nSo the model is (I guess) available to everyone equally. Do I have to make the dataset I make using it public too? \nAnd also, what is considered \"minimal cost\"? \nI think is someone uses an API it can cost somewhat near $50. \nWould that be considered minimal cost?\nOn the other hand, there's rank 1 winner of the progress prize who have spent at least $500 in his experiments (estimated).",
+  "message_count_observed": 28,
+  "messages": [
+    {
+      "authorName": "c-number",
+      "content": "<p></p>\n<p><a href=\"https://www.kaggle.com/datasets/kienngx/nemotron-30b-competition-trainingdata-cot-labels\" target=\"_blank\">https://www.kaggle.com/datasets/kienngx/nemotron-30b-competition-trainingdata-cot-labels</a></p>\n<p>It seems it's okay.</p>",
+      "depth": 0,
+      "first": true,
+      "id": 688360,
+      "postDate": "2026-04-05T13:55:19.091Z"
+    },
+    {
+      "authorName": "CPMP",
+      "content": "<p><a href=\"https://www.kaggle.com/cnumber\" target=\"_blank\">@cnumber</a> Thanks for raising this, it is a recurring issue in Kaggle competitions. Not kaggle fault, rather the complexity of IP laws and regulations.</p>\n<p>Disclaimer: We cannot provide legal advice. Contact someone trained on US IP laws if you need advice.</p>\n<p>With the above disclaimer, here is our thought.</p>\n<p>The purpose of this competition is not to train models that would compete with commercial models. NVIDIA will not reuse the adapters produced by participants. After all, we could train models ourselves if that was our intent, given we have the data generator.</p>\n<p>The goal of the competition is to see how people manage to fine tune Nemotron model. The pipelines are more interesting to us than the outcome.</p>\n<p>Given the above, we won't bother if people distill models for this competition provided that the only limit to model output use is to forbid training competing models. In particular, distilling Gemini Flash 2.0 outputs looks fine for this competition. For any other use please check with someone trained in IP law.</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3439425,
+      "postDate": "2026-04-10T17:24:28.347Z",
+      "votes": 19
+    },
+    {
+      "authorName": "c-number",
+      "content": "<p>Thank you for the confirmation!</p>\n<p>I am now confident that top players will distill frontier models for some tasks, but still there will be a huge gap between a simple distilation solution and the top solutions.</p>",
+      "depth": 1,
+      "first": false,
+      "id": 3439627,
+      "postDate": "2026-04-11T02:27:40.163Z",
+      "votes": 1
+    },
+    {
+      "authorName": "Saicharan Ramineni",
+      "content": "<p>Anthropic, Open AI, and Google don't allow distillation for training models that will <strong>COMPETE</strong> with them, does that mean for this competitions we can distill them because a LORA adapter is not competing with them? </p>",
+      "depth": 1,
+      "first": false,
+      "id": 3441383,
+      "postDate": "2026-04-13T22:00:11.687Z"
+    },
+    {
+      "authorName": "Chew Kok Wah",
+      "content": "<p>No, using such data will NOT lead to your account being deleted from the LB, there is no such rule.</p>\n<p>The only possible worst case scenario is that you will not eligible to receive the monetary prize.</p>\n<p>But some past Competition winner had been using output from Gemini to train their model and there is no words from either Google or Kaggle that it is not allow.</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3437179,
+      "postDate": "2026-04-07T09:36:53.053Z",
+      "votes": 3
+    },
+    {
+      "authorName": "c-number",
+      "content": "<p>Maybe you would want to have a look at this competition.</p>\n<p>Deepfake Detection Challenge</p>\n<p><a href=\"https://www.kaggle.com/c/deepfake-detection-challenge/discussion/157925\" target=\"_blank\">https://www.kaggle.com/c/deepfake-detection-challenge/discussion/157925</a></p>\n<p><a href=\"https://www.kaggle.com/c/deepfake-detection-challenge/discussion/158506\" target=\"_blank\">https://www.kaggle.com/c/deepfake-detection-challenge/discussion/158506</a></p>",
+      "depth": 1,
+      "first": false,
+      "id": 3438446,
+      "postDate": "2026-04-09T05:49:24.413Z",
+      "votes": 1
+    },
+    {
+      "authorName": "Sangram Patil",
+      "content": "<p>6 years ago, There is no use debating unless the host can confirm this. <a href=\"https://www.kaggle.com/cpmpml\" target=\"_blank\">@cpmpml</a> </p>",
+      "depth": 2,
+      "first": false,
+      "id": 3438459,
+      "postDate": "2026-04-09T06:22:04.813Z",
+      "votes": 1
+    },
+    {
+      "authorName": "Dieter",
+      "content": "<p>Its in judgement of host to remove participants from LB that do not comply with rules. And although we will discuss such cases internally I can tell you I am personally very much against that people would get medals when they are not eligible for a monetary prize </p>",
+      "depth": 2,
+      "first": false,
+      "id": 3438493,
+      "postDate": "2026-04-09T08:44:36.593Z",
+      "votes": 5
+    },
+    {
+      "authorName": "CPMP",
+      "content": "<blockquote>\n  <p>The only possible worst case scenario is that you will not eligible to receive the monetary prize.</p>\n</blockquote>\n<p>Nope. We can remove anyone who doesn't comply with the rules.</p>",
+      "depth": 1,
+      "first": false,
+      "id": 3438721,
+      "postDate": "2026-04-09T16:14:28.083Z"
+    },
+    {
+      "authorName": "Halla Yang",
+      "content": "<p>In the 2025 edition of ARC-AGI-2, it looked as though NVARC (NVIDIA's 1st place solution) found it permissible to use Claude to generate some limited types of synthetic data (see <a href=\"https://www.kaggle.com/datasets/sorokin/nvarc-artifacts-puzzles\" target=\"_blank\">https://www.kaggle.com/datasets/sorokin/nvarc-artifacts-puzzles</a> ). The creator of that dataset wrote:</p>\n<blockquote>\n  <p>License concerns: In case you need to filter the records created using Claude model, you have to filter all the records that contain [\"summary1\", \"summary5\", \"summary6\"] or [\"mix\"]. </p>\n</blockquote>\n<p>That text suggests that they were aware that Claude usage could lead to license concerns.  Maybe there are some nuances about how synthetic data from Claude can be used, e.g. perhaps it's okay to generate text summaries that then generate code, but it's not okay to generate reasoning traces, though I would be interested in more certainty on where that boundary is located.</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3438798,
+      "postDate": "2026-04-09T18:13:36.227Z",
+      "votes": 1
+    },
+    {
+      "authorName": "CPMP",
+      "content": "<p>Anthropic prohibits the use of Claude models output to train models that compete with them. That's why we put this warning in case people use our data to train models that could compete with Anthropic.</p>",
+      "depth": 1,
+      "first": false,
+      "id": 3438873,
+      "postDate": "2026-04-09T20:40:21.680Z",
+      "votes": 1
+    },
+    {
+      "authorName": "Halla Yang",
+      "content": "<p>Thanks, your response makes perfect sense. I don't believe a LoRA adapter for this Kaggle contest competes with Anthropic, so by the same reasoning it seems we should be permitted to use Claude here. </p>",
+      "depth": 2,
+      "first": false,
+      "id": 3438874,
+      "postDate": "2026-04-09T20:49:39.517Z",
+      "votes": 1
+    },
+    {
+      "depth": 2,
+      "first": false,
+      "id": 3440504,
+      "postDate": "2026-04-12T13:32:54.447Z"
+    },
+    {
+      "authorName": "Sangram Patil",
+      "content": "<p>Wait, is Gemini-2.0-flash  does not allow for that ?</p>\n<p>Comp. are not prohibiting closed-source APIs like Gemini or OpenAI for data generation</p>\n<p>And i gues ONLY Anthropic (Claude) Very strict!! so is fine!?</p>\n<p><a href=\"https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/684515#3429582\" target=\"_blank\">https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/684515#3429582</a></p>",
+      "depth": 0,
+      "first": false,
+      "id": 3436211,
+      "postDate": "2026-04-05T14:11:07.477Z",
+      "votes": 1
+    },
+    {
+      "authorName": "c-number",
+      "content": "<p>Google, OpenAI, and Anthropic all very strict about how their models are used.</p>\n<p><a href=\"https://cloud.google.com/terms/service-terms\" target=\"_blank\">https://cloud.google.com/terms/service-terms</a></p>\n<blockquote>\n  <p>b. ​​Model Restrictions. Customer will not, and will not allow End Users to, use output from an AI/ML Service (including Generated Output) to: (i) substitute, replace, or circumvent the use of a Google Model, directly or indirectly, or (ii) create or improve models similar to a Google Model.</p>\n</blockquote>\n<p>Instead, you can use models that allow distilation, for example DeepSeek.</p>",
+      "depth": 1,
+      "first": false,
+      "id": 3436223,
+      "postDate": "2026-04-05T14:33:18.977Z"
+    },
+    {
+      "authorName": "Sangram Patil",
+      "content": "<p>what about this:</p>\n<pre><code>Use of Generated Content\n\nSome of our Services allow you to generate original content. Google won't claim ownership over that content. You acknowledge that Google may generate the same or similar content for others and that we reserve all rights to do so.\n...\n</code></pre>\n<p>Some of our Services allow you to generate original content. -&gt;&gt; Paid API Service</p>\n<p><code>Google won't claim ownership over that content.</code></p>\n<p><a href=\"https://ai.google.dev/gemini-api/terms\" target=\"_blank\">https://ai.google.dev/gemini-api/terms</a></p>",
+      "depth": 2,
+      "first": false,
+      "id": 3436227,
+      "postDate": "2026-04-05T14:39:48.493Z"
+    },
+    {
+      "authorName": "c-number",
+      "content": "<p>That is about ownership, not permitted use.</p>\n<p>Google saying it does not claim ownership over generated content does not mean distillation is allowed. The separate AI/ML terms still restrict using generated output to create or improve models similar to a Google Model.</p>",
+      "depth": 2,
+      "first": false,
+      "id": 3436239,
+      "postDate": "2026-04-05T14:59:28.760Z"
+    },
+    {
+      "authorName": "Yurnero",
+      "content": "<p>Thanks for a remainder. I'm just curious how 'similar' is being defined?</p>",
+      "depth": 2,
+      "first": false,
+      "id": 3436240,
+      "postDate": "2026-04-05T15:01:52.387Z",
+      "votes": 1
+    },
+    {
+      "authorName": "Kishan Vavdara",
+      "content": "<p><code>You may not use the Services to develop models that compete with the Services (e.g., Gemini API or Google AI Studio). You also may not attempt to reverse engineer, extract or replicate any component of the Services, including the underlying data or models (e.g., parameter weights).</code></p>\n<p>That page also has this. IMO Distilling here is not a violation. In previous competition's like llm detect ai generated content, competitor's have used gemini for essay writing and training models on it. \n<a href=\"https://www.kaggle.com/cpmpml\" target=\"_blank\">@cpmpml</a>  is gemini generated data allowed here?</p>",
+      "depth": 2,
+      "first": false,
+      "id": 3436330,
+      "postDate": "2026-04-05T18:08:45.807Z",
+      "votes": 1
+    },
+    {
+      "authorName": "CPMP",
+      "content": "<blockquote>\n  <p>b. ​​Model Restrictions. Customer will not, and will not allow End Users to, use output from an AI/ML Service (including Generated Output) to: (i) substitute, replace, or circumvent the use of a Google Model, directly or indirectly, or (ii) create or improve models similar to a Google Model.</p>\n</blockquote>\n<p>This is a fair observation. Participants should only use data for which they have proper license.</p>\n<p>In this specific case, the competitions is not about creating a substitute for a Google model. NVIDIA is not going to use the LORA adapters from the participants. We are more interested in seeing how participants find ways to fine tune our model effectively.</p>\n<p>We will come back for clarification on the license topic ASAP.</p>",
+      "depth": 2,
+      "first": false,
+      "id": 3438723,
+      "postDate": "2026-04-09T16:18:54.400Z",
+      "votes": 6
+    },
+    {
+      "authorName": "Adarsh Kumar",
+      "content": "<p><a href=\"https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/684515#3429582\" target=\"_blank\">https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/684515#3429582</a></p>\n<p>Here is said by host we must comply by the term of LLM we use and the terms are we must not use the data generated by it to train model which would compete with them in market but for kaggle competition it's allowed </p>",
+      "depth": 0,
+      "first": false,
+      "id": 3436342,
+      "postDate": "2026-04-05T18:30:54.557Z",
+      "votes": 1
+    },
+    {
+      "authorName": "Paritosh Kumar Tripathi",
+      "content": "<p>Where does it say that for Kaggle Competition it's allowed?</p>",
+      "depth": 1,
+      "first": false,
+      "id": 3436354,
+      "postDate": "2026-04-05T19:23:06.667Z"
+    },
+    {
+      "authorName": "Adarsh Kumar",
+      "content": "<p>You can google it or ask the LLM it self, it's not allowed if the model is competing with LLM itself but for competitions there is no such problem for LLM in fact in competition many people purchase API which ultimately turns in their profit </p>",
+      "depth": 2,
+      "first": false,
+      "id": 3436459,
+      "postDate": "2026-04-06T02:07:07.833Z",
+      "votes": 1
+    },
+    {
+      "authorName": "Deepak Saldanha",
+      "content": "<p>Paying for an API isn't a license to ignore its TOS. Since distillation is banned by closed-source providers, its better to use open-source models to keep your solution eligible and safe from disqualification.</p>",
+      "depth": 2,
+      "first": false,
+      "id": 3436563,
+      "postDate": "2026-04-06T08:32:01.487Z"
+    },
+    {
+      "authorName": "Adarsh Kumar",
+      "content": "<p><a href=\"https://www.kaggle.com/deepaksaldanha\" target=\"_blank\">@deepaksaldanha</a> Maybe you are right but only open source model that could produce good reasoning at this level is deekseek r1(as per my knowledge) and its 671B model need 1TB vram thats not possible for us and also rtx 6000 pro's env in offline so we even cannot use its 30B and 70B variants so in end we need to buy api to access the model </p>",
+      "depth": 2,
+      "first": false,
+      "id": 3436618,
+      "postDate": "2026-04-06T10:51:58.107Z",
+      "votes": 1
+    },
+    {
+      "authorName": "Arunodhayan",
+      "content": "<p><a href=\"https://www.kaggle.com/cpmpml\" target=\"_blank\">@cpmpml</a> can you clarify whether we are allowed to use api from models like gemini GPT, etc., to geenrate some datas</p>",
+      "depth": 1,
+      "first": false,
+      "id": 3436587,
+      "postDate": "2026-04-06T09:30:50.613Z",
+      "votes": 4
+    },
+    {
+      "authorName": "Navneet",
+      "content": "<p>Bravo update <a href=\"https://www.kaggle.com/cnumber\" target=\"_blank\">@cnumber</a> </p>",
+      "depth": 0,
+      "first": false,
+      "id": 3437009,
+      "postDate": "2026-04-07T01:43:08.377Z",
+      "votes": -2
+    },
+    {
+      "authorName": "Komil Parmar",
+      "content": "<p>While I was not really focusing on which model can be used for distillation and which cannot be, I had a slightly different question.\nLet's say I use DeepSeek R1 model for distillation (as it has MIT license). \nDoes that mean I have to also make the dataset public to everyone that I am using to train Nemotron?</p>\n<p>Also, the rules mention </p>\n<blockquote>\n  <p>Because of the potential costs or restrictions (e.g., “geo restrictions”) associated with obtaining rights to use external data or certain software and associated tools, their use must be “reasonably accessible to all” and of “minimal cost”.</p>\n</blockquote>\n<p>So the model is (I guess) available to everyone equally. Do I have to make the dataset I make using it public too? </p>\n<p>And also, what is considered \"minimal cost\"? </p>\n<p>I think is someone uses an API it can cost somewhat near $50. \nWould that be considered minimal cost?\nOn the other hand, there's rank 1 winner of the progress prize who have spent at least $500 in his experiments (estimated).</p>",
+      "depth": 0,
+      "first": false,
+      "id": 3439664,
+      "postDate": "2026-04-11T05:12:40.097Z"
+    }
+  ],
+  "text_sha256": "9f8f84229cf3c454a4f0112e3a76d75c5421f525360f574686a5825c0ab17a84",
+  "topic": {
+    "authorName": "c-number",
+    "authorUrl": "https://www.kaggle.com/cnumber",
+    "commentCount": 27,
+    "content": "<p></p>\n<p><a href=\"https://www.kaggle.com/datasets/kienngx/nemotron-30b-competition-trainingdata-cot-labels\" target=\"_blank\">https://www.kaggle.com/datasets/kienngx/nemotron-30b-competition-trainingdata-cot-labels</a></p>\n<p>It seems it's okay.</p>",
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 688360,
+    "postDate": "2026-04-05T13:55:19.091Z",
+    "title": "[update] Read CPMP's reply. [original] Do not distill models that do not allow distillation (e.g. gemini, gpt5)",
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/688360",
+    "votes": 24
+  },
+  "topic_id": 688360,
+  "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/688360"
+}

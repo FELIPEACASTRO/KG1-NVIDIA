@@ -4,6 +4,45 @@ Gerado em: 2026-05-10
 
 Objetivo: consolidar os achados Kaggle/Hugging Face, resultados V221/V226/V229/V230 e o plano operacional para melhorar as duas familias criticas sem treino cego.
 
+## Estado real e impacto das evidencias - 2026-05-13
+
+Esta secao existe para remover ambiguidade: ha evidencias fortes de ganho, mas nem todas viraram ganho `adapter-only`. A decisao tecnica daqui em diante deve separar tres coisas: ganho medido em solver/verifier, ganho absorvido por LoRA, e ganho submitavel.
+
+### Numeros atuais sem romantizar
+
+| Estado | Total weak | Equation | Bit | Status real |
+|---|---:|---:|---:|---|
+| Melhor baseline historico V226 | `191/315` | `55/155` | `136/160` | superado por adapter-only posterior |
+| Melhor adapter-only atual | `192/315` | `56/155` | `136/160` | medido no weak, mas ainda nao passa o gate |
+| V291 full adapter-only | `823/947` | `56/155` | `135/160` | submitado, public score `0.86`, nao melhora equation |
+| V274/V275 postprocessor numerico | `196/315` | `60/155` | `136/160` | ganho real de solver/verifier, nao LoRA puro |
+| V324+V329 CPU solver/verifier | `197/315` projetado | `61/155` | `136/160` | ganho real CPU, ainda nao submitavel como adapter-only |
+| V335 LoRA mixed trace replay | `190/315` | `56/155` | `134/160` | falhou; job cancelado por FinOps |
+
+Conclusao honesta: a documentacao e as buscas produziram ganho tecnico real em solver/verifier. Elas ainda nao produziram ganho real em LoRA puro. O erro das ultimas tentativas foi assumir que uma regra verificavel vira comportamento do adapter apenas por SFT curto/misto. Os jobs V303, V326, V331 e V335 falsificaram essa hipotese: `equation_transform` ficou travado em `56/155` e `bit_manipulation` frequentemente caiu para `134-135/160`.
+
+### Impacto concreto do que foi estudado hoje
+
+| Fonte/evidencia | O que parecia promissor | Impacto medido | Decisao |
+|---|---|---|---|
+| Tong Hui Kang `bit_manipulation` (`690307`, repo `tonghuikang/nemotron`) | algoritmo publico com `1364/1602 = 85.1%` no train oficial | no weak atual deu `+1/-1`, ganho liquido `0` | usar como teacher/fixture; bloquear override direto |
+| Tong `equation_numeric.py` | ampliar DSL numerica de equation | direct gate deu `0` ganhos e `16` candidatos errados nos misses | usar somente como taxonomia de operacoes raras |
+| V274/V275 numeric postprocessor | recuperar equation com regras label-free guardadas | `+4` equation, `196/315`, `0` perdas | ganho real; precisa virar caminho permitido ou teacher distillado |
+| V329 symbolic cryptarithm | acrescentar ganho simbolico | `+1` adicional projetado, `197/315`, `0` perdas | ganho real CPU; precisa virar caminho permitido ou teacher distillado |
+| `furkankesen/equation-solver-swap-v1` | templates de concat/reverse/op para equation | `80` templates uteis, mas com overlaps; nao usar cru | usar como DSL/fixtures sinteticos verificados |
+| `konbu17`/`kienngx` CoT datasets | possiveis traces de treino | overlaps com weak/full ou flags incorretas | proibido uso bruto; apenas taxonomia/wording apos filtro |
+| OpenRouter/destilacao/IAs externas | confirmacao metodologica | reforcou que equation e sintese/verificacao, nao SFT generico | nao autoriza novo GPU sem CPU gate |
+| V335 mixed trace replay | tentar absorver V324/V329 em LoRA | `checkpoint-4/6 = 190/315`, bit caiu para `134` | cancelar, registrar falha, nao repetir mistura ampla |
+
+### Regra operacional obrigatoria
+
+- Nao iniciar novo job HF GPU se o CPU gate nao mostrar novo sinal verificavel.
+- Cancelar imediatamente por FinOps quando o primeiro weak eval violar `bit>=136`, `total>=192` ou mantiver `equation<=56`.
+- `eval_loss` menor nao promove candidato. O unico gate que importa e acerto por familia no contrato weak/full.
+- Nenhum submit Kaggle novo sem ganho medido e reproduzido em weak/full gate.
+- Todo dataset externo com overlap por `id` ou `prompt_sha256` fica bloqueado para treino bruto; no maximo entra como taxonomia.
+- O proximo ganho precisa ser primeiro demonstrado como programa/verifier no-loss; LoRA so vem depois, como tentativa de absorcao controlada.
+
 ## Resumo executivo
 
 - Baseline protegido atual: `v226__v226_best_checkpoint1_observed_191`.
@@ -6735,3 +6774,158 @@ Decisao:
   - `bit_manipulation >= 136`;
   - `0` regressao de truncation/template/adapter.
 - Se o primeiro checkpoint nao satisfizer esses criterios, cancelar o job e nao gastar GPU adicional.
+
+### V335 external resource triage from attached compilations - 2026-05-13
+
+Artefato:
+
+- `artifacts/v335_hf_nemo_a100_mixed_trace_replay_launch/KG1_EXTERNAL_RESOURCE_TRIAGE_2026_05_13.md`.
+
+Escopo:
+
+- Foram auditados os tres markdowns anexados de compilacao de recursos sobre destilacao, bit manipulation e equation transform.
+- URL inventory extraido em `artifacts/v335_hf_nemo_a100_mixed_trace_replay_launch/external_resource_urls_20260513.txt`.
+- Kaggle discussion audit via API executado sobre `11` topicos, com `7` novos fetches, `0` faltantes e `0` erros:
+  - `682313`, `687798`, `688277`, `688360`, `688461`, `689877`, `689915`, `690307`, `693260`, `697491`, `698293`.
+
+Achados aceitos:
+
+- `690307` continua sendo o melhor guia publico para bit: bit-pair, bitsum, stride e middle-fill. O V333C ja confirmou o valor dele como professor (`1364/1602` train), mas tambem confirmou que nao pode virar override direto (`+1/-1` no weak).
+- `688461` adiciona uma taxonomia concreta para o proximo bit gate CPU: constantes, identidade, NOT, gates de 2 entradas, variantes assimetricas com negacao, majority/choice/parity de 3 entradas e composicoes de 4 entradas. Acao: implementar apenas com contagem de conflito e promocao no-loss.
+- `693260` e `697491` reforcam que acuracia sintetica alta nao basta: traces longos ou fora do prior do modelo podem reduzir LB. Acao: manter traces curtos, min-logprob/low-confidence rebalance apenas se houver weak gate, e kill-switch no primeiro checkpoint.
+- `698293` confirma que `equation_symbolic` tem estrutura latente recuperavel por solver gold-conditioned, mas nao e inferencia permitida direta. Acao: usar como justificativa para expandir V329/V334 com rule class, candidate count, conflict count e abstain quando underdetermined.
+- `689877` documenta operadores ausentes nos exemplos de equation. Acao: nao forcar resposta quando a regra nao e inferivel; qualquer solver deve registrar underdetermined operator e abstain salvo se outro operador demonstrado provar a mesma classe.
+- `furkankesen/equation-solver-swap-v1` e a fonte nova mais acionavel para DSL de equation: `80` linhas deterministicas com classes `rev_both_add_rev`, `concat`, `rev_both_mul_rev`, `mul`, `add`, `abs_sub`, `swap_concat`, `rev_both_abs_sub_rev`, `sub`. Como ha `7` overlaps contra referencias V221/V291, nao pode ser usado cru; usar apenas como taxonomia e template para fixtures sinteticos verificados.
+- `konbu17/bit-manipulation-synthetic-cot` tem `3000` linhas e `0` overlap contra V221/V291, mas possui `solver_correct=False` em parte das linhas. Acao: so usar apos reexecucao/verificacao local por solver KG1; nunca como SFT direto.
+
+Bloqueios/rejeicoes:
+
+- `kienngx/nemotron-30b-competition-trainingdata-cot-labels` fica bloqueado para treino direto porque sobrepoe `315/315` weak e `947/947` full por id/prompt.
+- `konbu17/bit-manipulation-cot-dataset`, `furkankesen/hard-family-source-swap-v1` e `equation-solver-swap-v1` tem overlaps com nossos gates; entram como referencia/taxonomia, nao como dados brutos.
+- Notebooks genericos de DistilBERT, visao, SetFit, NLP e papers de destilacao sem artefato KG1 nao entram no caminho executavel.
+- `nvidia/Puzzle-KD-Nemotron-Post-Training-Dataset-v2` e grande e generico (`math/code/stem/chat`); nao e mistura direta para KG1. Fica P2 metodologico.
+
+Impacto no plano:
+
+- Proximo CPU gate bit: Tong stride + boolean gate taxonomy de `688461`, com regra de confianca label-free e no-loss.
+- Proximo CPU gate equation: expandir V324/V329 usando a taxonomia de `equation-solver-swap-v1`, principalmente reverse-both-op-reverse e concat/swap-concat, com abstain em operador nao demonstrado.
+- Proximo treino HF so continua se o checkpoint weak superar adapter-only atual: `total>192`, `equation>56`, `bit>=136`.
+- Regra operacional permanente para jobs HF: enquanto um job estiver rodando, verificar logs em ciclos de aproximadamente `40s`; cancelar por FinOps em erro, OOM, upload quebrado, travamento, ou evidencia clara de que o job nao pode bater o gate.
+
+### V336 roadmap cirurgico pos-V335 - 2026-05-13
+
+Motivo:
+
+- O V335 foi o teste correto para validar a hipotese "os ganhos V324/V329 podem ser absorvidos por LoRA em um mix de traces". O resultado foi negativo: `checkpoint-4` e `checkpoint-6` ficaram em `190/315`, `equation=56/155`, `bit=134/160`, truncation `1`. O job foi cancelado por FinOps.
+- Isso nao invalida os achados das buscas; invalida somente a estrategia de SFT misto amplo para transferi-los.
+- O roadmap precisa agora ficar agressivo no lugar certo: CPU solver/verifier e distilacao minima, nao mais epochs ou pesos aleatorios em H100/H200.
+
+#### Diagnostico raiz
+
+1. `equation_transform` nao esta limitada por falta de epochs. Ela esta limitada por falta de regra/verifier internalizada.
+2. `bit_manipulation` ja esta alta no weak (`136/160`) e e fragil: quase todo SFT recente derruba para `134-135`.
+3. O ganho real atual vem de regras deterministicas guardadas:
+   - V274/V275: `+4` equation, `196/315`, `0` perdas.
+   - V329: `+1` equation adicional projetado, `197/315`, `0` perdas.
+4. LoRA ate agora nao absorveu essas regras:
+   - V303: bit distill falhou, equation ficou `56`.
+   - V326: equation/bit replay falhou, melhor `191`, bit `135`.
+   - V331: symbolic mix falhou, `191`, bit `135`.
+   - V335: mixed trace replay falhou, `190`, bit `134`.
+5. Portanto, repetir GPU com mais LR/epochs/pesos e o mesmo tipo de dado e gasto sem fundamento.
+
+#### Sequencia obrigatoria daqui em diante
+
+**V336A - CPU integrated no-loss solver gate**
+
+Objetivo: consolidar V274/V275/V329 e expandir somente com novas classes que provem ganho sem perdas.
+
+Entradas permitidas:
+
+- Predicoes do melhor adapter-only atual (`192/315`, `equation=56`, `bit=136`).
+- Regras V274/V275 numeric operator.
+- Regra V329 symbolic cryptarithm aceita.
+- Taxonomia `equation-solver-swap-v1`: `concat`, `swap_concat`, `add`, `sub`, `abs_sub`, `mul`, `rev_both_add_rev`, `rev_both_mul_rev`, `rev_both_abs_sub_rev`.
+- Taxonomia Tong/688461 para bit: constantes, identity, NOT, gates de 2 entradas, negacoes assimetricas, majority/choice/parity e stride/bitsum.
+
+Saida exigida:
+
+- Manifest com `candidate_id`, `family`, `rule_class`, `old_prediction`, `new_prediction`, `confidence_reason`, `candidate_count`, `conflict_count`, `accepted/rejected`.
+- Reproducao dos resultados CPU atuais: V274/V275 `196/315`; V324+V329 projetado `197/315`.
+- Novo ganho so conta se `losses=0`, `bit>=136` e `equation>61` ou se mantiver `equation=61` com melhor evidencia de confianca.
+
+Bloqueio:
+
+- Se nao houver novo ganho no-loss, nao rodar HF GPU.
+
+**V336B - transferability audit antes de treinar**
+
+Objetivo: provar que o formato do dado ensina o comportamento que sera exigido na inferencia.
+
+Checagens:
+
+- Prompt de treino deve bater com o prompt de avaliacao que sera usado no weak eval.
+- Evitar conflito entre "raciocine" no treino e "retorne uma linha sem reasoning" no eval.
+- Criar dois formatos no maximo:
+  - `answer_only_verified`: resposta curta para absorcao direta;
+  - `compact_trace_verified`: trace minimo com passos deterministas.
+- Cada linha deve ter hard negative: baseline erra, solver acerta, regra explica por que.
+
+Bloqueio:
+
+- Se o dataset tiver muitas linhas genericas/answer-only antigas ou traces longos fora da regra aceita, bloquear antes de HF.
+
+**V337 - tiny LoRA absorption smoke**
+
+Objetivo: testar absorcao real, nao treinar "para ver".
+
+Configuracao:
+
+- Partir do melhor adapter-only atual.
+- Usar somente linhas de hard positives aceitas por V336A + replay minimo de bit/nao-criticas.
+- Salvar checkpoint muito cedo.
+- Rodar weak eval imediatamente no primeiro checkpoint.
+
+Gate de continuacao:
+
+- Continuar somente se `total>192`, `equation>56`, `bit>=136`, truncation `0`.
+- Promover somente se `equation>=60`, `bit>=136`, `total>=193`.
+- Cancelar por FinOps se `bit<136`, `total<192` ou `equation=56`.
+
+**V338 - se LoRA continuar falhando**
+
+Decisao honesta:
+
+- Parar tentativas de converter solver/verifier para LoRA via SFT curto.
+- Voltar para uma das duas rotas:
+  - rota A: confirmar se o formato oficial permite codigo/verifier/postprocessor junto com adapter;
+  - rota B: aceitar que o ganho CPU nao e submitavel agora e focar em um novo adapter-only com fonte de dados realmente diferente, nao variacao de peso/epoch.
+
+**V339 - full eval/package/submit**
+
+So pode ocorrer se:
+
+- weak gate passar com ganho medido;
+- full gate reproduzir melhora;
+- package contiver apenas artefatos permitidos;
+- manifest documentar diff por familia e nao apenas score total;
+- nenhum candidato com regressao de bit/equation for submetido.
+
+#### O que nao fazer mais
+
+- Nao rodar outro V335-like com mais steps.
+- Nao aumentar epochs so porque `eval_loss` caiu.
+- Nao misturar dataset publico bruto com overlap.
+- Nao usar "paper bom" como autorizacao de GPU.
+- Nao submeter adapter com `equation=56` se a justificativa for apenas expectativa.
+- Nao deixar job HF rodando depois do primeiro sinal objetivo de regressao.
+
+#### Criterio de sucesso real
+
+O proximo resultado so sera considerado ganho quando aparecer uma destas evidencias:
+
+1. Adapter-only weak: `>=193/315`, `equation>=60/155`, `bit>=136/160`.
+2. Adapter-only full: `>823/947` sem queda nas familias criticas.
+3. Solver/verifier permitido por regra de competicao com full eval melhor que V291 e package aceito.
+
+Enquanto isso nao acontecer, o estado honesto e: temos ganho tecnico em CPU, mas nao temos ganho submitavel adicional comprovado.
