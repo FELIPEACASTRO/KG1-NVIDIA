@@ -5715,3 +5715,22 @@ Double-check avassalador do mesmo anexo:
 - Decisao operacional:
   - se V316 falhar, V317 nao deve ser "mais steps" do mesmo treino;
   - V317 deve gerar `target_probe_manifest`, coletar wrong outputs do adapter congelado, treinar com answer-span weighting e hard negatives reais, e rejeitar antes de weak/full se os probes por ID nao moverem.
+
+Triple-check 10x do mesmo anexo:
+
+- Artefato: `artifacts/v316_openrouter_distill_triage/20260512T2350Z/v316_openrouter_chat_20260512_2_triplecheck.md`.
+- SHA256 do JSON bruto: `015FC4832C0FCA26789392C99714AB038B05A67A59F58279C828AB6F68E9FC12`.
+- Foram reavaliadas `22` respostas de assistentes; `20` tinham conteudo operacional substantivo.
+- Novo achado local importante: os `15` target IDs ja aparecem em `data/sft_v51_perfect.jsonl` e `data/sft_v51_complete.jsonl`, `2` ocorrencias por ID. Portanto, V317 nao deve ser apenas "adicionar exemplos corretos"; isso ja existiu em linhagem anterior. O problema mais provavel e diluicao de objetivo, pouca pressao nos tokens finais, negativos fracos e bit replay insuficiente.
+- Consequencia para o roadmap:
+  - V317 deve coletar `frozen_adapter_wrong_outputs` e usa-los como `rejected`;
+  - V317 deve usar completion curta/answer-aligned e perda ponderada no span final;
+  - V317 deve manter replay completo de bit keepers;
+  - V317 deve rejeitar checkpoint antes de weak/full se os probes exatos nao moverem.
+- Itens rejeitados pelo triple-check:
+  - high LR generico;
+  - mais epochs/steps do mesmo objetivo;
+  - treino equation-only sem replay;
+  - promocao por loss;
+  - variantes geradas por IA sem verificador deterministico;
+  - dual LoRA/router antes de esgotar single-adapter com answer-span weighting.
