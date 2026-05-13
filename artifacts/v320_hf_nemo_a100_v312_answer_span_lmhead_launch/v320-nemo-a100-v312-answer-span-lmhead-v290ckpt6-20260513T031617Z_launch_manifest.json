@@ -1,0 +1,55 @@
+{
+  "branch": "v230-v226-complementarity",
+  "dataset": {
+    "data_repo": "felipesp1983/kg1-nemotron-training",
+    "dataset_upload_commit": "725c8e2c0f1e4439d971dc20cb508335d11eca7f",
+    "train_file": "data/v312_verifier_synthetic_distill/20260512T1545Z/v312_verifier_synthetic_distill_sft_train.jsonl",
+    "train_rows": 204,
+    "train_sha256": "352fb0cdcf8bf1505e81a2cc2c0b24bae790cfe1c1441a811d12db0b27594f5c",
+    "val_file": "data/v312_verifier_synthetic_distill/20260512T1545Z/v312_verifier_synthetic_distill_sft_val.jsonl",
+    "val_rows": 51,
+    "val_sha256": "7e9d76277fc5adab680c5a6e53877880c14bcc6265b6469ef9e9737ee26b4153"
+  },
+  "expected_commit": "5b405af44e9b74afdb1bfd54bd8d7eef40c9315a",
+  "flavor": "a100-large",
+  "generated_at_utc": "2026-05-13T03:16:18.270945+00:00",
+  "hardware": {
+    "accelerator_model": "A100",
+    "accelerator_quantity": "1",
+    "accelerator_vram": "80 GB",
+    "cpu": "12 vCPU",
+    "name": "a100-large",
+    "pretty_name": "Nvidia A100 - large",
+    "ram": "142 GB",
+    "unit_cost_usd": 0.041667,
+    "unit_label": "minute"
+  },
+  "image": "nvcr.io/nvidia/nemo:25.11.nemotron_3_nano",
+  "init_adapter": {
+    "repo": "felipesp1983/kg1-nemotron-lora-v290-rank19-micro-patch-smoke",
+    "subfolder": "checkpoint-6"
+  },
+  "job_id": "6a03ed3f72518a06598ffe30",
+  "job_status": "RUNNING",
+  "job_url": "https://huggingface.co/jobs/felipesp1983/6a03ed3f72518a06598ffe30",
+  "namespace": "felipesp1983",
+  "next_action": "Monitor every 30 seconds; weak-eval checkpoints immediately after training completes.",
+  "output_repo": "felipesp1983/kg1-nemotron-lora-v320-nemo-a100-v312-answer-span-lmhead-v290ckpt6",
+  "recipe": {
+    "answer_span_loss_weight": "12.0",
+    "answer_span_min_weighted_tokens": "100",
+    "eval_every_steps": 2,
+    "eval_max_examples": 51,
+    "final_learning_rate": "2e-8",
+    "finops_change_vs_v319": "Use the small focused V312 dataset and 51-row eval to test movement before another broad run.",
+    "image_dependency_strategy": "Use NVIDIA official Nemotron 3 Nano image; do not build causal-conv1d/mamba-ssm on paid GPU.",
+    "learning_rate": "8e-8",
+    "max_steps": 8,
+    "objective": "focused V312 answer-span distillation of V306 rule classes into adapter-only lm_head behavior",
+    "promotion_gate": "reject if total<192 or bit<136; inspect only if equation>56 or total>=193; promote only if equation>=60 and bit>=136",
+    "save_every_steps": 2,
+    "trainable_lora_modules": "lm_head"
+  },
+  "run_id": "v320-nemo-a100-v312-answer-span-lmhead-v290ckpt6-20260513T031617Z",
+  "version": "v320_v312_answer_span_lmhead_from_v290_checkpoint6_nemo_a100"
+}
