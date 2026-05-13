@@ -1,0 +1,83 @@
+{
+  "source_file": "C:\\Users\\davis\\Downloads\\OpenRouter Chat Tue May 12 2026 (2).json",
+  "assistant_response_count": 22,
+  "theme_counts": {
+    "hard_negatives_dpo_rejected_outputs": 19,
+    "stop_promotion_gates": 20,
+    "bit_keeper_antiregression_replay": 9,
+    "answer_span_final_answer_weighting": 7,
+    "short_rigid_trace_format": 8,
+    "kl_baseline_regularization": 7,
+    "dual_lora_router": 3,
+    "high_lr_recipes": 16
+  },
+  "equation_gain_ids": [
+    {
+      "id": "7688e06e",
+      "rule": "minus_signed_opposite_sign_guarded",
+      "baseline": "55",
+      "target": "-55"
+    },
+    {
+      "id": "274def88",
+      "rule": "minus_signed_opposite_sign_guarded",
+      "baseline": "-92",
+      "target": "92"
+    },
+    {
+      "id": "d1bd7478",
+      "rule": "colon_absdiff_unreverse_same_len",
+      "baseline": "03",
+      "target": "30"
+    },
+    {
+      "id": "c5b058d6",
+      "rule": "add_direct_over_model_add_variant",
+      "baseline": "35",
+      "target": "134"
+    }
+  ],
+  "bit_gain_ids": [
+    "1abaffca",
+    "0e70c867",
+    "b8722d19",
+    "7192535b",
+    "8740ed31",
+    "1a7c8520",
+    "a6192d29",
+    "048cc279",
+    "4c327b55",
+    "b8aa3072",
+    "5ba26f21"
+  ],
+  "accepted": [
+    "Use actual frozen-adapter wrong outputs as hard negatives.",
+    "Use compact trace and answer-span/token weighting.",
+    "Make bit keeper replay mandatory.",
+    "Use exact IDs as probes and hard-negative anchors, not as the only SFT source.",
+    "Run target probes before expensive weak/full eval."
+  ],
+  "rejected_or_deferred": [
+    "High LR recipes for current PEFT lineage.",
+    "Sequential equation-only training without bit replay.",
+    "Dual LoRA/router as next immediate step.",
+    "KL regularization as the first anti-regression mechanism.",
+    "Model-generated unverified variants."
+  ],
+  "v317_if_v316_fails": {
+    "dataset": "deterministic verifier-generated variants plus frozen-adapter hard negatives and full bit keepers",
+    "trainer": "answer-span weighted SFT plus optional DPO/contrastive loss on observed wrong outputs",
+    "minimum_batch_bit_share": 0.3,
+    "preferred_batch_bit_share": 0.35,
+    "hard_reject": [
+      "bit_manipulation_correct < 135",
+      "no target-probe movement after two checkpoints",
+      "truncation worsens",
+      "loss improves but target probes do not move"
+    ],
+    "promotion": [
+      "bit_manipulation_correct >= 136",
+      "equation_transform_correct > 56 or weak_total >= 193"
+    ]
+  }
+}

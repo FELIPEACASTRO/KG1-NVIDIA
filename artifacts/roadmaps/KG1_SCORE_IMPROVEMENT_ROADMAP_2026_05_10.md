@@ -5695,3 +5695,23 @@ Impacto no plano:
 - Aguardar o resultado do V316, porque ele testa um eixo realmente diferente (`up_proj/down_proj`).
 - Se V316 nao promover, implementar V317 com trainer answer-span weighted, hard negatives reais, replay completo de bit e gate de parada antecipada.
 - Gate V317 minimo: rejeitar se `bit<135`; promover apenas se `bit>=136` e `equation>56` ou `total>=193`, com truncation sem piora.
+
+Double-check avassalador do mesmo anexo:
+
+- Artefato: `artifacts/v316_openrouter_distill_triage/20260512T2350Z/v316_openrouter_chat_20260512_2_deep_doublecheck.md`.
+- Foram analisadas `22` respostas de assistentes do arquivo atualizado.
+- Consenso por tema:
+  - hard negatives / DPO / rejected outputs: `19/22`;
+  - gates de parada/promocao: `20/22`;
+  - bit keeper / anti-regression replay: `9/22`;
+  - answer-span/final-answer weighting: `7/22`;
+  - short/rigid trace: `8/22`;
+  - KL regularization: `7/22`, mas adiado por complexidade;
+  - dual LoRA/router: `3/22`, adiado por risco de artefato;
+  - high LR recipes: `16/22`, rejeitado apesar da frequencia por conflito com a evidencia local.
+- IDs de probes que devem entrar em V317+:
+  - equation: `7688e06e`, `274def88`, `d1bd7478`, `c5b058d6`;
+  - bit: `1abaffca`, `0e70c867`, `b8722d19`, `7192535b`, `8740ed31`, `1a7c8520`, `a6192d29`, `048cc279`, `4c327b55`, `b8aa3072`, `5ba26f21`.
+- Decisao operacional:
+  - se V316 falhar, V317 nao deve ser "mais steps" do mesmo treino;
+  - V317 deve gerar `target_probe_manifest`, coletar wrong outputs do adapter congelado, treinar com answer-span weighting e hard negatives reais, e rejeitar antes de weak/full se os probes por ID nao moverem.
