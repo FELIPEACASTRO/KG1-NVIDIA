@@ -5824,6 +5824,16 @@ Atualizacao FinOps:
 - Primeiro launch V317 `https://huggingface.co/jobs/felipesp1983/6a03d08172518a06598ffd11` foi cancelado antes do treino, pois ficou varios ciclos preso no build local de `causal-conv1d`.
 - Ajuste aplicado no launcher: remover `--no-binary`, preferir wheels/binarios, adicionar marcadores `install_*_start/end` e timeout duro por dependencia para nao queimar H200 em build silencioso.
 - Relancar somente depois de commit/push desse ajuste.
+- Segundo launch V317 `https://huggingface.co/jobs/felipesp1983/6a03d28572518a06598ffd21` confirmou o problema operacional: `causal-conv1d==1.6.1` expirou com exit `124` antes do treino.
+- Probes de imagem:
+  - `vllm/vllm-openai:v0.20.1`: tem `torch`/`transformers`, mas nao tem `peft`, `causal_conv1d` nem `mamba_ssm`; ruim para treino HF com `AutoModel`.
+  - `nvcr.io/nvidia/nemo:25.11.nemotron_3_nano`: imagem oficial NVIDIA para Nemotron 3 Nano; ja contem `causal_conv1d=1.5.3`, `mamba_ssm=2.2.6.post3`, `transformers=4.57.6`, `peft=0.13.2`, `torch=2.9.0a0+...nv25.09`.
+- V318 aprovado:
+  - launcher `artifacts/v318_hf_nemo_a100_answer_span_launch/launch_v318_hf_nemo_a100_answer_span.py`;
+  - imagem `nvcr.io/nvidia/nemo:25.11.nemotron_3_nano`;
+  - hardware inicial `a100-large`, custo `0.041667/min`, metade do H200;
+  - instalar apenas dependencias Python leves/PEFT atualizado; nao compilar `mamba_ssm` ou `causal-conv1d`;
+  - se A100 falhar por memoria, relancar a mesma receita/imagem em H200.
 - Itens rejeitados pelo quintuple-check:
   - conversao literal de `postprocessor/verifier` para LoRA;
   - usar postprocessor em inferencia e chamar de LoRA puro;
