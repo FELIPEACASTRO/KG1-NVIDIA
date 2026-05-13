@@ -1456,6 +1456,7 @@ def evaluate_loss(
     val_data: list[dict[str, Any]],
     tokenizer: Any,
     max_examples: int,
+    label: str = "eval",
 ) -> float:
     if not val_data or max_examples <= 0:
         return float("nan")
@@ -1464,18 +1465,29 @@ def evaluate_loss(
     model.eval()
     sample = select_eval_sample(val_data, min(max_examples, len(val_data)))
     losses: list[float] = []
+    total = len(sample)
+    print(f"{label}_loss_eval_start examples={total} {cuda_memory_line()}", flush=True)
 
     with torch.no_grad():
-        for item in sample:
+        for index, item in enumerate(sample, start=1):
             input_ids, attention_mask, loss_mask = tensorize_batch([item], tokenizer.pad_token_id)
             outputs = model(input_ids=input_ids, attention_mask=attention_mask, use_cache=False)
             loss = masked_cross_entropy_loss(outputs.logits, input_ids, loss_mask)
             losses.append(float(loss.item()))
             del input_ids, attention_mask, loss_mask, outputs, loss
+            if index == 1 or index == total or index % 8 == 0:
+                partial = sum(losses) / max(1, len(losses))
+                print(
+                    f"{label}_loss_eval_progress {index}/{total} "
+                    f"partial_loss={partial:.4f} {cuda_memory_line()}",
+                    flush=True,
+                )
 
     if was_training:
         model.train()
-    return sum(losses) / max(1, len(losses))
+    result = sum(losses) / max(1, len(losses))
+    print(f"{label}_loss_eval_end loss={result:.4f} {cuda_memory_line()}", flush=True)
+    return result
 
 
 def make_manifest(
