@@ -6498,3 +6498,64 @@ Decisao tecnica:
   - promover para dataset somente classes `no_loss` com `+1` ou mais em equation e `0` perda em bit.
 - Para bit, completar o solver bitsum/stride e usar V332 apenas para refinar templates; nao rodar outro HF bit SFT se o CPU solver nao aumentar coverage acima de V304.
 - Para HF, V331 deve ser julgado por weak eval real. Checkpoints com eval loss pior que baseline nao podem ser promovidos sem melhoria medida de `equation>56` e `bit>=136`.
+
+### V333 external URL + EvoTD audit - 2026-05-13
+
+Artefato:
+
+- `artifacts/v333_external_url_evo_audit/KG1_V333_EXTERNAL_URL_EVO_AUDIT_2026_05_13.md`.
+
+URLs auditadas:
+
+- `https://gist.github.com/igorrivin/f16d4f0aff1e4c2ebe7f70865e2264b9`
+- `https://github.com/tonghuikang/nemotron`
+- `https://github.com/NVIDIA-NeMo/Nemotron`
+- `https://hackernoon.com/vision-model-showdown-we-ran-8-models-through-the-same-browser-agent-probe`
+- `https://github.com/nousresearch/hermes-agent`
+- `https://unsloth.ai/docs/models/nemotron-3/nemotron-3-super`
+- `https://arxiv.org/html/2605.11666v1`
+
+Achado acionavel principal:
+
+- `tonghuikang/nemotron` e a unica fonte nova da lista com ganho mensuravel direto em familia critica. Clone local no commit `82bd1880aa8a8986ad572ccd17ae35b2b5c7da85` confirmou:
+  - `reasoners/bit_manipulation.py` roda no `train.csv` oficial;
+  - `1602` linhas bit avaliadas;
+  - Tong reasoner: `1364/1602 = 85.1436%`;
+  - solver KG1 local atual: `1265/1602 = 78.9638%`;
+  - ganhos Tong vs solver atual: `157`;
+  - perdas Tong vs solver atual: `58`;
+  - ganho liquido no train oficial bit: `+99`.
+
+Implicacao para `bit_manipulation`:
+
+- Implementar V333 CPU gate com algoritmo completo bit-pair/bitsum/stride, left/right run matching e middle-fill inspirado no Tong.
+- Nao usar como submit direto antes de revisao de regras/package; usar primeiro como solver/verifier/teacher.
+- Promover somente se o gate weak/full local mantiver `bit>=136/160`, sem perda total, e registrar conflitos por regra.
+
+Implicacao para `equation_transform`:
+
+- `reasoners/equation_numeric.py` expoe lacunas concretas da DSL atual: divisao inteira, modulo, reverse division/modulo, max/min modulo, digit multiply sem apenas mod10, digit sum/product diff/sum, cross multiply, determinant, reversed-result e formatacao de negativos.
+- V334 deve expandir V324 com essas classes, mas manter bloqueio por conflito: regra, quantidade de candidatos, unicidade por exemplos e `0` perdas.
+
+Achado metodologico EvoTD:
+
+- O paper `Evolutionary Task Discovery: Advancing Reasoning Frontiers via Skill Composition and Complexity Scaling` (`arXiv:2605.11666v1`) nao entrega dados KG1 prontos, mas fornece um plano melhor para gerar dados sinteticos: skill bank, atributos de complexidade, mutation/crossover, executabilidade, alinhamento de skill e filtro de learnability/ZPD.
+- Aplicacao KG1: criar V335 CPU-only fixture builder, nao treino RL amplo:
+  - seed skills vindos de regras aceitas V324/V329/V333/V334;
+  - mutar ranges, simbolos, posicoes de operadores e padroes de bits;
+  - verificar tudo com solver deterministico;
+  - rejeitar casos triviais, ambiguos ou fora da classe suportada;
+  - so treinar LoRA se esse builder produzir coverage novo alem de V304/V331.
+
+Fontes rebaixadas:
+
+- `NVIDIA-NeMo/Nemotron`: util para receitas, catalogo de datasets e higiene de runtime; sem ganho direto nas duas familias.
+- `Unsloth Nemotron-3-Super`: util como referencia de serving/fine-tuning e cautela de estabilidade de router; nao e caminho adapter-only imediato.
+- `NousResearch/hermes-agent`: automacao/agente/RL, sem solver familiar direto; P3.
+- `igorrivin` gist: digest de modelos e contexto Nemotron/Kaggle; sem artefato acionavel.
+- `HackerNoon` vision/browser-agent: fora do dominio textual KG1; excluir de P0/P1.
+
+Decisao:
+
+- Bloquear novos HF GPU jobs ate V333/V334 encontrarem sinal CPU novo.
+- Proxima implementacao efetiva: V333 bit gate + V334 equation numeric DSL expandida + V335 EvoTD-style verified fixture builder.
