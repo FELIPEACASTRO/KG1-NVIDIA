@@ -17,11 +17,10 @@ REPO_BRANCH = "v230-v226-complementarity"
 REPO_ROOT = Path(__file__).resolve().parents[2]
 IMAGE = "vllm/vllm-openai:v0.20.1"
 FLAVOR = "h200"
-RUN_ID = "v319-h200-v221contract-answer-span-fast-eval-" + datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+RUN_ID = "v319-h200-v221contract-answer-span-fast-eval-final-" + datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
 
 ADAPTER_REPO = "felipesp1983/kg1-nemotron-lora-v319-nemo-a100-answer-span-fast-eval-v290ckpt6"
 REQUESTED_ADAPTERS = [
-    ("checkpoint-6", "v319_answer_span_checkpoint_6_v221_contract"),
     ("checkpoint-12", "v319_answer_span_checkpoint_12_v221_contract"),
     ("final", "v319_answer_span_final_v221_contract"),
 ]
