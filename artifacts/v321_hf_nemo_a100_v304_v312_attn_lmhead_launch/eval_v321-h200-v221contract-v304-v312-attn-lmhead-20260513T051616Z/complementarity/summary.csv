@@ -1,0 +1,4 @@
+candidate,shared_rows,base_correct,candidate_correct,oracle_correct,gains,losses,changed_wrong_wrong,bit_manipulation_base,bit_manipulation_cand,bit_manipulation_gains,bit_manipulation_losses,bit_manipulation_oracle,equation_transform_base,equation_transform_cand,equation_transform_gains,equation_transform_losses,equation_transform_oracle
+v321_ckpt2,315,192,192,192,0,0,6,136,136,0,0,136,56,56,0,0,56
+v321_ckpt10,315,192,191,192,0,1,8,136,135,0,1,136,56,56,0,0,56
+v321_final,315,192,190,192,0,2,4,136,134,0,2,136,56,56,0,0,56

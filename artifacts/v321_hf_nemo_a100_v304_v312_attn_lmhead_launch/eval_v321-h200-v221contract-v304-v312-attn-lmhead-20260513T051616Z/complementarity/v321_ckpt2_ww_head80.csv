@@ -1,0 +1,46 @@
+id,family,answer,base_prediction,cand_prediction,base_correct,cand_correct,prompt
+518deb39,equation_transform,$,{}>{,$}{>,False,False,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+<'+<"" = (>
+""'-$< = '<
+(""*(< = <<!!
+!$*<> = !^\
+Now, determine the result for: $$-<>"
+b06625c4,equation_transform,^&/,"""$ $]""","""$$]""",False,False,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+""""*$"" = <&#
+$]-<# = $<
+&&+^) = ]&
+/&-^$ = $$
+Now, determine the result for: ""$*$]"
+2d3547af,equation_transform,))^),\${,\${\,False,False,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+#}`)$ = }\
+$<(>/ = (^/
+!}&#< = $)^}
+>\`## = )$<
+Now, determine the result for: \$&\\"
+b0206bb7,equation_transform,]$!,$){,$){},False,False,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+){+&# = //
+!/*&@ = /{@}
+{)-&! = -/#
+{}*)} = &#{#
+]!-}{ = -@&
+Now, determine the result for: ${*)}"
+4ef88f92,bit_manipulation,01010111,01010011,01011111,False,False,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -> output:
+01101101 -> 10010111
+01000001 -> 01111101
+11001110 -> 01011110
+10011110 -> 10111011
+01111010 -> 11100111
+01110101 -> 11000111
+00110100 -> 01000111
+01101100 -> 10010111
+10010101 -> 10001001
+11011000 -> 00101111
+
+Now, determine the output for: 00110011"
+5bcb572e,equation_transform,-!#,"""{!""","""""{!",False,False,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+)!*]( = /{!!
+""(+""{ = ){{
+])-([ = ({
+Now, determine the result for: ""{-{!"

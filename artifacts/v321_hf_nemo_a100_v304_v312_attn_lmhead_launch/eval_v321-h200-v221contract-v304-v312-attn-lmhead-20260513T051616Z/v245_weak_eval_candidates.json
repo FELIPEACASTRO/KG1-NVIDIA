@@ -1,0 +1,32 @@
+[
+  {
+    "adapter": "/tmp/kg1_v245_adapter_snapshots/v321-h200-v221contract-v304-v312-attn-lmhead-20260513T051616Z/45a091b87c5a/checkpoint-2",
+    "name": "v321_hybrid_attn_lmhead_checkpoint_2_v221_contract",
+    "source_kind": "hf_model_repo"
+  },
+  {
+    "adapter": "/tmp/kg1_v245_adapter_snapshots/v321-h200-v221contract-v304-v312-attn-lmhead-20260513T051616Z/45a091b87c5a/checkpoint-4",
+    "name": "v321_hybrid_attn_lmhead_checkpoint_4_v221_contract",
+    "source_kind": "hf_model_repo"
+  },
+  {
+    "adapter": "/tmp/kg1_v245_adapter_snapshots/v321-h200-v221contract-v304-v312-attn-lmhead-20260513T051616Z/45a091b87c5a/checkpoint-6",
+    "name": "v321_hybrid_attn_lmhead_checkpoint_6_v221_contract",
+    "source_kind": "hf_model_repo"
+  },
+  {
+    "adapter": "/tmp/kg1_v245_adapter_snapshots/v321-h200-v221contract-v304-v312-attn-lmhead-20260513T051616Z/45a091b87c5a/checkpoint-8",
+    "name": "v321_hybrid_attn_lmhead_checkpoint_8_v221_contract",
+    "source_kind": "hf_model_repo"
+  },
+  {
+    "adapter": "/tmp/kg1_v245_adapter_snapshots/v321-h200-v221contract-v304-v312-attn-lmhead-20260513T051616Z/45a091b87c5a/checkpoint-10",
+    "name": "v321_hybrid_attn_lmhead_checkpoint_10_v221_contract",
+    "source_kind": "hf_model_repo"
+  },
+  {
+    "adapter": "/tmp/kg1_v245_adapter_snapshots/v321-h200-v221contract-v304-v312-attn-lmhead-20260513T051616Z/45a091b87c5a/final",
+    "name": "v321_hybrid_attn_lmhead_final_v221_contract",
+    "source_kind": "hf_model_repo"
+  }
+]

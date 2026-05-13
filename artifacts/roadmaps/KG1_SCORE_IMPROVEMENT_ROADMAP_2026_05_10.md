@@ -5914,3 +5914,26 @@ Atualizacao V321 weak-eval QA - 2026-05-13:
 - Resultados invalidos desse job: melhor `17/315`, `equation_transform=9/155`, `bit_manipulation=8/160`, truncation `0`; esses numeros nao devem ser usados para descartar o treino V321.
 - Ajuste aplicado: `artifacts/v321_hf_nemo_a100_v304_v312_attn_lmhead_launch/launch_v321_hf_weak_eval.py` agora usa `vllm/vllm-openai:v0.20.1` como V290/V320 e injeta `KG1_MAX_TOKENS=7680`, `KG1_MAX_MODEL_LEN=8192`, `KG1_MAX_NUM_SEQS=64`, `KG1_DISABLE_THINKING=0`, `KG1_NO_PROMPT_SUFFIX=0`, `KG1_EXPECTED_LORA_R=32` e `KG1_EXPECTED_LORA_ALPHA=32`.
 - Decisao: relancar o weak eval corrigido antes de rejeitar ou promover V321.
+
+Atualizacao V321 weak-eval corrigido - 2026-05-13:
+
+- Job HF corrigido: `https://huggingface.co/jobs/felipesp1983/6a0409607618f125ee2b7b48`.
+- Repo/output: `felipesp1983/kg1-nemotron-lora-v321-nemo-a100-v304-v312-attn-lmhead-v290ckpt6`, path `evals/v321-h200-v221contract-v304-v312-attn-lmhead-20260513T051616Z`.
+- Upload HF dos artefatos: `https://huggingface.co/felipesp1983/kg1-nemotron-lora-v321-nemo-a100-v304-v312-attn-lmhead-v290ckpt6/commit/9f0a0cd6877547578b9fa89713b356e133ed40a1`.
+- Contrato validado: `315` linhas, shared row contract `bf055e3b9ebce79d4bfc9e48bce5a305b1d83da882f14afddec80d6afaba5fff`, `max_tokens=7680`, `max_model_len=8192`, `max_num_seqs=64`, thinking habilitado, H200.
+- Resultados weak V221 corrigidos:
+  - `checkpoint-2`: `192/315`, `equation_transform=56/155`, `bit_manipulation=136/160`, truncation `0`.
+  - `checkpoint-4`: `190/315`, `equation_transform=56/155`, `bit_manipulation=134/160`, truncation `1`.
+  - `checkpoint-6`: `190/315`, `equation_transform=56/155`, `bit_manipulation=134/160`, truncation `1`.
+  - `checkpoint-8`: `190/315`, `equation_transform=56/155`, `bit_manipulation=134/160`, truncation `1`.
+  - `checkpoint-10`: `191/315`, `equation_transform=56/155`, `bit_manipulation=135/160`, truncation `0`.
+  - `final`: `190/315`, `equation_transform=56/155`, `bit_manipulation=134/160`, truncation `0`.
+- Artefatos locais pequenos baixados sem cache longo do HF:
+  - `artifacts/v321_hf_nemo_a100_v304_v312_attn_lmhead_launch/eval_v321-h200-v221contract-v304-v312-attn-lmhead-20260513T051616Z/batch_candidate_summary.json`;
+  - `artifacts/v321_hf_nemo_a100_v304_v312_attn_lmhead_launch/eval_v321-h200-v221contract-v304-v312-attn-lmhead-20260513T051616Z/v245_hf_weak_eval_manifest.json`;
+  - `artifacts/v321_hf_nemo_a100_v304_v312_attn_lmhead_launch/eval_v321-h200-v221contract-v304-v312-attn-lmhead-20260513T051616Z/complementarity/summary.csv`.
+- Complementaridade contra V290 checkpoint-6:
+  - `v321_ckpt2`: `0` ganhos, `0` perdas, oracle `192/315`; mudou apenas `6` linhas de errado para errado.
+  - `v321_ckpt10`: `0` ganhos, `1` perda, oracle `192/315`.
+  - `v321_final`: `0` ganhos, `2` perdas, oracle `192/315`.
+- Decisao: V321 rejeitado para full eval/package/Kaggle. Nao ha ganho por familia, nao ha complementaridade exploravel por router/soup simples, e o checkpoint com melhor `eval_loss` regrediu no weak gate. Proxima acao deve abandonar variacoes pequenas de SFT no mesmo sinal V304/V312 e voltar para dado/objetivo novo ou solver/verifier CPU que gere evidencia nova antes de qualquer GPU longa.
