@@ -1,0 +1,82 @@
+{
+  "adapter_repo": "felipesp1983/kg1-nemotron-lora-v316-v304-mlp-v290ckpt6",
+  "adapter_subfolders": [
+    "checkpoint-3",
+    "checkpoint-6",
+    "checkpoint-9",
+    "checkpoint-12",
+    "checkpoint-15",
+    "checkpoint-18",
+    "final"
+  ],
+  "branch": "v230-v226-complementarity",
+  "candidate_names": [
+    "v316_mlp_checkpoint_3_v221_contract",
+    "v316_mlp_checkpoint_6_v221_contract",
+    "v316_mlp_checkpoint_9_v221_contract",
+    "v316_mlp_checkpoint_12_v221_contract",
+    "v316_mlp_checkpoint_15_v221_contract",
+    "v316_mlp_checkpoint_18_v221_contract",
+    "v316_mlp_final_v221_contract"
+  ],
+  "decision_gate_after_eval": {
+    "diagnostic_floor": {
+      "meaning": "Only enough to inspect row-level movement; not enough for full/package/submit promotion.",
+      "minimum_bit_manipulation_correct": 136,
+      "minimum_equation_transform_correct": 56,
+      "minimum_total_correct": 192
+    },
+    "partial_signal_only": "equation_transform_correct > 56 or bit target-ID movement requires row-diff inspection before more HF spend.",
+    "protected_baseline": "v290_checkpoint_6_v221_contract",
+    "strict_full_or_submit_promotion_threshold": {
+      "minimum_bit_manipulation_correct": 136,
+      "minimum_equation_transform_correct": 60,
+      "minimum_total_correct": 193,
+      "requires_no_full_family_regression": true,
+      "requires_no_truncation_regression": true
+    }
+  },
+  "eval_contract": {
+    "disable_thinking": false,
+    "max_model_len": 8192,
+    "max_num_seqs": 64,
+    "max_tokens": 7680,
+    "name": "V221 reproduced weak contract",
+    "no_prompt_suffix": false,
+    "shared_row_contract_sha256": "bf055e3b9ebce79d4bfc9e48bce5a305b1d83da882f14afddec80d6afaba5fff",
+    "weak_csv_sha256": "85da758e14d57ea40270de5747f98726a0ad0b6d1795bff7dd46183005e0f9b6"
+  },
+  "expected_commit": "587bb65bef4f0acb42aae3fe773e2962d3d11cdf",
+  "flavor": "h200",
+  "generated_at_utc": "2026-05-13T00:35:12.277027+00:00",
+  "hardware": {
+    "accelerator_model": "H200",
+    "accelerator_quantity": "1",
+    "accelerator_vram": "141 GB",
+    "cpu": "23 vCPU",
+    "name": "h200",
+    "pretty_name": "Nvidia H200",
+    "ram": "256 GB",
+    "unit_cost_usd": 0.083333,
+    "unit_label": "minute"
+  },
+  "image": "vllm/vllm-openai:v0.20.1",
+  "job_id": "6a03c77d72518a06598ffcb1",
+  "job_status": "RUNNING",
+  "job_url": "https://huggingface.co/jobs/felipesp1983/6a03c77d72518a06598ffcb1",
+  "missing_adapter_subfolders": [],
+  "namespace": "felipesp1983",
+  "output_path_in_repo": "evals/v316-h200-v221contract-v304-mlp-20260513T003511Z",
+  "output_repo": "felipesp1983/kg1-nemotron-lora-v316-v304-mlp-v290ckpt6",
+  "requested_adapter_subfolders": [
+    "checkpoint-3",
+    "checkpoint-6",
+    "checkpoint-9",
+    "checkpoint-12",
+    "checkpoint-15",
+    "checkpoint-18",
+    "final"
+  ],
+  "run_id": "v316-h200-v221contract-v304-mlp-20260513T003511Z",
+  "version": "v316_v304_mlp_v221_weak_eval"
+}
