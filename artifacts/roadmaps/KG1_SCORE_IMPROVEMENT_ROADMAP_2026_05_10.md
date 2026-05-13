@@ -50,7 +50,6 @@ Meta para submit novo:
 | Discussions `690307`, `688461` | bit-pair/bitsum/stride e boolean gate taxonomy | implementar CPU bit gate |
 | Discussions `689877`, `698293` | operadores ausentes e estrutura latente de equation | abstain/conflict count em DSL |
 | Discussions `693260`, `697491` | synthetic accuracy alta pode piorar LB | traces curtos e kill-switch |
-| OpenRouter/destilacao | consenso metodologico: equation e sintese/verificacao | nao autoriza GPU sozinho |
 
 ## Roadmap ativo em ordem de maior chance de ganho
 
@@ -90,14 +89,39 @@ Checagens:
 
 Decisao:
 
-- Se solver/verifier for permitido: preparar full eval official-like com V274/V275/V329/V336A.
-- Se nao for permitido: seguir para V336C/V337 e tentar absorcao LoRA.
+- Se solver/verifier for permitido: seguir para V337S, que tem maior chance de ganho porque ja existe ganho CPU medido.
+- Se nao for permitido: seguir para V337D/V338 e tentar absorcao LoRA minima.
 
 Bloqueio:
 
 - Nenhum submit com solver/verifier sem esse gate.
 
-### 3. V336C - Dataset minimo de transferencia, somente se V336A passar
+### 3. V337S - Full eval/package do solver-verifier, somente se permitido
+
+Objetivo: transformar o ganho CPU ja medido em candidato submitavel antes de gastar GPU tentando LoRA.
+
+Executar somente se:
+
+- V336A passou com `losses=0`.
+- V336B confirmou que o formato de submissao permite o caminho solver/verifier/postprocessor.
+
+Passos:
+
+1. Rodar full official-like com V274/V275/V329/V336A.
+2. Comparar contra V291 `823/947`.
+3. Exigir melhora real nas familias:
+   - `equation_transform >=60/155`;
+   - `bit_manipulation >=135/160` no full e sem regressao contra o melhor package atual.
+4. Gerar package somente se full `>823/947`.
+5. Validar estrutura do package.
+6. Submeter ao Kaggle somente com manifest de diff por familia.
+
+Bloqueio:
+
+- Se o package oficial precisar ser adapter-only, parar V337S e ir para V337D.
+- Se full nao superar V291, nao submeter.
+
+### 4. V337D - Dataset minimo de transferencia, somente se solver/package direto for bloqueado
 
 Objetivo: criar dataset pequeno que ensine exatamente os casos em que o solver acerta e o adapter erra.
 
@@ -125,14 +149,14 @@ Gate:
 - tokenization/offset-mask gate.
 - manifest de source/family counts.
 
-### 4. V337 - Tiny LoRA absorption smoke
+### 5. V338 - Tiny LoRA absorption smoke
 
 Objetivo: testar absorcao real com gasto minimo.
 
 Configuracao:
 
 - Seed: melhor adapter-only atual.
-- Dataset: apenas V336C.
+- Dataset: apenas V337D.
 - Checkpoint cedo.
 - Weak eval imediato no primeiro checkpoint.
 - A100 preferencial por FinOps; H200 so se A100 nao suportar runtime.
@@ -151,9 +175,9 @@ Cancelar por FinOps se:
 - `equation=56`;
 - OOM, erro runtime, upload travado ou perda de contrato.
 
-### 5. V338 - Full eval, package e Kaggle submit
+### 6. V339 - Full eval, package e Kaggle submit adapter-only
 
-Executar apenas se V337 passar weak gate.
+Executar apenas se V338 passar weak gate.
 
 Passos:
 
@@ -168,14 +192,14 @@ Bloqueio:
 - Nao submeter adapter que mantem `equation=56` por expectativa.
 - Nao submeter candidato que reduz bit contra V291/V290.
 
-### 6. V339 - Se LoRA continuar falhando
+### 7. V340 - Se LoRA continuar falhando
 
-Se V337 falhar de novo:
+Se V338 falhar de novo:
 
 - Parar SFT curto/misto.
 - Nao gastar HF com variacao de LR, epochs ou pesos.
 - Voltar para uma das duas rotas:
-  - rota A: package permitido com solver/verifier;
+  - rota A: se V336B permitir, package com solver/verifier;
   - rota B: aguardar/liberar fonte realmente nova de traces, como `andy279/*`, com aprovacao humana.
 
 ## Itens removidos do roadmap ativo
@@ -195,6 +219,7 @@ Os itens abaixo ficam apenas no arquivo historico. Eles nao fazem parte do plano
 | V335 mixed trace replay | `190/315`, bit `134`; cancelado |
 | Raw `kienngx` / `konbu17` / `furkankesen` datasets | overlap ou flags incorretas; usar so taxonomia |
 | Generic distillation papers/datasets | P2 metodologico, sem acao direta |
+| OpenRouter/destilacao como item proprio | conclusao metodologica ja incorporada nas regras; nao e acao executavel |
 | Mais epochs/LR sem novo CPU gate | gasto sem fundamento |
 
 ## Regras permanentes
