@@ -131,7 +131,7 @@ def main() -> int:
     if missing_adapters:
         print("missing_optional_adapters =", json.dumps(missing_adapters, sort_keys=True), flush=True)
 
-    specs = [{"subfolder": subfolder, "name": name} for subfolder, name in existing_adapters]
+    specs = [{"repo": ADAPTER_REPO, "subfolder": subfolder, "name": name} for subfolder, name in existing_adapters]
     job_env = {
         "KG1_BRANCH": REPO_BRANCH,
         "KG1_EXPECTED_COMMIT": EXPECTED_COMMIT,
