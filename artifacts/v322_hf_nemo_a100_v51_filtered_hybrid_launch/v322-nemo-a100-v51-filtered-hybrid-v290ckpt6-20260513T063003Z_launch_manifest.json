@@ -1,0 +1,54 @@
+{
+  "branch": "v230-v226-complementarity",
+  "dataset": {
+    "data_repo": "felipesp1983/kg1-nemotron-training",
+    "dataset_upload_commit": "c17219390b6b067e2464c4eaa7246c49adb394a3",
+    "train_file": "data/v322_v51_filtered_hybrid/20260513T0620Z/v322_v51_filtered_hybrid_train.jsonl",
+    "train_rows": 21154,
+    "train_sha256": "2bafab700a3f6baebb8313644785d7ddfacbf629aeee2e2e122ef0396a85c21b",
+    "val_file": "data/v322_v51_filtered_hybrid/20260513T0620Z/v322_v51_filtered_hybrid_val.jsonl",
+    "val_rows": 1445,
+    "val_sha256": "dacb20c8cff73159d14336abdc5d6fa505435643184033ac2d4a85f0408ce5f1"
+  },
+  "expected_commit": "18320654be87c01235bc09eaca4f3a3e07925b0e",
+  "flavor": "a100-large",
+  "generated_at_utc": "2026-05-13T06:30:04.496572+00:00",
+  "hardware": {
+    "accelerator_model": "A100",
+    "accelerator_quantity": "1",
+    "accelerator_vram": "80 GB",
+    "cpu": "12 vCPU",
+    "name": "a100-large",
+    "pretty_name": "Nvidia A100 - large",
+    "ram": "142 GB",
+    "unit_cost_usd": 0.041667,
+    "unit_label": "minute"
+  },
+  "image": "nvcr.io/nvidia/nemo:25.11.nemotron_3_nano",
+  "init_adapter": {
+    "repo": "felipesp1983/kg1-nemotron-lora-v290-rank19-micro-patch-smoke",
+    "subfolder": "checkpoint-6"
+  },
+  "job_id": "6a041aa97618f125ee2b7b77",
+  "job_status": "RUNNING",
+  "job_url": "https://huggingface.co/jobs/felipesp1983/6a041aa97618f125ee2b7b77",
+  "namespace": "felipesp1983",
+  "next_action": "Monitor every 30 seconds; weak-eval checkpoint-4/8/12/16/final if training completes.",
+  "output_repo": "felipesp1983/kg1-nemotron-lora-v322-nemo-a100-v51-filtered-hybrid-v290ckpt6",
+  "recipe": {
+    "answer_span_loss_weight": "9.0",
+    "answer_span_min_weighted_tokens": "1000",
+    "eval_every_steps": 4,
+    "eval_max_examples": 96,
+    "final_learning_rate": "5e-9",
+    "finops": "A100 first; H200 reserved for weak eval or A100 failure.",
+    "learning_rate": "2.0e-8",
+    "max_steps": 16,
+    "objective": "filtered V51 solver-enhanced rows plus V304/V312 focused replay into attention/lm_head behavior",
+    "promotion_gate": "reject if total<192 or bit<136; inspect only if equation>56 or total>=193; promote only if equation>=60 and bit>=136",
+    "save_every_steps": 4,
+    "trainable_lora_modules": "q_proj,k_proj,v_proj,o_proj,lm_head"
+  },
+  "run_id": "v322-nemo-a100-v51-filtered-hybrid-v290ckpt6-20260513T063003Z",
+  "version": "v322_v51_filtered_hybrid_attn_lmhead_from_v290_checkpoint6_nemo_a100"
+}
