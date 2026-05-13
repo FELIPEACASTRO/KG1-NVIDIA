@@ -5734,3 +5734,67 @@ Triple-check 10x do mesmo anexo:
   - promocao por loss;
   - variantes geradas por IA sem verificador deterministico;
   - dual LoRA/router antes de esgotar single-adapter com answer-span weighting.
+
+Quadruple-check 1000x do mesmo anexo:
+
+- Artefato: `artifacts/v316_openrouter_distill_triage/20260512T2350Z/v316_openrouter_chat_20260512_2_quadruplecheck.md`.
+- Confirmacao local adicional:
+  - `artifacts/v304_solver_trace_distill_dataset/20260512T1430Z`: `0` hits dos `15` target IDs exatos;
+  - `artifacts/v312_verifier_synthetic_distill_dataset/20260512T1545Z`: `0` hits dos `15` target IDs exatos;
+  - `data/sft_v51_perfect.jsonl`: `15` hits;
+  - `data/sft_v51_complete.jsonl`: `15` hits.
+- Conclusao nova: V304/V312 treinaram padroes, variantes e preferencia, mas nao absorveram os IDs exatos como probes rastreaveis. V51 tinha os IDs, mas isso nao bastou para transferir os acertos. Logo V317, se necessario, deve mudar a funcao-objetivo, nao apenas adicionar exemplos corretos.
+- Regra para V316:
+  - avaliar V316 primeiro, pois ja terminou e testa `up_proj/down_proj`;
+  - promover direto somente com `total>=193`, `bit>=136`, sem regressao de truncation e equation nao pior que baseline;
+  - se vier `bit>=136` e `equation>56` mas `total<193`, inspecionar diff por linha antes de descartar;
+  - se vier flat perto de `191/135/56` ou pior, nao gastar HF com mais steps do mesmo V304.
+- V317 aprovado se V316 falhar:
+  - `target_probe_manifest` com os 4 equation IDs e 11 bit IDs;
+  - inferencia do adapter congelado para capturar saidas erradas reais;
+  - hard negatives usando essas saidas erradas reais como `rejected`;
+  - trainer com peso `3x-5x` no span final da resposta;
+  - traces compactos e deterministics;
+  - variantes geradas apenas por verificador deterministico;
+  - replay completo de bit keepers;
+  - gate antes de weak eval rejeitando `bit<135`, truncation pior ou probes sem movimento.
+- Itens mantidos fora do roadmap executavel:
+  - LR alto generico;
+  - mais epochs/steps do mesmo objetivo;
+  - equation-only sem replay de bit;
+  - promocao por loss/eval_loss;
+  - variantes geradas por IA sem verificador;
+  - dual LoRA/router antes de esgotar single-adapter answer-span.
+
+Quintuple-check 1000x cruzando todos os anexos recentes:
+
+- Artefato: `artifacts/v316_openrouter_distill_triage/20260512T2350Z/v316_all_sources_quintuplecheck.md`.
+- Fontes auditadas:
+  - `OpenRouter Chat Tue May 12 2026.json`: SHA `8E4BC64D30567AE496CBC2A8DCE4C3ADE0EBA1B00375BC5CB04B486AAFE1A03B`, `15,628,566` bytes. Conteudo util e generico sobre verifier/postprocessor -> LoRA; nao contem ACC medida de `bit_manipulation` ou `equation_transform`.
+  - `OpenRouter Chat Tue May 12 2026 (2).json`: SHA `015FC4832C0FCA26789392C99714AB038B05A67A59F58279C828AB6F68E9FC12`, `618,942` bytes. Conteudo KG1-especifico, mas sem nova ACC medida.
+  - `ANALISE_DESAFIO_IAS_15.txt`: SHA `26C803E4A5F2BB9A2461CE4C20AB55DC6FE2D05460E71DF50F44186AFA9362D8`, `5,160` linhas. Reforca destilacao offline, nao conversao literal de verifier Python para LoRA.
+- Achado novo de gate:
+  - `equation>56` nao e gate de submit; e apenas sinal diagnostico para inspecionar diffs.
+  - Gate de full/submit volta a ficar estrito: `eq>=60`, `bit>=136`, `total>=193`, sem regressao de truncation e sem regressao por familia no full.
+- Achado novo de bit:
+  - `bit>=136` sozinho e fraco. O oracle tem `11` ganhos de bit, entao proximos gates devem rastrear os `11` target IDs separadamente para impedir ganho acidental em linha diferente.
+- Achado novo de implementacao:
+  - O repo ja possui loss mask de completion e preference single-policy (`V315`), mas ainda nao ha ponderacao token-level especifica para o span final da resposta.
+  - V317, se necessario, deve implementar `answer-span weighting`: peso `3x-5x` no trecho `ANSWER`/`\\boxed{...}`, peso moderado em `RULE/CHECK` e peso baixo/zero em boilerplate.
+- Achado novo de dados:
+  - V317 deve usar formato rigido `RULE`, `CHECK`, `ANSWER`, nao CoT livre.
+  - Equation deve ser balanceado por regra, nao apenas por linha: `minus_signed_opposite_sign_guarded` aparece em `2` targets, `colon_absdiff_unreverse_same_len` em `1`, `add_direct_over_model_add_variant` em `1`.
+- Roadmap atualizado:
+  1. terminar weak eval do V316;
+  2. promover somente se bater o gate estrito;
+  3. se houver sinal parcial, inspecionar diff por linha;
+  4. se V316 ficar flat ou regredir, iniciar V317 com `target_probe_manifest`, outputs errados reais do adapter congelado, hard negatives reais, answer-span weighting, replay completo de bit keepers e gate por target ID antes de weak eval.
+- Itens rejeitados pelo quintuple-check:
+  - conversao literal de `postprocessor/verifier` para LoRA;
+  - usar postprocessor em inferencia e chamar de LoRA puro;
+  - SVD/PHLoRA sem checkpoint full/merged do mesmo backbone;
+  - LR alto generico;
+  - rank `64/128` como gasto imediato sem smoke;
+  - GRPO/RAFT antes de trainer com probes;
+  - dual LoRA/router antes de esgotar single-adapter answer-span;
+  - promocao por `train_loss`/`eval_loss`.

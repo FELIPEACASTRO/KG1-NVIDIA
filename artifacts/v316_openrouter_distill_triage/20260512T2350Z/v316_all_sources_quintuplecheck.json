@@ -1,0 +1,96 @@
+{
+  "sources": [
+    {
+      "path": "C:\\Users\\davis\\Downloads\\OpenRouter Chat Tue May 12 2026.json",
+      "sha256": "8E4BC64D30567AE496CBC2A8DCE4C3ADE0EBA1B00375BC5CB04B486AAFE1A03B",
+      "bytes": 15628566,
+      "coverage": {
+        "messages": 36,
+        "items": 156,
+        "characters": 24,
+        "message_items": 37,
+        "reasoning_items": 24,
+        "web_search_items": 90,
+        "web_fetch_items": 1
+      },
+      "kg1_direct_acc_evidence": false,
+      "usefulness": "generic verifier-to-LoRA distillation context only"
+    },
+    {
+      "path": "C:\\Users\\davis\\Downloads\\OpenRouter Chat Tue May 12 2026 (2).json",
+      "sha256": "015FC4832C0FCA26789392C99714AB038B05A67A59F58279C828AB6F68E9FC12",
+      "bytes": 618942,
+      "coverage": {
+        "messages": 24,
+        "assistant_responses": 22,
+        "substantive_assistant_responses": 20
+      },
+      "kg1_direct_acc_evidence": false,
+      "usefulness": "KG1-specific recommendations and contradictions, but no new measured score"
+    },
+    {
+      "path": "C:\\Users\\davis\\Downloads\\ANALISE_DESAFIO_IAS_15.txt",
+      "sha256": "26C803E4A5F2BB9A2461CE4C20AB55DC6FE2D05460E71DF50F44186AFA9362D8",
+      "bytes": 207055,
+      "lines": 5160,
+      "kg1_direct_acc_evidence": false,
+      "usefulness": "reinforces offline teacher distillation and identifies missing answer-span weighting"
+    }
+  ],
+  "baseline_evidence": {
+    "current_submit_baseline": {
+      "correct": 823,
+      "rows": 947,
+      "bit_manipulation": "135/160",
+      "equation_transform": "56/155"
+    },
+    "postprocessor_oracle": {
+      "correct": 838,
+      "rows": 947,
+      "bit_manipulation": "146/160",
+      "equation_transform": "60/155",
+      "gains": 15
+    },
+    "new_measured_acc_from_attachments": false
+  },
+  "strict_gate": {
+    "diagnostic_only": "equation>56 or bit>=136 without target-ID movement",
+    "full_or_submit_promotion": "eq>=60 and bit>=136 and total>=193 and no truncation/full-family regression"
+  },
+  "local_evidence": {
+    "exact_target_hits": {
+      "artifacts/v304_solver_trace_distill_dataset/20260512T1430Z": 0,
+      "artifacts/v312_verifier_synthetic_distill_dataset/20260512T1545Z": 0,
+      "data/sft_v51_perfect.jsonl": 15,
+      "data/sft_v51_complete.jsonl": 15
+    },
+    "existing_mechanisms": [
+      "completion_loss_mask",
+      "single_policy_chosen_rejected_preference_loss",
+      "V311_seed_preference_pack",
+      "V312_sft_and_preference_pack"
+    ],
+    "missing_mechanism": "token-level answer-span weighting inside final answer span"
+  },
+  "accepted_next_if_v316_fails": [
+    "V317_target_probe_manifest",
+    "frozen_adapter_wrong_outputs",
+    "answer_span_weighting_3x_to_5x",
+    "RULE_CHECK_ANSWER_rigid_format",
+    "rule_balanced_equation_variants",
+    "bit_fullbyte_target_variants",
+    "full_bit_keeper_replay",
+    "probe_gate_before_weak_eval"
+  ],
+  "rejected_or_deferred": [
+    "literal_python_verifier_to_lora_conversion",
+    "submission_inference_postprocessor_under_lora_pure_claim",
+    "svd_conversion_without_same_backbone_full_checkpoint",
+    "high_lr_generic_recipes",
+    "rank_64_or_128_sweep_as_immediate_hf_spend",
+    "grpo_or_raft_before_probe_trainer",
+    "dual_lora_router_before_single_adapter_answer_span_exhausted",
+    "more_steps_same_objective",
+    "loss_only_promotion"
+  ]
+}

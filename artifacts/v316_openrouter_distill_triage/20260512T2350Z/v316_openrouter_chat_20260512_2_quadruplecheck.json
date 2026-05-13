@@ -1,0 +1,59 @@
+{
+  "source_file": "C:\\Users\\davis\\Downloads\\OpenRouter Chat Tue May 12 2026 (2).json",
+  "source_sha256": "015FC4832C0FCA26789392C99714AB038B05A67A59F58279C828AB6F68E9FC12",
+  "raw_json_bytes": 618942,
+  "assistant_responses": 22,
+  "substantive_assistant_responses": 20,
+  "candidate_text_leaves": 41,
+  "candidate_text_chars": 351052,
+  "local_exact_target_id_hits": {
+    "artifacts/v304_solver_trace_distill_dataset/20260512T1430Z": 0,
+    "artifacts/v312_verifier_synthetic_distill_dataset/20260512T1545Z": 0,
+    "data/sft_v51_perfect.jsonl": 15,
+    "data/sft_v51_complete.jsonl": 15
+  },
+  "quadruple_check_finding": "V304 and V312 local artifacts do not contain exact target-ID hits, while old V51 files contain all 15 target IDs. If V316 fails, V317 should not be a longer rerun or plain correct-row addition; it should introduce probe gates, frozen-adapter wrong outputs, answer-span weighting, deterministic variants, and bit keeper replay.",
+  "equation_probe_targets": [
+    {"id": "7688e06e", "answer": "-55"},
+    {"id": "274def88", "answer": "92"},
+    {"id": "d1bd7478", "answer": "30"},
+    {"id": "c5b058d6", "answer": "134"}
+  ],
+  "bit_probe_targets": [
+    {"id": "1abaffca", "answer": "01000000"},
+    {"id": "0e70c867", "answer": "01000000"},
+    {"id": "b8722d19", "answer": "00100100"},
+    {"id": "7192535b", "answer": "00000010"},
+    {"id": "8740ed31", "answer": "01101000"},
+    {"id": "1a7c8520", "answer": "01100000"},
+    {"id": "a6192d29", "answer": "00001000"},
+    {"id": "048cc279", "answer": "01010000"},
+    {"id": "4c327b55", "answer": "11011100"},
+    {"id": "b8aa3072", "answer": "00000011"},
+    {"id": "5ba26f21", "answer": "01011100"}
+  ],
+  "v316_promotion_gate": {
+    "direct_promote": "total>=193 and bit>=136 and no truncation regression and equation not worse than baseline",
+    "inspect_if": "bit>=136 and equation>56 but total<193",
+    "reject_axis_if": "bit<135 or flat around 191/135/56"
+  },
+  "accepted_for_v317_if_v316_fails": [
+    "target_probe_manifest",
+    "frozen_adapter_wrong_outputs_as_rejected",
+    "answer_span_weighting_3x_to_5x",
+    "compact_answer_aligned_completions",
+    "full_bit_keeper_replay",
+    "deterministic_verifier_variants",
+    "probe_first_checkpoint_gate"
+  ],
+  "rejected_or_deferred": [
+    "high_lr_recipes",
+    "more_steps_same_objective",
+    "equation_only_training_without_bit_replay",
+    "loss_only_promotion",
+    "openrouter_text_as_measured_acc",
+    "unverified_model_generated_variants",
+    "dual_lora_router_before_single_adapter_exhausted",
+    "kl_or_ewc_as_first_fix"
+  ]
+}
