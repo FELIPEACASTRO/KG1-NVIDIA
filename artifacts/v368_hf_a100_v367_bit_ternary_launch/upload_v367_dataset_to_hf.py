@@ -106,6 +106,11 @@ def validate_local_contract() -> dict[str, Any]:
         raise RuntimeError("Unexpected V367 validation family counts.")
     if int(manifest.get("validation", {}).get("train_val_prompt_overlap", -1)) != 0:
         raise RuntimeError("V367 train/validation prompt overlap is not zero.")
+    for split_name, split_validation in (("train", train_validation), ("validation", val_validation)):
+        if int(split_validation.get("id_overlap_with_reference", -1)) != 0:
+            raise RuntimeError(f"V367 {split_name} id overlap with weak reference is not zero.")
+        if int(split_validation.get("prompt_sha256_overlap_with_reference", -1)) != 0:
+            raise RuntimeError(f"V367 {split_name} prompt overlap with weak reference is not zero.")
     if int(preference.get("train_rows", -1)) != EXPECTED_TRAIN_ROWS * 2:
         raise RuntimeError("Unexpected V367 preference train row count.")
     if int(preference.get("val_rows", -1)) != EXPECTED_VAL_ROWS * 2:

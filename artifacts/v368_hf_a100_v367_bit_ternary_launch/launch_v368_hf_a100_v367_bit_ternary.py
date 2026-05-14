@@ -109,10 +109,11 @@ def verify_v367_tokenization_gate() -> dict[str, Any]:
         raise RuntimeError("Unexpected V367 val family counts.")
     if int(validation.get("train_val_prompt_overlap", -1)) != 0:
         raise RuntimeError("V367 train/validation prompt overlap is not zero.")
-    if int(validation.get("weak_reference_id_overlap", -1)) != 0:
-        raise RuntimeError("V367 weak reference id overlap is not zero.")
-    if int(validation.get("weak_reference_prompt_sha256_overlap", -1)) != 0:
-        raise RuntimeError("V367 weak reference prompt overlap is not zero.")
+    for split_name, split_validation in (("train", train_validation), ("validation", val_validation)):
+        if int(split_validation.get("id_overlap_with_reference", -1)) != 0:
+            raise RuntimeError(f"V367 {split_name} id overlap with weak reference is not zero.")
+        if int(split_validation.get("prompt_sha256_overlap_with_reference", -1)) != 0:
+            raise RuntimeError(f"V367 {split_name} prompt overlap with weak reference is not zero.")
 
     train_subcategories = set(train_validation.get("subcategory_counts", {}))
     val_subcategories = set(val_validation.get("subcategory_counts", {}))
