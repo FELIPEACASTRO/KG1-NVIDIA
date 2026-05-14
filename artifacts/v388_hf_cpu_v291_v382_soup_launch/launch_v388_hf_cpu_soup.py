@@ -73,7 +73,7 @@ print(json.dumps({"python": platform.python_version(), "platform": platform.plat
 PY
 apt-get update -qq && apt-get install -y -qq git >/dev/null
 python -m pip install -q --no-cache-dir --upgrade pip
-python -m pip install -q --no-cache-dir 'huggingface_hub>=0.36.0' safetensors hf_transfer torch
+python -m pip install -q --no-cache-dir 'huggingface_hub>=0.36.0' safetensors hf_transfer torch numpy
 rm -rf /tmp/kg1
 git clone --depth 1 --branch "$KG1_BRANCH" https://github.com/FELIPEACASTRO/KG1-NVIDIA.git /tmp/kg1
 cd /tmp/kg1
