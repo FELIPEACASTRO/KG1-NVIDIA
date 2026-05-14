@@ -54,6 +54,7 @@ Precisamos buscar subida no ranking ainda hoje, `2026-05-14`. A decisao V392 e s
 | V394 equation row inventory | CPU projection `198/315` | `62/155` | `136/160` | sem sinal novo vs V390; nao autoriza GPU |
 | V395 HF CPU aggressive symbolic gate | CPU integrated `199/315` | `63/155` | `136/160` | confirma sinal V336/V343; `0` ganho novo adapter-only; GPU ainda bloqueada |
 | V396 Google Drive artifact audit | n/a | n/a | n/a | Drive contem artefatos validos de linhagem/diagnostico, mas nenhum supera V291/V290 adapter-only |
+| V397 reconstructed SFT transfer dataset | n/a | n/a | n/a | novo corpus adapter-transfer: `2578` train / `264` val, weak overlap `0`, tokenization real passou com `0` truncation |
 
 Conclusao: `eval_loss` baixo nao e criterio de promocao. O criterio e ACC por familia no weak/full gate.
 
@@ -84,6 +85,8 @@ Decisao V394 em `2026-05-14`: o inventario row-level sobre o baseline travado V2
 Decisao V395 em `2026-05-14`: o job HF CPU `https://huggingface.co/jobs/felipesp1983/6a0647a9e48bea4538b9d78a` rodou em `cpu-upgrade` (`8 vCPU`, `32 GB`, `US$0.0005/min`) e completou. O V324 agressivo nao achou IDs novos alem dos `6` numericos conhecidos. O V329 amplo reconfirmou o unico ganho simbolico conhecido `99d6a3b5`. A integracao no-loss ficou `199/315`, `equation=63/155`, `bit=136/160`, `losses=0`, mas e sinal solver/verifier ja conhecido de V336/V343, nao ganho adapter-only. Portanto V395 nao autoriza treino GPU repetindo a mesma transferencia. Os artefatos foram enviados para `felipesp1983/kg1-v395-cpu-symbolic-gate-artifacts`.
 
 Decisao V396 em `2026-05-14`: a auditoria seletiva no Google Drive confirmou que existem muitos artefatos validos, mas nenhum novo adapter-only melhor que V291/V290. V221 e V226 continuam validos como registros de candidatos (`190/315` e `191/315`), V230-V238 continuam uteis como miss packs/parser/solver diagnostics, e V199 e uma linhagem historica production-ready com ZIP validado. Em contrapartida, V227/V228/V229 foram descartados por regressao severa (`16/315` no V229 final; V228 com `111/160` truncados na primeira janela), e os adapters publicos em `KG1_PUBLIC_ADAPTERS` nao sao drop-in: Huikang falha por incompatibilidade de modulos LoRA e Kienngx 3000 fica em `32/315`. O resumo versionado esta em `artifacts/v396_drive_artifact_audit/KG1_V396_GOOGLE_DRIVE_ARTIFACT_AUDIT.md`. Nao ha autorizacao de novo treino GPU a partir do Drive.
+
+Decisao V397 em `2026-05-14`: o `sft_reconstructed.jsonl` local foi auditado contra `competition_train.csv`: `9500/9500` finais extraidos batem com os labels oficiais. Excluindo os `315` rows do weak gate, restam `2578` train e `264` validation focados em `bit_manipulation` e `equation_transform`. O gate real V286 passou com `0` overlap train/val, `0` weak-id leakage, `0` prompt truncation e `0` completion truncation em `max_length=8192`. Este e o primeiro corpus recente realmente diferente da linha V381/V391; ele autoriza apenas um smoke H200 curto V398, com `4` steps e weak eval nos checkpoints `2/4`. Promocao somente se `weak total > 192`, `equation > 56`, `bit >= 136`, `truncated=0`; caso contrario cancelar/encerrar por FinOps.
 
 ## Google Drive Artifact Audit 2026-05-14
 
@@ -505,6 +508,6 @@ Regras:
 
 ## Proxima Acao Unica
 
-Com a auditoria Google Drive V396 concluida, a proxima acao unica e auditar imediatamente o `sft_reconstructed.jsonl` e o dataset V282/V290 para decidir se existe uma rota adapter-only realmente diferente da transferencia falha V391. O criterio para gastar GPU hoje e: dataset novo com traces completos verificaveis, anti-leakage por `id`/`prompt_sha256`, preservacao de replay bit, e job curto com kill-switch no primeiro checkpoint se `weak<=192`, `equation<=56` ou `bit<136`.
+Com a auditoria V397 concluida, a proxima acao unica e executar um smoke H200 curto V398 a partir do V290 checkpoint-6 usando o dataset V397. O job deve ser barato e interrompivel: `4` steps, checkpoints `2/4`, weak eval imediato, e cancelamento se nao houver sinal adapter-only acima do baseline `192/315`, `equation=56`, `bit=136`, `truncated=0`. Nao iniciar outro treino amplo antes desse resultado.
 
 Nao rodar novo HF training antes de prova de transferencia adapter-only. Projecao CPU, teacher, solver/verifier e loss baixo nao autorizam GPU sozinhos.

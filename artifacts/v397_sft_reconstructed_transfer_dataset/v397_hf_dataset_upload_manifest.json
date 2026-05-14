@@ -1,0 +1,14 @@
+{
+  "data_repo": "felipesp1983/kg1-nemotron-training",
+  "dataset_dir": "artifacts\\v397_sft_reconstructed_transfer_dataset\\20260514T_cpu_gate",
+  "dataset_path_in_repo": "data/v397_sft_reconstructed_transfer/20260514T_cpu_gate",
+  "dataset_upload": "https://huggingface.co/datasets/felipesp1983/kg1-nemotron-training/commit/a6e29ab2bae0e6bd99abfb1e40ad18a9bf4c090e",
+  "gate_dir": "artifacts\\v397_sft_reconstructed_transfer_dataset\\20260514T_tokenization_gate",
+  "gate_path_in_repo": "runtime_artifacts/v397_sft_reconstructed_transfer_tokenization_gate/20260514T_tokenization_gate",
+  "gate_upload": "https://huggingface.co/datasets/felipesp1983/kg1-nemotron-training/commit/02b0ebfe5529fc8158e52c547745d67bd6de75b4",
+  "generated_at_utc": "2026-05-14T22:43:54.663632+00:00",
+  "next_action": "Commit/push V397/V398 scripts and run V398 debug/launch only after the branch contains this code.",
+  "previous_version": "V396 Drive audit; V392 locked adapter-only baseline",
+  "version": "v397_hf_dataset_upload",
+  "version_comparison_artifact": "artifacts\\v397_sft_reconstructed_transfer_dataset\\20260514T_cpu_gate\\V397_VS_PREVIOUS.md"
+}

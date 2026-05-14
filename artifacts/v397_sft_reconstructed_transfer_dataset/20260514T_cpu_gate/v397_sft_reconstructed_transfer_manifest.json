@@ -1,0 +1,147 @@
+{
+  "decision": {
+    "decision": "v397_dataset_ready_for_tokenization_gate",
+    "next_action": "Run V286 tokenization gate with boxed_suffix. Launch HF only if tokenization has zero completion truncation.",
+    "reason": "train=2578; val=264; weak_overlap=0; train_val_prompt_overlap=0"
+  },
+  "filters": {
+    "include_statuses": [
+      "rule_found",
+      "hypothesis_formed",
+      "rule_unknown"
+    ],
+    "max_assistant_chars": 14000,
+    "skipped_counts": {
+      "non_target_category": 6343,
+      "weak_id_excluded": 315
+    },
+    "source_counts": {
+      "bit_manipulation/hypothesis_formed": 121,
+      "bit_manipulation/rule_found": 1364,
+      "bit_manipulation/rule_unknown": 117,
+      "cipher/rule_found": 1576,
+      "cryptarithm_deduce/hypothesis_formed": 46,
+      "cryptarithm_deduce/rule_found": 54,
+      "cryptarithm_deduce/rule_unknown": 559,
+      "cryptarithm_guess/hypothesis_formed": 25,
+      "cryptarithm_guess/rule_found": 11,
+      "cryptarithm_guess/rule_unknown": 128,
+      "equation_numeric_deduce/hypothesis_formed": 22,
+      "equation_numeric_deduce/rule_found": 540,
+      "equation_numeric_deduce/rule_unknown": 34,
+      "equation_numeric_guess/hypothesis_formed": 35,
+      "equation_numeric_guess/rule_found": 21,
+      "equation_numeric_guess/rule_unknown": 80,
+      "gravity/rule_found": 1597,
+      "numeral/rule_found": 1576,
+      "unit_conversion/rule_found": 1594
+    },
+    "target_categories": [
+      "bit_manipulation",
+      "cryptarithm_deduce",
+      "cryptarithm_guess",
+      "equation_numeric_deduce",
+      "equation_numeric_guess"
+    ],
+    "val_mod": 10,
+    "verified_final_counts": {
+      "bit_manipulation/hypothesis_formed/ok": 103,
+      "bit_manipulation/rule_found/ok": 1228,
+      "bit_manipulation/rule_unknown/ok": 111,
+      "cryptarithm_deduce/hypothesis_formed/ok": 43,
+      "cryptarithm_deduce/rule_found/ok": 49,
+      "cryptarithm_deduce/rule_unknown/ok": 490,
+      "cryptarithm_guess/hypothesis_formed/ok": 22,
+      "cryptarithm_guess/rule_found/ok": 10,
+      "cryptarithm_guess/rule_unknown/ok": 119,
+      "equation_numeric_deduce/hypothesis_formed/ok": 20,
+      "equation_numeric_deduce/rule_found/ok": 492,
+      "equation_numeric_deduce/rule_unknown/ok": 31,
+      "equation_numeric_guess/hypothesis_formed/ok": 33,
+      "equation_numeric_guess/rule_found/ok": 20,
+      "equation_numeric_guess/rule_unknown/ok": 71
+    }
+  },
+  "generated_at_utc": "2026-05-14T22:39:04.846880+00:00",
+  "inputs": {
+    "competition_train_csv": "C:\\Users\\davis\\Downloads\\competition_train.csv",
+    "competition_train_sha256": "d204af160633b638448723a437aa51c0db70fd0b64ff92f6ad6f52e5ac6377fa",
+    "sft_reconstructed_jsonl": "C:\\Users\\davis\\Downloads\\sft_reconstructed.jsonl",
+    "sft_reconstructed_sha256": "e385421e85881a406144e2e1166961ef21b0b9063077c908f41e626e01681609",
+    "weak_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v290_rank19_micro_patch_reference\\runtime_artifacts\\v245_weak_eval_bridge\\v245-weak-bridge-hfonly-20260510T1950Z\\v221_weak_315.csv",
+    "weak_csv_sha256": "85da758e14d57ea40270de5747f98726a0ad0b6d1795bff7dd46183005e0f9b6"
+  },
+  "outputs": {
+    "comparison_md": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v397_sft_reconstructed_transfer_dataset\\20260514T_cpu_gate\\V397_VS_PREVIOUS.md",
+    "manifest_json": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v397_sft_reconstructed_transfer_dataset\\20260514T_cpu_gate\\v397_sft_reconstructed_transfer_manifest.json",
+    "train_jsonl": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v397_sft_reconstructed_transfer_dataset\\20260514T_cpu_gate\\v397_sft_reconstructed_transfer_train.jsonl",
+    "train_sha256": "3df737c01590112aea1249fdba7d77e82739a3dac7cd9cc972ed8488a72c78c6",
+    "val_jsonl": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v397_sft_reconstructed_transfer_dataset\\20260514T_cpu_gate\\v397_sft_reconstructed_transfer_val.jsonl",
+    "val_sha256": "f0790e8e33f427b2dadc85eb09c0519e17ca755a1a8352f1b7c5db4a25666031"
+  },
+  "policy": {
+    "assistant_final_answer_mode": "boxed_suffix",
+    "cpu_only": true,
+    "hf_gpu_allowed": false,
+    "kaggle_submit_allowed": false,
+    "next_required_gate": "scripts/run_v286_generic_tokenization_gate.py",
+    "weak_gate_rows_used_for_training": false
+  },
+  "schema_version": "kg1_v397_sft_reconstructed_transfer_dataset_v1",
+  "validation": {
+    "train": {
+      "assistant_char_max": 12453,
+      "assistant_char_mean": 7399.817688130333,
+      "assistant_char_min": 1098,
+      "boxed_suffix_rows": 2578,
+      "family_counts": {
+        "bit_manipulation": 1319,
+        "equation_transform": 1259
+      },
+      "prompt_hash_count": 2578,
+      "rows": 2578,
+      "source_status_counts": {
+        "hypothesis_formed": 207,
+        "rule_found": 1641,
+        "rule_unknown": 730
+      },
+      "subcategory_counts": {
+        "bit_manipulation": 1319,
+        "cryptarithm_deduce": 519,
+        "cryptarithm_guess": 131,
+        "equation_numeric_deduce": 498,
+        "equation_numeric_guess": 111
+      },
+      "unique_ids": 2578,
+      "unique_source_problem_ids": 2578
+    },
+    "train_val_prompt_overlap": 0,
+    "validation": {
+      "assistant_char_max": 12304,
+      "assistant_char_mean": 6898.810606060606,
+      "assistant_char_min": 1110,
+      "boxed_suffix_rows": 264,
+      "family_counts": {
+        "bit_manipulation": 123,
+        "equation_transform": 141
+      },
+      "prompt_hash_count": 264,
+      "rows": 264,
+      "source_status_counts": {
+        "hypothesis_formed": 14,
+        "rule_found": 158,
+        "rule_unknown": 92
+      },
+      "subcategory_counts": {
+        "bit_manipulation": 123,
+        "cryptarithm_deduce": 63,
+        "cryptarithm_guess": 20,
+        "equation_numeric_deduce": 45,
+        "equation_numeric_guess": 13
+      },
+      "unique_ids": 264,
+      "unique_source_problem_ids": 264
+    },
+    "weak_id_overlap": 0
+  }
+}
