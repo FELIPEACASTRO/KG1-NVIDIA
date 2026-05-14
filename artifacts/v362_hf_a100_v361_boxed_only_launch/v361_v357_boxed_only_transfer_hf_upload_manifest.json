@@ -1,0 +1,31 @@
+{
+  "dataset_dir": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v361_v357_boxed_only_transfer_dataset\\20260514T_cpu_gate",
+  "dataset_repo": "felipesp1983/kg1-nemotron-training",
+  "dataset_upload": "https://huggingface.co/datasets/felipesp1983/kg1-nemotron-training/commit/6cd8e8d5be2d0e09d66672ad17e28f347440800d",
+  "generated_at_utc": "2026-05-14T10:39:02.643587+00:00",
+  "local_gate_summary": {
+    "dataset_manifest_sha256": "e28dc0a5e1e5da47a0cbe689320a1454bfa3e044878a36d98ddce6dfb7e671bf",
+    "preferences_train_sha256": "f7f2e11540adbf16bcc93cc8f88a8f3f9c432086df59add4b4132daa821b4b06",
+    "preferences_val_sha256": "565a079d523f74cafe76e6e6161fd53f86d64ac90a684215d133b4b435763df3",
+    "token_max_train": 286,
+    "token_max_val": 286,
+    "tokenization_gate_manifest_sha256": "dc32dd89a9773941cc0f6c3cb06a16ebfdc616296835a846996ab5b5ca002353",
+    "train_rows": 1152,
+    "train_sha256": "be742d7a82bf1c98f33d67bed8903006068c139ab74f798055fcc7d435ffa4db",
+    "train_subcategory_counts": {
+      "bit_exact_global_binary_replay": 320,
+      "bit_exact_global_ternary": 832
+    },
+    "val_rows": 288,
+    "val_sha256": "4c93766e7fae72da14f879177e15c3c6300b7991e4efc8fba4d7fe75d3df5332",
+    "val_subcategory_counts": {
+      "bit_exact_global_binary_replay": 80,
+      "bit_exact_global_ternary": 208
+    }
+  },
+  "manifest_json": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v361_v357_boxed_only_transfer_dataset\\20260514T_cpu_gate\\v361_v357_boxed_only_transfer_manifest.json",
+  "path_in_repo": "data/v361_v357_boxed_only_transfer/20260514T_cpu_gate",
+  "tokenization_gate_manifest": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v361_v357_boxed_only_transfer_dataset\\20260514T_cpu_gate\\tokenization_gate_real\\v286_generic_tokenization_gate_manifest.json",
+  "upload": "https://huggingface.co/datasets/felipesp1983/kg1-nemotron-training/commit/6cd8e8d5be2d0e09d66672ad17e28f347440800d",
+  "version": "v361_v357_boxed_only_transfer_hf_upload"
+}
