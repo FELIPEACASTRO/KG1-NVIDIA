@@ -150,6 +150,9 @@ def load_json(path: Path):
 
 
 variants = json.loads(os.environ["KG1_PROMPT_VARIANTS_JSON"])
+skip_variant_names = set(json.loads(os.environ.get("KG1_SKIP_VARIANT_NAMES_JSON", "[]")))
+if skip_variant_names:
+    variants = [variant for variant in variants if variant["name"] not in skip_variant_names]
 base_run_id = os.environ["KG1_RUN_ID_BASE"]
 output_path_base = os.environ["KG1_OUTPUT_PATH_BASE"]
 output_repo = os.environ["KG1_OUTPUT_REPO"]
@@ -158,6 +161,7 @@ best_row = None
 
 print("=== V393 PROMPT SWEEP START ===", flush=True)
 print("variant_count =", len(variants), flush=True)
+print("skip_variant_names =", json.dumps(sorted(skip_variant_names)), flush=True)
 print("base_run_id =", base_run_id, flush=True)
 print("output_repo =", output_repo, flush=True)
 print("output_path_base =", output_path_base, flush=True)
@@ -195,7 +199,13 @@ for index, variant in enumerate(variants, start=1):
     payload = load_json(summary_path)
     if not payload:
         raise RuntimeError(f"empty candidate summary for {name}")
-    row = dict(payload[0])
+    if isinstance(payload, dict):
+        payload_rows = payload.get("rows", [])
+    else:
+        payload_rows = payload
+    if not payload_rows:
+        raise RuntimeError(f"empty candidate summary rows for {name}: {summary_path}")
+    row = dict(payload_rows[0])
     row["variant_name"] = name
     row["variant_run_id"] = run_id
     row["variant_output_path_in_repo"] = output_path
@@ -293,7 +303,7 @@ def adapter_exists(api: HfApi, repo_id: str, subfolder: str) -> bool:
     return {prefix + "adapter_config.json", prefix + "adapter_model.safetensors"}.issubset(files)
 
 
-def build_job_env(hardware: dict[str, object]) -> dict[str, str]:
+def build_job_env(hardware: dict[str, object], skip_variants: list[str]) -> dict[str, str]:
     specs = [{"repo": ADAPTER_REPO, "subfolder": ADAPTER_SUBFOLDER, "name": ADAPTER_NAME}]
     return {
         "KG1_BRANCH": REPO_BRANCH,
@@ -316,12 +326,20 @@ def build_job_env(hardware: dict[str, object]) -> dict[str, str]:
         "KG1_EXPECTED_LORA_R": "32",
         "KG1_EXPECTED_LORA_ALPHA": "32",
         "KG1_PROMPT_VARIANTS_JSON": json.dumps(PROMPT_VARIANTS, sort_keys=True),
+        "KG1_SKIP_VARIANT_NAMES_JSON": json.dumps(skip_variants, sort_keys=True),
     }
 
 
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--launch", action="store_true", help="Actually launch the Hugging Face Job.")
+    parser.add_argument(
+        "--skip-variant",
+        action="append",
+        default=[],
+        choices=[variant["name"] for variant in PROMPT_VARIANTS],
+        help="Skip a known variant, useful for FinOps-safe resume after a failed launcher.",
+    )
     args = parser.parse_args()
 
     token = get_token()
@@ -337,7 +355,8 @@ def main() -> int:
     if not adapter_exists(api, ADAPTER_REPO, ADAPTER_SUBFOLDER):
         raise RuntimeError(f"Missing adapter {ADAPTER_REPO}/{ADAPTER_SUBFOLDER}")
 
-    job_env = build_job_env(hardware)
+    skip_variants = sorted(set(args.skip_variant))
+    job_env = build_job_env(hardware, skip_variants)
     manifest: dict[str, Any] = {
         "version": VERSION,
         "generated_at_utc": datetime.now(timezone.utc).isoformat(),
@@ -357,6 +376,7 @@ def main() -> int:
         "output_repo": OUTPUT_REPO,
         "output_path_base": OUTPUT_PATH_BASE,
         "prompt_variants": PROMPT_VARIANTS,
+        "skip_variants": skip_variants,
         "comparison_vs_locked_baseline": {
             "locked_weak": {"total": 192, "equation_transform": 56, "bit_manipulation": 136, "truncated": 0},
             "v391_checkpoint4": {"total": 191, "equation_transform": 56, "bit_manipulation": 135, "truncated": 0},

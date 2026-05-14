@@ -81,6 +81,27 @@ Decisao V392: nao ha justificativa tecnica para continuar a linha "teacher/verif
 - `nvidia/Nemotron-RL-ReasoningGym-v1`: dataset oficial NVIDIA com `15000` amostras em `104` ambientes procedurais/verificaveis, licenca CC-BY-4.0. Uso permitido: fixtures/probes e sanity checks de raciocinio; nao entra em treino direto do desafio sem gate anti-overlap e prova de ganho nas familias alvo.
 - `NVIDIA-NeMo/Nemotron`: hub de receitas/datasets Nemotron. Ajuda em runtime/infra e confirma valor de dados verificaveis; nao fornece, sozinho, ganho row-level para o submit.
 
+## Literatura Solver/Verifier Reauditada 2026-05-14
+
+Filtro usado: entra no roadmap somente estudo que mude uma decisao tecnica para `bit_manipulation`, `equation_transform` ou gate solver/verifier. A revisao inclui trabalhos e labs asiaticos, mas a conclusao operacional nao depende de nacionalidade do paper: precisamos de sintese verificavel em CPU antes de GPU.
+
+| Fonte | Instituicao/lab | Achado operacional | Acao no roadmap |
+|---|---|---|---|
+| Kaggle/Tong Hui Kang + `tonghuikang/nemotron` | competidor Progress Prize | A solucao forte combina reasoners, corpus, traces e metricas por categoria; nao e "SFT amplo". | Manter V394/V395 como inventario row-level + DSL/verifier antes de qualquer treino. |
+| SyGuS / syntax-guided synthesis | comunidade PL/SMT | Restringir a gramatica torna sintese tratavel e melhora otimizacao. | `equation_transform` deve usar DSL pequena e verificada, nao busca livre nem prompt generico. |
+| Program Synthesis via Bi-directional Reduced-product Abstract Interpretation | Seoul National University/KAIST line of work | Busca bidirecional e interpretacao abstrata reduzem espaco de programas por restricoes de entrada e saida. | Em `bit`, inferir dependencia output-bit -> input-bit/pares/constantes antes de enumerar expressoes. |
+| Math-Shepherd | Peking/Tsinghua/DeepSeek lineage | Verificador/process reward melhora reranking e RL quando ha multiplas saidas e supervisao automatica. | Usar teacher/verifier para escolher candidatos e gerar hard negatives; nao contar como ganho submetivel sem adapter gate. |
+| InternLM-Math | Shanghai AI Laboratory | Unifica CoT, reward model, formal reasoning, data augmentation e code interpreter como solver/verifier/prover/augmenter. | Para `equation`, priorizar code/DSL verifier e data augmentation validada, nao mais epochs. |
+| DeepSeekMath/DeepSeek-Prover | DeepSeek AI, pesquisadores chineses | Ganho matematico vem de corpus filtrado, RL/verificacao e/ou proof feedback; answer final sozinho nao prova transferencia. | Se houver novo LoRA, dataset precisa ter resposta correta, baseline errada, trace curto deterministico e hard negative. |
+| DreamCoder / neural-guided synthesis / HYSYNTH | MIT/UCSD/general PL literature | LLM pode guiar busca, mas programa final precisa ser checado em DSL. | LLM/OpenRouter serve para propor operadores e priorizar busca; CPU verifier decide. |
+
+Decisao honesta: nenhuma literatura revisada autoriza "treinar mais" como proxima acao. O caminho de maior chance para subir hoje e:
+
+1. concluir/fixar o sweep sem treino somente se ele nao repetir custo inutil;
+2. executar V394 inventario row-level de `equation` com DSL expandida;
+3. executar V395 guardrail de `bit` por bit-pair/bitsum/stride;
+4. so abrir novo HF/Kaggle GPU se CPU gate mostrar `equation>56`, `bit>=136`, `truncated=0` ou uma variante prompt-safe com expectativa objetiva de full `>=824/947`.
+
 ## Fontes Auditadas
 
 ### Fonte ativa 1 - `solver_results.parquet`
@@ -241,7 +262,7 @@ Resultado V392:
 
 ### Step 2 - V393 sweep sem treino do melhor adapter/package
 
-Status: launcher preparado; pronto para HF H200 no-training weak sweep.
+Status: primeira execucao HF encerrada com erro de launcher apos o primeiro variante; bug corrigido localmente para resume FinOps-safe.
 
 Objetivo: buscar ganho hoje sem gastar em treino que ja falhou. Testar variantes de prompt/template/extractor/decoding sobre o melhor adapter/package existente.
 
@@ -277,6 +298,14 @@ Implementacao V393:
 - Adapter travado: `felipesp1983/kg1-nemotron-lora-v290-rank19-micro-patch-smoke/checkpoint-6`.
 - Variantes: `baseline_v290_repro`, `v221_boxed_suffix`, `no_suffix`, `strict_disable_thinking`, `strict_2048_tokens`.
 - Gate de promocao continua: `total>192`, `equation>56`, `bit>=136`, `truncated=0`.
+
+Resultado parcial V393 primeira execucao:
+
+| Variante | Total | equation | bit | trunc | Decisao |
+|---|---:|---:|---:|---:|---|
+| `baseline_v290_repro` | `190/315` | `56/155` | `134/160` | `1` | rejeitado; pior que V392 lock |
+
+Erro encontrado: o launcher tentava ler `batch_candidate_summary.json` como lista (`payload[0]`), mas o formato real atual e objeto com chave `rows`. Correcao aplicada no launcher: aceitar os dois formatos e permitir `--skip-variant` para retomar sem rerodar variante ja rejeitado. FinOps: nao rerodar `baseline_v290_repro`; se V393 for retomado, rodar apenas variantes restantes.
 
 ### Step 3 - V394 row-level equation miss inventory
 
@@ -398,6 +427,6 @@ Regras:
 
 ## Proxima Acao Unica
 
-Executar V392 baseline/package lock e, em seguida, V393 sweep sem treino no melhor adapter/package. O objetivo e obter ganho submit-safe hoje sem repetir SFT que ja falhou. Se V393 nao mover `equation>56` com `bit>=136` e `truncated=0`, executar V394 row-level miss inventory antes de qualquer novo HF/Kaggle GPU.
+Retomar V393 apenas nas variantes restantes usando `--skip-variant baseline_v290_repro`, porque o primeiro variante ja foi medido e rejeitado (`190/315`, `equation=56`, `bit=134`, `truncated=1`). O objetivo e obter ganho submit-safe hoje sem repetir SFT que ja falhou. Se as variantes restantes nao moverem `equation>56` com `bit>=136` e `truncated=0`, executar V394 row-level miss inventory antes de qualquer novo HF/Kaggle GPU.
 
 Nao rodar novo HF training antes de prova de transferencia adapter-only. Projecao CPU, teacher, solver/verifier e loss baixo nao autorizam GPU sozinhos.
