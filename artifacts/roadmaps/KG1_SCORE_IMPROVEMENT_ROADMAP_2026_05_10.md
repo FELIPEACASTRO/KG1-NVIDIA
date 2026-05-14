@@ -50,6 +50,7 @@ Precisamos buscar subida no ranking ainda hoje, `2026-05-14`. A decisao V392 e s
 | V390 A100 runtime attempt | n/a | n/a | n/a | bloqueado corretamente por gate: CUDA 13 em A100 |
 | V391 H200 relaunch + weak eval | `191/315` | `56/155` | `135/160` | rejeitado; checkpoints 2/4 iguais, eval cancelado por FinOps |
 | V392 roadmap reset | n/a | n/a | n/a | pausar LoRA; priorizar baseline lock + sweep sem treino + gate de transferencia real |
+| V393 prompt/template sweep | melhor `192/315` | `56/155` | `136/160` | encerrado por FinOps; sem ganho sobre V392 lock |
 
 Conclusao: `eval_loss` baixo nao e criterio de promocao. O criterio e ACC por familia no weak/full gate.
 
@@ -73,6 +74,8 @@ Decisao operacional pos-V387: usar Kaggle GPU apenas como alternativa barata par
 
 Decisao V392: nao ha justificativa tecnica para continuar a linha "teacher/verifier -> SFT LoRA" sem um gate novo que prove transferencia de resposta. V382/V383, V384/V387, V388/V389 e V391 repetiram o mesmo padrao: loss/teacher melhora ou projecao CPU parece boa, mas o adapter continua em `equation=56` e frequentemente perde `bit`. O plano ativo passa a privilegiar o caminho mais rapido para ranking hoje: identificar o melhor package historico, fazer sweeps sem treino, e so voltar ao treino se o gate mostrar ganho adapter-only antes da GPU.
 
+Decisao V393 em `2026-05-14`: o sweep sem treino foi encerrado por FinOps. `v221_boxed_suffix` empatou o baseline travado (`192/315`, `equation=56`, `bit=136`, `truncated=0`), portanto nao gera novo submit. `no_suffix` regrediu severamente (`158/315`, `equation=55`, `bit=103`, `truncated=1`), provando que remover a instrucao boxed quebra `bit_manipulation` e nao melhora equation. As variantes restantes (`strict_disable_thinking`, `strict_2048_tokens`) foram canceladas porque, apos esse resultado, a chance de superar `equation>56` com `bit>=136` nao justificava continuar gastando H200.
+
 ## Fontes Web Reauditadas 2026-05-14
 
 - `tonghuikang/nemotron`: repo publico da submissao Progress Prize. Ele confirma que a solucao vencedora nao foi treino generico; usou reasoners, corpus, token-level traces, metricas por categoria e treino SFT controlado. O que entra no plano: copiar o metodo de instrumentacao e gates, nao copiar bruto sem validacao.
@@ -90,6 +93,7 @@ Filtro usado: entra no roadmap somente estudo que mude uma decisao tecnica para 
 | Kaggle/Tong Hui Kang + `tonghuikang/nemotron` | competidor Progress Prize | A solucao forte combina reasoners, corpus, traces e metricas por categoria; nao e "SFT amplo". | Manter V394/V395 como inventario row-level + DSL/verifier antes de qualquer treino. |
 | SyGuS / syntax-guided synthesis | comunidade PL/SMT | Restringir a gramatica torna sintese tratavel e melhora otimizacao. | `equation_transform` deve usar DSL pequena e verificada, nao busca livre nem prompt generico. |
 | Program Synthesis via Bi-directional Reduced-product Abstract Interpretation | Seoul National University/KAIST line of work | Busca bidirecional e interpretacao abstrata reduzem espaco de programas por restricoes de entrada e saida. | Em `bit`, inferir dependencia output-bit -> input-bit/pares/constantes antes de enumerar expressoes. |
+| Euphony / learned probabilistic search for synthesis | KAIST, UPenn, Mayur Naik line | Em benchmarks SyGuS, inclui `750` tarefas BitVec e usa gramatica + modelo probabilistico para guiar busca em vez de enumeracao cega. | V395 deve ordenar candidatos bit por gramatica/probabilidade e validar por exemplos, nao tentar prompt ou treino amplo. |
 | Math-Shepherd | Peking/Tsinghua/DeepSeek lineage | Verificador/process reward melhora reranking e RL quando ha multiplas saidas e supervisao automatica. | Usar teacher/verifier para escolher candidatos e gerar hard negatives; nao contar como ganho submetivel sem adapter gate. |
 | Cumulative Reasoning | Tsinghua University, Andrew Yao/Yang Yuan team | Arquitetura proposer/verifier/reporter valida passos antes de acumular contexto, com ganhos em logica, Game of 24 e MATH. | Para `equation`, separar gerador de candidatos, verificador simbolico e decisor; nao confiar em uma unica amostra do modelo. |
 | InternLM-Math | Shanghai AI Laboratory | Unifica CoT, reward model, formal reasoning, data augmentation e code interpreter como solver/verifier/prover/augmenter. | Para `equation`, priorizar code/DSL verifier e data augmentation validada, nao mais epochs. |
@@ -99,9 +103,9 @@ Filtro usado: entra no roadmap somente estudo que mude uma decisao tecnica para 
 
 Decisao honesta: nenhuma literatura revisada autoriza "treinar mais" como proxima acao. O caminho de maior chance para subir hoje e:
 
-1. concluir/fixar o sweep sem treino somente se ele nao repetir custo inutil;
-2. executar V394 inventario row-level de `equation` com DSL expandida;
-3. executar V395 guardrail de `bit` por bit-pair/bitsum/stride;
+1. V393 esta encerrado: prompt/template sweep nao gerou ganho submit-safe.
+2. executar V394 inventario row-level de `equation` com DSL expandida e certificado por row;
+3. executar V395 guardrail de `bit` por bit-pair/bitsum/stride, com ordenacao de busca inspirada em BitVec synthesis;
 4. so abrir novo HF/Kaggle GPU se CPU gate mostrar `equation>56`, `bit>=136`, `truncated=0` ou uma variante prompt-safe com expectativa objetiva de full `>=824/947`.
 
 ## Fontes Auditadas
@@ -264,7 +268,7 @@ Resultado V392:
 
 ### Step 2 - V393 sweep sem treino do melhor adapter/package
 
-Status: primeira execucao HF encerrada com erro de launcher apos o primeiro variante; bug corrigido localmente para resume FinOps-safe.
+Status: encerrado por FinOps em `2026-05-14`.
 
 Objetivo: buscar ganho hoje sem gastar em treino que ja falhou. Testar variantes de prompt/template/extractor/decoding sobre o melhor adapter/package existente.
 
@@ -301,13 +305,19 @@ Implementacao V393:
 - Variantes: `baseline_v290_repro`, `v221_boxed_suffix`, `no_suffix`, `strict_disable_thinking`, `strict_2048_tokens`.
 - Gate de promocao continua: `total>192`, `equation>56`, `bit>=136`, `truncated=0`.
 
-Resultado parcial V393 primeira execucao:
+Resultado V393:
 
 | Variante | Total | equation | bit | trunc | Decisao |
 |---|---:|---:|---:|---:|---|
 | `baseline_v290_repro` | `190/315` | `56/155` | `134/160` | `1` | rejeitado; pior que V392 lock |
+| `v221_boxed_suffix` | `192/315` | `56/155` | `136/160` | `0` | empatou baseline; sem promocao |
+| `no_suffix` | `158/315` | `55/155` | `103/160` | `1` | regressao severa; prova que remover sufixo boxed quebra bit |
+| `strict_disable_thinking` | n/a | n/a | n/a | n/a | cancelado por FinOps apos regressao de `no_suffix` |
+| `strict_2048_tokens` | n/a | n/a | n/a | n/a | cancelado por FinOps apos regressao de `no_suffix` |
 
-Erro encontrado: o launcher tentava ler `batch_candidate_summary.json` como lista (`payload[0]`), mas o formato real atual e objeto com chave `rows`. Correcao aplicada no launcher: aceitar os dois formatos e permitir `--skip-variant` para retomar sem rerodar variante ja rejeitado. FinOps: nao rerodar `baseline_v290_repro`; se V393 for retomado, rodar apenas variantes restantes.
+Erro encontrado na primeira execucao: o launcher tentava ler `batch_candidate_summary.json` como lista (`payload[0]`), mas o formato real atual e objeto com chave `rows`. Correcao aplicada no launcher: aceitar os dois formatos e permitir `--skip-variant`.
+
+Conclusao: V393 nao libera submit nem full eval. Prompt/template sozinho nao move `equation_transform` acima de `56`; remover ou apertar demais a instrucao de resposta tende a destruir `bit_manipulation`. A linha esta encerrada.
 
 ### Step 3 - V394 row-level equation miss inventory
 
@@ -429,6 +439,6 @@ Regras:
 
 ## Proxima Acao Unica
 
-Retomar V393 apenas nas variantes restantes usando `--skip-variant baseline_v290_repro`, porque o primeiro variante ja foi medido e rejeitado (`190/315`, `equation=56`, `bit=134`, `truncated=1`). O objetivo e obter ganho submit-safe hoje sem repetir SFT que ja falhou. Se as variantes restantes nao moverem `equation>56` com `bit>=136` e `truncated=0`, executar V394 row-level miss inventory antes de qualquer novo HF/Kaggle GPU.
+Executar V394 row-level `equation_transform` miss inventory em CPU antes de qualquer novo HF/Kaggle GPU. O objetivo e isolar as `4` rows necessarias para `equation 56 -> 60`, gerar certificado por row com DSL/verifier, e separar ganho submit-safe de ganho apenas teacher/solver.
 
 Nao rodar novo HF training antes de prova de transferencia adapter-only. Projecao CPU, teacher, solver/verifier e loss baixo nao autorizam GPU sozinhos.
