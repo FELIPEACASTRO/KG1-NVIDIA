@@ -67,7 +67,7 @@ print(json.dumps({
 }, sort_keys=True), flush=True)
 PY
 apt-get update -qq && apt-get install -y -qq git >/dev/null
-$PYBIN -m pip install -q --no-cache-dir 'huggingface_hub>=0.36.0' pandas packaging peft safetensors hf_transfer
+$PYBIN -m pip install -q --no-cache-dir 'huggingface_hub>=0.36.0' pandas packaging safetensors hf_transfer
 rm -rf /tmp/kg1
 git clone --depth 1 --branch "$KG1_BRANCH" https://github.com/FELIPEACASTRO/KG1-NVIDIA.git /tmp/kg1
 cd /tmp/kg1
