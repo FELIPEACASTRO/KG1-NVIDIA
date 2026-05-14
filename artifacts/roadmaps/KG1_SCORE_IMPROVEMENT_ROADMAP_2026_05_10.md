@@ -192,7 +192,7 @@ Preflight local aprovado:
 - Artefatos: `artifacts/v352_hf_a100_v351_bit_transfer_launch/`.
 - Job HF treino A100: `https://huggingface.co/jobs/felipesp1983/6a0520b13308d79117b8f393`.
 - Decisao FinOps aplicada: treino cancelado apos upload completo de `checkpoint-2`; nao gastar nos steps 4/6/8 antes do weak eval.
-- Weak eval checkpoint-2: launcher criado e debug H200 aprovado; launch pendente apos commit/push do script de eval.
+- Weak eval checkpoint-2: `https://huggingface.co/jobs/felipesp1983/6a0524423308d79117b8f3a1`.
 
 Configuracao:
 
