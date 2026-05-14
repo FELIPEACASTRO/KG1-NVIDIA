@@ -26,6 +26,7 @@ Precisamos buscar subida no ranking ainda hoje, `2026-05-14`. O plano deve ser a
 - Se nenhum checkpoint V383 bater o baseline, voltar imediatamente para CPU gates que gerem novo sinal independente; nenhum novo HF training pode iniciar sem ganho CPU medido antes.
 - Caminho de hoje apos V383 negativo: gerar candidato submit-safe a partir do melhor adapter-only conhecido, sem solver/postprocessor runtime, e so substituir respostas se houver prova local reproduzivel de que a resposta vem do proprio adapter/package permitido.
 - Proibido submit de postprocessor/verifier/teacher-only. Submit hoje so pode vir de adapter/package que passe os gates.
+- Regra permanente: toda nova versao criada deve incluir um quadro comparativo contra a versao anterior, com metricas, delta e decisao de promocao/rejeicao.
 
 ## Estado Atual Medido
 
@@ -45,6 +46,7 @@ Precisamos buscar subida no ranking ainda hoje, `2026-05-14`. O plano deve ser a
 | V384 V382 V221 prompt weak eval | melhor `193/315` | `56/155` | `137/160` | rejeitado; `truncated=1` e equation nao subiu |
 | V387 V382 checkpoint-4 full official-like | full `823/947` | `56/155` | `135/160` | rejeitado; empatou V291 e falhou package gate `>=824/947` |
 | V388/V389 V291/V382 adapter soups | melhor `191/315` | `56/155` | `135/160` | rejeitado; todos os soups regrediram bit/total e nenhum moveu equation |
+| V390 CPU equation gate + bit replay mix | projecao CPU `198/315` | `62/155` | `136/160` guardrail | autorizado para smoke HF curto; ainda nao e adapter-only medido |
 
 Conclusao: `eval_loss` baixo nao e criterio de promocao. O criterio e ACC por familia no weak/full gate.
 
@@ -57,6 +59,8 @@ Double check V386 de medicao ACC em `2026-05-14`: weak315 e full947 foram cruzad
 Decisao agressiva V387 para ranking hoje: apesar de V384 falhar no weak gate por `truncated=1` e `equation=56`, o checkpoint-4 era o unico adapter-only novo com `total=193/315` e `bit=137/160`. O full official-like V387 em H200 terminou com `823/947`, `equation_transform=56/155`, `bit_manipulation=135/160`, `truncated=1`, `full_candidate_gate=False`. Isso empata a V291, nao melhora ranking e nao autoriza package/submission. A linha V381/V382/V384/V387 esta encerrada para submissao.
 
 Decisao V388/V389 em `2026-05-14`: os soups adapter-only V291/V382 foram gerados em CPU e avaliados no weak gate H200. Resultados: `0.95/0.05 = 191/315, equation=56, bit=135, truncated=2`; `0.90/0.10 = 190/315, equation=56, bit=134, truncated=1`; `1.05/-0.05 = 191/315, equation=56, bit=135, truncated=1`. Nenhum passou `total>192`, `equation>56`, `bit>=136`, `truncated=0`. Conclusao: combinacao linear simples entre V291 e V382 nao gera ganho submit-safe e esta encerrada.
+
+Decisao V390 em `2026-05-14`: o V324 CPU gate encontrou `6` novos ganhos equation sem conflitos (`equation` projetado `56 -> 62`, weak projetado `192 -> 198`) e preservou `bit=136`. O dataset V390/V326 tem `5031` train rows (`4231` bit replay + `800` equation) e `532` validation rows, passou tokenization gate com `0` truncation e offset mask completo. O smoke HF deve ser curto e agressivo (`12` steps), com weak eval nos checkpoints `2/4/6/8/10/12`. Promocao so se `total>192`, `equation>56`, `bit>=136`, `truncated=0`; caso contrario cancelar/encerrar por FinOps.
 
 Decisao operacional pos-V387: usar Kaggle GPU apenas como alternativa barata para validacao ou fallback, nao para repetir treino SFT amplo. O proximo gasto em HF/Kaggle GPU precisa vir depois de CPU gate novo que mostre `equation>56`, `bit>=136` e `truncated=0` no weak, ou de um candidato full official-like com expectativa objetiva de `>=824/947`.
 

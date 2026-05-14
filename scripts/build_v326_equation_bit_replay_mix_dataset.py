@@ -76,6 +76,19 @@ def read_jsonl(path: Path) -> list[dict[str, Any]]:
     return rows
 
 
+def resolve_manifest_path(manifest_path: Path, value: str) -> Path:
+    path = Path(value)
+    if path.is_absolute():
+        return path
+    repo_relative = REPO_ROOT / path
+    if repo_relative.exists():
+        return repo_relative
+    manifest_relative = manifest_path.parent / path
+    if manifest_relative.exists():
+        return manifest_relative
+    return repo_relative
+
+
 def write_jsonl(path: Path, rows: list[dict[str, Any]]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", encoding="utf-8", newline="\n") as handle:
@@ -249,13 +262,16 @@ def validate_input_manifest(v304_root: Path, v325_root: Path) -> dict[str, Any]:
     if not v304_manifest_path.is_file():
         raise FileNotFoundError(v304_manifest_path)
     if not v325_manifest_path.is_file():
-        raise FileNotFoundError(v325_manifest_path)
+        candidates = sorted(v325_root.glob("*_manifest.json"))
+        if len(candidates) != 1:
+            raise FileNotFoundError(v325_manifest_path)
+        v325_manifest_path = candidates[0]
     v304_manifest = read_json(v304_manifest_path)
     v325_manifest = read_json(v325_manifest_path)
     if v325_manifest.get("schema_version") != "kg1_v325_equation_no_loss_distill_dataset_v1":
         raise RuntimeError("unexpected V325 schema: " + str(v325_manifest.get("schema_version")))
-    if int(v325_manifest.get("v324_projected_equation_correct", -1)) != 60:
-        raise RuntimeError("V325 is not based on equation=60 CPU projection")
+    if int(v325_manifest.get("v324_projected_equation_correct", -1)) < 60:
+        raise RuntimeError("V325 is not based on equation>=60 CPU projection")
     v304_train_bit = int((v304_manifest.get("validation") or {}).get("train", {}).get("family_counts", {}).get("bit_manipulation", 0))
     if v304_train_bit < 4000:
         raise RuntimeError("V304 bit replay is unexpectedly small: " + str(v304_train_bit))
@@ -264,6 +280,7 @@ def validate_input_manifest(v304_root: Path, v325_root: Path) -> dict[str, Any]:
         "v304_manifest_sha256": sha256_file(v304_manifest_path),
         "v325_manifest_json": str(v325_manifest_path),
         "v325_manifest_sha256": sha256_file(v325_manifest_path),
+        "v325_manifest": v325_manifest,
     }
 
 
@@ -276,11 +293,21 @@ def build_dataset(args: argparse.Namespace) -> dict[str, Any]:
     print("label =", args.label, flush=True)
 
     manifest_inputs = validate_input_manifest(args.v304_root, args.v325_root)
+    v325_manifest = manifest_inputs.pop("v325_manifest")
+    v325_outputs = v325_manifest.get("outputs") or {}
+    v325_train = resolve_manifest_path(
+        args.v325_root / "v325_equation_no_loss_distill_manifest.json",
+        str(v325_outputs.get("sft_train_jsonl") or v325_outputs.get("train_jsonl") or ""),
+    )
+    v325_val = resolve_manifest_path(
+        args.v325_root / "v325_equation_no_loss_distill_manifest.json",
+        str(v325_outputs.get("sft_val_jsonl") or v325_outputs.get("val_jsonl") or ""),
+    )
     paths = {
         "v304_train": args.v304_root / "v304_solver_trace_distill_train.jsonl",
         "v304_val": args.v304_root / "v304_solver_trace_distill_val.jsonl",
-        "v325_train": args.v325_root / "v325_equation_no_loss_distill_sft_train.jsonl",
-        "v325_val": args.v325_root / "v325_equation_no_loss_distill_sft_val.jsonl",
+        "v325_train": v325_train,
+        "v325_val": v325_val,
     }
     for label, path in paths.items():
         print(f"input_{label} = {path} exists={path.is_file()}", flush=True)
@@ -409,7 +436,14 @@ def run_self_test() -> None:
         write_json(v304_root / "v304_solver_trace_distill_manifest.json", {"validation": {"train": {"family_counts": {"bit_manipulation": 4000}}}})
         write_json(
             v325_root / "v325_equation_no_loss_distill_manifest.json",
-            {"schema_version": "kg1_v325_equation_no_loss_distill_dataset_v1", "v324_projected_equation_correct": 60},
+            {
+                "schema_version": "kg1_v325_equation_no_loss_distill_dataset_v1",
+                "v324_projected_equation_correct": 62,
+                "outputs": {
+                    "sft_train_jsonl": str(v325_root / "v325_equation_no_loss_distill_sft_train.jsonl"),
+                    "sft_val_jsonl": str(v325_root / "v325_equation_no_loss_distill_sft_val.jsonl"),
+                },
+            },
         )
         write_jsonl(v304_root / "v304_solver_trace_distill_train.jsonl", [bit_row])
         write_jsonl(v304_root / "v304_solver_trace_distill_val.jsonl", [{**bit_row, "id": "bit_val_1", "prompt": "bit val prompt"}])

@@ -1,0 +1,330 @@
+{
+  "accepted_candidate_count": 6,
+  "accepted_candidate_ids": [
+    "274def88",
+    "528ec0d8",
+    "7688e06e",
+    "c5b058d6",
+    "d1bd7478",
+    "fb623471"
+  ],
+  "baseline_family_counts": {
+    "bit_manipulation": {
+      "correct": 136,
+      "rows": 160,
+      "truncated": 0
+    },
+    "equation_transform": {
+      "correct": 56,
+      "rows": 155,
+      "truncated": 0
+    }
+  },
+  "conflict_count": 0,
+  "decision": {
+    "decision": "equation_cpu_gate_found_distillation_signal",
+    "next_action": "Convert accepted no-loss rows into short deterministic hard-negative traces; run a no-GPU dataset gate before HF.",
+    "reason": "accepted_equation_gain=6; projected_equation_correct=62; bit_correct_guardrail=136>=136; conflicts=0"
+  },
+  "equation_miss_rows": 99,
+  "expected_shared_row_contract_sha256": "bf055e3b9ebce79d4bfc9e48bce5a305b1d83da882f14afddec80d6afaba5fff",
+  "generated_at_utc": "2026-05-14T19:38:49.823078+00:00",
+  "input": {
+    "downloaded_name": "v245_hf_weak_v259_checkpoint_4_v221_contract_predictions.csv",
+    "filename": "evals/v260b-h200-v221contract-v259-eqfocus-eval-20260511T025751Z/eval/v259_checkpoint_4_v221_contract/v245_hf_weak_v259_checkpoint_4_v221_contract_predictions.csv",
+    "repo_id": "felipesp1983/kg1-nemotron-lora-v259-v249-eqfocus-v257ckpt4-smoke",
+    "rows": 315,
+    "sha256": "d682f3a0aabd3624c449c63723deee510b070aa173f11c1102fe6b1b807bbca3",
+    "source": "hf_hub"
+  },
+  "observed_shared_row_contract_sha256": "bf055e3b9ebce79d4bfc9e48bce5a305b1d83da882f14afddec80d6afaba5fff",
+  "outputs": {
+    "accepted_candidates_csv": "artifacts\\v390_cpu_v324_equation_gate\\20260514T193847Z\\v324_equation_expanded_solver_accepted_candidates.csv",
+    "audit_csv": "artifacts\\v390_cpu_v324_equation_gate\\20260514T193847Z\\v324_equation_expanded_solver_audit.csv",
+    "conflicts_csv": "artifacts\\v390_cpu_v324_equation_gate\\20260514T193847Z\\v324_equation_expanded_solver_conflicts.csv",
+    "manifest_json": "artifacts\\v390_cpu_v324_equation_gate\\20260514T193847Z\\v324_equation_expanded_solver_manifest.json",
+    "rule_summary_csv": "artifacts\\v390_cpu_v324_equation_gate\\20260514T193847Z\\v324_equation_expanded_solver_rule_summary.csv"
+  },
+  "parse_status_counts": {
+    "ok": 99
+  },
+  "projected_equation_correct": 62,
+  "projected_weak_correct_if_equation_only": 198,
+  "rule_summary": [
+    {
+      "abstain_rows": 0,
+      "candidate_rows": 2,
+      "incorrect_candidates": 0,
+      "promotable_after_class_gate": true,
+      "rows": 2,
+      "rule_class": "v274_guarded_numeric_minus_signed_opposite_sign_guarded",
+      "verified_candidates": 2
+    },
+    {
+      "abstain_rows": 0,
+      "candidate_rows": 2,
+      "incorrect_candidates": 0,
+      "promotable_after_class_gate": true,
+      "rows": 2,
+      "rule_class": "v274_guarded_numeric_minus_direct_negative_restore_sign",
+      "verified_candidates": 2
+    },
+    {
+      "abstain_rows": 15,
+      "candidate_rows": 1,
+      "incorrect_candidates": 0,
+      "promotable_after_class_gate": true,
+      "rows": 16,
+      "rule_class": "v299_same_operator_unique_numeric_dsl",
+      "verified_candidates": 1
+    },
+    {
+      "abstain_rows": 0,
+      "candidate_rows": 1,
+      "incorrect_candidates": 0,
+      "promotable_after_class_gate": true,
+      "rows": 1,
+      "rule_class": "v274_guarded_numeric_colon_absdiff_unreverse_same_len",
+      "verified_candidates": 1
+    },
+    {
+      "abstain_rows": 0,
+      "candidate_rows": 1,
+      "incorrect_candidates": 0,
+      "promotable_after_class_gate": true,
+      "rows": 1,
+      "rule_class": "v274_guarded_numeric_add_direct_over_model_add_variant",
+      "verified_candidates": 1
+    },
+    {
+      "abstain_rows": 16,
+      "candidate_rows": 0,
+      "incorrect_candidates": 0,
+      "promotable_after_class_gate": false,
+      "rows": 16,
+      "rule_class": "v299_conventional_operator_prior_unique",
+      "verified_candidates": 0
+    },
+    {
+      "abstain_rows": 16,
+      "candidate_rows": 0,
+      "incorrect_candidates": 0,
+      "promotable_after_class_gate": false,
+      "rows": 16,
+      "rule_class": "v299_all_numeric_examples_unique_dsl",
+      "verified_candidates": 0
+    },
+    {
+      "abstain_rows": 10,
+      "candidate_rows": 0,
+      "incorrect_candidates": 0,
+      "promotable_after_class_gate": false,
+      "rows": 10,
+      "rule_class": "v274_guarded_numeric_query_operator_unseen",
+      "verified_candidates": 0
+    },
+    {
+      "abstain_rows": 83,
+      "candidate_rows": 0,
+      "incorrect_candidates": 0,
+      "promotable_after_class_gate": false,
+      "rows": 83,
+      "rule_class": "v274_guarded_numeric_not_numeric_query",
+      "verified_candidates": 0
+    },
+    {
+      "abstain_rows": 83,
+      "candidate_rows": 0,
+      "incorrect_candidates": 0,
+      "promotable_after_class_gate": false,
+      "rows": 83,
+      "rule_class": "symbolic_variable_operator_right_reverse_left",
+      "verified_candidates": 0
+    },
+    {
+      "abstain_rows": 83,
+      "candidate_rows": 0,
+      "incorrect_candidates": 0,
+      "promotable_after_class_gate": false,
+      "rows": 83,
+      "rule_class": "symbolic_variable_operator_right_only",
+      "verified_candidates": 0
+    },
+    {
+      "abstain_rows": 83,
+      "candidate_rows": 0,
+      "incorrect_candidates": 0,
+      "promotable_after_class_gate": false,
+      "rows": 83,
+      "rule_class": "symbolic_variable_operator_right_left",
+      "verified_candidates": 0
+    },
+    {
+      "abstain_rows": 83,
+      "candidate_rows": 0,
+      "incorrect_candidates": 0,
+      "promotable_after_class_gate": false,
+      "rows": 83,
+      "rule_class": "symbolic_variable_operator_reverse_right_left",
+      "verified_candidates": 0
+    },
+    {
+      "abstain_rows": 83,
+      "candidate_rows": 0,
+      "incorrect_candidates": 0,
+      "promotable_after_class_gate": false,
+      "rows": 83,
+      "rule_class": "symbolic_variable_operator_reverse_left_right",
+      "verified_candidates": 0
+    },
+    {
+      "abstain_rows": 83,
+      "candidate_rows": 0,
+      "incorrect_candidates": 0,
+      "promotable_after_class_gate": false,
+      "rows": 83,
+      "rule_class": "symbolic_variable_operator_reverse_drop_operator",
+      "verified_candidates": 0
+    },
+    {
+      "abstain_rows": 83,
+      "candidate_rows": 0,
+      "incorrect_candidates": 0,
+      "promotable_after_class_gate": false,
+      "rows": 83,
+      "rule_class": "symbolic_variable_operator_operator_between_reversed",
+      "verified_candidates": 0
+    },
+    {
+      "abstain_rows": 83,
+      "candidate_rows": 0,
+      "incorrect_candidates": 0,
+      "promotable_after_class_gate": false,
+      "rows": 83,
+      "rule_class": "symbolic_variable_operator_left_reverse_right",
+      "verified_candidates": 0
+    },
+    {
+      "abstain_rows": 83,
+      "candidate_rows": 0,
+      "incorrect_candidates": 0,
+      "promotable_after_class_gate": false,
+      "rows": 83,
+      "rule_class": "symbolic_variable_operator_left_only",
+      "verified_candidates": 0
+    },
+    {
+      "abstain_rows": 83,
+      "candidate_rows": 0,
+      "incorrect_candidates": 0,
+      "promotable_after_class_gate": false,
+      "rows": 83,
+      "rule_class": "symbolic_variable_operator_drop_operator",
+      "verified_candidates": 0
+    },
+    {
+      "abstain_rows": 83,
+      "candidate_rows": 0,
+      "incorrect_candidates": 0,
+      "promotable_after_class_gate": false,
+      "rows": 83,
+      "rule_class": "symbolic_suffix_after_marker",
+      "verified_candidates": 0
+    },
+    {
+      "abstain_rows": 83,
+      "candidate_rows": 0,
+      "incorrect_candidates": 0,
+      "promotable_after_class_gate": false,
+      "rows": 83,
+      "rule_class": "symbolic_suffix_after_last_marker",
+      "verified_candidates": 0
+    },
+    {
+      "abstain_rows": 83,
+      "candidate_rows": 0,
+      "incorrect_candidates": 0,
+      "promotable_after_class_gate": false,
+      "rows": 83,
+      "rule_class": "symbolic_remove_first_marker",
+      "verified_candidates": 0
+    },
+    {
+      "abstain_rows": 83,
+      "candidate_rows": 0,
+      "incorrect_candidates": 0,
+      "promotable_after_class_gate": false,
+      "rows": 83,
+      "rule_class": "symbolic_prefix_until_marker",
+      "verified_candidates": 0
+    },
+    {
+      "abstain_rows": 83,
+      "candidate_rows": 0,
+      "incorrect_candidates": 0,
+      "promotable_after_class_gate": false,
+      "rows": 83,
+      "rule_class": "symbolic_prefix_before_last_marker",
+      "verified_candidates": 0
+    },
+    {
+      "abstain_rows": 83,
+      "candidate_rows": 0,
+      "incorrect_candidates": 0,
+      "promotable_after_class_gate": false,
+      "rows": 83,
+      "rule_class": "symbolic_keep_selected_chars",
+      "verified_candidates": 0
+    },
+    {
+      "abstain_rows": 83,
+      "candidate_rows": 0,
+      "incorrect_candidates": 0,
+      "promotable_after_class_gate": false,
+      "rows": 83,
+      "rule_class": "symbolic_char_transducer",
+      "verified_candidates": 0
+    },
+    {
+      "abstain_rows": 16,
+      "candidate_rows": 0,
+      "incorrect_candidates": 0,
+      "promotable_after_class_gate": false,
+      "rows": 16,
+      "rule_class": "numeric_same_operator_extended",
+      "verified_candidates": 0
+    },
+    {
+      "abstain_rows": 82,
+      "candidate_rows": 1,
+      "incorrect_candidates": 1,
+      "promotable_after_class_gate": false,
+      "rows": 83,
+      "rule_class": "symbolic_position_template",
+      "verified_candidates": 0
+    },
+    {
+      "abstain_rows": 82,
+      "candidate_rows": 1,
+      "incorrect_candidates": 1,
+      "promotable_after_class_gate": false,
+      "rows": 83,
+      "rule_class": "symbolic_operator_index_template",
+      "verified_candidates": 0
+    },
+    {
+      "abstain_rows": 82,
+      "candidate_rows": 1,
+      "incorrect_candidates": 1,
+      "promotable_after_class_gate": false,
+      "rows": 83,
+      "rule_class": "symbolic_delete_selected_chars",
+      "verified_candidates": 0
+    }
+  ],
+  "schema_version": "kg1_v324_equation_expanded_solver_gate_v1",
+  "subtype_counts": {
+    "equation_numeric_operator": 16,
+    "equation_symbolic_punct": 83
+  }
+}

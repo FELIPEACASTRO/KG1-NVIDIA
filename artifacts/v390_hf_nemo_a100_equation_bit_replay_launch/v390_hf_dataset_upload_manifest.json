@@ -1,0 +1,14 @@
+{
+  "data_repo": "felipesp1983/kg1-nemotron-training",
+  "dataset_dir": "artifacts\\v390_v326_equation_bit_replay_mix_dataset\\20260514T193847Z",
+  "dataset_path_in_repo": "data/v390_equation_bit_replay_mix/20260514T193847Z",
+  "dataset_upload": "https://huggingface.co/datasets/felipesp1983/kg1-nemotron-training/commit/e53b9c95eaa990d4b541f87857dcdef6627199e4",
+  "gate_dir": "artifacts\\v390_v326_tokenization_gate\\20260514T193847Z",
+  "gate_path_in_repo": "runtime_artifacts/v390_equation_bit_replay_tokenization_gate/20260514T193847Z",
+  "gate_upload": "https://huggingface.co/datasets/felipesp1983/kg1-nemotron-training/commit/97f492729f271e5267db1a524a6dfb541bc9ee1b",
+  "generated_at_utc": "2026-05-14T19:49:16.079294+00:00",
+  "next_action": "Commit/push V390 scripts and launch a short A100 smoke train.",
+  "previous_version": "V389 rejected V388 soup weak eval",
+  "version": "v390_hf_dataset_upload",
+  "version_comparison_artifact": "artifacts/version_diffs/V390_VS_PREVIOUS.md"
+}
