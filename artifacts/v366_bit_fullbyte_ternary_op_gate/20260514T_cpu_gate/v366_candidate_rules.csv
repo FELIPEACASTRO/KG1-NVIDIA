@@ -1,0 +1,4 @@
+family,candidate_source,rule_class,candidate_rows,changed_rows,gains,losses,new_correct,accepted_rows,accepted,reason
+bit_manipulation,v366_bit_fullbyte_ternary,bit_fullbyte_ternary_op_CHO,4,4,4,0,4,4,True,accepted_no_loss
+bit_manipulation,v366_bit_fullbyte_ternary,bit_fullbyte_ternary_op_MAJ3,4,4,4,0,4,4,True,accepted_no_loss
+bit_manipulation,v366_bit_fullbyte_ternary,bit_fullbyte_ternary_op_AND_OR,1,1,0,1,0,0,False,rejected_by_gate

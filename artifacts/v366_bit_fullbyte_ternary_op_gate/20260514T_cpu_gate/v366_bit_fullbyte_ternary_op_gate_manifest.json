@@ -1,0 +1,133 @@
+{
+  "accepted_candidate_count": 8,
+  "accepted_candidate_ids": [
+    "1abaffca",
+    "b8722d19",
+    "7192535b",
+    "1a7c8520",
+    "a6192d29",
+    "048cc279",
+    "b8aa3072",
+    "5ba26f21"
+  ],
+  "accepted_gain_count": 8,
+  "accepted_gain_ids": [
+    "1abaffca",
+    "b8722d19",
+    "7192535b",
+    "1a7c8520",
+    "a6192d29",
+    "048cc279",
+    "b8aa3072",
+    "5ba26f21"
+  ],
+  "accepted_loss_count": 0,
+  "accepted_loss_ids": [],
+  "candidate_change_count": 9,
+  "candidate_gain_count": 8,
+  "candidate_gain_ids": [
+    "1abaffca",
+    "b8722d19",
+    "7192535b",
+    "1a7c8520",
+    "a6192d29",
+    "048cc279",
+    "b8aa3072",
+    "5ba26f21"
+  ],
+  "candidate_loss_count": 1,
+  "candidate_loss_ids": [
+    "78616706"
+  ],
+  "candidate_rule_summary": [
+    {
+      "accepted": true,
+      "accepted_rows": 4,
+      "candidate_rows": 4,
+      "candidate_source": "v366_bit_fullbyte_ternary",
+      "changed_rows": 4,
+      "family": "bit_manipulation",
+      "gains": 4,
+      "losses": 0,
+      "new_correct": 4,
+      "reason": "accepted_no_loss",
+      "rule_class": "bit_fullbyte_ternary_op_CHO"
+    },
+    {
+      "accepted": true,
+      "accepted_rows": 4,
+      "candidate_rows": 4,
+      "candidate_source": "v366_bit_fullbyte_ternary",
+      "changed_rows": 4,
+      "family": "bit_manipulation",
+      "gains": 4,
+      "losses": 0,
+      "new_correct": 4,
+      "reason": "accepted_no_loss",
+      "rule_class": "bit_fullbyte_ternary_op_MAJ3"
+    },
+    {
+      "accepted": false,
+      "accepted_rows": 0,
+      "candidate_rows": 1,
+      "candidate_source": "v366_bit_fullbyte_ternary",
+      "changed_rows": 1,
+      "family": "bit_manipulation",
+      "gains": 0,
+      "losses": 1,
+      "new_correct": 0,
+      "reason": "rejected_by_gate",
+      "rule_class": "bit_fullbyte_ternary_op_AND_OR"
+    }
+  ],
+  "current_summary": {
+    "accuracy": 0.6793650793650794,
+    "correct": 214,
+    "family": {
+      "bit_manipulation": {
+        "correct": 151,
+        "rows": 160
+      },
+      "equation_transform": {
+        "correct": 63,
+        "rows": 155
+      }
+    },
+    "rows": 315
+  },
+  "decision": {
+    "decision": "v366_cpu_gate_passed",
+    "hf_gpu_allowed": false,
+    "next_action": "Build V367 transfer dataset from accepted MAJ3/CHO rows with strong replay and hard negatives.",
+    "reason": "v366=222/315; equation=63/155; bit=159/160; candidate_changes=9; candidate_gains=8; candidate_losses=1; accepted=8; accepted_gains=8; accepted_losses=0"
+  },
+  "expected_shared_row_contract_sha256": "bf055e3b9ebce79d4bfc9e48bce5a305b1d83da882f14afddec80d6afaba5fff",
+  "generated_at_utc": "2026-05-14T11:45:50.554110+00:00",
+  "inputs": {
+    "input_predictions_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v357_bit_global_ternary_gate\\20260514T_cpu_gate\\v357_integrated_predictions.csv",
+    "input_predictions_sha256": "3871498bb6f9944d6c7f2151bcf027b9927ea345eaa87d8bb4d3999bbbf8f754"
+  },
+  "observed_shared_row_contract_sha256": "bf055e3b9ebce79d4bfc9e48bce5a305b1d83da882f14afddec80d6afaba5fff",
+  "outputs": {
+    "candidate_decisions_csv": "artifacts\\v366_bit_fullbyte_ternary_op_gate\\20260514T_cpu_gate\\v366_candidate_decisions.csv",
+    "candidate_rules_csv": "artifacts\\v366_bit_fullbyte_ternary_op_gate\\20260514T_cpu_gate\\v366_candidate_rules.csv",
+    "integrated_predictions_csv": "artifacts\\v366_bit_fullbyte_ternary_op_gate\\20260514T_cpu_gate\\v366_integrated_predictions.csv",
+    "manifest_json": "artifacts\\v366_bit_fullbyte_ternary_op_gate\\20260514T_cpu_gate\\v366_bit_fullbyte_ternary_op_gate_manifest.json"
+  },
+  "schema_version": "kg1_v366_bit_fullbyte_ternary_op_gate_v1",
+  "v366_summary": {
+    "accuracy": 0.7047619047619048,
+    "correct": 222,
+    "family": {
+      "bit_manipulation": {
+        "correct": 159,
+        "rows": 160
+      },
+      "equation_transform": {
+        "correct": 63,
+        "rows": 155
+      }
+    },
+    "rows": 315
+  }
+}

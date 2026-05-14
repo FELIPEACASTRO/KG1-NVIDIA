@@ -28,24 +28,25 @@ Historico completo e rotas antigas ficam fora do plano ativo:
 | V360 V359 transfer audit | bloqueia HF | nao altera equation | nao altera bit | causa provavel: SFT usou 15 regras, formato longo e nao usou preference hard negatives |
 | V361 boxed-only transfer dataset | `1152/288` train/val | nao altera equation | baseado nas mesmas `15` regras | corrige formato; V286 real gate passou com `boxed_only` |
 | V365 bit residual boolean grammar gate | `214/315` | `63/155` | `151/160` | bloqueado; `73` mudancas candidatas, `0` ganhos, `66` perdas candidatas |
-| Residual depois do V357 | mapa pronto | `92` misses | `9` misses | fila residual CPU |
+| V366 bit full-byte ternary op gate | `222/315` | `63/155` | `159/160` | teacher CPU aprovado: `+8` bit sobre V357, `0` perdas aceitas |
+| Residual depois do V366 | mapa pronto | `92` misses | `1` miss | fila residual CPU |
 | V349 Kaggle discussions | `140/140` topicos | reforca ambiguidade/DSL | reforca bit full-byte/bit-pair/3-input | guia do proximo CPU gate |
 | Double check compilacoes 2026-05-14 | `3` arquivos | sem novo ganho medido | sem novo ganho medido | classifica links; nao libera HF |
 
 Conclusao honesta:
 
-- Ha ganho real em CPU solver/verifier: `192 -> 214` weak, com `equation_transform 56 -> 63` e `bit_manipulation 136 -> 151`, sempre com `0` perdas no weak diagnostic.
+- Ha ganho real em CPU solver/verifier: `192 -> 222` weak, com `equation_transform 56 -> 63` e `bit_manipulation 136 -> 159`, sempre com `0` perdas aceitas no weak diagnostic.
 - O ganho novo comprovado de V357 e forte em bit, mas ainda e teacher CPU. Ainda nao ha ganho adapter-only novo. V338B, V341, V344, V346, V352 e V359 falharam em transferir ganhos para LoRA.
 - `eval_loss` menor nao significa ACC maior. Promocao agora e somente por ACC weak/full.
-- HF GPU esta bloqueado para a rota V358/V359. V360 provou que o primeiro adapter caiu para `190/315`, `bit=134`, com `truncation=1`; qualquer proximo HF exige novo dataset CPU-gated e smoke de no maximo `2` steps.
+- HF GPU continua bloqueado para as rotas V358/V359/V361/V362. V366 autoriza apenas construir V367 em CPU; qualquer HF posterior exige dataset novo, gates reais e smoke de no maximo `2` steps.
 
 ## Metas
 
 Para liberar novo teacher CPU:
 
 - `losses=0`.
-- `bit_manipulation >=136/160`.
-- `equation_transform >63/155` ou `bit_manipulation >138/160` no weak diagnostic.
+- `bit_manipulation >=159/160` se mexer em bit.
+- `equation_transform >63/155` ou `bit_manipulation >159/160` no weak diagnostic.
 - Manifest com `id`, `family`, `old_prediction`, `new_prediction`, `rule_class`, `candidate_count`, `conflict_count`, `accepted/rejected`, `reason`.
 
 Para liberar HF GPU:
@@ -82,6 +83,7 @@ Para submeter ao Kaggle:
 | V360 transfer failure audit | V358 tem `15` regras, `1152/288` SFT rows, preference `2304/576` nao usado pelo launcher, `0` boxed-only completions | bloqueia mais HF nessa rota; exige V361 answer-first/boxed-only ou voltar para DSL equation |
 | V361 boxed-only transfer dataset | `1152` train, `288` val, `2304/576` preference rows, `0` train/val prompt overlap, real tokenizer `token_max=286`, `0` truncation, `0` fallback masks | unica correcao de formato permitida; ainda nao libera submit nem full |
 | V365 bit residual boolean grammar | `73` mudancas candidatas sobre V357, `0` ganhos, `66` perdas candidatas | bloqueia gramatica per-bit livre; proxima rota bit precisa ser bit-pair/bitsum/stride restrito |
+| V366 full-byte ternary `CHO`/`MAJ3` | `222/315`, `equation=63`, `bit=159`, `8` ganhos aceitos, `0` perdas aceitas | novo teacher CPU; base do V367 transfer dataset |
 | V348 residual audit | `92` equation misses, `24` bit misses | fila unica do proximo CPU gate |
 | V349 discussion `689915` | tokens simples, cobertura de operacoes raras, min-logprob | orientar formato de traces futuros |
 | V349 discussion `688461` | taxonomia reversa e gramatica booleana dinamica | orientar DSL CPU |
@@ -595,6 +597,42 @@ Leitura tecnica:
 
 Decisao: V365 bloqueia HF. A proxima rota de bit precisa ser mais restrita e estrutural: bit-pair/bitsum/stride ou solver full-byte com prova de classe `0` perdas.
 
+### 16. V366 - Bit full-byte ternary operator gate
+
+Objetivo: testar uma rota mais restrita que V365: uma unica expressao ternaria full-byte precisa explicar todos os exemplos, e a promocao e feita por familia de operador ternario, nao por ID.
+
+Status: concluido e aprovado como teacher CPU.
+
+Resultado medido:
+
+- Script: `scripts/analyze_v366_bit_fullbyte_ternary_op_gate.py`.
+- Manifesto: `artifacts/v366_bit_fullbyte_ternary_op_gate/20260514T_cpu_gate/v366_bit_fullbyte_ternary_op_gate_manifest.json`.
+- Input: `artifacts/v357_bit_global_ternary_gate/20260514T_cpu_gate/v357_integrated_predictions.csv`.
+- Estado de entrada V357: `214/315`, `equation_transform=63/155`, `bit_manipulation=151/160`.
+- Candidate changes: `9`.
+- Candidate gains: `8`.
+- Candidate losses: `1`.
+- Regras aceitas:
+  - `bit_fullbyte_ternary_op_CHO`: `4` ganhos, `0` perdas.
+  - `bit_fullbyte_ternary_op_MAJ3`: `4` ganhos, `0` perdas.
+- Regra rejeitada:
+  - `bit_fullbyte_ternary_op_AND_OR`: `0` ganhos, `1` perda.
+- Estado V366: `222/315`, `equation_transform=63/155`, `bit_manipulation=159/160`.
+- Perdas aceitas: `0`.
+
+IDs aceitos:
+
+- `1abaffca`
+- `b8722d19`
+- `7192535b`
+- `1a7c8520`
+- `a6192d29`
+- `048cc279`
+- `b8aa3072`
+- `5ba26f21`
+
+Decisao: V366 e o melhor teacher CPU atual. O proximo passo e V367: dataset de transferencia pequeno com `CHO`/`MAJ3`, replay forte de bit, hard negatives e gate de tokenizacao. Sem HF antes desses checks.
+
 ## Removido do plano ativo
 
 Estes itens nao devem ser reexecutados como acao principal. So podem voltar se um novo CPU gate provar uma razao nova.
@@ -652,6 +690,6 @@ Estes itens nao devem ser reexecutados como acao principal. So podem voltar se u
 
 ## Proxima acao unica
 
-Prioridade imediata: bit CPU-only, mas nao pela gramatica per-bit livre. Implementar uma expansao restrita bit-pair/bitsum/stride contra os `9` residuos de `bit_manipulation` restantes apos V357 e aceitar apenas classes com `0` perdas. A referencia a `22` residuos vale apenas para o estado V350/V355; depois do V357 restam `9`.
+Construir V367 em CPU: dataset de transferencia para o teacher V366, usando somente os `8` ganhos aceitos `CHO`/`MAJ3`, replay forte das regras bit ja comprovadas, hard negatives do baseline/V357 errado e completion curta `\boxed{answer}`. O dataset precisa passar anti-leakage por `id`/`prompt_sha256`, family counts, tokenization/offset-mask e contrato weak antes de qualquer HF.
 
-Equation continua ativa somente se houver uma nova semantica simbolica diferente das rotas V363/V364. Novo HF so e permitido se um CPU gate superar o estado integrado V357 (`214/315`, `equation=63`, `bit=151`) ou produzir uma nova classe no-loss nao testada, com dataset de transferencia diferente das rotas V358/V361/V362 e kill-switch no primeiro checkpoint.
+Equation continua ativa somente se houver uma nova semantica simbolica diferente das rotas V363/V364. Novo HF so e permitido apos V367 passar os gates locais, e o primeiro checkpoint deve ser cancelado se nao mantiver pelo menos `bit>=136`, `equation>=56`, truncation `0`, e idealmente sinal acima do adapter-only `192/315`.
