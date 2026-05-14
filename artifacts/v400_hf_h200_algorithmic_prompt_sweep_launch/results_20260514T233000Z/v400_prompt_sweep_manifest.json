@@ -1,0 +1,143 @@
+{
+  "adapter_repo": "felipesp1983/kg1-nemotron-lora-v290-rank19-micro-patch-smoke",
+  "adapter_specs_json": [
+    {
+      "name": "v290_checkpoint_6_prompt_sweep",
+      "repo": "felipesp1983/kg1-nemotron-lora-v290-rank19-micro-patch-smoke",
+      "subfolder": "checkpoint-6"
+    }
+  ],
+  "base_run_id": "v400-h200-algorithmic-prompt-sweep-20260514T233000Z",
+  "best_row": {
+    "accuracy": 0.5555555555555556,
+    "adapter": "/tmp/kg1_v245_adapter_snapshots/v400-h200-algorithmic-prompt-sweep-20260514T233000Z_symbolic_equation_first/bfdcd356ac1c/checkpoint-6",
+    "bit_manipulation_correct": 135,
+    "completion_tokens": 1630358,
+    "correct": 175,
+    "equation_transform_correct": 40,
+    "error": "",
+    "name": "v290_checkpoint_6_prompt_sweep",
+    "report_json": "/tmp/kg1_v245_weak_eval/v400-h200-algorithmic-prompt-sweep-20260514T233000Z_symbolic_equation_first/eval/v290_checkpoint_6_prompt_sweep/v400_symbolic_equation_first_v290_checkpoint_6_prompt_sweep_eval_report.json",
+    "status": "ok",
+    "tokens_per_second": 2963.4102737418593,
+    "truncated": 27,
+    "truncation_rate": 0.08571428571428572,
+    "variant_config": {
+      "disable_thinking": false,
+      "max_model_len": 8192,
+      "max_num_seqs": 64,
+      "max_tokens": 7680,
+      "name": "symbolic_equation_first",
+      "no_prompt_suffix": false,
+      "prompt_suffix": "\nInfer the hidden rule from the examples before answering. For equation/transformation rows, test concise candidates in this order: concat, reverse concat, sum, difference/subtraction, product, +1/-1, integer division/modulo, and punctuation/symbol mapping. For bit rows, preserve exact 8-bit binary output. Return only one line: `\\boxed{answer}`. No explanation.",
+      "purpose": "Push equation_transform toward verified DSL operators without changing the adapter."
+    },
+    "variant_manifest_path": "/tmp/kg1_v245_weak_eval/v400-h200-algorithmic-prompt-sweep-20260514T233000Z_symbolic_equation_first/v245_hf_weak_eval_manifest.json",
+    "variant_name": "symbolic_equation_first",
+    "variant_output_path_in_repo": "evals/v400-h200-algorithmic-prompt-sweep-20260514T233000Z/symbolic_equation_first",
+    "variant_run_id": "v400-h200-algorithmic-prompt-sweep-20260514T233000Z_symbolic_equation_first",
+    "weak_gate_improves_locked_baseline": false
+  },
+  "decision": "reject_all_variants_no_full_eval",
+  "generated_at_utc": "2026-05-14T23:48:09.424796+00:00",
+  "locked_baseline": {
+    "bit_manipulation": 136,
+    "equation_transform": 56,
+    "truncated": 0,
+    "weak_total": 192
+  },
+  "output_path_base": "evals/v400-h200-algorithmic-prompt-sweep-20260514T233000Z",
+  "output_repo": "felipesp1983/kg1-nemotron-lora-v290-rank19-micro-patch-smoke",
+  "promotion_gate": {
+    "full_must_improve_current_package": true,
+    "weak_bit_gte": 136,
+    "weak_equation_gt": 56,
+    "weak_total_gt": 192,
+    "weak_truncated_eq": 0
+  },
+  "schema_version": "kg1_v400_algorithmic_prompt_sweep_manifest_v1",
+  "summary_rows": [
+    {
+      "accuracy": 0.5555555555555556,
+      "adapter": "/tmp/kg1_v245_adapter_snapshots/v400-h200-algorithmic-prompt-sweep-20260514T233000Z_symbolic_equation_first/bfdcd356ac1c/checkpoint-6",
+      "bit_manipulation_correct": 135,
+      "completion_tokens": 1630358,
+      "correct": 175,
+      "equation_transform_correct": 40,
+      "error": "",
+      "name": "v290_checkpoint_6_prompt_sweep",
+      "report_json": "/tmp/kg1_v245_weak_eval/v400-h200-algorithmic-prompt-sweep-20260514T233000Z_symbolic_equation_first/eval/v290_checkpoint_6_prompt_sweep/v400_symbolic_equation_first_v290_checkpoint_6_prompt_sweep_eval_report.json",
+      "status": "ok",
+      "tokens_per_second": 2963.4102737418593,
+      "truncated": 27,
+      "truncation_rate": 0.08571428571428572,
+      "variant_config": {
+        "disable_thinking": false,
+        "max_model_len": 8192,
+        "max_num_seqs": 64,
+        "max_tokens": 7680,
+        "name": "symbolic_equation_first",
+        "no_prompt_suffix": false,
+        "prompt_suffix": "\nInfer the hidden rule from the examples before answering. For equation/transformation rows, test concise candidates in this order: concat, reverse concat, sum, difference/subtraction, product, +1/-1, integer division/modulo, and punctuation/symbol mapping. For bit rows, preserve exact 8-bit binary output. Return only one line: `\\boxed{answer}`. No explanation.",
+        "purpose": "Push equation_transform toward verified DSL operators without changing the adapter."
+      },
+      "variant_manifest_path": "/tmp/kg1_v245_weak_eval/v400-h200-algorithmic-prompt-sweep-20260514T233000Z_symbolic_equation_first/v245_hf_weak_eval_manifest.json",
+      "variant_name": "symbolic_equation_first",
+      "variant_output_path_in_repo": "evals/v400-h200-algorithmic-prompt-sweep-20260514T233000Z/symbolic_equation_first",
+      "variant_run_id": "v400-h200-algorithmic-prompt-sweep-20260514T233000Z_symbolic_equation_first",
+      "weak_gate_improves_locked_baseline": false
+    },
+    {
+      "accuracy": 0.022222222222222223,
+      "adapter": "/tmp/kg1_v245_adapter_snapshots/v400-h200-algorithmic-prompt-sweep-20260514T233000Z_bit_stride_guarded/bfdcd356ac1c/checkpoint-6",
+      "bit_manipulation_correct": 0,
+      "completion_tokens": 517572,
+      "correct": 7,
+      "equation_transform_correct": 7,
+      "error": "",
+      "name": "v290_checkpoint_6_prompt_sweep",
+      "report_json": "/tmp/kg1_v245_weak_eval/v400-h200-algorithmic-prompt-sweep-20260514T233000Z_bit_stride_guarded/eval/v290_checkpoint_6_prompt_sweep/v400_bit_stride_guarded_v290_checkpoint_6_prompt_sweep_eval_report.json",
+      "status": "ok",
+      "tokens_per_second": 2453.986354908877,
+      "truncated": 227,
+      "truncation_rate": 0.7206349206349206,
+      "variant_config": {
+        "disable_thinking": false,
+        "max_model_len": 4096,
+        "max_num_seqs": 64,
+        "max_tokens": 2048,
+        "name": "bit_stride_guarded",
+        "no_prompt_suffix": false,
+        "prompt_suffix": "\nInfer the exact rule from examples. For bit_manipulation, compare output bits against input bits, negated bits, constants, bit pairs, and stride/rotation/shift patterns; output exactly 8 bits. For equation/transformation, test arithmetic, concat/reverse-concat, and symbol/punctuation transforms. Return only one line: `\\boxed{answer}`. No explanation.",
+        "purpose": "Protect bit format while checking whether a shorter generation budget reduces drift."
+      },
+      "variant_manifest_path": "/tmp/kg1_v245_weak_eval/v400-h200-algorithmic-prompt-sweep-20260514T233000Z_bit_stride_guarded/v245_hf_weak_eval_manifest.json",
+      "variant_name": "bit_stride_guarded",
+      "variant_output_path_in_repo": "evals/v400-h200-algorithmic-prompt-sweep-20260514T233000Z/bit_stride_guarded",
+      "variant_run_id": "v400-h200-algorithmic-prompt-sweep-20260514T233000Z_bit_stride_guarded",
+      "weak_gate_improves_locked_baseline": false
+    }
+  ],
+  "variants": [
+    {
+      "disable_thinking": false,
+      "max_model_len": 8192,
+      "max_num_seqs": 64,
+      "max_tokens": 7680,
+      "name": "symbolic_equation_first",
+      "no_prompt_suffix": false,
+      "prompt_suffix": "\nInfer the hidden rule from the examples before answering. For equation/transformation rows, test concise candidates in this order: concat, reverse concat, sum, difference/subtraction, product, +1/-1, integer division/modulo, and punctuation/symbol mapping. For bit rows, preserve exact 8-bit binary output. Return only one line: `\\boxed{answer}`. No explanation.",
+      "purpose": "Push equation_transform toward verified DSL operators without changing the adapter."
+    },
+    {
+      "disable_thinking": false,
+      "max_model_len": 4096,
+      "max_num_seqs": 64,
+      "max_tokens": 2048,
+      "name": "bit_stride_guarded",
+      "no_prompt_suffix": false,
+      "prompt_suffix": "\nInfer the exact rule from examples. For bit_manipulation, compare output bits against input bits, negated bits, constants, bit pairs, and stride/rotation/shift patterns; output exactly 8 bits. For equation/transformation, test arithmetic, concat/reverse-concat, and symbol/punctuation transforms. Return only one line: `\\boxed{answer}`. No explanation.",
+      "purpose": "Protect bit format while checking whether a shorter generation budget reduces drift."
+    }
+  ]
+}

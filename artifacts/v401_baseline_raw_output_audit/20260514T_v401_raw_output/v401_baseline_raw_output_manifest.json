@@ -1,0 +1,43 @@
+{
+  "audit_csv": "artifacts/v401_baseline_raw_output_audit/20260514T_v401_raw_output/v401_baseline_miss_raw_output_audit.csv",
+  "baseline_predictions_csv": "artifacts/v342_acc_first_diagnostic/v290_checkpoint6_baseline_predictions.csv",
+  "decision": {
+    "actionable": false,
+    "decision": "no_extractor_gain_adapter_generation_is_bottleneck",
+    "recoverable_raw_bit": 4,
+    "recoverable_raw_equation": 19,
+    "recoverable_simple_boxed_bit": 0,
+    "recoverable_simple_boxed_equation": 0
+  },
+  "generated_at_utc": "2026-05-14T23:51:00.834098+00:00",
+  "miss_rows": 123,
+  "rows": 315,
+  "schema_version": "kg1_v401_baseline_raw_output_audit_v1",
+  "summary": [
+    {
+      "answer_in_any_simple_boxed": 0,
+      "answer_in_raw": 11,
+      "answer_standalone_or_exact": 4,
+      "miss_rows": 24,
+      "truncated": 0,
+      "type": "bit_manipulation"
+    },
+    {
+      "answer_in_any_simple_boxed": 0,
+      "answer_in_raw": 19,
+      "answer_standalone_or_exact": 19,
+      "miss_rows": 99,
+      "truncated": 0,
+      "type": "equation_transform"
+    },
+    {
+      "answer_in_any_simple_boxed": 0,
+      "answer_in_raw": 30,
+      "answer_standalone_or_exact": 23,
+      "miss_rows": 123,
+      "truncated": 0,
+      "type": "OVERALL"
+    }
+  ],
+  "summary_csv": "artifacts/v401_baseline_raw_output_audit/20260514T_v401_raw_output/v401_baseline_raw_output_summary.csv"
+}

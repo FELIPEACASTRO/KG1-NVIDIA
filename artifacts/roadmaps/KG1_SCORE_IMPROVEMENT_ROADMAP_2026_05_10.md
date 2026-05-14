@@ -57,6 +57,8 @@ Precisamos buscar subida no ranking ainda hoje, `2026-05-14`. A decisao V392 e s
 | V397 reconstructed SFT transfer dataset | n/a | n/a | n/a | novo corpus adapter-transfer: `2578` train / `264` val, weak overlap `0`, tokenization real passou com `0` truncation |
 | V398 reconstructed SFT H200 smoke | melhor `191/315` | `56/155` | `135/160` | rejeitado; nao transferiu, perdeu bit e nao moveu equation |
 | V399 V398 pairwise CPU audit | melhor `191/315` | `56/155` | `135/160` | V398 tem `0` candidate-only equation e so perde bit; encerrar V397/V398 |
+| V400 algorithmic prompt sweep | melhor `175/315` | `40/155` | `135/160` | rejeitado; prompt algoritmico explicito causou truncation e colapso de ACC |
+| V401 baseline raw-output audit | n/a | `0` boxed recoverable | `0` boxed recoverable | sem ganho; misses nao sao erro de extrator simples |
 
 Conclusao: `eval_loss` baixo nao e criterio de promocao. O criterio e ACC por familia no weak/full gate.
 
@@ -93,6 +95,10 @@ Decisao V397 em `2026-05-14`: o `sft_reconstructed.jsonl` local foi auditado con
 Resultado V398 em `2026-05-14`: treino H200 curto a partir do V290 checkpoint-6 completou, mas falhou no weak gate. `checkpoint-2 = 190/315`, `equation=56`, `bit=134`, `truncated=1`; `checkpoint-4 = 191/315`, `equation=56`, `bit=135`, `truncated=0`. Ambos ficam abaixo do baseline adapter-only `192/315`, `equation=56`, `bit=136`, `truncated=0`. Decisao: nao promover, nao fazer full eval, nao fazer submit e nao alongar V397/V398. O quadro comparativo esta em `artifacts/v398_hf_nemo_h200_sft_reconstructed_launch/V398_VS_PREVIOUS.md`.
 
 Decisao V399 em `2026-05-14`: a auditoria pairwise CPU comparou V398 checkpoint-2/4 contra o baseline travado V290 checkpoint-6 (`192/315`, `equation=56`, `bit=136`, `truncated=0`). Resultado: checkpoint-2 tem `0` acertos novos de `equation_transform`, perde `2` bit e trunca `1`; checkpoint-4 tem `0` acertos novos de `equation_transform`, perde `1` bit e nao trunca. Portanto nao existe nem row-level complementaridade para minerar. A linha V397/V398 esta encerrada definitivamente. Artefatos: `artifacts/v399_v398_pairwise_complementarity/20260514T_v399_pairwise/V399_V398_PAIRWISE_COMPLEMENTARITY.md`.
+
+Decisao V400 em `2026-05-14`: o sweep H200 sem treino testou dois prompts algoritmicos curtos sobre o baseline V290 checkpoint-6. `symbolic_equation_first = 175/315`, `equation=40`, `bit=135`, `truncated=27`; `bit_stride_guarded = 7/315`, `equation=7`, `bit=0`, `truncated=227`. Conclusao: colocar a literatura/DSL diretamente no prompt e contraproducente; induz geracao longa e quebra formato. Encerrar sweeps de prompt algoritmico amplo. Artefato comparativo: `artifacts/v400_hf_h200_algorithmic_prompt_sweep_launch/V400_VS_BASELINE.md`.
+
+Decisao V401 em `2026-05-14`: auditoria CPU nos `123` misses do baseline V290 checkpoint-6 verificou se a resposta correta ja estava em `raw_output` mas perdida pela extracao. Resultado: `0` respostas corretas em simple `\boxed{}` nos misses de `equation_transform` e `0` em `bit_manipulation`. Existem ocorrencias brutas (`19` equation, `4` bit), mas spot-check mostra caracteres/numeros em raciocinio ou exemplos intermediarios, nao resposta final recuperavel. Conclusao: nao ha ganho submit-safe por trocar extrator; o gargalo e geracao do adapter. Artefato: `artifacts/v401_baseline_raw_output_audit/20260514T_v401_raw_output/V401_BASELINE_RAW_OUTPUT_AUDIT.md`.
 
 ## Google Drive Artifact Audit 2026-05-14
 
@@ -354,7 +360,14 @@ Resultado V393:
 
 Erro encontrado na primeira execucao: o launcher tentava ler `batch_candidate_summary.json` como lista (`payload[0]`), mas o formato real atual e objeto com chave `rows`. Correcao aplicada no launcher: aceitar os dois formatos e permitir `--skip-variant`.
 
-Conclusao: V393 nao libera submit nem full eval. Prompt/template sozinho nao move `equation_transform` acima de `56`; remover ou apertar demais a instrucao de resposta tende a destruir `bit_manipulation`. A linha esta encerrada.
+Extensao agressiva V400:
+
+| Variante | Total | equation | bit | trunc | Decisao |
+|---|---:|---:|---:|---:|---|
+| `symbolic_equation_first` | `175/315` | `40/155` | `135/160` | `27` | rejeitado; instrução algoritmica gera saida longa e perde equation |
+| `bit_stride_guarded` | `7/315` | `7/155` | `0/160` | `227` | rejeitado; colapso de formato, bit totalmente perdido |
+
+Conclusao: V393/V400 nao liberam submit nem full eval. Prompt/template sozinho nao move `equation_transform` acima de `56`; remover, apertar demais ou inserir DSL/literatura diretamente no prompt tende a destruir `bit_manipulation` e aumentar truncation. A linha de prompt sweep esta encerrada.
 
 ### Step 3 - V394 row-level equation miss inventory
 
@@ -514,11 +527,10 @@ Regras:
 
 ## Proxima Acao Unica
 
-Executar V400 prompt/template sweep sem treino no baseline V290 checkpoint-6, com no maximo duas variantes algorítmicas curtas:
+Parar novos HF GPU jobs para LoRA/prompt ate existir sinal novo adapter-only. Caminho imediato:
 
-1. `symbolic_equation_first`: prefixo/sufixo curto orientado a testar concat, reverse concat, soma/subtracao/multiplicacao, `+1/-1`, divisao/mod e padroes de pontuacao antes de responder.
-2. `bit_stride_guarded`: instrucao curta para bit-pair/bitsum/stride sem cadeia longa, preservando retorno `\boxed{answer}`.
-
-Promocao somente se `weak total > 192`, `equation_transform > 56`, `bit_manipulation >= 136` e `truncated=0`. Se as duas variantes nao passarem, encerrar sweeps de prompt e voltar exclusivamente ao baseline/package/submission lock ou a uma nova regra CPU com ganho adapter-only demonstravel.
+1. manter V291/V290 checkpoint-6 como unico package submitavel (`823/947`, public `0.86`);
+2. nao submeter V400/V398/V391/V387 porque todos falham o gate;
+3. se o objetivo for obrigatoriamente subir hoje, a unica rota tecnica restante e localizar um adapter historico/package ainda nao avaliado que bata V291 no weak/full gate. Repetir prompt, SFT amplo ou teacher SFT ja foi testado e rejeitado.
 
 Nao rodar novo HF training antes de prova de transferencia adapter-only. Projecao CPU, teacher, solver/verifier e loss baixo nao autorizam GPU sozinhos.

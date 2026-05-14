@@ -1,0 +1,4 @@
+type,miss_rows,answer_in_raw,answer_standalone_or_exact,answer_in_any_simple_boxed,truncated
+bit_manipulation,24,11,4,0,0
+equation_transform,99,19,19,0,0
+OVERALL,123,30,23,0,0

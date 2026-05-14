@@ -1,0 +1,42 @@
+{
+  "base_model_path": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+  "candidates_json": "/tmp/kg1_v245_weak_eval/v400-h200-algorithmic-prompt-sweep-20260514T233000Z_bit_stride_guarded/v245_weak_eval_candidates.json",
+  "config": {
+    "dtype": "auto",
+    "enable_chunked_prefill": true,
+    "enable_prefix_caching": true,
+    "gpu_memory_utilization": 0.85,
+    "max_lora_rank": 32,
+    "max_model_len": 4096,
+    "max_num_seqs": 64,
+    "max_tokens": 2048,
+    "model_name": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+    "model_revision": "cbd3fa9f933d55ef16a84236559f4ee2a0526848",
+    "prompt_suffix": "\nInfer the exact rule from examples. For bit_manipulation, compare output bits against input bits, negated bits, constants, bit pairs, and stride/rotation/shift patterns; output exactly 8 bits. For equation/transformation, test arithmetic, concat/reverse-concat, and symbol/punctuation transforms. Return only one line: `\\boxed{answer}`. No explanation.",
+    "temperature": 0.0,
+    "top_p": 1.0,
+    "trust_remote_code": true,
+    "warmup_rows": 0
+  },
+  "elapsed_s": 283.2910568714142,
+  "generated_at_utc": "2026-05-14T23:48:05.712723+00:00",
+  "questions_csv": "/root/.cache/huggingface/hub/datasets--felipesp1983--kg1-nemotron-training/snapshots/02b0ebfe5529fc8158e52c547745d67bd6de75b4/runtime_artifacts/v245_weak_eval_bridge/v245-weak-bridge-hfonly-20260510T1950Z/v221_weak_315.csv",
+  "rows": [
+    {
+      "accuracy": 0.022222222222222223,
+      "adapter": "/tmp/kg1_v245_adapter_snapshots/v400-h200-algorithmic-prompt-sweep-20260514T233000Z_bit_stride_guarded/bfdcd356ac1c/checkpoint-6",
+      "bit_manipulation_correct": 0,
+      "completion_tokens": 517572,
+      "correct": 7,
+      "equation_transform_correct": 7,
+      "error": "",
+      "name": "v290_checkpoint_6_prompt_sweep",
+      "report_json": "/tmp/kg1_v245_weak_eval/v400-h200-algorithmic-prompt-sweep-20260514T233000Z_bit_stride_guarded/eval/v290_checkpoint_6_prompt_sweep/v400_bit_stride_guarded_v290_checkpoint_6_prompt_sweep_eval_report.json",
+      "status": "ok",
+      "tokens_per_second": 2453.986354908877,
+      "truncated": 227,
+      "truncation_rate": 0.7206349206349206
+    }
+  ],
+  "solution_csv": "/root/.cache/huggingface/hub/datasets--felipesp1983--kg1-nemotron-training/snapshots/02b0ebfe5529fc8158e52c547745d67bd6de75b4/runtime_artifacts/v245_weak_eval_bridge/v245-weak-bridge-hfonly-20260510T1950Z/v221_weak_315.csv"
+}
