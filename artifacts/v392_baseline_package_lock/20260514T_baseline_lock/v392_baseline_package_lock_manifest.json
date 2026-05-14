@@ -1,0 +1,57 @@
+{
+  "schema_version": "kg1_v392_baseline_package_lock_v1",
+  "generated_at_date": "2026-05-14",
+  "decision": "lock_v291_v290_checkpoint6_as_current_submit_baseline",
+  "kaggle_leaderboard": {
+    "team_name": "Felipe Angelo",
+    "displayed_position_from_cli_page": 19,
+    "submission_date": "2026-05-11 22:19:17.163000",
+    "description": "V291 V290 checkpoint-6 adapter-only full823 trunc1 official-like gate",
+    "public_score": "0.86",
+    "private_score": ""
+  },
+  "package": {
+    "manifest": "artifacts/v291_submission_package/v291_h200_checkpoint6_823_20260511T212028Z/package_manifest.json",
+    "submission_zip": "artifacts/v291_submission_package/v291_h200_checkpoint6_823_20260511T212028Z/submission.zip",
+    "submission_zip_sha256": "293b414f316330db7ac12c4f3001e7796b0a087ed5dd86af6e13d98620b43433",
+    "adapter_repo": "felipesp1983/kg1-nemotron-lora-v290-rank19-micro-patch-smoke",
+    "adapter_subfolder": "checkpoint-6",
+    "adapter_model_sha256": "0a7b6144231d9358ae73a5e57d8778b32be1520fa47e3041414b3e025aaa1aa1",
+    "adapter_config_sha256": "a3d74c5a52ce75f71a8406222d877b9760ea18a40a772bcf407686c8ea19f11d"
+  },
+  "metrics": {
+    "weak_v290_checkpoint6": {
+      "total": "192/315",
+      "equation_transform": "56/155",
+      "bit_manipulation": "136/160",
+      "truncated": 0
+    },
+    "full_v291_checkpoint6": {
+      "total": "823/947",
+      "equation_transform": "56/155",
+      "bit_manipulation": "135/160",
+      "truncated": 1,
+      "local_accuracy": 0.8690601900739177
+    },
+    "v391_checkpoint2": {
+      "total": "191/315",
+      "equation_transform": "56/155",
+      "bit_manipulation": "135/160",
+      "truncated": 0
+    },
+    "v391_checkpoint4": {
+      "total": "191/315",
+      "equation_transform": "56/155",
+      "bit_manipulation": "135/160",
+      "truncated": 0
+    }
+  },
+  "promotion_gate_for_next_candidate": {
+    "weak_total_gt": 192,
+    "weak_equation_gt": 56,
+    "weak_bit_gte": 136,
+    "weak_truncated_eq": 0,
+    "full_must_improve_current_package": true
+  },
+  "next_action": "V393 no-training prompt/template/extractor sweep on the locked best adapter/package"
+}

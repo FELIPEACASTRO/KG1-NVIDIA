@@ -208,7 +208,7 @@ Ganho medido novo desses anexos:
 
 ### Step 1 - V392 baseline/package lock
 
-Status: executar agora em CPU.
+Status: concluido em CPU.
 
 Objetivo: parar de comparar contra nomes incertos. Localizar e travar o melhor package/submission historico que gerou o plateau `0.86`/ranking 19, ou declarar formalmente que o arquivo exato ainda nao esta disponivel localmente.
 
@@ -229,6 +229,15 @@ Saida esperada:
 
 - Manifest pequeno de baseline lock.
 - Tabela com `total`, `equation_transform`, `bit_manipulation`, `truncated`, full score quando existir e decisao.
+
+Resultado V392:
+
+- Manifest: `artifacts/v392_baseline_package_lock/20260514T_baseline_lock/v392_baseline_package_lock_manifest.json`.
+- Baseline travado: V291/V290 checkpoint-6 adapter-only package.
+- Kaggle CLI mostra o time `Felipe Angelo` na posicao `19` da pagina retornada, com submission `2026-05-11 22:19:17.163000`, descricao `V291 V290 checkpoint-6 adapter-only full823 trunc1 official-like gate`, public score `0.86`.
+- Package: `artifacts/v291_submission_package/v291_h200_checkpoint6_823_20260511T212028Z/submission.zip`, SHA256 `293b414f316330db7ac12c4f3001e7796b0a087ed5dd86af6e13d98620b43433`.
+- Weak baseline: `192/315`, `equation=56/155`, `bit=136/160`, `truncated=0`.
+- Full official-like baseline: `823/947`, `equation=56/155`, `bit=135/160`, `truncated=1`.
 
 ### Step 2 - V393 sweep sem treino do melhor adapter/package
 
