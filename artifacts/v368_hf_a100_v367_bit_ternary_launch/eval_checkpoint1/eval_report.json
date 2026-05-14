@@ -1,0 +1,42 @@
+{
+  "accuracy": 0.6063492063492063,
+  "adapter_dir": "/tmp/kg1_v245_adapter_snapshots/v368-h200-v221contract-v367-bit-ternary-cp1-20260514T122053Z/7056e53b3949/checkpoint-1",
+  "base_model_path": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+  "candidate_elapsed_s": 511.5670759677887,
+  "candidate_name": "v368_v367_bit_ternary_checkpoint_1_v221_contract",
+  "completion_tokens": 1503190,
+  "config": {
+    "dtype": "auto",
+    "enable_chunked_prefill": true,
+    "enable_prefix_caching": true,
+    "gpu_memory_utilization": 0.85,
+    "max_lora_rank": 32,
+    "max_model_len": 8192,
+    "max_num_seqs": 64,
+    "max_tokens": 7680,
+    "model_name": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+    "model_revision": "cbd3fa9f933d55ef16a84236559f4ee2a0526848",
+    "prompt_suffix": "\nReturn only one line: `\\boxed{answer}`. No reasoning. No explanation.",
+    "temperature": 0.0,
+    "top_p": 1.0,
+    "trust_remote_code": true,
+    "warmup_rows": 0
+  },
+  "correct": 191,
+  "generated_at_utc": "2026-05-14T12:35:46.822256+00:00",
+  "generation_elapsed_s": 511.49250292778015,
+  "label": "v368_v367_bit_ternary_hf_weak_v368_v367_bit_ternary_checkpoint_1_v221_contract",
+  "outputs": {
+    "per_task_csv": "/tmp/kg1_v245_weak_eval/v368-h200-v221contract-v367-bit-ternary-cp1-20260514T122053Z/eval/v368_v367_bit_ternary_checkpoint_1_v221_contract/v368_v367_bit_ternary_hf_weak_v368_v367_bit_ternary_checkpoint_1_v221_contract_per_task.csv",
+    "postprocessed_raw_predictions_pre_score_csv": "",
+    "predictions_csv": "/tmp/kg1_v245_weak_eval/v368-h200-v221contract-v367-bit-ternary-cp1-20260514T122053Z/eval/v368_v367_bit_ternary_checkpoint_1_v221_contract/v368_v367_bit_ternary_hf_weak_v368_v367_bit_ternary_checkpoint_1_v221_contract_predictions.csv",
+    "raw_predictions_pre_score_csv": "/tmp/kg1_v245_weak_eval/v368-h200-v221contract-v367-bit-ternary-cp1-20260514T122053Z/eval/v368_v367_bit_ternary_checkpoint_1_v221_contract/v368_v367_bit_ternary_hf_weak_v368_v367_bit_ternary_checkpoint_1_v221_contract_raw_predictions_pre_score.csv",
+    "report_json": "/tmp/kg1_v245_weak_eval/v368-h200-v221contract-v367-bit-ternary-cp1-20260514T122053Z/eval/v368_v367_bit_ternary_checkpoint_1_v221_contract/v368_v367_bit_ternary_hf_weak_v368_v367_bit_ternary_checkpoint_1_v221_contract_eval_report.json"
+  },
+  "prediction_postprocessor": "none",
+  "rows": 315,
+  "seed": 42,
+  "tokens_per_second": 2938.830953329226,
+  "truncated": 0,
+  "truncation_rate": 0.0
+}

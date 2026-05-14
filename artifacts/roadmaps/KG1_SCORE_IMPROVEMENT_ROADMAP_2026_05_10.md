@@ -30,6 +30,8 @@ Historico completo e rotas antigas ficam fora do plano ativo:
 | V365 bit residual boolean grammar gate | `214/315` | `63/155` | `151/160` | bloqueado; `73` mudancas candidatas, `0` ganhos, `66` perdas candidatas |
 | V366 bit full-byte ternary op gate | `222/315` | `63/155` | `159/160` | teacher CPU aprovado: `+8` bit sobre V357, `0` perdas aceitas |
 | V367 V366 transfer dataset | `1128/282` train/val | nao altera equation | `768/192` linhas novas V366 + replay | tokenization real aprovado, boxed-only, `0` truncation |
+| V368 checkpoint-1 adapter-only | `191/315` | `56/155` | `135/160` | rejeitado; V367/V366 nao transferiu e regrediu bit |
+| V369 V368 transfer audit | `0/8` V366 ganhos transferidos | nao altera equation | `1` ganho, `2` perdas vs baseline | bloqueia mais HF nessa rota |
 | Residual depois do V366 | mapa pronto | `92` misses | `1` miss | fila residual CPU |
 | V349 Kaggle discussions | `140/140` topicos | reforca ambiguidade/DSL | reforca bit full-byte/bit-pair/3-input | guia do proximo CPU gate |
 | Double check compilacoes 2026-05-14 | `3` arquivos | sem novo ganho medido | sem novo ganho medido | classifica links; nao libera HF |
@@ -37,9 +39,9 @@ Historico completo e rotas antigas ficam fora do plano ativo:
 Conclusao honesta:
 
 - Ha ganho real em CPU solver/verifier: `192 -> 222` weak, com `equation_transform 56 -> 63` e `bit_manipulation 136 -> 159`, sempre com `0` perdas aceitas no weak diagnostic.
-- O ganho novo comprovado de V357 e forte em bit, mas ainda e teacher CPU. Ainda nao ha ganho adapter-only novo. V338B, V341, V344, V346, V352 e V359 falharam em transferir ganhos para LoRA.
+- O ganho novo comprovado de V357/V366 e forte em bit, mas ainda e teacher CPU. Ainda nao ha ganho adapter-only novo. V338B, V341, V344, V346, V352, V359, V362 e V368 falharam em transferir ganhos para LoRA.
 - `eval_loss` menor nao significa ACC maior. Promocao agora e somente por ACC weak/full.
-- HF GPU continua bloqueado para as rotas V358/V359/V361/V362. V366 autoriza apenas construir V367 em CPU; qualquer HF posterior exige dataset novo, gates reais e smoke de no maximo `2` steps.
+- HF GPU continua bloqueado para as rotas V358/V359/V361/V362/V367/V368. Qualquer HF posterior exige uma nova evidencia CPU que explique a falha de transferencia e passe gates reais antes do smoke.
 
 ## Metas
 
@@ -85,7 +87,9 @@ Para submeter ao Kaggle:
 | V361 boxed-only transfer dataset | `1152` train, `288` val, `2304/576` preference rows, `0` train/val prompt overlap, real tokenizer `token_max=286`, `0` truncation, `0` fallback masks | unica correcao de formato permitida; ainda nao libera submit nem full |
 | V365 bit residual boolean grammar | `73` mudancas candidatas sobre V357, `0` ganhos, `66` perdas candidatas | bloqueia gramatica per-bit livre; proxima rota bit precisa ser bit-pair/bitsum/stride restrito |
 | V366 full-byte ternary `CHO`/`MAJ3` | `222/315`, `equation=63`, `bit=159`, `8` ganhos aceitos, `0` perdas aceitas | novo teacher CPU; base do V367 transfer dataset |
-| V367 transfer dataset | `1128/282`, `23` regras, `0` prompt overlap, tokenizer real `token_max=285`, `0` truncation | libera somente HF smoke curto com kill-switch |
+| V367 transfer dataset | `1128/282`, `23` regras, `0` prompt overlap, tokenizer real `token_max=285`, `0` truncation | liberou somente HF smoke V368 |
+| V368 checkpoint-1 weak eval | `191/315`, `equation=56`, `bit=135`, truncation `0` | rejeitado; bloqueia full/package/submit |
+| V369 transfer failure audit | V368 transferiu `0/8` ganhos V366; mudou `10` linhas vs baseline: `1` ganho, `2` perdas, `7` neutras | prova que V367/V368 bit-only SFT nao deve continuar |
 | V348 residual audit | `92` equation misses, `24` bit misses | fila unica do proximo CPU gate |
 | V349 discussion `689915` | tokens simples, cobertura de operacoes raras, min-logprob | orientar formato de traces futuros |
 | V349 discussion `688461` | taxonomia reversa e gramatica booleana dinamica | orientar DSL CPU |
@@ -664,7 +668,62 @@ Resultado medido:
 - Offset masks: `1128/1128` train, `282/282` validation.
 - Fallback masks: `0`.
 
-Decisao: V367 libera somente um HF smoke curto. O primeiro checkpoint deve ser avaliado imediatamente e cancelado se `total<=192`, `bit<136`, `equation<=56` ou truncation regressiva. Full/package/submit continuam bloqueados ate weak/full adapter-only mostrar ganho real.
+Decisao: V367 liberou somente o HF smoke curto V368. O primeiro checkpoint foi avaliado imediatamente conforme o kill-switch. Como V368 falhou, V367 nao deve ser usado para outro HF job sem novo sinal CPU independente.
+
+### 18. V368 - HF smoke V367/V366 bit ternary
+
+Objetivo: testar se o teacher CPU V366 (`222/315`, bit `159/160`) transferia para LoRA adapter-only usando o dataset V367 boxed-only.
+
+Status: concluido e rejeitado.
+
+Configuracao:
+
+- Train job HF A100: `https://huggingface.co/jobs/felipesp1983/6a05bad7e48bea4538b9c997`.
+- Weak eval checkpoint-1 HF H200: `https://huggingface.co/jobs/felipesp1983/6a05be653308d79117b8f5ce`.
+- Output repo: `felipesp1983/kg1-nemotron-lora-v368-nemo-a100-v367-bit-ternary-v290ckpt6`.
+- Eval artifact commit: `https://huggingface.co/felipesp1983/kg1-nemotron-lora-v368-nemo-a100-v367-bit-ternary-v290ckpt6/commit/ffbbbb3a77de65cbd87eb71a6ec9b1516507da68`.
+- Dataset: V367, `1128/282`, boxed-only, `0` truncation no tokenizer gate.
+- Init adapter: V290 checkpoint-6.
+- Max steps: `2`; checkpoint-1 avaliado como primeiro kill-switch.
+
+Resultado medido:
+
+- Checkpoint-1 weak: `191/315`.
+- `equation_transform=56/155`.
+- `bit_manipulation=135/160`.
+- Truncation: `0`.
+- Baseline adapter-only: `192/315`, equation `56/155`, bit `136/160`.
+- Delta: `-1` total, `0` equation, `-1` bit.
+- Artefatos locais: `artifacts/v368_hf_a100_v367_bit_ternary_launch/`.
+
+Decisao: rejeitado. Nao rodar checkpoint-2 weak eval, nao rodar full eval, nao packagear e nao submeter.
+
+### 19. V369 - Auditoria de falha de transferencia V368
+
+Objetivo: medir se V368 aprendeu algum dos `8` ganhos aceitos do teacher V366 e separar ganhos reais de regressao.
+
+Status: concluido e bloqueado.
+
+Resultado medido:
+
+- Script: `scripts/analyze_v369_v368_transfer_failure_audit.py`.
+- Manifesto: `artifacts/v369_v368_transfer_failure_audit/20260514T_cpu_audit/v369_v368_transfer_failure_manifest.json`.
+- Baseline adapter-only: `192/315`, equation `56/155`, bit `136/160`.
+- V366 CPU teacher: `222/315`, equation `63/155`, bit `159/160`.
+- V368 checkpoint-1: `191/315`, equation `56/155`, bit `135/160`.
+- Ganhos V366 aceitos testados: `8`.
+- Ganhos V366 transferidos para V368: `0/8`.
+- V368 mudou `10` linhas contra baseline: `1` ganho, `2` perdas, `7` mudancas neutras.
+- Unico ganho novo V368: `4ef88f92`.
+- Perdas V368: `8740ed31`, `59bee375`.
+
+Leitura tecnica:
+
+- O problema nao e falta de evidencia no teacher CPU; V366 tinha sinal forte e no-loss.
+- O problema e transferencia para LoRA com SFT bit-only: a adapter continua respondendo como baseline nos `8` IDs que V366 acertou.
+- Mais epochs/checkpoints nessa rota nao sao justificaveis porque o primeiro checkpoint ja violou total e bit.
+
+Decisao: bloquear V367/V368 bit-only SFT. A proxima acao deve ser CPU-only e precisa gerar um novo tipo de sinal, nao apenas repetir V367 com mais treino.
 
 ## Removido do plano ativo
 
@@ -692,6 +751,8 @@ Estes itens nao devem ser reexecutados como acao principal. So podem voltar se u
 | V363 same-operator symbolic DSL atual | bloqueado; nao gerou candidato unico no-loss |
 | V364 symbolic pair-table | bloqueado; `12` mudancas, `0` ganhos, com perdas em `len_4` |
 | V365 bit per-output boolean grammar | bloqueado; `73` mudancas candidatas, `0` ganhos, `66` perdas candidatas |
+| Mais HF sobre V367/V368 bit-only | removido; V368 checkpoint-1 caiu para `191/315`, bit `135`, e V369 mostrou `0/8` ganhos V366 transferidos |
+| V368 checkpoint-2/final weak eval | bloqueado por FinOps; checkpoint-1 ja violou total e bit |
 | Checkpoints restantes V346 4/6 | nao avaliar sem novo sinal independente |
 | Checkpoints restantes V352 4/6/8 | bloqueados por FinOps; checkpoint-2 ja caiu abaixo do gate |
 | V359 checkpoint-4/final weak eval | cancelado por FinOps; checkpoint-2 ja violou total, bit e truncation |
@@ -723,6 +784,9 @@ Estes itens nao devem ser reexecutados como acao principal. So podem voltar se u
 
 ## Proxima acao unica
 
-Preparar e executar V368 HF smoke curto a partir do V367, usando a imagem/launcher ja validado em V362, mas com dataset V367. O job deve ser pequeno, avaliar o primeiro checkpoint no contrato weak e aplicar FinOps automaticamente: cancelar se `total<=192`, `bit<136`, `equation<=56` ou truncation regressiva.
+V370 CPU-only: abandonar mais SFT bit-only sobre V367/V368 e procurar um novo sinal transferivel antes de qualquer HF. A prioridade e uma das duas rotas, nesta ordem:
 
-Equation continua ativa somente se houver uma nova semantica simbolica diferente das rotas V363/V364. Full/package/submit continuam bloqueados ate um adapter-only bater o baseline weak/full medido.
+1. Diagnosticar representacao solver-to-adapter: usar V369 para criar probes de formato ainda mais diretos nos `8` ganhos V366 e nos `2` losses V368, mas sem treino GPU. Se nao houver uma nova representacao verificavel, nao rodar HF.
+2. Voltar para `equation_transform`: testar uma nova DSL simbolica diferente de V363/V364 nos `92` misses residuais, com `candidate_count`, `conflict_count`, `losses=0` e ganho acima de `63/155`.
+
+Full/package/submit continuam bloqueados ate um adapter-only bater o baseline weak/full medido.

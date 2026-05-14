@@ -1,0 +1,95 @@
+{
+  "baseline_summary": {
+    "correct": 192,
+    "family": {
+      "bit_manipulation": {
+        "correct": 136,
+        "rows": 160
+      },
+      "equation_transform": {
+        "correct": 56,
+        "rows": 155
+      }
+    },
+    "rows": 315
+  },
+  "changed_vs_baseline_count": 10,
+  "decision": {
+    "decision": "v368_route_blocked",
+    "hf_gpu_allowed": false,
+    "next_action": "Do not continue V367/V368 bit-only SFT. Return to CPU-only diagnosis or a new equation/bit solver-to-adapter signal before any HF job.",
+    "reason": "V368=191/315, baseline=192/315, transferred_v366_gains=0/8, v368_unique_gains=1, v368_losses=2"
+  },
+  "expected_shared_row_contract_sha256": "bf055e3b9ebce79d4bfc9e48bce5a305b1d83da882f14afddec80d6afaba5fff",
+  "inputs": {
+    "baseline_predictions_csv": "artifacts\\v342_acc_first_diagnostic\\v290_checkpoint6_baseline_predictions.csv",
+    "baseline_predictions_sha256": "910a051d8b8e652e37c0b0814ac59fe4a400b95cb432945b6a0244f97f5b31bf",
+    "v366_manifest_json": "artifacts\\v366_bit_fullbyte_ternary_op_gate\\20260514T_cpu_gate\\v366_bit_fullbyte_ternary_op_gate_manifest.json",
+    "v366_manifest_sha256": "d5ae05ac50efa341a51a98a6ce94cf405e045ab93c27197f220112a6927755db",
+    "v366_predictions_csv": "artifacts\\v366_bit_fullbyte_ternary_op_gate\\20260514T_cpu_gate\\v366_integrated_predictions.csv",
+    "v366_predictions_sha256": "585f6a6c56bfbef58465c8260cad5bb98ffd9a2aec59202207fe06c90d3ac23e",
+    "v368_eval_report_json": "artifacts\\v368_hf_a100_v367_bit_ternary_launch\\eval_checkpoint1\\eval_report.json",
+    "v368_eval_report_sha256": "949bd87b238110fd83a41f23cf646f5d79b3da546e4cf1100920aa6884b0ca13",
+    "v368_predictions_csv": "artifacts\\v368_hf_a100_v367_bit_ternary_launch\\eval_checkpoint1\\predictions.csv",
+    "v368_predictions_sha256": "b1a25388e4e98e6b423692767baa53cbaeca729f419e6b6a328d89f81fd7a212"
+  },
+  "observed_shared_row_contract_sha256": "bf055e3b9ebce79d4bfc9e48bce5a305b1d83da882f14afddec80d6afaba5fff",
+  "outputs": {
+    "changed_vs_baseline_csv": "artifacts\\v369_v368_transfer_failure_audit\\20260514T_cpu_audit\\v369_v368_changed_vs_baseline.csv",
+    "family_summary_csv": "artifacts\\v369_v368_transfer_failure_audit\\20260514T_cpu_audit\\v369_family_summary.csv",
+    "manifest_json": "artifacts\\v369_v368_transfer_failure_audit\\20260514T_cpu_audit\\v369_v368_transfer_failure_manifest.json",
+    "summary_md": "artifacts\\v369_v368_transfer_failure_audit\\V369_RESULT_SUMMARY.md",
+    "v366_gain_transfer_csv": "artifacts\\v369_v368_transfer_failure_audit\\20260514T_cpu_audit\\v369_v366_gain_transfer.csv",
+    "v368_losses_csv": "artifacts\\v369_v368_transfer_failure_audit\\20260514T_cpu_audit\\v369_v368_losses.csv",
+    "v368_unique_gains_csv": "artifacts\\v369_v368_transfer_failure_audit\\20260514T_cpu_audit\\v369_v368_unique_gains.csv"
+  },
+  "schema_version": "kg1_v369_v368_transfer_failure_audit_v1",
+  "v366_accepted_gain_count": 8,
+  "v366_accepted_gains_not_transferred_to_v368": 8,
+  "v366_accepted_gains_transferred_to_v368": 0,
+  "v366_summary": {
+    "correct": 222,
+    "family": {
+      "bit_manipulation": {
+        "correct": 159,
+        "rows": 160
+      },
+      "equation_transform": {
+        "correct": 63,
+        "rows": 155
+      }
+    },
+    "rows": 315
+  },
+  "v368_gain_vs_baseline_count": 1,
+  "v368_loss_ids": [
+    "8740ed31",
+    "59bee375"
+  ],
+  "v368_loss_vs_baseline_count": 2,
+  "v368_neutral_change_count": 7,
+  "v368_report_summary": {
+    "accuracy": 0.6063492063492063,
+    "candidate_name": "v368_v367_bit_ternary_checkpoint_1_v221_contract",
+    "correct": 191,
+    "tokens_per_second": 2938.830953329226,
+    "truncated": 0
+  },
+  "v368_summary": {
+    "correct": 191,
+    "family": {
+      "bit_manipulation": {
+        "correct": 135,
+        "rows": 160
+      },
+      "equation_transform": {
+        "correct": 56,
+        "rows": 155
+      }
+    },
+    "rows": 315
+  },
+  "v368_unique_gain_ids": [
+    "4ef88f92"
+  ]
+}

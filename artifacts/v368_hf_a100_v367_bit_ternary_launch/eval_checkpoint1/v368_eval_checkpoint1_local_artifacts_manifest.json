@@ -1,0 +1,68 @@
+{
+  "files": [
+    {
+      "bytes": 638,
+      "local_name": "batch_candidate_summary.csv",
+      "sha256": "78b4ce495afe099daa6bceed8efa21c57e193b0c0a4ce0630ce15227d8baf159",
+      "source": "evals/v368-h200-v221contract-v367-bit-ternary-cp1-20260514T122053Z/eval/batch_candidate_summary.csv"
+    },
+    {
+      "bytes": 2164,
+      "local_name": "batch_candidate_summary.json",
+      "sha256": "402a453352cc7e8596ac32959ea72784ad08095eec5decf8f6db72fb1bba6f50",
+      "source": "evals/v368-h200-v221contract-v367-bit-ternary-cp1-20260514T122053Z/eval/batch_candidate_summary.json"
+    },
+    {
+      "bytes": 206,
+      "local_name": "candidate_preflight.csv",
+      "sha256": "e652df9403f272d13e2e5cd77726a03463ab35bdb9d106325c29b1f6ef8e75be",
+      "source": "evals/v368-h200-v221contract-v367-bit-ternary-cp1-20260514T122053Z/eval/candidate_preflight.csv"
+    },
+    {
+      "bytes": 2459,
+      "local_name": "eval_report.json",
+      "sha256": "949bd87b238110fd83a41f23cf646f5d79b3da546e4cf1100920aa6884b0ca13",
+      "source": "evals/v368-h200-v221contract-v367-bit-ternary-cp1-20260514T122053Z/eval/v368_v367_bit_ternary_checkpoint_1_v221_contract/v368_v367_bit_ternary_hf_weak_v368_v367_bit_ternary_checkpoint_1_v221_contract_eval_report.json"
+    },
+    {
+      "bytes": 191,
+      "local_name": "per_task.csv",
+      "sha256": "e3b8949fd1ba4d258965009d89beb02cb35724a8ada7178caa490d396f128689",
+      "source": "evals/v368-h200-v221contract-v367-bit-ternary-cp1-20260514T122053Z/eval/v368_v367_bit_ternary_checkpoint_1_v221_contract/v368_v367_bit_ternary_hf_weak_v368_v367_bit_ternary_checkpoint_1_v221_contract_per_task.csv"
+    },
+    {
+      "bytes": 2485663,
+      "local_name": "predictions.csv",
+      "sha256": "b1a25388e4e98e6b423692767baa53cbaeca729f419e6b6a328d89f81fd7a212",
+      "source": "evals/v368-h200-v221contract-v367-bit-ternary-cp1-20260514T122053Z/eval/v368_v367_bit_ternary_checkpoint_1_v221_contract/v368_v367_bit_ternary_hf_weak_v368_v367_bit_ternary_checkpoint_1_v221_contract_predictions.csv"
+    },
+    {
+      "bytes": 2366526,
+      "local_name": "raw_predictions_pre_score.csv",
+      "sha256": "d796732d01c788b51e5db855b23ebf495be188c241e4d7a6060eb07c621bffc4",
+      "source": "evals/v368-h200-v221contract-v367-bit-ternary-cp1-20260514T122053Z/eval/v368_v367_bit_ternary_checkpoint_1_v221_contract/v368_v367_bit_ternary_hf_weak_v368_v367_bit_ternary_checkpoint_1_v221_contract_raw_predictions_pre_score.csv"
+    },
+    {
+      "bytes": 38997,
+      "local_name": "v245_hf_weak_eval.log",
+      "sha256": "90ef5d6375bf045a84dfc695c8cc3dd0f638e3d77f11214bc8955a0062e78901",
+      "source": "evals/v368-h200-v221contract-v367-bit-ternary-cp1-20260514T122053Z/v245_hf_weak_eval.log"
+    },
+    {
+      "bytes": 4624,
+      "local_name": "v245_hf_weak_eval_manifest.json",
+      "sha256": "22466cd4a4d7455d558df05ada939761a9a2ef421c7eb588624c64ef7959a8f4",
+      "source": "evals/v368-h200-v221contract-v367-bit-ternary-cp1-20260514T122053Z/v245_hf_weak_eval_manifest.json"
+    },
+    {
+      "bytes": 247,
+      "local_name": "v245_weak_eval_candidates.json",
+      "sha256": "9e99213527e4471e2d02237b42844c8c483214f14298b9d1592c9f874f1bbe7f",
+      "source": "evals/v368-h200-v221contract-v367-bit-ternary-cp1-20260514T122053Z/v245_weak_eval_candidates.json"
+    }
+  ],
+  "source_commit": "ffbbbb3a77de65cbd87eb71a6ec9b1516507da68",
+  "source_path": "evals/v368-h200-v221contract-v367-bit-ternary-cp1-20260514T122053Z",
+  "source_repo": "felipesp1983/kg1-nemotron-lora-v368-nemo-a100-v367-bit-ternary-v290ckpt6",
+  "version": "v368_eval_checkpoint1_local_artifacts_manifest"
+}
