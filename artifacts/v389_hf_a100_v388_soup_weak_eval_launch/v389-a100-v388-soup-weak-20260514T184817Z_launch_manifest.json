@@ -1,0 +1,45 @@
+{
+  "adapter_repo": "felipesp1983/kg1-nemotron-lora-v388-v291-v382-soups",
+  "adapters": [],
+  "branch": "v230-v226-complementarity",
+  "expected_commit": "942d9b1c891acc6a4a50a86cc88e6897a9b49247",
+  "finops_note": "A100 is cheaper than H200; batch eval all uploaded V388 soups in one model load.",
+  "flavor": "a100-large",
+  "generated_at_utc": "2026-05-14T18:48:18.606734+00:00",
+  "hardware": {
+    "accelerator_model": "A100",
+    "accelerator_quantity": "1",
+    "accelerator_vram": "80 GB",
+    "cpu": "12 vCPU",
+    "name": "a100-large",
+    "pretty_name": "Nvidia A100 - large",
+    "ram": "142 GB",
+    "unit_cost_usd": 0.041667,
+    "unit_label": "minute"
+  },
+  "image": "vllm/vllm-openai:v0.20.1",
+  "job_id": "",
+  "job_status": "not_launched",
+  "job_url": "",
+  "missing_adapters": [
+    "soup_v291_095_v382_005",
+    "soup_v291_090_v382_010",
+    "soup_v291_105_v382_neg005"
+  ],
+  "mode": "debug_only_no_job_launched",
+  "output_path_in_repo": "evals/v389-a100-v388-soup-weak-20260514T184817Z",
+  "output_repo": "felipesp1983/kg1-nemotron-lora-v388-v291-v382-soups",
+  "promotion_gate": {
+    "promote_to_full_if_bit_gte": 136,
+    "promote_to_full_if_equation_gt": 56,
+    "promote_to_full_if_total_gt": 192,
+    "reject_if_bit_lt": 136,
+    "reject_if_equation_lte": 56,
+    "reject_if_total_lte": 192,
+    "reject_if_truncated_gt": 0,
+    "requires_full_eval_before_package_or_submit": true
+  },
+  "prompt_suffix": "\nPlease put your final answer inside `\\boxed{}`. For example: `\\boxed{your answer}`",
+  "run_id": "v389-a100-v388-soup-weak-20260514T184817Z",
+  "version": "v389_hf_a100_v388_soup_weak_eval"
+}
