@@ -960,6 +960,46 @@ Leitura tecnica:
 
 Decisao: V376 nao libera GPU. Ele libera apenas V377 CPU data-quality/tokenization gate para extrair um subconjunto pequeno e verificavel de traces.
 
+### 27. V377 - Auditoria do pacote `nemotron_hacker_dataset.zip`
+
+Objetivo: auditar tecnicamente o novo ZIP local sem extracao permanente de arquivos grandes, medir conteudo contra o train oficial e verificar se existe sinal novo para `bit_manipulation` e `equation_transform`.
+
+Status: concluido como source/data audit. Nenhum HF liberado.
+
+Artefatos pequenos:
+
+- Script: `scripts/analyze_v377_nemotron_hacker_dataset.py`.
+- Saida: `artifacts/v377_nemotron_hacker_dataset_audit/`.
+- Relatorio: `artifacts/v377_nemotron_hacker_dataset_audit/KG1_V377_NEMOTRON_HACKER_DATASET_AUDIT.md`.
+- Coverage residual: `artifacts/v377_nemotron_hacker_dataset_audit/v377_v375_residual_coverage.csv`.
+
+Conteudo do ZIP:
+
+- `sft_train_converted.jsonl`: `8703` rows, `7044` IDs unicos, `1659` duplicatas por reweighting, `8703/8703` metric-correct.
+- `sft_train_full_9500.jsonl`: `9500` rows, `9500` IDs unicos, `9500/9500` metric-correct.
+- `sft_train_reconstructed.jsonl`: `17963` rows, `9500` rows oficiais corretas e `8463` rows sinteticas/desconhecidas.
+- `kaggle_sft_data/dataset_generated.csv`: labels `9500/9500` corretos; CoT extraido `9197/9500` correto.
+- `kaggle_trajectories/nemotron_traj.csv`: geracoes brutas fracas, `4542/9500` corretas; usar como hard-negative/confidence, nao como label.
+
+Sinal especifico para familias problemáticas:
+
+- `sft_train_converted.jsonl` contem:
+  - `bit_manipulation`: `1354` IDs unicos, `1754` rows totais, todos os melhores traces corretos pelo scorer.
+  - `equation_transform`: `1499` IDs unicos, `2438` rows totais, todos os melhores traces corretos pelo scorer.
+- V375 residual equation coverage:
+  - `92/92` residual misses cobertos por `sft_train_converted.jsonl`, todos corretos.
+  - `92/92` cobertos por `sft_train_full_9500.jsonl`, todos corretos.
+  - `91/92` com CoT correto em `dataset_generated.csv`.
+
+Leitura tecnica:
+
+- Este e o primeiro pacote que cobre diretamente os `92` residuos de `equation_transform` com traces corretos.
+- Isso nao prova ganho adapter-only; prova que temos material para um gate CPU de selecao/filtragem de traces e, possivelmente, um treino pequeno se o gate de tokenizacao e anti-regressao passar.
+- O dado convertido tem duplicatas e reweighting; nao usar bruto. Selecionar no maximo um melhor trace por ID, por familia, com criterios de loss/length/correcao.
+- Muitos traces de bit sao longos; usar apenas depois de tokenization/offset-mask real, nao por tamanho em caracteres.
+
+Decisao: V377 nao autoriza submit nem HF. Autoriza V378 CPU filtered trace/tokenization gate, focado nos `92` residuos de equation e no replay bit sem regressao.
+
 ## Removido do plano ativo
 
 Estes itens nao devem ser reexecutados como acao principal. So podem voltar se um novo CPU gate provar uma razao nova.
@@ -1011,6 +1051,8 @@ Estes itens nao devem ser reexecutados como acao principal. So podem voltar se u
 | Buscas web genericas | so entram se produzirem regra, dataset ou gate verificavel |
 | Raw `problems.jsonl` do pacote Andy279/Tong como label | bloqueado; apenas `8333/9500` correto sob o scorer do projeto |
 | `sft_train_reconstructed.jsonl` inteiro como treino | bloqueado; contem `8463` rows sinteticas/desconhecidas ainda nao classificadas |
+| `sft_train_converted.jsonl` bruto como treino | bloqueado; contem duplicatas/reweighting e traces longos; usar apenas selecao por ID/loss/length |
+| `nemotron_traj.csv` como label | bloqueado; geracoes so `4542/9500` corretas |
 | Relatorios locais com tokens/segredos | nunca versionar; somente artefatos redigidos |
 
 ## Regras permanentes
@@ -1024,17 +1066,18 @@ Estes itens nao devem ser reexecutados como acao principal. So podem voltar se u
 
 ## Proxima acao unica
 
-V377 CPU-only filtered SFT/data gate.
+V378 CPU-only filtered trace/tokenization gate.
 
-Regras do V377:
+Regras do V378:
 
 - Rodar somente CPU, sem HF.
-- Entrada principal: `sft_reconstructed.jsonl`, `sft_train_reconstructed.jsonl`, `corpus.jsonl`, `generation.jsonl` e os manifests V375/V376.
+- Entrada principal: `sft_train_converted.jsonl`, `sft_train_full_9500.jsonl`, `dataset_generated.csv`, `v377_v375_residual_coverage.csv` e os manifests V375/V376/V377.
 - Nao copiar arquivos grandes para o repo; ler por streaming/ZIP e emitir apenas manifests/CSVs pequenos.
 - Filtrar primeiro `bit_manipulation` e `equation_transform`.
-- Aceitar somente rows com resposta validada pelo extractor/scorer do projeto, prompt hash conhecido, family count esperado, trace curto o bastante para `7680` tokens e status confiavel.
-- Separar SFT oficial de rows sinteticas/desconhecidas; sinteticas so entram se classificadas e sem leakage.
-- Gerar hard negatives a partir de `generation.jsonl` somente como metadado, nao como label.
+- Para `equation_transform`, construir um pacote minimo dos `92` residuos V375 cobertos por trace correto, com um melhor trace por ID.
+- Para `bit_manipulation`, construir replay conservador que preserve `bit>=136` e nao substitua V366/Tong solver logic por traces longos sem gate.
+- Aceitar somente rows com resposta validada pelo extractor/scorer do projeto, prompt hash conhecido, family count esperado, sem duplicata por ID, e trace aprovado por tokenizer real.
+- Gerar hard negatives a partir de `dataset_generated.csv`/`nemotron_traj.csv` somente como metadado, nao como label.
 - Rodar tokenization/offset-mask/truncation gate antes de qualquer dataset de treino.
 - HF GPU so volta se o gate produzir um subconjunto novo com expectativa concreta de transferir ganho e com kill-switch: primeiro checkpoint deve manter `bit>=136`, `equation>=56`, `total>=192`, truncation `0`; caso contrario cancelar.
 

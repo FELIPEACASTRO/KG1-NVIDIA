@@ -1,0 +1,945 @@
+{
+  "analyses": {
+    "HACKER_REPORT.md": {
+      "bytes": 6884,
+      "contains_hf_token_pattern": false,
+      "head_redacted": "# Relatório de Extração: Dataset andy279/nemotron-reasoning-challenge\n\n**Data da Extração:** 14 de Maio de 2026\n**Alvo:** `https://huggingface.co/datasets/andy279/nemotron-reasoning-challenge`\n**Status do Alvo:** Gated (Manual Approval Required) - 403 Forbidden\n\n## 1. Resumo Executivo da Operação\n\nO dataset original `andy279/nemotron-reasoning-challenge` encontra-se protegido por um sistema de aprovação manual (\"manual gated\") no Hugging Face. Apesar de possuirmos um token válido com a flag `canReadGatedRepos=True`, o acesso direto aos arquivos via API, Git, ou Web Interface retorna erro 403 (Forbidden) até que o autor aprove manualmente a solicitação.\n\nNo entanto, utilizando técnicas avançadas de OSINT (Open Source Intelligence), engenharia reversa de pipelines de treinamento e exploração de vazamentos em plataformas correlatas (Kaggle e GitHub), **conseguimos reconstruir e obter 100% dos dados essenciais do dataset**, incluindo versões de qualidade superior filtradas por logprob.\n\n## 2. Vetores de Ataque Explorados\n\n### 2.1. Tentativas Diretas (Falhas Esperadas)\n- **Hugging Face Hub API (`hf_hub_download`)**: Bloqueado (403).\n- **Git Clone com credenciais**: Bloqueado no nível do",
+      "kind": "markdown",
+      "urls": [
+        "https://huggingface.co/datasets/andy279/nemotron-reasoning-challenge`"
+      ]
+    },
+    "README.md": {
+      "bytes": 4347,
+      "contains_hf_token_pattern": false,
+      "head_redacted": "---\nlicense: apache-2.0\ntask_categories:\n  - text-generation\nlanguage:\n  - en\ntags:\n  - reasoning\n  - math\n  - puzzles\n  - sft\n  - nemotron\nsize_categories:\n  - 10K<n<100K\ndataset_info:\n  - config_name: default\n    features:\n      - name: messages\n        list:\n          - name: role\n            dtype: string\n          - name: content\n            dtype: string\n    splits:\n      - name: train\n        num_examples: 49290\n      - name: validation\n        num_examples: 1165\nconfigs:\n  - config_name: default\n    data_files:\n      - split: train\n        path: sft_train.jsonl\n      - split: validation\n        path: sft_val.jsonl\n---\n\n# Nemotron Reasoning Challenge — SFT Data\n\nSupervised fine-tuning data for `nvidia/Nemotron-3-Nano-30B-A3B` on puzzles from the [NVIDIA Nemotron Reasoning Challenge](https://www.kaggle.com/competitions/nvidia-nemotron-reasoning-challenge) Kaggle competition.\n\n## Splits\n\n| Split | Examples | Unique puzzles | Description |\n|-------|----------|----------------|-------------|\n| `train` | 49,290 | 7,200 | Correct reasoning traces from teacher models + solvers |\n| `validation` | 1,165 | 1,123 | Held-out puzzles for evaluation (includes 399 unsolved transformation p",
+      "kind": "markdown",
+      "urls": [
+        "https://www.kaggle.com/competitions/nvidia-nemotron-reasoning-challenge"
+      ]
+    },
+    "kaggle_sft_data/dataset_generated.csv": {
+      "answer_label_matches_official": 9500,
+      "answer_label_mismatches_official": 0,
+      "by_family": {
+        "bit_manipulation": {
+          "correct": 1602,
+          "rows": 1602,
+          "unknown": 0,
+          "wrong": 0
+        },
+        "equation_transform": {
+          "correct": 1555,
+          "rows": 1555,
+          "unknown": 0,
+          "wrong": 0
+        },
+        "gravity_constant": {
+          "correct": 1597,
+          "rows": 1597,
+          "unknown": 0,
+          "wrong": 0
+        },
+        "numeral_system": {
+          "correct": 1576,
+          "rows": 1576,
+          "unknown": 0,
+          "wrong": 0
+        },
+        "text_encryption": {
+          "correct": 1576,
+          "rows": 1576,
+          "unknown": 0,
+          "wrong": 0
+        },
+        "unit_conversion": {
+          "correct": 1594,
+          "rows": 1594,
+          "unknown": 0,
+          "wrong": 0
+        }
+      },
+      "by_family_generated_cot": {
+        "bit_manipulation": {
+          "correct": 1364,
+          "rows": 1602,
+          "unknown": 0,
+          "wrong": 238
+        },
+        "equation_transform": {
+          "correct": 1490,
+          "rows": 1555,
+          "unknown": 0,
+          "wrong": 65
+        },
+        "gravity_constant": {
+          "correct": 1597,
+          "rows": 1597,
+          "unknown": 0,
+          "wrong": 0
+        },
+        "numeral_system": {
+          "correct": 1576,
+          "rows": 1576,
+          "unknown": 0,
+          "wrong": 0
+        },
+        "text_encryption": {
+          "correct": 1576,
+          "rows": 1576,
+          "unknown": 0,
+          "wrong": 0
+        },
+        "unit_conversion": {
+          "correct": 1594,
+          "rows": 1594,
+          "unknown": 0,
+          "wrong": 0
+        }
+      },
+      "columns": [
+        "id",
+        "prompt",
+        "answer",
+        "type",
+        "generated_cot"
+      ],
+      "duplicate_known_id_rows": 0,
+      "generated_cot_has_boxed": 9500,
+      "generated_cot_metric_correct": 9197,
+      "generated_cot_metric_wrong": 303,
+      "kind": "dataset_generated_csv",
+      "known_train_rows": 9500,
+      "mismatch_first25": [
+        {
+          "family": "bit_manipulation",
+          "generated_cot_extracted": "00011111",
+          "id": "000b53cf",
+          "label": "01000011",
+          "official": "01000011"
+        },
+        {
+          "family": "bit_manipulation",
+          "generated_cot_extracted": "01111100",
+          "id": "00890aff",
+          "label": "01110000",
+          "official": "01110000"
+        },
+        {
+          "family": "equation_transform",
+          "generated_cot_extracted": "17",
+          "id": "00d8b3db",
+          "label": "17/",
+          "official": "17/"
+        },
+        {
+          "family": "bit_manipulation",
+          "generated_cot_extracted": "10010100",
+          "id": "012fb81b",
+          "label": "10000100",
+          "official": "10000100"
+        },
+        {
+          "family": "bit_manipulation",
+          "generated_cot_extracted": "10111001",
+          "id": "01e09228",
+          "label": "10010101",
+          "official": "10010101"
+        },
+        {
+          "family": "bit_manipulation",
+          "generated_cot_extracted": "00011001",
+          "id": "0245b9bb",
+          "label": "00001001",
+          "official": "00001001"
+        },
+        {
+          "family": "bit_manipulation",
+          "generated_cot_extracted": "01111101",
+          "id": "02a5a1ca",
+          "label": "01101101",
+          "official": "01101101"
+        },
+        {
+          "family": "bit_manipulation",
+          "generated_cot_extracted": "00001100",
+          "id": "0311b798",
+          "label": "00000100",
+          "official": "00000100"
+        },
+        {
+          "family": "bit_manipulation",
+          "generated_cot_extracted": "01111001",
+          "id": "034fb629",
+          "label": "00111001",
+          "official": "00111001"
+        },
+        {
+          "family": "bit_manipulation",
+          "generated_cot_extracted": "01111000",
+          "id": "048cc279",
+          "label": "01010000",
+          "official": "01010000"
+        },
+        {
+          "family": "bit_manipulation",
+          "generated_cot_extracted": "00000000",
+          "id": "04d8c3e6",
+          "label": "10000000",
+          "official": "10000000"
+        },
+        {
+          "family": "bit_manipulation",
+          "generated_cot_extracted": "01011011",
+          "id": "05ca617c",
+          "label": "11011011",
+          "official": "11011011"
+        },
+        {
+          "family": "bit_manipulation",
+          "generated_cot_extracted": "11111110",
+          "id": "06120e47",
+          "label": "11110010",
+          "official": "11110010"
+        },
+        {
+          "family": "equation_transform",
+          "generated_cot_extracted": "53",
+          "id": "065f9dea",
+          "label": "*53",
+          "official": "*53"
+        },
+        {
+          "family": "bit_manipulation",
+          "generated_cot_extracted": "01111100",
+          "id": "06881e47",
+          "label": "11111100",
+          "official": "11111100"
+        },
+        {
+          "family": "bit_manipulation",
+          "generated_cot_extracted": "00111010",
+          "id": "06b5da9f",
+          "label": "00011010",
+          "official": "00011010"
+        },
+        {
+          "family": "bit_manipulation",
+          "generated_cot_extracted": "10011001",
+          "id": "07d61ec8",
+          "label": "10111101",
+          "official": "10111101"
+        },
+        {
+          "family": "bit_manipulation",
+          "generated_cot_extracted": "10011110",
+          "id": "07e8cf66",
+          "label": "10010110",
+          "official": "10010110"
+        },
+        {
+          "family": "equation_transform",
+          "generated_cot_extracted": "1",
+          "id": "0bcffccd",
+          "label": "10",
+          "official": "10"
+        },
+        {
+          "family": "equation_transform",
+          "generated_cot_extracted": "82",
+          "id": "0c8a8a16",
+          "label": "{17",
+          "official": "{17"
+        },
+        {
+          "family": "bit_manipulation",
+          "generated_cot_extracted": "01001000",
+          "id": "0e70c867",
+          "label": "01000000",
+          "official": "01000000"
+        },
+        {
+          "family": "bit_manipulation",
+          "generated_cot_extracted": "01111111",
+          "id": "0ec17d2e",
+          "label": "00111111",
+          "official": "00111111"
+        },
+        {
+          "family": "bit_manipulation",
+          "generated_cot_extracted": "10011101",
+          "id": "101410e4",
+          "label": "10001101",
+          "official": "10001101"
+        },
+        {
+          "family": "bit_manipulation",
+          "generated_cot_extracted": "11111111",
+          "id": "108e69ef",
+          "label": "11011111",
+          "official": "11011111"
+        },
+        {
+          "family": "equation_transform",
+          "generated_cot_extracted": "47",
+          "id": "10fdae00",
+          "label": "-47",
+          "official": "-47"
+        }
+      ],
+      "rows": 9500,
+      "type_counts": {
+        "bit_manipulation": 1602,
+        "cipher": 1576,
+        "cryptarithm_deduce": 659,
+        "cryptarithm_guess": 164,
+        "equation_numeric_deduce": 596,
+        "equation_numeric_guess": 136,
+        "gravity": 1597,
+        "numeral": 1576,
+        "unit_conversion": 1594
+      },
+      "unique_known_ids_by_family": {
+        "bit_manipulation": 1602,
+        "equation_transform": 1555,
+        "gravity_constant": 1597,
+        "numeral_system": 1576,
+        "text_encryption": 1576,
+        "unit_conversion": 1594
+      },
+      "unique_known_train_ids": 9500,
+      "unknown_ids": 0
+    },
+    "kaggle_trajectories/nemotron_traj.csv": {
+      "by_family_generated": {
+        "bit_manipulation": {
+          "correct": 99,
+          "rows": 1602,
+          "unknown": 0,
+          "wrong": 1503
+        },
+        "equation_transform": {
+          "correct": 184,
+          "rows": 1555,
+          "unknown": 0,
+          "wrong": 1371
+        },
+        "gravity_constant": {
+          "correct": 995,
+          "rows": 1597,
+          "unknown": 0,
+          "wrong": 602
+        },
+        "numeral_system": {
+          "correct": 1522,
+          "rows": 1576,
+          "unknown": 0,
+          "wrong": 54
+        },
+        "text_encryption": {
+          "correct": 525,
+          "rows": 1576,
+          "unknown": 0,
+          "wrong": 1051
+        },
+        "unit_conversion": {
+          "correct": 1217,
+          "rows": 1594,
+          "unknown": 0,
+          "wrong": 377
+        }
+      },
+      "columns": [
+        "id",
+        "prompt",
+        "generated",
+        "correct answer",
+        "generated answer",
+        "correctness",
+        "problem type"
+      ],
+      "correct_answer_label_matches_official": 9500,
+      "correct_answer_label_mismatches_official": 0,
+      "correctness_counts": {
+        "false": 4738,
+        "partial": 339,
+        "true": 4423
+      },
+      "duplicate_known_id_rows": 0,
+      "generated_answer_metric_correct": 4542,
+      "generated_answer_metric_wrong": 4958,
+      "generated_text_char_stats": {
+        "max": 34155.0,
+        "mean": 14153.443894736842,
+        "min": 207.0,
+        "p50": 14872.0,
+        "p90": 26860.0,
+        "p99": 31948.0
+      },
+      "kind": "trajectory_csv",
+      "known_train_rows": 9500,
+      "problem_type_counts": {
+        "bit_manipulation": 1602,
+        "cipher": 1576,
+        "equation_numeric": 732,
+        "equation_symbolic": 823,
+        "gravity": 1597,
+        "numeral": 1576,
+        "unit_conversion": 1594
+      },
+      "rows": 9500,
+      "unique_known_train_ids": 9500,
+      "unknown_ids": 0,
+      "wrong_first25": [
+        {
+          "correctness": "false",
+          "family": "bit_manipulation",
+          "generated_answer": "11011101",
+          "id": "00066667",
+          "official": "10010111"
+        },
+        {
+          "correctness": "false",
+          "family": "bit_manipulation",
+          "generated_answer": "3",
+          "id": "000b53cf",
+          "official": "01000011"
+        },
+        {
+          "correctness": "false",
+          "family": "text_encryption",
+          "generated_answer": "5",
+          "id": "00189f6a",
+          "official": "cat imagines book"
+        },
+        {
+          "correctness": "partial",
+          "family": "text_encryption",
+          "generated_answer": "\\text{wizard learns secret",
+          "id": "001c63cb",
+          "official": "wizard creates secret"
+        },
+        {
+          "correctness": "partial",
+          "family": "unit_conversion",
+          "generated_answer": "50180",
+          "id": "00208201",
+          "official": "16.65"
+        },
+        {
+          "correctness": "false",
+          "family": "bit_manipulation",
+          "generated_answer": "2",
+          "id": "0031df9c",
+          "official": "00110100"
+        },
+        {
+          "correctness": "false",
+          "family": "equation_transform",
+          "generated_answer": "`*`?`",
+          "id": "00457d26",
+          "official": "@&"
+        },
+        {
+          "correctness": "partial",
+          "family": "gravity_constant",
+          "generated_answer": "50.5\\ \\text{m",
+          "id": "00463d04",
+          "official": "50.51"
+        },
+        {
+          "correctness": "false",
+          "family": "bit_manipulation",
+          "generated_answer": "1110100",
+          "id": "004ef7c7",
+          "official": "11111111"
+        },
+        {
+          "correctness": "false",
+          "family": "text_encryption",
+          "generated_answer": "king\\ chases\\ castle",
+          "id": "005ad22a",
+          "official": "king chases castle"
+        },
+        {
+          "correctness": "partial",
+          "family": "gravity_constant",
+          "generated_answer": "11.78\\ \\text{m",
+          "id": "00662ac2",
+          "official": "11.78"
+        },
+        {
+          "correctness": "partial",
+          "family": "text_encryption",
+          "generated_answer": "7",
+          "id": "00674059",
+          "official": "alice watches under wonderland"
+        },
+        {
+          "correctness": "false",
+          "family": "bit_manipulation",
+          "generated_answer": "7",
+          "id": "00754598",
+          "official": "11101111"
+        },
+        {
+          "correctness": "false",
+          "family": "bit_manipulation",
+          "generated_answer": "0",
+          "id": "00890aff",
+          "official": "01110000"
+        },
+        {
+          "correctness": "false",
+          "family": "bit_manipulation",
+          "generated_answer": "1",
+          "id": "008b52fd",
+          "official": "01100101"
+        },
+        {
+          "correctness": "false",
+          "family": "bit_manipulation",
+          "generated_answer": "2",
+          "id": "009a74b6",
+          "official": "11111011"
+        },
+        {
+          "correctness": "false",
+          "family": "text_encryption",
+          "generated_answer": "4",
+          "id": "00a3fd23",
+          "official": "wizard watches through library"
+        },
+        {
+          "correctness": "false",
+          "family": "equation_transform",
+          "generated_answer": "...",
+          "id": "00c032a8",
+          "official": "\\^?"
+        },
+        {
+          "correctness": "partial",
+          "family": "unit_conversion",
+          "generated_answer": "18",
+          "id": "00d1932c",
+          "official": "12.48"
+        },
+        {
+          "correctness": "false",
+          "family": "equation_transform",
+          "generated_answer": "6",
+          "id": "00d8b3db",
+          "official": "17/"
+        },
+        {
+          "correctness": "partial",
+          "family": "gravity_constant",
+          "generated_answer": "7.66\\text{ m",
+          "id": "00ec1c63",
+          "official": "7.66"
+        },
+        {
+          "correctness": "false",
+          "family": "text_encryption",
+          "generated_answer": "turtle\\ hatches\\ the\\ mysterious\\ garden",
+          "id": "00efa37c",
+          "official": "turtle watches the mysterious garden"
+        },
+        {
+          "correctness": "false",
+          "family": "bit_manipulation",
+          "generated_answer": "1",
+          "id": "00fdc0be",
+          "official": "11111111"
+        },
+        {
+          "correctness": "false",
+          "family": "bit_manipulation",
+          "generated_answer": "0",
+          "id": "01248b76",
+          "official": "11000101"
+        },
+        {
+          "correctness": "false",
+          "family": "equation_transform",
+          "generated_answer": "your answer",
+          "id": "012cab1f",
+          "official": "|@{"
+        }
+      ]
+    },
+    "sft_train_converted.jsonl": {
+      "assistant_char_stats": {
+        "max": 12985.0,
+        "mean": 5147.100195334942,
+        "min": 816.0,
+        "p50": 4207.0,
+        "p90": 10224.0,
+        "p99": 11247.0
+      },
+      "base_loss_stats": {
+        "max": 1.7144912010015445,
+        "mean": 0.5355024396995169,
+        "min": 0.1318104539082245,
+        "p50": 0.4474952736446086,
+        "p90": 1.2121590133261892,
+        "p99": 1.561454154349662
+      },
+      "by_family": {
+        "bit_manipulation": {
+          "correct": 1754,
+          "rows": 1754,
+          "unknown": 0,
+          "wrong": 0
+        },
+        "equation_transform": {
+          "correct": 2438,
+          "rows": 2438,
+          "unknown": 0,
+          "wrong": 0
+        },
+        "gravity_constant": {
+          "correct": 1055,
+          "rows": 1055,
+          "unknown": 0,
+          "wrong": 0
+        },
+        "numeral_system": {
+          "correct": 730,
+          "rows": 730,
+          "unknown": 0,
+          "wrong": 0
+        },
+        "text_encryption": {
+          "correct": 1656,
+          "rows": 1656,
+          "unknown": 0,
+          "wrong": 0
+        },
+        "unit_conversion": {
+          "correct": 1070,
+          "rows": 1070,
+          "unknown": 0,
+          "wrong": 0
+        }
+      },
+      "duplicate_known_id_rows": 1659,
+      "kind": "jsonl",
+      "known_train_rows": 8703,
+      "long_trace_rows_over_7680_chars": 2886,
+      "malformed": 0,
+      "matched_by": {
+        "id": 8703
+      },
+      "metadata_category_counts": {
+        "bit_manipulation": 1754,
+        "cipher": 1656,
+        "cryptarithm_deduce": 1232,
+        "cryptarithm_guess": 307,
+        "equation_numeric_deduce": 658,
+        "equation_numeric_guess": 241,
+        "gravity": 1055,
+        "numeral": 730,
+        "unit_conversion": 1070
+      },
+      "metadata_source_counts": {},
+      "metadata_status_counts": {},
+      "metadata_type_counts": {
+        "bit_manipulation": 1754,
+        "equation_transform": 2438,
+        "gravity_constant": 1055,
+        "numeral_system": 730,
+        "text_encryption": 1656,
+        "unit_conversion": 1070
+      },
+      "metric_correct": 8703,
+      "metric_wrong": 0,
+      "no_final_answer": 0,
+      "role_shapes": {
+        "user,assistant": 8703
+      },
+      "rows": 8703,
+      "unique_known_ids_by_family": {
+        "bit_manipulation": 1354,
+        "equation_transform": 1499,
+        "gravity_constant": 975,
+        "numeral_system": 650,
+        "text_encryption": 1576,
+        "unit_conversion": 990
+      },
+      "unique_known_train_ids": 7044,
+      "unknown_or_synthetic_rows": 0,
+      "wrong_first25": []
+    },
+    "sft_train_full_9500.jsonl": {
+      "assistant_char_stats": {
+        "max": 13035.0,
+        "mean": 4561.920842105264,
+        "min": 212.0,
+        "p50": 3854.0,
+        "p90": 9400.0,
+        "p99": 11150.0
+      },
+      "base_loss_stats": {},
+      "by_family": {
+        "bit_manipulation": {
+          "correct": 1602,
+          "rows": 1602,
+          "unknown": 0,
+          "wrong": 0
+        },
+        "equation_transform": {
+          "correct": 1555,
+          "rows": 1555,
+          "unknown": 0,
+          "wrong": 0
+        },
+        "gravity_constant": {
+          "correct": 1597,
+          "rows": 1597,
+          "unknown": 0,
+          "wrong": 0
+        },
+        "numeral_system": {
+          "correct": 1576,
+          "rows": 1576,
+          "unknown": 0,
+          "wrong": 0
+        },
+        "text_encryption": {
+          "correct": 1576,
+          "rows": 1576,
+          "unknown": 0,
+          "wrong": 0
+        },
+        "unit_conversion": {
+          "correct": 1594,
+          "rows": 1594,
+          "unknown": 0,
+          "wrong": 0
+        }
+      },
+      "duplicate_known_id_rows": 0,
+      "kind": "jsonl",
+      "known_train_rows": 9500,
+      "long_trace_rows_over_7680_chars": 2522,
+      "malformed": 0,
+      "matched_by": {
+        "id": 9500
+      },
+      "metadata_category_counts": {
+        "bit_manipulation": 1602,
+        "cipher": 1576,
+        "cryptarithm_deduce": 659,
+        "cryptarithm_guess": 164,
+        "equation_numeric_deduce": 596,
+        "equation_numeric_guess": 136,
+        "gravity": 1597,
+        "numeral": 1576,
+        "unit_conversion": 1594
+      },
+      "metadata_source_counts": {},
+      "metadata_status_counts": {},
+      "metadata_type_counts": {
+        "bit_manipulation": 1602,
+        "equation_transform": 1555,
+        "gravity_constant": 1597,
+        "numeral_system": 1576,
+        "text_encryption": 1576,
+        "unit_conversion": 1594
+      },
+      "metric_correct": 9500,
+      "metric_wrong": 0,
+      "no_final_answer": 0,
+      "role_shapes": {
+        "user,assistant": 9500
+      },
+      "rows": 9500,
+      "unique_known_ids_by_family": {
+        "bit_manipulation": 1602,
+        "equation_transform": 1555,
+        "gravity_constant": 1597,
+        "numeral_system": 1576,
+        "text_encryption": 1576,
+        "unit_conversion": 1594
+      },
+      "unique_known_train_ids": 9500,
+      "unknown_or_synthetic_rows": 0,
+      "wrong_first25": []
+    },
+    "sft_train_reconstructed.jsonl": {
+      "assistant_char_stats": {
+        "max": 13035.0,
+        "mean": 3241.4984134053334,
+        "min": 112.0,
+        "p50": 3002.0,
+        "p90": 8675.0,
+        "p99": 10928.0
+      },
+      "base_loss_stats": {},
+      "by_family": {
+        "bit_manipulation": {
+          "correct": 1602,
+          "rows": 1602,
+          "unknown": 0,
+          "wrong": 0
+        },
+        "equation_transform": {
+          "correct": 1555,
+          "rows": 1555,
+          "unknown": 0,
+          "wrong": 0
+        },
+        "gravity_constant": {
+          "correct": 1597,
+          "rows": 1602,
+          "unknown": 5,
+          "wrong": 0
+        },
+        "numeral_system": {
+          "correct": 1576,
+          "rows": 1576,
+          "unknown": 0,
+          "wrong": 0
+        },
+        "text_encryption": {
+          "correct": 1576,
+          "rows": 1585,
+          "unknown": 9,
+          "wrong": 0
+        },
+        "unit_conversion": {
+          "correct": 1594,
+          "rows": 1594,
+          "unknown": 0,
+          "wrong": 0
+        },
+        "unknown": {
+          "correct": 0,
+          "rows": 8449,
+          "unknown": 8449,
+          "wrong": 0
+        }
+      },
+      "duplicate_known_id_rows": 0,
+      "kind": "jsonl",
+      "known_train_rows": 9500,
+      "long_trace_rows_over_7680_chars": 2522,
+      "malformed": 0,
+      "matched_by": {
+        "prompt": 9500
+      },
+      "metadata_category_counts": {},
+      "metadata_source_counts": {},
+      "metadata_status_counts": {},
+      "metadata_type_counts": {},
+      "metric_correct": 9500,
+      "metric_wrong": 0,
+      "no_final_answer": 0,
+      "role_shapes": {
+        "user,assistant": 17963
+      },
+      "rows": 17963,
+      "unique_known_ids_by_family": {
+        "bit_manipulation": 1602,
+        "equation_transform": 1555,
+        "gravity_constant": 1597,
+        "numeral_system": 1576,
+        "text_encryption": 1576,
+        "unit_conversion": 1594
+      },
+      "unique_known_train_ids": 9500,
+      "unknown_or_synthetic_rows": 8463,
+      "wrong_first25": []
+    }
+  },
+  "file_hashes": {
+    "report_md": {
+      "bytes": 6884,
+      "path": "C:\\Users\\davis\\Downloads\\Relatório de Extração_ Dataset andy279_nemotron-reasoning-challenge.md",
+      "sha256": "869a7e0b1f294c48803bc4cdc2014baecb421a42c3b6676a1d3f68363c8b6314"
+    },
+    "train_csv": {
+      "bytes": 3069304,
+      "path": "C:\\Users\\davis\\Downloads\\competition_train.csv",
+      "sha256": "d204af160633b638448723a437aa51c0db70fd0b64ff92f6ad6f52e5ac6377fa"
+    },
+    "zip": {
+      "bytes": 94515464,
+      "path": "C:\\Users\\davis\\Downloads\\nemotron_hacker_dataset.zip",
+      "sha256": "6272e30e717c1b257801b82ae98a76980ecb14845f3306862a9be0a888ee476f"
+    }
+  },
+  "generated_at_utc": "2026-05-14T14:27:27.588986+00:00",
+  "outputs": {
+    "report_md": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v377_nemotron_hacker_dataset_audit\\KG1_V377_NEMOTRON_HACKER_DATASET_AUDIT.md",
+    "summary_json": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v377_nemotron_hacker_dataset_audit\\v377_nemotron_hacker_dataset_audit_summary.json",
+    "zip_entries_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v377_nemotron_hacker_dataset_audit\\zip_entries.csv"
+  },
+  "report_md": {
+    "contains_hf_token_pattern": false,
+    "head_redacted": "# Relatório de Extração: Dataset andy279/nemotron-reasoning-challenge\n\n**Data da Extração:** 14 de Maio de 2026\n**Alvo:** `https://huggingface.co/datasets/andy279/nemotron-reasoning-challenge`\n**Status do Alvo:** Gated (Manual Approval Required) - 403 Forbidden\n\n## 1. Resumo Executivo da Operação\n\nO dataset original `andy279/nemotron-reasoning-challenge` encontra-se protegido por um sistema de aprovação manual (\"manual gated\") no Hugging Face. Apesar de possuirmos um token válido com a flag `canReadGatedRepos=True`, o acesso direto aos arquivos via API, Git, ou Web Interface retorna erro 403 (Forbidden) até que o autor aprove manualmente a solicitação.\n\nNo entanto, utilizando técnicas avançadas de OSINT (Open Source Intelligence), engenharia reversa de pipelines de treinamento e exploração de vazamentos em plataformas correlatas (Kaggle e GitHub), **conseguimos reconstruir e obter 100% dos dados essenciais do dataset**, incluindo versões de qualidade superior filtradas por logprob.\n\n## 2. Vetores de Ataque Explorados\n\n### 2.1. Tentativas Diretas (Falhas Esperadas)\n- **Hugging Face Hub API (`hf_hub_download`)**: Bloqueado (403).\n- **Git Clone com credenciais**: Bloqueado no nível do",
+    "risk_flags": [
+      "report_mentions_gated_manual_approval",
+      "report_mentions_403_forbidden",
+      "report_mentions_vazamento_or_leak",
+      "report_mentions_bypass_or_attack_vectors"
+    ],
+    "urls": [
+      "https://huggingface.co/datasets/andy279/nemotron-reasoning-challenge`"
+    ]
+  },
+  "schema_version": "kg1_v377_nemotron_hacker_dataset_audit_v1",
+  "train_family_counts": {
+    "bit_manipulation": 1602,
+    "equation_transform": 1555,
+    "gravity_constant": 1597,
+    "numeral_system": 1576,
+    "text_encryption": 1576,
+    "unit_conversion": 1594
+  },
+  "zip_members": [
+    {
+      "compress_size": 11598085,
+      "file_size": 59672150,
+      "filename": "sft_train_converted.jsonl",
+      "sha256": "69aee7ddaed6b7d55a6792f03ad960e44a10e1974cffe2f184514646f68fd228"
+    },
+    {
+      "compress_size": 11307430,
+      "file_size": 57034518,
+      "filename": "sft_train_full_9500.jsonl",
+      "sha256": "8b5cead5c539a81761ec00cb43aa32ae5f2b277a4d7a252b98135d5693912a35"
+    },
+    {
+      "compress_size": 20555095,
+      "file_size": 96207995,
+      "filename": "sft_train_reconstructed.jsonl",
+      "sha256": "1434811d65cbf68fd17d391cb2fce77426183666f59d7cf6ca4fddf8b4fe5a91"
+    },
+    {
+      "compress_size": 3230,
+      "file_size": 6884,
+      "filename": "HACKER_REPORT.md",
+      "sha256": "869a7e0b1f294c48803bc4cdc2014baecb421a42c3b6676a1d3f68363c8b6314"
+    },
+    {
+      "compress_size": 1855,
+      "file_size": 4347,
+      "filename": "README.md",
+      "sha256": "ccedc438981d8aa5a1b1b659f7c8d6bd58af6eda4329838c32dd4b132436a3e1"
+    },
+    {
+      "compress_size": 10801970,
+      "file_size": 48670122,
+      "filename": "kaggle_sft_data/dataset_generated.csv",
+      "sha256": "dd3160e264585cb1902cdf481c31ac62a2d945a0eb481068eee9f45a56351f0a"
+    },
+    {
+      "compress_size": 40246525,
+      "file_size": 139456207,
+      "filename": "kaggle_trajectories/nemotron_traj.csv",
+      "sha256": "01da9b309daedf18c9bcff9e0766b3deb7d736a1d350c73ded47775a8b66685e"
+    }
+  ]
+}
