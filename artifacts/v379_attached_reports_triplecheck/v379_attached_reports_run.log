@@ -1,0 +1,72 @@
+=== V379 ATTACHED REPORTS TRIPLE CHECK START ===
+output_dir = C:\Users\davis\Workspace\KG1 -NVIDIA\artifacts\v284_official_gate_worktree\artifacts\v379_attached_reports_triplecheck
+competition_train_audit = {
+  "duplicate_id_rows": 0,
+  "duplicate_prompt_rows": 0,
+  "family_counts": {
+    "bit_manipulation": 1602,
+    "equation_transform": 1555,
+    "gravity_constant": 1597,
+    "numeral_system": 1576,
+    "text_encryption": 1576,
+    "unit_conversion": 1594
+  },
+  "path": "C:\\Users\\davis\\Downloads\\competition_train.csv",
+  "rows": 9500,
+  "sha256": "d204af160633b638448723a437aa51c0db70fd0b64ff92f6ad6f52e5ac6377fa",
+  "unique_ids": 9500,
+  "unique_prompts": 9500
+}
+competition_train_matches_final = True
+claim_decisions = [
+  {
+    "claim": "Original andy279 SFT train has 49,290 examples / 7,200 unique puzzles",
+    "evidence": "mentioned_in_reports=3; local_original_files_available=false",
+    "roadmap_decision": "not active training input until actual sft_train.jsonl is approved/downloaded and audited"
+  },
+  {
+    "claim": "Original validation has 1,165 examples / 1,123 puzzles, including 399 unsolved transformation rows",
+    "evidence": "mentioned_in_reports=3; transformation_unsolved_mentions=2",
+    "roadmap_decision": "supports equation_transform as solver/DSL problem; no direct adapter gain without data access"
+  },
+  {
+    "claim": "Original train contains heavy bit/equation signal",
+    "evidence": "bit_17285_mentions=3; transformation_10741_mentions=3; solver_bit_1602_mentions=3; solver_transformation_1101_mentions=3",
+    "roadmap_decision": "if access is granted later, mine only after strict V381-style gates; do not assume immediate gain"
+  },
+  {
+    "claim": "SFT README quality recipe cleans boxed LaTeX, reextracts answers, recomputes correctness, keeps only correct attempts",
+    "evidence": "quality_recipe_mentions=4",
+    "roadmap_decision": "promote this as mandatory V381 cleaning rule for any local trace source"
+  },
+  {
+    "claim": "competition_test.csv has 34 puzzles",
+    "evidence": "report_mentions=2; audited_final_test_rows=3",
+    "roadmap_decision": "claim contradicted locally; active roadmap keeps competition_test.csv retired as eval"
+  },
+  {
+    "claim": "Downloaded competition_train.csv is new data",
+    "evidence": "sha256=d204af160633b638448723a437aa51c0db70fd0b64ff92f6ad6f52e5ac6377fa; rows=9500; unique_ids=9500",
+    "roadmap_decision": "not new; identical to final package train and useful only as official prompt/answer reference"
+  },
+  {
+    "claim": "Reports mention tong_with_logprob/yours_with_logprob",
+    "evidence": "tong_mentions=1; yours_mentions=1; V379 confirmed files absent locally",
+    "roadmap_decision": "not evidence until files exist and pass hash/metric audit"
+  },
+  {
+    "claim": "Reports mention raw multi-attempt trace files",
+    "evidence": "raw_trace_mentions=2; V379 inventories do not contain these raw trace JSONLs",
+    "roadmap_decision": "not active input; if acquired later, audit as a new source before any training"
+  }
+]
+gain_assessment = {
+  "actionable_gain_route": "No direct gain from the attached files. The only actionable improvement is better gating/cleaning for V380/V381. Expected gain remains conditional on V380 accepting solver categories with zero losses, then V381 transferring without bit regression.",
+  "new_measured_adapter_gain": 0,
+  "new_measured_cpu_gain": 0
+}
+outputs = {
+  "report_md": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v379_attached_reports_triplecheck\\KG1_V379_ATTACHED_REPORTS_TRIPLECHECK.md",
+  "summary_json": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v379_attached_reports_triplecheck\\v379_attached_reports_triplecheck_summary.json"
+}
+=== V379 ATTACHED REPORTS TRIPLE CHECK END ===

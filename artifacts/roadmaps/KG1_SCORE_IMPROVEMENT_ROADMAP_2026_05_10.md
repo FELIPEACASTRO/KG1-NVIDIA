@@ -117,6 +117,36 @@ Uso permitido no plano:
 - Qualquer dataset futuro precisa filtrar `id`, `prompt_sha256`, prompt normalizado e split V217 val antes de treino ou validacao.
 - O relatorio menciona `tong_with_logprob.csv` e `yours_with_logprob.csv`, mas esses arquivos nao existem em nenhum dos dois diretorios auditados. Nao contam como evidencia.
 
+## Triple Check dos Anexos 2026-05-14
+
+Arquivos analisados:
+
+- `Dataset andy279_nemotron-reasoning-challenge - Relatorio Completo de Extracao.md`.
+- `Relatorio de Extracao_ Dataset andy279_nemotron-reasoning-challenge.md`.
+- `Nemotron Reasoning Challenge - SFT Data.md`.
+- `Relatorio_ Dataset andy279_nemotron-reasoning-challenge.md`.
+- `competition_train.csv`.
+
+Achados que ficam no plano:
+
+- `competition_train.csv` anexado e identico ao `competition_train.csv` do pacote final: SHA256 `d204af160633b638448723a437aa51c0db70fd0b64ff92f6ad6f52e5ac6377fa`, `9500` rows, `9500` IDs unicos, `0` duplicatas.
+- Contagem oficial por familia no train: `bit_manipulation=1602`, `equation_transform=1555`, `gravity_constant=1597`, `numeral_system=1576`, `text_encryption=1576`, `unit_conversion=1594`.
+- Os anexos descrevem o SFT original `andy279` como `49290` exemplos de treino / `7200` puzzles unicos e validacao com `1165` exemplos / `1123` puzzles.
+- Os anexos citam `399` transformations nao resolvidas no split de validacao original. Isto reforca que `equation_transform` e gargalo de solver/DSL/verificacao, nao de treino generico.
+- Os anexos citam forte sinal original para as familias alvo: `17285` traces de bit, `10741` transformation, `1602` solver-guided bit e `1101` solver-guided transformation.
+- Esses arquivos SFT originais nao estao disponiveis localmente; portanto nao entram como fonte ativa de treino. Se acesso for aprovado depois, entram apenas por novo gate de hash, resposta, duplicata, overlap e tokenizacao.
+- A frase dos relatorios sobre ter `100% dos dados essenciais` nao e aceita como fato operacional: os proprios anexos dizem que o original tem `49290` train e `1165` validation, enquanto os dados locais cobrem `17963`/`9500` derivados e nao incluem a validacao original.
+- O README SFT descreve uma regra de qualidade que agora e obrigatoria no V381: limpar artefatos LaTeX dentro de `\boxed{}`, reextrair a resposta final, recomputar corretude pelo scorer e manter somente tentativas corretas.
+- O claim de `competition_test.csv` com `34` puzzles foi contradito pela auditoria local: o arquivo auditado tem `3` rows e as `3` aparecem no train. Continua proibido como eval.
+- Os anexos citam raw traces multi-attempt (`all_traces_merged.jsonl`, `solver_bit_manipulation_traces_merged.jsonl`, `solver_transformation_traces_merged.jsonl`), mas esses arquivos nao existem nos diretorios locais auditados. So entram no plano se forem adquiridos e auditados em novo gate.
+- Um dos relatorios contem padrao de token HF; relatórios brutos nao devem ser versionados. Apenas metadados redigidos entram no repo.
+
+Ganho medido novo desses anexos:
+
+- Adapter-only: `+0`.
+- CPU teacher: `+0`.
+- Ganho esperado: indireto e condicional. A utilidade real e reduzir erro no V381/V382; ainda nao autoriza HF nem submit.
+
 ## Roadmap Ativo
 
 ### Step 1 - V380 CPU equation solver candidate patch
@@ -161,6 +191,10 @@ Regras:
 - Sem overlap com V217 val.
 - Sem `sft_train_converted` bruto: `6923` rows tem `<think>`/`</think>` malformado.
 - Sem `sft_train_full_9500` bruto: limpar spans intermediarios, respostas declaradas erradas e chaves literais antes de tokenizar.
+- Limpar artefatos LaTeX dentro de `\boxed{}`.
+- Reextrair a resposta final depois da limpeza.
+- Recomputar corretude pelo scorer do projeto.
+- Manter somente tentativas corretas.
 - Resposta final validada pelo scorer.
 - Prompt/template oficial preservado.
 - Offset-mask correto.
@@ -227,6 +261,8 @@ Regras:
 | `sft_train_converted.jsonl` bruto | duplicatas/reweighting |
 | `sft_train_full_9500.jsonl` bruto | multiplos boxed spans e `364` respostas declaradas erradas antes do final corrigido |
 | `competition_test.csv` como eval | `3/3` rows aparecem no train |
+| Claims de `100% dos dados essenciais` | contradizem a ausencia local de `sft_train.jsonl`, `sft_val.jsonl` e validacao original |
+| Raw traces citados nos relatorios | arquivos nao existem nos diretorios locais auditados |
 | `dataset_generated.csv` bruto | CoT errado em `303` rows |
 | `problems.jsonl` bruto | apenas `8333/9500` correto |
 | Tong bit direct replacement | V374 caiu para `bit=136` e teve perdas contra V366 |
