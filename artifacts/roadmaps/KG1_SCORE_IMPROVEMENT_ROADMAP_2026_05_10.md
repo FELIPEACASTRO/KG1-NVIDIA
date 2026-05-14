@@ -23,6 +23,7 @@ As evidencias fortes reunidas hoje mostram que ha ganho possivel, mas o ganho co
 | V344 preference/abstain checkpoint-2 | `192/315` | `56/155` | `136/160` | sem ganho; mudou `7` predicoes mas `0` ganhos e `0` perdas contra baseline |
 | V345 failure audit sobre V344 | diagnostico concluido | `7` ganhos V343 nao transferidos | bit preservado | dataset cobria classes de regra, mas treino nao alterou os IDs-alvo; bloquear repeticao do objetivo |
 | V346 answer exact-match checkpoint-2 | `191/315` | `56/155` | `135/160` | falhou; `0` ganhos, `1` perda em bit; bloquear mais H200 nessa variante |
+| V348 residual CPU audit | mapa residual pronto | `92` misses restantes | `24` misses restantes | HF bloqueado; proximo passo e regra label-free no-loss |
 | V306/V302 full verifier local | `838/947` potencial | `60/155` | `146/160` | depende de verifier/postprocessor |
 | V335 LoRA mixed trace replay | `190/315` | `56/155` | `134/160` | falhou; cancelado por FinOps |
 | V338B LoRA minimal transfer weak eval | `190/315` | `56/155` | `134/160` | checkpoints 2 e 4 falharam; cancelado por FinOps |
@@ -44,6 +45,8 @@ Atualizacao V345: a auditoria ACC-first confirmou que os `7` ganhos CPU V343 tin
 Atualizacao trainer preference: foi encontrado um bug objetivo no schedule de LR em `scripts/hf_job_train_v315_preference.py`. O loop incrementava `global_step` antes de calcular `base.get_lr`; com `MAX_STEPS=2`, o primeiro update ja usava `FINAL_LEARNING_RATE=1e-09`. Isso explica por que o log do V344 mostrou `lr=1.000e-09` em todos os steps. Correcao aplicada: calcular LR com o step anterior ao update e so depois marcar o step como concluido.
 
 Atualizacao V346 HF resultado: o treino answer exact-match A100 `felipesp1983/6a050b53e48bea4538b9c1e3` corrigiu o schedule e realmente usou LR alto no inicio (`8.00e-08` no step 1 ate `2.00e-08` no step 6). Mesmo assim, o weak eval H200 checkpoint-2 `felipesp1983/6a050efe3308d79117b8f350` ficou em `191/315`, `equation_transform=56/155`, `bit_manipulation=135/160`, `truncated=0`. Auditoria V347 contra o baseline V290 e o solver V343: `7` ganhos V343 continuaram nao transferidos, `6` predicoes mudaram, `0` ganhos e `1` perda em bit (`8740ed31`). Decisao: V346 nao promove, nao full eval, nao package, nao submit e nao avaliar checkpoints 4/6 sem novo sinal independente.
+
+Atualizacao V348 CPU residual: implementado `scripts/analyze_v348_residual_no_loss_expansion.py`. O mapa residual apos V343 ficou em `92` equation misses e `24` bit misses. Em equation, `82` sao `equation_symbolic_punct` e `10` sao `equation_numeric_operator`; os shapes sao `PPPPP=81`, `DDPDD=10`, `PPP=1`. Em bit, `14` misses estao a distancia de Hamming `1`, `8` a distancia `2`, `1` a distancia `3` e `1` a distancia `5`. Isso mostra oportunidade, mas ainda nao existe regra no-loss aceita; portanto HF continua bloqueado.
 
 ## Metas
 
@@ -248,6 +251,15 @@ Status 2026-05-13:
   - `v344_loss_vs_baseline=1` em `bit_manipulation`;
   - `preference_rows=0`, pois V346 era SFT answer-only, nao preference.
 - Decisao: V346 falhou mesmo com LR efetivo. Encerrar a rota "mais LR + answer-only SFT sintetico" ate existir novo sinal CPU. Nao gastar H200 avaliando checkpoints 4/6 por expectativa.
+- V348 residual no-loss audit implementado em `scripts/analyze_v348_residual_no_loss_expansion.py`.
+- Artefato: `artifacts/v348_residual_no_loss_expansion/20260513T_cpu_gate/v348_residual_no_loss_expansion_manifest.json`.
+- Resultado V348:
+  - V343 summary preservado: `199/315`, `equation=63/155`, `bit=136/160`;
+  - equation residual: `92` rows (`82` symbolic/punct, `10` numeric/operator);
+  - equation shape residual: `PPPPP=81`, `DDPDD=10`, `PPP=1`;
+  - bit residual: `24` rows; Hamming `1=14`, `2=8`, `3=1`, `5=1`;
+  - `22/24` bit misses sao low-Hamming, mas sem seletor no-loss ainda.
+- Decisao V348: mapa residual pronto, mas nenhum novo ganho aceito. HF GPU segue bloqueado ate V349 adicionar regra label-free com `losses=0`.
 
 ### 4. V338 - Tiny LoRA absorption smoke
 
@@ -417,18 +429,17 @@ Os itens abaixo ficam apenas no arquivo historico. Eles nao fazem parte do plano
 
 ## Proxima acao unica
 
-Implementar V348 CPU residual no-loss expansion antes de qualquer novo HF:
+Implementar V349 CPU candidate rules sobre os residuos V348 antes de qualquer novo HF:
 
-1. Partir do baseline adapter-only V290 checkpoint-6 e do solver/verifier V343, nao de loss.
-2. Auditar os residuos que continuam errados apos V343:
-   - equation: misses restantes depois dos `7` ganhos V343;
-   - bit: misses restantes mantendo `bit>=136`.
-3. Adicionar somente regras label-free com `candidate_count` baixo, `conflict_count=0` e explicacao deterministica:
+1. Usar somente os CSVs residuais V348 como fila de trabalho:
+   - `artifacts/v348_residual_no_loss_expansion/20260513T_cpu_gate/v348_equation_residuals.csv`;
+   - `artifacts/v348_residual_no_loss_expansion/20260513T_cpu_gate/v348_bit_residuals.csv`.
+2. Adicionar somente regras label-free com `candidate_count` baixo, `conflict_count=0` e explicacao deterministica:
    - equation symbolic/punctuation residual;
    - equation numeric residual que nao esteja coberto por V343;
    - bit Tong bit-pair/bitsum/stride apenas se gerar nova predicao no-loss.
-4. Gate CPU obrigatorio:
+3. Gate CPU obrigatorio:
    - novo ganho aceito apenas com `losses=0`;
    - `equation>63` ou `bit>136` no weak diagnostic;
    - sem usar weak/full rows como treino direto.
-5. HF GPU continua bloqueado. So liberar novo job se V348 produzir um novo teacher com ganho no-loss e um dataset cujo sinal seja diferente de V344/V346. Repetir mais epochs, checkpoints 4/6 do V346 ou outra variacao de LR sem novo CPU gate esta removido do plano ativo.
+4. HF GPU continua bloqueado. So liberar novo job se V349 produzir um novo teacher com ganho no-loss e um dataset cujo sinal seja diferente de V344/V346. Repetir mais epochs, checkpoints 4/6 do V346 ou outra variacao de LR sem novo CPU gate esta removido do plano ativo.

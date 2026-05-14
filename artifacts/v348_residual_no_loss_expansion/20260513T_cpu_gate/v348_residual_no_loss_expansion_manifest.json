@@ -1,0 +1,53 @@
+{
+  "bit_residual_count": 24,
+  "bit_residual_hamming": {
+    "1": 14,
+    "2": 8,
+    "3": 1,
+    "5": 1
+  },
+  "decision": {
+    "decision": "cpu_residual_map_ready_no_hf_gpu",
+    "next_action": "Implement new label-free candidate rules only against these residual CSVs, then rerun a CPU no-loss gate. HF remains blocked until equation>63 or bit>136 with losses=0.",
+    "reason": "residual_equation=92; residual_bit=24; no new no-loss rule has been accepted by this audit"
+  },
+  "equation_residual_by_subtype": {
+    "equation_numeric_operator": 10,
+    "equation_symbolic_punct": 82
+  },
+  "equation_residual_count": 92,
+  "equation_residual_query_shapes": {
+    "DDPDD": 10,
+    "PPP": 1,
+    "PPPPP": 81
+  },
+  "generated_at_utc": "2026-05-14T00:12:39.515995+00:00",
+  "inputs": {
+    "tong_detail_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v333_tong_bit_reasoner_gate\\20260513T171304Z\\v333_tong_bit_reasoner_gate_tong_bit_detail.csv",
+    "tong_detail_sha256": "0814f18a4c4f64c8bcf28606cb0c68879f07ad03593f4cbe8c56d9d73f20cac6",
+    "v343_predictions_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v343_equation_residual_solver_audit\\20260513T_integrated_on_v290_v3\\v336a_integrated_no_loss_predictions.csv",
+    "v343_predictions_sha256": "5ceaef012326b29af7a52e21485f78254719622107d0884d4cdacbc735d9f330"
+  },
+  "outputs": {
+    "bit_residuals_csv": "artifacts\\v348_residual_no_loss_expansion\\20260513T_cpu_gate\\v348_bit_residuals.csv",
+    "equation_residuals_csv": "artifacts\\v348_residual_no_loss_expansion\\20260513T_cpu_gate\\v348_equation_residuals.csv",
+    "manifest_json": "artifacts\\v348_residual_no_loss_expansion\\20260513T_cpu_gate\\v348_residual_no_loss_expansion_manifest.json"
+  },
+  "schema_version": "kg1_v348_residual_no_loss_expansion_v1",
+  "v343_summary": {
+    "accuracy": 0.6317460317460317,
+    "correct": 199,
+    "family": {
+      "bit_manipulation": {
+        "correct": 136,
+        "rows": 160
+      },
+      "equation_transform": {
+        "correct": 63,
+        "rows": 155
+      }
+    },
+    "rows": 315,
+    "truncated": 0
+  }
+}
