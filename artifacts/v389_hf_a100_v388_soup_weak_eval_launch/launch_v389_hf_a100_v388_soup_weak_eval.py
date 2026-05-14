@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Launch V389 A100 weak eval for V388 adapter soups.
+"""Launch V389 guarded weak eval for V388 adapter soups.
 
 V388 produces CPU-built adapter-only soups. V389 is the first GPU gate:
 evaluate the soups on weak315 using the historical V221 prompt suffix.
@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import subprocess
 from datetime import datetime, timezone
 from pathlib import Path
@@ -25,14 +26,17 @@ from huggingface_hub import HfApi, get_token
 from huggingface_hub.errors import RepositoryNotFoundError
 
 
-VERSION = "v389_hf_a100_v388_soup_weak_eval"
+VERSION = "v389_hf_v388_soup_weak_eval"
 NAMESPACE = "felipesp1983"
 REPO_BRANCH = "v230-v226-complementarity"
 REPO_ROOT = Path(__file__).resolve().parents[2]
 EXPECTED_COMMIT = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=REPO_ROOT, text=True).strip()
 IMAGE = "vllm/vllm-openai:v0.20.1"
-FLAVOR = "a100-large"
-RUN_ID = "v389-a100-v388-soup-weak-" + datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+FLAVOR = os.environ.get("KG1_LAUNCH_FLAVOR", "h200").strip()
+REQUIRED_GPU_NAME_REGEX = "H200" if FLAVOR.startswith("h200") else "A100"
+MIN_GPU_TOTAL_GIB = "130" if FLAVOR.startswith("h200") else "75"
+MAX_UNIT_COST_USD = "0.09" if FLAVOR.startswith("h200") else "0.05"
+RUN_ID = f"v389-{FLAVOR}-v388-soup-weak-" + datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
 
 ADAPTER_REPO = "felipesp1983/kg1-nemotron-lora-v388-v291-v382-soups"
 REQUESTED_ADAPTERS = [
@@ -67,7 +71,6 @@ print(json.dumps({
 }, sort_keys=True), flush=True)
 PY
 apt-get update -qq && apt-get install -y -qq git >/dev/null
-$PYBIN -m pip install -q --no-cache-dir 'huggingface_hub>=0.36.0' pandas packaging safetensors hf_transfer
 rm -rf /tmp/kg1
 git clone --depth 1 --branch "$KG1_BRANCH" https://github.com/FELIPEACASTRO/KG1-NVIDIA.git /tmp/kg1
 cd /tmp/kg1
@@ -77,6 +80,9 @@ observed=$(git rev-parse HEAD)
 echo "repo_commit=$observed"
 if [ "$observed" != "$KG1_EXPECTED_COMMIT" ]; then echo "commit mismatch: expected=$KG1_EXPECTED_COMMIT observed=$observed" >&2; exit 12; fi
 $PYBIN -m py_compile scripts/hf_job_weak_eval_v245.py scripts/hf_job_preflight_gate.py
+$PYBIN scripts/hf_job_preflight_gate.py --phase eval-preinstall
+$PYBIN -m pip install -q --no-cache-dir 'huggingface_hub>=0.36.0' pandas packaging safetensors hf_transfer
+$PYBIN scripts/hf_job_preflight_gate.py --phase eval-postinstall
 export HF_HUB_ENABLE_HF_TRANSFER=1
 export TOKENIZERS_PARALLELISM=false
 export VLLM_USE_DEEP_GEMM=0
@@ -118,11 +124,11 @@ def build_job_env(hardware: dict[str, object], specs: list[dict[str, str]]) -> d
         "KG1_BRANCH": REPO_BRANCH,
         "KG1_EXPECTED_COMMIT": EXPECTED_COMMIT,
         "KG1_REQUIRE_CUDA": "1",
-        "KG1_MIN_GPU_TOTAL_GIB": "75",
-        "KG1_REQUIRED_GPU_NAME_REGEX": "A100",
+        "KG1_MIN_GPU_TOTAL_GIB": MIN_GPU_TOTAL_GIB,
+        "KG1_REQUIRED_GPU_NAME_REGEX": REQUIRED_GPU_NAME_REGEX,
         "KG1_HF_FLAVOR": FLAVOR,
         "KG1_HF_UNIT_COST_USD": str(hardware["unit_cost_usd"]),
-        "KG1_HF_MAX_UNIT_COST_USD": "0.05",
+        "KG1_HF_MAX_UNIT_COST_USD": MAX_UNIT_COST_USD,
         "KG1_ALLOWED_HF_FLAVORS": FLAVOR,
         "KG1_RUN_ID": RUN_ID,
         "KG1_ADAPTER_REPO": ADAPTER_REPO,
@@ -157,8 +163,8 @@ def main() -> int:
     hardware = hardware_by_name.get(FLAVOR)
     if not hardware:
         raise RuntimeError(f"HF flavor {FLAVOR!r} is not available.")
-    if float(hardware["unit_cost_usd"]) > 0.05:
-        raise RuntimeError(f"A100 unit cost above gate: {hardware}")
+    if float(hardware["unit_cost_usd"]) > float(MAX_UNIT_COST_USD):
+        raise RuntimeError(f"HF unit cost above V389 gate: {hardware}")
 
     specs = []
     missing = []
@@ -200,7 +206,7 @@ def main() -> int:
             "promote_to_full_if_bit_gte": 136,
             "requires_full_eval_before_package_or_submit": True,
         },
-        "finops_note": "A100 is cheaper than H200; batch eval all uploaded V388 soups in one model load.",
+        "finops_note": "Batch eval all uploaded V388 soups in one model load; A100 is blocked for vLLM CUDA13 unless driver gate proves compatibility.",
     }
 
     print("available_adapters =", json.dumps(specs, indent=2, sort_keys=True), flush=True)

@@ -131,6 +131,18 @@ def torch_status() -> dict[str, Any]:
 def validate_gpu() -> None:
     status = torch_status()
     log_json("torch_gpu_status", status)
+    cuda_runtime = str(status.get("cuda") or "")
+    cuda_major = int(cuda_runtime.split(".", 1)[0]) if cuda_runtime[:1].isdigit() else 0
+    flavor = env_str("KG1_HF_FLAVOR")
+    if (
+        "a100" in flavor.lower()
+        and cuda_major >= 13
+        and not env_bool("KG1_ALLOW_CUDA13_ON_A100", False)
+    ):
+        raise RuntimeError(
+            "Blocked CUDA 13 runtime on HF A100 for official-like vLLM eval. "
+            "Use H200 for this vLLM image or a CUDA 12-compatible image."
+        )
     if env_bool("KG1_REQUIRE_CUDA", True) and not status["cuda_available"]:
         raise RuntimeError("CUDA is required for full vLLM eval.")
     min_gib = env_float("KG1_MIN_GPU_TOTAL_GIB", 79.0)

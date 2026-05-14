@@ -20,7 +20,7 @@ from pathlib import Path
 from typing import Any
 
 
-VALID_PHASES = {"preinstall", "artifacts", "postinstall", "all"}
+VALID_PHASES = {"preinstall", "artifacts", "postinstall", "eval-preinstall", "eval-postinstall", "all"}
 VALID_SAMPLING_MODES = {"shuffle", "weighted_replacement"}
 
 
@@ -91,10 +91,12 @@ def compile_repo_scripts() -> None:
 def torch_status() -> dict[str, Any]:
     import torch
 
+    cuda_runtime = str(getattr(torch.version, "cuda", ""))
     props = torch.cuda.get_device_properties(0) if torch.cuda.is_available() else None
     return {
         "torch": str(getattr(torch, "__version__", "unknown")),
-        "cuda": str(getattr(torch.version, "cuda", "")),
+        "cuda": cuda_runtime,
+        "cuda_runtime_major": int(cuda_runtime.split(".", 1)[0]) if re.match(r"^\d+", cuda_runtime) else 0,
         "cuda_available": bool(torch.cuda.is_available()),
         "gpu_name": str(props.name if props else ""),
         "gpu_total_gib": float(props.total_memory / 1024**3 if props else 0.0),
@@ -105,6 +107,26 @@ def torch_status() -> dict[str, Any]:
 def check_torch_and_gpu(stage: str) -> None:
     status = torch_status()
     log_json(f"torch_{stage}", status)
+
+    flavor = env_str("KG1_HF_FLAVOR")
+    cuda_major = int(status.get("cuda_runtime_major") or 0)
+    max_cuda_major = env_int("KG1_MAX_TORCH_CUDA_MAJOR", 0)
+    if max_cuda_major and cuda_major > max_cuda_major:
+        raise RuntimeError(
+            "torch CUDA runtime is newer than this job allows: "
+            f"runtime={status['cuda']} max_major={max_cuda_major} flavor={flavor}"
+        )
+    if (
+        "a100" in flavor.lower()
+        and cuda_major >= 13
+        and not env_bool("KG1_ALLOW_CUDA13_ON_A100", False)
+    ):
+        raise RuntimeError(
+            "Blocked CUDA 13 runtime on HF A100. Recent HF A100 jobs exposed a CUDA 12.x "
+            "driver API, which made torch/vLLM fail after startup. Use H200 for this "
+            "vLLM image, or use a CUDA 12-compatible image, or set KG1_ALLOW_CUDA13_ON_A100=1 "
+            "only after a fresh driver gate proves compatibility."
+        )
 
     expected_torch = env_str("KG1_EXPECTED_TORCH_VERSION")
     if expected_torch and status["torch"] != expected_torch:
@@ -451,6 +473,20 @@ def check_postinstall_imports() -> None:
         )
 
 
+def check_eval_postinstall_imports() -> None:
+    import importlib
+
+    for module_name in ["huggingface_hub", "pandas", "packaging", "safetensors", "vllm"]:
+        module = importlib.import_module(module_name)
+        log_json(
+            "eval_postinstall_import_ok",
+            {
+                "module": module_name,
+                "version": str(getattr(module, "__version__", "unknown")),
+            },
+        )
+
+
 def run_phase(phase: str) -> None:
     if phase == "preinstall":
         check_repo_gate()
@@ -466,6 +502,16 @@ def run_phase(phase: str) -> None:
         check_torch_and_gpu("postinstall")
         check_postinstall_imports()
         check_training_env()
+        return
+    if phase == "eval-preinstall":
+        check_repo_gate()
+        check_torch_and_gpu("eval_preinstall")
+        check_hf_flavor_cost()
+        return
+    if phase == "eval-postinstall":
+        check_torch_and_gpu("eval_postinstall")
+        check_eval_postinstall_imports()
+        check_hf_flavor_cost()
         return
     if phase == "all":
         run_phase("preinstall")
