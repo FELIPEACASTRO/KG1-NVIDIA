@@ -59,6 +59,7 @@ Precisamos buscar subida no ranking ainda hoje, `2026-05-14`. A decisao V392 e s
 | V399 V398 pairwise CPU audit | melhor `191/315` | `56/155` | `135/160` | V398 tem `0` candidate-only equation e so perde bit; encerrar V397/V398 |
 | V400 algorithmic prompt sweep | melhor `175/315` | `40/155` | `135/160` | rejeitado; prompt algoritmico explicito causou truncation e colapso de ACC |
 | V401 baseline raw-output audit | n/a | `0` boxed recoverable | `0` boxed recoverable | sem ganho; misses nao sao erro de extrator simples |
+| V402 local candidate scoreboard | weak max `192/315`; full max `823/947` | `56/155` | `136/160` weak | sem candidato local acima do baseline V291/V290 |
 
 Conclusao: `eval_loss` baixo nao e criterio de promocao. O criterio e ACC por familia no weak/full gate.
 
@@ -99,6 +100,8 @@ Decisao V399 em `2026-05-14`: a auditoria pairwise CPU comparou V398 checkpoint-
 Decisao V400 em `2026-05-14`: o sweep H200 sem treino testou dois prompts algoritmicos curtos sobre o baseline V290 checkpoint-6. `symbolic_equation_first = 175/315`, `equation=40`, `bit=135`, `truncated=27`; `bit_stride_guarded = 7/315`, `equation=7`, `bit=0`, `truncated=227`. Conclusao: colocar a literatura/DSL diretamente no prompt e contraproducente; induz geracao longa e quebra formato. Encerrar sweeps de prompt algoritmico amplo. Artefato comparativo: `artifacts/v400_hf_h200_algorithmic_prompt_sweep_launch/V400_VS_BASELINE.md`.
 
 Decisao V401 em `2026-05-14`: auditoria CPU nos `123` misses do baseline V290 checkpoint-6 verificou se a resposta correta ja estava em `raw_output` mas perdida pela extracao. Resultado: `0` respostas corretas em simple `\boxed{}` nos misses de `equation_transform` e `0` em `bit_manipulation`. Existem ocorrencias brutas (`19` equation, `4` bit), mas spot-check mostra caracteres/numeros em raciocinio ou exemplos intermediarios, nao resposta final recuperavel. Conclusao: nao ha ganho submit-safe por trocar extrator; o gargalo e geracao do adapter. Artefato: `artifacts/v401_baseline_raw_output_audit/20260514T_v401_raw_output/V401_BASELINE_RAW_OUTPUT_AUDIT.md`.
+
+Decisao V402 em `2026-05-14`: varredura CPU dos `batch_candidate_summary.json` locais nao encontrou candidato historico acima do baseline. Melhor weak local: empate `192/315`, `equation=56`, `bit=136`, `truncated=0` (`v321_hybrid_attn_lmhead_checkpoint_2_v221_contract` e `v290_checkpoint_6_v221_contract`). Melhor full-like local: V291 `823/947`, `truncated=1`. Conclusao: nao ha package local esquecido que suba ranking hoje sem novo sinal. Artefato: `artifacts/v402_local_candidate_scoreboard/20260514T_v402_scoreboard/V402_LOCAL_CANDIDATE_SCOREBOARD.md`.
 
 ## Google Drive Artifact Audit 2026-05-14
 
@@ -531,6 +534,7 @@ Parar novos HF GPU jobs para LoRA/prompt ate existir sinal novo adapter-only. Ca
 
 1. manter V291/V290 checkpoint-6 como unico package submitavel (`823/947`, public `0.86`);
 2. nao submeter V400/V398/V391/V387 porque todos falham o gate;
-3. se o objetivo for obrigatoriamente subir hoje, a unica rota tecnica restante e localizar um adapter historico/package ainda nao avaliado que bata V291 no weak/full gate. Repetir prompt, SFT amplo ou teacher SFT ja foi testado e rejeitado.
+3. nao ha candidato local esquecido acima do baseline pelo V402;
+4. se o objetivo for obrigatoriamente subir hoje, a unica rota tecnica restante e obter ou descobrir um novo adapter externo/privado ainda nao avaliado que bata V291 no weak/full gate. Repetir prompt, SFT amplo, teacher SFT, extractor ou sweep local ja foi testado e rejeitado.
 
 Nao rodar novo HF training antes de prova de transferencia adapter-only. Projecao CPU, teacher, solver/verifier e loss baixo nao autorizam GPU sozinhos.

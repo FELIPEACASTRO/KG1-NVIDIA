@@ -1,0 +1,21 @@
+{
+  "decision": {
+    "best_full_correct": 823,
+    "best_full_name": "v291_v290_checkpoint_6_official_like_full947",
+    "best_full_truncated": 1,
+    "best_weak_bit": 136,
+    "best_weak_correct": 192,
+    "best_weak_equation": 56,
+    "best_weak_name": "v321_hybrid_attn_lmhead_checkpoint_2_v221_contract",
+    "best_weak_truncated": 0,
+    "found_local_full_above_823": false,
+    "found_local_weak_above_192": false
+  },
+  "generated_at_utc": "2026-05-14T23:54:21.325989+00:00",
+  "root": "artifacts",
+  "schema_version": "kg1_v402_local_candidate_scoreboard_v1",
+  "scoreboard_csv": "artifacts/v402_local_candidate_scoreboard/20260514T_v402_scoreboard/v402_local_candidate_scoreboard.csv",
+  "summary_count": 44,
+  "top_full_csv": "artifacts/v402_local_candidate_scoreboard/20260514T_v402_scoreboard/v402_top_full_like.csv",
+  "top_weak_csv": "artifacts/v402_local_candidate_scoreboard/20260514T_v402_scoreboard/v402_top_weak315.csv"
+}
