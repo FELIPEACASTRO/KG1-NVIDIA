@@ -47,6 +47,8 @@ Precisamos buscar subida no ranking ainda hoje, `2026-05-14`. O plano deve ser a
 | V387 V382 checkpoint-4 full official-like | full `823/947` | `56/155` | `135/160` | rejeitado; empatou V291 e falhou package gate `>=824/947` |
 | V388/V389 V291/V382 adapter soups | melhor `191/315` | `56/155` | `135/160` | rejeitado; todos os soups regrediram bit/total e nenhum moveu equation |
 | V390 CPU equation gate + bit replay mix | projecao CPU `198/315` | `62/155` | `136/160` guardrail | autorizado para smoke HF curto; ainda nao e adapter-only medido |
+| V390 A100 runtime attempt | n/a | n/a | n/a | bloqueado corretamente por gate: CUDA 13 em A100 |
+| V391 H200 relaunch | pendente weak eval | pendente | pendente | mesma receita V390 em H200 compativel com CUDA 13 |
 
 Conclusao: `eval_loss` baixo nao e criterio de promocao. O criterio e ACC por familia no weak/full gate.
 
@@ -61,6 +63,8 @@ Decisao agressiva V387 para ranking hoje: apesar de V384 falhar no weak gate por
 Decisao V388/V389 em `2026-05-14`: os soups adapter-only V291/V382 foram gerados em CPU e avaliados no weak gate H200. Resultados: `0.95/0.05 = 191/315, equation=56, bit=135, truncated=2`; `0.90/0.10 = 190/315, equation=56, bit=134, truncated=1`; `1.05/-0.05 = 191/315, equation=56, bit=135, truncated=1`. Nenhum passou `total>192`, `equation>56`, `bit>=136`, `truncated=0`. Conclusao: combinacao linear simples entre V291 e V382 nao gera ganho submit-safe e esta encerrada.
 
 Decisao V390 em `2026-05-14`: o V324 CPU gate encontrou `6` novos ganhos equation sem conflitos (`equation` projetado `56 -> 62`, weak projetado `192 -> 198`) e preservou `bit=136`. O dataset V390/V326 tem `5031` train rows (`4231` bit replay + `800` equation) e `532` validation rows, passou tokenization gate com `0` truncation e offset mask completo. O smoke HF deve ser curto e agressivo (`12` steps), com weak eval nos checkpoints `2/4/6/8/10/12`. Promocao so se `total>192`, `equation>56`, `bit>=136`, `truncated=0`; caso contrario cancelar/encerrar por FinOps.
+
+Runtime V390/V391 em `2026-05-14`: o primeiro launch V390 em A100 foi barrado pelo preflight (`torch cuda=13.0`, `NVIDIA A100-SXM4-80GB`). Isso confirma que o gate novo esta correto e evita gasto inutil. A continuacao autorizada e V391 em H200, mantendo o mesmo dataset e os mesmos thresholds; nao repetir A100 com CUDA 13.
 
 Decisao operacional pos-V387: usar Kaggle GPU apenas como alternativa barata para validacao ou fallback, nao para repetir treino SFT amplo. O proximo gasto em HF/Kaggle GPU precisa vir depois de CPU gate novo que mostre `equation>56`, `bit>=136` e `truncated=0` no weak, ou de um candidato full official-like com expectativa objetiva de `>=824/947`.
 
