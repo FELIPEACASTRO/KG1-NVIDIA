@@ -14,17 +14,17 @@ Meta minima para gastar HF:
 - Sair do teto adapter-only `equation_transform=56/155`.
 - Primeiro checkpoint deve manter `total >= 192/315`, `truncated=0`.
 - Se qualquer job nao puder mais bater o gate, cancelar por FinOps.
+- A partir do V392, novo treino LoRA so pode iniciar se existir prova previa de transferencia no proprio caminho adapter/package. Projecao CPU/teacher isolada nao autoriza GPU.
 
 ## Regra Operacional Agressiva 2026-05-14
 
-Precisamos buscar subida no ranking ainda hoje, `2026-05-14`. O plano deve ser agressivo, mas responsavel: gastar HF somente quando existe chance objetiva de gerar submit adapter-only melhor que o baseline.
+Precisamos buscar subida no ranking ainda hoje, `2026-05-14`. A decisao V392 e ser agressivo no que tem maior chance de virar submit hoje e cortar o que ja falhou repetidamente.
 
 - Prioridade maxima: ganho adapter-only submetivel medido em weak/full gate, nao `eval_loss` isolado.
-- Concluir o V382 apenas como smoke curto ja em andamento; escolher checkpoint por ACC weak, nao por loss.
-- Rodar V383 weak-eval sweep, mas aplicar corte FinOps apos `checkpoint-6`: se `checkpoint-2`, `checkpoint-4` e `checkpoint-6` nao baterem `total > 192`, `equation_transform > 56`, `bit_manipulation >= 136` e `truncated=0`, cancelar `checkpoint-8/10` e encerrar esta linha.
-- Se qualquer checkpoint V383 bater `total > 192`, `equation_transform > 56`, `bit_manipulation >= 136` e `truncated=0`, promover para full/official-like eval e package gate no mesmo dia.
-- Se nenhum checkpoint V383 bater o baseline, voltar imediatamente para CPU gates que gerem novo sinal independente; nenhum novo HF training pode iniciar sem ganho CPU medido antes.
-- Caminho de hoje apos V383 negativo: gerar candidato submit-safe a partir do melhor adapter-only conhecido, sem solver/postprocessor runtime, e so substituir respostas se houver prova local reproduzivel de que a resposta vem do proprio adapter/package permitido.
+- Caminho de hoje: partir do melhor adapter/package conhecido e procurar ganho por prompt/template/extractor/decoding e selecao de checkpoint, antes de qualquer novo treino.
+- Treino LoRA fica pausado ate um gate demonstrar que o proprio modelo muda respostas em `equation_transform` sem perder bit. Dataset teacher, solver/verifier ou postprocessor que so melhora fora do adapter nao basta.
+- Se algum sweep sem treino bater `total > 192`, `equation_transform > 56`, `bit_manipulation >= 136` e `truncated=0`, promover para full/official-like eval e package gate no mesmo dia.
+- Se o sweep sem treino nao bater o baseline, o proximo passo e auditoria row-level dos misses para descobrir exatamente quais `4` equation rows podem ser convertidas em ganho adapter-only; nao iniciar HF training para "ver se aprende".
 - Proibido submit de postprocessor/verifier/teacher-only. Submit hoje so pode vir de adapter/package que passe os gates.
 - Regra permanente: toda nova versao criada deve incluir um quadro comparativo contra a versao anterior, com metricas, delta e decisao de promocao/rejeicao.
 
@@ -48,7 +48,8 @@ Precisamos buscar subida no ranking ainda hoje, `2026-05-14`. O plano deve ser a
 | V388/V389 V291/V382 adapter soups | melhor `191/315` | `56/155` | `135/160` | rejeitado; todos os soups regrediram bit/total e nenhum moveu equation |
 | V390 CPU equation gate + bit replay mix | projecao CPU `198/315` | `62/155` | `136/160` guardrail | autorizado para smoke HF curto; ainda nao e adapter-only medido |
 | V390 A100 runtime attempt | n/a | n/a | n/a | bloqueado corretamente por gate: CUDA 13 em A100 |
-| V391 H200 relaunch | pendente weak eval | pendente | pendente | mesma receita V390 em H200 compativel com CUDA 13 |
+| V391 H200 relaunch + weak eval | `191/315` | `56/155` | `135/160` | rejeitado; checkpoints 2/4 iguais, eval cancelado por FinOps |
+| V392 roadmap reset | n/a | n/a | n/a | pausar LoRA; priorizar baseline lock + sweep sem treino + gate de transferencia real |
 
 Conclusao: `eval_loss` baixo nao e criterio de promocao. O criterio e ACC por familia no weak/full gate.
 
@@ -66,7 +67,19 @@ Decisao V390 em `2026-05-14`: o V324 CPU gate encontrou `6` novos ganhos equatio
 
 Runtime V390/V391 em `2026-05-14`: o primeiro launch V390 em A100 foi barrado pelo preflight (`torch cuda=13.0`, `NVIDIA A100-SXM4-80GB`). Isso confirma que o gate novo esta correto e evita gasto inutil. A continuacao autorizada e V391 em H200, mantendo o mesmo dataset e os mesmos thresholds; nao repetir A100 com CUDA 13.
 
+Resultado V391 em `2026-05-14`: o H200 treinou a receita V390 com `12` steps. O weak eval V221-contract mediu `checkpoint-2 = 191/315`, `equation_transform=56/155`, `bit_manipulation=135/160`, `truncated=0`; `checkpoint-4 = 191/315`, `equation_transform=56/155`, `bit_manipulation=135/160`, `truncated=0`. Como ambos ficaram abaixo do melhor adapter-only (`192/315`, `equation=56`, `bit=136`) e nenhum sinal de equation apareceu, o eval foi cancelado antes de gastar com os checkpoints seguintes. Conclusao: a projecao CPU V390 (`198/315`, `equation=62`) nao transferiu para LoRA.
+
 Decisao operacional pos-V387: usar Kaggle GPU apenas como alternativa barata para validacao ou fallback, nao para repetir treino SFT amplo. O proximo gasto em HF/Kaggle GPU precisa vir depois de CPU gate novo que mostre `equation>56`, `bit>=136` e `truncated=0` no weak, ou de um candidato full official-like com expectativa objetiva de `>=824/947`.
+
+Decisao V392: nao ha justificativa tecnica para continuar a linha "teacher/verifier -> SFT LoRA" sem um gate novo que prove transferencia de resposta. V382/V383, V384/V387, V388/V389 e V391 repetiram o mesmo padrao: loss/teacher melhora ou projecao CPU parece boa, mas o adapter continua em `equation=56` e frequentemente perde `bit`. O plano ativo passa a privilegiar o caminho mais rapido para ranking hoje: identificar o melhor package historico, fazer sweeps sem treino, e so voltar ao treino se o gate mostrar ganho adapter-only antes da GPU.
+
+## Fontes Web Reauditadas 2026-05-14
+
+- `tonghuikang/nemotron`: repo publico da submissao Progress Prize. Ele confirma que a solucao vencedora nao foi treino generico; usou reasoners, corpus, token-level traces, metricas por categoria e treino SFT controlado. O que entra no plano: copiar o metodo de instrumentacao e gates, nao copiar bruto sem validacao.
+- `tonghuikang/nemotron/reasoners/equation_numeric.py`: fonte concreta para DSL de equation numeric. Operacoes uteis: concatenacao, reverse concatenation, soma, diferenca absoluta, subtracao nos dois sentidos, multiplicacao, `+1/-1`, divisao inteira, modulo, reverse division/modulo, operacoes por digito, cross multiply, determinante e abs determinant. Isso vira inventario row-level de misses, nao SFT amplo.
+- `tonghuikang/nemotron/reasoners/bit_manipulation.py` e discussao associada: confirma abordagem de bit por relacoes de bits, familias unary/binary/constant e stride. Como nossa linha "Tong bit direct replacement" ja caiu no V374, o uso correto agora e gerar traces curtos/verificaveis e probes, nao substituir o solver nem treinar bruto.
+- `nvidia/Nemotron-RL-ReasoningGym-v1`: dataset oficial NVIDIA com `15000` amostras em `104` ambientes procedurais/verificaveis, licenca CC-BY-4.0. Uso permitido: fixtures/probes e sanity checks de raciocinio; nao entra em treino direto do desafio sem gate anti-overlap e prova de ganho nas familias alvo.
+- `NVIDIA-NeMo/Nemotron`: hub de receitas/datasets Nemotron. Ajuda em runtime/infra e confirma valor de dados verificaveis; nao fornece, sozinho, ganho row-level para o submit.
 
 ## Fontes Auditadas
 
@@ -191,132 +204,145 @@ Ganho medido novo desses anexos:
 - CPU teacher: `+0`.
 - Ganho esperado: indireto e condicional. A utilidade real e reduzir erro no V381/V382; ainda nao autoriza HF nem submit.
 
-## Roadmap Ativo
+## Roadmap Ativo V392
 
-### Step 1 - V380 CPU equation solver candidate patch
+### Step 1 - V392 baseline/package lock
 
-Status: concluido em CPU.
+Status: executar agora em CPU.
 
-Objetivo: transformar `solver_results.parquet`/derivados V378 em candidatos controlados para os `92` residuos V375.
-
-Entrada:
-
-- `solver_results.parquet`.
-- `v378_v375_solver_coverage.csv`.
-- `v378_v375_residual_trace_solver_coverage.csv`.
-- `v366_integrated_predictions.csv`.
-
-Regras:
-
-- Usar somente os `79` residuos V375 com `solver_metric_correct=True`.
-- Separar evidencias condicionadas e nao condicionadas; promover regra somente se ela reexecutar sem consultar `answer`.
-- Separar por `solver_category`.
-- Gerar `old_prediction`, `new_prediction`, `answer`, `category`, `solver_ops`, `solver_mapping`.
-- Simular patch em CPU.
-- Bloquear qualquer categoria que tenha perda.
-
-Saida esperada:
-
-- Manifest criado em `artifacts/v380_solver_results_patch_gate/20260514T_cpu_gate/v380_solver_results_patch_gate_manifest.json`.
-- Resultado diagnostico oracle: `301/315`, `equation=142/155`, `bit=159/160`, ganho `+79`; nao submit-safe.
-- Resultado reexecuted teacher: `292/315`, `equation=133/155`, `bit=159/160`, ganho `+70`; pode alimentar V381 como teacher limpo.
-- Resultado strict-independent: `222/315`, `equation=63/155`, `bit=159/160`, ganho `+0`; nao desbloqueia HF nem submit.
-- Decisao: `teacher_signal_only_no_hf_unlock`.
-
-### Step 2 - V381 filtered trace/tokenization gate
-
-Status: concluido em CPU.
-
-Objetivo: construir dataset pequeno para LoRA a partir dos `70` candidatos V380 reexecuted-teacher, sem tratar oracle/answer-conditioned como regra submetivel.
+Objetivo: parar de comparar contra nomes incertos. Localizar e travar o melhor package/submission historico que gerou o plateau `0.86`/ranking 19, ou declarar formalmente que o arquivo exato ainda nao esta disponivel localmente.
 
 Entrada:
 
-- Melhor trace por ID de `filtered_merged_dataset.csv` ou `sft_train_full_9500.jsonl`.
-- Candidatos aprovados no V380.
+- Artefatos locais de package/submission.
+- Manifests de Kaggle/HF ja versionados.
+- Inventario Google Drive ja auditado.
 
 Regras:
 
-- Um trace por ID.
-- Sem duplicata/reweighting.
-- Sem overlap com V217 val.
-- Sem `sft_train_converted` bruto: `6923` rows tem `<think>`/`</think>` malformado.
-- Sem `sft_train_full_9500` bruto: limpar spans intermediarios, respostas declaradas erradas e chaves literais antes de tokenizar.
-- Limpar artefatos LaTeX dentro de `\boxed{}`.
-- Reextrair a resposta final depois da limpeza.
-- Recomputar corretude pelo scorer do projeto.
-- Manter somente tentativas corretas.
-- Resposta final validada pelo scorer.
-- Prompt/template oficial preservado.
-- Offset-mask correto.
-- Truncation `0`.
-- Separar equation target e bit replay.
-- Bloquear HF se o dataset nao provar pelo menos um dos dois:
-  - nova regra independentemente reexecutavel com `+4` equation e `0` perdas; ou
-  - dataset teacher limpo com cobertura superior ao V304, sem overlap proibido e com bit replay suficiente para manter `bit>=136`.
+- Registrar nome, caminho, SHA256, adapter repo/subfolder, commit e metricas weak/full do melhor submit conhecido.
+- Comparar contra o baseline operacional atual (`192/315`, `equation=56`, `bit=136`) e contra V291/V290/V226 quando existirem manifests.
+- Se o package exato do ranking 19 nao for encontrado, bloquear qualquer claim de "melhorar o submit 0.86" ate ele ser localizado.
+- Criar quadro comparativo V392 vs V391/V291 antes de qualquer novo experimento.
 
 Saida esperada:
 
-- JSONL pequeno, auditado.
-- Tokenization manifest.
-- Nenhum HF se `bit` replay nao estiver presente ou se truncation > 0.
-- Nenhum submit; este step so prepara gate para treino.
+- Manifest pequeno de baseline lock.
+- Tabela com `total`, `equation_transform`, `bit_manipulation`, `truncated`, full score quando existir e decisao.
 
-Resultado V381:
+### Step 2 - V393 sweep sem treino do melhor adapter/package
 
-- Script: `scripts/build_v381_filtered_teacher_dataset.py`.
-- Manifest: `artifacts/v381_filtered_teacher_dataset/20260514T_cpu_gate/v381_filtered_teacher_dataset_manifest.json`.
-- Dataset: `909` train rows e `211` validation rows.
-- Train: `669` `equation_transform` sinteticas derivadas de V380 reexecuted-teacher + `240` bit replay V217.
-- Validation: `171` `equation_transform` sinteticas + `40` bit replay V217.
-- Prototipos originais V380: `70` rows em `v381_teacher_prototypes_not_for_training.jsonl`; marcados como nao-treino.
-- Exact weak overlap com V366: `0` em train e `0` em validation.
-- Overlap train vs V217 val: `0`.
-- Tokenization gate real Nemotron passou:
-  - `completion_tokens_dropped=0`.
-  - `fallback_masks=0`.
-  - `prompt_truncation_rate=0.0`.
-  - `train_token_max=327`.
-  - `val_token_max=327`.
-  - `offset_masks=909/909` train e `211/211` validation.
-- Decisao: V382 HF micro-train esta permitido como smoke responsavel, mas nao autoriza submit.
+Status: proximo experimento permitido.
 
-### Step 3 - V382 HF micro-train com kill-switch
+Objetivo: buscar ganho hoje sem gastar em treino que ja falhou. Testar variantes de prompt/template/extractor/decoding sobre o melhor adapter/package existente.
 
-Status: V382 treinado; V383 weak eval curto rejeitado; V384 V221 prompt weak eval rejeitado por truncation e sem ganho de equation.
+Hipotese:
 
-Objetivo: testar se o sinal V381 transfere para adapter-only sem destruir bit.
+- V384 mostrou que prompt pode mover `bit` para `137/160`, mas falhou por `truncated=1` e `equation=56`.
+- A rota mais barata e rapida e corrigir truncation/extracao e testar prompts curtos, nao treinar outro LoRA.
 
 Regras:
 
-- Comecar com treino curto.
-- A100 preferencial por custo; H200/H100 so se houver razao tecnica.
-- Primeiro checkpoint deve bater:
-  - `total >= 192/315`.
-  - `equation >= 56/155`.
-  - `bit >= 136/160`.
-  - `truncated=0`.
-- Se falhar, cancelar.
-- Se passar, avaliar checkpoint seguinte.
-- Kill-switch adicional V381:
-  - cancelar se validation loss cair mas weak ACC ficar em `equation<=56` e `bit<136`;
-  - cancelar se o primeiro checkpoint tiver `bit<136`;
-  - cancelar se o custo estimado exceder o budget restante sem chance de bater `192/315`.
+- Sem solver/postprocessor runtime.
+- Sem alterar answer por regra externa.
+- Temperatura `0`, seed fixo, contrato V221 weak315.
+- Variantes pequenas e rastreaveis:
+  - prompt oficial historico;
+  - prompt curto boxed-only;
+  - prompt sem sufixo extra;
+  - limite de max tokens mais restritivo se reduzir truncation sem cortar answer;
+  - extractor oficial vs extractor estrito apenas para medir, sem escolher resposta manual.
+- Promover somente se `total > 192`, `equation > 56`, `bit >= 136`, `truncated=0`.
+- Se uma variante tiver `total=193` mas `equation=56`, so promover para full se tambem tiver `bit>=137` e `truncated=0`.
 
 Saida esperada:
 
-- Adapter-only candidato.
-- Weak eval comparavel ao baseline.
+- Batch weak eval comparavel.
+- Se passar: full official-like e package no mesmo dia.
+- Se falhar: encerrar sweep e ir para Step 3.
 
-### Step 4 - V383 full eval/package/submit gate
+### Step 3 - V394 row-level equation miss inventory
 
-Objetivo: submeter somente se houver ganho real adapter-only.
+Status: CPU, sem GPU.
+
+Objetivo: descobrir exatamente os `4` ganhos necessarios para `equation_transform 56 -> 60` sem depender de "treinar mais".
+
+Entrada:
+
+- Misses `equation_transform` do melhor adapter.
+- `solver_results`/V378/V380 derivados.
+- DSL auditada em `tonghuikang/nemotron/reasoners/equation_numeric.py`.
+- `filtered_merged_dataset.csv` somente como referencia de trace correto, nao como treino bruto.
+
+Regras:
+
+- Para cada miss, classificar se e:
+  - numeric operator DSL;
+  - concat/reverse concat;
+  - signed/negative formatting;
+  - little-endian/reversal;
+  - symbolic punctuation/braces;
+  - extractor/boxed formatting;
+  - prompt compliance failure.
+- Separar "o solver sabe" de "o adapter consegue produzir".
+- Gerar candidato de prompt/exemplar somente para rows onde o erro parece de formato/extracao/prompt compliance.
+- Nao contar ganho de solver externo como ganho submit-safe.
+
+Saida esperada:
+
+- CSV de misses com categoria, old prediction, expected answer, hipotese e acao.
+- Lista curta de no maximo `10` rows candidatas para prompt-level rescue.
+- Decisao: se existir rota prompt-safe, voltar ao Step 2 com variante focada; se nao existir, nao gastar GPU.
+
+### Step 4 - V395 bit guardrail/probe
+
+Status: CPU primeiro.
+
+Objetivo: manter `bit>=136` enquanto se tenta subir equation. Bit ja esta no limite bom; a tarefa e evitar regressao.
+
+Entrada:
+
+- Bit misses e hits do melhor adapter.
+- Ideias Tong: bit-pair, bitsum, stride, unary/binary/constant families.
+
+Regras:
+
+- Nao repetir "Tong bit direct replacement" porque V374 ja refutou essa linha.
+- Usar algoritmo Tong somente para gerar probes/traces curtos e identificar quais prompts causam regressao.
+- Qualquer variante equation precisa rodar bit guardrail antes de full eval.
+
+Saida esperada:
+
+- Bit guardrail CSV.
+- Bloqueio automatico de qualquer candidato com `bit<136`.
+
+### Step 5 - V396 treino LoRA somente com prova de transferencia
+
+Status: bloqueado ate Step 2/3 mostrar sinal novo.
+
+Objetivo: permitir treino apenas se houver evidencia que o modelo consegue internalizar a correcao.
+
+Gate obrigatorio antes de HF/Kaggle GPU:
+
+- Um pilot adapter/package ou prompt probe deve mostrar pelo menos `+1` weak real sem regressao.
+- Dataset deve ser curto, um trace por ID, sem overlap proibido, resposta final unica e scorer validado.
+- Primeiro checkpoint deve ser avaliado antes de continuar.
+- Cancelar se `equation<=56` ou `bit<136`.
+
+Decisao atual:
+
+- V391 provou que `198/315` em projecao CPU nao basta. Portanto V396 nao pode ser "mais epochs", "LR diferente" ou "mais H200" sem esse gate.
+
+### Step 6 - Full/package/submit
+
+Status: somente depois de weak gate.
 
 Regras:
 
 - Full eval somente se weak passar.
-- Package somente adapter-only, sem solver/postprocessor proibido.
-- Kaggle submit somente com ganho medido.
-- Registrar diferenca por familia contra o submit 0.86/ranking 19 quando o nome/arquivo exato estiver confirmado.
+- Package somente se full official-like melhorar o baseline conhecido.
+- Kaggle submit somente com ganho medido e tabela comparativa contra o submit historico.
+- Se criterio de desempate favorecer submissao anterior, nao enviar regressao mesmo que haja curiosidade experimental.
 
 ## Regras Permanentes
 
@@ -348,10 +374,13 @@ Regras:
 | HF V371/V372 trace-style | checkpoint-1 `191/315`, `bit=135` |
 | Prompt/thinking variants amplas | regressao severa |
 | Adapter soups V291/V382 | V389 mostrou `190-191/315`, `equation=56`, `bit=134-135`, truncation `1-2`; linha encerrada |
+| V390/V391 equation+bit replay LoRA direto | CPU projection `198/315` nao transferiu; V391 ficou `191/315`, `equation=56`, `bit=135` |
+| H200 relaunch sem novo dado | V391 confirmou que trocar hardware nao muda ACC quando a hipotese de dados nao transfere |
+| HF training baseado apenas em `eval_loss` | historicamente loss caiu sem mover `equation_transform`; promocao e por ACC |
 | Web/API buscas genericas | so retornam ao plano se virarem regra, dataset ou gate verificavel |
 
 ## Proxima Acao Unica
 
-Encerrar as linhas V381/V382/V384/V387 e V388/V389 para promocao/submissao. O proximo passo e CPU gate independente com novo sinal verificavel para `equation>56`, `bit>=136` e `truncated=0`; nenhum novo HF training deve iniciar sem esse ganho medido antes.
+Executar V392 baseline/package lock e, em seguida, V393 sweep sem treino no melhor adapter/package. O objetivo e obter ganho submit-safe hoje sem repetir SFT que ja falhou. Se V393 nao mover `equation>56` com `bit>=136` e `truncated=0`, executar V394 row-level miss inventory antes de qualquer novo HF/Kaggle GPU.
 
-Nao rodar novo HF training antes de novo CPU gate com ganho de ACC medido.
+Nao rodar novo HF training antes de prova de transferencia adapter-only. Projecao CPU, teacher, solver/verifier e loss baixo nao autorizam GPU sozinhos.

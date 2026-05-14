@@ -1,0 +1,76 @@
+{
+  "adapter_repo": "felipesp1983/kg1-nemotron-lora-v391-nemo-h200-equation-bit-replay-v290ckpt6",
+  "adapters": [
+    {
+      "name": "v391_equation_bit_replay_checkpoint_2_v221_contract",
+      "repo": "felipesp1983/kg1-nemotron-lora-v391-nemo-h200-equation-bit-replay-v290ckpt6",
+      "subfolder": "checkpoint-2"
+    },
+    {
+      "name": "v391_equation_bit_replay_checkpoint_4_v221_contract",
+      "repo": "felipesp1983/kg1-nemotron-lora-v391-nemo-h200-equation-bit-replay-v290ckpt6",
+      "subfolder": "checkpoint-4"
+    },
+    {
+      "name": "v391_equation_bit_replay_checkpoint_6_v221_contract",
+      "repo": "felipesp1983/kg1-nemotron-lora-v391-nemo-h200-equation-bit-replay-v290ckpt6",
+      "subfolder": "checkpoint-6"
+    },
+    {
+      "name": "v391_equation_bit_replay_checkpoint_8_v221_contract",
+      "repo": "felipesp1983/kg1-nemotron-lora-v391-nemo-h200-equation-bit-replay-v290ckpt6",
+      "subfolder": "checkpoint-8"
+    },
+    {
+      "name": "v391_equation_bit_replay_checkpoint_10_v221_contract",
+      "repo": "felipesp1983/kg1-nemotron-lora-v391-nemo-h200-equation-bit-replay-v290ckpt6",
+      "subfolder": "checkpoint-10"
+    },
+    {
+      "name": "v391_equation_bit_replay_checkpoint_12_v221_contract",
+      "repo": "felipesp1983/kg1-nemotron-lora-v391-nemo-h200-equation-bit-replay-v290ckpt6",
+      "subfolder": "checkpoint-12"
+    }
+  ],
+  "branch": "v230-v226-complementarity",
+  "expected_commit": "7bebc29f3fce89d1cdcae737f6145015768ed65d",
+  "flavor": "h200",
+  "generated_at_utc": "2026-05-14T20:26:28.735262+00:00",
+  "hardware": {
+    "accelerator_model": "H200",
+    "accelerator_quantity": "1",
+    "accelerator_vram": "141 GB",
+    "cpu": "23 vCPU",
+    "name": "h200",
+    "pretty_name": "Nvidia H200",
+    "ram": "256 GB",
+    "unit_cost_usd": 0.083333,
+    "unit_label": "minute"
+  },
+  "image": "vllm/vllm-openai:v0.20.1",
+  "job_id": "6a0630323308d79117b8fe61",
+  "job_status": "RUNNING",
+  "job_url": "https://huggingface.co/jobs/felipesp1983/6a0630323308d79117b8fe61",
+  "missing_optional_adapters": [],
+  "namespace": "felipesp1983",
+  "output_path_in_repo": "evals/v391-h200-v221contract-equation-bit-replay-20260514T202626Z",
+  "output_repo": "felipesp1983/kg1-nemotron-lora-v391-nemo-h200-equation-bit-replay-v290ckpt6",
+  "previous_version": "V390 A100 gate rejection",
+  "promotion_gate": {
+    "baseline_bit_manipulation": 136,
+    "baseline_equation_transform": 56,
+    "baseline_total": 192,
+    "full_eval_only_if": "total>192 and equation>56 and bit>=136 and truncated=0",
+    "inspect_if_equation_gt": 56,
+    "promote_if_bit_gte": 136,
+    "promote_if_equation_gte": 60,
+    "promote_if_total_gt": 192,
+    "reject_if_bit_lt": 136,
+    "reject_if_total_lte": 192,
+    "reject_if_truncated_gt": 0,
+    "submit_only_if_full_official_like_gte": 824
+  },
+  "run_id": "v391-h200-v221contract-equation-bit-replay-20260514T202626Z",
+  "version": "v391_equation_bit_replay_v221_weak_eval",
+  "version_comparison_artifact": "artifacts/version_diffs/V391_VS_PREVIOUS.md"
+}
