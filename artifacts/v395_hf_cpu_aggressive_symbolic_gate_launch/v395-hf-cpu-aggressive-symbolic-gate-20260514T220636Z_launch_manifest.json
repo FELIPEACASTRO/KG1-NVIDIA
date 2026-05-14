@@ -1,0 +1,52 @@
+{
+  "branch": "v230-v226-complementarity",
+  "comparison_baseline": {
+    "bit_manipulation": 136,
+    "equation_transform": 56,
+    "known_cpu_projection_v390_v394": {
+      "bit_manipulation": 136,
+      "equation_transform": 62,
+      "known_ids": [
+        "274def88",
+        "528ec0d8",
+        "7688e06e",
+        "c5b058d6",
+        "d1bd7478",
+        "fb623471"
+      ],
+      "weak_total": 198
+    },
+    "locked_submit": "V291/V290 checkpoint-6",
+    "weak_total": 192
+  },
+  "expected_commit": "7246a4c03d9618886b6f70e18cc9e754561420c4",
+  "flavor": "cpu-upgrade",
+  "gates": {
+    "cpu_only": true,
+    "gpu_allowed": false,
+    "kaggle_submit_allowed": false,
+    "package_allowed": false,
+    "promote_to_gpu_only_if_new_ids_beyond_v390": true,
+    "train_allowed": false
+  },
+  "generated_at_utc": "2026-05-14T22:06:36.613056+00:00",
+  "hardware": {
+    "accelerator_model": "",
+    "accelerator_quantity": "",
+    "accelerator_vram": "",
+    "cpu": "8 vCPU",
+    "name": "cpu-upgrade",
+    "pretty_name": "CPU Upgrade",
+    "ram": "32 GB",
+    "unit_cost_usd": 0.0005,
+    "unit_label": "minute"
+  },
+  "image": "python:3.11",
+  "job_id": "6a0647a9e48bea4538b9d78a",
+  "job_status": "RUNNING",
+  "job_url": "https://huggingface.co/jobs/felipesp1983/6a0647a9e48bea4538b9d78a",
+  "mode": "launched",
+  "output_dataset_repo": "felipesp1983/kg1-v395-cpu-symbolic-gate-artifacts",
+  "run_id": "v395-hf-cpu-aggressive-symbolic-gate-20260514T220636Z",
+  "version": "v395_hf_cpu_aggressive_symbolic_gate"
+}
