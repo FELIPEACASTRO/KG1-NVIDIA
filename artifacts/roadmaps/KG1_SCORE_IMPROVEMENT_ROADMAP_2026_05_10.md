@@ -41,8 +41,11 @@ Precisamos buscar subida no ranking ainda hoje, `2026-05-14`. O plano deve ser a
 | V380 reexecuted teacher | `292/315` | `133/155` | `159/160` | dataset teacher permitido; HF ainda bloqueado |
 | V380 strict independent | `222/315` | `63/155` | `159/160` | ganho real independente `+0`; nao submeter |
 | V381 filtered teacher dataset | n/a | `840` eq sintéticas | `280` bit replay | passou dataset + tokenization gate real; pronto para micro-train HF |
+| V382/V383 V381 teacher smoke | `191/315` melhor parcial | `56/155` | `135/160` | rejeitado; checkpoints 2/4/6 nao bateram baseline; V383 cancelado por FinOps |
 
 Conclusao: `eval_loss` baixo nao e criterio de promocao. O criterio e ACC por familia no weak/full gate.
+
+Resultado V383 em `2026-05-14`: checkpoint-2 = `190/315`, `equation=56`, `bit=134`, `truncated=1`; checkpoint-4 = `191/315`, `equation=56`, `bit=135`, `truncated=1`; checkpoint-6 = `190/315`, `equation=56`, `bit=134`, `truncated=1`. Como nenhum dos tres podia superar o baseline `192/315`, `equation=56`, `bit=136`, `truncated=0`, o job foi cancelado antes de avaliar `checkpoint-8/10`.
 
 ## Fontes Auditadas
 
