@@ -541,6 +541,31 @@ Teste de prior numerico:
 
 Decisao: V363 bloqueia HF. Mais treino sobre os datasets V351/V358/V361 ou prior numerico publico nao e justificavel. O proximo trabalho util precisa ser uma nova familia de programa simbolico para os `70` casos same-op ambiguos ou um desempate label-free real para os casos query-only.
 
+### 14. V364 - Symbolic pair-table gate
+
+Objetivo: testar uma nova familia simbolica para os residuos same-op de `equation_transform`: tabelas por par de posicoes dos operandos (`L0/L1/R0/R1`) para cada caractere de saida.
+
+Status: concluido e bloqueado.
+
+Resultado medido:
+
+- Script: `scripts/analyze_v364_symbolic_pair_table_gate.py`.
+- Manifesto: `artifacts/v364_symbolic_pair_table_gate/20260514T_cpu_gate/v364_symbolic_pair_table_gate_manifest.json`.
+- Input: `artifacts/v363_equation_residual_operator_support/20260514T_cpu_gate/v363_integrated_predictions.csv`.
+- Estado de entrada: `201/315`, `equation_transform=63/155`, `bit_manipulation=138/160`.
+- Estado V364: `201/315`, `equation_transform=63/155`, `bit_manipulation=138/160`.
+- Candidate changes: `12`.
+- Ganhos aceitos: `0`.
+- Perdas integradas: `0`.
+
+Resumo das regras testadas:
+
+- `symbolic_pair_table_len_2`: `2` mudancas, `0` ganhos, `0` perdas.
+- `symbolic_pair_table_len_3`: `2` mudancas, `0` ganhos, `0` perdas.
+- `symbolic_pair_table_len_4`: `8` mudancas, `0` ganhos, `2` perdas.
+
+Decisao: V364 bloqueia HF. A hipotese pair-table nao explica os residuos e nao deve virar dataset de treino.
+
 ## Removido do plano ativo
 
 Estes itens nao devem ser reexecutados como acao principal. So podem voltar se um novo CPU gate provar uma razao nova.
@@ -565,6 +590,7 @@ Estes itens nao devem ser reexecutados como acao principal. So podem voltar se u
 | V362 checkpoint-2/final weak eval | bloqueado por FinOps; checkpoint-1 ja violou total, bit e truncation |
 | V363 public-train numeric operator priors | bloqueado; causaram perdas e `0` ganhos |
 | V363 same-operator symbolic DSL atual | bloqueado; nao gerou candidato unico no-loss |
+| V364 symbolic pair-table | bloqueado; `12` mudancas, `0` ganhos, com perdas em `len_4` |
 | Checkpoints restantes V346 4/6 | nao avaliar sem novo sinal independente |
 | Checkpoints restantes V352 4/6/8 | bloqueados por FinOps; checkpoint-2 ja caiu abaixo do gate |
 | V359 checkpoint-4/final weak eval | cancelado por FinOps; checkpoint-2 ja violou total, bit e truncation |
@@ -596,4 +622,4 @@ Estes itens nao devem ser reexecutados como acao principal. So podem voltar se u
 
 ## Proxima acao unica
 
-Criar V364 CPU-only com uma nova familia simbolica para os `70` residuos same-op de `equation_transform`, porque V363 provou que prior numerico publico e a DSL same-op atual nao movem o gate. Em paralelo, continuar a expansao bit-pair/bitsum/stride somente em CPU. Novo HF so e permitido se o CPU gate superar o estado integrado atual (`201/315`, `equation=63`, `bit=138`) com `0` perdas e truncation `0`.
+Trocar a prioridade imediata para bit CPU-only: completar a expansao bit-pair/bitsum/stride contra os `22` residuos de `bit_manipulation` restantes apos V350/V357 e aceitar apenas classes com `0` perdas. Equation continua ativa somente se houver uma nova semantica simbolica diferente das rotas V363/V364. Novo HF so e permitido se o CPU gate superar o estado integrado atual (`201/315`, `equation=63`, `bit=138`) com `0` perdas e truncation `0`.

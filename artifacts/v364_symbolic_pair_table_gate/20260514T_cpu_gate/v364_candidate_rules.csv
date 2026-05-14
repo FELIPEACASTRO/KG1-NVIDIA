@@ -1,0 +1,4 @@
+family,candidate_source,rule_class,candidate_rows,changed_rows,gains,losses,new_correct,accepted_rows,accepted,reason
+equation_transform,v364_symbolic_pair_table,symbolic_pair_table_len_2,2,2,0,0,0,0,False,rejected_by_gate
+equation_transform,v364_symbolic_pair_table,symbolic_pair_table_len_3,2,2,0,0,0,0,False,rejected_by_gate
+equation_transform,v364_symbolic_pair_table,symbolic_pair_table_len_4,8,8,0,2,0,0,False,rejected_by_gate
