@@ -1,0 +1,7 @@
+candidate,family,rows,baseline_correct,candidate_correct,both_correct,candidate_only_correct,baseline_only_correct,both_wrong,candidate_truncated,delta_correct
+v398_checkpoint_2,bit_manipulation,160,136,134,134,0,2,24,1,-2
+v398_checkpoint_2,equation_transform,155,56,56,56,0,0,99,0,0
+v398_checkpoint_2,OVERALL,315,192,190,190,0,2,123,1,-2
+v398_checkpoint_4,bit_manipulation,160,136,135,135,0,1,24,0,-1
+v398_checkpoint_4,equation_transform,155,56,56,56,0,0,99,0,0
+v398_checkpoint_4,OVERALL,315,192,191,191,0,1,123,0,-1

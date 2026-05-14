@@ -1,0 +1,112 @@
+{
+  "baseline_predictions_csv": "artifacts/v342_acc_first_diagnostic/v290_checkpoint6_baseline_predictions.csv",
+  "baseline_sha256": "910a051d8b8e652e37c0b0814ac59fe4a400b95cb432945b6a0244f97f5b31bf",
+  "decision": {
+    "actionable_without_new_selector": false,
+    "best_bit_candidate": "v398_checkpoint_4",
+    "best_bit_correct": 135,
+    "best_equation_candidate": "v398_checkpoint_2",
+    "best_equation_candidate_only_correct": 0,
+    "best_overall_candidate": "v398_checkpoint_4",
+    "best_overall_correct": 191,
+    "decision": "close_v397_v398_training_branch",
+    "next_action": "Do not run more V397/V398 SFT; return to CPU solver/verifier DSL and baseline package."
+  },
+  "downloaded": {
+    "v398_checkpoint_2": "artifacts/v399_v398_pairwise_complementarity/20260514T_v399_pairwise/inputs/v398_checkpoint_2/v398_hf_weak_v398_sft_reconstructed_checkpoint_2_v221_contract_predictions.csv",
+    "v398_checkpoint_4": "artifacts/v399_v398_pairwise_complementarity/20260514T_v399_pairwise/inputs/v398_checkpoint_4/v398_hf_weak_v398_sft_reconstructed_checkpoint_4_v221_contract_predictions.csv"
+  },
+  "generated_at_utc": "2026-05-14T23:23:20.853363+00:00",
+  "summaries": [
+    {
+      "candidate": "v398_checkpoint_2",
+      "rows": [
+        {
+          "baseline_correct": 136,
+          "baseline_only_correct": 2,
+          "both_correct": 134,
+          "both_wrong": 24,
+          "candidate": "v398_checkpoint_2",
+          "candidate_correct": 134,
+          "candidate_only_correct": 0,
+          "candidate_truncated": 1,
+          "delta_correct": -2,
+          "family": "bit_manipulation",
+          "rows": 160
+        },
+        {
+          "baseline_correct": 56,
+          "baseline_only_correct": 0,
+          "both_correct": 56,
+          "both_wrong": 99,
+          "candidate": "v398_checkpoint_2",
+          "candidate_correct": 56,
+          "candidate_only_correct": 0,
+          "candidate_truncated": 0,
+          "delta_correct": 0,
+          "family": "equation_transform",
+          "rows": 155
+        },
+        {
+          "baseline_correct": 192,
+          "baseline_only_correct": 2,
+          "both_correct": 190,
+          "both_wrong": 123,
+          "candidate": "v398_checkpoint_2",
+          "candidate_correct": 190,
+          "candidate_only_correct": 0,
+          "candidate_truncated": 1,
+          "delta_correct": -2,
+          "family": "OVERALL",
+          "rows": 315
+        }
+      ]
+    },
+    {
+      "candidate": "v398_checkpoint_4",
+      "rows": [
+        {
+          "baseline_correct": 136,
+          "baseline_only_correct": 1,
+          "both_correct": 135,
+          "both_wrong": 24,
+          "candidate": "v398_checkpoint_4",
+          "candidate_correct": 135,
+          "candidate_only_correct": 0,
+          "candidate_truncated": 0,
+          "delta_correct": -1,
+          "family": "bit_manipulation",
+          "rows": 160
+        },
+        {
+          "baseline_correct": 56,
+          "baseline_only_correct": 0,
+          "both_correct": 56,
+          "both_wrong": 99,
+          "candidate": "v398_checkpoint_4",
+          "candidate_correct": 56,
+          "candidate_only_correct": 0,
+          "candidate_truncated": 0,
+          "delta_correct": 0,
+          "family": "equation_transform",
+          "rows": 155
+        },
+        {
+          "baseline_correct": 192,
+          "baseline_only_correct": 1,
+          "both_correct": 191,
+          "both_wrong": 123,
+          "candidate": "v398_checkpoint_4",
+          "candidate_correct": 191,
+          "candidate_only_correct": 0,
+          "candidate_truncated": 0,
+          "delta_correct": -1,
+          "family": "OVERALL",
+          "rows": 315
+        }
+      ]
+    }
+  ],
+  "summary_csv": "artifacts/v399_v398_pairwise_complementarity/20260514T_v399_pairwise/v399_pairwise_summary.csv",
+  "v398_repo": "felipesp1983/kg1-nemotron-lora-v398-nemo-h200-sft-reconstructed-v290ckpt6"
+}

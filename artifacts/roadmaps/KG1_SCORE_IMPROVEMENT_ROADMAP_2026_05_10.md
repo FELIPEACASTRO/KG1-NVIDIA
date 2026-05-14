@@ -56,6 +56,7 @@ Precisamos buscar subida no ranking ainda hoje, `2026-05-14`. A decisao V392 e s
 | V396 Google Drive artifact audit | n/a | n/a | n/a | Drive contem artefatos validos de linhagem/diagnostico, mas nenhum supera V291/V290 adapter-only |
 | V397 reconstructed SFT transfer dataset | n/a | n/a | n/a | novo corpus adapter-transfer: `2578` train / `264` val, weak overlap `0`, tokenization real passou com `0` truncation |
 | V398 reconstructed SFT H200 smoke | melhor `191/315` | `56/155` | `135/160` | rejeitado; nao transferiu, perdeu bit e nao moveu equation |
+| V399 V398 pairwise CPU audit | melhor `191/315` | `56/155` | `135/160` | V398 tem `0` candidate-only equation e so perde bit; encerrar V397/V398 |
 
 Conclusao: `eval_loss` baixo nao e criterio de promocao. O criterio e ACC por familia no weak/full gate.
 
@@ -90,6 +91,8 @@ Decisao V396 em `2026-05-14`: a auditoria seletiva no Google Drive confirmou que
 Decisao V397 em `2026-05-14`: o `sft_reconstructed.jsonl` local foi auditado contra `competition_train.csv`: `9500/9500` finais extraidos batem com os labels oficiais. Excluindo os `315` rows do weak gate, restam `2578` train e `264` validation focados em `bit_manipulation` e `equation_transform`. O gate real V286 passou com `0` overlap train/val, `0` weak-id leakage, `0` prompt truncation e `0` completion truncation em `max_length=8192`. Este e o primeiro corpus recente realmente diferente da linha V381/V391; ele autoriza apenas um smoke H200 curto V398, com `4` steps e weak eval nos checkpoints `2/4`. Promocao somente se `weak total > 192`, `equation > 56`, `bit >= 136`, `truncated=0`; caso contrario cancelar/encerrar por FinOps.
 
 Resultado V398 em `2026-05-14`: treino H200 curto a partir do V290 checkpoint-6 completou, mas falhou no weak gate. `checkpoint-2 = 190/315`, `equation=56`, `bit=134`, `truncated=1`; `checkpoint-4 = 191/315`, `equation=56`, `bit=135`, `truncated=0`. Ambos ficam abaixo do baseline adapter-only `192/315`, `equation=56`, `bit=136`, `truncated=0`. Decisao: nao promover, nao fazer full eval, nao fazer submit e nao alongar V397/V398. O quadro comparativo esta em `artifacts/v398_hf_nemo_h200_sft_reconstructed_launch/V398_VS_PREVIOUS.md`.
+
+Decisao V399 em `2026-05-14`: a auditoria pairwise CPU comparou V398 checkpoint-2/4 contra o baseline travado V290 checkpoint-6 (`192/315`, `equation=56`, `bit=136`, `truncated=0`). Resultado: checkpoint-2 tem `0` acertos novos de `equation_transform`, perde `2` bit e trunca `1`; checkpoint-4 tem `0` acertos novos de `equation_transform`, perde `1` bit e nao trunca. Portanto nao existe nem row-level complementaridade para minerar. A linha V397/V398 esta encerrada definitivamente. Artefatos: `artifacts/v399_v398_pairwise_complementarity/20260514T_v399_pairwise/V399_V398_PAIRWISE_COMPLEMENTARITY.md`.
 
 ## Google Drive Artifact Audit 2026-05-14
 
@@ -459,7 +462,7 @@ Gate obrigatorio antes de HF/Kaggle GPU:
 
 Decisao atual:
 
-- V391 provou que `198/315` em projecao CPU nao basta. V398 provou que o corpus reconstruido V397 tambem nao basta. Portanto o proximo passo nao pode ser "mais epochs", "LR diferente" ou "mais H200" sem uma analise pairwise que mostre novo acerto transferivel e sem perda de bit.
+- V391 provou que `198/315` em projecao CPU nao basta. V398 provou que o corpus reconstruido V397 tambem nao basta. V399 provou que V398 nao tem nenhum acerto complementar de `equation_transform`. Portanto o proximo passo nao pode ser "mais epochs", "LR diferente" ou "mais H200" nessa linha.
 
 ### Step 7 - Full/package/submit
 
@@ -511,6 +514,11 @@ Regras:
 
 ## Proxima Acao Unica
 
-Executar V399 em CPU: baixar apenas os CSVs pequenos de predicao V398 e comparar row-level contra o baseline adapter-only `192/315`. A saida obrigatoria e uma tabela de complementaridade: rows que V398 acertou e baseline errou, rows que V398 perdeu, familia, subtipo e padrao de resposta. Se nao houver pelo menos `+4` equation hits aproveitaveis com `0` perdas de bit por uma regra deterministica simples, encerrar V397/V398 definitivamente.
+Executar V400 prompt/template sweep sem treino no baseline V290 checkpoint-6, com no maximo duas variantes algorítmicas curtas:
+
+1. `symbolic_equation_first`: prefixo/sufixo curto orientado a testar concat, reverse concat, soma/subtracao/multiplicacao, `+1/-1`, divisao/mod e padroes de pontuacao antes de responder.
+2. `bit_stride_guarded`: instrucao curta para bit-pair/bitsum/stride sem cadeia longa, preservando retorno `\boxed{answer}`.
+
+Promocao somente se `weak total > 192`, `equation_transform > 56`, `bit_manipulation >= 136` e `truncated=0`. Se as duas variantes nao passarem, encerrar sweeps de prompt e voltar exclusivamente ao baseline/package/submission lock ou a uma nova regra CPU com ganho adapter-only demonstravel.
 
 Nao rodar novo HF training antes de prova de transferencia adapter-only. Projecao CPU, teacher, solver/verifier e loss baixo nao autorizam GPU sozinhos.
