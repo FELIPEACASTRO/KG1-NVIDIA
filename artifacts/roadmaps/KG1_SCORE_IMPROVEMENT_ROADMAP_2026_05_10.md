@@ -241,7 +241,7 @@ Resultado V392:
 
 ### Step 2 - V393 sweep sem treino do melhor adapter/package
 
-Status: proximo experimento permitido.
+Status: launcher preparado; pronto para HF H200 no-training weak sweep.
 
 Objetivo: buscar ganho hoje sem gastar em treino que ja falhou. Testar variantes de prompt/template/extractor/decoding sobre o melhor adapter/package existente.
 
@@ -269,6 +269,14 @@ Saida esperada:
 - Batch weak eval comparavel.
 - Se passar: full official-like e package no mesmo dia.
 - Se falhar: encerrar sweep e ir para Step 3.
+
+Implementacao V393:
+
+- Launcher: `artifacts/v393_hf_h200_v290_prompt_sweep_launch/launch_v393_hf_h200_v290_prompt_sweep.py`.
+- Diff obrigatório: `artifacts/version_diffs/V393_PROMPT_SWEEP_VS_V392.md`.
+- Adapter travado: `felipesp1983/kg1-nemotron-lora-v290-rank19-micro-patch-smoke/checkpoint-6`.
+- Variantes: `baseline_v290_repro`, `v221_boxed_suffix`, `no_suffix`, `strict_disable_thinking`, `strict_2048_tokens`.
+- Gate de promocao continua: `total>192`, `equation>56`, `bit>=136`, `truncated=0`.
 
 ### Step 3 - V394 row-level equation miss inventory
 
