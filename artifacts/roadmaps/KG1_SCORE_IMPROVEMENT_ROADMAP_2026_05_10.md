@@ -43,6 +43,7 @@ Precisamos buscar subida no ranking ainda hoje, `2026-05-14`. O plano deve ser a
 | V381 filtered teacher dataset | n/a | `840` eq sintéticas | `280` bit replay | passou dataset + tokenization gate real; pronto para micro-train HF |
 | V382/V383 V381 teacher smoke | `191/315` melhor parcial | `56/155` | `135/160` | rejeitado; checkpoints 2/4/6 nao bateram baseline; V383 cancelado por FinOps |
 | V384 V382 V221 prompt weak eval | melhor `193/315` | `56/155` | `137/160` | rejeitado; `truncated=1` e equation nao subiu |
+| V387 V382 checkpoint-4 full official-like | em execucao/pendente | em execucao/pendente | em execucao/pendente | trilha agressiva de hoje; so package/submission se `>=824/947` e truncation `<=4` |
 
 Conclusao: `eval_loss` baixo nao e criterio de promocao. O criterio e ACC por familia no weak/full gate.
 
@@ -51,6 +52,8 @@ Resultado V383 em `2026-05-14`: checkpoint-2 = `190/315`, `equation=56`, `bit=13
 Auditoria V385 de medicao ACC em `2026-05-14`: o weak scorer atual esta correto para comparar candidatos adapter-only. O CSV weak validado pelo proprio runner tem `315` rows, `160` bit, `155` equation, SHA `85da758e14d57ea40270de5747f98726a0ad0b6d1795bff7dd46183005e0f9b6` e contrato `bf055e3b9ebce79d4bfc9e48bce5a305b1d83da882f14afddec80d6afaba5fff`. O merge e `one_to_one` por `id`, a familia vem do CSV de solucao, `bit_manipulation` usa igualdade binaria exata e truncation vem de `finish_reason == "length"`. Gap encontrado: V383 usou sufixo curto e e diagnostico; V384 e a comparacao correta contra o prompt historico V221.
 
 Double check V386 de medicao ACC em `2026-05-14`: weak315 e full947 foram cruzados contra o `train.csv` oficial baixado via Kaggle CLI; `id`, `prompt` e `answer` bateram com `0` ausentes e `0` mismatches. O re-score local dos CSVs V384 baixados do HF reproduziu exatamente o `batch_candidate_summary`: `v382_ckpt4_v221prompt = 193/315, equation=56, bit=137, truncated=1`; `v382_ckpt6_v221prompt = 190/315, equation=55, bit=135, truncated=1`. Conclusao: o baixo ACC atual nao e bug de medicao nem sujeira de dataset; e falha real do candidato. A linha V381/V382/V384 nao deve ser promovida.
+
+Decisao agressiva V387 para ranking hoje: apesar de V384 falhar no weak gate por `truncated=1` e `equation=56`, o checkpoint-4 e o unico adapter-only novo com `total=193/315` e `bit=137/160`. Como o V291 submetido ja tem full `823/947`, V387 avalia `felipesp1983/kg1-nemotron-lora-v382-v381-teacher-smoke/checkpoint-4` em full official-like sem postprocessor. Regra: se o full ficar `<=823` ou truncation `>4`, nao packagear e nao submeter; se ficar `>=824/947`, packagear adapter-only e submeter no mesmo dia.
 
 ## Fontes Auditadas
 
