@@ -1,0 +1,9 @@
+{
+  "outputs": {
+    "train_jsonl": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v381_filtered_teacher_dataset\\20260514T_cpu_gate\\v381_train.jsonl",
+    "train_sha256": "345b50842c57f9485b216817c067dd26cff8d4541324ba68c82fa5d4764c3fef",
+    "val_jsonl": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v381_filtered_teacher_dataset\\20260514T_cpu_gate\\v381_val.jsonl",
+    "val_sha256": "105325328f5987708bfd0090b41cf85d0c670ec304371572d9ac6943e0e06f3c"
+  },
+  "schema_version": "kg1_v381_dataset_manifest_v1"
+}

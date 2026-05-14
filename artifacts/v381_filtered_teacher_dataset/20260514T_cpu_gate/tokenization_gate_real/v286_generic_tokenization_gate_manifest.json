@@ -1,0 +1,160 @@
+{
+  "blocked_actions": [
+    "full_eval",
+    "package",
+    "kaggle_submit"
+  ],
+  "config": {
+    "assistant_final_answer_mode": "suffix",
+    "max_length": 8192,
+    "max_prompt_truncation_rate": 0.0,
+    "min_train_rows": 600,
+    "min_val_rows": 120,
+    "require_offset_mask": true
+  },
+  "dataset_manifest_json": "artifacts\\v381_filtered_teacher_dataset\\20260514T_cpu_gate\\v381_dataset_manifest.json",
+  "dataset_manifest_sha256": "42b66a0713e3d59e853ee52226c82eaa700360290a7eb980e4e1028303fa895d",
+  "decision": {
+    "next_action": "Only consider a tiny HF smoke train if roadmap risk/budget gates approve it.",
+    "reason": "train_rows=909; val_rows=211; train_token_max=327; val_token_max=327; completion_truncation=0",
+    "status": "tokenization_gate_passed"
+  },
+  "generated_at_utc": "2026-05-14T15:48:13.916559+00:00",
+  "model_name": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+  "model_revision": "cbd3fa9f933d55ef16a84236559f4ee2a0526848",
+  "outputs": {
+    "manifest_json": "artifacts\\v381_filtered_teacher_dataset\\20260514T_cpu_gate\\tokenization_gate_real\\v286_generic_tokenization_gate_manifest.json"
+  },
+  "schema_version": "kg1_v286_generic_tokenization_gate_v1",
+  "tokenization": {
+    "train": {
+      "completion_tokens_dropped": 0,
+      "fallback_masks": 0,
+      "family_summary": {
+        "bit_manipulation": {
+          "loss_token_max": 14,
+          "loss_token_min": 14,
+          "loss_token_p50": 14,
+          "rows": 240,
+          "token_max": 327,
+          "token_p50": 289,
+          "token_p90": 324,
+          "token_p99": 327
+        },
+        "equation_transform": {
+          "loss_token_max": 53,
+          "loss_token_min": 36,
+          "loss_token_p50": 45,
+          "rows": 669,
+          "token_max": 175,
+          "token_p50": 156,
+          "token_p90": 168,
+          "token_p99": 173
+        }
+      },
+      "loss_token_max": 53,
+      "loss_token_min": 14,
+      "loss_token_p50": 43,
+      "offset_masks": 909,
+      "prompt_truncated": 0,
+      "prompt_truncation_rate": 0.0,
+      "rows": 909,
+      "token_max": 327,
+      "token_mean": 192.239,
+      "token_min": 139,
+      "token_p50": 162,
+      "token_p90": 298,
+      "token_p99": 327
+    },
+    "validation": {
+      "completion_tokens_dropped": 0,
+      "fallback_masks": 0,
+      "family_summary": {
+        "bit_manipulation": {
+          "loss_token_max": 14,
+          "loss_token_min": 14,
+          "loss_token_p50": 14,
+          "rows": 40,
+          "token_max": 327,
+          "token_p50": 289,
+          "token_p90": 324,
+          "token_p99": 327
+        },
+        "equation_transform": {
+          "loss_token_max": 52,
+          "loss_token_min": 37,
+          "loss_token_p50": 46,
+          "rows": 171,
+          "token_max": 172,
+          "token_p50": 156,
+          "token_p90": 169,
+          "token_p99": 172
+        }
+      },
+      "loss_token_max": 52,
+      "loss_token_min": 14,
+      "loss_token_p50": 43,
+      "offset_masks": 211,
+      "prompt_truncated": 0,
+      "prompt_truncation_rate": 0.0,
+      "rows": 211,
+      "token_max": 327,
+      "token_mean": 182.517,
+      "token_min": 139,
+      "token_p50": 161,
+      "token_p90": 286,
+      "token_p99": 327
+    }
+  },
+  "tokenizer_info": {
+    "class": "TokenizersBackend",
+    "eos_token": "<|im_end|>",
+    "is_fast": true,
+    "pad_token": "<|im_end|>",
+    "toy": false
+  },
+  "validation": {
+    "train": {
+      "family_counts": {
+        "bit_manipulation": 240,
+        "equation_transform": 669
+      },
+      "prompt_answer_hash_count": 909,
+      "prompt_hash_count": 909,
+      "rows": 909,
+      "sha256_expected": "345b50842c57f9485b216817c067dd26cff8d4541324ba68c82fa5d4764c3fef",
+      "source_counts": {
+        "v381_v217_bit_replay": 240,
+        "v381_v380_reexecuted_teacher_synthetic": 669
+      },
+      "subcategory_counts": {
+        "bit_manipulation": 52,
+        "equation_symbolic_teacher_synthetic": 669,
+        "unknown": 188
+      },
+      "unique_ids": 909
+    },
+    "train_val_prompt_answer_overlap": 0,
+    "train_val_prompt_overlap": 0,
+    "validation": {
+      "family_counts": {
+        "bit_manipulation": 40,
+        "equation_transform": 171
+      },
+      "prompt_answer_hash_count": 211,
+      "prompt_hash_count": 211,
+      "rows": 211,
+      "sha256_expected": "105325328f5987708bfd0090b41cf85d0c670ec304371572d9ac6943e0e06f3c",
+      "source_counts": {
+        "v381_v217_bit_replay": 40,
+        "v381_v380_reexecuted_teacher_synthetic": 171
+      },
+      "subcategory_counts": {
+        "bit_manipulation": 15,
+        "equation_symbolic_teacher_synthetic": 171,
+        "unknown": 25
+      },
+      "unique_ids": 211
+    }
+  }
+}

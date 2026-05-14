@@ -28,6 +28,7 @@ Meta minima para gastar HF:
 | V380 oracle diagnostic | `301/315` | `142/155` | `159/160` | nao submit-safe; usa resposta/teacher |
 | V380 reexecuted teacher | `292/315` | `133/155` | `159/160` | dataset teacher permitido; HF ainda bloqueado |
 | V380 strict independent | `222/315` | `63/155` | `159/160` | ganho real independente `+0`; nao submeter |
+| V381 filtered teacher dataset | n/a | `840` eq sintéticas | `280` bit replay | passou dataset + tokenization gate real; pronto para micro-train HF |
 
 Conclusao: `eval_loss` baixo nao e criterio de promocao. O criterio e ACC por familia no weak/full gate.
 
@@ -188,7 +189,7 @@ Saida esperada:
 
 ### Step 2 - V381 filtered trace/tokenization gate
 
-Status: proximo passo obrigatorio.
+Status: concluido em CPU.
 
 Objetivo: construir dataset pequeno para LoRA a partir dos `70` candidatos V380 reexecuted-teacher, sem tratar oracle/answer-conditioned como regra submetivel.
 
@@ -224,9 +225,30 @@ Saida esperada:
 - Nenhum HF se `bit` replay nao estiver presente ou se truncation > 0.
 - Nenhum submit; este step so prepara gate para treino.
 
+Resultado V381:
+
+- Script: `scripts/build_v381_filtered_teacher_dataset.py`.
+- Manifest: `artifacts/v381_filtered_teacher_dataset/20260514T_cpu_gate/v381_filtered_teacher_dataset_manifest.json`.
+- Dataset: `909` train rows e `211` validation rows.
+- Train: `669` `equation_transform` sinteticas derivadas de V380 reexecuted-teacher + `240` bit replay V217.
+- Validation: `171` `equation_transform` sinteticas + `40` bit replay V217.
+- Prototipos originais V380: `70` rows em `v381_teacher_prototypes_not_for_training.jsonl`; marcados como nao-treino.
+- Exact weak overlap com V366: `0` em train e `0` em validation.
+- Overlap train vs V217 val: `0`.
+- Tokenization gate real Nemotron passou:
+  - `completion_tokens_dropped=0`.
+  - `fallback_masks=0`.
+  - `prompt_truncation_rate=0.0`.
+  - `train_token_max=327`.
+  - `val_token_max=327`.
+  - `offset_masks=909/909` train e `211/211` validation.
+- Decisao: V382 HF micro-train esta permitido como smoke responsavel, mas nao autoriza submit.
+
 ### Step 3 - V382 HF micro-train com kill-switch
 
-Objetivo: testar se o ganho CPU transfere para adapter-only.
+Status: proximo passo.
+
+Objetivo: testar se o sinal V381 transfere para adapter-only sem destruir bit.
 
 Regras:
 
@@ -239,6 +261,10 @@ Regras:
   - `truncated=0`.
 - Se falhar, cancelar.
 - Se passar, avaliar checkpoint seguinte.
+- Kill-switch adicional V381:
+  - cancelar se validation loss cair mas weak ACC ficar em `equation<=56` e `bit<136`;
+  - cancelar se o primeiro checkpoint tiver `bit<136`;
+  - cancelar se o custo estimado exceder o budget restante sem chance de bater `192/315`.
 
 Saida esperada:
 

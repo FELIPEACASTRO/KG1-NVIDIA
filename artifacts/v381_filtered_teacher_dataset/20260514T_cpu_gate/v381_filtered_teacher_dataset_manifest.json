@@ -1,0 +1,142 @@
+{
+  "counts": {
+    "accepted_v380_teacher_rows": 70,
+    "prototypes_not_for_training": 70,
+    "synthetic_equation_rows": 840,
+    "train_rows": 909,
+    "val_rows": 211
+  },
+  "decision": {
+    "hf_gpu_allowed": false,
+    "next_action": "Run V286 generic tokenization gate on v381_dataset_manifest.json; only then consider a short HF micro-train.",
+    "reason": "synthetic dataset built without exact weak prompt overlap; run V286 real tokenization before HF",
+    "status": "dataset_gate_passed_tokenization_required",
+    "tokenization_gate_required": true
+  },
+  "generated_at_utc": "2026-05-14T15:47:25.787312+00:00",
+  "inputs": {
+    "v217_train_jsonl": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\data\\v217\\v217_short_answer_train.jsonl",
+    "v217_val_jsonl": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\data\\v217\\v217_short_answer_val.jsonl",
+    "v366_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v366_bit_fullbyte_ternary_op_gate\\20260514T_cpu_gate\\v366_integrated_predictions.csv",
+    "v380_candidate_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v380_solver_results_patch_gate\\20260514T_cpu_gate\\v380_solver_results_candidate_patch.csv"
+  },
+  "outputs": {
+    "dataset_manifest_json": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v381_filtered_teacher_dataset\\20260514T_cpu_gate\\v381_dataset_manifest.json",
+    "generation_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v381_filtered_teacher_dataset\\20260514T_cpu_gate\\v381_synthetic_generation_detail.csv",
+    "manifest_json": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v381_filtered_teacher_dataset\\20260514T_cpu_gate\\v381_filtered_teacher_dataset_manifest.json",
+    "prototypes_jsonl": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v381_filtered_teacher_dataset\\20260514T_cpu_gate\\v381_teacher_prototypes_not_for_training.jsonl",
+    "train_jsonl": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v381_filtered_teacher_dataset\\20260514T_cpu_gate\\v381_train.jsonl",
+    "val_jsonl": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v381_filtered_teacher_dataset\\20260514T_cpu_gate\\v381_val.jsonl"
+  },
+  "overlap_audit": {
+    "train_vs_v217_train": {
+      "overlap_ids_first20": [
+        "v381_replay_v217_train_00020c20d8c6c569",
+        "v381_replay_v217_train_0010f451760adf4f",
+        "v381_replay_v217_train_0044ac3b9f91ae1d",
+        "v381_replay_v217_train_0072e396c2902dce",
+        "v381_replay_v217_train_0089ccbe3aae7357",
+        "v381_replay_v217_train_00a25b60973e0ae6",
+        "v381_replay_v217_train_00b629e8f38dffc0",
+        "v381_replay_v217_train_00d7cb61ef04fd7b",
+        "v381_replay_v217_train_0100073033b4986e",
+        "v381_replay_v217_train_01051723cb121383",
+        "v381_replay_v217_train_010589822002306f",
+        "v381_replay_v217_train_013959fbc9442359",
+        "v381_replay_v217_train_016127cd3f135ea1",
+        "v381_replay_v217_train_0172e65e0208871c",
+        "v381_replay_v217_train_0178919bbfcf0c4a",
+        "v381_replay_v217_train_018b95f0c7649eb3",
+        "v381_replay_v217_train_01a97646f586f4e2",
+        "v381_replay_v217_train_01be4713ea6fa1b8",
+        "v381_replay_v217_train_01dd321c128b65f9",
+        "v381_replay_v217_train_01e417828a97f1b4"
+      ],
+      "overlap_rows": 240,
+      "reference": "v217_train",
+      "reference_rows": 10206
+    },
+    "train_vs_v217_val": {
+      "overlap_ids_first20": [],
+      "overlap_rows": 0,
+      "reference": "v217_val",
+      "reference_rows": 681
+    },
+    "train_vs_v366_weak": {
+      "overlap_ids_first20": [],
+      "overlap_rows": 0,
+      "reference": "v366_weak",
+      "reference_rows": 315
+    },
+    "val_vs_v366_weak": {
+      "overlap_ids_first20": [],
+      "overlap_rows": 0,
+      "reference": "v366_weak",
+      "reference_rows": 315
+    }
+  },
+  "parameters": {
+    "bit_replay_train_rows": 240,
+    "bit_replay_val_rows": 40,
+    "synthetic_per_rule": 12
+  },
+  "schema_version": "kg1_v381_filtered_teacher_dataset_v1",
+  "summaries": {
+    "prototypes": {
+      "family_counts": {
+        "equation_transform": 70
+      },
+      "max_answer_chars": 4,
+      "max_prompt_chars": 210,
+      "prompt_hash_count": 70,
+      "rows": 70,
+      "source_counts": {
+        "v381_v380_reexecuted_teacher_prototype": 70
+      },
+      "subcategory_counts": {
+        "equation_teacher_prototype": 70
+      },
+      "unique_ids": 70
+    },
+    "train": {
+      "family_counts": {
+        "bit_manipulation": 240,
+        "equation_transform": 669
+      },
+      "max_answer_chars": 8,
+      "max_prompt_chars": 530,
+      "prompt_hash_count": 909,
+      "rows": 909,
+      "source_counts": {
+        "v381_v217_bit_replay": 240,
+        "v381_v380_reexecuted_teacher_synthetic": 669
+      },
+      "subcategory_counts": {
+        "bit_manipulation": 52,
+        "equation_symbolic_teacher_synthetic": 669,
+        "unknown": 188
+      },
+      "unique_ids": 909
+    },
+    "validation": {
+      "family_counts": {
+        "bit_manipulation": 40,
+        "equation_transform": 171
+      },
+      "max_answer_chars": 8,
+      "max_prompt_chars": 530,
+      "prompt_hash_count": 211,
+      "rows": 211,
+      "source_counts": {
+        "v381_v217_bit_replay": 40,
+        "v381_v380_reexecuted_teacher_synthetic": 171
+      },
+      "subcategory_counts": {
+        "bit_manipulation": 15,
+        "equation_symbolic_teacher_synthetic": 171,
+        "unknown": 25
+      },
+      "unique_ids": 211
+    }
+  }
+}
