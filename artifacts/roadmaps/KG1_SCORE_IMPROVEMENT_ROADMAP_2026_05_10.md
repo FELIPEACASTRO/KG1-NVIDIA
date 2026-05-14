@@ -190,7 +190,9 @@ Preflight local aprovado:
 - LR: `3.0e-8 -> 8.0e-9`.
 - Trainable modules: `q_proj,k_proj,v_proj,o_proj,lm_head`.
 - Artefatos: `artifacts/v352_hf_a100_v351_bit_transfer_launch/`.
-- Job HF: `https://huggingface.co/jobs/felipesp1983/6a0520b13308d79117b8f393`.
+- Job HF treino A100: `https://huggingface.co/jobs/felipesp1983/6a0520b13308d79117b8f393`.
+- Decisao FinOps aplicada: treino cancelado apos upload completo de `checkpoint-2`; nao gastar nos steps 4/6/8 antes do weak eval.
+- Weak eval checkpoint-2: launcher criado e debug H200 aprovado; launch pendente apos commit/push do script de eval.
 
 Configuracao:
 
@@ -260,4 +262,4 @@ Estes itens nao devem ser reexecutados como acao principal. So podem voltar se u
 
 ## Proxima acao unica
 
-Monitorar o job V352 e, assim que existir checkpoint, rodar weak eval. Se o primeiro checkpoint nao mostrar sinal adapter-only acima do baseline, cancelar por FinOps.
+Executar o weak eval H200 do V352 `checkpoint-2`. Se `total<=192` ou `bit<=136`, encerrar esta rota; se houver ganho, decidir continuacao curta ou full eval conforme gate.
