@@ -1,0 +1,3 @@
+id,family,candidate_source,rule_class,old_prediction,new_prediction,answer,old_correct,new_correct,accepted,rejection_reason,candidate_count,conflict_count,proof,prediction,correct,truncated,v352_correct_bool,transfer_hit_new_prediction,transfer_hit_answer
+4ada9150,bit_manipulation,v350_bit_exact_global_byte,bit_exact_global_binary_OR,01111111,01111011,01111011,False,True,True,,1,0,"output=OR(ROL2(input),SHL4(input))",01111111,False,False,False,False,False
+4c327b55,bit_manipulation,v350_bit_exact_global_byte,bit_exact_global_binary_XOR,11011110,11011100,11011100,False,True,True,,1,0,"output=XOR(SHL1(input),SHR4(input))",11011110,False,False,False,False,False

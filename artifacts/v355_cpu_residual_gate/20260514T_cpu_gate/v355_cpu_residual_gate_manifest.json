@@ -1,0 +1,231 @@
+{
+  "accepted_candidate_count": 0,
+  "accepted_candidate_ids": [],
+  "candidate_rule_summary_top": [
+    {
+      "accepted": false,
+      "accepted_rows": 0,
+      "candidate_rows": 1,
+      "candidate_source": "v355_equation_conflict_recheck",
+      "changed_rows": 1,
+      "family": "equation_transform",
+      "gains": 1,
+      "losses": 0,
+      "new_correct": 1,
+      "reason": "rejected_by_gate",
+      "rule_class": "symbolic_cryptarithm_multi_operator_digits_add"
+    },
+    {
+      "accepted": false,
+      "accepted_rows": 0,
+      "candidate_rows": 1,
+      "candidate_source": "v355_equation_conflict_recheck",
+      "changed_rows": 1,
+      "family": "equation_transform",
+      "gains": 1,
+      "losses": 0,
+      "new_correct": 1,
+      "reason": "rejected_by_gate",
+      "rule_class": "symbolic_cryptarithm_multi_operator_digits_mul"
+    },
+    {
+      "accepted": false,
+      "accepted_rows": 0,
+      "candidate_rows": 11,
+      "candidate_source": "v355_current_bit_solver",
+      "changed_rows": 11,
+      "family": "bit_manipulation",
+      "gains": 1,
+      "losses": 6,
+      "new_correct": 1,
+      "reason": "rejected_by_gate",
+      "rule_class": "current_bit_solver_perbit_solved_8"
+    },
+    {
+      "accepted": false,
+      "accepted_rows": 0,
+      "candidate_rows": 1,
+      "candidate_source": "v355_current_bit_solver",
+      "changed_rows": 1,
+      "family": "bit_manipulation",
+      "gains": 0,
+      "losses": 0,
+      "new_correct": 0,
+      "reason": "rejected_by_gate",
+      "rule_class": "current_bit_solver_perbit_solved_2"
+    },
+    {
+      "accepted": false,
+      "accepted_rows": 0,
+      "candidate_rows": 3,
+      "candidate_source": "v355_current_bit_solver",
+      "changed_rows": 3,
+      "family": "bit_manipulation",
+      "gains": 0,
+      "losses": 0,
+      "new_correct": 0,
+      "reason": "rejected_by_gate",
+      "rule_class": "current_bit_solver_perbit_solved_4"
+    },
+    {
+      "accepted": false,
+      "accepted_rows": 0,
+      "candidate_rows": 3,
+      "candidate_source": "v355_bit_stride",
+      "changed_rows": 3,
+      "family": "bit_manipulation",
+      "gains": 0,
+      "losses": 1,
+      "new_correct": 0,
+      "reason": "rejected_by_gate",
+      "rule_class": "bit_stride_default_bits_0"
+    },
+    {
+      "accepted": false,
+      "accepted_rows": 0,
+      "candidate_rows": 1,
+      "candidate_source": "v355_bit_stride",
+      "changed_rows": 1,
+      "family": "bit_manipulation",
+      "gains": 0,
+      "losses": 1,
+      "new_correct": 0,
+      "reason": "rejected_by_gate",
+      "rule_class": "bit_stride_default_bits_4"
+    },
+    {
+      "accepted": false,
+      "accepted_rows": 0,
+      "candidate_rows": 1,
+      "candidate_source": "v355_current_bit_solver",
+      "changed_rows": 1,
+      "family": "bit_manipulation",
+      "gains": 0,
+      "losses": 1,
+      "new_correct": 0,
+      "reason": "rejected_by_gate",
+      "rule_class": "current_bit_solver_perbit_solved_6"
+    },
+    {
+      "accepted": false,
+      "accepted_rows": 0,
+      "candidate_rows": 3,
+      "candidate_source": "v355_bit_stride",
+      "changed_rows": 3,
+      "family": "bit_manipulation",
+      "gains": 0,
+      "losses": 2,
+      "new_correct": 0,
+      "reason": "rejected_by_gate",
+      "rule_class": "bit_stride_default_bits_5"
+    },
+    {
+      "accepted": false,
+      "accepted_rows": 0,
+      "candidate_rows": 3,
+      "candidate_source": "v355_bit_stride",
+      "changed_rows": 3,
+      "family": "bit_manipulation",
+      "gains": 0,
+      "losses": 3,
+      "new_correct": 0,
+      "reason": "rejected_by_gate",
+      "rule_class": "bit_stride_default_bits_1"
+    },
+    {
+      "accepted": false,
+      "accepted_rows": 0,
+      "candidate_rows": 3,
+      "candidate_source": "v355_bit_stride",
+      "changed_rows": 3,
+      "family": "bit_manipulation",
+      "gains": 0,
+      "losses": 3,
+      "new_correct": 0,
+      "reason": "rejected_by_gate",
+      "rule_class": "bit_stride_default_bits_3"
+    },
+    {
+      "accepted": false,
+      "accepted_rows": 0,
+      "candidate_rows": 5,
+      "candidate_source": "v355_bit_stride",
+      "changed_rows": 5,
+      "family": "bit_manipulation",
+      "gains": 0,
+      "losses": 4,
+      "new_correct": 0,
+      "reason": "rejected_by_gate",
+      "rule_class": "bit_stride_default_bits_2"
+    },
+    {
+      "accepted": false,
+      "accepted_rows": 0,
+      "candidate_rows": 13,
+      "candidate_source": "v355_current_bit_solver",
+      "changed_rows": 13,
+      "family": "bit_manipulation",
+      "gains": 0,
+      "losses": 7,
+      "new_correct": 0,
+      "reason": "rejected_by_gate",
+      "rule_class": "current_bit_solver_perbit_solved_7"
+    }
+  ],
+  "decision": {
+    "decision": "v355_cpu_residual_gate_blocked",
+    "hf_gpu_allowed": false,
+    "next_action": "Do not launch HF. Continue CPU search with a new equation ambiguity resolver or new bit rule family.",
+    "reason": "v355=201/315; equation=63/155; bit=138/160; gains=0; losses=0"
+  },
+  "expected_shared_row_contract_sha256": "bf055e3b9ebce79d4bfc9e48bce5a305b1d83da882f14afddec80d6afaba5fff",
+  "gain_count": 0,
+  "gain_ids": [],
+  "generated_at_utc": "2026-05-14T01:47:57.349002+00:00",
+  "inputs": {
+    "v350_candidate_decisions_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v350_cpu_residual_no_loss_gate\\20260514T_v350_cpu_gate\\v350_candidate_decisions.csv",
+    "v350_candidate_decisions_sha256": "f498508790cb91c6a2def68f92e896ab6f3f0188418f31ee696bd78891e74f18",
+    "v350_integrated_predictions_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v350_cpu_residual_no_loss_gate\\20260514T_v350_cpu_gate\\v350_integrated_predictions.csv",
+    "v350_integrated_predictions_sha256": "ca66e4d106626e122463cfcb360c0bb61dc907ece5237a06822ae690b38a29d7"
+  },
+  "loss_count": 0,
+  "loss_ids": [],
+  "observed_shared_row_contract_sha256": "bf055e3b9ebce79d4bfc9e48bce5a305b1d83da882f14afddec80d6afaba5fff",
+  "outputs": {
+    "candidate_decisions_csv": "artifacts\\v355_cpu_residual_gate\\20260514T_cpu_gate\\v355_candidate_decisions.csv",
+    "candidate_rules_csv": "artifacts\\v355_cpu_residual_gate\\20260514T_cpu_gate\\v355_candidate_rules.csv",
+    "integrated_predictions_csv": "artifacts\\v355_cpu_residual_gate\\20260514T_cpu_gate\\v355_integrated_predictions.csv",
+    "manifest_json": "artifacts\\v355_cpu_residual_gate\\20260514T_cpu_gate\\v355_cpu_residual_gate_manifest.json"
+  },
+  "schema_version": "kg1_v355_cpu_residual_gate_v1",
+  "v350_summary": {
+    "accuracy": 0.638095238095238,
+    "correct": 201,
+    "family": {
+      "bit_manipulation": {
+        "correct": 138,
+        "rows": 160
+      },
+      "equation_transform": {
+        "correct": 63,
+        "rows": 155
+      }
+    },
+    "rows": 315
+  },
+  "v355_summary": {
+    "accuracy": 0.638095238095238,
+    "correct": 201,
+    "family": {
+      "bit_manipulation": {
+        "correct": 138,
+        "rows": 160
+      },
+      "equation_transform": {
+        "correct": 63,
+        "rows": 155
+      }
+    },
+    "rows": 315
+  }
+}

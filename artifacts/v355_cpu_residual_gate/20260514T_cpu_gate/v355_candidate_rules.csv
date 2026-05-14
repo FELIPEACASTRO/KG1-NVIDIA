@@ -1,0 +1,14 @@
+family,candidate_source,rule_class,candidate_rows,changed_rows,gains,losses,new_correct,accepted_rows,accepted,reason
+equation_transform,v355_equation_conflict_recheck,symbolic_cryptarithm_multi_operator_digits_add,1,1,1,0,1,0,False,rejected_by_gate
+equation_transform,v355_equation_conflict_recheck,symbolic_cryptarithm_multi_operator_digits_mul,1,1,1,0,1,0,False,rejected_by_gate
+bit_manipulation,v355_current_bit_solver,current_bit_solver_perbit_solved_8,11,11,1,6,1,0,False,rejected_by_gate
+bit_manipulation,v355_current_bit_solver,current_bit_solver_perbit_solved_2,1,1,0,0,0,0,False,rejected_by_gate
+bit_manipulation,v355_current_bit_solver,current_bit_solver_perbit_solved_4,3,3,0,0,0,0,False,rejected_by_gate
+bit_manipulation,v355_bit_stride,bit_stride_default_bits_0,3,3,0,1,0,0,False,rejected_by_gate
+bit_manipulation,v355_bit_stride,bit_stride_default_bits_4,1,1,0,1,0,0,False,rejected_by_gate
+bit_manipulation,v355_current_bit_solver,current_bit_solver_perbit_solved_6,1,1,0,1,0,0,False,rejected_by_gate
+bit_manipulation,v355_bit_stride,bit_stride_default_bits_5,3,3,0,2,0,0,False,rejected_by_gate
+bit_manipulation,v355_bit_stride,bit_stride_default_bits_1,3,3,0,3,0,0,False,rejected_by_gate
+bit_manipulation,v355_bit_stride,bit_stride_default_bits_3,3,3,0,3,0,0,False,rejected_by_gate
+bit_manipulation,v355_bit_stride,bit_stride_default_bits_2,5,5,0,4,0,0,False,rejected_by_gate
+bit_manipulation,v355_current_bit_solver,current_bit_solver_perbit_solved_7,13,13,0,7,0,0,False,rejected_by_gate

@@ -1,0 +1,25 @@
+{
+  "conflict_rows_audited": 2,
+  "decision": {
+    "decision": "v356_conflict_tiebreaker_blocked",
+    "hf_gpu_allowed": false,
+    "next_action": "Do not promote these equation conflicts. Continue only with new CPU rules that remove ambiguity before weak labels.",
+    "reason": "No label-free tiebreaker found. Verified conflict rows rely on query-only operators that never appear in examples."
+  },
+  "generated_at_utc": "2026-05-14T01:50:02.045345+00:00",
+  "inputs": {
+    "v350_candidate_decisions_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v350_cpu_residual_no_loss_gate\\20260514T_v350_cpu_gate\\v350_candidate_decisions.csv",
+    "v350_candidate_decisions_sha256": "f498508790cb91c6a2def68f92e896ab6f3f0188418f31ee696bd78891e74f18",
+    "v350_integrated_predictions_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v350_cpu_residual_no_loss_gate\\20260514T_v350_cpu_gate\\v350_integrated_predictions.csv",
+    "v350_integrated_predictions_sha256": "ca66e4d106626e122463cfcb360c0bb61dc907ece5237a06822ae690b38a29d7"
+  },
+  "label_free_tiebreaker_count": 0,
+  "outputs": {
+    "audit_csv": "artifacts\\v356_equation_conflict_tiebreaker\\20260514T_cpu_audit\\v356_equation_conflict_tiebreaker_audit.csv",
+    "manifest_json": "artifacts\\v356_equation_conflict_tiebreaker\\20260514T_cpu_audit\\v356_equation_conflict_tiebreaker_manifest.json"
+  },
+  "reason_counts": {
+    "query_only_operator_no_label_free_tiebreaker": 2
+  },
+  "schema_version": "kg1_v356_equation_conflict_tiebreaker_v1"
+}

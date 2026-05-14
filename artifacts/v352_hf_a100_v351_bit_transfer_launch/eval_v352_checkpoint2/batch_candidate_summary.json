@@ -1,0 +1,42 @@
+{
+  "base_model_path": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+  "candidates_json": "/tmp/kg1_v245_weak_eval/v352-h200-v221contract-v351-bit-transfer-checkpoint2-20260514T012314Z/v245_weak_eval_candidates.json",
+  "config": {
+    "dtype": "auto",
+    "enable_chunked_prefill": true,
+    "enable_prefix_caching": true,
+    "gpu_memory_utilization": 0.85,
+    "max_lora_rank": 32,
+    "max_model_len": 8192,
+    "max_num_seqs": 64,
+    "max_tokens": 7680,
+    "model_name": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+    "model_revision": "cbd3fa9f933d55ef16a84236559f4ee2a0526848",
+    "prompt_suffix": "\nReturn only one line: `\\boxed{answer}`. No reasoning. No explanation.",
+    "temperature": 0.0,
+    "top_p": 1.0,
+    "trust_remote_code": true,
+    "warmup_rows": 0
+  },
+  "elapsed_s": 646.9031760692596,
+  "generated_at_utc": "2026-05-14T01:35:45.170538+00:00",
+  "questions_csv": "/root/.cache/huggingface/hub/datasets--felipesp1983--kg1-nemotron-training/snapshots/439f99442729bfce14432a865abb8c260a637d24/runtime_artifacts/v245_weak_eval_bridge/v245-weak-bridge-hfonly-20260510T1950Z/v221_weak_315.csv",
+  "rows": [
+    {
+      "accuracy": 0.6063492063492063,
+      "adapter": "/tmp/kg1_v245_adapter_snapshots/v352-h200-v221contract-v351-bit-transfer-checkpoint2-20260514T012314Z/bf47cea1a9a5/checkpoint-2",
+      "bit_manipulation_correct": 135,
+      "completion_tokens": 1502998,
+      "correct": 191,
+      "equation_transform_correct": 56,
+      "error": "",
+      "name": "v352_v351_bit_transfer_checkpoint_2_v221_contract",
+      "report_json": "/tmp/kg1_v245_weak_eval/v352-h200-v221contract-v351-bit-transfer-checkpoint2-20260514T012314Z/eval/v352_v351_bit_transfer_checkpoint_2_v221_contract/v352_v351_bit_transfer_hf_weak_v352_v351_bit_transfer_checkpoint_2_v221_contract_eval_report.json",
+      "status": "ok",
+      "tokens_per_second": 2926.726762456469,
+      "truncated": 0,
+      "truncation_rate": 0.0
+    }
+  ],
+  "solution_csv": "/root/.cache/huggingface/hub/datasets--felipesp1983--kg1-nemotron-training/snapshots/439f99442729bfce14432a865abb8c260a637d24/runtime_artifacts/v245_weak_eval_bridge/v245-weak-bridge-hfonly-20260510T1950Z/v221_weak_315.csv"
+}

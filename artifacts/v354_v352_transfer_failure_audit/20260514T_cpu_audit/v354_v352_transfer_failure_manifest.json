@@ -1,0 +1,80 @@
+{
+  "accepted_v350_count": 2,
+  "accepted_v350_transfer_detail_csv": "artifacts\\v354_v352_transfer_failure_audit\\20260514T_cpu_audit\\v354_v350_accepted_transfer_audit.csv",
+  "accepted_v350_transferred_count": 0,
+  "decision": {
+    "reason": "V352 checkpoint-2 failed to transfer the accepted V350 bit fixes and regressed against both V350 teacher and adapter-only gate.",
+    "status": "reject_v352_checkpoint2"
+  },
+  "delta_summary_v352_minus_v350": {
+    "net_v352_minus_v350": -10,
+    "v352_correct_v350_wrong": 0,
+    "v352_wrong_v350_correct": 10
+  },
+  "family_deltas_v352_minus_v350": [
+    {
+      "family": "bit_manipulation",
+      "net_v352_minus_v350": -3,
+      "rows": 160,
+      "v350_correct": 138,
+      "v352_correct": 135,
+      "v352_correct_v350_wrong": 0,
+      "v352_wrong_v350_correct": 3
+    },
+    {
+      "family": "equation_transform",
+      "net_v352_minus_v350": -7,
+      "rows": 155,
+      "v350_correct": 63,
+      "v352_correct": 56,
+      "v352_correct_v350_wrong": 0,
+      "v352_wrong_v350_correct": 7
+    }
+  ],
+  "row_delta_csv": "artifacts\\v354_v352_transfer_failure_audit\\20260514T_cpu_audit\\v354_v352_vs_v350_row_delta.csv",
+  "schema_version": "kg1_v354_v352_transfer_failure_audit_v1",
+  "shared_rows": 315,
+  "v350_candidate_decisions_csv": "artifacts\\v350_cpu_residual_no_loss_gate\\20260514T_v350_cpu_gate\\v350_candidate_decisions.csv",
+  "v350_family_summary": [
+    {
+      "accuracy": 0.8625,
+      "correct": 138,
+      "family": "bit_manipulation",
+      "rows": 160
+    },
+    {
+      "accuracy": 0.4064516129032258,
+      "correct": 63,
+      "family": "equation_transform",
+      "rows": 155
+    },
+    {
+      "accuracy": 0.638095238095238,
+      "correct": 201,
+      "family": "OVERALL",
+      "rows": 315
+    }
+  ],
+  "v350_integrated_predictions_csv": "artifacts\\v350_cpu_residual_no_loss_gate\\20260514T_v350_cpu_gate\\v350_integrated_predictions.csv",
+  "v352_family_summary": [
+    {
+      "accuracy": 0.84375,
+      "correct": 135,
+      "family": "bit_manipulation",
+      "rows": 160
+    },
+    {
+      "accuracy": 0.36129032258064514,
+      "correct": 56,
+      "family": "equation_transform",
+      "rows": 155
+    },
+    {
+      "accuracy": 0.6063492063492063,
+      "correct": 191,
+      "family": "OVERALL",
+      "rows": 315
+    }
+  ],
+  "v352_predictions_csv": "artifacts\\v352_hf_a100_v351_bit_transfer_launch\\eval_v352_checkpoint2\\predictions.csv"
+}

@@ -1,0 +1,4 @@
+task_type,total,correct,accuracy,truncated,truncation_rate
+bit_manipulation,160,135,0.84375,0,0.0
+equation_transform,155,56,0.36129032258064514,0,0.0
+OVERALL,315,191,0.6063492063492063,0,0.0
