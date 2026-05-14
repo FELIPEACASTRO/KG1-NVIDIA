@@ -1,0 +1,78 @@
+{
+  "accepted_cpu_gain_count": 6,
+  "accepted_cpu_gain_ids": [
+    "274def88",
+    "528ec0d8",
+    "7688e06e",
+    "c5b058d6",
+    "d1bd7478",
+    "fb623471"
+  ],
+  "baseline_predictions_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v394_equation_row_level_inventory\\20260514T_cpu_gate\\input\\v290_ckpt6_weak_predictions.csv",
+  "baseline_predictions_sha256": "910a051d8b8e652e37c0b0814ac59fe4a400b95cb432945b6a0244f97f5b31bf",
+  "comparison": [
+    {
+      "current": "274def88,528ec0d8,7688e06e,c5b058d6,d1bd7478,fb623471",
+      "decision": "no_new_cpu_gain",
+      "delta": 0,
+      "metric": "accepted_cpu_gain_ids",
+      "previous": "274def88,528ec0d8,7688e06e,c5b058d6,d1bd7478,fb623471"
+    },
+    {
+      "current": 62,
+      "decision": "no_new_equation_projection",
+      "delta": 0,
+      "metric": "projected_equation_correct",
+      "previous": 62
+    },
+    {
+      "current": 136,
+      "decision": "bit_guardrail_ok",
+      "delta": 0,
+      "metric": "bit_guardrail",
+      "previous": 136
+    }
+  ],
+  "decision": {
+    "decision": "reconfirmed_existing_cpu_signal_no_new_gpu_authorization",
+    "next_action": "Do not launch HF training from the same six numeric rows. Expand symbolic DSL on unresolved rows.",
+    "reason": "accepted_ids_match_previous_v390; projected_equation=62; bit=136; V391 already showed this signal did not transfer to LoRA"
+  },
+  "equation_miss_rows": 99,
+  "expected_shared_row_contract_sha256": "bf055e3b9ebce79d4bfc9e48bce5a305b1d83da882f14afddec80d6afaba5fff",
+  "family_summary": [
+    {
+      "baseline_correct": 136,
+      "delta": 0,
+      "family": "bit_manipulation",
+      "projected_correct": 136,
+      "rows": 160
+    },
+    {
+      "baseline_correct": 56,
+      "delta": 6,
+      "family": "equation_transform",
+      "projected_correct": 62,
+      "rows": 155
+    }
+  ],
+  "generated_at_utc": "2026-05-14T21:54:32.957813+00:00",
+  "new_cpu_gain_vs_v390_count": 0,
+  "new_cpu_gain_vs_v390_ids": [],
+  "observed_shared_row_contract_sha256": "bf055e3b9ebce79d4bfc9e48bce5a305b1d83da882f14afddec80d6afaba5fff",
+  "outputs": {
+    "comparison_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v394_equation_row_level_inventory\\20260514T_cpu_gate\\v394_inventory\\v394_vs_v390_comparison.csv",
+    "family_summary_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v394_equation_row_level_inventory\\20260514T_cpu_gate\\v394_inventory\\v394_family_projection_summary.csv",
+    "inventory_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v394_equation_row_level_inventory\\20260514T_cpu_gate\\v394_inventory\\v394_equation_row_level_inventory.csv",
+    "manifest_json": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v394_equation_row_level_inventory\\20260514T_cpu_gate\\v394_inventory\\v394_equation_row_level_inventory_manifest.json"
+  },
+  "schema_version": "kg1_v394_equation_row_level_inventory_v1",
+  "status_counts": {
+    "cpu_solver_verified_gain_not_adapter_gain": 6,
+    "unresolved_equation_miss": 93
+  },
+  "subtype_counts": {
+    "equation_numeric_operator": 16,
+    "equation_symbolic_punct": 83
+  }
+}

@@ -1,0 +1,4 @@
+metric,current,previous,delta,decision
+accepted_cpu_gain_ids,"274def88,528ec0d8,7688e06e,c5b058d6,d1bd7478,fb623471","274def88,528ec0d8,7688e06e,c5b058d6,d1bd7478,fb623471",0,no_new_cpu_gain
+projected_equation_correct,62,62,0,no_new_equation_projection
+bit_guardrail,136,136,0,bit_guardrail_ok

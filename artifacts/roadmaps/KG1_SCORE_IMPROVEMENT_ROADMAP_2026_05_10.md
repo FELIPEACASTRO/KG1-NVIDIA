@@ -51,6 +51,7 @@ Precisamos buscar subida no ranking ainda hoje, `2026-05-14`. A decisao V392 e s
 | V391 H200 relaunch + weak eval | `191/315` | `56/155` | `135/160` | rejeitado; checkpoints 2/4 iguais, eval cancelado por FinOps |
 | V392 roadmap reset | n/a | n/a | n/a | pausar LoRA; priorizar baseline lock + sweep sem treino + gate de transferencia real |
 | V393 prompt/template sweep | melhor `192/315` | `56/155` | `136/160` | encerrado por FinOps; sem ganho sobre V392 lock |
+| V394 equation row inventory | CPU projection `198/315` | `62/155` | `136/160` | sem sinal novo vs V390; nao autoriza GPU |
 
 Conclusao: `eval_loss` baixo nao e criterio de promocao. O criterio e ACC por familia no weak/full gate.
 
@@ -75,6 +76,8 @@ Decisao operacional pos-V387: usar Kaggle GPU apenas como alternativa barata par
 Decisao V392: nao ha justificativa tecnica para continuar a linha "teacher/verifier -> SFT LoRA" sem um gate novo que prove transferencia de resposta. V382/V383, V384/V387, V388/V389 e V391 repetiram o mesmo padrao: loss/teacher melhora ou projecao CPU parece boa, mas o adapter continua em `equation=56` e frequentemente perde `bit`. O plano ativo passa a privilegiar o caminho mais rapido para ranking hoje: identificar o melhor package historico, fazer sweeps sem treino, e so voltar ao treino se o gate mostrar ganho adapter-only antes da GPU.
 
 Decisao V393 em `2026-05-14`: o sweep sem treino foi encerrado por FinOps. `v221_boxed_suffix` empatou o baseline travado (`192/315`, `equation=56`, `bit=136`, `truncated=0`), portanto nao gera novo submit. `no_suffix` regrediu severamente (`158/315`, `equation=55`, `bit=103`, `truncated=1`), provando que remover a instrucao boxed quebra `bit_manipulation` e nao melhora equation. As variantes restantes (`strict_disable_thinking`, `strict_2048_tokens`) foram canceladas porque, apos esse resultado, a chance de superar `equation>56` com `bit>=136` nao justificava continuar gastando H200.
+
+Decisao V394 em `2026-05-14`: o inventario row-level sobre o baseline travado V290 checkpoint-6 confirmou `99` misses de `equation_transform`: `16` numeric operator e `83` symbolic punctuation. O V324 achou `6` ganhos CPU/verifier (`274def88`, `528ec0d8`, `7688e06e`, `c5b058d6`, `d1bd7478`, `fb623471`), projetando `equation=62/155` e `weak=198/315` com `bit=136/160`. Double check contra V390: `0` IDs novos, mesma projecao `62`, mesmo guardrail `136`. Como V391 ja testou esse sinal em LoRA e nao transferiu, V394 nao autoriza novo HF job. A proxima acao e expandir DSL simbolica nos `93` misses restantes, especialmente `equation_symbolic_punct`.
 
 ## Fontes Web Reauditadas 2026-05-14
 
@@ -321,7 +324,7 @@ Conclusao: V393 nao libera submit nem full eval. Prompt/template sozinho nao mov
 
 ### Step 3 - V394 row-level equation miss inventory
 
-Status: CPU, sem GPU.
+Status: concluido em CPU; sem autorizacao de GPU.
 
 Objetivo: descobrir exatamente os `4` ganhos necessarios para `equation_transform 56 -> 60` sem depender de "treinar mais".
 
@@ -351,6 +354,22 @@ Saida esperada:
 - CSV de misses com categoria, old prediction, expected answer, hipotese e acao.
 - Lista curta de no maximo `10` rows candidatas para prompt-level rescue.
 - Decisao: se existir rota prompt-safe, voltar ao Step 2 com variante focada; se nao existir, nao gastar GPU.
+
+Resultado V394:
+
+- Input: `artifacts/v394_equation_row_level_inventory/20260514T_cpu_gate/input/v290_ckpt6_weak_predictions.csv`, SHA256 `910a051d8b8e652e37c0b0814ac59fe4a400b95cb432945b6a0244f97f5b31bf`.
+- V324 sobre V290 checkpoint-6: `6` ganhos CPU aceitos, `0` conflitos, `projected_equation=62`, `projected_weak=198`, `bit_guardrail=136`.
+- V375: `99` misses, `26` clusters, `57` priority rows; subtipos `16` numeric operator e `83` symbolic punctuation.
+- V394 consolidation: `6` CPU solver verified gains, `93` unresolved misses.
+- Comparacao obrigatoria vs V390: `accepted_cpu_gain_ids` identicos, `delta=0`; `projected_equation_correct=62`, `delta=0`; `bit_guardrail=136`, `delta=0`.
+- Decisao: `reconfirmed_existing_cpu_signal_no_new_gpu_authorization`. Nao lançar HF training com os mesmos seis exemplos numericos; expandir DSL simbolica nos unresolved rows.
+
+Artefatos V394:
+
+- Script: `scripts/analyze_v394_equation_row_level_inventory.py`.
+- Manifest: `artifacts/v394_equation_row_level_inventory/20260514T_cpu_gate/v394_inventory/v394_equation_row_level_inventory_manifest.json`.
+- Inventario: `artifacts/v394_equation_row_level_inventory/20260514T_cpu_gate/v394_inventory/v394_equation_row_level_inventory.csv`.
+- Comparativo: `artifacts/v394_equation_row_level_inventory/20260514T_cpu_gate/v394_inventory/v394_vs_v390_comparison.csv`.
 
 ### Step 4 - V395 bit guardrail/probe
 
@@ -439,6 +458,6 @@ Regras:
 
 ## Proxima Acao Unica
 
-Executar V394 row-level `equation_transform` miss inventory em CPU antes de qualquer novo HF/Kaggle GPU. O objetivo e isolar as `4` rows necessarias para `equation 56 -> 60`, gerar certificado por row com DSL/verifier, e separar ganho submit-safe de ganho apenas teacher/solver.
+Implementar a proxima expansao CPU de DSL simbolica para os `93` unresolved equation misses do V394, priorizando `equation_symbolic_punct`. O gate minimo para voltar a GPU continua: novo sinal adapter-transfer ou CPU signal novo com IDs diferentes de V390, `equation>56`, `bit>=136`, `truncated=0`, e plano de transferencia que nao repita V391.
 
 Nao rodar novo HF training antes de prova de transferencia adapter-only. Projecao CPU, teacher, solver/verifier e loss baixo nao autorizam GPU sozinhos.
