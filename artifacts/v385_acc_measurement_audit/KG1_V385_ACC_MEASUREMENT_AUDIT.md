@@ -61,7 +61,7 @@ O fluxo do weak job e:
 ## Regras do scorer relevantes para nossas familias
 
 - `bit_manipulation`: comparacao binaria exata.
-- `equation_transform`: usa a resposta extraida; quando a resposta e numerica, o verificador aplica tolerancia numerica do projeto. Quando a resposta e string/simbolica, exige igualdade normalizada case-insensitive.
+- `equation_transform`: usa a resposta extraida; quando a resposta esperada e numerica fora de `[01]+`, o verificador aplica tolerancia numerica do projeto. Quando a resposta esperada contem apenas `0/1`, o verificador atual aplica igualdade exata, mesmo se a familia for `equation_transform`.
 - `extract_final_answer`: prefere a ultima ocorrencia de `\boxed{...}`, depois frases de final answer, depois ultimo numero, depois ultima linha nao vazia.
 
 Para bit e equation, isso e consistente com o uso atual do weak gate. Nao foi encontrado uso de solver, postprocessor ou label leak no V383/V384 weak eval.
@@ -94,7 +94,7 @@ Eles nao entram no score atual e nao foram apagados porque podem ser historico o
 
 ## Decisao
 
-- Manter o scorer atual.
+- Manter o scorer atual; a auditoria V386 confirmou que a excecao `[01]+` nao alterou o resultado V384 porque os dois casos de equation afetados foram respondidos exatamente.
 - Nao promover resultados que nao declarem prompt suffix e thinking mode.
 - V384 e o teste correto para responder se o problema do V383 era o sufixo curto.
 - Se V384 nao bater `total>192`, `equation>56`, `bit>=136`, `truncated=0`, encerrar a linha V382/V381 teacher-transfer.
