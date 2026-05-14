@@ -1,0 +1,72 @@
+{
+  "base_model_path": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+  "candidates_json": "/tmp/kg1_v245_weak_eval/v389-h200-v388-soup-weak-20260514T190741Z/v245_weak_eval_candidates.json",
+  "config": {
+    "dtype": "auto",
+    "enable_chunked_prefill": true,
+    "enable_prefix_caching": true,
+    "gpu_memory_utilization": 0.85,
+    "max_lora_rank": 32,
+    "max_model_len": 8192,
+    "max_num_seqs": 64,
+    "max_tokens": 7680,
+    "model_name": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+    "model_revision": "cbd3fa9f933d55ef16a84236559f4ee2a0526848",
+    "prompt_suffix": "\nPlease put your final answer inside `\\boxed{}`. For example: `\\boxed{your answer}`",
+    "temperature": 0.0,
+    "top_p": 1.0,
+    "trust_remote_code": true,
+    "warmup_rows": 0
+  },
+  "elapsed_s": 1600.4708533287048,
+  "generated_at_utc": "2026-05-14T19:36:12.949259+00:00",
+  "questions_csv": "/root/.cache/huggingface/hub/datasets--felipesp1983--kg1-nemotron-training/snapshots/3dbaa5dfab5db4e9bc01fbcc668acbca9e7d9b87/runtime_artifacts/v245_weak_eval_bridge/v245-weak-bridge-hfonly-20260510T1950Z/v221_weak_315.csv",
+  "rows": [
+    {
+      "accuracy": 0.6063492063492063,
+      "adapter": "/tmp/kg1_v245_adapter_snapshots/v389-h200-v388-soup-weak-20260514T190741Z/e8076016aa9b/soup_v291_095_v382_005",
+      "bit_manipulation_correct": 135,
+      "completion_tokens": 1511261,
+      "correct": 191,
+      "equation_transform_correct": 56,
+      "error": "",
+      "name": "v388_soup_v291_095_v382_005",
+      "report_json": "/tmp/kg1_v245_weak_eval/v389-h200-v388-soup-weak-20260514T190741Z/eval/v388_soup_v291_095_v382_005/v389_v388_soup_weak_v388_soup_v291_095_v382_005_eval_report.json",
+      "status": "ok",
+      "tokens_per_second": 2900.339787269177,
+      "truncated": 2,
+      "truncation_rate": 0.006349206349206349
+    },
+    {
+      "accuracy": 0.6031746031746031,
+      "adapter": "/tmp/kg1_v245_adapter_snapshots/v389-h200-v388-soup-weak-20260514T190741Z/e8076016aa9b/soup_v291_090_v382_010",
+      "bit_manipulation_correct": 134,
+      "completion_tokens": 1504326,
+      "correct": 190,
+      "equation_transform_correct": 56,
+      "error": "",
+      "name": "v388_soup_v291_090_v382_010",
+      "report_json": "/tmp/kg1_v245_weak_eval/v389-h200-v388-soup-weak-20260514T190741Z/eval/v388_soup_v291_090_v382_010/v389_v388_soup_weak_v388_soup_v291_090_v382_010_eval_report.json",
+      "status": "ok",
+      "tokens_per_second": 3169.9968880084625,
+      "truncated": 1,
+      "truncation_rate": 0.0031746031746031746
+    },
+    {
+      "accuracy": 0.6063492063492063,
+      "adapter": "/tmp/kg1_v245_adapter_snapshots/v389-h200-v388-soup-weak-20260514T190741Z/e8076016aa9b/soup_v291_105_v382_neg005",
+      "bit_manipulation_correct": 135,
+      "completion_tokens": 1504319,
+      "correct": 191,
+      "equation_transform_correct": 56,
+      "error": "",
+      "name": "v388_soup_v291_105_v382_neg005",
+      "report_json": "/tmp/kg1_v245_weak_eval/v389-h200-v388-soup-weak-20260514T190741Z/eval/v388_soup_v291_105_v382_neg005/v389_v388_soup_weak_v388_soup_v291_105_v382_neg005_eval_report.json",
+      "status": "ok",
+      "tokens_per_second": 3160.611838164047,
+      "truncated": 1,
+      "truncation_rate": 0.0031746031746031746
+    }
+  ],
+  "solution_csv": "/root/.cache/huggingface/hub/datasets--felipesp1983--kg1-nemotron-training/snapshots/3dbaa5dfab5db4e9bc01fbcc668acbca9e7d9b87/runtime_artifacts/v245_weak_eval_bridge/v245-weak-bridge-hfonly-20260510T1950Z/v221_weak_315.csv"
+}
