@@ -1,0 +1,132 @@
+{
+  "blocked_actions": [
+    "full_eval",
+    "package",
+    "kaggle_submit"
+  ],
+  "config": {
+    "assistant_final_answer_mode": "boxed_suffix",
+    "max_length": 8192,
+    "max_prompt_truncation_rate": 0.0,
+    "min_train_rows": 640,
+    "min_val_rows": 160,
+    "require_offset_mask": true
+  },
+  "dataset_manifest_json": "artifacts\\v351_v350_bit_transfer_dataset\\20260514T_cpu_gate\\v351_v350_bit_transfer_manifest.json",
+  "dataset_manifest_sha256": "2ea0b842a3d16f65784ab4bad6852977d5cfdce494e6f5a78afaca922bce96f3",
+  "decision": {
+    "next_action": "Only consider a tiny HF smoke train if roadmap risk/budget gates approve it.",
+    "reason": "train_rows=640; val_rows=160; train_token_max=1305; val_token_max=1305; completion_truncation=0",
+    "status": "tokenization_gate_passed"
+  },
+  "generated_at_utc": "2026-05-14T00:59:56.491600+00:00",
+  "model_name": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+  "model_revision": "cbd3fa9f933d55ef16a84236559f4ee2a0526848",
+  "outputs": {
+    "manifest_json": "artifacts\\v351_v350_bit_transfer_dataset\\20260514T_cpu_gate\\tokenization_gate_toy\\v286_generic_tokenization_gate_manifest.json"
+  },
+  "schema_version": "kg1_v286_generic_tokenization_gate_v1",
+  "tokenization": {
+    "train": {
+      "completion_tokens_dropped": 0,
+      "fallback_masks": 0,
+      "family_summary": {
+        "bit_manipulation": {
+          "loss_token_max": 664,
+          "loss_token_min": 662,
+          "loss_token_p50": 664,
+          "rows": 640,
+          "token_max": 1305,
+          "token_p50": 1305,
+          "token_p90": 1305,
+          "token_p99": 1305
+        }
+      },
+      "loss_token_max": 664,
+      "loss_token_min": 662,
+      "loss_token_p50": 664,
+      "offset_masks": 640,
+      "prompt_truncated": 0,
+      "prompt_truncation_rate": 0.0,
+      "rows": 640,
+      "token_max": 1305,
+      "token_mean": 1304.0,
+      "token_min": 1303,
+      "token_p50": 1305,
+      "token_p90": 1305,
+      "token_p99": 1305
+    },
+    "validation": {
+      "completion_tokens_dropped": 0,
+      "fallback_masks": 0,
+      "family_summary": {
+        "bit_manipulation": {
+          "loss_token_max": 664,
+          "loss_token_min": 662,
+          "loss_token_p50": 664,
+          "rows": 160,
+          "token_max": 1305,
+          "token_p50": 1305,
+          "token_p90": 1305,
+          "token_p99": 1305
+        }
+      },
+      "loss_token_max": 664,
+      "loss_token_min": 662,
+      "loss_token_p50": 664,
+      "offset_masks": 160,
+      "prompt_truncated": 0,
+      "prompt_truncation_rate": 0.0,
+      "rows": 160,
+      "token_max": 1305,
+      "token_mean": 1304.0,
+      "token_min": 1303,
+      "token_p50": 1305,
+      "token_p90": 1305,
+      "token_p99": 1305
+    }
+  },
+  "tokenizer_info": {
+    "class": "ToyTokenizer",
+    "eos_token": "<eos>",
+    "is_fast": true,
+    "pad_token": null,
+    "toy": true
+  },
+  "validation": {
+    "train": {
+      "family_counts": {
+        "bit_manipulation": 640
+      },
+      "prompt_answer_hash_count": 640,
+      "prompt_hash_count": 640,
+      "rows": 640,
+      "sha256_expected": "be8192036a570711d0858620aaeae1b0736e86588e4494cbdb2c85e8f8dcd5ed",
+      "source_counts": {
+        "v351_v350_bit_transfer_dataset": 640
+      },
+      "subcategory_counts": {
+        "bit_exact_global_byte": 640
+      },
+      "unique_ids": 640
+    },
+    "train_val_prompt_answer_overlap": 0,
+    "train_val_prompt_overlap": 0,
+    "validation": {
+      "family_counts": {
+        "bit_manipulation": 160
+      },
+      "prompt_answer_hash_count": 160,
+      "prompt_hash_count": 160,
+      "rows": 160,
+      "sha256_expected": "8e928e38a691f41c42ea4080c1227e053031f243cbf30dd4a1a07a98e5907f93",
+      "source_counts": {
+        "v351_v350_bit_transfer_dataset": 160
+      },
+      "subcategory_counts": {
+        "bit_exact_global_byte": 160
+      },
+      "unique_ids": 160
+    }
+  }
+}

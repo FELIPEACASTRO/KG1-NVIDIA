@@ -1,0 +1,11 @@
+family,candidate_source,rule_class,candidate_rows,changed_rows,gains,losses,verified_candidates,incorrect_candidates,accepted_rows,accepted,reason
+equation_transform,v350_v329_symbolic_cryptarithm,symbolic_cryptarithm_multi_operator_digits_mul,3,3,1,0,1,2,0,False,rejected_by_row_gate
+equation_transform,v350_v329_symbolic_cryptarithm,symbolic_cryptarithm_multi_operator_digits_add,3,3,1,0,1,2,0,False,rejected_by_row_gate
+bit_manipulation,v350_bit_exact_global_byte,bit_exact_global_binary_XOR,1,1,1,0,1,0,1,True,accepted_no_loss
+bit_manipulation,v350_bit_exact_global_byte,bit_exact_global_binary_OR,1,1,1,0,1,0,1,True,accepted_no_loss
+equation_transform,v350_v278_symbolic_dsl,symbolic_position_template,1,0,0,0,0,1,0,False,rejected_losses_or_no_verified_gain
+equation_transform,v350_v278_symbolic_dsl,symbolic_operator_index_template,1,0,0,0,0,1,0,False,rejected_losses_or_no_verified_gain
+equation_transform,v350_v278_symbolic_dsl,symbolic_delete_selected_chars,1,1,0,0,0,1,0,False,rejected_losses_or_no_verified_gain
+equation_transform,v350_v329_symbolic_cryptarithm,symbolic_cryptarithm_multi_operator_digits_sub_ba,2,2,0,0,0,2,0,False,rejected_losses_or_no_verified_gain
+equation_transform,v350_v329_symbolic_cryptarithm,symbolic_cryptarithm_multi_operator_digits_sub_ab,2,2,0,0,0,2,0,False,rejected_losses_or_no_verified_gain
+equation_transform,v350_v329_symbolic_cryptarithm,symbolic_cryptarithm_multi_operator_digits_abs_diff,4,4,0,0,0,4,0,False,rejected_losses_or_no_verified_gain

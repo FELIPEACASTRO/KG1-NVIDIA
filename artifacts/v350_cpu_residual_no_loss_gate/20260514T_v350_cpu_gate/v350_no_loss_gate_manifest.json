@@ -1,0 +1,240 @@
+{
+  "accepted_candidate_count": 2,
+  "accepted_candidate_ids": [
+    "4ada9150",
+    "4c327b55"
+  ],
+  "candidate_rule_summary_top": [
+    {
+      "accepted": false,
+      "accepted_rows": 0,
+      "candidate_rows": 3,
+      "candidate_source": "v350_v329_symbolic_cryptarithm",
+      "changed_rows": 3,
+      "family": "equation_transform",
+      "gains": 1,
+      "incorrect_candidates": 2,
+      "losses": 0,
+      "reason": "rejected_by_row_gate",
+      "rule_class": "symbolic_cryptarithm_multi_operator_digits_mul",
+      "verified_candidates": 1
+    },
+    {
+      "accepted": false,
+      "accepted_rows": 0,
+      "candidate_rows": 3,
+      "candidate_source": "v350_v329_symbolic_cryptarithm",
+      "changed_rows": 3,
+      "family": "equation_transform",
+      "gains": 1,
+      "incorrect_candidates": 2,
+      "losses": 0,
+      "reason": "rejected_by_row_gate",
+      "rule_class": "symbolic_cryptarithm_multi_operator_digits_add",
+      "verified_candidates": 1
+    },
+    {
+      "accepted": true,
+      "accepted_rows": 1,
+      "candidate_rows": 1,
+      "candidate_source": "v350_bit_exact_global_byte",
+      "changed_rows": 1,
+      "family": "bit_manipulation",
+      "gains": 1,
+      "incorrect_candidates": 0,
+      "losses": 0,
+      "reason": "accepted_no_loss",
+      "rule_class": "bit_exact_global_binary_XOR",
+      "verified_candidates": 1
+    },
+    {
+      "accepted": true,
+      "accepted_rows": 1,
+      "candidate_rows": 1,
+      "candidate_source": "v350_bit_exact_global_byte",
+      "changed_rows": 1,
+      "family": "bit_manipulation",
+      "gains": 1,
+      "incorrect_candidates": 0,
+      "losses": 0,
+      "reason": "accepted_no_loss",
+      "rule_class": "bit_exact_global_binary_OR",
+      "verified_candidates": 1
+    },
+    {
+      "accepted": false,
+      "accepted_rows": 0,
+      "candidate_rows": 1,
+      "candidate_source": "v350_v278_symbolic_dsl",
+      "changed_rows": 0,
+      "family": "equation_transform",
+      "gains": 0,
+      "incorrect_candidates": 1,
+      "losses": 0,
+      "reason": "rejected_losses_or_no_verified_gain",
+      "rule_class": "symbolic_position_template",
+      "verified_candidates": 0
+    },
+    {
+      "accepted": false,
+      "accepted_rows": 0,
+      "candidate_rows": 1,
+      "candidate_source": "v350_v278_symbolic_dsl",
+      "changed_rows": 0,
+      "family": "equation_transform",
+      "gains": 0,
+      "incorrect_candidates": 1,
+      "losses": 0,
+      "reason": "rejected_losses_or_no_verified_gain",
+      "rule_class": "symbolic_operator_index_template",
+      "verified_candidates": 0
+    },
+    {
+      "accepted": false,
+      "accepted_rows": 0,
+      "candidate_rows": 1,
+      "candidate_source": "v350_v278_symbolic_dsl",
+      "changed_rows": 1,
+      "family": "equation_transform",
+      "gains": 0,
+      "incorrect_candidates": 1,
+      "losses": 0,
+      "reason": "rejected_losses_or_no_verified_gain",
+      "rule_class": "symbolic_delete_selected_chars",
+      "verified_candidates": 0
+    },
+    {
+      "accepted": false,
+      "accepted_rows": 0,
+      "candidate_rows": 2,
+      "candidate_source": "v350_v329_symbolic_cryptarithm",
+      "changed_rows": 2,
+      "family": "equation_transform",
+      "gains": 0,
+      "incorrect_candidates": 2,
+      "losses": 0,
+      "reason": "rejected_losses_or_no_verified_gain",
+      "rule_class": "symbolic_cryptarithm_multi_operator_digits_sub_ba",
+      "verified_candidates": 0
+    },
+    {
+      "accepted": false,
+      "accepted_rows": 0,
+      "candidate_rows": 2,
+      "candidate_source": "v350_v329_symbolic_cryptarithm",
+      "changed_rows": 2,
+      "family": "equation_transform",
+      "gains": 0,
+      "incorrect_candidates": 2,
+      "losses": 0,
+      "reason": "rejected_losses_or_no_verified_gain",
+      "rule_class": "symbolic_cryptarithm_multi_operator_digits_sub_ab",
+      "verified_candidates": 0
+    },
+    {
+      "accepted": false,
+      "accepted_rows": 0,
+      "candidate_rows": 4,
+      "candidate_source": "v350_v329_symbolic_cryptarithm",
+      "changed_rows": 4,
+      "family": "equation_transform",
+      "gains": 0,
+      "incorrect_candidates": 4,
+      "losses": 0,
+      "reason": "rejected_losses_or_no_verified_gain",
+      "rule_class": "symbolic_cryptarithm_multi_operator_digits_abs_diff",
+      "verified_candidates": 0
+    }
+  ],
+  "decision": {
+    "decision": "v350_cpu_residual_no_loss_gate_passed",
+    "hf_gpu_allowed": false,
+    "next_action": "Build V351 minimal transfer dataset from accepted V350 rows before any HF GPU job.",
+    "reason": "v350=201/315; equation=63/155; bit=138/160; gains=2; losses=0"
+  },
+  "expected_shared_row_contract_sha256": "bf055e3b9ebce79d4bfc9e48bce5a305b1d83da882f14afddec80d6afaba5fff",
+  "family_summary": [
+    {
+      "delta_correct": 2,
+      "family": "bit_manipulation",
+      "rows": 160,
+      "v343_correct": 136,
+      "v343_truncated": 0,
+      "v350_correct": 138,
+      "v350_truncated": 0
+    },
+    {
+      "delta_correct": 0,
+      "family": "equation_transform",
+      "rows": 155,
+      "v343_correct": 63,
+      "v343_truncated": 0,
+      "v350_correct": 63,
+      "v350_truncated": 0
+    }
+  ],
+  "gain_count": 2,
+  "gain_ids": [
+    "4ada9150",
+    "4c327b55"
+  ],
+  "generated_at_utc": "2026-05-14T00:55:07.428322+00:00",
+  "inputs": {
+    "v343_predictions_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v343_equation_residual_solver_audit\\20260513T_integrated_on_v290_v3\\v336a_integrated_no_loss_predictions.csv",
+    "v343_predictions_sha256": "5ceaef012326b29af7a52e21485f78254719622107d0884d4cdacbc735d9f330",
+    "v348_bit_residuals_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v348_residual_no_loss_expansion\\20260513T_cpu_gate\\v348_bit_residuals.csv",
+    "v348_bit_residuals_sha256": "d432b328c9ee2f0d36dc395d7e40b8617eba52dca3eaeb6582062ec48ccf95ab",
+    "v348_equation_residuals_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v348_residual_no_loss_expansion\\20260513T_cpu_gate\\v348_equation_residuals.csv",
+    "v348_equation_residuals_sha256": "7b45356125010405e3d3d1b7713d12aa0d4a15fa3259b398aacb458ec5a08c73",
+    "v349_triage_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v349_kaggle_discussion_double_check\\20260514T003649Z\\v349_kaggle_discussion_triage.csv",
+    "v349_triage_sha256": "a0ec411b3b3d510d99298a9a107e837aeeb11996a3a0cae63189efa6d57fe3aa"
+  },
+  "loss_count": 0,
+  "loss_ids": [],
+  "observed_shared_row_contract_sha256": "bf055e3b9ebce79d4bfc9e48bce5a305b1d83da882f14afddec80d6afaba5fff",
+  "outputs": {
+    "candidate_decisions_csv": "artifacts\\v350_cpu_residual_no_loss_gate\\20260514T_v350_cpu_gate\\v350_candidate_decisions.csv",
+    "candidate_rules_csv": "artifacts\\v350_cpu_residual_no_loss_gate\\20260514T_v350_cpu_gate\\v350_candidate_rules.csv",
+    "equation_audit_csv": "artifacts\\v350_cpu_residual_no_loss_gate\\20260514T_v350_cpu_gate\\v350_equation_audit.csv",
+    "family_summary_csv": "artifacts\\v350_cpu_residual_no_loss_gate\\20260514T_v350_cpu_gate\\v350_family_summary.csv",
+    "integrated_predictions_csv": "artifacts\\v350_cpu_residual_no_loss_gate\\20260514T_v350_cpu_gate\\v350_integrated_predictions.csv",
+    "manifest_json": "artifacts\\v350_cpu_residual_no_loss_gate\\20260514T_v350_cpu_gate\\v350_no_loss_gate_manifest.json"
+  },
+  "schema_version": "kg1_v350_cpu_residual_no_loss_gate_v1",
+  "v343_summary": {
+    "accuracy": 0.6317460317460317,
+    "correct": 199,
+    "family": {
+      "bit_manipulation": {
+        "correct": 136,
+        "rows": 160,
+        "truncated": 0
+      },
+      "equation_transform": {
+        "correct": 63,
+        "rows": 155,
+        "truncated": 0
+      }
+    },
+    "rows": 315,
+    "truncated": 0
+  },
+  "v350_summary": {
+    "accuracy": 0.638095238095238,
+    "correct": 201,
+    "family": {
+      "bit_manipulation": {
+        "correct": 138,
+        "rows": 160,
+        "truncated": 0
+      },
+      "equation_transform": {
+        "correct": 63,
+        "rows": 155,
+        "truncated": 0
+      }
+    },
+    "rows": 315,
+    "truncated": 0
+  }
+}

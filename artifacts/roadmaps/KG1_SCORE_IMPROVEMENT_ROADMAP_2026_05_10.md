@@ -16,16 +16,18 @@ Historico completo e rotas antigas ficam fora do plano ativo:
 | Melhor adapter-only weak | `192/315` | `56/155` | `136/160` | baseline operacional LoRA |
 | Melhor full adapter-only conhecido/packageado | `823/947` | `56/155` | `135/160` | referencia do score conhecido `0.86` |
 | Melhor CPU solver/verifier V343 | `199/315` | `63/155` | `136/160` | teacher/verifier, nao submit direto |
-| Residual V348 depois do V343 | mapa pronto | `92` misses | `24` misses | fila de trabalho CPU |
+| V350 CPU residual no-loss gate | `201/315` | `63/155` | `138/160` | novo teacher CPU: `+2` bit, `0` perdas |
+| V351 V350 bit transfer dataset | `640/160` train/val | nao altera equation | baseado nos `2` acertos V350 | dataset minimo aprovado por gate real |
+| Residual depois do V350 | mapa pronto | `92` misses | `22` misses | fila residual CPU |
 | V349 Kaggle discussions | `140/140` topicos | reforca ambiguidade/DSL | reforca bit full-byte/bit-pair/3-input | guia do proximo CPU gate |
 | Double check compilacoes 2026-05-14 | `3` arquivos | sem novo ganho medido | sem novo ganho medido | classifica links; nao libera HF |
 
 Conclusao honesta:
 
-- Ha ganho real em CPU solver/verifier: `192 -> 199` weak, todo ganho em `equation_transform`, com `0` perdas.
+- Ha ganho real em CPU solver/verifier: `192 -> 201` weak, com `equation_transform 56 -> 63` e `bit_manipulation 136 -> 138`, sempre com `0` perdas no weak diagnostic.
 - Ainda nao ha ganho adapter-only novo. V338B, V341, V344 e V346 falharam em transferir o ganho para LoRA.
 - `eval_loss` menor nao significa ACC maior. Promocao agora e somente por ACC weak/full.
-- HF GPU fica bloqueado ate existir novo ganho CPU no-loss diferente de V343/V348.
+- HF GPU longo continua bloqueado. O unico uso liberado agora e um V352 smoke curto, porque V350 gerou ganho CPU novo e V351 passou gate estrutural/tokenizacao.
 
 ## Metas
 
@@ -33,7 +35,7 @@ Para liberar novo teacher CPU:
 
 - `losses=0`.
 - `bit_manipulation >=136/160`.
-- `equation_transform >63/155` ou `bit_manipulation >136/160` no weak diagnostic.
+- `equation_transform >63/155` ou `bit_manipulation >138/160` no weak diagnostic.
 - Manifest com `id`, `family`, `old_prediction`, `new_prediction`, `rule_class`, `candidate_count`, `conflict_count`, `accepted/rejected`, `reason`.
 
 Para liberar HF GPU:
@@ -57,6 +59,8 @@ Para submeter ao Kaggle:
 |---|---|---|
 | V336B package gate | Submissao deve ser adapter-only LoRA; solver/verifier direto bloqueado | impede submit com postprocessor |
 | V343 CPU solver/verifier | `199/315`, `equation=63`, `bit=136`, `7` ganhos, `0` perdas | baseline teacher a superar |
+| V350 CPU residual no-loss gate | `201/315`, `equation=63`, `bit=138`, `2` ganhos bit, `0` perdas | novo teacher CPU e unica fonte do V351 |
+| V351 V350 bit transfer dataset | `640` train, `160` val, `0` overlap por `id`/`prompt_sha256`, V286 real gate aprovado | libera somente smoke V352, nao treino longo |
 | V348 residual audit | `92` equation misses, `24` bit misses | fila unica do proximo CPU gate |
 | V349 discussion `689915` | tokens simples, cobertura de operacoes raras, min-logprob | orientar formato de traces futuros |
 | V349 discussion `688461` | taxonomia reversa e gramatica booleana dinamica | orientar DSL CPU |
@@ -76,6 +80,19 @@ Para submeter ao Kaggle:
 ### 1. V350 - CPU residual no-loss gate
 
 Objetivo: procurar ganho novo sem GPU usando apenas os residuos V348.
+
+Status: concluido e aprovado.
+
+Resultado medido:
+
+- V343 baseline: `199/315`, `equation=63/155`, `bit=136/160`.
+- V350 integrado: `201/315`, `equation=63/155`, `bit=138/160`.
+- Ganhos: `2`.
+- Perdas: `0`.
+- IDs aceitos:
+  - `4ada9150`: `01111111 -> 01111011`, regra `output=OR(ROL2(input),SHL4(input))`.
+  - `4c327b55`: `11011110 -> 11011100`, regra `output=XOR(SHL1(input),SHR4(input))`.
+- Artefatos: `artifacts/v350_cpu_residual_no_loss_gate/20260514T_v350_cpu_gate/`.
 
 Entradas obrigatorias:
 
@@ -112,9 +129,26 @@ Gate de promocao:
 - `equation_transform>63` ou `bit_manipulation>136`;
 - se nao passar, nao rodar HF.
 
+Decisao: passou para V351 por `bit_manipulation 136 -> 138` com `0` perdas.
+
 ### 2. V351 - Dataset minimo somente se V350 passar
 
 Objetivo: transformar novo ganho CPU em dataset de transferencia diferente dos que falharam.
+
+Status: concluido e aprovado no gate estrutural/tokenizacao real.
+
+Resultado medido:
+
+- Train: `640` linhas, todas `bit_manipulation`.
+- Validation: `160` linhas, todas `bit_manipulation`.
+- Train SHA256: `be8192036a570711d0858620aaeae1b0736e86588e4494cbdb2c85e8f8dcd5ed`.
+- Val SHA256: `8e928e38a691f41c42ea4080c1227e053031f243cbf30dd4a1a07a98e5907f93`.
+- `id_overlap=0`.
+- `prompt_sha256_overlap=0`.
+- `train_val_prompt_overlap=0`.
+- V286 real tokenization gate: aprovado, `prompt_truncation_rate=0.0`, `completion_tokens_dropped=0`, `fallback_masks=0`.
+- HF dataset upload: `https://huggingface.co/datasets/felipesp1983/kg1-nemotron-training/commit/439f99442729bfce14432a865abb8c260a637d24`.
+- Artefatos: `artifacts/v351_v350_bit_transfer_dataset/20260514T_cpu_gate/`.
 
 Permitido:
 
@@ -142,6 +176,20 @@ Gate:
 ### 3. V352 - HF smoke curto somente se V351 passar
 
 Objetivo: testar se o novo teacher transfere para adapter-only com gasto minimo.
+
+Status: launcher criado e debug local aprovado; job pago ainda nao foi lancado neste commit.
+
+Preflight local aprovado:
+
+- HF flavor: `a100-large`.
+- Custo observado: `0.041667 USD/min`, abaixo do gate `0.05`.
+- Imagem: `nvcr.io/nvidia/nemo:25.11.nemotron_3_nano`.
+- Dataset HF baixado e hash conferido.
+- Init adapter: `felipesp1983/kg1-nemotron-lora-v290-rank19-micro-patch-smoke/checkpoint-6`.
+- Max steps: `8`.
+- LR: `3.0e-8 -> 8.0e-9`.
+- Trainable modules: `q_proj,k_proj,v_proj,o_proj,lm_head`.
+- Artefatos: `artifacts/v352_hf_a100_v351_bit_transfer_launch/`.
 
 Configuracao:
 
@@ -211,4 +259,4 @@ Estes itens nao devem ser reexecutados como acao principal. So podem voltar se u
 
 ## Proxima acao unica
 
-Implementar V350 CPU residual no-loss gate. HF GPU continua bloqueado ate o V350 provar novo ganho no-loss.
+Commitar e enviar V350/V351/V352 para a branch, relancar o debug V352 para fixar o commit novo e criar o job HF pago com `--launch`. Se o primeiro checkpoint nao mostrar sinal adapter-only acima do baseline, cancelar por FinOps.
