@@ -24,6 +24,7 @@ As evidencias fortes reunidas hoje mostram que ha ganho possivel, mas o ganho co
 | V345 failure audit sobre V344 | diagnostico concluido | `7` ganhos V343 nao transferidos | bit preservado | dataset cobria classes de regra, mas treino nao alterou os IDs-alvo; bloquear repeticao do objetivo |
 | V346 answer exact-match checkpoint-2 | `191/315` | `56/155` | `135/160` | falhou; `0` ganhos, `1` perda em bit; bloquear mais H200 nessa variante |
 | V348 residual CPU audit | mapa residual pronto | `92` misses restantes | `24` misses restantes | HF bloqueado; proximo passo e regra label-free no-loss |
+| V349 Kaggle Discussion 140 double check | `140/140` topicos cobertos | reforca ambiguidade/DSL | reforca bit-pair/full-byte/3-input | nao gera submit; atualiza CPU gate |
 | V306/V302 full verifier local | `838/947` potencial | `60/155` | `146/160` | depende de verifier/postprocessor |
 | V335 LoRA mixed trace replay | `190/315` | `56/155` | `134/160` | falhou; cancelado por FinOps |
 | V338B LoRA minimal transfer weak eval | `190/315` | `56/155` | `134/160` | checkpoints 2 e 4 falharam; cancelado por FinOps |
@@ -47,6 +48,8 @@ Atualizacao trainer preference: foi encontrado um bug objetivo no schedule de LR
 Atualizacao V346 HF resultado: o treino answer exact-match A100 `felipesp1983/6a050b53e48bea4538b9c1e3` corrigiu o schedule e realmente usou LR alto no inicio (`8.00e-08` no step 1 ate `2.00e-08` no step 6). Mesmo assim, o weak eval H200 checkpoint-2 `felipesp1983/6a050efe3308d79117b8f350` ficou em `191/315`, `equation_transform=56/155`, `bit_manipulation=135/160`, `truncated=0`. Auditoria V347 contra o baseline V290 e o solver V343: `7` ganhos V343 continuaram nao transferidos, `6` predicoes mudaram, `0` ganhos e `1` perda em bit (`8740ed31`). Decisao: V346 nao promove, nao full eval, nao package, nao submit e nao avaliar checkpoints 4/6 sem novo sinal independente.
 
 Atualizacao V348 CPU residual: implementado `scripts/analyze_v348_residual_no_loss_expansion.py`. O mapa residual apos V343 ficou em `92` equation misses e `24` bit misses. Em equation, `82` sao `equation_symbolic_punct` e `10` sao `equation_numeric_operator`; os shapes sao `PPPPP=81`, `DDPDD=10`, `PPP=1`. Em bit, `14` misses estao a distancia de Hamming `1`, `8` a distancia `2`, `1` a distancia `3` e `1` a distancia `5`. Isso mostra oportunidade, mas ainda nao existe regra no-loss aceita; portanto HF continua bloqueado.
+
+Atualizacao V349 Kaggle discussions: os arquivos `NVIDIA Nemotron Model Reasoning Challenge - Discussion Topic IDs.md` e `NVIDIA Nemotron Model Reasoning Challenge - Discussion Topics URLs.md` foram reconciliados contra cache local V328/V332 e cobrem `140/140` topicos. O novo coletor `scripts/analyze_v349_kaggle_discussions.py` usa cache primeiro porque o endpoint live do Kaggle rate-limita. Achados acionaveis: `690756` reforca testar duas interpretacoes de bit (`full-byte unary transform` e `per-output-bit bit-pair/bitsum/stride`) e so adicionar fallback 3-input sob no-loss; `684192` e `694556` reforcam que equation/symbolic precisa contar ambiguidade e fazer abstain quando operador/candidato nao e unico; `685886` reforca traces bit com delta/plausibility/verification. Nenhum topico gerou novo adapter-only submit-ready.
 
 ## Metas
 
@@ -78,6 +81,7 @@ Meta para submit novo:
 | Discussions `690307`, `688461` | bit-pair/bitsum/stride e boolean gate taxonomy | implementar CPU bit gate |
 | Discussions `689877`, `698293` | operadores ausentes e estrutura latente de equation | abstain/conflict count em DSL |
 | Discussions `693260`, `697491` | synthetic accuracy alta pode piorar LB | traces curtos e kill-switch |
+| V349 discussions `690756`, `684192`, `694556`, `685886` | bit full-byte vs bit-pair, limite 3-input, operador ausente, multiplos candidatos simbolicos, trace delta/plausibility | atualizar CPU gate; nao libera HF sozinho |
 
 ## Roadmap ativo em ordem de maior chance de ganho
 
@@ -437,7 +441,9 @@ Implementar V349 CPU candidate rules sobre os residuos V348 antes de qualquer no
 2. Adicionar somente regras label-free com `candidate_count` baixo, `conflict_count=0` e explicacao deterministica:
    - equation symbolic/punctuation residual;
    - equation numeric residual que nao esteja coberto por V343;
-   - bit Tong bit-pair/bitsum/stride apenas se gerar nova predicao no-loss.
+   - bit Tong bit-pair/bitsum/stride apenas se gerar nova predicao no-loss;
+   - bit full-byte unary transform e bounded 3-input fallback apenas para os `24` misses residuais e somente sob no-loss;
+   - equation abstain obrigatorio quando o operador alvo nao aparece nos exemplos, quando houver multiplos programas simbolicos compativeis ou quando `candidate_count`/`conflict_count` nao for conclusivo.
 3. Gate CPU obrigatorio:
    - novo ganho aceito apenas com `losses=0`;
    - `equation>63` ou `bit>136` no weak diagnostic;
