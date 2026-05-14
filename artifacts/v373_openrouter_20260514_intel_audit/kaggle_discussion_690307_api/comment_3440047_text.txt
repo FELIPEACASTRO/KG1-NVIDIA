@@ -1,0 +1,21 @@
+It worked—thanks (It went up almost 20%.):```
+ (.venv) dreuxx@dreuxx-HP-ZBook-Fury-15-6-inch-G8-Mobile-Workstation-PC:~/Documents/data$ python3 solver.py "train(7).csv"
+Verifying 9500 samples from train(7).csv
+bitwise             :   918/ 1602 ( 57.3%) [unsolvable: 0]
+  cipher              :  1576/ 1576 (100.0%) [unsolvable: 0]
+  physics             :  1597/ 1597 (100.0%) [unsolvable: 0]
+  symbol_transform    :   168/ 1555 ( 10.8%) [unsolvable: 0]
+  symbolic            :  1576/ 1576 (100.0%) [unsolvable: 0]
+  unit_conversion     :  1594/ 1594 (100.0%) [unsolvable: 0]
+Total verified: 7429/9500 (78.2%)
+Generating curated dataset…
+Saved 7429 solved rows to train_curated.csv.
+(.venv) dreuxx@dreuxx-HP-ZBook-Fury-15-6-inch-G8-Mobile-Workstation-PC:~/Documents/data$ python3 solver.py "train(7).csv"
+Verifying 9500 samples from train(7).csv
+bitwise             :  1157/ 1602 ( 72.2%) [unsolvable: 0]
+  cipher              :  1576/ 1576 (100.0%) [unsolvable: 0]
+  physics             :  1597/ 1597 (100.0%) [unsolvable: 0]
+  symbol_transform    :   166/ 1555 ( 10.7%) [unsolvable: 0]
+  symbolic            :  1576/ 1576 (100.0%) [unsolvable: 0]
+  unit_conversion     :  1594/ 1594 (100.0%) [unsolvable: 0]
+```

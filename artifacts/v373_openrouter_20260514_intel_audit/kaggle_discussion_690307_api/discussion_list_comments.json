@@ -1,0 +1,76 @@
+{
+  "comments": [
+    {
+      "id": 3445372,
+      "authorName": "Taha",
+      "postDate": "2026-04-19T16:38:53.767Z",
+      "content": "<table>\n<thead>\n<tr>\n<th>Category</th>\n<th>Found</th>\n<th>Total</th>\n<th>Accuracy</th>\n<th>Avg ms</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>bit_manipulation</td>\n<td>1584</td>\n<td>1602</td>\n<td>98.9%</td>\n<td>7.7</td>\n</tr>\n<tr>\n<td>cipher</td>\n<td>1576</td>\n<td>1576</td>\n<td>100.0%</td>\n<td>0.0</td>\n</tr>\n<tr>\n<td>cryptarithm_deduce</td>\n<td>98</td>\n<td>659</td>\n<td>14.9%</td>\n<td>41.1</td>\n</tr>\n<tr>\n<td>cryptarithm_guess</td>\n<td>14</td>\n<td>164</td>\n<td>8.5%</td>\n<td>39.8</td>\n</tr>\n<tr>\n<td>equation_numeric_deduce</td>\n<td>553</td>\n<td>596</td>\n<td>92.8%</td>\n<td>0.9</td>\n</tr>\n<tr>\n<td>equation_numeric_guess</td>\n<td>21</td>\n<td>136</td>\n<td>15.4%</td>\n<td>0.9</td>\n</tr>\n<tr>\n<td>gravity</td>\n<td>1597</td>\n<td>1597</td>\n<td>100.0%</td>\n<td>0.0</td>\n</tr>\n<tr>\n<td>numeral</td>\n<td>1576</td>\n<td>1576</td>\n<td>100.0%</td>\n<td>0.0</td>\n</tr>\n<tr>\n<td>unit_conversion</td>\n<td>1594</td>\n<td>1594</td>\n<td>100.0%</td>\n<td>0.0</td>\n</tr>\n<tr>\n<td>--------------------------</td>\n<td>-------</td>\n<td>-------</td>\n<td>----------</td>\n<td>--------</td>\n</tr>\n<tr>\n<td><strong>TOTAL</strong></td>\n<td>8613</td>\n<td>9500</td>\n<td>90.7%</td>\n<td>33.0</td>\n</tr>\n</tbody>\n</table>\n<p>Guess what?</p>",
+      "votes": -3
+    },
+    {
+      "id": 3441561,
+      "authorName": "Navneet",
+      "postDate": "2026-04-14T07:41:51.427Z",
+      "content": "<p>Superb Strategy <a href=\"https://www.kaggle.com/huikang\" target=\"_blank\">@huikang</a> </p>",
+      "votes": -6
+    },
+    {
+      "id": 3440194,
+      "authorName": "Bhawesh Sinha 07",
+      "postDate": "2026-04-12T05:58:03.460Z",
+      "content": "<p>This was very informative!</p>",
+      "votes": -4
+    },
+    {
+      "id": 3440065,
+      "authorName": "Durga Kumari",
+      "postDate": "2026-04-11T20:51:27.037Z",
+      "content": "<p>This is a very clever optimization. Iterating over bit relationships instead of full expressions is a great insight. \nThanks for sharing such a detailed breakdown.</p>",
+      "votes": -5
+    },
+    {
+      "id": 3440047,
+      "authorName": "Giovanny Rodríguez",
+      "postDate": "2026-04-11T20:18:55.943Z",
+      "content": "<p>It worked—thanks (It went up almost 20%.):```\n (.venv) dreuxx@dreuxx-HP-ZBook-Fury-15-6-inch-G8-Mobile-Workstation-PC:~/Documents/data$ python3 solver.py \"train(7).csv\"\nVerifying 9500 samples from train(7).csv</p>\n<p>bitwise             :   918/ 1602 ( 57.3%) [unsolvable: 0]\n  cipher              :  1576/ 1576 (100.0%) [unsolvable: 0]\n  physics             :  1597/ 1597 (100.0%) [unsolvable: 0]\n  symbol_transform    :   168/ 1555 ( 10.8%) [unsolvable: 0]\n  symbolic            :  1576/ 1576 (100.0%) [unsolvable: 0]\n  unit_conversion     :  1594/ 1594 (100.0%) [unsolvable: 0]</p>\n<p>Total verified: 7429/9500 (78.2%)</p>\n<p>Generating curated dataset…\nSaved 7429 solved rows to train_curated.csv.\n(.venv) dreuxx@dreuxx-HP-ZBook-Fury-15-6-inch-G8-Mobile-Workstation-PC:~/Documents/data$ python3 solver.py \"train(7).csv\"\nVerifying 9500 samples from train(7).csv</p>\n<p>bitwise             :  1157/ 1602 ( 72.2%) [unsolvable: 0]\n  cipher              :  1576/ 1576 (100.0%) [unsolvable: 0]\n  physics             :  1597/ 1597 (100.0%) [unsolvable: 0]\n  symbol_transform    :   166/ 1555 ( 10.7%) [unsolvable: 0]\n  symbolic            :  1576/ 1576 (100.0%) [unsolvable: 0]\n  unit_conversion     :  1594/ 1594 (100.0%) [unsolvable: 0]</p>\n<p>```</p>",
+      "votes": -1
+    },
+    {
+      "id": 3439886,
+      "authorName": "Yurnero",
+      "postDate": "2026-04-11T12:20:00.930Z",
+      "content": "<p>Thanks, <a href=\"https://www.kaggle.com/huikang\" target=\"_blank\">@huikang</a>! That's an impressive RE.</p>\n<p>Will you release all CoTs later?</p>",
+      "votes": -1,
+      "replies": [
+        {
+          "id": 3439888,
+          "authorName": "Tong Hui Kang",
+          "postDate": "2026-04-11T12:26:11.480Z",
+          "content": "<p>Yes, I will need to release all the CoT for my winning submissions.</p>",
+          "votes": 6
+        }
+      ]
+    },
+    {
+      "id": 3454488,
+      "authorName": "wkdrbwnd1",
+      "postDate": "2026-05-07T10:37:40.533Z",
+      "content": "<p>Is that available dataset on huggingface?</p>"
+    },
+    {
+      "id": 3439908,
+      "postDate": "2026-04-11T13:54:55.907Z"
+    },
+    {
+      "id": 3439897,
+      "postDate": "2026-04-11T13:16:39.897Z",
+      "votes": -3
+    },
+    {
+      "id": 3446097,
+      "authorName": "PatrickKarle",
+      "postDate": "2026-04-21T01:43:55.387Z",
+      "content": "<p>Wonderful work. Thank you very much. </p>"
+    }
+  ]
+}

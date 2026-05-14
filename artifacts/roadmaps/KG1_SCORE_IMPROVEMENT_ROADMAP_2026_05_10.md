@@ -34,16 +34,18 @@ Historico completo e rotas antigas ficam fora do plano ativo:
 | V369 V368 transfer audit | `0/8` V366 ganhos transferidos | nao altera equation | `1` ganho, `2` perdas vs baseline | bloqueia mais HF nessa rota |
 | V370 format transfer audit | `0/315` raw boxed-only | nao altera equation | `160/160` bit rows com trace antigo | prova que boxed-only nao controlou inferencia |
 | V371 trace-style dataset | `1128/282` train/val | nao altera equation | trace-style para `23` regras | V286 real tokenization passou, `token_max=828`, `0` truncation |
+| V372 checkpoint-1 adapter-only | `191/315` | `56/155` | `135/160` | rejeitado; FinOps bloqueia checkpoint-2/full/package/submit |
 | Residual depois do V366 | mapa pronto | `92` misses | `1` miss | fila residual CPU |
 | V349 Kaggle discussions | `140/140` topicos | reforca ambiguidade/DSL | reforca bit full-byte/bit-pair/3-input | guia do proximo CPU gate |
 | Double check compilacoes 2026-05-14 | `3` arquivos | sem novo ganho medido | sem novo ganho medido | classifica links; nao libera HF |
+| OpenRouter/Kaggle API V373 | `466` URLs deduplicadas; topico `690307` baixado via API | reforca equation via DSL, nao via treino generico | confirma bit-pair/bitsum/stride e transferencia como gargalo | fonte auditada; nao libera HF sem novo CPU gate |
 
 Conclusao honesta:
 
 - Ha ganho real em CPU solver/verifier: `192 -> 222` weak, com `equation_transform 56 -> 63` e `bit_manipulation 136 -> 159`, sempre com `0` perdas aceitas no weak diagnostic.
-- O ganho novo comprovado de V357/V366 e forte em bit, mas ainda e teacher CPU. Ainda nao ha ganho adapter-only novo. V338B, V341, V344, V346, V352, V359, V362 e V368 falharam em transferir ganhos para LoRA.
+- O ganho novo comprovado de V357/V366 e forte em bit, mas ainda e teacher CPU. Ainda nao ha ganho adapter-only novo. V338B, V341, V344, V346, V352, V359, V362, V368 e V372 falharam em transferir ganhos para LoRA.
 - `eval_loss` menor nao significa ACC maior. Promocao agora e somente por ACC weak/full.
-- HF GPU continua bloqueado para as rotas V358/V359/V361/V362/V367/V368. Qualquer HF posterior exige uma nova evidencia CPU que explique a falha de transferencia e passe gates reais antes do smoke.
+- HF GPU continua bloqueado para as rotas V358/V359/V361/V362/V367/V368/V371/V372. Qualquer HF posterior exige uma nova evidencia CPU que explique a falha de transferencia e passe gates reais antes do smoke.
 
 ## Metas
 
@@ -94,10 +96,13 @@ Para submeter ao Kaggle:
 | V369 transfer failure audit | V368 transferiu `0/8` ganhos V366; mudou `10` linhas vs baseline: `1` ganho, `2` perdas, `7` neutras | prova que V367/V368 bit-only SFT nao deve continuar |
 | V370 format transfer audit | V367 treinou `1128/1128` boxed-only, mas V368 gerou `0/315` raw boxed-only; `160/160` bit rows mantiveram trace longo antigo | explica por que loss caiu sem ACC subir; proxima LoRA precisa casar o formato real de trace ou nao rodar |
 | V371 trace-style dataset + V286 gate | `1128/282`, trace-style, boxed suffix, `0` prompt overlap, tokenizacao real `token_max=828`, `0` truncation, `0` fallback masks | unica rota HF possivel apos V370; somente smoke minimo com kill-switch |
+| V372 checkpoint-1 weak eval | `191/315`, `equation=56/155`, `bit=135/160`, truncation `0`; artefatos em `artifacts/v372_hf_a100_v371_trace_style_launch/eval_v372_checkpoint1/` | rejeitado; nao avaliar checkpoint-2, nao rodar full, nao packagear e nao submeter |
+| V373 Kaggle API discussion `690307` | API retornou titulo `Strategy to solve 85% of bit manipulation`, autor Tong Hui Kang, `96` votos, `11` comentarios; conteudo salvo em `artifacts/v373_openrouter_20260514_intel_audit/kaggle_discussion_690307_api/` | confirma que bit melhora por solver/trace deterministico e que nosso problema atual e transferencia adapter-only |
+| V373 HF dataset `jasonkung98/NVIDIA-Nemotron-Model-Reasoning-Challenge` | `train.csv` e `test.csv` tem SHA256 identico ao ZIP oficial local do Kaggle; `train=9500`, `test=3`, sample test inteiro sobrepoe train | mirror util para jobs HF e auditoria de hashes; nao e fonte nova de labels, nao libera treino GPU nem submit |
 | V348 residual audit | `92` equation misses, `24` bit misses | fila unica do proximo CPU gate |
 | V349 discussion `689915` | tokens simples, cobertura de operacoes raras, min-logprob | orientar formato de traces futuros |
 | V349 discussion `688461` | taxonomia reversa e gramatica booleana dinamica | orientar DSL CPU |
-| V349 discussion `690307` | bit-pair/bitsum/stride | implementar/verificar bit gate |
+| V349/V373 discussion `690307` | API confirmou algoritmo bit-pair/bitsum/stride: testar `354` combinacoes em vez de enumerar expressoes, usar bitsum como hash, escolher maior stride e preencher meio com sequencia compativel; comentario reporta `1584/1602` bit em outra implementacao | como V366 ja chegou a `159/160` no weak, usar apenas no residual de `1` miss e no desenho de trace; nao justifica mais SFT bit-only |
 | V349 discussion `690756` | bit full-byte vs bit-pair e limite 3-input | testar as duas leituras e fallback 3-input limitado |
 | V349 discussion `685886` | bit delta, plausibility filter e verificacao por hipotese | orientar trace bit se houver novo teacher |
 | V349 discussions `684192`, `694556` | operador ausente e multiplos candidatos simbolicos | exigir abstain por ambiguidade |
@@ -107,6 +112,7 @@ Para submeter ao Kaggle:
 | V349 discussion `697491` | dataset deterministicamente melhor pode piorar LB por formato, duplicacao de traces e saturacao de gradiente | exigir dataset minimo, sem trace duplicado, com hard negatives e ACC gate |
 | V349 discussion `687798` | bit e exact-string | manter scorer exato e testes boxed/brace |
 | Compilacoes externas 2026-05-14 | listam notebooks/datasets/papers de KD, Nemotron, CoT, Puzzle-KD, Cascade e solvers publicos | nao entram como acao; so sobrevivem as regras/taxonomias ja gateadas acima |
+| OpenRouter Thu 2026-05-14 | arquivo `OpenRouter Chat Thu May 14 2026.json` tinha `101` itens textuais, `466` URLs limpas, hosts principais HF/Kaggle/GitHub/NVIDIA; fontes novas classificadas em `artifacts/v373_openrouter_20260514_intel_audit/` | sem ganho medido novo; mantem apenas fontes acionaveis: Tong repo/reasoners, datasets Andy/Jason/Naribow/NVIDIA para triagem, e docs NeMo/TRL como metodologia P2 |
 
 ## Roadmap ativo
 
@@ -759,7 +765,7 @@ Decisao: nao treinar mais V367 boxed-only. Se houver nova tentativa LoRA, o data
 
 Objetivo: testar a unica hipotese concreta que sobrou da falha V370: nao ensinar boxed-only, mas ensinar no mesmo estilo de trace que o modelo efetivamente emite no weak eval de bit.
 
-Status: concluido em CPU; tokenization gate real aprovado; HF ainda precisa ser smoke minimo com kill-switch.
+Status: concluido em CPU; tokenization gate real aprovado; HF smoke V372 executado e rejeitado pelo weak gate.
 
 Resultado medido:
 
@@ -787,7 +793,73 @@ Leitura tecnica:
 - Isso ainda nao prova ganho adapter-only. Apenas torna a proxima tentativa HF tecnicamente mais defensavel que V367 boxed-only.
 - Como V371 e bit-only, `equation_transform` continua sem ganho esperado nessa rota.
 
-Decisao: V371 pode liberar somente um smoke A100 muito pequeno (`max_steps<=2`) se o budget permitir. O checkpoint-1 deve ser avaliado antes de qualquer continuacao. Cancelar se `total<=192`, `bit<136`, `equation<=56`, truncation regressiva, ou se o raw output continuar preso no formato antigo sem melhorar ACC.
+Decisao: V371/V372 nao deve continuar. O smoke A100 foi feito com `max_steps=2`, mas o checkpoint-1 caiu para `191/315`, `bit=135/160`, `equation=56/155`, truncation `0`. A decisao FinOps correta e nao avaliar checkpoint-2, nao rodar full, nao packagear e nao submeter essa rota.
+
+### 22. V372 - HF smoke trace-style V371
+
+Objetivo: validar se a correcao de formato V371 transferia os ganhos V366 para adapter-only antes de qualquer treino longo.
+
+Status: concluido e rejeitado.
+
+Execucao:
+
+- Train job A100: `https://huggingface.co/jobs/felipesp1983/6a05c8a53308d79117b8f840`.
+- Weak eval H200 checkpoint-1: `https://huggingface.co/jobs/felipesp1983/6a05cc44e48bea4538b9cca8`.
+- Output repo: `felipesp1983/kg1-nemotron-lora-v372-nemo-a100-v371-trace-style-v290ckpt6`.
+- Eval upload commit: `https://huggingface.co/felipesp1983/kg1-nemotron-lora-v372-nemo-a100-v371-trace-style-v290ckpt6/commit/815d5bfb7b752e24afc77fdb9206b4745434a8f9`.
+- Artefatos locais: `artifacts/v372_hf_a100_v371_trace_style_launch/eval_v372_checkpoint1/`.
+
+Resultado medido:
+
+- `correct=191/315`.
+- `equation_transform=56/155`.
+- `bit_manipulation=135/160`.
+- `truncated=0`.
+- `tokens_per_second=2940.43`.
+
+Leitura tecnica:
+
+- V372 nao bateu o baseline adapter-only `192/315`.
+- V372 regrediu bit de `136` para `135`.
+- O ganho teacher CPU V366 (`bit=159/160`) continua sem transferencia para LoRA.
+- Como `equation` permaneceu no teto adapter-only `56`, a rota bit-only nao resolve o gargalo principal.
+
+Decisao: bloquear checkpoint-2/full/package/submit por FinOps. Voltar para CPU residual e para auditoria de transferencia antes de novo HF.
+
+### 23. V373 - OpenRouter/Kaggle API audit 2026-05-14
+
+Objetivo: auditar o arquivo `C:\Users\davis\Downloads\OpenRouter Chat Thu May 14 2026.json`, acessar fontes acionaveis e registrar apenas achados concretos.
+
+Status: concluido para as fontes prioritarias e topico Kaggle `690307`.
+
+Resultado medido:
+
+- Arquivo OpenRouter: `589,976` bytes.
+- Itens textuais extraidos: `101`.
+- URLs brutas extraidas: `1123`.
+- URLs limpas deduplicadas: `466`.
+- Hosts principais: Hugging Face, Kaggle, GitHub, NVIDIA docs/blogs, `nemotron.huikang.dev`.
+- Inventario local: `artifacts/v373_openrouter_20260514_intel_audit/openrouter_20260514_item_inventory.csv`.
+- Topico Kaggle `690307` baixado via `kagglesdk` API: `artifacts/v373_openrouter_20260514_intel_audit/kaggle_discussion_690307_api/`.
+
+Achados acionaveis:
+
+- `690307` confirma, por fonte primaria Kaggle API, que o salto em bit vem de algoritmo deterministico e trace: `ROT/SHR/SHL`, `AND/OR/XOR` e variantes `NOT`, ate tres transformacoes, busca por relacoes de bits, `bitsum` como hash, maior `stride`, e preenchimento do meio com sequencia compativel.
+- O proprio topico informa `1364/1602 = 85.1%` em bit; comentario reporta `1584/1602 = 98.9%` em outra implementacao. Isso e evidencia de potencial solver, nao evidencia de transferencia adapter-only.
+- O arquivo OpenRouter reforca fontes ja conhecidas e agora verificadas: `tonghuikang/nemotron`, `reasoners/equation_numeric.py`, `andy279/nemotron-reasoning-challenge`, `andy279/nemotron-reasoning-challenge-raw-traces`, `jasonkung98/NVIDIA-Nemotron-Model-Reasoning-Challenge`, `Naribow/nvidia-nemotron-progress-prize`, `nvidia/Nemotron-RL-ReasoningGym-v1`.
+- `reasoners/equation_numeric.py` confirma operacoes concretas para DSL residual: concatenacao, reverse concatenation, soma, diferenca absoluta, subtracoes, multiplicacao, `+1/-1`, divisao inteira, modulo, e operacoes por digito/determinante para pares de dois digitos.
+- `jasonkung98/NVIDIA-Nemotron-Model-Reasoning-Challenge` foi auditado como mirror HF: repo SHA `0c8b90ec46067cdd943a83771be602c4c86092e2`; `train.csv` SHA256 `d204af160633b638448723a437aa51c0db70fd0b64ff92f6ad6f52e5ac6377fa`; `test.csv` SHA256 `c59d7eb0464b0a872a0c3f81e60cd6643fc1932a2dedaa05972bfd02cc638589`; ambos batem byte-a-byte com o ZIP oficial local do Kaggle.
+- Conteudo do mirror Jasonkung98: `train=9500`, `test=3`, `0` ids duplicados, `0` nulos; familias `bit_manipulation=1602`, `equation_transform=1555`, `gravity_numeric=1597`, `unit_conversion=1594`, `cipher=1576`, `numeral=1576`. O `test.csv` e apenas sample publico e as `3` linhas sobrepoem o train oficial.
+
+Leitura tecnica:
+
+- Para bit, o plano nao e mais "descobrir como resolver"; V366 ja resolveu `159/160` no weak. O plano e resolver transferencia ou apenas atacar o `1` miss residual em CPU.
+- Para equation, a proxima chance real e CPU DSL residual nos `92` misses, usando operacoes de `equation_numeric.py` e filtros de ambiguidade. Treino generico, GRPO e datasets externos continuam bloqueados sem CPU gate.
+- As fontes HF externas sao triagem, nao treino direto. Devem passar anti-leakage por `id`, `prompt_sha256`, family counts, licenca e regra do desafio antes de qualquer uso.
+
+Decisao: V373 nao libera HF. Libera somente a proxima acao CPU V374.
+
+Dataset HF Jasonkung98: manter como mirror pequeno e reprodutivel para jobs HF quando o ZIP Kaggle nao estiver montado. Nao tratar como achado de ACC, porque e byte-a-byte igual ao dataset oficial publico.
 
 ## Removido do plano ativo
 
@@ -818,6 +890,7 @@ Estes itens nao devem ser reexecutados como acao principal. So podem voltar se u
 | Mais HF sobre V367/V368 bit-only | removido; V368 checkpoint-1 caiu para `191/315`, bit `135`, e V369 mostrou `0/8` ganhos V366 transferidos |
 | V368 checkpoint-2/final weak eval | bloqueado por FinOps; checkpoint-1 ja violou total e bit |
 | V367 boxed-only como objetivo LoRA | removido; V370 mostrou `0/315` raw boxed-only no V368 e `160/160` bit rows com trace antigo |
+| Mais HF sobre V371/V372 trace-style | removido; V372 checkpoint-1 caiu para `191/315`, `equation=56`, `bit=135`; checkpoint-2/full/package/submit bloqueados por FinOps |
 | Checkpoints restantes V346 4/6 | nao avaliar sem novo sinal independente |
 | Checkpoints restantes V352 4/6/8 | bloqueados por FinOps; checkpoint-2 ja caiu abaixo do gate |
 | V359 checkpoint-4/final weak eval | cancelado por FinOps; checkpoint-2 ja violou total, bit e truncation |
@@ -849,16 +922,16 @@ Estes itens nao devem ser reexecutados como acao principal. So podem voltar se u
 
 ## Proxima acao unica
 
-V372 HF smoke minimo sobre V371, somente porque V371 corrigiu o gap especifico de formato identificado em V370 e passou V286 real tokenization gate.
+V374 CPU residual equation/bit gate.
 
-Regras do V372:
+Regras do V374:
 
-- A100, nao H200 para treino.
-- `max_steps<=2`.
-- Weak eval no checkpoint-1 antes de qualquer continuidade.
-- Cancelar por FinOps se `total<=192`, `bit<136`, `equation<=56`, truncation regressiva, ou raw outputs nao mostrarem melhoria de formato/ACC.
-- Nao rodar full/package/submit sem weak gain medido.
-
-Se V372 falhar, remover a rota trace-style do plano ativo e voltar para `equation_transform`: testar uma nova DSL simbolica diferente de V363/V364 nos `92` misses residuais, com `candidate_count`, `conflict_count`, `losses=0` e ganho acima de `63/155`.
+- Rodar somente CPU, sem HF.
+- Entradas: residuos V348/V366, V373 `equation_numeric.py`, e topico Kaggle `690307` via API.
+- Equation: testar DSL expandida nos `92` misses residuais com concatenacao, reverse concatenation, soma/subtracao/multiplicacao, `+1/-1`, divisao/modulo, operacoes por digito, determinante/abs determinante, pontuacao/simbolico e abstain por ambiguidade.
+- Bit: testar apenas o `1` miss residual depois de V366 com bit-pair/bitsum/stride e limite 3-input. Nao reabrir SFT bit-only.
+- Aceitar somente se `losses=0` e se `equation_transform>63/155` ou `bit_manipulation>159/160`.
+- Manifest obrigatorio por linha: `id`, `family`, `old_prediction`, `new_prediction`, `rule_class`, `candidate_count`, `conflict_count`, `accepted/rejected`, `reason`.
+- Se V374 nao passar, nao rodar HF.
 
 Full/package/submit continuam bloqueados ate um adapter-only bater o baseline weak/full medido.

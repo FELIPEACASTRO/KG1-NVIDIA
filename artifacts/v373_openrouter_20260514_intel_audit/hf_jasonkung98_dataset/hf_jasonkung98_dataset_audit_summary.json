@@ -1,0 +1,28 @@
+{
+  "source_repo": "jasonkung98/NVIDIA-Nemotron-Model-Reasoning-Challenge",
+  "official_zip_match": true,
+  "rows": {
+    "train": 9500,
+    "test": 3
+  },
+  "family_counts": {
+    "bit_manipulation": 1602,
+    "cipher": 1576,
+    "equation_transform": 1555,
+    "gravity_numeric": 1597,
+    "numeral": 1576,
+    "unit_conversion": 1594
+  },
+  "equation_answer_classes": {
+    "punct_symbol": 807,
+    "plain_integer": 687,
+    "other": 35,
+    "numeric_symbolic_ops": 26
+  },
+  "bit_examples_per_prompt": {
+    "7": 392,
+    "8": 407,
+    "9": 408,
+    "10": 395
+  }
+}

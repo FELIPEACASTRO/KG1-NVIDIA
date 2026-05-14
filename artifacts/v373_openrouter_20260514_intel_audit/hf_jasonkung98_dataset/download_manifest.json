@@ -1,0 +1,24 @@
+{
+  "repo": "jasonkung98/NVIDIA-Nemotron-Model-Reasoning-Challenge",
+  "downloaded_at_utc": "2026-05-14T13:48:41Z",
+  "files": [
+    {
+      "file": "README.md",
+      "url": "https://huggingface.co/datasets/jasonkung98/NVIDIA-Nemotron-Model-Reasoning-Challenge/resolve/main/README.md",
+      "bytes": 31,
+      "sha256": "4bcf87ecfbbb8e07a01b21415a970c8b53a5283bf6872b657040d3f45c9241f7"
+    },
+    {
+      "file": "train.csv",
+      "url": "https://huggingface.co/datasets/jasonkung98/NVIDIA-Nemotron-Model-Reasoning-Challenge/resolve/main/train.csv",
+      "bytes": 3069304,
+      "sha256": "d204af160633b638448723a437aa51c0db70fd0b64ff92f6ad6f52e5ac6377fa"
+    },
+    {
+      "file": "test.csv",
+      "url": "https://huggingface.co/datasets/jasonkung98/NVIDIA-Nemotron-Model-Reasoning-Challenge/resolve/main/test.csv",
+      "bytes": 1461,
+      "sha256": "c59d7eb0464b0a872a0c3f81e60cd6643fc1932a2dedaa05972bfd02cc638589"
+    }
+  ]
+}

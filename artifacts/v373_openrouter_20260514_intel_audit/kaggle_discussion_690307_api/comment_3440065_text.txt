@@ -1,0 +1,2 @@
+This is a very clever optimization. Iterating over bit relationships instead of full expressions is a great insight.
+Thanks for sharing such a detailed breakdown.
