@@ -99,6 +99,7 @@ Para submeter ao Kaggle:
 | V372 checkpoint-1 weak eval | `191/315`, `equation=56/155`, `bit=135/160`, truncation `0`; artefatos em `artifacts/v372_hf_a100_v371_trace_style_launch/eval_v372_checkpoint1/` | rejeitado; nao avaliar checkpoint-2, nao rodar full, nao packagear e nao submeter |
 | V373 Kaggle API discussion `690307` | API retornou titulo `Strategy to solve 85% of bit manipulation`, autor Tong Hui Kang, `96` votos, `11` comentarios; conteudo salvo em `artifacts/v373_openrouter_20260514_intel_audit/kaggle_discussion_690307_api/` | confirma que bit melhora por solver/trace deterministico e que nosso problema atual e transferencia adapter-only |
 | V373 HF dataset `jasonkung98/NVIDIA-Nemotron-Model-Reasoning-Challenge` | `train.csv` e `test.csv` tem SHA256 identico ao ZIP oficial local do Kaggle; `train=9500`, `test=3`, sample test inteiro sobrepoe train | mirror util para jobs HF e auditoria de hashes; nao e fonte nova de labels, nao libera treino GPU nem submit |
+| V374 CPU residual gate | sobre V366 `222/315`: equation V324 achou `0` candidatos no-loss; Tong bit replace caiu para `199/315`, `bit=136/160`, `23` perdas | bloqueia HF; proxima acao e clustering CPU dos `92` misses de equation, nao treino |
 | V348 residual audit | `92` equation misses, `24` bit misses | fila unica do proximo CPU gate |
 | V349 discussion `689915` | tokens simples, cobertura de operacoes raras, min-logprob | orientar formato de traces futuros |
 | V349 discussion `688461` | taxonomia reversa e gramatica booleana dinamica | orientar DSL CPU |
@@ -861,6 +862,35 @@ Decisao: V373 nao libera HF. Libera somente a proxima acao CPU V374.
 
 Dataset HF Jasonkung98: manter como mirror pequeno e reprodutivel para jobs HF quando o ZIP Kaggle nao estiver montado. Nao tratar como achado de ACC, porque e byte-a-byte igual ao dataset oficial publico.
 
+### 24. V374 - CPU residual gate sobre V366
+
+Objetivo: testar, sem GPU, se as fontes V373 destravam algum ganho residual acima do teacher CPU V366 (`222/315`, `equation=63/155`, `bit=159/160`).
+
+Status: concluido e bloqueado.
+
+Resultados:
+
+- Equation gate: `scripts/run_v324_equation_expanded_solver_gate.py` sobre `v366_integrated_predictions.csv`.
+  - `equation_miss_rows=92`.
+  - `parse_status_counts={"ok": 92}`.
+  - `subtype_counts={"equation_numeric_operator": 10, "equation_symbolic_punct": 82}`.
+  - `accepted_candidate_count=0`.
+  - `projected_equation_correct=63`.
+  - decisao: `no_new_equation_signal_for_hf_gpu`.
+- Bit gate: `scripts/run_v333_tong_bit_reasoner_gate.py` contra Tong commit `82bd1880aa8a8986ad572ccd17ae35b2b5c7da85`.
+  - train-side Tong: `1364/1602 = 85.14%`, confirmando a fonte publica.
+  - weak-side sobre V366: Tong replacement cai para `199/315`, `bit=136/160`, `equation=63/155`.
+  - `tong_gains_vs_baseline=0`, `tong_losses_vs_baseline=23`.
+  - decisao: `tong_bit_signal_blocked`.
+
+Leitura tecnica:
+
+- O algoritmo Tong e forte no train publico, mas nao melhora o nosso V366 weak residual; como o V366 ja esta em `159/160`, Tong direto so adiciona perdas.
+- A DSL equation V324 nao encontrou nenhuma regra no-loss adicional sobre os `92` misses restantes.
+- V374 nao autoriza HF, full eval, package ou submit.
+
+Decisao: proxima acao e V375 CPU-only residual clustering dos `92` misses de equation. O objetivo e entender os `82` casos symbolic/punctuation e `10` numeric_operator restantes antes de criar qualquer regra nova.
+
 ## Removido do plano ativo
 
 Estes itens nao devem ser reexecutados como acao principal. So podem voltar se um novo CPU gate provar uma razao nova.
@@ -922,16 +952,16 @@ Estes itens nao devem ser reexecutados como acao principal. So podem voltar se u
 
 ## Proxima acao unica
 
-V374 CPU residual equation/bit gate.
+V375 CPU residual clustering de equation_transform.
 
-Regras do V374:
+Regras do V375:
 
 - Rodar somente CPU, sem HF.
-- Entradas: residuos V348/V366, V373 `equation_numeric.py`, e topico Kaggle `690307` via API.
-- Equation: testar DSL expandida nos `92` misses residuais com concatenacao, reverse concatenation, soma/subtracao/multiplicacao, `+1/-1`, divisao/modulo, operacoes por digito, determinante/abs determinante, pontuacao/simbolico e abstain por ambiguidade.
-- Bit: testar apenas o `1` miss residual depois de V366 com bit-pair/bitsum/stride e limite 3-input. Nao reabrir SFT bit-only.
-- Aceitar somente se `losses=0` e se `equation_transform>63/155` ou `bit_manipulation>159/160`.
+- Entrada principal: `artifacts/v374_cpu_residual_gate/20260514T_v374_cpu_gate/equation_v324_on_v366/v324_equation_expanded_solver_audit.csv` e `v366_integrated_predictions.csv`.
+- Separar os `92` misses em clusters verificaveis: `numeric_operator`, `symbolic_punct`, comprimento de query/resposta, charset, repeticao de simbolos, operador ausente/presente, exemplos ambiguos, e candidatos que quase bateram.
+- Produzir apenas relatorio/CSV de diagnostico; nao promover regra ainda.
+- So criar V376 solver se V375 apontar uma classe com evidencia concreta, baixa ambiguidade e possibilidade de no-loss gate.
 - Manifest obrigatorio por linha: `id`, `family`, `old_prediction`, `new_prediction`, `rule_class`, `candidate_count`, `conflict_count`, `accepted/rejected`, `reason`.
-- Se V374 nao passar, nao rodar HF.
+- Se V375 nao identificar uma classe promissora, nao rodar HF.
 
 Full/package/submit continuam bloqueados ate um adapter-only bater o baseline weak/full medido.

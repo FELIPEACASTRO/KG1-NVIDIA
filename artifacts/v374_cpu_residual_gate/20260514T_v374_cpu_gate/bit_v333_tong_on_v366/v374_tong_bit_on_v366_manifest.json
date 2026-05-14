@@ -1,0 +1,143 @@
+{
+  "decision": {
+    "decision": "tong_bit_signal_blocked",
+    "direct_replace_deployable": false,
+    "next_action": "Promote Tong bit replacement only if direct_replace_gate passes; otherwise use gain rows as teacher-trace fixtures and keep searching for a label-free confidence rule.",
+    "reason": "baseline=222; tong_replace=199; tong_gains=0; tong_losses=23",
+    "teacher_trace_signal": false
+  },
+  "generated_at_utc": "2026-05-14T14:02:19.440711+00:00",
+  "inputs": {
+    "baseline_csv": "artifacts\\v366_bit_fullbyte_ternary_op_gate\\20260514T_cpu_gate\\v366_integrated_predictions.csv",
+    "baseline_csv_sha256": "585f6a6c56bfbef58465c8260cad5bb98ffd9a2aec59202207fe06c90d3ac23e",
+    "baseline_filename": "evals/v260b-h200-v221contract-v259-eqfocus-eval-20260511T025751Z/eval/v259_checkpoint_4_v221_contract/v245_hf_weak_v259_checkpoint_4_v221_contract_predictions.csv",
+    "baseline_repo": "felipesp1983/kg1-nemotron-lora-v259-v249-eqfocus-v257ckpt4-smoke",
+    "baseline_runtime_path": "artifacts\\v366_bit_fullbyte_ternary_op_gate\\20260514T_cpu_gate\\v366_integrated_predictions.csv",
+    "expected_shared_row_contract_sha256": "bf055e3b9ebce79d4bfc9e48bce5a305b1d83da882f14afddec80d6afaba5fff",
+    "expected_tong_commit": "82bd1880aa8a8986ad572ccd17ae35b2b5c7da85",
+    "max_losses": 0,
+    "observed_shared_row_contract_sha256": "bf055e3b9ebce79d4bfc9e48bce5a305b1d83da882f14afddec80d6afaba5fff",
+    "resolved_tong_commit": "82bd1880aa8a8986ad572ccd17ae35b2b5c7da85",
+    "tong_repo_url": "https://github.com/tonghuikang/nemotron",
+    "weak_bit_min": 160,
+    "weak_total_min": 223
+  },
+  "label": "v374_tong_bit_on_v366",
+  "outputs": {
+    "detail_csv": "artifacts\\v374_cpu_residual_gate\\20260514T_v374_cpu_gate\\bit_v333_tong_on_v366\\v374_tong_bit_on_v366_tong_bit_detail.csv",
+    "manifest_json": "artifacts\\v374_cpu_residual_gate\\20260514T_v374_cpu_gate\\bit_v333_tong_on_v366\\v374_tong_bit_on_v366_manifest.json",
+    "predictions_csv": "artifacts\\v374_cpu_residual_gate\\20260514T_v374_cpu_gate\\bit_v333_tong_on_v366\\v374_tong_bit_on_v366_tong_bit_replace_predictions.csv",
+    "train_json": "artifacts\\v374_cpu_residual_gate\\20260514T_v374_cpu_gate\\bit_v333_tong_on_v366\\v374_tong_bit_on_v366_train_bit_comparison.json"
+  },
+  "schema_version": "kg1_v333_tong_bit_reasoner_gate_v1",
+  "train_bit_comparison": {
+    "both_correct": 1207,
+    "current_solver_accuracy": 0.7896379525593009,
+    "current_solver_correct": 1265,
+    "max_rows": 0,
+    "parse_missing": 0,
+    "rows": 1602,
+    "tong_accuracy": 0.8514357053682896,
+    "tong_correct": 1364,
+    "tong_gain_vs_current": 157,
+    "tong_loss_vs_current": 58
+  },
+  "weak_gate": {
+    "baseline_summary": {
+      "accuracy": 0.7047619047619048,
+      "correct": 222,
+      "family": {
+        "bit_manipulation": {
+          "correct": 159,
+          "rows": 160,
+          "truncated": 0
+        },
+        "equation_transform": {
+          "correct": 63,
+          "rows": 155,
+          "truncated": 0
+        }
+      },
+      "rows": 315,
+      "truncated": 0
+    },
+    "current_solver_bit_replace_summary": {
+      "accuracy": 0.5968253968253968,
+      "correct": 188,
+      "family": {
+        "bit_manipulation": {
+          "correct": 125,
+          "rows": 160,
+          "truncated": 0
+        },
+        "equation_transform": {
+          "correct": 63,
+          "rows": 155,
+          "truncated": 0
+        }
+      },
+      "rows": 315,
+      "truncated": 0
+    },
+    "current_solver_gains_vs_baseline": 0,
+    "current_solver_losses_vs_baseline": 34,
+    "direct_replace_gate": {
+      "max_losses": 0,
+      "note": "Deployable only if the label audit shows no losses and a weak total gain.",
+      "pass": false,
+      "weak_bit_min": 160,
+      "weak_total_min": 223
+    },
+    "teacher_trace_gate": {
+      "note": "Label-audited signal only; use for deterministic trace distillation, not direct routing.",
+      "pass": false,
+      "teacher_rows": 0
+    },
+    "tong_bit_replace_summary": {
+      "accuracy": 0.6317460317460317,
+      "correct": 199,
+      "family": {
+        "bit_manipulation": {
+          "correct": 136,
+          "rows": 160,
+          "truncated": 0
+        },
+        "equation_transform": {
+          "correct": 63,
+          "rows": 155,
+          "truncated": 0
+        }
+      },
+      "rows": 315,
+      "truncated": 0
+    },
+    "tong_gain_ids": [],
+    "tong_gains_vs_baseline": 0,
+    "tong_loss_ids": [
+      "1abaffca",
+      "e6d2a064",
+      "0e70c867",
+      "b8722d19",
+      "05ca617c",
+      "7192535b",
+      "a6704625",
+      "78d02fc5",
+      "55d834d1",
+      "4ef88f92",
+      "1a7c8520",
+      "202af98d",
+      "3ace787f",
+      "ef2fe526",
+      "3a7dd604",
+      "a6192d29",
+      "048cc279",
+      "06120e47",
+      "e1f3ffbb",
+      "4c327b55",
+      "b8aa3072",
+      "82ae858c",
+      "5ba26f21"
+    ],
+    "tong_losses_vs_baseline": 23
+  }
+}
