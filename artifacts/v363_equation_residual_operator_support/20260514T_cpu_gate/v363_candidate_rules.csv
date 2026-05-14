@@ -1,0 +1,5 @@
+family,candidate_source,rule_class,candidate_rows,changed_rows,gains,losses,new_correct,accepted_rows,accepted,reason
+equation_transform,v363_public_train_exweak_numeric_prior,numeric_operator_prior_92_abs_diff,1,1,0,1,0,0,False,rejected_by_gate
+equation_transform,v363_public_train_exweak_numeric_prior,numeric_operator_prior_93_abs_diff,1,1,0,1,0,0,False,rejected_by_gate
+equation_transform,v363_public_train_exweak_numeric_prior,numeric_operator_prior_123_concat_ab,3,3,0,3,0,0,False,rejected_by_gate
+equation_transform,v363_public_train_exweak_numeric_prior,numeric_operator_prior_45_sub_ab,8,8,0,7,1,0,False,rejected_by_gate

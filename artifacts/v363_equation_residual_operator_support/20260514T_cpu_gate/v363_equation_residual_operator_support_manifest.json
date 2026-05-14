@@ -1,0 +1,171 @@
+{
+  "accepted_candidate_count": 0,
+  "accepted_candidate_ids": [],
+  "candidate_rule_summary_top": [
+    {
+      "accepted": false,
+      "accepted_rows": 0,
+      "candidate_rows": 1,
+      "candidate_source": "v363_public_train_exweak_numeric_prior",
+      "changed_rows": 1,
+      "family": "equation_transform",
+      "gains": 0,
+      "losses": 1,
+      "new_correct": 0,
+      "reason": "rejected_by_gate",
+      "rule_class": "numeric_operator_prior_92_abs_diff"
+    },
+    {
+      "accepted": false,
+      "accepted_rows": 0,
+      "candidate_rows": 1,
+      "candidate_source": "v363_public_train_exweak_numeric_prior",
+      "changed_rows": 1,
+      "family": "equation_transform",
+      "gains": 0,
+      "losses": 1,
+      "new_correct": 0,
+      "reason": "rejected_by_gate",
+      "rule_class": "numeric_operator_prior_93_abs_diff"
+    },
+    {
+      "accepted": false,
+      "accepted_rows": 0,
+      "candidate_rows": 3,
+      "candidate_source": "v363_public_train_exweak_numeric_prior",
+      "changed_rows": 3,
+      "family": "equation_transform",
+      "gains": 0,
+      "losses": 3,
+      "new_correct": 0,
+      "reason": "rejected_by_gate",
+      "rule_class": "numeric_operator_prior_123_concat_ab"
+    },
+    {
+      "accepted": false,
+      "accepted_rows": 0,
+      "candidate_rows": 8,
+      "candidate_source": "v363_public_train_exweak_numeric_prior",
+      "changed_rows": 8,
+      "family": "equation_transform",
+      "gains": 0,
+      "losses": 7,
+      "new_correct": 1,
+      "reason": "rejected_by_gate",
+      "rule_class": "numeric_operator_prior_45_sub_ab"
+    }
+  ],
+  "current_summary": {
+    "accuracy": 0.638095238095238,
+    "correct": 201,
+    "family": {
+      "bit_manipulation": {
+        "correct": 138,
+        "rows": 160
+      },
+      "equation_transform": {
+        "correct": 63,
+        "rows": 155
+      }
+    },
+    "rows": 315
+  },
+  "decision": {
+    "decision": "v363_cpu_gate_blocked",
+    "hf_gpu_allowed": false,
+    "next_action": "Do not launch HF. Remaining equation residuals are dominated by query-operator gaps or same-op DSL ambiguity.",
+    "reason": "v363=201/315; equation=63/155; bit=138/160; gains=0; losses=0; accepted=0"
+  },
+  "equation_residual_count": 92,
+  "equation_residual_route_hints": {
+    "numeric_query_operator_unseen_in_examples_model_prior_required": 10,
+    "symbolic_query_operator_seen_but_same_op_dsl_no_unique_candidate": 70,
+    "symbolic_query_operator_unseen_in_examples_no_label_free_tiebreaker": 12
+  },
+  "equation_residual_subtypes": {
+    "equation_numeric_operator": 10,
+    "equation_symbolic_punct": 82
+  },
+  "expected_shared_row_contract_sha256": "bf055e3b9ebce79d4bfc9e48bce5a305b1d83da882f14afddec80d6afaba5fff",
+  "gain_count": 0,
+  "gain_ids": [],
+  "generated_at_utc": "2026-05-14T11:25:59.026746+00:00",
+  "inputs": {
+    "input_predictions_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v355_cpu_residual_gate\\20260514T_cpu_gate\\v355_integrated_predictions.csv",
+    "input_predictions_sha256": "c1d34ceb396a191dcba9a74b46ca8cbe2208f4aea0e79ed3754f3ce3634d998c",
+    "public_train_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\api_kaggle_openrouter_audit_2026_05_06\\competition_data\\extracted\\train.csv",
+    "public_train_excluded_id_count": 315,
+    "public_train_sha256": "d204af160633b638448723a437aa51c0db70fd0b64ff92f6ad6f52e5ac6377fa"
+  },
+  "loss_count": 0,
+  "loss_ids": [],
+  "numeric_operator_prior_count": 6,
+  "numeric_operator_priors": {
+    "-": {
+      "function": "sub_ab",
+      "operator": "-",
+      "precision": 0.27522935779816515,
+      "support": 30,
+      "total": 109
+    },
+    "?": {
+      "function": "add",
+      "operator": "?",
+      "precision": 0.25,
+      "support": 4,
+      "total": 16
+    },
+    "[": {
+      "function": "abs_diff",
+      "operator": "[",
+      "precision": 0.2727272727272727,
+      "support": 6,
+      "total": 22
+    },
+    "\\": {
+      "function": "abs_diff",
+      "operator": "\\",
+      "precision": 0.25,
+      "support": 3,
+      "total": 12
+    },
+    "]": {
+      "function": "abs_diff",
+      "operator": "]",
+      "precision": 0.35714285714285715,
+      "support": 5,
+      "total": 14
+    },
+    "{": {
+      "function": "concat_ab",
+      "operator": "{",
+      "precision": 0.25,
+      "support": 4,
+      "total": 16
+    }
+  },
+  "observed_shared_row_contract_sha256": "bf055e3b9ebce79d4bfc9e48bce5a305b1d83da882f14afddec80d6afaba5fff",
+  "outputs": {
+    "candidate_decisions_csv": "artifacts\\v363_equation_residual_operator_support\\20260514T_cpu_gate\\v363_candidate_decisions.csv",
+    "candidate_rules_csv": "artifacts\\v363_equation_residual_operator_support\\20260514T_cpu_gate\\v363_candidate_rules.csv",
+    "integrated_predictions_csv": "artifacts\\v363_equation_residual_operator_support\\20260514T_cpu_gate\\v363_integrated_predictions.csv",
+    "manifest_json": "artifacts\\v363_equation_residual_operator_support\\20260514T_cpu_gate\\v363_equation_residual_operator_support_manifest.json",
+    "residuals_csv": "artifacts\\v363_equation_residual_operator_support\\20260514T_cpu_gate\\v363_equation_residuals.csv"
+  },
+  "schema_version": "kg1_v363_equation_residual_operator_support_v1",
+  "v363_summary": {
+    "accuracy": 0.638095238095238,
+    "correct": 201,
+    "family": {
+      "bit_manipulation": {
+        "correct": 138,
+        "rows": 160
+      },
+      "equation_transform": {
+        "correct": 63,
+        "rows": 155
+      }
+    },
+    "rows": 315
+  }
+}

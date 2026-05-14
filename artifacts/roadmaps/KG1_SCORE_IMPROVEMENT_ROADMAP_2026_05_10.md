@@ -503,6 +503,44 @@ Impacto no roadmap:
 - Nao gastar mais GPU em V361/V362 bit-only sem novo CPU gate.
 - Proxima rota ativa volta para CPU: equation DSL/verifier nos `99` misses e expansao real do algoritmo bit-pair/bitsum/stride antes de qualquer SFT novo.
 
+### 13. V363 - Equation residual operator-support gate
+
+Objetivo: executar o proximo passo CPU-only apos V362, sem GPU, testando se os residuos de `equation_transform` ainda tinham ganho label-free por operador visto nos exemplos ou por prior numerico aprendido no train publico sem vazamento.
+
+Status: concluido e bloqueado.
+
+Resultado medido:
+
+- Script: `scripts/analyze_v363_equation_residual_operator_support.py`.
+- Manifesto: `artifacts/v363_equation_residual_operator_support/20260514T_cpu_gate/v363_equation_residual_operator_support_manifest.json`.
+- Input: `artifacts/v355_cpu_residual_gate/20260514T_cpu_gate/v355_integrated_predictions.csv`.
+- Train publico usado somente para prior numerico com exclusao dos `315` IDs weak.
+- Shared row contract: `bf055e3b9ebce79d4bfc9e48bce5a305b1d83da882f14afddec80d6afaba5fff`.
+- Estado de entrada: `201/315`, `equation_transform=63/155`, `bit_manipulation=138/160`.
+- Estado V363: `201/315`, `equation_transform=63/155`, `bit_manipulation=138/160`.
+- Ganhos aceitos: `0`.
+- Perdas integradas: `0`.
+- Candidatos aceitos: `0`.
+
+Mapa dos residuos de `equation_transform`:
+
+- `92` misses restantes.
+- `10` numeric operator: todos com operador da query ausente nos exemplos; exigem prior/modelo, nao solver derivado dos exemplos.
+- `70` symbolic punctuation: operador da query aparece nos exemplos, mas a DSL same-op nao encontrou candidato unico sem perda.
+- `12` symbolic punctuation: operador da query ausente nos exemplos, sem desempate label-free.
+
+Teste de prior numerico:
+
+- V363 aprendeu priors no train publico excluindo IDs weak.
+- Priors encontrados: `6`.
+- Priors que geraram mudancas foram rejeitados por perdas:
+  - `numeric_operator_prior_45_sub_ab`: `8` mudancas, `0` ganhos, `7` perdas.
+  - `numeric_operator_prior_123_concat_ab`: `3` mudancas, `0` ganhos, `3` perdas.
+  - `numeric_operator_prior_92_abs_diff`: `1` mudanca, `0` ganhos, `1` perda.
+  - `numeric_operator_prior_93_abs_diff`: `1` mudanca, `0` ganhos, `1` perda.
+
+Decisao: V363 bloqueia HF. Mais treino sobre os datasets V351/V358/V361 ou prior numerico publico nao e justificavel. O proximo trabalho util precisa ser uma nova familia de programa simbolico para os `70` casos same-op ambiguos ou um desempate label-free real para os casos query-only.
+
 ## Removido do plano ativo
 
 Estes itens nao devem ser reexecutados como acao principal. So podem voltar se um novo CPU gate provar uma razao nova.
@@ -525,6 +563,8 @@ Estes itens nao devem ser reexecutados como acao principal. So podem voltar se u
 | HF longo sobre V361 | removido; V361 e apenas reparo de formato e nao justifica treino longo |
 | Mais HF sobre V361/V362 boxed-only | removido; V362 checkpoint-1 caiu para `190/315`, equation `56`, bit `134`, truncation `1` |
 | V362 checkpoint-2/final weak eval | bloqueado por FinOps; checkpoint-1 ja violou total, bit e truncation |
+| V363 public-train numeric operator priors | bloqueado; causaram perdas e `0` ganhos |
+| V363 same-operator symbolic DSL atual | bloqueado; nao gerou candidato unico no-loss |
 | Checkpoints restantes V346 4/6 | nao avaliar sem novo sinal independente |
 | Checkpoints restantes V352 4/6/8 | bloqueados por FinOps; checkpoint-2 ja caiu abaixo do gate |
 | V359 checkpoint-4/final weak eval | cancelado por FinOps; checkpoint-2 ja violou total, bit e truncation |
@@ -556,4 +596,4 @@ Estes itens nao devem ser reexecutados como acao principal. So podem voltar se u
 
 ## Proxima acao unica
 
-Criar V363/V324 CPU-only para atacar `equation_transform` por DSL/verifier nos `99` misses e, em paralelo, completar a expansao bit-pair/bitsum/stride antes de qualquer novo SFT. Novo HF so e permitido se o CPU gate provar ganho no-loss contra o contrato weak, com `total>192`, `bit>=136`, `equation>=56` e truncation `0`.
+Criar V364 CPU-only com uma nova familia simbolica para os `70` residuos same-op de `equation_transform`, porque V363 provou que prior numerico publico e a DSL same-op atual nao movem o gate. Em paralelo, continuar a expansao bit-pair/bitsum/stride somente em CPU. Novo HF so e permitido se o CPU gate superar o estado integrado atual (`201/315`, `equation=63`, `bit=138`) com `0` perdas e truncation `0`.
