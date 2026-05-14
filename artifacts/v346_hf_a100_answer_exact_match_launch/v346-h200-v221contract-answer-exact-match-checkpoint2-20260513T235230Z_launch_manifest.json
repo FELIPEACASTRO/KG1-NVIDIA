@@ -1,0 +1,61 @@
+{
+  "adapter_repo": "felipesp1983/kg1-nemotron-lora-v346-answer-exact-match-a100-v290ckpt6",
+  "adapters": [
+    {
+      "name": "v346_answer_exact_match_checkpoint_2_v221_contract",
+      "repo": "felipesp1983/kg1-nemotron-lora-v346-answer-exact-match-a100-v290ckpt6",
+      "subfolder": "checkpoint-2"
+    }
+  ],
+  "branch": "v230-v226-complementarity",
+  "expected_commit": "fc960aa6233bfcd5aec2aad21e9730d4268aa6dc",
+  "flavor": "h200",
+  "generated_at_utc": "2026-05-13T23:52:31.679933+00:00",
+  "hardware": {
+    "accelerator_model": "H200",
+    "accelerator_quantity": "1",
+    "accelerator_vram": "141 GB",
+    "cpu": "23 vCPU",
+    "name": "h200",
+    "pretty_name": "Nvidia H200",
+    "ram": "256 GB",
+    "unit_cost_usd": 0.083333,
+    "unit_label": "minute"
+  },
+  "image": "vllm/vllm-openai:v0.20.1",
+  "job_id": "6a050efe3308d79117b8f350",
+  "job_status": "COMPLETED",
+  "job_url": "https://huggingface.co/jobs/felipesp1983/6a050efe3308d79117b8f350",
+  "missing_optional_adapters": [],
+  "mode": "launched",
+  "namespace": "felipesp1983",
+  "output_path_in_repo": "evals/v346-h200-v221contract-answer-exact-match-checkpoint2-20260513T235230Z",
+  "output_repo": "felipesp1983/kg1-nemotron-lora-v346-answer-exact-match-a100-v290ckpt6",
+  "promotion_gate": {
+    "baseline_bit_manipulation": 136,
+    "baseline_equation_transform": 56,
+    "baseline_total": 192,
+    "blocked_actions": [
+      "package",
+      "kaggle_submit"
+    ],
+    "promote_if_bit_gte": 136,
+    "promote_if_equation_gt": 56,
+    "promote_if_total_gte": 193,
+    "reject_if_bit_lt": 136,
+    "reject_if_equation_lte": 56,
+    "reject_if_total_lte": 192,
+    "requires_full_eval_before_package_or_submit": true
+  },
+  "observed_weak_eval": {
+    "bit_manipulation_correct": 135,
+    "correct": 191,
+    "decision": "reject_no_full_eval_no_package_no_submit",
+    "equation_transform_correct": 56,
+    "hf_result_commit": "https://huggingface.co/felipesp1983/kg1-nemotron-lora-v346-answer-exact-match-a100-v290ckpt6/commit/32b4240f3b7ace4a50b5bf5f960d5704257c7cee",
+    "reason": "total<=192 gate failed and bit<136 regressed versus baseline",
+    "truncated": 0
+  },
+  "run_id": "v346-h200-v221contract-answer-exact-match-checkpoint2-20260513T235230Z",
+  "version": "v346_answer_exact_match_checkpoint2_v221_weak_eval"
+}

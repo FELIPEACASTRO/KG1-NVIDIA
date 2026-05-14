@@ -1,0 +1,7 @@
+id,family,answer,baseline_prediction,v344_prediction,v343_prediction,baseline_correct,v344_correct,v343_integrated_correct,v344_changed_prediction,bucket,v343_rule_class,v343_rule_class_normalized,dataset_direct_id_count,dataset_prompt_overlap_count,dataset_metadata_seed_count,dataset_rule_count,v343_candidate_count,v343_conflict_count,v343_reason
+518deb39,equation_transform,$,{}>{,$}{>,{}>{,False,False,False,True,v344_changed_no_accuracy_delta,,,0,0,0,0,,,
+b06625c4,equation_transform,^&/,"""$ $]""","""$$]""","""$ $]""",False,False,False,True,v344_changed_no_accuracy_delta,,,0,0,0,0,,,
+b0206bb7,equation_transform,]$!,$){,$){},$){,False,False,False,True,v344_changed_no_accuracy_delta,,,0,0,0,0,,,
+8740ed31,bit_manipulation,01101000,01101000,01111000,01101000,True,False,True,True,v344_loss_vs_baseline,,,0,0,0,0,,,
+4ef88f92,bit_manipulation,01010111,01010011,01011111,01010011,False,False,False,True,v344_changed_no_accuracy_delta,,,0,0,0,0,,,
+b9f1d959,equation_transform,:>,"$""\[""","$""\[]","$""\[""",False,False,False,True,v344_changed_no_accuracy_delta,,,0,0,0,0,,,

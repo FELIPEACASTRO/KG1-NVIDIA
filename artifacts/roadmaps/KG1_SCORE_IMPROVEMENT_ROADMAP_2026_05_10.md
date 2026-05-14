@@ -22,6 +22,7 @@ As evidencias fortes reunidas hoje mostram que ha ganho possivel, mas o ganho co
 | V344 dataset transfer + V340 hard-negative gate | assets validos | dataset cobre `7` regras | replay bit preservado | launcher preference/abstain criado; primeiro launch cancelado por FinOps antes de checkpoint |
 | V344 preference/abstain checkpoint-2 | `192/315` | `56/155` | `136/160` | sem ganho; mudou `7` predicoes mas `0` ganhos e `0` perdas contra baseline |
 | V345 failure audit sobre V344 | diagnostico concluido | `7` ganhos V343 nao transferidos | bit preservado | dataset cobria classes de regra, mas treino nao alterou os IDs-alvo; bloquear repeticao do objetivo |
+| V346 answer exact-match checkpoint-2 | `191/315` | `56/155` | `135/160` | falhou; `0` ganhos, `1` perda em bit; bloquear mais H200 nessa variante |
 | V306/V302 full verifier local | `838/947` potencial | `60/155` | `146/160` | depende de verifier/postprocessor |
 | V335 LoRA mixed trace replay | `190/315` | `56/155` | `134/160` | falhou; cancelado por FinOps |
 | V338B LoRA minimal transfer weak eval | `190/315` | `56/155` | `134/160` | checkpoints 2 e 4 falharam; cancelado por FinOps |
@@ -41,6 +42,8 @@ Atualizacao V344 HF resultado: o relaunch A100 `felipesp1983/6a0501f03308d79117b
 Atualizacao V345: a auditoria ACC-first confirmou que os `7` ganhos CPU V343 tinham cobertura por classe de regra no dataset V344 (`1000` linhas para cada classe numerica relevante e `1500` para symbolic cryptarithm), mas `0` overlap direto por `id` ou `prompt` com o weak, por desenho anti-leakage. O V344 checkpoint-2 nao mudou a predicao de nenhum dos `7` IDs que o V343 resolveria; as `7` mudancas ocorreram em outros IDs e continuaram incorretas. Diagnostico: repetir o mesmo objetivo de preferencia nao deve ser feito.
 
 Atualizacao trainer preference: foi encontrado um bug objetivo no schedule de LR em `scripts/hf_job_train_v315_preference.py`. O loop incrementava `global_step` antes de calcular `base.get_lr`; com `MAX_STEPS=2`, o primeiro update ja usava `FINAL_LEARNING_RATE=1e-09`. Isso explica por que o log do V344 mostrou `lr=1.000e-09` em todos os steps. Correcao aplicada: calcular LR com o step anterior ao update e so depois marcar o step como concluido.
+
+Atualizacao V346 HF resultado: o treino answer exact-match A100 `felipesp1983/6a050b53e48bea4538b9c1e3` corrigiu o schedule e realmente usou LR alto no inicio (`8.00e-08` no step 1 ate `2.00e-08` no step 6). Mesmo assim, o weak eval H200 checkpoint-2 `felipesp1983/6a050efe3308d79117b8f350` ficou em `191/315`, `equation_transform=56/155`, `bit_manipulation=135/160`, `truncated=0`. Auditoria V347 contra o baseline V290 e o solver V343: `7` ganhos V343 continuaram nao transferidos, `6` predicoes mudaram, `0` ganhos e `1` perda em bit (`8740ed31`). Decisao: V346 nao promove, nao full eval, nao package, nao submit e nao avaliar checkpoints 4/6 sem novo sinal independente.
 
 ## Metas
 
@@ -223,6 +226,28 @@ Status 2026-05-13:
 - Upload HF V346 concluido para `felipesp1983/kg1-nemotron-training`, path `data/v346_answer_exact_match/20260513T_cpu_gate`, commit `9ecf0f758bfb4fd8abf3d2d2f4df235947d30e98`.
 - Launcher V346 criado em `artifacts/v346_hf_a100_answer_exact_match_launch/launch_v346_hf_a100_answer_exact_match.py`.
 - Debug local V346 passou em `a100-large`, imagem `nvcr.io/nvidia/nemo:25.11.nemotron_3_nano`, custo `0.041667/min`, adapter inicial V290 checkpoint-6 presente, dados HF com hash correto. Receita: `MAX_STEPS=6`, `LEARNING_RATE=8e-8`, `FINAL_LEARNING_RATE=2e-8`, answer-span loss `24.0`, checkpoint a cada `2` steps.
+- HF train V346 `felipesp1983/6a050b53e48bea4538b9c1e3` concluiu e confirmou que o bug de LR foi corrigido:
+  - step 1 `lr=8.00e-08`;
+  - step 2 `lr=6.80e-08`;
+  - step 3 `lr=5.60e-08`;
+  - step 4 `lr=4.40e-08`;
+  - step 5 `lr=3.20e-08`;
+  - step 6 `lr=2.00e-08`.
+- Weak eval H200 V346 checkpoint-2 `felipesp1983/6a050efe3308d79117b8f350` concluiu:
+  - `191/315`;
+  - `equation_transform=56/155`;
+  - `bit_manipulation=135/160`;
+  - `truncated=0`;
+  - output HF: `evals/v346-h200-v221contract-answer-exact-match-checkpoint2-20260513T235230Z`;
+  - commit HF do resultado: `32b4240f3b7ace4a50b5bf5f960d5704257c7cee`.
+- V347 audit sobre V346, usando o script ACC-first de V345 contra baseline V290 e solver V343:
+  - artefato: `artifacts/v347_v346_failure_audit/20260513T_acc_first/v345_v344_failure_audit_manifest.json`;
+  - `changed_prediction_count=6`;
+  - `v343_gain_not_transferred=7`;
+  - `v344_changed_no_accuracy_delta=5` (nome legado do script; neste run significa V346);
+  - `v344_loss_vs_baseline=1` em `bit_manipulation`;
+  - `preference_rows=0`, pois V346 era SFT answer-only, nao preference.
+- Decisao: V346 falhou mesmo com LR efetivo. Encerrar a rota "mais LR + answer-only SFT sintetico" ate existir novo sinal CPU. Nao gastar H200 avaliando checkpoints 4/6 por expectativa.
 
 ### 4. V338 - Tiny LoRA absorption smoke
 
@@ -392,17 +417,18 @@ Os itens abaixo ficam apenas no arquivo historico. Eles nao fazem parte do plano
 
 ## Proxima acao unica
 
-Implementar V346 answer-exact-match transfer smoke:
+Implementar V348 CPU residual no-loss expansion antes de qualquer novo HF:
 
-1. Construir dataset minimo apenas com rule classes que V345 mostrou cobertas mas nao transferidas:
-   - `add_direct_over_model_add_variant`;
-   - `minus_direct_negative_restore_sign`;
-   - `minus_signed_opposite_sign_guarded`;
-   - `colon_absdiff_restore_trailing_zero`;
-   - `symbolic_cryptarithm_single_operator_digits_mul`.
-2. Usar resposta final curta, sem CoT longo, priorizando `Final answer: \boxed{...}` e hard negatives so como regularizador leve.
-3. Subir LR/schedule em relacao a V344, porque `1e-09` nao moveu os IDs-alvo; ainda assim manter smoke curto.
-4. Primeiro checkpoint precisa weak eval imediato:
-   - continuar se `total > 192`, `equation > 56`, `bit >= 136`, `truncated=0`;
-   - cancelar se repetir `192/315`, `equation=56`, ou se `bit<136`.
-5. Nao repetir objective V344 de preferencia saturada; se V346 nao mover ACC, voltar para CPU DSL/verifier e encerrar GPU LoRA nessa linha.
+1. Partir do baseline adapter-only V290 checkpoint-6 e do solver/verifier V343, nao de loss.
+2. Auditar os residuos que continuam errados apos V343:
+   - equation: misses restantes depois dos `7` ganhos V343;
+   - bit: misses restantes mantendo `bit>=136`.
+3. Adicionar somente regras label-free com `candidate_count` baixo, `conflict_count=0` e explicacao deterministica:
+   - equation symbolic/punctuation residual;
+   - equation numeric residual que nao esteja coberto por V343;
+   - bit Tong bit-pair/bitsum/stride apenas se gerar nova predicao no-loss.
+4. Gate CPU obrigatorio:
+   - novo ganho aceito apenas com `losses=0`;
+   - `equation>63` ou `bit>136` no weak diagnostic;
+   - sem usar weak/full rows como treino direto.
+5. HF GPU continua bloqueado. So liberar novo job se V348 produzir um novo teacher com ganho no-loss e um dataset cujo sinal seja diferente de V344/V346. Repetir mais epochs, checkpoints 4/6 do V346 ou outra variacao de LR sem novo CPU gate esta removido do plano ativo.
