@@ -1,0 +1,193 @@
+{
+  "decision": {
+    "decision": "v360_blocks_more_hf_on_v358_v359",
+    "hf_gpu_allowed": false,
+    "kaggle_submit_allowed": false,
+    "next_action": "Build V361 CPU-gated answer-first/boxed-only transfer data or return to equation DSL. Do not launch another HF job from V358/V359 artifacts.",
+    "package_allowed": false,
+    "reason": "V359 checkpoint-2 regressed to 190/315, bit=134/160, truncated=1; V358 did not transfer V357 CPU gains."
+  },
+  "findings": [
+    {
+      "action": "Do not full-eval, package, submit, or continue V359 checkpoints without a new CPU-gated dataset format.",
+      "evidence": "V357 CPU summary={\"accuracy\": 0.6793650793650794, \"correct\": 214, \"family\": {\"bit_manipulation\": {\"correct\": 151, \"rows\": 160}, \"equation_transform\": {\"correct\": 63, \"rows\": 155}}, \"rows\": 315}; V359 checkpoint-2 total=190, equation=56, bit=134, truncated=1.",
+      "finding": "V359 did not transfer the V357 CPU gain.",
+      "severity": "blocking"
+    },
+    {
+      "action": "Either train with a real preference objective or remove preference artifacts from the active plan.",
+      "evidence": "Launcher references the SFT train JSONL, but not the preference train/val JSONL.",
+      "finding": "The hard-negative preference files were not used by the V359 SFT launcher.",
+      "severity": "high"
+    },
+    {
+      "action": "Next dataset must either be answer-only replay for exact rules or expand rule coverage before another GPU run.",
+      "evidence": "train unique_rule_slugs=15; val unique_rule_slugs=15.",
+      "finding": "V358 is narrow: it repeats 15 verified rules instead of teaching a broad bit solver.",
+      "severity": "high"
+    },
+    {
+      "action": "Test an answer-first or boxed-only V361 dataset in CPU/token gates before HF.",
+      "evidence": "assistant_only_boxed_rows=0 while all rows include Rule/Check examples/Final answer text.",
+      "finding": "Completion format differs from weak-eval prompt intent.",
+      "severity": "medium"
+    },
+    {
+      "action": "Keep token gates, but treat ACC regression as a learning/objective/format issue.",
+      "evidence": "{\"train\": {\"completion_tokens_dropped\": 0, \"fallback_masks\": 0, \"family_summary\": {\"bit_manipulation\": {\"loss_token_max\": 245, \"loss_token_min\": 236, \"loss_token_p50\": 243, \"rows\": 1152, \"token_max\": 524, \"token_p50\": 522, \"token_p90\": 524, \"token_p99\": 524}}, \"loss_token_max\": 245, \"loss_token_min\": 236, \"loss_token_p50\": 243, \"offset_masks\": 1152, \"prompt_truncated\": 0, \"prompt_truncation_rate\": 0.0, \"rows\": 1152, \"token_max\": 524, \"token_mean\": 520.472, \"token_min\": 515, \"token_p50\": 522, \"token_p90\": 524, \"token_p99\": 524}, \"validation\": {\"completion_tokens_dropped\": 0, \"fallback_masks\": 0, \"family_summary\": {\"bit_manipulation\": {\"loss_token_max\": 245, \"loss_token_min\": 236, \"loss_token_p50\": 243, \"rows\": 288, \"token_max\": 524, \"token_p50\": 522, \"token_p90\": 524, \"token_p99\": 524}}, \"loss_token_max\": 245, \"loss_token_min\": 236, \"loss_token_p50\": 243, \"offset_masks\": 288, \"prompt_truncated\": 0, \"prompt_truncation_rate\": 0.0, \"rows\": 288, \"token_max\": 524, \"token_mean\": 520.472, \"token_min\": 515, \"token_p50\": 522, \"token_p90\": 524, \"token_p99\": 524}}",
+      "finding": "V358 passed tokenization, so the failure is not explained by training truncation.",
+      "severity": "info"
+    },
+    {
+      "action": "Equation must continue through DSL/verifier/teacher data, not this bit-only SFT route.",
+      "evidence": "V358 train/val family counts are only bit_manipulation; measured equation stayed at 56/155.",
+      "finding": "V359 bit-only data cannot improve equation_transform.",
+      "severity": "blocking"
+    }
+  ],
+  "generated_at_utc": "2026-05-14T10:27:19.186787+00:00",
+  "inputs": {
+    "tokenization_manifest_json": "artifacts\\v358_v357_bit_ternary_transfer_dataset\\20260514T_cpu_gate\\tokenization_gate_real\\v286_generic_tokenization_gate_manifest.json",
+    "tokenization_manifest_sha256": "b9d470fd56f3a723fe79812f4711db9d2fb22501dac4935a16c110e9eb4060ed",
+    "v357_manifest_json": "artifacts\\v357_bit_global_ternary_gate\\20260514T_cpu_gate\\v357_bit_global_ternary_gate_manifest.json",
+    "v357_manifest_sha256": "91fc03c574f86315377ada4a8162528fca6dab1b91768a1a954c42a178083ebe",
+    "v358_manifest_json": "artifacts\\v358_v357_bit_ternary_transfer_dataset\\20260514T_cpu_gate\\v358_v357_bit_ternary_transfer_manifest.json",
+    "v358_manifest_sha256": "b88b52d53bd59d6620489b81cef157422a2c9856a0a01076197de1a672f668a4",
+    "v359_summary_md": "artifacts\\v359_hf_a100_v358_bit_ternary_launch\\V359_RESULT_SUMMARY.md",
+    "v359_train_launcher_py": "artifacts\\v359_hf_a100_v358_bit_ternary_launch\\launch_v359_hf_a100_v358_bit_ternary.py"
+  },
+  "label": "v360_v359_transfer_failure_audit",
+  "outputs": {
+    "findings_csv": "artifacts\\v360_v359_transfer_failure_audit\\20260514T_cpu_audit\\v360_v359_transfer_failure_audit_findings.csv",
+    "format_summary_csv": "artifacts\\v360_v359_transfer_failure_audit\\20260514T_cpu_audit\\v360_v359_transfer_failure_audit_format_summary.csv",
+    "manifest_json": "artifacts\\v360_v359_transfer_failure_audit\\20260514T_cpu_audit\\v360_v359_transfer_failure_audit_manifest.json",
+    "report_md": "artifacts\\v360_v359_transfer_failure_audit\\20260514T_cpu_audit\\v360_v359_transfer_failure_audit_report.md",
+    "rule_summary_csv": "artifacts\\v360_v359_transfer_failure_audit\\20260514T_cpu_audit\\v360_v359_transfer_failure_audit_rule_summary.csv"
+  },
+  "schema_version": "kg1_v360_v359_transfer_failure_audit_v1",
+  "v357_decision": {
+    "decision": "v357_bit_global_ternary_gate_passed",
+    "hf_gpu_allowed": false,
+    "next_action": "Build V358 transfer dataset from V357 bit gains with strong replay before any HF smoke.",
+    "reason": "v357=214/315; equation=63/155; bit=151/160; gains=13; losses=0"
+  },
+  "v358_preference_summary": {
+    "train_rows": 2304,
+    "used_by_v359_launcher": false,
+    "val_rows": 576
+  },
+  "v358_train_summary": {
+    "answer_char_stats": {
+      "max": 8,
+      "median": 8.0,
+      "min": 8
+    },
+    "answer_in_assistant_rows": 1152,
+    "assistant_boxed_rows": 1152,
+    "assistant_char_stats": {
+      "max": 343,
+      "median": 338.0,
+      "min": 327
+    },
+    "assistant_checks_rows": 1152,
+    "assistant_final_answer_rows": 1152,
+    "assistant_only_boxed_rows": 0,
+    "assistant_role_rows": 1152,
+    "assistant_rule_rows": 1152,
+    "bad_row_count": 0,
+    "bad_rows_first20": [],
+    "message_count_distribution": {
+      "3": 1152
+    },
+    "prompt_char_stats": {
+      "max": 468,
+      "median": 468.0,
+      "min": 468
+    },
+    "prompt_example_count_distribution": {
+      "8": 1152
+    },
+    "prompt_target_rows": 1152,
+    "rows": 1152,
+    "rule_class_counts": {
+      "bit_exact_global_binary_OR": 160,
+      "bit_exact_global_binary_XOR": 160,
+      "bit_exact_global_ternary_unique_prediction": 832
+    },
+    "split": "train",
+    "subcategory_counts": {
+      "bit_exact_global_binary_replay": 320,
+      "bit_exact_global_ternary": 832
+    },
+    "unique_exprs": 15,
+    "unique_rule_slugs": 15,
+    "unique_source_ids": 15
+  },
+  "v358_validation_summary": {
+    "answer_char_stats": {
+      "max": 8,
+      "median": 8.0,
+      "min": 8
+    },
+    "answer_in_assistant_rows": 288,
+    "assistant_boxed_rows": 288,
+    "assistant_char_stats": {
+      "max": 343,
+      "median": 338.0,
+      "min": 327
+    },
+    "assistant_checks_rows": 288,
+    "assistant_final_answer_rows": 288,
+    "assistant_only_boxed_rows": 0,
+    "assistant_role_rows": 288,
+    "assistant_rule_rows": 288,
+    "bad_row_count": 0,
+    "bad_rows_first20": [],
+    "message_count_distribution": {
+      "3": 288
+    },
+    "prompt_char_stats": {
+      "max": 468,
+      "median": 468.0,
+      "min": 468
+    },
+    "prompt_example_count_distribution": {
+      "8": 288
+    },
+    "prompt_target_rows": 288,
+    "rows": 288,
+    "rule_class_counts": {
+      "bit_exact_global_binary_OR": 40,
+      "bit_exact_global_binary_XOR": 40,
+      "bit_exact_global_ternary_unique_prediction": 208
+    },
+    "split": "validation",
+    "subcategory_counts": {
+      "bit_exact_global_binary_replay": 80,
+      "bit_exact_global_ternary": 208
+    },
+    "unique_exprs": 15,
+    "unique_rule_slugs": 15,
+    "unique_source_ids": 15
+  },
+  "v359_launcher_evidence": {
+    "answer_span_loss_weight_16": true,
+    "launcher_py": "artifacts\\v359_hf_a100_v358_bit_ternary_launch\\launch_v359_hf_a100_v358_bit_ternary.py",
+    "launcher_sha256": "f4c279a3b14e896937a1b89663383fd91e306015062c9d1c63c80202d07a747c",
+    "learning_rate_override": true,
+    "max_steps_override": true,
+    "mentions_preferences_train": false,
+    "mentions_sft_train_file": true,
+    "subcategory_weight_ternary_1_40": true
+  },
+  "v359_result": {
+    "checkpoint2_bit_manipulation_correct": 134,
+    "checkpoint2_equation_transform_correct": 56,
+    "checkpoint2_total_correct": 190,
+    "checkpoint2_truncated": 1,
+    "contains_finops_cancel": true,
+    "contains_rejected": true,
+    "summary_md": "artifacts\\v359_hf_a100_v358_bit_ternary_launch\\V359_RESULT_SUMMARY.md",
+    "summary_sha256": "0d7db3497a07d0b54ee8035f1a463960e1a72699f84310962ae72f199ee4e689"
+  }
+}

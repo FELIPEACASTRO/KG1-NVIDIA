@@ -1,0 +1,22 @@
+metric,train,validation
+answer_char_stats,"{""max"": 8, ""median"": 8.0, ""min"": 8}","{""max"": 8, ""median"": 8.0, ""min"": 8}"
+answer_in_assistant_rows,1152,288
+assistant_boxed_rows,1152,288
+assistant_char_stats,"{""max"": 343, ""median"": 338.0, ""min"": 327}","{""max"": 343, ""median"": 338.0, ""min"": 327}"
+assistant_checks_rows,1152,288
+assistant_final_answer_rows,1152,288
+assistant_only_boxed_rows,0,0
+assistant_role_rows,1152,288
+assistant_rule_rows,1152,288
+bad_row_count,0,0
+message_count_distribution,"{""3"": 1152}","{""3"": 288}"
+prompt_char_stats,"{""max"": 468, ""median"": 468.0, ""min"": 468}","{""max"": 468, ""median"": 468.0, ""min"": 468}"
+prompt_example_count_distribution,"{""8"": 1152}","{""8"": 288}"
+prompt_target_rows,1152,288
+rows,1152,288
+rule_class_counts,"{""bit_exact_global_binary_OR"": 160, ""bit_exact_global_binary_XOR"": 160, ""bit_exact_global_ternary_unique_prediction"": 832}","{""bit_exact_global_binary_OR"": 40, ""bit_exact_global_binary_XOR"": 40, ""bit_exact_global_ternary_unique_prediction"": 208}"
+split,"""train""","""validation"""
+subcategory_counts,"{""bit_exact_global_binary_replay"": 320, ""bit_exact_global_ternary"": 832}","{""bit_exact_global_binary_replay"": 80, ""bit_exact_global_ternary"": 208}"
+unique_exprs,15,15
+unique_rule_slugs,15,15
+unique_source_ids,15,15
