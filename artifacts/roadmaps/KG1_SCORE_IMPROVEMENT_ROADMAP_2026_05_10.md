@@ -24,6 +24,7 @@ Historico completo e rotas antigas ficam fora do plano ativo:
 | V356 equation conflict tiebreaker | sem ganho | `0/2` conflitos resolvidos | nao aplica | bloqueado; operador so aparece na query |
 | V357 bit global ternary CPU gate | `214/315` | `63/155` | `151/160` | novo teacher CPU: `+13` bit, `0` perdas |
 | V358 V357 bit ternary transfer dataset | `1152/288` train/val | nao altera equation | baseado em `13` ternary + `2` replay | dataset aprovado por gate real |
+| V359 checkpoint-2 adapter-only | `190/315` | `56/155` | `134/160` | rejeitado; truncation `1`, weak eval cancelado por FinOps |
 | Residual depois do V357 | mapa pronto | `92` misses | `9` misses | fila residual CPU |
 | V349 Kaggle discussions | `140/140` topicos | reforca ambiguidade/DSL | reforca bit full-byte/bit-pair/3-input | guia do proximo CPU gate |
 | Double check compilacoes 2026-05-14 | `3` arquivos | sem novo ganho medido | sem novo ganho medido | classifica links; nao libera HF |
@@ -31,7 +32,7 @@ Historico completo e rotas antigas ficam fora do plano ativo:
 Conclusao honesta:
 
 - Ha ganho real em CPU solver/verifier: `192 -> 214` weak, com `equation_transform 56 -> 63` e `bit_manipulation 136 -> 151`, sempre com `0` perdas no weak diagnostic.
-- O ganho novo comprovado de V357 e forte em bit, mas ainda e teacher CPU. Ainda nao ha ganho adapter-only novo. V338B, V341, V344, V346 e V352 falharam em transferir ganhos menores para LoRA.
+- O ganho novo comprovado de V357 e forte em bit, mas ainda e teacher CPU. Ainda nao ha ganho adapter-only novo. V338B, V341, V344, V346, V352 e V359 falharam em transferir ganhos para LoRA.
 - `eval_loss` menor nao significa ACC maior. Promocao agora e somente por ACC weak/full.
 - HF GPU volta a ficar permitido apenas para um smoke V359 curto, porque V357 passou e V358 foi gateado. Full/package/submit continuam bloqueados ate ACC weak/full adapter-only melhorar.
 
@@ -73,7 +74,8 @@ Para submeter ao Kaggle:
 | V355 CPU residual gate | bit stride/current solver e equation conflicts testados; `0` candidatos aceitos | bloqueia HF; classes novas nao sao seguras |
 | V356 conflict tiebreaker | `2` conflitos cryptarithm auditados; ambos tinham operador presente so na query | bloqueia cherry-pick dos 2 acertos aparentes |
 | V357 bit global ternary CPU gate | `214/315`, `equation=63`, `bit=151`, `13` ganhos, `0` perdas | novo teacher CPU para bit; libera somente V358/V359 smoke |
-| V358 V357 bit ternary dataset | `1152` train, `288` val, `0` overlap por `id`/`prompt_sha256`, V286 real gate aprovado | unica fonte atual para smoke V359 |
+| V358 V357 bit ternary dataset | `1152` train, `288` val, `0` overlap por `id`/`prompt_sha256`, V286 real gate aprovado | liberou somente smoke V359 |
+| V359 checkpoint-2 weak eval | `190/315`, `equation=56`, `bit=134`, truncation `1` | rejeitado; prova que V358 nao transferiu para adapter-only |
 | V348 residual audit | `92` equation misses, `24` bit misses | fila unica do proximo CPU gate |
 | V349 discussion `689915` | tokens simples, cobertura de operacoes raras, min-logprob | orientar formato de traces futuros |
 | V349 discussion `688461` | taxonomia reversa e gramatica booleana dinamica | orientar DSL CPU |
@@ -372,7 +374,7 @@ Decisao: libera upload HF e V359 smoke curto, nao libera full/package/submit.
 
 Objetivo: verificar se o ganho V357 transfere para LoRA adapter-only. Esta e a primeira tentativa com sinal CPU grande o bastante para justificar GPU apos a falha V352.
 
-Status: proxima acao.
+Status: concluido e rejeitado.
 
 Configuracao obrigatoria:
 
@@ -396,6 +398,36 @@ Promocao:
 - se passar weak, rodar full official-like;
 - se full `>823/947`, packagear e so entao considerar Kaggle submit.
 
+Resultado medido:
+
+- Train job HF A100: `https://huggingface.co/jobs/felipesp1983/6a0598743308d79117b8f539`.
+- Output repo: `felipesp1983/kg1-nemotron-lora-v359-nemo-a100-v358-bit-ternary-v290ckpt6`.
+- Checkpoints completos: `checkpoint-2`, `checkpoint-4`, `final`.
+- Weak eval HF H200: `https://huggingface.co/jobs/felipesp1983/6a059efce48bea4538b9c865`.
+- Checkpoint-2: `190/315`, `equation_transform=56/155`, `bit_manipulation=134/160`, truncation `1`.
+- Decisao FinOps: weak eval cancelado apos checkpoint-2, porque o primeiro candidato ficou abaixo de `192/315`, abaixo de `bit>=136` e com truncation regressivo.
+
+Decisao: V359 nao libera full eval, package ou Kaggle submit. Nao continuar checkpoint-4/final sem nova evidencia independente, porque o primeiro checkpoint ja falhou no gate.
+
+### 10. V360 - Auditoria pos-falha de transferencia e nova rota CPU
+
+Objetivo: parar de repetir SFT bit puro e descobrir por que o ganho CPU V357 nao vira LoRA.
+
+Status: proxima acao.
+
+Escopo:
+
+- comparar V359 checkpoint-2 contra a familia bit do baseline assim que houver predicoes completas; se nao houver artefato completo, usar apenas o resumo e nao gastar outro H200 so para auditoria;
+- identificar se a falha veio de formato de trace, truncation, resposta final, excesso de tokens ou incapacidade de memorizar regra global ternaria;
+- voltar para CPU gate, nao para outro HF imediato;
+- testar uma rota mais objetiva: traces ainda mais curtos, resposta first-token mais simples, ou dataset de classificacao de regra antes de gerar resposta.
+
+Gate:
+
+- nenhum novo HF enquanto nao houver um novo dataset que explique a falha V359;
+- qualquer V360/V361 deve provar em CPU que o formato novo preserva os `13` ganhos V357 e nao reintroduz truncation;
+- proximo HF so pode ser `max_steps<=2` ate primeiro weak eval.
+
 ## Removido do plano ativo
 
 Estes itens nao devem ser reexecutados como acao principal. So podem voltar se um novo CPU gate provar uma razao nova.
@@ -413,8 +445,10 @@ Estes itens nao devem ser reexecutados como acao principal. So podem voltar se u
 | V355 equation conflict cherry-pick | bloqueado: 2 acertos potenciais dependem de conflitos sem desempate label-free |
 | V356 query-only operator conflicts | bloqueado: os 2 acertos aparentes de equation exigiriam escolher operador que nao aparece nos exemplos |
 | Mais HF sobre V351/V352 | removido; V352 ja falhou e V358 substitui a rota com sinal CPU maior |
+| Mais HF sobre V358/V359 sem auditoria | removido; V359 checkpoint-2 caiu para `190/315`, bit `134`, truncation `1` |
 | Checkpoints restantes V346 4/6 | nao avaliar sem novo sinal independente |
 | Checkpoints restantes V352 4/6/8 | bloqueados por FinOps; checkpoint-2 ja caiu abaixo do gate |
+| V359 checkpoint-4/final weak eval | cancelado por FinOps; checkpoint-2 ja violou total, bit e truncation |
 | Mais epochs/LR/checkpoints sem CPU gate | removido por FinOps |
 | `eval_loss` como criterio de promocao | removido; ACC e o criterio |
 | Adapter soups | testado; nao moveu equation |
@@ -443,4 +477,4 @@ Estes itens nao devem ser reexecutados como acao principal. So podem voltar se u
 
 ## Proxima acao unica
 
-Upload do dataset V358 para HF, criar/validar launcher V359 e rodar apenas o smoke curto com kill-switch. Full/package/submit continuam bloqueados ate ganho adapter-only medido.
+Implementar V360 pos-falha: auditar a transferencia V359, redesenhar o formato de transferencia em CPU e so entao considerar outro HF. Full/package/submit continuam bloqueados ate ganho adapter-only medido.
