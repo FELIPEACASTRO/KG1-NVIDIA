@@ -7,8 +7,8 @@
 
 ## Downloaded Inputs
 
-- `v398_checkpoint_2`: `artifacts/v399_v398_pairwise_complementarity/20260514T_v399_pairwise/inputs/v398_checkpoint_2/v398_hf_weak_v398_sft_reconstructed_checkpoint_2_v221_contract_predictions.csv`
-- `v398_checkpoint_4`: `artifacts/v399_v398_pairwise_complementarity/20260514T_v399_pairwise/inputs/v398_checkpoint_4/v398_hf_weak_v398_sft_reconstructed_checkpoint_4_v221_contract_predictions.csv`
+- Full V398 prediction CSVs were downloaded from HF for the audit and intentionally not kept in git because they are reproducible from `felipesp1983/kg1-nemotron-lora-v398-nemo-h200-sft-reconstructed-v290ckpt6`.
+- Kept artifacts are the summary, manifest, script, and changed-row CSVs needed for the decision.
 
 ## Summary
 

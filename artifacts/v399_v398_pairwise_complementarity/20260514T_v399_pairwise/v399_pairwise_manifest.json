@@ -13,9 +13,11 @@
     "next_action": "Do not run more V397/V398 SFT; return to CPU solver/verifier DSL and baseline package."
   },
   "downloaded": {
-    "v398_checkpoint_2": "artifacts/v399_v398_pairwise_complementarity/20260514T_v399_pairwise/inputs/v398_checkpoint_2/v398_hf_weak_v398_sft_reconstructed_checkpoint_2_v221_contract_predictions.csv",
-    "v398_checkpoint_4": "artifacts/v399_v398_pairwise_complementarity/20260514T_v399_pairwise/inputs/v398_checkpoint_4/v398_hf_weak_v398_sft_reconstructed_checkpoint_4_v221_contract_predictions.csv"
+    "v398_checkpoint_2": "reproducible_from_hf_model_repo",
+    "v398_checkpoint_4": "reproducible_from_hf_model_repo"
   },
+  "downloaded_full_predictions_committed_to_git": false,
+  "downloaded_note": "Full V398 prediction CSV inputs are reproducible from HF and were not kept in git; changed-row and summary artifacts are kept.",
   "generated_at_utc": "2026-05-14T23:23:20.853363+00:00",
   "summaries": [
     {
