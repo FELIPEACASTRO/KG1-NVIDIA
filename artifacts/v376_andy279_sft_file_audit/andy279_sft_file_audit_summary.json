@@ -1,0 +1,1248 @@
+{
+  "generated_at_utc": "2026-05-14T00:00:00Z",
+  "file_hashes": {
+    "competition_train_csv": {
+      "path": "C:\\Users\\davis\\Downloads\\competition_train.csv",
+      "bytes": 3069304,
+      "sha256": "d204af160633b638448723a437aa51c0db70fd0b64ff92f6ad6f52e5ac6377fa"
+    },
+    "sft_reconstructed_jsonl": {
+      "path": "C:\\Users\\davis\\Downloads\\sft_reconstructed.jsonl",
+      "bytes": 54328626,
+      "sha256": "e385421e85881a406144e2e1166961ef21b0b9063077c908f41e626e01681609"
+    },
+    "sft_md": {
+      "path": "C:\\Users\\davis\\Downloads\\Nemotron Reasoning Challenge — SFT Data.md",
+      "bytes": 4347,
+      "sha256": "ccedc438981d8aa5a1b1b659f7c8d6bd58af6eda4329838c32dd4b132436a3e1"
+    },
+    "zip": {
+      "path": "C:\\Users\\davis\\Downloads\\nemotron-reasoning-challenge-complete.zip",
+      "bytes": 41281191,
+      "sha256": "79a68541451bd6d7c13b6a97f9da424df80727827d593723e0eb5ca11d3d5a26"
+    },
+    "report_md": {
+      "path": "C:\\Users\\davis\\Downloads\\Relatório_ Dataset andy279_nemotron-reasoning-challenge.md",
+      "bytes": 5551,
+      "sha256": "6b16e14312a965b918cf04748c6428a73e50d8429dfe70e6652e9ff806234c14"
+    }
+  },
+  "train_csv": {
+    "rows": 9500,
+    "columns": [
+      "id",
+      "prompt",
+      "answer"
+    ],
+    "unique_ids": 9500,
+    "duplicate_id_count": 0,
+    "family_counts": {
+      "bit_manipulation": 1602,
+      "cipher": 1576,
+      "numeral": 1576,
+      "unit_conversion": 1594,
+      "gravity": 1597,
+      "equation_transform": 1555
+    },
+    "sha256": "d204af160633b638448723a437aa51c0db70fd0b64ff92f6ad6f52e5ac6377fa",
+    "matches_official_jasonkung98_sha256": true
+  },
+  "standalone_sft_reconstructed_jsonl": {
+    "source": "standalone:sft_reconstructed",
+    "rows": 9500,
+    "malformed": 0,
+    "no_boxed_final": 34,
+    "unique_ids": 9500,
+    "duplicate_id_count": 0,
+    "role_shapes": {
+      "user,assistant": 9500
+    },
+    "category_counts": {
+      "bit_manipulation": 1602,
+      "cipher": 1576,
+      "numeral": 1576,
+      "unit_conversion": 1594,
+      "gravity": 1597,
+      "cryptarithm_deduce": 659,
+      "equation_numeric_deduce": 596,
+      "cryptarithm_guess": 164,
+      "equation_numeric_guess": 136
+    },
+    "status_counts": {
+      "rule_found": 8333,
+      "hypothesis_formed": 249,
+      "rule_unknown": 918
+    },
+    "known_train_ids": 9500,
+    "boxed_matches_train_answer": 9327,
+    "boxed_mismatches_train_answer": 173,
+    "assistant_char_stats": {
+      "min": 212,
+      "p50": 3854,
+      "p90": 9402,
+      "p99": 11121,
+      "max": 13035,
+      "mean": 4592.896421052632
+    },
+    "user_char_stats": {
+      "min": 260,
+      "p50": 364,
+      "p90": 551,
+      "p99": 593,
+      "max": 593,
+      "mean": 384.5158947368421
+    },
+    "boxed_answer_len_stats": {
+      "min": 0,
+      "p50": 5,
+      "p90": 24,
+      "p99": 33,
+      "max": 39,
+      "mean": 8.367052631578947
+    },
+    "mismatch_first25": [
+      {
+        "line": 40,
+        "id": "012cab1f",
+        "family": "equation_transform",
+        "category": "cryptarithm_deduce",
+        "status": "rule_unknown",
+        "boxed": "–",
+        "answer": "|@{"
+      },
+      {
+        "line": 61,
+        "id": "01b2aa67",
+        "family": "equation_transform",
+        "category": "cryptarithm_deduce",
+        "status": "rule_unknown",
+        "boxed": "+",
+        "answer": "+}"
+      },
+      {
+        "line": 98,
+        "id": "02664ad5",
+        "family": "equation_transform",
+        "category": "cryptarithm_deduce",
+        "status": "rule_unknown",
+        "boxed": ":",
+        "answer": ":}'"
+      },
+      {
+        "line": 160,
+        "id": "042f1e53",
+        "family": "equation_transform",
+        "category": "cryptarithm_deduce",
+        "status": "rule_unknown",
+        "boxed": "-",
+        "answer": "-}"
+      },
+      {
+        "line": 167,
+        "id": "0454705a",
+        "family": "equation_transform",
+        "category": "cryptarithm_deduce",
+        "status": "rule_unknown",
+        "boxed": "%",
+        "answer": "%}|"
+      },
+      {
+        "line": 397,
+        "id": "0a94b2de",
+        "family": "equation_transform",
+        "category": "cryptarithm_deduce",
+        "status": "rule_unknown",
+        "boxed": "@",
+        "answer": "@}`@"
+      },
+      {
+        "line": 464,
+        "id": "0c8a8a16",
+        "family": "equation_transform",
+        "category": "equation_numeric_deduce",
+        "status": "hypothesis_formed",
+        "boxed": "82",
+        "answer": "{17"
+      },
+      {
+        "line": 479,
+        "id": "0cf301cf",
+        "family": "equation_transform",
+        "category": "cryptarithm_deduce",
+        "status": "rule_unknown",
+        "boxed": ":#)<",
+        "answer": "{<"
+      },
+      {
+        "line": 485,
+        "id": "0d2e94ff",
+        "family": "equation_transform",
+        "category": "cryptarithm_deduce",
+        "status": "rule_unknown",
+        "boxed": "",
+        "answer": "}}^"
+      },
+      {
+        "line": 492,
+        "id": "0d542478",
+        "family": "equation_transform",
+        "category": "cryptarithm_deduce",
+        "status": "rule_unknown",
+        "boxed": "",
+        "answer": "}<"
+      },
+      {
+        "line": 514,
+        "id": "0dcfd566",
+        "family": "equation_transform",
+        "category": "cryptarithm_deduce",
+        "status": "rule_found",
+        "boxed": "–",
+        "answer": ")@\\{"
+      },
+      {
+        "line": 533,
+        "id": "0e375364",
+        "family": "equation_transform",
+        "category": "cryptarithm_deduce",
+        "status": "rule_unknown",
+        "boxed": "",
+        "answer": "}/@"
+      },
+      {
+        "line": 633,
+        "id": "10a94678",
+        "family": "equation_transform",
+        "category": "cryptarithm_deduce",
+        "status": "rule_unknown",
+        "boxed": "\"\"\\",
+        "answer": "\"\"\\}"
+      },
+      {
+        "line": 636,
+        "id": "10b71e8a",
+        "family": "equation_transform",
+        "category": "cryptarithm_deduce",
+        "status": "rule_unknown",
+        "boxed": "#",
+        "answer": "#}:"
+      },
+      {
+        "line": 831,
+        "id": "156e8c2c",
+        "family": "equation_transform",
+        "category": "cryptarithm_deduce",
+        "status": "rule_unknown",
+        "boxed": "–",
+        "answer": "{[#"
+      },
+      {
+        "line": 836,
+        "id": "15950a46",
+        "family": "equation_transform",
+        "category": "cryptarithm_guess",
+        "status": "rule_unknown",
+        "boxed": "",
+        "answer": "}@<["
+      },
+      {
+        "line": 885,
+        "id": "17093b07",
+        "family": "equation_transform",
+        "category": "cryptarithm_deduce",
+        "status": "rule_unknown",
+        "boxed": ":<`",
+        "answer": ">{{"
+      },
+      {
+        "line": 949,
+        "id": "18bce168",
+        "family": "equation_transform",
+        "category": "cryptarithm_guess",
+        "status": "rule_unknown",
+        "boxed": "&",
+        "answer": "@&`{"
+      },
+      {
+        "line": 966,
+        "id": "193c21d5",
+        "family": "equation_transform",
+        "category": "cryptarithm_deduce",
+        "status": "rule_unknown",
+        "boxed": "",
+        "answer": "}>[["
+      },
+      {
+        "line": 1062,
+        "id": "1c2e9814",
+        "family": "equation_transform",
+        "category": "cryptarithm_deduce",
+        "status": "rule_unknown",
+        "boxed": "'?",
+        "answer": "'?}"
+      },
+      {
+        "line": 1083,
+        "id": "1cce5949",
+        "family": "equation_transform",
+        "category": "cryptarithm_guess",
+        "status": "rule_unknown",
+        "boxed": "[?",
+        "answer": "[?}"
+      },
+      {
+        "line": 1088,
+        "id": "1d10ccaf",
+        "family": "equation_transform",
+        "category": "cryptarithm_deduce",
+        "status": "rule_found",
+        "boxed": "–",
+        "answer": "<({&"
+      },
+      {
+        "line": 1089,
+        "id": "1d15b7e6",
+        "family": "equation_transform",
+        "category": "cryptarithm_deduce",
+        "status": "rule_unknown",
+        "boxed": "|[$[",
+        "answer": "|['{"
+      },
+      {
+        "line": 1175,
+        "id": "1f64478c",
+        "family": "equation_transform",
+        "category": "cryptarithm_deduce",
+        "status": "rule_unknown",
+        "boxed": "#!>\\",
+        "answer": ":{"
+      },
+      {
+        "line": 1266,
+        "id": "21b90d9f",
+        "family": "equation_transform",
+        "category": "cryptarithm_deduce",
+        "status": "rule_found",
+        "boxed": "–",
+        "answer": "){?{"
+      }
+    ],
+    "unknown_id_samples": []
+  },
+  "zip_entries": [
+    {
+      "name": "nemotron-reasoning-challenge/",
+      "size": 0,
+      "compressed_size": 0,
+      "sha256": ""
+    },
+    {
+      "name": "nemotron-reasoning-challenge/.cache/",
+      "size": 0,
+      "compressed_size": 0,
+      "sha256": ""
+    },
+    {
+      "name": "nemotron-reasoning-challenge/.cache/huggingface/",
+      "size": 0,
+      "compressed_size": 0,
+      "sha256": ""
+    },
+    {
+      "name": "nemotron-reasoning-challenge/.cache/huggingface/CACHEDIR.TAG",
+      "size": 191,
+      "compressed_size": 146,
+      "sha256": "f6572428f6d5e1575e73a1502895a8731f10757dfbb634909c6e154b849af91d"
+    },
+    {
+      "name": "nemotron-reasoning-challenge/.cache/huggingface/download/",
+      "size": 0,
+      "compressed_size": 0,
+      "sha256": ""
+    },
+    {
+      "name": "nemotron-reasoning-challenge/.cache/huggingface/download/README.md.metadata",
+      "size": 101,
+      "compressed_size": 74,
+      "sha256": "472043af83fd4297504aaa4d420afd90170c682efbf5bbf428d8ef9ca9b7475d"
+    },
+    {
+      "name": "nemotron-reasoning-challenge/.cache/huggingface/.gitignore",
+      "size": 1,
+      "compressed_size": 1,
+      "sha256": "684888c0ebb17f374298b65ee2807526c066094c701bcc7ebbe1c1095f494fc1"
+    },
+    {
+      "name": "nemotron-reasoning-challenge/README.md",
+      "size": 4347,
+      "compressed_size": 1855,
+      "sha256": "ccedc438981d8aa5a1b1b659f7c8d6bd58af6eda4329838c32dd4b132436a3e1"
+    },
+    {
+      "name": "nemotron-reasoning-challenge/sft_reconstructed.jsonl",
+      "size": 54328626,
+      "compressed_size": 11178538,
+      "sha256": "e385421e85881a406144e2e1166961ef21b0b9063077c908f41e626e01681609"
+    },
+    {
+      "name": "nemotron-reasoning-challenge/sft_train_reconstructed.jsonl",
+      "size": 96207995,
+      "compressed_size": 20555095,
+      "sha256": "1434811d65cbf68fd17d391cb2fce77426183666f59d7cf6ca4fddf8b4fe5a91"
+    },
+    {
+      "name": "nemotron-reasoning-challenge/problems.jsonl",
+      "size": 931581,
+      "compressed_size": 114237,
+      "sha256": "5b536b97b402fab985312003983bf4c59a928eb08dbb2705ca77d1030d4cf24e"
+    },
+    {
+      "name": "nemotron-reasoning-challenge/corpus.jsonl",
+      "size": 42571300,
+      "compressed_size": 8247339,
+      "sha256": "7ac9e8e267397f1dbcce8d015c253460fec543cab20a078fcf64a53c6000de23"
+    },
+    {
+      "name": "nemotron-reasoning-challenge/generation.jsonl",
+      "size": 4765148,
+      "compressed_size": 543550,
+      "sha256": "42eb76d13bd81ea3ce6b55120a3e2a23782c18563e05dd4ac9eea59d631b9fbc"
+    },
+    {
+      "name": "nemotron-reasoning-challenge/competition_train.csv",
+      "size": 3069304,
+      "compressed_size": 633677,
+      "sha256": "d204af160633b638448723a437aa51c0db70fd0b64ff92f6ad6f52e5ac6377fa"
+    },
+    {
+      "name": "nemotron-reasoning-challenge/competition_test.csv",
+      "size": 1461,
+      "compressed_size": 614,
+      "sha256": "c59d7eb0464b0a872a0c3f81e60cd6643fc1932a2dedaa05972bfd02cc638589"
+    },
+    {
+      "name": "nemotron-reasoning-challenge/DATASET_REPORT.md",
+      "size": 5551,
+      "compressed_size": 2425,
+      "sha256": "6b16e14312a965b918cf04748c6428a73e50d8429dfe70e6652e9ff806234c14"
+    }
+  ],
+  "zip_summaries": {
+    "problems_jsonl": {
+      "rows": 9500,
+      "unique_ids": 9500,
+      "duplicate_id_count": 0,
+      "category_counts": {
+        "bit_manipulation": 1602,
+        "cipher": 1576,
+        "numeral": 1576,
+        "unit_conversion": 1594,
+        "gravity": 1597,
+        "cryptarithm_deduce": 659,
+        "equation_numeric_deduce": 596,
+        "cryptarithm_guess": 164,
+        "equation_numeric_guess": 136
+      },
+      "status_counts": {
+        "rule_found": 8333,
+        "hypothesis_formed": 249,
+        "rule_unknown": 918
+      },
+      "known_train_ids": 9500,
+      "submission_matches_train_answer": 5143,
+      "submission_mismatches_train_answer": 4357,
+      "mismatch_first25": [
+        {
+          "id": "000b53cf",
+          "category": "bit_manipulation",
+          "status": "hypothesis_formed",
+          "submission": "00011111",
+          "answer": "01000011"
+        },
+        {
+          "id": "00208201",
+          "category": "unit_conversion",
+          "status": "rule_found",
+          "submission": "16.634",
+          "answer": "16.65"
+        },
+        {
+          "id": "0040ff76",
+          "category": "gravity",
+          "status": "rule_found",
+          "submission": "154.631",
+          "answer": "154.62"
+        },
+        {
+          "id": "00457d26",
+          "category": "cryptarithm_deduce",
+          "status": "rule_unknown",
+          "submission": "[[!'",
+          "answer": "@&"
+        },
+        {
+          "id": "00463d04",
+          "category": "gravity",
+          "status": "rule_found",
+          "submission": "50.507",
+          "answer": "50.51"
+        },
+        {
+          "id": "0047365c",
+          "category": "unit_conversion",
+          "status": "rule_found",
+          "submission": "10.608",
+          "answer": "10.62"
+        },
+        {
+          "id": "0059df78",
+          "category": "unit_conversion",
+          "status": "rule_found",
+          "submission": "43.433",
+          "answer": "43.43"
+        },
+        {
+          "id": "00619cba",
+          "category": "gravity",
+          "status": "rule_found",
+          "submission": "91.829",
+          "answer": "91.84"
+        },
+        {
+          "id": "00662ac2",
+          "category": "gravity",
+          "status": "rule_found",
+          "submission": "11.780",
+          "answer": "11.78"
+        },
+        {
+          "id": "006a46d3",
+          "category": "unit_conversion",
+          "status": "rule_found",
+          "submission": "18.987",
+          "answer": "19.00"
+        },
+        {
+          "id": "0073bcbb",
+          "category": "gravity",
+          "status": "rule_found",
+          "submission": "20.326",
+          "answer": "20.33"
+        },
+        {
+          "id": "00890aff",
+          "category": "bit_manipulation",
+          "status": "hypothesis_formed",
+          "submission": "01111100",
+          "answer": "01110000"
+        },
+        {
+          "id": "00a77d86",
+          "category": "unit_conversion",
+          "status": "rule_found",
+          "submission": "20.552",
+          "answer": "20.56"
+        },
+        {
+          "id": "00c032a8",
+          "category": "cryptarithm_deduce",
+          "status": "rule_unknown",
+          "submission": "))\\)",
+          "answer": "\\^?"
+        },
+        {
+          "id": "00c8ab45",
+          "category": "unit_conversion",
+          "status": "rule_found",
+          "submission": "23.743",
+          "answer": "23.75"
+        },
+        {
+          "id": "00d1932c",
+          "category": "unit_conversion",
+          "status": "rule_found",
+          "submission": "12.471",
+          "answer": "12.48"
+        },
+        {
+          "id": "00d8b3db",
+          "category": "equation_numeric_deduce",
+          "status": "hypothesis_formed",
+          "submission": "17",
+          "answer": "17/"
+        },
+        {
+          "id": "00ec1c63",
+          "category": "gravity",
+          "status": "rule_found",
+          "submission": "7.659",
+          "answer": "7.66"
+        },
+        {
+          "id": "00ed1836",
+          "category": "gravity",
+          "status": "rule_found",
+          "submission": "24.277",
+          "answer": "24.28"
+        },
+        {
+          "id": "010055e2",
+          "category": "unit_conversion",
+          "status": "rule_found",
+          "submission": "28.254",
+          "answer": "28.29"
+        },
+        {
+          "id": "012cab1f",
+          "category": "cryptarithm_deduce",
+          "status": "rule_unknown",
+          "submission": "{`(&",
+          "answer": "|@{"
+        },
+        {
+          "id": "012fb81b",
+          "category": "bit_manipulation",
+          "status": "hypothesis_formed",
+          "submission": "10010100",
+          "answer": "10000100"
+        },
+        {
+          "id": "0140788e",
+          "category": "unit_conversion",
+          "status": "rule_found",
+          "submission": "38.735",
+          "answer": "38.74"
+        },
+        {
+          "id": "01466f0b",
+          "category": "unit_conversion",
+          "status": "rule_found",
+          "submission": "46.883",
+          "answer": "46.91"
+        },
+        {
+          "id": "014c4f83",
+          "category": "unit_conversion",
+          "status": "rule_found",
+          "submission": "54.277",
+          "answer": "54.28"
+        }
+      ]
+    },
+    "corpus_jsonl": {
+      "rows": 17963,
+      "unique_problem_ids": 17963,
+      "duplicate_problem_id_count": 0,
+      "category_counts": {
+        "matching": 4515,
+        "bit_manipulation": 1602,
+        "cipher": 1576,
+        "numeral": 1576,
+        "unit_conversion": 1594,
+        "splitting": 1500,
+        "spelling": 648,
+        "gravity": 1597,
+        "cryptarithm_deduce": 659,
+        "concatenation": 1500,
+        "equation_numeric_deduce": 596,
+        "lstrip": 300,
+        "cryptarithm_guess": 164,
+        "equation_numeric_guess": 136
+      },
+      "segment_counts": {
+        "synthetic.jsonl": 17963
+      },
+      "included_counts": {
+        "True": 17963
+      },
+      "token_count_stats": {
+        "min": 157,
+        "p50": 2723,
+        "p90": 6144,
+        "p99": 7482,
+        "max": 7999,
+        "mean": 2813.8055447308357
+      },
+      "masked_token_count_stats": {
+        "min": 86,
+        "p50": 259,
+        "p90": 1068,
+        "p99": 1949,
+        "max": 2094,
+        "mean": 538.4690196515058
+      },
+      "unmasked_token_count_stats": {
+        "min": 42,
+        "p50": 2299,
+        "p90": 6012,
+        "p99": 7186,
+        "max": 7702,
+        "mean": 2275.33652507933
+      },
+      "answer_char_stats": {
+        "min": 1,
+        "p50": 28,
+        "p90": 3027,
+        "p99": 5908,
+        "max": 6154,
+        "mean": 794.2586984356733
+      }
+    },
+    "generation_jsonl": {
+      "rows": 9500,
+      "known_train_ids": 9500,
+      "family_counts": {
+        "bit_manipulation": 1602,
+        "cipher": 1576,
+        "numeral": 1576,
+        "unit_conversion": 1594,
+        "gravity": 1597,
+        "equation_transform": 1555
+      },
+      "any_correct_counts": {
+        "False": 4738,
+        "True": 4762
+      },
+      "latest_correct_counts": {
+        "False": 4911,
+        "True": 4589
+      },
+      "by_family": {
+        "bit_manipulation": {
+          "rows": 1602,
+          "any_correct": 153,
+          "latest_correct": 144
+        },
+        "cipher": {
+          "rows": 1576,
+          "any_correct": 573,
+          "latest_correct": 525
+        },
+        "numeral": {
+          "rows": 1576,
+          "any_correct": 1531,
+          "latest_correct": 1522
+        },
+        "unit_conversion": {
+          "rows": 1594,
+          "any_correct": 1259,
+          "latest_correct": 1217
+        },
+        "gravity": {
+          "rows": 1597,
+          "any_correct": 1055,
+          "latest_correct": 995
+        },
+        "equation_transform": {
+          "rows": 1555,
+          "any_correct": 191,
+          "latest_correct": 186
+        }
+      },
+      "num_runs_counts": {
+        "2": 1550,
+        "4": 2,
+        "3": 20,
+        "1": 7928
+      },
+      "latest_num_gen_tokens_stats": {
+        "min": 78.0,
+        "p50": 7102.0,
+        "p90": 7680.0,
+        "p99": 7680.0,
+        "max": 7680.0,
+        "mean": 5075.568210526316
+      },
+      "latest_avg_logprob_stats": {
+        "min": -1.1316,
+        "p50": -0.3964,
+        "p90": -0.2301,
+        "p99": -0.1638,
+        "max": -0.0788,
+        "mean": -0.4194215157894737
+      },
+      "latest_min_logprob_stats": {
+        "min": -33.3866,
+        "p50": -19.75,
+        "p90": 0.0,
+        "p99": 0.0,
+        "max": 0.0,
+        "mean": -16.46217267368421
+      },
+      "weak_family_bad_examples_first10": [
+        {
+          "id": "00066667",
+          "family": "bit_manipulation",
+          "answer": "10010111",
+          "latest_extracted": "11011101",
+          "latest_num_gen_tokens": 7680,
+          "latest_avg_logprob": -0.4643,
+          "latest_min_logprob": -21.4214
+        },
+        {
+          "id": "000b53cf",
+          "family": "bit_manipulation",
+          "answer": "01000011",
+          "latest_extracted": "3",
+          "latest_num_gen_tokens": 7680,
+          "latest_avg_logprob": -0.3559,
+          "latest_min_logprob": 0.0
+        },
+        {
+          "id": "0031df9c",
+          "family": "bit_manipulation",
+          "answer": "00110100",
+          "latest_extracted": "2",
+          "latest_num_gen_tokens": 7680,
+          "latest_avg_logprob": -0.3102,
+          "latest_min_logprob": -22.1405
+        },
+        {
+          "id": "00457d26",
+          "family": "equation_transform",
+          "answer": "@&",
+          "latest_extracted": "`*`?`",
+          "latest_num_gen_tokens": 7680,
+          "latest_avg_logprob": -0.5257,
+          "latest_min_logprob": 0.0
+        },
+        {
+          "id": "004ef7c7",
+          "family": "bit_manipulation",
+          "answer": "11111111",
+          "latest_extracted": "1110100",
+          "latest_num_gen_tokens": 7680,
+          "latest_avg_logprob": -0.4446,
+          "latest_min_logprob": 0.0
+        },
+        {
+          "id": "00754598",
+          "family": "bit_manipulation",
+          "answer": "11101111",
+          "latest_extracted": "7",
+          "latest_num_gen_tokens": 7680,
+          "latest_avg_logprob": -0.4487,
+          "latest_min_logprob": 0.0
+        },
+        {
+          "id": "00890aff",
+          "family": "bit_manipulation",
+          "answer": "01110000",
+          "latest_extracted": "0",
+          "latest_num_gen_tokens": 7680,
+          "latest_avg_logprob": -0.3934,
+          "latest_min_logprob": 0.0
+        },
+        {
+          "id": "008b52fd",
+          "family": "bit_manipulation",
+          "answer": "01100101",
+          "latest_extracted": "1",
+          "latest_num_gen_tokens": 7680,
+          "latest_avg_logprob": -0.2756,
+          "latest_min_logprob": -21.9576
+        },
+        {
+          "id": "009a74b6",
+          "family": "bit_manipulation",
+          "answer": "11111011",
+          "latest_extracted": "2",
+          "latest_num_gen_tokens": 7680,
+          "latest_avg_logprob": -0.4488,
+          "latest_min_logprob": 0.0
+        },
+        {
+          "id": "00c032a8",
+          "family": "equation_transform",
+          "answer": "\\^?",
+          "latest_extracted": "...",
+          "latest_num_gen_tokens": 7680,
+          "latest_avg_logprob": -0.6205,
+          "latest_min_logprob": 0.0
+        }
+      ]
+    },
+    "zip_sft_reconstructed_jsonl": {
+      "source": "zip:sft_reconstructed",
+      "rows": 9500,
+      "malformed": 0,
+      "no_boxed_final": 34,
+      "unique_ids": 9500,
+      "duplicate_id_count": 0,
+      "role_shapes": {
+        "user,assistant": 9500
+      },
+      "category_counts": {
+        "bit_manipulation": 1602,
+        "cipher": 1576,
+        "numeral": 1576,
+        "unit_conversion": 1594,
+        "gravity": 1597,
+        "cryptarithm_deduce": 659,
+        "equation_numeric_deduce": 596,
+        "cryptarithm_guess": 164,
+        "equation_numeric_guess": 136
+      },
+      "status_counts": {
+        "rule_found": 8333,
+        "hypothesis_formed": 249,
+        "rule_unknown": 918
+      },
+      "known_train_ids": 9500,
+      "boxed_matches_train_answer": 9327,
+      "boxed_mismatches_train_answer": 173,
+      "assistant_char_stats": {
+        "min": 212,
+        "p50": 3854,
+        "p90": 9402,
+        "p99": 11121,
+        "max": 13035,
+        "mean": 4592.896421052632
+      },
+      "user_char_stats": {
+        "min": 260,
+        "p50": 364,
+        "p90": 551,
+        "p99": 593,
+        "max": 593,
+        "mean": 384.5158947368421
+      },
+      "boxed_answer_len_stats": {
+        "min": 0,
+        "p50": 5,
+        "p90": 24,
+        "p99": 33,
+        "max": 39,
+        "mean": 8.367052631578947
+      },
+      "mismatch_first25": [
+        {
+          "line": 40,
+          "id": "012cab1f",
+          "family": "equation_transform",
+          "category": "cryptarithm_deduce",
+          "status": "rule_unknown",
+          "boxed": "–",
+          "answer": "|@{"
+        },
+        {
+          "line": 61,
+          "id": "01b2aa67",
+          "family": "equation_transform",
+          "category": "cryptarithm_deduce",
+          "status": "rule_unknown",
+          "boxed": "+",
+          "answer": "+}"
+        },
+        {
+          "line": 98,
+          "id": "02664ad5",
+          "family": "equation_transform",
+          "category": "cryptarithm_deduce",
+          "status": "rule_unknown",
+          "boxed": ":",
+          "answer": ":}'"
+        },
+        {
+          "line": 160,
+          "id": "042f1e53",
+          "family": "equation_transform",
+          "category": "cryptarithm_deduce",
+          "status": "rule_unknown",
+          "boxed": "-",
+          "answer": "-}"
+        },
+        {
+          "line": 167,
+          "id": "0454705a",
+          "family": "equation_transform",
+          "category": "cryptarithm_deduce",
+          "status": "rule_unknown",
+          "boxed": "%",
+          "answer": "%}|"
+        },
+        {
+          "line": 397,
+          "id": "0a94b2de",
+          "family": "equation_transform",
+          "category": "cryptarithm_deduce",
+          "status": "rule_unknown",
+          "boxed": "@",
+          "answer": "@}`@"
+        },
+        {
+          "line": 464,
+          "id": "0c8a8a16",
+          "family": "equation_transform",
+          "category": "equation_numeric_deduce",
+          "status": "hypothesis_formed",
+          "boxed": "82",
+          "answer": "{17"
+        },
+        {
+          "line": 479,
+          "id": "0cf301cf",
+          "family": "equation_transform",
+          "category": "cryptarithm_deduce",
+          "status": "rule_unknown",
+          "boxed": ":#)<",
+          "answer": "{<"
+        },
+        {
+          "line": 485,
+          "id": "0d2e94ff",
+          "family": "equation_transform",
+          "category": "cryptarithm_deduce",
+          "status": "rule_unknown",
+          "boxed": "",
+          "answer": "}}^"
+        },
+        {
+          "line": 492,
+          "id": "0d542478",
+          "family": "equation_transform",
+          "category": "cryptarithm_deduce",
+          "status": "rule_unknown",
+          "boxed": "",
+          "answer": "}<"
+        },
+        {
+          "line": 514,
+          "id": "0dcfd566",
+          "family": "equation_transform",
+          "category": "cryptarithm_deduce",
+          "status": "rule_found",
+          "boxed": "–",
+          "answer": ")@\\{"
+        },
+        {
+          "line": 533,
+          "id": "0e375364",
+          "family": "equation_transform",
+          "category": "cryptarithm_deduce",
+          "status": "rule_unknown",
+          "boxed": "",
+          "answer": "}/@"
+        },
+        {
+          "line": 633,
+          "id": "10a94678",
+          "family": "equation_transform",
+          "category": "cryptarithm_deduce",
+          "status": "rule_unknown",
+          "boxed": "\"\"\\",
+          "answer": "\"\"\\}"
+        },
+        {
+          "line": 636,
+          "id": "10b71e8a",
+          "family": "equation_transform",
+          "category": "cryptarithm_deduce",
+          "status": "rule_unknown",
+          "boxed": "#",
+          "answer": "#}:"
+        },
+        {
+          "line": 831,
+          "id": "156e8c2c",
+          "family": "equation_transform",
+          "category": "cryptarithm_deduce",
+          "status": "rule_unknown",
+          "boxed": "–",
+          "answer": "{[#"
+        },
+        {
+          "line": 836,
+          "id": "15950a46",
+          "family": "equation_transform",
+          "category": "cryptarithm_guess",
+          "status": "rule_unknown",
+          "boxed": "",
+          "answer": "}@<["
+        },
+        {
+          "line": 885,
+          "id": "17093b07",
+          "family": "equation_transform",
+          "category": "cryptarithm_deduce",
+          "status": "rule_unknown",
+          "boxed": ":<`",
+          "answer": ">{{"
+        },
+        {
+          "line": 949,
+          "id": "18bce168",
+          "family": "equation_transform",
+          "category": "cryptarithm_guess",
+          "status": "rule_unknown",
+          "boxed": "&",
+          "answer": "@&`{"
+        },
+        {
+          "line": 966,
+          "id": "193c21d5",
+          "family": "equation_transform",
+          "category": "cryptarithm_deduce",
+          "status": "rule_unknown",
+          "boxed": "",
+          "answer": "}>[["
+        },
+        {
+          "line": 1062,
+          "id": "1c2e9814",
+          "family": "equation_transform",
+          "category": "cryptarithm_deduce",
+          "status": "rule_unknown",
+          "boxed": "'?",
+          "answer": "'?}"
+        },
+        {
+          "line": 1083,
+          "id": "1cce5949",
+          "family": "equation_transform",
+          "category": "cryptarithm_guess",
+          "status": "rule_unknown",
+          "boxed": "[?",
+          "answer": "[?}"
+        },
+        {
+          "line": 1088,
+          "id": "1d10ccaf",
+          "family": "equation_transform",
+          "category": "cryptarithm_deduce",
+          "status": "rule_found",
+          "boxed": "–",
+          "answer": "<({&"
+        },
+        {
+          "line": 1089,
+          "id": "1d15b7e6",
+          "family": "equation_transform",
+          "category": "cryptarithm_deduce",
+          "status": "rule_unknown",
+          "boxed": "|[$[",
+          "answer": "|['{"
+        },
+        {
+          "line": 1175,
+          "id": "1f64478c",
+          "family": "equation_transform",
+          "category": "cryptarithm_deduce",
+          "status": "rule_unknown",
+          "boxed": "#!>\\",
+          "answer": ":{"
+        },
+        {
+          "line": 1266,
+          "id": "21b90d9f",
+          "family": "equation_transform",
+          "category": "cryptarithm_deduce",
+          "status": "rule_found",
+          "boxed": "–",
+          "answer": "){?{"
+        }
+      ],
+      "unknown_id_samples": []
+    },
+    "zip_sft_train_reconstructed_jsonl": {
+      "source": "zip:sft_train_reconstructed",
+      "rows": 17963,
+      "malformed": 0,
+      "no_boxed_final": 527,
+      "unique_ids": 0,
+      "duplicate_id_count": 0,
+      "role_shapes": {
+        "user,assistant": 17963
+      },
+      "category_counts": {},
+      "status_counts": {},
+      "known_train_ids": 0,
+      "boxed_matches_train_answer": 0,
+      "boxed_mismatches_train_answer": 0,
+      "assistant_char_stats": {
+        "min": 112,
+        "p50": 3002,
+        "p90": 8675,
+        "p99": 10929,
+        "max": 13035,
+        "mean": 3241.4984134053334
+      },
+      "user_char_stats": {
+        "min": 260,
+        "p50": 530,
+        "p90": 2219,
+        "p99": 2665,
+        "max": 2754,
+        "mean": 864.881033234983
+      },
+      "boxed_answer_len_stats": {
+        "min": 0,
+        "p50": 10,
+        "p90": 30,
+        "p99": 58,
+        "max": 76,
+        "mean": 13.38312085954462
+      },
+      "mismatch_first25": [],
+      "unknown_id_samples": [
+        {
+          "line": 1,
+          "pid": "",
+          "category": "",
+          "status": "",
+          "user_head": "In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves opera"
+        },
+        {
+          "line": 2,
+          "pid": "",
+          "category": "",
+          "status": "",
+          "user_head": "In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves opera"
+        },
+        {
+          "line": 3,
+          "pid": "",
+          "category": "",
+          "status": "",
+          "user_head": "In Alice's Wonderland, secret encryption rules are used on text. Here are some examples:\nucoov pwgtfyoqg vorq yrjjoe -> "
+        },
+        {
+          "line": 4,
+          "pid": "",
+          "category": "",
+          "status": "",
+          "user_head": "In Alice's Wonderland, numbers are secretly converted into a different numeral system. Some examples are given below:\n11"
+        },
+        {
+          "line": 5,
+          "pid": "",
+          "category": "",
+          "status": "",
+          "user_head": "In Alice's Wonderland, secret encryption rules are used on text. Here are some examples:\nwkgqa lsrqaq wneeke -> mouse ch"
+        }
+      ]
+    }
+  },
+  "markdown_summaries": {
+    "sft_md": {
+      "bytes": 4347,
+      "lines": 143,
+      "urls": [
+        "https://www.kaggle.com/competitions/nvidia-nemotron-reasoning-challenge"
+      ],
+      "head": "---\nlicense: apache-2.0\ntask_categories:\n  - text-generation\nlanguage:\n  - en\ntags:\n  - reasoning\n  - math\n  - puzzles\n  - sft\n  - nemotron\nsize_categories:\n  - 10K<n<100K\ndataset_info:\n  - config_name: default\n    features:\n      - name: messages\n        list:\n          - name: role\n            dtype: string\n          - name: content\n            dtype: string\n    splits:\n      - name: train\n        num_examples: 49290\n      - name: validation\n        num_examples: 1165\nconfigs:\n  - config_name: default\n    data_files:\n      - split: train\n        path: sft_train.jsonl\n      - split: validation\n        path: sft_val.jsonl\n---\n\n# Nemotron Reasoning Challenge — SFT Data\n\nSupervised fine-tuning data for `nvidia/Nemotron-3-Nano-30B-A3B` on puzzles from the [NVIDIA Nemotron Reasoning Challenge](https://www.kaggle.com/competitions/nvidia-nemotron-reasoning-challenge) Kaggle competition.\n\n## Splits\n\n| Split | Examples | Unique puzzles | Description |\n|-------|----------|----------------|-------------|\n| `train` | 49,290 | 7,200 | Correct reasoning traces from teacher models + solvers |\n| `validation` | 1,165 | 1,123 | Held-out puzzles for evaluation (includes 399 unsolved transformation p"
+    },
+    "report_md": {
+      "bytes": 5551,
+      "lines": 127,
+      "urls": [],
+      "head": "# Relatório: Dataset andy279/nemotron-reasoning-challenge\n\n## Status do Acesso\n\nO dataset original `andy279/nemotron-reasoning-challenge` no Hugging Face é **gated (manual)**, o que significa que o acesso requer aprovação explícita do autor do repositório. O pedido de acesso foi enviado com sucesso usando o token `[REDACTED_HF_TOKEN]` (usuário: `felipesp1983`), mas está **aguardando aprovação** (\"awaiting a review from the repo authors\").\n\nTodos os métodos tentados para contornar essa restrição falharam com a mesma mensagem de erro 403, incluindo:\n- HF Hub SDK (snapshot_download, hf_hub_download, load_dataset)\n- Git clone com autenticação\n- API REST (resolve, parquet, rows endpoints)\n- Data Viewer / datasets-server API\n- Branch refs/convert/parquet\n- Wayback Machine / Internet Archive\n- Google Cache\n- Firecrawl MCP\n- Hugging Face MCP\n\n## O que foi obtido\n\nApesar de não ter sido possível baixar os arquivos `sft_train.jsonl` e `sft_val.jsonl` originais, consegui obter **dados equivalentes e complementares** de múltiplas fontes públicas.\n\n---\n\n## Estrutura do Dataset Original (do README obtido)\n\n| Split | Exemplos | Puzzles Únicos | Descrição |\n|-------|----------|--"
+    }
+  },
+  "findings": [
+    "competition_train.csv is byte-identical to official Kaggle train.csv / Jasonkung98 HF mirror.",
+    "problems.jsonl submissions are not all correct against train labels; use status/submission only as diagnostics, not training labels.",
+    "generation.jsonl contains per-run correctness/logprob metadata useful for hard-negative/confidence analysis, not direct answer improvement.",
+    "corpus.jsonl contains token/mask metadata and included flags; useful to filter trace segments before any SFT attempt."
+  ]
+}

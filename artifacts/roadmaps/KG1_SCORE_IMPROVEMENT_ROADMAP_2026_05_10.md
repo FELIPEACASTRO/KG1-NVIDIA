@@ -891,6 +891,75 @@ Leitura tecnica:
 
 Decisao: proxima acao e V375 CPU-only residual clustering dos `92` misses de equation. O objetivo e entender os `82` casos symbolic/punctuation e `10` numeric_operator restantes antes de criar qualquer regra nova.
 
+### 25. V375 - CPU residual clustering de equation_transform
+
+Objetivo: separar os `92` misses restantes de `equation_transform` do V366/V374 em classes verificaveis antes de criar nova regra ou gastar HF.
+
+Status: concluido e diagnostico-only.
+
+Artefatos:
+
+- Script: `scripts/analyze_v375_equation_residual_clustering.py`.
+- Saida: `artifacts/v375_equation_residual_clustering/20260514T141424Z/`.
+- Manifest: `artifacts/v375_equation_residual_clustering/20260514T141424Z/v375_equation_residual_clustering_manifest.json`.
+
+Resultado:
+
+- `residual_rows=92`.
+- `cluster_count=23`.
+- `priority_rows=50`.
+- `subtype_counts={"equation_numeric_operator": 10, "equation_symbolic_punct": 82}`.
+- Razoes prioritarias: `answer_chars_seen_in_outputs=36`, `opaque_symbolic_residual=42`, `numeric_operator_residual=8`, `numeric_operator_residual|answer_chars_seen_in_outputs=2`, `v324_had_candidate_but_failed=1`.
+
+Leitura tecnica:
+
+- O gargalo residual e majoritariamente `symbolic_punct`, nao treino numerico generico.
+- Ha uma massa de casos em que os caracteres da resposta aparecem nos outputs de exemplo, mas o V375 ainda nao provou uma regra no-loss para escolher a subsequencia correta.
+- Os `10` numeric_operator restantes tambem ficaram sem candidato aceito no V324/V375.
+
+Decisao: nao rodar HF, nao packagear e nao submeter. A proxima acao deve ser um gate CPU que transforme esses clusters em regras candidatas e rejeite qualquer regra com perda.
+
+### 26. V376 - Auditoria dos arquivos Andy279/Tong SFT anexados
+
+Objetivo: auditar os arquivos locais anexados sem extrair lixo grande para `C:`, inclusive o ZIP `nemotron-reasoning-challenge-complete.zip`, e classificar o que realmente pode ajudar `bit_manipulation` e `equation_transform`.
+
+Status: concluido.
+
+Artefatos pequenos:
+
+- `artifacts/v376_andy279_sft_file_audit/KG1_V376_ANDY279_SFT_FILE_AUDIT.md`.
+- `artifacts/v376_andy279_sft_file_audit/andy279_sft_file_audit_summary.json`.
+- `artifacts/v376_andy279_sft_file_audit/andy279_sft_metric_revalidation.json`.
+- `artifacts/v376_andy279_sft_file_audit/zip_entries.csv`.
+
+Hashes principais:
+
+- `competition_train.csv`: `d204af160633b638448723a437aa51c0db70fd0b64ff92f6ad6f52e5ac6377fa`, igual ao train oficial ja auditado.
+- `sft_reconstructed.jsonl`: `e385421e85881a406144e2e1166961ef21b0b9063077c908f41e626e01681609`.
+- `nemotron-reasoning-challenge-complete.zip`: `79a68541451bd6d7c13b6a97f9da424df80727827d593723e0eb5ca11d3d5a26`.
+
+Resultado medido com o scorer/extractor do projeto:
+
+- `sft_reconstructed.jsonl`: `9500/9500` metric-correct contra o train oficial.
+- Por familia no SFT reconstruido: `bit_manipulation=1602/1602`, `equation_transform=1555/1555`, `gravity=1597/1597`, `unit_conversion=1594/1594`, `cipher=1576/1576`, `numeral=1576/1576`.
+- `sft_train_reconstructed.jsonl` no ZIP: `17963` rows; `9500` rows oficiais reconhecidas e corretas; `8463` rows sinteticas/desconhecidas bloqueadas ate classificacao por prompt hash/familia.
+- `problems.jsonl`: nao e label source; sob o scorer do projeto tem apenas `8333/9500`, com `bit=1364/1602` e `equation=626/1555`.
+- `generation.jsonl`: util como hard-negative/confidence metadata, nao como label direto.
+- `corpus.jsonl`: contem `17963` rows incluidas e categorias como `matching`, `splitting`, `concatenation`, `equation_numeric_*` e `bit_manipulation`; usar somente apos filtro.
+
+Risco encontrado:
+
+- O relatorio local em portugues continha um token Hugging Face em texto claro. Os artefatos gerados foram redigidos; o arquivo original nao deve ser commitado nem copiado para o repo.
+- A contagem naive de `boxed` indicava `173` mismatches, mas isso era falso positivo por respostas simbolicas/braces. A metrica valida e `9500/9500` pelo extractor/scorer do projeto.
+
+Leitura tecnica:
+
+- Este e o primeiro pacote local recente com SFT reconstruido `9500/9500` valido por metrica do projeto. Ele e util como fonte de traces filtrados, nao como submit direto.
+- Treinar todo o SFT amplo continua bloqueado: historicamente loss baixo nao moveu ACC e broad trace transfer regrediu bit/equation.
+- A rota correta e selecionar somente rows `bit_manipulation`/`equation_transform` com resposta verificada, trace curto, status confiavel e sem overlap proibido, depois rodar tokenization/offset-mask/weak gate antes de qualquer HF.
+
+Decisao: V376 nao libera GPU. Ele libera apenas V377 CPU data-quality/tokenization gate para extrair um subconjunto pequeno e verificavel de traces.
+
 ## Removido do plano ativo
 
 Estes itens nao devem ser reexecutados como acao principal. So podem voltar se um novo CPU gate provar uma razao nova.
@@ -940,6 +1009,9 @@ Estes itens nao devem ser reexecutados como acao principal. So podem voltar se u
 | GRPO | caro e sem policy forte nova; P2 fora do plano ativo |
 | OpenRouter/destilacao como acao propria | conclusao ja incorporada; nao e rota executavel |
 | Buscas web genericas | so entram se produzirem regra, dataset ou gate verificavel |
+| Raw `problems.jsonl` do pacote Andy279/Tong como label | bloqueado; apenas `8333/9500` correto sob o scorer do projeto |
+| `sft_train_reconstructed.jsonl` inteiro como treino | bloqueado; contem `8463` rows sinteticas/desconhecidas ainda nao classificadas |
+| Relatorios locais com tokens/segredos | nunca versionar; somente artefatos redigidos |
 
 ## Regras permanentes
 
@@ -952,16 +1024,18 @@ Estes itens nao devem ser reexecutados como acao principal. So podem voltar se u
 
 ## Proxima acao unica
 
-V375 CPU residual clustering de equation_transform.
+V377 CPU-only filtered SFT/data gate.
 
-Regras do V375:
+Regras do V377:
 
 - Rodar somente CPU, sem HF.
-- Entrada principal: `artifacts/v374_cpu_residual_gate/20260514T_v374_cpu_gate/equation_v324_on_v366/v324_equation_expanded_solver_audit.csv` e `v366_integrated_predictions.csv`.
-- Separar os `92` misses em clusters verificaveis: `numeric_operator`, `symbolic_punct`, comprimento de query/resposta, charset, repeticao de simbolos, operador ausente/presente, exemplos ambiguos, e candidatos que quase bateram.
-- Produzir apenas relatorio/CSV de diagnostico; nao promover regra ainda.
-- So criar V376 solver se V375 apontar uma classe com evidencia concreta, baixa ambiguidade e possibilidade de no-loss gate.
-- Manifest obrigatorio por linha: `id`, `family`, `old_prediction`, `new_prediction`, `rule_class`, `candidate_count`, `conflict_count`, `accepted/rejected`, `reason`.
-- Se V375 nao identificar uma classe promissora, nao rodar HF.
+- Entrada principal: `sft_reconstructed.jsonl`, `sft_train_reconstructed.jsonl`, `corpus.jsonl`, `generation.jsonl` e os manifests V375/V376.
+- Nao copiar arquivos grandes para o repo; ler por streaming/ZIP e emitir apenas manifests/CSVs pequenos.
+- Filtrar primeiro `bit_manipulation` e `equation_transform`.
+- Aceitar somente rows com resposta validada pelo extractor/scorer do projeto, prompt hash conhecido, family count esperado, trace curto o bastante para `7680` tokens e status confiavel.
+- Separar SFT oficial de rows sinteticas/desconhecidas; sinteticas so entram se classificadas e sem leakage.
+- Gerar hard negatives a partir de `generation.jsonl` somente como metadado, nao como label.
+- Rodar tokenization/offset-mask/truncation gate antes de qualquer dataset de treino.
+- HF GPU so volta se o gate produzir um subconjunto novo com expectativa concreta de transferir ganho e com kill-switch: primeiro checkpoint deve manter `bit>=136`, `equation>=56`, `total>=192`, truncation `0`; caso contrario cancelar.
 
 Full/package/submit continuam bloqueados ate um adapter-only bater o baseline weak/full medido.
