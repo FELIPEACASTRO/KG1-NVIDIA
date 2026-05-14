@@ -25,6 +25,9 @@ Meta minima para gastar HF:
 | V372 HF trace-style smoke | `191/315` | `56/155` | `135/160` | rejeitado; nao continuar |
 | V375 equation residual clustering | `92` eq misses restantes | `82 symbolic_punct`, `10 numeric_operator` | n/a | diagnostico |
 | V378 solver parquet sobre V375 | `82/92` cobertos | `79/82` corretos | n/a | melhor novo sinal |
+| V380 oracle diagnostic | `301/315` | `142/155` | `159/160` | nao submit-safe; usa resposta/teacher |
+| V380 reexecuted teacher | `292/315` | `133/155` | `159/160` | dataset teacher permitido; HF ainda bloqueado |
+| V380 strict independent | `222/315` | `63/155` | `159/160` | ganho real independente `+0`; nao submeter |
 
 Conclusao: `eval_loss` baixo nao e criterio de promocao. O criterio e ACC por familia no weak/full gate.
 
@@ -32,7 +35,9 @@ Conclusao: `eval_loss` baixo nao e criterio de promocao. O criterio e ACC por fa
 
 ### Fonte ativa 1 - `solver_results.parquet`
 
-Arquivo: `C:\Users\davis\Downloads\nemotron_dataset_final\solver_results.parquet`
+Arquivo original: `C:\Users\davis\Downloads\nemotron_dataset_final\solver_results.parquet`
+
+Status: o parquet bruto nao deve ser tratado como dependencia operacional atual. A evidencia versionada e reproduzivel no repo esta nos CSVs derivados V378/V380.
 
 Evidencia:
 
@@ -43,6 +48,8 @@ Evidencia:
 - Cobre `82/92` residuos V375.
 - `79/82` corretos nesses residuos.
 - Categorias: `arithmetic`, `little_endian`, `mixed_concat`, `pure_concat`, `mixed_concat_little_endian`, `query_unseen_concat`.
+- V380 reexecutou os `solver_ops` no prompt: `70/79` ganhos reproduzidos como teacher (`36 arithmetic`, `27 little_endian`, `7 mixed_concat`).
+- V380 encontrou `0` ganhos strict-independent. Portanto o sinal ainda nao desbloqueia submit nem treino HF direto.
 
 Uso permitido no plano:
 
@@ -151,7 +158,9 @@ Ganho medido novo desses anexos:
 
 ### Step 1 - V380 CPU equation solver candidate patch
 
-Objetivo: transformar `solver_results.parquet` em candidatos controlados para os `92` residuos V375.
+Status: concluido em CPU.
+
+Objetivo: transformar `solver_results.parquet`/derivados V378 em candidatos controlados para os `92` residuos V375.
 
 Entrada:
 
@@ -171,13 +180,17 @@ Regras:
 
 Saida esperada:
 
-- Manifest com ganho bruto por categoria.
-- Se houver no-loss em weak, gerar dataset teacher para V381.
-- Se nao houver no-loss, nao rodar HF.
+- Manifest criado em `artifacts/v380_solver_results_patch_gate/20260514T_cpu_gate/v380_solver_results_patch_gate_manifest.json`.
+- Resultado diagnostico oracle: `301/315`, `equation=142/155`, `bit=159/160`, ganho `+79`; nao submit-safe.
+- Resultado reexecuted teacher: `292/315`, `equation=133/155`, `bit=159/160`, ganho `+70`; pode alimentar V381 como teacher limpo.
+- Resultado strict-independent: `222/315`, `equation=63/155`, `bit=159/160`, ganho `+0`; nao desbloqueia HF nem submit.
+- Decisao: `teacher_signal_only_no_hf_unlock`.
 
 ### Step 2 - V381 filtered trace/tokenization gate
 
-Objetivo: construir dataset pequeno para LoRA a partir dos candidatos V380.
+Status: proximo passo obrigatorio.
+
+Objetivo: construir dataset pequeno para LoRA a partir dos `70` candidatos V380 reexecuted-teacher, sem tratar oracle/answer-conditioned como regra submetivel.
 
 Entrada:
 
@@ -200,12 +213,16 @@ Regras:
 - Offset-mask correto.
 - Truncation `0`.
 - Separar equation target e bit replay.
+- Bloquear HF se o dataset nao provar pelo menos um dos dois:
+  - nova regra independentemente reexecutavel com `+4` equation e `0` perdas; ou
+  - dataset teacher limpo com cobertura superior ao V304, sem overlap proibido e com bit replay suficiente para manter `bit>=136`.
 
 Saida esperada:
 
 - JSONL pequeno, auditado.
 - Tokenization manifest.
 - Nenhum HF se `bit` replay nao estiver presente ou se truncation > 0.
+- Nenhum submit; este step so prepara gate para treino.
 
 ### Step 3 - V382 HF micro-train com kill-switch
 

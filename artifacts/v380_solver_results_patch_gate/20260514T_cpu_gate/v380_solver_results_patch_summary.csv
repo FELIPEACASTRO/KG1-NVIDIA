@@ -1,0 +1,5 @@
+strategy,rows,correct,accuracy,equation_transform_correct,bit_manipulation_correct,truncated,delta_total_vs_v366,delta_equation_vs_v366,delta_bit_vs_v366
+v366_baseline,315,222,0.7047619047619048,63,159,0,0,0,0
+oracle_solver_answer_patch_diagnostic_only,315,301,0.9555555555555556,142,159,0,79,79,0
+reexecuted_solver_ops_teacher_patch,315,292,0.926984126984127,133,159,0,70,70,0
+strict_independent_patch,315,222,0.7047619047619048,63,159,0,0,0,0

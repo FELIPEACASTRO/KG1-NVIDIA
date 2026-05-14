@@ -1,0 +1,171 @@
+{
+  "counts": {
+    "oracle_gains": 79,
+    "reexecuted_teacher_gains": 70,
+    "solver_covered_residual_rows": 82,
+    "strict_independent_gains": 0,
+    "v375_residual_rows": 92,
+    "weak_rows": 315
+  },
+  "decision": {
+    "decision": "teacher_signal_only_no_hf_unlock",
+    "hf_gpu_allowed": false,
+    "next_action": "Build V381 cleaned teacher dataset from reexecuted rows, but keep HF blocked until tokenization/overlap gates pass.",
+    "reason": "oracle_gains=79; reexecuted_teacher_gains=70; strict_independent_gains=0",
+    "v381_dataset_gate_allowed": true
+  },
+  "generated_at_utc": "2026-05-14T15:39:32.206964+00:00",
+  "inputs": {
+    "v366_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v366_bit_fullbyte_ternary_op_gate\\20260514T_cpu_gate\\v366_integrated_predictions.csv",
+    "v375_residual_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v375_equation_residual_clustering\\20260514T141424Z\\v375_equation_residual_rows.csv",
+    "v378_solver_coverage_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v378_nemotron_dataset_final_audit\\v378_v375_solver_coverage.csv"
+  },
+  "outputs": {
+    "candidate_patch_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v380_solver_results_patch_gate\\20260514T_cpu_gate\\v380_solver_results_candidate_patch.csv",
+    "category_summary_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v380_solver_results_patch_gate\\20260514T_cpu_gate\\v380_solver_results_category_summary.csv",
+    "manifest_json": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v380_solver_results_patch_gate\\20260514T_cpu_gate\\v380_solver_results_patch_gate_manifest.json",
+    "reexecuted_teacher_predictions_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v380_solver_results_patch_gate\\20260514T_cpu_gate\\v380_reexecuted_teacher_predictions.csv",
+    "summary_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v380_solver_results_patch_gate\\20260514T_cpu_gate\\v380_solver_results_patch_summary.csv"
+  },
+  "schema_version": "kg1_v380_solver_results_patch_gate_v1",
+  "summaries": {
+    "category_rows": [
+      {
+        "accepted_for_hf_unlock": 0,
+        "accepted_for_v381_teacher": 0,
+        "conditioned_on_answer": "False",
+        "old_correct": 0,
+        "oracle_correct": 0,
+        "oracle_gains": 0,
+        "reexecuted_correct": 0,
+        "reexecuted_gains": 0,
+        "rows": 3,
+        "solver_category": "None",
+        "strict_independent_gains": 0
+      },
+      {
+        "accepted_for_hf_unlock": 0,
+        "accepted_for_v381_teacher": 36,
+        "conditioned_on_answer": "True",
+        "old_correct": 0,
+        "oracle_correct": 36,
+        "oracle_gains": 36,
+        "reexecuted_correct": 36,
+        "reexecuted_gains": 36,
+        "rows": 36,
+        "solver_category": "arithmetic",
+        "strict_independent_gains": 0
+      },
+      {
+        "accepted_for_hf_unlock": 0,
+        "accepted_for_v381_teacher": 27,
+        "conditioned_on_answer": "True",
+        "old_correct": 0,
+        "oracle_correct": 29,
+        "oracle_gains": 29,
+        "reexecuted_correct": 27,
+        "reexecuted_gains": 27,
+        "rows": 29,
+        "solver_category": "little_endian",
+        "strict_independent_gains": 0
+      },
+      {
+        "accepted_for_hf_unlock": 0,
+        "accepted_for_v381_teacher": 7,
+        "conditioned_on_answer": "True",
+        "old_correct": 0,
+        "oracle_correct": 14,
+        "oracle_gains": 14,
+        "reexecuted_correct": 7,
+        "reexecuted_gains": 7,
+        "rows": 14,
+        "solver_category": "mixed_concat",
+        "strict_independent_gains": 0
+      }
+    ],
+    "oracle_solver_answer_patch_diagnostic_only": {
+      "accuracy": 0.9555555555555556,
+      "correct": 301,
+      "delta_bit_vs_v366": 0,
+      "delta_equation_vs_v366": 79,
+      "delta_total_vs_v366": 79,
+      "family": {
+        "bit_manipulation": {
+          "correct": 159,
+          "rows": 160,
+          "truncated": 0
+        },
+        "equation_transform": {
+          "correct": 142,
+          "rows": 155,
+          "truncated": 0
+        }
+      },
+      "rows": 315,
+      "truncated": 0
+    },
+    "reexecuted_solver_ops_teacher_patch": {
+      "accuracy": 0.926984126984127,
+      "correct": 292,
+      "delta_bit_vs_v366": 0,
+      "delta_equation_vs_v366": 70,
+      "delta_total_vs_v366": 70,
+      "family": {
+        "bit_manipulation": {
+          "correct": 159,
+          "rows": 160,
+          "truncated": 0
+        },
+        "equation_transform": {
+          "correct": 133,
+          "rows": 155,
+          "truncated": 0
+        }
+      },
+      "rows": 315,
+      "truncated": 0
+    },
+    "strict_independent_patch": {
+      "accuracy": 0.7047619047619048,
+      "correct": 222,
+      "delta_bit_vs_v366": 0,
+      "delta_equation_vs_v366": 0,
+      "delta_total_vs_v366": 0,
+      "family": {
+        "bit_manipulation": {
+          "correct": 159,
+          "rows": 160,
+          "truncated": 0
+        },
+        "equation_transform": {
+          "correct": 63,
+          "rows": 155,
+          "truncated": 0
+        }
+      },
+      "rows": 315,
+      "truncated": 0
+    },
+    "v366_baseline": {
+      "accuracy": 0.7047619047619048,
+      "correct": 222,
+      "delta_bit_vs_v366": 0,
+      "delta_equation_vs_v366": 0,
+      "delta_total_vs_v366": 0,
+      "family": {
+        "bit_manipulation": {
+          "correct": 159,
+          "rows": 160,
+          "truncated": 0
+        },
+        "equation_transform": {
+          "correct": 63,
+          "rows": 155,
+          "truncated": 0
+        }
+      },
+      "rows": 315,
+      "truncated": 0
+    }
+  }
+}

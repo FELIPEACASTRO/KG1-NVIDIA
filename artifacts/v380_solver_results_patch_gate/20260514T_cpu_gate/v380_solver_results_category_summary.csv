@@ -1,0 +1,5 @@
+solver_category,conditioned_on_answer,rows,oracle_correct,reexecuted_correct,old_correct,oracle_gains,reexecuted_gains,strict_independent_gains,accepted_for_v381_teacher,accepted_for_hf_unlock
+None,False,3,0,0,0,0,0,0,0,0
+arithmetic,True,36,36,36,0,36,36,0,36,0
+little_endian,True,29,29,27,0,29,27,0,27,0
+mixed_concat,True,14,14,7,0,14,7,0,7,0
