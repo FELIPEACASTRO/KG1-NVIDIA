@@ -471,6 +471,38 @@ Limite honesto:
 - V361 nao melhora `equation_transform`; esta familia continua dependendo de DSL/verifier.
 - Um HF baseado em V361, se rodar, deve ser apenas smoke `max_steps<=2`, A100, com weak eval imediato e cancelamento automatico se `total<=192`, `bit<136`, `equation<=56` ou truncation regressivo.
 
+### 12. V362 - HF smoke V361 boxed-only
+
+Objetivo: testar se o reparo de formato V361 transfere para LoRA adapter-only sem gastar em treino longo.
+
+Status: concluido e rejeitado.
+
+Configuracao:
+
+- Train job HF A100: `https://huggingface.co/jobs/felipesp1983/6a05a6dd3308d79117b8f574`.
+- Output repo: `felipesp1983/kg1-nemotron-lora-v362-nemo-a100-v361-boxed-only-v290ckpt6`.
+- Dataset: V361 boxed-only, `1152/288`, hashes fixos.
+- Init adapter: V290 checkpoint-6.
+- Max steps: `2`.
+- Checkpoints enviados: `checkpoint-1`, `checkpoint-2`.
+- A100 cancelado apos checkpoint-2 por FinOps; final eval/upload nao era necessario.
+
+Weak eval checkpoint-1:
+
+- Job HF H200: `https://huggingface.co/jobs/felipesp1983/6a05aa47e48bea4538b9c8dc`.
+- Output commit: `https://huggingface.co/felipesp1983/kg1-nemotron-lora-v362-nemo-a100-v361-boxed-only-v290ckpt6/commit/ed701d36d47ad2d80694d552b777a65b70e49a88`.
+- Shared row contract: `bf055e3b9ebce79d4bfc9e48bce5a305b1d83da882f14afddec80d6afaba5fff`.
+- Resultado: `190/315`, `equation_transform=56/155`, `bit_manipulation=134/160`, truncation `1`.
+- Comparacao contra gate adapter-only: baseline `192/315`, equation `56/155`, bit `136/160`, truncation `0`.
+
+Decisao: rejeitado. V362 regrediu `-2` no total, `-2` em bit e introduziu truncation. Nao libera full eval, package, Kaggle submit, nem weak eval de `checkpoint-2`/`final`.
+
+Impacto no roadmap:
+
+- A hipotese "completion boxed-only resolve transferencia" foi falsificada no primeiro checkpoint.
+- Nao gastar mais GPU em V361/V362 bit-only sem novo CPU gate.
+- Proxima rota ativa volta para CPU: equation DSL/verifier nos `99` misses e expansao real do algoritmo bit-pair/bitsum/stride antes de qualquer SFT novo.
+
 ## Removido do plano ativo
 
 Estes itens nao devem ser reexecutados como acao principal. So podem voltar se um novo CPU gate provar uma razao nova.
@@ -491,6 +523,8 @@ Estes itens nao devem ser reexecutados como acao principal. So podem voltar se u
 | Mais HF sobre V358/V359 sem auditoria | removido; V359 checkpoint-2 caiu para `190/315`, bit `134`, truncation `1` |
 | Mais HF sobre V358/V359 apos V360 | removido; V360 mostrou 15 regras estreitas, hard negatives nao usados e formato de completion desalinhado |
 | HF longo sobre V361 | removido; V361 e apenas reparo de formato e nao justifica treino longo |
+| Mais HF sobre V361/V362 boxed-only | removido; V362 checkpoint-1 caiu para `190/315`, equation `56`, bit `134`, truncation `1` |
+| V362 checkpoint-2/final weak eval | bloqueado por FinOps; checkpoint-1 ja violou total, bit e truncation |
 | Checkpoints restantes V346 4/6 | nao avaliar sem novo sinal independente |
 | Checkpoints restantes V352 4/6/8 | bloqueados por FinOps; checkpoint-2 ja caiu abaixo do gate |
 | V359 checkpoint-4/final weak eval | cancelado por FinOps; checkpoint-2 ja violou total, bit e truncation |
@@ -522,4 +556,4 @@ Estes itens nao devem ser reexecutados como acao principal. So podem voltar se u
 
 ## Proxima acao unica
 
-Criar V362 apenas como smoke curto a partir do V361, se e somente se o launcher conseguir preservar o contrato `boxed_only`, usar A100 barato, `max_steps<=2`, weak eval imediato e kill-switch FinOps no primeiro checkpoint. Em paralelo, retomar equation por DSL/verifier; V361 nao toca equation.
+Criar V363/V324 CPU-only para atacar `equation_transform` por DSL/verifier nos `99` misses e, em paralelo, completar a expansao bit-pair/bitsum/stride antes de qualquer novo SFT. Novo HF so e permitido se o CPU gate provar ganho no-loss contra o contrato weak, com `total>192`, `bit>=136`, `equation>=56` e truncation `0`.
