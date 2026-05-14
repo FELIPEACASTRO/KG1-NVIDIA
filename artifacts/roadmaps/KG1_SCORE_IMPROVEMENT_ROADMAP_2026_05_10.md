@@ -15,15 +15,16 @@ Meta minima para gastar HF:
 - Primeiro checkpoint deve manter `total >= 192/315`, `truncated=0`.
 - Se qualquer job nao puder mais bater o gate, cancelar por FinOps.
 
-## Regra Operacional 2026-05-14
+## Regra Operacional Agressiva 2026-05-14
 
-Precisamos buscar subida no ranking ainda hoje, `2026-05-14`. Portanto, a ordem de decisao fica:
+Precisamos buscar subida no ranking ainda hoje, `2026-05-14`. O plano deve ser agressivo, mas responsavel: gastar HF somente quando existe chance objetiva de gerar submit adapter-only melhor que o baseline.
 
 - Prioridade maxima: ganho adapter-only submetivel medido em weak/full gate, nao `eval_loss` isolado.
 - Concluir o V382 apenas como smoke curto ja em andamento; escolher checkpoint por ACC weak, nao por loss.
-- Rodar V383 weak-eval sweep imediatamente sobre checkpoints V382 disponiveis.
+- Rodar V383 weak-eval sweep, mas aplicar corte FinOps apos `checkpoint-6`: se `checkpoint-2`, `checkpoint-4` e `checkpoint-6` nao baterem `total > 192`, `equation_transform > 56`, `bit_manipulation >= 136` e `truncated=0`, cancelar `checkpoint-8/10` e encerrar esta linha.
 - Se qualquer checkpoint V383 bater `total > 192`, `equation_transform > 56`, `bit_manipulation >= 136` e `truncated=0`, promover para full/official-like eval e package gate no mesmo dia.
-- Se nenhum checkpoint V383 bater o baseline, encerrar esta linha por FinOps e voltar somente para CPU gates que gerem novo sinal independente.
+- Se nenhum checkpoint V383 bater o baseline, voltar imediatamente para CPU gates que gerem novo sinal independente; nenhum novo HF training pode iniciar sem ganho CPU medido antes.
+- Caminho de hoje apos V383 negativo: gerar candidato submit-safe a partir do melhor adapter-only conhecido, sem solver/postprocessor runtime, e so substituir respostas se houver prova local reproduzivel de que a resposta vem do proprio adapter/package permitido.
 - Proibido submit de postprocessor/verifier/teacher-only. Submit hoje so pode vir de adapter/package que passe os gates.
 
 ## Estado Atual Medido
