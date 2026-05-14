@@ -32,6 +32,8 @@ Historico completo e rotas antigas ficam fora do plano ativo:
 | V367 V366 transfer dataset | `1128/282` train/val | nao altera equation | `768/192` linhas novas V366 + replay | tokenization real aprovado, boxed-only, `0` truncation |
 | V368 checkpoint-1 adapter-only | `191/315` | `56/155` | `135/160` | rejeitado; V367/V366 nao transferiu e regrediu bit |
 | V369 V368 transfer audit | `0/8` V366 ganhos transferidos | nao altera equation | `1` ganho, `2` perdas vs baseline | bloqueia mais HF nessa rota |
+| V370 format transfer audit | `0/315` raw boxed-only | nao altera equation | `160/160` bit rows com trace antigo | prova que boxed-only nao controlou inferencia |
+| V371 trace-style dataset | `1128/282` train/val | nao altera equation | trace-style para `23` regras | V286 real tokenization passou, `token_max=828`, `0` truncation |
 | Residual depois do V366 | mapa pronto | `92` misses | `1` miss | fila residual CPU |
 | V349 Kaggle discussions | `140/140` topicos | reforca ambiguidade/DSL | reforca bit full-byte/bit-pair/3-input | guia do proximo CPU gate |
 | Double check compilacoes 2026-05-14 | `3` arquivos | sem novo ganho medido | sem novo ganho medido | classifica links; nao libera HF |
@@ -90,6 +92,8 @@ Para submeter ao Kaggle:
 | V367 transfer dataset | `1128/282`, `23` regras, `0` prompt overlap, tokenizer real `token_max=285`, `0` truncation | liberou somente HF smoke V368 |
 | V368 checkpoint-1 weak eval | `191/315`, `equation=56`, `bit=135`, truncation `0` | rejeitado; bloqueia full/package/submit |
 | V369 transfer failure audit | V368 transferiu `0/8` ganhos V366; mudou `10` linhas vs baseline: `1` ganho, `2` perdas, `7` neutras | prova que V367/V368 bit-only SFT nao deve continuar |
+| V370 format transfer audit | V367 treinou `1128/1128` boxed-only, mas V368 gerou `0/315` raw boxed-only; `160/160` bit rows mantiveram trace longo antigo | explica por que loss caiu sem ACC subir; proxima LoRA precisa casar o formato real de trace ou nao rodar |
+| V371 trace-style dataset + V286 gate | `1128/282`, trace-style, boxed suffix, `0` prompt overlap, tokenizacao real `token_max=828`, `0` truncation, `0` fallback masks | unica rota HF possivel apos V370; somente smoke minimo com kill-switch |
 | V348 residual audit | `92` equation misses, `24` bit misses | fila unica do proximo CPU gate |
 | V349 discussion `689915` | tokens simples, cobertura de operacoes raras, min-logprob | orientar formato de traces futuros |
 | V349 discussion `688461` | taxonomia reversa e gramatica booleana dinamica | orientar DSL CPU |
@@ -725,6 +729,66 @@ Leitura tecnica:
 
 Decisao: bloquear V367/V368 bit-only SFT. A proxima acao deve ser CPU-only e precisa gerar um novo tipo de sinal, nao apenas repetir V367 com mais treino.
 
+### 20. V370 - Auditoria de transferencia de formato V367
+
+Objetivo: verificar se o treino boxed-only V367 realmente mudou o formato de inferencia do V368.
+
+Status: concluido e bloqueado.
+
+Resultado medido:
+
+- Script: `scripts/analyze_v370_v367_format_transfer_audit.py`.
+- Manifesto: `artifacts/v370_v367_format_transfer_audit/20260514T_cpu_audit/v370_v367_format_transfer_manifest.json`.
+- V367 train assistant targets boxed-only: `1128/1128`.
+- V367 validation assistant targets boxed-only: `282/282`.
+- V368 raw outputs exact boxed-only: `0/315`.
+- V368 bit rows com trace antigo `We need to deduce`: `160/160`.
+- V368 bit rows com `Output bit columns`: `160/160`.
+- Cada ganho V366 aceito tinha pelo menos `96` linhas de treino e `24` de validation no V367.
+- Mesmo assim, ganhos V366 transferidos para V368: `0/8`.
+
+Leitura tecnica:
+
+- O problema de V368 nao foi falta de exemplos sinteticos para as regras `CHO`/`MAJ3`; havia cobertura.
+- O objetivo boxed-only nao controlou o comportamento de geracao no contrato weak. O adapter continuou usando o trace longo antigo em todas as linhas de bit.
+- Isso explica a observacao recorrente: `eval_loss` cai, mas ACC das familias nao sobe. O loss esta medindo imitacao do dataset, enquanto a inferencia continua presa ao formato anterior.
+
+Decisao: nao treinar mais V367 boxed-only. Se houver nova tentativa LoRA, o dataset precisa casar o formato real de trace que o modelo insiste em emitir, com alvo correto e verificavel. Sem esse gate CPU, HF continua bloqueado.
+
+### 21. V371 - Dataset trace-style alinhado ao V370
+
+Objetivo: testar a unica hipotese concreta que sobrou da falha V370: nao ensinar boxed-only, mas ensinar no mesmo estilo de trace que o modelo efetivamente emite no weak eval de bit.
+
+Status: concluido em CPU; tokenization gate real aprovado; HF ainda precisa ser smoke minimo com kill-switch.
+
+Resultado medido:
+
+- Script: `scripts/build_v371_v367_trace_style_transfer_dataset.py`.
+- Manifesto: `artifacts/v371_v367_trace_style_transfer_dataset/20260514T_cpu_gate/v371_v367_trace_style_transfer_manifest.json`.
+- Tokenization gate: `artifacts/v371_v367_trace_style_transfer_dataset/20260514T_cpu_gate/tokenization_gate_real/v286_generic_tokenization_gate_manifest.json`.
+- Train rows: `1128`.
+- Validation rows: `282`.
+- Train trace-style assistant rows: `1128/1128`.
+- Validation trace-style assistant rows: `282/282`.
+- Train boxed-suffix rows: `1128/1128`.
+- Validation boxed-suffix rows: `282/282`.
+- Train/validation prompt overlap: `0`.
+- Real tokenizer: `nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16@cbd3fa9f933d55ef16a84236559f4ee2a0526848`.
+- Token max train/val: `828`.
+- Loss token max train/val: `558`.
+- Prompt truncation rate: `0.0`.
+- Completion tokens dropped: `0`.
+- Offset masks: `1128/1128` train, `282/282` validation.
+- Fallback masks: `0`.
+
+Leitura tecnica:
+
+- V371 corrige o gap exato identificado em V370: o alvo agora comeca em `We need to deduce`, contem `Output bit columns`, e termina em `Final answer: \boxed{answer}`.
+- Isso ainda nao prova ganho adapter-only. Apenas torna a proxima tentativa HF tecnicamente mais defensavel que V367 boxed-only.
+- Como V371 e bit-only, `equation_transform` continua sem ganho esperado nessa rota.
+
+Decisao: V371 pode liberar somente um smoke A100 muito pequeno (`max_steps<=2`) se o budget permitir. O checkpoint-1 deve ser avaliado antes de qualquer continuacao. Cancelar se `total<=192`, `bit<136`, `equation<=56`, truncation regressiva, ou se o raw output continuar preso no formato antigo sem melhorar ACC.
+
 ## Removido do plano ativo
 
 Estes itens nao devem ser reexecutados como acao principal. So podem voltar se um novo CPU gate provar uma razao nova.
@@ -753,6 +817,7 @@ Estes itens nao devem ser reexecutados como acao principal. So podem voltar se u
 | V365 bit per-output boolean grammar | bloqueado; `73` mudancas candidatas, `0` ganhos, `66` perdas candidatas |
 | Mais HF sobre V367/V368 bit-only | removido; V368 checkpoint-1 caiu para `191/315`, bit `135`, e V369 mostrou `0/8` ganhos V366 transferidos |
 | V368 checkpoint-2/final weak eval | bloqueado por FinOps; checkpoint-1 ja violou total e bit |
+| V367 boxed-only como objetivo LoRA | removido; V370 mostrou `0/315` raw boxed-only no V368 e `160/160` bit rows com trace antigo |
 | Checkpoints restantes V346 4/6 | nao avaliar sem novo sinal independente |
 | Checkpoints restantes V352 4/6/8 | bloqueados por FinOps; checkpoint-2 ja caiu abaixo do gate |
 | V359 checkpoint-4/final weak eval | cancelado por FinOps; checkpoint-2 ja violou total, bit e truncation |
@@ -784,9 +849,16 @@ Estes itens nao devem ser reexecutados como acao principal. So podem voltar se u
 
 ## Proxima acao unica
 
-V370 CPU-only: abandonar mais SFT bit-only sobre V367/V368 e procurar um novo sinal transferivel antes de qualquer HF. A prioridade e uma das duas rotas, nesta ordem:
+V372 HF smoke minimo sobre V371, somente porque V371 corrigiu o gap especifico de formato identificado em V370 e passou V286 real tokenization gate.
 
-1. Diagnosticar representacao solver-to-adapter: usar V369 para criar probes de formato ainda mais diretos nos `8` ganhos V366 e nos `2` losses V368, mas sem treino GPU. Se nao houver uma nova representacao verificavel, nao rodar HF.
-2. Voltar para `equation_transform`: testar uma nova DSL simbolica diferente de V363/V364 nos `92` misses residuais, com `candidate_count`, `conflict_count`, `losses=0` e ganho acima de `63/155`.
+Regras do V372:
+
+- A100, nao H200 para treino.
+- `max_steps<=2`.
+- Weak eval no checkpoint-1 antes de qualquer continuidade.
+- Cancelar por FinOps se `total<=192`, `bit<136`, `equation<=56`, truncation regressiva, ou raw outputs nao mostrarem melhoria de formato/ACC.
+- Nao rodar full/package/submit sem weak gain medido.
+
+Se V372 falhar, remover a rota trace-style do plano ativo e voltar para `equation_transform`: testar uma nova DSL simbolica diferente de V363/V364 nos `92` misses residuais, com `candidate_count`, `conflict_count`, `losses=0` e ganho acima de `63/155`.
 
 Full/package/submit continuam bloqueados ate um adapter-only bater o baseline weak/full medido.

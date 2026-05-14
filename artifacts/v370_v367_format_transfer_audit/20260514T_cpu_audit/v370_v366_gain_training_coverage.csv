@@ -1,0 +1,9 @@
+id,source_rule,v367_train_rows,v367_val_rows,answer,v368_prediction,v368_correct,completion_tokens,raw_chars,exact_boxed_only,starts_boxed,contains_boxed,contains_deduce_trace,contains_output_bit_columns,contains_matching_output,contains_final_answer_phrase
+1abaffca,bit_fullbyte_ternary_op_CHO,96,24,01000000,01011000,False,6139,8411,False,False,True,True,True,True,False
+b8722d19,bit_fullbyte_ternary_op_CHO,96,24,00100100,11110100,False,6122,8533,False,False,True,True,True,True,False
+7192535b,bit_fullbyte_ternary_op_MAJ3,96,24,00000010,00001010,False,6986,9218,False,False,True,True,True,True,False
+1a7c8520,bit_fullbyte_ternary_op_MAJ3,96,24,01100000,01100110,False,6343,8571,False,False,True,True,True,True,False
+a6192d29,bit_fullbyte_ternary_op_MAJ3,96,24,00001000,01111110,False,7135,9701,False,False,True,True,True,True,False
+048cc279,bit_fullbyte_ternary_op_MAJ3,96,24,01010000,01111000,False,6470,8763,False,False,True,True,True,True,False
+b8aa3072,bit_fullbyte_ternary_op_CHO,96,24,00000011,00000111,False,6317,8381,False,False,True,True,True,True,False
+5ba26f21,bit_fullbyte_ternary_op_CHO,96,24,01011100,01111110,False,6451,9046,False,False,True,True,True,True,False

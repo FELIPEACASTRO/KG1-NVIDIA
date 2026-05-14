@@ -1,0 +1,70 @@
+{
+  "decision": {
+    "decision": "v367_boxed_only_format_not_transferred",
+    "hf_gpu_allowed": false,
+    "next_action": "Do not train more on boxed-only V367. If any LoRA route continues, first build a CPU-gated dataset that matches the actual bit reasoning trace style, or return to equation DSL.",
+    "reason": "V367 assistant targets were boxed-only, but V368 exact_boxed_only=0/315; bit rows with old deduce trace=160/160; V366 accepted gains transferred=0/8."
+  },
+  "expected_shared_row_contract_sha256": "bf055e3b9ebce79d4bfc9e48bce5a305b1d83da882f14afddec80d6afaba5fff",
+  "family_format_summary": [
+    {
+      "completion_tokens_max": 7492,
+      "completion_tokens_mean": 6682.81875,
+      "completion_tokens_median": 6672.0,
+      "completion_tokens_min": 5939,
+      "contains_deduce_trace": 160,
+      "contains_output_bit_columns": 160,
+      "correct": 135,
+      "exact_boxed_only": 0,
+      "family": "bit_manipulation",
+      "rows": 160,
+      "starts_boxed": 0
+    },
+    {
+      "completion_tokens_max": 6635,
+      "completion_tokens_mean": 2799.606451612903,
+      "completion_tokens_median": 707.0,
+      "completion_tokens_min": 475,
+      "contains_deduce_trace": 0,
+      "contains_output_bit_columns": 0,
+      "correct": 56,
+      "exact_boxed_only": 0,
+      "family": "equation_transform",
+      "rows": 155,
+      "starts_boxed": 0
+    }
+  ],
+  "inputs": {
+    "v367_train_jsonl": "artifacts\\v367_v366_bit_ternary_transfer_dataset\\20260514T_cpu_gate\\v367_v366_bit_ternary_transfer_train.jsonl",
+    "v367_train_sha256": "5ea3cef4d9f589c9c77aabf22ac90b5261cc77cdbdcf5c120f306c6c0edf95fc",
+    "v367_val_jsonl": "artifacts\\v367_v366_bit_ternary_transfer_dataset\\20260514T_cpu_gate\\v367_v366_bit_ternary_transfer_val.jsonl",
+    "v367_val_sha256": "04623efbcfd6c1db9d3988f9efca48ee6f387ae67bede8f55969517ebf06fb00",
+    "v368_predictions_csv": "artifacts\\v368_hf_a100_v367_bit_ternary_launch\\eval_checkpoint1\\predictions.csv",
+    "v368_predictions_sha256": "b1a25388e4e98e6b423692767baa53cbaeca729f419e6b6a328d89f81fd7a212",
+    "v369_manifest_json": "artifacts\\v369_v368_transfer_failure_audit\\20260514T_cpu_audit\\v369_v368_transfer_failure_manifest.json",
+    "v369_manifest_sha256": "fd48453a2e9b2b702963834e32c252dcade7afa0ae2d74e96599fdf13627729c"
+  },
+  "observed_shared_row_contract_sha256": "bf055e3b9ebce79d4bfc9e48bce5a305b1d83da882f14afddec80d6afaba5fff",
+  "outputs": {
+    "family_format_summary_csv": "artifacts\\v370_v367_format_transfer_audit\\20260514T_cpu_audit\\v370_family_format_summary.csv",
+    "manifest_json": "artifacts\\v370_v367_format_transfer_audit\\20260514T_cpu_audit\\v370_v367_format_transfer_manifest.json",
+    "raw_output_examples_csv": "artifacts\\v370_v367_format_transfer_audit\\20260514T_cpu_audit\\v370_raw_output_examples.csv",
+    "raw_output_format_flags_csv": "artifacts\\v370_v367_format_transfer_audit\\20260514T_cpu_audit\\v370_v368_raw_output_format_flags.csv",
+    "summary_md": "artifacts\\v370_v367_format_transfer_audit\\V370_RESULT_SUMMARY.md",
+    "v366_gain_training_coverage_csv": "artifacts\\v370_v367_format_transfer_audit\\20260514T_cpu_audit\\v370_v366_gain_training_coverage.csv"
+  },
+  "schema_version": "kg1_v370_v367_format_transfer_audit_v1",
+  "v366_accepted_gain_rows": 8,
+  "v366_accepted_gain_rows_transferred_to_v368": 0,
+  "v366_accepted_gain_training_coverage_min_train": 96,
+  "v366_accepted_gain_training_coverage_min_val": 24,
+  "v367_assistant_format_counts": {
+    "train_exact_boxed_only": 1128,
+    "validation_exact_boxed_only": 282
+  },
+  "v368_bit_rows_with_deduce_trace": 160,
+  "v368_bit_rows_with_output_bit_columns": 160,
+  "v368_contains_boxed_rows": 313,
+  "v368_exact_boxed_only_rows": 0,
+  "v368_starts_boxed_rows": 0
+}

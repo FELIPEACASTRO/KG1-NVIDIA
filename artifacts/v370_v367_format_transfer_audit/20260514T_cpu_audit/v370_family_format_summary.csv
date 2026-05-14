@@ -1,0 +1,3 @@
+family,rows,correct,exact_boxed_only,starts_boxed,contains_deduce_trace,contains_output_bit_columns,completion_tokens_mean,completion_tokens_median,completion_tokens_min,completion_tokens_max
+bit_manipulation,160,135,0,0,160,160,6682.81875,6672.0,5939,7492
+equation_transform,155,56,0,0,0,0,2799.606451612903,707.0,475,6635

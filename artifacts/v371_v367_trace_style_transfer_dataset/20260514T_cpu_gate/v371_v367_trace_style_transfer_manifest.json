@@ -1,0 +1,78 @@
+{
+  "decision": {
+    "decision": "v371_dataset_built_tokenization_required",
+    "hf_gpu_allowed": false,
+    "next_action": "Run V286 real tokenization gate. Do not launch HF from V371 without explicit weak-risk review.",
+    "reason": "trace_train=1128/1128; trace_val=282/282; prompt_overlap=0"
+  },
+  "generated_at_utc": "2026-05-14T12:54:47.561498+00:00",
+  "inputs": {
+    "v367_train_jsonl": "artifacts\\v367_v366_bit_ternary_transfer_dataset\\20260514T_cpu_gate\\v367_v366_bit_ternary_transfer_train.jsonl",
+    "v367_train_sha256": "5ea3cef4d9f589c9c77aabf22ac90b5261cc77cdbdcf5c120f306c6c0edf95fc",
+    "v367_val_jsonl": "artifacts\\v367_v366_bit_ternary_transfer_dataset\\20260514T_cpu_gate\\v367_v366_bit_ternary_transfer_val.jsonl",
+    "v367_val_sha256": "04623efbcfd6c1db9d3988f9efca48ee6f387ae67bede8f55969517ebf06fb00",
+    "v370_manifest_json": "artifacts\\v370_v367_format_transfer_audit\\20260514T_cpu_audit\\v370_v367_format_transfer_manifest.json",
+    "v370_manifest_sha256": "5842f798b495baada1354ffbc3921fdbf8bf7698e66d33e3e16224c67de45daf"
+  },
+  "outputs": {
+    "manifest_json": "artifacts\\v371_v367_trace_style_transfer_dataset\\20260514T_cpu_gate\\v371_v367_trace_style_transfer_manifest.json",
+    "train_jsonl": "artifacts\\v371_v367_trace_style_transfer_dataset\\20260514T_cpu_gate\\v371_v367_trace_style_transfer_train.jsonl",
+    "train_sha256": "96278ed22d81ba2412ce9a1ec5f8ac87df64a5f8014ebb5c3f88b18103bfbe0a",
+    "val_jsonl": "artifacts\\v371_v367_trace_style_transfer_dataset\\20260514T_cpu_gate\\v371_v367_trace_style_transfer_val.jsonl",
+    "val_sha256": "fe66489655ad6907705fa5d18bc8e777055b6d77d9f1ceaba7fb58005169c7d0"
+  },
+  "policy": {
+    "assistant_final_answer_mode": "boxed_suffix",
+    "finops": "HF remains blocked until tokenization and a new transfer rationale pass.",
+    "full_gate_rows_used_for_training": false,
+    "hf_gpu_allowed": false,
+    "next_gate": "run_v286_generic_tokenization_gate --assistant-final-answer-mode boxed_suffix",
+    "weak_gate_rows_used_for_training": false
+  },
+  "schema_version": "kg1_v371_v367_trace_style_transfer_dataset_v1",
+  "validation": {
+    "train": {
+      "assistant_boxed_suffix_rows": 1128,
+      "assistant_char_max": 759,
+      "assistant_char_mean": 751.063829787234,
+      "assistant_char_min": 743,
+      "assistant_contains_output_bit_columns_rows": 1128,
+      "assistant_trace_style_rows": 1128,
+      "family_counts": {
+        "bit_manipulation": 1128
+      },
+      "prompt_hash_count": 1128,
+      "rows": 1128,
+      "source_id_count": 23,
+      "split": "train",
+      "subcategory_counts": {
+        "bit_exact_global_binary_replay": 48,
+        "bit_exact_global_ternary_replay": 312,
+        "bit_fullbyte_ternary_v366_new": 768
+      },
+      "unique_ids": 1128
+    },
+    "train_val_prompt_overlap": 0,
+    "validation": {
+      "assistant_boxed_suffix_rows": 282,
+      "assistant_char_max": 759,
+      "assistant_char_mean": 751.063829787234,
+      "assistant_char_min": 743,
+      "assistant_contains_output_bit_columns_rows": 282,
+      "assistant_trace_style_rows": 282,
+      "family_counts": {
+        "bit_manipulation": 282
+      },
+      "prompt_hash_count": 282,
+      "rows": 282,
+      "source_id_count": 23,
+      "split": "validation",
+      "subcategory_counts": {
+        "bit_exact_global_binary_replay": 12,
+        "bit_exact_global_ternary_replay": 78,
+        "bit_fullbyte_ternary_v366_new": 192
+      },
+      "unique_ids": 282
+    }
+  }
+}
