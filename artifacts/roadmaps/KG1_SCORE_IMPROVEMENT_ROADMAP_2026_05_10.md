@@ -29,6 +29,7 @@ Historico completo e rotas antigas ficam fora do plano ativo:
 | V361 boxed-only transfer dataset | `1152/288` train/val | nao altera equation | baseado nas mesmas `15` regras | corrige formato; V286 real gate passou com `boxed_only` |
 | V365 bit residual boolean grammar gate | `214/315` | `63/155` | `151/160` | bloqueado; `73` mudancas candidatas, `0` ganhos, `66` perdas candidatas |
 | V366 bit full-byte ternary op gate | `222/315` | `63/155` | `159/160` | teacher CPU aprovado: `+8` bit sobre V357, `0` perdas aceitas |
+| V367 V366 transfer dataset | `1128/282` train/val | nao altera equation | `768/192` linhas novas V366 + replay | tokenization real aprovado, boxed-only, `0` truncation |
 | Residual depois do V366 | mapa pronto | `92` misses | `1` miss | fila residual CPU |
 | V349 Kaggle discussions | `140/140` topicos | reforca ambiguidade/DSL | reforca bit full-byte/bit-pair/3-input | guia do proximo CPU gate |
 | Double check compilacoes 2026-05-14 | `3` arquivos | sem novo ganho medido | sem novo ganho medido | classifica links; nao libera HF |
@@ -84,6 +85,7 @@ Para submeter ao Kaggle:
 | V361 boxed-only transfer dataset | `1152` train, `288` val, `2304/576` preference rows, `0` train/val prompt overlap, real tokenizer `token_max=286`, `0` truncation, `0` fallback masks | unica correcao de formato permitida; ainda nao libera submit nem full |
 | V365 bit residual boolean grammar | `73` mudancas candidatas sobre V357, `0` ganhos, `66` perdas candidatas | bloqueia gramatica per-bit livre; proxima rota bit precisa ser bit-pair/bitsum/stride restrito |
 | V366 full-byte ternary `CHO`/`MAJ3` | `222/315`, `equation=63`, `bit=159`, `8` ganhos aceitos, `0` perdas aceitas | novo teacher CPU; base do V367 transfer dataset |
+| V367 transfer dataset | `1128/282`, `23` regras, `0` prompt overlap, tokenizer real `token_max=285`, `0` truncation | libera somente HF smoke curto com kill-switch |
 | V348 residual audit | `92` equation misses, `24` bit misses | fila unica do proximo CPU gate |
 | V349 discussion `689915` | tokens simples, cobertura de operacoes raras, min-logprob | orientar formato de traces futuros |
 | V349 discussion `688461` | taxonomia reversa e gramatica booleana dinamica | orientar DSL CPU |
@@ -633,6 +635,37 @@ IDs aceitos:
 
 Decisao: V366 e o melhor teacher CPU atual. O proximo passo e V367: dataset de transferencia pequeno com `CHO`/`MAJ3`, replay forte de bit, hard negatives e gate de tokenizacao. Sem HF antes desses checks.
 
+### 17. V367 - V366 bit transfer dataset
+
+Objetivo: converter o teacher V366 em um dataset adapter-only tecnicamente treinavel, corrigindo duas falhas anteriores: sinal novo diluido e completion longa/desalinhada. V367 usa completion `boxed_only`, prioriza as `8` regras novas V366 e mantem replay reduzido V357/V350.
+
+Status: concluido e aprovado pelo tokenization gate real.
+
+Resultado medido:
+
+- Script: `scripts/build_v367_v366_bit_ternary_transfer_dataset.py`.
+- Manifesto: `artifacts/v367_v366_bit_ternary_transfer_dataset/20260514T_cpu_gate/v367_v366_bit_ternary_transfer_manifest.json`.
+- Tokenization gate: `artifacts/v367_v366_bit_ternary_transfer_dataset/20260514T_cpu_gate/tokenization_gate_real/v286_generic_tokenization_gate_manifest.json`.
+- Train rows: `1128`.
+- Validation rows: `282`.
+- V366 new rows: `768` train, `192` validation.
+- V357 replay rows: `312` train, `78` validation.
+- V350 replay rows: `48` train, `12` validation.
+- Unique rules: `23`.
+- Train/validation prompt overlap: `0`.
+- Weak reference id overlap: `0`.
+- Weak reference prompt hash overlap: `0`.
+- Assistant boxed-only rows: `1128/1128` train, `282/282` validation.
+- Real tokenizer: `nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16@cbd3fa9f933d55ef16a84236559f4ee2a0526848`.
+- Token max: `285`.
+- Loss tokens: `15`.
+- Prompt truncation rate: `0.0`.
+- Completion tokens dropped: `0`.
+- Offset masks: `1128/1128` train, `282/282` validation.
+- Fallback masks: `0`.
+
+Decisao: V367 libera somente um HF smoke curto. O primeiro checkpoint deve ser avaliado imediatamente e cancelado se `total<=192`, `bit<136`, `equation<=56` ou truncation regressiva. Full/package/submit continuam bloqueados ate weak/full adapter-only mostrar ganho real.
+
 ## Removido do plano ativo
 
 Estes itens nao devem ser reexecutados como acao principal. So podem voltar se um novo CPU gate provar uma razao nova.
@@ -690,6 +723,6 @@ Estes itens nao devem ser reexecutados como acao principal. So podem voltar se u
 
 ## Proxima acao unica
 
-Construir V367 em CPU: dataset de transferencia para o teacher V366, usando somente os `8` ganhos aceitos `CHO`/`MAJ3`, replay forte das regras bit ja comprovadas, hard negatives do baseline/V357 errado e completion curta `\boxed{answer}`. O dataset precisa passar anti-leakage por `id`/`prompt_sha256`, family counts, tokenization/offset-mask e contrato weak antes de qualquer HF.
+Preparar e executar V368 HF smoke curto a partir do V367, usando a imagem/launcher ja validado em V362, mas com dataset V367. O job deve ser pequeno, avaliar o primeiro checkpoint no contrato weak e aplicar FinOps automaticamente: cancelar se `total<=192`, `bit<136`, `equation<=56` ou truncation regressiva.
 
-Equation continua ativa somente se houver uma nova semantica simbolica diferente das rotas V363/V364. Novo HF so e permitido apos V367 passar os gates locais, e o primeiro checkpoint deve ser cancelado se nao mantiver pelo menos `bit>=136`, `equation>=56`, truncation `0`, e idealmente sinal acima do adapter-only `192/315`.
+Equation continua ativa somente se houver uma nova semantica simbolica diferente das rotas V363/V364. Full/package/submit continuam bloqueados ate um adapter-only bater o baseline weak/full medido.
