@@ -1,0 +1,49 @@
+{
+  "adapter_repo": "felipesp1983/kg1-nemotron-lora-v382-v381-teacher-smoke",
+  "adapter_subfolders": [
+    "checkpoint-4"
+  ],
+  "branch": "v230-v226-complementarity",
+  "candidate_names": [
+    "v387_v382_checkpoint_4_official_like_full947"
+  ],
+  "expected_commit": "9d5fc99717b688315da0ccba1bb799095114f498",
+  "flavor": "h200",
+  "full_eval_contract": {
+    "csv_sha256": "84e90b5b4d9adad6fdd9028aae3161d1b8991f2eab11e292b32d920c0ec3c935",
+    "gpu_memory_utilization": 0.85,
+    "max_model_len": 8192,
+    "max_num_seqs": 64,
+    "max_tokens": 7680,
+    "prediction_postprocessor": "none",
+    "rows": 947,
+    "thinking_enabled": true
+  },
+  "generated_at_utc": "2026-05-14T17:49:03.318966+00:00",
+  "hardware": {
+    "accelerator_model": "H200",
+    "accelerator_quantity": "1",
+    "accelerator_vram": "141 GB",
+    "cpu": "23 vCPU",
+    "name": "h200",
+    "pretty_name": "Nvidia H200",
+    "ram": "256 GB",
+    "unit_cost_usd": 0.083333,
+    "unit_label": "minute"
+  },
+  "image": "vllm/vllm-openai:v0.20.1",
+  "job_id": "6a060b4de48bea4538b9d276",
+  "job_status": "RUNNING",
+  "job_url": "https://huggingface.co/jobs/felipesp1983/6a060b4de48bea4538b9d276",
+  "namespace": "felipesp1983",
+  "output_path_in_repo": "evals/v387-h200-officiallike-v382ckpt4-full947-20260514T174902Z",
+  "output_repo": "felipesp1983/kg1-nemotron-lora-v382-v381-teacher-smoke",
+  "promotion_gate": {
+    "current_submit_correct": 823,
+    "finops_note": "Package/submit only if this beats V291, not if it merely ties 823.",
+    "full_candidate_gate": "correct>=824 and truncated<=4",
+    "minimum_correct_for_ranking_attempt": 824
+  },
+  "run_id": "v387-h200-officiallike-v382ckpt4-full947-20260514T174902Z",
+  "version": "v387_official_like_v382_checkpoint4_full_eval"
+}
