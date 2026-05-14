@@ -1,0 +1,210 @@
+{
+  "accepted_candidate_count": 0,
+  "accepted_candidate_ids": [],
+  "accepted_gain_count": 0,
+  "accepted_gain_ids": [],
+  "accepted_loss_count": 0,
+  "accepted_loss_ids": [],
+  "candidate_change_count": 73,
+  "candidate_gain_count": 0,
+  "candidate_gain_ids": [],
+  "candidate_loss_count": 66,
+  "candidate_loss_ids": [
+    "c7077b21",
+    "839e7350",
+    "a365e304",
+    "f3971b9a",
+    "ab71eaa0",
+    "892d73b5",
+    "e6d2a064",
+    "a1d2bb0c",
+    "0e70c867",
+    "54b895c1",
+    "f2b23d11",
+    "5cbe919f",
+    "b43d9cd5",
+    "d6187157",
+    "29e458d6",
+    "8c9fcc6b",
+    "3a90fdf6",
+    "d50746e7",
+    "12e0ac8c",
+    "05ca617c",
+    "4353cd0b",
+    "5b9964c7",
+    "3cfc5f9c",
+    "114a7439",
+    "343095d3",
+    "6b11c05f",
+    "eea91b82",
+    "0f7ddd75",
+    "a6704625",
+    "d117113e",
+    "8740ed31",
+    "5a19f71a",
+    "78d02fc5",
+    "21245d76",
+    "e0eba119",
+    "55014a7a",
+    "f8fc43d2",
+    "c711f9dd",
+    "55d834d1",
+    "5d77eff6",
+    "1c671acc",
+    "202af98d",
+    "3ace787f",
+    "2a5d4790",
+    "59bee375",
+    "01248b76",
+    "0dfd7674",
+    "8243c91e",
+    "ef2fe526",
+    "00fdc0be",
+    "3a7dd604",
+    "455b6b61",
+    "1d08947a",
+    "ced947c8",
+    "e641791f",
+    "3595c82c",
+    "bca238ee",
+    "06120e47",
+    "e1f3ffbb",
+    "4c327b55",
+    "70bc42af",
+    "0c2407ef",
+    "939273d7",
+    "16e73f0e",
+    "82ae858c",
+    "1282c5c5"
+  ],
+  "candidate_rule_summary_top": [
+    {
+      "accepted": false,
+      "accepted_rows": 0,
+      "candidate_rows": 7,
+      "candidate_source": "v365_bit_boolean_grammar",
+      "changed_rows": 7,
+      "family": "bit_manipulation",
+      "gains": 0,
+      "losses": 1,
+      "new_correct": 0,
+      "reason": "rejected_by_gate",
+      "rule_class": "bit_boolean_grammar_l4_ok_fallback0_maxrule3"
+    },
+    {
+      "accepted": false,
+      "accepted_rows": 0,
+      "candidate_rows": 1,
+      "candidate_source": "v365_bit_boolean_grammar",
+      "changed_rows": 1,
+      "family": "bit_manipulation",
+      "gains": 0,
+      "losses": 1,
+      "new_correct": 0,
+      "reason": "rejected_by_gate",
+      "rule_class": "bit_boolean_grammar_l4_partial_fallback1_maxrule5"
+    },
+    {
+      "accepted": false,
+      "accepted_rows": 0,
+      "candidate_rows": 2,
+      "candidate_source": "v365_bit_boolean_grammar",
+      "changed_rows": 2,
+      "family": "bit_manipulation",
+      "gains": 0,
+      "losses": 2,
+      "new_correct": 0,
+      "reason": "rejected_by_gate",
+      "rule_class": "bit_boolean_grammar_l4_partial_fallback2_maxrule5"
+    },
+    {
+      "accepted": false,
+      "accepted_rows": 0,
+      "candidate_rows": 5,
+      "candidate_source": "v365_bit_boolean_grammar",
+      "changed_rows": 5,
+      "family": "bit_manipulation",
+      "gains": 0,
+      "losses": 5,
+      "new_correct": 0,
+      "reason": "rejected_by_gate",
+      "rule_class": "bit_boolean_grammar_l4_ok_fallback0_maxrule1"
+    },
+    {
+      "accepted": false,
+      "accepted_rows": 0,
+      "candidate_rows": 58,
+      "candidate_source": "v365_bit_boolean_grammar",
+      "changed_rows": 58,
+      "family": "bit_manipulation",
+      "gains": 0,
+      "losses": 57,
+      "new_correct": 0,
+      "reason": "rejected_by_gate",
+      "rule_class": "bit_boolean_grammar_l4_ok_fallback0_maxrule2"
+    }
+  ],
+  "current_bit_miss_count": 9,
+  "current_bit_miss_ids": [
+    "1abaffca",
+    "b8722d19",
+    "7192535b",
+    "f507b7f1",
+    "1a7c8520",
+    "a6192d29",
+    "048cc279",
+    "b8aa3072",
+    "5ba26f21"
+  ],
+  "current_summary": {
+    "accuracy": 0.6793650793650794,
+    "correct": 214,
+    "family": {
+      "bit_manipulation": {
+        "correct": 151,
+        "rows": 160
+      },
+      "equation_transform": {
+        "correct": 63,
+        "rows": 155
+      }
+    },
+    "rows": 315
+  },
+  "decision": {
+    "decision": "v365_cpu_gate_blocked",
+    "hf_gpu_allowed": false,
+    "next_action": "Do not launch HF. Per-bit boolean grammar is unsafe on the V357 weak contract.",
+    "reason": "v365=214/315; equation=63/155; bit=151/160; candidate_changes=73; candidate_gains=0; candidate_losses=66; accepted=0; accepted_gains=0; accepted_losses=0"
+  },
+  "expected_shared_row_contract_sha256": "bf055e3b9ebce79d4bfc9e48bce5a305b1d83da882f14afddec80d6afaba5fff",
+  "generated_at_utc": "2026-05-14T11:37:32.708326+00:00",
+  "inputs": {
+    "input_predictions_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v357_bit_global_ternary_gate\\20260514T_cpu_gate\\v357_integrated_predictions.csv",
+    "input_predictions_sha256": "3871498bb6f9944d6c7f2151bcf027b9927ea345eaa87d8bb4d3999bbbf8f754",
+    "max_level": 4
+  },
+  "observed_shared_row_contract_sha256": "bf055e3b9ebce79d4bfc9e48bce5a305b1d83da882f14afddec80d6afaba5fff",
+  "outputs": {
+    "candidate_decisions_csv": "artifacts\\v365_bit_residual_boolean_grammar_gate\\20260514T_cpu_gate\\v365_candidate_decisions.csv",
+    "candidate_rules_csv": "artifacts\\v365_bit_residual_boolean_grammar_gate\\20260514T_cpu_gate\\v365_candidate_rules.csv",
+    "integrated_predictions_csv": "artifacts\\v365_bit_residual_boolean_grammar_gate\\20260514T_cpu_gate\\v365_integrated_predictions.csv",
+    "manifest_json": "artifacts\\v365_bit_residual_boolean_grammar_gate\\20260514T_cpu_gate\\v365_bit_residual_boolean_grammar_gate_manifest.json"
+  },
+  "schema_version": "kg1_v365_bit_residual_boolean_grammar_gate_v1",
+  "v365_summary": {
+    "accuracy": 0.6793650793650794,
+    "correct": 214,
+    "family": {
+      "bit_manipulation": {
+        "correct": 151,
+        "rows": 160
+      },
+      "equation_transform": {
+        "correct": 63,
+        "rows": 155
+      }
+    },
+    "rows": 315
+  }
+}

@@ -27,6 +27,7 @@ Historico completo e rotas antigas ficam fora do plano ativo:
 | V359 checkpoint-2 adapter-only | `190/315` | `56/155` | `134/160` | rejeitado; truncation `1`, weak eval cancelado por FinOps |
 | V360 V359 transfer audit | bloqueia HF | nao altera equation | nao altera bit | causa provavel: SFT usou 15 regras, formato longo e nao usou preference hard negatives |
 | V361 boxed-only transfer dataset | `1152/288` train/val | nao altera equation | baseado nas mesmas `15` regras | corrige formato; V286 real gate passou com `boxed_only` |
+| V365 bit residual boolean grammar gate | `214/315` | `63/155` | `151/160` | bloqueado; `73` mudancas candidatas, `0` ganhos, `66` perdas candidatas |
 | Residual depois do V357 | mapa pronto | `92` misses | `9` misses | fila residual CPU |
 | V349 Kaggle discussions | `140/140` topicos | reforca ambiguidade/DSL | reforca bit full-byte/bit-pair/3-input | guia do proximo CPU gate |
 | Double check compilacoes 2026-05-14 | `3` arquivos | sem novo ganho medido | sem novo ganho medido | classifica links; nao libera HF |
@@ -80,6 +81,7 @@ Para submeter ao Kaggle:
 | V359 checkpoint-2 weak eval | `190/315`, `equation=56`, `bit=134`, truncation `1` | rejeitado; prova que V358 nao transferiu para adapter-only |
 | V360 transfer failure audit | V358 tem `15` regras, `1152/288` SFT rows, preference `2304/576` nao usado pelo launcher, `0` boxed-only completions | bloqueia mais HF nessa rota; exige V361 answer-first/boxed-only ou voltar para DSL equation |
 | V361 boxed-only transfer dataset | `1152` train, `288` val, `2304/576` preference rows, `0` train/val prompt overlap, real tokenizer `token_max=286`, `0` truncation, `0` fallback masks | unica correcao de formato permitida; ainda nao libera submit nem full |
+| V365 bit residual boolean grammar | `73` mudancas candidatas sobre V357, `0` ganhos, `66` perdas candidatas | bloqueia gramatica per-bit livre; proxima rota bit precisa ser bit-pair/bitsum/stride restrito |
 | V348 residual audit | `92` equation misses, `24` bit misses | fila unica do proximo CPU gate |
 | V349 discussion `689915` | tokens simples, cobertura de operacoes raras, min-logprob | orientar formato de traces futuros |
 | V349 discussion `688461` | taxonomia reversa e gramatica booleana dinamica | orientar DSL CPU |
@@ -566,6 +568,33 @@ Resumo das regras testadas:
 
 Decisao: V364 bloqueia HF. A hipotese pair-table nao explica os residuos e nao deve virar dataset de treino.
 
+### 15. V365 - Bit residual boolean grammar gate
+
+Objetivo: testar se uma gramatica booleana per-output-bit mais ampla conseguiria resolver os `9` residuos de `bit_manipulation` restantes depois do V357, sem destruir linhas que o teacher V357 ja acertava.
+
+Status: concluido e bloqueado.
+
+Resultado medido:
+
+- Script: `scripts/analyze_v365_bit_residual_boolean_grammar_gate.py`.
+- Manifesto: `artifacts/v365_bit_residual_boolean_grammar_gate/20260514T_cpu_gate/v365_bit_residual_boolean_grammar_gate_manifest.json`.
+- Input: `artifacts/v357_bit_global_ternary_gate/20260514T_cpu_gate/v357_integrated_predictions.csv`.
+- Estado de entrada V357: `214/315`, `equation_transform=63/155`, `bit_manipulation=151/160`.
+- Residuos de bit antes do gate: `9`.
+- Candidate changes: `73`.
+- Candidate gains: `0`.
+- Candidate losses: `66`.
+- Candidatos aceitos: `0`.
+- Estado V365: `214/315`, `equation_transform=63/155`, `bit_manipulation=151/160`.
+
+Leitura tecnica:
+
+- A gramatica booleana per-bit livre encaixa muitas assinaturas dos exemplos, mas nao generaliza para a query.
+- Ela altera linhas corretas do V357 e nao resolve nenhum dos `9` misses restantes.
+- Esta rota nao deve virar SFT, preference dataset, adapter soup, nem HF job.
+
+Decisao: V365 bloqueia HF. A proxima rota de bit precisa ser mais restrita e estrutural: bit-pair/bitsum/stride ou solver full-byte com prova de classe `0` perdas.
+
 ## Removido do plano ativo
 
 Estes itens nao devem ser reexecutados como acao principal. So podem voltar se um novo CPU gate provar uma razao nova.
@@ -591,6 +620,7 @@ Estes itens nao devem ser reexecutados como acao principal. So podem voltar se u
 | V363 public-train numeric operator priors | bloqueado; causaram perdas e `0` ganhos |
 | V363 same-operator symbolic DSL atual | bloqueado; nao gerou candidato unico no-loss |
 | V364 symbolic pair-table | bloqueado; `12` mudancas, `0` ganhos, com perdas em `len_4` |
+| V365 bit per-output boolean grammar | bloqueado; `73` mudancas candidatas, `0` ganhos, `66` perdas candidatas |
 | Checkpoints restantes V346 4/6 | nao avaliar sem novo sinal independente |
 | Checkpoints restantes V352 4/6/8 | bloqueados por FinOps; checkpoint-2 ja caiu abaixo do gate |
 | V359 checkpoint-4/final weak eval | cancelado por FinOps; checkpoint-2 ja violou total, bit e truncation |
@@ -622,4 +652,6 @@ Estes itens nao devem ser reexecutados como acao principal. So podem voltar se u
 
 ## Proxima acao unica
 
-Trocar a prioridade imediata para bit CPU-only: completar a expansao bit-pair/bitsum/stride contra os `22` residuos de `bit_manipulation` restantes apos V350/V357 e aceitar apenas classes com `0` perdas. Equation continua ativa somente se houver uma nova semantica simbolica diferente das rotas V363/V364. Novo HF so e permitido se o CPU gate superar o estado integrado atual (`201/315`, `equation=63`, `bit=138`) com `0` perdas e truncation `0`.
+Prioridade imediata: bit CPU-only, mas nao pela gramatica per-bit livre. Implementar uma expansao restrita bit-pair/bitsum/stride contra os `9` residuos de `bit_manipulation` restantes apos V357 e aceitar apenas classes com `0` perdas. A referencia a `22` residuos vale apenas para o estado V350/V355; depois do V357 restam `9`.
+
+Equation continua ativa somente se houver uma nova semantica simbolica diferente das rotas V363/V364. Novo HF so e permitido se um CPU gate superar o estado integrado V357 (`214/315`, `equation=63`, `bit=151`) ou produzir uma nova classe no-loss nao testada, com dataset de transferencia diferente das rotas V358/V361/V362 e kill-switch no primeiro checkpoint.

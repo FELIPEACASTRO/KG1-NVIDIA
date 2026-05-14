@@ -1,0 +1,6 @@
+family,candidate_source,rule_class,candidate_rows,changed_rows,gains,losses,new_correct,accepted_rows,accepted,reason
+bit_manipulation,v365_bit_boolean_grammar,bit_boolean_grammar_l4_ok_fallback0_maxrule3,7,7,0,1,0,0,False,rejected_by_gate
+bit_manipulation,v365_bit_boolean_grammar,bit_boolean_grammar_l4_partial_fallback1_maxrule5,1,1,0,1,0,0,False,rejected_by_gate
+bit_manipulation,v365_bit_boolean_grammar,bit_boolean_grammar_l4_partial_fallback2_maxrule5,2,2,0,2,0,0,False,rejected_by_gate
+bit_manipulation,v365_bit_boolean_grammar,bit_boolean_grammar_l4_ok_fallback0_maxrule1,5,5,0,5,0,0,False,rejected_by_gate
+bit_manipulation,v365_bit_boolean_grammar,bit_boolean_grammar_l4_ok_fallback0_maxrule2,58,58,0,57,0,0,False,rejected_by_gate
