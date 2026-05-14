@@ -42,10 +42,13 @@ Precisamos buscar subida no ranking ainda hoje, `2026-05-14`. O plano deve ser a
 | V380 strict independent | `222/315` | `63/155` | `159/160` | ganho real independente `+0`; nao submeter |
 | V381 filtered teacher dataset | n/a | `840` eq sintéticas | `280` bit replay | passou dataset + tokenization gate real; pronto para micro-train HF |
 | V382/V383 V381 teacher smoke | `191/315` melhor parcial | `56/155` | `135/160` | rejeitado; checkpoints 2/4/6 nao bateram baseline; V383 cancelado por FinOps |
+| V384 V382 V221 prompt weak eval | em execucao | em execucao | em execucao | mede os mesmos ckpt4/6 do V382 com prompt suffix historico V221 e thinking habilitado |
 
 Conclusao: `eval_loss` baixo nao e criterio de promocao. O criterio e ACC por familia no weak/full gate.
 
 Resultado V383 em `2026-05-14`: checkpoint-2 = `190/315`, `equation=56`, `bit=134`, `truncated=1`; checkpoint-4 = `191/315`, `equation=56`, `bit=135`, `truncated=1`; checkpoint-6 = `190/315`, `equation=56`, `bit=134`, `truncated=1`. Como nenhum dos tres podia superar o baseline `192/315`, `equation=56`, `bit=136`, `truncated=0`, o job foi cancelado antes de avaliar `checkpoint-8/10`.
+
+Auditoria V385 de medicao ACC em `2026-05-14`: o weak scorer atual esta correto para comparar candidatos adapter-only. O CSV weak validado pelo proprio runner tem `315` rows, `160` bit, `155` equation, SHA `85da758e14d57ea40270de5747f98726a0ad0b6d1795bff7dd46183005e0f9b6` e contrato `bf055e3b9ebce79d4bfc9e48bce5a305b1d83da882f14afddec80d6afaba5fff`. O merge e `one_to_one` por `id`, a familia vem do CSV de solucao, `bit_manipulation` usa igualdade binaria exata e truncation vem de `finish_reason == "length"`. Gap encontrado: V383 usou sufixo curto e e diagnostico; V384 e a comparacao correta contra o prompt historico V221.
 
 ## Fontes Auditadas
 
@@ -261,7 +264,7 @@ Resultado V381:
 
 ### Step 3 - V382 HF micro-train com kill-switch
 
-Status: proximo passo.
+Status: V382 treinado; V383 weak eval curto rejeitado; V384 V221 prompt weak eval em execucao.
 
 Objetivo: testar se o sinal V381 transfere para adapter-only sem destruir bit.
 
@@ -331,6 +334,6 @@ Regras:
 
 ## Proxima Acao Unica
 
-Implementar V380 CPU equation solver candidate patch.
+Concluir V384. Se qualquer checkpoint bater `total>192`, `equation>56`, `bit>=136` e `truncated=0`, promover para full/official-like eval e package gate. Se V384 nao bater, encerrar a linha V381/V382 e voltar para CPU gate independente com novo sinal verificavel.
 
-Nao rodar HF antes do V380 e V381.
+Nao rodar novo HF training antes de novo CPU gate com ganho de ACC medido.
