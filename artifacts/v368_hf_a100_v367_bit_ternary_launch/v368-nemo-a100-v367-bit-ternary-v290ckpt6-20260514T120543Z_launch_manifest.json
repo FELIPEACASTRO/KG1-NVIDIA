@@ -1,0 +1,97 @@
+{
+  "branch": "v230-v226-complementarity",
+  "dataset": {
+    "data_repo": "felipesp1983/kg1-nemotron-training",
+    "dataset_upload_commit": "09cfc182989d7adcf41c748857610c2868159fd4",
+    "train_file": "data/v367_v366_bit_ternary_transfer/20260514T_cpu_gate/v367_v366_bit_ternary_transfer_train.jsonl",
+    "train_rows": 1128,
+    "train_sha256": "5ea3cef4d9f589c9c77aabf22ac90b5261cc77cdbdcf5c120f306c6c0edf95fc",
+    "val_file": "data/v367_v366_bit_ternary_transfer/20260514T_cpu_gate/v367_v366_bit_ternary_transfer_val.jsonl",
+    "val_rows": 282,
+    "val_sha256": "04623efbcfd6c1db9d3988f9efca48ee6f387ae67bede8f55969517ebf06fb00"
+  },
+  "expected_commit": "f45eab0a2d230d105efd0fb6ed9372b7a7ce62ad",
+  "finops_kill_switch": {
+    "action": "weak-eval checkpoint-1 first; cancel continuation if no adapter-only family gain appears",
+    "first_weak_eval_bit_min": 136,
+    "first_weak_eval_equation_min_exclusive": 56,
+    "first_weak_eval_total_min_exclusive": 192,
+    "first_weak_eval_truncated_max": 0
+  },
+  "flavor": "a100-large",
+  "generated_at_utc": "2026-05-14T12:05:44.650111+00:00",
+  "hardware": {
+    "accelerator_model": "A100",
+    "accelerator_quantity": "1",
+    "accelerator_vram": "80 GB",
+    "cpu": "12 vCPU",
+    "name": "a100-large",
+    "pretty_name": "Nvidia A100 - large",
+    "ram": "142 GB",
+    "unit_cost_usd": 0.041667,
+    "unit_label": "minute"
+  },
+  "image": "nvcr.io/nvidia/nemo:25.11.nemotron_3_nano",
+  "init_adapter": {
+    "repo": "felipesp1983/kg1-nemotron-lora-v290-rank19-micro-patch-smoke",
+    "subfolder": "checkpoint-6"
+  },
+  "job_id": "6a05bad7e48bea4538b9c997",
+  "job_status": "RUNNING",
+  "job_url": "https://huggingface.co/jobs/felipesp1983/6a05bad7e48bea4538b9c997",
+  "mode": "launched",
+  "namespace": "felipesp1983",
+  "next_action": "Monitor every 30 seconds; weak-eval checkpoint-2/4/6/8/final after training completes.",
+  "output_repo": "felipesp1983/kg1-nemotron-lora-v368-nemo-a100-v367-bit-ternary-v290ckpt6",
+  "recipe": {
+    "answer_span_loss_weight": "8.0",
+    "answer_span_min_weighted_tokens": "500",
+    "eval_every_steps": 1,
+    "eval_max_examples": 128,
+    "final_learning_rate": "1.0e-8",
+    "learning_rate": "4.0e-8",
+    "max_steps": 2,
+    "promotion_gate": "reject if total<192 or bit<136; inspect only if equation>56 or total>=193; promote only if equation>=60 and bit>=136",
+    "save_every_steps": 1,
+    "source_weights": "v367_synthetic_from_v366_teacher_with_replay=1.00",
+    "subcategory_weights": "bit_fullbyte_ternary_v366_new=2.50,bit_exact_global_ternary_replay=1.20,bit_exact_global_binary_replay=1.00,bit_manipulation=1.00,unknown=1.00",
+    "trainable_lora_modules": "q_proj,k_proj,v_proj,o_proj,lm_head"
+  },
+  "recipe_override": {
+    "answer_span_loss_weight": "8.0",
+    "answer_span_min_weighted_tokens": "500",
+    "eval_every_steps": 1,
+    "final_learning_rate": "1.0e-8",
+    "learning_rate": "4.0e-8",
+    "max_length": 512,
+    "max_steps": 2,
+    "preference_training_used": false,
+    "save_every_steps": 1,
+    "source_weights": "v367_synthetic_from_v366_teacher_with_replay=1.00",
+    "subcategory_weights": "bit_fullbyte_ternary_v366_new=2.50,bit_exact_global_ternary_replay=1.20,bit_exact_global_binary_replay=1.00,bit_manipulation=1.00,unknown=1.00"
+  },
+  "run_id": "v368-nemo-a100-v367-bit-ternary-v290ckpt6-20260514T120543Z",
+  "v367_local_gate_summary": {
+    "completion_format": "boxed_only",
+    "dataset_manifest_sha256": "68d9cf25b5eaafea88c3a3401347a82b397ce87e82d991058b531512dbb312b4",
+    "source_cpu_teacher": "V366",
+    "token_max_train": 285,
+    "token_max_val": 285,
+    "tokenization_gate_manifest_sha256": "2251a463eec41fb15d16c63ef27f09d8c9e2f85048825a00be2ee84a774f8201",
+    "train_rows": 1128,
+    "train_sha256": "5ea3cef4d9f589c9c77aabf22ac90b5261cc77cdbdcf5c120f306c6c0edf95fc",
+    "train_subcategory_counts": {
+      "bit_exact_global_binary_replay": 48,
+      "bit_exact_global_ternary_replay": 312,
+      "bit_fullbyte_ternary_v366_new": 768
+    },
+    "val_rows": 282,
+    "val_sha256": "04623efbcfd6c1db9d3988f9efca48ee6f387ae67bede8f55969517ebf06fb00",
+    "val_subcategory_counts": {
+      "bit_exact_global_binary_replay": 12,
+      "bit_exact_global_ternary_replay": 78,
+      "bit_fullbyte_ternary_v366_new": 192
+    }
+  },
+  "version": "v368_v367_bit_ternary_from_v290_checkpoint6_nemo_a100"
+}
