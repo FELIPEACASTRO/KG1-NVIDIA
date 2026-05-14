@@ -15,6 +15,17 @@ Meta minima para gastar HF:
 - Primeiro checkpoint deve manter `total >= 192/315`, `truncated=0`.
 - Se qualquer job nao puder mais bater o gate, cancelar por FinOps.
 
+## Regra Operacional 2026-05-14
+
+Precisamos buscar subida no ranking ainda hoje, `2026-05-14`. Portanto, a ordem de decisao fica:
+
+- Prioridade maxima: ganho adapter-only submetivel medido em weak/full gate, nao `eval_loss` isolado.
+- Concluir o V382 apenas como smoke curto ja em andamento; escolher checkpoint por ACC weak, nao por loss.
+- Rodar V383 weak-eval sweep imediatamente sobre checkpoints V382 disponiveis.
+- Se qualquer checkpoint V383 bater `total > 192`, `equation_transform > 56`, `bit_manipulation >= 136` e `truncated=0`, promover para full/official-like eval e package gate no mesmo dia.
+- Se nenhum checkpoint V383 bater o baseline, encerrar esta linha por FinOps e voltar somente para CPU gates que gerem novo sinal independente.
+- Proibido submit de postprocessor/verifier/teacher-only. Submit hoje so pode vir de adapter/package que passe os gates.
+
 ## Estado Atual Medido
 
 | Estado | Total weak | equation_transform | bit_manipulation | Status |
