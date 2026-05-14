@@ -1,0 +1,2 @@
+family,candidate_source,rule_class,candidate_rows,changed_rows,gains,losses,accepted_rows,accepted,reason
+bit_manipulation,v357_bit_exact_global_ternary,bit_exact_global_ternary_unique_prediction,13,13,13,0,13,True,accepted_no_loss

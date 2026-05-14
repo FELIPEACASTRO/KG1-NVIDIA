@@ -1,0 +1,236 @@
+{
+  "generated_at_utc": "2026-05-14T09:30:00.784885+00:00",
+  "inputs": {
+    "reference_csvs": [
+      {
+        "path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v350_cpu_residual_no_loss_gate\\20260514T_v350_cpu_gate\\v350_integrated_predictions.csv",
+        "rows": 315,
+        "sha256": "ca66e4d106626e122463cfcb360c0bb61dc907ece5237a06822ae690b38a29d7"
+      }
+    ],
+    "v350_manifest_json": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v350_cpu_residual_no_loss_gate\\20260514T_v350_cpu_gate\\v350_no_loss_gate_manifest.json",
+    "v350_manifest_sha256": "a8445877730b0b17c142245ce3b5c801b0071d26c1e0e54cf87639a7f6697829",
+    "v357_manifest_json": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v357_bit_global_ternary_gate\\20260514T_cpu_gate\\v357_bit_global_ternary_gate_manifest.json",
+    "v357_manifest_sha256": "91fc03c574f86315377ada4a8162528fca6dab1b91768a1a954c42a178083ebe"
+  },
+  "outputs": {
+    "manifest_json": "artifacts\\v358_v357_bit_ternary_transfer_dataset\\20260514T_cpu_gate\\v358_v357_bit_ternary_transfer_manifest.json",
+    "preferences_train_jsonl": "artifacts\\v358_v357_bit_ternary_transfer_dataset\\20260514T_cpu_gate\\v358_v357_bit_ternary_transfer_preferences_train.jsonl",
+    "preferences_train_sha256": "1159e04b15ad8b17c2a088e4c011d1b2bbc3c313d09db690ad8039addece422c",
+    "preferences_val_jsonl": "artifacts\\v358_v357_bit_ternary_transfer_dataset\\20260514T_cpu_gate\\v358_v357_bit_ternary_transfer_preferences_val.jsonl",
+    "preferences_val_sha256": "12fd0bc97940b7f85f411efd6fcd061e28f048bc8ce58f4216c6c854d8d7cbc0",
+    "train_jsonl": "artifacts\\v358_v357_bit_ternary_transfer_dataset\\20260514T_cpu_gate\\v358_v357_bit_ternary_transfer_train.jsonl",
+    "train_sha256": "6881308c7e46167ea8752513dd6e986d14b39f04f661dbac8d9ed18d189f1a05",
+    "val_jsonl": "artifacts\\v358_v357_bit_ternary_transfer_dataset\\20260514T_cpu_gate\\v358_v357_bit_ternary_transfer_val.jsonl",
+    "val_sha256": "d92f4bdf2e622be958ae09353bf3965d2a23e1e6fcea95fbd77c8bcbdf0b6b47"
+  },
+  "policy": {
+    "assistant_final_answer_mode": "boxed_suffix",
+    "full_gate_rows_used_for_training": false,
+    "hf_gpu_allowed": false,
+    "next_gate": "run_v286_generic_tokenization_gate before any HF launch",
+    "synthetic_from_verified_rules_only": true,
+    "weak_gate_rows_used_for_training": false
+  },
+  "rules": [
+    {
+      "expr": "XNOR(SHL2,AND_NOT(ROL5,SHR7))",
+      "id": "e6d2a064",
+      "rule_class": "bit_exact_global_ternary_unique_prediction",
+      "rule_slug": "xnor_shl2_and_not_rol5_shr7",
+      "source_version": "v357",
+      "subcategory": "bit_exact_global_ternary"
+    },
+    {
+      "expr": "AND(ROL2,OR(SHL4,SHR5))",
+      "id": "0e70c867",
+      "rule_class": "bit_exact_global_ternary_unique_prediction",
+      "rule_slug": "and_rol2_or_shl4_shr5",
+      "source_version": "v357",
+      "subcategory": "bit_exact_global_ternary"
+    },
+    {
+      "expr": "XNOR(ROL7,OR(ROL1,SHR1))",
+      "id": "05ca617c",
+      "rule_class": "bit_exact_global_ternary_unique_prediction",
+      "rule_slug": "xnor_rol7_or_rol1_shr1",
+      "source_version": "v357",
+      "subcategory": "bit_exact_global_ternary"
+    },
+    {
+      "expr": "OR_NOT(SHR3,XOR(ROL4,SHL1))",
+      "id": "a6704625",
+      "rule_class": "bit_exact_global_ternary_unique_prediction",
+      "rule_slug": "or_not_shr3_xor_rol4_shl1",
+      "source_version": "v357",
+      "subcategory": "bit_exact_global_ternary"
+    },
+    {
+      "expr": "XNOR(ROL2,OR(SHL6,SHR7))",
+      "id": "78d02fc5",
+      "rule_class": "bit_exact_global_ternary_unique_prediction",
+      "rule_slug": "xnor_rol2_or_shl6_shr7",
+      "source_version": "v357",
+      "subcategory": "bit_exact_global_ternary"
+    },
+    {
+      "expr": "XNOR(SHL7,AND_NOT(ROL4,SHR3))",
+      "id": "55d834d1",
+      "rule_class": "bit_exact_global_ternary_unique_prediction",
+      "rule_slug": "xnor_shl7_and_not_rol4_shr3",
+      "source_version": "v357",
+      "subcategory": "bit_exact_global_ternary"
+    },
+    {
+      "expr": "OR_NOT(SHR4,XOR(ROL1,SHL2))",
+      "id": "4ef88f92",
+      "rule_class": "bit_exact_global_ternary_unique_prediction",
+      "rule_slug": "or_not_shr4_xor_rol1_shl2",
+      "source_version": "v357",
+      "subcategory": "bit_exact_global_ternary"
+    },
+    {
+      "expr": "OR_NOT(SHR1,XOR(ROL3,SHL1))",
+      "id": "202af98d",
+      "rule_class": "bit_exact_global_ternary_unique_prediction",
+      "rule_slug": "or_not_shr1_xor_rol3_shl1",
+      "source_version": "v357",
+      "subcategory": "bit_exact_global_ternary"
+    },
+    {
+      "expr": "XNOR(ROL3,OR(ROL6,SHR5))",
+      "id": "3ace787f",
+      "rule_class": "bit_exact_global_ternary_unique_prediction",
+      "rule_slug": "xnor_rol3_or_rol6_shr5",
+      "source_version": "v357",
+      "subcategory": "bit_exact_global_ternary"
+    },
+    {
+      "expr": "XNOR(ROL7,OR(SHL6,SHR7))",
+      "id": "3a7dd604",
+      "rule_class": "bit_exact_global_ternary_unique_prediction",
+      "rule_slug": "xnor_rol7_or_shl6_shr7",
+      "source_version": "v357",
+      "subcategory": "bit_exact_global_ternary"
+    },
+    {
+      "expr": "OR_NOT(XOR(SHL2,SHR2),ROL2)",
+      "id": "06120e47",
+      "rule_class": "bit_exact_global_ternary_unique_prediction",
+      "rule_slug": "or_not_xor_shl2_shr2_rol2",
+      "source_version": "v357",
+      "subcategory": "bit_exact_global_ternary"
+    },
+    {
+      "expr": "OR_NOT(XOR(SHL1,SHR4),ROL1)",
+      "id": "e1f3ffbb",
+      "rule_class": "bit_exact_global_ternary_unique_prediction",
+      "rule_slug": "or_not_xor_shl1_shr4_rol1",
+      "source_version": "v357",
+      "subcategory": "bit_exact_global_ternary"
+    },
+    {
+      "expr": "OR_NOT(SHR2,XOR(ROL5,SHL2))",
+      "id": "82ae858c",
+      "rule_class": "bit_exact_global_ternary_unique_prediction",
+      "rule_slug": "or_not_shr2_xor_rol5_shl2",
+      "source_version": "v357",
+      "subcategory": "bit_exact_global_ternary"
+    },
+    {
+      "expr": "OR(ROL2,SHL4)",
+      "id": "4ada9150",
+      "rule_class": "bit_exact_global_binary_OR",
+      "rule_slug": "or_rol2_shl4",
+      "source_version": "v350_replay",
+      "subcategory": "bit_exact_global_binary_replay"
+    },
+    {
+      "expr": "XOR(SHL1,SHR4)",
+      "id": "4c327b55",
+      "rule_class": "bit_exact_global_binary_XOR",
+      "rule_slug": "xor_shl1_shr4",
+      "source_version": "v350_replay",
+      "subcategory": "bit_exact_global_binary_replay"
+    }
+  ],
+  "schema_version": "kg1_v358_v357_bit_ternary_transfer_dataset_v1",
+  "source_v350_replay": {
+    "accepted_candidate_ids": [
+      "4ada9150",
+      "4c327b55"
+    ],
+    "decision": {
+      "decision": "v350_cpu_residual_no_loss_gate_passed",
+      "hf_gpu_allowed": false,
+      "next_action": "Build V351 minimal transfer dataset from accepted V350 rows before any HF GPU job.",
+      "reason": "v350=201/315; equation=63/155; bit=138/160; gains=2; losses=0"
+    }
+  },
+  "source_v357": {
+    "accepted_candidate_ids": [
+      "e6d2a064",
+      "0e70c867",
+      "05ca617c",
+      "a6704625",
+      "78d02fc5",
+      "55d834d1",
+      "4ef88f92",
+      "202af98d",
+      "3ace787f",
+      "3a7dd604",
+      "06120e47",
+      "e1f3ffbb",
+      "82ae858c"
+    ],
+    "decision": {
+      "decision": "v357_bit_global_ternary_gate_passed",
+      "hf_gpu_allowed": false,
+      "next_action": "Build V358 transfer dataset from V357 bit gains with strong replay before any HF smoke.",
+      "reason": "v357=214/315; equation=63/155; bit=151/160; gains=13; losses=0"
+    }
+  },
+  "validation": {
+    "preference_train_rows": 2304,
+    "preference_val_rows": 576,
+    "train": {
+      "duplicate_ids": 0,
+      "duplicate_prompts": 0,
+      "family_counts": {
+        "bit_manipulation": 1152
+      },
+      "id_overlap_with_reference": 0,
+      "prompt_sha256_overlap_with_reference": 0,
+      "rows": 1152,
+      "source_counts": {
+        "v358_synthetic_from_verified_bit_rules": 1152
+      },
+      "subcategory_counts": {
+        "bit_exact_global_binary_replay": 320,
+        "bit_exact_global_ternary": 832
+      },
+      "unique_ids": 1152,
+      "unique_prompts": 1152
+    },
+    "train_val_prompt_overlap": 0,
+    "validation": {
+      "duplicate_ids": 0,
+      "duplicate_prompts": 0,
+      "family_counts": {
+        "bit_manipulation": 288
+      },
+      "id_overlap_with_reference": 0,
+      "prompt_sha256_overlap_with_reference": 0,
+      "rows": 288,
+      "source_counts": {
+        "v358_synthetic_from_verified_bit_rules": 288
+      },
+      "subcategory_counts": {
+        "bit_exact_global_binary_replay": 80,
+        "bit_exact_global_ternary": 208
+      },
+      "unique_ids": 288,
+      "unique_prompts": 288
+    }
+  }
+}

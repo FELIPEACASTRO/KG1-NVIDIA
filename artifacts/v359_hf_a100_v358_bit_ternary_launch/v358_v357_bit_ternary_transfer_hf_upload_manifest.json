@@ -1,0 +1,29 @@
+{
+  "dataset_dir": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v358_v357_bit_ternary_transfer_dataset\\20260514T_cpu_gate",
+  "dataset_repo": "felipesp1983/kg1-nemotron-training",
+  "dataset_upload": "https://huggingface.co/datasets/felipesp1983/kg1-nemotron-training/commit/9292641bd005d8b1a0e70445fe8d3fe1464d0232",
+  "generated_at_utc": "2026-05-14T09:37:24.113456+00:00",
+  "local_gate_summary": {
+    "dataset_manifest_sha256": "b88b52d53bd59d6620489b81cef157422a2c9856a0a01076197de1a672f668a4",
+    "preferences_train_sha256": "1159e04b15ad8b17c2a088e4c011d1b2bbc3c313d09db690ad8039addece422c",
+    "preferences_val_sha256": "12fd0bc97940b7f85f411efd6fcd061e28f048bc8ce58f4216c6c854d8d7cbc0",
+    "tokenization_gate_manifest_sha256": "b9d470fd56f3a723fe79812f4711db9d2fb22501dac4935a16c110e9eb4060ed",
+    "train_rows": 1152,
+    "train_sha256": "6881308c7e46167ea8752513dd6e986d14b39f04f661dbac8d9ed18d189f1a05",
+    "train_subcategory_counts": {
+      "bit_exact_global_binary_replay": 320,
+      "bit_exact_global_ternary": 832
+    },
+    "val_rows": 288,
+    "val_sha256": "d92f4bdf2e622be958ae09353bf3965d2a23e1e6fcea95fbd77c8bcbdf0b6b47",
+    "val_subcategory_counts": {
+      "bit_exact_global_binary_replay": 80,
+      "bit_exact_global_ternary": 208
+    }
+  },
+  "manifest_json": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v358_v357_bit_ternary_transfer_dataset\\20260514T_cpu_gate\\v358_v357_bit_ternary_transfer_manifest.json",
+  "path_in_repo": "data/v358_v357_bit_ternary_transfer/20260514T_cpu_gate",
+  "tokenization_gate_manifest": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v358_v357_bit_ternary_transfer_dataset\\20260514T_cpu_gate\\tokenization_gate_real\\v286_generic_tokenization_gate_manifest.json",
+  "upload": "https://huggingface.co/datasets/felipesp1983/kg1-nemotron-training/commit/9292641bd005d8b1a0e70445fe8d3fe1464d0232",
+  "version": "v358_v357_bit_ternary_transfer_hf_upload"
+}

@@ -22,16 +22,18 @@ Historico completo e rotas antigas ficam fora do plano ativo:
 | V354 V352 transfer failure audit | `-10` vs V350 | `-7` vs V350 | `-3` vs V350 | prova de falha de transferencia LoRA |
 | V355 CPU residual gate | `201/315` | `63/155` | `138/160` | bloqueado; novas classes tiveram perdas/ambiguidade |
 | V356 equation conflict tiebreaker | sem ganho | `0/2` conflitos resolvidos | nao aplica | bloqueado; operador so aparece na query |
-| Residual depois do V350 | mapa pronto | `92` misses | `22` misses | fila residual CPU |
+| V357 bit global ternary CPU gate | `214/315` | `63/155` | `151/160` | novo teacher CPU: `+13` bit, `0` perdas |
+| V358 V357 bit ternary transfer dataset | `1152/288` train/val | nao altera equation | baseado em `13` ternary + `2` replay | dataset aprovado por gate real |
+| Residual depois do V357 | mapa pronto | `92` misses | `9` misses | fila residual CPU |
 | V349 Kaggle discussions | `140/140` topicos | reforca ambiguidade/DSL | reforca bit full-byte/bit-pair/3-input | guia do proximo CPU gate |
 | Double check compilacoes 2026-05-14 | `3` arquivos | sem novo ganho medido | sem novo ganho medido | classifica links; nao libera HF |
 
 Conclusao honesta:
 
-- Ha ganho real em CPU solver/verifier: `192 -> 201` weak, com `equation_transform 56 -> 63` e `bit_manipulation 136 -> 138`, sempre com `0` perdas no weak diagnostic.
-- Ainda nao ha ganho adapter-only novo. V338B, V341, V344, V346 e V352 falharam em transferir o ganho para LoRA.
+- Ha ganho real em CPU solver/verifier: `192 -> 214` weak, com `equation_transform 56 -> 63` e `bit_manipulation 136 -> 151`, sempre com `0` perdas no weak diagnostic.
+- O ganho novo comprovado de V357 e forte em bit, mas ainda e teacher CPU. Ainda nao ha ganho adapter-only novo. V338B, V341, V344, V346 e V352 falharam em transferir ganhos menores para LoRA.
 - `eval_loss` menor nao significa ACC maior. Promocao agora e somente por ACC weak/full.
-- HF GPU volta a ficar bloqueado ate novo CPU gate. O V352 smoke curto foi executado, medido e rejeitado.
+- HF GPU volta a ficar permitido apenas para um smoke V359 curto, porque V357 passou e V358 foi gateado. Full/package/submit continuam bloqueados ate ACC weak/full adapter-only melhorar.
 
 ## Metas
 
@@ -48,6 +50,7 @@ Para liberar HF GPU:
 - Dataset novo, diferente de V337D/V344/V346, com hard positives e hard negatives gerados a partir do novo teacher.
 - Anti-leakage por `id` e `prompt_sha256`.
 - Tokenization/offset-mask gate aprovado.
+- Kill-switch no primeiro checkpoint: cancelar se `total<=192`, `equation<=56`, `bit<136` ou truncation regredir.
 
 Para submeter ao Kaggle:
 
@@ -69,6 +72,8 @@ Para submeter ao Kaggle:
 | V354 transfer failure audit | V352 transferiu `0/2` acertos aceitos do V350; `-10` total vs V350 | prova que a rota bit-transfer direta nao deve continuar |
 | V355 CPU residual gate | bit stride/current solver e equation conflicts testados; `0` candidatos aceitos | bloqueia HF; classes novas nao sao seguras |
 | V356 conflict tiebreaker | `2` conflitos cryptarithm auditados; ambos tinham operador presente so na query | bloqueia cherry-pick dos 2 acertos aparentes |
+| V357 bit global ternary CPU gate | `214/315`, `equation=63`, `bit=151`, `13` ganhos, `0` perdas | novo teacher CPU para bit; libera somente V358/V359 smoke |
+| V358 V357 bit ternary dataset | `1152` train, `288` val, `0` overlap por `id`/`prompt_sha256`, V286 real gate aprovado | unica fonte atual para smoke V359 |
 | V348 residual audit | `92` equation misses, `24` bit misses | fila unica do proximo CPU gate |
 | V349 discussion `689915` | tokens simples, cobertura de operacoes raras, min-logprob | orientar formato de traces futuros |
 | V349 discussion `688461` | taxonomia reversa e gramatica booleana dinamica | orientar DSL CPU |
@@ -306,26 +311,90 @@ Gate:
 
 Decisao: V356 nao passou. Nao promover os 2 acertos aparentes de equation.
 
-### 7. V357 - Nova familia de regra CPU ou parar HF
+### 7. V357 - Bit global ternary CPU gate
 
-Objetivo: continuar apenas com hipoteses que ainda nao foram falsificadas.
+Objetivo: testar uma familia nova de regras bit que ainda nao havia sido falsificada: expressoes globais ternarias full-byte com transformacoes `ROL`, `SHL`, `SHR` e operadores booleanos.
 
-Opcoes permitidas:
+Status: concluido e aprovado.
 
-- procurar uma regra equation que reduza ambiguidade antes de weak label;
-- procurar uma regra bit que explique os `22` misses residuais sem tocar nos `138` acertos V350;
-- usar discussoes/literatura somente se produzirem uma regra executavel e auditavel em CPU.
+Resultado medido:
 
-Opcoes bloqueadas:
+- Baseline V350: `201/315`, `equation=63/155`, `bit=138/160`.
+- V357 integrado: `214/315`, `equation=63/155`, `bit=151/160`.
+- Ganhos: `13`.
+- Perdas: `0`.
+- IDs aceitos: `e6d2a064`, `0e70c867`, `05ca617c`, `a6704625`, `78d02fc5`, `55d834d1`, `4ef88f92`, `202af98d`, `3ace787f`, `3a7dd604`, `06120e47`, `e1f3ffbb`, `82ae858c`.
+- Artefatos: `artifacts/v357_bit_global_ternary_gate/20260514T_cpu_gate/`.
 
-- mais LoRA/HF sobre V351/V352;
-- stride/current bit solver direto;
-- escolher operador ausente por palpite;
-- treinamento guiado por `eval_loss`.
+Regra de uso:
 
-Gate:
+- V357 nao e submit direto, porque package Kaggle precisa continuar adapter-only.
+- V357 e teacher/verifier para gerar dataset sintetico controlado.
+- Nao misturar V357 com rows weak/full como treino direto.
 
-- mesma regra: `losses=0`, `equation>63` ou `bit>138`.
+Decisao: passou para V358 por `bit_manipulation 138 -> 151` com `0` perdas.
+
+### 8. V358 - Dataset de transferencia V357
+
+Objetivo: converter os `13` ganhos V357 em dataset pequeno, verificavel e diferente da rota V351/V352 que falhou.
+
+Status: concluido e aprovado no gate estrutural/tokenizacao real.
+
+Resultado medido:
+
+- Train: `1152` linhas, todas `bit_manipulation`.
+- Validation: `288` linhas, todas `bit_manipulation`.
+- Subcategorias train: `832` ternary, `320` binary replay.
+- Subcategorias val: `208` ternary, `80` binary replay.
+- Train SHA256: `6881308c7e46167ea8752513dd6e986d14b39f04f661dbac8d9ed18d189f1a05`.
+- Val SHA256: `d92f4bdf2e622be958ae09353bf3965d2a23e1e6fcea95fbd77c8bcbdf0b6b47`.
+- `id_overlap_with_reference=0`.
+- `prompt_sha256_overlap_with_reference=0`.
+- `train_val_prompt_overlap=0`.
+- V286 real tokenization gate: aprovado, tokenizer real, `prompt_truncation_rate=0.0`, `completion_tokens_dropped=0`, `fallback_masks=0`.
+- Artefatos: `artifacts/v358_v357_bit_ternary_transfer_dataset/20260514T_cpu_gate/`.
+
+Permitido:
+
+- usar somente regras verificadas de V357 e replay V350;
+- treino smoke curto em HF;
+- hard negatives/preferencias apenas se o launcher os usar explicitamente e com gate.
+
+Proibido:
+
+- treino longo antes do primeiro weak eval;
+- continuar se o primeiro checkpoint nao superar adapter-only `192/315`;
+- usar `eval_loss` como criterio de promocao.
+
+Decisao: libera upload HF e V359 smoke curto, nao libera full/package/submit.
+
+### 9. V359 - HF smoke V358 bit ternary
+
+Objetivo: verificar se o ganho V357 transfere para LoRA adapter-only. Esta e a primeira tentativa com sinal CPU grande o bastante para justificar GPU apos a falha V352.
+
+Status: proxima acao.
+
+Configuracao obrigatoria:
+
+- A100 como padrao FinOps.
+- Init adapter: melhor adapter-only conhecido, preferencialmente V290 checkpoint-6 usado nos smokes anteriores.
+- Dataset HF: V358 depois de upload com hashes fixos.
+- Primeiro checkpoint cedo, weak eval imediato.
+- Logs acompanhados a cada aproximadamente `40s`.
+
+Kill-switch:
+
+- cancelar se `bit<136`;
+- cancelar se `equation<=56`;
+- cancelar se `total<=192`;
+- cancelar se truncation regredir;
+- cancelar se custo/tempo ficar fora do esperado.
+
+Promocao:
+
+- somente se weak adapter-only `>192/315`, `bit>=136`, `equation>56` ou `bit` subir sem derrubar total;
+- se passar weak, rodar full official-like;
+- se full `>823/947`, packagear e so entao considerar Kaggle submit.
 
 ## Removido do plano ativo
 
@@ -343,6 +412,7 @@ Estes itens nao devem ser reexecutados como acao principal. So podem voltar se u
 | V355 bit stride/current solver direto | bloqueado: stride teve perdas; solver atual teve 1 ganho mas 6 perdas na melhor classe |
 | V355 equation conflict cherry-pick | bloqueado: 2 acertos potenciais dependem de conflitos sem desempate label-free |
 | V356 query-only operator conflicts | bloqueado: os 2 acertos aparentes de equation exigiriam escolher operador que nao aparece nos exemplos |
+| Mais HF sobre V351/V352 | removido; V352 ja falhou e V358 substitui a rota com sinal CPU maior |
 | Checkpoints restantes V346 4/6 | nao avaliar sem novo sinal independente |
 | Checkpoints restantes V352 4/6/8 | bloqueados por FinOps; checkpoint-2 ja caiu abaixo do gate |
 | Mais epochs/LR/checkpoints sem CPU gate | removido por FinOps |
@@ -373,4 +443,4 @@ Estes itens nao devem ser reexecutados como acao principal. So podem voltar se u
 
 ## Proxima acao unica
 
-Implementar V357 somente se houver nova regra CPU verificavel. Nenhum novo HF job deve ser lancado ate V357 ou outro CPU gate provar ganho no-loss acima de V350.
+Upload do dataset V358 para HF, criar/validar launcher V359 e rodar apenas o smoke curto com kill-switch. Full/package/submit continuam bloqueados ate ganho adapter-only medido.

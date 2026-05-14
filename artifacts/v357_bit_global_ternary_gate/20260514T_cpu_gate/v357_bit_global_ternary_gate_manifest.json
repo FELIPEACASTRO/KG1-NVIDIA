@@ -1,0 +1,100 @@
+{
+  "accepted_candidate_count": 13,
+  "accepted_candidate_ids": [
+    "e6d2a064",
+    "0e70c867",
+    "05ca617c",
+    "a6704625",
+    "78d02fc5",
+    "55d834d1",
+    "4ef88f92",
+    "202af98d",
+    "3ace787f",
+    "3a7dd604",
+    "06120e47",
+    "e1f3ffbb",
+    "82ae858c"
+  ],
+  "candidate_rule_summary": [
+    {
+      "accepted": true,
+      "accepted_rows": 13,
+      "candidate_rows": 13,
+      "candidate_source": "v357_bit_exact_global_ternary",
+      "changed_rows": 13,
+      "family": "bit_manipulation",
+      "gains": 13,
+      "losses": 0,
+      "reason": "accepted_no_loss",
+      "rule_class": "bit_exact_global_ternary_unique_prediction"
+    }
+  ],
+  "decision": {
+    "decision": "v357_bit_global_ternary_gate_passed",
+    "hf_gpu_allowed": false,
+    "next_action": "Build V358 transfer dataset from V357 bit gains with strong replay before any HF smoke.",
+    "reason": "v357=214/315; equation=63/155; bit=151/160; gains=13; losses=0"
+  },
+  "expected_shared_row_contract_sha256": "bf055e3b9ebce79d4bfc9e48bce5a305b1d83da882f14afddec80d6afaba5fff",
+  "gain_count": 13,
+  "gain_ids": [
+    "e6d2a064",
+    "0e70c867",
+    "05ca617c",
+    "a6704625",
+    "78d02fc5",
+    "55d834d1",
+    "4ef88f92",
+    "202af98d",
+    "3ace787f",
+    "3a7dd604",
+    "06120e47",
+    "e1f3ffbb",
+    "82ae858c"
+  ],
+  "generated_at_utc": "2026-05-14T09:27:22.645466+00:00",
+  "inputs": {
+    "v350_integrated_predictions_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v350_cpu_residual_no_loss_gate\\20260514T_v350_cpu_gate\\v350_integrated_predictions.csv",
+    "v350_integrated_predictions_sha256": "ca66e4d106626e122463cfcb360c0bb61dc907ece5237a06822ae690b38a29d7"
+  },
+  "loss_count": 0,
+  "loss_ids": [],
+  "observed_shared_row_contract_sha256": "bf055e3b9ebce79d4bfc9e48bce5a305b1d83da882f14afddec80d6afaba5fff",
+  "outputs": {
+    "candidate_decisions_csv": "artifacts\\v357_bit_global_ternary_gate\\20260514T_cpu_gate\\v357_candidate_decisions.csv",
+    "candidate_rules_csv": "artifacts\\v357_bit_global_ternary_gate\\20260514T_cpu_gate\\v357_candidate_rules.csv",
+    "integrated_predictions_csv": "artifacts\\v357_bit_global_ternary_gate\\20260514T_cpu_gate\\v357_integrated_predictions.csv",
+    "manifest_json": "artifacts\\v357_bit_global_ternary_gate\\20260514T_cpu_gate\\v357_bit_global_ternary_gate_manifest.json"
+  },
+  "schema_version": "kg1_v357_bit_global_ternary_gate_v1",
+  "v350_summary": {
+    "accuracy": 0.638095238095238,
+    "correct": 201,
+    "family": {
+      "bit_manipulation": {
+        "correct": 138,
+        "rows": 160
+      },
+      "equation_transform": {
+        "correct": 63,
+        "rows": 155
+      }
+    },
+    "rows": 315
+  },
+  "v357_summary": {
+    "accuracy": 0.6793650793650794,
+    "correct": 214,
+    "family": {
+      "bit_manipulation": {
+        "correct": 151,
+        "rows": 160
+      },
+      "equation_transform": {
+        "correct": 63,
+        "rows": 155
+      }
+    },
+    "rows": 315
+  }
+}

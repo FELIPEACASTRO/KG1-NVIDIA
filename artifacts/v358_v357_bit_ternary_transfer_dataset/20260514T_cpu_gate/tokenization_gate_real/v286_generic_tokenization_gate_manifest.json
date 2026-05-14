@@ -1,0 +1,134 @@
+{
+  "blocked_actions": [
+    "full_eval",
+    "package",
+    "kaggle_submit"
+  ],
+  "config": {
+    "assistant_final_answer_mode": "boxed_suffix",
+    "max_length": 8192,
+    "max_prompt_truncation_rate": 0.0,
+    "min_train_rows": 1152,
+    "min_val_rows": 288,
+    "require_offset_mask": true
+  },
+  "dataset_manifest_json": "artifacts\\v358_v357_bit_ternary_transfer_dataset\\20260514T_cpu_gate\\v358_v357_bit_ternary_transfer_manifest.json",
+  "dataset_manifest_sha256": "b88b52d53bd59d6620489b81cef157422a2c9856a0a01076197de1a672f668a4",
+  "decision": {
+    "next_action": "Only consider a tiny HF smoke train if roadmap risk/budget gates approve it.",
+    "reason": "train_rows=1152; val_rows=288; train_token_max=524; val_token_max=524; completion_truncation=0",
+    "status": "tokenization_gate_passed"
+  },
+  "generated_at_utc": "2026-05-14T09:30:46.983035+00:00",
+  "model_name": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+  "model_revision": "cbd3fa9f933d55ef16a84236559f4ee2a0526848",
+  "outputs": {
+    "manifest_json": "artifacts\\v358_v357_bit_ternary_transfer_dataset\\20260514T_cpu_gate\\tokenization_gate_real\\v286_generic_tokenization_gate_manifest.json"
+  },
+  "schema_version": "kg1_v286_generic_tokenization_gate_v1",
+  "tokenization": {
+    "train": {
+      "completion_tokens_dropped": 0,
+      "fallback_masks": 0,
+      "family_summary": {
+        "bit_manipulation": {
+          "loss_token_max": 245,
+          "loss_token_min": 236,
+          "loss_token_p50": 243,
+          "rows": 1152,
+          "token_max": 524,
+          "token_p50": 522,
+          "token_p90": 524,
+          "token_p99": 524
+        }
+      },
+      "loss_token_max": 245,
+      "loss_token_min": 236,
+      "loss_token_p50": 243,
+      "offset_masks": 1152,
+      "prompt_truncated": 0,
+      "prompt_truncation_rate": 0.0,
+      "rows": 1152,
+      "token_max": 524,
+      "token_mean": 520.472,
+      "token_min": 515,
+      "token_p50": 522,
+      "token_p90": 524,
+      "token_p99": 524
+    },
+    "validation": {
+      "completion_tokens_dropped": 0,
+      "fallback_masks": 0,
+      "family_summary": {
+        "bit_manipulation": {
+          "loss_token_max": 245,
+          "loss_token_min": 236,
+          "loss_token_p50": 243,
+          "rows": 288,
+          "token_max": 524,
+          "token_p50": 522,
+          "token_p90": 524,
+          "token_p99": 524
+        }
+      },
+      "loss_token_max": 245,
+      "loss_token_min": 236,
+      "loss_token_p50": 243,
+      "offset_masks": 288,
+      "prompt_truncated": 0,
+      "prompt_truncation_rate": 0.0,
+      "rows": 288,
+      "token_max": 524,
+      "token_mean": 520.472,
+      "token_min": 515,
+      "token_p50": 522,
+      "token_p90": 524,
+      "token_p99": 524
+    }
+  },
+  "tokenizer_info": {
+    "class": "TokenizersBackend",
+    "eos_token": "<|im_end|>",
+    "is_fast": true,
+    "pad_token": "<|im_end|>",
+    "toy": false
+  },
+  "validation": {
+    "train": {
+      "family_counts": {
+        "bit_manipulation": 1152
+      },
+      "prompt_answer_hash_count": 1152,
+      "prompt_hash_count": 1152,
+      "rows": 1152,
+      "sha256_expected": "6881308c7e46167ea8752513dd6e986d14b39f04f661dbac8d9ed18d189f1a05",
+      "source_counts": {
+        "v358_synthetic_from_verified_bit_rules": 1152
+      },
+      "subcategory_counts": {
+        "bit_exact_global_binary_replay": 320,
+        "bit_exact_global_ternary": 832
+      },
+      "unique_ids": 1152
+    },
+    "train_val_prompt_answer_overlap": 0,
+    "train_val_prompt_overlap": 0,
+    "validation": {
+      "family_counts": {
+        "bit_manipulation": 288
+      },
+      "prompt_answer_hash_count": 288,
+      "prompt_hash_count": 288,
+      "rows": 288,
+      "sha256_expected": "d92f4bdf2e622be958ae09353bf3965d2a23e1e6fcea95fbd77c8bcbdf0b6b47",
+      "source_counts": {
+        "v358_synthetic_from_verified_bit_rules": 288
+      },
+      "subcategory_counts": {
+        "bit_exact_global_binary_replay": 80,
+        "bit_exact_global_ternary": 208
+      },
+      "unique_ids": 288
+    }
+  }
+}
