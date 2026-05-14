@@ -1,0 +1,482 @@
+{
+  "decisions": {
+    "active_sources": [
+      "solver_results.parquet",
+      "kaggle_logprob/results/filtered_merged_dataset.csv",
+      "sft_train_full_9500.jsonl"
+    ],
+    "diagnostic_only_sources": [
+      "kaggle_trajectories/nemotron_traj.csv",
+      "kaggle_sft_data/dataset_generated.csv",
+      "sft_train_converted.jsonl"
+    ],
+    "next_action": "V380 CPU-only equation solver candidate patch using 79 V375 solver-correct rows, then trace/tokenization gate.",
+    "retired_or_duplicate_sources": [
+      "nemotron_hacker_dataset common files duplicated by nemotron_dataset_final",
+      "sft_train_reconstructed.jsonl full raw expanded file",
+      "sft_reconstructed.jsonl duplicate 9500 SFT source now superseded by final full/logprob files"
+    ]
+  },
+  "directories": {
+    "common_file_count": 6,
+    "common_hash_mismatch_count": 0,
+    "final_dir": "C:\\Users\\davis\\Downloads\\nemotron_dataset_final",
+    "final_file_count": 13,
+    "final_only": [
+      "DATASET_COMPLETO.md",
+      "competition_test.csv",
+      "competition_train.csv",
+      "kaggle_logprob/results/filtered_merged_dataset.csv",
+      "raw_traces_README.md",
+      "sft_reconstructed.jsonl",
+      "solver_results.parquet"
+    ],
+    "final_total_bytes": 509113679,
+    "hacker_dir": "C:\\Users\\davis\\Downloads\\nemotron_hacker_dataset",
+    "hacker_file_count": 7,
+    "hacker_only": [
+      "HACKER_REPORT.md"
+    ],
+    "hacker_total_bytes": 401052223
+  },
+  "extra_audit": {
+    "competition_test_train_overlap": {
+      "id_overlap_count": 3,
+      "overlap_rows": [
+        {
+          "id": "00066667",
+          "id_in_train": true,
+          "matching_train_id": "00066667",
+          "prompt_in_train": true
+        },
+        {
+          "id": "000b53cf",
+          "id_in_train": true,
+          "matching_train_id": "000b53cf",
+          "prompt_in_train": true
+        },
+        {
+          "id": "00189f6a",
+          "id_in_train": true,
+          "matching_train_id": "00189f6a",
+          "prompt_in_train": true
+        }
+      ],
+      "prompt_overlap_count": 3,
+      "rows": 3
+    },
+    "filtered_merged_duplicates": {
+      "duplicate_exact_rows": 821,
+      "duplicate_id_examples": [
+        "72ae2707",
+        "0dfd7674",
+        "d72d8c1c",
+        "54b895c1",
+        "25ee72c3",
+        "3185fdeb",
+        "a4ee9fa6",
+        "c424dcd4",
+        "59a5bd7b",
+        "ce595dcd",
+        "eac0e775",
+        "a7cbf6fd",
+        "81042133",
+        "e20d3f48",
+        "6e6401d7",
+        "83f2724b",
+        "58eb55b2",
+        "c29cdaed",
+        "2e5e7fe7",
+        "9dfe5ac9"
+      ],
+      "duplicate_id_rows": 1659,
+      "path": "C:\\Users\\davis\\Downloads\\nemotron_dataset_final\\kaggle_logprob\\results\\filtered_merged_dataset.csv",
+      "rows": 8703,
+      "unique_exact_rows": 7882,
+      "unique_ids": 7044
+    },
+    "sft_train_converted_format": {
+      "duplicate_message_pair_rows": 1659,
+      "malformed_think_tag_rows": 6923,
+      "one_open_two_close_rows": 6923,
+      "path": "C:\\Users\\davis\\Downloads\\nemotron_dataset_final\\sft_train_converted.jsonl",
+      "rows": 8703
+    },
+    "sft_train_full_conflicts": {
+      "answer_contains_brace_by_family": {
+        "equation_transform": 173
+      },
+      "any_intermediate_boxed_wrong_last_correct_by_family": {
+        "bit_manipulation": 1602,
+        "equation_transform": 1555,
+        "gravity_constant": 1597,
+        "numeral_system": 1576,
+        "text_encryption": 1576,
+        "unit_conversion": 1594
+      },
+      "any_intermediate_boxed_wrong_last_correct_rows": 9500,
+      "declared_answer_wrong_last_correct_by_family": {
+        "bit_manipulation": 238,
+        "equation_transform": 126
+      },
+      "declared_answer_wrong_last_correct_rows": 364,
+      "declared_examples": [
+        {
+          "answer": "01000011",
+          "boxed_count": 5,
+          "declared_boxed": "00011111",
+          "family": "bit_manipulation",
+          "id": "000b53cf",
+          "last_boxed": "01000011"
+        },
+        {
+          "answer": "01110000",
+          "boxed_count": 5,
+          "declared_boxed": "01111100",
+          "family": "bit_manipulation",
+          "id": "00890aff",
+          "last_boxed": "01110000"
+        },
+        {
+          "answer": "17/",
+          "boxed_count": 5,
+          "declared_boxed": "17",
+          "family": "equation_transform",
+          "id": "00d8b3db",
+          "last_boxed": "17/"
+        },
+        {
+          "answer": "10000100",
+          "boxed_count": 5,
+          "declared_boxed": "10010100",
+          "family": "bit_manipulation",
+          "id": "012fb81b",
+          "last_boxed": "10000100"
+        },
+        {
+          "answer": "+}",
+          "boxed_count": 5,
+          "declared_boxed": "+",
+          "family": "equation_transform",
+          "id": "01b2aa67",
+          "last_boxed": "+}"
+        },
+        {
+          "answer": "10010101",
+          "boxed_count": 5,
+          "declared_boxed": "10111001",
+          "family": "bit_manipulation",
+          "id": "01e09228",
+          "last_boxed": "10010101"
+        },
+        {
+          "answer": "00001001",
+          "boxed_count": 5,
+          "declared_boxed": "00011001",
+          "family": "bit_manipulation",
+          "id": "0245b9bb",
+          "last_boxed": "00001001"
+        },
+        {
+          "answer": ":}'",
+          "boxed_count": 5,
+          "declared_boxed": ":",
+          "family": "equation_transform",
+          "id": "02664ad5",
+          "last_boxed": ":}'"
+        },
+        {
+          "answer": "01101101",
+          "boxed_count": 5,
+          "declared_boxed": "01111101",
+          "family": "bit_manipulation",
+          "id": "02a5a1ca",
+          "last_boxed": "01101101"
+        },
+        {
+          "answer": "00000100",
+          "boxed_count": 5,
+          "declared_boxed": "00001100",
+          "family": "bit_manipulation",
+          "id": "0311b798",
+          "last_boxed": "00000100"
+        }
+      ],
+      "intermediate_examples": [
+        {
+          "answer": "10010111",
+          "boxed_count": 5,
+          "family": "bit_manipulation",
+          "first_boxed": "",
+          "id": "00066667",
+          "last_boxed": "10010111"
+        },
+        {
+          "answer": "01000011",
+          "boxed_count": 5,
+          "family": "bit_manipulation",
+          "first_boxed": "",
+          "id": "000b53cf",
+          "last_boxed": "01000011"
+        },
+        {
+          "answer": "cat imagines book",
+          "boxed_count": 5,
+          "family": "text_encryption",
+          "first_boxed": "",
+          "id": "00189f6a",
+          "last_boxed": "cat imagines book"
+        },
+        {
+          "answer": "XXXVIII",
+          "boxed_count": 4,
+          "family": "numeral_system",
+          "first_boxed": "",
+          "id": "001b24c4",
+          "last_boxed": "XXXVIII"
+        },
+        {
+          "answer": "wizard creates secret",
+          "boxed_count": 5,
+          "family": "text_encryption",
+          "first_boxed": "",
+          "id": "001c63cb",
+          "last_boxed": "wizard creates secret"
+        },
+        {
+          "answer": "16.65",
+          "boxed_count": 5,
+          "family": "unit_conversion",
+          "first_boxed": "",
+          "id": "00208201",
+          "last_boxed": "16.65"
+        },
+        {
+          "answer": "00110100",
+          "boxed_count": 5,
+          "family": "bit_manipulation",
+          "first_boxed": "",
+          "id": "0031df9c",
+          "last_boxed": "00110100"
+        },
+        {
+          "answer": "154.62",
+          "boxed_count": 5,
+          "family": "gravity_constant",
+          "first_boxed": "",
+          "id": "0040ff76",
+          "last_boxed": "154.62"
+        },
+        {
+          "answer": "@&",
+          "boxed_count": 5,
+          "family": "equation_transform",
+          "first_boxed": "}.\n\n【`!*[{】 = 【'\"[`】\n  input: 【`】【!】【*】【[】【{】\n  left:【`】【!】\n  operator: 【*】\n  right:【[】【{】\n  output: 【'】【\"】【[】【`】\n  operator: 【*】 rule is complex\n\n【\\'*'>】 = 【![@】\n  input: 【\\】【'】【*】【'】【>】\n  left:【\\】【'】\n  operator: 【*】\n  right:【'】【>】\n  output: 【!】【[】【@】\n  operator: 【*】 rule is complex\n\n【\\'-!`】 = 【\\\\】\n  input: 【\\】【'】【-】【!】【`】\n  left:【\\】【'】\n  operator: 【-】\n  right:【!】【`】\n  output: 【\\】【\\】\n  operator: 【-】 follows projection rule (0, 0)\n\n【`!*\\&】 = 【'@'{】\n  input: 【`】【!】【*】【\\】【&】\n  left:【`】【!】\n  operator: 【*】\n  right:【\\】【&】\n  output: 【'】【@】【'】【{】\n  operator: 【*】 rule is complex\n\nQuestion【[[-!'】\n  input: 【[】【[】【-】【!】【'】\n  left:【[】【[】\n  operator:【-】\n  right:【!】【'】\n\nThe question operator is 【-】.\nBased on character frequency heuristics, we guess the answer.\n\n  output: 【@&】-> 【{@&",
+          "id": "00457d26",
+          "last_boxed": "@&"
+        },
+        {
+          "answer": "50.51",
+          "boxed_count": 5,
+          "family": "gravity_constant",
+          "first_boxed": "",
+          "id": "00463d04",
+          "last_boxed": "50.51"
+        }
+      ],
+      "multi_boxed_rows": 9500,
+      "path": "C:\\Users\\davis\\Downloads\\nemotron_dataset_final\\sft_train_full_9500.jsonl",
+      "rows": 9500
+    },
+    "solver_parquet_conditioning": {
+      "conditioned_on_answer_counts": {
+        "False": 82,
+        "True": 741
+      },
+      "path": "C:\\Users\\davis\\Downloads\\nemotron_dataset_final\\solver_results.parquet",
+      "rows": 823,
+      "solver_category_counts": {
+        "None": 23,
+        "arithmetic": 315,
+        "little_endian": 276,
+        "mixed_concat": 108,
+        "mixed_concat_little_endian": 26,
+        "pure_concat": 59,
+        "query_unseen_concat": 16
+      }
+    },
+    "v217_prompt_overlap": {
+      "v217_train": {
+        "example_v217_ids": [
+          "v217_train_b63a20f93790df03",
+          "v217_train_84fe9929ca160134",
+          "v217_train_962b881df1da763e",
+          "v217_train_cba0983e52d9fb78",
+          "v217_train_445e226737859d23",
+          "v217_train_30c8964d10a1b42a",
+          "v217_train_db9468bbe68b1d9d",
+          "v217_train_9815c6445dff1dc1",
+          "v217_train_06706c5031d32ffc",
+          "v217_train_8d53eab203064cbf",
+          "v217_train_7836f2fcd322b3df",
+          "v217_train_ef6222c83f2edff8",
+          "v217_train_a740aa7e2528f682",
+          "v217_train_9254e22927c5ee56",
+          "v217_train_150816b703e99056",
+          "v217_train_35fae52b0a9f4134",
+          "v217_train_2d3929070ea97b34",
+          "v217_train_8dc7bdbeb7929aaa",
+          "v217_train_bb7221ee503c7839",
+          "v217_train_84a4505d2ecea5c2"
+        ],
+        "overlap_family_counts": {
+          "bit_manipulation": 654,
+          "equation_transform": 246,
+          "gravity_constant": 144,
+          "numeral_system": 144,
+          "text_encryption": 144,
+          "unit_conversion": 144
+        },
+        "overlap_prompt_count": 1476,
+        "path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\data\\v217\\v217_short_answer_train.jsonl",
+        "source_rows": 10206
+      },
+      "v217_val": {
+        "example_v217_ids": [
+          "v217_val_5791573a7d76efde",
+          "v217_val_8f305685b6dd8f38",
+          "v217_val_0ce9f8f23634a46d",
+          "v217_val_e484697217a05505",
+          "v217_val_37578d044768ce21",
+          "v217_val_41014e329d70e9eb",
+          "v217_val_8b145cb62f5e1a59",
+          "v217_val_ca3ee4ef71d4b09e",
+          "v217_val_6a4d0900389e6f5f",
+          "v217_val_3ee34908e9fc0326",
+          "v217_val_7faffad7014f9477",
+          "v217_val_bc3d414d13a5807d",
+          "v217_val_729d04451e341d73",
+          "v217_val_687066d6c5721bbf",
+          "v217_val_c066bf2d5687d932",
+          "v217_val_f860ba059c5685ff",
+          "v217_val_f3a73f81630d9ff6",
+          "v217_val_14079114ef528862",
+          "v217_val_dc659e52b828f45a",
+          "v217_val_51b414cced20637c"
+        ],
+        "overlap_family_counts": {
+          "bit_manipulation": 30,
+          "equation_transform": 9,
+          "gravity_constant": 16,
+          "numeral_system": 16,
+          "text_encryption": 16,
+          "unit_conversion": 16
+        },
+        "overlap_prompt_count": 103,
+        "path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\data\\v217\\v217_short_answer_val.jsonl",
+        "source_rows": 681
+      }
+    }
+  },
+  "generated_at_utc": "2026-05-14T14:59:48.108778+00:00",
+  "metric_summary": {
+    "final_superset": {
+      "filtered_merged_dataset": {
+        "bit_cot": {
+          "correct": 1752,
+          "rows": 1754,
+          "wrong": 2
+        },
+        "cot_correct": 8691,
+        "equation_cot": {
+          "correct": 2428,
+          "rows": 2438,
+          "wrong": 10
+        },
+        "label_correct": 8703,
+        "rows": 8703,
+        "unique_ids": 7044
+      },
+      "solver_results": {
+        "metric_correct": 800,
+        "metric_wrong": 23,
+        "rows": 823,
+        "v375_coverage": {
+          "category_counts": {
+            "None": 3,
+            "arithmetic": 36,
+            "little_endian": 29,
+            "mixed_concat": 14
+          },
+          "correct": 79,
+          "coverage_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v378_nemotron_dataset_final_audit\\v378_v375_solver_coverage.csv",
+          "rows": 82,
+          "wrong": 3
+        }
+      },
+      "v375_residual_trace_solver_coverage": {
+        "coverage_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v378_nemotron_dataset_final_audit\\v378_v375_residual_trace_solver_coverage.csv",
+        "filtered_trace_correct": 91,
+        "filtered_trace_covered": 92,
+        "rows": 92,
+        "solver_correct": 79,
+        "solver_covered": 82
+      }
+    },
+    "hacker_subset": {
+      "dataset_generated_cot": {
+        "correct": 9197,
+        "wrong": 303
+      },
+      "sft_train_converted": {
+        "bit_unique_ids": 1354,
+        "equation_unique_ids": 1499,
+        "metric_correct": 8703,
+        "rows": 8703,
+        "unique_ids": 7044
+      },
+      "traj_generated_answer": {
+        "correct": 4542,
+        "wrong": 4958
+      }
+    }
+  },
+  "outputs": {
+    "common_hash_comparison_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v379_dataset_doublecheck_audit\\common_file_hash_comparison.csv",
+    "final_inventory_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v379_dataset_doublecheck_audit\\final_directory_inventory.csv",
+    "hacker_inventory_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v379_dataset_doublecheck_audit\\hacker_directory_inventory.csv",
+    "report_md": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v379_dataset_doublecheck_audit\\KG1_V379_DATASET_DOUBLECHECK.md",
+    "summary_json": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v379_dataset_doublecheck_audit\\v379_dataset_doublecheck_summary.json"
+  },
+  "report_audit": {
+    "C:\\Users\\davis\\Downloads\\Dataset andy279_nemotron-reasoning-challenge — Relatório Completo de Extração.md": {
+      "bytes": 12305,
+      "contains_hf_token_pattern": false,
+      "exists": true,
+      "mentions_34_test_puzzles": true,
+      "mentions_solver_results": true,
+      "mentions_tong_with_logprob": true,
+      "mentions_yours_with_logprob": true,
+      "sha256": "ed7d3b970b12155095de83cf34c72671ecfdc475e7c2adc72b47c6bc8d28dba5"
+    },
+    "C:\\Users\\davis\\Downloads\\Relatório de Extração_ Dataset andy279_nemotron-reasoning-challenge.md": {
+      "bytes": 6884,
+      "contains_hf_token_pattern": false,
+      "exists": true,
+      "mentions_34_test_puzzles": false,
+      "mentions_solver_results": false,
+      "mentions_tong_with_logprob": false,
+      "mentions_yours_with_logprob": false,
+      "sha256": "869a7e0b1f294c48803bc4cdc2014baecb421a42c3b6676a1d3f68363c8b6314"
+    }
+  },
+  "report_claims_missing_from_dirs": [
+    "kaggle_logprob/results/tong_with_logprob.csv",
+    "kaggle_logprob/results/yours_with_logprob.csv"
+  ],
+  "row_counts": {
+    "final_competition_test_rows": 3,
+    "final_competition_train_rows": 9500
+  },
+  "schema_version": "kg1_v379_dataset_doublecheck_v1"
+}
