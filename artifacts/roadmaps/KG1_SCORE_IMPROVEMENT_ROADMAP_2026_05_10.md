@@ -52,6 +52,8 @@ Precisamos buscar subida no ranking ainda hoje, `2026-05-14`. A decisao V392 e s
 | V392 roadmap reset | n/a | n/a | n/a | pausar LoRA; priorizar baseline lock + sweep sem treino + gate de transferencia real |
 | V393 prompt/template sweep | melhor `192/315` | `56/155` | `136/160` | encerrado por FinOps; sem ganho sobre V392 lock |
 | V394 equation row inventory | CPU projection `198/315` | `62/155` | `136/160` | sem sinal novo vs V390; nao autoriza GPU |
+| V395 HF CPU aggressive symbolic gate | CPU integrated `199/315` | `63/155` | `136/160` | confirma sinal V336/V343; `0` ganho novo adapter-only; GPU ainda bloqueada |
+| V396 Google Drive artifact audit | n/a | n/a | n/a | Drive contem artefatos validos de linhagem/diagnostico, mas nenhum supera V291/V290 adapter-only |
 
 Conclusao: `eval_loss` baixo nao e criterio de promocao. O criterio e ACC por familia no weak/full gate.
 
@@ -78,6 +80,29 @@ Decisao V392: nao ha justificativa tecnica para continuar a linha "teacher/verif
 Decisao V393 em `2026-05-14`: o sweep sem treino foi encerrado por FinOps. `v221_boxed_suffix` empatou o baseline travado (`192/315`, `equation=56`, `bit=136`, `truncated=0`), portanto nao gera novo submit. `no_suffix` regrediu severamente (`158/315`, `equation=55`, `bit=103`, `truncated=1`), provando que remover a instrucao boxed quebra `bit_manipulation` e nao melhora equation. As variantes restantes (`strict_disable_thinking`, `strict_2048_tokens`) foram canceladas porque, apos esse resultado, a chance de superar `equation>56` com `bit>=136` nao justificava continuar gastando H200.
 
 Decisao V394 em `2026-05-14`: o inventario row-level sobre o baseline travado V290 checkpoint-6 confirmou `99` misses de `equation_transform`: `16` numeric operator e `83` symbolic punctuation. O V324 achou `6` ganhos CPU/verifier (`274def88`, `528ec0d8`, `7688e06e`, `c5b058d6`, `d1bd7478`, `fb623471`), projetando `equation=62/155` e `weak=198/315` com `bit=136/160`. Double check contra V390: `0` IDs novos, mesma projecao `62`, mesmo guardrail `136`. Como V391 ja testou esse sinal em LoRA e nao transferiu, V394 nao autoriza novo HF job. A proxima acao e expandir DSL simbolica nos `93` misses restantes, especialmente `equation_symbolic_punct`.
+
+Decisao V395 em `2026-05-14`: o job HF CPU `https://huggingface.co/jobs/felipesp1983/6a0647a9e48bea4538b9d78a` rodou em `cpu-upgrade` (`8 vCPU`, `32 GB`, `US$0.0005/min`) e completou. O V324 agressivo nao achou IDs novos alem dos `6` numericos conhecidos. O V329 amplo reconfirmou o unico ganho simbolico conhecido `99d6a3b5`. A integracao no-loss ficou `199/315`, `equation=63/155`, `bit=136/160`, `losses=0`, mas e sinal solver/verifier ja conhecido de V336/V343, nao ganho adapter-only. Portanto V395 nao autoriza treino GPU repetindo a mesma transferencia. Os artefatos foram enviados para `felipesp1983/kg1-v395-cpu-symbolic-gate-artifacts`.
+
+Decisao V396 em `2026-05-14`: a auditoria seletiva no Google Drive confirmou que existem muitos artefatos validos, mas nenhum novo adapter-only melhor que V291/V290. V221 e V226 continuam validos como registros de candidatos (`190/315` e `191/315`), V230-V238 continuam uteis como miss packs/parser/solver diagnostics, e V199 e uma linhagem historica production-ready com ZIP validado. Em contrapartida, V227/V228/V229 foram descartados por regressao severa (`16/315` no V229 final; V228 com `111/160` truncados na primeira janela), e os adapters publicos em `KG1_PUBLIC_ADAPTERS` nao sao drop-in: Huikang falha por incompatibilidade de modulos LoRA e Kienngx 3000 fica em `32/315`. O resumo versionado esta em `artifacts/v396_drive_artifact_audit/KG1_V396_GOOGLE_DRIVE_ARTIFACT_AUDIT.md`. Nao ha autorizacao de novo treino GPU a partir do Drive.
+
+## Google Drive Artifact Audit 2026-05-14
+
+Achados que entram no plano:
+
+- `KG1_NVIDIA_V221`: registry weak AB com V194 `190/315`, V217 `190/315`, Kienngx `183/315`; util para oracle/complementarity, nao para novo submit.
+- `KG1_NVIDIA_V226`: checkpoint-1 `191/315`, bit `136`, equation `55`; predecessor direto usado em V230.
+- `KG1_NVIDIA_V230`: complementarity e miss packs; oracle row-level melhora, mas nao passa weak gate.
+- `KG1_NVIDIA_V231` a `V238`: workbench/parser/solver diagnostics; no maximo `1` row deployable em V238, insuficiente para submit.
+- `KG1_NVIDIA_V199`: `final_submit_doublecheck.json` valida um ZIP historico com layout root-only, rank `32`, target modules completos e `12011` tensors. Fica como linhagem/auditoria, nao como baseline atual.
+
+Achados descartados:
+
+- `KG1_NVIDIA_V227/V228/V229`: regressao de prompt/treino; V229 final `16/315`, eq `9`, bit `7`.
+- `KG1_PUBLIC_ADAPTERS/huikang_default_v20`: falha de carregamento vLLM por target modules de mixer incompativeis.
+- `KG1_PUBLIC_ADAPTERS/kienngx_cot_labels_3000samples_adapter`: `32/315`, truncation `202/315`.
+- `Submit/submission.zip`: historico e anterior ao package V291; nao substitui o baseline local travado.
+
+Impacto: o Drive melhora a confianca na linhagem e evita repetir linhas ruins, mas nao oferece ganho adapter-only novo. O proximo gasto em GPU continua bloqueado ate existir prova de transferencia adapter-only.
 
 ## Fontes Web Reauditadas 2026-05-14
 
@@ -108,7 +133,7 @@ Decisao honesta: nenhuma literatura revisada autoriza "treinar mais" como proxim
 
 1. V393 esta encerrado: prompt/template sweep nao gerou ganho submit-safe.
 2. executar V394 inventario row-level de `equation` com DSL expandida e certificado por row;
-3. executar V395 guardrail de `bit` por bit-pair/bitsum/stride, com ordenacao de busca inspirada em BitVec synthesis;
+3. executar V397 guardrail de `bit` por bit-pair/bitsum/stride, com ordenacao de busca inspirada em BitVec synthesis;
 4. so abrir novo HF/Kaggle GPU se CPU gate mostrar `equation>56`, `bit>=136`, `truncated=0` ou uma variante prompt-safe com expectativa objetiva de full `>=824/947`.
 
 ## Fontes Auditadas
@@ -371,7 +396,27 @@ Artefatos V394:
 - Inventario: `artifacts/v394_equation_row_level_inventory/20260514T_cpu_gate/v394_inventory/v394_equation_row_level_inventory.csv`.
 - Comparativo: `artifacts/v394_equation_row_level_inventory/20260514T_cpu_gate/v394_inventory/v394_vs_v390_comparison.csv`.
 
-### Step 4 - V395 bit guardrail/probe
+### Step 4 - V395 HF CPU aggressive symbolic gate
+
+Status: concluido no Hugging Face CPU; sem autorizacao de GPU.
+
+Objetivo: obedecer a diretriz de usar CPU do HF para validar uma busca mais agressiva antes de gastar GPU.
+
+Resultado:
+
+- Job: `https://huggingface.co/jobs/felipesp1983/6a0647a9e48bea4538b9d78a`.
+- Flavor: `cpu-upgrade`, `8 vCPU`, `32 GB`, `US$0.0005/min`.
+- V324 agressivo: `6` ganhos numericos conhecidos, `0` conflitos, `projected_equation=62`.
+- V329 amplo: `1` ganho simbolico conhecido (`99d6a3b5`), `0` conflitos, `projected_equation=63`.
+- V336 integrado: `199/315`, `equation=63/155`, `bit=136/160`, `losses=0`.
+- Decisao: nao houve sinal novo alem de V336/V343; nao treinar LoRA com a mesma lista de `7` IDs.
+
+Artefatos:
+
+- Local: `artifacts/v395_hf_cpu_aggressive_symbolic_gate_results/v395-hf-cpu-aggressive-symbolic-gate-20260514T220636Z/`.
+- HF dataset: `felipesp1983/kg1-v395-cpu-symbolic-gate-artifacts`, path `v395-hf-cpu-aggressive-symbolic-gate-20260514T220636Z`.
+
+### Step 5 - V397 bit guardrail/probe
 
 Status: CPU primeiro.
 
@@ -393,9 +438,9 @@ Saida esperada:
 - Bit guardrail CSV.
 - Bloqueio automatico de qualquer candidato com `bit<136`.
 
-### Step 5 - V396 treino LoRA somente com prova de transferencia
+### Step 6 - V398 treino LoRA somente com prova de transferencia
 
-Status: bloqueado ate Step 2/3 mostrar sinal novo.
+Status: bloqueado ate Step 2/3/5 mostrar sinal novo.
 
 Objetivo: permitir treino apenas se houver evidencia que o modelo consegue internalizar a correcao.
 
@@ -408,9 +453,9 @@ Gate obrigatorio antes de HF/Kaggle GPU:
 
 Decisao atual:
 
-- V391 provou que `198/315` em projecao CPU nao basta. Portanto V396 nao pode ser "mais epochs", "LR diferente" ou "mais H200" sem esse gate.
+- V391 provou que `198/315` em projecao CPU nao basta. Portanto V398 nao pode ser "mais epochs", "LR diferente" ou "mais H200" sem esse gate.
 
-### Step 6 - Full/package/submit
+### Step 7 - Full/package/submit
 
 Status: somente depois de weak gate.
 
@@ -455,9 +500,11 @@ Regras:
 | H200 relaunch sem novo dado | V391 confirmou que trocar hardware nao muda ACC quando a hipotese de dados nao transfere |
 | HF training baseado apenas em `eval_loss` | historicamente loss caiu sem mover `equation_transform`; promocao e por ACC |
 | Web/API buscas genericas | so retornam ao plano se virarem regra, dataset ou gate verificavel |
+| V227/V228/V229 targeted equation sweep | Drive audit V396 confirmou regressao severa: V229 `16/315`, V228 com `111/160` truncados na janela inicial |
+| Public adapters Huikang/Kienngx do Drive como drop-in | Huikang falha por incompatibilidade de target modules; Kienngx 3000 mede `32/315` com truncation alto |
 
 ## Proxima Acao Unica
 
-Implementar a proxima expansao CPU de DSL simbolica para os `93` unresolved equation misses do V394, priorizando `equation_symbolic_punct`. O gate minimo para voltar a GPU continua: novo sinal adapter-transfer ou CPU signal novo com IDs diferentes de V390, `equation>56`, `bit>=136`, `truncated=0`, e plano de transferencia que nao repita V391.
+Com a auditoria Google Drive V396 concluida, a proxima acao unica e auditar imediatamente o `sft_reconstructed.jsonl` e o dataset V282/V290 para decidir se existe uma rota adapter-only realmente diferente da transferencia falha V391. O criterio para gastar GPU hoje e: dataset novo com traces completos verificaveis, anti-leakage por `id`/`prompt_sha256`, preservacao de replay bit, e job curto com kill-switch no primeiro checkpoint se `weak<=192`, `equation<=56` ou `bit<136`.
 
 Nao rodar novo HF training antes de prova de transferencia adapter-only. Projecao CPU, teacher, solver/verifier e loss baixo nao autorizam GPU sozinhos.
