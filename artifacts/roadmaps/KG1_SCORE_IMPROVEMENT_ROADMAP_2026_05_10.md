@@ -1000,6 +1000,59 @@ Leitura tecnica:
 
 Decisao: V377 nao autoriza submit nem HF. Autoriza V378 CPU filtered trace/tokenization gate, focado nos `92` residuos de equation e no replay bit sem regressao.
 
+### 28. V378 - Auditoria do `nemotron_dataset_final`
+
+Objetivo: auditar o ZIP `nemotron_dataset_final.zip`, o relatorio completo e todos os arquivos do diretorio `C:\Users\davis\Downloads\nemotron_dataset_final`, incluindo subdiretorios, sem copiar arquivos grandes para o repo.
+
+Status: concluido. Nenhum HF liberado ainda.
+
+Artefatos pequenos:
+
+- Script: `scripts/analyze_v378_nemotron_dataset_final.py`.
+- Saida: `artifacts/v378_nemotron_dataset_final_audit/`.
+- Relatorio: `artifacts/v378_nemotron_dataset_final_audit/KG1_V378_NEMOTRON_DATASET_FINAL_AUDIT.md`.
+- Solver coverage: `artifacts/v378_nemotron_dataset_final_audit/v378_v375_solver_coverage.csv`.
+- Trace+solver coverage: `artifacts/v378_nemotron_dataset_final_audit/v378_v375_residual_trace_solver_coverage.csv`.
+
+Integridade:
+
+- Diretório auditado: `13` arquivos.
+- ZIP auditado: `13` arquivos.
+- `zip_vs_directory_hash_mismatches=0`.
+- ZIP SHA256: `acd467cf17b82fda2fcf43387d216c7b3c5c64d83e759ca6aac47e1119f109e3`.
+- Train SHA256: `d204af160633b638448723a437aa51c0db70fd0b64ff92f6ad6f52e5ac6377fa`.
+
+Conteudo validado:
+
+- `sft_train_full_9500.jsonl`: `9500/9500` correto.
+- `sft_reconstructed.jsonl`: `9500/9500` correto.
+- `sft_train_converted.jsonl`: `8703/8703` correto, `7044` IDs unicos, `1659` duplicatas/reweighting.
+- `kaggle_logprob/results/filtered_merged_dataset.csv`: labels `8703/8703` corretos; CoT `8691/8703` correto; `bit` CoT `1752/1754`; `equation` CoT `2428/2438`.
+- `kaggle_sft_data/dataset_generated.csv`: labels `9500/9500`; CoT `9197/9500`; `bit` CoT `1364/1602`; `equation` CoT `1490/1555`.
+- `kaggle_trajectories/nemotron_traj.csv`: geracao direta apenas `4542/9500`; usar somente como hard-negative/confidence.
+
+Novo achado mais importante:
+
+- `solver_results.parquet` contem `823` rows de `equation_transform`.
+- Correto pelo scorer: `800/823`.
+- Tipos/categorias: `arithmetic=315`, `little_endian=276`, `mixed_concat=108`, `pure_concat=59`, `mixed_concat_little_endian=26`, `query_unseen_concat=16`, `None=23`.
+- Cobertura dos `92` residuos V375:
+  - `82/92` cobertos pelo solver.
+  - `79/82` corretos.
+  - `3/82` errados/sem solver answer.
+  - Categorias cobertas: `arithmetic=36`, `little_endian=29`, `mixed_concat=14`, `None=3`.
+- Cobertura por trace nos mesmos `92` residuos:
+  - `filtered_merged_dataset.csv`: `92/92` cobertos, `91/92` CoT correto.
+
+Leitura tecnica:
+
+- O V378 muda a prioridade: o melhor proximo passo nao e treino amplo, e sim um gate CPU que transforma `solver_results.parquet` em candidatos no-loss para os residuos de `equation_transform`.
+- O solver parquet fornece resposta, tipo, categoria, operacoes e mapeamento; isso e muito mais acionavel do que loss generico.
+- Os traces filtrados complementam o solver: podem virar SFT curto/deterministico depois que o solver candidate gate provar que nao ha perdas.
+- Ainda nao e adapter-only gain. E sinal forte para construir V379 e testar contra weak contract antes de qualquer HF.
+
+Decisao: V378 autoriza V379 CPU-only solver+trace candidate gate. HF continua bloqueado ate o V379 provar ganho no-loss e passar tokenization/offset-mask.
+
 ## Removido do plano ativo
 
 Estes itens nao devem ser reexecutados como acao principal. So podem voltar se um novo CPU gate provar uma razao nova.
@@ -1053,6 +1106,7 @@ Estes itens nao devem ser reexecutados como acao principal. So podem voltar se u
 | `sft_train_reconstructed.jsonl` inteiro como treino | bloqueado; contem `8463` rows sinteticas/desconhecidas ainda nao classificadas |
 | `sft_train_converted.jsonl` bruto como treino | bloqueado; contem duplicatas/reweighting e traces longos; usar apenas selecao por ID/loss/length |
 | `nemotron_traj.csv` como label | bloqueado; geracoes so `4542/9500` corretas |
+| `solver_results.parquet` bruto como submit/label universal | bloqueado; usar apenas rows metric-correct e gate no-loss, pois ha `23` erros |
 | Relatorios locais com tokens/segredos | nunca versionar; somente artefatos redigidos |
 
 ## Regras permanentes
@@ -1066,15 +1120,17 @@ Estes itens nao devem ser reexecutados como acao principal. So podem voltar se u
 
 ## Proxima acao unica
 
-V378 CPU-only filtered trace/tokenization gate.
+V379 CPU-only solver+trace candidate gate.
 
-Regras do V378:
+Regras do V379:
 
 - Rodar somente CPU, sem HF.
-- Entrada principal: `sft_train_converted.jsonl`, `sft_train_full_9500.jsonl`, `dataset_generated.csv`, `v377_v375_residual_coverage.csv` e os manifests V375/V376/V377.
+- Entrada principal: `solver_results.parquet`, `filtered_merged_dataset.csv`, `sft_train_full_9500.jsonl`, `v378_v375_solver_coverage.csv`, `v378_v375_residual_trace_solver_coverage.csv` e os manifests V375/V376/V377/V378.
 - Nao copiar arquivos grandes para o repo; ler por streaming/ZIP e emitir apenas manifests/CSVs pequenos.
 - Filtrar primeiro `bit_manipulation` e `equation_transform`.
-- Para `equation_transform`, construir um pacote minimo dos `92` residuos V375 cobertos por trace correto, com um melhor trace por ID.
+- Para `equation_transform`, criar candidatos para os `79` residuos V375 com solver correto e testar substituicao no-loss contra o weak contract.
+- Separar solver categories: `arithmetic`, `little_endian`, `mixed_concat`, `pure_concat`, `query_unseen_concat`; nunca misturar categorias sem gate por categoria.
+- Para os `13` residuos nao resolvidos pelo solver correto, usar traces apenas como dataset diagnostico, nao como predicao direta.
 - Para `bit_manipulation`, construir replay conservador que preserve `bit>=136` e nao substitua V366/Tong solver logic por traces longos sem gate.
 - Aceitar somente rows com resposta validada pelo extractor/scorer do projeto, prompt hash conhecido, family count esperado, sem duplicata por ID, e trace aprovado por tokenizer real.
 - Gerar hard negatives a partir de `dataset_generated.csv`/`nemotron_traj.csv` somente como metadado, nao como label.

@@ -1,0 +1,715 @@
+{
+  "analyses": {
+    "kaggle_logprob/results/filtered_merged_dataset.csv": {
+      "answer_label_matches_official": 8703,
+      "answer_label_mismatches_official": 0,
+      "base_loss_stats": {
+        "max": 1.7144912010015443,
+        "mean": 0.5355024396995169,
+        "min": 0.13181045390822452,
+        "p50": 0.44749527364460867,
+        "p90": 1.2121590133261892,
+        "p99": 1.561454154349662
+      },
+      "by_family_cot": {
+        "bit_manipulation": {
+          "correct": 1752,
+          "rows": 1754,
+          "wrong": 2
+        },
+        "equation_transform": {
+          "correct": 2428,
+          "rows": 2438,
+          "wrong": 10
+        },
+        "gravity_constant": {
+          "correct": 1055,
+          "rows": 1055,
+          "wrong": 0
+        },
+        "numeral_system": {
+          "correct": 730,
+          "rows": 730,
+          "wrong": 0
+        },
+        "text_encryption": {
+          "correct": 1656,
+          "rows": 1656,
+          "wrong": 0
+        },
+        "unit_conversion": {
+          "correct": 1070,
+          "rows": 1070,
+          "wrong": 0
+        }
+      },
+      "by_family_label": {
+        "bit_manipulation": {
+          "correct": 1754,
+          "rows": 1754,
+          "wrong": 0
+        },
+        "equation_transform": {
+          "correct": 2438,
+          "rows": 2438,
+          "wrong": 0
+        },
+        "gravity_constant": {
+          "correct": 1055,
+          "rows": 1055,
+          "wrong": 0
+        },
+        "numeral_system": {
+          "correct": 730,
+          "rows": 730,
+          "wrong": 0
+        },
+        "text_encryption": {
+          "correct": 1656,
+          "rows": 1656,
+          "wrong": 0
+        },
+        "unit_conversion": {
+          "correct": 1070,
+          "rows": 1070,
+          "wrong": 0
+        }
+      },
+      "duplicate_known_id_rows": 1659,
+      "generated_cot_metric_correct": 8691,
+      "generated_cot_metric_wrong": 12,
+      "kind": "generated_csv",
+      "known_train_rows": 8703,
+      "rows": 8703,
+      "unique_known_ids_by_family": {
+        "bit_manipulation": 1354,
+        "equation_transform": 1499,
+        "gravity_constant": 975,
+        "numeral_system": 650,
+        "text_encryption": 1576,
+        "unit_conversion": 990
+      },
+      "unique_known_train_ids": 7044
+    },
+    "kaggle_sft_data/dataset_generated.csv": {
+      "answer_label_matches_official": 9500,
+      "answer_label_mismatches_official": 0,
+      "base_loss_stats": {},
+      "by_family_cot": {
+        "bit_manipulation": {
+          "correct": 1364,
+          "rows": 1602,
+          "wrong": 238
+        },
+        "equation_transform": {
+          "correct": 1490,
+          "rows": 1555,
+          "wrong": 65
+        },
+        "gravity_constant": {
+          "correct": 1597,
+          "rows": 1597,
+          "wrong": 0
+        },
+        "numeral_system": {
+          "correct": 1576,
+          "rows": 1576,
+          "wrong": 0
+        },
+        "text_encryption": {
+          "correct": 1576,
+          "rows": 1576,
+          "wrong": 0
+        },
+        "unit_conversion": {
+          "correct": 1594,
+          "rows": 1594,
+          "wrong": 0
+        }
+      },
+      "by_family_label": {
+        "bit_manipulation": {
+          "correct": 1602,
+          "rows": 1602,
+          "wrong": 0
+        },
+        "equation_transform": {
+          "correct": 1555,
+          "rows": 1555,
+          "wrong": 0
+        },
+        "gravity_constant": {
+          "correct": 1597,
+          "rows": 1597,
+          "wrong": 0
+        },
+        "numeral_system": {
+          "correct": 1576,
+          "rows": 1576,
+          "wrong": 0
+        },
+        "text_encryption": {
+          "correct": 1576,
+          "rows": 1576,
+          "wrong": 0
+        },
+        "unit_conversion": {
+          "correct": 1594,
+          "rows": 1594,
+          "wrong": 0
+        }
+      },
+      "duplicate_known_id_rows": 0,
+      "generated_cot_metric_correct": 9197,
+      "generated_cot_metric_wrong": 303,
+      "kind": "generated_csv",
+      "known_train_rows": 9500,
+      "rows": 9500,
+      "unique_known_ids_by_family": {
+        "bit_manipulation": 1602,
+        "equation_transform": 1555,
+        "gravity_constant": 1597,
+        "numeral_system": 1576,
+        "text_encryption": 1576,
+        "unit_conversion": 1594
+      },
+      "unique_known_train_ids": 9500
+    },
+    "kaggle_trajectories/nemotron_traj.csv": {
+      "by_family_generated": {
+        "bit_manipulation": {
+          "correct": 99,
+          "rows": 1602,
+          "wrong": 1503
+        },
+        "equation_transform": {
+          "correct": 184,
+          "rows": 1555,
+          "wrong": 1371
+        },
+        "gravity_constant": {
+          "correct": 995,
+          "rows": 1597,
+          "wrong": 602
+        },
+        "numeral_system": {
+          "correct": 1522,
+          "rows": 1576,
+          "wrong": 54
+        },
+        "text_encryption": {
+          "correct": 525,
+          "rows": 1576,
+          "wrong": 1051
+        },
+        "unit_conversion": {
+          "correct": 1217,
+          "rows": 1594,
+          "wrong": 377
+        }
+      },
+      "correctness_counts": {
+        "false": 4738,
+        "partial": 339,
+        "true": 4423
+      },
+      "generated_answer_metric_correct": 4542,
+      "generated_answer_metric_wrong": 4958,
+      "kind": "trajectory_csv",
+      "known_train_rows": 9500,
+      "problem_type_counts": {
+        "bit_manipulation": 1602,
+        "cipher": 1576,
+        "equation_numeric": 732,
+        "equation_symbolic": 823,
+        "gravity": 1597,
+        "numeral": 1576,
+        "unit_conversion": 1594
+      },
+      "rows": 9500,
+      "unique_known_train_ids": 9500
+    },
+    "sft_reconstructed.jsonl": {
+      "base_loss_stats": {},
+      "by_family": {
+        "bit_manipulation": {
+          "correct": 1602,
+          "rows": 1602,
+          "wrong": 0
+        },
+        "equation_transform": {
+          "correct": 1555,
+          "rows": 1555,
+          "wrong": 0
+        },
+        "gravity_constant": {
+          "correct": 1597,
+          "rows": 1597,
+          "wrong": 0
+        },
+        "numeral_system": {
+          "correct": 1576,
+          "rows": 1576,
+          "wrong": 0
+        },
+        "text_encryption": {
+          "correct": 1576,
+          "rows": 1576,
+          "wrong": 0
+        },
+        "unit_conversion": {
+          "correct": 1594,
+          "rows": 1594,
+          "wrong": 0
+        }
+      },
+      "duplicate_known_id_rows": 0,
+      "kind": "jsonl",
+      "known_train_rows": 9500,
+      "long_trace_rows_over_7680_chars": 2522,
+      "metadata_category_counts": {},
+      "metadata_status_counts": {},
+      "metric_correct": 9500,
+      "metric_wrong": 0,
+      "rows": 9500,
+      "unique_known_ids_by_family": {
+        "bit_manipulation": 1602,
+        "equation_transform": 1555,
+        "gravity_constant": 1597,
+        "numeral_system": 1576,
+        "text_encryption": 1576,
+        "unit_conversion": 1594
+      },
+      "unique_known_train_ids": 9500,
+      "unknown_or_synthetic_rows": 0
+    },
+    "sft_train_converted.jsonl": {
+      "base_loss_stats": {
+        "max": 1.7144912010015445,
+        "mean": 0.5355024396995169,
+        "min": 0.1318104539082245,
+        "p50": 0.4474952736446086,
+        "p90": 1.2121590133261892,
+        "p99": 1.561454154349662
+      },
+      "by_family": {
+        "bit_manipulation": {
+          "correct": 1754,
+          "rows": 1754,
+          "wrong": 0
+        },
+        "equation_transform": {
+          "correct": 2438,
+          "rows": 2438,
+          "wrong": 0
+        },
+        "gravity_constant": {
+          "correct": 1055,
+          "rows": 1055,
+          "wrong": 0
+        },
+        "numeral_system": {
+          "correct": 730,
+          "rows": 730,
+          "wrong": 0
+        },
+        "text_encryption": {
+          "correct": 1656,
+          "rows": 1656,
+          "wrong": 0
+        },
+        "unit_conversion": {
+          "correct": 1070,
+          "rows": 1070,
+          "wrong": 0
+        }
+      },
+      "duplicate_known_id_rows": 1659,
+      "kind": "jsonl",
+      "known_train_rows": 8703,
+      "long_trace_rows_over_7680_chars": 2886,
+      "metadata_category_counts": {
+        "bit_manipulation": 1754,
+        "cipher": 1656,
+        "cryptarithm_deduce": 1232,
+        "cryptarithm_guess": 307,
+        "equation_numeric_deduce": 658,
+        "equation_numeric_guess": 241,
+        "gravity": 1055,
+        "numeral": 730,
+        "unit_conversion": 1070
+      },
+      "metadata_status_counts": {},
+      "metric_correct": 8703,
+      "metric_wrong": 0,
+      "rows": 8703,
+      "unique_known_ids_by_family": {
+        "bit_manipulation": 1354,
+        "equation_transform": 1499,
+        "gravity_constant": 975,
+        "numeral_system": 650,
+        "text_encryption": 1576,
+        "unit_conversion": 990
+      },
+      "unique_known_train_ids": 7044,
+      "unknown_or_synthetic_rows": 0
+    },
+    "sft_train_full_9500.jsonl": {
+      "base_loss_stats": {},
+      "by_family": {
+        "bit_manipulation": {
+          "correct": 1602,
+          "rows": 1602,
+          "wrong": 0
+        },
+        "equation_transform": {
+          "correct": 1555,
+          "rows": 1555,
+          "wrong": 0
+        },
+        "gravity_constant": {
+          "correct": 1597,
+          "rows": 1597,
+          "wrong": 0
+        },
+        "numeral_system": {
+          "correct": 1576,
+          "rows": 1576,
+          "wrong": 0
+        },
+        "text_encryption": {
+          "correct": 1576,
+          "rows": 1576,
+          "wrong": 0
+        },
+        "unit_conversion": {
+          "correct": 1594,
+          "rows": 1594,
+          "wrong": 0
+        }
+      },
+      "duplicate_known_id_rows": 0,
+      "kind": "jsonl",
+      "known_train_rows": 9500,
+      "long_trace_rows_over_7680_chars": 2522,
+      "metadata_category_counts": {
+        "bit_manipulation": 1602,
+        "cipher": 1576,
+        "cryptarithm_deduce": 659,
+        "cryptarithm_guess": 164,
+        "equation_numeric_deduce": 596,
+        "equation_numeric_guess": 136,
+        "gravity": 1597,
+        "numeral": 1576,
+        "unit_conversion": 1594
+      },
+      "metadata_status_counts": {},
+      "metric_correct": 9500,
+      "metric_wrong": 0,
+      "rows": 9500,
+      "unique_known_ids_by_family": {
+        "bit_manipulation": 1602,
+        "equation_transform": 1555,
+        "gravity_constant": 1597,
+        "numeral_system": 1576,
+        "text_encryption": 1576,
+        "unit_conversion": 1594
+      },
+      "unique_known_train_ids": 9500,
+      "unknown_or_synthetic_rows": 0
+    },
+    "sft_train_reconstructed.jsonl": {
+      "base_loss_stats": {},
+      "by_family": {
+        "bit_manipulation": {
+          "correct": 1602,
+          "rows": 1602,
+          "wrong": 0
+        },
+        "equation_transform": {
+          "correct": 1555,
+          "rows": 1555,
+          "wrong": 0
+        },
+        "gravity_constant": {
+          "correct": 1597,
+          "rows": 1597,
+          "wrong": 0
+        },
+        "numeral_system": {
+          "correct": 1576,
+          "rows": 1576,
+          "wrong": 0
+        },
+        "text_encryption": {
+          "correct": 1576,
+          "rows": 1576,
+          "wrong": 0
+        },
+        "unit_conversion": {
+          "correct": 1594,
+          "rows": 1594,
+          "wrong": 0
+        }
+      },
+      "duplicate_known_id_rows": 0,
+      "kind": "jsonl",
+      "known_train_rows": 9500,
+      "long_trace_rows_over_7680_chars": 2522,
+      "metadata_category_counts": {},
+      "metadata_status_counts": {},
+      "metric_correct": 9500,
+      "metric_wrong": 0,
+      "rows": 17963,
+      "unique_known_ids_by_family": {
+        "bit_manipulation": 1602,
+        "equation_transform": 1555,
+        "gravity_constant": 1597,
+        "numeral_system": 1576,
+        "text_encryption": 1576,
+        "unit_conversion": 1594
+      },
+      "unique_known_train_ids": 9500,
+      "unknown_or_synthetic_rows": 8463
+    },
+    "solver_results.parquet": {
+      "family_counts": {
+        "equation_transform": 823
+      },
+      "kind": "solver_results_parquet",
+      "metric_correct": 800,
+      "metric_wrong": 23,
+      "official_known_rows": 823,
+      "rows": 823,
+      "solver_category_counts": {
+        "None": 23,
+        "arithmetic": 315,
+        "little_endian": 276,
+        "mixed_concat": 108,
+        "mixed_concat_little_endian": 26,
+        "pure_concat": 59,
+        "query_unseen_concat": 16
+      },
+      "solver_correct_flag_counts": {
+        "False": 23,
+        "True": 800
+      },
+      "solver_type_counts": {
+        "None": 23,
+        "arithmetic": 725,
+        "concat": 75
+      },
+      "unique_ids": 823,
+      "v375_residual_coverage": {
+        "category_counts": {
+          "None": 3,
+          "arithmetic": 36,
+          "little_endian": 29,
+          "mixed_concat": 14
+        },
+        "correct": 79,
+        "coverage_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v378_nemotron_dataset_final_audit\\v378_v375_solver_coverage.csv",
+        "rows": 82,
+        "wrong": 3
+      }
+    }
+  },
+  "directory_files": [
+    {
+      "bytes": 1461,
+      "relative_path": "competition_test.csv",
+      "sha256": "c59d7eb0464b0a872a0c3f81e60cd6643fc1932a2dedaa05972bfd02cc638589"
+    },
+    {
+      "bytes": 3069304,
+      "relative_path": "competition_train.csv",
+      "sha256": "d204af160633b638448723a437aa51c0db70fd0b64ff92f6ad6f52e5ac6377fa"
+    },
+    {
+      "bytes": 12305,
+      "relative_path": "DATASET_COMPLETO.md",
+      "sha256": "ed7d3b970b12155095de83cf34c72671ecfdc475e7c2adc72b47c6bc8d28dba5"
+    },
+    {
+      "bytes": 50530375,
+      "relative_path": "kaggle_logprob/results/filtered_merged_dataset.csv",
+      "sha256": "a541ff9632109783e44fbfe5fa231cc093984f72aa9a045889950050aa134053"
+    },
+    {
+      "bytes": 48670122,
+      "relative_path": "kaggle_sft_data/dataset_generated.csv",
+      "sha256": "dd3160e264585cb1902cdf481c31ac62a2d945a0eb481068eee9f45a56351f0a"
+    },
+    {
+      "bytes": 139456207,
+      "relative_path": "kaggle_trajectories/nemotron_traj.csv",
+      "sha256": "01da9b309daedf18c9bcff9e0766b3deb7d736a1d350c73ded47775a8b66685e"
+    },
+    {
+      "bytes": 3138,
+      "relative_path": "raw_traces_README.md",
+      "sha256": "0629dc348e5189bd0b2364f4ff2550dbf04004c5ca5d2512218f3affb7d35d55"
+    },
+    {
+      "bytes": 4347,
+      "relative_path": "README.md",
+      "sha256": "ccedc438981d8aa5a1b1b659f7c8d6bd58af6eda4329838c32dd4b132436a3e1"
+    },
+    {
+      "bytes": 54328626,
+      "relative_path": "sft_reconstructed.jsonl",
+      "sha256": "e385421e85881a406144e2e1166961ef21b0b9063077c908f41e626e01681609"
+    },
+    {
+      "bytes": 59672150,
+      "relative_path": "sft_train_converted.jsonl",
+      "sha256": "69aee7ddaed6b7d55a6792f03ad960e44a10e1974cffe2f184514646f68fd228"
+    },
+    {
+      "bytes": 57034518,
+      "relative_path": "sft_train_full_9500.jsonl",
+      "sha256": "8b5cead5c539a81761ec00cb43aa32ae5f2b277a4d7a252b98135d5693912a35"
+    },
+    {
+      "bytes": 96207995,
+      "relative_path": "sft_train_reconstructed.jsonl",
+      "sha256": "1434811d65cbf68fd17d391cb2fce77426183666f59d7cf6ca4fddf8b4fe5a91"
+    },
+    {
+      "bytes": 123131,
+      "relative_path": "solver_results.parquet",
+      "sha256": "78f3688b3881eff61624318ad93d8b29486131840922796ac03330677d417bab"
+    }
+  ],
+  "file_hashes": {
+    "report_md": {
+      "bytes": 12305,
+      "path": "C:\\Users\\davis\\Downloads\\Dataset andy279_nemotron-reasoning-challenge — Relatório Completo de Extração.md",
+      "sha256": "ed7d3b970b12155095de83cf34c72671ecfdc475e7c2adc72b47c6bc8d28dba5"
+    },
+    "train_csv": {
+      "bytes": 3069304,
+      "path": "C:\\Users\\davis\\Downloads\\nemotron_dataset_final\\competition_train.csv",
+      "sha256": "d204af160633b638448723a437aa51c0db70fd0b64ff92f6ad6f52e5ac6377fa"
+    },
+    "zip": {
+      "bytes": 117471725,
+      "path": "C:\\Users\\davis\\Downloads\\nemotron_dataset_final.zip",
+      "sha256": "acd467cf17b82fda2fcf43387d216c7b3c5c64d83e759ca6aac47e1119f109e3"
+    }
+  },
+  "generated_at_utc": "2026-05-14T14:39:00.785058+00:00",
+  "outputs": {
+    "directory_file_inventory_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v378_nemotron_dataset_final_audit\\directory_file_inventory.csv",
+    "report_md": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v378_nemotron_dataset_final_audit\\KG1_V378_NEMOTRON_DATASET_FINAL_AUDIT.md",
+    "summary_json": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v378_nemotron_dataset_final_audit\\v378_nemotron_dataset_final_audit_summary.json",
+    "zip_entries_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v378_nemotron_dataset_final_audit\\zip_entries.csv"
+  },
+  "report_md": {
+    "contains_hf_token_pattern": false,
+    "head_redacted": "# Dataset andy279/nemotron-reasoning-challenge — Relatório Completo de Extração\n\n**Data:** 14 de Maio de 2026  \n**Alvo:** `https://huggingface.co/datasets/andy279/nemotron-reasoning-challenge`  \n**Status:** Gated (Manual Approval) — Acesso pendente de aprovação pelo autor  \n**Operador:** Todas as técnicas de acesso ético foram esgotadas\n\n---\n\n## 1. Informações do Dataset Original\n\nO dataset **Nemotron Reasoning Challenge — SFT Data** é um conjunto de dados de fine-tuning supervisionado para o modelo `nvidia/Nemotron-3-Nano-30B-A3B` em puzzles da competição Kaggle [NVIDIA Nemotron Model Reasoning Challenge](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge).\n\n### 1.1. Estrutura do Dataset Original\n\n| Split | Exemplos | Puzzles Únicos | Descrição |\n|-------|----------|----------------|-----------|\n| train | 49.290 | 7.200 | Reasoning traces corretos de teacher models + solvers |\n| validation | 1.165 | 1.123 | Puzzles held-out para avaliação (inclui 399 transfo",
+    "urls": [
+      "https://huggingface.co/datasets/andy279/nemotron-reasoning-challenge",
+      "https://huggingface.co/datasets/andy279/nemotron-reasoning-challenge`",
+      "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge"
+    ]
+  },
+  "schema_version": "kg1_v378_nemotron_dataset_final_audit_v1",
+  "train_family_counts": {
+    "bit_manipulation": 1602,
+    "equation_transform": 1555,
+    "gravity_constant": 1597,
+    "numeral_system": 1576,
+    "text_encryption": 1576,
+    "unit_conversion": 1594
+  },
+  "v375_residual_trace_solver_coverage": {
+    "coverage_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v378_nemotron_dataset_final_audit\\v378_v375_residual_trace_solver_coverage.csv",
+    "filtered_trace_correct": 91,
+    "filtered_trace_covered": 92,
+    "rows": 92,
+    "solver_correct": 79,
+    "solver_covered": 82
+  },
+  "zip_files": [
+    {
+      "bytes": 12305,
+      "compressed_bytes": 4585,
+      "relative_path": "DATASET_COMPLETO.md",
+      "sha256": "ed7d3b970b12155095de83cf34c72671ecfdc475e7c2adc72b47c6bc8d28dba5"
+    },
+    {
+      "bytes": 4347,
+      "compressed_bytes": 1855,
+      "relative_path": "README.md",
+      "sha256": "ccedc438981d8aa5a1b1b659f7c8d6bd58af6eda4329838c32dd4b132436a3e1"
+    },
+    {
+      "bytes": 3138,
+      "compressed_bytes": 1338,
+      "relative_path": "raw_traces_README.md",
+      "sha256": "0629dc348e5189bd0b2364f4ff2550dbf04004c5ca5d2512218f3affb7d35d55"
+    },
+    {
+      "bytes": 59672150,
+      "compressed_bytes": 11598085,
+      "relative_path": "sft_train_converted.jsonl",
+      "sha256": "69aee7ddaed6b7d55a6792f03ad960e44a10e1974cffe2f184514646f68fd228"
+    },
+    {
+      "bytes": 57034518,
+      "compressed_bytes": 11307430,
+      "relative_path": "sft_train_full_9500.jsonl",
+      "sha256": "8b5cead5c539a81761ec00cb43aa32ae5f2b277a4d7a252b98135d5693912a35"
+    },
+    {
+      "bytes": 54328626,
+      "compressed_bytes": 11178538,
+      "relative_path": "sft_reconstructed.jsonl",
+      "sha256": "e385421e85881a406144e2e1166961ef21b0b9063077c908f41e626e01681609"
+    },
+    {
+      "bytes": 96207995,
+      "compressed_bytes": 20555095,
+      "relative_path": "sft_train_reconstructed.jsonl",
+      "sha256": "1434811d65cbf68fd17d391cb2fce77426183666f59d7cf6ca4fddf8b4fe5a91"
+    },
+    {
+      "bytes": 123131,
+      "compressed_bytes": 93474,
+      "relative_path": "solver_results.parquet",
+      "sha256": "78f3688b3881eff61624318ad93d8b29486131840922796ac03330677d417bab"
+    },
+    {
+      "bytes": 3069304,
+      "compressed_bytes": 633677,
+      "relative_path": "competition_train.csv",
+      "sha256": "d204af160633b638448723a437aa51c0db70fd0b64ff92f6ad6f52e5ac6377fa"
+    },
+    {
+      "bytes": 1461,
+      "compressed_bytes": 614,
+      "relative_path": "competition_test.csv",
+      "sha256": "c59d7eb0464b0a872a0c3f81e60cd6643fc1932a2dedaa05972bfd02cc638589"
+    },
+    {
+      "bytes": 48670122,
+      "compressed_bytes": 10801970,
+      "relative_path": "kaggle_sft_data/dataset_generated.csv",
+      "sha256": "dd3160e264585cb1902cdf481c31ac62a2d945a0eb481068eee9f45a56351f0a"
+    },
+    {
+      "bytes": 139456207,
+      "compressed_bytes": 40246525,
+      "relative_path": "kaggle_trajectories/nemotron_traj.csv",
+      "sha256": "01da9b309daedf18c9bcff9e0766b3deb7d736a1d350c73ded47775a8b66685e"
+    },
+    {
+      "bytes": 50530375,
+      "compressed_bytes": 11046179,
+      "relative_path": "kaggle_logprob/results/filtered_merged_dataset.csv",
+      "sha256": "a541ff9632109783e44fbfe5fa231cc093984f72aa9a045889950050aa134053"
+    }
+  ],
+  "zip_vs_directory_hash_mismatches": []
+}
