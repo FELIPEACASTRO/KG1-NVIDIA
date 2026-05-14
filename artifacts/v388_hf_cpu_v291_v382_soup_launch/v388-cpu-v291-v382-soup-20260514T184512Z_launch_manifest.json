@@ -1,0 +1,79 @@
+{
+  "branch": "v230-v226-complementarity",
+  "expected_commit": "af58fc81afdffaa41bcb1b8f79143de7b0609817",
+  "finops_note": "CPU-upgrade soup job avoids local disk/CPU pressure; GPU is used only for later weak eval if upload succeeds.",
+  "flavor": "cpu-upgrade",
+  "gates": {
+    "cpu_only": true,
+    "eval_allowed": false,
+    "kaggle_submit_allowed": false,
+    "next_gpu_allowed_only_after_soup_upload": true,
+    "package_allowed": false,
+    "train_allowed": false
+  },
+  "generated_at_utc": "2026-05-14T18:45:13.285263+00:00",
+  "hardware": {
+    "accelerator_model": "",
+    "accelerator_quantity": "",
+    "accelerator_vram": "",
+    "cpu": "8 vCPU",
+    "name": "cpu-upgrade",
+    "pretty_name": "CPU Upgrade",
+    "ram": "32 GB",
+    "unit_cost_usd": 0.0005,
+    "unit_label": "minute"
+  },
+  "image": "python:3.11",
+  "inputs": [
+    {
+      "name": "v291_ckpt6",
+      "repo": "felipesp1983/kg1-nemotron-lora-v290-rank19-micro-patch-smoke",
+      "subfolder": "checkpoint-6"
+    },
+    {
+      "name": "v382_ckpt4",
+      "repo": "felipesp1983/kg1-nemotron-lora-v382-v381-teacher-smoke",
+      "subfolder": "checkpoint-4"
+    }
+  ],
+  "job_id": "",
+  "job_status": "not_launched",
+  "job_url": "",
+  "mode": "debug_only_no_job_launched",
+  "output_repo": "felipesp1983/kg1-nemotron-lora-v388-v291-v382-soups",
+  "promotion_gate": {
+    "promote_to_full_only_if_bit_gte": 136,
+    "promote_to_full_only_if_equation_gt": 56,
+    "promote_to_full_only_if_total_gt": 192,
+    "promote_to_full_only_if_truncated_eq": 0,
+    "weak_eval_required": true
+  },
+  "recipes": [
+    {
+      "name": "soup_v291_095_v382_005",
+      "primary": "v291_ckpt6",
+      "weights": {
+        "v291_ckpt6": 0.95,
+        "v382_ckpt4": 0.05
+      }
+    },
+    {
+      "name": "soup_v291_090_v382_010",
+      "primary": "v291_ckpt6",
+      "weights": {
+        "v291_ckpt6": 0.9,
+        "v382_ckpt4": 0.1
+      }
+    },
+    {
+      "name": "soup_v291_105_v382_neg005",
+      "primary": "v291_ckpt6",
+      "weights": {
+        "v291_ckpt6": 1.05,
+        "v382_ckpt4": -0.05
+      }
+    }
+  ],
+  "run_id": "v388-cpu-v291-v382-soup-20260514T184512Z",
+  "version": "v388_hf_cpu_v291_v382_soup"
+}
