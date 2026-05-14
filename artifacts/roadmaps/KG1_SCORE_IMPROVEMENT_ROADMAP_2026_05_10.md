@@ -177,7 +177,7 @@ Gate:
 
 Objetivo: testar se o novo teacher transfere para adapter-only com gasto minimo.
 
-Status: launcher criado e debug local aprovado; job pago ainda nao foi lancado neste commit.
+Status: launcher criado, debug local aprovado e job pago curto lancado.
 
 Preflight local aprovado:
 
@@ -190,6 +190,7 @@ Preflight local aprovado:
 - LR: `3.0e-8 -> 8.0e-9`.
 - Trainable modules: `q_proj,k_proj,v_proj,o_proj,lm_head`.
 - Artefatos: `artifacts/v352_hf_a100_v351_bit_transfer_launch/`.
+- Job HF: `https://huggingface.co/jobs/felipesp1983/6a0520b13308d79117b8f393`.
 
 Configuracao:
 
@@ -259,4 +260,4 @@ Estes itens nao devem ser reexecutados como acao principal. So podem voltar se u
 
 ## Proxima acao unica
 
-Commitar e enviar V350/V351/V352 para a branch, relancar o debug V352 para fixar o commit novo e criar o job HF pago com `--launch`. Se o primeiro checkpoint nao mostrar sinal adapter-only acima do baseline, cancelar por FinOps.
+Monitorar o job V352 e, assim que existir checkpoint, rodar weak eval. Se o primeiro checkpoint nao mostrar sinal adapter-only acima do baseline, cancelar por FinOps.

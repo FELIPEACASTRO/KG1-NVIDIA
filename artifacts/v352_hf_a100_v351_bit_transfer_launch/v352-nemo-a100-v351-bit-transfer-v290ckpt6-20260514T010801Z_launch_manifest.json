@@ -1,0 +1,71 @@
+{
+  "branch": "v230-v226-complementarity",
+  "dataset": {
+    "data_repo": "felipesp1983/kg1-nemotron-training",
+    "dataset_upload_commit": "439f99442729bfce14432a865abb8c260a637d24",
+    "train_file": "data/v351_v350_bit_transfer/20260514T_cpu_gate/v351_v350_bit_transfer_train.jsonl",
+    "train_rows": 640,
+    "train_sha256": "be8192036a570711d0858620aaeae1b0736e86588e4494cbdb2c85e8f8dcd5ed",
+    "val_file": "data/v351_v350_bit_transfer/20260514T_cpu_gate/v351_v350_bit_transfer_val.jsonl",
+    "val_rows": 160,
+    "val_sha256": "8e928e38a691f41c42ea4080c1227e053031f243cbf30dd4a1a07a98e5907f93"
+  },
+  "expected_commit": "cebde9aa0910c90b5e4e59c5836d09da0ddb96af",
+  "finops_kill_switch": {
+    "action": "cancel HF job if first weak checkpoint does not show adapter-only gain over the 192/315 baseline",
+    "first_checkpoint_bit_min_exclusive": 136,
+    "first_checkpoint_equation_min": 56,
+    "first_checkpoint_total_min_exclusive": 192
+  },
+  "flavor": "a100-large",
+  "generated_at_utc": "2026-05-14T01:08:03.044723+00:00",
+  "hardware": {
+    "accelerator_model": "A100",
+    "accelerator_quantity": "1",
+    "accelerator_vram": "80 GB",
+    "cpu": "12 vCPU",
+    "name": "a100-large",
+    "pretty_name": "Nvidia A100 - large",
+    "ram": "142 GB",
+    "unit_cost_usd": 0.041667,
+    "unit_label": "minute"
+  },
+  "image": "nvcr.io/nvidia/nemo:25.11.nemotron_3_nano",
+  "init_adapter": {
+    "repo": "felipesp1983/kg1-nemotron-lora-v290-rank19-micro-patch-smoke",
+    "subfolder": "checkpoint-6"
+  },
+  "job_id": "6a0520b13308d79117b8f393",
+  "job_status": "RUNNING",
+  "job_url": "https://huggingface.co/jobs/felipesp1983/6a0520b13308d79117b8f393",
+  "mode": "launched",
+  "namespace": "felipesp1983",
+  "next_action": "Monitor every 30 seconds; weak-eval checkpoint-2/4/6/8/final after training completes.",
+  "output_repo": "felipesp1983/kg1-nemotron-lora-v352-nemo-a100-v351-bit-transfer-v290ckpt6",
+  "recipe": {
+    "answer_span_loss_weight": "12.0",
+    "answer_span_min_weighted_tokens": "600",
+    "eval_every_steps": 2,
+    "eval_max_examples": 80,
+    "final_learning_rate": "1.0e-8",
+    "learning_rate": "4.0e-8",
+    "max_steps": 8,
+    "promotion_gate": "reject if total<192 or bit<136; inspect only if equation>56 or total>=193; promote only if equation>=60 and bit>=136",
+    "save_every_steps": 2,
+    "source_weights": "v351_synthetic_from_v350_bit_exact_global=1.00",
+    "subcategory_weights": "bit_exact_global_byte=1.00,bit_manipulation=1.00,unknown=1.00",
+    "trainable_lora_modules": "q_proj,k_proj,v_proj,o_proj,lm_head"
+  },
+  "run_id": "v352-nemo-a100-v351-bit-transfer-v290ckpt6-20260514T010801Z",
+  "v351_local_gate_summary": {
+    "dataset_manifest_sha256": "2ea0b842a3d16f65784ab4bad6852977d5cfdce494e6f5a78afaca922bce96f3",
+    "token_max_train": 765,
+    "token_max_val": 765,
+    "tokenization_gate_manifest_sha256": "2f34abe4015ec37eb4129e70ba6baeb7213871600e39ca9fdf0ede1fe6538fbd",
+    "train_rows": 640,
+    "train_sha256": "be8192036a570711d0858620aaeae1b0736e86588e4494cbdb2c85e8f8dcd5ed",
+    "val_rows": 160,
+    "val_sha256": "8e928e38a691f41c42ea4080c1227e053031f243cbf30dd4a1a07a98e5907f93"
+  },
+  "version": "v352_v351_bit_transfer_from_v290_checkpoint6_nemo_a100"
+}
