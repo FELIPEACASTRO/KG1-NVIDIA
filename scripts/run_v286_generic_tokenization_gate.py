@@ -123,6 +123,8 @@ def validate_rows(
         final_answer_line = "Final answer: " + answer
         if assistant_final_answer_mode.startswith("boxed_"):
             final_answer_line = "Final answer: " + r"\boxed{" + answer + "}"
+        if assistant_final_answer_mode == "boxed_only":
+            final_answer_line = r"\boxed{" + answer + "}"
         if assistant_final_answer_mode == "exact" and assistant_content != final_answer_line:
             bad_rows.append(rid)
             continue
@@ -135,7 +137,10 @@ def validate_rows(
         if assistant_final_answer_mode == "boxed_suffix" and not assistant_content.rstrip().endswith(final_answer_line):
             bad_rows.append(rid)
             continue
-        if assistant_final_answer_mode not in {"exact", "suffix", "boxed_exact", "boxed_suffix"}:
+        if assistant_final_answer_mode == "boxed_only" and assistant_content != final_answer_line:
+            bad_rows.append(rid)
+            continue
+        if assistant_final_answer_mode not in {"exact", "suffix", "boxed_exact", "boxed_suffix", "boxed_only"}:
             raise RuntimeError(f"unknown assistant_final_answer_mode={assistant_final_answer_mode!r}")
         if metadata.get("weak_gate_rows_used_for_training") is not False:
             bad_rows.append(rid)
@@ -665,7 +670,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--min-val-rows", type=int, default=60)
     parser.add_argument(
         "--assistant-final-answer-mode",
-        choices=("exact", "suffix", "boxed_exact", "boxed_suffix"),
+        choices=("exact", "suffix", "boxed_exact", "boxed_suffix", "boxed_only"),
         default="exact",
         help="Use exact for short-answer rows, suffix for solver traces, boxed_* for rows ending in \\boxed{answer}.",
     )

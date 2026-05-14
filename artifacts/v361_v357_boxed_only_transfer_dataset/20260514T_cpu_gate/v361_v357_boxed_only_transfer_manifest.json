@@ -1,0 +1,113 @@
+{
+  "decision": {
+    "decision": "v361_boxed_only_dataset_built",
+    "hf_gpu_allowed": false,
+    "next_action": "Run V286 tokenization gate with assistant_final_answer_mode=boxed_only.",
+    "reason": "V361 fixes V360 completion-format evidence and regenerates hard negatives, but still requires real tokenization gate before any HF smoke."
+  },
+  "generated_at_utc": "2026-05-14T10:32:24.930521+00:00",
+  "inputs": {
+    "v358_manifest_json": "artifacts\\v358_v357_bit_ternary_transfer_dataset\\20260514T_cpu_gate\\v358_v357_bit_ternary_transfer_manifest.json",
+    "v358_manifest_sha256": "b88b52d53bd59d6620489b81cef157422a2c9856a0a01076197de1a672f668a4",
+    "v360_manifest_json": "artifacts\\v360_v359_transfer_failure_audit\\20260514T_cpu_audit\\v360_v359_transfer_failure_audit_manifest.json",
+    "v360_manifest_sha256": "aa245e757d6f0a78450dcf40c26973ba70d60079c24b89b03910357c9a05abc4"
+  },
+  "outputs": {
+    "manifest_json": "artifacts\\v361_v357_boxed_only_transfer_dataset\\20260514T_cpu_gate\\v361_v357_boxed_only_transfer_manifest.json",
+    "preferences_train_jsonl": "artifacts\\v361_v357_boxed_only_transfer_dataset\\20260514T_cpu_gate\\v361_v357_boxed_only_transfer_preferences_train.jsonl",
+    "preferences_train_sha256": "f7f2e11540adbf16bcc93cc8f88a8f3f9c432086df59add4b4132daa821b4b06",
+    "preferences_val_jsonl": "artifacts\\v361_v357_boxed_only_transfer_dataset\\20260514T_cpu_gate\\v361_v357_boxed_only_transfer_preferences_val.jsonl",
+    "preferences_val_sha256": "565a079d523f74cafe76e6e6161fd53f86d64ac90a684215d133b4b435763df3",
+    "train_jsonl": "artifacts\\v361_v357_boxed_only_transfer_dataset\\20260514T_cpu_gate\\v361_v357_boxed_only_transfer_train.jsonl",
+    "train_sha256": "be742d7a82bf1c98f33d67bed8903006068c139ab74f798055fcc7d435ffa4db",
+    "val_jsonl": "artifacts\\v361_v357_boxed_only_transfer_dataset\\20260514T_cpu_gate\\v361_v357_boxed_only_transfer_val.jsonl",
+    "val_sha256": "4c93766e7fae72da14f879177e15c3c6300b7991e4efc8fba4d7fe75d3df5332"
+  },
+  "policy": {
+    "completion_format": "boxed_only",
+    "full_gate_rows_used_for_training": false,
+    "purpose": "CPU-gated format repair after V359 failed to transfer V357 teacher gains.",
+    "weak_gate_rows_used_for_training": false
+  },
+  "schema_version": "kg1_v361_v357_boxed_only_transfer_dataset_v1",
+  "source_v358_outputs": {
+    "manifest_json": "artifacts\\v358_v357_bit_ternary_transfer_dataset\\20260514T_cpu_gate\\v358_v357_bit_ternary_transfer_manifest.json",
+    "preferences_train_jsonl": "artifacts\\v358_v357_bit_ternary_transfer_dataset\\20260514T_cpu_gate\\v358_v357_bit_ternary_transfer_preferences_train.jsonl",
+    "preferences_train_sha256": "1159e04b15ad8b17c2a088e4c011d1b2bbc3c313d09db690ad8039addece422c",
+    "preferences_val_jsonl": "artifacts\\v358_v357_bit_ternary_transfer_dataset\\20260514T_cpu_gate\\v358_v357_bit_ternary_transfer_preferences_val.jsonl",
+    "preferences_val_sha256": "12fd0bc97940b7f85f411efd6fcd061e28f048bc8ce58f4216c6c854d8d7cbc0",
+    "train_jsonl": "artifacts\\v358_v357_bit_ternary_transfer_dataset\\20260514T_cpu_gate\\v358_v357_bit_ternary_transfer_train.jsonl",
+    "train_sha256": "6881308c7e46167ea8752513dd6e986d14b39f04f661dbac8d9ed18d189f1a05",
+    "val_jsonl": "artifacts\\v358_v357_bit_ternary_transfer_dataset\\20260514T_cpu_gate\\v358_v357_bit_ternary_transfer_val.jsonl",
+    "val_sha256": "d92f4bdf2e622be958ae09353bf3965d2a23e1e6fcea95fbd77c8bcbdf0b6b47"
+  },
+  "v360_check": {
+    "v360_decision": {
+      "decision": "v360_blocks_more_hf_on_v358_v359",
+      "hf_gpu_allowed": false,
+      "kaggle_submit_allowed": false,
+      "next_action": "Build V361 CPU-gated answer-first/boxed-only transfer data or return to equation DSL. Do not launch another HF job from V358/V359 artifacts.",
+      "package_allowed": false,
+      "reason": "V359 checkpoint-2 regressed to 190/315, bit=134/160, truncated=1; V358 did not transfer V357 CPU gains."
+    },
+    "v360_manifest_findings_checked": [
+      "The hard-negative preference files were not used",
+      "Completion format differs"
+    ]
+  },
+  "validation": {
+    "preference": {
+      "negative_types": {
+        "format_negative_raw_answer_no_box": 1440,
+        "hard_negative_one_bit_flip_boxed_only": 1440
+      },
+      "train_rows": 2304,
+      "val_rows": 576
+    },
+    "train": {
+      "assistant_boxed_only_rows": 1152,
+      "assistant_char_max": 16,
+      "assistant_char_min": 16,
+      "duplicate_prompt_count_within_split": 0,
+      "family_counts": {
+        "bit_manipulation": 1152
+      },
+      "prompt_hash_count": 1152,
+      "rows": 1152,
+      "source_counts": {
+        "v361_boxed_only_from_v358_verified_bit_rules": 1152
+      },
+      "split": "train",
+      "subcategory_counts": {
+        "bit_exact_global_binary_replay": 320,
+        "bit_exact_global_ternary": 832
+      },
+      "unique_exprs": 15,
+      "unique_ids": 1152,
+      "unique_rule_slugs": 15
+    },
+    "train_validation_prompt_overlap": 0,
+    "validation": {
+      "assistant_boxed_only_rows": 288,
+      "assistant_char_max": 16,
+      "assistant_char_min": 16,
+      "duplicate_prompt_count_within_split": 0,
+      "family_counts": {
+        "bit_manipulation": 288
+      },
+      "prompt_hash_count": 288,
+      "rows": 288,
+      "source_counts": {
+        "v361_boxed_only_from_v358_verified_bit_rules": 288
+      },
+      "split": "validation",
+      "subcategory_counts": {
+        "bit_exact_global_binary_replay": 80,
+        "bit_exact_global_ternary": 208
+      },
+      "unique_exprs": 15,
+      "unique_ids": 288,
+      "unique_rule_slugs": 15
+    }
+  }
+}
