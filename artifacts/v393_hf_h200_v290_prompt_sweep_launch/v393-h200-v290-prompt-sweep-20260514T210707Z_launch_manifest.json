@@ -1,0 +1,109 @@
+{
+  "adapter_repo": "felipesp1983/kg1-nemotron-lora-v290-rank19-micro-patch-smoke",
+  "adapter_subfolder": "checkpoint-6",
+  "branch": "v230-v226-complementarity",
+  "comparison_vs_locked_baseline": {
+    "locked_weak": {
+      "bit_manipulation": 136,
+      "equation_transform": 56,
+      "total": 192,
+      "truncated": 0
+    },
+    "v391_checkpoint4": {
+      "bit_manipulation": 135,
+      "equation_transform": 56,
+      "total": 191,
+      "truncated": 0
+    },
+    "v393_required_to_promote": {
+      "bit_manipulation_min": 136,
+      "equation_transform_min": 57,
+      "total_min": 193,
+      "truncated": 0
+    }
+  },
+  "expected_commit": "5d87f5786584d03757e9182c9ca4a8ca78586344",
+  "finops_note": "No training. Stop after sweep unless at least one variant beats V392 locked weak gate.",
+  "flavor": "h200",
+  "generated_at_utc": "2026-05-14T21:07:07.890710+00:00",
+  "hardware": {
+    "accelerator_model": "H200",
+    "accelerator_quantity": "1",
+    "accelerator_vram": "141 GB",
+    "cpu": "23 vCPU",
+    "name": "h200",
+    "pretty_name": "Nvidia H200",
+    "ram": "256 GB",
+    "unit_cost_usd": 0.083333,
+    "unit_label": "minute"
+  },
+  "image": "vllm/vllm-openai:v0.20.1",
+  "job_id": "6a0639b93308d79117b8fe91",
+  "job_status": "RUNNING",
+  "job_url": "https://huggingface.co/jobs/felipesp1983/6a0639b93308d79117b8fe91",
+  "mode": "launched",
+  "namespace": "felipesp1983",
+  "output_path_base": "evals/v393-h200-v290-prompt-sweep-20260514T210707Z",
+  "output_repo": "felipesp1983/kg1-nemotron-lora-v290-rank19-micro-patch-smoke",
+  "promotion_gate": {
+    "full_must_improve_current_package": true,
+    "weak_bit_gte": 136,
+    "weak_equation_gt": 56,
+    "weak_total_gt": 192,
+    "weak_truncated_eq": 0
+  },
+  "prompt_variants": [
+    {
+      "disable_thinking": false,
+      "max_model_len": 8192,
+      "max_num_seqs": 64,
+      "max_tokens": 7680,
+      "name": "baseline_v290_repro",
+      "no_prompt_suffix": false,
+      "prompt_suffix": "\nReturn only one line: `\\boxed{answer}`. No reasoning. No explanation.",
+      "purpose": "Reproduce the locked V290 weak contract before comparing variants."
+    },
+    {
+      "disable_thinking": false,
+      "max_model_len": 8192,
+      "max_num_seqs": 64,
+      "max_tokens": 7680,
+      "name": "v221_boxed_suffix",
+      "no_prompt_suffix": false,
+      "prompt_suffix": "\nPlease put your final answer inside `\\boxed{}`. For example: `\\boxed{your answer}`",
+      "purpose": "Test the older boxed-answer prompt that rescued some historical evaluations."
+    },
+    {
+      "disable_thinking": false,
+      "max_model_len": 8192,
+      "max_num_seqs": 64,
+      "max_tokens": 7680,
+      "name": "no_suffix",
+      "no_prompt_suffix": true,
+      "prompt_suffix": "",
+      "purpose": "Check whether suffix instructions suppress correct equation-style answers."
+    },
+    {
+      "disable_thinking": true,
+      "max_model_len": 8192,
+      "max_num_seqs": 64,
+      "max_tokens": 7680,
+      "name": "strict_disable_thinking",
+      "no_prompt_suffix": false,
+      "prompt_suffix": "\nReturn only one line: `\\boxed{answer}`. No reasoning. No explanation.",
+      "purpose": "Force no-thinking template while preserving the strict boxed-output suffix."
+    },
+    {
+      "disable_thinking": false,
+      "max_model_len": 4096,
+      "max_num_seqs": 64,
+      "max_tokens": 2048,
+      "name": "strict_2048_tokens",
+      "no_prompt_suffix": false,
+      "prompt_suffix": "\nReturn only one line: `\\boxed{answer}`. No reasoning. No explanation.",
+      "purpose": "Limit generation budget to reduce answer drift while keeping enough context."
+    }
+  ],
+  "run_id_base": "v393-h200-v290-prompt-sweep-20260514T210707Z",
+  "version": "v393_h200_v290_prompt_sweep"
+}
