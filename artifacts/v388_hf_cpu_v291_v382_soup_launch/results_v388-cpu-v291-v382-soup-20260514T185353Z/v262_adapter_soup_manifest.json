@@ -1,0 +1,140 @@
+{
+  "decision": {
+    "decision": "adapter_soups_ready_for_weak_eval_only",
+    "next_action": "Run V221-contract weak eval on the soups; stop if first result regresses."
+  },
+  "gates": {
+    "cpu_only": true,
+    "eval_allowed": false,
+    "full_scoring_allowed": false,
+    "kaggle_submit_allowed": false,
+    "package_allowed": false,
+    "train_allowed": false
+  },
+  "generated_at_utc": "2026-05-14T18:57:48.604070+00:00",
+  "inputs": [
+    {
+      "config_sha256": "a3d74c5a52ce75f71a8406222d877b9760ea18a40a772bcf407686c8ea19f11d",
+      "local_dir": "/tmp/kg1_v262_soup_rwrnzmgq/inputs/v291_ckpt6",
+      "lora_alpha": 32,
+      "name": "v291_ckpt6",
+      "r": 32,
+      "repo": "felipesp1983/kg1-nemotron-lora-v290-rank19-micro-patch-smoke",
+      "subfolder": "checkpoint-6",
+      "target_modules": [
+        "v_proj",
+        "up_proj",
+        "in_proj",
+        "k_proj",
+        "lm_head",
+        "o_proj",
+        "down_proj",
+        "q_proj",
+        "out_proj"
+      ],
+      "target_parameters": [
+        "mlp.experts.gate_up_proj",
+        "mlp.experts.down_proj"
+      ],
+      "weights_bytes": 4259063856,
+      "weights_sha256": "0a7b6144231d9358ae73a5e57d8778b32be1520fa47e3041414b3e025aaa1aa1"
+    },
+    {
+      "config_sha256": "7cfc472feff1c51e3cc7ee2823f3f4b16ea64a4f3cb0a4dbfd630b9d1141deab",
+      "local_dir": "/tmp/kg1_v262_soup_rwrnzmgq/inputs/v382_ckpt4",
+      "lora_alpha": 32,
+      "name": "v382_ckpt4",
+      "r": 32,
+      "repo": "felipesp1983/kg1-nemotron-lora-v382-v381-teacher-smoke",
+      "subfolder": "checkpoint-4",
+      "target_modules": [
+        "out_proj",
+        "k_proj",
+        "o_proj",
+        "up_proj",
+        "lm_head",
+        "in_proj",
+        "v_proj",
+        "down_proj",
+        "q_proj"
+      ],
+      "target_parameters": null,
+      "weights_bytes": 4259063856,
+      "weights_sha256": "bdb4313f365843ff08a2e954282c5959d658caa0d25aa56d4db8b1071cc5ecb1"
+    }
+  ],
+  "output_repo": "felipesp1983/kg1-nemotron-lora-v388-v291-v382-soups",
+  "recipes": [
+    {
+      "name": "soup_v291_095_v382_005",
+      "primary": "v291_ckpt6",
+      "weights": {
+        "v291_ckpt6": 0.95,
+        "v382_ckpt4": 0.05
+      }
+    },
+    {
+      "name": "soup_v291_090_v382_010",
+      "primary": "v291_ckpt6",
+      "weights": {
+        "v291_ckpt6": 0.9,
+        "v382_ckpt4": 0.1
+      }
+    },
+    {
+      "name": "soup_v291_105_v382_neg005",
+      "primary": "v291_ckpt6",
+      "weights": {
+        "v291_ckpt6": 1.05,
+        "v382_ckpt4": -0.05
+      }
+    }
+  ],
+  "repo_commit": "23a3a6357050541ea98d3674631b168cb7c6b11f",
+  "run_id": "v388-cpu-v291-v382-soup-20260514T185353Z",
+  "schema_version": "kg1_v262_adapter_soup_manifest_v1",
+  "soups": [
+    {
+      "adapter_config_sha256": "a3d74c5a52ce75f71a8406222d877b9760ea18a40a772bcf407686c8ea19f11d",
+      "adapter_weights_bytes": 4259063824,
+      "adapter_weights_sha256": "96dec8eb473eb9ec0b1368c400d44b06e78f9b149fd8290b3896cdfaa8748b6f",
+      "name": "soup_v291_095_v382_005",
+      "output_dir": "/tmp/kg1_v262_soup_rwrnzmgq/stage/soup_v291_095_v382_005",
+      "primary": "v291_ckpt6",
+      "weights": {
+        "v291_ckpt6": 0.95,
+        "v382_ckpt4": 0.05
+      }
+    },
+    {
+      "adapter_config_sha256": "a3d74c5a52ce75f71a8406222d877b9760ea18a40a772bcf407686c8ea19f11d",
+      "adapter_weights_bytes": 4259063824,
+      "adapter_weights_sha256": "23562abf093cb55969139c82d5d25db8c3691b30ed2cba9fd2eaa5e2bb19d749",
+      "name": "soup_v291_090_v382_010",
+      "output_dir": "/tmp/kg1_v262_soup_rwrnzmgq/stage/soup_v291_090_v382_010",
+      "primary": "v291_ckpt6",
+      "weights": {
+        "v291_ckpt6": 0.9,
+        "v382_ckpt4": 0.1
+      }
+    },
+    {
+      "adapter_config_sha256": "a3d74c5a52ce75f71a8406222d877b9760ea18a40a772bcf407686c8ea19f11d",
+      "adapter_weights_bytes": 4259063824,
+      "adapter_weights_sha256": "4e3d229fbc3846e1d898f8645afed3263ed54d5f35d3c3ab6816bc373f1017e9",
+      "name": "soup_v291_105_v382_neg005",
+      "output_dir": "/tmp/kg1_v262_soup_rwrnzmgq/stage/soup_v291_105_v382_neg005",
+      "primary": "v291_ckpt6",
+      "weights": {
+        "v291_ckpt6": 1.05,
+        "v382_ckpt4": -0.05
+      }
+    }
+  ],
+  "tensor_contract": {
+    "adapter_count": 2,
+    "base_input": "v291_ckpt6",
+    "tensor_contract_sha256": "3419375a77ddf718fcec58e0ed3da179b25cbae2ed22d74de87fad51994925fb",
+    "tensor_count": 12011
+  }
+}
