@@ -38,7 +38,7 @@ from run_v278_symbolic_pbe_dsl_audit_hf import (  # noqa: E402
 
 DEFAULT_BASELINE_CSV = (
     REPO_ROOT
-    / "artifacts/v394_equation_row_level_inventory/20260514T_cpu_gate/input/v290_ckpt6_weak_predictions.csv"
+    / "artifacts/v342_acc_first_diagnostic/v290_checkpoint6_baseline_predictions.csv"
 )
 DEFAULT_V324_ACCEPTED_CSV = (
     REPO_ROOT
