@@ -1,0 +1,156 @@
+answer,baseline_correct,baseline_prediction,candidate_correct,id,prediction,proof,reason,same_operator_examples,status
+84,True,84,,e518256e,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 1, ""status"": ""abstain""}",no_operator_specific_program,1,abstain
+!?'!,False,|:>>,,09d5ee68,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 1, ""status"": ""abstain""}",no_operator_specific_program,1,abstain
+@&,False,\boxed[[!'},,00457d26,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 1, ""status"": ""abstain""}",no_operator_specific_program,1,abstain
+$,False,{}>{,,518deb39,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 1, ""status"": ""abstain""}",no_operator_specific_program,1,abstain
+-@>,False,'^^^',,82109e34,,"{""reason"": ""no_same_operator_examples"", ""status"": ""abstain""}",no_same_operator_examples,,abstain
+63,True,63,,5e67b1a1,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 2, ""status"": ""abstain""}",no_operator_specific_program,2,abstain
+1089,False,0,,e1728524,,"{""reason"": ""no_same_operator_examples"", ""status"": ""abstain""}",no_same_operator_examples,,abstain
+"""`",False,@`',,e3bf0c2c,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 1, ""status"": ""abstain""}",no_operator_specific_program,1,abstain
+"-\""",False,|?|,,fdbdf50c,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 3, ""status"": ""abstain""}",no_operator_specific_program,3,abstain
+]%],False,/`%`,,47c1d8f5,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 2, ""status"": ""abstain""}",no_operator_specific_program,2,abstain
+/((`,False,@($/,,f9a33aa1,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 2, ""status"": ""abstain""}",no_operator_specific_program,2,abstain
+7272,True,7272,,9f2fae58,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 2, ""status"": ""abstain""}",no_operator_specific_program,2,abstain
+&:/?,False,:^?\,,f9799a68,,"{""reason"": ""no_same_operator_examples"", ""status"": ""abstain""}",no_same_operator_examples,,abstain
+&/,False,]]]%,,c24074a8,,"{""reason"": ""no_same_operator_examples"", ""status"": ""abstain""}",no_same_operator_examples,,abstain
+-@',False,@``:,,893ffb06,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 1, ""status"": ""abstain""}",no_operator_specific_program,1,abstain
+-[,False,@|#|,False,cf4c04c0,@,"{""reason"": ""operator_specific_symbolic_unique_top"", ""same_operator_examples"": 2, ""status"": ""candidate"", ""top_programs"": [""v412_symbolic_transducer:#->,$->,:->,[->(,{->|,|->"", ""v412_symbolic_transducer:#->,$->|,:->,[->(,{->,|->""]}",operator_specific_symbolic_unique_top,2,candidate
+]]],False,$&&,,8e411cc7,,"{""reason"": ""ambiguous_operator_specific_top"", ""same_operator_examples"": 2, ""status"": ""abstain"", ""top_predictions"": [""&&"", ""&&]""]}",ambiguous_operator_specific_top,2,abstain
+9318,True,9318,True,41e6cbfc,9318,"{""reason"": ""operator_specific_symbolic_unique_top"", ""same_operator_examples"": 3, ""status"": ""candidate"", ""top_programs"": [""v412_symbolic_position_template:end1|end0|end3|end2"", ""v412_symbolic_position_template:end1|end0|end3|start1"", ""v412_symbolic_position_template:end1|end0|start0|end2"", ""v412_symbolic_position_template:end1|end0|start0|start1"", ""v412_symbolic_position_template:end1|start3|end3|end2""]}",operator_specific_symbolic_unique_top,3,candidate
+['[/,True,['[/,True,dea42835,['[/,"{""reason"": ""operator_specific_symbolic_unique_top"", ""same_operator_examples"": 3, ""status"": ""candidate"", ""top_programs"": [""v412_symbolic_position_template:end1|end0|end3|end2"", ""v412_symbolic_position_template:end1|end0|end3|start1"", ""v412_symbolic_position_template:end1|end0|start0|end2"", ""v412_symbolic_position_template:end1|end0|start0|start1"", ""v412_symbolic_position_template:end1|start3|end3|end2""]}",operator_specific_symbolic_unique_top,3,candidate
+53,False,32,,48c25e0e,,"{""reason"": ""no_same_operator_examples"", ""status"": ""abstain""}",no_same_operator_examples,,abstain
+>42,True,>42,,7ef4d5d6,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 2, ""status"": ""abstain""}",no_operator_specific_program,2,abstain
+-51,True,-51,,3ee36e0a,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 1, ""status"": ""abstain""}",no_operator_specific_program,1,abstain
+{]``,True,{]``,True,39c237c7,{]``,"{""reason"": ""operator_specific_symbolic_unique_top"", ""same_operator_examples"": 2, ""status"": ""candidate"", ""top_programs"": [""v412_symbolic_position_template:end3|end2|end1|end0"", ""v412_symbolic_position_template:end3|end2|end1|start3"", ""v412_symbolic_position_template:end3|end2|start2|end0"", ""v412_symbolic_position_template:end3|end2|start2|start3"", ""v412_symbolic_position_template:end3|start1|end1|end0""]}",operator_specific_symbolic_unique_top,2,candidate
+76,True,76,,963e85bb,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 1, ""status"": ""abstain""}",no_operator_specific_program,1,abstain
+-),False,!$$[,,a98d4d53,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 1, ""status"": ""abstain""}",no_operator_specific_program,1,abstain
+/,False,$/>/,,59733f94,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 3, ""status"": ""abstain""}",no_operator_specific_program,3,abstain
+63,True,63,False,b1bc3731,"""523","{""reason"": ""operator_specific_symbolic_unique_top"", ""same_operator_examples"": 2, ""status"": ""candidate"", ""top_programs"": [""v412_symbolic_transducer:0->\"",2->,4->2,7->5,8->8""]}",operator_specific_symbolic_unique_top,2,candidate
+87,True,87,,a1523a63,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 2, ""status"": ""abstain""}",no_operator_specific_program,2,abstain
+66,True,66,,3383d4ec,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 1, ""status"": ""abstain""}",no_operator_specific_program,1,abstain
+))[,False,:<`\,,9dae880f,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 1, ""status"": ""abstain""}",no_operator_specific_program,1,abstain
+20,True,20,,2af7134e,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 3, ""status"": ""abstain""}",no_operator_specific_program,3,abstain
+#`,False,$?]$,,ae6be599,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 1, ""status"": ""abstain""}",no_operator_specific_program,1,abstain
+5983,True,5983,,b26d8818,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 3, ""status"": ""abstain""}",no_operator_specific_program,3,abstain
+"""`#&",False,"])<""",,8494aad3,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 2, ""status"": ""abstain""}",no_operator_specific_program,2,abstain
+34,True,34,,8df3daad,,"{""reason"": ""no_same_operator_examples"", ""status"": ""abstain""}",no_same_operator_examples,,abstain
+4922,True,4922,,791056ce,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 1, ""status"": ""abstain""}",no_operator_specific_program,1,abstain
+321,True,321,,3c12aeb9,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 3, ""status"": ""abstain""}",no_operator_specific_program,3,abstain
+4472,True,4472,True,69aa57b3,4472,"{""reason"": ""operator_specific_symbolic_unique_top"", ""same_operator_examples"": 1, ""status"": ""candidate"", ""top_programs"": [""one_shot:right_left""]}",operator_specific_symbolic_unique_top,1,candidate
+{@%],False,(^@{,,e3890bf7,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 1, ""status"": ""abstain""}",no_operator_specific_program,1,abstain
+231,True,231,,d204b9cc,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 1, ""status"": ""abstain""}",no_operator_specific_program,1,abstain
+?|,False,|''>,,d29e19a4,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 2, ""status"": ""abstain""}",no_operator_specific_program,2,abstain
+^&/,False,"""$ $]""",,b06625c4,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 1, ""status"": ""abstain""}",no_operator_specific_program,1,abstain
+24,True,24,,84030b0b,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 3, ""status"": ""abstain""}",no_operator_specific_program,3,abstain
+'!,False,&&&`,,52be4988,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 1, ""status"": ""abstain""}",no_operator_specific_program,1,abstain
+?()<,False,(<)),,99d6a3b5,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 4, ""status"": ""abstain""}",no_operator_specific_program,4,abstain
+))^),False,\${,,2d3547af,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 1, ""status"": ""abstain""}",no_operator_specific_program,1,abstain
+'],False,|^^^,,28b0ff48,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 1, ""status"": ""abstain""}",no_operator_specific_program,1,abstain
+696,True,696,,3fa49035,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 1, ""status"": ""abstain""}",no_operator_specific_program,1,abstain
+|&,False,'{),,61557701,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 3, ""status"": ""abstain""}",no_operator_specific_program,3,abstain
+711,True,711,,56343b77,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 1, ""status"": ""abstain""}",no_operator_specific_program,1,abstain
+-23,True,-23,,7ac90433,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 3, ""status"": ""abstain""}",no_operator_specific_program,3,abstain
+>/,False,!!$>,,02902eb3,,"{""reason"": ""no_same_operator_examples"", ""status"": ""abstain""}",no_same_operator_examples,,abstain
+:,False,::)[,,0d90736f,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 1, ""status"": ""abstain""}",no_operator_specific_program,1,abstain
+&(,False,##!),,294453b5,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 2, ""status"": ""abstain""}",no_operator_specific_program,2,abstain
+671,False,18,,386b6d03,,"{""reason"": ""no_same_operator_examples"", ""status"": ""abstain""}",no_same_operator_examples,,abstain
+%{{,False,|@(!,,57f6878e,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 2, ""status"": ""abstain""}",no_operator_specific_program,2,abstain
+(/&{,True,(/&{,True,bc83b0a1,(/&{,"{""reason"": ""operator_specific_symbolic_unique_top"", ""same_operator_examples"": 3, ""status"": ""candidate"", ""top_programs"": [""v412_symbolic_position_template:end3|end2|end1|end0"", ""v412_symbolic_position_template:end3|end2|end1|start3"", ""v412_symbolic_position_template:end3|end2|start2|end0"", ""v412_symbolic_position_template:end3|end2|start2|start3"", ""v412_symbolic_position_template:end3|start1|end1|end0""]}",operator_specific_symbolic_unique_top,3,candidate
+:46,False,46,,a361a1b7,,"{""reason"": ""no_same_operator_examples"", ""status"": ""abstain""}",no_same_operator_examples,,abstain
+:\:,False,@}<',,d911e8e1,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 1, ""status"": ""abstain""}",no_operator_specific_program,1,abstain
+-55,False,55,,7688e06e,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 5, ""status"": ""abstain""}",no_operator_specific_program,5,abstain
+5631,True,5631,True,dbd0e3c9,5631,"{""reason"": ""operator_specific_symbolic_unique_top"", ""same_operator_examples"": 2, ""status"": ""candidate"", ""top_programs"": [""v412_symbolic_keep_chars:keep:13568""]}",operator_specific_symbolic_unique_top,2,candidate
+07,True,07,,2e2d60b2,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 2, ""status"": ""abstain""}",no_operator_specific_program,2,abstain
+}/!},False,|!@[,,5f9f0ed7,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 3, ""status"": ""abstain""}",no_operator_specific_program,3,abstain
+7,True,7,,333d93ec,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 2, ""status"": ""abstain""}",no_operator_specific_program,2,abstain
+49,True,49,,74fff108,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 1, ""status"": ""abstain""}",no_operator_specific_program,1,abstain
+)|,False,$):$,,c43b5a13,,"{""reason"": ""ambiguous_operator_specific_top"", ""same_operator_examples"": 2, ""status"": ""abstain"", ""top_predictions"": [""{"", ""{<"", ""{|"", ""|<|"", ""|{<|"", ""|{|"", ""|{||"", ""||"", ""|||""]}",ambiguous_operator_specific_top,2,abstain
+]$!,False,$){,False,b0206bb7,$&{#,"{""reason"": ""operator_specific_symbolic_unique_top"", ""same_operator_examples"": 2, ""status"": ""candidate"", ""top_programs"": [""v412_symbolic_transducer:!->/,&->@,)->{,/->{,@->},{->&,}->#""]}",operator_specific_symbolic_unique_top,2,candidate
+@,False,$]<$,,638f93ca,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 1, ""status"": ""abstain""}",no_operator_specific_program,1,abstain
+{<<<,False,@/[@,,4bfd095a,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 3, ""status"": ""abstain""}",no_operator_specific_program,3,abstain
+%'!,False,"#`""",,7a422e17,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 1, ""status"": ""abstain""}",no_operator_specific_program,1,abstain
+&&,False,><\$,,5b2523e6,,"{""reason"": ""no_same_operator_examples"", ""status"": ""abstain""}",no_same_operator_examples,,abstain
+"(""",False,^?(|,,0fe53bac,,"{""reason"": ""ambiguous_operator_specific_top"", ""same_operator_examples"": 2, ""status"": ""abstain"", ""top_predictions"": [""^"", ""^\"""", ""^("", ""^(\"""", ""^(@"", ""^(@\"""", ""^@"", ""^@\""""]}",ambiguous_operator_specific_top,2,abstain
+92,False,-92,,274def88,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 2, ""status"": ""abstain""}",no_operator_specific_program,2,abstain
+-!,False,'}>/,,03a3437f,,"{""reason"": ""ambiguous_operator_specific_top"", ""same_operator_examples"": 2, ""status"": ""abstain"", ""top_predictions"": [""'"", ""''"", ""'>'"", "">'""]}",ambiguous_operator_specific_top,2,abstain
+)#?,False,@\}?,,30ac5c8e,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 1, ""status"": ""abstain""}",no_operator_specific_program,1,abstain
+88,True,88,,08d8d7e1,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 2, ""status"": ""abstain""}",no_operator_specific_program,2,abstain
+#<,False,!%<<,,ff121f08,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 1, ""status"": ""abstain""}",no_operator_specific_program,1,abstain
+881,True,881,,42cb233d,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 1, ""status"": ""abstain""}",no_operator_specific_program,1,abstain
+"|""]",False,|@<!,,ec8b4875,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 2, ""status"": ""abstain""}",no_operator_specific_program,2,abstain
+'(^),False,{%??,,e3fbc768,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 1, ""status"": ""abstain""}",no_operator_specific_program,1,abstain
+)(,False,^&>),,6cc5dafb,,"{""reason"": ""no_same_operator_examples"", ""status"": ""abstain""}",no_same_operator_examples,,abstain
+>>,False,""")&&",,d5a03a2e,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 1, ""status"": ""abstain""}",no_operator_specific_program,1,abstain
+3388,True,3388,,8bebef83,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 2, ""status"": ""abstain""}",no_operator_specific_program,2,abstain
+3341,True,3341,False,27cec7a9,33,"{""reason"": ""operator_specific_symbolic_unique_top"", ""same_operator_examples"": 2, ""status"": ""candidate"", ""top_programs"": [""v412_symbolic_keep_chars:keep:02359""]}",operator_specific_symbolic_unique_top,2,candidate
+1455,True,1455,True,4aeed935,1455,"{""reason"": ""operator_specific_symbolic_unique_top"", ""same_operator_examples"": 1, ""status"": ""candidate"", ""top_programs"": [""one_shot:right_left""]}",operator_specific_symbolic_unique_top,1,candidate
+-21,False,21,,fb623471,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 1, ""status"": ""abstain""}",no_operator_specific_program,1,abstain
+5311,True,5311,True,88b43464,5311,"{""reason"": ""operator_specific_symbolic_unique_top"", ""same_operator_examples"": 1, ""status"": ""candidate"", ""top_programs"": [""one_shot:right_left""]}",operator_specific_symbolic_unique_top,1,candidate
+101,True,101,,209c43f0,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 2, ""status"": ""abstain""}",no_operator_specific_program,2,abstain
+##$,False,!>``,,d129b085,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 2, ""status"": ""abstain""}",no_operator_specific_program,2,abstain
+}@,False,"""']@",,e582df31,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 1, ""status"": ""abstain""}",no_operator_specific_program,1,abstain
+"[""",False,{>$[,,a77be9fa,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 1, ""status"": ""abstain""}",no_operator_specific_program,1,abstain
+5543,True,5543,,f8d6abd1,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 2, ""status"": ""abstain""}",no_operator_specific_program,2,abstain
+"(""/""",False,!:`(,,4ed6b56f,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 2, ""status"": ""abstain""}",no_operator_specific_program,2,abstain
+[:,False,[&<>,,208d7838,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 1, ""status"": ""abstain""}",no_operator_specific_program,1,abstain
+-)\,False,^!#\,,58c099d2,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 1, ""status"": ""abstain""}",no_operator_specific_program,1,abstain
+[[&],False,]$$),,3cb3fd89,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 2, ""status"": ""abstain""}",no_operator_specific_program,2,abstain
+<',False,<&<#,,a26065d4,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 3, ""status"": ""abstain""}",no_operator_specific_program,3,abstain
+%,False,!\{<,,194695e8,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 1, ""status"": ""abstain""}",no_operator_specific_program,1,abstain
+-39,False,39,,528ec0d8,,"{""reason"": ""no_same_operator_examples"", ""status"": ""abstain""}",no_same_operator_examples,,abstain
+]}\!,True,]}\!,,4bb8c6cd,,"{""reason"": ""no_same_operator_examples"", ""status"": ""abstain""}",no_same_operator_examples,,abstain
+-/<,False,$/'{,,57712d01,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 2, ""status"": ""abstain""}",no_operator_specific_program,2,abstain
+?(&@,False,(@@?,,d98d85c0,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 1, ""status"": ""abstain""}",no_operator_specific_program,1,abstain
+180,True,180,,7ed40e8a,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 1, ""status"": ""abstain""}",no_operator_specific_program,1,abstain
+)!,False,@|]!,,491b8ea5,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 1, ""status"": ""abstain""}",no_operator_specific_program,1,abstain
+>!>},False,){>),,eb1a62f7,,"{""reason"": ""no_same_operator_examples"", ""status"": ""abstain""}",no_same_operator_examples,,abstain
+%?<,False,"""$%%""",,0bb591e6,,"{""reason"": ""no_same_operator_examples"", ""status"": ""abstain""}",no_same_operator_examples,,abstain
+9351,True,9351,,3c424916,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 2, ""status"": ""abstain""}",no_operator_specific_program,2,abstain
+3316,True,3316,,72336119,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 2, ""status"": ""abstain""}",no_operator_specific_program,2,abstain
+#>[,False,!&)#,,9a19fc2d,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 3, ""status"": ""abstain""}",no_operator_specific_program,3,abstain
+"""'",False,>]],,528b694b,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 2, ""status"": ""abstain""}",no_operator_specific_program,2,abstain
+3922,True,3922,True,d3b20e29,3922,"{""reason"": ""operator_specific_symbolic_unique_top"", ""same_operator_examples"": 2, ""status"": ""candidate"", ""top_programs"": [""v412_symbolic_position_template:end1|end0|end3|end2"", ""v412_symbolic_position_template:end1|end0|end3|start1"", ""v412_symbolic_position_template:end1|end0|start0|end2"", ""v412_symbolic_position_template:end1|end0|start0|start1"", ""v412_symbolic_position_template:end1|start3|end3|end2""]}",operator_specific_symbolic_unique_top,2,candidate
+30,False,3,,d1bd7478,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 1, ""status"": ""abstain""}",no_operator_specific_program,1,abstain
+35,True,35,,21519be7,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 1, ""status"": ""abstain""}",no_operator_specific_program,1,abstain
+251,True,251,,7306613b,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 3, ""status"": ""abstain""}",no_operator_specific_program,3,abstain
+'>&,False,{>?#,,fba40625,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 2, ""status"": ""abstain""}",no_operator_specific_program,2,abstain
+/#</,True,/#</,False,9aa8dc92,#<,"{""reason"": ""operator_specific_symbolic_unique_top"", ""same_operator_examples"": 2, ""status"": ""candidate"", ""top_programs"": [""v412_symbolic_keep_chars:keep:#:<\\|""]}",operator_specific_symbolic_unique_top,2,candidate
+134,False,35,,c5b058d6,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 1, ""status"": ""abstain""}",no_operator_specific_program,1,abstain
+66,True,66,,b4342b90,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 2, ""status"": ""abstain""}",no_operator_specific_program,2,abstain
+<>\>,False,"<:{""",,837a6ae7,,"{""reason"": ""no_same_operator_examples"", ""status"": ""abstain""}",no_same_operator_examples,,abstain
+!&&},False,|&$|,,d0e1010b,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 2, ""status"": ""abstain""}",no_operator_specific_program,2,abstain
+04`,True,04`,,34c563c5,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 1, ""status"": ""abstain""}",no_operator_specific_program,1,abstain
+341,False,55,,5a0d5d2a,,"{""reason"": ""no_same_operator_examples"", ""status"": ""abstain""}",no_same_operator_examples,,abstain
+4443,False,4,,5a9fcf68,,"{""reason"": ""no_same_operator_examples"", ""status"": ""abstain""}",no_same_operator_examples,,abstain
+-/#,False,&#!,,6e56b39a,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 4, ""status"": ""abstain""}",no_operator_specific_program,4,abstain
+/|',False,!&&&,,a5f1991c,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 1, ""status"": ""abstain""}",no_operator_specific_program,1,abstain
+">""(",False,"\""]",,c7aae192,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 1, ""status"": ""abstain""}",no_operator_specific_program,1,abstain
+113,False,16,,e4cc7639,,"{""reason"": ""no_same_operator_examples"", ""status"": ""abstain""}",no_same_operator_examples,,abstain
+"/""",False,`@>``,,844f826c,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 1, ""status"": ""abstain""}",no_operator_specific_program,1,abstain
+66,True,66,,b69391b8,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 1, ""status"": ""abstain""}",no_operator_specific_program,1,abstain
+??{`,False,#?&`,,8193e7e0,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 2, ""status"": ""abstain""}",no_operator_specific_program,2,abstain
+-!#,False,"""{!""",,5bcb572e,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 1, ""status"": ""abstain""}",no_operator_specific_program,1,abstain
+-52,True,-52,,8c1529e1,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 1, ""status"": ""abstain""}",no_operator_specific_program,1,abstain
+<?/,False,>}][?,,cdec898a,,"{""reason"": ""ambiguous_operator_specific_top"", ""same_operator_examples"": 2, ""status"": ""abstain"", ""top_predictions"": ["")/?"", "")?/?"", "")??"", "")}/?"", ""/?"", ""?/?"", ""??"", ""??/?"", ""???"", ""?}/?"", ""}/?""]}",ambiguous_operator_specific_top,2,abstain
+5913,True,5913,,44398869,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 4, ""status"": ""abstain""}",no_operator_specific_program,4,abstain
+$(%,False,::{[,,edf364da,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 1, ""status"": ""abstain""}",no_operator_specific_program,1,abstain
+3,True,3,,339149c9,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 3, ""status"": ""abstain""}",no_operator_specific_program,3,abstain
+:/$^,True,:/$^,,c7844441,,"{""reason"": ""no_same_operator_examples"", ""status"": ""abstain""}",no_same_operator_examples,,abstain
+-25,True,-25,,21261dc6,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 2, ""status"": ""abstain""}",no_operator_specific_program,2,abstain
+611,True,611,,4dbec546,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 1, ""status"": ""abstain""}",no_operator_specific_program,1,abstain
+`?\!,False,@?`?,,0e009c6d,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 2, ""status"": ""abstain""}",no_operator_specific_program,2,abstain
+>\:,False,>!!/,,b4b73143,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 1, ""status"": ""abstain""}",no_operator_specific_program,1,abstain
+2271,False,10,,861cb154,,"{""reason"": ""no_same_operator_examples"", ""status"": ""abstain""}",no_same_operator_examples,,abstain
+:<],False,?>>>,,90feb0c5,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 1, ""status"": ""abstain""}",no_operator_specific_program,1,abstain
+-01,True,-01,,c541eb82,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 4, ""status"": ""abstain""}",no_operator_specific_program,4,abstain
+:>,False,"$""\[""",,b9f1d959,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 3, ""status"": ""abstain""}",no_operator_specific_program,3,abstain
+^,False,"\boxed({""'|})",,ca5db1c0,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 1, ""status"": ""abstain""}",no_operator_specific_program,1,abstain
+[,False,"""]'/",,9f1ff166,,"{""reason"": ""ambiguous_operator_specific_top"", ""same_operator_examples"": 2, ""status"": ""abstain"", ""top_predictions"": [""/]/"", ""]/""]}",ambiguous_operator_specific_top,2,abstain
+%[:?,False,\{<?,,432b1110,,"{""reason"": ""no_same_operator_examples"", ""status"": ""abstain""}",no_same_operator_examples,,abstain
+100,True,100,,f333b67f,,"{""reason"": ""no_operator_specific_program"", ""same_operator_examples"": 1, ""status"": ""abstain""}",no_operator_specific_program,1,abstain
+/@,False,[}}\,False,f7d26b8d,}\\-,"{""reason"": ""operator_specific_symbolic_unique_top"", ""same_operator_examples"": 2, ""status"": ""candidate"", ""top_programs"": [""v412_symbolic_transducer:%->,[->},\\->-,]->\\,`->},}->\\""]}",operator_specific_symbolic_unique_top,2,candidate
+%/<>,True,%/<>,True,8e56a42e,%/<>,"{""reason"": ""operator_specific_symbolic_unique_top"", ""same_operator_examples"": 1, ""status"": ""candidate"", ""top_programs"": [""one_shot:identity""]}",operator_specific_symbolic_unique_top,1,candidate
+2976,False,65,,20f0fac9,,"{""reason"": ""no_same_operator_examples"", ""status"": ""abstain""}",no_same_operator_examples,,abstain
+){|,False,"""%]%{""",False,26e48e98,"""@%#","{""reason"": ""operator_specific_symbolic_unique_top"", ""same_operator_examples"": 2, ""status"": ""candidate"", ""top_programs"": [""v412_symbolic_transducer:#->),(->],@->,]->@,{->#,|->""]}",operator_specific_symbolic_unique_top,2,candidate
+[#>#,False,!##^,,5501c054,,"{""reason"": ""no_same_operator_examples"", ""status"": ""abstain""}",no_same_operator_examples,,abstain
+87,False,37,,ea6d926a,,"{""reason"": ""no_same_operator_examples"", ""status"": ""abstain""}",no_same_operator_examples,,abstain

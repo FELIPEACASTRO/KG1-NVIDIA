@@ -74,6 +74,7 @@ Precisamos buscar subida no ranking ainda hoje, `2026-05-14`. A decisao V392 e s
 | V418 CPU synthesis aggressive rerun | CPU projection `202/315` | `63/155` | `139/160` | `0` ganho novo vs V409/V412; DSL atual esgotada |
 | V419 residual taxonomy | `92` eq residuais | `80` punct-only dominantes | n/a | proxima classe: symbolic punctuation structural solver; sem GPU |
 | V420 symbolic cryptarithm aggressive | `1` accepted conhecido | `99d6a3b5` ja em V409/V414 | n/a | `0` ganho novo; multi-operator nao promotavel |
+| V421 operator-specific symbolic gate | `17` candidates | `0` gains | n/a | `3` conflitos; hipotese bloqueada |
 
 Conclusao: `eval_loss` baixo nao e criterio de promocao. O criterio e ACC por familia no weak/full gate. A rota "resolver nos mesmos" finalmente tem ganho mensuravel (`+9` weak em CPU), mas esse ganho ainda e solver/verifier externo; para submit, ele precisa virar comportamento do adapter/package ou ser permitido explicitamente pelas regras de runtime.
 
@@ -1024,6 +1025,29 @@ Artefatos:
 
 Decisao: nao abrir HF. O accepted `99d6a3b5` ja era conhecido em V409/V414. Variantes multi-operador nao sao promotaveis.
 
+### Step 6R - V421 operator-specific symbolic gate
+
+Status: concluido; sem ganho.
+
+Objetivo: testar uma nova hipotese para os residuais de pontuacao: aprender programa apenas a partir de exemplos com o mesmo operador da pergunta, removendo o operador antes da sintese simbolica.
+
+Resultado:
+
+| Metric | Valor |
+|---|---:|
+| Candidate rows | `17` |
+| Accepted gains | `0` |
+| Conflicts/losses | `3` |
+| Decisao | `operator_specific_symbolic_gate_no_gain` |
+
+Artefatos:
+
+- Script: `artifacts/v421_operator_specific_symbolic_gate/build_v421_operator_specific_symbolic_gate.py`.
+- Manifest: `artifacts/v421_operator_specific_symbolic_gate/20260515T_v421_operator_specific_symbolic/v421_operator_specific_symbolic_manifest.json`.
+- Relatorio: `artifacts/v421_operator_specific_symbolic_gate/20260515T_v421_operator_specific_symbolic/V421_OPERATOR_SPECIFIC_SYMBOLIC_GATE.md`.
+
+Decisao: nao abrir HF. A hipotese same-operator nao e segura; ela nao encontrou ganho e tentaria regredir `3` rows corretas do baseline.
+
 ## Regras Permanentes
 
 - Nenhum HF sem CPU gate com sinal novo.
@@ -1065,7 +1089,7 @@ Decisao: nao abrir HF. O accepted `99d6a3b5` ja era conhecido em V409/V414. Vari
 
 ## Proxima Acao Unica
 
-V415 confirmou que nao existe candidato adapter-like local pronto para promocao, V416 confirmou que mudar o estilo da completion ainda nao transfere os ganhos do teacher para o adapter, V417 bloqueou novo GPU SFT por FinOps, V418 mostrou que aumentar caps da DSL V412 nao cria ganhos novos, V419 mostrou que o residual dominante e `80` rows de pontuacao simbolica pura, e V420 confirmou que ampliar cryptarithm V329 so reencontra `99d6a3b5`. Portanto o caminho ativo volta para CPU gate com classe de regra nova antes de qualquer novo gasto HF:
+V415 confirmou que nao existe candidato adapter-like local pronto para promocao, V416 confirmou que mudar o estilo da completion ainda nao transfere os ganhos do teacher para o adapter, V417 bloqueou novo GPU SFT por FinOps, V418 mostrou que aumentar caps da DSL V412 nao cria ganhos novos, V419 mostrou que o residual dominante e `80` rows de pontuacao simbolica pura, V420 confirmou que ampliar cryptarithm V329 so reencontra `99d6a3b5`, e V421 bloqueou a hipotese same-operator por `0` ganhos e `3` conflitos. Portanto o caminho ativo volta para CPU gate com outra classe de regra nova antes de qualquer novo gasto HF:
 
 1. criar V417 como auditoria de falha e bloqueio de receita:
    - consolidar V413/V416 como linhas de transferencia rejeitadas;

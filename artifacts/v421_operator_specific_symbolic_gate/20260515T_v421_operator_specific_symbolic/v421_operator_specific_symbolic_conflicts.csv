@@ -1,0 +1,4 @@
+answer,baseline_correct,baseline_prediction,candidate_correct,id,prediction,proof,reason,same_operator_examples,status
+63,True,63,False,b1bc3731,"""523","{""reason"": ""operator_specific_symbolic_unique_top"", ""same_operator_examples"": 2, ""status"": ""candidate"", ""top_programs"": [""v412_symbolic_transducer:0->\"",2->,4->2,7->5,8->8""]}",operator_specific_symbolic_unique_top,2,candidate
+3341,True,3341,False,27cec7a9,33,"{""reason"": ""operator_specific_symbolic_unique_top"", ""same_operator_examples"": 2, ""status"": ""candidate"", ""top_programs"": [""v412_symbolic_keep_chars:keep:02359""]}",operator_specific_symbolic_unique_top,2,candidate
+/#</,True,/#</,False,9aa8dc92,#<,"{""reason"": ""operator_specific_symbolic_unique_top"", ""same_operator_examples"": 2, ""status"": ""candidate"", ""top_programs"": [""v412_symbolic_keep_chars:keep:#:<\\|""]}",operator_specific_symbolic_unique_top,2,candidate

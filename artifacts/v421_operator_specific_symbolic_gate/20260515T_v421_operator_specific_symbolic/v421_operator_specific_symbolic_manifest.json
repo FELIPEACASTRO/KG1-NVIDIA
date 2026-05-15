@@ -1,0 +1,20 @@
+{
+  "accepted_gain_count": 0,
+  "candidate_count": 17,
+  "conflict_count": 3,
+  "decision": {
+    "decision": "operator_specific_symbolic_gate_no_gain",
+    "next_action": "Do not train from this hypothesis; continue with another symbolic structural class.",
+    "reason": "accepted=0; conflicts=3"
+  },
+  "generated_at_utc": "2026-05-15T04:00:56.613945+00:00",
+  "hf_gpu_allowed": false,
+  "outputs": {
+    "accepted_csv": "artifacts\\v421_operator_specific_symbolic_gate\\20260515T_v421_operator_specific_symbolic\\v421_operator_specific_symbolic_accepted.csv",
+    "audit_csv": "artifacts\\v421_operator_specific_symbolic_gate\\20260515T_v421_operator_specific_symbolic\\v421_operator_specific_symbolic_audit.csv",
+    "conflicts_csv": "artifacts\\v421_operator_specific_symbolic_gate\\20260515T_v421_operator_specific_symbolic\\v421_operator_specific_symbolic_conflicts.csv",
+    "manifest_json": "artifacts\\v421_operator_specific_symbolic_gate\\20260515T_v421_operator_specific_symbolic\\v421_operator_specific_symbolic_manifest.json",
+    "report_md": "artifacts\\v421_operator_specific_symbolic_gate\\20260515T_v421_operator_specific_symbolic\\V421_OPERATOR_SPECIFIC_SYMBOLIC_GATE.md"
+  },
+  "schema_version": "kg1_v421_operator_specific_symbolic_gate_v1"
+}
