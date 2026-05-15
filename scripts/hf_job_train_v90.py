@@ -2067,6 +2067,9 @@ def train() -> None:
     start_time = time.time()
     best_eval_loss = float("inf")
     train_eval_point_losses: list[float] = []
+    step_loss_history: list[dict[str, float | int]] = []
+    eval_history: list[dict[str, float | int | str]] = []
+    checkpoint_history: list[dict[str, str | int]] = []
 
     for epoch in range(NUM_EPOCHS):
         if global_step >= total_steps:
@@ -2129,6 +2132,13 @@ def train() -> None:
                 torch.cuda.empty_cache()
 
             avg_loss = accum_loss / GRADIENT_ACCUMULATION
+            step_loss_history.append(
+                {
+                    "step": completed_step,
+                    "lr": lr,
+                    "train_loss": avg_loss,
+                }
+            )
             elapsed = time.time() - start_time
             if LOG_EVERY_STEPS > 0 and completed_step % LOG_EVERY_STEPS == 0:
                 print(
@@ -2176,6 +2186,14 @@ def train() -> None:
                         raise RuntimeError("abort_train_loss_rising")
                 eval_loss = evaluate_loss(model, val_data, tokenizer, EVAL_MAX_EXAMPLES)
                 best_eval_loss = min(best_eval_loss, eval_loss)
+                eval_history.append(
+                    {
+                        "step": completed_step,
+                        "eval_loss": eval_loss,
+                        "best_eval_loss": best_eval_loss,
+                        "kind": "scheduled",
+                    }
+                )
                 print(
                     f"eval step={completed_step} "
                     f"loss={eval_loss:.4f} best={best_eval_loss:.4f}"
@@ -2221,6 +2239,13 @@ def train() -> None:
                 model.save_pretrained(str(checkpoint_dir))
                 tokenizer.save_pretrained(str(checkpoint_dir))
                 print(f"Checkpoint saved: {checkpoint_dir}")
+                checkpoint_history.append(
+                    {
+                        "step": completed_step,
+                        "path": str(checkpoint_dir),
+                        "kind": "scheduled",
+                    }
+                )
                 upload_checkpoint_during_training(checkpoint_dir)
 
             accum_loss = 0.0
@@ -2243,6 +2268,14 @@ def train() -> None:
     if val_data:
         final_eval_loss = evaluate_loss(model, val_data, tokenizer, EVAL_MAX_EXAMPLES)
         best_eval_loss = min(best_eval_loss, final_eval_loss)
+        eval_history.append(
+            {
+                "step": global_step,
+                "eval_loss": final_eval_loss,
+                "best_eval_loss": best_eval_loss,
+                "kind": "final",
+            }
+        )
         print(f"Final eval loss: {final_eval_loss:.4f}; best eval loss: {best_eval_loss:.4f}")
         if (
             baseline_eval_loss is not None
@@ -2272,6 +2305,10 @@ def train() -> None:
     )
     manifest["training"]["baseline_eval_loss"] = baseline_eval_loss
     manifest["training"]["final_eval_loss"] = final_eval_loss
+    manifest["training"]["step_loss_history"] = step_loss_history
+    manifest["training"]["eval_history"] = eval_history
+    manifest["training"]["checkpoint_history"] = checkpoint_history
+    manifest["training"]["sampling_report"] = weighted_sample_report(train_data)
     manifest["training"]["baseline_gate"] = {
         "baseline_eval_before_train": BASELINE_EVAL_BEFORE_TRAIN,
         "baseline_eval_loss": baseline_eval_loss,
