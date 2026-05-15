@@ -223,7 +223,7 @@ Contrato:
 | scoring | nao |
 | treino | nao |
 | submit/package | nao |
-| default hardware | `a100-large` |
+| default hardware | `h200` |
 | default caps | equation 200, bit 80 |
 | cost gate | `unit_cost_usd <= 0.09/min` |
 
@@ -233,7 +233,7 @@ Execucoes:
 
 | Run | Hardware | Status | Decisao |
 |---|---|---|---|
-| `v435c-adapter-probe-raw-20260515T141708Z` | `a100-large` | erro rapido | driver A100 incompatível com imagem CUDA 13; nao insistir nessa combinacao |
+| `v435c-adapter-probe-raw-20260515T141708Z` | `a100-large` | erro rapido | driver A100 incompativel com imagem CUDA 13; launcher agora bloqueia essa combinacao por default |
 | `v435c-adapter-probe-raw-20260515T141924Z` | `h200` | rodando | manter enquanto gerar outputs e nao houver OOM/stall |
 
 ### V435D - Adapter Probe Output Analysis
@@ -324,4 +324,4 @@ Objetivo:
 4. Reexecutar V435 usando esses raw outputs para criar hard negatives reais.
 5. So liberar V436 se V435 passar com `hf_gpu_allowed=true`.
 
-Regra FinOps: V435C e inferencia, nao treino. Mesmo assim gasta GPU se rodar no HF/Kaggle. A execucao inicial deve usar caps (`equation=200`, `bit=80`) e `a100-large` por custo/beneficio. Cancelar se houver OOM repetido, stall, custo acima do gate ou se o output nao puder alimentar V435. Enquanto raw outputs reais nao existirem, a decisao correta e nao treinar.
+Regra FinOps: V435C e inferencia, nao treino. Mesmo assim gasta GPU se rodar no HF/Kaggle. A execucao inicial deve usar caps (`equation=200`, `bit=80`) e `h200`, porque `a100-large` falhou com driver antigo na imagem CUDA 13. Cancelar se houver OOM repetido, stall, custo acima do gate ou se o output nao puder alimentar V435. Enquanto raw outputs reais nao existirem, a decisao correta e nao treinar.

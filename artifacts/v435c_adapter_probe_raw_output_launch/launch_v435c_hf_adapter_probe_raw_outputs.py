@@ -24,7 +24,7 @@ REPO_BRANCH = "v230-v226-complementarity"
 REPO_ROOT = Path(__file__).resolve().parents[2]
 EXPECTED_COMMIT = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=REPO_ROOT, text=True).strip()
 IMAGE = os.environ.get("KG1_V435C_IMAGE", "vllm/vllm-openai:v0.20.1").strip()
-FLAVOR = os.environ.get("KG1_V435C_FLAVOR", "a100-large").strip()
+FLAVOR = os.environ.get("KG1_V435C_FLAVOR", "h200").strip()
 DEFAULT_GPU_REGEX = "A100" if FLAVOR.startswith("a100") else ("H200" if FLAVOR.startswith("h200") else "")
 DEFAULT_MIN_GPU_GIB = "79" if FLAVOR.startswith("a100") else ("130" if FLAVOR.startswith("h200") else "0")
 REQUIRED_GPU_NAME_REGEX = os.environ.get("KG1_V435C_REQUIRED_GPU_NAME_REGEX", DEFAULT_GPU_REGEX).strip()
@@ -149,6 +149,19 @@ def main() -> int:
     token = get_token()
     if not token:
         raise RuntimeError("HF token is required to launch V435C.")
+    if FLAVOR.startswith("a100") and IMAGE == "vllm/vllm-openai:v0.20.1":
+        allow_a100_cuda13 = os.environ.get("KG1_V435C_ALLOW_A100_CUDA13", "0").strip().lower() in {
+            "1",
+            "true",
+            "yes",
+            "on",
+        }
+        if not allow_a100_cuda13:
+            raise RuntimeError(
+                "blocked FinOps/infra: a100-large failed V435C with vllm/vllm-openai:v0.20.1 "
+                "because the HF A100 driver was too old for CUDA 13. Use h200 or set "
+                "KG1_V435C_ALLOW_A100_CUDA13=1 only after changing the image/torch stack."
+            )
     api = HfApi(token=token)
     hardware = {item.name: hardware_to_dict(item) for item in api.list_jobs_hardware()}
     if FLAVOR not in hardware:
