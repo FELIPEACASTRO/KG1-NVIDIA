@@ -363,6 +363,8 @@ Regra preventiva:
   `answers_equivalent`.
 - `scripts/audit_v449_acc_metric_integrity.py` deve ser usado quando houver
   duvida sobre ACC, metric parity ou divergencia simbolica.
+- `scripts/audit_v449_acc_metric_integrity.py --self-test` agora valida os
+  casos built-in sem depender de CSV externo.
 
 Status: corrigido em `scripts/analyze_eval_predictions.py`; gate e auditor V449
 adicionados.

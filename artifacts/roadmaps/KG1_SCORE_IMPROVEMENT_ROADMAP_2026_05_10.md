@@ -49,6 +49,7 @@ Regra central: ganho so conta se aparecer no adapter/package. Teacher CPU, solve
 | OpenRouter V447 public mining consensus | 6 modelos uteis; consenso condicional | minerar notebooks publicos em paralelo, mas priorizar V446 builder |
 | V449 ACC metric integrity audit | weak scorer usa `verify_answer`; `answers_equivalent` superconta bit e foi bloqueado para `official_correct` | metrica de promocao confirmada; script diagnostico corrigido |
 | V448 H200 V447 clean trace weak eval | checkpoint-3 `190/315`, equation `56/155`, bit `134/160`, trunc `1` | cancelado por FinOps; rota clean-trace SFT bloqueada |
+| V450 transfer-debug audit | ACC path, weak scorer, family mapping e exact binary auditados | sem erro ativo de scoring; gargalo e transferencia adapter-only |
 
 ## Regras Permanentes
 
@@ -978,13 +979,14 @@ novo checkpoint do mesmo dataset e gasto sem base tecnica.
 Rota ativa agora volta para CPU e depuracao de transferencia, nao para novo
 treino pago.
 
-1. Fechar V450 CPU transfer-debug:
+1. V450 CPU transfer-debug foi fechado:
    - auditar metric parity com `verify_answer`;
    - auditar `raw_output`, `prediction`, primeiro/ultimo `boxed`, truncation,
      family mapping e exact binary;
    - confirmar que nao ha erro de logica, negocio, simbolico ou sintaxe no
      calculo de ACC;
-   - produzir tabela de discrepancias acionaveis, se existirem.
+   - resultado: nao ha erro ativo de ACC; o erro permissivo foi bloqueado pelo
+     V449 e o gargalo ativo e transferencia para adapter-only.
 2. Expandir V451/V452 equation DSL v2 somente em CPU:
    - basear em `tonghuikang/nemotron/reasoners/equation_numeric.py`;
    - cobrir concat, reverse concat, soma/subtracao/multiplicacao, `+1/-1`,

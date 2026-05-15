@@ -208,8 +208,23 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
     return report
 
 
+def run_self_test() -> None:
+    print("=== V449 ACC METRIC INTEGRITY SELF TEST START ===", flush=True)
+    tests = builtin_metric_tests()
+    payload = {
+        "schema_version": "kg1_v449_acc_metric_integrity_self_test_v1",
+        "builtin_metric_tests": tests,
+        "passed": bool(all(item["passed"] for item in tests)),
+    }
+    print("v449_acc_metric_integrity_self_test =", json.dumps(payload, indent=2, sort_keys=True), flush=True)
+    if not payload["passed"]:
+        raise RuntimeError("V449 ACC metric integrity self-test failed")
+    print("=== V449 ACC METRIC INTEGRITY SELF TEST END ===", flush=True)
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--self-test", action="store_true", help="Run built-in strict metric checks and exit.")
     parser.add_argument("--weak-csv", type=Path, default=DEFAULT_WEAK_CSV)
     parser.add_argument("--prediction-csv", type=Path, action="append", default=[])
     parser.add_argument("--output-dir", type=Path, default=Path("artifacts/v449_acc_metric_integrity_audit/20260515T_cpu_gate"))
@@ -219,6 +234,9 @@ def build_parser() -> argparse.ArgumentParser:
 
 def main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
+    if args.self_test:
+        run_self_test()
+        return 0
     run(args)
     return 0
 
