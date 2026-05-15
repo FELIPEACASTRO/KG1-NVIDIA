@@ -1,0 +1,156 @@
+answer,baseline_correct,baseline_prediction,candidate_correct,checked_loo,example_count,id,prediction,program_kind,proof,query,reason,source_name,source_positions,status
+84,True,84,False,,3,e518256e,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}","94""10",no_selection_substitution_program,,"""""",abstain
+!?'!,False,|:>>,False,,4,09d5ee68,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",|:*>>,no_selection_substitution_program,,"""""",abstain
+@&,False,\boxed[[!'},False,,4,00457d26,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",[[-!',no_selection_substitution_program,,"""""",abstain
+$,False,{}>{,False,,4,518deb39,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",$$-<>,no_selection_substitution_program,,"""""",abstain
+-@>,False,'^^^',False,,4,82109e34,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",'^-^^,no_selection_substitution_program,,"""""",abstain
+63,True,63,False,,4,5e67b1a1,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",32{31,no_selection_substitution_program,,"""""",abstain
+1089,False,0,False,,5,e1728524,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",99/99,no_selection_substitution_program,,"""""",abstain
+"""`",False,@`',False,,5,e3bf0c2c,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",@`}'',no_selection_substitution_program,,"""""",abstain
+"-\""",False,|?|,False,,5,fdbdf50c,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",|\-?|,no_selection_substitution_program,,"""""",abstain
+]%],False,/`%`,False,,4,47c1d8f5,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",/`#%`,no_selection_substitution_program,,"""""",abstain
+/((`,False,@($/,False,,4,f9a33aa1,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",@(\$/,no_selection_substitution_program,,"""""",abstain
+7272,True,7272,False,,5,9f2fae58,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",88$13,no_selection_substitution_program,,"""""",abstain
+&:/?,False,:^?\,False,3,4,f9799a68,?\:^,direct_selection,"{""checked_loo"": 3, ""output_len"": 4, ""program_kind"": ""direct_selection"", ""reason"": ""unique_selection_substitution_program"", ""source_name"": ""operands4"", ""source_positions"": [3, 4, 0, 1], ""status"": ""candidate"", ""top_count"": 1}",:^*?\,unique_selection_substitution_program,operands4,"[3, 4, 0, 1]",candidate
+&/,False,]]]%,False,,5,c24074a8,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",]]`]%,no_selection_substitution_program,,"""""",abstain
+-@',False,@``:,False,,4,893ffb06,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",@`-`:,no_selection_substitution_program,,"""""",abstain
+-[,False,@|#|,False,,5,cf4c04c0,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",@|-#|,no_selection_substitution_program,,"""""",abstain
+]]],False,$&&,False,,4,8e411cc7,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",$&!&},no_selection_substitution_program,,"""""",abstain
+9318,True,9318,True,4,4,41e6cbfc,9318,direct_selection,"{""checked_loo"": 4, ""output_len"": 4, ""program_kind"": ""direct_selection"", ""reason"": ""unique_selection_substitution_program"", ""source_name"": ""operands4"", ""source_positions"": [3, 4, 0, 1], ""status"": ""candidate"", ""top_count"": 1}",18+93,unique_selection_substitution_program,operands4,"[3, 4, 0, 1]",candidate
+['[/,True,['[/,True,3,5,dea42835,['[/,direct_selection,"{""checked_loo"": 3, ""output_len"": 4, ""program_kind"": ""direct_selection"", ""reason"": ""unique_selection_substitution_program"", ""source_name"": ""operands4"", ""source_positions"": [3, 4, 0, 1], ""status"": ""candidate"", ""top_count"": 1}",[/*[',unique_selection_substitution_program,operands4,"[3, 4, 0, 1]",candidate
+53,False,32,False,,3,48c25e0e,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",43&11,no_selection_substitution_program,,"""""",abstain
+>42,True,>42,False,,4,7ef4d5d6,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",66>24,no_selection_substitution_program,,"""""",abstain
+-51,True,-51,False,,3,3ee36e0a,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",48-99,no_selection_substitution_program,,"""""",abstain
+{]``,True,{]``,False,,3,39c237c7,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",{]+``,no_selection_substitution_program,,"""""",abstain
+76,True,76,False,,4,963e85bb,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",52$24,no_selection_substitution_program,,"""""",abstain
+-),False,!$$[,False,,3,a98d4d53,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",!$-$[,no_selection_substitution_program,,"""""",abstain
+/,False,$/>/,False,,5,59733f94,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",$/->/,no_selection_substitution_program,,"""""",abstain
+63,True,63,False,,3,b1bc3731,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}","07""43",no_selection_substitution_program,,"""""",abstain
+87,True,87,False,,3,a1523a63,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",66%31,no_selection_substitution_program,,"""""",abstain
+66,True,66,False,2,3,3383d4ec,7239,direct_selection,"{""checked_loo"": 2, ""output_len"": 4, ""program_kind"": ""direct_selection"", ""reason"": ""unique_selection_substitution_program"", ""source_name"": ""operands4"", ""source_positions"": [3, 4, 0, 1], ""status"": ""candidate"", ""top_count"": 1}",39-72,unique_selection_substitution_program,operands4,"[3, 4, 0, 1]",candidate
+))[,False,:<`\,False,,5,9dae880f,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",:<}`\,no_selection_substitution_program,,"""""",abstain
+20,True,20,False,,4,2af7134e,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",61+41,no_selection_substitution_program,,"""""",abstain
+#`,False,$?]$,False,,3,ae6be599,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",$?+]$,no_selection_substitution_program,,"""""",abstain
+5983,True,5983,False,,3,b26d8818,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",68]88,no_selection_substitution_program,,"""""",abstain
+"""`#&",False,"])<""",False,,4,8494aad3,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}","])*<""",no_selection_substitution_program,,"""""",abstain
+34,True,34,False,3,3,8df3daad,4511,direct_selection,"{""checked_loo"": 3, ""output_len"": 4, ""program_kind"": ""direct_selection"", ""reason"": ""unique_selection_substitution_program"", ""source_name"": ""operands4"", ""source_positions"": [0, 1, 3, 4], ""status"": ""candidate"", ""top_count"": 1}",45|11,unique_selection_substitution_program,operands4,"[0, 1, 3, 4]",candidate
+4922,True,4922,False,,5,791056ce,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",58{72,no_selection_substitution_program,,"""""",abstain
+321,True,321,False,,5,3c12aeb9,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",27$15,no_selection_substitution_program,,"""""",abstain
+4472,True,4472,False,,3,69aa57b3,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",72+44,no_selection_substitution_program,,"""""",abstain
+{@%],False,(^@{,False,,3,e3890bf7,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",(^*{@,no_selection_substitution_program,,"""""",abstain
+231,True,231,False,,5,d204b9cc,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",75)57,no_selection_substitution_program,,"""""",abstain
+?|,False,|''>,False,,4,d29e19a4,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",|'$>',no_selection_substitution_program,,"""""",abstain
+^&/,False,"""$ $]""",False,,4,b06625c4,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}","""$*$]",no_selection_substitution_program,,"""""",abstain
+24,True,24,False,,5,84030b0b,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",36)12,no_selection_substitution_program,,"""""",abstain
+'!,False,&&&`,False,,5,52be4988,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",&&+&`,no_selection_substitution_program,,"""""",abstain
+?()<,False,(<)),False,,4,99d6a3b5,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",(<%)),no_selection_substitution_program,,"""""",abstain
+))^),False,\${,False,,4,2d3547af,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",\$&\\,no_selection_substitution_program,,"""""",abstain
+'],False,|^^^,False,,3,28b0ff48,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",|^-^^,no_selection_substitution_program,,"""""",abstain
+696,True,696,False,,4,3fa49035,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",24>29,no_selection_substitution_program,,"""""",abstain
+|&,False,'{),False,,4,61557701,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",'{+{),no_selection_substitution_program,,"""""",abstain
+711,True,711,False,2,5,56343b77,7417,direct_selection,"{""checked_loo"": 2, ""output_len"": 4, ""program_kind"": ""direct_selection"", ""reason"": ""unique_selection_substitution_program"", ""source_name"": ""operands4"", ""source_positions"": [3, 4, 0, 1], ""status"": ""candidate"", ""top_count"": 1}",17+74,unique_selection_substitution_program,operands4,"[3, 4, 0, 1]",candidate
+-23,True,-23,False,,3,7ac90433,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",48-25,no_selection_substitution_program,,"""""",abstain
+>/,False,!!$>,False,,3,02902eb3,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",!!+$>,no_selection_substitution_program,,"""""",abstain
+:,False,::)[,False,,5,0d90736f,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",::-)[,no_selection_substitution_program,,"""""",abstain
+&(,False,##!),False,,3,294453b5,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",##-!),no_selection_substitution_program,,"""""",abstain
+671,False,18,False,,3,386b6d03,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",79'97,no_selection_substitution_program,,"""""",abstain
+%{{,False,|@(!,False,,5,57f6878e,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",|@<:(,no_selection_substitution_program,,"""""",abstain
+(/&{,True,(/&{,False,,5,bc83b0a1,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",(/*&{,no_selection_substitution_program,,"""""",abstain
+:46,False,46,False,,5,a361a1b7,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",53:99,no_selection_substitution_program,,"""""",abstain
+:\:,False,@}<',False,,3,d911e8e1,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",@})<',no_selection_substitution_program,,"""""",abstain
+-55,False,55,False,,5,7688e06e,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",63-19,no_selection_substitution_program,,"""""",abstain
+5631,True,5631,False,,5,dbd0e3c9,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",56*31,no_selection_substitution_program,,"""""",abstain
+07,True,07,False,,4,2e2d60b2,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",85+11,no_selection_substitution_program,,"""""",abstain
+}/!},False,|!@[,False,,5,5f9f0ed7,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",|!*@[,no_selection_substitution_program,,"""""",abstain
+7,True,7,False,,5,333d93ec,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",44-73,no_selection_substitution_program,,"""""",abstain
+49,True,49,False,,5,74fff108,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",65^16,no_selection_substitution_program,,"""""",abstain
+)|,False,$):$,False,,3,c43b5a13,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",$)+:$,no_selection_substitution_program,,"""""",abstain
+]$!,False,$){,False,,5,b0206bb7,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",${*)},no_selection_substitution_program,,"""""",abstain
+@,False,$]<$,False,,4,638f93ca,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",$<-]$,no_selection_substitution_program,,"""""",abstain
+{<<<,False,@/[@,False,,4,4bfd095a,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",@/*[@,no_selection_substitution_program,,"""""",abstain
+%'!,False,"#`""",False,,4,7a422e17,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}","#`@{""",no_selection_substitution_program,,"""""",abstain
+&&,False,><\$,False,,4,5b2523e6,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",><-\$,no_selection_substitution_program,,"""""",abstain
+"(""",False,^?(|,False,,4,0fe53bac,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",^?+(|,no_selection_substitution_program,,"""""",abstain
+92,False,-92,False,,5,274def88,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",85-92,no_selection_substitution_program,,"""""",abstain
+-!,False,'}>/,False,,3,03a3437f,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",'}-/>,no_selection_substitution_program,,"""""",abstain
+)#?,False,@\}?,False,,5,30ac5c8e,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",@\+}?,no_selection_substitution_program,,"""""",abstain
+88,True,88,False,2,4,08d8d7e1,2365,direct_selection,"{""checked_loo"": 2, ""output_len"": 4, ""program_kind"": ""direct_selection"", ""reason"": ""unique_selection_substitution_program"", ""source_name"": ""operands4"", ""source_positions"": [3, 4, 0, 1], ""status"": ""candidate"", ""top_count"": 1}",65+23,unique_selection_substitution_program,operands4,"[3, 4, 0, 1]",candidate
+#<,False,!%<<,False,,5,ff121f08,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",!%+<<,no_selection_substitution_program,,"""""",abstain
+881,True,881,False,,3,42cb233d,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",59+29,no_selection_substitution_program,,"""""",abstain
+"|""]",False,|@<!,False,,3,ec8b4875,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",|@*<!,no_selection_substitution_program,,"""""",abstain
+'(^),False,{%??,False,,3,e3fbc768,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",{%/??,no_selection_substitution_program,,"""""",abstain
+)(,False,^&>),False,,4,6cc5dafb,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",^&!>),no_selection_substitution_program,,"""""",abstain
+>>,False,""")&&",False,,4,d5a03a2e,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",""""")&&",no_selection_substitution_program,,"""""",abstain
+3388,True,3388,False,,4,8bebef83,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",44{77,no_selection_substitution_program,,"""""",abstain
+3341,True,3341,True,2,5,27cec7a9,3341,direct_selection,"{""checked_loo"": 2, ""output_len"": 4, ""program_kind"": ""direct_selection"", ""reason"": ""unique_selection_substitution_program"", ""source_name"": ""operands4"", ""source_positions"": [0, 1, 3, 4], ""status"": ""candidate"", ""top_count"": 1}",33:41,unique_selection_substitution_program,operands4,"[0, 1, 3, 4]",candidate
+1455,True,1455,True,3,4,4aeed935,1455,direct_selection,"{""checked_loo"": 3, ""output_len"": 4, ""program_kind"": ""direct_selection"", ""reason"": ""unique_selection_substitution_program"", ""source_name"": ""operands4"", ""source_positions"": [3, 4, 0, 1], ""status"": ""candidate"", ""top_count"": 1}",55*14,unique_selection_substitution_program,operands4,"[3, 4, 0, 1]",candidate
+-21,False,21,False,,3,fb623471,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",08-29,no_selection_substitution_program,,"""""",abstain
+5311,True,5311,False,,5,88b43464,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",11+53,no_selection_substitution_program,,"""""",abstain
+101,True,101,False,,4,209c43f0,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",18^84,no_selection_substitution_program,,"""""",abstain
+##$,False,!>``,False,,4,d129b085,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}","!>+`""",no_selection_substitution_program,,"""""",abstain
+}@,False,"""']@",False,,3,e582df31,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}","""'?]@",no_selection_substitution_program,,"""""",abstain
+"[""",False,{>$[,False,,3,a77be9fa,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",{>|$[,no_selection_substitution_program,,"""""",abstain
+5543,True,5543,False,,3,f8d6abd1,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",63:88,no_selection_substitution_program,,"""""",abstain
+"(""/""",False,!:`(,False,,4,4ed6b56f,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",!:*`(,no_selection_substitution_program,,"""""",abstain
+[:,False,[&<>,False,,5,208d7838,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",[&-<>,no_selection_substitution_program,,"""""",abstain
+-)\,False,^!#\,False,,3,58c099d2,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",^!-#\,no_selection_substitution_program,,"""""",abstain
+[[&],False,]$$),False,,4,3cb3fd89,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",]$*$),no_selection_substitution_program,,"""""",abstain
+<',False,<&<#,False,2,5,a26065d4,<,direct_selection,"{""checked_loo"": 2, ""output_len"": 1, ""program_kind"": ""direct_selection"", ""reason"": ""unique_selection_substitution_program"", ""source_name"": ""operands4"", ""source_positions"": [3], ""status"": ""candidate"", ""top_count"": 1}",<&+<#,unique_selection_substitution_program,operands4,[3],candidate
+%,False,!\{<,False,,3,194695e8,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",!\-{<,no_selection_substitution_program,,"""""",abstain
+-39,False,39,False,,4,528ec0d8,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",11-50,no_selection_substitution_program,,"""""",abstain
+]}\!,True,]}\!,False,,5,4bb8c6cd,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",]}*\!,no_selection_substitution_program,,"""""",abstain
+-/<,False,$/'{,False,,5,57712d01,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",$/-'{,no_selection_substitution_program,,"""""",abstain
+?(&@,False,(@@?,False,,3,d98d85c0,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",(@+@?,no_selection_substitution_program,,"""""",abstain
+180,True,180,False,,3,7ed40e8a,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",99&82,no_selection_substitution_program,,"""""",abstain
+)!,False,@|]!,False,,3,491b8ea5,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",@|-]!,no_selection_substitution_program,,"""""",abstain
+>!>},False,){>),False,,3,eb1a62f7,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",)}*>),no_selection_substitution_program,,"""""",abstain
+%?<,False,"""$%%""",False,,4,0bb591e6,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}","""$+%%",no_selection_substitution_program,,"""""",abstain
+9351,True,9351,False,,3,3c424916,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",82*55,no_selection_substitution_program,,"""""",abstain
+3316,True,3316,False,,4,72336119,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",85>39,no_selection_substitution_program,,"""""",abstain
+#>[,False,!&)#,False,,5,9a19fc2d,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",!&+)#,no_selection_substitution_program,,"""""",abstain
+"""'",False,>]],False,,4,528b694b,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",>]<]),no_selection_substitution_program,,"""""",abstain
+3922,True,3922,True,2,4,d3b20e29,3922,direct_selection,"{""checked_loo"": 2, ""output_len"": 4, ""program_kind"": ""direct_selection"", ""reason"": ""unique_selection_substitution_program"", ""source_name"": ""operands4"", ""source_positions"": [3, 4, 0, 1], ""status"": ""candidate"", ""top_count"": 1}",22+39,unique_selection_substitution_program,operands4,"[3, 4, 0, 1]",candidate
+30,False,3,False,,4,d1bd7478,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",37:67,no_selection_substitution_program,,"""""",abstain
+35,True,35,False,,3,21519be7,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",82@52,no_selection_substitution_program,,"""""",abstain
+251,True,251,False,,5,7306613b,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",79+65,no_selection_substitution_program,,"""""",abstain
+'>&,False,{>?#,False,,4,fba40625,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",{>'?#,no_selection_substitution_program,,"""""",abstain
+/#</,True,/#</,True,2,3,9aa8dc92,/#</,direct_selection,"{""checked_loo"": 2, ""output_len"": 4, ""program_kind"": ""direct_selection"", ""reason"": ""unique_selection_substitution_program"", ""source_name"": ""operands4"", ""source_positions"": [0, 1, 3, 4], ""status"": ""candidate"", ""top_count"": 1}",/#+</,unique_selection_substitution_program,operands4,"[0, 1, 3, 4]",candidate
+134,False,35,False,,4,c5b058d6,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",94)40,no_selection_substitution_program,,"""""",abstain
+66,True,66,False,,5,b4342b90,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",40\25,no_selection_substitution_program,,"""""",abstain
+<>\>,False,"<:{""",False,,5,837a6ae7,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}","<{*:""",no_selection_substitution_program,,"""""",abstain
+!&&},False,|&$|,False,,4,d0e1010b,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",|&*$|,no_selection_substitution_program,,"""""",abstain
+04`,True,04`,False,,3,34c563c5,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",45`41,no_selection_substitution_program,,"""""",abstain
+341,False,55,False,,3,5a0d5d2a,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",39+94,no_selection_substitution_program,,"""""",abstain
+4443,False,4,False,,3,5a9fcf68,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",24@28,no_selection_substitution_program,,"""""",abstain
+-/#,False,&#!,False,,4,6e56b39a,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",&#-!],no_selection_substitution_program,,"""""",abstain
+/|',False,!&&&,False,3,5,a5f1991c,!?&&,direct_selection,"{""checked_loo"": 3, ""output_len"": 4, ""program_kind"": ""direct_selection"", ""reason"": ""unique_selection_substitution_program"", ""source_name"": ""operands4"", ""source_positions"": [0, 1, 3, 4], ""status"": ""candidate"", ""top_count"": 1}",!?/&&,unique_selection_substitution_program,operands4,"[0, 1, 3, 4]",candidate
+">""(",False,"\""]",False,,3,c7aae192,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}","\""*}}",no_selection_substitution_program,,"""""",abstain
+113,False,16,False,,5,e4cc7639,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",48*64,no_selection_substitution_program,,"""""",abstain
+"/""",False,`@>``,False,,5,844f826c,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",`@*>`,no_selection_substitution_program,,"""""",abstain
+66,True,66,False,,4,b69391b8,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",52'14,no_selection_substitution_program,,"""""",abstain
+??{`,False,#?&`,False,,4,8193e7e0,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",#?*&`,no_selection_substitution_program,,"""""",abstain
+-!#,False,"""{!""",False,,3,5bcb572e,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}","""{-{!",no_selection_substitution_program,,"""""",abstain
+-52,True,-52,False,,3,8c1529e1,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",65-18,no_selection_substitution_program,,"""""",abstain
+<?/,False,>}][?,False,,4,cdec898a,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",>}+]?,no_selection_substitution_program,,"""""",abstain
+5913,True,5913,False,,5,44398869,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",54^17,no_selection_substitution_program,,"""""",abstain
+$(%,False,::{[,False,,3,edf364da,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",::*{[,no_selection_substitution_program,,"""""",abstain
+3,True,3,False,,5,339149c9,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",32-62,no_selection_substitution_program,,"""""",abstain
+:/$^,True,:/$^,False,,5,c7844441,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",:/[$^,no_selection_substitution_program,,"""""",abstain
+-25,True,-25,False,,3,21261dc6,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",02-27,no_selection_substitution_program,,"""""",abstain
+611,True,611,False,3,5,4dbec546,6506,direct_selection,"{""checked_loo"": 3, ""output_len"": 4, ""program_kind"": ""direct_selection"", ""reason"": ""unique_selection_substitution_program"", ""source_name"": ""operands4"", ""source_positions"": [3, 4, 0, 1], ""status"": ""candidate"", ""top_count"": 1}",06+65,unique_selection_substitution_program,operands4,"[3, 4, 0, 1]",candidate
+`?\!,False,@?`?,False,,4,0e009c6d,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",@?'`?,no_selection_substitution_program,,"""""",abstain
+>\:,False,>!!/,False,,3,b4b73143,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",>!%!/,no_selection_substitution_program,,"""""",abstain
+2271,False,10,False,,3,861cb154,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",14!24,no_selection_substitution_program,,"""""",abstain
+:<],False,?>>>,False,2,3,90feb0c5,?>>>,direct_selection,"{""checked_loo"": 2, ""output_len"": 4, ""program_kind"": ""direct_selection"", ""reason"": ""unique_selection_substitution_program"", ""source_name"": ""operands4"", ""source_positions"": [0, 1, 3, 4], ""status"": ""candidate"", ""top_count"": 1}",?>'>>,unique_selection_substitution_program,operands4,"[0, 1, 3, 4]",candidate
+-01,True,-01,False,,4,c541eb82,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",47-48,no_selection_substitution_program,,"""""",abstain
+:>,False,"$""\[""",False,,5,b9f1d959,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}","$\+""[",no_selection_substitution_program,,"""""",abstain
+^,False,"\boxed({""'|})",False,,3,ca5db1c0,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}","(""-'|",no_selection_substitution_program,,"""""",abstain
+[,False,"""]'/",False,,4,9f1ff166,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}","""]-'/",no_selection_substitution_program,,"""""",abstain
+%[:?,False,\{<?,False,4,4,432b1110,\{<?,direct_selection,"{""checked_loo"": 4, ""output_len"": 4, ""program_kind"": ""direct_selection"", ""reason"": ""unique_selection_substitution_program"", ""source_name"": ""operands4"", ""source_positions"": [0, 1, 3, 4], ""status"": ""candidate"", ""top_count"": 1}",\{*<?,unique_selection_substitution_program,operands4,"[0, 1, 3, 4]",candidate
+100,True,100,False,,4,f333b67f,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",48<51,no_selection_substitution_program,,"""""",abstain
+/@,False,[}}\,False,,5,f7d26b8d,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",[}-}\,no_selection_substitution_program,,"""""",abstain
+%/<>,True,%/<>,False,,3,8e56a42e,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",%/[<>,no_selection_substitution_program,,"""""",abstain
+2976,False,65,False,,4,20f0fac9,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",31%96,no_selection_substitution_program,,"""""",abstain
+){|,False,"""%]%{""",False,,5,26e48e98,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}","""])%{",no_selection_substitution_program,,"""""",abstain
+[#>#,False,!##^,False,,5,5501c054,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",!#$#^,no_selection_substitution_program,,"""""",abstain
+87,False,37,False,,4,ea6d926a,,,"{""reason"": ""no_selection_substitution_program"", ""status"": ""abstain""}",25+62,no_selection_substitution_program,,"""""",abstain

@@ -1,0 +1,44 @@
+{
+  "accepted_gain_count": 0,
+  "baseline": {
+    "bit_manipulation": 136,
+    "equation_transform": 56,
+    "source": "V291/V290 checkpoint-6",
+    "truncated": 0,
+    "weak_total": 192
+  },
+  "candidate_count": 16,
+  "conflict_count": 5,
+  "decision": {
+    "decision": "hf_gpu_blocked_no_safe_gain",
+    "next_action": "Continue CPU-only symbolic structural search; do not train.",
+    "reason": "accepted=0; conflicts=5; projected_eq=56; projected_bit=136"
+  },
+  "generated_at_utc": "2026-05-15T09:26:44.397944+00:00",
+  "hf_gpu_allowed": false,
+  "kaggle_submit_allowed": false,
+  "outputs": {
+    "accepted_csv": "artifacts\\v422_symbolic_substitution_gate\\20260515T_v422_symbolic_substitution_gate\\v422_symbolic_substitution_accepted.csv",
+    "audit_csv": "artifacts\\v422_symbolic_substitution_gate\\20260515T_v422_symbolic_substitution_gate\\v422_symbolic_substitution_audit.csv",
+    "conflicts_csv": "artifacts\\v422_symbolic_substitution_gate\\20260515T_v422_symbolic_substitution_gate\\v422_symbolic_substitution_conflicts.csv",
+    "manifest_json": "artifacts\\v422_symbolic_substitution_gate\\20260515T_v422_symbolic_substitution_gate\\v422_symbolic_substitution_manifest.json",
+    "report_md": "artifacts\\v422_symbolic_substitution_gate\\20260515T_v422_symbolic_substitution_gate\\V422_SYMBOLIC_SUBSTITUTION_GATE.md"
+  },
+  "package_allowed": false,
+  "projection": {
+    "accuracy": 0.6095238095238096,
+    "bit_manipulation_correct": 136,
+    "correct": 192,
+    "equation_transform_correct": 56,
+    "rows": 315,
+    "truncated": 0
+  },
+  "schema_version": "kg1_v422_symbolic_substitution_gate_v1",
+  "teacher_reference": {
+    "adapter_only": false,
+    "bit_manipulation": 159,
+    "equation_transform": 63,
+    "source": "V414/V366 consolidated CPU teacher/verifier",
+    "weak_total": 222
+  }
+}

@@ -75,6 +75,7 @@ Precisamos buscar subida no ranking ainda hoje, `2026-05-14`. A decisao V392 e s
 | V419 residual taxonomy | `92` eq residuais | `80` punct-only dominantes | n/a | proxima classe: symbolic punctuation structural solver; sem GPU |
 | V420 symbolic cryptarithm aggressive | `1` accepted conhecido | `99d6a3b5` ja em V409/V414 | n/a | `0` ganho novo; multi-operator nao promotavel |
 | V421 operator-specific symbolic gate | `17` candidates | `0` gains | n/a | `3` conflitos; hipotese bloqueada |
+| V422 symbolic selection/substitution gate | `16` candidates | `0` gains | n/a | `5` conflitos; hipotese bloqueada; reproducao HF CPU autorizada apenas como gate barato |
 
 Conclusao: `eval_loss` baixo nao e criterio de promocao. O criterio e ACC por familia no weak/full gate. A rota "resolver nos mesmos" finalmente tem ganho mensuravel (`+9` weak em CPU), mas esse ganho ainda e solver/verifier externo; para submit, ele precisa virar comportamento do adapter/package ou ser permitido explicitamente pelas regras de runtime.
 
@@ -1048,6 +1049,33 @@ Artefatos:
 
 Decisao: nao abrir HF. A hipotese same-operator nao e segura; ela nao encontrou ganho e tentaria regredir `3` rows corretas do baseline.
 
+### Step 6S - V422 symbolic selection/substitution gate
+
+Status: concluido localmente; reproducao HF CPU em andamento/permitida por ser barata e sem treino.
+
+Objetivo: testar outra classe estrutural para os residuais de pontuacao simbolica: selecionar posicoes da expressao Alice de 5 caracteres e aprender substituicao global ou por slot a partir dos exemplos do proprio prompt.
+
+Resultado local:
+
+| Metric | Valor |
+|---|---:|
+| Candidate rows | `16` |
+| Accepted gains | `0` |
+| Conflicts/losses | `5` |
+| Projected weak total | `192/315` |
+| Projected equation_transform | `56/155` |
+| Projected bit_manipulation | `136/160` |
+| Decisao | `hf_gpu_blocked_no_safe_gain` |
+
+Artefatos:
+
+- Script: `artifacts/v422_symbolic_substitution_gate/build_v422_symbolic_substitution_gate.py`.
+- Manifest: `artifacts/v422_symbolic_substitution_gate/20260515T_v422_symbolic_substitution_gate/v422_symbolic_substitution_manifest.json`.
+- Relatorio: `artifacts/v422_symbolic_substitution_gate/20260515T_v422_symbolic_substitution_gate/V422_SYMBOLIC_SUBSTITUTION_GATE.md`.
+- HF CPU launcher: `artifacts/v422_hf_cpu_symbolic_substitution_launch/launch_v422_hf_cpu_symbolic_substitution.py`.
+
+Decisao: nao abrir GPU, nao fazer package e nao submeter. O valor pratico do V422 e negativo/diagnostico: ele fecha uma hipotese plausivel de literatura de program synthesis, prova que selecao+substituicao simples nao move `equation_transform`, e evita gastar com LoRA baseado nessa classe.
+
 ## Regras Permanentes
 
 - Nenhum HF sem CPU gate com sinal novo.
@@ -1081,6 +1109,7 @@ Decisao: nao abrir HF. A hipotese same-operator nao e segura; ela nao encontrou 
 | V390/V391 equation+bit replay LoRA direto | CPU projection `198/315` nao transferiu; V391 ficou `191/315`, `equation=56`, `bit=135` |
 | V416 rawstyle transfer LoRA | dataset/gate passou, mas HF weak ficou `190-191/315`, `equation=56`, `bit=134-135`, `truncated=1`; linha encerrada |
 | Aumentar caps da DSL V412 | V418 agressivo achou `0` ganho novo e gerou `1` falso positivo + `8` conflitos |
+| V421 same-operator symbolic e V422 selection/substitution simples | ambos tiveram `0` ganhos e conflitos; nao usar para treino |
 | H200 relaunch sem novo dado | V391 confirmou que trocar hardware nao muda ACC quando a hipotese de dados nao transfere |
 | HF training baseado apenas em `eval_loss` | historicamente loss caiu sem mover `equation_transform`; promocao e por ACC |
 | Web/API buscas genericas | so retornam ao plano se virarem regra, dataset ou gate verificavel |
@@ -1089,7 +1118,7 @@ Decisao: nao abrir HF. A hipotese same-operator nao e segura; ela nao encontrou 
 
 ## Proxima Acao Unica
 
-V415 confirmou que nao existe candidato adapter-like local pronto para promocao, V416 confirmou que mudar o estilo da completion ainda nao transfere os ganhos do teacher para o adapter, V417 bloqueou novo GPU SFT por FinOps, V418 mostrou que aumentar caps da DSL V412 nao cria ganhos novos, V419 mostrou que o residual dominante e `80` rows de pontuacao simbolica pura, V420 confirmou que ampliar cryptarithm V329 so reencontra `99d6a3b5`, e V421 bloqueou a hipotese same-operator por `0` ganhos e `3` conflitos. Portanto o caminho ativo volta para CPU gate com outra classe de regra nova antes de qualquer novo gasto HF:
+V415 confirmou que nao existe candidato adapter-like local pronto para promocao, V416 confirmou que mudar o estilo da completion ainda nao transfere os ganhos do teacher para o adapter, V417 bloqueou novo GPU SFT por FinOps, V418 mostrou que aumentar caps da DSL V412 nao cria ganhos novos, V419 mostrou que o residual dominante e `80` rows de pontuacao simbolica pura, V420 confirmou que ampliar cryptarithm V329 so reencontra `99d6a3b5`, V421 bloqueou a hipotese same-operator por `0` ganhos e `3` conflitos, e V422 bloqueou selection/substitution simples por `0` ganhos e `5` conflitos. Portanto o caminho ativo continua em CPU, mas precisa atacar uma classe nova de regra, nao repetir as ja fechadas:
 
 1. criar V417 como auditoria de falha e bloqueio de receita:
    - consolidar V413/V416 como linhas de transferencia rejeitadas;
@@ -1099,10 +1128,11 @@ V415 confirmou que nao existe candidato adapter-like local pronto para promocao,
    - comportamento adapter/package, nao teacher externo;
    - `total > 192`, `equation > 56`, `bit >= 136`, `truncated=0`;
    - nenhum uso direto de weak/full rows em treino.
-3. implementar primeiro um `symbolic_punctuation_structural_solver` para os `80` residuais punct-only:
+3. implementar primeiro um `symbolic_punctuation_structural_solver` para os `80` residuais punct-only, mas excluindo as classes ja rejeitadas:
    - sem treino;
    - com abstain agressivo;
    - aceitar apenas ganhos no-loss contra V291/V290.
-4. se nao houver esse sinal em CPU, nao abrir HF job. A acao correta e minerar outra classe formal ainda nao coberta por V412/V418/V419, ou mudar o mecanismo de inferencia permitido, nao repetir SFT nem apenas aumentar caps.
+4. proxima classe tecnica candidata: busca por invariantes de igualdade/multiconjunto e posicoes condicionadas por relacoes entre operandos (`same char`, `left==right`, frequencia, espelhamento), porque V421/V422 ja descartaram operador-especifico simples e substituicao direta.
+5. se nao houver esse sinal em CPU, nao abrir GPU. A acao correta e minerar outra classe formal ainda nao coberta por V412/V418/V419/V421/V422, ou mudar o mecanismo de inferencia permitido, nao repetir SFT nem apenas aumentar caps.
 
 Nao rodar broad SFT, prompt sweep ou job guiado por `eval_loss`. A decisao e por ACC, truncation e comparativo contra V291.
