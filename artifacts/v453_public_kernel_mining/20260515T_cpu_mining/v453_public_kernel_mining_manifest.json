@@ -1,0 +1,18 @@
+{
+  "analyzed_count": 30,
+  "competition": "nvidia-nemotron-model-reasoning-challenge",
+  "generated_at_utc": "2026-05-15T21:19:50.035941+00:00",
+  "listed_count": 30,
+  "outputs": {
+    "manifest_json": "artifacts\\v453_public_kernel_mining\\20260515T_cpu_mining\\v453_public_kernel_mining_manifest.json",
+    "markdown": "artifacts\\v453_public_kernel_mining\\20260515T_cpu_mining\\KG1_V453_PUBLIC_KERNEL_MINING.md",
+    "summary_csv": "artifacts\\v453_public_kernel_mining\\20260515T_cpu_mining\\v453_public_kernel_mining_summary.csv"
+  },
+  "pull_failed_count": 1,
+  "raw_notebooks_deleted": true,
+  "schema_version": "kg1_v453_public_kernel_mining_v1",
+  "status_counts": {
+    "ok": 29,
+    "pull_failed": 1
+  }
+}

@@ -52,6 +52,7 @@ Regra central: ganho so conta se aparecer no adapter/package. Teacher CPU, solve
 | V450 transfer-debug audit | ACC path, weak scorer, family mapping e exact binary auditados | sem erro ativo de scoring; gargalo e transferencia adapter-only |
 | V451 equation DSL v2 gap audit | V324 tem `+6` CPU solver-only; V443 tem `0` pares certificados e `120` no_unique_certified_rule | V452 precisa ampliar DSL/certificador antes de GPU |
 | V452 equation DSL v2 certified builder | 133 rows auditadas; 7 candidatos; 2 pares certificados; 5 candidatos numericos reprovados | `hf_gpu_allowed=false`; nao abrir H200 por esta rota |
+| V453 public Kaggle kernel mining | 30 kernels listados/analisados; 29 pull ok; raw notebooks apagados apos triagem | sem ganho submit-ready; reforca `lm_head`/target modules e mineracao publica CPU-only |
 
 ## Regras Permanentes
 
@@ -70,7 +71,7 @@ Regra central: ganho so conta se aparecer no adapter/package. Teacher CPU, solve
 13. H200 esta autorizada ate 1 hora por execucao. Se uma execucao precisar passar de 1 hora, parar e pedir autorizacao humana antes de continuar.
 14. Todo erro novo deve entrar no ledger `artifacts/roadmaps/KG1_ERROR_LEDGER_2026_05_15.md` com evidencia, impacto, regra preventiva e status antes de abrir novo job pago.
 15. Antes de qualquer job pago ou notebook operacional novo/alterado, rodar auditoria de integracao: launcher, dataset correto, conteudo do dataset, hashes, schema, targets, paths HF, adapter inicial, gates, kill-switch e comparacao contra baseline. Para HF jobs, usar `scripts/kg1_pre_paid_job_integration_gate.py` alem do static gate.
-16. Acesso a modelos/datasets Hugging Face deve reutilizar o `HF_TOKEN` ja usado para criar/executar jobs. Nunca imprimir, commitar ou gravar a chave em artefatos.
+16. Acesso a modelos/datasets Hugging Face deve reutilizar o `HF_TOKEN` ja usado para criar/executar jobs. Nunca imprimir, commitar ou gravar a chave em artefatos. `.env*` fica ignorado; commitar apenas `.env.example` sem segredos.
 17. Todo novo dataset de equation precisa passar por gate de alinhamento de target antes de GPU: alvo nativo verificado por rejection sampling ou alvo canonico com logprob/score pre-registrado contra base/V291. Target plausivel e condicao necessaria, nao opcional.
 18. Todo treino que toque `equation_transform` precisa de bit replay/anchor pre-registrado. Piso exploratorio: `>=200` rows limpas; preferencia para H200 final: `>=800` rows, se disponiveis sem leakage.
 19. Antes de qualquer GPU, rodar leakage forte: `id`, `prompt_sha256`, prompt normalizado e overlap `13-gram` contra weak/full. Qualquer hit bloqueia o dataset.
@@ -976,6 +977,43 @@ V444: equation fica travado em `56`, bit perde `2`, e aparece truncation.
 Portanto, repetir V448 com mais steps, mais epochs, H200 maior, LR sweep ou
 novo checkpoint do mesmo dataset e gasto sem base tecnica.
 
+## Atualizacao V453 - Public Kernel Mining
+
+V453 executou mineracao CPU-only de notebooks publicos do Kaggle para procurar
+tecnicas de terceiros que tratem `bit_manipulation` e `equation_transform`
+melhor que a nossa rota atual.
+
+Artefatos:
+
+- Script: `scripts/mine_v453_public_kernels.py`.
+- Manifesto: `artifacts/v453_public_kernel_mining/20260515T_cpu_mining/v453_public_kernel_mining_manifest.json`.
+- Sumario CSV: `artifacts/v453_public_kernel_mining/20260515T_cpu_mining/v453_public_kernel_mining_summary.csv`.
+- Relatorio: `artifacts/v453_public_kernel_mining/20260515T_cpu_mining/KG1_V453_PUBLIC_KERNEL_MINING.md`.
+
+Resultado:
+
+| Item | Valor |
+|---|---:|
+| Kernels listados | `30` |
+| Kernels analisados | `30` |
+| Pull failures | `1` |
+| Raw notebooks retidos | `0` |
+| `hf_gpu_allowed` | `false` |
+
+Achados acionaveis:
+
+| Achado | Interpretacao |
+|---|---|
+| `huikang/end-to-end-finetuning-for-lb-0-85` e forks reforcam `lm_head` manual e target modules amplos | confirma tecnica ja conhecida; nao e ganho novo porque nossas rotas `lm_head`/rank32 ja foram testadas e nao passaram gate |
+| `matthewblakeward/steinifrank` tem classificadores por regex e hard negatives por familia | util como inspiracao para triagem/local routing CPU, mas nao prova regra `equation_transform` ou bit que melhore weak |
+| notebooks `nvidia-nemotron-trained-models-submission` listam fontes Kienngx/Tinker/LoRA diversas | material para inventario, nao para uso direto de pesos/submits de terceiros |
+| guias `0.86` reforcam que compatibilidade estrutural de adapter nao basta | valida nosso bloqueio contra mais treino generico sem sinal CPU |
+
+Decisao: V453 nao libera GPU e nao altera baseline. A mineracao publica continua
+permitida somente em CPU e somente para extrair regra implementavel localmente.
+Qualquer achado futuro precisa virar builder/probe e provar ganho por
+`verify_answer` antes de entrar em treino.
+
 ## Proxima Acao Ativa
 
 Rota ativa agora volta para CPU e depuracao de transferencia, nao para novo
@@ -996,17 +1034,14 @@ treino pago.
      numericos novos reprovados por label;
    - decisao: `hf_gpu_allowed=false`; nao abrir H200 nem repetir treino a partir
      deste dataset.
-3. Fechar V453 bit/equation public-mining CPU:
-   - minerar notebooks publicos e sources permitidos apenas para extrair regra,
-     nao pesos/submits/artefatos de terceiros;
-   - comparar qualquer regra contra os probes V439/V452 e contra weak gate
-     apenas como avaliacao posterior;
-   - criterio minimo para reabrir GPU: pelo menos `4` modos independentes
-     no-loss em equation ou melhora comprovada em bit sem queda de equation.
-4. Fechar V454 bit guardrail CPU:
+3. Fechar V454 bit guardrail CPU:
    - bit-pair/bitsum/stride;
    - exact binary com `verify_answer`;
    - gerar apenas anchors que preservem `bit>=136`, sem tolerancia numerica.
+4. Fechar V455 equation target-audit CPU:
+   - separar `equation_transform` em submodos por operador/forma;
+   - auditar os 99 misses atuais sem usar label no tiebreak;
+   - promover apenas regras com no-loss e independencia de prompt.
 5. So voltar a HF GPU se a CPU provar:
    - `total > 192/315`;
    - `equation > 56/155`;
