@@ -1,0 +1,87 @@
+{
+  "adapter_identity": {
+    "adapter_config_sha256": "a3d74c5a52ce75f71a8406222d877b9760ea18a40a772bcf407686c8ea19f11d",
+    "adapter_dir": "/root/.cache/huggingface/hub/models--felipesp1983--kg1-nemotron-lora-v290-rank19-micro-patch-smoke/snapshots/75909c9b40d8b7fa846d379d9d764fa33daeb9e2/checkpoint-6",
+    "adapter_model_bytes": 4259063856,
+    "adapter_model_file": "adapter_model.safetensors",
+    "adapter_model_sha256": "0a7b6144231d9358ae73a5e57d8778b32be1520fa47e3041414b3e025aaa1aa1",
+    "adapter_repo": "felipesp1983/kg1-nemotron-lora-v290-rank19-micro-patch-smoke",
+    "adapter_revision": "main",
+    "adapter_subfolder": "checkpoint-6"
+  },
+  "decode_config": {
+    "dtype": "auto",
+    "enable_chunked_prefill": true,
+    "enable_prefix_caching": true,
+    "gpu_memory_utilization": 0.9,
+    "max_lora_rank": 32,
+    "max_model_len": 8192,
+    "max_num_seqs": 32,
+    "max_tokens": 7680,
+    "model_name": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+    "model_revision": "cbd3fa9f933d55ef16a84236559f4ee2a0526848",
+    "temperature": 0.0,
+    "top_p": 1.0,
+    "trust_remote_code": true,
+    "warmup_rows": 2
+  },
+  "decode_config_sha256": "53805afbca5dc65a16a35a1d2941291cd421620195946686e177d1e8369dd7d7",
+  "generated_at_utc": "2026-05-15T14:33:34.738346+00:00",
+  "generation": {
+    "completion_tokens": 1119105,
+    "finish_reason_counts": {
+      "stop": 280
+    },
+    "generation_elapsed_s": 532.13738322258,
+    "seed": 42,
+    "tokens_per_second": 2103.037740409803
+  },
+  "inputs": {
+    "prompt_pack_jsonl": "artifacts/v435b_adapter_probe_prompt_pack/20260515T_v435b_prompt_pack/v435b_adapter_probe_prompt_pack_prompts.jsonl",
+    "prompt_pack_jsonl_sha256": "2e6b41aa2f1fd40857080fe8369df91a14bc63c215fbe122b52f5b5158991a55",
+    "prompt_pack_manifest_json": "artifacts/v435b_adapter_probe_prompt_pack/20260515T_v435b_prompt_pack/v435b_adapter_probe_prompt_pack_manifest.json",
+    "prompt_pack_manifest_sha256": "3329ccac365b3f6692f20671f2d0426f84a6b563d0b99d77d0dff34f184413ed",
+    "prompt_pack_schema": "kg1_v435b_adapter_probe_prompt_pack_v1"
+  },
+  "label": "v435c_adapter_probe_raw_outputs",
+  "model": {
+    "base_model_path": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+    "model_name": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+    "model_revision": "cbd3fa9f933d55ef16a84236559f4ee2a0526848"
+  },
+  "next_action": "Rerun V435 adapter-level pair gate using these raw outputs; only then consider V436 transfer generation.",
+  "outputs": {
+    "manifest_json": "/tmp/kg1_v435c/v435c-adapter-probe-raw-20260515T141924Z/v435c_adapter_probe_raw_outputs_manifest.json",
+    "raw_outputs_csv": "/tmp/kg1_v435c/v435c-adapter-probe-raw-20260515T141924Z/v435c_adapter_probe_raw_outputs_raw_outputs.csv",
+    "raw_outputs_csv_sha256": "525ca038242f990fd05f4aba94c55d46e1e3d7dccb6fe14b0c9facc70e910cc3",
+    "raw_outputs_jsonl": "/tmp/kg1_v435c/v435c-adapter-probe-raw-20260515T141924Z/v435c_adapter_probe_raw_outputs_raw_outputs.jsonl",
+    "raw_outputs_jsonl_sha256": "de7d265413d0d05f69696f5f3820ae3626a042a8e2a03475a792f1e191f62afb"
+  },
+  "runtime_settings": {
+    "KG1_ALLOW_VLLM_DEEP_GEMM": "",
+    "VLLM_DEEP_GEMM_WARMUP": "skip",
+    "VLLM_MEMORY_PROFILER_ESTIMATE_CUDAGRAPHS": "0",
+    "VLLM_MOE_USE_DEEP_GEMM": "0",
+    "VLLM_USE_DEEP_GEMM": "0",
+    "VLLM_USE_DEEP_GEMM_E8M0": "0",
+    "VLLM_USE_DEEP_GEMM_TMA_ALIGNED_SCALES": "0"
+  },
+  "schema_version": "kg1_v435c_adapter_probe_raw_outputs_v1",
+  "selection": {
+    "available_rows": 840,
+    "family_counts": {
+      "bit_manipulation": 80,
+      "equation_transform": 200
+    },
+    "limit": 0,
+    "max_bit": 80,
+    "max_equation": 200,
+    "selected_rows": 280
+  },
+  "source_policy": {
+    "answers_exported": false,
+    "answers_input": false,
+    "purpose": "Collect adapter raw outputs on permitted prompt-only probes for adapter-level hard-negative mining.",
+    "weak_or_full_rows_input": false
+  }
+}

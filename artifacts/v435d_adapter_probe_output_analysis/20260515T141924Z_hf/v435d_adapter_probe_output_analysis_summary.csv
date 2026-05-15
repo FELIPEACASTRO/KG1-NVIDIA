@@ -1,0 +1,4 @@
+family,rows,correct,accuracy,misses,truncated
+bit_manipulation,80,67,0.8375,13,0
+equation_transform,200,80,0.4,120,0
+OVERALL,280,147,0.525,133,0

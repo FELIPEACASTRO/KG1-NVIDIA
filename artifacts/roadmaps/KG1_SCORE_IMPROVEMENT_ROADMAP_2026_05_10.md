@@ -206,7 +206,7 @@ Decisao: o pack V435B e permitido para coleta de raw outputs reais do adapter. E
 
 ### V435C - Adapter Probe Raw Outputs
 
-Status: em execucao HF inference-only.
+Status: concluido HF inference-only.
 
 Artefatos preparados:
 
@@ -234,11 +234,17 @@ Execucoes:
 | Run | Hardware | Status | Decisao |
 |---|---|---|---|
 | `v435c-adapter-probe-raw-20260515T141708Z` | `a100-large` | erro rapido | driver A100 incompativel com imagem CUDA 13; launcher agora bloqueia essa combinacao por default |
-| `v435c-adapter-probe-raw-20260515T141924Z` | `h200` | rodando | manter enquanto gerar outputs e nao houver OOM/stall |
+| `v435c-adapter-probe-raw-20260515T141924Z` | `h200` | concluido | `280` raw outputs coletados sem labels; `80` bit, `200` equation, `0` truncation |
+
+Artefatos:
+
+- HF job: `https://huggingface.co/jobs/felipesp1983/6a072bade48bea4538b9e4e2`
+- HF dataset output: `https://huggingface.co/datasets/felipesp1983/kg1-v435c-adapter-probe-raw-outputs/tree/main/runs/v435c-adapter-probe-raw-20260515T141924Z`
+- local: `artifacts/v435c_adapter_probe_raw_outputs/20260515T141924Z_hf_download/`
 
 ### V435D - Adapter Probe Output Analysis
 
-Status: preparado.
+Status: concluido.
 
 Artefato:
 
@@ -246,18 +252,92 @@ Artefato:
 
 Objetivo: depois que V435C publicar `raw_outputs.csv`, juntar os outputs com `competition_train.csv` por `id`, somente entao usar a resposta publica de treino para medir quais prompts permitidos o adapter errou. Essa etapa gera inventario de misses por familia e deve alimentar o construtor de pares certificados. Ela nao libera treino sozinha.
 
+Resultado H200 2026-05-15:
+
+| Familia | Rows | Correct | ACC | Misses | Trunc |
+|---|---:|---:|---:|---:|---:|
+| `bit_manipulation` | 80 | 67 | 83.75% | 13 | 0 |
+| `equation_transform` | 200 | 80 | 40.00% | 120 | 0 |
+| OVERALL | 280 | 147 | 52.50% | 133 | 0 |
+
+Artefatos:
+
+- `artifacts/v435d_adapter_probe_output_analysis/20260515T141924Z_hf/v435d_adapter_probe_output_analysis_manifest.json`
+- `artifacts/v435d_adapter_probe_output_analysis/20260515T141924Z_hf/v435d_adapter_probe_output_analysis_summary.csv`
+- `artifacts/v435d_adapter_probe_output_analysis/20260515T141924Z_hf/v435d_adapter_probe_output_analysis_misses.csv`
+
+Decisao: V435D produziu o primeiro inventario permitido de erros reais do adapter congelado fora de weak/full. Isto libera construir pares exact-wrong, mas ainda nao e ganho de ACC.
+
+### V435E - Adapter Exact-Wrong Preference Dataset
+
+Status: concluido e enviado ao HF dataset de treino.
+
+Artefato:
+
+- `scripts/build_v435e_adapter_probe_preference_dataset.py`
+
+Politica:
+
+- Usar somente public-train probes de V435D.
+- `chosen`: completion curta com resposta publica correta em `\boxed{}` com escape de braces/backslash.
+- `rejected`: completion curta com a predicao errada real do adapter V291/V290.
+- Guardrail de bit: rows bit corretas viram format replay `format_negative_no_box`.
+- `weak/full`: usados somente para filtro de overlap, nunca como treino.
+
+Resultado:
+
+| Split | Rows | bit | equation | hard negatives | bit replay |
+|---|---:|---:|---:|---:|---:|
+| train | 160 | 62 | 98 | 109 | 51 |
+| validation | 40 | 18 | 22 | 24 | 16 |
+| all | 200 | 80 | 120 | 133 | 67 |
+
+Rule classes de equation cobertas:
+
+- `equation_numeric_operator_to_number`: 20
+- `equation_numeric_operator_to_symbolic`: 4
+- `equation_symbolic_sequence`: 64
+- `equation_symbolic_short`: 32
+
+HF dataset:
+
+- `https://huggingface.co/datasets/felipesp1983/kg1-nemotron-training/tree/main/data/v435e_adapter_probe_preference/20260515T_v435e_from_h200_probe`
+
+### V435F - Adapter Probe Preference Gate
+
+Status: passou.
+
+Artefato:
+
+- `scripts/run_v435f_adapter_probe_preference_gate.py`
+- `artifacts/v435f_adapter_probe_preference_gate/20260515T_v435f_from_h200_probe/v435f_adapter_probe_preference_gate_manifest.json`
+
+Gate:
+
+| Condicao | Resultado |
+|---|---|
+| all rows approved | true |
+| approved rows >= 180 | true (`200`) |
+| equation hard negatives >= 100 | true (`120`) |
+| bit hard negatives >= 10 | true (`13`) |
+| bit replay >= 50 | true (`67`) |
+| equation rule classes >= 4 | true (`4`) |
+
+Decisao: `hf_gpu_allowed=true` para um unico V436 short smoke. Este e um desbloqueio de treino, nao autorizacao de submit.
+
 ## V436 - Short Adapter-Only Smoke
 
-Status: condicional a V435 passar.
+Status: liberado por V435F para um smoke curto.
 
 Objetivo: testar transferencia real para adapter, com gasto minimo.
 
 Configuracao inicial:
 
 - Preservar config e target modules do V291/V290.
-- ORPO/DPO ou preference objective curto, usando somente pares aprovados no V435.
+- Preference objective curto, usando somente pares exact-wrong aprovados no V435F.
 - Evitar loss medio diluido: ponderar span final da resposta/boxed answer quando a implementacao permitir.
 - Sem mudanca de tokenizer, prompt oficial, runtime ou pacote.
+- Config V436 inicial: H200, `24` steps, checkpoint/eval a cada `4`, LR `2e-8 -> 4e-9`, `PREF_BETA=0.20`, `PREF_LOSS_WEIGHT=1.5`, `CHOSEN_CE_WEIGHT=0.30`.
 
 Kill-switch no primeiro checkpoint:
 
@@ -314,14 +394,14 @@ Estes itens nao estao ativos agora. So entram se V435/V436 trouxer sinal real:
 
 ## Proxima Acao Unica
 
-Executar V435C adapter raw-output collection sobre o prompt pack V435B, monitorando logs a cada 40 segundos.
+Lancar V436 H200 short preference smoke a partir do V290 checkpoint-6 usando V435E.
 
 Objetivo:
 
-1. Rodar o V291/V290 congelado primeiro em uma amostra capada dos prompts permitidos do V435B.
-2. Salvar `raw_output`, `prediction`, decode config, adapter path/commit e prompt hash.
-3. Nao incluir `answer` no input do job.
-4. Reexecutar V435 usando esses raw outputs para criar hard negatives reais.
-5. So liberar V436 se V435 passar com `hf_gpu_allowed=true`.
+1. Treinar apenas `24` steps com checkpoints a cada `4`.
+2. Monitorar logs a cada `40` segundos.
+3. Apos cada checkpoint disponivel, rodar weak eval antes de qualquer continuidade longa.
+4. Cancelar por FinOps se o primeiro checkpoint nao mostrar plausibilidade de preservar `bit>=136` e sair do teto `equation=56`.
+5. Promover para full/package/submit somente se weak superar o melhor adapter-only atual.
 
-Regra FinOps: V435C e inferencia, nao treino. Mesmo assim gasta GPU se rodar no HF/Kaggle. A execucao inicial deve usar caps (`equation=200`, `bit=80`) e `h200`, porque `a100-large` falhou com driver antigo na imagem CUDA 13. Cancelar se houver OOM repetido, stall, custo acima do gate ou se o output nao puder alimentar V435. Enquanto raw outputs reais nao existirem, a decisao correta e nao treinar.
+Regra FinOps: se V436 nao mostrar sinal no primeiro checkpoint avaliavel, cancelar e nao rodar variantes longas. O objetivo hoje e ganho medido de ranking, nao mais perda de tempo com loss interno.

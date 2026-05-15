@@ -1,0 +1,58 @@
+{
+  "blocked_reasons": {},
+  "generated_at_utc": "2026-05-15T14:34:40.575695+00:00",
+  "inputs": {
+    "competition_train_csv": "C:\\Users\\davis\\Downloads\\competition_train.csv",
+    "competition_train_sha256": "d204af160633b638448723a437aa51c0db70fd0b64ff92f6ad6f52e5ac6377fa",
+    "raw_outputs_csv": "artifacts\\v435c_adapter_probe_raw_outputs\\20260515T141924Z_hf_download\\runs\\v435c-adapter-probe-raw-20260515T141924Z\\v435c_adapter_probe_raw_outputs_raw_outputs.csv",
+    "raw_outputs_csv_sha256": "525ca038242f990fd05f4aba94c55d46e1e3d7dccb6fe14b0c9facc70e910cc3",
+    "reference_full_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v293_gap_mining\\inputs\\v291_full_predictions.csv",
+    "reference_full_sha256": "d9634ea15cb55e17bbfb90229f1cdbfd9b0f5a4cdba0d61848e6f746393dde20",
+    "reference_weak_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v290_rank19_micro_patch_reference\\runtime_artifacts\\v245_weak_eval_bridge\\v245-weak-bridge-hfonly-20260510T1950Z\\v221_weak_315.csv",
+    "reference_weak_sha256": "85da758e14d57ea40270de5747f98726a0ad0b6d1795bff7dd46183005e0f9b6"
+  },
+  "label": "v435d_adapter_probe_output_analysis",
+  "next_action": "If equation misses exist, generate certified rule-class pairs from these locked raw outputs; do not train directly from uncategorized misses.",
+  "outputs": {
+    "detail_csv": "artifacts\\v435d_adapter_probe_output_analysis\\20260515T141924Z_hf\\v435d_adapter_probe_output_analysis_detail.csv",
+    "detail_sha256": "cb8922fa9192c412baf53ab1cf7fd6215295ca8c9b9949951b024d5754785d65",
+    "manifest_json": "artifacts\\v435d_adapter_probe_output_analysis\\20260515T141924Z_hf\\v435d_adapter_probe_output_analysis_manifest.json",
+    "misses_csv": "artifacts\\v435d_adapter_probe_output_analysis\\20260515T141924Z_hf\\v435d_adapter_probe_output_analysis_misses.csv",
+    "misses_sha256": "64642f7f122cc77f201cacfe04fd739f0c0abd930d41f6c1f64e8692d0e682ba",
+    "summary_csv": "artifacts\\v435d_adapter_probe_output_analysis\\20260515T141924Z_hf\\v435d_adapter_probe_output_analysis_summary.csv",
+    "summary_sha256": "a825132cea169bb45e843fc81fc29ec9b14ac5cf81438b1ac719557b7b11dfd5"
+  },
+  "schema_version": "kg1_v435d_adapter_probe_output_analysis_v1",
+  "source_policy": {
+    "labels_joined_after_collection_from_public_train": true,
+    "purpose": "Identify permitted public-train adapter misses for the next hard-negative builder.",
+    "raw_outputs_collected_without_labels": true,
+    "weak_full_used_for_training": false
+  },
+  "summary": [
+    {
+      "accuracy": 0.8375,
+      "correct": 67,
+      "family": "bit_manipulation",
+      "misses": 13,
+      "rows": 80,
+      "truncated": 0
+    },
+    {
+      "accuracy": 0.4,
+      "correct": 80,
+      "family": "equation_transform",
+      "misses": 120,
+      "rows": 200,
+      "truncated": 0
+    },
+    {
+      "accuracy": 0.525,
+      "correct": 147,
+      "family": "OVERALL",
+      "misses": 133,
+      "rows": 280,
+      "truncated": 0
+    }
+  ]
+}
