@@ -1233,6 +1233,76 @@ Artefatos:
 
 Decisao: nao abrir GPU. Nao ha ganho escondido por first-boxed, last-line, first-line, last-number ou first-number em raw outputs adapter-like existentes.
 
+### Step 6Z - V429 symbolic edit-transducer gate
+
+Status: concluido localmente; sem ganho novo.
+
+Objetivo: testar uma classe formal nova para `equation_transform` simbolico puro: transdutores ordenados de edicao com delete/copy/constant/table actions e insercoes constantes, tentando explicar rows de pontuacao que nao foram cobertas por DSLs anteriores.
+
+Resultado:
+
+| Metric | Baseline V291/V290 | V429 projection | Delta |
+|---|---:|---:|---:|
+| Total weak correct | `192/315` | `192/315` | `0` |
+| equation_transform | `56/155` | `56/155` | `0` |
+| bit_manipulation | `136/160` | `136/160` | `0` |
+| Truncated | `0` | `0` | `0` |
+
+Gate counts:
+
+| Metric | Valor |
+|---|---:|
+| Equation rows audited | `155` |
+| Candidate status `no_program` | `85` |
+| Candidate status `not_punctuation_len5` | `65` |
+| Candidate status `unique_candidates` | `5` |
+| Changed candidate rows | `1` |
+| Accepted new gains | `0` |
+| Conflict rows blocked | `0` |
+
+Artefatos:
+
+- Script: `artifacts/v429_symbolic_edit_transducer_gate/build_v429_symbolic_edit_transducer_gate.py`.
+- Manifest: `artifacts/v429_symbolic_edit_transducer_gate/20260515T_v429_symbolic_edit_transducer/v429_symbolic_edit_transducer_manifest.json`.
+- Relatorio: `artifacts/v429_symbolic_edit_transducer_gate/20260515T_v429_symbolic_edit_transducer/V429_SYMBOLIC_EDIT_TRANSDUCER_GATE.md`.
+
+Decisao: nao abrir GPU. Transdutor edit-distance global gerou apenas `1` mudanca candidata e `0` ganhos aceitos; esta classe nao deve virar treino nem postprocess submit-safe.
+
+### Step 6AA - V430 symbolic rank-arithmetic gate
+
+Status: concluido localmente; sem ganho novo.
+
+Objetivo: testar outra classe formal nova para rows de pontuacao: transformar simbolos em ranks dentro dos alfabetos do prompt e ajustar cada posicao por aritmetica de ranks (`add_mod`, `sub_mod`, `absdiff`, `min`, `max` e variantes entre lados/operadores).
+
+Resultado:
+
+| Metric | Baseline V291/V290 | V430 projection | Delta |
+|---|---:|---:|---:|
+| Total weak correct | `192/315` | `192/315` | `0` |
+| equation_transform | `56/155` | `56/155` | `0` |
+| bit_manipulation | `136/160` | `136/160` | `0` |
+| Truncated | `0` | `0` | `0` |
+
+Gate counts:
+
+| Metric | Valor |
+|---|---:|
+| Equation rows audited | `155` |
+| Candidate status `no_candidate` | `89` |
+| Candidate status `not_punctuation_len5` | `65` |
+| Candidate status `unique_rank_arithmetic` | `1` |
+| Changed candidate rows | `0` |
+| Accepted new gains | `0` |
+| Conflict rows blocked | `0` |
+
+Artefatos:
+
+- Script: `artifacts/v430_symbolic_rank_arithmetic_gate/build_v430_symbolic_rank_arithmetic_gate.py`.
+- Manifest: `artifacts/v430_symbolic_rank_arithmetic_gate/20260515T_v430_symbolic_rank_arithmetic/v430_symbolic_rank_arithmetic_manifest.json`.
+- Relatorio: `artifacts/v430_symbolic_rank_arithmetic_gate/20260515T_v430_symbolic_rank_arithmetic/V430_SYMBOLIC_RANK_ARITHMETIC_GATE.md`.
+
+Decisao: nao abrir GPU. Rank arithmetic nao mudou nenhuma row e nao cria sinal para LoRA.
+
 ## Regras Permanentes
 
 - Nenhum HF sem CPU gate com sinal novo.
@@ -1271,6 +1341,8 @@ Decisao: nao abrir GPU. Nao ha ganho escondido por first-boxed, last-line, first
 | Buscar ganho escondido em CSV local antigo | V425 varreu `303` CSVs e `93` colunas de predicao; `0` candidatos adapter-like promotaveis |
 | Templates estruturais posicao+constante e shift ASCII/alfabeto | V426/V427 tiveram `0` ganhos novos e `16` conflitos somados |
 | Parser/raw-output rescue em adapter-like antigo | V428 testou `72` estrategias e `0` resgates promotaveis |
+| Transdutor edit-distance global | V429 auditou `155` equation rows, criou `1` mudanca candidata e teve `0` ganhos aceitos |
+| Rank arithmetic sobre alfabetos simbolicos | V430 auditou `155` equation rows, teve `1` candidato unico, `0` mudancas e `0` ganhos |
 | H200 relaunch sem novo dado | V391 confirmou que trocar hardware nao muda ACC quando a hipotese de dados nao transfere |
 | HF training baseado apenas em `eval_loss` | historicamente loss caiu sem mover `equation_transform`; promocao e por ACC |
 | Web/API buscas genericas | so retornam ao plano se virarem regra, dataset ou gate verificavel |
@@ -1279,11 +1351,11 @@ Decisao: nao abrir GPU. Nao ha ganho escondido por first-boxed, last-line, first
 
 ## Proxima Acao Unica
 
-V415 confirmou que nao existe candidato adapter-like local pronto para promocao, V416 confirmou que mudar o estilo da completion ainda nao transfere os ganhos do teacher para o adapter, V417 bloqueou novo GPU SFT por FinOps, V418 mostrou que aumentar caps da DSL V412 nao cria ganhos novos, V419 mostrou que o residual dominante e `80` rows de pontuacao simbolica pura, V420 confirmou que ampliar cryptarithm V329 so reencontra `99d6a3b5`, V421 bloqueou a hipotese same-operator por `0` ganhos e `3` conflitos, V422 bloqueou selection/substitution simples por `0` ganhos e `5` conflitos, V423 bloqueou invariantes condicionais simples por `0` ganhos e `1` conflito, V424 mostrou que match de assinatura/template simples do train publico nao aplica ao weak, V425 fechou a hipotese de ganho escondido em CSV antigo, V426/V427 fecharam posicao+constante e shift ASCII/alfabeto, e V428 fechou parser/raw-output rescue. Portanto o caminho ativo continua em CPU, com uma unica frente agressiva responsavel:
+V415 confirmou que nao existe candidato adapter-like local pronto para promocao, V416 confirmou que mudar o estilo da completion ainda nao transfere os ganhos do teacher para o adapter, V417 bloqueou novo GPU SFT por FinOps, V418 mostrou que aumentar caps da DSL V412 nao cria ganhos novos, V419 mostrou que o residual dominante e `80` rows de pontuacao simbolica pura, V420 confirmou que ampliar cryptarithm V329 so reencontra `99d6a3b5`, V421 bloqueou a hipotese same-operator por `0` ganhos e `3` conflitos, V422 bloqueou selection/substitution simples por `0` ganhos e `5` conflitos, V423 bloqueou invariantes condicionais simples por `0` ganhos e `1` conflito, V424 mostrou que match de assinatura/template simples do train publico nao aplica ao weak, V425 fechou a hipotese de ganho escondido em CSV antigo, V426/V427 fecharam posicao+constante e shift ASCII/alfabeto, V428 fechou parser/raw-output rescue, V429 fechou transdutor edit-distance global e V430 fechou rank-arithmetic simbolico. Portanto o caminho ativo continua em CPU, com uma unica frente agressiva responsavel:
 
 1. a proxima classe formal so deve ser criada se for materialmente diferente das DSLs ja rejeitadas:
-   - exemplos: sintese por transdutor edit-distance global, CEGIS com ranking por prova, ou restricoes cross-example ainda nao cobertas;
-   - nao repetir same-operator, selection/substitution, invariantes condicionais, assinatura/template, posicao+constante, shift ASCII/alfabeto.
+   - exemplos restantes: CEGIS/SAT com restricoes cross-example mais ricas, busca por gramatica simbolica com prova de unicidade, ou mineracao de fonte externa que produza regra verificavel nova;
+   - nao repetir same-operator, selection/substitution, invariantes condicionais, assinatura/template, posicao+constante, shift ASCII/alfabeto, parser rescue, transdutor edit-distance global ou rank-arithmetic.
 2. criterios de promocao:
    - `total > 192`, `equation > 56`, `bit >= 136`, `truncated=0`;
    - preferencialmente `equation >= 60` para justificar qualquer pacote/submit;

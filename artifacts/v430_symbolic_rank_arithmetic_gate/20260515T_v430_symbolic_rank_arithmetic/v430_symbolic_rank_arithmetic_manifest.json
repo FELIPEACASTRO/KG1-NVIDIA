@@ -1,0 +1,66 @@
+{
+  "accepted_new_gains": 0,
+  "audit_rows": 155,
+  "baseline": {
+    "families": {
+      "bit_manipulation": {
+        "correct": 136,
+        "rows": 160,
+        "truncated": 0
+      },
+      "equation_transform": {
+        "correct": 56,
+        "rows": 155,
+        "truncated": 0
+      }
+    },
+    "total": {
+      "correct": 192,
+      "rows": 315,
+      "truncated": 0
+    }
+  },
+  "candidate_status_counts": {
+    "abstain::no_rank_arithmetic_candidate": 89,
+    "abstain::not_punctuation_len5_query": 65,
+    "candidate::unique_rank_arithmetic_prediction": 1
+  },
+  "changed_rows": 0,
+  "conflict_rows": 0,
+  "decision": {
+    "decision": "v430_no_gpu",
+    "next_action": "Promote only if accepted_new_gains > 0; otherwise continue CPU-only search.",
+    "reason": "Rank-arithmetic CPU gate must beat baseline before any GPU."
+  },
+  "generated_at_utc": "2026-05-15T10:24:12.663916+00:00",
+  "hf_gpu_allowed": false,
+  "outputs": {
+    "accepted_csv": "artifacts\\v430_symbolic_rank_arithmetic_gate\\20260515T_v430_symbolic_rank_arithmetic\\v430_rank_arithmetic_accepted.csv",
+    "audit_csv": "artifacts\\v430_symbolic_rank_arithmetic_gate\\20260515T_v430_symbolic_rank_arithmetic\\v430_rank_arithmetic_audit.csv",
+    "conflicts_csv": "artifacts\\v430_symbolic_rank_arithmetic_gate\\20260515T_v430_symbolic_rank_arithmetic\\v430_rank_arithmetic_conflicts.csv",
+    "decisions_csv": "artifacts\\v430_symbolic_rank_arithmetic_gate\\20260515T_v430_symbolic_rank_arithmetic\\v430_rank_arithmetic_decisions.csv",
+    "manifest_json": "artifacts\\v430_symbolic_rank_arithmetic_gate\\20260515T_v430_symbolic_rank_arithmetic\\v430_symbolic_rank_arithmetic_manifest.json",
+    "report_md": "artifacts\\v430_symbolic_rank_arithmetic_gate\\20260515T_v430_symbolic_rank_arithmetic\\V430_SYMBOLIC_RANK_ARITHMETIC_GATE.md"
+  },
+  "program_summary_top": [],
+  "projected": {
+    "families": {
+      "bit_manipulation": {
+        "correct": 136,
+        "rows": 160,
+        "truncated": 0
+      },
+      "equation_transform": {
+        "correct": 56,
+        "rows": 155,
+        "truncated": 0
+      }
+    },
+    "total": {
+      "correct": 192,
+      "rows": 315,
+      "truncated": 0
+    }
+  },
+  "schema_version": "kg1_v430_symbolic_rank_arithmetic_gate_v1"
+}

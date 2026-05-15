@@ -1,0 +1,2 @@
+id,answer,old_prediction,new_prediction,old_correct,new_correct,accepted,rejection_reason,scope,program_label
+c43b5a13,)|,$):$,|{,False,False,False,reject_program_no_gain,same_operator_examples,"same_operator_examples|gaps=('|', '', '', '', '', '')|actions=0:table($->{,/-><)/1:del/2:del/3:del/4:del"

@@ -1,0 +1,75 @@
+{
+  "accepted_new_gains": 0,
+  "audit_rows": 155,
+  "baseline": {
+    "families": {
+      "bit_manipulation": {
+        "correct": 136,
+        "rows": 160,
+        "truncated": 0
+      },
+      "equation_transform": {
+        "correct": 56,
+        "rows": 155,
+        "truncated": 0
+      }
+    },
+    "total": {
+      "correct": 192,
+      "rows": 315,
+      "truncated": 0
+    }
+  },
+  "candidate_status_counts": {
+    "abstain::no_edit_transducer_program": 85,
+    "abstain::not_punctuation_len5_query": 65,
+    "candidate::unique_edit_transducer": 5
+  },
+  "changed_rows": 1,
+  "conflict_rows": 0,
+  "decision": {
+    "decision": "v429_no_gpu",
+    "next_action": "Promote only if accepted_new_gains > 0; otherwise try another materially new CPU rule class.",
+    "reason": "Edit-transducer CPU gate must beat total>192, equation>56, bit>=136, trunc=0 before any GPU."
+  },
+  "generated_at_utc": "2026-05-15T10:20:52.051200+00:00",
+  "hf_gpu_allowed": false,
+  "outputs": {
+    "accepted_csv": "artifacts\\v429_symbolic_edit_transducer_gate\\20260515T_v429_symbolic_edit_transducer\\v429_edit_transducer_accepted.csv",
+    "audit_csv": "artifacts\\v429_symbolic_edit_transducer_gate\\20260515T_v429_symbolic_edit_transducer\\v429_edit_transducer_audit.csv",
+    "conflicts_csv": "artifacts\\v429_symbolic_edit_transducer_gate\\20260515T_v429_symbolic_edit_transducer\\v429_edit_transducer_conflicts.csv",
+    "decisions_csv": "artifacts\\v429_symbolic_edit_transducer_gate\\20260515T_v429_symbolic_edit_transducer\\v429_edit_transducer_decisions.csv",
+    "manifest_json": "artifacts\\v429_symbolic_edit_transducer_gate\\20260515T_v429_symbolic_edit_transducer\\v429_symbolic_edit_transducer_manifest.json",
+    "report_md": "artifacts\\v429_symbolic_edit_transducer_gate\\20260515T_v429_symbolic_edit_transducer\\V429_SYMBOLIC_EDIT_TRANSDUCER_GATE.md"
+  },
+  "program_summary_top": [
+    {
+      "accepted": false,
+      "accepted_rows": 0,
+      "changed_rows": 1,
+      "gains": 0,
+      "losses": 0,
+      "program_label": "same_operator_examples|gaps=('|', '', '', '', '', '')|actions=0:table($->{,/-><)/1:del/2:del/3:del/4:del"
+    }
+  ],
+  "projected": {
+    "families": {
+      "bit_manipulation": {
+        "correct": 136,
+        "rows": 160,
+        "truncated": 0
+      },
+      "equation_transform": {
+        "correct": 56,
+        "rows": 155,
+        "truncated": 0
+      }
+    },
+    "total": {
+      "correct": 192,
+      "rows": 315,
+      "truncated": 0
+    }
+  },
+  "schema_version": "kg1_v429_symbolic_edit_transducer_gate_v1"
+}
