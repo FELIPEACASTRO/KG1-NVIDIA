@@ -1,0 +1,23 @@
+{
+  "baseline": {
+    "bit_manipulation": 136,
+    "equation_transform": 56,
+    "name": "V291/V290 checkpoint-6 baseline",
+    "total": 192,
+    "truncated": 0
+  },
+  "hf_gpu_allowed": false,
+  "mandatory_pre_gpu_evidence": [
+    "new adapter/package-level signal, not only solver/verifier teacher",
+    "no direct weak/full training rows",
+    "row-level comparison against V291/V290 baseline",
+    "kill-switch plan at first checkpoint"
+  ],
+  "promotion_threshold": {
+    "bit_manipulation_at_least": 136,
+    "equation_transform_strictly_greater_than": 56,
+    "total_strictly_greater_than": 192,
+    "truncated_equal": 0
+  },
+  "schema_version": "kg1_v417_next_gate_contract_v1"
+}

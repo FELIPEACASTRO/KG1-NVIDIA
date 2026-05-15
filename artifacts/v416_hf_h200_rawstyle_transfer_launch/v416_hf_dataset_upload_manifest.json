@@ -1,0 +1,13 @@
+{
+  "data_repo": "felipesp1983/kg1-nemotron-training",
+  "dataset_dir": "artifacts\\v416_rawstyle_transfer_dataset\\20260515T_v416_rawstyle_transfer",
+  "dataset_path_in_repo": "data/v416_rawstyle_transfer/20260515T_v416_rawstyle_transfer",
+  "dataset_upload": "https://huggingface.co/datasets/felipesp1983/kg1-nemotron-training/commit/3267de9a8afb21927aa033ec84178f14e8e88152",
+  "gate_dir": "artifacts\\v416_rawstyle_transfer_dataset\\20260515T_v416_rawstyle_transfer\\tokenization_gate_real",
+  "gate_path_in_repo": "runtime_artifacts/v416_rawstyle_transfer_tokenization_gate/20260515T_v416_rawstyle_transfer",
+  "gate_upload": "https://huggingface.co/datasets/felipesp1983/kg1-nemotron-training/commit/277c90b0dc300d4b2325ed307ec005e338511c43",
+  "generated_at_utc": "2026-05-15T03:04:58.409291+00:00",
+  "next_action": "Commit/push V416 launcher and run a short H200 smoke train if budget gate allows.",
+  "previous_version": "V415 adapter-direct audit",
+  "version": "v416_hf_dataset_upload"
+}

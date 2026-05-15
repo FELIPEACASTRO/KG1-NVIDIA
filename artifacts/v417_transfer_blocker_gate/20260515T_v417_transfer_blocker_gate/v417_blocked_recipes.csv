@@ -1,0 +1,7 @@
+recipe,reason,allowed_again
+solver_teacher_sft_v413,"H200 smoke failed: checkpoint-2 was 190/315, equation=56, bit=134, truncated=1.","no, unless CPU gate proves a new adapter/package signal"
+rawstyle_teacher_sft_v416,"H200 weak eval failed: best checkpoint was 191/315, equation=56, bit=135, truncated=1.",no
+more_epochs_or_lr_only,Loss improved in prior jobs without improving equation_transform; decision metric is family ACC.,no
+adapter_soup_v291_v382,V389 soups regressed to 190-191/315 and never moved equation above 56.,no
+prompt_sweep_without_new_signal,V393 tied or regressed the baseline; no_suffix broke bit_manipulation.,no
+gpu_job_from_cpu_teacher_only,"V414 teacher is 222/315, but V368/V413/V416 show teacher strength alone does not transfer.",only if pre-GPU gate shows adapter/package behavior can change

@@ -69,7 +69,8 @@ Precisamos buscar subida no ranking ainda hoje, `2026-05-14`. A decisao V392 e s
 | V413 H200 solver-first transfer smoke | `190/315` checkpoint-2 | `56/155` | `134/160` | rejeitado; `truncated=1`, weak eval cancelado por FinOps antes de completar checkpoint-4 |
 | V414 CPU teacher meta gate | CPU projection `222/315` | `63/155` | `159/160` | melhor teacher CPU reconstruido; transferencia V368/V413 bloqueada |
 | V415 adapter-direct audit | `0` candidato promovivel | teto `56/155` | max adapter-like `136/160` | sem ganho submit-safe existente; exige mecanismo novo |
-| V416 rawstyle transfer dataset | `2320/580` train/val | n/a | n/a | dataset/gate passou; HF smoke permitido somente apos upload/debug |
+| V416 rawstyle transfer smoke | melhor `191/315` | `56/155` | `135/160` | rejeitado; checkpoints 2/4 nao moveram equation, perderam bit e tiveram `truncated=1` |
+| V417 transfer blocker gate | `hf_gpu_allowed=false` | teto adapter `56/155` | baseline `136/160` | bloqueia novo GPU SFT ate existir sinal CPU adapter/package novo |
 
 Conclusao: `eval_loss` baixo nao e criterio de promocao. O criterio e ACC por familia no weak/full gate. A rota "resolver nos mesmos" finalmente tem ganho mensuravel (`+9` weak em CPU), mas esse ganho ainda e solver/verifier externo; para submit, ele precisa virar comportamento do adapter/package ou ser permitido explicitamente pelas regras de runtime.
 
@@ -79,7 +80,7 @@ Resultado V414 em `2026-05-15`: o meta-gate CPU reconstruiu a melhor projecao so
 
 Resultado V415 em `2026-05-15`: a auditoria adapter-direct varreu CSVs row-level adapter-like locais contra os `30` ganhos V414. Nenhum candidato existente passa o gate `total>192`, `equation>56`, `bit>=136`, `truncated=0`. O melhor hit isolado foi V368, que acertou `1/30` ganho V414 (`4ef88f92`), mas perdeu `2` linhas do baseline e ficou `191/315`, `equation=56`, `bit=135`. Conclusao: nao existe checkpoint/prediction local esquecido que vire submit hoje; o proximo passo precisa ser um mecanismo novo, nao selecao de artefato historico.
 
-Resultado V416 em `2026-05-15`: foi criado um dataset de transferencia rawstyle diferente de V410/V413. Ele reutiliza prompts sinteticos seguros de V410, nao usa rows weak/full em treino, mas muda a completion para um estilo mais proximo do raw output historico do adapter e finaliza com `Final answer: \boxed{...}`. O gate real V286 passou: `2320` train, `580` val, `0` prompt truncation, `0` completion tokens dropped, offset masks completos. O primeiro build foi bloqueado corretamente por formato final errado; apos ajuste, o gate passou. Proximo passo permitido: upload HF, debug remoto, e somente entao smoke H200 curtissimo com checkpoint-2 kill-switch.
+Resultado V416 em `2026-05-15`: foi criado um dataset de transferencia rawstyle diferente de V410/V413. Ele reutiliza prompts sinteticos seguros de V410, nao usa rows weak/full em treino, mas muda a completion para um estilo mais proximo do raw output historico do adapter e finaliza com `Final answer: \boxed{...}`. O gate real V286 passou: `2320` train, `580` val, `0` prompt truncation, `0` completion tokens dropped, offset masks completos. O H200 smoke curto avaliou checkpoints `2` e `4`: `checkpoint-2 = 190/315`, `equation_transform=56/155`, `bit_manipulation=134/160`, `truncated=1`; `checkpoint-4 = 191/315`, `equation_transform=56/155`, `bit_manipulation=135/160`, `truncated=1`. Decisao: V416 rejeitado, sem full eval, sem package, sem submit. O treino foi cancelado por FinOps depois de ambos os checkpoints uteis serem enviados/avaliados. A hipotese rawstyle tambem nao transfere o teacher para adapter-only.
 
 Resultado V383 em `2026-05-14`: checkpoint-2 = `190/315`, `equation=56`, `bit=134`, `truncated=1`; checkpoint-4 = `191/315`, `equation=56`, `bit=135`, `truncated=1`; checkpoint-6 = `190/315`, `equation=56`, `bit=134`, `truncated=1`. Como nenhum dos tres podia superar o baseline `192/315`, `equation=56`, `bit=136`, `truncated=0`, o job foi cancelado antes de avaliar `checkpoint-8/10`.
 
@@ -862,7 +863,7 @@ Decisao:
 
 ### Step 6M - V416 rawstyle transfer dataset
 
-Status: dataset concluido; tokenization/leakage/format gate aprovado; aguardando upload/debug HF.
+Status: concluido e rejeitado no weak gate.
 
 Objetivo: testar uma diferenca material contra V410/V413. V413 treinou o solver-first transfer com completions curtas de regra/final answer e falhou. V416 mantem prompts sinteticos seguros, mas altera a distribution da completion para raw-output-style boxed suffix.
 
@@ -885,12 +886,20 @@ Gate:
 | Offset masks | `2320/2320` train, `580/580` val |
 | Token max | `430` |
 
+Resultado HF:
+
+| Candidate | Total weak | equation_transform | bit_manipulation | Truncated | Decisao |
+|---|---:|---:|---:|---:|---|
+| V291/V290 checkpoint-6 baseline | `192/315` | `56/155` | `136/160` | `0` | manter |
+| V416 checkpoint-2 | `190/315` | `56/155` | `134/160` | `1` | rejeitar |
+| V416 checkpoint-4 | `191/315` | `56/155` | `135/160` | `1` | rejeitar |
+
 Decisao:
 
-- V416 e a unica rota GPU atualmente permitida, porque muda o formato que V370/V415 identificaram como gargalo.
-- O smoke deve ser curto (`4` steps, checkpoints `2/4`) e monitorado a cada `40s`.
-- Cancelar se checkpoint-2 repetir o padrao falho: `equation=56` e `bit<136`.
-- Promover somente se `total>192`, `equation>56`, `bit>=136`, `truncated=0`.
+- V416 falhou o gate `total>192`, `equation>56`, `bit>=136`, `truncated=0`.
+- Nao fazer full eval, package ou submit.
+- Nao repetir GPU SFT rawstyle/teacher-transfer sem um sinal materialmente novo.
+- A proxima etapa deve ser CPU-gated e orientada a comportamento adapter/package, nao a `eval_loss` nem a teacher externo mais forte.
 
 ### Step 7 - Full/package/submit
 
@@ -902,6 +911,40 @@ Regras:
 - Package somente se full official-like melhorar o baseline conhecido.
 - Kaggle submit somente com ganho medido e tabela comparativa contra o submit historico.
 - Se criterio de desempate favorecer submissao anterior, nao enviar regressao mesmo que haja curiosidade experimental.
+
+### Step 6N - V417 transfer blocker gate
+
+Status: concluido; novo GPU SFT bloqueado ate aparecer sinal adapter/package novo.
+
+Objetivo: transformar os fracassos V413/V416 em gate executavel de FinOps, para nao repetir gasto com receitas que ja deixam `equation_transform=56` e ainda perdem bit/truncation.
+
+Artefatos:
+
+- Script: `artifacts/v417_transfer_blocker_gate/build_v417_transfer_blocker_gate.py`.
+- Manifest: `artifacts/v417_transfer_blocker_gate/20260515T_v417_transfer_blocker_gate/v417_transfer_blocker_gate_manifest.json`.
+- Relatorio: `artifacts/v417_transfer_blocker_gate/20260515T_v417_transfer_blocker_gate/V417_TRANSFER_BLOCKER_GATE.md`.
+- Contrato: `artifacts/v417_transfer_blocker_gate/20260515T_v417_transfer_blocker_gate/v417_next_gate_contract.json`.
+
+Resultado:
+
+| Check | Resultado |
+|---|---|
+| V416 checkpoint-2 | `190/315`, `equation=56`, `bit=134`, `truncated=1` |
+| V416 checkpoint-4 | `191/315`, `equation=56`, `bit=135`, `truncated=1` |
+| V414 teacher CPU | `222/315`, `equation=63`, `bit=159`, mas nao adapter-only |
+| V415 adapter hits nos `30` ganhos V414 | apenas `2` hits, ambos no mesmo ID via V368; nao promovivel |
+| Decisao | `hf_gpu_allowed=false` |
+
+Receitas bloqueadas:
+
+- `solver_teacher_sft_v413`.
+- `rawstyle_teacher_sft_v416`.
+- mais epochs/LR sem novo sinal.
+- adapter soup V291/V382.
+- prompt sweep sem novo sinal.
+- GPU job baseado apenas em teacher CPU mais forte.
+
+Proxima acao permitida: CPU-only row-level mining ou expansao formal com prova no-loss. HF GPU so volta se um gate pre-GPU demonstrar comportamento adapter/package novo com chance objetiva de bater `total>192`, `equation>56`, `bit>=136`, `truncated=0`.
 
 ## Regras Permanentes
 
@@ -934,6 +977,7 @@ Regras:
 | Prompt/thinking variants amplas | regressao severa |
 | Adapter soups V291/V382 | V389 mostrou `190-191/315`, `equation=56`, `bit=134-135`, truncation `1-2`; linha encerrada |
 | V390/V391 equation+bit replay LoRA direto | CPU projection `198/315` nao transferiu; V391 ficou `191/315`, `equation=56`, `bit=135` |
+| V416 rawstyle transfer LoRA | dataset/gate passou, mas HF weak ficou `190-191/315`, `equation=56`, `bit=134-135`, `truncated=1`; linha encerrada |
 | H200 relaunch sem novo dado | V391 confirmou que trocar hardware nao muda ACC quando a hipotese de dados nao transfere |
 | HF training baseado apenas em `eval_loss` | historicamente loss caiu sem mover `equation_transform`; promocao e por ACC |
 | Web/API buscas genericas | so retornam ao plano se virarem regra, dataset ou gate verificavel |
@@ -942,21 +986,16 @@ Regras:
 
 ## Proxima Acao Unica
 
-V415 confirmou que nao existe candidato adapter-like local pronto para promocao. O caminho ativo agora e V416, mas ainda sem GPU ate passar gate de diferenca material:
+V415 confirmou que nao existe candidato adapter-like local pronto para promocao, V416 confirmou que mudar o estilo da completion ainda nao transfere os ganhos do teacher para o adapter, e V417 bloqueou novo GPU SFT por FinOps. Portanto o caminho ativo volta para CPU gate antes de qualquer novo gasto HF:
 
-1. construir um pacote de transferencia minimo que seja diferente das rotas falhas V368/V413:
-   - nao usar weak/full gate rows diretamente em treino;
-   - gerar exemplos sinteticos a partir das regras V414;
-   - usar completions no estilo do raw output historico que o adapter ja sabe emitir, nao apenas `Final answer`;
-   - incluir hard negatives/replay para impedir queda de bit.
-2. antes de HF, rodar tokenization + leakage + formato + comparativo contra V410/V367:
-   - se o dataset for essencialmente igual a V410/V367, bloquear;
-   - se usar rows weak/full como treino direto, bloquear;
-   - se nao houver replay suficiente para `bit>=136`, bloquear.
-3. se o gate V416 passar, liberar no maximo um smoke curto com kill-switch no checkpoint-2:
-   - promover apenas se `total > 192`, `equation > 56`, `bit >= 136`, `truncated=0`;
-   - cancelar imediatamente se repetir `equation=56` e `bit<136`.
-4. se V416 nao passar, parar GPU e voltar para sintese formal, porque gastar mais em treino seria repeticao do erro.
-5. manter V291/V290 checkpoint-6 como unico package submitavel ate aparecer ganho adapter-only medido.
+1. criar V417 como auditoria de falha e bloqueio de receita:
+   - consolidar V413/V416 como linhas de transferencia rejeitadas;
+   - listar exatamente quais condicoes bloqueiam novo GPU SFT;
+   - manter V291/V290 checkpoint-6 como unico package submitavel.
+2. criar o proximo gate tecnico somente se ele medir uma diferenca nova antes da GPU:
+   - comportamento adapter/package, nao teacher externo;
+   - `total > 192`, `equation > 56`, `bit >= 136`, `truncated=0`;
+   - nenhum uso direto de weak/full rows em treino.
+3. se nao houver esse sinal em CPU, nao abrir HF job. A acao correta e minerar novas regras formais/sinteticas ou mudar o mecanismo de inferencia permitido, nao repetir SFT.
 
 Nao rodar broad SFT, prompt sweep ou job guiado por `eval_loss`. A decisao e por ACC, truncation e comparativo contra V291.

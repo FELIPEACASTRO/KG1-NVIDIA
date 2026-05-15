@@ -29,6 +29,7 @@ def load_base_module():
 base = load_base_module()
 
 base.VERSION = "v416_rawstyle_transfer_from_v290_checkpoint6_nemo_h200"
+base.EXPECTED_COMMIT = "f0dff1caaaceb18bbc5978e41dd4ff1e25ab7a50"
 base.FLAVOR = "h200"
 base.RUN_ID = "v416-nemo-h200-rawstyle-transfer-v290ckpt6-" + datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
 base.DATASET_UPLOAD_COMMIT = "pending-upload-manifest"

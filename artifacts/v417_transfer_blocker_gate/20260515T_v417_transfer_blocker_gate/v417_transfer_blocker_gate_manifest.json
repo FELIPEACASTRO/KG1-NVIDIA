@@ -1,0 +1,96 @@
+{
+  "baseline": {
+    "bit_manipulation": 136,
+    "equation_transform": 56,
+    "name": "V291/V290 checkpoint-6 baseline",
+    "total": 192,
+    "truncated": 0
+  },
+  "blocked_recipes": [
+    {
+      "allowed_again": "no, unless CPU gate proves a new adapter/package signal",
+      "reason": "H200 smoke failed: checkpoint-2 was 190/315, equation=56, bit=134, truncated=1.",
+      "recipe": "solver_teacher_sft_v413"
+    },
+    {
+      "allowed_again": "no",
+      "reason": "H200 weak eval failed: best checkpoint was 191/315, equation=56, bit=135, truncated=1.",
+      "recipe": "rawstyle_teacher_sft_v416"
+    },
+    {
+      "allowed_again": "no",
+      "reason": "Loss improved in prior jobs without improving equation_transform; decision metric is family ACC.",
+      "recipe": "more_epochs_or_lr_only"
+    },
+    {
+      "allowed_again": "no",
+      "reason": "V389 soups regressed to 190-191/315 and never moved equation above 56.",
+      "recipe": "adapter_soup_v291_v382"
+    },
+    {
+      "allowed_again": "no",
+      "reason": "V393 tied or regressed the baseline; no_suffix broke bit_manipulation.",
+      "recipe": "prompt_sweep_without_new_signal"
+    },
+    {
+      "allowed_again": "only if pre-GPU gate shows adapter/package behavior can change",
+      "reason": "V414 teacher is 222/315, but V368/V413/V416 show teacher strength alone does not transfer.",
+      "recipe": "gpu_job_from_cpu_teacher_only"
+    }
+  ],
+  "decision": {
+    "decision": "block_new_gpu_sft_until_new_cpu_adapter_signal",
+    "next_action": "Mine a materially new CPU-gated adapter/package mechanism or formal solver path before any HF spend.",
+    "reason": "V413 and V416 both leave equation at 56 and regress bit/truncation despite stronger CPU teachers."
+  },
+  "generated_at_utc": "2026-05-15T03:48:33.541245+00:00",
+  "hf_gpu_allowed": false,
+  "outputs": {
+    "blocked_recipes_csv": "artifacts\\v417_transfer_blocker_gate\\20260515T_v417_transfer_blocker_gate\\v417_blocked_recipes.csv",
+    "manifest_json": "artifacts\\v417_transfer_blocker_gate\\20260515T_v417_transfer_blocker_gate\\v417_transfer_blocker_gate_manifest.json",
+    "next_gate_contract_json": "artifacts\\v417_transfer_blocker_gate\\20260515T_v417_transfer_blocker_gate\\v417_next_gate_contract.json",
+    "report_md": "artifacts\\v417_transfer_blocker_gate\\20260515T_v417_transfer_blocker_gate\\V417_TRANSFER_BLOCKER_GATE.md"
+  },
+  "schema_version": "kg1_v417_transfer_blocker_gate_v1",
+  "v414_best_cpu_teacher": {
+    "bit_delta": "23",
+    "bit_manipulation": "159",
+    "equation_delta": "7",
+    "equation_transform": "63",
+    "state": "V414/V366 consolidated CPU teacher",
+    "status": "best CPU teacher; not adapter-only",
+    "total": "222",
+    "total_delta": "30"
+  },
+  "v415_adapter_hit_count_on_v414_gains": 2,
+  "v415_v414_gain_rows": 30,
+  "v416_candidate_decisions": [
+    {
+      "bit_manipulation": 134,
+      "candidate": "v416_rawstyle_transfer_checkpoint_2_v221_contract",
+      "decision": "reject",
+      "delta_bit_manipulation": -2,
+      "delta_equation_transform": 0,
+      "delta_total": -2,
+      "delta_truncated": 1,
+      "equation_transform": 56,
+      "passes_promotion_gate": false,
+      "total": 190,
+      "truncated": 1
+    },
+    {
+      "bit_manipulation": 135,
+      "candidate": "v416_rawstyle_transfer_checkpoint_4_v221_contract",
+      "decision": "reject",
+      "delta_bit_manipulation": -1,
+      "delta_equation_transform": 0,
+      "delta_total": -1,
+      "delta_truncated": 1,
+      "equation_transform": 56,
+      "passes_promotion_gate": false,
+      "total": 191,
+      "truncated": 1
+    }
+  ],
+  "v416_summary_json": "artifacts\\v416_hf_h200_rawstyle_transfer_launch\\eval_summary_v416_20260515T031825Z\\batch_candidate_summary.json"
+}

@@ -25,6 +25,7 @@ def load_base_module():
 base = load_base_module()
 
 base.VERSION = "v416_rawstyle_transfer_v221_weak_eval"
+base.EXPECTED_COMMIT = "f0dff1caaaceb18bbc5978e41dd4ff1e25ab7a50"
 base.RUN_ID = "v416-h200-v221contract-rawstyle-transfer-" + datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
 base.ADAPTER_REPO = "felipesp1983/kg1-nemotron-lora-v416-h200-rawstyle-transfer-v290ckpt6"
 base.REQUESTED_ADAPTERS = [

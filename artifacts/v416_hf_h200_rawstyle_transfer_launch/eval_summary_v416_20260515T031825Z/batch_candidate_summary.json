@@ -1,0 +1,57 @@
+{
+  "base_model_path": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+  "candidates_json": "/tmp/kg1_v245_weak_eval/v416-h200-v221contract-rawstyle-transfer-20260515T031825Z/v245_weak_eval_candidates.json",
+  "config": {
+    "dtype": "auto",
+    "enable_chunked_prefill": true,
+    "enable_prefix_caching": true,
+    "gpu_memory_utilization": 0.85,
+    "max_lora_rank": 32,
+    "max_model_len": 8192,
+    "max_num_seqs": 64,
+    "max_tokens": 7680,
+    "model_name": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+    "model_revision": "cbd3fa9f933d55ef16a84236559f4ee2a0526848",
+    "prompt_suffix": "\nReturn only one line: `\\boxed{answer}`. No reasoning. No explanation.",
+    "temperature": 0.0,
+    "top_p": 1.0,
+    "trust_remote_code": true,
+    "warmup_rows": 0
+  },
+  "elapsed_s": 1112.44686961174,
+  "generated_at_utc": "2026-05-15T03:38:45.979217+00:00",
+  "questions_csv": "/root/.cache/huggingface/hub/datasets--felipesp1983--kg1-nemotron-training/snapshots/277c90b0dc300d4b2325ed307ec005e338511c43/runtime_artifacts/v245_weak_eval_bridge/v245-weak-bridge-hfonly-20260510T1950Z/v221_weak_315.csv",
+  "rows": [
+    {
+      "accuracy": 0.6031746031746031,
+      "adapter": "/tmp/kg1_v245_adapter_snapshots/v416-h200-v221contract-rawstyle-transfer-20260515T031825Z/feda6c86ac5b/checkpoint-2",
+      "bit_manipulation_correct": 134,
+      "completion_tokens": 1504201,
+      "correct": 190,
+      "equation_transform_correct": 56,
+      "error": "",
+      "name": "v416_rawstyle_transfer_checkpoint_2_v221_contract",
+      "report_json": "/tmp/kg1_v245_weak_eval/v416-h200-v221contract-rawstyle-transfer-20260515T031825Z/eval/v416_rawstyle_transfer_checkpoint_2_v221_contract/v413_hf_weak_v416_rawstyle_transfer_checkpoint_2_v221_contract_eval_report.json",
+      "status": "ok",
+      "tokens_per_second": 2930.1918769941776,
+      "truncated": 1,
+      "truncation_rate": 0.0031746031746031746
+    },
+    {
+      "accuracy": 0.6063492063492063,
+      "adapter": "/tmp/kg1_v245_adapter_snapshots/v416-h200-v221contract-rawstyle-transfer-20260515T031825Z/feda6c86ac5b/checkpoint-4",
+      "bit_manipulation_correct": 135,
+      "completion_tokens": 1504187,
+      "correct": 191,
+      "equation_transform_correct": 56,
+      "error": "",
+      "name": "v416_rawstyle_transfer_checkpoint_4_v221_contract",
+      "report_json": "/tmp/kg1_v245_weak_eval/v416-h200-v221contract-rawstyle-transfer-20260515T031825Z/eval/v416_rawstyle_transfer_checkpoint_4_v221_contract/v413_hf_weak_v416_rawstyle_transfer_checkpoint_4_v221_contract_eval_report.json",
+      "status": "ok",
+      "tokens_per_second": 3187.652560271179,
+      "truncated": 1,
+      "truncation_rate": 0.0031746031746031746
+    }
+  ],
+  "solution_csv": "/root/.cache/huggingface/hub/datasets--felipesp1983--kg1-nemotron-training/snapshots/277c90b0dc300d4b2325ed307ec005e338511c43/runtime_artifacts/v245_weak_eval_bridge/v245-weak-bridge-hfonly-20260510T1950Z/v221_weak_315.csv"
+}
