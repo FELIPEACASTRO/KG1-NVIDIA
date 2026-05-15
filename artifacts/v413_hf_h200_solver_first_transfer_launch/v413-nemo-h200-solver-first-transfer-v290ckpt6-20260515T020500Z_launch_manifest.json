@@ -1,0 +1,59 @@
+{
+  "branch": "v230-v226-complementarity",
+  "dataset": {
+    "data_repo": "felipesp1983/kg1-nemotron-training",
+    "dataset_upload_commit": "dataset:175f20209efdcf803b01152f5765b24778b7cd49;gate:abfecbaf4e04acb8bc8ff9507c164e13f7a4626b",
+    "train_file": "data/v410_solver_first_transfer/20260514T_v410_solver_first_transfer/v410_solver_first_transfer_train.jsonl",
+    "train_rows": 2320,
+    "train_sha256": "4917699c5f5960a3cec80767c19d5c6c799fdc68a5457b5bfc73062f6b0cbba1",
+    "val_file": "data/v410_solver_first_transfer/20260514T_v410_solver_first_transfer/v410_solver_first_transfer_val.jsonl",
+    "val_rows": 580,
+    "val_sha256": "de8735b97c23b7c1b5263cc9a87426f2d4cf78ca9fbf882142a5a93899c2cff5"
+  },
+  "expected_commit": "760ede6cc1eb6c7f2eb563f8a059adf8b22c740e",
+  "flavor": "h200",
+  "generated_at_utc": "2026-05-15T02:05:02.395243+00:00",
+  "hardware": {
+    "accelerator_model": "H200",
+    "accelerator_quantity": "1",
+    "accelerator_vram": "141 GB",
+    "cpu": "23 vCPU",
+    "name": "h200",
+    "pretty_name": "Nvidia H200",
+    "ram": "256 GB",
+    "unit_cost_usd": 0.083333,
+    "unit_label": "minute"
+  },
+  "image": "nvcr.io/nvidia/nemo:25.11.nemotron_3_nano",
+  "init_adapter": {
+    "repo": "felipesp1983/kg1-nemotron-lora-v290-rank19-micro-patch-smoke",
+    "subfolder": "checkpoint-6"
+  },
+  "job_id": "6a067f89e48bea4538b9da81",
+  "job_status": "RUNNING",
+  "job_url": "https://huggingface.co/jobs/felipesp1983/6a067f89e48bea4538b9da81",
+  "mode": "launched",
+  "namespace": "felipesp1983",
+  "next_action": "Monitor every 40 seconds; weak-eval checkpoint-2/4; cancel unless weak total>192, equation>56, bit>=136, truncated=0.",
+  "output_repo": "felipesp1983/kg1-nemotron-lora-v413-h200-solver-first-transfer-v290ckpt6",
+  "previous_version": "V412 CPU synthesis gate",
+  "recipe": {
+    "answer_span_loss_weight": "14.0",
+    "answer_span_min_weighted_tokens": "1200",
+    "eval_every_steps": 2,
+    "eval_max_examples": 128,
+    "final_learning_rate": "1.0e-8",
+    "learning_rate": "4.0e-8",
+    "max_steps": 4,
+    "previous_version": "V412 CPU synthesis gate",
+    "promotion_gate": "promote only if weak total>192, equation>56, bit>=136, truncated=0; otherwise cancel by FinOps",
+    "save_every_steps": 2,
+    "source_weights": "v410_v390_v325_equation_numeric=8.00,v410_v330_symbolic_cryptarithm=6.00,v410_v408_perbit_asym_rule=3.50,v410_v403_exact_global_bit_rule=2.50,v406_v217_bit_replay_guardrail=1.25",
+    "subcategory_weights": "equation_numeric_add_direct=12.00,equation_numeric_colon_absdiff=12.00,equation_numeric_colon_trailing_zero=12.00,equation_numeric_minus_direct_negative=12.00,equation_numeric_minus_signed=12.00,equation_symbolic_cryptarithm_single_operator_mul=8.00,bit_solver_first_v410=3.00,bit_manipulation=1.25,unknown=1.00",
+    "trainable_lora_modules": "q_proj,k_proj,v_proj,o_proj,lm_head",
+    "version_comparison_artifact": "artifacts/v413_hf_h200_solver_first_transfer_launch/V413_VS_PREVIOUS.md"
+  },
+  "run_id": "v413-nemo-h200-solver-first-transfer-v290ckpt6-20260515T020500Z",
+  "version": "v413_solver_first_transfer_from_v290_checkpoint6_nemo_h200",
+  "version_comparison_artifact": "artifacts/v413_hf_h200_solver_first_transfer_launch/V413_VS_PREVIOUS.md"
+}
