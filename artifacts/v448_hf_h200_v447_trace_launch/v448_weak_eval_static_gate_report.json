@@ -1,0 +1,9 @@
+{
+  "file_count": 1,
+  "files": [
+    "artifacts/v448_hf_h200_v447_trace_launch/launch_v448_hf_weak_eval.py"
+  ],
+  "findings": [],
+  "ok": true,
+  "schema_version": "kg1_static_safety_gate_v1"
+}
