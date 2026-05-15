@@ -53,6 +53,7 @@ Regra central: ganho so conta se aparecer no adapter/package. Teacher CPU, solve
 | V451 equation DSL v2 gap audit | V324 tem `+6` CPU solver-only; V443 tem `0` pares certificados e `120` no_unique_certified_rule | V452 precisa ampliar DSL/certificador antes de GPU |
 | V452 equation DSL v2 certified builder | 133 rows auditadas; 7 candidatos; 2 pares certificados; 5 candidatos numericos reprovados | `hf_gpu_allowed=false`; nao abrir H200 por esta rota |
 | V453 public Kaggle kernel mining | 30 kernels listados/analisados; 29 pull ok; raw notebooks apagados apos triagem | sem ganho submit-ready; reforca `lm_head`/target modules e mineracao publica CPU-only |
+| V454 bit guardrail decision | teacher CPU chega a bit `159/160`, mas adapter-transfer V359/V368 fica em `134-135/160` | bit-only GPU bloqueado; bit vira replay/guardrail |
 
 ## Regras Permanentes
 
@@ -1014,6 +1015,34 @@ permitida somente em CPU e somente para extrair regra implementavel localmente.
 Qualquer achado futuro precisa virar builder/probe e provar ganho por
 `verify_answer` antes de entrar em treino.
 
+## Atualizacao V454 - Bit Guardrail
+
+V454 consolidou as rotas de bit ja testadas para decidir se ainda vale abrir
+GPU bit-only.
+
+Artefatos:
+
+- Script: `scripts/build_v454_bit_guardrail_decision.py`.
+- Manifesto: `artifacts/v454_bit_guardrail_decision/20260515T_cpu_gate/v454_bit_guardrail_decision_manifest.json`.
+- Relatorio: `artifacts/v454_bit_guardrail_decision/20260515T_cpu_gate/V454_BIT_GUARDRAIL_DECISION.md`.
+
+Resultado:
+
+| Fonte | Resultado | Decisao |
+|---|---:|---|
+| V296 stride train | `1201/1602`, gains `154`, losses `218` | diagnostico lossy |
+| V333 Tong train | `1364/1602` | teacher forte |
+| V333 Tong weak replace | `192/315`, bit `136/160`, gains `1`, losses `1` | nao deployable |
+| V366 CPU teacher | `222/315`, bit `159/160`, losses `0` | teacher only |
+| V359 adapter transfer | `190/315`, bit `134/160`, trunc `1` | rejeitado |
+| V368 adapter transfer | `191/315`, bit `135/160`, trunc `0` | rejeitado |
+
+Decisao: `hf_gpu_allowed=false` para treino bit-only. O problema nao e falta
+de solver/teacher de bit; o problema e transferencia para adapter-only. A partir
+daqui bit entra apenas como replay/guardrail quando a rota de equation provar
+ganho CPU. Novo job bit-only so pode existir se houver evidencia nova que
+ataque diretamente a falha de transferencia, nao apenas teacher melhor.
+
 ## Proxima Acao Ativa
 
 Rota ativa agora volta para CPU e depuracao de transferencia, nao para novo
@@ -1034,22 +1063,18 @@ treino pago.
      numericos novos reprovados por label;
    - decisao: `hf_gpu_allowed=false`; nao abrir H200 nem repetir treino a partir
      deste dataset.
-3. Fechar V454 bit guardrail CPU:
-   - bit-pair/bitsum/stride;
-   - exact binary com `verify_answer`;
-   - gerar apenas anchors que preservem `bit>=136`, sem tolerancia numerica.
-4. Fechar V455 equation target-audit CPU:
+3. Fechar V455 equation target-audit CPU:
    - separar `equation_transform` em submodos por operador/forma;
    - auditar os 99 misses atuais sem usar label no tiebreak;
    - promover apenas regras com no-loss e independencia de prompt.
-5. So voltar a HF GPU se a CPU provar:
+4. So voltar a HF GPU se a CPU provar:
    - `total > 192/315`;
    - `equation > 56/155`;
    - `bit >= 136/160`;
    - `truncated = 0`;
    - dataset sem leakage;
    - alvo treinavel que o adapter consiga emitir em resposta curta.
-6. Se a proxima CPU route nao mostrar ganho estrito, nao abrir job pago.
+5. Se a proxima CPU route nao mostrar ganho estrito, nao abrir job pago.
 
 Regra FinOps continua: se o primeiro checkpoint ou gate parcial nao indicar
 caminho para `total>192`, `equation>56`, `bit>=136`, `truncated=0`, cancelar.

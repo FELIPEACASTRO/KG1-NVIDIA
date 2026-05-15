@@ -1,0 +1,90 @@
+{
+  "baseline_submit_safe": {
+    "bit_manipulation": 136,
+    "equation_transform": 56,
+    "truncated": 0,
+    "weak_total": 192
+  },
+  "decision": {
+    "adapter_best_bit_submit_safe": 136,
+    "decision": "bit_gpu_blocked_until_new_transfer_evidence",
+    "hf_gpu_allowed": false,
+    "next_action": "Do not run bit-only GPU. Build V455 equation target-audit CPU and only include bit as replay/guardrail if equation CPU gate proves gain.",
+    "reason": "Bit teacher signal is strong, but direct weak replacement is lossy and adapter-transfer attempts regressed below bit>=136.",
+    "train_teacher_bit": 1364,
+    "train_teacher_rows": 1602,
+    "transfer_gap": 23,
+    "weak_teacher_best_bit": 159
+  },
+  "evidence": {
+    "v296_stride_train": {
+      "bit_rows": 1602,
+      "current_correct": 1265,
+      "decision": "diagnostic_only_lossy",
+      "stride_correct": 1201,
+      "stride_gain_vs_current": 154,
+      "stride_loss_vs_current": 218
+    },
+    "v333_tong_train": {
+      "current_solver_correct": 1265,
+      "decision": "teacher_strong_but_lossy_on_weak_replace",
+      "rows": 1602,
+      "tong_correct": 1364,
+      "tong_gain_vs_current": 157,
+      "tong_loss_vs_current": 58
+    },
+    "v333_tong_weak_replace": {
+      "baseline_bit": 136,
+      "baseline_total": 192,
+      "decision": "tong_bit_teacher_trace_signal_only",
+      "tong_bit": 136,
+      "tong_gains_vs_baseline": 1,
+      "tong_losses_vs_baseline": 1,
+      "tong_total": 192
+    },
+    "v357_teacher_cpu": {
+      "bit_manipulation": 151,
+      "decision": "teacher_cpu_only",
+      "losses": 0,
+      "weak_total": 214
+    },
+    "v359_adapter_transfer": {
+      "bit_manipulation": 134,
+      "decision": "rejected_adapter_transfer",
+      "equation_transform": 56,
+      "status": "rejected",
+      "truncated": 1,
+      "weak_total": 190
+    },
+    "v366_teacher_cpu": {
+      "accepted_losses": 0,
+      "bit_manipulation": 159,
+      "decision": "teacher_cpu_only",
+      "equation_transform": 63,
+      "weak_total": 222
+    },
+    "v368_adapter_transfer": {
+      "adapter": "/tmp/kg1_v245_adapter_snapshots/v368-h200-v221contract-v367-bit-ternary-cp1-20260514T122053Z/7056e53b3949/checkpoint-1",
+      "bit_manipulation": 135,
+      "decision": "rejected_adapter_transfer",
+      "equation_transform": 56,
+      "status": "ok",
+      "truncated": 0,
+      "weak_total": 191
+    }
+  },
+  "generated_at_utc": "2026-05-15T21:34:57.145382+00:00",
+  "inputs": {
+    "v296_summary": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v296_bit_stride_solver_audit\\20260512T0450Z\\v296_bit_stride_solver_audit_summary.json",
+    "v333_manifest": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v333_tong_bit_reasoner_gate\\20260513T171304Z\\v333_tong_bit_reasoner_gate_manifest.json",
+    "v357_summary_md": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v357_bit_global_ternary_gate\\V357_RESULT_SUMMARY.md",
+    "v359_summary_md": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v359_hf_a100_v358_bit_ternary_launch\\V359_RESULT_SUMMARY.md",
+    "v366_summary_md": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v366_bit_fullbyte_ternary_op_gate\\V366_RESULT_SUMMARY.md",
+    "v368_eval_summary_json": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v368_hf_a100_v367_bit_ternary_launch\\eval_checkpoint1\\batch_candidate_summary.json"
+  },
+  "outputs": {
+    "manifest_json": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v454_bit_guardrail_decision\\20260515T_cpu_gate\\v454_bit_guardrail_decision_manifest.json",
+    "report_md": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v454_bit_guardrail_decision\\20260515T_cpu_gate\\V454_BIT_GUARDRAIL_DECISION.md"
+  },
+  "schema_version": "kg1_v454_bit_guardrail_decision_v1"
+}
