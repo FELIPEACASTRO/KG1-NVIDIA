@@ -1,0 +1,93 @@
+{
+  "branch": "v230-v226-complementarity",
+  "dataset": {
+    "data_repo": "felipesp1983/kg1-nemotron-training",
+    "format_negatives_allowed": false,
+    "preference_train_file": "data/v439_final_answer_only_pairs/20260515T_v439_final_answer_only/v439_final_answer_only_pairs_train.jsonl",
+    "preference_train_rows": 109,
+    "preference_train_sha256": "bc032da2f7cada19aef295aa91aef6098e03c7b85215e7729f1ddd71b3e5079a",
+    "preference_val_file": "data/v439_final_answer_only_pairs/20260515T_v439_final_answer_only/v439_final_answer_only_pairs_val.jsonl",
+    "preference_val_rows": 24,
+    "preference_val_sha256": "57321347f9293e9c0f2f17e6c9de1d88f1246fee4154125574b2e60251aee3a6"
+  },
+  "expected_commit": "51a03f07bd6854848f2519287a3b976d2888db26",
+  "flavor": "h200",
+  "gates": [
+    "V439 final-answer-only structural audit hf_gpu_allowed_for_same_objective=true",
+    "kg1_static_safety_gate over launcher and trainer",
+    "hf_job_preflight_gate:preinstall",
+    "hf_job_preflight_gate:artifacts over V439 final-answer-only preference rows",
+    "hf_job_preflight_gate:postinstall",
+    "hf_job_train_v315_preference blocks format_negative rows",
+    "hf_job_train_v315_preference tokenization/truncation/offset-mask gate for chosen and rejected"
+  ],
+  "generated_at_utc": "2026-05-15T16:13:47.884720+00:00",
+  "hardware": {
+    "accelerator_model": "H200",
+    "accelerator_quantity": "1",
+    "accelerator_vram": "141 GB",
+    "cpu": "23 vCPU",
+    "name": "h200",
+    "pretty_name": "Nvidia H200",
+    "ram": "256 GB",
+    "unit_cost_usd": 0.083333,
+    "unit_label": "minute"
+  },
+  "image": "pytorch/pytorch:2.8.0-cuda12.8-cudnn9-devel",
+  "init_adapter": {
+    "repo": "felipesp1983/kg1-nemotron-lora-v290-rank19-micro-patch-smoke",
+    "subfolder": "checkpoint-6"
+  },
+  "job_id": "6a07467be48bea4538b9e722",
+  "job_status": "CANCELED",
+  "job_url": "https://huggingface.co/jobs/felipesp1983/6a07467be48bea4538b9e722",
+  "namespace": "felipesp1983",
+  "next_action": "Do not promote V440 to weak/full. Use this result as evidence that final-answer-only mean-NLL preference did not create a material first-checkpoint signal.",
+  "output_repo": "felipesp1983/kg1-nemotron-lora-v440-v439-final-answer-v290ckpt6",
+  "recipe": {
+    "chosen_ce_weight": 0.3,
+    "continuation_from": "felipesp1983/kg1-nemotron-lora-v290-rank19-micro-patch-smoke/checkpoint-6",
+    "eval_every_steps": 3,
+    "eval_max_examples": 24,
+    "final_learning_rate": "4e-9",
+    "learning_rate": "2e-8",
+    "max_steps": 12,
+    "preference_beta": 0.2,
+    "preference_loss": "single-policy contrastive chosen/rejected plus chosen CE",
+    "preference_loss_weight": 1.5,
+    "promotion_gate": "weak eval only; promote only if bit>=136 and equation improves or total>=193",
+    "sampling_mode": "shuffle",
+    "save_every_steps": 3,
+    "trainable_lora_modules": "q_proj,k_proj,v_proj,o_proj,lm_head"
+  },
+  "result": {
+    "baseline_preference_eval": {
+      "bit_manipulation_correct": 1,
+      "bit_manipulation_total": 2,
+      "chosen_mean_nll": 2.909796873728434,
+      "equation_transform_correct": 7,
+      "equation_transform_total": 22,
+      "preference_accuracy": 0.3333333333333333,
+      "preference_correct": 8,
+      "rejected_mean_nll": 2.6814187516768775,
+      "rows": 24
+    },
+    "checkpoint_3_preference_eval": {
+      "bit_manipulation_correct": 1,
+      "bit_manipulation_total": 2,
+      "chosen_mean_nll": 2.909424811601639,
+      "equation_transform_correct": 7,
+      "equation_transform_total": 22,
+      "preference_accuracy": 0.3333333333333333,
+      "preference_correct": 8,
+      "rejected_mean_nll": 2.6792703370253244,
+      "rows": 24
+    },
+    "checkpoint_uploaded": "felipesp1983/kg1-nemotron-lora-v440-v439-final-answer-v290ckpt6/checkpoint-3",
+    "decision": "canceled_by_finops_no_first_checkpoint_gain",
+    "weak_eval_allowed": false,
+    "weak_eval_reason": "checkpoint-3 tied baseline preference eval: 8/24 total, equation 7/22, bit 1/2"
+  },
+  "run_id": "v440-v439-final-answer-pref-v290ckpt6-20260515T161347Z",
+  "version": "v440_v439_final_answer_only_preference_h200"
+}

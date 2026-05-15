@@ -39,6 +39,7 @@ Regra central: ganho so conta se aparecer no adapter/package. Teacher CPU, solve
 | V435E corrigido hard-negative-only | 133 rows, equation 120, bit 13 | unico dataset preference permitido agora |
 | V435F corrigido | hard-only passa; dataset antigo e bloqueado | GPU so com novo launcher e novo kill-switch |
 | V436B H200 hard-negative-only | checkpoint-3 piorou preference 6/24 -> 4/24 | cancelado; sem weak/full |
+| V440 H200 V439 final-answer-only | checkpoint-3 empatou baseline 8/24; equation 7/22; bit 1/2 | cancelado; sem weak/full |
 
 ## Regras Permanentes
 
@@ -484,6 +485,42 @@ V438 audit sobre V439:
 
 Decisao: V439 corrige E003. Ele nao prova ganho de ACC, mas e o primeiro dataset limpo para um smoke curto. Se rodar, usar H200 por menos de 1 hora, checkpoint/eval no step 3 e cancelar se nao melhorar a metrica interna contra o baseline V439.
 
+## V440 - H200 Smoke Final-Answer-Only
+
+Status: executado em H200 e cancelado por FinOps no checkpoint-3.
+
+Objetivo: testar se V439 final-answer-only, sem contaminacao textual do chosen,
+melhora o objetivo interno de preference antes de gastar weak/full.
+
+Configuracao:
+
+- Job: `https://huggingface.co/jobs/felipesp1983/6a07467be48bea4538b9e722`.
+- Output repo: `felipesp1983/kg1-nemotron-lora-v440-v439-final-answer-v290ckpt6`.
+- Dataset HF: `felipesp1983/kg1-nemotron-training/data/v439_final_answer_only_pairs/20260515T_v439_final_answer_only`.
+- Adapter inicial: `felipesp1983/kg1-nemotron-lora-v290-rank19-micro-patch-smoke/checkpoint-6`.
+- H200, max `12` steps, eval/save no step `3`, timeout `3600s`.
+- Integration gate local e remoto: OK, zero findings.
+- Tokenizacao: `0` truncation, offset masks OK.
+- Adapter load: `12011/12011` tensores mapeados.
+- Trainable LoRA: `8,015,872` parametros, `0.0247%`.
+
+Resultado:
+
+| Metrica interna V439 val | Baseline V290 ckpt-6 | V440 checkpoint-3 | Decisao |
+|---|---:|---:|---|
+| preference hard-negative total | 8/24 | 8/24 | empatou |
+| equation_transform preference | 7/22 | 7/22 | empatou |
+| bit_manipulation preference | 1/2 | 1/2 | empatou |
+
+Decisao: cancelado. V440 corrigiu o target contaminado de V436B, mas nao gerou
+sinal material no primeiro checkpoint. Nao autoriza weak/full, package ou
+submit.
+
+Implicacao tecnica: a linha `mean_nll` preference, mesmo com final-answer-only,
+nao e suficiente. O proximo passo nao deve ser mais epoch nem LR sweep nessa
+mesma formulacao. Precisamos mudar o objetivo ou voltar para CPU gate de solver
+/ DSL que produza novos pares com cobertura/sinal diferente.
+
 ## Regra De Integracao Pre-Job
 
 Status: implementada em `scripts/kg1_pre_paid_job_integration_gate.py`.
@@ -549,7 +586,8 @@ Estes itens nao estao ativos agora. So entram se houver novo gate CPU mais forte
 
 ## Proxima Acao Unica
 
-Parar a linha V436/V436B e nao abrir novo GPU job de preference mean-NLL direto.
+Parar a linha V436/V436B/V440 e nao abrir novo GPU job de preference mean-NLL
+direto sem uma mudanca tecnica nova no objetivo ou no dado.
 
 Objetivo:
 
@@ -559,8 +597,9 @@ Objetivo:
    - `chosen_mentions_adapter_prediction_rows=0`.
    - `chosen_mentions_public_train_label_audit_rows=0`.
 2. Rodar gate V439: semantic boxes 100%, subcategory counts preservados, no weak/full leakage, tokenizacao sem truncation, quadro comparativo contra V291/V290. Status: estrutural concluido; falta tokenizacao remota se publicar em HF.
-3. Publicar V439 no HF e rodar smoke curto somente se o launcher tiver kill-switch no primeiro checkpoint e comparar baseline V439 vs checkpoint-3.
-4. Qualquer novo GPU job precisa mostrar, antes de rodar, quadro comparativo contra V291/V290 e condicao objetiva de parada no primeiro checkpoint.
-5. Promover para weak/full/package/submit somente se o gate superar o melhor adapter-only atual: weak `192/315`, equation `56/155`, bit `136/160`, trunc `0`.
+3. Publicar V439 no HF e rodar smoke curto somente se o launcher tiver kill-switch no primeiro checkpoint e comparar baseline V439 vs checkpoint-3. Status: concluido; V440 empatou e foi cancelado.
+4. Proxima rota: CPU gate para solver/DSL de `equation_transform` ou nova funcao de perda que compare somente a probabilidade do boxed payload, nao a sequencia inteira.
+5. Qualquer novo GPU job precisa mostrar, antes de rodar, quadro comparativo contra V291/V290 e condicao objetiva de parada no primeiro checkpoint.
+6. Promover para weak/full/package/submit somente se o gate superar o melhor adapter-only atual: weak `192/315`, equation `56/155`, bit `136/160`, trunc `0`.
 
 Regra FinOps: V436 revelou bug de dataset; V436B provou que hard-negative-only ainda nao basta. O objetivo segue sendo ganho medido de ranking; loss interno e preference accuracy so servem para matar job cedo, nao para promover.

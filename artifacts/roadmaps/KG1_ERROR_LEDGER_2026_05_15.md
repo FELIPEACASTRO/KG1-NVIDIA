@@ -176,6 +176,35 @@ Regra preventiva:
 
 Status: implementado para a linha V440/V439.
 
+### E006 - Final-answer-only mean-NLL preference nao trouxe sinal
+
+Evidencia:
+
+- V439 removeu a contaminacao textual de E003:
+  `chosen_mentions_adapter_prediction_rows=0` e
+  `chosen_mentions_public_train_label_audit_rows=0`.
+- V440 passou integration gate local/remoto, hashes, tokenizacao, adapter load e
+  H200 gates.
+- Baseline interno V439 validation: `8/24`, equation `7/22`, bit `1/2`.
+- Checkpoint-3 V440: `8/24`, equation `7/22`, bit `1/2`.
+
+Impacto:
+
+- Corrigir o template era necessario, mas nao suficiente para gerar ganho.
+- Mais steps/epochs na mesma formulacao `mean_nll` nao tem evidencia de ganho e
+  tende a gastar GPU sem melhorar weak/full.
+
+Regra preventiva:
+
+- Nao repetir V440 ou variantes triviais de LR/epoch sobre o mesmo objetivo.
+- Proximo job pago precisa mudar uma destas duas coisas:
+  1. objetivo: comparar somente boxed payload/logit do answer, ou outra perda
+     que nao seja mean-NLL da sequencia inteira;
+  2. dado: novo CPU solver/DSL encontra pares adicionais com sinal diferente e
+     passa gate sem regressao.
+
+Status: V440 cancelado por FinOps; sem weak/full/package/submit.
+
 ## Prompt Externo
 
 Prompt consolidado para OpenRouter/outras APIs:

@@ -135,7 +135,8 @@ flowchart TD
 - V438 audit sobre V439: `hf_gpu_allowed_for_same_objective=true`.
 - Integration gate local: aprovado, zero findings.
 - HF job V440: H200, max `12` steps, checkpoint/eval no step `3`, timeout `3600s`.
-- Kill-switch: cancelar se checkpoint-3 nao melhorar contra baseline interno V439.
+- Resultado V440: checkpoint-3 empatou baseline interno `8/24`, equation `7/22`, bit `1/2`; job cancelado por FinOps.
+- Proxima rota arquitetural: nao repetir `mean_nll` final-answer-only; mudar para CPU gate de solver/DSL ou objetivo focado no boxed payload.
 
 ## O Que Nao Promove Submit
 
