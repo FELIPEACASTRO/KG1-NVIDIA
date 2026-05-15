@@ -448,6 +448,34 @@ Regra preventiva:
 Status: V452 bloqueou GPU corretamente; proxima rota volta para mineracao CPU
 de regras novas.
 
+### E014 - V459 detail sem prompt bloqueou o builder V460
+
+Evidencia:
+
+- A primeira execucao de `scripts/build_v460_numeric_one_rule_micro_dataset.py`
+  falhou com `KeyError: 'prompt'`.
+- Causa: `scripts/build_v459_v458_numeric_hard_negative_audit.py` preservava
+  `raw_output`, predicao e hashes, mas nao escrevia a coluna `prompt` no
+  detail CSV.
+- O erro foi pego antes de qualquer HF GPU ou upload de dataset.
+
+Impacto:
+
+- Nenhum treino, submit ou package foi criado com o artefato incompleto.
+- O impacto foi limitado ao CPU builder V460.
+
+Regra preventiva:
+
+- Todo artefato intermediario que possa alimentar dataset precisa carregar
+  explicitamente `id`, `family`, `prompt`, `answer` quando permitido,
+  `prediction`, hashes de prompt, decode config e identidade do adapter.
+- Builders subsequentes devem falhar cedo se `prompt` ou `answer` permitido
+  estiver ausente.
+- Rerodar self-test, `py_compile` e `kg1_static_safety_gate.py` apos corrigir.
+
+Status: corrigido. V459 agora inclui `prompt`, V459 foi rerodado, V460 foi
+construido e o tokenization gate V286 passou com truncation `0`.
+
 ## Prompt Externo
 
 Prompt consolidado para OpenRouter/outras APIs:

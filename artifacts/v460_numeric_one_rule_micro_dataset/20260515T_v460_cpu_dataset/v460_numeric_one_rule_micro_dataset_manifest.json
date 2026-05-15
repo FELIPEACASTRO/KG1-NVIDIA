@@ -1,0 +1,89 @@
+{
+  "conditions": {
+    "bit_replay_train_ge_min": true,
+    "bit_replay_val_ge_min": true,
+    "hard_negatives_ge_min": true,
+    "one_rule_risk_acknowledged": false
+  },
+  "decision": {
+    "blocking_conditions": [
+      "one_rule_risk_acknowledged"
+    ],
+    "decision": "v460_blocks_gpu_one_rule_risk_not_acknowledged",
+    "hf_gpu_allowed": false,
+    "next_action": "Run tokenization gate, then require explicit one-rule micro-smoke risk acceptance before paid GPU."
+  },
+  "generated_at_utc": "2026-05-15T22:22:49.637648+00:00",
+  "inputs": {
+    "bit_train_jsonl": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\data\\v217\\v217_short_answer_train.jsonl",
+    "bit_train_sha256": "a56938b1ae9eb471b779ebfc415ee88c05322941732128752680317495157984",
+    "bit_val_jsonl": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\data\\v217\\v217_short_answer_val.jsonl",
+    "bit_val_sha256": "65c4cb88b8ff2fc96940ccea33b8ca493769790c7ae80d27f2b69ac818fc6451",
+    "v459_detail_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v459_v458_numeric_hard_negative_audit\\20260515T_v459_cpu_audit\\v459_v458_numeric_hard_negative_audit_detail.csv",
+    "v459_detail_sha256": "67e645f5370b6fdc62136de3584d77c0daba326dd3c3b22e7f9be1eea38fa4d0",
+    "v459_manifest_json": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v459_v458_numeric_hard_negative_audit\\20260515T_v459_cpu_audit\\v459_v458_numeric_hard_negative_audit_manifest.json",
+    "v459_manifest_sha256": "1d3a1017603d49b416759d8c7ab2f93620e8f474c70de078e11960c0a6427faa"
+  },
+  "label": "v460_numeric_one_rule_micro_dataset",
+  "outputs": {
+    "manifest_json": "artifacts\\v460_numeric_one_rule_micro_dataset\\20260515T_v460_cpu_dataset\\v460_numeric_one_rule_micro_dataset_manifest.json",
+    "manifest_sha256": "0d732220fa37ebbbd82fd896951c6846599be4694fa011b6a42419c78f3b29eb",
+    "report_md": "artifacts\\v460_numeric_one_rule_micro_dataset\\20260515T_v460_cpu_dataset\\v460_numeric_one_rule_micro_dataset.md",
+    "report_sha256": "845b3f471eb7d447eecb0445728e959a55daa3dea16cbd0bea55a1bdc4fce91b",
+    "train_jsonl": "artifacts\\v460_numeric_one_rule_micro_dataset\\20260515T_v460_cpu_dataset\\v460_numeric_one_rule_micro_dataset_train.jsonl",
+    "train_sha256": "29f4453b83ce281d86e3255690491fc2bd1fef2b8ea76d595b0fc1218be7152d",
+    "val_jsonl": "artifacts\\v460_numeric_one_rule_micro_dataset\\20260515T_v460_cpu_dataset\\v460_numeric_one_rule_micro_dataset_val.jsonl",
+    "val_sha256": "93bae9783528722f6db86ba81bdb0a3aae675e4b891e85908460ebb6aa4cc2de"
+  },
+  "schema_version": "kg1_v460_numeric_one_rule_micro_dataset_v1",
+  "selection": {
+    "bit_train_rows": 128,
+    "bit_val_rows": 32,
+    "equation_rows_total": 22,
+    "equation_train_rows": 18,
+    "equation_val_rows": 4,
+    "train_positive_rule_replay": 11,
+    "train_real_hard_negatives": 7,
+    "validation_equation_positive_only": true
+  },
+  "source_policy": {
+    "bit_replay_guardrail": true,
+    "labels_joined_after_collection_from_public_train": true,
+    "one_rule_risk": true,
+    "raw_outputs_collected_without_labels": true,
+    "weak_full_rows_used_for_training": false
+  },
+  "summary": {
+    "train": {
+      "family_counts": {
+        "bit_manipulation": 128,
+        "equation_transform": 18
+      },
+      "rows": 146,
+      "source_role_counts": {
+        "bit_guardrail_replay": 128,
+        "hard_negative": 7,
+        "positive_rule_replay": 11
+      },
+      "subcategory_counts": {
+        "bit_guardrail_replay": 128,
+        "v274_guarded_numeric_minus_signed_opposite_sign_guarded": 18
+      }
+    },
+    "validation": {
+      "family_counts": {
+        "bit_manipulation": 32,
+        "equation_transform": 4
+      },
+      "rows": 36,
+      "source_role_counts": {
+        "bit_guardrail_replay": 32,
+        "positive_rule_replay": 4
+      },
+      "subcategory_counts": {
+        "bit_guardrail_replay": 32,
+        "v274_guarded_numeric_minus_signed_opposite_sign_guarded": 4
+      }
+    }
+  }
+}

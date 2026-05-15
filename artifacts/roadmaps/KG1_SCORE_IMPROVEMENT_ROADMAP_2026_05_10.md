@@ -57,6 +57,9 @@ Regra central: ganho so conta se aparecer no adapter/package. Teacher CPU, solve
 | V455 equation target audit | V324 tinha 6 candidatos no-loss; V452 cobriu 2 pares; faltam 4 rows verificadas em 3 classes numericas; simbolico verificado 0 | `hf_gpu_allowed=false`; V456 precisa fechar classes faltantes antes de GPU |
 | V456 missing numeric class decision | 3 classes faltantes auditadas; 2 ja tinham sintético massivo sem transferir; 1 precisa raw probe; 0 elegiveis para treino | `hf_gpu_allowed=false`; nao repetir SFT sintetico |
 | V457 public-train numeric probe pack | 22 prompts public-train sem answer para `minus_signed_opposite_sign_guarded`; pack sem chaves answer-like | `hf_raw_probe_allowed=true`; treino ainda bloqueado ate raw outputs reais |
+| V458 HF raw-output probe | H200 inference-only nos 22 prompts V457; 22 outputs, stop-only, 0 labels no input | concluido; habilitou V459 CPU audit |
+| V459 numeric hard-negative audit | 22 rows auditadas; adapter acerta 15, erra 7 exatamente no padrao opposite-sign; postprocessor corrige 22/22 | sinal real, mas 1 classe so; `hf_gpu_allowed=false` |
+| V460 one-rule micro dataset | train 146 rows: 18 equation, 128 bit replay; val 36 rows; token gate passou, trunc 0 | GPU bloqueada ate aceitar risco explicito de micro-smoke de uma classe |
 
 ## Regras Permanentes
 
@@ -1116,6 +1119,71 @@ Proxima acao tecnica: executar raw-output probe curto no HF para estes 22
 prompts, depois analisar se o adapter V291/V290 realmente erra com o padrao que
 o V274 corrige. Se nao houver hard-negative real, arquivar a rota sem treino.
 
+## Atualizacao V458/V459/V460 - Raw Probe e Micro Dataset
+
+V458 executou o raw-output probe em HF H200, sem labels no input:
+
+- Job: `https://huggingface.co/jobs/felipesp1983/6a07989d3308d79117b90d62`.
+- Output HF: `https://huggingface.co/datasets/felipesp1983/kg1-v458-v457-numeric-raw-probe/tree/main/runs/v458-v457-numeric-raw-probe-20260515T220411Z`.
+- Commit HF output: `https://huggingface.co/datasets/felipesp1983/kg1-v458-v457-numeric-raw-probe/commit/12b10166887cebb2d3490503edcc7b7368484abd`.
+- Manifesto local: `artifacts/v458_hf_v457_numeric_raw_probe_outputs/runs/v458-v457-numeric-raw-probe-20260515T220411Z/v458_v457_numeric_raw_probe_manifest.json`.
+
+Resultado V458:
+
+| Item | Valor |
+|---|---:|
+| rows geradas | `22` |
+| family | `equation_transform` |
+| completion tokens | `128278` |
+| finish reason | `stop=22` |
+| generation elapsed | `115.49s` |
+| H200 total job | cerca de `6min` |
+
+V459 juntou as labels public-train somente apos a coleta de raw outputs:
+
+- Script: `scripts/build_v459_v458_numeric_hard_negative_audit.py`.
+- Manifesto: `artifacts/v459_v458_numeric_hard_negative_audit/20260515T_v459_cpu_audit/v459_v458_numeric_hard_negative_audit_manifest.json`.
+- Relatorio: `artifacts/v459_v458_numeric_hard_negative_audit/20260515T_v459_cpu_audit/v459_v458_numeric_hard_negative_audit.md`.
+
+Resultado V459:
+
+| Classe | Rows | Adapter correto | Adapter igual ao erro simulado | Postprocessor correto | Hard negatives reais |
+|---|---:|---:|---:|---:|---:|
+| `v274_guarded_numeric_minus_signed_opposite_sign_guarded` | `22` | `15` | `7` | `22` | `7` |
+
+Interpretacao: existe sinal real do adapter, porque 7 linhas public-train
+produzem exatamente a resposta opposite-sign errada que o V274 corrige. Isso e
+mais forte que sintetico, mas ainda e estreito: uma unica classe. Por isso
+`hf_gpu_allowed=false` no V459.
+
+V460 materializou uma proposta de dataset micro, ainda CPU-only:
+
+- Script: `scripts/build_v460_numeric_one_rule_micro_dataset.py`.
+- Manifesto: `artifacts/v460_numeric_one_rule_micro_dataset/20260515T_v460_cpu_dataset/v460_numeric_one_rule_micro_dataset_manifest.json`.
+- Token gate: `artifacts/v460_numeric_one_rule_micro_dataset/20260515T_v460_tokenization_gate/v286_generic_tokenization_gate_manifest.json`.
+
+Resultado V460:
+
+| Split | Rows | equation | bit replay | Hard negatives reais | Trunc/token gate |
+|---|---:|---:|---:|---:|---|
+| train | `146` | `18` | `128` | `7` | passou |
+| validation | `36` | `4` | `32` | `0` | passou |
+
+Token gate V460:
+
+- `prompt_truncation_rate=0.0`;
+- `completion_tokens_dropped=0`;
+- `fallback_masks=0`;
+- offset masks completas;
+- train/val prompt overlap `0`.
+
+Decisao: V460 ainda nao libera GPU por padrao porque e uma rota de uma classe
+so. O caminho agressivo possivel e um micro-smoke de um checkpoint em H200, mas
+isso deve ser tratado como risco explicito: ele so tenta transferir a classe
+`minus_signed_opposite_sign_guarded`. Se rodar, o kill-switch e imediato:
+promover somente se weak `>192`, equation `>56`, bit `>=136`, trunc `0`;
+caso contrario cancelar e arquivar.
+
 ## Proxima Acao Ativa
 
 Rota ativa agora volta para CPU e depuracao de transferencia, nao para novo
@@ -1156,14 +1224,21 @@ treino pago.
    - resultado: `22` prompts public-train sem answer para raw-output probe;
    - permitido: inferencia curta para coletar raw outputs;
    - proibido: treino, package ou submit antes de hard negatives reais.
-6. So voltar a HF GPU de treino se a CPU/raw-probe provar:
+6. V458/V459/V460 foram fechados:
+   - V458 coletou raw outputs reais do adapter para os 22 prompts V457;
+   - V459 confirmou 7 hard negatives reais em uma classe numerica;
+   - V460 montou dataset micro com bit replay e token gate passou;
+   - decisao atual: GPU bloqueada por padrao porque a evidencia cobre uma
+     classe so. O unico caminho pago aceitavel e micro-smoke explicitamente
+     marcado como risco de uma classe, com cancelamento no primeiro checkpoint.
+7. So voltar a HF GPU de treino se a CPU/raw-probe provar:
    - `total > 192/315`;
    - `equation > 56/155`;
    - `bit >= 136/160`;
    - `truncated = 0`;
    - dataset sem leakage;
    - alvo treinavel que o adapter consiga emitir em resposta curta.
-7. Se a proxima CPU/raw-probe route nao mostrar ganho estrito, nao abrir job pago.
+8. Se a proxima CPU/raw-probe route nao mostrar ganho estrito, nao abrir job pago.
 
 Regra FinOps continua: se o primeiro checkpoint ou gate parcial nao indicar
 caminho para `total>192`, `equation>56`, `bit>=136`, `truncated=0`, cancelar.
