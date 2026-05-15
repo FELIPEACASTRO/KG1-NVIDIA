@@ -1,0 +1,51 @@
+{
+  "baseline": {
+    "bit_manipulation": 136,
+    "equation_transform": 56,
+    "total": 192
+  },
+  "best_v414_hit_candidate": {
+    "bit_manipulation_correct": 135,
+    "correct": 191,
+    "delta_vs_baseline_on_overlap": -1,
+    "equation_transform_correct": 56,
+    "gain_ids": "4ef88f92",
+    "gains_vs_baseline": 1,
+    "loss_ids": "59bee375;8740ed31",
+    "losses_vs_baseline": 2,
+    "overlap_rows": 315,
+    "path": "artifacts\\v368_hf_a100_v367_bit_ternary_launch\\eval_checkpoint1\\predictions.csv",
+    "prediction_column": "prediction",
+    "truncated": 0,
+    "v414_bit_hits": 1,
+    "v414_equation_hits": 0,
+    "v414_gain_hits": 1,
+    "v414_gain_misses": 29,
+    "v414_hit_ids": "4ef88f92"
+  },
+  "decision": {
+    "decision": "v415_no_existing_adapter_direct_promotion",
+    "hf_gpu_allowed": false,
+    "next_action": "If no promotable candidate exists, design a materially different transfer mechanism; do not repeat V368/V413.",
+    "reason": "No existing row-level adapter eval beats baseline with equation>56, bit>=136 and truncation=0."
+  },
+  "generated_at_utc": "2026-05-15T02:53:30.235924+00:00",
+  "inputs": {
+    "baseline_csv": "artifacts\\v342_acc_first_diagnostic\\v290_checkpoint6_baseline_predictions.csv",
+    "baseline_sha256": "910a051d8b8e652e37c0b0814ac59fe4a400b95cb432945b6a0244f97f5b31bf",
+    "v414_accepted_csv": "artifacts\\v414_cpu_teacher_meta_gate\\20260515T_v414_cpu_teacher_meta_gate\\v414_accepted_union.csv",
+    "v414_accepted_sha256": "fa5d06cc047c817e4b2f7da81f4d719f53e111ae3bcf7644513930ab1bfbce88"
+  },
+  "outputs": {
+    "candidate_summary_csv": "artifacts\\v415_adapter_direct_audit\\20260515T_v415_adapter_direct_audit\\v415_adapter_candidate_summary.csv",
+    "gain_hit_matrix_csv": "artifacts\\v415_adapter_direct_audit\\20260515T_v415_adapter_direct_audit\\v415_v414_gain_hit_matrix.csv",
+    "manifest_json": "artifacts\\v415_adapter_direct_audit\\20260515T_v415_adapter_direct_audit\\v415_adapter_direct_audit_manifest.json",
+    "promotable_candidates_csv": "artifacts\\v415_adapter_direct_audit\\20260515T_v415_adapter_direct_audit\\v415_promotable_candidates.csv",
+    "summary_md": "artifacts\\v415_adapter_direct_audit\\20260515T_v415_adapter_direct_audit\\V415_ADAPTER_DIRECT_AUDIT.md"
+  },
+  "promotable_candidate_count": 0,
+  "scanned_candidate_count": 6,
+  "schema_version": "kg1_v415_adapter_direct_audit_v1",
+  "skipped_csv_count": 80,
+  "v414_gain_count": 30
+}

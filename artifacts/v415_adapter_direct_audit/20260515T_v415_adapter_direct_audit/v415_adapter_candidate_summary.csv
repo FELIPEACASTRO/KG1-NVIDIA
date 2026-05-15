@@ -1,0 +1,7 @@
+path,prediction_column,overlap_rows,correct,delta_vs_baseline_on_overlap,equation_transform_correct,bit_manipulation_correct,truncated,gains_vs_baseline,losses_vs_baseline,v414_gain_hits,v414_gain_misses,v414_equation_hits,v414_bit_hits,gain_ids,loss_ids,v414_hit_ids
+artifacts\v368_hf_a100_v367_bit_ternary_launch\eval_checkpoint1\predictions.csv,prediction,315,191,-1,56,135,0,1,2,1,29,0,1,4ef88f92,59bee375;8740ed31,4ef88f92
+artifacts\v368_hf_a100_v367_bit_ternary_launch\eval_checkpoint1\raw_predictions_pre_score.csv,prediction,315,191,-1,56,135,0,1,2,1,29,0,1,4ef88f92,59bee375;8740ed31,4ef88f92
+artifacts\v342_acc_first_diagnostic\v290_checkpoint6_baseline_predictions.csv,prediction,315,192,0,56,136,0,0,0,0,30,0,0,,,
+artifacts\v347_v346_failure_audit\input\v346_checkpoint2_predictions.csv,prediction,315,191,-1,56,135,0,0,1,0,30,0,0,,8740ed31,
+artifacts\v352_hf_a100_v351_bit_transfer_launch\eval_v352_checkpoint2\predictions.csv,prediction,315,191,-1,56,135,0,0,1,0,30,0,0,,8740ed31,
+artifacts\v342_acc_first_diagnostic\v341_checkpoint2_predictions.csv,prediction,315,190,-2,56,134,1,0,2,0,30,0,0,,59bee375;8740ed31,

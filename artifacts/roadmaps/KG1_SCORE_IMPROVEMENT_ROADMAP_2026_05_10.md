@@ -67,10 +67,16 @@ Precisamos buscar subida no ranking ainda hoje, `2026-05-14`. A decisao V392 e s
 | V411C OpenRouter 2026-05-14 file review | n/a | n/a | n/a | adiciona VSA/ranking/probes para equation e SAT repair P2 para bit; sem submit |
 | V412 CPU synthesis gate | CPU projection `202/315` | `63/155` | `139/160` | sem ganho novo alem do V409; bloqueia GPU por V412 isolado |
 | V413 H200 solver-first transfer smoke | `190/315` checkpoint-2 | `56/155` | `134/160` | rejeitado; `truncated=1`, weak eval cancelado por FinOps antes de completar checkpoint-4 |
+| V414 CPU teacher meta gate | CPU projection `222/315` | `63/155` | `159/160` | melhor teacher CPU reconstruido; transferencia V368/V413 bloqueada |
+| V415 adapter-direct audit | `0` candidato promovivel | teto `56/155` | max adapter-like `136/160` | sem ganho submit-safe existente; exige mecanismo novo |
 
 Conclusao: `eval_loss` baixo nao e criterio de promocao. O criterio e ACC por familia no weak/full gate. A rota "resolver nos mesmos" finalmente tem ganho mensuravel (`+9` weak em CPU), mas esse ganho ainda e solver/verifier externo; para submit, ele precisa virar comportamento do adapter/package ou ser permitido explicitamente pelas regras de runtime.
 
 Resultado V413 em `2026-05-15`: o treino H200 solver-first transfer completou com checkpoints `2` e `4`, mas o primeiro weak eval V221-contract falhou o kill-switch. `checkpoint-2 = 190/315`, `equation_transform=56/155`, `bit_manipulation=134/160`, `truncated=1`, contra baseline `192/315`, `equation=56`, `bit=136`, `truncated=0`. O eval foi cancelado enquanto iniciava `checkpoint-4`, por FinOps. Decisao: nao fazer full eval, nao package, nao submit, nao alongar V413. A linha "CPU teacher V409/V410 -> LoRA smoke" fica rejeitada ate existir novo sinal adapter-only ou novo CPU program set ainda nao testado em V409/V412.
+
+Resultado V414 em `2026-05-15`: o meta-gate CPU reconstruiu a melhor projecao solver/verifier atual com evidencia reproduzivel: `222/315`, `equation_transform=63/155`, `bit_manipulation=159/160`, `+30` sobre o baseline adapter-only. Isso confirma que ha muitos acertos recuperaveis por solver formal, especialmente em bit. Tambem confirma o bloqueio operacional: V368 tentou transferir V366 e caiu para `191/315`; V413 tentou transferir V409/V410 e caiu para `190/315`. Portanto o ganho V414 e teacher CPU, nao submit adapter-only. A proxima acao nao e repetir SFT do mesmo teacher, e sim atacar comportamento adapter/package diretamente ou criar mecanismo de transferencia materialmente diferente.
+
+Resultado V415 em `2026-05-15`: a auditoria adapter-direct varreu CSVs row-level adapter-like locais contra os `30` ganhos V414. Nenhum candidato existente passa o gate `total>192`, `equation>56`, `bit>=136`, `truncated=0`. O melhor hit isolado foi V368, que acertou `1/30` ganho V414 (`4ef88f92`), mas perdeu `2` linhas do baseline e ficou `191/315`, `equation=56`, `bit=135`. Conclusao: nao existe checkpoint/prediction local esquecido que vire submit hoje; o proximo passo precisa ser um mecanismo novo, nao selecao de artefato historico.
 
 Resultado V383 em `2026-05-14`: checkpoint-2 = `190/315`, `equation=56`, `bit=134`, `truncated=1`; checkpoint-4 = `191/315`, `equation=56`, `bit=135`, `truncated=1`; checkpoint-6 = `190/315`, `equation=56`, `bit=134`, `truncated=1`. Como nenhum dos tres podia superar o baseline `192/315`, `equation=56`, `bit=136`, `truncated=0`, o job foi cancelado antes de avaliar `checkpoint-8/10`.
 
@@ -778,6 +784,79 @@ Resultado:
 
 Conclusao: V413 confirma que o dataset V410/V409 nao transferiu para LoRA. O proximo passo nao e repetir treino; e voltar para CPU synthesis row-level procurando programas novos que nao estejam em V409/V412, com aceite no-loss antes de qualquer GPU.
 
+### Step 6K - V414 CPU teacher meta gate
+
+Status: concluido; melhor teacher CPU confirmado, mas GPU bloqueada para rotas repetidas.
+
+Objetivo: consolidar os ganhos CPU reais e impedir que a gente confunda teacher/verifier com submit adapter-only.
+
+Artefatos:
+
+- Script: `artifacts/v414_cpu_teacher_meta_gate/build_v414_cpu_teacher_meta_gate.py`.
+- Manifest: `artifacts/v414_cpu_teacher_meta_gate/20260515T_v414_cpu_teacher_meta_gate/v414_cpu_teacher_meta_gate_manifest.json`.
+- Relatorio: `artifacts/v414_cpu_teacher_meta_gate/20260515T_v414_cpu_teacher_meta_gate/V414_CPU_TEACHER_META_GATE.md`.
+
+Resultado:
+
+| Estado | Weak total | Delta | equation | Delta | bit | Delta | Status |
+|---|---:|---:|---:|---:|---:|---:|---|
+| V291/V290 adapter baseline | `192/315` | `+0` | `56/155` | `+0` | `136/160` | `+0` | submitavel |
+| V409 solver projection | `202/315` | `+10` | `63/155` | `+7` | `139/160` | `+3` | teacher CPU |
+| V412 CPU synthesis union | `202/315` | `+10` | `63/155` | `+7` | `139/160` | `+3` | sem ganho novo |
+| V357 bit global ternary union | `214/315` | `+22` | `63/155` | `+7` | `151/160` | `+15` | teacher CPU |
+| V414/V366 consolidated CPU teacher | `222/315` | `+30` | `63/155` | `+7` | `159/160` | `+23` | melhor teacher CPU |
+
+Achado honesto:
+
+- O potencial existe: `+7` em equation e `+23` em bit no weak CPU teacher.
+- O submit ainda nao existe: V368 transferiu `0/8` ganhos V366 e caiu para `191/315`; V413 caiu para `190/315`, `bit=134`, `truncated=1`.
+- O gargalo atual nao e falta de solver; e falha de transferencia para comportamento do adapter.
+
+Decisao:
+
+- Bloquear novo HF/Kaggle GPU que reuse V357/V366/V409/V410/V414 como SFT simples.
+- Nao fazer full eval/package/submit com V414, porque nao e adapter-only.
+- Usar V414 como oracle de diagnostico para a proxima etapa adapter-direta.
+
+Proximo passo ativo:
+
+1. V415 deve ser um gate sem treino, focado em comportamento adapter/package: comparar prompts, checkpoints e respostas do baseline apenas em rows V414 que o adapter erra.
+2. Se V415 nao achar ganho adapter-only, criar dataset minimo diferente das rotas falhas: nao repetir resposta teacher ampla; usar hard negatives e formato de trace igual ao raw output que o adapter ja sabe emitir.
+3. Qualquer treino posterior precisa provar no checkpoint-2: `total > 192`, `equation > 56`, `bit >= 136`, `truncated=0`; caso contrario cancelar.
+
+### Step 6L - V415 adapter-direct audit
+
+Status: concluido; nenhum candidato existente e promovivel.
+
+Objetivo: procurar ganho submit-safe sem novo treino, usando apenas predicoes row-level adapter-like ja existentes no repo.
+
+Artefatos:
+
+- Script: `artifacts/v415_adapter_direct_audit/build_v415_adapter_direct_audit.py`.
+- Manifest: `artifacts/v415_adapter_direct_audit/20260515T_v415_adapter_direct_audit/v415_adapter_direct_audit_manifest.json`.
+- Relatorio: `artifacts/v415_adapter_direct_audit/20260515T_v415_adapter_direct_audit/V415_ADAPTER_DIRECT_AUDIT.md`.
+
+Resultado:
+
+| Melhor candidato local | Weak total | equation | bit | trunc | V414 hits | Perdas vs baseline | Decisao |
+|---|---:|---:|---:|---:|---:|---:|---|
+| V291/V290 baseline | `192/315` | `56/155` | `136/160` | `0` | `0/30` | `0` | manter |
+| V368 predictions | `191/315` | `56/155` | `135/160` | `0` | `1/30` | `2` | rejeitar |
+| V346/V352/V341 row-level | `190-191/315` | `56/155` | `134-135/160` | `0-1` | `0/30` | `1-2` | rejeitar |
+
+Achado honesto:
+
+- Nao ha candidato adapter-like local com equation acima de `56`.
+- O unico hit em ganho V414 existente em adapter (`4ef88f92`) vem com perdas maiores que o ganho.
+- O problema nao e falta de garimpo local; e que os ganhos do teacher nao estao sendo aprendidos pelo adapter.
+
+Decisao:
+
+- Nao fazer submit.
+- Nao rodar full/package.
+- Nao abrir job HF para repetir dataset teacher anterior.
+- Proxima etapa: V416 deve mudar o mecanismo de transferencia, com formato alinhado ao raw output historico ou outro metodo que nao repita V368/V413.
+
 ### Step 7 - Full/package/submit
 
 Status: somente depois de weak gate.
@@ -828,17 +907,21 @@ Regras:
 
 ## Proxima Acao Unica
 
-V413 falhou; portanto o caminho ativo volta para CPU solver row-level, sem GPU:
+V415 confirmou que nao existe candidato adapter-like local pronto para promocao. O caminho ativo agora e V416, mas ainda sem GPU ate passar gate de diferenca material:
 
-1. implementar o proximo CPU gate `V414` focado apenas em programas novos que nao estejam em V409/V412.
-2. atacar primeiro `equation_transform`, porque o submit precisa sair do teto `56/155`:
-   - ampliar DSL simbolica/pontuacao com VSA/ranking;
-   - exigir leave-one-example-out, formato valido e top-1 unico ou empate com mesma predicao;
-   - aceitar somente rows com `0` perdas contra o baseline.
-3. manter `bit_manipulation` como guardrail e ganho secundario:
-   - usar bit-pair/bitsum/stride e LUT apenas com abstain;
-   - qualquer candidato que reduza `bit < 136` e rejeitado.
-4. so voltar para HF/Kaggle GPU se V414 gerar ganho novo no-loss acima de V409/V412 e um dataset de transferencia com hard negatives que ainda nao foi testado.
+1. construir um pacote de transferencia minimo que seja diferente das rotas falhas V368/V413:
+   - nao usar weak/full gate rows diretamente em treino;
+   - gerar exemplos sinteticos a partir das regras V414;
+   - usar completions no estilo do raw output historico que o adapter ja sabe emitir, nao apenas `Final answer`;
+   - incluir hard negatives/replay para impedir queda de bit.
+2. antes de HF, rodar tokenization + leakage + formato + comparativo contra V410/V367:
+   - se o dataset for essencialmente igual a V410/V367, bloquear;
+   - se usar rows weak/full como treino direto, bloquear;
+   - se nao houver replay suficiente para `bit>=136`, bloquear.
+3. se o gate V416 passar, liberar no maximo um smoke curto com kill-switch no checkpoint-2:
+   - promover apenas se `total > 192`, `equation > 56`, `bit >= 136`, `truncated=0`;
+   - cancelar imediatamente se repetir `equation=56` e `bit<136`.
+4. se V416 nao passar, parar GPU e voltar para sintese formal, porque gastar mais em treino seria repeticao do erro.
 5. manter V291/V290 checkpoint-6 como unico package submitavel ate aparecer ganho adapter-only medido.
 
 Nao rodar broad SFT, prompt sweep ou job guiado por `eval_loss`. A decisao e por ACC, truncation e comparativo contra V291.

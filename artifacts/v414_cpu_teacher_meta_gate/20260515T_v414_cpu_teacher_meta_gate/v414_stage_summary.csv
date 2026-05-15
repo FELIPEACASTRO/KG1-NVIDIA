@@ -1,0 +1,6 @@
+state,total,total_delta,equation_transform,equation_delta,bit_manipulation,bit_delta,status
+V291/V290 adapter baseline,192,0,56,0,136,0,submit-safe baseline
+V409 solver projection,202,10,63,7,139,3,CPU teacher only
+V412 CPU synthesis union,202,10,63,7,139,3,CPU teacher only; no new gain over V409
+V357 bit global ternary union,214,22,63,7,151,15,CPU teacher only
+V414/V366 consolidated CPU teacher,222,30,63,7,159,23,best CPU teacher; not adapter-only
