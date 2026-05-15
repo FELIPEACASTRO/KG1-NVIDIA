@@ -1,0 +1,52 @@
+{
+  "decision": {
+    "hf_gpu_allowed": false,
+    "reason": "requires V438 structural audit and tokenization gate before GPU"
+  },
+  "label": "v439_final_answer_only_pairs",
+  "schema_version": "kg1_v439_final_answer_only_pairs_manifest_v1",
+  "source_train_jsonl": "artifacts\\v435e_adapter_probe_preference_dataset\\20260515T_v435e_hardneg_only\\v435e_adapter_probe_preference_dataset_preferences_train.jsonl",
+  "source_val_jsonl": "artifacts\\v435e_adapter_probe_preference_dataset\\20260515T_v435e_hardneg_only\\v435e_adapter_probe_preference_dataset_preferences_val.jsonl",
+  "train_jsonl": "artifacts\\v439_final_answer_only_pairs\\20260515T_v439_final_answer_only\\v439_final_answer_only_pairs_train.jsonl",
+  "train_sha256": "bc032da2f7cada19aef295aa91aef6098e03c7b85215e7729f1ddd71b3e5079a",
+  "train_summary": {
+    "bad_chosen_text_rows": 0,
+    "bad_rejected_text_rows": 0,
+    "family_counts": {
+      "bit_manipulation": 11,
+      "equation_transform": 98
+    },
+    "negative_type_counts": {
+      "hard_negative_adapter_exact_wrong": 109
+    },
+    "rows": 109,
+    "subcategory_counts": {
+      "bit_adapter_exact_wrong": 11,
+      "equation_numeric_operator_to_number": 18,
+      "equation_numeric_operator_to_symbolic": 3,
+      "equation_symbolic_sequence": 48,
+      "equation_symbolic_short": 29
+    }
+  },
+  "val_jsonl": "artifacts\\v439_final_answer_only_pairs\\20260515T_v439_final_answer_only\\v439_final_answer_only_pairs_val.jsonl",
+  "val_sha256": "57321347f9293e9c0f2f17e6c9de1d88f1246fee4154125574b2e60251aee3a6",
+  "val_summary": {
+    "bad_chosen_text_rows": 0,
+    "bad_rejected_text_rows": 0,
+    "family_counts": {
+      "bit_manipulation": 2,
+      "equation_transform": 22
+    },
+    "negative_type_counts": {
+      "hard_negative_adapter_exact_wrong": 24
+    },
+    "rows": 24,
+    "subcategory_counts": {
+      "bit_adapter_exact_wrong": 2,
+      "equation_numeric_operator_to_number": 2,
+      "equation_numeric_operator_to_symbolic": 1,
+      "equation_symbolic_sequence": 16,
+      "equation_symbolic_short": 3
+    }
+  }
+}

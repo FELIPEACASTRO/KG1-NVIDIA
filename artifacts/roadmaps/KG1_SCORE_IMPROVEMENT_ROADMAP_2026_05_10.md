@@ -38,6 +38,7 @@ Regra central: ganho so conta se aparecer no adapter/package. Teacher CPU, solve
 | V435E antigo misto | 200 rows, 67 format-only negatives | arquivado; contaminava mean-NLL preference |
 | V435E corrigido hard-negative-only | 133 rows, equation 120, bit 13 | unico dataset preference permitido agora |
 | V435F corrigido | hard-only passa; dataset antigo e bloqueado | GPU so com novo launcher e novo kill-switch |
+| V436B H200 hard-negative-only | checkpoint-3 piorou preference 6/24 -> 4/24 | cancelado; sem weak/full |
 
 ## Regras Permanentes
 
@@ -53,6 +54,7 @@ Regra central: ganho so conta se aparecer no adapter/package. Teacher CPU, solve
 10. Se job estiver rodando, analisar logs periodicamente e aplicar kill-switch sem esperar gasto inutil.
 11. Todo script, job launcher, workflow ou notebook criado/alterado precisa passar `python scripts/kg1_static_safety_gate.py <paths>` antes de entrega/push/execucao. O gate bloqueia V435E misto arquivado, `format_negative_*` em treino ativo e `ALLOW_FORMAT_NEGATIVES` em job/notebook.
 12. H200 esta autorizada ate 1 hora por execucao. Se uma execucao precisar passar de 1 hora, parar e pedir autorizacao humana antes de continuar.
+13. Todo erro novo deve entrar no ledger `artifacts/roadmaps/KG1_ERROR_LEDGER_2026_05_15.md` com evidencia, impacto, regra preventiva e status antes de abrir novo job pago.
 
 ## Achados Consolidados V434C
 
@@ -398,11 +400,92 @@ Kill-switch no primeiro checkpoint:
 | package incompatibilidade | cancelar |
 | ganho weak e bit preservado | continuar para full gate |
 
-Conclusao: V436 nao trouxe ganho submit-safe e nao autoriza V437. O motivo provavel foi dado contaminado por negativos so de formato. Nao repetir o launcher V436 antigo. So considerar um V436B se o hard-negative-only for publicado em HF e o preflight remoto confirmar os hashes corrigidos.
+Conclusao: V436 nao trouxe ganho submit-safe e nao autoriza V437. O motivo provavel foi dado contaminado por negativos so de formato. Nao repetir o launcher V436 antigo.
+
+## V436B - Hard-Negative-Only Preference Smoke
+
+Status: executado em H200 e cancelado por FinOps no primeiro checkpoint.
+
+Objetivo: repetir o smoke de preference usando somente V435E hard-negative-only corrigido, sem os `67` negativos so de formato.
+
+Configuracao:
+
+- Job: `https://huggingface.co/jobs/felipesp1983/6a073c74e48bea4538b9e652`.
+- Output repo: `felipesp1983/kg1-nemotron-lora-v436b-v435e-hardneg-v290ckpt6`.
+- Dataset HF: `felipesp1983/kg1-nemotron-training/data/v435e_adapter_probe_preference/20260515T_v435e_hardneg_only`.
+- Train/val hashes confirmados: `9dfe89d6da803e593da566ec72865815ccbadb4b42385f82bb7ae2e9d0ad240b` e `92cd619bc7e315e930742cdf14978452f93d25ae07c28e7ded2ba91816c2d503`.
+- Static safety gate remoto OK, preinstall/artifacts/postinstall gates OK, tokenizacao sem truncation, adapter V290 checkpoint-6 carregado com `12011/12011` tensores mapeados.
+- Trainable LoRA: `8,015,872` parametros, `0.0247%` do modelo, modulos `q_proj,k_proj,v_proj,o_proj,lm_head`.
+
+Resultado:
+
+| Metrica interna | Baseline V290 ckpt-6 | V436B checkpoint-3 | Decisao |
+|---|---:|---:|---|
+| preference hard-negative total | 6/24 | 4/24 | piorou |
+| equation_transform preference | 4/22 | 2/22 | piorou |
+| bit_manipulation preference | 2/2 | 2/2 | preservou |
+
+Decisao: cancelado. O primeiro checkpoint piorou a preferencia hard-negative e nao autoriza weak/full eval, package ou submit.
+
+Implicacao tecnica: o problema nao era apenas o dataset misto. O objetivo `mean_nll` chosen/rejected continua sem transferencia confiavel para ACC. A linha preference direta fica bloqueada ate existir novo gate CPU que prove orientacao correta do objetivo ou uma forma de treinar resposta final sem mover a distribuicao contra os pares.
+
+## V438 - Error Ledger e Preference Objective Audit
+
+Status: executado localmente em CPU.
+
+Artefatos:
+
+- `scripts/audit_v438_preference_objective.py`.
+- `artifacts/v438_preference_objective_audit/20260515T_v438_v435e_hardneg_only/v438_v435e_hardneg_only_preference_objective_audit_manifest.json`.
+- `artifacts/roadmaps/KG1_ERROR_LEDGER_2026_05_15.md`.
+- `artifacts/openrouter/KG1_V438_ERROR_LEDGER_EXTERNAL_API_PROMPT_2026_05_15.md`.
+
+Resultado:
+
+| Check | Resultado |
+|---|---:|
+| answer boxes semanticamente corretos | 133/133 |
+| rejected boxes semanticamente iguais ao adapter wrong | 133/133 |
+| chosen menciona adapter prediction errado | 123/133 |
+| chosen menciona public-train label audit | 133/133 |
+| chosen tokens medio | 34.08 |
+| rejected tokens medio | 26.80 |
+
+Decisao: o erro dominante agora e estrutural no target, nao no label. O chosen ensina texto de auditoria e repete a resposta errada, enquanto o submit precisa aprender uma resposta final curta. Novo GPU job fica bloqueado ate V439 gerar e auditar targets `final-answer-only` sem esses contaminantes.
+
+## V439 - Final-Answer-Only Pair Cleanup
+
+Status: executado localmente em CPU; pronto para publicacao HF se decidirmos rodar smoke.
+
+Artefatos:
+
+- `scripts/build_v439_final_answer_only_pairs.py`.
+- `artifacts/v439_final_answer_only_pairs/20260515T_v439_final_answer_only/v439_final_answer_only_pairs_manifest.json`.
+- `artifacts/v438_preference_objective_audit/20260515T_v438_v439_final_answer_only/v438_v439_final_answer_only_audit_manifest.json`.
+
+Dataset:
+
+| Split | Rows | equation | bit | SHA256 |
+|---|---:|---:|---:|---|
+| train | 109 | 98 | 11 | `bc032da2f7cada19aef295aa91aef6098e03c7b85215e7729f1ddd71b3e5079a` |
+| val | 24 | 22 | 2 | `57321347f9293e9c0f2f17e6c9de1d88f1246fee4154125574b2e60251aee3a6` |
+
+V438 audit sobre V439:
+
+| Check | Resultado |
+|---|---:|
+| answer boxes corretos | 133/133 |
+| rejected boxes iguais ao adapter wrong | 133/133 |
+| chosen menciona adapter prediction fora do boxed | 0/133 |
+| chosen menciona public-train label audit | 0/133 |
+| chosen tokens medio | 4.83 |
+| rejected tokens medio | 4.80 |
+
+Decisao: V439 corrige E003. Ele nao prova ganho de ACC, mas e o primeiro dataset limpo para um smoke curto. Se rodar, usar H200 por menos de 1 hora, checkpoint/eval no step 3 e cancelar se nao melhorar a metrica interna contra o baseline V439.
 
 ## V437 - Full Gate, Package e Submit
 
-Status: bloqueado. V436 falhou o primeiro kill-switch.
+Status: bloqueado. V436 e V436B falharam o primeiro kill-switch.
 
 Regras:
 
@@ -442,17 +525,23 @@ Estes itens nao estao ativos agora. So entram se houver novo gate CPU mais forte
 | Decisao por `eval_loss` | Nao correlacionou com ACC das familias |
 | H200/A100 relaunch sem V435 | Gasto sem novo sinal |
 | V436 preference variants sobre V435E antigo | Dataset misto tinha `67` format negatives; launcher antigo agora falha fechado |
+| Preference mean-NLL direto sobre V435E hard-only | V436B piorou checkpoint-3 de `6/24` para `4/24` |
+| Chosen com texto `public-train label audit` e candidato errado | V438 mostrou contaminacao de target em `133/133` e `123/133` linhas |
 
 ## Proxima Acao Unica
 
-Parar a linha V436 antiga e nao abrir novo GPU job com o dataset misto.
+Parar a linha V436/V436B e nao abrir novo GPU job de preference mean-NLL direto.
 
 Objetivo:
 
-1. Publicar o V435E hard-negative-only em novo path HF, sem sobrescrever o dataset antigo. Status: concluido.
-2. Criar um launcher V436B novo apontando para os hashes corrigidos e sem `format_negative_*`. Status: preparado em `artifacts/v436b_hf_h200_v435e_hardneg_preference_launch/launch_v436b_hf_h200_v435e_hardneg_preference.py`.
-3. Rodar somente um smoke curto se o custo estimado for pequeno e o primeiro checkpoint reportar por `negative_type` que `hard_negative_adapter_exact_wrong` melhorou sem queda de bit.
-4. Cancelar imediatamente se a metrica interna hard-negative nao melhorar no primeiro checkpoint; nao esperar weak/full.
-5. Promover para weak/full/package/submit somente se o novo gate superar o melhor adapter-only atual: weak `192/315`, equation `56/155`, bit `136/160`, trunc `0`.
+1. Construir V439 CPU dataset final-answer-only/equalizado. Status: concluido.
+   - chosen: `Final answer: \boxed{ANSWER}`.
+   - rejected: `Final answer: \boxed{ADAPTER_WRONG}` somente para auditoria/contraste, sem texto de auditoria.
+   - `chosen_mentions_adapter_prediction_rows=0`.
+   - `chosen_mentions_public_train_label_audit_rows=0`.
+2. Rodar gate V439: semantic boxes 100%, subcategory counts preservados, no weak/full leakage, tokenizacao sem truncation, quadro comparativo contra V291/V290. Status: estrutural concluido; falta tokenizacao remota se publicar em HF.
+3. Publicar V439 no HF e rodar smoke curto somente se o launcher tiver kill-switch no primeiro checkpoint e comparar baseline V439 vs checkpoint-3.
+4. Qualquer novo GPU job precisa mostrar, antes de rodar, quadro comparativo contra V291/V290 e condicao objetiva de parada no primeiro checkpoint.
+5. Promover para weak/full/package/submit somente se o gate superar o melhor adapter-only atual: weak `192/315`, equation `56/155`, bit `136/160`, trunc `0`.
 
-Regra FinOps: V436 ja acionou o kill-switch e revelou bug de dataset. O objetivo segue sendo ganho medido de ranking; loss interno e preference accuracy so servem para matar job cedo, nao para promover.
+Regra FinOps: V436 revelou bug de dataset; V436B provou que hard-negative-only ainda nao basta. O objetivo segue sendo ganho medido de ranking; loss interno e preference accuracy so servem para matar job cedo, nao para promover.
