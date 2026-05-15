@@ -1343,6 +1343,8 @@ Artefatos:
 
 Decisao: nao abrir GPU. A classe assinada/padded reencontra apenas o `99d6a3b5`, que ja era teacher-known; `accepted_new_gains=0`.
 
+Validacao HF CPU: job `felipesp1983/6a06f81ee48bea4538b9e179` em `cpu-basic`, imagem `python:3.12`, completou em `33s` e reproduziu a decisao local: `projection=193/315`, `equation=57/155`, `bit=136/160`, `accepted_new_ids=[]`, `accepted_known_v414_ids=["99d6a3b5"]`, `hf_gpu_allowed=false`.
+
 ## Regras Permanentes
 
 - Nenhum HF sem CPU gate com sinal novo.
