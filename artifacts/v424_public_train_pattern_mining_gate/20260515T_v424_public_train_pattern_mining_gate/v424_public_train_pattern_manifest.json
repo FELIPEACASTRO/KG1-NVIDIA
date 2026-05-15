@@ -1,0 +1,23 @@
+{
+  "accepted_gain_count": 0,
+  "candidate_count": 0,
+  "conflict_count": 0,
+  "decision": {
+    "decision": "hf_gpu_blocked_no_public_train_pattern_gain",
+    "next_action": "Do not train from exact/train-template signatures; mine a richer program DSL if continuing.",
+    "reason": "accepted=0; conflicts=0; projected_eq=56"
+  },
+  "exact_signature_count": 1400,
+  "feature_template_signature_count": 21,
+  "generated_at_utc": "2026-05-15T09:43:05.122869+00:00",
+  "hf_gpu_allowed": false,
+  "projection": {
+    "bit_manipulation_correct": 136,
+    "correct": 192,
+    "equation_transform_correct": 56,
+    "rows": 315
+  },
+  "schema_version": "kg1_v424_public_train_pattern_mining_gate_v1",
+  "train_csv": "C:\\Users\\davis\\Downloads\\competition_train.csv",
+  "train_rows": 9500
+}
