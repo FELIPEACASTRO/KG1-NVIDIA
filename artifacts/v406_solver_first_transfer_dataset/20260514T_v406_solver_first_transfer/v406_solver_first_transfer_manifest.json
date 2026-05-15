@@ -1,0 +1,126 @@
+{
+  "generated_at_utc": "2026-05-15T00:22:37.234768+00:00",
+  "inputs": {
+    "v217_train": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\data\\v217\\v217_short_answer_train.jsonl",
+    "v217_train_sha256": "a56938b1ae9eb471b779ebfc415ee88c05322941732128752680317495157984",
+    "v217_val": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\data\\v217\\v217_short_answer_val.jsonl",
+    "v217_val_sha256": "65c4cb88b8ff2fc96940ccea33b8ca493769790c7ae80d27f2b69ac818fc6451",
+    "v325_train": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v390_v325_equation_no_loss_distill_dataset\\20260514T193847Z\\v390_v325_equation_no_loss_distill_sft_train.jsonl",
+    "v325_train_sha256": "d78704157cd6ea55f6340dd5218f45c372dbe72ba227e9fd1e5851430d670793",
+    "v325_val": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v390_v325_equation_no_loss_distill_dataset\\20260514T193847Z\\v390_v325_equation_no_loss_distill_sft_val.jsonl",
+    "v325_val_sha256": "bdca7d2b7787e87eb1645ed6cb5b1e8687f1445fa76d58510b768de8eae1b5fa",
+    "v330_train": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v330_symbolic_cryptarithm_distill_dataset\\20260513T_cpu_gate\\v330_symbolic_cryptarithm_distill_sft_train.jsonl",
+    "v330_train_sha256": "5dc407b627ba246a49c1177251c077b583e520941d92bfe354225eac531a0e30",
+    "v330_val": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v330_symbolic_cryptarithm_distill_dataset\\20260513T_cpu_gate\\v330_symbolic_cryptarithm_distill_sft_val.jsonl",
+    "v330_val_sha256": "1462f154c178c7cf87e28f945f57927099c1f34130eede8ef411afa50b75cf66"
+  },
+  "outputs": {
+    "comparison_md": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v406_solver_first_transfer_dataset\\20260514T_v406_solver_first_transfer\\V406_VS_PREVIOUS.md",
+    "manifest_json": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v406_solver_first_transfer_dataset\\20260514T_v406_solver_first_transfer\\v406_solver_first_transfer_manifest.json",
+    "train_jsonl": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v406_solver_first_transfer_dataset\\20260514T_v406_solver_first_transfer\\v406_solver_first_transfer_train.jsonl",
+    "train_sha256": "1ff5af6135971f40c572f517e734c8e991ffca53e2e78983dcded831844f9807",
+    "val_jsonl": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v406_solver_first_transfer_dataset\\20260514T_v406_solver_first_transfer\\v406_solver_first_transfer_val.jsonl",
+    "val_sha256": "7ef3ba7be49ef9ccd46429ad779ea5697dbadd46999ac3c7bbcd4e82be389f98"
+  },
+  "reference_summary": [
+    {
+      "path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v290_rank19_micro_patch_reference\\runtime_artifacts\\v245_weak_eval_bridge\\v245-weak-bridge-hfonly-20260510T1950Z\\v221_weak_315.csv",
+      "rows": 315,
+      "sha256": "85da758e14d57ea40270de5747f98726a0ad0b6d1795bff7dd46183005e0f9b6"
+    },
+    {
+      "path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v293_gap_mining\\inputs\\v291_full_predictions.csv",
+      "rows": 947,
+      "sha256": "d9634ea15cb55e17bbfb90229f1cdbfd9b0f5a4cdba0d61848e6f746393dde20"
+    }
+  ],
+  "required_next_gate": [
+    "python scripts/run_v286_generic_tokenization_gate.py --dataset-manifest-json <manifest> --assistant-final-answer-mode boxed_suffix --min-train-rows 1800 --min-val-rows 500",
+    "Only then launch a short HF smoke; first checkpoint kill-switch total>192 equation>56 bit>=136 truncated=0."
+  ],
+  "schema_version": "kg1_v406_solver_first_transfer_dataset_v1",
+  "source_policy": {
+    "adapter_training_authorization": "blocked_until_real_tokenization_gate",
+    "v405_accepted_rows_used_as_rule_evidence_only": true,
+    "v405_accepted_rows_used_as_training": false,
+    "weak_or_full_gate_rows_used_for_training": false
+  },
+  "train_summary": {
+    "bad_rows_first10": [],
+    "duplicate_ids": 0,
+    "duplicate_prompts": 0,
+    "family_counts": {
+      "bit_manipulation": 1024,
+      "equation_transform": 1040
+    },
+    "label": "train",
+    "reference_id_overlap": 0,
+    "reference_prompt_overlap": 0,
+    "rows": 2064,
+    "source_counts": {
+      "v406_v217_bit_replay_guardrail": 512,
+      "v406_v330_symbolic_cryptarithm": 240,
+      "v406_v390_v325_equation_numeric": 800,
+      "v406_v403_exact_global_bit_rule": 512
+    },
+    "subcategory_counts": {
+      "bit_exact_global_v403": 512,
+      "bit_manipulation": 141,
+      "equation_numeric_add_direct": 160,
+      "equation_numeric_colon_absdiff": 160,
+      "equation_numeric_colon_trailing_zero": 160,
+      "equation_numeric_minus_direct_negative": 160,
+      "equation_numeric_minus_signed": 160,
+      "equation_symbolic_cryptarithm_single_operator_mul": 240,
+      "unknown": 371
+    },
+    "unique_ids": 2064,
+    "unique_prompt_hashes": 2064
+  },
+  "v405_projection": {
+    "accepted_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v405_integrated_solver_projection\\20260514T_v405_integrated_projection\\v405_integrated_solver_accepted.csv",
+    "accepted_sha256": "869635e4e056a3b9e1833a14a85bec6d8397a4342d5d204ba74d897d0cf676f3",
+    "baseline": {
+      "bit_manipulation": "136/160",
+      "equation_transform": "56/155",
+      "total": "192/315"
+    },
+    "cpu_solver_projection": {
+      "bit_manipulation": "138/160",
+      "equation_transform": "63/155",
+      "total": "201/315"
+    }
+  },
+  "validation_summary": {
+    "bad_rows_first10": [],
+    "duplicate_ids": 0,
+    "duplicate_prompts": 0,
+    "family_counts": {
+      "bit_manipulation": 256,
+      "equation_transform": 260
+    },
+    "label": "validation",
+    "reference_id_overlap": 0,
+    "reference_prompt_overlap": 0,
+    "rows": 516,
+    "source_counts": {
+      "v406_v217_bit_replay_guardrail": 128,
+      "v406_v330_symbolic_cryptarithm": 60,
+      "v406_v390_v325_equation_numeric": 200,
+      "v406_v403_exact_global_bit_rule": 128
+    },
+    "subcategory_counts": {
+      "bit_exact_global_v403": 128,
+      "bit_manipulation": 40,
+      "equation_numeric_add_direct": 40,
+      "equation_numeric_colon_absdiff": 40,
+      "equation_numeric_colon_trailing_zero": 40,
+      "equation_numeric_minus_direct_negative": 40,
+      "equation_numeric_minus_signed": 40,
+      "equation_symbolic_cryptarithm_single_operator_mul": 60,
+      "unknown": 88
+    },
+    "unique_ids": 516,
+    "unique_prompt_hashes": 516
+  }
+}

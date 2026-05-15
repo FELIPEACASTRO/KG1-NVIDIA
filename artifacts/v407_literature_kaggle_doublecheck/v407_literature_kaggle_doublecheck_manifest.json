@@ -1,0 +1,43 @@
+{
+  "version": "V407_LITERATURE_KAGGLE_DOUBLECHECK",
+  "date": "2026-05-14",
+  "baseline_submit_safe": {
+    "candidate": "V291/V290 checkpoint-6",
+    "weak_total": 192,
+    "equation_transform_correct": 56,
+    "bit_manipulation_correct": 136,
+    "full_official_like_correct": 823,
+    "full_official_like_rows": 947,
+    "public_score": 0.86
+  },
+  "latest_cpu_projection": {
+    "candidate": "V405 integrated solver projection",
+    "weak_total": 201,
+    "equation_transform_correct": 63,
+    "bit_manipulation_correct": 138,
+    "conflicts": 0,
+    "submit_safe": false
+  },
+  "checked_kaggle_kernels": [
+    "konbu17/bit-manipulation-solver-cot-generator",
+    "mohankrishnathalla/nemotron-6-puzzle-types-decoded-rule-solvers",
+    "huikang/end-to-end-finetuning-for-lb-0-85",
+    "michaelhodel/program-synthesis-starter-notebook",
+    "marcshade/three-tier-dsl-based-program-synthesis",
+    "francisbanda/arc-agi-2-mdl-program-synthesis-solver"
+  ],
+  "checked_research_topics": [
+    "FlashFill / programming by example",
+    "SyGuS / CEGIS",
+    "Z3 fixed-width bit-vectors",
+    "DreamCoder / neural-guided program synthesis"
+  ],
+  "actionable_findings": [
+    "Add exact no-loss bit CPU gate for asymmetric INHIB/IMPL ordered boolean functions.",
+    "Treat MAJ/CH/XOR3 as low-frequency fallback only under strict all-example verification.",
+    "Build equation_transform symbolic PBE DSL with unique-candidate abstention.",
+    "Use V406 solver-first transfer dataset only for a short checkpoint-gated smoke, not broad SFT.",
+    "Do not promote any HF job by eval_loss alone."
+  ],
+  "decision": "solver_first_exact_gate_then_short_adapter_transfer_smoke"
+}

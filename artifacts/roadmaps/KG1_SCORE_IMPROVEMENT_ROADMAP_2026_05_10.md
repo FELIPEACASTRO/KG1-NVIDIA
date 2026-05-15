@@ -489,6 +489,69 @@ Decisao atual:
 
 - V391 provou que `198/315` em projecao CPU nao basta. V398 provou que o corpus reconstruido V397 tambem nao basta. V399 provou que V398 nao tem nenhum acerto complementar de `equation_transform`. Portanto o proximo passo nao pode ser "mais epochs", "LR diferente" ou "mais H200" nessa linha.
 
+### Step 6B - V405/V406 solver-first transfer
+
+Status: CPU projection concluida; dataset V406 construido e gateado; sem ganho adapter-only ainda.
+
+Comparativo obrigatorio:
+
+| Versao | Weak total | equation | bit | Conflitos | Submit-safe? |
+|---|---:|---:|---:|---:|---|
+| V291/V290 checkpoint-6 | `192/315` | `56/155` | `136/160` | n/a | sim |
+| V405 integrated CPU solver projection | `201/315` | `63/155` | `138/160` | `0` | nao |
+| V406 solver-first transfer dataset | nao treinado | nao medido | nao medido | n/a | nao ainda |
+
+V405 integrou os ganhos CPU sem conflito:
+
+- equation gains: `274def88`, `528ec0d8`, `7688e06e`, `99d6a3b5`, `c5b058d6`, `d1bd7478`, `fb623471`;
+- bit gains: `4ada9150`, `4c327b55`;
+- projecao: `201/315`, `equation=63`, `bit=138`, `0` conflitos.
+
+V406 transformou esse sinal em dataset de transferencia sem treinar nos weak/full rows:
+
+- treino: `2064` rows (`1024` bit, `1040` equation);
+- validacao: `516` rows (`256` bit, `260` equation);
+- overlap com weak/full: `0` por ID e `0` por prompt hash;
+- tokenization gate real: `passed`, truncation `0`, offset masks `100%`.
+
+Decisao: V406 e o primeiro candidato responsavel para um smoke adapter-only curto. Ainda nao autoriza submit. Autoriza apenas um treino curto com kill-switch no primeiro checkpoint.
+
+Promocao minima:
+
+- weak `>192/315`;
+- `equation>56`;
+- `bit>=136`;
+- `truncated=0`.
+
+Cancelar por FinOps se o primeiro checkpoint nao bater esses limites.
+
+### Step 6C - V407 literature/Kaggle double check
+
+Status: concluido; achados acionaveis inseridos.
+
+Fontes auditadas:
+
+- Kaggle/Nemotron: `konbu17/bit-manipulation-solver-cot-generator`, `mohankrishnathalla/nemotron-6-puzzle-types-decoded-rule-solvers`, `huikang/end-to-end-finetuning-for-lb-0-85`;
+- Kaggle/program synthesis: `michaelhodel/program-synthesis-starter-notebook`, `marcshade/three-tier-dsl-based-program-synthesis`, `francisbanda/arc-agi-2-mdl-program-synthesis-solver`;
+- literatura: FlashFill/PBE, SyGuS/CEGIS, Z3 bit-vectors, DreamCoder/neural-guided synthesis.
+
+Achados reais:
+
+- `bit_manipulation` deve expandir o gate exato para funcoes booleanas assimetricas `INHIB(a,b)=a AND NOT b` e `IMPL(a,b)=NOT a OR b`; variantes reversas vem de pares ordenados.
+- `MAJ`, `CH`, `XOR3` so entram como fallback raro e com verificacao em todos os exemplos.
+- CoT de bit deve ser high-confidence; low-confidence/bruteforce fica fora de treino porque historicamente causa regressao.
+- `equation_transform` deve seguir PBE/SyGuS: DSL pequena, busca de programa curto, verificacao contra todos os exemplos e abstencao quando houver ambiguidade.
+- ARC/program-synthesis reforca tie-break por programa curto/MDL e nao por primeira hipotese fraca.
+
+Mudanca de plano:
+
+1. implementar gate CPU V407/V408 para bit assimetrico e equation symbolic PBE;
+2. se o gate achar novo sinal no-loss, atualizar V406/V408 dataset;
+3. rodar somente smoke adapter-only curto;
+4. promover para full/package/submit apenas se bater V291 no weak gate.
+
+Artefato: `artifacts/v407_literature_kaggle_doublecheck/KG1_V407_LITERATURE_KAGGLE_DOUBLECHECK.md`.
+
 ### Step 7 - Full/package/submit
 
 Status: somente depois de weak gate.
@@ -539,11 +602,16 @@ Regras:
 
 ## Proxima Acao Unica
 
-Parar novos HF GPU jobs para LoRA/prompt ate existir sinal novo adapter-only. Caminho imediato:
+Seguir rota solver-first agressiva, mas com gate:
 
-1. manter V291/V290 checkpoint-6 como unico package submitavel (`823/947`, public `0.86`);
-2. nao submeter V400/V398/V391/V387 porque todos falham o gate;
-3. nao ha candidato local esquecido acima do baseline pelo V402;
-4. se o objetivo for obrigatoriamente subir hoje, a unica rota tecnica restante e obter ou descobrir um novo adapter externo/privado ainda nao avaliado que bata V291 no weak/full gate. Repetir prompt, SFT amplo, teacher SFT, extractor ou sweep local ja foi testado e rejeitado.
+1. implementar V407/V408 CPU gate para `bit_manipulation`:
+   - `INHIB`, `IMPL`, pares ordenados, `MAJ`, `CH`, `XOR3`;
+   - aceitar somente candidatos que batem todos os exemplos e nao causam perdas.
+2. implementar V407/V408 CPU gate para `equation_transform`:
+   - DSL PBE/SyGuS para concat, reverse concat, signed format, literal insert/delete, pontuacao/brackets e pequenos hibridos aritmeticos;
+   - aceitar somente programa unico/curto com verificacao total.
+3. se houver novo ganho CPU no-loss, atualizar V406 em V408 e rodar smoke HF/Kaggle curto.
+4. se o primeiro checkpoint nao superar V291 (`192/315`, `equation=56`, `bit=136`, trunc `0`), cancelar por FinOps.
+5. manter V291/V290 checkpoint-6 como unico package submitavel ate aparecer ganho adapter-only medido.
 
-Nao rodar novo HF training antes de prova de transferencia adapter-only. Projecao CPU, teacher, solver/verifier e loss baixo nao autorizam GPU sozinhos.
+Nao rodar broad SFT, prompt sweep ou job guiado por `eval_loss`. A decisao e por ACC, truncation e comparativo contra V291.
