@@ -1,0 +1,46 @@
+{
+  "adapter_repo": "felipesp1983/kg1-nemotron-lora-v290-rank19-micro-patch-smoke",
+  "adapter_subfolder": "checkpoint-6",
+  "branch": "v230-v226-complementarity",
+  "expected_commit": "e5643d925dea0747478df2f3a7af17e4f691bace",
+  "finops_gate": {
+    "cancel_if": "Job fails hardware/load checks, stalls, or raw-output collection cannot feed V435.",
+    "family_caps": {
+      "bit_manipulation": 80,
+      "equation_transform": 200
+    },
+    "max_unit_cost_usd_per_min": 0.09,
+    "timeout_seconds": 7200
+  },
+  "flavor": "h200",
+  "generated_at_utc": "2026-05-15T14:19:25.561856+00:00",
+  "hardware": {
+    "accelerator_model": "H200",
+    "accelerator_quantity": "1",
+    "accelerator_vram": "141 GB",
+    "cpu": "23 vCPU",
+    "name": "h200",
+    "pretty_name": "Nvidia H200",
+    "ram": "256 GB",
+    "unit_cost_usd": 0.083333,
+    "unit_label": "minute"
+  },
+  "image": "vllm/vllm-openai:v0.20.1",
+  "job_id": "6a072bade48bea4538b9e4e2",
+  "job_status": "RUNNING",
+  "job_url": "https://huggingface.co/jobs/felipesp1983/6a072bade48bea4538b9e4e2",
+  "namespace": "felipesp1983",
+  "next_action": "Monitor logs every 40 seconds, then rerun V435 with uploaded raw outputs.",
+  "output_path_in_repo": "runs/v435c-adapter-probe-raw-20260515T141924Z",
+  "output_repo": "felipesp1983/kg1-v435c-adapter-probe-raw-outputs",
+  "output_repo_type": "dataset",
+  "run_id": "v435c-adapter-probe-raw-20260515T141924Z",
+  "source_policy": {
+    "answers_input": false,
+    "purpose": "Collect raw outputs for CPU hard-negative gate.",
+    "scoring": false,
+    "submission": false,
+    "training": false
+  },
+  "version": "v435c_adapter_probe_raw_outputs"
+}

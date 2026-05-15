@@ -206,7 +206,7 @@ Decisao: o pack V435B e permitido para coleta de raw outputs reais do adapter. E
 
 ### V435C - Adapter Probe Raw Outputs
 
-Status: pronto para execucao HF inference-only.
+Status: em execucao HF inference-only.
 
 Artefatos preparados:
 
@@ -228,6 +228,23 @@ Contrato:
 | cost gate | `unit_cost_usd <= 0.09/min` |
 
 Objetivo: obter `raw_output`, `prediction`, prompt hash, rendered prompt hash, decode config e identidade do adapter para reexecutar V435 com hard negatives reais. Se V435C falhar por OOM/infra, tentar H200 somente se a coleta ainda for o menor gasto para desbloquear o gate; caso contrario cancelar por FinOps.
+
+Execucoes:
+
+| Run | Hardware | Status | Decisao |
+|---|---|---|---|
+| `v435c-adapter-probe-raw-20260515T141708Z` | `a100-large` | erro rapido | driver A100 incompatível com imagem CUDA 13; nao insistir nessa combinacao |
+| `v435c-adapter-probe-raw-20260515T141924Z` | `h200` | rodando | manter enquanto gerar outputs e nao houver OOM/stall |
+
+### V435D - Adapter Probe Output Analysis
+
+Status: preparado.
+
+Artefato:
+
+- `scripts/analyze_v435d_adapter_probe_outputs.py`
+
+Objetivo: depois que V435C publicar `raw_outputs.csv`, juntar os outputs com `competition_train.csv` por `id`, somente entao usar a resposta publica de treino para medir quais prompts permitidos o adapter errou. Essa etapa gera inventario de misses por familia e deve alimentar o construtor de pares certificados. Ela nao libera treino sozinha.
 
 ## V436 - Short Adapter-Only Smoke
 
