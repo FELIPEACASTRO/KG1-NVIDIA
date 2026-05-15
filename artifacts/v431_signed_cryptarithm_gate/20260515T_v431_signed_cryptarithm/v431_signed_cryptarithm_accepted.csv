@@ -1,0 +1,2 @@
+id,answer,old_prediction,new_prediction,old_correct,new_correct,accepted,rejection_reason,candidate_count,proof
+99d6a3b5,?()<,(<)),?()<,False,True,True,,2,"mul__minimal; ops={""%"": ""mul""}; map={""!"": 7, ""#"": 5, ""("": 6, "")"": 4, ""<"": 0, ""?"": 2, ""["": 9, ""^"": 1, ""`"": 8, ""{"": 3}"

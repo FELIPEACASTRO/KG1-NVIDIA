@@ -1,0 +1,51 @@
+{
+  "accepted_ids": [
+    "99d6a3b5"
+  ],
+  "accepted_known_v414_gains": 1,
+  "accepted_known_v414_ids": [
+    "99d6a3b5"
+  ],
+  "accepted_new_gains": 0,
+  "accepted_new_ids": [],
+  "accepted_total_gains": 1,
+  "ambiguous_rows": 4,
+  "audit_rows": 155,
+  "baseline_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v342_acc_first_diagnostic\\v290_checkpoint6_baseline_predictions.csv",
+  "baseline_score": {
+    "correct": 192,
+    "families": {
+      "bit_manipulation": {
+        "correct": 136,
+        "rows": 160
+      },
+      "equation_transform": {
+        "correct": 56,
+        "rows": 155
+      }
+    },
+    "truncated": 0
+  },
+  "candidate_status_counts": {
+    "abstain": 149,
+    "accepted": 1,
+    "ambiguous": 4,
+    "candidate": 1
+  },
+  "conflict_rows": 0,
+  "generated_at_utc": "2026-05-15T10:35:07.369844+00:00",
+  "hf_gpu_allowed": false,
+  "projection": {
+    "bit_delta": 0,
+    "bit_manipulation_correct": 136,
+    "equation_delta": 1,
+    "equation_transform_correct": 57,
+    "total_correct": 193,
+    "total_delta": 1,
+    "truncated": 0,
+    "truncated_delta": 0
+  },
+  "schema_version": "kg1_v431_signed_cryptarithm_gate_v1",
+  "unique_candidate_rows": 2,
+  "v414_accepted_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v414_cpu_teacher_meta_gate\\20260515T_v414_cpu_teacher_meta_gate\\v414_accepted_union.csv"
+}
