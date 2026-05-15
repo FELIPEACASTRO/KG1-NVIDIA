@@ -1,0 +1,1126 @@
+id,family,source,status,prediction,answer,baseline_prediction,baseline_correct,candidate_correct,accepted,reason,proof
+e518256e,equation_transform,v408_equation_symbolic_pbe,abstain,,84,84,True,False,False,numeric_same_operator_extended,same_operator_examples=1 below_min=2
+09d5ee68,equation_transform,v408_equation_symbolic_pbe,abstain,,!?'!,|:>>,False,False,False,symbolic_char_transducer,no_pair_mapping
+09d5ee68,equation_transform,v408_equation_symbolic_pbe,abstain,,!?'!,|:>>,False,False,False,symbolic_delete_selected_chars,delete_char_sets=; unique_prediction_count=0
+09d5ee68,equation_transform,v408_equation_symbolic_pbe,abstain,,!?'!,|:>>,False,False,False,symbolic_keep_selected_chars,keep_char_sets=; unique_prediction_count=0
+09d5ee68,equation_transform,v408_equation_symbolic_pbe,abstain,,!?'!,|:>>,False,False,False,symbolic_prefix_until_marker,markers=''; unique_prediction_count=0
+09d5ee68,equation_transform,v408_equation_symbolic_pbe,abstain,,!?'!,|:>>,False,False,False,symbolic_suffix_after_marker,markers=''; unique_prediction_count=0
+09d5ee68,equation_transform,v408_equation_symbolic_pbe,abstain,,!?'!,|:>>,False,False,False,symbolic_prefix_before_last_marker,markers=''; unique_prediction_count=0
+09d5ee68,equation_transform,v408_equation_symbolic_pbe,abstain,,!?'!,|:>>,False,False,False,symbolic_suffix_after_last_marker,markers=''; unique_prediction_count=0
+09d5ee68,equation_transform,v408_equation_symbolic_pbe,abstain,,!?'!,|:>>,False,False,False,symbolic_remove_first_marker,markers=''; unique_prediction_count=0
+09d5ee68,equation_transform,v408_equation_symbolic_pbe,abstain,,!?'!,|:>>,False,False,False,symbolic_position_template,nonuniform_rhs_lengths
+09d5ee68,equation_transform,v408_equation_symbolic_pbe,abstain,,!?'!,|:>>,False,False,False,symbolic_operator_index_template,programs=; unique_prediction_count=0
+7e5b8c12,bit_manipulation,v408_bit_unique_value,abstain,,10110000,10110000,True,False,False,ambiguous_prediction_bit_0,"{""candidate_counts"": [5], ""reason"": ""ambiguous_prediction_bit_0"", ""status"": ""abstain""}"
+00457d26,equation_transform,v408_equation_symbolic_pbe,abstain,,@&,\boxed[[!'},False,False,False,symbolic_char_transducer,no_global_mapping
+00457d26,equation_transform,v408_equation_symbolic_pbe,abstain,,@&,\boxed[[!'},False,False,False,symbolic_delete_selected_chars,delete_char_sets=; unique_prediction_count=0
+00457d26,equation_transform,v408_equation_symbolic_pbe,abstain,,@&,\boxed[[!'},False,False,False,symbolic_keep_selected_chars,keep_char_sets=; unique_prediction_count=0
+00457d26,equation_transform,v408_equation_symbolic_pbe,abstain,,@&,\boxed[[!'},False,False,False,symbolic_prefix_until_marker,markers=''; unique_prediction_count=0
+00457d26,equation_transform,v408_equation_symbolic_pbe,abstain,,@&,\boxed[[!'},False,False,False,symbolic_suffix_after_marker,markers=''; unique_prediction_count=0
+00457d26,equation_transform,v408_equation_symbolic_pbe,abstain,,@&,\boxed[[!'},False,False,False,symbolic_prefix_before_last_marker,markers=''; unique_prediction_count=0
+00457d26,equation_transform,v408_equation_symbolic_pbe,abstain,,@&,\boxed[[!'},False,False,False,symbolic_suffix_after_last_marker,markers=''; unique_prediction_count=0
+00457d26,equation_transform,v408_equation_symbolic_pbe,abstain,,@&,\boxed[[!'},False,False,False,symbolic_remove_first_marker,markers=''; unique_prediction_count=0
+00457d26,equation_transform,v408_equation_symbolic_pbe,abstain,,@&,\boxed[[!'},False,False,False,symbolic_position_template,nonuniform_rhs_lengths
+00457d26,equation_transform,v408_equation_symbolic_pbe,abstain,,@&,\boxed[[!'},False,False,False,symbolic_operator_index_template,programs=; unique_prediction_count=0
+518deb39,equation_transform,v408_equation_symbolic_pbe,abstain,,$,{}>{,False,False,False,symbolic_char_transducer,no_global_mapping
+518deb39,equation_transform,v408_equation_symbolic_pbe,abstain,,$,{}>{,False,False,False,symbolic_delete_selected_chars,delete_char_sets=; unique_prediction_count=0
+518deb39,equation_transform,v408_equation_symbolic_pbe,abstain,,$,{}>{,False,False,False,symbolic_keep_selected_chars,keep_char_sets=; unique_prediction_count=0
+518deb39,equation_transform,v408_equation_symbolic_pbe,abstain,,$,{}>{,False,False,False,symbolic_prefix_until_marker,markers=''; unique_prediction_count=0
+518deb39,equation_transform,v408_equation_symbolic_pbe,abstain,,$,{}>{,False,False,False,symbolic_suffix_after_marker,markers=''; unique_prediction_count=0
+518deb39,equation_transform,v408_equation_symbolic_pbe,abstain,,$,{}>{,False,False,False,symbolic_prefix_before_last_marker,markers=''; unique_prediction_count=0
+518deb39,equation_transform,v408_equation_symbolic_pbe,abstain,,$,{}>{,False,False,False,symbolic_suffix_after_last_marker,markers=''; unique_prediction_count=0
+518deb39,equation_transform,v408_equation_symbolic_pbe,abstain,,$,{}>{,False,False,False,symbolic_remove_first_marker,markers=''; unique_prediction_count=0
+518deb39,equation_transform,v408_equation_symbolic_pbe,abstain,,$,{}>{,False,False,False,symbolic_position_template,nonuniform_rhs_lengths
+518deb39,equation_transform,v408_equation_symbolic_pbe,abstain,,$,{}>{,False,False,False,symbolic_operator_index_template,programs=; unique_prediction_count=0
+78616706,bit_manipulation,v408_bit_unique_value,abstain,,00000111,00000111,True,False,False,ambiguous_prediction_bit_0,"{""candidate_counts"": [14], ""reason"": ""ambiguous_prediction_bit_0"", ""status"": ""abstain""}"
+82109e34,equation_transform,v408_equation_symbolic_pbe,abstain,,-@>,'^^^',False,False,False,symbolic_char_transducer,no_global_mapping
+82109e34,equation_transform,v408_equation_symbolic_pbe,abstain,,-@>,'^^^',False,False,False,symbolic_delete_selected_chars,delete_char_sets=; unique_prediction_count=0
+82109e34,equation_transform,v408_equation_symbolic_pbe,abstain,,-@>,'^^^',False,False,False,symbolic_keep_selected_chars,keep_char_sets=; unique_prediction_count=0
+82109e34,equation_transform,v408_equation_symbolic_pbe,abstain,,-@>,'^^^',False,False,False,symbolic_prefix_until_marker,markers=''; unique_prediction_count=0
+82109e34,equation_transform,v408_equation_symbolic_pbe,abstain,,-@>,'^^^',False,False,False,symbolic_suffix_after_marker,markers=''; unique_prediction_count=0
+82109e34,equation_transform,v408_equation_symbolic_pbe,abstain,,-@>,'^^^',False,False,False,symbolic_prefix_before_last_marker,markers=''; unique_prediction_count=0
+82109e34,equation_transform,v408_equation_symbolic_pbe,abstain,,-@>,'^^^',False,False,False,symbolic_suffix_after_last_marker,markers=''; unique_prediction_count=0
+82109e34,equation_transform,v408_equation_symbolic_pbe,abstain,,-@>,'^^^',False,False,False,symbolic_remove_first_marker,markers=''; unique_prediction_count=0
+82109e34,equation_transform,v408_equation_symbolic_pbe,abstain,,-@>,'^^^',False,False,False,symbolic_position_template,nonuniform_rhs_lengths
+82109e34,equation_transform,v408_equation_symbolic_pbe,abstain,,-@>,'^^^',False,False,False,symbolic_operator_index_template,programs=; unique_prediction_count=0
+5e67b1a1,equation_transform,v408_equation_symbolic_pbe,abstain,,63,63,True,False,False,numeric_same_operator_extended,same_operator_examples=2; rules=; unique_prediction_count=0
+c7077b21,bit_manipulation,v408_bit_unique_value,abstain,,00010110,00010110,True,False,False,ambiguous_prediction_bit_2,"{""candidate_counts"": [2, 2, 16], ""reason"": ""ambiguous_prediction_bit_2"", ""status"": ""abstain""}"
+fb5a7b9e,bit_manipulation,v408_bit_unique_value,abstain,,11111010,11111010,True,False,False,ambiguous_prediction_bit_0,"{""candidate_counts"": [7], ""reason"": ""ambiguous_prediction_bit_0"", ""status"": ""abstain""}"
+e1728524,equation_transform,v408_equation_symbolic_pbe,abstain,,1089,0,False,False,False,numeric_same_operator_extended,same_operator_examples=0 below_min=2
+839e7350,bit_manipulation,v408_bit_unique_value,abstain,,00111011,00111011,True,False,False,ambiguous_prediction_bit_2,"{""candidate_counts"": [2, 2, 5], ""reason"": ""ambiguous_prediction_bit_2"", ""status"": ""abstain""}"
+a365e304,bit_manipulation,v408_bit_unique_value,abstain,,11011011,11011011,True,False,False,ambiguous_prediction_bit_0,"{""candidate_counts"": [5], ""reason"": ""ambiguous_prediction_bit_0"", ""status"": ""abstain""}"
+e3bf0c2c,equation_transform,v408_equation_symbolic_pbe,abstain,,"""`",@`',False,False,False,symbolic_char_transducer,no_global_mapping
+e3bf0c2c,equation_transform,v408_equation_symbolic_pbe,abstain,,"""`",@`',False,False,False,symbolic_delete_selected_chars,delete_char_sets=; unique_prediction_count=0
+e3bf0c2c,equation_transform,v408_equation_symbolic_pbe,abstain,,"""`",@`',False,False,False,symbolic_keep_selected_chars,keep_char_sets=; unique_prediction_count=0
+e3bf0c2c,equation_transform,v408_equation_symbolic_pbe,abstain,,"""`",@`',False,False,False,symbolic_prefix_until_marker,markers=''; unique_prediction_count=0
+e3bf0c2c,equation_transform,v408_equation_symbolic_pbe,abstain,,"""`",@`',False,False,False,symbolic_suffix_after_marker,markers=''; unique_prediction_count=0
+e3bf0c2c,equation_transform,v408_equation_symbolic_pbe,abstain,,"""`",@`',False,False,False,symbolic_prefix_before_last_marker,markers=''; unique_prediction_count=0
+e3bf0c2c,equation_transform,v408_equation_symbolic_pbe,abstain,,"""`",@`',False,False,False,symbolic_suffix_after_last_marker,markers=''; unique_prediction_count=0
+e3bf0c2c,equation_transform,v408_equation_symbolic_pbe,abstain,,"""`",@`',False,False,False,symbolic_remove_first_marker,markers=''; unique_prediction_count=0
+e3bf0c2c,equation_transform,v408_equation_symbolic_pbe,abstain,,"""`",@`',False,False,False,symbolic_position_template,nonuniform_rhs_lengths
+e3bf0c2c,equation_transform,v408_equation_symbolic_pbe,abstain,,"""`",@`',False,False,False,symbolic_operator_index_template,programs=; unique_prediction_count=0
+fdbdf50c,equation_transform,v408_equation_symbolic_pbe,abstain,,"-\""",|?|,False,False,False,symbolic_char_transducer,no_global_mapping
+fdbdf50c,equation_transform,v408_equation_symbolic_pbe,abstain,,"-\""",|?|,False,False,False,symbolic_delete_selected_chars,delete_char_sets=; unique_prediction_count=0
+fdbdf50c,equation_transform,v408_equation_symbolic_pbe,abstain,,"-\""",|?|,False,False,False,symbolic_keep_selected_chars,keep_char_sets=; unique_prediction_count=0
+fdbdf50c,equation_transform,v408_equation_symbolic_pbe,abstain,,"-\""",|?|,False,False,False,symbolic_prefix_until_marker,markers=''; unique_prediction_count=0
+fdbdf50c,equation_transform,v408_equation_symbolic_pbe,abstain,,"-\""",|?|,False,False,False,symbolic_suffix_after_marker,markers=''; unique_prediction_count=0
+fdbdf50c,equation_transform,v408_equation_symbolic_pbe,abstain,,"-\""",|?|,False,False,False,symbolic_prefix_before_last_marker,markers=''; unique_prediction_count=0
+fdbdf50c,equation_transform,v408_equation_symbolic_pbe,abstain,,"-\""",|?|,False,False,False,symbolic_suffix_after_last_marker,markers=''; unique_prediction_count=0
+fdbdf50c,equation_transform,v408_equation_symbolic_pbe,abstain,,"-\""",|?|,False,False,False,symbolic_remove_first_marker,markers=''; unique_prediction_count=0
+fdbdf50c,equation_transform,v408_equation_symbolic_pbe,abstain,,"-\""",|?|,False,False,False,symbolic_position_template,nonuniform_rhs_lengths
+fdbdf50c,equation_transform,v408_equation_symbolic_pbe,abstain,,"-\""",|?|,False,False,False,symbolic_operator_index_template,programs=; unique_prediction_count=0
+f3971b9a,bit_manipulation,v408_bit_unique_value,abstain,,00011001,00011001,True,False,False,ambiguous_prediction_bit_3,"{""candidate_counts"": [2, 6, 4, 10], ""reason"": ""ambiguous_prediction_bit_3"", ""status"": ""abstain""}"
+ab71eaa0,bit_manipulation,v408_bit_unique_value,abstain,,00010010,00010010,True,False,False,ambiguous_prediction_bit_0,"{""candidate_counts"": [5], ""reason"": ""ambiguous_prediction_bit_0"", ""status"": ""abstain""}"
+47c1d8f5,equation_transform,v408_equation_symbolic_pbe,abstain,,]%],/`%`,False,False,False,symbolic_char_transducer,no_global_mapping
+47c1d8f5,equation_transform,v408_equation_symbolic_pbe,abstain,,]%],/`%`,False,False,False,symbolic_delete_selected_chars,delete_char_sets=; unique_prediction_count=0
+47c1d8f5,equation_transform,v408_equation_symbolic_pbe,abstain,,]%],/`%`,False,False,False,symbolic_keep_selected_chars,keep_char_sets=; unique_prediction_count=0
+47c1d8f5,equation_transform,v408_equation_symbolic_pbe,abstain,,]%],/`%`,False,False,False,symbolic_prefix_until_marker,markers=''; unique_prediction_count=0
+47c1d8f5,equation_transform,v408_equation_symbolic_pbe,abstain,,]%],/`%`,False,False,False,symbolic_suffix_after_marker,markers=''; unique_prediction_count=0
+47c1d8f5,equation_transform,v408_equation_symbolic_pbe,abstain,,]%],/`%`,False,False,False,symbolic_prefix_before_last_marker,markers=''; unique_prediction_count=0
+47c1d8f5,equation_transform,v408_equation_symbolic_pbe,abstain,,]%],/`%`,False,False,False,symbolic_suffix_after_last_marker,markers=''; unique_prediction_count=0
+47c1d8f5,equation_transform,v408_equation_symbolic_pbe,abstain,,]%],/`%`,False,False,False,symbolic_remove_first_marker,markers=''; unique_prediction_count=0
+47c1d8f5,equation_transform,v408_equation_symbolic_pbe,abstain,,]%],/`%`,False,False,False,symbolic_position_template,nonuniform_rhs_lengths
+47c1d8f5,equation_transform,v408_equation_symbolic_pbe,abstain,,]%],/`%`,False,False,False,symbolic_operator_index_template,programs=; unique_prediction_count=0
+bfee75d5,bit_manipulation,v408_bit_unique_value,abstain,,01000010,01000010,True,False,False,ambiguous_prediction_bit_2,"{""candidate_counts"": [5, 7, 3], ""reason"": ""ambiguous_prediction_bit_2"", ""status"": ""abstain""}"
+f9a33aa1,equation_transform,v408_equation_symbolic_pbe,abstain,,/((`,@($/,False,False,False,symbolic_char_transducer,no_pair_mapping
+f9a33aa1,equation_transform,v408_equation_symbolic_pbe,abstain,,/((`,@($/,False,False,False,symbolic_delete_selected_chars,delete_char_sets=; unique_prediction_count=0
+f9a33aa1,equation_transform,v408_equation_symbolic_pbe,abstain,,/((`,@($/,False,False,False,symbolic_keep_selected_chars,keep_char_sets=; unique_prediction_count=0
+f9a33aa1,equation_transform,v408_equation_symbolic_pbe,abstain,,/((`,@($/,False,False,False,symbolic_prefix_until_marker,markers=''; unique_prediction_count=0
+f9a33aa1,equation_transform,v408_equation_symbolic_pbe,abstain,,/((`,@($/,False,False,False,symbolic_suffix_after_marker,markers=''; unique_prediction_count=0
+f9a33aa1,equation_transform,v408_equation_symbolic_pbe,abstain,,/((`,@($/,False,False,False,symbolic_prefix_before_last_marker,markers=''; unique_prediction_count=0
+f9a33aa1,equation_transform,v408_equation_symbolic_pbe,abstain,,/((`,@($/,False,False,False,symbolic_suffix_after_last_marker,markers=''; unique_prediction_count=0
+f9a33aa1,equation_transform,v408_equation_symbolic_pbe,abstain,,/((`,@($/,False,False,False,symbolic_remove_first_marker,markers=''; unique_prediction_count=0
+f9a33aa1,equation_transform,v408_equation_symbolic_pbe,abstain,,/((`,@($/,False,False,False,symbolic_position_template,nonuniform_rhs_lengths
+f9a33aa1,equation_transform,v408_equation_symbolic_pbe,abstain,,/((`,@($/,False,False,False,symbolic_operator_index_template,programs=; unique_prediction_count=0
+1abaffca,bit_manipulation,v408_bit_unique_value,abstain,,01000000,01011000,False,False,False,ambiguous_prediction_bit_0,"{""candidate_counts"": [18], ""reason"": ""ambiguous_prediction_bit_0"", ""status"": ""abstain""}"
+9f2fae58,equation_transform,v408_equation_symbolic_pbe,abstain,,7272,7272,True,False,False,numeric_same_operator_extended,same_operator_examples=2; rules=; unique_prediction_count=0
+f9799a68,equation_transform,v408_equation_symbolic_pbe,abstain,,&:/?,:^?\,False,False,False,symbolic_char_transducer,no_global_mapping
+f9799a68,equation_transform,v408_equation_symbolic_pbe,abstain,,&:/?,:^?\,False,False,False,symbolic_delete_selected_chars,delete_char_sets=; unique_prediction_count=0
+f9799a68,equation_transform,v408_equation_symbolic_pbe,abstain,,&:/?,:^?\,False,False,False,symbolic_keep_selected_chars,keep_char_sets=; unique_prediction_count=0
+f9799a68,equation_transform,v408_equation_symbolic_pbe,abstain,,&:/?,:^?\,False,False,False,symbolic_prefix_until_marker,markers=''; unique_prediction_count=0
+f9799a68,equation_transform,v408_equation_symbolic_pbe,abstain,,&:/?,:^?\,False,False,False,symbolic_suffix_after_marker,markers=''; unique_prediction_count=0
+f9799a68,equation_transform,v408_equation_symbolic_pbe,abstain,,&:/?,:^?\,False,False,False,symbolic_prefix_before_last_marker,markers=''; unique_prediction_count=0
+f9799a68,equation_transform,v408_equation_symbolic_pbe,abstain,,&:/?,:^?\,False,False,False,symbolic_suffix_after_last_marker,markers=''; unique_prediction_count=0
+f9799a68,equation_transform,v408_equation_symbolic_pbe,abstain,,&:/?,:^?\,False,False,False,symbolic_remove_first_marker,markers=''; unique_prediction_count=0
+f9799a68,equation_transform,v408_equation_symbolic_pbe,abstain,,&:/?,:^?\,False,False,False,symbolic_position_template,nonuniform_rhs_lengths
+f9799a68,equation_transform,v408_equation_symbolic_pbe,abstain,,&:/?,:^?\,False,False,False,symbolic_operator_index_template,programs=; unique_prediction_count=0
+c24074a8,equation_transform,v408_equation_symbolic_pbe,abstain,,&/,]]]%,False,False,False,symbolic_char_transducer,no_global_mapping
+c24074a8,equation_transform,v408_equation_symbolic_pbe,abstain,,&/,]]]%,False,False,False,symbolic_delete_selected_chars,delete_char_sets=; unique_prediction_count=0
+c24074a8,equation_transform,v408_equation_symbolic_pbe,abstain,,&/,]]]%,False,False,False,symbolic_keep_selected_chars,keep_char_sets=; unique_prediction_count=0
+c24074a8,equation_transform,v408_equation_symbolic_pbe,abstain,,&/,]]]%,False,False,False,symbolic_prefix_until_marker,markers=''; unique_prediction_count=0
+c24074a8,equation_transform,v408_equation_symbolic_pbe,abstain,,&/,]]]%,False,False,False,symbolic_suffix_after_marker,markers=''; unique_prediction_count=0
+c24074a8,equation_transform,v408_equation_symbolic_pbe,abstain,,&/,]]]%,False,False,False,symbolic_prefix_before_last_marker,markers=''; unique_prediction_count=0
+c24074a8,equation_transform,v408_equation_symbolic_pbe,abstain,,&/,]]]%,False,False,False,symbolic_suffix_after_last_marker,markers=''; unique_prediction_count=0
+c24074a8,equation_transform,v408_equation_symbolic_pbe,abstain,,&/,]]]%,False,False,False,symbolic_remove_first_marker,markers=''; unique_prediction_count=0
+c24074a8,equation_transform,v408_equation_symbolic_pbe,abstain,,&/,]]]%,False,False,False,symbolic_position_template,nonuniform_rhs_lengths
+c24074a8,equation_transform,v408_equation_symbolic_pbe,abstain,,&/,]]]%,False,False,False,symbolic_operator_index_template,programs=; unique_prediction_count=0
+bc7618a7,bit_manipulation,v408_bit_unique_value,abstain,,00001100,00001100,True,False,False,ambiguous_prediction_bit_0,"{""candidate_counts"": [11], ""reason"": ""ambiguous_prediction_bit_0"", ""status"": ""abstain""}"
+893ffb06,equation_transform,v408_equation_symbolic_pbe,abstain,,-@',@``:,False,False,False,symbolic_char_transducer,no_global_mapping
+893ffb06,equation_transform,v408_equation_symbolic_pbe,abstain,,-@',@``:,False,False,False,symbolic_delete_selected_chars,delete_char_sets=; unique_prediction_count=0
+893ffb06,equation_transform,v408_equation_symbolic_pbe,abstain,,-@',@``:,False,False,False,symbolic_keep_selected_chars,keep_char_sets=; unique_prediction_count=0
+893ffb06,equation_transform,v408_equation_symbolic_pbe,abstain,,-@',@``:,False,False,False,symbolic_prefix_until_marker,markers=''; unique_prediction_count=0
+893ffb06,equation_transform,v408_equation_symbolic_pbe,abstain,,-@',@``:,False,False,False,symbolic_suffix_after_marker,markers=''; unique_prediction_count=0
+893ffb06,equation_transform,v408_equation_symbolic_pbe,abstain,,-@',@``:,False,False,False,symbolic_prefix_before_last_marker,markers=''; unique_prediction_count=0
+893ffb06,equation_transform,v408_equation_symbolic_pbe,abstain,,-@',@``:,False,False,False,symbolic_suffix_after_last_marker,markers=''; unique_prediction_count=0
+893ffb06,equation_transform,v408_equation_symbolic_pbe,abstain,,-@',@``:,False,False,False,symbolic_remove_first_marker,markers=''; unique_prediction_count=0
+893ffb06,equation_transform,v408_equation_symbolic_pbe,abstain,,-@',@``:,False,False,False,symbolic_position_template,nonuniform_rhs_lengths
+893ffb06,equation_transform,v408_equation_symbolic_pbe,abstain,,-@',@``:,False,False,False,symbolic_operator_index_template,programs=; unique_prediction_count=0
+cf4c04c0,equation_transform,v408_equation_symbolic_pbe,abstain,,-[,@|#|,False,False,False,symbolic_char_transducer,no_pair_mapping
+cf4c04c0,equation_transform,v408_equation_symbolic_pbe,abstain,,-[,@|#|,False,False,False,symbolic_delete_selected_chars,delete_char_sets=; unique_prediction_count=0
+cf4c04c0,equation_transform,v408_equation_symbolic_pbe,abstain,,-[,@|#|,False,False,False,symbolic_keep_selected_chars,keep_char_sets=; unique_prediction_count=0
+cf4c04c0,equation_transform,v408_equation_symbolic_pbe,abstain,,-[,@|#|,False,False,False,symbolic_prefix_until_marker,markers=''; unique_prediction_count=0
+cf4c04c0,equation_transform,v408_equation_symbolic_pbe,abstain,,-[,@|#|,False,False,False,symbolic_suffix_after_marker,markers=''; unique_prediction_count=0
+cf4c04c0,equation_transform,v408_equation_symbolic_pbe,abstain,,-[,@|#|,False,False,False,symbolic_prefix_before_last_marker,markers=''; unique_prediction_count=0
+cf4c04c0,equation_transform,v408_equation_symbolic_pbe,abstain,,-[,@|#|,False,False,False,symbolic_suffix_after_last_marker,markers=''; unique_prediction_count=0
+cf4c04c0,equation_transform,v408_equation_symbolic_pbe,abstain,,-[,@|#|,False,False,False,symbolic_remove_first_marker,markers=''; unique_prediction_count=0
+cf4c04c0,equation_transform,v408_equation_symbolic_pbe,abstain,,-[,@|#|,False,False,False,symbolic_position_template,nonuniform_rhs_lengths
+cf4c04c0,equation_transform,v408_equation_symbolic_pbe,abstain,,-[,@|#|,False,False,False,symbolic_operator_index_template,programs=; unique_prediction_count=0
+8e411cc7,equation_transform,v408_equation_symbolic_pbe,abstain,,]]],$&&,False,False,False,symbolic_char_transducer,no_global_mapping
+8e411cc7,equation_transform,v408_equation_symbolic_pbe,abstain,,]]],$&&,False,False,False,symbolic_delete_selected_chars,delete_char_sets=; unique_prediction_count=0
+8e411cc7,equation_transform,v408_equation_symbolic_pbe,abstain,,]]],$&&,False,False,False,symbolic_keep_selected_chars,keep_char_sets=; unique_prediction_count=0
+8e411cc7,equation_transform,v408_equation_symbolic_pbe,abstain,,]]],$&&,False,False,False,symbolic_prefix_until_marker,markers=''; unique_prediction_count=0
+8e411cc7,equation_transform,v408_equation_symbolic_pbe,abstain,,]]],$&&,False,False,False,symbolic_suffix_after_marker,markers=''; unique_prediction_count=0
+8e411cc7,equation_transform,v408_equation_symbolic_pbe,abstain,,]]],$&&,False,False,False,symbolic_prefix_before_last_marker,markers=''; unique_prediction_count=0
+8e411cc7,equation_transform,v408_equation_symbolic_pbe,abstain,,]]],$&&,False,False,False,symbolic_suffix_after_last_marker,markers=''; unique_prediction_count=0
+8e411cc7,equation_transform,v408_equation_symbolic_pbe,abstain,,]]],$&&,False,False,False,symbolic_remove_first_marker,markers=''; unique_prediction_count=0
+8e411cc7,equation_transform,v408_equation_symbolic_pbe,abstain,,]]],$&&,False,False,False,symbolic_position_template,nonuniform_rhs_lengths
+8e411cc7,equation_transform,v408_equation_symbolic_pbe,abstain,,]]],$&&,False,False,False,symbolic_operator_index_template,programs=; unique_prediction_count=0
+892d73b5,bit_manipulation,v408_bit_unique_value,abstain,,00010101,00010101,True,False,False,ambiguous_prediction_bit_0,"{""candidate_counts"": [10], ""reason"": ""ambiguous_prediction_bit_0"", ""status"": ""abstain""}"
+41e6cbfc,equation_transform,v408_equation_symbolic_pbe,abstain,,9318,9318,True,False,False,numeric_same_operator_extended,same_operator_examples=3; rules=; unique_prediction_count=0
+dea42835,equation_transform,v408_equation_symbolic_pbe,abstain,,['[/,['[/,True,False,False,symbolic_char_transducer,no_global_mapping
+dea42835,equation_transform,v408_equation_symbolic_pbe,abstain,,['[/,['[/,True,False,False,symbolic_delete_selected_chars,delete_char_sets=; unique_prediction_count=0
+dea42835,equation_transform,v408_equation_symbolic_pbe,abstain,,['[/,['[/,True,False,False,symbolic_keep_selected_chars,keep_char_sets=; unique_prediction_count=0
+dea42835,equation_transform,v408_equation_symbolic_pbe,abstain,,['[/,['[/,True,False,False,symbolic_prefix_until_marker,markers=''; unique_prediction_count=0
+dea42835,equation_transform,v408_equation_symbolic_pbe,abstain,,['[/,['[/,True,False,False,symbolic_suffix_after_marker,markers=''; unique_prediction_count=0
+dea42835,equation_transform,v408_equation_symbolic_pbe,abstain,,['[/,['[/,True,False,False,symbolic_prefix_before_last_marker,markers=''; unique_prediction_count=0
+dea42835,equation_transform,v408_equation_symbolic_pbe,abstain,,['[/,['[/,True,False,False,symbolic_suffix_after_last_marker,markers=''; unique_prediction_count=0
+dea42835,equation_transform,v408_equation_symbolic_pbe,abstain,,['[/,['[/,True,False,False,symbolic_remove_first_marker,markers=''; unique_prediction_count=0
+dea42835,equation_transform,v408_equation_symbolic_pbe,abstain,,['[/,['[/,True,False,False,symbolic_position_template,nonuniform_rhs_lengths
+dea42835,equation_transform,v408_equation_symbolic_pbe,abstain,,['[/,['[/,True,False,False,symbolic_operator_index_template,programs=; unique_prediction_count=0
+48c25e0e,equation_transform,v408_equation_symbolic_pbe,abstain,,53,32,False,False,False,numeric_same_operator_extended,same_operator_examples=0 below_min=2
+e6d2a064,bit_manipulation,v408_bit_unique_value,abstain,,11100011,11100010,False,False,False,ambiguous_prediction_bit_0,"{""candidate_counts"": [14], ""reason"": ""ambiguous_prediction_bit_0"", ""status"": ""abstain""}"
+a1d2bb0c,bit_manipulation,v408_bit_unique_value,abstain,,00100010,00100010,True,False,False,ambiguous_prediction_bit_0,"{""candidate_counts"": [9], ""reason"": ""ambiguous_prediction_bit_0"", ""status"": ""abstain""}"
+4e4fb429,bit_manipulation,v408_bit_unique_value,candidate,10111110,10111110,10111110,True,True,False,unique_value_per_bit,"b0:OR(2,4)|OR(4,2); b1:OR(3,5)|OR(5,3)|XNOR(5,7)|RIMPL(5,7)|XNOR(7,5)|IMPL(7,5); b2:IMPL(0,1)|NAND(0,3)|IMPL(0,4)|RIMPL(1,0)|OR(1,6)|NAND(3,0); b3:ID(7)|IMPL(0,7)|OR(1,7)|OR(2,6)|OR(2,7)|IMPL(3,5); b4:C1|OR(0,6)|OR(0,7)|NAND(1,3)|IMPL(1,7)|IMPL(2,7); b5:ID(7)|IMPL(0,7)|OR(1,7)|OR(2,6)|OR(2,7)|IMPL(3,5); b6:ID(2)|AND(2,7)|AND(7,2); b7:ID(3)|RINHIB(1,3)|NOR(1,4)|INHIB(3,1)|INHIB(3,4)|RIMPL(3,7)"
+7ef4d5d6,equation_transform,v408_equation_symbolic_pbe,abstain,,>42,>42,True,False,False,numeric_same_operator_extended,same_operator_examples=2; rules=; unique_prediction_count=0
+3ee36e0a,equation_transform,v408_equation_symbolic_pbe,abstain,,-51,-51,True,False,False,numeric_same_operator_extended,same_operator_examples=1 below_min=2
+39c237c7,equation_transform,v408_equation_symbolic_pbe,abstain,,{]``,{]``,True,False,False,symbolic_char_transducer,no_pair_mapping
+39c237c7,equation_transform,v408_equation_symbolic_pbe,abstain,,{]``,{]``,True,False,False,symbolic_delete_selected_chars,delete_char_sets=; unique_prediction_count=0
+39c237c7,equation_transform,v408_equation_symbolic_pbe,abstain,,{]``,{]``,True,False,False,symbolic_keep_selected_chars,keep_char_sets=; unique_prediction_count=0
+39c237c7,equation_transform,v408_equation_symbolic_pbe,abstain,,{]``,{]``,True,False,False,symbolic_prefix_until_marker,markers=''; unique_prediction_count=0
+39c237c7,equation_transform,v408_equation_symbolic_pbe,abstain,,{]``,{]``,True,False,False,symbolic_suffix_after_marker,markers=''; unique_prediction_count=0
+39c237c7,equation_transform,v408_equation_symbolic_pbe,abstain,,{]``,{]``,True,False,False,symbolic_prefix_before_last_marker,markers=''; unique_prediction_count=0
+39c237c7,equation_transform,v408_equation_symbolic_pbe,abstain,,{]``,{]``,True,False,False,symbolic_suffix_after_last_marker,markers=''; unique_prediction_count=0
+39c237c7,equation_transform,v408_equation_symbolic_pbe,abstain,,{]``,{]``,True,False,False,symbolic_remove_first_marker,markers=''; unique_prediction_count=0
+39c237c7,equation_transform,v408_equation_symbolic_pbe,abstain,,{]``,{]``,True,False,False,symbolic_position_template,no_source_for_output_index=0
+39c237c7,equation_transform,v408_equation_symbolic_pbe,abstain,,{]``,{]``,True,False,False,symbolic_operator_index_template,programs=; unique_prediction_count=0
+963e85bb,equation_transform,v408_equation_symbolic_pbe,abstain,,76,76,True,False,False,numeric_same_operator_extended,same_operator_examples=1 below_min=2
+a98d4d53,equation_transform,v408_equation_symbolic_pbe,abstain,,-),!$$[,False,False,False,symbolic_char_transducer,no_global_mapping
+a98d4d53,equation_transform,v408_equation_symbolic_pbe,abstain,,-),!$$[,False,False,False,symbolic_delete_selected_chars,delete_char_sets=; unique_prediction_count=0
+a98d4d53,equation_transform,v408_equation_symbolic_pbe,abstain,,-),!$$[,False,False,False,symbolic_keep_selected_chars,keep_char_sets=; unique_prediction_count=0
+a98d4d53,equation_transform,v408_equation_symbolic_pbe,abstain,,-),!$$[,False,False,False,symbolic_prefix_until_marker,markers=''; unique_prediction_count=0
+a98d4d53,equation_transform,v408_equation_symbolic_pbe,abstain,,-),!$$[,False,False,False,symbolic_suffix_after_marker,markers=''; unique_prediction_count=0
+a98d4d53,equation_transform,v408_equation_symbolic_pbe,abstain,,-),!$$[,False,False,False,symbolic_prefix_before_last_marker,markers=''; unique_prediction_count=0
+a98d4d53,equation_transform,v408_equation_symbolic_pbe,abstain,,-),!$$[,False,False,False,symbolic_suffix_after_last_marker,markers=''; unique_prediction_count=0
+a98d4d53,equation_transform,v408_equation_symbolic_pbe,abstain,,-),!$$[,False,False,False,symbolic_remove_first_marker,markers=''; unique_prediction_count=0
+a98d4d53,equation_transform,v408_equation_symbolic_pbe,abstain,,-),!$$[,False,False,False,symbolic_position_template,nonuniform_rhs_lengths
+a98d4d53,equation_transform,v408_equation_symbolic_pbe,abstain,,-),!$$[,False,False,False,symbolic_operator_index_template,programs=; unique_prediction_count=0
+0e70c867,bit_manipulation,v408_bit_unique_value,abstain,,01000000,01001100,False,False,False,ambiguous_prediction_bit_1,"{""candidate_counts"": [2, 10], ""reason"": ""ambiguous_prediction_bit_1"", ""status"": ""abstain""}"
+59733f94,equation_transform,v408_equation_symbolic_pbe,abstain,,/,$/>/,False,False,False,symbolic_char_transducer,no_global_mapping
+59733f94,equation_transform,v408_equation_symbolic_pbe,abstain,,/,$/>/,False,False,False,symbolic_delete_selected_chars,delete_char_sets=; unique_prediction_count=0
+59733f94,equation_transform,v408_equation_symbolic_pbe,abstain,,/,$/>/,False,False,False,symbolic_keep_selected_chars,keep_char_sets=; unique_prediction_count=0
+59733f94,equation_transform,v408_equation_symbolic_pbe,abstain,,/,$/>/,False,False,False,symbolic_prefix_until_marker,markers=''; unique_prediction_count=0
+59733f94,equation_transform,v408_equation_symbolic_pbe,abstain,,/,$/>/,False,False,False,symbolic_suffix_after_marker,markers=''; unique_prediction_count=0
+59733f94,equation_transform,v408_equation_symbolic_pbe,abstain,,/,$/>/,False,False,False,symbolic_prefix_before_last_marker,markers=''; unique_prediction_count=0
+59733f94,equation_transform,v408_equation_symbolic_pbe,abstain,,/,$/>/,False,False,False,symbolic_suffix_after_last_marker,markers=''; unique_prediction_count=0
+59733f94,equation_transform,v408_equation_symbolic_pbe,abstain,,/,$/>/,False,False,False,symbolic_remove_first_marker,markers=''; unique_prediction_count=0
+59733f94,equation_transform,v408_equation_symbolic_pbe,abstain,,/,$/>/,False,False,False,symbolic_position_template,nonuniform_rhs_lengths
+59733f94,equation_transform,v408_equation_symbolic_pbe,abstain,,/,$/>/,False,False,False,symbolic_operator_index_template,programs=; unique_prediction_count=0
+b1bc3731,equation_transform,v408_equation_symbolic_pbe,abstain,,63,63,True,False,False,numeric_same_operator_extended,same_operator_examples=2; rules=; unique_prediction_count=0
+54b895c1,bit_manipulation,v408_bit_unique_value,abstain,,10111011,10111011,True,False,False,no_candidates_bit_2,"{""candidate_counts"": [2, 4, 0], ""reason"": ""no_candidates_bit_2"", ""status"": ""abstain""}"
+ed24e7af,bit_manipulation,v408_bit_unique_value,abstain,,00001001,00001001,True,False,False,ambiguous_prediction_bit_0,"{""candidate_counts"": [3], ""reason"": ""ambiguous_prediction_bit_0"", ""status"": ""abstain""}"
+3cd80c64,bit_manipulation,v408_bit_unique_value,abstain,,01100100,01100100,True,False,False,ambiguous_prediction_bit_0,"{""candidate_counts"": [33], ""reason"": ""ambiguous_prediction_bit_0"", ""status"": ""abstain""}"
+a1523a63,equation_transform,v408_equation_symbolic_pbe,abstain,,87,87,True,False,False,numeric_same_operator_extended,same_operator_examples=2; rules=; unique_prediction_count=0
+f2b23d11,bit_manipulation,v408_bit_unique_value,abstain,,10000000,10000000,True,False,False,ambiguous_prediction_bit_0,"{""candidate_counts"": [8], ""reason"": ""ambiguous_prediction_bit_0"", ""status"": ""abstain""}"
+5cbe919f,bit_manipulation,v408_bit_unique_value,abstain,,00000000,00000000,True,False,False,ambiguous_prediction_bit_0,"{""candidate_counts"": [23], ""reason"": ""ambiguous_prediction_bit_0"", ""status"": ""abstain""}"
+3383d4ec,equation_transform,v408_equation_symbolic_pbe,abstain,,66,66,True,False,False,numeric_same_operator_extended,same_operator_examples=1 below_min=2
+9dae880f,equation_transform,v408_equation_symbolic_pbe,abstain,,))[,:<`\,False,False,False,symbolic_char_transducer,no_global_mapping
+9dae880f,equation_transform,v408_equation_symbolic_pbe,abstain,,))[,:<`\,False,False,False,symbolic_delete_selected_chars,delete_char_sets=; unique_prediction_count=0
+9dae880f,equation_transform,v408_equation_symbolic_pbe,abstain,,))[,:<`\,False,False,False,symbolic_keep_selected_chars,keep_char_sets=; unique_prediction_count=0
+9dae880f,equation_transform,v408_equation_symbolic_pbe,abstain,,))[,:<`\,False,False,False,symbolic_prefix_until_marker,markers=''; unique_prediction_count=0
+9dae880f,equation_transform,v408_equation_symbolic_pbe,abstain,,))[,:<`\,False,False,False,symbolic_suffix_after_marker,markers=''; unique_prediction_count=0
+9dae880f,equation_transform,v408_equation_symbolic_pbe,abstain,,))[,:<`\,False,False,False,symbolic_prefix_before_last_marker,markers=''; unique_prediction_count=0
+9dae880f,equation_transform,v408_equation_symbolic_pbe,abstain,,))[,:<`\,False,False,False,symbolic_suffix_after_last_marker,markers=''; unique_prediction_count=0
+9dae880f,equation_transform,v408_equation_symbolic_pbe,abstain,,))[,:<`\,False,False,False,symbolic_remove_first_marker,markers=''; unique_prediction_count=0
+9dae880f,equation_transform,v408_equation_symbolic_pbe,abstain,,))[,:<`\,False,False,False,symbolic_position_template,nonuniform_rhs_lengths
+9dae880f,equation_transform,v408_equation_symbolic_pbe,abstain,,))[,:<`\,False,False,False,symbolic_operator_index_template,programs=; unique_prediction_count=0
+b43d9cd5,bit_manipulation,v408_bit_unique_value,abstain,,11100100,11100100,True,False,False,ambiguous_prediction_bit_0,"{""candidate_counts"": [9], ""reason"": ""ambiguous_prediction_bit_0"", ""status"": ""abstain""}"
+64890e18,bit_manipulation,v408_bit_unique_value,abstain,,00001100,00001100,True,False,False,ambiguous_prediction_bit_0,"{""candidate_counts"": [11], ""reason"": ""ambiguous_prediction_bit_0"", ""status"": ""abstain""}"
+d6187157,bit_manipulation,v408_bit_unique_value,abstain,,01001000,01001000,True,False,False,ambiguous_prediction_bit_1,"{""candidate_counts"": [13, 35], ""reason"": ""ambiguous_prediction_bit_1"", ""status"": ""abstain""}"
+de91def4,bit_manipulation,v408_bit_unique_value,abstain,,10000111,10000111,True,False,False,ambiguous_prediction_bit_1,"{""candidate_counts"": [3, 21], ""reason"": ""ambiguous_prediction_bit_1"", ""status"": ""abstain""}"
+2af7134e,equation_transform,v408_equation_symbolic_pbe,candidate,20,20,20,True,True,False,numeric_same_operator_extended,same_operator_examples=3; rules=abs_diff
+ae6be599,equation_transform,v408_equation_symbolic_pbe,abstain,,#`,$?]$,False,False,False,symbolic_char_transducer,no_global_mapping
+ae6be599,equation_transform,v408_equation_symbolic_pbe,abstain,,#`,$?]$,False,False,False,symbolic_delete_selected_chars,delete_char_sets=; unique_prediction_count=0
+ae6be599,equation_transform,v408_equation_symbolic_pbe,abstain,,#`,$?]$,False,False,False,symbolic_keep_selected_chars,keep_char_sets=; unique_prediction_count=0
+ae6be599,equation_transform,v408_equation_symbolic_pbe,abstain,,#`,$?]$,False,False,False,symbolic_prefix_until_marker,markers=''; unique_prediction_count=0
+ae6be599,equation_transform,v408_equation_symbolic_pbe,abstain,,#`,$?]$,False,False,False,symbolic_suffix_after_marker,markers=''; unique_prediction_count=0
+ae6be599,equation_transform,v408_equation_symbolic_pbe,abstain,,#`,$?]$,False,False,False,symbolic_prefix_before_last_marker,markers=''; unique_prediction_count=0
+ae6be599,equation_transform,v408_equation_symbolic_pbe,abstain,,#`,$?]$,False,False,False,symbolic_suffix_after_last_marker,markers=''; unique_prediction_count=0
+ae6be599,equation_transform,v408_equation_symbolic_pbe,abstain,,#`,$?]$,False,False,False,symbolic_remove_first_marker,markers=''; unique_prediction_count=0
+ae6be599,equation_transform,v408_equation_symbolic_pbe,abstain,,#`,$?]$,False,False,False,symbolic_position_template,nonuniform_rhs_lengths
+ae6be599,equation_transform,v408_equation_symbolic_pbe,abstain,,#`,$?]$,False,False,False,symbolic_operator_index_template,programs=; unique_prediction_count=0
+b26d8818,equation_transform,v408_equation_symbolic_pbe,abstain,,5983,5983,True,False,False,numeric_same_operator_extended,same_operator_examples=3; rules=; unique_prediction_count=0
+8494aad3,equation_transform,v408_equation_symbolic_pbe,abstain,,"""`#&","])<""",False,False,False,symbolic_char_transducer,no_pair_mapping
+8494aad3,equation_transform,v408_equation_symbolic_pbe,abstain,,"""`#&","])<""",False,False,False,symbolic_delete_selected_chars,delete_char_sets=; unique_prediction_count=0
+8494aad3,equation_transform,v408_equation_symbolic_pbe,abstain,,"""`#&","])<""",False,False,False,symbolic_keep_selected_chars,keep_char_sets=; unique_prediction_count=0
+8494aad3,equation_transform,v408_equation_symbolic_pbe,abstain,,"""`#&","])<""",False,False,False,symbolic_prefix_until_marker,markers=''; unique_prediction_count=0
+8494aad3,equation_transform,v408_equation_symbolic_pbe,abstain,,"""`#&","])<""",False,False,False,symbolic_suffix_after_marker,markers=''; unique_prediction_count=0
+8494aad3,equation_transform,v408_equation_symbolic_pbe,abstain,,"""`#&","])<""",False,False,False,symbolic_prefix_before_last_marker,markers=''; unique_prediction_count=0
+8494aad3,equation_transform,v408_equation_symbolic_pbe,abstain,,"""`#&","])<""",False,False,False,symbolic_suffix_after_last_marker,markers=''; unique_prediction_count=0
+8494aad3,equation_transform,v408_equation_symbolic_pbe,abstain,,"""`#&","])<""",False,False,False,symbolic_remove_first_marker,markers=''; unique_prediction_count=0
+8494aad3,equation_transform,v408_equation_symbolic_pbe,abstain,,"""`#&","])<""",False,False,False,symbolic_position_template,no_source_for_output_index=0
+8494aad3,equation_transform,v408_equation_symbolic_pbe,abstain,,"""`#&","])<""",False,False,False,symbolic_operator_index_template,programs=; unique_prediction_count=0
+8df3daad,equation_transform,v408_equation_symbolic_pbe,abstain,,34,34,True,False,False,numeric_same_operator_extended,same_operator_examples=0 below_min=2
+791056ce,equation_transform,v408_equation_symbolic_pbe,abstain,,4922,4922,True,False,False,numeric_same_operator_extended,same_operator_examples=1 below_min=2
+29e458d6,bit_manipulation,v408_bit_unique_value,abstain,,00010010,00010010,True,False,False,ambiguous_prediction_bit_4,"{""candidate_counts"": [2, 2, 10, 4, 8], ""reason"": ""ambiguous_prediction_bit_4"", ""status"": ""abstain""}"
+3c12aeb9,equation_transform,v408_equation_symbolic_pbe,abstain,,321,321,True,False,False,numeric_same_operator_extended,same_operator_examples=3; rules=; unique_prediction_count=0
+69aa57b3,equation_transform,v408_equation_symbolic_pbe,abstain,,4472,4472,True,False,False,numeric_same_operator_extended,same_operator_examples=1 below_min=2
+e3890bf7,equation_transform,v408_equation_symbolic_pbe,abstain,,{@%],(^@{,False,False,False,symbolic_char_transducer,no_global_mapping
+e3890bf7,equation_transform,v408_equation_symbolic_pbe,abstain,,{@%],(^@{,False,False,False,symbolic_delete_selected_chars,delete_char_sets=; unique_prediction_count=0
+e3890bf7,equation_transform,v408_equation_symbolic_pbe,abstain,,{@%],(^@{,False,False,False,symbolic_keep_selected_chars,keep_char_sets=; unique_prediction_count=0
+e3890bf7,equation_transform,v408_equation_symbolic_pbe,abstain,,{@%],(^@{,False,False,False,symbolic_prefix_until_marker,markers=''; unique_prediction_count=0
+e3890bf7,equation_transform,v408_equation_symbolic_pbe,abstain,,{@%],(^@{,False,False,False,symbolic_suffix_after_marker,markers=''; unique_prediction_count=0
+e3890bf7,equation_transform,v408_equation_symbolic_pbe,abstain,,{@%],(^@{,False,False,False,symbolic_prefix_before_last_marker,markers=''; unique_prediction_count=0
+e3890bf7,equation_transform,v408_equation_symbolic_pbe,abstain,,{@%],(^@{,False,False,False,symbolic_suffix_after_last_marker,markers=''; unique_prediction_count=0
+e3890bf7,equation_transform,v408_equation_symbolic_pbe,abstain,,{@%],(^@{,False,False,False,symbolic_remove_first_marker,markers=''; unique_prediction_count=0
+e3890bf7,equation_transform,v408_equation_symbolic_pbe,abstain,,{@%],(^@{,False,False,False,symbolic_position_template,nonuniform_rhs_lengths
+e3890bf7,equation_transform,v408_equation_symbolic_pbe,abstain,,{@%],(^@{,False,False,False,symbolic_operator_index_template,programs=; unique_prediction_count=0
+d204b9cc,equation_transform,v408_equation_symbolic_pbe,abstain,,231,231,True,False,False,numeric_same_operator_extended,same_operator_examples=1 below_min=2
+7a79ac09,bit_manipulation,v408_bit_unique_value,abstain,,11111111,11111111,True,False,False,ambiguous_prediction_bit_0,"{""candidate_counts"": [11], ""reason"": ""ambiguous_prediction_bit_0"", ""status"": ""abstain""}"
+d29e19a4,equation_transform,v408_equation_symbolic_pbe,abstain,,?|,|''>,False,False,False,symbolic_char_transducer,no_global_mapping
+d29e19a4,equation_transform,v408_equation_symbolic_pbe,abstain,,?|,|''>,False,False,False,symbolic_delete_selected_chars,delete_char_sets=; unique_prediction_count=0
+d29e19a4,equation_transform,v408_equation_symbolic_pbe,abstain,,?|,|''>,False,False,False,symbolic_keep_selected_chars,keep_char_sets=; unique_prediction_count=0
+d29e19a4,equation_transform,v408_equation_symbolic_pbe,abstain,,?|,|''>,False,False,False,symbolic_prefix_until_marker,markers=''; unique_prediction_count=0
+d29e19a4,equation_transform,v408_equation_symbolic_pbe,abstain,,?|,|''>,False,False,False,symbolic_suffix_after_marker,markers=''; unique_prediction_count=0
+d29e19a4,equation_transform,v408_equation_symbolic_pbe,abstain,,?|,|''>,False,False,False,symbolic_prefix_before_last_marker,markers=''; unique_prediction_count=0
+d29e19a4,equation_transform,v408_equation_symbolic_pbe,abstain,,?|,|''>,False,False,False,symbolic_suffix_after_last_marker,markers=''; unique_prediction_count=0
+d29e19a4,equation_transform,v408_equation_symbolic_pbe,abstain,,?|,|''>,False,False,False,symbolic_remove_first_marker,markers=''; unique_prediction_count=0
+d29e19a4,equation_transform,v408_equation_symbolic_pbe,abstain,,?|,|''>,False,False,False,symbolic_position_template,nonuniform_rhs_lengths
+d29e19a4,equation_transform,v408_equation_symbolic_pbe,abstain,,?|,|''>,False,False,False,symbolic_operator_index_template,programs=; unique_prediction_count=0
+b06625c4,equation_transform,v408_equation_symbolic_pbe,abstain,,^&/,"""$ $]""",False,False,False,symbolic_char_transducer,no_pair_mapping
+b06625c4,equation_transform,v408_equation_symbolic_pbe,abstain,,^&/,"""$ $]""",False,False,False,symbolic_delete_selected_chars,delete_char_sets=; unique_prediction_count=0
+b06625c4,equation_transform,v408_equation_symbolic_pbe,abstain,,^&/,"""$ $]""",False,False,False,symbolic_keep_selected_chars,keep_char_sets=; unique_prediction_count=0
+b06625c4,equation_transform,v408_equation_symbolic_pbe,abstain,,^&/,"""$ $]""",False,False,False,symbolic_prefix_until_marker,markers=''; unique_prediction_count=0
+b06625c4,equation_transform,v408_equation_symbolic_pbe,abstain,,^&/,"""$ $]""",False,False,False,symbolic_suffix_after_marker,markers=''; unique_prediction_count=0
+b06625c4,equation_transform,v408_equation_symbolic_pbe,abstain,,^&/,"""$ $]""",False,False,False,symbolic_prefix_before_last_marker,markers=''; unique_prediction_count=0
+b06625c4,equation_transform,v408_equation_symbolic_pbe,abstain,,^&/,"""$ $]""",False,False,False,symbolic_suffix_after_last_marker,markers=''; unique_prediction_count=0
+b06625c4,equation_transform,v408_equation_symbolic_pbe,abstain,,^&/,"""$ $]""",False,False,False,symbolic_remove_first_marker,markers=''; unique_prediction_count=0
+b06625c4,equation_transform,v408_equation_symbolic_pbe,abstain,,^&/,"""$ $]""",False,False,False,symbolic_position_template,nonuniform_rhs_lengths
+b06625c4,equation_transform,v408_equation_symbolic_pbe,abstain,,^&/,"""$ $]""",False,False,False,symbolic_operator_index_template,programs=; unique_prediction_count=0
+84030b0b,equation_transform,v408_equation_symbolic_pbe,abstain,,24,24,True,False,False,numeric_same_operator_extended,same_operator_examples=3; rules=; unique_prediction_count=0
+3a67aa26,bit_manipulation,v408_bit_unique_value,abstain,,00101110,00101110,True,False,False,ambiguous_prediction_bit_3,"{""candidate_counts"": [2, 2, 2, 12], ""reason"": ""ambiguous_prediction_bit_3"", ""status"": ""abstain""}"
+710cf035,bit_manipulation,v408_bit_unique_value,abstain,,10000011,10000011,True,False,False,ambiguous_prediction_bit_1,"{""candidate_counts"": [1, 3], ""reason"": ""ambiguous_prediction_bit_1"", ""status"": ""abstain""}"
+52be4988,equation_transform,v408_equation_symbolic_pbe,abstain,,'!,&&&`,False,False,False,symbolic_char_transducer,no_global_mapping
+52be4988,equation_transform,v408_equation_symbolic_pbe,abstain,,'!,&&&`,False,False,False,symbolic_delete_selected_chars,delete_char_sets=; unique_prediction_count=0
+52be4988,equation_transform,v408_equation_symbolic_pbe,abstain,,'!,&&&`,False,False,False,symbolic_keep_selected_chars,keep_char_sets=; unique_prediction_count=0
+52be4988,equation_transform,v408_equation_symbolic_pbe,abstain,,'!,&&&`,False,False,False,symbolic_prefix_until_marker,markers=''; unique_prediction_count=0
+52be4988,equation_transform,v408_equation_symbolic_pbe,abstain,,'!,&&&`,False,False,False,symbolic_suffix_after_marker,markers=''; unique_prediction_count=0
+52be4988,equation_transform,v408_equation_symbolic_pbe,abstain,,'!,&&&`,False,False,False,symbolic_prefix_before_last_marker,markers=''; unique_prediction_count=0
+52be4988,equation_transform,v408_equation_symbolic_pbe,abstain,,'!,&&&`,False,False,False,symbolic_suffix_after_last_marker,markers=''; unique_prediction_count=0
+52be4988,equation_transform,v408_equation_symbolic_pbe,abstain,,'!,&&&`,False,False,False,symbolic_remove_first_marker,markers=''; unique_prediction_count=0
+52be4988,equation_transform,v408_equation_symbolic_pbe,abstain,,'!,&&&`,False,False,False,symbolic_position_template,nonuniform_rhs_lengths
+52be4988,equation_transform,v408_equation_symbolic_pbe,abstain,,'!,&&&`,False,False,False,symbolic_operator_index_template,programs=; unique_prediction_count=0
+b8722d19,bit_manipulation,v408_bit_unique_value,abstain,,00100100,11110100,False,False,False,ambiguous_prediction_bit_0,"{""candidate_counts"": [5], ""reason"": ""ambiguous_prediction_bit_0"", ""status"": ""abstain""}"
+99d6a3b5,equation_transform,v408_equation_symbolic_pbe,abstain,,?()<,(<)),False,False,False,symbolic_char_transducer,no_pair_mapping
+99d6a3b5,equation_transform,v408_equation_symbolic_pbe,abstain,,?()<,(<)),False,False,False,symbolic_delete_selected_chars,delete_char_sets=; unique_prediction_count=0
+99d6a3b5,equation_transform,v408_equation_symbolic_pbe,abstain,,?()<,(<)),False,False,False,symbolic_keep_selected_chars,keep_char_sets=; unique_prediction_count=0
+99d6a3b5,equation_transform,v408_equation_symbolic_pbe,abstain,,?()<,(<)),False,False,False,symbolic_prefix_until_marker,markers=''; unique_prediction_count=0
+99d6a3b5,equation_transform,v408_equation_symbolic_pbe,abstain,,?()<,(<)),False,False,False,symbolic_suffix_after_marker,markers=''; unique_prediction_count=0
+99d6a3b5,equation_transform,v408_equation_symbolic_pbe,abstain,,?()<,(<)),False,False,False,symbolic_prefix_before_last_marker,markers=''; unique_prediction_count=0
+99d6a3b5,equation_transform,v408_equation_symbolic_pbe,abstain,,?()<,(<)),False,False,False,symbolic_suffix_after_last_marker,markers=''; unique_prediction_count=0
+99d6a3b5,equation_transform,v408_equation_symbolic_pbe,abstain,,?()<,(<)),False,False,False,symbolic_remove_first_marker,markers=''; unique_prediction_count=0
+99d6a3b5,equation_transform,v408_equation_symbolic_pbe,abstain,,?()<,(<)),False,False,False,symbolic_position_template,nonuniform_rhs_lengths
+99d6a3b5,equation_transform,v408_equation_symbolic_pbe,abstain,,?()<,(<)),False,False,False,symbolic_operator_index_template,programs=; unique_prediction_count=0
+2d3547af,equation_transform,v408_equation_symbolic_pbe,abstain,,))^),\${,False,False,False,symbolic_char_transducer,no_global_mapping
+2d3547af,equation_transform,v408_equation_symbolic_pbe,abstain,,))^),\${,False,False,False,symbolic_delete_selected_chars,delete_char_sets=; unique_prediction_count=0
+2d3547af,equation_transform,v408_equation_symbolic_pbe,abstain,,))^),\${,False,False,False,symbolic_keep_selected_chars,keep_char_sets=; unique_prediction_count=0
+2d3547af,equation_transform,v408_equation_symbolic_pbe,abstain,,))^),\${,False,False,False,symbolic_prefix_until_marker,markers=''; unique_prediction_count=0
+2d3547af,equation_transform,v408_equation_symbolic_pbe,abstain,,))^),\${,False,False,False,symbolic_suffix_after_marker,markers=''; unique_prediction_count=0
+2d3547af,equation_transform,v408_equation_symbolic_pbe,abstain,,))^),\${,False,False,False,symbolic_prefix_before_last_marker,markers=''; unique_prediction_count=0
+2d3547af,equation_transform,v408_equation_symbolic_pbe,abstain,,))^),\${,False,False,False,symbolic_suffix_after_last_marker,markers=''; unique_prediction_count=0
+2d3547af,equation_transform,v408_equation_symbolic_pbe,abstain,,))^),\${,False,False,False,symbolic_remove_first_marker,markers=''; unique_prediction_count=0
+2d3547af,equation_transform,v408_equation_symbolic_pbe,abstain,,))^),\${,False,False,False,symbolic_position_template,nonuniform_rhs_lengths
+2d3547af,equation_transform,v408_equation_symbolic_pbe,abstain,,))^),\${,False,False,False,symbolic_operator_index_template,programs=; unique_prediction_count=0
+8c9fcc6b,bit_manipulation,v408_bit_unique_value,abstain,,11110111,11110111,True,False,False,ambiguous_prediction_bit_1,"{""candidate_counts"": [5, 7], ""reason"": ""ambiguous_prediction_bit_1"", ""status"": ""abstain""}"
+28b0ff48,equation_transform,v408_equation_symbolic_pbe,abstain,,'],|^^^,False,False,False,symbolic_char_transducer,no_global_mapping
+28b0ff48,equation_transform,v408_equation_symbolic_pbe,abstain,,'],|^^^,False,False,False,symbolic_delete_selected_chars,delete_char_sets=; unique_prediction_count=0
+28b0ff48,equation_transform,v408_equation_symbolic_pbe,abstain,,'],|^^^,False,False,False,symbolic_keep_selected_chars,keep_char_sets=; unique_prediction_count=0
+28b0ff48,equation_transform,v408_equation_symbolic_pbe,abstain,,'],|^^^,False,False,False,symbolic_prefix_until_marker,markers=''; unique_prediction_count=0
+28b0ff48,equation_transform,v408_equation_symbolic_pbe,abstain,,'],|^^^,False,False,False,symbolic_suffix_after_marker,markers=''; unique_prediction_count=0
+28b0ff48,equation_transform,v408_equation_symbolic_pbe,abstain,,'],|^^^,False,False,False,symbolic_prefix_before_last_marker,markers=''; unique_prediction_count=0
+28b0ff48,equation_transform,v408_equation_symbolic_pbe,abstain,,'],|^^^,False,False,False,symbolic_suffix_after_last_marker,markers=''; unique_prediction_count=0
+28b0ff48,equation_transform,v408_equation_symbolic_pbe,abstain,,'],|^^^,False,False,False,symbolic_remove_first_marker,markers=''; unique_prediction_count=0
+28b0ff48,equation_transform,v408_equation_symbolic_pbe,abstain,,'],|^^^,False,False,False,symbolic_position_template,nonuniform_rhs_lengths
+28b0ff48,equation_transform,v408_equation_symbolic_pbe,abstain,,'],|^^^,False,False,False,symbolic_operator_index_template,programs=; unique_prediction_count=0
+3fa49035,equation_transform,v408_equation_symbolic_pbe,abstain,,696,696,True,False,False,numeric_same_operator_extended,same_operator_examples=1 below_min=2
+61557701,equation_transform,v408_equation_symbolic_pbe,abstain,,|&,'{),False,False,False,symbolic_char_transducer,no_global_mapping
+61557701,equation_transform,v408_equation_symbolic_pbe,abstain,,|&,'{),False,False,False,symbolic_delete_selected_chars,delete_char_sets=; unique_prediction_count=0
+61557701,equation_transform,v408_equation_symbolic_pbe,abstain,,|&,'{),False,False,False,symbolic_keep_selected_chars,keep_char_sets=; unique_prediction_count=0
+61557701,equation_transform,v408_equation_symbolic_pbe,abstain,,|&,'{),False,False,False,symbolic_prefix_until_marker,markers=''; unique_prediction_count=0
+61557701,equation_transform,v408_equation_symbolic_pbe,abstain,,|&,'{),False,False,False,symbolic_suffix_after_marker,markers=''; unique_prediction_count=0
+61557701,equation_transform,v408_equation_symbolic_pbe,abstain,,|&,'{),False,False,False,symbolic_prefix_before_last_marker,markers=''; unique_prediction_count=0
+61557701,equation_transform,v408_equation_symbolic_pbe,abstain,,|&,'{),False,False,False,symbolic_suffix_after_last_marker,markers=''; unique_prediction_count=0
+61557701,equation_transform,v408_equation_symbolic_pbe,abstain,,|&,'{),False,False,False,symbolic_remove_first_marker,markers=''; unique_prediction_count=0
+61557701,equation_transform,v408_equation_symbolic_pbe,abstain,,|&,'{),False,False,False,symbolic_position_template,nonuniform_rhs_lengths
+61557701,equation_transform,v408_equation_symbolic_pbe,abstain,,|&,'{),False,False,False,symbolic_operator_index_template,programs=; unique_prediction_count=0
+8c0f9291,bit_manipulation,v408_bit_unique_value,candidate,00001111,00001111,00001111,True,True,False,unique_value_per_bit,"b0:XNOR(1,4)|XNOR(4,1); b1:XNOR(2,5)|XNOR(5,2); b2:XNOR(3,6)|XNOR(6,3); b3:XNOR(4,7)|XNOR(7,4); b4:RIMPL(0,5)|IMPL(5,0); b5:C1|IMPL(0,7)|RIMPL(1,6)|NAND(2,4)|IMPL(2,7)|NAND(4,2); b6:XNOR(2,7)|RIMPL(2,7)|NAND(4,7)|XNOR(7,2)|IMPL(7,2)|NAND(7,4); b7:C1|IMPL(0,7)|RIMPL(1,6)|NAND(2,4)|IMPL(2,7)|NAND(4,2)"
+d6e6f8b5,bit_manipulation,v408_bit_unique_value,abstain,,11100001,11100001,True,False,False,ambiguous_prediction_bit_1,"{""candidate_counts"": [3, 3], ""reason"": ""ambiguous_prediction_bit_1"", ""status"": ""abstain""}"
+3a90fdf6,bit_manipulation,v408_bit_unique_value,abstain,,10100000,10100000,True,False,False,ambiguous_prediction_bit_0,"{""candidate_counts"": [21], ""reason"": ""ambiguous_prediction_bit_0"", ""status"": ""abstain""}"
+56343b77,equation_transform,v408_equation_symbolic_pbe,abstain,,711,711,True,False,False,numeric_same_operator_extended,same_operator_examples=1 below_min=2
+08df5363,bit_manipulation,v408_bit_unique_value,abstain,,01011100,01011100,True,False,False,ambiguous_prediction_bit_0,"{""candidate_counts"": [6], ""reason"": ""ambiguous_prediction_bit_0"", ""status"": ""abstain""}"
+d50746e7,bit_manipulation,v408_bit_unique_value,abstain,,01000010,01000010,True,False,False,ambiguous_prediction_bit_2,"{""candidate_counts"": [2, 2, 12], ""reason"": ""ambiguous_prediction_bit_2"", ""status"": ""abstain""}"
+2facfaa4,bit_manipulation,v408_bit_unique_value,abstain,,00111110,00111110,True,False,False,ambiguous_prediction_bit_1,"{""candidate_counts"": [15, 15], ""reason"": ""ambiguous_prediction_bit_1"", ""status"": ""abstain""}"
+7ac90433,equation_transform,v408_equation_symbolic_pbe,abstain,,-23,-23,True,False,False,numeric_same_operator_extended,same_operator_examples=3; rules=; unique_prediction_count=0
+8abcff0f,bit_manipulation,v408_bit_unique_value,abstain,,11110111,11110111,True,False,False,ambiguous_prediction_bit_0,"{""candidate_counts"": [5], ""reason"": ""ambiguous_prediction_bit_0"", ""status"": ""abstain""}"
+02902eb3,equation_transform,v408_equation_symbolic_pbe,abstain,,>/,!!$>,False,False,False,symbolic_char_transducer,no_pair_mapping
+02902eb3,equation_transform,v408_equation_symbolic_pbe,abstain,,>/,!!$>,False,False,False,symbolic_delete_selected_chars,delete_char_sets=; unique_prediction_count=0
+02902eb3,equation_transform,v408_equation_symbolic_pbe,abstain,,>/,!!$>,False,False,False,symbolic_keep_selected_chars,keep_char_sets=; unique_prediction_count=0
+02902eb3,equation_transform,v408_equation_symbolic_pbe,abstain,,>/,!!$>,False,False,False,symbolic_prefix_until_marker,markers=''; unique_prediction_count=0
+02902eb3,equation_transform,v408_equation_symbolic_pbe,abstain,,>/,!!$>,False,False,False,symbolic_suffix_after_marker,markers=''; unique_prediction_count=0
+02902eb3,equation_transform,v408_equation_symbolic_pbe,abstain,,>/,!!$>,False,False,False,symbolic_prefix_before_last_marker,markers=''; unique_prediction_count=0
+02902eb3,equation_transform,v408_equation_symbolic_pbe,abstain,,>/,!!$>,False,False,False,symbolic_suffix_after_last_marker,markers=''; unique_prediction_count=0
+02902eb3,equation_transform,v408_equation_symbolic_pbe,abstain,,>/,!!$>,False,False,False,symbolic_remove_first_marker,markers=''; unique_prediction_count=0
+02902eb3,equation_transform,v408_equation_symbolic_pbe,abstain,,>/,!!$>,False,False,False,symbolic_position_template,nonuniform_rhs_lengths
+02902eb3,equation_transform,v408_equation_symbolic_pbe,abstain,,>/,!!$>,False,False,False,symbolic_operator_index_template,programs=; unique_prediction_count=0
+ddc5aefe,bit_manipulation,v408_bit_unique_value,abstain,,00000001,00000001,True,False,False,ambiguous_prediction_bit_0,"{""candidate_counts"": [4], ""reason"": ""ambiguous_prediction_bit_0"", ""status"": ""abstain""}"
+0d90736f,equation_transform,v408_equation_symbolic_pbe,abstain,,:,::)[,False,False,False,symbolic_char_transducer,no_pair_mapping
+0d90736f,equation_transform,v408_equation_symbolic_pbe,abstain,,:,::)[,False,False,False,symbolic_delete_selected_chars,delete_char_sets=; unique_prediction_count=0
+0d90736f,equation_transform,v408_equation_symbolic_pbe,abstain,,:,::)[,False,False,False,symbolic_keep_selected_chars,keep_char_sets=; unique_prediction_count=0
+0d90736f,equation_transform,v408_equation_symbolic_pbe,abstain,,:,::)[,False,False,False,symbolic_prefix_until_marker,markers=''; unique_prediction_count=0
+0d90736f,equation_transform,v408_equation_symbolic_pbe,abstain,,:,::)[,False,False,False,symbolic_suffix_after_marker,markers=''; unique_prediction_count=0
+0d90736f,equation_transform,v408_equation_symbolic_pbe,abstain,,:,::)[,False,False,False,symbolic_prefix_before_last_marker,markers=''; unique_prediction_count=0
+0d90736f,equation_transform,v408_equation_symbolic_pbe,abstain,,:,::)[,False,False,False,symbolic_suffix_after_last_marker,markers=''; unique_prediction_count=0
+0d90736f,equation_transform,v408_equation_symbolic_pbe,abstain,,:,::)[,False,False,False,symbolic_remove_first_marker,markers=''; unique_prediction_count=0
+0d90736f,equation_transform,v408_equation_symbolic_pbe,abstain,,:,::)[,False,False,False,symbolic_position_template,nonuniform_rhs_lengths
+0d90736f,equation_transform,v408_equation_symbolic_pbe,abstain,,:,::)[,False,False,False,symbolic_operator_index_template,programs=; unique_prediction_count=0
+294453b5,equation_transform,v408_equation_symbolic_pbe,abstain,,&(,##!),False,False,False,symbolic_char_transducer,no_global_mapping
+294453b5,equation_transform,v408_equation_symbolic_pbe,abstain,,&(,##!),False,False,False,symbolic_delete_selected_chars,delete_char_sets=; unique_prediction_count=0
+294453b5,equation_transform,v408_equation_symbolic_pbe,abstain,,&(,##!),False,False,False,symbolic_keep_selected_chars,keep_char_sets=; unique_prediction_count=0
+294453b5,equation_transform,v408_equation_symbolic_pbe,abstain,,&(,##!),False,False,False,symbolic_prefix_until_marker,markers=''; unique_prediction_count=0
+294453b5,equation_transform,v408_equation_symbolic_pbe,abstain,,&(,##!),False,False,False,symbolic_suffix_after_marker,markers=''; unique_prediction_count=0
+294453b5,equation_transform,v408_equation_symbolic_pbe,abstain,,&(,##!),False,False,False,symbolic_prefix_before_last_marker,markers=''; unique_prediction_count=0
+294453b5,equation_transform,v408_equation_symbolic_pbe,abstain,,&(,##!),False,False,False,symbolic_suffix_after_last_marker,markers=''; unique_prediction_count=0
+294453b5,equation_transform,v408_equation_symbolic_pbe,abstain,,&(,##!),False,False,False,symbolic_remove_first_marker,markers=''; unique_prediction_count=0
+294453b5,equation_transform,v408_equation_symbolic_pbe,abstain,,&(,##!),False,False,False,symbolic_position_template,nonuniform_rhs_lengths
+294453b5,equation_transform,v408_equation_symbolic_pbe,abstain,,&(,##!),False,False,False,symbolic_operator_index_template,programs=; unique_prediction_count=0
+75ecd32c,bit_manipulation,v408_bit_unique_value,candidate,11100011,11100011,11100011,True,True,False,unique_value_per_bit,"b0:ID(6); b1:ID(7); b2:ID(0); b3:ID(1)|OR(1,2)|OR(2,1); b4:ID(2)|AND(1,2)|AND(2,1); b5:ID(3); b6:ID(4)|RIMPL(4,5)|IMPL(5,4); b7:ID(5)|IMPL(4,5)|RIMPL(5,4)"
+12e0ac8c,bit_manipulation,v408_bit_unique_value,abstain,,10101001,10101001,True,False,False,ambiguous_prediction_bit_1,"{""candidate_counts"": [2, 8], ""reason"": ""ambiguous_prediction_bit_1"", ""status"": ""abstain""}"
+386b6d03,equation_transform,v408_equation_symbolic_pbe,abstain,,671,18,False,False,False,numeric_same_operator_extended,same_operator_examples=0 below_min=2
+2ead53dc,bit_manipulation,v408_bit_unique_value,abstain,,00000101,00000101,True,False,False,ambiguous_prediction_bit_0,"{""candidate_counts"": [13], ""reason"": ""ambiguous_prediction_bit_0"", ""status"": ""abstain""}"
+57f6878e,equation_transform,v408_equation_symbolic_pbe,abstain,,%{{,|@(!,False,False,False,symbolic_char_transducer,no_global_mapping
+57f6878e,equation_transform,v408_equation_symbolic_pbe,abstain,,%{{,|@(!,False,False,False,symbolic_delete_selected_chars,delete_char_sets=; unique_prediction_count=0
+57f6878e,equation_transform,v408_equation_symbolic_pbe,abstain,,%{{,|@(!,False,False,False,symbolic_keep_selected_chars,keep_char_sets=; unique_prediction_count=0
+57f6878e,equation_transform,v408_equation_symbolic_pbe,abstain,,%{{,|@(!,False,False,False,symbolic_prefix_until_marker,markers=''; unique_prediction_count=0
+57f6878e,equation_transform,v408_equation_symbolic_pbe,abstain,,%{{,|@(!,False,False,False,symbolic_suffix_after_marker,markers=''; unique_prediction_count=0
+57f6878e,equation_transform,v408_equation_symbolic_pbe,abstain,,%{{,|@(!,False,False,False,symbolic_prefix_before_last_marker,markers=''; unique_prediction_count=0
+57f6878e,equation_transform,v408_equation_symbolic_pbe,abstain,,%{{,|@(!,False,False,False,symbolic_suffix_after_last_marker,markers=''; unique_prediction_count=0
+57f6878e,equation_transform,v408_equation_symbolic_pbe,abstain,,%{{,|@(!,False,False,False,symbolic_remove_first_marker,markers=''; unique_prediction_count=0
+57f6878e,equation_transform,v408_equation_symbolic_pbe,abstain,,%{{,|@(!,False,False,False,symbolic_position_template,nonuniform_rhs_lengths
+57f6878e,equation_transform,v408_equation_symbolic_pbe,abstain,,%{{,|@(!,False,False,False,symbolic_operator_index_template,programs=; unique_prediction_count=0
+05ca617c,bit_manipulation,v408_bit_unique_value,abstain,,11011011,01011011,False,False,False,ambiguous_prediction_bit_0,"{""candidate_counts"": [8], ""reason"": ""ambiguous_prediction_bit_0"", ""status"": ""abstain""}"
+6890870d,bit_manipulation,v408_bit_unique_value,abstain,,01110000,01110000,True,False,False,ambiguous_prediction_bit_0,"{""candidate_counts"": [5], ""reason"": ""ambiguous_prediction_bit_0"", ""status"": ""abstain""}"
+1c566511,bit_manipulation,v408_bit_unique_value,candidate,01010010,01010010,01010010,True,True,False,unique_value_per_bit,"b0:XOR(6,7)|XOR(7,6); b1:XOR(0,7)|XOR(7,0); b2:ID(1); b3:ID(2); b4:ID(3); b5:ID(4); b6:ID(5); b7:ID(6)"
+bc83b0a1,equation_transform,v408_equation_symbolic_pbe,abstain,,(/&{,(/&{,True,False,False,symbolic_char_transducer,no_pair_mapping
+bc83b0a1,equation_transform,v408_equation_symbolic_pbe,abstain,,(/&{,(/&{,True,False,False,symbolic_delete_selected_chars,delete_char_sets=; unique_prediction_count=0
+bc83b0a1,equation_transform,v408_equation_symbolic_pbe,abstain,,(/&{,(/&{,True,False,False,symbolic_keep_selected_chars,keep_char_sets=; unique_prediction_count=0
+bc83b0a1,equation_transform,v408_equation_symbolic_pbe,abstain,,(/&{,(/&{,True,False,False,symbolic_prefix_until_marker,markers=''; unique_prediction_count=0
+bc83b0a1,equation_transform,v408_equation_symbolic_pbe,abstain,,(/&{,(/&{,True,False,False,symbolic_suffix_after_marker,markers=''; unique_prediction_count=0
+bc83b0a1,equation_transform,v408_equation_symbolic_pbe,abstain,,(/&{,(/&{,True,False,False,symbolic_prefix_before_last_marker,markers=''; unique_prediction_count=0
+bc83b0a1,equation_transform,v408_equation_symbolic_pbe,abstain,,(/&{,(/&{,True,False,False,symbolic_suffix_after_last_marker,markers=''; unique_prediction_count=0
+bc83b0a1,equation_transform,v408_equation_symbolic_pbe,abstain,,(/&{,(/&{,True,False,False,symbolic_remove_first_marker,markers=''; unique_prediction_count=0
+bc83b0a1,equation_transform,v408_equation_symbolic_pbe,abstain,,(/&{,(/&{,True,False,False,symbolic_position_template,nonuniform_rhs_lengths
+bc83b0a1,equation_transform,v408_equation_symbolic_pbe,abstain,,(/&{,(/&{,True,False,False,symbolic_operator_index_template,programs=; unique_prediction_count=0
+a361a1b7,equation_transform,v408_equation_symbolic_pbe,abstain,,:46,46,False,False,False,numeric_same_operator_extended,same_operator_examples=0 below_min=2
+d911e8e1,equation_transform,v408_equation_symbolic_pbe,abstain,,:\:,@}<',False,False,False,symbolic_char_transducer,no_pair_mapping
+d911e8e1,equation_transform,v408_equation_symbolic_pbe,abstain,,:\:,@}<',False,False,False,symbolic_delete_selected_chars,delete_char_sets=; unique_prediction_count=0
+d911e8e1,equation_transform,v408_equation_symbolic_pbe,abstain,,:\:,@}<',False,False,False,symbolic_keep_selected_chars,keep_char_sets=; unique_prediction_count=0
+d911e8e1,equation_transform,v408_equation_symbolic_pbe,abstain,,:\:,@}<',False,False,False,symbolic_prefix_until_marker,markers=''; unique_prediction_count=0
+d911e8e1,equation_transform,v408_equation_symbolic_pbe,abstain,,:\:,@}<',False,False,False,symbolic_suffix_after_marker,markers=''; unique_prediction_count=0
+d911e8e1,equation_transform,v408_equation_symbolic_pbe,abstain,,:\:,@}<',False,False,False,symbolic_prefix_before_last_marker,markers=''; unique_prediction_count=0
+d911e8e1,equation_transform,v408_equation_symbolic_pbe,abstain,,:\:,@}<',False,False,False,symbolic_suffix_after_last_marker,markers=''; unique_prediction_count=0
+d911e8e1,equation_transform,v408_equation_symbolic_pbe,abstain,,:\:,@}<',False,False,False,symbolic_remove_first_marker,markers=''; unique_prediction_count=0
+d911e8e1,equation_transform,v408_equation_symbolic_pbe,abstain,,:\:,@}<',False,False,False,symbolic_position_template,nonuniform_rhs_lengths
+d911e8e1,equation_transform,v408_equation_symbolic_pbe,abstain,,:\:,@}<',False,False,False,symbolic_operator_index_template,programs=; unique_prediction_count=0
+4353cd0b,bit_manipulation,v408_bit_unique_value,abstain,,00100001,00100001,True,False,False,ambiguous_prediction_bit_1,"{""candidate_counts"": [5, 9], ""reason"": ""ambiguous_prediction_bit_1"", ""status"": ""abstain""}"
+7688e06e,equation_transform,v408_equation_symbolic_pbe,abstain,,-55,55,False,False,False,numeric_same_operator_extended,same_operator_examples=5; rules=; unique_prediction_count=0
+30ba0cf4,bit_manipulation,v408_bit_unique_value,abstain,,01101101,01101101,True,False,False,ambiguous_prediction_bit_0,"{""candidate_counts"": [13], ""reason"": ""ambiguous_prediction_bit_0"", ""status"": ""abstain""}"
+dbd0e3c9,equation_transform,v408_equation_symbolic_pbe,candidate,5631,5631,5631,True,True,False,numeric_same_operator_extended,same_operator_examples=2; rules=concat_ab
+8fbd2477,bit_manipulation,v408_bit_unique_value,abstain,,01011010,01011010,True,False,False,ambiguous_prediction_bit_0,"{""candidate_counts"": [4], ""reason"": ""ambiguous_prediction_bit_0"", ""status"": ""abstain""}"
+ba61b815,bit_manipulation,v408_bit_unique_value,abstain,,00001101,00001101,True,False,False,ambiguous_prediction_bit_0,"{""candidate_counts"": [9], ""reason"": ""ambiguous_prediction_bit_0"", ""status"": ""abstain""}"
+2e2d60b2,equation_transform,v408_equation_symbolic_pbe,abstain,,07,07,True,False,False,numeric_same_operator_extended,same_operator_examples=2; rules=; unique_prediction_count=0
+5f9f0ed7,equation_transform,v408_equation_symbolic_pbe,abstain,,}/!},|!@[,False,False,False,symbolic_char_transducer,no_global_mapping
+5f9f0ed7,equation_transform,v408_equation_symbolic_pbe,abstain,,}/!},|!@[,False,False,False,symbolic_delete_selected_chars,delete_char_sets=; unique_prediction_count=0
+5f9f0ed7,equation_transform,v408_equation_symbolic_pbe,abstain,,}/!},|!@[,False,False,False,symbolic_keep_selected_chars,keep_char_sets=; unique_prediction_count=0
+5f9f0ed7,equation_transform,v408_equation_symbolic_pbe,abstain,,}/!},|!@[,False,False,False,symbolic_prefix_until_marker,markers=''; unique_prediction_count=0
+5f9f0ed7,equation_transform,v408_equation_symbolic_pbe,abstain,,}/!},|!@[,False,False,False,symbolic_suffix_after_marker,markers=''; unique_prediction_count=0
+5f9f0ed7,equation_transform,v408_equation_symbolic_pbe,abstain,,}/!},|!@[,False,False,False,symbolic_prefix_before_last_marker,markers=''; unique_prediction_count=0
+5f9f0ed7,equation_transform,v408_equation_symbolic_pbe,abstain,,}/!},|!@[,False,False,False,symbolic_suffix_after_last_marker,markers=''; unique_prediction_count=0
+5f9f0ed7,equation_transform,v408_equation_symbolic_pbe,abstain,,}/!},|!@[,False,False,False,symbolic_remove_first_marker,markers=''; unique_prediction_count=0
+5f9f0ed7,equation_transform,v408_equation_symbolic_pbe,abstain,,}/!},|!@[,False,False,False,symbolic_position_template,nonuniform_rhs_lengths
+5f9f0ed7,equation_transform,v408_equation_symbolic_pbe,abstain,,}/!},|!@[,False,False,False,symbolic_operator_index_template,programs=; unique_prediction_count=0
+333d93ec,equation_transform,v408_equation_symbolic_pbe,abstain,,7,7,True,False,False,numeric_same_operator_extended,same_operator_examples=2; rules=; unique_prediction_count=0
+74fff108,equation_transform,v408_equation_symbolic_pbe,abstain,,49,49,True,False,False,numeric_same_operator_extended,same_operator_examples=1 below_min=2
+c43b5a13,equation_transform,v408_equation_symbolic_pbe,abstain,,)|,$):$,False,False,False,symbolic_char_transducer,char_transducer mappings=16 usable=16 unique_predictions=9
+c43b5a13,equation_transform,v408_equation_symbolic_pbe,abstain,,)|,$):$,False,False,False,symbolic_delete_selected_chars,delete_char_sets=; unique_prediction_count=0
+c43b5a13,equation_transform,v408_equation_symbolic_pbe,abstain,,)|,$):$,False,False,False,symbolic_keep_selected_chars,keep_char_sets=; unique_prediction_count=0
+c43b5a13,equation_transform,v408_equation_symbolic_pbe,abstain,,)|,$):$,False,False,False,symbolic_prefix_until_marker,markers=''; unique_prediction_count=0
+c43b5a13,equation_transform,v408_equation_symbolic_pbe,abstain,,)|,$):$,False,False,False,symbolic_suffix_after_marker,markers=''; unique_prediction_count=0
+c43b5a13,equation_transform,v408_equation_symbolic_pbe,abstain,,)|,$):$,False,False,False,symbolic_prefix_before_last_marker,markers=''; unique_prediction_count=0
+c43b5a13,equation_transform,v408_equation_symbolic_pbe,abstain,,)|,$):$,False,False,False,symbolic_suffix_after_last_marker,markers=''; unique_prediction_count=0
+c43b5a13,equation_transform,v408_equation_symbolic_pbe,abstain,,)|,$):$,False,False,False,symbolic_remove_first_marker,markers=''; unique_prediction_count=0
+c43b5a13,equation_transform,v408_equation_symbolic_pbe,abstain,,)|,$):$,False,False,False,symbolic_position_template,no_source_for_output_index=0
+c43b5a13,equation_transform,v408_equation_symbolic_pbe,abstain,,)|,$):$,False,False,False,symbolic_operator_index_template,programs=; unique_prediction_count=0
+b0206bb7,equation_transform,v408_equation_symbolic_pbe,abstain,,]$!,$){,False,False,False,symbolic_char_transducer,no_global_mapping
+b0206bb7,equation_transform,v408_equation_symbolic_pbe,abstain,,]$!,$){,False,False,False,symbolic_delete_selected_chars,delete_char_sets=; unique_prediction_count=0
+b0206bb7,equation_transform,v408_equation_symbolic_pbe,abstain,,]$!,$){,False,False,False,symbolic_keep_selected_chars,keep_char_sets=; unique_prediction_count=0
+b0206bb7,equation_transform,v408_equation_symbolic_pbe,abstain,,]$!,$){,False,False,False,symbolic_prefix_until_marker,markers=''; unique_prediction_count=0
+b0206bb7,equation_transform,v408_equation_symbolic_pbe,abstain,,]$!,$){,False,False,False,symbolic_suffix_after_marker,markers=''; unique_prediction_count=0
+b0206bb7,equation_transform,v408_equation_symbolic_pbe,abstain,,]$!,$){,False,False,False,symbolic_prefix_before_last_marker,markers=''; unique_prediction_count=0
+b0206bb7,equation_transform,v408_equation_symbolic_pbe,abstain,,]$!,$){,False,False,False,symbolic_suffix_after_last_marker,markers=''; unique_prediction_count=0
+b0206bb7,equation_transform,v408_equation_symbolic_pbe,abstain,,]$!,$){,False,False,False,symbolic_remove_first_marker,markers=''; unique_prediction_count=0
+b0206bb7,equation_transform,v408_equation_symbolic_pbe,abstain,,]$!,$){,False,False,False,symbolic_position_template,nonuniform_rhs_lengths
+b0206bb7,equation_transform,v408_equation_symbolic_pbe,abstain,,]$!,$){,False,False,False,symbolic_operator_index_template,programs=; unique_prediction_count=0
+638f93ca,equation_transform,v408_equation_symbolic_pbe,abstain,,@,$]<$,False,False,False,symbolic_char_transducer,no_global_mapping
+638f93ca,equation_transform,v408_equation_symbolic_pbe,abstain,,@,$]<$,False,False,False,symbolic_delete_selected_chars,delete_char_sets=; unique_prediction_count=0
+638f93ca,equation_transform,v408_equation_symbolic_pbe,abstain,,@,$]<$,False,False,False,symbolic_keep_selected_chars,keep_char_sets=; unique_prediction_count=0
+638f93ca,equation_transform,v408_equation_symbolic_pbe,abstain,,@,$]<$,False,False,False,symbolic_prefix_until_marker,markers=''; unique_prediction_count=0
+638f93ca,equation_transform,v408_equation_symbolic_pbe,abstain,,@,$]<$,False,False,False,symbolic_suffix_after_marker,markers=''; unique_prediction_count=0
+638f93ca,equation_transform,v408_equation_symbolic_pbe,abstain,,@,$]<$,False,False,False,symbolic_prefix_before_last_marker,markers=''; unique_prediction_count=0
+638f93ca,equation_transform,v408_equation_symbolic_pbe,abstain,,@,$]<$,False,False,False,symbolic_suffix_after_last_marker,markers=''; unique_prediction_count=0
+638f93ca,equation_transform,v408_equation_symbolic_pbe,abstain,,@,$]<$,False,False,False,symbolic_remove_first_marker,markers=''; unique_prediction_count=0
+638f93ca,equation_transform,v408_equation_symbolic_pbe,abstain,,@,$]<$,False,False,False,symbolic_position_template,nonuniform_rhs_lengths
+638f93ca,equation_transform,v408_equation_symbolic_pbe,abstain,,@,$]<$,False,False,False,symbolic_operator_index_template,programs=; unique_prediction_count=0
+5b9964c7,bit_manipulation,v408_bit_unique_value,abstain,,00011011,00011011,True,False,False,ambiguous_prediction_bit_1,"{""candidate_counts"": [9, 23], ""reason"": ""ambiguous_prediction_bit_1"", ""status"": ""abstain""}"
+a6f7139f,bit_manipulation,v408_bit_unique_value,abstain,,11000000,11000000,True,False,False,ambiguous_prediction_bit_0,"{""candidate_counts"": [19], ""reason"": ""ambiguous_prediction_bit_0"", ""status"": ""abstain""}"
+b2fb65cf,bit_manipulation,v408_bit_unique_value,abstain,,11000011,11000011,True,False,False,ambiguous_prediction_bit_6,"{""candidate_counts"": [2, 4, 9, 13, 9, 7, 31], ""reason"": ""ambiguous_prediction_bit_6"", ""status"": ""abstain""}"
+4bfd095a,equation_transform,v408_equation_symbolic_pbe,abstain,,{<<<,@/[@,False,False,False,symbolic_char_transducer,no_global_mapping
+4bfd095a,equation_transform,v408_equation_symbolic_pbe,abstain,,{<<<,@/[@,False,False,False,symbolic_delete_selected_chars,delete_char_sets=; unique_prediction_count=0
+4bfd095a,equation_transform,v408_equation_symbolic_pbe,abstain,,{<<<,@/[@,False,False,False,symbolic_keep_selected_chars,keep_char_sets=; unique_prediction_count=0
+4bfd095a,equation_transform,v408_equation_symbolic_pbe,abstain,,{<<<,@/[@,False,False,False,symbolic_prefix_until_marker,markers=''; unique_prediction_count=0
+4bfd095a,equation_transform,v408_equation_symbolic_pbe,abstain,,{<<<,@/[@,False,False,False,symbolic_suffix_after_marker,markers=''; unique_prediction_count=0
+4bfd095a,equation_transform,v408_equation_symbolic_pbe,abstain,,{<<<,@/[@,False,False,False,symbolic_prefix_before_last_marker,markers=''; unique_prediction_count=0
+4bfd095a,equation_transform,v408_equation_symbolic_pbe,abstain,,{<<<,@/[@,False,False,False,symbolic_suffix_after_last_marker,markers=''; unique_prediction_count=0
+4bfd095a,equation_transform,v408_equation_symbolic_pbe,abstain,,{<<<,@/[@,False,False,False,symbolic_remove_first_marker,markers=''; unique_prediction_count=0
+4bfd095a,equation_transform,v408_equation_symbolic_pbe,abstain,,{<<<,@/[@,False,False,False,symbolic_position_template,nonuniform_rhs_lengths
+4bfd095a,equation_transform,v408_equation_symbolic_pbe,abstain,,{<<<,@/[@,False,False,False,symbolic_operator_index_template,programs=; unique_prediction_count=0
+7a422e17,equation_transform,v408_equation_symbolic_pbe,abstain,,%'!,"#`""",False,False,False,symbolic_char_transducer,no_pair_mapping
+7a422e17,equation_transform,v408_equation_symbolic_pbe,abstain,,%'!,"#`""",False,False,False,symbolic_delete_selected_chars,delete_char_sets=; unique_prediction_count=0
+7a422e17,equation_transform,v408_equation_symbolic_pbe,abstain,,%'!,"#`""",False,False,False,symbolic_keep_selected_chars,keep_char_sets=; unique_prediction_count=0
+7a422e17,equation_transform,v408_equation_symbolic_pbe,abstain,,%'!,"#`""",False,False,False,symbolic_prefix_until_marker,markers=''; unique_prediction_count=0
+7a422e17,equation_transform,v408_equation_symbolic_pbe,abstain,,%'!,"#`""",False,False,False,symbolic_suffix_after_marker,markers=''; unique_prediction_count=0
+7a422e17,equation_transform,v408_equation_symbolic_pbe,abstain,,%'!,"#`""",False,False,False,symbolic_prefix_before_last_marker,markers=''; unique_prediction_count=0
+7a422e17,equation_transform,v408_equation_symbolic_pbe,abstain,,%'!,"#`""",False,False,False,symbolic_suffix_after_last_marker,markers=''; unique_prediction_count=0
+7a422e17,equation_transform,v408_equation_symbolic_pbe,abstain,,%'!,"#`""",False,False,False,symbolic_remove_first_marker,markers=''; unique_prediction_count=0
+7a422e17,equation_transform,v408_equation_symbolic_pbe,abstain,,%'!,"#`""",False,False,False,symbolic_position_template,nonuniform_rhs_lengths
+7a422e17,equation_transform,v408_equation_symbolic_pbe,abstain,,%'!,"#`""",False,False,False,symbolic_operator_index_template,programs=; unique_prediction_count=0
+7192535b,bit_manipulation,v408_bit_unique_value,abstain,,00000010,00001010,False,False,False,ambiguous_prediction_bit_3,"{""candidate_counts"": [8, 16, 16, 4], ""reason"": ""ambiguous_prediction_bit_3"", ""status"": ""abstain""}"
+5b2523e6,equation_transform,v408_equation_symbolic_pbe,abstain,,&&,><\$,False,False,False,symbolic_char_transducer,no_pair_mapping
+5b2523e6,equation_transform,v408_equation_symbolic_pbe,abstain,,&&,><\$,False,False,False,symbolic_delete_selected_chars,delete_char_sets=; unique_prediction_count=0
+5b2523e6,equation_transform,v408_equation_symbolic_pbe,abstain,,&&,><\$,False,False,False,symbolic_keep_selected_chars,keep_char_sets=; unique_prediction_count=0
+5b2523e6,equation_transform,v408_equation_symbolic_pbe,abstain,,&&,><\$,False,False,False,symbolic_prefix_until_marker,markers=''; unique_prediction_count=0
+5b2523e6,equation_transform,v408_equation_symbolic_pbe,abstain,,&&,><\$,False,False,False,symbolic_suffix_after_marker,markers=''; unique_prediction_count=0
+5b2523e6,equation_transform,v408_equation_symbolic_pbe,abstain,,&&,><\$,False,False,False,symbolic_prefix_before_last_marker,markers=''; unique_prediction_count=0
+5b2523e6,equation_transform,v408_equation_symbolic_pbe,abstain,,&&,><\$,False,False,False,symbolic_suffix_after_last_marker,markers=''; unique_prediction_count=0
+5b2523e6,equation_transform,v408_equation_symbolic_pbe,abstain,,&&,><\$,False,False,False,symbolic_remove_first_marker,markers=''; unique_prediction_count=0
+5b2523e6,equation_transform,v408_equation_symbolic_pbe,abstain,,&&,><\$,False,False,False,symbolic_position_template,nonuniform_rhs_lengths
+5b2523e6,equation_transform,v408_equation_symbolic_pbe,abstain,,&&,><\$,False,False,False,symbolic_operator_index_template,programs=; unique_prediction_count=0
+dbb611da,bit_manipulation,v408_bit_unique_value,abstain,,00000001,00000001,True,False,False,ambiguous_prediction_bit_1,"{""candidate_counts"": [2, 17], ""reason"": ""ambiguous_prediction_bit_1"", ""status"": ""abstain""}"
+0fe53bac,equation_transform,v408_equation_symbolic_pbe,abstain,,"(""",^?(|,False,False,False,symbolic_char_transducer,no_global_mapping
+0fe53bac,equation_transform,v408_equation_symbolic_pbe,abstain,,"(""",^?(|,False,False,False,symbolic_delete_selected_chars,delete_char_sets=; unique_prediction_count=0
+0fe53bac,equation_transform,v408_equation_symbolic_pbe,abstain,,"(""",^?(|,False,False,False,symbolic_keep_selected_chars,keep_char_sets=; unique_prediction_count=0
+0fe53bac,equation_transform,v408_equation_symbolic_pbe,abstain,,"(""",^?(|,False,False,False,symbolic_prefix_until_marker,markers=''; unique_prediction_count=0
+0fe53bac,equation_transform,v408_equation_symbolic_pbe,abstain,,"(""",^?(|,False,False,False,symbolic_suffix_after_marker,markers=''; unique_prediction_count=0
+0fe53bac,equation_transform,v408_equation_symbolic_pbe,abstain,,"(""",^?(|,False,False,False,symbolic_prefix_before_last_marker,markers=''; unique_prediction_count=0
+0fe53bac,equation_transform,v408_equation_symbolic_pbe,abstain,,"(""",^?(|,False,False,False,symbolic_suffix_after_last_marker,markers=''; unique_prediction_count=0
+0fe53bac,equation_transform,v408_equation_symbolic_pbe,abstain,,"(""",^?(|,False,False,False,symbolic_remove_first_marker,markers=''; unique_prediction_count=0
+0fe53bac,equation_transform,v408_equation_symbolic_pbe,abstain,,"(""",^?(|,False,False,False,symbolic_position_template,nonuniform_rhs_lengths
+0fe53bac,equation_transform,v408_equation_symbolic_pbe,abstain,,"(""",^?(|,False,False,False,symbolic_operator_index_template,programs=; unique_prediction_count=0
+07ceed47,bit_manipulation,v408_bit_unique_value,abstain,,10000101,10000101,True,False,False,ambiguous_prediction_bit_1,"{""candidate_counts"": [21, 45], ""reason"": ""ambiguous_prediction_bit_1"", ""status"": ""abstain""}"
+274def88,equation_transform,v408_equation_symbolic_pbe,abstain,,92,-92,False,False,False,numeric_same_operator_extended,same_operator_examples=2; rules=; unique_prediction_count=0
+7aa4fdf0,bit_manipulation,v408_bit_unique_value,abstain,,00000001,00000001,True,False,False,ambiguous_prediction_bit_2,"{""candidate_counts"": [14, 2, 14], ""reason"": ""ambiguous_prediction_bit_2"", ""status"": ""abstain""}"
+03a3437f,equation_transform,v408_equation_symbolic_pbe,abstain,,-!,'}>/,False,False,False,symbolic_char_transducer,no_global_mapping
+03a3437f,equation_transform,v408_equation_symbolic_pbe,abstain,,-!,'}>/,False,False,False,symbolic_delete_selected_chars,delete_char_sets=; unique_prediction_count=0
+03a3437f,equation_transform,v408_equation_symbolic_pbe,abstain,,-!,'}>/,False,False,False,symbolic_keep_selected_chars,keep_char_sets=; unique_prediction_count=0
+03a3437f,equation_transform,v408_equation_symbolic_pbe,abstain,,-!,'}>/,False,False,False,symbolic_prefix_until_marker,markers=''; unique_prediction_count=0
+03a3437f,equation_transform,v408_equation_symbolic_pbe,abstain,,-!,'}>/,False,False,False,symbolic_suffix_after_marker,markers=''; unique_prediction_count=0
+03a3437f,equation_transform,v408_equation_symbolic_pbe,abstain,,-!,'}>/,False,False,False,symbolic_prefix_before_last_marker,markers=''; unique_prediction_count=0
+03a3437f,equation_transform,v408_equation_symbolic_pbe,abstain,,-!,'}>/,False,False,False,symbolic_suffix_after_last_marker,markers=''; unique_prediction_count=0
+03a3437f,equation_transform,v408_equation_symbolic_pbe,abstain,,-!,'}>/,False,False,False,symbolic_remove_first_marker,markers=''; unique_prediction_count=0
+03a3437f,equation_transform,v408_equation_symbolic_pbe,abstain,,-!,'}>/,False,False,False,symbolic_position_template,nonuniform_rhs_lengths
+03a3437f,equation_transform,v408_equation_symbolic_pbe,abstain,,-!,'}>/,False,False,False,symbolic_operator_index_template,programs=; unique_prediction_count=0
+f2014638,bit_manipulation,v408_bit_unique_value,candidate,10011010,10011010,10011010,True,True,False,unique_value_per_bit,"b0:ID(6)|OR(4,6)|OR(6,4); b1:ID(7); b2:ID(0)|XNOR(1,5)|XNOR(5,1); b3:ID(1)|XNOR(0,5)|XNOR(5,0); b4:ID(2); b5:ID(3); b6:ID(4)|AND(4,6)|AND(6,4); b7:ID(5)|XNOR(0,1)|XNOR(1,0)"
+a8ea0e29,bit_manipulation,v408_bit_unique_value,abstain,,00000000,00000000,True,False,False,ambiguous_prediction_bit_0,"{""candidate_counts"": [19], ""reason"": ""ambiguous_prediction_bit_0"", ""status"": ""abstain""}"
+30ac5c8e,equation_transform,v408_equation_symbolic_pbe,abstain,,)#?,@\}?,False,False,False,symbolic_char_transducer,no_pair_mapping
+30ac5c8e,equation_transform,v408_equation_symbolic_pbe,abstain,,)#?,@\}?,False,False,False,symbolic_delete_selected_chars,delete_char_sets=; unique_prediction_count=0
+30ac5c8e,equation_transform,v408_equation_symbolic_pbe,abstain,,)#?,@\}?,False,False,False,symbolic_keep_selected_chars,keep_char_sets=; unique_prediction_count=0
+30ac5c8e,equation_transform,v408_equation_symbolic_pbe,abstain,,)#?,@\}?,False,False,False,symbolic_prefix_until_marker,markers=''; unique_prediction_count=0
+30ac5c8e,equation_transform,v408_equation_symbolic_pbe,abstain,,)#?,@\}?,False,False,False,symbolic_suffix_after_marker,markers=''; unique_prediction_count=0
+30ac5c8e,equation_transform,v408_equation_symbolic_pbe,abstain,,)#?,@\}?,False,False,False,symbolic_prefix_before_last_marker,markers=''; unique_prediction_count=0
+30ac5c8e,equation_transform,v408_equation_symbolic_pbe,abstain,,)#?,@\}?,False,False,False,symbolic_suffix_after_last_marker,markers=''; unique_prediction_count=0
+30ac5c8e,equation_transform,v408_equation_symbolic_pbe,abstain,,)#?,@\}?,False,False,False,symbolic_remove_first_marker,markers=''; unique_prediction_count=0
+30ac5c8e,equation_transform,v408_equation_symbolic_pbe,abstain,,)#?,@\}?,False,False,False,symbolic_position_template,nonuniform_rhs_lengths
+30ac5c8e,equation_transform,v408_equation_symbolic_pbe,abstain,,)#?,@\}?,False,False,False,symbolic_operator_index_template,programs=; unique_prediction_count=0
+3cfc5f9c,bit_manipulation,v408_bit_unique_value,abstain,,01110111,01110111,True,False,False,ambiguous_prediction_bit_0,"{""candidate_counts"": [16], ""reason"": ""ambiguous_prediction_bit_0"", ""status"": ""abstain""}"
+08d8d7e1,equation_transform,v408_equation_symbolic_pbe,abstain,,88,88,True,False,False,numeric_same_operator_extended,same_operator_examples=2; rules=; unique_prediction_count=0
+ff121f08,equation_transform,v408_equation_symbolic_pbe,abstain,,#<,!%<<,False,False,False,symbolic_char_transducer,no_global_mapping
+ff121f08,equation_transform,v408_equation_symbolic_pbe,abstain,,#<,!%<<,False,False,False,symbolic_delete_selected_chars,delete_char_sets=; unique_prediction_count=0
+ff121f08,equation_transform,v408_equation_symbolic_pbe,abstain,,#<,!%<<,False,False,False,symbolic_keep_selected_chars,keep_char_sets=; unique_prediction_count=0
+ff121f08,equation_transform,v408_equation_symbolic_pbe,abstain,,#<,!%<<,False,False,False,symbolic_prefix_until_marker,markers=''; unique_prediction_count=0
+ff121f08,equation_transform,v408_equation_symbolic_pbe,abstain,,#<,!%<<,False,False,False,symbolic_suffix_after_marker,markers=''; unique_prediction_count=0
+ff121f08,equation_transform,v408_equation_symbolic_pbe,abstain,,#<,!%<<,False,False,False,symbolic_prefix_before_last_marker,markers=''; unique_prediction_count=0
+ff121f08,equation_transform,v408_equation_symbolic_pbe,abstain,,#<,!%<<,False,False,False,symbolic_suffix_after_last_marker,markers=''; unique_prediction_count=0
+ff121f08,equation_transform,v408_equation_symbolic_pbe,abstain,,#<,!%<<,False,False,False,symbolic_remove_first_marker,markers=''; unique_prediction_count=0
+ff121f08,equation_transform,v408_equation_symbolic_pbe,abstain,,#<,!%<<,False,False,False,symbolic_position_template,nonuniform_rhs_lengths
+ff121f08,equation_transform,v408_equation_symbolic_pbe,abstain,,#<,!%<<,False,False,False,symbolic_operator_index_template,programs=; unique_prediction_count=0
+114a7439,bit_manipulation,v408_bit_unique_value,abstain,,01110001,01110001,True,False,False,ambiguous_prediction_bit_0,"{""candidate_counts"": [5], ""reason"": ""ambiguous_prediction_bit_0"", ""status"": ""abstain""}"
+343095d3,bit_manipulation,v408_bit_unique_value,abstain,,01010100,01010100,True,False,False,ambiguous_prediction_bit_2,"{""candidate_counts"": [2, 2, 10], ""reason"": ""ambiguous_prediction_bit_2"", ""status"": ""abstain""}"
+a4dd4cce,bit_manipulation,v408_bit_unique_value,abstain,,10110010,10110010,True,False,False,ambiguous_prediction_bit_3,"{""candidate_counts"": [9, 5, 5, 9], ""reason"": ""ambiguous_prediction_bit_3"", ""status"": ""abstain""}"
+6b11c05f,bit_manipulation,v408_bit_unique_value,abstain,,00100010,00100010,True,False,False,ambiguous_prediction_bit_1,"{""candidate_counts"": [2, 25], ""reason"": ""ambiguous_prediction_bit_1"", ""status"": ""abstain""}"
+42cb233d,equation_transform,v408_equation_symbolic_pbe,abstain,,881,881,True,False,False,numeric_same_operator_extended,same_operator_examples=1 below_min=2
+ec8b4875,equation_transform,v408_equation_symbolic_pbe,abstain,,"|""]",|@<!,False,False,False,symbolic_char_transducer,no_pair_mapping
+ec8b4875,equation_transform,v408_equation_symbolic_pbe,abstain,,"|""]",|@<!,False,False,False,symbolic_delete_selected_chars,delete_char_sets=; unique_prediction_count=0
+ec8b4875,equation_transform,v408_equation_symbolic_pbe,abstain,,"|""]",|@<!,False,False,False,symbolic_keep_selected_chars,keep_char_sets=; unique_prediction_count=0
+ec8b4875,equation_transform,v408_equation_symbolic_pbe,abstain,,"|""]",|@<!,False,False,False,symbolic_prefix_until_marker,markers=''; unique_prediction_count=0
+ec8b4875,equation_transform,v408_equation_symbolic_pbe,abstain,,"|""]",|@<!,False,False,False,symbolic_suffix_after_marker,markers=''; unique_prediction_count=0
+ec8b4875,equation_transform,v408_equation_symbolic_pbe,abstain,,"|""]",|@<!,False,False,False,symbolic_prefix_before_last_marker,markers=''; unique_prediction_count=0
+ec8b4875,equation_transform,v408_equation_symbolic_pbe,abstain,,"|""]",|@<!,False,False,False,symbolic_suffix_after_last_marker,markers=''; unique_prediction_count=0
+ec8b4875,equation_transform,v408_equation_symbolic_pbe,abstain,,"|""]",|@<!,False,False,False,symbolic_remove_first_marker,markers=''; unique_prediction_count=0
+ec8b4875,equation_transform,v408_equation_symbolic_pbe,abstain,,"|""]",|@<!,False,False,False,symbolic_position_template,nonuniform_rhs_lengths
+ec8b4875,equation_transform,v408_equation_symbolic_pbe,abstain,,"|""]",|@<!,False,False,False,symbolic_operator_index_template,programs=; unique_prediction_count=0
+e3fbc768,equation_transform,v408_equation_symbolic_pbe,abstain,,'(^),{%??,False,False,False,symbolic_char_transducer,no_pair_mapping
+e3fbc768,equation_transform,v408_equation_symbolic_pbe,abstain,,'(^),{%??,False,False,False,symbolic_delete_selected_chars,delete_char_sets=; unique_prediction_count=0
+e3fbc768,equation_transform,v408_equation_symbolic_pbe,abstain,,'(^),{%??,False,False,False,symbolic_keep_selected_chars,keep_char_sets=; unique_prediction_count=0
+e3fbc768,equation_transform,v408_equation_symbolic_pbe,abstain,,'(^),{%??,False,False,False,symbolic_prefix_until_marker,markers=''; unique_prediction_count=0
+e3fbc768,equation_transform,v408_equation_symbolic_pbe,abstain,,'(^),{%??,False,False,False,symbolic_suffix_after_marker,markers=''; unique_prediction_count=0
+e3fbc768,equation_transform,v408_equation_symbolic_pbe,abstain,,'(^),{%??,False,False,False,symbolic_prefix_before_last_marker,markers=''; unique_prediction_count=0
+e3fbc768,equation_transform,v408_equation_symbolic_pbe,abstain,,'(^),{%??,False,False,False,symbolic_suffix_after_last_marker,markers=''; unique_prediction_count=0
+e3fbc768,equation_transform,v408_equation_symbolic_pbe,abstain,,'(^),{%??,False,False,False,symbolic_remove_first_marker,markers=''; unique_prediction_count=0
+e3fbc768,equation_transform,v408_equation_symbolic_pbe,abstain,,'(^),{%??,False,False,False,symbolic_position_template,nonuniform_rhs_lengths
+e3fbc768,equation_transform,v408_equation_symbolic_pbe,abstain,,'(^),{%??,False,False,False,symbolic_operator_index_template,programs=; unique_prediction_count=0
+6cc5dafb,equation_transform,v408_equation_symbolic_pbe,abstain,,)(,^&>),False,False,False,symbolic_char_transducer,no_global_mapping
+6cc5dafb,equation_transform,v408_equation_symbolic_pbe,abstain,,)(,^&>),False,False,False,symbolic_delete_selected_chars,delete_char_sets=; unique_prediction_count=0
+6cc5dafb,equation_transform,v408_equation_symbolic_pbe,abstain,,)(,^&>),False,False,False,symbolic_keep_selected_chars,keep_char_sets=; unique_prediction_count=0
+6cc5dafb,equation_transform,v408_equation_symbolic_pbe,abstain,,)(,^&>),False,False,False,symbolic_prefix_until_marker,markers=''; unique_prediction_count=0
+6cc5dafb,equation_transform,v408_equation_symbolic_pbe,abstain,,)(,^&>),False,False,False,symbolic_suffix_after_marker,markers=''; unique_prediction_count=0
+6cc5dafb,equation_transform,v408_equation_symbolic_pbe,abstain,,)(,^&>),False,False,False,symbolic_prefix_before_last_marker,markers=''; unique_prediction_count=0
+6cc5dafb,equation_transform,v408_equation_symbolic_pbe,abstain,,)(,^&>),False,False,False,symbolic_suffix_after_last_marker,markers=''; unique_prediction_count=0
+6cc5dafb,equation_transform,v408_equation_symbolic_pbe,abstain,,)(,^&>),False,False,False,symbolic_remove_first_marker,markers=''; unique_prediction_count=0
+6cc5dafb,equation_transform,v408_equation_symbolic_pbe,abstain,,)(,^&>),False,False,False,symbolic_position_template,nonuniform_rhs_lengths
+6cc5dafb,equation_transform,v408_equation_symbolic_pbe,abstain,,)(,^&>),False,False,False,symbolic_operator_index_template,programs=; unique_prediction_count=0
+d5a03a2e,equation_transform,v408_equation_symbolic_pbe,abstain,,>>,""")&&",False,False,False,symbolic_char_transducer,no_global_mapping
+d5a03a2e,equation_transform,v408_equation_symbolic_pbe,abstain,,>>,""")&&",False,False,False,symbolic_delete_selected_chars,delete_char_sets=; unique_prediction_count=0
+d5a03a2e,equation_transform,v408_equation_symbolic_pbe,abstain,,>>,""")&&",False,False,False,symbolic_keep_selected_chars,keep_char_sets=; unique_prediction_count=0
+d5a03a2e,equation_transform,v408_equation_symbolic_pbe,abstain,,>>,""")&&",False,False,False,symbolic_prefix_until_marker,markers=''; unique_prediction_count=0
+d5a03a2e,equation_transform,v408_equation_symbolic_pbe,abstain,,>>,""")&&",False,False,False,symbolic_suffix_after_marker,markers=''; unique_prediction_count=0
+d5a03a2e,equation_transform,v408_equation_symbolic_pbe,abstain,,>>,""")&&",False,False,False,symbolic_prefix_before_last_marker,markers=''; unique_prediction_count=0
+d5a03a2e,equation_transform,v408_equation_symbolic_pbe,abstain,,>>,""")&&",False,False,False,symbolic_suffix_after_last_marker,markers=''; unique_prediction_count=0
+d5a03a2e,equation_transform,v408_equation_symbolic_pbe,abstain,,>>,""")&&",False,False,False,symbolic_remove_first_marker,markers=''; unique_prediction_count=0
+d5a03a2e,equation_transform,v408_equation_symbolic_pbe,abstain,,>>,""")&&",False,False,False,symbolic_position_template,nonuniform_rhs_lengths
+d5a03a2e,equation_transform,v408_equation_symbolic_pbe,abstain,,>>,""")&&",False,False,False,symbolic_operator_index_template,programs=; unique_prediction_count=0
+eea91b82,bit_manipulation,v408_bit_unique_value,abstain,,00101111,00101111,True,False,False,ambiguous_prediction_bit_7,"{""candidate_counts"": [2, 4, 2, 4, 2, 10, 5, 9], ""reason"": ""ambiguous_prediction_bit_7"", ""status"": ""abstain""}"
+4736daab,bit_manipulation,v408_bit_unique_value,abstain,,01000111,01000111,True,False,False,ambiguous_prediction_bit_0,"{""candidate_counts"": [3], ""reason"": ""ambiguous_prediction_bit_0"", ""status"": ""abstain""}"
+8bebef83,equation_transform,v408_equation_symbolic_pbe,candidate,3388,3388,3388,True,True,False,numeric_same_operator_extended,same_operator_examples=2; rules=mul
+efc2b69d,bit_manipulation,v408_bit_unique_value,abstain,,10111100,10111100,True,False,False,ambiguous_prediction_bit_0,"{""candidate_counts"": [11], ""reason"": ""ambiguous_prediction_bit_0"", ""status"": ""abstain""}"
+a794d193,bit_manipulation,v408_bit_unique_value,abstain,,01011101,01011101,True,False,False,ambiguous_prediction_bit_0,"{""candidate_counts"": [11], ""reason"": ""ambiguous_prediction_bit_0"", ""status"": ""abstain""}"
+0f7ddd75,bit_manipulation,v408_bit_unique_value,abstain,,11110110,11110110,True,False,False,ambiguous_prediction_bit_4,"{""candidate_counts"": [2, 6, 2, 10, 6], ""reason"": ""ambiguous_prediction_bit_4"", ""status"": ""abstain""}"
+27cec7a9,equation_transform,v408_equation_symbolic_pbe,candidate,3341,3341,3341,True,True,False,numeric_same_operator_extended,same_operator_examples=2; rules=concat_ab
+a6704625,bit_manipulation,v408_bit_unique_value,abstain,,00001101,00011111,False,False,False,ambiguous_prediction_bit_1,"{""candidate_counts"": [2, 4], ""reason"": ""ambiguous_prediction_bit_1"", ""status"": ""abstain""}"
+d117113e,bit_manipulation,v408_bit_unique_value,abstain,,00000000,00000000,True,False,False,ambiguous_prediction_bit_0,"{""candidate_counts"": [21], ""reason"": ""ambiguous_prediction_bit_0"", ""status"": ""abstain""}"
+4aeed935,equation_transform,v408_equation_symbolic_pbe,abstain,,1455,1455,True,False,False,numeric_same_operator_extended,same_operator_examples=1 below_min=2
+6f7a9048,bit_manipulation,v408_bit_unique_value,abstain,,00101000,00101000,True,False,False,ambiguous_prediction_bit_0,"{""candidate_counts"": [11], ""reason"": ""ambiguous_prediction_bit_0"", ""status"": ""abstain""}"
+8740ed31,bit_manipulation,v408_bit_unique_value,abstain,,01101000,01101000,True,False,False,ambiguous_prediction_bit_1,"{""candidate_counts"": [2, 22], ""reason"": ""ambiguous_prediction_bit_1"", ""status"": ""abstain""}"
+fb623471,equation_transform,v408_equation_symbolic_pbe,abstain,,-21,21,False,False,False,numeric_same_operator_extended,same_operator_examples=1 below_min=2
+88b43464,equation_transform,v408_equation_symbolic_pbe,abstain,,5311,5311,True,False,False,numeric_same_operator_extended,same_operator_examples=1 below_min=2
+209c43f0,equation_transform,v408_equation_symbolic_pbe,candidate,101,101,101,True,True,False,numeric_same_operator_extended,same_operator_examples=2; rules=a_plus_b_minus1
+8ac52d78,bit_manipulation,v408_bit_unique_value,abstain,,00010000,00010000,True,False,False,ambiguous_prediction_bit_1,"{""candidate_counts"": [4, 8], ""reason"": ""ambiguous_prediction_bit_1"", ""status"": ""abstain""}"
+f507b7f1,bit_manipulation,v408_bit_unique_value,abstain,,11001100,11011100,False,False,False,ambiguous_prediction_bit_4,"{""candidate_counts"": [10, 10, 6, 3, 33], ""reason"": ""ambiguous_prediction_bit_4"", ""status"": ""abstain""}"
+d129b085,equation_transform,v408_equation_symbolic_pbe,abstain,,##$,!>``,False,False,False,symbolic_char_transducer,no_global_mapping
+d129b085,equation_transform,v408_equation_symbolic_pbe,abstain,,##$,!>``,False,False,False,symbolic_delete_selected_chars,delete_char_sets=; unique_prediction_count=0
+d129b085,equation_transform,v408_equation_symbolic_pbe,abstain,,##$,!>``,False,False,False,symbolic_keep_selected_chars,keep_char_sets=; unique_prediction_count=0
+d129b085,equation_transform,v408_equation_symbolic_pbe,abstain,,##$,!>``,False,False,False,symbolic_prefix_until_marker,markers=''; unique_prediction_count=0
+d129b085,equation_transform,v408_equation_symbolic_pbe,abstain,,##$,!>``,False,False,False,symbolic_suffix_after_marker,markers=''; unique_prediction_count=0
+d129b085,equation_transform,v408_equation_symbolic_pbe,abstain,,##$,!>``,False,False,False,symbolic_prefix_before_last_marker,markers=''; unique_prediction_count=0
+d129b085,equation_transform,v408_equation_symbolic_pbe,abstain,,##$,!>``,False,False,False,symbolic_suffix_after_last_marker,markers=''; unique_prediction_count=0
+d129b085,equation_transform,v408_equation_symbolic_pbe,abstain,,##$,!>``,False,False,False,symbolic_remove_first_marker,markers=''; unique_prediction_count=0
+d129b085,equation_transform,v408_equation_symbolic_pbe,abstain,,##$,!>``,False,False,False,symbolic_position_template,nonuniform_rhs_lengths
+d129b085,equation_transform,v408_equation_symbolic_pbe,abstain,,##$,!>``,False,False,False,symbolic_operator_index_template,programs=; unique_prediction_count=0
+368f20dd,bit_manipulation,v408_bit_unique_value,abstain,,10000101,10000101,True,False,False,ambiguous_prediction_bit_0,"{""candidate_counts"": [5], ""reason"": ""ambiguous_prediction_bit_0"", ""status"": ""abstain""}"
+e582df31,equation_transform,v408_equation_symbolic_pbe,abstain,,}@,"""']@",False,False,False,symbolic_char_transducer,no_global_mapping
+e582df31,equation_transform,v408_equation_symbolic_pbe,abstain,,}@,"""']@",False,False,False,symbolic_delete_selected_chars,delete_char_sets=; unique_prediction_count=0
+e582df31,equation_transform,v408_equation_symbolic_pbe,abstain,,}@,"""']@",False,False,False,symbolic_keep_selected_chars,keep_char_sets=; unique_prediction_count=0
+e582df31,equation_transform,v408_equation_symbolic_pbe,abstain,,}@,"""']@",False,False,False,symbolic_prefix_until_marker,markers=''; unique_prediction_count=0
+e582df31,equation_transform,v408_equation_symbolic_pbe,abstain,,}@,"""']@",False,False,False,symbolic_suffix_after_marker,markers=''; unique_prediction_count=0
+e582df31,equation_transform,v408_equation_symbolic_pbe,abstain,,}@,"""']@",False,False,False,symbolic_prefix_before_last_marker,markers=''; unique_prediction_count=0
+e582df31,equation_transform,v408_equation_symbolic_pbe,abstain,,}@,"""']@",False,False,False,symbolic_suffix_after_last_marker,markers=''; unique_prediction_count=0
+e582df31,equation_transform,v408_equation_symbolic_pbe,abstain,,}@,"""']@",False,False,False,symbolic_remove_first_marker,markers=''; unique_prediction_count=0
+e582df31,equation_transform,v408_equation_symbolic_pbe,abstain,,}@,"""']@",False,False,False,symbolic_position_template,nonuniform_rhs_lengths
+e582df31,equation_transform,v408_equation_symbolic_pbe,abstain,,}@,"""']@",False,False,False,symbolic_operator_index_template,programs=; unique_prediction_count=0
+a77be9fa,equation_transform,v408_equation_symbolic_pbe,abstain,,"[""",{>$[,False,False,False,symbolic_char_transducer,no_global_mapping
+a77be9fa,equation_transform,v408_equation_symbolic_pbe,abstain,,"[""",{>$[,False,False,False,symbolic_delete_selected_chars,delete_char_sets=; unique_prediction_count=0
+a77be9fa,equation_transform,v408_equation_symbolic_pbe,abstain,,"[""",{>$[,False,False,False,symbolic_keep_selected_chars,keep_char_sets=; unique_prediction_count=0
+a77be9fa,equation_transform,v408_equation_symbolic_pbe,abstain,,"[""",{>$[,False,False,False,symbolic_prefix_until_marker,markers=''; unique_prediction_count=0
+a77be9fa,equation_transform,v408_equation_symbolic_pbe,abstain,,"[""",{>$[,False,False,False,symbolic_suffix_after_marker,markers=''; unique_prediction_count=0
+a77be9fa,equation_transform,v408_equation_symbolic_pbe,abstain,,"[""",{>$[,False,False,False,symbolic_prefix_before_last_marker,markers=''; unique_prediction_count=0
+a77be9fa,equation_transform,v408_equation_symbolic_pbe,abstain,,"[""",{>$[,False,False,False,symbolic_suffix_after_last_marker,markers=''; unique_prediction_count=0
+a77be9fa,equation_transform,v408_equation_symbolic_pbe,abstain,,"[""",{>$[,False,False,False,symbolic_remove_first_marker,markers=''; unique_prediction_count=0
+a77be9fa,equation_transform,v408_equation_symbolic_pbe,abstain,,"[""",{>$[,False,False,False,symbolic_position_template,nonuniform_rhs_lengths
+a77be9fa,equation_transform,v408_equation_symbolic_pbe,abstain,,"[""",{>$[,False,False,False,symbolic_operator_index_template,programs=; unique_prediction_count=0
+5a19f71a,bit_manipulation,v408_bit_unique_value,abstain,,11100010,11100010,True,False,False,ambiguous_prediction_bit_1,"{""candidate_counts"": [4, 6], ""reason"": ""ambiguous_prediction_bit_1"", ""status"": ""abstain""}"
+78d02fc5,bit_manipulation,v408_bit_unique_value,abstain,,11001001,11001011,False,False,False,ambiguous_prediction_bit_0,"{""candidate_counts"": [8], ""reason"": ""ambiguous_prediction_bit_0"", ""status"": ""abstain""}"
+4166067c,bit_manipulation,v408_bit_unique_value,abstain,,01110110,01110110,True,False,False,ambiguous_prediction_bit_4,"{""candidate_counts"": [15, 15, 11, 17, 30], ""reason"": ""ambiguous_prediction_bit_4"", ""status"": ""abstain""}"
+49fb46e8,bit_manipulation,v408_bit_unique_value,abstain,,01001110,01001110,True,False,False,ambiguous_prediction_bit_0,"{""candidate_counts"": [13], ""reason"": ""ambiguous_prediction_bit_0"", ""status"": ""abstain""}"
+779bb1f3,bit_manipulation,v408_bit_unique_value,candidate,10000001,10000001,10000001,True,True,False,unique_value_per_bit,"b0:ID(6)|RIMPL(0,3)|OR(0,6)|XNOR(1,3)|RIMPL(1,3)|OR(1,6); b1:ID(7)|OR(1,7)|AND(3,7)|RINHIB(4,7)|OR(7,1)|AND(7,3); b2:C0|RINHIB(0,1)|INHIB(0,2)|AND(0,5)|INHIB(0,6)|INHIB(1,0); b3:C0|RINHIB(0,1)|INHIB(0,2)|AND(0,5)|INHIB(0,6)|INHIB(1,0); b4:C0|RINHIB(0,1)|INHIB(0,2)|AND(0,5)|INHIB(0,6)|INHIB(1,0); b5:C0|RINHIB(0,1)|INHIB(0,2)|AND(0,5)|INHIB(0,6)|INHIB(1,0); b6:C0|RINHIB(0,1)|INHIB(0,2)|AND(0,5)|INHIB(0,6)|INHIB(1,0); b7:ID(0)|OR(0,1)|AND(0,2)|INHIB(0,5)|AND(0,6)|OR(1,0)"
+e2b02e13,bit_manipulation,v408_bit_unique_value,abstain,,01111110,01111110,True,False,False,ambiguous_prediction_bit_3,"{""candidate_counts"": [2, 3, 3, 7], ""reason"": ""ambiguous_prediction_bit_3"", ""status"": ""abstain""}"
+f8d6abd1,equation_transform,v408_equation_symbolic_pbe,abstain,,5543,5543,True,False,False,numeric_same_operator_extended,same_operator_examples=2; rules=; unique_prediction_count=0
+21245d76,bit_manipulation,v408_bit_unique_value,abstain,,01111111,01111111,True,False,False,ambiguous_prediction_bit_0,"{""candidate_counts"": [4], ""reason"": ""ambiguous_prediction_bit_0"", ""status"": ""abstain""}"
+4ed6b56f,equation_transform,v408_equation_symbolic_pbe,abstain,,"(""/""",!:`(,False,False,False,symbolic_char_transducer,no_global_mapping
+4ed6b56f,equation_transform,v408_equation_symbolic_pbe,abstain,,"(""/""",!:`(,False,False,False,symbolic_delete_selected_chars,delete_char_sets=; unique_prediction_count=0
+4ed6b56f,equation_transform,v408_equation_symbolic_pbe,abstain,,"(""/""",!:`(,False,False,False,symbolic_keep_selected_chars,keep_char_sets=; unique_prediction_count=0
+4ed6b56f,equation_transform,v408_equation_symbolic_pbe,abstain,,"(""/""",!:`(,False,False,False,symbolic_prefix_until_marker,markers=''; unique_prediction_count=0
+4ed6b56f,equation_transform,v408_equation_symbolic_pbe,abstain,,"(""/""",!:`(,False,False,False,symbolic_suffix_after_marker,markers=''; unique_prediction_count=0
+4ed6b56f,equation_transform,v408_equation_symbolic_pbe,abstain,,"(""/""",!:`(,False,False,False,symbolic_prefix_before_last_marker,markers=''; unique_prediction_count=0
+4ed6b56f,equation_transform,v408_equation_symbolic_pbe,abstain,,"(""/""",!:`(,False,False,False,symbolic_suffix_after_last_marker,markers=''; unique_prediction_count=0
+4ed6b56f,equation_transform,v408_equation_symbolic_pbe,abstain,,"(""/""",!:`(,False,False,False,symbolic_remove_first_marker,markers=''; unique_prediction_count=0
+4ed6b56f,equation_transform,v408_equation_symbolic_pbe,abstain,,"(""/""",!:`(,False,False,False,symbolic_position_template,nonuniform_rhs_lengths
+4ed6b56f,equation_transform,v408_equation_symbolic_pbe,abstain,,"(""/""",!:`(,False,False,False,symbolic_operator_index_template,programs=; unique_prediction_count=0
+e0eba119,bit_manipulation,v408_bit_unique_value,abstain,,00010010,00010010,True,False,False,ambiguous_prediction_bit_2,"{""candidate_counts"": [8, 2, 23], ""reason"": ""ambiguous_prediction_bit_2"", ""status"": ""abstain""}"
+55014a7a,bit_manipulation,v408_bit_unique_value,abstain,,01010000,01010000,True,False,False,ambiguous_prediction_bit_0,"{""candidate_counts"": [8], ""reason"": ""ambiguous_prediction_bit_0"", ""status"": ""abstain""}"
+0fe06e8c,bit_manipulation,v408_bit_unique_value,abstain,,10010010,10010010,True,False,False,ambiguous_prediction_bit_1,"{""candidate_counts"": [3, 7], ""reason"": ""ambiguous_prediction_bit_1"", ""status"": ""abstain""}"
+f8fc43d2,bit_manipulation,v408_bit_unique_value,abstain,,11100100,11100100,True,False,False,ambiguous_prediction_bit_0,"{""candidate_counts"": [11], ""reason"": ""ambiguous_prediction_bit_0"", ""status"": ""abstain""}"
+208d7838,equation_transform,v408_equation_symbolic_pbe,abstain,,[:,[&<>,False,False,False,symbolic_char_transducer,no_pair_mapping
+208d7838,equation_transform,v408_equation_symbolic_pbe,abstain,,[:,[&<>,False,False,False,symbolic_delete_selected_chars,delete_char_sets=; unique_prediction_count=0
+208d7838,equation_transform,v408_equation_symbolic_pbe,abstain,,[:,[&<>,False,False,False,symbolic_keep_selected_chars,keep_char_sets=; unique_prediction_count=0
+208d7838,equation_transform,v408_equation_symbolic_pbe,abstain,,[:,[&<>,False,False,False,symbolic_prefix_until_marker,markers=''; unique_prediction_count=0
+208d7838,equation_transform,v408_equation_symbolic_pbe,abstain,,[:,[&<>,False,False,False,symbolic_suffix_after_marker,markers=''; unique_prediction_count=0
+208d7838,equation_transform,v408_equation_symbolic_pbe,abstain,,[:,[&<>,False,False,False,symbolic_prefix_before_last_marker,markers=''; unique_prediction_count=0
+208d7838,equation_transform,v408_equation_symbolic_pbe,abstain,,[:,[&<>,False,False,False,symbolic_suffix_after_last_marker,markers=''; unique_prediction_count=0
+208d7838,equation_transform,v408_equation_symbolic_pbe,abstain,,[:,[&<>,False,False,False,symbolic_remove_first_marker,markers=''; unique_prediction_count=0
+208d7838,equation_transform,v408_equation_symbolic_pbe,abstain,,[:,[&<>,False,False,False,symbolic_position_template,nonuniform_rhs_lengths
+208d7838,equation_transform,v408_equation_symbolic_pbe,abstain,,[:,[&<>,False,False,False,symbolic_operator_index_template,programs=; unique_prediction_count=0
+58c099d2,equation_transform,v408_equation_symbolic_pbe,abstain,,-)\,^!#\,False,False,False,symbolic_char_transducer,no_global_mapping
+58c099d2,equation_transform,v408_equation_symbolic_pbe,abstain,,-)\,^!#\,False,False,False,symbolic_delete_selected_chars,delete_char_sets=; unique_prediction_count=0
+58c099d2,equation_transform,v408_equation_symbolic_pbe,abstain,,-)\,^!#\,False,False,False,symbolic_keep_selected_chars,keep_char_sets=; unique_prediction_count=0
+58c099d2,equation_transform,v408_equation_symbolic_pbe,abstain,,-)\,^!#\,False,False,False,symbolic_prefix_until_marker,markers=''; unique_prediction_count=0
+58c099d2,equation_transform,v408_equation_symbolic_pbe,abstain,,-)\,^!#\,False,False,False,symbolic_suffix_after_marker,markers=''; unique_prediction_count=0
+58c099d2,equation_transform,v408_equation_symbolic_pbe,abstain,,-)\,^!#\,False,False,False,symbolic_prefix_before_last_marker,markers=''; unique_prediction_count=0
+58c099d2,equation_transform,v408_equation_symbolic_pbe,abstain,,-)\,^!#\,False,False,False,symbolic_suffix_after_last_marker,markers=''; unique_prediction_count=0
+58c099d2,equation_transform,v408_equation_symbolic_pbe,abstain,,-)\,^!#\,False,False,False,symbolic_remove_first_marker,markers=''; unique_prediction_count=0
+58c099d2,equation_transform,v408_equation_symbolic_pbe,abstain,,-)\,^!#\,False,False,False,symbolic_position_template,nonuniform_rhs_lengths
+58c099d2,equation_transform,v408_equation_symbolic_pbe,abstain,,-)\,^!#\,False,False,False,symbolic_operator_index_template,programs=; unique_prediction_count=0
+d40ce15d,bit_manipulation,v408_bit_unique_value,abstain,,00010000,00010000,True,False,False,ambiguous_prediction_bit_2,"{""candidate_counts"": [1, 1, 7], ""reason"": ""ambiguous_prediction_bit_2"", ""status"": ""abstain""}"
+3cb3fd89,equation_transform,v408_equation_symbolic_pbe,abstain,,[[&],]$$),False,False,False,symbolic_char_transducer,no_pair_mapping
+3cb3fd89,equation_transform,v408_equation_symbolic_pbe,abstain,,[[&],]$$),False,False,False,symbolic_delete_selected_chars,delete_char_sets=; unique_prediction_count=0
+3cb3fd89,equation_transform,v408_equation_symbolic_pbe,abstain,,[[&],]$$),False,False,False,symbolic_keep_selected_chars,keep_char_sets=; unique_prediction_count=0
+3cb3fd89,equation_transform,v408_equation_symbolic_pbe,abstain,,[[&],]$$),False,False,False,symbolic_prefix_until_marker,markers=''; unique_prediction_count=0
+3cb3fd89,equation_transform,v408_equation_symbolic_pbe,abstain,,[[&],]$$),False,False,False,symbolic_suffix_after_marker,markers=''; unique_prediction_count=0
+3cb3fd89,equation_transform,v408_equation_symbolic_pbe,abstain,,[[&],]$$),False,False,False,symbolic_prefix_before_last_marker,markers=''; unique_prediction_count=0
+3cb3fd89,equation_transform,v408_equation_symbolic_pbe,abstain,,[[&],]$$),False,False,False,symbolic_suffix_after_last_marker,markers=''; unique_prediction_count=0
+3cb3fd89,equation_transform,v408_equation_symbolic_pbe,abstain,,[[&],]$$),False,False,False,symbolic_remove_first_marker,markers=''; unique_prediction_count=0
+3cb3fd89,equation_transform,v408_equation_symbolic_pbe,abstain,,[[&],]$$),False,False,False,symbolic_position_template,nonuniform_rhs_lengths
+3cb3fd89,equation_transform,v408_equation_symbolic_pbe,abstain,,[[&],]$$),False,False,False,symbolic_operator_index_template,programs=; unique_prediction_count=0
+c711f9dd,bit_manipulation,v408_bit_unique_value,abstain,,11000000,11000000,True,False,False,ambiguous_prediction_bit_0,"{""candidate_counts"": [17], ""reason"": ""ambiguous_prediction_bit_0"", ""status"": ""abstain""}"
+a26065d4,equation_transform,v408_equation_symbolic_pbe,abstain,,<',<&<#,False,False,False,symbolic_char_transducer,no_global_mapping
+a26065d4,equation_transform,v408_equation_symbolic_pbe,abstain,,<',<&<#,False,False,False,symbolic_delete_selected_chars,delete_char_sets=; unique_prediction_count=0
+a26065d4,equation_transform,v408_equation_symbolic_pbe,abstain,,<',<&<#,False,False,False,symbolic_keep_selected_chars,keep_char_sets=; unique_prediction_count=0
+a26065d4,equation_transform,v408_equation_symbolic_pbe,abstain,,<',<&<#,False,False,False,symbolic_prefix_until_marker,markers=''; unique_prediction_count=0
+a26065d4,equation_transform,v408_equation_symbolic_pbe,abstain,,<',<&<#,False,False,False,symbolic_suffix_after_marker,markers=''; unique_prediction_count=0
+a26065d4,equation_transform,v408_equation_symbolic_pbe,abstain,,<',<&<#,False,False,False,symbolic_prefix_before_last_marker,markers=''; unique_prediction_count=0
+a26065d4,equation_transform,v408_equation_symbolic_pbe,abstain,,<',<&<#,False,False,False,symbolic_suffix_after_last_marker,markers=''; unique_prediction_count=0
+a26065d4,equation_transform,v408_equation_symbolic_pbe,abstain,,<',<&<#,False,False,False,symbolic_remove_first_marker,markers=''; unique_prediction_count=0
+a26065d4,equation_transform,v408_equation_symbolic_pbe,abstain,,<',<&<#,False,False,False,symbolic_position_template,nonuniform_rhs_lengths
+a26065d4,equation_transform,v408_equation_symbolic_pbe,abstain,,<',<&<#,False,False,False,symbolic_operator_index_template,programs=; unique_prediction_count=0
+55d834d1,bit_manipulation,v408_bit_unique_value,abstain,,00111111,10111111,False,False,False,ambiguous_prediction_bit_0,"{""candidate_counts"": [8], ""reason"": ""ambiguous_prediction_bit_0"", ""status"": ""abstain""}"
+194695e8,equation_transform,v408_equation_symbolic_pbe,abstain,,%,!\{<,False,False,False,symbolic_char_transducer,no_pair_mapping
+194695e8,equation_transform,v408_equation_symbolic_pbe,abstain,,%,!\{<,False,False,False,symbolic_delete_selected_chars,delete_char_sets=; unique_prediction_count=0
+194695e8,equation_transform,v408_equation_symbolic_pbe,abstain,,%,!\{<,False,False,False,symbolic_keep_selected_chars,keep_char_sets=; unique_prediction_count=0
+194695e8,equation_transform,v408_equation_symbolic_pbe,abstain,,%,!\{<,False,False,False,symbolic_prefix_until_marker,markers=''; unique_prediction_count=0
+194695e8,equation_transform,v408_equation_symbolic_pbe,abstain,,%,!\{<,False,False,False,symbolic_suffix_after_marker,markers=''; unique_prediction_count=0
+194695e8,equation_transform,v408_equation_symbolic_pbe,abstain,,%,!\{<,False,False,False,symbolic_prefix_before_last_marker,markers=''; unique_prediction_count=0
+194695e8,equation_transform,v408_equation_symbolic_pbe,abstain,,%,!\{<,False,False,False,symbolic_suffix_after_last_marker,markers=''; unique_prediction_count=0
+194695e8,equation_transform,v408_equation_symbolic_pbe,abstain,,%,!\{<,False,False,False,symbolic_remove_first_marker,markers=''; unique_prediction_count=0
+194695e8,equation_transform,v408_equation_symbolic_pbe,abstain,,%,!\{<,False,False,False,symbolic_position_template,nonuniform_rhs_lengths
+194695e8,equation_transform,v408_equation_symbolic_pbe,abstain,,%,!\{<,False,False,False,symbolic_operator_index_template,programs=; unique_prediction_count=0
+4ef88f92,bit_manipulation,v408_bit_unique_value,candidate,01010111,01010111,01010011,False,True,True,unique_value_per_bit,"b0:XNOR(1,2)|XNOR(2,1); b1:XNOR(2,3)|XNOR(3,2); b2:XNOR(3,4)|XNOR(4,3); b3:XNOR(4,5)|XNOR(5,4); b4:NOT(2)|RIMPL(0,2)|IMPL(2,0); b5:IMPL(0,1)|RIMPL(1,0)|OR(1,2)|OR(2,1); b6:OR(2,4)|RIMPL(2,7)|OR(4,2)|IMPL(7,2); b7:IMPL(0,3)|RIMPL(3,0)|RIMPL(3,6)|IMPL(6,3)"
+5d77eff6,bit_manipulation,v408_bit_unique_value,abstain,,00011100,00011100,True,False,False,ambiguous_prediction_bit_3,"{""candidate_counts"": [2, 2, 2, 14], ""reason"": ""ambiguous_prediction_bit_3"", ""status"": ""abstain""}"
+1a7c8520,bit_manipulation,v408_bit_unique_value,abstain,,01100000,01100110,False,False,False,ambiguous_prediction_bit_0,"{""candidate_counts"": [8], ""reason"": ""ambiguous_prediction_bit_0"", ""status"": ""abstain""}"
+1c671acc,bit_manipulation,v408_bit_unique_value,abstain,,11111101,11111101,True,False,False,ambiguous_prediction_bit_0,"{""candidate_counts"": [12], ""reason"": ""ambiguous_prediction_bit_0"", ""status"": ""abstain""}"
+528ec0d8,equation_transform,v408_equation_symbolic_pbe,abstain,,-39,39,False,False,False,numeric_same_operator_extended,same_operator_examples=0 below_min=2
+4bb8c6cd,equation_transform,v408_equation_symbolic_pbe,abstain,,]}\!,]}\!,True,False,False,symbolic_char_transducer,no_global_mapping
+4bb8c6cd,equation_transform,v408_equation_symbolic_pbe,abstain,,]}\!,]}\!,True,False,False,symbolic_delete_selected_chars,delete_char_sets=; unique_prediction_count=0
+4bb8c6cd,equation_transform,v408_equation_symbolic_pbe,abstain,,]}\!,]}\!,True,False,False,symbolic_keep_selected_chars,keep_char_sets=; unique_prediction_count=0
+4bb8c6cd,equation_transform,v408_equation_symbolic_pbe,abstain,,]}\!,]}\!,True,False,False,symbolic_prefix_until_marker,markers=''; unique_prediction_count=0
+4bb8c6cd,equation_transform,v408_equation_symbolic_pbe,abstain,,]}\!,]}\!,True,False,False,symbolic_suffix_after_marker,markers=''; unique_prediction_count=0
+4bb8c6cd,equation_transform,v408_equation_symbolic_pbe,abstain,,]}\!,]}\!,True,False,False,symbolic_prefix_before_last_marker,markers=''; unique_prediction_count=0
+4bb8c6cd,equation_transform,v408_equation_symbolic_pbe,abstain,,]}\!,]}\!,True,False,False,symbolic_suffix_after_last_marker,markers=''; unique_prediction_count=0
+4bb8c6cd,equation_transform,v408_equation_symbolic_pbe,abstain,,]}\!,]}\!,True,False,False,symbolic_remove_first_marker,markers=''; unique_prediction_count=0
+4bb8c6cd,equation_transform,v408_equation_symbolic_pbe,abstain,,]}\!,]}\!,True,False,False,symbolic_position_template,nonuniform_rhs_lengths
+4bb8c6cd,equation_transform,v408_equation_symbolic_pbe,abstain,,]}\!,]}\!,True,False,False,symbolic_operator_index_template,programs=; unique_prediction_count=0
+57712d01,equation_transform,v408_equation_symbolic_pbe,abstain,,-/<,$/'{,False,False,False,symbolic_char_transducer,no_global_mapping
+57712d01,equation_transform,v408_equation_symbolic_pbe,abstain,,-/<,$/'{,False,False,False,symbolic_delete_selected_chars,delete_char_sets=; unique_prediction_count=0
+57712d01,equation_transform,v408_equation_symbolic_pbe,abstain,,-/<,$/'{,False,False,False,symbolic_keep_selected_chars,keep_char_sets=; unique_prediction_count=0
+57712d01,equation_transform,v408_equation_symbolic_pbe,abstain,,-/<,$/'{,False,False,False,symbolic_prefix_until_marker,markers=''; unique_prediction_count=0
+57712d01,equation_transform,v408_equation_symbolic_pbe,abstain,,-/<,$/'{,False,False,False,symbolic_suffix_after_marker,markers=''; unique_prediction_count=0
+57712d01,equation_transform,v408_equation_symbolic_pbe,abstain,,-/<,$/'{,False,False,False,symbolic_prefix_before_last_marker,markers=''; unique_prediction_count=0
+57712d01,equation_transform,v408_equation_symbolic_pbe,abstain,,-/<,$/'{,False,False,False,symbolic_suffix_after_last_marker,markers=''; unique_prediction_count=0
+57712d01,equation_transform,v408_equation_symbolic_pbe,abstain,,-/<,$/'{,False,False,False,symbolic_remove_first_marker,markers=''; unique_prediction_count=0
+57712d01,equation_transform,v408_equation_symbolic_pbe,abstain,,-/<,$/'{,False,False,False,symbolic_position_template,nonuniform_rhs_lengths
+57712d01,equation_transform,v408_equation_symbolic_pbe,abstain,,-/<,$/'{,False,False,False,symbolic_operator_index_template,programs=; unique_prediction_count=0
+d98d85c0,equation_transform,v408_equation_symbolic_pbe,abstain,,?(&@,(@@?,False,False,False,symbolic_char_transducer,no_global_mapping
+d98d85c0,equation_transform,v408_equation_symbolic_pbe,abstain,,?(&@,(@@?,False,False,False,symbolic_delete_selected_chars,delete_char_sets=; unique_prediction_count=0
+d98d85c0,equation_transform,v408_equation_symbolic_pbe,abstain,,?(&@,(@@?,False,False,False,symbolic_keep_selected_chars,keep_char_sets=; unique_prediction_count=0
+d98d85c0,equation_transform,v408_equation_symbolic_pbe,abstain,,?(&@,(@@?,False,False,False,symbolic_prefix_until_marker,markers=''; unique_prediction_count=0
+d98d85c0,equation_transform,v408_equation_symbolic_pbe,abstain,,?(&@,(@@?,False,False,False,symbolic_suffix_after_marker,markers=''; unique_prediction_count=0
+d98d85c0,equation_transform,v408_equation_symbolic_pbe,abstain,,?(&@,(@@?,False,False,False,symbolic_prefix_before_last_marker,markers=''; unique_prediction_count=0
+d98d85c0,equation_transform,v408_equation_symbolic_pbe,abstain,,?(&@,(@@?,False,False,False,symbolic_suffix_after_last_marker,markers=''; unique_prediction_count=0
+d98d85c0,equation_transform,v408_equation_symbolic_pbe,abstain,,?(&@,(@@?,False,False,False,symbolic_remove_first_marker,markers=''; unique_prediction_count=0
+d98d85c0,equation_transform,v408_equation_symbolic_pbe,abstain,,?(&@,(@@?,False,False,False,symbolic_position_template,nonuniform_rhs_lengths
+d98d85c0,equation_transform,v408_equation_symbolic_pbe,abstain,,?(&@,(@@?,False,False,False,symbolic_operator_index_template,programs=; unique_prediction_count=0
+b62f2e75,bit_manipulation,v408_bit_unique_value,abstain,,00111111,00111111,True,False,False,ambiguous_prediction_bit_0,"{""candidate_counts"": [47], ""reason"": ""ambiguous_prediction_bit_0"", ""status"": ""abstain""}"
+7ed40e8a,equation_transform,v408_equation_symbolic_pbe,abstain,,180,180,True,False,False,numeric_same_operator_extended,same_operator_examples=1 below_min=2
+491b8ea5,equation_transform,v408_equation_symbolic_pbe,abstain,,)!,@|]!,False,False,False,symbolic_char_transducer,no_global_mapping
+491b8ea5,equation_transform,v408_equation_symbolic_pbe,abstain,,)!,@|]!,False,False,False,symbolic_delete_selected_chars,delete_char_sets=; unique_prediction_count=0
+491b8ea5,equation_transform,v408_equation_symbolic_pbe,abstain,,)!,@|]!,False,False,False,symbolic_keep_selected_chars,keep_char_sets=; unique_prediction_count=0
+491b8ea5,equation_transform,v408_equation_symbolic_pbe,abstain,,)!,@|]!,False,False,False,symbolic_prefix_until_marker,markers=''; unique_prediction_count=0
+491b8ea5,equation_transform,v408_equation_symbolic_pbe,abstain,,)!,@|]!,False,False,False,symbolic_suffix_after_marker,markers=''; unique_prediction_count=0
+491b8ea5,equation_transform,v408_equation_symbolic_pbe,abstain,,)!,@|]!,False,False,False,symbolic_prefix_before_last_marker,markers=''; unique_prediction_count=0
+491b8ea5,equation_transform,v408_equation_symbolic_pbe,abstain,,)!,@|]!,False,False,False,symbolic_suffix_after_last_marker,markers=''; unique_prediction_count=0
+491b8ea5,equation_transform,v408_equation_symbolic_pbe,abstain,,)!,@|]!,False,False,False,symbolic_remove_first_marker,markers=''; unique_prediction_count=0
+491b8ea5,equation_transform,v408_equation_symbolic_pbe,abstain,,)!,@|]!,False,False,False,symbolic_position_template,nonuniform_rhs_lengths
+491b8ea5,equation_transform,v408_equation_symbolic_pbe,abstain,,)!,@|]!,False,False,False,symbolic_operator_index_template,programs=; unique_prediction_count=0
+eb1a62f7,equation_transform,v408_equation_symbolic_pbe,abstain,,>!>},){>),False,False,False,symbolic_char_transducer,no_global_mapping
+eb1a62f7,equation_transform,v408_equation_symbolic_pbe,abstain,,>!>},){>),False,False,False,symbolic_delete_selected_chars,delete_char_sets=; unique_prediction_count=0
+eb1a62f7,equation_transform,v408_equation_symbolic_pbe,abstain,,>!>},){>),False,False,False,symbolic_keep_selected_chars,keep_char_sets=; unique_prediction_count=0
+eb1a62f7,equation_transform,v408_equation_symbolic_pbe,abstain,,>!>},){>),False,False,False,symbolic_prefix_until_marker,markers=''; unique_prediction_count=0
+eb1a62f7,equation_transform,v408_equation_symbolic_pbe,abstain,,>!>},){>),False,False,False,symbolic_suffix_after_marker,markers=''; unique_prediction_count=0
+eb1a62f7,equation_transform,v408_equation_symbolic_pbe,abstain,,>!>},){>),False,False,False,symbolic_prefix_before_last_marker,markers=''; unique_prediction_count=0
+eb1a62f7,equation_transform,v408_equation_symbolic_pbe,abstain,,>!>},){>),False,False,False,symbolic_suffix_after_last_marker,markers=''; unique_prediction_count=0
+eb1a62f7,equation_transform,v408_equation_symbolic_pbe,abstain,,>!>},){>),False,False,False,symbolic_remove_first_marker,markers=''; unique_prediction_count=0
+eb1a62f7,equation_transform,v408_equation_symbolic_pbe,abstain,,>!>},){>),False,False,False,symbolic_position_template,no_source_for_output_index=0
+eb1a62f7,equation_transform,v408_equation_symbolic_pbe,abstain,,>!>},){>),False,False,False,symbolic_operator_index_template,programs=; unique_prediction_count=0
+0bb591e6,equation_transform,v408_equation_symbolic_pbe,abstain,,%?<,"""$%%""",False,False,False,symbolic_char_transducer,no_global_mapping
+0bb591e6,equation_transform,v408_equation_symbolic_pbe,abstain,,%?<,"""$%%""",False,False,False,symbolic_delete_selected_chars,delete_char_sets=; unique_prediction_count=0
+0bb591e6,equation_transform,v408_equation_symbolic_pbe,abstain,,%?<,"""$%%""",False,False,False,symbolic_keep_selected_chars,keep_char_sets=; unique_prediction_count=0
+0bb591e6,equation_transform,v408_equation_symbolic_pbe,abstain,,%?<,"""$%%""",False,False,False,symbolic_prefix_until_marker,markers=''; unique_prediction_count=0
+0bb591e6,equation_transform,v408_equation_symbolic_pbe,abstain,,%?<,"""$%%""",False,False,False,symbolic_suffix_after_marker,markers=''; unique_prediction_count=0
+0bb591e6,equation_transform,v408_equation_symbolic_pbe,abstain,,%?<,"""$%%""",False,False,False,symbolic_prefix_before_last_marker,markers=''; unique_prediction_count=0
+0bb591e6,equation_transform,v408_equation_symbolic_pbe,abstain,,%?<,"""$%%""",False,False,False,symbolic_suffix_after_last_marker,markers=''; unique_prediction_count=0
+0bb591e6,equation_transform,v408_equation_symbolic_pbe,abstain,,%?<,"""$%%""",False,False,False,symbolic_remove_first_marker,markers=''; unique_prediction_count=0
+0bb591e6,equation_transform,v408_equation_symbolic_pbe,abstain,,%?<,"""$%%""",False,False,False,symbolic_position_template,nonuniform_rhs_lengths
+0bb591e6,equation_transform,v408_equation_symbolic_pbe,abstain,,%?<,"""$%%""",False,False,False,symbolic_operator_index_template,programs=; unique_prediction_count=0
+c869b4f6,bit_manipulation,v408_bit_unique_value,abstain,,10010001,10010001,True,False,False,ambiguous_prediction_bit_1,"{""candidate_counts"": [3, 4], ""reason"": ""ambiguous_prediction_bit_1"", ""status"": ""abstain""}"
+3c424916,equation_transform,v408_equation_symbolic_pbe,abstain,,9351,9351,True,False,False,numeric_same_operator_extended,same_operator_examples=2; rules=; unique_prediction_count=0
+575f9709,bit_manipulation,v408_bit_unique_value,abstain,,01111111,01111111,True,False,False,ambiguous_prediction_bit_1,"{""candidate_counts"": [1, 7], ""reason"": ""ambiguous_prediction_bit_1"", ""status"": ""abstain""}"
+691608b9,bit_manipulation,v408_bit_unique_value,candidate,00101000,00101000,00101000,True,True,False,unique_value_per_bit,"b0:C0|AND(0,7)|INHIB(1,3)|AND(1,7)|RINHIB(2,7)|RINHIB(3,1); b1:C0|AND(0,7)|INHIB(1,3)|AND(1,7)|RINHIB(2,7)|RINHIB(3,1); b2:ID(0)|INHIB(0,7)|RINHIB(7,0); b3:ID(1)|AND(1,3)|INHIB(1,7)|AND(3,1)|RINHIB(7,1); b4:ID(2)|OR(2,7)|OR(7,2); b5:ID(3)|OR(1,3)|OR(3,1)|INHIB(3,7)|RINHIB(7,3); b6:ID(4)|INHIB(4,7)|RINHIB(7,4); b7:ID(5)|INHIB(5,7)|RINHIB(7,5)"
+72336119,equation_transform,v408_equation_symbolic_pbe,abstain,,3316,3316,True,False,False,numeric_same_operator_extended,same_operator_examples=2; rules=; unique_prediction_count=0
+202af98d,bit_manipulation,v408_bit_unique_value,abstain,,11111101,11111111,False,False,False,ambiguous_prediction_bit_0,"{""candidate_counts"": [4], ""reason"": ""ambiguous_prediction_bit_0"", ""status"": ""abstain""}"
+3ace787f,bit_manipulation,v408_bit_unique_value,abstain,,11111011,11111111,False,False,False,ambiguous_prediction_bit_0,"{""candidate_counts"": [8], ""reason"": ""ambiguous_prediction_bit_0"", ""status"": ""abstain""}"
+9a19fc2d,equation_transform,v408_equation_symbolic_pbe,abstain,,#>[,!&)#,False,False,False,symbolic_char_transducer,no_global_mapping
+9a19fc2d,equation_transform,v408_equation_symbolic_pbe,abstain,,#>[,!&)#,False,False,False,symbolic_delete_selected_chars,delete_char_sets=; unique_prediction_count=0
+9a19fc2d,equation_transform,v408_equation_symbolic_pbe,abstain,,#>[,!&)#,False,False,False,symbolic_keep_selected_chars,keep_char_sets=; unique_prediction_count=0
+9a19fc2d,equation_transform,v408_equation_symbolic_pbe,abstain,,#>[,!&)#,False,False,False,symbolic_prefix_until_marker,markers=''; unique_prediction_count=0
+9a19fc2d,equation_transform,v408_equation_symbolic_pbe,abstain,,#>[,!&)#,False,False,False,symbolic_suffix_after_marker,markers=''; unique_prediction_count=0
+9a19fc2d,equation_transform,v408_equation_symbolic_pbe,abstain,,#>[,!&)#,False,False,False,symbolic_prefix_before_last_marker,markers=''; unique_prediction_count=0
+9a19fc2d,equation_transform,v408_equation_symbolic_pbe,abstain,,#>[,!&)#,False,False,False,symbolic_suffix_after_last_marker,markers=''; unique_prediction_count=0
+9a19fc2d,equation_transform,v408_equation_symbolic_pbe,abstain,,#>[,!&)#,False,False,False,symbolic_remove_first_marker,markers=''; unique_prediction_count=0
+9a19fc2d,equation_transform,v408_equation_symbolic_pbe,abstain,,#>[,!&)#,False,False,False,symbolic_position_template,nonuniform_rhs_lengths
+9a19fc2d,equation_transform,v408_equation_symbolic_pbe,abstain,,#>[,!&)#,False,False,False,symbolic_operator_index_template,programs=; unique_prediction_count=0
+dc7f150a,bit_manipulation,v408_bit_unique_value,abstain,,11001011,11001011,True,False,False,ambiguous_prediction_bit_1,"{""candidate_counts"": [7, 11], ""reason"": ""ambiguous_prediction_bit_1"", ""status"": ""abstain""}"
+12e947ca,bit_manipulation,v408_bit_unique_value,abstain,,00111110,00111110,True,False,False,ambiguous_prediction_bit_1,"{""candidate_counts"": [17, 4], ""reason"": ""ambiguous_prediction_bit_1"", ""status"": ""abstain""}"
+2a5d4790,bit_manipulation,v408_bit_unique_value,abstain,,11111111,11111111,True,False,False,ambiguous_prediction_bit_0,"{""candidate_counts"": [7], ""reason"": ""ambiguous_prediction_bit_0"", ""status"": ""abstain""}"
+59bee375,bit_manipulation,v408_bit_unique_value,abstain,,10010101,10010101,True,False,False,ambiguous_prediction_bit_1,"{""candidate_counts"": [18, 26], ""reason"": ""ambiguous_prediction_bit_1"", ""status"": ""abstain""}"
+528b694b,equation_transform,v408_equation_symbolic_pbe,abstain,,"""'",>]],False,False,False,symbolic_char_transducer,no_global_mapping
+528b694b,equation_transform,v408_equation_symbolic_pbe,abstain,,"""'",>]],False,False,False,symbolic_delete_selected_chars,delete_char_sets=; unique_prediction_count=0
+528b694b,equation_transform,v408_equation_symbolic_pbe,abstain,,"""'",>]],False,False,False,symbolic_keep_selected_chars,keep_char_sets=; unique_prediction_count=0
+528b694b,equation_transform,v408_equation_symbolic_pbe,abstain,,"""'",>]],False,False,False,symbolic_prefix_until_marker,markers=''; unique_prediction_count=0
+528b694b,equation_transform,v408_equation_symbolic_pbe,abstain,,"""'",>]],False,False,False,symbolic_suffix_after_marker,markers=''; unique_prediction_count=0
+528b694b,equation_transform,v408_equation_symbolic_pbe,abstain,,"""'",>]],False,False,False,symbolic_prefix_before_last_marker,markers=''; unique_prediction_count=0
+528b694b,equation_transform,v408_equation_symbolic_pbe,abstain,,"""'",>]],False,False,False,symbolic_suffix_after_last_marker,markers=''; unique_prediction_count=0
+528b694b,equation_transform,v408_equation_symbolic_pbe,abstain,,"""'",>]],False,False,False,symbolic_remove_first_marker,markers=''; unique_prediction_count=0
+528b694b,equation_transform,v408_equation_symbolic_pbe,abstain,,"""'",>]],False,False,False,symbolic_position_template,nonuniform_rhs_lengths
+528b694b,equation_transform,v408_equation_symbolic_pbe,abstain,,"""'",>]],False,False,False,symbolic_operator_index_template,programs=; unique_prediction_count=0
+d3b20e29,equation_transform,v408_equation_symbolic_pbe,abstain,,3922,3922,True,False,False,numeric_same_operator_extended,same_operator_examples=2; rules=; unique_prediction_count=0
+d1bd7478,equation_transform,v408_equation_symbolic_pbe,abstain,,30,3,False,False,False,numeric_same_operator_extended,same_operator_examples=1 below_min=2
+21519be7,equation_transform,v408_equation_symbolic_pbe,abstain,,35,35,True,False,False,numeric_same_operator_extended,same_operator_examples=1 below_min=2
+fe6d3aa3,bit_manipulation,v408_bit_unique_value,abstain,,10100010,10100010,True,False,False,ambiguous_prediction_bit_5,"{""candidate_counts"": [3, 1, 2, 4, 1, 7], ""reason"": ""ambiguous_prediction_bit_5"", ""status"": ""abstain""}"
+01248b76,bit_manipulation,v408_bit_unique_value,abstain,,11000101,11000101,True,False,False,ambiguous_prediction_bit_1,"{""candidate_counts"": [2, 27], ""reason"": ""ambiguous_prediction_bit_1"", ""status"": ""abstain""}"
+0dfd7674,bit_manipulation,v408_bit_unique_value,abstain,,01001110,01001110,True,False,False,ambiguous_prediction_bit_1,"{""candidate_counts"": [2, 6], ""reason"": ""ambiguous_prediction_bit_1"", ""status"": ""abstain""}"
+7306613b,equation_transform,v408_equation_symbolic_pbe,abstain,,251,251,True,False,False,numeric_same_operator_extended,same_operator_examples=3; rules=; unique_prediction_count=0
+8243c91e,bit_manipulation,v408_bit_unique_value,abstain,,01000101,01000101,True,False,False,ambiguous_prediction_bit_1,"{""candidate_counts"": [10, 18], ""reason"": ""ambiguous_prediction_bit_1"", ""status"": ""abstain""}"
+fba40625,equation_transform,v408_equation_symbolic_pbe,abstain,,'>&,{>?#,False,False,False,symbolic_char_transducer,no_global_mapping
+fba40625,equation_transform,v408_equation_symbolic_pbe,abstain,,'>&,{>?#,False,False,False,symbolic_delete_selected_chars,delete_char_sets=; unique_prediction_count=0
+fba40625,equation_transform,v408_equation_symbolic_pbe,abstain,,'>&,{>?#,False,False,False,symbolic_keep_selected_chars,keep_char_sets=; unique_prediction_count=0
+fba40625,equation_transform,v408_equation_symbolic_pbe,abstain,,'>&,{>?#,False,False,False,symbolic_prefix_until_marker,markers=''; unique_prediction_count=0
+fba40625,equation_transform,v408_equation_symbolic_pbe,abstain,,'>&,{>?#,False,False,False,symbolic_suffix_after_marker,markers=''; unique_prediction_count=0
+fba40625,equation_transform,v408_equation_symbolic_pbe,abstain,,'>&,{>?#,False,False,False,symbolic_prefix_before_last_marker,markers=''; unique_prediction_count=0
+fba40625,equation_transform,v408_equation_symbolic_pbe,abstain,,'>&,{>?#,False,False,False,symbolic_suffix_after_last_marker,markers=''; unique_prediction_count=0
+fba40625,equation_transform,v408_equation_symbolic_pbe,abstain,,'>&,{>?#,False,False,False,symbolic_remove_first_marker,markers=''; unique_prediction_count=0
+fba40625,equation_transform,v408_equation_symbolic_pbe,abstain,,'>&,{>?#,False,False,False,symbolic_position_template,nonuniform_rhs_lengths
+fba40625,equation_transform,v408_equation_symbolic_pbe,abstain,,'>&,{>?#,False,False,False,symbolic_operator_index_template,programs=; unique_prediction_count=0
+9aa8dc92,equation_transform,v408_equation_symbolic_pbe,candidate,#<,/#</,/#</,True,False,False,symbolic_char_transducer,char_transducer mappings=1 usable=1
+9aa8dc92,equation_transform,v408_equation_symbolic_pbe,abstain,,/#</,/#</,True,False,False,symbolic_delete_selected_chars,delete_char_sets=; unique_prediction_count=0
+9aa8dc92,equation_transform,v408_equation_symbolic_pbe,abstain,,/#</,/#</,True,False,False,symbolic_keep_selected_chars,keep_char_sets=; unique_prediction_count=0
+9aa8dc92,equation_transform,v408_equation_symbolic_pbe,abstain,,/#</,/#</,True,False,False,symbolic_prefix_until_marker,markers=''; unique_prediction_count=0
+9aa8dc92,equation_transform,v408_equation_symbolic_pbe,abstain,,/#</,/#</,True,False,False,symbolic_suffix_after_marker,markers=''; unique_prediction_count=0
+9aa8dc92,equation_transform,v408_equation_symbolic_pbe,abstain,,/#</,/#</,True,False,False,symbolic_prefix_before_last_marker,markers=''; unique_prediction_count=0
+9aa8dc92,equation_transform,v408_equation_symbolic_pbe,abstain,,/#</,/#</,True,False,False,symbolic_suffix_after_last_marker,markers=''; unique_prediction_count=0
+9aa8dc92,equation_transform,v408_equation_symbolic_pbe,abstain,,/#</,/#</,True,False,False,symbolic_remove_first_marker,markers=''; unique_prediction_count=0
+9aa8dc92,equation_transform,v408_equation_symbolic_pbe,abstain,,/#</,/#</,True,False,False,symbolic_position_template,nonuniform_rhs_lengths
+9aa8dc92,equation_transform,v408_equation_symbolic_pbe,abstain,,/#</,/#</,True,False,False,symbolic_operator_index_template,programs=; unique_prediction_count=0
+ef2fe526,bit_manipulation,v408_bit_unique_value,abstain,,01011010,01011010,True,False,False,ambiguous_prediction_bit_0,"{""candidate_counts"": [4], ""reason"": ""ambiguous_prediction_bit_0"", ""status"": ""abstain""}"
+c5b058d6,equation_transform,v408_equation_symbolic_pbe,abstain,,134,35,False,False,False,numeric_same_operator_extended,same_operator_examples=1 below_min=2
+b4342b90,equation_transform,v408_equation_symbolic_pbe,candidate,66,66,66,True,True,False,numeric_same_operator_extended,same_operator_examples=2; rules=a_plus_b_plus1
+837a6ae7,equation_transform,v408_equation_symbolic_pbe,abstain,,<>\>,"<:{""",False,False,False,symbolic_char_transducer,no_global_mapping
+837a6ae7,equation_transform,v408_equation_symbolic_pbe,abstain,,<>\>,"<:{""",False,False,False,symbolic_delete_selected_chars,delete_char_sets=; unique_prediction_count=0
+837a6ae7,equation_transform,v408_equation_symbolic_pbe,abstain,,<>\>,"<:{""",False,False,False,symbolic_keep_selected_chars,keep_char_sets=; unique_prediction_count=0
+837a6ae7,equation_transform,v408_equation_symbolic_pbe,abstain,,<>\>,"<:{""",False,False,False,symbolic_prefix_until_marker,markers=''; unique_prediction_count=0
+837a6ae7,equation_transform,v408_equation_symbolic_pbe,abstain,,<>\>,"<:{""",False,False,False,symbolic_suffix_after_marker,markers=''; unique_prediction_count=0
+837a6ae7,equation_transform,v408_equation_symbolic_pbe,abstain,,<>\>,"<:{""",False,False,False,symbolic_prefix_before_last_marker,markers=''; unique_prediction_count=0
+837a6ae7,equation_transform,v408_equation_symbolic_pbe,abstain,,<>\>,"<:{""",False,False,False,symbolic_suffix_after_last_marker,markers=''; unique_prediction_count=0
+837a6ae7,equation_transform,v408_equation_symbolic_pbe,abstain,,<>\>,"<:{""",False,False,False,symbolic_remove_first_marker,markers=''; unique_prediction_count=0
+837a6ae7,equation_transform,v408_equation_symbolic_pbe,abstain,,<>\>,"<:{""",False,False,False,symbolic_position_template,nonuniform_rhs_lengths
+837a6ae7,equation_transform,v408_equation_symbolic_pbe,abstain,,<>\>,"<:{""",False,False,False,symbolic_operator_index_template,programs=; unique_prediction_count=0
+9d3e7f1a,bit_manipulation,v408_bit_unique_value,candidate,01101010,01101010,01101010,True,True,False,unique_value_per_bit,"b0:ID(3); b1:ID(4)|OR(1,4)|OR(4,1)|RIMPL(4,7)|IMPL(7,4); b2:ID(5)|IMPL(2,5)|RIMPL(5,2)|OR(5,6)|RIMPL(5,7)|OR(6,5); b3:ID(6)|RINHIB(1,6)|IMPL(2,6)|AND(5,6)|INHIB(6,1)|RIMPL(6,2); b4:ID(7)|IMPL(4,7)|IMPL(5,7)|RIMPL(7,4)|RIMPL(7,5); b5:C0|NOR(0,2)|INHIB(1,2)|INHIB(1,4)|AND(1,6)|NOR(2,0); b6:ID(0)|RIMPL(0,2)|IMPL(2,0); b7:ID(1)|AND(1,2)|AND(1,4)|INHIB(1,6)|AND(2,1)|AND(4,1)"
+00fdc0be,bit_manipulation,v408_bit_unique_value,abstain,,11111111,11111111,True,False,False,ambiguous_prediction_bit_1,"{""candidate_counts"": [17, 17], ""reason"": ""ambiguous_prediction_bit_1"", ""status"": ""abstain""}"
+3a7dd604,bit_manipulation,v408_bit_unique_value,abstain,,01001010,01001011,False,False,False,ambiguous_prediction_bit_0,"{""candidate_counts"": [14], ""reason"": ""ambiguous_prediction_bit_0"", ""status"": ""abstain""}"
+d0e1010b,equation_transform,v408_equation_symbolic_pbe,abstain,,!&&},|&$|,False,False,False,symbolic_char_transducer,no_global_mapping
+d0e1010b,equation_transform,v408_equation_symbolic_pbe,abstain,,!&&},|&$|,False,False,False,symbolic_delete_selected_chars,delete_char_sets=; unique_prediction_count=0
+d0e1010b,equation_transform,v408_equation_symbolic_pbe,abstain,,!&&},|&$|,False,False,False,symbolic_keep_selected_chars,keep_char_sets=; unique_prediction_count=0
+d0e1010b,equation_transform,v408_equation_symbolic_pbe,abstain,,!&&},|&$|,False,False,False,symbolic_prefix_until_marker,markers=''; unique_prediction_count=0
+d0e1010b,equation_transform,v408_equation_symbolic_pbe,abstain,,!&&},|&$|,False,False,False,symbolic_suffix_after_marker,markers=''; unique_prediction_count=0
+d0e1010b,equation_transform,v408_equation_symbolic_pbe,abstain,,!&&},|&$|,False,False,False,symbolic_prefix_before_last_marker,markers=''; unique_prediction_count=0
+d0e1010b,equation_transform,v408_equation_symbolic_pbe,abstain,,!&&},|&$|,False,False,False,symbolic_suffix_after_last_marker,markers=''; unique_prediction_count=0
+d0e1010b,equation_transform,v408_equation_symbolic_pbe,abstain,,!&&},|&$|,False,False,False,symbolic_remove_first_marker,markers=''; unique_prediction_count=0
+d0e1010b,equation_transform,v408_equation_symbolic_pbe,abstain,,!&&},|&$|,False,False,False,symbolic_position_template,nonuniform_rhs_lengths
+d0e1010b,equation_transform,v408_equation_symbolic_pbe,abstain,,!&&},|&$|,False,False,False,symbolic_operator_index_template,programs=; unique_prediction_count=0
+3feeabea,bit_manipulation,v408_bit_unique_value,abstain,,10010010,10010010,True,False,False,ambiguous_prediction_bit_0,"{""candidate_counts"": [3], ""reason"": ""ambiguous_prediction_bit_0"", ""status"": ""abstain""}"
+34c563c5,equation_transform,v408_equation_symbolic_pbe,abstain,,04`,04`,True,False,False,numeric_same_operator_extended,same_operator_examples=1 below_min=2
+5a0d5d2a,equation_transform,v408_equation_symbolic_pbe,abstain,,341,55,False,False,False,numeric_same_operator_extended,same_operator_examples=0 below_min=2
+5a9fcf68,equation_transform,v408_equation_symbolic_pbe,abstain,,4443,4,False,False,False,numeric_same_operator_extended,same_operator_examples=0 below_min=2
+6e56b39a,equation_transform,v408_equation_symbolic_pbe,abstain,,-/#,&#!,False,False,False,symbolic_char_transducer,no_global_mapping
+6e56b39a,equation_transform,v408_equation_symbolic_pbe,abstain,,-/#,&#!,False,False,False,symbolic_delete_selected_chars,delete_char_sets=; unique_prediction_count=0
+6e56b39a,equation_transform,v408_equation_symbolic_pbe,abstain,,-/#,&#!,False,False,False,symbolic_keep_selected_chars,keep_char_sets=; unique_prediction_count=0
+6e56b39a,equation_transform,v408_equation_symbolic_pbe,abstain,,-/#,&#!,False,False,False,symbolic_prefix_until_marker,markers=''; unique_prediction_count=0
+6e56b39a,equation_transform,v408_equation_symbolic_pbe,abstain,,-/#,&#!,False,False,False,symbolic_suffix_after_marker,markers=''; unique_prediction_count=0
+6e56b39a,equation_transform,v408_equation_symbolic_pbe,abstain,,-/#,&#!,False,False,False,symbolic_prefix_before_last_marker,markers=''; unique_prediction_count=0
+6e56b39a,equation_transform,v408_equation_symbolic_pbe,abstain,,-/#,&#!,False,False,False,symbolic_suffix_after_last_marker,markers=''; unique_prediction_count=0
+6e56b39a,equation_transform,v408_equation_symbolic_pbe,abstain,,-/#,&#!,False,False,False,symbolic_remove_first_marker,markers=''; unique_prediction_count=0
+6e56b39a,equation_transform,v408_equation_symbolic_pbe,abstain,,-/#,&#!,False,False,False,symbolic_position_template,no_source_for_output_index=1
+6e56b39a,equation_transform,v408_equation_symbolic_pbe,abstain,,-/#,&#!,False,False,False,symbolic_operator_index_template,programs=; unique_prediction_count=0
+4ada9150,bit_manipulation,v408_bit_unique_value,candidate,01111011,01111011,01111111,False,True,True,unique_value_per_bit,"b0:OR(2,4)|OR(4,2); b1:ID(5)|IMPL(0,5)|OR(2,5)|OR(3,5)|OR(4,5)|RIMPL(5,0); b2:OR(3,6)|OR(4,6)|OR(6,3)|OR(6,4); b3:OR(5,7)|OR(7,5); b4:ID(6); b5:ID(7)|RINHIB(3,7)|INHIB(7,3); b6:ID(0)|RIMPL(0,5)|IMPL(5,0); b7:ID(1)|INHIB(1,2)|RINHIB(2,1)"
+a5f1991c,equation_transform,v408_equation_symbolic_pbe,abstain,,/|',!&&&,False,False,False,symbolic_char_transducer,no_global_mapping
+a5f1991c,equation_transform,v408_equation_symbolic_pbe,abstain,,/|',!&&&,False,False,False,symbolic_delete_selected_chars,delete_char_sets=; unique_prediction_count=0
+a5f1991c,equation_transform,v408_equation_symbolic_pbe,abstain,,/|',!&&&,False,False,False,symbolic_keep_selected_chars,keep_char_sets=; unique_prediction_count=0
+a5f1991c,equation_transform,v408_equation_symbolic_pbe,abstain,,/|',!&&&,False,False,False,symbolic_prefix_until_marker,markers=''; unique_prediction_count=0
+a5f1991c,equation_transform,v408_equation_symbolic_pbe,abstain,,/|',!&&&,False,False,False,symbolic_suffix_after_marker,markers=''; unique_prediction_count=0
+a5f1991c,equation_transform,v408_equation_symbolic_pbe,abstain,,/|',!&&&,False,False,False,symbolic_prefix_before_last_marker,markers=''; unique_prediction_count=0
+a5f1991c,equation_transform,v408_equation_symbolic_pbe,abstain,,/|',!&&&,False,False,False,symbolic_suffix_after_last_marker,markers=''; unique_prediction_count=0
+a5f1991c,equation_transform,v408_equation_symbolic_pbe,abstain,,/|',!&&&,False,False,False,symbolic_remove_first_marker,markers=''; unique_prediction_count=0
+a5f1991c,equation_transform,v408_equation_symbolic_pbe,abstain,,/|',!&&&,False,False,False,symbolic_position_template,nonuniform_rhs_lengths
+a5f1991c,equation_transform,v408_equation_symbolic_pbe,abstain,,/|',!&&&,False,False,False,symbolic_operator_index_template,programs=; unique_prediction_count=0
+455b6b61,bit_manipulation,v408_bit_unique_value,abstain,,00111011,00111011,True,False,False,ambiguous_prediction_bit_0,"{""candidate_counts"": [28], ""reason"": ""ambiguous_prediction_bit_0"", ""status"": ""abstain""}"
+1d08947a,bit_manipulation,v408_bit_unique_value,abstain,,10010100,10010100,True,False,False,ambiguous_prediction_bit_0,"{""candidate_counts"": [14], ""reason"": ""ambiguous_prediction_bit_0"", ""status"": ""abstain""}"
+d26f22c3,bit_manipulation,v408_bit_unique_value,abstain,,11101100,11101100,True,False,False,ambiguous_prediction_bit_2,"{""candidate_counts"": [4, 2, 17], ""reason"": ""ambiguous_prediction_bit_2"", ""status"": ""abstain""}"
+c7aae192,equation_transform,v408_equation_symbolic_pbe,abstain,,">""(","\""]",False,False,False,symbolic_char_transducer,no_pair_mapping
+c7aae192,equation_transform,v408_equation_symbolic_pbe,abstain,,">""(","\""]",False,False,False,symbolic_delete_selected_chars,delete_char_sets=; unique_prediction_count=0
+c7aae192,equation_transform,v408_equation_symbolic_pbe,abstain,,">""(","\""]",False,False,False,symbolic_keep_selected_chars,keep_char_sets=; unique_prediction_count=0
+c7aae192,equation_transform,v408_equation_symbolic_pbe,abstain,,">""(","\""]",False,False,False,symbolic_prefix_until_marker,markers=''; unique_prediction_count=0
+c7aae192,equation_transform,v408_equation_symbolic_pbe,abstain,,">""(","\""]",False,False,False,symbolic_suffix_after_marker,markers=''; unique_prediction_count=0
+c7aae192,equation_transform,v408_equation_symbolic_pbe,abstain,,">""(","\""]",False,False,False,symbolic_prefix_before_last_marker,markers=''; unique_prediction_count=0
+c7aae192,equation_transform,v408_equation_symbolic_pbe,abstain,,">""(","\""]",False,False,False,symbolic_suffix_after_last_marker,markers=''; unique_prediction_count=0
+c7aae192,equation_transform,v408_equation_symbolic_pbe,abstain,,">""(","\""]",False,False,False,symbolic_remove_first_marker,markers=''; unique_prediction_count=0
+c7aae192,equation_transform,v408_equation_symbolic_pbe,abstain,,">""(","\""]",False,False,False,symbolic_position_template,nonuniform_rhs_lengths
+c7aae192,equation_transform,v408_equation_symbolic_pbe,abstain,,">""(","\""]",False,False,False,symbolic_operator_index_template,programs=; unique_prediction_count=0
+a6192d29,bit_manipulation,v408_bit_unique_value,abstain,,00001000,01111110,False,False,False,no_candidates_bit_1,"{""candidate_counts"": [4, 0], ""reason"": ""no_candidates_bit_1"", ""status"": ""abstain""}"
+e4cc7639,equation_transform,v408_equation_symbolic_pbe,abstain,,113,16,False,False,False,numeric_same_operator_extended,same_operator_examples=0 below_min=2
+eeb60061,bit_manipulation,v408_bit_unique_value,abstain,,00000101,00000101,True,False,False,ambiguous_prediction_bit_5,"{""candidate_counts"": [2, 3, 5, 3, 9, 17], ""reason"": ""ambiguous_prediction_bit_5"", ""status"": ""abstain""}"
+844f826c,equation_transform,v408_equation_symbolic_pbe,abstain,,"/""",`@>``,False,False,False,symbolic_char_transducer,no_global_mapping
+844f826c,equation_transform,v408_equation_symbolic_pbe,abstain,,"/""",`@>``,False,False,False,symbolic_delete_selected_chars,delete_char_sets=; unique_prediction_count=0
+844f826c,equation_transform,v408_equation_symbolic_pbe,abstain,,"/""",`@>``,False,False,False,symbolic_keep_selected_chars,keep_char_sets=; unique_prediction_count=0
+844f826c,equation_transform,v408_equation_symbolic_pbe,abstain,,"/""",`@>``,False,False,False,symbolic_prefix_until_marker,markers=''; unique_prediction_count=0
+844f826c,equation_transform,v408_equation_symbolic_pbe,abstain,,"/""",`@>``,False,False,False,symbolic_suffix_after_marker,markers=''; unique_prediction_count=0
+844f826c,equation_transform,v408_equation_symbolic_pbe,abstain,,"/""",`@>``,False,False,False,symbolic_prefix_before_last_marker,markers=''; unique_prediction_count=0
+844f826c,equation_transform,v408_equation_symbolic_pbe,abstain,,"/""",`@>``,False,False,False,symbolic_suffix_after_last_marker,markers=''; unique_prediction_count=0
+844f826c,equation_transform,v408_equation_symbolic_pbe,abstain,,"/""",`@>``,False,False,False,symbolic_remove_first_marker,markers=''; unique_prediction_count=0
+844f826c,equation_transform,v408_equation_symbolic_pbe,abstain,,"/""",`@>``,False,False,False,symbolic_position_template,nonuniform_rhs_lengths
+844f826c,equation_transform,v408_equation_symbolic_pbe,abstain,,"/""",`@>``,False,False,False,symbolic_operator_index_template,programs=; unique_prediction_count=0
+048cc279,bit_manipulation,v408_bit_unique_value,abstain,,01010000,01111000,False,False,False,ambiguous_prediction_bit_0,"{""candidate_counts"": [5], ""reason"": ""ambiguous_prediction_bit_0"", ""status"": ""abstain""}"
+20052c2f,bit_manipulation,v408_bit_unique_value,abstain,,01100110,01100110,True,False,False,ambiguous_prediction_bit_3,"{""candidate_counts"": [5, 7, 9, 11], ""reason"": ""ambiguous_prediction_bit_3"", ""status"": ""abstain""}"
+89dfa4c2,bit_manipulation,v408_bit_unique_value,abstain,,00111010,00111010,True,False,False,ambiguous_prediction_bit_3,"{""candidate_counts"": [3, 4, 1, 5], ""reason"": ""ambiguous_prediction_bit_3"", ""status"": ""abstain""}"
+53329505,bit_manipulation,v408_bit_unique_value,candidate,11011111,11011111,11011111,True,True,False,unique_value_per_bit,"b0:ID(1)|OR(0,1)|OR(1,0); b1:ID(2)|RINHIB(0,2)|INHIB(2,0); b2:ID(3)|OR(0,3)|OR(3,0)|RIMPL(3,5)|IMPL(5,3); b3:ID(4)|OR(0,4)|OR(4,0); b4:ID(5)|RINHIB(0,5)|IMPL(3,5)|INHIB(5,0)|RIMPL(5,3)|OR(5,7); b5:ID(6)|RINHIB(0,6)|INHIB(6,0); b6:OR(0,7)|XOR(0,7)|OR(7,0)|XOR(7,0); b7:ID(1)|OR(0,1)|OR(1,0)"
+ced947c8,bit_manipulation,v408_bit_unique_value,abstain,,01001011,01001011,True,False,False,ambiguous_prediction_bit_0,"{""candidate_counts"": [12], ""reason"": ""ambiguous_prediction_bit_0"", ""status"": ""abstain""}"
+0440e6ab,bit_manipulation,v408_bit_unique_value,abstain,,01100000,01100000,True,False,False,ambiguous_prediction_bit_0,"{""candidate_counts"": [3], ""reason"": ""ambiguous_prediction_bit_0"", ""status"": ""abstain""}"
+e641791f,bit_manipulation,v408_bit_unique_value,abstain,,00010001,00010001,True,False,False,ambiguous_prediction_bit_0,"{""candidate_counts"": [5], ""reason"": ""ambiguous_prediction_bit_0"", ""status"": ""abstain""}"
+bcdf9198,bit_manipulation,v408_bit_unique_value,abstain,,11111111,11111111,True,False,False,ambiguous_prediction_bit_0,"{""candidate_counts"": [25], ""reason"": ""ambiguous_prediction_bit_0"", ""status"": ""abstain""}"
+b69391b8,equation_transform,v408_equation_symbolic_pbe,abstain,,66,66,True,False,False,numeric_same_operator_extended,same_operator_examples=1 below_min=2
+8193e7e0,equation_transform,v408_equation_symbolic_pbe,abstain,,??{`,#?&`,False,False,False,symbolic_char_transducer,no_pair_mapping
+8193e7e0,equation_transform,v408_equation_symbolic_pbe,abstain,,??{`,#?&`,False,False,False,symbolic_delete_selected_chars,delete_char_sets=; unique_prediction_count=0
+8193e7e0,equation_transform,v408_equation_symbolic_pbe,abstain,,??{`,#?&`,False,False,False,symbolic_keep_selected_chars,keep_char_sets=; unique_prediction_count=0
+8193e7e0,equation_transform,v408_equation_symbolic_pbe,abstain,,??{`,#?&`,False,False,False,symbolic_prefix_until_marker,markers=''; unique_prediction_count=0
+8193e7e0,equation_transform,v408_equation_symbolic_pbe,abstain,,??{`,#?&`,False,False,False,symbolic_suffix_after_marker,markers=''; unique_prediction_count=0
+8193e7e0,equation_transform,v408_equation_symbolic_pbe,abstain,,??{`,#?&`,False,False,False,symbolic_prefix_before_last_marker,markers=''; unique_prediction_count=0
+8193e7e0,equation_transform,v408_equation_symbolic_pbe,abstain,,??{`,#?&`,False,False,False,symbolic_suffix_after_last_marker,markers=''; unique_prediction_count=0
+8193e7e0,equation_transform,v408_equation_symbolic_pbe,abstain,,??{`,#?&`,False,False,False,symbolic_remove_first_marker,markers=''; unique_prediction_count=0
+8193e7e0,equation_transform,v408_equation_symbolic_pbe,abstain,,??{`,#?&`,False,False,False,symbolic_position_template,nonuniform_rhs_lengths
+8193e7e0,equation_transform,v408_equation_symbolic_pbe,abstain,,??{`,#?&`,False,False,False,symbolic_operator_index_template,programs=; unique_prediction_count=0
+20cdbdb1,bit_manipulation,v408_bit_unique_value,abstain,,11100001,11100001,True,False,False,ambiguous_prediction_bit_2,"{""candidate_counts"": [3, 5, 3], ""reason"": ""ambiguous_prediction_bit_2"", ""status"": ""abstain""}"
+48ae04f6,bit_manipulation,v408_bit_unique_value,candidate,00000010,00000010,00000010,True,True,False,unique_value_per_bit,"b0:AND(4,5)|AND(5,4); b1:AND(0,6)|AND(1,5)|RINHIB(4,6)|AND(5,1)|AND(5,6)|AND(6,0); b2:AND(6,7)|AND(7,6); b3:AND(0,7)|XNOR(0,7)|AND(7,0)|XNOR(7,0); b4:C0|NOR(0,4)|NOR(0,7)|NOR(1,7)|INHIB(2,7)|NOR(4,0); b5:AND(0,2)|AND(2,0)|AND(2,3)|AND(2,5)|AND(3,2)|AND(5,2); b6:AND(1,3)|AND(3,1); b7:AND(2,4)|AND(4,2)"
+3595c82c,bit_manipulation,v408_bit_unique_value,abstain,,10011011,10011011,True,False,False,ambiguous_prediction_bit_1,"{""candidate_counts"": [2, 10], ""reason"": ""ambiguous_prediction_bit_1"", ""status"": ""abstain""}"
+5bcb572e,equation_transform,v408_equation_symbolic_pbe,abstain,,-!#,"""{!""",False,False,False,symbolic_char_transducer,no_global_mapping
+5bcb572e,equation_transform,v408_equation_symbolic_pbe,abstain,,-!#,"""{!""",False,False,False,symbolic_delete_selected_chars,delete_char_sets=; unique_prediction_count=0
+5bcb572e,equation_transform,v408_equation_symbolic_pbe,abstain,,-!#,"""{!""",False,False,False,symbolic_keep_selected_chars,keep_char_sets=; unique_prediction_count=0
+5bcb572e,equation_transform,v408_equation_symbolic_pbe,abstain,,-!#,"""{!""",False,False,False,symbolic_prefix_until_marker,markers=''; unique_prediction_count=0
+5bcb572e,equation_transform,v408_equation_symbolic_pbe,abstain,,-!#,"""{!""",False,False,False,symbolic_suffix_after_marker,markers=''; unique_prediction_count=0
+5bcb572e,equation_transform,v408_equation_symbolic_pbe,abstain,,-!#,"""{!""",False,False,False,symbolic_prefix_before_last_marker,markers=''; unique_prediction_count=0
+5bcb572e,equation_transform,v408_equation_symbolic_pbe,abstain,,-!#,"""{!""",False,False,False,symbolic_suffix_after_last_marker,markers=''; unique_prediction_count=0
+5bcb572e,equation_transform,v408_equation_symbolic_pbe,abstain,,-!#,"""{!""",False,False,False,symbolic_remove_first_marker,markers=''; unique_prediction_count=0
+5bcb572e,equation_transform,v408_equation_symbolic_pbe,abstain,,-!#,"""{!""",False,False,False,symbolic_position_template,nonuniform_rhs_lengths
+5bcb572e,equation_transform,v408_equation_symbolic_pbe,abstain,,-!#,"""{!""",False,False,False,symbolic_operator_index_template,programs=; unique_prediction_count=0
+8c1529e1,equation_transform,v408_equation_symbolic_pbe,abstain,,-52,-52,True,False,False,numeric_same_operator_extended,same_operator_examples=1 below_min=2
+cdec898a,equation_transform,v408_equation_symbolic_pbe,abstain,,<?/,>}][?,False,False,False,symbolic_char_transducer,no_global_mapping
+cdec898a,equation_transform,v408_equation_symbolic_pbe,abstain,,<?/,>}][?,False,False,False,symbolic_delete_selected_chars,delete_char_sets=; unique_prediction_count=0
+cdec898a,equation_transform,v408_equation_symbolic_pbe,abstain,,<?/,>}][?,False,False,False,symbolic_keep_selected_chars,keep_char_sets=; unique_prediction_count=0
+cdec898a,equation_transform,v408_equation_symbolic_pbe,abstain,,<?/,>}][?,False,False,False,symbolic_prefix_until_marker,markers=''; unique_prediction_count=0
+cdec898a,equation_transform,v408_equation_symbolic_pbe,abstain,,<?/,>}][?,False,False,False,symbolic_suffix_after_marker,markers=''; unique_prediction_count=0
+cdec898a,equation_transform,v408_equation_symbolic_pbe,abstain,,<?/,>}][?,False,False,False,symbolic_prefix_before_last_marker,markers=''; unique_prediction_count=0
+cdec898a,equation_transform,v408_equation_symbolic_pbe,abstain,,<?/,>}][?,False,False,False,symbolic_suffix_after_last_marker,markers=''; unique_prediction_count=0
+cdec898a,equation_transform,v408_equation_symbolic_pbe,abstain,,<?/,>}][?,False,False,False,symbolic_remove_first_marker,markers=''; unique_prediction_count=0
+cdec898a,equation_transform,v408_equation_symbolic_pbe,abstain,,<?/,>}][?,False,False,False,symbolic_position_template,nonuniform_rhs_lengths
+cdec898a,equation_transform,v408_equation_symbolic_pbe,abstain,,<?/,>}][?,False,False,False,symbolic_operator_index_template,programs=; unique_prediction_count=0
+bca238ee,bit_manipulation,v408_bit_unique_value,abstain,,00000000,00000000,True,False,False,ambiguous_prediction_bit_0,"{""candidate_counts"": [5], ""reason"": ""ambiguous_prediction_bit_0"", ""status"": ""abstain""}"
+5dffe751,bit_manipulation,v408_bit_unique_value,abstain,,01100000,01100000,True,False,False,ambiguous_prediction_bit_0,"{""candidate_counts"": [21], ""reason"": ""ambiguous_prediction_bit_0"", ""status"": ""abstain""}"
+44398869,equation_transform,v408_equation_symbolic_pbe,abstain,,5913,5913,True,False,False,numeric_same_operator_extended,same_operator_examples=4; rules=; unique_prediction_count=0
+06120e47,bit_manipulation,v408_bit_unique_value,abstain,,11110010,11111110,False,False,False,ambiguous_prediction_bit_0,"{""candidate_counts"": [3], ""reason"": ""ambiguous_prediction_bit_0"", ""status"": ""abstain""}"
+1f7407ed,bit_manipulation,v408_bit_unique_value,abstain,,00101101,00101101,True,False,False,ambiguous_prediction_bit_3,"{""candidate_counts"": [6, 6, 2, 11], ""reason"": ""ambiguous_prediction_bit_3"", ""status"": ""abstain""}"
+46dd0f22,bit_manipulation,v408_bit_unique_value,abstain,,01010000,01010000,True,False,False,ambiguous_prediction_bit_0,"{""candidate_counts"": [9], ""reason"": ""ambiguous_prediction_bit_0"", ""status"": ""abstain""}"
+edf364da,equation_transform,v408_equation_symbolic_pbe,abstain,,$(%,::{[,False,False,False,symbolic_char_transducer,no_pair_mapping
+edf364da,equation_transform,v408_equation_symbolic_pbe,abstain,,$(%,::{[,False,False,False,symbolic_delete_selected_chars,delete_char_sets=; unique_prediction_count=0
+edf364da,equation_transform,v408_equation_symbolic_pbe,abstain,,$(%,::{[,False,False,False,symbolic_keep_selected_chars,keep_char_sets=; unique_prediction_count=0
+edf364da,equation_transform,v408_equation_symbolic_pbe,abstain,,$(%,::{[,False,False,False,symbolic_prefix_until_marker,markers=''; unique_prediction_count=0
+edf364da,equation_transform,v408_equation_symbolic_pbe,abstain,,$(%,::{[,False,False,False,symbolic_suffix_after_marker,markers=''; unique_prediction_count=0
+edf364da,equation_transform,v408_equation_symbolic_pbe,abstain,,$(%,::{[,False,False,False,symbolic_prefix_before_last_marker,markers=''; unique_prediction_count=0
+edf364da,equation_transform,v408_equation_symbolic_pbe,abstain,,$(%,::{[,False,False,False,symbolic_suffix_after_last_marker,markers=''; unique_prediction_count=0
+edf364da,equation_transform,v408_equation_symbolic_pbe,abstain,,$(%,::{[,False,False,False,symbolic_remove_first_marker,markers=''; unique_prediction_count=0
+edf364da,equation_transform,v408_equation_symbolic_pbe,abstain,,$(%,::{[,False,False,False,symbolic_position_template,nonuniform_rhs_lengths
+edf364da,equation_transform,v408_equation_symbolic_pbe,abstain,,$(%,::{[,False,False,False,symbolic_operator_index_template,programs=; unique_prediction_count=0
+d6e5cd59,bit_manipulation,v408_bit_unique_value,abstain,,01101111,01101111,True,False,False,ambiguous_prediction_bit_3,"{""candidate_counts"": [2, 4, 1, 11], ""reason"": ""ambiguous_prediction_bit_3"", ""status"": ""abstain""}"
+339149c9,equation_transform,v408_equation_symbolic_pbe,abstain,,3,3,True,False,False,numeric_same_operator_extended,same_operator_examples=3; rules=; unique_prediction_count=0
+e1f3ffbb,bit_manipulation,v408_bit_unique_value,abstain,,11111010,11111011,False,False,False,ambiguous_prediction_bit_0,"{""candidate_counts"": [21], ""reason"": ""ambiguous_prediction_bit_0"", ""status"": ""abstain""}"
+4c327b55,bit_manipulation,v408_bit_unique_value,abstain,,11011100,11011110,False,False,False,ambiguous_prediction_bit_0,"{""candidate_counts"": [17], ""reason"": ""ambiguous_prediction_bit_0"", ""status"": ""abstain""}"
+0f2dec86,bit_manipulation,v408_bit_unique_value,abstain,,10111000,10111000,True,False,False,ambiguous_prediction_bit_5,"{""candidate_counts"": [7, 4, 8, 2, 6, 6], ""reason"": ""ambiguous_prediction_bit_5"", ""status"": ""abstain""}"
+e36a0065,bit_manipulation,v408_bit_unique_value,abstain,,01110110,01110110,True,False,False,ambiguous_prediction_bit_0,"{""candidate_counts"": [3], ""reason"": ""ambiguous_prediction_bit_0"", ""status"": ""abstain""}"
+c7844441,equation_transform,v408_equation_symbolic_pbe,abstain,,:/$^,:/$^,True,False,False,symbolic_char_transducer,no_global_mapping
+c7844441,equation_transform,v408_equation_symbolic_pbe,abstain,,:/$^,:/$^,True,False,False,symbolic_delete_selected_chars,delete_char_sets=; unique_prediction_count=0
+c7844441,equation_transform,v408_equation_symbolic_pbe,abstain,,:/$^,:/$^,True,False,False,symbolic_keep_selected_chars,keep_char_sets=; unique_prediction_count=0
+c7844441,equation_transform,v408_equation_symbolic_pbe,abstain,,:/$^,:/$^,True,False,False,symbolic_prefix_until_marker,markers=''; unique_prediction_count=0
+c7844441,equation_transform,v408_equation_symbolic_pbe,abstain,,:/$^,:/$^,True,False,False,symbolic_suffix_after_marker,markers=''; unique_prediction_count=0
+c7844441,equation_transform,v408_equation_symbolic_pbe,abstain,,:/$^,:/$^,True,False,False,symbolic_prefix_before_last_marker,markers=''; unique_prediction_count=0
+c7844441,equation_transform,v408_equation_symbolic_pbe,abstain,,:/$^,:/$^,True,False,False,symbolic_suffix_after_last_marker,markers=''; unique_prediction_count=0
+c7844441,equation_transform,v408_equation_symbolic_pbe,abstain,,:/$^,:/$^,True,False,False,symbolic_remove_first_marker,markers=''; unique_prediction_count=0
+c7844441,equation_transform,v408_equation_symbolic_pbe,abstain,,:/$^,:/$^,True,False,False,symbolic_position_template,nonuniform_rhs_lengths
+c7844441,equation_transform,v408_equation_symbolic_pbe,abstain,,:/$^,:/$^,True,False,False,symbolic_operator_index_template,programs=; unique_prediction_count=0
+21261dc6,equation_transform,v408_equation_symbolic_pbe,abstain,,-25,-25,True,False,False,numeric_same_operator_extended,same_operator_examples=2; rules=; unique_prediction_count=0
+70bc42af,bit_manipulation,v408_bit_unique_value,abstain,,10101010,10101010,True,False,False,ambiguous_prediction_bit_0,"{""candidate_counts"": [10], ""reason"": ""ambiguous_prediction_bit_0"", ""status"": ""abstain""}"
+4dbec546,equation_transform,v408_equation_symbolic_pbe,abstain,,611,611,True,False,False,numeric_same_operator_extended,same_operator_examples=1 below_min=2
+0c2407ef,bit_manipulation,v408_bit_unique_value,abstain,,11000011,11000011,True,False,False,ambiguous_prediction_bit_0,"{""candidate_counts"": [9], ""reason"": ""ambiguous_prediction_bit_0"", ""status"": ""abstain""}"
+939273d7,bit_manipulation,v408_bit_unique_value,abstain,,11100110,11100110,True,False,False,ambiguous_prediction_bit_3,"{""candidate_counts"": [4, 2, 4, 12], ""reason"": ""ambiguous_prediction_bit_3"", ""status"": ""abstain""}"
+8082a958,bit_manipulation,v408_bit_unique_value,candidate,00000000,00000000,00000000,True,True,False,unique_value_per_bit,"b0:C0|NOR(0,1)|RINHIB(0,4)|RINHIB(0,5)|NOR(1,0)|NOR(1,3); b1:C0|NOR(0,1)|RINHIB(0,4)|RINHIB(0,5)|NOR(1,0)|NOR(1,3); b2:C0|NOR(0,1)|RINHIB(0,4)|RINHIB(0,5)|NOR(1,0)|NOR(1,3); b3:C0|NOR(0,1)|RINHIB(0,4)|RINHIB(0,5)|NOR(1,0)|NOR(1,3); b4:C0|NOR(0,1)|RINHIB(0,4)|RINHIB(0,5)|NOR(1,0)|NOR(1,3); b5:C0|NOR(0,1)|RINHIB(0,4)|RINHIB(0,5)|NOR(1,0)|NOR(1,3); b6:C0|NOR(0,1)|RINHIB(0,4)|RINHIB(0,5)|NOR(1,0)|NOR(1,3); b7:AND(0,2)|XNOR(1,5)|AND(2,0)|AND(2,4)|AND(2,6)|AND(3,6)"
+fd48ee2f,bit_manipulation,v408_bit_unique_value,candidate,10110100,10110100,10110100,True,True,False,unique_value_per_bit,"b0:ID(2); b1:ID(3)|OR(3,6)|OR(6,3); b2:ID(4)|INHIB(4,6)|RINHIB(6,4); b3:ID(5)|INHIB(5,6)|RINHIB(6,5); b4:ID(6)|AND(0,6)|AND(3,6)|RINHIB(4,6)|RINHIB(5,6)|AND(6,0); b5:ID(7)|IMPL(0,7)|RIMPL(7,0); b6:C0|NOR(0,1)|RINHIB(0,6)|NOR(0,7)|NOR(1,0)|RINHIB(3,6); b7:C0|NOR(0,1)|RINHIB(0,6)|NOR(0,7)|NOR(1,0)|RINHIB(3,6)"
+4eb990f6,bit_manipulation,v408_bit_unique_value,candidate,00000001,00000001,00000001,True,True,False,unique_value_per_bit,"b0:C0|RINHIB(0,4)|AND(2,3)|AND(2,4)|AND(2,5)|INHIB(2,6); b1:ID(0)|OR(0,4)|OR(4,0); b2:ID(1); b3:ID(2)|INHIB(2,3)|INHIB(2,4)|INHIB(2,5)|AND(2,6)|INHIB(2,7); b4:ID(3)|RINHIB(2,3)|INHIB(3,2)|AND(3,5)|AND(5,3); b5:ID(4)|AND(0,4)|RINHIB(2,4)|AND(4,0)|INHIB(4,2)|AND(4,5); b6:ID(5)|RINHIB(2,5)|OR(3,4)|OR(3,5)|OR(4,3)|OR(4,5); b7:ID(6)|OR(2,6)|OR(6,2)"
+85af23eb,bit_manipulation,v408_bit_unique_value,abstain,,00001111,00001111,True,False,False,ambiguous_prediction_bit_3,"{""candidate_counts"": [2, 3, 1, 7], ""reason"": ""ambiguous_prediction_bit_3"", ""status"": ""abstain""}"
+0e009c6d,equation_transform,v408_equation_symbolic_pbe,abstain,,`?\!,@?`?,False,False,False,symbolic_char_transducer,no_pair_mapping
+0e009c6d,equation_transform,v408_equation_symbolic_pbe,abstain,,`?\!,@?`?,False,False,False,symbolic_delete_selected_chars,delete_char_sets=; unique_prediction_count=0
+0e009c6d,equation_transform,v408_equation_symbolic_pbe,abstain,,`?\!,@?`?,False,False,False,symbolic_keep_selected_chars,keep_char_sets=; unique_prediction_count=0
+0e009c6d,equation_transform,v408_equation_symbolic_pbe,abstain,,`?\!,@?`?,False,False,False,symbolic_prefix_until_marker,markers=''; unique_prediction_count=0
+0e009c6d,equation_transform,v408_equation_symbolic_pbe,abstain,,`?\!,@?`?,False,False,False,symbolic_suffix_after_marker,markers=''; unique_prediction_count=0
+0e009c6d,equation_transform,v408_equation_symbolic_pbe,abstain,,`?\!,@?`?,False,False,False,symbolic_prefix_before_last_marker,markers=''; unique_prediction_count=0
+0e009c6d,equation_transform,v408_equation_symbolic_pbe,abstain,,`?\!,@?`?,False,False,False,symbolic_suffix_after_last_marker,markers=''; unique_prediction_count=0
+0e009c6d,equation_transform,v408_equation_symbolic_pbe,abstain,,`?\!,@?`?,False,False,False,symbolic_remove_first_marker,markers=''; unique_prediction_count=0
+0e009c6d,equation_transform,v408_equation_symbolic_pbe,abstain,,`?\!,@?`?,False,False,False,symbolic_position_template,nonuniform_rhs_lengths
+0e009c6d,equation_transform,v408_equation_symbolic_pbe,abstain,,`?\!,@?`?,False,False,False,symbolic_operator_index_template,programs=; unique_prediction_count=0
+d2ac699b,bit_manipulation,v408_bit_unique_value,abstain,,10001011,10001011,True,False,False,ambiguous_prediction_bit_0,"{""candidate_counts"": [5], ""reason"": ""ambiguous_prediction_bit_0"", ""status"": ""abstain""}"
+b4b73143,equation_transform,v408_equation_symbolic_pbe,abstain,,>\:,>!!/,False,False,False,symbolic_char_transducer,no_global_mapping
+b4b73143,equation_transform,v408_equation_symbolic_pbe,abstain,,>\:,>!!/,False,False,False,symbolic_delete_selected_chars,delete_char_sets=; unique_prediction_count=0
+b4b73143,equation_transform,v408_equation_symbolic_pbe,abstain,,>\:,>!!/,False,False,False,symbolic_keep_selected_chars,keep_char_sets=; unique_prediction_count=0
+b4b73143,equation_transform,v408_equation_symbolic_pbe,abstain,,>\:,>!!/,False,False,False,symbolic_prefix_until_marker,markers=''; unique_prediction_count=0
+b4b73143,equation_transform,v408_equation_symbolic_pbe,abstain,,>\:,>!!/,False,False,False,symbolic_suffix_after_marker,markers=''; unique_prediction_count=0
+b4b73143,equation_transform,v408_equation_symbolic_pbe,abstain,,>\:,>!!/,False,False,False,symbolic_prefix_before_last_marker,markers=''; unique_prediction_count=0
+b4b73143,equation_transform,v408_equation_symbolic_pbe,abstain,,>\:,>!!/,False,False,False,symbolic_suffix_after_last_marker,markers=''; unique_prediction_count=0
+b4b73143,equation_transform,v408_equation_symbolic_pbe,abstain,,>\:,>!!/,False,False,False,symbolic_remove_first_marker,markers=''; unique_prediction_count=0
+b4b73143,equation_transform,v408_equation_symbolic_pbe,abstain,,>\:,>!!/,False,False,False,symbolic_position_template,nonuniform_rhs_lengths
+b4b73143,equation_transform,v408_equation_symbolic_pbe,abstain,,>\:,>!!/,False,False,False,symbolic_operator_index_template,programs=; unique_prediction_count=0
+3a148f6a,bit_manipulation,v408_bit_unique_value,candidate,00100111,00100111,00100111,True,True,False,unique_value_per_bit,"b0:XNOR(1,7)|XNOR(7,1); b1:XNOR(0,2)|XNOR(2,0); b2:XNOR(1,3)|XNOR(3,1); b3:XNOR(2,4)|XNOR(4,2); b4:XNOR(3,5)|XNOR(5,3); b5:XNOR(4,6)|XNOR(6,4); b6:XNOR(5,7)|XNOR(7,5); b7:RIMPL(0,6)|IMPL(6,0)"
+861cb154,equation_transform,v408_equation_symbolic_pbe,abstain,,2271,10,False,False,False,numeric_same_operator_extended,same_operator_examples=0 below_min=2
+90feb0c5,equation_transform,v408_equation_symbolic_pbe,abstain,,:<],?>>>,False,False,False,symbolic_char_transducer,no_global_mapping
+90feb0c5,equation_transform,v408_equation_symbolic_pbe,abstain,,:<],?>>>,False,False,False,symbolic_delete_selected_chars,delete_char_sets=; unique_prediction_count=0
+90feb0c5,equation_transform,v408_equation_symbolic_pbe,abstain,,:<],?>>>,False,False,False,symbolic_keep_selected_chars,keep_char_sets=; unique_prediction_count=0
+90feb0c5,equation_transform,v408_equation_symbolic_pbe,abstain,,:<],?>>>,False,False,False,symbolic_prefix_until_marker,markers=''; unique_prediction_count=0
+90feb0c5,equation_transform,v408_equation_symbolic_pbe,abstain,,:<],?>>>,False,False,False,symbolic_suffix_after_marker,markers=''; unique_prediction_count=0
+90feb0c5,equation_transform,v408_equation_symbolic_pbe,abstain,,:<],?>>>,False,False,False,symbolic_prefix_before_last_marker,markers=''; unique_prediction_count=0
+90feb0c5,equation_transform,v408_equation_symbolic_pbe,abstain,,:<],?>>>,False,False,False,symbolic_suffix_after_last_marker,markers=''; unique_prediction_count=0
+90feb0c5,equation_transform,v408_equation_symbolic_pbe,abstain,,:<],?>>>,False,False,False,symbolic_remove_first_marker,markers=''; unique_prediction_count=0
+90feb0c5,equation_transform,v408_equation_symbolic_pbe,abstain,,:<],?>>>,False,False,False,symbolic_position_template,nonuniform_rhs_lengths
+90feb0c5,equation_transform,v408_equation_symbolic_pbe,abstain,,:<],?>>>,False,False,False,symbolic_operator_index_template,programs=; unique_prediction_count=0
+c541eb82,equation_transform,v408_equation_symbolic_pbe,abstain,,-01,-01,True,False,False,numeric_same_operator_extended,same_operator_examples=4; rules=; unique_prediction_count=0
+b9f1d959,equation_transform,v408_equation_symbolic_pbe,abstain,,:>,"$""\[""",False,False,False,symbolic_char_transducer,no_global_mapping
+b9f1d959,equation_transform,v408_equation_symbolic_pbe,abstain,,:>,"$""\[""",False,False,False,symbolic_delete_selected_chars,delete_char_sets=; unique_prediction_count=0
+b9f1d959,equation_transform,v408_equation_symbolic_pbe,abstain,,:>,"$""\[""",False,False,False,symbolic_keep_selected_chars,keep_char_sets=; unique_prediction_count=0
+b9f1d959,equation_transform,v408_equation_symbolic_pbe,abstain,,:>,"$""\[""",False,False,False,symbolic_prefix_until_marker,markers=''; unique_prediction_count=0
+b9f1d959,equation_transform,v408_equation_symbolic_pbe,abstain,,:>,"$""\[""",False,False,False,symbolic_suffix_after_marker,markers=''; unique_prediction_count=0
+b9f1d959,equation_transform,v408_equation_symbolic_pbe,abstain,,:>,"$""\[""",False,False,False,symbolic_prefix_before_last_marker,markers=''; unique_prediction_count=0
+b9f1d959,equation_transform,v408_equation_symbolic_pbe,abstain,,:>,"$""\[""",False,False,False,symbolic_suffix_after_last_marker,markers=''; unique_prediction_count=0
+b9f1d959,equation_transform,v408_equation_symbolic_pbe,abstain,,:>,"$""\[""",False,False,False,symbolic_remove_first_marker,markers=''; unique_prediction_count=0
+b9f1d959,equation_transform,v408_equation_symbolic_pbe,abstain,,:>,"$""\[""",False,False,False,symbolic_position_template,nonuniform_rhs_lengths
+b9f1d959,equation_transform,v408_equation_symbolic_pbe,abstain,,:>,"$""\[""",False,False,False,symbolic_operator_index_template,programs=; unique_prediction_count=0
+5374b4ba,bit_manipulation,v408_bit_unique_value,candidate,10101100,10101100,10101100,True,True,False,unique_value_per_bit,"b0:ID(5)|OR(5,7)|OR(7,5); b1:ID(6); b2:ID(7)|AND(5,7)|AND(7,5); b3:C0|AND(1,2)|AND(2,1)|RINHIB(5,7)|INHIB(7,5); b4:ID(0); b5:ID(1)|INHIB(1,2)|RINHIB(2,1); b6:ID(2)|RINHIB(1,2)|INHIB(2,1); b7:ID(3)"
+ca5db1c0,equation_transform,v408_equation_symbolic_pbe,abstain,,^,"\boxed({""'|})",False,False,False,symbolic_char_transducer,no_global_mapping
+ca5db1c0,equation_transform,v408_equation_symbolic_pbe,abstain,,^,"\boxed({""'|})",False,False,False,symbolic_delete_selected_chars,delete_char_sets=; unique_prediction_count=0
+ca5db1c0,equation_transform,v408_equation_symbolic_pbe,abstain,,^,"\boxed({""'|})",False,False,False,symbolic_keep_selected_chars,keep_char_sets=; unique_prediction_count=0
+ca5db1c0,equation_transform,v408_equation_symbolic_pbe,abstain,,^,"\boxed({""'|})",False,False,False,symbolic_prefix_until_marker,markers=''; unique_prediction_count=0
+ca5db1c0,equation_transform,v408_equation_symbolic_pbe,abstain,,^,"\boxed({""'|})",False,False,False,symbolic_suffix_after_marker,markers=''; unique_prediction_count=0
+ca5db1c0,equation_transform,v408_equation_symbolic_pbe,abstain,,^,"\boxed({""'|})",False,False,False,symbolic_prefix_before_last_marker,markers=''; unique_prediction_count=0
+ca5db1c0,equation_transform,v408_equation_symbolic_pbe,abstain,,^,"\boxed({""'|})",False,False,False,symbolic_suffix_after_last_marker,markers=''; unique_prediction_count=0
+ca5db1c0,equation_transform,v408_equation_symbolic_pbe,abstain,,^,"\boxed({""'|})",False,False,False,symbolic_remove_first_marker,markers=''; unique_prediction_count=0
+ca5db1c0,equation_transform,v408_equation_symbolic_pbe,abstain,,^,"\boxed({""'|})",False,False,False,symbolic_position_template,nonuniform_rhs_lengths
+ca5db1c0,equation_transform,v408_equation_symbolic_pbe,abstain,,^,"\boxed({""'|})",False,False,False,symbolic_operator_index_template,programs=; unique_prediction_count=0
+16e73f0e,bit_manipulation,v408_bit_unique_value,abstain,,00000001,00000001,True,False,False,ambiguous_prediction_bit_0,"{""candidate_counts"": [21], ""reason"": ""ambiguous_prediction_bit_0"", ""status"": ""abstain""}"
+87007054,bit_manipulation,v408_bit_unique_value,candidate,10111111,10111111,10111111,True,True,False,unique_value_per_bit,"b0:XNOR(4,5)|XNOR(5,4); b1:INHIB(3,4)|RINHIB(4,3)|XNOR(5,6)|XNOR(6,5); b2:XNOR(6,7)|XNOR(7,6); b3:NOT(7)|NOR(2,7)|INHIB(4,7)|NOR(7,2)|RINHIB(7,4); b4:C1|RIMPL(0,2)|OR(0,5)|IMPL(2,0)|IMPL(2,7)|OR(4,7); b5:C1|RIMPL(0,2)|OR(0,5)|IMPL(2,0)|IMPL(2,7)|OR(4,7); b6:C1|RIMPL(0,2)|OR(0,5)|IMPL(2,0)|IMPL(2,7)|OR(4,7); b7:C1|RIMPL(0,2)|OR(0,5)|IMPL(2,0)|IMPL(2,7)|OR(4,7)"
+b8aa3072,bit_manipulation,v408_bit_unique_value,abstain,,00000011,00000111,False,False,False,ambiguous_prediction_bit_0,"{""candidate_counts"": [33], ""reason"": ""ambiguous_prediction_bit_0"", ""status"": ""abstain""}"
+9f1ff166,equation_transform,v408_equation_symbolic_pbe,abstain,,[,"""]'/",False,False,False,symbolic_char_transducer,no_global_mapping
+9f1ff166,equation_transform,v408_equation_symbolic_pbe,abstain,,[,"""]'/",False,False,False,symbolic_delete_selected_chars,delete_char_sets=; unique_prediction_count=0
+9f1ff166,equation_transform,v408_equation_symbolic_pbe,abstain,,[,"""]'/",False,False,False,symbolic_keep_selected_chars,keep_char_sets=; unique_prediction_count=0
+9f1ff166,equation_transform,v408_equation_symbolic_pbe,abstain,,[,"""]'/",False,False,False,symbolic_prefix_until_marker,markers=''; unique_prediction_count=0
+9f1ff166,equation_transform,v408_equation_symbolic_pbe,abstain,,[,"""]'/",False,False,False,symbolic_suffix_after_marker,markers=''; unique_prediction_count=0
+9f1ff166,equation_transform,v408_equation_symbolic_pbe,abstain,,[,"""]'/",False,False,False,symbolic_prefix_before_last_marker,markers=''; unique_prediction_count=0
+9f1ff166,equation_transform,v408_equation_symbolic_pbe,abstain,,[,"""]'/",False,False,False,symbolic_suffix_after_last_marker,markers=''; unique_prediction_count=0
+9f1ff166,equation_transform,v408_equation_symbolic_pbe,abstain,,[,"""]'/",False,False,False,symbolic_remove_first_marker,markers=''; unique_prediction_count=0
+9f1ff166,equation_transform,v408_equation_symbolic_pbe,abstain,,[,"""]'/",False,False,False,symbolic_position_template,nonuniform_rhs_lengths
+9f1ff166,equation_transform,v408_equation_symbolic_pbe,abstain,,[,"""]'/",False,False,False,symbolic_operator_index_template,programs=; unique_prediction_count=0
+82ae858c,bit_manipulation,v408_bit_unique_value,abstain,,11001101,11111101,False,False,False,ambiguous_prediction_bit_2,"{""candidate_counts"": [2, 2, 10], ""reason"": ""ambiguous_prediction_bit_2"", ""status"": ""abstain""}"
+1282c5c5,bit_manipulation,v408_bit_unique_value,abstain,,00001110,00001110,True,False,False,ambiguous_prediction_bit_3,"{""candidate_counts"": [2, 4, 4, 5], ""reason"": ""ambiguous_prediction_bit_3"", ""status"": ""abstain""}"
+432b1110,equation_transform,v408_equation_symbolic_pbe,abstain,,%[:?,\{<?,False,False,False,symbolic_char_transducer,char_transducer mappings=1 usable=0 unique_predictions=0
+432b1110,equation_transform,v408_equation_symbolic_pbe,candidate,\{*<?,%[:?,\{<?,False,False,False,symbolic_delete_selected_chars,delete_char_sets=+
+432b1110,equation_transform,v408_equation_symbolic_pbe,abstain,,%[:?,\{<?,False,False,False,symbolic_keep_selected_chars,keep_char_sets=; unique_prediction_count=0
+432b1110,equation_transform,v408_equation_symbolic_pbe,abstain,,%[:?,\{<?,False,False,False,symbolic_prefix_until_marker,markers=''; unique_prediction_count=0
+432b1110,equation_transform,v408_equation_symbolic_pbe,abstain,,%[:?,\{<?,False,False,False,symbolic_suffix_after_marker,markers=''; unique_prediction_count=0
+432b1110,equation_transform,v408_equation_symbolic_pbe,abstain,,%[:?,\{<?,False,False,False,symbolic_prefix_before_last_marker,markers=''; unique_prediction_count=0
+432b1110,equation_transform,v408_equation_symbolic_pbe,abstain,,%[:?,\{<?,False,False,False,symbolic_suffix_after_last_marker,markers=''; unique_prediction_count=0
+432b1110,equation_transform,v408_equation_symbolic_pbe,abstain,,%[:?,\{<?,False,False,False,symbolic_remove_first_marker,markers=''; unique_prediction_count=0
+432b1110,equation_transform,v408_equation_symbolic_pbe,candidate,\{<?,%[:?,\{<?,False,False,False,symbolic_position_template,"choice_counts=2,2,2,2"
+432b1110,equation_transform,v408_equation_symbolic_pbe,candidate,\{<?,%[:?,\{<?,False,False,False,symbolic_operator_index_template,programs=drop_op@2
+f333b67f,equation_transform,v408_equation_symbolic_pbe,abstain,,100,100,True,False,False,numeric_same_operator_extended,same_operator_examples=1 below_min=2
+f7d26b8d,equation_transform,v408_equation_symbolic_pbe,abstain,,/@,[}}\,False,False,False,symbolic_char_transducer,no_global_mapping
+f7d26b8d,equation_transform,v408_equation_symbolic_pbe,abstain,,/@,[}}\,False,False,False,symbolic_delete_selected_chars,delete_char_sets=; unique_prediction_count=0
+f7d26b8d,equation_transform,v408_equation_symbolic_pbe,abstain,,/@,[}}\,False,False,False,symbolic_keep_selected_chars,keep_char_sets=; unique_prediction_count=0
+f7d26b8d,equation_transform,v408_equation_symbolic_pbe,abstain,,/@,[}}\,False,False,False,symbolic_prefix_until_marker,markers=''; unique_prediction_count=0
+f7d26b8d,equation_transform,v408_equation_symbolic_pbe,abstain,,/@,[}}\,False,False,False,symbolic_suffix_after_marker,markers=''; unique_prediction_count=0
+f7d26b8d,equation_transform,v408_equation_symbolic_pbe,abstain,,/@,[}}\,False,False,False,symbolic_prefix_before_last_marker,markers=''; unique_prediction_count=0
+f7d26b8d,equation_transform,v408_equation_symbolic_pbe,abstain,,/@,[}}\,False,False,False,symbolic_suffix_after_last_marker,markers=''; unique_prediction_count=0
+f7d26b8d,equation_transform,v408_equation_symbolic_pbe,abstain,,/@,[}}\,False,False,False,symbolic_remove_first_marker,markers=''; unique_prediction_count=0
+f7d26b8d,equation_transform,v408_equation_symbolic_pbe,abstain,,/@,[}}\,False,False,False,symbolic_position_template,nonuniform_rhs_lengths
+f7d26b8d,equation_transform,v408_equation_symbolic_pbe,abstain,,/@,[}}\,False,False,False,symbolic_operator_index_template,programs=; unique_prediction_count=0
+5ba26f21,bit_manipulation,v408_bit_unique_value,abstain,,01011100,01111110,False,False,False,ambiguous_prediction_bit_0,"{""candidate_counts"": [16], ""reason"": ""ambiguous_prediction_bit_0"", ""status"": ""abstain""}"
+a00fe76a,bit_manipulation,v408_bit_unique_value,abstain,,10111011,10111011,True,False,False,ambiguous_prediction_bit_3,"{""candidate_counts"": [5, 3, 5, 5], ""reason"": ""ambiguous_prediction_bit_3"", ""status"": ""abstain""}"
+8e56a42e,equation_transform,v408_equation_symbolic_pbe,abstain,,%/<>,%/<>,True,False,False,symbolic_char_transducer,no_global_mapping
+8e56a42e,equation_transform,v408_equation_symbolic_pbe,abstain,,%/<>,%/<>,True,False,False,symbolic_delete_selected_chars,delete_char_sets=; unique_prediction_count=0
+8e56a42e,equation_transform,v408_equation_symbolic_pbe,abstain,,%/<>,%/<>,True,False,False,symbolic_keep_selected_chars,keep_char_sets=; unique_prediction_count=0
+8e56a42e,equation_transform,v408_equation_symbolic_pbe,abstain,,%/<>,%/<>,True,False,False,symbolic_prefix_until_marker,markers=''; unique_prediction_count=0
+8e56a42e,equation_transform,v408_equation_symbolic_pbe,abstain,,%/<>,%/<>,True,False,False,symbolic_suffix_after_marker,markers=''; unique_prediction_count=0
+8e56a42e,equation_transform,v408_equation_symbolic_pbe,abstain,,%/<>,%/<>,True,False,False,symbolic_prefix_before_last_marker,markers=''; unique_prediction_count=0
+8e56a42e,equation_transform,v408_equation_symbolic_pbe,abstain,,%/<>,%/<>,True,False,False,symbolic_suffix_after_last_marker,markers=''; unique_prediction_count=0
+8e56a42e,equation_transform,v408_equation_symbolic_pbe,abstain,,%/<>,%/<>,True,False,False,symbolic_remove_first_marker,markers=''; unique_prediction_count=0
+8e56a42e,equation_transform,v408_equation_symbolic_pbe,abstain,,%/<>,%/<>,True,False,False,symbolic_position_template,nonuniform_rhs_lengths
+8e56a42e,equation_transform,v408_equation_symbolic_pbe,abstain,,%/<>,%/<>,True,False,False,symbolic_operator_index_template,programs=; unique_prediction_count=0
+0e3962f6,bit_manipulation,v408_bit_unique_value,abstain,,11111110,11111110,True,False,False,ambiguous_prediction_bit_0,"{""candidate_counts"": [21], ""reason"": ""ambiguous_prediction_bit_0"", ""status"": ""abstain""}"
+20f0fac9,equation_transform,v408_equation_symbolic_pbe,abstain,,2976,65,False,False,False,numeric_same_operator_extended,same_operator_examples=0 below_min=2
+26e48e98,equation_transform,v408_equation_symbolic_pbe,abstain,,){|,"""%]%{""",False,False,False,symbolic_char_transducer,no_pair_mapping
+26e48e98,equation_transform,v408_equation_symbolic_pbe,abstain,,){|,"""%]%{""",False,False,False,symbolic_delete_selected_chars,delete_char_sets=; unique_prediction_count=0
+26e48e98,equation_transform,v408_equation_symbolic_pbe,abstain,,){|,"""%]%{""",False,False,False,symbolic_keep_selected_chars,keep_char_sets=; unique_prediction_count=0
+26e48e98,equation_transform,v408_equation_symbolic_pbe,abstain,,){|,"""%]%{""",False,False,False,symbolic_prefix_until_marker,markers=''; unique_prediction_count=0
+26e48e98,equation_transform,v408_equation_symbolic_pbe,abstain,,){|,"""%]%{""",False,False,False,symbolic_suffix_after_marker,markers=''; unique_prediction_count=0
+26e48e98,equation_transform,v408_equation_symbolic_pbe,abstain,,){|,"""%]%{""",False,False,False,symbolic_prefix_before_last_marker,markers=''; unique_prediction_count=0
+26e48e98,equation_transform,v408_equation_symbolic_pbe,abstain,,){|,"""%]%{""",False,False,False,symbolic_suffix_after_last_marker,markers=''; unique_prediction_count=0
+26e48e98,equation_transform,v408_equation_symbolic_pbe,abstain,,){|,"""%]%{""",False,False,False,symbolic_remove_first_marker,markers=''; unique_prediction_count=0
+26e48e98,equation_transform,v408_equation_symbolic_pbe,abstain,,){|,"""%]%{""",False,False,False,symbolic_position_template,nonuniform_rhs_lengths
+26e48e98,equation_transform,v408_equation_symbolic_pbe,abstain,,){|,"""%]%{""",False,False,False,symbolic_operator_index_template,programs=; unique_prediction_count=0
+0290f51a,bit_manipulation,v408_bit_unique_value,abstain,,10101111,10101111,True,False,False,ambiguous_prediction_bit_5,"{""candidate_counts"": [2, 2, 2, 3, 3, 8], ""reason"": ""ambiguous_prediction_bit_5"", ""status"": ""abstain""}"
+c30a782a,bit_manipulation,v408_bit_unique_value,candidate,01000110,01000110,01000110,True,True,False,unique_value_per_bit,"b0:AND(0,1)|AND(0,5)|INHIB(0,7)|AND(1,0)|AND(1,5)|AND(3,5); b1:XOR(5,6)|RINHIB(5,6)|XOR(6,5)|INHIB(6,5); b2:RINHIB(6,7)|INHIB(7,6); b3:AND(0,1)|AND(0,5)|INHIB(0,7)|AND(1,0)|AND(1,5)|AND(3,5); b4:ID(1)|AND(1,6)|AND(6,1); b5:ID(2)|OR(2,5)|RIMPL(2,6)|OR(5,2)|IMPL(6,2); b6:ID(3)|OR(0,3)|OR(3,0); b7:ID(4)|RIMPL(4,6)|IMPL(6,4)"
+3d24aef4,bit_manipulation,v408_bit_unique_value,abstain,,10100101,10100101,True,False,False,ambiguous_prediction_bit_1,"{""candidate_counts"": [1, 3], ""reason"": ""ambiguous_prediction_bit_1"", ""status"": ""abstain""}"
+5501c054,equation_transform,v408_equation_symbolic_pbe,abstain,,[#>#,!##^,False,False,False,symbolic_char_transducer,no_global_mapping
+5501c054,equation_transform,v408_equation_symbolic_pbe,abstain,,[#>#,!##^,False,False,False,symbolic_delete_selected_chars,delete_char_sets=; unique_prediction_count=0
+5501c054,equation_transform,v408_equation_symbolic_pbe,abstain,,[#>#,!##^,False,False,False,symbolic_keep_selected_chars,keep_char_sets=; unique_prediction_count=0
+5501c054,equation_transform,v408_equation_symbolic_pbe,abstain,,[#>#,!##^,False,False,False,symbolic_prefix_until_marker,markers=''; unique_prediction_count=0
+5501c054,equation_transform,v408_equation_symbolic_pbe,abstain,,[#>#,!##^,False,False,False,symbolic_suffix_after_marker,markers=''; unique_prediction_count=0
+5501c054,equation_transform,v408_equation_symbolic_pbe,abstain,,[#>#,!##^,False,False,False,symbolic_prefix_before_last_marker,markers=''; unique_prediction_count=0
+5501c054,equation_transform,v408_equation_symbolic_pbe,abstain,,[#>#,!##^,False,False,False,symbolic_suffix_after_last_marker,markers=''; unique_prediction_count=0
+5501c054,equation_transform,v408_equation_symbolic_pbe,abstain,,[#>#,!##^,False,False,False,symbolic_remove_first_marker,markers=''; unique_prediction_count=0
+5501c054,equation_transform,v408_equation_symbolic_pbe,abstain,,[#>#,!##^,False,False,False,symbolic_position_template,nonuniform_rhs_lengths
+5501c054,equation_transform,v408_equation_symbolic_pbe,abstain,,[#>#,!##^,False,False,False,symbolic_operator_index_template,programs=; unique_prediction_count=0
+ea6d926a,equation_transform,v408_equation_symbolic_pbe,abstain,,87,37,False,False,False,numeric_same_operator_extended,same_operator_examples=0 below_min=2

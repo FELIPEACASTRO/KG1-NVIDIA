@@ -1,0 +1,11 @@
+id,family,old_prediction,new_prediction,answer,old_correct,new_correct,accepted,sources,reasons
+274def88,equation_transform,-92,92,92,False,True,True,v405_integrated,v324_equation_numeric
+4ada9150,bit_manipulation,01111111,01111011,01111011,False,True,True,v405_integrated;v408_asym_bit_symbolic_pbe,unique_value_per_bit;v403_bit_global_exact
+4c327b55,bit_manipulation,11011110,11011100,11011100,False,True,True,v405_integrated,v403_bit_global_exact
+4ef88f92,bit_manipulation,01010011,01010111,01010111,False,True,True,v408_asym_bit_symbolic_pbe,unique_value_per_bit
+528ec0d8,equation_transform,39,-39,-39,False,True,True,v405_integrated,v324_equation_numeric
+7688e06e,equation_transform,55,-55,-55,False,True,True,v405_integrated,v324_equation_numeric
+99d6a3b5,equation_transform,(<)),?()<,?()<,False,True,True,v405_integrated,v329_symbolic_cryptarithm
+c5b058d6,equation_transform,35,134,134,False,True,True,v405_integrated,v324_equation_numeric
+d1bd7478,equation_transform,3,30,30,False,True,True,v405_integrated,v324_equation_numeric
+fb623471,equation_transform,21,-21,-21,False,True,True,v405_integrated,v324_equation_numeric

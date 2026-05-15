@@ -552,6 +552,44 @@ Mudanca de plano:
 
 Artefato: `artifacts/v407_literature_kaggle_doublecheck/KG1_V407_LITERATURE_KAGGLE_DOUBLECHECK.md`.
 
+### Step 6D - V408/V409 asymmetric bit gate
+
+Status: CPU concluido; novo ganho CPU/projection encontrado; ainda sem submit adapter-only.
+
+V408 implementou o primeiro gate direto dos achados V407:
+
+- bit per-bit com `INHIB`, `IMPL`, variantes reversas por pares ordenados e abstencao quando o valor do bit da query nao e unico;
+- symbolic/equation PBE reaproveitando a DSL V278;
+- conflitos bloqueados antes de integrar.
+
+Comparativo:
+
+| Versao | Weak total | equation | bit | Conflitos aplicados | Submit-safe? |
+|---|---:|---:|---:|---:|---|
+| V291/V290 checkpoint-6 | `192/315` | `56/155` | `136/160` | n/a | sim |
+| V405 integrated CPU projection | `201/315` | `63/155` | `138/160` | `0` | nao |
+| V408 standalone CPU gate | `194/315` | `56/155` | `138/160` | `0` aplicados, `1` bloqueado | nao |
+| V409 V405+V408 integrated projection | `202/315` | `63/155` | `139/160` | `0` | nao |
+
+Ganho novo:
+
+- V408 encontrou o bit row `4ef88f92`: baseline `01010011` -> `01010111`.
+- V409 integrou V405+V408: `+10` total sobre o baseline (`+7` equation, `+3` bit).
+
+Decisao:
+
+- este e o melhor estado CPU solver/verifier ate agora;
+- nao e submitavel como adapter;
+- o proximo dataset de transferencia precisa incluir tambem o padrao per-bit assimetrico V408, alem dos global bit rules V403.
+
+Promocao minima para qualquer smoke HF/Kaggle:
+
+- primeiro checkpoint precisa superar `192/315`;
+- `equation>56`;
+- `bit>=136`;
+- `truncated=0`;
+- caso contrario, cancelar por FinOps.
+
 ### Step 7 - Full/package/submit
 
 Status: somente depois de weak gate.
@@ -607,11 +645,15 @@ Seguir rota solver-first agressiva, mas com gate:
 1. implementar V407/V408 CPU gate para `bit_manipulation`:
    - `INHIB`, `IMPL`, pares ordenados, `MAJ`, `CH`, `XOR3`;
    - aceitar somente candidatos que batem todos os exemplos e nao causam perdas.
-2. implementar V407/V408 CPU gate para `equation_transform`:
+2. incorporar o novo bit row V408 em um V410 dataset de transferencia:
+   - traces curtos per-bit assimetricos;
+   - replay de bit para preservar `136/160`;
+   - sem treinar diretamente no weak row.
+3. implementar V407/V408 CPU gate para `equation_transform`:
    - DSL PBE/SyGuS para concat, reverse concat, signed format, literal insert/delete, pontuacao/brackets e pequenos hibridos aritmeticos;
    - aceitar somente programa unico/curto com verificacao total.
-3. se houver novo ganho CPU no-loss, atualizar V406 em V408 e rodar smoke HF/Kaggle curto.
-4. se o primeiro checkpoint nao superar V291 (`192/315`, `equation=56`, `bit=136`, trunc `0`), cancelar por FinOps.
-5. manter V291/V290 checkpoint-6 como unico package submitavel ate aparecer ganho adapter-only medido.
+4. se houver novo ganho CPU no-loss, atualizar V406 em V410 e rodar smoke HF/Kaggle curto.
+5. se o primeiro checkpoint nao superar V291 (`192/315`, `equation=56`, `bit=136`, trunc `0`), cancelar por FinOps.
+6. manter V291/V290 checkpoint-6 como unico package submitavel ate aparecer ganho adapter-only medido.
 
 Nao rodar broad SFT, prompt sweep ou job guiado por `eval_loss`. A decisao e por ACC, truncation e comparativo contra V291.

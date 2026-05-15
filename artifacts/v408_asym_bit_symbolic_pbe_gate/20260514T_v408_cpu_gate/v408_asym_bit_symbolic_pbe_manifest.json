@@ -1,0 +1,60 @@
+{
+  "accepted_by_source": {
+    "v408_bit_unique_value": 2
+  },
+  "accepted_gain_count": 2,
+  "baseline_score": {
+    "families": {
+      "bit_manipulation": {
+        "correct": 136,
+        "rows": 160
+      },
+      "equation_transform": {
+        "correct": 56,
+        "rows": 155
+      }
+    },
+    "total": {
+      "correct": 192,
+      "rows": 315
+    }
+  },
+  "config": {
+    "allow_ternary_bit": false,
+    "global_mapping_cap": 12000,
+    "max_candidates_per_bit": 64,
+    "max_char_subset_size": 4,
+    "max_position_sources": 7,
+    "min_same_operator_examples": 2,
+    "pair_mapping_cap": 3000
+  },
+  "conflict_count": 1,
+  "decision": "v408_cpu_signal_found_conflicts_blocked_not_adapter_submit_safe",
+  "generated_at_utc": "2026-05-15T00:40:10.910725+00:00",
+  "inputs": {
+    "baseline_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v342_acc_first_diagnostic\\v290_checkpoint6_baseline_predictions.csv"
+  },
+  "outputs": {
+    "accepted_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v408_asym_bit_symbolic_pbe_gate\\20260514T_v408_cpu_gate\\v408_asym_bit_symbolic_pbe_accepted.csv",
+    "candidates_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v408_asym_bit_symbolic_pbe_gate\\20260514T_v408_cpu_gate\\v408_asym_bit_symbolic_pbe_candidates.csv",
+    "conflicts_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v408_asym_bit_symbolic_pbe_gate\\20260514T_v408_cpu_gate\\v408_asym_bit_symbolic_pbe_conflicts.csv",
+    "manifest_json": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v408_asym_bit_symbolic_pbe_gate\\20260514T_v408_cpu_gate\\v408_asym_bit_symbolic_pbe_manifest.json"
+  },
+  "schema_version": "kg1_v408_asym_bit_symbolic_pbe_gate_v1",
+  "v408_score": {
+    "families": {
+      "bit_manipulation": {
+        "correct": 138,
+        "rows": 160
+      },
+      "equation_transform": {
+        "correct": 56,
+        "rows": 155
+      }
+    },
+    "total": {
+      "correct": 194,
+      "rows": 315
+    }
+  }
+}
