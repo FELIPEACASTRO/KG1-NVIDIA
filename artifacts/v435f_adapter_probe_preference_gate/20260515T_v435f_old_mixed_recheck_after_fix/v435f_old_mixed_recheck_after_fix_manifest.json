@@ -1,0 +1,68 @@
+{
+  "conditions": {
+    "all_rows_approved": true,
+    "approved_rows_ge_min": true,
+    "bit_hard_negatives_ge_min": true,
+    "bit_replay_ge_min": true,
+    "equation_hard_negatives_ge_min": true,
+    "equation_rule_classes_ge_min": true,
+    "format_negatives_absent_for_preference": false
+  },
+  "decision": {
+    "blocking_conditions": [
+      "format_negatives_absent_for_preference"
+    ],
+    "decision": "v435f_blocks_gpu",
+    "hf_gpu_allowed": false,
+    "next_action": "Do not launch GPU. Fix blocked conditions or collect better raw outputs."
+  },
+  "generated_at_utc": "2026-05-15T15:13:31.648266+00:00",
+  "inputs": {
+    "preferences_train_jsonl": "artifacts\\v435e_adapter_probe_preference_dataset\\20260515T_v435e_from_h200_probe\\v435e_adapter_probe_preference_dataset_preferences_train.jsonl",
+    "preferences_train_sha256": "7f5e11770ac09c15e695cf4690df2fe7b5985b4a8b5bf5f8a201e8b71fe8be81",
+    "preferences_val_jsonl": "artifacts\\v435e_adapter_probe_preference_dataset\\20260515T_v435e_from_h200_probe\\v435e_adapter_probe_preference_dataset_preferences_val.jsonl",
+    "preferences_val_sha256": "d66752ab8470e145744a8bf80bc9b8beab7a4a3479d9161d03d6cc61c8ff9d92",
+    "v435e_manifest_json": "artifacts\\v435e_adapter_probe_preference_dataset\\20260515T_v435e_from_h200_probe\\v435e_adapter_probe_preference_dataset_manifest.json",
+    "v435e_manifest_sha256": "b1fca0ab169f7e839d016a62a92ae9fca3cc40a23ddcc71ba6071902c3b68f25"
+  },
+  "label": "v435f_old_mixed_recheck_after_fix",
+  "outputs": {
+    "audit_jsonl": "artifacts\\v435f_adapter_probe_preference_gate\\20260515T_v435f_old_mixed_recheck_after_fix\\v435f_old_mixed_recheck_after_fix_audit.jsonl",
+    "audit_sha256": "0c20cd25b2b2057e5b5851c7bc0d83951dc6286dc5619e61fd1eaae394067c5f",
+    "manifest_json": "artifacts\\v435f_adapter_probe_preference_gate\\20260515T_v435f_old_mixed_recheck_after_fix\\v435f_old_mixed_recheck_after_fix_manifest.json"
+  },
+  "schema_version": "kg1_v435f_adapter_probe_preference_gate_v1",
+  "summary": {
+    "approved_equation_hard_negative_rule_class_count": 4,
+    "approved_equation_hard_negative_rule_classes": [
+      "equation_numeric_operator_to_number",
+      "equation_numeric_operator_to_symbolic",
+      "equation_symbolic_sequence",
+      "equation_symbolic_short"
+    ],
+    "approved_family_counts": {
+      "bit_manipulation": 80,
+      "equation_transform": 120
+    },
+    "approved_hard_negative_family_counts": {
+      "bit_manipulation": 13,
+      "equation_transform": 120
+    },
+    "approved_negative_type_counts": {
+      "format_negative_format_no_box": 67,
+      "hard_negative_adapter_exact_wrong": 133
+    },
+    "approved_rows": 200,
+    "blocked_reason_counts": {},
+    "blocked_rows": 0,
+    "rows": 200
+  },
+  "thresholds": {
+    "allow_format_negatives": false,
+    "min_approved_rows": 120,
+    "min_bit_hard_negatives": 10,
+    "min_bit_replay": 0,
+    "min_equation_hard_negatives": 100,
+    "min_equation_rule_classes": 4
+  }
+}

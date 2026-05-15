@@ -1,0 +1,4 @@
+split,rows,family_counts,negative_type_counts,rule_class_counts
+train,109,"{'bit_manipulation': 11, 'equation_transform': 98}",{'hard_negative_adapter_exact_wrong': 109},"{'equation_symbolic_sequence': 48, 'equation_symbolic_short': 29, 'equation_numeric_operator_to_number': 18, 'bit_adapter_exact_wrong': 11, 'equation_numeric_operator_to_symbolic': 3}"
+validation,24,"{'bit_manipulation': 2, 'equation_transform': 22}",{'hard_negative_adapter_exact_wrong': 24},"{'equation_symbolic_sequence': 16, 'equation_symbolic_short': 3, 'bit_adapter_exact_wrong': 2, 'equation_numeric_operator_to_number': 2, 'equation_numeric_operator_to_symbolic': 1}"
+all,133,"{'bit_manipulation': 13, 'equation_transform': 120}",{'hard_negative_adapter_exact_wrong': 133},"{'equation_symbolic_sequence': 64, 'equation_symbolic_short': 32, 'equation_numeric_operator_to_number': 20, 'bit_adapter_exact_wrong': 13, 'equation_numeric_operator_to_symbolic': 4}"

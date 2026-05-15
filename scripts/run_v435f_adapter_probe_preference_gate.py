@@ -20,7 +20,7 @@ from typing import Any
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_V435E_DIR = REPO_ROOT / "artifacts/v435e_adapter_probe_preference_dataset/20260515T_v435e_from_h200_probe"
+DEFAULT_V435E_DIR = REPO_ROOT / "artifacts/v435e_adapter_probe_preference_dataset/20260515T_v435e_hardneg_only"
 DEFAULT_V435E_MANIFEST = DEFAULT_V435E_DIR / "v435e_adapter_probe_preference_dataset_manifest.json"
 DEFAULT_PREF_TRAIN = DEFAULT_V435E_DIR / "v435e_adapter_probe_preference_dataset_preferences_train.jsonl"
 DEFAULT_PREF_VAL = DEFAULT_V435E_DIR / "v435e_adapter_probe_preference_dataset_preferences_val.jsonl"
@@ -220,12 +220,18 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
     summary = summarize(audits)
     hard_counts = summary["approved_hard_negative_family_counts"]
     negative_counts = summary["approved_negative_type_counts"]
+    format_negative_rows = sum(
+        int(count)
+        for key, count in negative_counts.items()
+        if str(key).startswith("format_negative_")
+    )
     conditions = {
         "all_rows_approved": summary["blocked_rows"] == 0,
         "approved_rows_ge_min": summary["approved_rows"] >= args.min_approved_rows,
         "equation_hard_negatives_ge_min": int(hard_counts.get("equation_transform", 0)) >= args.min_equation_hard_negatives,
         "bit_hard_negatives_ge_min": int(hard_counts.get("bit_manipulation", 0)) >= args.min_bit_hard_negatives,
         "bit_replay_ge_min": int(negative_counts.get("format_negative_format_no_box", 0)) >= args.min_bit_replay,
+        "format_negatives_absent_for_preference": args.allow_format_negatives or format_negative_rows == 0,
         "equation_rule_classes_ge_min": summary["approved_equation_hard_negative_rule_class_count"] >= args.min_equation_rule_classes,
     }
     hf_gpu_allowed = all(conditions.values())
@@ -262,6 +268,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             "min_bit_hard_negatives": args.min_bit_hard_negatives,
             "min_bit_replay": args.min_bit_replay,
             "min_equation_rule_classes": args.min_equation_rule_classes,
+            "allow_format_negatives": args.allow_format_negatives,
         },
         "summary": summary,
         "conditions": conditions,
@@ -320,11 +327,19 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--preferences-val-jsonl", type=Path, default=DEFAULT_PREF_VAL)
     parser.add_argument("--output-dir", type=Path, default=DEFAULT_OUTPUT_ROOT / utc_compact())
     parser.add_argument("--label", default="v435f_adapter_probe_preference_gate")
-    parser.add_argument("--min-approved-rows", type=int, default=180)
+    parser.add_argument("--min-approved-rows", type=int, default=120)
     parser.add_argument("--min-equation-hard-negatives", type=int, default=100)
     parser.add_argument("--min-bit-hard-negatives", type=int, default=10)
-    parser.add_argument("--min-bit-replay", type=int, default=50)
+    parser.add_argument("--min-bit-replay", type=int, default=0)
     parser.add_argument("--min-equation-rule-classes", type=int, default=4)
+    parser.add_argument(
+        "--allow-format-negatives",
+        action="store_true",
+        help=(
+            "Permit format-only negatives. Keep disabled for GPU preference training because "
+            "mean-NLL preference can reward shorter no-box completions."
+        ),
+    )
     return parser.parse_args()
 
 

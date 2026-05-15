@@ -1,5 +1,11 @@
 #!/usr/bin/env python3
-"""Launch V436 H200 preference smoke over V435E exact-wrong pairs."""
+"""Archived V436 launcher.
+
+The original V436 launch consumed the mixed V435E dataset that included
+format-only negatives. V435F now blocks that dataset, so this launcher is
+fail-closed to prevent accidental relaunch. Create a fresh launcher only after
+the hard-negative-only V435E artifact is uploaded and gated.
+"""
 
 from __future__ import annotations
 
@@ -159,6 +165,11 @@ def hardware_to_dict(item: object) -> dict[str, object]:
 
 
 def main() -> int:
+    raise RuntimeError(
+        "Archived launcher: original V436 used mixed V435E format negatives. "
+        "Use the hard-negative-only V435E artifact plus the corrected V435F gate "
+        "before creating any new HF GPU job."
+    )
     token = get_token()
     if not token:
         raise RuntimeError("HF token is required to launch V436.")

@@ -18,6 +18,13 @@
 - The CI workflow `.github/workflows/notebook-release-gate.yml` enforces this gate for every changed notebook on push and pull request.
 - Historical notebooks are not retroactively required to pass until they are edited; once edited, they must satisfy the current gate.
 
+## Static Safety Gate
+
+- Every created or changed script, HF/Kaggle job launcher, workflow, or notebook must pass `python scripts/kg1_static_safety_gate.py <changed paths>` before it is delivered, committed, pushed, or executed.
+- This gate blocks active jobs/notebooks from using archived mixed V435E preference data, `format_negative_*` preference rows, or `ALLOW_FORMAT_NEGATIVES` unless the file is an explicit CPU diagnostic gate/builder.
+- Any preference-training job must use hard-negative-only preference data by default and must fail closed if a dataset contains format-only negatives.
+- The CI workflow `.github/workflows/notebook-release-gate.yml` runs this gate over changed files on push and pull request.
+
 ## HF Job Log Monitoring
 
 - While actively analyzing a running HF/Kaggle/Colab job, check job status and logs every ~30 seconds unless a command is blocked, a human explicitly pauses monitoring, or the job reaches a terminal state.

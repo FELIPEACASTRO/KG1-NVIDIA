@@ -1,0 +1,101 @@
+{
+  "build_policy": {
+    "bit_guardrail": "V435D bit rows with correct=true are excluded from preference data by default; format-only negatives are allowed only when --include-format-negatives is set",
+    "chosen": "short deterministic completion ending with escaped boxed public-train answer",
+    "hard_negative_source": "V435D rows with correct=false",
+    "include_format_negatives": false,
+    "rejected": "short exact-wrong completion ending with escaped boxed adapter prediction",
+    "validation_mod": 5
+  },
+  "generated_at_utc": "2026-05-15T15:12:03.481647+00:00",
+  "inputs": {
+    "v435d_detail_csv": "artifacts\\v435d_adapter_probe_output_analysis\\20260515T141924Z_hf\\v435d_adapter_probe_output_analysis_detail.csv",
+    "v435d_detail_sha256": "cb8922fa9192c412baf53ab1cf7fd6215295ca8c9b9949951b024d5754785d65",
+    "v435d_manifest_json": "artifacts\\v435d_adapter_probe_output_analysis\\20260515T141924Z_hf\\v435d_adapter_probe_output_analysis_manifest.json",
+    "v435d_manifest_sha256": "361270be5648b4c0e68702325ae257185d455dec2f35789e4e6653bc27c24157"
+  },
+  "label": "v435e_adapter_probe_preference_dataset",
+  "next_gate": "Run V435F adapter-probe preference gate before any HF GPU job.",
+  "outputs": {
+    "manifest_json": "artifacts\\v435e_adapter_probe_preference_dataset\\20260515T_v435e_hardneg_only\\v435e_adapter_probe_preference_dataset_manifest.json",
+    "preferences_train_jsonl": "artifacts\\v435e_adapter_probe_preference_dataset\\20260515T_v435e_hardneg_only\\v435e_adapter_probe_preference_dataset_preferences_train.jsonl",
+    "preferences_train_sha256": "9dfe89d6da803e593da566ec72865815ccbadb4b42385f82bb7ae2e9d0ad240b",
+    "preferences_val_jsonl": "artifacts\\v435e_adapter_probe_preference_dataset\\20260515T_v435e_hardneg_only\\v435e_adapter_probe_preference_dataset_preferences_val.jsonl",
+    "preferences_val_sha256": "92cd619bc7e315e930742cdf14978452f93d25ae07c28e7ded2ba91816c2d503",
+    "summary_csv": "artifacts\\v435e_adapter_probe_preference_dataset\\20260515T_v435e_hardneg_only\\v435e_adapter_probe_preference_dataset_summary.csv",
+    "summary_sha256": "906b24582946b3d59823308b1c93a5108a30554f2cf9b177d1f11bf8bb96be71"
+  },
+  "schema_version": "kg1_v435e_adapter_probe_preference_dataset_v1",
+  "source_counts": {
+    "bit_replay_family_counts": {
+      "bit_manipulation": 67
+    },
+    "bit_replay_source_rows": 67,
+    "detail_rows": 280,
+    "hard_negative_family_counts": {
+      "bit_manipulation": 13,
+      "equation_transform": 120
+    },
+    "hard_negative_rows": 133
+  },
+  "source_policy": {
+    "labels_joined_after_collection_from_public_train": true,
+    "purpose": "Train only on public-train prompt probes where the frozen adapter made real mistakes.",
+    "raw_outputs_collected_without_labels": true,
+    "weak_full_rows_used_for_training": false,
+    "weak_full_used_only_as_reference_overlap_filter": true
+  },
+  "summary": {
+    "all": {
+      "family_counts": {
+        "bit_manipulation": 13,
+        "equation_transform": 120
+      },
+      "negative_type_counts": {
+        "hard_negative_adapter_exact_wrong": 133
+      },
+      "rows": 133,
+      "rule_class_counts": {
+        "bit_adapter_exact_wrong": 13,
+        "equation_numeric_operator_to_number": 20,
+        "equation_numeric_operator_to_symbolic": 4,
+        "equation_symbolic_sequence": 64,
+        "equation_symbolic_short": 32
+      }
+    },
+    "train": {
+      "family_counts": {
+        "bit_manipulation": 11,
+        "equation_transform": 98
+      },
+      "negative_type_counts": {
+        "hard_negative_adapter_exact_wrong": 109
+      },
+      "rows": 109,
+      "rule_class_counts": {
+        "bit_adapter_exact_wrong": 11,
+        "equation_numeric_operator_to_number": 18,
+        "equation_numeric_operator_to_symbolic": 3,
+        "equation_symbolic_sequence": 48,
+        "equation_symbolic_short": 29
+      }
+    },
+    "validation": {
+      "family_counts": {
+        "bit_manipulation": 2,
+        "equation_transform": 22
+      },
+      "negative_type_counts": {
+        "hard_negative_adapter_exact_wrong": 24
+      },
+      "rows": 24,
+      "rule_class_counts": {
+        "bit_adapter_exact_wrong": 2,
+        "equation_numeric_operator_to_number": 2,
+        "equation_numeric_operator_to_symbolic": 1,
+        "equation_symbolic_sequence": 16,
+        "equation_symbolic_short": 3
+      }
+    }
+  }
+}

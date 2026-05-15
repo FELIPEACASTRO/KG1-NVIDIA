@@ -23,8 +23,9 @@ jobs:
 
       - name: Validate Gate Script
         run: |
-          python -m py_compile scripts/notebook_release_gate.py scripts/scan_repo_secrets.py
+          python -m py_compile scripts/notebook_release_gate.py scripts/scan_repo_secrets.py scripts/kg1_static_safety_gate.py
           python scripts/notebook_release_gate.py --self-test
+          python scripts/kg1_static_safety_gate.py --self-test
 
       - name: Secret Scan
         run: python scripts/scan_repo_secrets.py
@@ -111,6 +112,12 @@ jobs:
               print(f"  {path}")
           raise SystemExit(subprocess.call([sys.executable, "scripts/notebook_release_gate.py", *paths]))
           PY
+
+      - name: Run Static Safety Gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/kg1_static_safety_gate.py --paths-file artifacts/notebook_release_gate/changed_files.txt --allow-empty
 
       - name: No Changed Notebooks
         if: steps.changed.outputs.has_notebooks != 'true'

@@ -53,6 +53,7 @@ EXPECTED_PREF_TRAIN_SHA256 = env_str("EXPECTED_PREF_TRAIN_SHA256", "")
 EXPECTED_PREF_VAL_SHA256 = env_str("EXPECTED_PREF_VAL_SHA256", "")
 MIN_PREF_TRAIN_EXAMPLES = env_int("MIN_PREF_TRAIN_EXAMPLES", 1)
 MIN_PREF_VAL_EXAMPLES = env_int("MIN_PREF_VAL_EXAMPLES", 1)
+ALLOW_FORMAT_NEGATIVES = env_bool("ALLOW_FORMAT_NEGATIVES", False)
 
 PREF_BETA = env_float("PREF_BETA", 0.10)
 PREF_MARGIN = env_float("PREF_MARGIN", 0.0)
@@ -109,6 +110,8 @@ def validate_preference_rows(rows: list[dict[str, Any]], label: str, min_rows: i
         negative_counts[negative_type] = negative_counts.get(negative_type, 0) + 1
         if not row_id or not prompt or not chosen or not rejected:
             bad.append(f"{idx}:missing_required_field")
+        if negative_type.startswith("format_negative_") and not ALLOW_FORMAT_NEGATIVES:
+            bad.append(f"{row_id}:format_negative_blocked")
         if row_id in ids:
             bad.append(f"{row_id}:duplicate_id")
         ids.add(row_id)
@@ -249,6 +252,8 @@ def evaluate_preferences(
     rejected_losses: list[float] = []
     family_totals: dict[str, int] = {}
     family_correct: dict[str, int] = {}
+    negative_type_totals: dict[str, int] = {}
+    negative_type_correct: dict[str, int] = {}
     micro = max(1, base.MICRO_BATCH_SIZE)
     progress_every = max(1, int(os.environ.get("PREFERENCE_EVAL_PROGRESS_EVERY", "8")))
     for start in range(0, len(sample), micro):
@@ -271,6 +276,10 @@ def evaluate_preferences(
             family = str(pair.get("family", "unknown"))
             family_totals[family] = family_totals.get(family, 0) + 1
             family_correct[family] = family_correct.get(family, 0) + int(bool(win))
+            metadata = pair.get("metadata") if isinstance(pair.get("metadata"), dict) else {}
+            negative_type = str(pair.get("negative_type") or metadata.get("negative_type") or "unknown")
+            negative_type_totals[negative_type] = negative_type_totals.get(negative_type, 0) + 1
+            negative_type_correct[negative_type] = negative_type_correct.get(negative_type, 0) + int(bool(win))
             chosen_losses.append(float(c_loss))
             rejected_losses.append(float(r_loss))
         if total == len(sample) or total % progress_every == 0:
@@ -292,6 +301,12 @@ def evaluate_preferences(
         "family_accuracy": {
             key: family_correct.get(key, 0) / max(1, value)
             for key, value in sorted(family_totals.items())
+        },
+        "negative_type_totals": negative_type_totals,
+        "negative_type_correct": negative_type_correct,
+        "negative_type_accuracy": {
+            key: negative_type_correct.get(key, 0) / max(1, value)
+            for key, value in sorted(negative_type_totals.items())
         },
     }
 
@@ -330,6 +345,7 @@ def save_training_manifest(
             "chosen_ce_weight": CHOSEN_CE_WEIGHT,
             "rejected_ce_weight": REJECTED_CE_WEIGHT,
             "pair_score_mode": PAIR_SCORE_MODE,
+            "allow_format_negatives": ALLOW_FORMAT_NEGATIVES,
         },
         "lora": {
             "r": base.LORA_R,
@@ -385,7 +401,11 @@ def train() -> None:
     print(f"run_id={base.RUN_ID}", flush=True)
     print(f"preference_train_file={PREF_TRAIN_FILE}", flush=True)
     print(f"preference_val_file={PREF_VAL_FILE}", flush=True)
-    print(f"objective beta={PREF_BETA} margin={PREF_MARGIN} pref_weight={PREF_LOSS_WEIGHT}", flush=True)
+    print(
+        f"objective beta={PREF_BETA} margin={PREF_MARGIN} pref_weight={PREF_LOSS_WEIGHT} "
+        f"allow_format_negatives={ALLOW_FORMAT_NEGATIVES}",
+        flush=True,
+    )
 
     train_path = base.resolve_data_file(PREF_TRAIN_FILE)
     val_path = base.resolve_data_file(PREF_VAL_FILE)

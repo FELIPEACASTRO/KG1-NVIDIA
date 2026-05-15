@@ -33,10 +33,11 @@ Regra central: ganho so conta se aparecer no adapter/package. Teacher CPU, solve
 | Melhor teacher CPU V414/V366 | weak 222/315, equation 63, bit 159 | nao submit-safe |
 | Melhor projecao solver integrada V405 | weak 201/315, equation 63, bit 138 | nao submit-safe |
 | OpenRouter V434/V434B/V434C | sem ganho pronto; trouxe filtros e rota V435 | evidencia para plano |
-| V435 CPU pair gate | 0/3558 pares aprovados | bloqueia GPU; faltam raw outputs reais V291/V290 e certificados |
-| V435B prompt pack | 840 prompts permitidos, 0 answers exportadas | pronto para coleta de raw outputs, nao libera treino |
-| HF GPU treino | bloqueado | liberar somente com V435 `hf_gpu_allowed=true` |
-| HF V435C inferencia | preparado | permitido apenas para coletar raw outputs V291/V290, com caps e kill-switch |
+| V435 CPU pair gate inicial | 0/3558 pares aprovados | bloqueou GPU ate existir raw output real |
+| V435C/V435D raw-output audit | 280 probes, 133 erros reais do adapter | base permitida para hard negatives |
+| V435E antigo misto | 200 rows, 67 format-only negatives | arquivado; contaminava mean-NLL preference |
+| V435E corrigido hard-negative-only | 133 rows, equation 120, bit 13 | unico dataset preference permitido agora |
+| V435F corrigido | hard-only passa; dataset antigo e bloqueado | GPU so com novo launcher e novo kill-switch |
 
 ## Regras Permanentes
 
@@ -50,6 +51,7 @@ Regra central: ganho so conta se aparecer no adapter/package. Teacher CPU, solve
 8. Toda nova versao precisa quadro comparativo contra V291/V290 e decisao explicita: promover, repetir CPU, cancelar ou arquivar.
 9. Se notebook for criado ou alterado, precisa passar `python scripts/notebook_release_gate.py <notebook>` antes de entrega/push.
 10. Se job estiver rodando, analisar logs periodicamente e aplicar kill-switch sem esperar gasto inutil.
+11. Todo script, job launcher, workflow ou notebook criado/alterado precisa passar `python scripts/kg1_static_safety_gate.py <paths>` antes de entrega/push/execucao. O gate bloqueia V435E misto arquivado, `format_negative_*` em treino ativo e `ALLOW_FORMAT_NEGATIVES` em job/notebook.
 
 ## Achados Consolidados V434C
 
@@ -270,27 +272,42 @@ Decisao: V435D produziu o primeiro inventario permitido de erros reais do adapte
 
 ### V435E - Adapter Exact-Wrong Preference Dataset
 
-Status: concluido e enviado ao HF dataset de treino.
+Status: corrigido em 2026-05-15. A versao antiga foi arquivada.
 
 Artefato:
 
 - `scripts/build_v435e_adapter_probe_preference_dataset.py`
 
-Politica:
+Politica corrigida:
 
 - Usar somente public-train probes de V435D.
 - `chosen`: completion curta com resposta publica correta em `\boxed{}` com escape de braces/backslash.
 - `rejected`: completion curta com a predicao errada real do adapter V291/V290.
-- Guardrail de bit: rows bit corretas viram format replay `format_negative_no_box`.
+- Guardrail de bit: rows bit corretas nao entram como preferencia por padrao.
+- Negativos de formato (`format_negative_*`) sao permitidos apenas para diagnostico explicito com `--include-format-negatives`; nao podem alimentar GPU preference training.
 - `weak/full`: usados somente para filtro de overlap, nunca como treino.
 
-Resultado:
+Erro encontrado:
+
+- A versao anterior de V435E misturou `133` hard negatives semanticos com `67` negativos so de formato (`format_negative_format_no_box`).
+- Isso contaminava o objetivo mean-NLL: o rejected podia ser semanticamente correto e apenas menor/sem box, entao o treino podia aprender preferencia de formato/comprimento, nao resolver puzzle.
+- Esse erro explica por que o V436 teve metrica interna ruim e nao deve ser repetido.
+
+Resultado antigo arquivado:
 
 | Split | Rows | bit | equation | hard negatives | bit replay |
 |---|---:|---:|---:|---:|---:|
 | train | 160 | 62 | 98 | 109 | 51 |
 | validation | 40 | 18 | 22 | 24 | 16 |
 | all | 200 | 80 | 120 | 133 | 67 |
+
+Resultado corrigido hard-negative-only:
+
+| Split | Rows | bit | equation | hard negatives | format negatives |
+|---|---:|---:|---:|---:|---:|
+| train | 109 | 11 | 98 | 109 | 0 |
+| validation | 24 | 2 | 22 | 24 | 0 |
+| all | 133 | 13 | 120 | 133 | 0 |
 
 Rule classes de equation cobertas:
 
@@ -299,31 +316,49 @@ Rule classes de equation cobertas:
 - `equation_symbolic_sequence`: 64
 - `equation_symbolic_short`: 32
 
-HF dataset:
+Hashes corrigidos:
 
-- `https://huggingface.co/datasets/felipesp1983/kg1-nemotron-training/tree/main/data/v435e_adapter_probe_preference/20260515T_v435e_from_h200_probe`
+- train: `9dfe89d6da803e593da566ec72865815ccbadb4b42385f82bb7ae2e9d0ad240b`
+- validation: `92cd619bc7e315e930742cdf14978452f93d25ae07c28e7ded2ba91816c2d503`
+- manifest: `artifacts/v435e_adapter_probe_preference_dataset/20260515T_v435e_hardneg_only/v435e_adapter_probe_preference_dataset_manifest.json`
+
+HF dataset status:
+
+- O dataset antigo em HF com path `20260515T_v435e_from_h200_probe` esta arquivado para diagnostico e nao deve ser usado para treino.
+- O hard-negative-only precisa ser publicado em novo path antes de qualquer novo HF job.
 
 ### V435F - Adapter Probe Preference Gate
 
-Status: passou.
+Status: corrigido em 2026-05-15.
 
 Artefato:
 
 - `scripts/run_v435f_adapter_probe_preference_gate.py`
-- `artifacts/v435f_adapter_probe_preference_gate/20260515T_v435f_from_h200_probe/v435f_adapter_probe_preference_gate_manifest.json`
+- `artifacts/v435f_adapter_probe_preference_gate/20260515T_v435f_hardneg_only/v435f_adapter_probe_preference_gate_manifest.json`
+- `artifacts/v435f_adapter_probe_preference_gate/20260515T_v435f_old_mixed_recheck_after_fix/v435f_old_mixed_recheck_after_fix_manifest.json`
 
-Gate:
+Gate corrigido sobre hard-negative-only:
 
 | Condicao | Resultado |
 |---|---|
 | all rows approved | true |
-| approved rows >= 180 | true (`200`) |
+| approved rows >= 120 | true (`133`) |
 | equation hard negatives >= 100 | true (`120`) |
 | bit hard negatives >= 10 | true (`13`) |
-| bit replay >= 50 | true (`67`) |
+| format negatives absent | true (`0`) |
 | equation rule classes >= 4 | true (`4`) |
 
-Decisao: `hf_gpu_allowed=true` para um unico V436 short smoke. Este e um desbloqueio de treino, nao autorizacao de submit.
+Recheck do dataset antigo misto:
+
+| Condicao | Resultado |
+|---|---|
+| rows | `200` |
+| hard negatives | `133` |
+| format negatives | `67` |
+| `format_negatives_absent_for_preference` | false |
+| decisao | `v435f_blocks_gpu` |
+
+Decisao: o gate corrigido permite apenas o hard-negative-only. O launcher V436 antigo foi travado fail-closed; qualquer novo GPU smoke deve usar um launcher novo, hashes hard-only e kill-switch no primeiro checkpoint.
 
 ## V436 - Short Adapter-Only Smoke
 
@@ -360,7 +395,7 @@ Kill-switch no primeiro checkpoint:
 | package incompatibilidade | cancelar |
 | ganho weak e bit preservado | continuar para full gate |
 
-Conclusao: V436 nao trouxe ganho submit-safe e nao autoriza V437. Nao repetir variantes V436 sem um novo gate CPU que demonstre sinal direto de transferencia, nao apenas dataset novo ou loss interno.
+Conclusao: V436 nao trouxe ganho submit-safe e nao autoriza V437. O motivo provavel foi dado contaminado por negativos so de formato. Nao repetir o launcher V436 antigo. So considerar um V436B se o hard-negative-only for publicado em HF e o preflight remoto confirmar os hashes corrigidos.
 
 ## V437 - Full Gate, Package e Submit
 
@@ -403,17 +438,18 @@ Estes itens nao estao ativos agora. So entram se houver novo gate CPU mais forte
 | Weak/full misses como treino | Leakage/cherry-pick |
 | Decisao por `eval_loss` | Nao correlacionou com ACC das familias |
 | H200/A100 relaunch sem V435 | Gasto sem novo sinal |
-| V436 preference variants sobre V435E | Primeiro checkpoint regrediu de `6/40` para `5/40` |
+| V436 preference variants sobre V435E antigo | Dataset misto tinha `67` format negatives; launcher antigo agora falha fechado |
 
 ## Proxima Acao Unica
 
-Parar a linha V436 e nao abrir novo GPU job ate existir um gate CPU com hipotese de transferencia mais direta.
+Parar a linha V436 antiga e nao abrir novo GPU job com o dataset misto.
 
 Objetivo:
 
-1. Converter os achados V435D/V435E em diagnostico de por que o adapter prefere negativos: comparar `chosen_mean_nll`, `rejected_mean_nll`, tamanho de respostas, tipo de negativo e familia.
-2. Se houver bug de formato/dataset, corrigir em CPU e reconstruir V435E; se nao houver bug, arquivar a linha preference-LoRA.
-3. Qualquer novo HF GPU job precisa passar um gate CPU novo com uma metrica que nao tenha regredido no checkpoint inicial anterior.
-4. Promover para weak/full/package/submit somente se o novo gate superar o melhor adapter-only atual: weak `192/315`, equation `56/155`, bit `136/160`, trunc `0`.
+1. Publicar o V435E hard-negative-only em novo path HF, sem sobrescrever o dataset antigo.
+2. Criar um launcher V436B novo apontando para os hashes corrigidos e sem `format_negative_*`.
+3. Rodar somente um smoke curto se o custo estimado for pequeno e o primeiro checkpoint reportar por `negative_type` que `hard_negative_adapter_exact_wrong` melhorou sem queda de bit.
+4. Cancelar imediatamente se a metrica interna hard-negative nao melhorar no primeiro checkpoint; nao esperar weak/full.
+5. Promover para weak/full/package/submit somente se o novo gate superar o melhor adapter-only atual: weak `192/315`, equation `56/155`, bit `136/160`, trunc `0`.
 
-Regra FinOps: V436 ja acionou o kill-switch. O objetivo segue sendo ganho medido de ranking, nao mais perda de tempo com loss interno.
+Regra FinOps: V436 ja acionou o kill-switch e revelou bug de dataset. O objetivo segue sendo ganho medido de ranking; loss interno e preference accuracy so servem para matar job cedo, nao para promover.

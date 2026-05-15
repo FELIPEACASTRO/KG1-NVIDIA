@@ -5,7 +5,9 @@ V435C collected V291/V290 adapter outputs without labels. V435D joined public
 train labels only after collection and filtered weak/full reference overlap.
 This builder converts those permitted, real adapter mistakes into short
 chosen/rejected preference pairs. It does not train, submit, or use weak/full
-labels as training data.
+labels as training data. Correct adapter rows are not included by default:
+format-only negatives are useful for a format audit, but they are not valid
+semantic preference pairs for a mean-NLL preference objective.
 """
 
 from __future__ import annotations
@@ -260,8 +262,9 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         if truthy(row.get("correct")) and row.get("family") == "bit_manipulation"
     ]
     pairs = [make_pair(row, "hard_negative") for row in hard_negative_rows]
-    for row in replay_source_rows:
-        pairs.append(make_pair(row, "format_no_box"))
+    if args.include_format_negatives:
+        for row in replay_source_rows:
+            pairs.append(make_pair(row, "format_no_box"))
 
     train_rows, val_rows = split_rows(pairs, max(2, args.validation_mod))
     args.output_dir.mkdir(parents=True, exist_ok=True)
@@ -301,7 +304,11 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             "hard_negative_source": "V435D rows with correct=false",
             "chosen": "short deterministic completion ending with escaped boxed public-train answer",
             "rejected": "short exact-wrong completion ending with escaped boxed adapter prediction",
-            "bit_guardrail": "V435D bit rows with correct=true become format no-box replay pairs",
+            "bit_guardrail": (
+                "V435D bit rows with correct=true are excluded from preference data by default; "
+                "format-only negatives are allowed only when --include-format-negatives is set"
+            ),
+            "include_format_negatives": args.include_format_negatives,
             "validation_mod": args.validation_mod,
         },
         "source_counts": {
@@ -363,6 +370,14 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--output-dir", type=Path, default=DEFAULT_OUTPUT_ROOT / utc_compact())
     parser.add_argument("--label", default="v435e_adapter_probe_preference_dataset")
     parser.add_argument("--validation-mod", type=int, default=5)
+    parser.add_argument(
+        "--include-format-negatives",
+        action="store_true",
+        help=(
+            "Include correct-answer format-only negatives. This is for diagnostics only; "
+            "V435F blocks them from GPU preference training by default."
+        ),
+    )
     return parser.parse_args()
 
 
