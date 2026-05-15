@@ -1,0 +1,204 @@
+{
+  "source": "C:\\Users\\davis\\Downloads\\OpenRouter Chat Fri May 15 2026 (1).json",
+  "assistant_count": 16,
+  "rows": [
+    {
+      "message_id": "msg-1778870367-ISzeg0i9grxgaZ5gJGT7",
+      "model": "qwen/qwen3.5-plus-20260420",
+      "variant": "qwen/qwen3.5-plus-20260420",
+      "cost": "0.0143115",
+      "duration_ms": 128411,
+      "tokens": 7523,
+      "final_text_len": 9824,
+      "message_item_ids": [
+        "msg_tmp_q656jounu4p"
+      ],
+      "file": "artifacts\\openrouter\\v446_uploaded_chat_analysis\\01_qwen_qwen3.5-plus-20260420.md"
+    },
+    {
+      "message_id": "msg-1778870367-FlVIBADnyU4gsyZp60Zx",
+      "model": "qwen/qwen3.6-max-preview",
+      "variant": "qwen/qwen3.6-max-preview-20260420",
+      "cost": "0.051818",
+      "duration_ms": 227769,
+      "tokens": 7878,
+      "final_text_len": 10456,
+      "message_item_ids": [
+        "msg_tmp_lcl2215f4a"
+      ],
+      "file": "artifacts\\openrouter\\v446_uploaded_chat_analysis\\02_qwen_qwen3.6-max-preview.md"
+    },
+    {
+      "message_id": "msg-1778870367-SzNfa4iy4lCuSUXuTPLS",
+      "model": "~anthropic/claude-opus-latest",
+      "variant": "anthropic/claude-4.7-opus-20260416",
+      "cost": "0.250795",
+      "duration_ms": 142118,
+      "tokens": 8795,
+      "final_text_len": 23636,
+      "message_item_ids": [
+        "msg_tmp_wtrjl3ip3"
+      ],
+      "file": "artifacts\\openrouter\\v446_uploaded_chat_analysis\\03_anthropic_claude-opus-latest.md"
+    },
+    {
+      "message_id": "msg-1778870367-MDJpsANpo31s8xnAYHRY",
+      "model": "~google/gemini-pro-latest",
+      "variant": "google/gemini-3.1-pro-preview-20260219",
+      "cost": "0",
+      "duration_ms": 128746,
+      "tokens": 0,
+      "final_text_len": 0,
+      "message_item_ids": [],
+      "file": ""
+    },
+    {
+      "message_id": "msg-1778870367-JlVSfasSC9AUVrMDiMM5",
+      "model": "deepseek/deepseek-v4-pro",
+      "variant": "deepseek/deepseek-v4-pro-20260423",
+      "cost": "0.07281646",
+      "duration_ms": 33159,
+      "tokens": 1188,
+      "final_text_len": 0,
+      "message_item_ids": [],
+      "file": ""
+    },
+    {
+      "message_id": "msg-1778870367-32TxbXoZPZflL5LHtwxk",
+      "model": "openai/gpt-5.4",
+      "variant": "openai/gpt-5.4-20260305",
+      "cost": "0.061425",
+      "duration_ms": 61655,
+      "tokens": 3767,
+      "final_text_len": 18927,
+      "message_item_ids": [
+        "msg_tmp_z4p19xk3lnr"
+      ],
+      "file": "artifacts\\openrouter\\v446_uploaded_chat_analysis\\06_openai_gpt-5.4.md"
+    },
+    {
+      "message_id": "msg-1778870367-SiSWOKmj94V9BLq9yEe1",
+      "model": "xiaomi/mimo-v2.5-pro",
+      "variant": "xiaomi/mimo-v2.5-pro-20260422",
+      "cost": "0.080162",
+      "duration_ms": 5420,
+      "tokens": 516,
+      "final_text_len": 0,
+      "message_item_ids": [],
+      "file": ""
+    },
+    {
+      "message_id": "msg-1778870367-85L0QPo1oLaAolzAdLvu",
+      "model": "x-ai/grok-4.3",
+      "variant": "x-ai/grok-4.3-20260430",
+      "cost": "0.0049331",
+      "duration_ms": 2212,
+      "tokens": 940,
+      "final_text_len": 2045,
+      "message_item_ids": [
+        "msg_tmp_c2u832iyor"
+      ],
+      "file": "artifacts\\openrouter\\v446_uploaded_chat_analysis\\08_x-ai_grok-4.3.md"
+    },
+    {
+      "message_id": "msg-1778870367-cEidZ1OsKQc8kYufOHYI",
+      "model": "moonshotai/kimi-k2.6",
+      "variant": "moonshotai/kimi-k2.6-20260420",
+      "cost": "0.03233933",
+      "duration_ms": 13642,
+      "tokens": 1514,
+      "final_text_len": 0,
+      "message_item_ids": [],
+      "file": ""
+    },
+    {
+      "message_id": "msg-1778870367-vrU9MDAKRDQBHHuYpAdY",
+      "model": "qwen/qwen3-max-thinking",
+      "variant": "qwen/qwen3-max-thinking-20260123",
+      "cost": "0.00891852",
+      "duration_ms": 46925,
+      "tokens": 1796,
+      "final_text_len": 7447,
+      "message_item_ids": [
+        "msg_tmp_ylia5ewx86q"
+      ],
+      "file": "artifacts\\openrouter\\v446_uploaded_chat_analysis\\10_qwen_qwen3-max-thinking.md"
+    },
+    {
+      "message_id": "msg-1778870367-wU8ZkAThww5QWmIZr2Dm",
+      "model": "qwen/qwen3.6-plus",
+      "variant": "qwen/qwen3.6-plus-04-02",
+      "cost": "0.039855550000000003",
+      "duration_ms": 109754,
+      "tokens": 6072,
+      "final_text_len": 13180,
+      "message_item_ids": [
+        "msg_tmp_57m7ffwxp8h"
+      ],
+      "file": "artifacts\\openrouter\\v446_uploaded_chat_analysis\\11_qwen_qwen3.6-plus.md"
+    },
+    {
+      "message_id": "msg-1778870367-VxuypbgaBncDbJza9OwB",
+      "model": "google/gemini-3.1-pro-preview",
+      "variant": "google/gemini-3.1-pro-preview-20260219",
+      "cost": "0.05314",
+      "duration_ms": 33806,
+      "tokens": 4046,
+      "final_text_len": 6945,
+      "message_item_ids": [
+        "msg_tmp_l9j7wt74qpj"
+      ],
+      "file": "artifacts\\openrouter\\v446_uploaded_chat_analysis\\12_google_gemini-3.1-pro-preview.md"
+    },
+    {
+      "message_id": "msg-1778870367-gIvdMOMyT1Kjaa2rhK7B",
+      "model": "nvidia/nemotron-3-nano-30b-a3b:free",
+      "variant": "nvidia/nemotron-3-nano-30b-a3b:free",
+      "cost": "0",
+      "duration_ms": 16769,
+      "tokens": 2955,
+      "final_text_len": 6965,
+      "message_item_ids": [
+        "msg_tmp_vieb7tkdxu"
+      ],
+      "file": "artifacts\\openrouter\\v446_uploaded_chat_analysis\\13_nvidia_nemotron-3-nano-30b-a3b_free.md"
+    },
+    {
+      "message_id": "msg-1778870367-R5GXzsFhImF1o4QdKUu3",
+      "model": "nvidia/llama-3.3-nemotron-super-49b-v1.5",
+      "variant": "nvidia/llama-3.3-nemotron-super-49b-v1.5",
+      "cost": "0.0011707",
+      "duration_ms": 36105,
+      "tokens": 2370,
+      "final_text_len": 4326,
+      "message_item_ids": [
+        "msg_tmp_l0poopuym9p"
+      ],
+      "file": "artifacts\\openrouter\\v446_uploaded_chat_analysis\\14_nvidia_llama-3.3-nemotron-super-49b-v1.5.md"
+    },
+    {
+      "message_id": "msg-1778870367-xs7VOrWHxLYG13oOldvX",
+      "model": "qwen/qwen3-coder-next",
+      "variant": "qwen/qwen3-coder-next-2025-02-03",
+      "cost": "0.024433359999999998",
+      "duration_ms": 6906,
+      "tokens": 236,
+      "final_text_len": 0,
+      "message_item_ids": [],
+      "file": ""
+    },
+    {
+      "message_id": "msg-1778870367-23IIwtpvMGUSzUXABfJK",
+      "model": "openai/gpt-5.3-codex",
+      "variant": "openai/gpt-5.3-codex-20260224",
+      "cost": "0.06937525",
+      "duration_ms": 72096,
+      "tokens": 4709,
+      "final_text_len": 10332,
+      "message_item_ids": [
+        "msg_tmp_x7ih58o9xxa"
+      ],
+      "file": "artifacts\\openrouter\\v446_uploaded_chat_analysis\\16_openai_gpt-5.3-codex.md"
+    }
+  ]
+}

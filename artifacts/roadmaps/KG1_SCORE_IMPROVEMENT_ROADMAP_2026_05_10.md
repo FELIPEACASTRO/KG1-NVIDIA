@@ -43,6 +43,8 @@ Regra central: ganho so conta se aparecer no adapter/package. Teacher CPU, solve
 | V441 OpenRouter consult | DeepSeek/Qwen/Gemini consultados; 2 respostas completas dizem SIM com gates; Gemini truncou mas iniciou SIM | V441 boxed-payload e justificado, com kill-switch |
 | V441 H200 boxed-payload | baseline 7/24; checkpoint-3 7/24; equation 6/22; bit 1/2 | cancelado; sem weak/full |
 | V442 post-V441 route audit | 133 pares V439 auditados; 133 source-ok; 0 rule-certified | bloqueia novo GPU preference; volta para CPU certified builder |
+| V445 prediction/parse audit | current, official reextract, first boxed e last boxed todos `192/56/136/0` | parser/extractor nao e gargalo |
+| OpenRouter V446 uploaded consult | 16 slots, 11 respostas finais; consenso CPU-first target-alignment | evidencia para V446/V447 |
 
 ## Regras Permanentes
 
@@ -61,6 +63,11 @@ Regra central: ganho so conta se aparecer no adapter/package. Teacher CPU, solve
 13. Todo erro novo deve entrar no ledger `artifacts/roadmaps/KG1_ERROR_LEDGER_2026_05_15.md` com evidencia, impacto, regra preventiva e status antes de abrir novo job pago.
 14. Antes de qualquer job pago ou notebook operacional novo/alterado, rodar auditoria de integracao: launcher, dataset correto, conteudo do dataset, hashes, schema, targets, paths HF, adapter inicial, gates, kill-switch e comparacao contra baseline. Para HF jobs, usar `scripts/kg1_pre_paid_job_integration_gate.py` alem do static gate.
 15. Acesso a modelos/datasets Hugging Face deve reutilizar o `HF_TOKEN` ja usado para criar/executar jobs. Nunca imprimir, commitar ou gravar a chave em artefatos.
+16. Todo novo dataset de equation precisa passar por gate de alinhamento de target antes de GPU: alvo nativo verificado por rejection sampling ou alvo canonico com logprob/score pre-registrado contra base/V291. Target plausivel e condicao necessaria, nao opcional.
+17. Todo treino que toque `equation_transform` precisa de bit replay/anchor pre-registrado. Piso exploratorio: `>=200` rows limpas; preferencia para H200 final: `>=800` rows, se disponiveis sem leakage.
+18. Antes de qualquer GPU, rodar leakage forte: `id`, `prompt_sha256`, prompt normalizado e overlap `13-gram` contra weak/full. Qualquer hit bloqueia o dataset.
+19. Antes de qualquer GPU, carregar um scaffold LoRA pelo caminho oficial vLLM/LoRA em prompt dummy. Se nao carrega como adapter-only, nao treinar.
+20. One-shot policy: nao repetir a mesma receita paga se ela ja falhou weak/family gate. Nova GPU exige evidencia CPU nova e material.
 
 ## Achados Consolidados V434C
 
@@ -741,33 +748,145 @@ Interpretacao: V444 e diferente de V397/V398 porque remove `822` linhas
 `rule_unknown`, que provavelmente diluiram o sinal. Ainda nao e ganho. E apenas
 o menor teste pago justificavel depois que V443 fechou a rota de regras simples.
 
-## Proxima Acao Unica
+## Atualizacao V445/V446 - 2026-05-15
 
-Executar apenas um smoke H200 V444 de quatro steps, com timeout maximo de
-`3600` segundos e custo H200 travado em `<=0.09 USD/min`.
+V444 H200 foi executado e o weak eval foi cancelado por FinOps no primeiro
+checkpoint avaliado.
 
-Ordem obrigatoria:
+Resultado V444 checkpoint-2:
 
-1. Commitar e enviar para a branch o script V443, dataset/gate V444 e launcher
-   V444.
-2. Rodar debug local do launcher apos o commit para garantir que
-   `KG1_EXPECTED_COMMIT` aponta para o commit novo.
-3. Lancar o job V444 somente se o debug local passar:
-   - HF dataset remoto com SHA exato;
-   - adapter V290 checkpoint-6 completo;
-   - H200 com pelo menos `130 GiB`;
-   - `MAX_STEPS=4`;
-   - `MAX_LENGTH=8192`;
-   - timeout `3600`;
-   - trainable LoRA restrito a `q_proj,k_proj,v_proj,o_proj,lm_head`.
-4. Monitorar logs a cada `40` segundos.
-5. Avaliar checkpoints 2 e 4 no weak gate.
-6. Promover somente se superar simultaneamente:
-   - weak total `>192/315`;
-   - `equation_transform >56/155`;
-   - `bit_manipulation >=136/160`;
-   - truncation `0`.
+| Item | Baseline submit-safe | V444 ckpt-2 | Decisao |
+|---|---:|---:|---|
+| Total weak | `192/315` | `190/315` | reprova |
+| `equation_transform` | `56/155` | `56/155` | sem ganho |
+| `bit_manipulation` | `136/160` | `134/160` | regressao |
+| truncated | `0` | `1` | regressao |
 
-Regra FinOps: se o primeiro checkpoint nao indicar caminho para o gate acima,
-cancelar e registrar no error ledger. `eval_loss`, `train_loss` e accuracy
-interna nao promovem submit; elas apenas ajudam a matar job cedo.
+Job: `felipesp1983/6a075f1a3308d79117b907ff`.
+
+Decisao: cancelar antes de avaliar checkpoint-4. O primeiro checkpoint nao
+manteve `bit>=136`, nao aumentou equation e introduziu truncation. Isso fecha a
+rota V444 high-confidence SFT como fonte de submit.
+
+Resultado V445 prediction/parse audit:
+
+| Estrategia | Total weak | Equation | Bit | Trunc | Decisao |
+|---|---:|---:|---:|---:|---|
+| current prediction | `192/315` | `56/155` | `136/160` | `0` | baseline |
+| official reextract raw | `192/315` | `56/155` | `136/160` | `0` | sem ganho |
+| first boxed | `192/315` | `56/155` | `136/160` | `0` | sem ganho |
+| last boxed | `192/315` | `56/155` | `136/160` | `0` | sem ganho |
+
+Interpretacao: parser, boxed extraction e re-extracao nao explicam o teto. O
+problema e geracao/raciocinio transferido para o adapter, nao pos-processamento.
+
+Resultado do arquivo OpenRouter V446:
+
+- Fonte: `C:\Users\davis\Downloads\OpenRouter Chat Fri May 15 2026 (1).json`.
+- Artefato local: `artifacts/openrouter/v446_uploaded_chat_analysis/KG1_V446_OPENROUTER_FILE_ANALYSIS_SUMMARY.md`.
+- 16 slots/modelos no export; 11 respostas finais usaveis; 5 sem resposta final
+  acionavel.
+
+Consenso util:
+
+| Achado | Decisao no roadmap |
+|---|---|
+| FinOps e promotion gates estao corretos | manter e endurecer com novos pre-gates |
+| SFT amplo, mais epochs, LR sweep e preference sem novo dado repetem falha | nao rodar |
+| Falta target treinavel com estado intermediario | implementar target-alignment gate |
+| Equation precisa de trace/trajectory ou DSL composicional verificavel | V446/V447 CPU-first |
+| Bit deve ser preservado, nao reaprendido | bit anchor/replay obrigatorio |
+| Weak/full nao podem virar fonte de treino | rejeitar sugestoes baseadas em weak misses |
+
+Rejeicoes explicitas do V446:
+
+| Sugestao vista nas respostas | Motivo de rejeicao |
+|---|---|
+| Treinar com weak misses/120 misses | leakage/cherry-pick |
+| Parser/verifier no adapter package | viola adapter-only |
+| Modulo/layer sweep sem target certificado | custo sem evidencia |
+| Synthetic generico sem certificacao | ruido e regressao provaveis |
+| Relaxar `bit` para `134/135` | perde baseline submit-safe |
+
+Double check V446D de URLs/fontes do arquivo OpenRouter:
+
+- Fonte auditada: `C:\Users\davis\Downloads\OpenRouter Chat Fri May 15 2026 (1).json`.
+- Artefato: `artifacts/openrouter/v446_uploaded_chat_analysis/KG1_V446_URL_DOUBLE_CHECK.md`.
+- URLs extraidas: `101`; URLs de conteudo/desafio: `61`; metadados de
+  provedor/status/TOS/favicon: `40`.
+- Kaggle CLI confirmou paginas oficiais de `rules`, `evaluation` e
+  `data-description`; a avaliacao continua sendo adapter-only LoRA rank `<=32`
+  via vLLM, `temperature=0.0`, `max_tokens=7680`, `max_model_len=8192`.
+- Tiebreak oficial: em empate, vence a submissao enviada primeiro. Isso reforca
+  que uma submissao nova so faz sentido com ganho medido, nao com empate.
+
+Achados acionaveis do V446D:
+
+| Fonte | Achado | Decisao |
+|---|---|---|
+| `tonghuikang/nemotron` | repo publico da submissao Progress Prize; contem `reasoners`, `corpus`, metricas e pipeline | usar como fonte de algoritmos para gate CPU, nao como submit pronto |
+| `reasoners/equation_numeric.py` | inventario concreto: concat/reverse concat, add/sub/mul, abs diff, `+1/-1`, div/mod, digitos, determinante, reversao de operandos/resultado, prefix/suffix | base obrigatoria da DSL v2 |
+| `reasoners/bit_manipulation.py` | bit-pair/bitsum/stride, matching por colunas e preservacao de regra | bit deve ser protegido com replay/anchor; nao reaprendido por SFT amplo |
+| `andy279/nemotron-reasoning-challenge*` | README documenta SFT/teacher traces, solver-guided transformation/bit traces; payload esta gated/401 neste ambiente | usar somente copias locais ja fornecidas e apenas apos provenance + anti-leakage gate |
+| `jasonkung98/NVIDIA-Nemotron-Model-Reasoning-Challenge` | espelho publico Apache-2.0 de `train.csv`/`test.csv`, 9.5k train | serve para hash/provenance, nao e sinal novo |
+| NVIDIA/vLLM/NeMo docs | confirmam scaffold e compatibilidade de loader | manter scaffold/LoRA package gate |
+
+Rejeicoes adicionais do V446D:
+
+| Fonte | Motivo |
+|---|---|
+| Kaggle discussion URLs no export | HTTP retorna shell generico; Kaggle CLI 2.0.2 nao expoe corpo de discussion; sem novo conteudo extraido |
+| `passagereptile455/*` | HF API mostra somente `.gitattributes`; nao ha adapter/pesos |
+| `GaryNENE/nemotron-nano-8b-reasoning-lora` | base 8B e rank 128; nao e submit-compativel com Nemotron 3 Nano 30B A3B rank<=32 |
+| datasets genericos NVIDIA Math/ReasoningGym/logical-puzzles | P2 para fixtures/estilo de trace; nao autorizam GPU sem target-alignment |
+
+## Proxima Acao Ativa
+
+Nao abrir novo H200/A100 para treino ate existir um artefato CPU que passe
+target-alignment. A implementacao deve seguir esta ordem:
+
+1. Nao abrir novo H200/A100 para SFT amplo, high-confidence SFT ou LR/epoch
+   sweep.
+2. Implementar V446/V447 CPU target-alignment gate com prioridade
+   `Tong-source`:
+   - importar para o nosso formato apenas os conceitos publicos e verificaveis
+     dos reasoners de Tong, registrando URL, arquivo, SHA e linhas/operacoes
+     usadas;
+   - equation DSL v2 deve iniciar pelo inventario de
+     `reasoners/equation_numeric.py`;
+   - bit guardrail deve iniciar por bit-pair/bitsum/stride e replay/anchor
+     inspirado em `reasoners/bit_manipulation.py`;
+   - entrada permitida: public train/treino permitido, nunca weak/full como
+     fonte de treino;
+   - checks obrigatorios: hash denylist, prompt normalizado, `13-gram`,
+     label provenance, family counts, token length, offset mask, exact boxed,
+     bit replay floor e target plausibility;
+   - target plausibility pode ser provada por trajectory nativa verificada ou
+     logprob/score pre-registrado contra base/V291.
+3. Rodar duas rotas CPU baratas e concorrentes:
+   - DSL v2 composicional: depth ate 3/4 com rename, substitute, reverse,
+     concat, slot-permute, constant-fold, LOO, renaming/metamorphic checks e
+     replay checker;
+   - native rejection sampling: gerar continuacoes em public train equation,
+     manter apenas trajetorias curtas, nativas e verificadas como corretas.
+4. Exigir antes de qualquer GPU:
+   - equation dataset certificado com cobertura material; alvo preferido para
+     H200: `>=400` exemplos limpos ou, se menor, evidencia clara de ganho
+     publico/holdout e target plausivel;
+   - bit anchor limpo `>=200` no minimo; preferencia `>=800`;
+   - public-train holdout sem regressao de bit;
+   - scaffold LoRA carregando via vLLM/LoRA oficial;
+   - go/no-go manifest com custo, tempo e kill-switch.
+5. Se todos os gates passarem, abrir no maximo uma H200 curta (`<=45` min)
+   com checkpoint-1 kill-switch:
+   - continuar somente se `equation>=58`, `bit>=136`, `truncated=0`;
+   - promover somente se superar `192/315`, `equation>56`, `bit>=136`,
+     `truncated=0` e depois full `>823/947`.
+6. Se DSL v2 e native sampling falharem cobertura/precisao/alinhamento, parar
+   novos treinos pagos e tratar V291/V290 checkpoint-6 como teto adapter-only
+   atual para submit seguro.
+
+Regra FinOps continua: se o primeiro checkpoint ou gate parcial nao indicar
+caminho para `total>192`, `equation>56`, `bit>=136`, `truncated=0`, cancelar.
+`eval_loss`, `train_loss` e accuracy interna nao promovem submit; elas apenas
+ajudam a matar job cedo.
