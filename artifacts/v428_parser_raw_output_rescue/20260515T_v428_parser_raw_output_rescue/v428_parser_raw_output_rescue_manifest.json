@@ -1,0 +1,41 @@
+{
+  "adapter_paths_scanned": 6,
+  "baseline": {
+    "bit": 136,
+    "equation": 56,
+    "total": 192,
+    "truncated": 0
+  },
+  "best_strategy": {
+    "bit_manipulation_correct": 136,
+    "column": "prediction",
+    "correct": 192,
+    "delta_bit": 0,
+    "delta_equation": 0,
+    "delta_total": 0,
+    "equation_transform_correct": 56,
+    "gain_ids": "",
+    "gains_vs_baseline": 0,
+    "loss_ids": "",
+    "losses_vs_baseline": 0,
+    "path": "artifacts\\v342_acc_first_diagnostic\\v290_checkpoint6_baseline_predictions.csv",
+    "rows": 315,
+    "strategy": "first_line"
+  },
+  "decision": {
+    "decision": "v428_no_parser_rescue",
+    "hf_gpu_allowed": false,
+    "next_action": "Do not spend GPU from parser hypothesis unless a submit-compatible extraction path is proven.",
+    "reason": "No adapter-like raw output contains a no-loss parser rescue over V291/V290."
+  },
+  "generated_at_utc": "2026-05-15T10:06:41.691403+00:00",
+  "outputs": {
+    "manifest_json": "artifacts\\v428_parser_raw_output_rescue\\20260515T_v428_parser_raw_output_rescue\\v428_parser_raw_output_rescue_manifest.json",
+    "promotable_csv": "artifacts\\v428_parser_raw_output_rescue\\20260515T_v428_parser_raw_output_rescue\\v428_promotable_parser_rescues.csv",
+    "report_md": "artifacts\\v428_parser_raw_output_rescue\\20260515T_v428_parser_raw_output_rescue\\V428_PARSER_RAW_OUTPUT_RESCUE.md",
+    "scores_csv": "artifacts\\v428_parser_raw_output_rescue\\20260515T_v428_parser_raw_output_rescue\\v428_parser_strategy_scores.csv"
+  },
+  "promotable_rescue_count": 0,
+  "schema_version": "kg1_v428_parser_raw_output_rescue_v1",
+  "strategy_rows": 72
+}

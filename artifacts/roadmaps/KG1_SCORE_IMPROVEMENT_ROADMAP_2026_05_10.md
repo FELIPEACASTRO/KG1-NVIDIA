@@ -1133,6 +1133,106 @@ Artefatos:
 
 Decisao: nao abrir GPU. O train publico ajuda como corpus, mas assinatura canonica/template simples nao gera transferencia para os rows fracos. A proxima tentativa, se houver, precisa minerar uma DSL de programas mais rica, nao apenas match de padrao.
 
+### Step 6V - V425 global prediction archaeology
+
+Status: concluido localmente; sem candidato promotavel.
+
+Objetivo: fazer uma varredura global em CPU de todos os CSVs locais para verificar se algum adapter/checkpoint antigo, Drive export ou eval row-level ja continha ganho escondido que V415 nao tinha pontuado.
+
+Resultado:
+
+| Metric | Valor |
+|---|---:|
+| CSV files considerados | `303` |
+| Colunas de predicao pontuadas | `93` |
+| Colunas adapter-like pontuadas | `12` |
+| Candidatos adapter-like promotaveis | `0` |
+| Melhor adapter-like | V291/V290 checkpoint-6: `192/315`, equation `56/155`, bit `136/160`, trunc `0` |
+| Melhor teacher/postprocessor | V366/V414: `222/315`, equation `63/155`, bit `159/160`, trunc `0`, nao submit-safe |
+
+Artefatos:
+
+- Script: `artifacts/v425_global_prediction_archaeology/build_v425_global_prediction_archaeology.py`.
+- Manifest: `artifacts/v425_global_prediction_archaeology/20260515T_v425_global_prediction_archaeology/v425_global_prediction_archaeology_manifest.json`.
+- Relatorio: `artifacts/v425_global_prediction_archaeology/20260515T_v425_global_prediction_archaeology/V425_GLOBAL_PREDICTION_ARCHAEOLOGY.md`.
+- Todos os scores: `artifacts/v425_global_prediction_archaeology/20260515T_v425_global_prediction_archaeology/v425_all_scored_prediction_columns.csv`.
+- Adapter-like scores: `artifacts/v425_global_prediction_archaeology/20260515T_v425_global_prediction_archaeology/v425_adapter_like_candidates.csv`.
+
+Decisao: nao abrir HF/GPU e nao submeter. A arqueologia de artefatos locais fechou a hipotese de "ganho escondido em CSV antigo": nenhum candidato adapter-like bate `total>192`, `equation>56`, `bit>=136`, `trunc=0`. Os ganhos fortes continuam restritos a solver/verifier/postprocessor CPU, que nao sao package adapter-only.
+
+### Step 6W - V426 symbolic structural template gate
+
+Status: concluido localmente; sem ganho novo.
+
+Objetivo: atacar os residuais `punct_only` com uma DSL nova de templates estruturais que mistura copia de posicoes do input e constantes aprendidas dos exemplos, com leave-one-out e abstain.
+
+Resultado:
+
+| Metric | Valor |
+|---|---:|
+| Candidate rows | `20` |
+| Accepted new gains outside V414 | `0` |
+| Conflicts/losses | `6` |
+| Projected weak total | `192/315` |
+| Projected equation_transform | `56/155` |
+| Projected bit_manipulation | `136/160` |
+
+Artefatos:
+
+- Script: `artifacts/v426_symbolic_structural_template_gate/build_v426_symbolic_structural_template_gate.py`.
+- Manifest: `artifacts/v426_symbolic_structural_template_gate/20260515T_v426_symbolic_structural_template/v426_symbolic_structural_template_manifest.json`.
+- Relatorio: `artifacts/v426_symbolic_structural_template_gate/20260515T_v426_symbolic_structural_template/V426_SYMBOLIC_STRUCTURAL_TEMPLATE_GATE.md`.
+
+Decisao: nao abrir GPU. Templates posicao+constante nao resolvem os residuais sem conflito.
+
+### Step 6X - V427 symbolic alphabet/ASCII shift gate
+
+Status: concluido localmente; sem ganho novo.
+
+Objetivo: testar uma classe que generaliza substituicao exata para pontuacao: deslocamento por ASCII e por alfabeto do prompt, aplicado por posicao de input.
+
+Resultado:
+
+| Metric | Valor |
+|---|---:|
+| Candidate rows | `42` |
+| Accepted new gains outside V414 | `0` |
+| Conflicts/losses | `10` |
+| Projected weak total | `192/315` |
+| Projected equation_transform | `56/155` |
+| Projected bit_manipulation | `136/160` |
+
+Artefatos:
+
+- Script: `artifacts/v427_symbolic_alphabet_shift_gate/build_v427_symbolic_alphabet_shift_gate.py`.
+- Manifest: `artifacts/v427_symbolic_alphabet_shift_gate/20260515T_v427_symbolic_alphabet_shift/v427_symbolic_alphabet_shift_manifest.json`.
+- Relatorio: `artifacts/v427_symbolic_alphabet_shift_gate/20260515T_v427_symbolic_alphabet_shift/V427_SYMBOLIC_ALPHABET_SHIFT_GATE.md`.
+
+Decisao: nao abrir GPU. O deslocamento ASCII/alfabeto cria mais candidatos, mas todos os ganhos potenciais falham ou conflitam; nao deve virar treino.
+
+### Step 6Y - V428 parser/raw-output rescue audit
+
+Status: concluido localmente; sem ganho novo.
+
+Objetivo: confirmar se algum raw output adapter-like antigo continha a resposta correta, mas foi perdido pela estrategia de extracao atual.
+
+Resultado:
+
+| Metric | Valor |
+|---|---:|
+| Adapter-like paths escaneados | `6` |
+| Estrategias/colunas pontuadas | `72` |
+| Parser rescues promotaveis | `0` |
+| Melhor estrategia | V291/V290 baseline: `192/315`, equation `56/155`, bit `136/160` |
+
+Artefatos:
+
+- Script: `artifacts/v428_parser_raw_output_rescue/build_v428_parser_raw_output_rescue.py`.
+- Manifest: `artifacts/v428_parser_raw_output_rescue/20260515T_v428_parser_raw_output_rescue/v428_parser_raw_output_rescue_manifest.json`.
+- Relatorio: `artifacts/v428_parser_raw_output_rescue/20260515T_v428_parser_raw_output_rescue/V428_PARSER_RAW_OUTPUT_RESCUE.md`.
+
+Decisao: nao abrir GPU. Nao ha ganho escondido por first-boxed, last-line, first-line, last-number ou first-number em raw outputs adapter-like existentes.
+
 ## Regras Permanentes
 
 - Nenhum HF sem CPU gate com sinal novo.
@@ -1168,6 +1268,9 @@ Decisao: nao abrir GPU. O train publico ajuda como corpus, mas assinatura canoni
 | Aumentar caps da DSL V412 | V418 agressivo achou `0` ganho novo e gerou `1` falso positivo + `8` conflitos |
 | V421 same-operator symbolic, V422 selection/substitution simples e V423 conditioned symbolic | todos tiveram `0` ganhos e conflitos; nao usar para treino |
 | V424 train exact/template signature mining simples | `0` candidatos aplicaveis; nao usar como dataset/receita de treino |
+| Buscar ganho escondido em CSV local antigo | V425 varreu `303` CSVs e `93` colunas de predicao; `0` candidatos adapter-like promotaveis |
+| Templates estruturais posicao+constante e shift ASCII/alfabeto | V426/V427 tiveram `0` ganhos novos e `16` conflitos somados |
+| Parser/raw-output rescue em adapter-like antigo | V428 testou `72` estrategias e `0` resgates promotaveis |
 | H200 relaunch sem novo dado | V391 confirmou que trocar hardware nao muda ACC quando a hipotese de dados nao transfere |
 | HF training baseado apenas em `eval_loss` | historicamente loss caiu sem mover `equation_transform`; promocao e por ACC |
 | Web/API buscas genericas | so retornam ao plano se virarem regra, dataset ou gate verificavel |
@@ -1176,21 +1279,15 @@ Decisao: nao abrir GPU. O train publico ajuda como corpus, mas assinatura canoni
 
 ## Proxima Acao Unica
 
-V415 confirmou que nao existe candidato adapter-like local pronto para promocao, V416 confirmou que mudar o estilo da completion ainda nao transfere os ganhos do teacher para o adapter, V417 bloqueou novo GPU SFT por FinOps, V418 mostrou que aumentar caps da DSL V412 nao cria ganhos novos, V419 mostrou que o residual dominante e `80` rows de pontuacao simbolica pura, V420 confirmou que ampliar cryptarithm V329 so reencontra `99d6a3b5`, V421 bloqueou a hipotese same-operator por `0` ganhos e `3` conflitos, V422 bloqueou selection/substitution simples por `0` ganhos e `5` conflitos, V423 bloqueou invariantes condicionais simples por `0` ganhos e `1` conflito, e V424 mostrou que match de assinatura/template simples do train publico nao aplica ao weak. Portanto o caminho ativo continua em CPU, mas precisa atacar uma classe nova de regra, nao repetir as ja fechadas:
+V415 confirmou que nao existe candidato adapter-like local pronto para promocao, V416 confirmou que mudar o estilo da completion ainda nao transfere os ganhos do teacher para o adapter, V417 bloqueou novo GPU SFT por FinOps, V418 mostrou que aumentar caps da DSL V412 nao cria ganhos novos, V419 mostrou que o residual dominante e `80` rows de pontuacao simbolica pura, V420 confirmou que ampliar cryptarithm V329 so reencontra `99d6a3b5`, V421 bloqueou a hipotese same-operator por `0` ganhos e `3` conflitos, V422 bloqueou selection/substitution simples por `0` ganhos e `5` conflitos, V423 bloqueou invariantes condicionais simples por `0` ganhos e `1` conflito, V424 mostrou que match de assinatura/template simples do train publico nao aplica ao weak, V425 fechou a hipotese de ganho escondido em CSV antigo, V426/V427 fecharam posicao+constante e shift ASCII/alfabeto, e V428 fechou parser/raw-output rescue. Portanto o caminho ativo continua em CPU, com uma unica frente agressiva responsavel:
 
-1. criar V417 como auditoria de falha e bloqueio de receita:
-   - consolidar V413/V416 como linhas de transferencia rejeitadas;
-   - listar exatamente quais condicoes bloqueiam novo GPU SFT;
-   - manter V291/V290 checkpoint-6 como unico package submitavel.
-2. criar o proximo gate tecnico somente se ele medir uma diferenca nova antes da GPU:
-   - comportamento adapter/package, nao teacher externo;
+1. a proxima classe formal so deve ser criada se for materialmente diferente das DSLs ja rejeitadas:
+   - exemplos: sintese por transdutor edit-distance global, CEGIS com ranking por prova, ou restricoes cross-example ainda nao cobertas;
+   - nao repetir same-operator, selection/substitution, invariantes condicionais, assinatura/template, posicao+constante, shift ASCII/alfabeto.
+2. criterios de promocao:
    - `total > 192`, `equation > 56`, `bit >= 136`, `truncated=0`;
-   - nenhum uso direto de weak/full rows em treino.
-3. implementar primeiro um `symbolic_punctuation_structural_solver` para os `80` residuais punct-only, mas excluindo as classes ja rejeitadas:
-   - sem treino;
-   - com abstain agressivo;
-   - aceitar apenas ganhos no-loss contra V291/V290.
-4. proxima classe tecnica candidata: DSL rica minerada no train publico por execucao de programa, nao por assinatura exata/template direto. Exemplos de classe ainda nao fechada: operadores de string com mapeamento criptaritmico multi-step e constraints globais por prompt.
-5. se nao houver esse sinal em CPU, nao abrir GPU. A acao correta e minerar outra classe formal ainda nao coberta por V412/V418/V419/V421/V422/V423/V424, ou mudar o mecanismo de inferencia permitido, nao repetir SFT nem apenas aumentar caps.
+   - preferencialmente `equation >= 60` para justificar qualquer pacote/submit;
+   - se houver ganho CPU teacher mas nao adapter/package, registrar como nao submit-safe.
+3. se nao houver sinal CPU novo, nao abrir GPU. O proximo passo sera outra classe formal ainda nao coberta, varredura de fonte externa ainda nao integrada, ou mecanismo permitido de package/inferencia. Nao repetir SFT, prompt sweep, soup, H200 relaunch, ou qualquer decisao baseada em `eval_loss`.
 
 Nao rodar broad SFT, prompt sweep ou job guiado por `eval_loss`. A decisao e por ACC, truncation e comparativo contra V291.

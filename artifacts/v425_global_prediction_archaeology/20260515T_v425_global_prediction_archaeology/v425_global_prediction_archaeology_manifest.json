@@ -1,0 +1,92 @@
+{
+  "baseline": {
+    "bit_manipulation_correct": 136,
+    "correct": 192,
+    "equation_transform_correct": 56,
+    "rows": 315,
+    "truncated": 0
+  },
+  "best_adapter_like": {
+    "bit_manipulation_correct": 136,
+    "correct": 192,
+    "delta_vs_baseline_on_overlap": 0,
+    "equation_transform_correct": 56,
+    "gain_ids": "",
+    "gains_vs_baseline": 0,
+    "id_column": "id",
+    "loss_ids": "",
+    "losses_vs_baseline": 0,
+    "overlap_rows": 315,
+    "path": "artifacts\\v342_acc_first_diagnostic\\v290_checkpoint6_baseline_predictions.csv",
+    "prediction_column": "prediction",
+    "source_type": "adapter_like",
+    "submit_like_adapter_eval": true,
+    "top_prediction": "11111111",
+    "truncated": 0,
+    "unique_prediction_count": 260,
+    "v414_bit_hits": 0,
+    "v414_equation_hits": 0,
+    "v414_gain_hits": 0,
+    "v414_gain_misses": 30,
+    "v414_hit_ids": ""
+  },
+  "best_overall": {
+    "bit_manipulation_correct": 136,
+    "correct": 192,
+    "delta_vs_baseline_on_overlap": 0,
+    "equation_transform_correct": 56,
+    "gain_ids": "",
+    "gains_vs_baseline": 0,
+    "id_column": "id",
+    "loss_ids": "",
+    "losses_vs_baseline": 0,
+    "overlap_rows": 315,
+    "path": "artifacts\\v342_acc_first_diagnostic\\v290_checkpoint6_baseline_predictions.csv",
+    "prediction_column": "prediction",
+    "source_type": "adapter_like",
+    "submit_like_adapter_eval": true,
+    "top_prediction": "11111111",
+    "truncated": 0,
+    "unique_prediction_count": 260,
+    "v414_bit_hits": 0,
+    "v414_equation_hits": 0,
+    "v414_gain_hits": 0,
+    "v414_gain_misses": 30,
+    "v414_hit_ids": ""
+  },
+  "decision": {
+    "decision": "v425_no_promotable_adapter_candidate_found",
+    "hf_gpu_allowed": false,
+    "next_action": "Continue CPU-only rule/adapter-behavior probes; new GPU SFT remains blocked by V417/V425.",
+    "reason": "No existing adapter-like CSV beats total>192, equation>56, bit>=136, trunc=0. Do not spend GPU on archaeology result."
+  },
+  "generated_at_utc": "2026-05-15T09:58:02.987378+00:00",
+  "inputs": {
+    "baseline_csv": "artifacts\\v342_acc_first_diagnostic\\v290_checkpoint6_baseline_predictions.csv",
+    "baseline_sha256": "910a051d8b8e652e37c0b0814ac59fe4a400b95cb432945b6a0244f97f5b31bf",
+    "v414_accepted_csv": "artifacts\\v414_cpu_teacher_meta_gate\\20260515T_v414_cpu_teacher_meta_gate\\v414_accepted_union.csv",
+    "v414_accepted_sha256": "fa5d06cc047c817e4b2f7da81f4d719f53e111ae3bcf7644513930ab1bfbce88"
+  },
+  "outputs": {
+    "adapter_like_csv": "artifacts\\v425_global_prediction_archaeology\\20260515T_v425_global_prediction_archaeology\\v425_adapter_like_candidates.csv",
+    "all_scored_csv": "artifacts\\v425_global_prediction_archaeology\\20260515T_v425_global_prediction_archaeology\\v425_all_scored_prediction_columns.csv",
+    "manifest_json": "artifacts\\v425_global_prediction_archaeology\\20260515T_v425_global_prediction_archaeology\\v425_global_prediction_archaeology_manifest.json",
+    "non_adapter_best_csv": "artifacts\\v425_global_prediction_archaeology\\20260515T_v425_global_prediction_archaeology\\v425_best_non_adapter_teacher_candidates.csv",
+    "promotable_csv": "artifacts\\v425_global_prediction_archaeology\\20260515T_v425_global_prediction_archaeology\\v425_promotable_adapter_candidates.csv",
+    "report_md": "artifacts\\v425_global_prediction_archaeology\\20260515T_v425_global_prediction_archaeology\\V425_GLOBAL_PREDICTION_ARCHAEOLOGY.md",
+    "skipped_csv": "artifacts\\v425_global_prediction_archaeology\\20260515T_v425_global_prediction_archaeology\\v425_skipped_csvs.csv"
+  },
+  "promotable_adapter_candidate_count": 0,
+  "scan": {
+    "adapter_like_scored": 12,
+    "csv_files_considered": 303,
+    "scored_prediction_columns": 93,
+    "skipped_csvs": 263,
+    "source_type_counts": {
+      "adapter_like": 12,
+      "teacher_solver_or_postprocessor": 73,
+      "unknown_or_diagnostic": 8
+    }
+  },
+  "schema_version": "kg1_v425_global_prediction_archaeology_v1"
+}

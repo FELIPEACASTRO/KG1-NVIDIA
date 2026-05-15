@@ -1,0 +1,32 @@
+{
+  "accepted_new_gain_count": 0,
+  "baseline": {
+    "bit_manipulation_correct": 136,
+    "correct": 192,
+    "equation_transform_correct": 56,
+    "truncated": 0
+  },
+  "candidate_count": 42,
+  "conflict_count": 10,
+  "decision": {
+    "decision": "v427_no_safe_new_gain",
+    "hf_gpu_allowed": false,
+    "next_action": "Reject alphabet/ASCII shift DSL for training; continue with another class or stop GPU spending.",
+    "reason": "accepted_new_gain=0; conflicts=10; projected=192/315 eq=56/155 bit=136/160"
+  },
+  "generated_at_utc": "2026-05-15T10:04:27.593749+00:00",
+  "outputs": {
+    "accepted_csv": "artifacts\\v427_symbolic_alphabet_shift_gate\\20260515T_v427_symbolic_alphabet_shift\\v427_symbolic_alphabet_shift_accepted.csv",
+    "audit_csv": "artifacts\\v427_symbolic_alphabet_shift_gate\\20260515T_v427_symbolic_alphabet_shift\\v427_symbolic_alphabet_shift_audit.csv",
+    "conflicts_csv": "artifacts\\v427_symbolic_alphabet_shift_gate\\20260515T_v427_symbolic_alphabet_shift\\v427_symbolic_alphabet_shift_conflicts.csv",
+    "manifest_json": "artifacts\\v427_symbolic_alphabet_shift_gate\\20260515T_v427_symbolic_alphabet_shift\\v427_symbolic_alphabet_shift_manifest.json",
+    "report_md": "artifacts\\v427_symbolic_alphabet_shift_gate\\20260515T_v427_symbolic_alphabet_shift\\V427_SYMBOLIC_ALPHABET_SHIFT_GATE.md"
+  },
+  "projected": {
+    "bit_manipulation_correct": 136,
+    "correct": 192,
+    "equation_transform_correct": 56,
+    "truncated": 0
+  },
+  "schema_version": "kg1_v427_symbolic_alphabet_shift_gate_v1"
+}

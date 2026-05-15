@@ -1,0 +1,32 @@
+{
+  "accepted_new_gain_count": 0,
+  "baseline": {
+    "bit_manipulation_correct": 136,
+    "correct": 192,
+    "equation_transform_correct": 56,
+    "truncated": 0
+  },
+  "candidate_count": 20,
+  "conflict_count": 6,
+  "decision": {
+    "decision": "v426_no_safe_new_gain",
+    "hf_gpu_allowed": false,
+    "next_action": "Reject this DSL class for training; continue with another structural class.",
+    "reason": "accepted_new_gain=0; conflicts=6; projected=192/315 eq=56/155 bit=136/160"
+  },
+  "generated_at_utc": "2026-05-15T10:02:29.636054+00:00",
+  "outputs": {
+    "accepted_csv": "artifacts\\v426_symbolic_structural_template_gate\\20260515T_v426_symbolic_structural_template\\v426_symbolic_structural_template_accepted.csv",
+    "audit_csv": "artifacts\\v426_symbolic_structural_template_gate\\20260515T_v426_symbolic_structural_template\\v426_symbolic_structural_template_audit.csv",
+    "conflicts_csv": "artifacts\\v426_symbolic_structural_template_gate\\20260515T_v426_symbolic_structural_template\\v426_symbolic_structural_template_conflicts.csv",
+    "manifest_json": "artifacts\\v426_symbolic_structural_template_gate\\20260515T_v426_symbolic_structural_template\\v426_symbolic_structural_template_manifest.json",
+    "report_md": "artifacts\\v426_symbolic_structural_template_gate\\20260515T_v426_symbolic_structural_template\\V426_SYMBOLIC_STRUCTURAL_TEMPLATE_GATE.md"
+  },
+  "projected": {
+    "bit_manipulation_correct": 136,
+    "correct": 192,
+    "equation_transform_correct": 56,
+    "truncated": 0
+  },
+  "schema_version": "kg1_v426_symbolic_structural_template_gate_v1"
+}

@@ -1,0 +1,1 @@
+path,column,strategy,rows,correct,equation_transform_correct,bit_manipulation_correct,delta_total,delta_equation,delta_bit,gains_vs_baseline,losses_vs_baseline,gain_ids,loss_ids
