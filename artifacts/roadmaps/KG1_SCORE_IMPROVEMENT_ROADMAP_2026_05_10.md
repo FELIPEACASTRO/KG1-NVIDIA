@@ -35,7 +35,8 @@ Regra central: ganho so conta se aparecer no adapter/package. Teacher CPU, solve
 | OpenRouter V434/V434B/V434C | sem ganho pronto; trouxe filtros e rota V435 | evidencia para plano |
 | V435 CPU pair gate | 0/3558 pares aprovados | bloqueia GPU; faltam raw outputs reais V291/V290 e certificados |
 | V435B prompt pack | 840 prompts permitidos, 0 answers exportadas | pronto para coleta de raw outputs, nao libera treino |
-| GPU/HF | bloqueado | liberar somente com V435 `hf_gpu_allowed=true` |
+| HF GPU treino | bloqueado | liberar somente com V435 `hf_gpu_allowed=true` |
+| HF V435C inferencia | preparado | permitido apenas para coletar raw outputs V291/V290, com caps e kill-switch |
 
 ## Regras Permanentes
 
@@ -203,6 +204,31 @@ Resultado:
 
 Decisao: o pack V435B e permitido para coleta de raw outputs reais do adapter. Ele nao e dataset de treino e nao libera V436 sozinho.
 
+### V435C - Adapter Probe Raw Outputs
+
+Status: pronto para execucao HF inference-only.
+
+Artefatos preparados:
+
+- `scripts/run_v435c_adapter_probe_raw_outputs.py`
+- `artifacts/v435c_adapter_probe_raw_output_launch/launch_v435c_hf_adapter_probe_raw_outputs.py`
+
+Contrato:
+
+| Item | Valor |
+|---|---|
+| adapter | V291/V290 checkpoint-6 |
+| input | V435B prompt-only pack |
+| labels no input | sim |
+| scoring | nao |
+| treino | nao |
+| submit/package | nao |
+| default hardware | `a100-large` |
+| default caps | equation 200, bit 80 |
+| cost gate | `unit_cost_usd <= 0.09/min` |
+
+Objetivo: obter `raw_output`, `prediction`, prompt hash, rendered prompt hash, decode config e identidade do adapter para reexecutar V435 com hard negatives reais. Se V435C falhar por OOM/infra, tentar H200 somente se a coleta ainda for o menor gasto para desbloquear o gate; caso contrario cancelar por FinOps.
+
 ## V436 - Short Adapter-Only Smoke
 
 Status: condicional a V435 passar.
@@ -271,14 +297,14 @@ Estes itens nao estao ativos agora. So entram se V435/V436 trouxer sinal real:
 
 ## Proxima Acao Unica
 
-Executar V435C adapter raw-output collection sobre o prompt pack V435B.
+Executar V435C adapter raw-output collection sobre o prompt pack V435B, monitorando logs a cada 40 segundos.
 
 Objetivo:
 
-1. Rodar o V291/V290 congelado nos 840 prompts permitidos do V435B.
+1. Rodar o V291/V290 congelado primeiro em uma amostra capada dos prompts permitidos do V435B.
 2. Salvar `raw_output`, `prediction`, decode config, adapter path/commit e prompt hash.
 3. Nao incluir `answer` no input do job.
 4. Reexecutar V435 usando esses raw outputs para criar hard negatives reais.
 5. So liberar V436 se V435 passar com `hf_gpu_allowed=true`.
 
-Regra FinOps: V435C e inferencia, nao treino. Mesmo assim gasta GPU se rodar no HF/Kaggle. Se nao houver GPU gratuita/barata disponivel, parar aqui ate autorizacao explicita para essa coleta. Enquanto raw outputs reais nao existirem, a decisao correta e nao treinar.
+Regra FinOps: V435C e inferencia, nao treino. Mesmo assim gasta GPU se rodar no HF/Kaggle. A execucao inicial deve usar caps (`equation=200`, `bit=80`) e `a100-large` por custo/beneficio. Cancelar se houver OOM repetido, stall, custo acima do gate ou se o output nao puder alimentar V435. Enquanto raw outputs reais nao existirem, a decisao correta e nao treinar.
