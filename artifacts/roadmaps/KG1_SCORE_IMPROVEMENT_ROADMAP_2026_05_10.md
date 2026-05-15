@@ -77,7 +77,7 @@ Precisamos buscar subida no ranking ainda hoje, `2026-05-14`. A decisao V392 e s
 | V421 operator-specific symbolic gate | `17` candidates | `0` gains | n/a | `3` conflitos; hipotese bloqueada |
 | V422 symbolic selection/substitution gate | `16` candidates | `0` gains | n/a | `5` conflitos; HF CPU completou e confirmou bloqueio; sem GPU |
 | V423 conditioned symbolic gate | `10` candidates | `0` gains | n/a | `1` conflito; HF CPU completou e confirmou bloqueio; sem GPU |
-| V424 public-train pattern mining | `0` candidates | `0` gains | n/a | `1400` assinaturas exatas e `21` template signatures mineradas; nenhuma aplicavel ao weak |
+| V424 public-train pattern mining | `0` candidates | `0` gains | n/a | HF CPU confirmou com `train.csv` publico HF; nenhuma assinatura aplicavel ao weak |
 
 Conclusao: `eval_loss` baixo nao e criterio de promocao. O criterio e ACC por familia no weak/full gate. A rota "resolver nos mesmos" finalmente tem ganho mensuravel (`+9` weak em CPU), mas esse ganho ainda e solver/verifier externo; para submit, ele precisa virar comportamento do adapter/package ou ser permitido explicitamente pelas regras de runtime.
 
@@ -1108,7 +1108,7 @@ Decisao: nao abrir HF GPU. O teste reduz uma lacuna do roadmap: invariantes simp
 
 ### Step 6U - V424 public-train pattern mining gate
 
-Status: concluido localmente; sem sinal para GPU.
+Status: concluido localmente e reproduzido em HF CPU; sem sinal para GPU.
 
 Objetivo: usar o `train.csv` publico excluindo IDs do weak para minerar padroes recorrentes sem depender de label weak: assinatura canonica exata de exemplos+query e biblioteca de templates diretos por features.
 
@@ -1129,6 +1129,7 @@ Artefatos:
 - Script: `artifacts/v424_public_train_pattern_mining_gate/build_v424_public_train_pattern_mining_gate.py`.
 - Manifest: `artifacts/v424_public_train_pattern_mining_gate/20260515T_v424_public_train_pattern_mining_gate/v424_public_train_pattern_manifest.json`.
 - Relatorio: `artifacts/v424_public_train_pattern_mining_gate/20260515T_v424_public_train_pattern_mining_gate/V424_PUBLIC_TRAIN_PATTERN_MINING_GATE.md`.
+- HF job: `https://huggingface.co/jobs/felipesp1983/6a06eb573308d79117b9024f`, concluido em `22s`, baixando `train.csv` de `jasonkung98/NVIDIA-Nemotron-Model-Reasoning-Challenge`.
 
 Decisao: nao abrir GPU. O train publico ajuda como corpus, mas assinatura canonica/template simples nao gera transferencia para os rows fracos. A proxima tentativa, se houver, precisa minerar uma DSL de programas mais rica, nao apenas match de padrao.
 

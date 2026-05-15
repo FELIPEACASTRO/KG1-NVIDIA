@@ -1,0 +1,30 @@
+{
+  "branch": "v230-v226-complementarity",
+  "dataset_repo": "jasonkung98/NVIDIA-Nemotron-Model-Reasoning-Challenge",
+  "expected_commit": "59af54c48cdc89a64fce66e096791cf0cc58564f",
+  "flavor": "cpu-upgrade",
+  "gates": {
+    "cpu_only": true,
+    "gpu_allowed": false,
+    "kaggle_submit_allowed": false,
+    "package_allowed": false,
+    "train_allowed": false
+  },
+  "image": "python:3.11",
+  "job_id": "6a06eb573308d79117b9024f",
+  "job_status": "COMPLETED",
+  "job_url": "https://huggingface.co/jobs/felipesp1983/6a06eb573308d79117b9024f",
+  "remote_result": {
+    "accepted_gain_count": 0,
+    "candidate_count": 0,
+    "conflict_count": 0,
+    "decision": "hf_gpu_blocked_no_public_train_pattern_gain",
+    "exact_signature_count": 1400,
+    "feature_template_signature_count": 21,
+    "projected_bit_manipulation": 136,
+    "projected_equation_transform": 56,
+    "projected_weak_total": 192,
+    "train_rows": 9500
+  },
+  "schema_version": "kg1_v424_hf_cpu_launch_manifest_v1"
+}
