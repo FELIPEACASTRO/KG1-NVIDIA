@@ -55,6 +55,8 @@ Regra central: ganho so conta se aparecer no adapter/package. Teacher CPU, solve
 | V453 public Kaggle kernel mining | 30 kernels listados/analisados; 29 pull ok; raw notebooks apagados apos triagem | sem ganho submit-ready; reforca `lm_head`/target modules e mineracao publica CPU-only |
 | V454 bit guardrail decision | teacher CPU chega a bit `159/160`, mas adapter-transfer V359/V368 fica em `134-135/160` | bit-only GPU bloqueado; bit vira replay/guardrail |
 | V455 equation target audit | V324 tinha 6 candidatos no-loss; V452 cobriu 2 pares; faltam 4 rows verificadas em 3 classes numericas; simbolico verificado 0 | `hf_gpu_allowed=false`; V456 precisa fechar classes faltantes antes de GPU |
+| V456 missing numeric class decision | 3 classes faltantes auditadas; 2 ja tinham sintético massivo sem transferir; 1 precisa raw probe; 0 elegiveis para treino | `hf_gpu_allowed=false`; nao repetir SFT sintetico |
+| V457 public-train numeric probe pack | 22 prompts public-train sem answer para `minus_signed_opposite_sign_guarded`; pack sem chaves answer-like | `hf_raw_probe_allowed=true`; treino ainda bloqueado ate raw outputs reais |
 
 ## Regras Permanentes
 
@@ -1084,6 +1086,36 @@ construir pares legais para as 3 classes numericas ausentes ou provar que elas
 nao possuem material treinavel permitido. Weak/full labels continuam proibidos
 para treino, filtro e tiebreak.
 
+## Atualizacao V456/V457 - Missing Numeric Classes
+
+V456 auditou as 3 classes numericas que V455 marcou como ausentes:
+
+| Classe | Gap V455 | Evidencia | Decisao |
+|---|---:|---|---|
+| `add_direct_over_model_add_variant` | `1` | `6160` ocorrencias sinteticas historicas em V290/V293/V294 | bloqueada: sintetico ja falhou transferencia |
+| `colon_absdiff_restore_trailing_zero` | `1` | builder existe, mas sem cobertura sintetica historica e sem hard-negative publico | precisa raw probe publico antes de qualquer treino |
+| `minus_signed_opposite_sign_guarded` | `2` | `6160` ocorrencias sinteticas historicas em V290/V293/V294 | bloqueada para novo sintetico; precisa hard-negative real |
+
+Decisao V456: `hf_gpu_allowed=false`. O achado importante e negativo: repetir
+dataset sintetico para `minus_signed` e `add_direct` e gasto ruim, porque ja foi
+tentado em escala e o adapter ficou preso em `equation=56`.
+
+V457 entao construiu um pack de raw-output probe, usando apenas public-train:
+
+- Script: `scripts/build_v457_public_train_numeric_probe_pack.py`.
+- Manifesto: `artifacts/v457_public_train_numeric_probe_pack/20260515T_cpu_gate/v457_public_train_numeric_probe_pack_manifest.json`.
+- Prompt pack: `artifacts/v457_public_train_numeric_probe_pack/20260515T_cpu_gate/v457_public_train_numeric_probe_pack_prompts.jsonl`.
+- Rows: `22` prompts public-train de `minus_signed_opposite_sign_guarded`.
+- O prompt pack omite `answer` e nao contem chaves `answer`, `label`, `target`,
+  `correct`, `is_correct` ou `solution`.
+- `hf_raw_probe_allowed=true` apenas para inferencia e coleta de raw output.
+- `hf_gpu_train_allowed=false` ate os raw outputs provarem hard negatives reais
+  do adapter, sem overlap weak/full.
+
+Proxima acao tecnica: executar raw-output probe curto no HF para estes 22
+prompts, depois analisar se o adapter V291/V290 realmente erra com o padrao que
+o V274 corrige. Se nao houver hard-negative real, arquivar a rota sem treino.
+
 ## Proxima Acao Ativa
 
 Rota ativa agora volta para CPU e depuracao de transferencia, nao para novo
@@ -1115,19 +1147,23 @@ treino pago.
    - simbolico/pontuacao segue sem candidato verificado (`0`);
    - decisao: `hf_gpu_allowed=false`; nao abrir H200 ainda.
 4. V456 deve ser o proximo passo CPU:
-   - construir ou provar inviavel um builder legal para as 3 classes numericas
-     faltantes;
-   - nao usar weak/full label como linha de treino, filtro ou tiebreak;
-   - so liberar GPU se o gate demonstrar alvo treinavel legal, sem perdas e
-     com comparativo contra V291/V290.
-5. So voltar a HF GPU se a CPU provar:
+   - status: fechado por `scripts/build_v456_missing_numeric_class_decision.py`;
+   - resultado: `eligible=0`, `synthetic_failed=2`, `needs_probe=1`,
+     `needs_builder=0`;
+   - decisao: nao abrir treino HF.
+5. V457 public-train numeric probe pack:
+   - status: fechado por `scripts/build_v457_public_train_numeric_probe_pack.py`;
+   - resultado: `22` prompts public-train sem answer para raw-output probe;
+   - permitido: inferencia curta para coletar raw outputs;
+   - proibido: treino, package ou submit antes de hard negatives reais.
+6. So voltar a HF GPU de treino se a CPU/raw-probe provar:
    - `total > 192/315`;
    - `equation > 56/155`;
    - `bit >= 136/160`;
    - `truncated = 0`;
    - dataset sem leakage;
    - alvo treinavel que o adapter consiga emitir em resposta curta.
-6. Se a proxima CPU route nao mostrar ganho estrito, nao abrir job pago.
+7. Se a proxima CPU/raw-probe route nao mostrar ganho estrito, nao abrir job pago.
 
 Regra FinOps continua: se o primeiro checkpoint ou gate parcial nao indicar
 caminho para `total>192`, `equation>56`, `bit>=136`, `truncated=0`, cancelar.

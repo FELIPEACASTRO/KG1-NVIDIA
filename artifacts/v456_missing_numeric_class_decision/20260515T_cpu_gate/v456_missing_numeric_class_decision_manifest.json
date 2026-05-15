@@ -1,0 +1,72 @@
+{
+  "decision": {
+    "decision": "v456_no_gpu_expand_public_train_raw_probe",
+    "hf_gpu_allowed": false,
+    "next_action": "Build V457 public-train numeric raw-output probe pack for the missing classes; only train if it yields legal adapter-wrong pairs with zero leakage.",
+    "reason": "eligible=0; synthetic_failed=2; needs_probe=1; needs_builder=0"
+  },
+  "decision_rows": [
+    {
+      "action": "blocked_prior_synthetic_transfer_failed",
+      "builder_exists": true,
+      "prior_synthetic_rule_count": 6160,
+      "prior_synthetic_sources": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v290_rank19_micro_patch_dataset\\20260511T1925Z\\v282_rank19_micro_patch_manifest.json;C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v293_v274_distill_dataset\\20260511T2338Z\\v293_v274_distill_manifest.json;C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v294_verified_equation_patch_dataset\\20260512T012919Z\\v294_verified_equation_patch_manifest.json",
+      "prior_synthetic_subcategory_count": 3280,
+      "public_train_candidates": 0,
+      "public_train_promoted": 0,
+      "reason": "V290/V293/V294 already generated large legal synthetic add_direct coverage, but later adapter-only weak evals stayed at equation=56.",
+      "rule": "add_direct_over_model_add_variant",
+      "rule_class": "v274_guarded_numeric_add_direct_over_model_add_variant",
+      "v455_accepted_ids": "c5b058d6",
+      "v455_gap": "1"
+    },
+    {
+      "action": "needs_public_train_raw_probe_before_gpu",
+      "builder_exists": true,
+      "prior_synthetic_rule_count": 0,
+      "prior_synthetic_sources": "",
+      "prior_synthetic_subcategory_count": 0,
+      "public_train_candidates": 0,
+      "public_train_promoted": 0,
+      "reason": "The builder exists, but this exact trailing-zero variant was not part of the earlier generated rule mix; it still lacks a legal public-train adapter hard-negative pair.",
+      "rule": "colon_absdiff_restore_trailing_zero",
+      "rule_class": "v274_guarded_numeric_colon_absdiff_restore_trailing_zero",
+      "v455_accepted_ids": "d1bd7478",
+      "v455_gap": "1"
+    },
+    {
+      "action": "blocked_prior_synthetic_transfer_failed",
+      "builder_exists": true,
+      "prior_synthetic_rule_count": 6160,
+      "prior_synthetic_sources": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v290_rank19_micro_patch_dataset\\20260511T1925Z\\v282_rank19_micro_patch_manifest.json;C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v293_v274_distill_dataset\\20260511T2338Z\\v293_v274_distill_manifest.json;C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v294_verified_equation_patch_dataset\\20260512T012919Z\\v294_verified_equation_patch_manifest.json",
+      "prior_synthetic_subcategory_count": 3280,
+      "public_train_candidates": 0,
+      "public_train_promoted": 0,
+      "reason": "V290/V293/V294 already generated large legal synthetic minus_signed coverage, but later adapter-only weak evals stayed at equation=56.",
+      "rule": "minus_signed_opposite_sign_guarded",
+      "rule_class": "v274_guarded_numeric_minus_signed_opposite_sign_guarded",
+      "v455_accepted_ids": "274def88,7688e06e",
+      "v455_gap": "2"
+    }
+  ],
+  "generated_at_utc": "2026-05-15T21:52:46.763970+00:00",
+  "inputs": {
+    "builder_source_path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\scripts\\build_v282_rank19_micro_patch_dataset.py",
+    "prior_synthetic_manifests": [
+      "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v290_rank19_micro_patch_dataset\\20260511T1925Z\\v282_rank19_micro_patch_manifest.json",
+      "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v293_v274_distill_dataset\\20260511T2338Z\\v293_v274_distill_manifest.json",
+      "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v294_verified_equation_patch_dataset\\20260512T012919Z\\v294_verified_equation_patch_manifest.json"
+    ],
+    "v452_audit_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v452_equation_dsl_v2_certified_builder\\20260515T_cpu_gate\\v452_equation_dsl_v2_certified_builder_audit.csv",
+    "v455_class_gaps_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v455_equation_target_audit\\20260515T_cpu_gate\\v455_equation_target_audit_class_gaps.csv"
+  },
+  "schema_version": "kg1_v456_missing_numeric_class_decision_v1",
+  "summary": {
+    "blocked_prior_synthetic_transfer_failed": 2,
+    "eligible_for_prepaid_gate": 0,
+    "hf_gpu_allowed": false,
+    "missing_classes": 3,
+    "needs_new_builder_before_gpu": 0,
+    "needs_public_train_raw_probe_before_gpu": 1
+  }
+}

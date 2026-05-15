@@ -1,0 +1,50 @@
+{
+  "decision": {
+    "decision": "v457_prompt_pack_ready_for_raw_probe",
+    "hf_gpu_train_allowed": false,
+    "hf_raw_probe_allowed": true,
+    "next_action": "Run inference-only raw-output probe, then build legal hard negatives from actual adapter errors."
+  },
+  "generated_at_utc": "2026-05-15T21:58:55.993289+00:00",
+  "inputs": {
+    "competition_train_csv": "C:\\Users\\davis\\Downloads\\competition_train.csv",
+    "competition_train_sha256": "d204af160633b638448723a437aa51c0db70fd0b64ff92f6ad6f52e5ac6377fa",
+    "reference_full_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v293_gap_mining\\inputs\\v291_full_predictions.csv",
+    "reference_full_sha256": "d9634ea15cb55e17bbfb90229f1cdbfd9b0f5a4cdba0d61848e6f746393dde20",
+    "reference_weak_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v290_rank19_micro_patch_reference\\runtime_artifacts\\v245_weak_eval_bridge\\v245-weak-bridge-hfonly-20260510T1950Z\\v221_weak_315.csv",
+    "reference_weak_sha256": "85da758e14d57ea40270de5747f98726a0ad0b6d1795bff7dd46183005e0f9b6"
+  },
+  "outputs": {
+    "audit_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v457_public_train_numeric_probe_pack\\20260515T_cpu_gate\\v457_public_train_numeric_probe_pack_audit.csv",
+    "audit_csv_sha256": "147216ab9a8485b9786da5771fe39db219e026fc6bff5295fd1c67ad356133a4",
+    "manifest_json": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v457_public_train_numeric_probe_pack\\20260515T_cpu_gate\\v457_public_train_numeric_probe_pack_manifest.json",
+    "prompts_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v457_public_train_numeric_probe_pack\\20260515T_cpu_gate\\v457_public_train_numeric_probe_pack_prompts.csv",
+    "prompts_csv_sha256": "edb0568c3ce36fda889bc39012fc6951ab67093a8960522040264c02abd59372",
+    "prompts_jsonl": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v457_public_train_numeric_probe_pack\\20260515T_cpu_gate\\v457_public_train_numeric_probe_pack_prompts.jsonl",
+    "prompts_jsonl_sha256": "eaa197b268460ad42f81c05ea1098054e2030c2e9614cb68dc17a595eeab76dc",
+    "report_md": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v457_public_train_numeric_probe_pack\\20260515T_cpu_gate\\V457_PUBLIC_TRAIN_NUMERIC_PROBE_PACK.md"
+  },
+  "schema_version": "kg1_v457_public_train_numeric_probe_pack_v1",
+  "selection": {
+    "audit_counts_by_rule": {
+      "v274_guarded_numeric_minus_signed_opposite_sign_guarded": 22
+    },
+    "audit_rows": 22,
+    "hf_gpu_train_allowed": false,
+    "hf_raw_probe_allowed": true,
+    "max_rows_per_rule": 96,
+    "prompt_rows": 22,
+    "selected_counts_by_rule": {
+      "v274_guarded_numeric_minus_signed_opposite_sign_guarded": 22
+    },
+    "skipped": {
+      "reference_id_overlap": 155
+    }
+  },
+  "source_policy": {
+    "answers_exported_to_prompt_pack": false,
+    "answers_in_audit_only": true,
+    "purpose": "Collect adapter raw outputs on public-train numeric prompts before any training.",
+    "weak_or_full_rows_exported": false
+  }
+}
