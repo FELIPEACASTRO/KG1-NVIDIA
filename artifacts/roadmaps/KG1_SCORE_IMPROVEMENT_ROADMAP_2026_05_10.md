@@ -41,6 +41,7 @@ Regra central: ganho so conta se aparecer no adapter/package. Teacher CPU, solve
 | V436B H200 hard-negative-only | checkpoint-3 piorou preference 6/24 -> 4/24 | cancelado; sem weak/full |
 | V440 H200 V439 final-answer-only | checkpoint-3 empatou baseline 8/24; equation 7/22; bit 1/2 | cancelado; sem weak/full |
 | V441 OpenRouter consult | DeepSeek/Qwen/Gemini consultados; 2 respostas completas dizem SIM com gates; Gemini truncou mas iniciou SIM | V441 boxed-payload e justificado, com kill-switch |
+| V441 H200 boxed-payload | baseline 7/24; checkpoint-3 7/24; equation 6/22; bit 1/2 | cancelado; sem weak/full |
 
 ## Regras Permanentes
 
@@ -524,7 +525,7 @@ mesma formulacao. Precisamos mudar o objetivo ou voltar para CPU gate de solver
 
 ## V441 - API Consult e Boxed-Payload Preference
 
-Status: implementacao em andamento; ainda nao promove weak/full/submit.
+Status: executado e cancelado por FinOps; nao promove weak/full/submit.
 
 Consulta externa:
 
@@ -576,6 +577,16 @@ Preflight local executado:
 Risco honesto: mesmo que V441 melhore preference interna, ainda pode nao
 transferir para weak ACC. Preference interna e so kill-switch barato; promocao
 continua exigindo weak/full por familia.
+
+Resultado HF:
+
+- Job: `https://huggingface.co/jobs/felipesp1983/6a075046e48bea4538b9e7d3`.
+- Output repo parcial: `felipesp1983/kg1-nemotron-lora-v441-v439-boxed-payload-v290ckpt6/checkpoint-3`.
+- Baseline V441 val: `7/24`, equation `6/22`, bit `1/2`.
+- Checkpoint-3: `7/24`, equation `6/22`, bit `1/2`.
+- Decisao: cancelado. A mascara de payload funcionou tecnicamente, mas nao
+  produziu sinal interno no primeiro checkpoint. Nao ha base para weak/full ou
+  submit.
 
 ## Regra De Integracao Pre-Job
 
@@ -642,9 +653,9 @@ Estes itens nao estao ativos agora. So entram se houver novo gate CPU mais forte
 
 ## Proxima Acao Unica
 
-Parar a linha V436/V436B/V440 e nao abrir novo GPU job de preference mean-NLL
-direto sem uma mudanca tecnica nova no objetivo ou no dado. V441 e permitido
-porque troca o objetivo para `boxed_payload_mean_nll`.
+Parar a linha V436/V436B/V440/V441 e nao abrir novo GPU job de preference
+simples sem uma mudanca tecnica nova no objetivo ou no dado. V441 ja testou a
+hipotese de score somente no boxed payload e nao gerou sinal.
 
 Objetivo:
 
@@ -655,7 +666,7 @@ Objetivo:
    - `chosen_mentions_public_train_label_audit_rows=0`.
 2. Rodar gate V439: semantic boxes 100%, subcategory counts preservados, no weak/full leakage, tokenizacao sem truncation, quadro comparativo contra V291/V290. Status: estrutural concluido; falta tokenizacao remota se publicar em HF.
 3. Publicar V439 no HF e rodar smoke curto somente se o launcher tiver kill-switch no primeiro checkpoint e comparar baseline V439 vs checkpoint-3. Status: concluido; V440 empatou e foi cancelado.
-4. Proxima rota: CPU gate para solver/DSL de `equation_transform` ou nova funcao de perda que compare somente a probabilidade do boxed payload, nao a sequencia inteira. Status: V441 implementa a segunda opcao como smoke curto.
+4. Proxima rota: CPU gate para solver/DSL de `equation_transform`; a alternativa de loss focada no boxed payload foi testada na V441 e nao gerou sinal.
 5. Qualquer novo GPU job precisa mostrar, antes de rodar, quadro comparativo contra V291/V290 e condicao objetiva de parada no primeiro checkpoint.
 6. Promover para weak/full/package/submit somente se o gate superar o melhor adapter-only atual: weak `192/315`, equation `56/155`, bit `136/160`, trunc `0`.
 

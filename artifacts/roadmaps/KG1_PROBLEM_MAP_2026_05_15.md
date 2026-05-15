@@ -27,6 +27,8 @@ O que ja sabemos:
 - `equation_transform` e o gargalo principal: `56/155`.
 - V436/V436B/V440 provaram que preference `mean_nll` nao esta gerando ganho
   submit-safe.
+- V441 provou que focar o score somente no payload do `\boxed{...}` tambem nao
+  gera sinal no primeiro checkpoint.
 - Solver/verifier/teacher mostrou potencial, mas esse ganho ainda nao foi
   convertido para adapter-only.
 - Consulta OpenRouter V441 confirmou que o proximo smoke defensavel e trocar o
@@ -55,7 +57,7 @@ flowchart LR
   G --> H[Preference/SFT antigo\nmean-NLL sequencial]
   H --> I[Sem ganho medido\nV436/V436B/V440]
 
-  G --> J[Proxima rota\nCPU gate + boxed-payload objective]
+  G --> J[Proxima rota\nCPU gate solver/DSL]
   J --> K[Novo adapter candidato]
   K --> C
 
@@ -271,6 +273,17 @@ Preflight local V441:
 - Mascara de score no payload nao vazia: treino `chosen=339`, `rejected=376`;
   validacao `chosen=75`, `rejected=78`.
 
+Resultado V441:
+
+| Metrica interna V441 validation | Baseline V290 ckpt-6 | V441 checkpoint-3 |
+|---|---:|---:|
+| preference total | `7/24` | `7/24` |
+| equation | `6/22` | `6/22` |
+| bit | `1/2` | `1/2` |
+
+Decisao: cancelado por FinOps. A implementacao do payload mask funcionou, mas
+nao houve sinal interno para weak/full.
+
 ## O Que Isso Significa
 
 O gargalo nao e "rodar mais H200". O gargalo e **como transformar conhecimento
@@ -287,8 +300,7 @@ O que ainda falta:
 1. isolar exatamente os subtipos de equation que podem ganhar `+4`;
 2. gerar pares/traces onde a resposta correta seja aprendida sem ensinar texto
    estranho;
-3. usar um objetivo que force o modelo a aumentar probabilidade do boxed payload
-   correto, nao apenas reduzir NLL medio de uma sequencia inteira;
+3. produzir acertos novos via solver/DSL antes de outro treino;
 4. preservar `bit >= 136/160`.
 
 ## Proxima Acao Tecnica Correta
@@ -298,7 +310,9 @@ Nao repetir:
 - V436;
 - V436B;
 - V440;
+- V441;
 - mais epochs/LR sweep sobre o mesmo `mean_nll`;
+- mais preference simples sobre final answer sem novo sinal CPU;
 - submit sem weak/full gain.
 
 Executar agora:
@@ -315,9 +329,7 @@ Executar agora:
    - final answer curto;
    - hard negative do adapter;
    - opcional trace deterministico curto somente se nao contaminar target.
-4. Trocar objetivo de treino:
-   - bloquear repeticao de `mean_nll` sequencial puro;
-   - testar objetivo focado no boxed payload ou masked completion payload.
+4. So voltar a treino se o CPU gate produzir novos acertos verificaveis.
 5. Rodar novo HF job somente se o CPU gate provar ganho potencial e o
    integration gate aprovar tudo.
 
