@@ -33,6 +33,8 @@ Regra central: ganho so conta se aparecer no adapter/package. Teacher CPU, solve
 | Melhor teacher CPU V414/V366 | weak 222/315, equation 63, bit 159 | nao submit-safe |
 | Melhor projecao solver integrada V405 | weak 201/315, equation 63, bit 138 | nao submit-safe |
 | OpenRouter V434/V434B/V434C | sem ganho pronto; trouxe filtros e rota V435 | evidencia para plano |
+| V435 CPU pair gate | 0/3558 pares aprovados | bloqueia GPU; faltam raw outputs reais V291/V290 e certificados |
+| V435B prompt pack | 840 prompts permitidos, 0 answers exportadas | pronto para coleta de raw outputs, nao libera treino |
 | GPU/HF | bloqueado | liberar somente com V435 `hf_gpu_allowed=true` |
 
 ## Regras Permanentes
@@ -149,6 +151,58 @@ Condicoes para `hf_gpu_allowed=true`:
 
 Se qualquer condicao falhar, V435 termina com `hf_gpu_allowed=false` e nao abre GPU.
 
+### Resultado V435 2026-05-15
+
+Artefatos:
+
+- `artifacts/v435_adapter_level_pair_gate/20260515T_v435_cpu_gate/v435_adapter_level_pair_gate_manifest.json`
+- `artifacts/v435_adapter_level_pair_gate/20260515T_v435_cpu_gate/v435_adapter_level_pair_gate_pair_audit.csv`
+- `artifacts/v435_adapter_level_pair_gate/20260515T_v435_cpu_gate/v435_adapter_level_pair_gate_decision.md`
+
+Resultado:
+
+| Item | Valor |
+|---|---:|
+| candidate pairs auditados | 3558 |
+| approved pairs | 0 |
+| approved equation rule modes | 0 |
+| bit replay train/validation | 720 / 160 |
+| programmatic bit hard negatives | 0 |
+| `hf_gpu_allowed` | false |
+
+Bloqueios principais:
+
+- todos os pares existentes faltam raw output real do V291/V290;
+- todos faltam identidade/config de decode do adapter;
+- todos faltam `locked_before_answer_audit=true`;
+- todos faltam certificados MDL, Leave-One-Out e renaming stability;
+- bit tem replay, mas nao tem hard negatives programaticos prontos.
+
+Decisao: nao abrir GPU de treino. O proximo passo seguro e coletar raw outputs reais do V291/V290 em prompts permitidos, sem usar answers.
+
+### Resultado V435B 2026-05-15
+
+Artefatos:
+
+- `artifacts/v435b_adapter_probe_prompt_pack/20260515T_v435b_prompt_pack/v435b_adapter_probe_prompt_pack_manifest.json`
+- `artifacts/v435b_adapter_probe_prompt_pack/20260515T_v435b_prompt_pack/v435b_adapter_probe_prompt_pack_prompts.jsonl`
+- `artifacts/v435b_adapter_probe_prompt_pack/20260515T_v435b_prompt_pack/v435b_adapter_probe_prompt_pack_prompts.csv`
+
+Resultado:
+
+| Item | Valor |
+|---|---:|
+| public train rows vistos | 9500 |
+| bit_manipulation vistos | 1602 |
+| equation_transform vistos | 1555 |
+| prompts exportados equation | 600 |
+| prompts exportados bit | 240 |
+| total prompts exportados | 840 |
+| answers exportadas | 0 |
+| weak/full rows removidas por overlap | 315 |
+
+Decisao: o pack V435B e permitido para coleta de raw outputs reais do adapter. Ele nao e dataset de treino e nao libera V436 sozinho.
+
 ## V436 - Short Adapter-Only Smoke
 
 Status: condicional a V435 passar.
@@ -217,12 +271,14 @@ Estes itens nao estao ativos agora. So entram se V435/V436 trouxer sinal real:
 
 ## Proxima Acao Unica
 
-Implementar V435 CPU-only:
+Executar V435C adapter raw-output collection sobre o prompt pack V435B.
 
-1. Criar script `scripts/build_v435_adapter_level_pair_gate.py`.
-2. Gerar `v435_pair_manifest.json` com schema fechado.
-3. Gerar tabela comparativa V435 vs V291/V290.
-4. Declarar `hf_gpu_allowed=false` por default.
-5. Liberar V436 somente se V435 provar hard negatives reais, regras independentes, zero leakage, bit guardrail e tokenization limpa.
+Objetivo:
 
-Enquanto V435 nao existir e nao passar, a decisao correta e nao gastar GPU.
+1. Rodar o V291/V290 congelado nos 840 prompts permitidos do V435B.
+2. Salvar `raw_output`, `prediction`, decode config, adapter path/commit e prompt hash.
+3. Nao incluir `answer` no input do job.
+4. Reexecutar V435 usando esses raw outputs para criar hard negatives reais.
+5. So liberar V436 se V435 passar com `hf_gpu_allowed=true`.
+
+Regra FinOps: V435C e inferencia, nao treino. Mesmo assim gasta GPU se rodar no HF/Kaggle. Se nao houver GPU gratuita/barata disponivel, parar aqui ate autorizacao explicita para essa coleta. Enquanto raw outputs reais nao existirem, a decisao correta e nao treinar.

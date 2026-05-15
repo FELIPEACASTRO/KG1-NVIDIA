@@ -1,0 +1,130 @@
+{
+  "baseline": {
+    "expected_baseline": {
+      "bit_manipulation": 136,
+      "equation_transform": 56,
+      "total": 192,
+      "truncated": 0
+    },
+    "family_counts": {
+      "bit_manipulation": {
+        "correct": 136,
+        "rows": 160,
+        "truncated": 0
+      },
+      "equation_transform": {
+        "correct": 56,
+        "rows": 155,
+        "truncated": 0
+      }
+    },
+    "matches_expected_v291_v290": true,
+    "observed_baseline": {
+      "bit_manipulation": 136,
+      "equation_transform": 56,
+      "total": 192,
+      "truncated": 0
+    },
+    "path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v342_acc_first_diagnostic\\v290_checkpoint6_baseline_predictions.csv",
+    "rows": 315,
+    "sha256": "910a051d8b8e652e37c0b0814ac59fe4a400b95cb432945b6a0244f97f5b31bf",
+    "total_correct": 192,
+    "total_truncated": 0
+  },
+  "bit_guardrail": {
+    "bit_replay_available": true,
+    "bit_replay_train_rows": 720,
+    "bit_replay_validation_rows": 160,
+    "decision": "partial_replay_only_missing_programmatic_bit_hard_negatives",
+    "preference_negative_type_counts": {
+      "train": {
+        "format_negative_multiple_boxes": 720,
+        "format_negative_no_box": 720,
+        "format_negative_trailing_text": 720,
+        "hard_negative_equation_near_miss": 720
+      },
+      "validation": {
+        "format_negative_multiple_boxes": 180,
+        "format_negative_no_box": 180,
+        "format_negative_trailing_text": 180,
+        "hard_negative_equation_near_miss": 180
+      }
+    },
+    "programmatic_bit_guardrail_ready": false,
+    "programmatic_bit_hard_negative_rows": 0
+  },
+  "decision": {
+    "blocking_conditions": [
+      "approved_equation_rule_modes_ge_4",
+      "approved_pairs_gt_0",
+      "programmatic_bit_guardrail_ready"
+    ],
+    "decision": "v435_pair_gate_blocks_gpu",
+    "hf_gpu_allowed": false,
+    "next_action": "Do not launch GPU. Generate V291/V290 raw outputs on permitted train/synthetic rows or add certified adapter-level hard negatives."
+  },
+  "generated_at_utc": "2026-05-15T14:01:47.887858+00:00",
+  "inputs": {
+    "baseline_weak_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v342_acc_first_diagnostic\\v290_checkpoint6_baseline_predictions.csv",
+    "baseline_weak_sha256": "910a051d8b8e652e37c0b0814ac59fe4a400b95cb432945b6a0244f97f5b31bf",
+    "preference_manifest_json": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v341_clean_preference_transfer_dataset\\20260513T_cpu_gate\\v341_clean_preference_transfer_manifest.json",
+    "preference_manifest_sha256": "10f80a61cd95b56d442f89c4da556f4c939c682845e488b8f7ef8d5912b80d32",
+    "preferences_train_jsonl": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v341_clean_preference_transfer_dataset\\20260513T_cpu_gate\\v341_clean_preference_transfer_preferences_train.jsonl",
+    "preferences_train_sha256": "217068058e723063178c00e5b9de697a1a669839e85abdb86154663543a71ae2",
+    "preferences_val_jsonl": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v341_clean_preference_transfer_dataset\\20260513T_cpu_gate\\v341_clean_preference_transfer_preferences_val.jsonl",
+    "preferences_val_sha256": "6aa1bfcd795a6bb11fa50551067e0744159a697331f2fff3bdd9084ce912cd8a",
+    "reference_full_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v293_gap_mining\\inputs\\v291_full_predictions.csv",
+    "reference_full_sha256": "d9634ea15cb55e17bbfb90229f1cdbfd9b0f5a4cdba0d61848e6f746393dde20",
+    "reference_weak_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v290_rank19_micro_patch_reference\\runtime_artifacts\\v245_weak_eval_bridge\\v245-weak-bridge-hfonly-20260510T1950Z\\v221_weak_315.csv",
+    "reference_weak_sha256": "85da758e14d57ea40270de5747f98726a0ad0b6d1795bff7dd46183005e0f9b6",
+    "v337d_manifest_json": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v337d_minimal_transfer_dataset\\20260513T_cpu_gate\\v337d_minimal_transfer_manifest.json",
+    "v337d_manifest_sha256": "6ccd686686b4022247393816fb502af63b4a6567b41f28d25c9803f8dc067ca6"
+  },
+  "label": "v435_adapter_level_pair_gate",
+  "outputs": {
+    "decision_markdown": "artifacts\\v435_adapter_level_pair_gate\\20260515T_v435_cpu_gate\\v435_adapter_level_pair_gate_decision.md",
+    "decision_markdown_sha256": "1718ef2c16a38e4418d4b01be0bf858f82e3832a3d5cf14ad100357d0b3cc239",
+    "manifest_json": "artifacts\\v435_adapter_level_pair_gate\\20260515T_v435_cpu_gate\\v435_adapter_level_pair_gate_manifest.json",
+    "pair_audit_csv": "artifacts\\v435_adapter_level_pair_gate\\20260515T_v435_cpu_gate\\v435_adapter_level_pair_gate_pair_audit.csv",
+    "pair_audit_sha256": "174140aeb17597161088b0f18a06c7d23efc7ae5ed2efa85dcd52bf31c9cc733",
+    "rule_summary_csv": "artifacts\\v435_adapter_level_pair_gate\\20260515T_v435_cpu_gate\\v435_adapter_level_pair_gate_rule_summary.csv",
+    "rule_summary_sha256": "5531ed62ea4ff4c8f1bbc78921a6c7f22d321feada3a685a5b20ca0f7c9aedb1"
+  },
+  "pair_summary": {
+    "approved_equation_rule_classes": [],
+    "approved_equation_rule_modes": 0,
+    "approved_pairs": 0,
+    "blocked_pairs": 3558,
+    "blocked_reason_counts": {
+      "missing_adapter_decode_config": 3558,
+      "missing_adapter_identity": 3558,
+      "missing_adapter_raw_output": 3558,
+      "missing_locked_before_answer_audit": 3558,
+      "missing_loo_certificate": 3558,
+      "missing_mdl_certificate": 3558,
+      "missing_renaming_certificate": 3558,
+      "not_hard_negative": 2700,
+      "rejected_box_count_0": 900,
+      "rejected_box_count_2": 900,
+      "same_chosen_rejected_box": 900
+    },
+    "candidate_pairs": 3558,
+    "status_counts": {
+      "blocked": 3558
+    }
+  },
+  "promotion_conditions": {
+    "approved_equation_rule_modes_ge_4": false,
+    "approved_pairs_gt_0": false,
+    "baseline_matches_expected": true,
+    "programmatic_bit_guardrail_ready": false,
+    "zero_reference_overlap_in_approved_pairs": true
+  },
+  "reference_summary": {
+    "combined_reference_ids": 947,
+    "combined_reference_prompt_hashes": 947,
+    "full_rows": 947,
+    "weak_rows": 315
+  },
+  "schema_version": "kg1_v435_adapter_level_pair_gate_v1"
+}

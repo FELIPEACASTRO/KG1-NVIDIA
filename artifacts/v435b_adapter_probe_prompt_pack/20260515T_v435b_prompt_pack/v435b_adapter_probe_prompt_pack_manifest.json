@@ -1,0 +1,44 @@
+{
+  "generated_at_utc": "2026-05-15T14:03:30.499744+00:00",
+  "inputs": {
+    "competition_train_csv": "C:\\Users\\davis\\Downloads\\competition_train.csv",
+    "competition_train_sha256": "d204af160633b638448723a437aa51c0db70fd0b64ff92f6ad6f52e5ac6377fa",
+    "reference_full_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v293_gap_mining\\inputs\\v291_full_predictions.csv",
+    "reference_full_sha256": "d9634ea15cb55e17bbfb90229f1cdbfd9b0f5a4cdba0d61848e6f746393dde20",
+    "reference_weak_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v290_rank19_micro_patch_reference\\runtime_artifacts\\v245_weak_eval_bridge\\v245-weak-bridge-hfonly-20260510T1950Z\\v221_weak_315.csv",
+    "reference_weak_sha256": "85da758e14d57ea40270de5747f98726a0ad0b6d1795bff7dd46183005e0f9b6"
+  },
+  "label": "v435b_adapter_probe_prompt_pack",
+  "next_action": "Run V291/V290 adapter inference on this prompt-only pack; then rerun V435 with real raw-output hard negatives.",
+  "outputs": {
+    "manifest_json": "artifacts\\v435b_adapter_probe_prompt_pack\\20260515T_v435b_prompt_pack\\v435b_adapter_probe_prompt_pack_manifest.json",
+    "prompts_csv": "artifacts\\v435b_adapter_probe_prompt_pack\\20260515T_v435b_prompt_pack\\v435b_adapter_probe_prompt_pack_prompts.csv",
+    "prompts_csv_sha256": "665a16e02731fcfb0a2b4a517aae6c2b8459b2793601507eaccd48358f281e57",
+    "prompts_jsonl": "artifacts\\v435b_adapter_probe_prompt_pack\\20260515T_v435b_prompt_pack\\v435b_adapter_probe_prompt_pack_prompts.jsonl",
+    "prompts_jsonl_sha256": "2e6b41aa2f1fd40857080fe8369df91a14bc63c215fbe122b52f5b5158991a55"
+  },
+  "schema_version": "kg1_v435b_adapter_probe_prompt_pack_v1",
+  "selection": {
+    "family_seen": {
+      "bit_manipulation": 1602,
+      "equation_transform": 1555
+    },
+    "family_selected": {
+      "bit_manipulation": 240,
+      "equation_transform": 600
+    },
+    "max_bit": 240,
+    "max_equation": 600,
+    "selected_rows": 840,
+    "skipped": {
+      "bit_manipulation_cap": 1202,
+      "equation_transform_cap": 800,
+      "reference_id_overlap": 315
+    }
+  },
+  "source_policy": {
+    "answers_exported": false,
+    "purpose": "Collect V291/V290 raw outputs on permitted prompts before V436.",
+    "weak_or_full_rows_exported": false
+  }
+}
