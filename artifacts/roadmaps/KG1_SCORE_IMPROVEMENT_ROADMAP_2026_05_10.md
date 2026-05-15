@@ -60,6 +60,11 @@ Regra central: ganho so conta se aparecer no adapter/package. Teacher CPU, solve
 | V458 HF raw-output probe | H200 inference-only nos 22 prompts V457; 22 outputs, stop-only, 0 labels no input | concluido; habilitou V459 CPU audit |
 | V459 numeric hard-negative audit | 22 rows auditadas; adapter acerta 15, erra 7 exatamente no padrao opposite-sign; postprocessor corrige 22/22 | sinal real, mas 1 classe so; `hf_gpu_allowed=false` |
 | V460 one-rule micro dataset | train 146 rows: 18 equation, 128 bit replay; val 36 rows; token gate passou, trunc 0 | GPU bloqueada ate aceitar risco explicito de micro-smoke de uma classe |
+| V461 synthetic numeric probe pack | 56 prompts sem labels para 4 classes numericas | permitido apenas inference-only |
+| V462 HF raw-output probe | H200 inference-only; 56/56 outputs, stop-only, 0 labels no input | concluido; habilitou V463 CPU audit |
+| V463 synthetic numeric hard-negative audit | 26 hard negatives reais em 3 classes; prompt hashes 56/56; postprocessor 56/56 | autoriza V464 dataset CPU; treino ainda bloqueado |
+| V464 numeric multirule dataset | train 558 rows: 46 equation, 512 bit replay; val 138 rows; token gate passou, trunc 0 | dataset pronto para smoke V465 |
+| V465 H200 numeric multirule smoke | dataset/gate enviados ao HF; launcher com H200 <=1h, 16 steps, checkpoints 4/8/12/16 | proxima execucao paga, com kill-switch weak |
 
 ## Regras Permanentes
 
@@ -1186,77 +1191,37 @@ caso contrario cancelar e arquivar.
 
 ## Proxima Acao Ativa
 
-Rota ativa agora volta para CPU e depuracao de transferencia, nao para novo
-treino pago.
+Rota ativa: V465 numeric multirule smoke. Esta e a primeira rota desde V448 que
+tem hard negatives reais multi-classe do adapter atual antes de treino.
 
-1. V450 CPU transfer-debug foi fechado:
-   - auditar metric parity com `verify_answer`;
-   - auditar `raw_output`, `prediction`, primeiro/ultimo `boxed`, truncation,
-     family mapping e exact binary;
-   - confirmar que nao ha erro de logica, negocio, simbolico ou sintaxe no
-     calculo de ACC;
-   - resultado: nao ha erro ativo de ACC; o erro permissivo foi bloqueado pelo
-     V449 e o gargalo ativo e transferencia para adapter-only.
-2. V452 CPU DSL v2 foi executado:
-   - artefatos: `scripts/build_v452_equation_dsl_v2_certified_builder.py` e
-     `artifacts/v452_equation_dsl_v2_certified_builder/20260515T_cpu_gate/`;
-   - resultado: `2` pares certificados, `1` modo independente, `5` candidatos
-     numericos novos reprovados por label;
-   - decisao: `hf_gpu_allowed=false`; nao abrir H200 nem repetir treino a partir
-     deste dataset.
-3. V455 equation target-audit CPU foi fechado:
-   - artefatos: `scripts/build_v455_equation_target_audit.py` e
-     `artifacts/v455_equation_target_audit/20260515T_cpu_gate/`;
-   - resultado: V324 tem `6` candidatos no-loss, V452 promoveu `2` pares
-     treinaveis, faltam `4` rows verificadas em `3` classes numericas;
-   - classes faltantes: `add_direct_over_model_add_variant`,
-     `colon_absdiff_restore_trailing_zero` e
-     `minus_signed_opposite_sign_guarded`;
-   - simbolico/pontuacao segue sem candidato verificado (`0`);
-   - decisao: `hf_gpu_allowed=false`; nao abrir H200 ainda.
-4. V456 deve ser o proximo passo CPU:
-   - status: fechado por `scripts/build_v456_missing_numeric_class_decision.py`;
-   - resultado: `eligible=0`, `synthetic_failed=2`, `needs_probe=1`,
-     `needs_builder=0`;
-   - decisao: nao abrir treino HF.
-5. V457 public-train numeric probe pack:
-   - status: fechado por `scripts/build_v457_public_train_numeric_probe_pack.py`;
-   - resultado: `22` prompts public-train sem answer para raw-output probe;
-   - permitido: inferencia curta para coletar raw outputs;
-   - proibido: treino, package ou submit antes de hard negatives reais.
-6. V458/V459/V460 foram fechados:
-   - V458 coletou raw outputs reais do adapter para os 22 prompts V457;
-   - V459 confirmou 7 hard negatives reais em uma classe numerica;
-   - V460 montou dataset micro com bit replay e token gate passou;
-   - decisao atual: GPU bloqueada por padrao porque a evidencia cobre uma
-     classe so. O unico caminho pago aceitavel e micro-smoke explicitamente
-     marcado como risco de uma classe, com cancelamento no primeiro checkpoint.
-7. V461 foi criado como rota agressiva responsavel antes de treino:
-   - artefato: `artifacts/v461_synthetic_numeric_probe_pack/20260515T_cpu_gate/`;
-   - rows: `56` prompts sinteticos sem labels no JSONL de inferencia;
-   - classes cobertas: `add_direct_over_model_add_variant`,
-     `colon_absdiff_restore_trailing_zero`,
-     `minus_direct_negative_restore_sign` e
-     `minus_signed_opposite_sign_guarded`;
-   - objetivo: coletar raw outputs do adapter atual e descobrir se existem
-     hard negatives reais em mais de uma classe;
-   - permitido: HF inference-only curta, sem score, sem treino, sem submit;
-   - proibido: converter em treino antes do V463 provar hard negatives reais
-     multi-classe.
-8. V462 e o proximo passo operacional:
-   - launcher: `artifacts/v462_hf_v461_synthetic_raw_probe_launch/launch_v462_hf_v461_synthetic_raw_probe.py`;
-   - job: H200 inference-only, limite `<=1h`, prompt pack sem labels;
-   - monitoramento: logs a cada `40s`;
-   - FinOps: cancelar se falhar hardware/load, se ficar sem progresso apos
-     startup, ou se nao gerar raw outputs para o V463.
-9. So voltar a HF GPU de treino se a CPU/raw-probe provar:
-   - `total > 192/315`;
-   - `equation > 56/155`;
-   - `bit >= 136/160`;
-   - `truncated = 0`;
-   - dataset sem leakage;
-   - alvo treinavel que o adapter consiga emitir em resposta curta.
-10. Se a proxima CPU/raw-probe route nao mostrar ganho estrito, nao abrir job pago.
+1. V462 foi concluido:
+   - job: `https://huggingface.co/jobs/felipesp1983/6a07a0aa3308d79117b90da2`;
+   - output: `felipesp1983/kg1-v462-v461-synthetic-raw-probe`;
+   - resultado: `56/56` outputs, todos `stop`, prompt pack sem labels.
+2. V463 foi fechado:
+   - script: `artifacts/v463_v462_synthetic_numeric_hard_negative_audit/build_v463_v462_synthetic_numeric_hard_negative_audit.py`;
+   - artefato: `artifacts/v463_v462_synthetic_numeric_hard_negative_audit/20260515T_cpu_gate/`;
+   - resultado: `26` hard negatives reais em `3` classes;
+   - classes: `add_direct_over_model_add_variant`, `minus_direct_negative_restore_sign`, `minus_signed_opposite_sign_guarded`;
+   - sanity: ids 56/56 unidos, prompt hashes 56/56, finish `stop` 56/56, postprocessor 56/56.
+3. V464 foi fechado:
+   - script: `scripts/build_v464_v463_numeric_multirule_dataset.py`;
+   - artefato: `artifacts/v464_v463_numeric_multirule_dataset/20260515T_cpu_gate/`;
+   - train: `558` rows = `46` equation + `512` bit replay;
+   - validation: `138` rows = `10` equation + `128` bit replay;
+   - hard negatives no treino: `22` em `3` classes;
+   - token gate: `prompt_truncation_rate=0.0`, `completion_tokens_dropped=0`, `fallback_masks=0`, train/val overlap `0`.
+4. V465 deve rodar apenas como smoke:
+   - launcher: `artifacts/v465_hf_h200_v464_numeric_multirule_launch/launch_v465_hf_h200_v464_numeric_multirule.py`;
+   - dataset HF: `felipesp1983/kg1-nemotron-training/data/v464_v463_numeric_multirule_dataset/20260515T_cpu_gate`;
+   - gate HF: `runtime_artifacts/v464_v463_numeric_multirule_dataset/20260515T_tokenization_gate`;
+   - H200, timeout `3600s`, `MAX_STEPS=16`, checkpoints `4/8/12/16`;
+   - pesos: equation hard-negative classes sobem, bit replay preserva piso.
+5. Depois do treino V465:
+   - rodar weak eval por checkpoint, nao full eval direto;
+   - promover somente se `total > 192/315`, `equation > 56/155`, `bit >= 136/160`, `truncated = 0`;
+   - se checkpoint-4 ja mostrar bit <136 ou equation sem ganho, cancelar/arquivar por FinOps;
+   - se nenhum checkpoint passar, nao repetir receita: voltar para mining CPU de novas classes reais.
 
 Regra FinOps continua: se o primeiro checkpoint ou gate parcial nao indicar
 caminho para `total>192`, `equation>56`, `bit>=136`, `truncated=0`, cancelar.

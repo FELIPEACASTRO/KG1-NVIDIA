@@ -1,0 +1,48 @@
+{
+  "adapter_repo": "felipesp1983/kg1-nemotron-lora-v290-rank19-micro-patch-smoke",
+  "adapter_subfolder": "checkpoint-6",
+  "branch": "v230-v226-complementarity",
+  "expected_commit": "057243b80338a48b4b17d3e5ea656f19eb7d10a8",
+  "finops_gate": {
+    "cancel_if": "hardware/load failure, no progress for 40 seconds after startup, or raw-output collection cannot feed V463.",
+    "family_caps": {
+      "bit_manipulation": 0,
+      "equation_transform": 64
+    },
+    "max_unit_cost_usd_per_min": 0.09,
+    "timeout_seconds": 3600
+  },
+  "flavor": "h200",
+  "generated_at_utc": "2026-05-15T22:38:34.463766+00:00",
+  "hardware": {
+    "accelerator_model": "H200",
+    "accelerator_quantity": "1",
+    "accelerator_vram": "141 GB",
+    "cpu": "23 vCPU",
+    "name": "h200",
+    "pretty_name": "Nvidia H200",
+    "ram": "256 GB",
+    "unit_cost_usd": 0.083333,
+    "unit_label": "minute"
+  },
+  "image": "vllm/vllm-openai:v0.20.1",
+  "job_id": "6a07a0aa3308d79117b90da2",
+  "job_status": "RUNNING",
+  "job_url": "https://huggingface.co/jobs/felipesp1983/6a07a0aa3308d79117b90da2",
+  "namespace": "felipesp1983",
+  "next_action": "Monitor logs every 40 seconds, then run V463 raw-output analysis.",
+  "output_path_in_repo": "runs/v462-v461-synthetic-raw-probe-20260515T223832Z",
+  "output_repo": "felipesp1983/kg1-v462-v461-synthetic-raw-probe",
+  "output_repo_type": "dataset",
+  "prompt_pack_jsonl": "artifacts/v461_synthetic_numeric_probe_pack/20260515T_cpu_gate/v461_synthetic_numeric_probe_pack_prompts.jsonl",
+  "prompt_pack_manifest_json": "artifacts/v461_synthetic_numeric_probe_pack/20260515T_cpu_gate/v461_synthetic_numeric_probe_pack_manifest.json",
+  "run_id": "v462-v461-synthetic-raw-probe-20260515T223832Z",
+  "source_policy": {
+    "answers_input": false,
+    "purpose": "Collect raw outputs for V463 CPU hard-negative analysis.",
+    "scoring": false,
+    "submission": false,
+    "training": false
+  },
+  "version": "v462_hf_v461_synthetic_raw_probe"
+}

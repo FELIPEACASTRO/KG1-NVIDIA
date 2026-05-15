@@ -1,0 +1,12 @@
+{
+  "data_repo": "felipesp1983/kg1-nemotron-training",
+  "dataset_dir": "artifacts\\v464_v463_numeric_multirule_dataset\\20260515T_cpu_gate",
+  "dataset_path_in_repo": "data/v464_v463_numeric_multirule_dataset/20260515T_cpu_gate",
+  "dataset_upload": "https://huggingface.co/datasets/felipesp1983/kg1-nemotron-training/commit/e44fff30f1e038d162e476a9a4842513e3063aaf",
+  "gate_dir": "artifacts\\v464_v463_numeric_multirule_dataset\\20260515T_tokenization_gate",
+  "gate_path_in_repo": "runtime_artifacts/v464_v463_numeric_multirule_dataset/20260515T_tokenization_gate",
+  "gate_upload": "https://huggingface.co/datasets/felipesp1983/kg1-nemotron-training/commit/e44fff30f1e038d162e476a9a4842513e3063aaf",
+  "generated_at_utc": "2026-05-15T23:05:14.685058+00:00",
+  "next_action": "Launch V465 H200 numeric multirule smoke after repo commit is pushed.",
+  "version": "v464_hf_dataset_upload"
+}

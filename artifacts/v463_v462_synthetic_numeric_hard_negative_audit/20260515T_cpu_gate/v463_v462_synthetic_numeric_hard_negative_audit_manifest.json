@@ -1,0 +1,102 @@
+{
+  "conditions": {
+    "all_ids_joined": true,
+    "finish_reason_stop_only": true,
+    "hard_negative_count_ge_min": true,
+    "hard_negative_rule_classes_ge_min": true,
+    "postprocessor_all_correct": true,
+    "prompt_hashes_all_match": true
+  },
+  "decision": {
+    "blocking_conditions": [],
+    "decision": "v463_multi_rule_synthetic_signal_ready_for_v464_cpu_dataset",
+    "hard_negative_count": 26,
+    "hard_negative_rule_class_count": 3,
+    "hf_gpu_train_allowed": false,
+    "next_action": "Build V464 CPU dataset proposal with only real adapter hard negatives, bit replay, tokenization gates, and weak/full promotion guards. Do not train yet.",
+    "v464_dataset_build_allowed": true
+  },
+  "generated_at_utc": "2026-05-15T22:59:42.730183+00:00",
+  "inputs": {
+    "v461_audit_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v461_synthetic_numeric_probe_pack\\20260515T_cpu_gate\\v461_synthetic_numeric_probe_pack_audit.csv",
+    "v461_audit_sha256": "ac91702a087b18a2e93971bdf5953ff4e7f03ee368d1f1d65facd469e3fd1ee3",
+    "v461_manifest_json": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v461_synthetic_numeric_probe_pack\\20260515T_cpu_gate\\v461_synthetic_numeric_probe_pack_manifest.json",
+    "v461_manifest_sha256": "e5b0c33f1a780f6389686313144ccf73e86bed870c5e3adec8210df91e4ff868",
+    "v462_manifest_json": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v462_hf_v461_synthetic_raw_probe_outputs\\runs\\v462-v461-synthetic-raw-probe-20260515T223832Z\\v462_v461_synthetic_raw_probe_manifest.json",
+    "v462_manifest_sha256": "0238000814cc9f049f8e5c2f4172b14c97b75915af73998555a04d9367af9c69",
+    "v462_raw_outputs_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v462_hf_v461_synthetic_raw_probe_outputs\\runs\\v462-v461-synthetic-raw-probe-20260515T223832Z\\v462_v461_synthetic_raw_probe_raw_outputs.csv",
+    "v462_raw_outputs_sha256": "95e44cd22bc11a484e743db754c0ae2608510bbdd7d421fba927bc3a287264ae"
+  },
+  "label": "v463_v462_synthetic_numeric_hard_negative_audit",
+  "outputs": {
+    "detail_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v463_v462_synthetic_numeric_hard_negative_audit\\20260515T_cpu_gate\\v463_v462_synthetic_numeric_hard_negative_audit_detail.csv",
+    "detail_sha256": "58140c853c69b761cc6442763ca0426861bd16f06917dfe74f2dc6aeee02c5c0",
+    "hard_negatives_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v463_v462_synthetic_numeric_hard_negative_audit\\20260515T_cpu_gate\\v463_v462_synthetic_numeric_hard_negative_audit_hard_negatives.csv",
+    "hard_negatives_sha256": "63fb85e6ec604378d10ab1b26989a8d4f84f8ff069306f93e29b94bcc5f71876",
+    "manifest_json": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v463_v462_synthetic_numeric_hard_negative_audit\\20260515T_cpu_gate\\v463_v462_synthetic_numeric_hard_negative_audit_manifest.json",
+    "report_md": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v463_v462_synthetic_numeric_hard_negative_audit\\20260515T_cpu_gate\\v463_v462_synthetic_numeric_hard_negative_audit.md",
+    "report_sha256": "ec7c21f1ed8cd17ba0ff7c821a44b3e7b7f31b0328fa5115c4858579a9672cf9"
+  },
+  "schema_version": "kg1_v463_v462_synthetic_numeric_hard_negative_audit_v1",
+  "source_policy": {
+    "labels_joined_after_collection_from_local_synthetic_audit": true,
+    "purpose": "Decide whether synthetic numeric probes reveal real frozen-adapter mistakes worth a later CPU dataset proposal.",
+    "raw_outputs_collected_without_labels": true,
+    "submission": false,
+    "training": false,
+    "weak_full_rows_used_for_training": false
+  },
+  "summary": {
+    "rows": 56,
+    "rule_summary": {
+      "v274_guarded_numeric_add_direct_over_model_add_variant": {
+        "adapter_correct": 0,
+        "adapter_matches_simulated_wrong": 16,
+        "finish_stop": 16,
+        "postprocessor_correct": 16,
+        "prompt_hashes_match": 16,
+        "real_hard_negative_candidate": 16,
+        "rows": 16
+      },
+      "v274_guarded_numeric_colon_absdiff_restore_trailing_zero": {
+        "adapter_correct": 16,
+        "adapter_matches_simulated_wrong": 0,
+        "finish_stop": 16,
+        "postprocessor_correct": 16,
+        "prompt_hashes_match": 16,
+        "real_hard_negative_candidate": 0,
+        "rows": 16
+      },
+      "v274_guarded_numeric_minus_direct_negative_restore_sign": {
+        "adapter_correct": 0,
+        "adapter_matches_simulated_wrong": 8,
+        "finish_stop": 8,
+        "postprocessor_correct": 8,
+        "prompt_hashes_match": 8,
+        "real_hard_negative_candidate": 8,
+        "rows": 8
+      },
+      "v274_guarded_numeric_minus_signed_opposite_sign_guarded": {
+        "adapter_correct": 14,
+        "adapter_matches_simulated_wrong": 2,
+        "finish_stop": 16,
+        "postprocessor_correct": 16,
+        "prompt_hashes_match": 16,
+        "real_hard_negative_candidate": 2,
+        "rows": 16
+      }
+    },
+    "totals": {
+      "adapter_correct": 30,
+      "adapter_matches_simulated_wrong": 26,
+      "finish_stop": 56,
+      "postprocessor_correct": 56,
+      "prompt_hashes_match": 56,
+      "real_hard_negative_candidate": 26
+    }
+  },
+  "thresholds": {
+    "min_hard_negatives": 12,
+    "min_rule_classes": 2
+  }
+}
