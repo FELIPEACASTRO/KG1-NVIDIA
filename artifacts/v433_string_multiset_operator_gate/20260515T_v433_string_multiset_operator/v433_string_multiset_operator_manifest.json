@@ -1,0 +1,32 @@
+{
+  "accepted_new_gains": 0,
+  "ambiguous_correct_candidate_rows": 4,
+  "ambiguous_rows": 6,
+  "audit_rows": 155,
+  "baseline_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v342_acc_first_diagnostic\\v290_checkpoint6_baseline_predictions.csv",
+  "candidate_rows": 9,
+  "candidate_status_counts": {
+    "abstain": 140,
+    "ambiguous": 6,
+    "candidate": 9
+  },
+  "conflict_rows": 0,
+  "decision": {
+    "decision": "string_multiset_operator_no_unique_gain",
+    "next_action": "Do not launch GPU from V433. Continue only with another materially different CPU-gated class.",
+    "reason": "No unique label-free gain; correct candidates only appeared inside ambiguous candidate sets."
+  },
+  "generated_at_utc": "2026-05-15T11:42:24.700474+00:00",
+  "hf_gpu_allowed": false,
+  "projection": {
+    "bit_delta": 0,
+    "bit_manipulation_correct": 136,
+    "equation_delta": 0,
+    "equation_transform_correct": 56,
+    "total_correct": 192,
+    "total_delta": 0,
+    "truncated": 0,
+    "truncated_delta": 0
+  },
+  "schema_version": "kg1_v433_string_multiset_operator_gate_v1"
+}

@@ -85,6 +85,7 @@ Precisamos buscar subida no ranking ainda hoje, `2026-05-14`. A decisao V392 e s
 | V430 rank-arithmetic symbolic gate | `0` gains | `0` gains | n/a | `1` candidato unico, `0` mudancas; sem GPU |
 | V431 signed/padded cryptarithm | `193/315` projection | `57/155` | `136/160` | `+1` conhecido (`99d6a3b5`), `0` ganho novo alem de V414 |
 | V432 V431 label-free tiebreak | `193/315` projection | `57/155` | `136/160` | `0` ganho novo; ambiguos requerem escolha por label, GPU bloqueada |
+| V433 string/multiset operator gate | `192/315` projection | `56/155` | `136/160` | `0` ganho unico; `4` acertos so dentro de listas ambiguas |
 
 Conclusao: `eval_loss` baixo nao e criterio de promocao. O criterio e ACC por familia no weak/full gate. A rota "resolver nos mesmos" finalmente tem ganho mensuravel (`+9` weak em CPU), mas esse ganho ainda e solver/verifier externo; para submit, ele precisa virar comportamento do adapter/package ou ser permitido explicitamente pelas regras de runtime.
 
@@ -1396,6 +1397,48 @@ Artefatos:
 
 Decisao: nao abrir GPU. O V432 prova que a V431 nao gera ganho submit-safe novo. O `+1` para `193/315` e diagnostico/teacher-known; nao justifica novo treino nem submit.
 
+### Step 6AD - V433 string/multiset operator gate
+
+Status: concluido localmente; sem ganho unico label-free.
+
+Objetivo: testar uma classe diferente de cryptarithm e substitution/transducer global: transformacoes locais por operador sobre strings e multiconjuntos (`concat`, `left/right`, `reverse`, intersecao, diferenca, uniao ordenada, duplicatas e prefixes). A predicao usa apenas exemplos com o mesmo operador da query; o gabarito entra somente depois, para auditoria.
+
+Resultado:
+
+| Metric | Baseline V291/V290 | V433 projection | Delta |
+|---|---:|---:|---:|
+| Total weak correct | `192/315` | `192/315` | `0` |
+| equation_transform | `56/155` | `56/155` | `0` |
+| bit_manipulation | `136/160` | `136/160` | `0` |
+| Truncated | `0` | `0` | `0` |
+
+Gate counts:
+
+| Metric | Valor |
+|---|---:|
+| Candidate rows | `9` |
+| Ambiguous rows | `6` |
+| Ambiguous rows containing answer | `4` |
+| Accepted new gains | `0` |
+| Conflicts | `0` |
+
+Linhas com resposta correta apenas dentro de lista ambigua:
+
+| id | answer | candidate_predictions |
+|---|---|---|
+| `dea42835` | `['[/` | `'/`, `/'/`, `['/`, `['/[`, `['[/` |
+| `69aa57b3` | `4472` | `4472`, `472`, `4724` |
+| `88b43464` | `5311` | `531`, `5311`, `5315` |
+| `d3b20e29` | `3922` | `3922`, `3923` |
+
+Artefatos:
+
+- Script: `artifacts/v433_string_multiset_operator_gate/build_v433_string_multiset_operator_gate.py`.
+- Manifest: `artifacts/v433_string_multiset_operator_gate/20260515T_v433_string_multiset_operator/v433_string_multiset_operator_manifest.json`.
+- Relatorio: `artifacts/v433_string_multiset_operator_gate/20260515T_v433_string_multiset_operator/V433_STRING_MULTISET_OPERATOR_GATE.md`.
+
+Decisao: nao abrir GPU. A classe mostra que ha sinal parcial, mas sem regra de desempate label-free. Usar essas linhas seria oracle/cherry-pick.
+
 ## Regras Permanentes
 
 - Nenhum HF sem CPU gate com sinal novo.
@@ -1438,6 +1481,7 @@ Decisao: nao abrir GPU. O V432 prova que a V431 nao gera ganho submit-safe novo.
 | Rank arithmetic sobre alfabetos simbolicos | V430 auditou `155` equation rows, teve `1` candidato unico, `0` mudancas e `0` ganhos |
 | Signed/padded symbolic cryptarithm | V431 reencontrou `99d6a3b5` (`+1` vs baseline), mas `0` ganhos novos alem de V414/V329 |
 | Desempate manual dos ambiguos V431 | V432 mostrou `4` rows ambiguos sem tie-break label-free e `1` falso positivo; usar esses candidatos seria cherry-pick pelo gabarito |
+| String/multiset operator local | V433 gerou `4` acertos apenas dentro de listas ambiguas e `0` ganho unico; nao usar como treino nem postprocessor |
 | H200 relaunch sem novo dado | V391 confirmou que trocar hardware nao muda ACC quando a hipotese de dados nao transfere |
 | HF training baseado apenas em `eval_loss` | historicamente loss caiu sem mover `equation_transform`; promocao e por ACC |
 | Web/API buscas genericas | so retornam ao plano se virarem regra, dataset ou gate verificavel |
@@ -1446,7 +1490,7 @@ Decisao: nao abrir GPU. O V432 prova que a V431 nao gera ganho submit-safe novo.
 
 ## Proxima Acao Unica
 
-V415 confirmou que nao existe candidato adapter-like local pronto para promocao, V416 confirmou que mudar o estilo da completion ainda nao transfere os ganhos do teacher para o adapter, V417 bloqueou novo GPU SFT por FinOps, V418 mostrou que aumentar caps da DSL V412 nao cria ganhos novos, V419 mostrou que o residual dominante e `80` rows de pontuacao simbolica pura, V420 confirmou que ampliar cryptarithm V329 so reencontra `99d6a3b5`, V421 bloqueou a hipotese same-operator por `0` ganhos e `3` conflitos, V422 bloqueou selection/substitution simples por `0` ganhos e `5` conflitos, V423 bloqueou invariantes condicionais simples por `0` ganhos e `1` conflito, V424 mostrou que match de assinatura/template simples do train publico nao aplica ao weak, V425 fechou a hipotese de ganho escondido em CSV antigo, V426/V427 fecharam posicao+constante e shift ASCII/alfabeto, V428 fechou parser/raw-output rescue, V429 fechou transdutor edit-distance global, V430 fechou rank-arithmetic simbolico, V431 fechou signed/padded cryptarithm sem ganho novo e V432 fechou o desempate label-free dos ambiguos V431. O V336B tambem bloqueia solver/verifier direto como pacote, pois o submit valido e adapter-only. Portanto o caminho ativo continua em CPU, com uma unica frente agressiva responsavel:
+V415 confirmou que nao existe candidato adapter-like local pronto para promocao, V416 confirmou que mudar o estilo da completion ainda nao transfere os ganhos do teacher para o adapter, V417 bloqueou novo GPU SFT por FinOps, V418 mostrou que aumentar caps da DSL V412 nao cria ganhos novos, V419 mostrou que o residual dominante e `80` rows de pontuacao simbolica pura, V420 confirmou que ampliar cryptarithm V329 so reencontra `99d6a3b5`, V421 bloqueou a hipotese same-operator por `0` ganhos e `3` conflitos, V422 bloqueou selection/substitution simples por `0` ganhos e `5` conflitos, V423 bloqueou invariantes condicionais simples por `0` ganhos e `1` conflito, V424 mostrou que match de assinatura/template simples do train publico nao aplica ao weak, V425 fechou a hipotese de ganho escondido em CSV antigo, V426/V427 fecharam posicao+constante e shift ASCII/alfabeto, V428 fechou parser/raw-output rescue, V429 fechou transdutor edit-distance global, V430 fechou rank-arithmetic simbolico, V431 fechou signed/padded cryptarithm sem ganho novo, V432 fechou o desempate label-free dos ambiguos V431 e V433 fechou string/multiset operator local sem ganho unico. O V336B tambem bloqueia solver/verifier direto como pacote, pois o submit valido e adapter-only. Portanto o caminho ativo continua em CPU, com uma unica frente agressiva responsavel:
 
 1. a proxima classe formal so deve ser criada se for materialmente diferente das DSLs ja rejeitadas:
    - exemplos restantes: CEGIS/SAT com restricoes cross-example mais ricas, busca por gramatica simbolica com prova de unicidade, ou mineracao de fonte externa que produza regra verificavel nova;
