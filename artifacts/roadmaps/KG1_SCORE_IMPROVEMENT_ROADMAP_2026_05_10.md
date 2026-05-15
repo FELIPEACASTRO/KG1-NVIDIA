@@ -54,6 +54,7 @@ Regra central: ganho so conta se aparecer no adapter/package. Teacher CPU, solve
 | V452 equation DSL v2 certified builder | 133 rows auditadas; 7 candidatos; 2 pares certificados; 5 candidatos numericos reprovados | `hf_gpu_allowed=false`; nao abrir H200 por esta rota |
 | V453 public Kaggle kernel mining | 30 kernels listados/analisados; 29 pull ok; raw notebooks apagados apos triagem | sem ganho submit-ready; reforca `lm_head`/target modules e mineracao publica CPU-only |
 | V454 bit guardrail decision | teacher CPU chega a bit `159/160`, mas adapter-transfer V359/V368 fica em `134-135/160` | bit-only GPU bloqueado; bit vira replay/guardrail |
+| V455 equation target audit | V324 tinha 6 candidatos no-loss; V452 cobriu 2 pares; faltam 4 rows verificadas em 3 classes numericas; simbolico verificado 0 | `hf_gpu_allowed=false`; V456 precisa fechar classes faltantes antes de GPU |
 
 ## Regras Permanentes
 
@@ -1043,6 +1044,46 @@ daqui bit entra apenas como replay/guardrail quando a rota de equation provar
 ganho CPU. Novo job bit-only so pode existir se houver evidencia nova que
 ataque diretamente a falha de transferencia, nao apenas teacher melhor.
 
+## Atualizacao V455 - Equation Target Audit
+
+V455 comparou o ganho CPU solver-only do V324 contra o que o builder legal V452
+conseguiu transformar em pares treinaveis. O objetivo era separar falta de regra
+de falta de material treinavel permitido.
+
+Artefatos:
+
+- Script: `scripts/build_v455_equation_target_audit.py`.
+- Manifesto: `artifacts/v455_equation_target_audit/20260515T_cpu_gate/v455_equation_target_audit_manifest.json`.
+- Relatorio: `artifacts/v455_equation_target_audit/20260515T_cpu_gate/V455_EQUATION_TARGET_AUDIT.md`.
+
+Resultado:
+
+| Item | Valor |
+|---|---:|
+| Equation misses auditados pelo V324 | `99` |
+| Misses numericos | `16` |
+| Misses simbolicos/pontuacao | `83` |
+| Candidatos V324 aceitos no-loss | `6` |
+| Pares treinaveis certificados pelo V452 | `2` |
+| Rows verificadas ainda ausentes do builder | `4` |
+| Classes verificadas ainda ausentes | `3` |
+| Candidatos simbolicos verificados | `0` |
+| `hf_gpu_allowed` | `false` |
+
+Lacunas concretas:
+
+| Classe | V324 verified | V452 promoted | Gap |
+|---|---:|---:|---:|
+| `v274_guarded_numeric_add_direct_over_model_add_variant` | `1` | `0` | `1` |
+| `v274_guarded_numeric_colon_absdiff_restore_trailing_zero` | `1` | `0` | `1` |
+| `v274_guarded_numeric_minus_direct_negative_restore_sign` | `2` | `2` | `0` |
+| `v274_guarded_numeric_minus_signed_opposite_sign_guarded` | `2` | `0` | `2` |
+
+Decisao: V455 nao autoriza GPU. O proximo passo correto e V456 CPU: tentar
+construir pares legais para as 3 classes numericas ausentes ou provar que elas
+nao possuem material treinavel permitido. Weak/full labels continuam proibidos
+para treino, filtro e tiebreak.
+
 ## Proxima Acao Ativa
 
 Rota ativa agora volta para CPU e depuracao de transferencia, nao para novo
@@ -1063,18 +1104,30 @@ treino pago.
      numericos novos reprovados por label;
    - decisao: `hf_gpu_allowed=false`; nao abrir H200 nem repetir treino a partir
      deste dataset.
-3. Fechar V455 equation target-audit CPU:
-   - separar `equation_transform` em submodos por operador/forma;
-   - auditar os 99 misses atuais sem usar label no tiebreak;
-   - promover apenas regras com no-loss e independencia de prompt.
-4. So voltar a HF GPU se a CPU provar:
+3. V455 equation target-audit CPU foi fechado:
+   - artefatos: `scripts/build_v455_equation_target_audit.py` e
+     `artifacts/v455_equation_target_audit/20260515T_cpu_gate/`;
+   - resultado: V324 tem `6` candidatos no-loss, V452 promoveu `2` pares
+     treinaveis, faltam `4` rows verificadas em `3` classes numericas;
+   - classes faltantes: `add_direct_over_model_add_variant`,
+     `colon_absdiff_restore_trailing_zero` e
+     `minus_signed_opposite_sign_guarded`;
+   - simbolico/pontuacao segue sem candidato verificado (`0`);
+   - decisao: `hf_gpu_allowed=false`; nao abrir H200 ainda.
+4. V456 deve ser o proximo passo CPU:
+   - construir ou provar inviavel um builder legal para as 3 classes numericas
+     faltantes;
+   - nao usar weak/full label como linha de treino, filtro ou tiebreak;
+   - so liberar GPU se o gate demonstrar alvo treinavel legal, sem perdas e
+     com comparativo contra V291/V290.
+5. So voltar a HF GPU se a CPU provar:
    - `total > 192/315`;
    - `equation > 56/155`;
    - `bit >= 136/160`;
    - `truncated = 0`;
    - dataset sem leakage;
    - alvo treinavel que o adapter consiga emitir em resposta curta.
-5. Se a proxima CPU route nao mostrar ganho estrito, nao abrir job pago.
+6. Se a proxima CPU route nao mostrar ganho estrito, nao abrir job pago.
 
 Regra FinOps continua: se o primeiro checkpoint ou gate parcial nao indicar
 caminho para `total>192`, `equation>56`, `bit>=136`, `truncated=0`, cancelar.

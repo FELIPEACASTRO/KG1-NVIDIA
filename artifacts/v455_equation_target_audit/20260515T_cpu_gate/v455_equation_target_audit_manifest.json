@@ -1,0 +1,75 @@
+{
+  "decision": {
+    "decision": "v455_missing_verified_equation_targets_no_gpu",
+    "hf_gpu_allowed": false,
+    "next_action": "Implement V456 builder for the missing V324 verified numeric classes before any HF GPU.",
+    "reason": "v324_accepted=6; v452_pairs=2; missing_verified=4; missing_classes=3; symbolic_verified=0"
+  },
+  "generated_at_utc": "2026-05-15T21:39:18.914534+00:00",
+  "inputs": {
+    "v324_accepted_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v394_equation_row_level_inventory\\20260514T_cpu_gate\\v324_on_v290_checkpoint6\\v324_equation_expanded_solver_accepted_candidates.csv",
+    "v324_manifest_json": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v394_equation_row_level_inventory\\20260514T_cpu_gate\\v324_on_v290_checkpoint6\\v324_equation_expanded_solver_manifest.json",
+    "v324_rule_summary_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v394_equation_row_level_inventory\\20260514T_cpu_gate\\v324_on_v290_checkpoint6\\v324_equation_expanded_solver_rule_summary.csv",
+    "v452_audit_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v452_equation_dsl_v2_certified_builder\\20260515T_cpu_gate\\v452_equation_dsl_v2_certified_builder_audit.csv",
+    "v452_manifest_json": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v452_equation_dsl_v2_certified_builder\\20260515T_cpu_gate\\v452_equation_dsl_v2_certified_builder_manifest.json"
+  },
+  "outputs": {
+    "class_gaps_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v455_equation_target_audit\\20260515T_cpu_gate\\v455_equation_target_audit_class_gaps.csv",
+    "manifest_json": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v455_equation_target_audit\\20260515T_cpu_gate\\v455_equation_target_audit_manifest.json",
+    "missing_verified_rows_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v455_equation_target_audit\\20260515T_cpu_gate\\v455_equation_target_audit_missing_verified_rows.csv",
+    "report_md": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v455_equation_target_audit\\20260515T_cpu_gate\\V455_EQUATION_TARGET_AUDIT.md"
+  },
+  "schema_version": "kg1_v455_equation_target_audit_v1",
+  "summary": {
+    "class_gaps": [
+      {
+        "accepted_ids": "c5b058d6",
+        "gap_verified_not_promoted": 1,
+        "promoted_ids": "",
+        "rule_class": "v274_guarded_numeric_add_direct_over_model_add_variant",
+        "status": "missing_builder_target",
+        "v324_verified": 1,
+        "v452_candidates": 0,
+        "v452_promoted": 0
+      },
+      {
+        "accepted_ids": "d1bd7478",
+        "gap_verified_not_promoted": 1,
+        "promoted_ids": "",
+        "rule_class": "v274_guarded_numeric_colon_absdiff_restore_trailing_zero",
+        "status": "missing_builder_target",
+        "v324_verified": 1,
+        "v452_candidates": 0,
+        "v452_promoted": 0
+      },
+      {
+        "accepted_ids": "528ec0d8,fb623471",
+        "gap_verified_not_promoted": 0,
+        "promoted_ids": "07aef27f,10fdae00",
+        "rule_class": "v274_guarded_numeric_minus_direct_negative_restore_sign",
+        "status": "covered",
+        "v324_verified": 2,
+        "v452_candidates": 2,
+        "v452_promoted": 2
+      },
+      {
+        "accepted_ids": "274def88,7688e06e",
+        "gap_verified_not_promoted": 2,
+        "promoted_ids": "",
+        "rule_class": "v274_guarded_numeric_minus_signed_opposite_sign_guarded",
+        "status": "missing_builder_target",
+        "v324_verified": 2,
+        "v452_candidates": 0,
+        "v452_promoted": 0
+      }
+    ],
+    "equation_miss_rows": 99,
+    "missing_verified_classes": 3,
+    "missing_verified_rows": 4,
+    "numeric_miss_rows": 16,
+    "symbolic_miss_rows": 83,
+    "symbolic_verified_candidates": 0,
+    "v324_accepted_candidates": 6,
+    "v452_certified_pairs": 2
+  }
+}

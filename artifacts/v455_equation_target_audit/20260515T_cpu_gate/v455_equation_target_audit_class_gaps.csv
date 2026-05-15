@@ -1,0 +1,5 @@
+rule_class,v324_verified,v452_candidates,v452_promoted,gap_verified_not_promoted,status,accepted_ids,promoted_ids
+v274_guarded_numeric_add_direct_over_model_add_variant,1,0,0,1,missing_builder_target,c5b058d6,
+v274_guarded_numeric_colon_absdiff_restore_trailing_zero,1,0,0,1,missing_builder_target,d1bd7478,
+v274_guarded_numeric_minus_direct_negative_restore_sign,2,2,2,0,covered,"528ec0d8,fb623471","07aef27f,10fdae00"
+v274_guarded_numeric_minus_signed_opposite_sign_guarded,2,0,0,2,missing_builder_target,"274def88,7688e06e",
