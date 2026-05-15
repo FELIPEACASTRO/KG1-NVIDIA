@@ -1,0 +1,29 @@
+{
+  "model": "qwen/qwen3-max-thinking",
+  "ok": true,
+  "content_chars": 3988,
+  "content": "{\n  \"decision\": \"condicional\",\n  \"consensus_recommendation\": \"A minera\u00e7\u00e3o sistem\u00e1tica de solu\u00e7\u00f5es p\u00fablicas \u00e9 justificada somente se for estruturada como um pipeline de extra\u00e7\u00e3o de traces ou datasets compat\u00edveis com o formato submit-safe, e se for precedida por valida\u00e7\u00e3o rigorosa no weak gate. Treino LoRA gen\u00e9rico j\u00e1 demonstrou n\u00e3o gerar ganhos em ACC nas fam\u00edlias cr\u00edticas, portanto n\u00e3o \u00e9 o melhor uso imediato de recursos. A abordagem proposta tem potencial, mas s\u00f3 \u00e9 superior se for executada com disciplina t\u00e9cnica e gates expl\u00edcitos.\",\n  \"ordered_roadmap\": [\n    \"1. Criar script isolado (CPU-only) que baixa notebooks p\u00fablicos do Kaggle/HF com tag relevante (ex: 'Nemotron', 'Reasoning', 'LoRA') e extrai apenas c\u00e9lulas de gera\u00e7\u00e3o de dados ou traces.\",\n    \"2. Filtrar conte\u00fado por presen\u00e7a expl\u00edcita de traces ou datasets para bit_manipulation ou equation_transform (ex: listas de pares input/output, templates de prompt com racioc\u00ednio passo a passo).\",\n    \"3. Converter achados em formato compat\u00edvel com sft_reconstructed.jsonl: usar prompt oficial do desafio, max_model_len <= 8192, max_tokens <= 7680, temperatura 0.0 impl\u00edcita.\",\n    \"4. Validar cada novo trace contra weak gate CPU (V446): rejeitar se n\u00e3o melhorar ACC em bit_manipulation ou equation_transform sem regredir outras fam\u00edlias.\",\n    \"5. Fundir traces v\u00e1lidos ao dataset V446, mantendo separa\u00e7\u00e3o por fam\u00edlia para an\u00e1lise de ganho marginal.\",\n    \"6. Executar treino LoRA leve (1 epoch, LR baixa) apenas se ganho cumulativo no weak gate for >= +3 ACC em equation_transform ou >= +2 em bit_manipulation.\",\n    \"7. Submeter novo adapter somente ap\u00f3s passar full gate >823/947 e manter truncation=0.\"\n  ],\n  \"gates\": {\n    \"weak_gate_min\": {\n      \"total\": 193,\n      \"equation_transform\": 57,\n      \"bit_manipulation\": 136,\n      \"truncation\": 0\n    },\n    \"full_gate_min\": 824,\n    \"regression_guard\": \"Qualquer nova submiss\u00e3o deve ter bit_manipulation >= 136; se <136, descartar imediatamente.\",\n    \"leakage_guard\": \"Nenhum trace pode conter output do modelo oficial (ex: respostas do vLLM/Nemotron em produ\u00e7\u00e3o). Apenas dados sint\u00e9ticos ou de fontes p\u00fablicas verific\u00e1veis (ex: Tong Hui Kang).\",\n    \"license_guard\": \"Aceitar apenas traces com licen\u00e7a permissiva (Apache 2.0, MIT, CC0). Rejeitar qualquer dado sem licen\u00e7a expl\u00edcita.\"\n  },\n  \"finops_rules\": [\n    \"Nenhum download persistente de notebooks/datasets >50 MB; apagar imediatamente ap\u00f3s extra\u00e7\u00e3o de traces.\",\n    \"GPU s\u00f3 autorizada ap\u00f3s valida\u00e7\u00e3o CPU confirmar ganho >= +3 em equation_transform ou +2 em bit_manipulation no weak gate.\",\n    \"Limite de 2 treinos GPU por semana, cada um com <= 1 epoch e LR <= 2e-5.\"\n  ],\n  \"prohibited_items\": [\n    \"Uso de qualquer runtime customizado (solver, verifier, postprocessor) na submiss\u00e3o final.\",\n    \"Inclus\u00e3o de traces com racioc\u00ednio que exceda 7680 tokens ou prompt que ultrapasse 8192 tokens.\",\n    \"Treino com dados que n\u00e3o passem pelo weak gate CPU antes do merge.\",\n    \"Submiss\u00e3o com loss menor mas ACC est\u00e1vel ou pior nas fam\u00edlias cr\u00edticas.\",\n    \"Uso de checkpoints de terceiros n\u00e3o treinados exclusivamente com dados submit-safe.\"\n  ],\n  \"expected_gain_ranges\": {\n    \"equation_transform\": \"+2 a +8 ACC (base 56/155)\",\n    \"bit_manipulation\": \"+0 a +4 ACC (base 136/160, risco de regress\u00e3o alto)\",\n    \"full_score\": \"+5 a +20 pontos (base 823/947)\",\n    \"probabilidade_de_ganho_significativo\": \"moderada (40-60%) se traces forem de alta fidelidade e alinhados ao prompt oficial\"\n  },\n  \"immediate_next_action\": \"Executar valida\u00e7\u00e3o isolada dos 462 traces equation_transform do V446 no weak gate CPU, medindo ACC por subfam\u00edlia (concat, reverse, add, sub, mul, div, mod, digit, determinant). Se ACC atual for <56/155, priorizar gera\u00e7\u00e3o de hard negatives para subfam\u00edlias com ACC <30%. Paralelamente, escanear at\u00e9 10 notebooks p\u00fablicos recentes (\u00faltimos 14 dias) com score >800 no leaderboard para extrair traces equation_transform adicionais, aplicando gates de licen\u00e7a e formato imediatamente.\"\n}",
+  "usage": {
+    "prompt_tokens": 1069,
+    "completion_tokens": 1166,
+    "total_tokens": 2235,
+    "cost": 0.00538122,
+    "is_byok": false,
+    "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "cache_write_tokens": 0,
+      "audio_tokens": 0,
+      "video_tokens": 0
+    },
+    "cost_details": {
+      "upstream_inference_cost": 0.00538122,
+      "upstream_inference_prompt_cost": 0.00083382,
+      "upstream_inference_completions_cost": 0.0045474
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "image_tokens": 0,
+      "audio_tokens": 0
+    }
+  }
+}

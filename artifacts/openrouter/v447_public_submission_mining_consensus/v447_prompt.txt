@@ -1,0 +1,31 @@
+
+Voce e um auditor tecnico senior de Kaggle/LLM fine-tuning. Responda em portugues, sem alucinacao, sem inventar acesso a dados privados, e com foco em decisoes executaveis.
+
+Contexto do desafio:
+- Competicao: NVIDIA Nemotron Model Reasoning Challenge.
+- Submissao permitida: pacote LoRA/adaptador submit-safe. A avaliacao oficial carrega adapter_config.json + adapter_model.safetensors no runner oficial com vLLM/Nemotron, temperatura 0.0, max_tokens 7680, max_model_len 8192.
+- Nao podemos depender de solver/verifier/postprocessor/parser/logit mask/runtime customizado na submissao final. Qualquer tecnica externa so e util se virar comportamento aprendido no adapter ou dataset/trace que o adapter consegue reproduzir no runner oficial.
+- Familias problematicas no nosso weak gate atual: bit_manipulation e equation_transform.
+- Melhor estado submit-safe adapter-only atual: total weak 192/315, equation_transform 56/155, bit_manipulation 136/160, truncation 0. Full official-like conhecido: 823/947.
+- Gate de promocao: so promover se weak total >192, equation >56, bit >=136, truncation 0, depois full >823/947.
+- Treinos genericos SFT/preference/DPO com mais epochs/steps reduziram loss/eval_loss, mas nao melhoraram ACC dessas familias; muitas vezes bit regrediu. Portanto loss nao e criterio de promocao.
+- Achado novo V446 CPU gate: usando fonte publica Tong Hui Kang e arquivo local sft_reconstructed.jsonl, foram encontrados 1310 traces target-aligned aceitos por filtro preliminar: 848 bit_manipulation e 462 equation_transform. O source inventory confirma em Tong: bit bitsum/stride/bit-pair/boolean ops; equation concat/reverse/add/sub/mul/div/mod/digit/determinant. O gate marcou hf_gpu_allowed=true, mas ainda requer dataset builder + tokenization/pair gate antes de GPU.
+
+Ideia que quero avaliar:
+"Verificar qualquer submissao/notebook publico do Kaggle/HF sobre o desafio, independente do score. Para cada solucao publica, identificar como ela trata bit_manipulation e equation_transform. Se a tecnica/trace/dataset/metodo tiver ACC melhor que o nosso nas familias, extrair apenas o achado tecnico permitido, reproduzir em CPU contra nosso weak/full gate, guardar somente o que e importante e apagar downloads grandes. Repetir em diversos notebooks para capturar pequenos ganhos que outras submissoes tiveram e nos ainda nao temos."
+
+Perguntas obrigatorias:
+1. Essa ideia e o melhor caminho agora, comparada a continuar treinando LoRA generico? Responda sim/nao/condicional e justifique.
+2. Quais riscos especificos existem (leakage, uso de artefato nao permitido, overfit ao weak, licenca, formato oficial, regressao de bit, FinOps)? Como mitigar com gates?
+3. Qual workflow exato voce recomenda para minerar notebooks publicos sem contaminar a solucao final? Liste passos em ordem.
+4. Quais sinais minimos devem autorizar GPU? Use numeros concretos quando possivel.
+5. Como transformar tecnica publica de solver/verifier em adapter-only? Seja especifico: traces, hard negatives, replay, tokenization, prompt oficial, checkpoints, kill-switch.
+6. O que deve ser explicitamente proibido ou removido do roadmap?
+7. Dado o V446 (848 bit + 462 equation traces limpos preliminares), qual e a proxima acao mais objetiva para tentar ganhar ACC hoje?
+
+Regras da resposta:
+- Nao sugira submissao se nao houver ganho medido no gate.
+- Nao diga para usar solver runtime na submissao final.
+- Nao invente nomes de notebooks/datasets que voce nao conhece; se citar uma fonte, diga se e exemplo conhecido ou hipotese.
+- Distingua achado comprovado, hipotese plausivel e acao bloqueada.
+- Saida em JSON valido com chaves: decision, consensus_recommendation, ordered_roadmap, gates, finops_rules, prohibited_items, expected_gain_ranges, immediate_next_action.

@@ -1,0 +1,29 @@
+{
+  "model": "deepseek/deepseek-r1-0528",
+  "ok": true,
+  "content_chars": 2706,
+  "content": "```json\n{\n  \"decision\": \"condicional\",\n  \"consensus_recommendation\": \"A ideia \u00e9 v\u00e1lida se houver notebooks p\u00fablicos com t\u00e9cnicas adapter-only comprovadamente superiores nas fam\u00edlias cr\u00edticas. Priorize V446 primeiro por ser recurso interno controlado. Minera\u00e7\u00e3o externa s\u00f3 se V446 n\u00e3o atingir gate.\",\n  \"ordered_roadmap\": [\n    \"Executar tokenization/pair gate do V446 em CPU (validar comprimento de tokens <=8192 e alinhamento input-output)\",\n    \"Treino LoRA focado em V446 com 1 \u00e9poca em GPU se passar no gate\",\n    \"Testar adapter resultante no weak gate (bit_manipulation >=136, equation_transform >56)\",\n    \"Se weak gate passar, minerar notebooks p\u00fablicos com workflow controlado\",\n    \"Validar t\u00e9cnicas externas em CPU usando weak gate antes de qualquer treino\"\n  ],\n  \"gates\": {\n    \"cpu_gate\": {\n      \"requisitos\": [\n        \"Comprimento tokens <=8192 em 100% dos traces\",\n        \"Aumento m\u00ednimo de 1 ponto em equation_transform no weak gate ap\u00f3s t\u00e9cnica nova\",\n        \"Bit_manipulation mant\u00e9m >=136\",\n        \"Zero traces truncados\"\n      ],\n      \"mitiga\u00e7\u00e3o_riscos\": {\n        \"leakage\": \"Bloquear dados n\u00e3o originados em fontes p\u00fablicas comprovadas (ex: Tong Hui Kang)\",\n        \"overfit_weak\": \"Exigir melhoria simult\u00e2nea em subconjunto aleat\u00f3rio de 50 exemplos do full gate\",\n        \"licen\u00e7a\": \"Rejeitar t\u00e9cnicas com licen\u00e7a n\u00e3o permissiva (Apache/MIT)\",\n        \"regress\u00e3o_bit\": \"Abortar imediatamente se ACC bit_manipulation <136\"\n      }\n    },\n    \"gpu_gate\": {\n      \"gatilhos\": [\n        \"V446: Passar no cpu_gate com equation_transform >=58 e bit_manipulation >=137\",\n        \"T\u00e9cnicas externas: Melhoria sustentada em 3 execu\u00e7\u00f5es consecutivas do weak gate\"\n      ],\n      \"finops_rules\": [\n        \"Treinos limitados a 1 \u00e9poca inicial\",\n        \"Batch size m\u00e1ximo 4 (A100 40GB)\",\n        \"Monitorar custo/hora: abortar se >USD 15 sem ganho de ACC\"\n      ]\n    }\n  },\n  \"prohibited_items\": [\n    \"Uso de dados de teste da competi\u00e7\u00e3o em qualquer forma\",\n    \"T\u00e9cnicas que dependem de runtime customizado (solvers, m\u00e1scaras de logit)\",\n    \"Incorpora\u00e7\u0101o direta de c\u00f3digo de notebooks sem convers\u00e3o para traces\",\n    \"Fine-tuning gen\u00e9rico sem valida\u00e7\u00e3o pr\u00e9via no weak gate\"\n  ],\n  \"expected_gain_ranges\": {\n    \"V446\": {\n      \"equation_transform\": \"+3 a +8 pontos\",\n      \"bit_manipulation\": \"+0 a +2 pontos (prote\u00e7\u00e3o contra regress\u00e3o)\"\n    },\n    \"minera\u00e7\u0101o_externa\": {\n      \"ganho_m\u00e1ximo_por_t\u00e9cnica\": \"+1 a +3 pontos por fam\u00edlia\",\n      \"risco_regress\u00e3o\": \"At\u00e9 -5 pontos se sem valida\u00e7\u00e3o rigorosa\"\n    }\n  },\n  \"immediate_next_action\": \"Executar tokenization/pair gate do dataset V446 em CPU (validar 100% dos 1310 traces com tokenizador oficial e prompt competition_math)\"\n}\n```",
+  "usage": {
+    "prompt_tokens": 1034,
+    "completion_tokens": 2825,
+    "total_tokens": 3859,
+    "cost": 0.00664205,
+    "is_byok": false,
+    "prompt_tokens_details": {
+      "cached_tokens": 2,
+      "cache_write_tokens": 0,
+      "audio_tokens": 0,
+      "video_tokens": 0
+    },
+    "cost_details": {
+      "upstream_inference_cost": 0.00664205,
+      "upstream_inference_prompt_cost": 0.0005683,
+      "upstream_inference_completions_cost": 0.00607375
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 2054,
+      "image_tokens": 0,
+      "audio_tokens": 0
+    }
+  }
+}

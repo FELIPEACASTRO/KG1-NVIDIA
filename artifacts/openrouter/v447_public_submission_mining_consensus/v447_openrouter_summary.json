@@ -1,0 +1,183 @@
+[
+  {
+    "model": "openai/gpt-5.2",
+    "ok": true,
+    "content_chars": 10526,
+    "error": null,
+    "usage": {
+      "prompt_tokens": 920,
+      "completion_tokens": 2756,
+      "total_tokens": 3676,
+      "cost": 0.040194,
+      "is_byok": false,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": 0,
+        "audio_tokens": 0,
+        "video_tokens": 0
+      },
+      "cost_details": {
+        "upstream_inference_cost": 0.040194,
+        "upstream_inference_prompt_cost": 0.00161,
+        "upstream_inference_completions_cost": 0.038584
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 76,
+        "image_tokens": 0,
+        "audio_tokens": 0
+      }
+    }
+  },
+  {
+    "model": "anthropic/claude-sonnet-4.6",
+    "ok": true,
+    "content_chars": 9744,
+    "error": null,
+    "usage": {
+      "prompt_tokens": 1173,
+      "completion_tokens": 3000,
+      "total_tokens": 4173,
+      "cost": 0.048519,
+      "is_byok": false,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": 0,
+        "audio_tokens": 0,
+        "video_tokens": 0
+      },
+      "cost_details": {
+        "upstream_inference_cost": 0.048519,
+        "upstream_inference_prompt_cost": 0.003519,
+        "upstream_inference_completions_cost": 0.045
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 0,
+        "image_tokens": 0,
+        "audio_tokens": 0
+      }
+    }
+  },
+  {
+    "model": "google/gemini-2.5-pro",
+    "ok": false,
+    "content_chars": null,
+    "error": "TypeError(\"object of type 'NoneType' has no len()\")",
+    "usage": null
+  },
+  {
+    "model": "deepseek/deepseek-r1-0528",
+    "ok": true,
+    "content_chars": 2706,
+    "error": null,
+    "usage": {
+      "prompt_tokens": 1034,
+      "completion_tokens": 2825,
+      "total_tokens": 3859,
+      "cost": 0.00664205,
+      "is_byok": false,
+      "prompt_tokens_details": {
+        "cached_tokens": 2,
+        "cache_write_tokens": 0,
+        "audio_tokens": 0,
+        "video_tokens": 0
+      },
+      "cost_details": {
+        "upstream_inference_cost": 0.00664205,
+        "upstream_inference_prompt_cost": 0.0005683,
+        "upstream_inference_completions_cost": 0.00607375
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 2054,
+        "image_tokens": 0,
+        "audio_tokens": 0
+      }
+    }
+  },
+  {
+    "model": "qwen/qwen3-max-thinking",
+    "ok": true,
+    "content_chars": 3988,
+    "error": null,
+    "usage": {
+      "prompt_tokens": 1069,
+      "completion_tokens": 1166,
+      "total_tokens": 2235,
+      "cost": 0.00538122,
+      "is_byok": false,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": 0,
+        "audio_tokens": 0,
+        "video_tokens": 0
+      },
+      "cost_details": {
+        "upstream_inference_cost": 0.00538122,
+        "upstream_inference_prompt_cost": 0.00083382,
+        "upstream_inference_completions_cost": 0.0045474
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 0,
+        "image_tokens": 0,
+        "audio_tokens": 0
+      }
+    }
+  },
+  {
+    "model": "google/gemini-3.1-pro-preview",
+    "ok": true,
+    "content_chars": 3729,
+    "error": null,
+    "usage": {
+      "prompt_tokens": 1026,
+      "completion_tokens": 2496,
+      "total_tokens": 3522,
+      "cost": 0.032004,
+      "is_byok": false,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": 0,
+        "audio_tokens": 0,
+        "video_tokens": 0
+      },
+      "cost_details": {
+        "upstream_inference_cost": 0.032004,
+        "upstream_inference_prompt_cost": 0.002052,
+        "upstream_inference_completions_cost": 0.029952
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 1415,
+        "image_tokens": 0,
+        "audio_tokens": 0
+      }
+    }
+  },
+  {
+    "model": "perplexity/sonar-reasoning-pro",
+    "ok": true,
+    "content_chars": 3087,
+    "error": null,
+    "usage": {
+      "prompt_tokens": 1015,
+      "completion_tokens": 2117,
+      "total_tokens": 3132,
+      "cost": 0.02497,
+      "is_byok": false,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": 0,
+        "audio_tokens": 0,
+        "video_tokens": 0
+      },
+      "cost_details": {
+        "upstream_inference_cost": 0.02497,
+        "upstream_inference_prompt_cost": 0.00203,
+        "upstream_inference_completions_cost": 0.02294
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 1514,
+        "image_tokens": 0,
+        "audio_tokens": 0
+      }
+    }
+  }
+]

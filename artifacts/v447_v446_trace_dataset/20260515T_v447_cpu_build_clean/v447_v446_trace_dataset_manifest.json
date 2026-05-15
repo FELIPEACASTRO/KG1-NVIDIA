@@ -1,0 +1,102 @@
+{
+  "build_stats": {
+    "accepted_audit_rows": 1310,
+    "audit_rows": 9500,
+    "dropped_rows": 17,
+    "family_counts": {
+      "bit_manipulation": 848,
+      "equation_transform": 445
+    },
+    "missing_answer": 0,
+    "missing_source_row": 0,
+    "normalization_status": {
+      "appended_confirming_boxed_suffix": 1293,
+      "dropped_different_boxed_mismatch": 17
+    },
+    "status_counts": {
+      "hypothesis_formed": 141,
+      "rule_found": 1152
+    }
+  },
+  "decision": {
+    "next_action": "Run V286 generic tokenization gate with assistant_final_answer_mode=boxed_suffix.",
+    "status": "dataset_built"
+  },
+  "generated_at_utc": "2026-05-15T19:45:29.819894+00:00",
+  "inputs": {
+    "competition_train_csv": "C:\\Users\\davis\\Downloads\\competition_train.csv",
+    "competition_train_csv_sha256": "d204af160633b638448723a437aa51c0db70fd0b64ff92f6ad6f52e5ac6377fa",
+    "sft_jsonl": "C:\\Users\\davis\\Downloads\\sft_reconstructed.jsonl",
+    "sft_jsonl_sha256": "e385421e85881a406144e2e1166961ef21b0b9063077c908f41e626e01681609",
+    "v446_audit_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v446_tong_source_target_alignment_gate\\20260515T_v446_cpu_gate\\v446_tong_source_target_alignment_gate_candidate_audit.csv",
+    "v446_audit_sha256": "959be501a45cfc3d323d439e8f468002ae6c35728c981a1cdab735a85025986b"
+  },
+  "label": "v447_v446_trace_dataset",
+  "outputs": {
+    "manifest_json": "artifacts\\v447_v446_trace_dataset\\20260515T_v447_cpu_build_clean\\v447_v446_trace_dataset_manifest.json",
+    "train_jsonl": "artifacts\\v447_v446_trace_dataset\\20260515T_v447_cpu_build_clean\\v447_v446_trace_train.jsonl",
+    "train_sha256": "08a4d36adf61fd20dcd5f2536eff6e5f39825b3a6b3a3a64d21e5ea4399c1ca7",
+    "val_jsonl": "artifacts\\v447_v446_trace_dataset\\20260515T_v447_cpu_build_clean\\v447_v446_trace_val.jsonl",
+    "val_sha256": "19a8a360444d0fae61181fc77ce1f53180e5bed05661dc0c2f6cd7c4d3f00f31"
+  },
+  "split_stats": {
+    "bit_manipulation::hypothesis_formed": {
+      "rows": 67,
+      "train": 60,
+      "val": 7
+    },
+    "bit_manipulation::rule_found": {
+      "rows": 781,
+      "train": 703,
+      "val": 78
+    },
+    "equation_transform::hypothesis_formed": {
+      "rows": 74,
+      "train": 67,
+      "val": 7
+    },
+    "equation_transform::rule_found": {
+      "rows": 371,
+      "train": 334,
+      "val": 37
+    }
+  },
+  "train_summary": {
+    "assistant_chars": {
+      "avg": 8853.85,
+      "max": 11842,
+      "min": 1098
+    },
+    "family_counts": {
+      "bit_manipulation": 763,
+      "equation_transform": 401
+    },
+    "normalization_status": {
+      "appended_confirming_boxed_suffix": 1164
+    },
+    "rows": 1164,
+    "status_counts": {
+      "hypothesis_formed": 127,
+      "rule_found": 1037
+    }
+  },
+  "val_summary": {
+    "assistant_chars": {
+      "avg": 9140.66,
+      "max": 11631,
+      "min": 1142
+    },
+    "family_counts": {
+      "bit_manipulation": 85,
+      "equation_transform": 44
+    },
+    "normalization_status": {
+      "appended_confirming_boxed_suffix": 129
+    },
+    "rows": 129,
+    "status_counts": {
+      "hypothesis_formed": 14,
+      "rule_found": 115
+    }
+  }
+}

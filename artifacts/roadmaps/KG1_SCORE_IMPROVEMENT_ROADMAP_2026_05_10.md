@@ -45,6 +45,8 @@ Regra central: ganho so conta se aparecer no adapter/package. Teacher CPU, solve
 | V442 post-V441 route audit | 133 pares V439 auditados; 133 source-ok; 0 rule-certified | bloqueia novo GPU preference; volta para CPU certified builder |
 | V445 prediction/parse audit | current, official reextract, first boxed e last boxed todos `192/56/136/0` | parser/extractor nao e gargalo |
 | OpenRouter V446 uploaded consult | 16 slots, 11 respostas finais; consenso CPU-first target-alignment | evidencia para V446/V447 |
+| V446 Tong-source target-alignment gate | `1310` traces aceitos: bit `848`, equation `462`; `hf_gpu_allowed=true` | sinal material novo; exige dataset/token gate antes de GPU |
+| OpenRouter V447 public mining consensus | 6 modelos uteis; consenso condicional | minerar notebooks publicos em paralelo, mas priorizar V446 builder |
 
 ## Regras Permanentes
 
@@ -68,6 +70,7 @@ Regra central: ganho so conta se aparecer no adapter/package. Teacher CPU, solve
 18. Antes de qualquer GPU, rodar leakage forte: `id`, `prompt_sha256`, prompt normalizado e overlap `13-gram` contra weak/full. Qualquer hit bloqueia o dataset.
 19. Antes de qualquer GPU, carregar um scaffold LoRA pelo caminho oficial vLLM/LoRA em prompt dummy. Se nao carrega como adapter-only, nao treinar.
 20. One-shot policy: nao repetir a mesma receita paga se ela ja falhou weak/family gate. Nova GPU exige evidencia CPU nova e material.
+21. Mineracao de notebooks publicos e permitida somente como extracao de tecnica/dataset/trace, nunca como uso direto de adapter, peso ou submissao de terceiros. Downloads grandes precisam ser apagados depois da triagem; o roadmap guarda apenas o achado validado.
 
 ## Achados Consolidados V434C
 
@@ -840,51 +843,134 @@ Rejeicoes adicionais do V446D:
 | `GaryNENE/nemotron-nano-8b-reasoning-lora` | base 8B e rank 128; nao e submit-compativel com Nemotron 3 Nano 30B A3B rank<=32 |
 | datasets genericos NVIDIA Math/ReasoningGym/logical-puzzles | P2 para fixtures/estilo de trace; nao autorizam GPU sem target-alignment |
 
+## Atualizacao V446/V447 - Target Alignment e Public Mining
+
+V446 CPU gate foi implementado e executado.
+
+Artefatos:
+
+- Script: `scripts/run_v446_tong_source_target_alignment_gate.py`.
+- Manifesto: `artifacts/v446_tong_source_target_alignment_gate/20260515T_v446_cpu_gate/v446_tong_source_target_alignment_gate_manifest.json`.
+- Source inventory: `artifacts/v446_tong_source_target_alignment_gate/20260515T_v446_cpu_gate/v446_tong_source_target_alignment_gate_source_inventory.json`.
+- Audit CSV: `artifacts/v446_tong_source_target_alignment_gate/20260515T_v446_cpu_gate/v446_tong_source_target_alignment_gate_candidate_audit.csv`.
+
+Resultado V446:
+
+| Item | Resultado |
+|---|---:|
+| Rows auditadas em `sft_reconstructed.jsonl` | `9500` |
+| Rows aceitas preliminarmente | `1310` |
+| `bit_manipulation` aceitas | `848` |
+| `equation_transform` aceitas | `462` |
+| Rows bloqueadas | `8190` |
+| Weak row contract | passou |
+| Tong source commit | `82bd1880aa8a8986ad572ccd17ae35b2b5c7da85` |
+| `hf_gpu_allowed` | `true`, condicionado a builder/token gate |
+
+O source inventory confirmou que a fonte Tong contem os operadores que o plano
+precisa:
+
+| Familia | Inventario confirmado |
+|---|---|
+| `bit_manipulation` | bit-pair, bitsum, stride, operadores booleanos |
+| `equation_transform` | concat, reverse, add/sub/mul, div/mod, digitos/determinante |
+
+Interpretacao: pela primeira vez apos dias de tentativas, existe material novo
+suficiente para justificar uma rota curta de transferencia para adapter, mas
+isso ainda nao e ganho de ACC. A decisao correta e construir dataset final
+V447, rodar tokenizacao/pair gate e somente entao abrir um H200 smoke curto.
+
+V447 OpenRouter/API consensus:
+
+- Artefato: `artifacts/openrouter/v447_public_submission_mining_consensus/KG1_V447_PUBLIC_SUBMISSION_MINING_CONSENSUS.md`.
+- Prompt: `artifacts/openrouter/v447_public_submission_mining_consensus/v447_prompt.txt`.
+- Modelos uteis: `openai/gpt-5.2`, `anthropic/claude-sonnet-4.6`,
+  `deepseek/deepseek-r1-0528`, `qwen/qwen3-max-thinking`,
+  `google/gemini-3.1-pro-preview`, `perplexity/sonar-reasoning-pro`.
+- Consenso: minerar notebooks/submissoes publicas e valido, mas nao substitui
+  o V446. A mineracao deve rodar em CPU e extrair tecnica/trace/dataset
+  permitido, nao usar artefato de terceiros.
+
+Decisao V447:
+
+| Opcao | Decisao |
+|---|---|
+| Mais SFT generico, mais epochs, LR sweep | rejeitado |
+| Minerar notebooks publicos antes do V446 builder | rejeitado como caminho principal; permitido em paralelo CPU |
+| V446 -> builder -> token gate -> H200 smoke <= 1h | caminho principal |
+| Usar solver/verifier runtime no submit | proibido |
+| Usar adapter/peso/submissao publica de terceiro | proibido |
+
+V447 dataset clean:
+
+| Item | V447 bruto | V447 clean | Decisao |
+|---|---:|---:|---|
+| Total rows | `1310` | `1293` | usar clean |
+| Rows descartadas por `boxed` contraditorio | `0` | `17` | bloqueio obrigatorio |
+| Train rows | `1178` | `1164` | passa minimo |
+| Val rows | `132` | `129` | passa minimo |
+| Train `bit_manipulation` | `763` | `763` | preservado |
+| Train `equation_transform` | `415` | `401` | remove ruido contraditorio |
+| Val `bit_manipulation` | `85` | `85` | preservado |
+| Val `equation_transform` | `47` | `44` | remove ruido contraditorio |
+| `last_boxed_mismatch` | `17` potenciais | `0` | obrigatorio antes de GPU |
+
+Gate de tokenizacao V447 clean:
+
+| Check | Resultado |
+|---|---|
+| Manifesto | `artifacts/v447_v446_trace_dataset/20260515T_v447_tokenization_gate_clean/v286_generic_tokenization_gate_manifest.json` |
+| `prompt_truncation_rate` | `0.0` |
+| `completion_tokens_dropped` | `0` |
+| `fallback_masks` | `0` |
+| `offset_masks` | `1164/1164` train, `129/129` val |
+| `train_val_prompt_overlap` | `0` |
+| `train_val_prompt_answer_overlap` | `0` |
+| Token max train/val | `8048` / `7995` |
+| Decisao | `tokenization_gate_passed` |
+
+Dataset HF V447 clean:
+
+| Split | HF path | SHA256 |
+|---|---|---|
+| train | `felipesp1983/kg1-nemotron-training::data/v447_v446_trace_dataset/20260515T_cpu_gate_clean/v447_v446_trace_train.jsonl` | `08a4d36adf61fd20dcd5f2536eff6e5f39825b3a6b3a3a64d21e5ea4399c1ca7` |
+| val | `felipesp1983/kg1-nemotron-training::data/v447_v446_trace_dataset/20260515T_cpu_gate_clean/v447_v446_trace_val.jsonl` | `19a8a360444d0fae61181fc77ce1f53180e5bed05661dc0c2f6cd7c4d3f00f31` |
+
+Nova regra permanente: qualquer dataset/trace com ultimo `\boxed{}` diferente
+da resposta oficial de treino deve ser bloqueado por padrao. Override so pode
+existir via flag explicita, nunca silenciosamente. Essa regra entra em todos os
+builders, notebooks e jobs novos/alterados.
+
 ## Proxima Acao Ativa
 
-Nao abrir novo H200/A100 para treino ate existir um artefato CPU que passe
-target-alignment. A implementacao deve seguir esta ordem:
+Executar V448 nesta ordem:
 
-1. Nao abrir novo H200/A100 para SFT amplo, high-confidence SFT ou LR/epoch
-   sweep.
-2. Implementar V446/V447 CPU target-alignment gate com prioridade
-   `Tong-source`:
-   - importar para o nosso formato apenas os conceitos publicos e verificaveis
-     dos reasoners de Tong, registrando URL, arquivo, SHA e linhas/operacoes
-     usadas;
-   - equation DSL v2 deve iniciar pelo inventario de
-     `reasoners/equation_numeric.py`;
-   - bit guardrail deve iniciar por bit-pair/bitsum/stride e replay/anchor
-     inspirado em `reasoners/bit_manipulation.py`;
-   - entrada permitida: public train/treino permitido, nunca weak/full como
-     fonte de treino;
-   - checks obrigatorios: hash denylist, prompt normalizado, `13-gram`,
-     label provenance, family counts, token length, offset mask, exact boxed,
-     bit replay floor e target plausibility;
-   - target plausibility pode ser provada por trajectory nativa verificada ou
-     logprob/score pre-registrado contra base/V291.
-3. Rodar duas rotas CPU baratas e concorrentes:
-   - DSL v2 composicional: depth ate 3/4 com rename, substitute, reverse,
-     concat, slot-permute, constant-fold, LOO, renaming/metamorphic checks e
-     replay checker;
-   - native rejection sampling: gerar continuacoes em public train equation,
-     manter apenas trajetorias curtas, nativas e verificadas como corretas.
-4. Exigir antes de qualquer GPU:
-   - equation dataset certificado com cobertura material; alvo preferido para
-     H200: `>=400` exemplos limpos ou, se menor, evidencia clara de ganho
-     publico/holdout e target plausivel;
-   - bit anchor limpo `>=200` no minimo; preferencia `>=800`;
-   - public-train holdout sem regressao de bit;
-   - scaffold LoRA carregando via vLLM/LoRA oficial;
-   - go/no-go manifest com custo, tempo e kill-switch.
-5. Se todos os gates passarem, abrir no maximo uma H200 curta (`<=45` min)
-   com checkpoint-1 kill-switch:
-   - continuar somente se `equation>=58`, `bit>=136`, `truncated=0`;
-   - promover somente se superar `192/315`, `equation>56`, `bit>=136`,
-     `truncated=0` e depois full `>823/947`.
-6. Se DSL v2 e native sampling falharem cobertura/precisao/alinhamento, parar
-   novos treinos pagos e tratar V291/V290 checkpoint-6 como teto adapter-only
-   atual para submit seguro.
+1. Criar V448 H200 smoke com dataset V447 clean:
+   - base `V290 checkpoint-6`;
+   - maximo `6` steps, checkpoint a cada `3`;
+   - LR mais agressivo que V444, mas com timeout `<=1h`;
+   - dataset/hashes V447 clean fixos;
+   - `rule_found` e `hypothesis_formed` como subcategorias obrigatorias.
+2. Rodar local debug do launcher:
+   - verificar H200, custo unitario, timeout, dataset HF, hashes, adapter init,
+     commit esperado, snippets do script e ausencia de snippets stale.
+3. Commitar/pushar antes de lancar:
+   - o job deve fazer checkout do commit exato que passou no debug.
+4. Lançar apenas se o debug passar:
+   - monitorar logs a cada `40s`;
+   - matar por FinOps se erro/gate indicar que nao ha caminho para ganho.
+5. Rodar weak eval nos checkpoints `3` e `6`:
+   - promover somente se `total>192`, `equation>56`, `bit>=136`,
+     `truncated=0`;
+   - se `checkpoint-3` ja regredir sem sinal recuperavel, cancelar antes do
+     `checkpoint-6`.
+6. Em paralelo, minerar notebooks publicos Kaggle/HF:
+   - baixar somente em diretorio temporario;
+   - extrair tecnica, prompt style, dataset/trace permitido e license/provenance;
+   - apagar arquivos grandes apos triagem;
+   - registrar apenas achados que passem CPU gate.
+7. Se V448 falhar, nao repetir com mais epochs. Voltar para CPU mining/DSL v2
+   e exigir novo target certificado antes de outra GPU.
 
 Regra FinOps continua: se o primeiro checkpoint ou gate parcial nao indicar
 caminho para `total>192`, `equation>56`, `bit>=136`, `truncated=0`, cancelar.
