@@ -61,8 +61,12 @@ PREF_LOSS_WEIGHT = env_float("PREF_LOSS_WEIGHT", 1.0)
 CHOSEN_CE_WEIGHT = env_float("CHOSEN_CE_WEIGHT", 0.15)
 REJECTED_CE_WEIGHT = env_float("REJECTED_CE_WEIGHT", 0.0)
 PAIR_SCORE_MODE = env_str("PAIR_SCORE_MODE", "mean_nll")
-if PAIR_SCORE_MODE not in {"mean_nll", "sum_nll"}:
-    raise ValueError("PAIR_SCORE_MODE must be mean_nll or sum_nll")
+BOXED_PAYLOAD_SCORE_MODES = {"boxed_payload_mean_nll", "boxed_payload_sum_nll"}
+if PAIR_SCORE_MODE not in {"mean_nll", "sum_nll", *BOXED_PAYLOAD_SCORE_MODES}:
+    raise ValueError(
+        "PAIR_SCORE_MODE must be mean_nll, sum_nll, boxed_payload_mean_nll, "
+        "or boxed_payload_sum_nll"
+    )
 
 SYSTEM_PROMPT = env_str(
     "PREFERENCE_SYSTEM_PROMPT",
@@ -155,6 +159,97 @@ def make_example(row: dict[str, Any], completion_key: str, suffix: str) -> dict[
     }
 
 
+def boxed_payload_span(text: str) -> tuple[int, int]:
+    """Return the assistant-relative payload span inside the last \\boxed{...}."""
+
+    start = text.rfind("\\boxed{")
+    if start < 0:
+        raise ValueError("missing \\boxed{...} span")
+    payload_start = start + len("\\boxed{")
+    depth = 1
+    for idx in range(payload_start, len(text)):
+        char = text[idx]
+        backslashes = 0
+        probe = idx - 1
+        while probe >= 0 and text[probe] == "\\":
+            backslashes += 1
+            probe -= 1
+        escaped = bool(backslashes % 2)
+        if char == "{" and not escaped:
+            depth += 1
+        elif char == "}" and not escaped:
+            depth -= 1
+            if depth == 0:
+                return payload_start, idx
+    raise ValueError("unterminated \\boxed{...} span")
+
+
+def chat_template_text(messages: list[dict[str, Any]], tokenizer: Any) -> str:
+    try:
+        return tokenizer.apply_chat_template(
+            messages,
+            tokenize=False,
+            add_generation_prompt=False,
+            enable_thinking=True,
+        )
+    except TypeError:
+        return tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=False)
+
+
+def build_boxed_payload_loss_mask(
+    example: dict[str, Any],
+    tokenized_item: dict[str, Any],
+    tokenizer: Any,
+    label: str,
+) -> list[float]:
+    """Build a score mask that covers only payload tokens inside \\boxed{}.
+
+    V436/V436B/V440 showed that full-completion mean-NLL can move while family
+    ACC does not. This mask lets the preference objective compare the answer
+    payload itself instead of boilerplate like "Final answer:" and wrappers.
+    """
+
+    messages = example.get("messages", [])
+    assistant_text = ""
+    for message in reversed(messages):
+        if message.get("role") == "assistant":
+            assistant_text = str(message.get("content", ""))
+            break
+    if not assistant_text:
+        raise RuntimeError(f"{label}: assistant message missing for payload mask")
+    payload_start, payload_end = boxed_payload_span(assistant_text)
+    full_text = chat_template_text(messages, tokenizer)
+    assistant_start = full_text.rfind(assistant_text)
+    if assistant_start < 0:
+        raise RuntimeError(f"{label}: assistant text not found in rendered chat template")
+    absolute_start = assistant_start + payload_start
+    absolute_end = assistant_start + payload_end
+    encoded = tokenizer(
+        full_text,
+        add_special_tokens=False,
+        return_offsets_mapping=True,
+    )
+    input_ids = list(encoded["input_ids"])
+    offsets = encoded.get("offset_mapping")
+    if not offsets or len(offsets) != len(input_ids):
+        raise RuntimeError(f"{label}: tokenizer did not return usable offsets for payload mask")
+    mask: list[float] = []
+    for start, end in offsets:
+        token_start = int(start)
+        token_end = int(end)
+        mask.append(1.0 if token_end > absolute_start and token_start < absolute_end else 0.0)
+    if len(input_ids) > base.MAX_LENGTH:
+        overflow = len(input_ids) - base.MAX_LENGTH
+        input_ids = input_ids[overflow:]
+        mask = mask[overflow:]
+    if list(tokenized_item["input_ids"]) != input_ids:
+        raise RuntimeError(f"{label}: payload mask tokenization drift")
+    payload_tokens = int(sum(1 for value in mask if value > 0))
+    if payload_tokens <= 0:
+        raise RuntimeError(f"{label}: boxed payload mask has zero tokens")
+    return mask
+
+
 def tokenize_preference_rows(
     rows: list[dict[str, Any]],
     tokenizer: Any,
@@ -170,11 +265,28 @@ def tokenize_preference_rows(
             f"chosen={len(chosen)} rejected={len(rejected)}"
         )
     pairs: list[dict[str, Any]] = []
-    for raw, chosen_item, rejected_item in zip(rows, chosen, rejected):
+    boxed_payload_mode = PAIR_SCORE_MODE in BOXED_PAYLOAD_SCORE_MODES
+    chosen_payload_tokens = 0
+    rejected_payload_tokens = 0
+    for raw, chosen_example, rejected_example, chosen_item, rejected_item in zip(
+        rows, chosen_examples, rejected_examples, chosen, rejected
+    ):
         raw_id = str(raw["id"])
         if not str(chosen_item["id"]).startswith(raw_id) or not str(rejected_item["id"]).startswith(raw_id):
             raise RuntimeError(f"{label} tokenization id drift around {raw_id}")
         metadata = raw.get("metadata") or {}
+        if boxed_payload_mode:
+            chosen_mask = build_boxed_payload_loss_mask(chosen_example, chosen_item, tokenizer, f"{label}:{raw_id}:chosen")
+            rejected_mask = build_boxed_payload_loss_mask(
+                rejected_example, rejected_item, tokenizer, f"{label}:{raw_id}:rejected"
+            )
+        else:
+            chosen_mask = list(chosen_item["loss_mask"])
+            rejected_mask = list(rejected_item["loss_mask"])
+        chosen_item["score_loss_mask"] = chosen_mask
+        rejected_item["score_loss_mask"] = rejected_mask
+        chosen_payload_tokens += int(sum(1 for value in chosen_mask if value > 0))
+        rejected_payload_tokens += int(sum(1 for value in rejected_mask if value > 0))
         pairs.append(
             {
                 "id": raw_id,
@@ -185,7 +297,13 @@ def tokenize_preference_rows(
                 "subcategory": metadata.get("subcategory") or "unknown",
             }
         )
-    print(f"{label}_preference_tokenized_pairs = {len(pairs)}", flush=True)
+    print(
+        f"{label}_preference_tokenized_pairs = {len(pairs)} "
+        f"pair_score_mode={PAIR_SCORE_MODE} "
+        f"chosen_score_tokens={chosen_payload_tokens} "
+        f"rejected_score_tokens={rejected_payload_tokens}",
+        flush=True,
+    )
     return pairs
 
 
@@ -195,14 +313,20 @@ def build_epoch_pairs(pairs: list[dict[str, Any]], rng: random.Random) -> list[d
     return epoch
 
 
-def pad_batch(items: list[dict[str, Any]], pad_token_id: int, device: torch.device) -> dict[str, torch.Tensor]:
+def pad_batch(
+    items: list[dict[str, Any]],
+    pad_token_id: int,
+    device: torch.device,
+    *,
+    mask_key: str = "loss_mask",
+) -> dict[str, torch.Tensor]:
     max_len = max(len(item["input_ids"]) for item in items)
     batch_input_ids: list[list[int]] = []
     batch_attention: list[list[int]] = []
     batch_loss_mask: list[list[int]] = []
     for item in items:
         ids = list(item["input_ids"])
-        mask = list(item["loss_mask"])
+        mask = list(item[mask_key])
         pad_len = max_len - len(ids)
         batch_input_ids.append(ids + [pad_token_id] * pad_len)
         batch_attention.append([1] * len(ids) + [0] * pad_len)
@@ -218,9 +342,11 @@ def sequence_nll(
     model: torch.nn.Module,
     items: list[dict[str, Any]],
     pad_token_id: int,
+    *,
+    mask_key: str = "loss_mask",
 ) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
     device = next(model.parameters()).device
-    batch = pad_batch(items, pad_token_id, device)
+    batch = pad_batch(items, pad_token_id, device, mask_key=mask_key)
     outputs = model(input_ids=batch["input_ids"], attention_mask=batch["attention_mask"])
     logits = outputs.logits[:, :-1, :].contiguous()
     labels = batch["input_ids"][:, 1:].contiguous()
@@ -235,6 +361,16 @@ def sequence_nll(
     sum_nll = token_loss.sum(dim=1)
     mean_nll = sum_nll / token_counts
     return mean_nll, sum_nll, token_counts
+
+
+def score_mask_key() -> str:
+    return "score_loss_mask" if PAIR_SCORE_MODE in BOXED_PAYLOAD_SCORE_MODES else "loss_mask"
+
+
+def scores_from_nll(mean_nll: torch.Tensor, sum_nll: torch.Tensor) -> torch.Tensor:
+    if PAIR_SCORE_MODE in {"mean_nll", "boxed_payload_mean_nll"}:
+        return -mean_nll
+    return -sum_nll
 
 
 @torch.no_grad()
@@ -256,14 +392,15 @@ def evaluate_preferences(
     negative_type_correct: dict[str, int] = {}
     micro = max(1, base.MICRO_BATCH_SIZE)
     progress_every = max(1, int(os.environ.get("PREFERENCE_EVAL_PROGRESS_EVERY", "8")))
+    mask_key = score_mask_key()
     for start in range(0, len(sample), micro):
         batch_pairs = sample[start : start + micro]
         chosen_items = [item["chosen"] for item in batch_pairs]
         rejected_items = [item["rejected"] for item in batch_pairs]
-        chosen_mean, chosen_sum, _ = sequence_nll(model, chosen_items, pad_token_id)
-        rejected_mean, rejected_sum, _ = sequence_nll(model, rejected_items, pad_token_id)
-        chosen_score = -chosen_mean if PAIR_SCORE_MODE == "mean_nll" else -chosen_sum
-        rejected_score = -rejected_mean if PAIR_SCORE_MODE == "mean_nll" else -rejected_sum
+        chosen_mean, chosen_sum, _ = sequence_nll(model, chosen_items, pad_token_id, mask_key=mask_key)
+        rejected_mean, rejected_sum, _ = sequence_nll(model, rejected_items, pad_token_id, mask_key=mask_key)
+        chosen_score = scores_from_nll(chosen_mean, chosen_sum)
+        rejected_score = scores_from_nll(rejected_mean, rejected_sum)
         wins = (chosen_score > rejected_score).detach().cpu().tolist()
         for pair, win, c_loss, r_loss in zip(
             batch_pairs,
@@ -345,6 +482,7 @@ def save_training_manifest(
             "chosen_ce_weight": CHOSEN_CE_WEIGHT,
             "rejected_ce_weight": REJECTED_CE_WEIGHT,
             "pair_score_mode": PAIR_SCORE_MODE,
+            "score_mask_key": score_mask_key(),
             "allow_format_negatives": ALLOW_FORMAT_NEGATIVES,
         },
         "lora": {
@@ -403,6 +541,7 @@ def train() -> None:
     print(f"preference_val_file={PREF_VAL_FILE}", flush=True)
     print(
         f"objective beta={PREF_BETA} margin={PREF_MARGIN} pref_weight={PREF_LOSS_WEIGHT} "
+        f"pair_score_mode={PAIR_SCORE_MODE} score_mask_key={score_mask_key()} "
         f"allow_format_negatives={ALLOW_FORMAT_NEGATIVES}",
         flush=True,
     )
@@ -500,6 +639,7 @@ def train() -> None:
     epoch_index = 0
     grad_accum = max(1, base.GRADIENT_ACCUMULATION)
     micro = max(1, base.MICRO_BATCH_SIZE)
+    mask_key = score_mask_key()
 
     print(f"baseline_preference_eval_start max_examples={base.EVAL_MAX_EXAMPLES}", flush=True)
     baseline_eval = evaluate_preferences(model, val_pairs, pad_token_id, base.EVAL_MAX_EXAMPLES)
@@ -520,10 +660,10 @@ def train() -> None:
             batch_pairs = [epoch_pairs.pop() for _ in range(micro)]
             chosen_items = [item["chosen"] for item in batch_pairs]
             rejected_items = [item["rejected"] for item in batch_pairs]
-            chosen_mean, chosen_sum, _ = sequence_nll(model, chosen_items, pad_token_id)
-            rejected_mean, rejected_sum, _ = sequence_nll(model, rejected_items, pad_token_id)
-            chosen_score = -chosen_mean if PAIR_SCORE_MODE == "mean_nll" else -chosen_sum
-            rejected_score = -rejected_mean if PAIR_SCORE_MODE == "mean_nll" else -rejected_sum
+            chosen_mean, chosen_sum, _ = sequence_nll(model, chosen_items, pad_token_id, mask_key=mask_key)
+            rejected_mean, rejected_sum, _ = sequence_nll(model, rejected_items, pad_token_id, mask_key=mask_key)
+            chosen_score = scores_from_nll(chosen_mean, chosen_sum)
+            rejected_score = scores_from_nll(rejected_mean, rejected_sum)
             pref_logits = PREF_BETA * (chosen_score - rejected_score - PREF_MARGIN)
             preference_loss = F.softplus(-pref_logits).mean()
             chosen_ce = chosen_mean.mean()

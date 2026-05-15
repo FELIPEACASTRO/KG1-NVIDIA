@@ -44,6 +44,9 @@ CRITICAL_SNIPPETS = {
         "format rows blocked": "format_negative_blocked",
         "negative type accuracy": "negative_type_accuracy",
         "negative type from tokenized pair": "pair.get(\"negative_type\")",
+        "boxed payload score modes": "BOXED_PAYLOAD_SCORE_MODES",
+        "payload-only score mask": "build_boxed_payload_loss_mask",
+        "score mask manifest": "\"score_mask_key\": score_mask_key()",
     },
     "scripts/kg1_pre_paid_job_integration_gate.py": {
         "dataset content audit": "audit_dataset_file",

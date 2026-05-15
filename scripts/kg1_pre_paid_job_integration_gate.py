@@ -88,6 +88,13 @@ def audit_launcher(args: argparse.Namespace, findings: list[Finding]) -> dict[st
     require_text(text, "SAVE_EVERY_STEPS = 3", "launcher_missing_first_checkpoint_save", findings)
     require_text(text, "EVAL_EVERY_STEPS = 3", "launcher_missing_first_checkpoint_eval", findings)
     require_regex(text, r"MAX_STEPS\s*=\s*(?:[1-9]|1[0-2])\b", "launcher_max_steps_too_high", findings)
+    if args.expected_pair_score_mode:
+        require_text(
+            text,
+            f"export PAIR_SCORE_MODE='{args.expected_pair_score_mode}'",
+            "launcher_pair_score_mode_mismatch",
+            findings,
+        )
     require_text(
         text,
         "export PREFERENCE_SYSTEM_PROMPT='Solve the KG1 puzzle. End with exactly one final answer in \\boxed{}.'",
@@ -212,6 +219,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--expected-output-repo", required=True)
     parser.add_argument("--expected-init-adapter-repo", required=True)
     parser.add_argument("--expected-init-adapter-subfolder", required=True)
+    parser.add_argument("--expected-pair-score-mode", default="")
     parser.add_argument("--output-json", type=Path, default=None)
     return parser.parse_args()
 

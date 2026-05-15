@@ -40,6 +40,7 @@ Regra central: ganho so conta se aparecer no adapter/package. Teacher CPU, solve
 | V435F corrigido | hard-only passa; dataset antigo e bloqueado | GPU so com novo launcher e novo kill-switch |
 | V436B H200 hard-negative-only | checkpoint-3 piorou preference 6/24 -> 4/24 | cancelado; sem weak/full |
 | V440 H200 V439 final-answer-only | checkpoint-3 empatou baseline 8/24; equation 7/22; bit 1/2 | cancelado; sem weak/full |
+| V441 OpenRouter consult | DeepSeek/Qwen/Gemini consultados; 2 respostas completas dizem SIM com gates; Gemini truncou mas iniciou SIM | V441 boxed-payload e justificado, com kill-switch |
 
 ## Regras Permanentes
 
@@ -521,6 +522,61 @@ nao e suficiente. O proximo passo nao deve ser mais epoch nem LR sweep nessa
 mesma formulacao. Precisamos mudar o objetivo ou voltar para CPU gate de solver
 / DSL que produza novos pares com cobertura/sinal diferente.
 
+## V441 - API Consult e Boxed-Payload Preference
+
+Status: implementacao em andamento; ainda nao promove weak/full/submit.
+
+Consulta externa:
+
+- Artefato: `artifacts/openrouter/v441_boxed_payload_decision_api_consult/`.
+- Modelos consultados: `deepseek/deepseek-v3.2`,
+  `qwen/qwen3.6-max-preview`, `google/gemini-3.1-pro-preview`.
+- DeepSeek: SIM, com ressalvas; V441 e justificavel porque foca o gradiente no
+  payload, mas pode nao resolver raciocinio interno.
+- Qwen: SIM; considera V441 a correcao mecanica direta para a falha de V440,
+  desde que haja mascara nao vazia, drift check e kill-switch no checkpoint-3.
+- Gemini: resposta truncada, mas iniciou com SIM e a mesma justificativa de
+  diluicao de sinal.
+
+Decisao: V441 e permitido como smoke curto porque muda tecnicamente o objetivo.
+Nao e repeticao de V440.
+
+Mudanca tecnica:
+
+- Novo `PAIR_SCORE_MODE=boxed_payload_mean_nll`.
+- O trainer calcula `score_loss_mask` somente nos tokens dentro do payload do
+  ultimo `\boxed{...}`.
+- Boilerplate `Final answer:` e wrappers `\boxed{}` deixam de entrar no score
+  preference e no chosen CE.
+- O trainer aborta se qualquer payload mask tiver zero tokens ou se houver drift
+  entre tokenizacao do chat template e a mascara.
+
+Validacoes obrigatorias:
+
+- Dataset V439 hash/rows/family/subcategory preservados.
+- `chosen` e `rejected` continuam final-answer-only, sem format negatives.
+- `score_loss_mask` nao pode ter zero tokens em nenhum par.
+- Integration gate exige explicitamente
+  `--expected-pair-score-mode boxed_payload_mean_nll`.
+- Primeiro checkpoint precisa melhorar preference accuracy interna contra o
+  baseline V439; caso contrario cancelar por FinOps.
+
+Preflight local executado:
+
+- `py_compile`: OK.
+- `kg1_static_safety_gate.py`: OK, sem findings.
+- `kg1_pre_paid_job_integration_gate.py`: OK, sem findings.
+- Tokenize-only dry-run com tokenizer Nemotron real: OK.
+- Pares tokenizados: treino `109/109`, validacao `24/24`.
+- Truncation: `0`.
+- Offset mask fallback: `0`.
+- Score mask payload: treino `chosen=339`, `rejected=376`; validacao
+  `chosen=75`, `rejected=78`.
+
+Risco honesto: mesmo que V441 melhore preference interna, ainda pode nao
+transferir para weak ACC. Preference interna e so kill-switch barato; promocao
+continua exigindo weak/full por familia.
+
 ## Regra De Integracao Pre-Job
 
 Status: implementada em `scripts/kg1_pre_paid_job_integration_gate.py`.
@@ -587,7 +643,8 @@ Estes itens nao estao ativos agora. So entram se houver novo gate CPU mais forte
 ## Proxima Acao Unica
 
 Parar a linha V436/V436B/V440 e nao abrir novo GPU job de preference mean-NLL
-direto sem uma mudanca tecnica nova no objetivo ou no dado.
+direto sem uma mudanca tecnica nova no objetivo ou no dado. V441 e permitido
+porque troca o objetivo para `boxed_payload_mean_nll`.
 
 Objetivo:
 
@@ -598,7 +655,7 @@ Objetivo:
    - `chosen_mentions_public_train_label_audit_rows=0`.
 2. Rodar gate V439: semantic boxes 100%, subcategory counts preservados, no weak/full leakage, tokenizacao sem truncation, quadro comparativo contra V291/V290. Status: estrutural concluido; falta tokenizacao remota se publicar em HF.
 3. Publicar V439 no HF e rodar smoke curto somente se o launcher tiver kill-switch no primeiro checkpoint e comparar baseline V439 vs checkpoint-3. Status: concluido; V440 empatou e foi cancelado.
-4. Proxima rota: CPU gate para solver/DSL de `equation_transform` ou nova funcao de perda que compare somente a probabilidade do boxed payload, nao a sequencia inteira.
+4. Proxima rota: CPU gate para solver/DSL de `equation_transform` ou nova funcao de perda que compare somente a probabilidade do boxed payload, nao a sequencia inteira. Status: V441 implementa a segunda opcao como smoke curto.
 5. Qualquer novo GPU job precisa mostrar, antes de rodar, quadro comparativo contra V291/V290 e condicao objetiva de parada no primeiro checkpoint.
 6. Promover para weak/full/package/submit somente se o gate superar o melhor adapter-only atual: weak `192/315`, equation `56/155`, bit `136/160`, trunc `0`.
 

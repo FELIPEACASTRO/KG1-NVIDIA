@@ -29,6 +29,9 @@ O que ja sabemos:
   submit-safe.
 - Solver/verifier/teacher mostrou potencial, mas esse ganho ainda nao foi
   convertido para adapter-only.
+- Consulta OpenRouter V441 confirmou que o proximo smoke defensavel e trocar o
+  score de preference para o payload dentro do `\boxed{...}`, com kill-switch
+  no primeiro checkpoint.
 
 ## Desenho Simples Das Pecas Principais
 
@@ -107,6 +110,8 @@ flowchart TD
   F11 --> F12[V440 H200]
   F12 --> F13[baseline 8/24, ckpt-3 8/24]
   F13 --> P5[PROBLEMA: limpar target foi necessario, mas nao suficiente]
+  P5 --> F14[V441 proposto]
+  F14 --> F15[score so no boxed payload]
 
   G --> G1[Teacher/probes mostram potencial]
   G1 --> G2[Exemplo: equation pode chegar a 60 via verifier]
@@ -242,6 +247,29 @@ Decisao: cancelado por FinOps. Nao houve sinal material para weak/full.
 Diagnostico: limpar o target era necessario, mas o objetivo `mean_nll` sobre a
 sequencia curta ainda nao e forte o bastante para converter os acertos desejados
 em comportamento do adapter.
+
+### 6. Consulta API sobre V441
+
+Consulta feita em 2026-05-15 via OpenRouter:
+
+- `deepseek/deepseek-v3.2`: V441 e tecnicamente justificado, mas com ressalva
+  de que payload-only pode nao corrigir raciocinio.
+- `qwen/qwen3.6-max-preview`: V441 e a correcao mecanica direta para a diluicao
+  de sinal da V440.
+- `google/gemini-3.1-pro-preview`: resposta truncada, mas iniciou validando a
+  mesma tese de diluicao de sinal.
+
+Conclusao: V441 pode ser rodado como smoke curto, desde que nao seja tratado
+como ganho. Ele apenas testa se o problema era a diluicao da loss em tokens de
+boilerplate.
+
+Preflight local V441:
+
+- Compile, gate estatico e gate pre-pago: OK.
+- Tokenize-only dry-run: treino `109/109`, validacao `24/24`.
+- Truncation e fallback de offset mask: `0`.
+- Mascara de score no payload nao vazia: treino `chosen=339`, `rejected=376`;
+  validacao `chosen=75`, `rejected=78`.
 
 ## O Que Isso Significa
 

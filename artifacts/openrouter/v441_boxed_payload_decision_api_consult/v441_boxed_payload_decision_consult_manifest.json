@@ -1,0 +1,99 @@
+{
+  "schema_version": "kg1_v441_openrouter_boxed_payload_decision_consult_v1",
+  "generated_at_utc": "2026-05-15T16:46:08Z",
+  "models_requested": [
+    "deepseek/deepseek-v3.2",
+    "qwen/qwen3.6-max-preview",
+    "google/gemini-3.1-pro-preview"
+  ],
+  "prompt": "Voce e um revisor tecnico senior de ML/LLM para uma competicao Kaggle. Responda sem entusiasmo e sem especular alem dos fatos. Quero uma decisao pratica sobre o proximo experimento.\n\nContexto do projeto KG1 / NVIDIA Nemotron Model Reasoning Challenge:\n- O submit/package precisa ser adapter-only/LoRA. Solver externo, postprocessor/verifier e teacher CPU mostram potencial, mas nao contam como submissao se nao virarem comportamento do adapter.\n- Melhor estado adapter-only weak atual: 192/315 total, bit_manipulation 136/160, equation_transform 56/155, truncation 0.\n- Gargalo principal: equation_transform precisa subir para pelo menos 60/155 sem derrubar bit abaixo de 136.\n- V409 CPU solver projection: 202/315, equation 63, bit 139, mas nao adapter-only.\n- V414 CPU teacher: 222/315, equation 63, bit 159, mas nao adapter-only.\n- V413/V416 SFT teacher transfer falharam: equation ficou 56 e bit/truncation regrediram.\n- V436 preference com dataset misto falhou; havia hard negatives + format-only negatives.\n- V436B hard-negative-only ainda falhou: baseline interno 6/24, checkpoint-3 4/24; equation 4/22 -> 2/22.\n- V438 audit encontrou contaminacao no chosen antigo: chosen mencionava resposta errada/label audit.\n- V439 corrigiu target: chosen = \"Final answer: \\\\boxed{ANSWER}\", rejected = \"Final answer: \\\\boxed{ADAPTER_WRONG}\", sem contaminacao textual.\n- V440 H200 testou V439 final-answer-only com single-policy preference: PAIR_SCORE_MODE=mean_nll sobre a sequencia inteira, plus chosen CE. Resultado baseline 8/24, checkpoint-3 8/24; equation 7/22, bit 1/2. Foi cancelado por FinOps.\n\nMudanca proposta V441:\n- Manter exatamente o dataset limpo V439 e init adapter V290 checkpoint-6.\n- Nao repetir mean_nll da sequencia inteira.\n- Implementar PAIR_SCORE_MODE=boxed_payload_mean_nll.\n- Para chosen/rejected, construir uma score_loss_mask somente nos tokens dentro do payload do ultimo \\\\boxed{...}; excluir boilerplate \"Final answer:\" e os wrappers \\\\boxed{ } da preference score e do chosen CE.\n- Gate: abortar se qualquer payload mask tiver zero tokens, se houver drift de tokenizacao, se dataset/hash/family/subcategory divergir, ou se checkpoint-3 nao melhorar a preference accuracy interna contra baseline.\n- H200 permitido por no maximo 1 hora, mas deve cancelar no primeiro checkpoint sem sinal.\n\nPerguntas:\n1. Esse e um proximo experimento tecnicamente justificado, ou ainda e perda de tempo? Responda SIM/NAO e por que.\n2. Se SIM, quais 5 validacoes obrigatorias antes de gastar GPU?\n3. Quais 5 criterios objetivos para matar o job cedo?\n4. Quais riscos tecnicos podem fazer boxed_payload_mean_nll nao transferir para weak ACC?\n5. Existe uma alternativa mais forte e barata que deveria vir antes? Seja especifico e operacional.\n\nResponda em portugues, em bullets curtos, com foco em acao. Nao invente metricas novas; use apenas os numeros acima.",
+  "responses": [
+    {
+      "model": "deepseek/deepseek-v3.2",
+      "ok": true,
+      "elapsed_s": 34.38,
+      "content": "**1. Próximo experimento justificado?**  \nSIM, mas com ressalvas críticas.  \n- Motivo: O dataset V439 corrige contaminação anterior, e a máscara `boxed_payload` foca o sinal de preferência no conteúdo matemático, alinhando com o objetivo (resposta final correta).  \n- Ressalva: V440 (single-policy, mean_nll sobre sequência inteira) já falhou em melhorar equation_transform (7/22 vs baseline 6/24), sugerindo que o problema pode não ser apenas o alvo da loss, mas a capacidade do adapter de internalizar raciocínio.  \n\n**2. 5 validações obrigatórias antes de GPU:**  \n- Confirmar que o dataset V439 não contém nenhum vazamento de label (auditar 50 amostras aleatórias para `chosen`/`rejected`).  \n- Verificar que a máscara `boxed_payload` não resulta em máscaras vazias para nenhum exemplo (payload zero tokens).  \n- Validar que o tokenizador do modelo base trata `\\\\boxed{` e `}` consistentemente (sem drift de subword).  \n- Garantir que o adapter inicial V290 checkpoint-6 carrega sem erros e tem performance baseline conhecida (192/315).  \n- Executar uma simulação da loss em 100 exemplos (CPU) para confirmar que `PAIR_SCORE_MODE=boxed_payload_mean_nll` computa gradientes não-nulos.  \n\n**3. 5 critérios para matar o job cedo:**  \n- Checkpoint-3 não superar baseline interna em preference accuracy (ex.: accuracy calculada em split de validação do dataset V439).  \n- Loss de preferência estagnada ou divergindo nos primeiros 500 steps.  \n- Qualquer métrica de equation_transform em validação cair abaixo de 56/155 durante o treino.  \n- Bit_manipulation em validação cair abaixo de 136/160.  \n- Tempo exceder 1h sem sinal de melhoria (checkpoint-3 já avaliado).  \n\n**4. Riscos técnicos para não transferir para weak ACC:**  \n- O adapter pode aprender a gerar payloads \"corretos\" apenas no contexto de preferência, mas não generalizar para problemas novos (overfitting ao sinal superficial).  \n- A máscara ignorar o raciocínio anterior ao `\\\\boxed{}` pode não capturar erros de raciocínio que ocorrem antes da resposta final.  \n- O dataset V439 pode não ter variedade suficiente de erros típicos do adapter em equation_transform.  \n- O modelo base pode ter capacidade limitada para internalizar transformações algébricas via adapter-only.  \n- A otimização apenas no payload pode desestabilizar a geração de formatação (ex.: esquecer `\\\\boxed{}`).  \n\n**5. Alternativa mais forte e barata?**  \nSIM. Antes de V441, executar:  \n- **V441A (alternativa barata)**: Usar o mesmo dataset V439, mas com fine-tuning supervisionado (SFT) direto nos `chosen`, focando apenas em equation_transform (amostras onde o adapter atual erra).  \n- **Justificativa**: Transferência de teacher (V413/V416) falhou, mas SFT direto em respostas corretas (sem contaminação) é mais simples e já elevou equation_transform para 56/155.  \n- **Operacional**: Treinar por 1 época, adapter V290 init, batch pequeno, monitorar equation_transform e bit_manipulation a cada checkpoint. Custo: ~30min em H200.  \n- **Vantagem**: Testa se o problema é de capacidade de adapter (SFT falha) ou de sinal de preferência (DPO falha). Se SFT melhorar equation_transform sem regredir bit, é mais promissor que DPO complexo.",
+      "usage": {
+        "prompt_tokens": 835,
+        "completion_tokens": 892,
+        "total_tokens": 1727,
+        "cost": 0.0004208148,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 559,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0.0004208148,
+          "upstream_inference_prompt_cost": 8.36388e-05,
+          "upstream_inference_completions_cost": 0.000337176
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "image_tokens": 0,
+          "audio_tokens": 0
+        }
+      }
+    },
+    {
+      "model": "qwen/qwen3.6-max-preview",
+      "ok": true,
+      "elapsed_s": 133.09,
+      "content": "**1. Decisão: SIM**\n- V440 falhou por diluir o gradiente de preferência em tokens irrelevantes (boilerplate + wrappers). Restringir a loss ao payload dentro de `\\boxed{}` isola o sinal de decisão crítica.\n- É a correção técnica direta para o modo de falha observado, alinhada ao gargalo equation_transform (56/155) e ao limite de custo (1h H200).\n- Não há garantia de transferência para weak ACC, mas a intervenção é mecanicamente justificada e de risco controlado.\n\n**2. 5 validações obrigatórias antes de GPU**\n- Confirmar que 100% das amostras V439 possuem ≥1 token dentro da mask do payload; abortar se houver zero tokens.\n- Validar alinhamento de tokenização: `tokenizer.encode(payload_extraído)` deve coincidir exatamente com os IDs mascarados; verificar ausência de drift ou tokens especiais injetados.\n- Verificar checksum/hash do dataset V439 contra a versão auditada (sem contaminação textual de labels/respostas erradas).\n- Rodar forward pass em CPU (1 batch): confirmar que `score_loss_mask` e `chosen CE` ignoram \"Final answer:\" e `\\boxed{ }`, aplicando-se apenas ao conteúdo interno.\n- Validar carregamento do adapter V290 checkpoint-6: sem mismatch de chaves e com bit_manipulation baseline interna ≥136/160 antes do primeiro step.\n\n**3. 5 critérios objetivos para matar o job cedo**\n- Checkpoint-3 não apresentar melhoria na preference accuracy interna vs baseline (gate explícito do projeto).\n- Bit_manipulation weak ACC cair abaixo de 136/160 em qualquer avaliação intermediária.\n- `score_loss_mask` retornar zero tokens ou gerar NaN/Inf nos logits em qualquer batch.\n- Loss de preferência (boxed_payload) não decrescer ou apresentar oscilação sem tendência de queda até o primeiro checkpoint.\n- Consumo de tempo atingir 45 min sem checkpoint válido ou sem sinal de convergência (respeitando teto de 1h e cancelamento no primeiro checkpoint sem sinal).\n\n**4. Riscos técnicos de boxed_payload_mean_nll não transferir para weak ACC**\n- Sinal esparso: payloads curtos (1-3 tokens) geram gradiente insuficiente para atualizar camadas do adapter de forma estável.\n- Desacoplamento razão-resposta: otimizar apenas o token final não corrige erros de raciocínio intermediário; o adapter pode aprender a emitir o formato correto sem resolver a equação.\n- Fragmentação de tokenização: se o tokenizer quebra números/símbolos em subtokens inconsistentes, a mask aplica-se a IDs errados, corrompendo o gradiente de preferência.\n- Margem de preferência rasa: se `ADAPTER_WRONG` e `ANSWER` forem lexical ou semanticamente próximos, o signal-to-noise da loss será baixo, impedindo aprendizado discriminativo.\n- Shift de distribuição: foco excessivo no payload pode degradar generalização em bit_manipulation ou truncation, já que o adapter deixa de receber sinal de estrutura/contexto.\n\n**5. Alternativa mais forte e barata que deveria vir antes**\n- Destilação via SFT direcionado a partir do V414 CPU teacher (equation 63/155, bit 159/160, total 222/315), restrita apenas ao subconjunto equation_transform.\n- Operacional: extrair amostras equation do V414, aplicar SFT com mask nos passos de derivação + payload final, treinar por 30 min H200, validar weak ACC.\n- Justificativa: SFT é mais estável e barato que preference loss em payloads esparsos; transfere comportamento verificado diretamente para o adapter, contornando a instabilidade observada em V436/V436B/V440.\n- Se V413/V416 já tentaram SFT exatamente com esse recorte e falharam, a alternativa não é inferível como superior com os dados fornecidos; caso contrário, deve preceder V441.",
+      "usage": {
+        "prompt_tokens": 863,
+        "completion_tokens": 4626,
+        "total_tokens": 5489,
+        "cost": 0.02976376,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0.02976376,
+          "upstream_inference_prompt_cost": 0.00089752,
+          "upstream_inference_completions_cost": 0.02886624
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 3691,
+          "image_tokens": 0,
+          "audio_tokens": 0
+        }
+      }
+    },
+    {
+      "model": "google/gemini-3.1-pro-preview",
+      "ok": true,
+      "elapsed_s": 16.43,
+      "content": "**1. Esse é um próximo experimento tecnicamente justificado, ou ainda é perda de tempo?**\n*   **SIM.**\n*   **Por quê:** O experimento V440 falhou por diluição de sinal. Ao usar `mean_nll",
+      "usage": {
+        "prompt_tokens": 876,
+        "completion_tokens": 1396,
+        "total_tokens": 2272,
+        "cost": 0.018504,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0.018504,
+          "upstream_inference_prompt_cost": 0.001752,
+          "upstream_inference_completions_cost": 0.016752
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 1341,
+          "image_tokens": 0,
+          "audio_tokens": 0
+        }
+      }
+    }
+  ]
+}

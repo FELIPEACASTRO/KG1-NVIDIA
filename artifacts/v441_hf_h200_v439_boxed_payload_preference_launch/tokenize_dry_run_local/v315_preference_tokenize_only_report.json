@@ -1,0 +1,26 @@
+{
+  "tokenized_train_pairs": 109,
+  "tokenized_validation_pairs": 24,
+  "train_summary": {
+    "family_counts": {
+      "bit_manipulation": 11,
+      "equation_transform": 98
+    },
+    "negative_type_counts": {
+      "hard_negative_adapter_exact_wrong": 109
+    },
+    "rows": 109,
+    "unique_ids": 109
+  },
+  "validation_summary": {
+    "family_counts": {
+      "bit_manipulation": 2,
+      "equation_transform": 22
+    },
+    "negative_type_counts": {
+      "hard_negative_adapter_exact_wrong": 24
+    },
+    "rows": 24,
+    "unique_ids": 24
+  }
+}

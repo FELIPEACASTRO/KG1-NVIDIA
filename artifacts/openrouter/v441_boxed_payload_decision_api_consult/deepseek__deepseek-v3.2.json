@@ -1,0 +1,29 @@
+{
+  "model": "deepseek/deepseek-v3.2",
+  "ok": true,
+  "elapsed_s": 34.38,
+  "content": "**1. Próximo experimento justificado?**  \nSIM, mas com ressalvas críticas.  \n- Motivo: O dataset V439 corrige contaminação anterior, e a máscara `boxed_payload` foca o sinal de preferência no conteúdo matemático, alinhando com o objetivo (resposta final correta).  \n- Ressalva: V440 (single-policy, mean_nll sobre sequência inteira) já falhou em melhorar equation_transform (7/22 vs baseline 6/24), sugerindo que o problema pode não ser apenas o alvo da loss, mas a capacidade do adapter de internalizar raciocínio.  \n\n**2. 5 validações obrigatórias antes de GPU:**  \n- Confirmar que o dataset V439 não contém nenhum vazamento de label (auditar 50 amostras aleatórias para `chosen`/`rejected`).  \n- Verificar que a máscara `boxed_payload` não resulta em máscaras vazias para nenhum exemplo (payload zero tokens).  \n- Validar que o tokenizador do modelo base trata `\\\\boxed{` e `}` consistentemente (sem drift de subword).  \n- Garantir que o adapter inicial V290 checkpoint-6 carrega sem erros e tem performance baseline conhecida (192/315).  \n- Executar uma simulação da loss em 100 exemplos (CPU) para confirmar que `PAIR_SCORE_MODE=boxed_payload_mean_nll` computa gradientes não-nulos.  \n\n**3. 5 critérios para matar o job cedo:**  \n- Checkpoint-3 não superar baseline interna em preference accuracy (ex.: accuracy calculada em split de validação do dataset V439).  \n- Loss de preferência estagnada ou divergindo nos primeiros 500 steps.  \n- Qualquer métrica de equation_transform em validação cair abaixo de 56/155 durante o treino.  \n- Bit_manipulation em validação cair abaixo de 136/160.  \n- Tempo exceder 1h sem sinal de melhoria (checkpoint-3 já avaliado).  \n\n**4. Riscos técnicos para não transferir para weak ACC:**  \n- O adapter pode aprender a gerar payloads \"corretos\" apenas no contexto de preferência, mas não generalizar para problemas novos (overfitting ao sinal superficial).  \n- A máscara ignorar o raciocínio anterior ao `\\\\boxed{}` pode não capturar erros de raciocínio que ocorrem antes da resposta final.  \n- O dataset V439 pode não ter variedade suficiente de erros típicos do adapter em equation_transform.  \n- O modelo base pode ter capacidade limitada para internalizar transformações algébricas via adapter-only.  \n- A otimização apenas no payload pode desestabilizar a geração de formatação (ex.: esquecer `\\\\boxed{}`).  \n\n**5. Alternativa mais forte e barata?**  \nSIM. Antes de V441, executar:  \n- **V441A (alternativa barata)**: Usar o mesmo dataset V439, mas com fine-tuning supervisionado (SFT) direto nos `chosen`, focando apenas em equation_transform (amostras onde o adapter atual erra).  \n- **Justificativa**: Transferência de teacher (V413/V416) falhou, mas SFT direto em respostas corretas (sem contaminação) é mais simples e já elevou equation_transform para 56/155.  \n- **Operacional**: Treinar por 1 época, adapter V290 init, batch pequeno, monitorar equation_transform e bit_manipulation a cada checkpoint. Custo: ~30min em H200.  \n- **Vantagem**: Testa se o problema é de capacidade de adapter (SFT falha) ou de sinal de preferência (DPO falha). Se SFT melhorar equation_transform sem regredir bit, é mais promissor que DPO complexo.",
+  "usage": {
+    "prompt_tokens": 835,
+    "completion_tokens": 892,
+    "total_tokens": 1727,
+    "cost": 0.0004208148,
+    "is_byok": false,
+    "prompt_tokens_details": {
+      "cached_tokens": 559,
+      "cache_write_tokens": 0,
+      "audio_tokens": 0,
+      "video_tokens": 0
+    },
+    "cost_details": {
+      "upstream_inference_cost": 0.0004208148,
+      "upstream_inference_prompt_cost": 8.36388e-05,
+      "upstream_inference_completions_cost": 0.000337176
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "image_tokens": 0,
+      "audio_tokens": 0
+    }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "model": "qwen/qwen3.6-max-preview",
+  "ok": true,
+  "elapsed_s": 133.09,
+  "content": "**1. Decisão: SIM**\n- V440 falhou por diluir o gradiente de preferência em tokens irrelevantes (boilerplate + wrappers). Restringir a loss ao payload dentro de `\\boxed{}` isola o sinal de decisão crítica.\n- É a correção técnica direta para o modo de falha observado, alinhada ao gargalo equation_transform (56/155) e ao limite de custo (1h H200).\n- Não há garantia de transferência para weak ACC, mas a intervenção é mecanicamente justificada e de risco controlado.\n\n**2. 5 validações obrigatórias antes de GPU**\n- Confirmar que 100% das amostras V439 possuem ≥1 token dentro da mask do payload; abortar se houver zero tokens.\n- Validar alinhamento de tokenização: `tokenizer.encode(payload_extraído)` deve coincidir exatamente com os IDs mascarados; verificar ausência de drift ou tokens especiais injetados.\n- Verificar checksum/hash do dataset V439 contra a versão auditada (sem contaminação textual de labels/respostas erradas).\n- Rodar forward pass em CPU (1 batch): confirmar que `score_loss_mask` e `chosen CE` ignoram \"Final answer:\" e `\\boxed{ }`, aplicando-se apenas ao conteúdo interno.\n- Validar carregamento do adapter V290 checkpoint-6: sem mismatch de chaves e com bit_manipulation baseline interna ≥136/160 antes do primeiro step.\n\n**3. 5 critérios objetivos para matar o job cedo**\n- Checkpoint-3 não apresentar melhoria na preference accuracy interna vs baseline (gate explícito do projeto).\n- Bit_manipulation weak ACC cair abaixo de 136/160 em qualquer avaliação intermediária.\n- `score_loss_mask` retornar zero tokens ou gerar NaN/Inf nos logits em qualquer batch.\n- Loss de preferência (boxed_payload) não decrescer ou apresentar oscilação sem tendência de queda até o primeiro checkpoint.\n- Consumo de tempo atingir 45 min sem checkpoint válido ou sem sinal de convergência (respeitando teto de 1h e cancelamento no primeiro checkpoint sem sinal).\n\n**4. Riscos técnicos de boxed_payload_mean_nll não transferir para weak ACC**\n- Sinal esparso: payloads curtos (1-3 tokens) geram gradiente insuficiente para atualizar camadas do adapter de forma estável.\n- Desacoplamento razão-resposta: otimizar apenas o token final não corrige erros de raciocínio intermediário; o adapter pode aprender a emitir o formato correto sem resolver a equação.\n- Fragmentação de tokenização: se o tokenizer quebra números/símbolos em subtokens inconsistentes, a mask aplica-se a IDs errados, corrompendo o gradiente de preferência.\n- Margem de preferência rasa: se `ADAPTER_WRONG` e `ANSWER` forem lexical ou semanticamente próximos, o signal-to-noise da loss será baixo, impedindo aprendizado discriminativo.\n- Shift de distribuição: foco excessivo no payload pode degradar generalização em bit_manipulation ou truncation, já que o adapter deixa de receber sinal de estrutura/contexto.\n\n**5. Alternativa mais forte e barata que deveria vir antes**\n- Destilação via SFT direcionado a partir do V414 CPU teacher (equation 63/155, bit 159/160, total 222/315), restrita apenas ao subconjunto equation_transform.\n- Operacional: extrair amostras equation do V414, aplicar SFT com mask nos passos de derivação + payload final, treinar por 30 min H200, validar weak ACC.\n- Justificativa: SFT é mais estável e barato que preference loss em payloads esparsos; transfere comportamento verificado diretamente para o adapter, contornando a instabilidade observada em V436/V436B/V440.\n- Se V413/V416 já tentaram SFT exatamente com esse recorte e falharam, a alternativa não é inferível como superior com os dados fornecidos; caso contrário, deve preceder V441.",
+  "usage": {
+    "prompt_tokens": 863,
+    "completion_tokens": 4626,
+    "total_tokens": 5489,
+    "cost": 0.02976376,
+    "is_byok": false,
+    "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "cache_write_tokens": 0,
+      "audio_tokens": 0,
+      "video_tokens": 0
+    },
+    "cost_details": {
+      "upstream_inference_cost": 0.02976376,
+      "upstream_inference_prompt_cost": 0.00089752,
+      "upstream_inference_completions_cost": 0.02886624
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 3691,
+      "image_tokens": 0,
+      "audio_tokens": 0
+    }
+  }
+}
