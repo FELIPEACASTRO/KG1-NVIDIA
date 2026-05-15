@@ -73,6 +73,7 @@ Precisamos buscar subida no ranking ainda hoje, `2026-05-14`. A decisao V392 e s
 | V417 transfer blocker gate | `hf_gpu_allowed=false` | teto adapter `56/155` | baseline `136/160` | bloqueia novo GPU SFT ate existir sinal CPU adapter/package novo |
 | V418 CPU synthesis aggressive rerun | CPU projection `202/315` | `63/155` | `139/160` | `0` ganho novo vs V409/V412; DSL atual esgotada |
 | V419 residual taxonomy | `92` eq residuais | `80` punct-only dominantes | n/a | proxima classe: symbolic punctuation structural solver; sem GPU |
+| V420 symbolic cryptarithm aggressive | `1` accepted conhecido | `99d6a3b5` ja em V409/V414 | n/a | `0` ganho novo; multi-operator nao promotavel |
 
 Conclusao: `eval_loss` baixo nao e criterio de promocao. O criterio e ACC por familia no weak/full gate. A rota "resolver nos mesmos" finalmente tem ganho mensuravel (`+9` weak em CPU), mas esse ganho ainda e solver/verifier externo; para submit, ele precisa virar comportamento do adapter/package ou ser permitido explicitamente pelas regras de runtime.
 
@@ -1000,6 +1001,29 @@ Resultado:
 
 Decisao: o gargalo dominante restante e `symbolic_punctuation_structural_solver`, nao treino. O proximo passo deve atacar esses `80` punct-only residuais com uma DSL nova de estrutura simbolica; GPU continua bloqueada.
 
+### Step 6Q - V420 symbolic cryptarithm aggressive gate
+
+Status: concluido; sem ganho novo.
+
+Objetivo: testar se ampliar o gate cryptarithm V329 para ate `4` operadores encontra novos ganhos dentro do bucket simbolico.
+
+Resultado:
+
+| Metric | Valor |
+|---|---:|
+| Symbolic equation miss rows auditados | `83` |
+| Accepted candidates | `1` |
+| Accepted ID | `99d6a3b5` |
+| Ganho novo alem de V409/V414 | `0` |
+| Conflicts | `0` |
+
+Artefatos:
+
+- Manifest: `artifacts/v420_symbolic_cryptarithm_aggressive_gate/20260515T_v420_symbolic_cryptarithm_aggressive/v329_symbolic_cryptarithm_manifest.json`.
+- Relatorio: `artifacts/v420_symbolic_cryptarithm_aggressive_gate/20260515T_v420_symbolic_cryptarithm_aggressive/V420_SYMBOLIC_CRYPTARITHM_AGGRESSIVE.md`.
+
+Decisao: nao abrir HF. O accepted `99d6a3b5` ja era conhecido em V409/V414. Variantes multi-operador nao sao promotaveis.
+
 ## Regras Permanentes
 
 - Nenhum HF sem CPU gate com sinal novo.
@@ -1041,7 +1065,7 @@ Decisao: o gargalo dominante restante e `symbolic_punctuation_structural_solver`
 
 ## Proxima Acao Unica
 
-V415 confirmou que nao existe candidato adapter-like local pronto para promocao, V416 confirmou que mudar o estilo da completion ainda nao transfere os ganhos do teacher para o adapter, V417 bloqueou novo GPU SFT por FinOps, V418 mostrou que aumentar caps da DSL V412 nao cria ganhos novos, e V419 mostrou que o residual dominante e `80` rows de pontuacao simbolica pura. Portanto o caminho ativo volta para CPU gate com classe de regra nova antes de qualquer novo gasto HF:
+V415 confirmou que nao existe candidato adapter-like local pronto para promocao, V416 confirmou que mudar o estilo da completion ainda nao transfere os ganhos do teacher para o adapter, V417 bloqueou novo GPU SFT por FinOps, V418 mostrou que aumentar caps da DSL V412 nao cria ganhos novos, V419 mostrou que o residual dominante e `80` rows de pontuacao simbolica pura, e V420 confirmou que ampliar cryptarithm V329 so reencontra `99d6a3b5`. Portanto o caminho ativo volta para CPU gate com classe de regra nova antes de qualquer novo gasto HF:
 
 1. criar V417 como auditoria de falha e bloqueio de receita:
    - consolidar V413/V416 como linhas de transferencia rejeitadas;
