@@ -78,6 +78,13 @@ Precisamos buscar subida no ranking ainda hoje, `2026-05-14`. A decisao V392 e s
 | V422 symbolic selection/substitution gate | `16` candidates | `0` gains | n/a | `5` conflitos; HF CPU completou e confirmou bloqueio; sem GPU |
 | V423 conditioned symbolic gate | `10` candidates | `0` gains | n/a | `1` conflito; HF CPU completou e confirmou bloqueio; sem GPU |
 | V424 public-train pattern mining | `0` candidates | `0` gains | n/a | HF CPU confirmou com `train.csv` publico HF; nenhuma assinatura aplicavel ao weak |
+| V425 local CSV archaeology | `0` adapter-like promotions | teto `56/155` | max `136/160` | `303` CSVs e `93` colunas varridas; sem ganho escondido |
+| V426/V427 structural/ASCII symbolic gates | `0` gains | `0` gains | n/a | `16` conflitos somados; classes encerradas |
+| V428 parser/raw-output rescue | `0` gains | `0` gains | n/a | `72` estrategias de resgate; sem promocao |
+| V429 edit-transducer symbolic gate | `0` gains | `0` gains | n/a | `1` mudanca candidata, `0` aceitas; sem GPU |
+| V430 rank-arithmetic symbolic gate | `0` gains | `0` gains | n/a | `1` candidato unico, `0` mudancas; sem GPU |
+| V431 signed/padded cryptarithm | `193/315` projection | `57/155` | `136/160` | `+1` conhecido (`99d6a3b5`), `0` ganho novo alem de V414 |
+| V432 V431 label-free tiebreak | `193/315` projection | `57/155` | `136/160` | `0` ganho novo; ambiguos requerem escolha por label, GPU bloqueada |
 
 Conclusao: `eval_loss` baixo nao e criterio de promocao. O criterio e ACC por familia no weak/full gate. A rota "resolver nos mesmos" finalmente tem ganho mensuravel (`+9` weak em CPU), mas esse ganho ainda e solver/verifier externo; para submit, ele precisa virar comportamento do adapter/package ou ser permitido explicitamente pelas regras de runtime.
 
@@ -1345,6 +1352,50 @@ Decisao: nao abrir GPU. A classe assinada/padded reencontra apenas o `99d6a3b5`,
 
 Validacao HF CPU: job `felipesp1983/6a06f81ee48bea4538b9e179` em `cpu-basic`, imagem `python:3.12`, completou em `33s` e reproduziu a decisao local: `projection=193/315`, `equation=57/155`, `bit=136/160`, `accepted_new_ids=[]`, `accepted_known_v414_ids=["99d6a3b5"]`, `hf_gpu_allowed=false`.
 
+### Step 6AC - V432 V431 label-free tiebreak gate
+
+Status: concluido localmente; sem ganho label-free novo.
+
+Objetivo: auditar os `6` rows nao-abstain do V431 e responder se algum candidato ambiguo pode ser promovido sem usar `answer`, `id`, oracle, ou cherry-pick manual. Esse gate e importante porque V431 gerou candidatos corretos dentro de listas ambiguas, mas submissao adapter-only nao tem acesso ao gabarito para escolher entre eles.
+
+Resultado:
+
+| Metric | Baseline V291/V290 | V431 projection | V432 label-free |
+|---|---:|---:|---:|
+| Total weak correct | `192/315` | `193/315` | `193/315` |
+| equation_transform | `56/155` | `57/155` | `57/155` |
+| bit_manipulation | `136/160` | `136/160` | `136/160` |
+| Truncated | `0` | `0` | `0` |
+
+Tiebreak:
+
+| Item | Valor |
+|---|---:|
+| V431 non-abstain rows auditados | `6` |
+| Label-free promotable new gains | `0` |
+| Rows bloqueados por multiplos candidatos | `4` |
+| Unique false positives bloqueados | `1` |
+| Promotable mas ja conhecido V414 | `1` |
+
+Linhas auditadas:
+
+| id | Status V431 | Decisao V432 |
+|---|---|---|
+| `99d6a3b5` | accepted | correto, mas ja conhecido por V414/V329; nao e sinal novo |
+| `02902eb3` | ambiguous | multiplas predicoes; sem desempate label-free |
+| `c43b5a13` | candidate | candidato unico falso positivo |
+| `6cc5dafb` | ambiguous | predicao correta aparece na lista, mas requer escolha por label |
+| `194695e8` | ambiguous | multiplas predicoes; sem desempate label-free |
+| `5501c054` | ambiguous | predicao correta aparece na lista, mas requer escolha por label |
+
+Artefatos:
+
+- Script: `artifacts/v432_v431_label_free_tiebreak_gate/build_v432_v431_label_free_tiebreak_gate.py`.
+- Manifest: `artifacts/v432_v431_label_free_tiebreak_gate/20260515T_v432_v431_label_free_tiebreak/v432_v431_label_free_tiebreak_manifest.json`.
+- Relatorio: `artifacts/v432_v431_label_free_tiebreak_gate/20260515T_v432_v431_label_free_tiebreak/V432_V431_LABEL_FREE_TIEBREAK_GATE.md`.
+
+Decisao: nao abrir GPU. O V432 prova que a V431 nao gera ganho submit-safe novo. O `+1` para `193/315` e diagnostico/teacher-known; nao justifica novo treino nem submit.
+
 ## Regras Permanentes
 
 - Nenhum HF sem CPU gate com sinal novo.
@@ -1386,6 +1437,7 @@ Validacao HF CPU: job `felipesp1983/6a06f81ee48bea4538b9e179` em `cpu-basic`, im
 | Transdutor edit-distance global | V429 auditou `155` equation rows, criou `1` mudanca candidata e teve `0` ganhos aceitos |
 | Rank arithmetic sobre alfabetos simbolicos | V430 auditou `155` equation rows, teve `1` candidato unico, `0` mudancas e `0` ganhos |
 | Signed/padded symbolic cryptarithm | V431 reencontrou `99d6a3b5` (`+1` vs baseline), mas `0` ganhos novos alem de V414/V329 |
+| Desempate manual dos ambiguos V431 | V432 mostrou `4` rows ambiguos sem tie-break label-free e `1` falso positivo; usar esses candidatos seria cherry-pick pelo gabarito |
 | H200 relaunch sem novo dado | V391 confirmou que trocar hardware nao muda ACC quando a hipotese de dados nao transfere |
 | HF training baseado apenas em `eval_loss` | historicamente loss caiu sem mover `equation_transform`; promocao e por ACC |
 | Web/API buscas genericas | so retornam ao plano se virarem regra, dataset ou gate verificavel |
@@ -1394,7 +1446,7 @@ Validacao HF CPU: job `felipesp1983/6a06f81ee48bea4538b9e179` em `cpu-basic`, im
 
 ## Proxima Acao Unica
 
-V415 confirmou que nao existe candidato adapter-like local pronto para promocao, V416 confirmou que mudar o estilo da completion ainda nao transfere os ganhos do teacher para o adapter, V417 bloqueou novo GPU SFT por FinOps, V418 mostrou que aumentar caps da DSL V412 nao cria ganhos novos, V419 mostrou que o residual dominante e `80` rows de pontuacao simbolica pura, V420 confirmou que ampliar cryptarithm V329 so reencontra `99d6a3b5`, V421 bloqueou a hipotese same-operator por `0` ganhos e `3` conflitos, V422 bloqueou selection/substitution simples por `0` ganhos e `5` conflitos, V423 bloqueou invariantes condicionais simples por `0` ganhos e `1` conflito, V424 mostrou que match de assinatura/template simples do train publico nao aplica ao weak, V425 fechou a hipotese de ganho escondido em CSV antigo, V426/V427 fecharam posicao+constante e shift ASCII/alfabeto, V428 fechou parser/raw-output rescue, V429 fechou transdutor edit-distance global, V430 fechou rank-arithmetic simbolico e V431 fechou signed/padded cryptarithm sem ganho novo. Portanto o caminho ativo continua em CPU, com uma unica frente agressiva responsavel:
+V415 confirmou que nao existe candidato adapter-like local pronto para promocao, V416 confirmou que mudar o estilo da completion ainda nao transfere os ganhos do teacher para o adapter, V417 bloqueou novo GPU SFT por FinOps, V418 mostrou que aumentar caps da DSL V412 nao cria ganhos novos, V419 mostrou que o residual dominante e `80` rows de pontuacao simbolica pura, V420 confirmou que ampliar cryptarithm V329 so reencontra `99d6a3b5`, V421 bloqueou a hipotese same-operator por `0` ganhos e `3` conflitos, V422 bloqueou selection/substitution simples por `0` ganhos e `5` conflitos, V423 bloqueou invariantes condicionais simples por `0` ganhos e `1` conflito, V424 mostrou que match de assinatura/template simples do train publico nao aplica ao weak, V425 fechou a hipotese de ganho escondido em CSV antigo, V426/V427 fecharam posicao+constante e shift ASCII/alfabeto, V428 fechou parser/raw-output rescue, V429 fechou transdutor edit-distance global, V430 fechou rank-arithmetic simbolico, V431 fechou signed/padded cryptarithm sem ganho novo e V432 fechou o desempate label-free dos ambiguos V431. O V336B tambem bloqueia solver/verifier direto como pacote, pois o submit valido e adapter-only. Portanto o caminho ativo continua em CPU, com uma unica frente agressiva responsavel:
 
 1. a proxima classe formal so deve ser criada se for materialmente diferente das DSLs ja rejeitadas:
    - exemplos restantes: CEGIS/SAT com restricoes cross-example mais ricas, busca por gramatica simbolica com prova de unicidade, ou mineracao de fonte externa que produza regra verificavel nova;
@@ -1403,6 +1455,6 @@ V415 confirmou que nao existe candidato adapter-like local pronto para promocao,
    - `total > 192`, `equation > 56`, `bit >= 136`, `truncated=0`;
    - preferencialmente `equation >= 60` para justificar qualquer pacote/submit;
    - se houver ganho CPU teacher mas nao adapter/package, registrar como nao submit-safe.
-3. se nao houver sinal CPU novo, nao abrir GPU. O proximo passo sera outra classe formal ainda nao coberta, varredura de fonte externa ainda nao integrada, ou mecanismo permitido de package/inferencia. Nao repetir SFT, prompt sweep, soup, H200 relaunch, ou qualquer decisao baseada em `eval_loss`.
+3. se nao houver sinal CPU novo, nao abrir GPU. O proximo passo sera outra classe formal ainda nao coberta, varredura de fonte externa ainda nao integrada, ou mecanismo permitido de package/inferencia que respeite V336B. Nao repetir SFT, prompt sweep, soup, H200 relaunch, ou qualquer decisao baseada em `eval_loss`.
 
 Nao rodar broad SFT, prompt sweep ou job guiado por `eval_loss`. A decisao e por ACC, truncation e comparativo contra V291.

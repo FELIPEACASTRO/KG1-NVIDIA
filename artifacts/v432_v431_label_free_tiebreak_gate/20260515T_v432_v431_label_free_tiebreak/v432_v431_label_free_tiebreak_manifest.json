@@ -1,0 +1,38 @@
+{
+  "audited_rows": 6,
+  "baseline_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v342_acc_first_diagnostic\\v290_checkpoint6_baseline_predictions.csv",
+  "block_reason_counts": {
+    "multiple_predictions_no_label_free_tiebreak": 4,
+    "promotable_but_already_known_v414_not_new_signal": 1,
+    "unique_candidate_false_positive": 1
+  },
+  "blocked_false_unique_candidates": 1,
+  "blocked_multiple_candidates": 4,
+  "decision": {
+    "decision": "v431_tiebreak_no_new_submit_safe_signal",
+    "next_action": "Do not launch GPU from V431. Continue only with a materially new CPU-gated solver class or adapter-direct signal.",
+    "reason": "V431 ambiguous rows either have multiple predictions without a label-free tie-break or a unique false positive; the only correct promoted row is already known by V414."
+  },
+  "generated_at_utc": "2026-05-15T11:36:42.978311+00:00",
+  "hf_gpu_allowed": false,
+  "label_free_new_gains": 0,
+  "schema_version": "kg1_v432_v431_label_free_tiebreak_gate_v1",
+  "v431_audit_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v431_signed_cryptarithm_gate\\20260515T_v431_signed_cryptarithm\\v431_signed_cryptarithm_audit.csv",
+  "v431_manifest_json": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v431_signed_cryptarithm_gate\\20260515T_v431_signed_cryptarithm\\v431_signed_cryptarithm_manifest.json",
+  "v431_projection": {
+    "bit_delta": 0,
+    "bit_manipulation_correct": 136,
+    "equation_delta": 1,
+    "equation_transform_correct": 57,
+    "total_correct": 193,
+    "total_delta": 1,
+    "truncated": 0,
+    "truncated_delta": 0
+  },
+  "v432_projection": {
+    "bit_manipulation_correct": 136,
+    "equation_transform_correct": 57,
+    "total_correct": 193,
+    "truncated": 0
+  }
+}

@@ -1,0 +1,7 @@
+id,status_v431,answer,baseline_prediction,baseline_correct,candidate_predictions,candidate_count,correct_candidate_present,query_expr,query_operator,query_operator_seen_in_examples,example_operator_counts,label_free_policy,label_free_prediction,label_free_correct,label_free_promotable,block_reason
+99d6a3b5,accepted,?()<,(<)),False,?()<,1,True,(<%)),%,True,"{""%"": 4}",unique_candidate_only,?()<,True,True,promotable_but_already_known_v414_not_new_signal
+02902eb3,ambiguous,>/,!!$>,False,-]|/]&}|>}|],4,False,!!+$>,+,False,"{""*"": 2, ""-"": 1}",blocked_multiple_candidates,,False,False,multiple_predictions_no_label_free_tiebreak
+c43b5a13,candidate,)|,$):$,False,/<,1,False,$)+:$,+,True,"{""+"": 2, ""-"": 1}",unique_candidate_only,/<,False,False,unique_candidate_false_positive
+6cc5dafb,ambiguous,)(,^&>),False,"""#>#|%%)(|%%>>|%)(|%>>|)(|-%%>>|-%>>",8,True,^&!>),!,False,"{""-"": 2, ""\\"": 2}",blocked_multiple_candidates,,False,False,multiple_predictions_no_label_free_tiebreak
+194695e8,ambiguous,%,!\{<,False,%%{<|-%%{<|-{<|{<,4,False,!\-{<,-,True,"{""*"": 2, ""-"": 1}",blocked_multiple_candidates,,False,False,multiple_predictions_no_label_free_tiebreak
+5501c054,ambiguous,[#>#,!##^,False,"&&[|&[|-&&[|-&[|-[|[|[#>#|^)""",8,True,!#$#^,$,False,"{""{"": 2, ""}"": 3}",blocked_multiple_candidates,,False,False,multiple_predictions_no_label_free_tiebreak
