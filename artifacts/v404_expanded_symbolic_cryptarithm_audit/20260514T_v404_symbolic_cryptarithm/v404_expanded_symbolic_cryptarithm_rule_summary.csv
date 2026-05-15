@@ -1,0 +1,7 @@
+rule_class,rows,candidate_rows,verified_candidates,incorrect_candidates,promotable_after_class_gate
+symbolic_cryptarithm_v404_mul,1,1,1,0,True
+symbolic_cryptarithm_v404_ambiguous,78,0,0,0,False
+symbolic_cryptarithm_v404_parse_gate,1,0,0,0,False
+symbolic_cryptarithm_v404_abs_diff,1,1,0,1,False
+symbolic_cryptarithm_v404_concat_ba,1,1,0,1,False
+symbolic_cryptarithm_v404_sub_ba,1,1,0,1,False

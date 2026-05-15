@@ -1,0 +1,45 @@
+{
+  "accepted_gain_count": 9,
+  "baseline_score": {
+    "families": {
+      "bit_manipulation": {
+        "correct": 136,
+        "rows": 160
+      },
+      "equation_transform": {
+        "correct": 56,
+        "rows": 155
+      }
+    },
+    "total": {
+      "correct": 192,
+      "rows": 315
+    }
+  },
+  "conflict_count": 0,
+  "decision": "cpu_solver_projection_only_not_adapter_submit_safe",
+  "generated_at_utc": "2026-05-15T00:15:49.908403+00:00",
+  "inputs": {
+    "baseline_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v342_acc_first_diagnostic\\v290_checkpoint6_baseline_predictions.csv",
+    "v324_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v394_equation_row_level_inventory\\20260514T_cpu_gate\\v324_on_v290_checkpoint6\\v324_equation_expanded_solver_accepted_candidates.csv",
+    "v329_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v329_symbolic_cryptarithm_gate\\20260513T_cpu_gate_r2\\v329_symbolic_cryptarithm_accepted_candidates.csv",
+    "v403_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v403_formal_solver_abstain_audit\\20260514T_v403_solver_abstain\\v403_accepted_formal_solver_candidates.csv"
+  },
+  "integrated_score": {
+    "families": {
+      "bit_manipulation": {
+        "correct": 138,
+        "rows": 160
+      },
+      "equation_transform": {
+        "correct": 63,
+        "rows": 155
+      }
+    },
+    "total": {
+      "correct": 201,
+      "rows": 315
+    }
+  },
+  "schema_version": "kg1_v405_integrated_solver_projection_v1"
+}

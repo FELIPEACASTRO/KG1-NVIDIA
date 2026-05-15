@@ -1,0 +1,63 @@
+{
+  "accepted_candidate_count": 1,
+  "audited_symbolic_misses": 83,
+  "decision": "new_symbolic_candidates_found",
+  "generated_at_utc": "2026-05-15T00:16:39.429302+00:00",
+  "incorrect_candidate_count": 3,
+  "input_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v342_acc_first_diagnostic\\v290_checkpoint6_baseline_predictions.csv",
+  "policy_counts": {
+    "abstain": 79,
+    "candidate": 4
+  },
+  "rule_summary": [
+    {
+      "candidate_rows": 1,
+      "incorrect_candidates": 0,
+      "promotable_after_class_gate": true,
+      "rows": 1,
+      "rule_class": "symbolic_cryptarithm_v404_mul",
+      "verified_candidates": 1
+    },
+    {
+      "candidate_rows": 0,
+      "incorrect_candidates": 0,
+      "promotable_after_class_gate": false,
+      "rows": 78,
+      "rule_class": "symbolic_cryptarithm_v404_ambiguous",
+      "verified_candidates": 0
+    },
+    {
+      "candidate_rows": 0,
+      "incorrect_candidates": 0,
+      "promotable_after_class_gate": false,
+      "rows": 1,
+      "rule_class": "symbolic_cryptarithm_v404_parse_gate",
+      "verified_candidates": 0
+    },
+    {
+      "candidate_rows": 1,
+      "incorrect_candidates": 1,
+      "promotable_after_class_gate": false,
+      "rows": 1,
+      "rule_class": "symbolic_cryptarithm_v404_abs_diff",
+      "verified_candidates": 0
+    },
+    {
+      "candidate_rows": 1,
+      "incorrect_candidates": 1,
+      "promotable_after_class_gate": false,
+      "rows": 1,
+      "rule_class": "symbolic_cryptarithm_v404_concat_ba",
+      "verified_candidates": 0
+    },
+    {
+      "candidate_rows": 1,
+      "incorrect_candidates": 1,
+      "promotable_after_class_gate": false,
+      "rows": 1,
+      "rule_class": "symbolic_cryptarithm_v404_sub_ba",
+      "verified_candidates": 0
+    }
+  ],
+  "schema_version": "kg1_v404_expanded_symbolic_cryptarithm_audit_v1"
+}

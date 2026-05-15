@@ -1,0 +1,10 @@
+id,family,old_prediction,new_prediction,answer,old_correct,new_correct,accepted,sources,rule_classes
+274def88,equation_transform,-92,92,92,False,True,True,v324_equation_numeric,v274_guarded_numeric_minus_signed_opposite_sign_guarded
+4ada9150,bit_manipulation,01111111,01111011,01111011,False,True,True,v403_bit_global_exact,
+4c327b55,bit_manipulation,11011110,11011100,11011100,False,True,True,v403_bit_global_exact,
+528ec0d8,equation_transform,39,-39,-39,False,True,True,v324_equation_numeric,v274_guarded_numeric_minus_direct_negative_restore_sign
+7688e06e,equation_transform,55,-55,-55,False,True,True,v324_equation_numeric,v274_guarded_numeric_minus_signed_opposite_sign_guarded
+99d6a3b5,equation_transform,(<)),?()<,?()<,False,True,True,v329_symbolic_cryptarithm,symbolic_cryptarithm_single_operator_digits_mul
+c5b058d6,equation_transform,35,134,134,False,True,True,v324_equation_numeric,v274_guarded_numeric_add_direct_over_model_add_variant
+d1bd7478,equation_transform,3,30,30,False,True,True,v324_equation_numeric,v274_guarded_numeric_colon_absdiff_restore_trailing_zero
+fb623471,equation_transform,21,-21,-21,False,True,True,v324_equation_numeric,v274_guarded_numeric_minus_direct_negative_restore_sign
