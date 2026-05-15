@@ -60,6 +60,7 @@ Precisamos buscar subida no ranking ainda hoje, `2026-05-14`. A decisao V392 e s
 | V400 algorithmic prompt sweep | melhor `175/315` | `40/155` | `135/160` | rejeitado; prompt algoritmico explicito causou truncation e colapso de ACC |
 | V401 baseline raw-output audit | n/a | `0` boxed recoverable | `0` boxed recoverable | sem ganho; misses nao sao erro de extrator simples |
 | V402 local candidate scoreboard | weak max `192/315`; full max `823/947` | `56/155` | `136/160` weak | sem candidato local acima do baseline V291/V290 |
+| V403 formal solver abstain audit | CPU projection `+2` bit | `0` ganho equation v2 | `136 -> 138` se postprocess externo fosse permitido | sinal solver limpo, nao submit-safe; usar so como fixture/trace |
 
 Conclusao: `eval_loss` baixo nao e criterio de promocao. O criterio e ACC por familia no weak/full gate.
 
@@ -102,6 +103,8 @@ Decisao V400 em `2026-05-14`: o sweep H200 sem treino testou dois prompts algori
 Decisao V401 em `2026-05-14`: auditoria CPU nos `123` misses do baseline V290 checkpoint-6 verificou se a resposta correta ja estava em `raw_output` mas perdida pela extracao. Resultado: `0` respostas corretas em simple `\boxed{}` nos misses de `equation_transform` e `0` em `bit_manipulation`. Existem ocorrencias brutas (`19` equation, `4` bit), mas spot-check mostra caracteres/numeros em raciocinio ou exemplos intermediarios, nao resposta final recuperavel. Conclusao: nao ha ganho submit-safe por trocar extrator; o gargalo e geracao do adapter. Artefato: `artifacts/v401_baseline_raw_output_audit/20260514T_v401_raw_output/V401_BASELINE_RAW_OUTPUT_AUDIT.md`.
 
 Decisao V402 em `2026-05-14`: varredura CPU dos `batch_candidate_summary.json` locais nao encontrou candidato historico acima do baseline. Melhor weak local: empate `192/315`, `equation=56`, `bit=136`, `truncated=0` (`v321_hybrid_attn_lmhead_checkpoint_2_v221_contract` e `v290_checkpoint_6_v221_contract`). Melhor full-like local: V291 `823/947`, `truncated=1`. Conclusao: nao ha package local esquecido que suba ranking hoje sem novo sinal. Artefato: `artifacts/v402_local_candidate_scoreboard/20260514T_v402_scoreboard/V402_LOCAL_CANDIDATE_SCOREBOARD.md`.
+
+Decisao V403 em `2026-05-14`: a rota "resolver nos mesmos" foi formalizada como solver-first com abstain. O solver bit global exato encontrou `112` rows aceitas no weak, com `2` ganhos e `0` perdas quando limitado a regras byte-globais exatas. Ganhos: `4ada9150` (`01111111 -> 01111011`, `OR(ROL2, SHL4)`) e `4c327b55` (`11011110 -> 11011100`, `XOR(SHL1, SHR4)`). O mesmo solver, se usar `CONSENSUS`/`UNSOLVED`, gera `14` perdas e portanto fica proibido. O parser antigo `equation_solver_v2` nao produziu ganhos independentes em equation. Conclusao: SyGuS/CEGIS/solver com abstain e a direcao correta, mas V403 ainda e sinal CPU/postprocessor, nao ganho adapter-only submitavel. Artefato: `artifacts/v403_formal_solver_abstain_audit/20260514T_v403_solver_abstain/V403_FORMAL_SOLVER_ABSTAIN_AUDIT.md`.
 
 ## Google Drive Artifact Audit 2026-05-14
 

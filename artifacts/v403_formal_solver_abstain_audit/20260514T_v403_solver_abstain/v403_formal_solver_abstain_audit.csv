@@ -1,0 +1,316 @@
+id,family,answer,baseline_prediction,baseline_correct,candidate_prediction,candidate_correct,policy,accepted,delta,solved_bits,proof
+e518256e,equation_transform,84,84,True,,False,reject_equation_v2_abstain,False,0,,Could not solve
+09d5ee68,equation_transform,!?'!,|:>>,False,,False,reject_equation_v2_abstain,False,0,,Could not solve
+7e5b8c12,bit_manipulation,10110000,10110000,True,10110000,True,accept_exact_global,True,0,8,Global unary: output = ROL6(input)
+00457d26,equation_transform,@&,\boxed[[!'},False,,False,reject_equation_v2_abstain,False,0,,Could not solve
+518deb39,equation_transform,$,{}>{,False,,False,reject_equation_v2_abstain,False,0,,Could not solve
+78616706,bit_manipulation,00000111,00000111,True,00000111,True,reject_consensus,False,0,8,Per-bit analysis for 00111001:
+82109e34,equation_transform,-@>,'^^^',False,,False,reject_equation_v2_abstain,False,0,,Could not solve
+5e67b1a1,equation_transform,63,63,True,,False,reject_equation_v2_abstain,False,0,,Could not solve
+c7077b21,bit_manipulation,00010110,00010110,True,00010110,True,accept_exact_global,True,0,8,"Global binary: output = AND_NOT(ROL4(input), SHL5(input))"
+fb5a7b9e,bit_manipulation,11111010,11111010,True,11111010,True,accept_exact_global,True,0,8,"Global binary: output = XOR(SHL5(input), SHR1(input))"
+e1728524,equation_transform,1089,0,False,,False,reject_equation_v2_abstain,False,0,,Could not solve
+839e7350,bit_manipulation,00111011,00111011,True,00111011,True,accept_exact_global,True,0,8,"Global binary: output = XNOR(SHL2(input), SHL5(input))"
+a365e304,bit_manipulation,11011011,11011011,True,11011011,True,accept_exact_global,True,0,8,"Global binary: output = XOR(ROL5(input), SHR5(input))"
+e3bf0c2c,equation_transform,"""`",@`',False,,False,reject_equation_v2_abstain,False,0,,Could not solve
+fdbdf50c,equation_transform,"-\""",|?|,False,,False,reject_equation_v2_abstain,False,0,,Could not solve
+f3971b9a,bit_manipulation,00011001,00011001,True,00011001,True,accept_exact_global,True,0,8,"Global binary: output = AND_NOT(ROL2(input), SHL4(input))"
+ab71eaa0,bit_manipulation,00010010,00010010,True,00010010,True,accept_exact_global,True,0,8,"Global binary: output = XOR(SHL1(input), SHR3(input))"
+47c1d8f5,equation_transform,]%],/`%`,False,,False,reject_equation_v2_abstain,False,0,,Could not solve
+bfee75d5,bit_manipulation,01000010,01000010,True,01000010,True,accept_exact_global,True,0,8,Global unary: output = ROL6(input)
+f9a33aa1,equation_transform,/((`,@($/,False,,False,reject_equation_v2_abstain,False,0,,Could not solve
+1abaffca,bit_manipulation,01000000,01011000,False,00000000,False,reject_consensus,False,0,7,Per-bit analysis for 00100000:
+9f2fae58,equation_transform,7272,7272,True,,False,reject_equation_v2_abstain,False,0,,Could not solve
+f9799a68,equation_transform,&:/?,:^?\,False,,False,reject_equation_v2_abstain,False,0,,Could not solve
+c24074a8,equation_transform,&/,]]]%,False,,False,reject_equation_v2_abstain,False,0,,Could not solve
+bc7618a7,bit_manipulation,00001100,00001100,True,00001100,True,accept_exact_global,True,0,8,"Global binary: output = OR(SHL5(input), SHR4(input))"
+893ffb06,equation_transform,-@',@``:,False,,False,reject_equation_v2_abstain,False,0,,Could not solve
+cf4c04c0,equation_transform,-[,@|#|,False,,False,reject_equation_v2_abstain,False,0,,Could not solve
+8e411cc7,equation_transform,]]],$&&,False,,False,reject_equation_v2_abstain,False,0,,Could not solve
+892d73b5,bit_manipulation,00010101,00010101,True,00010101,True,accept_exact_global,True,0,8,Global unary: output = ROL5(input)
+41e6cbfc,equation_transform,9318,9318,True,,False,reject_equation_v2_abstain,False,0,,Could not solve
+dea42835,equation_transform,['[/,['[/,True,,False,reject_equation_v2_abstain,False,0,,Could not solve
+48c25e0e,equation_transform,53,32,False,,False,reject_equation_v2_abstain,False,0,,Could not solve
+e6d2a064,bit_manipulation,11100011,11100010,False,11100010,False,reject_non_global_per_bit,False,0,8,Per-bit analysis for 01100100:
+a1d2bb0c,bit_manipulation,00100010,00100010,True,00100010,True,accept_exact_global,True,0,8,"Global binary: output = XOR(SHL1(input), SHR5(input))"
+4e4fb429,bit_manipulation,10111110,10111110,True,10111110,True,accept_exact_global,True,0,8,"Global binary: output = OR(ROL4(input), SHL2(input))"
+7ef4d5d6,equation_transform,>42,>42,True,,False,reject_equation_v2_abstain,False,0,,Could not solve
+3ee36e0a,equation_transform,-51,-51,True,,False,reject_equation_v2_abstain,False,0,,Could not solve
+39c237c7,equation_transform,{]``,{]``,True,,False,reject_equation_v2_abstain,False,0,,Could not solve
+963e85bb,equation_transform,76,76,True,,False,reject_equation_v2_abstain,False,0,,Could not solve
+a98d4d53,equation_transform,-),!$$[,False,,False,reject_equation_v2_abstain,False,0,,Could not solve
+0e70c867,bit_manipulation,01000000,01001100,False,00100100,False,reject_consensus,False,0,8,Per-bit analysis for 10010110:
+59733f94,equation_transform,/,$/>/,False,,False,reject_equation_v2_abstain,False,0,,Could not solve
+b1bc3731,equation_transform,63,63,True,,False,reject_equation_v2_abstain,False,0,,Could not solve
+54b895c1,bit_manipulation,10111011,10111011,True,10011001,False,reject_consensus,False,0,7,Per-bit analysis for 00000101:
+ed24e7af,bit_manipulation,00001001,00001001,True,00001001,True,accept_exact_global,True,0,8,"Global binary: output = OR(SHL7(input), SHR3(input))"
+3cd80c64,bit_manipulation,01100100,01100100,True,01100100,True,accept_exact_global,True,0,8,Global unary: output = SHR1(input)
+a1523a63,equation_transform,87,87,True,,False,reject_equation_v2_abstain,False,0,,Could not solve
+f2b23d11,bit_manipulation,10000000,10000000,True,10000000,True,accept_exact_global,True,0,8,"Global binary: output = AND(ROL3(input), SHL5(input))"
+5cbe919f,bit_manipulation,00000000,00000000,True,00000000,True,accept_exact_global,True,0,8,"Global binary: output = AND(ROL6(input), SHR4(input))"
+3383d4ec,equation_transform,66,66,True,,False,reject_equation_v2_abstain,False,0,,Could not solve
+9dae880f,equation_transform,))[,:<`\,False,,False,reject_equation_v2_abstain,False,0,,Could not solve
+b43d9cd5,bit_manipulation,11100100,11100100,True,11100100,True,accept_exact_global,True,0,8,Global unary: output = ROL2(input)
+64890e18,bit_manipulation,00001100,00001100,True,00001100,True,accept_exact_global,True,0,8,"Global binary: output = XOR(SHL2(input), SHR4(input))"
+d6187157,bit_manipulation,01001000,01001000,True,00001000,False,reject_consensus,False,0,8,Per-bit analysis for 11101100:
+de91def4,bit_manipulation,10000111,10000111,True,10000111,True,accept_exact_global,True,0,8,"Global binary: output = OR(SHL7(input), SHR5(input))"
+2af7134e,equation_transform,20,20,True,,False,reject_equation_v2_abstain,False,0,,Could not solve
+ae6be599,equation_transform,#`,$?]$,False,,False,reject_equation_v2_abstain,False,0,,Could not solve
+b26d8818,equation_transform,5983,5983,True,,False,reject_equation_v2_abstain,False,0,,Could not solve
+8494aad3,equation_transform,"""`#&","])<""",False,,False,reject_equation_v2_abstain,False,0,,Could not solve
+8df3daad,equation_transform,34,34,True,,False,reject_equation_v2_abstain,False,0,,Could not solve
+791056ce,equation_transform,4922,4922,True,,False,reject_equation_v2_abstain,False,0,,Could not solve
+29e458d6,bit_manipulation,00010010,00010010,True,00010010,True,accept_exact_global,True,0,8,"Global binary: output = AND_NOT(ROL7(input), SHL1(input))"
+3c12aeb9,equation_transform,321,321,True,,False,reject_equation_v2_abstain,False,0,,Could not solve
+69aa57b3,equation_transform,4472,4472,True,,False,reject_equation_v2_abstain,False,0,,Could not solve
+e3890bf7,equation_transform,{@%],(^@{,False,,False,reject_equation_v2_abstain,False,0,,Could not solve
+d204b9cc,equation_transform,231,231,True,,False,reject_equation_v2_abstain,False,0,,Could not solve
+7a79ac09,bit_manipulation,11111111,11111111,True,11111111,True,accept_exact_global,True,0,8,"Global binary: output = OR(ROL3(input), SHR1(input))"
+d29e19a4,equation_transform,?|,|''>,False,,False,reject_equation_v2_abstain,False,0,,Could not solve
+b06625c4,equation_transform,^&/,"""$ $]""",False,,False,reject_equation_v2_abstain,False,0,,Could not solve
+84030b0b,equation_transform,24,24,True,,False,reject_equation_v2_abstain,False,0,,Could not solve
+3a67aa26,bit_manipulation,00101110,00101110,True,00101110,True,reject_consensus,False,0,8,Per-bit analysis for 10111010:
+710cf035,bit_manipulation,10000011,10000011,True,10000011,True,accept_exact_global,True,0,8,"Global binary: output = XOR(SHL1(input), SHR6(input))"
+52be4988,equation_transform,'!,&&&`,False,,False,reject_equation_v2_abstain,False,0,,Could not solve
+b8722d19,bit_manipulation,00100100,11110100,False,11000000,False,reject_consensus,False,0,7,Per-bit analysis for 10000100:
+99d6a3b5,equation_transform,?()<,(<)),False,,False,reject_equation_v2_abstain,False,0,,Could not solve
+2d3547af,equation_transform,))^),\${,False,,False,reject_equation_v2_abstain,False,0,,Could not solve
+8c9fcc6b,bit_manipulation,11110111,11110111,True,11110111,True,accept_exact_global,True,0,8,"Global binary: output = XOR(SHL1(input), SHR2(input))"
+28b0ff48,equation_transform,'],|^^^,False,,False,reject_equation_v2_abstain,False,0,,Could not solve
+3fa49035,equation_transform,696,696,True,,False,reject_equation_v2_abstain,False,0,,Could not solve
+61557701,equation_transform,|&,'{),False,,False,reject_equation_v2_abstain,False,0,,Could not solve
+8c0f9291,bit_manipulation,00001111,00001111,True,00000111,False,reject_consensus,False,0,7,Per-bit analysis for 11100011:
+d6e6f8b5,bit_manipulation,11100001,11100001,True,11100001,True,accept_exact_global,True,0,8,"Global binary: output = OR(SHL5(input), SHR7(input))"
+3a90fdf6,bit_manipulation,10100000,10100000,True,10100000,True,accept_exact_global,True,0,8,"Global binary: output = AND(ROL2(input), SHL5(input))"
+56343b77,equation_transform,711,711,True,,False,reject_equation_v2_abstain,False,0,,Could not solve
+08df5363,bit_manipulation,01011100,01011100,True,01011100,True,accept_exact_global,True,0,8,"Global binary: output = AND_NOT(ROL5(input), SHL7(input))"
+d50746e7,bit_manipulation,01000010,01000010,True,01000010,True,reject_non_global_per_bit,False,0,8,Per-bit analysis for 00101100:
+2facfaa4,bit_manipulation,00111110,00111110,True,00111110,True,accept_exact_global,True,0,8,"Global binary: output = XOR(SHL1(input), SHR6(input))"
+7ac90433,equation_transform,-23,-23,True,,False,reject_equation_v2_abstain,False,0,,Could not solve
+8abcff0f,bit_manipulation,11110111,11110111,True,11110111,True,accept_exact_global,True,0,8,"Global binary: output = OR(ROL4(input), SHR5(input))"
+02902eb3,equation_transform,>/,!!$>,False,,False,reject_equation_v2_abstain,False,0,,Could not solve
+ddc5aefe,bit_manipulation,00000001,00000001,True,00000001,True,reject_non_global_per_bit,False,0,8,Per-bit analysis for 10000011:
+0d90736f,equation_transform,:,::)[,False,,False,reject_equation_v2_abstain,False,0,,Could not solve
+294453b5,equation_transform,&(,##!),False,,False,reject_equation_v2_abstain,False,0,,Could not solve
+75ecd32c,bit_manipulation,11100011,11100011,True,11100011,True,accept_exact_global,True,0,8,Global unary: output = ROL6(input)
+12e0ac8c,bit_manipulation,10101001,10101001,True,10101000,False,reject_unsolved,False,0,7,Per-bit analysis for 10011100:
+386b6d03,equation_transform,671,18,False,,False,reject_equation_v2_abstain,False,0,,Could not solve
+2ead53dc,bit_manipulation,00000101,00000101,True,00000101,True,accept_exact_global,True,0,8,Global unary: output = SHR4(input)
+57f6878e,equation_transform,%{{,|@(!,False,,False,reject_equation_v2_abstain,False,0,,Could not solve
+05ca617c,bit_manipulation,11011011,01011011,False,01011011,False,reject_consensus,False,0,8,Per-bit analysis for 10010010:
+6890870d,bit_manipulation,01110000,01110000,True,01110000,True,accept_exact_global,True,0,8,Global unary: output = ROL1(input)
+1c566511,bit_manipulation,01010010,01010010,True,01010010,True,accept_exact_global,True,0,8,"Global binary: output = XOR(ROL7(input), SHL6(input))"
+bc83b0a1,equation_transform,(/&{,(/&{,True,,False,reject_equation_v2_abstain,False,0,,Could not solve
+a361a1b7,equation_transform,:46,46,False,,False,reject_equation_v2_abstain,False,0,,Could not solve
+d911e8e1,equation_transform,:\:,@}<',False,,False,reject_equation_v2_abstain,False,0,,Could not solve
+4353cd0b,bit_manipulation,00100001,00100001,True,00100001,True,accept_exact_global,True,0,8,"Global binary: output = XOR(SHL2(input), SHR3(input))"
+7688e06e,equation_transform,-55,55,False,,False,reject_equation_v2_abstain,False,0,,Could not solve
+30ba0cf4,bit_manipulation,01101101,01101101,True,01101101,True,accept_exact_global,True,0,8,"Global binary: output = OR(ROL6(input), SHR7(input))"
+dbd0e3c9,equation_transform,5631,5631,True,,False,reject_equation_v2_abstain,False,0,,Could not solve
+8fbd2477,bit_manipulation,01011010,01011010,True,01011010,True,accept_exact_global,True,0,8,"Global binary: output = XOR(ROL1(input), SHL3(input))"
+ba61b815,bit_manipulation,00001101,00001101,True,00001101,True,accept_exact_global,True,0,8,"Global binary: output = OR(SHL7(input), SHR4(input))"
+2e2d60b2,equation_transform,07,07,True,,False,reject_equation_v2_abstain,False,0,,Could not solve
+5f9f0ed7,equation_transform,}/!},|!@[,False,,False,reject_equation_v2_abstain,False,0,,Could not solve
+333d93ec,equation_transform,7,7,True,,False,reject_equation_v2_abstain,False,0,,Could not solve
+74fff108,equation_transform,49,49,True,,False,reject_equation_v2_abstain,False,0,,Could not solve
+c43b5a13,equation_transform,)|,$):$,False,,False,reject_equation_v2_abstain,False,0,,Could not solve
+b0206bb7,equation_transform,]$!,$){,False,,False,reject_equation_v2_abstain,False,0,,Could not solve
+638f93ca,equation_transform,@,$]<$,False,,False,reject_equation_v2_abstain,False,0,,Could not solve
+5b9964c7,bit_manipulation,00011011,00011011,True,00011011,True,accept_exact_global,True,0,8,"Global binary: output = OR(ROL5(input), SHR2(input))"
+a6f7139f,bit_manipulation,11000000,11000000,True,11000000,True,accept_exact_global,True,0,8,"Global binary: output = OR(SHL6(input), SHR4(input))"
+b2fb65cf,bit_manipulation,11000011,11000011,True,11000011,True,accept_exact_global,True,0,8,"Global binary: output = XNOR(SHL2(input), SHL6(input))"
+4bfd095a,equation_transform,{<<<,@/[@,False,,False,reject_equation_v2_abstain,False,0,,Could not solve
+7a422e17,equation_transform,%'!,"#`""",False,,False,reject_equation_v2_abstain,False,0,,Could not solve
+7192535b,bit_manipulation,00000010,00001010,False,00001010,False,reject_consensus,False,0,8,Per-bit analysis for 00100101:
+5b2523e6,equation_transform,&&,><\$,False,,False,reject_equation_v2_abstain,False,0,,Could not solve
+dbb611da,bit_manipulation,00000001,00000001,True,00000001,True,reject_consensus,False,0,8,Per-bit analysis for 10100000:
+0fe53bac,equation_transform,"(""",^?(|,False,,False,reject_equation_v2_abstain,False,0,,Could not solve
+07ceed47,bit_manipulation,10000101,10000101,True,10000101,True,accept_exact_global,True,0,8,"Global binary: output = OR(SHL7(input), SHR3(input))"
+274def88,equation_transform,92,-92,False,,False,reject_equation_v2_abstain,False,0,,Could not solve
+7aa4fdf0,bit_manipulation,00000001,00000001,True,00000001,True,accept_exact_global,True,0,8,"Global binary: output = AND_NOT(ROL4(input), SHL3(input))"
+03a3437f,equation_transform,-!,'}>/,False,,False,reject_equation_v2_abstain,False,0,,Could not solve
+f2014638,bit_manipulation,10011010,10011010,True,10011010,True,accept_exact_global,True,0,8,Global unary: output = ROL6(input)
+a8ea0e29,bit_manipulation,00000000,00000000,True,00000000,True,accept_exact_global,True,0,8,Global unary: output = SHL7(input)
+30ac5c8e,equation_transform,)#?,@\}?,False,,False,reject_equation_v2_abstain,False,0,,Could not solve
+3cfc5f9c,bit_manipulation,01110111,01110111,True,01110111,True,accept_exact_global,True,0,8,"Global binary: output = XNOR(SHL3(input), SHL4(input))"
+08d8d7e1,equation_transform,88,88,True,,False,reject_equation_v2_abstain,False,0,,Could not solve
+ff121f08,equation_transform,#<,!%<<,False,,False,reject_equation_v2_abstain,False,0,,Could not solve
+114a7439,bit_manipulation,01110001,01110001,True,01110001,True,accept_exact_global,True,0,8,"Global binary: output = AND_NOT(ROL3(input), SHL6(input))"
+343095d3,bit_manipulation,01010100,01010100,True,01010100,True,accept_exact_global,True,0,8,"Global binary: output = AND_NOT(ROL1(input), SHL4(input))"
+a4dd4cce,bit_manipulation,10110010,10110010,True,10110010,True,accept_exact_global,True,0,8,"Global binary: output = OR(SHL4(input), SHR5(input))"
+6b11c05f,bit_manipulation,00100010,00100010,True,00100010,True,accept_exact_global,True,0,8,"Global binary: output = AND_NOT(ROL6(input), SHL3(input))"
+42cb233d,equation_transform,881,881,True,,False,reject_equation_v2_abstain,False,0,,Could not solve
+ec8b4875,equation_transform,"|""]",|@<!,False,,False,reject_equation_v2_abstain,False,0,,Could not solve
+e3fbc768,equation_transform,'(^),{%??,False,,False,reject_equation_v2_abstain,False,0,,Could not solve
+6cc5dafb,equation_transform,)(,^&>),False,,False,reject_equation_v2_abstain,False,0,,Could not solve
+d5a03a2e,equation_transform,>>,""")&&",False,,False,reject_equation_v2_abstain,False,0,,Could not solve
+eea91b82,bit_manipulation,00101111,00101111,True,00101110,False,reject_consensus,False,0,8,Per-bit analysis for 11110101:
+4736daab,bit_manipulation,01000111,01000111,True,01000111,True,accept_exact_global,True,0,8,"Global binary: output = OR(SHL4(input), SHR5(input))"
+8bebef83,equation_transform,3388,3388,True,,False,reject_equation_v2_abstain,False,0,,Could not solve
+efc2b69d,bit_manipulation,10111100,10111100,True,10111100,True,accept_exact_global,True,0,8,Global unary: output = ROL5(input)
+a794d193,bit_manipulation,01011101,01011101,True,01011101,True,accept_exact_global,True,0,8,"Global binary: output = XOR(SHL1(input), SHR5(input))"
+0f7ddd75,bit_manipulation,11110110,11110110,True,11110110,True,accept_exact_global,True,0,8,"Global binary: output = OR(ROL2(input), SHL1(input))"
+27cec7a9,equation_transform,3341,3341,True,,False,reject_equation_v2_abstain,False,0,,Could not solve
+a6704625,bit_manipulation,00001101,00011111,False,00001111,False,reject_consensus,False,0,8,Per-bit analysis for 01000111:
+d117113e,bit_manipulation,00000000,00000000,True,00000000,True,accept_exact_global,True,0,8,"Global binary: output = AND(ROL7(input), SHR2(input))"
+4aeed935,equation_transform,1455,1455,True,,False,reject_equation_v2_abstain,False,0,,Could not solve
+6f7a9048,bit_manipulation,00101000,00101000,True,00101000,True,accept_exact_global,True,0,8,"Global binary: output = XOR(SHL4(input), SHR1(input))"
+8740ed31,bit_manipulation,01101000,01101000,True,00001010,False,reject_consensus,False,0,8,Per-bit analysis for 11001101:
+fb623471,equation_transform,-21,21,False,,False,reject_equation_v2_abstain,False,0,,Could not solve
+88b43464,equation_transform,5311,5311,True,,False,reject_equation_v2_abstain,False,0,,Could not solve
+209c43f0,equation_transform,101,101,True,,False,reject_equation_v2_abstain,False,0,,Could not solve
+8ac52d78,bit_manipulation,00010000,00010000,True,00010000,True,accept_exact_global,True,0,8,"Global binary: output = AND(ROL5(input), SHL4(input))"
+f507b7f1,bit_manipulation,11001100,11011100,False,11011100,False,reject_consensus,False,0,7,Per-bit analysis for 11000110:
+d129b085,equation_transform,##$,!>``,False,,False,reject_equation_v2_abstain,False,0,,Could not solve
+368f20dd,bit_manipulation,10000101,10000101,True,10000101,True,accept_exact_global,True,0,8,"Global binary: output = XOR(SHL3(input), SHR4(input))"
+e582df31,equation_transform,}@,"""']@",False,,False,reject_equation_v2_abstain,False,0,,Could not solve
+a77be9fa,equation_transform,"[""",{>$[,False,,False,reject_equation_v2_abstain,False,0,,Could not solve
+5a19f71a,bit_manipulation,11100010,11100010,True,11100010,True,accept_exact_global,True,0,8,"Global binary: output = XOR(ROL3(input), SHL5(input))"
+78d02fc5,bit_manipulation,11001001,11001011,False,11001000,False,reject_consensus,False,0,8,Per-bit analysis for 11011101:
+4166067c,bit_manipulation,01110110,01110110,True,01110110,True,accept_exact_global,True,0,8,"Global binary: output = AND_NOT(ROL6(input), SHL7(input))"
+49fb46e8,bit_manipulation,01001110,01001110,True,01001110,True,accept_exact_global,True,0,8,"Global binary: output = XOR(SHL2(input), SHR5(input))"
+779bb1f3,bit_manipulation,10000001,10000001,True,10000001,True,accept_exact_global,True,0,8,"Global binary: output = OR(SHL6(input), SHR7(input))"
+e2b02e13,bit_manipulation,01111110,01111110,True,01111110,True,accept_exact_global,True,0,8,"Global binary: output = AND_NOT(ROL5(input), SHL7(input))"
+f8d6abd1,equation_transform,5543,5543,True,,False,reject_equation_v2_abstain,False,0,,Could not solve
+21245d76,bit_manipulation,01111111,01111111,True,01110110,False,reject_consensus,False,0,7,Per-bit analysis for 11011011:
+4ed6b56f,equation_transform,"(""/""",!:`(,False,,False,reject_equation_v2_abstain,False,0,,Could not solve
+e0eba119,bit_manipulation,00010010,00010010,True,00010010,True,accept_exact_global,True,0,8,"Global binary: output = AND_NOT(ROL3(input), SHL1(input))"
+55014a7a,bit_manipulation,01010000,01010000,True,01010000,True,accept_exact_global,True,0,8,"Global binary: output = AND(ROL2(input), ROL4(input))"
+0fe06e8c,bit_manipulation,10010010,10010010,True,10010010,True,accept_exact_global,True,0,8,"Global binary: output = OR(SHL4(input), SHR6(input))"
+f8fc43d2,bit_manipulation,11100100,11100100,True,11100100,True,accept_exact_global,True,0,8,"Global binary: output = XOR(ROL3(input), SHR2(input))"
+208d7838,equation_transform,[:,[&<>,False,,False,reject_equation_v2_abstain,False,0,,Could not solve
+58c099d2,equation_transform,-)\,^!#\,False,,False,reject_equation_v2_abstain,False,0,,Could not solve
+d40ce15d,bit_manipulation,00010000,00010000,True,00010000,True,accept_exact_global,True,0,8,"Global binary: output = XOR(SHL2(input), SHR3(input))"
+3cb3fd89,equation_transform,[[&],]$$),False,,False,reject_equation_v2_abstain,False,0,,Could not solve
+c711f9dd,bit_manipulation,11000000,11000000,True,11000000,True,accept_exact_global,True,0,8,"Global binary: output = AND_NOT(ROL1(input), SHL6(input))"
+a26065d4,equation_transform,<',<&<#,False,,False,reject_equation_v2_abstain,False,0,,Could not solve
+55d834d1,bit_manipulation,00111111,10111111,False,00111111,True,reject_consensus,False,0,8,Per-bit analysis for 00011100:
+194695e8,equation_transform,%,!\{<,False,,False,reject_equation_v2_abstain,False,0,,Could not solve
+4ef88f92,bit_manipulation,01010111,01010011,False,01010110,False,reject_consensus,False,0,7,Per-bit analysis for 00110011:
+5d77eff6,bit_manipulation,00011100,00011100,True,00011000,False,reject_consensus,False,0,7,Per-bit analysis for 11100001:
+1a7c8520,bit_manipulation,01100000,01100110,False,00100000,False,reject_consensus,False,0,7,Per-bit analysis for 10111000:
+1c671acc,bit_manipulation,11111101,11111101,True,11111101,True,accept_exact_global,True,0,8,"Global binary: output = OR(ROL3(input), SHL2(input))"
+528ec0d8,equation_transform,-39,39,False,,False,reject_equation_v2_abstain,False,0,,Could not solve
+4bb8c6cd,equation_transform,]}\!,]}\!,True,,False,reject_equation_v2_abstain,False,0,,Could not solve
+57712d01,equation_transform,-/<,$/'{,False,,False,reject_equation_v2_abstain,False,0,,Could not solve
+d98d85c0,equation_transform,?(&@,(@@?,False,,False,reject_equation_v2_abstain,False,0,,Could not solve
+b62f2e75,bit_manipulation,00111111,00111111,True,00111111,True,accept_exact_global,True,0,8,Global unary: output = SHR2(input)
+7ed40e8a,equation_transform,180,180,True,,False,reject_equation_v2_abstain,False,0,,Could not solve
+491b8ea5,equation_transform,)!,@|]!,False,,False,reject_equation_v2_abstain,False,0,,Could not solve
+eb1a62f7,equation_transform,>!>},){>),False,,False,reject_equation_v2_abstain,False,0,,Could not solve
+0bb591e6,equation_transform,%?<,"""$%%""",False,,False,reject_equation_v2_abstain,False,0,,Could not solve
+c869b4f6,bit_manipulation,10010001,10010001,True,10010001,True,accept_exact_global,True,0,8,"Global binary: output = XOR(SHL6(input), SHR1(input))"
+3c424916,equation_transform,9351,9351,True,,False,reject_equation_v2_abstain,False,0,,Could not solve
+575f9709,bit_manipulation,01111111,01111111,True,01111111,True,accept_exact_global,True,0,8,"Global binary: output = OR(ROL3(input), SHR2(input))"
+691608b9,bit_manipulation,00101000,00101000,True,00101000,True,accept_exact_global,True,0,8,Global unary: output = SHR2(input)
+72336119,equation_transform,3316,3316,True,,False,reject_equation_v2_abstain,False,0,,Could not solve
+202af98d,bit_manipulation,11111101,11111111,False,01000100,False,reject_consensus,False,0,4,Per-bit analysis for 11110010:
+3ace787f,bit_manipulation,11111011,11111111,False,11111010,False,reject_consensus,False,0,8,Per-bit analysis for 01111011:
+9a19fc2d,equation_transform,#>[,!&)#,False,,False,reject_equation_v2_abstain,False,0,,Could not solve
+dc7f150a,bit_manipulation,11001011,11001011,True,11001011,True,accept_exact_global,True,0,8,Global unary: output = ROL7(input)
+12e947ca,bit_manipulation,00111110,00111110,True,00111110,True,accept_exact_global,True,0,8,"Global binary: output = XOR(SHL6(input), SHR1(input))"
+2a5d4790,bit_manipulation,11111111,11111111,True,11111111,True,accept_exact_global,True,0,8,"Global binary: output = OR(ROL4(input), SHR1(input))"
+59bee375,bit_manipulation,10010101,10010101,True,10010101,True,reject_consensus,False,0,8,Per-bit analysis for 10101101:
+528b694b,equation_transform,"""'",>]],False,,False,reject_equation_v2_abstain,False,0,,Could not solve
+d3b20e29,equation_transform,3922,3922,True,,False,reject_equation_v2_abstain,False,0,,Could not solve
+d1bd7478,equation_transform,30,3,False,,False,reject_equation_v2_abstain,False,0,,Could not solve
+21519be7,equation_transform,35,35,True,,False,reject_equation_v2_abstain,False,0,,Could not solve
+fe6d3aa3,bit_manipulation,10100010,10100010,True,10100010,True,accept_exact_global,True,0,8,"Global binary: output = XOR(SHL4(input), SHR2(input))"
+01248b76,bit_manipulation,11000101,11000101,True,11000101,True,accept_exact_global,True,0,8,"Global binary: output = XOR(ROL1(input), SHL4(input))"
+0dfd7674,bit_manipulation,01001110,01001110,True,01001110,True,accept_exact_global,True,0,8,"Global binary: output = XOR(ROL6(input), SHL1(input))"
+7306613b,equation_transform,251,251,True,,False,reject_equation_v2_abstain,False,0,,Could not solve
+8243c91e,bit_manipulation,01000101,01000101,True,00000001,False,reject_consensus,False,0,8,Per-bit analysis for 10100110:
+fba40625,equation_transform,'>&,{>?#,False,,False,reject_equation_v2_abstain,False,0,,Could not solve
+9aa8dc92,equation_transform,/#</,/#</,True,,False,reject_equation_v2_abstain,False,0,,Could not solve
+ef2fe526,bit_manipulation,01011010,01011010,True,01011010,True,accept_exact_global,True,0,8,"Global binary: output = AND(ROL4(input), SHL1(input))"
+c5b058d6,equation_transform,134,35,False,,False,reject_equation_v2_abstain,False,0,,Could not solve
+b4342b90,equation_transform,66,66,True,,False,reject_equation_v2_abstain,False,0,,Could not solve
+837a6ae7,equation_transform,<>\>,"<:{""",False,,False,reject_equation_v2_abstain,False,0,,Could not solve
+9d3e7f1a,bit_manipulation,01101010,01101010,True,01101010,True,accept_exact_global,True,0,8,"Global binary: output = OR(SHL3(input), SHR6(input))"
+00fdc0be,bit_manipulation,11111111,11111111,True,11111111,True,accept_exact_global,True,0,8,"Global binary: output = OR(ROL7(input), SHL2(input))"
+3a7dd604,bit_manipulation,01001010,01001011,False,01001011,False,reject_consensus,False,0,8,Per-bit analysis for 01101010:
+d0e1010b,equation_transform,!&&},|&$|,False,,False,reject_equation_v2_abstain,False,0,,Could not solve
+3feeabea,bit_manipulation,10010010,10010010,True,10010010,True,accept_exact_global,True,0,8,"Global binary: output = OR(SHL4(input), SHR6(input))"
+34c563c5,equation_transform,04`,04`,True,,False,reject_equation_v2_abstain,False,0,,Could not solve
+5a0d5d2a,equation_transform,341,55,False,,False,reject_equation_v2_abstain,False,0,,Could not solve
+5a9fcf68,equation_transform,4443,4,False,,False,reject_equation_v2_abstain,False,0,,Could not solve
+6e56b39a,equation_transform,-/#,&#!,False,,False,reject_equation_v2_abstain,False,0,,Could not solve
+4ada9150,bit_manipulation,01111011,01111111,False,01111011,True,accept_exact_global,True,1,8,"Global binary: output = OR(ROL2(input), SHL4(input))"
+a5f1991c,equation_transform,/|',!&&&,False,,False,reject_equation_v2_abstain,False,0,,Could not solve
+455b6b61,bit_manipulation,00111011,00111011,True,00111011,True,accept_exact_global,True,0,8,"Global binary: output = XOR(ROL2(input), SHR2(input))"
+1d08947a,bit_manipulation,10010100,10010100,True,10010100,True,accept_exact_global,True,0,8,Global unary: output = SHL2(input)
+d26f22c3,bit_manipulation,11101100,11101100,True,11101000,False,reject_consensus,False,0,8,Per-bit analysis for 10010011:
+c7aae192,equation_transform,">""(","\""]",False,,False,reject_equation_v2_abstain,False,0,,Could not solve
+a6192d29,bit_manipulation,00001000,01111110,False,00000000,False,reject_consensus,False,0,2,Per-bit analysis for 00110000:
+e4cc7639,equation_transform,113,16,False,,False,reject_equation_v2_abstain,False,0,,Could not solve
+eeb60061,bit_manipulation,00000101,00000101,True,00000101,True,accept_exact_global,True,0,8,"Global binary: output = XOR(ROL4(input), SHL7(input))"
+844f826c,equation_transform,"/""",`@>``,False,,False,reject_equation_v2_abstain,False,0,,Could not solve
+048cc279,bit_manipulation,01010000,01111000,False,10100000,False,reject_consensus,False,0,7,Per-bit analysis for 11101010:
+20052c2f,bit_manipulation,01100110,01100110,True,01100110,True,accept_exact_global,True,0,8,"Global binary: output = OR(ROL5(input), SHR7(input))"
+89dfa4c2,bit_manipulation,00111010,00111010,True,00111010,True,accept_exact_global,True,0,8,"Global binary: output = AND_NOT(ROL2(input), SHL6(input))"
+53329505,bit_manipulation,11011111,11011111,True,11011111,True,accept_exact_global,True,0,8,"Global binary: output = OR(ROL1(input), SHR6(input))"
+ced947c8,bit_manipulation,01001011,01001011,True,01001011,True,accept_exact_global,True,0,8,"Global binary: output = AND_NOT(ROL3(input), SHL4(input))"
+0440e6ab,bit_manipulation,01100000,01100000,True,01100000,True,accept_exact_global,True,0,8,"Global binary: output = OR(SHL5(input), SHR7(input))"
+e641791f,bit_manipulation,00010001,00010001,True,00010001,True,accept_exact_global,True,0,8,"Global binary: output = XOR(ROL1(input), SHR3(input))"
+bcdf9198,bit_manipulation,11111111,11111111,True,11111111,True,accept_exact_global,True,0,8,"Global binary: output = XNOR(ID(input), ID(input))"
+b69391b8,equation_transform,66,66,True,,False,reject_equation_v2_abstain,False,0,,Could not solve
+8193e7e0,equation_transform,??{`,#?&`,False,,False,reject_equation_v2_abstain,False,0,,Could not solve
+20cdbdb1,bit_manipulation,11100001,11100001,True,11100001,True,accept_exact_global,True,0,8,"Global binary: output = OR(SHL4(input), SHR7(input))"
+48ae04f6,bit_manipulation,00000010,00000010,True,00000010,True,reject_consensus,False,0,8,Per-bit analysis for 01011001:
+3595c82c,bit_manipulation,10011011,10011011,True,10011011,True,reject_non_global_per_bit,False,0,8,Per-bit analysis for 10000110:
+5bcb572e,equation_transform,-!#,"""{!""",False,,False,reject_equation_v2_abstain,False,0,,Could not solve
+8c1529e1,equation_transform,-52,-52,True,,False,reject_equation_v2_abstain,False,0,,Could not solve
+cdec898a,equation_transform,<?/,>}][?,False,,False,reject_equation_v2_abstain,False,0,,Could not solve
+bca238ee,bit_manipulation,00000000,00000000,True,00000000,True,reject_consensus,False,0,8,Per-bit analysis for 00100111:
+5dffe751,bit_manipulation,01100000,01100000,True,01100000,True,accept_exact_global,True,0,8,Global unary: output = SHL4(input)
+44398869,equation_transform,5913,5913,True,,False,reject_equation_v2_abstain,False,0,,Could not solve
+06120e47,bit_manipulation,11110010,11111110,False,11110001,False,reject_consensus,False,0,7,Per-bit analysis for 01110011:
+1f7407ed,bit_manipulation,00101101,00101101,True,00101100,False,reject_consensus,False,0,7,Per-bit analysis for 01110010:
+46dd0f22,bit_manipulation,01010000,01010000,True,01010000,True,reject_consensus,False,0,8,Per-bit analysis for 00101000:
+edf364da,equation_transform,$(%,::{[,False,,False,reject_equation_v2_abstain,False,0,,Could not solve
+d6e5cd59,bit_manipulation,01101111,01101111,True,01101111,True,accept_exact_global,True,0,8,"Global binary: output = XNOR(SHL1(input), SHL6(input))"
+339149c9,equation_transform,3,3,True,,False,reject_equation_v2_abstain,False,0,,Could not solve
+e1f3ffbb,bit_manipulation,11111010,11111011,False,11111011,False,reject_consensus,False,0,8,Per-bit analysis for 11000010:
+4c327b55,bit_manipulation,11011100,11011110,False,11011100,True,accept_exact_global,True,1,8,"Global binary: output = XOR(SHL1(input), SHR4(input))"
+0f2dec86,bit_manipulation,10111000,10111000,True,10111000,True,accept_exact_global,True,0,8,"Global binary: output = XOR(SHL2(input), SHR1(input))"
+e36a0065,bit_manipulation,01110110,01110110,True,01110110,True,accept_exact_global,True,0,8,Global unary: output = ROL2(input)
+c7844441,equation_transform,:/$^,:/$^,True,,False,reject_equation_v2_abstain,False,0,,Could not solve
+21261dc6,equation_transform,-25,-25,True,,False,reject_equation_v2_abstain,False,0,,Could not solve
+70bc42af,bit_manipulation,10101010,10101010,True,10101010,True,accept_exact_global,True,0,8,"Global binary: output = OR(ROL5(input), SHL3(input))"
+4dbec546,equation_transform,611,611,True,,False,reject_equation_v2_abstain,False,0,,Could not solve
+0c2407ef,bit_manipulation,11000011,11000011,True,11000011,True,reject_non_global_per_bit,False,0,8,Per-bit analysis for 10011111:
+939273d7,bit_manipulation,11100110,11100110,True,11100010,False,reject_consensus,False,0,8,Per-bit analysis for 01001111:
+8082a958,bit_manipulation,00000000,00000000,True,00000000,True,accept_exact_global,True,0,8,"Global binary: output = AND(ROL3(input), SHR7(input))"
+fd48ee2f,bit_manipulation,10110100,10110100,True,10110100,True,accept_exact_global,True,0,8,Global unary: output = SHL2(input)
+4eb990f6,bit_manipulation,00000001,00000001,True,00000001,True,accept_exact_global,True,0,8,Global unary: output = SHR1(input)
+85af23eb,bit_manipulation,00001111,00001111,True,00001111,True,accept_exact_global,True,0,8,"Global binary: output = XNOR(SHL3(input), SHL7(input))"
+0e009c6d,equation_transform,`?\!,@?`?,False,,False,reject_equation_v2_abstain,False,0,,Could not solve
+d2ac699b,bit_manipulation,10001011,10001011,True,10001011,True,accept_exact_global,True,0,8,"Global binary: output = XOR(SHL3(input), SHR4(input))"
+b4b73143,equation_transform,>\:,>!!/,False,,False,reject_equation_v2_abstain,False,0,,Could not solve
+3a148f6a,bit_manipulation,00100111,00100111,True,00100110,False,reject_unsolved,False,0,7,Per-bit analysis for 10001111:
+861cb154,equation_transform,2271,10,False,,False,reject_equation_v2_abstain,False,0,,Could not solve
+90feb0c5,equation_transform,:<],?>>>,False,,False,reject_equation_v2_abstain,False,0,,Could not solve
+c541eb82,equation_transform,-01,-01,True,,False,reject_equation_v2_abstain,False,0,,Could not solve
+b9f1d959,equation_transform,:>,"$""\[""",False,,False,reject_equation_v2_abstain,False,0,,Could not solve
+5374b4ba,bit_manipulation,10101100,10101100,True,10101100,True,accept_exact_global,True,0,8,"Global binary: output = OR(SHL5(input), SHR4(input))"
+ca5db1c0,equation_transform,^,"\boxed({""'|})",False,,False,reject_equation_v2_abstain,False,0,,Could not solve
+16e73f0e,bit_manipulation,00000001,00000001,True,00000001,True,accept_exact_global,True,0,8,"Global binary: output = AND(ROL6(input), SHR4(input))"
+87007054,bit_manipulation,10111111,10111111,True,10111111,True,accept_exact_global,True,0,8,"Global binary: output = XNOR(SHL4(input), SHL5(input))"
+b8aa3072,bit_manipulation,00000011,00000111,False,00000111,False,reject_consensus,False,0,8,Per-bit analysis for 00101111:
+9f1ff166,equation_transform,[,"""]'/",False,,False,reject_equation_v2_abstain,False,0,,Could not solve
+82ae858c,bit_manipulation,11001101,11111101,False,11100001,False,reject_consensus,False,0,4,Per-bit analysis for 00110111:
+1282c5c5,bit_manipulation,00001110,00001110,True,00001000,False,reject_consensus,False,0,6,Per-bit analysis for 01101110:
+432b1110,equation_transform,%[:?,\{<?,False,,False,reject_equation_v2_abstain,False,0,,Could not solve
+f333b67f,equation_transform,100,100,True,,False,reject_equation_v2_abstain,False,0,,Could not solve
+f7d26b8d,equation_transform,/@,[}}\,False,,False,reject_equation_v2_abstain,False,0,,Could not solve
+5ba26f21,bit_manipulation,01011100,01111110,False,00000000,False,reject_consensus,False,0,4,Per-bit analysis for 11101001:
+a00fe76a,bit_manipulation,10111011,10111011,True,10111011,True,accept_exact_global,True,0,8,Global unary: output = ROL6(input)
+8e56a42e,equation_transform,%/<>,%/<>,True,,False,reject_equation_v2_abstain,False,0,,Could not solve
+0e3962f6,bit_manipulation,11111110,11111110,True,11111110,True,accept_exact_global,True,0,8,Global unary: output = ROL3(input)
+20f0fac9,equation_transform,2976,65,False,,False,reject_equation_v2_abstain,False,0,,Could not solve
+26e48e98,equation_transform,){|,"""%]%{""",False,,False,reject_equation_v2_abstain,False,0,,Could not solve
+0290f51a,bit_manipulation,10101111,10101111,True,10101111,True,reject_consensus,False,0,8,Per-bit analysis for 11010001:
+c30a782a,bit_manipulation,01000110,01000110,True,01000110,True,accept_exact_global,True,0,8,"Global binary: output = AND_NOT(ROL5(input), SHL4(input))"
+3d24aef4,bit_manipulation,10100101,10100101,True,10100101,True,accept_exact_global,True,0,8,"Global binary: output = XOR(ROL3(input), SHR7(input))"
+5501c054,equation_transform,[#>#,!##^,False,,False,reject_equation_v2_abstain,False,0,,Could not solve
+ea6d926a,equation_transform,87,37,False,,False,reject_equation_v2_abstain,False,0,,Could not solve

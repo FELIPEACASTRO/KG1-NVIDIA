@@ -1,0 +1,28 @@
+{
+  "accepted_delta": 2,
+  "accepted_gains": 2,
+  "accepted_losses": 0,
+  "accepted_rows": 112,
+  "decision": "formal_solver_global_bit_signal_found_but_not_adapter_submit_safe",
+  "family_correctness_counts": {
+    "bit_manipulation|False|False": 21,
+    "bit_manipulation|False|True": 3,
+    "bit_manipulation|True|False": 14,
+    "bit_manipulation|True|True": 122,
+    "equation_transform|False|False": 99,
+    "equation_transform|True|False": 56
+  },
+  "generated_at_utc": "2026-05-15T00:04:23.924085+00:00",
+  "input_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v342_acc_first_diagnostic\\v290_checkpoint6_baseline_predictions.csv",
+  "next_action": "Use exact global bit rules only as verified trace fixtures; do not use consensus/per-bit fallback. No GPU job is authorized until a transfer gate proves adapter-only gains.",
+  "policy_counts": {
+    "accept_exact_global": 112,
+    "reject_consensus": 41,
+    "reject_equation_v2_abstain": 155,
+    "reject_non_global_per_bit": 5,
+    "reject_unsolved": 2
+  },
+  "rows": 315,
+  "schema_version": "kg1_v403_formal_solver_abstain_audit_v1",
+  "target_rows": 315
+}
