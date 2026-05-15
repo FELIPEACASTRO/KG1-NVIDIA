@@ -1,0 +1,140 @@
+{
+  "decision": {
+    "decision": "v397_dataset_ready_for_tokenization_gate",
+    "next_action": "Run V286 tokenization gate with boxed_suffix. Launch HF only if tokenization has zero completion truncation.",
+    "reason": "train=1848; val=172; weak_overlap=0; train_val_prompt_overlap=0"
+  },
+  "filters": {
+    "include_statuses": [
+      "rule_found",
+      "hypothesis_formed"
+    ],
+    "max_assistant_chars": 14000,
+    "skipped_counts": {
+      "non_target_category": 6343,
+      "status_excluded": 822,
+      "weak_id_excluded": 315
+    },
+    "source_counts": {
+      "bit_manipulation/hypothesis_formed": 121,
+      "bit_manipulation/rule_found": 1364,
+      "bit_manipulation/rule_unknown": 117,
+      "cipher/rule_found": 1576,
+      "cryptarithm_deduce/hypothesis_formed": 46,
+      "cryptarithm_deduce/rule_found": 54,
+      "cryptarithm_deduce/rule_unknown": 559,
+      "cryptarithm_guess/hypothesis_formed": 25,
+      "cryptarithm_guess/rule_found": 11,
+      "cryptarithm_guess/rule_unknown": 128,
+      "equation_numeric_deduce/hypothesis_formed": 22,
+      "equation_numeric_deduce/rule_found": 540,
+      "equation_numeric_deduce/rule_unknown": 34,
+      "equation_numeric_guess/hypothesis_formed": 35,
+      "equation_numeric_guess/rule_found": 21,
+      "equation_numeric_guess/rule_unknown": 80,
+      "gravity/rule_found": 1597,
+      "numeral/rule_found": 1576,
+      "unit_conversion/rule_found": 1594
+    },
+    "target_categories": [
+      "bit_manipulation",
+      "cryptarithm_deduce",
+      "cryptarithm_guess",
+      "equation_numeric_deduce",
+      "equation_numeric_guess"
+    ],
+    "val_mod": 10,
+    "verified_final_counts": {
+      "bit_manipulation/hypothesis_formed/ok": 103,
+      "bit_manipulation/rule_found/ok": 1228,
+      "cryptarithm_deduce/hypothesis_formed/ok": 43,
+      "cryptarithm_deduce/rule_found/ok": 49,
+      "cryptarithm_guess/hypothesis_formed/ok": 22,
+      "cryptarithm_guess/rule_found/ok": 10,
+      "equation_numeric_deduce/hypothesis_formed/ok": 20,
+      "equation_numeric_deduce/rule_found/ok": 492,
+      "equation_numeric_guess/hypothesis_formed/ok": 33,
+      "equation_numeric_guess/rule_found/ok": 20
+    }
+  },
+  "generated_at_utc": "2026-05-15T17:34:24.132585+00:00",
+  "inputs": {
+    "competition_train_csv": "C:\\Users\\davis\\Downloads\\competition_train.csv",
+    "competition_train_sha256": "d204af160633b638448723a437aa51c0db70fd0b64ff92f6ad6f52e5ac6377fa",
+    "sft_reconstructed_jsonl": "C:\\Users\\davis\\Downloads\\sft_reconstructed.jsonl",
+    "sft_reconstructed_sha256": "e385421e85881a406144e2e1166961ef21b0b9063077c908f41e626e01681609",
+    "weak_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v290_rank19_micro_patch_reference\\runtime_artifacts\\v245_weak_eval_bridge\\v245-weak-bridge-hfonly-20260510T1950Z\\v221_weak_315.csv",
+    "weak_csv_sha256": "85da758e14d57ea40270de5747f98726a0ad0b6d1795bff7dd46183005e0f9b6"
+  },
+  "outputs": {
+    "comparison_md": "artifacts\\v444_sft_reconstructed_high_conf_dataset\\20260515T_cpu_gate\\V397_VS_PREVIOUS.md",
+    "manifest_json": "artifacts\\v444_sft_reconstructed_high_conf_dataset\\20260515T_cpu_gate\\v397_sft_reconstructed_transfer_manifest.json",
+    "train_jsonl": "artifacts\\v444_sft_reconstructed_high_conf_dataset\\20260515T_cpu_gate\\v397_sft_reconstructed_transfer_train.jsonl",
+    "train_sha256": "4b064ed04401c6632798c470f76225688e0af3b0771dc65225d32cc283f439cc",
+    "val_jsonl": "artifacts\\v444_sft_reconstructed_high_conf_dataset\\20260515T_cpu_gate\\v397_sft_reconstructed_transfer_val.jsonl",
+    "val_sha256": "7a6ba5a60575f34f04f721b3c2312147a33fbbea6d3e27fbf9063ab8f4ef361e"
+  },
+  "policy": {
+    "assistant_final_answer_mode": "boxed_suffix",
+    "cpu_only": true,
+    "hf_gpu_allowed": false,
+    "kaggle_submit_allowed": false,
+    "next_required_gate": "scripts/run_v286_generic_tokenization_gate.py",
+    "weak_gate_rows_used_for_training": false
+  },
+  "schema_version": "kg1_v397_sft_reconstructed_transfer_dataset_v1",
+  "validation": {
+    "train": {
+      "assistant_char_max": 12122,
+      "assistant_char_mean": 8889.281926406926,
+      "assistant_char_min": 1098,
+      "boxed_suffix_rows": 1848,
+      "family_counts": {
+        "bit_manipulation": 1219,
+        "equation_transform": 629
+      },
+      "prompt_hash_count": 1848,
+      "rows": 1848,
+      "source_status_counts": {
+        "hypothesis_formed": 207,
+        "rule_found": 1641
+      },
+      "subcategory_counts": {
+        "bit_manipulation": 1219,
+        "cryptarithm_deduce": 81,
+        "cryptarithm_guess": 30,
+        "equation_numeric_deduce": 470,
+        "equation_numeric_guess": 48
+      },
+      "unique_ids": 1848,
+      "unique_source_problem_ids": 1848
+    },
+    "train_val_prompt_overlap": 0,
+    "validation": {
+      "assistant_char_max": 12304,
+      "assistant_char_mean": 8734.331395348838,
+      "assistant_char_min": 1110,
+      "boxed_suffix_rows": 172,
+      "family_counts": {
+        "bit_manipulation": 112,
+        "equation_transform": 60
+      },
+      "prompt_hash_count": 172,
+      "rows": 172,
+      "source_status_counts": {
+        "hypothesis_formed": 14,
+        "rule_found": 158
+      },
+      "subcategory_counts": {
+        "bit_manipulation": 112,
+        "cryptarithm_deduce": 11,
+        "cryptarithm_guess": 2,
+        "equation_numeric_deduce": 42,
+        "equation_numeric_guess": 5
+      },
+      "unique_ids": 172,
+      "unique_source_problem_ids": 172
+    },
+    "weak_id_overlap": 0
+  }
+}

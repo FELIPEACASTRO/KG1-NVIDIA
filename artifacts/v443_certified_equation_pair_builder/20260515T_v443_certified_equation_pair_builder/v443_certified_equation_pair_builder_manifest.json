@@ -1,0 +1,39 @@
+{
+  "decision": {
+    "decision": "cpu_pairs_insufficient_no_gpu",
+    "next_action": "Expand certified CPU builder; do not launch GPU from V443 yet.",
+    "reason": "pairs=0, modes=0, val_pairs=0"
+  },
+  "generated_at_utc": "2026-05-15T17:28:30.383876+00:00",
+  "hf_gpu_allowed": false,
+  "inputs": {
+    "source_rows": 133,
+    "v439_manifest_json": "artifacts/v439_final_answer_only_pairs/20260515T_v439_final_answer_only/v439_final_answer_only_pairs_manifest.json"
+  },
+  "label": "v443_certified_equation_pair_builder",
+  "outputs": {
+    "audit_csv": "artifacts/v443_certified_equation_pair_builder/20260515T_v443_certified_equation_pair_builder/v443_certified_equation_pair_builder_audit.csv",
+    "manifest_json": "artifacts/v443_certified_equation_pair_builder/20260515T_v443_certified_equation_pair_builder/v443_certified_equation_pair_builder_manifest.json",
+    "preferences_train_jsonl": "artifacts/v443_certified_equation_pair_builder/20260515T_v443_certified_equation_pair_builder/v443_certified_equation_pair_builder_preferences_train.jsonl",
+    "preferences_train_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "preferences_val_jsonl": "artifacts/v443_certified_equation_pair_builder/20260515T_v443_certified_equation_pair_builder/v443_certified_equation_pair_builder_preferences_val.jsonl",
+    "preferences_val_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "schema_version": "kg1_v443_certified_equation_pair_builder_v1",
+  "summary": {
+    "audit_rows": 133,
+    "candidate_rows": 0,
+    "certified_pair_rows": 0,
+    "independent_modes": 0,
+    "pair_rule_counts": {},
+    "reason_counts": {
+      "no_unique_certified_rule": 120,
+      "not_equation": 13
+    },
+    "status_counts": {
+      "abstain": 133
+    },
+    "train_pairs": 0,
+    "val_pairs": 0
+  }
+}

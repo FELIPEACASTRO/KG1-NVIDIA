@@ -694,33 +694,80 @@ Estes itens nao estao ativos agora. So entram se houver novo gate CPU mais forte
 | Preference mean-NLL direto sobre V435E hard-only | V436B piorou checkpoint-3 de `6/24` para `4/24` |
 | Chosen com texto `public-train label audit` e candidato errado | V438 mostrou contaminacao de target em `133/133` e `123/133` linhas |
 
+## Atualizacao V443/V444 - 2026-05-15
+
+Estado medido antes do proximo job:
+
+| Item | Valor |
+|---|---:|
+| melhor adapter-only weak | `192/315` |
+| `equation_transform` weak | `56/155` |
+| `bit_manipulation` weak | `136/160` |
+| truncation weak | `0` |
+| melhor full official-like conhecido | `823/947` |
+
+Resultado V443:
+
+| Item | Valor |
+|---|---:|
+| linhas auditadas | `133` |
+| linhas equation analisadas | `120` |
+| candidatos certificados | `0` |
+| pares certificados | `0` |
+
+Interpretacao: o builder de regras simples/slot-map nao encontrou uma regra
+unica, LOO e renaming-stable. Isso fecha a rota de gerar pares certificados por
+substituicao textual simples. Nao ha autorizacao tecnica para relancar V439 ou
+V441 com mais steps.
+
+Resultado V444 CPU:
+
+| Item | Valor |
+|---|---:|
+| fonte | `sft_reconstructed.jsonl` |
+| status mantidos | `rule_found`, `hypothesis_formed` |
+| status removido | `rule_unknown` |
+| train rows | `1848` |
+| val rows | `172` |
+| train bit/equation | `1219 / 629` |
+| val bit/equation | `112 / 60` |
+| train SHA | `4b064ed04401c6632798c470f76225688e0af3b0771dc65225d32cc283f439cc` |
+| val SHA | `7a6ba5a60575f34f04f721b3c2312147a33fbbea6d3e27fbf9063ab8f4ef361e` |
+| tokenization gate | passed |
+| prompt truncation | `0` |
+| completion truncation | `0` |
+
+Interpretacao: V444 e diferente de V397/V398 porque remove `822` linhas
+`rule_unknown`, que provavelmente diluiram o sinal. Ainda nao e ganho. E apenas
+o menor teste pago justificavel depois que V443 fechou a rota de regras simples.
+
 ## Proxima Acao Unica
 
-Parar a linha V436/V436B/V440/V441 e nao abrir novo GPU job de preference
-simples sem uma mudanca tecnica nova no dado. V441 ja testou a hipotese de
-score somente no boxed payload e nao gerou sinal; V442 confirmou que o V439
-tem `0` linhas com certificado de regra label-free.
+Executar apenas um smoke H200 V444 de quatro steps, com timeout maximo de
+`3600` segundos e custo H200 travado em `<=0.09 USD/min`.
 
-Objetivo:
+Ordem obrigatoria:
 
-1. Implementar V443 CPU certified equation pair builder.
-   - Entrada: public train permitido e probes V435D/V439 apenas como diagnostico.
-   - Prioridade: `equation_symbolic_sequence` e `equation_symbolic_short`.
-   - Exigir regra congelada antes do answer, MDL, Leave-One-Out, renaming
-     stability, candidate count unico e slot/substring alignment stats.
-2. Gerar pares somente para regras certificadas.
-   - chosen: resposta final curta derivada da regra congelada.
-   - rejected: erro real do adapter V291/V290 sobre o mesmo prompt.
-   - Sem weak/full como fonte, sem oracle de gate, sem tiebreak por answer.
-3. Rodar gate CPU contra baseline V291/V290.
-   - So avanca se houver novo sinal medido para `equation_transform` e zero
-     regressao esperada de bit.
-4. Se e somente se V443 gerar pelo menos quatro modos independentes de equation,
-   publicar dataset e rodar integration gate pre-pago.
-5. Qualquer novo GPU job precisa mostrar, antes de rodar, quadro comparativo
-   contra V291/V290 e condicao objetiva de parada no primeiro checkpoint.
-6. Promover para weak/full/package/submit somente se o gate superar o melhor
-   adapter-only atual: weak `192/315`, equation `56/155`, bit `136/160`,
-   trunc `0`.
+1. Commitar e enviar para a branch o script V443, dataset/gate V444 e launcher
+   V444.
+2. Rodar debug local do launcher apos o commit para garantir que
+   `KG1_EXPECTED_COMMIT` aponta para o commit novo.
+3. Lancar o job V444 somente se o debug local passar:
+   - HF dataset remoto com SHA exato;
+   - adapter V290 checkpoint-6 completo;
+   - H200 com pelo menos `130 GiB`;
+   - `MAX_STEPS=4`;
+   - `MAX_LENGTH=8192`;
+   - timeout `3600`;
+   - trainable LoRA restrito a `q_proj,k_proj,v_proj,o_proj,lm_head`.
+4. Monitorar logs a cada `40` segundos.
+5. Avaliar checkpoints 2 e 4 no weak gate.
+6. Promover somente se superar simultaneamente:
+   - weak total `>192/315`;
+   - `equation_transform >56/155`;
+   - `bit_manipulation >=136/160`;
+   - truncation `0`.
 
-Regra FinOps: V436 revelou bug de dataset; V436B provou que hard-negative-only ainda nao basta. O objetivo segue sendo ganho medido de ranking; loss interno e preference accuracy so servem para matar job cedo, nao para promover.
+Regra FinOps: se o primeiro checkpoint nao indicar caminho para o gate acima,
+cancelar e registrar no error ledger. `eval_loss`, `train_loss` e accuracy
+interna nao promovem submit; elas apenas ajudam a matar job cedo.

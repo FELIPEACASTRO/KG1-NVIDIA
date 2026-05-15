@@ -236,6 +236,58 @@ Regra preventiva:
 
 Status: V441 cancelado por FinOps; sem weak/full/package/submit.
 
+### E008 - Regras simples certificadas nao geraram pares V443
+
+Evidencia:
+
+- V443 auditou `133` linhas diagnosticas V439/V435E.
+- `120` eram linhas de equation.
+- O builder tentou transformacoes diretas de string, reverse concat,
+  slot/global maps, LOO e renaming stability.
+- Resultado: `0` candidatos certificados e `0` pares certificados.
+- Debug sem os gates estritos mostrou candidatos brutos em muitas linhas, mas
+  `raw_correct=0`; portanto o problema nao era apenas excesso de rigor do gate.
+
+Impacto:
+
+- Nao ha base para novo job pago de preference/mean-NLL sobre V439/V435E.
+- O ganho de equation exige DSL/solver mais expressivo ou dado supervisionado
+  mais limpo, nao mais steps na mesma formulacao.
+
+Regra preventiva:
+
+- Se um dataset de pares nao tiver certificado `rule_frozen_before_answer`,
+  LOO/renaming ou evidencia equivalente, ele nao pode justificar H200.
+- Quando o builder retornar `0` pares certificados, registrar a falha e mudar a
+  classe de hipotese, nao repetir LR/epoch.
+
+Status: V443 fechado; V444 high-confidence SFT e o unico smoke GPU permitido.
+
+### E009 - Truncar assistant text antes da tokenizacao pode quebrar offset mask
+
+Evidencia:
+
+- A primeira montagem V444 com `max_assistant_chars=9000` falhou no gate:
+  `assistant text not found in rendered chat`.
+- A causa foi truncar do lado errado do texto, deixando o assistant com
+  whitespace/prefixo que nao casava com o chat template.
+- Rebuild com `max_assistant_chars=14000` passou:
+  prompt truncation `0`, completion truncation `0`, offset masks completas.
+
+Impacto:
+
+- Um dataset pode parecer correto em JSONL e ainda falhar no mapeamento de loss
+  por offset mask.
+
+Regra preventiva:
+
+- Todo dataset novo/alterado precisa passar tokenization/offset-mask gate antes
+  de qualquer HF job.
+- Se houver truncamento manual de assistant text, o dataset deve ser refeito ou
+  o truncamento deve preservar exatamente o sufixo esperado pelo template.
+
+Status: regra aplicada em V444; dataset final passou o gate.
+
 ## Prompt Externo
 
 Prompt consolidado para OpenRouter/outras APIs:

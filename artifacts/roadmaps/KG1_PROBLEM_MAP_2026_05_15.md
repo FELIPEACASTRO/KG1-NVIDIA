@@ -365,3 +365,32 @@ Um candidato so avanca se:
 - depois full official-like `>823/947`.
 
 Sem isso, o resultado volta para o error ledger e nao vira submit.
+
+## Atualizacao V443/V444
+
+V443 executou o builder CPU de pares certificados para equation e retornou
+`0` pares certificados. Isso localiza o problema: a melhoria desejada nao esta
+em substituicoes textuais simples, slot-map global ou regras de string com LOO
+e renaming stability. Essa rota fica fechada ate existir uma DSL mais forte.
+
+V444 mudou a frente ativa para um teste minimo de transferencia supervisionada:
+usar apenas os traces reconstruidos de alta confianca (`rule_found` e
+`hypothesis_formed`) e remover `rule_unknown`. O dataset ficou com `1848`
+linhas de treino e `172` de validacao, passou tokenizacao sem truncation, e foi
+publicado no HF para um smoke H200 de quatro steps.
+
+Problema principal agora:
+
+```text
+Dados com regra simples certificada     -> 0 pares V443
+Dados reconstruidos amplos V397/V398    -> sem ganho weak
+Dados reconstruidos high-confidence V444 -> ainda nao testado no weak gate
+```
+
+Decisao:
+
+1. V444 e o unico job GPU ativo permitido agora.
+2. O job deve parar se nao bater `192/315`, `equation>56`, `bit>=136`,
+   `truncated=0`.
+3. Se V444 nao ganhar, o proximo plano nao e mais SFT reconstruido; volta para
+   DSL/solver equation mais expressivo, com prova CPU antes de GPU.
