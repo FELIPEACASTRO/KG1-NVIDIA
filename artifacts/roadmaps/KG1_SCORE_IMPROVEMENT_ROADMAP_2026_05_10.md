@@ -76,7 +76,7 @@ Precisamos buscar subida no ranking ainda hoje, `2026-05-14`. A decisao V392 e s
 | V420 symbolic cryptarithm aggressive | `1` accepted conhecido | `99d6a3b5` ja em V409/V414 | n/a | `0` ganho novo; multi-operator nao promotavel |
 | V421 operator-specific symbolic gate | `17` candidates | `0` gains | n/a | `3` conflitos; hipotese bloqueada |
 | V422 symbolic selection/substitution gate | `16` candidates | `0` gains | n/a | `5` conflitos; HF CPU completou e confirmou bloqueio; sem GPU |
-| V423 conditioned symbolic gate | `10` candidates | `0` gains | n/a | `1` conflito; invariantes simples bloqueados; sem GPU |
+| V423 conditioned symbolic gate | `10` candidates | `0` gains | n/a | `1` conflito; HF CPU completou e confirmou bloqueio; sem GPU |
 
 Conclusao: `eval_loss` baixo nao e criterio de promocao. O criterio e ACC por familia no weak/full gate. A rota "resolver nos mesmos" finalmente tem ganho mensuravel (`+9` weak em CPU), mas esse ganho ainda e solver/verifier externo; para submit, ele precisa virar comportamento do adapter/package ou ser permitido explicitamente pelas regras de runtime.
 
@@ -1080,7 +1080,7 @@ Decisao: nao abrir GPU, nao fazer package e nao submeter. O valor pratico do V42
 
 ### Step 6T - V423 conditioned symbolic gate
 
-Status: concluido localmente; sem sinal para GPU.
+Status: concluido localmente e reproduzido em HF CPU; sem sinal para GPU.
 
 Objetivo: testar uma classe nova depois do V422: programas simbolicos condicionados por invariantes do input (`left==right`, caracteres repetidos, cruzamentos entre operandos, operador dentro dos operandos, compartilhamento entre left/right).
 
@@ -1101,6 +1101,7 @@ Artefatos:
 - Script: `artifacts/v423_conditioned_symbolic_gate/build_v423_conditioned_symbolic_gate.py`.
 - Manifest: `artifacts/v423_conditioned_symbolic_gate/20260515T_v423_conditioned_symbolic_gate/v423_conditioned_symbolic_manifest.json`.
 - Relatorio: `artifacts/v423_conditioned_symbolic_gate/20260515T_v423_conditioned_symbolic_gate/V423_CONDITIONED_SYMBOLIC_GATE.md`.
+- HF job: `https://huggingface.co/jobs/felipesp1983/6a06e9e9e48bea4538b9e0b5`, concluido em `18s`, `cpu-upgrade`.
 
 Decisao: nao abrir HF GPU. O teste reduz uma lacuna do roadmap: invariantes simples de igualdade/multiconjunto tambem nao resolvem os residuais simbolicos quando exigimos abstain seguro.
 

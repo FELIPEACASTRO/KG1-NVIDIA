@@ -1,0 +1,26 @@
+{
+  "branch": "v230-v226-complementarity",
+  "expected_commit": "947700df9721b485cbbceb5b579dfe3cfffd4c54",
+  "flavor": "cpu-upgrade",
+  "gates": {
+    "cpu_only": true,
+    "gpu_allowed": false,
+    "kaggle_submit_allowed": false,
+    "package_allowed": false,
+    "train_allowed": false
+  },
+  "image": "python:3.11",
+  "job_id": "6a06e9e9e48bea4538b9e0b5",
+  "job_status": "COMPLETED",
+  "job_url": "https://huggingface.co/jobs/felipesp1983/6a06e9e9e48bea4538b9e0b5",
+  "remote_result": {
+    "accepted_gain_count": 0,
+    "candidate_count": 10,
+    "conflict_count": 1,
+    "decision": "hf_gpu_blocked_no_safe_gain",
+    "projected_bit_manipulation": 136,
+    "projected_equation_transform": 56,
+    "projected_weak_total": 192
+  },
+  "schema_version": "kg1_v423_hf_cpu_launch_manifest_v1"
+}
