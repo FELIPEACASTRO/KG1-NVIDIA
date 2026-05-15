@@ -48,6 +48,7 @@ Regra central: ganho so conta se aparecer no adapter/package. Teacher CPU, solve
 | V446 Tong-source target-alignment gate | `1310` traces aceitos: bit `848`, equation `462`; `hf_gpu_allowed=true` | sinal material novo; exige dataset/token gate antes de GPU |
 | OpenRouter V447 public mining consensus | 6 modelos uteis; consenso condicional | minerar notebooks publicos em paralelo, mas priorizar V446 builder |
 | V449 ACC metric integrity audit | weak scorer usa `verify_answer`; `answers_equivalent` superconta bit e foi bloqueado para `official_correct` | metrica de promocao confirmada; script diagnostico corrigido |
+| V448 H200 V447 clean trace weak eval | checkpoint-3 `190/315`, equation `56/155`, bit `134/160`, trunc `1` | cancelado por FinOps; rota clean-trace SFT bloqueada |
 
 ## Regras Permanentes
 
@@ -73,6 +74,7 @@ Regra central: ganho so conta se aparecer no adapter/package. Teacher CPU, solve
 20. Antes de qualquer GPU, carregar um scaffold LoRA pelo caminho oficial vLLM/LoRA em prompt dummy. Se nao carrega como adapter-only, nao treinar.
 21. One-shot policy: nao repetir a mesma receita paga se ela ja falhou weak/family gate. Nova GPU exige evidencia CPU nova e material.
 22. Mineracao de notebooks publicos e permitida somente como extracao de tecnica/dataset/trace, nunca como uso direto de adapter, peso ou submissao de terceiros. Downloads grandes precisam ser apagados depois da triagem; o roadmap guarda apenas o achado validado.
+23. V444/V448 provaram que target-aligned trace SFT, mesmo limpo e com token gate, nao transfere ganho para adapter-only. Nova GPU nao pode repetir essa classe de treino sem prova CPU nova de que o adapter parseia e emite a resposta curta correta, nao apenas que o teacher/trace esta correto.
 
 ## Achados Consolidados V434C
 
@@ -943,36 +945,65 @@ da resposta oficial de treino deve ser bloqueado por padrao. Override so pode
 existir via flag explicita, nunca silenciosamente. Essa regra entra em todos os
 builders, notebooks e jobs novos/alterados.
 
+## Atualizacao V448 - 2026-05-15
+
+V448 foi executado e avaliado no contrato weak V221. O treino H200 completou,
+mas o primeiro weak eval util falhou o gate e o job foi cancelado antes de
+avaliar checkpoint-6.
+
+Artefatos:
+
+- Launcher de treino: `artifacts/v448_hf_h200_v447_trace_launch/launch_v448_hf_h200_v447_trace.py`.
+- Launcher de weak eval: `artifacts/v448_hf_h200_v447_trace_launch/launch_v448_hf_weak_eval.py`.
+- Job de weak eval: `https://huggingface.co/jobs/felipesp1983/6a07832e3308d79117b90a27`.
+- Resultado registrado: `artifacts/v448_hf_h200_v447_trace_launch/V448_WEAK_EVAL_RESULT.md`.
+
+Resultado V448 checkpoint-3:
+
+| Item | Baseline submit-safe | V444 ckpt-2 | V448 ckpt-3 | Decisao |
+|---|---:|---:|---:|---|
+| Total weak | `192/315` | `190/315` | `190/315` | reprovado |
+| `equation_transform` | `56/155` | `56/155` | `56/155` | sem ganho |
+| `bit_manipulation` | `136/160` | `134/160` | `134/160` | regressao |
+| `truncated` | `0` | `1` | `1` | reprovado |
+
+Interpretacao: V446/V447 continham material novo e limpo, mas o adapter nao
+aprendeu a converter esses traces em melhoria submit-safe. O padrao repetiu
+V444: equation fica travado em `56`, bit perde `2`, e aparece truncation.
+Portanto, repetir V448 com mais steps, mais epochs, H200 maior, LR sweep ou
+novo checkpoint do mesmo dataset e gasto sem base tecnica.
+
 ## Proxima Acao Ativa
 
-Executar V448 nesta ordem:
+Rota ativa agora volta para CPU e depuracao de transferencia, nao para novo
+treino pago.
 
-1. Criar V448 H200 smoke com dataset V447 clean:
-   - base `V290 checkpoint-6`;
-   - maximo `6` steps, checkpoint a cada `3`;
-   - LR mais agressivo que V444, mas com timeout `<=1h`;
-   - dataset/hashes V447 clean fixos;
-   - `rule_found` e `hypothesis_formed` como subcategorias obrigatorias.
-2. Rodar local debug do launcher:
-   - verificar H200, custo unitario, timeout, dataset HF, hashes, adapter init,
-     commit esperado, snippets do script e ausencia de snippets stale.
-3. Commitar/pushar antes de lancar:
-   - o job deve fazer checkout do commit exato que passou no debug.
-4. Lançar apenas se o debug passar:
-   - monitorar logs a cada `40s`;
-   - matar por FinOps se erro/gate indicar que nao ha caminho para ganho.
-5. Rodar weak eval nos checkpoints `3` e `6`:
-   - promover somente se `total>192`, `equation>56`, `bit>=136`,
-     `truncated=0`;
-   - se `checkpoint-3` ja regredir sem sinal recuperavel, cancelar antes do
-     `checkpoint-6`.
-6. Em paralelo, minerar notebooks publicos Kaggle/HF:
-   - baixar somente em diretorio temporario;
-   - extrair tecnica, prompt style, dataset/trace permitido e license/provenance;
-   - apagar arquivos grandes apos triagem;
-   - registrar apenas achados que passem CPU gate.
-7. Se V448 falhar, nao repetir com mais epochs. Voltar para CPU mining/DSL v2
-   e exigir novo target certificado antes de outra GPU.
+1. Fechar V450 CPU transfer-debug:
+   - auditar metric parity com `verify_answer`;
+   - auditar `raw_output`, `prediction`, primeiro/ultimo `boxed`, truncation,
+     family mapping e exact binary;
+   - confirmar que nao ha erro de logica, negocio, simbolico ou sintaxe no
+     calculo de ACC;
+   - produzir tabela de discrepancias acionaveis, se existirem.
+2. Expandir V451/V452 equation DSL v2 somente em CPU:
+   - basear em `tonghuikang/nemotron/reasoners/equation_numeric.py`;
+   - cobrir concat, reverse concat, soma/subtracao/multiplicacao, `+1/-1`,
+     div/mod, abs diff, digitos, determinante, reverse operands/result,
+     prefix/suffix e padroes simbolicos/pontuacao;
+   - exigir regra unica label-free, Leave-One-Out, renaming stability,
+     anti-leakage e abstain em empate.
+3. Fechar V453 bit guardrail CPU:
+   - bit-pair/bitsum/stride;
+   - exact binary com `verify_answer`;
+   - gerar apenas anchors que preservem `bit>=136`, sem tolerancia numerica.
+4. So voltar a HF GPU se a CPU provar:
+   - `total > 192/315`;
+   - `equation > 56/155`;
+   - `bit >= 136/160`;
+   - `truncated = 0`;
+   - dataset sem leakage;
+   - alvo treinavel que o adapter consiga emitir em resposta curta.
+5. Se a proxima CPU route nao mostrar ganho estrito, nao abrir job pago.
 
 Regra FinOps continua: se o primeiro checkpoint ou gate parcial nao indicar
 caminho para `total>192`, `equation>56`, `bit>=136`, `truncated=0`, cancelar.

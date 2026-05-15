@@ -8,12 +8,12 @@ perder a familia `bit_manipulation`.
 
 ## Comparativo
 
-| Item | V290/V291 baseline | V444 ultimo H200 | V448 proposto |
+| Item | V290/V291 baseline | V444 ultimo H200 | V448 medido |
 |---|---:|---:|---:|
-| Weak total medido | `192/315` | `190/315` | pendente |
-| `equation_transform` | `56/155` | `56/155` | precisa `>56` |
-| `bit_manipulation` | `136/160` | `134/160` | precisa `>=136` |
-| `truncated` | `0` | `1` | precisa `0` |
+| Weak total medido | `192/315` | `190/315` | `190/315` |
+| `equation_transform` | `56/155` | `56/155` | `56/155` |
+| `bit_manipulation` | `136/160` | `134/160` | `134/160` |
+| `truncated` | `0` | `1` | `1` |
 | Dataset de treino | adapter existente | high-conf reconstructed amplo | V447 clean target-aligned |
 | Train rows | n/a | `1848` | `1164` |
 | Val rows | n/a | `172` | `129` |
@@ -31,6 +31,10 @@ perder a familia `bit_manipulation`.
 
 ## Decisao Esperada
 
-Rodar V448 apenas apos debug local, commit e push. Se o primeiro checkpoint
-avaliado nao tiver caminho para preservar `bit>=136` e superar
-`equation=56`, cancelar e voltar para CPU mining/DSL v2.
+V448 foi executado. O primeiro weak eval util (`checkpoint-3`) reprovou:
+`190/315`, `equation=56/155`, `bit=134/160`, `truncated=1`. O job foi
+cancelado por FinOps antes de avaliar `checkpoint-6`.
+
+Decisao: nao repetir V448 com mais steps, epochs, LR sweep ou H200 maior.
+Voltar para CPU transfer-debug, DSL v2 e metric/parser audit antes de qualquer
+novo job pago.

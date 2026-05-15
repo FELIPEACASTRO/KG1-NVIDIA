@@ -367,6 +367,47 @@ Regra preventiva:
 Status: corrigido em `scripts/analyze_eval_predictions.py`; gate e auditor V449
 adicionados.
 
+### E012 - V448 clean trace SFT repetiu a regressao V444
+
+Evidencia:
+
+- V448 treinou em H200 usando o dataset V447 clean:
+  - `1164` train rows;
+  - `129` validation rows;
+  - `0` `boxed` mismatch;
+  - tokenization gate com `prompt_truncation_rate=0.0`,
+    `completion_tokens_dropped=0`, `fallback_masks=0` e offset masks completas.
+- O weak eval V221-contract avaliou `checkpoint-3`.
+- Resultado do checkpoint-3:
+  - total weak `190/315`;
+  - `equation_transform=56/155`;
+  - `bit_manipulation=134/160`;
+  - `truncated=1`.
+- Baseline submit-safe permanece `192/315`, `equation=56/155`,
+  `bit=136/160`, `truncated=0`.
+- O job `felipesp1983/6a07832e3308d79117b90a27` foi cancelado por FinOps antes
+  de avaliar `checkpoint-6`.
+
+Impacto:
+
+- A limpeza V447 corrigiu contradicoes de `boxed` e validou tokenizacao, mas nao
+  resolveu o problema central de transferencia para adapter-only.
+- O adapter continuou preso no teto `equation=56` e perdeu `2` acertos em bit.
+- O padrao e o mesmo de V444, portanto a classe "target-aligned trace SFT" nao
+  pode ser repetida como se fosse nova evidencia.
+
+Regra preventiva:
+
+- Nao repetir V448 com mais epochs, mais steps, LR sweep, H200 maior ou outro
+  checkpoint do mesmo dataset.
+- Nova GPU so pode ser aberta se um gate CPU provar uma classe de evidencia
+  diferente: resposta curta emitivel pelo adapter, DSL label-free com abstain ou
+  parser/metric fix que altere ACC estrita.
+- Se o primeiro checkpoint de qualquer rota futura repetir `equation=56`,
+  `bit<136` ou `truncated>0`, cancelar imediatamente.
+
+Status: V448 weak eval cancelado por FinOps; sem full/package/submit.
+
 ## Prompt Externo
 
 Prompt consolidado para OpenRouter/outras APIs:
