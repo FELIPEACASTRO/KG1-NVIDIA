@@ -1,0 +1,71 @@
+{
+  "decision": {
+    "decision": "same_preference_route_blocked_return_to_cpu_certified_builder",
+    "next_action": "Implement CPU certified equation pair builder; do not launch another V435E/V439 preference GPU job.",
+    "reason": "V441 tied baseline under boxed-payload scoring and V439 pairs have zero rule-certified rows."
+  },
+  "generated_at_utc": "2026-05-15T17:21:21.452468+00:00",
+  "hf_gpu_allowed": false,
+  "inputs": {
+    "v419_manifest_json": "artifacts/v419_residual_taxonomy/20260515T_v419_residual_taxonomy/v419_residual_taxonomy_manifest.json",
+    "v433_manifest_json": "artifacts/v433_string_multiset_operator_gate/20260515T_v433_string_multiset_operator/v433_string_multiset_operator_manifest.json",
+    "v438_manifest_json": "artifacts/v438_preference_objective_audit/20260515T_v438_v439_final_answer_only/v438_v439_final_answer_only_audit_manifest.json",
+    "v439_manifest_json": "artifacts/v439_final_answer_only_pairs/20260515T_v439_final_answer_only/v439_final_answer_only_pairs_manifest.json",
+    "v441_manifest_json": "artifacts/v441_hf_h200_v439_boxed_payload_preference_launch/v441-v439-boxed-payload-pref-v290ckpt6-20260515T165533Z_manifest.json"
+  },
+  "label": "v442_post_v441_route_audit",
+  "outputs": {
+    "manifest_json": "artifacts/v442_post_v441_route_audit/20260515T_v442_post_v441_route_audit/v442_post_v441_route_audit_manifest.json",
+    "pair_audit_csv": "artifacts/v442_post_v441_route_audit/20260515T_v442_post_v441_route_audit/v442_post_v441_route_audit_pair_certification_audit.csv",
+    "report_md": "artifacts/v442_post_v441_route_audit/20260515T_v442_post_v441_route_audit/v442_post_v441_route_audit_report.md"
+  },
+  "pair_summary": {
+    "existing_source_ok_rows": 133,
+    "family_counts": {
+      "bit_manipulation": 13,
+      "equation_transform": 120
+    },
+    "missing_rule_cert_counts": {
+      "leave_one_out_pass": 133,
+      "mdl_score": 133,
+      "program_or_rule": 133,
+      "renaming_stability_pass": 133,
+      "rule_candidate_count": 133,
+      "rule_frozen_before_answer": 133,
+      "rule_unique_label_free": 133,
+      "slot_alignment_stats": 133
+    },
+    "rows": 133,
+    "rule_certified_rows": 0,
+    "rule_class_counts": {
+      "bit_adapter_exact_wrong": 13,
+      "equation_numeric_operator_to_number": 20,
+      "equation_numeric_operator_to_symbolic": 4,
+      "equation_symbolic_sequence": 64,
+      "equation_symbolic_short": 32
+    },
+    "split_counts": {
+      "train": 109,
+      "validation": 24
+    },
+    "weak_full_training_rows": 0
+  },
+  "same_route_gpu_blocked": true,
+  "schema_version": "kg1_v442_post_v441_route_audit_v1",
+  "v438_structural_audit_ok": true,
+  "v441_summary": {
+    "baseline_bit": 1,
+    "baseline_equation": 6,
+    "baseline_total": 7,
+    "bit_delta": 0,
+    "checkpoint3_bit": 1,
+    "checkpoint3_equation": 6,
+    "checkpoint3_total": 7,
+    "decision": "finops_cancel_no_checkpoint3_signal",
+    "equation_delta": 0,
+    "job_id": "6a075046e48bea4538b9e7d3",
+    "job_url": "https://huggingface.co/jobs/felipesp1983/6a075046e48bea4538b9e7d3",
+    "status": "CANCELED",
+    "total_delta": 0
+  }
+}

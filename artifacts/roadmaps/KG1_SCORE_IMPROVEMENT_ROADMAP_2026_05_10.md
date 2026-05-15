@@ -42,6 +42,7 @@ Regra central: ganho so conta se aparecer no adapter/package. Teacher CPU, solve
 | V440 H200 V439 final-answer-only | checkpoint-3 empatou baseline 8/24; equation 7/22; bit 1/2 | cancelado; sem weak/full |
 | V441 OpenRouter consult | DeepSeek/Qwen/Gemini consultados; 2 respostas completas dizem SIM com gates; Gemini truncou mas iniciou SIM | V441 boxed-payload e justificado, com kill-switch |
 | V441 H200 boxed-payload | baseline 7/24; checkpoint-3 7/24; equation 6/22; bit 1/2 | cancelado; sem weak/full |
+| V442 post-V441 route audit | 133 pares V439 auditados; 133 source-ok; 0 rule-certified | bloqueia novo GPU preference; volta para CPU certified builder |
 
 ## Regras Permanentes
 
@@ -59,6 +60,7 @@ Regra central: ganho so conta se aparecer no adapter/package. Teacher CPU, solve
 12. H200 esta autorizada ate 1 hora por execucao. Se uma execucao precisar passar de 1 hora, parar e pedir autorizacao humana antes de continuar.
 13. Todo erro novo deve entrar no ledger `artifacts/roadmaps/KG1_ERROR_LEDGER_2026_05_15.md` com evidencia, impacto, regra preventiva e status antes de abrir novo job pago.
 14. Antes de qualquer job pago ou notebook operacional novo/alterado, rodar auditoria de integracao: launcher, dataset correto, conteudo do dataset, hashes, schema, targets, paths HF, adapter inicial, gates, kill-switch e comparacao contra baseline. Para HF jobs, usar `scripts/kg1_pre_paid_job_integration_gate.py` alem do static gate.
+15. Acesso a modelos/datasets Hugging Face deve reutilizar o `HF_TOKEN` ja usado para criar/executar jobs. Nunca imprimir, commitar ou gravar a chave em artefatos.
 
 ## Achados Consolidados V434C
 
@@ -588,6 +590,47 @@ Resultado HF:
   produziu sinal interno no primeiro checkpoint. Nao ha base para weak/full ou
   submit.
 
+## V442 - Post-V441 Route Audit
+
+Status: executado em CPU; bloqueia novo GPU preference sobre V435E/V439.
+
+Artefatos:
+
+- `scripts/analyze_v442_post_v441_route_audit.py`
+- `artifacts/v442_post_v441_route_audit/20260515T_v442_post_v441_route_audit/v442_post_v441_route_audit_manifest.json`
+- `artifacts/v442_post_v441_route_audit/20260515T_v442_post_v441_route_audit/v442_post_v441_route_audit_pair_certification_audit.csv`
+- `artifacts/v442_post_v441_route_audit/20260515T_v442_post_v441_route_audit/v442_post_v441_route_audit_report.md`
+
+Resultado:
+
+| Item | Valor |
+|---|---:|
+| pares V439 auditados | 133 |
+| source-ok rows | 133 |
+| weak/full training rows | 0 |
+| rule-certified rows | 0 |
+| V441 checkpoint-3 delta preference total | 0 |
+| V441 checkpoint-3 delta equation | 0 |
+| V441 checkpoint-3 delta bit | 0 |
+
+Interpretacao:
+
+- O dataset V439/V435E esta limpo contra vazamento weak/full e serve como
+  diagnostico.
+- Ele nao tem `rule_unique_label_free`, `program_or_rule`, `mdl_score`,
+  `leave_one_out_pass`, `renaming_stability_pass`, `slot_alignment_stats` nem
+  `rule_frozen_before_answer`.
+- Portanto, o dataset nao justifica outro job pago por si so. A ausencia do
+  certificado explica por que V436B/V440/V441 mudaram o objetivo mas nao
+  transferiram ACC.
+
+Decisao:
+
+- Nao relancar V435E/V439 preference com mais steps, LR, H200 ou payload loss.
+- Proxima implementacao obrigatoria: CPU certified equation pair builder.
+- Novo HF GPU so volta se o builder gerar pares com regra unica e pelo menos
+  quatro modos independentes de `equation_transform`, preservando `bit>=136`.
+
 ## Regra De Integracao Pre-Job
 
 Status: implementada em `scripts/kg1_pre_paid_job_integration_gate.py`.
@@ -654,20 +697,30 @@ Estes itens nao estao ativos agora. So entram se houver novo gate CPU mais forte
 ## Proxima Acao Unica
 
 Parar a linha V436/V436B/V440/V441 e nao abrir novo GPU job de preference
-simples sem uma mudanca tecnica nova no objetivo ou no dado. V441 ja testou a
-hipotese de score somente no boxed payload e nao gerou sinal.
+simples sem uma mudanca tecnica nova no dado. V441 ja testou a hipotese de
+score somente no boxed payload e nao gerou sinal; V442 confirmou que o V439
+tem `0` linhas com certificado de regra label-free.
 
 Objetivo:
 
-1. Construir V439 CPU dataset final-answer-only/equalizado. Status: concluido.
-   - chosen: `Final answer: \boxed{ANSWER}`.
-   - rejected: `Final answer: \boxed{ADAPTER_WRONG}` somente para auditoria/contraste, sem texto de auditoria.
-   - `chosen_mentions_adapter_prediction_rows=0`.
-   - `chosen_mentions_public_train_label_audit_rows=0`.
-2. Rodar gate V439: semantic boxes 100%, subcategory counts preservados, no weak/full leakage, tokenizacao sem truncation, quadro comparativo contra V291/V290. Status: estrutural concluido; falta tokenizacao remota se publicar em HF.
-3. Publicar V439 no HF e rodar smoke curto somente se o launcher tiver kill-switch no primeiro checkpoint e comparar baseline V439 vs checkpoint-3. Status: concluido; V440 empatou e foi cancelado.
-4. Proxima rota: CPU gate para solver/DSL de `equation_transform`; a alternativa de loss focada no boxed payload foi testada na V441 e nao gerou sinal.
-5. Qualquer novo GPU job precisa mostrar, antes de rodar, quadro comparativo contra V291/V290 e condicao objetiva de parada no primeiro checkpoint.
-6. Promover para weak/full/package/submit somente se o gate superar o melhor adapter-only atual: weak `192/315`, equation `56/155`, bit `136/160`, trunc `0`.
+1. Implementar V443 CPU certified equation pair builder.
+   - Entrada: public train permitido e probes V435D/V439 apenas como diagnostico.
+   - Prioridade: `equation_symbolic_sequence` e `equation_symbolic_short`.
+   - Exigir regra congelada antes do answer, MDL, Leave-One-Out, renaming
+     stability, candidate count unico e slot/substring alignment stats.
+2. Gerar pares somente para regras certificadas.
+   - chosen: resposta final curta derivada da regra congelada.
+   - rejected: erro real do adapter V291/V290 sobre o mesmo prompt.
+   - Sem weak/full como fonte, sem oracle de gate, sem tiebreak por answer.
+3. Rodar gate CPU contra baseline V291/V290.
+   - So avanca se houver novo sinal medido para `equation_transform` e zero
+     regressao esperada de bit.
+4. Se e somente se V443 gerar pelo menos quatro modos independentes de equation,
+   publicar dataset e rodar integration gate pre-pago.
+5. Qualquer novo GPU job precisa mostrar, antes de rodar, quadro comparativo
+   contra V291/V290 e condicao objetiva de parada no primeiro checkpoint.
+6. Promover para weak/full/package/submit somente se o gate superar o melhor
+   adapter-only atual: weak `192/315`, equation `56/155`, bit `136/160`,
+   trunc `0`.
 
 Regra FinOps: V436 revelou bug de dataset; V436B provou que hard-negative-only ainda nao basta. O objetivo segue sendo ganho medido de ranking; loss interno e preference accuracy so servem para matar job cedo, nao para promover.

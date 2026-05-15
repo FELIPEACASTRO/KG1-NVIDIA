@@ -205,6 +205,37 @@ Regra preventiva:
 
 Status: V440 cancelado por FinOps; sem weak/full/package/submit.
 
+### E007 - Boxed-payload preference tambem nao trouxe sinal
+
+Evidencia:
+
+- V441 usou o mesmo dataset V439 final-answer-only, mas mudou o score de
+  preferencia para tokens dentro do payload final `\boxed{...}`.
+- V441 passou static gate, integration gate, tokenizacao, mask de payload,
+  adapter load e H200 gates.
+- Baseline interno V441 validation: `7/24`, equation `6/22`, bit `1/2`.
+- Checkpoint-3 V441: `7/24`, equation `6/22`, bit `1/2`.
+- O job `felipesp1983/6a075046e48bea4538b9e7d3` foi cancelado por FinOps.
+
+Impacto:
+
+- Trocar mean-NLL da sequencia inteira por mean-NLL apenas do payload boxed
+  era uma hipotese tecnicamente correta, mas nao produziu movimento medido.
+- Repetir V439/V440/V441 com mais steps, LR diferente ou H200 maior nao tem
+  evidencia para superar `192/315`.
+- O problema restante nao e so formato de resposta; falta dado/objetivo com
+  regra label-free certificada que transfira para o adapter.
+
+Regra preventiva:
+
+- Bloquear novos jobs GPU baseados apenas no V435E/V439 hard-negative dataset.
+- Exigir CPU gate com regra unica, MDL/LOO/renaming ou certificado equivalente
+  antes de qualquer novo treino pago.
+- Se o dataset nao tiver certificado de regra congelada antes da resposta
+  correta, ele pode servir para diagnostico, mas nao para novo job de ranking.
+
+Status: V441 cancelado por FinOps; sem weak/full/package/submit.
+
 ## Prompt Externo
 
 Prompt consolidado para OpenRouter/outras APIs:

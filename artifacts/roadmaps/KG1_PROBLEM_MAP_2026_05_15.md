@@ -29,11 +29,13 @@ O que ja sabemos:
   submit-safe.
 - V441 provou que focar o score somente no payload do `\boxed{...}` tambem nao
   gera sinal no primeiro checkpoint.
+- V442 provou que os `133` pares V439 sao source-ok, mas `0/133` possuem
+  certificado de regra label-free. O problema deixou de ser formato/loss e
+  virou falta de regra congelada transferivel para o adapter.
 - Solver/verifier/teacher mostrou potencial, mas esse ganho ainda nao foi
   convertido para adapter-only.
-- Consulta OpenRouter V441 confirmou que o proximo smoke defensavel e trocar o
-  score de preference para o payload dentro do `\boxed{...}`, com kill-switch
-  no primeiro checkpoint.
+- Apos V441/V442, novo smoke defensavel exige dado novo com certificado CPU,
+  nao apenas troca de loss, LR, epoch ou H200.
 
 ## Desenho Simples Das Pecas Principais
 
@@ -284,6 +286,25 @@ Resultado V441:
 Decisao: cancelado por FinOps. A implementacao do payload mask funcionou, mas
 nao houve sinal interno para weak/full.
 
+### 7. Auditoria V442 pos-V441
+
+Resultado:
+
+| Item | Valor |
+|---|---:|
+| pares V439 auditados | `133` |
+| source-ok rows | `133` |
+| weak/full training rows | `0` |
+| rule-certified rows | `0` |
+
+Conclusao: o dataset V439 e limpo como diagnostico, mas insuficiente para novo
+treino pago. Ele nao traz `rule_unique_label_free`, `program_or_rule`,
+`mdl_score`, `leave_one_out_pass`, `renaming_stability_pass`,
+`slot_alignment_stats` nem `rule_frozen_before_answer`.
+
+Decisao: bloquear novos jobs de preference simples sobre V435E/V439. O proximo
+passo e construir o builder CPU certificado, nao trocar LR/epoch/loss outra vez.
+
 ## O Que Isso Significa
 
 O gargalo nao e "rodar mais H200". O gargalo e **como transformar conhecimento
@@ -317,19 +338,19 @@ Nao repetir:
 
 Executar agora:
 
-1. CPU gate de `equation_transform` com DSL/solver:
-   - focar `equation_numeric_operator_to_number`;
-   - focar `equation_numeric_operator_to_symbolic`;
-   - focar `equation_symbolic_sequence`;
-   - focar `equation_symbolic_short`.
-2. Medir se o solver/DSL encontra pelo menos `+4` equation em misses do
-   baseline sem tocar em weak/full como treino.
-3. Se existir sinal, gerar dataset de distilacao com:
+1. V443 CPU certified equation pair builder:
+   - focar primeiro `equation_symbolic_sequence` e `equation_symbolic_short`;
+   - congelar regra antes do answer;
+   - exigir MDL, Leave-One-Out, renaming stability, candidate count unico e
+     slot/substring alignment stats.
+2. Medir se o builder encontra novos pares certificados sem tocar em weak/full
+   como treino.
+3. Se existir sinal, gerar dataset de distilacao apenas com:
    - prompt original;
-   - final answer curto;
-   - hard negative do adapter;
-   - opcional trace deterministico curto somente se nao contaminar target.
-4. So voltar a treino se o CPU gate produzir novos acertos verificaveis.
+   - final answer curto derivado da regra congelada;
+   - hard negative real do adapter;
+   - trace deterministico curto somente se nao contaminar target.
+4. So voltar a treino se o CPU gate produzir novo sinal verificavel.
 5. Rodar novo HF job somente se o CPU gate provar ganho potencial e o
    integration gate aprovar tudo.
 
