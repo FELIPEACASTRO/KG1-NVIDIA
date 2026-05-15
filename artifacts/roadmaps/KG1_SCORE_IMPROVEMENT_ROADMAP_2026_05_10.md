@@ -55,6 +55,7 @@ Regra central: ganho so conta se aparecer no adapter/package. Teacher CPU, solve
 11. Todo script, job launcher, workflow ou notebook criado/alterado precisa passar `python scripts/kg1_static_safety_gate.py <paths>` antes de entrega/push/execucao. O gate bloqueia V435E misto arquivado, `format_negative_*` em treino ativo e `ALLOW_FORMAT_NEGATIVES` em job/notebook.
 12. H200 esta autorizada ate 1 hora por execucao. Se uma execucao precisar passar de 1 hora, parar e pedir autorizacao humana antes de continuar.
 13. Todo erro novo deve entrar no ledger `artifacts/roadmaps/KG1_ERROR_LEDGER_2026_05_15.md` com evidencia, impacto, regra preventiva e status antes de abrir novo job pago.
+14. Antes de qualquer job pago ou notebook operacional novo/alterado, rodar auditoria de integracao: launcher, dataset correto, conteudo do dataset, hashes, schema, targets, paths HF, adapter inicial, gates, kill-switch e comparacao contra baseline. Para HF jobs, usar `scripts/kg1_pre_paid_job_integration_gate.py` alem do static gate.
 
 ## Achados Consolidados V434C
 
@@ -482,6 +483,23 @@ V438 audit sobre V439:
 | rejected tokens medio | 4.80 |
 
 Decisao: V439 corrige E003. Ele nao prova ganho de ACC, mas e o primeiro dataset limpo para um smoke curto. Se rodar, usar H200 por menos de 1 hora, checkpoint/eval no step 3 e cancelar se nao melhorar a metrica interna contra o baseline V439.
+
+## Regra De Integracao Pre-Job
+
+Status: implementada em `scripts/kg1_pre_paid_job_integration_gate.py`.
+
+O gate deve rodar antes de qualquer execucao paga ou longa. Ele verifica:
+
+- launcher aponta para o dataset esperado, hashes esperados, adapter inicial e output repo corretos;
+- timeout H200 fica em `3600` segundos e custo unitario respeita o teto;
+- primeiro checkpoint/eval existe no step `3` para kill-switch cedo;
+- dataset local tem row count, SHA, families, subcategories e `negative_type` esperados;
+- `chosen` e `rejected` usam template final-answer-only, exatamente um `\boxed{}`;
+- `chosen` nao contem auditoria, resposta errada, texto de adapter ou contaminacao de target;
+- flags `gate_rows_used_for_training`, `weak_gate_rows_used_for_training` e `full_gate_rows_used_for_training` sao `false`;
+- manifest V438 declara `hf_gpu_allowed_for_same_objective=true` e zero mismatches.
+
+Decisao: se esse gate falhar, nao abrir HF/Kaggle GPU. Primeiro corrigir o dado ou o launcher.
 
 ## V437 - Full Gate, Package e Submit
 

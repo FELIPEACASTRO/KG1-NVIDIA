@@ -154,8 +154,9 @@ def main() -> int:
         "train_summary": summarize(train_rows),
         "val_summary": summarize(val_rows),
         "decision": {
-            "hf_gpu_allowed": False,
-            "reason": "requires V438 structural audit and tokenization gate before GPU",
+            "builder_decision": "post_build_audit_required",
+            "hf_gpu_allowed_by_builder_alone": False,
+            "reason": "builder only creates pairs; V438 structural audit and pre-paid integration gate are required before GPU",
         },
     }
     manifest_path = args.output_dir / f"{args.label}_manifest.json"

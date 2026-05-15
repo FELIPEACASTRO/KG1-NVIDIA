@@ -77,7 +77,10 @@ def run_git_head() -> str:
 def compile_repo_scripts() -> None:
     targets = [
         Path("scripts/hf_job_train_v90.py"),
+        Path("scripts/hf_job_train_v315_preference.py"),
         Path("scripts/hf_job_preflight_gate.py"),
+        Path("scripts/kg1_static_safety_gate.py"),
+        Path("scripts/kg1_pre_paid_job_integration_gate.py"),
         Path("scripts/build_v243_training_mix.py"),
         Path("scripts/audit_jsonl_overlap.py"),
     ]

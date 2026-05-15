@@ -1,10 +1,16 @@
 {
   "decision": {
-    "hf_gpu_allowed": false,
-    "reason": "requires V438 structural audit and tokenization gate before GPU"
+    "builder_decision": "post_build_audit_required",
+    "hf_gpu_allowed_by_builder_alone": false,
+    "reason": "builder only creates pairs; V438 structural audit and pre-paid integration gate are required before GPU"
   },
   "label": "v439_final_answer_only_pairs",
   "schema_version": "kg1_v439_final_answer_only_pairs_manifest_v1",
+  "post_build_audit": {
+    "hf_gpu_allowed_for_same_objective": true,
+    "integration_gate_required_before_paid_job": true,
+    "manifest_json": "artifacts\\v438_preference_objective_audit\\20260515T_v438_v439_final_answer_only\\v438_v439_final_answer_only_audit_manifest.json"
+  },
   "source_train_jsonl": "artifacts\\v435e_adapter_probe_preference_dataset\\20260515T_v435e_hardneg_only\\v435e_adapter_probe_preference_dataset_preferences_train.jsonl",
   "source_val_jsonl": "artifacts\\v435e_adapter_probe_preference_dataset\\20260515T_v435e_hardneg_only\\v435e_adapter_probe_preference_dataset_preferences_val.jsonl",
   "train_jsonl": "artifacts\\v439_final_answer_only_pairs\\20260515T_v439_final_answer_only\\v439_final_answer_only_pairs_train.jsonl",

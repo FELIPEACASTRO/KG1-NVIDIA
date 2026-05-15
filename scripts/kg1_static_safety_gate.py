@@ -45,6 +45,14 @@ CRITICAL_SNIPPETS = {
         "negative type accuracy": "negative_type_accuracy",
         "negative type from tokenized pair": "pair.get(\"negative_type\")",
     },
+    "scripts/kg1_pre_paid_job_integration_gate.py": {
+        "dataset content audit": "audit_dataset_file",
+        "target template check": "Final answer: \\\\boxed{",
+        "audit manifest gate": "hf_gpu_allowed_for_same_objective",
+        "h200 timeout gate": "launcher_timeout_not_one_hour",
+        "first checkpoint eval gate": "launcher_missing_first_checkpoint_eval",
+        "format negatives blocked": "launcher_allows_format_negatives",
+    },
 }
 
 TRUE_FORMAT_NEGATIVE_RE = re.compile(

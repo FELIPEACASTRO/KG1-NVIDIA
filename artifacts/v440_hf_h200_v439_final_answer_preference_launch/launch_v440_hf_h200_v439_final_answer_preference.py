@@ -70,8 +70,21 @@ git checkout --detach "$KG1_EXPECTED_COMMIT"
 observed=$(git rev-parse HEAD)
 echo "repo_commit=$observed"
 if [ "$observed" != "$KG1_EXPECTED_COMMIT" ]; then echo "commit mismatch: expected=$KG1_EXPECTED_COMMIT observed=$observed" >&2; exit 12; fi
-python -m py_compile scripts/hf_job_train_v315_preference.py scripts/hf_job_train_v90.py scripts/hf_job_preflight_gate.py scripts/kg1_static_safety_gate.py
-python scripts/kg1_static_safety_gate.py scripts/hf_job_train_v315_preference.py scripts/run_v435f_adapter_probe_preference_gate.py artifacts/v440_hf_h200_v439_final_answer_preference_launch/launch_v440_hf_h200_v439_final_answer_preference.py
+python -m py_compile scripts/hf_job_train_v315_preference.py scripts/hf_job_train_v90.py scripts/hf_job_preflight_gate.py scripts/kg1_static_safety_gate.py scripts/kg1_pre_paid_job_integration_gate.py
+python scripts/kg1_static_safety_gate.py scripts/hf_job_train_v315_preference.py scripts/run_v435f_adapter_probe_preference_gate.py scripts/kg1_pre_paid_job_integration_gate.py artifacts/v440_hf_h200_v439_final_answer_preference_launch/launch_v440_hf_h200_v439_final_answer_preference.py
+python scripts/kg1_pre_paid_job_integration_gate.py \
+  --launcher artifacts/v440_hf_h200_v439_final_answer_preference_launch/launch_v440_hf_h200_v439_final_answer_preference.py \
+  --train-jsonl artifacts/v439_final_answer_only_pairs/20260515T_v439_final_answer_only/v439_final_answer_only_pairs_train.jsonl \
+  --val-jsonl artifacts/v439_final_answer_only_pairs/20260515T_v439_final_answer_only/v439_final_answer_only_pairs_val.jsonl \
+  --v438-audit-manifest artifacts/v438_preference_objective_audit/20260515T_v438_v439_final_answer_only/v438_v439_final_answer_only_audit_manifest.json \
+  --expected-data-root data/v439_final_answer_only_pairs/20260515T_v439_final_answer_only \
+  --expected-train-sha256 "$KG1_PREF_TRAIN_SHA" \
+  --expected-val-sha256 "$KG1_PREF_VAL_SHA" \
+  --expected-train-rows "$KG1_PREF_TRAIN_ROWS" \
+  --expected-val-rows "$KG1_PREF_VAL_ROWS" \
+  --expected-output-repo "$KG1_OUTPUT_REPO" \
+  --expected-init-adapter-repo "$KG1_INIT_ADAPTER_REPO" \
+  --expected-init-adapter-subfolder "$KG1_INIT_ADAPTER_SUBFOLDER"
 export HF_HUB_ENABLE_HF_TRANSFER=1
 export TOKENIZERS_PARALLELISM=false
 export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True

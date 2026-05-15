@@ -148,6 +148,33 @@ Regra preventiva:
 
 Status: regra permanente.
 
+### E005 - Auditoria de integracao antes de job pago
+
+Evidencia:
+
+- V435E misto passou por treino pago antes de ficar claro que havia `67`
+  negativos apenas de formato.
+- V436B passou gates remotos, mas mostrou que o objetivo ainda estava
+  estruturalmente desalinhado.
+- O usuario formalizou a regra: antes de rodar script/job/notebook, validar
+  dataset correto, conteudo do dataset, pecas, componentes e integracoes.
+
+Impacto:
+
+- Sem auditoria integrada, um launcher pode apontar para path correto mas ainda
+  carregar manifest antigo, dataset com target contaminado, kill-switch ausente
+  ou comparacao incompleta contra baseline.
+
+Regra preventiva:
+
+- Todo job pago ou notebook operacional novo/alterado deve passar por
+  `scripts/kg1_pre_paid_job_integration_gate.py` quando houver dataset/launcher
+  envolvidos.
+- Esse gate precisa aprovar launcher, hashes, row counts, targets, flags de
+  leakage, audit manifest, H200 timeout/cost gate e primeiro checkpoint/eval.
+
+Status: implementado para a linha V440/V439.
+
 ## Prompt Externo
 
 Prompt consolidado para OpenRouter/outras APIs:
