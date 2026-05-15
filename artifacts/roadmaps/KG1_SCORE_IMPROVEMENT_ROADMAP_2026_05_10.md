@@ -50,6 +50,7 @@ Regra central: ganho so conta se aparecer no adapter/package. Teacher CPU, solve
 | V449 ACC metric integrity audit | weak scorer usa `verify_answer`; `answers_equivalent` superconta bit e foi bloqueado para `official_correct` | metrica de promocao confirmada; script diagnostico corrigido |
 | V448 H200 V447 clean trace weak eval | checkpoint-3 `190/315`, equation `56/155`, bit `134/160`, trunc `1` | cancelado por FinOps; rota clean-trace SFT bloqueada |
 | V450 transfer-debug audit | ACC path, weak scorer, family mapping e exact binary auditados | sem erro ativo de scoring; gargalo e transferencia adapter-only |
+| V451 equation DSL v2 gap audit | V324 tem `+6` CPU solver-only; V443 tem `0` pares certificados e `120` no_unique_certified_rule | V452 precisa ampliar DSL/certificador antes de GPU |
 
 ## Regras Permanentes
 
@@ -987,11 +988,12 @@ treino pago.
      calculo de ACC;
    - resultado: nao ha erro ativo de ACC; o erro permissivo foi bloqueado pelo
      V449 e o gargalo ativo e transferencia para adapter-only.
-2. Expandir V451/V452 equation DSL v2 somente em CPU:
+2. Expandir V452 equation DSL v2 somente em CPU:
    - basear em `tonghuikang/nemotron/reasoners/equation_numeric.py`;
    - cobrir concat, reverse concat, soma/subtracao/multiplicacao, `+1/-1`,
      div/mod, abs diff, digitos, determinante, reverse operands/result,
      prefix/suffix e padroes simbolicos/pontuacao;
+   - atacar especificamente os `120` rows V443 com `no_unique_certified_rule`;
    - exigir regra unica label-free, Leave-One-Out, renaming stability,
      anti-leakage e abstain em empate.
 3. Fechar V453 bit guardrail CPU:
