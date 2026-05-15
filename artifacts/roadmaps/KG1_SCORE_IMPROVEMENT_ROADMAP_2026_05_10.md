@@ -590,6 +590,33 @@ Promocao minima para qualquer smoke HF/Kaggle:
 - `truncated=0`;
 - caso contrario, cancelar por FinOps.
 
+### Step 6E - V410 solver-first transfer dataset
+
+Status: dataset construido e tokenization gate aprovado; pronto apenas para smoke curto.
+
+Objetivo: converter a projecao CPU V409 (`202/315`, `equation=63`, `bit=139`) em sinal adapter-only, sem treinar diretamente em weak/full rows.
+
+Comparativo:
+
+| Item | V406 | V410 |
+|---|---:|---:|
+| CPU projection basis | `201/315`, bit `138` | `202/315`, bit `139` |
+| Train rows | `2064` | `2320` |
+| Validation rows | `516` | `580` |
+| Bit exact-global rules | `2` | `2` |
+| Bit asymmetric per-bit rule | `0` | `1` (`4ef88f92`) |
+| Weak/full rows used for train | `0` | `0` |
+| Tokenization gate | pass | pass |
+
+V410 gate real:
+
+- prompt truncation `0`;
+- completion tokens dropped `0`;
+- offset masks `2320/2320` train e `580/580` validation;
+- token max `360`.
+
+Decisao: V410 autoriza somente um smoke curto. Nao autoriza full eval, package ou submit.
+
 ### Step 7 - Full/package/submit
 
 Status: somente depois de weak gate.
@@ -645,7 +672,7 @@ Seguir rota solver-first agressiva, mas com gate:
 1. implementar V407/V408 CPU gate para `bit_manipulation`:
    - `INHIB`, `IMPL`, pares ordenados, `MAJ`, `CH`, `XOR3`;
    - aceitar somente candidatos que batem todos os exemplos e nao causam perdas.
-2. incorporar o novo bit row V408 em um V410 dataset de transferencia:
+2. usar o V410 dataset de transferencia ja gateado:
    - traces curtos per-bit assimetricos;
    - replay de bit para preservar `136/160`;
    - sem treinar diretamente no weak row.
