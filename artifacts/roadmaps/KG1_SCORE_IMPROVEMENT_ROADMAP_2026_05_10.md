@@ -1231,14 +1231,32 @@ treino pago.
    - decisao atual: GPU bloqueada por padrao porque a evidencia cobre uma
      classe so. O unico caminho pago aceitavel e micro-smoke explicitamente
      marcado como risco de uma classe, com cancelamento no primeiro checkpoint.
-7. So voltar a HF GPU de treino se a CPU/raw-probe provar:
+7. V461 foi criado como rota agressiva responsavel antes de treino:
+   - artefato: `artifacts/v461_synthetic_numeric_probe_pack/20260515T_cpu_gate/`;
+   - rows: `56` prompts sinteticos sem labels no JSONL de inferencia;
+   - classes cobertas: `add_direct_over_model_add_variant`,
+     `colon_absdiff_restore_trailing_zero`,
+     `minus_direct_negative_restore_sign` e
+     `minus_signed_opposite_sign_guarded`;
+   - objetivo: coletar raw outputs do adapter atual e descobrir se existem
+     hard negatives reais em mais de uma classe;
+   - permitido: HF inference-only curta, sem score, sem treino, sem submit;
+   - proibido: converter em treino antes do V463 provar hard negatives reais
+     multi-classe.
+8. V462 e o proximo passo operacional:
+   - launcher: `artifacts/v462_hf_v461_synthetic_raw_probe_launch/launch_v462_hf_v461_synthetic_raw_probe.py`;
+   - job: H200 inference-only, limite `<=1h`, prompt pack sem labels;
+   - monitoramento: logs a cada `40s`;
+   - FinOps: cancelar se falhar hardware/load, se ficar sem progresso apos
+     startup, ou se nao gerar raw outputs para o V463.
+9. So voltar a HF GPU de treino se a CPU/raw-probe provar:
    - `total > 192/315`;
    - `equation > 56/155`;
    - `bit >= 136/160`;
    - `truncated = 0`;
    - dataset sem leakage;
    - alvo treinavel que o adapter consiga emitir em resposta curta.
-8. Se a proxima CPU/raw-probe route nao mostrar ganho estrito, nao abrir job pago.
+10. Se a proxima CPU/raw-probe route nao mostrar ganho estrito, nao abrir job pago.
 
 Regra FinOps continua: se o primeiro checkpoint ou gate parcial nao indicar
 caminho para `total>192`, `equation>56`, `bit>=136`, `truncated=0`, cancelar.

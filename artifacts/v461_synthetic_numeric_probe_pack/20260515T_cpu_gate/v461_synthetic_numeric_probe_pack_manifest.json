@@ -1,0 +1,41 @@
+{
+  "decision": {
+    "decision": "v461_prompt_pack_ready_for_inference_only_raw_probe",
+    "hf_gpu_train_allowed": false,
+    "hf_raw_probe_allowed": true,
+    "next_action": "Run inference-only adapter raw-output probe, then join labels locally and require multi-rule real hard negatives before any training."
+  },
+  "generated_at_utc": "2026-05-15T22:35:00.363347+00:00",
+  "outputs": {
+    "audit_csv": "artifacts\\v461_synthetic_numeric_probe_pack\\20260515T_cpu_gate\\v461_synthetic_numeric_probe_pack_audit.csv",
+    "audit_csv_sha256": "ac91702a087b18a2e93971bdf5953ff4e7f03ee368d1f1d65facd469e3fd1ee3",
+    "manifest_json": "artifacts\\v461_synthetic_numeric_probe_pack\\20260515T_cpu_gate\\v461_synthetic_numeric_probe_pack_manifest.json",
+    "prompts_csv": "artifacts\\v461_synthetic_numeric_probe_pack\\20260515T_cpu_gate\\v461_synthetic_numeric_probe_pack_prompts.csv",
+    "prompts_csv_sha256": "393808fda81761899845201173565d678dd24a793c14fac1cbbd86b5d0c17a9d",
+    "prompts_jsonl": "artifacts\\v461_synthetic_numeric_probe_pack\\20260515T_cpu_gate\\v461_synthetic_numeric_probe_pack_prompts.jsonl",
+    "prompts_jsonl_sha256": "44e4de668faa35078b115508a13d6854cbb8e99948555f01cad9b863cbdfe48d",
+    "report_md": "artifacts\\v461_synthetic_numeric_probe_pack\\20260515T_cpu_gate\\V461_SYNTHETIC_NUMERIC_PROBE_PACK.md"
+  },
+  "schema_version": "kg1_v461_synthetic_numeric_probe_pack_v1",
+  "source_policy": {
+    "answers_in_prompt_pack": false,
+    "inference": false,
+    "purpose": "Create prompt-only synthetic probes to collect adapter raw outputs for multi-rule hard-negative mining.",
+    "submission": false,
+    "synthetic_prompts": true,
+    "training": false,
+    "weak_or_full_rows_used": false
+  },
+  "summary": {
+    "hf_gpu_train_allowed": false,
+    "hf_raw_probe_allowed": true,
+    "rows": 56,
+    "rule_class_counts": {
+      "v274_guarded_numeric_add_direct_over_model_add_variant": 16,
+      "v274_guarded_numeric_colon_absdiff_restore_trailing_zero": 16,
+      "v274_guarded_numeric_minus_direct_negative_restore_sign": 8,
+      "v274_guarded_numeric_minus_signed_opposite_sign_guarded": 16
+    }
+  },
+  "version": "v461_synthetic_numeric_probe_pack"
+}
