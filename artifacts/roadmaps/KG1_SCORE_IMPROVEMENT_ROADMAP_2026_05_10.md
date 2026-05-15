@@ -51,6 +51,7 @@ Regra central: ganho so conta se aparecer no adapter/package. Teacher CPU, solve
 | V448 H200 V447 clean trace weak eval | checkpoint-3 `190/315`, equation `56/155`, bit `134/160`, trunc `1` | cancelado por FinOps; rota clean-trace SFT bloqueada |
 | V450 transfer-debug audit | ACC path, weak scorer, family mapping e exact binary auditados | sem erro ativo de scoring; gargalo e transferencia adapter-only |
 | V451 equation DSL v2 gap audit | V324 tem `+6` CPU solver-only; V443 tem `0` pares certificados e `120` no_unique_certified_rule | V452 precisa ampliar DSL/certificador antes de GPU |
+| V452 equation DSL v2 certified builder | 133 rows auditadas; 7 candidatos; 2 pares certificados; 5 candidatos numericos reprovados | `hf_gpu_allowed=false`; nao abrir H200 por esta rota |
 
 ## Regras Permanentes
 
@@ -988,26 +989,32 @@ treino pago.
      calculo de ACC;
    - resultado: nao ha erro ativo de ACC; o erro permissivo foi bloqueado pelo
      V449 e o gargalo ativo e transferencia para adapter-only.
-2. Expandir V452 equation DSL v2 somente em CPU:
-   - basear em `tonghuikang/nemotron/reasoners/equation_numeric.py`;
-   - cobrir concat, reverse concat, soma/subtracao/multiplicacao, `+1/-1`,
-     div/mod, abs diff, digitos, determinante, reverse operands/result,
-     prefix/suffix e padroes simbolicos/pontuacao;
-   - atacar especificamente os `120` rows V443 com `no_unique_certified_rule`;
-   - exigir regra unica label-free, Leave-One-Out, renaming stability,
-     anti-leakage e abstain em empate.
-3. Fechar V453 bit guardrail CPU:
+2. V452 CPU DSL v2 foi executado:
+   - artefatos: `scripts/build_v452_equation_dsl_v2_certified_builder.py` e
+     `artifacts/v452_equation_dsl_v2_certified_builder/20260515T_cpu_gate/`;
+   - resultado: `2` pares certificados, `1` modo independente, `5` candidatos
+     numericos novos reprovados por label;
+   - decisao: `hf_gpu_allowed=false`; nao abrir H200 nem repetir treino a partir
+     deste dataset.
+3. Fechar V453 bit/equation public-mining CPU:
+   - minerar notebooks publicos e sources permitidos apenas para extrair regra,
+     nao pesos/submits/artefatos de terceiros;
+   - comparar qualquer regra contra os probes V439/V452 e contra weak gate
+     apenas como avaliacao posterior;
+   - criterio minimo para reabrir GPU: pelo menos `4` modos independentes
+     no-loss em equation ou melhora comprovada em bit sem queda de equation.
+4. Fechar V454 bit guardrail CPU:
    - bit-pair/bitsum/stride;
    - exact binary com `verify_answer`;
    - gerar apenas anchors que preservem `bit>=136`, sem tolerancia numerica.
-4. So voltar a HF GPU se a CPU provar:
+5. So voltar a HF GPU se a CPU provar:
    - `total > 192/315`;
    - `equation > 56/155`;
    - `bit >= 136/160`;
    - `truncated = 0`;
    - dataset sem leakage;
    - alvo treinavel que o adapter consiga emitir em resposta curta.
-5. Se a proxima CPU route nao mostrar ganho estrito, nao abrir job pago.
+6. Se a proxima CPU route nao mostrar ganho estrito, nao abrir job pago.
 
 Regra FinOps continua: se o primeiro checkpoint ou gate parcial nao indicar
 caminho para `total>192`, `equation>56`, `bit>=136`, `truncated=0`, cancelar.

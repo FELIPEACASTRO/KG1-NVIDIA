@@ -410,6 +410,44 @@ Regra preventiva:
 
 Status: V448 weak eval cancelado por FinOps; sem full/package/submit.
 
+### E013 - DSL numerica global com LOO ainda gera falsos positivos em V452
+
+Evidencia:
+
+- V452 auditou `133` probes V439 public-train, incluindo `120` rows de
+  `equation_transform`.
+- A expansao numerica v2 encontrou `5` candidatos globais com LOO, mas todos
+  eram incorretos contra o label publico:
+  - `numeric_v2_global_abs_diff_revop0_revres0`;
+  - `numeric_v2_global_add_minus1_revop0_revres0`;
+  - `numeric_v2_global_add_revop0_revres0`;
+  - `numeric_v2_global_max_mod_min_revop0_revres0`;
+  - `numeric_v2_global_mul_revop1_revres1`.
+- O unico sinal seguro foi `v274_guarded_numeric_minus_direct_negative_restore_sign`:
+  `2` candidatos, `2` corretos, `0` incorretos.
+- Resultado final V452: `2` pares certificados, `1` modo independente,
+  `hf_gpu_allowed=false`.
+
+Impacto:
+
+- Explicar exemplos locais com uma regra numerica nao e suficiente para criar
+  treino. Em `equation_transform`, regras globais plausiveis podem falhar no
+  target mesmo com LOO.
+- Abrir H200 a partir de V452 seria gasto sem base tecnica: o dataset tem poucos
+  pares e pouca diversidade.
+
+Regra preventiva:
+
+- Toda nova DSL de equation deve reportar candidatos incorretos por classe e
+  bloquear a classe inteira se houver qualquer conflito.
+- O gate minimo para GPU exige pelo menos quatro modos independentes no-loss,
+  nao apenas quatro linhas ou quatro candidatos.
+- Regras numericas globais so podem promover dataset se passarem por classe
+  safe, row-conflict gate e auditoria posterior com `verify_answer`.
+
+Status: V452 bloqueou GPU corretamente; proxima rota volta para mineracao CPU
+de regras novas.
+
 ## Prompt Externo
 
 Prompt consolidado para OpenRouter/outras APIs:
