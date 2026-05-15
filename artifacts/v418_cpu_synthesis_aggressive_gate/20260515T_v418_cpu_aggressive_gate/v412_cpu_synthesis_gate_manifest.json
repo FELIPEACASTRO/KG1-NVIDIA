@@ -1,0 +1,91 @@
+{
+  "accepted_gain_count": 10,
+  "baseline_score": {
+    "families": {
+      "bit_manipulation": {
+        "correct": 136,
+        "rows": 160
+      },
+      "equation_transform": {
+        "correct": 56,
+        "rows": 155
+      }
+    },
+    "total": {
+      "correct": 192,
+      "rows": 315
+    }
+  },
+  "config": {
+    "baseline_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v342_acc_first_diagnostic\\v290_checkpoint6_baseline_predictions.csv",
+    "bit_max_accepted_candidates_per_bit": 1024,
+    "bit_max_k": 3,
+    "bit_max_total_candidates_per_bit": 12000,
+    "global_mapping_cap": 30000,
+    "max_char_subset_size": 5,
+    "max_position_programs": 80000,
+    "max_position_sources": 10,
+    "max_programs_before_rank": 80000,
+    "min_same_operator_examples": 1,
+    "output_dir": "artifacts\\v418_cpu_synthesis_aggressive_gate\\20260515T_v418_cpu_aggressive_gate",
+    "pair_mapping_cap": 8000,
+    "v409_accepted_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v409_integrated_solver_projection_v2\\20260514T_v409_integrated_projection_v2\\v409_integrated_solver_accepted.csv"
+  },
+  "conflict_count": 8,
+  "decision": {
+    "decision": "v412_no_new_safe_cpu_signal_beyond_v409",
+    "gpu_authorized": false,
+    "reason": "baseline=192; v409=202; v412=202; new_v412=0; false_positive=1; conflicts=8",
+    "submit_authorized": false
+  },
+  "false_positive_count": 1,
+  "generated_at_utc": "2026-05-15T03:50:31.624466+00:00",
+  "inputs": {
+    "baseline_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v342_acc_first_diagnostic\\v290_checkpoint6_baseline_predictions.csv",
+    "v409_accepted_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v409_integrated_solver_projection_v2\\20260514T_v409_integrated_projection_v2\\v409_integrated_solver_accepted.csv"
+  },
+  "new_v412_by_family": {},
+  "new_v412_gain_count": 0,
+  "outputs": {
+    "accepted_csv": "artifacts\\v418_cpu_synthesis_aggressive_gate\\20260515T_v418_cpu_aggressive_gate\\v412_integrated_accepted.csv",
+    "candidate_audit_csv": "artifacts\\v418_cpu_synthesis_aggressive_gate\\20260515T_v418_cpu_aggressive_gate\\v412_candidate_audit.csv",
+    "conflicts_csv": "artifacts\\v418_cpu_synthesis_aggressive_gate\\20260515T_v418_cpu_aggressive_gate\\v412_conflicts.csv",
+    "false_positive_csv": "artifacts\\v418_cpu_synthesis_aggressive_gate\\20260515T_v418_cpu_aggressive_gate\\v412_false_positive_candidates.csv",
+    "manifest_json": "artifacts\\v418_cpu_synthesis_aggressive_gate\\20260515T_v418_cpu_aggressive_gate\\v412_cpu_synthesis_gate_manifest.json",
+    "new_accepted_csv": "artifacts\\v418_cpu_synthesis_aggressive_gate\\20260515T_v418_cpu_aggressive_gate\\v412_new_accepted.csv",
+    "report_md": "artifacts\\v418_cpu_synthesis_aggressive_gate\\20260515T_v418_cpu_aggressive_gate\\V412_CPU_SYNTHESIS_GATE.md"
+  },
+  "schema_version": "kg1_v412_cpu_synthesis_gate_v1",
+  "v409_score": {
+    "families": {
+      "bit_manipulation": {
+        "correct": 139,
+        "rows": 160
+      },
+      "equation_transform": {
+        "correct": 63,
+        "rows": 155
+      }
+    },
+    "total": {
+      "correct": 202,
+      "rows": 315
+    }
+  },
+  "v412_score": {
+    "families": {
+      "bit_manipulation": {
+        "correct": 139,
+        "rows": 160
+      },
+      "equation_transform": {
+        "correct": 63,
+        "rows": 155
+      }
+    },
+    "total": {
+      "correct": 202,
+      "rows": 315
+    }
+  }
+}

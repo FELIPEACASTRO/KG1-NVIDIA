@@ -71,6 +71,8 @@ Precisamos buscar subida no ranking ainda hoje, `2026-05-14`. A decisao V392 e s
 | V415 adapter-direct audit | `0` candidato promovivel | teto `56/155` | max adapter-like `136/160` | sem ganho submit-safe existente; exige mecanismo novo |
 | V416 rawstyle transfer smoke | melhor `191/315` | `56/155` | `135/160` | rejeitado; checkpoints 2/4 nao moveram equation, perderam bit e tiveram `truncated=1` |
 | V417 transfer blocker gate | `hf_gpu_allowed=false` | teto adapter `56/155` | baseline `136/160` | bloqueia novo GPU SFT ate existir sinal CPU adapter/package novo |
+| V418 CPU synthesis aggressive rerun | CPU projection `202/315` | `63/155` | `139/160` | `0` ganho novo vs V409/V412; DSL atual esgotada |
+| V419 residual taxonomy | `92` eq residuais | `80` punct-only dominantes | n/a | proxima classe: symbolic punctuation structural solver; sem GPU |
 
 Conclusao: `eval_loss` baixo nao e criterio de promocao. O criterio e ACC por familia no weak/full gate. A rota "resolver nos mesmos" finalmente tem ganho mensuravel (`+9` weak em CPU), mas esse ganho ainda e solver/verifier externo; para submit, ele precisa virar comportamento do adapter/package ou ser permitido explicitamente pelas regras de runtime.
 
@@ -946,6 +948,58 @@ Receitas bloqueadas:
 
 Proxima acao permitida: CPU-only row-level mining ou expansao formal com prova no-loss. HF GPU so volta se um gate pre-GPU demonstrar comportamento adapter/package novo com chance objetiva de bater `total>192`, `equation>56`, `bit>=136`, `truncated=0`.
 
+### Step 6O - V418 aggressive CPU synthesis rerun
+
+Status: concluido; sem ganho novo.
+
+Objetivo: testar se apenas ampliar caps/parametros da DSL V412 encontra novos ganhos CPU antes de considerar qualquer GPU.
+
+Comando executado: `analyze_v412_cpu_synthesis_gate.py` com `max_char_subset_size=5`, `max_position_sources=10`, `max_position_programs=80000`, `pair_mapping_cap=8000`, `global_mapping_cap=30000`, `min_same_operator_examples=1`.
+
+Resultado:
+
+| Metric | Baseline | V409/V412 | V418 aggressive | Delta vs V409 |
+|---|---:|---:|---:|---:|
+| Weak total | `192/315` | `202/315` | `202/315` | `+0` |
+| equation_transform | `56/155` | `63/155` | `63/155` | `+0` |
+| bit_manipulation | `136/160` | `139/160` | `139/160` | `+0` |
+| New safe gains | n/a | n/a | `0` | `+0` |
+| False positives | n/a | n/a | `1` | n/a |
+| Conflicts/losses blocked | n/a | n/a | `8` | n/a |
+
+Artefatos:
+
+- Manifest: `artifacts/v418_cpu_synthesis_aggressive_gate/20260515T_v418_cpu_aggressive_gate/v412_cpu_synthesis_gate_manifest.json`.
+- Audit CSV: `artifacts/v418_cpu_synthesis_aggressive_gate/20260515T_v418_cpu_aggressive_gate/v412_candidate_audit.csv`.
+- False positive: `432b1110`, prediction `\{<?`, answer `%[:?`, baseline `\{<?`.
+
+Decisao: nao abrir HF. A DSL atual de V412 esta esgotada para ganho novo; o proximo avanco precisa ser uma classe nova de solver/regra, nao aumentar caps da mesma busca.
+
+### Step 6P - V419 residual taxonomy
+
+Status: concluido; definiu o proximo alvo tecnico.
+
+Objetivo: analisar os `equation_transform` ainda errados depois da melhor projecao CPU atual, para decidir qual regra nova deve ser implementada antes de qualquer GPU.
+
+Artefatos:
+
+- Script: `artifacts/v419_residual_taxonomy/build_v419_residual_taxonomy.py`.
+- Manifest: `artifacts/v419_residual_taxonomy/20260515T_v419_residual_taxonomy/v419_residual_taxonomy_manifest.json`.
+- Relatorio: `artifacts/v419_residual_taxonomy/20260515T_v419_residual_taxonomy/V419_RESIDUAL_TAXONOMY.md`.
+- Residual rows: `artifacts/v419_residual_taxonomy/20260515T_v419_residual_taxonomy/v419_equation_residual_rows.csv`.
+
+Resultado:
+
+| Bucket residual | Count |
+|---|---:|
+| `punct_only::symbolic_punctuation_prompt::no_consistent_vsa_program` | `80` |
+| `numeric_unsigned::numeric_operator_prompt::no_consistent_vsa_program` | `9` |
+| `mixed_symbolic::numeric_operator_prompt::no_consistent_vsa_program` | `1` |
+| `punct_only::symbolic_punctuation_prompt::ambiguous_near_top_vsa_predictions` | `1` |
+| `punct_only::symbolic_punctuation_prompt::v412_vsa_ranked_unique_prediction` | `1` |
+
+Decisao: o gargalo dominante restante e `symbolic_punctuation_structural_solver`, nao treino. O proximo passo deve atacar esses `80` punct-only residuais com uma DSL nova de estrutura simbolica; GPU continua bloqueada.
+
 ## Regras Permanentes
 
 - Nenhum HF sem CPU gate com sinal novo.
@@ -978,6 +1032,7 @@ Proxima acao permitida: CPU-only row-level mining ou expansao formal com prova n
 | Adapter soups V291/V382 | V389 mostrou `190-191/315`, `equation=56`, `bit=134-135`, truncation `1-2`; linha encerrada |
 | V390/V391 equation+bit replay LoRA direto | CPU projection `198/315` nao transferiu; V391 ficou `191/315`, `equation=56`, `bit=135` |
 | V416 rawstyle transfer LoRA | dataset/gate passou, mas HF weak ficou `190-191/315`, `equation=56`, `bit=134-135`, `truncated=1`; linha encerrada |
+| Aumentar caps da DSL V412 | V418 agressivo achou `0` ganho novo e gerou `1` falso positivo + `8` conflitos |
 | H200 relaunch sem novo dado | V391 confirmou que trocar hardware nao muda ACC quando a hipotese de dados nao transfere |
 | HF training baseado apenas em `eval_loss` | historicamente loss caiu sem mover `equation_transform`; promocao e por ACC |
 | Web/API buscas genericas | so retornam ao plano se virarem regra, dataset ou gate verificavel |
@@ -986,7 +1041,7 @@ Proxima acao permitida: CPU-only row-level mining ou expansao formal com prova n
 
 ## Proxima Acao Unica
 
-V415 confirmou que nao existe candidato adapter-like local pronto para promocao, V416 confirmou que mudar o estilo da completion ainda nao transfere os ganhos do teacher para o adapter, e V417 bloqueou novo GPU SFT por FinOps. Portanto o caminho ativo volta para CPU gate antes de qualquer novo gasto HF:
+V415 confirmou que nao existe candidato adapter-like local pronto para promocao, V416 confirmou que mudar o estilo da completion ainda nao transfere os ganhos do teacher para o adapter, V417 bloqueou novo GPU SFT por FinOps, V418 mostrou que aumentar caps da DSL V412 nao cria ganhos novos, e V419 mostrou que o residual dominante e `80` rows de pontuacao simbolica pura. Portanto o caminho ativo volta para CPU gate com classe de regra nova antes de qualquer novo gasto HF:
 
 1. criar V417 como auditoria de falha e bloqueio de receita:
    - consolidar V413/V416 como linhas de transferencia rejeitadas;
@@ -996,6 +1051,10 @@ V415 confirmou que nao existe candidato adapter-like local pronto para promocao,
    - comportamento adapter/package, nao teacher externo;
    - `total > 192`, `equation > 56`, `bit >= 136`, `truncated=0`;
    - nenhum uso direto de weak/full rows em treino.
-3. se nao houver esse sinal em CPU, nao abrir HF job. A acao correta e minerar novas regras formais/sinteticas ou mudar o mecanismo de inferencia permitido, nao repetir SFT.
+3. implementar primeiro um `symbolic_punctuation_structural_solver` para os `80` residuais punct-only:
+   - sem treino;
+   - com abstain agressivo;
+   - aceitar apenas ganhos no-loss contra V291/V290.
+4. se nao houver esse sinal em CPU, nao abrir HF job. A acao correta e minerar outra classe formal ainda nao coberta por V412/V418/V419, ou mudar o mecanismo de inferencia permitido, nao repetir SFT nem apenas aumentar caps.
 
 Nao rodar broad SFT, prompt sweep ou job guiado por `eval_loss`. A decisao e por ACC, truncation e comparativo contra V291.

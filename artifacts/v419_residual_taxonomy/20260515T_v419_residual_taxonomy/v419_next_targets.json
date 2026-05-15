@@ -1,0 +1,20 @@
+[
+  {
+    "gpu_allowed": false,
+    "priority": 1,
+    "target": "symbolic_punctuation_structural_solver",
+    "why": "Most remaining equation misses are punctuation/mixed symbolic rows where V412 reports no_consistent_vsa_program."
+  },
+  {
+    "gpu_allowed": false,
+    "priority": 2,
+    "target": "signed_numeric_guarded_solver",
+    "why": "V418 conflicts show sign-handling candidates such as 7ac90433 would regress baseline if not explicitly guarded."
+  },
+  {
+    "gpu_allowed": false,
+    "priority": 3,
+    "target": "bit_fullbyte_formula_to_runtime_or_package_path",
+    "why": "V414 proves many bit gains formally, but V415/V416 show they do not transfer to adapter-only SFT."
+  }
+]
