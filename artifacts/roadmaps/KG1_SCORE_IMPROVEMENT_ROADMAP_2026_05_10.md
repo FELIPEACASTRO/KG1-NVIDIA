@@ -327,7 +327,7 @@ Decisao: `hf_gpu_allowed=true` para um unico V436 short smoke. Este e um desbloq
 
 ## V436 - Short Adapter-Only Smoke
 
-Status: liberado por V435F para um smoke curto.
+Status: executado e cancelado por FinOps no primeiro checkpoint.
 
 Objetivo: testar transferencia real para adapter, com gasto minimo.
 
@@ -338,6 +338,16 @@ Configuracao inicial:
 - Evitar loss medio diluido: ponderar span final da resposta/boxed answer quando a implementacao permitir.
 - Sem mudanca de tokenizer, prompt oficial, runtime ou pacote.
 - Config V436 inicial: H200, `24` steps, checkpoint/eval a cada `4`, LR `2e-8 -> 4e-9`, `PREF_BETA=0.20`, `PREF_LOSS_WEIGHT=1.5`, `CHOSEN_CE_WEIGHT=0.30`.
+
+Resultado 2026-05-15:
+
+- Job: `https://huggingface.co/jobs/felipesp1983/6a0732913308d79117b90436`.
+- Output repo: `felipesp1983/kg1-nemotron-lora-v436-v435e-preference-v290ckpt6`.
+- Preflight remoto OK: H200 CUDA 12.8, hashes V435E OK, tokenizacao sem truncation, adapter V290 checkpoint-6 carregado com `12011/12011` tensores mapeados.
+- Baseline preference eval V435E: `6/40 = 15.0%`; bit `2/18`, equation `4/22`.
+- Step 4 preference eval: `5/40 = 12.5%`; bit `2/18`, equation `3/22`.
+- Decisao: cancelado. O primeiro checkpoint piorou a metrica de preferencia e nao justificou continuar gastando H200.
+- Artefato: `artifacts/v436_hf_h200_v435e_preference_launch/v436-v435e-pref-v290ckpt6-20260515T144849Z_finops_decision.json`.
 
 Kill-switch no primeiro checkpoint:
 
@@ -350,9 +360,11 @@ Kill-switch no primeiro checkpoint:
 | package incompatibilidade | cancelar |
 | ganho weak e bit preservado | continuar para full gate |
 
+Conclusao: V436 nao trouxe ganho submit-safe e nao autoriza V437. Nao repetir variantes V436 sem um novo gate CPU que demonstre sinal direto de transferencia, nao apenas dataset novo ou loss interno.
+
 ## V437 - Full Gate, Package e Submit
 
-Status: condicional a V436 passar.
+Status: bloqueado. V436 falhou o primeiro kill-switch.
 
 Regras:
 
@@ -364,7 +376,7 @@ Regras:
 
 ## P2 Somente Apos V435
 
-Estes itens nao estao ativos agora. So entram se V435/V436 trouxer sinal real:
+Estes itens nao estao ativos agora. So entram se houver novo gate CPU mais forte que V435E:
 
 - Targeted module/freeze controlado para reduzir regressao de bit.
 - TIES/DARE/SLERP apenas se houver adapters novos com sinais complementares medidos.
@@ -391,17 +403,17 @@ Estes itens nao estao ativos agora. So entram se V435/V436 trouxer sinal real:
 | Weak/full misses como treino | Leakage/cherry-pick |
 | Decisao por `eval_loss` | Nao correlacionou com ACC das familias |
 | H200/A100 relaunch sem V435 | Gasto sem novo sinal |
+| V436 preference variants sobre V435E | Primeiro checkpoint regrediu de `6/40` para `5/40` |
 
 ## Proxima Acao Unica
 
-Lancar V436 H200 short preference smoke a partir do V290 checkpoint-6 usando V435E.
+Parar a linha V436 e nao abrir novo GPU job ate existir um gate CPU com hipotese de transferencia mais direta.
 
 Objetivo:
 
-1. Treinar apenas `24` steps com checkpoints a cada `4`.
-2. Monitorar logs a cada `40` segundos.
-3. Apos cada checkpoint disponivel, rodar weak eval antes de qualquer continuidade longa.
-4. Cancelar por FinOps se o primeiro checkpoint nao mostrar plausibilidade de preservar `bit>=136` e sair do teto `equation=56`.
-5. Promover para full/package/submit somente se weak superar o melhor adapter-only atual.
+1. Converter os achados V435D/V435E em diagnostico de por que o adapter prefere negativos: comparar `chosen_mean_nll`, `rejected_mean_nll`, tamanho de respostas, tipo de negativo e familia.
+2. Se houver bug de formato/dataset, corrigir em CPU e reconstruir V435E; se nao houver bug, arquivar a linha preference-LoRA.
+3. Qualquer novo HF GPU job precisa passar um gate CPU novo com uma metrica que nao tenha regredido no checkpoint inicial anterior.
+4. Promover para weak/full/package/submit somente se o novo gate superar o melhor adapter-only atual: weak `192/315`, equation `56/155`, bit `136/160`, trunc `0`.
 
-Regra FinOps: se V436 nao mostrar sinal no primeiro checkpoint avaliavel, cancelar e nao rodar variantes longas. O objetivo hoje e ganho medido de ranking, nao mais perda de tempo com loss interno.
+Regra FinOps: V436 ja acionou o kill-switch. O objetivo segue sendo ganho medido de ranking, nao mais perda de tempo com loss interno.

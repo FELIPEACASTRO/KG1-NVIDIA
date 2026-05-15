@@ -1,0 +1,46 @@
+{
+  "run_id": "v436-v435e-pref-v290ckpt6-20260515T144849Z",
+  "job_url": "https://huggingface.co/jobs/felipesp1983/6a0732913308d79117b90436",
+  "output_repo": "felipesp1983/kg1-nemotron-lora-v436-v435e-preference-v290ckpt6",
+  "checkpoint_saved": "checkpoint-4",
+  "decision": "canceled_by_finops_kill_switch",
+  "decision_time_local": "2026-05-15T12:07:21-03:00",
+  "reason": "First preference checkpoint regressed the V435E validation preference metric, so continuing H200 training was not justified.",
+  "baseline_preference_eval": {
+    "rows": 40,
+    "preference_correct": 6,
+    "preference_accuracy": 0.15,
+    "bit_manipulation": {
+      "correct": 2,
+      "rows": 18,
+      "accuracy": 0.1111111111111111
+    },
+    "equation_transform": {
+      "correct": 4,
+      "rows": 22,
+      "accuracy": 0.18181818181818182
+    },
+    "chosen_mean_nll": 4.912123137712479,
+    "rejected_mean_nll": 4.170304650068283
+  },
+  "step_4_preference_eval": {
+    "rows": 40,
+    "preference_correct": 5,
+    "preference_accuracy": 0.125,
+    "bit_manipulation": {
+      "correct": 2,
+      "rows": 18,
+      "accuracy": 0.1111111111111111
+    },
+    "equation_transform": {
+      "correct": 3,
+      "rows": 22,
+      "accuracy": 0.13636363636363635
+    },
+    "chosen_mean_nll": 4.906949645280838,
+    "rejected_mean_nll": 4.165161746740341
+  },
+  "submit_safe_gain": false,
+  "weak_eval_allowed": false,
+  "next_action": "Do not continue V436 variants. A new GPU job requires a CPU gate with a direct weak-transfer hypothesis stronger than V435E preference accuracy."
+}
