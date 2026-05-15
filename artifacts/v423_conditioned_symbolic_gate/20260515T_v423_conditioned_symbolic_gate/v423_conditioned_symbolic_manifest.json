@@ -1,0 +1,36 @@
+{
+  "accepted_gain_count": 0,
+  "baseline": {
+    "bit_manipulation": 136,
+    "equation_transform": 56,
+    "truncated": 0,
+    "weak_total": 192
+  },
+  "candidate_count": 10,
+  "conflict_count": 1,
+  "decision": {
+    "decision": "hf_gpu_blocked_no_safe_gain",
+    "next_action": "Do not train; continue CPU-only search with a different symbolic class.",
+    "reason": "accepted=0; conflicts=1; projected_eq=56; projected_bit=136"
+  },
+  "generated_at_utc": "2026-05-15T09:34:25.898204+00:00",
+  "hf_gpu_allowed": false,
+  "kaggle_submit_allowed": false,
+  "outputs": {
+    "accepted_csv": "artifacts\\v423_conditioned_symbolic_gate\\20260515T_v423_conditioned_symbolic_gate\\v423_conditioned_symbolic_accepted.csv",
+    "audit_csv": "artifacts\\v423_conditioned_symbolic_gate\\20260515T_v423_conditioned_symbolic_gate\\v423_conditioned_symbolic_audit.csv",
+    "conflicts_csv": "artifacts\\v423_conditioned_symbolic_gate\\20260515T_v423_conditioned_symbolic_gate\\v423_conditioned_symbolic_conflicts.csv",
+    "manifest_json": "artifacts\\v423_conditioned_symbolic_gate\\20260515T_v423_conditioned_symbolic_gate\\v423_conditioned_symbolic_manifest.json",
+    "report_md": "artifacts\\v423_conditioned_symbolic_gate\\20260515T_v423_conditioned_symbolic_gate\\V423_CONDITIONED_SYMBOLIC_GATE.md"
+  },
+  "package_allowed": false,
+  "projection": {
+    "accuracy": 0.6095238095238096,
+    "bit_manipulation_correct": 136,
+    "correct": 192,
+    "equation_transform_correct": 56,
+    "rows": 315,
+    "truncated": 0
+  },
+  "schema_version": "kg1_v423_conditioned_symbolic_gate_v1"
+}
