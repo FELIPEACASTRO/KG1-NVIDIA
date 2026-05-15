@@ -1,6 +1,6 @@
 # KG1 Score Improvement Roadmap
 
-Atualizado: 2026-05-14
+Atualizado: 2026-05-15
 
 Este arquivo agora e o roadmap ativo e limpo. O historico detalhado anterior foi arquivado em `artifacts/roadmaps/archive/KG1_SCORE_IMPROVEMENT_ROADMAP_PRE_V379_CLEANUP_2026_05_14.md`.
 
@@ -66,9 +66,11 @@ Precisamos buscar subida no ranking ainda hoje, `2026-05-14`. A decisao V392 e s
 | V411B new-source triple check | n/a | n/a | n/a | adiciona LUT bit k=2/k=3 e catalogo equation v29 para V412; sem submit |
 | V411C OpenRouter 2026-05-14 file review | n/a | n/a | n/a | adiciona VSA/ranking/probes para equation e SAT repair P2 para bit; sem submit |
 | V412 CPU synthesis gate | CPU projection `202/315` | `63/155` | `139/160` | sem ganho novo alem do V409; bloqueia GPU por V412 isolado |
-| V413 H200 solver-first transfer smoke | debug/upload ok | n/a | n/a | V410 dataset enviado ao HF; launcher curto pronto, sem submit antes do weak gate |
+| V413 H200 solver-first transfer smoke | `190/315` checkpoint-2 | `56/155` | `134/160` | rejeitado; `truncated=1`, weak eval cancelado por FinOps antes de completar checkpoint-4 |
 
 Conclusao: `eval_loss` baixo nao e criterio de promocao. O criterio e ACC por familia no weak/full gate. A rota "resolver nos mesmos" finalmente tem ganho mensuravel (`+9` weak em CPU), mas esse ganho ainda e solver/verifier externo; para submit, ele precisa virar comportamento do adapter/package ou ser permitido explicitamente pelas regras de runtime.
+
+Resultado V413 em `2026-05-15`: o treino H200 solver-first transfer completou com checkpoints `2` e `4`, mas o primeiro weak eval V221-contract falhou o kill-switch. `checkpoint-2 = 190/315`, `equation_transform=56/155`, `bit_manipulation=134/160`, `truncated=1`, contra baseline `192/315`, `equation=56`, `bit=136`, `truncated=0`. O eval foi cancelado enquanto iniciava `checkpoint-4`, por FinOps. Decisao: nao fazer full eval, nao package, nao submit, nao alongar V413. A linha "CPU teacher V409/V410 -> LoRA smoke" fica rejeitada ate existir novo sinal adapter-only ou novo CPU program set ainda nao testado em V409/V412.
 
 Resultado V383 em `2026-05-14`: checkpoint-2 = `190/315`, `equation=56`, `bit=134`, `truncated=1`; checkpoint-4 = `191/315`, `equation=56`, `bit=135`, `truncated=1`; checkpoint-6 = `190/315`, `equation=56`, `bit=134`, `truncated=1`. Como nenhum dos tres podia superar o baseline `192/315`, `equation=56`, `bit=136`, `truncated=0`, o job foi cancelado antes de avaliar `checkpoint-8/10`.
 
@@ -743,7 +745,7 @@ Decisao: manter V409 como melhor teacher CPU. Como o V410 dataset de transferenc
 
 ### Step 6J - V413 H200 solver-first transfer smoke
 
-Status: upload/debug concluido; job pode ser lancado apenas com commit/push atualizado e monitoramento a cada `40s`.
+Status: rejeitado por weak gate; encerrado por FinOps em `2026-05-15`.
 
 Objetivo: testar se o dataset V410, baseado na projecao V409 (`202/315`, `equation=63`, `bit=139`), transfere algum sinal para adapter-only sem gastar em treino longo.
 
@@ -766,6 +768,15 @@ Kill-switch:
 - Promover somente se weak `total > 192`, `equation_transform > 56`, `bit_manipulation >= 136`, `truncated=0`.
 - Cancelar/encerrar se checkpoint-2 ou checkpoint-4 nao puder mais bater esse gate.
 - Nao usar `eval_loss` como criterio de promocao.
+
+Resultado:
+
+| Versao | Weak total | equation | bit | Truncated | Decisao |
+|---|---:|---:|---:|---:|---|
+| V291/V290 checkpoint-6 | `192/315` | `56/155` | `136/160` | `0` | baseline submitavel |
+| V413 checkpoint-2 | `190/315` | `56/155` | `134/160` | `1` | rejeitar; cancela eval |
+
+Conclusao: V413 confirma que o dataset V410/V409 nao transferiu para LoRA. O proximo passo nao e repetir treino; e voltar para CPU synthesis row-level procurando programas novos que nao estejam em V409/V412, com aceite no-loss antes de qualquer GPU.
 
 ### Step 7 - Full/package/submit
 
@@ -817,19 +828,17 @@ Regras:
 
 ## Proxima Acao Unica
 
-Seguir rota solver-first agressiva, mas com gate:
+V413 falhou; portanto o caminho ativo volta para CPU solver row-level, sem GPU:
 
-1. fazer commit/push dos artefatos V412/V413, porque o HF job clona o commit exato.
-2. lancar V413 H200 smoke somente depois do push:
-   - `MAX_STEPS=4`;
-   - checkpoints/eval em `2` e `4`;
-   - monitorar logs a cada `40s`;
-   - cancelar se o primeiro weak eval nao puder superar V291.
-3. rodar weak eval V221-contract para checkpoint-2 antes de continuar qualquer avaliacao:
-   - promover apenas se `total > 192`, `equation > 56`, `bit >= 136`, `truncated=0`;
-   - se `equation=56` ou `bit<136`, encerrar V413 por FinOps.
-4. se V413 passar weak, rodar full official-like e package gate no mesmo dia.
-5. se V413 falhar, nao repetir SFT: voltar para CPU solver row-level, focando somente em novos programas verificaveis que nao estejam no V409/V412.
-6. manter V291/V290 checkpoint-6 como unico package submitavel ate aparecer ganho adapter-only medido.
+1. implementar o proximo CPU gate `V414` focado apenas em programas novos que nao estejam em V409/V412.
+2. atacar primeiro `equation_transform`, porque o submit precisa sair do teto `56/155`:
+   - ampliar DSL simbolica/pontuacao com VSA/ranking;
+   - exigir leave-one-example-out, formato valido e top-1 unico ou empate com mesma predicao;
+   - aceitar somente rows com `0` perdas contra o baseline.
+3. manter `bit_manipulation` como guardrail e ganho secundario:
+   - usar bit-pair/bitsum/stride e LUT apenas com abstain;
+   - qualquer candidato que reduza `bit < 136` e rejeitado.
+4. so voltar para HF/Kaggle GPU se V414 gerar ganho novo no-loss acima de V409/V412 e um dataset de transferencia com hard negatives que ainda nao foi testado.
+5. manter V291/V290 checkpoint-6 como unico package submitavel ate aparecer ganho adapter-only medido.
 
 Nao rodar broad SFT, prompt sweep ou job guiado por `eval_loss`. A decisao e por ACC, truncation e comparativo contra V291.
