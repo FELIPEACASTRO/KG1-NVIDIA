@@ -47,6 +47,7 @@ Regra central: ganho so conta se aparecer no adapter/package. Teacher CPU, solve
 | OpenRouter V446 uploaded consult | 16 slots, 11 respostas finais; consenso CPU-first target-alignment | evidencia para V446/V447 |
 | V446 Tong-source target-alignment gate | `1310` traces aceitos: bit `848`, equation `462`; `hf_gpu_allowed=true` | sinal material novo; exige dataset/token gate antes de GPU |
 | OpenRouter V447 public mining consensus | 6 modelos uteis; consenso condicional | minerar notebooks publicos em paralelo, mas priorizar V446 builder |
+| V449 ACC metric integrity audit | weak scorer usa `verify_answer`; `answers_equivalent` superconta bit e foi bloqueado para `official_correct` | metrica de promocao confirmada; script diagnostico corrigido |
 
 ## Regras Permanentes
 
@@ -55,22 +56,23 @@ Regra central: ganho so conta se aparecer no adapter/package. Teacher CPU, solve
 3. `id`, prompt hash de weak/full, oracle, solver runtime, verifier runtime e postprocessor nao podem entrar no submit.
 4. Submit valido e apenas adapter-only: `adapter_config.json` e `adapter_model.safetensors` no root do pacote. Sem script, tokenizer, prompt prefix, soft-prompt, `embed_tokens`, `lm_head`, decoder patch, logit mask, constrained decoding, runtime abstention ou confidence threshold.
 5. Decisao e por ACC/truncation. `eval_loss`, `train_loss`, preference accuracy interna e probabilidades de LLM nao liberam submit nem GPU.
-6. HF GPU so pode rodar depois de CPU gate com sinal material, manifest auditavel e `hf_gpu_allowed=true`.
-7. FinOps: cancelar ou nao iniciar qualquer job que nao possa mais superar `total>192`, `equation>56`, `bit>=136`, `truncated=0`.
-8. Toda nova versao precisa quadro comparativo contra V291/V290 e decisao explicita: promover, repetir CPU, cancelar ou arquivar.
-9. Se notebook for criado ou alterado, precisa passar `python scripts/notebook_release_gate.py <notebook>` antes de entrega/push.
-10. Se job estiver rodando, analisar logs periodicamente e aplicar kill-switch sem esperar gasto inutil.
-11. Todo script, job launcher, workflow ou notebook criado/alterado precisa passar `python scripts/kg1_static_safety_gate.py <paths>` antes de entrega/push/execucao. O gate bloqueia V435E misto arquivado, `format_negative_*` em treino ativo e `ALLOW_FORMAT_NEGATIVES` em job/notebook.
-12. H200 esta autorizada ate 1 hora por execucao. Se uma execucao precisar passar de 1 hora, parar e pedir autorizacao humana antes de continuar.
-13. Todo erro novo deve entrar no ledger `artifacts/roadmaps/KG1_ERROR_LEDGER_2026_05_15.md` com evidencia, impacto, regra preventiva e status antes de abrir novo job pago.
-14. Antes de qualquer job pago ou notebook operacional novo/alterado, rodar auditoria de integracao: launcher, dataset correto, conteudo do dataset, hashes, schema, targets, paths HF, adapter inicial, gates, kill-switch e comparacao contra baseline. Para HF jobs, usar `scripts/kg1_pre_paid_job_integration_gate.py` alem do static gate.
-15. Acesso a modelos/datasets Hugging Face deve reutilizar o `HF_TOKEN` ja usado para criar/executar jobs. Nunca imprimir, commitar ou gravar a chave em artefatos.
-16. Todo novo dataset de equation precisa passar por gate de alinhamento de target antes de GPU: alvo nativo verificado por rejection sampling ou alvo canonico com logprob/score pre-registrado contra base/V291. Target plausivel e condicao necessaria, nao opcional.
-17. Todo treino que toque `equation_transform` precisa de bit replay/anchor pre-registrado. Piso exploratorio: `>=200` rows limpas; preferencia para H200 final: `>=800` rows, se disponiveis sem leakage.
-18. Antes de qualquer GPU, rodar leakage forte: `id`, `prompt_sha256`, prompt normalizado e overlap `13-gram` contra weak/full. Qualquer hit bloqueia o dataset.
-19. Antes de qualquer GPU, carregar um scaffold LoRA pelo caminho oficial vLLM/LoRA em prompt dummy. Se nao carrega como adapter-only, nao treinar.
-20. One-shot policy: nao repetir a mesma receita paga se ela ja falhou weak/family gate. Nova GPU exige evidencia CPU nova e material.
-21. Mineracao de notebooks publicos e permitida somente como extracao de tecnica/dataset/trace, nunca como uso direto de adapter, peso ou submissao de terceiros. Downloads grandes precisam ser apagados depois da triagem; o roadmap guarda apenas o achado validado.
+6. ACC de promocao deve ser calculada com `src.competition_utils.verify_answer`. `answers_equivalent` e diagnostico-only; ela superconta strings binarias por tolerancia numerica e nao pode alimentar `official_correct`, weak/full gate, promocao ou submit.
+7. HF GPU so pode rodar depois de CPU gate com sinal material, manifest auditavel e `hf_gpu_allowed=true`.
+8. FinOps: cancelar ou nao iniciar qualquer job que nao possa mais superar `total>192`, `equation>56`, `bit>=136`, `truncated=0`.
+9. Toda nova versao precisa quadro comparativo contra V291/V290 e decisao explicita: promover, repetir CPU, cancelar ou arquivar.
+10. Se notebook for criado ou alterado, precisa passar `python scripts/notebook_release_gate.py <notebook>` antes de entrega/push.
+11. Se job estiver rodando, analisar logs periodicamente e aplicar kill-switch sem esperar gasto inutil.
+12. Todo script, job launcher, workflow ou notebook criado/alterado precisa passar `python scripts/kg1_static_safety_gate.py <paths>` antes de entrega/push/execucao. O gate bloqueia V435E misto arquivado, `format_negative_*` em treino ativo, `ALLOW_FORMAT_NEGATIVES` em job/notebook e uso permissivo de `answers_equivalent` para `official_correct`.
+13. H200 esta autorizada ate 1 hora por execucao. Se uma execucao precisar passar de 1 hora, parar e pedir autorizacao humana antes de continuar.
+14. Todo erro novo deve entrar no ledger `artifacts/roadmaps/KG1_ERROR_LEDGER_2026_05_15.md` com evidencia, impacto, regra preventiva e status antes de abrir novo job pago.
+15. Antes de qualquer job pago ou notebook operacional novo/alterado, rodar auditoria de integracao: launcher, dataset correto, conteudo do dataset, hashes, schema, targets, paths HF, adapter inicial, gates, kill-switch e comparacao contra baseline. Para HF jobs, usar `scripts/kg1_pre_paid_job_integration_gate.py` alem do static gate.
+16. Acesso a modelos/datasets Hugging Face deve reutilizar o `HF_TOKEN` ja usado para criar/executar jobs. Nunca imprimir, commitar ou gravar a chave em artefatos.
+17. Todo novo dataset de equation precisa passar por gate de alinhamento de target antes de GPU: alvo nativo verificado por rejection sampling ou alvo canonico com logprob/score pre-registrado contra base/V291. Target plausivel e condicao necessaria, nao opcional.
+18. Todo treino que toque `equation_transform` precisa de bit replay/anchor pre-registrado. Piso exploratorio: `>=200` rows limpas; preferencia para H200 final: `>=800` rows, se disponiveis sem leakage.
+19. Antes de qualquer GPU, rodar leakage forte: `id`, `prompt_sha256`, prompt normalizado e overlap `13-gram` contra weak/full. Qualquer hit bloqueia o dataset.
+20. Antes de qualquer GPU, carregar um scaffold LoRA pelo caminho oficial vLLM/LoRA em prompt dummy. Se nao carrega como adapter-only, nao treinar.
+21. One-shot policy: nao repetir a mesma receita paga se ela ja falhou weak/family gate. Nova GPU exige evidencia CPU nova e material.
+22. Mineracao de notebooks publicos e permitida somente como extracao de tecnica/dataset/trace, nunca como uso direto de adapter, peso ou submissao de terceiros. Downloads grandes precisam ser apagados depois da triagem; o roadmap guarda apenas o achado validado.
 
 ## Achados Consolidados V434C
 

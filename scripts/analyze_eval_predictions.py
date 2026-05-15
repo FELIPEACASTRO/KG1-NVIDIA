@@ -16,7 +16,7 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from src.competition_utils import answers_equivalent, extract_boxed_answers, extract_final_answer
+from src.competition_utils import extract_boxed_answers, extract_final_answer, verify_answer
 
 
 def first_boxed_answer(text: object) -> str:
@@ -50,14 +50,11 @@ def add_alternatives(frame: pd.DataFrame) -> pd.DataFrame:
     out["early_1024_prediction"] = out["raw_output"].map(lambda value: early_window_answer(value, 1024))
     out["early_2048_prediction"] = out["raw_output"].map(lambda value: early_window_answer(value, 2048))
     if "answer" in out.columns:
-        out["official_correct"] = out.apply(lambda row: answers_equivalent(row["answer"], row["prediction"]), axis=1)
-        out["first_boxed_correct"] = out.apply(
-            lambda row: answers_equivalent(row["answer"], row["first_boxed_prediction"], observed_is_boxed_payload=True),
-            axis=1,
-        )
+        out["official_correct"] = out.apply(lambda row: verify_answer(row["answer"], row["prediction"]), axis=1)
+        out["first_boxed_correct"] = out.apply(lambda row: verify_answer(row["answer"], row["first_boxed_prediction"]), axis=1)
         for chars in (512, 1024, 2048):
             col = f"early_{chars}_prediction"
-            out[f"early_{chars}_correct"] = out.apply(lambda row, name=col: answers_equivalent(row["answer"], row[name]), axis=1)
+            out[f"early_{chars}_correct"] = out.apply(lambda row, name=col: verify_answer(row["answer"], row[name]), axis=1)
     return out
 
 

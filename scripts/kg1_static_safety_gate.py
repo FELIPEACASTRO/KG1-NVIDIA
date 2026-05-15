@@ -184,6 +184,16 @@ def audit_text(path: Path, text: str) -> list[Finding]:
             )
         )
 
+    if rel != "scripts/kg1_static_safety_gate.py" and "official_correct" in text and "answers_equivalent(" in text:
+        findings.append(
+            Finding(
+                rel,
+                "error",
+                "permissive_metric_used_for_official_correct",
+                "Official ACC diagnostics must use verify_answer, not answers_equivalent; numeric tolerance overcounts binary strings.",
+            )
+        )
+
     for critical_rel, snippets in CRITICAL_SNIPPETS.items():
         if rel != critical_rel:
             continue
@@ -276,6 +286,16 @@ def run_self_test() -> int:
         enabled_findings = audit_text(enabled, enabled.read_text(encoding="utf-8"))
         if "allow_format_negatives_enabled" not in {item.code for item in enabled_findings}:
             print("missing ALLOW_FORMAT_NEGATIVES self-test finding", flush=True)
+            return 1
+        permissive_metric = tmp / "diag_metric.py"
+        permissive_metric.write_text(
+            "from src.competition_utils import answers_equivalent\n"
+            "df['official_correct'] = df.apply(lambda row: answers_equivalent(row['answer'], row['prediction']), axis=1)\n",
+            encoding="utf-8",
+        )
+        metric_findings = audit_text(permissive_metric, permissive_metric.read_text(encoding="utf-8"))
+        if "permissive_metric_used_for_official_correct" not in {item.code for item in metric_findings}:
+            print("missing permissive metric self-test finding", flush=True)
             return 1
     print("kg1_static_safety_gate_self_test=ok", flush=True)
     print("=== KG1 STATIC SAFETY GATE SELF TEST END ===", flush=True)

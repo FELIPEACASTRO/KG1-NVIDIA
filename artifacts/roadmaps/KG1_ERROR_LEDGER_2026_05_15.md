@@ -288,6 +288,85 @@ Regra preventiva:
 
 Status: regra aplicada em V444; dataset final passou o gate.
 
+### E010 - V444 high-confidence SFT regrediu no weak gate
+
+Evidencia:
+
+- V444 treinou em H200 por quatro steps usando o dataset
+  `v444_sft_reconstructed_high_conf`, derivado de `sft_reconstructed.jsonl`
+  com apenas `rule_found` e `hypothesis_formed`.
+- O dataset passou hashes, tokenization gate, prompt truncation `0`,
+  completion truncation `0` e offset-mask gate.
+- O weak eval avaliou o primeiro checkpoint (`checkpoint-2`) no contrato V221.
+- Resultado do checkpoint-2:
+  - total weak `190/315`;
+  - `equation_transform=56/155`;
+  - `bit_manipulation=134/160`;
+  - `truncated=1`.
+- Baseline submit-safe permanece `192/315`, `equation=56/155`,
+  `bit=136/160`, `truncated=0`.
+- Job de eval `felipesp1983/6a075f1a3308d79117b907ff` foi cancelado antes de
+  avaliar checkpoint-4.
+
+Impacto:
+
+- Filtrar `rule_unknown` foi necessario para limpar o dataset, mas nao foi
+  suficiente para transferir ganho para o adapter.
+- O primeiro checkpoint perdeu bit e truncou, exatamente as regresssoes que o
+  gate permanente deve bloquear.
+- Repetir V444 com mais steps, H200 maior, LR sweep ou epoch sweep nao tem
+  base tecnica.
+
+Regra preventiva:
+
+- Nenhum novo job pago pode usar V444 high-confidence SFT ou variante trivial
+  dele sem um novo CPU gate que mostre sinal material antes.
+- Se um primeiro checkpoint nao mantiver `bit>=136` e `truncated=0`, cancelar
+  imediatamente antes de avaliar checkpoints seguintes.
+- A proxima tentativa deve mudar a classe de evidencia para raw-output
+  prediction/parse audit ou solver label-free certificado, nao apenas trocar
+  hiperparametros.
+
+Status: V444 weak eval cancelado por FinOps; sem full/package/submit.
+
+### E011 - Metrica permissiva podia supercontar bit em diagnosticos
+
+Evidencia:
+
+- `scripts/analyze_eval_predictions.py` usava `answers_equivalent` para a coluna
+  `official_correct`.
+- `answers_equivalent` aplica tolerancia numerica quando ambos os valores podem
+  ser convertidos para numero. Isso faz strings binarias diferentes como
+  `11100011` e `11100010` parecerem corretas por proximidade numerica.
+- O scorer de weak/full submit-safe usa `verify_answer`, que trata qualquer
+  gabarito `[01]+` como exato. Esse caminho principal estava correto.
+- O V449 audit confirmou o risco em artefatos locais:
+  - baseline/prediction V405: estrito `192/315`, permissivo `206/315`, inflacao
+    de `+14` em `bit_manipulation`;
+  - V405 integrated: estrito `201/315`, permissivo `213/315`, inflacao de `+12`;
+  - V414 projection: estrito `222/315`, permissivo `223/315`, inflacao de `+1`.
+
+Impacto:
+
+- Nao houve evidencia de submit indevido por esse erro, porque os gates de
+  promocao usam `verify_answer`.
+- O risco era analitico: diagnosticos e comparacoes poderiam sugerir ganho de
+  bit inexistente.
+
+Regra preventiva:
+
+- ACC de promocao, `official_correct`, weak/full gate e qualquer decisao de
+  submit devem usar `src.competition_utils.verify_answer`.
+- `answers_equivalent` fica restrito a diagnostico exploratorio sem decisao de
+  promocao.
+- `scripts/kg1_static_safety_gate.py` agora bloqueia `official_correct` com
+  `answers_equivalent`.
+- `scripts/audit_v449_acc_metric_integrity.py` deve ser usado quando houver
+  duvida sobre ACC, metric parity ou divergencia simbolica.
+
+Status: corrigido em `scripts/analyze_eval_predictions.py`; gate e auditor V449
+adicionados.
+
 ## Prompt Externo
 
 Prompt consolidado para OpenRouter/outras APIs:

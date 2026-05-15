@@ -1,0 +1,16 @@
+{
+  "file_count": 8,
+  "files": [
+    "scripts/analyze_eval_predictions.py",
+    "scripts/audit_v449_acc_metric_integrity.py",
+    "scripts/evaluate_lora_adapter.py",
+    "scripts/evaluate_lora_adapters_batch.py",
+    "scripts/hf_job_preflight_gate.py",
+    "scripts/hf_job_weak_eval_v245.py",
+    "scripts/kg1_pre_paid_job_integration_gate.py",
+    "scripts/kg1_static_safety_gate.py"
+  ],
+  "findings": [],
+  "ok": true,
+  "schema_version": "kg1_static_safety_gate_v1"
+}

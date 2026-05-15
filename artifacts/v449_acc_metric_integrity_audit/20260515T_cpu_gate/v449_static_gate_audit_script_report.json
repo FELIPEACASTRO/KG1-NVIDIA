@@ -1,0 +1,9 @@
+{
+  "file_count": 1,
+  "files": [
+    "scripts/audit_v449_acc_metric_integrity.py"
+  ],
+  "findings": [],
+  "ok": true,
+  "schema_version": "kg1_static_safety_gate_v1"
+}
