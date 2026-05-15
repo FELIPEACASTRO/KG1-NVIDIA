@@ -206,7 +206,13 @@ def load_paths(args: argparse.Namespace) -> list[Path]:
         paths.extend(path if path.is_absolute() else ROOT / path for path in args.paths)
     if not paths:
         paths = discover_changed_paths(args.changed_from or None, args.changed_to)
-    return sorted({path for path in paths if path.exists() and is_scannable(path)})
+    expanded: list[Path] = []
+    for path in paths:
+        if path.is_dir():
+            expanded.extend(item for item in path.rglob("*") if item.is_file())
+        else:
+            expanded.append(path)
+    return sorted({path for path in expanded if path.exists() and is_scannable(path)})
 
 
 def audit_paths(paths: list[Path]) -> list[Finding]:

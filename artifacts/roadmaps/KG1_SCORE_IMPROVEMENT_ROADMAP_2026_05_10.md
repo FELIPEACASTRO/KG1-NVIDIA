@@ -52,6 +52,7 @@ Regra central: ganho so conta se aparecer no adapter/package. Teacher CPU, solve
 9. Se notebook for criado ou alterado, precisa passar `python scripts/notebook_release_gate.py <notebook>` antes de entrega/push.
 10. Se job estiver rodando, analisar logs periodicamente e aplicar kill-switch sem esperar gasto inutil.
 11. Todo script, job launcher, workflow ou notebook criado/alterado precisa passar `python scripts/kg1_static_safety_gate.py <paths>` antes de entrega/push/execucao. O gate bloqueia V435E misto arquivado, `format_negative_*` em treino ativo e `ALLOW_FORMAT_NEGATIVES` em job/notebook.
+12. H200 esta autorizada ate 1 hora por execucao. Se uma execucao precisar passar de 1 hora, parar e pedir autorizacao humana antes de continuar.
 
 ## Achados Consolidados V434C
 
@@ -325,7 +326,9 @@ Hashes corrigidos:
 HF dataset status:
 
 - O dataset antigo em HF com path `20260515T_v435e_from_h200_probe` esta arquivado para diagnostico e nao deve ser usado para treino.
-- O hard-negative-only precisa ser publicado em novo path antes de qualquer novo HF job.
+- O hard-negative-only foi publicado em `felipesp1983/kg1-nemotron-training` no path `data/v435e_adapter_probe_preference/20260515T_v435e_hardneg_only`.
+- Commit HF dataset: `https://huggingface.co/datasets/felipesp1983/kg1-nemotron-training/commit/ccc53c6412cb6f94a03f1b7ec5482e4c7f0bf7cb`.
+- Verificacao HF: `4` arquivos presentes no path novo.
 
 ### V435F - Adapter Probe Preference Gate
 
@@ -446,8 +449,8 @@ Parar a linha V436 antiga e nao abrir novo GPU job com o dataset misto.
 
 Objetivo:
 
-1. Publicar o V435E hard-negative-only em novo path HF, sem sobrescrever o dataset antigo.
-2. Criar um launcher V436B novo apontando para os hashes corrigidos e sem `format_negative_*`.
+1. Publicar o V435E hard-negative-only em novo path HF, sem sobrescrever o dataset antigo. Status: concluido.
+2. Criar um launcher V436B novo apontando para os hashes corrigidos e sem `format_negative_*`. Status: preparado em `artifacts/v436b_hf_h200_v435e_hardneg_preference_launch/launch_v436b_hf_h200_v435e_hardneg_preference.py`.
 3. Rodar somente um smoke curto se o custo estimado for pequeno e o primeiro checkpoint reportar por `negative_type` que `hard_negative_adapter_exact_wrong` melhorou sem queda de bit.
 4. Cancelar imediatamente se a metrica interna hard-negative nao melhorar no primeiro checkpoint; nao esperar weak/full.
 5. Promover para weak/full/package/submit somente se o novo gate superar o melhor adapter-only atual: weak `192/315`, equation `56/155`, bit `136/160`, trunc `0`.

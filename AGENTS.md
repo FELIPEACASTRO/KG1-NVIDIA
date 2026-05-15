@@ -29,3 +29,4 @@
 
 - While actively analyzing a running HF/Kaggle/Colab job, check job status and logs every ~30 seconds unless a command is blocked, a human explicitly pauses monitoring, or the job reaches a terminal state.
 - Each monitoring update should identify the current stage, any new progress markers, and whether there is a failure, regression, or next automated action.
+- H200 is authorized for KG1 jobs up to 1 hour per execution. If a run needs more than 1 hour, stop and ask for explicit human authorization before continuing.
