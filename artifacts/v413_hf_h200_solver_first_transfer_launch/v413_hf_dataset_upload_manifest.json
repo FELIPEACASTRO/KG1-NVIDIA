@@ -1,0 +1,13 @@
+{
+  "data_repo": "felipesp1983/kg1-nemotron-training",
+  "dataset_dir": "artifacts\\v410_solver_first_transfer_dataset\\20260514T_v410_solver_first_transfer",
+  "dataset_path_in_repo": "data/v410_solver_first_transfer/20260514T_v410_solver_first_transfer",
+  "dataset_upload": "https://huggingface.co/datasets/felipesp1983/kg1-nemotron-training/commit/175f20209efdcf803b01152f5765b24778b7cd49",
+  "gate_dir": "artifacts\\v410_solver_first_transfer_dataset\\20260514T_v410_solver_first_transfer\\tokenization_gate_real",
+  "gate_path_in_repo": "runtime_artifacts/v410_solver_first_transfer_tokenization_gate/20260514T_v410_solver_first_transfer",
+  "gate_upload": "https://huggingface.co/datasets/felipesp1983/kg1-nemotron-training/commit/abfecbaf4e04acb8bc8ff9507c164e13f7a4626b",
+  "generated_at_utc": "2026-05-15T02:00:26.685654+00:00",
+  "next_action": "Commit/push V413 launcher and run a short H200 smoke train.",
+  "previous_version": "V412 CPU synthesis gate",
+  "version": "v413_hf_dataset_upload"
+}

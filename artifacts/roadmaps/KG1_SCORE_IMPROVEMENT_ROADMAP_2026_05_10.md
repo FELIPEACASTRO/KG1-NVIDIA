@@ -65,6 +65,8 @@ Precisamos buscar subida no ranking ainda hoje, `2026-05-14`. A decisao V392 e s
 | V405 integrated solver projection | CPU projection `201/315` | `63/155` | `138/160` | melhor combinacao solver-first com abstain; nao adapter-only submit-safe |
 | V411B new-source triple check | n/a | n/a | n/a | adiciona LUT bit k=2/k=3 e catalogo equation v29 para V412; sem submit |
 | V411C OpenRouter 2026-05-14 file review | n/a | n/a | n/a | adiciona VSA/ranking/probes para equation e SAT repair P2 para bit; sem submit |
+| V412 CPU synthesis gate | CPU projection `202/315` | `63/155` | `139/160` | sem ganho novo alem do V409; bloqueia GPU por V412 isolado |
+| V413 H200 solver-first transfer smoke | debug/upload ok | n/a | n/a | V410 dataset enviado ao HF; launcher curto pronto, sem submit antes do weak gate |
 
 Conclusao: `eval_loss` baixo nao e criterio de promocao. O criterio e ACC por familia no weak/full gate. A rota "resolver nos mesmos" finalmente tem ganho mensuravel (`+9` weak em CPU), mas esse ganho ainda e solver/verifier externo; para submit, ele precisa virar comportamento do adapter/package ou ser permitido explicitamente pelas regras de runtime.
 
@@ -717,6 +719,54 @@ Comparativo:
 
 Decisao: V411C nao gera ganho medido. Ele muda a implementacao do V412: equation precisa de VSA/ranking/probes, bit pode ter repair SAT somente como P2 apos LUT. Nao iniciar novo job HF/Kaggle por causa desse arquivo sozinho.
 
+### Step 6I - V412 CPU synthesis gate
+
+Status: concluido; nao gerou ganho novo alem do V409.
+
+Artefatos:
+
+- Script: `artifacts/v412_cpu_synthesis_gate/analyze_v412_cpu_synthesis_gate.py`.
+- Manifest: `artifacts/v412_cpu_synthesis_gate/20260514T_v412_cpu_gate/v412_cpu_synthesis_gate_manifest.json`.
+- Relatorio: `artifacts/v412_cpu_synthesis_gate/20260514T_v412_cpu_gate/V412_CPU_SYNTHESIS_GATE.md`.
+
+Resultado:
+
+| Versao | Weak total | equation | bit | Submit-safe? |
+|---|---:|---:|---:|---|
+| V291/V290 checkpoint-6 | `192/315` | `56/155` | `136/160` | sim |
+| V409 CPU projection | `202/315` | `63/155` | `139/160` | nao |
+| V412 CPU projection | `202/315` | `63/155` | `139/160` | nao |
+
+Achado honesto: a LUT k=1/2/3 e a VSA/ranking/probes ficaram conservadoras corretamente. Elas geraram `0` ganhos novos, bloquearam `1` falso positivo e `8` perdas potenciais. Portanto V412 nao autoriza GPU, full eval, package ou submit por si so.
+
+Decisao: manter V409 como melhor teacher CPU. Como o V410 dataset de transferencia V409 ja estava gateado e ainda nao tinha sido testado, liberar apenas um smoke V413 curtissimo com kill-switch no primeiro weak eval. Nao alongar se `equation` continuar em `56` ou `bit < 136`.
+
+### Step 6J - V413 H200 solver-first transfer smoke
+
+Status: upload/debug concluido; job pode ser lancado apenas com commit/push atualizado e monitoramento a cada `40s`.
+
+Objetivo: testar se o dataset V410, baseado na projecao V409 (`202/315`, `equation=63`, `bit=139`), transfere algum sinal para adapter-only sem gastar em treino longo.
+
+Gate antes do launch:
+
+- Dataset HF enviado: `felipesp1983/kg1-nemotron-training`, commits `175f20209efdcf803b01152f5765b24778b7cd49` e `abfecbaf4e04acb8bc8ff9507c164e13f7a4626b`.
+- Train: `2320` rows, SHA `4917699c5f5960a3cec80767c19d5c6c799fdc68a5457b5bfc73062f6b0cbba1`.
+- Val: `580` rows, SHA `de8735b97c23b7c1b5263cc9a87426f2d4cf78ca9fbf882142a5a93899c2cff5`.
+- Tokenization gate V410: `0` prompt truncation, `0` completion tokens dropped, offset masks `2320/2320` train e `580/580` val.
+- H200 debug: hardware `141 GB`, custo `0.083333/min`, init adapter V290 checkpoint-6 completo.
+
+Receita:
+
+- `MAX_STEPS=4`, checkpoints/eval a cada `2` steps.
+- `answer_span_loss_weight=14.0`.
+- Pesos maiores para `equation_numeric_*`, `equation_symbolic_cryptarithm_single_operator_mul` e `bit_solver_first_v410`.
+
+Kill-switch:
+
+- Promover somente se weak `total > 192`, `equation_transform > 56`, `bit_manipulation >= 136`, `truncated=0`.
+- Cancelar/encerrar se checkpoint-2 ou checkpoint-4 nao puder mais bater esse gate.
+- Nao usar `eval_loss` como criterio de promocao.
+
 ### Step 7 - Full/package/submit
 
 Status: somente depois de weak gate.
@@ -769,22 +819,17 @@ Regras:
 
 Seguir rota solver-first agressiva, mas com gate:
 
-1. implementar V412 CPU synthesis gate para `bit_manipulation`:
-   - `INHIB`, `IMPL`, pares ordenados, cache de assinatura, enumeracao por valor nos exemplos, `MAJ`, `CH`, `XOR3` apenas com verificacao total;
-   - adicionar LUT booleana k=2/k=3 por bit de saida, com cobertura minima, unicidade/predicao consensual e abstencao em ambiguidade;
-   - Manthan/SAT repair fica P2 apos LUT: usar so em near-fit, nunca aceitar sem bater todos os exemplos do prompt e sem predicao unica/consensual;
-   - aceitar somente candidatos que batem todos os exemplos e nao causam perdas.
-2. usar o V410 dataset de transferencia ja gateado:
-   - traces curtos per-bit assimetricos;
-   - replay de bit para preservar `136/160`;
-   - sem treinar diretamente no weak row.
-3. implementar V412 CPU synthesis gate para `equation_transform`:
-   - DSL PBE/SyGuS para concat, reverse concat, signed format, literal insert/delete, pontuacao/brackets e pequenos hibridos aritmeticos;
-   - expandir catalogo numeric/operator com unary, binary, ternary e depth-2 pequeno inspirado no V411B, mas reescrito com verifier estrito;
-   - adicionar VSA/DAG por row, intersecao por exemplos, ranking por profundidade/nos/literais/undefined/OOD-format e probes sinteticos de estabilidade;
-   - aceitar somente programa unico/curto com verificacao total e abstencao em ambiguidade.
-4. se houver novo ganho CPU no-loss, atualizar V410 em V413/V414 e rodar smoke HF/Kaggle curto.
-5. se o primeiro checkpoint nao superar V291 (`192/315`, `equation=56`, `bit=136`, trunc `0`), cancelar por FinOps.
+1. fazer commit/push dos artefatos V412/V413, porque o HF job clona o commit exato.
+2. lancar V413 H200 smoke somente depois do push:
+   - `MAX_STEPS=4`;
+   - checkpoints/eval em `2` e `4`;
+   - monitorar logs a cada `40s`;
+   - cancelar se o primeiro weak eval nao puder superar V291.
+3. rodar weak eval V221-contract para checkpoint-2 antes de continuar qualquer avaliacao:
+   - promover apenas se `total > 192`, `equation > 56`, `bit >= 136`, `truncated=0`;
+   - se `equation=56` ou `bit<136`, encerrar V413 por FinOps.
+4. se V413 passar weak, rodar full official-like e package gate no mesmo dia.
+5. se V413 falhar, nao repetir SFT: voltar para CPU solver row-level, focando somente em novos programas verificaveis que nao estejam no V409/V412.
 6. manter V291/V290 checkpoint-6 como unico package submitavel ate aparecer ganho adapter-only medido.
 
 Nao rodar broad SFT, prompt sweep ou job guiado por `eval_loss`. A decisao e por ACC, truncation e comparativo contra V291.
