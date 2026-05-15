@@ -1,0 +1,65 @@
+[
+  {
+    "idx": 1,
+    "messageId": "msg-1778808117-oeekA4gDhjCRBe4ze7gU",
+    "itemId": "msg_tmp_k5n4ngw0nlc",
+    "length": 12095,
+    "head": "## Achados Acionáveis — NVIDIA Nemotron Reasoning Challenge\n\nAbaixo, técnicas concretas extraídas da literatura top em program synthesis, SMT/SyGuS e lógica booleana. Focado em **bit_manipulation** (DSL per-bit boolean) e **equation_transform** (DSL equation rewrite), com CPU verification sem test labels.\n\n---\n\n### 1. Bit-Manipulation: Enumeração Per-Bit com LUT k=2/3 + Abstract Interpretation Pruning\n\n| Item | Detalhe |\n|---|---|\n| **Fonte** | Yoon, Lee, Yi — *\"Inductive Program Synthesis via Iterative Forward-Backward Abstract Interpretation\"* (PLDI 2023, Seoul Nacional); Ding & Qiu — *\"Enhanced Enumeration for Bit-Vector Synthesis\"* (POPL 2024, Purdue/DryadSynth); UC Berkeley — Ashenhurst-Curtis Decomposition com LUT mapping |\n| **URLs** | • arXiv: 2304.10768 (Simba)<br>• par.nsf.gov/biblio/10495144 (DryadSynth POPL'24)<br>• arXiv: 2406.06241 (ACD LUT, Berkeley) |\n| **Algoritmo/Regra** | **DSL per-bit boolean, depth-limitada:**<br>$$\\text{f: }\\{0,1\\}^8 \\to \\{0,1\\}$$<br>Cada bit de saída é uma função booleana $f(x_0, \\dots, x_7)$. Para cada bit,枚举 todas as $2^{2^8}$ possíveis tabelas-verdade não é viável, mas **decomposição Ashenhurst-Curtis (ACD)** reduz cada saída a um circuit "
+  },
+  {
+    "idx": 2,
+    "messageId": "msg-1778808117-5h5tt81cYx2k1kj7rQjx",
+    "itemId": "msg_tmp_8wubpfx1uqt",
+    "length": 10533,
+    "head": "Aqui estão 6 achados acionáveis, filtrados rigorosamente para **adapter/package-level inference**, com foco em `bit_manipulation` e `equation_transform`, testáveis em CPU e sem depender de treino genérico.\n\n---\n\n### 1. Manthan-Style Proof-Guided Boolean Repair (IIT Kanpur / NUS)\n**Fonte:** [Manthan: A Data-Driven Approach for Boolean Function Synthesis](https://arxiv.org/pdf/2005.06922v1) (CAV 2020)\n1. **Algoritmo/Regra exata:** Para cada bit de saída $y_k$, aprenda uma árvore de decisão (ou LUT $k\\in\\{2,3\\}$) com amostras PBE. Verifique com a *error formula* SAT: $E(X,Y,Y') = F(X,Y) \\land \\neg F(X,Y') \\land (Y' \\leftrightarrow \\Psi)$. Se SAT, extraia o contraexemplo $\\sigma$. Use MaxSAT com $F(X,Y) \\land (X \\leftrightarrow \\sigma[X])$ como hard e $(Y \\leftrightarrow \\sigma[Y'])$ como soft para localizar bits errados. Construa a fórmula de repair $\\beta$ a partir do **UnsatCore** de $G_k = (y_k \\leftrightarrow \\sigma[y'_k]) \\land F \\land (X \\leftrightarrow \\sigma[X]) \\land (\\hat{Y} \\leftrightarrow \\sigma[\\hat{Y}])$. Atualize: $\\psi_k \\leftarrow \\psi_k \\land \\neg\\beta$ (se output deve virar 0) ou $\\psi_k \\lor \\beta$ (se deve virar 1).\n2. **Teste em CPU sem labels:** Gere 200-500 amo"
+  },
+  {
+    "idx": 3,
+    "messageId": "msg-1778808117-HoFp2s8sfS8iK30snVzV",
+    "itemId": "msg_tmp_0ipxlj9arwsq",
+    "length": 148,
+    "head": "Vou pesquisar técnicas concretas em PBE/SyGuS e síntese de programas para bit manipulation e equation transformation das universidades mencionadas.\n"
+  },
+  {
+    "idx": 4,
+    "messageId": "msg-1778808117-HoFp2s8sfS8iK30snVzV",
+    "itemId": "msg_tmp_rg3eudsp33c",
+    "length": 131,
+    "head": "Let me search for more specific techniques related to the equation_transform task domain and verifier-based abstention strategies.\n"
+  },
+  {
+    "idx": 5,
+    "messageId": "msg-1778808117-HoFp2s8sfS8iK30snVzV",
+    "itemId": "msg_tmp_95qs1uegkmo",
+    "length": 171,
+    "head": "Excellent — I found highly relevant material. Let me get the key competition-specific details from the Progress Prize winner and one more piece on per-bit boolean search.\n"
+  },
+  {
+    "idx": 6,
+    "messageId": "msg-1778808117-HoFp2s8sfS8iK30snVzV",
+    "itemId": "msg_tmp_5x1rmkhczx",
+    "length": 178,
+    "head": "I have enough material. Let me also quickly check for the huikang repo's actual augmentation rules (`augmentation.py`) since this is the canonical reference for the competition.\n"
+  },
+  {
+    "idx": 7,
+    "messageId": "msg-1778808117-qtiwAZmZLC4UsXpJsr17",
+    "itemId": "msg_tmp_f7plogvo6h",
+    "length": 6602,
+    "head": "Aqui está uma análise técnica focada em abordagens neuro-simbólicas, SyGuS (Syntax-Guided Synthesis) e PBE (Programming by Example), baseada em pesquisas recentes de universidades de ponta para otimizar seus extratores e verificadores em CPU.\n\nComo o ajuste de pesos (Adapter SFT/Epochs) já atingiu saturação e regressão, o ganho de 192 (ou 202) para números maiores na restrição de submissão (Adapter-only) virá de **Execution-Guided Search** e **Equality Saturation** rodando no kernel da CPU.\n\n<details open>\n<summary><b>Achado 1: E-Graphs e Equality Saturation para Equation Transform</b></summary>\n\nFocado em resolver a regressão e estagnação no subset `equation_transform` iterando a sua DSL (concat, mod, etc.) sem explodir a árvore de busca.\n\n1. **Fonte:** University of Washington / Cornell (Projeto `egg` / *Equality Saturation*). URL: https://egraphs-good.github.io/\n2. **Algoritmo/Regra:** Em vez de usar o LLM para prever a resposta direta (que falha por erro de reasoning), faça o adapter prever **pesos de probabilidade (PCFG)** para as operações da sua DSL de `equation_transform`. Na CPU, instancie um E-Graph (via binding leve como `snake-egg` ou implementação nativa). Insira as en"
+  },
+  {
+    "idx": 8,
+    "messageId": "msg-1778808117-hgkloE1FGVKbInyn4q4c",
+    "itemId": "msg_tmp_c0uchp4ggkr",
+    "length": 25391,
+    "head": "1. **MIT / FlashFill-style Version Space Algebra + ranking por “generalidade + undefined penalty”**  \n   URL: https://people.csail.mit.edu/rishabh/papers/cacm12.pdf  \n   **Algoritmo/regra exata:**  \n   - Para `equation_transform`, implemente enumeração por DSL pequena com **VSA/DAG de programas consistentes por exemplo** e **interseção entre exemplos**.  \n   - Ranking exato inspirado no paper:\n     - menor AST/depth primeiro;\n     - menos constantes/literais “memorísticas” primeiro;\n     - programas **undefined** em inputs adicionais ou que produzem outputs com “características” fora do padrão observado recebem penalidade;\n     - preferir programas que reutilizam substrings/dígitos do input ao invés de emitir literais arbitrários.\n   - Na prática, para sua DSL:\n     - agrupe operadores em camadas:  \n       1. `concat`, `slice`, `reverse`, literal insert/delete, punctuation/brackets  \n       2. `+1/-1`, `*`,`/`,`%`, `digit_sum`, `digit_prod`, `reverse_digits`  \n       3. `gcd/lcm`, ternary, depth-2 compositions\n     - gere todos os programas consistentes até custo $c$ e faça interseção incremental por exemplos.  \n     - score sugerido:\n       $$score(p)=5\\cdot depth(p)+2\\cdot nodes("
+  },
+  {
+    "idx": 9,
+    "messageId": "msg-1778808117-xykCOCqevxroEgOBYBRk",
+    "itemId": "msg_tmp_dk8wjh6xji8",
+    "length": 3219,
+    "head": "**1. fonte:** https://arxiv.org/pdf/2511.02491  \n**algoritmo/regra exata:** Orimetric (oriented metric) for bitvector domain + pruning + factorization. Define $m(p, gt)$ as a directed distance (e.g., Hamming on relevant bits + popcount difference + stride alignment) that is asymmetric. Prune bottom-up enumeration to the ball $\\{p \\mid m(p, gt) \\le d\\}$ around ground-truth examples; factorize search space into equivalence classes $\\{p \\mid \\forall q \\prec p.\\, JpK \\equiv_m JqK\\}$ where $\\prec$ is the orimetric-induced order. Approximate orimetric $m^\\sharp$ + on-the-fly reordering from spurious counterexamples. Applies directly to bit_manipulation (LUT k=2/3, bit-pair, INHIB/IMPL, stride) and equation bit-level fragments.  \n\n**2. como testar em CPU sem test labels:**  \n- Split public train into 80/20 (or 5-fold).  \n- For each fold, run bottom-up enumerator (depth ≤ 6–7) with orimetric pruning on the 80 %; measure exact match rate + abstention rate on the held-out 20 %.  \n- Track #programs enumerated before hitting a correct solution and #weak rows that now produce a unique verifiable program. No test set required.  \n\n**3. risco de overfit/leakage/truncation:** Low leakage (purely sy"
+  }
+]

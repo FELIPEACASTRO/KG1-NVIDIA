@@ -1,0 +1,35 @@
+{
+  "artifact_version": "V411C_OPENROUTER_FILE_REVIEW_20260514",
+  "source_file": "C:\\Users\\davis\\Downloads\\OpenRouter Chat Thu May 14 2026 (1).json",
+  "assistant_outputs_reviewed": 9,
+  "relevant_technical_urls_extracted": 252,
+  "clean_urls_requested": 221,
+  "reachable_urls": 198,
+  "failed_or_blocked_urls": 23,
+  "best_adapter_only_baseline": {
+    "weak_total": "192/315",
+    "equation_transform": "56/155",
+    "bit_manipulation": "136/160",
+    "submit_safe": true
+  },
+  "best_solver_projection": {
+    "weak_total": "202/315",
+    "equation_transform": "63/155",
+    "bit_manipulation": "139/160",
+    "submit_safe": false
+  },
+  "accepted_findings": [
+    "FlashFill/VSA-style ranking and synthetic stability probes for equation_transform V412",
+    "Manthan-style Boolean repair as optional P2 after LUT k=2/k=3 for bit_manipulation",
+    "E-graphs/DryadSynth/abstract-interpretation pruning only as search optimizers"
+  ],
+  "rejected_findings": [
+    "more epochs or lower eval_loss as promotion criterion",
+    "teacher/verifier-only gains as submit-safe",
+    "unverified guaranteed weak-row gain claims",
+    "all-256 hidden target verification claim for test-time bit rules"
+  ],
+  "roadmap_updated": true,
+  "gpu_authorized": false,
+  "submit_authorized": false
+}

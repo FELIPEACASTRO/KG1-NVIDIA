@@ -64,6 +64,7 @@ Precisamos buscar subida no ranking ainda hoje, `2026-05-14`. A decisao V392 e s
 | V404 expanded symbolic cryptarithm audit | CPU projection `+1` equation | `56 -> 57` isolado | n/a | reconfirma o unico ganho simbolico conhecido `99d6a3b5`; sem nova classe segura |
 | V405 integrated solver projection | CPU projection `201/315` | `63/155` | `138/160` | melhor combinacao solver-first com abstain; nao adapter-only submit-safe |
 | V411B new-source triple check | n/a | n/a | n/a | adiciona LUT bit k=2/k=3 e catalogo equation v29 para V412; sem submit |
+| V411C OpenRouter 2026-05-14 file review | n/a | n/a | n/a | adiciona VSA/ranking/probes para equation e SAT repair P2 para bit; sem submit |
 
 Conclusao: `eval_loss` baixo nao e criterio de promocao. O criterio e ACC por familia no weak/full gate. A rota "resolver nos mesmos" finalmente tem ganho mensuravel (`+9` weak em CPU), mas esse ganho ainda e solver/verifier externo; para submit, ele precisa virar comportamento do adapter/package ou ser permitido explicitamente pelas regras de runtime.
 
@@ -677,6 +678,45 @@ Comparativo:
 
 Decisao: implementar V412 com esses dois incrementos objetivos. Nao iniciar HF/Kaggle GPU a partir de V411B sozinho.
 
+### Step 6H - V411C OpenRouter 2026-05-14 file review
+
+Status: concluido; refina V412, sem autorizar submit ou GPU.
+
+Arquivo auditado:
+
+- `C:\Users\davis\Downloads\OpenRouter Chat Thu May 14 2026 (1).json`.
+
+Escopo:
+
+- `9` respostas de modelos/servicos revisadas.
+- `252` URLs tecnicas extraidas.
+- `221` URLs limpas acessadas por auditoria leve; `198` responderam e `23` falharam, estavam bloqueadas ou estavam malformadas.
+- Relatorio: `artifacts/v411c_openrouter_20260514_review/KG1_V411C_OPENROUTER_FILE_REVIEW.md`.
+
+Achados que entram:
+
+- `equation_transform`: adicionar ao V412 um ranking estilo FlashFill/VSA. A DSL maior so vale se vier com intersecao de candidatos por exemplo, penalidade para literal/constante arbitraria, penalidade para programa indefinido, penalidade para formato fora do padrao observado, leave-one-example-out e probes sinteticos de estabilidade. Aceitar apenas top-1 unico ou candidatos empatados que predizem a mesma resposta.
+- `bit_manipulation`: Manthan/proof-guided Boolean repair e util somente depois da LUT k=2/k=3. Nao aceitar alegacao de "verificar todos os 256 inputs" como prova do alvo oculto; no desafio, o alvo real so e conhecido nos exemplos do prompt e nos audits locais. O uso correto e reparar near-fits e manter abstencao quando ambiguo.
+- E-graphs, DryadSynth, abstract interpretation e CVC5/SyGuS entram apenas como otimizadores de busca se V412 ficar lento. Nao mudam o criterio de aceite.
+
+Achados rejeitados:
+
+- mais epochs/LR/eval_loss baixo;
+- GRPO/RL amplo sem prova de transferencia adapter-only;
+- constrained decoding/postprocessor como submit, salvo liberacao explicita de runtime;
+- promessas de `+15/+20` weak rows sem gate local;
+- teacher/verifier externo como se fosse package submit-safe.
+
+Comparativo:
+
+| Versao | Weak total | equation | bit | Submit-safe? |
+|---|---:|---:|---:|---|
+| V291/V290 checkpoint-6 | `192/315` | `56/155` | `136/160` | sim |
+| V409 CPU projection | `202/315` | `63/155` | `139/160` | nao |
+| V411C spec | nao medido | nao medido | nao medido | nao |
+
+Decisao: V411C nao gera ganho medido. Ele muda a implementacao do V412: equation precisa de VSA/ranking/probes, bit pode ter repair SAT somente como P2 apos LUT. Nao iniciar novo job HF/Kaggle por causa desse arquivo sozinho.
+
 ### Step 7 - Full/package/submit
 
 Status: somente depois de weak gate.
@@ -732,6 +772,7 @@ Seguir rota solver-first agressiva, mas com gate:
 1. implementar V412 CPU synthesis gate para `bit_manipulation`:
    - `INHIB`, `IMPL`, pares ordenados, cache de assinatura, enumeracao por valor nos exemplos, `MAJ`, `CH`, `XOR3` apenas com verificacao total;
    - adicionar LUT booleana k=2/k=3 por bit de saida, com cobertura minima, unicidade/predicao consensual e abstencao em ambiguidade;
+   - Manthan/SAT repair fica P2 apos LUT: usar so em near-fit, nunca aceitar sem bater todos os exemplos do prompt e sem predicao unica/consensual;
    - aceitar somente candidatos que batem todos os exemplos e nao causam perdas.
 2. usar o V410 dataset de transferencia ja gateado:
    - traces curtos per-bit assimetricos;
@@ -740,6 +781,7 @@ Seguir rota solver-first agressiva, mas com gate:
 3. implementar V412 CPU synthesis gate para `equation_transform`:
    - DSL PBE/SyGuS para concat, reverse concat, signed format, literal insert/delete, pontuacao/brackets e pequenos hibridos aritmeticos;
    - expandir catalogo numeric/operator com unary, binary, ternary e depth-2 pequeno inspirado no V411B, mas reescrito com verifier estrito;
+   - adicionar VSA/DAG por row, intersecao por exemplos, ranking por profundidade/nos/literais/undefined/OOD-format e probes sinteticos de estabilidade;
    - aceitar somente programa unico/curto com verificacao total e abstencao em ambiguidade.
 4. se houver novo ganho CPU no-loss, atualizar V410 em V413/V414 e rodar smoke HF/Kaggle curto.
 5. se o primeiro checkpoint nao superar V291 (`192/315`, `equation=56`, `bit=136`, trunc `0`), cancelar por FinOps.

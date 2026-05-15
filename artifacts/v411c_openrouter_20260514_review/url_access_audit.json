@@ -1,0 +1,1989 @@
+{
+  "failed_count": 23,
+  "generated_at_local": "2026-05-14T22:39:27",
+  "ok_count": 198,
+  "raw_relevant_url_count": 252,
+  "requested_url_count": 221,
+  "results": [
+    {
+      "content_length": 45431,
+      "content_type": "text/html; charset=utf-8",
+      "error": "",
+      "final_url": "https://arxiv.org/abs/2312.06001",
+      "ok": true,
+      "status": 200,
+      "url": "http://arxiv.org/abs/2312.06001"
+    },
+    {
+      "content_length": 186660,
+      "content_type": "application/pdf",
+      "error": "",
+      "final_url": "https://arxiv.org/pdf/1907.10175v1",
+      "ok": true,
+      "status": 200,
+      "url": "http://arxiv.org/pdf/1907.10175v1"
+    },
+    {
+      "content_length": 876963,
+      "content_type": "application/pdf",
+      "error": "",
+      "final_url": "https://arxiv.org/pdf/2104.11463v2",
+      "ok": true,
+      "status": 200,
+      "url": "http://arxiv.org/pdf/2104.11463v2"
+    },
+    {
+      "content_length": 315,
+      "content_type": "text/html; charset=iso-8859-1",
+      "error": "",
+      "final_url": "http://home.ustc.edu.cn/~guoxing/stratego/strategoxt-manual-chunk-book-0.17pre18721/java-in-stratego.html",
+      "ok": false,
+      "status": 404,
+      "url": "http://home.ustc.edu.cn/~guoxing/stratego/strategoxt-manual-chunk-book-0.17pre18721/java-in-stratego.html"
+    },
+    {
+      "content_length": 315,
+      "content_type": "text/html; charset=iso-8859-1",
+      "error": "",
+      "final_url": "http://home.ustc.edu.cn/~guoxing/stratego/strategoxt-manual-chunk-book-0.17pre18721/ref-parse-cs.html",
+      "ok": false,
+      "status": 404,
+      "url": "http://home.ustc.edu.cn/~guoxing/stratego/strategoxt-manual-chunk-book-0.17pre18721/ref-parse-cs.html"
+    },
+    {
+      "content_length": 315,
+      "content_type": "text/html; charset=iso-8859-1",
+      "error": "",
+      "final_url": "http://home.ustc.edu.cn/~guoxing/stratego/strategoxt-manual-chunk-book-0.17pre18721/ref-sglr.html",
+      "ok": false,
+      "status": 404,
+      "url": "http://home.ustc.edu.cn/~guoxing/stratego/strategoxt-manual-chunk-book-0.17pre18721/ref-sglr.html"
+    },
+    {
+      "content_length": 315,
+      "content_type": "text/html; charset=iso-8859-1",
+      "error": "",
+      "final_url": "http://home.ustc.edu.cn/~guoxing/stratego/strategoxt-manual-chunk-book-0.17pre18721/tutorial.html",
+      "ok": false,
+      "status": 404,
+      "url": "http://home.ustc.edu.cn/~guoxing/stratego/strategoxt-manual-chunk-book-0.17pre18721/tutorial.html"
+    },
+    {
+      "content_length": null,
+      "content_type": "text/html;charset=UTF-8",
+      "error": "",
+      "final_url": "http://math.ustc.edu.cn/_t5440/2024/1205/c37905a663727/pagem.psp",
+      "ok": true,
+      "status": 200,
+      "url": "http://math.ustc.edu.cn/_t5440/2024/1205/c37905a663727/pagem.htm"
+    },
+    {
+      "content_length": 16985,
+      "content_type": "text/html",
+      "error": "",
+      "final_url": "http://nthucad.cs.nthu.edu.tw/~wcyao/publications/publications.htm",
+      "ok": true,
+      "status": 200,
+      "url": "http://nthucad.cs.nthu.edu.tw/~wcyao/publications/publications.htm"
+    },
+    {
+      "content_length": null,
+      "content_type": "text/html; charset=utf-8",
+      "error": "",
+      "final_url": "https://ora.ox.ac.uk/objects/uuid:3cd96a82-4a62-4a7f-a68e-5b37f7396b0e",
+      "ok": true,
+      "status": 200,
+      "url": "http://ora.ox.ac.uk/objects/uuid:3cd96a82-4a62-4a7f-a68e-5b37f7396b0e"
+    },
+    {
+      "content_length": 1659,
+      "content_type": "text/html",
+      "error": "",
+      "final_url": "http://pl.postech.ac.kr/SL/",
+      "ok": true,
+      "status": 200,
+      "url": "http://pl.postech.ac.kr/SL/"
+    },
+    {
+      "content_length": 4737,
+      "content_type": "text/html; charset=utf-8",
+      "error": "",
+      "final_url": "https://www.sri.inf.ethz.ch/publications/drachsler2017synthesis",
+      "ok": true,
+      "status": 200,
+      "url": "http://srl.inf.ethz.ch/publications/drachsler2017synthesis"
+    },
+    {
+      "content_length": 2209276,
+      "content_type": "application/pdf",
+      "error": "",
+      "final_url": "http://theory.stanford.edu/~barrett/pubs/LAL+21.pdf",
+      "ok": true,
+      "status": 200,
+      "url": "http://theory.stanford.edu/~barrett/pubs/LAL+21.pdf"
+    },
+    {
+      "content_length": 445097,
+      "content_type": "application/pdf",
+      "error": "",
+      "final_url": "http://theory.stanford.edu/~barrett/pubs/RKT+19.pdf",
+      "ok": true,
+      "status": 200,
+      "url": "http://theory.stanford.edu/~barrett/pubs/RKT+19.pdf"
+    },
+    {
+      "content_length": 4941,
+      "content_type": "text/html",
+      "error": "",
+      "final_url": "http://www-lab09.kuee.kyoto-u.ac.jp/parthenon/NTT/hajimete_e/8shou.htm",
+      "ok": true,
+      "status": 200,
+      "url": "http://www-lab09.kuee.kyoto-u.ac.jp/parthenon/NTT/hajimete_e/8shou.htm"
+    },
+    {
+      "content_length": null,
+      "content_type": "text/html",
+      "error": "",
+      "final_url": "http://www.cad.zju.edu.cn/home/jin/SigA20231/NeuralSolver.htm",
+      "ok": true,
+      "status": 200,
+      "url": "http://www.cad.zju.edu.cn/home/jin/SigA20231/NeuralSolver.htm"
+    },
+    {
+      "content_length": 3162,
+      "content_type": "text/html; charset=utf-8",
+      "error": "",
+      "final_url": "https://www.cl.cam.ac.uk/research/security/ctsrd/smten.html",
+      "ok": true,
+      "status": 200,
+      "url": "http://www.cl.cam.ac.uk/Research/Security/ctsrd/smten.html"
+    },
+    {
+      "content_length": 25432,
+      "content_type": "text/html",
+      "error": "",
+      "final_url": "http://www.cs.titech.ac.jp/TR/tr-abst95.html",
+      "ok": true,
+      "status": 200,
+      "url": "http://www.cs.titech.ac.jp/TR/tr-abst95.html"
+    },
+    {
+      "content_length": 4406,
+      "content_type": "text/html",
+      "error": "",
+      "final_url": "http://www.isee.zju.edu.cn/iseenglish/2024/0329/c21167a2895890/page.htm",
+      "ok": true,
+      "status": 200,
+      "url": "http://www.isee.zju.edu.cn/iseenglish/2024/0329/c21167a2895890/page.htm"
+    },
+    {
+      "content_length": 4826,
+      "content_type": "text/html; charset=utf-8",
+      "error": "",
+      "final_url": "https://www.sri.inf.ethz.ch/publications/raychev2016learning",
+      "ok": true,
+      "status": 200,
+      "url": "http://www.srl.inf.ethz.ch/publications/raychev2016learning"
+    },
+    {
+      "content_length": 47674,
+      "content_type": "text/html; charset=utf-8",
+      "error": "",
+      "final_url": "https://arxiv.org/abs/1611.01855",
+      "ok": true,
+      "status": 200,
+      "url": "https://arxiv.org/abs/1611.01855"
+    },
+    {
+      "content_length": 45604,
+      "content_type": "text/html; charset=utf-8",
+      "error": "",
+      "final_url": "https://arxiv.org/abs/2002.09030",
+      "ok": true,
+      "status": 200,
+      "url": "https://arxiv.org/abs/2002.09030"
+    },
+    {
+      "content_length": 47878,
+      "content_type": "text/html; charset=utf-8",
+      "error": "",
+      "final_url": "https://arxiv.org/abs/2006.08381",
+      "ok": true,
+      "status": 200,
+      "url": "https://arxiv.org/abs/2006.08381"
+    },
+    {
+      "content_length": 11771,
+      "content_type": "text/html; charset=utf-8",
+      "error": "",
+      "final_url": "https://arxiv.org/abs/2006.08381n2",
+      "ok": false,
+      "status": 404,
+      "url": "https://arxiv.org/abs/2006.08381n2"
+    },
+    {
+      "content_length": 48144,
+      "content_type": "text/html; charset=utf-8",
+      "error": "",
+      "final_url": "https://arxiv.org/abs/2007.14381",
+      "ok": true,
+      "status": 200,
+      "url": "https://arxiv.org/abs/2007.14381"
+    },
+    {
+      "content_length": 45317,
+      "content_type": "text/html; charset=utf-8",
+      "error": "",
+      "final_url": "https://arxiv.org/abs/2212.08170",
+      "ok": true,
+      "status": 200,
+      "url": "https://arxiv.org/abs/2212.08170"
+    },
+    {
+      "content_length": 45431,
+      "content_type": "text/html; charset=utf-8",
+      "error": "",
+      "final_url": "https://arxiv.org/abs/2312.06001",
+      "ok": true,
+      "status": 200,
+      "url": "https://arxiv.org/abs/2312.06001"
+    },
+    {
+      "content_length": 45640,
+      "content_type": "text/html; charset=utf-8",
+      "error": "",
+      "final_url": "https://arxiv.org/abs/2405.15880",
+      "ok": true,
+      "status": 200,
+      "url": "https://arxiv.org/abs/2405.15880"
+    },
+    {
+      "content_length": 46958,
+      "content_type": "text/html; charset=utf-8",
+      "error": "",
+      "final_url": "https://arxiv.org/abs/2408.15475",
+      "ok": true,
+      "status": 200,
+      "url": "https://arxiv.org/abs/2408.15475"
+    },
+    {
+      "content_length": 45996,
+      "content_type": "text/html; charset=utf-8",
+      "error": "",
+      "final_url": "https://arxiv.org/abs/2412.14933",
+      "ok": true,
+      "status": 200,
+      "url": "https://arxiv.org/abs/2412.14933"
+    },
+    {
+      "content_length": 49765,
+      "content_type": "text/html; charset=utf-8",
+      "error": "",
+      "final_url": "https://arxiv.org/abs/2505.23126",
+      "ok": true,
+      "status": 200,
+      "url": "https://arxiv.org/abs/2505.23126"
+    },
+    {
+      "content_length": 48227,
+      "content_type": "text/html; charset=utf-8",
+      "error": "",
+      "final_url": "https://arxiv.org/abs/2511.02491",
+      "ok": true,
+      "status": 200,
+      "url": "https://arxiv.org/abs/2511.02491"
+    },
+    {
+      "content_length": 464437,
+      "content_type": "text/html; charset=utf-8",
+      "error": "",
+      "final_url": "https://arxiv.org/html/2307.09564v2",
+      "ok": true,
+      "status": 200,
+      "url": "https://arxiv.org/html/2307.09564v2"
+    },
+    {
+      "content_length": 1161476,
+      "content_type": "text/html; charset=utf-8",
+      "error": "",
+      "final_url": "https://arxiv.org/html/2310.11689v1",
+      "ok": true,
+      "status": 200,
+      "url": "https://arxiv.org/html/2310.11689v1"
+    },
+    {
+      "content_length": 1089946,
+      "content_type": "text/html; charset=utf-8",
+      "error": "",
+      "final_url": "https://arxiv.org/html/2403.03997",
+      "ok": true,
+      "status": 200,
+      "url": "https://arxiv.org/html/2403.03997"
+    },
+    {
+      "content_length": 1089946,
+      "content_type": "text/html; charset=utf-8",
+      "error": "",
+      "final_url": "https://arxiv.org/html/2403.03997v2",
+      "ok": true,
+      "status": 200,
+      "url": "https://arxiv.org/html/2403.03997v2"
+    },
+    {
+      "content_length": 679620,
+      "content_type": "text/html; charset=utf-8",
+      "error": "",
+      "final_url": "https://arxiv.org/html/2409.17270v2",
+      "ok": true,
+      "status": 200,
+      "url": "https://arxiv.org/html/2409.17270v2"
+    },
+    {
+      "content_length": 395657,
+      "content_type": "text/html; charset=utf-8",
+      "error": "",
+      "final_url": "https://arxiv.org/html/2410.08137v1",
+      "ok": true,
+      "status": 200,
+      "url": "https://arxiv.org/html/2410.08137v1"
+    },
+    {
+      "content_length": 1215797,
+      "content_type": "text/html; charset=utf-8",
+      "error": "",
+      "final_url": "https://arxiv.org/html/2412.06176v1",
+      "ok": true,
+      "status": 200,
+      "url": "https://arxiv.org/html/2412.06176v1"
+    },
+    {
+      "content_length": 445408,
+      "content_type": "text/html; charset=utf-8",
+      "error": "",
+      "final_url": "https://arxiv.org/html/2503.15540v1",
+      "ok": true,
+      "status": 200,
+      "url": "https://arxiv.org/html/2503.15540v1"
+    },
+    {
+      "content_length": 518212,
+      "content_type": "text/html; charset=utf-8",
+      "error": "",
+      "final_url": "https://arxiv.org/html/2507.08665v1",
+      "ok": true,
+      "status": 200,
+      "url": "https://arxiv.org/html/2507.08665v1"
+    },
+    {
+      "content_length": 173949,
+      "content_type": "text/html; charset=utf-8",
+      "error": "",
+      "final_url": "https://arxiv.org/html/2509.23676v1",
+      "ok": true,
+      "status": 200,
+      "url": "https://arxiv.org/html/2509.23676v1"
+    },
+    {
+      "content_length": 341062,
+      "content_type": "text/html; charset=utf-8",
+      "error": "",
+      "final_url": "https://arxiv.org/html/2602.11630v1",
+      "ok": true,
+      "status": 200,
+      "url": "https://arxiv.org/html/2602.11630v1"
+    },
+    {
+      "content_length": 442544,
+      "content_type": "text/html; charset=utf-8",
+      "error": "",
+      "final_url": "https://arxiv.org/html/2604.17073v1",
+      "ok": true,
+      "status": 200,
+      "url": "https://arxiv.org/html/2604.17073v1"
+    },
+    {
+      "content_length": 337933,
+      "content_type": "application/pdf",
+      "error": "",
+      "final_url": "https://arxiv.org/pdf/1405.5590",
+      "ok": true,
+      "status": 200,
+      "url": "https://arxiv.org/pdf/1405.5590"
+    },
+    {
+      "content_length": 364912,
+      "content_type": "application/pdf",
+      "error": "",
+      "final_url": "https://arxiv.org/pdf/1510.08121",
+      "ok": true,
+      "status": 200,
+      "url": "https://arxiv.org/pdf/1510.08121"
+    },
+    {
+      "content_length": 1605152,
+      "content_type": "application/pdf",
+      "error": "",
+      "final_url": "https://arxiv.org/pdf/1611.07627",
+      "ok": true,
+      "status": 200,
+      "url": "https://arxiv.org/pdf/1611.07627"
+    },
+    {
+      "content_length": 1378228,
+      "content_type": "application/pdf",
+      "error": "",
+      "final_url": "https://arxiv.org/pdf/1703.03539",
+      "ok": true,
+      "status": 200,
+      "url": "https://arxiv.org/pdf/1703.03539"
+    },
+    {
+      "content_length": 136793,
+      "content_type": "application/pdf",
+      "error": "",
+      "final_url": "https://arxiv.org/pdf/1710.10720",
+      "ok": true,
+      "status": 200,
+      "url": "https://arxiv.org/pdf/1710.10720"
+    },
+    {
+      "content_length": 1399660,
+      "content_type": "application/pdf",
+      "error": "",
+      "final_url": "https://arxiv.org/pdf/1711.11438",
+      "ok": true,
+      "status": 200,
+      "url": "https://arxiv.org/pdf/1711.11438"
+    },
+    {
+      "content_length": 188953,
+      "content_type": "application/pdf",
+      "error": "",
+      "final_url": "https://arxiv.org/pdf/1807.11103",
+      "ok": true,
+      "status": 200,
+      "url": "https://arxiv.org/pdf/1807.11103"
+    },
+    {
+      "content_length": 682992,
+      "content_type": "application/pdf",
+      "error": "",
+      "final_url": "https://arxiv.org/pdf/2005.06922v1",
+      "ok": true,
+      "status": 200,
+      "url": "https://arxiv.org/pdf/2005.06922v1"
+    },
+    {
+      "content_length": 1331928,
+      "content_type": "application/pdf",
+      "error": "",
+      "final_url": "https://arxiv.org/pdf/2106.07175",
+      "ok": true,
+      "status": 200,
+      "url": "https://arxiv.org/pdf/2106.07175"
+    },
+    {
+      "content_length": 822460,
+      "content_type": "application/pdf",
+      "error": "",
+      "final_url": "https://arxiv.org/pdf/2106.11610",
+      "ok": true,
+      "status": 200,
+      "url": "https://arxiv.org/pdf/2106.11610"
+    },
+    {
+      "content_length": 1047804,
+      "content_type": "application/pdf",
+      "error": "",
+      "final_url": "https://arxiv.org/pdf/2203.10452",
+      "ok": true,
+      "status": 200,
+      "url": "https://arxiv.org/pdf/2203.10452"
+    },
+    {
+      "content_length": 784621,
+      "content_type": "application/pdf",
+      "error": "",
+      "final_url": "https://arxiv.org/pdf/2312.06001",
+      "ok": true,
+      "status": 200,
+      "url": "https://arxiv.org/pdf/2312.06001"
+    },
+    {
+      "content_length": 642411,
+      "content_type": "application/pdf",
+      "error": "",
+      "final_url": "https://arxiv.org/pdf/2405.01563",
+      "ok": true,
+      "status": 200,
+      "url": "https://arxiv.org/pdf/2405.01563"
+    },
+    {
+      "content_length": 210833,
+      "content_type": "application/pdf",
+      "error": "",
+      "final_url": "https://arxiv.org/pdf/2406.06241",
+      "ok": true,
+      "status": 200,
+      "url": "https://arxiv.org/pdf/2406.06241"
+    },
+    {
+      "content_length": 7419191,
+      "content_type": "application/pdf",
+      "error": "",
+      "final_url": "https://arxiv.org/pdf/2407.04405",
+      "ok": true,
+      "status": 200,
+      "url": "https://arxiv.org/pdf/2407.04405"
+    },
+    {
+      "content_length": 390833,
+      "content_type": "application/pdf",
+      "error": "",
+      "final_url": "https://arxiv.org/pdf/2409.17490",
+      "ok": true,
+      "status": 200,
+      "url": "https://arxiv.org/pdf/2409.17490"
+    },
+    {
+      "content_length": 668598,
+      "content_type": "application/pdf",
+      "error": "",
+      "final_url": "https://arxiv.org/pdf/2502.09061",
+      "ok": true,
+      "status": 200,
+      "url": "https://arxiv.org/pdf/2502.09061"
+    },
+    {
+      "content_length": 652549,
+      "content_type": "application/pdf",
+      "error": "",
+      "final_url": "https://arxiv.org/pdf/2503.03207",
+      "ok": true,
+      "status": 200,
+      "url": "https://arxiv.org/pdf/2503.03207"
+    },
+    {
+      "content_length": 953401,
+      "content_type": "application/pdf",
+      "error": "",
+      "final_url": "https://arxiv.org/pdf/2504.05577",
+      "ok": true,
+      "status": 200,
+      "url": "https://arxiv.org/pdf/2504.05577"
+    },
+    {
+      "content_length": 5082718,
+      "content_type": "application/pdf",
+      "error": "",
+      "final_url": "https://arxiv.org/pdf/2504.10415",
+      "ok": true,
+      "status": 200,
+      "url": "https://arxiv.org/pdf/2504.10415?"
+    },
+    {
+      "content_length": 1819282,
+      "content_type": "application/pdf",
+      "error": "",
+      "final_url": "https://arxiv.org/pdf/2508.00005",
+      "ok": true,
+      "status": 200,
+      "url": "https://arxiv.org/pdf/2508.00005"
+    },
+    {
+      "content_length": 1291577,
+      "content_type": "application/pdf",
+      "error": "",
+      "final_url": "https://arxiv.org/pdf/2509.00360",
+      "ok": true,
+      "status": 200,
+      "url": "https://arxiv.org/pdf/2509.00360"
+    },
+    {
+      "content_length": 871695,
+      "content_type": "application/pdf",
+      "error": "",
+      "final_url": "https://arxiv.org/pdf/2511.00403",
+      "ok": true,
+      "status": 200,
+      "url": "https://arxiv.org/pdf/2511.00403"
+    },
+    {
+      "content_length": 1391663,
+      "content_type": "application/pdf",
+      "error": "",
+      "final_url": "https://arxiv.org/pdf/2511.02491",
+      "ok": true,
+      "status": 200,
+      "url": "https://arxiv.org/pdf/2511.02491"
+    },
+    {
+      "content_length": 386488,
+      "content_type": "application/pdf",
+      "error": "",
+      "final_url": "https://arxiv.org/pdf/2511.22570",
+      "ok": true,
+      "status": 200,
+      "url": "https://arxiv.org/pdf/2511.22570"
+    },
+    {
+      "content_length": 698098,
+      "content_type": "application/pdf",
+      "error": "",
+      "final_url": "https://arxiv.org/pdf/2601.04045",
+      "ok": true,
+      "status": 200,
+      "url": "https://arxiv.org/pdf/2601.04045"
+    },
+    {
+      "content_length": 6175127,
+      "content_type": "application/pdf",
+      "error": "",
+      "final_url": "https://arxiv.org/pdf/2602.12259",
+      "ok": true,
+      "status": 200,
+      "url": "https://arxiv.org/pdf/2602.12259"
+    },
+    {
+      "content_length": 799857,
+      "content_type": "application/pdf",
+      "error": "",
+      "final_url": "https://boolector.github.io/papers/Brummayer-PhD-Thesis-2009.pdf",
+      "ok": true,
+      "status": 200,
+      "url": "https://boolector.github.io/papers/Brummayer-PhD-Thesis-2009.pdf"
+    },
+    {
+      "content_length": 43463,
+      "content_type": "text/html; charset=utf-8",
+      "error": "",
+      "final_url": "https://cap.ecn.purdue.edu/dryadsynth",
+      "ok": true,
+      "status": 200,
+      "url": "https://cap.ecn.purdue.edu/dryadsynth"
+    },
+    {
+      "content_length": 123193,
+      "content_type": "application/pdf",
+      "error": "",
+      "final_url": "https://cc.ee.ntu.edu.tw/~jhjiang/instruction/courses/fall10-lsv/lec01-intro_2p.pdf",
+      "ok": true,
+      "status": 200,
+      "url": "https://cc.ee.ntu.edu.tw/~jhjiang/instruction/courses/fall10-lsv/lec01-intro_2p.pdf"
+    },
+    {
+      "content_length": 258129,
+      "content_type": "application/pdf",
+      "error": "",
+      "final_url": "https://cc.ee.ntu.edu.tw/~jhjiang/instruction/courses/fall14-lsv/lec01-abc_2p.pdf",
+      "ok": true,
+      "status": 200,
+      "url": "https://cc.ee.ntu.edu.tw/~jhjiang/instruction/courses/fall14-lsv/lec01-abc_2p.pdf"
+    },
+    {
+      "content_length": 294164,
+      "content_type": "application/pdf",
+      "error": "",
+      "final_url": "https://cc.ee.ntu.edu.tw/~jhjiang/instruction/courses/fall14-lsv/lec01-abc_4p.pdf",
+      "ok": true,
+      "status": 200,
+      "url": "https://cc.ee.ntu.edu.tw/~jhjiang/instruction/courses/fall14-lsv/lec01-abc_4p.pdf"
+    },
+    {
+      "content_length": 3227244,
+      "content_type": "application/pdf",
+      "error": "",
+      "final_url": "https://cc.ee.ntu.edu.tw/~ywchang/Courses/PD_Source/EDA_Chapter1.pdf",
+      "ok": true,
+      "status": 200,
+      "url": "https://cc.ee.ntu.edu.tw/~ywchang/Courses/PD_Source/EDA_Chapter1.pdf"
+    },
+    {
+      "content_length": 7597,
+      "content_type": "text/html",
+      "error": "",
+      "final_url": "https://cs.pku.edu.cn/info/1230/2027.htm",
+      "ok": true,
+      "status": 200,
+      "url": "https://cs.pku.edu.cn/info/1230/2027.htm"
+    },
+    {
+      "content_length": 7608,
+      "content_type": "text/html",
+      "error": "",
+      "final_url": "https://cs.pku.edu.cn/info/1234/2092.htm",
+      "ok": true,
+      "status": 200,
+      "url": "https://cs.pku.edu.cn/info/1234/2092.htm"
+    },
+    {
+      "content_length": 1185415,
+      "content_type": "application/pdf",
+      "error": "",
+      "final_url": "https://cs.stanford.edu/~sumith/docs/bfss-fmsd20.pdf",
+      "ok": true,
+      "status": 200,
+      "url": "https://cs.stanford.edu/~sumith/docs/bfss-fmsd20.pdf"
+    },
+    {
+      "content_length": 153733,
+      "content_type": "application/pdf",
+      "error": "",
+      "final_url": "https://cvc4.cs.stanford.edu/papers/comp-sysdesc/syguscomp-2018.pdf",
+      "ok": true,
+      "status": 200,
+      "url": "https://cvc4.cs.stanford.edu/papers/comp-sysdesc/syguscomp-2018.pdf"
+    },
+    {
+      "content_length": 925431,
+      "content_type": "application/pdf",
+      "error": "",
+      "final_url": "https://dai.sjtu.edu.cn/my_file/pdf/739d9f50-3749-47e0-a40f-3c5a63c54b31.pdf",
+      "ok": true,
+      "status": 200,
+      "url": "https://dai.sjtu.edu.cn/my_file/pdf/739d9f50-3749-47e0-a40f-3c5a63c54b31.pdf"
+    },
+    {
+      "content_length": 265,
+      "content_type": "text/html; charset=iso-8859-1",
+      "error": "",
+      "final_url": "https://dspace.mit.edu/bitstream/handle/1721.1/147672/3571234.pdf?isAllowed=y&sequence=1",
+      "ok": false,
+      "status": 403,
+      "url": "https://dspace.mit.edu/bitstream/handle/1721.1/147672/3571234.pdf?isAllowed=y&sequence=1"
+    },
+    {
+      "content_length": null,
+      "content_type": "text/html;charset=utf-8",
+      "error": "",
+      "final_url": "https://dspace.mit.edu/handle/1721.1/145949?show=full",
+      "ok": true,
+      "status": 200,
+      "url": "https://dspace.mit.edu/handle/1721.1/145949?show=full"
+    },
+    {
+      "content_length": 294619,
+      "content_type": "text/plain;charset=UTF-8",
+      "error": "",
+      "final_url": "https://ecommons.cornell.edu/server/api/core/bitstreams/e00b8f1e-e85b-40bd-a4ea-9d68597e1291/content",
+      "ok": true,
+      "status": 200,
+      "url": "https://ecommons.cornell.edu/server/api/core/bitstreams/e00b8f1e-e85b-40bd-a4ea-9d68597e1291/content"
+    },
+    {
+      "content_length": null,
+      "content_type": "",
+      "error": "ConnectionError: HTTPSConnectionPool(host='egg.cs.washington.edu', port=443): Max retries exceeded with url: / (Caused by NameResolutionError(\"HTTPSConnection(host='egg.cs.washington.edu', port=443",
+      "ok": false,
+      "status": null,
+      "url": "https://egg.cs.washington.edu/"
+    },
+    {
+      "content_length": 5254,
+      "content_type": "text/html; charset=utf-8",
+      "error": "",
+      "final_url": "https://egraphs-good.github.io/n2",
+      "ok": false,
+      "status": 404,
+      "url": "https://egraphs-good.github.io/n2"
+    },
+    {
+      "content_length": 2687418,
+      "content_type": "application/pdf",
+      "error": "",
+      "final_url": "https://export.arxiv.org/pdf/2109.10476v4",
+      "ok": true,
+      "status": 200,
+      "url": "https://export.arxiv.org/pdf/2109.10476v4.pdf"
+    },
+    {
+      "content_length": 661167,
+      "content_type": "application/pdf",
+      "error": "",
+      "final_url": "https://export.arxiv.org/pdf/2212.08170v1",
+      "ok": true,
+      "status": 200,
+      "url": "https://export.arxiv.org/pdf/2212.08170v1.pdf"
+    },
+    {
+      "content_length": 1467133,
+      "content_type": "application/pdf",
+      "error": "",
+      "final_url": "https://export.arxiv.org/pdf/2304.10768v1",
+      "ok": true,
+      "status": 200,
+      "url": "https://export.arxiv.org/pdf/2304.10768v1.pdf"
+    },
+    {
+      "content_length": 445012,
+      "content_type": "application/pdf",
+      "error": "",
+      "final_url": "https://files.sri.inf.ethz.ch/website/papers/cav17-pa.pdf",
+      "ok": true,
+      "status": 200,
+      "url": "https://files.sri.inf.ethz.ch/website/papers/cav17-pa.pdf"
+    },
+    {
+      "content_length": 150256,
+      "content_type": "application/pdf",
+      "error": "",
+      "final_url": "https://flolac.iis.sinica.edu.tw/2020/talk-slides.pdf",
+      "ok": true,
+      "status": 200,
+      "url": "https://flolac.iis.sinica.edu.tw/2020/talk-slides.pdf"
+    },
+    {
+      "content_length": 7223,
+      "content_type": "text/html; charset=utf-8",
+      "error": "",
+      "final_url": "https://flolac.iis.sinica.edu.tw/en/2025/",
+      "ok": true,
+      "status": 200,
+      "url": "https://flolac.iis.sinica.edu.tw/en/2025/"
+    },
+    {
+      "content_length": 4021,
+      "content_type": "text/html; charset=utf-8",
+      "error": "",
+      "final_url": "https://flolac.iis.sinica.edu.tw/flolac08/derivation.html",
+      "ok": true,
+      "status": 200,
+      "url": "https://flolac.iis.sinica.edu.tw/flolac08/derivation.html"
+    },
+    {
+      "content_length": 1796010,
+      "content_type": "text/html",
+      "error": "",
+      "final_url": "https://gc.sjtu.edu.cn/~wkqian/publications.html",
+      "ok": true,
+      "status": 200,
+      "url": "https://gc.sjtu.edu.cn/~wkqian/publications.html"
+    },
+    {
+      "content_length": 102790,
+      "content_type": "text/html",
+      "error": "",
+      "final_url": "https://gc.sjtu.edu.cn/~wkqian/research.html",
+      "ok": true,
+      "status": 200,
+      "url": "https://gc.sjtu.edu.cn/~wkqian/research.html"
+    },
+    {
+      "content_length": null,
+      "content_type": "text/html; charset=utf-8",
+      "error": "",
+      "final_url": "https://github.com/Ayman-Sabek/NVIDIA_Kaggle_Nemotron",
+      "ok": true,
+      "status": 200,
+      "url": "https://github.com/Ayman-Sabek/NVIDIA_Kaggle_Nemotron"
+    },
+    {
+      "content_length": null,
+      "content_type": "text/html; charset=utf-8",
+      "error": "",
+      "final_url": "https://github.com/Microsoft/prose/",
+      "ok": true,
+      "status": 200,
+      "url": "https://github.com/Microsoft/prose/"
+    },
+    {
+      "content_length": null,
+      "content_type": "text/html; charset=utf-8",
+      "error": "",
+      "final_url": "https://github.com/SynthesisLab/MBA",
+      "ok": true,
+      "status": 200,
+      "url": "https://github.com/SynthesisLab/MBA"
+    },
+    {
+      "content_length": null,
+      "content_type": "text/html; charset=utf-8",
+      "error": "",
+      "final_url": "https://github.com/amitz25/PCCoder",
+      "ok": true,
+      "status": 200,
+      "url": "https://github.com/amitz25/PCCoder"
+    },
+    {
+      "content_length": null,
+      "content_type": "text/html; charset=utf-8",
+      "error": "",
+      "final_url": "https://github.com/deepseek-ai/deepseek-math-v2",
+      "ok": true,
+      "status": 200,
+      "url": "https://github.com/deepseek-ai/deepseek-math-v2"
+    },
+    {
+      "content_length": null,
+      "content_type": "text/html; charset=utf-8",
+      "error": "",
+      "final_url": "https://github.com/hkustgz-zhang-lab/ABCPaperCheck/blob/main/README.md",
+      "ok": true,
+      "status": 200,
+      "url": "https://github.com/hkustgz-zhang-lab/ABCPaperCheck/blob/main/README.md"
+    },
+    {
+      "content_length": null,
+      "content_type": "text/html; charset=utf-8",
+      "error": "",
+      "final_url": "https://github.com/mkantwala/DeepSeek-R1-TrainingSuite",
+      "ok": true,
+      "status": 200,
+      "url": "https://github.com/mkantwala/DeepSeek-R1-TrainingSuite"
+    },
+    {
+      "content_length": null,
+      "content_type": "text/html; charset=utf-8",
+      "error": "",
+      "final_url": "https://github.com/purdue-cap/DryadSynth",
+      "ok": true,
+      "status": 200,
+      "url": "https://github.com/purdue-cap/DryadSynth"
+    },
+    {
+      "content_length": null,
+      "content_type": "text/html; charset=utf-8",
+      "error": "",
+      "final_url": "https://github.com/sagnikanupam/mathdslnPreprint",
+      "ok": false,
+      "status": 404,
+      "url": "https://github.com/sagnikanupam/mathdslnPreprint"
+    },
+    {
+      "content_length": null,
+      "content_type": "text/html; charset=utf-8",
+      "error": "",
+      "final_url": "https://github.com/tonghuikang/claude-code-template",
+      "ok": true,
+      "status": 200,
+      "url": "https://github.com/tonghuikang/claude-code-template"
+    },
+    {
+      "content_length": null,
+      "content_type": "text/html; charset=utf-8",
+      "error": "",
+      "final_url": "https://github.com/tonghuikang/nemotron",
+      "ok": true,
+      "status": 200,
+      "url": "https://github.com/tonghuikang/nemotron"
+    },
+    {
+      "content_length": null,
+      "content_type": "text/html; charset=utf-8",
+      "error": "",
+      "final_url": "https://github.com/zaxtax/bustle",
+      "ok": true,
+      "status": 200,
+      "url": "https://github.com/zaxtax/bustle"
+    },
+    {
+      "content_length": 1787041,
+      "content_type": "application/pdf",
+      "error": "",
+      "final_url": "https://gosec.sjtu.edu.cn/wp-content/uploads/2021/05/Fuzzing2018Chen.pdf",
+      "ok": true,
+      "status": 200,
+      "url": "https://gosec.sjtu.edu.cn/wp-content/uploads/2021/05/Fuzzing2018Chen.pdf"
+    },
+    {
+      "content_length": 97985,
+      "content_type": "text/html; charset=UTF-8",
+      "error": "",
+      "final_url": "https://graphics.stanford.edu/~seander/bithacks.html",
+      "ok": true,
+      "status": 200,
+      "url": "https://graphics.stanford.edu/~seander/bithacks.html"
+    },
+    {
+      "content_length": 367599,
+      "content_type": "application/pdf",
+      "error": "",
+      "final_url": "https://homepage.iis.sinica.edu.tw/~bywang/papers/icse16.pdf",
+      "ok": true,
+      "status": 200,
+      "url": "https://homepage.iis.sinica.edu.tw/~bywang/papers/icse16.pdf"
+    },
+    {
+      "content_length": 86387,
+      "content_type": "text/html; charset=utf-8",
+      "error": "",
+      "final_url": "https://huggingface.co/GaryNENE/nemotron-nano-8b-reasoning-lora",
+      "ok": true,
+      "status": 200,
+      "url": "https://huggingface.co/GaryNENE/nemotron-nano-8b-reasoning-lora"
+    },
+    {
+      "content_length": 95170,
+      "content_type": "text/html; charset=utf-8",
+      "error": "",
+      "final_url": "https://huggingface.co/datasets/Naribow/nemotron-training-runtime",
+      "ok": true,
+      "status": 200,
+      "url": "https://huggingface.co/datasets/Naribow/nemotron-training-runtime"
+    },
+    {
+      "content_length": 108452,
+      "content_type": "text/html; charset=utf-8",
+      "error": "",
+      "final_url": "https://huggingface.co/datasets/andy279/nemotron-reasoning-challenge",
+      "ok": true,
+      "status": 200,
+      "url": "https://huggingface.co/datasets/andy279/nemotron-reasoning-challenge"
+    },
+    {
+      "content_length": 79610,
+      "content_type": "text/html; charset=utf-8",
+      "error": "",
+      "final_url": "https://huggingface.co/datasets/andy279/nemotron-reasoning-challenge-raw-traces",
+      "ok": true,
+      "status": 200,
+      "url": "https://huggingface.co/datasets/andy279/nemotron-reasoning-challenge-raw-traces"
+    },
+    {
+      "content_length": 515611,
+      "content_type": "text/html; charset=utf-8",
+      "error": "",
+      "final_url": "https://huggingface.co/datasets/codelion/logical-puzzles-cot",
+      "ok": true,
+      "status": 200,
+      "url": "https://huggingface.co/datasets/codelion/logical-puzzles-cot"
+    },
+    {
+      "content_length": 337120,
+      "content_type": "text/html; charset=utf-8",
+      "error": "",
+      "final_url": "https://huggingface.co/datasets/jasonkung98/NVIDIA-Nemotron-Model-Reasoning-Challenge",
+      "ok": true,
+      "status": 200,
+      "url": "https://huggingface.co/datasets/jasonkung98/NVIDIA-Nemotron-Model-Reasoning-Challenge"
+    },
+    {
+      "content_length": 72088,
+      "content_type": "text/html; charset=utf-8",
+      "error": "",
+      "final_url": "https://huggingface.co/felipesp1983/nemotron-v130-training-notebook",
+      "ok": true,
+      "status": 200,
+      "url": "https://huggingface.co/felipesp1983/nemotron-v130-training-notebook"
+    },
+    {
+      "content_length": null,
+      "content_type": "text/html; charset=UTF-8",
+      "error": "",
+      "final_url": "https://jzus.zju.edu.cn/article.php?doi=10.1631%2FFITEE.1601349",
+      "ok": true,
+      "status": 200,
+      "url": "https://jzus.zju.edu.cn/article.php?doi=10.1631%2FFITEE.1601349"
+    },
+    {
+      "content_length": null,
+      "content_type": "text/html; charset=UTF-8",
+      "error": "",
+      "final_url": "https://jzus.zju.edu.cn/article.php?doi=10.1631%2FFITEE.1601730",
+      "ok": true,
+      "status": 200,
+      "url": "https://jzus.zju.edu.cn/article.php?doi=10.1631%2FFITEE.1601730"
+    },
+    {
+      "content_length": null,
+      "content_type": "text/html; charset=UTF-8",
+      "error": "",
+      "final_url": "https://jzus.zju.edu.cn/iparticle.php?doi=10.1631%2FFITEE.2200463",
+      "ok": true,
+      "status": 200,
+      "url": "https://jzus.zju.edu.cn/iparticle.php?doi=10.1631%2FFITEE.2200463"
+    },
+    {
+      "content_length": null,
+      "content_type": "text/html; charset=utf-8",
+      "error": "",
+      "final_url": "https://keg.cs.tsinghua.edu.cn/codegeex/",
+      "ok": true,
+      "status": 200,
+      "url": "https://keg.cs.tsinghua.edu.cn/codegeex/"
+    },
+    {
+      "content_length": 5502331,
+      "content_type": "application/pdf",
+      "error": "",
+      "final_url": "https://keg.cs.tsinghua.edu.cn/jietang/publications/KDD23-Zheng-CodeGeeX.pdf",
+      "ok": true,
+      "status": 200,
+      "url": "https://keg.cs.tsinghua.edu.cn/jietang/publications/KDD23-Zheng-CodeGeeX.pdf"
+    },
+    {
+      "content_length": 3302,
+      "content_type": "text/html; charset=utf-8",
+      "error": "",
+      "final_url": "https://kihongheo.kaist.ac.kr/projects",
+      "ok": true,
+      "status": 200,
+      "url": "https://kihongheo.kaist.ac.kr/projects"
+    },
+    {
+      "content_length": null,
+      "content_type": "text/html;charset=UTF-8",
+      "error": "",
+      "final_url": "https://koasas.kaist.ac.kr/handle/10203/277251",
+      "ok": true,
+      "status": 200,
+      "url": "https://koasas.kaist.ac.kr/handle/10203/277251"
+    },
+    {
+      "content_length": null,
+      "content_type": "text/html;charset=UTF-8",
+      "error": "",
+      "final_url": "https://koasas.kaist.ac.kr/handle/10203/277251nn3",
+      "ok": true,
+      "status": 200,
+      "url": "https://koasas.kaist.ac.kr/handle/10203/277251nn3"
+    },
+    {
+      "content_length": null,
+      "content_type": "text/html; charset=utf-8",
+      "error": "",
+      "final_url": "https://nemotron.huikang.dev/corpus.html",
+      "ok": true,
+      "status": 200,
+      "url": "https://nemotron.huikang.dev/corpus.html"
+    },
+    {
+      "content_length": null,
+      "content_type": "text/html; charset=utf-8",
+      "error": "",
+      "final_url": "https://nemotron.huikang.dev/metrics.html",
+      "ok": true,
+      "status": 200,
+      "url": "https://nemotron.huikang.dev/metrics.html"
+    },
+    {
+      "content_length": null,
+      "content_type": "text/html; charset=utf-8",
+      "error": "",
+      "final_url": "https://nemotron.huikang.dev/synthetic.html",
+      "ok": true,
+      "status": 200,
+      "url": "https://nemotron.huikang.dev/synthetic.html"
+    },
+    {
+      "content_length": null,
+      "content_type": "text/html; charset=utf-8",
+      "error": "",
+      "final_url": "https://nemotron.huikang.dev/training.html",
+      "ok": true,
+      "status": 200,
+      "url": "https://nemotron.huikang.dev/training.html"
+    },
+    {
+      "content_length": 0,
+      "content_type": "",
+      "error": "",
+      "final_url": "https://oasis.postech.ac.kr/handle/2014.oak/124923",
+      "ok": false,
+      "status": 403,
+      "url": "https://oasis.postech.ac.kr/handle/2014.oak/124923"
+    },
+    {
+      "content_length": 0,
+      "content_type": "",
+      "error": "",
+      "final_url": "https://oasis.postech.ac.kr/handle/2014.oak/125082",
+      "ok": false,
+      "status": 403,
+      "url": "https://oasis.postech.ac.kr/handle/2014.oak/125082"
+    },
+    {
+      "content_length": 0,
+      "content_type": "",
+      "error": "",
+      "final_url": "https://oasis.postech.ac.kr/handle/2014.oak/28538?mode=simple",
+      "ok": false,
+      "status": 403,
+      "url": "https://oasis.postech.ac.kr/handle/2014.oak/28538?mode=simple"
+    },
+    {
+      "content_length": 0,
+      "content_type": "",
+      "error": "",
+      "final_url": "https://oasis.postech.ac.kr/handle/2014.oak/36403",
+      "ok": false,
+      "status": 403,
+      "url": "https://oasis.postech.ac.kr/handle/2014.oak/36403"
+    },
+    {
+      "content_length": null,
+      "content_type": "application/pdf; header=present",
+      "error": "",
+      "final_url": "https://ora.ox.ac.uk/objects/uuid:3cd96a82-4a62-4a7f-a68e-5b37f7396b0e/files/m62954c17dc62741987ac2b57b7f2682a",
+      "ok": true,
+      "status": 200,
+      "url": "https://ora.ox.ac.uk/objects/uuid:3cd96a82-4a62-4a7f-a68e-5b37f7396b0e/files/m62954c17dc62741987ac2b57b7f2682a"
+    },
+    {
+      "content_length": null,
+      "content_type": "application/pdf; header=present",
+      "error": "",
+      "final_url": "https://ora.ox.ac.uk/objects/uuid:d5517b91-e5a3-4f61-8169-5020d2da90a4/files/s6682x4042",
+      "ok": true,
+      "status": 200,
+      "url": "https://ora.ox.ac.uk/objects/uuid:d5517b91-e5a3-4f61-8169-5020d2da90a4/files/s6682x4042"
+    },
+    {
+      "content_length": null,
+      "content_type": "text/html",
+      "error": "",
+      "final_url": "https://pacman.cs.tsinghua.edu.cn/~zjd/publication/generated/dblp-confpldi-tang-zwjzyz-22/",
+      "ok": true,
+      "status": 200,
+      "url": "https://pacman.cs.tsinghua.edu.cn/~zjd/publication/generated/dblp-confpldi-tang-zwjzyz-22/"
+    },
+    {
+      "content_length": 10633,
+      "content_type": "text/html",
+      "error": "",
+      "final_url": "https://people.csail.mit.edu/asolar/SynthesisCourse/Lecture1.htm",
+      "ok": true,
+      "status": 200,
+      "url": "https://people.csail.mit.edu/asolar/SynthesisCourse/Lecture1.htm"
+    },
+    {
+      "content_length": 8201,
+      "content_type": "text/html",
+      "error": "",
+      "final_url": "https://people.csail.mit.edu/asolar/SynthesisCourse/Lecture9.htm",
+      "ok": true,
+      "status": 200,
+      "url": "https://people.csail.mit.edu/asolar/SynthesisCourse/Lecture9.htm"
+    },
+    {
+      "content_length": null,
+      "content_type": "text/html; charset=iso-8859-1",
+      "error": "",
+      "final_url": "https://people.csail.mit.edu/asolar/n2",
+      "ok": false,
+      "status": 404,
+      "url": "https://people.csail.mit.edu/asolar/n2"
+    },
+    {
+      "content_length": 393061,
+      "content_type": "application/pdf",
+      "error": "",
+      "final_url": "https://people.csail.mit.edu/asolar/papers/EllisMSST18.pdf",
+      "ok": true,
+      "status": 200,
+      "url": "https://people.csail.mit.edu/asolar/papers/EllisMSST18.pdf"
+    },
+    {
+      "content_length": 2782158,
+      "content_type": "application/pdf",
+      "error": "",
+      "final_url": "https://people.csail.mit.edu/asolar/papers/EllisWNSMHCST21.pdf",
+      "ok": true,
+      "status": 200,
+      "url": "https://people.csail.mit.edu/asolar/papers/EllisWNSMHCST21.pdf"
+    },
+    {
+      "content_length": 803436,
+      "content_type": "application/pdf",
+      "error": "",
+      "final_url": "https://people.csail.mit.edu/asolar/papers/NyeHTS19.pdf",
+      "ok": true,
+      "status": 200,
+      "url": "https://people.csail.mit.edu/asolar/papers/NyeHTS19.pdf"
+    },
+    {
+      "content_length": 9867986,
+      "content_type": "application/pdf",
+      "error": "",
+      "final_url": "https://people.csail.mit.edu/rinard/paper/popl19.pdf",
+      "ok": true,
+      "status": 200,
+      "url": "https://people.csail.mit.edu/rinard/paper/popl19.pdf"
+    },
+    {
+      "content_length": 628808,
+      "content_type": "application/pdf",
+      "error": "",
+      "final_url": "https://people.csail.mit.edu/rishabh/papers/cacm12.pdf",
+      "ok": true,
+      "status": 200,
+      "url": "https://people.csail.mit.edu/rishabh/papers/cacm12.pdf"
+    },
+    {
+      "content_length": 79050,
+      "content_type": "application/pdf",
+      "error": "",
+      "final_url": "https://people.eecs.berkeley.edu/~alanmi/publications/2002/iwls02_enc.pdf",
+      "ok": true,
+      "status": 200,
+      "url": "https://people.eecs.berkeley.edu/~alanmi/publications/2002/iwls02_enc.pdf"
+    },
+    {
+      "content_length": 253853,
+      "content_type": "application/pdf",
+      "error": "",
+      "final_url": "https://people.eecs.berkeley.edu/~alanmi/publications/2008/iccad08_lp.pdf",
+      "ok": true,
+      "status": 200,
+      "url": "https://people.eecs.berkeley.edu/~alanmi/publications/2008/iccad08_lp.pdf"
+    },
+    {
+      "content_length": 265392,
+      "content_type": "application/pdf",
+      "error": "",
+      "final_url": "https://people.eecs.berkeley.edu/~alanmi/publications/2010/cav10_abc.pdf",
+      "ok": true,
+      "status": 200,
+      "url": "https://people.eecs.berkeley.edu/~alanmi/publications/2010/cav10_abc.pdf"
+    },
+    {
+      "content_length": 285913,
+      "content_type": "application/pdf",
+      "error": "",
+      "final_url": "https://people.eecs.berkeley.edu/~alanmi/publications/2022/iwls22_reo.pdf",
+      "ok": true,
+      "status": 200,
+      "url": "https://people.eecs.berkeley.edu/~alanmi/publications/2022/iwls22_reo.pdf"
+    },
+    {
+      "content_length": 575893,
+      "content_type": "application/pdf",
+      "error": "",
+      "final_url": "https://people.eecs.berkeley.edu/~alanmi/publications/2023/iwls23_lut.pdf",
+      "ok": true,
+      "status": 200,
+      "url": "https://people.eecs.berkeley.edu/~alanmi/publications/2023/iwls23_lut.pdf"
+    },
+    {
+      "content_length": 155209,
+      "content_type": "application/pdf",
+      "error": "",
+      "final_url": "https://people.eecs.berkeley.edu/~sseshia/219c/spr16/lectures/SyGuS.pdf",
+      "ok": true,
+      "status": 200,
+      "url": "https://people.eecs.berkeley.edu/~sseshia/219c/spr16/lectures/SyGuS.pdf"
+    },
+    {
+      "content_length": 206123,
+      "content_type": "application/pdf",
+      "error": "",
+      "final_url": "https://people.eecs.berkeley.edu/~sseshia/pubdir/icse10-TR.pdf",
+      "ok": true,
+      "status": 200,
+      "url": "https://people.eecs.berkeley.edu/~sseshia/pubdir/icse10-TR.pdf"
+    },
+    {
+      "content_length": 205400,
+      "content_type": "application/pdf",
+      "error": "",
+      "final_url": "https://people.eecs.berkeley.edu/~sseshia/pubdir/synth-icse10.pdf",
+      "ok": true,
+      "status": 200,
+      "url": "https://people.eecs.berkeley.edu/~sseshia/pubdir/synth-icse10.pdf"
+    },
+    {
+      "content_length": 334613,
+      "content_type": "application/pdf",
+      "error": "",
+      "final_url": "https://people.eecs.berkeley.edu/~sseshia/pubdir/togis17.pdf",
+      "ok": true,
+      "status": 200,
+      "url": "https://people.eecs.berkeley.edu/~sseshia/pubdir/togis17.pdf"
+    },
+    {
+      "content_length": 1598,
+      "content_type": "text/html",
+      "error": "",
+      "final_url": "https://people.eecs.berkeley.edu/~sseshia/pubs/b2hd-alur-fmcad13.html",
+      "ok": true,
+      "status": 200,
+      "url": "https://people.eecs.berkeley.edu/~sseshia/pubs/b2hd-alur-fmcad13.html"
+    },
+    {
+      "content_length": 1370,
+      "content_type": "text/html",
+      "error": "",
+      "final_url": "https://people.eecs.berkeley.edu/~sseshia/pubs/b2hd-jha-icse10.html",
+      "ok": true,
+      "status": 200,
+      "url": "https://people.eecs.berkeley.edu/~sseshia/pubs/b2hd-jha-icse10.html"
+    },
+    {
+      "content_length": 2050352,
+      "content_type": "application/pdf",
+      "error": "",
+      "final_url": "https://people.iiis.tsinghua.edu.cn/~gaomy/pubs/syno.asplos25.pdf",
+      "ok": true,
+      "status": 200,
+      "url": "https://people.iiis.tsinghua.edu.cn/~gaomy/pubs/syno.asplos25.pdf"
+    },
+    {
+      "content_length": null,
+      "content_type": "text/html",
+      "error": "",
+      "final_url": "https://pku.ai/publication/generalization2024iclr/",
+      "ok": true,
+      "status": 200,
+      "url": "https://pku.ai/publication/generalization2024iclr/"
+    },
+    {
+      "content_length": null,
+      "content_type": "",
+      "error": "ConnectTimeout: HTTPSConnectionPool(host='pl.cs.pku.edu.cn', port=443): Max retries exceeded with url: /en/info/1017/1640.htm (Caused by ConnectTimeoutError(<HTTPSConnection(host='pl.cs.pku.edu.cn",
+      "ok": false,
+      "status": null,
+      "url": "https://pl.cs.pku.edu.cn/en/info/1017/1640.htm"
+    },
+    {
+      "content_length": null,
+      "content_type": "",
+      "error": "ConnectTimeout: HTTPSConnectionPool(host='pl.cs.pku.edu.cn', port=443): Max retries exceeded with url: /en/info/1017/1640.htmnn**Proje%C3%A7%C3%A3o (Caused by ConnectTimeoutError(<HTTPSConnection(",
+      "ok": false,
+      "status": null,
+      "url": "https://pl.cs.pku.edu.cn/en/info/1017/1640.htmnn**Proje\u00e7\u00e3o"
+    },
+    {
+      "content_length": null,
+      "content_type": "",
+      "error": "ConnectTimeout: HTTPSConnectionPool(host='pl.cs.pku.edu.cn', port=443): Max retries exceeded with url: /en/info/1082/1744.htm (Caused by ConnectTimeoutError(<HTTPSConnection(host='pl.cs.pku.edu.cn",
+      "ok": false,
+      "status": null,
+      "url": "https://pl.cs.pku.edu.cn/en/info/1082/1744.htm"
+    },
+    {
+      "content_length": null,
+      "content_type": "",
+      "error": "ConnectTimeout: HTTPSConnectionPool(host='pl.cs.pku.edu.cn', port=443): Max retries exceeded with url: /workshop.html (Caused by ConnectTimeoutError(<HTTPSConnection(host='pl.cs.pku.edu.cn', port=",
+      "ok": false,
+      "status": null,
+      "url": "https://pl.cs.pku.edu.cn/workshop.html"
+    },
+    {
+      "content_length": 19038,
+      "content_type": "text/html",
+      "error": "",
+      "final_url": "https://pllab.cs.nthu.edu.tw/Research.html",
+      "ok": true,
+      "status": 200,
+      "url": "https://pllab.cs.nthu.edu.tw/Research.html"
+    },
+    {
+      "content_length": null,
+      "content_type": "text/html; charset=UTF-8",
+      "error": "",
+      "final_url": "https://prg.is.titech.ac.jp/projects/teaching-programming/design-recipes/",
+      "ok": true,
+      "status": 200,
+      "url": "https://prg.is.titech.ac.jp/en/projects/teaching-programming/design-recipes/"
+    },
+    {
+      "content_length": 115320,
+      "content_type": "application/pdf",
+      "error": "",
+      "final_url": "https://prg.is.titech.ac.jp/papers/pdf/coqpl2017.pdf",
+      "ok": true,
+      "status": 200,
+      "url": "https://prg.is.titech.ac.jp/papers/pdf/coqpl2017.pdf"
+    },
+    {
+      "content_length": null,
+      "content_type": "text/html;charset=UTF-8",
+      "error": "",
+      "final_url": "https://pure.kaist.ac.kr/en/publications/accelerating-search-based-program-synthesis-using-learned-probabi/",
+      "ok": true,
+      "status": 200,
+      "url": "https://pure.kaist.ac.kr/en/publications/accelerating-search-based-program-synthesis-using-learned-probabi/"
+    },
+    {
+      "content_length": null,
+      "content_type": "text/html;charset=UTF-8",
+      "error": "",
+      "final_url": "https://pure.kaist.ac.kr/en/publications/field-report-applying-monte-carlo-tree-search-for-program-synthes/",
+      "ok": true,
+      "status": 200,
+      "url": "https://pure.kaist.ac.kr/en/publications/field-report-applying-monte-carlo-tree-search-for-program-synthes"
+    },
+    {
+      "content_length": null,
+      "content_type": "text/html;charset=UTF-8",
+      "error": "",
+      "final_url": "https://pure.kaist.ac.kr/en/publications/user-guided-program-reasoning-using-bayesian-inference-2/",
+      "ok": true,
+      "status": 200,
+      "url": "https://pure.kaist.ac.kr/en/publications/user-guided-program-reasoning-using-bayesian-inference-2"
+    },
+    {
+      "content_length": null,
+      "content_type": "text/html",
+      "error": "",
+      "final_url": "https://quantum.cs.tsinghua.edu.cn/publication/10-1145-3158123/",
+      "ok": true,
+      "status": 200,
+      "url": "https://quantum.cs.tsinghua.edu.cn/publication/10-1145-3158123/"
+    },
+    {
+      "content_length": 391535,
+      "content_type": "application/pdf",
+      "error": "",
+      "final_url": "https://repositum.tuwien.at/bitstream/20.500.12708/188826/1/Mohamed-2023-A%20Procedure%20for%20SyGuS%20Solution%20Fitting%20via%20Matching%20and%20Rewr...-vor.pdf",
+      "ok": true,
+      "status": 200,
+      "url": "https://repositum.tuwien.at/bitstream/20.500.12708/188826/1/Mohamed-2023-A%20Procedure%20for%20SyGuS%20Solution%20Fitting%20via%20Matching%20and%20Rewr...-vor.pdf"
+    },
+    {
+      "content_length": 879610,
+      "content_type": "application/pdf",
+      "error": "",
+      "final_url": "https://simons.berkeley.edu/sites/default/files/docs/17300/rajeevalurtfcssynthesisslides.pdf",
+      "ok": true,
+      "status": 200,
+      "url": "https://simons.berkeley.edu/sites/default/files/docs/17300/rajeevalurtfcssynthesisslides.pdf"
+    },
+    {
+      "content_length": 3210,
+      "content_type": "text/html; charset=utf-8",
+      "error": "",
+      "final_url": "https://sygus-org.github.io/",
+      "ok": true,
+      "status": 200,
+      "url": "https://sygus-org.github.io/"
+    },
+    {
+      "content_length": 3299,
+      "content_type": "text/html; charset=utf-8",
+      "error": "",
+      "final_url": "https://sygus-org.github.io/language/",
+      "ok": true,
+      "status": 200,
+      "url": "https://sygus-org.github.io/language/"
+    },
+    {
+      "content_length": 13954,
+      "content_type": "text/html; charset=utf-8",
+      "error": "",
+      "final_url": "https://synt2024.github.io/program.html",
+      "ok": true,
+      "status": 200,
+      "url": "https://synt2024.github.io/program.html"
+    },
+    {
+      "content_length": 22843,
+      "content_type": "text/html; charset=utf-8",
+      "error": "",
+      "final_url": "https://talks.cam.ac.uk/talk/index/58406/",
+      "ok": true,
+      "status": 200,
+      "url": "https://talks.cam.ac.uk/talk/index/58406/"
+    },
+    {
+      "content_length": 22273,
+      "content_type": "text/html; charset=utf-8",
+      "error": "",
+      "final_url": "https://talks.cam.ac.uk/talk/index/60130/",
+      "ok": true,
+      "status": 200,
+      "url": "https://talks.cam.ac.uk/talk/index/60130/"
+    },
+    {
+      "content_length": null,
+      "content_type": "",
+      "error": "SSLError: HTTPSConnectionPool(host='tdr.lib.ntu.edu.tw', port=443): Max retries exceeded with url: /jspui/bitstream/123456789/80080/1/U0001-1207202111053300.pdf (Caused by SSLError(SSLCertVe",
+      "ok": false,
+      "status": null,
+      "url": "https://tdr.lib.ntu.edu.tw/jspui/bitstream/123456789/80080/1/U0001-1207202111053300.pdf"
+    },
+    {
+      "content_length": 323400,
+      "content_type": "application/pdf",
+      "error": "",
+      "final_url": "https://theory.stanford.edu/~barrett/fmcad/papers/FMCAD2019_paper_63.pdf",
+      "ok": true,
+      "status": 200,
+      "url": "https://theory.stanford.edu/~barrett/fmcad/papers/FMCAD2019_paper_63.pdf"
+    },
+    {
+      "content_length": 648498,
+      "content_type": "application/pdf",
+      "error": "",
+      "final_url": "https://theory.stanford.edu/~barrett/pubs/ABB+23.pdf",
+      "ok": true,
+      "status": 200,
+      "url": "https://theory.stanford.edu/~barrett/pubs/ABB+23.pdf"
+    },
+    {
+      "content_length": 501124,
+      "content_type": "application/pdf",
+      "error": "",
+      "final_url": "https://theory.stanford.edu/~barrett/pubs/NPR+18.pdf",
+      "ok": true,
+      "status": 200,
+      "url": "https://theory.stanford.edu/~barrett/pubs/NPR+18.pdf"
+    },
+    {
+      "content_length": 522127,
+      "content_type": "application/pdf",
+      "error": "",
+      "final_url": "https://theory.stanford.edu/~barrett/pubs/NRB+19.pdf",
+      "ok": true,
+      "status": 200,
+      "url": "https://theory.stanford.edu/~barrett/pubs/NRB+19.pdf"
+    },
+    {
+      "content_length": 372340,
+      "content_type": "application/pdf",
+      "error": "",
+      "final_url": "https://theory.stanford.edu/~barrett/pubs/RDK+15.pdf",
+      "ok": true,
+      "status": 200,
+      "url": "https://theory.stanford.edu/~barrett/pubs/RDK+15.pdf"
+    },
+    {
+      "content_length": 3275,
+      "content_type": "text/html; charset=UTF-8",
+      "error": "",
+      "final_url": "https://theory.stanford.edu/~barrett/pubs/RKT+19-abstract.html",
+      "ok": true,
+      "status": 200,
+      "url": "https://theory.stanford.edu/~barrett/pubs/RKT+19-abstract.html"
+    },
+    {
+      "content_length": null,
+      "content_type": "text/html; charset=utf-8",
+      "error": "",
+      "final_url": "https://topics.libra.titech.ac.jp/en/xc/search/%2A?filter=all_authors_fc%3A%22Bruynooghe%2C+Maurice.%22&ql=1",
+      "ok": true,
+      "status": 200,
+      "url": "https://topics.libra.titech.ac.jp/en/xc/search/%2A?filter=all_authors_fc%3A%22Bruynooghe%2C+Maurice.%22&ql=1"
+    },
+    {
+      "content_length": 1002314,
+      "content_type": "application/pdf",
+      "error": "",
+      "final_url": "https://troll.iis.sinica.edu.tw/by-publ/recent/verify25519.pdf",
+      "ok": true,
+      "status": 200,
+      "url": "https://troll.iis.sinica.edu.tw/by-publ/recent/verify25519.pdf"
+    },
+    {
+      "content_length": 315340,
+      "content_type": "application/pdf",
+      "error": "",
+      "final_url": "https://gc.sjtu.edu.cn/~wkqian/papers/Qian_Riedel_The_Synthesis_of_Robust_Polynomial_Arithmetic_with_Stochastic_Logic.pdf",
+      "ok": true,
+      "status": 200,
+      "url": "https://umji.sjtu.edu.cn/~wkqian/papers/Qian_Riedel_The_Synthesis_of_Robust_Polynomial_Arithmetic_with_Stochastic_Logic.pdf"
+    },
+    {
+      "content_length": 20,
+      "content_type": "text/html",
+      "error": "",
+      "final_url": "https://web.mit.edu/6.111/www/f2007/tutprobs/synthesis.html",
+      "ok": true,
+      "status": 200,
+      "url": "https://web.mit.edu/6.111/www/f2007/tutprobs/synthesis.html"
+    },
+    {
+      "content_length": null,
+      "content_type": "",
+      "error": "ConnectTimeout: HTTPSConnectionPool(host='www.cis.upenn.edu', port=443): Max retries exceeded with url: /~alur/SyGuS13.pdf (Caused by ConnectTimeoutError(<HTTPSConnection(host='www.cis.upenn.edu',",
+      "ok": false,
+      "status": null,
+      "url": "https://www.cis.upenn.edu/~alur/SyGuS13.pdf"
+    },
+    {
+      "content_length": null,
+      "content_type": "text/html; charset=utf-8",
+      "error": "",
+      "final_url": "https://www.cs.cornell.edu/courses/cs6120/2022sp/lesson/13/",
+      "ok": true,
+      "status": 200,
+      "url": "https://www.cs.cornell.edu/courses/cs6120/2022sp/lesson/13/"
+    },
+    {
+      "content_length": 657694,
+      "content_type": "application/pdf",
+      "error": "",
+      "final_url": "https://cs.wellesley.edu/~avh/diospyros-lctes-2020.pdf",
+      "ok": true,
+      "status": 200,
+      "url": "https://www.cs.cornell.edu/~avh/diospyros-lctes-2020.pdf"
+    },
+    {
+      "content_length": 3144441,
+      "content_type": "application/pdf",
+      "error": "",
+      "final_url": "https://www.cs.cornell.edu/~ellisk/documents/Li_Ellis_pbe_2024.pdf",
+      "ok": true,
+      "status": 200,
+      "url": "https://www.cs.cornell.edu/~ellisk/documents/Li_Ellis_pbe_2024.pdf"
+    },
+    {
+      "content_length": 1296837,
+      "content_type": "application/pdf",
+      "error": "",
+      "final_url": "https://www.cs.cornell.edu/~moeller/pdf/lstarblanks.pdf",
+      "ok": true,
+      "status": 200,
+      "url": "https://www.cs.cornell.edu/~moeller/pdf/lstarblanks.pdf"
+    },
+    {
+      "content_length": null,
+      "content_type": "",
+      "error": "SSLError: HTTPSConnectionPool(host='www.cs.nthu.edu.tw', port=443): Max retries exceeded with url: /~tingting/Als_21/midproject/Midproject_tutorial.pdf (Caused by SSLError(SSLCertVerificatio",
+      "ok": false,
+      "status": null,
+      "url": "https://www.cs.nthu.edu.tw/~tingting/Als_21/midproject/Midproject_tutorial.pdf"
+    },
+    {
+      "content_length": null,
+      "content_type": "",
+      "error": "SSLError: HTTPSConnectionPool(host='www.cs.nthu.edu.tw', port=443): Max retries exceeded with url: /~tingting/Als_23/presentation_paper/paper6.pdf (Caused by SSLError(SSLCertVerificationErro",
+      "ok": false,
+      "status": null,
+      "url": "https://www.cs.nthu.edu.tw/~tingting/Als_23/presentation_paper/paper6.pdf"
+    },
+    {
+      "content_length": null,
+      "content_type": "",
+      "error": "SSLError: HTTPSConnectionPool(host='www.cs.nthu.edu.tw', port=443): Max retries exceeded with url: /~tingting/Als_25/sis_tutorial.pdf (Caused by SSLError(SSLCertVerificationError(1, '[SSL: C",
+      "ok": false,
+      "status": null,
+      "url": "https://www.cs.nthu.edu.tw/~tingting/Als_25/sis_tutorial.pdf"
+    },
+    {
+      "content_length": 7490,
+      "content_type": "text/html; charset=UTF-8",
+      "error": "",
+      "final_url": "https://www.cs.ox.ac.uk/publications/publication12086-abstract.html",
+      "ok": true,
+      "status": 200,
+      "url": "https://www.cs.ox.ac.uk/publications/publication12086-abstract.html"
+    },
+    {
+      "content_length": 7767,
+      "content_type": "text/html; charset=UTF-8",
+      "error": "",
+      "final_url": "https://www.cs.ox.ac.uk/seminars/2462.html",
+      "ok": true,
+      "status": 200,
+      "url": "https://www.cs.ox.ac.uk/seminars/2462.html"
+    },
+    {
+      "content_length": 172890,
+      "content_type": "text/html; charset=utf-8",
+      "error": "",
+      "final_url": "https://www.fos.kuis.kyoto-u.ac.jp/mailman3/hyperkitty/list/logic-ml@fos.kuis.kyoto-u.ac.jp/2012/12/",
+      "ok": true,
+      "status": 200,
+      "url": "https://www.fos.kuis.kyoto-u.ac.jp/mailman3/hyperkitty/list/logic-ml@fos.kuis.kyoto-u.ac.jp/2012/12/"
+    },
+    {
+      "content_length": 6227,
+      "content_type": "text/html",
+      "error": "",
+      "final_url": "https://www.fos.kuis.kyoto-u.ac.jp/pipermail/logic-ml/2016-August/001051.html",
+      "ok": true,
+      "status": 200,
+      "url": "https://www.fos.kuis.kyoto-u.ac.jp/pipermail/logic-ml/2016-August/001051.html"
+    },
+    {
+      "content_length": 284053,
+      "content_type": "application/pdf",
+      "error": "",
+      "final_url": "https://www.fos.kuis.kyoto-u.ac.jp/~igarashi/papers/pdf/mcrec-ESOP13.pdf",
+      "ok": true,
+      "status": 200,
+      "url": "https://www.fos.kuis.kyoto-u.ac.jp/~igarashi/papers/pdf/mcrec-ESOP13.pdf"
+    },
+    {
+      "content_length": 540701,
+      "content_type": "application/pdf",
+      "error": "",
+      "final_url": "https://www.is.c.titech.ac.jp/report-c/C-274.pdf",
+      "ok": true,
+      "status": 200,
+      "url": "https://www.is.c.titech.ac.jp/report-c/C-274.pdf"
+    },
+    {
+      "content_length": null,
+      "content_type": "text/html; charset=utf-8",
+      "error": "",
+      "final_url": "https://www.kaggle.com/code/hosseinbadrnezhad/nvidia-nemotron-model-reasoning-challenge/comments",
+      "ok": true,
+      "status": 200,
+      "url": "https://www.kaggle.com/code/hosseinbadrnezhad/nvidia-nemotron-model-reasoning-challenge/comments"
+    },
+    {
+      "content_length": null,
+      "content_type": "text/html; charset=utf-8",
+      "error": "",
+      "final_url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge",
+      "ok": true,
+      "status": 200,
+      "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge"
+    },
+    {
+      "content_length": null,
+      "content_type": "text/html; charset=utf-8",
+      "error": "",
+      "final_url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/data",
+      "ok": true,
+      "status": 200,
+      "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/data"
+    },
+    {
+      "content_length": null,
+      "content_type": "text/html; charset=utf-8",
+      "error": "",
+      "final_url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/689915",
+      "ok": true,
+      "status": 200,
+      "url": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/689915"
+    },
+    {
+      "content_length": null,
+      "content_type": "text/html; charset=utf-8",
+      "error": "",
+      "final_url": "https://www.kaggle.com/datasets/nctuan/nvidia-nemotron-reasoning-challenge",
+      "ok": true,
+      "status": 200,
+      "url": "https://www.kaggle.com/datasets/nctuan/nvidia-nemotron-reasoning-challenge"
+    },
+    {
+      "content_length": null,
+      "content_type": "text/html; charset=utf-8",
+      "error": "",
+      "final_url": "https://www.kaggle.com/huikang/discussion",
+      "ok": true,
+      "status": 200,
+      "url": "https://www.kaggle.com/huikang/discussion"
+    },
+    {
+      "content_length": 1848112,
+      "content_type": "application/pdf",
+      "error": "",
+      "final_url": "https://www.kurims.kyoto-u.ac.jp/~kyodo/kokyuroku/contents/pdf/1125-5.pdf",
+      "ok": true,
+      "status": 200,
+      "url": "https://www.kurims.kyoto-u.ac.jp/~kyodo/kokyuroku/contents/pdf/1125-5.pdf"
+    },
+    {
+      "content_length": 20,
+      "content_type": "text/html; charset=utf-8",
+      "error": "",
+      "final_url": "https://www.microsoft.com/en-us/legal/terms-of-use?oneroute=true",
+      "ok": true,
+      "status": 200,
+      "url": "https://www.microsoft.com/en-us/legal/terms-of-use?oneroute=true"
+    },
+    {
+      "content_length": 20,
+      "content_type": "text/html; charset=utf-8",
+      "error": "",
+      "final_url": "https://www.microsoft.com/en-us/privacy/privacystatement",
+      "ok": true,
+      "status": 200,
+      "url": "https://www.microsoft.com/en-us/privacy/privacystatement"
+    },
+    {
+      "content_length": 0,
+      "content_type": "text/html; charset=UTF-8",
+      "error": "",
+      "final_url": "https://www.microsoft.com/en-us/research/group/prose/",
+      "ok": true,
+      "status": 200,
+      "url": "https://www.microsoft.com/en-us/research/group/prose/"
+    },
+    {
+      "content_length": 0,
+      "content_type": "text/html; charset=UTF-8",
+      "error": "",
+      "final_url": "https://www.microsoft.com/en-us/research/publication/flashfill-scaling-programming-by-example-by-cutting-to-the-chase/",
+      "ok": true,
+      "status": 200,
+      "url": "https://www.microsoft.com/en-us/research/publication/flashfill-scaling-programming-by-example-by-cutting-to-the-chase/"
+    },
+    {
+      "content_length": 411571,
+      "content_type": "application/pdf",
+      "error": "",
+      "final_url": "https://www.microsoft.com/en-us/research/wp-content/uploads/2016/12/pbe16.pdf",
+      "ok": true,
+      "status": 200,
+      "url": "https://www.microsoft.com/en-us/research/wp-content/uploads/2016/12/pbe16.pdf"
+    },
+    {
+      "content_length": 2289778,
+      "content_type": "application/pdf",
+      "error": "",
+      "final_url": "https://www.microsoft.com/en-us/research/wp-content/uploads/2022/12/flashfillpp-popl-23-camera-ready.pdf",
+      "ok": true,
+      "status": 200,
+      "url": "https://www.microsoft.com/en-us/research/wp-content/uploads/2022/12/flashfillpp-popl-23-camera-ready.pdf"
+    },
+    {
+      "content_length": 751,
+      "content_type": "text/html; charset=UTF-8",
+      "error": "",
+      "final_url": "https://www.repository.cam.ac.uk/bitstreams/a235595e-c3a5-4064-a516-3e76ca253b22/download",
+      "ok": true,
+      "status": 200,
+      "url": "https://www.repository.cam.ac.uk/bitstreams/a235595e-c3a5-4064-a516-3e76ca253b22/download"
+    },
+    {
+      "content_length": 751,
+      "content_type": "text/html; charset=UTF-8",
+      "error": "",
+      "final_url": "https://www.repository.cam.ac.uk/items/3d53dbf4-0835-4440-ab3a-077deb5b590c",
+      "ok": true,
+      "status": 200,
+      "url": "https://www.repository.cam.ac.uk/items/3d53dbf4-0835-4440-ab3a-077deb5b590c"
+    },
+    {
+      "content_length": null,
+      "content_type": "application/json;charset=UTF-8",
+      "error": "",
+      "final_url": "https://www.research-collection.ethz.ch/server/api/core/bitstreams/822be548-b06a-4f58-9aa5-57cf64baaa1e/content",
+      "ok": true,
+      "status": 200,
+      "url": "https://www.research-collection.ethz.ch/server/api/core/bitstreams/822be548-b06a-4f58-9aa5-57cf64baaa1e/content"
+    },
+    {
+      "content_length": 4347,
+      "content_type": "text/html; charset=utf-8",
+      "error": "",
+      "final_url": "https://www.sri.inf.ethz.ch/publications/bielik2020guiding",
+      "ok": true,
+      "status": 200,
+      "url": "https://www.sri.inf.ethz.ch/publications/bielik2020guiding"
+    },
+    {
+      "content_length": 4556,
+      "content_type": "text/html; charset=utf-8",
+      "error": "",
+      "final_url": "https://www.sri.inf.ethz.ch/publications/raychev2016probabilistic",
+      "ok": true,
+      "status": 200,
+      "url": "https://www.sri.inf.ethz.ch/publications/raychev2016probabilistic"
+    },
+    {
+      "content_length": 10477,
+      "content_type": "text/html",
+      "error": "",
+      "final_url": "https://www2.eecs.berkeley.edu/Pubs/TechRpts/2010/EECS-2010-15.html",
+      "ok": true,
+      "status": 200,
+      "url": "https://www2.eecs.berkeley.edu/Pubs/TechRpts/2010/EECS-2010-15.html"
+    },
+    {
+      "content_length": 927763,
+      "content_type": "application/pdf",
+      "error": "",
+      "final_url": "https://xinpl.github.io/papers/popl26b.pdf",
+      "ok": true,
+      "status": 200,
+      "url": "https://xinpl.github.io/papers/popl26b.pdf"
+    }
+  ],
+  "source_file": "C:\\Users\\davis\\Downloads\\OpenRouter Chat Thu May 14 2026 (1).json"
+}
