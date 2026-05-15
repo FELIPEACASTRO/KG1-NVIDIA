@@ -476,6 +476,33 @@ Regra preventiva:
 Status: corrigido. V459 agora inclui `prompt`, V459 foi rerodado, V460 foi
 construido e o tokenization gate V286 passou com truncation `0`.
 
+### E015 - V465 preflight bloqueou subcategoria de bit herdada do V217
+
+Evidencia:
+
+- O primeiro V465 launch chegou apenas ao `hf_job_preflight_gate.py --phase artifacts`.
+- O job falhou antes de treino com:
+  `RuntimeError: KG1_REQUIRED_TRAIN_SUBCATEGORIES missing from train: ['bit_guardrail_replay']`.
+- Causa: o builder V464 escrevia `subcategory=bit_guardrail_replay` no topo da
+  linha, mas preservava `metadata.subcategory`/`metadata.subtype` herdados do
+  V217. O preflight do job prioriza `metadata.subcategory`, logo contou varias
+  linhas de bit como `bit_manipulation` ou `unknown`.
+
+Impacto:
+
+- Nenhum treino, checkpoint, package, full eval ou submit foi criado.
+- O preflight funcionou corretamente e evitou gastar H200 em dataset com schema
+  inconsistente.
+
+Regra preventiva:
+
+- Todo builder que reusa replay rows precisa sobrescrever tambem
+  `metadata.subcategory` e `metadata.subtype`, nao apenas a coluna top-level.
+- O debug do launcher deve validar os mesmos `KG1_REQUIRED_*` que o job remoto
+  usa, e qualquer mismatch bloqueia launch.
+
+Status: corrigindo em V464/V465; rerodar dataset, token gate, upload e launch.
+
 ## Prompt Externo
 
 Prompt consolidado para OpenRouter/outras APIs:

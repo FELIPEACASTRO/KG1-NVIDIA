@@ -200,6 +200,8 @@ def make_bit_replay_row(row: dict[str, Any], split: str, index: int) -> dict[str
             "source": "v217_bit_replay_guardrail",
             "source_dataset": "v217_bit_replay_guardrail",
             "source_role": "bit_guardrail_replay",
+            "subcategory": "bit_guardrail_replay",
+            "subtype": "bit_guardrail_replay",
             "v464_split": split,
             "weak_gate_rows_used_for_training": False,
             "full_gate_rows_used_for_training": False,

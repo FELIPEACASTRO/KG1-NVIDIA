@@ -13,13 +13,13 @@
     "require_offset_mask": true
   },
   "dataset_manifest_json": "artifacts\\v464_v463_numeric_multirule_dataset\\20260515T_cpu_gate\\v464_v463_numeric_multirule_dataset_manifest.json",
-  "dataset_manifest_sha256": "91367595cde32da6195b85c89b661d271be1bbd9bfb6c48220c341fe81ebfb44",
+  "dataset_manifest_sha256": "24a2b9fd2279a60052209c1ebfa88906008ab03a14146943e41256f8a482fd5b",
   "decision": {
     "next_action": "Only consider a tiny HF smoke train if roadmap risk/budget gates approve it.",
     "reason": "train_rows=558; val_rows=138; train_token_max=327; val_token_max=356; completion_truncation=0",
     "status": "tokenization_gate_passed"
   },
-  "generated_at_utc": "2026-05-15T23:00:18.826016+00:00",
+  "generated_at_utc": "2026-05-15T23:10:53.477429+00:00",
   "model_name": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
   "model_revision": "cbd3fa9f933d55ef16a84236559f4ee2a0526848",
   "outputs": {
@@ -122,7 +122,7 @@
       "prompt_answer_hash_count": 558,
       "prompt_hash_count": 558,
       "rows": 558,
-      "sha256_expected": "0df06c56ee464865299ddc098f95a745918f022fad2e8dc3e464e5ae0598bc6b",
+      "sha256_expected": "16abd61d2e14b0c0911d32a41e23e2f58b62424cac23e1b0e9147ef6358634ad",
       "source_counts": {
         "v217_bit_replay_guardrail": 512,
         "v464_v463_numeric_multirule_dataset": 46
@@ -146,7 +146,7 @@
       "prompt_answer_hash_count": 138,
       "prompt_hash_count": 138,
       "rows": 138,
-      "sha256_expected": "55e53a6450a8bc7db9d57b3d88afb7f8afa25a1b1b5097c6e21c3f352de99930",
+      "sha256_expected": "7379295c39459f531b1fd0dc97e9d5c6441976a961079b6cef2b3a2e0c82d228",
       "source_counts": {
         "v217_bit_replay_guardrail": 128,
         "v464_v463_numeric_multirule_dataset": 10

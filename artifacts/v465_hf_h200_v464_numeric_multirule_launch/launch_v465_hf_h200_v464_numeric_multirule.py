@@ -41,8 +41,8 @@ base.RUN_ID = "v465-nemo-h200-v464-numeric-multirule-v290ckpt6-" + datetime.now(
 base.DATASET_UPLOAD_NOTE = "dataset:v464_v463_numeric_multirule;gate:v286_tokenization_passed;hardneg=22_train_3_rules"
 base.TRAIN_FILE = "data/v464_v463_numeric_multirule_dataset/20260515T_cpu_gate/v464_v463_numeric_multirule_dataset_train.jsonl"
 base.VAL_FILE = "data/v464_v463_numeric_multirule_dataset/20260515T_cpu_gate/v464_v463_numeric_multirule_dataset_val.jsonl"
-base.TRAIN_SHA256 = "0df06c56ee464865299ddc098f95a745918f022fad2e8dc3e464e5ae0598bc6b"
-base.VAL_SHA256 = "55e53a6450a8bc7db9d57b3d88afb7f8afa25a1b1b5097c6e21c3f352de99930"
+base.TRAIN_SHA256 = "16abd61d2e14b0c0911d32a41e23e2f58b62424cac23e1b0e9147ef6358634ad"
+base.VAL_SHA256 = "7379295c39459f531b1fd0dc97e9d5c6441976a961079b6cef2b3a2e0c82d228"
 base.TRAIN_ROWS = 558
 base.VAL_ROWS = 138
 base.OUTPUT_REPO = "felipesp1983/kg1-nemotron-lora-v465-v464-numeric-multirule-v290ckpt6"
@@ -65,7 +65,7 @@ TOKENIZATION_GATE_FILE = (
     "runtime_artifacts/v464_v463_numeric_multirule_dataset/20260515T_tokenization_gate/"
     "v286_generic_tokenization_gate_manifest.json"
 )
-TOKENIZATION_GATE_SHA256 = "7586a1be45116e830b22d784606a9895a66fd527f5db151c092ab609f8fb92be"
+TOKENIZATION_GATE_SHA256 = "7195954f6546ae6873e2364feba6da70d93e0689492482ab975ae6a3dee2afff"
 REQUIRED_SUBCATEGORIES = (
     "bit_guardrail_replay,"
     "v274_guarded_numeric_add_direct_over_model_add_variant,"
