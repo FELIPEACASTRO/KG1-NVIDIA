@@ -1,0 +1,52 @@
+{
+  "version": "V411B_NEW_SOURCES_TRIPLECHECK_20260514",
+  "generated_at": "2026-05-14",
+  "baseline": {
+    "best_adapter_only_total": 192,
+    "best_adapter_only_equation_transform": 56,
+    "best_adapter_only_bit_manipulation": 136,
+    "weak_rows": 315
+  },
+  "decision": {
+    "submit_authorized": false,
+    "long_training_authorized": false,
+    "next_step": "Implement V412 CPU synthesis gate with bit LUT k=2/k=3 and expanded equation numeric/operator DSL under strict verifier, uniqueness, MDL tie-break, and abstention."
+  },
+  "new_actionable_findings": [
+    {
+      "family": "bit_manipulation",
+      "finding": "Add conservative per-output-bit Boolean LUT search for k=2/k=3 input bits, after named operators, with coverage/uniqueness/abstention guardrails."
+    },
+    {
+      "family": "equation_transform",
+      "finding": "Expand numeric/operator DSL with unary, binary, ternary, concat/reverse-concat, digit transforms, div/mod/gcd/lcm, and depth-2 compositions, verified against all examples."
+    },
+    {
+      "family": "training",
+      "finding": "Do not run GRPO/SFT directly from literature hints; require V412 CPU no-loss gain and V413 transfer dataset before any GPU spend."
+    }
+  ],
+  "audited_kaggle_sources": [
+    "manderson240/nemotron-pure-symbolic-solver-v29",
+    "manderson240/nemotron-pure-symbolic-solver-v28",
+    "johnnyhyland/nvidia-nemotron-sft-grpo-colab-faster",
+    "amanatar/nemotron-ultimate-sft-grpo-v3",
+    "torpidoff/full-pipeline-nvidia-nemotron-3-reasoning",
+    "aliafzal9323/nemotron-30b-deterministic-solvers-cot-fine-tu",
+    "kalyankkr/all-6-puzzle-types-decoded-sft-training-data",
+    "khoinguyennguyen/aimo3-blackboard-cross-model-multi-agent-solver",
+    "anhtuan299/blackboard-expert-agent-assembly-solving-technique",
+    "mohit98765/arc-2026-llm-guided-program-synthesis-v5",
+    "mohit98765/arc-2026-mcts-program-synthesis-v9",
+    "mohit98765/arc-2026-dreamcoder-lite-library-learning-v10"
+  ],
+  "academic_sources": [
+    "MIT CSAIL Sketch / program synthesis",
+    "UPenn/Berkeley/MIT SyGuS",
+    "UW Rosette",
+    "Stanford STOKE",
+    "Microsoft PROSE",
+    "ETH Zurich SMT/program verification",
+    "NUS PBE/SyGuS generalization"
+  ]
+}

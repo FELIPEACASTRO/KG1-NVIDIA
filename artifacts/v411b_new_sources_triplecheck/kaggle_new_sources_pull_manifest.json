@@ -1,0 +1,18 @@
+{
+  "ok": [
+    "manderson240/nemotron-pure-symbolic-solver-v29",
+    "manderson240/nemotron-pure-symbolic-solver-v28",
+    "johnnyhyland/nvidia-nemotron-sft-grpo-colab-faster",
+    "amanatar/nemotron-ultimate-sft-grpo-v3",
+    "torpidoff/full-pipeline-nvidia-nemotron-3-reasoning",
+    "aliafzal9323/nemotron-30b-deterministic-solvers-cot-fine-tu",
+    "kalyankkr/all-6-puzzle-types-decoded-sft-training-data",
+    "khoinguyennguyen/aimo3-blackboard-cross-model-multi-agent-solver",
+    "anhtuan299/blackboard-expert-agent-assembly-solving-technique",
+    "mohit98765/arc-2026-llm-guided-program-synthesis-v5",
+    "mohit98765/arc-2026-mcts-program-synthesis-v9",
+    "mohit98765/arc-2026-dreamcoder-lite-library-learning-v10"
+  ],
+  "fail": [],
+  "generated_at": "2026-05-14T22:01:32"
+}

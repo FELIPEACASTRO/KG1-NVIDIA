@@ -63,6 +63,7 @@ Precisamos buscar subida no ranking ainda hoje, `2026-05-14`. A decisao V392 e s
 | V403 formal solver abstain audit | CPU projection `+2` bit | `0` ganho equation v2 | `136 -> 138` se postprocess externo fosse permitido | sinal solver limpo, nao submit-safe; usar so como fixture/trace |
 | V404 expanded symbolic cryptarithm audit | CPU projection `+1` equation | `56 -> 57` isolado | n/a | reconfirma o unico ganho simbolico conhecido `99d6a3b5`; sem nova classe segura |
 | V405 integrated solver projection | CPU projection `201/315` | `63/155` | `138/160` | melhor combinacao solver-first com abstain; nao adapter-only submit-safe |
+| V411B new-source triple check | n/a | n/a | n/a | adiciona LUT bit k=2/k=3 e catalogo equation v29 para V412; sem submit |
 
 Conclusao: `eval_loss` baixo nao e criterio de promocao. O criterio e ACC por familia no weak/full gate. A rota "resolver nos mesmos" finalmente tem ganho mensuravel (`+9` weak em CPU), mas esse ganho ainda e solver/verifier externo; para submit, ele precisa virar comportamento do adapter/package ou ser permitido explicitamente pelas regras de runtime.
 
@@ -644,6 +645,38 @@ Comparativo:
 
 Decisao: V411 nao autoriza submit e nao justifica treino longo. Ele autoriza V412 CPU synthesis gate antes de qualquer novo job grande.
 
+### Step 6G - V411B new-source triple check MIT/top-university/Kaggle
+
+Status: concluido; atualiza a especificacao do V412, sem autorizar submit ou treino longo.
+
+Fontes novas auditadas:
+
+- MIT CSAIL / Solar-Lezama Sketch e curso de Program Synthesis;
+- UPenn/Berkeley/MIT SyGuS;
+- UW Rosette;
+- Stanford STOKE;
+- Microsoft PROSE;
+- ETH Zurich SMT/program verification;
+- NUS PBE/SyGuS generalization;
+- Kaggle novo: `manderson240/nemotron-pure-symbolic-solver-v29`, `manderson240/nemotron-pure-symbolic-solver-v28`, GRPO/SFT notebooks novos, blackboard/MCTS/DreamCoder ARC/AIMO.
+
+Achados acionaveis:
+
+- `bit_manipulation`: V412 deve adicionar busca LUT booleana por bit de saida, com k=2 e k=3 bits de entrada. O uso correto nao e "primeiro match vence": precisa de cobertura minima dos padroes observados, unicidade ou predicao identica entre candidatos consistentes, verifier em todos os exemplos, fuzz local e abstencao quando ambiguo.
+- `equation_transform`: V412 deve incorporar um catalogo maior de DSL numeric/operator inspirado no `manderson240` v29: unary (`digit-sum`, `digit-product`, reverse digits, square/cube, `+1/-1`, `*2`, `*10`, `//10`, `%10`), binary (`+`, `-`, abs diff, `*`, div/mod, max/min, bitwise, concat/reverse concat, gcd/lcm, squares, digit transforms), ternary e composicoes depth-2 pequenas.
+- Academicamente, MIT/Sketch, SyGuS, Rosette, STOKE e PROSE convergem para a mesma regra: gramatica pequena + verifier + programa curto/MDL + abstencao. Isso reforca solver-first; nao reforca "mais epochs".
+- GRPO/RL, blackboard, MCTS e DreamCoder ficam P2. So entram depois de V412/V413 mostrar ganho no-loss, porque ate agora treino direto reduziu loss sem mover ACC.
+
+Comparativo:
+
+| Versao | Weak total | equation | bit | Submit-safe? |
+|---|---:|---:|---:|---|
+| V291/V290 checkpoint-6 | `192/315` | `56/155` | `136/160` | sim |
+| V409 CPU projection | `202/315` | `63/155` | `139/160` | nao |
+| V411B spec | nao medido | nao medido | nao medido | nao |
+
+Decisao: implementar V412 com esses dois incrementos objetivos. Nao iniciar HF/Kaggle GPU a partir de V411B sozinho.
+
 ### Step 7 - Full/package/submit
 
 Status: somente depois de weak gate.
@@ -698,6 +731,7 @@ Seguir rota solver-first agressiva, mas com gate:
 
 1. implementar V412 CPU synthesis gate para `bit_manipulation`:
    - `INHIB`, `IMPL`, pares ordenados, cache de assinatura, enumeracao por valor nos exemplos, `MAJ`, `CH`, `XOR3` apenas com verificacao total;
+   - adicionar LUT booleana k=2/k=3 por bit de saida, com cobertura minima, unicidade/predicao consensual e abstencao em ambiguidade;
    - aceitar somente candidatos que batem todos os exemplos e nao causam perdas.
 2. usar o V410 dataset de transferencia ja gateado:
    - traces curtos per-bit assimetricos;
@@ -705,6 +739,7 @@ Seguir rota solver-first agressiva, mas com gate:
    - sem treinar diretamente no weak row.
 3. implementar V412 CPU synthesis gate para `equation_transform`:
    - DSL PBE/SyGuS para concat, reverse concat, signed format, literal insert/delete, pontuacao/brackets e pequenos hibridos aritmeticos;
+   - expandir catalogo numeric/operator com unary, binary, ternary e depth-2 pequeno inspirado no V411B, mas reescrito com verifier estrito;
    - aceitar somente programa unico/curto com verificacao total e abstencao em ambiguidade.
 4. se houver novo ganho CPU no-loss, atualizar V410 em V413/V414 e rodar smoke HF/Kaggle curto.
 5. se o primeiro checkpoint nao superar V291 (`192/315`, `equation=56`, `bit=136`, trunc `0`), cancelar por FinOps.
