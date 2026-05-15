@@ -171,7 +171,8 @@ Regra preventiva:
   `scripts/kg1_pre_paid_job_integration_gate.py` quando houver dataset/launcher
   envolvidos.
 - Esse gate precisa aprovar launcher, hashes, row counts, targets, flags de
-  leakage, audit manifest, H200 timeout/cost gate e primeiro checkpoint/eval.
+  leakage, audit manifest, prompt de sistema alinhado ao target, H200
+  timeout/cost gate e primeiro checkpoint/eval.
 
 Status: implementado para a linha V440/V439.
 

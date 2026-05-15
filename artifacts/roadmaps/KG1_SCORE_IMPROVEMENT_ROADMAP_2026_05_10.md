@@ -495,6 +495,7 @@ O gate deve rodar antes de qualquer execucao paga ou longa. Ele verifica:
 - primeiro checkpoint/eval existe no step `3` para kill-switch cedo;
 - dataset local tem row count, SHA, families, subcategories e `negative_type` esperados;
 - `chosen` e `rejected` usam template final-answer-only, exatamente um `\boxed{}`;
+- prompt de sistema do launcher deve estar alinhado ao target final-answer-only;
 - `chosen` nao contem auditoria, resposta errada, texto de adapter ou contaminacao de target;
 - flags `gate_rows_used_for_training`, `weak_gate_rows_used_for_training` e `full_gate_rows_used_for_training` sao `false`;
 - manifest V438 declara `hf_gpu_allowed_for_same_objective=true` e zero mismatches.

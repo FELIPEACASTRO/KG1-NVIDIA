@@ -88,6 +88,12 @@ def audit_launcher(args: argparse.Namespace, findings: list[Finding]) -> dict[st
     require_text(text, "SAVE_EVERY_STEPS = 3", "launcher_missing_first_checkpoint_save", findings)
     require_text(text, "EVAL_EVERY_STEPS = 3", "launcher_missing_first_checkpoint_eval", findings)
     require_regex(text, r"MAX_STEPS\s*=\s*(?:[1-9]|1[0-2])\b", "launcher_max_steps_too_high", findings)
+    require_text(
+        text,
+        "export PREFERENCE_SYSTEM_PROMPT='Solve the KG1 puzzle. End with exactly one final answer in \\boxed{}.'",
+        "launcher_system_prompt_not_final_answer_only",
+        findings,
+    )
     require_text(text, "KG1_REQUIRED_TRAIN_FAMILIES", "launcher_missing_train_family_gate", findings)
     require_text(text, "KG1_REQUIRED_VAL_FAMILIES", "launcher_missing_val_family_gate", findings)
     require_text(text, "KG1_REQUIRED_TRAIN_SUBCATEGORIES", "launcher_missing_train_subcategory_gate", findings)

@@ -49,6 +49,7 @@ CRITICAL_SNIPPETS = {
         "dataset content audit": "audit_dataset_file",
         "target template check": "Final answer: \\\\boxed{",
         "audit manifest gate": "hf_gpu_allowed_for_same_objective",
+        "system prompt alignment gate": "launcher_system_prompt_not_final_answer_only",
         "h200 timeout gate": "launcher_timeout_not_one_hour",
         "first checkpoint eval gate": "launcher_missing_first_checkpoint_eval",
         "format negatives blocked": "launcher_allows_format_negatives",

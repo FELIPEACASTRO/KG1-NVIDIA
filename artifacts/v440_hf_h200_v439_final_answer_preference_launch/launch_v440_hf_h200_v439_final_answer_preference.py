@@ -141,6 +141,7 @@ export PREF_LOSS_WEIGHT=1.5
 export CHOSEN_CE_WEIGHT=0.30
 export REJECTED_CE_WEIGHT=0.0
 export PAIR_SCORE_MODE='mean_nll'
+export PREFERENCE_SYSTEM_PROMPT='Solve the KG1 puzzle. End with exactly one final answer in \boxed{}.'
 export SAMPLING_MODE='shuffle'
 export ABORT_TRAIN_RISE_POINTS=0
 export ABORT_MAX_RESERVED_GIB=118
