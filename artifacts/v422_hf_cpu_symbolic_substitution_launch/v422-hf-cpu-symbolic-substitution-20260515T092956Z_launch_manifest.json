@@ -1,0 +1,55 @@
+{
+  "branch": "v230-v226-complementarity",
+  "comparison": {
+    "locked_submit_adapter_only": {
+      "bit_manipulation": 136,
+      "equation_transform": 56,
+      "weak_total": 192
+    },
+    "teacher_verifier_not_adapter_only": {
+      "bit_manipulation": 159,
+      "equation_transform": 63,
+      "weak_total": 222
+    }
+  },
+  "expected_commit": "e021d4f13b5c99425374a9d5b87560006e98c935",
+  "flavor": "cpu-upgrade",
+  "gates": {
+    "cpu_only": true,
+    "finops_cancel_if_no_gain": true,
+    "gpu_allowed": false,
+    "kaggle_submit_allowed": false,
+    "package_allowed": false,
+    "train_allowed": false
+  },
+  "generated_at_utc": "2026-05-15T09:29:56.944133+00:00",
+  "hardware": {
+    "accelerator_model": "",
+    "accelerator_quantity": "",
+    "accelerator_vram": "",
+    "cpu": "8 vCPU",
+    "name": "cpu-upgrade",
+    "pretty_name": "CPU Upgrade",
+    "ram": "32 GB",
+    "unit_cost_usd": 0.0005,
+    "unit_label": "minute"
+  },
+  "image": "python:3.11",
+  "job_id": "6a06e7cde48bea4538b9e09d",
+  "job_status": "COMPLETED",
+  "job_url": "https://huggingface.co/jobs/felipesp1983/6a06e7cde48bea4538b9e09d",
+  "mode": "launched",
+  "output_dataset_repo": "felipesp1983/kg1-v422-cpu-symbolic-substitution-artifacts",
+  "remote_result": {
+    "accepted_gain_count": 0,
+    "candidate_count": 16,
+    "conflict_count": 5,
+    "decision": "hf_gpu_blocked_no_safe_gain",
+    "projected_bit_manipulation": 136,
+    "projected_equation_transform": 56,
+    "projected_weak_total": 192,
+    "uploaded_path": "v422-hf-cpu-symbolic-substitution-20260515T092956Z"
+  },
+  "run_id": "v422-hf-cpu-symbolic-substitution-20260515T092956Z",
+  "version": "v422_hf_cpu_symbolic_substitution"
+}

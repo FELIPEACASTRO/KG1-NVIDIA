@@ -75,7 +75,7 @@ Precisamos buscar subida no ranking ainda hoje, `2026-05-14`. A decisao V392 e s
 | V419 residual taxonomy | `92` eq residuais | `80` punct-only dominantes | n/a | proxima classe: symbolic punctuation structural solver; sem GPU |
 | V420 symbolic cryptarithm aggressive | `1` accepted conhecido | `99d6a3b5` ja em V409/V414 | n/a | `0` ganho novo; multi-operator nao promotavel |
 | V421 operator-specific symbolic gate | `17` candidates | `0` gains | n/a | `3` conflitos; hipotese bloqueada |
-| V422 symbolic selection/substitution gate | `16` candidates | `0` gains | n/a | `5` conflitos; hipotese bloqueada; reproducao HF CPU autorizada apenas como gate barato |
+| V422 symbolic selection/substitution gate | `16` candidates | `0` gains | n/a | `5` conflitos; HF CPU completou e confirmou bloqueio; sem GPU |
 
 Conclusao: `eval_loss` baixo nao e criterio de promocao. O criterio e ACC por familia no weak/full gate. A rota "resolver nos mesmos" finalmente tem ganho mensuravel (`+9` weak em CPU), mas esse ganho ainda e solver/verifier externo; para submit, ele precisa virar comportamento do adapter/package ou ser permitido explicitamente pelas regras de runtime.
 
@@ -1051,7 +1051,7 @@ Decisao: nao abrir HF. A hipotese same-operator nao e segura; ela nao encontrou 
 
 ### Step 6S - V422 symbolic selection/substitution gate
 
-Status: concluido localmente; reproducao HF CPU em andamento/permitida por ser barata e sem treino.
+Status: concluido localmente e reproduzido em HF CPU.
 
 Objetivo: testar outra classe estrutural para os residuais de pontuacao simbolica: selecionar posicoes da expressao Alice de 5 caracteres e aprender substituicao global ou por slot a partir dos exemplos do proprio prompt.
 
@@ -1073,6 +1073,7 @@ Artefatos:
 - Manifest: `artifacts/v422_symbolic_substitution_gate/20260515T_v422_symbolic_substitution_gate/v422_symbolic_substitution_manifest.json`.
 - Relatorio: `artifacts/v422_symbolic_substitution_gate/20260515T_v422_symbolic_substitution_gate/V422_SYMBOLIC_SUBSTITUTION_GATE.md`.
 - HF CPU launcher: `artifacts/v422_hf_cpu_symbolic_substitution_launch/launch_v422_hf_cpu_symbolic_substitution.py`.
+- HF job: `https://huggingface.co/jobs/felipesp1983/6a06e7cde48bea4538b9e09d`, concluido em `28s`, `cpu-upgrade`, artefatos enviados para `felipesp1983/kg1-v422-cpu-symbolic-substitution-artifacts`.
 
 Decisao: nao abrir GPU, nao fazer package e nao submeter. O valor pratico do V422 e negativo/diagnostico: ele fecha uma hipotese plausivel de literatura de program synthesis, prova que selecao+substituicao simples nao move `equation_transform`, e evita gastar com LoRA baseado nessa classe.
 
