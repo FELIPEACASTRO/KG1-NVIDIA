@@ -1,0 +1,78 @@
+{
+  "generated_at_utc": "2026-05-15T02:58:13.055854+00:00",
+  "material_difference_vs_v410": [
+    "same leak-safe synthetic prompts and labels",
+    "assistant completion rewritten to raw-output-style boxed suffix",
+    "no weak/full gate rows used directly",
+    "intended to test V370 format-mismatch finding without changing source labels"
+  ],
+  "outputs": {
+    "manifest_json": "artifacts\\v416_rawstyle_transfer_dataset\\20260515T_v416_rawstyle_transfer\\v416_rawstyle_transfer_manifest.json",
+    "report_md": "artifacts\\v416_rawstyle_transfer_dataset\\20260515T_v416_rawstyle_transfer\\V416_VS_PREVIOUS.md",
+    "train_jsonl": "artifacts\\v416_rawstyle_transfer_dataset\\20260515T_v416_rawstyle_transfer\\v416_rawstyle_transfer_train.jsonl",
+    "train_sha256": "cc1ac4bc74af73b3e8b00b07519b458f90f8dc05146cc399e8d74dedf03ef9da",
+    "val_jsonl": "artifacts\\v416_rawstyle_transfer_dataset\\20260515T_v416_rawstyle_transfer\\v416_rawstyle_transfer_val.jsonl",
+    "val_sha256": "d02d38ce0cc179650170f359f825ceffd8437003ebf454bc2472dc2057c402e4"
+  },
+  "previous_dataset": {
+    "failure_evidence": "V413 weak eval checkpoint-2=190/315, equation=56/155, bit=134/160, truncated=1.",
+    "manifest_json": "artifacts\\v410_solver_first_transfer_dataset\\20260514T_v410_solver_first_transfer\\v410_solver_first_transfer_manifest.json",
+    "train_sha256": "4917699c5f5960a3cec80767c19d5c6c799fdc68a5457b5bfc73062f6b0cbba1",
+    "val_sha256": "de8735b97c23b7c1b5263cc9a87426f2d4cf78ca9fbf882142a5a93899c2cff5",
+    "version": "V410"
+  },
+  "promotion_gate": {
+    "bit_manipulation_min": 136,
+    "equation_transform_min_exclusive": 56,
+    "first_checkpoint_kill_switch": true,
+    "truncated_max": 0,
+    "weak_total_min_exclusive": 192
+  },
+  "schema_version": "kg1_v416_rawstyle_transfer_dataset_v1",
+  "source_policy": {
+    "adapter_training_authorization": "blocked_until_tokenization_gate_and_debug_launch",
+    "v414_rows_used_as_training": false,
+    "v414_rules_used_as_motivation_only": true,
+    "weak_or_full_gate_rows_used_for_training": false
+  },
+  "train_summary": {
+    "bad_rows_first10": [],
+    "duplicate_ids": 0,
+    "duplicate_prompts": 0,
+    "family_counts": {
+      "bit_manipulation": 1280,
+      "equation_transform": 1040
+    },
+    "label": "train",
+    "rows": 2320,
+    "source_counts": {
+      "v406_v217_bit_replay_guardrail_rawstyle_v416": 512,
+      "v410_v330_symbolic_cryptarithm_rawstyle_v416": 240,
+      "v410_v390_v325_equation_numeric_rawstyle_v416": 800,
+      "v410_v403_exact_global_bit_rule_rawstyle_v416": 512,
+      "v410_v408_perbit_asym_rule_rawstyle_v416": 256
+    },
+    "unique_ids": 2320,
+    "unique_prompts": 2320
+  },
+  "validation_summary": {
+    "bad_rows_first10": [],
+    "duplicate_ids": 0,
+    "duplicate_prompts": 0,
+    "family_counts": {
+      "bit_manipulation": 320,
+      "equation_transform": 260
+    },
+    "label": "validation",
+    "rows": 580,
+    "source_counts": {
+      "v406_v217_bit_replay_guardrail_rawstyle_v416": 128,
+      "v410_v330_symbolic_cryptarithm_rawstyle_v416": 60,
+      "v410_v390_v325_equation_numeric_rawstyle_v416": 200,
+      "v410_v403_exact_global_bit_rule_rawstyle_v416": 128,
+      "v410_v408_perbit_asym_rule_rawstyle_v416": 64
+    },
+    "unique_ids": 580,
+    "unique_prompts": 580
+  }
+}

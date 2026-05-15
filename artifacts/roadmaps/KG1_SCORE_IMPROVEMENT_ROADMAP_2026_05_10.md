@@ -69,6 +69,7 @@ Precisamos buscar subida no ranking ainda hoje, `2026-05-14`. A decisao V392 e s
 | V413 H200 solver-first transfer smoke | `190/315` checkpoint-2 | `56/155` | `134/160` | rejeitado; `truncated=1`, weak eval cancelado por FinOps antes de completar checkpoint-4 |
 | V414 CPU teacher meta gate | CPU projection `222/315` | `63/155` | `159/160` | melhor teacher CPU reconstruido; transferencia V368/V413 bloqueada |
 | V415 adapter-direct audit | `0` candidato promovivel | teto `56/155` | max adapter-like `136/160` | sem ganho submit-safe existente; exige mecanismo novo |
+| V416 rawstyle transfer dataset | `2320/580` train/val | n/a | n/a | dataset/gate passou; HF smoke permitido somente apos upload/debug |
 
 Conclusao: `eval_loss` baixo nao e criterio de promocao. O criterio e ACC por familia no weak/full gate. A rota "resolver nos mesmos" finalmente tem ganho mensuravel (`+9` weak em CPU), mas esse ganho ainda e solver/verifier externo; para submit, ele precisa virar comportamento do adapter/package ou ser permitido explicitamente pelas regras de runtime.
 
@@ -77,6 +78,8 @@ Resultado V413 em `2026-05-15`: o treino H200 solver-first transfer completou co
 Resultado V414 em `2026-05-15`: o meta-gate CPU reconstruiu a melhor projecao solver/verifier atual com evidencia reproduzivel: `222/315`, `equation_transform=63/155`, `bit_manipulation=159/160`, `+30` sobre o baseline adapter-only. Isso confirma que ha muitos acertos recuperaveis por solver formal, especialmente em bit. Tambem confirma o bloqueio operacional: V368 tentou transferir V366 e caiu para `191/315`; V413 tentou transferir V409/V410 e caiu para `190/315`. Portanto o ganho V414 e teacher CPU, nao submit adapter-only. A proxima acao nao e repetir SFT do mesmo teacher, e sim atacar comportamento adapter/package diretamente ou criar mecanismo de transferencia materialmente diferente.
 
 Resultado V415 em `2026-05-15`: a auditoria adapter-direct varreu CSVs row-level adapter-like locais contra os `30` ganhos V414. Nenhum candidato existente passa o gate `total>192`, `equation>56`, `bit>=136`, `truncated=0`. O melhor hit isolado foi V368, que acertou `1/30` ganho V414 (`4ef88f92`), mas perdeu `2` linhas do baseline e ficou `191/315`, `equation=56`, `bit=135`. Conclusao: nao existe checkpoint/prediction local esquecido que vire submit hoje; o proximo passo precisa ser um mecanismo novo, nao selecao de artefato historico.
+
+Resultado V416 em `2026-05-15`: foi criado um dataset de transferencia rawstyle diferente de V410/V413. Ele reutiliza prompts sinteticos seguros de V410, nao usa rows weak/full em treino, mas muda a completion para um estilo mais proximo do raw output historico do adapter e finaliza com `Final answer: \boxed{...}`. O gate real V286 passou: `2320` train, `580` val, `0` prompt truncation, `0` completion tokens dropped, offset masks completos. O primeiro build foi bloqueado corretamente por formato final errado; apos ajuste, o gate passou. Proximo passo permitido: upload HF, debug remoto, e somente entao smoke H200 curtissimo com checkpoint-2 kill-switch.
 
 Resultado V383 em `2026-05-14`: checkpoint-2 = `190/315`, `equation=56`, `bit=134`, `truncated=1`; checkpoint-4 = `191/315`, `equation=56`, `bit=135`, `truncated=1`; checkpoint-6 = `190/315`, `equation=56`, `bit=134`, `truncated=1`. Como nenhum dos tres podia superar o baseline `192/315`, `equation=56`, `bit=136`, `truncated=0`, o job foi cancelado antes de avaliar `checkpoint-8/10`.
 
@@ -856,6 +859,38 @@ Decisao:
 - Nao rodar full/package.
 - Nao abrir job HF para repetir dataset teacher anterior.
 - Proxima etapa: V416 deve mudar o mecanismo de transferencia, com formato alinhado ao raw output historico ou outro metodo que nao repita V368/V413.
+
+### Step 6M - V416 rawstyle transfer dataset
+
+Status: dataset concluido; tokenization/leakage/format gate aprovado; aguardando upload/debug HF.
+
+Objetivo: testar uma diferenca material contra V410/V413. V413 treinou o solver-first transfer com completions curtas de regra/final answer e falhou. V416 mantem prompts sinteticos seguros, mas altera a distribution da completion para raw-output-style boxed suffix.
+
+Artefatos:
+
+- Builder: `artifacts/v416_rawstyle_transfer_dataset/build_v416_rawstyle_transfer_dataset.py`.
+- Manifest: `artifacts/v416_rawstyle_transfer_dataset/20260515T_v416_rawstyle_transfer/v416_rawstyle_transfer_manifest.json`.
+- Tokenization gate: `artifacts/v416_rawstyle_transfer_dataset/20260515T_v416_rawstyle_transfer/tokenization_gate_real/v286_generic_tokenization_gate_manifest.json`.
+- Launchers: `artifacts/v416_hf_h200_rawstyle_transfer_launch/`.
+
+Gate:
+
+| Check | Resultado |
+|---|---:|
+| Train rows | `2320` |
+| Val rows | `580` |
+| Weak/full rows usadas no treino | `0` |
+| Prompt truncation | `0` |
+| Completion tokens dropped | `0` |
+| Offset masks | `2320/2320` train, `580/580` val |
+| Token max | `430` |
+
+Decisao:
+
+- V416 e a unica rota GPU atualmente permitida, porque muda o formato que V370/V415 identificaram como gargalo.
+- O smoke deve ser curto (`4` steps, checkpoints `2/4`) e monitorado a cada `40s`.
+- Cancelar se checkpoint-2 repetir o padrao falho: `equation=56` e `bit<136`.
+- Promover somente se `total>192`, `equation>56`, `bit>=136`, `truncated=0`.
 
 ### Step 7 - Full/package/submit
 
