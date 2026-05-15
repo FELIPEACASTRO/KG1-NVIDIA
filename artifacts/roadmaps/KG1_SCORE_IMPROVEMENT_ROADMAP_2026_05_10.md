@@ -617,6 +617,33 @@ V410 gate real:
 
 Decisao: V410 autoriza somente um smoke curto. Nao autoriza full eval, package ou submit.
 
+### Step 6F - V411 literature/Kaggle cross-check
+
+Status: concluido; confirma o plano solver-first e adiciona um refinamento de implementacao.
+
+Fontes auditadas:
+
+- Kaggle/Nemotron: `konbu17/bit-manipulation-solver-cot-generator`, `mohankrishnathalla/nemotron-6-puzzle-types-decoded-rule-solvers`, `huikang/end-to-end-finetuning-for-lb-0-85`, `kienngx/nemotron-sft-reasoning-trajectories-dataset`, `konbu17/nemotron-tong-style-cot-sft-updated-v2`;
+- Kaggle adjacente: ARC DSL/program synthesis, ARC MDL solver, AIMO TIR/reward/majority-vote;
+- literatura: PBE/FlashFill, SyGuS/CEGIS, Z3 bit-vectors, enhanced enumeration for bit-vector synthesis, SemGuS, DreamCoder/neural-guided synthesis.
+
+Achados acionaveis:
+
+- `bit_manipulation`: manter `INHIB`, `IMPL` e pares ordenados; adicionar no proximo gate cache de assinatura de candidatos, enumeracao tipo term-graph e fallback ternario (`MAJ`, `CH`, `XOR3`) somente quando todos os exemplos verificarem.
+- `equation_transform`: tratar como PBE/SyGuS com duas DSLs pequenas: numeric lane (`+1/-1`, multiplicacao/divisao/mod, concat/reverse concat, signed format) e symbolic lane (substituicao de operador, pontuacao/brackets, literal insert/delete, reordenacao simples).
+- Kaggle ARC/AIMO reforca o padrao: gerar hipotese, executar/verificar, tie-break por menor programa/MDL, abstencao quando ambiguo. Reward/vote sem verificador exato nao entra no plano ativo.
+- CoT/training so com exemplos verificados. Public notebooks confirmam que equation transform foi subtratado quando nao recebeu solver proprio.
+
+Comparativo:
+
+| Versao | Weak total | equation | bit | Submit-safe? |
+|---|---:|---:|---:|---|
+| V291/V290 checkpoint-6 | `192/315` | `56/155` | `136/160` | sim |
+| V409 CPU projection | `202/315` | `63/155` | `139/160` | nao |
+| V410 transfer dataset | nao treinado | nao medido | nao medido | nao |
+
+Decisao: V411 nao autoriza submit e nao justifica treino longo. Ele autoriza V412 CPU synthesis gate antes de qualquer novo job grande.
+
 ### Step 7 - Full/package/submit
 
 Status: somente depois de weak gate.
@@ -669,17 +696,17 @@ Regras:
 
 Seguir rota solver-first agressiva, mas com gate:
 
-1. implementar V407/V408 CPU gate para `bit_manipulation`:
-   - `INHIB`, `IMPL`, pares ordenados, `MAJ`, `CH`, `XOR3`;
+1. implementar V412 CPU synthesis gate para `bit_manipulation`:
+   - `INHIB`, `IMPL`, pares ordenados, cache de assinatura, enumeracao por valor nos exemplos, `MAJ`, `CH`, `XOR3` apenas com verificacao total;
    - aceitar somente candidatos que batem todos os exemplos e nao causam perdas.
 2. usar o V410 dataset de transferencia ja gateado:
    - traces curtos per-bit assimetricos;
    - replay de bit para preservar `136/160`;
    - sem treinar diretamente no weak row.
-3. implementar V407/V408 CPU gate para `equation_transform`:
+3. implementar V412 CPU synthesis gate para `equation_transform`:
    - DSL PBE/SyGuS para concat, reverse concat, signed format, literal insert/delete, pontuacao/brackets e pequenos hibridos aritmeticos;
-   - aceitar somente programa unico/curto com verificacao total.
-4. se houver novo ganho CPU no-loss, atualizar V406 em V410 e rodar smoke HF/Kaggle curto.
+   - aceitar somente programa unico/curto com verificacao total e abstencao em ambiguidade.
+4. se houver novo ganho CPU no-loss, atualizar V410 em V413/V414 e rodar smoke HF/Kaggle curto.
 5. se o primeiro checkpoint nao superar V291 (`192/315`, `equation=56`, `bit=136`, trunc `0`), cancelar por FinOps.
 6. manter V291/V290 checkpoint-6 como unico package submitavel ate aparecer ganho adapter-only medido.
 

@@ -1,0 +1,51 @@
+{
+  "version": "V411_LITERATURE_KAGGLE_CROSSCHECK",
+  "generated_date": "2026-05-14",
+  "scope": [
+    "bit_manipulation",
+    "equation_transform"
+  ],
+  "baseline_submit_safe": {
+    "candidate": "V291/V290 checkpoint-6",
+    "weak_total": 192,
+    "equation_transform": 56,
+    "bit_manipulation": 136,
+    "submit_safe": true
+  },
+  "best_cpu_projection": {
+    "candidate": "V409 integrated CPU solver projection",
+    "weak_total": 202,
+    "equation_transform": 63,
+    "bit_manipulation": 139,
+    "submit_safe": false
+  },
+  "kaggle_kernels_checked": [
+    "konbu17/bit-manipulation-solver-cot-generator",
+    "mohankrishnathalla/nemotron-6-puzzle-types-decoded-rule-solvers",
+    "huikang/end-to-end-finetuning-for-lb-0-85",
+    "kienngx/nemotron-sft-reasoning-trajectories-dataset",
+    "konbu17/nemotron-tong-style-cot-sft-updated-v2",
+    "michaelhodel/program-synthesis-starter-notebook",
+    "marcshade/three-tier-dsl-based-program-synthesis",
+    "francisbanda/arc-agi-2-mdl-program-synthesis-solver",
+    "sorokin/aimo2-tir-rm",
+    "nihilisticneuralnet/39-50-aimo3-condition-mining-tir-w-python"
+  ],
+  "literature_checked": [
+    "Syntax-Guided Synthesis / CEGIS",
+    "Programming by Example / Synthesis from Examples",
+    "Z3 bit-vector theory",
+    "Enhanced enumeration for SyGuS bit-vector manipulations",
+    "Semantics-Guided Synthesis",
+    "DreamCoder / neural-guided program synthesis"
+  ],
+  "actionable_findings": [
+    "Use candidate-signature caching and example-vector filtering for bit synthesis.",
+    "Keep asymmetric bit functions INHIB and IMPL with ordered pairs.",
+    "Allow ternary bit functions only under strict all-example verification.",
+    "Treat equation_transform as PBE/SyGuS with numeric and symbolic lanes.",
+    "Use MDL/shortest-program tie-break and abstain on ambiguity.",
+    "Use reward/vote/TIR patterns only after exact verifier produces valid candidates."
+  ],
+  "decision": "No submit-safe gain. Proceed to V412 CPU synthesis gate before any larger GPU job."
+}

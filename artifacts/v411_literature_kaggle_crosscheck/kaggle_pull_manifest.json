@@ -1,0 +1,16 @@
+{
+  "ok": [
+    "konbu17/bit-manipulation-solver-cot-generator",
+    "mohankrishnathalla/nemotron-6-puzzle-types-decoded-rule-solvers",
+    "huikang/end-to-end-finetuning-for-lb-0-85",
+    "kienngx/nemotron-sft-reasoning-trajectories-dataset",
+    "konbu17/nemotron-tong-style-cot-sft-updated-v2",
+    "michaelhodel/program-synthesis-starter-notebook",
+    "marcshade/three-tier-dsl-based-program-synthesis",
+    "francisbanda/arc-agi-2-mdl-program-synthesis-solver",
+    "sorokin/aimo2-tir-rm",
+    "nihilisticneuralnet/39-50-aimo3-condition-mining-tir-w-python"
+  ],
+  "fail": [],
+  "generated_at": "2026-05-14T21:47:49"
+}
