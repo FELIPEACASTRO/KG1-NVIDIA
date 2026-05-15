@@ -86,7 +86,8 @@ Precisamos buscar subida no ranking ainda hoje, `2026-05-14`. A decisao V392 e s
 | V431 signed/padded cryptarithm | `193/315` projection | `57/155` | `136/160` | `+1` conhecido (`99d6a3b5`), `0` ganho novo alem de V414 |
 | V432 V431 label-free tiebreak | `193/315` projection | `57/155` | `136/160` | `0` ganho novo; ambiguos requerem escolha por label, GPU bloqueada |
 | V433 string/multiset operator gate | `192/315` projection | `56/155` | `136/160` | `0` ganho unico; `4` acertos so dentro de listas ambiguas |
-| V434 OpenRouter May 15 response review | n/a | n/a | n/a | 16 modelos convergem em ORPO/DPO com hard negatives reais do V291 + MDL/LOO/CEGIS; sem ganho pronto, mas muda o proximo experimento |
+| V434 OpenRouter May 15 response review | n/a | n/a | n/a | respostas OpenRouter sugerem ORPO/DPO com hard negatives reais do V291 + MDL/LOO/CEGIS; sem ganho pronto, hipotese precisa de gate |
+| V434B OpenRouter May 15 double check | n/a | n/a | n/a | corrige risco de leakage: weak/full so eval; adiciona renaming stability/slot-alignment ao V435 e ANF-SAT/MaxSAT bit como P2; rejeita prefix/runtime abstention |
 
 Conclusao: `eval_loss` baixo nao e criterio de promocao. O criterio e ACC por familia no weak/full gate. A rota "resolver nos mesmos" finalmente tem ganho mensuravel (`+9` weak em CPU), mas esse ganho ainda e solver/verifier externo; para submit, ele precisa virar comportamento do adapter/package ou ser permitido explicitamente pelas regras de runtime.
 
@@ -1449,7 +1450,7 @@ Fonte analisada:
 - `C:\Users\davis\Downloads\OpenRouter Chat Fri May 15 2026.json`.
 - Relatorio: `artifacts/openrouter/KG1_V434_OPENROUTER_MAY15_RESPONSE_REVIEW.md`.
 
-Resumo: o arquivo contem respostas de `16` modelos OpenRouter sobre a pergunta central do projeto: como converter os ganhos solver/verifier em melhora adapter-only nas familias `equation_transform` e `bit_manipulation`. As respostas convergem no diagnostico que ja foi medido localmente: SFT amplo, transfer rawstyle, prompt sweep, adapter soup e "treinar mais" nao saem do teto `equation=56/155` e tendem a perder bit.
+Resumo: o arquivo contem mensagens de modelos OpenRouter sobre a pergunta central do projeto: como converter os ganhos solver/verifier em melhora adapter-only nas familias `equation_transform` e `bit_manipulation`. Para decisao tecnica, considerar apenas respostas finais completas; mensagens incompletas/tool-only/reasoning-only sao ruido. As respostas convergem no diagnostico que ja foi medido localmente: SFT amplo, transfer rawstyle, prompt sweep, adapter soup e "treinar mais" nao saem do teto `equation=56/155` e tendem a perder bit.
 
 Achados que entram no roadmap:
 
@@ -1465,17 +1466,55 @@ Pontos rejeitados:
 
 - Runtime abstention por threshold/logit: nao e submit-safe se exigir codigo externo ou postprocessor.
 - Output `ABSTAIN` no teste: conta como resposta errada; so serve como filtro de treino/gate.
+- Treino a partir de weak/full misses: leakage. Weak/full sao apenas avaliacao/gate.
+- Uso de `row.answer` em dataset, `chosen` ou filtro de selecao: proibido. `answer` so entra em metrica final depois da regra label-free estar definida.
+- Constrained decoding, logit masks, decoder patches, prompt-prefix/soft-prompt/`embed_tokens` fora do contrato oficial: rejeitados ate package gate oficial provar compatibilidade.
 - Qualquer GPU baseada apenas em projecao teacher: V391/V398/V413/V416 ja provaram que nao transfere.
 
 Novo criterio de CPU gate V434/V435 antes de GPU:
 
-1. Reproduzir a resposta errada real do baseline V291/V290.
-2. Gerar `chosen/rejected` apenas para rows em que o solver passa MDL, Leave-One-Out e unicidade.
-3. `chosen` deve ser trace curto correto; `rejected` deve ser a resposta/trace errado real do V291 ou hard negative da mesma familia.
-4. O dataset nao pode conter weak/full leakage por `id`, `prompt_sha256` ou resposta usada como prompt.
-5. So liberar GPU se houver pelo menos `4` candidatos equation acima do baseline, replay bit mantendo `bit>=136`, tokenization sem truncation e quadro comparativo contra V291.
+1. Reproduzir a resposta errada real do baseline V291/V290 apenas em dados de treino permitidos/public train/sintetico auditado.
+2. Gerar `chosen/rejected` apenas para rows em que o solver passa MDL, Leave-One-Out e unicidade antes de qualquer auditoria com `answer`.
+3. `chosen` deve ser trace curto label-free; `rejected` deve ser a resposta/trace errado real do V291 ou hard negative da mesma familia.
+4. O dataset nao pode conter weak/full leakage por `id`, `prompt_sha256` ou resposta usada como prompt; weak/full nao podem ser fonte de pares.
+5. So liberar GPU se houver pelo menos `4` candidatos equation em treino permitido, replay bit mantendo `bit>=136`, tokenization sem truncation e quadro comparativo contra V291 no weak gate.
 
 Decisao: criar primeiro um builder CPU de pares ORPO/contrastivos. Nao abrir HF GPU ate o builder produzir dataset auditado e comparativo. O objetivo e atacar o erro do adapter atual diretamente, nao repetir SFT em trace correto isolado.
+
+### Step 6AF - V434B OpenRouter May 15 double check
+
+Status: concluido localmente; refinamento do V434, sem ganho submit-safe pronto.
+
+Fonte e relatorio:
+
+- `C:\Users\davis\Downloads\OpenRouter Chat Fri May 15 2026.json`.
+- Relatorio: `artifacts/openrouter/KG1_V434B_OPENROUTER_MAY15_DOUBLE_CHECK.md`.
+
+Resultado: o double check reprocessou todas as respostas e confirmou a direcao hipotetica do V434, mas tambem corrigiu um risco critico: weak/full nao podem ser usados para construir pares nem escolher misses. O consenso principal continua sendo ORPO/DPO com hard negatives reais do V291/V290 em dados permitidos, filtrado por MDL, Leave-One-Out e unicidade. Nao ha recomendacao confiavel para abrir GPU ainda.
+
+Achados adicionais que entram:
+
+| Achado extra | Decisao |
+|---|---|
+| Estabilidade por renomeacao de simbolos | adicionar ao V435 como criterio de desempate label-free |
+| Alinhamento por slot/substring condicionado por operador | adicionar como classe Alice restrita, sem repetir transdutor global V429 |
+| ANF-SAT/MaxSAT esparso para bit | P2 como teacher/fixture de bit, nao como caminho principal |
+| Targeted module/attention routing | P2 bloqueado ate haver dataset V435 com sinal |
+
+Achados rejeitados:
+
+- Prefix/embedding tokens novos: risco de incompatibilidade de tokenizer/runtime.
+- Hidden-state contrastive distillation: depende de teacher/modelo compativel e nao resolve submit-safe direto.
+- Runtime abstention por logit/confidence: proibido como runtime; permitido apenas como filtro offline/gate.
+- Constrained decoding, logit masks e decoder patches: runtime externo, nao adapter-only.
+- Treino a partir de weak/full misses ou `row.answer`: leakage.
+- TIES/DARE/SLERP merge sem adapters novos com sinal real: repetir agora seria variante de soup sem base.
+
+Decisao: V435 deve ter tres blocos de CPU gate antes de qualquer HF GPU:
+
+1. `equation_pair_builder`: anti-unification/E-generalization + CEGIS/SyGuS + operator-conditioned slot/substring alignment + MDL + Leave-One-Out + estabilidade por renomeacao.
+2. `bit_guardrail_builder`: bit-pair/bitsum/stride curto e, se barato, ANF-SAT/MaxSAT como teacher secundario.
+3. `training_feasibility_gate`: anti-leakage, tokenization, contagem de pares limpos, comparativo contra V291 e flag `hf_gpu_allowed`.
 
 ## Regras Permanentes
 
@@ -1528,12 +1567,14 @@ Decisao: criar primeiro um builder CPU de pares ORPO/contrastivos. Nao abrir HF 
 
 ## Proxima Acao Unica
 
-V415 confirmou que nao existe candidato adapter-like local pronto para promocao, V416 confirmou que mudar o estilo da completion ainda nao transfere os ganhos do teacher para o adapter, V417 bloqueou novo GPU SFT por FinOps, V418 mostrou que aumentar caps da DSL V412 nao cria ganhos novos, V419 mostrou que o residual dominante e `80` rows de pontuacao simbolica pura, V420 confirmou que ampliar cryptarithm V329 so reencontra `99d6a3b5`, V421 bloqueou a hipotese same-operator por `0` ganhos e `3` conflitos, V422 bloqueou selection/substitution simples por `0` ganhos e `5` conflitos, V423 bloqueou invariantes condicionais simples por `0` ganhos e `1` conflito, V424 mostrou que match de assinatura/template simples do train publico nao aplica ao weak, V425 fechou a hipotese de ganho escondido em CSV antigo, V426/V427 fecharam posicao+constante e shift ASCII/alfabeto, V428 fechou parser/raw-output rescue, V429 fechou transdutor edit-distance global, V430 fechou rank-arithmetic simbolico, V431 fechou signed/padded cryptarithm sem ganho novo, V432 fechou o desempate label-free dos ambiguos V431, V433 fechou string/multiset operator local sem ganho unico e V434 confirmou que o proximo caminho diferente precisa trocar SFT por ORPO/DPO com hard negatives reais do V291. O V336B tambem bloqueia solver/verifier direto como pacote, pois o submit valido e adapter-only. Portanto o caminho ativo continua em CPU, com uma unica frente agressiva responsavel:
+V415 confirmou que nao existe candidato adapter-like local pronto para promocao, V416 confirmou que mudar o estilo da completion ainda nao transfere os ganhos do teacher para o adapter, V417 bloqueou novo GPU SFT por FinOps, V418 mostrou que aumentar caps da DSL V412 nao cria ganhos novos, V419 mostrou que o residual dominante e `80` rows de pontuacao simbolica pura, V420 confirmou que ampliar cryptarithm V329 so reencontra `99d6a3b5`, V421 bloqueou a hipotese same-operator por `0` ganhos e `3` conflitos, V422 bloqueou selection/substitution simples por `0` ganhos e `5` conflitos, V423 bloqueou invariantes condicionais simples por `0` ganhos e `1` conflito, V424 mostrou que match de assinatura/template simples do train publico nao aplica ao weak, V425 fechou a hipotese de ganho escondido em CSV antigo, V426/V427 fecharam posicao+constante e shift ASCII/alfabeto, V428 fechou parser/raw-output rescue, V429 fechou transdutor edit-distance global, V430 fechou rank-arithmetic simbolico, V431 fechou signed/padded cryptarithm sem ganho novo, V432 fechou o desempate label-free dos ambiguos V431, V433 fechou string/multiset operator local sem ganho unico, V434 confirmou que o proximo caminho diferente precisa trocar SFT por ORPO/DPO com hard negatives reais do V291 e V434B adicionou renaming stability/ANF-SAT como refinamentos. O V336B tambem bloqueia solver/verifier direto como pacote, pois o submit valido e adapter-only. Portanto o caminho ativo continua em CPU, com uma unica frente agressiva responsavel:
 
 1. criar V435 CPU ORPO-pair builder, materialmente diferente das DSLs ja rejeitadas:
-   - usar anti-unification/E-generalization, CEGIS/SyGuS, MDL e Leave-One-Out para gerar regras unicas;
+   - weak/full sao somente avaliacao; dataset vem de public train/sintetico auditado com `0` overlap;
+   - usar anti-unification/E-generalization, CEGIS/SyGuS, operator-conditioned slot/substring alignment, MDL, Leave-One-Out e estabilidade por renomeacao para gerar regras unicas;
    - usar a resposta errada real do V291/V290 como hard negative;
-   - gerar replay bit-pair/bitsum/stride curto para preservar `bit>=136`;
+   - gerar replay bit-pair/bitsum/stride curto para preservar `bit>=136`; ANF-SAT/MaxSAT entra apenas como teacher P2 se for barato;
+   - preservar inicialmente config/target_modules do V290; ablation de modulos/attention routing so depois de sinal adapter/package;
    - nao repetir same-operator, selection/substitution, invariantes condicionais, assinatura/template, posicao+constante, shift ASCII/alfabeto, parser rescue, transdutor edit-distance global, rank-arithmetic ou signed/padded cryptarithm.
 2. criterios de promocao:
    - `total > 192`, `equation > 56`, `bit >= 136`, `truncated=0`;
