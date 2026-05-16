@@ -1,0 +1,41 @@
+{
+  "version": "V484_OPENROUTER_UPLOADED_AUDIT_20260516",
+  "generated_date": "2026-05-16",
+  "inputs": [
+    {
+      "path": "C:\\Users\\davis\\Downloads\\OpenRouter Chat Sat May 16 2026.json",
+      "bytes": 316625,
+      "messages": 14,
+      "extracted_strings": 1738,
+      "unique_urls": 42
+    },
+    {
+      "path": "C:\\Users\\davis\\Downloads\\OpenRouter Chat Sat May 16 2026 (1).json",
+      "bytes": 761499,
+      "messages": 15,
+      "extracted_strings": 3770,
+      "unique_urls": 118
+    }
+  ],
+  "baseline_submit_safe": {
+    "weak_total": "192/315",
+    "equation_transform": "56/155",
+    "bit_manipulation": "136/160",
+    "truncated": 0
+  },
+  "actionable_consensus": [
+    "Preserve PEFT target_parameters for the V290/V291 MoE adapter lineage.",
+    "Prefer PeftModel.from_pretrained(..., is_trainable=True) over manual state_dict injection.",
+    "Block paid jobs until CPU round-trip proves adapter config, safetensors keys, trainable tensors, and gradients.",
+    "Do not promote by eval_loss; promote only by weak/full ACC and truncation gates.",
+    "Do not repeat broad SFT, longer epochs, or H200 runs without a new CPU gate."
+  ],
+  "implemented_changes": [
+    "hf_job_train_v90 default INIT_ADAPTER_LOAD_MODE changed to peft.",
+    "hf_job_preflight_gate blocks manual load when target_parameters exist.",
+    "kg1_static_safety_gate blocks active launchers with manual load and MoE target_parameters.",
+    "V391 launcher now exports INIT_ADAPTER_LOAD_MODE=peft.",
+    "Roadmap rewritten as active-only plan with old details archived."
+  ],
+  "next_required_step": "Implement V485 CPU PEFT round-trip gate before any paid GPU smoke."
+}

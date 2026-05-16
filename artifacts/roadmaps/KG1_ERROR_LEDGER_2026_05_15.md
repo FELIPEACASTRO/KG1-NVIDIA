@@ -1,6 +1,6 @@
 # KG1 Error Ledger
 
-Atualizado: 2026-05-15
+Atualizado: 2026-05-16
 
 Este ledger registra erros, evidencia, impacto e regra preventiva. Ele deve ser
 usado antes de qualquer novo job HF/Kaggle para evitar repeticao de custo sem
@@ -16,6 +16,37 @@ ganho.
 | truncation | 0 |
 
 ## Erros Confirmados
+
+### E036 - Load manual de adapter com `target_parameters` podia mascarar regressao PEFT
+
+Evidencia:
+
+- Os arquivos OpenRouter de 16/05/2026 convergiram que a linha V480/V391
+  precisava provar continuidade PEFT antes de novo gasto.
+- A documentacao PEFT exige config correta quando o adapter original usa
+  `target_parameters`; injecao por `state_dict` nao basta para esse caso.
+- O launcher V391 ainda exportava `INIT_ADAPTER_LOAD_MODE='manual'` enquanto
+  carregava `LORA_TARGET_PARAMETERS=mlp.experts.gate_up_proj,mlp.experts.down_proj`.
+
+Impacto:
+
+- Um treino poderia carregar/inicializar LoRA em namespace estrutural diferente
+  do adapter baseline, reduzir `eval_loss` e ainda nao transferir ACC.
+- Isso explica um modo de falha compativel com o plateau: loss mexe, mas
+  `equation_transform`/`bit_manipulation` nao melhoram de forma submit-safe.
+
+Regra preventiva:
+
+- `scripts/hf_job_train_v90.py` agora usa `INIT_ADAPTER_LOAD_MODE=peft` por
+  padrao.
+- `scripts/hf_job_preflight_gate.py` bloqueia `INIT_ADAPTER_LOAD_MODE=manual`
+  quando o init adapter tem `target_parameters`.
+- `scripts/kg1_static_safety_gate.py` bloqueia launchers ativos que combinam
+  MoE `LORA_TARGET_PARAMETERS` com `INIT_ADAPTER_LOAD_MODE='manual'`.
+- Proxima etapa obrigatoria: gate CPU round-trip V485 antes de qualquer novo
+  job pago.
+
+Status: mitigado por gate; requer V485 para liberar GPU.
 
 ### E001 - V435E misto contaminou preference
 

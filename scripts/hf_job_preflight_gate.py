@@ -517,6 +517,12 @@ def check_hub_artifacts() -> None:
             raise RuntimeError(
                 "Init adapter has target_parameters but REQUIRE_LORA_TARGET_PARAMETER_MATCH is disabled."
             )
+        if target_parameters and env_str("INIT_ADAPTER_LOAD_MODE", "peft").strip().lower() == "manual":
+            raise RuntimeError(
+                "INIT_ADAPTER_LOAD_MODE=manual is blocked for adapters with target_parameters. "
+                "Use the PEFT-native PeftModel.from_pretrained path or run a dedicated CPU "
+                "round-trip equivalence gate before allowing manual state_dict injection."
+            )
 
 
 def check_postinstall_imports() -> None:

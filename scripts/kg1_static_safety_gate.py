@@ -158,6 +158,10 @@ DISABLED_TARGET_PARAMETER_MATCH_RE = re.compile(
     r"export\s+REQUIRE_LORA_TARGET_PARAMETER_MATCH\s*=\s*0\b",
     re.IGNORECASE,
 )
+MANUAL_INIT_ADAPTER_LOAD_RE = re.compile(
+    r"export\s+INIT_ADAPTER_LOAD_MODE\s*=\s*['\"]manual['\"]",
+    re.IGNORECASE,
+)
 
 
 @dataclass
@@ -321,6 +325,24 @@ def audit_text(path: Path, text: str) -> list[Finding]:
     if (
         job_or_notebook
         and not is_archived_fail_closed(text)
+        and ("mlp.experts.gate_up_proj" in text or "KG1_LORA_TARGET_PARAMETERS" in text)
+        and MANUAL_INIT_ADAPTER_LOAD_RE.search(text)
+    ):
+        findings.append(
+            Finding(
+                rel,
+                "error",
+                "manual_init_adapter_load_with_target_parameters",
+                "Launchers with MoE LORA_TARGET_PARAMETERS must use the PEFT-native "
+                "PeftModel.from_pretrained path unless a dedicated CPU round-trip gate proves "
+                "manual state_dict injection is equivalent.",
+            )
+        )
+
+    if (
+        job_or_notebook
+        and not is_archived_fail_closed(text)
+        and rel != "scripts/hf_job_train_v90.py"
         and "bit_manipulation" in text
         and "equation_transform" in text
         and ("SOURCE_WEIGHTS" in text or "KG1_SOURCE_WEIGHTS" in text)
@@ -671,6 +693,25 @@ def run_self_test() -> int:
         )
         if "lora_target_parameter_match_disabled" not in {item.code for item in disabled_match_findings}:
             print("missing disabled target-parameter match self-test finding", flush=True)
+            return 1
+        manual_target_parameter_load = tmp / "launch_manual_target_parameter_load.py"
+        manual_target_parameter_load.write_text(
+            "from huggingface_hub import HfApi\n"
+            "KG1_LORA_TARGET_PARAMETERS='mlp.experts.gate_up_proj,mlp.experts.down_proj'\n"
+            "COMMAND_SCRIPT=\"\"\"\n"
+            "export INIT_ADAPTER_LOAD_MODE='manual'\n"
+            "export LORA_TARGET_PARAMETERS=\"$KG1_LORA_TARGET_PARAMETERS\"\n"
+            "export REQUIRE_LORA_TARGET_PARAMETER_MATCH=1\n"
+            "\"\"\"\n"
+            "HfApi().run_job(command=['true'])\n",
+            encoding="utf-8",
+        )
+        manual_target_findings = audit_text(
+            manual_target_parameter_load,
+            manual_target_parameter_load.read_text(encoding="utf-8"),
+        )
+        if "manual_init_adapter_load_with_target_parameters" not in {item.code for item in manual_target_findings}:
+            print("missing manual target-parameter load self-test finding", flush=True)
             return 1
         archived_quarantine = tmp / "launch_archived_quarantine.py"
         archived_quarantine.write_text(
