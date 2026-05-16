@@ -71,6 +71,7 @@ base.SUBCATEGORY_WEIGHTS = (
 base.COMMAND_SCRIPT = (
     base.COMMAND_SCRIPT
     .replace("export OUTPUT_DIR='/tmp/kg1_v391_output'", "export OUTPUT_DIR='/tmp/kg1_v480_output'")
+    .replace("export MAX_STEPS=12", "export MAX_STEPS=8")
     .replace("export LEARNING_RATE=4.0e-8", "export LEARNING_RATE=4.0e-8")
     .replace("export FINAL_LEARNING_RATE=1.0e-8", "export FINAL_LEARNING_RATE=1.0e-8")
 )
@@ -132,11 +133,23 @@ def local_debug(api: HfApi, token: str) -> tuple[dict[str, object], dict[str, st
         "v464_" + "v463_numeric_multirule_dataset",
         "v468_" + "v464_symbol_fix_dataset",
         "timeout=5400",
+        "export MAX_STEPS=12",
         "v475_v325_equation_no_loss_distill=8.00",
     ]
     found_forbidden = [item for item in forbidden_snippets if item in base.COMMAND_SCRIPT or item in json.dumps(job_env)]
     if found_forbidden:
         raise RuntimeError("V480 command/env contains stale forbidden snippets: " + json.dumps(found_forbidden))
+    required_command_snippets = [
+        "export MAX_STEPS=8",
+        "export OUTPUT_DIR='/tmp/kg1_v480_output'",
+        "export SOURCE_WEIGHTS=\"$KG1_SOURCE_WEIGHTS\"",
+        "export SUBCATEGORY_WEIGHTS=\"$KG1_SUBCATEGORY_WEIGHTS\"",
+    ]
+    missing_command_snippets = [item for item in required_command_snippets if item not in base.COMMAND_SCRIPT]
+    if missing_command_snippets:
+        raise RuntimeError(
+            "V480 command missing required launch snippets: " + json.dumps(missing_command_snippets)
+        )
     required_env = {
         "KG1_TRAIN_FILE": base.TRAIN_FILE,
         "KG1_VAL_FILE": base.VAL_FILE,
