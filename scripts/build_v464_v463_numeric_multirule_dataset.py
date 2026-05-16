@@ -28,6 +28,7 @@ from src.competition_utils import verify_answer  # noqa: E402
 
 
 VERSION = "v464_v463_numeric_multirule_dataset"
+ACTIVE_VERSION = VERSION
 DEFAULT_V463_DIR = REPO_ROOT / "artifacts/v463_v462_synthetic_numeric_hard_negative_audit/20260515T_cpu_gate"
 DEFAULT_BIT_TRAIN = REPO_ROOT / "data/v217/v217_short_answer_train.jsonl"
 DEFAULT_BIT_VAL = REPO_ROOT / "data/v217/v217_short_answer_val.jsonl"
@@ -119,33 +120,58 @@ def hard_flag(row: dict[str, str]) -> bool:
     return flag(row, "real_hard_negative_candidate")
 
 
-def rule_explanation(row: dict[str, str]) -> str:
+def rejected_candidate_info(row: dict[str, str], answer: str) -> dict[str, str]:
+    """Choose a candidate that is actually wrong for rejection traces.
+
+    V463 rows contain both a real adapter prediction and a simulated wrong
+    prediction. For rule-replay rows the adapter may already equal the answer,
+    so using it in "candidate X is rejected" creates contradictory supervision.
+    """
+
+    adapter = str(row.get("adapter_prediction") or "").strip()
+    simulated = str(row.get("simulated_wrong_prediction") or "").strip()
+    ordered: list[tuple[str, str]] = []
+    if hard_flag(row):
+        ordered.extend([("adapter_prediction", adapter), ("simulated_wrong_prediction", simulated)])
+    else:
+        ordered.extend([("simulated_wrong_prediction", simulated), ("adapter_prediction", adapter)])
+
+    seen: set[str] = set()
+    for source, value in ordered:
+        if not value or value in seen:
+            continue
+        seen.add(value)
+        if not verify_answer(answer, value):
+            return {"value": value, "source": source}
+    raise RuntimeError(f"no rejected candidate differs from answer for {row.get('id')}: answer={answer!r}")
+
+
+def rule_explanation(row: dict[str, str], rejected_candidate: str) -> str:
     rule = str(row["target_rule_class"])
     answer = str(row["answer"])
-    wrong = str(row.get("adapter_prediction") or row.get("simulated_wrong_prediction") or "")
     query = str(row.get("query", ""))
     if rule == ADD_RULE:
         return (
             f"For {query}, use the direct operands in the query. "
-            f"The reversed-operand/reversed-result candidate {wrong!r} fits the symmetric examples but not the target. "
+            f"The reversed-operand/reversed-result candidate {rejected_candidate!r} fits the symmetric examples but not the target. "
             f"The direct addition result is {answer}."
         )
     if rule == COLON_RULE:
         return (
             f"For {query}, ':' maps to absolute difference. Preserve a trailing zero when the computed result has one. "
-            f"The shortened candidate {wrong!r} is rejected; the verified result is {answer}."
+            f"The shortened candidate {rejected_candidate!r} is rejected; the verified result is {answer}."
         )
     if rule == MINUS_DIRECT_RULE:
         return (
             f"For {query}, '-' is direct subtraction. Preserve the negative sign when the result is below zero. "
-            f"The unsigned candidate {wrong!r} is rejected; the verified result is {answer}."
+            f"The unsigned candidate {rejected_candidate!r} is rejected; the verified result is {answer}."
         )
     if rule == MINUS_SIGNED_RULE:
         return (
             f"For {query}, compare the minus examples and keep the signed rule output. "
-            f"The opposite-sign candidate {wrong!r} is rejected; the verified result is {answer}."
+            f"The opposite-sign candidate {rejected_candidate!r} is rejected; the verified result is {answer}."
         )
-    return f"Reject candidate {wrong!r}; verified result is {answer}."
+    return f"Reject candidate {rejected_candidate!r}; verified result is {answer}."
 
 
 def make_equation_row(row: dict[str, str], split: str, role: str) -> dict[str, Any]:
@@ -154,10 +180,11 @@ def make_equation_row(row: dict[str, str], split: str, role: str) -> dict[str, A
         raise RuntimeError(f"postprocessor answer mismatch for {row.get('id')}")
     if hard_flag(row) and verify_answer(answer, row.get("adapter_prediction", "")):
         raise RuntimeError(f"hard row adapter is already correct for {row.get('id')}")
-    assistant = f"Verification: {rule_explanation(row)}\nFinal answer: {boxed(answer)}"
+    rejected = rejected_candidate_info(row, answer)
+    assistant = f"Verification: {rule_explanation(row, rejected['value'])}\nFinal answer: {boxed(answer)}"
     metadata = {
-        "source": VERSION,
-        "source_dataset": VERSION,
+        "source": ACTIVE_VERSION,
+        "source_dataset": ACTIVE_VERSION,
         "source_role": role,
         "family": "equation_transform",
         "rule_class": row["target_rule_class"],
@@ -165,6 +192,8 @@ def make_equation_row(row: dict[str, str], split: str, role: str) -> dict[str, A
         "v463_source_id": row["id"],
         "adapter_prediction": row.get("adapter_prediction", ""),
         "simulated_wrong_prediction": row.get("simulated_wrong_prediction", ""),
+        "rejected_candidate": rejected["value"],
+        "rejected_candidate_source": rejected["source"],
         "postprocessor_prediction": row.get("postprocessor_prediction", ""),
         "real_hard_negative_candidate": hard_flag(row),
         "raw_output_collected_without_labels": True,
@@ -175,10 +204,10 @@ def make_equation_row(row: dict[str, str], split: str, role: str) -> dict[str, A
         "split": split,
     }
     return {
-        "id": f"v464_{split}_equation_{row['id']}",
+        "id": f"{ACTIVE_VERSION}_{split}_equation_{row['id']}",
         "family": "equation_transform",
         "subcategory": row["target_rule_class"],
-        "source": VERSION,
+        "source": ACTIVE_VERSION,
         "prompt": row["prompt"],
         "answer": answer,
         "messages": [
@@ -202,6 +231,7 @@ def make_bit_replay_row(row: dict[str, Any], split: str, index: int) -> dict[str
             "source_role": "bit_guardrail_replay",
             "subcategory": "bit_guardrail_replay",
             "subtype": "bit_guardrail_replay",
+            "dataset_builder_version": ACTIVE_VERSION,
             "v464_split": split,
             "weak_gate_rows_used_for_training": False,
             "full_gate_rows_used_for_training": False,
@@ -209,7 +239,7 @@ def make_bit_replay_row(row: dict[str, Any], split: str, index: int) -> dict[str
         }
     )
     return {
-        "id": f"v464_{split}_bit_replay_{index:04d}_{row.get('id', '')}",
+        "id": f"{ACTIVE_VERSION}_{split}_bit_replay_{index:04d}_{row.get('id', '')}",
         "family": "bit_manipulation",
         "subcategory": "bit_guardrail_replay",
         "source": "v217_bit_replay_guardrail",
@@ -267,12 +297,18 @@ def summarize(rows: list[dict[str, Any]]) -> dict[str, Any]:
     family = Counter(str(row.get("family", "")) for row in rows)
     subcat = Counter(str(row.get("subcategory", "")) for row in rows)
     source_role = Counter(str((row.get("metadata") or {}).get("source_role", "")) for row in rows)
+    rejected_source = Counter(
+        str((row.get("metadata") or {}).get("rejected_candidate_source", ""))
+        for row in rows
+        if row.get("family") == "equation_transform"
+    )
     hard = sum(1 for row in rows if (row.get("metadata") or {}).get("real_hard_negative_candidate") is True)
     return {
         "rows": len(rows),
         "family_counts": dict(sorted(family.items())),
         "subcategory_counts": dict(sorted(subcat.items())),
         "source_role_counts": dict(sorted(source_role.items())),
+        "rejected_candidate_source_counts": dict(sorted(rejected_source.items())),
         "real_hard_negative_rows": hard,
     }
 
@@ -298,6 +334,13 @@ def validate_dataset_rows(train_rows: list[dict[str, Any]], val_rows: list[dict[
         assistant = str(messages[2].get("content", ""))
         if not assistant.rstrip().endswith(boxed(answer)):
             issues.append(f"assistant_not_boxed_suffix:{row.get('id')}")
+        if row.get("family") == "equation_transform":
+            metadata = row.get("metadata") or {}
+            rejected = str(metadata.get("rejected_candidate", ""))
+            if not rejected:
+                issues.append(f"missing_rejected_candidate:{row.get('id')}")
+            elif verify_answer(answer, rejected):
+                issues.append(f"rejected_candidate_matches_answer:{row.get('id')}")
     return issues
 
 
@@ -333,6 +376,8 @@ def render_report(manifest: dict[str, Any]) -> str:
 
 
 def run(args: argparse.Namespace) -> dict[str, Any]:
+    global ACTIVE_VERSION
+    ACTIVE_VERSION = str(args.label)
     print("=== V464 V463 NUMERIC MULTIRULE DATASET START ===", flush=True)
     print("v463_manifest_json =", args.v463_manifest_json, flush=True)
     print("v463_detail_csv =", args.v463_detail_csv, flush=True)
@@ -412,6 +457,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         "schema_version": "kg1_v464_v463_numeric_multirule_dataset_v1",
         "generated_at_utc": utc_now(),
         "label": args.label,
+        "active_dataset_version": ACTIVE_VERSION,
         "source_policy": {
             "raw_outputs_collected_without_labels": True,
             "labels_joined_after_collection_from_local_synthetic_audit": True,
@@ -465,7 +511,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             ),
             "blocking_conditions": [key for key, value in conditions.items() if not value],
             "next_action": (
-                "Run V286 generic tokenization gate with boxed_suffix mode; only then consider V465 one-checkpoint HF smoke."
+                "Run V286 generic tokenization gate with boxed_suffix mode; only then consider a one-checkpoint HF smoke."
                 if dataset_ready_for_tokenization
                 else "Fix dataset validation issues before tokenization or training."
             ),
@@ -510,6 +556,35 @@ def self_test() -> None:
     item = make_equation_row(row, "train", "equation_real_hard_negative")
     assert item["messages"][2]["content"].endswith("\\boxed{134}")
     assert "35" in item["messages"][2]["content"]
+    colon_replay = {
+        "id": "colon",
+        "target_rule_class": COLON_RULE,
+        "query": "37:67",
+        "answer": "30",
+        "adapter_prediction": "30",
+        "simulated_wrong_prediction": "3",
+        "postprocessor_prediction": "30",
+        "prompt": "p",
+        "real_hard_negative_candidate": "false",
+    }
+    colon_item = make_equation_row(colon_replay, "train", "equation_rule_replay")
+    assert "candidate '3' is rejected" in colon_item["messages"][2]["content"]
+    assert "candidate '30' is rejected" not in colon_item["messages"][2]["content"]
+    assert colon_item["metadata"]["rejected_candidate_source"] == "simulated_wrong_prediction"
+    signed_replay = {
+        "id": "signed",
+        "target_rule_class": MINUS_SIGNED_RULE,
+        "query": "13-105",
+        "answer": "92",
+        "adapter_prediction": "92",
+        "simulated_wrong_prediction": "-92",
+        "postprocessor_prediction": "92",
+        "prompt": "p",
+        "real_hard_negative_candidate": "false",
+    }
+    signed_item = make_equation_row(signed_replay, "train", "equation_rule_replay")
+    assert "candidate '-92' is rejected" in signed_item["messages"][2]["content"]
+    assert "candidate '92' is rejected" not in signed_item["messages"][2]["content"]
     print("v464_self_test=ok", flush=True)
 
 

@@ -503,6 +503,43 @@ Regra preventiva:
 
 Status: corrigindo em V464/V465; rerodar dataset, token gate, upload e launch.
 
+### E016 - V464 trace rejeitava candidato igual ao gabarito
+
+Evidencia:
+
+- Auditoria em crisis mode encontrou traces `equation_transform` do V464 em
+  que o texto dizia `candidate 'X' is rejected`, mas `X` era igual ao
+  `answer` pelo `verify_answer`.
+- Contagem no V464 antigo:
+  - train: `24/46` linhas equation com candidato rejeitado igual ao gabarito;
+  - validation: `6/10` linhas equation com candidato rejeitado igual ao
+    gabarito.
+- Exemplo: `37:67` com answer `30`; a trace dizia que o candidato `'30'` era
+  rejeitado e terminava com `\boxed{30}`.
+- V466 avaliou V465 treinado sobre esse dataset contaminado e nao obteve ganho:
+  checkpoint-4 `189/315`, checkpoint-8 `192/315`, `equation=56`, `truncated=1`.
+
+Impacto:
+
+- V465/V466 nao podem ser usados como evidencia positiva de treino.
+- O erro explica um padrao observado: `eval_loss` pode cair sem melhorar ACC,
+  porque a supervisao textual estava semanticamente contraditoria.
+- O job V466 foi cancelado por FinOps antes de gastar em checkpoint-12/16/final.
+
+Regra preventiva:
+
+- Builders de trace precisam gravar `metadata.rejected_candidate` e
+  `metadata.rejected_candidate_source`.
+- Nenhuma linha pode dizer que rejeita candidato que verifica igual ao
+  gabarito.
+- O gate V286 agora falha se `metadata.rejected_candidate` ou o texto
+  `candidate 'X' is rejected` bater com o `answer`.
+- `hf_job_train_v90.py --self-test` agora e um self-test real; argumentos
+  desconhecidos nao podem iniciar treino por engano.
+
+Status: corrigido em V468/V469. V468 tem `0/56` contradicoes, passou token gate
+real, foi reenviado ao HF e e a unica rota liberada para novo smoke.
+
 ## Prompt Externo
 
 Prompt consolidado para OpenRouter/outras APIs:

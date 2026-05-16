@@ -13,11 +13,19 @@ import hashlib
 import json
 import re
 import statistics
+import sys
 import tempfile
 from collections import Counter
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
+
+
+REPO_ROOT = Path(__file__).resolve().parents[1]
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+from src.competition_utils import verify_answer  # noqa: E402
 
 
 DEFAULT_MODEL_NAME = "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16"
@@ -144,6 +152,14 @@ def validate_rows(
             raise RuntimeError(f"unknown assistant_final_answer_mode={assistant_final_answer_mode!r}")
         if metadata.get("weak_gate_rows_used_for_training") is not False:
             bad_rows.append(rid)
+        rejected = str(metadata.get("rejected_candidate", "")).strip()
+        if rejected and verify_answer(answer, rejected):
+            bad_rows.append(rid)
+            continue
+        for candidate in re.findall(r"candidate '([^']*)' is rejected", assistant_content):
+            if verify_answer(answer, candidate):
+                bad_rows.append(rid)
+                break
     if answer_empty:
         raise RuntimeError(f"{split} rows with empty prompt/answer: {answer_empty[:20]}")
     if bad_rows:
@@ -652,6 +668,63 @@ def self_test() -> int:
         )
         boxed_manifest_out = run(boxed_args)
         assert boxed_manifest_out["decision"]["status"] == "tokenization_gate_passed"
+
+        bad_row = {
+            **boxed_row,
+            "id": "bad_rejected_candidate",
+            "prompt": "Bad rejected candidate question",
+            "answer": "30",
+            "family": "equation_transform",
+            "subcategory": "toy_bad_rejected",
+            "messages": [
+                {"role": "system", "content": "system"},
+                {"role": "user", "content": "Bad rejected candidate question"},
+                {
+                    "role": "assistant",
+                    "content": "The shortened candidate '30' is rejected.\n" + r"Final answer: \boxed{30}",
+                },
+            ],
+            "metadata": {
+                "source_dataset": "toy",
+                "weak_gate_rows_used_for_training": False,
+                "rejected_candidate": "30",
+            },
+        }
+        bad_train = tmp / "bad_train.jsonl"
+        bad_val = tmp / "bad_val.jsonl"
+        bad_train.write_text(json.dumps(bad_row, sort_keys=True) + "\n", encoding="utf-8")
+        bad_val.write_text(json.dumps({**bad_row, "id": "bad_rejected_candidate_val"}, sort_keys=True) + "\n", encoding="utf-8")
+        bad_manifest = tmp / "bad_dataset_manifest.json"
+        write_json(
+            bad_manifest,
+            {
+                "outputs": {
+                    "train_jsonl": str(bad_train),
+                    "train_sha256": sha256_file(bad_train),
+                    "val_jsonl": str(bad_val),
+                    "val_sha256": sha256_file(bad_val),
+                }
+            },
+        )
+        bad_args = argparse.Namespace(
+            dataset_manifest_json=bad_manifest,
+            output_dir=tmp / "bad_out",
+            model_name="toy",
+            model_revision="",
+            max_length=2048,
+            max_prompt_truncation_rate=0.0,
+            require_offset_mask=True,
+            min_train_rows=1,
+            min_val_rows=1,
+            use_toy_tokenizer=True,
+            assistant_final_answer_mode="boxed_suffix",
+        )
+        try:
+            run(bad_args)
+        except RuntimeError as exc:
+            assert "bad rows" in str(exc)
+        else:
+            raise AssertionError("contradictory rejected candidate must fail the tokenization gate")
     print("v286_generic_tokenization_gate_self_test=ok", flush=True)
     return 0
 

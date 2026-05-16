@@ -1227,3 +1227,69 @@ Regra FinOps continua: se o primeiro checkpoint ou gate parcial nao indicar
 caminho para `total>192`, `equation>56`, `bit>=136`, `truncated=0`, cancelar.
 `eval_loss`, `train_loss` e accuracy interna nao promovem submit; elas apenas
 ajudam a matar job cedo.
+
+## Atualizacao V466/V468 - Crisis Mode Silent Bug
+
+V466 avaliou o adapter V465 treinado sobre V464 e confirmou que a rota nao
+gerou ganho submit-safe:
+
+| Checkpoint | Total weak | equation | bit | truncated | Decisao |
+|---|---:|---:|---:|---:|---|
+| V465 checkpoint-4 | `189/315` | `56/155` | `133/160` | `1` | rejeitar |
+| V465 checkpoint-8 | `192/315` | `56/155` | `136/160` | `1` | rejeitar |
+
+FinOps: o job V466 foi cancelado antes de checkpoint-12/16/final, porque
+checkpoint-8 manteve `equation=56`, nao passou `truncated=0` e nao superou
+`192/315`.
+
+Auditoria posterior achou um bug silencioso no dataset V464:
+
+| Split V464 antigo | equation rows | traces com `candidate == answer` |
+|---|---:|---:|
+| train | `46` | `24` |
+| validation | `10` | `6` |
+
+Exemplo do bug: a trace dizia que o candidato `'30'` era rejeitado e, na mesma
+linha, finalizava com `\boxed{30}`. Isso torna a supervisao contraditoria: o
+loss pode cair, mas a regra ensinada fica semanticamente errada.
+
+Correcoes implementadas:
+
+- `scripts/build_v464_v463_numeric_multirule_dataset.py` agora seleciona um
+  `rejected_candidate` que obrigatoriamente difere da resposta pelo
+  `verify_answer`.
+- O builder falha em CPU se nao existir candidato errado valido.
+- O manifesto registra `rejected_candidate` e
+  `rejected_candidate_source`.
+- `scripts/run_v286_generic_tokenization_gate.py` agora bloqueia qualquer
+  dataset em que `metadata.rejected_candidate` ou o texto
+  `candidate 'X' is rejected` verifique igual ao gabarito.
+
+V468 e o rebuild corrigido:
+
+| Split V468 | Rows | equation | bit replay | contradiction gate |
+|---|---:|---:|---:|---|
+| train | `558` | `46` | `512` | `0` |
+| validation | `138` | `10` | `128` | `0` |
+
+Tokenization gate V468:
+
+- tokenizer real `nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16`;
+- `prompt_truncation_rate=0.0`;
+- `completion_tokens_dropped=0`;
+- `fallback_masks=0`;
+- offset masks completas;
+- train/val prompt overlap `0`.
+
+Decisao atual: V464/V465 ficam bloqueados para novos treinos. A unica proxima
+execucao permitida nesta rota e um smoke HF novo usando V468 corrigido. O gate
+de promocao permanece:
+
+- weak total `>192/315`;
+- `equation_transform >56/155`;
+- `bit_manipulation >=136/160`;
+- `truncated = 0`.
+
+Se checkpoint-4 do novo treino V468 nao passar nesses criterios, cancelar
+imediatamente por FinOps e voltar para mining CPU de novas classes reais, sem
+treinar mais epochs sobre o mesmo sinal.

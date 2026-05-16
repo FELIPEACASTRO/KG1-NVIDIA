@@ -1,0 +1,127 @@
+{
+  "active_dataset_version": "v468_v464_symbol_fix_dataset",
+  "conditions": {
+    "bit_replay_train_ge_min": true,
+    "bit_replay_val_ge_min": true,
+    "hf_gpu_blocked_until_tokenization_gate": true,
+    "train_hard_negative_rule_classes_ge_min": true,
+    "train_hard_negatives_ge_min": true,
+    "validation_issues_absent": true
+  },
+  "decision": {
+    "blocking_conditions": [],
+    "dataset_ready_for_tokenization_gate": true,
+    "decision": "v464_dataset_ready_for_tokenization_gate",
+    "hf_gpu_allowed": false,
+    "next_action": "Run V286 generic tokenization gate with boxed_suffix mode; only then consider a one-checkpoint HF smoke.",
+    "tokenization_gate_required": true
+  },
+  "generated_at_utc": "2026-05-16T00:14:24.523303+00:00",
+  "inputs": {
+    "bit_train_jsonl": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\data\\v217\\v217_short_answer_train.jsonl",
+    "bit_train_sha256": "a56938b1ae9eb471b779ebfc415ee88c05322941732128752680317495157984",
+    "bit_val_jsonl": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\data\\v217\\v217_short_answer_val.jsonl",
+    "bit_val_sha256": "65c4cb88b8ff2fc96940ccea33b8ca493769790c7ae80d27f2b69ac818fc6451",
+    "v463_detail_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v463_v462_synthetic_numeric_hard_negative_audit\\20260515T_cpu_gate\\v463_v462_synthetic_numeric_hard_negative_audit_detail.csv",
+    "v463_detail_sha256": "58140c853c69b761cc6442763ca0426861bd16f06917dfe74f2dc6aeee02c5c0",
+    "v463_manifest_json": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v463_v462_synthetic_numeric_hard_negative_audit\\20260515T_cpu_gate\\v463_v462_synthetic_numeric_hard_negative_audit_manifest.json",
+    "v463_manifest_sha256": "e815c7e444ea168630228dcf4cece56f80676aa43e3dbea13bc33142a1cf6567"
+  },
+  "label": "v468_v464_symbol_fix_dataset",
+  "outputs": {
+    "manifest_json": "artifacts\\v468_v464_symbol_fix_dataset\\20260515T_cpu_gate\\v468_v464_symbol_fix_dataset_manifest.json",
+    "report_md": "artifacts\\v468_v464_symbol_fix_dataset\\20260515T_cpu_gate\\v468_v464_symbol_fix_dataset.md",
+    "report_sha256": "79576effdf0e93e01ad0778f67deb5e33e8210aba87b477433bfded9dbc903fc",
+    "train_jsonl": "artifacts\\v468_v464_symbol_fix_dataset\\20260515T_cpu_gate\\v468_v464_symbol_fix_dataset_train.jsonl",
+    "train_sha256": "6f04f07e0406cfab4eb599b868055d2abc0c043a8dde2eba4fb7f76cdc7f3cb8",
+    "val_jsonl": "artifacts\\v468_v464_symbol_fix_dataset\\20260515T_cpu_gate\\v468_v464_symbol_fix_dataset_val.jsonl",
+    "val_sha256": "b99c6d57f31636221a045dcfe108fbf2c908bffe8db26cb207b9f3de871da162"
+  },
+  "schema_version": "kg1_v464_v463_numeric_multirule_dataset_v1",
+  "selection": {
+    "bit_train_rows": 512,
+    "bit_val_rows": 128,
+    "equation_rows_total": 56,
+    "equation_train_rows": 46,
+    "equation_val_rows": 10,
+    "hard_negative_rule_classes_total": [
+      "v274_guarded_numeric_add_direct_over_model_add_variant",
+      "v274_guarded_numeric_minus_direct_negative_restore_sign",
+      "v274_guarded_numeric_minus_signed_opposite_sign_guarded"
+    ],
+    "hard_negatives_total": 26,
+    "train_hard_negative_rule_classes": [
+      "v274_guarded_numeric_add_direct_over_model_add_variant",
+      "v274_guarded_numeric_minus_direct_negative_restore_sign",
+      "v274_guarded_numeric_minus_signed_opposite_sign_guarded"
+    ],
+    "train_hard_negatives": 22,
+    "validation_hard_negatives": 4
+  },
+  "source_policy": {
+    "bit_replay_guardrail": true,
+    "labels_joined_after_collection_from_local_synthetic_audit": true,
+    "raw_outputs_collected_without_labels": true,
+    "submission": false,
+    "training": false,
+    "weak_full_rows_used_for_training": false
+  },
+  "summary": {
+    "train": {
+      "family_counts": {
+        "bit_manipulation": 512,
+        "equation_transform": 46
+      },
+      "real_hard_negative_rows": 22,
+      "rejected_candidate_source_counts": {
+        "adapter_prediction": 22,
+        "simulated_wrong_prediction": 24
+      },
+      "rows": 558,
+      "source_role_counts": {
+        "bit_guardrail_replay": 512,
+        "equation_real_hard_negative": 22,
+        "equation_rule_replay": 24
+      },
+      "subcategory_counts": {
+        "bit_guardrail_replay": 512,
+        "v274_guarded_numeric_add_direct_over_model_add_variant": 14,
+        "v274_guarded_numeric_colon_absdiff_restore_trailing_zero": 13,
+        "v274_guarded_numeric_minus_direct_negative_restore_sign": 6,
+        "v274_guarded_numeric_minus_signed_opposite_sign_guarded": 13
+      }
+    },
+    "validation": {
+      "family_counts": {
+        "bit_manipulation": 128,
+        "equation_transform": 10
+      },
+      "real_hard_negative_rows": 4,
+      "rejected_candidate_source_counts": {
+        "adapter_prediction": 4,
+        "simulated_wrong_prediction": 6
+      },
+      "rows": 138,
+      "source_role_counts": {
+        "bit_guardrail_replay": 128,
+        "equation_real_hard_negative": 4,
+        "equation_rule_replay": 6
+      },
+      "subcategory_counts": {
+        "bit_guardrail_replay": 128,
+        "v274_guarded_numeric_add_direct_over_model_add_variant": 2,
+        "v274_guarded_numeric_colon_absdiff_restore_trailing_zero": 3,
+        "v274_guarded_numeric_minus_direct_negative_restore_sign": 2,
+        "v274_guarded_numeric_minus_signed_opposite_sign_guarded": 3
+      }
+    }
+  },
+  "thresholds": {
+    "bit_train_rows": 512,
+    "bit_val_rows": 128,
+    "min_hard_negatives": 20,
+    "min_rule_classes": 3,
+    "min_train_hard_negatives": 20
+  },
+  "validation_issues": []
+}

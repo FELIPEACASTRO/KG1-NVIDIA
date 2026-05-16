@@ -2325,5 +2325,34 @@ def train() -> None:
     upload_outputs(final_dir)
 
 
+def self_test() -> None:
+    print("=== HF JOB TRAIN V90 SELF TEST START ===", flush=True)
+    parsed = parse_weight_map("a=2.5,b:0.75")
+    assert parsed == {"a": 2.5, "b": 0.75}
+    for bad in ["a=0", "a=-1", "a=nan", "a=1,a=2", "missing_value"]:
+        try:
+            parse_weight_map(bad)
+        except ValueError:
+            pass
+        else:
+            raise AssertionError(f"parse_weight_map should reject {bad!r}")
+    toy_rows = [
+        {"family": "equation_transform", "subcategory": "rule_a", "source": "source_a"},
+        {"family": "bit_manipulation", "subcategory": "bit_guardrail_replay", "source": "source_b"},
+    ]
+    report = weighted_sample_report(toy_rows)
+    assert report["mode"] == SAMPLING_MODE
+    assert "weighted_share_by_source" in report
+    assert "weighted_share_by_subcategory" in report
+    print("hf_job_train_v90_self_test=ok", flush=True)
+    print("=== HF JOB TRAIN V90 SELF TEST END ===", flush=True)
+
+
 if __name__ == "__main__":
-    train()
+    if len(sys.argv) > 1:
+        if sys.argv[1:] == ["--self-test"]:
+            self_test()
+        else:
+            raise SystemExit("unknown arguments: " + " ".join(sys.argv[1:]))
+    else:
+        train()
