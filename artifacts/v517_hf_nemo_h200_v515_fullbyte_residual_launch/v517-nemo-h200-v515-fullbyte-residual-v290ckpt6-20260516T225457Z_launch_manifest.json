@@ -1,0 +1,442 @@
+{
+  "branch": "v230-v226-complementarity",
+  "dataset": {
+    "data_repo": "felipesp1983/kg1-v515-v514-fullbyte-residual-artifacts",
+    "data_root": "v515-hf-cpu-fullbyte-residual-20260516T221957Z",
+    "dataset_upload_commit": "hf-cpu-job:6a08edcf3308d79117b9167f;path:v515-hf-cpu-fullbyte-residual-20260516T221957Z",
+    "train_file": "v515-hf-cpu-fullbyte-residual-20260516T221957Z/v515_v514_fullbyte_residual_train.jsonl",
+    "train_rows": 2491,
+    "train_sha256": "145f7b8f6d4ba14efc1255073e73f1c6096aa2267a8cf4d5be63b44cf6dc71d9",
+    "val_file": "v515-hf-cpu-fullbyte-residual-20260516T221957Z/v515_v514_fullbyte_residual_val.jsonl",
+    "val_rows": 620,
+    "val_sha256": "06bb9f0a7c60b9a2840ea14e0f960439b68813fd0a4bc555d23b4b5b09a42206"
+  },
+  "expected_commit": "c1ca2f8f979f436780f1c2004f41a91ed5b4e454",
+  "flavor": "h200",
+  "generated_at_utc": "2026-05-16T22:54:59.072183+00:00",
+  "hardware": {
+    "accelerator_model": "H200",
+    "accelerator_quantity": "1",
+    "accelerator_vram": "141 GB",
+    "cpu": "23 vCPU",
+    "name": "h200",
+    "pretty_name": "Nvidia H200",
+    "ram": "256 GB",
+    "unit_cost_usd": 0.083333,
+    "unit_label": "minute"
+  },
+  "image": "nvcr.io/nvidia/nemo:25.11.nemotron_3_nano",
+  "init_adapter": {
+    "repo": "felipesp1983/kg1-nemotron-lora-v290-rank19-micro-patch-smoke",
+    "subfolder": "checkpoint-6"
+  },
+  "job_env": {
+    "KG1_ALLOWED_HF_FLAVORS": "h200",
+    "KG1_ANSWER_SPAN_LOSS_WEIGHT": "1.0",
+    "KG1_ANSWER_SPAN_MIN_WEIGHTED_TOKENS": "1",
+    "KG1_BRANCH": "v230-v226-complementarity",
+    "KG1_CRISIS_MODE_BACKFIRE_GUARD": "1",
+    "KG1_EXPECTED_COMMIT": "c1ca2f8f979f436780f1c2004f41a91ed5b4e454",
+    "KG1_EXPECTED_MAX_STEPS": "2",
+    "KG1_EXPECTED_TORCH_VERSION": "",
+    "KG1_HF_FLAVOR": "h200",
+    "KG1_HF_MAX_UNIT_COST_USD": "0.09",
+    "KG1_HF_UNIT_COST_USD": "0.083333",
+    "KG1_INIT_ADAPTER_REPO": "felipesp1983/kg1-nemotron-lora-v290-rank19-micro-patch-smoke",
+    "KG1_INIT_ADAPTER_SUBFOLDER": "checkpoint-6",
+    "KG1_LORA_TARGET_PARAMETERS": "mlp.experts.gate_up_proj,mlp.experts.down_proj",
+    "KG1_MAX_PROMPT_TRUNCATION_RATE": "0.0",
+    "KG1_MIN_GPU_TOTAL_GIB": "130",
+    "KG1_OUTPUT_REPO": "felipesp1983/kg1-nemotron-lora-v517-nemo-h200-v515-fullbyte-residual-v290ckpt6",
+    "KG1_REQUIRED_GPU_NAME_REGEX": "H200",
+    "KG1_REQUIRED_TRAIN_FAMILIES": "bit_manipulation,equation_transform",
+    "KG1_REQUIRED_TRAIN_SUBCATEGORIES": "bit_guardrail_replay,equation_numeric_add_direct_hard_negative,equation_numeric_colon_trailing_zero_hard_negative,equation_numeric_minus_signed_hard_negative,equation_numeric_add_direct,equation_numeric_colon_absdiff,equation_numeric_colon_trailing_zero,equation_numeric_minus_direct_negative,equation_numeric_minus_signed,v274_guarded_numeric_minus_signed_opposite_sign_guarded",
+    "KG1_REQUIRED_VAL_FAMILIES": "bit_manipulation,equation_transform",
+    "KG1_REQUIRED_VAL_SUBCATEGORIES": "bit_guardrail_replay,equation_numeric_add_direct_hard_negative,equation_numeric_colon_trailing_zero_hard_negative,equation_numeric_minus_signed_hard_negative,equation_numeric_add_direct,equation_numeric_colon_absdiff,equation_numeric_colon_trailing_zero,equation_numeric_minus_direct_negative,equation_numeric_minus_signed,v274_guarded_numeric_minus_signed_opposite_sign_guarded",
+    "KG1_REQUIRE_CUDA": "1",
+    "KG1_REQUIRE_LORA_TARGET_PARAMETERS_TRAINABLE": "1",
+    "KG1_REQUIRE_MAMBA_IMPORTS": "1",
+    "KG1_REQUIRE_OFFSET_MASK": "1",
+    "KG1_RUN_ID": "v517-nemo-h200-v515-fullbyte-residual-v290ckpt6-20260516T225457Z",
+    "KG1_SOURCE_WEIGHTS": "v514_traceable_bit_from_v510=1.50,v515_fullbyte_residual_from_v510=1.50,v498_numeric_teacher_trace_pack=1.00,v475_v325_equation_no_loss_distill=1.00,v460_v459_numeric_one_rule_micro_dataset=1.00",
+    "KG1_STRICT_INIT_ADAPTER_CONFIG": "1",
+    "KG1_SUBCATEGORY_WEIGHTS": "bit_guardrail_replay=1.00,equation_numeric_add_direct_hard_negative=1.00,equation_numeric_colon_trailing_zero_hard_negative=1.00,equation_numeric_minus_signed_hard_negative=1.00,equation_numeric_add_direct=1.00,equation_numeric_colon_absdiff=1.00,equation_numeric_colon_trailing_zero=1.00,equation_numeric_minus_direct_negative=1.00,equation_numeric_minus_signed=1.00,v274_guarded_numeric_minus_signed_opposite_sign_guarded=1.00",
+    "KG1_TRAINABLE_LORA_MODULES": "q_proj,k_proj,v_proj,o_proj,up_proj,down_proj",
+    "KG1_TRAIN_FILE": "v515-hf-cpu-fullbyte-residual-20260516T221957Z/v515_v514_fullbyte_residual_train.jsonl",
+    "KG1_TRAIN_ROWS": "2491",
+    "KG1_TRAIN_SHA": "145f7b8f6d4ba14efc1255073e73f1c6096aa2267a8cf4d5be63b44cf6dc71d9",
+    "KG1_VAL_FILE": "v515-hf-cpu-fullbyte-residual-20260516T221957Z/v515_v514_fullbyte_residual_val.jsonl",
+    "KG1_VAL_ROWS": "620",
+    "KG1_VAL_SHA": "06bb9f0a7c60b9a2840ea14e0f960439b68813fd0a4bc555d23b4b5b09a42206"
+  },
+  "job_id": "6a08f6043308d79117b916de",
+  "job_status": "RUNNING",
+  "job_url": "https://huggingface.co/jobs/felipesp1983/6a08f6043308d79117b916de",
+  "mode": "launched",
+  "namespace": "felipesp1983",
+  "next_action": "Monitor every 40 seconds; run weak eval checkpoint-2 only if training uploads a complete adapter.",
+  "objective_alignment": {
+    "path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v517_hf_nemo_h200_v515_fullbyte_residual_launch\\v517-nemo-h200-v515-fullbyte-residual-v290ckpt6-20260516T225457Z_objective_alignment_gate.json",
+    "report": {
+      "dataset_manifest_json": "",
+      "findings": [],
+      "generated_at_utc": "2026-05-16T22:54:58.566342+00:00",
+      "hf_gpu_allowed": true,
+      "schema_version": "kg1_v478_training_objective_alignment_gate_v1",
+      "source_weights": {
+        "v460_v459_numeric_one_rule_micro_dataset": 1.0,
+        "v475_v325_equation_no_loss_distill": 1.0,
+        "v498_numeric_teacher_trace_pack": 1.0,
+        "v514_traceable_bit_from_v510": 1.5,
+        "v515_fullbyte_residual_from_v510": 1.5
+      },
+      "subcategory_weights": {
+        "bit_guardrail_replay": 1.0,
+        "equation_numeric_add_direct": 1.0,
+        "equation_numeric_add_direct_hard_negative": 1.0,
+        "equation_numeric_colon_absdiff": 1.0,
+        "equation_numeric_colon_trailing_zero": 1.0,
+        "equation_numeric_colon_trailing_zero_hard_negative": 1.0,
+        "equation_numeric_minus_direct_negative": 1.0,
+        "equation_numeric_minus_signed": 1.0,
+        "equation_numeric_minus_signed_hard_negative": 1.0,
+        "v274_guarded_numeric_minus_signed_opposite_sign_guarded": 1.0
+      },
+      "thresholds": {
+        "max_any_family_effective_share": 0.8,
+        "max_equation_effective_share": 0.8,
+        "min_bit_effective_share": 0.2
+      },
+      "train": {
+        "effective_share_by_family": {
+          "bit_manipulation": {
+            "share": 0.260128,
+            "weight": 709.5
+          },
+          "equation_transform": {
+            "share": 0.739872,
+            "weight": 2018.0
+          }
+        },
+        "effective_share_by_source": {
+          "v460_v459_numeric_one_rule_micro_dataset": {
+            "share": 0.006599,
+            "weight": 18.0
+          },
+          "v475_v325_equation_no_loss_distill": {
+            "share": 0.293309,
+            "weight": 800.0
+          },
+          "v498_numeric_teacher_trace_pack": {
+            "share": 0.439963,
+            "weight": 1200.0
+          },
+          "v514_traceable_bit_from_v510": {
+            "share": 0.256279,
+            "weight": 699.0
+          },
+          "v515_fullbyte_residual_from_v510": {
+            "share": 0.00385,
+            "weight": 10.5
+          }
+        },
+        "effective_share_by_subcategory": {
+          "bit_guardrail_replay": {
+            "share": 0.260128,
+            "weight": 709.5
+          },
+          "equation_numeric_add_direct": {
+            "share": 0.058662,
+            "weight": 160.0
+          },
+          "equation_numeric_add_direct_hard_negative": {
+            "share": 0.146654,
+            "weight": 400.0
+          },
+          "equation_numeric_colon_absdiff": {
+            "share": 0.058662,
+            "weight": 160.0
+          },
+          "equation_numeric_colon_trailing_zero": {
+            "share": 0.058662,
+            "weight": 160.0
+          },
+          "equation_numeric_colon_trailing_zero_hard_negative": {
+            "share": 0.146654,
+            "weight": 400.0
+          },
+          "equation_numeric_minus_direct_negative": {
+            "share": 0.058662,
+            "weight": 160.0
+          },
+          "equation_numeric_minus_signed": {
+            "share": 0.058662,
+            "weight": 160.0
+          },
+          "equation_numeric_minus_signed_hard_negative": {
+            "share": 0.146654,
+            "weight": 400.0
+          },
+          "v274_guarded_numeric_minus_signed_opposite_sign_guarded": {
+            "share": 0.006599,
+            "weight": 18.0
+          }
+        },
+        "effective_total_weight": 2727.5,
+        "physical_share_by_family": {
+          "bit_manipulation": {
+            "rows": 473,
+            "share": 0.189884
+          },
+          "equation_transform": {
+            "rows": 2018,
+            "share": 0.810116
+          }
+        },
+        "physical_share_by_source": {
+          "v460_v459_numeric_one_rule_micro_dataset": {
+            "rows": 18,
+            "share": 0.007226
+          },
+          "v475_v325_equation_no_loss_distill": {
+            "rows": 800,
+            "share": 0.321156
+          },
+          "v498_numeric_teacher_trace_pack": {
+            "rows": 1200,
+            "share": 0.481734
+          },
+          "v514_traceable_bit_from_v510": {
+            "rows": 466,
+            "share": 0.187073
+          },
+          "v515_fullbyte_residual_from_v510": {
+            "rows": 7,
+            "share": 0.00281
+          }
+        },
+        "physical_share_by_subcategory": {
+          "bit_guardrail_replay": {
+            "rows": 473,
+            "share": 0.189884
+          },
+          "equation_numeric_add_direct": {
+            "rows": 160,
+            "share": 0.064231
+          },
+          "equation_numeric_add_direct_hard_negative": {
+            "rows": 400,
+            "share": 0.160578
+          },
+          "equation_numeric_colon_absdiff": {
+            "rows": 160,
+            "share": 0.064231
+          },
+          "equation_numeric_colon_trailing_zero": {
+            "rows": 160,
+            "share": 0.064231
+          },
+          "equation_numeric_colon_trailing_zero_hard_negative": {
+            "rows": 400,
+            "share": 0.160578
+          },
+          "equation_numeric_minus_direct_negative": {
+            "rows": 160,
+            "share": 0.064231
+          },
+          "equation_numeric_minus_signed": {
+            "rows": 160,
+            "share": 0.064231
+          },
+          "equation_numeric_minus_signed_hard_negative": {
+            "rows": 400,
+            "share": 0.160578
+          },
+          "v274_guarded_numeric_minus_signed_opposite_sign_guarded": {
+            "rows": 18,
+            "share": 0.007226
+          }
+        },
+        "rows": 2491,
+        "unknown_source_rows": 0,
+        "unknown_subcategory_rows": 0
+      },
+      "train_jsonl": "C:\\Users\\davis\\.cache\\huggingface\\hub\\datasets--felipesp1983--kg1-v515-v514-fullbyte-residual-artifacts\\snapshots\\7b3b2029413520b8094b6b2fb52087e5f4e9e01e\\v515-hf-cpu-fullbyte-residual-20260516T221957Z\\v515_v514_fullbyte_residual_train.jsonl",
+      "val_jsonl": "C:\\Users\\davis\\.cache\\huggingface\\hub\\datasets--felipesp1983--kg1-v515-v514-fullbyte-residual-artifacts\\snapshots\\7b3b2029413520b8094b6b2fb52087e5f4e9e01e\\v515-hf-cpu-fullbyte-residual-20260516T221957Z\\v515_v514_fullbyte_residual_val.jsonl",
+      "validation": {
+        "effective_share_by_family": {
+          "bit_manipulation": {
+            "share": 0.256637,
+            "weight": 174.0
+          },
+          "equation_transform": {
+            "share": 0.743363,
+            "weight": 504.0
+          }
+        },
+        "effective_share_by_source": {
+          "v460_v459_numeric_one_rule_micro_dataset": {
+            "share": 0.0059,
+            "weight": 4.0
+          },
+          "v475_v325_equation_no_loss_distill": {
+            "share": 0.294985,
+            "weight": 200.0
+          },
+          "v498_numeric_teacher_trace_pack": {
+            "share": 0.442478,
+            "weight": 300.0
+          },
+          "v514_traceable_bit_from_v510": {
+            "share": 0.254425,
+            "weight": 172.5
+          },
+          "v515_fullbyte_residual_from_v510": {
+            "share": 0.002212,
+            "weight": 1.5
+          }
+        },
+        "effective_share_by_subcategory": {
+          "bit_guardrail_replay": {
+            "share": 0.256637,
+            "weight": 174.0
+          },
+          "equation_numeric_add_direct": {
+            "share": 0.058997,
+            "weight": 40.0
+          },
+          "equation_numeric_add_direct_hard_negative": {
+            "share": 0.147493,
+            "weight": 100.0
+          },
+          "equation_numeric_colon_absdiff": {
+            "share": 0.058997,
+            "weight": 40.0
+          },
+          "equation_numeric_colon_trailing_zero": {
+            "share": 0.058997,
+            "weight": 40.0
+          },
+          "equation_numeric_colon_trailing_zero_hard_negative": {
+            "share": 0.147493,
+            "weight": 100.0
+          },
+          "equation_numeric_minus_direct_negative": {
+            "share": 0.058997,
+            "weight": 40.0
+          },
+          "equation_numeric_minus_signed": {
+            "share": 0.058997,
+            "weight": 40.0
+          },
+          "equation_numeric_minus_signed_hard_negative": {
+            "share": 0.147493,
+            "weight": 100.0
+          },
+          "v274_guarded_numeric_minus_signed_opposite_sign_guarded": {
+            "share": 0.0059,
+            "weight": 4.0
+          }
+        },
+        "effective_total_weight": 678.0,
+        "physical_share_by_family": {
+          "bit_manipulation": {
+            "rows": 116,
+            "share": 0.187097
+          },
+          "equation_transform": {
+            "rows": 504,
+            "share": 0.812903
+          }
+        },
+        "physical_share_by_source": {
+          "v460_v459_numeric_one_rule_micro_dataset": {
+            "rows": 4,
+            "share": 0.006452
+          },
+          "v475_v325_equation_no_loss_distill": {
+            "rows": 200,
+            "share": 0.322581
+          },
+          "v498_numeric_teacher_trace_pack": {
+            "rows": 300,
+            "share": 0.483871
+          },
+          "v514_traceable_bit_from_v510": {
+            "rows": 115,
+            "share": 0.185484
+          },
+          "v515_fullbyte_residual_from_v510": {
+            "rows": 1,
+            "share": 0.001613
+          }
+        },
+        "physical_share_by_subcategory": {
+          "bit_guardrail_replay": {
+            "rows": 116,
+            "share": 0.187097
+          },
+          "equation_numeric_add_direct": {
+            "rows": 40,
+            "share": 0.064516
+          },
+          "equation_numeric_add_direct_hard_negative": {
+            "rows": 100,
+            "share": 0.16129
+          },
+          "equation_numeric_colon_absdiff": {
+            "rows": 40,
+            "share": 0.064516
+          },
+          "equation_numeric_colon_trailing_zero": {
+            "rows": 40,
+            "share": 0.064516
+          },
+          "equation_numeric_colon_trailing_zero_hard_negative": {
+            "rows": 100,
+            "share": 0.16129
+          },
+          "equation_numeric_minus_direct_negative": {
+            "rows": 40,
+            "share": 0.064516
+          },
+          "equation_numeric_minus_signed": {
+            "rows": 40,
+            "share": 0.064516
+          },
+          "equation_numeric_minus_signed_hard_negative": {
+            "rows": 100,
+            "share": 0.16129
+          },
+          "v274_guarded_numeric_minus_signed_opposite_sign_guarded": {
+            "rows": 4,
+            "share": 0.006452
+          }
+        },
+        "rows": 620,
+        "unknown_source_rows": 0,
+        "unknown_subcategory_rows": 0
+      }
+    }
+  },
+  "output_repo": "felipesp1983/kg1-nemotron-lora-v517-nemo-h200-v515-fullbyte-residual-v290ckpt6",
+  "recipe": {
+    "answer_span_loss_weight": "1.0",
+    "answer_span_min_weighted_tokens": "1",
+    "eval_every_steps": 2,
+    "eval_max_examples": 128,
+    "final_learning_rate": "5.0e-9",
+    "learning_rate": "2.0e-8",
+    "max_steps": 2,
+    "previous_version": "V511 V510 canonical H200 smoke",
+    "promotion_gate": "reject unless total>192, equation>55 label-free, bit>=136, truncated=0; prefer equation>=59/60 without bit loss",
+    "save_every_steps": 2,
+    "source_weights": "v514_traceable_bit_from_v510=1.50,v515_fullbyte_residual_from_v510=1.50,v498_numeric_teacher_trace_pack=1.00,v475_v325_equation_no_loss_distill=1.00,v460_v459_numeric_one_rule_micro_dataset=1.00",
+    "subcategory_weights": "bit_guardrail_replay=1.00,equation_numeric_add_direct_hard_negative=1.00,equation_numeric_colon_trailing_zero_hard_negative=1.00,equation_numeric_minus_signed_hard_negative=1.00,equation_numeric_add_direct=1.00,equation_numeric_colon_absdiff=1.00,equation_numeric_colon_trailing_zero=1.00,equation_numeric_minus_direct_negative=1.00,equation_numeric_minus_signed=1.00,v274_guarded_numeric_minus_signed_opposite_sign_guarded=1.00",
+    "target_parameters_trainability": "required_trainable",
+    "trainable_lora_modules": "q_proj,k_proj,v_proj,o_proj,up_proj,down_proj",
+    "version_comparison_artifact": "artifacts/version_diffs/V517_VS_V511.md"
+  },
+  "run_id": "v517-nemo-h200-v515-fullbyte-residual-v290ckpt6-20260516T225457Z",
+  "version": "v517_v515_fullbyte_residual_moe_trainable_no_lmhead_from_v290_checkpoint6_nemo_h200"
+}

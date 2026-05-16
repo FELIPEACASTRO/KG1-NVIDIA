@@ -1,0 +1,9 @@
+{
+  "file_count": 1,
+  "files": [
+    "artifacts/v518_hf_h200_v517_weak_eval_launch/launch_v518_hf_weak_eval_v517_checkpoint2.py"
+  ],
+  "findings": [],
+  "ok": true,
+  "schema_version": "kg1_static_safety_gate_v1"
+}
