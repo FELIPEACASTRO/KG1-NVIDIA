@@ -922,6 +922,10 @@ def run_self_test() -> int:
         raise AssertionError(f"boxed binary escape mismatch: {boxed_binary!r}")
     if extract_final_answer(boxed_binary) != "00101010":
         raise AssertionError("boxed binary extraction did not preserve leading zeros")
+    if extract_final_answer(r"Answer \boxed{42}. \text{done}") != "42":
+        raise AssertionError("boxed extraction consumed text after the balanced closing brace")
+    if extract_final_answer(r"Answer \boxed{\frac{1}{2}} trailing") != r"\frac{1}{2}":
+        raise AssertionError("boxed extraction failed nested LaTeX payload")
     if not verify_answer("00101010", "00101010"):
         raise AssertionError("binary exact verify failed")
     if verify_answer("00101010", "101010"):
@@ -1015,8 +1019,8 @@ def main() -> int:
     parser.add_argument("--preferred-baseline", default="v226__v226_best_checkpoint1_observed_191")
     parser.add_argument("--weak-total-min", type=int, default=193)
     parser.add_argument("--weak-eq-min", type=int, default=60)
-    parser.add_argument("--weak-bit-min", type=int, default=133)
-    parser.add_argument("--weak-trunc-max", type=int, default=3)
+    parser.add_argument("--weak-bit-min", type=int, default=136)
+    parser.add_argument("--weak-trunc-max", type=int, default=0)
     parser.add_argument("--expected-baseline-correct", type=int, default=191)
     parser.add_argument("--expected-baseline-rows", type=int, default=315)
     parser.add_argument("--expected-baseline-adapter", default="")

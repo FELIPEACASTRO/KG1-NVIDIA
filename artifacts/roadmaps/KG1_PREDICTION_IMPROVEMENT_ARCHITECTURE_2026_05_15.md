@@ -124,10 +124,10 @@ flowchart TD
 | Integration Gate | `scripts/kg1_pre_paid_job_integration_gate.py` | Valida pecas, dataset, launcher e kill-switch antes de job pago |
 | HF Job | H200 curto | Executa apenas smoke com limite de 1 hora |
 | FinOps | Checkpoint 3 | Cancela cedo se a metrica interna piorar |
-| Weak Gate | `192/315`, `56/155`, `136/160` | Primeiro criterio real para promover checkpoint |
-| Full Gate | `823/947` | Criterio final antes de package/submit |
+| Weak Gate | promover somente se `>192/315`, `equation>56/155`, `bit>=136/160`, `truncation=0`; alvo operacional `equation>=60/155` | Primeiro criterio real para promover checkpoint |
+| Full Gate | package novo exige official-like `>=831/947` e `truncated<=4`; qualquer ranking delta precisa superar o historico `823/947` | Criterio final antes de package/submit |
 
-## Estado Atual Da Linha V439/V440
+## Estado Atual Das Linhas Historicas V439/V440
 
 - Dataset V439: final-answer-only, `109` train, `24` validation.
 - Train SHA: `bc032da2f7cada19aef295aa91aef6098e03c7b85215e7729f1ddd71b3e5079a`.
@@ -136,7 +136,11 @@ flowchart TD
 - Integration gate local: aprovado, zero findings.
 - HF job V440: H200, max `12` steps, checkpoint/eval no step `3`, timeout `3600s`.
 - Resultado V440: checkpoint-3 empatou baseline interno `8/24`, equation `7/22`, bit `1/2`; job cancelado por FinOps.
-- Proxima rota arquitetural: nao repetir `mean_nll` final-answer-only; mudar para CPU gate de solver/DSL ou objetivo focado no boxed payload.
+- Status: linha historica fechada; nao repetir `mean_nll` final-answer-only.
+- Proxima rota arquitetural ativa: CPU-only, criar dataset limpo novo somente
+  depois de gate de simbolos/contradicoes/referencia; nenhum job GPU ativo.
+- V447/V461/V463/V464/V468 e adapters V448/V465/V469 estao quarentenados e
+  nao podem alimentar treino, eval, package ou submit.
 
 ## O Que Nao Promove Submit
 

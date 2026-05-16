@@ -150,7 +150,7 @@ flowchart TD
 
 O weak atual mostra:
 
-- `bit_manipulation`: `136/160`, ja acima do gate minimo de `133`.
+- `bit_manipulation`: `136/160`, no piso submit-safe atual de `136`.
 - `equation_transform`: `56/155`, abaixo da meta operacional de `60`.
 - Total: `192/315`, ainda sem margem para promover full/package com seguranca.
 
@@ -373,11 +373,11 @@ V443 executou o builder CPU de pares certificados para equation e retornou
 em substituicoes textuais simples, slot-map global ou regras de string com LOO
 e renaming stability. Essa rota fica fechada ate existir uma DSL mais forte.
 
-V444 mudou a frente ativa para um teste minimo de transferencia supervisionada:
-usar apenas os traces reconstruidos de alta confianca (`rule_found` e
-`hypothesis_formed`) e remover `rule_unknown`. O dataset ficou com `1848`
-linhas de treino e `172` de validacao, passou tokenizacao sem truncation, foi
-publicado no HF e treinou um smoke H200 de quatro steps.
+V444 foi um teste minimo de transferencia supervisionada historico: usou traces
+`rule_found` e `hypothesis_formed`, removeu `rule_unknown`, passou tokenizacao
+sem truncation, publicou no HF e treinou um smoke H200 de quatro steps.
+Depois da auditoria V472/V473, `hypothesis_formed` nao e mais aceito como fonte
+ativa para novos datasets de treino sem verificacao adicional de contradicao.
 
 Problema principal agora:
 
@@ -392,6 +392,8 @@ Decisao:
 1. V444 foi cancelado por FinOps no primeiro checkpoint avaliado.
 2. Resultado checkpoint-2: total `190/315`, equation `56/155`, bit `134/160`,
    truncated `1`.
-3. O proximo plano nao e mais SFT reconstruido; volta para auditoria CPU de
+3. V448/V461/V463/V464/V468 e adapters derivados V448/V465/V469 ficam
+   quarentenados/fail-closed.
+4. O proximo plano nao e mais SFT reconstruido; volta para auditoria CPU de
    raw output/parse ou DSL/solver equation mais expressivo, com prova CPU antes
    de qualquer GPU.

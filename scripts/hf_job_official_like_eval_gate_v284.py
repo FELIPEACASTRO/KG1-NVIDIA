@@ -311,9 +311,13 @@ def validate_adapter(adapter_dir: Path) -> dict[str, Any]:
         raise RuntimeError(f"adapter r mismatch: expected {expected_r}, got {config.get('r')}")
     if int(config.get("lora_alpha", -1)) != expected_alpha:
         raise RuntimeError(f"adapter alpha mismatch: expected {expected_alpha}, got {config.get('lora_alpha')}")
+    config_sha = sha256_file(config_path)
+    weights_sha = sha256_file(weights_path)
     return {
         "adapter_dir": str(adapter_dir),
         "adapter_weights_bytes": int(weights_path.stat().st_size),
+        "adapter_config_sha256": config_sha,
+        "adapter_model_sha256": weights_sha,
         "target_modules": config.get("target_modules"),
         "target_parameters": config.get("target_parameters"),
         "r": config.get("r"),
@@ -334,11 +338,12 @@ def parse_adapter_specs(adapter_repo: str, adapter_subfolders_raw: str) -> list[
             repo = str(item.get("repo", "")).strip()
             subfolder = str(item.get("subfolder", "")).strip().strip("/")
             name = str(item.get("name", "")).strip()
+            revision = str(item.get("revision", "")).strip()
             if not repo:
                 raise RuntimeError(f"adapter spec at index {index} missing repo")
             if not name:
                 name = f"candidate_{index}_{subfolder.replace('/', '_') or 'root'}"
-            specs.append({"repo": repo, "subfolder": subfolder, "name": name})
+            specs.append({"repo": repo, "subfolder": subfolder, "name": name, "revision": revision})
         return specs
     subfolders = [part.strip().strip("/") for part in adapter_subfolders_raw.split(",") if part.strip()]
     if not subfolders:
@@ -351,6 +356,7 @@ def parse_adapter_specs(adapter_repo: str, adapter_subfolders_raw: str) -> list[
             "repo": adapter_repo,
             "subfolder": subfolder,
             "name": names[index] if names else f"v284_official_like_{subfolder.replace('/', '_') or 'root'}",
+            "revision": env_str("KG1_ADAPTER_REVISION"),
         }
         for index, subfolder in enumerate(subfolders)
     ]
@@ -433,29 +439,49 @@ def run_eval(args: argparse.Namespace) -> dict[str, Any]:
     log_json("full_manifest_gate", manifest_meta)
 
     adapter_cache_dir = Path(env_str("KG1_ADAPTER_CACHE_DIR", "/tmp/kg1_v284_adapter_snapshots")) / run_id
+    hub_api = HfApi(token=token or None)
     repo_roots: dict[str, Path] = {}
     for repo in sorted({spec["repo"] for spec in adapter_specs}):
         subfolders = sorted({spec["subfolder"] for spec in adapter_specs if spec["repo"] == repo})
+        revisions = sorted({spec.get("revision", "") for spec in adapter_specs if spec["repo"] == repo})
+        if len(revisions) > 1:
+            raise RuntimeError(f"adapter specs for repo {repo} use multiple revisions: {revisions}")
+        revision = revisions[0] if revisions else ""
         allow_patterns = [f"{subfolder}/*" for subfolder in subfolders if subfolder] or ["*"]
         repo_cache_dir = adapter_cache_dir / hashlib.sha256(repo.encode("utf-8")).hexdigest()[:12]
+        model_info = hub_api.model_info(repo_id=repo, revision=revision or None)
         print("snapshot_adapter_repo =", repo, flush=True)
+        print("snapshot_adapter_revision =", revision or "<default>", flush=True)
+        print("snapshot_adapter_resolved_revision =", model_info.sha, flush=True)
         print("snapshot_allow_patterns =", json.dumps(allow_patterns), flush=True)
         repo_roots[repo] = Path(
             snapshot_download(
                 repo_id=repo,
                 repo_type="model",
+                revision=revision or None,
                 allow_patterns=allow_patterns,
                 local_dir=str(repo_cache_dir),
                 token=token or None,
             )
         )
+        for spec in adapter_specs:
+            if spec["repo"] == repo:
+                spec["resolved_revision"] = str(model_info.sha or "")
 
     adapter_metas: list[dict[str, Any]] = []
     candidate_payload: list[dict[str, str]] = []
     for spec in adapter_specs:
         adapter_dir = repo_roots[spec["repo"]] / spec["subfolder"] if spec["subfolder"] else repo_roots[spec["repo"]]
         adapter_meta = validate_adapter(adapter_dir)
-        adapter_meta.update({"repo": spec["repo"], "subfolder": spec["subfolder"], "candidate_name": spec["name"]})
+        adapter_meta.update(
+            {
+                "repo": spec["repo"],
+                "subfolder": spec["subfolder"],
+                "revision": spec.get("revision", ""),
+                "resolved_revision": spec.get("resolved_revision", ""),
+                "candidate_name": spec["name"],
+            }
+        )
         adapter_metas.append(adapter_meta)
         candidate_payload.append({"name": spec["name"], "adapter": str(adapter_dir), "source_kind": "hf_model_repo"})
     log_json("adapter_gates", {"count": len(adapter_metas), "adapters": adapter_metas})
@@ -675,7 +701,9 @@ def main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
     if args.self_test:
         return self_test()
-    run_eval(args)
+    manifest = run_eval(args)
+    if manifest.get("full_candidate_gate") is not True and not env_bool("KG1_ALLOW_FAILED_GATE_EXIT_0", False):
+        raise RuntimeError("official-like full eval gate failed; refusing successful exit")
     return 0
 
 

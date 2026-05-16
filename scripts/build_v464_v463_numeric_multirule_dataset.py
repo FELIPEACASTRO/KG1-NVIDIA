@@ -379,6 +379,12 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
     global ACTIVE_VERSION
     ACTIVE_VERSION = str(args.label)
     print("=== V464 V463 NUMERIC MULTIRULE DATASET START ===", flush=True)
+    if not args.allow_quarantined_rebuild:
+        raise RuntimeError(
+            "V464/V463 builder is quarantined and fail-closed: crisis audit found "
+            "contradictory rejected candidates and downstream V468 reference leakage. "
+            "Create a new clean builder/version with explicit forbidden_reference_csvs instead."
+        )
     print("v463_manifest_json =", args.v463_manifest_json, flush=True)
     print("v463_detail_csv =", args.v463_detail_csv, flush=True)
     print("bit_train_jsonl =", args.bit_train_jsonl, flush=True)
@@ -602,6 +608,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--min-rule-classes", type=int, default=3)
     parser.add_argument("--bit-train-rows", type=int, default=512)
     parser.add_argument("--bit-val-rows", type=int, default=128)
+    parser.add_argument("--allow-quarantined-rebuild", action="store_true")
     return parser.parse_args()
 
 

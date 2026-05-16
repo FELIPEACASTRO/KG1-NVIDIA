@@ -366,7 +366,7 @@ def metric_parity_report() -> dict[str, Any]:
         {"name": "plain", "text": r"\boxed{42}", "expected_boxes": ["42"], "expected_final": "42"},
         {"name": "last_boxed", "text": r"noise \boxed{1} more \boxed{2}", "expected_boxes": ["1", "2"], "expected_final": "2"},
         {"name": "nested_latex", "text": r"\boxed{\frac{1}{2}}", "expected_boxes": [r"\frac{1}{2}"], "expected_final": r"\frac{1}{2}"},
-        {"name": "literal_brace_payload", "text": r"\boxed{}52}", "expected_boxes": ["}52"], "expected_final": "}52"},
+        {"name": "post_boxed_brace_text", "text": r"\boxed{52} \text{done}", "expected_boxes": ["52"], "expected_final": "52"},
         {"name": "unclosed", "text": r"\boxed{abc", "expected_boxes": ["abc"], "expected_final": "abc"},
         {"name": "fullwidth_colon", "text": "Final answer\uFF1A 99", "expected_boxes": [], "expected_final": "99"},
     ]

@@ -116,14 +116,34 @@ def extract_boxed_answers(text: str | None) -> list[str]:
     if text is None:
         return []
     value = str(text)
-    starts = list(re.finditer(r"\\boxed\{", value))
     matches: list[str] = []
-    for index, match in enumerate(starts):
-        start = match.end()
-        end = starts[index + 1].start() if index + 1 < len(starts) else len(value)
-        segment = value[start:end]
-        last_brace = segment.rfind("}")
-        matches.append(segment[:last_brace] if last_brace != -1 else segment)
+    marker = r"\boxed{"
+    cursor = 0
+    while True:
+        marker_pos = value.find(marker, cursor)
+        if marker_pos == -1:
+            break
+        start = marker_pos + len(marker)
+        depth = 1
+        index = start
+        while index < len(value):
+            char = value[index]
+            if char == "\\" and index + 1 < len(value):
+                index += 2
+                continue
+            if char == "{":
+                depth += 1
+            elif char == "}":
+                depth -= 1
+                if depth == 0:
+                    break
+            index += 1
+        if depth == 0:
+            matches.append(value[start:index])
+            cursor = index + 1
+        else:
+            matches.append(value[start:])
+            break
     return matches
 
 

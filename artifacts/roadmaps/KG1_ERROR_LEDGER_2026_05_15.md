@@ -501,7 +501,9 @@ Regra preventiva:
 - O debug do launcher deve validar os mesmos `KG1_REQUIRED_*` que o job remoto
   usa, e qualquer mismatch bloqueia launch.
 
-Status: corrigindo em V464/V465; rerodar dataset, token gate, upload e launch.
+Status: linha V464/V465 encerrada. O builder V464 agora e fail-closed por
+padrao, launch/upload/eval V465/V466 foram arquivados, e nenhum rerun dessa
+rota pode ser usado sem nova versao limpa.
 
 ### E016 - V464 trace rejeitava candidato igual ao gabarito
 
@@ -537,8 +539,10 @@ Regra preventiva:
 - `hf_job_train_v90.py --self-test` agora e um self-test real; argumentos
   desconhecidos nao podem iniciar treino por engano.
 
-Status: corrigido em V468/V469. V468 tem `0/56` contradicoes, passou token gate
-real, foi reenviado ao HF e e a unica rota liberada para novo smoke.
+Status: V468 corrigiu a contradicao `rejected_candidate == answer`, mas depois
+foi bloqueado em V472/V473 por seed exata de referencia full. V468/V469/V470
+ficam encerrados para treino/eval GPU; nenhuma rota GPU esta liberada a partir
+dessa familia de artefatos.
 
 ### E017 - Evaluator podia gerar accuracy falso quando `answer` estava ausente
 
@@ -665,8 +669,8 @@ Status: corrigido em V472.
 
 Evidencia:
 
-- Auditoria independente V472 encontrou o prompt/answer `63-19 -> -55` em
-  `v468_v464_symbol_fix_dataset_train.jsonl`.
+- Auditoria independente V472 encontrou o prompt/answer `63-19 -> -55` no
+  JSONL de treino V468, antes da remocao operacional V473.
 - A mesma combinacao bate com a referencia full local `v291_full_predictions`
   no id `7688e06e`.
 - A origem rastreada foi a rota V461/V463.
@@ -770,20 +774,118 @@ Evidencia:
 - Data integrity scan V472 confirmou novamente que V464 antigo contem
   `24` linhas train e `6` linhas validation onde o rejected candidate verifica
   igual ao gabarito.
-- V468 corrigiu a geracao, mas V464 ainda existe como artefato historico.
+- V468 corrigiu parcialmente a geracao, mas V464 continuava rastreado ate a
+  remocao operacional V473.
 
 Impacto:
 
-- Um launch HF manual poderia apontar para o dataset V464 antigo e repetir a
-  rota contaminada.
+- Antes de V473, um launch HF manual poderia apontar para o dataset V464 antigo
+  e repetir a rota contaminada.
 
 Regra preventiva:
 
 - `hf_job_preflight_gate.py` agora bloqueia qualquer training identity que
   contenha `v464_v463_numeric_multirule_dataset`.
-- A mensagem instrui usar V468 ou dataset posterior corrigido.
+- A mensagem instrui criar dataset posterior limpo; V468 tambem esta
+  quarentenado por overlap de referencia.
 
 Status: corrigido em V472.
+
+Atualizacao V473: os JSONL/manifests rastreados de V447/V464/V468 foram
+removidos da arvore ativa; o historico fica registrado no ledger e no relatorio
+`V473_QUARANTINED_ARTIFACT_REMOVAL.md`.
+
+### E028 - Launchers e defaults antigos podiam reabrir rotas quarentenadas
+
+Evidencia:
+
+- Scan V473 em `scripts`, `src` e `artifacts` encontrou defaults antigos em
+  argparse: `--weak-bit-min=133` e `--weak-trunc-max=3`.
+- Launchers V448/V462/V465/V466/V469/V470 ainda eram executaveis e apontavam
+  para datasets/adapters derivados de V447/V461/V464/V468.
+
+Impacto:
+
+- Mesmo com o roadmap correto, um comando manual poderia relancar uma rota
+  sabidamente contaminada ou promover com threshold frouxo.
+- Isso cria risco direto de gasto HF e ACC falso.
+
+Regra preventiva:
+
+- Defaults antigos foram atualizados para bit `136` e truncation `0`.
+- Launchers das rotas quarentenadas agora falham imediatamente com
+  `RuntimeError` fail-closed.
+- `kg1_static_safety_gate.py` agora bloqueia defaults argparse antigos e
+  adapter repos derivados de V448/V465/V469.
+
+Status: corrigido em V473.
+
+### E029 - Package podia desamarrar manifest avaliado do adapter baixado
+
+Evidencia:
+
+- Auditoria V473 apontou que `scripts/package_hf_adapter_submission.py`
+  validava `full_candidate_gate`, mas baixava `repo/subfolder` sem exigir
+  revision imutavel nem comparar hashes avaliados do adapter.
+- O default antigo `--min-full-correct=823` ficava abaixo do piso operacional
+  atual de package novo.
+
+Impacto:
+
+- Um manifest bom poderia autorizar empacotar outro checkpoint ou a ponta
+  `latest` do mesmo repo.
+- Isso podia gerar submit com adapter diferente do que foi medido.
+
+Regra preventiva:
+
+- Package novo exige manifest official-like V284, controles oficiais
+  (`max_tokens=7680`, `max_model_len=8192`, `max_num_seqs=64`, prompt suffix
+  oficial e sem postprocessor), row contract full esperado, repo/subfolder
+  iguais ao adapter avaliado, revision/resolved_revision imutavel e hashes de
+  `adapter_config.json`/`adapter_model.safetensors`.
+- Default de package passa a `--min-full-correct=831`; reempacotar V291
+  historico exige decisao explicita fora da rota nova.
+
+Status: corrigido em V473; static safety gate agora protege esses snippets.
+
+### E030 - Metric parser de `\boxed{}` podia consumir texto depois da resposta
+
+Evidencia:
+
+- `extract_boxed_answers` procurava o ultimo `}` antes do proximo `\boxed{}`.
+  Em saidas como `\boxed{42}. \text{done}`, o payload podia virar
+  `42}. \text{done`, produzindo falso negativo de ACC.
+
+Impacto:
+
+- ACC, error mining e gates podiam marcar resposta correta como errada quando
+  havia texto LaTeX depois da caixa final.
+
+Regra preventiva:
+
+- Parser central agora e balanceado: fecha no par correspondente de `\boxed{`,
+  preserva payloads aninhados como `\frac{1}{2}` e ignora braces posteriores.
+- Self-tests adicionados cobrem texto pos-box e payload LaTeX aninhado.
+
+Status: corrigido em V473.
+
+### E031 - Gates de eval podiam sair com sucesso apesar de gate falso
+
+Evidencia:
+
+- Jobs V276/V277/V284 escreviam `full_candidate_gate=false` ou
+  `weak_gate_pass=false`, mas `main()` retornava `0`.
+
+Impacto:
+
+- Automacao externa poderia interpretar job verde como promovivel.
+
+Regra preventiva:
+
+- Esses jobs agora falham por padrao quando o gate falha. Modo diagnostico
+  precisa ser opt-in explicito com `KG1_ALLOW_FAILED_GATE_EXIT_0=1`.
+
+Status: corrigido em V473.
 
 ## Prompt Externo
 

@@ -20,6 +20,18 @@ from typing import Any
 
 
 ROOT = Path(__file__).resolve().parents[1]
+BLOCKED_DATASET_MARKERS = {
+    "v447_v446_trace_dataset": "V447 traces contain hypothesis_formed contradictions.",
+    "v461_synthetic_numeric_probe_pack": "V461 contains a full-reference exact prompt/answer seed.",
+    "v463_v462_synthetic_numeric_hard_negative_audit": "V463 depends on the quarantined V461/V462 route.",
+    "v464_v463_numeric_multirule_dataset": "V464 contains rejected_candidate == answer contamination.",
+    "v468_v464_symbol_fix_dataset": "V468 still contains a full-reference exact prompt/answer seed.",
+}
+BLOCKED_ADAPTER_MARKERS = {
+    "kg1-nemotron-lora-v448-nemo-h200-v447-clean-trace-v290ckpt6": "Adapter trained from quarantined V447 traces.",
+    "kg1-nemotron-lora-v465-v464-numeric-multirule-v290ckpt6": "Adapter trained from quarantined V464 traces.",
+    "kg1-nemotron-lora-v469-v468-symbol-fix-v290ckpt6": "Adapter trained from quarantined V468 traces.",
+}
 
 
 @dataclass
@@ -65,9 +77,19 @@ def require_regex(text: str, pattern: str, code: str, findings: list[Finding]) -
         findings.append(Finding("error", code, f"missing pattern: {pattern}"))
 
 
+def block_quarantined_identity(text: str, findings: list[Finding], *, source: str) -> None:
+    for marker, reason in BLOCKED_DATASET_MARKERS.items():
+        if marker in text:
+            findings.append(Finding("error", "quarantined_dataset_identity", f"{source}: {marker}: {reason}"))
+    for marker, reason in BLOCKED_ADAPTER_MARKERS.items():
+        if marker in text:
+            findings.append(Finding("error", "quarantined_adapter_identity", f"{source}: {marker}: {reason}"))
+
+
 def audit_launcher(args: argparse.Namespace, findings: list[Finding]) -> dict[str, Any]:
     launcher = args.launcher
     text = launcher.read_text(encoding="utf-8", errors="replace")
+    block_quarantined_identity(text, findings, source=str(launcher))
     require_text(text, f'DATA_ROOT = "{args.expected_data_root}"', "launcher_data_root_mismatch", findings)
     require_text(text, f'PREF_TRAIN_SHA256 = "{args.expected_train_sha256}"', "launcher_train_sha_mismatch", findings)
     require_text(text, f'PREF_VAL_SHA256 = "{args.expected_val_sha256}"', "launcher_val_sha_mismatch", findings)
@@ -121,6 +143,7 @@ def audit_launcher(args: argparse.Namespace, findings: list[Finding]) -> dict[st
 
 
 def audit_dataset_file(path: Path, expected_sha: str, expected_rows: int, split: str, findings: list[Finding]) -> dict[str, Any]:
+    block_quarantined_identity(str(path), findings, source=f"{split}_path")
     observed_sha = sha256_file(path)
     rows = read_jsonl(path)
     if observed_sha != expected_sha:

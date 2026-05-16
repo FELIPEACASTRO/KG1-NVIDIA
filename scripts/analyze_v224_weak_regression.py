@@ -362,8 +362,8 @@ def main() -> int:
     parser.add_argument("--v223-name", default="v223_eqrescue_from_v217_lr1e8_s12")
     parser.add_argument("--weak-total-min", type=int, default=193)
     parser.add_argument("--weak-eq-min", type=int, default=60)
-    parser.add_argument("--weak-bit-min", type=int, default=133)
-    parser.add_argument("--weak-trunc-max", type=int, default=3)
+    parser.add_argument("--weak-bit-min", type=int, default=136)
+    parser.add_argument("--weak-trunc-max", type=int, default=0)
     args = parser.parse_args()
 
     thresholds = {

@@ -34,8 +34,8 @@ def main() -> int:
     parser.add_argument("--label", default="v226_equation_checkpoint_sweep")
     parser.add_argument("--weak-total-min", type=int, default=193)
     parser.add_argument("--weak-eq-min", type=int, default=60)
-    parser.add_argument("--weak-bit-min", type=int, default=133)
-    parser.add_argument("--weak-trunc-max", type=int, default=3)
+    parser.add_argument("--weak-bit-min", type=int, default=136)
+    parser.add_argument("--weak-trunc-max", type=int, default=0)
     args = parser.parse_args()
 
     print("=== V226 ANALYZER START ===", flush=True)

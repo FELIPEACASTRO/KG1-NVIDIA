@@ -528,7 +528,9 @@ def main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
     if args.self_test:
         return self_test()
-    run_eval(args)
+    manifest = run_eval(args)
+    if manifest.get("full_candidate_gate") is not True and not env_bool("KG1_ALLOW_FAILED_GATE_EXIT_0", False):
+        raise RuntimeError("full eval gate failed; refusing successful exit")
     return 0
 
 

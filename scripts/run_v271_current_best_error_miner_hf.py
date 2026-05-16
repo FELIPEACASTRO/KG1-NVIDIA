@@ -629,7 +629,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--expected-shared-row-contract-sha256", default=EXPECTED_ROW_CONTRACT_SHA256)
     parser.add_argument("--weak-total-min", type=int, default=193)
     parser.add_argument("--weak-eq-min", type=int, default=60)
-    parser.add_argument("--weak-bit-min", type=int, default=133)
+    parser.add_argument("--weak-bit-min", type=int, default=136)
     parser.add_argument("--bit-guardrail-min", type=int, default=136)
     parser.add_argument("--upload", action="store_true")
     parser.add_argument("--self-test", action="store_true")

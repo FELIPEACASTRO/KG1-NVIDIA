@@ -51,11 +51,39 @@ CRITICAL_SNIPPETS = {
     "scripts/kg1_pre_paid_job_integration_gate.py": {
         "dataset content audit": "audit_dataset_file",
         "target template check": "Final answer: \\\\boxed{",
+        "blocked dataset marker gate": "BLOCKED_DATASET_MARKERS",
+        "blocked adapter marker gate": "BLOCKED_ADAPTER_MARKERS",
         "audit manifest gate": "hf_gpu_allowed_for_same_objective",
         "system prompt alignment gate": "launcher_system_prompt_not_final_answer_only",
         "h200 timeout gate": "launcher_timeout_not_one_hour",
         "first checkpoint eval gate": "launcher_missing_first_checkpoint_eval",
         "format negatives blocked": "launcher_allows_format_negatives",
+    },
+    "scripts/package_hf_adapter_submission.py": {
+        "official-like manifest schema required": "OFFICIAL_LIKE_SCHEMA_VERSION",
+        "package threshold aligned": "--min-full-correct\", type=int, default=831",
+        "immutable revision required": "missing immutable revision/resolved_revision",
+        "adapter config hash check": "adapter_config sha mismatch",
+        "adapter model hash check": "adapter_model sha mismatch",
+        "official postprocessor rejected": "submission package cannot rely on external prediction postprocessor",
+    },
+    "scripts/hf_job_official_like_eval_gate_v284.py": {
+        "failed gate exit hard": "official-like full eval gate failed; refusing successful exit",
+        "failed gate override explicit": "KG1_ALLOW_FAILED_GATE_EXIT_0",
+        "adapter config sha emitted": "adapter_config_sha256",
+        "adapter model sha emitted": "adapter_model_sha256",
+        "adapter resolved revision emitted": "resolved_revision",
+    },
+    "scripts/hf_job_full_eval_v276.py": {
+        "failed gate exit hard": "full eval gate failed; refusing successful exit",
+        "failed gate override explicit": "KG1_ALLOW_FAILED_GATE_EXIT_0",
+    },
+    "scripts/hf_job_weak_eval_v277_external_adapters.py": {
+        "failed gate exit hard": "weak eval gate failed; refusing successful exit",
+        "failed gate override explicit": "KG1_ALLOW_FAILED_GATE_EXIT_0",
+    },
+    "scripts/hf_job_train_v90.py": {
+        "default max length official": "MAX_LENGTH = env_int(\"MAX_LENGTH\", 8192)",
     },
 }
 
@@ -65,6 +93,12 @@ BLOCKED_TRAINING_DATASET_MARKERS = {
     "v464_v463_numeric_multirule_dataset": "V464 rejected candidates can equal the answer and is quarantined.",
     "v468_v464_symbol_fix_dataset": "V468 still contains a full-reference exact prompt/answer seed.",
     "v447_v446_trace_dataset": "Current V447 contains hypothesis_formed traces with contradictory boxed answers.",
+}
+
+BLOCKED_ADAPTER_MARKERS = {
+    "kg1-nemotron-lora-v448-nemo-h200-v447-clean-trace-v290ckpt6": "Adapter was trained from quarantined V447 trace data.",
+    "kg1-nemotron-lora-v465-v464-numeric-multirule-v290ckpt6": "Adapter was trained from quarantined V464 data.",
+    "kg1-nemotron-lora-v469-v468-symbol-fix-v290ckpt6": "Adapter was trained from quarantined V468 data.",
 }
 
 TRUE_FORMAT_NEGATIVE_RE = re.compile(
@@ -148,6 +182,14 @@ def is_hf_job_or_notebook(path: Path, text: str) -> bool:
 
 
 def is_archived_fail_closed(text: str) -> bool:
+    generic_archive = [
+        "Archived KG1 launcher",
+        "raise RuntimeError(",
+        "quarantined",
+        "fail-closed",
+    ]
+    if all(snippet in text for snippet in generic_archive):
+        return True
     required = [
         "Archived V436 launcher",
         "raise RuntimeError(",
@@ -251,6 +293,43 @@ def audit_text(path: Path, text: str) -> list[Finding]:
             )
         )
 
+    if rel != "scripts/kg1_static_safety_gate.py" and re.search(
+        r"add_argument\(\s*[\"']--weak-bit-min[\"'][\s\S]{0,160}default\s*=\s*133\b", text
+    ):
+        findings.append(
+            Finding(
+                rel,
+                "error",
+                "stale_weak_bit_argparse_default",
+                "Argparse default for --weak-bit-min must be 136, not 133.",
+            )
+        )
+
+    if rel != "scripts/kg1_static_safety_gate.py" and re.search(
+        r"add_argument\(\s*[\"']--weak-trunc-max[\"'][\s\S]{0,160}default\s*=\s*3\b", text
+    ):
+        findings.append(
+            Finding(
+                rel,
+                "error",
+                "stale_weak_trunc_argparse_default",
+                "Argparse default for --weak-trunc-max must be 0, not 3.",
+            )
+        )
+
+    if rel == "scripts/package_hf_adapter_submission.py" and re.search(
+        r"add_argument\(\s*[\"']--min-full-correct[\"'][\s\S]{0,160}default\s*=\s*(?:82[0-9]|830)\b",
+        text,
+    ):
+        findings.append(
+            Finding(
+                rel,
+                "error",
+                "stale_package_full_correct_default",
+                "Package default must require current official-like full floor 831, not an older 823/824 threshold.",
+            )
+        )
+
     if job_or_notebook and rel != "scripts/hf_job_preflight_gate.py":
         for marker, reason in BLOCKED_TRAINING_DATASET_MARKERS.items():
             if marker in text and not is_archived_fail_closed(text):
@@ -259,6 +338,16 @@ def audit_text(path: Path, text: str) -> list[Finding]:
                         rel,
                         "error",
                         "blocked_training_dataset_referenced",
+                        f"{marker}: {reason}",
+                    )
+                )
+        for marker, reason in BLOCKED_ADAPTER_MARKERS.items():
+            if marker in text and not is_archived_fail_closed(text):
+                findings.append(
+                    Finding(
+                        rel,
+                        "error",
+                        "blocked_adapter_referenced",
                         f"{marker}: {reason}",
                     )
                 )
@@ -372,13 +461,22 @@ def run_self_test() -> int:
             "KG1_WEAK_BIT_MIN\", 133\nKG1_WEAK_TRUNC_MAX\", 3\n",
             encoding="utf-8",
         )
+        stale_argparse = tmp / "run_old_argparse.py"
+        stale_argparse.write_text(
+            "parser.add_argument(\"--weak-bit-min\", type=int, default=133)\n"
+            "parser.add_argument(\"--weak-trunc-max\", type=int, default=3)\n",
+            encoding="utf-8",
+        )
         stale_gate_findings = audit_text(stale_gate, stale_gate.read_text(encoding="utf-8"))
+        stale_gate_findings.extend(audit_text(stale_argparse, stale_argparse.read_text(encoding="utf-8")))
         stale_codes = {item.code for item in stale_gate_findings}
         if not {
             "stale_weak_bit_gate",
             "stale_weak_trunc_gate",
             "stale_weak_bit_env_gate",
             "stale_weak_trunc_env_gate",
+            "stale_weak_bit_argparse_default",
+            "stale_weak_trunc_argparse_default",
         }.issubset(stale_codes):
             print("missing stale weak gate self-test finding", flush=True)
             return 1
@@ -392,6 +490,28 @@ def run_self_test() -> int:
         blocked_findings = audit_text(blocked_dataset, blocked_dataset.read_text(encoding="utf-8"))
         if "blocked_training_dataset_referenced" not in {item.code for item in blocked_findings}:
             print("missing blocked training dataset self-test finding", flush=True)
+            return 1
+        blocked_adapter = tmp / "job_blocked_adapter.py"
+        blocked_adapter.write_text(
+            "from huggingface_hub import HfApi\n"
+            "ADAPTER_REPO='felipesp1983/kg1-nemotron-lora-v469-v468-symbol-fix-v290ckpt6'\n"
+            "HfApi().run_job(command=['true'])\n",
+            encoding="utf-8",
+        )
+        blocked_adapter_findings = audit_text(blocked_adapter, blocked_adapter.read_text(encoding="utf-8"))
+        if "blocked_adapter_referenced" not in {item.code for item in blocked_adapter_findings}:
+            print("missing blocked adapter self-test finding", flush=True)
+            return 1
+        archived_quarantine = tmp / "launch_archived_quarantine.py"
+        archived_quarantine.write_text(
+            '"""Archived KG1 launcher for quarantined route; fail-closed."""\n'
+            "def main():\n"
+            "    raise RuntimeError('Archived KG1 launcher: quarantined route; fail-closed')\n",
+            encoding="utf-8",
+        )
+        archived_quarantine_findings = audit_text(archived_quarantine, archived_quarantine.read_text(encoding="utf-8"))
+        if archived_quarantine_findings:
+            print(json.dumps([item.__dict__ for item in archived_quarantine_findings], indent=2), flush=True)
             return 1
     print("kg1_static_safety_gate_self_test=ok", flush=True)
     print("=== KG1 STATIC SAFETY GATE SELF TEST END ===", flush=True)

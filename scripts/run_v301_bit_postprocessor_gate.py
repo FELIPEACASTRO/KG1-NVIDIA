@@ -178,6 +178,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         int(post_summary["correct"]) >= args.weak_total_min
         and int(bit_after.get("correct", 0)) >= args.weak_bit_min
         and int(eq_after.get("correct", 0)) >= args.weak_eq_min
+        and int(post_summary.get("truncated", 999999)) <= args.weak_trunc_max
         and not losses
         and not guard["forbidden_hits"]
     )
@@ -196,6 +197,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             "weak_total_min": args.weak_total_min,
             "weak_eq_min": args.weak_eq_min,
             "weak_bit_min": args.weak_bit_min,
+            "weak_trunc_max": args.weak_trunc_max,
         },
         "decision": {
             "decision": "v301_bit_postprocessor_passes_weak_gate" if weak_gate_pass else "v301_bit_postprocessor_blocked",
@@ -216,6 +218,7 @@ def main() -> int:
     parser.add_argument("--weak-total-min", type=int, default=193)
     parser.add_argument("--weak-eq-min", type=int, default=60)
     parser.add_argument("--weak-bit-min", type=int, default=137)
+    parser.add_argument("--weak-trunc-max", type=int, default=0)
     args = parser.parse_args()
     run(args)
     return 0

@@ -253,6 +253,10 @@ def check_training_env() -> None:
     expected_max_steps = env_int("KG1_EXPECTED_MAX_STEPS", 0)
     if expected_max_steps and max_steps != expected_max_steps:
         raise RuntimeError(f"MAX_STEPS mismatch: expected {expected_max_steps}, got {max_steps}")
+    max_length = env_int("MAX_LENGTH")
+    expected_max_length = env_int("KG1_EXPECTED_MAX_LENGTH", 0)
+    if expected_max_length and max_length != expected_max_length:
+        raise RuntimeError(f"MAX_LENGTH mismatch: expected {expected_max_length}, got {max_length}")
 
     if env_bool("KG1_REQUIRE_OFFSET_MASK", True) and not env_bool("REQUIRE_OFFSET_MASK", False):
         raise RuntimeError("REQUIRE_OFFSET_MASK must remain enabled for real training.")
@@ -282,7 +286,7 @@ def check_training_env() -> None:
         "run_id": env_str("RUN_ID"),
         "max_steps": max_steps,
         "sampling_mode": sampling_mode,
-        "max_length": env_int("MAX_LENGTH"),
+        "max_length": max_length,
         "lora_r": env_int("LORA_R"),
         "lora_alpha": env_int("LORA_ALPHA"),
         "target_modules": env_str("LORA_TARGET_MODULES"),
@@ -571,6 +575,25 @@ def self_test() -> None:
     os.environ.setdefault("SAMPLING_MODE", "weighted_replacement")
     if env_str("SAMPLING_MODE") not in VALID_SAMPLING_MODES:
         raise RuntimeError("self-test failed")
+    old_max_length = os.environ.get("MAX_LENGTH")
+    old_expected_max_length = os.environ.get("KG1_EXPECTED_MAX_LENGTH")
+    os.environ["MAX_LENGTH"] = "8192"
+    os.environ["KG1_EXPECTED_MAX_LENGTH"] = "8192"
+    if env_int("MAX_LENGTH") != env_int("KG1_EXPECTED_MAX_LENGTH"):
+        raise RuntimeError("self-test max length equality failed")
+    os.environ["KG1_EXPECTED_MAX_LENGTH"] = "4096"
+    try:
+        if env_int("MAX_LENGTH") == env_int("KG1_EXPECTED_MAX_LENGTH"):
+            raise RuntimeError("self-test expected max length mismatch")
+    finally:
+        if old_max_length is None:
+            os.environ.pop("MAX_LENGTH", None)
+        else:
+            os.environ["MAX_LENGTH"] = old_max_length
+        if old_expected_max_length is None:
+            os.environ.pop("KG1_EXPECTED_MAX_LENGTH", None)
+        else:
+            os.environ["KG1_EXPECTED_MAX_LENGTH"] = old_expected_max_length
     assert blocked_dataset_matches("repo data/v464_v463_numeric_multirule_dataset/train.jsonl")
     assert blocked_dataset_matches("repo data/v468_v464_symbol_fix_dataset/train.jsonl")
     assert blocked_dataset_matches("repo data/v447_v446_trace_dataset/train.jsonl")

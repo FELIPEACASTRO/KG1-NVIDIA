@@ -437,6 +437,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
     expected_integrated_equation = int(v329_manifest.get("projected_equation_correct", -1))
     integrated_equation = int(integrated_counts.get("equation_transform", {}).get("correct", 0))
     integrated_bit = int(integrated_counts.get("bit_manipulation", {}).get("correct", 0))
+    integrated_truncated = sum(int(item.get("truncated", 0)) for item in integrated_counts.values())
     loss_count = len(losses)
 
     if len(v324_candidates) != int(v324_manifest.get("accepted_candidate_count", -1)):
@@ -459,6 +460,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         and integrated_total >= args.weak_total_min
         and integrated_equation >= args.weak_equation_min
         and integrated_bit >= args.weak_bit_min
+        and integrated_truncated <= args.weak_trunc_max
         and not rejected_candidate_rows
     )
     if cpu_gate_pass:
@@ -466,7 +468,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             "decision": "v336a_cpu_integrated_no_loss_gate_passed",
             "reason": (
                 f"integrated={integrated_total}/315; equation={integrated_equation}/155; "
-                f"bit={integrated_bit}/160; gains={len(gains)}; losses={loss_count}"
+                f"bit={integrated_bit}/160; truncated={integrated_truncated}; gains={len(gains)}; losses={loss_count}"
             ),
             "next_action": "Run V336B package-permission gate before any package, submit, or HF GPU training.",
             "hf_gpu_allowed": False,
@@ -476,7 +478,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             "decision": "v336a_cpu_integrated_no_loss_gate_blocked",
             "reason": (
                 f"integrated={integrated_total}/315; equation={integrated_equation}/155; "
-                f"bit={integrated_bit}/160; gains={len(gains)}; losses={loss_count}; "
+                f"bit={integrated_bit}/160; truncated={integrated_truncated}; gains={len(gains)}; losses={loss_count}; "
                 f"rejected_candidates={len(rejected_candidate_rows)}"
             ),
             "next_action": "Do not launch HF GPU; inspect rejected/conflicting candidates or expand CPU DSL.",
@@ -560,6 +562,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             "weak_total_min": args.weak_total_min,
             "weak_equation_min": args.weak_equation_min,
             "weak_bit_min": args.weak_bit_min,
+            "weak_trunc_max": args.weak_trunc_max,
             "max_losses": 0,
         },
         "decision": decision,
@@ -643,6 +646,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--weak-total-min", type=int, default=193)
     parser.add_argument("--weak-equation-min", type=int, default=61)
     parser.add_argument("--weak-bit-min", type=int, default=136)
+    parser.add_argument("--weak-trunc-max", type=int, default=0)
     return parser.parse_args()
 
 

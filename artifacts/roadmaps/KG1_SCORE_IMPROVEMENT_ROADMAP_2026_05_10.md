@@ -755,7 +755,7 @@ Resultado V444 CPU:
 | Item | Valor |
 |---|---:|
 | fonte | `sft_reconstructed.jsonl` |
-| status mantidos | `rule_found`, `hypothesis_formed` |
+| status mantidos no experimento historico | `rule_found`, `hypothesis_formed` |
 | status removido | `rule_unknown` |
 | train rows | `1848` |
 | val rows | `172` |
@@ -767,9 +767,10 @@ Resultado V444 CPU:
 | prompt truncation | `0` |
 | completion truncation | `0` |
 
-Interpretacao: V444 e diferente de V397/V398 porque remove `822` linhas
-`rule_unknown`, que provavelmente diluiram o sinal. Ainda nao e ganho. E apenas
-o menor teste pago justificavel depois que V443 fechou a rota de regras simples.
+Interpretacao atualizada: V444 foi um experimento historico, nao uma rota ativa.
+Ele removeu `rule_unknown`, mas ainda manteve `hypothesis_formed`; depois da
+auditoria V472/V473, qualquer nova rota de traces so pode usar material que
+tenha regra final confirmada e sem boxed answer contraditorio.
 
 ## Atualizacao V445/V446 - 2026-05-15
 
@@ -921,40 +922,11 @@ Decisao V447:
 | Usar solver/verifier runtime no submit | proibido |
 | Usar adapter/peso/submissao publica de terceiro | proibido |
 
-V447 dataset clean:
-
-| Item | V447 bruto | V447 clean | Decisao |
-|---|---:|---:|---|
-| Total rows | `1310` | `1293` | usar clean |
-| Rows descartadas por `boxed` contraditorio | `0` | `17` | bloqueio obrigatorio |
-| Train rows | `1178` | `1164` | passa minimo |
-| Val rows | `132` | `129` | passa minimo |
-| Train `bit_manipulation` | `763` | `763` | preservado |
-| Train `equation_transform` | `415` | `401` | remove ruido contraditorio |
-| Val `bit_manipulation` | `85` | `85` | preservado |
-| Val `equation_transform` | `47` | `44` | remove ruido contraditorio |
-| `last_boxed_mismatch` | `17` potenciais | `0` | obrigatorio antes de GPU |
-
-Gate de tokenizacao V447 clean:
-
-| Check | Resultado |
-|---|---|
-| Manifesto | `artifacts/v447_v446_trace_dataset/20260515T_v447_tokenization_gate_clean/v286_generic_tokenization_gate_manifest.json` |
-| `prompt_truncation_rate` | `0.0` |
-| `completion_tokens_dropped` | `0` |
-| `fallback_masks` | `0` |
-| `offset_masks` | `1164/1164` train, `129/129` val |
-| `train_val_prompt_overlap` | `0` |
-| `train_val_prompt_answer_overlap` | `0` |
-| Token max train/val | `8048` / `7995` |
-| Decisao | `tokenization_gate_passed` |
-
-Dataset HF V447 clean:
-
-| Split | HF path | SHA256 |
-|---|---|---|
-| train | `felipesp1983/kg1-nemotron-training::data/v447_v446_trace_dataset/20260515T_cpu_gate_clean/v447_v446_trace_train.jsonl` | `08a4d36adf61fd20dcd5f2536eff6e5f39825b3a6b3a3a64d21e5ea4399c1ca7` |
-| val | `felipesp1983/kg1-nemotron-training::data/v447_v446_trace_dataset/20260515T_cpu_gate_clean/v447_v446_trace_val.jsonl` | `19a8a360444d0fae61181fc77ce1f53180e5bed05661dc0c2f6cd7c4d3f00f31` |
+V447 ficou como rota historica bloqueada. A auditoria V472/V473 concluiu que
+o caminho ainda carregava traces `hypothesis_formed` sem regra final verificada
+e que os artefatos rastreados nao devem mais orientar treino, token gate,
+upload HF, eval ou package. Em V473, os JSONL/manifests rastreados de V447 foram
+removidos da arvore ativa; os launchers V448 foram convertidos para fail-closed.
 
 Nova regra permanente: qualquer dataset/trace com ultimo `\boxed{}` diferente
 da resposta oficial de treino deve ser bloqueado por padrao. Override so pode
@@ -1191,37 +1163,21 @@ caso contrario cancelar e arquivar.
 
 ## Proxima Acao Ativa
 
-Rota ativa: V465 numeric multirule smoke. Esta e a primeira rota desde V448 que
-tem hard negatives reais multi-classe do adapter atual antes de treino.
+Rota ativa apos V473: **CPU-only audit/mining, sem GPU liberada**.
 
-1. V462 foi concluido:
-   - job: `https://huggingface.co/jobs/felipesp1983/6a07a0aa3308d79117b90da2`;
-   - output: `felipesp1983/kg1-v462-v461-synthetic-raw-probe`;
-   - resultado: `56/56` outputs, todos `stop`, prompt pack sem labels.
-2. V463 foi fechado:
-   - script: `artifacts/v463_v462_synthetic_numeric_hard_negative_audit/build_v463_v462_synthetic_numeric_hard_negative_audit.py`;
-   - artefato: `artifacts/v463_v462_synthetic_numeric_hard_negative_audit/20260515T_cpu_gate/`;
-   - resultado: `26` hard negatives reais em `3` classes;
-   - classes: `add_direct_over_model_add_variant`, `minus_direct_negative_restore_sign`, `minus_signed_opposite_sign_guarded`;
-   - sanity: ids 56/56 unidos, prompt hashes 56/56, finish `stop` 56/56, postprocessor 56/56.
-3. V464 foi fechado:
-   - script: `scripts/build_v464_v463_numeric_multirule_dataset.py`;
-   - artefato: `artifacts/v464_v463_numeric_multirule_dataset/20260515T_cpu_gate/`;
-   - train: `558` rows = `46` equation + `512` bit replay;
-   - validation: `138` rows = `10` equation + `128` bit replay;
-   - hard negatives no treino: `22` em `3` classes;
-   - token gate: `prompt_truncation_rate=0.0`, `completion_tokens_dropped=0`, `fallback_masks=0`, train/val overlap `0`.
-4. V465 deve rodar apenas como smoke:
-   - launcher: `artifacts/v465_hf_h200_v464_numeric_multirule_launch/launch_v465_hf_h200_v464_numeric_multirule.py`;
-   - dataset HF: `felipesp1983/kg1-nemotron-training/data/v464_v463_numeric_multirule_dataset/20260515T_cpu_gate`;
-   - gate HF: `runtime_artifacts/v464_v463_numeric_multirule_dataset/20260515T_tokenization_gate`;
-   - H200, timeout `3600s`, `MAX_STEPS=16`, checkpoints `4/8/12/16`;
-   - pesos: equation hard-negative classes sobem, bit replay preserva piso.
-5. Depois do treino V465:
-   - rodar weak eval por checkpoint, nao full eval direto;
-   - promover somente se `total > 192/315`, `equation > 56/155`, `bit >= 136/160`, `truncated = 0`;
-   - se checkpoint-4 ja mostrar bit <136 ou equation sem ganho, cancelar/arquivar por FinOps;
-   - se nenhum checkpoint passar, nao repetir receita: voltar para mining CPU de novas classes reais.
+As rotas V462/V463/V464/V465/V468/V469/V470/V448 foram encerradas ou
+quarentenadas. Elas continuam documentadas como evidência de falha, mas nao
+podem justificar novo treino, upload ou weak eval pago.
+
+Proximo trabalho permitido:
+
+1. minerar `equation_transform` em CPU com dados limpos e novas classes de regra;
+2. provar ganho potencial antes de treino: `+4` equation, `0` perdas,
+   `bit>=136`, `truncated=0`;
+3. passar V286 com referencias proibidas quando existirem;
+4. passar static/preflight gate sem marcadores quarentenados;
+5. so entao criar uma nova versao de dataset/launcher, sem reutilizar nomes
+   V447/V461/V463/V464/V468.
 
 Regra FinOps continua: se o primeiro checkpoint ou gate parcial nao indicar
 caminho para `total>192`, `equation>56`, `bit>=136`, `truncated=0`, cancelar.
@@ -1281,18 +1237,18 @@ Tokenization gate V468:
 - offset masks completas;
 - train/val prompt overlap `0`.
 
-Decisao atual: V464/V465 ficam bloqueados para novos treinos. A unica proxima
-execucao permitida nesta rota e um smoke HF novo usando V468 corrigido. O gate
-de promocao permanece:
+Decisao atual apos V472/V473: V464/V465/V468/V469/V470 ficam bloqueados para
+novos treinos, uploads e weak evals pagos. Nao ha execucao HF permitida nesta
+rota. O gate de promocao permanece valido para qualquer rota nova:
 
 - weak total `>192/315`;
 - `equation_transform >56/155`;
 - `bit_manipulation >=136/160`;
 - `truncated = 0`.
 
-Se checkpoint-4 do novo treino V468 nao passar nesses criterios, cancelar
-imediatamente por FinOps e voltar para mining CPU de novas classes reais, sem
-treinar mais epochs sobre o mesmo sinal.
+Qualquer nova versao precisa ter nome novo, hashes novos, V286 limpo e CPU gate
+com ganho potencial antes de H200/A100. Nao treinar mais epochs sobre o mesmo
+sinal V464/V468.
 
 ## Atualizacao V471 - Crisis Triple-Check
 
@@ -1351,7 +1307,7 @@ dados, simbolos, builders e FinOps. Achados acionaveis:
 | Achado | Acao |
 |---|---|
 | Builders historicos V217-V231/V244/V245 ainda tinham `bit=133` e `trunc=3` | Corrigidos para `bit=136` e `trunc=0`; static safety gate agora bloqueia esses valores antigos |
-| Dataset V464 contaminado ainda existia como artefato rastreado | Mantido como evidencia historica, mas bloqueado no HF preflight por marcador `v464_v463_numeric_multirule_dataset` |
+| Dataset V464 contaminado ainda existia como artefato rastreado | Removido da arvore ativa em V473 e bloqueado no HF preflight por marcador `v464_v463_numeric_multirule_dataset` |
 | V468 ainda continha seed exata de referencia full (`63-19 -> -55`) herdada de V461/V463 | V461/V463/V464/V468 bloqueados para treino ate rebuild com nova versao limpa |
 | V447 tinha `141` traces `hypothesis_formed` com resposta interna contraditoria | V446/V447 agora aceitam somente `rule_found` para essa rota |
 | Postprocessor de eval rodava antes de `truncated` existir | Eval agora marca `truncated` antes de V274; linhas truncadas abstain |
@@ -1367,3 +1323,30 @@ com `0` perdas e `bit>=136`, passar V286 com referencias proibidas quando
 existirem, e so entao liberar smoke HF. V447/V461/V463/V464/V468 nao podem ser
 reutilizados como dataset de treino; se algum achado deles for reaproveitado,
 precisa ser reconstruido em uma nova versao limpa com hashes novos.
+
+## Atualizacao V473 - Quintuple Crisis Audit
+
+V473 fez o scan de `scripts`, `src` e `artifacts` inteiros, alem de revisar os
+thresholds e launchers historicos que ainda poderiam ser executados por engano.
+
+| Achado | Acao |
+|---|---|
+| Scripts antigos ainda tinham argparse defaults `--weak-bit-min=133` e `--weak-trunc-max=3` | Atualizados para `136` e `0`; static safety gate agora bloqueia esses defaults |
+| Launchers V448/V462/V465/V466/V469/V470 ainda eram executaveis | Transformados em launchers arquivados fail-closed com `RuntimeError` imediato |
+| Static gate bloqueava datasets, mas nao adapters treinados por rotas contaminadas | Adicionado bloqueio por adapter repo V448/V465/V469 |
+| Full-repo scan mostrou notebooks historicos com thresholds antigos | Mantidos sem edicao por regra do repo: notebooks historicos nao sao retroativos ate serem alterados; novos/alterados continuam bloqueados pelo notebook gate |
+| `package_hf_adapter_submission.py` podia baixar adapter diferente do manifest avaliado | Package novo exige manifest official-like V284, repo/subfolder/revision imutavel e hashes do adapter avaliados |
+| Parser central de `\boxed{}` podia consumir texto LaTeX apos a resposta | `extract_boxed_answers` agora usa fechamento balanceado e preserva payload aninhado |
+| Jobs V276/V277/V284 podiam sair `0` mesmo com gate falso | Agora falham por padrao; diagnostico precisa de `KG1_ALLOW_FAILED_GATE_EXIT_0=1` |
+| Builders V447/V464 ainda podiam recriar datasets quarentenados manualmente | Builders ficam fail-closed por padrao; nova tentativa exige nova versao limpa |
+| Preflight de treino nao travava `MAX_LENGTH` esperado | `hf_job_preflight_gate.py` valida `KG1_EXPECTED_MAX_LENGTH`; default de treino volta a `8192` |
+
+Status operacional atualizado:
+
+- nenhum HF job ativo;
+- nenhuma rota GPU ativa;
+- nenhum dataset V447/V461/V463/V464/V468 nem adapter V448/V465/V469 pode alimentar treino/eval/package;
+- package novo so pode sair de manifest official-like com full gate atual e adapter hashado;
+- worktree deve permanecer com gates passando antes de qualquer nova execucao;
+- proximo passo continua CPU-first em nova versao limpa, com gate de
+  contradicao, referencias proibidas e simbolos antes de qualquer gasto HF.

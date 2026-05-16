@@ -287,6 +287,12 @@ def build(args: argparse.Namespace) -> dict[str, Any]:
     output_dir = args.output_dir or (DEFAULT_OUTPUT_ROOT / utc_compact())
     output_dir.mkdir(parents=True, exist_ok=True)
     print("=== V447 V446 TRACE DATASET BUILD START ===", flush=True)
+    if not args.allow_quarantined_rebuild:
+        raise RuntimeError(
+            "V447/V446 trace builder is quarantined and fail-closed: crisis audit found "
+            "hypothesis_formed contradictory traces and divergent internal boxed answers. "
+            "Create a new rule_found-only builder/version with internal boxed-answer validation."
+        )
     print("v446_audit_csv =", args.v446_audit_csv, "exists =", args.v446_audit_csv.exists(), flush=True)
     print("sft_jsonl =", args.sft_jsonl, "exists =", args.sft_jsonl.exists(), flush=True)
     print("competition_train_csv =", args.competition_train_csv, "exists =", args.competition_train_csv.exists(), flush=True)
@@ -381,6 +387,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         action="store_true",
         help="Keep traces whose last boxed answer differs from the official train answer. Default blocks them.",
     )
+    parser.add_argument("--allow-quarantined-rebuild", action="store_true")
     return parser.parse_args(argv)
 
 

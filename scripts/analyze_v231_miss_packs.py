@@ -414,7 +414,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--label", default="v231_v230_miss_pack_mining")
     parser.add_argument("--expected-shared-row-contract-sha256", default="")
     parser.add_argument("--weak-eq-min", type=int, default=60)
-    parser.add_argument("--weak-bit-min", type=int, default=133)
+    parser.add_argument("--weak-bit-min", type=int, default=136)
     parser.add_argument("--equation-target-gain", type=int, default=5)
     parser.add_argument("--bit-guardrail-min", type=int, default=136)
     parser.add_argument("--self-test", action="store_true")
