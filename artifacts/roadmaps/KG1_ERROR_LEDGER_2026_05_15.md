@@ -1044,6 +1044,36 @@ round-trip PEFT nativo, preferindo `PeftModel.from_pretrained(...,
 is_trainable=True)`, e comparando `adapter_config.json`, keys, shapes, dtypes,
 coverage de `mlp.experts.*` e parametros trainable antes de qualquer GPU.
 
+### E036 - Peso de equation dominava o objetivo efetivo antes do treino
+
+Evidencia:
+
+- O job H200 `felipesp1983/6a086ffce48bea4538b9fc0f` foi lancado com V391 e
+  parado pelo gate V478 antes de qualquer treino util.
+- A combinacao `equation_numeric_* = 10.00` gerou `bit_manipulation` com apenas
+  `0.135975` do objetivo efetivo de treino e `equation_transform` com
+  `0.864025`.
+- Isso violou os limites `min_bit_effective_share=0.20` e
+  `max_equation_effective_share=0.80`.
+
+Impacto:
+
+- O treino parecia agressivo para equation, mas na pratica deixava bit sem
+  pressao suficiente e aumentava risco de repetir o padrao `equation=57`,
+  `bit=135`, que nao e submit-safe.
+
+Regra preventiva:
+
+- V478 permanece obrigatorio antes de qualquer HF GPU job.
+- V486 usa `equation_numeric_* = 6.00`, que passa o gate com
+  `bit_manipulation=0.207788` e `equation_transform=0.792212` no objetivo
+  efetivo de treino.
+- A promocao continua dependendo de weak micro-ACC: `total>192`,
+  `equation>56`, `bit>=136`, `truncated=0`.
+
+Status: corrigido para o proximo smoke V486; V391 ficou registrado como
+rejeicao FinOps correta.
+
 ## Prompt Externo
 
 Prompt consolidado para OpenRouter/outras APIs:

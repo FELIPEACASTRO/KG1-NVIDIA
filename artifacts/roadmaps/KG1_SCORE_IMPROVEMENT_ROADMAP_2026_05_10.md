@@ -179,6 +179,27 @@ Manifest: `artifacts/v485_peft_roundtrip_gate/v485_seed_adapter_manifest.json`.
 
 Promove para P3 quando: round-trip manifesto aprovado.
 
+### V391/V486 Objective Balance Update
+
+V391 foi lancado em H200 mas parou antes do treino, no gate V478. Isso foi
+correto: os pesos `equation_numeric_* = 10.00` faziam equation dominar o
+objetivo efetivo.
+
+| Versao | Status | Bit share efetivo treino | Equation share efetivo treino | Decisao |
+|---|---|---:|---:|---|
+| V391 | rejeitado antes do treino | 0.135975 | 0.864025 | nao treinar; objetivo desequilibrado |
+| V486 | probe CPU aprovado | 0.207788 | 0.792212 | candidato a smoke curto |
+
+Artefatos:
+
+- `artifacts/version_diffs/V486_VS_V391.md`
+- `artifacts/v486_objective_weight_probe/V486_OBJECTIVE_WEIGHT_PROBE.md`
+- `artifacts/v486_objective_weight_probe/eq_6.json`
+
+Regra atualizada: qualquer novo HF job deve passar o gate V478 e manter
+`bit_manipulation` com pressao efetiva minima. `eval_loss` continua sendo
+diagnostico secundario; promocao depende de weak micro-ACC.
+
 ### P3 - Smoke HF Minimo
 
 Objetivo: verificar se o bug de continuidade era o gargalo sem gastar longo.
