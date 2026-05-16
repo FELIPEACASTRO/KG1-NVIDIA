@@ -38,8 +38,10 @@ Ultima evidencia operacional relevante:
 | V488 ckpt-10 weak eval | weak 191, equation 57, bit 134, trunc 1 | nao promove; target params nao eram o unico gargalo |
 | V489 audit integridade | metrica ACC estrita correta; V488 teve +1 equation, -2 bit, +1 trunc; F2 frozen-active nao era visivel no manifesto; expected-aware antigo podia vazar boxed anterior | corrigir observabilidade/guard/extracao antes de novo GPU |
 | V490 debug double check | compilacao, self-tests, static gate, dataset V390/V326, tokenization e metric path OK; HF jobs ativos 0 | proximo passo deve mudar mecanismo treinavel, nao repetir V487 |
+| V491 OpenRouter consult | GPT-5.5, Claude Opus 4.7, Gemini 3.1 Pro, Qwen 3.6 Max convergem em MoE trainability, freeze `lm_head`, loss weight 1.0 e kill-switch cedo | roteiro de smoke alterado; nao repetir treino attention+`lm_head` |
+| V492 uploaded OpenRouter double check | 12 modelos adicionais reforcam MoE `up_proj/down_proj` frozen-active como principal suspeita; tambem alertam que o +1 equation pode ser extracao, nao aprendizado bruto | roadmap limpo para um unico experimento fail-fast, depois pivot/stop |
 
-## Achado Principal V484
+## Achados Principais V484-V492
 
 Os dois arquivos OpenRouter de 16/05/2026 reforcam um ponto tecnico mais forte
 que qualquer nova busca de dados: a linha de treino precisa provar continuidade
@@ -70,6 +72,21 @@ Evidencia externa verificada:
   fail-closed.
 
 Fontes: `artifacts/v484_openrouter_uploaded_audit/V484_OPENROUTER_UPLOAD_AUDIT.md`.
+
+Atualizacao V491/V492: o double check com o prompt completo e o arquivo
+`C:\Users\davis\Downloads\OpenRouter Chat Sat May 16 2026 (2).json` reforcou
+quatro conclusoes praticas:
+
+| Achado | Decisao no plano |
+|---|---|
+| V487/V488 carregavam MoE `target_parameters`, mas a allowlist treinavel era `q/k/v/o/lm_head`; isso deixa `up_proj/down_proj` em modo `frozen_active` | proximo smoke deve exigir `target_parameters_trainability_mode="trainable"` e tensores treinaveis nao nulos para `up_proj/down_proj` |
+| `lm_head` treinavel e suspeito direto de flip de bit e truncation, porque altera distribuicao de `0/1` e EOS | remover `lm_head` de `TRAINABLE_LORA_MODULES` no proximo smoke; so reativar como ablation documentada |
+| `ANSWER_SPAN_LOSS_WEIGHT=12.0` pode baixar loss sem melhorar ACC estrito | pin em `1.0` para smokes oficiais; qualquer valor maior vira experimento separado e nao promocional |
+| O `equation=57` de V488 precisa ser revalidado em raw output, porque pode vir de extracao expected-aware e nao de melhoria real do adapter | todo ganho novo precisa ter diff `raw_output`, `simple_extracted`, `expected_aware_extracted` e familia antes de promocao |
+
+Consenso util dos modelos: a proxima tentativa nao e "mais treino"; e um teste
+de mecanismo. Se o MoE treinavel com `lm_head` congelado nao preservar
+`bit>=136` no primeiro checkpoint, broad SFT segue bloqueado por FinOps.
 
 ## Regras Ativas
 
@@ -103,6 +120,18 @@ Fontes: `artifacts/v484_openrouter_uploaded_audit/V484_OPENROUTER_UPLOAD_AUDIT.m
 12. Todo erro novo entra em `KG1_ERROR_LEDGER_2026_05_15.md` antes de novo job
    pago.
 13. Toda versao nova precisa quadro comparativo contra V291/V290.
+14. Job promocional com `LORA_TARGET_PARAMETERS` deve declarar
+    `REQUIRE_LORA_TARGET_PARAMETERS_TRAINABLE=1`, incluir `up_proj/down_proj`
+    na allowlist treinavel e falhar se o manifesto nao registrar modo
+    `trainable`.
+15. `lm_head` fica fora de `TRAINABLE_LORA_MODULES` nos smokes de melhoria.
+    Reativar `lm_head` exige ablation isolada, porque V477/V488 sugerem risco
+    de flip de bit e truncation.
+16. `ANSWER_SPAN_LOSS_WEIGHT` fica em `1.0` nos smokes promocionais. Valores
+    maiores sao diagnostico-only ate provarem ganho de ACC estrito.
+17. Nenhum ganho baseado apenas em `expected_aware_extracted` promove pacote.
+    O diff precisa mostrar que a saida bruta ou a extracao simples tambem nao
+    introduz regressao ilegal.
 
 ## Plano Cronologico Ativo
 
@@ -231,9 +260,11 @@ suficiente para romper o plateau. A rota de repetir o mesmo SFT/mesmo objetivo
 esta bloqueada por FinOps ate existir novo sinal CPU que preserve bit e
 truncation.
 
-Atualizacao V489: o diff linha a linha confirmou que a metrica estrita esta
-correta e que V488 teve exatamente um ganho real de equation (`518deb39`) e duas
-regressoes reais de bit (`8740ed31`, `59bee375`), sendo uma com truncation. A
+Atualizacao V489/V492: o diff linha a linha confirmou que a metrica estrita esta
+correta e que V488 teve exatamente um ganho observado de equation (`518deb39`) e
+duas regressoes reais de bit (`8740ed31`, `59bee375`), sendo uma com truncation.
+O ganho de equation ainda precisa ser classificado como aprendizado bruto do
+adapter ou efeito de extracao expected-aware antes de qualquer promocao. A
 auditoria tambem mostrou um gap de F2/observabilidade: V487 carregava
 `target_parameters`, mas a allowlist treinavel era `q/k/v/o/lm_head`; logo
 `up_proj/down_proj` ficavam frozen-active, nao comprovadamente treinados. O
@@ -246,32 +277,43 @@ expected-aware que agora so pode desambiguar o ultimo boxed.
 
 Artefato: `artifacts/v489_solution_integrity_audit/V489_SOLUTION_INTEGRITY_AUDIT.md`.
 
-Atualizacao V490: o double check em modo debug confirmou que o gap atual nao e
-um erro simples de ACC, split, tokenizacao ou threshold. V488 realmente ganhou
-1 linha de equation (`518deb39`) e perdeu 2 linhas de bit (`8740ed31`,
+Atualizacao V490/V492: o double check em modo debug confirmou que o gap atual
+nao e um erro simples de ACC, split, tokenizacao ou threshold. V488 observou
+1 linha a mais de equation (`518deb39`) e perdeu 2 linhas de bit (`8740ed31`,
 `59bee375`), com truncation em `59bee375`. O dataset V390/V326 tem 5031/532
 linhas, IDs/prompts unicos, zero overlap train/val e flags `gate/weak/full`
 como `False`. A proxima tentativa so faz sentido se for estruturalmente
 diferente: testar `target_parameters` MoE como treinaveis, nao apenas
-frozen-active.
+frozen-active, e auditar se qualquer ganho de equation aparece na saida bruta.
 
 Artefato: `artifacts/v490_debug_double_check/V490_DEBUG_DOUBLE_CHECK_2026_05_16.md`.
 
-### P3 - Smoke HF Minimo
+### P3 - Smoke HF Minimo V491/V492
 
-Objetivo: verificar se o bug de continuidade era o gargalo sem gastar longo.
+Objetivo: testar o mecanismo apontado por V491/V492 sem gastar longo: MoE LoRA
+treinavel, `lm_head` congelado, answer-span sem peso artificial e bit como
+guardrail duro.
 
 Executar:
 
-- max 2 a 4 steps na primeira leitura de ACC;
-- mesmo dataset limpo V390/V475;
+- max 4 steps, com leitura obrigatoria de ACC no step/checkpoint 2;
+- mesmo dataset limpo V390/V326;
 - bit replay obrigatorio;
 - log de componentes de loss, incluindo answer-span;
 - weak micro-ACC no primeiro checkpoint, nao apenas `eval_loss`;
 - kill-switch no primeiro checkpoint.
-- proxima variante deve declarar `REQUIRE_LORA_TARGET_PARAMETERS_TRAINABLE=1`
-  e incluir os LoRA `up_proj/down_proj` ligados aos `target_parameters`, porque
-  V487 provou que `q/k/v/o/lm_head` com MoE frozen-active nao basta.
+- configuracao minima do launcher:
+  - `TRAINABLE_LORA_MODULES=q_proj,k_proj,v_proj,o_proj,up_proj,down_proj`
+  - `LORA_TARGET_PARAMETERS=mlp.experts.gate_up_proj,mlp.experts.down_proj`
+  - `REQUIRE_LORA_TARGET_PARAMETERS_TRAINABLE=1`
+  - `ANSWER_SPAN_LOSS_WEIGHT=1.0`
+  - `lm_head` ausente da allowlist treinavel
+  - `LEARNING_RATE=2.0e-8`
+  - `FINAL_LEARNING_RATE=5.0e-9`
+- pressao de dados bit-protective para smoke:
+  - preferir `v304_bit_replay_only=2.0`
+  - `v325_equation_no_loss_distill=1.0`
+  - qualquer peso equation maior exige justificativa e aborta se bit cair.
 
 Gate:
 
@@ -281,6 +323,16 @@ Gate:
 | equation_transform | > 56 |
 | bit_manipulation | >= 136 |
 | truncated | 0 |
+
+Manifesto obrigatorio antes de aceitar o resultado:
+
+- `target_parameters_trainability_mode == "trainable"`;
+- `target_parameter_trainable_lora_tensors` nao vazio para
+  `mlp.experts.gate_up_proj` e `mlp.experts.down_proj`;
+- `trainable_by_module["up_proj"] > 0` e `trainable_by_module["down_proj"] > 0`;
+- `trainable_by_module["lm_head"] == 0`;
+- `ANSWER_SPAN_LOSS_WEIGHT == 1.0`;
+- `simple_extracted` vs `expected_aware_extracted` auditado por familia.
 
 Se o smoke der `equation=57` com perda de bit, nao promove. Esse caso ja
 ocorreu duas vezes: V477 (`equation=57`, `bit=135`, `trunc=0`) e V488
@@ -306,6 +358,18 @@ Nao executar:
 - mais epochs sem novo sinal;
 - dataset sintetico que ja falhou transfer;
 - treino com labels selecionados por weak/full.
+- hard negatives diretamente extraidos de IDs weak/full como labels de treino.
+  `518deb39`, `8740ed31` e `59bee375` so podem ser usados como diagnostico de
+  diff/gate, nao como exemplos de treino promocional.
+
+Se P3 falhar no step 2:
+
+- nao continuar o mesmo job;
+- rodar apenas ablation curta:
+  - MoE-only se o trainer suportar grupos de parametro ou freeze de attention;
+  - ou attention-only sem `lm_head` para isolar truncation;
+- se duas ablations falharem `bit>=136`, broad SFT fica encerrado ate existir
+  novo dataset/teacher nao contaminado com sinal CPU verificavel.
 
 ### P5 - Bit Como Guardrail
 
@@ -347,24 +411,28 @@ Sem isso, nao packagear e nao submeter.
 | Solver/verifier no runtime submit | contra regra adapter-only |
 | Prompt hack, logit mask, constrained decoding | nao submit-safe |
 | OpenRouter/provider/legal URLs | ruido; nao afeta ACC |
+| `lm_head` treinavel no smoke principal | risco de bit flip/truncation; somente ablation |
+| `ANSWER_SPAN_LOSS_WEIGHT>1.0` em job promocional | baixa loss sem provar ACC; somente diagnostico |
+| Treinar diretamente nos IDs weak/full que regrediram ou ganharam | viola regra de usar weak/full apenas como gate |
+| Promover ganho visto apenas por expected-aware extractor | pode ser melhoria de parser, nao de adapter |
 
 ## Proxima Acao Imediata
 
-1. Usar o V489/V490 audit como baseline de diagnostico: qualquer novo treino deve
-   mostrar no manifesto se `target_parameters` estao `frozen_active`,
-   `partially_trainable` ou `trainable`.
-2. Criar gate CPU de regressao que bloqueie qualquer dataset/objetivo que
-   reproduza o padrao `equation +1` com `bit -1/-2` ou truncation.
+1. Atualizar/validar o launcher do proximo smoke com:
+   `TRAINABLE_LORA_MODULES=q_proj,k_proj,v_proj,o_proj,up_proj,down_proj`,
+   `REQUIRE_LORA_TARGET_PARAMETERS_TRAINABLE=1`, `ANSWER_SPAN_LOSS_WEIGHT=1.0`
+   e `lm_head` congelado.
+2. Antes de GPU, rodar gate CPU que falha se `target_parameters` nao estiverem
+   `trainable` ou se `lm_head` aparecer como treinavel.
 3. Rodar auditoria de extracao raw em todo weak eval novo:
    `simple_extracted` vs `expected_aware_extracted`, com delta documentado por
    familia.
-4. Criar o proximo smoke com `REQUIRE_LORA_TARGET_PARAMETERS_TRAINABLE=1` e
-   `up_proj/down_proj` treinaveis junto ao conjunto minimo necessario. O job so
-   pode seguir alem do primeiro checkpoint se mantiver `bit>=136`, `trunc=0` e
-   superar `equation=56`.
+4. Executar smoke HF/H200 curto com kill-switch no step 2. O job so pode seguir
+   se mantiver `bit>=136`, `trunc=0` e superar `equation=56` com
+   `total>192`.
 5. Minerar `kishanvavdara/nemotron-reasoning-traj` apenas como fonte de
    padroes/fixtures apos anti-leakage; nao treinar direto sem gate.
-6. So voltar para H200 se o gate CPU mostrar uma mudanca verificavel com
+6. So repetir H200 se o smoke ou ablation mostrar uma mudanca verificavel com
    `bit>=136`, `trunc=0` e pelo menos `equation>=57` sem regressao total.
 7. Se o CPU diff mostrar que o erro vem de truncation/formato, corrigir formato
    e parser de treino antes de novo SFT. Se mostrar erro semantico, voltar ao

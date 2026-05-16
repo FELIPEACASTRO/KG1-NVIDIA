@@ -1,0 +1,35 @@
+{
+  "prompt_path": "c:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\openrouter\\v491_plateau_solution_consult\\KG1_V491_OPENROUTER_PLATEAU_PROMPT_2026_05_16.md",
+  "models": [
+    {
+      "model": "openai/gpt-5.5",
+      "ok": true,
+      "chars": 13371,
+      "seconds": 94.8
+    },
+    {
+      "model": "anthropic/claude-opus-4.7",
+      "ok": true,
+      "chars": 13403,
+      "seconds": 91.6
+    },
+    {
+      "model": "google/gemini-3.1-pro-preview",
+      "ok": true,
+      "chars": 6832,
+      "seconds": 44.7
+    },
+    {
+      "model": "deepseek/deepseek-v4-pro",
+      "ok": false,
+      "error": "TypeError",
+      "seconds": 157.4
+    },
+    {
+      "model": "qwen/qwen3.6-max-preview",
+      "ok": true,
+      "chars": 8308,
+      "seconds": 175.3
+    }
+  ]
+}
