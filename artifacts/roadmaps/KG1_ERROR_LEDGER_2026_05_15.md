@@ -1263,6 +1263,63 @@ Regra preventiva:
 
 Status: corrigido em V489.
 
+### E043 - V475 SFT transfer ganhou equation mas regrediu bit
+
+Evidencia:
+
+- V495 treinou tecnicamente correto no dataset V475:
+  `target_parameters` MoE treinaveis, `up_proj/down_proj` ativos no treino,
+  `lm_head` congelado e `ANSWER_SPAN_LOSS_WEIGHT=1.0`.
+- V496 weak eval retornou `191/315`, `equation_transform=57/155`,
+  `bit_manipulation=134/160`, `truncated=1`.
+- Diff estrito vs V290 checkpoint-6:
+  - ganho `518deb39` em equation;
+  - perdas `8740ed31` e `59bee375` em bit;
+  - `59bee375` virou saida nao-binaria `2`.
+- O extra expected-aware `4bb8c6cd` ja existia no baseline V290 e nao e
+  aprendizado novo do adapter.
+
+Impacto:
+
+- A hipotese "V475 CPU projection 196/315 vai transferir diretamente para LoRA"
+  falhou na primeira avaliacao submit-safe.
+- Repetir H200 SFT amplo com o mesmo tipo de dado tende a trocar erro por erro
+  e nao melhora ranking.
+
+Regra preventiva:
+
+- Bloquear novos H200 SFT V475/V390/V326 sem novo sinal CPU.
+- Exigir projecao CPU com `equation>=60`, `bit>=136`, `trunc=0` antes de novo
+  treino pago.
+- Todo candidato deve passar bit guardrail que rejeita nao-binario e protege
+  rows equivalentes a `8740ed31` e `59bee375`.
+
+Status: aberto; proxima acao e CPU residual audit/teacher antes de GPU.
+
+### E044 - H200 weak eval demora por completion tokens, nao por hardware
+
+Evidencia:
+
+- V496 gerou `1,504,306` completion tokens para 315 rows.
+- V496 generation elapsed: `516.9s`; V290 checkpoint-6 baseline: `470.2s`.
+- O run usa settings official-like: thinking ligado, `max_tokens=7680`,
+  `max_model_len=8192`, `max_num_seqs=64`.
+
+Impacto:
+
+- A H200 parece "lenta", mas o custo real vem do protocolo de avaliacao longo.
+- Rodar weak full para cada tentativa desperdiça budget quando o candidato
+  ainda nao tem sinal CPU forte.
+
+Regra preventiva:
+
+- Avaliacoes com `disable_thinking`, `max_tokens` menor ou subset de rows sao
+  diagnostico-only e precisam ser re-baselined contra V290 antes de conclusao.
+- Weak eval official-like so roda para finalistas que passaram CPU gate e
+  guardrail de bit.
+
+Status: regra ativa de FinOps/performance.
+
 ## Prompt Externo
 
 Prompt consolidado para OpenRouter/outras APIs:

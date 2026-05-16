@@ -1,0 +1,234 @@
+{
+  "builtin_metric_tests": [
+    {
+      "answer": "10101010",
+      "expected": true,
+      "name": "bit_exact_match",
+      "observed": true,
+      "passed": true,
+      "prediction": "10101010",
+      "reason": "8-bit binary answers must match exactly."
+    },
+    {
+      "answer": "11100011",
+      "expected": false,
+      "name": "bit_near_numeric_must_not_pass",
+      "observed": false,
+      "passed": true,
+      "prediction": "11100010",
+      "reason": "Numeric tolerance would overcount binary strings; strict verifier must reject this."
+    },
+    {
+      "answer": "42",
+      "expected": true,
+      "name": "numeric_tolerance_non_binary",
+      "observed": true,
+      "passed": true,
+      "prediction": "42.1",
+      "reason": "Non-binary numeric answers use 1% relative tolerance."
+    },
+    {
+      "answer": "101",
+      "expected": false,
+      "name": "binary_like_answer_exact",
+      "observed": false,
+      "passed": true,
+      "prediction": "101.0",
+      "reason": "The project verifier mirrors the historical Kaggle verify_kaggle helper: all [01]+ answers are exact."
+    },
+    {
+      "answer": "Alice",
+      "expected": true,
+      "name": "case_insensitive_symbolic",
+      "observed": true,
+      "passed": true,
+      "prediction": "alice",
+      "reason": "Non-numeric symbolic answers compare case-insensitively."
+    }
+  ],
+  "decision": "metric_path_ok",
+  "generated_at_utc": "2026-05-16T17:53:15.704185+00:00",
+  "prediction_metric_audits": [
+    {
+      "column_audits": [
+        {
+          "disagreement_by_family": {
+            "bit_manipulation": 14
+          },
+          "disagreement_examples": [
+            {
+              "answer": "11100011",
+              "family_norm": "bit_manipulation",
+              "id": "e6d2a064",
+              "permissive_correct": true,
+              "prediction": "11100010",
+              "strict_correct": false
+            },
+            {
+              "answer": "01000000",
+              "family_norm": "bit_manipulation",
+              "id": "0e70c867",
+              "permissive_correct": true,
+              "prediction": "01001100",
+              "strict_correct": false
+            },
+            {
+              "answer": "11001100",
+              "family_norm": "bit_manipulation",
+              "id": "f507b7f1",
+              "permissive_correct": true,
+              "prediction": "11011100",
+              "strict_correct": false
+            },
+            {
+              "answer": "11001001",
+              "family_norm": "bit_manipulation",
+              "id": "78d02fc5",
+              "permissive_correct": true,
+              "prediction": "11001011",
+              "strict_correct": false
+            },
+            {
+              "answer": "01010111",
+              "family_norm": "bit_manipulation",
+              "id": "4ef88f92",
+              "permissive_correct": true,
+              "prediction": "01010011",
+              "strict_correct": false
+            },
+            {
+              "answer": "01100000",
+              "family_norm": "bit_manipulation",
+              "id": "1a7c8520",
+              "permissive_correct": true,
+              "prediction": "01100110",
+              "strict_correct": false
+            },
+            {
+              "answer": "11111101",
+              "family_norm": "bit_manipulation",
+              "id": "202af98d",
+              "permissive_correct": true,
+              "prediction": "11111111",
+              "strict_correct": false
+            },
+            {
+              "answer": "11111011",
+              "family_norm": "bit_manipulation",
+              "id": "3ace787f",
+              "permissive_correct": true,
+              "prediction": "11111111",
+              "strict_correct": false
+            },
+            {
+              "answer": "01001010",
+              "family_norm": "bit_manipulation",
+              "id": "3a7dd604",
+              "permissive_correct": true,
+              "prediction": "01001011",
+              "strict_correct": false
+            },
+            {
+              "answer": "01111011",
+              "family_norm": "bit_manipulation",
+              "id": "4ada9150",
+              "permissive_correct": true,
+              "prediction": "01111111",
+              "strict_correct": false
+            },
+            {
+              "answer": "11110010",
+              "family_norm": "bit_manipulation",
+              "id": "06120e47",
+              "permissive_correct": true,
+              "prediction": "11111110",
+              "strict_correct": false
+            },
+            {
+              "answer": "11111010",
+              "family_norm": "bit_manipulation",
+              "id": "e1f3ffbb",
+              "permissive_correct": true,
+              "prediction": "11111011",
+              "strict_correct": false
+            },
+            {
+              "answer": "11011100",
+              "family_norm": "bit_manipulation",
+              "id": "4c327b55",
+              "permissive_correct": true,
+              "prediction": "11011110",
+              "strict_correct": false
+            },
+            {
+              "answer": "11001101",
+              "family_norm": "bit_manipulation",
+              "id": "82ae858c",
+              "permissive_correct": true,
+              "prediction": "11111101",
+              "strict_correct": false
+            }
+          ],
+          "permissive_accuracy": 0.653968253968254,
+          "permissive_correct": 206,
+          "prediction_column": "prediction",
+          "strict_accuracy": 0.6095238095238096,
+          "strict_correct": 192,
+          "strict_vs_permissive_disagreement_rows": 14
+        }
+      ],
+      "path": "artifacts\\v496_hf_h200_v495_weak_eval_launch\\baseline_v290_checkpoint6\\predictions.csv",
+      "prediction_columns": [
+        "prediction"
+      ],
+      "rows": 315
+    }
+  ],
+  "raw_extraction_audits": [
+    {
+      "answer_csv": "artifacts\\v290_rank19_micro_patch_reference\\runtime_artifacts\\v245_weak_eval_bridge\\v245-weak-bridge-hfonly-20260510T1950Z\\v221_weak_315.csv",
+      "correctness_delta_by_family": {
+        "equation_transform": 1
+      },
+      "correctness_delta_examples": [
+        {
+          "answer": "]}\\!",
+          "expected_aware_correct": true,
+          "expected_aware_extracted": "]}\\!",
+          "family_norm": "equation_transform",
+          "id": "4bb8c6cd",
+          "simple_correct": false,
+          "simple_extracted": "]"
+        }
+      ],
+      "correctness_delta_rows": 1,
+      "expected_aware_correct": 192,
+      "expected_aware_minus_simple_correct": 1,
+      "extraction_disagreement_rows": 1,
+      "path": "artifacts\\v496_hf_h200_v495_weak_eval_launch\\baseline_v290_checkpoint6\\raw_predictions_pre_score.csv",
+      "raw_output_column": "raw_output",
+      "rows": 315,
+      "simple_correct": 191
+    }
+  ],
+  "rule": "Promotion ACC must be computed with src.competition_utils.verify_answer. answers_equivalent is diagnostic-only because it numerically overcounts binary bit strings. Expected-aware extraction may only disambiguate the last boxed payload; it must not select an earlier boxed answer because that would leak the validation answer into extraction.",
+  "schema_version": "kg1_v449_acc_metric_integrity_v1",
+  "weak_answer_audit": {
+    "binary_like_answer_by_family": {
+      "bit_manipulation": 160,
+      "equation_transform": 2
+    },
+    "binary_like_equation_rows": [
+      {
+        "answer_s": "101",
+        "id": "209c43f0"
+      },
+      {
+        "answer_s": "100",
+        "id": "f333b67f"
+      }
+    ],
+    "path": "artifacts\\v290_rank19_micro_patch_reference\\runtime_artifacts\\v245_weak_eval_bridge\\v245-weak-bridge-hfonly-20260510T1950Z\\v221_weak_315.csv",
+    "rows": 315
+  }
+}

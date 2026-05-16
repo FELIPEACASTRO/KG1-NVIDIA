@@ -1,0 +1,18 @@
+id,answer,family_norm,base_prediction,base_correct,v496_prediction,v496_correct
+518deb39,$,equation_transform,{}>{,False,$,True
+fdbdf50c,"-\""",equation_transform,|?|,False,|\(?|,False
+f9799a68,&:/?,equation_transform,:^?\,False,:^?\},False
+9dae880f,))[,equation_transform,:<`\,False,:<`\},False
+b06625c4,^&/,equation_transform,"""$ $]""",False,"""$$]""",False
+d911e8e1,:\:,equation_transform,@}<',False,@,False
+b0206bb7,]$!,equation_transform,$){,False,$){},False
+03a3437f,-!,equation_transform,'}>/,False,',False
+8740ed31,01101000,bit_manipulation,01101000,True,01111000,False
+d129b085,##$,equation_transform,!>``,False,"!>`""",False
+58c099d2,-)\,equation_transform,^!#\,False,^!#\},False
+4ef88f92,01010111,bit_manipulation,01010011,False,01011111,False
+59bee375,10010101,bit_manipulation,10010101,True,2,False
+844f826c,"/""",equation_transform,`@>``,False,`@>`,False
+cdec898a,<?/,equation_transform,>}][?,False,>,False
+ca5db1c0,^,equation_transform,"\boxed({""'|})",False,"(""'|",False
+f7d26b8d,/@,equation_transform,[}}\,False,[},False

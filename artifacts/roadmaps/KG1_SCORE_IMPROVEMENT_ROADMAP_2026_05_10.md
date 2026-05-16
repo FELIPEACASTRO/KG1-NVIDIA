@@ -43,7 +43,9 @@ Ultima evidencia operacional relevante:
 | V493 H200 smoke | treino completo; `target_parameters_trainability_mode=trainable`; `up_proj/down_proj` treinaveis; `lm_head` congelado; eval loss `1.9233 -> 1.9152`; checkpoint-2 uploaded | loss saudavel mas ganho nao comprovado; seguir para V494 weak eval |
 | V494 loss/ACC sync audit | loss path correto como CE mascarada; ACC path correto como geracao+extracao+`verify_answer`; loss nao e proxy matematico de ACC; V245 precisa controles long-context explicitos | static gate atualizado; rodar weak eval promocional com `KG1_MAX_TOKENS=7680`, thinking on e gate bloqueante |
 | V494 V493 checkpoint-2 weak eval | weak 190, equation 57, bit 133, trunc 1; simple extraction 189; strict-vs-permissive bit overcount 15 | nao promove; invalida o mix antigo V390/V326 nesse mecanismo, mas nao testa o dataset V475 CPU-gated |
-| V494 dataset mismatch audit | V493/V494 usou `data/v390_equation_bit_replay_mix`, nao `data/v475_equation_bit_replay_mix`; V475 tem 1312/328 linhas, token max 331, trunc 0 e projecao CPU `equation 56 -> 60` | proximo passo responsavel e V495: smoke curto no V475, nao repetir V390/V326 |
+| V494 dataset mismatch audit | V493/V494 usou `data/v390_equation_bit_replay_mix`, nao `data/v475_equation_bit_replay_mix`; V475 tem 1312/328 linhas, token max 331, trunc 0 e projecao CPU `equation 56 -> 60` | justificou V495; apos V496, V475 SFT tambem esta bloqueado sem novo sinal CPU |
+| V495 H200 V475 smoke | treino tecnico OK; MoE `up_proj/down_proj` treinaveis; `lm_head` congelado; eval loss `1.695015 -> 1.694518` | loss saudavel, mas muito pequeno; decisao dependeu do V496 weak eval |
+| V496 V495 checkpoint-2 weak eval | weak 191, equation 57, bit 134, trunc 1; diff real vs V290: +1 equation (`518deb39`), -2 bit (`8740ed31`, `59bee375`) | nao promove; V475 SFT transfer tambem bloqueada; proximo passo e CPU teacher/guardrail, nao mais H200 SFT amplo |
 
 ## Achados Principais V484-V492
 
@@ -109,8 +111,36 @@ linhas de treino e pressao efetiva `bit=0.926178`, `equation=0.073822`. O
 V475 CPU-gated que projetava `equation 56 -> 60` e `weak 196` e outro dataset:
 `data/v475_equation_bit_replay_mix/20260516T_v475_equation_bit_replay_mix`,
 com 1312/328 linhas, `equation=800/200`, `bit=512/128`, token max `331`,
-truncation `0`, offset masks completos e zero overlap com weak/full. Portanto
-V494 bloqueia repetir V390/V326, mas ainda nao bloqueia um smoke curto V475.
+truncation `0`, offset masks completos e zero overlap com weak/full. Isso
+justificou o smoke V495 no V475, mas V496 mostrou que esse sinal CPU nao
+transferiu para LoRA submit-safe.
+
+Atualizacao V495/V496: o smoke curto V475 foi executado. O treino confirmou que
+as pecas tecnicas estavam no lugar (`target_parameters` MoE treinaveis,
+`lm_head` congelado, `ANSWER_SPAN_LOSS_WEIGHT=1.0`, hashes V475 corretos), mas
+a weak eval bloqueou promocao:
+
+| Metrica | V290 checkpoint-6 | V496 V495 checkpoint-2 | Delta |
+|---|---:|---:|---:|
+| Total weak | 192/315 | 191/315 | -1 |
+| equation_transform | 56/155 | 57/155 | +1 |
+| bit_manipulation | 136/160 | 134/160 | -2 |
+| truncated | 0 | 1 | +1 pior |
+
+Auditoria V496:
+
+- metric path OK (`verify_answer` estrito);
+- V496 mudou 17 linhas, mas so 3 mudaram corretude;
+- ganho real: `518deb39` em equation;
+- perdas reais: `8740ed31` e `59bee375` em bit;
+- o extra `4bb8c6cd` de expected-aware extraction ja existia no baseline V290,
+  portanto nao e aprendizado novo;
+- V496 gerou `1,504,306` completion tokens em `516.9s`; o gargalo e geracao
+  longa com thinking/max_tokens oficiais, nao falta de H200.
+
+Decisao: V475 SFT transfer tambem esta bloqueada. A rota mais rapida agora e
+CPU-first: descobrir teacher/verifier de equation que projete pelo menos
+`equation>=60`, `bit>=136`, `trunc=0` antes de qualquer novo H200.
 
 ## Regras Ativas
 
@@ -299,11 +329,10 @@ Auditoria de metrica:
 - Diff vs V290 checkpoint-6: ganho `518deb39` em equation; perdas
   `5b9964c7`, `8740ed31` e `59bee375` em bit.
 
-Decisao: falhou para o mix antigo V390/V326. Nao repetir V390/V326. Antes de
-encerrar a rota de transferencia, executar apenas um smoke V495 no dataset V475
-CPU-gated, porque ele e o unico dataset ativo com sinal CPU limpo, tokenizacao
-aprovada e guardrail de bit. Se V495 nao superar `192/315` mantendo
-`bit>=136` e `trunc=0`, encerrar SFT pago e voltar para CPU solver/teacher.
+Decisao atualizada: falhou para o mix antigo V390/V326 e tambem para o V475
+CPU-gated apos V495/V496. Nao repetir V390/V326 nem V475 em H200. SFT pago fica
+bloqueado ate existir novo sinal CPU independente que projete `equation>=60`,
+`bit>=136`, `trunc=0` e `total>192`.
 
 ### V391/V486 Objective Balance Update
 
@@ -449,19 +478,19 @@ Nao executar:
   `518deb39`, `8740ed31` e `59bee375` so podem ser usados como diagnostico de
   diff/gate, nao como exemplos de treino promocional.
 
-Como P3 falhou no V390/V326:
+Como P3 falhou no V390/V326 e depois V495/V496 falhou no V475:
 
 - nao continuar o mesmo job;
-- nao abrir nova H200 para repetir V493/V494 ou qualquer V390/V326;
-- permitir uma unica excecao fail-fast: V495 sobre o dataset V475 CPU-gated;
-- se V495 falhar, rodar CPU-only para auditar os residuos de equation e bit:
+- nao abrir nova H200 para repetir V493/V494/V495/V496, V390/V326 ou V475
+  sem novo sinal CPU;
+- rodar CPU-only para auditar os residuos de equation e bit:
   - mapear os 99 misses de equation por padrao simbolico;
   - separar ganho bruto vs ganho por extracao;
   - identificar qualquer regra que resolva pelo menos +4 equation com zero
     perda de bit quando convertida para trace/teacher;
   - produzir dataset curto somente se o solver CPU independente passar
     leakage/contract gate.
-- broad SFT fica encerrado apos V495 se nao existir ganho real.
+- broad SFT fica encerrado ate existir novo sinal CPU submit-safe.
 
 ### P5 - Bit Como Guardrail
 
@@ -510,29 +539,23 @@ Sem isso, nao packagear e nao submeter.
 
 ## Proxima Acao Imediata
 
-1. Atualizar/validar o launcher V495 para usar exatamente:
-   - `data/v475_equation_bit_replay_mix/20260516T_v475_equation_bit_replay_mix/v475_equation_bit_replay_mix_train.jsonl`;
-   - `data/v475_equation_bit_replay_mix/20260516T_v475_equation_bit_replay_mix/v475_equation_bit_replay_mix_val.jsonl`;
-   - train SHA `22aa443a0c7d2f0dea790fe7afcd7249cc4d775e5627671e7dc6377105095aa6`;
-   - val SHA `2a3945ffd7cc795043fdc14ef12d37a044a5a3d304c5a5d1b9c0fa37b89cc0e7`;
-   - source weights `v475_v325_equation_no_loss_distill=1.0`,
-     `v475_v217_bit_replay_guardrail=1.0`.
-2. O smoke V495 deve manter:
-   `TRAINABLE_LORA_MODULES=q_proj,k_proj,v_proj,o_proj,up_proj,down_proj`,
-   `REQUIRE_LORA_TARGET_PARAMETERS_TRAINABLE=1`, `ANSWER_SPAN_LOSS_WEIGHT=1.0`
-   e `lm_head` congelado.
-3. Antes de GPU, rodar gate CPU que falha se `target_parameters` nao estiverem
-   `trainable` ou se `lm_head` aparecer como treinavel.
-4. Rodar auditoria de extracao raw em todo weak eval novo:
-   `simple_extracted` vs `expected_aware_extracted`, com delta documentado por
-   familia.
-5. Executar smoke HF/H200 curto com kill-switch no step 2. O job so pode seguir
-   se mantiver `bit>=136`, `trunc=0` e superar `equation=56` com
-   `total>192`.
-6. Minerar `kishanvavdara/nemotron-reasoning-traj` apenas como fonte de
-   padroes/fixtures apos anti-leakage; nao treinar direto sem gate.
-7. So repetir H200 se o smoke ou ablation mostrar uma mudanca verificavel com
-   `bit>=136`, `trunc=0` e pelo menos `equation>=57` sem regressao total.
-8. Se o CPU diff mostrar que o erro vem de truncation/formato, corrigir formato
-   e parser de treino antes de novo SFT. Se mostrar erro semantico, voltar ao
-   DSL/trace curto e nao ao broad SFT.
+1. Manter V290 checkpoint-6 como unico adapter submit-safe.
+2. Criar V497/V498 CPU residual audit focado em equation:
+   - listar os 99 misses de equation do baseline;
+   - separar simbolico/pontuacao, numerico direto, colon/quote/backslash e
+     casos onde simple extraction difere do expected-aware;
+   - comparar V324/V475/V496 para saber quais regras realmente mudam a saida;
+   - bloquear qualquer regra que use weak/full como label de treino.
+3. Criar guardrail CPU de bit antes de qualquer novo dataset:
+   - rejeitar candidatos que possam reproduzir `8740ed31` ou `59bee375 -> 2`;
+   - exigir saida binaria exata para todo probe bit;
+   - exigir `bit>=136` e `trunc=0` na projecao weak.
+4. So montar novo dataset adapter-only se a projecao CPU independente chegar a:
+   `equation>=60`, `bit>=136`, `trunc=0`, `total>192`.
+5. Se esse gate passar, fazer apenas um H200 smoke curto com kill-switch no
+   primeiro checkpoint. Se repetir `equation=57` com `bit<136` ou truncation,
+   cancelar e voltar para CPU.
+6. Qualquer weak eval promocional continua official-like e caro por desenho:
+   thinking ligado, `max_tokens=7680`, `max_model_len=8192`. Para performance,
+   usar avaliacoes baratas/diagnosticas antes; nao mudar essas configuracoes
+   em resultado que pretende comparar com V290.

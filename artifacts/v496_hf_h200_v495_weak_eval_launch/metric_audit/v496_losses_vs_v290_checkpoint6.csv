@@ -1,0 +1,3 @@
+id,answer,family_norm,base_prediction,base_correct,v496_prediction,v496_correct
+8740ed31,01101000,bit_manipulation,01101000,True,01111000,False
+59bee375,10010101,bit_manipulation,10010101,True,2,False
