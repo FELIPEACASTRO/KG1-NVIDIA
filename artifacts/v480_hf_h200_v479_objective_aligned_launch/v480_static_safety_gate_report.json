@@ -1,0 +1,12 @@
+{
+  "file_count": 4,
+  "files": [
+    "artifacts/v480_hf_h200_v479_objective_aligned_launch/launch_v480_hf_h200_v479_objective_aligned.py",
+    "artifacts/v480_hf_h200_v479_objective_aligned_launch/upload_v479_dataset_to_hf.py",
+    "scripts/audit_v478_training_objective_alignment.py",
+    "scripts/kg1_static_safety_gate.py"
+  ],
+  "findings": [],
+  "ok": true,
+  "schema_version": "kg1_static_safety_gate_v1"
+}

@@ -1,0 +1,11 @@
+{
+  "data_repo": "felipesp1983/kg1-nemotron-training",
+  "dataset_dir": "artifacts\\v479_objective_aligned_filter\\20260516T_v479_objective_aligned_filter",
+  "dataset_path_in_repo": "data/v479_objective_aligned_filter/20260516T_v479_objective_aligned_filter",
+  "dataset_upload": "https://huggingface.co/datasets/felipesp1983/kg1-nemotron-training/commit/dbb97ac737969a69794d2e93895049a8ccbb8eb5",
+  "generated_at_utc": "2026-05-16T04:45:14.922943+00:00",
+  "next_action": "Launch V480 only after local debug verifies hashes and V478 objective alignment.",
+  "train_file": "data/v479_objective_aligned_filter/20260516T_v479_objective_aligned_filter/v479_objective_aligned_filter_train.jsonl",
+  "val_file": "data/v479_objective_aligned_filter/20260516T_v479_objective_aligned_filter/v479_objective_aligned_filter_val.jsonl",
+  "version": "v480_v479_dataset_upload"
+}
