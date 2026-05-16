@@ -472,7 +472,9 @@ Manifesto obrigatorio antes de aceitar o resultado:
   `mlp.experts.gate_up_proj` e `mlp.experts.down_proj`;
 - `trainable_by_module["up_proj"] > 0` e `trainable_by_module["down_proj"] > 0`;
 - `trainable_by_module["lm_head"] == 0`;
-- `ANSWER_SPAN_LOSS_WEIGHT == 1.0`;
+- `ANSWER_SPAN_LOSS_WEIGHT` deve estar explicito e auditado; para treino
+  promocional de ACC, o valor `1.0` agora e considerado smoke-only, nao
+  suficiente para alinhar loss com resposta final;
 - `simple_extracted` vs `expected_aware_extracted` auditado por familia.
 
 Se o smoke der `equation=57` com perda de bit, nao promove. Esse caso ja
@@ -560,7 +562,7 @@ Sem isso, nao packagear e nao submeter.
 | Prompt hack, logit mask, constrained decoding | nao submit-safe |
 | OpenRouter/provider/legal URLs | ruido; nao afeta ACC |
 | `lm_head` treinavel no smoke principal | risco de bit flip/truncation; somente ablation |
-| `ANSWER_SPAN_LOSS_WEIGHT>1.0` em job promocional | baixa loss sem provar ACC; somente diagnostico |
+| Treino promocional com `ANSWER_SPAN_LOSS_WEIGHT=1.0` | V499 mostrou `0` exemplos com answer-span weighting e loss final sem melhora |
 | Treinar diretamente nos IDs weak/full que regrediram ou ganharam | viola regra de usar weak/full apenas como gate |
 | Promover ganho visto apenas por expected-aware extractor | pode ser melhoria de parser, nao de adapter |
 
@@ -572,18 +574,78 @@ Sem isso, nao packagear e nao submeter.
    - train SHA `920b3c30b9ada9ad2685091194dcc53e717f72a9c037cafeef6e494f21511e79`;
    - val SHA `68cda4162214359aaf7cda304c2a06902775b1aadb53fcadfd0edf7ff481ed80`;
    - HF dataset commit `c7e27fd39c598dd23cb25481f567787bdff50820`.
-3. Commitar/pushar V498/V499 para a branch e executar exatamente um smoke V499
-   H200 de 2 steps com:
-   - `lm_head` congelado;
-   - `up_proj/down_proj` MoE treinaveis;
-   - `ANSWER_SPAN_LOSS_WEIGHT=1.0`;
-   - pesos efetivos `bit=39.02%`, `equation=60.98%`.
-4. Rodar weak eval official-like apenas no checkpoint V499 completo. Promover
-   somente se `total>192`, `equation>=60`, `bit>=136`, `trunc=0`.
-5. Se V499 retornar `equation=57` com qualquer perda de bit ou truncation,
-   cancelar a rota teacher-trace SFT e voltar para CPU. O proximo plano devera
-   ser isolado por uma unica familia, com equation primeiro.
-6. Qualquer weak eval promocional continua official-like e caro por desenho:
+3. V499 H200 executou e subiu `checkpoint-2` e `final_adapter`, mas a auditoria
+   V500 bloqueou promocao/weak eval pago:
+   - dataset, hashes, offset masks, MoE trainavel, `lm_head` congelado, custo,
+     upload e memoria passaram;
+   - baseline eval loss `2.8125`, final eval loss `2.8162` (`+0.0037`);
+   - `ANSWER_SPAN_LOSS_WEIGHT=1.0` gerou `0` answer-span weighted examples;
+   - `MAX_STEPS=2` era smoke-only.
+4. Nao rodar weak eval pago no V499. A decisao FinOps correta e nao gastar com
+   ACC caro quando o objetivo local ficou plano/pior.
+5. Proxima execucao deve ser V500/V501 com answer-focused loss antes de qualquer
+   weak eval:
+   - `ANSWER_SPAN_LOSS_WEIGHT>=4.0`;
+   - gate exigindo `answer_span_weighted_examples_train>0` e
+     `answer_span_weighted_examples_val>0`;
+   - `MAX_STEPS=4..8`, `EVAL_EVERY_STEPS=2`, `SAVE_EVERY_STEPS=2`;
+   - manter V290 checkpoint-6, MoE `gate_up/down` treinaveis, `lm_head`
+     congelado e replay bit efetivo >= `39%`;
+   - abortar se eval loss ultrapassar baseline ou se memoria/custo sair do
+     gate.
+6. Rodar weak eval official-like apenas se V500/V501 tiver sinal local melhor
+   ou novo CPU gate deterministico. Promover somente se `total>192`,
+   `equation>=60`, `bit>=136`, `trunc=0`.
+7. Qualquer weak eval promocional continua official-like e caro por desenho:
    thinking ligado, `max_tokens=7680`, `max_model_len=8192`. Para performance,
    usar avaliacoes baratas/diagnosticas antes; nao mudar essas configuracoes
    em resultado que pretende comparar com V290.
+
+## Atualizacao V500 - Auditoria De Parametros V499
+
+Artefatos:
+
+- `artifacts/v500_v499_parameterization_audit/KG1_V500_V499_PARAMETERIZATION_AUDIT.md`;
+- `artifacts/v500_v499_parameterization_audit/v500_v499_parameterization_audit_manifest.json`.
+
+Conclusao: as pecas de execucao do V499 estao sincronizadas, mas os valores nao
+estao corretos para esperar ganho de ACC. O run comprovou que o caminho tecnico
+funciona, nao que o adapter aprendeu os quatro ganhos de equation. O novo gate
+obrigatorio e: treino para ACC precisa ativar answer-span weighting e provar que
+esse weighting foi aplicado no tokenizador antes de gastar H200.
+
+## Atualizacao V502 - Double Check De Parametrizacao
+
+Artefatos:
+
+- `artifacts/v502_solution_parameterization_double_check/KG1_V502_SOLUTION_PARAMETERIZATION_DOUBLE_CHECK.md`;
+- `artifacts/v502_solution_parameterization_double_check/v502_solution_parameterization_double_check_manifest.json`;
+- `artifacts/v501_hf_nemo_h200_v498_answer_span_weighted_launch/launch_v501_hf_nemo_h200_v498_answer_span_weighted.py`.
+
+Resultado do double check:
+
+- dataset V498: `1712` train, `428` val, zero duplicados, zero falha de
+  extracao/verificacao do `Final answer`, zero caracteres suspeitos nos
+  answers;
+- tokenizacao: `token_max=331`, `MAX_LENGTH=1024` seguro, zero truncation,
+  offset masks completos;
+- ACC metric: raw CoT nao e aceito diretamente; avaliacao precisa extrair
+  resposta final antes de `verify_answer`, como esperado;
+- V499: tecnicamente correto, mas bloqueado por objetivo local
+  (`2.8125 -> 2.8162`, delta `+0.0037`, answer-span inativo);
+- V501: corrigido para `ANSWER_SPAN_LOSS_WEIGHT=4.0`,
+  `ANSWER_SPAN_MIN_WEIGHTED_TOKENS=1000`, `MAX_STEPS=4`, V290 checkpoint-6,
+  MoE `gate_up/down` treinaveis, `lm_head` congelado, bit replay efetivo
+  `39.02%`;
+- `kg1_static_safety_gate.py` atualizado para permitir peso de answer-span
+  apenas em rota explicitamente `answer_span_weighted` e bloquear qualquer caso
+  sem min-token gate.
+
+Decisao:
+
+- V499 nao deve receber weak eval pago.
+- V501 pode ser lançado somente depois de commit/push e debug final no HEAD
+  commitado.
+- Se V501 nao reduzir eval loss com answer-span ativo, nao rodar weak eval e
+  voltar para CPU/teacher; se reduzir, executar weak eval official-like e
+  promover apenas se `total>192`, `equation>=60`, `bit>=136`, `trunc=0`.

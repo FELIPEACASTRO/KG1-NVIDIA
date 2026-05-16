@@ -420,16 +420,39 @@ def audit_text(path: Path, text: str) -> list[Finding]:
                 )
             )
         high_answer_span_match = HIGH_ANSWER_SPAN_LOSS_WEIGHT_RE.search(text)
-        if high_answer_span_match and float(high_answer_span_match.group(1)) != 1.0:
+        answer_span_weight = float(high_answer_span_match.group(1)) if high_answer_span_match else 1.0
+        explicit_answer_span_route = (
+            "answer_span_weighted" in text
+            or "answer-span" in rel.lower()
+            or "ANSWER_SPAN_MIN_WEIGHTED_TOKENS" in text
+        )
+        if high_answer_span_match and answer_span_weight != 1.0 and not explicit_answer_span_route:
             findings.append(
                 Finding(
                     rel,
                     "error",
                     "high_answer_span_loss_weight_in_moe_smoke",
-                    "V491/V492 route requires ANSWER_SPAN_LOSS_WEIGHT=1.0 for promotional MoE smokes. "
-                    f"Observed numeric value {high_answer_span_match.group(1)}.",
+                    "Generic promotional MoE smokes require ANSWER_SPAN_LOSS_WEIGHT=1.0. "
+                    "Use an explicitly named answer-span route with an answer-span min-token gate "
+                    f"before raising it. Observed numeric value {high_answer_span_match.group(1)}.",
                 )
             )
+        if high_answer_span_match and answer_span_weight > 1.0 and explicit_answer_span_route:
+            min_tokens_match = re.search(
+                r"ANSWER_SPAN_MIN_WEIGHTED_TOKENS\s*=\s*['\"]?([0-9]+)['\"]?",
+                text,
+            )
+            if not min_tokens_match or int(min_tokens_match.group(1)) <= 0:
+                findings.append(
+                    Finding(
+                        rel,
+                        "error",
+                        "answer_span_weight_missing_min_token_gate",
+                        "Explicit answer-span routes with ANSWER_SPAN_LOSS_WEIGHT>1.0 must set "
+                        "ANSWER_SPAN_MIN_WEIGHTED_TOKENS to a positive value so inactive weighting "
+                        "cannot silently pass.",
+                    )
+                )
 
     if (
         job_or_notebook
@@ -934,6 +957,60 @@ def run_self_test() -> int:
         )
         if "high_answer_span_loss_weight_in_moe_smoke" not in {item.code for item in p3_high_findings}:
             print("missing P3 answer-span loss weight self-test finding", flush=True)
+            return 1
+        p3_answer_span_allowed = tmp / "launch_answer_span_weighted.py"
+        p3_answer_span_allowed.write_text(
+            "from huggingface_hub import HfApi\n"
+            "VERSION='v501_answer_span_weighted'\n"
+            "ANSWER_SPAN_MIN_WEIGHTED_TOKENS='1000'\n"
+            "COMMAND_SCRIPT=\"\"\"\n"
+            "export LORA_TARGET_PARAMETERS='mlp.experts.gate_up_proj,mlp.experts.down_proj'\n"
+            "export TRAINABLE_LORA_MODULES='q_proj,k_proj,v_proj,o_proj,up_proj,down_proj'\n"
+            "export REQUIRE_LORA_TARGET_PARAMETER_MATCH=1\n"
+            "export REQUIRE_LORA_TARGET_PARAMETERS_TRAINABLE=1\n"
+            "export ANSWER_SPAN_LOSS_WEIGHT='4.0'\n"
+            "export ANSWER_SPAN_MIN_WEIGHTED_TOKENS='1000'\n"
+            "\"\"\"\n"
+            "HfApi().run_job(command=['true'])\n",
+            encoding="utf-8",
+        )
+        p3_answer_span_allowed_findings = audit_text(
+            p3_answer_span_allowed,
+            p3_answer_span_allowed.read_text(encoding="utf-8"),
+        )
+        p3_answer_span_allowed_codes = {item.code for item in p3_answer_span_allowed_findings}
+        if {
+            "high_answer_span_loss_weight_in_moe_smoke",
+            "answer_span_weight_missing_min_token_gate",
+        } & p3_answer_span_allowed_codes:
+            print(
+                "false positive answer-span weighted route self-test finding",
+                json.dumps([item.__dict__ for item in p3_answer_span_allowed_findings], indent=2),
+                flush=True,
+            )
+            return 1
+        p3_answer_span_no_min = tmp / "launch_answer_span_weighted_no_min.py"
+        p3_answer_span_no_min.write_text(
+            "from huggingface_hub import HfApi\n"
+            "VERSION='v501_answer_span_weighted'\n"
+            "COMMAND_SCRIPT=\"\"\"\n"
+            "export LORA_TARGET_PARAMETERS='mlp.experts.gate_up_proj,mlp.experts.down_proj'\n"
+            "export TRAINABLE_LORA_MODULES='q_proj,k_proj,v_proj,o_proj,up_proj,down_proj'\n"
+            "export REQUIRE_LORA_TARGET_PARAMETER_MATCH=1\n"
+            "export REQUIRE_LORA_TARGET_PARAMETERS_TRAINABLE=1\n"
+            "export ANSWER_SPAN_LOSS_WEIGHT='4.0'\n"
+            "\"\"\"\n"
+            "HfApi().run_job(command=['true'])\n",
+            encoding="utf-8",
+        )
+        p3_answer_span_no_min_findings = audit_text(
+            p3_answer_span_no_min,
+            p3_answer_span_no_min.read_text(encoding="utf-8"),
+        )
+        if "answer_span_weight_missing_min_token_gate" not in {
+            item.code for item in p3_answer_span_no_min_findings
+        }:
+            print("missing answer-span min-token gate self-test finding", flush=True)
             return 1
         p3_valid_moe_smoke = tmp / "launch_p3_valid_moe_smoke.py"
         p3_valid_moe_smoke.write_text(

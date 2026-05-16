@@ -1,0 +1,275 @@
+{
+  "checks": [
+    {
+      "detail": "1712 rows",
+      "name": "train_rows",
+      "ok": true,
+      "severity": "fail"
+    },
+    {
+      "detail": "428 rows",
+      "name": "val_rows",
+      "ok": true,
+      "severity": "fail"
+    },
+    {
+      "detail": "{\"bit_manipulation\": 512, \"equation_transform\": 1200}",
+      "name": "train_family_counts",
+      "ok": true,
+      "severity": "fail"
+    },
+    {
+      "detail": "{\"bit_manipulation\": 128, \"equation_transform\": 300}",
+      "name": "val_family_counts",
+      "ok": true,
+      "severity": "fail"
+    },
+    {
+      "detail": "train/val duplicate ids",
+      "name": "duplicate_ids",
+      "ok": true,
+      "severity": "fail"
+    },
+    {
+      "detail": "all rows include Final answer marker",
+      "name": "assistant_final_markers",
+      "ok": true,
+      "severity": "fail"
+    },
+    {
+      "detail": "all rows include boxed final answer",
+      "name": "assistant_boxed_markers",
+      "ok": true,
+      "severity": "fail"
+    },
+    {
+      "detail": "train reference id/prompt/prompt+answer overlap all zero",
+      "name": "reference_overlap",
+      "ok": true,
+      "severity": "fail"
+    },
+    {
+      "detail": "tokenization_gate_passed",
+      "name": "tokenization_gate",
+      "ok": true,
+      "severity": "fail"
+    },
+    {
+      "detail": "token_max=331; runtime MAX_LENGTH=1024",
+      "name": "train_max_length_runtime_safe",
+      "ok": true,
+      "severity": "fail"
+    },
+    {
+      "detail": "runtime offset masks complete",
+      "name": "offset_masks",
+      "ok": true,
+      "severity": "fail"
+    },
+    {
+      "detail": "{\"v498_bit_replay_guardrail_from_v475\": 1.5, \"v498_numeric_teacher_trace_pack\": 1.0}",
+      "name": "source_weights",
+      "ok": true,
+      "severity": "fail"
+    },
+    {
+      "detail": "bit_share=0.390244",
+      "name": "bit_replay_effective_share",
+      "ok": true,
+      "severity": "fail"
+    },
+    {
+      "detail": "equation_share=0.609756",
+      "name": "equation_effective_share",
+      "ok": true,
+      "severity": "fail"
+    },
+    {
+      "detail": "cost=0.083333/min",
+      "name": "hf_cost_gate",
+      "ok": true,
+      "severity": "fail"
+    },
+    {
+      "detail": "{\"accelerator_model\": \"H200\", \"accelerator_quantity\": \"1\", \"accelerator_vram\": \"141 GB\", \"cpu\": \"23 vCPU\", \"name\": \"h200\", \"pretty_name\": \"Nvidia H200\", \"ram\": \"256 GB\", \"unit_cost_usd\": 0.083333, \"unit_label\": \"minute\"}",
+      "name": "h200_hardware_gate",
+      "ok": true,
+      "severity": "fail"
+    },
+    {
+      "detail": "{\"repo\": \"felipesp1983/kg1-nemotron-lora-v290-rank19-micro-patch-smoke\", \"subfolder\": \"checkpoint-6\"}",
+      "name": "init_adapter",
+      "ok": true,
+      "severity": "fail"
+    },
+    {
+      "detail": "MoE target parameters reported trainable",
+      "name": "target_parameters_trainable",
+      "ok": true,
+      "severity": "fail"
+    },
+    {
+      "detail": "lm_head has zero trainable params in log",
+      "name": "lm_head_frozen",
+      "ok": true,
+      "severity": "fail"
+    },
+    {
+      "detail": "training/checkpoint/final upload complete",
+      "name": "job_completed_and_uploaded",
+      "ok": true,
+      "severity": "fail"
+    },
+    {
+      "detail": "max_mem_reserved=76.1GiB",
+      "name": "memory_under_abort_cap",
+      "ok": true,
+      "severity": "fail"
+    },
+    {
+      "detail": "baseline=2.8125; final=2.8162; delta=0.0037",
+      "name": "eval_loss_improved",
+      "ok": false,
+      "severity": "warn"
+    },
+    {
+      "detail": "weight=1.0; weighted_train=0; weighted_val=0",
+      "name": "answer_span_acc_alignment",
+      "ok": false,
+      "severity": "warn"
+    },
+    {
+      "detail": "max_steps=2 was smoke-only",
+      "name": "max_steps_submit_gain_sufficient",
+      "ok": false,
+      "severity": "warn"
+    }
+  ],
+  "dataset_manifest": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v498_numeric_teacher_trace_pack\\20260516T_v498_numeric_teacher\\v498_numeric_teacher_trace_manifest.json",
+  "decision": {
+    "hard_failures": 0,
+    "next_action": "Do not run paid weak eval for V499; create answer-span-weighted V500/V501 only after local gate proves weighting is active.",
+    "reason": "Core gates passed, but final eval loss did not improve and the answer span was not emphasized for ACC.",
+    "status": "parameterization_technical_pass_objective_warning",
+    "warnings": 3
+  },
+  "expected": {
+    "bit_effective_share_min": 0.35,
+    "equation_effective_share_max": 0.65,
+    "max_unit_cost_usd": 0.09,
+    "promotion_gate": {
+      "bit_gte": 136,
+      "equation_gte": 60,
+      "total_gt": 192,
+      "truncated_eq": 0
+    },
+    "required_family_counts": {
+      "bit_manipulation": 512,
+      "equation_transform": 1200
+    },
+    "required_source_weights": {
+      "v498_bit_replay_guardrail_from_v475": 1.5,
+      "v498_numeric_teacher_trace_pack": 1.0
+    },
+    "required_val_family_counts": {
+      "bit_manipulation": 128,
+      "equation_transform": 300
+    },
+    "tokenization_status": "tokenization_gate_passed",
+    "train_rows": 1712,
+    "train_sha256": "920b3c30b9ada9ad2685091194dcc53e717f72a9c037cafeef6e494f21511e79",
+    "train_token_max_lte": 1024,
+    "val_rows": 428,
+    "val_sha256": "68cda4162214359aaf7cda304c2a06902775b1aadb53fcadfd0edf7ff481ed80"
+  },
+  "generated_at_utc": "2026-05-16T18:54:35.476249+00:00",
+  "job_log": {
+    "answer_span_weight": 1.0,
+    "answer_span_weighted_examples_train": 0,
+    "answer_span_weighted_examples_val": 0,
+    "baseline_eval_loss": 2.8125,
+    "eval_loss_end_values": [
+      2.8125,
+      2.8162,
+      2.8162
+    ],
+    "final_eval_loss": 2.8162,
+    "max_mem_reserved_gib": 76.1,
+    "raw_line_count": 2080,
+    "status_markers": {
+      "checkpoint_uploaded": true,
+      "lm_head_frozen": true,
+      "target_parameters_trainable": true,
+      "trainable_lora_filter_applied": true,
+      "training_complete": true,
+      "upload_complete": true
+    },
+    "tokenization_train_line": "Train tokenization summary: raw=1712 tokenized=1712 truncated=0 prompt_truncated=0 prompt_tokens_dropped_est=0 skipped_missing_messages=0 skipped_no_loss=0 offset_masks=1712 fallback_masks=0 fallback_prefix_mismatches=0 answer_span_loss_weight=1.0 answer_span_weighted_examples=0 answer_span_weighted_tokens=0",
+    "tokenization_validation_line": "Validation tokenization summary: raw=428 tokenized=428 truncated=0 prompt_truncated=0 prompt_tokens_dropped_est=0 skipped_missing_messages=0 skipped_no_loss=0 offset_masks=428 fallback_masks=0 fallback_prefix_mismatches=0 answer_span_loss_weight=1.0 answer_span_weighted_examples=0 answer_span_weighted_tokens=0",
+    "train_losses": [
+      {
+        "lr": 2e-08,
+        "max_steps": 2,
+        "step": 1,
+        "train_loss": 3.1656
+      },
+      {
+        "lr": 5e-09,
+        "max_steps": 2,
+        "step": 2,
+        "train_loss": 3.5717
+      }
+    ]
+  },
+  "job_log_path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v499_hf_nemo_h200_v498_numeric_teacher_trace_launch\\v499_hf_job_6a08b91e3308d79117b911f6.log",
+  "launch_manifest": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v499_hf_nemo_h200_v498_numeric_teacher_trace_launch\\v499-nemo-h200-v498-numeric-teacher-v290ckpt6-20260516T183506Z_launch_manifest.json",
+  "loss_delta": 0.0037,
+  "objective_manifest": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v499_hf_nemo_h200_v498_numeric_teacher_trace_launch\\v499-nemo-h200-v498-numeric-teacher-v290ckpt6-20260516T183506Z_objective_alignment_gate.json",
+  "schema_version": "kg1_v500_v499_parameterization_audit_v1",
+  "tokenization_manifest": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v498_numeric_teacher_trace_pack\\20260516T_v498_numeric_teacher\\tokenization_gate_real\\v286_generic_tokenization_gate_manifest.json",
+  "train_summary": {
+    "duplicate_ids": 0,
+    "empty_answers": 0,
+    "family_counts": {
+      "bit_manipulation": 512,
+      "equation_transform": 1200
+    },
+    "missing_boxed_marker": 0,
+    "missing_final_answer_marker": 0,
+    "rows": 1712,
+    "source_counts": {
+      "v498_bit_replay_guardrail_from_v475": 512,
+      "v498_numeric_teacher_trace_pack": 1200
+    },
+    "subcategory_counts": {
+      "bit_guardrail_replay": 512,
+      "equation_numeric_add_direct_hard_negative": 400,
+      "equation_numeric_colon_trailing_zero_hard_negative": 400,
+      "equation_numeric_minus_signed_hard_negative": 400
+    },
+    "unique_ids": 1712
+  },
+  "upload_manifest": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v499_hf_nemo_h200_v498_numeric_teacher_trace_launch\\v498_hf_dataset_upload_manifest.json",
+  "validation_summary": {
+    "duplicate_ids": 0,
+    "empty_answers": 0,
+    "family_counts": {
+      "bit_manipulation": 128,
+      "equation_transform": 300
+    },
+    "missing_boxed_marker": 0,
+    "missing_final_answer_marker": 0,
+    "rows": 428,
+    "source_counts": {
+      "v498_bit_replay_guardrail_from_v475": 128,
+      "v498_numeric_teacher_trace_pack": 300
+    },
+    "subcategory_counts": {
+      "bit_guardrail_replay": 128,
+      "equation_numeric_add_direct_hard_negative": 100,
+      "equation_numeric_colon_trailing_zero_hard_negative": 100,
+      "equation_numeric_minus_signed_hard_negative": 100
+    },
+    "unique_ids": 428
+  }
+}

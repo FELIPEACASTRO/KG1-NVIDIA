@@ -1,0 +1,1613 @@
++ export DEBIAN_FRONTEND=noninteractive
++ DEBIAN_FRONTEND=noninteractive
++ export MAX_JOBS=8
++ MAX_JOBS=8
+++ command -v python
++ PYBIN=/opt/venv/bin/python
++ echo python_bin=/opt/venv/bin/python
++ apt-get update -qq
+python_bin=/opt/venv/bin/python
++ apt-get install -y -qq git
++ /opt/venv/bin/python -
+{"torch_before": "2.9.0a0+50eac811a6.nv25.09", "cuda": "13.0", "cuda_available": true, "device": "NVIDIA H200", "gpu_total_gib": 139.80072021484375}
++ /opt/venv/bin/python -m pip install -q --no-cache-dir --upgrade pip
++ /opt/venv/bin/python -m pip install -q --no-cache-dir --upgrade 'huggingface_hub>=0.36.0' packaging wheel setuptools 'peft>=0.17.0' 'accelerate>=1.10.0' safetensors sentencepiece protobuf hf_transfer ninja einops
+ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.
+nvidia-resiliency-ext 0.4.1 requires pynvml>=12.0.0, which is not installed.
+tensorrt-llm 1.1.0 requires patchelf==0.18.0, which is not installed.
+nemo-export-deploy 0.4.0rc0 requires megatron-bridge<0.2.0,>=0.1.0a0, but you have megatron-bridge 0.3.0rc0 which is incompatible.
+nemo-export-deploy 0.4.0rc0 requires megatron-core<0.15.0,>=0.14.0a0, but you have megatron-core 0.16.0rc0 which is incompatible.
+nemo-export-deploy 0.4.0rc0 requires nvidia-modelopt[torch]<0.34.0,>=0.33.0a0; sys_platform != "darwin", but you have nvidia-modelopt 0.37.0 which is incompatible.
+nemo-export-deploy 0.4.0rc0 requires peft<0.14.0, but you have peft 0.19.1 which is incompatible.
+nemo-export-deploy 0.4.0rc0 requires torch==2.7.1, but you have torch 2.9.0a0+50eac811a6.nv25.9 which is incompatible.
+nemo-export-deploy 0.4.0rc0 requires transformer-engine[pytorch]<2.7.0,>=2.6.0a0; sys_platform != "darwin", but you have transformer-engine 2.9.0+70f53666 which is incompatible.
+google-api-core 2.29.0 requires protobuf!=3.20.0,!=3.20.1,!=4.21.0,!=4.21.1,!=4.21.2,!=4.21.3,!=4.21.4,!=4.21.5,<7.0.0,>=3.19.5, but you have protobuf 7.34.1 which is incompatible.
+googleapis-common-protos 1.72.0 requires protobuf!=4.21.1,!=4.21.2,!=4.21.3,!=4.21.4,!=4.21.5,<7.0.0,>=3.20.2, but you have protobuf 7.34.1 which is incompatible.
+lightning 2.4.0 requires packaging<25.0,>=20.0, but you have packaging 26.2 which is incompatible.
+nemo-toolkit 2.6.0rc0 requires fsspec==2024.12.0, but you have fsspec 2024.9.0 which is incompatible.
+nemo-toolkit 2.6.0rc0 requires protobuf~=5.29.5, but you have protobuf 7.34.1 which is incompatible.
+opentelemetry-proto 1.39.1 requires protobuf<7.0,>=5.0, but you have protobuf 7.34.1 which is incompatible.
+proto-plus 1.27.0 requires protobuf<7.0.0,>=3.19.0, but you have protobuf 7.34.1 which is incompatible.
+wandb 0.24.0 requires protobuf!=4.21.0,!=5.28.0,<7,>=3.19.0; python_version > "3.9" and sys_platform == "linux", but you have protobuf 7.34.1 which is incompatible.
+tensorrt-llm 1.1.0 requires fastapi<=0.117.1,>=0.115.4, but you have fastapi 0.128.0 which is incompatible.
+tensorrt-llm 1.1.0 requires h5py==3.12.1, but you have h5py 3.15.1 which is incompatible.
+tensorrt-llm 1.1.0 requires nvidia-cutlass-dsl==4.2.1; python_version >= "3.10", but you have nvidia-cutlass-dsl 4.4.0.dev0 which is incompatible.
+tensorrt-llm 1.1.0 requires setuptools<80, but you have setuptools 82.0.1 which is incompatible.
+tensorrt-llm 1.1.0 requires transformers==4.56.0, but you have transformers 4.57.6 which is incompatible.
+tensorrt-llm 1.1.0 requires wheel<=0.45.1, but you have wheel 0.47.0 which is incompatible.
+vllm 0.10.1.1+381074ae.nv25.9.cu130 requires setuptools<80,>=77.0.3; python_version > "3.11", but you have setuptools 82.0.1 which is incompatible.
+vllm 0.10.1.1+381074ae.nv25.9.cu130 requires transformers==4.55.2, but you have transformers 4.57.6 which is incompatible.
+vllm 0.10.1.1+381074ae.nv25.9.cu130 requires xgrammar==0.1.22; platform_machine == "x86_64" or platform_machine == "aarch64" or platform_machine == "arm64", but you have xgrammar 0.1.25 which is incompatible.
+nvidia-dali-cuda130 1.51.2 requires packaging<=25.0, but you have packaging 26.2 which is incompatible.
++ rm -rf /tmp/kg1
++ git clone --depth 1 --branch v230-v226-complementarity https://github.com/FELIPEACASTRO/KG1-NVIDIA.git /tmp/kg1
+Cloning into '/tmp/kg1'...
+Updating files:  57% (1157/1996)Updating files:  58% (1158/1996)Updating files:  59% (1178/1996)Updating files:  60% (1198/1996)Updating files:  61% (1218/1996)Updating files:  62% (1238/1996)Updating files:  63% (1258/1996)Updating files:  64% (1278/1996)Updating files:  65% (1298/1996)Updating files:  66% (1318/1996)Updating files:  67% (1338/1996)Updating files:  68% (1358/1996)Updating files:  69% (1378/1996)Updating files:  70% (1398/1996)Updating files:  71% (1418/1996)Updating files:  72% (1438/1996)Updating files:  73% (1458/1996)Updating files:  74% (1478/1996)Updating files:  75% (1497/1996)Updating files:  76% (1517/1996)Updating files:  77% (1537/1996)Updating files:  78% (1557/1996)Updating files:  79% (1577/1996)Updating files:  80% (1597/1996)Updating files:  81% (1617/1996)Updating files:  82% (1637/1996)Updating files:  83% (1657/1996)Updating files:  84% (1677/1996)Updating files:  85% (1697/1996)Updating files:  86% (1717/1996)Updating files:  87% (1737/1996)Updating files:  88% (1757/1996)Updating files:  89% (1777/1996)Updating files:  90% (1797/1996)Updating files:  91% (1817/1996)Updating files:  92% (1837/1996)Updating files:  93% (1857/1996)Updating files:  94% (1877/1996)Updating files:  95% (1897/1996)Updating files:  96% (1917/1996)Updating files:  97% (1937/1996)Updating files:  98% (1957/1996)Updating files:  99% (1977/1996)Updating files: 100% (1996/1996)Updating files: 100% (1996/1996), done.
++ cd /tmp/kg1
++ git fetch --depth 1 origin 99deba3e1d2adb0dd0d057cc14d51925530545d5
+From https://github.com/FELIPEACASTRO/KG1-NVIDIA
+ * branch            99deba3e1d2adb0dd0d057cc14d51925530545d5 -> FETCH_HEAD
++ git checkout --detach 99deba3e1d2adb0dd0d057cc14d51925530545d5
+HEAD is now at 99deba3 Add V498 numeric teacher trace smoke path
+++ git rev-parse HEAD
++ observed=99deba3e1d2adb0dd0d057cc14d51925530545d5
++ echo repo_commit=99deba3e1d2adb0dd0d057cc14d51925530545d5
++ '[' 99deba3e1d2adb0dd0d057cc14d51925530545d5 '!=' 99deba3e1d2adb0dd0d057cc14d51925530545d5 ']'
++ /opt/venv/bin/python -m py_compile scripts/hf_job_train_v90.py scripts/hf_job_preflight_gate.py scripts/run_v485_peft_roundtrip_gate.py
+repo_commit=99deba3e1d2adb0dd0d057cc14d51925530545d5
++ export HF_HUB_ENABLE_HF_TRANSFER=1
++ HF_HUB_ENABLE_HF_TRANSFER=1
++ export TOKENIZERS_PARALLELISM=false
++ TOKENIZERS_PARALLELISM=false
++ export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
++ PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
++ export MODEL_NAME=nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16
++ MODEL_NAME=nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16
++ export MODEL_REVISION=cbd3fa9f933d55ef16a84236559f4ee2a0526848
++ MODEL_REVISION=cbd3fa9f933d55ef16a84236559f4ee2a0526848
++ export DATA_REPO=felipesp1983/kg1-nemotron-training
++ DATA_REPO=felipesp1983/kg1-nemotron-training
++ export DATA_FILE=data/v498_numeric_teacher_trace_pack/20260516T_v498_numeric_teacher/v498_numeric_teacher_trace_train.jsonl
++ DATA_FILE=data/v498_numeric_teacher_trace_pack/20260516T_v498_numeric_teacher/v498_numeric_teacher_trace_train.jsonl
++ export VAL_FILE=data/v498_numeric_teacher_trace_pack/20260516T_v498_numeric_teacher/v498_numeric_teacher_trace_val.jsonl
++ VAL_FILE=data/v498_numeric_teacher_trace_pack/20260516T_v498_numeric_teacher/v498_numeric_teacher_trace_val.jsonl
++ export EXPECTED_TRAIN_SHA256=920b3c30b9ada9ad2685091194dcc53e717f72a9c037cafeef6e494f21511e79
++ EXPECTED_TRAIN_SHA256=920b3c30b9ada9ad2685091194dcc53e717f72a9c037cafeef6e494f21511e79
++ export EXPECTED_VAL_SHA256=68cda4162214359aaf7cda304c2a06902775b1aadb53fcadfd0edf7ff481ed80
++ EXPECTED_VAL_SHA256=68cda4162214359aaf7cda304c2a06902775b1aadb53fcadfd0edf7ff481ed80
++ export MIN_TRAIN_EXAMPLES=1712
++ MIN_TRAIN_EXAMPLES=1712
++ export MIN_VAL_EXAMPLES=428
++ MIN_VAL_EXAMPLES=428
++ export MIN_TOKENIZED_TRAIN_EXAMPLES=1712
++ MIN_TOKENIZED_TRAIN_EXAMPLES=1712
++ export MIN_TOKENIZED_VAL_EXAMPLES=428
++ MIN_TOKENIZED_VAL_EXAMPLES=428
++ export OUTPUT_DIR=/tmp/kg1_v499_output
++ OUTPUT_DIR=/tmp/kg1_v499_output
++ export OUTPUT_REPO=felipesp1983/kg1-nemotron-lora-v499-nemo-h200-v498-numeric-teacher-v290ckpt6
++ OUTPUT_REPO=felipesp1983/kg1-nemotron-lora-v499-nemo-h200-v498-numeric-teacher-v290ckpt6
++ export RUN_ID=v499-nemo-h200-v498-numeric-teacher-v290ckpt6-20260516T183506Z
++ RUN_ID=v499-nemo-h200-v498-numeric-teacher-v290ckpt6-20260516T183506Z
++ export UPLOAD_TO_HF=1
++ UPLOAD_TO_HF=1
++ export UPLOAD_CHECKPOINTS_DURING_TRAINING=1
++ UPLOAD_CHECKPOINTS_DURING_TRAINING=1
++ export INIT_ADAPTER_REPO=felipesp1983/kg1-nemotron-lora-v290-rank19-micro-patch-smoke
++ INIT_ADAPTER_REPO=felipesp1983/kg1-nemotron-lora-v290-rank19-micro-patch-smoke
++ export INIT_ADAPTER_SUBFOLDER=checkpoint-6
++ INIT_ADAPTER_SUBFOLDER=checkpoint-6
++ export INIT_ADAPTER_LOAD_MODE=peft
++ INIT_ADAPTER_LOAD_MODE=peft
++ export PEFT_MANUAL_LOAD_METHOD=auto
++ PEFT_MANUAL_LOAD_METHOD=auto
++ export FAIL_ON_MISSING_ADAPTER_KEYS=1
++ FAIL_ON_MISSING_ADAPTER_KEYS=1
++ export LORA_R=32
++ LORA_R=32
++ export LORA_ALPHA=32
++ LORA_ALPHA=32
++ export LORA_DROPOUT=0.0
++ LORA_DROPOUT=0.0
++ export LORA_TARGET_MODULES=down_proj,in_proj,k_proj,lm_head,o_proj,out_proj,q_proj,up_proj,v_proj
++ LORA_TARGET_MODULES=down_proj,in_proj,k_proj,lm_head,o_proj,out_proj,q_proj,up_proj,v_proj
++ export LORA_TARGET_PARAMETERS=mlp.experts.gate_up_proj,mlp.experts.down_proj
++ LORA_TARGET_PARAMETERS=mlp.experts.gate_up_proj,mlp.experts.down_proj
++ export TRAINABLE_LORA_MODULES=q_proj,k_proj,v_proj,o_proj,up_proj,down_proj
++ TRAINABLE_LORA_MODULES=q_proj,k_proj,v_proj,o_proj,up_proj,down_proj
++ export TRAINABLE_LORA_NAME_SUBSTRINGS=
++ TRAINABLE_LORA_NAME_SUBSTRINGS=
++ export REQUIRED_TRAINABLE_LORA_NAME_SUBSTRINGS=q_proj,k_proj,v_proj,o_proj,up_proj,down_proj
++ REQUIRED_TRAINABLE_LORA_NAME_SUBSTRINGS=q_proj,k_proj,v_proj,o_proj,up_proj,down_proj
++ export REQUIRE_LORA_TARGET_PARAMETER_MATCH=1
++ REQUIRE_LORA_TARGET_PARAMETER_MATCH=1
++ export REQUIRE_LORA_TARGET_PARAMETERS_TRAINABLE=1
++ REQUIRE_LORA_TARGET_PARAMETERS_TRAINABLE=1
++ export MAX_TRAINABLE_PARAM_RATIO=0.035
++ MAX_TRAINABLE_PARAM_RATIO=0.035
++ export MAX_LENGTH=1024
++ MAX_LENGTH=1024
++ export BATCH_SIZE=4
++ BATCH_SIZE=4
++ export MICRO_BATCH_SIZE=1
++ MICRO_BATCH_SIZE=1
++ export LEARNING_RATE=2.0e-8
++ LEARNING_RATE=2.0e-8
++ export FINAL_LEARNING_RATE=5.0e-9
++ FINAL_LEARNING_RATE=5.0e-9
++ export NUM_EPOCHS=1
++ NUM_EPOCHS=1
++ export MAX_STEPS=2
++ MAX_STEPS=2
++ export SAVE_EVERY_STEPS=2
++ SAVE_EVERY_STEPS=2
++ export EVAL_EVERY_STEPS=2
++ EVAL_EVERY_STEPS=2
++ export EVAL_MAX_EXAMPLES=96
++ EVAL_MAX_EXAMPLES=96
++ export LOG_EVERY_STEPS=1
++ LOG_EVERY_STEPS=1
++ export MICRO_LOG_EVERY=0
++ MICRO_LOG_EVERY=0
++ export ANSWER_SPAN_LOSS_WEIGHT=1.0
++ ANSWER_SPAN_LOSS_WEIGHT=1.0
++ export ANSWER_SPAN_MIN_WEIGHTED_TOKENS=1
++ ANSWER_SPAN_MIN_WEIGHTED_TOKENS=1
++ export BASELINE_EVAL_BEFORE_TRAIN=1
++ BASELINE_EVAL_BEFORE_TRAIN=1
++ export REQUIRE_FINAL_EVAL_LTE_BASELINE=0
++ REQUIRE_FINAL_EVAL_LTE_BASELINE=0
++ export ABORT_EVAL_RELATIVE_TO_BASELINE_DELTA=0.16
++ ABORT_EVAL_RELATIVE_TO_BASELINE_DELTA=0.16
++ export MAX_FINAL_EVAL_REGRESSION=0
++ MAX_FINAL_EVAL_REGRESSION=0
++ export ABORT_TRAIN_RISE_POINTS=0
++ ABORT_TRAIN_RISE_POINTS=0
++ export ABORT_MAX_RESERVED_GIB=78
++ ABORT_MAX_RESERVED_GIB=78
++ export SAMPLING_MODE=weighted_replacement
++ SAMPLING_MODE=weighted_replacement
++ export SUBCATEGORY_WEIGHTS=equation_numeric_add_direct_hard_negative=1.00,equation_numeric_colon_trailing_zero_hard_negative=1.00,equation_numeric_minus_signed_hard_negative=1.00,bit_guardrail_replay=1.00
++ SUBCATEGORY_WEIGHTS=equation_numeric_add_direct_hard_negative=1.00,equation_numeric_colon_trailing_zero_hard_negative=1.00,equation_numeric_minus_signed_hard_negative=1.00,bit_guardrail_replay=1.00
++ export SOURCE_WEIGHTS=v498_numeric_teacher_trace_pack=1.00,v498_bit_replay_guardrail_from_v475=1.50
++ SOURCE_WEIGHTS=v498_numeric_teacher_trace_pack=1.00,v498_bit_replay_guardrail_from_v475=1.50
++ export MAX_PROMPT_TRUNCATION_RATE=0.0
++ MAX_PROMPT_TRUNCATION_RATE=0.0
++ export REQUIRE_OFFSET_MASK=1
++ REQUIRE_OFFSET_MASK=1
++ export TOKENIZE_ONLY_DRY_RUN=0
++ TOKENIZE_ONLY_DRY_RUN=0
++ export DRY_RUN_VALIDATE_ONLY=0
++ DRY_RUN_VALIDATE_ONLY=0
++ export USE_BITSANDBYTES=0
++ USE_BITSANDBYTES=0
++ export MODEL_DEVICE_MAP=auto
++ MODEL_DEVICE_MAP=auto
++ export ATTN_IMPLEMENTATION=eager
++ ATTN_IMPLEMENTATION=eager
++ export TORCH_ALLOW_TF32=1
++ TORCH_ALLOW_TF32=1
++ export TORCH_FLOAT32_MATMUL_PRECISION=high
++ TORCH_FLOAT32_MATMUL_PRECISION=high
++ export GRADIENT_CHECKPOINTING=1
++ GRADIENT_CHECKPOINTING=1
++ /opt/venv/bin/python scripts/hf_job_preflight_gate.py --phase preinstall
+=== HF JOB PREFLIGHT GATE START ===
+generated_at_utc = 2026-05-16T18:36:38.469505+00:00
+phase = preinstall
+repo_commit_gate = {"expected": "99deba3e1d2adb0dd0d057cc14d51925530545d5", "observed": "99deba3e1d2adb0dd0d057cc14d51925530545d5"}
+py_compile_ok = {"targets": ["scripts/hf_job_train_v90.py", "scripts/hf_job_train_v315_preference.py", "scripts/hf_job_preflight_gate.py", "scripts/kg1_static_safety_gate.py", "scripts/kg1_pre_paid_job_integration_gate.py", "scripts/build_v243_training_mix.py", "scripts/audit_jsonl_overlap.py"]}
+torch_preinstall = {"capability": [9, 0], "cuda": "13.0", "cuda_available": true, "cuda_runtime_major": 13, "gpu_name": "NVIDIA H200", "gpu_total_gib": 139.80072021484375, "torch": "2.9.0a0+50eac811a6.nv25.09"}
+hf_flavor_cost_gate = {"allowed_flavors": ["h200"], "flavor": "h200", "max_unit_cost_usd": 0.09, "unit_cost_usd": 0.083333}
+training_env_gate = {"data_file": "data/v498_numeric_teacher_trace_pack/20260516T_v498_numeric_teacher/v498_numeric_teacher_trace_train.jsonl", "data_repo": "felipesp1983/kg1-nemotron-training", "lora_alpha": 32, "lora_r": 32, "max_length": 1024, "max_steps": 2, "model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16", "model_revision": "cbd3fa9f933d55ef16a84236559f4ee2a0526848", "output_repo": "felipesp1983/kg1-nemotron-lora-v499-nemo-h200-v498-numeric-teacher-v290ckpt6", "require_lora_target_parameter_match": true, "required_trainable_lora_name_substrings": "q_proj,k_proj,v_proj,o_proj,up_proj,down_proj", "run_id": "v499-nemo-h200-v498-numeric-teacher-v290ckpt6-20260516T183506Z", "sampling_mode": "weighted_replacement", "target_modules": "down_proj,in_proj,k_proj,lm_head,o_proj,out_proj,q_proj,up_proj,v_proj", "target_parameters": "mlp.experts.gate_up_proj,mlp.experts.down_proj", "trainable_lora_modules": "q_proj,k_proj,v_proj,o_proj,up_proj,down_proj", "trainable_lora_name_substrings": "", "val_file": "data/v498_numeric_teacher_trace_pack/20260516T_v498_numeric_teacher/v498_numeric_teacher_trace_val.jsonl"}
+=== HF JOB PREFLIGHT GATE END ===
++ /opt/venv/bin/python scripts/hf_job_preflight_gate.py --phase artifacts
+=== HF JOB PREFLIGHT GATE START ===
+generated_at_utc = 2026-05-16T18:36:40.269765+00:00
+phase = artifacts
+training_env_gate = {"data_file": "data/v498_numeric_teacher_trace_pack/20260516T_v498_numeric_teacher/v498_numeric_teacher_trace_train.jsonl", "data_repo": "felipesp1983/kg1-nemotron-training", "lora_alpha": 32, "lora_r": 32, "max_length": 1024, "max_steps": 2, "model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16", "model_revision": "cbd3fa9f933d55ef16a84236559f4ee2a0526848", "output_repo": "felipesp1983/kg1-nemotron-lora-v499-nemo-h200-v498-numeric-teacher-v290ckpt6", "require_lora_target_parameter_match": true, "required_trainable_lora_name_substrings": "q_proj,k_proj,v_proj,o_proj,up_proj,down_proj", "run_id": "v499-nemo-h200-v498-numeric-teacher-v290ckpt6-20260516T183506Z", "sampling_mode": "weighted_replacement", "target_modules": "down_proj,in_proj,k_proj,lm_head,o_proj,out_proj,q_proj,up_proj,v_proj", "target_parameters": "mlp.experts.gate_up_proj,mlp.experts.down_proj", "trainable_lora_modules": "q_proj,k_proj,v_proj,o_proj,up_proj,down_proj", "trainable_lora_name_substrings": "", "val_file": "data/v498_numeric_teacher_trace_pack/20260516T_v498_numeric_teacher/v498_numeric_teacher_trace_val.jsonl"}
+model_revision_gate = {"model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16", "revision": "cbd3fa9f933d55ef16a84236559f4ee2a0526848", "sha": "cbd3fa9f933d55ef16a84236559f4ee2a0526848"}
+
+v498_numeric_teacher_trace_train.jsonl:   0%|          | 0.00/3.31M [00:00<?, ?B/s][Av498_numeric_teacher_trace_train.jsonl: 100%|██████████| 3.31M/3.31M [00:00<00:00, 49.8MB/s]
+train_dataset_file = {"expected_sha256": "920b3c30b9ada9ad2685091194dcc53e717f72a9c037cafeef6e494f21511e79", "filename": "data/v498_numeric_teacher_trace_pack/20260516T_v498_numeric_teacher/v498_numeric_teacher_trace_train.jsonl", "path": "/root/.cache/huggingface/hub/datasets--felipesp1983--kg1-nemotron-training/snapshots/c7e27fd39c598dd23cb25481f567787bdff50820/data/v498_numeric_teacher_trace_pack/20260516T_v498_numeric_teacher/v498_numeric_teacher_trace_train.jsonl", "repo_id": "felipesp1983/kg1-nemotron-training", "sha256": "920b3c30b9ada9ad2685091194dcc53e717f72a9c037cafeef6e494f21511e79"}
+train_jsonl_audit = {"assistant_missing": 0, "bad_rows_first10": [], "duplicate_ids": 0, "family_counts": {"bit_manipulation": 512, "equation_transform": 1200}, "gate_row_flag_bad_rows_first10": [], "gate_row_flag_counts": {"full_gate_rows_used_for_training": 1712, "gate_rows_used_for_training": 1712, "weak_gate_rows_used_for_training": 1712}, "gate_row_flag_missing_counts": {"full_gate_rows_used_for_training": 0, "gate_rows_used_for_training": 0, "weak_gate_rows_used_for_training": 0}, "label": "train", "path": "/root/.cache/huggingface/hub/datasets--felipesp1983--kg1-nemotron-training/snapshots/c7e27fd39c598dd23cb25481f567787bdff50820/data/v498_numeric_teacher_trace_pack/20260516T_v498_numeric_teacher/v498_numeric_teacher_trace_train.jsonl", "rows": 1712, "subcategory_counts": {"bit_guardrail_replay": 512, "equation_numeric_add_direct_hard_negative": 400, "equation_numeric_colon_trailing_zero_hard_negative": 400, "equation_numeric_minus_signed_hard_negative": 400}, "subcategory_counts_top20": {"bit_guardrail_replay": 512, "equation_numeric_add_direct_hard_negative": 400, "equation_numeric_colon_trailing_zero_hard_negative": 400, "equation_numeric_minus_signed_hard_negative": 400}, "unique_ids": 1712}
+
+v498_numeric_teacher_trace_val.jsonl:   0%|          | 0.00/833k [00:00<?, ?B/s][Av498_numeric_teacher_trace_val.jsonl: 100%|██████████| 833k/833k [00:00<00:00, 44.0MB/s]
+validation_dataset_file = {"expected_sha256": "68cda4162214359aaf7cda304c2a06902775b1aadb53fcadfd0edf7ff481ed80", "filename": "data/v498_numeric_teacher_trace_pack/20260516T_v498_numeric_teacher/v498_numeric_teacher_trace_val.jsonl", "path": "/root/.cache/huggingface/hub/datasets--felipesp1983--kg1-nemotron-training/snapshots/c7e27fd39c598dd23cb25481f567787bdff50820/data/v498_numeric_teacher_trace_pack/20260516T_v498_numeric_teacher/v498_numeric_teacher_trace_val.jsonl", "repo_id": "felipesp1983/kg1-nemotron-training", "sha256": "68cda4162214359aaf7cda304c2a06902775b1aadb53fcadfd0edf7ff481ed80"}
+validation_jsonl_audit = {"assistant_missing": 0, "bad_rows_first10": [], "duplicate_ids": 0, "family_counts": {"bit_manipulation": 128, "equation_transform": 300}, "gate_row_flag_bad_rows_first10": [], "gate_row_flag_counts": {"full_gate_rows_used_for_training": 428, "gate_rows_used_for_training": 428, "weak_gate_rows_used_for_training": 428}, "gate_row_flag_missing_counts": {"full_gate_rows_used_for_training": 0, "gate_rows_used_for_training": 0, "weak_gate_rows_used_for_training": 0}, "label": "validation", "path": "/root/.cache/huggingface/hub/datasets--felipesp1983--kg1-nemotron-training/snapshots/c7e27fd39c598dd23cb25481f567787bdff50820/data/v498_numeric_teacher_trace_pack/20260516T_v498_numeric_teacher/v498_numeric_teacher_trace_val.jsonl", "rows": 428, "subcategory_counts": {"bit_guardrail_replay": 128, "equation_numeric_add_direct_hard_negative": 100, "equation_numeric_colon_trailing_zero_hard_negative": 100, "equation_numeric_minus_signed_hard_negative": 100}, "subcategory_counts_top20": {"bit_guardrail_replay": 128, "equation_numeric_add_direct_hard_negative": 100, "equation_numeric_colon_trailing_zero_hard_negative": 100, "equation_numeric_minus_signed_hard_negative": 100}, "unique_ids": 428}
+
+adapter_config.json:   0%|          | 0.00/1.21k [00:00<?, ?B/s][Aadapter_config.json: 100%|██████████| 1.21k/1.21k [00:00<00:00, 19.4MB/s]
+init_adapter_gate = {"adapter_config": "checkpoint-6/adapter_config.json", "adapter_weights": "checkpoint-6/adapter_model.safetensors", "lora_alpha": 32, "modules_to_save": [], "r": 32, "repo": "felipesp1983/kg1-nemotron-lora-v290-rank19-micro-patch-smoke", "subfolder": "checkpoint-6", "target_modules": ["down_proj", "in_proj", "k_proj", "lm_head", "o_proj", "out_proj", "q_proj", "up_proj", "v_proj"], "target_parameters": ["mlp.experts.down_proj", "mlp.experts.gate_up_proj"]}
+=== HF JOB PREFLIGHT GATE END ===
++ /opt/venv/bin/python scripts/run_v485_peft_roundtrip_gate.py --adapter-repo felipesp1983/kg1-nemotron-lora-v290-rank19-micro-patch-smoke --adapter-subfolder checkpoint-6 --expected-r 32 --expected-alpha 32 --expected-target-modules down_proj,in_proj,k_proj,lm_head,o_proj,out_proj,q_proj,up_proj,v_proj --expected-target-parameters mlp.experts.gate_up_proj,mlp.experts.down_proj --output-json /tmp/kg1_v485_peft_roundtrip_gate_manifest.json
+=== V485 PEFT ROUNDTRIP GATE START ===
+generated_at_utc = 2026-05-16T18:36:40.899062+00:00
+adapter_repo = felipesp1983/kg1-nemotron-lora-v290-rank19-micro-patch-smoke
+adapter_subfolder = checkpoint-6
+adapter_revision = default
+output_json = /tmp/kg1_v485_peft_roundtrip_gate_manifest.json
+hf_gpu_allowed = True
+adapter_config_sha256 = 4dfe5ec8ca33dade558c27af9a2f2f542f1f0d05ff0ee9d85bb5e5a57f12aae4
+key_shape_dtype_sha256 = fc540b014aaba5eeef5098abbb638b70e639f5e7ba04386535012f54b8d98a95
+target_parameter_lora_tensors = {"mlp.experts.down_proj": 5934, "mlp.experts.gate_up_proj": 5934}
+module_lora_tensors = {"down_proj": 5934, "in_proj": 46, "k_proj": 12, "lm_head": 2, "o_proj": 12, "out_proj": 46, "q_proj": 12, "up_proj": 5934, "v_proj": 12}
+v485_peft_roundtrip_gate=ok
+=== V485 PEFT ROUNDTRIP GATE END ===
++ /opt/venv/bin/python -
+objective_alignment_cmd = /opt/venv/bin/python scripts/audit_v478_training_objective_alignment.py --train-jsonl /root/.cache/huggingface/hub/datasets--felipesp1983--kg1-nemotron-training/snapshots/c7e27fd39c598dd23cb25481f567787bdff50820/data/v498_numeric_teacher_trace_pack/20260516T_v498_numeric_teacher/v498_numeric_teacher_trace_train.jsonl --val-jsonl /root/.cache/huggingface/hub/datasets--felipesp1983--kg1-nemotron-training/snapshots/c7e27fd39c598dd23cb25481f567787bdff50820/data/v498_numeric_teacher_trace_pack/20260516T_v498_numeric_teacher/v498_numeric_teacher_trace_val.jsonl --source-weights v498_numeric_teacher_trace_pack=1.00,v498_bit_replay_guardrail_from_v475=1.50 --subcategory-weights equation_numeric_add_direct_hard_negative=1.00,equation_numeric_colon_trailing_zero_hard_negative=1.00,equation_numeric_minus_signed_hard_negative=1.00,bit_guardrail_replay=1.00 --min-bit-effective-share 0.35 --max-equation-effective-share 0.65 --max-any-family-effective-share 0.95 --output-json /tmp/kg1_v499_objective_alignment_gate.json --enforce
+{
+  "dataset_manifest_json": "",
+  "findings": [],
+  "generated_at_utc": "2026-05-16T18:36:42.388660+00:00",
+  "hf_gpu_allowed": true,
+  "schema_version": "kg1_v478_training_objective_alignment_gate_v1",
+  "source_weights": {
+    "v498_bit_replay_guardrail_from_v475": 1.5,
+    "v498_numeric_teacher_trace_pack": 1.0
+  },
+  "subcategory_weights": {
+    "bit_guardrail_replay": 1.0,
+    "equation_numeric_add_direct_hard_negative": 1.0,
+    "equation_numeric_colon_trailing_zero_hard_negative": 1.0,
+    "equation_numeric_minus_signed_hard_negative": 1.0
+  },
+  "thresholds": {
+    "max_any_family_effective_share": 0.95,
+    "max_equation_effective_share": 0.65,
+    "min_bit_effective_share": 0.35
+  },
+  "train": {
+    "effective_share_by_family": {
+      "bit_manipulation": {
+        "share": 0.390244,
+        "weight": 768.0
+      },
+      "equation_transform": {
+        "share": 0.609756,
+        "weight": 1200.0
+      }
+    },
+    "effective_share_by_source": {
+      "v498_bit_replay_guardrail_from_v475": {
+        "share": 0.390244,
+        "weight": 768.0
+      },
+      "v498_numeric_teacher_trace_pack": {
+        "share": 0.609756,
+        "weight": 1200.0
+      }
+    },
+    "effective_share_by_subcategory": {
+      "bit_guardrail_replay": {
+        "share": 0.390244,
+        "weight": 768.0
+      },
+      "equation_numeric_add_direct_hard_negative": {
+        "share": 0.203252,
+        "weight": 400.0
+      },
+      "equation_numeric_colon_trailing_zero_hard_negative": {
+        "share": 0.203252,
+        "weight": 400.0
+      },
+      "equation_numeric_minus_signed_hard_negative": {
+        "share": 0.203252,
+        "weight": 400.0
+      }
+    },
+    "effective_total_weight": 1968.0,
+    "physical_share_by_family": {
+      "bit_manipulation": {
+        "rows": 512,
+        "share": 0.299065
+      },
+      "equation_transform": {
+        "rows": 1200,
+        "share": 0.700935
+      }
+    },
+    "physical_share_by_source": {
+      "v498_bit_replay_guardrail_from_v475": {
+        "rows": 512,
+        "share": 0.299065
+      },
+      "v498_numeric_teacher_trace_pack": {
+        "rows": 1200,
+        "share": 0.700935
+      }
+    },
+    "physical_share_by_subcategory": {
+      "bit_guardrail_replay": {
+        "rows": 512,
+        "share": 0.299065
+      },
+      "equation_numeric_add_direct_hard_negative": {
+        "rows": 400,
+        "share": 0.233645
+      },
+      "equation_numeric_colon_trailing_zero_hard_negative": {
+        "rows": 400,
+        "share": 0.233645
+      },
+      "equation_numeric_minus_signed_hard_negative": {
+        "rows": 400,
+        "share": 0.233645
+      }
+    },
+    "rows": 1712,
+    "unknown_source_rows": 0,
+    "unknown_subcategory_rows": 0
+  },
+  "train_jsonl": "/root/.cache/huggingface/hub/datasets--felipesp1983--kg1-nemotron-training/snapshots/c7e27fd39c598dd23cb25481f567787bdff50820/data/v498_numeric_teacher_trace_pack/20260516T_v498_numeric_teacher/v498_numeric_teacher_trace_train.jsonl",
+  "val_jsonl": "/root/.cache/huggingface/hub/datasets--felipesp1983--kg1-nemotron-training/snapshots/c7e27fd39c598dd23cb25481f567787bdff50820/data/v498_numeric_teacher_trace_pack/20260516T_v498_numeric_teacher/v498_numeric_teacher_trace_val.jsonl",
+  "validation": {
+    "effective_share_by_family": {
+      "bit_manipulation": {
+        "share": 0.390244,
+        "weight": 192.0
+      },
+      "equation_transform": {
+        "share": 0.609756,
+        "weight": 300.0
+      }
+    },
+    "effective_share_by_source": {
+      "v498_bit_replay_guardrail_from_v475": {
+        "share": 0.390244,
+        "weight": 192.0
+      },
+      "v498_numeric_teacher_trace_pack": {
+        "share": 0.609756,
+        "weight": 300.0
+      }
+    },
+    "effective_share_by_subcategory": {
+      "bit_guardrail_replay": {
+        "share": 0.390244,
+        "weight": 192.0
+      },
+      "equation_numeric_add_direct_hard_negative": {
+        "share": 0.203252,
+        "weight": 100.0
+      },
+      "equation_numeric_colon_trailing_zero_hard_negative": {
+        "share": 0.203252,
+        "weight": 100.0
+      },
+      "equation_numeric_minus_signed_hard_negative": {
+        "share": 0.203252,
+        "weight": 100.0
+      }
+    },
+    "effective_total_weight": 492.0,
+    "physical_share_by_family": {
+      "bit_manipulation": {
+        "rows": 128,
+        "share": 0.299065
+      },
+      "equation_transform": {
+        "rows": 300,
+        "share": 0.700935
+      }
+    },
+    "physical_share_by_source": {
+      "v498_bit_replay_guardrail_from_v475": {
+        "rows": 128,
+        "share": 0.299065
+      },
+      "v498_numeric_teacher_trace_pack": {
+        "rows": 300,
+        "share": 0.700935
+      }
+    },
+    "physical_share_by_subcategory": {
+      "bit_guardrail_replay": {
+        "rows": 128,
+        "share": 0.299065
+      },
+      "equation_numeric_add_direct_hard_negative": {
+        "rows": 100,
+        "share": 0.233645
+      },
+      "equation_numeric_colon_trailing_zero_hard_negative": {
+        "rows": 100,
+        "share": 0.233645
+      },
+      "equation_numeric_minus_signed_hard_negative": {
+        "rows": 100,
+        "share": 0.233645
+      }
+    },
+    "rows": 428,
+    "unknown_source_rows": 0,
+    "unknown_subcategory_rows": 0
+  }
+}
+objective_alignment_gate_json = /tmp/kg1_v499_objective_alignment_gate.json
+{
+  "dataset_manifest_json": "",
+  "findings": [],
+  "generated_at_utc": "2026-05-16T18:36:42.388660+00:00",
+  "hf_gpu_allowed": true,
+  "schema_version": "kg1_v478_training_objective_alignment_gate_v1",
+  "source_weights": {
+    "v498_bit_replay_guardrail_from_v475": 1.5,
+    "v498_numeric_teacher_trace_pack": 1.0
+  },
+  "subcategory_weights": {
+    "bit_guardrail_replay": 1.0,
+    "equation_numeric_add_direct_hard_negative": 1.0,
+    "equation_numeric_colon_trailing_zero_hard_negative": 1.0,
+    "equation_numeric_minus_signed_hard_negative": 1.0
+  },
+  "thresholds": {
+    "max_any_family_effective_share": 0.95,
+    "max_equation_effective_share": 0.65,
+    "min_bit_effective_share": 0.35
+  },
+  "train": {
+    "effective_share_by_family": {
+      "bit_manipulation": {
+        "share": 0.390244,
+        "weight": 768.0
+      },
+      "equation_transform": {
+        "share": 0.609756,
+        "weight": 1200.0
+      }
+    },
+    "effective_share_by_source": {
+      "v498_bit_replay_guardrail_from_v475": {
+        "share": 0.390244,
+        "weight": 768.0
+      },
+      "v498_numeric_teacher_trace_pack": {
+        "share": 0.609756,
+        "weight": 1200.0
+      }
+    },
+    "effective_share_by_subcategory": {
+      "bit_guardrail_replay": {
+        "share": 0.390244,
+        "weight": 768.0
+      },
+      "equation_numeric_add_direct_hard_negative": {
+        "share": 0.203252,
+        "weight": 400.0
+      },
+      "equation_numeric_colon_trailing_zero_hard_negative": {
+        "share": 0.203252,
+        "weight": 400.0
+      },
+      "equation_numeric_minus_signed_hard_negative": {
+        "share": 0.203252,
+        "weight": 400.0
+      }
+    },
+    "effective_total_weight": 1968.0,
+    "physical_share_by_family": {
+      "bit_manipulation": {
+        "rows": 512,
+        "share": 0.299065
+      },
+      "equation_transform": {
+        "rows": 1200,
+        "share": 0.700935
+      }
+    },
+    "physical_share_by_source": {
+      "v498_bit_replay_guardrail_from_v475": {
+        "rows": 512,
+        "share": 0.299065
+      },
+      "v498_numeric_teacher_trace_pack": {
+        "rows": 1200,
+        "share": 0.700935
+      }
+    },
+    "physical_share_by_subcategory": {
+      "bit_guardrail_replay": {
+        "rows": 512,
+        "share": 0.299065
+      },
+      "equation_numeric_add_direct_hard_negative": {
+        "rows": 400,
+        "share": 0.233645
+      },
+      "equation_numeric_colon_trailing_zero_hard_negative": {
+        "rows": 400,
+        "share": 0.233645
+      },
+      "equation_numeric_minus_signed_hard_negative": {
+        "rows": 400,
+        "share": 0.233645
+      }
+    },
+    "rows": 1712,
+    "unknown_source_rows": 0,
+    "unknown_subcategory_rows": 0
+  },
+  "train_jsonl": "/root/.cache/huggingface/hub/datasets--felipesp1983--kg1-nemotron-training/snapshots/c7e27fd39c598dd23cb25481f567787bdff50820/data/v498_numeric_teacher_trace_pack/20260516T_v498_numeric_teacher/v498_numeric_teacher_trace_train.jsonl",
+  "val_jsonl": "/root/.cache/huggingface/hub/datasets--felipesp1983--kg1-nemotron-training/snapshots/c7e27fd39c598dd23cb25481f567787bdff50820/data/v498_numeric_teacher_trace_pack/20260516T_v498_numeric_teacher/v498_numeric_teacher_trace_val.jsonl",
+  "validation": {
+    "effective_share_by_family": {
+      "bit_manipulation": {
+        "share": 0.390244,
+        "weight": 192.0
+      },
+      "equation_transform": {
+        "share": 0.609756,
+        "weight": 300.0
+      }
+    },
+    "effective_share_by_source": {
+      "v498_bit_replay_guardrail_from_v475": {
+        "share": 0.390244,
+        "weight": 192.0
+      },
+      "v498_numeric_teacher_trace_pack": {
+        "share": 0.609756,
+        "weight": 300.0
+      }
+    },
+    "effective_share_by_subcategory": {
+      "bit_guardrail_replay": {
+        "share": 0.390244,
+        "weight": 192.0
+      },
+      "equation_numeric_add_direct_hard_negative": {
+        "share": 0.203252,
+        "weight": 100.0
+      },
+      "equation_numeric_colon_trailing_zero_hard_negative": {
+        "share": 0.203252,
+        "weight": 100.0
+      },
+      "equation_numeric_minus_signed_hard_negative": {
+        "share": 0.203252,
+        "weight": 100.0
+      }
+    },
+    "effective_total_weight": 492.0,
+    "physical_share_by_family": {
+      "bit_manipulation": {
+        "rows": 128,
+        "share": 0.299065
+      },
+      "equation_transform": {
+        "rows": 300,
+        "share": 0.700935
+      }
+    },
+    "physical_share_by_source": {
+      "v498_bit_replay_guardrail_from_v475": {
+        "rows": 128,
+        "share": 0.299065
+      },
+      "v498_numeric_teacher_trace_pack": {
+        "rows": 300,
+        "share": 0.700935
+      }
+    },
+    "physical_share_by_subcategory": {
+      "bit_guardrail_replay": {
+        "rows": 128,
+        "share": 0.299065
+      },
+      "equation_numeric_add_direct_hard_negative": {
+        "rows": 100,
+        "share": 0.233645
+      },
+      "equation_numeric_colon_trailing_zero_hard_negative": {
+        "rows": 100,
+        "share": 0.233645
+      },
+      "equation_numeric_minus_signed_hard_negative": {
+        "rows": 100,
+        "share": 0.233645
+      }
+    },
+    "rows": 428,
+    "unknown_source_rows": 0,
+    "unknown_subcategory_rows": 0
+  }
+}
+
++ /opt/venv/bin/python -
+nemo_dependency_probe = {"causal_conv1d": "1.5.3", "mamba_ssm": "2.2.6.post3", "peft_lora_config_has_target_parameters": true}
++ /opt/venv/bin/python scripts/hf_job_preflight_gate.py --phase postinstall
+=== HF JOB PREFLIGHT GATE START ===
+generated_at_utc = 2026-05-16T18:36:48.053976+00:00
+phase = postinstall
+torch_postinstall = {"capability": [9, 0], "cuda": "13.0", "cuda_available": true, "cuda_runtime_major": 13, "gpu_name": "NVIDIA H200", "gpu_total_gib": 139.80072021484375, "torch": "2.9.0a0+50eac811a6.nv25.09"}
+postinstall_import_ok = {"module": "huggingface_hub", "version": "0.36.2"}
+postinstall_import_ok = {"module": "transformers", "version": "4.57.6"}
+postinstall_import_ok = {"module": "peft", "version": "0.19.1"}
+postinstall_import_ok = {"module": "accelerate", "version": "1.13.0"}
+postinstall_import_ok = {"module": "safetensors", "version": "0.7.0"}
+postinstall_import_ok = {"module": "causal_conv1d", "version": "1.5.3"}
+postinstall_import_ok = {"module": "mamba_ssm", "version": "2.2.6.post3"}
+postinstall_import_ok = {"module": "mamba_ssm.ops.triton.layernorm_gated", "version": "unknown"}
+postinstall_import_ok = {"module": "mamba_ssm.ops.selective_scan_interface", "version": "unknown"}
+training_env_gate = {"data_file": "data/v498_numeric_teacher_trace_pack/20260516T_v498_numeric_teacher/v498_numeric_teacher_trace_train.jsonl", "data_repo": "felipesp1983/kg1-nemotron-training", "lora_alpha": 32, "lora_r": 32, "max_length": 1024, "max_steps": 2, "model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16", "model_revision": "cbd3fa9f933d55ef16a84236559f4ee2a0526848", "output_repo": "felipesp1983/kg1-nemotron-lora-v499-nemo-h200-v498-numeric-teacher-v290ckpt6", "require_lora_target_parameter_match": true, "required_trainable_lora_name_substrings": "q_proj,k_proj,v_proj,o_proj,up_proj,down_proj", "run_id": "v499-nemo-h200-v498-numeric-teacher-v290ckpt6-20260516T183506Z", "sampling_mode": "weighted_replacement", "target_modules": "down_proj,in_proj,k_proj,lm_head,o_proj,out_proj,q_proj,up_proj,v_proj", "target_parameters": "mlp.experts.gate_up_proj,mlp.experts.down_proj", "trainable_lora_modules": "q_proj,k_proj,v_proj,o_proj,up_proj,down_proj", "trainable_lora_name_substrings": "", "val_file": "data/v498_numeric_teacher_trace_pack/20260516T_v498_numeric_teacher/v498_numeric_teacher_trace_val.jsonl"}
+=== HF JOB PREFLIGHT GATE END ===
++ /opt/venv/bin/python scripts/hf_job_train_v90.py
+Disabling PEFT torchao dispatcher: found torchao==0.13.0+git, but this BF16 LoRA run does not need torchao.
+========================================================================
+KG1 v90 category-solver remote training
+========================================================================
+Run ID: v499-nemo-h200-v498-numeric-teacher-v290ckpt6-20260516T183506Z
+Model: nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16
+Model revision: cbd3fa9f933d55ef16a84236559f4ee2a0526848
+Train: felipesp1983/kg1-nemotron-training/data/v498_numeric_teacher_trace_pack/20260516T_v498_numeric_teacher/v498_numeric_teacher_trace_train.jsonl
+Validation: felipesp1983/kg1-nemotron-training/data/v498_numeric_teacher_trace_pack/20260516T_v498_numeric_teacher/v498_numeric_teacher_trace_val.jsonl
+Output repo: felipesp1983/kg1-nemotron-lora-v499-nemo-h200-v498-numeric-teacher-v290ckpt6
+Upload to HF: True
+Require offset masks: True
+Dry-run validate only: False
+Initial adapter: felipesp1983/kg1-nemotron-lora-v290-rank19-micro-patch-smoke/checkpoint-6
+LoRA: r=32 alpha=32 dropout=0.0 target_modules=down_proj,in_proj,k_proj,lm_head,o_proj,out_proj,q_proj,up_proj,v_proj
+LoRA target_parameters: mlp.experts.gate_up_proj,mlp.experts.down_proj
+Trainable LoRA module filter: q_proj,k_proj,v_proj,o_proj,up_proj,down_proj
+Trainable LoRA name substring filter: disabled
+Require LoRA target-parameter match: True
+Require LoRA target-parameters trainable: True
+Required trainable LoRA name substrings: q_proj,k_proj,v_proj,o_proj,up_proj,down_proj
+Max trainable parameter ratio: 3.5000%
+Length=1024 batch=4 micro_batch=1
+LR: 2.00e-08 -> 5.00e-09
+Epochs=1 max_steps=2
+Model device map: auto
+Attention implementation: eager
+Gradient checkpointing: True
+HF transfer enabled: 1
+
+Applying runtime performance settings:
+  TORCH_ALLOW_TF32=True
+  TORCH_FLOAT32_MATMUL_PRECISION=high
+  TORCH_DISABLE_CUDNN_SDP=False
+  TORCH_FORCE_MATH_SDP=False
+  ATTN_IMPLEMENTATION=eager
+  GRADIENT_CHECKPOINTING=True
+/usr/local/lib/python3.12/dist-packages/torch/backends/__init__.py:46: UserWarning: Please use the new API settings to control TF32 behavior, such as torch.backends.cudnn.conv.fp32_precision = 'tf32' or torch.backends.cuda.matmul.fp32_precision = 'ieee'. Old settings, e.g, torch.backends.cuda.matmul.allow_tf32 = True, torch.backends.cudnn.allow_tf32 = True, allowTF32CuDNN() and allowTF32CuBLAS() will be deprecated after Pytorch 2.9. Please see https://pytorch.org/docs/main/notes/cuda.html#tensorfloat-32-tf32-on-ampere-and-later-devices (Triggered internally at /opt/pytorch/pytorch/aten/src/ATen/Context.cpp:80.)
+  self.setter(val)
+  enabled torch CUDA/CUDNN TF32 flags
+  set_float32_matmul_precision=high
+  sdpa_backend_status={"cudnn_sdp_enabled": true, "flash_sdp_enabled": true, "math_sdp_enabled": true, "mem_efficient_sdp_enabled": true}
+runtime_dependency_import_ok = {"label": "causal_conv1d", "module": "causal_conv1d", "version": "1.5.3"}
+runtime_dependency_import_ok = {"label": "mamba_ssm", "module": "mamba_ssm", "version": "2.2.6.post3"}
+runtime_dependency_import_ok = {"label": "mamba_ssm layernorm_gated", "module": "mamba_ssm.ops.triton.layernorm_gated", "version": "unknown"}
+runtime_dependency_import_ok = {"label": "mamba_ssm selective_scan", "module": "mamba_ssm.ops.selective_scan_interface", "version": "unknown"}
+Loading tokenizer from nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16...
+
+tokenizer_config.json:   0%|          | 0.00/188k [00:00<?, ?B/s][Atokenizer_config.json: 100%|██████████| 188k/188k [00:00<00:00, 7.91MB/s]
+
+tokenizer.json:   0%|          | 0.00/17.1M [00:00<?, ?B/s][Atokenizer.json: 100%|██████████| 17.1M/17.1M [00:00<00:00, 25.1MB/s]
+
+special_tokens_map.json:   0%|          | 0.00/420 [00:00<?, ?B/s][Aspecial_tokens_map.json: 100%|██████████| 420/420 [00:00<00:00, 5.99MB/s]
+
+chat_template.jinja:   0%|          | 0.00/10.5k [00:00<?, ?B/s][Achat_template.jinja: 100%|██████████| 10.5k/10.5k [00:00<00:00, 97.5MB/s]
+Downloading dataset file from felipesp1983/kg1-nemotron-training/data/v498_numeric_teacher_trace_pack/20260516T_v498_numeric_teacher/v498_numeric_teacher_trace_train.jsonl...
+Downloading dataset file from felipesp1983/kg1-nemotron-training/data/v498_numeric_teacher_trace_pack/20260516T_v498_numeric_teacher/v498_numeric_teacher_trace_val.jsonl...
+train dataset sha256 OK: 920b3c30b9ada9ad2685091194dcc53e717f72a9c037cafeef6e494f21511e79
+validation dataset sha256 OK: 68cda4162214359aaf7cda304c2a06902775b1aadb53fcadfd0edf7ff481ed80
+Loaded train=1712 validation=428
+Train tokenization summary: raw=1712 tokenized=1712 truncated=0 prompt_truncated=0 prompt_tokens_dropped_est=0 skipped_missing_messages=0 skipped_no_loss=0 offset_masks=1712 fallback_masks=0 fallback_prefix_mismatches=0 answer_span_loss_weight=1.0 answer_span_weighted_examples=0 answer_span_weighted_tokens=0
+
+Train: 1712 examples
+  Total tokens: 390,653
+  Unmasked completion tokens: 76,956.0
+  bit_manipulation: n=512 p50=293 p90=331 p99=331 truncated=0/512
+  equation_transform: n=1200 p50=204 p90=208 p99=210 truncated=0/1200
+Validation tokenization summary: raw=428 tokenized=428 truncated=0 prompt_truncated=0 prompt_tokens_dropped_est=0 skipped_missing_messages=0 skipped_no_loss=0 offset_masks=428 fallback_masks=0 fallback_prefix_mismatches=0 answer_span_loss_weight=1.0 answer_span_weighted_examples=0 answer_span_weighted_tokens=0
+
+Validation: 428 examples
+  Total tokens: 97,516
+  Unmasked completion tokens: 19,229.0
+  bit_manipulation: n=128 p50=293 p90=331 p99=331 truncated=0/128
+  equation_transform: n=300 p50=204 p90=208 p99=210 truncated=0/300
+
+Loading model nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16 in BF16 with device_map=auto attn_implementation=eager...
+
+config.json:   0%|          | 0.00/1.82k [00:00<?, ?B/s][Aconfig.json: 100%|██████████| 1.82k/1.82k [00:00<00:00, 20.9MB/s]
+
+configuration_nemotron_h.py:   0%|          | 0.00/12.9k [00:00<?, ?B/s][Aconfiguration_nemotron_h.py: 100%|██████████| 12.9k/12.9k [00:00<00:00, 109MB/s]
+
+modeling_nemotron_h.py:   0%|          | 0.00/83.8k [00:00<?, ?B/s][Amodeling_nemotron_h.py: 100%|██████████| 83.8k/83.8k [00:00<00:00, 49.6MB/s]
+
+model.safetensors.index.json:   0%|          | 0.00/613k [00:00<?, ?B/s][Amodel.safetensors.index.json: 100%|██████████| 613k/613k [00:00<00:00, 43.7MB/s]
+
+model-00001-of-00013.safetensors:   0%|          | 0.00/4.99G [00:00<?, ?B/s][A
+model-00001-of-00013.safetensors:   0%|          | 109k/4.99G [00:01<12:46:39, 109kB/s][A
+model-00001-of-00013.safetensors:   8%|▊         | 403M/4.99G [00:02<00:19, 236MB/s]   [A
+model-00001-of-00013.safetensors:  26%|██▌       | 1.28G/4.99G [00:03<00:08, 429MB/s][A
+model-00001-of-00013.safetensors:  43%|████▎     | 2.15G/4.99G [00:04<00:04, 582MB/s][A
+model-00001-of-00013.safetensors:  68%|██████▊   | 3.38G/4.99G [00:05<00:02, 736MB/s][A
+model-00001-of-00013.safetensors:  94%|█████████▍| 4.70G/4.99G [00:07<00:00, 849MB/s][Amodel-00001-of-00013.safetensors: 100%|██████████| 4.99G/4.99G [00:07<00:00, 651MB/s]
+
+model-00002-of-00013.safetensors:   0%|          | 0.00/4.99G [00:00<?, ?B/s][A
+model-00002-of-00013.safetensors:   5%|▌         | 265M/4.99G [00:01<00:31, 151MB/s][A
+model-00002-of-00013.safetensors:  16%|█▌        | 802M/4.99G [00:03<00:14, 291MB/s][A
+model-00002-of-00013.safetensors:  27%|██▋       | 1.34G/4.99G [00:04<00:09, 381MB/s][A
+model-00002-of-00013.safetensors:  54%|█████▎    | 2.68G/4.99G [00:05<00:03, 653MB/s][A
+model-00002-of-00013.safetensors:  78%|███████▊  | 3.89G/4.99G [00:07<00:01, 667MB/s][Amodel-00002-of-00013.safetensors: 100%|██████████| 4.99G/4.99G [00:07<00:00, 681MB/s]
+
+model-00003-of-00013.safetensors:   0%|          | 0.00/4.99G [00:00<?, ?B/s][A
+model-00003-of-00013.safetensors:   1%|▏         | 64.2M/4.99G [00:01<01:55, 42.7MB/s][A
+model-00003-of-00013.safetensors:  17%|█▋        | 869M/4.99G [00:02<00:11, 369MB/s]  [A
+model-00003-of-00013.safetensors:  36%|███▌      | 1.81G/4.99G [00:04<00:05, 536MB/s][A
+model-00003-of-00013.safetensors:  54%|█████▎    | 2.68G/4.99G [00:05<00:03, 648MB/s][A
+model-00003-of-00013.safetensors:  85%|████████▍ | 4.22G/4.99G [00:06<00:00, 806MB/s][Amodel-00003-of-00013.safetensors: 100%|██████████| 4.99G/4.99G [00:06<00:00, 722MB/s]
+
+model-00004-of-00013.safetensors:   0%|          | 0.00/5.00G [00:00<?, ?B/s][A
+model-00004-of-00013.safetensors:   4%|▍         | 198M/5.00G [00:01<00:30, 158MB/s][A
+model-00004-of-00013.safetensors:   9%|▉         | 467M/5.00G [00:02<00:20, 217MB/s][A
+model-00004-of-00013.safetensors:  17%|█▋        | 869M/5.00G [00:03<00:15, 268MB/s][A
+model-00004-of-00013.safetensors:  31%|███       | 1.54G/5.00G [00:04<00:08, 412MB/s][A
+model-00004-of-00013.safetensors:  58%|█████▊    | 2.88G/5.00G [00:05<00:02, 726MB/s][A
+model-00004-of-00013.safetensors:  99%|█████████▉| 4.96G/5.00G [00:08<00:00, 706MB/s][Amodel-00004-of-00013.safetensors: 100%|██████████| 5.00G/5.00G [00:08<00:00, 586MB/s]
+
+model-00005-of-00013.safetensors:   0%|          | 0.00/4.98G [00:00<?, ?B/s][A
+model-00005-of-00013.safetensors:   7%|▋         | 333M/4.98G [00:01<00:24, 189MB/s][A
+model-00005-of-00013.safetensors:  21%|██▏       | 1.07G/4.98G [00:03<00:09, 391MB/s][A
+model-00005-of-00013.safetensors:  43%|████▎     | 2.17G/4.98G [00:04<00:04, 595MB/s][A
+model-00005-of-00013.safetensors:  63%|██████▎   | 3.15G/4.98G [00:05<00:02, 716MB/s][A
+model-00005-of-00013.safetensors:  87%|████████▋ | 4.36G/4.98G [00:06<00:00, 812MB/s][Amodel-00005-of-00013.safetensors: 100%|██████████| 4.98G/4.98G [00:07<00:00, 694MB/s]
+
+model-00006-of-00013.safetensors:   0%|          | 0.00/5.00G [00:00<?, ?B/s][A
+model-00006-of-00013.safetensors:   0%|          | 22.2M/5.00G [00:01<06:34, 12.6MB/s][A
+model-00006-of-00013.safetensors:   7%|▋         | 334M/5.00G [00:03<00:35, 132MB/s]  [A
+model-00006-of-00013.safetensors:  31%|███       | 1.54G/5.00G [00:04<00:06, 525MB/s][A
+model-00006-of-00013.safetensors:  55%|█████▍    | 2.75G/5.00G [00:05<00:03, 699MB/s][A
+model-00006-of-00013.safetensors:  78%|███████▊  | 3.90G/5.00G [00:06<00:01, 839MB/s][Amodel-00006-of-00013.safetensors: 100%|██████████| 5.00G/5.00G [00:06<00:00, 725MB/s]
+
+model-00007-of-00013.safetensors:   0%|          | 0.00/4.99G [00:00<?, ?B/s][A
+model-00007-of-00013.safetensors:   0%|          | 10.1M/4.99G [00:01<08:18, 10.0MB/s][A
+model-00007-of-00013.safetensors:  16%|█▌        | 793M/4.99G [00:02<00:11, 358MB/s]  [A
+model-00007-of-00013.safetensors:  33%|███▎      | 1.66G/4.99G [00:03<00:06, 510MB/s][A
+model-00007-of-00013.safetensors:  55%|█████▍    | 2.74G/4.99G [00:05<00:03, 646MB/s][A
+model-00007-of-00013.safetensors:  80%|████████  | 4.01G/4.99G [00:06<00:01, 780MB/s][Amodel-00007-of-00013.safetensors: 100%|██████████| 4.99G/4.99G [00:07<00:00, 703MB/s]
+
+model-00008-of-00013.safetensors:   0%|          | 0.00/4.99G [00:00<?, ?B/s][A
+model-00008-of-00013.safetensors:   0%|          | 143k/4.99G [00:01<9:47:08, 142kB/s][A
+model-00008-of-00013.safetensors:   5%|▌         | 266M/4.99G [00:02<00:30, 156MB/s]  [A
+model-00008-of-00013.safetensors:  24%|██▍       | 1.20G/4.99G [00:03<00:08, 457MB/s][A
+model-00008-of-00013.safetensors:  41%|████▏     | 2.07G/4.99G [00:04<00:04, 610MB/s][A
+model-00008-of-00013.safetensors:  60%|██████    | 3.01G/4.99G [00:05<00:02, 666MB/s][A
+model-00008-of-00013.safetensors:  98%|█████████▊| 4.88G/4.99G [00:06<00:00, 969MB/s][Amodel-00008-of-00013.safetensors: 100%|██████████| 4.99G/4.99G [00:06<00:00, 735MB/s]
+
+model-00009-of-00013.safetensors:   0%|          | 0.00/5.00G [00:00<?, ?B/s][A
+model-00009-of-00013.safetensors:   5%|▌         | 265M/5.00G [00:01<00:26, 176MB/s][A
+model-00009-of-00013.safetensors:  22%|██▏       | 1.09G/5.00G [00:02<00:08, 438MB/s][A
+model-00009-of-00013.safetensors:  33%|███▎      | 1.66G/5.00G [00:03<00:06, 485MB/s][A
+model-00009-of-00013.safetensors:  62%|██████▏   | 3.07G/5.00G [00:05<00:02, 751MB/s][A
+model-00009-of-00013.safetensors:  92%|█████████▏| 4.62G/5.00G [00:06<00:00, 929MB/s][Amodel-00009-of-00013.safetensors: 100%|██████████| 5.00G/5.00G [00:06<00:00, 736MB/s]
+
+model-00010-of-00013.safetensors:   0%|          | 0.00/4.99G [00:00<?, ?B/s][A
+model-00010-of-00013.safetensors:   5%|▌         | 265M/4.99G [00:01<00:22, 211MB/s][A
+model-00010-of-00013.safetensors:  16%|█▌        | 792M/4.99G [00:02<00:11, 379MB/s][A
+model-00010-of-00013.safetensors:  31%|███       | 1.53G/4.99G [00:03<00:07, 482MB/s][A
+model-00010-of-00013.safetensors:  51%|█████     | 2.54G/4.99G [00:04<00:03, 666MB/s][A
+model-00010-of-00013.safetensors:  84%|████████▍ | 4.21G/4.99G [00:06<00:00, 865MB/s][Amodel-00010-of-00013.safetensors: 100%|██████████| 4.99G/4.99G [00:06<00:00, 752MB/s]
+
+model-00011-of-00013.safetensors:   0%|          | 0.00/5.00G [00:00<?, ?B/s][A
+model-00011-of-00013.safetensors:   0%|          | 226k/5.00G [00:01<9:13:46, 150kB/s][A
+model-00011-of-00013.safetensors:  21%|██        | 1.06G/5.00G [00:02<00:08, 460MB/s] [A
+model-00011-of-00013.safetensors:  43%|████▎     | 2.13G/5.00G [00:04<00:04, 583MB/s][A
+model-00011-of-00013.safetensors:  74%|███████▎  | 3.68G/5.00G [00:05<00:01, 821MB/s][A
+model-00011-of-00013.safetensors: 100%|██████████| 5.00G/5.00G [00:06<00:00, 915MB/s][Amodel-00011-of-00013.safetensors: 100%|██████████| 5.00G/5.00G [00:06<00:00, 746MB/s]
+
+model-00012-of-00013.safetensors:   0%|          | 0.00/5.00G [00:00<?, ?B/s][A
+model-00012-of-00013.safetensors:   5%|▌         | 265M/5.00G [00:01<00:22, 211MB/s][A
+model-00012-of-00013.safetensors:  12%|█▏        | 591M/5.00G [00:02<00:16, 272MB/s][A
+model-00012-of-00013.safetensors:  28%|██▊       | 1.40G/5.00G [00:03<00:07, 453MB/s][A
+model-00012-of-00013.safetensors:  52%|█████▏    | 2.60G/5.00G [00:04<00:03, 664MB/s][A
+model-00012-of-00013.safetensors:  80%|████████  | 4.01G/5.00G [00:06<00:01, 835MB/s][Amodel-00012-of-00013.safetensors: 100%|██████████| 5.00G/5.00G [00:06<00:00, 746MB/s]
+
+model-00013-of-00013.safetensors:   0%|          | 0.00/3.24G [00:00<?, ?B/s][A
+model-00013-of-00013.safetensors:   2%|▏         | 65.7M/3.24G [00:01<01:00, 52.3MB/s][A
+model-00013-of-00013.safetensors:  29%|██▊       | 927M/3.24G [00:02<00:05, 426MB/s]  [A
+model-00013-of-00013.safetensors:  60%|█████▉    | 1.93G/3.24G [00:03<00:02, 599MB/s][A
+model-00013-of-00013.safetensors:  91%|█████████ | 2.94G/3.24G [00:05<00:00, 679MB/s][Amodel-00013-of-00013.safetensors: 100%|██████████| 3.24G/3.24G [00:05<00:00, 605MB/s]
+
+Loading checkpoint shards:   0%|          | 0/13 [00:00<?, ?it/s][A
+Loading checkpoint shards:  15%|█▌        | 2/13 [00:01<00:08,  1.33it/s][A
+Loading checkpoint shards:  31%|███       | 4/13 [00:02<00:06,  1.34it/s][A
+Loading checkpoint shards:  46%|████▌     | 6/13 [00:04<00:05,  1.34it/s][A
+Loading checkpoint shards:  62%|██████▏   | 8/13 [00:06<00:03,  1.33it/s][A
+Loading checkpoint shards:  77%|███████▋  | 10/13 [00:07<00:02,  1.33it/s][A
+Loading checkpoint shards:  92%|█████████▏| 12/13 [00:08<00:00,  1.33it/s][ALoading checkpoint shards: 100%|██████████| 13/13 [00:09<00:00,  1.37it/s]
+
+generation_config.json:   0%|          | 0.00/197 [00:00<?, ?B/s][Ageneration_config.json: 100%|██████████| 197/197 [00:00<00:00, 2.68MB/s]
+Applying/loading trainable LoRA adapter...
+Loading trainable initial adapter from HF: felipesp1983/kg1-nemotron-lora-v290-rank19-micro-patch-smoke/checkpoint-6
+Adapter load settings: torch_device=peft-default low_cpu_mem_usage=False mode=peft
+
+checkpoint-6/adapter_model.safetensors:   0%|          | 0.00/4.26G [00:00<?, ?B/s][A
+checkpoint-6/adapter_model.safetensors:   2%|▏         | 68.7M/4.26G [00:01<01:31, 45.6MB/s][A
+checkpoint-6/adapter_model.safetensors:  22%|██▏       | 944M/4.26G [00:03<00:10, 302MB/s]  [A
+checkpoint-6/adapter_model.safetensors:  38%|███▊      | 1.61G/4.26G [00:04<00:06, 388MB/s][A
+checkpoint-6/adapter_model.safetensors:  65%|██████▍   | 2.76G/4.26G [00:06<00:02, 571MB/s][A
+checkpoint-6/adapter_model.safetensors:  98%|█████████▊| 4.16G/4.26G [00:07<00:00, 753MB/s][Acheckpoint-6/adapter_model.safetensors: 100%|██████████| 4.26G/4.26G [00:07<00:00, 547MB/s]
+Applied trainable LoRA module filter:
+{
+  "enabled": true,
+  "frozen_by_module": {
+    "in_proj": 9562112,
+    "lm_head": 4280320,
+    "out_proj": 4993024
+  },
+  "frozen_lora_params": 18835456,
+  "frozen_lora_tensors": 94,
+  "modules": [
+    "q_proj",
+    "k_proj",
+    "v_proj",
+    "o_proj",
+    "up_proj",
+    "down_proj"
+  ],
+  "name_substrings": [],
+  "require_lora_target_parameters_trainable": true,
+  "required_trainable_lora_params": {
+    "down_proj": 432791552,
+    "k_proj": 565248,
+    "o_proj": 1302528,
+    "q_proj": 1302528,
+    "up_proj": 432791552,
+    "v_proj": 565248
+  },
+  "required_trainable_lora_tensors": {
+    "down_proj": 5934,
+    "k_proj": 12,
+    "o_proj": 12,
+    "q_proj": 12,
+    "up_proj": 5934,
+    "v_proj": 12
+  },
+  "target_parameter_lora_params": {
+    "mlp.experts.down_proj": 432791552,
+    "mlp.experts.gate_up_proj": 432791552
+  },
+  "target_parameter_lora_tensors": {
+    "mlp.experts.down_proj": 5934,
+    "mlp.experts.gate_up_proj": 5934
+  },
+  "target_parameter_trainable_lora_params": {
+    "mlp.experts.down_proj": 432791552,
+    "mlp.experts.gate_up_proj": 432791552
+  },
+  "target_parameter_trainable_lora_tensors": {
+    "mlp.experts.down_proj": 5934,
+    "mlp.experts.gate_up_proj": 5934
+  },
+  "target_parameters_trainability_mode": "trainable",
+  "trainable_by_module": {
+    "down_proj": 432791552,
+    "k_proj": 565248,
+    "o_proj": 1302528,
+    "q_proj": 1302528,
+    "up_proj": 432791552,
+    "v_proj": 565248
+  },
+  "trainable_by_name_substring": {},
+  "trainable_lora_params": 869318656,
+  "trainable_lora_tensors": 11916
+}
+Gradient checkpointing enabled.
+trainable params: 869,318,656 || all params: 32,466,091,456 || trainable%: 2.6776
+Trainable parameter guard: 869,318,656 / 32,466,091,456 (2.6776%)
+Optimizer: torch Adam (USE_BITSANDBYTES=0)
+
+Training: 1712 examples, planned_steps=2
+Sampling:
+{
+  "mode": "weighted_replacement",
+  "source_weights": {
+    "v498_bit_replay_guardrail_from_v475": 1.5,
+    "v498_numeric_teacher_trace_pack": 1.0
+  },
+  "subcategory_weights": {
+    "bit_guardrail_replay": 1.0,
+    "equation_numeric_add_direct_hard_negative": 1.0,
+    "equation_numeric_colon_trailing_zero_hard_negative": 1.0,
+    "equation_numeric_minus_signed_hard_negative": 1.0
+  },
+  "weighted_share_by_source": {
+    "v498_bit_replay_guardrail_from_v475": 0.390244,
+    "v498_numeric_teacher_trace_pack": 0.609756
+  },
+  "weighted_share_by_subcategory": {
+    "bit_guardrail_replay": 0.390244,
+    "equation_numeric_add_direct_hard_negative": 0.203252,
+    "equation_numeric_colon_trailing_zero_hard_negative": 0.203252,
+    "equation_numeric_minus_signed_hard_negative": 0.203252
+  }
+}
+Baseline eval before training: max_examples=96
+eval_loss_eval_start examples=96 mem_alloc=62.1GiB mem_reserved=66.1GiB
+eval_loss_eval_progress 1/96 partial_loss=1.7852 mem_alloc=62.2GiB mem_reserved=66.1GiB
+eval_loss_eval_progress 8/96 partial_loss=1.8597 mem_alloc=62.2GiB mem_reserved=66.1GiB
+eval_loss_eval_progress 16/96 partial_loss=1.8259 mem_alloc=62.2GiB mem_reserved=66.1GiB
+eval_loss_eval_progress 24/96 partial_loss=1.7995 mem_alloc=62.2GiB mem_reserved=66.1GiB
+eval_loss_eval_progress 32/96 partial_loss=1.7924 mem_alloc=62.2GiB mem_reserved=66.1GiB
+eval_loss_eval_progress 40/96 partial_loss=1.7734 mem_alloc=62.2GiB mem_reserved=66.1GiB
+eval_loss_eval_progress 48/96 partial_loss=1.7694 mem_alloc=62.2GiB mem_reserved=66.1GiB
+eval_loss_eval_progress 56/96 partial_loss=2.0711 mem_alloc=62.2GiB mem_reserved=66.1GiB
+eval_loss_eval_progress 64/96 partial_loss=2.3023 mem_alloc=62.2GiB mem_reserved=66.1GiB
+eval_loss_eval_progress 72/96 partial_loss=2.4610 mem_alloc=62.2GiB mem_reserved=66.1GiB
+eval_loss_eval_progress 80/96 partial_loss=2.5979 mem_alloc=62.2GiB mem_reserved=66.1GiB
+eval_loss_eval_progress 88/96 partial_loss=2.7075 mem_alloc=62.2GiB mem_reserved=66.1GiB
+eval_loss_eval_progress 96/96 partial_loss=2.8125 mem_alloc=62.2GiB mem_reserved=66.1GiB
+eval_loss_eval_end loss=2.8125 mem_alloc=62.2GiB mem_reserved=66.1GiB
+baseline_eval_loss=2.8125
+
+--- Epoch 1/1 ---
+step=1/2 lr=2.00e-08 train_loss=3.1656 elapsed=1.0m mem_alloc=68.7GiB mem_reserved=76.1GiB
+step=2/2 lr=5.00e-09 train_loss=3.5717 elapsed=1.2m mem_alloc=68.7GiB mem_reserved=76.1GiB
+eval_loss_eval_start examples=96 mem_alloc=68.7GiB mem_reserved=76.1GiB
+eval_loss_eval_progress 1/96 partial_loss=1.8290 mem_alloc=68.7GiB mem_reserved=76.1GiB
+eval_loss_eval_progress 8/96 partial_loss=1.8722 mem_alloc=68.7GiB mem_reserved=76.1GiB
+eval_loss_eval_progress 16/96 partial_loss=1.8333 mem_alloc=68.7GiB mem_reserved=76.1GiB
+eval_loss_eval_progress 24/96 partial_loss=1.8054 mem_alloc=68.7GiB mem_reserved=76.1GiB
+eval_loss_eval_progress 32/96 partial_loss=1.8034 mem_alloc=68.7GiB mem_reserved=76.1GiB
+eval_loss_eval_progress 40/96 partial_loss=1.7863 mem_alloc=68.7GiB mem_reserved=76.1GiB
+eval_loss_eval_progress 48/96 partial_loss=1.7803 mem_alloc=68.7GiB mem_reserved=76.1GiB
+eval_loss_eval_progress 56/96 partial_loss=2.0773 mem_alloc=68.7GiB mem_reserved=76.1GiB
+eval_loss_eval_progress 64/96 partial_loss=2.3069 mem_alloc=68.7GiB mem_reserved=76.1GiB
+eval_loss_eval_progress 72/96 partial_loss=2.4663 mem_alloc=68.7GiB mem_reserved=76.1GiB
+eval_loss_eval_progress 80/96 partial_loss=2.6022 mem_alloc=68.7GiB mem_reserved=76.1GiB
+eval_loss_eval_progress 88/96 partial_loss=2.7121 mem_alloc=68.7GiB mem_reserved=76.1GiB
+eval_loss_eval_progress 96/96 partial_loss=2.8162 mem_alloc=68.7GiB mem_reserved=76.1GiB
+eval_loss_eval_end loss=2.8162 mem_alloc=68.7GiB mem_reserved=76.1GiB
+eval step=2 loss=2.8162 best=2.8162
+/opt/venv/lib/python3.12/site-packages/peft/utils/save_and_load.py:356: UserWarning: Setting `save_embedding_layers` to `True` as embedding layers found in `target_modules`.
+  warnings.warn("Setting `save_embedding_layers` to `True` as embedding layers found in `target_modules`.")
+Checkpoint saved: /tmp/kg1_v499_output/checkpoint-2
+Uploading checkpoint during training: felipesp1983/kg1-nemotron-lora-v499-nemo-h200-v498-numeric-teacher-v290ckpt6/checkpoint-2
+Processing Files (0 / 0)      : |          |  0.00B /  0.00B            
+New Data Upload               : |          |  0.00B /  0.00B            [A
+
+  ...eckpoint-2/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A
+
+  ...eckpoint-2/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A
+
+
+  ...adapter_model.safetensors:   0%|          | 1.68MB / 4.26GB            [A[A[A
+
+  ...eckpoint-2/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A
+
+
+  ...adapter_model.safetensors:   0%|          | 1.68MB / 4.26GB            [A[A[A
+
+  ...eckpoint-2/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A
+
+
+  ...adapter_model.safetensors:   0%|          | 2.24MB / 4.26GB            [A[A[A
+
+  ...eckpoint-2/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A
+
+
+  ...adapter_model.safetensors:   0%|          | 10.1MB / 4.26GB            [A[A[AProcessing Files (1 / 2)      :   1%|          | 27.2MB / 4.28GB, 2.55MB/s  
+New Data Upload               :   6%|▋         | 8.45MB /  134MB,  819kB/s  [A
+
+  ...eckpoint-2/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A
+
+
+  ...adapter_model.safetensors:   2%|▏         | 78.3MB / 4.26GB            [A[A[A
+
+  ...eckpoint-2/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A
+
+
+  ...adapter_model.safetensors:   2%|▏         | 83.4MB / 4.26GB            [A[A[A
+
+  ...eckpoint-2/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A
+
+
+  ...adapter_model.safetensors:   2%|▏         | 90.7MB / 4.26GB            [A[A[A
+
+  ...eckpoint-2/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A
+
+
+  ...adapter_model.safetensors:   2%|▏         | 98.6MB / 4.26GB            [A[A[A
+
+  ...eckpoint-2/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A
+
+
+  ...adapter_model.safetensors:   4%|▍         |  168MB / 4.26GB            [A[A[AProcessing Files (1 / 2)      :   4%|▍         |  185MB / 4.28GB, 16.6MB/s  
+New Data Upload               :  56%|█████▋    |  151MB /  268MB, 13.6MB/s  [A
+
+  ...eckpoint-2/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A
+
+
+  ...adapter_model.safetensors:   6%|▌         |  244MB / 4.26GB            [A[A[A
+
+  ...eckpoint-2/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A
+
+
+  ...adapter_model.safetensors:   7%|▋         |  300MB / 4.26GB            [A[A[A
+
+  ...eckpoint-2/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A
+
+
+  ...adapter_model.safetensors:   7%|▋         |  309MB / 4.26GB            [A[A[A
+
+  ...eckpoint-2/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A
+
+
+  ...adapter_model.safetensors:   9%|▊         |  369MB / 4.26GB            [A[A[A
+
+  ...eckpoint-2/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A
+
+
+  ...adapter_model.safetensors:  10%|█         |  436MB / 4.26GB            [A[A[AProcessing Files (1 / 2)      :  11%|█         |  453MB / 4.28GB, 38.3MB/s  
+New Data Upload               :  85%|████████▌ |  401MB /  470MB, 34.2MB/s  [A
+
+  ...eckpoint-2/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A
+
+
+  ...adapter_model.safetensors:  12%|█▏        |  497MB / 4.26GB            [A[A[A
+
+  ...eckpoint-2/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A
+
+
+  ...adapter_model.safetensors:  13%|█▎        |  557MB / 4.26GB            [A[A[A
+
+  ...eckpoint-2/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A
+
+
+  ...adapter_model.safetensors:  15%|█▌        |  658MB / 4.26GB            [A[A[A
+
+  ...eckpoint-2/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A
+
+
+  ...adapter_model.safetensors:  17%|█▋        |  738MB / 4.26GB            [A[A[AProcessing Files (1 / 2)      :  18%|█▊        |  755MB / 4.28GB, 61.3MB/s  
+New Data Upload               :  91%|█████████ |  673MB /  738MB, 54.8MB/s  [A
+
+  ...eckpoint-2/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A
+
+
+  ...adapter_model.safetensors:  19%|█▉        |  816MB / 4.26GB            [A[A[A
+
+  ...eckpoint-2/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A
+
+
+  ...adapter_model.safetensors:  21%|██        |  893MB / 4.26GB            [A[A[A
+
+  ...eckpoint-2/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A
+
+
+  ...adapter_model.safetensors:  23%|██▎       |  978MB / 4.26GB            [A[A[A
+
+  ...eckpoint-2/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A
+
+
+  ...adapter_model.safetensors:  24%|██▍       | 1.03GB / 4.26GB            [A[A[AProcessing Files (1 / 2)      :  24%|██▍       | 1.04GB / 4.28GB, 80.5MB/s  
+New Data Upload               :  88%|████████▊ |  944MB / 1.07GB, 73.2MB/s  [A
+
+  ...eckpoint-2/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A
+
+
+  ...adapter_model.safetensors:  26%|██▌       | 1.10GB / 4.26GB            [A[A[A
+
+  ...eckpoint-2/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A
+
+
+  ...adapter_model.safetensors:  28%|██▊       | 1.18GB / 4.26GB            [A[A[A
+
+  ...eckpoint-2/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A
+
+
+  ...adapter_model.safetensors:  30%|██▉       | 1.27GB / 4.26GB            [A[A[A
+
+  ...eckpoint-2/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A
+
+
+  ...adapter_model.safetensors:  32%|███▏      | 1.36GB / 4.26GB            [A[A[A
+
+  ...eckpoint-2/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A
+
+
+  ...adapter_model.safetensors:  34%|███▍      | 1.45GB / 4.26GB            [A[A[AProcessing Files (1 / 2)      :  34%|███▍      | 1.47GB / 4.28GB,  107MB/s  
+New Data Upload               :  92%|█████████▏| 1.35GB / 1.48GB, 99.3MB/s  [A
+
+  ...eckpoint-2/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A
+
+
+  ...adapter_model.safetensors:  36%|███▌      | 1.53GB / 4.26GB            [A[A[A
+
+  ...eckpoint-2/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A
+
+
+  ...adapter_model.safetensors:  38%|███▊      | 1.61GB / 4.26GB            [A[A[A
+
+  ...eckpoint-2/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A
+
+
+  ...adapter_model.safetensors:  40%|███▉      | 1.70GB / 4.26GB            [A[A[A
+
+  ...eckpoint-2/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A
+
+
+  ...adapter_model.safetensors:  41%|████      | 1.74GB / 4.26GB            [A[A[A
+
+  ...eckpoint-2/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A
+
+
+  ...adapter_model.safetensors:  43%|████▎     | 1.84GB / 4.26GB            [A[A[AProcessing Files (1 / 2)      :  43%|████▎     | 1.86GB / 4.28GB,  128MB/s  
+New Data Upload               :  95%|█████████▌| 1.72GB / 1.81GB,  119MB/s  [A
+
+  ...eckpoint-2/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A
+
+
+  ...adapter_model.safetensors:  45%|████▌     | 1.94GB / 4.26GB            [A[A[A
+
+  ...eckpoint-2/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A
+
+
+  ...adapter_model.safetensors:  48%|████▊     | 2.03GB / 4.26GB            [A[A[A
+
+  ...eckpoint-2/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A
+
+
+  ...adapter_model.safetensors:  50%|████▉     | 2.11GB / 4.26GB            [A[A[A
+
+  ...eckpoint-2/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A
+
+
+  ...adapter_model.safetensors:  52%|█████▏    | 2.20GB / 4.26GB            [A[A[AProcessing Files (1 / 2)      :  52%|█████▏    | 2.22GB / 4.28GB,  147MB/s  
+New Data Upload               :  96%|█████████▌| 2.06GB / 2.15GB,  137MB/s  [A
+
+  ...eckpoint-2/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A
+
+
+  ...adapter_model.safetensors:  53%|█████▎    | 2.26GB / 4.26GB            [A[A[A
+
+  ...eckpoint-2/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A
+
+
+  ...adapter_model.safetensors:  54%|█████▍    | 2.29GB / 4.26GB            [A[A[A
+
+  ...eckpoint-2/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A
+
+
+  ...adapter_model.safetensors:  55%|█████▌    | 2.36GB / 4.26GB            [A[A[A
+
+  ...eckpoint-2/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A
+
+
+  ...adapter_model.safetensors:  58%|█████▊    | 2.45GB / 4.26GB            [A[A[A
+
+  ...eckpoint-2/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A
+
+
+  ...adapter_model.safetensors:  59%|█████▉    | 2.53GB / 4.26GB            [A[A[AProcessing Files (1 / 2)      :  60%|█████▉    | 2.55GB / 4.28GB,  159MB/s  
+New Data Upload               :  96%|█████████▌| 2.37GB / 2.48GB,  148MB/s  [A
+
+  ...eckpoint-2/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A
+
+
+  ...adapter_model.safetensors:  61%|██████    | 2.61GB / 4.26GB            [A[A[A
+
+  ...eckpoint-2/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A
+
+
+  ...adapter_model.safetensors:  63%|██████▎   | 2.70GB / 4.26GB            [A[A[A
+
+  ...eckpoint-2/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A
+
+
+  ...adapter_model.safetensors:  65%|██████▌   | 2.79GB / 4.26GB            [A[A[A
+
+  ...eckpoint-2/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A
+
+
+  ...adapter_model.safetensors:  67%|██████▋   | 2.87GB / 4.26GB            [A[A[A
+
+  ...eckpoint-2/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A
+
+
+  ...adapter_model.safetensors:  69%|██████▉   | 2.94GB / 4.26GB            [A[A[AProcessing Files (1 / 2)      :  69%|██████▉   | 2.96GB / 4.28GB,  175MB/s  
+New Data Upload               :  96%|█████████▌| 2.77GB / 2.88GB,  165MB/s  [A
+
+  ...eckpoint-2/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A
+
+
+  ...adapter_model.safetensors:  71%|███████   | 3.02GB / 4.26GB            [A[A[A
+
+  ...eckpoint-2/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A
+
+
+  ...adapter_model.safetensors:  72%|███████▏  | 3.08GB / 4.26GB            [A[A[A
+
+  ...eckpoint-2/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A
+
+
+  ...adapter_model.safetensors:  73%|███████▎  | 3.12GB / 4.26GB            [A[A[A
+
+  ...eckpoint-2/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A
+
+
+  ...adapter_model.safetensors:  76%|███████▌  | 3.23GB / 4.26GB            [A[A[AProcessing Files (1 / 2)      :  76%|███████▌  | 3.24GB / 4.28GB,  183MB/s  
+New Data Upload               :  97%|█████████▋| 3.05GB / 3.15GB,  173MB/s  [A
+
+  ...eckpoint-2/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A
+
+
+  ...adapter_model.safetensors:  78%|███████▊  | 3.31GB / 4.26GB            [A[A[A
+
+  ...eckpoint-2/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A
+
+
+  ...adapter_model.safetensors:  80%|███████▉  | 3.39GB / 4.26GB            [A[A[A
+
+  ...eckpoint-2/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A
+
+
+  ...adapter_model.safetensors:  83%|████████▎ | 3.55GB / 4.26GB            [A[A[A
+
+  ...eckpoint-2/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A
+
+
+  ...adapter_model.safetensors:  88%|████████▊ | 3.76GB / 4.26GB            [A[A[AProcessing Files (1 / 2)      :  88%|████████▊ | 3.78GB / 4.28GB,  210MB/s  
+New Data Upload               : 100%|█████████▉| 3.35GB / 3.35GB,  183MB/s  [A
+
+  ...eckpoint-2/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A
+
+
+  ...adapter_model.safetensors:  92%|█████████▏| 3.91GB / 4.26GB            [A[A[A
+
+  ...eckpoint-2/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A
+
+
+  ...adapter_model.safetensors:  95%|█████████▌| 4.07GB / 4.26GB            [A[A[A
+
+  ...eckpoint-2/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A
+
+
+  ...adapter_model.safetensors:  99%|█████████▉| 4.21GB / 4.26GB            [A[A[A
+
+  ...eckpoint-2/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A
+
+
+  ...adapter_model.safetensors: 100%|██████████| 4.26GB / 4.26GB            [A[A[AProcessing Files (2 / 2)      : 100%|██████████| 4.28GB / 4.28GB,  232MB/s  
+New Data Upload               : 100%|██████████| 3.36GB / 3.36GB,  170MB/s  
+  ...eckpoint-2/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            
+  ...adapter_model.safetensors: 100%|██████████| 4.26GB / 4.26GB            
+Checkpoint uploaded: felipesp1983/kg1-nemotron-lora-v499-nemo-h200-v498-numeric-teacher-v290ckpt6/checkpoint-2
+
+=== TRAINING COMPLETE ===
+Time: 0.05h
+Final step: 2
+eval_loss_eval_start examples=96 mem_alloc=68.7GiB mem_reserved=76.1GiB
+eval_loss_eval_progress 1/96 partial_loss=1.8290 mem_alloc=68.7GiB mem_reserved=76.1GiB
+eval_loss_eval_progress 8/96 partial_loss=1.8722 mem_alloc=68.7GiB mem_reserved=76.1GiB
+eval_loss_eval_progress 16/96 partial_loss=1.8333 mem_alloc=68.7GiB mem_reserved=76.1GiB
+eval_loss_eval_progress 24/96 partial_loss=1.8054 mem_alloc=68.7GiB mem_reserved=76.1GiB
+eval_loss_eval_progress 32/96 partial_loss=1.8034 mem_alloc=68.7GiB mem_reserved=76.1GiB
+eval_loss_eval_progress 40/96 partial_loss=1.7863 mem_alloc=68.7GiB mem_reserved=76.1GiB
+eval_loss_eval_progress 48/96 partial_loss=1.7803 mem_alloc=68.7GiB mem_reserved=76.1GiB
+eval_loss_eval_progress 56/96 partial_loss=2.0773 mem_alloc=68.7GiB mem_reserved=76.1GiB
+eval_loss_eval_progress 64/96 partial_loss=2.3069 mem_alloc=68.7GiB mem_reserved=76.1GiB
+eval_loss_eval_progress 72/96 partial_loss=2.4663 mem_alloc=68.7GiB mem_reserved=76.1GiB
+eval_loss_eval_progress 80/96 partial_loss=2.6022 mem_alloc=68.7GiB mem_reserved=76.1GiB
+eval_loss_eval_progress 88/96 partial_loss=2.7121 mem_alloc=68.7GiB mem_reserved=76.1GiB
+eval_loss_eval_progress 96/96 partial_loss=2.8162 mem_alloc=68.7GiB mem_reserved=76.1GiB
+eval_loss_eval_end loss=2.8162 mem_alloc=68.7GiB mem_reserved=76.1GiB
+Final eval loss: 2.8162; best eval loss: 2.8162
+Final adapter saved: /tmp/kg1_v499_output/final_adapter
+Manifest saved: /tmp/kg1_v499_output/final_adapter/v90_training_manifest.json
+
+Uploading final adapter and checkpoints to felipesp1983/kg1-nemotron-lora-v499-nemo-h200-v498-numeric-teacher-v290ckpt6...
+Processing Files (0 / 0)      : |          |  0.00B /  0.00B            
+New Data Upload               : |          |  0.00B /  0.00B            [A
+
+  ...adapter_model.safetensors:   4%|▎         |  152MB / 4.26GB            [A[A
+
+
+  ...al_adapter/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A[A
+
+  ...adapter_model.safetensors:   4%|▎         |  152MB / 4.26GB            [A[A
+
+
+  ...al_adapter/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A[A
+
+  ...adapter_model.safetensors:   7%|▋         |  304MB / 4.26GB            [A[A
+
+
+  ...al_adapter/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A[A
+
+  ...adapter_model.safetensors:  11%|█         |  456MB / 4.26GB            [A[A
+
+
+  ...al_adapter/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A[A
+
+  ...adapter_model.safetensors:  14%|█▍        |  600MB / 4.26GB            [A[A
+
+
+  ...al_adapter/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A[AProcessing Files (1 / 2)      :  14%|█▍        |  617MB / 4.28GB, 58.3MB/s  
+
+  ...adapter_model.safetensors:  18%|█▊        |  752MB / 4.26GB            [A[A
+
+
+  ...al_adapter/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A[A
+
+  ...adapter_model.safetensors:  21%|██        |  904MB / 4.26GB            [A[A
+
+
+  ...al_adapter/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A[A
+
+  ...adapter_model.safetensors:  25%|██▍       | 1.06GB / 4.26GB            [A[A
+
+
+  ...al_adapter/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A[A
+
+  ...adapter_model.safetensors:  28%|██▊       | 1.20GB / 4.26GB            [A[A
+
+
+  ...al_adapter/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A[A
+
+  ...adapter_model.safetensors:  32%|███▏      | 1.35GB / 4.26GB            [A[A
+
+
+  ...al_adapter/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A[AProcessing Files (1 / 2)      :  32%|███▏      | 1.37GB / 4.28GB,  120MB/s  
+
+  ...adapter_model.safetensors:  35%|███▌      | 1.50GB / 4.26GB            [A[A
+
+
+  ...al_adapter/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A[A
+
+  ...adapter_model.safetensors:  39%|███▉      | 1.66GB / 4.26GB            [A[A
+
+
+  ...al_adapter/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A[A
+
+  ...adapter_model.safetensors:  42%|████▏     | 1.80GB / 4.26GB            [A[A
+
+
+  ...al_adapter/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A[A
+
+  ...adapter_model.safetensors:  46%|████▌     | 1.95GB / 4.26GB            [A[A
+
+
+  ...al_adapter/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A[A
+
+  ...adapter_model.safetensors:  49%|████▉     | 2.10GB / 4.26GB            [A[A
+
+
+  ...al_adapter/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A[AProcessing Files (1 / 2)      :  50%|████▉     | 2.12GB / 4.28GB,  173MB/s  
+
+  ...adapter_model.safetensors:  53%|█████▎    | 2.26GB / 4.26GB            [A[A
+
+
+  ...al_adapter/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A[A
+
+  ...adapter_model.safetensors:  56%|█████▋    | 2.40GB / 4.26GB            [A[A
+
+
+  ...al_adapter/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A[A
+
+  ...adapter_model.safetensors:  60%|█████▉    | 2.55GB / 4.26GB            [A[A
+
+
+  ...al_adapter/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A[A
+
+  ...adapter_model.safetensors:  63%|██████▎   | 2.70GB / 4.26GB            [A[A
+
+
+  ...al_adapter/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A[A
+
+  ...adapter_model.safetensors:  67%|██████▋   | 2.85GB / 4.26GB            [A[A
+
+
+  ...al_adapter/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A[AProcessing Files (1 / 2)      :  67%|██████▋   | 2.87GB / 4.28GB,  218MB/s  
+
+  ...adapter_model.safetensors:  70%|███████   | 3.00GB / 4.26GB            [A[A
+
+
+  ...al_adapter/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A[A
+
+  ...adapter_model.safetensors:  74%|███████▍  | 3.15GB / 4.26GB            [A[A
+
+
+  ...al_adapter/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A[A
+
+  ...adapter_model.safetensors:  77%|███████▋  | 3.30GB / 4.26GB            [A[A
+
+
+  ...al_adapter/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A[A
+
+  ...adapter_model.safetensors:  81%|████████  | 3.45GB / 4.26GB            [A[A
+
+
+  ...al_adapter/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A[A
+
+  ...adapter_model.safetensors:  85%|████████▍ | 3.60GB / 4.26GB            [A[A
+
+
+  ...al_adapter/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A[AProcessing Files (1 / 2)      :  85%|████████▍ | 3.62GB / 4.28GB,  258MB/s  
+
+  ...adapter_model.safetensors:  88%|████████▊ | 3.75GB / 4.26GB            [A[A
+
+
+  ...al_adapter/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A[A
+
+  ...adapter_model.safetensors:  91%|█████████▏| 3.90GB / 4.26GB            [A[A
+
+
+  ...al_adapter/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A[A
+
+  ...adapter_model.safetensors:  95%|█████████▌| 4.05GB / 4.26GB            [A[A
+
+
+  ...al_adapter/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A[A
+
+  ...adapter_model.safetensors:  99%|█████████▊| 4.20GB / 4.26GB            [A[A
+
+
+  ...al_adapter/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A[A
+
+  ...adapter_model.safetensors: 100%|██████████| 4.26GB / 4.26GB            [A[A
+
+
+  ...al_adapter/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A[AProcessing Files (2 / 2)      : 100%|██████████| 4.28GB / 4.28GB,  285MB/s  Processing Files (2 / 2)      : 100%|██████████| 4.28GB / 4.28GB,  285MB/s  
+New Data Upload               : |          |  0.00B /  0.00B,  0.00B/s  
+  ...adapter_model.safetensors: 100%|██████████| 4.26GB / 4.26GB            
+  ...al_adapter/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            
+Processing Files (0 / 0)      : |          |  0.00B /  0.00B            
+New Data Upload               : |          |  0.00B /  0.00B            [A
+
+  ...eckpoint-2/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A
+
+
+  ...adapter_model.safetensors:   4%|▎         |  152MB / 4.26GB            [A[A[A
+
+  ...eckpoint-2/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A
+
+
+  ...adapter_model.safetensors:   4%|▎         |  152MB / 4.26GB            [A[A[A
+
+  ...eckpoint-2/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A
+
+
+  ...adapter_model.safetensors:   7%|▋         |  304MB / 4.26GB            [A[A[A
+
+  ...eckpoint-2/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A
+
+
+  ...adapter_model.safetensors:  11%|█         |  456MB / 4.26GB            [A[A[A
+
+  ...eckpoint-2/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A
+
+
+  ...adapter_model.safetensors:  14%|█▍        |  600MB / 4.26GB            [A[A[AProcessing Files (1 / 2)      :  14%|█▍        |  617MB / 4.28GB, 58.3MB/s  
+
+  ...eckpoint-2/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A
+
+
+  ...adapter_model.safetensors:  18%|█▊        |  752MB / 4.26GB            [A[A[A
+
+  ...eckpoint-2/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A
+
+
+  ...adapter_model.safetensors:  21%|██        |  904MB / 4.26GB            [A[A[A
+
+  ...eckpoint-2/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A
+
+
+  ...adapter_model.safetensors:  25%|██▍       | 1.06GB / 4.26GB            [A[A[A
+
+  ...eckpoint-2/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A
+
+
+  ...adapter_model.safetensors:  28%|██▊       | 1.20GB / 4.26GB            [A[A[A
+
+  ...eckpoint-2/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A
+
+
+  ...adapter_model.safetensors:  32%|███▏      | 1.35GB / 4.26GB            [A[A[AProcessing Files (1 / 2)      :  32%|███▏      | 1.37GB / 4.28GB,  120MB/s  
+
+  ...eckpoint-2/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A
+
+
+  ...adapter_model.safetensors:  35%|███▌      | 1.50GB / 4.26GB            [A[A[A
+
+  ...eckpoint-2/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A
+
+
+  ...adapter_model.safetensors:  39%|███▊      | 1.65GB / 4.26GB            [A[A[A
+
+  ...eckpoint-2/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A
+
+
+  ...adapter_model.safetensors:  42%|████▏     | 1.80GB / 4.26GB            [A[A[A
+
+  ...eckpoint-2/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A
+
+
+  ...adapter_model.safetensors:  46%|████▌     | 1.95GB / 4.26GB            [A[A[AProcessing Files (1 / 2)      :  46%|████▌     | 1.97GB / 4.28GB,  163MB/s  
+
+  ...eckpoint-2/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A
+
+
+  ...adapter_model.safetensors:  49%|████▉     | 2.10GB / 4.26GB            [A[A[A
+
+  ...eckpoint-2/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A
+
+
+  ...adapter_model.safetensors:  53%|█████▎    | 2.26GB / 4.26GB            [A[A[A
+
+  ...eckpoint-2/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A
+
+
+  ...adapter_model.safetensors:  56%|█████▋    | 2.40GB / 4.26GB            [A[A[A
+
+  ...eckpoint-2/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A
+
+
+  ...adapter_model.safetensors:  60%|█████▉    | 2.55GB / 4.26GB            [A[A[A
+
+  ...eckpoint-2/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A
+
+
+  ...adapter_model.safetensors:  63%|██████▎   | 2.70GB / 4.26GB            [A[A[AProcessing Files (1 / 2)      :  64%|██████▎   | 2.72GB / 4.28GB,  210MB/s  
+
+  ...eckpoint-2/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A
+
+
+  ...adapter_model.safetensors:  67%|██████▋   | 2.85GB / 4.26GB            [A[A[A
+
+  ...eckpoint-2/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A
+
+
+  ...adapter_model.safetensors:  70%|███████   | 3.00GB / 4.26GB            [A[A[A
+
+  ...eckpoint-2/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A
+
+
+  ...adapter_model.safetensors:  74%|███████▍  | 3.15GB / 4.26GB            [A[A[A
+
+  ...eckpoint-2/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A
+
+
+  ...adapter_model.safetensors:  78%|███████▊  | 3.30GB / 4.26GB            [A[A[AProcessing Files (1 / 2)      :  78%|███████▊  | 3.32GB / 4.28GB,  243MB/s  
+
+  ...eckpoint-2/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A
+
+
+  ...adapter_model.safetensors:  81%|████████  | 3.45GB / 4.26GB            [A[A[A
+
+  ...eckpoint-2/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A
+
+
+  ...adapter_model.safetensors:  85%|████████▍ | 3.60GB / 4.26GB            [A[A[A
+
+  ...eckpoint-2/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A
+
+
+  ...adapter_model.safetensors:  88%|████████▊ | 3.75GB / 4.26GB            [A[A[A
+
+  ...eckpoint-2/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A
+
+
+  ...adapter_model.safetensors:  92%|█████████▏| 3.90GB / 4.26GB            [A[A[A
+
+  ...eckpoint-2/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A
+
+
+  ...adapter_model.safetensors:  95%|█████████▌| 4.05GB / 4.26GB            [A[A[AProcessing Files (1 / 2)      :  95%|█████████▌| 4.07GB / 4.28GB,  280MB/s  
+
+  ...eckpoint-2/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A
+
+
+  ...adapter_model.safetensors:  99%|█████████▊| 4.20GB / 4.26GB            [A[A[A
+
+  ...eckpoint-2/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            [A[A
+
+
+  ...adapter_model.safetensors: 100%|██████████| 4.26GB / 4.26GB            [A[A[AProcessing Files (2 / 2)      : 100%|██████████| 4.28GB / 4.28GB,  285MB/s  
+New Data Upload               : |          |  0.00B /  0.00B,  0.00B/s  
+  ...eckpoint-2/tokenizer.json: 100%|██████████| 17.1MB / 17.1MB            
+  ...adapter_model.safetensors: 100%|██████████| 4.26GB / 4.26GB            
+No files have been modified since last commit. Skipping to prevent empty commit.
+Upload complete: felipesp1983/kg1-nemotron-lora-v499-nemo-h200-v498-numeric-teacher-v290ckpt6
