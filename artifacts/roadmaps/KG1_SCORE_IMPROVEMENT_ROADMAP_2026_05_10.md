@@ -71,7 +71,7 @@ Ultima evidencia operacional relevante:
 | V516 label-free equation regate | baseline correto e `191/315`, `equation=55`, `bit=136`; gate equation achou os mesmos `4` ganhos no-loss conhecidos e `0` conflitos, projetando `195/315`, `equation=59`; V324 agora bloqueia CSV com `raw_output` se `prediction` nao for label-free | nao e novo dado de equation; esses IDs ja estao cobertos no V475/V510/V515, entao o gargalo e transferencia |
 | V517 H200 V515 smoke attempt 1 | job `felipesp1983/6a08f4713308d79117b916c8` falhou barato em `phase=artifacts`: `DATA_REPO` Python apontava para V515, mas `COMMAND_SCRIPT` ainda exportava repo antigo `felipesp1983/kg1-nemotron-training`; nenhum modelo carregou e nenhum treino rodou | corrigido no launcher e transformado em gate: `kg1_pre_paid_job_integration_gate.py --expected-data-repo` agora exige constante e export do repo esperado antes de qualquer job pago |
 | V517 H200 V515 smoke retry | job `felipesp1983/6a08f6043308d79117b916de` completou; `DATA_REPO` correto; MoE `gate_up/down` treinaveis; `lm_head` congelado; checkpoint-2 uploaded; eval loss `3.2771 -> 3.2720`; tempo `0.05h` | perda caiu pouco, mas loss nao promove; obrigatorio rodar V518 weak eval label-free do checkpoint-2 antes de qualquer full/package/submit |
-| V518 V517 checkpoint-2 weak eval | launcher criado com comparativo V518 vs V517; mede somente ACC weak do checkpoint-2 V517 com `KG1_MAX_TOKENS=7680` e promotion gate `total>=193`, `equation>=57`, `bit>=136`, `trunc=0` | proximo passo imediato; se falhar, nao ha submit nem mais GPU nessa linha sem novo sinal CPU |
+| V518 V517 checkpoint-2 weak eval | job `felipesp1983/6a08f97ce48bea4538ba05d2` concluiu a inferencia weak e salvou diagnosticos; resultado label-free `191/315`, `equation=56/155`, `bit=135/160`, `trunc=0`; label-aware debug seria `192/315`, mas nao e promocional | F2/backfire confirmado: queda de bit `136 -> 135` e total nao supera baseline; V517/V518 bloqueados para full/package/submit; qualquer nova GPU precisa de novo sinal CPU e gate anti-regressao |
 
 ## Achados Principais V484-V492
 
@@ -745,13 +745,17 @@ Sem isso, nao packagear e nao submeter.
    corrigidos.
 8. Se surgir novo candidato, weak eval promocional deve usar thinking ligado,
    `max_tokens=7680`, `max_model_len=8192`, `max_num_seqs=64` e falhar se nao
-   passar `total>=196`, `equation>=60`, `bit>=136`, `trunc=0`.
-9. V517 e o unico smoke GPU atualmente autorizado: H200, `MAX_STEPS=2`,
+   passar primeiro pelo gate minimo anti-backfire (`total>=193`,
+   `equation>=57`, `bit>=136`, `trunc=0`). Para package/submit, a meta segue
+   mais alta: aproximar `total>=196`, `equation>=60`, `bit>=136`, `trunc=0`.
+9. V517/V518 encerram a linha V515 GPU atual: H200, `MAX_STEPS=2`,
    dataset V515 HF CPU, bit source weights `1.5x`, `lm_head` congelado,
    MoE `gate_up/down` treinaveis, `KG1_CRISIS_MODE_BACKFIRE_GUARD=1`.
-   Se o checkpoint nao puder superar o baseline label-free
-   `191/315`, `equation=55`, `bit=136`, a linha deve ser cancelada por
-   FinOps e nao receber package/submit.
+   O weak eval V518 do checkpoint-2 retornou `191/315`, `equation=56`,
+   `bit=135`, `trunc=0`, portanto regrediu bit contra o baseline label-free
+   `191/315`, `equation=55`, `bit=136`. Esta linha fica em crisis mode:
+   nenhum full/package/submit, nenhum GPU repetido, e o proximo passo volta
+   para CPU/debug ate aparecer sinal novo sem regressao.
 
 ## Atualizacao V500 - Auditoria De Parametros V499
 

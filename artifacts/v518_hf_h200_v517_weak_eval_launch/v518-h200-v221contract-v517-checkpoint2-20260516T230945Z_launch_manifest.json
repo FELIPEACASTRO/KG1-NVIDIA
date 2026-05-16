@@ -1,0 +1,55 @@
+{
+  "adapter_repo": "felipesp1983/kg1-nemotron-lora-v517-nemo-h200-v515-fullbyte-residual-v290ckpt6",
+  "adapters": [
+    {
+      "name": "v518_v517_checkpoint_2_v221_contract",
+      "repo": "felipesp1983/kg1-nemotron-lora-v517-nemo-h200-v515-fullbyte-residual-v290ckpt6",
+      "subfolder": "checkpoint-2"
+    }
+  ],
+  "branch": "v230-v226-complementarity",
+  "expected_commit": "4cf24b108a51a959433c7aa9d161b37d0372a702",
+  "flavor": "h200",
+  "generated_at_utc": "2026-05-16T23:09:46.751491+00:00",
+  "hardware": {
+    "accelerator_model": "H200",
+    "accelerator_quantity": "1",
+    "accelerator_vram": "141 GB",
+    "cpu": "23 vCPU",
+    "name": "h200",
+    "pretty_name": "Nvidia H200",
+    "ram": "256 GB",
+    "unit_cost_usd": 0.083333,
+    "unit_label": "minute"
+  },
+  "image": "vllm/vllm-openai:v0.20.1",
+  "job_id": "6a08f97ce48bea4538ba05d2",
+  "job_status": "ERROR",
+  "job_status_note": "Expected terminal error after diagnostics upload because weak promotion gate blocked the candidate.",
+  "job_url": "https://huggingface.co/jobs/felipesp1983/6a08f97ce48bea4538ba05d2",
+  "loss_acc_sync_audit": "artifacts/v494_loss_acc_sync_audit/KG1_V494_LOSS_ACC_SYNC_AUDIT_2026_05_16.md",
+  "namespace": "felipesp1983",
+  "output_path_in_repo": "evals/v518-h200-v221contract-v517-checkpoint2-20260516T230945Z",
+  "output_repo": "felipesp1983/kg1-nemotron-lora-v517-nemo-h200-v515-fullbyte-residual-v290ckpt6",
+  "promotion_gate": {
+    "current_label_free_baseline_bit_manipulation": 136,
+    "current_label_free_baseline_equation_transform": 55,
+    "current_label_free_baseline_total": 191,
+    "full_eval_only_if": "total>=193 and equation>=57 and bit>=136 and truncated=0",
+    "legacy_stored_baseline_equation_transform": 56,
+    "legacy_stored_baseline_total": 192,
+    "reject_if_bit_lt": 136,
+    "reject_if_equation_lt": 57,
+    "reject_if_total_lt": 193,
+    "reject_if_truncated_gt": 0,
+    "submit_only_if_full_official_like_gt": 823
+  },
+  "run_id": "v518-h200-v221contract-v517-checkpoint2-20260516T230945Z",
+  "version": "v518_v517_checkpoint2_v515_fullbyte_residual_weak_eval",
+  "version_comparison": {
+    "current": "V518 weak ACC measurement of V517 checkpoint-2",
+    "expected_decision": "no package/submit unless weak promotion gate passes label-free",
+    "previous": "V517 H200 V515 fullbyte-residual checkpoint-2 training smoke"
+  },
+  "version_comparison_artifact": "artifacts/version_diffs/V518_VS_V517.md"
+}

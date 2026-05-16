@@ -1910,8 +1910,44 @@ Regra preventiva:
 - `kg1_static_safety_gate.py` trata essa checagem como snippet critico do
   pre-paid gate.
 
-Status: mitigado por gate local; V517 so pode ser relancado apos commit/push e
-debug local atualizado.
+Status: mitigado por gate local; V517 retry foi executado com repo correto.
+
+### E064 - V517/V518 loss caiu mas ACC label-free nao promoveu e bit regrediu
+
+Evidencia:
+
+- V517 retry (`felipesp1983/6a08f6043308d79117b916de`) treinou `MAX_STEPS=2`
+  em H200, com `DATA_REPO` correto, `lm_head` congelado e MoE
+  `gate_up/down` treinaveis.
+- O eval loss caiu pouco: `3.2771 -> 3.2720`.
+- V518 weak eval (`felipesp1983/6a08f97ce48bea4538ba05d2`) mediu o
+  checkpoint-2 em weak label-free:
+  - total `191/315`;
+  - `equation_transform=56/155`;
+  - `bit_manipulation=135/160`;
+  - `truncated=0`.
+- O mesmo relatorio mostra `label_aware_debug_correct=192`, confirmando que
+  metricas label-aware continuam diagnosticas e nao podem guiar submit.
+
+Impacto:
+
+- Esta e a classe exata de bug/processo que a regra F2/backfire deve bloquear:
+  loss melhorou, mas ACC promocional nao melhorou e bit regrediu `136 -> 135`.
+- V517/V518 nao sao submit-safe e nao devem receber full eval, package ou
+  Kaggle submit.
+- Repetir a mesma linha com mais steps ou GPU maior seria gasto sem novo sinal
+  tecnico.
+
+Regra preventiva:
+
+- Promotion gate deve continuar exigindo ACC label-free, `bit>=136`,
+  `trunc=0` e ganho total real antes de qualquer full/package/submit.
+- Qualquer novo treino derivado de V515 precisa antes provar em CPU qual
+  mecanismo evita perder o acerto de bit que V518 perdeu.
+- Loss so pode ser usado como telemetria de saude; nunca como criterio de
+  promocao.
+
+Status: crise/revert aplicado; V517/V518 arquivados como diagnostico negativo.
 
 ## Prompt Externo
 

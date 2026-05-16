@@ -1,0 +1,37 @@
+{
+  "version": "V518",
+  "run_id": "v518-h200-v221contract-v517-checkpoint2-20260516T230945Z",
+  "hf_job_url": "https://huggingface.co/jobs/felipesp1983/6a08f97ce48bea4538ba05d2",
+  "hf_job_final_status": "ERROR",
+  "error_is_expected_gate_block": true,
+  "adapter_repo": "felipesp1983/kg1-nemotron-lora-v517-nemo-h200-v515-fullbyte-residual-v290ckpt6",
+  "adapter_subfolder": "checkpoint-2",
+  "uploaded_eval_commit": "https://huggingface.co/felipesp1983/kg1-nemotron-lora-v517-nemo-h200-v515-fullbyte-residual-v290ckpt6/commit/2ccc9f9b3190c574e457e852ec004657d5a0f8af",
+  "weak_label_free_result": {
+    "total_correct": 191,
+    "total_rows": 315,
+    "accuracy": 0.6063492063492063,
+    "equation_transform_correct": 56,
+    "equation_transform_total": 155,
+    "bit_manipulation_correct": 135,
+    "bit_manipulation_total": 160,
+    "truncated": 0
+  },
+  "label_aware_debug_correct": 192,
+  "promotion_gate": {
+    "passed": false,
+    "blocking_reasons": [
+      "correct_lt_193",
+      "equation_lt_57",
+      "bit_lt_136"
+    ],
+    "thresholds": {
+      "correct_min": 193,
+      "equation_transform_min": 57,
+      "bit_manipulation_min": 136,
+      "truncated_max": 0
+    }
+  },
+  "decision": "blocked_crisis_revert_no_full_no_package_no_submit",
+  "reason": "Loss improved in V517, but V518 label-free weak ACC did not improve total and regressed bit from 136 to 135."
+}
