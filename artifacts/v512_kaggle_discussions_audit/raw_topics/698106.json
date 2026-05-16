@@ -1,0 +1,769 @@
+{
+  "forumTopic": {
+    "authorId": 2003505,
+    "authorPerformanceTier": "STAFF",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "2003505-kg.jpg",
+    "authorUserDisplayName": "Ryan Holbrook",
+    "authorUserName": "ryanholbrook",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "RB",
+          "id": 183046,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/183046-kg.png",
+          "tier": "MASTER",
+          "url": "/rashmibanthia"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 749,
+        "content": "<p>We resubmitted 3 models - none of them improved either. </p>",
+        "feedbackTrackingData": {},
+        "id": 3458413,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-05-15T19:41:12.750Z",
+        "rawMarkdown": "We resubmitted 3 models - none of them improved either. ",
+        "replies": [
+          {
+            "author": {
+              "displayName": "Kishan Vavdara",
+              "id": 12951282,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/12951282-kg.jpeg",
+              "tier": "MASTER",
+              "url": "/kishanvavdara"
+            },
+            "authorType": "COMMENT",
+            "competitionRanking": 7,
+            "content": "<p>Similar results for us too. Instead of improving,  score reduced by third decimal. In selecting the final submission this will be problematic. <a href=\"https://www.kaggle.com/ryanholbrook\" target=\"_blank\">@ryanholbrook</a> if there will be no rescoring with new metric how will the final submission score finalized. Suppose our best sub is on older metric and we select that, will you rescore it with new metric after competition end?</p>",
+            "feedbackTrackingData": {},
+            "id": 3458563,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-05-16T07:21:54.220Z",
+            "rawMarkdown": "Similar results for us too. Instead of improving,  score reduced by third decimal. In selecting the final submission this will be problematic. @ryanholbrook if there will be no rescoring with new metric how will the final submission score finalized. Suppose our best sub is on older metric and we select that, will you rescore it with new metric after competition end?",
+            "replies": [
+              {
+                "author": {
+                  "displayName": "Ravi Ramakrishnan",
+                  "id": 8273630,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/8273630-kg.JPG?t=2024-03-26-14-51-52",
+                  "tier": "GRANDMASTER",
+                  "url": "/ravi20076"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 7,
+                "content": "<p><a href=\"https://www.kaggle.com/kishanvavdara\" target=\"_blank\">@kishanvavdara</a> fair point.</p>\n<p>Also there should be a policy that such material changes should be ensued in the first week/ 2 weeks of the competition. Adjusting such a core element after the half way point of the competition and <strong>after handing over a prize for early success</strong> is not optional at all. </p>\n<p>I have raised this issue earlier as well. Competitions lately are witnessing a lot of such material changes during the training period. Perhaps better governance is the need of the hour..</p>",
+                "feedbackTrackingData": {},
+                "id": 3458629,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-05-16T09:49:40.030Z",
+                "rawMarkdown": "@kishanvavdara fair point.\n\nAlso there should be a policy that such material changes should be ensued in the first week/ 2 weeks of the competition. Adjusting such a core element after the half way point of the competition and **after handing over a prize for early success** is not optional at all. \n\nI have raised this issue earlier as well. Competitions lately are witnessing a lot of such material changes during the training period. Perhaps better governance is the need of the hour..",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "Kishan Vavdara",
+                    "id": 12951282,
+                    "performanceTier": "MASTER",
+                    "profileUrl": "/kishanvavdara",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/12951282-kg.jpeg",
+                    "tier": "MASTER",
+                    "url": "/kishanvavdara",
+                    "userId": 12951282,
+                    "userName": "kishanvavdara"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true,
+                  "totalVotes": -2
+                }
+              },
+              {
+                "author": {
+                  "displayName": "Chew Kok Wah",
+                  "id": 3967558,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                  "tier": "EXPERT",
+                  "url": "/chewkokwahibrainai"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 62,
+                "content": "<p>They do the right thing for making the right change when mistake is found and maintain the high transparency, their act should be encourage to maintain fairness and reward real advancement. There is no concrete evidence to suggest that past competitions never facing any behind the scene material changes half way.</p>",
+                "feedbackTrackingData": {},
+                "id": 3458667,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-05-16T11:47:15.263Z",
+                "rawMarkdown": "They do the right thing for making the right change when mistake is found and maintain the high transparency, their act should be encourage to maintain fairness and reward real advancement. There is no concrete evidence to suggest that past competitions never facing any behind the scene material changes half way.",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "Chew Kok Wah",
+                    "id": 3967558,
+                    "performanceTier": "EXPERT",
+                    "profileUrl": "/chewkokwahibrainai",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                    "tier": "EXPERT",
+                    "url": "/chewkokwahibrainai",
+                    "userId": 3967558,
+                    "userName": "chewkokwahibrainai"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true
+                }
+              },
+              {
+                "author": {
+                  "displayName": "Ravi Ramakrishnan",
+                  "id": 8273630,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/8273630-kg.JPG?t=2024-03-26-14-51-52",
+                  "tier": "GRANDMASTER",
+                  "url": "/ravi20076"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 7,
+                "content": "<p><a href=\"https://www.kaggle.com/chewkokwahibrainai\" target=\"_blank\">@chewkokwahibrainai</a> better governance is needed for sure. Making a change to the metric after the halfway point is an indicator of sub-optimal governance. What if an error is discovered in the last 2 weeks of the competition? Will a change be made there as well?</p>",
+                "feedbackTrackingData": {},
+                "id": 3458668,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-05-16T11:49:24.007Z",
+                "rawMarkdown": "@chewkokwahibrainai better governance is needed for sure. Making a change to the metric after the halfway point is an indicator of sub-optimal governance. What if an error is discovered in the last 2 weeks of the competition? Will a change be made there as well?",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "Kishan Vavdara",
+                    "id": 12951282,
+                    "performanceTier": "MASTER",
+                    "profileUrl": "/kishanvavdara",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/12951282-kg.jpeg",
+                    "tier": "MASTER",
+                    "url": "/kishanvavdara",
+                    "userId": 12951282,
+                    "userName": "kishanvavdara"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true,
+                  "totalVotes": -1
+                }
+              }
+            ],
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "Kishan Vavdara",
+                "id": 12951282,
+                "performanceTier": "MASTER",
+                "profileUrl": "/kishanvavdara",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/12951282-kg.jpeg",
+                "tier": "MASTER",
+                "url": "/kishanvavdara",
+                "userId": 12951282,
+                "userName": "kishanvavdara"
+              }
+            },
+            "votes": {
+              "canUpvote": true,
+              "totalUpvotes": 2,
+              "totalVotes": 2
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "RB",
+            "id": 183046,
+            "performanceTier": "MASTER",
+            "profileUrl": "/rashmibanthia",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/183046-kg.png",
+            "tier": "MASTER",
+            "url": "/rashmibanthia",
+            "userId": 183046,
+            "userName": "rashmibanthia"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 1,
+          "totalVotes": 1
+        }
+      },
+      {
+        "author": {
+          "displayName": "Ali",
+          "id": 6915758,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/6915758-kg.png",
+          "tier": "MASTER",
+          "url": "/asalhi"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 13,
+        "content": "<p>I am also seeing some kind of 1% drop in scores.</p>\n<p>If my understanding is correct, the update is to fix such cases, right? </p>\n<pre><code>True answer: +}\nModel output: \\boxed{+}}\nOld metric extracted: +\nNew metric extracts: +}\nResult: now correct\n</code></pre>\n<p>But if for some reason the model added } at the end of boxed, like this : </p>\n<pre><code>True answer: 42\nModel output: \\boxed{42}}\nOld metric extracted: 42\nNew metric extracts: 42}\nResult: wrong\n</code></pre>\n<p>Then our score will go down with the new update. </p>\n<p>So maybe this is the case? The public LB does not have problems with \"}\" in the answer (or our models can't handle it correctly in the first place), but might have some outputs with multiple }} in the boxed output, which causes the wrong answer to other problems.</p>\n<p>PS: In my local tests, I see an increase of 2%, but my local validation set outputs do not include a case with }} beside the ones needed fix. </p>",
+        "feedbackTrackingData": {},
+        "id": 3455975,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-05-10T21:01:35.313Z",
+        "rawMarkdown": "I am also seeing some kind of 1% drop in scores.\n\nIf my understanding is correct, the update is to fix such cases, right? \n\n```python\nTrue answer: +}\nModel output: \\boxed{+}}\nOld metric extracted: +\nNew metric extracts: +}\nResult: now correct\n```\n\nBut if for some reason the model added } at the end of boxed, like this : \n\n```python\nTrue answer: 42\nModel output: \\boxed{42}}\nOld metric extracted: 42\nNew metric extracts: 42}\nResult: wrong\n```\nThen our score will go down with the new update. \n\nSo maybe this is the case? The public LB does not have problems with \"}\" in the answer (or our models can't handle it correctly in the first place), but might have some outputs with multiple }} in the boxed output, which causes the wrong answer to other problems.\n\nPS: In my local tests, I see an increase of 2%, but my local validation set outputs do not include a case with }} beside the ones needed fix. \n",
+        "replies": [
+          {
+            "author": {
+              "displayName": "Ryan Holbrook",
+              "id": 2003505,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2003505-kg.jpg",
+              "tier": "STAFF",
+              "url": "/ryanholbrook"
+            },
+            "authorType": "ADMIN",
+            "content": "<p>This seems like an ambiguity that doesn't have a clear resolution. I'm still in favor of keeping the fix, though, since it allows a larger subset of problems to be correctly answered which were simply impossible before.</p>",
+            "feedbackTrackingData": {},
+            "id": 3456263,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-05-11T15:28:54.617Z",
+            "rawMarkdown": "This seems like an ambiguity that doesn't have a clear resolution. I'm still in favor of keeping the fix, though, since it allows a larger subset of problems to be correctly answered which were simply impossible before.",
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "Ryan Holbrook",
+                "id": 2003505,
+                "performanceTier": "STAFF",
+                "profileUrl": "/ryanholbrook",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2003505-kg.jpg",
+                "tier": "STAFF",
+                "url": "/ryanholbrook",
+                "userId": 2003505,
+                "userName": "ryanholbrook"
+              }
+            },
+            "votes": {
+              "canUpvote": true,
+              "totalUpvotes": 5,
+              "totalVotes": 5
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Ali",
+            "id": 6915758,
+            "performanceTier": "MASTER",
+            "profileUrl": "/asalhi",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/6915758-kg.png",
+            "tier": "MASTER",
+            "url": "/asalhi",
+            "userId": 6915758,
+            "userName": "asalhi"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 5,
+          "totalVotes": 5
+        }
+      },
+      {
+        "author": {
+          "displayName": "JK-Piece",
+          "id": 3937164,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/3937164-kg.png?t=2023-11-07-17-35-27",
+          "tier": "MASTER",
+          "url": "/jeannkouagou"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 138,
+        "content": "<p>Thanks for the update. My first feedback is that it has dropped my score by 1%. So from 0.86 to 0.85. But you expected it to increase scores! There is something wrong probably. I will do some tests with the new metric and provide updates here.</p>",
+        "feedbackTrackingData": {},
+        "id": 3455463,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-05-09T13:17:39.753Z",
+        "rawMarkdown": "Thanks for the update. My first feedback is that it has dropped my score by 1%. So from 0.86 to 0.85. But you expected it to increase scores! There is something wrong probably. I will do some tests with the new metric and provide updates here.",
+        "replies": [
+          {
+            "author": {
+              "displayName": "Ryan Holbrook",
+              "id": 2003505,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2003505-kg.jpg",
+              "tier": "STAFF",
+              "url": "/ryanholbrook"
+            },
+            "authorType": "ADMIN",
+            "content": "<p>If you discover an error, please let me know!</p>",
+            "feedbackTrackingData": {},
+            "id": 3456264,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-05-11T15:29:24.570Z",
+            "rawMarkdown": "If you discover an error, please let me know!",
+            "replies": [
+              {
+                "author": {
+                  "displayName": "JK-Piece",
+                  "id": 3937164,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/3937164-kg.png?t=2023-11-07-17-35-27",
+                  "tier": "MASTER",
+                  "url": "/jeannkouagou"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 138,
+                "content": "<p>My tests did not reveal any issue yet. So I guess the answer extraction script works well.</p>",
+                "feedbackTrackingData": {},
+                "id": 3456267,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-05-11T15:40:35.153Z",
+                "rawMarkdown": "My tests did not reveal any issue yet. So I guess the answer extraction script works well.",
+                "teamUpInfo": {
+                  "intro": "Hey Kagglers. I am looking for a teammate with current score around 0.78-0.80. I have strong checkpoints and great training data that would benefit the team to be formed. Feel free to reach out.",
+                  "teamLeader": {
+                    "displayName": "JK-Piece",
+                    "id": 3937164,
+                    "performanceTier": "MASTER",
+                    "profileUrl": "/jeannkouagou",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/3937164-kg.png?t=2023-11-07-17-35-27",
+                    "tier": "MASTER",
+                    "url": "/jeannkouagou",
+                    "userId": 3937164,
+                    "userName": "jeannkouagou"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true
+                }
+              }
+            ],
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "Ryan Holbrook",
+                "id": 2003505,
+                "performanceTier": "STAFF",
+                "profileUrl": "/ryanholbrook",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2003505-kg.jpg",
+                "tier": "STAFF",
+                "url": "/ryanholbrook",
+                "userId": 2003505,
+                "userName": "ryanholbrook"
+              }
+            },
+            "votes": {
+              "canUpvote": true,
+              "totalUpvotes": 1,
+              "totalVotes": 1
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "Hey Kagglers. I am looking for a teammate with current score around 0.78-0.80. I have strong checkpoints and great training data that would benefit the team to be formed. Feel free to reach out.",
+          "teamLeader": {
+            "displayName": "JK-Piece",
+            "id": 3937164,
+            "performanceTier": "MASTER",
+            "profileUrl": "/jeannkouagou",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/3937164-kg.png?t=2023-11-07-17-35-27",
+            "tier": "MASTER",
+            "url": "/jeannkouagou",
+            "userId": 3937164,
+            "userName": "jeannkouagou"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 3,
+          "totalVotes": 3
+        }
+      },
+      {
+        "author": {
+          "displayName": "NoOneAhead",
+          "id": 31723762,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/31723762-kg.png?t=2026-04-16-12-41-34",
+          "tier": "CONTRIBUTOR",
+          "url": "/jerrlu"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 164,
+        "content": "<p>I'm not sure what went wrong; the same file submission is now getting a score 0.02 lower than before.</p>",
+        "feedbackTrackingData": {},
+        "id": 3455146,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-05-08T18:11:08.793Z",
+        "rawMarkdown": "I'm not sure what went wrong; the same file submission is now getting a score 0.02 lower than before.",
+        "replies": [
+          {
+            "author": {
+              "displayName": "Ryan Holbrook",
+              "id": 2003505,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2003505-kg.jpg",
+              "tier": "STAFF",
+              "url": "/ryanholbrook"
+            },
+            "authorType": "ADMIN",
+            "content": "<p>Maybe try submitting it again? There is some non-determinism inherent in the evaluation. It's possible the metric change didn't affect you much, but you're just seeing variation in vLLM.</p>",
+            "feedbackTrackingData": {},
+            "id": 3455208,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-05-08T20:26:46.460Z",
+            "rawMarkdown": "Maybe try submitting it again? There is some non-determinism inherent in the evaluation. It's possible the metric change didn't affect you much, but you're just seeing variation in vLLM.",
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "Ryan Holbrook",
+                "id": 2003505,
+                "performanceTier": "STAFF",
+                "profileUrl": "/ryanholbrook",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2003505-kg.jpg",
+                "tier": "STAFF",
+                "url": "/ryanholbrook",
+                "userId": 2003505,
+                "userName": "ryanholbrook"
+              }
+            },
+            "votes": {
+              "canUpvote": true,
+              "totalUpvotes": 1,
+              "totalVotes": 1
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "NoOneAhead",
+            "id": 31723762,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/jerrlu",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/31723762-kg.png?t=2026-04-16-12-41-34",
+            "tier": "CONTRIBUTOR",
+            "url": "/jerrlu",
+            "userId": 31723762,
+            "userName": "jerrlu"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 1,
+          "totalVotes": 1
+        }
+      },
+      {
+        "author": {
+          "displayName": "Tong Hui Kang",
+          "id": 1680925,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1680925-kg.jpg",
+          "tier": "MASTER",
+          "url": "/huikang"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 748,
+        "content": "<p>PSA that the metric notebook is at <a href=\"https://www.kaggle.com/code/metric/nvidia-nemotron-metric/notebook\" target=\"_blank\">https://www.kaggle.com/code/metric/nvidia-nemotron-metric/notebook</a></p>",
+        "feedbackTrackingData": {},
+        "id": 3455257,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-05-08T23:09:55.087Z",
+        "rawMarkdown": "PSA that the metric notebook is at https://www.kaggle.com/code/metric/nvidia-nemotron-metric/notebook\n\n",
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Tong Hui Kang",
+            "id": 1680925,
+            "performanceTier": "MASTER",
+            "profileUrl": "/huikang",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1680925-kg.jpg",
+            "tier": "MASTER",
+            "url": "/huikang",
+            "userId": 1680925,
+            "userName": "huikang"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 2,
+          "totalVotes": 2
+        }
+      },
+      {
+        "author": {
+          "displayName": "Ra'uf Fauzan Rambe",
+          "id": 31589109,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/31589109-kg.png?t=2026-01-18-04-00-38",
+          "tier": "EXPERT",
+          "url": "/rauffauzanrambe"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 93,
+        "content": "<p>Sure I am give a solution in this the problems:</p>\n<p>Can have make code into character answer correctly this the import Library this import re to handle the patterns, but I'll make sure my regex is now robust enough to match your fix. </p>\n<p>This is mine solutions </p>",
+        "feedbackTrackingData": {},
+        "id": 3455287,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-05-09T02:44:06.970Z",
+        "rawMarkdown": "Sure I am give a solution in this the problems:\n\nCan have make code into character answer correctly this the import Library this import re to handle the patterns, but I'll make sure my regex is now robust enough to match your fix. \n\nThis is mine solutions ",
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Ra'uf Fauzan Rambe",
+            "id": 31589109,
+            "performanceTier": "EXPERT",
+            "profileUrl": "/rauffauzanrambe",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/31589109-kg.png?t=2026-01-18-04-00-38",
+            "tier": "EXPERT",
+            "url": "/rauffauzanrambe",
+            "userId": 31589109,
+            "userName": "rauffauzanrambe"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalVotes": -1
+        }
+      },
+      {
+        "author": {
+          "displayName": "Ogurtsov",
+          "id": 682731,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/682731-kg.jpg?t=2024-04-01-08-44-00",
+          "tier": "MASTER",
+          "url": "/ogurtsov"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 619,
+        "content": "<p>I suppose rescoring is needed at least for private test calculation with updated metric. Otherwise private scores would be computed with different metrics for early and later submits. <a href=\"https://www.kaggle.com/ryanholbrook\" target=\"_blank\">@ryanholbrook</a> please confirm how this issue will be resolved.</p>",
+        "feedbackTrackingData": {},
+        "id": 3458830,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-05-16T18:21:21.550Z",
+        "rawMarkdown": "I suppose rescoring is needed at least for private test calculation with updated metric. Otherwise private scores would be computed with different metrics for early and later submits. @ryanholbrook please confirm how this issue will be resolved.",
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Ogurtsov",
+            "id": 682731,
+            "performanceTier": "MASTER",
+            "profileUrl": "/ogurtsov",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/682731-kg.jpg?t=2024-04-01-08-44-00",
+            "tier": "MASTER",
+            "url": "/ogurtsov",
+            "userId": 682731,
+            "userName": "ogurtsov"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      },
+      {
+        "author": {
+          "displayName": "Harshit samrat",
+          "id": 20911817,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "CONTRIBUTOR",
+          "url": "/harshitsamrat"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 1479,
+        "content": "<p>Any chance you can allocate more compute for the  metric calculation takes 2 hrs  to test one adapter ;)</p>",
+        "feedbackTrackingData": {},
+        "id": 3455194,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-05-08T20:05:41.337Z",
+        "rawMarkdown": "Any chance you can allocate more compute for the  metric calculation takes 2 hrs  to test one adapter ;)",
+        "replies": [
+          {
+            "author": {
+              "displayName": "CPMP",
+              "id": 75976,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/75976-gr.jpg",
+              "tier": "GRANDMASTER",
+              "url": "/cpmpml"
+            },
+            "authorType": "HOST",
+            "content": "<p>You should rely on local CV to evaluate your adapter. Relying on public leaderboard is a recipe for overfitting.</p>\n<p>Remember that what matters is your score on the private test data, not the public test data.</p>\n<p>Back to why evaluation takes two hours is because we kept enough samples for the test data to avoid to much instability in scoring. There is still some instability. If we were to modify it then I'd advocate for using more samples in test data, which would mean longer scoring.</p>",
+            "feedbackTrackingData": {},
+            "id": 3455222,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-05-08T21:03:28.487Z",
+            "rawMarkdown": "You should rely on local CV to evaluate your adapter. Relying on public leaderboard is a recipe for overfitting.\n\nRemember that what matters is your score on the private test data, not the public test data.\n\nBack to why evaluation takes two hours is because we kept enough samples for the test data to avoid to much instability in scoring. There is still some instability. If we were to modify it then I'd advocate for using more samples in test data, which would mean longer scoring.",
+            "votes": {
+              "canUpvote": true,
+              "totalUpvotes": 4,
+              "totalVotes": 3
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Harshit samrat",
+            "id": 20911817,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/harshitsamrat",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+            "tier": "CONTRIBUTOR",
+            "url": "/harshitsamrat",
+            "userId": 20911817,
+            "userName": "harshitsamrat"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      },
+      {
+        "author": {
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "url": "/"
+        },
+        "authorType": "COMMENT",
+        "canDelete": true,
+        "feedbackTrackingData": {},
+        "id": 3455623,
+        "isDeleted": true,
+        "isThankYou": false,
+        "isUserAuthor": true,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-05-09T21:31:51.180Z",
+        "rawMarkdown": "",
+        "votes": {}
+      },
+      {
+        "author": {
+          "displayName": "CPMP",
+          "id": 75976,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/75976-gr.jpg",
+          "tier": "GRANDMASTER",
+          "url": "/cpmpml"
+        },
+        "authorType": "HOST",
+        "content": "<p>Thank you Ryan.</p>",
+        "feedbackTrackingData": {},
+        "id": 3455133,
+        "isThankYou": true,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-05-08T16:58:36.183Z",
+        "rawMarkdown": "Thank you Ryan.",
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 1
+        }
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "Ryan Holbrook",
+        "id": 2003505,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2003505-kg.jpg",
+        "tier": "STAFF",
+        "url": "/ryanholbrook"
+      },
+      "authorType": "ADMIN",
+      "content": "<p>Hi everyone,</p>\n<p>I just deployed a fix to the metric that should address the issue of answers with the <code>'}'</code> character not being correctly extracted. I've tested it against a variety of inputs, and I believe it should be robust. If it seems like it's not working though, please let me know.</p>\n<p>Also, since this fix should only improve scores, I won't be doing a rescore. Instead, just resubmit anything you want scored again.</p>\n<p>Please let me know if you have any questions or concerns.</p>",
+      "feedbackTrackingData": {},
+      "id": 3455054,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-05-08T14:02:56.743Z",
+      "rawMarkdown": "Hi everyone,\n\nI just deployed a fix to the metric that should address the issue of answers with the `'}'` character not being correctly extracted. I've tested it against a variety of inputs, and I believe it should be robust. If it seems like it's not working though, please let me know.\n\nAlso, since this fix should only improve scores, I won't be doing a rescore. Instead, just resubmit anything you want scored again.\n\nPlease let me know if you have any questions or concerns.",
+      "teamUpInfo": {
+        "intro": "",
+        "teamLeader": {
+          "displayName": "Ryan Holbrook",
+          "id": 2003505,
+          "performanceTier": "STAFF",
+          "profileUrl": "/ryanholbrook",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2003505-kg.jpg",
+          "tier": "STAFF",
+          "url": "/ryanholbrook",
+          "userId": 2003505,
+          "userName": "ryanholbrook"
+        }
+      },
+      "votes": {
+        "canUpvote": true,
+        "totalUpvotes": 20,
+        "totalVotes": 20
+      }
+    },
+    "firstMessageId": 3455054,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 698106,
+    "isStickied": true,
+    "name": "Metric Update",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-05-08T14:02:56.743573Z",
+    "totalMessages": 19,
+    "totalVotes": 20,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/698106"
+  }
+}

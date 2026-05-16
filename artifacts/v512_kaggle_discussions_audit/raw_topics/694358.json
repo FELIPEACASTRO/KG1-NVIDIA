@@ -1,0 +1,141 @@
+{
+  "forumTopic": {
+    "authorId": 2427837,
+    "authorPerformanceTier": "CONTRIBUTOR",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "default-thumb.png",
+    "authorUserDisplayName": "Boris Polishchuk",
+    "authorUserName": "polishch",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "dz",
+          "id": 29325763,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/29325763-kg.png?t=2026-04-14-02-10-22",
+          "tier": "CONTRIBUTOR",
+          "url": "/dgxchen"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 90,
+        "content": "<p>This is due to the limitations of the Kaggle GPU environment for this competition. In a GPU session, external network access, such as pip install, is disabled, so dependencies cannot be installed online.</p>\n<p>Therefore, the dependencies need to be installed offline, for example by uploading the required packages to a Kaggle Dataset.</p>\n<p>You can refer to <a href=\"https://www.kaggle.com/code/dgxchen/training-with-unsloth-to-achieve-0-85-lb\" target=\"_blank\">my notebook</a>, where I used Unsloth to complete SFT training.</p>",
+        "feedbackTrackingData": {},
+        "id": 3448281,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-25T04:47:05.137Z",
+        "rawMarkdown": "This is due to the limitations of the Kaggle GPU environment for this competition. In a GPU session, external network access, such as pip install, is disabled, so dependencies cannot be installed online.\n\nTherefore, the dependencies need to be installed offline, for example by uploading the required packages to a Kaggle Dataset.\n\nYou can refer to [my notebook] (https://www.kaggle.com/code/dgxchen/training-with-unsloth-to-achieve-0-85-lb), where I used Unsloth to complete SFT training.",
+        "replies": [
+          {
+            "author": {
+              "displayName": "Boris Polishchuk",
+              "id": 2427837,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+              "tier": "CONTRIBUTOR",
+              "url": "/polishch"
+            },
+            "authorType": "TOPIC",
+            "competitionRanking": 2039,
+            "content": "<p>Thanks a lot! That's what I need.</p>",
+            "feedbackTrackingData": {},
+            "id": 3448403,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-04-25T11:45:40.827Z",
+            "rawMarkdown": "Thanks a lot! That's what I need.",
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "Boris Polishchuk",
+                "id": 2427837,
+                "performanceTier": "CONTRIBUTOR",
+                "profileUrl": "/polishch",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                "tier": "CONTRIBUTOR",
+                "url": "/polishch",
+                "userId": 2427837,
+                "userName": "polishch"
+              }
+            },
+            "votes": {
+              "canUpvote": true
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "dz",
+            "id": 29325763,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/dgxchen",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/29325763-kg.png?t=2026-04-14-02-10-22",
+            "tier": "CONTRIBUTOR",
+            "url": "/dgxchen",
+            "userId": 29325763,
+            "userName": "dgxchen"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 2,
+          "totalVotes": 2
+        }
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "Boris Polishchuk",
+        "id": 2427837,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+        "tier": "CONTRIBUTOR",
+        "url": "/polishch"
+      },
+      "authorType": "TOPIC",
+      "competitionRanking": 2039,
+      "content": "<p>Hello!</p>\n<p>I cannot install unsloth when running new Kaggle notebook GPU RTX Pro 6000. It looks like internet is off, but in fact it's on. When I set accelerator to None in Session options, everything is fine, pip install works.</p>\n<p>Do anybody has a chance to run RL training with the one of NVIDIA frameworks like Unsloth in the Kaggle notebook with GPU? Could you please share your settings?</p>",
+      "feedbackTrackingData": {},
+      "id": 3448039,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-04-24T14:06:54.247Z",
+      "rawMarkdown": "Hello!\n\nI cannot install unsloth when running new Kaggle notebook GPU RTX Pro 6000. It looks like internet is off, but in fact it's on. When I set accelerator to None in Session options, everything is fine, pip install works.\n\nDo anybody has a chance to run RL training with the one of NVIDIA frameworks like Unsloth in the Kaggle notebook with GPU? Could you please share your settings?",
+      "teamUpInfo": {
+        "intro": "",
+        "teamLeader": {
+          "displayName": "Boris Polishchuk",
+          "id": 2427837,
+          "performanceTier": "CONTRIBUTOR",
+          "profileUrl": "/polishch",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "CONTRIBUTOR",
+          "url": "/polishch",
+          "userId": 2427837,
+          "userName": "polishch"
+        }
+      },
+      "votes": {
+        "canUpvote": true
+      }
+    },
+    "firstMessageId": 3448039,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 694358,
+    "name": "Cannot install unsloth on the GPU RTX Pro 6000 notebook",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-04-24T14:06:54.248207200Z",
+    "totalMessages": 2,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/694358"
+  }
+}

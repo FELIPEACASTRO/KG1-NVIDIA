@@ -1,0 +1,142 @@
+{
+  "forumTopic": {
+    "authorId": 6915758,
+    "authorPerformanceTier": "MASTER",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "6915758-kg.png",
+    "authorUserDisplayName": "Ali",
+    "authorUserName": "asalhi",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "Javier Hernández",
+          "id": 3098761,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/3098761-kg.png?t=2025-02-13-22-27-27",
+          "tier": "EXPERT",
+          "url": "/javihm77"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 664,
+        "content": "<p><a href=\"https://www.kaggle.com/asalhi\" target=\"_blank\">@asalhi</a> after your recommendation I searched the option but is not available for my country, Guatemala 🇬🇹 🥲</p>\n<p><img src=\"https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F3098761%2Ff894923dffffa8e9a2aa2c98c2bddf8e%2FCaptura%20de%20pantalla%202026-03-24%20a%20la(s)%202.11.40p.m..png?generation=1774394680821143&amp;alt=media\" alt=\"\"></p>",
+        "feedbackTrackingData": {},
+        "id": 3428077,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-24T23:24:44.127Z",
+        "rawMarkdown": "@asalhi after your recommendation I searched the option but is not available for my country, Guatemala 🇬🇹 🥲\n\n![](https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F3098761%2Ff894923dffffa8e9a2aa2c98c2bddf8e%2FCaptura%20de%20pantalla%202026-03-24%20a%20la(s)%202.11.40p.m..png?generation=1774394680821143&alt=media)",
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Javier Hernández",
+            "id": 3098761,
+            "performanceTier": "EXPERT",
+            "profileUrl": "/javihm77",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/3098761-kg.png?t=2025-02-13-22-27-27",
+            "tier": "EXPERT",
+            "url": "/javihm77",
+            "userId": 3098761,
+            "userName": "javihm77"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 1,
+          "totalVotes": 1
+        }
+      },
+      {
+        "author": {
+          "displayName": "jerryv69",
+          "id": 26862542,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "CONTRIBUTOR",
+          "url": "/jerryv69"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 2087,
+        "content": "<p>Is the GPU RTX Pro 6000 included in the extra hours?</p>",
+        "feedbackTrackingData": {},
+        "id": 3429948,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-27T15:59:47.663Z",
+        "rawMarkdown": "Is the GPU RTX Pro 6000 included in the extra hours?",
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "jerryv69",
+            "id": 26862542,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/jerryv69",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+            "tier": "CONTRIBUTOR",
+            "url": "/jerryv69",
+            "userId": 26862542,
+            "userName": "jerryv69"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "Ali",
+        "id": 6915758,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/6915758-kg.png",
+        "tier": "MASTER",
+        "url": "/asalhi"
+      },
+      "authorType": "TOPIC",
+      "competitionRanking": 13,
+      "content": "<p>Hi, </p>\n<p>Maybe this is not new to some, but maybe new to others. </p>\n<p>You can get an extra 15 or 30 hours (a total of 45 or 60 hours GPU per week) if you have a paid account on Colab.</p>\n<p>More details here : \n<a href=\"https://www.kaggle.com/discussions/product-announcements/575468\" target=\"_blank\">https://www.kaggle.com/discussions/product-announcements/575468</a></p>",
+      "feedbackTrackingData": {},
+      "id": 3423126,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-03-18T07:24:48.400Z",
+      "rawMarkdown": "Hi, \n\nMaybe this is not new to some, but maybe new to others. \n\nYou can get an extra 15 or 30 hours (a total of 45 or 60 hours GPU per week) if you have a paid account on Colab.\n\nMore details here : \nhttps://www.kaggle.com/discussions/product-announcements/575468\n\n",
+      "teamUpInfo": {
+        "intro": "",
+        "teamLeader": {
+          "displayName": "Ali",
+          "id": 6915758,
+          "performanceTier": "MASTER",
+          "profileUrl": "/asalhi",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/6915758-kg.png",
+          "tier": "MASTER",
+          "url": "/asalhi",
+          "userId": 6915758,
+          "userName": "asalhi"
+        }
+      },
+      "votes": {
+        "canUpvote": true,
+        "totalUpvotes": 14,
+        "totalVotes": 11
+      }
+    },
+    "firstMessageId": 3423126,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 682375,
+    "name": "Unlock 15 or 30 extra GPU hours per week (connect Colab Pro) ",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-03-18T07:24:48.398746600Z",
+    "totalMessages": 2,
+    "totalVotes": 11,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/682375"
+  }
+}

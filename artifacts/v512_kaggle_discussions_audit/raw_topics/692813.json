@@ -1,0 +1,142 @@
+{
+  "forumTopic": {
+    "authorId": 12774893,
+    "authorPerformanceTier": "EXPERT",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "12774893-kg.jpg?t=2025-12-03-02-50-45",
+    "authorUserDisplayName": "JinchengZhang1",
+    "authorUserName": "jinchengzhang1",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "YePing Lin",
+          "id": 23116720,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/23116720-kg.jpg?t=2026-01-17-09-44-26",
+          "tier": "CONTRIBUTOR",
+          "url": "/linyeping"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 233,
+        "content": "<p>no,the 1st competitor get 0.87 now!😄</p>",
+        "feedbackTrackingData": {},
+        "id": 3446725,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-22T02:23:40.650Z",
+        "rawMarkdown": " no,the 1st competitor get 0.87 now!😄",
+        "replies": [
+          {
+            "author": {
+              "displayName": "Brandonioti",
+              "id": 30063404,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+              "tier": "CONTRIBUTOR",
+              "url": "/brandonioti"
+            },
+            "authorType": "COMMENT",
+            "competitionRanking": 61,
+            "content": "<p>Two with 0.87 now. Things will defnitely slow down but i believe people will keep improving. Remember there's still 2 months left of this comp a lot can happen in that time. We'll be up to the 0.88's before too long then 0.89. Just have some patience</p>",
+            "feedbackTrackingData": {},
+            "id": 3447835,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-04-24T04:24:36.900Z",
+            "rawMarkdown": "Two with 0.87 now. Things will defnitely slow down but i believe people will keep improving. Remember there's still 2 months left of this comp a lot can happen in that time. We'll be up to the 0.88's before too long then 0.89. Just have some patience",
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "Brandonioti",
+                "id": 30063404,
+                "performanceTier": "CONTRIBUTOR",
+                "profileUrl": "/brandonioti",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                "tier": "CONTRIBUTOR",
+                "url": "/brandonioti",
+                "userId": 30063404,
+                "userName": "brandonioti"
+              }
+            },
+            "votes": {
+              "canUpvote": true
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "YePing Lin",
+            "id": 23116720,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/linyeping",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/23116720-kg.jpg?t=2026-01-17-09-44-26",
+            "tier": "CONTRIBUTOR",
+            "url": "/linyeping",
+            "userId": 23116720,
+            "userName": "linyeping"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "JinchengZhang1",
+        "id": 12774893,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/12774893-kg.jpg?t=2025-12-03-02-50-45",
+        "tier": "EXPERT",
+        "url": "/jinchengzhang1"
+      },
+      "authorType": "TOPIC",
+      "competitionRanking": 243,
+      "content": "<p>Is 0.86 already the limit?</p>",
+      "feedbackTrackingData": {},
+      "id": 3444576,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-04-18T01:38:17.950Z",
+      "rawMarkdown": "Is 0.86 already the limit?",
+      "teamUpInfo": {
+        "intro": "",
+        "teamLeader": {
+          "displayName": "JinchengZhang1",
+          "id": 12774893,
+          "performanceTier": "EXPERT",
+          "profileUrl": "/jinchengzhang1",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/12774893-kg.jpg?t=2025-12-03-02-50-45",
+          "tier": "EXPERT",
+          "url": "/jinchengzhang1",
+          "userId": 12774893,
+          "userName": "jinchengzhang1"
+        }
+      },
+      "votes": {
+        "canUpvote": true,
+        "totalUpvotes": 3,
+        "totalVotes": -2
+      }
+    },
+    "firstMessageId": 3444576,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 692813,
+    "name": "Is 0.86 already the limit?",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-04-18T01:38:17.951095900Z",
+    "totalMessages": 2,
+    "totalVotes": -2,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/692813"
+  }
+}

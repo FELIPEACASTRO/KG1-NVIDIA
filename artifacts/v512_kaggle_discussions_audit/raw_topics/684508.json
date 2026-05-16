@@ -1,0 +1,276 @@
+{
+  "forumTopic": {
+    "authorId": 21092801,
+    "authorPerformanceTier": "CONTRIBUTOR",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "21092801-kg.jpg?t=2024-12-20-16-21-01",
+    "authorUserDisplayName": "m4nocha",
+    "authorUserName": "aksh1t",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "tamura_aicon",
+          "id": 17968567,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/17968567-kg.png?t=2026-03-28-08-10-32",
+          "tier": "EXPERT",
+          "url": "/hayatetaf"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 989,
+        "content": "<p>In my experiments, I've confirmed that SFT with an improved dataset can reach a score of 0.76.</p>",
+        "feedbackTrackingData": {},
+        "id": 3430305,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-28T08:22:29.657Z",
+        "rawMarkdown": "In my experiments, I've confirmed that SFT with an improved dataset can reach a score of 0.76.",
+        "replies": [
+          {
+            "author": {
+              "displayName": "Bianco Chiu",
+              "id": 16242374,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/16242374-kg.png?t=2025-10-18-04-56-53",
+              "tier": "CONTRIBUTOR",
+              "url": "/biancochiu"
+            },
+            "authorType": "COMMENT",
+            "competitionRanking": 1775,
+            "content": "<p>Hi, may I ask what do you mean by improved dataset, with CoT?</p>",
+            "feedbackTrackingData": {},
+            "id": 3430315,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-03-28T08:54:54.263Z",
+            "rawMarkdown": "Hi, may I ask what do you mean by improved dataset, with CoT?",
+            "replies": [
+              {
+                "author": {
+                  "displayName": "tamura_aicon",
+                  "id": 17968567,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/17968567-kg.png?t=2026-03-28-08-10-32",
+                  "tier": "EXPERT",
+                  "url": "/hayatetaf"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 989,
+                "content": "<p>Yes, with CoT. In my experience, data quality matters far more than quantity. Not every category benefits from the same training approach.</p>",
+                "feedbackTrackingData": {},
+                "id": 3430334,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-03-28T09:39:57.810Z",
+                "rawMarkdown": "Yes, with CoT. In my experience, data quality matters far more than quantity. Not every category benefits from the same training approach.",
+                "reactions": [
+                  {
+                    "emoji": "THANK_YOU",
+                    "featuredUserNames": [
+                      "shtljw",
+                      "weedoo",
+                      "adai111",
+                      "biancochiu"
+                    ],
+                    "userCount": 4
+                  }
+                ],
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "tamura_aicon",
+                    "id": 17968567,
+                    "performanceTier": "EXPERT",
+                    "profileUrl": "/hayatetaf",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/17968567-kg.png?t=2026-03-28-08-10-32",
+                    "tier": "EXPERT",
+                    "url": "/hayatetaf",
+                    "userId": 17968567,
+                    "userName": "hayatetaf"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true,
+                  "totalUpvotes": 1,
+                  "totalVotes": 1
+                }
+              }
+            ],
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "Bianco Chiu",
+                "id": 16242374,
+                "performanceTier": "CONTRIBUTOR",
+                "profileUrl": "/biancochiu",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/16242374-kg.png?t=2025-10-18-04-56-53",
+                "tier": "CONTRIBUTOR",
+                "url": "/biancochiu",
+                "userId": 16242374,
+                "userName": "biancochiu"
+              }
+            },
+            "votes": {
+              "canUpvote": true
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "tamura_aicon",
+            "id": 17968567,
+            "performanceTier": "EXPERT",
+            "profileUrl": "/hayatetaf",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/17968567-kg.png?t=2026-03-28-08-10-32",
+            "tier": "EXPERT",
+            "url": "/hayatetaf",
+            "userId": 17968567,
+            "userName": "hayatetaf"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 4,
+          "totalVotes": 4
+        }
+      },
+      {
+        "author": {
+          "displayName": "SwiftyOS",
+          "id": 649041,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/649041-kg.jpg?t=2026-03-26-11-13-20",
+          "tier": "CONTRIBUTOR",
+          "url": "/swifty13"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 1667,
+        "content": "<p>This is something I'm wondering too. Where does RL play a part if its possible to programatically solve all the problems.</p>",
+        "feedbackTrackingData": {},
+        "id": 3428589,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-25T17:34:27.340Z",
+        "rawMarkdown": "This is something I'm wondering too. Where does RL play a part if its possible to programatically solve all the problems.",
+        "replies": [
+          {
+            "author": {
+              "displayName": "m4nocha",
+              "id": 21092801,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/21092801-kg.jpg?t=2024-12-20-16-21-01",
+              "tier": "CONTRIBUTOR",
+              "url": "/aksh1t"
+            },
+            "authorType": "TOPIC",
+            "competitionRanking": 1450,
+            "content": "<p>how  much did you achieve with SFT then?</p>",
+            "feedbackTrackingData": {},
+            "id": 3429812,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-03-27T10:51:09.677Z",
+            "rawMarkdown": "how  much did you achieve with SFT then?",
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "m4nocha",
+                "id": 21092801,
+                "performanceTier": "CONTRIBUTOR",
+                "profileUrl": "/aksh1t",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/21092801-kg.jpg?t=2024-12-20-16-21-01",
+                "tier": "CONTRIBUTOR",
+                "url": "/aksh1t",
+                "userId": 21092801,
+                "userName": "aksh1t"
+              }
+            },
+            "votes": {
+              "canUpvote": true
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "SwiftyOS",
+            "id": 649041,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/swifty13",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/649041-kg.jpg?t=2026-03-26-11-13-20",
+            "tier": "CONTRIBUTOR",
+            "url": "/swifty13",
+            "userId": 649041,
+            "userName": "swifty13"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "m4nocha",
+        "id": 21092801,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/21092801-kg.jpg?t=2024-12-20-16-21-01",
+        "tier": "CONTRIBUTOR",
+        "url": "/aksh1t"
+      },
+      "authorType": "TOPIC",
+      "competitionRanking": 1450,
+      "content": "<p>I saw that people are achieving 69% accuracy with only prompt -&gt; boxed answer mapping\non the other hand i am able to achieve only 65% accuracy with synthetic CoT SFT (for 4 easy categories only)?<br>\ndo you think there is something wrong with my training pipeline? or do I need to move forward with RL?\nI analysed the answer prompt on the validation set and the output reasoning trace is quite different from the training input</p>",
+      "feedbackTrackingData": {},
+      "id": 3428285,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-03-25T07:54:10.030Z",
+      "rawMarkdown": "I saw that people are achieving 69% accuracy with only prompt -> boxed answer mapping\non the other hand i am able to achieve only 65% accuracy with synthetic CoT SFT (for 4 easy categories only)?  \ndo you think there is something wrong with my training pipeline? or do I need to move forward with RL?\nI analysed the answer prompt on the validation set and the output reasoning trace is quite different from the training input",
+      "teamUpInfo": {
+        "intro": "",
+        "teamLeader": {
+          "displayName": "m4nocha",
+          "id": 21092801,
+          "performanceTier": "CONTRIBUTOR",
+          "profileUrl": "/aksh1t",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/21092801-kg.jpg?t=2024-12-20-16-21-01",
+          "tier": "CONTRIBUTOR",
+          "url": "/aksh1t",
+          "userId": 21092801,
+          "userName": "aksh1t"
+        }
+      },
+      "votes": {
+        "canUpvote": true,
+        "totalUpvotes": 4,
+        "totalVotes": 2
+      }
+    },
+    "firstMessageId": 3428285,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 684508,
+    "name": "maximum achievable performance with SFT only",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-03-25T07:54:10.030481700Z",
+    "totalMessages": 5,
+    "totalVotes": 2,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/684508"
+  }
+}

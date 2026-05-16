@@ -1,0 +1,108 @@
+{
+  "forumTopic": {
+    "authorId": 1521642,
+    "authorPerformanceTier": "CONTRIBUTOR",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "1521642-kg.jpg?t=2025-02-28-08-49-36",
+    "authorUserDisplayName": "einherjer",
+    "authorUserName": "einherjer",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "a14iiiii",
+          "id": 18702860,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "EXPERT",
+          "url": "/a14iiiii"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 60,
+        "content": "<p>This is because your dependency files are too much, taking a long time to finish the notebook. For utility script, just cpu is fine.</p>",
+        "feedbackTrackingData": {},
+        "id": 3448372,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-25T09:29:55.603Z",
+        "rawMarkdown": "This is because your dependency files are too much, taking a long time to finish the notebook. For utility script, just cpu is fine.",
+        "reactions": [
+          {
+            "emoji": "THANK_YOU",
+            "featuredUserNames": [
+              "einherjer"
+            ],
+            "userCount": 1
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "a14iiiii",
+            "id": 18702860,
+            "performanceTier": "EXPERT",
+            "profileUrl": "/a14iiiii",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+            "tier": "EXPERT",
+            "url": "/a14iiiii",
+            "userId": 18702860,
+            "userName": "a14iiiii"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "einherjer",
+        "id": 1521642,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1521642-kg.jpg?t=2025-02-28-08-49-36",
+        "tier": "CONTRIBUTOR",
+        "url": "/einherjer"
+      },
+      "authorType": "TOPIC",
+      "competitionRanking": 2119,
+      "content": "<p>I have made a copy of the NVIDIA Utility Script (version 6, <a href=\"https://www.kaggle.com/code/ryanholbrook/nvidia-utility-script?scriptVersionId=306236690\" target=\"_blank\">https://www.kaggle.com/code/ryanholbrook/nvidia-utility-script?scriptVersionId=306236690</a>) and wanted to run it so that I can use it in my training notebook. However it takes forever to complete. Currently it is running for 3 hours on the T4 x2. <a href=\"https://www.kaggle.com/ryanholbrook\" target=\"_blank\">@ryanholbrook</a> is that normal that it takes this long? I assume I am supposed to run it on an accelerator but this will kill my remaining GPU hours. The last few lines of the log show:</p>\n<pre><code>13.1s    403 Checking system NVCC version:\n13.1s    404 nvcc: NVIDIA (R) Cuda compiler driver\n13.1s    405 Copyright (c) 2005-2025 NVIDIA Corporation\n13.1s    406 Built on Fri_Feb_21_20:23:50_PST_2025\n13.1s    407 Cuda compilation tools, release 12.8, V12.8.93\n13.1s    408 Build cuda_12.8.r12.8/compiler.35583870_0\n13.1s    409 --------------------------------------------------\n13.1s    410 Running: uv pip uninstall torch torchvision torchaudio\n14.6s    411 Running: uv pip install --target=/kaggle/working --system nvidia-cutlass\n16.3s    412 Running: uv pip install --target=/kaggle/working --system --pre torch torchvision torchaudio --index-url https://download.pytorch.org/whl/nightly/cu128\n73.1s    413 Running: uv pip install --target=/kaggle/working --system --no-build-isolation 'causal-conv1d&gt;=1.4.0' 'flash-attn'\n</code></pre>",
+      "feedbackTrackingData": {},
+      "id": 3447494,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-04-23T08:35:58.093Z",
+      "rawMarkdown": "I have made a copy of the NVIDIA Utility Script (version 6, https://www.kaggle.com/code/ryanholbrook/nvidia-utility-script?scriptVersionId=306236690) and wanted to run it so that I can use it in my training notebook. However it takes forever to complete. Currently it is running for 3 hours on the T4 x2. @ryanholbrook is that normal that it takes this long? I assume I am supposed to run it on an accelerator but this will kill my remaining GPU hours. The last few lines of the log show:\n```\n13.1s\t403\tChecking system NVCC version:\n13.1s\t404\tnvcc: NVIDIA (R) Cuda compiler driver\n13.1s\t405\tCopyright (c) 2005-2025 NVIDIA Corporation\n13.1s\t406\tBuilt on Fri_Feb_21_20:23:50_PST_2025\n13.1s\t407\tCuda compilation tools, release 12.8, V12.8.93\n13.1s\t408\tBuild cuda_12.8.r12.8/compiler.35583870_0\n13.1s\t409\t--------------------------------------------------\n13.1s\t410\tRunning: uv pip uninstall torch torchvision torchaudio\n14.6s\t411\tRunning: uv pip install --target=/kaggle/working --system nvidia-cutlass\n16.3s\t412\tRunning: uv pip install --target=/kaggle/working --system --pre torch torchvision torchaudio --index-url https://download.pytorch.org/whl/nightly/cu128\n73.1s\t413\tRunning: uv pip install --target=/kaggle/working --system --no-build-isolation 'causal-conv1d>=1.4.0' 'flash-attn'\n```",
+      "teamUpInfo": {
+        "intro": "",
+        "teamLeader": {
+          "displayName": "einherjer",
+          "id": 1521642,
+          "performanceTier": "CONTRIBUTOR",
+          "profileUrl": "/einherjer",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1521642-kg.jpg?t=2025-02-28-08-49-36",
+          "tier": "CONTRIBUTOR",
+          "url": "/einherjer",
+          "userId": 1521642,
+          "userName": "einherjer"
+        }
+      },
+      "votes": {
+        "canUpvote": true
+      }
+    },
+    "firstMessageId": 3447494,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 694074,
+    "name": "Nvidia utility script takes forever to run",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-04-23T08:35:58.092797500Z",
+    "totalMessages": 1,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/694074"
+  }
+}

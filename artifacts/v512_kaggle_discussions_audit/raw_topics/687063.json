@@ -1,0 +1,273 @@
+{
+  "forumTopic": {
+    "authorId": 21691005,
+    "authorPerformanceTier": "MASTER",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "21691005-kg.png?t=2025-08-27-03-21-25",
+    "authorUserDisplayName": "Kh0a",
+    "authorUserName": "llkh0a",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "Ryan Holbrook",
+          "id": 2003505,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2003505-kg.jpg",
+          "tier": "STAFF",
+          "url": "/ryanholbrook"
+        },
+        "authorType": "ADMIN",
+        "content": "<p>Hi <a href=\"https://www.kaggle.com/llkh0a\" target=\"_blank\">@llkh0a</a>,</p>\n<p>We are currently assessing a rescore. Due to limited GPU availability, we need to be thoughtful about how it's done. I will try to post an announcement about how we'll proceed in the next couple days.</p>",
+        "feedbackTrackingData": {},
+        "id": 3434045,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-02T14:07:46.373Z",
+        "rawMarkdown": "Hi @llkh0a,\n\nWe are currently assessing a rescore. Due to limited GPU availability, we need to be thoughtful about how it's done. I will try to post an announcement about how we'll proceed in the next couple days.",
+        "reactions": [
+          {
+            "emoji": "THANK_YOU",
+            "featuredUserNames": [
+              "llkh0a"
+            ],
+            "userCount": 1
+          }
+        ],
+        "replies": [
+          {
+            "author": {
+              "displayName": "Kh0a",
+              "id": 21691005,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/21691005-kg.png?t=2025-08-27-03-21-25",
+              "tier": "MASTER",
+              "url": "/llkh0a"
+            },
+            "authorType": "TOPIC",
+            "competitionRanking": 4,
+            "content": "<p>Thank you for the reply, there are some cases like for id 10ff9431, the groundtruth is <code>0271</code>, but with the verify function logic as:</p>\n<pre><code>def verify(stored_answer: str, predicted: str) -&gt; bool:\n    \"\"\"Verify if the answer matches.\n\n    For numerical answers, allow them to be judged as equal within a certain relative tolerance (1e-2);\n    otherwise, compare strictly as strings (case-insensitive).\n    \"\"\"\n    # Clean up strings\n    stored_answer = stored_answer.strip()\n    predicted = predicted.strip()\n\n    try:\n        # Try to convert the answers to floating point numbers\n        stored_num = float(stored_answer)\n        predicted_num = float(predicted)\n        # Use a small absolute tolerance for numbers near zero\n        return math.isclose(stored_num, predicted_num, rel_tol=1e-2, abs_tol=1e-5)\n    except Exception:\n        # Fallback to case-insensitive string comparison\n        return predicted.lower() == stored_answer.lower()\n</code></pre>\n<p>prediction <code>271</code> is also accepted; Could you clarify if this work as intended?</p>",
+            "feedbackTrackingData": {},
+            "id": 3434066,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-04-02T14:40:55.900Z",
+            "rawMarkdown": "Thank you for the reply, there are some cases like for id 10ff9431, the groundtruth is `0271`, but with the verify function logic as:\n\n```python\ndef verify(stored_answer: str, predicted: str) -> bool:\n    \"\"\"Verify if the answer matches.\n\n    For numerical answers, allow them to be judged as equal within a certain relative tolerance (1e-2);\n    otherwise, compare strictly as strings (case-insensitive).\n    \"\"\"\n    # Clean up strings\n    stored_answer = stored_answer.strip()\n    predicted = predicted.strip()\n\n    try:\n        # Try to convert the answers to floating point numbers\n        stored_num = float(stored_answer)\n        predicted_num = float(predicted)\n        # Use a small absolute tolerance for numbers near zero\n        return math.isclose(stored_num, predicted_num, rel_tol=1e-2, abs_tol=1e-5)\n    except Exception:\n        # Fallback to case-insensitive string comparison\n        return predicted.lower() == stored_answer.lower()\n```\nprediction `271` is also accepted; Could you clarify if this work as intended?\n\n",
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "Kh0a",
+                "id": 21691005,
+                "performanceTier": "MASTER",
+                "profileUrl": "/llkh0a",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/21691005-kg.png?t=2025-08-27-03-21-25",
+                "tier": "MASTER",
+                "url": "/llkh0a",
+                "userId": 21691005,
+                "userName": "llkh0a"
+              }
+            },
+            "votes": {
+              "canUpvote": true,
+              "totalUpvotes": 1,
+              "totalVotes": 1
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Ryan Holbrook",
+            "id": 2003505,
+            "performanceTier": "STAFF",
+            "profileUrl": "/ryanholbrook",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2003505-kg.jpg",
+            "tier": "STAFF",
+            "url": "/ryanholbrook",
+            "userId": 2003505,
+            "userName": "ryanholbrook"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 5,
+          "totalVotes": 5
+        }
+      },
+      {
+        "author": {
+          "displayName": "CPMP",
+          "id": 75976,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/75976-gr.jpg",
+          "tier": "GRANDMASTER",
+          "url": "/cpmpml"
+        },
+        "authorType": "HOST",
+        "content": "<p>LLM inference is non deterministic. Even with temp=0. </p>",
+        "feedbackTrackingData": {},
+        "id": 3433894,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-02T09:23:33.030Z",
+        "rawMarkdown": "LLM inference is non deterministic. Even with temp=0. ",
+        "reactions": [
+          {
+            "emoji": "SURPRISE",
+            "featuredUserNames": [
+              "imeintanis"
+            ],
+            "userCount": 1
+          },
+          {
+            "emoji": "THANK_YOU",
+            "featuredUserNames": [
+              "llkh0a"
+            ],
+            "userCount": 1
+          }
+        ],
+        "replies": [
+          {
+            "author": {
+              "displayName": "Chew Kok Wah",
+              "id": 3967558,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+              "tier": "EXPERT",
+              "url": "/chewkokwahibrainai"
+            },
+            "authorType": "COMMENT",
+            "competitionRanking": 62,
+            "content": "<p>The scoring Metric code is one of the problem, there is no per request seed set for vLLM.</p>",
+            "feedbackTrackingData": {},
+            "id": 3434590,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-04-03T03:42:51.053Z",
+            "rawMarkdown": "The scoring Metric code is one of the problem, there is no per request seed set for vLLM.",
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "Chew Kok Wah",
+                "id": 3967558,
+                "performanceTier": "EXPERT",
+                "profileUrl": "/chewkokwahibrainai",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                "tier": "EXPERT",
+                "url": "/chewkokwahibrainai",
+                "userId": 3967558,
+                "userName": "chewkokwahibrainai"
+              }
+            },
+            "votes": {
+              "canUpvote": true
+            }
+          }
+        ],
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 2,
+          "totalVotes": 2
+        }
+      },
+      {
+        "author": {
+          "displayName": "Donald Galliano III",
+          "id": 29434769,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/29434769-kg.png?t=2026-03-14-05-23-02",
+          "tier": "CONTRIBUTOR",
+          "url": "/donaldgalliano"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 2317,
+        "content": "<p>i support bullet point 2. But i know we gonna see higher scores than current before April 9th. </p>",
+        "feedbackTrackingData": {},
+        "id": 3433746,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-02T04:01:30.557Z",
+        "rawMarkdown": "i support bullet point 2. But i know we gonna see higher scores than current before April 9th. ",
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Donald Galliano III",
+            "id": 29434769,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/donaldgalliano",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/29434769-kg.png?t=2026-03-14-05-23-02",
+            "tier": "CONTRIBUTOR",
+            "url": "/donaldgalliano",
+            "userId": 29434769,
+            "userName": "donaldgalliano"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalVotes": -1
+        }
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "Kh0a",
+        "id": 21691005,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/21691005-kg.png?t=2025-08-27-03-21-25",
+        "tier": "MASTER",
+        "url": "/llkh0a"
+      },
+      "authorType": "TOPIC",
+      "competitionRanking": 4,
+      "content": "<p>Hi Team, <a href=\"https://www.kaggle.com/ashleyoldacre\" target=\"_blank\">@ashleyoldacre</a>, <a href=\"https://www.kaggle.com/ryanholbrook\" target=\"_blank\">@ryanholbrook</a> </p>\n<p>I have a few concerns I'd like to clear up:</p>\n<ol>\n<li><p>Non-deterministic Results: I’ve noticed that identical submissions are yielding different results (e.g., scoring 0.72 yesterday and 0.73 today). Is the inference environment fully deterministic, or is there a known issue?</p></li>\n<li><p>Leaderboard Equity: Since submissions made before the metric fix seem to hold a scoring advantage, how will this be handled for the Open Progress Prize? I suggest re-running earlier submissions (which may cost a lot) or resetting the prize eligibility to include only those submitted after the fix to ensure fairness.</p></li>\n</ol>\n<p>Thanks for the help!</p>",
+      "feedbackTrackingData": {},
+      "id": 3433718,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-04-02T02:18:07.087Z",
+      "rawMarkdown": "Hi Team, @ashleyoldacre, @ryanholbrook \n\nI have a few concerns I'd like to clear up:\n\n1. Non-deterministic Results: I’ve noticed that identical submissions are yielding different results (e.g., scoring 0.72 yesterday and 0.73 today). Is the inference environment fully deterministic, or is there a known issue?\n\n2. Leaderboard Equity: Since submissions made before the metric fix seem to hold a scoring advantage, how will this be handled for the Open Progress Prize? I suggest re-running earlier submissions (which may cost a lot) or resetting the prize eligibility to include only those submitted after the fix to ensure fairness.\n\nThanks for the help!",
+      "teamUpInfo": {
+        "intro": "",
+        "teamLeader": {
+          "displayName": "Kh0a",
+          "id": 21691005,
+          "performanceTier": "MASTER",
+          "profileUrl": "/llkh0a",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/21691005-kg.png?t=2025-08-27-03-21-25",
+          "tier": "MASTER",
+          "url": "/llkh0a",
+          "userId": 21691005,
+          "userName": "llkh0a"
+        }
+      },
+      "votes": {
+        "canUpvote": true,
+        "totalUpvotes": 10,
+        "totalVotes": 10
+      }
+    },
+    "firstMessageId": 3433718,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 687063,
+    "name": "Inquiry regarding inference non-determinism and Open Progress Prize fairness",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-04-02T02:18:07.087283Z",
+    "totalMessages": 5,
+    "totalVotes": 10,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/687063"
+  }
+}

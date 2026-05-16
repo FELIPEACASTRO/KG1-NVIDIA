@@ -1,0 +1,216 @@
+{
+  "forumTopic": {
+    "authorId": 3762503,
+    "authorPerformanceTier": "CONTRIBUTOR",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "default-thumb.png",
+    "authorUserDisplayName": "Asadullah Baig",
+    "authorUserName": "asadullahbeg",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "Asadullah Baig",
+          "id": 3762503,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "CONTRIBUTOR",
+          "url": "/asadullahbeg"
+        },
+        "authorType": "TOPIC",
+        "competitionRanking": 2479,
+        "content": "<p>Now I am also adding the train.csv but first i am adding the  tag in the answers and then merging the training with my own rich reasoning questions.</p>",
+        "feedbackTrackingData": {},
+        "id": 3429527,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-26T20:51:15.687Z",
+        "rawMarkdown": "Now I am also adding the train.csv but first i am adding the <thinking> tag in the answers and then merging the training with my own rich reasoning questions.",
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Asadullah Baig",
+            "id": 3762503,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/asadullahbeg",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+            "tier": "CONTRIBUTOR",
+            "url": "/asadullahbeg",
+            "userId": 3762503,
+            "userName": "asadullahbeg"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      },
+      {
+        "author": {
+          "displayName": "Asadullah Baig",
+          "id": 3762503,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "CONTRIBUTOR",
+          "url": "/asadullahbeg"
+        },
+        "authorType": "TOPIC",
+        "competitionRanking": 2479,
+        "content": "<p>I have only reached 200 samples and it has cost me around 2$ uptil now</p>",
+        "feedbackTrackingData": {},
+        "id": 3429498,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-26T20:02:53.420Z",
+        "rawMarkdown": "I have only reached 200 samples and it has cost me around 2$ uptil now",
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Asadullah Baig",
+            "id": 3762503,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/asadullahbeg",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+            "tier": "CONTRIBUTOR",
+            "url": "/asadullahbeg",
+            "userId": 3762503,
+            "userName": "asadullahbeg"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      },
+      {
+        "author": {
+          "displayName": "Asadullah Baig",
+          "id": 3762503,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "CONTRIBUTOR",
+          "url": "/asadullahbeg"
+        },
+        "authorType": "TOPIC",
+        "competitionRanking": 2479,
+        "content": "<p>chosen \n\"nousresearch/hermes-3-llama-3.1-405b\",\n    \"deepseek/deepseek-r1\",\n    \"openai/gpt-5.4-pro\",\n    \"qwen/qwq-32b\",\n    \"anthropic/claude-3.5-sonnet\"\nas the teachers and now running the code to gather samples</p>",
+        "feedbackTrackingData": {},
+        "id": 3429426,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-26T18:11:03.960Z",
+        "rawMarkdown": "chosen \n\"nousresearch/hermes-3-llama-3.1-405b\",\n    \"deepseek/deepseek-r1\",\n    \"openai/gpt-5.4-pro\",\n    \"qwen/qwq-32b\",\n    \"anthropic/claude-3.5-sonnet\"\nas the teachers and now running the code to gather samples",
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Asadullah Baig",
+            "id": 3762503,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/asadullahbeg",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+            "tier": "CONTRIBUTOR",
+            "url": "/asadullahbeg",
+            "userId": 3762503,
+            "userName": "asadullahbeg"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      },
+      {
+        "author": {
+          "displayName": "Asadullah Baig",
+          "id": 3762503,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "CONTRIBUTOR",
+          "url": "/asadullahbeg"
+        },
+        "authorType": "TOPIC",
+        "competitionRanking": 2479,
+        "content": "<p>I have modified my method now to create 1000 samples from different teachers and then create a Lora Adaptor.</p>",
+        "feedbackTrackingData": {},
+        "id": 3429411,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-26T17:51:12.933Z",
+        "rawMarkdown": "I have modified my method now to create 1000 samples from different teachers and then create a Lora Adaptor.",
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Asadullah Baig",
+            "id": 3762503,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/asadullahbeg",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+            "tier": "CONTRIBUTOR",
+            "url": "/asadullahbeg",
+            "userId": 3762503,
+            "userName": "asadullahbeg"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "Asadullah Baig",
+        "id": 3762503,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+        "tier": "CONTRIBUTOR",
+        "url": "/asadullahbeg"
+      },
+      "authorType": "TOPIC",
+      "competitionRanking": 2479,
+      "content": "<p>So the method I am following right now is to first create around 1000 high-quality expert reasoning entries. After that i am feeding those to the SFTTTrainer and getting the Lora Adaptor. Right now i am creating the 1000 high quality export reasoning entries.</p>",
+      "feedbackTrackingData": {},
+      "id": 3429369,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-03-26T17:12:23.680Z",
+      "rawMarkdown": "So the method I am following right now is to first create around 1000 high-quality expert reasoning entries. After that i am feeding those to the SFTTTrainer and getting the Lora Adaptor. Right now i am creating the 1000 high quality export reasoning entries.",
+      "teamUpInfo": {
+        "intro": "",
+        "teamLeader": {
+          "displayName": "Asadullah Baig",
+          "id": 3762503,
+          "performanceTier": "CONTRIBUTOR",
+          "profileUrl": "/asadullahbeg",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "CONTRIBUTOR",
+          "url": "/asadullahbeg",
+          "userId": 3762503,
+          "userName": "asadullahbeg"
+        }
+      },
+      "votes": {
+        "canUpvote": true,
+        "totalUpvotes": 2,
+        "totalVotes": -1
+      }
+    },
+    "firstMessageId": 3429369,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 685020,
+    "name": "method to solve",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-03-26T17:12:23.679869Z",
+    "totalMessages": 4,
+    "totalVotes": -1,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/685020"
+  }
+}

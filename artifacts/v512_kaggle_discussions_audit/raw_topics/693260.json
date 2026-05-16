@@ -1,0 +1,832 @@
+{
+  "forumTopic": {
+    "authorId": 33728306,
+    "authorPerformanceTier": "CONTRIBUTOR",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "33728306-kg.png?t=2026-04-25-07-15-05",
+    "authorUserDisplayName": "Taha",
+    "authorUserName": "tahaalam2009",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "Giovanny Rodríguez",
+          "id": 23653385,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "EXPERT",
+          "url": "/giovannyrodrguez"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 178,
+        "content": "<p>The problem is that \"I wrote a custom Python generator to force serial bit computation. By forcing the CoT to explicitly detail the bitwise operations (Bit 0: 1&amp;1=1, Bit 1: 1&amp;0=0), the logic became hyper-compressed and deterministic,\" so arriving at the solution must always be valid.</p>",
+        "feedbackTrackingData": {},
+        "id": 3445853,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-20T15:59:22.017Z",
+        "rawMarkdown": "The problem is that \"I wrote a custom Python generator to force serial bit computation. By forcing the CoT to explicitly detail the bitwise operations (Bit 0: 1&1=1, Bit 1: 1&0=0), the logic became hyper-compressed and deterministic,\" so arriving at the solution must always be valid.",
+        "replies": [
+          {
+            "author": {
+              "displayName": "Giovanny Rodríguez",
+              "id": 23653385,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+              "tier": "EXPERT",
+              "url": "/giovannyrodrguez"
+            },
+            "authorType": "COMMENT",
+            "competitionRanking": 178,
+            "content": "<p>90.7(1498 bi and 217 cryp etc..) Same accuracy different method: .83 —&gt;.85</p>",
+            "feedbackTrackingData": {},
+            "id": 3445942,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-04-20T18:06:30.270Z",
+            "rawMarkdown": "90.7(1498 bi and 217 cryp etc..) Same accuracy different method: .83 —>.85",
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "Giovanny Rodríguez",
+                "id": 23653385,
+                "performanceTier": "EXPERT",
+                "profileUrl": "/giovannyrodrguez",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                "tier": "EXPERT",
+                "url": "/giovannyrodrguez",
+                "userId": 23653385,
+                "userName": "giovannyrodrguez"
+              }
+            },
+            "votes": {
+              "canUpvote": true
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Giovanny Rodríguez",
+            "id": 23653385,
+            "performanceTier": "EXPERT",
+            "profileUrl": "/giovannyrodrguez",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+            "tier": "EXPERT",
+            "url": "/giovannyrodrguez",
+            "userId": 23653385,
+            "userName": "giovannyrodrguez"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 1,
+          "totalVotes": 1
+        }
+      },
+      {
+        "author": {
+          "displayName": "Buzz shocker",
+          "id": 24192230,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "CONTRIBUTOR",
+          "url": "/buzzshocker"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 2874,
+        "content": "<p>Do you think their is a chance that the 1602 rows dataset has some AI generated Values that don't really follow any method? </p>",
+        "feedbackTrackingData": {},
+        "id": 3453053,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-05-04T20:49:01.433Z",
+        "rawMarkdown": "Do you think their is a chance that the 1602 rows dataset has some AI generated Values that don't really follow any method? ",
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Buzz shocker",
+            "id": 24192230,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/buzzshocker",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+            "tier": "CONTRIBUTOR",
+            "url": "/buzzshocker",
+            "userId": 24192230,
+            "userName": "buzzshocker"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      },
+      {
+        "author": {
+          "displayName": "M3haRban",
+          "id": 8526368,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "CONTRIBUTOR",
+          "url": "/m3harban"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 1165,
+        "content": "<p>Taha — your finding on the format clash is interesting. Have you compared training trajectories where you preserve the baseline CoT format on saturated buckets (cipher, gravity, numeral, unit_conversion) and only inject the bit-serial format for bit_manipulation? Curious whether the format clash applies globally or only when you replace already-working formats. Also — your Mamba/SVD question is one I'm wrestling with too. Anyone in the 0.86+ tier who's tested E2E vs LoRA on this specific issue?</p>",
+        "feedbackTrackingData": {},
+        "id": 3452577,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-05-03T19:37:31.500Z",
+        "rawMarkdown": "Taha — your finding on the format clash is interesting. Have you compared training trajectories where you preserve the baseline CoT format on saturated buckets (cipher, gravity, numeral, unit_conversion) and only inject the bit-serial format for bit_manipulation? Curious whether the format clash applies globally or only when you replace already-working formats. Also — your Mamba/SVD question is one I'm wrestling with too. Anyone in the 0.86+ tier who's tested E2E vs LoRA on this specific issue?",
+        "replies": [
+          {
+            "author": {
+              "displayName": "Giovanny Rodríguez",
+              "id": 23653385,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+              "tier": "EXPERT",
+              "url": "/giovannyrodrguez"
+            },
+            "authorType": "COMMENT",
+            "competitionRanking": 178,
+            "content": "<p>The 1602 can be solved 100%, it just can't be used only per bit.</p>",
+            "feedbackTrackingData": {},
+            "id": 3453100,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-05-04T23:19:44.187Z",
+            "rawMarkdown": "The 1602 can be solved 100%, it just can't be used only per bit.",
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "Giovanny Rodríguez",
+                "id": 23653385,
+                "performanceTier": "EXPERT",
+                "profileUrl": "/giovannyrodrguez",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                "tier": "EXPERT",
+                "url": "/giovannyrodrguez",
+                "userId": 23653385,
+                "userName": "giovannyrodrguez"
+              }
+            },
+            "votes": {
+              "canUpvote": true
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "M3haRban",
+            "id": 8526368,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/m3harban",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+            "tier": "CONTRIBUTOR",
+            "url": "/m3harban",
+            "userId": 8526368,
+            "userName": "m3harban"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      },
+      {
+        "author": {
+          "displayName": "MAJ0RT0M",
+          "id": 2071133,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "CONTRIBUTOR",
+          "url": "/maj0rt0m"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 1265,
+        "content": "<p>Make sure your generated COT actually fits in 8000 tokens - I dont think 99% on bit manipulation is possible w/o either 1) enumerating all 100k ternary operations or 2) overfitting to the train set</p>\n<p>Especially since your COT looks so verbose: Bit 0: 1&amp;1=1, Bit 1: 1&amp;0=0</p>\n<p>I also think that backtracking solvers (which it seems like you are using) are not going to be as operation efficient as truth table solvers (what Tong's original solver did) </p>",
+        "feedbackTrackingData": {},
+        "id": 3446075,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-20T23:41:51.493Z",
+        "rawMarkdown": "Make sure your generated COT actually fits in 8000 tokens - I dont think 99% on bit manipulation is possible w/o either 1) enumerating all 100k ternary operations or 2) overfitting to the train set\n\nEspecially since your COT looks so verbose: Bit 0: 1&1=1, Bit 1: 1&0=0\n\nI also think that backtracking solvers (which it seems like you are using) are not going to be as operation efficient as truth table solvers (what Tong's original solver did) ",
+        "replies": [
+          {
+            "author": {
+              "displayName": "Taha",
+              "id": 33728306,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/33728306-kg.png?t=2026-04-25-07-15-05",
+              "tier": "CONTRIBUTOR",
+              "url": "/tahaalam2009"
+            },
+            "authorType": "TOPIC",
+            "competitionRanking": 313,
+            "content": "<p>it does fit and its shorter than tong's almost 3-4k tokens</p>",
+            "feedbackTrackingData": {},
+            "id": 3446087,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-04-21T00:52:48.653Z",
+            "rawMarkdown": "it does fit and its shorter than tong's almost 3-4k tokens",
+            "replies": [
+              {
+                "author": {
+                  "displayName": "MAJ0RT0M",
+                  "id": 2071133,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                  "tier": "CONTRIBUTOR",
+                  "url": "/maj0rt0m"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 1265,
+                "content": "<p>I think each bit comparison must take you &gt;3 tokens - so you can only check &lt;3000 bits in your COT - maybe closer to 1000 from what you're saying</p>\n<p>Are you putting every checked bit for your algorithm in the COT? Or just the bits that don't work?</p>\n<p>B/c if its just the rejection bits I think thats probably confusing your model</p>",
+                "feedbackTrackingData": {},
+                "id": 3446105,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-21T02:08:20.530Z",
+                "rawMarkdown": "I think each bit comparison must take you >3 tokens - so you can only check <3000 bits in your COT - maybe closer to 1000 from what you're saying\n\nAre you putting every checked bit for your algorithm in the COT? Or just the bits that don't work?\n\nB/c if its just the rejection bits I think thats probably confusing your model\n\n",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "MAJ0RT0M",
+                    "id": 2071133,
+                    "performanceTier": "CONTRIBUTOR",
+                    "profileUrl": "/maj0rt0m",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                    "tier": "CONTRIBUTOR",
+                    "url": "/maj0rt0m",
+                    "userId": 2071133,
+                    "userName": "maj0rt0m"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true
+                }
+              }
+            ],
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "Taha",
+                "id": 33728306,
+                "performanceTier": "CONTRIBUTOR",
+                "profileUrl": "/tahaalam2009",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/33728306-kg.png?t=2026-04-25-07-15-05",
+                "tier": "CONTRIBUTOR",
+                "url": "/tahaalam2009",
+                "userId": 33728306,
+                "userName": "tahaalam2009"
+              }
+            },
+            "votes": {
+              "canUpvote": true
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "MAJ0RT0M",
+            "id": 2071133,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/maj0rt0m",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+            "tier": "CONTRIBUTOR",
+            "url": "/maj0rt0m",
+            "userId": 2071133,
+            "userName": "maj0rt0m"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      },
+      {
+        "author": {
+          "displayName": "Taha",
+          "id": 33728306,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/33728306-kg.png?t=2026-04-25-07-15-05",
+          "tier": "CONTRIBUTOR",
+          "url": "/tahaalam2009"
+        },
+        "authorType": "TOPIC",
+        "competitionRanking": 313,
+        "content": "<p><img src=\"https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F33728306%2F38e6f5a84737ae171ffe4797c2984387%2FScreenshot%202026-04-20%20at%206.15.02PM.png?generation=1776689302421120&amp;alt=media\" alt=\"\"></p>",
+        "feedbackTrackingData": {},
+        "id": 3445739,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-20T12:48:23.953Z",
+        "rawMarkdown": "![](https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F33728306%2F38e6f5a84737ae171ffe4797c2984387%2FScreenshot%202026-04-20%20at%206.15.02PM.png?generation=1776689302421120&alt=media)",
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Taha",
+            "id": 33728306,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/tahaalam2009",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/33728306-kg.png?t=2026-04-25-07-15-05",
+            "tier": "CONTRIBUTOR",
+            "url": "/tahaalam2009",
+            "userId": 33728306,
+            "userName": "tahaalam2009"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      },
+      {
+        "author": {
+          "displayName": "Taha",
+          "id": 33728306,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/33728306-kg.png?t=2026-04-25-07-15-05",
+          "tier": "CONTRIBUTOR",
+          "url": "/tahaalam2009"
+        },
+        "authorType": "TOPIC",
+        "competitionRanking": 313,
+        "content": "<p><img src=\"https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F33728306%2Fca304c20736cec887dc67126b6b61135%2FScreenshot%202026-04-20%20at%206.13.50PM.png?generation=1776689287387490&amp;alt=media\" alt=\"\"></p>",
+        "feedbackTrackingData": {},
+        "id": 3445738,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-20T12:48:09.230Z",
+        "rawMarkdown": "![](https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F33728306%2Fca304c20736cec887dc67126b6b61135%2FScreenshot%202026-04-20%20at%206.13.50PM.png?generation=1776689287387490&alt=media)",
+        "replies": [
+          {
+            "author": {
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+              "url": "/"
+            },
+            "authorType": "COMMENT",
+            "canDelete": true,
+            "feedbackTrackingData": {},
+            "id": 3446233,
+            "isDeleted": true,
+            "isThankYou": false,
+            "isUserAuthor": true,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-04-21T09:22:49.173Z",
+            "rawMarkdown": "",
+            "replies": [
+              {
+                "author": {
+                  "displayName": "Taha",
+                  "id": 33728306,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/33728306-kg.png?t=2026-04-25-07-15-05",
+                  "tier": "CONTRIBUTOR",
+                  "url": "/tahaalam2009"
+                },
+                "authorType": "TOPIC",
+                "competitionRanking": 313,
+                "content": "<p>yes please </p>",
+                "feedbackTrackingData": {},
+                "id": 3446261,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-21T10:15:28.690Z",
+                "rawMarkdown": "yes please ",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "Taha",
+                    "id": 33728306,
+                    "performanceTier": "CONTRIBUTOR",
+                    "profileUrl": "/tahaalam2009",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/33728306-kg.png?t=2026-04-25-07-15-05",
+                    "tier": "CONTRIBUTOR",
+                    "url": "/tahaalam2009",
+                    "userId": 33728306,
+                    "userName": "tahaalam2009"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true
+                }
+              }
+            ],
+            "votes": {}
+          },
+          {
+            "author": {
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+              "url": "/"
+            },
+            "authorType": "COMMENT",
+            "canDelete": true,
+            "feedbackTrackingData": {},
+            "id": 3446257,
+            "isCollapsed": true,
+            "isDeleted": true,
+            "isThankYou": false,
+            "isUserAuthor": true,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-04-21T10:11:10.183Z",
+            "rawMarkdown": "",
+            "votes": {}
+          },
+          {
+            "author": {
+              "displayName": "Vu Tran Hoang",
+              "id": 27223088,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/27223088-kg.jpg?t=2026-04-09-09-29-26",
+              "tier": "CONTRIBUTOR",
+              "url": "/hoangvux"
+            },
+            "authorType": "COMMENT",
+            "competitionRanking": 245,
+            "content": "<p>I did something similar to you, but I only got 94.05% on the bit task, and the training score also dropped. Could you tell me how you managed to reach 98.95?</p>",
+            "feedbackTrackingData": {},
+            "id": 3446259,
+            "isCollapsed": true,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-04-21T10:11:49.400Z",
+            "rawMarkdown": "I did something similar to you, but I only got 94.05% on the bit task, and the training score also dropped. Could you tell me how you managed to reach 98.95?",
+            "replies": [
+              {
+                "author": {
+                  "displayName": "Taha",
+                  "id": 33728306,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/33728306-kg.png?t=2026-04-25-07-15-05",
+                  "tier": "CONTRIBUTOR",
+                  "url": "/tahaalam2009"
+                },
+                "authorType": "TOPIC",
+                "competitionRanking": 313,
+                "content": "<p>Yes , sure but not now cause i feel its of no use and Donald's Method arent good enough</p>",
+                "feedbackTrackingData": {},
+                "id": 3446262,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-21T10:16:06.307Z",
+                "rawMarkdown": "Yes , sure but not now cause i feel its of no use and Donald's Method arent good enough",
+                "reactions": [
+                  {
+                    "emoji": "LOVE",
+                    "featuredUserNames": [
+                      "hoangvux"
+                    ],
+                    "userCount": 1
+                  },
+                  {
+                    "emoji": "FUNNY",
+                    "featuredUserNames": [
+                      "hoangvux"
+                    ],
+                    "userCount": 1
+                  }
+                ],
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "Taha",
+                    "id": 33728306,
+                    "performanceTier": "CONTRIBUTOR",
+                    "profileUrl": "/tahaalam2009",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/33728306-kg.png?t=2026-04-25-07-15-05",
+                    "tier": "CONTRIBUTOR",
+                    "url": "/tahaalam2009",
+                    "userId": 33728306,
+                    "userName": "tahaalam2009"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true,
+                  "totalVotes": -1
+                }
+              },
+              {
+                "author": {
+                  "displayName": "MAJ0RT0M",
+                  "id": 2071133,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                  "tier": "CONTRIBUTOR",
+                  "url": "/maj0rt0m"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 1265,
+                "content": "<p>If you can solve 99% of bit manipulation problems w/in 3-4k tokens w/o omitting any operations than your method is good and should be learnable by the AI</p>\n<p>But\n1) if I were you I wouldn't share that method w/ others\n2) if you want advice on how to train the AI w/ your method we can't give it w/o knowing what you are doing\n3) check your source code - are you sure you didnt just let AI pass the answer into the solver?</p>",
+                "feedbackTrackingData": {},
+                "id": 3446544,
+                "isCollapsed": true,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-21T18:45:47.653Z",
+                "rawMarkdown": "If you can solve 99% of bit manipulation problems w/in 3-4k tokens w/o omitting any operations than your method is good and should be learnable by the AI\n\nBut\n1) if I were you I wouldn't share that method w/ others\n2) if you want advice on how to train the AI w/ your method we can't give it w/o knowing what you are doing\n3) check your source code - are you sure you didnt just let AI pass the answer into the solver?\n",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "MAJ0RT0M",
+                    "id": 2071133,
+                    "performanceTier": "CONTRIBUTOR",
+                    "profileUrl": "/maj0rt0m",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                    "tier": "CONTRIBUTOR",
+                    "url": "/maj0rt0m",
+                    "userId": 2071133,
+                    "userName": "maj0rt0m"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true
+                }
+              },
+              {
+                "author": {
+                  "displayName": "Taha",
+                  "id": 33728306,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/33728306-kg.png?t=2026-04-25-07-15-05",
+                  "tier": "CONTRIBUTOR",
+                  "url": "/tahaalam2009"
+                },
+                "authorType": "TOPIC",
+                "competitionRanking": 313,
+                "content": "<p>The structure is unlearnable , the model cant even memorise so i ditched it</p>",
+                "feedbackTrackingData": {},
+                "id": 3446932,
+                "isCollapsed": true,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-22T12:38:31.223Z",
+                "rawMarkdown": "The structure is unlearnable , the model cant even memorise so i ditched it",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "Taha",
+                    "id": 33728306,
+                    "performanceTier": "CONTRIBUTOR",
+                    "profileUrl": "/tahaalam2009",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/33728306-kg.png?t=2026-04-25-07-15-05",
+                    "tier": "CONTRIBUTOR",
+                    "url": "/tahaalam2009",
+                    "userId": 33728306,
+                    "userName": "tahaalam2009"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true
+                }
+              },
+              {
+                "author": {
+                  "displayName": "MAJ0RT0M",
+                  "id": 2071133,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                  "tier": "CONTRIBUTOR",
+                  "url": "/maj0rt0m"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 1265,
+                "content": "<p>If you're solving the bit probelms in 9ms and 4000 tokens of bit comparison at max theoretical accuracy - its definitely worth trying to get the model to memorize this algo - thats like 1.5% of the total score for this competition (relative to Tong's bit COT). You shouldnt give up immediately b/c the model couldnt learn the format on the first try</p>\n<p>But I dont know your method - If some of your operations are e.g. - hash table lookups - I think the AI def is not going to be able to learn those</p>",
+                "feedbackTrackingData": {},
+                "id": 3447092,
+                "isCollapsed": true,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-22T17:29:23.560Z",
+                "rawMarkdown": "If you're solving the bit probelms in 9ms and 4000 tokens of bit comparison at max theoretical accuracy - its definitely worth trying to get the model to memorize this algo - thats like 1.5% of the total score for this competition (relative to Tong's bit COT). You shouldnt give up immediately b/c the model couldnt learn the format on the first try\n\nBut I dont know your method - If some of your operations are e.g. - hash table lookups - I think the AI def is not going to be able to learn those\n",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "MAJ0RT0M",
+                    "id": 2071133,
+                    "performanceTier": "CONTRIBUTOR",
+                    "profileUrl": "/maj0rt0m",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                    "tier": "CONTRIBUTOR",
+                    "url": "/maj0rt0m",
+                    "userId": 2071133,
+                    "userName": "maj0rt0m"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true
+                }
+              }
+            ],
+            "teamUpInfo": {
+              "enabled": true,
+              "intro": "Looking for Team",
+              "teamLeader": {
+                "displayName": "Vu Tran Hoang",
+                "id": 27223088,
+                "performanceTier": "CONTRIBUTOR",
+                "profileUrl": "/hoangvux",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/27223088-kg.jpg?t=2026-04-09-09-29-26",
+                "tier": "CONTRIBUTOR",
+                "url": "/hoangvux",
+                "userId": 27223088,
+                "userName": "hoangvux"
+              }
+            },
+            "votes": {
+              "canUpvote": true,
+              "totalUpvotes": 3,
+              "totalVotes": 3
+            }
+          },
+          {
+            "author": {
+              "displayName": "Kh0a",
+              "id": 21691005,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/21691005-kg.png?t=2025-08-27-03-21-25",
+              "tier": "MASTER",
+              "url": "/llkh0a"
+            },
+            "authorType": "COMMENT",
+            "competitionRanking": 4,
+            "content": "<p>The accuracy number is reliable only if the model has not seen the sample in training.</p>",
+            "feedbackTrackingData": {},
+            "id": 3446311,
+            "isCollapsed": true,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-04-21T11:47:06.720Z",
+            "rawMarkdown": "The accuracy number is reliable only if the model has not seen the sample in training.",
+            "replies": [
+              {
+                "author": {
+                  "displayName": "MAJ0RT0M",
+                  "id": 2071133,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                  "tier": "CONTRIBUTOR",
+                  "url": "/maj0rt0m"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 1265,
+                "content": "<p>These are accuracy #s computed over this guys solvers - not from the model itself</p>",
+                "feedbackTrackingData": {},
+                "id": 3446530,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-21T18:29:29.437Z",
+                "rawMarkdown": "These are accuracy #s computed over this guys solvers - not from the model itself",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "MAJ0RT0M",
+                    "id": 2071133,
+                    "performanceTier": "CONTRIBUTOR",
+                    "profileUrl": "/maj0rt0m",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                    "tier": "CONTRIBUTOR",
+                    "url": "/maj0rt0m",
+                    "userId": 2071133,
+                    "userName": "maj0rt0m"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true,
+                  "totalUpvotes": 1,
+                  "totalVotes": 1
+                }
+              }
+            ],
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "Kh0a",
+                "id": 21691005,
+                "performanceTier": "MASTER",
+                "profileUrl": "/llkh0a",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/21691005-kg.png?t=2025-08-27-03-21-25",
+                "tier": "MASTER",
+                "url": "/llkh0a",
+                "userId": 21691005,
+                "userName": "llkh0a"
+              }
+            },
+            "votes": {
+              "canUpvote": true,
+              "totalUpvotes": 2,
+              "totalVotes": 2
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Taha",
+            "id": 33728306,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/tahaalam2009",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/33728306-kg.png?t=2026-04-25-07-15-05",
+            "tier": "CONTRIBUTOR",
+            "url": "/tahaalam2009",
+            "userId": 33728306,
+            "userName": "tahaalam2009"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "Taha",
+        "id": 33728306,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/33728306-kg.png?t=2026-04-25-07-15-05",
+        "tier": "CONTRIBUTOR",
+        "url": "/tahaalam2009"
+      },
+      "authorType": "TOPIC",
+      "competitionRanking": 313,
+      "content": "<p>First, a massive shoutout to Donald Galliano III for his incredible <a href=\"https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/688461\" target=\"_blank\">100% Solve Rate / Reverse Engineering post</a>. His insights completely changed how I was approaching the dataset. </p>\n<p>I wanted to share my experience of implementing his methodology to build a custom synthetic Chain-of-Thought (CoT) dataset, how I hit <strong>98.9% on Bit Manipulation</strong>, and the catastrophic mistake I made that actually caused my LB score to drop—plus how I'm fixing it.</p>\n<h3>The Win: Solving Bit Manipulation (98.9%)</h3>\n<p>Following Donald's advice, I realized the baseline models cap out at ~85% on <code>bit_manipulation</code> because LLMs hallucinate when forced to do parallel array math (e.g., <code>1100 AND 1010</code>), and the resulting CoTs often hit the 7680 token limit. </p>\n<p>I wrote a custom Python generator to enforce <strong>Bit-Serial Computation</strong>. By forcing the CoT to explicitly spell out the operations one bit at a time (<code>Bit 0: 1&amp;1=1</code>, <code>Bit 1: 1&amp;0=0</code>), the logic became hyper-compressed and deterministic. </p>\n<p>My local generator validation hit:</p>\n<ul>\n<li><strong>Bit Manipulation:</strong> 1584 / 1602 (98.9%)</li>\n<li><strong>Total Dataset:</strong> 8613 / 9500 (90.7%)</li>\n</ul>\n<h3>The Crash: Why did my score drop?</h3>\n<p>I thought an 8,613-row dataset of mathematically perfect traces was a guaranteed ticket to the top of the LB. I trained a LoRA adapter… and the score plummeted. </p>\n<p>I ran a local validation of the model <em>on its own training data</em> and it only scored 46.5%. I had poisoned my own model. Here is what went wrong for anyone else generating synthetic data (im not sure , please help me out):</p>\n<p><strong>1. The \"Duplicate CoT\" Trap:</strong> When generating 8,600+ traces, my script hit a bug and generated the <em>exact same text trace</em> for thousands of completely different problems. I was telling the model: \"Question A -&gt; [Generic Text] -&gt; Answer 5\", and then \"Question B -&gt; [Exact same Generic Text] -&gt; Answer 12\". The gradients collapsed, and the model learned that \"thinking\" was useless, so it started blindly guessing. </p>\n<p><strong>2. The Format Clash:</strong>\nLoRA is only tuning ~2.7% of the weights. If you drastically change the structural format of the thinking trace from your previous baseline, the model spends the entire epoch trying to learn your <em>formatting</em> instead of the math. </p>\n<h3>Open Questions for the Community</h3>\n<p>Tong and Donald laid out the roadmap, but I'm curious how the top tier is handling the last few hurdles. I haven't seen much public discussion on these specific points:</p>\n<ol>\n<li><strong>Token Training:</strong> Are people training directly on tokens to avoid tokenizer issues with algorithmic math? </li>\n<li><strong>Cryptarithm Token Budgets:</strong> If someone can solve a single substitution cipher within the token budget, it’s an easy +2-3% on the LB. Has anyone managed to compress the 7-step cipher-cracking pipeline into a reliable, token-efficient CoT?</li>\n<li><strong>E2E Fine-tuning vs LoRA:</strong> Is the bulk of the 0.86+ crowd doing end-to-end fine-tuning to recover the Mamba weights dropped by SVD, or are people still pushing standard LoRA adapters?</li>\n</ol>\n<p>Would love to hear what strategies you are using to build your CoT pipelines!\nHelp me diagnose too!! cause not sure yet!</p>",
+      "feedbackTrackingData": {},
+      "id": 3445737,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-04-20T12:47:14.677Z",
+      "rawMarkdown": "First, a massive shoutout to Donald Galliano III for his incredible [100% Solve Rate / Reverse Engineering post](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/688461). His insights completely changed how I was approaching the dataset. \n\nI wanted to share my experience of implementing his methodology to build a custom synthetic Chain-of-Thought (CoT) dataset, how I hit **98.9% on Bit Manipulation**, and the catastrophic mistake I made that actually caused my LB score to drop—plus how I'm fixing it.\n\n### The Win: Solving Bit Manipulation (98.9%)\nFollowing Donald's advice, I realized the baseline models cap out at ~85% on `bit_manipulation` because LLMs hallucinate when forced to do parallel array math (e.g., `1100 AND 1010`), and the resulting CoTs often hit the 7680 token limit. \n\nI wrote a custom Python generator to enforce **Bit-Serial Computation**. By forcing the CoT to explicitly spell out the operations one bit at a time (`Bit 0: 1&1=1`, `Bit 1: 1&0=0`), the logic became hyper-compressed and deterministic. \n\nMy local generator validation hit:\n* **Bit Manipulation:** 1584 / 1602 (98.9%)\n* **Total Dataset:** 8613 / 9500 (90.7%)\n\n### The Crash: Why did my score drop?\nI thought an 8,613-row dataset of mathematically perfect traces was a guaranteed ticket to the top of the LB. I trained a LoRA adapter... and the score plummeted. \n\nI ran a local validation of the model *on its own training data* and it only scored 46.5%. I had poisoned my own model. Here is what went wrong for anyone else generating synthetic data (im not sure , please help me out):\n\n**1. The \"Duplicate CoT\" Trap:** When generating 8,600+ traces, my script hit a bug and generated the *exact same text trace* for thousands of completely different problems. I was telling the model: \"Question A -> [Generic Text] -> Answer 5\", and then \"Question B -> [Exact same Generic Text] -> Answer 12\". The gradients collapsed, and the model learned that \"thinking\" was useless, so it started blindly guessing. \n\n**2. The Format Clash:**\nLoRA is only tuning ~2.7% of the weights. If you drastically change the structural format of the thinking trace from your previous baseline, the model spends the entire epoch trying to learn your *formatting* instead of the math. \n\n### Open Questions for the Community\nTong and Donald laid out the roadmap, but I'm curious how the top tier is handling the last few hurdles. I haven't seen much public discussion on these specific points:\n\n1. **Token Training:** Are people training directly on tokens to avoid tokenizer issues with algorithmic math? \n2. **Cryptarithm Token Budgets:** If someone can solve a single substitution cipher within the token budget, it’s an easy +2-3% on the LB. Has anyone managed to compress the 7-step cipher-cracking pipeline into a reliable, token-efficient CoT?\n3. **E2E Fine-tuning vs LoRA:** Is the bulk of the 0.86+ crowd doing end-to-end fine-tuning to recover the Mamba weights dropped by SVD, or are people still pushing standard LoRA adapters?\n\nWould love to hear what strategies you are using to build your CoT pipelines!\nHelp me diagnose too!! cause not sure yet!",
+      "teamUpInfo": {
+        "intro": "",
+        "teamLeader": {
+          "displayName": "Taha",
+          "id": 33728306,
+          "performanceTier": "CONTRIBUTOR",
+          "profileUrl": "/tahaalam2009",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/33728306-kg.png?t=2026-04-25-07-15-05",
+          "tier": "CONTRIBUTOR",
+          "url": "/tahaalam2009",
+          "userId": 33728306,
+          "userName": "tahaalam2009"
+        }
+      },
+      "votes": {
+        "canUpvote": true,
+        "totalUpvotes": 8,
+        "totalVotes": 4
+      }
+    },
+    "firstMessageId": 3445737,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 693260,
+    "name": "90.7% Synthetic CoT Accuracy -> LB Drop: A Warning on Data Generation & Thanks to Donald",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-04-20T12:47:14.676877100Z",
+    "totalMessages": 20,
+    "totalVotes": 4,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/693260"
+  }
+}

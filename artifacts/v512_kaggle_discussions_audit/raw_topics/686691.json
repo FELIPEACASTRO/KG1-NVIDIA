@@ -1,0 +1,96 @@
+{
+  "forumTopic": {
+    "authorId": 32888326,
+    "authorPerformanceTier": "CONTRIBUTOR",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "32888326-kg.png?t=2026-04-10-21-58-33",
+    "authorUserDisplayName": "AMITH NAIR",
+    "authorUserName": "amith1707",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "Addison Howard",
+          "id": 1095143,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1095143-kg.jpeg",
+          "tier": "STAFF",
+          "url": "/addisonhoward"
+        },
+        "authorType": "ADMIN",
+        "content": "<p>Hi there,</p>\n<p>In the event that a minor is a) permitted to enter by the host, b) has their parent/guardian out the appropriate forms (one for Kaggle.com and one for the specific competition), and c) wins a cash prize, then the parent will be allowed to accept the prize on behalf of the minor.</p>",
+        "feedbackTrackingData": {},
+        "id": 3432848,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-01T00:23:41.713Z",
+        "rawMarkdown": "Hi there,\n\nIn the event that a minor is a) permitted to enter by the host, b) has their parent/guardian out the appropriate forms (one for Kaggle.com and one for the specific competition), and c) wins a cash prize, then the parent will be allowed to accept the prize on behalf of the minor.",
+        "reactions": [
+          {
+            "emoji": "THANK_YOU",
+            "featuredUserNames": [
+              "amith1707"
+            ],
+            "userCount": 1
+          }
+        ],
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 1,
+          "totalVotes": 1
+        }
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "AMITH NAIR",
+        "id": 32888326,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/32888326-kg.png?t=2026-04-10-21-58-33",
+        "tier": "CONTRIBUTOR",
+        "url": "/amith1707"
+      },
+      "authorType": "TOPIC",
+      "content": "<p>I am under the legal age in my jurisdiction, according to the competition rules, participants must be at least 18 years old or the age of majority in their jurisdiction. My parent/guardian has provided a consent form allowing me to participate in the competition. I would like to confirm in the event that I win a prize, can my parent/guardian legally sign the required prize acceptance forms on my behalf? Thank you for your guidance. I would like to kindly request a written confirmation from the competition sponsor or administrator regarding prize acceptance.\nI want to ensure full compliance with all competition rules and legal requirements before participating.</p>\n<p>Thank you in advance for your time and assistance.</p>",
+      "feedbackTrackingData": {},
+      "id": 3432837,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-04-01T00:13:35.497Z",
+      "rawMarkdown": "I am under the legal age in my jurisdiction, according to the competition rules, participants must be at least 18 years old or the age of majority in their jurisdiction. My parent/guardian has provided a consent form allowing me to participate in the competition. I would like to confirm in the event that I win a prize, can my parent/guardian legally sign the required prize acceptance forms on my behalf? Thank you for your guidance. I would like to kindly request a written confirmation from the competition sponsor or administrator regarding prize acceptance.\nI want to ensure full compliance with all competition rules and legal requirements before participating.\n\nThank you in advance for your time and assistance.",
+      "teamUpInfo": {
+        "intro": "",
+        "teamLeader": {
+          "displayName": "AMITH NAIR",
+          "id": 32888326,
+          "performanceTier": "CONTRIBUTOR",
+          "profileUrl": "/amith1707",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/32888326-kg.png?t=2026-04-10-21-58-33",
+          "tier": "CONTRIBUTOR",
+          "url": "/amith1707",
+          "userId": 32888326,
+          "userName": "amith1707"
+        }
+      },
+      "votes": {
+        "canUpvote": true,
+        "totalUpvotes": 2,
+        "totalVotes": 1
+      }
+    },
+    "firstMessageId": 3432837,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 686691,
+    "name": "Minor Claiming Prizes",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-04-01T00:13:35.497079300Z",
+    "totalMessages": 1,
+    "totalVotes": 1,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/686691"
+  }
+}

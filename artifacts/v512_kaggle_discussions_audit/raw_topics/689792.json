@@ -1,0 +1,701 @@
+{
+  "forumTopic": {
+    "authorId": 2071133,
+    "authorPerformanceTier": "CONTRIBUTOR",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "default-thumb.png",
+    "authorUserDisplayName": "MAJ0RT0M",
+    "authorUserName": "maj0rt0m",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "ImperfectKitto",
+          "id": 11905020,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/11905020-kg.jpg",
+          "tier": "EXPERT",
+          "url": "/defdet"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 492,
+        "content": "<p>one quick <a href=\"https://huggingface.co/learn/cookbook/en/grpo_vllm_online_training\" target=\"_blank\">google search</a></p>",
+        "feedbackTrackingData": {},
+        "id": 3439035,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-10T06:17:37.637Z",
+        "rawMarkdown": "one quick [google search](https://huggingface.co/learn/cookbook/en/grpo_vllm_online_training)",
+        "replies": [
+          {
+            "author": {
+              "displayName": "MAJ0RT0M",
+              "id": 2071133,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+              "tier": "CONTRIBUTOR",
+              "url": "/maj0rt0m"
+            },
+            "authorType": "TOPIC",
+            "competitionRanking": 1268,
+            "content": "<p>I think the link might be broken - this guide doesnt look specific to nemotron</p>",
+            "feedbackTrackingData": {},
+            "id": 3439431,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-04-10T17:43:03.283Z",
+            "rawMarkdown": "I think the link might be broken - this guide doesnt look specific to nemotron",
+            "replies": [
+              {
+                "author": {
+                  "displayName": "ImperfectKitto",
+                  "id": 11905020,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/11905020-kg.jpg",
+                  "tier": "EXPERT",
+                  "url": "/defdet"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 492,
+                "content": "<p>it's not broken. nemotron model is no different</p>",
+                "feedbackTrackingData": {},
+                "id": 3439437,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-10T18:00:00.957Z",
+                "rawMarkdown": "it's not broken. nemotron model is no different",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "ImperfectKitto",
+                    "id": 11905020,
+                    "performanceTier": "EXPERT",
+                    "profileUrl": "/defdet",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/11905020-kg.jpg",
+                    "tier": "EXPERT",
+                    "url": "/defdet",
+                    "userId": 11905020,
+                    "userName": "defdet"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true
+                }
+              }
+            ],
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "MAJ0RT0M",
+                "id": 2071133,
+                "performanceTier": "CONTRIBUTOR",
+                "profileUrl": "/maj0rt0m",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                "tier": "CONTRIBUTOR",
+                "url": "/maj0rt0m",
+                "userId": 2071133,
+                "userName": "maj0rt0m"
+              }
+            },
+            "votes": {
+              "canUpvote": true
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "ImperfectKitto",
+            "id": 11905020,
+            "performanceTier": "EXPERT",
+            "profileUrl": "/defdet",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/11905020-kg.jpg",
+            "tier": "EXPERT",
+            "url": "/defdet",
+            "userId": 11905020,
+            "userName": "defdet"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 1,
+          "totalVotes": 1
+        }
+      },
+      {
+        "author": {
+          "displayName": "Russell Kirk",
+          "id": 27681700,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/27681700-kg.jpg?t=2026-03-31-11-28-38",
+          "tier": "CONTRIBUTOR",
+          "url": "/russcore"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 1383,
+        "content": "<p><a href=\"https://www.kaggle.com/code/russcore/fork-of-eval-dna37000-final\" target=\"_blank\">https://www.kaggle.com/code/russcore/fork-of-eval-dna37000-final</a></p>\n<p>takes about 40 min for me.</p>",
+        "feedbackTrackingData": {},
+        "id": 3438768,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-09T17:25:22.730Z",
+        "rawMarkdown": "https://www.kaggle.com/code/russcore/fork-of-eval-dna37000-final\n\ntakes about 40 min for me.",
+        "replies": [
+          {
+            "author": {
+              "displayName": "MAJ0RT0M",
+              "id": 2071133,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+              "tier": "CONTRIBUTOR",
+              "url": "/maj0rt0m"
+            },
+            "authorType": "TOPIC",
+            "competitionRanking": 1268,
+            "content": "<p>This is using vllm though</p>\n<p>Do you know how to integrate vllm w/ trl for some grpo training?</p>",
+            "feedbackTrackingData": {},
+            "id": 3438826,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-04-09T18:52:22.627Z",
+            "rawMarkdown": "This is using vllm though\n\nDo you know how to integrate vllm w/ trl for some grpo training?",
+            "replies": [
+              {
+                "author": {
+                  "displayName": "Russell Kirk",
+                  "id": 27681700,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/27681700-kg.jpg?t=2026-03-31-11-28-38",
+                  "tier": "CONTRIBUTOR",
+                  "url": "/russcore"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 1383,
+                "content": "<p>Is async GRPO not a thing? I really don't know.  I know what GRPO is but I haven't tried using it yet.</p>",
+                "feedbackTrackingData": {},
+                "id": 3438832,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-09T19:00:20.190Z",
+                "rawMarkdown": "Is async GRPO not a thing? I really don't know.  I know what GRPO is but I haven't tried using it yet.",
+                "teamUpInfo": {
+                  "enabled": true,
+                  "intro": "If you got the time, I got the data .. I hope :D",
+                  "teamLeader": {
+                    "displayName": "Russell Kirk",
+                    "id": 27681700,
+                    "performanceTier": "CONTRIBUTOR",
+                    "profileUrl": "/russcore",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/27681700-kg.jpg?t=2026-03-31-11-28-38",
+                    "tier": "CONTRIBUTOR",
+                    "url": "/russcore",
+                    "userId": 27681700,
+                    "userName": "russcore"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true
+                }
+              },
+              {
+                "author": {
+                  "displayName": "m4nocha",
+                  "id": 21092801,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/21092801-kg.jpg?t=2024-12-20-16-21-01",
+                  "tier": "CONTRIBUTOR",
+                  "url": "/aksh1t"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 1450,
+                "content": "<p>did you use RLVR, or did you achieve your best score with SFT only?</p>",
+                "feedbackTrackingData": {},
+                "id": 3438839,
+                "isCollapsed": true,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-09T19:08:02.880Z",
+                "rawMarkdown": "did you use RLVR, or did you achieve your best score with SFT only?",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "m4nocha",
+                    "id": 21092801,
+                    "performanceTier": "CONTRIBUTOR",
+                    "profileUrl": "/aksh1t",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/21092801-kg.jpg?t=2024-12-20-16-21-01",
+                    "tier": "CONTRIBUTOR",
+                    "url": "/aksh1t",
+                    "userId": 21092801,
+                    "userName": "aksh1t"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true
+                }
+              },
+              {
+                "author": {
+                  "displayName": "Russell Kirk",
+                  "id": 27681700,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/27681700-kg.jpg?t=2026-03-31-11-28-38",
+                  "tier": "CONTRIBUTOR",
+                  "url": "/russcore"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 1383,
+                "content": "<p>I've only been doing SFT</p>",
+                "feedbackTrackingData": {},
+                "id": 3438870,
+                "isCollapsed": true,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-09T20:23:10.233Z",
+                "rawMarkdown": "I've only been doing SFT",
+                "teamUpInfo": {
+                  "enabled": true,
+                  "intro": "If you got the time, I got the data .. I hope :D",
+                  "teamLeader": {
+                    "displayName": "Russell Kirk",
+                    "id": 27681700,
+                    "performanceTier": "CONTRIBUTOR",
+                    "profileUrl": "/russcore",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/27681700-kg.jpg?t=2026-03-31-11-28-38",
+                    "tier": "CONTRIBUTOR",
+                    "url": "/russcore",
+                    "userId": 27681700,
+                    "userName": "russcore"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true
+                }
+              },
+              {
+                "author": {
+                  "displayName": "MAJ0RT0M",
+                  "id": 2071133,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                  "tier": "CONTRIBUTOR",
+                  "url": "/maj0rt0m"
+                },
+                "authorType": "TOPIC",
+                "competitionRanking": 1268,
+                "content": "<p>I dont think so? Or at least I don't think anyone does async RLVR in the sense that they load a model into an inference engine, compute reward - then load the model into a training engine and backprop using the reward</p>",
+                "feedbackTrackingData": {},
+                "id": 3439429,
+                "isCollapsed": true,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-10T17:42:10.070Z",
+                "rawMarkdown": "I dont think so? Or at least I don't think anyone does async RLVR in the sense that they load a model into an inference engine, compute reward - then load the model into a training engine and backprop using the reward",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "MAJ0RT0M",
+                    "id": 2071133,
+                    "performanceTier": "CONTRIBUTOR",
+                    "profileUrl": "/maj0rt0m",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                    "tier": "CONTRIBUTOR",
+                    "url": "/maj0rt0m",
+                    "userId": 2071133,
+                    "userName": "maj0rt0m"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true
+                }
+              },
+              {
+                "author": {
+                  "displayName": "ImperfectKitto",
+                  "id": 11905020,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/11905020-kg.jpg",
+                  "tier": "EXPERT",
+                  "url": "/defdet"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 492,
+                "content": "<p>i do do that successfully </p>",
+                "feedbackTrackingData": {},
+                "id": 3439438,
+                "isCollapsed": true,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-10T18:00:18.640Z",
+                "rawMarkdown": "i do do that successfully ",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "ImperfectKitto",
+                    "id": 11905020,
+                    "performanceTier": "EXPERT",
+                    "profileUrl": "/defdet",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/11905020-kg.jpg",
+                    "tier": "EXPERT",
+                    "url": "/defdet",
+                    "userId": 11905020,
+                    "userName": "defdet"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true
+                }
+              },
+              {
+                "author": {
+                  "displayName": "Russell Kirk",
+                  "id": 27681700,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/27681700-kg.jpg?t=2026-03-31-11-28-38",
+                  "tier": "CONTRIBUTOR",
+                  "url": "/russcore"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 1383,
+                "content": "<p>Yea, that was how I was always trying to do it -- but I don't come from an ML background.  I'll have to look more into it, but naively, that's how I would have approached it. </p>",
+                "feedbackTrackingData": {},
+                "id": 3439441,
+                "isCollapsed": true,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-10T18:05:33.717Z",
+                "rawMarkdown": "Yea, that was how I was always trying to do it -- but I don't come from an ML background.  I'll have to look more into it, but naively, that's how I would have approached it. ",
+                "teamUpInfo": {
+                  "enabled": true,
+                  "intro": "If you got the time, I got the data .. I hope :D",
+                  "teamLeader": {
+                    "displayName": "Russell Kirk",
+                    "id": 27681700,
+                    "performanceTier": "CONTRIBUTOR",
+                    "profileUrl": "/russcore",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/27681700-kg.jpg?t=2026-03-31-11-28-38",
+                    "tier": "CONTRIBUTOR",
+                    "url": "/russcore",
+                    "userId": 27681700,
+                    "userName": "russcore"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true
+                }
+              }
+            ],
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "MAJ0RT0M",
+                "id": 2071133,
+                "performanceTier": "CONTRIBUTOR",
+                "profileUrl": "/maj0rt0m",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                "tier": "CONTRIBUTOR",
+                "url": "/maj0rt0m",
+                "userId": 2071133,
+                "userName": "maj0rt0m"
+              }
+            },
+            "votes": {
+              "canUpvote": true
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "enabled": true,
+          "intro": "If you got the time, I got the data .. I hope :D",
+          "teamLeader": {
+            "displayName": "Russell Kirk",
+            "id": 27681700,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/russcore",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/27681700-kg.jpg?t=2026-03-31-11-28-38",
+            "tier": "CONTRIBUTOR",
+            "url": "/russcore",
+            "userId": 27681700,
+            "userName": "russcore"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 1,
+          "totalVotes": 1
+        }
+      },
+      {
+        "author": {
+          "displayName": "MAJ0RT0M",
+          "id": 2071133,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "CONTRIBUTOR",
+          "url": "/maj0rt0m"
+        },
+        "authorType": "TOPIC",
+        "competitionRanking": 1268,
+        "content": "<p>I tried installing unsloth but ran into version incompatibility problems - but I heard that it works - can anyone confirm?</p>",
+        "feedbackTrackingData": {},
+        "id": 3438755,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-09T17:09:46.037Z",
+        "rawMarkdown": "I tried installing unsloth but ran into version incompatibility problems - but I heard that it works - can anyone confirm?",
+        "replies": [
+          {
+            "author": {
+              "displayName": "m4nocha",
+              "id": 21092801,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/21092801-kg.jpg?t=2024-12-20-16-21-01",
+              "tier": "CONTRIBUTOR",
+              "url": "/aksh1t"
+            },
+            "authorType": "COMMENT",
+            "competitionRanking": 1450,
+            "content": "<p>It works and the training speed for 3000 token sequence is 2 hours/epoch\nthe inference speed using vllm is 3000-4000 tokens/sec</p>",
+            "feedbackTrackingData": {},
+            "id": 3438797,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-04-09T18:11:38.617Z",
+            "rawMarkdown": "It works and the training speed for 3000 token sequence is 2 hours/epoch\nthe inference speed using vllm is 3000-4000 tokens/sec",
+            "replies": [
+              {
+                "author": {
+                  "displayName": "MAJ0RT0M",
+                  "id": 2071133,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                  "tier": "CONTRIBUTOR",
+                  "url": "/maj0rt0m"
+                },
+                "authorType": "TOPIC",
+                "competitionRanking": 1268,
+                "content": "<p>nice!</p>\n<p>your epoch is the full 9000 rows?</p>\n<p>If you are using vllm for inference I guess you would need to halt training first - flush memory and then load model into vllm?</p>\n<p>Edit: also - are you able to use unsloth for inference? If so - do you see any speedup?</p>",
+                "feedbackTrackingData": {},
+                "id": 3438825,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-09T18:51:31.357Z",
+                "rawMarkdown": "nice!\n\nyour epoch is the full 9000 rows?\n\nIf you are using vllm for inference I guess you would need to halt training first - flush memory and then load model into vllm?\n\nEdit: also - are you able to use unsloth for inference? If so - do you see any speedup?",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "MAJ0RT0M",
+                    "id": 2071133,
+                    "performanceTier": "CONTRIBUTOR",
+                    "profileUrl": "/maj0rt0m",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                    "tier": "CONTRIBUTOR",
+                    "url": "/maj0rt0m",
+                    "userId": 2071133,
+                    "userName": "maj0rt0m"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true
+                }
+              },
+              {
+                "author": {
+                  "displayName": "m4nocha",
+                  "id": 21092801,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/21092801-kg.jpg?t=2024-12-20-16-21-01",
+                  "tier": "CONTRIBUTOR",
+                  "url": "/aksh1t"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 1450,
+                "content": "<p>I perform inference on my validation dataset after SFT is completed. instead of flushing memory I delete the model and then reload it with LoRA adapter\nInference with only the model gives 3000-4000 tokens/sec\nbut on loading the LoRA adapter it drops to 2000 tokens/sec\nhere is my inference script</p>\n<pre><code># ============================================================\n# STEP 5 — INFERENCE CONFIG &amp; VRAM NUKE\n# ============================================================\nimport gc, torch, os, time, json, re, math\nfrom vllm import LLM, SamplingParams\nfrom vllm.lora.request import LoRARequest\n\nUSE_LORA = True\nOUTPUT_JSON = \"/kaggle/working/evaluation_results.json\"\n\nprint(\"Clearing VRAM for inference...\")\n# Clean up training objects to free memory for vLLM\nfor var in ['trainer', 'model']:\n    if var in globals(): del globals()[var]\n\ngc.collect()\ntorch.cuda.empty_cache()\ntorch.cuda.synchronize()\n\nos.environ['VLLM_WORKER_MULTIPROC_METHOD'] = 'spawn'\n\n# ============================================================\n# STEP 6 — UPDATED HELPERS &amp; PROMPT PREP\n# ============================================================\n\ndef classify_puzzle(prompt):\n    if not isinstance(prompt, str): return 'Unknown'\n    p = prompt.lower()\n    if re.search(r'numeral system|base[- ]?\\d|number.*convert|radix|secret number', p):\n        return 'Number Base Conversion'\n    elif re.search(r'gravit|gravity|falling|free.?fall|acceleration due to', p):\n        return 'Gravitational Constant'\n    elif re.search(r'transformation rule|equation.*transform|secret.*rule.*equation|rule.*applied.*equation', p):\n        return 'Equation Transformation'\n    elif re.search(r'encrypt|cipher|secret.*code.*letter|coded.*message|secret.*text', p):\n        return 'Text Encryption'\n    elif re.search(r'bit.?manipul|binary|8.?bit|bitwise|bit.*transform', p):\n        return 'Bit Manipulation'\n    elif re.search(r'unit.?conver|measurement|becomes.*\\d|secret.*conver.*measur', p):\n        return 'Unit Conversion'\n    return 'Unknown'\n\ndef extract_final_answer(text: str | None) -&gt; str:\n    r\"\"\"Extracts the final answer from the model response.\n    Prioritizes extracting answers inside `\\boxed{}`.\n    \"\"\"\n    if text is None:\n        return 'NOT_FOUND'\n\n    # Search for boxed answer\n    matches = re.findall(r'\\\\boxed\\{([^}]*)(?:\\}|$)', text)\n    if matches:\n        non_empty = [m.strip() for m in matches if m.strip()]\n        if non_empty:\n            return non_empty[-1]\n        return matches[-1].strip()\n\n    # Other common formats if \\boxed{} is not found\n    patterns = [\n        r'The final answer is:\\s*([^\\n]+)',\n        r'Final answer is:\\s*([^\\n]+)',\n        r'Final answer\\s*[:：]\\s*([^\\n]+)',\n        r'final answer\\s*[:：]\\s*([^\\n]+)',\n    ]\n    for pattern in patterns:\n        matches = re.findall(pattern, text, re.IGNORECASE)\n        if matches:\n            return matches[-1].strip()\n\n    # If no structured format is found, extract the last valid number\n    matches = re.findall(r'-?\\d+(?:\\.\\d+)?', text)\n    if matches:\n        return matches[-1]\n\n    # Fallback to the last line of text\n    lines = [line.strip() for line in text.splitlines() if line.strip()]\n    return lines[-1] if lines else 'NOT_FOUND'\n\ndef verify(stored_answer: str, predicted: str) -&gt; bool:\n    \"\"\"Verify if the answer matches with binary and numeric tolerance.\"\"\"\n    stored_answer = stored_answer.strip()\n    predicted = predicted.strip()\n\n    # If the answer is a binary string, compare strictly as strings\n    if re.fullmatch(r'[01]+', stored_answer):\n        return predicted.lower() == stored_answer.lower()\n\n    try:\n        # Try to convert the answers to floating point numbers\n        stored_num = float(stored_answer)\n        predicted_num = float(predicted)\n        return math.isclose(stored_num, predicted_num, rel_tol=1e-2, abs_tol=1e-5)\n    except Exception:\n        # Fallback to case-insensitive string comparison\n        return predicted.lower() == stored_answer.lower()\n\neval_records = []\nprint(\"Preparing evaluation records...\")\n\nfor i, ex in enumerate(eval_dataset):\n    orig_prompt = ex[\"prompt\"]\n    gt_answer   = str(ex[\"answer\"])\n\n    chat_messages = [{\"role\": \"user\", \"content\": orig_prompt}]\n    formatted_prompt = tokenizer.apply_chat_template(\n        chat_messages, \n        tokenize=False, \n        add_generation_prompt=True\n    )\n\n    eval_records.append({\n        \"id\": ex.get(\"id\", i), \n        \"prompt\": formatted_prompt, \n        \"answer\": gt_answer, \n        \"category\": classify_puzzle(orig_prompt)\n    })\n\n# ============================================================\n# STEP 7 — vLLM GENERATION\n# ============================================================\nprint(f\"\\nStarting vLLM Engine... (LoRA Enabled: {USE_LORA})\")\nllm = LLM(\n    model=MODEL_PATH,\n    tensor_parallel_size=1,\n    max_num_seqs=128,\n    gpu_memory_utilization=0.9,\n    dtype='auto',\n    max_model_len=7000, \n    trust_remote_code=True,\n    enable_lora=USE_LORA,\n    max_lora_rank=LORA_RANK if USE_LORA else None,\n)\n\nsampling_params = SamplingParams(temperature=0, top_p=1.0, max_tokens=MAX_SEQ_LEN)\nprompts = [item[\"prompt\"] for item in eval_records]\n\nprint(f\"Generating {len(prompts)} predictions...\")\nstart_time = time.time()\n\nlora_req = LoRARequest('adapter', 1, OUTPUT_DIR) if USE_LORA else None\noutputs = llm.generate(prompts, sampling_params=sampling_params, lora_request=lora_req)\n\nelapsed = time.time() - start_time\n\n# ============================================================\n# STEP 8 — SCORING &amp; JSON EXPORT\n# ============================================================\nresults = []\nnum_correct = 0\ncategory_stats = {}\ntotal_tokens = sum(len(o.outputs[0].token_ids) for o in outputs)\ntps = total_tokens / elapsed if elapsed &gt; 0 else 0\n\nfor item, output in zip(eval_records, outputs):\n    raw_generated_text = output.outputs[0].text\n    predicted = extract_final_answer(raw_generated_text)\n\n    # Use the updated verify function\n    is_correct = verify(item[\"answer\"], predicted)\n    cat = item[\"category\"]\n\n    if cat not in category_stats:\n        category_stats[cat] = {\"correct\": 0, \"total\": 0}\n\n    category_stats[cat][\"total\"] += 1\n    if is_correct:\n        num_correct += 1\n        category_stats[cat][\"correct\"] += 1\n\n    results.append({\n        \"id\": item[\"id\"],\n        \"category\": cat,\n        \"ground_truth\": item[\"answer\"],\n        \"predicted\": predicted,\n        \"is_correct\": is_correct,\n        \"full_output\": raw_generated_text\n    })\n\naccuracy = num_correct / len(eval_records) if eval_records else 0\n\n# Save to JSON\njson_data = {\n    \"summary\": {\n        \"overall_accuracy\": accuracy,\n        \"correct\": num_correct,\n        \"total_samples\": len(eval_records),\n        \"category_metrics\": category_stats,\n        \"tokens_per_second\": round(tps, 2),\n        \"elapsed_seconds\": round(elapsed, 2)\n    },\n    \"results\": results\n}\n\nwith open(OUTPUT_JSON, \"w\") as f:\n    json.dump(json_data, f, indent=4)\n\nprint(\"\\n\" + \"=\"*55)\nprint(f\"✅ OVERALL ACCURACY : {accuracy:.2%} ({num_correct}/{len(eval_records)})\")\nprint(\"-\" * 55)\nfor cat, stats in sorted(category_stats.items()):\n    cat_acc = stats[\"correct\"] / stats[\"total\"] if stats[\"total\"] &gt; 0 else 0\n    print(f\"  &gt; {cat:&lt;25}: {cat_acc:&gt;6.2%}  ({stats['correct']}/{stats['total']})\")\n\nprint(\"-\" * 55)\nprint(f\"🚀 SPEED    : {tps:.2f} tokens/s | 💾 SAVED TO : {OUTPUT_JSON}\")\nprint(\"=\"*55)\n</code></pre>\n<p>and here is the result it got</p>\n<pre><code>=======================================================\n✅ OVERALL ACCURACY : 81.34% (693/852)\n-------------------------------------------------------\n  &gt; Bit Manipulation         :  9.23%  (12/130)\n  &gt; Equation Transformation  : 52.11%  (37/71)\n  &gt; Gravitational Constant   : 100.00%  (148/148)\n  &gt; Number Base Conversion   : 100.00%  (162/162)\n  &gt; Text Encryption          : 95.86%  (162/169)\n  &gt; Unit Conversion          : 100.00%  (172/172)\n-------------------------------------------------------\n🚀 SPEED    : 1815.43 tokens/s | 💾 SAVED TO : /kaggle/working/evaluation_results.json\n=======================================================\n</code></pre>",
+                "feedbackTrackingData": {},
+                "id": 3438836,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-09T19:06:31.053Z",
+                "rawMarkdown": "I perform inference on my validation dataset after SFT is completed. instead of flushing memory I delete the model and then reload it with LoRA adapter\nInference with only the model gives 3000-4000 tokens/sec\nbut on loading the LoRA adapter it drops to 2000 tokens/sec\nhere is my inference script\n```\n# ============================================================\n# STEP 5 — INFERENCE CONFIG & VRAM NUKE\n# ============================================================\nimport gc, torch, os, time, json, re, math\nfrom vllm import LLM, SamplingParams\nfrom vllm.lora.request import LoRARequest\n\nUSE_LORA = True\nOUTPUT_JSON = \"/kaggle/working/evaluation_results.json\"\n\nprint(\"Clearing VRAM for inference...\")\n# Clean up training objects to free memory for vLLM\nfor var in ['trainer', 'model']:\n    if var in globals(): del globals()[var]\n\ngc.collect()\ntorch.cuda.empty_cache()\ntorch.cuda.synchronize()\n\nos.environ['VLLM_WORKER_MULTIPROC_METHOD'] = 'spawn'\n\n# ============================================================\n# STEP 6 — UPDATED HELPERS & PROMPT PREP\n# ============================================================\n\ndef classify_puzzle(prompt):\n    if not isinstance(prompt, str): return 'Unknown'\n    p = prompt.lower()\n    if re.search(r'numeral system|base[- ]?\\d|number.*convert|radix|secret number', p):\n        return 'Number Base Conversion'\n    elif re.search(r'gravit|gravity|falling|free.?fall|acceleration due to', p):\n        return 'Gravitational Constant'\n    elif re.search(r'transformation rule|equation.*transform|secret.*rule.*equation|rule.*applied.*equation', p):\n        return 'Equation Transformation'\n    elif re.search(r'encrypt|cipher|secret.*code.*letter|coded.*message|secret.*text', p):\n        return 'Text Encryption'\n    elif re.search(r'bit.?manipul|binary|8.?bit|bitwise|bit.*transform', p):\n        return 'Bit Manipulation'\n    elif re.search(r'unit.?conver|measurement|becomes.*\\d|secret.*conver.*measur', p):\n        return 'Unit Conversion'\n    return 'Unknown'\n\ndef extract_final_answer(text: str | None) -> str:\n    r\"\"\"Extracts the final answer from the model response.\n    Prioritizes extracting answers inside `\\boxed{}`.\n    \"\"\"\n    if text is None:\n        return 'NOT_FOUND'\n\n    # Search for boxed answer\n    matches = re.findall(r'\\\\boxed\\{([^}]*)(?:\\}|$)', text)\n    if matches:\n        non_empty = [m.strip() for m in matches if m.strip()]\n        if non_empty:\n            return non_empty[-1]\n        return matches[-1].strip()\n\n    # Other common formats if \\boxed{} is not found\n    patterns = [\n        r'The final answer is:\\s*([^\\n]+)',\n        r'Final answer is:\\s*([^\\n]+)',\n        r'Final answer\\s*[:：]\\s*([^\\n]+)',\n        r'final answer\\s*[:：]\\s*([^\\n]+)',\n    ]\n    for pattern in patterns:\n        matches = re.findall(pattern, text, re.IGNORECASE)\n        if matches:\n            return matches[-1].strip()\n\n    # If no structured format is found, extract the last valid number\n    matches = re.findall(r'-?\\d+(?:\\.\\d+)?', text)\n    if matches:\n        return matches[-1]\n\n    # Fallback to the last line of text\n    lines = [line.strip() for line in text.splitlines() if line.strip()]\n    return lines[-1] if lines else 'NOT_FOUND'\n\ndef verify(stored_answer: str, predicted: str) -> bool:\n    \"\"\"Verify if the answer matches with binary and numeric tolerance.\"\"\"\n    stored_answer = stored_answer.strip()\n    predicted = predicted.strip()\n\n    # If the answer is a binary string, compare strictly as strings\n    if re.fullmatch(r'[01]+', stored_answer):\n        return predicted.lower() == stored_answer.lower()\n\n    try:\n        # Try to convert the answers to floating point numbers\n        stored_num = float(stored_answer)\n        predicted_num = float(predicted)\n        return math.isclose(stored_num, predicted_num, rel_tol=1e-2, abs_tol=1e-5)\n    except Exception:\n        # Fallback to case-insensitive string comparison\n        return predicted.lower() == stored_answer.lower()\n\neval_records = []\nprint(\"Preparing evaluation records...\")\n\nfor i, ex in enumerate(eval_dataset):\n    orig_prompt = ex[\"prompt\"]\n    gt_answer   = str(ex[\"answer\"])\n    \n    chat_messages = [{\"role\": \"user\", \"content\": orig_prompt}]\n    formatted_prompt = tokenizer.apply_chat_template(\n        chat_messages, \n        tokenize=False, \n        add_generation_prompt=True\n    )\n    \n    eval_records.append({\n        \"id\": ex.get(\"id\", i), \n        \"prompt\": formatted_prompt, \n        \"answer\": gt_answer, \n        \"category\": classify_puzzle(orig_prompt)\n    })\n\n# ============================================================\n# STEP 7 — vLLM GENERATION\n# ============================================================\nprint(f\"\\nStarting vLLM Engine... (LoRA Enabled: {USE_LORA})\")\nllm = LLM(\n    model=MODEL_PATH,\n    tensor_parallel_size=1,\n    max_num_seqs=128,\n    gpu_memory_utilization=0.9,\n    dtype='auto',\n    max_model_len=7000, \n    trust_remote_code=True,\n    enable_lora=USE_LORA,\n    max_lora_rank=LORA_RANK if USE_LORA else None,\n)\n\nsampling_params = SamplingParams(temperature=0, top_p=1.0, max_tokens=MAX_SEQ_LEN)\nprompts = [item[\"prompt\"] for item in eval_records]\n\nprint(f\"Generating {len(prompts)} predictions...\")\nstart_time = time.time()\n\nlora_req = LoRARequest('adapter', 1, OUTPUT_DIR) if USE_LORA else None\noutputs = llm.generate(prompts, sampling_params=sampling_params, lora_request=lora_req)\n\nelapsed = time.time() - start_time\n\n# ============================================================\n# STEP 8 — SCORING & JSON EXPORT\n# ============================================================\nresults = []\nnum_correct = 0\ncategory_stats = {}\ntotal_tokens = sum(len(o.outputs[0].token_ids) for o in outputs)\ntps = total_tokens / elapsed if elapsed > 0 else 0\n\nfor item, output in zip(eval_records, outputs):\n    raw_generated_text = output.outputs[0].text\n    predicted = extract_final_answer(raw_generated_text)\n    \n    # Use the updated verify function\n    is_correct = verify(item[\"answer\"], predicted)\n    cat = item[\"category\"]\n    \n    if cat not in category_stats:\n        category_stats[cat] = {\"correct\": 0, \"total\": 0}\n        \n    category_stats[cat][\"total\"] += 1\n    if is_correct:\n        num_correct += 1\n        category_stats[cat][\"correct\"] += 1\n        \n    results.append({\n        \"id\": item[\"id\"],\n        \"category\": cat,\n        \"ground_truth\": item[\"answer\"],\n        \"predicted\": predicted,\n        \"is_correct\": is_correct,\n        \"full_output\": raw_generated_text\n    })\n\naccuracy = num_correct / len(eval_records) if eval_records else 0\n\n# Save to JSON\njson_data = {\n    \"summary\": {\n        \"overall_accuracy\": accuracy,\n        \"correct\": num_correct,\n        \"total_samples\": len(eval_records),\n        \"category_metrics\": category_stats,\n        \"tokens_per_second\": round(tps, 2),\n        \"elapsed_seconds\": round(elapsed, 2)\n    },\n    \"results\": results\n}\n\nwith open(OUTPUT_JSON, \"w\") as f:\n    json.dump(json_data, f, indent=4)\n\nprint(\"\\n\" + \"=\"*55)\nprint(f\"✅ OVERALL ACCURACY : {accuracy:.2%} ({num_correct}/{len(eval_records)})\")\nprint(\"-\" * 55)\nfor cat, stats in sorted(category_stats.items()):\n    cat_acc = stats[\"correct\"] / stats[\"total\"] if stats[\"total\"] > 0 else 0\n    print(f\"  > {cat:<25}: {cat_acc:>6.2%}  ({stats['correct']}/{stats['total']})\")\n\nprint(\"-\" * 55)\nprint(f\"🚀 SPEED    : {tps:.2f} tokens/s | 💾 SAVED TO : {OUTPUT_JSON}\")\nprint(\"=\"*55)\n```\n\nand here is the result it got\n```\n=======================================================\n✅ OVERALL ACCURACY : 81.34% (693/852)\n-------------------------------------------------------\n  > Bit Manipulation         :  9.23%  (12/130)\n  > Equation Transformation  : 52.11%  (37/71)\n  > Gravitational Constant   : 100.00%  (148/148)\n  > Number Base Conversion   : 100.00%  (162/162)\n  > Text Encryption          : 95.86%  (162/169)\n  > Unit Conversion          : 100.00%  (172/172)\n-------------------------------------------------------\n🚀 SPEED    : 1815.43 tokens/s | 💾 SAVED TO : /kaggle/working/evaluation_results.json\n=======================================================\n```",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "m4nocha",
+                    "id": 21092801,
+                    "performanceTier": "CONTRIBUTOR",
+                    "profileUrl": "/aksh1t",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/21092801-kg.jpg?t=2024-12-20-16-21-01",
+                    "tier": "CONTRIBUTOR",
+                    "url": "/aksh1t",
+                    "userId": 21092801,
+                    "userName": "aksh1t"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true,
+                  "totalUpvotes": 1,
+                  "totalVotes": 1
+                }
+              },
+              {
+                "author": {
+                  "displayName": "Komil Parmar",
+                  "id": 11351811,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/11351811-kg.jpg?t=2025-07-02-06-16-19",
+                  "tier": "EXPERT",
+                  "url": "/komilparmar"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 963,
+                "content": "<p>I am trying to do the same but I am bound by the input tokens/s rather than the output tokens/s .\nHave you encountered the same earlier? If yes, please provide the fix. </p>\n<p>1032/38000 [19:45&lt;12:00:46,  1.17s/it, est. speed input: 134.58 toks/s, output: 1736.83 toks/s]</p>",
+                "feedbackTrackingData": {},
+                "id": 3439780,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-11T08:08:43.313Z",
+                "rawMarkdown": "I am trying to do the same but I am bound by the input tokens/s rather than the output tokens/s .\nHave you encountered the same earlier? If yes, please provide the fix. \n\n1032/38000 [19:45<12:00:46,  1.17s/it, est. speed input: 134.58 toks/s, output: 1736.83 toks/s]\n",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "Komil Parmar",
+                    "id": 11351811,
+                    "performanceTier": "EXPERT",
+                    "profileUrl": "/komilparmar",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/11351811-kg.jpg?t=2025-07-02-06-16-19",
+                    "tier": "EXPERT",
+                    "url": "/komilparmar",
+                    "userId": 11351811,
+                    "userName": "komilparmar"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true
+                }
+              }
+            ],
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "m4nocha",
+                "id": 21092801,
+                "performanceTier": "CONTRIBUTOR",
+                "profileUrl": "/aksh1t",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/21092801-kg.jpg?t=2024-12-20-16-21-01",
+                "tier": "CONTRIBUTOR",
+                "url": "/aksh1t",
+                "userId": 21092801,
+                "userName": "aksh1t"
+              }
+            },
+            "votes": {
+              "canUpvote": true,
+              "totalUpvotes": 1,
+              "totalVotes": 1
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "MAJ0RT0M",
+            "id": 2071133,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/maj0rt0m",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+            "tier": "CONTRIBUTOR",
+            "url": "/maj0rt0m",
+            "userId": 2071133,
+            "userName": "maj0rt0m"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 1,
+          "totalVotes": 1
+        }
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "MAJ0RT0M",
+        "id": 2071133,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+        "tier": "CONTRIBUTOR",
+        "url": "/maj0rt0m"
+      },
+      "authorType": "TOPIC",
+      "competitionRanking": 1268,
+      "content": "<p>I'm sure we are all familiar w/ this error by now: <code>NemotronH requires an initialized</code>NemotronHHybridDynamicCache<code>to return a cache. None was provided, so no cache will be returned.</code></p>\n<p>It makes generating reasonable length (2000 tokens+) infeasible - generation speed is ~2toks/sec - so this would take 15m</p>\n<p>GPRO becomes impossible - local evaluation also impossible. Even sanity checks to see if the model is producing reasonable output and learning thinking formats become expensive</p>\n<p>But I see people w/ code to evaluate locally and run GRPO - how?  I also see that when people share notebooks w/ output enabled and generation code - they are getting this cache error also. Are they just eating the huge generation time?</p>\n<p>Has anyone managed to fix this cache error? Or find a workaround?</p>\n<p>I'm open to solutions on or off kaggle hardware</p>",
+      "feedbackTrackingData": {},
+      "id": 3438753,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-04-09T17:07:04.553Z",
+      "rawMarkdown": "I'm sure we are all familiar w/ this error by now: `NemotronH requires an initialized `NemotronHHybridDynamicCache` to return a cache. None was provided, so no cache will be returned.`\n\nIt makes generating reasonable length (2000 tokens+) infeasible - generation speed is ~2toks/sec - so this would take 15m\n\nGPRO becomes impossible - local evaluation also impossible. Even sanity checks to see if the model is producing reasonable output and learning thinking formats become expensive\n\nBut I see people w/ code to evaluate locally and run GRPO - how?  I also see that when people share notebooks w/ output enabled and generation code - they are getting this cache error also. Are they just eating the huge generation time?\n\nHas anyone managed to fix this cache error? Or find a workaround?\n\nI'm open to solutions on or off kaggle hardware",
+      "teamUpInfo": {
+        "intro": "",
+        "teamLeader": {
+          "displayName": "MAJ0RT0M",
+          "id": 2071133,
+          "performanceTier": "CONTRIBUTOR",
+          "profileUrl": "/maj0rt0m",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "CONTRIBUTOR",
+          "url": "/maj0rt0m",
+          "userId": 2071133,
+          "userName": "maj0rt0m"
+        }
+      },
+      "votes": {
+        "canUpvote": true,
+        "totalUpvotes": 1
+      }
+    },
+    "firstMessageId": 3438753,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 689792,
+    "name": "Is anyone able to get inference/generation speeds >2 tokens/sec?",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-04-09T17:07:04.553901100Z",
+    "totalMessages": 16,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/689792"
+  }
+}

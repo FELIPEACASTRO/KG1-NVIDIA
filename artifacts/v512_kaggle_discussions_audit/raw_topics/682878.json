@@ -1,0 +1,246 @@
+{
+  "forumTopic": {
+    "authorId": 10714081,
+    "authorPerformanceTier": "MASTER",
+    "authorProgressionOptOut": true,
+    "authorThumbnailName": "10714081-kg.jpeg?t=2025-08-17-19-57-58",
+    "authorUserDisplayName": "ducnh279",
+    "authorUserName": "ducnh279",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "Nic Barthelemy",
+          "id": 61857,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/61857-gr.jpg",
+          "tier": "CONTRIBUTOR",
+          "url": "/nicbarthelemy1"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 367,
+        "content": "<p>I hit 12 hours on GPU and my notebook was cancelled. </p>",
+        "feedbackTrackingData": {},
+        "id": 3427300,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-23T23:34:52.727Z",
+        "rawMarkdown": "I hit 12 hours on GPU and my notebook was cancelled. ",
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Nic Barthelemy",
+            "id": 61857,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/nicbarthelemy1",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/61857-gr.jpg",
+            "tier": "CONTRIBUTOR",
+            "url": "/nicbarthelemy1",
+            "userId": 61857,
+            "userName": "nicbarthelemy1"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 3,
+          "totalVotes": 3
+        }
+      },
+      {
+        "author": {
+          "displayName": "newduck",
+          "id": 1786084,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1786084-kg.png?t=2025-07-19-06-46-08",
+          "tier": "EXPERT",
+          "url": "/newduck"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 1701,
+        "content": "<blockquote>\n  <p>Approximately/Specifically how many problems can we expect in the test set?\n  According to the \"Data\" description, it says the test set will be replaced with \"several hundred problems,\" so I’d expect roughly around 300–600 problems.</p>\n</blockquote>",
+        "feedbackTrackingData": {},
+        "id": 3424934,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-20T05:40:21.767Z",
+        "rawMarkdown": ">Approximately/Specifically how many problems can we expect in the test set?\nAccording to the \"Data\" description, it says the test set will be replaced with \"several hundred problems,\" so I’d expect roughly around 300–600 problems.",
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "newduck",
+            "id": 1786084,
+            "performanceTier": "EXPERT",
+            "profileUrl": "/newduck",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1786084-kg.png?t=2025-07-19-06-46-08",
+            "tier": "EXPERT",
+            "url": "/newduck",
+            "userId": 1786084,
+            "userName": "newduck"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 1,
+          "totalVotes": 1
+        }
+      },
+      {
+        "author": {
+          "displayName": "lucian kucera",
+          "id": 17819385,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "CONTRIBUTOR",
+          "url": "/luciankucera"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 1662,
+        "content": "<p>There is no limit on runtime, since you are not doing the inference. Inference is done by kaggle.</p>",
+        "feedbackTrackingData": {},
+        "id": 3424048,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-19T09:54:27.713Z",
+        "rawMarkdown": "There is no limit on runtime, since you are not doing the inference. Inference is done by kaggle.",
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "lucian kucera",
+            "id": 17819385,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/luciankucera",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+            "tier": "CONTRIBUTOR",
+            "url": "/luciankucera",
+            "userId": 17819385,
+            "userName": "luciankucera"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 2,
+          "totalVotes": 2
+        }
+      },
+      {
+        "author": {
+          "displayName": "Mani Ratan",
+          "id": 28502904,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "EXPERT",
+          "url": "/mani787060"
+        },
+        "authorType": "COMMENT",
+        "content": "<p>Hii buddy ….. In most Kaggle competitions, there are runtime limits during submission, even if they are not always clearly mentioned. Typically:</p>\n<p>🔹 There is a total runtime limit (often similar to ~9h CPU / ~5h GPU)\n🔹 Internet is disabled, so everything must run locally\n🔹 Long inference (like very large outputs or high max_tokens) can sometimes lead to timeouts</p>\n<p>If exact limits are not specified, it’s safest to optimize your code for faster inference and avoid very long outputs.</p>\n<p>For exact details (like test set size), organizers usually clarify in discussions or update the competition page.</p>\n<p>I hope this wiil help you👍.</p>",
+        "feedbackTrackingData": {},
+        "id": 3424027,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-19T09:30:02.293Z",
+        "rawMarkdown": "Hii buddy ..... In most Kaggle competitions, there are runtime limits during submission, even if they are not always clearly mentioned. Typically:\n\n🔹 There is a total runtime limit (often similar to ~9h CPU / ~5h GPU)\n🔹 Internet is disabled, so everything must run locally\n🔹 Long inference (like very large outputs or high max_tokens) can sometimes lead to timeouts\n\nIf exact limits are not specified, it’s safest to optimize your code for faster inference and avoid very long outputs.\n\nFor exact details (like test set size), organizers usually clarify in discussions or update the competition page.\n\nI hope this wiil help you👍.",
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 1,
+          "totalVotes": -4
+        }
+      },
+      {
+        "author": {
+          "displayName": "Mr. Bruce",
+          "id": 20802451,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/20802451-kg.jpg?t=2026-04-14-05-58-52",
+          "tier": "EXPERT",
+          "url": "/muhammaddanyalmalik"
+        },
+        "authorType": "COMMENT",
+        "content": "<p>Hi, thanks for your question!</p>\n<p>While exact limits may not be explicitly stated, it’s generally safe to assume that standard Kaggle constraints apply (e.g 9 hours CPU / 5 hours GPU). There is usually an overall runtime cap during evaluation, so optimizing inference time is important.</p>\n<p>Long outputs (like near max_tokens) could increase the risk of timeouts, especially if the test set is large. It’s recommended to keep responses efficient.</p>\n<p>The exact size of the test set is typically not disclosed, but you can expect it to be substantial enough to require careful performance considerations.</p>",
+        "feedbackTrackingData": {},
+        "id": 3424895,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-20T03:50:13.697Z",
+        "rawMarkdown": "Hi, thanks for your question!\n\nWhile exact limits may not be explicitly stated, it’s generally safe to assume that standard Kaggle constraints apply (e.g 9 hours CPU / 5 hours GPU). There is usually an overall runtime cap during evaluation, so optimizing inference time is important.\n\nLong outputs (like near max_tokens) could increase the risk of timeouts, especially if the test set is large. It’s recommended to keep responses efficient.\n\nThe exact size of the test set is typically not disclosed, but you can expect it to be substantial enough to require careful performance considerations.",
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Mr. Bruce",
+            "id": 20802451,
+            "performanceTier": "EXPERT",
+            "profileUrl": "/muhammaddanyalmalik",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/20802451-kg.jpg?t=2026-04-14-05-58-52",
+            "tier": "EXPERT",
+            "url": "/muhammaddanyalmalik",
+            "userId": 20802451,
+            "userName": "muhammaddanyalmalik"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalVotes": -5
+        }
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "ducnh279",
+        "id": 10714081,
+        "progressionOptOut": true,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/10714081-kg.jpeg?t=2025-08-17-19-57-58",
+        "tier": "MASTER",
+        "url": "/ducnh279"
+      },
+      "authorType": "TOPIC",
+      "competitionRanking": 19,
+      "content": "<p>Hi, I have a question regarding inference/runtime constraints for this competition.</p>\n<p>In many Kaggle competitions, we usually have limits like:</p>\n<ul>\n<li>CPU Notebook ≤ 9 hours runtime  </li>\n<li>GPU Notebook ≤ 5 hours runtime  </li>\n</ul>\n<p>However, I couldn’t find any explicit information about runtime limits for this competition’s evaluation setup.</p>\n<p>Could the organizers clarify:</p>\n<ul>\n<li>Is there a total runtime limit during evaluation?  </li>\n<li>Are there any constraints on inference time per submission?  </li>\n<li>Should we be concerned about long outputs (e.g., close to max_tokens = 7680) causing timeouts?  </li>\n<li>Approximately/Specifically how many problems can we expect in the test set?  </li>\n</ul>\n<p>Thanks!</p>",
+      "feedbackTrackingData": {},
+      "id": 3423977,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-03-19T07:55:24.707Z",
+      "rawMarkdown": "Hi, I have a question regarding inference/runtime constraints for this competition.\n\nIn many Kaggle competitions, we usually have limits like:\n\n- CPU Notebook ≤ 9 hours runtime  \n- GPU Notebook ≤ 5 hours runtime  \n\nHowever, I couldn’t find any explicit information about runtime limits for this competition’s evaluation setup.\n\nCould the organizers clarify:\n\n- Is there a total runtime limit during evaluation?  \n- Are there any constraints on inference time per submission?  \n- Should we be concerned about long outputs (e.g., close to max_tokens = 7680) causing timeouts?  \n- Approximately/Specifically how many problems can we expect in the test set?  \n\nThanks!",
+      "teamUpInfo": {
+        "intro": "",
+        "teamLeader": {
+          "displayName": "ducnh279",
+          "id": 10714081,
+          "performanceTier": "MASTER",
+          "profileUrl": "/ducnh279",
+          "progressionOptOut": true,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/10714081-kg.jpeg?t=2025-08-17-19-57-58",
+          "tier": "MASTER",
+          "url": "/ducnh279",
+          "userId": 10714081,
+          "userName": "ducnh279"
+        }
+      },
+      "votes": {
+        "canUpvote": true,
+        "totalUpvotes": 11,
+        "totalVotes": 11
+      }
+    },
+    "firstMessageId": 3423977,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 682878,
+    "name": "Runtime Limits During Evaluation? (CPU/GPU Constraints)",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-03-19T07:55:24.708235Z",
+    "totalMessages": 5,
+    "totalVotes": 11,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/682878"
+  }
+}

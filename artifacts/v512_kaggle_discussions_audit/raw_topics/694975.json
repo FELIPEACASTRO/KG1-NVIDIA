@@ -1,0 +1,1007 @@
+{
+  "forumTopic": {
+    "authorId": 10218904,
+    "authorPerformanceTier": "EXPERT",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "default-thumb.png",
+    "authorUserDisplayName": "Murugesan Narayanaswamy",
+    "authorUserName": "murugesann",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "Taha",
+          "id": 33728306,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/33728306-kg.png?t=2026-04-25-07-15-05",
+          "tier": "CONTRIBUTOR",
+          "url": "/tahaalam2009"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 312,
+        "content": "<p>See this amazing GPRO notebook yet it yields same results <a href=\"https://www.kaggle.com/code/banwait13/nemotron-on-steroids\" target=\"_blank\">HERE</a></p>",
+        "feedbackTrackingData": {},
+        "id": 3452331,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-05-03T05:40:59.893Z",
+        "rawMarkdown": "See this amazing GPRO notebook yet it yields same results [HERE](https://www.kaggle.com/code/banwait13/nemotron-on-steroids)",
+        "replies": [
+          {
+            "author": {
+              "displayName": "Murugesan Narayanaswamy",
+              "id": 10218904,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+              "tier": "EXPERT",
+              "url": "/murugesann"
+            },
+            "authorType": "TOPIC",
+            "competitionRanking": 1166,
+            "content": "<p>Thanks, will look into it! Need to see whether he is using DAPO instead of GRPO for efficiency purpose or it serves better for this usecase.</p>\n<p>Also, GRPO/DAPO needs to be run for each category of problems separately - if data is not sufficient for individual category of problems, then synthetic data needs to be created with minor variations.</p>",
+            "feedbackTrackingData": {},
+            "id": 3452361,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-05-03T07:04:10.587Z",
+            "rawMarkdown": "Thanks, will look into it! Need to see whether he is using DAPO instead of GRPO for efficiency purpose or it serves better for this usecase.\n\nAlso, GRPO/DAPO needs to be run for each category of problems separately - if data is not sufficient for individual category of problems, then synthetic data needs to be created with minor variations.\n",
+            "replies": [
+              {
+                "author": {
+                  "displayName": "Murugesan Narayanaswamy",
+                  "id": 10218904,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                  "tier": "EXPERT",
+                  "url": "/murugesann"
+                },
+                "authorType": "TOPIC",
+                "competitionRanking": 1166,
+                "content": "<p>oh, sorry, running GRPO for each category separately can lead to catastrophic forgetting. Quite a lot of time since I did ML training! But the point that additional set of newly created synthetic data and extra data where required will be necessary if you are going to train again with GRPO is still correct. </p>",
+                "feedbackTrackingData": {},
+                "id": 3453841,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-05-06T03:06:35.047Z",
+                "rawMarkdown": "oh, sorry, running GRPO for each category separately can lead to catastrophic forgetting. Quite a lot of time since I did ML training! But the point that additional set of newly created synthetic data and extra data where required will be necessary if you are going to train again with GRPO is still correct. ",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "Murugesan Narayanaswamy",
+                    "id": 10218904,
+                    "performanceTier": "EXPERT",
+                    "profileUrl": "/murugesann",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                    "tier": "EXPERT",
+                    "url": "/murugesann",
+                    "userId": 10218904,
+                    "userName": "murugesann"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true
+                }
+              }
+            ],
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "Murugesan Narayanaswamy",
+                "id": 10218904,
+                "performanceTier": "EXPERT",
+                "profileUrl": "/murugesann",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                "tier": "EXPERT",
+                "url": "/murugesann",
+                "userId": 10218904,
+                "userName": "murugesann"
+              }
+            },
+            "votes": {
+              "canUpvote": true,
+              "totalVotes": -2
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Taha",
+            "id": 33728306,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/tahaalam2009",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/33728306-kg.png?t=2026-04-25-07-15-05",
+            "tier": "CONTRIBUTOR",
+            "url": "/tahaalam2009",
+            "userId": 33728306,
+            "userName": "tahaalam2009"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 1,
+          "totalVotes": -1
+        }
+      },
+      {
+        "author": {
+          "displayName": "FO-SHIZZLE",
+          "id": 43446,
+          "progressionOptOut": true,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/43446-kg.jpg",
+          "tier": "CONTRIBUTOR",
+          "url": "/mcw0089"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 121,
+        "content": "<p>why would anyone give this Discussion a -1?</p>",
+        "feedbackTrackingData": {},
+        "id": 3451642,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-05-01T17:56:10.273Z",
+        "rawMarkdown": "why would anyone give this Discussion a -1?\n",
+        "replies": [
+          {
+            "author": {
+              "displayName": "CPMP",
+              "id": 75976,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/75976-gr.jpg",
+              "tier": "GRANDMASTER",
+              "url": "/cpmpml"
+            },
+            "authorType": "HOST",
+            "content": "<p>See <a href=\"https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/694975#3450715\" target=\"_blank\">https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/694975#3450715</a></p>",
+            "feedbackTrackingData": {},
+            "id": 3452032,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-05-02T11:50:00.977Z",
+            "rawMarkdown": "See https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/694975#3450715",
+            "votes": {
+              "canUpvote": true
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "FO-SHIZZLE",
+            "id": 43446,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/mcw0089",
+            "progressionOptOut": true,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/43446-kg.jpg",
+            "tier": "CONTRIBUTOR",
+            "url": "/mcw0089",
+            "userId": 43446,
+            "userName": "mcw0089"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 1
+        }
+      },
+      {
+        "author": {
+          "displayName": "Murugesan Narayanaswamy",
+          "id": 10218904,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "EXPERT",
+          "url": "/murugesann"
+        },
+        "authorType": "TOPIC",
+        "competitionRanking": 1166,
+        "content": "<p>I am wondering - are these downvotes due to disagreement with 'content' of this post or 'presentation style' of the post?!😄 It's three years since I participated in any kaggle competition, guess a lot of rules have changed - not sure what downvotes and upvotes serve! If its due to presentation style  - ok, whomever downvotes feel so - but if its about content, then there is no freedom of speech! Upvotes should be meant to raise or lower the posts ranking in discussion forum but downvotes should not be used for that purpose</p>",
+        "feedbackTrackingData": {},
+        "id": 3450533,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-30T00:33:13.730Z",
+        "rawMarkdown": "I am wondering - are these downvotes due to disagreement with 'content' of this post or 'presentation style' of the post?!😄 It's three years since I participated in any kaggle competition, guess a lot of rules have changed - not sure what downvotes and upvotes serve! If its due to presentation style  - ok, whomever downvotes feel so - but if its about content, then there is no freedom of speech! Upvotes should be meant to raise or lower the posts ranking in discussion forum but downvotes should not be used for that purpose",
+        "replies": [
+          {
+            "author": {
+              "displayName": "Saicharan Ramineni",
+              "id": 33573923,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/33573923-gr.jpg",
+              "tier": "CONTRIBUTOR",
+              "url": "/godlydonuts"
+            },
+            "authorType": "COMMENT",
+            "competitionRanking": 98,
+            "content": "<p>I think some people just downvoted everything.</p>",
+            "feedbackTrackingData": {},
+            "id": 3450547,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-04-30T01:46:52.967Z",
+            "rawMarkdown": "I think some people just downvoted everything.",
+            "teamUpInfo": {
+              "enabled": true,
+              "intro": "Anything and Everything to Win.",
+              "teamLeader": {
+                "displayName": "Saicharan Ramineni",
+                "id": 33573923,
+                "performanceTier": "CONTRIBUTOR",
+                "profileUrl": "/godlydonuts",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/33573923-gr.jpg",
+                "tier": "CONTRIBUTOR",
+                "url": "/godlydonuts",
+                "userId": 33573923,
+                "userName": "godlydonuts"
+              }
+            },
+            "votes": {
+              "canUpvote": true,
+              "totalUpvotes": 1,
+              "totalVotes": 1
+            }
+          },
+          {
+            "author": {
+              "displayName": "CPMP",
+              "id": 75976,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/75976-gr.jpg",
+              "tier": "GRANDMASTER",
+              "url": "/cpmpml"
+            },
+            "authorType": "HOST",
+            "content": "<p>I'm not sure, but maybe it is this:</p>\n<p>You make lots of claims, you criticize the mid point winner strategy,  but haven't submitted at all. </p>\n<p>Maybe you are right, but the only way to prove it is to submit and get a better score. Kaggle is not a place where opinion matters. Scores matters. It is why Kaggle is valuable: it cuts through the hype and crap that is so pervasive in AI on social media.</p>",
+            "feedbackTrackingData": {},
+            "id": 3450715,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-04-30T09:03:55.253Z",
+            "rawMarkdown": "I'm not sure, but maybe it is this:\n\nYou make lots of claims, you criticize the mid point winner strategy,  but haven't submitted at all. \n\nMaybe you are right, but the only way to prove it is to submit and get a better score. Kaggle is not a place where opinion matters. Scores matters. It is why Kaggle is valuable: it cuts through the hype and crap that is so pervasive in AI on social media.",
+            "replies": [
+              {
+                "author": {
+                  "displayName": "Murugesan Narayanaswamy",
+                  "id": 10218904,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                  "tier": "EXPERT",
+                  "url": "/murugesann"
+                },
+                "authorType": "TOPIC",
+                "competitionRanking": 1166,
+                "content": "<p>Sorry, but I am not participating in this competition. All the best!</p>",
+                "feedbackTrackingData": {},
+                "id": 3450745,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-30T10:18:39.680Z",
+                "rawMarkdown": "Sorry, but I am not participating in this competition. All the best!",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "Murugesan Narayanaswamy",
+                    "id": 10218904,
+                    "performanceTier": "EXPERT",
+                    "profileUrl": "/murugesann",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                    "tier": "EXPERT",
+                    "url": "/murugesann",
+                    "userId": 10218904,
+                    "userName": "murugesann"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true,
+                  "totalUpvotes": 1,
+                  "totalVotes": -4
+                }
+              },
+              {
+                "author": {
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                  "url": "/"
+                },
+                "authorType": "COMMENT",
+                "canDelete": true,
+                "feedbackTrackingData": {},
+                "id": 3450748,
+                "isCollapsed": true,
+                "isDeleted": true,
+                "isThankYou": false,
+                "isUserAuthor": true,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-30T10:21:24.533Z",
+                "rawMarkdown": "",
+                "votes": {}
+              },
+              {
+                "author": {
+                  "displayName": "CPMP",
+                  "id": 75976,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/75976-gr.jpg",
+                  "tier": "GRANDMASTER",
+                  "url": "/cpmpml"
+                },
+                "authorType": "HOST",
+                "content": "<blockquote>\n  <p>Sorry, but I am not participating in this competition. All the best!</p>\n</blockquote>\n<p>Then why are you posting? Why are you asking about down votes then dismissing the answers?</p>\n<p>You look more and more like a troll I must say. I wish there was a way to mute specific people on Kaggle forums.</p>",
+                "feedbackTrackingData": {},
+                "id": 3450768,
+                "isCollapsed": true,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-30T11:42:34.007Z",
+                "rawMarkdown": "> Sorry, but I am not participating in this competition. All the best!\n\nThen why are you posting? Why are you asking about down votes then dismissing the answers?\n\nYou look more and more like a troll I must say. I wish there was a way to mute specific people on Kaggle forums.",
+                "reactions": [
+                  {
+                    "emoji": "FUNNY",
+                    "featuredUserNames": [
+                      "kishanvavdara"
+                    ],
+                    "userCount": 1
+                  }
+                ],
+                "votes": {
+                  "canUpvote": true,
+                  "totalUpvotes": 4,
+                  "totalVotes": 4
+                }
+              },
+              {
+                "author": {
+                  "displayName": "Murugesan Narayanaswamy",
+                  "id": 10218904,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                  "tier": "EXPERT",
+                  "url": "/murugesann"
+                },
+                "authorType": "TOPIC",
+                "competitionRanking": 1166,
+                "content": "<p>I am not aware that one cannot participate in discussion forums if he is not submitting notebooks for the competition - may be some new rule. </p>",
+                "feedbackTrackingData": {},
+                "id": 3450832,
+                "isCollapsed": true,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-30T14:02:30.037Z",
+                "rawMarkdown": "I am not aware that one cannot participate in discussion forums if he is not submitting notebooks for the competition - may be some new rule. ",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "Murugesan Narayanaswamy",
+                    "id": 10218904,
+                    "performanceTier": "EXPERT",
+                    "profileUrl": "/murugesann",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                    "tier": "EXPERT",
+                    "url": "/murugesann",
+                    "userId": 10218904,
+                    "userName": "murugesann"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true,
+                  "totalUpvotes": 1
+                }
+              },
+              {
+                "author": {
+                  "displayName": "CPMP",
+                  "id": 75976,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/75976-gr.jpg",
+                  "tier": "GRANDMASTER",
+                  "url": "/cpmpml"
+                },
+                "authorType": "HOST",
+                "content": "<blockquote>\n  <p>I am not aware that one cannot participate in discussion forums</p>\n</blockquote>\n<p>Neither am I.</p>",
+                "feedbackTrackingData": {},
+                "id": 3450861,
+                "isCollapsed": true,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-30T15:00:38.187Z",
+                "rawMarkdown": "> I am not aware that one cannot participate in discussion forums\n\nNeither am I.",
+                "votes": {
+                  "canUpvote": true
+                }
+              },
+              {
+                "author": {
+                  "displayName": "Murugesan Narayanaswamy",
+                  "id": 10218904,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                  "tier": "EXPERT",
+                  "url": "/murugesann"
+                },
+                "authorType": "TOPIC",
+                "competitionRanking": 1166,
+                "content": "<p>You have only said about submitting notebooks - 'Maybe you are right, but the only way to prove it is to submit and get a better score.' - it is not necessary that everybody should prove his ideas! I would rather that the discussion should lead to conclusions that can be validated, by the community. Discussions are the way to move towards better solutions, and so every view need not require the burden of proof.</p>\n<p>I was really not much bothered about downvotes but your labelling of my post/comments as trolling is totally wrong, completely unwarranted and unacceptable coming as it is from the competition host, as there is nothing of a troll here for those who understand the significance of the content involved for the success of the competition.</p>",
+                "feedbackTrackingData": {},
+                "id": 3452251,
+                "isCollapsed": true,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-05-02T21:48:22.823Z",
+                "rawMarkdown": "You have only said about submitting notebooks - 'Maybe you are right, but the only way to prove it is to submit and get a better score.' - it is not necessary that everybody should prove his ideas! I would rather that the discussion should lead to conclusions that can be validated, by the community. Discussions are the way to move towards better solutions, and so every view need not require the burden of proof.\n\nI was really not much bothered about downvotes but your labelling of my post/comments as trolling is totally wrong, completely unwarranted and unacceptable coming as it is from the competition host, as there is nothing of a troll here for those who understand the significance of the content involved for the success of the competition.",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "Murugesan Narayanaswamy",
+                    "id": 10218904,
+                    "performanceTier": "EXPERT",
+                    "profileUrl": "/murugesann",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                    "tier": "EXPERT",
+                    "url": "/murugesann",
+                    "userId": 10218904,
+                    "userName": "murugesann"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true,
+                  "totalUpvotes": 1,
+                  "totalVotes": -2
+                }
+              }
+            ],
+            "votes": {
+              "canUpvote": true,
+              "totalUpvotes": 9,
+              "totalVotes": 9
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Murugesan Narayanaswamy",
+            "id": 10218904,
+            "performanceTier": "EXPERT",
+            "profileUrl": "/murugesann",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+            "tier": "EXPERT",
+            "url": "/murugesann",
+            "userId": 10218904,
+            "userName": "murugesann"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 1,
+          "totalVotes": -2
+        }
+      },
+      {
+        "author": {
+          "displayName": "Ogurtsov",
+          "id": 682731,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/682731-kg.jpg?t=2024-04-01-08-44-00",
+          "tier": "MASTER",
+          "url": "/ogurtsov"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 618,
+        "content": "<blockquote>\n  <p>In this competition, this makes GRPO very essential. In fact, the mid-progress prize of 0.86 is literally so - the model trained for 0.86 score should now be trained with GRPO so that it builds generic reasoning circuits that strenthen the core reasoning capabilities of the model. </p>\n</blockquote>\n<p>The only real goal (for participants) of any kaggle competition is to achieve a good score on unseen test dataset. We assume test set, at least public, is very similar to the train one, and we have strong evidence of it. And if train samples are composed this way, we have nothing to do but fine-tune model to solve programmatically solvable tasks. </p>\n<p>p.s. I don't see any examples in between programmatically solvable and completely unsolvable ones like inferring the meaning of symbol without training examples.</p>",
+        "feedbackTrackingData": {},
+        "id": 3449487,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-28T11:01:20.427Z",
+        "rawMarkdown": ">In this competition, this makes GRPO very essential. In fact, the mid-progress prize of 0.86 is literally so - the model trained for 0.86 score should now be trained with GRPO so that it builds generic reasoning circuits that strenthen the core reasoning capabilities of the model. \n\nThe only real goal (for participants) of any kaggle competition is to achieve a good score on unseen test dataset. We assume test set, at least public, is very similar to the train one, and we have strong evidence of it. And if train samples are composed this way, we have nothing to do but fine-tune model to solve programmatically solvable tasks. \n\np.s. I don't see any examples in between programmatically solvable and completely unsolvable ones like inferring the meaning of symbol without training examples.",
+        "replies": [
+          {
+            "author": {
+              "displayName": "Murugesan Narayanaswamy",
+              "id": 10218904,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+              "tier": "EXPERT",
+              "url": "/murugesann"
+            },
+            "authorType": "TOPIC",
+            "competitionRanking": 1166,
+            "content": "<p>In classical machine learning, we have this concept of splitting the dataset into training and validation / test dataset. However, those datasets cannot be solved programmatically. So, taking a sample of training dataset and keeping it for testing works. But when the training dataset is programmatically solvable, the test dataset should bo beyond the training dataset distribution. If competition organizers did not bother about this and the idea is just to convert the program logic involved in training dataset into LLM weights, then it is fine!</p>",
+            "feedbackTrackingData": {},
+            "id": 3449588,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-04-28T15:30:31.513Z",
+            "rawMarkdown": "In classical machine learning, we have this concept of splitting the dataset into training and validation / test dataset. However, those datasets cannot be solved programmatically. So, taking a sample of training dataset and keeping it for testing works. But when the training dataset is programmatically solvable, the test dataset should bo beyond the training dataset distribution. If competition organizers did not bother about this and the idea is just to convert the program logic involved in training dataset into LLM weights, then it is fine!",
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "Murugesan Narayanaswamy",
+                "id": 10218904,
+                "performanceTier": "EXPERT",
+                "profileUrl": "/murugesann",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                "tier": "EXPERT",
+                "url": "/murugesann",
+                "userId": 10218904,
+                "userName": "murugesann"
+              }
+            },
+            "votes": {
+              "canUpvote": true,
+              "totalVotes": -2
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Ogurtsov",
+            "id": 682731,
+            "performanceTier": "MASTER",
+            "profileUrl": "/ogurtsov",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/682731-kg.jpg?t=2024-04-01-08-44-00",
+            "tier": "MASTER",
+            "url": "/ogurtsov",
+            "userId": 682731,
+            "userName": "ogurtsov"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 2,
+          "totalVotes": 1
+        }
+      },
+      {
+        "author": {
+          "displayName": "Saicharan Ramineni",
+          "id": 33573923,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/33573923-gr.jpg",
+          "tier": "CONTRIBUTOR",
+          "url": "/godlydonuts"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 98,
+        "content": "<p>Have you considered why no one else has implemented GRPO yet?</p>",
+        "feedbackTrackingData": {},
+        "id": 3449436,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-28T07:17:00.227Z",
+        "rawMarkdown": "Have you considered why no one else has implemented GRPO yet?",
+        "replies": [
+          {
+            "author": {
+              "displayName": "Russell Kirk",
+              "id": 27681700,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/27681700-kg.jpg?t=2026-03-31-11-28-38",
+              "tier": "CONTRIBUTOR",
+              "url": "/russcore"
+            },
+            "authorType": "COMMENT",
+            "competitionRanking": 1379,
+            "content": "<p>I'm curious; why not? </p>",
+            "feedbackTrackingData": {},
+            "id": 3449455,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-04-28T08:32:08.680Z",
+            "rawMarkdown": "I'm curious; why not? ",
+            "replies": [
+              {
+                "author": {
+                  "displayName": "Taha",
+                  "id": 33728306,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/33728306-kg.png?t=2026-04-25-07-15-05",
+                  "tier": "CONTRIBUTOR",
+                  "url": "/tahaalam2009"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 312,
+                "content": "<p>too slow , but peope did fix and gpro is waste of compute i feel </p>",
+                "feedbackTrackingData": {},
+                "id": 3449460,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-28T08:52:16.570Z",
+                "rawMarkdown": "too slow , but peope did fix and gpro is waste of compute i feel ",
+                "reactions": [
+                  {
+                    "emoji": "THANK_YOU",
+                    "featuredUserNames": [
+                      "russcore"
+                    ],
+                    "userCount": 1
+                  }
+                ],
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "Taha",
+                    "id": 33728306,
+                    "performanceTier": "CONTRIBUTOR",
+                    "profileUrl": "/tahaalam2009",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/33728306-kg.png?t=2026-04-25-07-15-05",
+                    "tier": "CONTRIBUTOR",
+                    "url": "/tahaalam2009",
+                    "userId": 33728306,
+                    "userName": "tahaalam2009"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true,
+                  "totalUpvotes": 1
+                }
+              },
+              {
+                "author": {
+                  "displayName": "koulet3011",
+                  "id": 21318590,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/21318590-kg.jpeg?t=2024-07-11-10-43-20",
+                  "tier": "EXPERT",
+                  "url": "/koubasho"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 198,
+                "content": "<p>I think it's simply because nobody has enough compute resources to do it.</p>",
+                "feedbackTrackingData": {},
+                "id": 3449472,
+                "isCollapsed": true,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-28T09:48:57.860Z",
+                "rawMarkdown": "I think it's simply because nobody has enough compute resources to do it.",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "koulet3011",
+                    "id": 21318590,
+                    "performanceTier": "EXPERT",
+                    "profileUrl": "/koubasho",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/21318590-kg.jpeg?t=2024-07-11-10-43-20",
+                    "tier": "EXPERT",
+                    "url": "/koubasho",
+                    "userId": 21318590,
+                    "userName": "koubasho"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true,
+                  "totalVotes": -2
+                }
+              },
+              {
+                "author": {
+                  "displayName": "Murugesan Narayanaswamy",
+                  "id": 10218904,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                  "tier": "EXPERT",
+                  "url": "/murugesann"
+                },
+                "authorType": "TOPIC",
+                "competitionRanking": 1166,
+                "content": "<p>It is waste of compute if done before training with 'cold start SFT with CoT traces' for these kind of problems. However, if the test dataset is a subset of programmatically solvable training dataset, then it is not required but I dont understand what purpose this competition would serve for NVIDIA Nemotron reasoning capabilities!</p>",
+                "feedbackTrackingData": {},
+                "id": 3449593,
+                "isCollapsed": true,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-28T15:33:55.593Z",
+                "rawMarkdown": "It is waste of compute if done before training with 'cold start SFT with CoT traces' for these kind of problems. However, if the test dataset is a subset of programmatically solvable training dataset, then it is not required but I dont understand what purpose this competition would serve for NVIDIA Nemotron reasoning capabilities!",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "Murugesan Narayanaswamy",
+                    "id": 10218904,
+                    "performanceTier": "EXPERT",
+                    "profileUrl": "/murugesann",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                    "tier": "EXPERT",
+                    "url": "/murugesann",
+                    "userId": 10218904,
+                    "userName": "murugesann"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true,
+                  "totalUpvotes": 1
+                }
+              },
+              {
+                "author": {
+                  "displayName": "Taha",
+                  "id": 33728306,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/33728306-kg.png?t=2026-04-25-07-15-05",
+                  "tier": "CONTRIBUTOR",
+                  "url": "/tahaalam2009"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 312,
+                "content": "<p>exactly i run of my qouta before i even do anything</p>",
+                "feedbackTrackingData": {},
+                "id": 3450118,
+                "isCollapsed": true,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-29T10:36:17.067Z",
+                "rawMarkdown": "exactly i run of my qouta before i even do anything",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "Taha",
+                    "id": 33728306,
+                    "performanceTier": "CONTRIBUTOR",
+                    "profileUrl": "/tahaalam2009",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/33728306-kg.png?t=2026-04-25-07-15-05",
+                    "tier": "CONTRIBUTOR",
+                    "url": "/tahaalam2009",
+                    "userId": 33728306,
+                    "userName": "tahaalam2009"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true
+                }
+              },
+              {
+                "author": {
+                  "displayName": "Manish Swami",
+                  "id": 16167361,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/16167361-kg.jpg?t=2025-12-08-08-52-10",
+                  "tier": "EXPERT",
+                  "url": "/manish756"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 128,
+                "content": "<p>because no one get better CoT and without better CoT GRPO is wastage of computation and risk of regression is undeniable </p>",
+                "feedbackTrackingData": {},
+                "id": 3457268,
+                "isCollapsed": true,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-05-13T13:06:41.107Z",
+                "rawMarkdown": "because no one get better CoT and without better CoT GRPO is wastage of computation and risk of regression is undeniable ",
+                "teamUpInfo": {
+                  "intro": "looking for teammate , Those have understanding of what going on!!",
+                  "teamLeader": {
+                    "displayName": "Manish Swami",
+                    "id": 16167361,
+                    "performanceTier": "EXPERT",
+                    "profileUrl": "/manish756",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/16167361-kg.jpg?t=2025-12-08-08-52-10",
+                    "tier": "EXPERT",
+                    "url": "/manish756",
+                    "userId": 16167361,
+                    "userName": "manish756"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true
+                }
+              }
+            ],
+            "teamUpInfo": {
+              "enabled": true,
+              "intro": "If you got the time, I got the data .. I hope :D",
+              "teamLeader": {
+                "displayName": "Russell Kirk",
+                "id": 27681700,
+                "performanceTier": "CONTRIBUTOR",
+                "profileUrl": "/russcore",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/27681700-kg.jpg?t=2026-03-31-11-28-38",
+                "tier": "CONTRIBUTOR",
+                "url": "/russcore",
+                "userId": 27681700,
+                "userName": "russcore"
+              }
+            },
+            "votes": {
+              "canUpvote": true,
+              "totalVotes": -1
+            }
+          },
+          {
+            "author": {
+              "displayName": "CPMP",
+              "id": 75976,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/75976-gr.jpg",
+              "tier": "GRANDMASTER",
+              "url": "/cpmpml"
+            },
+            "authorType": "HOST",
+            "content": "<p>No one shared a public notebook with GRPO would be more appropriate.</p>",
+            "feedbackTrackingData": {},
+            "id": 3449629,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-04-28T16:54:18.363Z",
+            "rawMarkdown": "No one shared a public notebook with GRPO would be more appropriate.",
+            "replies": [
+              {
+                "author": {
+                  "displayName": "Murugesan Narayanaswamy",
+                  "id": 10218904,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                  "tier": "EXPERT",
+                  "url": "/murugesann"
+                },
+                "authorType": "TOPIC",
+                "competitionRanking": 1166,
+                "content": "<p>It's three years since I have interacted with you! Glad you are now organizing this competition!</p>\n<p>I am wondering whether the test dataset can be a split of training dataset when the problems are programmatically solvable, if the objective is to make Nemotron acquire generic reasoning capabilities. May be it has completely different distribution but still SFT with CoT enables a score of 0.86, which would be a tremendous achievement. If this clarity is not there, then any methods to improve the score from 0.86 would be mostly one of overfitting rather than extending the capabilities.</p>",
+                "feedbackTrackingData": {},
+                "id": 3449828,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-28T23:38:46.407Z",
+                "rawMarkdown": "It's three years since I have interacted with you! Glad you are now organizing this competition!\n\nI am wondering whether the test dataset can be a split of training dataset when the problems are programmatically solvable, if the objective is to make Nemotron acquire generic reasoning capabilities. May be it has completely different distribution but still SFT with CoT enables a score of 0.86, which would be a tremendous achievement. If this clarity is not there, then any methods to improve the score from 0.86 would be mostly one of overfitting rather than extending the capabilities.\n",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "Murugesan Narayanaswamy",
+                    "id": 10218904,
+                    "performanceTier": "EXPERT",
+                    "profileUrl": "/murugesann",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                    "tier": "EXPERT",
+                    "url": "/murugesann",
+                    "userId": 10218904,
+                    "userName": "murugesann"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true,
+                  "totalVotes": -5
+                }
+              }
+            ],
+            "votes": {
+              "canUpvote": true,
+              "totalUpvotes": 1
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "enabled": true,
+          "intro": "Anything and Everything to Win.",
+          "teamLeader": {
+            "displayName": "Saicharan Ramineni",
+            "id": 33573923,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/godlydonuts",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/33573923-gr.jpg",
+            "tier": "CONTRIBUTOR",
+            "url": "/godlydonuts",
+            "userId": 33573923,
+            "userName": "godlydonuts"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalVotes": -1
+        }
+      },
+      {
+        "author": {
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "url": "/"
+        },
+        "authorType": "COMMENT",
+        "canDelete": true,
+        "feedbackTrackingData": {},
+        "id": 3456380,
+        "isDeleted": true,
+        "isThankYou": false,
+        "isUserAuthor": true,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-05-11T19:19:19.690Z",
+        "rawMarkdown": "",
+        "votes": {}
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "Murugesan Narayanaswamy",
+        "id": 10218904,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+        "tier": "EXPERT",
+        "url": "/murugesann"
+      },
+      "authorType": "TOPIC",
+      "competitionRanking": 1166,
+      "content": "<p>Congratulations to <a href=\"https://www.kaggle.com/huikang\" target=\"_blank\">@huikang</a> for the mid-progress prize! What a tremendous effort he had put and then his kaggle spirit making everything public!</p>\n<p>But there is one thing I disagree - his strategy for this competition where he says  he bets against reinforcement training ('I already have the optimal policy for solvable problems. I already know the best next token for the LLM to make (assuming they have been making all the correct moves). The only job of the LLM is to follow the policy')</p>\n<p>The concept of machine learning is meant for function approximation where no singe programmatic function can be designed to model the system behavior. In the case of Nemotron reasoning challenge, it has been shown most of the problems can be programmatically solved. Why do we then require a machine learning or AI model? Given that the same argument can be applied for LLMs acquiring capabilities for numerical calculations (that calculators can do) and basic programming tasks, we can argue that building such reasoning capabilities as part of the LLM weights can strengthen the reasoning horizon of LLMs like the way coding and math increased the overall reasoning capabilities.</p>\n<p>However, if these reasoning capabilities should become core of the AI model, then it cannot overfit the given training samples. If the training samples can be solved upto 87% and the test data would also give a leaderboard score of 0.87, the whole exercise becomes meaningless.</p>\n<p>On the other hand, I think it is for these kind of problems, the reinforcement learning is envisaged - the model has to build its own reasoning paths to achieve the specified goals. However, the model has infinite states to explore which makes GRPO quite challenging. The solution is the cold start SFT where the basic paths are built using CoT traces. Once the basic boundary and context is set, then GRPO can explore the various reasoning paths to achieve the goals. This is why DeepSeek-R1 used DeepSeek's CoT traces before GRPO training.</p>\n<p>In this competition, this makes GRPO very essential. In fact, the mid-progress prize of 0.86 is literally so - the model trained for 0.86 score should now be trained with GRPO so that it builds generic reasoning circuits that strenthen the core reasoning capabilities of the model. </p>\n<p>In fact, I am convinced that the winning pipeline for this competition would be exactly similar to the pipeline used by deepseek for creating a full fledged reasoning model! So, I think GRPO is quite essential part of this competition and I strongly disagree with <a href=\"https://www.kaggle.com/huikang\" target=\"_blank\">@huikang</a> and consider without GRPO, the model will not learn a generic policy that would help strengthen its reasoning capabilities. </p>",
+      "feedbackTrackingData": {},
+      "id": 3449319,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-04-27T21:56:16.653Z",
+      "rawMarkdown": "Congratulations to @huikang for the mid-progress prize! What a tremendous effort he had put and then his kaggle spirit making everything public!\n\nBut there is one thing I disagree - his strategy for this competition where he says  he bets against reinforcement training ('I already have the optimal policy for solvable problems. I already know the best next token for the LLM to make (assuming they have been making all the correct moves). The only job of the LLM is to follow the policy')\n\nThe concept of machine learning is meant for function approximation where no singe programmatic function can be designed to model the system behavior. In the case of Nemotron reasoning challenge, it has been shown most of the problems can be programmatically solved. Why do we then require a machine learning or AI model? Given that the same argument can be applied for LLMs acquiring capabilities for numerical calculations (that calculators can do) and basic programming tasks, we can argue that building such reasoning capabilities as part of the LLM weights can strengthen the reasoning horizon of LLMs like the way coding and math increased the overall reasoning capabilities.\n\nHowever, if these reasoning capabilities should become core of the AI model, then it cannot overfit the given training samples. If the training samples can be solved upto 87% and the test data would also give a leaderboard score of 0.87, the whole exercise becomes meaningless.\n\nOn the other hand, I think it is for these kind of problems, the reinforcement learning is envisaged - the model has to build its own reasoning paths to achieve the specified goals. However, the model has infinite states to explore which makes GRPO quite challenging. The solution is the cold start SFT where the basic paths are built using CoT traces. Once the basic boundary and context is set, then GRPO can explore the various reasoning paths to achieve the goals. This is why DeepSeek-R1 used DeepSeek's CoT traces before GRPO training.\n\nIn this competition, this makes GRPO very essential. In fact, the mid-progress prize of 0.86 is literally so - the model trained for 0.86 score should now be trained with GRPO so that it builds generic reasoning circuits that strenthen the core reasoning capabilities of the model. \n\nIn fact, I am convinced that the winning pipeline for this competition would be exactly similar to the pipeline used by deepseek for creating a full fledged reasoning model! So, I think GRPO is quite essential part of this competition and I strongly disagree with @huikang and consider without GRPO, the model will not learn a generic policy that would help strengthen its reasoning capabilities. ",
+      "teamUpInfo": {
+        "intro": "",
+        "teamLeader": {
+          "displayName": "Murugesan Narayanaswamy",
+          "id": 10218904,
+          "performanceTier": "EXPERT",
+          "profileUrl": "/murugesann",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "EXPERT",
+          "url": "/murugesann",
+          "userId": 10218904,
+          "userName": "murugesann"
+        }
+      },
+      "votes": {
+        "canUpvote": true,
+        "totalUpvotes": 3,
+        "totalVotes": -23
+      }
+    },
+    "firstMessageId": 3449319,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 694975,
+    "name": "GRPO is must for this competition",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-04-27T21:56:16.654343Z",
+    "totalMessages": 26,
+    "totalVotes": -23,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/694975"
+  }
+}

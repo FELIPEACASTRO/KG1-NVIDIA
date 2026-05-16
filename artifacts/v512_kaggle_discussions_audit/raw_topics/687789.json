@@ -1,0 +1,99 @@
+{
+  "forumTopic": {
+    "authorId": 25849260,
+    "authorPerformanceTier": "EXPERT",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "25849260-kg.png?t=2026-04-21-18-23-19",
+    "authorUserDisplayName": "Svanik Kolli",
+    "authorUserName": "svanikkolli",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "m4nocha",
+          "id": 21092801,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/21092801-kg.jpg?t=2024-12-20-16-21-01",
+          "tier": "CONTRIBUTOR",
+          "url": "/aksh1t"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 1450,
+        "content": "<p>1% relative error for numerical questions. else no relief is given and the Score is calculated using Pass@1 at 0 temperature</p>",
+        "feedbackTrackingData": {},
+        "id": 3435540,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-04T11:19:26.243Z",
+        "rawMarkdown": "1% relative error for numerical questions. else no relief is given and the Score is calculated using Pass@1 at 0 temperature",
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "m4nocha",
+            "id": 21092801,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/aksh1t",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/21092801-kg.jpg?t=2024-12-20-16-21-01",
+            "tier": "CONTRIBUTOR",
+            "url": "/aksh1t",
+            "userId": 21092801,
+            "userName": "aksh1t"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "Svanik Kolli",
+        "id": 25849260,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/25849260-kg.png?t=2026-04-21-18-23-19",
+        "tier": "EXPERT",
+        "url": "/svanikkolli"
+      },
+      "authorType": "TOPIC",
+      "competitionRanking": 123,
+      "content": "<p>Hey everyone, quick question about scoring in the NVIDIA Nemotron Model Reasoning Challenge </p>\n<p>Does anyone have a clear understanding of how the evaluation metric actually works?</p>\n<p>From what I’ve observed, it seems heavily tied to whether the final answer is correct (especially formatting like boxed answers), but I’m not sure how much partial reasoning or intermediate steps are considered in the score.</p>\n<p>Is it purely exact-match on the final answer, or is there some tolerance / grading for reasoning quality as well?</p>\n<p>Also curious if small formatting differences (like missing \\boxed{}) can significantly impact the score.</p>\n<p>Also, I’m working locally on a MacBook M3 Pro (16 GB Memory) and trying to push into the 0.75+ range without relying on Kaggle notebooks. Has anyone managed to reach that level locally, or is external compute basically required at that point?</p>\n<p>Would really appreciate any insights or experiences. Thanks </p>",
+      "feedbackTrackingData": {},
+      "id": 3435093,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-04-03T17:02:02.070Z",
+      "rawMarkdown": "Hey everyone, quick question about scoring in the NVIDIA Nemotron Model Reasoning Challenge \n\nDoes anyone have a clear understanding of how the evaluation metric actually works?\n\nFrom what I’ve observed, it seems heavily tied to whether the final answer is correct (especially formatting like boxed answers), but I’m not sure how much partial reasoning or intermediate steps are considered in the score.\n\nIs it purely exact-match on the final answer, or is there some tolerance / grading for reasoning quality as well?\n\nAlso curious if small formatting differences (like missing \\boxed{}) can significantly impact the score.\n\nAlso, I’m working locally on a MacBook M3 Pro (16 GB Memory) and trying to push into the 0.75+ range without relying on Kaggle notebooks. Has anyone managed to reach that level locally, or is external compute basically required at that point?\n\nWould really appreciate any insights or experiences. Thanks \n",
+      "teamUpInfo": {
+        "intro": "",
+        "teamLeader": {
+          "displayName": "Svanik Kolli",
+          "id": 25849260,
+          "performanceTier": "EXPERT",
+          "profileUrl": "/svanikkolli",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/25849260-kg.png?t=2026-04-21-18-23-19",
+          "tier": "EXPERT",
+          "url": "/svanikkolli",
+          "userId": 25849260,
+          "userName": "svanikkolli"
+        }
+      },
+      "votes": {
+        "canUpvote": true
+      }
+    },
+    "firstMessageId": 3435093,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 687789,
+    "name": "Kaggle Scoring ",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-04-03T17:02:02.070602200Z",
+    "totalMessages": 1,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/687789"
+  }
+}

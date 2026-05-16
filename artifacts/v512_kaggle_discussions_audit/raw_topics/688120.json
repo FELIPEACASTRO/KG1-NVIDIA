@@ -1,0 +1,117 @@
+{
+  "forumTopic": {
+    "authorId": 2012837,
+    "authorPerformanceTier": "CONTRIBUTOR",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "2012837-kg.jpg",
+    "authorUserDisplayName": "Sahil Patil",
+    "authorUserName": "sahilpatil",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "lucian kucera",
+          "id": 17819385,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "CONTRIBUTOR",
+          "url": "/luciankucera"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 1662,
+        "content": "<p>I can share few tips:</p>\n<ol>\n<li>For example bit problems aren't determinsitc, I have prooven that such problems have infinite wrong solution. So you need to teach model test distribution of data. Which might be impossible task. </li>\n<li>Generate high quality chain of thought data: You don't need 100k data, but high quality traces. For example model strugles with concept of Majority/Choice. It doesn't know they can be used to emulate NOR and NAND. So you prepare high quality data that aligns model, with knowladge of Choice making it possible to emulate NOR/NAND.</li>\n<li>Equations are very difficult, but my guess is they are more deterministic, tho there is blatantly wrong data in train set. So maybe filtering could help.</li>\n<li>Other problems seem to be easily trained.</li>\n<li>So I would probably focus on equation problems.</li>\n<li>For finuting best is to isolate tasks and try to improve model on one task. Use part of the training set for eval. Lets say u try to improve equations. U create lora only trained on COT data for equation and than use vllm for evaulation. If beats baseline ur data was good, otherwise your data sucks and u need reevaluate it.</li>\n<li>Another use Muon optimizer: Its better for optimizing LORA, there are several papers on it.</li>\n<li>Dont quantize weights.</li>\n<li>Use unsloth, tho gains here are minimal, since both transformers and unsloth use mamba_ssm kernels</li>\n<li>Use RLVR after sfting model over baseline. I saw huge boosts on bit problemss after 3 epochs of rlvr.</li>\n<li>Dont waster ur time tuning hyperparametrs, untill u find good data. Rank=32 and all linear layers is good default.</li>\n<li>Sfting over pair of values is trash: since it destroys model reasoning. So use coherent COT for training.</li>\n</ol>",
+        "feedbackTrackingData": {},
+        "id": 3435914,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-05T01:30:20.133Z",
+        "rawMarkdown": "I can share few tips:\n1. For example bit problems aren't determinsitc, I have prooven that such problems have infinite wrong solution. So you need to teach model test distribution of data. Which might be impossible task. \n2. Generate high quality chain of thought data: You don't need 100k data, but high quality traces. For example model strugles with concept of Majority/Choice. It doesn't know they can be used to emulate NOR and NAND. So you prepare high quality data that aligns model, with knowladge of Choice making it possible to emulate NOR/NAND.\n3. Equations are very difficult, but my guess is they are more deterministic, tho there is blatantly wrong data in train set. So maybe filtering could help.\n4. Other problems seem to be easily trained.\n5. So I would probably focus on equation problems.\n7. For finuting best is to isolate tasks and try to improve model on one task. Use part of the training set for eval. Lets say u try to improve equations. U create lora only trained on COT data for equation and than use vllm for evaulation. If beats baseline ur data was good, otherwise your data sucks and u need reevaluate it.\n8. Another use Muon optimizer: Its better for optimizing LORA, there are several papers on it.\n9. Dont quantize weights.\n10. Use unsloth, tho gains here are minimal, since both transformers and unsloth use mamba_ssm kernels\n11. Use RLVR after sfting model over baseline. I saw huge boosts on bit problemss after 3 epochs of rlvr.\n12. Dont waster ur time tuning hyperparametrs, untill u find good data. Rank=32 and all linear layers is good default.\n13. Sfting over pair of values is trash: since it destroys model reasoning. So use coherent COT for training.",
+        "reactions": [
+          {
+            "emoji": "THANK_YOU",
+            "featuredUserNames": [
+              "sahilpatil",
+              "yinh21",
+              "smartorz",
+              "yashm917",
+              "renta0426",
+              "zefirrrr",
+              "mekory"
+            ],
+            "userCount": 7
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "lucian kucera",
+            "id": 17819385,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/luciankucera",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+            "tier": "CONTRIBUTOR",
+            "url": "/luciankucera",
+            "userId": 17819385,
+            "userName": "luciankucera"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 3,
+          "totalVotes": 3
+        }
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "Sahil Patil",
+        "id": 2012837,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2012837-kg.jpg",
+        "tier": "CONTRIBUTOR",
+        "url": "/sahilpatil"
+      },
+      "authorType": "TOPIC",
+      "competitionRanking": 2495,
+      "content": "<p>Hi everyone,</p>\n<p>A lot of participants here are new to LoRA/PEFT and training adapters. This comp’s setup-Nemotron base + LoRA zip submission + exact-match puzzle eval-is a concrete goal, but the learning curve is still steep without a good reading order and a few battle-tested patterns.</p>\n<p>If you’ve fine-tuned LLMs before (especially LoRA on HF stacks, Kaggle GPUs, or similar reasoning/supervised setups), it would help a lot if you could pay it forward in this thread:</p>\n<p>One or two resources you’d actually assign to a colleague (docs, posts, notebooks-not necessarily Nemotron-specific).\nPractical gotchas for this kind of task (OOM, LR, eval splits, answer formatting for strict match, exporting a clean adapter).\nOptional: a minimal “do this first, then this” path in a few bullets.\nIf you’re newer, reply with where you’re stuck or your background-short answers from people who’ve done this before often save days of thrashing.</p>\n<p>Let’s make this a curated resource pile for anyone who wants to learn fine-tuning through this competition. Thanks for sharing.</p>",
+      "feedbackTrackingData": {},
+      "id": 3435753,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-04-04T17:18:51.820Z",
+      "rawMarkdown": "Hi everyone,\n\nA lot of participants here are new to LoRA/PEFT and training adapters. This comp’s setup-Nemotron base + LoRA zip submission + exact-match puzzle eval-is a concrete goal, but the learning curve is still steep without a good reading order and a few battle-tested patterns.\n\nIf you’ve fine-tuned LLMs before (especially LoRA on HF stacks, Kaggle GPUs, or similar reasoning/supervised setups), it would help a lot if you could pay it forward in this thread:\n\nOne or two resources you’d actually assign to a colleague (docs, posts, notebooks-not necessarily Nemotron-specific).\nPractical gotchas for this kind of task (OOM, LR, eval splits, answer formatting for strict match, exporting a clean adapter).\nOptional: a minimal “do this first, then this” path in a few bullets.\nIf you’re newer, reply with where you’re stuck or your background-short answers from people who’ve done this before often save days of thrashing.\n\nLet’s make this a curated resource pile for anyone who wants to learn fine-tuning through this competition. Thanks for sharing.",
+      "teamUpInfo": {
+        "intro": "",
+        "teamLeader": {
+          "displayName": "Sahil Patil",
+          "id": 2012837,
+          "performanceTier": "CONTRIBUTOR",
+          "profileUrl": "/sahilpatil",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2012837-kg.jpg",
+          "tier": "CONTRIBUTOR",
+          "url": "/sahilpatil",
+          "userId": 2012837,
+          "userName": "sahilpatil"
+        }
+      },
+      "votes": {
+        "canUpvote": true,
+        "totalUpvotes": 2
+      }
+    },
+    "firstMessageId": 3435753,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 688120,
+    "name": "Calling experienced fine-tuners: share LoRA / PEFT resources for newcomers in this challenge",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-04-04T17:18:51.821010200Z",
+    "totalMessages": 1,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/688120"
+  }
+}

@@ -1,0 +1,217 @@
+{
+  "forumTopic": {
+    "authorId": 24432429,
+    "authorPerformanceTier": "CONTRIBUTOR",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "default-thumb.png",
+    "authorUserDisplayName": "yuki",
+    "authorUserName": "kazukitejima",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "hwe owe",
+          "id": 28884560,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/28884560-kg.png?t=2026-02-13-13-07-25",
+          "tier": "CONTRIBUTOR",
+          "url": "/hweowe"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 2229,
+        "content": "<p>hi,can you add me:)</p>",
+        "feedbackTrackingData": {},
+        "id": 3423973,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-19T07:45:16.923Z",
+        "rawMarkdown": "hi,can you add me:)",
+        "teamUpInfo": {
+          "enabled": true,
+          "intro": "",
+          "teamLeader": {
+            "displayName": "hwe owe",
+            "id": 28884560,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/hweowe",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/28884560-kg.png?t=2026-02-13-13-07-25",
+            "tier": "CONTRIBUTOR",
+            "url": "/hweowe",
+            "userId": 28884560,
+            "userName": "hweowe"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      },
+      {
+        "author": {
+          "displayName": "aichu tan",
+          "id": 12035561,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "CONTRIBUTOR",
+          "url": "/aichutan"
+        },
+        "authorType": "COMMENT",
+        "content": "<p>Hi! I’d love to join your team. I’m currently learning data science and have experience with Python,  basic ML models, LLM. I’m still improving my Kaggle skills, but I’m very motivated and willing to contribute actively. Let me know if you’re interested!</p>",
+        "feedbackTrackingData": {},
+        "id": 3423809,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-19T03:26:46.403Z",
+        "rawMarkdown": "Hi! I’d love to join your team. I’m currently learning data science and have experience with Python,  basic ML models, LLM. I’m still improving my Kaggle skills, but I’m very motivated and willing to contribute actively. Let me know if you’re interested!",
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "aichu tan",
+            "id": 12035561,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/aichutan",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+            "tier": "CONTRIBUTOR",
+            "url": "/aichutan",
+            "userId": 12035561,
+            "userName": "aichutan"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      },
+      {
+        "author": {
+          "displayName": "Vaghela jaydip",
+          "id": 30011187,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "CONTRIBUTOR",
+          "url": "/vaghelajaydip"
+        },
+        "authorType": "COMMENT",
+        "content": "<p>Hi! I’d love to join your team. I’m Jaydip from India. I’m also a beginner but highly motivated to learn and contribute. I can help with prompt testing, research, and data work, and I’ll stay active daily. Looking forward to working together!</p>",
+        "feedbackTrackingData": {},
+        "id": 3423614,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-18T18:54:32.503Z",
+        "rawMarkdown": "Hi! I’d love to join your team. I’m Jaydip from India. I’m also a beginner but highly motivated to learn and contribute. I can help with prompt testing, research, and data work, and I’ll stay active daily. Looking forward to working together!",
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Vaghela jaydip",
+            "id": 30011187,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/vaghelajaydip",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+            "tier": "CONTRIBUTOR",
+            "url": "/vaghelajaydip",
+            "userId": 30011187,
+            "userName": "vaghelajaydip"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      },
+      {
+        "author": {
+          "displayName": "Maruthi Enugula",
+          "id": 22447050,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/22447050-kg.jpg?t=2025-12-18-16-44-44",
+          "tier": "CONTRIBUTOR",
+          "url": "/maruthienugula"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 2796,
+        "content": "<p>Hi yuki, I am from India. I can be a part of your team. I have worked for the Google Tunix hackathon before this. I am happy to work together. </p>",
+        "feedbackTrackingData": {},
+        "id": 3423595,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-18T18:27:00.330Z",
+        "rawMarkdown": "Hi yuki, I am from India. I can be a part of your team. I have worked for the Google Tunix hackathon before this. I am happy to work together. ",
+        "teamUpInfo": {
+          "enabled": true,
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Maruthi Enugula",
+            "id": 22447050,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/maruthienugula",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/22447050-kg.jpg?t=2025-12-18-16-44-44",
+            "tier": "CONTRIBUTOR",
+            "url": "/maruthienugula",
+            "userId": 22447050,
+            "userName": "maruthienugula"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "yuki",
+        "id": 24432429,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+        "tier": "CONTRIBUTOR",
+        "url": "/kazukitejima"
+      },
+      "authorType": "TOPIC",
+      "competitionRanking": 271,
+      "content": "<p>Hi everyone, I’m a Japanese engineer looking for teammates for this competition. I’m still a beginner and not very familiar with standard Kaggle practices yet, but I’m motivated and would be happy to work together. Please let me know if you’re interested.</p>",
+      "feedbackTrackingData": {},
+      "id": 3423383,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-03-18T14:05:35.180Z",
+      "rawMarkdown": "Hi everyone, I’m a Japanese engineer looking for teammates for this competition. I’m still a beginner and not very familiar with standard Kaggle practices yet, but I’m motivated and would be happy to work together. Please let me know if you’re interested.",
+      "teamUpInfo": {
+        "enabled": true,
+        "intro": "",
+        "teamLeader": {
+          "displayName": "yuki",
+          "id": 24432429,
+          "performanceTier": "CONTRIBUTOR",
+          "profileUrl": "/kazukitejima",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "CONTRIBUTOR",
+          "url": "/kazukitejima",
+          "userId": 24432429,
+          "userName": "kazukitejima"
+        }
+      },
+      "votes": {
+        "canUpvote": true,
+        "totalUpvotes": 4,
+        "totalVotes": 4
+      }
+    },
+    "firstMessageId": 3423383,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 682542,
+    "name": "Looking for Teammates",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-03-18T14:05:35.180968700Z",
+    "totalMessages": 4,
+    "totalVotes": 4,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/682542"
+  }
+}

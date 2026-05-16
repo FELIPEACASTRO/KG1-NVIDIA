@@ -1,0 +1,203 @@
+{
+  "forumTopic": {
+    "authorId": 6624777,
+    "authorPerformanceTier": "GRANDMASTER",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "6624777-kg.jpg",
+    "authorUserDisplayName": "c-number",
+    "authorUserName": "cnumber",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "lucian kucera",
+          "id": 17819385,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "CONTRIBUTOR",
+          "url": "/luciankucera"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 1662,
+        "content": "<p>Bruh u have RTX PRO 6000 on kaggle, there is no point in using 5090.  Kaggle GPU has  3 times the vram.</p>\n<p>Model is in BF16 and has 30B params so simple math u need 60GB vram to load model. Than ofc when u train lora u add additional params + activations. Optimizer has copy of each trainable param so u double the params for lora.</p>\n<p>IF u used 4bit precison for entire model u would need 15GB vram + vram for aditional params.</p>\n<p>Also if u check Unsloth mentions requriements for qlora on their website. <a href=\"https://unsloth.ai/docs/get-started/fine-tuning-for-beginners/unsloth-requirements\" target=\"_blank\">requirements</a></p>\n<p>For 32B model it says for qlora u need 26GB vram, which should fit into 5090. So i guess u can use 4Bit qlora.</p>\n<p>But i would strongly advise u agianst using qlora, u dont stand a chance in this competition if u lower precision.</p>\n<p>In reasoning precision is exteremly important, low precision llm thinks like unwell person. Hope it helps. For ur own sake just use nvdia provided GPU.</p>\n<p>You could try CPU offloading, sadly as fair as i know Unsloth doesn't support offloading natively, u would have to write code for it yourself or try to use Claude to write the code for it. Tho i expect it to be quite difficult task, if u decide to extend hugginface trainer, because of monkeypatching done by unsloth. Maybe writing ur own custom trainer would be the wisest choice in this case.(this is my guess<a href=\"https://github.com/unslothai/unsloth/issues/1158\" target=\"_blank\">cpu offloading issue</a>)</p>",
+        "feedbackTrackingData": {},
+        "id": 3422854,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-18T01:50:12.597Z",
+        "rawMarkdown": "Bruh u have RTX PRO 6000 on kaggle, there is no point in using 5090.  Kaggle GPU has  3 times the vram.\n\nModel is in BF16 and has 30B params so simple math u need 60GB vram to load model. Than ofc when u train lora u add additional params + activations. Optimizer has copy of each trainable param so u double the params for lora.\n\nIF u used 4bit precison for entire model u would need 15GB vram + vram for aditional params.\n\nAlso if u check Unsloth mentions requriements for qlora on their website. [requirements](https://unsloth.ai/docs/get-started/fine-tuning-for-beginners/unsloth-requirements)\n\n\nFor 32B model it says for qlora u need 26GB vram, which should fit into 5090. So i guess u can use 4Bit qlora.\n\nBut i would strongly advise u agianst using qlora, u dont stand a chance in this competition if u lower precision.\n\nIn reasoning precision is exteremly important, low precision llm thinks like unwell person. Hope it helps. For ur own sake just use nvdia provided GPU.\n\n\nYou could try CPU offloading, sadly as fair as i know Unsloth doesn't support offloading natively, u would have to write code for it yourself or try to use Claude to write the code for it. Tho i expect it to be quite difficult task, if u decide to extend hugginface trainer, because of monkeypatching done by unsloth. Maybe writing ur own custom trainer would be the wisest choice in this case.(this is my guess[cpu offloading issue](https://github.com/unslothai/unsloth/issues/1158))\n\n",
+        "reactions": [
+          {
+            "emoji": "THANK_YOU",
+            "featuredUserNames": [
+              "beckpro",
+              "cnumber",
+              "kclamm",
+              "sahelidatta"
+            ],
+            "userCount": 4
+          },
+          {
+            "emoji": "FUNNY",
+            "featuredUserNames": [
+              "umutszr"
+            ],
+            "userCount": 1
+          }
+        ],
+        "replies": [
+          {
+            "author": {
+              "displayName": "c-number",
+              "id": 6624777,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/6624777-kg.jpg",
+              "tier": "GRANDMASTER",
+              "url": "/cnumber"
+            },
+            "authorType": "TOPIC",
+            "content": "<p>Thanks! I couldn't get QLoRA work, but maybe I did something wrong. It's always good if you can train every day, so I think I'll use QLoRA locally while training using bf16 on kaggle.</p>",
+            "feedbackTrackingData": {},
+            "id": 3422899,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-03-18T02:52:17.213Z",
+            "rawMarkdown": "Thanks! I couldn't get QLoRA work, but maybe I did something wrong. It's always good if you can train every day, so I think I'll use QLoRA locally while training using bf16 on kaggle.",
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "c-number",
+                "id": 6624777,
+                "performanceTier": "GRANDMASTER",
+                "profileUrl": "/cnumber",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/6624777-kg.jpg",
+                "tier": "GRANDMASTER",
+                "url": "/cnumber",
+                "userId": 6624777,
+                "userName": "cnumber"
+              }
+            },
+            "votes": {
+              "canUpvote": true,
+              "totalUpvotes": 2,
+              "totalVotes": 2
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "lucian kucera",
+            "id": 17819385,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/luciankucera",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+            "tier": "CONTRIBUTOR",
+            "url": "/luciankucera",
+            "userId": 17819385,
+            "userName": "luciankucera"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 8,
+          "totalVotes": 7
+        }
+      },
+      {
+        "author": {
+          "displayName": "Victor Merckle",
+          "id": 23854220,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "CONTRIBUTOR",
+          "url": "/vmerckle"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 767,
+        "content": "<p>The Lora adapter trained on a quantized model will have reduced performance or terrible performance when used on the BF16 model.</p>",
+        "feedbackTrackingData": {},
+        "id": 3423112,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-18T07:00:10.867Z",
+        "rawMarkdown": "The Lora adapter trained on a quantized model will have reduced performance or terrible performance when used on the BF16 model.",
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Victor Merckle",
+            "id": 23854220,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/vmerckle",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+            "tier": "CONTRIBUTOR",
+            "url": "/vmerckle",
+            "userId": 23854220,
+            "userName": "vmerckle"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 1,
+          "totalVotes": 1
+        }
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "c-number",
+        "id": 6624777,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/6624777-kg.jpg",
+        "tier": "GRANDMASTER",
+        "url": "/cnumber"
+      },
+      "authorType": "TOPIC",
+      "content": "<p>I tried training with unsloth using my RTX 5090, but failed due to OOM.\nHas anyone been able to train locally?</p>",
+      "feedbackTrackingData": {},
+      "id": 3422818,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-03-18T01:15:04.927Z",
+      "rawMarkdown": "I tried training with unsloth using my RTX 5090, but failed due to OOM.\nHas anyone been able to train locally?",
+      "teamUpInfo": {
+        "intro": "",
+        "teamLeader": {
+          "displayName": "c-number",
+          "id": 6624777,
+          "performanceTier": "GRANDMASTER",
+          "profileUrl": "/cnumber",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/6624777-kg.jpg",
+          "tier": "GRANDMASTER",
+          "url": "/cnumber",
+          "userId": 6624777,
+          "userName": "cnumber"
+        }
+      },
+      "votes": {
+        "canUpvote": true,
+        "totalUpvotes": 16,
+        "totalVotes": 16
+      }
+    },
+    "firstMessageId": 3422818,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 682167,
+    "name": "What is the minimum VRAM for training?",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-03-18T01:15:04.928297900Z",
+    "totalMessages": 3,
+    "totalVotes": 16,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/682167"
+  }
+}

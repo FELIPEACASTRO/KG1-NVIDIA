@@ -1,0 +1,138 @@
+{
+  "forumTopic": {
+    "authorId": 1423843,
+    "authorPerformanceTier": "CONTRIBUTOR",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "1423843-kg.png?t=2026-03-17-23-53-30",
+    "authorUserDisplayName": "Anton Kratz",
+    "authorUserName": "antonkratz",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "aemad",
+          "id": 1199835,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "CONTRIBUTOR",
+          "url": "/aemado"
+        },
+        "authorType": "COMMENT",
+        "content": "<p>check this notebook&gt; it applies a Triton ptxas fix\n<a href=\"https://www.kaggle.com/code/kienngx/nvidia-nemotron-training-copy-run-instantly\" target=\"_blank\">https://www.kaggle.com/code/kienngx/nvidia-nemotron-training-copy-run-instantly</a></p>",
+        "feedbackTrackingData": {},
+        "id": 3426501,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-22T17:46:31.467Z",
+        "rawMarkdown": "check this notebook> it applies a Triton ptxas fix\nhttps://www.kaggle.com/code/kienngx/nvidia-nemotron-training-copy-run-instantly",
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "aemad",
+            "id": 1199835,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/aemado",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+            "tier": "CONTRIBUTOR",
+            "url": "/aemado",
+            "userId": 1199835,
+            "userName": "aemado"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      },
+      {
+        "author": {
+          "displayName": "Ashish Kumar Jha",
+          "id": 12104026,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/12104026-kg.jpg",
+          "tier": "CONTRIBUTOR",
+          "url": "/ashu1399"
+        },
+        "authorType": "COMMENT",
+        "content": "<p>I'm also facing the same issue and the fix for this issue is inprogress refer: <a href=\"https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/683067\" target=\"_blank\">https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/683067</a>, Thanks</p>",
+        "feedbackTrackingData": {},
+        "id": 3426249,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-22T08:09:35.610Z",
+        "rawMarkdown": "I'm also facing the same issue and the fix for this issue is inprogress refer: https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/683067, Thanks",
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Ashish Kumar Jha",
+            "id": 12104026,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/ashu1399",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/12104026-kg.jpg",
+            "tier": "CONTRIBUTOR",
+            "url": "/ashu1399",
+            "userId": 12104026,
+            "userName": "ashu1399"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "Anton Kratz",
+        "id": 1423843,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1423843-kg.png?t=2026-03-17-23-53-30",
+        "tier": "CONTRIBUTOR",
+        "url": "/antonkratz"
+      },
+      "authorType": "TOPIC",
+      "competitionRanking": 2610,
+      "content": "<p>On Kaggle notebook runtime GPU RTX Pro 6000, fine-tuning metric/nemotron-3-nano-30b-a3b-bf16/transformers/default fails at trainer.train() with:</p>\n<p><code>AcceleratorError: CUDA error: no kernel image is available for execution on the device</code></p>\n<p>The actual failing call in the traceback is:</p>\n<p>causal_conv1d_cuda.causal_conv1d_fwd(…)</p>\n<p>from Kaggle’s preinstalled causal_conv1d / mamba_ssm path.</p>\n<p><strong>This looks like the CUDA extension was built without support for the assigned GPU architecture.</strong> Model load works; the crash starts on the first training forward pass.</p>\n<p><strong>I have made a public notebook documenting this</strong>: <a href=\"https://www.kaggle.com/code/antonkratz/nvidia-nemotron-finetune-ipynb\" target=\"_blank\">https://www.kaggle.com/code/antonkratz/nvidia-nemotron-finetune-ipynb</a></p>\n<p>I already spent over 10 GPU hours on this issue.</p>\n<p><strong>Can you confirm whether the GPU RTX Pro 6000 runtime image is missing a compatible build of causal_conv1d / mamba_ssm for this competition?</strong></p>\n<p>Tricks like turning internet off/on and then trying to install did not work for me. This issue should be fixed in the base environment I think.</p>",
+      "feedbackTrackingData": {},
+      "id": 3423975,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-03-19T07:49:45.650Z",
+      "rawMarkdown": "On Kaggle notebook runtime GPU RTX Pro 6000, fine-tuning metric/nemotron-3-nano-30b-a3b-bf16/transformers/default fails at trainer.train() with:\n\n`AcceleratorError: CUDA error: no kernel image is available for execution on the device`\n\nThe actual failing call in the traceback is:\n\ncausal_conv1d_cuda.causal_conv1d_fwd(...)\n\nfrom Kaggle’s preinstalled causal_conv1d / mamba_ssm path.\n\n**This looks like the CUDA extension was built without support for the assigned GPU architecture.** Model load works; the crash starts on the first training forward pass.\n\n**I have made a public notebook documenting this**: https://www.kaggle.com/code/antonkratz/nvidia-nemotron-finetune-ipynb\n\nI already spent over 10 GPU hours on this issue.\n\n**Can you confirm whether the GPU RTX Pro 6000 runtime image is missing a compatible build of causal_conv1d / mamba_ssm for this competition?**\n\nTricks like turning internet off/on and then trying to install did not work for me. This issue should be fixed in the base environment I think.",
+      "teamUpInfo": {
+        "intro": "",
+        "teamLeader": {
+          "displayName": "Anton Kratz",
+          "id": 1423843,
+          "performanceTier": "CONTRIBUTOR",
+          "profileUrl": "/antonkratz",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1423843-kg.png?t=2026-03-17-23-53-30",
+          "tier": "CONTRIBUTOR",
+          "url": "/antonkratz",
+          "userId": 1423843,
+          "userName": "antonkratz"
+        }
+      },
+      "votes": {
+        "canUpvote": true,
+        "totalUpvotes": 13,
+        "totalVotes": 13
+      }
+    },
+    "firstMessageId": 3423975,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 682877,
+    "name": "AcceleratorError: CUDA error: no kernel image is available for execution on the device; causal_conv1d; mamba_ssm",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-03-19T07:49:45.648433800Z",
+    "totalMessages": 2,
+    "totalVotes": 13,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/682877"
+  }
+}

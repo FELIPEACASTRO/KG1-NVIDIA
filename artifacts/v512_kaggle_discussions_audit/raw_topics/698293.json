@@ -1,0 +1,262 @@
+{
+  "forumTopic": {
+    "authorId": 24473636,
+    "authorPerformanceTier": "EXPERT",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "24473636-kg.png?t=2025-09-19-16-54-39",
+    "authorUserDisplayName": "lkevincc",
+    "authorUserName": "jjsdfd22",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "Taha",
+          "id": 33728306,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/33728306-kg.png?t=2026-04-25-07-15-05",
+          "tier": "CONTRIBUTOR",
+          "url": "/tahaalam2009"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 311,
+        "content": "<p>Thank you!</p>\n<pre><code>Generating reasoning: 100%|█████████████████████████████████████████████████████████████████████████████████████████████| 9500/9500 [01:30&lt;00:00, 104.65prob/s]\n\nGenerated 9307 reasoning files in /Codebase/nemotron/reasoning/\nSkipped 193 (no generator for category)\nHypothesis formed: 105 (investigation without reasoning)\n\n================================================================\nCategory                      Found  Total   Accuracy     Avg ms\n----------------------------------------------------------------\nbit_manipulation               1593   1602      99.4%        0.7\ncipher                         1576   1576     100.0%        0.1\ncryptarithm_deduce              284    659      43.1%      103.9\ncryptarithm_guess                26    164      15.9%      113.8\nequation_numeric_deduce         540    596      90.6%        0.6\nequation_numeric_guess           21    136      15.4%        0.6\ngravity                        1597   1597     100.0%        0.1\nnumeral                        1576   1576     100.0%        0.0\nunit_conversion                1594   1594     100.0%        0.1\n----------------------------------------------------------------\nTOTAL                          8807   9500      92.7%        9.4\n================================================================\n\nIf you were given an example to fix, please verify that example.\n</code></pre>",
+        "feedbackTrackingData": {},
+        "id": 3457835,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-05-14T12:44:42.170Z",
+        "rawMarkdown": "Thank you!\n\n```text\nGenerating reasoning: 100%|█████████████████████████████████████████████████████████████████████████████████████████████| 9500/9500 [01:30<00:00, 104.65prob/s]\n\nGenerated 9307 reasoning files in /Codebase/nemotron/reasoning/\nSkipped 193 (no generator for category)\nHypothesis formed: 105 (investigation without reasoning)\n\n================================================================\nCategory                      Found  Total   Accuracy     Avg ms\n----------------------------------------------------------------\nbit_manipulation               1593   1602      99.4%        0.7\ncipher                         1576   1576     100.0%        0.1\ncryptarithm_deduce              284    659      43.1%      103.9\ncryptarithm_guess                26    164      15.9%      113.8\nequation_numeric_deduce         540    596      90.6%        0.6\nequation_numeric_guess           21    136      15.4%        0.6\ngravity                        1597   1597     100.0%        0.1\nnumeral                        1576   1576     100.0%        0.0\nunit_conversion                1594   1594     100.0%        0.1\n----------------------------------------------------------------\nTOTAL                          8807   9500      92.7%        9.4\n================================================================\n\nIf you were given an example to fix, please verify that example.\n```\n",
+        "replies": [
+          {
+            "author": {
+              "displayName": "QianYuu",
+              "id": 15950992,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/15950992-kg.png?t=2023-11-20-06-16-48",
+              "tier": "EXPERT",
+              "url": "/qianyuu"
+            },
+            "authorType": "COMMENT",
+            "competitionRanking": 619,
+            "content": "<p>What is LB? Could you please tell me?</p>",
+            "feedbackTrackingData": {},
+            "id": 3458165,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-05-15T09:15:11.337Z",
+            "rawMarkdown": "What is LB? Could you please tell me?",
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "QianYuu",
+                "id": 15950992,
+                "performanceTier": "EXPERT",
+                "profileUrl": "/qianyuu",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/15950992-kg.png?t=2023-11-20-06-16-48",
+                "tier": "EXPERT",
+                "url": "/qianyuu",
+                "userId": 15950992,
+                "userName": "qianyuu"
+              }
+            },
+            "votes": {
+              "canUpvote": true
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Taha",
+            "id": 33728306,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/tahaalam2009",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/33728306-kg.png?t=2026-04-25-07-15-05",
+            "tier": "CONTRIBUTOR",
+            "url": "/tahaalam2009",
+            "userId": 33728306,
+            "userName": "tahaalam2009"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 2,
+          "totalVotes": 2
+        }
+      },
+      {
+        "author": {
+          "displayName": "Tong Hui Kang",
+          "id": 1680925,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1680925-kg.jpg",
+          "tier": "MASTER",
+          "url": "/huikang"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 744,
+        "content": "<p>Thanks for making the dataset accessible!</p>\n<p>Currently <a href=\"https://lkevincc0.github.io/kaggle-nemotron-equation-symbolic/\" target=\"_blank\">https://lkevincc0.github.io/kaggle-nemotron-equation-symbolic/</a> returns </p>\n<pre><code>failed: Invalid Error: Opening file 'solver_results.parquet' failed with error: NetworkError: Failed to execute 'send' on 'XMLHttpRequest': Failed to load 'https://github.com/lkevincc0/kaggle-nemotron-equation-symbolic/raw/refs/heads/main/data/solver_results.parquet'.\n</code></pre>",
+        "feedbackTrackingData": {},
+        "id": 3455478,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-05-09T14:23:11.997Z",
+        "rawMarkdown": "Thanks for making the dataset accessible!\n\nCurrently https://lkevincc0.github.io/kaggle-nemotron-equation-symbolic/ returns \n\n```\nfailed: Invalid Error: Opening file 'solver_results.parquet' failed with error: NetworkError: Failed to execute 'send' on 'XMLHttpRequest': Failed to load 'https://github.com/lkevincc0/kaggle-nemotron-equation-symbolic/raw/refs/heads/main/data/solver_results.parquet'.\n```",
+        "replies": [
+          {
+            "attachments": [
+              {
+                "fileType": ".html",
+                "id": 42396,
+                "name": "index.html",
+                "totalBytes": 23291,
+                "url": "https://storage.googleapis.com/kaggle-forum-message-attachments/3455502/42396/index.html"
+              }
+            ],
+            "author": {
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+              "url": "/"
+            },
+            "authorType": "COMMENT",
+            "canDelete": true,
+            "feedbackTrackingData": {},
+            "id": 3455502,
+            "isDeleted": true,
+            "isThankYou": false,
+            "isUserAuthor": true,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-05-09T15:12:40.410Z",
+            "rawMarkdown": "",
+            "votes": {}
+          },
+          {
+            "author": {
+              "displayName": "lkevincc",
+              "id": 24473636,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/24473636-kg.png?t=2025-09-19-16-54-39",
+              "tier": "EXPERT",
+              "url": "/jjsdfd22"
+            },
+            "authorType": "TOPIC",
+            "competitionRanking": 1379,
+            "content": "<p>Thanks! I fix it, should be good now.</p>",
+            "feedbackTrackingData": {},
+            "id": 3455593,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-05-09T19:19:39.633Z",
+            "rawMarkdown": "Thanks! I fix it, should be good now.",
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "lkevincc",
+                "id": 24473636,
+                "performanceTier": "EXPERT",
+                "profileUrl": "/jjsdfd22",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/24473636-kg.png?t=2025-09-19-16-54-39",
+                "tier": "EXPERT",
+                "url": "/jjsdfd22",
+                "userId": 24473636,
+                "userName": "jjsdfd22"
+              }
+            },
+            "votes": {
+              "canUpvote": true,
+              "totalUpvotes": 2,
+              "totalVotes": 2
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Tong Hui Kang",
+            "id": 1680925,
+            "performanceTier": "MASTER",
+            "profileUrl": "/huikang",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1680925-kg.jpg",
+            "tier": "MASTER",
+            "url": "/huikang",
+            "userId": 1680925,
+            "userName": "huikang"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 1,
+          "totalVotes": 1
+        }
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "lkevincc",
+        "id": 24473636,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/24473636-kg.png?t=2025-09-19-16-54-39",
+        "tier": "EXPERT",
+        "url": "/jjsdfd22"
+      },
+      "authorType": "TOPIC",
+      "competitionRanking": 1379,
+      "content": "<p>I have been using this gold-conditioned symbolic solver to study the rule structure of the <code>equation_symbolic</code> category.</p>\n<p>To be clear, this is not an inference-time competition solution. The solver uses the known target answer as a constraint, so it should be viewed as a research oracle rather than something directly usable in a Kaggle submission.</p>\n<p>What it shows is that for many examples, there exists a latent symbolic rule that can explain the puzzle.</p>\n<p>Given the gold answer, the solver searches for and exposes a full latent program, including:</p>\n<ul>\n<li>the symbol-to-digit mapping</li>\n<li>the operator choices</li>\n<li>the solving mode / interpretation mode</li>\n<li>the numeric value implied by the query</li>\n<li>whether the same latent program is consistent with all demonstration examples\nThe program must be consistent with both the demonstration examples and the target query.</li>\n</ul>\n<p>Current result on the 823 <code>equation_symbolic</code> training examples:</p>\n<ul>\n<li>800 / 823 solved</li>\n<li>0 wrong answers</li>\n<li>23 no solution found</li>\n<li>97.2% coverage</li>\n</ul>\n<p>My interpretation is that this category is not random: most cases appear to have recoverable symbolic structure. The solver exposes that latent structure.</p>\n<p>However, this does not mean that a model can naturally infer the same rule from the prompt. It also does not mean that a generated CoT trace reflects the natural reasoning order. In my experiments, there is still a large gap between explicit symbolic search and what a single-pass LoRA model can learn through SFT.</p>\n<p>So the main takeaway for me is:</p>\n<p><code>equation_symbolic</code> seems highly explainable with symbolic search: the solver can recover hidden structure such as digit mappings, operator choices, and interpretation modes. The hard part is transferring this into ordinary model generation, because the candidate space is huge and the model has to infer the mapping, operators, and reasoning path from the prompt alone.</p>\n<p>The code is <a href=\"https://github.com/lkevincc0/kaggle-nemotron-equation-symbolic\" target=\"_blank\">here</a>, website is <a href=\"https://lkevincc0.github.io/kaggle-nemotron-equation-symbolic\" target=\"_blank\">here</a>, dataset is <a href=\"https://github.com/lkevincc0/kaggle-nemotron-equation-symbolic/raw/refs/heads/main/data/solver_results.parquet\" target=\"_blank\">here</a></p>\n<p><img src=\"https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F24473636%2Fa6f9fd6dfa387114b0d8e91519d033f4%2FScreenshot%202026-05-09%20at%205.49.25PM.png?generation=1778313060655176&amp;alt=media\" alt=\"\"></p>",
+      "feedbackTrackingData": {},
+      "id": 3455360,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-05-09T07:56:08.270Z",
+      "rawMarkdown": "I have been using this gold-conditioned symbolic solver to study the rule structure of the `equation_symbolic` category.\n\nTo be clear, this is not an inference-time competition solution. The solver uses the known target answer as a constraint, so it should be viewed as a research oracle rather than something directly usable in a Kaggle submission.\n\nWhat it shows is that for many examples, there exists a latent symbolic rule that can explain the puzzle.\n\nGiven the gold answer, the solver searches for and exposes a full latent program, including:\n\n- the symbol-to-digit mapping\n- the operator choices\n- the solving mode / interpretation mode\n- the numeric value implied by the query\n- whether the same latent program is consistent with all demonstration examples\nThe program must be consistent with both the demonstration examples and the target query.\n\nCurrent result on the 823 `equation_symbolic` training examples:\n\n- 800 / 823 solved\n- 0 wrong answers\n- 23 no solution found\n- 97.2% coverage\n\nMy interpretation is that this category is not random: most cases appear to have recoverable symbolic structure. The solver exposes that latent structure.\n\nHowever, this does not mean that a model can naturally infer the same rule from the prompt. It also does not mean that a generated CoT trace reflects the natural reasoning order. In my experiments, there is still a large gap between explicit symbolic search and what a single-pass LoRA model can learn through SFT.\n\nSo the main takeaway for me is:\n\n`equation_symbolic` seems highly explainable with symbolic search: the solver can recover hidden structure such as digit mappings, operator choices, and interpretation modes. The hard part is transferring this into ordinary model generation, because the candidate space is huge and the model has to infer the mapping, operators, and reasoning path from the prompt alone.\n\nThe code is [here](https://github.com/lkevincc0/kaggle-nemotron-equation-symbolic), website is [here](https://lkevincc0.github.io/kaggle-nemotron-equation-symbolic), dataset is [here](https://github.com/lkevincc0/kaggle-nemotron-equation-symbolic/raw/refs/heads/main/data/solver_results.parquet)\n\n![](https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F24473636%2Fa6f9fd6dfa387114b0d8e91519d033f4%2FScreenshot%202026-05-09%20at%205.49.25PM.png?generation=1778313060655176&alt=media)",
+      "reactions": [
+        {
+          "emoji": "THANK_YOU",
+          "featuredUserNames": [
+            "gmobaz"
+          ],
+          "userCount": 1
+        }
+      ],
+      "teamUpInfo": {
+        "intro": "",
+        "teamLeader": {
+          "displayName": "lkevincc",
+          "id": 24473636,
+          "performanceTier": "EXPERT",
+          "profileUrl": "/jjsdfd22",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/24473636-kg.png?t=2025-09-19-16-54-39",
+          "tier": "EXPERT",
+          "url": "/jjsdfd22",
+          "userId": 24473636,
+          "userName": "jjsdfd22"
+        }
+      },
+      "votes": {
+        "canUpvote": true,
+        "totalUpvotes": 37,
+        "totalVotes": 37
+      }
+    },
+    "firstMessageId": 3455360,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 698293,
+    "name": "97.2% Gold-Conditioned Symbolic Solver Exposing Digit Mappings and Operators",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-05-09T07:56:08.269448Z",
+    "totalMessages": 5,
+    "totalVotes": 37,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/698293"
+  }
+}

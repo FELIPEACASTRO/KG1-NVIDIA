@@ -1,0 +1,142 @@
+{
+  "forumTopic": {
+    "authorId": 18831627,
+    "authorPerformanceTier": "CONTRIBUTOR",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "18831627-kg.jpg?t=2025-08-13-20-54-01",
+    "authorUserDisplayName": "ulasdesouza",
+    "authorUserName": "ulasdesouza",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "lucian kucera",
+          "id": 17819385,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "CONTRIBUTOR",
+          "url": "/luciankucera"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 1662,
+        "content": "<p>Submission time can be around a minute, if u store lora inside a dataset. Or just link ur training notebook.</p>",
+        "feedbackTrackingData": {},
+        "id": 3425483,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-20T21:36:33.483Z",
+        "rawMarkdown": "Submission time can be around a minute, if u store lora inside a dataset. Or just link ur training notebook.",
+        "replies": [
+          {
+            "author": {
+              "displayName": "ulasdesouza",
+              "id": 18831627,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/18831627-kg.jpg?t=2025-08-13-20-54-01",
+              "tier": "CONTRIBUTOR",
+              "url": "/ulasdesouza"
+            },
+            "authorType": "TOPIC",
+            "competitionRanking": 977,
+            "content": "<p>My training output is around 6 GB. I save it and submit it by selecting the notebook. Is there a more efficient and faster way? What would you recommend?</p>",
+            "feedbackTrackingData": {},
+            "id": 3425485,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-03-20T21:39:58.573Z",
+            "rawMarkdown": "My training output is around 6 GB. I save it and submit it by selecting the notebook. Is there a more efficient and faster way? What would you recommend?",
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "ulasdesouza",
+                "id": 18831627,
+                "performanceTier": "CONTRIBUTOR",
+                "profileUrl": "/ulasdesouza",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/18831627-kg.jpg?t=2025-08-13-20-54-01",
+                "tier": "CONTRIBUTOR",
+                "url": "/ulasdesouza",
+                "userId": 18831627,
+                "userName": "ulasdesouza"
+              }
+            },
+            "votes": {
+              "canUpvote": true
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "lucian kucera",
+            "id": 17819385,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/luciankucera",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+            "tier": "CONTRIBUTOR",
+            "url": "/luciankucera",
+            "userId": 17819385,
+            "userName": "luciankucera"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "ulasdesouza",
+        "id": 18831627,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/18831627-kg.jpg?t=2025-08-13-20-54-01",
+        "tier": "CONTRIBUTOR",
+        "url": "/ulasdesouza"
+      },
+      "authorType": "TOPIC",
+      "competitionRanking": 977,
+      "content": "<p>What is your average submission time?</p>",
+      "feedbackTrackingData": {},
+      "id": 3425429,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-03-20T19:48:59.497Z",
+      "rawMarkdown": "What is your average submission time?",
+      "teamUpInfo": {
+        "intro": "",
+        "teamLeader": {
+          "displayName": "ulasdesouza",
+          "id": 18831627,
+          "performanceTier": "CONTRIBUTOR",
+          "profileUrl": "/ulasdesouza",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/18831627-kg.jpg?t=2025-08-13-20-54-01",
+          "tier": "CONTRIBUTOR",
+          "url": "/ulasdesouza",
+          "userId": 18831627,
+          "userName": "ulasdesouza"
+        }
+      },
+      "votes": {
+        "canUpvote": true,
+        "totalUpvotes": 2,
+        "totalVotes": 2
+      }
+    },
+    "firstMessageId": 3425429,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 683484,
+    "name": "submission time",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-03-20T19:48:59.495142400Z",
+    "totalMessages": 2,
+    "totalVotes": 2,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/683484"
+  }
+}

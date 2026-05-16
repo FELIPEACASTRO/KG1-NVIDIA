@@ -1,0 +1,153 @@
+{
+  "forumTopic": {
+    "authorId": 1423843,
+    "authorPerformanceTier": "CONTRIBUTOR",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "1423843-kg.png?t=2026-03-17-23-53-30",
+    "authorUserDisplayName": "Anton Kratz",
+    "authorUserName": "antonkratz",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "Deval Mukherjee1",
+          "id": 28837165,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "CONTRIBUTOR",
+          "url": "/devalmukherjee1"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 972,
+        "content": "<p>I tried a lot to do this, and I have no clue how to get vllm. I wasted like 20 hours of gpu time doing it. Please keep me posted </p>",
+        "feedbackTrackingData": {},
+        "id": 3430112,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-27T21:27:22.733Z",
+        "rawMarkdown": "I tried a lot to do this, and I have no clue how to get vllm. I wasted like 20 hours of gpu time doing it. Please keep me posted ",
+        "replies": [
+          {
+            "author": {
+              "displayName": "Deval Mukherjee1",
+              "id": 28837165,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+              "tier": "CONTRIBUTOR",
+              "url": "/devalmukherjee1"
+            },
+            "authorType": "COMMENT",
+            "competitionRanking": 972,
+            "content": "<p>Try this notebook :<a href=\"https://www.kaggle.com/code/luciankucera/more-tokens-doesn-t-help-massive-sft-ftw\" target=\"_blank\">https://www.kaggle.com/code/luciankucera/more-tokens-doesn-t-help-massive-sft-ftw</a></p>",
+            "feedbackTrackingData": {},
+            "id": 3430117,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-03-27T21:34:49.983Z",
+            "rawMarkdown": "Try this notebook :https://www.kaggle.com/code/luciankucera/more-tokens-doesn-t-help-massive-sft-ftw",
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "Deval Mukherjee1",
+                "id": 28837165,
+                "performanceTier": "CONTRIBUTOR",
+                "profileUrl": "/devalmukherjee1",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                "tier": "CONTRIBUTOR",
+                "url": "/devalmukherjee1",
+                "userId": 28837165,
+                "userName": "devalmukherjee1"
+              }
+            },
+            "votes": {
+              "canUpvote": true,
+              "totalUpvotes": 1,
+              "totalVotes": 1
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Deval Mukherjee1",
+            "id": 28837165,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/devalmukherjee1",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+            "tier": "CONTRIBUTOR",
+            "url": "/devalmukherjee1",
+            "userId": 28837165,
+            "userName": "devalmukherjee1"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "Anton Kratz",
+        "id": 1423843,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1423843-kg.png?t=2026-03-17-23-53-30",
+        "tier": "CONTRIBUTOR",
+        "url": "/antonkratz"
+      },
+      "authorType": "TOPIC",
+      "competitionRanking": 2610,
+      "content": "<p>I made a public notebook where I try to just predict test.csv: <a href=\"https://www.kaggle.com/code/antonkratz/notebookdf0d07f28b\" target=\"_blank\">https://www.kaggle.com/code/antonkratz/notebookdf0d07f28b</a></p>\n<p>I reach about 79 tokens/second. I believe that a GTX Blackwell 6000 should reach almost 2000 tokens/second.</p>\n<p>How can I use vllm with the official Kaggle infrastructure? I tried many different ways and workarounds, it seems not possible to install it. How can we best make use of the GTX Blackwell 6000 at full speed? I am orders of magnitude off in the current setup. I believe that I am not the only one facing this.</p>",
+      "feedbackTrackingData": {},
+      "id": 3428115,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-03-25T01:05:26.797Z",
+      "rawMarkdown": "I made a public notebook where I try to just predict test.csv: https://www.kaggle.com/code/antonkratz/notebookdf0d07f28b\n\nI reach about 79 tokens/second. I believe that a GTX Blackwell 6000 should reach almost 2000 tokens/second.\n\nHow can I use vllm with the official Kaggle infrastructure? I tried many different ways and workarounds, it seems not possible to install it. How can we best make use of the GTX Blackwell 6000 at full speed? I am orders of magnitude off in the current setup. I believe that I am not the only one facing this.",
+      "reactions": [
+        {
+          "emoji": "LOVE",
+          "featuredUserNames": [
+            "einherjer"
+          ],
+          "userCount": 1
+        }
+      ],
+      "teamUpInfo": {
+        "intro": "",
+        "teamLeader": {
+          "displayName": "Anton Kratz",
+          "id": 1423843,
+          "performanceTier": "CONTRIBUTOR",
+          "profileUrl": "/antonkratz",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1423843-kg.png?t=2026-03-17-23-53-30",
+          "tier": "CONTRIBUTOR",
+          "url": "/antonkratz",
+          "userId": 1423843,
+          "userName": "antonkratz"
+        }
+      },
+      "votes": {
+        "canUpvote": true,
+        "totalUpvotes": 6,
+        "totalVotes": 6
+      }
+    },
+    "firstMessageId": 3428115,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 684459,
+    "name": "How can I use vLLM to speed up test.csv inference on Kaggle?",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-03-25T01:05:26.798032700Z",
+    "totalMessages": 2,
+    "totalVotes": 6,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/684459"
+  }
+}

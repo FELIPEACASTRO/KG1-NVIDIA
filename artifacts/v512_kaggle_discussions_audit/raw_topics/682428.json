@@ -1,0 +1,344 @@
+{
+  "forumTopic": {
+    "authorId": 21299224,
+    "authorPerformanceTier": "CONTRIBUTOR",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "default-thumb.png",
+    "authorUserDisplayName": "Harsh Rajbhar",
+    "authorUserName": "harshrajbhar",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "Abhigyan Srivastava",
+          "id": 4923504,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "CONTRIBUTOR",
+          "url": "/srivastavaabhigyan"
+        },
+        "authorType": "COMMENT",
+        "content": "<p>The error is still here. Kaggle team says they are working on it. I only hope that they send out a shoutout mail to all of us once it is fixed.</p>",
+        "feedbackTrackingData": {},
+        "id": 3424392,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-19T16:36:39.863Z",
+        "rawMarkdown": "The error is still here. Kaggle team says they are working on it. I only hope that they send out a shoutout mail to all of us once it is fixed.",
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Abhigyan Srivastava",
+            "id": 4923504,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/srivastavaabhigyan",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+            "tier": "CONTRIBUTOR",
+            "url": "/srivastavaabhigyan",
+            "userId": 4923504,
+            "userName": "srivastavaabhigyan"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 1,
+          "totalVotes": 1
+        }
+      },
+      {
+        "author": {
+          "displayName": "Timmy Juicehouse",
+          "id": 18538441,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/18538441-kg.png?t=2026-03-26-01-25-24",
+          "tier": "EXPERT",
+          "url": "/sweetyheehee"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 155,
+        "content": "<p>If I'm not mistaken, you plan to train with PyTorch, but the PyTorch version in your environment is incompatible with the CUDA version required for the RTX Pro 6000. When I ran it on my workstation, I had to update the CUDA environment.</p>",
+        "feedbackTrackingData": {},
+        "id": 3423940,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-19T06:31:56.123Z",
+        "rawMarkdown": "If I'm not mistaken, you plan to train with PyTorch, but the PyTorch version in your environment is incompatible with the CUDA version required for the RTX Pro 6000. When I ran it on my workstation, I had to update the CUDA environment.",
+        "replies": [
+          {
+            "author": {
+              "displayName": "Harsh Rajbhar",
+              "id": 21299224,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+              "tier": "CONTRIBUTOR",
+              "url": "/harshrajbhar"
+            },
+            "authorType": "TOPIC",
+            "content": "<p>Could you plz explain in detail , how you fixed it ? Since , i can't use pip because internet is disabled on GPU RTX Pro 6000 .</p>",
+            "feedbackTrackingData": {},
+            "id": 3423947,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-03-19T06:48:01.833Z",
+            "rawMarkdown": "Could you plz explain in detail , how you fixed it ? Since , i can't use pip because internet is disabled on GPU RTX Pro 6000 .",
+            "replies": [
+              {
+                "author": {
+                  "displayName": "Timmy Juicehouse",
+                  "id": 18538441,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/18538441-kg.png?t=2026-03-26-01-25-24",
+                  "tier": "EXPERT",
+                  "url": "/sweetyheehee"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 155,
+                "content": "<p>Are you training in a Kaggle environment? Try downloading the offline PyTorch installation package and then installing it in the online environment.</p>",
+                "feedbackTrackingData": {},
+                "id": 3423950,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-03-19T07:02:43.493Z",
+                "rawMarkdown": "Are you training in a Kaggle environment? Try downloading the offline PyTorch installation package and then installing it in the online environment.",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "Timmy Juicehouse",
+                    "id": 18538441,
+                    "performanceTier": "EXPERT",
+                    "profileUrl": "/sweetyheehee",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/18538441-kg.png?t=2026-03-26-01-25-24",
+                    "tier": "EXPERT",
+                    "url": "/sweetyheehee",
+                    "userId": 18538441,
+                    "userName": "sweetyheehee"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true
+                }
+              },
+              {
+                "author": {
+                  "displayName": "Harsh Rajbhar",
+                  "id": 21299224,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                  "tier": "CONTRIBUTOR",
+                  "url": "/harshrajbhar"
+                },
+                "authorType": "TOPIC",
+                "content": "<p>I’ve already updated to PyTorch nightly with CUDA 12.8, and torch.cuda.get_arch_list() correctly shows sm_120, so PyTorch itself supports the GPU. However, training still fails with:</p>\n<p>CUDA error: no kernel image is available for execution on the device</p>\n<p>This seems to come from causal_conv1d, which appears to be compiled for older architectures and not SM120.</p>\n<p>Since Kaggle does not allow proper CUDA compilation (nvcc), I’m unable to rebuild causal_conv1d from source inside the environment.</p>\n<p>Could you please clarify:</p>\n<p>Is there a precompiled version of causal_conv1d that supports SM120?</p>\n<p>Should we disable causal_conv1d and use a fallback implementation instead?</p>\n<p>If disabling is expected, what is the recommended way/config flag to do so in this competition setup?</p>",
+                "feedbackTrackingData": {},
+                "id": 3423980,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-03-19T08:15:34.457Z",
+                "rawMarkdown": "I’ve already updated to PyTorch nightly with CUDA 12.8, and torch.cuda.get_arch_list() correctly shows sm_120, so PyTorch itself supports the GPU. However, training still fails with:\n\nCUDA error: no kernel image is available for execution on the device\n\nThis seems to come from causal_conv1d, which appears to be compiled for older architectures and not SM120.\n\nSince Kaggle does not allow proper CUDA compilation (nvcc), I’m unable to rebuild causal_conv1d from source inside the environment.\n\nCould you please clarify:\n\nIs there a precompiled version of causal_conv1d that supports SM120?\n\nShould we disable causal_conv1d and use a fallback implementation instead?\n\nIf disabling is expected, what is the recommended way/config flag to do so in this competition setup?",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "Harsh Rajbhar",
+                    "id": 21299224,
+                    "performanceTier": "CONTRIBUTOR",
+                    "profileUrl": "/harshrajbhar",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                    "tier": "CONTRIBUTOR",
+                    "url": "/harshrajbhar",
+                    "userId": 21299224,
+                    "userName": "harshrajbhar"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true,
+                  "totalUpvotes": 1,
+                  "totalVotes": 1
+                }
+              }
+            ],
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "Harsh Rajbhar",
+                "id": 21299224,
+                "performanceTier": "CONTRIBUTOR",
+                "profileUrl": "/harshrajbhar",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                "tier": "CONTRIBUTOR",
+                "url": "/harshrajbhar",
+                "userId": 21299224,
+                "userName": "harshrajbhar"
+              }
+            },
+            "votes": {
+              "canUpvote": true
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Timmy Juicehouse",
+            "id": 18538441,
+            "performanceTier": "EXPERT",
+            "profileUrl": "/sweetyheehee",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/18538441-kg.png?t=2026-03-26-01-25-24",
+            "tier": "EXPERT",
+            "url": "/sweetyheehee",
+            "userId": 18538441,
+            "userName": "sweetyheehee"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 1,
+          "totalVotes": 1
+        }
+      },
+      {
+        "author": {
+          "displayName": "Sulavss7",
+          "id": 21575314,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "CONTRIBUTOR",
+          "url": "/sulavss7"
+        },
+        "authorType": "COMMENT",
+        "content": "<p>i am not able to use p100 gpu . T4 is working fine . what the hell is happening </p>",
+        "feedbackTrackingData": {},
+        "id": 3425886,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-21T13:29:15.697Z",
+        "rawMarkdown": "i am not able to use p100 gpu . T4 is working fine . what the hell is happening ",
+        "replies": [
+          {
+            "author": {
+              "displayName": "chenchen2",
+              "id": 24645837,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+              "tier": "CONTRIBUTOR",
+              "url": "/chenfen2"
+            },
+            "authorType": "COMMENT",
+            "content": "<p>I also encountered this problem. How did you solve it</p>",
+            "feedbackTrackingData": {},
+            "id": 3445591,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-04-20T06:33:02.573Z",
+            "rawMarkdown": "I also encountered this problem. How did you solve it",
+            "votes": {
+              "canUpvote": true
+            }
+          }
+        ],
+        "votes": {
+          "canUpvote": true
+        }
+      },
+      {
+        "author": {
+          "displayName": "xianxu qiu",
+          "id": 29856570,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "CONTRIBUTOR",
+          "url": "/xianxuqiu"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 2070,
+        "content": "<p>I encountered the same problem; without using sm_120, the inference speed was only 1.7 tokens/s.</p>",
+        "feedbackTrackingData": {},
+        "id": 3424032,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-19T09:36:47.317Z",
+        "rawMarkdown": "I encountered the same problem; without using sm_120, the inference speed was only 1.7 tokens/s.",
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "xianxu qiu",
+            "id": 29856570,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/xianxuqiu",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+            "tier": "CONTRIBUTOR",
+            "url": "/xianxuqiu",
+            "userId": 29856570,
+            "userName": "xianxuqiu"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "Harsh Rajbhar",
+        "id": 21299224,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+        "tier": "CONTRIBUTOR",
+        "url": "/harshrajbhar"
+      },
+      "authorType": "TOPIC",
+      "content": "<p>How to fix this ?</p>\n<p>[ERROR] Training error: CUDA error: no kernel image is available for execution on the device\nSearch for <code>cudaErrorNoKernelImageForDevice' in https://docs.nvidia.com/cuda/cuda-runtime-api/group__CUDART__TYPES.html for more information.\nCUDA kernel errors might be asynchronously reported at some other API call, so the stacktrace below might be incorrect.\nFor debugging consider passing CUDA_LAUNCH_BLOCKING=1\nCompile with</code>TORCH_USE_CUDA_DSA` to enable device-side assertions.</p>",
+      "feedbackTrackingData": {},
+      "id": 3423202,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-03-18T09:17:13.103Z",
+      "rawMarkdown": "How to fix this ?\n\n\n[ERROR] Training error: CUDA error: no kernel image is available for execution on the device\nSearch for `cudaErrorNoKernelImageForDevice' in https://docs.nvidia.com/cuda/cuda-runtime-api/group__CUDART__TYPES.html for more information.\nCUDA kernel errors might be asynchronously reported at some other API call, so the stacktrace below might be incorrect.\nFor debugging consider passing CUDA_LAUNCH_BLOCKING=1\nCompile with `TORCH_USE_CUDA_DSA` to enable device-side assertions.\n",
+      "teamUpInfo": {
+        "intro": "",
+        "teamLeader": {
+          "displayName": "Harsh Rajbhar",
+          "id": 21299224,
+          "performanceTier": "CONTRIBUTOR",
+          "profileUrl": "/harshrajbhar",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "CONTRIBUTOR",
+          "url": "/harshrajbhar",
+          "userId": 21299224,
+          "userName": "harshrajbhar"
+        }
+      },
+      "votes": {
+        "canUpvote": true,
+        "totalUpvotes": 9,
+        "totalVotes": 8
+      }
+    },
+    "firstMessageId": 3423202,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 682428,
+    "name": " Training error: CUDA error: no kernel image is available for execution on the device",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-03-18T09:17:13.104596200Z",
+    "totalMessages": 8,
+    "totalVotes": 8,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/682428"
+  }
+}

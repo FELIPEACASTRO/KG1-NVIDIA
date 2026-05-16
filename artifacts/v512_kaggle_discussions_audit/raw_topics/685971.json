@@ -1,0 +1,281 @@
+{
+  "forumTopic": {
+    "authorId": 17819385,
+    "authorPerformanceTier": "CONTRIBUTOR",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "default-thumb.png",
+    "authorUserDisplayName": "lucian kucera",
+    "authorUserName": "luciankucera",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "DaoHe Liu",
+          "id": 21415108,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/21415108-kg.jpg?t=2025-08-26-11-25-10",
+          "tier": "EXPERT",
+          "url": "/daoheliu"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 315,
+        "content": "<p>May I ask whether your data consists of competition data that has been processed into CoT (Chain-of-Thought) format, or if it is entirely new data that is completely distinct from the competition data?</p>",
+        "feedbackTrackingData": {},
+        "id": 3431574,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-30T10:19:35.557Z",
+        "rawMarkdown": "May I ask whether your data consists of competition data that has been processed into CoT (Chain-of-Thought) format, or if it is entirely new data that is completely distinct from the competition data?",
+        "reactions": [
+          {
+            "emoji": "KAGGLE",
+            "featuredUserNames": [
+              "javihm77"
+            ],
+            "userCount": 1
+          }
+        ],
+        "replies": [
+          {
+            "author": {
+              "displayName": "lucian kucera",
+              "id": 17819385,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+              "tier": "CONTRIBUTOR",
+              "url": "/luciankucera"
+            },
+            "authorType": "TOPIC",
+            "competitionRanking": 1662,
+            "content": "<p>Completely new generated trough my own generator. Its based on one of the files from the dataset concretely depth-1.</p>",
+            "feedbackTrackingData": {},
+            "id": 3431591,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-03-30T10:33:44.163Z",
+            "rawMarkdown": "Completely new generated trough my own generator. Its based on one of the files from the dataset concretely depth-1.",
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "lucian kucera",
+                "id": 17819385,
+                "performanceTier": "CONTRIBUTOR",
+                "profileUrl": "/luciankucera",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                "tier": "CONTRIBUTOR",
+                "url": "/luciankucera",
+                "userId": 17819385,
+                "userName": "luciankucera"
+              }
+            },
+            "votes": {
+              "canUpvote": true
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "DaoHe Liu",
+            "id": 21415108,
+            "performanceTier": "EXPERT",
+            "profileUrl": "/daoheliu",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/21415108-kg.jpg?t=2025-08-26-11-25-10",
+            "tier": "EXPERT",
+            "url": "/daoheliu",
+            "userId": 21415108,
+            "userName": "daoheliu"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 1,
+          "totalVotes": 1
+        }
+      },
+      {
+        "author": {
+          "displayName": "Bianco Chiu",
+          "id": 16242374,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/16242374-kg.png?t=2025-10-18-04-56-53",
+          "tier": "CONTRIBUTOR",
+          "url": "/biancochiu"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 1775,
+        "content": "<p>May I ask which model are you using as the teacher model? Does its license allow us to distill that model?</p>",
+        "feedbackTrackingData": {},
+        "id": 3431369,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-30T01:44:44.377Z",
+        "rawMarkdown": "May I ask which model are you using as the teacher model? Does its license allow us to distill that model?",
+        "replies": [
+          {
+            "author": {
+              "displayName": "lucian kucera",
+              "id": 17819385,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+              "tier": "CONTRIBUTOR",
+              "url": "/luciankucera"
+            },
+            "authorType": "TOPIC",
+            "competitionRanking": 1662,
+            "content": "<p>GPT OSS 120B</p>",
+            "feedbackTrackingData": {},
+            "id": 3431458,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-03-30T06:52:22.193Z",
+            "rawMarkdown": "GPT OSS 120B",
+            "reactions": [
+              {
+                "emoji": "THANK_YOU",
+                "featuredUserNames": [
+                  "biancochiu"
+                ],
+                "userCount": 1
+              }
+            ],
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "lucian kucera",
+                "id": 17819385,
+                "performanceTier": "CONTRIBUTOR",
+                "profileUrl": "/luciankucera",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                "tier": "CONTRIBUTOR",
+                "url": "/luciankucera",
+                "userId": 17819385,
+                "userName": "luciankucera"
+              }
+            },
+            "votes": {
+              "canUpvote": true
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Bianco Chiu",
+            "id": 16242374,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/biancochiu",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/16242374-kg.png?t=2025-10-18-04-56-53",
+            "tier": "CONTRIBUTOR",
+            "url": "/biancochiu",
+            "userId": 16242374,
+            "userName": "biancochiu"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      },
+      {
+        "author": {
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "url": "/"
+        },
+        "authorType": "COMMENT",
+        "canDelete": true,
+        "feedbackTrackingData": {},
+        "id": 3431388,
+        "isDeleted": true,
+        "isThankYou": false,
+        "isUserAuthor": true,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-30T03:10:12.650Z",
+        "rawMarkdown": "",
+        "votes": {}
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "lucian kucera",
+        "id": 17819385,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+        "tier": "CONTRIBUTOR",
+        "url": "/luciankucera"
+      },
+      "authorType": "TOPIC",
+      "competitionRanking": 1662,
+      "content": "<p>Use dataset_cot.csv for training reasoning during SFT for bit problems. Contains data for all bitwise operations:</p>\n<ul>\n<li>Nand,And,Or,Xor,Majority,Choice,shift,rotation</li>\n<li>filtered meticulously to contain only correct samples and standardized reasoning format.</li>\n<li>Contains 5000 high quality reasoning traces for SOTA performance\n<a href=\"https://www.kaggle.com/datasets/luciankucera/bitunit-test-depth-1\" target=\"_blank\">dataset</a>\n<a href=\"https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/685886\" target=\"_blank\">prompt</a></li>\n</ul>\n<p>Now I will work on creating dataset for other problems. And I will no work on RL kaggle environment, for bit problem using SOTA techinques.\nAlso might share highly optimized Unsloth kaggle SFT pipeline for high velocity training, without precision loss. </p>",
+      "feedbackTrackingData": {},
+      "id": 3431330,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-03-29T22:45:03.780Z",
+      "rawMarkdown": "Use dataset_cot.csv for training reasoning during SFT for bit problems. Contains data for all bitwise operations:\n* Nand,And,Or,Xor,Majority,Choice,shift,rotation\n* filtered meticulously to contain only correct samples and standardized reasoning format.\n* Contains 5000 high quality reasoning traces for SOTA performance\n[dataset](https://www.kaggle.com/datasets/luciankucera/bitunit-test-depth-1)\n[prompt](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/685886)\n\nNow I will work on creating dataset for other problems. And I will no work on RL kaggle environment, for bit problem using SOTA techinques.\nAlso might share highly optimized Unsloth kaggle SFT pipeline for high velocity training, without precision loss. ",
+      "teamUpInfo": {
+        "intro": "",
+        "teamLeader": {
+          "displayName": "lucian kucera",
+          "id": 17819385,
+          "performanceTier": "CONTRIBUTOR",
+          "profileUrl": "/luciankucera",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "CONTRIBUTOR",
+          "url": "/luciankucera",
+          "userId": 17819385,
+          "userName": "luciankucera"
+        }
+      },
+      "votes": {
+        "canUpvote": true,
+        "totalUpvotes": 5,
+        "totalVotes": 1
+      }
+    },
+    "firstMessageId": 3431330,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 685971,
+    "name": "Brand new comprahensive dataset, that teaches model to solve bit problems[created using SOTA techinques][Will improve your model reasoning]",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-03-29T22:45:03.779462400Z",
+    "tags": [
+      {
+        "displayName": "Text Generation",
+        "id": 16696,
+        "listingUrl": "/search?q=text+generation+tag%3A%22text+generation%22",
+        "name": "text generation",
+        "tagUrl": "/tags/text-generation"
+      },
+      {
+        "displayName": "Text",
+        "id": 14104,
+        "listingUrl": "/search?q=text+tag%3A%22text%22",
+        "name": "text",
+        "tagUrl": "/tags/text-data"
+      },
+      {
+        "displayName": "NLP",
+        "id": 13204,
+        "listingUrl": "/search?q=nlp+tag%3A%22nlp%22",
+        "name": "nlp",
+        "tagUrl": "/tags/nlp"
+      }
+    ],
+    "totalMessages": 5,
+    "totalVotes": 1,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/685971"
+  }
+}

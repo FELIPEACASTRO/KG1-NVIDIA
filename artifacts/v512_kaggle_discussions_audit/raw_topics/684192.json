@@ -1,0 +1,806 @@
+{
+  "forumTopic": {
+    "authorId": 145164,
+    "authorPerformanceTier": "EXPERT",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "145164-kg.JPG?t=2025-08-14-07-51-30",
+    "authorUserDisplayName": "Dennis",
+    "authorUserName": "dennisfong",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "Yuchen20",
+          "id": 14322371,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/14322371-kg.jpeg?t=2023-09-22-11-23-14",
+          "tier": "MASTER",
+          "url": "/yuchen2066"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 1385,
+        "content": "<p>This one is not even solvable, id : 4e840a1a</p>\n<pre><code>In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:\n58*93 = 152\n26*21 = 48\n56*65 = 122\nNow, determine the result for: 15+53\n</code></pre>\n<p>the <code>+</code> is not even in the multi-shot example</p>",
+        "feedbackTrackingData": {},
+        "id": 3429708,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-27T05:41:59.650Z",
+        "rawMarkdown": "This one is not even solvable, id : 4e840a1a\n\n```\nIn Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:\n58*93 = 152\n26*21 = 48\n56*65 = 122\nNow, determine the result for: 15+53\n```\n\nthe `+` is not even in the multi-shot example",
+        "reactions": [
+          {
+            "emoji": "FUNNY",
+            "featuredUserNames": [
+              "pranavpoduval",
+              "copasta",
+              "zacchaeus",
+              "cnumber",
+              "phucthaiv02",
+              "kishanvavdara",
+              "kain205",
+              "askdkjanfkqf",
+              "msvzss"
+            ],
+            "userCount": 9
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Yuchen20",
+            "id": 14322371,
+            "performanceTier": "MASTER",
+            "profileUrl": "/yuchen2066",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/14322371-kg.jpeg?t=2023-09-22-11-23-14",
+            "tier": "MASTER",
+            "url": "/yuchen2066",
+            "userId": 14322371,
+            "userName": "yuchen2066"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 4,
+          "totalVotes": 4
+        }
+      },
+      {
+        "author": {
+          "displayName": "Donald Galliano III",
+          "id": 29434769,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/29434769-kg.png?t=2026-03-14-05-23-02",
+          "tier": "CONTRIBUTOR",
+          "url": "/donaldgalliano"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 2306,
+        "content": "<p>Solved here : <a href=\"https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/688461\" target=\"_blank\">https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/688461</a></p>",
+        "feedbackTrackingData": {},
+        "id": 3436420,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-05T22:45:35.597Z",
+        "rawMarkdown": "Solved here : https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/688461",
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Donald Galliano III",
+            "id": 29434769,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/donaldgalliano",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/29434769-kg.png?t=2026-03-14-05-23-02",
+            "tier": "CONTRIBUTOR",
+            "url": "/donaldgalliano",
+            "userId": 29434769,
+            "userName": "donaldgalliano"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalVotes": -6
+        }
+      },
+      {
+        "author": {
+          "displayName": "Durga Kumari",
+          "id": 30256119,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/30256119-kg.jpg?t=2026-04-09-17-12-41",
+          "tier": "CONTRIBUTOR",
+          "url": "/durgakumari12"
+        },
+        "authorType": "COMMENT",
+        "content": "<p>Nice Dataset</p>",
+        "feedbackTrackingData": {},
+        "id": 3431812,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-30T17:48:37.473Z",
+        "rawMarkdown": "Nice Dataset",
+        "votes": {
+          "canUpvote": true,
+          "totalVotes": -3
+        }
+      },
+      {
+        "author": {
+          "displayName": "Navneet",
+          "id": 15692441,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/15692441-kg.jpg?t=2025-05-18-07-58-06",
+          "tier": "CONTRIBUTOR",
+          "url": "/navneetbende"
+        },
+        "authorType": "COMMENT",
+        "content": "<p>Cool Dataset <a href=\"https://www.kaggle.com/dennisfong\" target=\"_blank\">@dennisfong</a> </p>",
+        "feedbackTrackingData": {},
+        "id": 3430332,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-28T09:29:50.447Z",
+        "rawMarkdown": "Cool Dataset @dennisfong ",
+        "votes": {
+          "canUpvote": true,
+          "totalVotes": -4
+        }
+      },
+      {
+        "author": {
+          "displayName": "Ashutosh Kumar",
+          "id": 11379547,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "CONTRIBUTOR",
+          "url": "/ashutoshkumar432"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 1383,
+        "content": "<p>Exactly, for bit_manipulation and equation_transformation, despite so many rotations and handlings model hallucinates and its not fit for arithmetic operations </p>\n<p>Bit manipulation (46% per-bit, 100% rotation):</p>\n<p>Rotation: 9/9 = 100% — model recognizes rotation patterns perfectly\nPer-bit: 42/91 = 46% — model writes correct format but derives WRONG boolean rules\nFailed predictions heavily use complex ops (xnor: 80, or_not: 42, and_not: 33)\nCorrect predictions dominated by simple ops (COPY: 290, AND: 90)\nThe model can't actually compute boolean operations — this is a 3B model capability limit\nEquation transformation (54% numeric, 4% symbolic):</p>\n<p>28/100 equations have numeric answers, 72/100 have symbolic\nNumeric: 15/28 correct (54%) — model gets arithmetic wrong in 13 cases\nSymbolic: 3/72 correct (4%) — arbitrary character substitutions are fundamentally impossible\nCommon failure: model claims \"a+b+1: 26,93→120? no → MATCH\" — hallucinates verification</p>",
+        "feedbackTrackingData": {},
+        "id": 3431860,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-30T19:15:15.820Z",
+        "rawMarkdown": "Exactly, for bit_manipulation and equation_transformation, despite so many rotations and handlings model hallucinates and its not fit for arithmetic operations \n\nBit manipulation (46% per-bit, 100% rotation):\n\nRotation: 9/9 = 100% — model recognizes rotation patterns perfectly\nPer-bit: 42/91 = 46% — model writes correct format but derives WRONG boolean rules\nFailed predictions heavily use complex ops (xnor: 80, or_not: 42, and_not: 33)\nCorrect predictions dominated by simple ops (COPY: 290, AND: 90)\nThe model can't actually compute boolean operations — this is a 3B model capability limit\nEquation transformation (54% numeric, 4% symbolic):\n\n28/100 equations have numeric answers, 72/100 have symbolic\nNumeric: 15/28 correct (54%) — model gets arithmetic wrong in 13 cases\nSymbolic: 3/72 correct (4%) — arbitrary character substitutions are fundamentally impossible\nCommon failure: model claims \"a+b+1: 26,93→120? no → MATCH\" — hallucinates verification",
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Ashutosh Kumar",
+            "id": 11379547,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/ashutoshkumar432",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+            "tier": "CONTRIBUTOR",
+            "url": "/ashutoshkumar432",
+            "userId": 11379547,
+            "userName": "ashutoshkumar432"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      },
+      {
+        "author": {
+          "displayName": "Asadullah Baig",
+          "id": 3762503,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "CONTRIBUTOR",
+          "url": "/asadullahbeg"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 2467,
+        "content": "<p>In short training on this dataset is not recommended. Either correct it and then train on a different set?</p>",
+        "feedbackTrackingData": {},
+        "id": 3430319,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-28T09:01:47.010Z",
+        "rawMarkdown": "In short training on this dataset is not recommended. Either correct it and then train on a different set?",
+        "replies": [
+          {
+            "author": {
+              "displayName": "ImperfectKitto",
+              "id": 11905020,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/11905020-kg.jpg",
+              "tier": "EXPERT",
+              "url": "/defdet"
+            },
+            "authorType": "COMMENT",
+            "competitionRanking": 490,
+            "content": "<p>What about the hidden testing dataset?</p>",
+            "feedbackTrackingData": {},
+            "id": 3431082,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-03-29T11:48:48.723Z",
+            "rawMarkdown": "What about the hidden testing dataset?\n",
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "ImperfectKitto",
+                "id": 11905020,
+                "performanceTier": "EXPERT",
+                "profileUrl": "/defdet",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/11905020-kg.jpg",
+                "tier": "EXPERT",
+                "url": "/defdet",
+                "userId": 11905020,
+                "userName": "defdet"
+              }
+            },
+            "votes": {
+              "canUpvote": true
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Asadullah Baig",
+            "id": 3762503,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/asadullahbeg",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+            "tier": "CONTRIBUTOR",
+            "url": "/asadullahbeg",
+            "userId": 3762503,
+            "userName": "asadullahbeg"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      },
+      {
+        "author": {
+          "displayName": "George",
+          "id": 24335872,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/24335872-kg.png?t=2024-12-26-02-47-25",
+          "tier": "CONTRIBUTOR",
+          "url": "/george8874"
+        },
+        "authorType": "COMMENT",
+        "content": "<p>Who can solve this puzzle? * not present in the examples at all</p>\n<pre><code>In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:\n81+79 = 511\n19-41 = 7\n58-87 = 7\nNow, determine the result for: 07*79\n</code></pre>",
+        "feedbackTrackingData": {},
+        "id": 3428304,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-25T08:32:01.653Z",
+        "rawMarkdown": "Who can solve this puzzle? * not present in the examples at all\n\n```\nIn Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:\n81+79 = 511\n19-41 = 7\n58-87 = 7\nNow, determine the result for: 07*79\n```",
+        "replies": [
+          {
+            "author": {
+              "displayName": "zoey",
+              "id": 20797610,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+              "tier": "CONTRIBUTOR",
+              "url": "/kaggletongtong"
+            },
+            "authorType": "COMMENT",
+            "content": "<p>Impossible, my opus-4.6 failed</p>",
+            "feedbackTrackingData": {},
+            "id": 3429907,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-03-27T14:32:45.980Z",
+            "rawMarkdown": "Impossible, my opus-4.6 failed",
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "zoey",
+                "id": 20797610,
+                "performanceTier": "CONTRIBUTOR",
+                "profileUrl": "/kaggletongtong",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                "tier": "CONTRIBUTOR",
+                "url": "/kaggletongtong",
+                "userId": 20797610,
+                "userName": "kaggletongtong"
+              }
+            },
+            "votes": {
+              "canUpvote": true
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "George",
+            "id": 24335872,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/george8874",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/24335872-kg.png?t=2024-12-26-02-47-25",
+            "tier": "CONTRIBUTOR",
+            "url": "/george8874",
+            "userId": 24335872,
+            "userName": "george8874"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      },
+      {
+        "author": {
+          "displayName": "Đăng Nguyễn Hồng",
+          "id": 10254700,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/10254700-kg.jpeg?t=2025-10-30-16-17-14",
+          "tier": "MASTER",
+          "url": "/dangnh0611"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 1425,
+        "content": "<p>I found the provided dataset is quite consistent in rule, but some questions indeed unsolvable in mathematical term (such as a query operator is unseen in example equations-there are many cases, but not sure if there are hidden rules to find it out, but until now it seems random to me). \nBy this nature, think about it as a puzzle intead of mathematic :D</p>",
+        "feedbackTrackingData": {},
+        "id": 3427478,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-24T06:05:10.610Z",
+        "rawMarkdown": "I found the provided dataset is quite consistent in rule, but some questions indeed unsolvable in mathematical term (such as a query operator is unseen in example equations-there are many cases, but not sure if there are hidden rules to find it out, but until now it seems random to me). \nBy this nature, think about it as a puzzle intead of mathematic :D",
+        "replies": [
+          {
+            "author": {
+              "displayName": "Dennis",
+              "id": 145164,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/145164-kg.JPG?t=2025-08-14-07-51-30",
+              "tier": "EXPERT",
+              "url": "/dennisfong"
+            },
+            "authorType": "TOPIC",
+            "competitionRanking": 1839,
+            "content": "<p><a href=\"https://www.kaggle.com/dangnh0611\" target=\"_blank\">@dangnh0611</a> , can you give some hints on solving this?</p>\n<pre><code>In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:\n`!-`/ = -[]\n[/-:( = -](\n^`*&lt;! = :%[!\n%/-&lt;&lt; = -/(\n!&lt;+^^ = %((\nNow, determine the result for: :&lt;-]!\n</code></pre>",
+            "feedbackTrackingData": {},
+            "id": 3428175,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-03-25T03:22:36.203Z",
+            "rawMarkdown": "@dangnh0611 , can you give some hints on solving this?\n\n```python\nIn Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:\n`!-`/ = -[]\n[/-:( = -](\n^`*<! = :%[!\n%/-<< = -/(\n!<+^^ = %((\nNow, determine the result for: :<-]!\n```",
+            "replies": [
+              {
+                "author": {
+                  "displayName": "Đăng Nguyễn Hồng",
+                  "id": 10254700,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/10254700-kg.jpeg?t=2025-10-30-16-17-14",
+                  "tier": "MASTER",
+                  "url": "/dangnh0611"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 1425,
+                "content": "<p>This result obtained from a LLM by provide a detailed prompt/instructions about how to solve this kind of puzzle. Share you my obtained response, with long-CoT-thinking prunned, strip to the final result:</p>\n<p><strong>Digits mapping:</strong></p>\n<ul>\n<li><code>[</code> = 0, <code>(</code> = 1</li>\n<li><code>&lt;</code> = 2</li>\n<li><code>/</code> = 3</li>\n<li><code>]</code> = 4</li>\n<li><code>%</code> = 5</li>\n<li><code>:</code> = 6</li>\n<li><code>!</code> = 7</li>\n<li><code>^</code> = 8</li>\n<li><code>`</code> = 9</li>\n</ul>\n<p><strong>Operators:</strong></p>\n<ul>\n<li><code>+</code> = standard addition</li>\n<li><code>*</code> = multiplication</li>\n<li><code>-</code> = negative absolute difference (<code>neg_abs_diff</code>)</li>\n</ul>\n<p>We can substitute the assigned digits into the equations to verify:</p>\n<ul>\n<li><strong>Eq 1:</strong> <code>97 - 93 = -04</code> → <code>-|79 - 39| = -40</code> → reverses to <code>-04</code>. (Matches <code>-[]</code>)</li>\n<li><strong>Eq 2:</strong> <code>03 - 61 = -41</code> → <code>-|30 - 16| = -14</code> → reverses to <code>-41</code>. (Matches <code>-](</code>)</li>\n<li><strong>Eq 3:</strong> <code>89 * 27 = 6507</code> → <code>98 * 72 = 7056</code> → reverses to <code>6507</code>. (Matches <code>:%[!</code>)</li>\n<li><strong>Eq 4:</strong> <code>53 - 22 = -31</code> → <code>-|35 - 22| = -13</code> → reverses to <code>-31</code>. (Matches <code>-/(</code>)</li>\n<li><strong>Eq 5:</strong> <code>72 + 88 = 511</code> → <code>27 + 88 = 115</code> → reverses to <code>511</code>. (Matches <code>%((</code>)</li>\n</ul>\n<p><strong>PHASE 3: COMPUTE ANSWER</strong>\nWe need to determine the result for the query: <code>:&lt; - ]!</code></p>\n<ol>\n<li>Translate the operands: \n<code>:</code> = 6, <code>&lt;</code> = 2  → <strong>62</strong>\n<code>]</code> = 4, <code>!</code> = 7  → <strong>47</strong></li>\n<li>Apply reverse mode (reverse operands): \nA' = 26\nB' = 74</li>\n<li>Apply the operator <code>-</code> (<code>neg_abs_diff</code>): \n-|26 - 74| = -|-48| = <strong>-48</strong></li>\n<li>Reverse the magnitude for the final result:\n48 reversed is <strong>84</strong>. Sign is preserved as <code>-84</code>.</li>\n<li>Re-encode into symbols:\n8 = <code>^</code>\n4 = <code>]</code>\nResult = <code>-^]</code></li>\n</ol>",
+                "feedbackTrackingData": {},
+                "id": 3428212,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-03-25T04:59:02.723Z",
+                "rawMarkdown": "This result obtained from a LLM by provide a detailed prompt/instructions about how to solve this kind of puzzle. Share you my obtained response, with long-CoT-thinking prunned, strip to the final result:\n\n**Digits mapping:**\n* `[` = 0, `(` = 1\n* `<` = 2\n* `/` = 3\n* `]` = 4\n* `%` = 5\n* `:` = 6\n* `!` = 7\n* `^` = 8\n* `` ` `` = 9\n\n**Operators:**\n* `+` = standard addition\n* `*` = multiplication\n* `-` = negative absolute difference (`neg_abs_diff`)\n\nWe can substitute the assigned digits into the equations to verify:\n* **Eq 1:** `97 - 93 = -04` → `-|79 - 39| = -40` → reverses to `-04`. (Matches `-[]`)\n* **Eq 2:** `03 - 61 = -41` → `-|30 - 16| = -14` → reverses to `-41`. (Matches `-](`)\n* **Eq 3:** `89 * 27 = 6507` → `98 * 72 = 7056` → reverses to `6507`. (Matches `:%[!`)\n* **Eq 4:** `53 - 22 = -31` → `-|35 - 22| = -13` → reverses to `-31`. (Matches `-/(`)\n* **Eq 5:** `72 + 88 = 511` → `27 + 88 = 115` → reverses to `511`. (Matches `%((`)\n\n\n**PHASE 3: COMPUTE ANSWER**\nWe need to determine the result for the query: `:< - ]!`\n\n1. Translate the operands: \n   `:` = 6, `<` = 2  → **62**\n   `]` = 4, `!` = 7  → **47**\n2. Apply reverse mode (reverse operands): \n   A' = 26\n   B' = 74\n3. Apply the operator `-` (`neg_abs_diff`): \n   -|26 - 74| = -|-48| = **-48**\n4. Reverse the magnitude for the final result:\n   48 reversed is **84**. Sign is preserved as `-84`.\n5. Re-encode into symbols:\n   8 = `^`\n   4 = `]`\n   Result = `-^]`",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "Đăng Nguyễn Hồng",
+                    "id": 10254700,
+                    "performanceTier": "MASTER",
+                    "profileUrl": "/dangnh0611",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/10254700-kg.jpeg?t=2025-10-30-16-17-14",
+                    "tier": "MASTER",
+                    "url": "/dangnh0611",
+                    "userId": 10254700,
+                    "userName": "dangnh0611"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true,
+                  "totalUpvotes": 15,
+                  "totalVotes": 15
+                }
+              },
+              {
+                "author": {
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                  "url": "/"
+                },
+                "authorType": "COMMENT",
+                "canDelete": true,
+                "feedbackTrackingData": {},
+                "id": 3428221,
+                "isDeleted": true,
+                "isThankYou": false,
+                "isUserAuthor": true,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-03-25T05:20:45.883Z",
+                "rawMarkdown": "",
+                "votes": {}
+              },
+              {
+                "author": {
+                  "displayName": "Dennis",
+                  "id": 145164,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/145164-kg.JPG?t=2025-08-14-07-51-30",
+                  "tier": "EXPERT",
+                  "url": "/dennisfong"
+                },
+                "authorType": "TOPIC",
+                "competitionRanking": 1839,
+                "content": "<p><a href=\"https://www.kaggle.com/dangnh0611\" target=\"_blank\">@dangnh0611</a> . Thanks for sharing. It inspired me how to teach my model to fine tune. </p>",
+                "feedbackTrackingData": {},
+                "id": 3428232,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-03-25T05:43:38.470Z",
+                "rawMarkdown": "@dangnh0611 . Thanks for sharing. It inspired me how to teach my model to fine tune. ",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "Dennis",
+                    "id": 145164,
+                    "performanceTier": "EXPERT",
+                    "profileUrl": "/dennisfong",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/145164-kg.JPG?t=2025-08-14-07-51-30",
+                    "tier": "EXPERT",
+                    "url": "/dennisfong",
+                    "userId": 145164,
+                    "userName": "dennisfong"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true
+                }
+              }
+            ],
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "Dennis",
+                "id": 145164,
+                "performanceTier": "EXPERT",
+                "profileUrl": "/dennisfong",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/145164-kg.JPG?t=2025-08-14-07-51-30",
+                "tier": "EXPERT",
+                "url": "/dennisfong",
+                "userId": 145164,
+                "userName": "dennisfong"
+              }
+            },
+            "votes": {
+              "canUpvote": true
+            }
+          },
+          {
+            "author": {
+              "displayName": "yash bhaskar",
+              "id": 12063947,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/12063947-kg.jpeg?t=2025-12-19-14-37-37",
+              "tier": "GRANDMASTER",
+              "url": "/yash9439"
+            },
+            "authorType": "COMMENT",
+            "competitionRanking": 149,
+            "content": "<p><a href=\"https://www.kaggle.com/dangnh0611\" target=\"_blank\">@dangnh0611</a> Whats the logic here?</p>\n<pre><code>In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:\n#[!}} = &gt;#\n]]-?&lt; = &gt;\"]\n]](&gt;&gt; = &lt;&lt;\n&gt;#-&lt;} = &lt;#&gt;}\nNow, determine the result for: &gt;}-&lt;\"\n</code></pre>",
+            "feedbackTrackingData": {},
+            "id": 3429641,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-03-27T02:51:28.650Z",
+            "rawMarkdown": "@dangnh0611 Whats the logic here?\n\n```python\nIn Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:\n#[!}} = >#\n]]-?< = >\"]\n]](>> = <<\n>#-<} = <#>}\nNow, determine the result for: >}-<\"\n```",
+            "replies": [
+              {
+                "author": {
+                  "displayName": "Kh0a",
+                  "id": 21691005,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/21691005-kg.png?t=2025-08-27-03-21-25",
+                  "tier": "MASTER",
+                  "url": "/llkh0a"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 4,
+                "content": "<p>I asked gemini</p>\n<h1>Wonderland Math Puzzle Solution</h1>\n<p><strong>Digits mapping:</strong>\n<strong>\"</strong> = 0, <strong>&lt;</strong> = 1\n<strong>]</strong> = 2\n<strong>#</strong> = 3\n<strong>?</strong> = 4\n<strong>}</strong> = 5\n<strong>[</strong> = 8\n<strong>&gt;</strong> = 9</p>\n<p><strong>Operators:</strong>\n<strong>!</strong> = standard addition\n<strong>-</strong> = multiplication\n<strong>(</strong> = Greatest Common Divisor (GCD)</p>\n<p><strong>We can substitute the assigned digits into the equations to verify:</strong></p>\n<ul>\n<li><strong>Eq 1:</strong> 38 + 55 = 93 <em>(Matches &gt;#)</em></li>\n<li><strong>Eq 2:</strong> 22 * 41 = 902 <em>(Matches &gt;\"])</em></li>\n<li><strong>Eq 3:</strong> GCD(22, 99) = 11 <em>(Matches &lt;&lt;)</em></li>\n<li><strong>Eq 4:</strong> 93 * 15 = 1395 <em>(Matches &lt;#&gt;})</em></li>\n</ul>\n<h3>PHASE 3: COMPUTE ANSWER</h3>\n<p><strong>We need to determine the result for the query:</strong> <code>&gt;}-&lt;\"</code></p>\n<ul>\n<li><strong>Translate the operands:</strong> <code>&gt;</code> = 9, <code>}</code> = 5 → <strong>95</strong> | <code>&lt;</code> = 1, <code>\"</code> = 0 → <strong>10</strong></li>\n<li><strong>Apply the operator <code>-</code> (multiplication):</strong> 95 * 10 = <strong>950</strong></li>\n<li><strong>Re-encode into symbols:</strong> 9 = <code>&gt;</code>, 5 = <code>}</code>, 0 = <code>\"</code> → <strong>Result = <code>&gt;}\"</code></strong></li>\n</ul>",
+                "feedbackTrackingData": {},
+                "id": 3429748,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-03-27T07:51:26.883Z",
+                "rawMarkdown": "I asked gemini\n\n# Wonderland Math Puzzle Solution\n\n**Digits mapping:**\n**\"** = 0, **<** = 1\n**]** = 2\n**#** = 3\n**?** = 4\n**}** = 5\n**[** = 8\n**>** = 9\n\n**Operators:**\n**!** = standard addition\n**-** = multiplication\n**(** = Greatest Common Divisor (GCD)\n\n**We can substitute the assigned digits into the equations to verify:**\n* **Eq 1:** 38 + 55 = 93 *(Matches >#)*\n* **Eq 2:** 22 * 41 = 902 *(Matches >\"])*\n* **Eq 3:** GCD(22, 99) = 11 *(Matches <<)*\n* **Eq 4:** 93 * 15 = 1395 *(Matches <#>})*\n\n### PHASE 3: COMPUTE ANSWER \n**We need to determine the result for the query:** `>}-<\"`\n\n* **Translate the operands:** `>` = 9, `}` = 5 → **95** | `<` = 1, `\"` = 0 → **10**\n* **Apply the operator `-` (multiplication):** 95 * 10 = **950**\n* **Re-encode into symbols:** 9 = `>`, 5 = `}`, 0 = `\"` → **Result = `>}\"`**",
+                "reactions": [
+                  {
+                    "emoji": "LOVE",
+                    "featuredUserNames": [
+                      "pranavpoduval",
+                      "javihm77",
+                      "cnumber",
+                      "yash9439"
+                    ],
+                    "userCount": 4
+                  }
+                ],
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "Kh0a",
+                    "id": 21691005,
+                    "performanceTier": "MASTER",
+                    "profileUrl": "/llkh0a",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/21691005-kg.png?t=2025-08-27-03-21-25",
+                    "tier": "MASTER",
+                    "url": "/llkh0a",
+                    "userId": 21691005,
+                    "userName": "llkh0a"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true
+                }
+              }
+            ],
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "Aneesh",
+                "id": 18445905,
+                "performanceTier": "EXPERT",
+                "profileUrl": "/aneeshmukkamala",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/18445905-kg.jpeg?t=2025-05-12-17-38-43",
+                "tier": "EXPERT",
+                "url": "/aneeshmukkamala",
+                "userId": 18445905,
+                "userName": "aneeshmukkamala"
+              }
+            },
+            "votes": {
+              "canUpvote": true
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Đăng Nguyễn Hồng",
+            "id": 10254700,
+            "performanceTier": "MASTER",
+            "profileUrl": "/dangnh0611",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/10254700-kg.jpeg?t=2025-10-30-16-17-14",
+            "tier": "MASTER",
+            "url": "/dangnh0611",
+            "userId": 10254700,
+            "userName": "dangnh0611"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      },
+      {
+        "author": {
+          "displayName": "MD Mushfirat Mohaimin",
+          "id": 5956875,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/5956875-kg.jpg?t=2024-04-26-21-54-01",
+          "tier": "EXPERT",
+          "url": "/mushfirat"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 1961,
+        "content": "<p>I found another example.  </p>\n<p><strong>026106f5</strong></p>\n<pre><code>In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:\n52{43 = 9\n31*15 = 46\n37{26 = 11\n17{92 = 24\nNow, determine the result for: 75*97\n</code></pre>\n<p>Here, we can observe that <code>{</code> acts like a minus for two examples, but for the last example the mapping is NOT a minus.<br>\nWe can also observe that <code>*</code> seems to act like a plus from the only one example where this operator is used.<br>\nSo, the answer to <code>75*97</code> would be the sum of 75 and 97, which is 172, right?  </p>\n<p>But, in the dataset, the answer to this prompt is 631  </p>\n<p>What's the logic behind it?</p>",
+        "feedbackTrackingData": {},
+        "id": 3427411,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-24T03:45:13.297Z",
+        "rawMarkdown": "I found another example.  \n\n**026106f5**\n```\nIn Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:\n52{43 = 9\n31*15 = 46\n37{26 = 11\n17{92 = 24\nNow, determine the result for: 75*97\n```\nHere, we can observe that `{` acts like a minus for two examples, but for the last example the mapping is NOT a minus.  \nWe can also observe that `*` seems to act like a plus from the only one example where this operator is used.  \nSo, the answer to `75*97` would be the sum of 75 and 97, which is 172, right?  \n\nBut, in the dataset, the answer to this prompt is 631  \n\nWhat's the logic behind it?",
+        "replies": [
+          {
+            "author": {
+              "displayName": "Dennis",
+              "id": 145164,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/145164-kg.JPG?t=2025-08-14-07-51-30",
+              "tier": "EXPERT",
+              "url": "/dennisfong"
+            },
+            "authorType": "TOPIC",
+            "competitionRanking": 1839,
+            "content": "<p>I tried to solve it by hand.</p>\n<p>31*15=46\nseems like 3+1 =4 , 1+5 = 6 , and then concat  = 46</p>\n<p><a href=\"https://www.kaggle.com/ryanholbrook\" target=\"_blank\">@ryanholbrook</a> , could you please provide some insights ? Thanks in advance.</p>",
+            "feedbackTrackingData": {},
+            "id": 3427417,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-03-24T03:54:27.510Z",
+            "rawMarkdown": "I tried to solve it by hand.\n\n31*15=46\nseems like 3+1 =4 , 1+5 = 6 , and then concat  = 46\n\n@ryanholbrook , could you please provide some insights ? Thanks in advance.",
+            "replies": [
+              {
+                "author": {
+                  "displayName": "Đăng Nguyễn Hồng",
+                  "id": 10254700,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/10254700-kg.jpeg?t=2025-10-30-16-17-14",
+                  "tier": "MASTER",
+                  "url": "/dangnh0611"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 1425,
+                "content": "<p>About this example:</p>\n<ul>\n<li>{ means digit-reverse then take abs(B-A) -&gt; reverse: 9=34-25; 11=abs(62-73), 42=abs(29-71)</li>\n<li>* means reverse -&gt; add -&gt; reverse: 64=51+13; 136=79+57</li>\n</ul>",
+                "feedbackTrackingData": {},
+                "id": 3427473,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-03-24T05:55:02.867Z",
+                "rawMarkdown": "About this example:\n- { means digit-reverse then take abs(B-A) -> reverse: 9=34-25; 11=abs(62-73), 42=abs(29-71)\n- * means reverse -> add -> reverse: 64=51+13; 136=79+57\n",
+                "reactions": [
+                  {
+                    "emoji": "FUNNY",
+                    "featuredUserNames": [
+                      "siddhantoon",
+                      "taurine511",
+                      "roschildrui",
+                      "jiaqiweijqw"
+                    ],
+                    "userCount": 4
+                  }
+                ],
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "Đăng Nguyễn Hồng",
+                    "id": 10254700,
+                    "performanceTier": "MASTER",
+                    "profileUrl": "/dangnh0611",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/10254700-kg.jpeg?t=2025-10-30-16-17-14",
+                    "tier": "MASTER",
+                    "url": "/dangnh0611",
+                    "userId": 10254700,
+                    "userName": "dangnh0611"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true,
+                  "totalUpvotes": 9,
+                  "totalVotes": 9
+                }
+              }
+            ],
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "Dennis",
+                "id": 145164,
+                "performanceTier": "EXPERT",
+                "profileUrl": "/dennisfong",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/145164-kg.JPG?t=2025-08-14-07-51-30",
+                "tier": "EXPERT",
+                "url": "/dennisfong",
+                "userId": 145164,
+                "userName": "dennisfong"
+              }
+            },
+            "votes": {
+              "canUpvote": true
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "MD Mushfirat Mohaimin",
+            "id": 5956875,
+            "performanceTier": "EXPERT",
+            "profileUrl": "/mushfirat",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/5956875-kg.jpg?t=2024-04-26-21-54-01",
+            "tier": "EXPERT",
+            "url": "/mushfirat",
+            "userId": 5956875,
+            "userName": "mushfirat"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "Dennis",
+        "id": 145164,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/145164-kg.JPG?t=2025-08-14-07-51-30",
+        "tier": "EXPERT",
+        "url": "/dennisfong"
+      },
+      "authorType": "TOPIC",
+      "competitionRanking": 1839,
+      "content": "<p><strong>eeae398e</strong></p>\n<pre><code>In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:\n63]67 = 4\n18]81 = 9\n72-22 = 95\n64]48 = 16\n65]15 = 5\nNow, determine the result for: 65/58\n</code></pre>\n<p>When we look at the above question, slash has never appeared in the example. How can we deduce the solution?\nWe know that ] is max(A, B) % min(A, B). No example is given for /</p>\n<p><strong>e7cf0394</strong></p>\n<pre><code>In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:\n88\\87 = 7656\n30]47 = 3047\n52*15 = *37\nNow, determine the result for: 97]83\n</code></pre>\n<p>If the symbol works across the \"Alice Wonderland\", here 30] 47 should not use concat.</p>\n<p>It seems that the training dataset has hallucination?</p>\n<p>One more thing,\n<strong>7993452d</strong></p>\n<pre><code>In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:\n`!-`/ = -[]\n[/-:( = -](\n^`*&lt;! = :%[!\n%/-&lt;&lt; = -/(\n!&lt;+^^ = %((\nNow, determine the result for: :&lt;-]!\n</code></pre>\n<p>Would anyone share how to reason this kind of problem? I have asked some LLM, they spent many tokens but unable to find the solution. I have also tried to deduce it but in vain.</p>\n<p>It seems the data is unbalanced and there are some hallucinations (I think it is severe) in the dataset.\n<img src=\"https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F145164%2Fcb7ae8b9240d5418b30f437e8e7f292d%2Fnvda.png?generation=1774324860344503&amp;alt=media\" alt=\"\"></p>",
+      "feedbackTrackingData": {},
+      "id": 3427334,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-03-24T01:13:54.920Z",
+      "rawMarkdown": "**eeae398e**\n```python\nIn Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:\n63]67 = 4\n18]81 = 9\n72-22 = 95\n64]48 = 16\n65]15 = 5\nNow, determine the result for: 65/58\n```\n\nWhen we look at the above question, slash has never appeared in the example. How can we deduce the solution?\nWe know that ] is max(A, B) % min(A, B). No example is given for /\n\n**e7cf0394**\n```python\nIn Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:\n88\\87 = 7656\n30]47 = 3047\n52*15 = *37\nNow, determine the result for: 97]83\n```\n\nIf the symbol works across the \"Alice Wonderland\", here 30] 47 should not use concat.\n\nIt seems that the training dataset has hallucination?\n\nOne more thing,\n**7993452d**\n```python\nIn Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:\n`!-`/ = -[]\n[/-:( = -](\n^`*<! = :%[!\n%/-<< = -/(\n!<+^^ = %((\nNow, determine the result for: :<-]!\n```\n\nWould anyone share how to reason this kind of problem? I have asked some LLM, they spent many tokens but unable to find the solution. I have also tried to deduce it but in vain.\n\nIt seems the data is unbalanced and there are some hallucinations (I think it is severe) in the dataset.\n![](https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F145164%2Fcb7ae8b9240d5418b30f437e8e7f292d%2Fnvda.png?generation=1774324860344503&alt=media)",
+      "reactions": [
+        {
+          "emoji": "LOVE",
+          "featuredUserNames": [
+            "wuzhiqiang01",
+            "badwolfe"
+          ],
+          "userCount": 2
+        }
+      ],
+      "teamUpInfo": {
+        "intro": "",
+        "teamLeader": {
+          "displayName": "Dennis",
+          "id": 145164,
+          "performanceTier": "EXPERT",
+          "profileUrl": "/dennisfong",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/145164-kg.JPG?t=2025-08-14-07-51-30",
+          "tier": "EXPERT",
+          "url": "/dennisfong",
+          "userId": 145164,
+          "userName": "dennisfong"
+        }
+      },
+      "votes": {
+        "canUpvote": true,
+        "totalUpvotes": 52,
+        "totalVotes": 52
+      }
+    },
+    "firstMessageId": 3427334,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 684192,
+    "name": "[Dataset Hallucination?] How did you resolve these problems by human?",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-03-24T01:13:54.919394300Z",
+    "totalMessages": 19,
+    "totalVotes": 52,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/684192"
+  }
+}

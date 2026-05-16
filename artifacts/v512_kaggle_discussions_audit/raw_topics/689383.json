@@ -1,0 +1,299 @@
+{
+  "forumTopic": {
+    "authorId": 3967558,
+    "authorPerformanceTier": "EXPERT",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "default-thumb.png",
+    "authorUserDisplayName": "Chew Kok Wah",
+    "authorUserName": "chewkokwahibrainai",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "CPMP",
+          "id": 75976,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/75976-gr.jpg",
+          "tier": "GRANDMASTER",
+          "url": "/cpmpml"
+        },
+        "authorType": "HOST",
+        "content": "<p>I see variance in other competitions as well, e.g. ARC AGI2, AIMO3, etc. I agree it is a pain for participants, been there quite often.</p>\n<p>I personally think that fixing the seed leads to less generalization, but I'll check with others and will come back.</p>",
+        "feedbackTrackingData": {},
+        "id": 3438154,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-08T18:23:23.980Z",
+        "rawMarkdown": "I see variance in other competitions as well, e.g. ARC AGI2, AIMO3, etc. I agree it is a pain for participants, been there quite often.\n\nI personally think that fixing the seed leads to less generalization, but I'll check with others and will come back.\n",
+        "replies": [
+          {
+            "author": {
+              "displayName": "Chew Kok Wah",
+              "id": 3967558,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+              "tier": "EXPERT",
+              "url": "/chewkokwahibrainai"
+            },
+            "authorType": "TOPIC",
+            "competitionRanking": 62,
+            "content": "<p>In AIMO3, the variance is only happen in Public Leaderboard due to random  question order, but the Host had decided to minimize variance in Private Leaderboard by fix the question order during Private Leaderboard rerun + use 2 rerun to get the mean score.</p>",
+            "feedbackTrackingData": {},
+            "id": 3438324,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-04-08T23:51:28.593Z",
+            "rawMarkdown": "In AIMO3, the variance is only happen in Public Leaderboard due to random  question order, but the Host had decided to minimize variance in Private Leaderboard by fix the question order during Private Leaderboard rerun + use 2 rerun to get the mean score.",
+            "replies": [
+              {
+                "author": {
+                  "displayName": "James Day",
+                  "id": 3512350,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                  "tier": "GRANDMASTER",
+                  "url": "/jsday96"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 749,
+                "content": "<blockquote>\n  <p>use 2 rerun to get the mean score</p>\n</blockquote>\n<p>I like this idea. I've been averaging my CV scores across 3 runs too. Hopefully the hosts have enough GPU resources to use it for the leaderboard of this comp.</p>",
+                "feedbackTrackingData": {},
+                "id": 3438331,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-09T00:05:59.497Z",
+                "rawMarkdown": "> use 2 rerun to get the mean score\n\nI like this idea. I've been averaging my CV scores across 3 runs too. Hopefully the hosts have enough GPU resources to use it for the leaderboard of this comp.",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "James Day",
+                    "id": 3512350,
+                    "performanceTier": "GRANDMASTER",
+                    "profileUrl": "/jsday96",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                    "tier": "GRANDMASTER",
+                    "url": "/jsday96",
+                    "userId": 3512350,
+                    "userName": "jsday96"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true,
+                  "totalUpvotes": 1,
+                  "totalVotes": 1
+                }
+              }
+            ],
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "Chew Kok Wah",
+                "id": 3967558,
+                "performanceTier": "EXPERT",
+                "profileUrl": "/chewkokwahibrainai",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                "tier": "EXPERT",
+                "url": "/chewkokwahibrainai",
+                "userId": 3967558,
+                "userName": "chewkokwahibrainai"
+              }
+            },
+            "votes": {
+              "canUpvote": true,
+              "totalUpvotes": 1,
+              "totalVotes": 1
+            }
+          },
+          {
+            "author": {
+              "displayName": "Priyanshu Kumar",
+              "id": 1349917,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1349917-kg.jpeg",
+              "tier": "MASTER",
+              "url": "/kpriyanshu256"
+            },
+            "authorType": "COMMENT",
+            "competitionRanking": 748,
+            "content": "<p>Would it be possible to enable vLLM batch invariance in the metric notebook? \n<a href=\"https://docs.vllm.ai/en/latest/features/batch_invariance/\" target=\"_blank\">https://docs.vllm.ai/en/latest/features/batch_invariance/</a></p>",
+            "feedbackTrackingData": {},
+            "id": 3438370,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-04-09T02:23:01.373Z",
+            "rawMarkdown": "Would it be possible to enable vLLM batch invariance in the metric notebook? \nhttps://docs.vllm.ai/en/latest/features/batch_invariance/",
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "RB",
+                "id": 183046,
+                "performanceTier": "MASTER",
+                "profileUrl": "/rashmibanthia",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/183046-kg.png",
+                "tier": "MASTER",
+                "url": "/rashmibanthia",
+                "userId": 183046,
+                "userName": "rashmibanthia"
+              }
+            },
+            "votes": {
+              "canUpvote": true
+            }
+          }
+        ],
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 4,
+          "totalVotes": 4
+        }
+      },
+      {
+        "author": {
+          "displayName": "ありま こうせい",
+          "id": 11175168,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/11175168-kg.jpeg?t=2026-02-05-14-36-31",
+          "tier": "EXPERT",
+          "url": "/theunforgiven7"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 212,
+        "content": "<p>I think the winner can just report it to the organizers without making it public; otherwise, it would all be meaningless.</p>",
+        "feedbackTrackingData": {},
+        "id": 3438015,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-08T14:21:04.500Z",
+        "rawMarkdown": "I think the winner can just report it to the organizers without making it public; otherwise, it would all be meaningless.",
+        "reactions": [
+          {
+            "emoji": "KAGGLE",
+            "featuredUserNames": [
+              "theunforgiven7",
+              "nataliajakowska",
+              "renta0426"
+            ],
+            "userCount": 3
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Handudu",
+            "id": 8812411,
+            "performanceTier": "EXPERT",
+            "profileUrl": "/handudu",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/8812411-kg.jpg?t=2024-06-17-04-43-21",
+            "tier": "EXPERT",
+            "url": "/handudu",
+            "userId": 8812411,
+            "userName": "handudu"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 4,
+          "totalVotes": 2
+        }
+      },
+      {
+        "author": {
+          "displayName": "Sangram Patil",
+          "id": 23276411,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/23276411-kg.jpg?t=2026-05-12-05-11-11",
+          "tier": "EXPERT",
+          "url": "/sangrampatil5150"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 214,
+        "content": "<p>Nah! who as quality data + 0.84 baseline = Top score!</p>",
+        "feedbackTrackingData": {},
+        "id": 3438016,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-08T14:25:38.043Z",
+        "rawMarkdown": "Nah! who as quality data + 0.84 baseline = Top score!",
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Sangram Patil",
+            "id": 23276411,
+            "performanceTier": "EXPERT",
+            "profileUrl": "/sangrampatil5150",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/23276411-kg.jpg?t=2026-05-12-05-11-11",
+            "tier": "EXPERT",
+            "url": "/sangrampatil5150",
+            "userId": 23276411,
+            "userName": "sangrampatil5150"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "Chew Kok Wah",
+        "id": 3967558,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+        "tier": "EXPERT",
+        "url": "/chewkokwahibrainai"
+      },
+      "authorType": "TOPIC",
+      "competitionRanking": 62,
+      "content": "<p>After 9 April, when 0.84 become the baseline, and the around 4 point score variance of same code submission, will this make the Competition effectively turn into a Lottery Game ?</p>\n<p>Will the Host consider making the scoring a little bit more deterministic for period after 9 April by setting per request seed for vLLM in the Metric code? <a href=\"https://www.kaggle.com/cpmpml\" target=\"_blank\">@cpmpml</a> </p>",
+      "feedbackTrackingData": {},
+      "id": 3438012,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-04-08T14:07:21.223Z",
+      "rawMarkdown": "After 9 April, when 0.84 become the baseline, and the around 4 point score variance of same code submission, will this make the Competition effectively turn into a Lottery Game ?\n\nWill the Host consider making the scoring a little bit more deterministic for period after 9 April by setting per request seed for vLLM in the Metric code? @cpmpml ",
+      "teamUpInfo": {
+        "intro": "",
+        "teamLeader": {
+          "displayName": "Chew Kok Wah",
+          "id": 3967558,
+          "performanceTier": "EXPERT",
+          "profileUrl": "/chewkokwahibrainai",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "EXPERT",
+          "url": "/chewkokwahibrainai",
+          "userId": 3967558,
+          "userName": "chewkokwahibrainai"
+        }
+      },
+      "votes": {
+        "canUpvote": true,
+        "totalUpvotes": 1,
+        "totalVotes": 1
+      }
+    },
+    "firstMessageId": 3438012,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 689383,
+    "name": "Will This Competition become a Lottery Game after 9 April ",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-04-08T14:07:21.222779500Z",
+    "totalMessages": 6,
+    "totalVotes": 1,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/689383"
+  }
+}

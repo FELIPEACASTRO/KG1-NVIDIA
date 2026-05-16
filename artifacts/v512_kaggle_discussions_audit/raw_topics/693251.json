@@ -1,0 +1,446 @@
+{
+  "forumTopic": {
+    "authorId": 33728306,
+    "authorPerformanceTier": "CONTRIBUTOR",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "33728306-kg.png?t=2026-04-25-07-15-05",
+    "authorUserDisplayName": "Taha",
+    "authorUserName": "tahaalam2009",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "CPMP",
+          "id": 75976,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/75976-gr.jpg",
+          "tier": "GRANDMASTER",
+          "url": "/cpmpml"
+        },
+        "authorType": "HOST",
+        "content": "<p>Not a new issue alas. </p>\n<p>To me the cure is to allow down votes for notebooks. Plagiarism would be down voted.</p>\n<p>I made a proposal 7 years ago to allow for notebook down votes. Kaggle didn't agree to it.</p>\n<p>Maybe up voting that proposal would help get it accepted?</p>\n<p>Here it is: <a href=\"https://www.kaggle.com/discussions/product-feedback/76394\" target=\"_blank\">https://www.kaggle.com/discussions/product-feedback/76394</a></p>",
+        "feedbackTrackingData": {},
+        "id": 3446212,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-21T07:29:40.970Z",
+        "rawMarkdown": "Not a new issue alas. \n\nTo me the cure is to allow down votes for notebooks. Plagiarism would be down voted.\n\nI made a proposal 7 years ago to allow for notebook down votes. Kaggle didn't agree to it.\n\nMaybe up voting that proposal would help get it accepted?\n\nHere it is: https://www.kaggle.com/discussions/product-feedback/76394",
+        "replies": [
+          {
+            "author": {
+              "displayName": "Taha",
+              "id": 33728306,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/33728306-kg.png?t=2026-04-25-07-15-05",
+              "tier": "CONTRIBUTOR",
+              "url": "/tahaalam2009"
+            },
+            "authorType": "TOPIC",
+            "competitionRanking": 314,
+            "content": "<p>Please at least report them out!!</p>",
+            "feedbackTrackingData": {},
+            "id": 3446252,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-04-21T09:59:49.750Z",
+            "rawMarkdown": "Please at least report them out!!",
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "Taha",
+                "id": 33728306,
+                "performanceTier": "CONTRIBUTOR",
+                "profileUrl": "/tahaalam2009",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/33728306-kg.png?t=2026-04-25-07-15-05",
+                "tier": "CONTRIBUTOR",
+                "url": "/tahaalam2009",
+                "userId": 33728306,
+                "userName": "tahaalam2009"
+              }
+            },
+            "votes": {
+              "canUpvote": true
+            }
+          }
+        ],
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 2,
+          "totalVotes": 2
+        }
+      },
+      {
+        "author": {
+          "displayName": "hongan",
+          "id": 4616875,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/4616875-kg.png?t=2025-12-17-22-09-50",
+          "tier": "MASTER",
+          "url": "/honganzhu"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 34,
+        "content": "<p>Your kaggle id is surprisingly similar to the one you are pointing fingers at… Is that a coincidence?</p>",
+        "feedbackTrackingData": {},
+        "id": 3445799,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-20T14:46:56.933Z",
+        "rawMarkdown": "Your kaggle id is surprisingly similar to the one you are pointing fingers at... Is that a coincidence?",
+        "replies": [
+          {
+            "author": {
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+              "url": "/"
+            },
+            "authorType": "COMMENT",
+            "canDelete": true,
+            "feedbackTrackingData": {},
+            "id": 3445813,
+            "isDeleted": true,
+            "isThankYou": false,
+            "isUserAuthor": true,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-04-20T15:02:46.443Z",
+            "rawMarkdown": "",
+            "replies": [
+              {
+                "author": {
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                  "url": "/"
+                },
+                "authorType": "COMMENT",
+                "canDelete": true,
+                "feedbackTrackingData": {},
+                "id": 3447019,
+                "isDeleted": true,
+                "isThankYou": false,
+                "isUserAuthor": true,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-22T15:42:21.337Z",
+                "rawMarkdown": "",
+                "votes": {}
+              }
+            ],
+            "votes": {
+              "totalUpvotes": 3,
+              "totalVotes": 1
+            }
+          },
+          {
+            "author": {
+              "displayName": "Taha",
+              "id": 33728306,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/33728306-kg.png?t=2026-04-25-07-15-05",
+              "tier": "CONTRIBUTOR",
+              "url": "/tahaalam2009"
+            },
+            "authorType": "TOPIC",
+            "competitionRanking": 314,
+            "content": "<p>wow like anything? if it was me why would i be criticizing myself out?</p>",
+            "feedbackTrackingData": {},
+            "id": 3445827,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-04-20T15:32:43.673Z",
+            "rawMarkdown": "wow like anything? if it was me why would i be criticizing myself out?",
+            "replies": [
+              {
+                "author": {
+                  "displayName": "Taha",
+                  "id": 33728306,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/33728306-kg.png?t=2026-04-25-07-15-05",
+                  "tier": "CONTRIBUTOR",
+                  "url": "/tahaalam2009"
+                },
+                "authorType": "TOPIC",
+                "competitionRanking": 314,
+                "content": "<p>That might just be a coincidence. Just because I have “Alam” in my name and “Taha” and “Atah” sound similar doesn’t mean they’re the same person. Also, Kaggle strictly does not allow multiple accounts, so that assumption doesn’t make sense what would it take for me to prove you wrong?</p>",
+                "feedbackTrackingData": {},
+                "id": 3445832,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-20T15:38:51.350Z",
+                "rawMarkdown": "That might just be a coincidence. Just because I have “Alam” in my name and “Taha” and “Atah” sound similar doesn’t mean they’re the same person. Also, Kaggle strictly does not allow multiple accounts, so that assumption doesn’t make sense what would it take for me to prove you wrong?",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "Taha",
+                    "id": 33728306,
+                    "performanceTier": "CONTRIBUTOR",
+                    "profileUrl": "/tahaalam2009",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/33728306-kg.png?t=2026-04-25-07-15-05",
+                    "tier": "CONTRIBUTOR",
+                    "url": "/tahaalam2009",
+                    "userId": 33728306,
+                    "userName": "tahaalam2009"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true
+                }
+              },
+              {
+                "author": {
+                  "displayName": "hongan",
+                  "id": 4616875,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/4616875-kg.png?t=2025-12-17-22-09-50",
+                  "tier": "MASTER",
+                  "url": "/honganzhu"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 34,
+                "content": "<p>you don't have to prove anything! like i said, i am more than glad to admit i am wrong. If it is a coincidence, then my apologies🤐</p>",
+                "feedbackTrackingData": {},
+                "id": 3445834,
+                "isCollapsed": true,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-20T15:41:08.433Z",
+                "rawMarkdown": "you don't have to prove anything! like i said, i am more than glad to admit i am wrong. If it is a coincidence, then my apologies🤐",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "hongan",
+                    "id": 4616875,
+                    "performanceTier": "MASTER",
+                    "profileUrl": "/honganzhu",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/4616875-kg.png?t=2025-12-17-22-09-50",
+                    "tier": "MASTER",
+                    "url": "/honganzhu",
+                    "userId": 4616875,
+                    "userName": "honganzhu"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true,
+                  "totalUpvotes": 1
+                }
+              },
+              {
+                "author": {
+                  "displayName": "Taha",
+                  "id": 33728306,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/33728306-kg.png?t=2026-04-25-07-15-05",
+                  "tier": "CONTRIBUTOR",
+                  "url": "/tahaalam2009"
+                },
+                "authorType": "TOPIC",
+                "competitionRanking": 314,
+                "content": "<p>indeed it is 😭</p>",
+                "feedbackTrackingData": {},
+                "id": 3445857,
+                "isCollapsed": true,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-20T16:01:15.697Z",
+                "rawMarkdown": "indeed it is 😭",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "Taha",
+                    "id": 33728306,
+                    "performanceTier": "CONTRIBUTOR",
+                    "profileUrl": "/tahaalam2009",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/33728306-kg.png?t=2026-04-25-07-15-05",
+                    "tier": "CONTRIBUTOR",
+                    "url": "/tahaalam2009",
+                    "userId": 33728306,
+                    "userName": "tahaalam2009"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true
+                }
+              },
+              {
+                "author": {
+                  "displayName": "hongan",
+                  "id": 4616875,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/4616875-kg.png?t=2025-12-17-22-09-50",
+                  "tier": "MASTER",
+                  "url": "/honganzhu"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 34,
+                "content": "<p>Sorry! You have my deepest apologies.😔</p>",
+                "feedbackTrackingData": {},
+                "id": 3445859,
+                "isCollapsed": true,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-20T16:02:56.630Z",
+                "rawMarkdown": "Sorry! You have my deepest apologies.😔",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "hongan",
+                    "id": 4616875,
+                    "performanceTier": "MASTER",
+                    "profileUrl": "/honganzhu",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/4616875-kg.png?t=2025-12-17-22-09-50",
+                    "tier": "MASTER",
+                    "url": "/honganzhu",
+                    "userId": 4616875,
+                    "userName": "honganzhu"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true,
+                  "totalUpvotes": 1
+                }
+              }
+            ],
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "Taha",
+                "id": 33728306,
+                "performanceTier": "CONTRIBUTOR",
+                "profileUrl": "/tahaalam2009",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/33728306-kg.png?t=2026-04-25-07-15-05",
+                "tier": "CONTRIBUTOR",
+                "url": "/tahaalam2009",
+                "userId": 33728306,
+                "userName": "tahaalam2009"
+              }
+            },
+            "votes": {
+              "canUpvote": true
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "hongan",
+            "id": 4616875,
+            "performanceTier": "MASTER",
+            "profileUrl": "/honganzhu",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/4616875-kg.png?t=2025-12-17-22-09-50",
+            "tier": "MASTER",
+            "url": "/honganzhu",
+            "userId": 4616875,
+            "userName": "honganzhu"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 2
+        }
+      },
+      {
+        "author": {
+          "displayName": "RB",
+          "id": 183046,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/183046-kg.png",
+          "tier": "MASTER",
+          "url": "/rashmibanthia"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 749,
+        "content": "<p>What I don't get is - why was it required for Open Progress Prize to release model and datasets , wasn't sharing approach / code enough ? Once the model is released there's going to be plethora of fork and submit </p>",
+        "feedbackTrackingData": {},
+        "id": 3445717,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-20T12:04:55.263Z",
+        "rawMarkdown": "What I don't get is - why was it required for Open Progress Prize to release model and datasets , wasn't sharing approach / code enough ? Once the model is released there's going to be plethora of fork and submit ",
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "RB",
+            "id": 183046,
+            "performanceTier": "MASTER",
+            "profileUrl": "/rashmibanthia",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/183046-kg.png",
+            "tier": "MASTER",
+            "url": "/rashmibanthia",
+            "userId": 183046,
+            "userName": "rashmibanthia"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 3
+        }
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "Taha",
+        "id": 33728306,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/33728306-kg.png?t=2026-04-25-07-15-05",
+        "tier": "CONTRIBUTOR",
+        "url": "/tahaalam2009"
+      },
+      "authorType": "TOPIC",
+      "competitionRanking": 314,
+      "content": "<p>I’d like to bring attention to a pattern I’ve been noticing recently in the Notebooks section that may be harmful to the integrity of the platform. After <a href=\"https://www.kaggle.com/atahalam\" target=\"_blank\">This Guy</a> everyone has started to do the same following his path ; even worse and they are not getting banded or removed!!</p>\n<p>There are several notebooks being published with high claimed scores, but upon closer inspection:</p>\n<p>Minimal or no original work: Some notebooks appear to be direct copies of existing public notebooks, with little to no modification.\nOutput reuse: In certain cases, the outputs or submission files seem to be reused rather than generated by the code in the notebook itself.\nMisleading titles: Titles sometimes claim scores or improvements that are not reproducible from the provided code.\nLimited transparency: Comments are occasionally disabled, which makes it harder for others to question or verify the work.</p>\n<p>Here are a few examples for reference (for transparency and discussion purposes):</p>\n<p>Notebook A → derived from Notebook B → originally from Notebook C\nNotebook D → very minimal changes from Notebook E</p>\n<p>(I encourage others to verify these independently by comparing code and outputs.)</p>\n<p>This kind of behavior can:</p>\n<p>Mislead newer participants\nReduce trust in shared work\nDevalue genuine contributions from the community</p>\n<p>I’m not suggesting that reuse or learning from others is wrong—on the contrary, it’s a core part of Kaggle. But proper attribution, meaningful modification, and transparency are important.</p>\n<p>Suggestions:</p>\n<p>Encourage users to clearly state what is original vs reused\nMake it easier to report misleading notebooks\nPromote reproducibility (code should match results)</p>\n<p>I’d be interested to hear how others view this and whether there are better ways to address it as a community.</p>\n<p>Notebooks I've found :\n<a href=\"https://www.kaggle.com/code/koushikrudra/0-86-just-train-see-u-in-leaderboard\" target=\"_blank\">https://www.kaggle.com/code/koushikrudra/0-86-just-train-see-u-in-leaderboard</a> \nfrom \n<a href=\"https://www.kaggle.com/code/itahiro/nvidia-nemotron-trained-models-submission\" target=\"_blank\">https://www.kaggle.com/code/itahiro/nvidia-nemotron-trained-models-submission</a> \ncopied from \n<a href=\"https://www.kaggle.com/code/kienngx/nvidia-nemotron-trained-models-submission\" target=\"_blank\">Orignal</a> \n<a href=\"https://www.kaggle.com/code/vishnuvardhan33/tinker-copy(just\" target=\"_blank\">https://www.kaggle.com/code/vishnuvardhan33/tinker-copy(just</a> 1 line diff) \n<a href=\"https://www.kaggle.com/code/huikang/tinker-submission-notebook\" target=\"_blank\">from orignal</a></p>",
+      "feedbackTrackingData": {},
+      "id": 3445714,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-04-20T11:54:50.843Z",
+      "rawMarkdown": "I’d like to bring attention to a pattern I’ve been noticing recently in the Notebooks section that may be harmful to the integrity of the platform. After [This Guy](https://www.kaggle.com/atahalam) everyone has started to do the same following his path ; even worse and they are not getting banded or removed!!\n\nThere are several notebooks being published with high claimed scores, but upon closer inspection:\n\nMinimal or no original work: Some notebooks appear to be direct copies of existing public notebooks, with little to no modification.\nOutput reuse: In certain cases, the outputs or submission files seem to be reused rather than generated by the code in the notebook itself.\nMisleading titles: Titles sometimes claim scores or improvements that are not reproducible from the provided code.\nLimited transparency: Comments are occasionally disabled, which makes it harder for others to question or verify the work.\n\nHere are a few examples for reference (for transparency and discussion purposes):\n\nNotebook A → derived from Notebook B → originally from Notebook C\nNotebook D → very minimal changes from Notebook E\n\n(I encourage others to verify these independently by comparing code and outputs.)\n\nThis kind of behavior can:\n\nMislead newer participants\nReduce trust in shared work\nDevalue genuine contributions from the community\n\nI’m not suggesting that reuse or learning from others is wrong—on the contrary, it’s a core part of Kaggle. But proper attribution, meaningful modification, and transparency are important.\n\nSuggestions:\n\nEncourage users to clearly state what is original vs reused\nMake it easier to report misleading notebooks\nPromote reproducibility (code should match results)\n\nI’d be interested to hear how others view this and whether there are better ways to address it as a community.\n\nNotebooks I've found :\nhttps://www.kaggle.com/code/koushikrudra/0-86-just-train-see-u-in-leaderboard \nfrom \nhttps://www.kaggle.com/code/itahiro/nvidia-nemotron-trained-models-submission \ncopied from \n[Orignal] (https://www.kaggle.com/code/kienngx/nvidia-nemotron-trained-models-submission) \nhttps://www.kaggle.com/code/vishnuvardhan33/tinker-copy(just 1 line diff) \n[from orignal] (https://www.kaggle.com/code/huikang/tinker-submission-notebook)",
+      "teamUpInfo": {
+        "intro": "",
+        "teamLeader": {
+          "displayName": "Taha",
+          "id": 33728306,
+          "performanceTier": "CONTRIBUTOR",
+          "profileUrl": "/tahaalam2009",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/33728306-kg.png?t=2026-04-25-07-15-05",
+          "tier": "CONTRIBUTOR",
+          "url": "/tahaalam2009",
+          "userId": 33728306,
+          "userName": "tahaalam2009"
+        }
+      },
+      "votes": {
+        "canUpvote": true,
+        "totalUpvotes": 7,
+        "totalVotes": 5
+      }
+    },
+    "firstMessageId": 3445714,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 693251,
+    "name": "[Discussion] Concerns about copied notebooks and misleading submissions in the Notebooks section , Heavy Plagiarism",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-04-20T11:54:50.841909700Z",
+    "totalMessages": 11,
+    "totalVotes": 5,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/693251"
+  }
+}

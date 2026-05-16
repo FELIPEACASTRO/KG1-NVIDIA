@@ -1,0 +1,102 @@
+{
+  "forumTopic": {
+    "authorId": 23386481,
+    "authorPerformanceTier": "CONTRIBUTOR",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "default-thumb.png",
+    "authorUserDisplayName": "Divyam Singh",
+    "authorUserName": "divyamsingh2356",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "blckvia",
+          "id": 7885022,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/7885022-kg.jpg?t=2026-04-26-11-10-13",
+          "tier": "CONTRIBUTOR",
+          "url": "/blckvia"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 2480,
+        "content": "<p><a href=\"https://www.kaggle.com/divyamsingh2356\" target=\"_blank\">@divyamsingh2356</a> Hey, you just need to click \"Add Input\" after that write \"nvidia utility script\" and add it to your notebook and problem will be solved.</p>",
+        "feedbackTrackingData": {},
+        "id": 3434791,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-03T08:30:02.253Z",
+        "rawMarkdown": "@divyamsingh2356 Hey, you just need to click \"Add Input\" after that write \"nvidia utility script\" and add it to your notebook and problem will be solved.",
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "blckvia",
+            "id": 7885022,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/blckvia",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/7885022-kg.jpg?t=2026-04-26-11-10-13",
+            "tier": "CONTRIBUTOR",
+            "url": "/blckvia",
+            "userId": 7885022,
+            "userName": "blckvia"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "Divyam Singh",
+        "id": 23386481,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+        "tier": "CONTRIBUTOR",
+        "url": "/divyamsingh2356"
+      },
+      "authorType": "TOPIC",
+      "competitionRanking": 1169,
+      "content": "<p>I saw recently on the architecture of nemotron and realised it needs something called mamba ssm as a part of its architcture to fine tune the lora although somehow im not able to install them and when i try to connect to internet it says that internet is not allowed for the competition , is me not being able to install the mamba packagae issue or is it intended that way </p>",
+      "feedbackTrackingData": {},
+      "id": 3433195,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-04-01T11:29:02.567Z",
+      "rawMarkdown": "I saw recently on the architecture of nemotron and realised it needs something called mamba ssm as a part of its architcture to fine tune the lora although somehow im not able to install them and when i try to connect to internet it says that internet is not allowed for the competition , is me not being able to install the mamba packagae issue or is it intended that way ",
+      "teamUpInfo": {
+        "intro": "",
+        "teamLeader": {
+          "displayName": "Manish modak",
+          "id": 31274017,
+          "performanceTier": "CONTRIBUTOR",
+          "profileUrl": "/manishmodak",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/31274017-kg.png?t=2026-04-01-15-25-00",
+          "tier": "CONTRIBUTOR",
+          "url": "/manishmodak",
+          "userId": 31274017,
+          "userName": "manishmodak"
+        }
+      },
+      "votes": {
+        "canUpvote": true,
+        "totalUpvotes": 1,
+        "totalVotes": 1
+      }
+    },
+    "firstMessageId": 3433195,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 686839,
+    "name": "Mamba_ssm  modules not installing",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-04-01T11:29:02.565493900Z",
+    "totalMessages": 1,
+    "totalVotes": 1,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/686839"
+  }
+}

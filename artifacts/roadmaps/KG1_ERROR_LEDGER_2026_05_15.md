@@ -1624,6 +1624,71 @@ Regra preventiva:
 Status: corrigido no V511; `py_compile`, static gate, pre-paid integration gate
 e launcher debug passaram.
 
+### E056 - V511 V510 canonical smoke roda, mas nao traz sinal de transferencia
+
+Evidencia:
+
+- HF job `felipesp1983/6a08dc43e48bea4538ba02ce` completou.
+- V510 dataset carregado do HF commit
+  `40e71a686d9970c3c842d26dcf89200fc4990a51`.
+- MoE `target_parameters` ficaram treinaveis:
+  `mlp.experts.gate_up_proj=5934` e `mlp.experts.down_proj=5934` trainable
+  LoRA tensors.
+- `lm_head` ficou congelado.
+- Checkpoint-2 e final adapter foram enviados para
+  `felipesp1983/kg1-nemotron-lora-v511-nemo-h200-v510-canonical-v290ckpt6`.
+- Eval local piorou levemente: `2.8125 -> 2.8128`.
+
+Impacto:
+
+- A infraestrutura H200/V510/PEFT nao e mais o gargalo principal.
+- O dataset/objetivo V510 nao demonstrou transferencia suficiente para justificar
+  weak/full eval pago.
+- Rodar mais steps/epochs nessa mesma rota seria custo sem evidencia.
+
+Regra preventiva:
+
+- Candidato com loss local pior no smoke de 2 steps nao recebe weak/full eval
+  pago, salvo novo gate barato independente.
+- Antes de outro H200, exigir CPU learnability gate: trace curto, sem duplicate
+  CoT conflitante, offset-mask completo e base logprob comparado ao baseline.
+
+Status: bloqueado; sem package/submit.
+
+### E057 - Discussions Kaggle reforcam que solver correto nao basta
+
+Evidencia:
+
+- V512 auditou `140` topicos e `586` posts do Kaggle via API.
+- Discussion `690307` confirma que o ganho de bit veio de CoT deterministica
+  bit-pair/bitsum/stride.
+- Discussion `689915` confirma que a solucao vencedora otimizava SFT para
+  minimo logprob com traces deterministas.
+- Discussion `697491` mostra que dataset solver-correct pode reduzir LB por
+  complexidade de trace, oversampling, duplicate-CoT e format clash.
+- Discussion `694710` reforca prompt-loss masking/pretokenized response mask.
+- Discussion `698293` mostra solver simbolico gold-conditioned como oracle
+  forte, mas nao submit-safe e nao automaticamente transferivel.
+
+Impacto:
+
+- O problema atual e learnability/transferencia para adapter, nao falta de
+  mais dados solver-correct.
+- Treino amplo com dataset maior deve continuar bloqueado ate passar gates de
+  duplicidade, comprimento, logprob e formato.
+
+Regra preventiva:
+
+- Novo dataset so entra se registrar:
+  - duplicate-CoT conflitante `0`;
+  - trace max preferencial `<1300` tokens ou justificativa explicita;
+  - logprob/CE por subfamilia comparado ao baseline;
+  - response-mask/offset-mask completo;
+  - projection CPU sem perda de bit e sem expected-aware extraction.
+
+Status: regra ativa; V512 gerou
+`artifacts/v512_kaggle_discussions_audit/V512_KAGGLE_DISCUSSION_AUDIT_SUMMARY.md`.
+
 ## Prompt Externo
 
 Prompt consolidado para OpenRouter/outras APIs:

@@ -1,0 +1,163 @@
+{
+  "forumTopic": {
+    "authorId": 2796179,
+    "authorPerformanceTier": "MASTER",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "2796179-kg.png",
+    "authorUserDisplayName": "Gerwyn",
+    "authorUserName": "gerwynng",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "Ryan Holbrook",
+          "id": 2003505,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2003505-kg.jpg",
+          "tier": "STAFF",
+          "url": "/ryanholbrook"
+        },
+        "authorType": "ADMIN",
+        "content": "<p>Thanks for the heads up. I will investigate and update the metric as needed.</p>",
+        "feedbackTrackingData": {},
+        "id": 3426893,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-23T13:00:41.913Z",
+        "rawMarkdown": "Thanks for the heads up. I will investigate and update the metric as needed.",
+        "replies": [
+          {
+            "author": {
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+              "url": "/"
+            },
+            "authorType": "COMMENT",
+            "canDelete": true,
+            "feedbackTrackingData": {},
+            "id": 3429687,
+            "isDeleted": true,
+            "isThankYou": false,
+            "isUserAuthor": true,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-03-27T04:47:30.877Z",
+            "rawMarkdown": "",
+            "votes": {}
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Ryan Holbrook",
+            "id": 2003505,
+            "performanceTier": "STAFF",
+            "profileUrl": "/ryanholbrook",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2003505-kg.jpg",
+            "tier": "STAFF",
+            "url": "/ryanholbrook",
+            "userId": 2003505,
+            "userName": "ryanholbrook"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 3,
+          "totalVotes": 3
+        }
+      },
+      {
+        "author": {
+          "displayName": "Tong Hui Kang",
+          "id": 1680925,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1680925-kg.jpg",
+          "tier": "MASTER",
+          "url": "/huikang"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 748,
+        "content": "<p>It also classifies <code>00000001</code> and <code>0001</code> to be the same</p>",
+        "feedbackTrackingData": {},
+        "id": 3426561,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-22T20:47:07.857Z",
+        "rawMarkdown": "It also classifies `00000001` and `0001` to be the same",
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Tong Hui Kang",
+            "id": 1680925,
+            "performanceTier": "MASTER",
+            "profileUrl": "/huikang",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1680925-kg.jpg",
+            "tier": "MASTER",
+            "url": "/huikang",
+            "userId": 1680925,
+            "userName": "huikang"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 2,
+          "totalVotes": 2
+        }
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "Gerwyn",
+        "id": 2796179,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2796179-kg.png",
+        "tier": "MASTER",
+        "url": "/gerwynng"
+      },
+      "authorType": "TOPIC",
+      "competitionRanking": 1731,
+      "content": "<p>Binary string answers (e.g. \"11111011\") are parsed as decimal integers by float(), so verify() uses numeric 1% tolerance instead of exact string matching; meaning \"11111011\" and \"11111000\" are scored as equal.</p>\n<p>I made a notebook with minimal reproducible examples:  <a href=\"https://www.kaggle.com/code/gerwynng/competition-metric-verify-method-bug?scriptVersionId=305629662\" target=\"_blank\">https://www.kaggle.com/code/gerwynng/competition-metric-verify-method-bug?scriptVersionId=305629662</a></p>",
+      "feedbackTrackingData": {},
+      "id": 3426429,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-03-22T15:30:30.230Z",
+      "rawMarkdown": "Binary string answers (e.g. \"11111011\") are parsed as decimal integers by float(), so verify() uses numeric 1% tolerance instead of exact string matching; meaning \"11111011\" and \"11111000\" are scored as equal.\n\nI made a notebook with minimal reproducible examples:  https://www.kaggle.com/code/gerwynng/competition-metric-verify-method-bug?scriptVersionId=305629662\n\n\n",
+      "teamUpInfo": {
+        "intro": "",
+        "teamLeader": {
+          "displayName": "Gerwyn",
+          "id": 2796179,
+          "performanceTier": "MASTER",
+          "profileUrl": "/gerwynng",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2796179-kg.png",
+          "tier": "MASTER",
+          "url": "/gerwynng",
+          "userId": 2796179,
+          "userName": "gerwynng"
+        }
+      },
+      "votes": {
+        "canUpvote": true,
+        "totalUpvotes": 20,
+        "totalVotes": 20
+      }
+    },
+    "firstMessageId": 3426429,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 683853,
+    "name": "Competition Metric Bug: verify method fails for Binary String Problem (?)",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-03-22T15:30:30.229410500Z",
+    "totalMessages": 3,
+    "totalVotes": 20,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/683853"
+  }
+}

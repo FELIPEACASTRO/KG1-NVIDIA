@@ -1,0 +1,109 @@
+{
+  "forumTopic": {
+    "authorId": 2998099,
+    "authorPerformanceTier": "CONTRIBUTOR",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "2998099-kg.jpg?t=2026-03-27-22-44-38",
+    "authorUserDisplayName": "shoulderpain",
+    "authorUserName": "horsepurve",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "shoulderpain",
+          "id": 2998099,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2998099-kg.jpg?t=2026-03-27-22-44-38",
+          "tier": "CONTRIBUTOR",
+          "url": "/horsepurve"
+        },
+        "authorType": "TOPIC",
+        "competitionRanking": 1915,
+        "content": "<p>Now I switched to Datasets + notebook submission, as unused Datasets can be completely deleted. But I still want to delete the old submission.zip from Submissions because they're huge.</p>",
+        "feedbackTrackingData": {},
+        "id": 3428587,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-25T17:33:19.463Z",
+        "rawMarkdown": "Now I switched to Datasets + notebook submission, as unused Datasets can be completely deleted. But I still want to delete the old submission.zip from Submissions because they're huge.",
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "shoulderpain",
+            "id": 2998099,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/horsepurve",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2998099-kg.jpg?t=2026-03-27-22-44-38",
+            "tier": "CONTRIBUTOR",
+            "url": "/horsepurve",
+            "userId": 2998099,
+            "userName": "horsepurve"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "shoulderpain",
+        "id": 2998099,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2998099-kg.jpg?t=2026-03-27-22-44-38",
+        "tier": "CONTRIBUTOR",
+        "url": "/horsepurve"
+      },
+      "authorType": "TOPIC",
+      "competitionRanking": 1915,
+      "content": "<p>I used Submit Prediction -&gt; File Upload -&gt; submission.zip to submit a model I trained locally.</p>\n<p>My submission.zip is 3GB. If I make 5 submissions a day, this will quickly use up my Kaggle storage. </p>\n<p>Is it possible to delete the old submission.zip from Submissions to save space? Unlike notebook submissions, the file submissions are huge.</p>",
+      "feedbackTrackingData": {},
+      "id": 3428585,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-03-25T17:30:49.050Z",
+      "rawMarkdown": "I used Submit Prediction -> File Upload -> submission.zip to submit a model I trained locally.\n\nMy submission.zip is 3GB. If I make 5 submissions a day, this will quickly use up my Kaggle storage. \n\nIs it possible to delete the old submission.zip from Submissions to save space? Unlike notebook submissions, the file submissions are huge.",
+      "reactions": [
+        {
+          "emoji": "LOVE",
+          "featuredUserNames": [
+            "horsepurve"
+          ],
+          "userCount": 1
+        }
+      ],
+      "teamUpInfo": {
+        "intro": "",
+        "teamLeader": {
+          "displayName": "shoulderpain",
+          "id": 2998099,
+          "performanceTier": "CONTRIBUTOR",
+          "profileUrl": "/horsepurve",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2998099-kg.jpg?t=2026-03-27-22-44-38",
+          "tier": "CONTRIBUTOR",
+          "url": "/horsepurve",
+          "userId": 2998099,
+          "userName": "horsepurve"
+        }
+      },
+      "votes": {
+        "canUpvote": true,
+        "totalUpvotes": 1
+      }
+    },
+    "firstMessageId": 3428585,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 684641,
+    "name": "How to delete old submission.zip to save space?",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-03-25T17:30:49.049101Z",
+    "totalMessages": 1,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/684641"
+  }
+}

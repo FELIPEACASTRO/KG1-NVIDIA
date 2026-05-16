@@ -1,0 +1,144 @@
+{
+  "forumTopic": {
+    "authorId": 1380377,
+    "authorPerformanceTier": "MASTER",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "1380377-kg.png",
+    "authorUserDisplayName": "shark",
+    "authorUserName": "zhixing629",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "Ken",
+          "id": 33200697,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "CONTRIBUTOR",
+          "url": "/kdawgz"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 1269,
+        "content": "<p>You should be able to use the <code>--accelerator NvidiaRtxPro6000</code> flag. Note that since it's only available for this competition, you need to ensure your kernel metadata includes\n<code>\"competition_sources\": [\n    \"nvidia-nemotron-model-reasoning-challenge\"\n  ]</code></p>",
+        "feedbackTrackingData": {},
+        "id": 3447429,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-23T05:37:20.763Z",
+        "rawMarkdown": "You should be able to use the `--accelerator NvidiaRtxPro6000` flag. Note that since it's only available for this competition, you need to ensure your kernel metadata includes\n`\"competition_sources\": [\n    \"nvidia-nemotron-model-reasoning-challenge\"\n  ]`",
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Ken",
+            "id": 33200697,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/kdawgz",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+            "tier": "CONTRIBUTOR",
+            "url": "/kdawgz",
+            "userId": 33200697,
+            "userName": "kdawgz"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 1,
+          "totalVotes": 1
+        }
+      },
+      {
+        "author": {
+          "displayName": "shark",
+          "id": 1380377,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1380377-kg.png",
+          "tier": "MASTER",
+          "url": "/zhixing629"
+        },
+        "authorType": "TOPIC",
+        "competitionRanking": 1620,
+        "content": "<p><code>kaggle kernels push --accelerator NvidiaRtxPro6000</code> can run success.</p>",
+        "feedbackTrackingData": {},
+        "id": 3447455,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-23T06:58:12.853Z",
+        "rawMarkdown": "`kaggle kernels push --accelerator NvidiaRtxPro6000` can run success.",
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "shark",
+            "id": 1380377,
+            "performanceTier": "MASTER",
+            "profileUrl": "/zhixing629",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1380377-kg.png",
+            "tier": "MASTER",
+            "url": "/zhixing629",
+            "userId": 1380377,
+            "userName": "zhixing629"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 2,
+          "totalVotes": 2
+        }
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "shark",
+        "id": 1380377,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1380377-kg.png",
+        "tier": "MASTER",
+        "url": "/zhixing629"
+      },
+      "authorType": "TOPIC",
+      "competitionRanking": 1620,
+      "content": "<p>Help needed: I’m doing vibe coding in Cursor and submitting via the Kaggle CLI, but it seems I can’t change the GPU type locally. Every time I have to manually open the webpage, switch the GPU to RTX 6000, and then click “Save Version.” Is there a better way to handle this?</p>",
+      "feedbackTrackingData": {},
+      "id": 3447384,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-04-23T03:48:18.590Z",
+      "rawMarkdown": "Help needed: I’m doing vibe coding in Cursor and submitting via the Kaggle CLI, but it seems I can’t change the GPU type locally. Every time I have to manually open the webpage, switch the GPU to RTX 6000, and then click “Save Version.” Is there a better way to handle this?",
+      "teamUpInfo": {
+        "intro": "",
+        "teamLeader": {
+          "displayName": "shark",
+          "id": 1380377,
+          "performanceTier": "MASTER",
+          "profileUrl": "/zhixing629",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1380377-kg.png",
+          "tier": "MASTER",
+          "url": "/zhixing629",
+          "userId": 1380377,
+          "userName": "zhixing629"
+        }
+      },
+      "votes": {
+        "canUpvote": true,
+        "totalUpvotes": 1,
+        "totalVotes": 1
+      }
+    },
+    "firstMessageId": 3447384,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 694041,
+    "name": "Kaggle CLI Can’t Set GPU Type? Tired of Manually Switching to RTX 6000 Every Time 😩",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-04-23T03:48:18.590529400Z",
+    "totalMessages": 2,
+    "totalVotes": 1,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/694041"
+  }
+}

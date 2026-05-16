@@ -1,0 +1,368 @@
+{
+  "forumTopic": {
+    "authorId": 1680925,
+    "authorPerformanceTier": "MASTER",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "1680925-kg.jpg",
+    "authorUserDisplayName": "Tong Hui Kang",
+    "authorUserName": "huikang",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "JK-Piece",
+          "id": 3937164,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/3937164-kg.png?t=2023-11-07-17-35-27",
+          "tier": "MASTER",
+          "url": "/jeannkouagou"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 138,
+        "content": "<p>Scoring 0.84 is impressive. Congratulations 🎉. Looking forward to the shared public notebook and datasets</p>",
+        "feedbackTrackingData": {},
+        "id": 3436574,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-06T08:51:31.597Z",
+        "rawMarkdown": "Scoring 0.84 is impressive. Congratulations 🎉. Looking forward to the shared public notebook and datasets",
+        "teamUpInfo": {
+          "intro": "Hey Kagglers. I am looking for a teammate with current score around 0.78-0.80. I have strong checkpoints and great training data that would benefit the team to be formed. Feel free to reach out.",
+          "teamLeader": {
+            "displayName": "JK-Piece",
+            "id": 3937164,
+            "performanceTier": "MASTER",
+            "profileUrl": "/jeannkouagou",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/3937164-kg.png?t=2023-11-07-17-35-27",
+            "tier": "MASTER",
+            "url": "/jeannkouagou",
+            "userId": 3937164,
+            "userName": "jeannkouagou"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 3,
+          "totalVotes": 3
+        }
+      },
+      {
+        "author": {
+          "displayName": "Yurnero",
+          "id": 13977249,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/13977249-kg.jpg?t=2025-06-08-06-49-23",
+          "tier": "GRANDMASTER",
+          "url": "/samson8"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 712,
+        "content": "<p>Alright, so basically competition starts on April 9th….</p>",
+        "feedbackTrackingData": {},
+        "id": 3436662,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-06T13:10:03.377Z",
+        "rawMarkdown": "Alright, so basically competition starts on April 9th....",
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Yurnero",
+            "id": 13977249,
+            "performanceTier": "GRANDMASTER",
+            "profileUrl": "/samson8",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/13977249-kg.jpg?t=2025-06-08-06-49-23",
+            "tier": "GRANDMASTER",
+            "url": "/samson8",
+            "userId": 13977249,
+            "userName": "samson8"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 4,
+          "totalVotes": 4
+        }
+      },
+      {
+        "author": {
+          "displayName": "Addison Howard",
+          "id": 1095143,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1095143-kg.jpeg",
+          "tier": "STAFF",
+          "url": "/addisonhoward"
+        },
+        "authorType": "ADMIN",
+        "content": "<p>The deadline is 11:59pm UTC unless otherwise noted</p>",
+        "feedbackTrackingData": {},
+        "id": 3437345,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-07T14:40:56.100Z",
+        "rawMarkdown": "The deadline is 11:59pm UTC unless otherwise noted",
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 2,
+          "totalVotes": 2
+        }
+      },
+      {
+        "author": {
+          "displayName": "Tong Hui Kang",
+          "id": 1680925,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1680925-kg.jpg",
+          "tier": "MASTER",
+          "url": "/huikang"
+        },
+        "authorType": "TOPIC",
+        "competitionRanking": 747,
+        "content": "<p>The eve of April 9 is approaching, <a href=\"https://www.kaggle.com/ryanholbrook\" target=\"_blank\">@ryanholbrook</a> for clarification</p>",
+        "feedbackTrackingData": {},
+        "id": 3437302,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-07T13:30:26.493Z",
+        "rawMarkdown": "The eve of April 9 is approaching, @ryanholbrook for clarification",
+        "replies": [
+          {
+            "author": {
+              "displayName": "JK-Piece",
+              "id": 3937164,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/3937164-kg.png?t=2023-11-07-17-35-27",
+              "tier": "MASTER",
+              "url": "/jeannkouagou"
+            },
+            "authorType": "COMMENT",
+            "competitionRanking": 138,
+            "content": "<p>Congratulations <a href=\"https://www.kaggle.com/huikang\" target=\"_blank\">@huikang</a> for scoring 0.83. It seems that the battle will be fierce between you, <a href=\"https://www.kaggle.com/yiyangzheng\" target=\"_blank\">@yiyangzheng</a>, and <a href=\"https://www.kaggle.com/tonyxu\" target=\"_blank\">@tonyxu</a> on the Open Progress Prize. I'm out for this one😀, preparing to come back for other prizes.</p>",
+            "feedbackTrackingData": {},
+            "id": 3437864,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-04-08T08:22:37.827Z",
+            "rawMarkdown": "Congratulations @huikang for scoring 0.83. It seems that the battle will be fierce between you, @yiyangzheng, and @tonyxu on the Open Progress Prize. I'm out for this one😀, preparing to come back for other prizes.",
+            "replies": [
+              {
+                "author": {
+                  "displayName": "Russell Kirk",
+                  "id": 27681700,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/27681700-kg.jpg?t=2026-03-31-11-28-38",
+                  "tier": "CONTRIBUTOR",
+                  "url": "/russcore"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 1380,
+                "content": "<p>IM COMING FOR 25TH JK-PIECE, WATCH OUT!! :D</p>\n<p>P.S. Am I the only one smart or dumb enough to use QLoRa here?</p>",
+                "feedbackTrackingData": {},
+                "id": 3437910,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-08T10:44:45.930Z",
+                "rawMarkdown": "IM COMING FOR 25TH JK-PIECE, WATCH OUT!! :D\n\nP.S. Am I the only one smart or dumb enough to use QLoRa here?",
+                "teamUpInfo": {
+                  "enabled": true,
+                  "intro": "If you got the time, I got the data .. I hope :D",
+                  "teamLeader": {
+                    "displayName": "Russell Kirk",
+                    "id": 27681700,
+                    "performanceTier": "CONTRIBUTOR",
+                    "profileUrl": "/russcore",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/27681700-kg.jpg?t=2026-03-31-11-28-38",
+                    "tier": "CONTRIBUTOR",
+                    "url": "/russcore",
+                    "userId": 27681700,
+                    "userName": "russcore"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true
+                }
+              },
+              {
+                "author": {
+                  "displayName": "Van-Phuc Huynh",
+                  "id": 2106526,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2106526-kg.jpg?t=2025-01-11-10-15-51",
+                  "tier": "EXPERT",
+                  "url": "/hvanphucs112"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 200,
+                "content": "<p>Congratulations <a href=\"https://www.kaggle.com/huikang\" target=\"_blank\">@huikang</a> for reaching #1! I’m really looking forward to seeing how you approached it — I’m currently stuck on the symbolic equation problem and don’t have a good idea yet. Let’s wait until tomorrow.</p>",
+                "feedbackTrackingData": {},
+                "id": 3438294,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-08T22:24:15.097Z",
+                "rawMarkdown": "Congratulations @huikang for reaching #1! I’m really looking forward to seeing how you approached it — I’m currently stuck on the symbolic equation problem and don’t have a good idea yet. Let’s wait until tomorrow.",
+                "teamUpInfo": {
+                  "enabled": true,
+                  "intro": "Let’s team up and push for rank #1 together.",
+                  "teamLeader": {
+                    "displayName": "Van-Phuc Huynh",
+                    "id": 2106526,
+                    "performanceTier": "EXPERT",
+                    "profileUrl": "/hvanphucs112",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2106526-kg.jpg?t=2025-01-11-10-15-51",
+                    "tier": "EXPERT",
+                    "url": "/hvanphucs112",
+                    "userId": 2106526,
+                    "userName": "hvanphucs112"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true,
+                  "totalUpvotes": 1,
+                  "totalVotes": 1
+                }
+              },
+              {
+                "author": {
+                  "displayName": "Tong Hui Kang",
+                  "id": 1680925,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1680925-kg.jpg",
+                  "tier": "MASTER",
+                  "url": "/huikang"
+                },
+                "authorType": "TOPIC",
+                "competitionRanking": 747,
+                "content": "<p>Thanks for the well wishes!</p>\n<p>I will be very excited to share my full solution.</p>\n<p>However, I think I need to get the requirements resolved - <a href=\"https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/685031#3438074\" target=\"_blank\">https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/685031#3438074</a></p>",
+                "feedbackTrackingData": {},
+                "id": 3438321,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-08T23:44:55.047Z",
+                "rawMarkdown": "Thanks for the well wishes!\n\nI will be very excited to share my full solution.\n\nHowever, I think I need to get the requirements resolved - https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/685031#3438074",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "Tong Hui Kang",
+                    "id": 1680925,
+                    "performanceTier": "MASTER",
+                    "profileUrl": "/huikang",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1680925-kg.jpg",
+                    "tier": "MASTER",
+                    "url": "/huikang",
+                    "userId": 1680925,
+                    "userName": "huikang"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true
+                }
+              }
+            ],
+            "teamUpInfo": {
+              "intro": "Hey Kagglers. I am looking for a teammate with current score around 0.78-0.80. I have strong checkpoints and great training data that would benefit the team to be formed. Feel free to reach out.",
+              "teamLeader": {
+                "displayName": "JK-Piece",
+                "id": 3937164,
+                "performanceTier": "MASTER",
+                "profileUrl": "/jeannkouagou",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/3937164-kg.png?t=2023-11-07-17-35-27",
+                "tier": "MASTER",
+                "url": "/jeannkouagou",
+                "userId": 3937164,
+                "userName": "jeannkouagou"
+              }
+            },
+            "votes": {
+              "canUpvote": true,
+              "totalUpvotes": 1,
+              "totalVotes": 1
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Tong Hui Kang",
+            "id": 1680925,
+            "performanceTier": "MASTER",
+            "profileUrl": "/huikang",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1680925-kg.jpg",
+            "tier": "MASTER",
+            "url": "/huikang",
+            "userId": 1680925,
+            "userName": "huikang"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "Tong Hui Kang",
+        "id": 1680925,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1680925-kg.jpg",
+        "tier": "MASTER",
+        "url": "/huikang"
+      },
+      "authorType": "TOPIC",
+      "competitionRanking": 747,
+      "content": "<p>Congratulations to <a href=\"https://www.kaggle.com/yiyangzheng\" target=\"_blank\">@yiyangzheng</a> for scoring 0.84, whose <a href=\"https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-3/discussion/671835\" target=\"_blank\">team</a> also won the AIMO3 Longest Leader Prize.</p>\n<p>For the <a href=\"https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/overview\" target=\"_blank\">Open Progress Prize</a> of this competition</p>\n<blockquote>\n  <p>Awarded to the team with the highest leaderboard score as of the Midpoint Cut-off Date: April 9, 2026.</p>\n</blockquote>\n<p>How exactly is April 9, 2026 defined - <strong>is it  the end of the day</strong>? Also, is the defined by the submission time as well?</p>\n<p>Edit: \"The deadline is 11:59pm UTC unless otherwise noted\", see comment</p>\n<p>I also presume that winning the Open Progress Prize requires sharing the submissions by April 16, 2026, as this section of the rules apply to the prize.</p>\n<blockquote>\n  <p>To be eligible for any prize, teams must publish a public Kaggle notebook and solution write-up documenting the methods, datasets, and techniques used to produce the submission.</p>\n</blockquote>",
+      "feedbackTrackingData": {},
+      "id": 3436449,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-04-06T01:12:02.640Z",
+      "rawMarkdown": "Congratulations to @yiyangzheng for scoring 0.84, whose [team](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-3/discussion/671835) also won the AIMO3 Longest Leader Prize.\n\nFor the [Open Progress Prize](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/overview) of this competition\n\n> Awarded to the team with the highest leaderboard score as of the Midpoint Cut-off Date: April 9, 2026.\n\nHow exactly is April 9, 2026 defined - **is it ~~the start of the day or~~ the end of the day**? Also, is the defined by the submission time as well?\n\nEdit: \"The deadline is 11:59pm UTC unless otherwise noted\", see comment\n\nI also presume that winning the Open Progress Prize requires sharing the submissions by April 16, 2026, as this section of the rules apply to the prize.\n\n> To be eligible for any prize, teams must publish a public Kaggle notebook and solution write-up documenting the methods, datasets, and techniques used to produce the submission.",
+      "teamUpInfo": {
+        "intro": "",
+        "teamLeader": {
+          "displayName": "Tong Hui Kang",
+          "id": 1680925,
+          "performanceTier": "MASTER",
+          "profileUrl": "/huikang",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1680925-kg.jpg",
+          "tier": "MASTER",
+          "url": "/huikang",
+          "userId": 1680925,
+          "userName": "huikang"
+        }
+      },
+      "votes": {
+        "canUpvote": true,
+        "totalUpvotes": 12,
+        "totalVotes": 12
+      }
+    },
+    "firstMessageId": 3436449,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 688482,
+    "name": "Midpoint Cut-off Date and the Open Progress Prize",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-04-06T01:12:02.640337200Z",
+    "totalMessages": 8,
+    "totalVotes": 12,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/688482"
+  }
+}

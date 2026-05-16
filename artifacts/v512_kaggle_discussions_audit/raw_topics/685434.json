@@ -1,0 +1,102 @@
+{
+  "forumTopic": {
+    "authorId": 500786,
+    "authorPerformanceTier": "CONTRIBUTOR",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "500786-kg.jpg?t=2025-02-08-05-30-27",
+    "authorUserDisplayName": "Ghost@N",
+    "authorUserName": "nishanthkc",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "Van Dong Tran",
+          "id": 11460130,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "EXPERT",
+          "url": "/vandongtran"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 58,
+        "content": "<p>You can only submit the zip file of lora adapter, not necessary a notebook. The evaluation metric will check and you only your submission zip file. For dataset, as i read and know, you can use what ever you want as long as it's legal</p>",
+        "feedbackTrackingData": {},
+        "id": 3430969,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-29T06:30:01.030Z",
+        "rawMarkdown": "You can only submit the zip file of lora adapter, not necessary a notebook. The evaluation metric will check and you only your submission zip file. For dataset, as i read and know, you can use what ever you want as long as it's legal",
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Van Dong Tran",
+            "id": 11460130,
+            "performanceTier": "EXPERT",
+            "profileUrl": "/vandongtran",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+            "tier": "EXPERT",
+            "url": "/vandongtran",
+            "userId": 11460130,
+            "userName": "vandongtran"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 2,
+          "totalVotes": 2
+        }
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "Ghost@N",
+        "id": 500786,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/500786-kg.jpg?t=2025-02-08-05-30-27",
+        "tier": "CONTRIBUTOR",
+        "url": "/nishanthkc"
+      },
+      "authorType": "TOPIC",
+      "competitionRanking": 1922,
+      "content": "<p>Can we train the model outside the notebook and use notebook/submission zip for submission?\nCan we use closed source models like gpt to create a synthetic data and fine-tune the nemotron model?\ncan we use external datasets to train this model apart from what's given in competition ?</p>\n<p>does anyone know about these?</p>",
+      "feedbackTrackingData": {},
+      "id": 3430208,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-03-28T04:11:12.517Z",
+      "rawMarkdown": "Can we train the model outside the notebook and use notebook/submission zip for submission?\nCan we use closed source models like gpt to create a synthetic data and fine-tune the nemotron model?\ncan we use external datasets to train this model apart from what's given in competition ?\n\ndoes anyone know about these?\n",
+      "teamUpInfo": {
+        "intro": "",
+        "teamLeader": {
+          "displayName": "Ghost@N",
+          "id": 500786,
+          "performanceTier": "CONTRIBUTOR",
+          "profileUrl": "/nishanthkc",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/500786-kg.jpg?t=2025-02-08-05-30-27",
+          "tier": "CONTRIBUTOR",
+          "url": "/nishanthkc",
+          "userId": 500786,
+          "userName": "nishanthkc"
+        }
+      },
+      "votes": {
+        "canUpvote": true,
+        "totalUpvotes": 1
+      }
+    },
+    "firstMessageId": 3430208,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 685434,
+    "name": "Doubts regarding the competition ",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-03-28T04:11:12.517615900Z",
+    "totalMessages": 1,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/685434"
+  }
+}

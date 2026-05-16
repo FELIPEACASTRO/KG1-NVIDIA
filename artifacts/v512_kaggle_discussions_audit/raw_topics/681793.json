@@ -1,0 +1,312 @@
+{
+  "forumTopic": {
+    "authorId": 147404,
+    "authorPerformanceTier": "MASTER",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "147404-kg.jpeg",
+    "authorUserDisplayName": "Devin Anzelmo",
+    "authorUserName": "devinanzelmo",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "Ryan Holbrook",
+          "id": 2003505,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2003505-kg.jpg",
+          "tier": "STAFF",
+          "url": "/ryanholbrook"
+        },
+        "authorType": "ADMIN",
+        "content": "<p>Yes, they are the same. The distribution should be roughly similar as well.</p>",
+        "feedbackTrackingData": {},
+        "id": 3422247,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-17T09:55:07.147Z",
+        "rawMarkdown": "Yes, they are the same. The distribution should be roughly similar as well.",
+        "replies": [
+          {
+            "author": {
+              "displayName": "Yuchen20",
+              "id": 14322371,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/14322371-kg.jpeg?t=2023-09-22-11-23-14",
+              "tier": "MASTER",
+              "url": "/yuchen2066"
+            },
+            "authorType": "COMMENT",
+            "competitionRanking": 1391,
+            "content": "<blockquote>\n  <p>Yes, they are the same. The distribution should be roughly similar as well.</p>\n</blockquote>\n<p>That said, wouldn’t it be possible that we can produce some simple programmatic approach that works for a whole class of similar problems, so the model can read the answer from the function output, instead of actually requiring reasoning?</p>\n<p>For example, for a problem like this:</p>\n<pre><code>In Alice's Wonderland, a secret unit conversion is applied to measurements. For example:\n14.89 m becomes 21.91\n9.37 m becomes 13.79\n5.73 m becomes 8.43\n26.82 m becomes 39.46\nNow, convert the following measurement: 23.28 m\n</code></pre>\n<p>one could easily write a script like:</p>\n<pre><code>import re\n\ntext = \"\"\"\nIn Alice's Wonderland, a secret unit conversion is applied to measurements. For example:\n14.89 m becomes 21.91\n9.37 m becomes 13.79\n5.73 m becomes 8.43\n26.82 m becomes 39.46\nNow, convert the following measurement: 23.28 m\n\"\"\"\n\n# Extract training pairs like: 14.89 m becomes 21.91\npairs = [(float(a), float(b)) for a, b in re.findall(r'(\\d+\\.\\d+)\\s*m\\s*becomes\\s*(\\d+\\.\\d+)', text)]\n\n# Estimate conversion factor by averaging b/a\nfactor = sum(b / a for a, b in pairs) / len(pairs)\n\n# Extract the final value to convert\ntarget = float(re.search(r'convert the following measurement:\\s*(\\d+\\.\\d+)\\s*m', text, re.I).group(1))\n\n# Compute Wonderland value\nresult = target * factor\n\nprint(\"pairs:\", pairs)\nprint(\"target:\", target)\nprint(\"wonderland value:\", round(result, 2))\n</code></pre>\n<p>which derives:</p>\n<pre><code>pairs: [(14.89, 21.91), (9.37, 13.79), (5.73, 8.43), (26.82, 39.46)]\n\ntarget: 23.28\n\nwonderland value: 34.25\n</code></pre>\n<p>Then the result could simply be appended to the prompt, given that prompt engineering is allowed.</p>",
+            "feedbackTrackingData": {},
+            "id": 3422682,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-03-17T22:15:42.033Z",
+            "rawMarkdown": "> Yes, they are the same. The distribution should be roughly similar as well.\n\nThat said, wouldn’t it be possible that we can produce some simple programmatic approach that works for a whole class of similar problems, so the model can read the answer from the function output, instead of actually requiring reasoning?\n\nFor example, for a problem like this:\n```\nIn Alice's Wonderland, a secret unit conversion is applied to measurements. For example:\n14.89 m becomes 21.91\n9.37 m becomes 13.79\n5.73 m becomes 8.43\n26.82 m becomes 39.46\nNow, convert the following measurement: 23.28 m\n```\none could easily write a script like:\n```python\nimport re\n\ntext = \"\"\"\nIn Alice's Wonderland, a secret unit conversion is applied to measurements. For example:\n14.89 m becomes 21.91\n9.37 m becomes 13.79\n5.73 m becomes 8.43\n26.82 m becomes 39.46\nNow, convert the following measurement: 23.28 m\n\"\"\"\n\n# Extract training pairs like: 14.89 m becomes 21.91\npairs = [(float(a), float(b)) for a, b in re.findall(r'(\\d+\\.\\d+)\\s*m\\s*becomes\\s*(\\d+\\.\\d+)', text)]\n\n# Estimate conversion factor by averaging b/a\nfactor = sum(b / a for a, b in pairs) / len(pairs)\n\n# Extract the final value to convert\ntarget = float(re.search(r'convert the following measurement:\\s*(\\d+\\.\\d+)\\s*m', text, re.I).group(1))\n\n# Compute Wonderland value\nresult = target * factor\n\nprint(\"pairs:\", pairs)\nprint(\"target:\", target)\nprint(\"wonderland value:\", round(result, 2))\n```\nwhich derives:\n```\npairs: [(14.89, 21.91), (9.37, 13.79), (5.73, 8.43), (26.82, 39.46)]\n\ntarget: 23.28\n\nwonderland value: 34.25\n```\nThen the result could simply be appended to the prompt, given that prompt engineering is allowed.",
+            "replies": [
+              {
+                "author": {
+                  "displayName": "KCLamm",
+                  "id": 9419015,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                  "tier": "CONTRIBUTOR",
+                  "url": "/kclamm"
+                },
+                "authorType": "COMMENT",
+                "content": "<p>Seems to me that there is a fixed pipeline for the model evaluation, in which the only thing kagglers are supposed to change is the LoRA part.\nThe 'you can experiment with: prompting strategies, …' part in the rules is followed by 'Participants may use any training framework, tooling, or workflow to produce their LoRA adapter,' may be indicating the prompt engineering thing mentioned is about training LoRA only.</p>",
+                "feedbackTrackingData": {},
+                "id": 3423041,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-03-18T05:36:04.797Z",
+                "rawMarkdown": "Seems to me that there is a fixed pipeline for the model evaluation, in which the only thing kagglers are supposed to change is the LoRA part.\nThe 'you can experiment with: prompting strategies, ...' part in the rules is followed by 'Participants may use any training framework, tooling, or workflow to produce their LoRA adapter,' may be indicating the prompt engineering thing mentioned is about training LoRA only.",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "KCLamm",
+                    "id": 9419015,
+                    "performanceTier": "CONTRIBUTOR",
+                    "profileUrl": "/kclamm",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                    "tier": "CONTRIBUTOR",
+                    "url": "/kclamm",
+                    "userId": 9419015,
+                    "userName": "kclamm"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true,
+                  "totalUpvotes": 2,
+                  "totalVotes": 2
+                }
+              },
+              {
+                "author": {
+                  "displayName": "Ryan Holbrook",
+                  "id": 2003505,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2003505-kg.jpg",
+                  "tier": "STAFF",
+                  "url": "/ryanholbrook"
+                },
+                "authorType": "ADMIN",
+                "content": "<p>Right, you can't actually change the inference prompt or call out to Python scripts. All you're able to do is submit a LoRA adapter.</p>",
+                "feedbackTrackingData": {},
+                "id": 3423358,
+                "isCollapsed": true,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-03-18T13:29:51.783Z",
+                "rawMarkdown": "Right, you can't actually change the inference prompt or call out to Python scripts. All you're able to do is submit a LoRA adapter.",
+                "reactions": [
+                  {
+                    "emoji": "THANK_YOU",
+                    "featuredUserNames": [
+                      "yuchen2066",
+                      "ashrafyaseerrashid"
+                    ],
+                    "userCount": 2
+                  }
+                ],
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "Ryan Holbrook",
+                    "id": 2003505,
+                    "performanceTier": "STAFF",
+                    "profileUrl": "/ryanholbrook",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2003505-kg.jpg",
+                    "tier": "STAFF",
+                    "url": "/ryanholbrook",
+                    "userId": 2003505,
+                    "userName": "ryanholbrook"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true,
+                  "totalUpvotes": 8,
+                  "totalVotes": 8
+                }
+              },
+              {
+                "author": {
+                  "displayName": "Alex4138",
+                  "id": 32768788,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/32768788-kg.png?t=2026-03-18-10-37-56",
+                  "tier": "CONTRIBUTOR",
+                  "url": "/alex4138"
+                },
+                "authorType": "COMMENT",
+                "content": "<p>what eval are people using for the leaderboard, the train.csv alice set?</p>",
+                "feedbackTrackingData": {},
+                "id": 3423827,
+                "isCollapsed": true,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-03-19T03:52:41.243Z",
+                "rawMarkdown": "what eval are people using for the leaderboard, the train.csv alice set?",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "Alex4138",
+                    "id": 32768788,
+                    "performanceTier": "CONTRIBUTOR",
+                    "profileUrl": "/alex4138",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/32768788-kg.png?t=2026-03-18-10-37-56",
+                    "tier": "CONTRIBUTOR",
+                    "url": "/alex4138",
+                    "userId": 32768788,
+                    "userName": "alex4138"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true
+                }
+              },
+              {
+                "author": {
+                  "displayName": "Gerwyn",
+                  "id": 2796179,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2796179-kg.png",
+                  "tier": "MASTER",
+                  "url": "/gerwynng"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 1731,
+                "content": "<blockquote>\n  <p>This leaderboard is calculated with approximately 50% of the test data. The final results will be based on the other 50%, so the final standings may be different.</p>\n</blockquote>",
+                "feedbackTrackingData": {},
+                "id": 3424003,
+                "isCollapsed": true,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-03-19T08:43:10.110Z",
+                "rawMarkdown": "> This leaderboard is calculated with approximately 50% of the test data. The final results will be based on the other 50%, so the final standings may be different.\n",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "Gerwyn",
+                    "id": 2796179,
+                    "performanceTier": "MASTER",
+                    "profileUrl": "/gerwynng",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2796179-kg.png",
+                    "tier": "MASTER",
+                    "url": "/gerwynng",
+                    "userId": 2796179,
+                    "userName": "gerwynng"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true
+                }
+              }
+            ],
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "Yuchen20",
+                "id": 14322371,
+                "performanceTier": "MASTER",
+                "profileUrl": "/yuchen2066",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/14322371-kg.jpeg?t=2023-09-22-11-23-14",
+                "tier": "MASTER",
+                "url": "/yuchen2066",
+                "userId": 14322371,
+                "userName": "yuchen2066"
+              }
+            },
+            "votes": {
+              "canUpvote": true,
+              "totalUpvotes": 5,
+              "totalVotes": 5
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Ryan Holbrook",
+            "id": 2003505,
+            "performanceTier": "STAFF",
+            "profileUrl": "/ryanholbrook",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2003505-kg.jpg",
+            "tier": "STAFF",
+            "url": "/ryanholbrook",
+            "userId": 2003505,
+            "userName": "ryanholbrook"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 11,
+          "totalVotes": 11
+        }
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "Devin Anzelmo",
+        "id": 147404,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/147404-kg.jpeg",
+        "tier": "MASTER",
+        "url": "/devinanzelmo"
+      },
+      "authorType": "TOPIC",
+      "content": "<p>There appear to be six different problem types in the training set:</p>\n<ul>\n<li>numbers are secretly converted into a different numeral system</li>\n<li>the gravitational constant has been secretly changed</li>\n<li>a secret set of transformation rules is applied to equations</li>\n<li>secret encryption rules are used on text</li>\n<li>a secret bit manipulation rule transforms 8-bit binary numbers</li>\n<li>a secret unit conversion is applied to measurements</li>\n</ul>\n<p>Are these the same set of problem types that appear in the test set? The approach to this competition is completely different depending on whether we are looking at all new question types or not so it would be helpful to know the answer to this question.  </p>",
+      "feedbackTrackingData": {},
+      "id": 3422244,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-03-17T09:46:54.957Z",
+      "rawMarkdown": "There appear to be six different problem types in the training set:\n\n- numbers are secretly converted into a different numeral system\n- the gravitational constant has been secretly changed\n- a secret set of transformation rules is applied to equations\n- secret encryption rules are used on text\n- a secret bit manipulation rule transforms 8-bit binary numbers\n- a secret unit conversion is applied to measurements\n\nAre these the same set of problem types that appear in the test set? The approach to this competition is completely different depending on whether we are looking at all new question types or not so it would be helpful to know the answer to this question.  ",
+      "teamUpInfo": {
+        "intro": "",
+        "teamLeader": {
+          "displayName": "Devin Anzelmo",
+          "id": 147404,
+          "performanceTier": "MASTER",
+          "profileUrl": "/devinanzelmo",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/147404-kg.jpeg",
+          "tier": "MASTER",
+          "url": "/devinanzelmo",
+          "userId": 147404,
+          "userName": "devinanzelmo"
+        }
+      },
+      "votes": {
+        "canUpvote": true,
+        "totalUpvotes": 28,
+        "totalVotes": 28
+      }
+    },
+    "firstMessageId": 3422244,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 681793,
+    "name": "Are problem types the same for train and test?",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-03-17T09:46:54.956974200Z",
+    "totalMessages": 6,
+    "totalVotes": 28,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/681793"
+  }
+}

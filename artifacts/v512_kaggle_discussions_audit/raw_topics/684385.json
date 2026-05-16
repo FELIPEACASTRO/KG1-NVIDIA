@@ -1,0 +1,158 @@
+{
+  "forumTopic": {
+    "authorId": 6762707,
+    "authorPerformanceTier": "CONTRIBUTOR",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "default-thumb.png",
+    "authorUserDisplayName": "LEI ALEX",
+    "authorUserName": "leialex",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "url": "/"
+        },
+        "authorType": "COMMENT",
+        "canDelete": true,
+        "feedbackTrackingData": {},
+        "id": 3428409,
+        "isDeleted": true,
+        "isThankYou": false,
+        "isUserAuthor": true,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-25T13:20:30.260Z",
+        "rawMarkdown": "",
+        "votes": {}
+      },
+      {
+        "author": {
+          "displayName": "Arthur Yu",
+          "id": 11449501,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/11449501-kg.jpg?t=2024-11-08-11-48-24",
+          "tier": "CONTRIBUTOR",
+          "url": "/arthurroland"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 635,
+        "content": "<p>Great thanks👍 fantastic work done！</p>",
+        "feedbackTrackingData": {},
+        "id": 3428186,
+        "isThankYou": true,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-25T03:46:40.147Z",
+        "rawMarkdown": "Great thanks👍 fantastic work done！",
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Arthur Yu",
+            "id": 11449501,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/arthurroland",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/11449501-kg.jpg?t=2024-11-08-11-48-24",
+            "tier": "CONTRIBUTOR",
+            "url": "/arthurroland",
+            "userId": 11449501,
+            "userName": "arthurroland"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      },
+      {
+        "author": {
+          "displayName": "Javier Hernández",
+          "id": 3098761,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/3098761-kg.png?t=2025-02-13-22-27-27",
+          "tier": "EXPERT",
+          "url": "/javihm77"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 664,
+        "content": "<p>Thanks a lot! it works! 👍</p>",
+        "feedbackTrackingData": {},
+        "id": 3428016,
+        "isThankYou": true,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-24T19:41:00.410Z",
+        "rawMarkdown": "Thanks a lot! it works! 👍",
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Javier Hernández",
+            "id": 3098761,
+            "performanceTier": "EXPERT",
+            "profileUrl": "/javihm77",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/3098761-kg.png?t=2025-02-13-22-27-27",
+            "tier": "EXPERT",
+            "url": "/javihm77",
+            "userId": 3098761,
+            "userName": "javihm77"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "LEI ALEX",
+        "id": 6762707,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+        "tier": "CONTRIBUTOR",
+        "url": "/leialex"
+      },
+      "authorType": "TOPIC",
+      "competitionRanking": 1367,
+      "content": "<p>The actual cutlass code is hidden inside nvidia_cutlass_dsl/python_packages/. The package uses a .pth file to tell Python where to find it. However, simply adding your target directory to sys.path does not parse .pth files in non-standard directories. Python completely ignores the .pth file and fails to find the hidden folder.</p>\n<p>Just replace the first cell in your notebook with this code:</p>\n<pre><code>import subprocess, sys, os\nfrom pathlib import Path\ndef resolve_python_path(target_dir):\n    for pth_file in Path(target_dir).glob(\"*.pth\"):\n        with pth_file.open() as fp:\n            relpath = fp.read()\n            rel_pack_path = (pth_file.parent/relpath)\n            if rel_pack_path.exists():\n                print(f\"append {rel_pack_path}\")\n                sys.path.append(str(rel_pack_path))\n\n\n\noffline_dir = \"/kaggle/input/nvidia-nemotron-offline-packages/offline_packages\"\ntarget_dir = \"/kaggle/working/packages\"\n\nos.makedirs(target_dir, exist_ok=True)\nresolve_python_path(\"/kaggle/usr/lib/notebooks/ryanholbrook/nvidia-utility-script/\")\n\nif os.path.exists(offline_dir):\n    subprocess.check_call([\n        sys.executable, \"-m\", \"pip\", \"install\", \"-q\",\n        \"--no-index\",\n        \"--find-links\", offline_dir,\n        \"--target\", target_dir,\n        \"datasets\", \"trl\"\n    ])\n    print(\"Installed from offline packages\")\nelse:\n    subprocess.check_call([\n        sys.executable, \"-m\", \"pip\", \"install\", \"-q\",\n        \"--target\", target_dir,\n        \"datasets\", \"trl\"\n    ])\n    print(\"Installed from PyPI\")\n\n# Add to Python path\nsys.path.append(target_dir)\nresolve_python_path(target_dir)\n\nimport datasets, trl, cutlass\nprint(\"datasets:\", datasets.__version__, \"trl:\", trl.__version__, \"cutlass:\", cutlass.__version__)\n</code></pre>",
+      "feedbackTrackingData": {},
+      "id": 3427905,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-03-24T17:00:13.707Z",
+      "rawMarkdown": "The actual cutlass code is hidden inside nvidia_cutlass_dsl/python_packages/. The package uses a .pth file to tell Python where to find it. However, simply adding your target directory to sys.path does not parse .pth files in non-standard directories. Python completely ignores the .pth file and fails to find the hidden folder.\n\nJust replace the first cell in your notebook with this code:\n\n```\nimport subprocess, sys, os\nfrom pathlib import Path\ndef resolve_python_path(target_dir):\n    for pth_file in Path(target_dir).glob(\"*.pth\"):\n        with pth_file.open() as fp:\n            relpath = fp.read()\n            rel_pack_path = (pth_file.parent/relpath)\n            if rel_pack_path.exists():\n                print(f\"append {rel_pack_path}\")\n                sys.path.append(str(rel_pack_path))\n\n\n\noffline_dir = \"/kaggle/input/nvidia-nemotron-offline-packages/offline_packages\"\ntarget_dir = \"/kaggle/working/packages\"\n\nos.makedirs(target_dir, exist_ok=True)\nresolve_python_path(\"/kaggle/usr/lib/notebooks/ryanholbrook/nvidia-utility-script/\")\n\nif os.path.exists(offline_dir):\n    subprocess.check_call([\n        sys.executable, \"-m\", \"pip\", \"install\", \"-q\",\n        \"--no-index\",\n        \"--find-links\", offline_dir,\n        \"--target\", target_dir,\n        \"datasets\", \"trl\"\n    ])\n    print(\"Installed from offline packages\")\nelse:\n    subprocess.check_call([\n        sys.executable, \"-m\", \"pip\", \"install\", \"-q\",\n        \"--target\", target_dir,\n        \"datasets\", \"trl\"\n    ])\n    print(\"Installed from PyPI\")\n\n# Add to Python path\nsys.path.append(target_dir)\nresolve_python_path(target_dir)\n\nimport datasets, trl, cutlass\nprint(\"datasets:\", datasets.__version__, \"trl:\", trl.__version__, \"cutlass:\", cutlass.__version__)\n```",
+      "teamUpInfo": {
+        "intro": "",
+        "teamLeader": {
+          "displayName": "LEI ALEX",
+          "id": 6762707,
+          "performanceTier": "CONTRIBUTOR",
+          "profileUrl": "/leialex",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "CONTRIBUTOR",
+          "url": "/leialex",
+          "userId": 6762707,
+          "userName": "leialex"
+        }
+      },
+      "votes": {
+        "canUpvote": true,
+        "totalUpvotes": 9,
+        "totalVotes": 8
+      }
+    },
+    "firstMessageId": 3427905,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 684385,
+    "name": "Fix ModuleNotFoundError for cutlass",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-03-24T17:00:13.707067300Z",
+    "totalMessages": 3,
+    "totalVotes": 8,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/684385"
+  }
+}

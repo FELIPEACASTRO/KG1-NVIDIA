@@ -1,0 +1,263 @@
+{
+  "forumTopic": {
+    "authorId": 3563032,
+    "authorPerformanceTier": "MASTER",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "3563032-kg.png?t=2024-10-16-03-06-20",
+    "authorUserDisplayName": "william.wu",
+    "authorUserName": "wuwenmin",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "Russell Kirk",
+          "id": 27681700,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/27681700-kg.jpg?t=2026-03-31-11-28-38",
+          "tier": "CONTRIBUTOR",
+          "url": "/russcore"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 1380,
+        "content": "<p>I think it's basically, \"Who has copied the public notebook and who hasn't?\"</p>",
+        "feedbackTrackingData": {},
+        "id": 3452854,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-05-04T12:56:42.997Z",
+        "rawMarkdown": "I think it's basically, \"Who has copied the public notebook and who hasn't?\"",
+        "teamUpInfo": {
+          "enabled": true,
+          "intro": "If you got the time, I got the data .. I hope :D",
+          "teamLeader": {
+            "displayName": "Russell Kirk",
+            "id": 27681700,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/russcore",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/27681700-kg.jpg?t=2026-03-31-11-28-38",
+            "tier": "CONTRIBUTOR",
+            "url": "/russcore",
+            "userId": 27681700,
+            "userName": "russcore"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 3,
+          "totalVotes": 2
+        }
+      },
+      {
+        "author": {
+          "displayName": "klimagapov",
+          "id": 4530070,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/4530070-kg.jpg",
+          "tier": "CONTRIBUTOR",
+          "url": "/klimagapov"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 101,
+        "content": "<p>How much do you pay for Claude?</p>",
+        "feedbackTrackingData": {},
+        "id": 3453351,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-05-05T11:43:00.980Z",
+        "rawMarkdown": "How much do you pay for Claude?",
+        "replies": [
+          {
+            "author": {
+              "displayName": "william.wu",
+              "id": 3563032,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/3563032-kg.png?t=2024-10-16-03-06-20",
+              "tier": "MASTER",
+              "url": "/wuwenmin"
+            },
+            "authorType": "TOPIC",
+            "competitionRanking": 16,
+            "content": "<p>Here's my daily cost, average $200/day when actively working on kaggle competitions.  Thanks to this great <a href=\"https://github.com/jyao97/agenthive\" target=\"_blank\">project</a> that allows me to participate in kaggle competions without touching my laptop most of the time.\n<img src=\"https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F3563032%2F370e940d340636731c82baffd91df4b6%2FAgentHive.png?generation=1778372884522798&amp;alt=media\" alt=\"\"></p>",
+            "feedbackTrackingData": {},
+            "id": 3455650,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-05-10T00:30:28.403Z",
+            "rawMarkdown": "Here's my daily cost, average $200/day when actively working on kaggle competitions.  Thanks to this great [project](https://github.com/jyao97/agenthive) that allows me to participate in kaggle competions without touching my laptop most of the time.\n![](https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F3563032%2F370e940d340636731c82baffd91df4b6%2FAgentHive.png?generation=1778372884522798&alt=media)",
+            "replies": [
+              {
+                "author": {
+                  "displayName": "AK",
+                  "id": 454169,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/454169-kg.jpg?t=2025-09-11-13-30-28",
+                  "tier": "MASTER",
+                  "url": "/aman1391"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 347,
+                "content": "<p>so you must be loaded 🤑</p>",
+                "feedbackTrackingData": {},
+                "id": 3455933,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-05-10T17:43:46.073Z",
+                "rawMarkdown": "so you must be loaded 🤑",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "AK",
+                    "id": 454169,
+                    "performanceTier": "MASTER",
+                    "profileUrl": "/aman1391",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/454169-kg.jpg?t=2025-09-11-13-30-28",
+                    "tier": "MASTER",
+                    "url": "/aman1391",
+                    "userId": 454169,
+                    "userName": "aman1391"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true
+                }
+              },
+              {
+                "author": {
+                  "displayName": "Chew Kok Wah",
+                  "id": 3967558,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                  "tier": "EXPERT",
+                  "url": "/chewkokwahibrainai"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 62,
+                "content": "<p>Is this daily additional cost after you exhausted your Claude Max subscription quota ?</p>",
+                "feedbackTrackingData": {},
+                "id": 3457571,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-05-13T23:45:24.777Z",
+                "rawMarkdown": "Is this daily additional cost after you exhausted your Claude Max subscription quota ?",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "Chew Kok Wah",
+                    "id": 3967558,
+                    "performanceTier": "EXPERT",
+                    "profileUrl": "/chewkokwahibrainai",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                    "tier": "EXPERT",
+                    "url": "/chewkokwahibrainai",
+                    "userId": 3967558,
+                    "userName": "chewkokwahibrainai"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true
+                }
+              }
+            ],
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "william.wu",
+                "id": 3563032,
+                "performanceTier": "MASTER",
+                "profileUrl": "/wuwenmin",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/3563032-kg.png?t=2024-10-16-03-06-20",
+                "tier": "MASTER",
+                "url": "/wuwenmin",
+                "userId": 3563032,
+                "userName": "wuwenmin"
+              }
+            },
+            "votes": {
+              "canUpvote": true,
+              "totalUpvotes": 2,
+              "totalVotes": -1
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "klimagapov",
+            "id": 4530070,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/klimagapov",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/4530070-kg.jpg",
+            "tier": "CONTRIBUTOR",
+            "url": "/klimagapov",
+            "userId": 4530070,
+            "userName": "klimagapov"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "william.wu",
+        "id": 3563032,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/3563032-kg.png?t=2024-10-16-03-06-20",
+        "tier": "MASTER",
+        "url": "/wuwenmin"
+      },
+      "authorType": "TOPIC",
+      "competitionRanking": 16,
+      "content": "<p>All credit to <strong>Public Notebooks + Claude Code + kaggle CLI + an auto-research loop</strong> :)</p>\n<p>If anyone's doing similar agentic setups for this competition, drop a comment 👋</p>",
+      "feedbackTrackingData": {},
+      "id": 3452822,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-05-04T11:35:52.407Z",
+      "rawMarkdown": "All credit to **Public Notebooks + Claude Code + kaggle CLI + an auto-research loop** :)\n\nIf anyone's doing similar agentic setups for this competition, drop a comment 👋",
+      "teamUpInfo": {
+        "intro": "",
+        "teamLeader": {
+          "displayName": "william.wu",
+          "id": 3563032,
+          "performanceTier": "MASTER",
+          "profileUrl": "/wuwenmin",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/3563032-kg.png?t=2024-10-16-03-06-20",
+          "tier": "MASTER",
+          "url": "/wuwenmin",
+          "userId": 3563032,
+          "userName": "wuwenmin"
+        }
+      },
+      "votes": {
+        "canUpvote": true,
+        "totalUpvotes": 7,
+        "totalVotes": -7
+      }
+    },
+    "firstMessageId": 3452822,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 696854,
+    "name": " Just noticed I'm in the golden zone — and I know almost nothing about this competition",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-05-04T11:35:52.408077500Z",
+    "totalMessages": 5,
+    "totalVotes": -7,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/696854"
+  }
+}

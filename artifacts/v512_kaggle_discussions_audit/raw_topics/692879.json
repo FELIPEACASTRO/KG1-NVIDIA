@@ -1,0 +1,326 @@
+{
+  "forumTopic": {
+    "authorId": 33728306,
+    "authorPerformanceTier": "CONTRIBUTOR",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "33728306-kg.png?t=2026-04-25-07-15-05",
+    "authorUserDisplayName": "Taha",
+    "authorUserName": "tahaalam2009",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "CPMP",
+          "id": 75976,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/75976-gr.jpg",
+          "tier": "GRANDMASTER",
+          "url": "/cpmpml"
+        },
+        "authorType": "HOST",
+        "content": "<p>It is allowed provided you can use the submission format.</p>\n<p>On a personal note, I tried DORA in a previous competition, and the extra training time did not translate into better LB score. It would be nice to see if you get a positive outcome.</p>",
+        "feedbackTrackingData": {},
+        "id": 3444782,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-18T12:22:51.773Z",
+        "rawMarkdown": "It is allowed provided you can use the submission format.\n\nOn a personal note, I tried DORA in a previous competition, and the extra training time did not translate into better LB score. It would be nice to see if you get a positive outcome.",
+        "replies": [
+          {
+            "author": {
+              "displayName": "Taha",
+              "id": 33728306,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/33728306-kg.png?t=2026-04-25-07-15-05",
+              "tier": "CONTRIBUTOR",
+              "url": "/tahaalam2009"
+            },
+            "authorType": "TOPIC",
+            "competitionRanking": 313,
+            "content": "<p>Thanks for the real-world experience! Even if DoRA saves correctly to standard LoRA format via Unsloth/PEFT, vLLM's config detection likely kills it anyway no confirmed successful Kaggle LBs with DoRA yet. Your note on no LB boost despite extra time seals it for me; with limited compute, I'll skip use_dora=True and optimize standard LoRA (higher rank/alpha, data tweaks) for cryptarithms instead. Appreciate the heads-up</p>",
+            "feedbackTrackingData": {},
+            "id": 3444930,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-04-18T17:45:41.953Z",
+            "rawMarkdown": "Thanks for the real-world experience! Even if DoRA saves correctly to standard LoRA format via Unsloth/PEFT, vLLM's config detection likely kills it anyway no confirmed successful Kaggle LBs with DoRA yet. Your note on no LB boost despite extra time seals it for me; with limited compute, I'll skip use_dora=True and optimize standard LoRA (higher rank/alpha, data tweaks) for cryptarithms instead. Appreciate the heads-up",
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "Taha",
+                "id": 33728306,
+                "performanceTier": "CONTRIBUTOR",
+                "profileUrl": "/tahaalam2009",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/33728306-kg.png?t=2026-04-25-07-15-05",
+                "tier": "CONTRIBUTOR",
+                "url": "/tahaalam2009",
+                "userId": 33728306,
+                "userName": "tahaalam2009"
+              }
+            },
+            "votes": {
+              "canUpvote": true
+            }
+          }
+        ],
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 4,
+          "totalVotes": 4
+        }
+      },
+      {
+        "author": {
+          "displayName": "NNMax",
+          "id": 18148523,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/18148523-kg.jpg?t=2025-10-31-11-21-57",
+          "tier": "EXPERT",
+          "url": "/ashok205"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 758,
+        "content": "<p>Doesn't current versions of vllm do not support native DoRA? </p>\n<p>I think the possible ways are either mimicking DoRA finetuning but by using LoRA alone or some really complex engineering?</p>",
+        "feedbackTrackingData": {},
+        "id": 3444869,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-18T15:35:21.167Z",
+        "rawMarkdown": "Doesn't current versions of vllm do not support native DoRA? \n\nI think the possible ways are either mimicking DoRA finetuning but by using LoRA alone or some really complex engineering?",
+        "replies": [
+          {
+            "author": {
+              "displayName": "Taha",
+              "id": 33728306,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/33728306-kg.png?t=2026-04-25-07-15-05",
+              "tier": "CONTRIBUTOR",
+              "url": "/tahaalam2009"
+            },
+            "authorType": "TOPIC",
+            "competitionRanking": 313,
+            "content": "<p>Yes, you're spot on current standard vLLM versions (including Kaggle's vanilla setup) don't natively support DoRA. The PEFT helper explicitly errors with \"vLLM does not yet support DoRA\" when it detects DoRA configs. PR #14389 for DoRA support is still open with merge conflicts, no merge by April 2026, and recent issues show inference failures for DoRA models.</p>\n<p>Mimicking DoRA with plain LoRA misses the core benefit (separate magnitude training), so gains would be suboptimal. Complex forks like vllm-dora work locally but won't fly in Kaggle's locked env. Best bet: stick to standard LoRA for safe LB submits.\nI Did a bit of research and got to know that <code>While vLLM does not yet natively support DoRA (Weight-Decomposed Low-Rank Adaptation) adapters for dynamic serving as of early 2026</code></p>",
+            "feedbackTrackingData": {},
+            "id": 3444927,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-04-18T17:44:26.617Z",
+            "rawMarkdown": "Yes, you're spot on current standard vLLM versions (including Kaggle's vanilla setup) don't natively support DoRA. The PEFT helper explicitly errors with \"vLLM does not yet support DoRA\" when it detects DoRA configs. PR #14389 for DoRA support is still open with merge conflicts, no merge by April 2026, and recent issues show inference failures for DoRA models.\n\nMimicking DoRA with plain LoRA misses the core benefit (separate magnitude training), so gains would be suboptimal. Complex forks like vllm-dora work locally but won't fly in Kaggle's locked env. Best bet: stick to standard LoRA for safe LB submits.\nI Did a bit of research and got to know that `While vLLM does not yet natively support DoRA (Weight-Decomposed Low-Rank Adaptation) adapters for dynamic serving as of early 2026`",
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "Taha",
+                "id": 33728306,
+                "performanceTier": "CONTRIBUTOR",
+                "profileUrl": "/tahaalam2009",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/33728306-kg.png?t=2026-04-25-07-15-05",
+                "tier": "CONTRIBUTOR",
+                "url": "/tahaalam2009",
+                "userId": 33728306,
+                "userName": "tahaalam2009"
+              }
+            },
+            "votes": {
+              "canUpvote": true
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "NNMax",
+            "id": 18148523,
+            "performanceTier": "EXPERT",
+            "profileUrl": "/ashok205",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/18148523-kg.jpg?t=2025-10-31-11-21-57",
+            "tier": "EXPERT",
+            "url": "/ashok205",
+            "userId": 18148523,
+            "userName": "ashok205"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 1,
+          "totalVotes": 1
+        }
+      },
+      {
+        "author": {
+          "displayName": "Noizersam",
+          "id": 9894684,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "EXPERT",
+          "url": "/noizersam"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 213,
+        "content": "<p>Have you tested how many epochs of training yield the best results?</p>",
+        "feedbackTrackingData": {},
+        "id": 3444838,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-18T15:14:09.720Z",
+        "rawMarkdown": "Have you tested how many epochs of training yield the best results?",
+        "replies": [
+          {
+            "author": {
+              "displayName": "Taha",
+              "id": 33728306,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/33728306-kg.png?t=2026-04-25-07-15-05",
+              "tier": "CONTRIBUTOR",
+              "url": "/tahaalam2009"
+            },
+            "authorType": "TOPIC",
+            "competitionRanking": 313,
+            "content": "<p>i dont have heavy compute , i just have modal and few dollars in tinker , so i havent tested yet</p>",
+            "feedbackTrackingData": {},
+            "id": 3444872,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-04-18T15:43:25.607Z",
+            "rawMarkdown": "i dont have heavy compute , i just have modal and few dollars in tinker , so i havent tested yet",
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "Taha",
+                "id": 33728306,
+                "performanceTier": "CONTRIBUTOR",
+                "profileUrl": "/tahaalam2009",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/33728306-kg.png?t=2026-04-25-07-15-05",
+                "tier": "CONTRIBUTOR",
+                "url": "/tahaalam2009",
+                "userId": 33728306,
+                "userName": "tahaalam2009"
+              }
+            },
+            "votes": {
+              "canUpvote": true
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Noizersam",
+            "id": 9894684,
+            "performanceTier": "EXPERT",
+            "profileUrl": "/noizersam",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+            "tier": "EXPERT",
+            "url": "/noizersam",
+            "userId": 9894684,
+            "userName": "noizersam"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 1,
+          "totalVotes": 1
+        }
+      },
+      {
+        "author": {
+          "displayName": "Giovanny Rodríguez",
+          "id": 23653385,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "EXPERT",
+          "url": "/giovannyrodrguez"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 178,
+        "content": "<p>I'll try to make them a couple of weeks ago, Pissa and Dora LB: 0</p>",
+        "feedbackTrackingData": {},
+        "id": 3444979,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-18T20:59:00.293Z",
+        "rawMarkdown": "I'll try to make them a couple of weeks ago, Pissa and Dora LB: 0",
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Giovanny Rodríguez",
+            "id": 23653385,
+            "performanceTier": "EXPERT",
+            "profileUrl": "/giovannyrodrguez",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+            "tier": "EXPERT",
+            "url": "/giovannyrodrguez",
+            "userId": 23653385,
+            "userName": "giovannyrodrguez"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "Taha",
+        "id": 33728306,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/33728306-kg.png?t=2026-04-25-07-15-05",
+        "tier": "CONTRIBUTOR",
+        "url": "/tahaalam2009"
+      },
+      "authorType": "TOPIC",
+      "competitionRanking": 313,
+      "content": "<p>Hey everyone,</p>\n<p>I’m currently prepping a final training run and wanted to get the community's thoughts on using <strong>DoRA (Weight-Decomposed Low-Rank Adaptation)</strong> instead of standard LoRA for this specific reasoning challenge.</p>\n<p>I’ve managed to hit a solid baseline (around 0.84 - 0.85) using standard SFT with a carefully balanced data mix and a cosine scheduler. However, I'm looking for that last 1-2% push to handle the harder algorithmic categories (like cryptarithms). </p>\n<p>Theoretically, DoRA should be perfect here. By separating the weight updates into magnitude and direction, it usually performs much closer to full fine-tuning, which seems critical for rigid mathematical reasoning tasks where standard LoRA tends to plateau , the extra VRAM overhead from tracking the magnitude vectors isn't a bottleneck for me.</p>\n<p>My main hesitation is <strong>Kaggle's submission evaluator.</strong> As we know, Kaggle spins up a vanilla <code>vLLM</code> instance and injects our <code>adapter_model.safetensors</code>. Unsloth/PEFT handles DoRA beautifully during training, and it <em>should</em> mathematically fold the magnitude and direction back into standard $A$ and $B$ matrices when calling <code>save_pretrained()</code>. </p>\n<p>But Kaggle's backend can be notoriously finicky. I've had issues in the past with adapters throwing errors or scoring abysmally low because of slight formatting or merging quirks.</p>\n<p>Has anyone here successfully submitted a DoRA-trained adapter to the leaderboard? </p>\n<ol>\n<li><strong>Did it load correctly in the hidden vLLM environment, or did it trigger an evaluation error / 0.0 score?</strong></li>\n<li><strong>If it worked, did you actually see a tangible LB boost over standard LoRA (assuming the same rank/alpha)?</strong></li>\n</ol>\n<p>I only have enough compute budget for a couple more serious runs, so I’m trying to decide if flipping <code>use_dora=True</code> is a smart calculated bet or a technical trap. </p>\n<p>Any insights would be hugely appreciated!</p>",
+      "feedbackTrackingData": {},
+      "id": 3444757,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-04-18T10:51:51.983Z",
+      "rawMarkdown": "Hey everyone,\n\nI’m currently prepping a final training run and wanted to get the community's thoughts on using **DoRA (Weight-Decomposed Low-Rank Adaptation)** instead of standard LoRA for this specific reasoning challenge.\n\nI’ve managed to hit a solid baseline (around 0.84 - 0.85) using standard SFT with a carefully balanced data mix and a cosine scheduler. However, I'm looking for that last 1-2% push to handle the harder algorithmic categories (like cryptarithms). \n\nTheoretically, DoRA should be perfect here. By separating the weight updates into magnitude and direction, it usually performs much closer to full fine-tuning, which seems critical for rigid mathematical reasoning tasks where standard LoRA tends to plateau , the extra VRAM overhead from tracking the magnitude vectors isn't a bottleneck for me.\n\nMy main hesitation is **Kaggle's submission evaluator.** As we know, Kaggle spins up a vanilla `vLLM` instance and injects our `adapter_model.safetensors`. Unsloth/PEFT handles DoRA beautifully during training, and it *should* mathematically fold the magnitude and direction back into standard $A$ and $B$ matrices when calling `save_pretrained()`. \n\nBut Kaggle's backend can be notoriously finicky. I've had issues in the past with adapters throwing errors or scoring abysmally low because of slight formatting or merging quirks.\n\nHas anyone here successfully submitted a DoRA-trained adapter to the leaderboard? \n1. **Did it load correctly in the hidden vLLM environment, or did it trigger an evaluation error / 0.0 score?**\n2. **If it worked, did you actually see a tangible LB boost over standard LoRA (assuming the same rank/alpha)?**\n\nI only have enough compute budget for a couple more serious runs, so I’m trying to decide if flipping `use_dora=True` is a smart calculated bet or a technical trap. \n\nAny insights would be hugely appreciated!",
+      "teamUpInfo": {
+        "intro": "",
+        "teamLeader": {
+          "displayName": "Taha",
+          "id": 33728306,
+          "performanceTier": "CONTRIBUTOR",
+          "profileUrl": "/tahaalam2009",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/33728306-kg.png?t=2026-04-25-07-15-05",
+          "tier": "CONTRIBUTOR",
+          "url": "/tahaalam2009",
+          "userId": 33728306,
+          "userName": "tahaalam2009"
+        }
+      },
+      "votes": {
+        "canUpvote": true,
+        "totalUpvotes": 1,
+        "totalVotes": 1
+      }
+    },
+    "firstMessageId": 3444757,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 692879,
+    "name": " Is DoRA allowed does it actually improve LB scores?",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-04-18T10:51:51.982983500Z",
+    "totalMessages": 7,
+    "totalVotes": 1,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/692879"
+  }
+}

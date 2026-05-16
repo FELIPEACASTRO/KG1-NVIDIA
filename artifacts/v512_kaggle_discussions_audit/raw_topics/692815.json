@@ -1,0 +1,98 @@
+{
+  "forumTopic": {
+    "authorId": 19735847,
+    "authorPerformanceTier": "CONTRIBUTOR",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "default-thumb.png",
+    "authorUserDisplayName": "Gerves François Baniakina",
+    "authorUserName": "gbaniaki",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "Trimut",
+          "id": 21859916,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/21859916-kg.jpg?t=2026-04-16-06-36-26",
+          "tier": "CONTRIBUTOR",
+          "url": "/tamannaji"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 2684,
+        "content": "<p>This error usually happens due to a NumPy–Pandas version mismatch (binary incompatibility).\nFix (recommended): reinstall both with compatible versions**\n!pip install --upgrade --force-reinstall numpy pandas</p>\n<h2>`Then restart the runtime/kernel(very important).</h2>\n<p>Alternative (stable combo):\n!pip install numpy==1.26.4 pandas==2.2.2\n``Restart again after installing.\nThis should resolve the issue.</p>",
+        "feedbackTrackingData": {},
+        "id": 3447013,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-22T15:34:35.207Z",
+        "rawMarkdown": "This error usually happens due to a NumPy–Pandas version mismatch (binary incompatibility).\nFix (recommended): reinstall both with compatible versions**\n!pip install --upgrade --force-reinstall numpy pandas\n`Then restart the runtime/kernel(very important).\n---\nAlternative (stable combo):\n!pip install numpy==1.26.4 pandas==2.2.2\n``Restart again after installing.\nThis should resolve the issue.\n",
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Trimut",
+            "id": 21859916,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/tamannaji",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/21859916-kg.jpg?t=2026-04-16-06-36-26",
+            "tier": "CONTRIBUTOR",
+            "url": "/tamannaji",
+            "userId": 21859916,
+            "userName": "tamannaji"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "Gerves François Baniakina",
+        "id": 19735847,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+        "tier": "CONTRIBUTOR",
+        "url": "/gbaniaki"
+      },
+      "authorType": "TOPIC",
+      "content": "<p>can anybody help em with this issue ---------------------------------------------------------------------------\nValueError                                Traceback (most recent call last)\n/tmp/ipykernel_16681/4065505671.py in ()\n      4 \n      5 import numpy as np # linear algebra\n----&gt; 6 import pandas as pd # data processing, CSV file I/O (e.g. pd.read_csv)\n      7 \n      8 </p>\n<p>/usr/local/lib/python3.12/dist-packages/pandas/<strong>init</strong>.py in \n     32     ) from _err\n     33 \n---&gt; 34 from pandas._config import (\n     35     get_option,\n     36     set_option,</p>\n<p>/usr/local/lib/python3.12/dist-packages/pandas/_config/<strong>init</strong>.py in \n     17     \"set_option\",\n     18 ]\n---&gt; 19 from pandas._config import config\n     20 from pandas._config import dates  # pyright: ignore[reportUnusedImport]  # noqa: F401\n     21 from pandas._config.config import (</p>\n<p>/usr/local/lib/python3.12/dist-packages/pandas/_config/config.py in \n     61 import warnings\n     62 \n---&gt; 63 from pandas._typing import F\n     64 from pandas.util._exceptions import find_stack_level\n     65 </p>\n<p>/usr/local/lib/python3.12/dist-packages/pandas/_typing.py in \n    198     int\n    199     | np.ndarray\n--&gt; 200     | np.random.Generator\n    201     | np.random.BitGenerator\n    202     | np.random.RandomState</p>\n<p>/usr/local/lib/python3.12/dist-packages/numpy/<strong>init</strong>.py in <strong>getattr</strong>(attr)\n    335         min,\n    336         min_scalar_type,\n--&gt; 337         minimum,\n    338         mod,\n    339         modf,</p>\n<p>/usr/local/lib/python3.12/dist-packages/numpy/random/<strong>init</strong>.py in \n    178 \n    179 # add these for module-freeze analysis (like PyInstaller)\n--&gt; 180 from . import _bounded_integers, _common, _pickle\n    181 from ._generator import Generator, default_rng\n    182 from ._mt19937 import MT19937</p>\n<p>/usr/local/lib/python3.12/dist-packages/numpy/random/_pickle.py in \n      5 from ._sfc64 import SFC64\n      6 from .bit_generator import BitGenerator\n----&gt; 7 from .mtrand import RandomState\n      8 \n      9 BitGenerators = {'MT19937': MT19937,</p>\n<p>numpy/random/mtrand.pyx in init numpy.random.mtrand()</p>\n<p>ValueError: numpy.dtype size changed, may indicate binary incompatibility. Expected 96 from C header, got 88 from PyObject\nadd Codeadd Markdown</p>",
+      "feedbackTrackingData": {},
+      "id": 3444587,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-04-18T02:39:03.737Z",
+      "rawMarkdown": "can anybody help em with this issue ---------------------------------------------------------------------------\nValueError                                Traceback (most recent call last)\n/tmp/ipykernel_16681/4065505671.py in <cell line: 0>()\n      4 \n      5 import numpy as np # linear algebra\n----> 6 import pandas as pd # data processing, CSV file I/O (e.g. pd.read_csv)\n      7 \n      8 \n\n/usr/local/lib/python3.12/dist-packages/pandas/__init__.py in <module>\n     32     ) from _err\n     33 \n---> 34 from pandas._config import (\n     35     get_option,\n     36     set_option,\n\n/usr/local/lib/python3.12/dist-packages/pandas/_config/__init__.py in <module>\n     17     \"set_option\",\n     18 ]\n---> 19 from pandas._config import config\n     20 from pandas._config import dates  # pyright: ignore[reportUnusedImport]  # noqa: F401\n     21 from pandas._config.config import (\n\n/usr/local/lib/python3.12/dist-packages/pandas/_config/config.py in <module>\n     61 import warnings\n     62 \n---> 63 from pandas._typing import F\n     64 from pandas.util._exceptions import find_stack_level\n     65 \n\n/usr/local/lib/python3.12/dist-packages/pandas/_typing.py in <module>\n    198     int\n    199     | np.ndarray\n--> 200     | np.random.Generator\n    201     | np.random.BitGenerator\n    202     | np.random.RandomState\n\n/usr/local/lib/python3.12/dist-packages/numpy/__init__.py in __getattr__(attr)\n    335         min,\n    336         min_scalar_type,\n--> 337         minimum,\n    338         mod,\n    339         modf,\n\n/usr/local/lib/python3.12/dist-packages/numpy/random/__init__.py in <module>\n    178 \n    179 # add these for module-freeze analysis (like PyInstaller)\n--> 180 from . import _bounded_integers, _common, _pickle\n    181 from ._generator import Generator, default_rng\n    182 from ._mt19937 import MT19937\n\n/usr/local/lib/python3.12/dist-packages/numpy/random/_pickle.py in <module>\n      5 from ._sfc64 import SFC64\n      6 from .bit_generator import BitGenerator\n----> 7 from .mtrand import RandomState\n      8 \n      9 BitGenerators = {'MT19937': MT19937,\n\nnumpy/random/mtrand.pyx in init numpy.random.mtrand()\n\nValueError: numpy.dtype size changed, may indicate binary incompatibility. Expected 96 from C header, got 88 from PyObject\nadd Codeadd Markdown",
+      "teamUpInfo": {
+        "intro": "",
+        "teamLeader": {
+          "displayName": "Gerves François Baniakina",
+          "id": 19735847,
+          "performanceTier": "CONTRIBUTOR",
+          "profileUrl": "/gbaniaki",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "CONTRIBUTOR",
+          "url": "/gbaniaki",
+          "userId": 19735847,
+          "userName": "gbaniaki"
+        }
+      },
+      "votes": {
+        "canUpvote": true
+      }
+    },
+    "firstMessageId": 3444587,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 692815,
+    "name": "runnung issues ",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-04-18T02:39:03.737057200Z",
+    "totalMessages": 1,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/692815"
+  }
+}

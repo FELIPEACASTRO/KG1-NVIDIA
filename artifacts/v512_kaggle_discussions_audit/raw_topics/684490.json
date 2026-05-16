@@ -1,0 +1,219 @@
+{
+  "forumTopic": {
+    "authorId": 25920728,
+    "authorPerformanceTier": "EXPERT",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "25920728-kg.png?t=2025-05-15-13-53-02",
+    "authorUserDisplayName": "Liangjie Zhao",
+    "authorUserName": "liangjiezhao",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "JacobWu15",
+          "id": 11275720,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "CONTRIBUTOR",
+          "url": "/jacobwu15"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 3091,
+        "content": "<p>I have the same problem. Does someone slove it?</p>",
+        "feedbackTrackingData": {},
+        "id": 3450699,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-30T08:28:13.557Z",
+        "rawMarkdown": "I have the same problem. Does someone slove it?\n",
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "JacobWu15",
+            "id": 11275720,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/jacobwu15",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+            "tier": "CONTRIBUTOR",
+            "url": "/jacobwu15",
+            "userId": 11275720,
+            "userName": "jacobwu15"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      },
+      {
+        "author": {
+          "displayName": "SANNNNN",
+          "id": 31467923,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/31467923-kg.png?t=2026-01-09-20-10-52",
+          "tier": "CONTRIBUTOR",
+          "url": "/zuhairsan"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 103,
+        "content": "<p><code>adapter_config.json</code> and <code>adapter_model.safetensors</code> are essential. Make sure they finish uploading before submitting. If submission.zip is less than 3GB, it's not fully uploaded when submission.</p>",
+        "feedbackTrackingData": {},
+        "id": 3444033,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-17T07:19:04.777Z",
+        "rawMarkdown": "`adapter_config.json` and `adapter_model.safetensors` are essential. Make sure they finish uploading before submitting. If submission.zip is less than 3GB, it's not fully uploaded when submission.",
+        "replies": [
+          {
+            "author": {
+              "displayName": "Russell Kirk",
+              "id": 27681700,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/27681700-kg.jpg?t=2026-03-31-11-28-38",
+              "tier": "CONTRIBUTOR",
+              "url": "/russcore"
+            },
+            "authorType": "COMMENT",
+            "competitionRanking": 1381,
+            "content": "<p>Depends on what modules you target! </p>",
+            "feedbackTrackingData": {},
+            "id": 3450702,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-04-30T08:31:47.303Z",
+            "rawMarkdown": "Depends on what modules you target! ",
+            "teamUpInfo": {
+              "enabled": true,
+              "intro": "If you got the time, I got the data .. I hope :D",
+              "teamLeader": {
+                "displayName": "Russell Kirk",
+                "id": 27681700,
+                "performanceTier": "CONTRIBUTOR",
+                "profileUrl": "/russcore",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/27681700-kg.jpg?t=2026-03-31-11-28-38",
+                "tier": "CONTRIBUTOR",
+                "url": "/russcore",
+                "userId": 27681700,
+                "userName": "russcore"
+              }
+            },
+            "votes": {
+              "canUpvote": true
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "SANNNNN",
+            "id": 31467923,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/zuhairsan",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/31467923-kg.png?t=2026-01-09-20-10-52",
+            "tier": "CONTRIBUTOR",
+            "url": "/zuhairsan",
+            "userId": 31467923,
+            "userName": "zuhairsan"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      },
+      {
+        "author": {
+          "displayName": "Rishabh",
+          "id": 1597311,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1597311-gp.jpg",
+          "tier": "CONTRIBUTOR",
+          "url": "/reddevilrishabh"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 2994,
+        "content": "<p>hey, facing similar issue today, were you able to figure out the way?</p>",
+        "feedbackTrackingData": {},
+        "id": 3443376,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-16T13:22:00.717Z",
+        "rawMarkdown": "hey, facing similar issue today, were you able to figure out the way?",
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Rishabh",
+            "id": 1597311,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/reddevilrishabh",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1597311-gp.jpg",
+            "tier": "CONTRIBUTOR",
+            "url": "/reddevilrishabh",
+            "userId": 1597311,
+            "userName": "reddevilrishabh"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "Liangjie Zhao",
+        "id": 25920728,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/25920728-kg.png?t=2025-05-15-13-53-02",
+        "tier": "EXPERT",
+        "url": "/liangjiezhao"
+      },
+      "authorType": "TOPIC",
+      "competitionRanking": 2954,
+      "content": "<p>My training process was completed on my private server, and I obtained the adapter's config.json, tensor, and other files. However, after uploading them, I encountered an \"Evaluation metric raised an unexpected error\" error. Therefore, I would like to obtain guidelines for external training submissions.</p>",
+      "feedbackTrackingData": {},
+      "id": 3428236,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-03-25T05:49:47.880Z",
+      "rawMarkdown": "My training process was completed on my private server, and I obtained the adapter's config.json, tensor, and other files. However, after uploading them, I encountered an \"Evaluation metric raised an unexpected error\" error. Therefore, I would like to obtain guidelines for external training submissions.",
+      "teamUpInfo": {
+        "intro": "",
+        "teamLeader": {
+          "displayName": "Liangjie Zhao",
+          "id": 25920728,
+          "performanceTier": "EXPERT",
+          "profileUrl": "/liangjiezhao",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/25920728-kg.png?t=2025-05-15-13-53-02",
+          "tier": "EXPERT",
+          "url": "/liangjiezhao",
+          "userId": 25920728,
+          "userName": "liangjiezhao"
+        }
+      },
+      "votes": {
+        "canUpvote": true,
+        "totalUpvotes": 4,
+        "totalVotes": 4
+      }
+    },
+    "firstMessageId": 3428236,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 684490,
+    "name": "What should be included in submission.zip?",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-03-25T05:49:47.879005900Z",
+    "totalMessages": 4,
+    "totalVotes": 4,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/684490"
+  }
+}

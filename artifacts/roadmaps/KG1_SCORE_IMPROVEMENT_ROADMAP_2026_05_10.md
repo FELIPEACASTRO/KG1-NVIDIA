@@ -58,7 +58,8 @@ Ultima evidencia operacional relevante:
 | V509 dataset integrity audit | 20 datasets auditados; V439 bloqueado por `31` mismatches de resposta simbolica/escape; V443 bloqueado por dataset vazio; V475/V498/V460 passam integridade | nao treinar com V439/V443; consolidar dataset ativo limpo |
 | V510 canonical active training pool | dataset unico criado: `2627` train, `637` val; incluiu V498/V475/V460; removeu `543` duplicados train e `155` val; reaudit V509 com `0` bloqueios | usar V510 como unica fonte ativa antes de tokenization/pre-paid gate |
 | V510 tokenization real local | tokenizer oficial local passou: `offset_masks=2627/637`, `prompt_truncation_rate=0`, `completion_truncation=0`, token max `331`, sem overlap weak/full | V510 esta pronto para launch fail-fast, desde que pre-paid/debug tambem passem |
-| V511 canonical H200 smoke preflight | V510 foi enviado ao HF dataset commit `40e71a686d9970c3c842d26dcf89200fc4990a51`; static gate, pre-paid integration gate e launcher debug passaram; H200 custa `$0.083333/min`; init adapter V290 ckpt-6 existe | proximo passo executavel e commit/push do launcher V511 e smoke H200 de 2 steps, nao treino longo |
+| V511 canonical H200 smoke | job `felipesp1983/6a08dc43e48bea4538ba02ce` completou em `0.05h`; MoE `gate_up/down` treinaveis `5934/5934`, `lm_head` congelado, checkpoint/final adapter uploaded; eval loss `2.8125 -> 2.8128` | bloqueado por FinOps; nao weak-eval/package/submit; V510 nao trouxe sinal de transferencia |
+| V512 Kaggle discussions audit | `140` topicos e `586` posts varridos via API; `392` hits; achados concretos: THK bit-pair/bitsum/stride, min-logprob, prompt-loss masking, logprob/learnability test, trace curto, duplicate-CoT/format-clash, solvers simbolicos como oracle | reforca CPU-first e trace learnability; nao autoriza novo broad SFT |
 
 ## Achados Principais V484-V492
 
@@ -178,6 +179,39 @@ de bit: o objetivo efetivo fica `bit=0.390244` e `equation=0.609756`. Isso
 autoriza um unico smoke H200 curto. Se o primeiro checkpoint repetir o padrao
 V496 (`equation=57` com `bit<136` ou truncation), cancelar por FinOps e voltar
 ao CPU teacher, sem broad SFT.
+
+Atualizacao V511: o smoke canonico com V510 executou no H200 e validou as pecas
+de infraestrutura que antes eram suspeitas: dataset HF correto, MoE
+`target_parameters` treinaveis, `lm_head` congelado, adapter seed carregado,
+checkpoint salvo e upload final completo. O resultado tecnico, porem, nao
+melhorou o objetivo local: `baseline_eval_loss=2.8125` e `final_eval_loss=2.8128`.
+Pela regra FinOps, esse candidato nao deve receber weak/full eval pago nem
+treino mais longo. O V511 prova que o gargalo atual nao e mais "job nao roda";
+e transferencia de sinal solver/trace para comportamento do adapter.
+
+Atualizacao V512: a auditoria via API das discussions do Kaggle carregou todos
+os `140` topicos listados nos arquivos locais e varreu `586` posts. Achados que
+entram no plano:
+
+| Fonte | Achado concreto | Impacto no plano |
+|---|---|---|
+| Discussion `690307`, Tong Hui Kang | bit-pair/bitsum/stride resolve a maior parte de bit sem enumerar todas as expressoes; o proprio autor declara que a transferencia depende do modelo reproduzir exatamente a CoT | bit continua guardrail; novo bit dataset so vale se gerar traces curtos e stride-verificados, nao full brute force longo |
+| Discussion `689915`, Tong Hui Kang | vencedor usou SFT, CoT deterministica, objetivo de maximizar minimo logprob e codigo gerado por solver; nao apostou em RL/distill generico | proximo dataset deve passar teste de learnability/logprob antes de GPU |
+| Discussion `697491`, Taha/Russell | dataset mais correto por solver pode piorar LB; oversampling, trace dificil, duplicate CoT e format clash causam regressao; traces acima de ~1300 tokens tendem a ser caros e pouco transferiveis | todo novo trace precisa auditoria de duplicidade textual, comprimento e logprob base; evitar mudar formato global |
+| Discussion `694710`, Taha/CPMP | prompt-loss masking/pretokenized response mask e requisito; loss baixo sem mask correta e ilusao | manter offset-mask gate obrigatorio e nao interpretar loss sem ACC |
+| Discussion `690891`, Mark Cooper | equation/cryptarithm devem ser separados em solver coverage e modelo gerar CoT; heuristicas para guess sao limite informacional | equation deve ser CPU solver + trace learnability; nao broad SFT |
+| Discussion `698293`, lkevincc/Taha | solver simbolico gold-conditioned mostra estrutura latente, mas nao e submit-safe e nao transfere automaticamente para LoRA | usar como oracle de pesquisa/rotulagem, nunca como runtime ou label weak/full |
+| Discussion `694556`, Murugesan/NguyenThanhNhan | categorias simbolicas tem muitos duplicados e DSL publica cobre so parte; muitos traces sao fallback/guess | dataset simbolico precisa deduplicacao forte e marca de "derivavel" vs "guess" |
+
+Decisao apos V511/V512: parar H200 de treino amplo. O caminho mais rapido e
+barato agora e CPU-only ate haver um novo pacote de traces que prove:
+
+- zero duplicate-CoT conflitante;
+- max trace preferencial abaixo de `1300` tokens;
+- response-mask/offset-mask completo;
+- base logprob/learnability melhor ou igual ao baseline por subfamilia;
+- CPU projection `equation>=60`, `bit>=136`, `trunc=0`;
+- nenhum ganho dependente de expected-aware extraction.
 
 ## Regras Ativas
 
@@ -458,7 +492,7 @@ sem repetir os datasets antigos que ja falharam. O smoke V511 combina:
 - bit replay com peso efetivo suficiente para preservar `136/160`;
 - fail-fast em 2 steps.
 
-Status atual: preflight completo, sem job pago ainda.
+Status final: executado e bloqueado.
 
 Evidencia pronta:
 
@@ -476,15 +510,23 @@ Evidencia pronta:
 - static safety gate: passou.
 - pre-paid integration gate: passou.
 - launcher debug: passou, H200 `0.083333 USD/min`, `timeout=3600`.
+- job HF: `felipesp1983/6a08dc43e48bea4538ba02ce`.
+- runtime: `0.05h`.
+- trainability: `target_parameters_trainability_mode="trainable"`,
+  `mlp.experts.gate_up_proj=5934` e `mlp.experts.down_proj=5934`
+  trainable LoRA tensors.
+- result: `baseline_eval_loss=2.8125`, `final_eval_loss=2.8128`.
+- upload: checkpoint-2 e final adapter enviados para
+  `felipesp1983/kg1-nemotron-lora-v511-nemo-h200-v510-canonical-v290ckpt6`.
 
-Executar:
+Decisao:
 
-- commitar e enviar V511 para `v230-v226-complementarity` antes do launch,
-  porque o job usa `KG1_EXPECTED_COMMIT`;
-- rodar V511 com `--launch` somente apos push;
-- acompanhar logs de 40 em 40 segundos;
-- cancelar por FinOps se o primeiro checkpoint nao puder superar o gate;
-- weak micro-ACC no checkpoint 2, nao apenas `eval_loss`.
+- nao weak-eval pago;
+- nao packagear;
+- nao submeter;
+- nao continuar V511 em treino longo;
+- usar o log como evidencia de que a pipeline roda, mas o dataset/objetivo nao
+  transferiu sinal.
 
 Configuracao minima do launcher:
 
@@ -540,20 +582,29 @@ ocorreu duas vezes: V477 (`equation=57`, `bit=135`, `trunc=0`) e V488
 (`equation=57`, `bit=134`, `trunc=1`). O ganho isolado de uma linha em
 equation nao vale se derruba o guardrail de bit ou truncation.
 
-### P4 - Equation Somente Se P3 Sinalizar
+### P4 - CPU Learnability Gate Antes De Novo GPU
 
-Objetivo: transformar os 4 ganhos CPU de equation em comportamento do adapter.
+Objetivo: transformar ganhos CPU de equation/bit em comportamento aprendivel
+do adapter, sem repetir V493/V495/V511.
 
-Executar somente em CPU enquanto nao houver novo sinal. P3 repetiu
-`equation=57` com `bit<136` e truncation, entao nao continuar GPU nesta rota.
-O objetivo agora e descobrir um teacher/verifier que produza ganhos de equation
-sem usar weak/full como label de treino e sem perder bit.
+Executar somente em CPU enquanto nao houver novo sinal. V511 nao repetiu a
+regressao de ACC porque nao recebeu weak eval, mas o loss local piorou
+`2.8125 -> 2.8128`; portanto tambem nao autoriza GPU longo. O objetivo agora e
+descobrir um teacher/verifier/trace que produza ganhos de equation sem usar
+weak/full como label de treino e sem perder bit.
 
 - construir dataset hard-negative curto com apenas regras CPU verificadas;
-- target final-answer-only, sem auditoria textual;
+- target final-answer-only ou trace deterministico curto, sem auditoria textual
+  longa;
 - rejected = resposta exata errada do baseline;
 - chosen = resposta correta curta;
 - leakage gate por `id`, `prompt_sha256`, prompt normalizado e n-gram.
+- novo gate de learnability antes de GPU:
+  - nenhum duplicate-CoT conflitante;
+  - trace max preferencial abaixo de `1300` tokens;
+  - base logprob nao pior que baseline por subfamilia;
+  - response-mask/offset-mask `100%`;
+  - diff label-free separado de expected-aware.
 
 Nao executar:
 
@@ -577,7 +628,7 @@ Como P3 falhou no V390/V326 e depois V495/V496 falhou no V475:
     perda de bit quando convertida para trace/teacher;
   - produzir dataset curto somente se o solver CPU independente passar
     leakage/contract gate.
-- broad SFT fica encerrado ate existir novo sinal CPU submit-safe.
+- broad SFT fica encerrado ate existir novo sinal CPU submit-safe e aprendivel.
 
 ### P5 - Bit Como Guardrail
 

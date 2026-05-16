@@ -1,0 +1,417 @@
+{
+  "forumTopic": {
+    "authorId": 20851032,
+    "authorPerformanceTier": "CONTRIBUTOR",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "20851032-kg.png?t=2026-05-06-14-39-14",
+    "authorUserDisplayName": "Mohamed Amr992",
+    "authorUserName": "mohamedamr992",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "Duc-Thanh Le",
+          "id": 31167510,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/31167510-kg.jpg?t=2026-04-14-02-20-56",
+          "tier": "CONTRIBUTOR",
+          "url": "/ldthanh"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 28,
+        "content": "<p>You just need to hover over the file in the tree and click on the three-dot symbol, a pop up will appear and you can choose \"Download\"</p>",
+        "feedbackTrackingData": {},
+        "id": 3445689,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-20T10:53:32.613Z",
+        "rawMarkdown": "You just need to hover over the file in the tree and click on the three-dot symbol, a pop up will appear and you can choose \"Download\"",
+        "replies": [
+          {
+            "author": {
+              "displayName": "Mohamed Amr992",
+              "id": 20851032,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/20851032-kg.png?t=2026-05-06-14-39-14",
+              "tier": "CONTRIBUTOR",
+              "url": "/mohamedamr992"
+            },
+            "authorType": "TOPIC",
+            "competitionRanking": 160,
+            "content": "<p>when I click nothing happen ,  idk why the model is 1.6GB</p>",
+            "feedbackTrackingData": {},
+            "id": 3446174,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-04-21T05:25:50.050Z",
+            "rawMarkdown": "when I click nothing happen ,  idk why the model is 1.6GB\n",
+            "replies": [
+              {
+                "author": {
+                  "displayName": "Duc-Thanh Le",
+                  "id": 31167510,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/31167510-kg.jpg?t=2026-04-14-02-20-56",
+                  "tier": "CONTRIBUTOR",
+                  "url": "/ldthanh"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 28,
+                "content": "<p>It's likely that kaggle must finish its transfer before the download dialog of browser appears, so it takes a while for large file after clicking the download button. About the model's size, idk why too.</p>",
+                "feedbackTrackingData": {},
+                "id": 3446283,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-21T10:53:22.097Z",
+                "rawMarkdown": "It's likely that kaggle must finish its transfer before the download dialog of browser appears, so it takes a while for large file after clicking the download button. About the model's size, idk why too.",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "Duc-Thanh Le",
+                    "id": 31167510,
+                    "performanceTier": "CONTRIBUTOR",
+                    "profileUrl": "/ldthanh",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/31167510-kg.jpg?t=2026-04-14-02-20-56",
+                    "tier": "CONTRIBUTOR",
+                    "url": "/ldthanh",
+                    "userId": 31167510,
+                    "userName": "ldthanh"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true,
+                  "totalUpvotes": 1,
+                  "totalVotes": 1
+                }
+              },
+              {
+                "author": {
+                  "displayName": "Mohamed Amr992",
+                  "id": 20851032,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/20851032-kg.png?t=2026-05-06-14-39-14",
+                  "tier": "CONTRIBUTOR",
+                  "url": "/mohamedamr992"
+                },
+                "authorType": "TOPIC",
+                "competitionRanking": 160,
+                "content": "<p>Thanks, I tried it but there was no sign that the download started. I’ll try again and wait a bit longer. I’ve already spent about 3 hours trying to figure out how to download it.</p>",
+                "feedbackTrackingData": {},
+                "id": 3446309,
+                "isCollapsed": true,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-21T11:42:07.663Z",
+                "rawMarkdown": "Thanks, I tried it but there was no sign that the download started. I’ll try again and wait a bit longer. I’ve already spent about 3 hours trying to figure out how to download it.",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "Mohamed Amr992",
+                    "id": 20851032,
+                    "performanceTier": "CONTRIBUTOR",
+                    "profileUrl": "/mohamedamr992",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/20851032-kg.png?t=2026-05-06-14-39-14",
+                    "tier": "CONTRIBUTOR",
+                    "url": "/mohamedamr992",
+                    "userId": 20851032,
+                    "userName": "mohamedamr992"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true
+                }
+              },
+              {
+                "author": {
+                  "displayName": "Duc-Thanh Le",
+                  "id": 31167510,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/31167510-kg.jpg?t=2026-04-14-02-20-56",
+                  "tier": "CONTRIBUTOR",
+                  "url": "/ldthanh"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 28,
+                "content": "<p>Hmm, you can try with a smaller file to ensure it works as expected</p>",
+                "feedbackTrackingData": {},
+                "id": 3446389,
+                "isCollapsed": true,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-21T14:14:42.330Z",
+                "rawMarkdown": "Hmm, you can try with a smaller file to ensure it works as expected",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "Duc-Thanh Le",
+                    "id": 31167510,
+                    "performanceTier": "CONTRIBUTOR",
+                    "profileUrl": "/ldthanh",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/31167510-kg.jpg?t=2026-04-14-02-20-56",
+                    "tier": "CONTRIBUTOR",
+                    "url": "/ldthanh",
+                    "userId": 31167510,
+                    "userName": "ldthanh"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true
+                }
+              },
+              {
+                "author": {
+                  "displayName": "Mohamed Amr992",
+                  "id": 20851032,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/20851032-kg.png?t=2026-05-06-14-39-14",
+                  "tier": "CONTRIBUTOR",
+                  "url": "/mohamedamr992"
+                },
+                "authorType": "TOPIC",
+                "competitionRanking": 160,
+                "content": "<p>It works with smaller files. For example, a 20 MB file downloaded in about 2 seconds. But with larger files, there is no sign that the download has started or anything happening. I also do not think it is a network issue, because I am using my university’s network.</p>",
+                "feedbackTrackingData": {},
+                "id": 3446645,
+                "isCollapsed": true,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-21T22:29:44Z",
+                "rawMarkdown": "It works with smaller files. For example, a 20 MB file downloaded in about 2 seconds. But with larger files, there is no sign that the download has started or anything happening. I also do not think it is a network issue, because I am using my university’s network.",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "Mohamed Amr992",
+                    "id": 20851032,
+                    "performanceTier": "CONTRIBUTOR",
+                    "profileUrl": "/mohamedamr992",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/20851032-kg.png?t=2026-05-06-14-39-14",
+                    "tier": "CONTRIBUTOR",
+                    "url": "/mohamedamr992",
+                    "userId": 20851032,
+                    "userName": "mohamedamr992"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true
+                }
+              },
+              {
+                "author": {
+                  "displayName": "ImperfectKitto",
+                  "id": 11905020,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/11905020-kg.jpg",
+                  "tier": "EXPERT",
+                  "url": "/defdet"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 492,
+                "content": "<p>just click \"Save version\". That's the intended workflow anyway</p>",
+                "feedbackTrackingData": {},
+                "id": 3446662,
+                "isCollapsed": true,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-21T23:14:59.517Z",
+                "rawMarkdown": "just click \"Save version\". That's the intended workflow anyway\n",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "ImperfectKitto",
+                    "id": 11905020,
+                    "performanceTier": "EXPERT",
+                    "profileUrl": "/defdet",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/11905020-kg.jpg",
+                    "tier": "EXPERT",
+                    "url": "/defdet",
+                    "userId": 11905020,
+                    "userName": "defdet"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true,
+                  "totalUpvotes": 1,
+                  "totalVotes": 1
+                }
+              },
+              {
+                "author": {
+                  "displayName": "Mohamed Amr992",
+                  "id": 20851032,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/20851032-kg.png?t=2026-05-06-14-39-14",
+                  "tier": "CONTRIBUTOR",
+                  "url": "/mohamedamr992"
+                },
+                "authorType": "TOPIC",
+                "competitionRanking": 160,
+                "content": "<p>so you mean I need to train it with save version ?</p>",
+                "feedbackTrackingData": {},
+                "id": 3448345,
+                "isCollapsed": true,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-25T08:08:48.560Z",
+                "rawMarkdown": "so you mean I need to train it with save version ?",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "Mohamed Amr992",
+                    "id": 20851032,
+                    "performanceTier": "CONTRIBUTOR",
+                    "profileUrl": "/mohamedamr992",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/20851032-kg.png?t=2026-05-06-14-39-14",
+                    "tier": "CONTRIBUTOR",
+                    "url": "/mohamedamr992",
+                    "userId": 20851032,
+                    "userName": "mohamedamr992"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true
+                }
+              },
+              {
+                "author": {
+                  "displayName": "Mohamed Amr992",
+                  "id": 20851032,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/20851032-kg.png?t=2026-05-06-14-39-14",
+                  "tier": "CONTRIBUTOR",
+                  "url": "/mohamedamr992"
+                },
+                "authorType": "TOPIC",
+                "competitionRanking": 160,
+                "content": "<p>It did work finally </p>",
+                "feedbackTrackingData": {},
+                "id": 3448472,
+                "isCollapsed": true,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-25T15:48:11.140Z",
+                "rawMarkdown": "It did work finally ",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "Mohamed Amr992",
+                    "id": 20851032,
+                    "performanceTier": "CONTRIBUTOR",
+                    "profileUrl": "/mohamedamr992",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/20851032-kg.png?t=2026-05-06-14-39-14",
+                    "tier": "CONTRIBUTOR",
+                    "url": "/mohamedamr992",
+                    "userId": 20851032,
+                    "userName": "mohamedamr992"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true
+                }
+              }
+            ],
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "Mohamed Amr992",
+                "id": 20851032,
+                "performanceTier": "CONTRIBUTOR",
+                "profileUrl": "/mohamedamr992",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/20851032-kg.png?t=2026-05-06-14-39-14",
+                "tier": "CONTRIBUTOR",
+                "url": "/mohamedamr992",
+                "userId": 20851032,
+                "userName": "mohamedamr992"
+              }
+            },
+            "votes": {
+              "canUpvote": true
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Duc-Thanh Le",
+            "id": 31167510,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/ldthanh",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/31167510-kg.jpg?t=2026-04-14-02-20-56",
+            "tier": "CONTRIBUTOR",
+            "url": "/ldthanh",
+            "userId": 31167510,
+            "userName": "ldthanh"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "Mohamed Amr992",
+        "id": 20851032,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/20851032-kg.png?t=2026-05-06-14-39-14",
+        "tier": "CONTRIBUTOR",
+        "url": "/mohamedamr992"
+      },
+      "authorType": "TOPIC",
+      "competitionRanking": 160,
+      "content": "<p>how can I download the model from the /kaggle/working?</p>",
+      "feedbackTrackingData": {},
+      "id": 3444755,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-04-18T10:49:47.457Z",
+      "rawMarkdown": "how can I download the model from the /kaggle/working?",
+      "teamUpInfo": {
+        "intro": "",
+        "teamLeader": {
+          "displayName": "Mohamed Amr992",
+          "id": 20851032,
+          "performanceTier": "CONTRIBUTOR",
+          "profileUrl": "/mohamedamr992",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/20851032-kg.png?t=2026-05-06-14-39-14",
+          "tier": "CONTRIBUTOR",
+          "url": "/mohamedamr992",
+          "userId": 20851032,
+          "userName": "mohamedamr992"
+        }
+      },
+      "votes": {
+        "canUpvote": true
+      }
+    },
+    "firstMessageId": 3444755,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 692877,
+    "name": "how can I download the model from the /kaggle/working?",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-04-18T10:49:47.455885500Z",
+    "totalMessages": 9,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/692877"
+  }
+}

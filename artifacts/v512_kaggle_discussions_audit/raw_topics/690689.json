@@ -1,0 +1,486 @@
+{
+  "forumTopic": {
+    "authorId": 11320172,
+    "authorPerformanceTier": "EXPERT",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "11320172-kg.jpg",
+    "authorUserDisplayName": "EISLab_hwlee",
+    "authorUserName": "leeheewon01",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "CPMP",
+          "id": 75976,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/75976-gr.jpg",
+          "tier": "GRANDMASTER",
+          "url": "/cpmpml"
+        },
+        "authorType": "HOST",
+        "content": "<p>I have proposed to allow downvotes on notebooks for fighting plagiarism, see <a href=\"https://www.kaggle.com/discussions/product-feedback/76394\" target=\"_blank\">https://www.kaggle.com/discussions/product-feedback/76394</a></p>\n<p>It was rejected by Kaggle. Maybe if enough people support this request then it will be implemented.</p>\n<p>I think it would be much simpler and more effective than finger pointing posts like yours. Even though I agree with why you posted it.</p>",
+        "feedbackTrackingData": {},
+        "id": 3440609,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-12T17:50:33.723Z",
+        "rawMarkdown": "I have proposed to allow downvotes on notebooks for fighting plagiarism, see https://www.kaggle.com/discussions/product-feedback/76394\n\nIt was rejected by Kaggle. Maybe if enough people support this request then it will be implemented.\n\nI think it would be much simpler and more effective than finger pointing posts like yours. Even though I agree with why you posted it.",
+        "replies": [
+          {
+            "author": {
+              "displayName": "EISLab_hwlee",
+              "id": 11320172,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/11320172-kg.jpg",
+              "tier": "EXPERT",
+              "url": "/leeheewon01"
+            },
+            "authorType": "TOPIC",
+            "competitionRanking": 840,
+            "content": "<p>Thank you! I totally agree that a downvote button is the best solution, and I just upvoted your proposal. Since the author disabled comments, making this post was the only way to warn others right now. I really hope Kaggle implements your idea soon!</p>",
+            "feedbackTrackingData": {},
+            "id": 3440614,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-04-12T18:01:21.593Z",
+            "rawMarkdown": "Thank you! I totally agree that a downvote button is the best solution, and I just upvoted your proposal. Since the author disabled comments, making this post was the only way to warn others right now. I really hope Kaggle implements your idea soon!",
+            "replies": [
+              {
+                "author": {
+                  "displayName": "CPMP",
+                  "id": 75976,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/75976-gr.jpg",
+                  "tier": "GRANDMASTER",
+                  "url": "/cpmpml"
+                },
+                "authorType": "HOST",
+                "content": "<p>Well, my suggestion is 7 years old…</p>",
+                "feedbackTrackingData": {},
+                "id": 3440635,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-12T18:32:59.747Z",
+                "rawMarkdown": "Well, my suggestion is 7 years old...",
+                "votes": {
+                  "canUpvote": true,
+                  "totalUpvotes": 3,
+                  "totalVotes": 2
+                }
+              },
+              {
+                "author": {
+                  "displayName": "EISLab_hwlee",
+                  "id": 11320172,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/11320172-kg.jpg",
+                  "tier": "EXPERT",
+                  "url": "/leeheewon01"
+                },
+                "authorType": "TOPIC",
+                "competitionRanking": 840,
+                "content": "<p>Oh, I just saw it…</p>",
+                "feedbackTrackingData": {},
+                "id": 3440683,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-12T20:47:59.503Z",
+                "rawMarkdown": "Oh, I just saw it...",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "EISLab_hwlee",
+                    "id": 11320172,
+                    "performanceTier": "EXPERT",
+                    "profileUrl": "/leeheewon01",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/11320172-kg.jpg",
+                    "tier": "EXPERT",
+                    "url": "/leeheewon01",
+                    "userId": 11320172,
+                    "userName": "leeheewon01"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true,
+                  "totalUpvotes": 2,
+                  "totalVotes": 1
+                }
+              }
+            ],
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "EISLab_hwlee",
+                "id": 11320172,
+                "performanceTier": "EXPERT",
+                "profileUrl": "/leeheewon01",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/11320172-kg.jpg",
+                "tier": "EXPERT",
+                "url": "/leeheewon01",
+                "userId": 11320172,
+                "userName": "leeheewon01"
+              }
+            },
+            "votes": {
+              "canUpvote": true,
+              "totalUpvotes": 2,
+              "totalVotes": 1
+            }
+          }
+        ],
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 15,
+          "totalVotes": 13
+        }
+      },
+      {
+        "author": {
+          "displayName": "Chew Kok Wah",
+          "id": 3967558,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "EXPERT",
+          "url": "/chewkokwahibrainai"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 62,
+        "content": "<p>Please click report at notebook for plagiarism so that Kaggle will remove it. Need more people to report in order to alert Kaggle properly.</p>\n<p><img src=\"https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F3967558%2Fe9a5903b334f66e3fa8f2b973d9f0972%2Fimage_2026-04-13_010333919.png?generation=1776013416452085&amp;alt=media\" alt=\"\"></p>",
+        "feedbackTrackingData": {},
+        "id": 3440578,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-12T16:59:16.243Z",
+        "rawMarkdown": "Please click report at notebook for plagiarism so that Kaggle will remove it. Need more people to report in order to alert Kaggle properly.\n\n![](https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F3967558%2Fe9a5903b334f66e3fa8f2b973d9f0972%2Fimage_2026-04-13_010333919.png?generation=1776013416452085&alt=media)",
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Chew Kok Wah",
+            "id": 3967558,
+            "performanceTier": "EXPERT",
+            "profileUrl": "/chewkokwahibrainai",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+            "tier": "EXPERT",
+            "url": "/chewkokwahibrainai",
+            "userId": 3967558,
+            "userName": "chewkokwahibrainai"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 5,
+          "totalVotes": 4
+        }
+      },
+      {
+        "author": {
+          "displayName": "Atah Alam",
+          "id": 24862356,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "CONTRIBUTOR",
+          "url": "/atahalam"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 284,
+        "content": "<p>I’ve posted a public apology addressing this <a href=\"https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/691057\" target=\"_blank\">issue here </a></p>\n<p>I take full responsibility for my actions and understand why this was wrong. I’ve removed the misleading content and will make sure anything I share going forward is genuine and reproducible.</p>\n<p>I appreciate the community calling this out.</p>",
+        "feedbackTrackingData": {},
+        "id": 3441274,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-13T18:27:13.873Z",
+        "rawMarkdown": "I’ve posted a public apology addressing this [issue here ](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/691057)\n\nI take full responsibility for my actions and understand why this was wrong. I’ve removed the misleading content and will make sure anything I share going forward is genuine and reproducible.\n\nI appreciate the community calling this out.\n",
+        "replies": [
+          {
+            "author": {
+              "displayName": "Noizersam",
+              "id": 9894684,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+              "tier": "EXPERT",
+              "url": "/noizersam"
+            },
+            "authorType": "COMMENT",
+            "competitionRanking": 211,
+            "content": "<p>Then why did you delete the post🤣</p>",
+            "feedbackTrackingData": {},
+            "id": 3441720,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-04-14T13:43:51.450Z",
+            "rawMarkdown": "Then why did you delete the post🤣",
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "Noizersam",
+                "id": 9894684,
+                "performanceTier": "EXPERT",
+                "profileUrl": "/noizersam",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                "tier": "EXPERT",
+                "url": "/noizersam",
+                "userId": 9894684,
+                "userName": "noizersam"
+              }
+            },
+            "votes": {
+              "canUpvote": true,
+              "totalUpvotes": 3,
+              "totalVotes": 2
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Atah Alam",
+            "id": 24862356,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/atahalam",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+            "tier": "CONTRIBUTOR",
+            "url": "/atahalam",
+            "userId": 24862356,
+            "userName": "atahalam"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 3
+        }
+      },
+      {
+        "author": {
+          "displayName": "Bhawesh Sinha 07",
+          "id": 13316592,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/13316592-kg.jpg?t=2026-01-19-04-50-34",
+          "tier": "EXPERT",
+          "url": "/bhaweshsinha07"
+        },
+        "authorType": "COMMENT",
+        "content": "<p>very highlighted updates for us</p>",
+        "feedbackTrackingData": {},
+        "id": 3443459,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-16T15:35:09.047Z",
+        "rawMarkdown": "very highlighted updates for us",
+        "votes": {
+          "canUpvote": true,
+          "totalVotes": -1
+        }
+      },
+      {
+        "author": {
+          "displayName": "Wasiq Ali",
+          "id": 27928595,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/27928595-kg.jpg?t=2025-07-19-08-54-29",
+          "tier": "EXPERT",
+          "url": "/wasiqaliyasir"
+        },
+        "authorType": "COMMENT",
+        "content": "<p>Ok well that's a very highlighted updates for us </p>",
+        "feedbackTrackingData": {},
+        "id": 3442682,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-15T18:58:33.103Z",
+        "rawMarkdown": "Ok well that's a very highlighted updates for us ",
+        "votes": {
+          "canUpvote": true,
+          "totalVotes": -1
+        }
+      },
+      {
+        "author": {
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "url": "/"
+        },
+        "authorType": "COMMENT",
+        "canDelete": true,
+        "feedbackTrackingData": {},
+        "id": 3441734,
+        "isDeleted": true,
+        "isThankYou": false,
+        "isUserAuthor": true,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-14T14:15:32.513Z",
+        "rawMarkdown": "",
+        "replies": [
+          {
+            "author": {
+              "displayName": "Tong Hui Kang",
+              "id": 1680925,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1680925-kg.jpg",
+              "tier": "MASTER",
+              "url": "/huikang"
+            },
+            "authorType": "COMMENT",
+            "competitionRanking": 744,
+            "content": "<p>I think there is some value to the community in sharing that it is possible that a public notebook can score 44/50 or 0.86/1.00, as long as it is well-attributed (it is a fork so that you can easily checked what exactly was changed).</p>\n<p>The value of doing that in AIMO3 is much much bigger though, there was an ongoing contest for a prize.</p>",
+            "feedbackTrackingData": {},
+            "id": 3441771,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-04-14T15:03:29.217Z",
+            "rawMarkdown": "I think there is some value to the community in sharing that it is possible that a public notebook can score 44/50 or 0.86/1.00, as long as it is well-attributed (it is a fork so that you can easily checked what exactly was changed).\n\nThe value of doing that in AIMO3 is much much bigger though, there was an ongoing contest for a prize.",
+            "replies": [
+              {
+                "author": {
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                  "url": "/"
+                },
+                "authorType": "COMMENT",
+                "canDelete": true,
+                "feedbackTrackingData": {},
+                "id": 3441810,
+                "isDeleted": true,
+                "isThankYou": false,
+                "isUserAuthor": true,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-14T16:14:41.170Z",
+                "rawMarkdown": "",
+                "votes": {
+                  "totalUpvotes": 2,
+                  "totalVotes": 1
+                }
+              }
+            ],
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "Tong Hui Kang",
+                "id": 1680925,
+                "performanceTier": "MASTER",
+                "profileUrl": "/huikang",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1680925-kg.jpg",
+                "tier": "MASTER",
+                "url": "/huikang",
+                "userId": 1680925,
+                "userName": "huikang"
+              }
+            },
+            "votes": {
+              "canUpvote": true,
+              "totalUpvotes": 4,
+              "totalVotes": 3
+            }
+          }
+        ],
+        "votes": {
+          "totalVotes": -1
+        }
+      },
+      {
+        "author": {
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "url": "/"
+        },
+        "authorType": "COMMENT",
+        "canDelete": true,
+        "feedbackTrackingData": {},
+        "id": 3441708,
+        "isDeleted": true,
+        "isThankYou": false,
+        "isUserAuthor": true,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-14T13:09:48.070Z",
+        "rawMarkdown": "",
+        "votes": {}
+      },
+      {
+        "author": {
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "url": "/"
+        },
+        "authorType": "COMMENT",
+        "canDelete": true,
+        "feedbackTrackingData": {},
+        "id": 3441111,
+        "isDeleted": true,
+        "isThankYou": false,
+        "isUserAuthor": true,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-13T14:14:59.550Z",
+        "rawMarkdown": "",
+        "votes": {
+          "totalVotes": -1
+        }
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "EISLab_hwlee",
+        "id": 11320172,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/11320172-kg.jpg",
+        "tier": "EXPERT",
+        "url": "/leeheewon01"
+      },
+      "authorType": "TOPIC",
+      "competitionRanking": 840,
+      "content": "<p>I would like to bring the community's attention to a deceptive practice currently happening in the notebooks section to farm upvotes.</p>\n<p><a href=\"https://www.kaggle.com/code/atahalam/nvidianemotron-0-81-new-making-0-85-public-soon\" target=\"_blank\">nvidianemotron 0.81 new making 0.85 public soon</a></p>\n<p><strong>Why this notebook is fake and deceptive:</strong></p>\n<ol>\n<li><strong>Output Copying (Plagiarism):</strong> The code inside this notebook is completely fake and does not generate the score it claims through actual modeling. Instead, it simply copies the <code>submission.zip</code> or outputs from other hard-working Kagglers' top-performing public notebooks directly into <code>/kaggle/working/</code>. </li>\n<li><strong>Clickbait Titles:</strong> The author intentionally uses misleading titles like <em>\"making 0.85 public soon\"</em> to deceive users and farm upvotes. Furthermore, they have a history of writing fabricated scores in the titles that are completely different from what the actual code inside achieves.</li>\n<li><strong>Disabled Comments:</strong> To prevent anyone from pointing out these issues or warning others, the author has deliberately disabled the comments section on the notebook.</li>\n</ol>\n<p><strong>This behavior disrespects the hard work of original authors and clutters the platform with spam.</strong></p>\n<p>Please be careful, always check the code before upvoting, and let's not reward this kind of cheating behavior.</p>",
+      "feedbackTrackingData": {},
+      "id": 3440558,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-04-12T16:01:29.320Z",
+      "rawMarkdown": "I would like to bring the community's attention to a deceptive practice currently happening in the notebooks section to farm upvotes.\n\n[nvidianemotron 0.81 new making 0.85 public soon](https://www.kaggle.com/code/atahalam/nvidianemotron-0-81-new-making-0-85-public-soon)\n\n**Why this notebook is fake and deceptive:**\n1. **Output Copying (Plagiarism):** The code inside this notebook is completely fake and does not generate the score it claims through actual modeling. Instead, it simply copies the `submission.zip` or outputs from other hard-working Kagglers' top-performing public notebooks directly into `/kaggle/working/`. \n2. **Clickbait Titles:** The author intentionally uses misleading titles like *\"making 0.85 public soon\"* to deceive users and farm upvotes. Furthermore, they have a history of writing fabricated scores in the titles that are completely different from what the actual code inside achieves.\n3. **Disabled Comments:** To prevent anyone from pointing out these issues or warning others, the author has deliberately disabled the comments section on the notebook.\n\n**This behavior disrespects the hard work of original authors and clutters the platform with spam.**\n\nPlease be careful, always check the code before upvoting, and let's not reward this kind of cheating behavior.",
+      "teamUpInfo": {
+        "intro": "",
+        "teamLeader": {
+          "displayName": "EISLab_hwlee",
+          "id": 11320172,
+          "performanceTier": "EXPERT",
+          "profileUrl": "/leeheewon01",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/11320172-kg.jpg",
+          "tier": "EXPERT",
+          "url": "/leeheewon01",
+          "userId": 11320172,
+          "userName": "leeheewon01"
+        }
+      },
+      "votes": {
+        "canUpvote": true,
+        "totalUpvotes": 26,
+        "totalVotes": 24
+      }
+    },
+    "firstMessageId": 3440558,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 690689,
+    "name": "[Fake Notebook Alert] Watch out for fake laptops that copy and upload other people's submission.",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-04-12T16:01:29.320824Z",
+    "totalMessages": 14,
+    "totalVotes": 24,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/690689"
+  }
+}

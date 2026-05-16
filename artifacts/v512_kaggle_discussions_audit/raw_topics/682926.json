@@ -1,0 +1,220 @@
+{
+  "forumTopic": {
+    "authorId": 31589483,
+    "authorPerformanceTier": "CONTRIBUTOR",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "31589483-kg.png?t=2026-02-11-14-20-14",
+    "authorUserDisplayName": "Aurorcys",
+    "authorUserName": "aurorcys",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "hwe owe",
+          "id": 28884560,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/28884560-kg.png?t=2026-02-13-13-07-25",
+          "tier": "CONTRIBUTOR",
+          "url": "/hweowe"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 2229,
+        "content": "<p>you can use another notebook with internet and download the wheel file,then you can install it offfline</p>",
+        "feedbackTrackingData": {},
+        "id": 3424097,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-19T11:05:05.800Z",
+        "rawMarkdown": "you can use another notebook with internet and download the wheel file,then you can install it offfline",
+        "replies": [
+          {
+            "author": {
+              "displayName": "Aurorcys",
+              "id": 31589483,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/31589483-kg.png?t=2026-02-11-14-20-14",
+              "tier": "CONTRIBUTOR",
+              "url": "/aurorcys"
+            },
+            "authorType": "TOPIC",
+            "competitionRanking": 506,
+            "content": "<p>Yeah, thank you for the suggestion. I also found a offline package dataset so thanks for the help 🙏🙏</p>",
+            "feedbackTrackingData": {},
+            "id": 3424098,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-03-19T11:07:47.120Z",
+            "rawMarkdown": "Yeah, thank you for the suggestion. I also found a offline package dataset so thanks for the help 🙏🙏",
+            "replies": [
+              {
+                "author": {
+                  "displayName": "HADY",
+                  "id": 28656359,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                  "tier": "CONTRIBUTOR",
+                  "url": "/johnhady101"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 2983,
+                "content": "<p>can you provide me with the dataset?</p>",
+                "feedbackTrackingData": {},
+                "id": 3425820,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-03-21T10:42:49.743Z",
+                "rawMarkdown": "can you provide me with the dataset?",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "HADY",
+                    "id": 28656359,
+                    "performanceTier": "CONTRIBUTOR",
+                    "profileUrl": "/johnhady101",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                    "tier": "CONTRIBUTOR",
+                    "url": "/johnhady101",
+                    "userId": 28656359,
+                    "userName": "johnhady101"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true
+                }
+              }
+            ],
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "Aurorcys",
+                "id": 31589483,
+                "performanceTier": "CONTRIBUTOR",
+                "profileUrl": "/aurorcys",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/31589483-kg.png?t=2026-02-11-14-20-14",
+                "tier": "CONTRIBUTOR",
+                "url": "/aurorcys",
+                "userId": 31589483,
+                "userName": "aurorcys"
+              }
+            },
+            "votes": {
+              "canUpvote": true
+            }
+          },
+          {
+            "author": {
+              "displayName": "badwolfe",
+              "id": 28916260,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+              "tier": "CONTRIBUTOR",
+              "url": "/badwolfe"
+            },
+            "authorType": "COMMENT",
+            "content": "<p>How do I add datasets I have on kaggle then?</p>",
+            "feedbackTrackingData": {},
+            "id": 3427349,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-03-24T01:39:27.660Z",
+            "rawMarkdown": "How do I add datasets I have on kaggle then?",
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "badwolfe",
+                "id": 28916260,
+                "performanceTier": "CONTRIBUTOR",
+                "profileUrl": "/badwolfe",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                "tier": "CONTRIBUTOR",
+                "url": "/badwolfe",
+                "userId": 28916260,
+                "userName": "badwolfe"
+              }
+            },
+            "votes": {
+              "canUpvote": true
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "enabled": true,
+          "intro": "",
+          "teamLeader": {
+            "displayName": "hwe owe",
+            "id": 28884560,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/hweowe",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/28884560-kg.png?t=2026-02-13-13-07-25",
+            "tier": "CONTRIBUTOR",
+            "url": "/hweowe",
+            "userId": 28884560,
+            "userName": "hweowe"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "Aurorcys",
+        "id": 31589483,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/31589483-kg.png?t=2026-02-11-14-20-14",
+        "tier": "CONTRIBUTOR",
+        "url": "/aurorcys"
+      },
+      "authorType": "TOPIC",
+      "competitionRanking": 506,
+      "content": "<p>When I turn on the Blackwell, I just can't pip install the mama-ssm, it just says theres no internet. But when I don't select any accelerators, I can download the mamba-ssm, how should I fix this?</p>",
+      "feedbackTrackingData": {},
+      "id": 3424081,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-03-19T10:44:21.260Z",
+      "rawMarkdown": "When I turn on the Blackwell, I just can't pip install the mama-ssm, it just says theres no internet. But when I don't select any accelerators, I can download the mamba-ssm, how should I fix this?",
+      "teamUpInfo": {
+        "intro": "",
+        "teamLeader": {
+          "displayName": "Aurorcys",
+          "id": 31589483,
+          "performanceTier": "CONTRIBUTOR",
+          "profileUrl": "/aurorcys",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/31589483-kg.png?t=2026-02-11-14-20-14",
+          "tier": "CONTRIBUTOR",
+          "url": "/aurorcys",
+          "userId": 31589483,
+          "userName": "aurorcys"
+        }
+      },
+      "votes": {
+        "canUpvote": true,
+        "totalUpvotes": 4,
+        "totalVotes": 3
+      }
+    },
+    "firstMessageId": 3424081,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 682926,
+    "name": "BlackWell Kaggle Internet Issue",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-03-19T10:44:21.258415Z",
+    "totalMessages": 4,
+    "totalVotes": 3,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/682926"
+  }
+}

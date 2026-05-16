@@ -1,0 +1,442 @@
+{
+  "branch": "v230-v226-complementarity",
+  "dataset": {
+    "data_repo": "felipesp1983/kg1-nemotron-training",
+    "data_root": "data/v510_canonical_training_dataset/v510_canonical_active_training_pool",
+    "dataset_upload_commit": "40e71a686d9970c3c842d26dcf89200fc4990a51",
+    "train_file": "data/v510_canonical_training_dataset/v510_canonical_active_training_pool/v510_canonical_active_training_pool_train.jsonl",
+    "train_rows": 2627,
+    "train_sha256": "9033e794bad98679f26bb2fc7f1eb5d4d7f32d06ef6231ee6e0fffc66fc70d3b",
+    "val_file": "data/v510_canonical_training_dataset/v510_canonical_active_training_pool/v510_canonical_active_training_pool_val.jsonl",
+    "val_rows": 637,
+    "val_sha256": "062514b8a74ba3656df44ad99667ba63dda69f56d41a20ffb0500f17393ceea8"
+  },
+  "expected_commit": "34d0187820ea8b2af1f229ebe4a2a557193071e9",
+  "flavor": "h200",
+  "generated_at_utc": "2026-05-16T21:05:05.955839+00:00",
+  "hardware": {
+    "accelerator_model": "H200",
+    "accelerator_quantity": "1",
+    "accelerator_vram": "141 GB",
+    "cpu": "23 vCPU",
+    "name": "h200",
+    "pretty_name": "Nvidia H200",
+    "ram": "256 GB",
+    "unit_cost_usd": 0.083333,
+    "unit_label": "minute"
+  },
+  "image": "nvcr.io/nvidia/nemo:25.11.nemotron_3_nano",
+  "init_adapter": {
+    "repo": "felipesp1983/kg1-nemotron-lora-v290-rank19-micro-patch-smoke",
+    "subfolder": "checkpoint-6"
+  },
+  "job_env": {
+    "KG1_ALLOWED_HF_FLAVORS": "h200",
+    "KG1_ANSWER_SPAN_LOSS_WEIGHT": "1.0",
+    "KG1_ANSWER_SPAN_MIN_WEIGHTED_TOKENS": "1",
+    "KG1_BRANCH": "v230-v226-complementarity",
+    "KG1_CRISIS_MODE_BACKFIRE_GUARD": "1",
+    "KG1_EXPECTED_COMMIT": "34d0187820ea8b2af1f229ebe4a2a557193071e9",
+    "KG1_EXPECTED_MAX_STEPS": "2",
+    "KG1_EXPECTED_TORCH_VERSION": "",
+    "KG1_HF_FLAVOR": "h200",
+    "KG1_HF_MAX_UNIT_COST_USD": "0.09",
+    "KG1_HF_UNIT_COST_USD": "0.083333",
+    "KG1_INIT_ADAPTER_REPO": "felipesp1983/kg1-nemotron-lora-v290-rank19-micro-patch-smoke",
+    "KG1_INIT_ADAPTER_SUBFOLDER": "checkpoint-6",
+    "KG1_LORA_TARGET_PARAMETERS": "mlp.experts.gate_up_proj,mlp.experts.down_proj",
+    "KG1_MAX_PROMPT_TRUNCATION_RATE": "0.0",
+    "KG1_MIN_GPU_TOTAL_GIB": "130",
+    "KG1_OUTPUT_REPO": "felipesp1983/kg1-nemotron-lora-v511-nemo-h200-v510-canonical-v290ckpt6",
+    "KG1_REQUIRED_GPU_NAME_REGEX": "H200",
+    "KG1_REQUIRED_TRAIN_FAMILIES": "bit_manipulation,equation_transform",
+    "KG1_REQUIRED_TRAIN_SUBCATEGORIES": "bit_guardrail_replay,equation_numeric_add_direct_hard_negative,equation_numeric_colon_trailing_zero_hard_negative,equation_numeric_minus_signed_hard_negative,equation_numeric_add_direct,equation_numeric_colon_absdiff,equation_numeric_colon_trailing_zero,equation_numeric_minus_direct_negative,equation_numeric_minus_signed,v274_guarded_numeric_minus_signed_opposite_sign_guarded",
+    "KG1_REQUIRED_VAL_FAMILIES": "bit_manipulation,equation_transform",
+    "KG1_REQUIRED_VAL_SUBCATEGORIES": "bit_guardrail_replay,equation_numeric_add_direct_hard_negative,equation_numeric_colon_trailing_zero_hard_negative,equation_numeric_minus_signed_hard_negative,equation_numeric_add_direct,equation_numeric_colon_absdiff,equation_numeric_colon_trailing_zero,equation_numeric_minus_direct_negative,equation_numeric_minus_signed,v274_guarded_numeric_minus_signed_opposite_sign_guarded",
+    "KG1_REQUIRE_CUDA": "1",
+    "KG1_REQUIRE_LORA_TARGET_PARAMETERS_TRAINABLE": "1",
+    "KG1_REQUIRE_MAMBA_IMPORTS": "1",
+    "KG1_REQUIRE_OFFSET_MASK": "1",
+    "KG1_RUN_ID": "v511-nemo-h200-v510-canonical-v290ckpt6-20260516T210504Z",
+    "KG1_SOURCE_WEIGHTS": "v498_bit_replay_guardrail_from_v475=3.00,v475_v217_bit_replay_guardrail=3.00,v217_bit_replay_guardrail=3.00,v498_numeric_teacher_trace_pack=1.00,v475_v325_equation_no_loss_distill=1.00,v460_v459_numeric_one_rule_micro_dataset=1.00",
+    "KG1_STRICT_INIT_ADAPTER_CONFIG": "1",
+    "KG1_SUBCATEGORY_WEIGHTS": "bit_guardrail_replay=1.00,equation_numeric_add_direct_hard_negative=1.00,equation_numeric_colon_trailing_zero_hard_negative=1.00,equation_numeric_minus_signed_hard_negative=1.00,equation_numeric_add_direct=1.00,equation_numeric_colon_absdiff=1.00,equation_numeric_colon_trailing_zero=1.00,equation_numeric_minus_direct_negative=1.00,equation_numeric_minus_signed=1.00,v274_guarded_numeric_minus_signed_opposite_sign_guarded=1.00",
+    "KG1_TRAINABLE_LORA_MODULES": "q_proj,k_proj,v_proj,o_proj,up_proj,down_proj",
+    "KG1_TRAIN_FILE": "data/v510_canonical_training_dataset/v510_canonical_active_training_pool/v510_canonical_active_training_pool_train.jsonl",
+    "KG1_TRAIN_ROWS": "2627",
+    "KG1_TRAIN_SHA": "9033e794bad98679f26bb2fc7f1eb5d4d7f32d06ef6231ee6e0fffc66fc70d3b",
+    "KG1_VAL_FILE": "data/v510_canonical_training_dataset/v510_canonical_active_training_pool/v510_canonical_active_training_pool_val.jsonl",
+    "KG1_VAL_ROWS": "637",
+    "KG1_VAL_SHA": "062514b8a74ba3656df44ad99667ba63dda69f56d41a20ffb0500f17393ceea8"
+  },
+  "job_id": "6a08dc43e48bea4538ba02ce",
+  "job_status": "RUNNING",
+  "job_url": "https://huggingface.co/jobs/felipesp1983/6a08dc43e48bea4538ba02ce",
+  "mode": "launched",
+  "namespace": "felipesp1983",
+  "next_action": "Monitor every 40 seconds; run weak eval checkpoint-2 only if training uploads a complete adapter.",
+  "objective_alignment": {
+    "path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v511_hf_nemo_h200_v510_canonical_launch\\v511-nemo-h200-v510-canonical-v290ckpt6-20260516T210504Z_objective_alignment_gate.json",
+    "report": {
+      "dataset_manifest_json": "",
+      "findings": [],
+      "generated_at_utc": "2026-05-16T21:05:05.252341+00:00",
+      "hf_gpu_allowed": true,
+      "schema_version": "kg1_v478_training_objective_alignment_gate_v1",
+      "source_weights": {
+        "v217_bit_replay_guardrail": 3.0,
+        "v460_v459_numeric_one_rule_micro_dataset": 1.0,
+        "v475_v217_bit_replay_guardrail": 3.0,
+        "v475_v325_equation_no_loss_distill": 1.0,
+        "v498_bit_replay_guardrail_from_v475": 3.0,
+        "v498_numeric_teacher_trace_pack": 1.0
+      },
+      "subcategory_weights": {
+        "bit_guardrail_replay": 1.0,
+        "equation_numeric_add_direct": 1.0,
+        "equation_numeric_add_direct_hard_negative": 1.0,
+        "equation_numeric_colon_absdiff": 1.0,
+        "equation_numeric_colon_trailing_zero": 1.0,
+        "equation_numeric_colon_trailing_zero_hard_negative": 1.0,
+        "equation_numeric_minus_direct_negative": 1.0,
+        "equation_numeric_minus_signed": 1.0,
+        "equation_numeric_minus_signed_hard_negative": 1.0,
+        "v274_guarded_numeric_minus_signed_opposite_sign_guarded": 1.0
+      },
+      "thresholds": {
+        "max_any_family_effective_share": 0.95,
+        "max_equation_effective_share": 0.65,
+        "min_bit_effective_share": 0.35
+      },
+      "train": {
+        "effective_share_by_family": {
+          "bit_manipulation": {
+            "share": 0.475163,
+            "weight": 1827.0
+          },
+          "equation_transform": {
+            "share": 0.524837,
+            "weight": 2018.0
+          }
+        },
+        "effective_share_by_source": {
+          "v217_bit_replay_guardrail": {
+            "share": 0.075683,
+            "weight": 291.0
+          },
+          "v460_v459_numeric_one_rule_micro_dataset": {
+            "share": 0.004681,
+            "weight": 18.0
+          },
+          "v475_v325_equation_no_loss_distill": {
+            "share": 0.208062,
+            "weight": 800.0
+          },
+          "v498_bit_replay_guardrail_from_v475": {
+            "share": 0.39948,
+            "weight": 1536.0
+          },
+          "v498_numeric_teacher_trace_pack": {
+            "share": 0.312094,
+            "weight": 1200.0
+          }
+        },
+        "effective_share_by_subcategory": {
+          "bit_guardrail_replay": {
+            "share": 0.475163,
+            "weight": 1827.0
+          },
+          "equation_numeric_add_direct": {
+            "share": 0.041612,
+            "weight": 160.0
+          },
+          "equation_numeric_add_direct_hard_negative": {
+            "share": 0.104031,
+            "weight": 400.0
+          },
+          "equation_numeric_colon_absdiff": {
+            "share": 0.041612,
+            "weight": 160.0
+          },
+          "equation_numeric_colon_trailing_zero": {
+            "share": 0.041612,
+            "weight": 160.0
+          },
+          "equation_numeric_colon_trailing_zero_hard_negative": {
+            "share": 0.104031,
+            "weight": 400.0
+          },
+          "equation_numeric_minus_direct_negative": {
+            "share": 0.041612,
+            "weight": 160.0
+          },
+          "equation_numeric_minus_signed": {
+            "share": 0.041612,
+            "weight": 160.0
+          },
+          "equation_numeric_minus_signed_hard_negative": {
+            "share": 0.104031,
+            "weight": 400.0
+          },
+          "v274_guarded_numeric_minus_signed_opposite_sign_guarded": {
+            "share": 0.004681,
+            "weight": 18.0
+          }
+        },
+        "effective_total_weight": 3845.0,
+        "physical_share_by_family": {
+          "bit_manipulation": {
+            "rows": 609,
+            "share": 0.231823
+          },
+          "equation_transform": {
+            "rows": 2018,
+            "share": 0.768177
+          }
+        },
+        "physical_share_by_source": {
+          "v217_bit_replay_guardrail": {
+            "rows": 97,
+            "share": 0.036924
+          },
+          "v460_v459_numeric_one_rule_micro_dataset": {
+            "rows": 18,
+            "share": 0.006852
+          },
+          "v475_v325_equation_no_loss_distill": {
+            "rows": 800,
+            "share": 0.30453
+          },
+          "v498_bit_replay_guardrail_from_v475": {
+            "rows": 512,
+            "share": 0.194899
+          },
+          "v498_numeric_teacher_trace_pack": {
+            "rows": 1200,
+            "share": 0.456795
+          }
+        },
+        "physical_share_by_subcategory": {
+          "bit_guardrail_replay": {
+            "rows": 609,
+            "share": 0.231823
+          },
+          "equation_numeric_add_direct": {
+            "rows": 160,
+            "share": 0.060906
+          },
+          "equation_numeric_add_direct_hard_negative": {
+            "rows": 400,
+            "share": 0.152265
+          },
+          "equation_numeric_colon_absdiff": {
+            "rows": 160,
+            "share": 0.060906
+          },
+          "equation_numeric_colon_trailing_zero": {
+            "rows": 160,
+            "share": 0.060906
+          },
+          "equation_numeric_colon_trailing_zero_hard_negative": {
+            "rows": 400,
+            "share": 0.152265
+          },
+          "equation_numeric_minus_direct_negative": {
+            "rows": 160,
+            "share": 0.060906
+          },
+          "equation_numeric_minus_signed": {
+            "rows": 160,
+            "share": 0.060906
+          },
+          "equation_numeric_minus_signed_hard_negative": {
+            "rows": 400,
+            "share": 0.152265
+          },
+          "v274_guarded_numeric_minus_signed_opposite_sign_guarded": {
+            "rows": 18,
+            "share": 0.006852
+          }
+        },
+        "rows": 2627,
+        "unknown_source_rows": 0,
+        "unknown_subcategory_rows": 0
+      },
+      "train_jsonl": "C:\\Users\\davis\\.cache\\huggingface\\hub\\datasets--felipesp1983--kg1-nemotron-training\\snapshots\\40e71a686d9970c3c842d26dcf89200fc4990a51\\data\\v510_canonical_training_dataset\\v510_canonical_active_training_pool\\v510_canonical_active_training_pool_train.jsonl",
+      "val_jsonl": "C:\\Users\\davis\\.cache\\huggingface\\hub\\datasets--felipesp1983--kg1-nemotron-training\\snapshots\\40e71a686d9970c3c842d26dcf89200fc4990a51\\data\\v510_canonical_training_dataset\\v510_canonical_active_training_pool\\v510_canonical_active_training_pool_val.jsonl",
+      "validation": {
+        "effective_share_by_family": {
+          "bit_manipulation": {
+            "share": 0.44186,
+            "weight": 399.0
+          },
+          "equation_transform": {
+            "share": 0.55814,
+            "weight": 504.0
+          }
+        },
+        "effective_share_by_source": {
+          "v217_bit_replay_guardrail": {
+            "share": 0.016611,
+            "weight": 15.0
+          },
+          "v460_v459_numeric_one_rule_micro_dataset": {
+            "share": 0.00443,
+            "weight": 4.0
+          },
+          "v475_v325_equation_no_loss_distill": {
+            "share": 0.221484,
+            "weight": 200.0
+          },
+          "v498_bit_replay_guardrail_from_v475": {
+            "share": 0.425249,
+            "weight": 384.0
+          },
+          "v498_numeric_teacher_trace_pack": {
+            "share": 0.332226,
+            "weight": 300.0
+          }
+        },
+        "effective_share_by_subcategory": {
+          "bit_guardrail_replay": {
+            "share": 0.44186,
+            "weight": 399.0
+          },
+          "equation_numeric_add_direct": {
+            "share": 0.044297,
+            "weight": 40.0
+          },
+          "equation_numeric_add_direct_hard_negative": {
+            "share": 0.110742,
+            "weight": 100.0
+          },
+          "equation_numeric_colon_absdiff": {
+            "share": 0.044297,
+            "weight": 40.0
+          },
+          "equation_numeric_colon_trailing_zero": {
+            "share": 0.044297,
+            "weight": 40.0
+          },
+          "equation_numeric_colon_trailing_zero_hard_negative": {
+            "share": 0.110742,
+            "weight": 100.0
+          },
+          "equation_numeric_minus_direct_negative": {
+            "share": 0.044297,
+            "weight": 40.0
+          },
+          "equation_numeric_minus_signed": {
+            "share": 0.044297,
+            "weight": 40.0
+          },
+          "equation_numeric_minus_signed_hard_negative": {
+            "share": 0.110742,
+            "weight": 100.0
+          },
+          "v274_guarded_numeric_minus_signed_opposite_sign_guarded": {
+            "share": 0.00443,
+            "weight": 4.0
+          }
+        },
+        "effective_total_weight": 903.0,
+        "physical_share_by_family": {
+          "bit_manipulation": {
+            "rows": 133,
+            "share": 0.208791
+          },
+          "equation_transform": {
+            "rows": 504,
+            "share": 0.791209
+          }
+        },
+        "physical_share_by_source": {
+          "v217_bit_replay_guardrail": {
+            "rows": 5,
+            "share": 0.007849
+          },
+          "v460_v459_numeric_one_rule_micro_dataset": {
+            "rows": 4,
+            "share": 0.006279
+          },
+          "v475_v325_equation_no_loss_distill": {
+            "rows": 200,
+            "share": 0.313972
+          },
+          "v498_bit_replay_guardrail_from_v475": {
+            "rows": 128,
+            "share": 0.200942
+          },
+          "v498_numeric_teacher_trace_pack": {
+            "rows": 300,
+            "share": 0.470958
+          }
+        },
+        "physical_share_by_subcategory": {
+          "bit_guardrail_replay": {
+            "rows": 133,
+            "share": 0.208791
+          },
+          "equation_numeric_add_direct": {
+            "rows": 40,
+            "share": 0.062794
+          },
+          "equation_numeric_add_direct_hard_negative": {
+            "rows": 100,
+            "share": 0.156986
+          },
+          "equation_numeric_colon_absdiff": {
+            "rows": 40,
+            "share": 0.062794
+          },
+          "equation_numeric_colon_trailing_zero": {
+            "rows": 40,
+            "share": 0.062794
+          },
+          "equation_numeric_colon_trailing_zero_hard_negative": {
+            "rows": 100,
+            "share": 0.156986
+          },
+          "equation_numeric_minus_direct_negative": {
+            "rows": 40,
+            "share": 0.062794
+          },
+          "equation_numeric_minus_signed": {
+            "rows": 40,
+            "share": 0.062794
+          },
+          "equation_numeric_minus_signed_hard_negative": {
+            "rows": 100,
+            "share": 0.156986
+          },
+          "v274_guarded_numeric_minus_signed_opposite_sign_guarded": {
+            "rows": 4,
+            "share": 0.006279
+          }
+        },
+        "rows": 637,
+        "unknown_source_rows": 0,
+        "unknown_subcategory_rows": 0
+      }
+    }
+  },
+  "output_repo": "felipesp1983/kg1-nemotron-lora-v511-nemo-h200-v510-canonical-v290ckpt6",
+  "recipe": {
+    "answer_span_loss_weight": "1.0",
+    "answer_span_min_weighted_tokens": "1",
+    "eval_every_steps": 2,
+    "eval_max_examples": 128,
+    "final_learning_rate": "5.0e-9",
+    "learning_rate": "2.0e-8",
+    "max_steps": 2,
+    "previous_version": "V510 canonical pool after excluding V439/V443 and historical failed datasets",
+    "promotion_gate": "reject unless total>192, equation>56, bit>=136, truncated=0; prefer equation>=60",
+    "save_every_steps": 2,
+    "source_weights": "v498_bit_replay_guardrail_from_v475=3.00,v475_v217_bit_replay_guardrail=3.00,v217_bit_replay_guardrail=3.00,v498_numeric_teacher_trace_pack=1.00,v475_v325_equation_no_loss_distill=1.00,v460_v459_numeric_one_rule_micro_dataset=1.00",
+    "subcategory_weights": "bit_guardrail_replay=1.00,equation_numeric_add_direct_hard_negative=1.00,equation_numeric_colon_trailing_zero_hard_negative=1.00,equation_numeric_minus_signed_hard_negative=1.00,equation_numeric_add_direct=1.00,equation_numeric_colon_absdiff=1.00,equation_numeric_colon_trailing_zero=1.00,equation_numeric_minus_direct_negative=1.00,equation_numeric_minus_signed=1.00,v274_guarded_numeric_minus_signed_opposite_sign_guarded=1.00",
+    "target_parameters_trainability": "required_trainable",
+    "trainable_lora_modules": "q_proj,k_proj,v_proj,o_proj,up_proj,down_proj"
+  },
+  "run_id": "v511-nemo-h200-v510-canonical-v290ckpt6-20260516T210504Z",
+  "version": "v511_v510_canonical_moe_trainable_no_lmhead_from_v290_checkpoint6_nemo_h200"
+}

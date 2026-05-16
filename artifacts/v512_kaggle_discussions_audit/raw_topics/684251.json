@@ -1,0 +1,142 @@
+{
+  "forumTopic": {
+    "authorId": 21415108,
+    "authorPerformanceTier": "EXPERT",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "21415108-kg.jpg?t=2025-08-26-11-25-10",
+    "authorUserDisplayName": "DaoHe Liu",
+    "authorUserName": "daoheliu",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "lucian kucera",
+          "id": 17819385,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "CONTRIBUTOR",
+          "url": "/luciankucera"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 1662,
+        "content": "<p><a href=\"https://www.kaggle.com/DaoHe\" target=\"_blank\">@DaoHe</a> Liu Not sure, that iam using the newest version of unsloth, but to me it seems lora adapters are applied. Would be nice if u show screenshot of notebook output after applying peft config. With layers with no lora adapters. If there are some layers without adapters, that would be concerning.</p>",
+        "feedbackTrackingData": {},
+        "id": 3427831,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-24T15:52:22.963Z",
+        "rawMarkdown": "@DaoHe Liu Not sure, that iam using the newest version of unsloth, but to me it seems lora adapters are applied. Would be nice if u show screenshot of notebook output after applying peft config. With layers with no lora adapters. If there are some layers without adapters, that would be concerning.",
+        "replies": [
+          {
+            "author": {
+              "displayName": "DaoHe Liu",
+              "id": 21415108,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/21415108-kg.jpg?t=2025-08-26-11-25-10",
+              "tier": "EXPERT",
+              "url": "/daoheliu"
+            },
+            "authorType": "TOPIC",
+            "competitionRanking": 315,
+            "content": "<p>I think I roughly know what to do.</p>",
+            "feedbackTrackingData": {},
+            "id": 3428150,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-03-25T02:28:19.007Z",
+            "rawMarkdown": "I think I roughly know what to do.",
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "DaoHe Liu",
+                "id": 21415108,
+                "performanceTier": "EXPERT",
+                "profileUrl": "/daoheliu",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/21415108-kg.jpg?t=2025-08-26-11-25-10",
+                "tier": "EXPERT",
+                "url": "/daoheliu",
+                "userId": 21415108,
+                "userName": "daoheliu"
+              }
+            },
+            "votes": {
+              "canUpvote": true
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "lucian kucera",
+            "id": 17819385,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/luciankucera",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+            "tier": "CONTRIBUTOR",
+            "url": "/luciankucera",
+            "userId": 17819385,
+            "userName": "luciankucera"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "DaoHe Liu",
+        "id": 21415108,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/21415108-kg.jpg?t=2025-08-26-11-25-10",
+        "tier": "EXPERT",
+        "url": "/daoheliu"
+      },
+      "authorType": "TOPIC",
+      "competitionRanking": 315,
+      "content": "<p>Unsloth's official documentation has added an adapter for Nemotron, but Kaggle shows that the trainable parameters seem to differ from the official documentation. Has anyone encountered this issue?\nThe official documents are as follows：</p>\n<pre><code>model = FastLanguageModel.get_peft_model(\n    model,\n    r = 8, # Choose any number &gt; 0 ! Suggested 8, 16, 32, 64, 128\n    target_modules = [\"q_proj\", \"k_proj\", \"v_proj\", \"o_proj\",\n                      \"gate_proj\", \"up_proj\", \"down_proj\",\n                      \"in_proj\", \"out_proj\",],\n    lora_alpha = 16,\n    lora_dropout = 0, # Supports any, but = 0 is optimized\n    bias = \"none\",    # Supports any, but = \"none\" is optimized\n    # [NEW] \"unsloth\" uses 30% less VRAM, fits 2x larger batch sizes!\n    use_gradient_checkpointing = \"unsloth\", # True or \"unsloth\" for very long context\n    random_state = 3407,\n    use_rslora = False,  # We support rank stabilized LoRA\n    loftq_config = None, # And LoftQ\n)\n</code></pre>\n<p>However, the results show:\nUnsloth: Detected MoE model with num_experts = 128 and target_modules = ['q_proj', 'k_proj', 'v_proj', 'o_proj', 'gate_proj', 'up_proj', 'down_proj', 'in_proj', 'out_proj']. Enabling LoRA on MoE parameters: ['mlp.experts.gate_up_proj', 'mlp.experts.down_proj']</p>\n<p>Is this normal? Unsloth only performed LoRa on a small number of layers instead of the layers we specified, resulting in very few trainable parameters.</p>",
+      "feedbackTrackingData": {},
+      "id": 3427528,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-03-24T07:43:34.800Z",
+      "rawMarkdown": "Unsloth's official documentation has added an adapter for Nemotron, but Kaggle shows that the trainable parameters seem to differ from the official documentation. Has anyone encountered this issue?\nThe official documents are as follows：\n\n```python\nmodel = FastLanguageModel.get_peft_model(\n    model,\n    r = 8, # Choose any number > 0 ! Suggested 8, 16, 32, 64, 128\n    target_modules = [\"q_proj\", \"k_proj\", \"v_proj\", \"o_proj\",\n                      \"gate_proj\", \"up_proj\", \"down_proj\",\n                      \"in_proj\", \"out_proj\",],\n    lora_alpha = 16,\n    lora_dropout = 0, # Supports any, but = 0 is optimized\n    bias = \"none\",    # Supports any, but = \"none\" is optimized\n    # [NEW] \"unsloth\" uses 30% less VRAM, fits 2x larger batch sizes!\n    use_gradient_checkpointing = \"unsloth\", # True or \"unsloth\" for very long context\n    random_state = 3407,\n    use_rslora = False,  # We support rank stabilized LoRA\n    loftq_config = None, # And LoftQ\n)\n```\n\nHowever, the results show:\nUnsloth: Detected MoE model with num_experts = 128 and target_modules = ['q_proj', 'k_proj', 'v_proj', 'o_proj', 'gate_proj', 'up_proj', 'down_proj', 'in_proj', 'out_proj']. Enabling LoRA on MoE parameters: ['mlp.experts.gate_up_proj', 'mlp.experts.down_proj']\n\nIs this normal? Unsloth only performed LoRa on a small number of layers instead of the layers we specified, resulting in very few trainable parameters.\n",
+      "teamUpInfo": {
+        "intro": "",
+        "teamLeader": {
+          "displayName": "DaoHe Liu",
+          "id": 21415108,
+          "performanceTier": "EXPERT",
+          "profileUrl": "/daoheliu",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/21415108-kg.jpg?t=2025-08-26-11-25-10",
+          "tier": "EXPERT",
+          "url": "/daoheliu",
+          "userId": 21415108,
+          "userName": "daoheliu"
+        }
+      },
+      "votes": {
+        "canUpvote": true,
+        "totalUpvotes": 1,
+        "totalVotes": 1
+      }
+    },
+    "firstMessageId": 3427528,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 684251,
+    "name": "The fit of unsloth to the Nemotron model",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-03-24T07:43:34.801210400Z",
+    "totalMessages": 2,
+    "totalVotes": 1,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/684251"
+  }
+}

@@ -1,0 +1,182 @@
+{
+  "forumTopic": {
+    "authorId": 3967558,
+    "authorPerformanceTier": "EXPERT",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "default-thumb.png",
+    "authorUserDisplayName": "Chew Kok Wah",
+    "authorUserName": "chewkokwahibrainai",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "Ryan Holbrook",
+          "id": 2003505,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2003505-kg.jpg",
+          "tier": "STAFF",
+          "url": "/ryanholbrook"
+        },
+        "authorType": "ADMIN",
+        "content": "<p>Hi <a href=\"https://www.kaggle.com/chewkokwahibrainai\" target=\"_blank\">@chewkokwahibrainai</a>,</p>\n<p>We have investigated the possibility of deterministic scoring in vLLM. Unfortunately, it appears that this will lead to a significant throughput drop on the order of 35% to 55%. With our current stock of GPUs, this would lead to significant queueing. As such, we will not be changing the metric.</p>\n<p>Also, it's worth noting that determinism in vLLM doesn't solve the problem of order variance in the questions. Scores on the private test set are still subject to order variance, it's just that the order is the same for all submissions. You still have no way of knowing which submission was \"lucky\" and got a higher score on the private lb by chance.</p>",
+        "feedbackTrackingData": {},
+        "id": 3439299,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-10T13:30:32.953Z",
+        "rawMarkdown": "Hi @chewkokwahibrainai,\n\nWe have investigated the possibility of deterministic scoring in vLLM. Unfortunately, it appears that this will lead to a significant throughput drop on the order of 35% to 55%. With our current stock of GPUs, this would lead to significant queueing. As such, we will not be changing the metric.\n\nAlso, it's worth noting that determinism in vLLM doesn't solve the problem of order variance in the questions. Scores on the private test set are still subject to order variance, it's just that the order is the same for all submissions. You still have no way of knowing which submission was \"lucky\" and got a higher score on the private lb by chance.",
+        "replies": [
+          {
+            "author": {
+              "displayName": "Ertuğrul Demir",
+              "id": 4616296,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/4616296-kg.jpg",
+              "tier": "GRANDMASTER",
+              "url": "/datafan07"
+            },
+            "authorType": "COMMENT",
+            "competitionRanking": 26,
+            "content": "<p>Thanks for clarifying. Could you share the rough magnitude of the score variance you’ve seen from order effects in practice? It would help us understand how noisy the scores may be.</p>",
+            "feedbackTrackingData": {},
+            "id": 3439307,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-04-10T13:52:17.647Z",
+            "rawMarkdown": "Thanks for clarifying. Could you share the rough magnitude of the score variance you’ve seen from order effects in practice? It would help us understand how noisy the scores may be.",
+            "replies": [
+              {
+                "author": {
+                  "displayName": "Ryan Holbrook",
+                  "id": 2003505,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2003505-kg.jpg",
+                  "tier": "STAFF",
+                  "url": "/ryanholbrook"
+                },
+                "authorType": "ADMIN",
+                "content": "<p><a href=\"https://www.kaggle.com/datafan07\" target=\"_blank\">@datafan07</a> I'm afraid I don't have a good estimate. I've seen some discussion about it though, and just observing your own submission variance on train CV or the public LB could be informative too, of course.</p>",
+                "feedbackTrackingData": {},
+                "id": 3439314,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-10T14:06:33.807Z",
+                "rawMarkdown": "@datafan07 I'm afraid I don't have a good estimate. I've seen some discussion about it though, and just observing your own submission variance on train CV or the public LB could be informative too, of course.",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "Ryan Holbrook",
+                    "id": 2003505,
+                    "performanceTier": "STAFF",
+                    "profileUrl": "/ryanholbrook",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2003505-kg.jpg",
+                    "tier": "STAFF",
+                    "url": "/ryanholbrook",
+                    "userId": 2003505,
+                    "userName": "ryanholbrook"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true
+                }
+              }
+            ],
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "Ertuğrul Demir",
+                "id": 4616296,
+                "performanceTier": "GRANDMASTER",
+                "profileUrl": "/datafan07",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/4616296-kg.jpg",
+                "tier": "GRANDMASTER",
+                "url": "/datafan07",
+                "userId": 4616296,
+                "userName": "datafan07"
+              }
+            },
+            "votes": {
+              "canUpvote": true
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Ryan Holbrook",
+            "id": 2003505,
+            "performanceTier": "STAFF",
+            "profileUrl": "/ryanholbrook",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2003505-kg.jpg",
+            "tier": "STAFF",
+            "url": "/ryanholbrook",
+            "userId": 2003505,
+            "userName": "ryanholbrook"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 2,
+          "totalVotes": 2
+        }
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "Chew Kok Wah",
+        "id": 3967558,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+        "tier": "EXPERT",
+        "url": "/chewkokwahibrainai"
+      },
+      "authorType": "TOPIC",
+      "competitionRanking": 62,
+      "content": "<p>I check the scoring Metric and found that there is no per request seed and Batch Invariance setting for VLLM, this make the scoring metric non-deterministic, please <a href=\"https://www.kaggle.com/ryanholbrook\" target=\"_blank\">@ryanholbrook</a> <a href=\"https://www.kaggle.com/cpmpml\" target=\"_blank\">@cpmpml</a> make it more deterministic before the rescore.</p>\n<p>The above setting had been experimentally proven to <strong>100% guarantee deterministic</strong> output.</p>\n<p>If it is too expensive to rescore, can you enable the setting after the <strong>9 April Midpoint</strong> award date? By then, all participants score will be very near, a non-deterministic score will make this Competition into a <strong>LOTTERY</strong> game. </p>",
+      "feedbackTrackingData": {},
+      "id": 3435010,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-04-03T15:21:55.550Z",
+      "rawMarkdown": "I check the scoring Metric and found that there is no per request seed and Batch Invariance setting for VLLM, this make the scoring metric non-deterministic, please @ryanholbrook @cpmpml make it more deterministic before the rescore.\n\nThe above setting had been experimentally proven to **100% guarantee deterministic** output.\n\nIf it is too expensive to rescore, can you enable the setting after the **9 April Midpoint** award date? By then, all participants score will be very near, a non-deterministic score will make this Competition into a **LOTTERY** game. ",
+      "teamUpInfo": {
+        "intro": "",
+        "teamLeader": {
+          "displayName": "Chew Kok Wah",
+          "id": 3967558,
+          "performanceTier": "EXPERT",
+          "profileUrl": "/chewkokwahibrainai",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "EXPERT",
+          "url": "/chewkokwahibrainai",
+          "userId": 3967558,
+          "userName": "chewkokwahibrainai"
+        }
+      },
+      "votes": {
+        "canUpvote": true,
+        "totalUpvotes": 4,
+        "totalVotes": 4
+      }
+    },
+    "firstMessageId": 3435010,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 687740,
+    "name": "Official Scoring Metric Code were not set to be Deterministic",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-04-03T15:21:55.549803800Z",
+    "totalMessages": 3,
+    "totalVotes": 4,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/687740"
+  }
+}

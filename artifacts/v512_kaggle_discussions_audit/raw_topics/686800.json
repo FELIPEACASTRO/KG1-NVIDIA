@@ -1,0 +1,144 @@
+{
+  "forumTopic": {
+    "authorId": 18079680,
+    "authorPerformanceTier": "CONTRIBUTOR",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "default-thumb.png",
+    "authorUserDisplayName": "Alpaca",
+    "authorUserName": "aggshourya",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "Vish Ramamurthy",
+          "id": 23050523,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "CONTRIBUTOR",
+          "url": "/vishramamurthy"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 2859,
+        "content": "<p>+1 this is affecting me as well, unable to generate model output</p>",
+        "feedbackTrackingData": {},
+        "id": 3433531,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-01T19:28:48.623Z",
+        "rawMarkdown": "+1 this is affecting me as well, unable to generate model output",
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Vish Ramamurthy",
+            "id": 23050523,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/vishramamurthy",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+            "tier": "CONTRIBUTOR",
+            "url": "/vishramamurthy",
+            "userId": 23050523,
+            "userName": "vishramamurthy"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 1,
+          "totalVotes": 1
+        }
+      },
+      {
+        "author": {
+          "displayName": "Alpaca",
+          "id": 18079680,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "CONTRIBUTOR",
+          "url": "/aggshourya"
+        },
+        "authorType": "TOPIC",
+        "competitionRanking": 2669,
+        "content": "<p><a href=\"https://www.kaggle.com/ryanholbrook\" target=\"_blank\">@ryanholbrook</a> pls suggest!</p>",
+        "feedbackTrackingData": {},
+        "id": 3433106,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-01T08:28:56.467Z",
+        "rawMarkdown": "@ryanholbrook pls suggest!",
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Alpaca",
+            "id": 18079680,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/aggshourya",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+            "tier": "CONTRIBUTOR",
+            "url": "/aggshourya",
+            "userId": 18079680,
+            "userName": "aggshourya"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 1,
+          "totalVotes": 1
+        }
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "Alpaca",
+        "id": 18079680,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+        "tier": "CONTRIBUTOR",
+        "url": "/aggshourya"
+      },
+      "authorType": "TOPIC",
+      "competitionRanking": 2669,
+      "content": "<p>PermissionError: [Errno 13] Permission denied: '/kaggle/usr/lib/notebooks/ryanholbrook/nvidia-utility-script/triton/backends/nvidia/bin/ptxas-blackwell'</p>\n<p>Running on Rtx-6000</p>",
+      "feedbackTrackingData": {},
+      "id": 3433105,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-04-01T08:28:26.563Z",
+      "rawMarkdown": "PermissionError: [Errno 13] Permission denied: '/kaggle/usr/lib/notebooks/ryanholbrook/nvidia-utility-script/triton/backends/nvidia/bin/ptxas-blackwell'\n\nRunning on Rtx-6000",
+      "teamUpInfo": {
+        "intro": "",
+        "teamLeader": {
+          "displayName": "Alpaca",
+          "id": 18079680,
+          "performanceTier": "CONTRIBUTOR",
+          "profileUrl": "/aggshourya",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "CONTRIBUTOR",
+          "url": "/aggshourya",
+          "userId": 18079680,
+          "userName": "aggshourya"
+        }
+      },
+      "votes": {
+        "canUpvote": true,
+        "totalUpvotes": 2,
+        "totalVotes": 2
+      }
+    },
+    "firstMessageId": 3433105,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 686800,
+    "name": "Permission error",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-04-01T08:28:26.564293300Z",
+    "totalMessages": 2,
+    "totalVotes": 2,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/686800"
+  }
+}

@@ -1,0 +1,102 @@
+{
+  "forumTopic": {
+    "authorId": 1317811,
+    "authorPerformanceTier": "CONTRIBUTOR",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "1317811-gr.jpg",
+    "authorUserDisplayName": "MattiasLiljenzin",
+    "authorUserName": "liljenzin",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "srujanprabhu12345",
+          "id": 14368759,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "CONTRIBUTOR",
+          "url": "/srujanprabhu12345"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 617,
+        "content": "<p>you are goat, thank u😎</p>",
+        "feedbackTrackingData": {},
+        "id": 3456861,
+        "isThankYou": true,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-05-12T17:20:49.080Z",
+        "rawMarkdown": "you are goat, thank u😎",
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "srujanprabhu12345",
+            "id": 14368759,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/srujanprabhu12345",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+            "tier": "CONTRIBUTOR",
+            "url": "/srujanprabhu12345",
+            "userId": 14368759,
+            "userName": "srujanprabhu12345"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "MattiasLiljenzin",
+        "id": 1317811,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1317811-gr.jpg",
+        "tier": "CONTRIBUTOR",
+        "url": "/liljenzin"
+      },
+      "authorType": "TOPIC",
+      "competitionRanking": 2445,
+      "content": "<p>Getting one of these?</p>\n<ul>\n<li>ModuleNotFoundError: No module named 'cutlass'</li>\n<li>ModuleNotFoundError: No module named 'mamba_ssm'</li>\n</ul>\n<p>You might get lucky and fix the issues, or you will spend over an hour (like myself) trying to implement fixes and recommendations that dont work. Sure, you will probably resolve the issue sooner or later, but do yourself a favour and clone a template notebook and start fresh from there instead. </p>\n<p><strong>TLDR;</strong> Don't try to fix them manually. Instead, clone a fully-functional notebook by clicking \"Copy &amp; Edit\" on the official nemotron demo notebook below:</p>\n<p><a href=\"https://www.kaggle.com/code/ryanholbrook/nvidia-nemotron-submission-demo\" target=\"_blank\">https://www.kaggle.com/code/ryanholbrook/nvidia-nemotron-submission-demo</a></p>",
+      "feedbackTrackingData": {},
+      "id": 3452570,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-05-03T19:20:20.327Z",
+      "rawMarkdown": "Getting one of these?\n\n- ModuleNotFoundError: No module named 'cutlass'\n- ModuleNotFoundError: No module named 'mamba_ssm'\n\nYou might get lucky and fix the issues, or you will spend over an hour (like myself) trying to implement fixes and recommendations that dont work. Sure, you will probably resolve the issue sooner or later, but do yourself a favour and clone a template notebook and start fresh from there instead. \n\n**TLDR;** Don't try to fix them manually. Instead, clone a fully-functional notebook by clicking \"Copy & Edit\" on the official nemotron demo notebook below:\n\nhttps://www.kaggle.com/code/ryanholbrook/nvidia-nemotron-submission-demo\n\n",
+      "teamUpInfo": {
+        "intro": "",
+        "teamLeader": {
+          "displayName": "MattiasLiljenzin",
+          "id": 1317811,
+          "performanceTier": "CONTRIBUTOR",
+          "profileUrl": "/liljenzin",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1317811-gr.jpg",
+          "tier": "CONTRIBUTOR",
+          "url": "/liljenzin",
+          "userId": 1317811,
+          "userName": "liljenzin"
+        }
+      },
+      "votes": {
+        "canUpvote": true,
+        "totalUpvotes": 1,
+        "totalVotes": 1
+      }
+    },
+    "firstMessageId": 3452570,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 696734,
+    "name": "Having trouble with mamba_ssm or cutlass? Read here",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-05-03T19:20:20.326403Z",
+    "totalMessages": 1,
+    "totalVotes": 1,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/696734"
+  }
+}

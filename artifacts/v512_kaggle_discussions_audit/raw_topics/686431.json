@@ -1,0 +1,144 @@
+{
+  "forumTopic": {
+    "authorId": 9894684,
+    "authorPerformanceTier": "EXPERT",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "default-thumb.png",
+    "authorUserDisplayName": "Noizersam",
+    "authorUserName": "noizersam",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "MAJ0RT0M",
+          "id": 2071133,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "CONTRIBUTOR",
+          "url": "/maj0rt0m"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 1268,
+        "content": "<p>Need to patch in pytorch code - otherwise the model doesnt support quantized layers</p>\n<pre><code># Force the slow (pure PyTorch) code path for Nemotron-H layers\n    # The fast CUDA kernels may not work on all container versions\n    for name, mod in sys.modules.items():\n        if 'modeling_nemotron_h' in name and hasattr(mod, 'is_fast_path_available'):\n            mod.is_fast_path_available = False\n            print(f'Patched {name}: using slow path') \n</code></pre>\n<p>The reasoning starter notebook has a snippet for this (where I got the code from above)</p>",
+        "feedbackTrackingData": {},
+        "id": 3433012,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-01T04:56:02.140Z",
+        "rawMarkdown": "Need to patch in pytorch code - otherwise the model doesnt support quantized layers\n```\n# Force the slow (pure PyTorch) code path for Nemotron-H layers\n    # The fast CUDA kernels may not work on all container versions\n    for name, mod in sys.modules.items():\n        if 'modeling_nemotron_h' in name and hasattr(mod, 'is_fast_path_available'):\n            mod.is_fast_path_available = False\n            print(f'Patched {name}: using slow path') \n```\n\nThe reasoning starter notebook has a snippet for this (where I got the code from above)",
+        "replies": [
+          {
+            "author": {
+              "displayName": "The Swimmer",
+              "id": 16323783,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/16323783-kg.jpg?t=2025-03-24-00-25-06",
+              "tier": "CONTRIBUTOR",
+              "url": "/theswimmer"
+            },
+            "authorType": "COMMENT",
+            "competitionRanking": 778,
+            "content": "<p>interesting, but where exactly would this code be put in the whole process? </p>\n<p>edit: I tried this code right before the line where I call trainer.train() and it seems to have fixed the dimension error, but i now get an error called \"RuntimeError: index_add_(): self (Half) and source (Float) must have the same scalar type\"</p>",
+            "feedbackTrackingData": {},
+            "id": 3455527,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-05-09T15:46:17.090Z",
+            "rawMarkdown": "interesting, but where exactly would this code be put in the whole process? \n\nedit: I tried this code right before the line where I call trainer.train() and it seems to have fixed the dimension error, but i now get an error called \"RuntimeError: index_add_(): self (Half) and source (Float) must have the same scalar type\"\n\n",
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "The Swimmer",
+                "id": 16323783,
+                "performanceTier": "CONTRIBUTOR",
+                "profileUrl": "/theswimmer",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/16323783-kg.jpg?t=2025-03-24-00-25-06",
+                "tier": "CONTRIBUTOR",
+                "url": "/theswimmer",
+                "userId": 16323783,
+                "userName": "theswimmer"
+              }
+            },
+            "votes": {
+              "canUpvote": true
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "MAJ0RT0M",
+            "id": 2071133,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/maj0rt0m",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+            "tier": "CONTRIBUTOR",
+            "url": "/maj0rt0m",
+            "userId": 2071133,
+            "userName": "maj0rt0m"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 1,
+          "totalVotes": 1
+        }
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "Noizersam",
+        "id": 9894684,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+        "tier": "EXPERT",
+        "url": "/noizersam"
+      },
+      "authorType": "TOPIC",
+      "competitionRanking": 215,
+      "content": "<p>I am attempting to fine-tune a model using QLoRA, but I am encountering the following error when training on a model that has been quantized using bitsandbytes:\n<code>RuntimeError: mat1 and mat2 shapes cannot be multiplied (302x4096 and 1x2752512)</code>\nHas anyone else encountered this same error, or does anyone have a solution?</p>",
+      "feedbackTrackingData": {},
+      "id": 3432215,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-03-31T08:42:04.017Z",
+      "rawMarkdown": "I am attempting to fine-tune a model using QLoRA, but I am encountering the following error when training on a model that has been quantized using bitsandbytes:\n`RuntimeError: mat1 and mat2 shapes cannot be multiplied (302x4096 and 1x2752512)`\nHas anyone else encountered this same error, or does anyone have a solution?",
+      "teamUpInfo": {
+        "intro": "",
+        "teamLeader": {
+          "displayName": "Noizersam",
+          "id": 9894684,
+          "performanceTier": "EXPERT",
+          "profileUrl": "/noizersam",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "EXPERT",
+          "url": "/noizersam",
+          "userId": 9894684,
+          "userName": "noizersam"
+        }
+      },
+      "votes": {
+        "canUpvote": true,
+        "totalUpvotes": 2,
+        "totalVotes": 2
+      }
+    },
+    "firstMessageId": 3432215,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 686431,
+    "name": "QLoRA Fine-tuning Bug",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-03-31T08:42:04.018020300Z",
+    "totalMessages": 2,
+    "totalVotes": 2,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/686431"
+  }
+}

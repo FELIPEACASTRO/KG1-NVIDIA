@@ -1,0 +1,195 @@
+{
+  "forumTopic": {
+    "authorId": 33164262,
+    "authorPerformanceTier": "CONTRIBUTOR",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "default-thumb.png",
+    "authorUserDisplayName": "Dongyong Lee",
+    "authorUserName": "shemissmebutidont",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "CPMP",
+          "id": 75976,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/75976-gr.jpg",
+          "tier": "GRANDMASTER",
+          "url": "/cpmpml"
+        },
+        "authorType": "HOST",
+        "content": "<p>Before prizes are awarded. Mid point prize are there to encourage sharing. It is your call to go for these prize or wait till competition end.</p>",
+        "feedbackTrackingData": {},
+        "id": 3433972,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-02T11:51:41.427Z",
+        "rawMarkdown": "Before prizes are awarded. Mid point prize are there to encourage sharing. It is your call to go for these prize or wait till competition end.",
+        "reactions": [
+          {
+            "emoji": "THANK_YOU",
+            "featuredUserNames": [
+              "jamesweatherhead"
+            ],
+            "userCount": 1
+          }
+        ],
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 1,
+          "totalVotes": 1
+        }
+      },
+      {
+        "author": {
+          "displayName": "James Weatherhead",
+          "id": 21325433,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/21325433-kg.jpeg?t=2025-12-07-17-37-01",
+          "tier": "CONTRIBUTOR",
+          "url": "/jamesweatherhead"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 1575,
+        "content": "<p>This is a good question… I had the same thought for the mid-point prize too.</p>",
+        "feedbackTrackingData": {},
+        "id": 3431249,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-29T18:23:43.570Z",
+        "rawMarkdown": "This is a good question... I had the same thought for the mid-point prize too.",
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "James Weatherhead",
+            "id": 21325433,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/jamesweatherhead",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/21325433-kg.jpeg?t=2025-12-07-17-37-01",
+            "tier": "CONTRIBUTOR",
+            "url": "/jamesweatherhead",
+            "userId": 21325433,
+            "userName": "jamesweatherhead"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      },
+      {
+        "author": {
+          "displayName": "HADY",
+          "id": 28656359,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "CONTRIBUTOR",
+          "url": "/johnhady101"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 2983,
+        "content": "<p>I wonder why would someone downvote for this. Very valid question!</p>",
+        "feedbackTrackingData": {},
+        "id": 3430136,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-27T22:34:00.477Z",
+        "rawMarkdown": "I wonder why would someone downvote for this. Very valid question!",
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "HADY",
+            "id": 28656359,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/johnhady101",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+            "tier": "CONTRIBUTOR",
+            "url": "/johnhady101",
+            "userId": 28656359,
+            "userName": "johnhady101"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      },
+      {
+        "author": {
+          "displayName": "Brisa Marina",
+          "id": 15748787,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "EXPERT",
+          "url": "/brisamarina"
+        },
+        "authorType": "COMMENT",
+        "content": "<p>We won't know if we are competition winners until <strong>after</strong> the competition ends.  Any required documentation would be submitted after the competition ends.  </p>",
+        "feedbackTrackingData": {},
+        "id": 3429881,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-27T13:37:04.060Z",
+        "rawMarkdown": "We won't know if we are competition winners until **after** the competition ends.  Any required documentation would be submitted after the competition ends.  ",
+        "votes": {
+          "canUpvote": true
+        }
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "Dongyong Lee",
+        "id": 33164262,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+        "tier": "CONTRIBUTOR",
+        "url": "/shemissmebutidont"
+      },
+      "authorType": "TOPIC",
+      "competitionRanking": 162,
+      "content": "<p>Hi, the rules state:\n ▎ \"To be eligible for any prize, teams must publish a public Kaggle notebook and solution Writeup documenting the methods used to generate their submission.\"\n Could you clarify when this needs to happen — before the competition deadline, or after the competition ends?\n Thank you!</p>",
+      "feedbackTrackingData": {},
+      "id": 3429865,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-03-27T13:16:18.880Z",
+      "rawMarkdown": " Hi, the rules state:\n\n  ▎ \"To be eligible for any prize, teams must publish a public Kaggle notebook and solution Writeup documenting the methods used to generate their submission.\"\n\n  Could you clarify when this needs to happen — before the competition deadline, or after the competition ends?\n\n  Thank you!",
+      "teamUpInfo": {
+        "intro": "",
+        "teamLeader": {
+          "displayName": "Dongyong Lee",
+          "id": 33164262,
+          "performanceTier": "CONTRIBUTOR",
+          "profileUrl": "/shemissmebutidont",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "CONTRIBUTOR",
+          "url": "/shemissmebutidont",
+          "userId": 33164262,
+          "userName": "shemissmebutidont"
+        }
+      },
+      "votes": {
+        "canUpvote": true,
+        "totalUpvotes": 8,
+        "totalVotes": 7
+      }
+    },
+    "firstMessageId": 3429865,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 685247,
+    "name": " When should winners publish their public notebook and writeup?",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-03-27T13:16:18.881389600Z",
+    "totalMessages": 4,
+    "totalVotes": 7,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/685247"
+  }
+}

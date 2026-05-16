@@ -1,0 +1,226 @@
+{
+  "forumTopic": {
+    "authorId": 17819385,
+    "authorPerformanceTier": "CONTRIBUTOR",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "default-thumb.png",
+    "authorUserDisplayName": "lucian kucera",
+    "authorUserName": "luciankucera",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "ImperfectKitto",
+          "id": 11905020,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/11905020-kg.jpg",
+          "tier": "EXPERT",
+          "url": "/defdet"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 492,
+        "content": "<p>Don't know about others, but I gave you dislike just for the clickbaity title</p>",
+        "feedbackTrackingData": {},
+        "id": 3429041,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-26T09:19:38.423Z",
+        "rawMarkdown": "Don't know about others, but I gave you dislike just for the clickbaity title",
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "ImperfectKitto",
+            "id": 11905020,
+            "performanceTier": "EXPERT",
+            "profileUrl": "/defdet",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/11905020-kg.jpg",
+            "tier": "EXPERT",
+            "url": "/defdet",
+            "userId": 11905020,
+            "userName": "defdet"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 1,
+          "totalVotes": 1
+        }
+      },
+      {
+        "author": {
+          "displayName": "Komil Parmar",
+          "id": 11351811,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/11351811-kg.jpg?t=2025-07-02-06-16-19",
+          "tier": "EXPERT",
+          "url": "/komilparmar"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 963,
+        "content": "<p>I am just starting the competition so I am not familiar with the data yet. But, SFT as I know definitely can hurt if not configured properly. It is better suited for tasks that does not require unpredictable steps, and hence not reasoning task at least. It can suite the objectives like aligning a LLM to be nice, or tuning its output for a certain style for example. Reasoning can take very different turns at each step, so RL works better because it cares about the outputs and not the path. SFT still might work if one takes a huge model, like opus, and save its reasoning, and then train this smaller model to do reasoning like it. But simply applying it on dataset provided, can hence kill the performance. I am quite sure top rankers that are already way beyond the reach of highest scoring public notebook are definitely using RL methods like GRPO. Please let me know if you think my reasoning is right. </p>",
+        "feedbackTrackingData": {},
+        "id": 3428942,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-26T05:30:26.883Z",
+        "rawMarkdown": "I am just starting the competition so I am not familiar with the data yet. But, SFT as I know definitely can hurt if not configured properly. It is better suited for tasks that does not require unpredictable steps, and hence not reasoning task at least. It can suite the objectives like aligning a LLM to be nice, or tuning its output for a certain style for example. Reasoning can take very different turns at each step, so RL works better because it cares about the outputs and not the path. SFT still might work if one takes a huge model, like opus, and save its reasoning, and then train this smaller model to do reasoning like it. But simply applying it on dataset provided, can hence kill the performance. I am quite sure top rankers that are already way beyond the reach of highest scoring public notebook are definitely using RL methods like GRPO. Please let me know if you think my reasoning is right. ",
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Komil Parmar",
+            "id": 11351811,
+            "performanceTier": "EXPERT",
+            "profileUrl": "/komilparmar",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/11351811-kg.jpg?t=2025-07-02-06-16-19",
+            "tier": "EXPERT",
+            "url": "/komilparmar",
+            "userId": 11351811,
+            "userName": "komilparmar"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 1,
+          "totalVotes": 1
+        }
+      },
+      {
+        "author": {
+          "displayName": "NNMax",
+          "id": 18148523,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/18148523-kg.jpg?t=2025-10-31-11-21-57",
+          "tier": "EXPERT",
+          "url": "/ashok205"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 759,
+        "content": "<blockquote>\n  <p>after applying Naive SFT</p>\n</blockquote>\n<p>The reason's in your post itself. For this kind of reasoning task, naive SFT barely works and there's a lot of methods out there for LoRA SFT itself. Have you experimented with adjusting hyperparameters first?</p>\n<p>I'm seeing a massive difference in tuning the hyperparameters itself and there's still a lot of other things to explore like finetuning methods, two-stage approaches, LoRA rank vs alpha tradeoff tuning and much more.</p>",
+        "feedbackTrackingData": {},
+        "id": 3425468,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-20T20:58:40.260Z",
+        "rawMarkdown": "> after applying Naive SFT\n\nThe reason's in your post itself. For this kind of reasoning task, naive SFT barely works and there's a lot of methods out there for LoRA SFT itself. Have you experimented with adjusting hyperparameters first?\n\nI'm seeing a massive difference in tuning the hyperparameters itself and there's still a lot of other things to explore like finetuning methods, two-stage approaches, LoRA rank vs alpha tradeoff tuning and much more.",
+        "replies": [
+          {
+            "author": {
+              "displayName": "lucian kucera",
+              "id": 17819385,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+              "tier": "CONTRIBUTOR",
+              "url": "/luciankucera"
+            },
+            "authorType": "TOPIC",
+            "competitionRanking": 1662,
+            "content": "<p>Bro most people are trying naive SFT, so iam trying to help them to stop. Since it is a dead end. Look at most notebooks, with lot of upvotes, all of them use naive SFT. My message is to stop doing it.</p>",
+            "feedbackTrackingData": {},
+            "id": 3425482,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-03-20T21:33:58.497Z",
+            "rawMarkdown": "Bro most people are trying naive SFT, so iam trying to help them to stop. Since it is a dead end. Look at most notebooks, with lot of upvotes, all of them use naive SFT. My message is to stop doing it.",
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "lucian kucera",
+                "id": 17819385,
+                "performanceTier": "CONTRIBUTOR",
+                "profileUrl": "/luciankucera",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                "tier": "CONTRIBUTOR",
+                "url": "/luciankucera",
+                "userId": 17819385,
+                "userName": "luciankucera"
+              }
+            },
+            "votes": {
+              "canUpvote": true,
+              "totalUpvotes": 1,
+              "totalVotes": 1
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "NNMax",
+            "id": 18148523,
+            "performanceTier": "EXPERT",
+            "profileUrl": "/ashok205",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/18148523-kg.jpg?t=2025-10-31-11-21-57",
+            "tier": "EXPERT",
+            "url": "/ashok205",
+            "userId": 18148523,
+            "userName": "ashok205"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 1,
+          "totalVotes": 1
+        }
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "lucian kucera",
+        "id": 17819385,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+        "tier": "CONTRIBUTOR",
+        "url": "/luciankucera"
+      },
+      "authorType": "TOPIC",
+      "competitionRanking": 1662,
+      "content": "<p>I created this notebook, that shows few example of outputs after applying Naive SFT. It absolutelly kills models reasoning and makes it dumb as rocks. <a href=\"https://www.kaggle.com/code/luciankucera/impactofnaivesftonmodelreasoning\" target=\"_blank\">notebook</a></p>\n<p>Please don't give me dislikes, if u do please share your reason, beacause disliking without reasoning is not constructive.</p>\n<p>Iam getting review bombed for telling the truth pls give me upvote, so we can counter reviewbombing.</p>",
+      "feedbackTrackingData": {},
+      "id": 3425239,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-03-20T15:17:25.193Z",
+      "rawMarkdown": "I created this notebook, that shows few example of outputs after applying Naive SFT. It absolutelly kills models reasoning and makes it dumb as rocks. [notebook](https://www.kaggle.com/code/luciankucera/impactofnaivesftonmodelreasoning)\n\nPlease don't give me dislikes, if u do please share your reason, beacause disliking without reasoning is not constructive.\n\nIam getting review bombed for telling the truth pls give me upvote, so we can counter reviewbombing.",
+      "teamUpInfo": {
+        "intro": "",
+        "teamLeader": {
+          "displayName": "lucian kucera",
+          "id": 17819385,
+          "performanceTier": "CONTRIBUTOR",
+          "profileUrl": "/luciankucera",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "CONTRIBUTOR",
+          "url": "/luciankucera",
+          "userId": 17819385,
+          "userName": "luciankucera"
+        }
+      },
+      "votes": {
+        "canUpvote": true,
+        "totalUpvotes": 4,
+        "totalVotes": -16
+      }
+    },
+    "firstMessageId": 3425239,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 683401,
+    "name": "Ground Breaking Discovery regarding SFT[MUST WATCH]",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-03-20T15:17:25.194265700Z",
+    "totalMessages": 4,
+    "totalVotes": -16,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/683401"
+  }
+}

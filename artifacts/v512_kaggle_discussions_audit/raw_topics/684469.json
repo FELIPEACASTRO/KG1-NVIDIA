@@ -1,0 +1,151 @@
+{
+  "forumTopic": {
+    "authorId": 9655925,
+    "authorPerformanceTier": "CONTRIBUTOR",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "9655925-kg.jpg",
+    "authorUserDisplayName": "tiffanyseah",
+    "authorUserName": "tiffanyseah",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "Shoto",
+          "id": 5578954,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/5578954-kg.png?t=2023-11-25-02-36-56",
+          "tier": "CONTRIBUTOR",
+          "url": "/bloodymonday"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 418,
+        "content": "<p>Turn off internet use from right tab</p>\n<p><img src=\"https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F5578954%2F8591b6930574029831fae6f3ed090a1a%2FScreenshot%202026-03-25%20at%205.14.34PM.png?generation=1774426566981453&amp;alt=media\"></p>",
+        "feedbackTrackingData": {},
+        "id": 3428295,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-25T08:16:10.423Z",
+        "rawMarkdown": "Turn off internet use from right tab\n\n<img height=\"360px\" src=\"https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F5578954%2F8591b6930574029831fae6f3ed090a1a%2FScreenshot%202026-03-25%20at%205.14.34PM.png?generation=1774426566981453&alt=media\">",
+        "reactions": [
+          {
+            "emoji": "THANK_YOU",
+            "featuredUserNames": [
+              "tiffanyseah"
+            ],
+            "userCount": 1
+          }
+        ],
+        "replies": [
+          {
+            "author": {
+              "displayName": "tiffanyseah",
+              "id": 9655925,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/9655925-kg.jpg",
+              "tier": "CONTRIBUTOR",
+              "url": "/tiffanyseah"
+            },
+            "authorType": "TOPIC",
+            "competitionRanking": 2360,
+            "content": "<p>okie, noted. Thank you</p>",
+            "feedbackTrackingData": {},
+            "id": 3428519,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-03-25T15:41:18.717Z",
+            "rawMarkdown": "okie, noted. Thank you",
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "tiffanyseah",
+                "id": 9655925,
+                "performanceTier": "CONTRIBUTOR",
+                "profileUrl": "/tiffanyseah",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/9655925-kg.jpg",
+                "tier": "CONTRIBUTOR",
+                "url": "/tiffanyseah",
+                "userId": 9655925,
+                "userName": "tiffanyseah"
+              }
+            },
+            "votes": {
+              "canUpvote": true
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Shoto",
+            "id": 5578954,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/bloodymonday",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/5578954-kg.png?t=2023-11-25-02-36-56",
+            "tier": "CONTRIBUTOR",
+            "url": "/bloodymonday",
+            "userId": 5578954,
+            "userName": "bloodymonday"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "tiffanyseah",
+        "id": 9655925,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/9655925-kg.jpg",
+        "tier": "CONTRIBUTOR",
+        "url": "/tiffanyseah"
+      },
+      "authorType": "TOPIC",
+      "competitionRanking": 2360,
+      "content": "<p>my notebook failed to save draft and I am not able to turn on the Internet. I have this error </p>\n<p><img src=\"https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F9655925%2Fb460f343fa7b7184aaa72011c176d926%2FScreenshot%202026-03-25%20104538.jpg?generation=1774406768762445&amp;alt=media\" alt=\"\"></p>",
+      "feedbackTrackingData": {},
+      "id": 3428159,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-03-25T02:46:19.193Z",
+      "rawMarkdown": "my notebook failed to save draft and I am not able to turn on the Internet. I have this error \n\n![](https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F9655925%2Fb460f343fa7b7184aaa72011c176d926%2FScreenshot%202026-03-25%20104538.jpg?generation=1774406768762445&alt=media)",
+      "teamUpInfo": {
+        "intro": "",
+        "teamLeader": {
+          "displayName": "tiffanyseah",
+          "id": 9655925,
+          "performanceTier": "CONTRIBUTOR",
+          "profileUrl": "/tiffanyseah",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/9655925-kg.jpg",
+          "tier": "CONTRIBUTOR",
+          "url": "/tiffanyseah",
+          "userId": 9655925,
+          "userName": "tiffanyseah"
+        }
+      },
+      "votes": {
+        "canUpvote": true,
+        "totalUpvotes": 2,
+        "totalVotes": 2
+      }
+    },
+    "firstMessageId": 3428159,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 684469,
+    "name": "Error: Internet cannot be enabled for this competition with the current accelerator.",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-03-25T02:46:19.194151400Z",
+    "totalMessages": 2,
+    "totalVotes": 2,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/684469"
+  }
+}

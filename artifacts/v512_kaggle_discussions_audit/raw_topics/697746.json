@@ -1,0 +1,258 @@
+{
+  "forumTopic": {
+    "authorId": 16845331,
+    "authorPerformanceTier": "EXPERT",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "default-thumb.png",
+    "authorUserDisplayName": "Harshita Kumari",
+    "authorUserName": "harshitakumari256",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "Manish Swami",
+          "id": 16167361,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/16167361-kg.jpg?t=2025-12-08-08-52-10",
+          "tier": "EXPERT",
+          "url": "/manish756"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 128,
+        "content": "<p>target_modules = [\n    'out_proj', 'v_proj', 'q_proj', 'down_proj', 'embed_tokens',\n    'k_proj', 'in_proj', 'up_proj', 'o_proj', 'lm_head', 'gate_proj'\n]\nremove embed_tokens , gate_proj and lm_head and then try again </p>",
+        "feedbackTrackingData": {},
+        "id": 3455320,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-05-09T05:14:34.983Z",
+        "rawMarkdown": "target_modules = [\n    'out_proj', 'v_proj', 'q_proj', 'down_proj', 'embed_tokens',\n    'k_proj', 'in_proj', 'up_proj', 'o_proj', 'lm_head', 'gate_proj'\n]\nremove embed_tokens , gate_proj and lm_head and then try again \n",
+        "replies": [
+          {
+            "author": {
+              "displayName": "Harshita Kumari",
+              "id": 16845331,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+              "tier": "EXPERT",
+              "url": "/harshitakumari256"
+            },
+            "authorType": "TOPIC",
+            "competitionRanking": 491,
+            "content": "<p>still the same score</p>",
+            "feedbackTrackingData": {},
+            "id": 3455485,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-05-09T14:44:06.757Z",
+            "rawMarkdown": "still the same score",
+            "replies": [
+              {
+                "author": {
+                  "displayName": "Manish Swami",
+                  "id": 16167361,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/16167361-kg.jpg?t=2025-12-08-08-52-10",
+                  "tier": "EXPERT",
+                  "url": "/manish756"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 128,
+                "content": "<p>Then its is CoT improve it </p>",
+                "feedbackTrackingData": {},
+                "id": 3455722,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-05-10T06:03:14.747Z",
+                "rawMarkdown": "Then its is CoT improve it ",
+                "teamUpInfo": {
+                  "intro": "looking for teammate , Those have understanding of what going on!!",
+                  "teamLeader": {
+                    "displayName": "Manish Swami",
+                    "id": 16167361,
+                    "performanceTier": "EXPERT",
+                    "profileUrl": "/manish756",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/16167361-kg.jpg?t=2025-12-08-08-52-10",
+                    "tier": "EXPERT",
+                    "url": "/manish756",
+                    "userId": 16167361,
+                    "userName": "manish756"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true
+                }
+              }
+            ],
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "Harshita Kumari",
+                "id": 16845331,
+                "performanceTier": "EXPERT",
+                "profileUrl": "/harshitakumari256",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                "tier": "EXPERT",
+                "url": "/harshitakumari256",
+                "userId": 16845331,
+                "userName": "harshitakumari256"
+              }
+            },
+            "votes": {
+              "canUpvote": true
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "looking for teammate , Those have understanding of what going on!!",
+          "teamLeader": {
+            "displayName": "Manish Swami",
+            "id": 16167361,
+            "performanceTier": "EXPERT",
+            "profileUrl": "/manish756",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/16167361-kg.jpg?t=2025-12-08-08-52-10",
+            "tier": "EXPERT",
+            "url": "/manish756",
+            "userId": 16167361,
+            "userName": "manish756"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 2,
+          "totalVotes": 2
+        }
+      },
+      {
+        "author": {
+          "displayName": "KrishnaGupta02468",
+          "id": 27224570,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "CONTRIBUTOR",
+          "url": "/krishnagupta02468"
+        },
+        "authorType": "COMMENT",
+        "content": "<p>mine too: <a href=\"https://www.kaggle.com/code/krishnagupta02468/tinker-submission-notebook\" target=\"_blank\">https://www.kaggle.com/code/krishnagupta02468/tinker-submission-notebook</a></p>\n<p>i dont have tinker credits, so i found this guy's raw weights from tinker: <a href=\"https://www.kaggle.com/datasets/penguin069/nemotron-adapter-run\" target=\"_blank\">https://www.kaggle.com/datasets/penguin069/nemotron-adapter-run</a></p>\n<p>but i am not getting good results, even in the validation notebook</p>",
+        "feedbackTrackingData": {},
+        "id": 3457962,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-05-14T17:41:47.397Z",
+        "rawMarkdown": "mine too: https://www.kaggle.com/code/krishnagupta02468/tinker-submission-notebook\n\ni dont have tinker credits, so i found this guy's raw weights from tinker: https://www.kaggle.com/datasets/penguin069/nemotron-adapter-run\n\nbut i am not getting good results, even in the validation notebook",
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "KrishnaGupta02468",
+            "id": 27224570,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/krishnagupta02468",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+            "tier": "CONTRIBUTOR",
+            "url": "/krishnagupta02468",
+            "userId": 27224570,
+            "userName": "krishnagupta02468"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      },
+      {
+        "author": {
+          "displayName": "SHUBHAM KUMAR",
+          "id": 23040687,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "CONTRIBUTOR",
+          "url": "/shubhamkumar1210"
+        },
+        "authorType": "COMMENT",
+        "content": "<p>check you token length for input if its too low the cot will get cut off before reaching the boxed answer!!</p>",
+        "feedbackTrackingData": {},
+        "id": 3456628,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-05-12T10:08:54.407Z",
+        "rawMarkdown": "check you token length for input if its too low the cot will get cut off before reaching the boxed answer!!",
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "SHUBHAM KUMAR",
+            "id": 23040687,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/shubhamkumar1210",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+            "tier": "CONTRIBUTOR",
+            "url": "/shubhamkumar1210",
+            "userId": 23040687,
+            "userName": "shubhamkumar1210"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "Harshita Kumari",
+        "id": 16845331,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+        "tier": "EXPERT",
+        "url": "/harshitakumari256"
+      },
+      "authorType": "TOPIC",
+      "competitionRanking": 491,
+      "content": "<p>I have tried cot finetuning, generated custom reasoning from deepseek/qwen-30b model for bit manipulation and other complex tasks it generated reasoning but it was not complete but still i collected all of them and finetuned but the score is .52 which is very low</p>\n<p><a href=\"https://www.kaggle.com/code/harshitakumari256/notebook633554d240\" target=\"_blank\">https://www.kaggle.com/code/harshitakumari256/notebook633554d240</a></p>",
+      "feedbackTrackingData": {},
+      "id": 3454423,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-05-07T05:33:53.470Z",
+      "rawMarkdown": "I have tried cot finetuning, generated custom reasoning from deepseek/qwen-30b model for bit manipulation and other complex tasks it generated reasoning but it was not complete but still i collected all of them and finetuned but the score is .52 which is very low\n\nhttps://www.kaggle.com/code/harshitakumari256/notebook633554d240",
+      "teamUpInfo": {
+        "intro": "",
+        "teamLeader": {
+          "displayName": "Harshita Kumari",
+          "id": 16845331,
+          "performanceTier": "EXPERT",
+          "profileUrl": "/harshitakumari256",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "EXPERT",
+          "url": "/harshitakumari256",
+          "userId": 16845331,
+          "userName": "harshitakumari256"
+        }
+      },
+      "votes": {
+        "canUpvote": true,
+        "totalUpvotes": 2,
+        "totalVotes": 2
+      }
+    },
+    "firstMessageId": 3454423,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 697746,
+    "name": "SCORE NOT IMPROVING EVEN WITH REASONING+ANSWER FINETUNING",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-05-07T05:33:53.469707900Z",
+    "totalMessages": 5,
+    "totalVotes": 2,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/697746"
+  }
+}

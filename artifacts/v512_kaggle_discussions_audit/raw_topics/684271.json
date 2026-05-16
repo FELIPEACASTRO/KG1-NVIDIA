@@ -1,0 +1,408 @@
+{
+  "forumTopic": {
+    "authorId": 28695249,
+    "authorPerformanceTier": "CONTRIBUTOR",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "default-thumb.png",
+    "authorUserDisplayName": "qqqqqqqqqqqp",
+    "authorUserName": "qqqqqqqqqqqp",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "newduck",
+          "id": 1786084,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1786084-kg.png?t=2025-07-19-06-46-08",
+          "tier": "EXPERT",
+          "url": "/newduck"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 1701,
+        "content": "<p>I had the same \"No module named 'cutlass'\" error and fixed it in my notebook.\nNot sure if this applies to your case, but it might help.\nPlease see the comments in the notebook below.\n<a href=\"https://www.kaggle.com/code/newduck/nvidia-nemotron-soft-balanced-sampling-sft/comments\" target=\"_blank\">https://www.kaggle.com/code/newduck/nvidia-nemotron-soft-balanced-sampling-sft/comments</a></p>",
+        "feedbackTrackingData": {},
+        "id": 3428879,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-26T03:00:04.287Z",
+        "rawMarkdown": "I had the same \"No module named 'cutlass'\" error and fixed it in my notebook.\nNot sure if this applies to your case, but it might help.\nPlease see the comments in the notebook below.\nhttps://www.kaggle.com/code/newduck/nvidia-nemotron-soft-balanced-sampling-sft/comments",
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "newduck",
+            "id": 1786084,
+            "performanceTier": "EXPERT",
+            "profileUrl": "/newduck",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1786084-kg.png?t=2025-07-19-06-46-08",
+            "tier": "EXPERT",
+            "url": "/newduck",
+            "userId": 1786084,
+            "userName": "newduck"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      },
+      {
+        "author": {
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "url": "/"
+        },
+        "authorType": "COMMENT",
+        "canDelete": true,
+        "feedbackTrackingData": {},
+        "id": 3427706,
+        "isDeleted": true,
+        "isThankYou": false,
+        "isUserAuthor": true,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-24T12:50:46.773Z",
+        "rawMarkdown": "",
+        "replies": [
+          {
+            "author": {
+              "displayName": "qqqqqqqqqqqp",
+              "id": 28695249,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+              "tier": "CONTRIBUTOR",
+              "url": "/qqqqqqqqqqqp"
+            },
+            "authorType": "TOPIC",
+            "competitionRanking": 602,
+            "content": "<p>I've already resolved it using my own approach—thank you for your reply!</p>",
+            "feedbackTrackingData": {},
+            "id": 3427750,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-03-24T13:43:35.590Z",
+            "rawMarkdown": "I've already resolved it using my own approach—thank you for your reply!",
+            "replies": [
+              {
+                "author": {
+                  "displayName": "Zhuang Jia",
+                  "id": 1565062,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1565062-kg.PNG",
+                  "tier": "MASTER",
+                  "url": "/jiazhuang"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 145,
+                "content": "<p>how to …..?</p>",
+                "feedbackTrackingData": {},
+                "id": 3427766,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-03-24T14:09:44.510Z",
+                "rawMarkdown": "how to .....?",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "Zhuang Jia",
+                    "id": 1565062,
+                    "performanceTier": "MASTER",
+                    "profileUrl": "/jiazhuang",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1565062-kg.PNG",
+                    "tier": "MASTER",
+                    "url": "/jiazhuang",
+                    "userId": 1565062,
+                    "userName": "jiazhuang"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true
+                }
+              },
+              {
+                "author": {
+                  "displayName": "Pradeep Boopathy",
+                  "id": 6262292,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/6262292-kg.jpg",
+                  "tier": "CONTRIBUTOR",
+                  "url": "/pradeepboopathy"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 277,
+                "content": "<p>Can you add your approach here?</p>",
+                "feedbackTrackingData": {},
+                "id": 3427781,
+                "isCollapsed": true,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-03-24T14:34:45.320Z",
+                "rawMarkdown": "Can you add your approach here?",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "Pradeep Boopathy",
+                    "id": 6262292,
+                    "performanceTier": "CONTRIBUTOR",
+                    "profileUrl": "/pradeepboopathy",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/6262292-kg.jpg",
+                    "tier": "CONTRIBUTOR",
+                    "url": "/pradeepboopathy",
+                    "userId": 6262292,
+                    "userName": "pradeepboopathy"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true,
+                  "totalUpvotes": 1,
+                  "totalVotes": 1
+                }
+              },
+              {
+                "author": {
+                  "displayName": "HADY",
+                  "id": 28656359,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                  "tier": "CONTRIBUTOR",
+                  "url": "/johnhady101"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 2983,
+                "content": "<p>can you provide us with it?</p>",
+                "feedbackTrackingData": {},
+                "id": 3427898,
+                "isCollapsed": true,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-03-24T16:53:04.707Z",
+                "rawMarkdown": "can you provide us with it?",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "HADY",
+                    "id": 28656359,
+                    "performanceTier": "CONTRIBUTOR",
+                    "profileUrl": "/johnhady101",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                    "tier": "CONTRIBUTOR",
+                    "url": "/johnhady101",
+                    "userId": 28656359,
+                    "userName": "johnhady101"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true
+                }
+              },
+              {
+                "author": {
+                  "displayName": "HARSHIN RAMESH",
+                  "id": 3380388,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/3380388-kg.jpg?t=2025-04-08-13-25-23",
+                  "tier": "CONTRIBUTOR",
+                  "url": "/harshinramesh"
+                },
+                "authorType": "COMMENT",
+                "content": "<p>please add the approch</p>",
+                "feedbackTrackingData": {},
+                "id": 3428004,
+                "isCollapsed": true,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-03-24T19:12:22.407Z",
+                "rawMarkdown": "please add the approch",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "HARSHIN RAMESH",
+                    "id": 3380388,
+                    "performanceTier": "CONTRIBUTOR",
+                    "profileUrl": "/harshinramesh",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/3380388-kg.jpg?t=2025-04-08-13-25-23",
+                    "tier": "CONTRIBUTOR",
+                    "url": "/harshinramesh",
+                    "userId": 3380388,
+                    "userName": "harshinramesh"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true
+                }
+              },
+              {
+                "author": {
+                  "displayName": "Minh Tâm",
+                  "id": 1985738,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                  "tier": "CONTRIBUTOR",
+                  "url": "/minhtam"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 1858,
+                "content": "<p>Try : </p>\n<p><code>\nimport site\n</code></p>\n<p><code>\ncutlass_pkg_path = \"/kaggle/usr/lib/notebooks/ryanholbrook/nvidia-utility-script/nvidia_cutlass_dsl/python_packages/\"\n</code></p>\n<p><code>\nsite.addsitedir(cutlass_pkg_path)\n</code></p>",
+                "feedbackTrackingData": {},
+                "id": 3428262,
+                "isCollapsed": true,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-03-25T07:02:05.483Z",
+                "rawMarkdown": "Try : \n\n`\nimport site\n`\n\n`\ncutlass_pkg_path = \"/kaggle/usr/lib/notebooks/ryanholbrook/nvidia-utility-script/nvidia_cutlass_dsl/python_packages/\"\n`\n\n`\nsite.addsitedir(cutlass_pkg_path)\n`",
+                "reactions": [
+                  {
+                    "emoji": "THANK_YOU",
+                    "featuredUserNames": [
+                      "yanpapadakis"
+                    ],
+                    "userCount": 1
+                  }
+                ],
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "Minh Tâm",
+                    "id": 1985738,
+                    "performanceTier": "CONTRIBUTOR",
+                    "profileUrl": "/minhtam",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                    "tier": "CONTRIBUTOR",
+                    "url": "/minhtam",
+                    "userId": 1985738,
+                    "userName": "minhtam"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true,
+                  "totalUpvotes": 2,
+                  "totalVotes": 2
+                }
+              },
+              {
+                "author": {
+                  "displayName": "kunal_wagh2703",
+                  "id": 12818266,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                  "tier": "CONTRIBUTOR",
+                  "url": "/kunalwagh2703"
+                },
+                "authorType": "COMMENT",
+                "content": "<p>This still results in:\nModuleNotFoundError: No module named 'cutlass.cute'</p>",
+                "feedbackTrackingData": {},
+                "id": 3428284,
+                "isCollapsed": true,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-03-25T07:53:56.563Z",
+                "rawMarkdown": "This still results in:\nModuleNotFoundError: No module named 'cutlass.cute'",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "kunal_wagh2703",
+                    "id": 12818266,
+                    "performanceTier": "CONTRIBUTOR",
+                    "profileUrl": "/kunalwagh2703",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                    "tier": "CONTRIBUTOR",
+                    "url": "/kunalwagh2703",
+                    "userId": 12818266,
+                    "userName": "kunalwagh2703"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true
+                }
+              }
+            ],
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "qqqqqqqqqqqp",
+                "id": 28695249,
+                "performanceTier": "CONTRIBUTOR",
+                "profileUrl": "/qqqqqqqqqqqp",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                "tier": "CONTRIBUTOR",
+                "url": "/qqqqqqqqqqqp",
+                "userId": 28695249,
+                "userName": "qqqqqqqqqqqp"
+              }
+            },
+            "votes": {
+              "canUpvote": true,
+              "totalUpvotes": 2,
+              "totalVotes": 2
+            }
+          }
+        ],
+        "votes": {}
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "qqqqqqqqqqqp",
+        "id": 28695249,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+        "tier": "CONTRIBUTOR",
+        "url": "/qqqqqqqqqqqp"
+      },
+      "authorType": "TOPIC",
+      "competitionRanking": 602,
+      "content": "<p>how to finish this quesion</p>",
+      "feedbackTrackingData": {},
+      "id": 3427589,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-03-24T09:20:19.523Z",
+      "rawMarkdown": "how to finish this quesion",
+      "teamUpInfo": {
+        "intro": "",
+        "teamLeader": {
+          "displayName": "qqqqqqqqqqqp",
+          "id": 28695249,
+          "performanceTier": "CONTRIBUTOR",
+          "profileUrl": "/qqqqqqqqqqqp",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "CONTRIBUTOR",
+          "url": "/qqqqqqqqqqqp",
+          "userId": 28695249,
+          "userName": "qqqqqqqqqqqp"
+        }
+      },
+      "votes": {
+        "canUpvote": true,
+        "totalUpvotes": 11,
+        "totalVotes": 11
+      }
+    },
+    "firstMessageId": 3427589,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 684271,
+    "name": "ModuleNotFoundError: No module named 'cutlass'",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-03-24T09:20:19.523786500Z",
+    "totalMessages": 9,
+    "totalVotes": 11,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/684271"
+  }
+}

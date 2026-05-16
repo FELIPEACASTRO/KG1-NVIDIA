@@ -1,0 +1,323 @@
+{
+  "forumTopic": {
+    "authorId": 33728306,
+    "authorPerformanceTier": "CONTRIBUTOR",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "33728306-kg.png?t=2026-04-25-07-15-05",
+    "authorUserDisplayName": "Taha",
+    "authorUserName": "tahaalam2009",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "MAJ0RT0M",
+          "id": 2071133,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "CONTRIBUTOR",
+          "url": "/maj0rt0m"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 1268,
+        "content": "<p>I think Tong laid out a few areas for improvement w/ his method</p>\n<ol>\n<li>e2e fine tuning to recover mamba weights dropped by SVD when converting from tinker (or training w/o using tinker at all)</li>\n<li>training on tokens to avoid tokenization issues </li>\n<li>producing an algorithm for cryptarithm that fits w/in COT budget</li>\n<li>generating problems to then produce synthetic COT and train on those</li>\n</ol>\n<p>Ive seen some public notebooks doing (1) - which I guess probably makes up the bulk of people currently scoring 0.86 </p>\n<p>But I haven't see anyone publicly doing any of (2),(3),(4)</p>\n<p>My opinion is that Tong has the right idea -  training the model to replicate optimal COTs that fit w/in the token budget is better than using distilled data or RL - so that what I've been focusing on</p>\n<p>If someone could solve a single substitution cipher w/in the token budget they could achieve 15-20% on cryptarithm problems - which is 2-3% and would get them to 0.87-8.89 depending on their starting score. If you see people starting to hit those scores thats my guess on what they are doing</p>",
+        "feedbackTrackingData": {},
+        "id": 3445455,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-19T19:51:54.583Z",
+        "rawMarkdown": "I think Tong laid out a few areas for improvement w/ his method\n1. e2e fine tuning to recover mamba weights dropped by SVD when converting from tinker (or training w/o using tinker at all)\n2. training on tokens to avoid tokenization issues \n3. producing an algorithm for cryptarithm that fits w/in COT budget\n4. generating problems to then produce synthetic COT and train on those\n\nIve seen some public notebooks doing (1) - which I guess probably makes up the bulk of people currently scoring 0.86 \n\nBut I haven't see anyone publicly doing any of (2),(3),(4)\n\nMy opinion is that Tong has the right idea -  training the model to replicate optimal COTs that fit w/in the token budget is better than using distilled data or RL - so that what I've been focusing on\n\nIf someone could solve a single substitution cipher w/in the token budget they could achieve 15-20% on cryptarithm problems - which is 2-3% and would get them to 0.87-8.89 depending on their starting score. If you see people starting to hit those scores thats my guess on what they are doing",
+        "replies": [
+          {
+            "author": {
+              "displayName": "Taha",
+              "id": 33728306,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/33728306-kg.png?t=2026-04-25-07-15-05",
+              "tier": "CONTRIBUTOR",
+              "url": "/tahaalam2009"
+            },
+            "authorType": "TOPIC",
+            "competitionRanking": 314,
+            "content": "<p>i have been doing all of them you mentioned</p>",
+            "feedbackTrackingData": {},
+            "id": 3445635,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-04-20T08:37:46.233Z",
+            "rawMarkdown": "i have been doing all of them you mentioned",
+            "replies": [
+              {
+                "author": {
+                  "displayName": "MAJ0RT0M",
+                  "id": 2071133,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                  "tier": "CONTRIBUTOR",
+                  "url": "/maj0rt0m"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 1268,
+                "content": "<p>Were you able to benchmark these methods against eachother?</p>\n<p>I'm surprised you haven't seen good results producing a COT for cryptarithm</p>\n<p>How does training on tokens compare to e2e fine tuning?</p>",
+                "feedbackTrackingData": {},
+                "id": 3445895,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-20T16:39:04.250Z",
+                "rawMarkdown": "Were you able to benchmark these methods against eachother?\n\nI'm surprised you haven't seen good results producing a COT for cryptarithm\n\nHow does training on tokens compare to e2e fine tuning?",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "MAJ0RT0M",
+                    "id": 2071133,
+                    "performanceTier": "CONTRIBUTOR",
+                    "profileUrl": "/maj0rt0m",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                    "tier": "CONTRIBUTOR",
+                    "url": "/maj0rt0m",
+                    "userId": 2071133,
+                    "userName": "maj0rt0m"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true
+                }
+              },
+              {
+                "author": {
+                  "displayName": "Taha",
+                  "id": 33728306,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/33728306-kg.png?t=2026-04-25-07-15-05",
+                  "tier": "CONTRIBUTOR",
+                  "url": "/tahaalam2009"
+                },
+                "authorType": "TOPIC",
+                "competitionRanking": 314,
+                "content": "<p>I'll share the results tommorow expecting 0.87</p>",
+                "feedbackTrackingData": {},
+                "id": 3445905,
+                "isCollapsed": true,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-20T17:06:00.217Z",
+                "rawMarkdown": "I'll share the results tommorow expecting 0.87",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "Taha",
+                    "id": 33728306,
+                    "performanceTier": "CONTRIBUTOR",
+                    "profileUrl": "/tahaalam2009",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/33728306-kg.png?t=2026-04-25-07-15-05",
+                    "tier": "CONTRIBUTOR",
+                    "url": "/tahaalam2009",
+                    "userId": 33728306,
+                    "userName": "tahaalam2009"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true,
+                  "totalUpvotes": 2,
+                  "totalVotes": 2
+                }
+              },
+              {
+                "author": {
+                  "displayName": "Chew Kok Wah",
+                  "id": 3967558,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                  "tier": "EXPERT",
+                  "url": "/chewkokwahibrainai"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 62,
+                "content": "<p>Do you see any improvement from method above as well as your synthetic CoT? </p>",
+                "feedbackTrackingData": {},
+                "id": 3446296,
+                "isCollapsed": true,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-21T11:17:54.180Z",
+                "rawMarkdown": "Do you see any improvement from method above as well as your synthetic CoT? ",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "Chew Kok Wah",
+                    "id": 3967558,
+                    "performanceTier": "EXPERT",
+                    "profileUrl": "/chewkokwahibrainai",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                    "tier": "EXPERT",
+                    "url": "/chewkokwahibrainai",
+                    "userId": 3967558,
+                    "userName": "chewkokwahibrainai"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true
+                }
+              },
+              {
+                "author": {
+                  "displayName": "Taha",
+                  "id": 33728306,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/33728306-kg.png?t=2026-04-25-07-15-05",
+                  "tier": "CONTRIBUTOR",
+                  "url": "/tahaalam2009"
+                },
+                "authorType": "TOPIC",
+                "competitionRanking": 314,
+                "content": "<p>No, no improvement at all 0.84~ and submitting the my synthetic attempt one <img src=\"https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F33728306%2F7daf180438f359558ea186e19aeb57d8%2FScreenshot%202026-04-21%20at%204.51.23PM.png?generation=1776770498600507&amp;alt=media\" alt=\"\"></p>",
+                "feedbackTrackingData": {},
+                "id": 3446299,
+                "isCollapsed": true,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-21T11:21:43.537Z",
+                "rawMarkdown": "No, no improvement at all 0.84~ and submitting the my synthetic attempt one ![](https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F33728306%2F7daf180438f359558ea186e19aeb57d8%2FScreenshot%202026-04-21%20at%204.51.23PM.png?generation=1776770498600507&alt=media)",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "Taha",
+                    "id": 33728306,
+                    "performanceTier": "CONTRIBUTOR",
+                    "profileUrl": "/tahaalam2009",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/33728306-kg.png?t=2026-04-25-07-15-05",
+                    "tier": "CONTRIBUTOR",
+                    "url": "/tahaalam2009",
+                    "userId": 33728306,
+                    "userName": "tahaalam2009"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true,
+                  "totalUpvotes": 1,
+                  "totalVotes": 1
+                }
+              }
+            ],
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "Taha",
+                "id": 33728306,
+                "performanceTier": "CONTRIBUTOR",
+                "profileUrl": "/tahaalam2009",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/33728306-kg.png?t=2026-04-25-07-15-05",
+                "tier": "CONTRIBUTOR",
+                "url": "/tahaalam2009",
+                "userId": 33728306,
+                "userName": "tahaalam2009"
+              }
+            },
+            "votes": {
+              "canUpvote": true
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "MAJ0RT0M",
+            "id": 2071133,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/maj0rt0m",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+            "tier": "CONTRIBUTOR",
+            "url": "/maj0rt0m",
+            "userId": 2071133,
+            "userName": "maj0rt0m"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 6,
+          "totalVotes": 6
+        }
+      },
+      {
+        "author": {
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "url": "/"
+        },
+        "authorType": "COMMENT",
+        "canDelete": true,
+        "feedbackTrackingData": {},
+        "id": 3445449,
+        "isDeleted": true,
+        "isThankYou": false,
+        "isUserAuthor": true,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-19T19:14:30.860Z",
+        "rawMarkdown": "",
+        "votes": {}
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "Taha",
+        "id": 33728306,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/33728306-kg.png?t=2026-04-25-07-15-05",
+        "tier": "CONTRIBUTOR",
+        "url": "/tahaalam2009"
+      },
+      "authorType": "TOPIC",
+      "competitionRanking": 314,
+      "content": "<p>I’ve been experimenting quite a bit with the Nemotron reasoning setup over the past few days, and I’m starting to feel like many of us might be hitting a similar ceiling around ~0.86.</p>\n<p>From what I can tell, a lot of current approaches seem to fall into two buckets:</p>\n<ul>\n<li>building directly on top of strong public notebooks (which already reach ~0.86), or</li>\n<li>trying to reproduce / adapt methods like <a href=\"https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/689915\" target=\"_blank\">\nTong Hui Kang’s</a> pipeline</li>\n</ul>\n<p>I’ve personally tried a mix of things on top of that:</p>\n<ul>\n<li>different LoRA variants (including DoRA)</li>\n<li>some knowledge distillation setups</li>\n<li>hybrid synthetic + distilled data</li>\n<li>prompt / formatting tweaks</li>\n</ul>\n<p>But so far, nothing has meaningfully pushed me past that same range.</p>\n<p>Right now I even have a long run going (~14 hours in), trying a slightly different data pipeline, but I’m not super confident it’ll break through.</p>\n<p>So I wanted to ask:\nDo you think this plateau is mostly coming from model capacity (LoRA rank limits), data quality, or something else entirely?</p>\n<p>Also curious if anyone has seen actual gains from:</p>\n<ul>\n<li>distillation-heavy approaches</li>\n<li>more structured synthetic CoT pipelines</li>\n<li>or anything outside the usual playbook</li>\n</ul>\n<p>If I do manage to get something working beyond this range, I’ll update this thread with details.</p>\n<p>Would be great to hear what others are seeing as well.</p>\n<p>It feels like people have stopped being creative after Tong Hui Kang’s discussion most are either reproducing it or fixing small issues, and nothing really new is emerging. I do agree that his method is key, and I’m grateful for the breakthrough.</p>\n<p>Also, Kaggle’s 30-hour quota seems to be another limiting factor for experimentation. I’ve personally been working around this using Tinker and Modal.</p>\n<p>Just to be clear, no criticism intended toward anyone this is just an observation based on what I’ve been seeing.</p>",
+      "feedbackTrackingData": {},
+      "id": 3444925,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-04-18T17:38:39.807Z",
+      "rawMarkdown": "I’ve been experimenting quite a bit with the Nemotron reasoning setup over the past few days, and I’m starting to feel like many of us might be hitting a similar ceiling around ~0.86.\n\nFrom what I can tell, a lot of current approaches seem to fall into two buckets:\n\n* building directly on top of strong public notebooks (which already reach ~0.86), or\n* trying to reproduce / adapt methods like [\nTong Hui Kang’s](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/689915) pipeline\n\nI’ve personally tried a mix of things on top of that:\n\n* different LoRA variants (including DoRA)\n* some knowledge distillation setups\n* hybrid synthetic + distilled data\n* prompt / formatting tweaks\n\nBut so far, nothing has meaningfully pushed me past that same range.\n\nRight now I even have a long run going (~14 hours in), trying a slightly different data pipeline, but I’m not super confident it’ll break through.\n\nSo I wanted to ask:\nDo you think this plateau is mostly coming from model capacity (LoRA rank limits), data quality, or something else entirely?\n\nAlso curious if anyone has seen actual gains from:\n\n* distillation-heavy approaches\n* more structured synthetic CoT pipelines\n* or anything outside the usual playbook\n\nIf I do manage to get something working beyond this range, I’ll update this thread with details.\n\nWould be great to hear what others are seeing as well.\n\nIt feels like people have stopped being creative after Tong Hui Kang’s discussion most are either reproducing it or fixing small issues, and nothing really new is emerging. I do agree that his method is key, and I’m grateful for the breakthrough.\n\nAlso, Kaggle’s 30-hour quota seems to be another limiting factor for experimentation. I’ve personally been working around this using Tinker and Modal.\n\nJust to be clear, no criticism intended toward anyone this is just an observation based on what I’ve been seeing.",
+      "teamUpInfo": {
+        "intro": "",
+        "teamLeader": {
+          "displayName": "Taha",
+          "id": 33728306,
+          "performanceTier": "CONTRIBUTOR",
+          "profileUrl": "/tahaalam2009",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/33728306-kg.png?t=2026-04-25-07-15-05",
+          "tier": "CONTRIBUTOR",
+          "url": "/tahaalam2009",
+          "userId": 33728306,
+          "userName": "tahaalam2009"
+        }
+      },
+      "votes": {
+        "canUpvote": true,
+        "totalUpvotes": 10,
+        "totalVotes": 3
+      }
+    },
+    "firstMessageId": 3444925,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 692950,
+    "name": "Is ~0.86 a current ceiling for most approaches? ",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-04-18T17:38:39.808175200Z",
+    "totalMessages": 7,
+    "totalVotes": 3,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/692950"
+  }
+}

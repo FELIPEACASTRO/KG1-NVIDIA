@@ -1,0 +1,142 @@
+{
+  "forumTopic": {
+    "authorId": 12819967,
+    "authorPerformanceTier": "CONTRIBUTOR",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "12819967-kg.jpg?t=2025-11-25-17-51-37",
+    "authorUserDisplayName": "Sai Srikanth",
+    "authorUserName": "twinklesai",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "tiffanyseah",
+          "id": 9655925,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/9655925-kg.jpg",
+          "tier": "CONTRIBUTOR",
+          "url": "/tiffanyseah"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 2354,
+        "content": "<p>you have to include the utility scripts in your inputs (see the image below)</p>\n<p>check this \"https://www.kaggle.com/code/ryanholbrook/nvidia-utility-script\"</p>\n<p><img src=\"https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F9655925%2F6f9a6ceca09d98c89ceaf979a0a6130c%2FScreenshot%202026-03-25%20133239.jpg?generation=1774416774640783&amp;alt=media\" alt=\"\"></p>",
+        "feedbackTrackingData": {},
+        "id": 3428227,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-25T05:32:02.200Z",
+        "rawMarkdown": "you have to include the utility scripts in your inputs (see the image below)\n\ncheck this \"https://www.kaggle.com/code/ryanholbrook/nvidia-utility-script\"\n\n![](https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F9655925%2F6f9a6ceca09d98c89ceaf979a0a6130c%2FScreenshot%202026-03-25%20133239.jpg?generation=1774416774640783&alt=media)",
+        "replies": [
+          {
+            "author": {
+              "displayName": "Sai Srikanth",
+              "id": 12819967,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/12819967-kg.jpg?t=2025-11-25-17-51-37",
+              "tier": "CONTRIBUTOR",
+              "url": "/twinklesai"
+            },
+            "authorType": "TOPIC",
+            "content": "<p>Yeah checked it, It is working.</p>",
+            "feedbackTrackingData": {},
+            "id": 3428319,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-03-25T09:09:03.253Z",
+            "rawMarkdown": "Yeah checked it, It is working.",
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "Sai Srikanth",
+                "id": 12819967,
+                "performanceTier": "CONTRIBUTOR",
+                "profileUrl": "/twinklesai",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/12819967-kg.jpg?t=2025-11-25-17-51-37",
+                "tier": "CONTRIBUTOR",
+                "url": "/twinklesai",
+                "userId": 12819967,
+                "userName": "twinklesai"
+              }
+            },
+            "votes": {
+              "canUpvote": true
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "tiffanyseah",
+            "id": 9655925,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/tiffanyseah",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/9655925-kg.jpg",
+            "tier": "CONTRIBUTOR",
+            "url": "/tiffanyseah",
+            "userId": 9655925,
+            "userName": "tiffanyseah"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 1,
+          "totalVotes": 1
+        }
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "Sai Srikanth",
+        "id": 12819967,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/12819967-kg.jpg?t=2025-11-25-17-51-37",
+        "tier": "CONTRIBUTOR",
+        "url": "/twinklesai"
+      },
+      "authorType": "TOPIC",
+      "content": "<p>Hello, I am facing the below import error while loading and running the Nemotron Nano model.\nImportError: mamba-ssm is required by the Mamba model but cannot be imported</p>\n<p>Can anyone help me with this, I am using RTX6000 GPU and the below code.</p>\n<p>import torch\nimport torch.nn.functional as F\nimport kagglehub\nfrom datasets import Dataset\nfrom transformers import AutoModelForCausalLM, AutoTokenizer, TrainingArguments\nfrom peft import LoraConfig, get_peft_model, TaskType\nfrom trl import SFTTrainer, SFTConfig</p>\n<p>MODEL_PATH = kagglehub.model_download(\"metric/nemotron-3-nano-30b-a3b-bf16/transformers/default\")</p>\n<p>model = AutoModelForCausalLM.from_pretrained(\n    MODEL_PATH, \n    device_map=\"auto\", \n    trust_remote_code=True, \n    dtype=torch.bfloat16,\n    use_mamba = False\n)</p>",
+      "feedbackTrackingData": {},
+      "id": 3427507,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-03-24T07:04:32.327Z",
+      "rawMarkdown": "Hello, I am facing the below import error while loading and running the Nemotron Nano model.\nImportError: mamba-ssm is required by the Mamba model but cannot be imported\n\nCan anyone help me with this, I am using RTX6000 GPU and the below code.\n\n\nimport torch\nimport torch.nn.functional as F\nimport kagglehub\nfrom datasets import Dataset\nfrom transformers import AutoModelForCausalLM, AutoTokenizer, TrainingArguments\nfrom peft import LoraConfig, get_peft_model, TaskType\nfrom trl import SFTTrainer, SFTConfig\n\nMODEL_PATH = kagglehub.model_download(\"metric/nemotron-3-nano-30b-a3b-bf16/transformers/default\")\n\nmodel = AutoModelForCausalLM.from_pretrained(\n    MODEL_PATH, \n    device_map=\"auto\", \n    trust_remote_code=True, \n    dtype=torch.bfloat16,\n    use_mamba = False\n)",
+      "teamUpInfo": {
+        "intro": "",
+        "teamLeader": {
+          "displayName": "Sai Srikanth",
+          "id": 12819967,
+          "performanceTier": "CONTRIBUTOR",
+          "profileUrl": "/twinklesai",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/12819967-kg.jpg?t=2025-11-25-17-51-37",
+          "tier": "CONTRIBUTOR",
+          "url": "/twinklesai",
+          "userId": 12819967,
+          "userName": "twinklesai"
+        }
+      },
+      "votes": {
+        "canUpvote": true,
+        "totalUpvotes": 4,
+        "totalVotes": 4
+      }
+    },
+    "firstMessageId": 3427507,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 684244,
+    "name": "ModuleNotFound Error for mamba-ssm",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-03-24T07:04:32.327182900Z",
+    "totalMessages": 2,
+    "totalVotes": 4,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/684244"
+  }
+}

@@ -1,0 +1,150 @@
+{
+  "forumTopic": {
+    "authorId": 30605618,
+    "authorPerformanceTier": "CONTRIBUTOR",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "30605618-kg.jpeg?t=2026-03-21-00-01-52",
+    "authorUserDisplayName": "Dr. Ahmed M Abdelsalam",
+    "authorUserName": "drahmedmabdelsalam33",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "lucian kucera",
+          "id": 17819385,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "CONTRIBUTOR",
+          "url": "/luciankucera"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 1662,
+        "content": "<p>Bruh there is billions of notebooks u can already fork.</p>",
+        "feedbackTrackingData": {},
+        "id": 3431266,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-29T19:40:15.310Z",
+        "rawMarkdown": "Bruh there is billions of notebooks u can already fork.",
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "lucian kucera",
+            "id": 17819385,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/luciankucera",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+            "tier": "CONTRIBUTOR",
+            "url": "/luciankucera",
+            "userId": 17819385,
+            "userName": "luciankucera"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalVotes": -3
+        }
+      },
+      {
+        "author": {
+          "displayName": "Mohamed Amr992",
+          "id": 20851032,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/20851032-kg.png?t=2026-05-06-14-39-14",
+          "tier": "CONTRIBUTOR",
+          "url": "/mohamedamr992"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 160,
+        "content": "<p>use this notebook \"https://www.kaggle.com/code/mohamedamr992/easy-loading-of-nemotron-3\"</p>",
+        "feedbackTrackingData": {},
+        "id": 3431958,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-30T22:42:58.663Z",
+        "rawMarkdown": "use this notebook \"https://www.kaggle.com/code/mohamedamr992/easy-loading-of-nemotron-3\"",
+        "reactions": [
+          {
+            "emoji": "LOVE",
+            "featuredUserNames": [
+              "georgeyao13",
+              "drahmedmabdelsalam33"
+            ],
+            "userCount": 2
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Mohamed Amr992",
+            "id": 20851032,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/mohamedamr992",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/20851032-kg.png?t=2026-05-06-14-39-14",
+            "tier": "CONTRIBUTOR",
+            "url": "/mohamedamr992",
+            "userId": 20851032,
+            "userName": "mohamedamr992"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "Dr. Ahmed M Abdelsalam",
+        "id": 30605618,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/30605618-kg.jpeg?t=2026-03-21-00-01-52",
+        "tier": "CONTRIBUTOR",
+        "url": "/drahmedmabdelsalam33"
+      },
+      "authorType": "TOPIC",
+      "competitionRanking": 2733,
+      "content": "<p>Hi everyone,</p>\n<p>I'm trying to load the\nNVIDIA Nemotron-3-Nano-30B model on Kaggle using trust_remote_code=True, but I keep running into the following error:</p>\n<p>*ImportError: mamba-ssm is required by the Mamba model but cannot be imported\n*\nWhat I’ve already tried:</p>\n<p>Installing mamba-ssm and causal-conv1d via pip\nUsing --no-build-isolation\nInstalling into /kaggle/working and updating PYTHONPATH\nRestarting the session after installation</p>\n<p>However, the issue persists. It seems that Kaggle’s environment may not fully support building these dependencies (possibly due to Triton/CUDA constraints).</p>\n<p><strong>My questions:</strong></p>\n<p>Is there a reliable way to run Nemotron models on Kaggle without hitting mamba_ssm errors?\nIs there a workaround or alternative version of the model that does not depend on Mamba?\nHas anyone successfully trained a LoRA adapter for this model on Kaggle?</p>\n<p>Any help or shared experience would be greatly appreciated 🙏\n<img src=\"https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F30605618%2F338960e4a777e64116485fb965ca820e%2FScreenshot%202026-03-29%20190955.png?generation=1774804217520257&amp;alt=media\" alt=\"\"></p>",
+      "feedbackTrackingData": {},
+      "id": 3431210,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-03-29T17:10:23.917Z",
+      "rawMarkdown": "Hi everyone,\n\nI'm trying to load the\nNVIDIA Nemotron-3-Nano-30B model on Kaggle using trust_remote_code=True, but I keep running into the following error:\n\n*ImportError: mamba-ssm is required by the Mamba model but cannot be imported\n*\nWhat I’ve already tried:\n\nInstalling mamba-ssm and causal-conv1d via pip\nUsing --no-build-isolation\nInstalling into /kaggle/working and updating PYTHONPATH\nRestarting the session after installation\n\nHowever, the issue persists. It seems that Kaggle’s environment may not fully support building these dependencies (possibly due to Triton/CUDA constraints).\n\n**My questions:**\n\nIs there a reliable way to run Nemotron models on Kaggle without hitting mamba_ssm errors?\nIs there a workaround or alternative version of the model that does not depend on Mamba?\nHas anyone successfully trained a LoRA adapter for this model on Kaggle?\n\nAny help or shared experience would be greatly appreciated 🙏\n![](https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F30605618%2F338960e4a777e64116485fb965ca820e%2FScreenshot%202026-03-29%20190955.png?generation=1774804217520257&alt=media)",
+      "teamUpInfo": {
+        "intro": "",
+        "teamLeader": {
+          "displayName": "Dr. Ahmed M Abdelsalam",
+          "id": 30605618,
+          "performanceTier": "CONTRIBUTOR",
+          "profileUrl": "/drahmedmabdelsalam33",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/30605618-kg.jpeg?t=2026-03-21-00-01-52",
+          "tier": "CONTRIBUTOR",
+          "url": "/drahmedmabdelsalam33",
+          "userId": 30605618,
+          "userName": "drahmedmabdelsalam33"
+        }
+      },
+      "votes": {
+        "canUpvote": true,
+        "totalVotes": -5
+      }
+    },
+    "firstMessageId": 3431210,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 685922,
+    "name": "Issue running NVIDIA Nemotron model on Kaggle (mamba_ssm import error)",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-03-29T17:10:23.916954800Z",
+    "totalMessages": 2,
+    "totalVotes": -5,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/685922"
+  }
+}

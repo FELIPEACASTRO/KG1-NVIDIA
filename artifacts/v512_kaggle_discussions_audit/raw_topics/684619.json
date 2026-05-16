@@ -1,0 +1,315 @@
+{
+  "forumTopic": {
+    "authorId": 3098761,
+    "authorPerformanceTier": "EXPERT",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "3098761-kg.png?t=2025-02-13-22-27-27",
+    "authorUserDisplayName": "Javier Hernández",
+    "authorUserName": "javihm77",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "WWWWZZ",
+          "id": 11950698,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "EXPERT",
+          "url": "/wwwwzz"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 447,
+        "content": "<p>you need a vpn</p>",
+        "feedbackTrackingData": {},
+        "id": 3429593,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-26T23:52:45.790Z",
+        "rawMarkdown": "you need a vpn",
+        "reactions": [
+          {
+            "emoji": "LOVE",
+            "featuredUserNames": [
+              "javihm77"
+            ],
+            "userCount": 1
+          }
+        ],
+        "replies": [
+          {
+            "author": {
+              "displayName": "Javier Hernández",
+              "id": 3098761,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/3098761-kg.png?t=2025-02-13-22-27-27",
+              "tier": "EXPERT",
+              "url": "/javihm77"
+            },
+            "authorType": "TOPIC",
+            "competitionRanking": 664,
+            "content": "<p>I'm laughing a bit, I tried and indeed it works 😄\nthanks for the reminder of the tip</p>",
+            "feedbackTrackingData": {},
+            "id": 3429669,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-03-27T04:06:57.450Z",
+            "rawMarkdown": "I'm laughing a bit, I tried and indeed it works 😄\nthanks for the reminder of the tip",
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "Javier Hernández",
+                "id": 3098761,
+                "performanceTier": "EXPERT",
+                "profileUrl": "/javihm77",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/3098761-kg.png?t=2025-02-13-22-27-27",
+                "tier": "EXPERT",
+                "url": "/javihm77",
+                "userId": 3098761,
+                "userName": "javihm77"
+              }
+            },
+            "votes": {
+              "canUpvote": true
+            }
+          },
+          {
+            "author": {
+              "displayName": "Javier Hernández",
+              "id": 3098761,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/3098761-kg.png?t=2025-02-13-22-27-27",
+              "tier": "EXPERT",
+              "url": "/javihm77"
+            },
+            "authorType": "TOPIC",
+            "competitionRanking": 664,
+            "content": "<p>At the end the VPN wasn't enough, Google is requesting me a government ID of the USA\n<img src=\"https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F3098761%2F8a78614a869303dc5658d8e9cbc1fed5%2FCaptura%20de%20pantalla%202026-04-02%20a%20la(s)%209.34.13p.m..png?generation=1775187475202200&amp;alt=media\" alt=\"\"></p>",
+            "feedbackTrackingData": {},
+            "id": 3434586,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-04-03T03:38:00.350Z",
+            "rawMarkdown": "At the end the VPN wasn't enough, Google is requesting me a government ID of the USA\n![](https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F3098761%2F8a78614a869303dc5658d8e9cbc1fed5%2FCaptura%20de%20pantalla%202026-04-02%20a%20la(s)%209.34.13p.m..png?generation=1775187475202200&alt=media)",
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "Javier Hernández",
+                "id": 3098761,
+                "performanceTier": "EXPERT",
+                "profileUrl": "/javihm77",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/3098761-kg.png?t=2025-02-13-22-27-27",
+                "tier": "EXPERT",
+                "url": "/javihm77",
+                "userId": 3098761,
+                "userName": "javihm77"
+              }
+            },
+            "votes": {
+              "canUpvote": true,
+              "totalUpvotes": 1,
+              "totalVotes": 1
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "WWWWZZ",
+            "id": 11950698,
+            "performanceTier": "EXPERT",
+            "profileUrl": "/wwwwzz",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+            "tier": "EXPERT",
+            "url": "/wwwwzz",
+            "userId": 11950698,
+            "userName": "wwwwzz"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 1,
+          "totalVotes": 1
+        }
+      },
+      {
+        "author": {
+          "displayName": "Komil Parmar",
+          "id": 11351811,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/11351811-kg.jpg?t=2025-07-02-06-16-19",
+          "tier": "EXPERT",
+          "url": "/komilparmar"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 963,
+        "content": "<p>There are many other sites like vast, lambda, lightningai and more.</p>",
+        "feedbackTrackingData": {},
+        "id": 3428987,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-26T06:59:29.777Z",
+        "rawMarkdown": "There are many other sites like vast, lambda, lightningai and more.",
+        "replies": [
+          {
+            "author": {
+              "displayName": "Javier Hernández",
+              "id": 3098761,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/3098761-kg.png?t=2025-02-13-22-27-27",
+              "tier": "EXPERT",
+              "url": "/javihm77"
+            },
+            "authorType": "TOPIC",
+            "competitionRanking": 664,
+            "content": "<p><a href=\"https://www.kaggle.com/komilparmar\" target=\"_blank\">@komilparmar</a> Which one do you recommend me? \nSorry to ask a beginner question, I don't understand how do you run the Kaggle environment using the GPU RTX Pro 6000 </p>",
+            "feedbackTrackingData": {},
+            "id": 3429577,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-03-26T23:06:43.843Z",
+            "rawMarkdown": "@komilparmar Which one do you recommend me? \nSorry to ask a beginner question, I don't understand how do you run the Kaggle environment using the GPU RTX Pro 6000 ",
+            "replies": [
+              {
+                "author": {
+                  "displayName": "AI-Cat",
+                  "id": 7279405,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/7279405-kg.png?t=2025-06-25-12-03-09",
+                  "tier": "MASTER",
+                  "url": "/konstantinboyko"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 853,
+                "content": "<p>The best place is where you can install the Dockers yourself. For this competition, you'll need a Docker 168. You can watch it here.</p>\n<p><a href=\"https://github.com/Kaggle/docker-python/releases/tag/v168-GPU-9bc2d69e4dc6caba1c4e45952d4bec429911b514ab22c2ab1bff8dccfa8a3063\" target=\"_blank\">https://github.com/Kaggle/docker-python/releases/tag/v168-GPU-9bc2d69e4dc6caba1c4e45952d4bec429911b514ab22c2ab1bff8dccfa8a3063</a></p>",
+                "feedbackTrackingData": {},
+                "id": 3448084,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-24T15:54:46.113Z",
+                "rawMarkdown": "The best place is where you can install the Dockers yourself. For this competition, you'll need a Docker 168. You can watch it here.\n\nhttps://github.com/Kaggle/docker-python/releases/tag/v168-GPU-9bc2d69e4dc6caba1c4e45952d4bec429911b514ab22c2ab1bff8dccfa8a3063\n",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "AI-Cat",
+                    "id": 7279405,
+                    "performanceTier": "MASTER",
+                    "profileUrl": "/konstantinboyko",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/7279405-kg.png?t=2025-06-25-12-03-09",
+                    "tier": "MASTER",
+                    "url": "/konstantinboyko",
+                    "userId": 7279405,
+                    "userName": "konstantinboyko"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true,
+                  "totalUpvotes": 3,
+                  "totalVotes": 3
+                }
+              }
+            ],
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "Javier Hernández",
+                "id": 3098761,
+                "performanceTier": "EXPERT",
+                "profileUrl": "/javihm77",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/3098761-kg.png?t=2025-02-13-22-27-27",
+                "tier": "EXPERT",
+                "url": "/javihm77",
+                "userId": 3098761,
+                "userName": "javihm77"
+              }
+            },
+            "votes": {
+              "canUpvote": true
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Komil Parmar",
+            "id": 11351811,
+            "performanceTier": "EXPERT",
+            "profileUrl": "/komilparmar",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/11351811-kg.jpg?t=2025-07-02-06-16-19",
+            "tier": "EXPERT",
+            "url": "/komilparmar",
+            "userId": 11351811,
+            "userName": "komilparmar"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 1,
+          "totalVotes": 1
+        }
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "Javier Hernández",
+        "id": 3098761,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/3098761-kg.png?t=2025-02-13-22-27-27",
+        "tier": "EXPERT",
+        "url": "/javihm77"
+      },
+      "authorType": "TOPIC",
+      "competitionRanking": 664,
+      "content": "<p>What can I do if google colab pro says that is not available in my country? \n<a href=\"https://www.kaggle.com/ryanholbrook\" target=\"_blank\">@ryanholbrook</a> </p>\n<p><img src=\"https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F3098761%2F89daff6cddcacd53f984aa4e278367bd%2FCaptura%20de%20pantalla%202026-03-25%20a%20la(s)%2010.22.06a.m..png?generation=1774456023544435&amp;alt=media\" alt=\"\"></p>",
+      "feedbackTrackingData": {},
+      "id": 3428550,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-03-25T16:27:14.453Z",
+      "rawMarkdown": "What can I do if google colab pro says that is not available in my country? \n@ryanholbrook \n\n![](https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F3098761%2F89daff6cddcacd53f984aa4e278367bd%2FCaptura%20de%20pantalla%202026-03-25%20a%20la(s)%2010.22.06a.m..png?generation=1774456023544435&alt=media)",
+      "teamUpInfo": {
+        "intro": "",
+        "teamLeader": {
+          "displayName": "Javier Hernández",
+          "id": 3098761,
+          "performanceTier": "EXPERT",
+          "profileUrl": "/javihm77",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/3098761-kg.png?t=2025-02-13-22-27-27",
+          "tier": "EXPERT",
+          "url": "/javihm77",
+          "userId": 3098761,
+          "userName": "javihm77"
+        }
+      },
+      "votes": {
+        "canUpvote": true,
+        "totalUpvotes": 2,
+        "totalVotes": 1
+      }
+    },
+    "firstMessageId": 3428550,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 684619,
+    "name": "Google Colab Pro not available in my country",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-03-25T16:27:14.451728400Z",
+    "totalMessages": 6,
+    "totalVotes": 1,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/684619"
+  }
+}

@@ -1,0 +1,144 @@
+{
+  "forumTopic": {
+    "authorId": 145164,
+    "authorPerformanceTier": "EXPERT",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "145164-kg.JPG?t=2025-08-14-07-51-30",
+    "authorUserDisplayName": "Dennis",
+    "authorUserName": "dennisfong",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "Ravi Ramakrishnan",
+          "id": 8273630,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/8273630-kg.JPG?t=2024-03-26-14-51-52",
+          "tier": "GRANDMASTER",
+          "url": "/ravi20076"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 7,
+        "content": "<p>What if one removes these words - do they add value to the problem at hand <a href=\"https://www.kaggle.com/dennisfong\" target=\"_blank\">@dennisfong</a>? I think it does not matter if the wonderland belongs to a name / PII. </p>",
+        "feedbackTrackingData": {},
+        "id": 3425709,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-21T06:34:11.350Z",
+        "rawMarkdown": "What if one removes these words - do they add value to the problem at hand @dennisfong? I think it does not matter if the wonderland belongs to a name / PII. ",
+        "replies": [
+          {
+            "author": {
+              "displayName": "Dennis",
+              "id": 145164,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/145164-kg.JPG?t=2025-08-14-07-51-30",
+              "tier": "EXPERT",
+              "url": "/dennisfong"
+            },
+            "authorType": "TOPIC",
+            "competitionRanking": 1848,
+            "content": "<p><a href=\"https://www.kaggle.com/ravi20076\" target=\"_blank\">@ravi20076</a> </p>\n<p>I am thinking template overfit.</p>\n<p>In addition, if the wonderland is something like \"when you see plus sign just concat wonderland\" but the examples are really addition. Do we need to handle those extreme cases?</p>",
+            "feedbackTrackingData": {},
+            "id": 3427354,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-03-24T01:48:35.233Z",
+            "rawMarkdown": "@ravi20076 \n\nI am thinking template overfit.\n\nIn addition, if the wonderland is something like \"when you see plus sign just concat wonderland\" but the examples are really addition. Do we need to handle those extreme cases?",
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "Dennis",
+                "id": 145164,
+                "performanceTier": "EXPERT",
+                "profileUrl": "/dennisfong",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/145164-kg.JPG?t=2025-08-14-07-51-30",
+                "tier": "EXPERT",
+                "url": "/dennisfong",
+                "userId": 145164,
+                "userName": "dennisfong"
+              }
+            },
+            "votes": {
+              "canUpvote": true,
+              "totalUpvotes": 1,
+              "totalVotes": 1
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Kishan Vavdara",
+            "id": 12951282,
+            "performanceTier": "MASTER",
+            "profileUrl": "/kishanvavdara",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/12951282-kg.jpeg",
+            "tier": "MASTER",
+            "url": "/kishanvavdara",
+            "userId": 12951282,
+            "userName": "kishanvavdara"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "Dennis",
+        "id": 145164,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/145164-kg.JPG?t=2025-08-14-07-51-30",
+        "tier": "EXPERT",
+        "url": "/dennisfong"
+      },
+      "authorType": "TOPIC",
+      "competitionRanking": 1848,
+      "content": "<p>(1)\nIn Alice's Wonderland, a secret unit conversion is applied to measurements. For example:\n22.27 m becomes 16.31</p>\n<p>1a) can I expect \"In Alice's Wonderland, a secret unit conversion is applied to measurements. For example:\" must appear in all public and private datasets for the same type of unit conversion question?</p>\n<p>1b) can I expect the example will have varied \"unit\", or the unit is the same (must be \"m\") in all public and private datasets for the same type of unit conversion question\nsomething like \n22.27 m becomes 16.31\n22.27 km becomes 163.1</p>\n<p>============</p>\n<p>(2) In Alice's Wonderland, the gravitational constant has been secretly changed. Here are some example observations:\nFor t = 1.58s, distance = 8.84 m</p>\n<p>2a)can I expect \"In Alice's Wonderland, the gravitational constant has been secretly changed. Here are some example observations:\" must appear in all public and private datasets for the same type of gravitational constant question?</p>\n<p>2b) can I expect \"d = 0.5<em>g</em>t^2\" must appear in all public and private datasets for the same type of gravitational constant question?</p>\n<p>2c) apart from gravitational constant , will other constant (Kinematic Regression) be examined in all public and private datasets for the same type?</p>\n<p>2d) the obeservations in the training dataset is like\nFor t = 1.37s, distance = 14.92 m\nFor t = 4.27s, distance = 144.96 m\nCan I expect the t is always in s, and the distance is always m? There will be no Alice Wonderland's special unit like t = 1.37l or t = 1.37t ? distance = 14.92 km , distance = 14.92 p?</p>\n<p>============</p>\n<p>(3) In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions. </p>\n<p>3a) Can I expect there is no other bit's binary numbers apart from 8-bit?</p>\n<p>3b) Can I expect there is no other numbers apart from binary? Will there be 8-bit Hex?</p>\n<p>3c) \"The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions. \" will there be more operations apart from those named?</p>\n<p>============\n(4) In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:\n<code>!*[{ = '\"\"[</code></p>\n<p>4a) Can I expect the examples won't have double (or more) equal sign like \n<code>!*[{ == '\"\"[</code>'\n<code>!*[{ === '\"\"[</code>''</p>\n<p>============\n(5)\nOne general question: </p>\n<p>Will \"Alice's Wonderland\" appear in all prompts? Will there something like no wonderland, Dennis Wonderland, … ?</p>\n<p>This may be a silly question since Nvidia may not want us to overfit the model. However, this is a competition with limited competition time. I want to create a better dataset for the competition. </p>\n<p>Thanks for answering, host 😀</p>",
+      "feedbackTrackingData": {},
+      "id": 3425685,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-03-21T05:37:39.347Z",
+      "rawMarkdown": "(1)\nIn Alice's Wonderland, a secret unit conversion is applied to measurements. For example:\n22.27 m becomes 16.31\n\n1a) can I expect \"In Alice's Wonderland, a secret unit conversion is applied to measurements. For example:\" must appear in all public and private datasets for the same type of unit conversion question?\n\n1b) can I expect the example will have varied \"unit\", or the unit is the same (must be \"m\") in all public and private datasets for the same type of unit conversion question\nsomething like \n22.27 m becomes 16.31\n22.27 km becomes 163.1\n\n============\n\n(2) In Alice's Wonderland, the gravitational constant has been secretly changed. Here are some example observations:\nFor t = 1.58s, distance = 8.84 m\n\n2a)can I expect \"In Alice's Wonderland, the gravitational constant has been secretly changed. Here are some example observations:\" must appear in all public and private datasets for the same type of gravitational constant question?\n\n2b) can I expect \"d = 0.5*g*t^2\" must appear in all public and private datasets for the same type of gravitational constant question?\n\n2c) apart from gravitational constant , will other constant (Kinematic Regression) be examined in all public and private datasets for the same type?\n\n2d) the obeservations in the training dataset is like\nFor t = 1.37s, distance = 14.92 m\nFor t = 4.27s, distance = 144.96 m\nCan I expect the t is always in s, and the distance is always m? There will be no Alice Wonderland's special unit like t = 1.37l or t = 1.37t ? distance = 14.92 km , distance = 14.92 p?\n\n============\n\n(3) In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions. \n\n3a) Can I expect there is no other bit's binary numbers apart from 8-bit?\n\n3b) Can I expect there is no other numbers apart from binary? Will there be 8-bit Hex?\n\n3c) \"The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions. \" will there be more operations apart from those named?\n\n============\n(4) In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:\n`!*[{ = '\"\"[`\n\n4a) Can I expect the examples won't have double (or more) equal sign like \n`!*[{ == '\"\"[`'\n`!*[{ === '\"\"[`''\n\n============\n(5)\nOne general question: \n\nWill \"Alice's Wonderland\" appear in all prompts? Will there something like no wonderland, Dennis Wonderland, ... ?\n\nThis may be a silly question since Nvidia may not want us to overfit the model. However, this is a competition with limited competition time. I want to create a better dataset for the competition. \n\nThanks for answering, host 😀",
+      "teamUpInfo": {
+        "intro": "",
+        "teamLeader": {
+          "displayName": "Dennis",
+          "id": 145164,
+          "performanceTier": "EXPERT",
+          "profileUrl": "/dennisfong",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/145164-kg.JPG?t=2025-08-14-07-51-30",
+          "tier": "EXPERT",
+          "url": "/dennisfong",
+          "userId": 145164,
+          "userName": "dennisfong"
+        }
+      },
+      "votes": {
+        "canUpvote": true,
+        "totalUpvotes": 6,
+        "totalVotes": 6
+      }
+    },
+    "firstMessageId": 3425685,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 683573,
+    "name": "Exactly same \"types\" of the prompts?",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-03-21T05:37:39.348250800Z",
+    "totalMessages": 2,
+    "totalVotes": 6,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/683573"
+  }
+}

@@ -1,0 +1,142 @@
+{
+  "forumTopic": {
+    "authorId": 25818777,
+    "authorPerformanceTier": "MASTER",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "25818777-kg.png?t=2026-04-20-16-49-43",
+    "authorUserDisplayName": "Adarsh Kumar",
+    "authorUserName": "adarsh2626",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "TwangyGarlic449",
+          "id": 25196579,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "CONTRIBUTOR",
+          "url": "/twangygarlic449"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 1712,
+        "content": "<p>In this competition, the submission is a .zip file containing a Lora adapter. This is run by a script made by the hosts, not by the submitter. Thus, there is no use in imposing a run time limit.\nTraining runs used to create this Lora adapter may run for as long as you wish (although scripts run on Kaggle are limited to 12 hours; that's just how the platform is).\nHopefully this helps!</p>",
+        "feedbackTrackingData": {},
+        "id": 3430834,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-28T22:14:31.020Z",
+        "rawMarkdown": "In this competition, the submission is a .zip file containing a Lora adapter. This is run by a script made by the hosts, not by the submitter. Thus, there is no use in imposing a run time limit.\nTraining runs used to create this Lora adapter may run for as long as you wish (although scripts run on Kaggle are limited to 12 hours; that's just how the platform is).\nHopefully this helps!",
+        "replies": [
+          {
+            "author": {
+              "displayName": "Adarsh Kumar",
+              "id": 25818777,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/25818777-kg.png?t=2026-04-20-16-49-43",
+              "tier": "MASTER",
+              "url": "/adarsh2626"
+            },
+            "authorType": "TOPIC",
+            "competitionRanking": 654,
+            "content": "<p>Thank you </p>",
+            "feedbackTrackingData": {},
+            "id": 3430923,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-03-29T02:53:02.963Z",
+            "rawMarkdown": "Thank you ",
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "Muhammad Ibrahim Qasmi",
+                "id": 24946333,
+                "performanceTier": "GRANDMASTER",
+                "profileUrl": "/ibrahimqasimi",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/24946333-kg.jpeg?t=2025-12-22-22-44-57",
+                "tier": "GRANDMASTER",
+                "url": "/ibrahimqasimi",
+                "userId": 24946333,
+                "userName": "ibrahimqasimi"
+              }
+            },
+            "votes": {
+              "canUpvote": true
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "TwangyGarlic449",
+            "id": 25196579,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/twangygarlic449",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+            "tier": "CONTRIBUTOR",
+            "url": "/twangygarlic449",
+            "userId": 25196579,
+            "userName": "twangygarlic449"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 1,
+          "totalVotes": 1
+        }
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "Adarsh Kumar",
+        "id": 25818777,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/25818777-kg.png?t=2026-04-20-16-49-43",
+        "tier": "MASTER",
+        "url": "/adarsh2626"
+      },
+      "authorType": "TOPIC",
+      "competitionRanking": 654,
+      "content": "<p>In this competition it is not specified what is the maximum session time on rtx 6000 pro can we run session for 20 hour straight?</p>",
+      "feedbackTrackingData": {},
+      "id": 3430189,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-03-28T03:24:44.497Z",
+      "rawMarkdown": "In this competition it is not specified what is the maximum session time on rtx 6000 pro can we run session for 20 hour straight?",
+      "teamUpInfo": {
+        "intro": "",
+        "teamLeader": {
+          "displayName": "Muhammad Ibrahim Qasmi",
+          "id": 24946333,
+          "performanceTier": "GRANDMASTER",
+          "profileUrl": "/ibrahimqasimi",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/24946333-kg.jpeg?t=2025-12-22-22-44-57",
+          "tier": "GRANDMASTER",
+          "url": "/ibrahimqasimi",
+          "userId": 24946333,
+          "userName": "ibrahimqasimi"
+        }
+      },
+      "votes": {
+        "canUpvote": true,
+        "totalUpvotes": 2
+      }
+    },
+    "firstMessageId": 3430189,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 685421,
+    "name": "Max session time",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-03-28T03:24:44.495200400Z",
+    "totalMessages": 2,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/685421"
+  }
+}

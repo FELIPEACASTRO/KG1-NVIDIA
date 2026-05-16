@@ -1,0 +1,256 @@
+{
+  "forumTopic": {
+    "authorId": 29434769,
+    "authorPerformanceTier": "CONTRIBUTOR",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "29434769-kg.png?t=2026-03-14-05-23-02",
+    "authorUserDisplayName": "Donald Galliano III",
+    "authorUserName": "donaldgalliano",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "lucian kucera",
+          "id": 17819385,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "CONTRIBUTOR",
+          "url": "/luciankucera"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 1657,
+        "content": "<p>What the hell, you have so many public notebooks, that show u how to do sft. Environment isnt really broken just fork a notebook.</p>",
+        "feedbackTrackingData": {},
+        "id": 3430774,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-28T20:44:35.387Z",
+        "rawMarkdown": "What the hell, you have so many public notebooks, that show u how to do sft. Environment isnt really broken just fork a notebook.\n",
+        "replies": [
+          {
+            "author": {
+              "displayName": "Donald Galliano III",
+              "id": 29434769,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/29434769-kg.png?t=2026-03-14-05-23-02",
+              "tier": "CONTRIBUTOR",
+              "url": "/donaldgalliano"
+            },
+            "authorType": "TOPIC",
+            "competitionRanking": 2312,
+            "content": "<p>I’ve forked and run multiple notebooks. The environment issues with mamba_ssm, causal_conv1d, and ptxas on the RTX 6000 are well-documented across several threads here, including my own post from 9 days ago that got staff acknowledgment. The recent Docker update helped but didn’t fully resolve things (cutlass still missing, mamba_ssm still needs workarounds). My constraint is compute budget, not knowledge. Looking for a partner, not a tutorial.</p>",
+            "feedbackTrackingData": {},
+            "id": 3430797,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-03-28T20:58:29.103Z",
+            "rawMarkdown": "I’ve forked and run multiple notebooks. The environment issues with mamba_ssm, causal_conv1d, and ptxas on the RTX 6000 are well-documented across several threads here, including my own post from 9 days ago that got staff acknowledgment. The recent Docker update helped but didn’t fully resolve things (cutlass still missing, mamba_ssm still needs workarounds). My constraint is compute budget, not knowledge. Looking for a partner, not a tutorial.",
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "Donald Galliano III",
+                "id": 29434769,
+                "performanceTier": "CONTRIBUTOR",
+                "profileUrl": "/donaldgalliano",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/29434769-kg.png?t=2026-03-14-05-23-02",
+                "tier": "CONTRIBUTOR",
+                "url": "/donaldgalliano",
+                "userId": 29434769,
+                "userName": "donaldgalliano"
+              }
+            },
+            "votes": {
+              "canUpvote": true
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "lucian kucera",
+            "id": 17819385,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/luciankucera",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+            "tier": "CONTRIBUTOR",
+            "url": "/luciankucera",
+            "userId": 17819385,
+            "userName": "luciankucera"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalVotes": -1
+        }
+      },
+      {
+        "author": {
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "url": "/"
+        },
+        "authorType": "COMMENT",
+        "canDelete": true,
+        "feedbackTrackingData": {},
+        "id": 3430856,
+        "isDeleted": true,
+        "isThankYou": false,
+        "isUserAuthor": true,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-28T22:59:18.740Z",
+        "rawMarkdown": "",
+        "replies": [
+          {
+            "author": {
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+              "url": "/"
+            },
+            "authorType": "COMMENT",
+            "canDelete": true,
+            "feedbackTrackingData": {},
+            "id": 3430863,
+            "isDeleted": true,
+            "isThankYou": false,
+            "isUserAuthor": true,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-03-28T23:02:48.263Z",
+            "rawMarkdown": "",
+            "votes": {}
+          },
+          {
+            "author": {
+              "displayName": "Donald Galliano III",
+              "id": 29434769,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/29434769-kg.png?t=2026-03-14-05-23-02",
+              "tier": "CONTRIBUTOR",
+              "url": "/donaldgalliano"
+            },
+            "authorType": "TOPIC",
+            "competitionRanking": 2312,
+            "content": "<p>Yes, I have all categories covered including transformations (100% solved). Happy to share details in DM when I get off work tonight!</p>",
+            "feedbackTrackingData": {},
+            "id": 3430870,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-03-28T23:14:53.317Z",
+            "rawMarkdown": "Yes, I have all categories covered including transformations (100% solved). Happy to share details in DM when I get off work tonight!",
+            "replies": [
+              {
+                "author": {
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                  "url": "/"
+                },
+                "authorType": "COMMENT",
+                "canDelete": true,
+                "feedbackTrackingData": {},
+                "id": 3430876,
+                "isDeleted": true,
+                "isThankYou": false,
+                "isUserAuthor": true,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-03-28T23:36:21.800Z",
+                "rawMarkdown": "",
+                "votes": {}
+              },
+              {
+                "author": {
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                  "url": "/"
+                },
+                "authorType": "COMMENT",
+                "canDelete": true,
+                "feedbackTrackingData": {},
+                "id": 3430879,
+                "isDeleted": true,
+                "isThankYou": false,
+                "isUserAuthor": true,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-03-28T23:46:14.560Z",
+                "rawMarkdown": "",
+                "votes": {}
+              }
+            ],
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "Donald Galliano III",
+                "id": 29434769,
+                "performanceTier": "CONTRIBUTOR",
+                "profileUrl": "/donaldgalliano",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/29434769-kg.png?t=2026-03-14-05-23-02",
+                "tier": "CONTRIBUTOR",
+                "url": "/donaldgalliano",
+                "userId": 29434769,
+                "userName": "donaldgalliano"
+              }
+            },
+            "votes": {
+              "canUpvote": true
+            }
+          }
+        ],
+        "votes": {}
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "Donald Galliano III",
+        "id": 29434769,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/29434769-kg.png?t=2026-03-14-05-23-02",
+        "tier": "CONTRIBUTOR",
+        "url": "/donaldgalliano"
+      },
+      "authorType": "TOPIC",
+      "competitionRanking": 2312,
+      "content": "<p>I've spent the last two weeks reverse-engineering all 8 puzzle categories in this benchmark. </p>\n<p>I have:</p>\n<p>Working factories that generate unlimited verified training samples for every category\nStructured reasoning traces (not naive SFT) with Python-verified ground truth\nFull understanding of the binary boolean decomposition, cipher substitutions, symbol transforms, digit pairings, gravity/roman/unitconv formulas\nA 50k sample synthetic dataset ready to train on\nCorrect chat template, sensitive layer targeting, and training pipeline ready to execute</p>\n<p>I haven't been able to run a clean training job yet. The Kaggle RTX 6000 environment has been broken for the entirety of this competition, and I don't have the budget for cloud GPUs to iterate.</p>\n<p>What I need: a partner with GPU access willing to run training jobs. The data pipeline, problem analysis, and training scripts are complete.</p>\n<p>DM me if interested. Targeting April 9 midpoint.</p>",
+      "feedbackTrackingData": {},
+      "id": 3430714,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-03-28T20:01:51.247Z",
+      "rawMarkdown": "I've spent the last two weeks reverse-engineering all 8 puzzle categories in this benchmark. \n\nI have:\n\nWorking factories that generate unlimited verified training samples for every category\nStructured reasoning traces (not naive SFT) with Python-verified ground truth\nFull understanding of the binary boolean decomposition, cipher substitutions, symbol transforms, digit pairings, gravity/roman/unitconv formulas\nA 50k sample synthetic dataset ready to train on\nCorrect chat template, sensitive layer targeting, and training pipeline ready to execute\n\nI haven't been able to run a clean training job yet. The Kaggle RTX 6000 environment has been broken for the entirety of this competition, and I don't have the budget for cloud GPUs to iterate.\n\nWhat I need: a partner with GPU access willing to run training jobs. The data pipeline, problem analysis, and training scripts are complete.\n\n\nDM me if interested. Targeting April 9 midpoint.",
+      "teamUpInfo": {
+        "intro": "",
+        "teamLeader": {
+          "displayName": "Donald Galliano III",
+          "id": 29434769,
+          "performanceTier": "CONTRIBUTOR",
+          "profileUrl": "/donaldgalliano",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/29434769-kg.png?t=2026-03-14-05-23-02",
+          "tier": "CONTRIBUTOR",
+          "url": "/donaldgalliano",
+          "userId": 29434769,
+          "userName": "donaldgalliano"
+        }
+      },
+      "votes": {
+        "canUpvote": true,
+        "totalVotes": -6
+      }
+    },
+    "firstMessageId": 3430714,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 685710,
+    "name": "Compute partner needed - deterministic solvers for all puzzle categories built, budget-constrained",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-03-28T20:01:51.246102900Z",
+    "totalMessages": 7,
+    "totalVotes": -6,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/685710"
+  }
+}

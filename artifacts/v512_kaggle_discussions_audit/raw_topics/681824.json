@@ -1,0 +1,158 @@
+{
+  "forumTopic": {
+    "authorId": 30571045,
+    "authorPerformanceTier": "CONTRIBUTOR",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "30571045-kg.png?t=2026-02-03-02-51-14",
+    "authorUserDisplayName": "Ritwika Kancharla",
+    "authorUserName": "ritwikakancharla",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "Anton Kratz",
+          "id": 1423843,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1423843-kg.png?t=2026-03-17-23-53-30",
+          "tier": "CONTRIBUTOR",
+          "url": "/antonkratz"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 2610,
+        "content": "<p>I also run into this exact issue.</p>",
+        "feedbackTrackingData": {},
+        "id": 3423926,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-19T06:05:34.980Z",
+        "rawMarkdown": "I also run into this exact issue.",
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Anton Kratz",
+            "id": 1423843,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/antonkratz",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1423843-kg.png?t=2026-03-17-23-53-30",
+            "tier": "CONTRIBUTOR",
+            "url": "/antonkratz",
+            "userId": 1423843,
+            "userName": "antonkratz"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      },
+      {
+        "author": {
+          "displayName": "Adarsh Kumar",
+          "id": 25818777,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/25818777-kg.png?t=2026-04-20-16-49-43",
+          "tier": "MASTER",
+          "url": "/adarsh2626"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 654,
+        "content": "<p>Turn of the internet and then again on then install it worked for me</p>",
+        "feedbackTrackingData": {},
+        "id": 3422320,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-17T13:16:29.073Z",
+        "rawMarkdown": "Turn of the internet and then again on then install it worked for me",
+        "reactions": [
+          {
+            "emoji": "SURPRISE",
+            "featuredUserNames": [
+              "einherjer"
+            ],
+            "userCount": 1
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Muhammad Ibrahim Qasmi",
+            "id": 24946333,
+            "performanceTier": "GRANDMASTER",
+            "profileUrl": "/ibrahimqasimi",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/24946333-kg.jpeg?t=2025-12-22-22-44-57",
+            "tier": "GRANDMASTER",
+            "url": "/ibrahimqasimi",
+            "userId": 24946333,
+            "userName": "ibrahimqasimi"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "Ritwika Kancharla",
+        "id": 30571045,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/30571045-kg.png?t=2026-02-03-02-51-14",
+        "tier": "CONTRIBUTOR",
+        "url": "/ritwikakancharla"
+      },
+      "authorType": "TOPIC",
+      "competitionRanking": 392,
+      "content": "<p>The causal_conv1d_cuda.so binary in the environment is not compiled \nfor SM120 (Blackwell). Getting cudaErrorNoKernelImageForDevice on every \ntraining attempt. ptxas chmod fixes the triton issue but causal_conv1d \nstill fails. We cannot install a new version because the filesystem is \nread-only and pip has no internet. How are we supposed to fine-tune on \nthis GPU?</p>",
+      "feedbackTrackingData": {},
+      "id": 3422315,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-03-17T13:07:20.273Z",
+      "rawMarkdown": "The causal_conv1d_cuda.so binary in the environment is not compiled \nfor SM120 (Blackwell). Getting cudaErrorNoKernelImageForDevice on every \ntraining attempt. ptxas chmod fixes the triton issue but causal_conv1d \nstill fails. We cannot install a new version because the filesystem is \nread-only and pip has no internet. How are we supposed to fine-tune on \nthis GPU?",
+      "reactions": [
+        {
+          "emoji": "KAGGLE",
+          "featuredUserNames": [
+            "antonkratz"
+          ],
+          "userCount": 1
+        }
+      ],
+      "teamUpInfo": {
+        "intro": "",
+        "teamLeader": {
+          "displayName": "Ritwika Kancharla",
+          "id": 30571045,
+          "performanceTier": "CONTRIBUTOR",
+          "profileUrl": "/ritwikakancharla",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/30571045-kg.png?t=2026-02-03-02-51-14",
+          "tier": "CONTRIBUTOR",
+          "url": "/ritwikakancharla",
+          "userId": 30571045,
+          "userName": "ritwikakancharla"
+        }
+      },
+      "votes": {
+        "canUpvote": true,
+        "totalUpvotes": 8,
+        "totalVotes": 8
+      }
+    },
+    "firstMessageId": 3422315,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 681824,
+    "name": "causal_conv1d_cuda not compiled for Blackwell SM120 - training impossible",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-03-17T13:07:20.273286400Z",
+    "totalMessages": 2,
+    "totalVotes": 8,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/681824"
+  }
+}

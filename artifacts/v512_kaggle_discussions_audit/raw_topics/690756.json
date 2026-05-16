@@ -1,0 +1,112 @@
+{
+  "forumTopic": {
+    "authorId": 10290345,
+    "authorPerformanceTier": "CONTRIBUTOR",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "10290345-kg.jpg?t=2026-03-17-04-10-40",
+    "authorUserDisplayName": "Darren Amadeus Martin",
+    "authorUserName": "darrenamadeusmartin",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "Mark Cooper",
+          "id": 33183648,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/33183648-kg.png?t=2026-03-25-21-09-26",
+          "tier": "CONTRIBUTOR",
+          "url": "/markjcooper"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 708,
+        "content": "<p>Nice framing — these are actually two projections of the same underlying structure, and which one works depends on how you constrain the search.<br>\n  <strong>Why the function-on-full-bits approach hits 96% with low divergence</strong><br>\n  The expression space is small (unary ops, 3-4 combinators, boolean ops), so the search is bounded. Each candidate rule must fit 8 example outputs simultaneously — that's 64 bit constraints per candidate, which makes false-positive survival rare. The cost is the 4% tail where the ground truth\n   rule isn't in your expression grammar (typically 3-unary compositions with uncommon operator ordering).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <strong>Why the function-on-single-bits approach hits 100% coverage but 50% divergence</strong>                                                                                                                                                                                                                  </p>\n<p>Each output bit can be explained by many different single-bit functions that all fit the examples. Without a global constraint you pick one at random and it doesn't generalize to the query. The per-bit view is under-constrained on its own. This is the <a href=\"https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/688461\" target=\"_blank\">Answers To Everything 100% Solve       \n  Rate</a> situation — solver fits examples, model can't pick the correct generalization.</p>\n<p><strong>The hybrid <a href=\"https://www.kaggle.com/huikang\" target=\"_blank\">Tong Hui Kang</a> uses</strong> — full write-up in <a href=\"https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/690307\" target=\"_blank\">Strategy to solve 85% of bit manipulation</a>:</p>\n<ul>\n<li><p>Iterate over input bit PAIRS (the single-bit view)</p></li>\n<li><p>Use a stride constraint (the full-bits view) to prune — for each output bit i, find which input bit-pairs could produce it AND check the winning pair is offset by exactly +1/+1 from the winning pair at position i-1</p></li>\n<li><p>That stride is exactly what the full-bits unary transforms (rotate, shift) encode</p></li>\n<li><p>Bitsum hash is a secondary pruner — same bitsum means same operator class, reduces false positives further</p>\n<p>Together these drop divergence to about 5% at 85%+ coverage. The full chain-of-thought structure is viewable at <a href=\"https://nemotron.huikang.dev/corpus.html?category=bit_manipulation\" target=\"_blank\">nemotron.huikang.dev/corpus.html</a> — worth studying token-by-token, not just reading.</p>\n<p><strong>On the 50 unsolved</strong></p>\n<p>Most are 3-transformation expressions where some output bits depend on 3 input bits simultaneously — e.g. <code>(SHL(3) XOR SHR(3)) AND ROT(7)</code> where x + y is less than 8. THK's stride approach explicitly doesn't cover these (he notes this in his writeup). They ARE solvable if you extend the<br>\nsearch to 3-input boolean functions per output bit position (LUT3 style) with stride-consistency pruning — that closes solver coverage to 100%.</p>\n<p>Whether the model can reliably reproduce the CoT for that extended search is the separate question, and the harder one. Solver coverage does not equal inference accuracy — our bit_manipulation solvers hit 100% but model bench runs at about 51%, compared to THK's 85%. THK's edge isn't the<br>\nsolver, it's the token-level CoT design (see his <a href=\"https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/689915\" target=\"_blank\">main writeup</a> on deterministic token-by-token traces).</p>\n<p>So: we have the algorithm. The open problem is making the model produce it at inference.</p></li>\n</ul>",
+        "feedbackTrackingData": {},
+        "id": 3443305,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-16T11:05:33.470Z",
+        "rawMarkdown": "Nice framing — these are actually two projections of the same underlying structure, and which one works depends on how you constrain the search.                                                                                                                                                       \n  **Why the function-on-full-bits approach hits 96% with low divergence**                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   \n  The expression space is small (unary ops, 3-4 combinators, boolean ops), so the search is bounded. Each candidate rule must fit 8 example outputs simultaneously — that's 64 bit constraints per candidate, which makes false-positive survival rare. The cost is the 4% tail where the ground truth\n   rule isn't in your expression grammar (typically 3-unary compositions with uncommon operator ordering).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    **Why the function-on-single-bits approach hits 100% coverage but 50% divergence**                                                                                                                                                                                                                  \n\n  Each output bit can be explained by many different single-bit functions that all fit the examples. Without a global constraint you pick one at random and it doesn't generalize to the query. The per-bit view is under-constrained on its own. This is the [Answers To Everything 100% Solve       \n  Rate][ATE] situation — solver fits examples, model can't pick the correct generalization.\n\n  **The hybrid [Tong Hui Kang][THK] uses** — full write-up in [Strategy to solve 85% of bit manipulation][BITSTRAT]:\n\n  - Iterate over input bit PAIRS (the single-bit view)\n  - Use a stride constraint (the full-bits view) to prune — for each output bit i, find which input bit-pairs could produce it AND check the winning pair is offset by exactly +1/+1 from the winning pair at position i-1\n  - That stride is exactly what the full-bits unary transforms (rotate, shift) encode\n  - Bitsum hash is a secondary pruner — same bitsum means same operator class, reduces false positives further\n\n  Together these drop divergence to about 5% at 85%+ coverage. The full chain-of-thought structure is viewable at [nemotron.huikang.dev/corpus.html][CORPUS] — worth studying token-by-token, not just reading.\n\n  **On the 50 unsolved**\n\n  Most are 3-transformation expressions where some output bits depend on 3 input bits simultaneously — e.g. `(SHL(3) XOR SHR(3)) AND ROT(7)` where x + y is less than 8. THK's stride approach explicitly doesn't cover these (he notes this in his writeup). They ARE solvable if you extend the     \n  search to 3-input boolean functions per output bit position (LUT3 style) with stride-consistency pruning — that closes solver coverage to 100%.\n\n  Whether the model can reliably reproduce the CoT for that extended search is the separate question, and the harder one. Solver coverage does not equal inference accuracy — our bit_manipulation solvers hit 100% but model bench runs at about 51%, compared to THK's 85%. THK's edge isn't the    \n  solver, it's the token-level CoT design (see his [main writeup][MAIN] on deterministic token-by-token traces).\n\n  So: we have the algorithm. The open problem is making the model produce it at inference.\n\n  [ATE]: https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/688461\n  [THK]: https://www.kaggle.com/huikang\n  [BITSTRAT]: https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/690307\n  [CORPUS]: https://nemotron.huikang.dev/corpus.html?category=bit_manipulation\n  [MAIN]: https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/689915\n",
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Mark Cooper",
+            "id": 33183648,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/markjcooper",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/33183648-kg.png?t=2026-03-25-21-09-26",
+            "tier": "CONTRIBUTOR",
+            "url": "/markjcooper",
+            "userId": 33183648,
+            "userName": "markjcooper"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalVotes": -1
+        }
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "Darren Amadeus Martin",
+        "id": 10290345,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/10290345-kg.jpg?t=2026-03-17-04-10-40",
+        "tier": "CONTRIBUTOR",
+        "url": "/darrenamadeusmartin"
+      },
+      "authorType": "TOPIC",
+      "competitionRanking": 1407,
+      "content": "<p>After seeing fhe discussions and analyzing the bit manipulation problems for many times, there can be 2 ways to tackle the bit problem</p>\n<ol>\n<li><p>FUNCTION ON FULL BITS\nThis is the first way which I think kinda aligns with the first LB winner. The approach is first we take an unary function which is rotate, shift, and their not variations and call it U. U is applied not to a single bit but to the whole number. So NOT(11100111) would simply be (00011000) rotate right 1 for 11100111 would be 11110011. Now for the problem there are multiple ways to express them. One of them is U op U where op is the operator which is XOR OR AND. The next is maj choice for 3 U, U op U op U. And also U op U op U op U. By cycling through all of this, around 96% of the lroblem cen be solved. And there are around 50 problems that I still not manage to solve yet. Now there are also not so many case of divergence (the case where it fits all the example but habing different result than the ground truth) if you search by using a hierarchy of the patterns that I have explained (searching for unaries only first, then unary op unary, maj choice, 3 unaries, 4 unaries. Most of the divergence wont happen if you dont go to the next hierarchy). However, the search space is so big and there are still 50 unsolved problems</p></li>\n<li><p>FUNCTION ON SINGLE BITS\nI think this is the implementation of the READ ME SOLVED 100% discussion where the function is done on the bits itself. For exampe x1=x3 AND x5 where x1,3,5 is the index of the bits. If you apply the discussions's approach, a coverage of 100% is attainable. HOWEVER, it is important to note that like 50% of them causes a divergence. So maybe the constraints should be limited to prevent divergence but I still haven't touched this. </p></li>\n</ol>\n<p>Now I still don't know which might be the correct one, but I hope these findings help</p>",
+      "feedbackTrackingData": {},
+      "id": 3440689,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-04-12T21:02:59.757Z",
+      "rawMarkdown": "After seeing fhe discussions and analyzing the bit manipulation problems for many times, there can be 2 ways to tackle the bit problem\n\n1. FUNCTION ON FULL BITS\nThis is the first way which I think kinda aligns with the first LB winner. The approach is first we take an unary function which is rotate, shift, and their not variations and call it U. U is applied not to a single bit but to the whole number. So NOT(11100111) would simply be (00011000) rotate right 1 for 11100111 would be 11110011. Now for the problem there are multiple ways to express them. One of them is U op U where op is the operator which is XOR OR AND. The next is maj choice for 3 U, U op U op U. And also U op U op U op U. By cycling through all of this, around 96% of the lroblem cen be solved. And there are around 50 problems that I still not manage to solve yet. Now there are also not so many case of divergence (the case where it fits all the example but habing different result than the ground truth) if you search by using a hierarchy of the patterns that I have explained (searching for unaries only first, then unary op unary, maj choice, 3 unaries, 4 unaries. Most of the divergence wont happen if you dont go to the next hierarchy). However, the search space is so big and there are still 50 unsolved problems\n\n2. FUNCTION ON SINGLE BITS\nI think this is the implementation of the READ ME SOLVED 100% discussion where the function is done on the bits itself. For exampe x1=x3 AND x5 where x1,3,5 is the index of the bits. If you apply the discussions's approach, a coverage of 100% is attainable. HOWEVER, it is important to note that like 50% of them causes a divergence. So maybe the constraints should be limited to prevent divergence but I still haven't touched this. \n\nNow I still don't know which might be the correct one, but I hope these findings help",
+      "reactions": [
+        {
+          "emoji": "THANK_YOU",
+          "featuredUserNames": [
+            "taurine511"
+          ],
+          "userCount": 1
+        }
+      ],
+      "teamUpInfo": {
+        "intro": "",
+        "teamLeader": {
+          "displayName": "Darren Amadeus Martin",
+          "id": 10290345,
+          "performanceTier": "CONTRIBUTOR",
+          "profileUrl": "/darrenamadeusmartin",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/10290345-kg.jpg?t=2026-03-17-04-10-40",
+          "tier": "CONTRIBUTOR",
+          "url": "/darrenamadeusmartin",
+          "userId": 10290345,
+          "userName": "darrenamadeusmartin"
+        }
+      },
+      "votes": {
+        "canUpvote": true,
+        "totalUpvotes": 1,
+        "totalVotes": 1
+      }
+    },
+    "firstMessageId": 3440689,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 690756,
+    "name": "2 interpretations of the bit manipulation problem",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-04-12T21:02:59.758231Z",
+    "totalMessages": 1,
+    "totalVotes": 1,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/690756"
+  }
+}

@@ -1,0 +1,104 @@
+{
+  "forumTopic": {
+    "authorId": 3937164,
+    "authorPerformanceTier": "MASTER",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "3937164-kg.png?t=2023-11-07-17-35-27",
+    "authorUserDisplayName": "JK-Piece",
+    "authorUserName": "jeannkouagou",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "agenlu",
+          "id": 1076183,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1076183-kg.jpg",
+          "tier": "EXPERT",
+          "url": "/agenlu"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 415,
+        "content": "<p>Sometimes if you stop and try again, it works</p>",
+        "feedbackTrackingData": {},
+        "id": 3447759,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-23T20:55:36.103Z",
+        "rawMarkdown": "Sometimes if you stop and try again, it works",
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "agenlu",
+            "id": 1076183,
+            "performanceTier": "EXPERT",
+            "profileUrl": "/agenlu",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1076183-kg.jpg",
+            "tier": "EXPERT",
+            "url": "/agenlu",
+            "userId": 1076183,
+            "userName": "agenlu"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 2,
+          "totalVotes": 2
+        }
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "JK-Piece",
+        "id": 3937164,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/3937164-kg.png?t=2023-11-07-17-35-27",
+        "tier": "MASTER",
+        "url": "/jeannkouagou"
+      },
+      "authorType": "TOPIC",
+      "competitionRanking": 138,
+      "content": "<p>Hi all. Are you experiencing a queue when saving your notebook?</p>\n<p>Mine is queued for 2 hours now and still counting.</p>",
+      "feedbackTrackingData": {},
+      "id": 3447746,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-04-23T20:29:21.430Z",
+      "rawMarkdown": "Hi all. Are you experiencing a queue when saving your notebook?\n\nMine is queued for 2 hours now and still counting.",
+      "teamUpInfo": {
+        "intro": "Hey Kagglers. I am looking for a teammate with current score around 0.78-0.80. I have strong checkpoints and great training data that would benefit the team to be formed. Feel free to reach out.",
+        "teamLeader": {
+          "displayName": "JK-Piece",
+          "id": 3937164,
+          "performanceTier": "MASTER",
+          "profileUrl": "/jeannkouagou",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/3937164-kg.png?t=2023-11-07-17-35-27",
+          "tier": "MASTER",
+          "url": "/jeannkouagou",
+          "userId": 3937164,
+          "userName": "jeannkouagou"
+        }
+      },
+      "votes": {
+        "canUpvote": true,
+        "totalUpvotes": 5,
+        "totalVotes": 5
+      }
+    },
+    "firstMessageId": 3447746,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 694213,
+    "name": "Queued for hours for the first time!",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-04-23T20:29:21.430208100Z",
+    "totalMessages": 1,
+    "totalVotes": 5,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/694213"
+  }
+}

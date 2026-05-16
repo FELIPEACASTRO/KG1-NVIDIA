@@ -1,0 +1,166 @@
+{
+  "forumTopic": {
+    "authorId": 12878406,
+    "authorPerformanceTier": "CONTRIBUTOR",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "default-thumb.png",
+    "authorUserDisplayName": "Huy Nguyễnq",
+    "authorUserName": "huynguynq",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "CPMP",
+          "id": 75976,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/75976-gr.jpg",
+          "tier": "GRANDMASTER",
+          "url": "/cpmpml"
+        },
+        "authorType": "HOST",
+        "content": "<p>You must comply with the license of the LLM you use. Some allow the use of output to train other models. Some don't allow this. It is your responsibility  to comply with these licenses.</p>",
+        "feedbackTrackingData": {},
+        "id": 3429582,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-26T23:10:40.497Z",
+        "rawMarkdown": "You must comply with the license of the LLM you use. Some allow the use of output to train other models. Some don't allow this. It is your responsibility  to comply with these licenses.",
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 4,
+          "totalVotes": 3
+        }
+      },
+      {
+        "author": {
+          "displayName": "Komil Parmar",
+          "id": 11351811,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/11351811-kg.jpg?t=2025-07-02-06-16-19",
+          "tier": "EXPERT",
+          "url": "/komilparmar"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 963,
+        "content": "<p>Some companies were recently sued for doing what they call a 'Distillation Attack' (Knowledge Distillation) on OpenAI's ChatGPT and Anthropic Clade. So you decide. </p>",
+        "feedbackTrackingData": {},
+        "id": 3428971,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-26T06:30:54.913Z",
+        "rawMarkdown": "Some companies were recently sued for doing what they call a 'Distillation Attack' (Knowledge Distillation) on OpenAI's ChatGPT and Anthropic Clade. So you decide. ",
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Komil Parmar",
+            "id": 11351811,
+            "performanceTier": "EXPERT",
+            "profileUrl": "/komilparmar",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/11351811-kg.jpg?t=2025-07-02-06-16-19",
+            "tier": "EXPERT",
+            "url": "/komilparmar",
+            "userId": 11351811,
+            "userName": "komilparmar"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalVotes": -2
+        }
+      },
+      {
+        "author": {
+          "displayName": "GokuIt",
+          "id": 28639800,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "CONTRIBUTOR",
+          "url": "/gokuit"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 2802,
+        "content": "<p><a href=\"https://www.kaggle.com/cpmpml\" target=\"_blank\">@cpmpml</a> How can we install data_designer in the kernel given that the RTX accelerator does not allow pip installs? \nWas planning to use this for synth data gen - <a href=\"https://nvidia-nemo.github.io/DataDesigner/latest/notebooks/3-seeding-with-a-dataset/\" target=\"_blank\">https://nvidia-nemo.github.io/DataDesigner/latest/notebooks/3-seeding-with-a-dataset/</a>. Please suggest an alternative if not this.</p>",
+        "feedbackTrackingData": {},
+        "id": 3435015,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-03T15:26:04.810Z",
+        "rawMarkdown": "@cpmpml How can we install data_designer in the kernel given that the RTX accelerator does not allow pip installs? \nWas planning to use this for synth data gen - https://nvidia-nemo.github.io/DataDesigner/latest/notebooks/3-seeding-with-a-dataset/. Please suggest an alternative if not this.",
+        "teamUpInfo": {
+          "enabled": true,
+          "intro": "Software Engineer with SFT experience in Robotics and Agentic memory areas. Looking for people/teams with SFT experience. Goal is to learn and contribute.",
+          "teamLeader": {
+            "displayName": "GokuIt",
+            "id": 28639800,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/gokuit",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+            "tier": "CONTRIBUTOR",
+            "url": "/gokuit",
+            "userId": 28639800,
+            "userName": "gokuit"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "Huy Nguyễnq",
+        "id": 12878406,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+        "tier": "CONTRIBUTOR",
+        "url": "/huynguynq"
+      },
+      "authorType": "TOPIC",
+      "competitionRanking": 2410,
+      "content": "<p>With synthetic data generation for data enrichment, can i use close source like OpenAI API or only use opensource model</p>",
+      "feedbackTrackingData": {},
+      "id": 3428305,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-03-25T08:40:32.717Z",
+      "rawMarkdown": "With synthetic data generation for data enrichment, can i use close source like OpenAI API or only use opensource model",
+      "teamUpInfo": {
+        "intro": "",
+        "teamLeader": {
+          "displayName": "Huy Nguyễnq",
+          "id": 12878406,
+          "performanceTier": "CONTRIBUTOR",
+          "profileUrl": "/huynguynq",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "CONTRIBUTOR",
+          "url": "/huynguynq",
+          "userId": 12878406,
+          "userName": "huynguynq"
+        }
+      },
+      "votes": {
+        "canUpvote": true,
+        "totalUpvotes": 1,
+        "totalVotes": -3
+      }
+    },
+    "firstMessageId": 3428305,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 684515,
+    "name": "Synthetic data generation allowed",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-03-25T08:40:32.717699100Z",
+    "totalMessages": 3,
+    "totalVotes": -3,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/684515"
+  }
+}

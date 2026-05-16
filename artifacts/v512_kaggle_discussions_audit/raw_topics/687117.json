@@ -1,0 +1,262 @@
+{
+  "forumTopic": {
+    "authorId": 3937164,
+    "authorPerformanceTier": "MASTER",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "3937164-kg.png?t=2023-11-07-17-35-27",
+    "authorUserDisplayName": "JK-Piece",
+    "authorUserName": "jeannkouagou",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "Addison Howard",
+          "id": 1095143,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1095143-kg.jpeg",
+          "tier": "STAFF",
+          "url": "/addisonhoward"
+        },
+        "authorType": "ADMIN",
+        "content": "<p>Hi there-</p>\n<p>Only 1 DGX Spark is available for the Open Progress prize. If you are on a team with multiple members, you can choose how to divide the prize (cash and DGX spark) accordingly.</p>",
+        "feedbackTrackingData": {},
+        "id": 3433990,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-02T12:47:16.640Z",
+        "rawMarkdown": "Hi there-\n\nOnly 1 DGX Spark is available for the Open Progress prize. If you are on a team with multiple members, you can choose how to divide the prize (cash and DGX spark) accordingly.",
+        "reactions": [
+          {
+            "emoji": "THANK_YOU",
+            "featuredUserNames": [
+              "jeannkouagou"
+            ],
+            "userCount": 1
+          }
+        ],
+        "replies": [
+          {
+            "author": {
+              "displayName": "Donald Galliano III",
+              "id": 29434769,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/29434769-kg.png?t=2026-03-14-05-23-02",
+              "tier": "CONTRIBUTOR",
+              "url": "/donaldgalliano"
+            },
+            "authorType": "COMMENT",
+            "competitionRanking": 2317,
+            "content": "<p>Hi. I made a post a few days ago about this. Is the prize awarded based on the private or public leaderboard? </p>",
+            "feedbackTrackingData": {},
+            "id": 3434225,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-04-02T18:17:51.803Z",
+            "rawMarkdown": "Hi. I made a post a few days ago about this. Is the prize awarded based on the private or public leaderboard? ",
+            "replies": [
+              {
+                "author": {
+                  "displayName": "JK-Piece",
+                  "id": 3937164,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/3937164-kg.png?t=2023-11-07-17-35-27",
+                  "tier": "MASTER",
+                  "url": "/jeannkouagou"
+                },
+                "authorType": "TOPIC",
+                "competitionRanking": 138,
+                "content": "<p>Based on the public leaderboard for sure </p>",
+                "feedbackTrackingData": {},
+                "id": 3434233,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-02T18:28:06.290Z",
+                "rawMarkdown": "Based on the public leaderboard for sure ",
+                "reactions": [
+                  {
+                    "emoji": "THANK_YOU",
+                    "featuredUserNames": [
+                      "donaldgalliano"
+                    ],
+                    "userCount": 1
+                  }
+                ],
+                "teamUpInfo": {
+                  "intro": "Hey Kagglers. I am looking for a teammate with current score around 0.78-0.80. I have strong checkpoints and great training data that would benefit the team to be formed. Feel free to reach out.",
+                  "teamLeader": {
+                    "displayName": "JK-Piece",
+                    "id": 3937164,
+                    "performanceTier": "MASTER",
+                    "profileUrl": "/jeannkouagou",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/3937164-kg.png?t=2023-11-07-17-35-27",
+                    "tier": "MASTER",
+                    "url": "/jeannkouagou",
+                    "userId": 3937164,
+                    "userName": "jeannkouagou"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true
+                }
+              },
+              {
+                "author": {
+                  "displayName": "Donald Galliano III",
+                  "id": 29434769,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/29434769-kg.png?t=2026-03-14-05-23-02",
+                  "tier": "CONTRIBUTOR",
+                  "url": "/donaldgalliano"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 2317,
+                "content": "<p>Awesome! Thanks. That lets us know the winners basically end of April 9th then for the midpoint. </p>",
+                "feedbackTrackingData": {},
+                "id": 3434255,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-02T18:58:04.800Z",
+                "rawMarkdown": "Awesome! Thanks. That lets us know the winners basically end of April 9th then for the midpoint. ",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "Donald Galliano III",
+                    "id": 29434769,
+                    "performanceTier": "CONTRIBUTOR",
+                    "profileUrl": "/donaldgalliano",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/29434769-kg.png?t=2026-03-14-05-23-02",
+                    "tier": "CONTRIBUTOR",
+                    "url": "/donaldgalliano",
+                    "userId": 29434769,
+                    "userName": "donaldgalliano"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true
+                }
+              }
+            ],
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "Donald Galliano III",
+                "id": 29434769,
+                "performanceTier": "CONTRIBUTOR",
+                "profileUrl": "/donaldgalliano",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/29434769-kg.png?t=2026-03-14-05-23-02",
+                "tier": "CONTRIBUTOR",
+                "url": "/donaldgalliano",
+                "userId": 29434769,
+                "userName": "donaldgalliano"
+              }
+            },
+            "votes": {
+              "canUpvote": true
+            }
+          }
+        ],
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 2,
+          "totalVotes": 2
+        }
+      },
+      {
+        "author": {
+          "displayName": "lakshmig82",
+          "id": 32391938,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/32391938-kg.png?t=2026-03-26-17-36-44",
+          "tier": "CONTRIBUTOR",
+          "url": "/lakshmig82"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 2352,
+        "content": "<p>And also re scoring must be done as soon as possible to refine solutions. Otherwise we are optimizing blindly for the next 2 weeks.</p>",
+        "feedbackTrackingData": {},
+        "id": 3433936,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-02T10:58:47.050Z",
+        "rawMarkdown": "And also re scoring must be done as soon as possible to refine solutions. Otherwise we are optimizing blindly for the next 2 weeks.",
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "lakshmig82",
+            "id": 32391938,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/lakshmig82",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/32391938-kg.png?t=2026-03-26-17-36-44",
+            "tier": "CONTRIBUTOR",
+            "url": "/lakshmig82",
+            "userId": 32391938,
+            "userName": "lakshmig82"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "JK-Piece",
+        "id": 3937164,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/3937164-kg.png?t=2023-11-07-17-35-27",
+        "tier": "MASTER",
+        "url": "/jeannkouagou"
+      },
+      "authorType": "TOPIC",
+      "competitionRanking": 138,
+      "content": "<p>The following is written for the Open Progress Prize:</p>\n<p><strong>Open Progress Prize: $5,000 + 1 DGX Sparks</strong></p>\n<ul>\n<li>Awarded to the team with the highest leaderboard score as of the Midpoint Cut-off Date: April 9, 2026.</li>\n<li>Methodology submissions Cut-off Date: April 16, 2026.</li>\n<li>Winners will be announced during Cloud NEXT (April 22-24, 2026)</li>\n<li>Each eligible participant may receive no more than one (1) DGX Spark.</li>\n</ul>\n<p>Because many participants may want to form teams to compete for this prize, **will each member of a team receive 1 DGX Sparks? **</p>\n<p>The question is crucial because 1 DGX Spark cannot be shared among different members of a team.</p>",
+      "feedbackTrackingData": {},
+      "id": 3433884,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-04-02T09:08:43.493Z",
+      "rawMarkdown": "The following is written for the Open Progress Prize:\n\n**Open Progress Prize: $5,000 + 1 DGX Sparks**\n\n- Awarded to the team with the highest leaderboard score as of the Midpoint Cut-off Date: April 9, 2026.\n- Methodology submissions Cut-off Date: April 16, 2026.\n- Winners will be announced during Cloud NEXT (April 22-24, 2026)\n- Each eligible participant may receive no more than one (1) DGX Spark.\n\nBecause many participants may want to form teams to compete for this prize, **will each member of a team receive 1 DGX Sparks? **\n\nThe question is crucial because 1 DGX Spark cannot be shared among different members of a team.",
+      "teamUpInfo": {
+        "intro": "Hey Kagglers. I am looking for a teammate with current score around 0.78-0.80. I have strong checkpoints and great training data that would benefit the team to be formed. Feel free to reach out.",
+        "teamLeader": {
+          "displayName": "JK-Piece",
+          "id": 3937164,
+          "performanceTier": "MASTER",
+          "profileUrl": "/jeannkouagou",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/3937164-kg.png?t=2023-11-07-17-35-27",
+          "tier": "MASTER",
+          "url": "/jeannkouagou",
+          "userId": 3937164,
+          "userName": "jeannkouagou"
+        }
+      },
+      "votes": {
+        "canUpvote": true,
+        "totalUpvotes": 1,
+        "totalVotes": 1
+      }
+    },
+    "firstMessageId": 3433884,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 687117,
+    "name": "Clarification Regarding Open Progress Prize -- Hosts Needed ",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-04-02T09:08:43.494990Z",
+    "totalMessages": 5,
+    "totalVotes": 1,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/687117"
+  }
+}

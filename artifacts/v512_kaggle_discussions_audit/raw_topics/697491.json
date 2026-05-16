@@ -1,0 +1,576 @@
+{
+  "forumTopic": {
+    "authorId": 33728306,
+    "authorPerformanceTier": "CONTRIBUTOR",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "33728306-kg.png?t=2026-04-25-07-15-05",
+    "authorUserDisplayName": "Taha",
+    "authorUserName": "tahaalam2009",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "Ogurtsov",
+          "id": 682731,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/682731-kg.jpg?t=2024-04-01-08-44-00",
+          "tier": "MASTER",
+          "url": "/ogurtsov"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 619,
+        "content": "<p><a href=\"https://www.kaggle.com/tahaalam2009\" target=\"_blank\">@tahaalam2009</a> \nWhy do you think this is better CoT and correct solution?</p>\n<pre><code>Based on character frequency heuristics, we guess the answer.\n\n  output: 【@&amp;】-&gt; 【{@&amp;}】\n</code></pre>",
+        "feedbackTrackingData": {},
+        "id": 3453973,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-05-06T10:33:41.453Z",
+        "rawMarkdown": "@tahaalam2009 \nWhy do you think this is better CoT and correct solution?\n```\nBased on character frequency heuristics, we guess the answer.\n\n  output: 【@&】-> 【{@&}】\n```",
+        "replies": [
+          {
+            "author": {
+              "displayName": "Taha",
+              "id": 33728306,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/33728306-kg.png?t=2026-04-25-07-15-05",
+              "tier": "CONTRIBUTOR",
+              "url": "/tahaalam2009"
+            },
+            "authorType": "TOPIC",
+            "competitionRanking": 313,
+            "content": "<p>I haven't evaluated the dataset even once , i get it now its just filled with garbage</p>",
+            "feedbackTrackingData": {},
+            "id": 3454003,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-05-06T12:28:05.287Z",
+            "rawMarkdown": "I haven't evaluated the dataset even once , i get it now its just filled with garbage",
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "Taha",
+                "id": 33728306,
+                "performanceTier": "CONTRIBUTOR",
+                "profileUrl": "/tahaalam2009",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/33728306-kg.png?t=2026-04-25-07-15-05",
+                "tier": "CONTRIBUTOR",
+                "url": "/tahaalam2009",
+                "userId": 33728306,
+                "userName": "tahaalam2009"
+              }
+            },
+            "votes": {
+              "canUpvote": true,
+              "totalVotes": -3
+            }
+          },
+          {
+            "author": {
+              "displayName": "Taha",
+              "id": 33728306,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/33728306-kg.png?t=2026-04-25-07-15-05",
+              "tier": "CONTRIBUTOR",
+              "url": "/tahaalam2009"
+            },
+            "authorType": "TOPIC",
+            "competitionRanking": 313,
+            "content": "<p>I made a dataset so trash never realized how bad it was 🥀</p>",
+            "feedbackTrackingData": {},
+            "id": 3454008,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-05-06T12:36:53.893Z",
+            "rawMarkdown": "I made a dataset so trash never realized how bad it was 🥀",
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "Taha",
+                "id": 33728306,
+                "performanceTier": "CONTRIBUTOR",
+                "profileUrl": "/tahaalam2009",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/33728306-kg.png?t=2026-04-25-07-15-05",
+                "tier": "CONTRIBUTOR",
+                "url": "/tahaalam2009",
+                "userId": 33728306,
+                "userName": "tahaalam2009"
+              }
+            },
+            "votes": {
+              "canUpvote": true,
+              "totalVotes": -1
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Ogurtsov",
+            "id": 682731,
+            "performanceTier": "MASTER",
+            "profileUrl": "/ogurtsov",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/682731-kg.jpg?t=2024-04-01-08-44-00",
+            "tier": "MASTER",
+            "url": "/ogurtsov",
+            "userId": 682731,
+            "userName": "ogurtsov"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 6,
+          "totalVotes": 6
+        }
+      },
+      {
+        "author": {
+          "displayName": "Russell Kirk",
+          "id": 27681700,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/27681700-kg.jpg?t=2026-03-31-11-28-38",
+          "tier": "CONTRIBUTOR",
+          "url": "/russcore"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 1380,
+        "content": "<p>I think you have to make your algorithm appeal to its priors because you're limited in how much you can move the model from its base.  I came up with a very clever and mechanical way to solve bits, but I had to over-engineer it to fit in the 7.8k context (like converting Binary to Hex) -- my average loss was sub 0.01 , but it translated to only about 12% accuracy.  Too expensive for me to keep trying that route though (long traces == expensive to train).</p>\n<p>Almost all my success has been keeping all traces less than 1300 tokens.  (Originally 900).</p>\n<p>It feels impossible to iterate over long traces -- as least with what I know.   Takes several hours for an eval, and very expensive to train!</p>",
+        "feedbackTrackingData": {},
+        "id": 3454021,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-05-06T12:52:06.877Z",
+        "rawMarkdown": "I think you have to make your algorithm appeal to its priors because you're limited in how much you can move the model from its base.  I came up with a very clever and mechanical way to solve bits, but I had to over-engineer it to fit in the 7.8k context (like converting Binary to Hex) -- my average loss was sub 0.01 , but it translated to only about 12% accuracy.  Too expensive for me to keep trying that route though (long traces == expensive to train).\n\nAlmost all my success has been keeping all traces less than 1300 tokens.  (Originally 900).\n\nIt feels impossible to iterate over long traces -- as least with what I know.   Takes several hours for an eval, and very expensive to train!\n",
+        "teamUpInfo": {
+          "enabled": true,
+          "intro": "If you got the time, I got the data .. I hope :D",
+          "teamLeader": {
+            "displayName": "Russell Kirk",
+            "id": 27681700,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/russcore",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/27681700-kg.jpg?t=2026-03-31-11-28-38",
+            "tier": "CONTRIBUTOR",
+            "url": "/russcore",
+            "userId": 27681700,
+            "userName": "russcore"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 1,
+          "totalVotes": 1
+        }
+      },
+      {
+        "author": {
+          "displayName": "MAJ0RT0M",
+          "id": 2071133,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "CONTRIBUTOR",
+          "url": "/maj0rt0m"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 1265,
+        "content": "<p><a href=\"https://www.kaggle.com/tahaalam2009\" target=\"_blank\">@tahaalam2009</a> - theres something very fishy about your results </p>\n<p>cryptarithm_guess    164 85.4%\nequation_numeric_deduce    596 90.6%\nequation_numeric_guess    136 92.6%</p>\n<p>how can the guess categories achieve parity w/ the non-guess categories?</p>\n<p>even if you SMT solved these problems (which definitely is not a COT compatible algorithm) I dont think these results are possible</p>\n<p>Are you sure you aren't passing the golden answer into your solver?</p>",
+        "feedbackTrackingData": {},
+        "id": 3456281,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-05-11T16:30:11.057Z",
+        "rawMarkdown": "@tahaalam2009 - theres something very fishy about your results \n\ncryptarithm_guess\t164\t85.4%\nequation_numeric_deduce\t596\t90.6%\nequation_numeric_guess\t136\t92.6%\n\nhow can the guess categories achieve parity w/ the non-guess categories?\n\neven if you SMT solved these problems (which definitely is not a COT compatible algorithm) I dont think these results are possible\n\nAre you sure you aren't passing the golden answer into your solver?",
+        "replies": [
+          {
+            "author": {
+              "displayName": "Taha",
+              "id": 33728306,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/33728306-kg.png?t=2026-04-25-07-15-05",
+              "tier": "CONTRIBUTOR",
+              "url": "/tahaalam2009"
+            },
+            "authorType": "TOPIC",
+            "competitionRanking": 313,
+            "content": "<p>Yeah, after digging deeper I realized a lot of the dataset I generated was honestly pretty garbage for SFT. My assumption was that forcing the model to “guess” more would improve generalization, but that mostly didn’t translate into better LB performance.\nBUT it went from 1.5% -&gt; 15.3%\nThat said, the cryptarithm_guess category actually <em>did</em> improve on the validation script, which is why I initially thought the approach was working. I wasn’t passing any golden answers into the solver  the issue was more that the generated CoTs were noisy/non-learnable and the model couldn’t effectively absorb them.</p>\n<p>So the main lesson for me was that solver correctness != learnable reasoning traces for an LLM.</p>",
+            "feedbackTrackingData": {},
+            "id": 3456678,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-05-12T12:17:46.177Z",
+            "rawMarkdown": "Yeah, after digging deeper I realized a lot of the dataset I generated was honestly pretty garbage for SFT. My assumption was that forcing the model to “guess” more would improve generalization, but that mostly didn’t translate into better LB performance.\nBUT it went from 1.5% -> 15.3%\nThat said, the cryptarithm_guess category actually *did* improve on the validation script, which is why I initially thought the approach was working. I wasn’t passing any golden answers into the solver  the issue was more that the generated CoTs were noisy/non-learnable and the model couldn’t effectively absorb them.\n\nSo the main lesson for me was that solver correctness != learnable reasoning traces for an LLM.\n",
+            "replies": [
+              {
+                "author": {
+                  "displayName": "MAJ0RT0M",
+                  "id": 2071133,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                  "tier": "CONTRIBUTOR",
+                  "url": "/maj0rt0m"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 1265,
+                "content": "<p>I dont think your solver is correct either 1) the cryptarithm problems are inherently ambiguous and can'e be solved w/ the same level of accuracy as equation numeric 2) the guess problems are also inherently ambiguous  - i think ub for these problems is not more than 20%</p>\n<p>Yet both problem categories achieve comparable accuracy to equation numeric deduce in your solver results</p>\n<p>You need to look carefully at what your solver is doing - and what modifications to Tong's codebase you made</p>\n<p>Im not really sure what the problem could be - but I think its something along the lines of passing the golden answer into your predictor or producing many answers and checking if any match golden</p>",
+                "feedbackTrackingData": {},
+                "id": 3456942,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-05-12T19:41:32.077Z",
+                "rawMarkdown": "I dont think your solver is correct either 1) the cryptarithm problems are inherently ambiguous and can'e be solved w/ the same level of accuracy as equation numeric 2) the guess problems are also inherently ambiguous  - i think ub for these problems is not more than 20%\n\nYet both problem categories achieve comparable accuracy to equation numeric deduce in your solver results\n\nYou need to look carefully at what your solver is doing - and what modifications to Tong's codebase you made\n\nIm not really sure what the problem could be - but I think its something along the lines of passing the golden answer into your predictor or producing many answers and checking if any match golden",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "MAJ0RT0M",
+                    "id": 2071133,
+                    "performanceTier": "CONTRIBUTOR",
+                    "profileUrl": "/maj0rt0m",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                    "tier": "CONTRIBUTOR",
+                    "url": "/maj0rt0m",
+                    "userId": 2071133,
+                    "userName": "maj0rt0m"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true
+                }
+              },
+              {
+                "author": {
+                  "displayName": "Taha",
+                  "id": 33728306,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/33728306-kg.png?t=2026-04-25-07-15-05",
+                  "tier": "CONTRIBUTOR",
+                  "url": "/tahaalam2009"
+                },
+                "authorType": "TOPIC",
+                "competitionRanking": 313,
+                "content": "<p>Vibe coding landed me in trouble and the dataset was just \"guesswork\" , I have rewritten an algorithm in rust and it solves 60% of problems and rest 40% are unsolvable i believe , once i test out ill let you guys know!</p>",
+                "feedbackTrackingData": {},
+                "id": 3457369,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-05-13T16:49:03.417Z",
+                "rawMarkdown": "Vibe coding landed me in trouble and the dataset was just \"guesswork\" , I have rewritten an algorithm in rust and it solves 60% of problems and rest 40% are unsolvable i believe , once i test out ill let you guys know!",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "Taha",
+                    "id": 33728306,
+                    "performanceTier": "CONTRIBUTOR",
+                    "profileUrl": "/tahaalam2009",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/33728306-kg.png?t=2026-04-25-07-15-05",
+                    "tier": "CONTRIBUTOR",
+                    "url": "/tahaalam2009",
+                    "userId": 33728306,
+                    "userName": "tahaalam2009"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true,
+                  "totalUpvotes": 1,
+                  "totalVotes": 1
+                }
+              },
+              {
+                "author": {
+                  "displayName": "MAJ0RT0M",
+                  "id": 2071133,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                  "tier": "CONTRIBUTOR",
+                  "url": "/maj0rt0m"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 1265,
+                "content": "<p>Yeah that was about what I observed also</p>",
+                "feedbackTrackingData": {},
+                "id": 3458043,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-05-14T21:59:40.217Z",
+                "rawMarkdown": "Yeah that was about what I observed also",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "MAJ0RT0M",
+                    "id": 2071133,
+                    "performanceTier": "CONTRIBUTOR",
+                    "profileUrl": "/maj0rt0m",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                    "tier": "CONTRIBUTOR",
+                    "url": "/maj0rt0m",
+                    "userId": 2071133,
+                    "userName": "maj0rt0m"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true
+                }
+              }
+            ],
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "Taha",
+                "id": 33728306,
+                "performanceTier": "CONTRIBUTOR",
+                "profileUrl": "/tahaalam2009",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/33728306-kg.png?t=2026-04-25-07-15-05",
+                "tier": "CONTRIBUTOR",
+                "url": "/tahaalam2009",
+                "userId": 33728306,
+                "userName": "tahaalam2009"
+              }
+            },
+            "votes": {
+              "canUpvote": true,
+              "totalUpvotes": 1
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "MAJ0RT0M",
+            "id": 2071133,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/maj0rt0m",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+            "tier": "CONTRIBUTOR",
+            "url": "/maj0rt0m",
+            "userId": 2071133,
+            "userName": "maj0rt0m"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      },
+      {
+        "author": {
+          "displayName": "Nic Barthelemy",
+          "id": 61857,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/61857-gr.jpg",
+          "tier": "CONTRIBUTOR",
+          "url": "/nicbarthelemy1"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 367,
+        "content": "<p>I went all in initially on strong solvers and arrived at exactly the same conclusion as you.  I'm still hunting like most of the field sitting at 0.86LB waiting for that aha that gets at last a 0.01 - 0.02 bump with deterministic scoring.  </p>",
+        "feedbackTrackingData": {},
+        "id": 3454323,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-05-06T22:27:28.903Z",
+        "rawMarkdown": "I went all in initially on strong solvers and arrived at exactly the same conclusion as you.  I'm still hunting like most of the field sitting at 0.86LB waiting for that aha that gets at last a 0.01 - 0.02 bump with deterministic scoring.  ",
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Nic Barthelemy",
+            "id": 61857,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/nicbarthelemy1",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/61857-gr.jpg",
+            "tier": "CONTRIBUTOR",
+            "url": "/nicbarthelemy1",
+            "userId": 61857,
+            "userName": "nicbarthelemy1"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      },
+      {
+        "author": {
+          "displayName": "Giovanny Rodríguez",
+          "id": 23653385,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "EXPERT",
+          "url": "/giovannyrodrguez"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 178,
+        "content": "<p>You also need to remember the winner model multiplied by 11 in the cry sample, which is more memorization than anything else.</p>",
+        "feedbackTrackingData": {},
+        "id": 3454152,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-05-06T16:37:29.890Z",
+        "rawMarkdown": "You also need to remember the winner model multiplied by 11 in the cry sample, which is more memorization than anything else.",
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Giovanny Rodríguez",
+            "id": 23653385,
+            "performanceTier": "EXPERT",
+            "profileUrl": "/giovannyrodrguez",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+            "tier": "EXPERT",
+            "url": "/giovannyrodrguez",
+            "userId": 23653385,
+            "userName": "giovannyrodrguez"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      },
+      {
+        "author": {
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "url": "/"
+        },
+        "authorType": "COMMENT",
+        "canDelete": true,
+        "feedbackTrackingData": {},
+        "id": 3453965,
+        "isDeleted": true,
+        "isThankYou": false,
+        "isUserAuthor": true,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-05-06T09:42:01.807Z",
+        "rawMarkdown": "",
+        "replies": [
+          {
+            "author": {
+              "displayName": "Taha",
+              "id": 33728306,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/33728306-kg.png?t=2026-04-25-07-15-05",
+              "tier": "CONTRIBUTOR",
+              "url": "/tahaalam2009"
+            },
+            "authorType": "TOPIC",
+            "competitionRanking": 313,
+            "content": "<p>I understand that, but I don’t see why a better algorithm wouldn’t improve generalization  shouldn’t clearer, more accurate reasoning help the model learn better? and also log probs dont differ much between two</p>",
+            "feedbackTrackingData": {},
+            "id": 3453969,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-05-06T10:03:09.883Z",
+            "rawMarkdown": "I understand that, but I don’t see why a better algorithm wouldn’t improve generalization  shouldn’t clearer, more accurate reasoning help the model learn better? and also log probs dont differ much between two",
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "Taha",
+                "id": 33728306,
+                "performanceTier": "CONTRIBUTOR",
+                "profileUrl": "/tahaalam2009",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/33728306-kg.png?t=2026-04-25-07-15-05",
+                "tier": "CONTRIBUTOR",
+                "url": "/tahaalam2009",
+                "userId": 33728306,
+                "userName": "tahaalam2009"
+              }
+            },
+            "votes": {
+              "canUpvote": true
+            }
+          }
+        ],
+        "votes": {
+          "totalVotes": -1
+        }
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "Taha",
+        "id": 33728306,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/33728306-kg.png?t=2026-04-25-07-15-05",
+        "tier": "CONTRIBUTOR",
+        "url": "/tahaalam2009"
+      },
+      "authorType": "TOPIC",
+      "competitionRanking": 313,
+      "content": "<p>Hey everyone, </p>\n<p>Over the last week, I went down a massive rabbit hole trying to improve the synthetic Chain of Thought (CoT) generation for the hard categories in this competition (<code>cryptarithm_deduce</code>, <code>cryptarithm_guess</code>, <code>equation_numeric_guess</code>). </p>\n<p>I managed to write a much better deterministic algorithm to solve these, pushing my synthetic dataset accuracy from the baseline <strong>87.7% to 95.8%</strong>. I assumed this would guarantee a leaderboard boost. Instead, my first few runs crashed to 0.73, and even my stabilized runs hovered around 0.82–0.84, failing to beat the 0.85 baseline. </p>\n<p>I wanted to share exactly why a \"better\" dataset doesn't automatically equal a better LB score, and the three massive traps I fell into (and how to fix them).</p>\n<h4>The Data Comparison</h4>\n<p>Here is the baseline (Tong's) generation vs. my custom generation. Notice the massive jump in the hard categories:</p>\n<p><strong>Original Baseline (LB ~0.85):</strong></p>\n<table>\n<thead>\n<tr>\n<th>Category</th>\n<th>Total</th>\n<th>Accuracy</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>bit_manipulation</td>\n<td>1602</td>\n<td>85.1%</td>\n</tr>\n<tr>\n<td>cipher</td>\n<td>1576</td>\n<td>100.0%</td>\n</tr>\n<tr>\n<td><strong>cryptarithm_deduce</strong></td>\n<td>659</td>\n<td><strong>8.2%</strong></td>\n</tr>\n<tr>\n<td><strong>cryptarithm_guess</strong></td>\n<td>164</td>\n<td><strong>6.7%</strong></td>\n</tr>\n<tr>\n<td>equation_numeric_deduce</td>\n<td>596</td>\n<td>90.6%</td>\n</tr>\n<tr>\n<td><strong>equation_numeric_guess</strong></td>\n<td>136</td>\n<td><strong>15.4%</strong></td>\n</tr>\n<tr>\n<td>gravity</td>\n<td>1597</td>\n<td>100.0%</td>\n</tr>\n<tr>\n<td>numeral</td>\n<td>1576</td>\n<td>100.0%</td>\n</tr>\n<tr>\n<td>unit_conversion</td>\n<td>1594</td>\n<td>100.0%</td>\n</tr>\n<tr>\n<td><strong>TOTAL</strong></td>\n<td><strong>9500</strong></td>\n<td><strong>87.7%</strong></td>\n</tr>\n</tbody>\n</table>\n<p><strong>My Custom Generation (LB ~0.82-0.84):</strong></p>\n<table>\n<thead>\n<tr>\n<th>Category</th>\n<th>Total</th>\n<th>Accuracy</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>bit_manipulation</td>\n<td>1602</td>\n<td>85.1%</td>\n</tr>\n<tr>\n<td>cipher</td>\n<td>1576</td>\n<td>100.0%</td>\n</tr>\n<tr>\n<td><strong>cryptarithm_deduce</strong></td>\n<td>659</td>\n<td><strong>89.8%</strong></td>\n</tr>\n<tr>\n<td><strong>cryptarithm_guess</strong></td>\n<td>164</td>\n<td><strong>85.4%</strong></td>\n</tr>\n<tr>\n<td>equation_numeric_deduce</td>\n<td>596</td>\n<td>90.6%</td>\n</tr>\n<tr>\n<td><strong>equation_numeric_guess</strong></td>\n<td>136</td>\n<td><strong>92.6%</strong></td>\n</tr>\n<tr>\n<td>gravity</td>\n<td>1597</td>\n<td>100.0%</td>\n</tr>\n<tr>\n<td>numeral</td>\n<td>1576</td>\n<td>100.0%</td>\n</tr>\n<tr>\n<td>unit_conversion</td>\n<td>1594</td>\n<td>100.0%</td>\n</tr>\n<tr>\n<td><strong>TOTAL</strong></td>\n<td><strong>9500</strong></td>\n<td><strong>95.8%</strong></td>\n</tr>\n</tbody>\n</table>\n<h4>Trap 1: Algorithmic Complexity vs. LLM Learnability (The Logprob Test)</h4>\n<p>Just because a Python script can solve a cryptarithm perfectly using backtracking or constraint solving doesn’t mean a language model can learn to predict those same steps token by token.</p>\n<p>I checked this by looking at the base model’s loss (negative log probability) across different datasets:</p>\n<h3>AVG DIFFERNCE :</h3>\n<ul>\n<li><code>cryptarithm_deduce</code>: ~0.4</li>\n<li><code>cryptarithm_guess</code>: ~0.20–0.3</li>\n<li><code>equation_numeric_guess</code>: roughly the same as <code>Tong's</code></li>\n</ul>\n<p>The takeaway is simple but easy to miss. Even though the data was correct, the reasoning paths in the “deduce” set were heavier and harder for the model to follow. Lower logprob data tends to be easier for the model to learn, even if it’s less “clean” from a traditional algorithmic point of view.\nRefer to LogProb Data <a href=\"https://www.kaggle.com/datasets/tahaalam2009/nemotron-0-90\" target=\"_blank\">Here</a></p>\n<h4>Trap 2: Catastrophic Forgetting via Oversampling</h4>\n<p>Because my hard categories only made up ~10% of the dataset, I initially oversampled them by 14x. <strong>This resulted in an LB score of 0.73.</strong> </p>\n<p>By force-feeding the model massively complex cryptarithm gradients (with a standard learning rate of <code>2e-4</code>), I triggered gradient saturation. The optimizer prioritized memorizing the hard math, and in doing so, it violently overwrote the base model's knowledge of basic math, gravity, and ciphers. </p>\n<p><em>Fix:</em> Cap oversampling at 3x, lower the learning rate to <code>5e-5</code>, and increase gradient accumulation to 64 to smooth the updates. </p>\n<h4>My Notebooks &amp; Datasets</h4>\n<p>If anyone wants to look at the code, the logprob filter, or the 95% dataset, here they are:</p>\n<ul>\n<li><strong>Datasets:</strong><ul>\n<li><a href=\"https://www.kaggle.com/datasets/tahaalam2009/nemotron-0-90\" target=\"_blank\">Nemotron-0-90 (The 95.8% Dataset)</a></li>\n<li><a href=\"https://www.kaggle.com/datasets/tahaalam2009/nemotron-logprob\" target=\"_blank\">Nemotron-Logprob (Pre-computed losses)</a></li></ul></li>\n<li><strong>Notebooks:</strong><ul>\n<li><a href=\"https://www.kaggle.com/code/tahaalam2009/nemotron-batched-logprob-filter-train\" target=\"_blank\">Batched Logprob Filter + Train</a></li>\n<li><a href=\"https://www.kaggle.com/code/tahaalam2009/end-to-end-finetuning-for-lb-0-82-csv-custom\" target=\"_blank\">End-to-End Finetuning for LB 0.82</a></li>\n<li><a href=\"https://www.kaggle.com/code/tahaalam2009/nemotron-sft-final-0-83-lb\" target=\"_blank\">Nemotron SFT Final 0.83 LB</a></li></ul></li>\n</ul>\n<p><strong>TL;DR:</strong> To win, you can't just have a 100% accurate synthetic generator. You must merge your hard CoTs with the easy baseline data (to act as an anchor), manage your gradients so you don't overwrite base knowledge, and ensure your token masking is bulletproof. </p>\n<p>Happy to hear if anyone else ran into the gradient saturation wall!\nAny Suggestions? then drop down! ;D</p>",
+      "feedbackTrackingData": {},
+      "id": 3453960,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-05-06T09:21:05.257Z",
+      "rawMarkdown": "Hey everyone, \n\nOver the last week, I went down a massive rabbit hole trying to improve the synthetic Chain of Thought (CoT) generation for the hard categories in this competition (`cryptarithm_deduce`, `cryptarithm_guess`, `equation_numeric_guess`). \n\nI managed to write a much better deterministic algorithm to solve these, pushing my synthetic dataset accuracy from the baseline **87.7% to 95.8%**. I assumed this would guarantee a leaderboard boost. Instead, my first few runs crashed to 0.73, and even my stabilized runs hovered around 0.82–0.84, failing to beat the 0.85 baseline. \n\nI wanted to share exactly why a \"better\" dataset doesn't automatically equal a better LB score, and the three massive traps I fell into (and how to fix them).\n\n#### The Data Comparison\n\nHere is the baseline (Tong's) generation vs. my custom generation. Notice the massive jump in the hard categories:\n\n**Original Baseline (LB ~0.85):**\n| Category | Total | Accuracy |\n| :--- | :--- | :--- |\n| bit_manipulation | 1602 | 85.1% |\n| cipher | 1576 | 100.0% |\n| **cryptarithm_deduce** | 659 | **8.2%** |\n| **cryptarithm_guess** | 164 | **6.7%** |\n| equation_numeric_deduce | 596 | 90.6% |\n| **equation_numeric_guess**| 136 | **15.4%** |\n| gravity | 1597 | 100.0% |\n| numeral | 1576 | 100.0% |\n| unit_conversion | 1594 | 100.0% |\n| **TOTAL** | **9500** | **87.7%** |\n\n**My Custom Generation (LB ~0.82-0.84):**\n| Category | Total | Accuracy |\n| :--- | :--- | :--- |\n| bit_manipulation | 1602 | 85.1% |\n| cipher | 1576 | 100.0% |\n| **cryptarithm_deduce** | 659 | **89.8%** |\n| **cryptarithm_guess** | 164 | **85.4%** |\n| equation_numeric_deduce | 596 | 90.6% |\n| **equation_numeric_guess**| 136 | **92.6%** |\n| gravity | 1597 | 100.0% |\n| numeral | 1576 | 100.0% |\n| unit_conversion | 1594 | 100.0% |\n| **TOTAL** | **9500** | **95.8%** |\n\n#### Trap 1: Algorithmic Complexity vs. LLM Learnability (The Logprob Test)\n\nJust because a Python script can solve a cryptarithm perfectly using backtracking or constraint solving doesn’t mean a language model can learn to predict those same steps token by token.\n\nI checked this by looking at the base model’s loss (negative log probability) across different datasets:\n### AVG DIFFERNCE :\n* `cryptarithm_deduce`: ~0.4\n* `cryptarithm_guess`: ~0.20–0.3\n* `equation_numeric_guess`: roughly the same as `Tong's`\n\nThe takeaway is simple but easy to miss. Even though the data was correct, the reasoning paths in the “deduce” set were heavier and harder for the model to follow. Lower logprob data tends to be easier for the model to learn, even if it’s less “clean” from a traditional algorithmic point of view.\nRefer to LogProb Data [Here](https://www.kaggle.com/datasets/tahaalam2009/nemotron-0-90)\n\n####  Trap 2: Catastrophic Forgetting via Oversampling\nBecause my hard categories only made up ~10% of the dataset, I initially oversampled them by 14x. **This resulted in an LB score of 0.73.** \n\nBy force-feeding the model massively complex cryptarithm gradients (with a standard learning rate of `2e-4`), I triggered gradient saturation. The optimizer prioritized memorizing the hard math, and in doing so, it violently overwrote the base model's knowledge of basic math, gravity, and ciphers. \n\n*Fix:* Cap oversampling at 3x, lower the learning rate to `5e-5`, and increase gradient accumulation to 64 to smooth the updates. \n\n####  My Notebooks & Datasets\nIf anyone wants to look at the code, the logprob filter, or the 95% dataset, here they are:\n\n*   **Datasets:**\n    *   [Nemotron-0-90 (The 95.8% Dataset)](https://www.kaggle.com/datasets/tahaalam2009/nemotron-0-90)\n    *   [Nemotron-Logprob (Pre-computed losses)](https://www.kaggle.com/datasets/tahaalam2009/nemotron-logprob)\n*   **Notebooks:**\n    *   [Batched Logprob Filter + Train](https://www.kaggle.com/code/tahaalam2009/nemotron-batched-logprob-filter-train)\n    *   [End-to-End Finetuning for LB 0.82](https://www.kaggle.com/code/tahaalam2009/end-to-end-finetuning-for-lb-0-82-csv-custom)\n    *   [Nemotron SFT Final 0.83 LB](https://www.kaggle.com/code/tahaalam2009/nemotron-sft-final-0-83-lb)\n\n**TL;DR:** To win, you can't just have a 100% accurate synthetic generator. You must merge your hard CoTs with the easy baseline data (to act as an anchor), manage your gradients so you don't overwrite base knowledge, and ensure your token masking is bulletproof. \n\nHappy to hear if anyone else ran into the gradient saturation wall!\nAny Suggestions? then drop down! ;D",
+      "reactions": [
+        {
+          "emoji": "THANK_YOU",
+          "featuredUserNames": [
+            "beckpro",
+            "takayukiimoto",
+            "daniilgonchar"
+          ],
+          "userCount": 3
+        },
+        {
+          "emoji": "SURPRISE",
+          "featuredUserNames": [
+            "amith1707"
+          ],
+          "userCount": 1
+        }
+      ],
+      "teamUpInfo": {
+        "intro": "",
+        "teamLeader": {
+          "displayName": "Taha",
+          "id": 33728306,
+          "performanceTier": "CONTRIBUTOR",
+          "profileUrl": "/tahaalam2009",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/33728306-kg.png?t=2026-04-25-07-15-05",
+          "tier": "CONTRIBUTOR",
+          "url": "/tahaalam2009",
+          "userId": 33728306,
+          "userName": "tahaalam2009"
+        }
+      },
+      "votes": {
+        "canUpvote": true,
+        "totalUpvotes": 17,
+        "totalVotes": 14
+      }
+    },
+    "firstMessageId": 3453960,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 697491,
+    "name": "Why a \"Better\" Dataset Scored Worse: Lessons on Logprobs, Gradient Saturation, and SFT Bugs",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-05-06T09:21:05.257833400Z",
+    "totalMessages": 13,
+    "totalVotes": 14,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/697491"
+  }
+}

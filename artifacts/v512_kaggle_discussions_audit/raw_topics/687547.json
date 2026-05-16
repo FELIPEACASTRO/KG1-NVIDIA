@@ -1,0 +1,163 @@
+{
+  "forumTopic": {
+    "authorId": 23138827,
+    "authorPerformanceTier": "CONTRIBUTOR",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "default-thumb.png",
+    "authorUserDisplayName": "Caspian Lin",
+    "authorUserName": "caspianlin",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "NNMax",
+          "id": 18148523,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/18148523-kg.jpg?t=2025-10-31-11-21-57",
+          "tier": "EXPERT",
+          "url": "/ashok205"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 759,
+        "content": "<p>Unfortunately I dont think DoRA is supported by vllm yet. You can see more details in this github <a href=\"https://github.com/vllm-project/vllm/issues/10849\" target=\"_blank\">issue</a>.</p>",
+        "feedbackTrackingData": {},
+        "id": 3435050,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-03T15:58:41.507Z",
+        "rawMarkdown": "Unfortunately I dont think DoRA is supported by vllm yet. You can see more details in this github [issue](https://github.com/vllm-project/vllm/issues/10849).",
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "NNMax",
+            "id": 18148523,
+            "performanceTier": "EXPERT",
+            "profileUrl": "/ashok205",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/18148523-kg.jpg?t=2025-10-31-11-21-57",
+            "tier": "EXPERT",
+            "url": "/ashok205",
+            "userId": 18148523,
+            "userName": "ashok205"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 2,
+          "totalVotes": 2
+        }
+      },
+      {
+        "author": {
+          "displayName": "CPMP",
+          "id": 75976,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/75976-gr.jpg",
+          "tier": "GRANDMASTER",
+          "url": "/cpmpml"
+        },
+        "authorType": "HOST",
+        "content": "<p>You use whatever you want provided you submit a LORA adapter for the competition model. The way you produce the LORA adapter is totally open.</p>",
+        "feedbackTrackingData": {},
+        "id": 3435625,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-04T13:38:01.910Z",
+        "rawMarkdown": "You use whatever you want provided you submit a LORA adapter for the competition model. The way you produce the LORA adapter is totally open.",
+        "votes": {
+          "canUpvote": true
+        }
+      },
+      {
+        "author": {
+          "displayName": "Ryan Holbrook",
+          "id": 2003505,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2003505-kg.jpg",
+          "tier": "STAFF",
+          "url": "/ryanholbrook"
+        },
+        "authorType": "ADMIN",
+        "content": "<p>Hi <a href=\"https://www.kaggle.com/caspianlin\" target=\"_blank\">@caspianlin</a> You could try it out using the provided evaluation metric <a href=\"https://www.kaggle.com/code/metric/nvidia-nemotron-metric\" target=\"_blank\">here</a>. Let us know your results!</p>",
+        "feedbackTrackingData": {},
+        "id": 3434993,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-03T14:53:24.763Z",
+        "rawMarkdown": "Hi @caspianlin You could try it out using the provided evaluation metric [here](https://www.kaggle.com/code/metric/nvidia-nemotron-metric). Let us know your results!",
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Ryan Holbrook",
+            "id": 2003505,
+            "performanceTier": "STAFF",
+            "profileUrl": "/ryanholbrook",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2003505-kg.jpg",
+            "tier": "STAFF",
+            "url": "/ryanholbrook",
+            "userId": 2003505,
+            "userName": "ryanholbrook"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "Caspian Lin",
+        "id": 23138827,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+        "tier": "CONTRIBUTOR",
+        "url": "/caspianlin"
+      },
+      "authorType": "TOPIC",
+      "competitionRanking": 2142,
+      "content": "<p>Can we use DoRA (Weight-Decomposed Low-Rank Adaptation) to improve LoRA performance? I tried setting use_dora=True in the LoRA config, but I encountered an unknown error after submitting. Is DoRA supported in the final test submission? Or is this competition limited to using basic LoRA configurations?</p>",
+      "feedbackTrackingData": {},
+      "id": 3434722,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-04-03T06:49:03.770Z",
+      "rawMarkdown": "Can we use DoRA (Weight-Decomposed Low-Rank Adaptation) to improve LoRA performance? I tried setting use_dora=True in the LoRA config, but I encountered an unknown error after submitting. Is DoRA supported in the final test submission? Or is this competition limited to using basic LoRA configurations?\n",
+      "teamUpInfo": {
+        "intro": "",
+        "teamLeader": {
+          "displayName": "Caspian Lin",
+          "id": 23138827,
+          "performanceTier": "CONTRIBUTOR",
+          "profileUrl": "/caspianlin",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "CONTRIBUTOR",
+          "url": "/caspianlin",
+          "userId": 23138827,
+          "userName": "caspianlin"
+        }
+      },
+      "votes": {
+        "canUpvote": true,
+        "totalUpvotes": 1,
+        "totalVotes": 1
+      }
+    },
+    "firstMessageId": 3434722,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 687547,
+    "name": "Can we use DoRA (Weight-Decomposed Low-Rank Adaptation) to improve LoRA performance?",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-04-03T06:49:03.771496800Z",
+    "totalMessages": 3,
+    "totalVotes": 1,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/687547"
+  }
+}

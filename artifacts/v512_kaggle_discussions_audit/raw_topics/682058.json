@@ -1,0 +1,139 @@
+{
+  "forumTopic": {
+    "authorId": 2559802,
+    "authorPerformanceTier": "CONTRIBUTOR",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "default-thumb.png",
+    "authorUserDisplayName": "Saurabh Dasgupta",
+    "authorUserName": "dasgupsa500",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "Ashish Kumar Jha",
+          "id": 12104026,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/12104026-kg.jpg",
+          "tier": "CONTRIBUTOR",
+          "url": "/ashu1399"
+        },
+        "authorType": "COMMENT",
+        "content": "<p>Yes - You don't have to worry about getting the compute and pay anywhere.</p>\n<p>Copy: <a href=\"https://www.kaggle.com/code/ryanholbrook/nvidia-nemotron-submission-demo\" target=\"_blank\">https://www.kaggle.com/code/ryanholbrook/nvidia-nemotron-submission-demo</a>, then if you want to manually select / change accelerator go to settings -&gt; Accelerator -&gt; GPU RTX Pro 6000</p>",
+        "feedbackTrackingData": {},
+        "id": 3426251,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-22T08:14:10.083Z",
+        "rawMarkdown": "Yes - You don't have to worry about getting the compute and pay anywhere.\n\nCopy: https://www.kaggle.com/code/ryanholbrook/nvidia-nemotron-submission-demo, then if you want to manually select / change accelerator go to settings -> Accelerator -> GPU RTX Pro 6000",
+        "replies": [
+          {
+            "author": {
+              "displayName": "Saurabh Dasgupta",
+              "id": 2559802,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+              "tier": "CONTRIBUTOR",
+              "url": "/dasgupsa500"
+            },
+            "authorType": "TOPIC",
+            "content": "<p>Thank you Ashish. If there are any issues, I will definitely let you know.\nThank you again.</p>",
+            "feedbackTrackingData": {},
+            "id": 3426776,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-03-23T07:44:01.133Z",
+            "rawMarkdown": "Thank you Ashish. If there are any issues, I will definitely let you know.\nThank you again.",
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "Saurabh Dasgupta",
+                "id": 2559802,
+                "performanceTier": "CONTRIBUTOR",
+                "profileUrl": "/dasgupsa500",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                "tier": "CONTRIBUTOR",
+                "url": "/dasgupsa500",
+                "userId": 2559802,
+                "userName": "dasgupsa500"
+              }
+            },
+            "votes": {
+              "canUpvote": true
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Ashish Kumar Jha",
+            "id": 12104026,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/ashu1399",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/12104026-kg.jpg",
+            "tier": "CONTRIBUTOR",
+            "url": "/ashu1399",
+            "userId": 12104026,
+            "userName": "ashu1399"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "Saurabh Dasgupta",
+        "id": 2559802,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+        "tier": "CONTRIBUTOR",
+        "url": "/dasgupsa500"
+      },
+      "authorType": "TOPIC",
+      "content": "<p>Hi</p>\n<p>I hope you are well. This may have already been answered but I wanted to check.\nIn order to do this challenge, the competitors will be using Kaggle compute and machines, which will have the \"G4 VMs powered by NVIDIA RTX PRO 6000 Blackwell Server Edition GPUs as the compute backbone for this challenge\". Hence, I do not have to worry about getting GPU compute from the cloud (unless additional work is needed).\nPlease let me know.</p>\n<p>Many thanks in advance\nSaurabh</p>",
+      "feedbackTrackingData": {},
+      "id": 3422664,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-03-17T21:42:05.583Z",
+      "rawMarkdown": "Hi\n\nI hope you are well. This may have already been answered but I wanted to check.\nIn order to do this challenge, the competitors will be using Kaggle compute and machines, which will have the \"G4 VMs powered by NVIDIA RTX PRO 6000 Blackwell Server Edition GPUs as the compute backbone for this challenge\". Hence, I do not have to worry about getting GPU compute from the cloud (unless additional work is needed).\nPlease let me know.\n\nMany thanks in advance\nSaurabh",
+      "teamUpInfo": {
+        "intro": "",
+        "teamLeader": {
+          "displayName": "Saurabh Dasgupta",
+          "id": 2559802,
+          "performanceTier": "CONTRIBUTOR",
+          "profileUrl": "/dasgupsa500",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "CONTRIBUTOR",
+          "url": "/dasgupsa500",
+          "userId": 2559802,
+          "userName": "dasgupsa500"
+        }
+      },
+      "votes": {
+        "canUpvote": true,
+        "totalUpvotes": 3,
+        "totalVotes": 3
+      }
+    },
+    "firstMessageId": 3422664,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 682058,
+    "name": "Compute Access",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-03-17T21:42:05.581711500Z",
+    "totalMessages": 2,
+    "totalVotes": 3,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/682058"
+  }
+}

@@ -1,0 +1,173 @@
+{
+  "forumTopic": {
+    "authorId": 17819385,
+    "authorPerformanceTier": "CONTRIBUTOR",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "default-thumb.png",
+    "authorUserDisplayName": "lucian kucera",
+    "authorUserName": "luciankucera",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "CPMP",
+          "id": 75976,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/75976-gr.jpg",
+          "tier": "GRANDMASTER",
+          "url": "/cpmpml"
+        },
+        "authorType": "HOST",
+        "content": "<p>Don't try understanding downvotes.</p>\n<p>I had some serial downvoters downvoting every single post and reply I was making at a time. This happens, some people are just mad at you for unknown reasons.</p>\n<p>Just move on and focus on positive things.</p>",
+        "feedbackTrackingData": {},
+        "id": 3433211,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-01T11:59:16.230Z",
+        "rawMarkdown": "Don't try understanding downvotes.\n\nI had some serial downvoters downvoting every single post and reply I was making at a time. This happens, some people are just mad at you for unknown reasons.\n\nJust move on and focus on positive things.",
+        "reactions": [
+          {
+            "emoji": "FUNNY",
+            "featuredUserNames": [
+              "mushfirat"
+            ],
+            "userCount": 1
+          }
+        ],
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 2,
+          "totalVotes": 2
+        }
+      },
+      {
+        "author": {
+          "displayName": "Mohamed Amr992",
+          "id": 20851032,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/20851032-kg.png?t=2026-05-06-14-39-14",
+          "tier": "CONTRIBUTOR",
+          "url": "/mohamedamr992"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 160,
+        "content": "<p>release negative energy </p>",
+        "feedbackTrackingData": {},
+        "id": 3432809,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-31T23:50:18.943Z",
+        "rawMarkdown": "release negative energy ",
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Mohamed Amr992",
+            "id": 20851032,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/mohamedamr992",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/20851032-kg.png?t=2026-05-06-14-39-14",
+            "tier": "CONTRIBUTOR",
+            "url": "/mohamedamr992",
+            "userId": 20851032,
+            "userName": "mohamedamr992"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      },
+      {
+        "author": {
+          "displayName": "Alhasan Abdellatif",
+          "id": 1362573,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1362573-kg.jpeg?t=2025-08-05-17-30-30",
+          "tier": "EXPERT",
+          "url": "/alhasanabdellatif123"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 1673,
+        "content": "<p>I don't know. It is annoying!</p>",
+        "feedbackTrackingData": {},
+        "id": 3431197,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-29T16:42:37.090Z",
+        "rawMarkdown": "I don't know. It is annoying!",
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Alhasan Abdellatif",
+            "id": 1362573,
+            "performanceTier": "EXPERT",
+            "profileUrl": "/alhasanabdellatif123",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1362573-kg.jpeg?t=2025-08-05-17-30-30",
+            "tier": "EXPERT",
+            "url": "/alhasanabdellatif123",
+            "userId": 1362573,
+            "userName": "alhasanabdellatif123"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "lucian kucera",
+        "id": 17819385,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+        "tier": "CONTRIBUTOR",
+        "url": "/luciankucera"
+      },
+      "authorType": "TOPIC",
+      "competitionRanking": 1662,
+      "content": "<p>Why am i getting downvoted when sharing a prompts? I dont get are there kaggle bots that downvote poeple that try to help others?</p>",
+      "feedbackTrackingData": {},
+      "id": 3431183,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-03-29T16:15:26.667Z",
+      "rawMarkdown": "Why am i getting downvoted when sharing a prompts? I dont get are there kaggle bots that downvote poeple that try to help others?",
+      "teamUpInfo": {
+        "intro": "",
+        "teamLeader": {
+          "displayName": "lucian kucera",
+          "id": 17819385,
+          "performanceTier": "CONTRIBUTOR",
+          "profileUrl": "/luciankucera",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "CONTRIBUTOR",
+          "url": "/luciankucera",
+          "userId": 17819385,
+          "userName": "luciankucera"
+        }
+      },
+      "votes": {
+        "canUpvote": true,
+        "totalUpvotes": 2,
+        "totalVotes": -12
+      }
+    },
+    "firstMessageId": 3431183,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 685910,
+    "name": "Why people downvote?",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-03-29T16:15:26.666300600Z",
+    "totalMessages": 3,
+    "totalVotes": -12,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/685910"
+  }
+}

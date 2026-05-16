@@ -1,0 +1,143 @@
+{
+  "forumTopic": {
+    "authorId": 26336666,
+    "authorPerformanceTier": "EXPERT",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "26336666-kg.png?t=2026-04-09-13-38-39",
+    "authorUserDisplayName": "Zejun_",
+    "authorUserName": "zejunfool",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "Mark Cooper",
+          "id": 33183648,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/33183648-kg.png?t=2026-03-25-21-09-26",
+          "tier": "CONTRIBUTOR",
+          "url": "/markjcooper"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 707,
+        "content": "<p>Two sub-problems worth separating.</p>\n<p><strong>Problem one: CAN we solve them algorithmically?</strong></p>\n<p><strong>cryptarithm_deduce</strong> — yes, with brute force. The operator IS in the examples,\n   just hidden under a substitution cipher. Enumerate cipher permutations times operator\n  primitives and check consistency across examples. Expensive but tractable on GPU. We hit about  \n  95% solver coverage via exhaustive GPU sweeps.</p>\n<p><strong>cryptarithm_guess and equation_numeric_guess</strong> — genuinely info-theoretic. The\n   unknown operator does not appear anywhere in the examples, so no amount of analysis recovers   \n  it. Best you can do is heuristic guesses like absolute difference, concatenation,\n  output-length-based fallback. See my earlier post in this forum.</p>\n<p><strong>Problem two: Can we make the model generate those solver CoTs?</strong></p>\n<p>This is the real problem, and where almost everyone fails. Two approaches we have seen.</p>\n<p><strong>LLM-generated CoTs</strong>, which is what Zejun tried. Frontier models like Claude, \n  GPT, DeepSeek hallucinate constantly on cipher-plus-operator puzzles. They get the answer right \n  about 30% of the time but the reasoning is wrong, so training on them teaches the model to guess\n   confidently rather than derive correctly. Not recommended.</p>\n<p><strong>Algorithmic CoTs</strong>, which is Tong Hui Kang's approach. Write Python that      \n  produces the exact derivation as text, mirroring what a solver does step-by-step. This is how   \n  THK got bit_manipulation from 21% to 85%. The bit_manipulation playbook is published at <a href=\"https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/6\n  90307\">discussion 690307</a>.</p>\n<p><strong>What we think the cryptarithm equivalent of THK's bit trick looks like:</strong></p>\n<ul>\n  <li>Enumerate candidate cipher maps in parallel, token-by-token, using an output-length hash    \n  analogous to his bitsum to prune.</li>\n  <li>Show the matching step for each candidate rather than trying to reason the map.</li>        \n  <li>Keep each token derivable from a small fixed context, no global reasoning required.</li>    \n  </ul>\n<p>Nobody has published this for cryptarithm yet. Whoever writes it first is probably in the top\n   10 at the end.</p>\n<p>For the <code>_guess</code> subtypes: accept the 15-20% ceiling and optimise the heuristic   \n  pick. Output-length match is the best signal we have found.</p>",
+        "feedbackTrackingData": {},
+        "id": 3443293,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-16T10:36:32.177Z",
+        "rawMarkdown": "<p>Two sub-problems worth separating.</p>                                                       \n  \n  <p><strong>Problem one: CAN we solve them algorithmically?</strong></p>                                                                                                                           \n  <p><strong>cryptarithm_deduce</strong> — yes, with brute force. The operator IS in the examples,\n   just hidden under a substitution cipher. Enumerate cipher permutations times operator\n  primitives and check consistency across examples. Expensive but tractable on GPU. We hit about  \n  95% solver coverage via exhaustive GPU sweeps.</p>\n\n  <p><strong>cryptarithm_guess and equation_numeric_guess</strong> — genuinely info-theoretic. The\n   unknown operator does not appear anywhere in the examples, so no amount of analysis recovers   \n  it. Best you can do is heuristic guesses like absolute difference, concatenation,\n  output-length-based fallback. See my earlier post in this forum.</p>\n\n  <p><strong>Problem two: Can we make the model generate those solver CoTs?</strong></p>\n\n  <p>This is the real problem, and where almost everyone fails. Two approaches we have seen.</p>  \n\n  <p><strong>LLM-generated CoTs</strong>, which is what Zejun tried. Frontier models like Claude, \n  GPT, DeepSeek hallucinate constantly on cipher-plus-operator puzzles. They get the answer right \n  about 30% of the time but the reasoning is wrong, so training on them teaches the model to guess\n   confidently rather than derive correctly. Not recommended.</p>\n\n  <p><strong>Algorithmic CoTs</strong>, which is Tong Hui Kang's approach. Write Python that      \n  produces the exact derivation as text, mirroring what a solver does step-by-step. This is how   \n  THK got bit_manipulation from 21% to 85%. The bit_manipulation playbook is published at <a      \n  href=\"https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/6\n  90307\">discussion 690307</a>.</p>\n\n  <p><strong>What we think the cryptarithm equivalent of THK's bit trick looks like:</strong></p> \n\n  <ul>\n  <li>Enumerate candidate cipher maps in parallel, token-by-token, using an output-length hash    \n  analogous to his bitsum to prune.</li>\n  <li>Show the matching step for each candidate rather than trying to reason the map.</li>        \n  <li>Keep each token derivable from a small fixed context, no global reasoning required.</li>    \n  </ul>\n\n  <p>Nobody has published this for cryptarithm yet. Whoever writes it first is probably in the top\n   10 at the end.</p>\n\n  <p>For the <code>_guess</code> subtypes: accept the 15-20% ceiling and optimise the heuristic   \n  pick. Output-length match is the best signal we have found.</p>",
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Mark Cooper",
+            "id": 33183648,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/markjcooper",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/33183648-kg.png?t=2026-03-25-21-09-26",
+            "tier": "CONTRIBUTOR",
+            "url": "/markjcooper",
+            "userId": 33183648,
+            "userName": "markjcooper"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 2,
+          "totalVotes": 2
+        }
+      },
+      {
+        "author": {
+          "displayName": "FO-SHIZZLE",
+          "id": 43446,
+          "progressionOptOut": true,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/43446-kg.jpg",
+          "tier": "CONTRIBUTOR",
+          "url": "/mcw0089"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 121,
+        "content": "<p>My guess is that this particular dataset was derived from some internal work done at Nvidia. I am almost sure this has very real and practical implications for some sort of translation problem they face internally. \nIt is highly unlikely that the solutions to these problems exist in the open domain. They likely exist internally but they are trying to figure out a way to speed up things without exposing their trade secrets. In short, the cryptic nature of the problems are because they are protecting trade secrets and just need the best model so they can follow the recipe internally and speed up some sort of translation or solve some important task.</p>",
+        "feedbackTrackingData": {},
+        "id": 3447401,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-23T04:31:50.250Z",
+        "rawMarkdown": "My guess is that this particular dataset was derived from some internal work done at Nvidia. I am almost sure this has very real and practical implications for some sort of translation problem they face internally. \nIt is highly unlikely that the solutions to these problems exist in the open domain. They likely exist internally but they are trying to figure out a way to speed up things without exposing their trade secrets. In short, the cryptic nature of the problems are because they are protecting trade secrets and just need the best model so they can follow the recipe internally and speed up some sort of translation or solve some important task.",
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "FO-SHIZZLE",
+            "id": 43446,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/mcw0089",
+            "progressionOptOut": true,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/43446-kg.jpg",
+            "tier": "CONTRIBUTOR",
+            "url": "/mcw0089",
+            "userId": 43446,
+            "userName": "mcw0089"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "Zejun_",
+        "id": 26336666,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/26336666-kg.png?t=2026-04-09-13-38-39",
+        "tier": "EXPERT",
+        "url": "/zejunfool"
+      },
+      "authorType": "TOPIC",
+      "competitionRanking": 346,
+      "content": "<p>Thank <a href=\"https://www.kaggle.com/huikang\" target=\"_blank\">huikang</a> for providing such a powerful new starting point for the latter part of this competition. Congratulations! If you run the longer notebook and look at the report results, you will find that the accuracy rates for the three categories of problems, <strong>cryptarithm_deduce</strong>, <strong>cryptarithm_guess</strong>, and <strong>equation_numeric_guess</strong>, are all very low. These will be the main directions for everyone's efforts after this incredibly powerful baseline. </p>\n<p>To solve them, while I tried to solve them independently, I also tried to get the LLM to generate CoT. Unfortunately, neither I nor the LLM could provide reasonable steps for the answers in the CSV file. Does anyone have any experience in solving these complex and difficult mapping problems? If not using human effort but LLMs, what models do you use to generate accurate CoT? I think this is very meaningful for this competition and will enable the top-kagglers to aim for a perfect score.</p>",
+      "feedbackTrackingData": {},
+      "id": 3440954,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-04-13T09:51:02.613Z",
+      "rawMarkdown": "Thank [huikang](https://www.kaggle.com/huikang) for providing such a powerful new starting point for the latter part of this competition. Congratulations! If you run the longer notebook and look at the report results, you will find that the accuracy rates for the three categories of problems, **cryptarithm_deduce**, **cryptarithm_guess**, and **equation_numeric_guess**, are all very low. These will be the main directions for everyone's efforts after this incredibly powerful baseline. \n\nTo solve them, while I tried to solve them independently, I also tried to get the LLM to generate CoT. Unfortunately, neither I nor the LLM could provide reasonable steps for the answers in the CSV file. Does anyone have any experience in solving these complex and difficult mapping problems? If not using human effort but LLMs, what models do you use to generate accurate CoT? I think this is very meaningful for this competition and will enable the top-kagglers to aim for a perfect score.",
+      "teamUpInfo": {
+        "enabled": true,
+        "intro": "",
+        "teamLeader": {
+          "displayName": "Zejun_",
+          "id": 26336666,
+          "performanceTier": "EXPERT",
+          "profileUrl": "/zejunfool",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/26336666-kg.png?t=2026-04-09-13-38-39",
+          "tier": "EXPERT",
+          "url": "/zejunfool",
+          "userId": 26336666,
+          "userName": "zejunfool"
+        }
+      },
+      "votes": {
+        "canUpvote": true,
+        "totalUpvotes": 4,
+        "totalVotes": 4
+      }
+    },
+    "firstMessageId": 3440954,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 690891,
+    "name": "There are still many missing pieces of the puzzle: equation and cryptarithm.",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-04-13T09:51:02.613643300Z",
+    "totalMessages": 2,
+    "totalVotes": 4,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/690891"
+  }
+}

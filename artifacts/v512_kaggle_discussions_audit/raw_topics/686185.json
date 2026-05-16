@@ -1,0 +1,225 @@
+{
+  "forumTopic": {
+    "authorId": 31950811,
+    "authorPerformanceTier": "CONTRIBUTOR",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "default-thumb.png",
+    "authorUserDisplayName": "CS Major",
+    "authorUserName": "aaditsingh7",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "Kh0a",
+          "id": 21691005,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/21691005-kg.png?t=2025-08-27-03-21-25",
+          "tier": "MASTER",
+          "url": "/llkh0a"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 4,
+        "content": "<p>the puzzles are very rule-consistent. \"/\" appeared since is it defined as negative sign.</p>\n<p><code>69/52 = rev(rev(52) - rev(69)) = rev(25 - 96) = rev(-71) = 17- =&gt; 17/</code></p>\n<p><code>52}51 = rev(rev(52) + rev(51) - 1) = rev(25 + 15 -1) = rev(39) = 93</code></p>",
+        "feedbackTrackingData": {},
+        "id": 3432076,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-31T04:12:04.327Z",
+        "rawMarkdown": "the puzzles are very rule-consistent. \"/\" appeared since is it defined as negative sign.\n\n`69/52 = rev(rev(52) - rev(69)) = rev(25 - 96) = rev(-71) = 17- => 17/  `\n\n`52}51 = rev(rev(52) + rev(51) - 1) = rev(25 + 15 -1) = rev(39) = 93`",
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Kh0a",
+            "id": 21691005,
+            "performanceTier": "MASTER",
+            "profileUrl": "/llkh0a",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/21691005-kg.png?t=2025-08-27-03-21-25",
+            "tier": "MASTER",
+            "url": "/llkh0a",
+            "userId": 21691005,
+            "userName": "llkh0a"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 5,
+          "totalVotes": 5
+        }
+      },
+      {
+        "author": {
+          "displayName": "CS Major",
+          "id": 31950811,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "CONTRIBUTOR",
+          "url": "/aaditsingh7"
+        },
+        "authorType": "TOPIC",
+        "competitionRanking": 1527,
+        "content": "<p>If it helps, this is the log for success/failure</p>\n<p>bit_manipulation: 842 success, 760 failed (52.6% success)</p>\n<p>gravity_physics: 1590 success, 7 failed (99.6% success)</p>\n<p>numeral_conversion: 1576 success, 0 failed (100.0% success)</p>\n<p>symbolic_algebra: 1004 success, 551 failed (64.6% success)</p>\n<p>text_encryption: 1576 success, 0 failed (100.0% success)</p>\n<p>unit_conversion: 1593 success, 1 failed (99.9% success)</p>",
+        "feedbackTrackingData": {},
+        "id": 3431794,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-30T17:21:19.443Z",
+        "rawMarkdown": "If it helps, this is the log for success/failure\n\nbit_manipulation: 842 success, 760 failed (52.6% success)\n\ngravity_physics: 1590 success, 7 failed (99.6% success)\n\nnumeral_conversion: 1576 success, 0 failed (100.0% success)\n\nsymbolic_algebra: 1004 success, 551 failed (64.6% success)\n\ntext_encryption: 1576 success, 0 failed (100.0% success)\n\nunit_conversion: 1593 success, 1 failed (99.9% success)",
+        "replies": [
+          {
+            "author": {
+              "displayName": "akshit manocha",
+              "id": 18256095,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+              "tier": "CONTRIBUTOR",
+              "url": "/akshitmanocha"
+            },
+            "authorType": "COMMENT",
+            "content": "<p>this is for the brute force? or was your fine tuned model able to solve this?</p>",
+            "feedbackTrackingData": {},
+            "id": 3434699,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-04-03T06:17:11.220Z",
+            "rawMarkdown": "this is for the brute force? or was your fine tuned model able to solve this?",
+            "replies": [
+              {
+                "author": {
+                  "displayName": "CS Major",
+                  "id": 31950811,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                  "tier": "CONTRIBUTOR",
+                  "url": "/aaditsingh7"
+                },
+                "authorType": "TOPIC",
+                "competitionRanking": 1527,
+                "content": "<p>This was produced by my deterministic CoT generating code. I haven’t actually tested my model against a validation set yet (probably not best practice) but once my solver is strong enough I’m planning on using that to produce synthetic example’s following the same logic in the provided set and train + validate on that. </p>",
+                "feedbackTrackingData": {},
+                "id": 3434724,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-03T06:54:04.927Z",
+                "rawMarkdown": "This was produced by my deterministic CoT generating code. I haven’t actually tested my model against a validation set yet (probably not best practice) but once my solver is strong enough I’m planning on using that to produce synthetic example’s following the same logic in the provided set and train + validate on that. ",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "CS Major",
+                    "id": 31950811,
+                    "performanceTier": "CONTRIBUTOR",
+                    "profileUrl": "/aaditsingh7",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                    "tier": "CONTRIBUTOR",
+                    "url": "/aaditsingh7",
+                    "userId": 31950811,
+                    "userName": "aaditsingh7"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true
+                }
+              }
+            ],
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "akshit manocha",
+                "id": 18256095,
+                "performanceTier": "CONTRIBUTOR",
+                "profileUrl": "/akshitmanocha",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                "tier": "CONTRIBUTOR",
+                "url": "/akshitmanocha",
+                "userId": 18256095,
+                "userName": "akshitmanocha"
+              }
+            },
+            "votes": {
+              "canUpvote": true,
+              "totalUpvotes": 1,
+              "totalVotes": 1
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "CS Major",
+            "id": 31950811,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/aaditsingh7",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+            "tier": "CONTRIBUTOR",
+            "url": "/aaditsingh7",
+            "userId": 31950811,
+            "userName": "aaditsingh7"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 2,
+          "totalVotes": 2
+        }
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "CS Major",
+        "id": 31950811,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+        "tier": "CONTRIBUTOR",
+        "url": "/aaditsingh7"
+      },
+      "authorType": "TOPIC",
+      "competitionRanking": 1527,
+      "content": "<p>Was looking through some of the questions where my CoT generating code failed (mostly in the symbolic algebra question types) and I noticed a few questions such as the following:</p>\n<p>\"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:\n34/44 = 1\n41/32 = 9\n34|25 = 69\n87\\64 = 8853\nNow, determine the result for: 69/52\"    and the solution is \"17/\"</p>\n<p>and </p>\n<p>\"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:\n45^08 = 0234\n37}95 = 131\n99^88 = 2178\nNow, determine the result for: 52}51\" and the solution is \"93\"</p>\n<p>Is this just a dataset quality issue or am I missing something? I got a higher score (0.7) leaving these unsolved examples in compared to excluding them (0.63) so I'm not too sure honestly.</p>",
+      "feedbackTrackingData": {},
+      "id": 3431789,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-03-30T17:17:57.427Z",
+      "rawMarkdown": "Was looking through some of the questions where my CoT generating code failed (mostly in the symbolic algebra question types) and I noticed a few questions such as the following:\n\n\"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:\n34/44 = 1\n41/32 = 9\n34|25 = 69\n87\\64 = 8853\nNow, determine the result for: 69/52\"\tand the solution is \"17/\"\n\nand \n\n\"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:\n45^08 = 0234\n37}95 = 131\n99^88 = 2178\nNow, determine the result for: 52}51\" and the solution is \"93\"\n\nIs this just a dataset quality issue or am I missing something? I got a higher score (0.7) leaving these unsolved examples in compared to excluding them (0.63) so I'm not too sure honestly.",
+      "teamUpInfo": {
+        "intro": "",
+        "teamLeader": {
+          "displayName": "CS Major",
+          "id": 31950811,
+          "performanceTier": "CONTRIBUTOR",
+          "profileUrl": "/aaditsingh7",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "CONTRIBUTOR",
+          "url": "/aaditsingh7",
+          "userId": 31950811,
+          "userName": "aaditsingh7"
+        }
+      },
+      "votes": {
+        "canUpvote": true,
+        "totalUpvotes": 3,
+        "totalVotes": 3
+      }
+    },
+    "firstMessageId": 3431789,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 686185,
+    "name": "Seemingly Impossible Questions in Dataset?",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-03-30T17:17:57.426026500Z",
+    "totalMessages": 4,
+    "totalVotes": 3,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/686185"
+  }
+}

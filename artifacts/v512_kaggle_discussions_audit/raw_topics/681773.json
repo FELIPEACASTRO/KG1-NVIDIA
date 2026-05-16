@@ -1,0 +1,133 @@
+{
+  "forumTopic": {
+    "authorId": 29987937,
+    "authorPerformanceTier": "CONTRIBUTOR",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "default-thumb.png",
+    "authorUserDisplayName": "BeyondBirthday",
+    "authorUserName": "near07",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "Addison Howard",
+          "id": 1095143,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1095143-kg.jpeg",
+          "tier": "STAFF",
+          "url": "/addisonhoward"
+        },
+        "authorType": "ADMIN",
+        "content": "<p>April 9 is correct - we moved the date up to ensure that a prospective winning team had a chance to provide documentation in advance of the announcement at Google Cloud NEXT.</p>\n<p>I've updated the inconsistency</p>",
+        "feedbackTrackingData": {},
+        "id": 3422316,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-17T13:07:52.430Z",
+        "rawMarkdown": "April 9 is correct - we moved the date up to ensure that a prospective winning team had a chance to provide documentation in advance of the announcement at Google Cloud NEXT.\n\nI've updated the inconsistency",
+        "reactions": [
+          {
+            "emoji": "THANK_YOU",
+            "featuredUserNames": [
+              "ashleyoldacre"
+            ],
+            "userCount": 1
+          }
+        ],
+        "replies": [
+          {
+            "author": {
+              "displayName": "BeyondBirthday",
+              "id": 29987937,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+              "tier": "CONTRIBUTOR",
+              "url": "/near07"
+            },
+            "authorType": "TOPIC",
+            "content": "<p>Thank you!</p>",
+            "feedbackTrackingData": {},
+            "id": 3423264,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-03-18T11:05:15.503Z",
+            "rawMarkdown": "Thank you!",
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "BeyondBirthday",
+                "id": 29987937,
+                "performanceTier": "CONTRIBUTOR",
+                "profileUrl": "/near07",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                "tier": "CONTRIBUTOR",
+                "url": "/near07",
+                "userId": 29987937,
+                "userName": "near07"
+              }
+            },
+            "votes": {
+              "canUpvote": true
+            }
+          }
+        ],
+        "votes": {
+          "canUpvote": true
+        }
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "BeyondBirthday",
+        "id": 29987937,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+        "tier": "CONTRIBUTOR",
+        "url": "/near07"
+      },
+      "authorType": "TOPIC",
+      "content": "<p>Hi NVIDIA Team,</p>\n<p>Thank you for organizing this competition. While going through the competition details, I noticed an inconsistency in the Midpoint Cut-off Date between two sections:</p>\n<p><strong>In the Prizes section (Open Progress Prize):</strong></p>\n<blockquote>\n  <p>\"Awarded to the team with the highest leaderboard score as of the Midpoint Cut-off Date: April 9, 2026.\"</p>\n</blockquote>\n<p><strong>In the Timeline section:</strong></p>\n<blockquote>\n  <p>\"April 16, 2026 - Midpoint Cut-off Date\"</p>\n</blockquote>\n<p>Could you please confirm which date is the correct Midpoint Cut-off Date for the Open Progress Prize?</p>\n<p>Thank you!</p>",
+      "feedbackTrackingData": {},
+      "id": 3422191,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-03-17T05:48:09.197Z",
+      "rawMarkdown": "Hi NVIDIA Team,\n\nThank you for organizing this competition. While going through the competition details, I noticed an inconsistency in the Midpoint Cut-off Date between two sections:\n\n**In the Prizes section (Open Progress Prize):**\n> \"Awarded to the team with the highest leaderboard score as of the Midpoint Cut-off Date: April 9, 2026.\"\n\n**In the Timeline section:**\n> \"April 16, 2026 - Midpoint Cut-off Date\"\n\nCould you please confirm which date is the correct Midpoint Cut-off Date for the Open Progress Prize?\n\nThank you!",
+      "teamUpInfo": {
+        "intro": "",
+        "teamLeader": {
+          "displayName": "BeyondBirthday",
+          "id": 29987937,
+          "performanceTier": "CONTRIBUTOR",
+          "profileUrl": "/near07",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "CONTRIBUTOR",
+          "url": "/near07",
+          "userId": 29987937,
+          "userName": "near07"
+        }
+      },
+      "votes": {
+        "canUpvote": true,
+        "totalUpvotes": 4,
+        "totalVotes": 4
+      }
+    },
+    "firstMessageId": 3422191,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 681773,
+    "name": "Date Conflict: Midpoint Cut-off Date in Prizes vs Timeline section",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-03-17T05:48:09.197397900Z",
+    "totalMessages": 2,
+    "totalVotes": 4,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/681773"
+  }
+}

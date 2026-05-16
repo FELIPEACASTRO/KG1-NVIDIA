@@ -1,0 +1,116 @@
+{
+  "forumTopic": {
+    "authorId": 11379547,
+    "authorPerformanceTier": "CONTRIBUTOR",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "default-thumb.png",
+    "authorUserDisplayName": "Ashutosh Kumar",
+    "authorUserName": "ashutoshkumar432",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "CPMP",
+          "id": 75976,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/75976-gr.jpg",
+          "tier": "GRANDMASTER",
+          "url": "/cpmpml"
+        },
+        "authorType": "HOST",
+        "content": "<p>This bug is fixed in transformers library for versions 5.3.0+.</p>",
+        "feedbackTrackingData": {},
+        "id": 3438863,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-09T20:15:57.490Z",
+        "rawMarkdown": "This bug is fixed in transformers library for versions 5.3.0+.",
+        "reactions": [
+          {
+            "emoji": "SURPRISE",
+            "featuredUserNames": [
+              "einherjer"
+            ],
+            "userCount": 1
+          },
+          {
+            "emoji": "LOVE",
+            "featuredUserNames": [
+              "ryotasueyoshi",
+              "komilparmar",
+              "evanharbaugh"
+            ],
+            "userCount": 3
+          },
+          {
+            "emoji": "THANK_YOU",
+            "featuredUserNames": [
+              "komilparmar",
+              "ashutoshkumar432",
+              "aichangeworld",
+              "evanharbaugh"
+            ],
+            "userCount": 4
+          }
+        ],
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 5,
+          "totalVotes": 5
+        }
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "Ashutosh Kumar",
+        "id": 11379547,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+        "tier": "CONTRIBUTOR",
+        "url": "/ashutoshkumar432"
+      },
+      "authorType": "TOPIC",
+      "competitionRanking": 1389,
+      "content": "<p>There's the bug in the model itself! Look at line 1659:\n\"past_key_values\": past_key_values,</p>\n<p>But the .forward() method (line 1695) expects cache_params, NOT past_key_values:\ndef forward(self, …, cache_params=None, …)</p>\n<p>The prepare_inputs_for_generation returns {\"past_key_values\": cache} but forward() receives it as **kwargs — it gets lost! The cache is created but never used.</p>\n<p>However, this is the model code on the HF Hub — it works in the competition evaluation because vLLM handles caching differently. The model file on the training server might be different.</p>\n<p>The forward() has cache_params in its signature but prepare_inputs_for_generation passes past_key_values. Since forward() has args, the past_key_values goes into kwargs and is silently ignored. cache_params stays None.</p>\n<p>This is a bug in NVIDIA's model code. The fix: patch forward() to extract past_key_values from kwargs and use it as cache_params</p>",
+      "feedbackTrackingData": {},
+      "id": 3432662,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-03-31T20:39:44.113Z",
+      "rawMarkdown": "There's the bug in the model itself! Look at line 1659:\n\"past_key_values\": past_key_values,\n\nBut the .forward() method (line 1695) expects cache_params, NOT past_key_values:\ndef forward(self, ..., cache_params=None, ...)\n\nThe prepare_inputs_for_generation returns {\"past_key_values\": cache} but forward() receives it as **kwargs — it gets lost! The cache is created but never used.\n\nHowever, this is the model code on the HF Hub — it works in the competition evaluation because vLLM handles caching differently. The model file on the training server might be different.\n\nThe forward() has cache_params in its signature but prepare_inputs_for_generation passes past_key_values. Since forward() has args, the past_key_values goes into kwargs and is silently ignored. cache_params stays None.\n\nThis is a bug in NVIDIA's model code. The fix: patch forward() to extract past_key_values from kwargs and use it as cache_params",
+      "teamUpInfo": {
+        "intro": "",
+        "teamLeader": {
+          "displayName": "Ashutosh Kumar",
+          "id": 11379547,
+          "performanceTier": "CONTRIBUTOR",
+          "profileUrl": "/ashutoshkumar432",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "CONTRIBUTOR",
+          "url": "/ashutoshkumar432",
+          "userId": 11379547,
+          "userName": "ashutoshkumar432"
+        }
+      },
+      "votes": {
+        "canUpvote": true,
+        "totalUpvotes": 8,
+        "totalVotes": 8
+      }
+    },
+    "firstMessageId": 3432662,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 686615,
+    "name": "BUG in Nemotron Model file://Models/modeling_nemotron_h.py",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-03-31T20:39:44.111947500Z",
+    "totalMessages": 1,
+    "totalVotes": 8,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/686615"
+  }
+}

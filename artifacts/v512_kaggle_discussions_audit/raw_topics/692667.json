@@ -1,0 +1,110 @@
+{
+  "forumTopic": {
+    "authorId": 14748936,
+    "authorPerformanceTier": "CONTRIBUTOR",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "default-thumb.png",
+    "authorUserDisplayName": "VanyaRekunov",
+    "authorUserName": "vanyarekunov",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "Dennis",
+          "id": 145164,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/145164-kg.JPG?t=2025-08-14-07-51-30",
+          "tier": "EXPERT",
+          "url": "/dennisfong"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 1848,
+        "content": "<p>There is a pattern. I think able to find it is the glod medal points.</p>",
+        "feedbackTrackingData": {},
+        "id": 3444578,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-18T02:03:47.193Z",
+        "rawMarkdown": "There is a pattern. I think able to find it is the glod medal points.",
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Dennis",
+            "id": 145164,
+            "performanceTier": "EXPERT",
+            "profileUrl": "/dennisfong",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/145164-kg.JPG?t=2025-08-14-07-51-30",
+            "tier": "EXPERT",
+            "url": "/dennisfong",
+            "userId": 145164,
+            "userName": "dennisfong"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      }
+    ],
+    "firstMessage": {
+      "attachments": [
+        {
+          "fileType": ".jpg",
+          "id": 41554,
+          "name": "photo_2026-04-17_17-03-13.jpg",
+          "totalBytes": 63449,
+          "url": "https://storage.googleapis.com/kaggle-forum-message-attachments/3444230/41554/photo_2026-04-17_17-03-13.jpg"
+        }
+      ],
+      "author": {
+        "displayName": "VanyaRekunov",
+        "id": 14748936,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+        "tier": "CONTRIBUTOR",
+        "url": "/vanyarekunov"
+      },
+      "authorType": "TOPIC",
+      "competitionRanking": 2923,
+      "content": "<p>Has anyone noticed that there are mistakes in the provided train.csv? In the photo I attached, there is an example of incorrect tasks in the numeric equation task, where some operations are just missing or given incorrectly. How to deal with this? There might also be mistakes in other tasks. Should i do sth about this, or just skip? </p>",
+      "feedbackTrackingData": {},
+      "id": 3444230,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-04-17T14:08:14.577Z",
+      "rawMarkdown": "Has anyone noticed that there are mistakes in the provided train.csv? In the photo I attached, there is an example of incorrect tasks in the numeric equation task, where some operations are just missing or given incorrectly. How to deal with this? There might also be mistakes in other tasks. Should i do sth about this, or just skip? ",
+      "teamUpInfo": {
+        "intro": "",
+        "teamLeader": {
+          "displayName": "Chellick",
+          "id": 17756806,
+          "performanceTier": "CONTRIBUTOR",
+          "profileUrl": "/matweyisupov",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/17756806-kg.jpg?t=2026-04-08-20-47-42",
+          "tier": "CONTRIBUTOR",
+          "url": "/matweyisupov",
+          "userId": 17756806,
+          "userName": "matweyisupov"
+        }
+      },
+      "votes": {
+        "canUpvote": true,
+        "totalVotes": -1
+      }
+    },
+    "firstMessageId": 3444230,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 692667,
+    "name": "Incorrect tasks in train.csv",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-04-17T14:08:14.578258100Z",
+    "totalMessages": 1,
+    "totalVotes": -1,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/692667"
+  }
+}

@@ -1,0 +1,186 @@
+{
+  "forumTopic": {
+    "authorId": 5956875,
+    "authorPerformanceTier": "EXPERT",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "5956875-kg.jpg?t=2024-04-26-21-54-01",
+    "authorUserDisplayName": "MD Mushfirat Mohaimin",
+    "authorUserName": "mushfirat",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "MD Mushfirat Mohaimin",
+          "id": 5956875,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/5956875-kg.jpg?t=2024-04-26-21-54-01",
+          "tier": "EXPERT",
+          "url": "/mushfirat"
+        },
+        "authorType": "TOPIC",
+        "competitionRanking": 1971,
+        "content": "<p>I used the code from the evaluation metric notebook, and tried to do inference using <code>temperature=1.0</code> and <code>temperature=0</code></p>\n<p>Using <code>temperature=1.0</code> gives much lower accuracy compared to <code>temparature=0</code></p>\n<p>And the accuracy spread with <code>temperature=1.0</code> is comparable to what's happening with the public LB</p>\n<p>I'm getting more confident that evaluation runs are using <code>temperature=1.0</code> instead of <code>0</code></p>\n<p><a href=\"https://www.kaggle.com/ryanholbrook\" target=\"_blank\">@ryanholbrook</a> plz investigate</p>",
+        "feedbackTrackingData": {},
+        "id": 3430994,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-29T07:40:39.857Z",
+        "rawMarkdown": "I used the code from the evaluation metric notebook, and tried to do inference using `temperature=1.0` and `temperature=0`\n\nUsing `temperature=1.0` gives much lower accuracy compared to `temparature=0`\n\nAnd the accuracy spread with `temperature=1.0` is comparable to what's happening with the public LB\n\nI'm getting more confident that evaluation runs are using `temperature=1.0` instead of `0`\n\n@ryanholbrook plz investigate",
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "MD Mushfirat Mohaimin",
+            "id": 5956875,
+            "performanceTier": "EXPERT",
+            "profileUrl": "/mushfirat",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/5956875-kg.jpg?t=2024-04-26-21-54-01",
+            "tier": "EXPERT",
+            "url": "/mushfirat",
+            "userId": 5956875,
+            "userName": "mushfirat"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      },
+      {
+        "author": {
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "url": "/"
+        },
+        "authorType": "COMMENT",
+        "canDelete": true,
+        "feedbackTrackingData": {},
+        "id": 3430984,
+        "isDeleted": true,
+        "isThankYou": false,
+        "isUserAuthor": true,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-29T07:09:50.627Z",
+        "rawMarkdown": "",
+        "replies": [
+          {
+            "author": {
+              "displayName": "MD Mushfirat Mohaimin",
+              "id": 5956875,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/5956875-kg.jpg?t=2024-04-26-21-54-01",
+              "tier": "EXPERT",
+              "url": "/mushfirat"
+            },
+            "authorType": "TOPIC",
+            "competitionRanking": 1971,
+            "content": "<p>are you sure? can you plz let me know the source behind that info?</p>",
+            "feedbackTrackingData": {},
+            "id": 3430985,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-03-29T07:12:25.403Z",
+            "rawMarkdown": "are you sure? can you plz let me know the source behind that info?",
+            "replies": [
+              {
+                "author": {
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                  "url": "/"
+                },
+                "authorType": "COMMENT",
+                "canDelete": true,
+                "feedbackTrackingData": {},
+                "id": 3430991,
+                "isDeleted": true,
+                "isThankYou": false,
+                "isUserAuthor": true,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-03-29T07:27:41.127Z",
+                "rawMarkdown": "",
+                "votes": {
+                  "totalUpvotes": 1
+                }
+              }
+            ],
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "MD Mushfirat Mohaimin",
+                "id": 5956875,
+                "performanceTier": "EXPERT",
+                "profileUrl": "/mushfirat",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/5956875-kg.jpg?t=2024-04-26-21-54-01",
+                "tier": "EXPERT",
+                "url": "/mushfirat",
+                "userId": 5956875,
+                "userName": "mushfirat"
+              }
+            },
+            "votes": {
+              "canUpvote": true,
+              "totalUpvotes": 1,
+              "totalVotes": 1
+            }
+          }
+        ],
+        "votes": {
+          "totalVotes": -1
+        }
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "MD Mushfirat Mohaimin",
+        "id": 5956875,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/5956875-kg.jpg?t=2024-04-26-21-54-01",
+        "tier": "EXPERT",
+        "url": "/mushfirat"
+      },
+      "authorType": "TOPIC",
+      "competitionRanking": 1971,
+      "content": "<p>I submitted the same <code>submission.zip</code> multiple times, and got different scores.<br>\nAs per comments in other threads, many other participants can also observe this.</p>\n<p>This is only possible if the <code>temperature</code> parameter during evaluation is something other than <code>0</code>. In the evaluation section of the competition overview, it's written that <code>temparature</code> is supposed to be <code>0</code>. Perhaps, there's a mistake in the evaluation code? It's possible because the default value of <code>temparature</code> is set to <code>1.0</code> in the evaluation metric notebook.  </p>\n<p><a href=\"https://www.kaggle.com/ryanholbrook\" target=\"_blank\">@ryanholbrook</a> can you please look into this? Can you please make sure that the evaluation code is correctly overriding the function's default temperature parameter?</p>",
+      "feedbackTrackingData": {},
+      "id": 3430976,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-03-29T06:49:15.217Z",
+      "rawMarkdown": "I submitted the same `submission.zip` multiple times, and got different scores.  \nAs per comments in other threads, many other participants can also observe this.\n\nThis is only possible if the `temperature` parameter during evaluation is something other than `0`. In the evaluation section of the competition overview, it's written that `temparature` is supposed to be `0`. Perhaps, there's a mistake in the evaluation code? It's possible because the default value of `temparature` is set to `1.0` in the evaluation metric notebook.  \n\n@ryanholbrook can you please look into this? Can you please make sure that the evaluation code is correctly overriding the function's default temperature parameter?",
+      "teamUpInfo": {
+        "intro": "",
+        "teamLeader": {
+          "displayName": "MD Mushfirat Mohaimin",
+          "id": 5956875,
+          "performanceTier": "EXPERT",
+          "profileUrl": "/mushfirat",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/5956875-kg.jpg?t=2024-04-26-21-54-01",
+          "tier": "EXPERT",
+          "url": "/mushfirat",
+          "userId": 5956875,
+          "userName": "mushfirat"
+        }
+      },
+      "votes": {
+        "canUpvote": true,
+        "totalUpvotes": 11,
+        "totalVotes": 11
+      }
+    },
+    "firstMessageId": 3430976,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 685817,
+    "name": "Submission re-runs give different scores",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-03-29T06:49:15.215389100Z",
+    "totalMessages": 4,
+    "totalVotes": 11,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/685817"
+  }
+}

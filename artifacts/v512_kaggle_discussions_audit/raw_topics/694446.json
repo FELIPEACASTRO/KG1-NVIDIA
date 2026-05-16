@@ -1,0 +1,138 @@
+{
+  "forumTopic": {
+    "authorId": 31566131,
+    "authorPerformanceTier": "CONTRIBUTOR",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "default-thumb.png",
+    "authorUserDisplayName": "Ghazi Boumediene Ghaouti",
+    "authorUserName": "ghaziboumediene",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "AMITH NAIR",
+          "id": 32888326,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/32888326-kg.png?t=2026-04-10-21-58-33",
+          "tier": "CONTRIBUTOR",
+          "url": "/amith1707"
+        },
+        "authorType": "COMMENT",
+        "content": "<p>Your question is a bit vague regarding what you mean by \"my own training data.\"</p>\n<p>If you are asking whether you can perform feature engineering on the provided competition dataset (train.csv), then yes absolutely. In fact, that is essentially the core objective of the competition and one of the main ways to improve performance.</p>\n<p>However, if you are asking whether you can create an entirely new training dataset with your own custom questions and answers, then the answer is generally no.</p>\n<p>The reason is that the provided competition dataset is carefully engineered around specific underlying patterns and relationships between the questions and their corresponding answers. The hidden evaluation data used for testing submissions follows those same underlying patterns. If you generate completely unrelated training examples, you risk teaching the model incorrect or inconsistent logic that does not align with the competition’s actual task distribution.</p>\n<p>The only realistic way to safely create additional data would be to first build reliable task-specific solvers for the existing dataset patterns, and then use those solvers to generate new synthetic examples that preserve the same logical structure and answer-generation rules as the original dataset. Without that, newly generated data would likely introduce noise and harm model performance rather than improve it when being evaluated.</p>",
+        "feedbackTrackingData": {},
+        "id": 3455588,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-05-09T18:59:53.677Z",
+        "rawMarkdown": "Your question is a bit vague regarding what you mean by \"my own training data.\"\n\nIf you are asking whether you can perform feature engineering on the provided competition dataset (train.csv), then yes absolutely. In fact, that is essentially the core objective of the competition and one of the main ways to improve performance.\n\nHowever, if you are asking whether you can create an entirely new training dataset with your own custom questions and answers, then the answer is generally no.\n\nThe reason is that the provided competition dataset is carefully engineered around specific underlying patterns and relationships between the questions and their corresponding answers. The hidden evaluation data used for testing submissions follows those same underlying patterns. If you generate completely unrelated training examples, you risk teaching the model incorrect or inconsistent logic that does not align with the competition’s actual task distribution.\n\nThe only realistic way to safely create additional data would be to first build reliable task-specific solvers for the existing dataset patterns, and then use those solvers to generate new synthetic examples that preserve the same logical structure and answer-generation rules as the original dataset. Without that, newly generated data would likely introduce noise and harm model performance rather than improve it when being evaluated.",
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "AMITH NAIR",
+            "id": 32888326,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/amith1707",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/32888326-kg.png?t=2026-04-10-21-58-33",
+            "tier": "CONTRIBUTOR",
+            "url": "/amith1707",
+            "userId": 32888326,
+            "userName": "amith1707"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      },
+      {
+        "author": {
+          "displayName": "TwangyGarlic449",
+          "id": 25196579,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "CONTRIBUTOR",
+          "url": "/twangygarlic449"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 1709,
+        "content": "<p>Yes, if you find a good way to generate problems, I don't see why you wouldn't be allowed to.</p>",
+        "feedbackTrackingData": {},
+        "id": 3448240,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-25T00:25:11.520Z",
+        "rawMarkdown": "Yes, if you find a good way to generate problems, I don't see why you wouldn't be allowed to.",
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "TwangyGarlic449",
+            "id": 25196579,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/twangygarlic449",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+            "tier": "CONTRIBUTOR",
+            "url": "/twangygarlic449",
+            "userId": 25196579,
+            "userName": "twangygarlic449"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "Ghazi Boumediene Ghaouti",
+        "id": 31566131,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+        "tier": "CONTRIBUTOR",
+        "url": "/ghaziboumediene"
+      },
+      "authorType": "TOPIC",
+      "content": "<p>Is it possible to use my own new training data?</p>",
+      "feedbackTrackingData": {},
+      "id": 3448197,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-04-24T21:59:50.547Z",
+      "rawMarkdown": "Is it possible to use my own new training data?",
+      "teamUpInfo": {
+        "intro": "",
+        "teamLeader": {
+          "displayName": "Ghazi Boumediene Ghaouti",
+          "id": 31566131,
+          "performanceTier": "CONTRIBUTOR",
+          "profileUrl": "/ghaziboumediene",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "CONTRIBUTOR",
+          "url": "/ghaziboumediene",
+          "userId": 31566131,
+          "userName": "ghaziboumediene"
+        }
+      },
+      "votes": {
+        "canUpvote": true,
+        "totalUpvotes": 2,
+        "totalVotes": 2
+      }
+    },
+    "firstMessageId": 3448197,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 694446,
+    "name": "Is it possible to use my own new training data?",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-04-24T21:59:50.547682700Z",
+    "totalMessages": 2,
+    "totalVotes": 2,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/694446"
+  }
+}

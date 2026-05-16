@@ -1,0 +1,129 @@
+{
+  "forumTopic": {
+    "authorId": 18161863,
+    "authorPerformanceTier": "MASTER",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "18161863-kg.png?t=2025-03-30-13-52-59",
+    "authorUserDisplayName": "Andreas Bisiadis",
+    "authorUserName": "andreasbis",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "Dustin",
+          "id": 2039816,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2039816-kg.jpg",
+          "tier": "STAFF",
+          "url": "/herbison"
+        },
+        "authorType": "ADMIN",
+        "content": "<p>Correct, internet access is disabled on this accelerator for similar reasons to the previous comps.</p>",
+        "feedbackTrackingData": {},
+        "id": 3422394,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-17T16:30:36.407Z",
+        "rawMarkdown": "Correct, internet access is disabled on this accelerator for similar reasons to the previous comps.",
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 1,
+          "totalVotes": 1
+        }
+      },
+      {
+        "author": {
+          "displayName": "Mani Ratan",
+          "id": 28502904,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "EXPERT",
+          "url": "/mani787060"
+        },
+        "authorType": "COMMENT",
+        "content": "<p>Hii buddy, In most Kaggle competitions, internet access is disabled during submission runs, regardless of the accelerator (like RTX PRO 6000 or H100).</p>\n<p>So even if you select a GPU, you usually won’t be able to access external APIs or download data during inference. Everything needed must be included in the notebook or dataset beforehand.</p>\n<p>It’s always best to double-check the competition rules page, but in general, assume no internet access during submission. \nI hope it will help you👍</p>",
+        "feedbackTrackingData": {},
+        "id": 3422948,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-18T03:39:17.523Z",
+        "rawMarkdown": "Hii buddy, In most Kaggle competitions, internet access is disabled during submission runs, regardless of the accelerator (like RTX PRO 6000 or H100).\n\nSo even if you select a GPU, you usually won’t be able to access external APIs or download data during inference. Everything needed must be included in the notebook or dataset beforehand.\n\nIt’s always best to double-check the competition rules page, but in general, assume no internet access during submission. \nI hope it will help you👍",
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 2,
+          "totalVotes": 1
+        }
+      },
+      {
+        "author": {
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "url": "/"
+        },
+        "authorType": "COMMENT",
+        "canDelete": true,
+        "feedbackTrackingData": {},
+        "id": 3422395,
+        "isDeleted": true,
+        "isThankYou": false,
+        "isUserAuthor": true,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-17T16:31:12.880Z",
+        "rawMarkdown": "",
+        "votes": {}
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "Andreas Bisiadis",
+        "id": 18161863,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/18161863-kg.png?t=2025-03-30-13-52-59",
+        "tier": "MASTER",
+        "url": "/andreasbis"
+      },
+      "authorType": "TOPIC",
+      "content": "<p>Since in AIMO3 participants could not use Internet with the H100 selected, is this the case in this competition as well?</p>",
+      "feedbackTrackingData": {},
+      "id": 3422390,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-03-17T16:20:18.030Z",
+      "rawMarkdown": "Since in AIMO3 participants could not use Internet with the H100 selected, is this the case in this competition as well?",
+      "teamUpInfo": {
+        "intro": "",
+        "teamLeader": {
+          "displayName": "Andreas Bisiadis",
+          "id": 18161863,
+          "performanceTier": "MASTER",
+          "profileUrl": "/andreasbis",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/18161863-kg.png?t=2025-03-30-13-52-59",
+          "tier": "MASTER",
+          "url": "/andreasbis",
+          "userId": 18161863,
+          "userName": "andreasbis"
+        }
+      },
+      "votes": {
+        "canUpvote": true,
+        "totalUpvotes": 2,
+        "totalVotes": 2
+      }
+    },
+    "firstMessageId": 3422390,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 681853,
+    "name": "Is Internet access allowed with the RTX PRO 6000 accelerator?",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-03-17T16:20:18.029301900Z",
+    "totalMessages": 3,
+    "totalVotes": 2,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/681853"
+  }
+}

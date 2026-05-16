@@ -1,0 +1,380 @@
+{
+  "forumTopic": {
+    "authorId": 25849260,
+    "authorPerformanceTier": "EXPERT",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "25849260-kg.png?t=2026-04-21-18-23-19",
+    "authorUserDisplayName": "Svanik Kolli",
+    "authorUserName": "svanikkolli",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "fate",
+          "id": 4184342,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "MASTER",
+          "url": "/chihantsai"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 182,
+        "content": "<p>I don’t think it has really started yet. CV and LB are still highly correlated, and the strongest competitors usually only start to emerge in the final 1–2 weeks.</p>",
+        "feedbackTrackingData": {},
+        "id": 3445812,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-20T15:02:29.020Z",
+        "rawMarkdown": "I don’t think it has really started yet. CV and LB are still highly correlated, and the strongest competitors usually only start to emerge in the final 1–2 weeks.",
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "fate",
+            "id": 4184342,
+            "performanceTier": "MASTER",
+            "profileUrl": "/chihantsai",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+            "tier": "MASTER",
+            "url": "/chihantsai",
+            "userId": 4184342,
+            "userName": "chihantsai"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 2,
+          "totalVotes": 2
+        }
+      },
+      {
+        "author": {
+          "displayName": "Ravi Ramakrishnan",
+          "id": 8273630,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/8273630-kg.JPG?t=2024-03-26-14-51-52",
+          "tier": "GRANDMASTER",
+          "url": "/ravi20076"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 7,
+        "content": "<p>This is a compute heavy competition, so expect results to be updated with some lags between experiments <a href=\"https://www.kaggle.com/svanikkolli\" target=\"_blank\">@svanikkolli</a> \n0.87++ is coming very soon</p>",
+        "feedbackTrackingData": {},
+        "id": 3445887,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-20T16:21:07.690Z",
+        "rawMarkdown": "This is a compute heavy competition, so expect results to be updated with some lags between experiments @svanikkolli \n0.87++ is coming very soon\n",
+        "replies": [
+          {
+            "author": {
+              "displayName": "Murugesan Narayanaswamy",
+              "id": 10218904,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+              "tier": "EXPERT",
+              "url": "/murugesann"
+            },
+            "authorType": "COMMENT",
+            "competitionRanking": 1170,
+            "content": "<p>At the first look, I thought the solution for this challenge lies in GRPO but came to know that there were some bugs and then about a new release that fixed the bugs. On further investigation, I think pure GRPO is unlikely solve this problem easily even if speed / latency problem is resolved. However, SFT using generated CoT traces + GRPO could be right solution - as is the case with most of the reinforced training solutions. I understand SFT using elaborate synthetically generated data has given upto 0.86 in the leaderboard - has anybody tried GRPO on the 0.86 SFT Model? (I was busy in an another competition and not involved in this competition right now). </p>",
+            "feedbackTrackingData": {},
+            "id": 3446782,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-04-22T05:37:27.797Z",
+            "rawMarkdown": "At the first look, I thought the solution for this challenge lies in GRPO but came to know that there were some bugs and then about a new release that fixed the bugs. On further investigation, I think pure GRPO is unlikely solve this problem easily even if speed / latency problem is resolved. However, SFT using generated CoT traces + GRPO could be right solution - as is the case with most of the reinforced training solutions. I understand SFT using elaborate synthetically generated data has given upto 0.86 in the leaderboard - has anybody tried GRPO on the 0.86 SFT Model? (I was busy in an another competition and not involved in this competition right now). ",
+            "replies": [
+              {
+                "author": {
+                  "displayName": "Taha",
+                  "id": 33728306,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/33728306-kg.png?t=2026-04-25-07-15-05",
+                  "tier": "CONTRIBUTOR",
+                  "url": "/tahaalam2009"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 314,
+                "content": "<p>GPRO is too slow and i feel its not worth once sft brings results i would move to gpro</p>",
+                "feedbackTrackingData": {},
+                "id": 3446931,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-22T12:36:56.700Z",
+                "rawMarkdown": "GPRO is too slow and i feel its not worth once sft brings results i would move to gpro",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "Taha",
+                    "id": 33728306,
+                    "performanceTier": "CONTRIBUTOR",
+                    "profileUrl": "/tahaalam2009",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/33728306-kg.png?t=2026-04-25-07-15-05",
+                    "tier": "CONTRIBUTOR",
+                    "url": "/tahaalam2009",
+                    "userId": 33728306,
+                    "userName": "tahaalam2009"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true,
+                  "totalVotes": -1
+                }
+              },
+              {
+                "author": {
+                  "displayName": "Murugesan Narayanaswamy",
+                  "id": 10218904,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                  "tier": "EXPERT",
+                  "url": "/murugesann"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 1170,
+                "content": "<p>I think GRPO should be done for each challenge separately after generating additional test data. The reasoning patterns required would be different for bit manipulation compared to cypher decryption etc. But I think quantity of training data is not uniform for each category of problems.</p>\n<p>On the other hand, the score of 0.86 could be limitation of dataset in some rare cases i.e. that is the maximum possible in the test dataset owing to errors or inefficient formulations etc (requiring overfitting)! :-)</p>\n<p>(I am trying to learn something without deeply involved in the competition! :-))</p>",
+                "feedbackTrackingData": {},
+                "id": 3446992,
+                "isCollapsed": true,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-22T15:08:58.390Z",
+                "rawMarkdown": "I think GRPO should be done for each challenge separately after generating additional test data. The reasoning patterns required would be different for bit manipulation compared to cypher decryption etc. But I think quantity of training data is not uniform for each category of problems.\n\nOn the other hand, the score of 0.86 could be limitation of dataset in some rare cases i.e. that is the maximum possible in the test dataset owing to errors or inefficient formulations etc (requiring overfitting)! :-)\n\n(I am trying to learn something without deeply involved in the competition! :-))",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "Murugesan Narayanaswamy",
+                    "id": 10218904,
+                    "performanceTier": "EXPERT",
+                    "profileUrl": "/murugesann",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                    "tier": "EXPERT",
+                    "url": "/murugesann",
+                    "userId": 10218904,
+                    "userName": "murugesann"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true
+                }
+              },
+              {
+                "author": {
+                  "displayName": "Brandonioti",
+                  "id": 30063404,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                  "tier": "CONTRIBUTOR",
+                  "url": "/brandonioti"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 61,
+                "content": "<p>Just go for it bro. There's plenty of notebooks that have been shared. Look through them all, make a submission and see what you liked and disliked about each one. Get a score in the competition and learn</p>",
+                "feedbackTrackingData": {},
+                "id": 3447839,
+                "isCollapsed": true,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-24T04:27:54.020Z",
+                "rawMarkdown": "Just go for it bro. There's plenty of notebooks that have been shared. Look through them all, make a submission and see what you liked and disliked about each one. Get a score in the competition and learn\n",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "Brandonioti",
+                    "id": 30063404,
+                    "performanceTier": "CONTRIBUTOR",
+                    "profileUrl": "/brandonioti",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                    "tier": "CONTRIBUTOR",
+                    "url": "/brandonioti",
+                    "userId": 30063404,
+                    "userName": "brandonioti"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true,
+                  "totalUpvotes": 1,
+                  "totalVotes": 1
+                }
+              },
+              {
+                "author": {
+                  "displayName": "Murugesan Narayanaswamy",
+                  "id": 10218904,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                  "tier": "EXPERT",
+                  "url": "/murugesann"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 1170,
+                "content": "<p>Thanks for imbibing me with that kaggle spirit! But as <a href=\"https://www.kaggle.com/cpmpml\" target=\"_blank\">@cpmpml</a> says it is a legal drug! Thats why I am thinking!</p>",
+                "feedbackTrackingData": {},
+                "id": 3448027,
+                "isCollapsed": true,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-24T13:08:20Z",
+                "rawMarkdown": "Thanks for imbibing me with that kaggle spirit! But as @cpmpml says it is a legal drug! Thats why I am thinking!",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "Murugesan Narayanaswamy",
+                    "id": 10218904,
+                    "performanceTier": "EXPERT",
+                    "profileUrl": "/murugesann",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                    "tier": "EXPERT",
+                    "url": "/murugesann",
+                    "userId": 10218904,
+                    "userName": "murugesann"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true,
+                  "totalUpvotes": 1
+                }
+              }
+            ],
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "Murugesan Narayanaswamy",
+                "id": 10218904,
+                "performanceTier": "EXPERT",
+                "profileUrl": "/murugesann",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                "tier": "EXPERT",
+                "url": "/murugesann",
+                "userId": 10218904,
+                "userName": "murugesann"
+              }
+            },
+            "votes": {
+              "canUpvote": true
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Kishan Vavdara",
+            "id": 12951282,
+            "performanceTier": "MASTER",
+            "profileUrl": "/kishanvavdara",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/12951282-kg.jpeg",
+            "tier": "MASTER",
+            "url": "/kishanvavdara",
+            "userId": 12951282,
+            "userName": "kishanvavdara"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalVotes": -1
+        }
+      },
+      {
+        "author": {
+          "displayName": "Taha",
+          "id": 33728306,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/33728306-kg.png?t=2026-04-25-07-15-05",
+          "tier": "CONTRIBUTOR",
+          "url": "/tahaalam2009"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 314,
+        "content": "<p>Everyone has been working lately hard ; so dont say that</p>",
+        "feedbackTrackingData": {},
+        "id": 3445761,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-20T13:30:19.307Z",
+        "rawMarkdown": "Everyone has been working lately hard ; so dont say that",
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Taha",
+            "id": 33728306,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/tahaalam2009",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/33728306-kg.png?t=2026-04-25-07-15-05",
+            "tier": "CONTRIBUTOR",
+            "url": "/tahaalam2009",
+            "userId": 33728306,
+            "userName": "tahaalam2009"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "Svanik Kolli",
+        "id": 25849260,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/25849260-kg.png?t=2026-04-21-18-23-19",
+        "tier": "EXPERT",
+        "url": "/svanikkolli"
+      },
+      "authorType": "TOPIC",
+      "competitionRanking": 123,
+      "content": "<p>Hey everyone,</p>\n<p>Is it just me, or has the momentum for the Nemotron Reasoning Challenge hit a massive brick wall? </p>\n<p>Looking at the leaderboard, it feels like the entire community has collectively stalled out at the 0.85–0.86 range. The rapid-fire updates we saw in the first few weeks have slowed to a crawl, and it seems like we’re all staring at the same bottlenecks (looking at you, Cryptarithms and logic-trace bugs).</p>\n<p>It feels like the \"low-hanging fruit\" of prompt engineering and standard fine-tuning is officially gone. We’ve reached the point of diminishing returns where grinding for a +0.001 gain feels like a full-time job, and I’m starting to see that competition fatigue set in.</p>\n<p>The big question: Is 0.86 the theoretical ceiling for the Nano-30B architecture on these tasks, or are we just one moment away from a new baseline?</p>\n<p>How are you guys holding up? Are you still burning GPU hours trying to break 0.87, or have you shifted your focus to other projects until someone finds a new path forward?</p>",
+      "feedbackTrackingData": {},
+      "id": 3445755,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-04-20T13:22:53.180Z",
+      "rawMarkdown": "Hey everyone,\n\nIs it just me, or has the momentum for the Nemotron Reasoning Challenge hit a massive brick wall? \n\nLooking at the leaderboard, it feels like the entire community has collectively stalled out at the 0.85–0.86 range. The rapid-fire updates we saw in the first few weeks have slowed to a crawl, and it seems like we’re all staring at the same bottlenecks (looking at you, Cryptarithms and logic-trace bugs).\n\nIt feels like the \"low-hanging fruit\" of prompt engineering and standard fine-tuning is officially gone. We’ve reached the point of diminishing returns where grinding for a +0.001 gain feels like a full-time job, and I’m starting to see that competition fatigue set in.\n\nThe big question: Is 0.86 the theoretical ceiling for the Nano-30B architecture on these tasks, or are we just one moment away from a new baseline?\n\nHow are you guys holding up? Are you still burning GPU hours trying to break 0.87, or have you shifted your focus to other projects until someone finds a new path forward?",
+      "teamUpInfo": {
+        "intro": "",
+        "teamLeader": {
+          "displayName": "Svanik Kolli",
+          "id": 25849260,
+          "performanceTier": "EXPERT",
+          "profileUrl": "/svanikkolli",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/25849260-kg.png?t=2026-04-21-18-23-19",
+          "tier": "EXPERT",
+          "url": "/svanikkolli",
+          "userId": 25849260,
+          "userName": "svanikkolli"
+        }
+      },
+      "votes": {
+        "canUpvote": true,
+        "totalUpvotes": 2
+      }
+    },
+    "firstMessageId": 3445755,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 693270,
+    "name": "Competition has dramatically slowed down ",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-04-20T13:22:53.181495Z",
+    "totalMessages": 8,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/693270"
+  }
+}

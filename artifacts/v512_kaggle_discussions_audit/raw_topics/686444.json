@@ -1,0 +1,218 @@
+{
+  "forumTopic": {
+    "authorId": 14555359,
+    "authorPerformanceTier": "CONTRIBUTOR",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "14555359-kg.jpg?t=2026-05-03-06-22-31",
+    "authorUserDisplayName": "WillTLing",
+    "authorUserName": "willtling",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "Mark Susol",
+          "id": 3049666,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/3049666-kg.jpeg?t=2026-05-03-20-23-50",
+          "tier": "CONTRIBUTOR",
+          "url": "/gdataranger"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 2484,
+        "content": "<blockquote>\n  <p>I also tried using vLLM, but the GPU memory was completely insufficient.</p>\n</blockquote>\n<p>Mind sharing your efforts? I am running on DGX Spark so GPU/RAM should be sufficient.</p>\n<p><code>\nLoading tokenizer: nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16\nLoading base model: nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16\nLoading checkpoint shards:   0%|          | 0/13 [00:00&lt;?, ?it                                          Loading checkpoint shards: 100%|██████████| 13/13 [06:13&lt;00:00, 28.70s/it]\nLoading adapter: /workspace/output/adapter_20260503_203554\nInference:   0%|          | 0/950 [00:00&lt;?, ?it/s]This model does not support</code>Cache<code>instances.</code>cache_implementation<code>(set to hybrid) will be ignored.\nNemotronH requires an initialized</code>NemotronHHybridDynamicCache<code>to return a cache. None was provided, so no cache will be returned.Inference:  10%|█         | 99/950 [30:40&lt;5:58:22, 25.27s/it]  \n</code></p>\n<p>Below is my verbose research thread (perplexity) where I am planning an improvement. How will Kaggle deal with the l;ong inference times? </p>\n<p>`</p>\n<h1>Nemotron Inference Improvement Plan</h1>\n<h2>Objective</h2>\n<p>Improve inference throughput for the LoRA-adapted Nemotron-3-Nano-30B-A3B model by moving performance-critical runs away from raw Hugging Face <code>model.generate()</code> and toward a cache-aware serving path suitable for Kaggle time limits.[1][2]</p>\n<h2>Current State</h2>\n<p>The current inference script uses plain <code>transformers</code> generation with a PEFT adapter attached to the base model.[1] This path is functionally correct for validation, but the current Hugging Face NemotronH integration has a known cache-plumbing issue: <code>generate()</code> follows the standard <code>past_key_values</code> protocol, while the model expects its hybrid cache under <code>cache_params</code>, so KV or hybrid cache is not actually used during decoding.[3][2]</p>\n<h2>Problem Summary</h2>\n<p>Because the hybrid cache is not threaded through correctly, generation repeatedly recomputes context instead of benefiting from incremental cached decoding.[3][2] NVIDIA’s own guidance says Hugging Face is mainly for prototyping here and points users to optimized inference engines such as vLLM, TRT-LLM, SGLang, and llama.cpp for KV-cache-aware deployment.[2][1]</p>\n<h2>Target Architecture</h2>\n<p>The preferred production path is:</p>\n<ol>\n<li>Load the fine-tuned PEFT or LoRA adapter onto the Nemotron base model.</li>\n<li>Merge the adapter into the base weights with <code>merge_and_unload()</code>.</li>\n<li>Save the merged checkpoint as a standalone model artifact.</li>\n<li>Run inference through vLLM using the merged model.</li>\n<li>Keep the existing Hugging Face script only for smoke tests and small validation runs.[4][5][2]</li>\n</ol>\n<h2>Why vLLM</h2>\n<p>vLLM has a documented deployment path for NVIDIA Nemotron-3-Nano-30B-A3B and is part of NVIDIA’s recommended inference stack for this model family.[4][5][1] This avoids the current Hugging Face cache mismatch and gives a better chance of meeting Kaggle runtime limits.[2]</p>\n<h2>Implementation Steps</h2>\n<h3>1. Freeze the baseline</h3>\n<ul>\n<li>Keep the current <code>scripts/infer_lora.py</code> path unchanged for reproducibility and baseline comparison.[1]</li>\n<li>Record current runtime metrics: prompt length, <code>max_new_tokens</code>, tokens per second, total job duration, and hardware profile.</li>\n</ul>\n<h3>2. Add a merge script</h3>\n<ul>\n<li>Create a script such as <code>scripts/merge_lora.py</code>.</li>\n<li>Load base model + tokenizer + adapter.</li>\n<li>Call <code>merge_and_unload()</code> on the PEFT model.</li>\n<li>Save merged model and tokenizer to a new output directory such as <code>output/merged_nemotron_model/</code>.</li>\n<li>Validate that the merged checkpoint loads without PEFT dependencies in the inference environment.</li>\n</ul>\n<h3>3. Validate output parity</h3>\n<ul>\n<li>Run a small fixed eval set through both paths: current HF+adapter flow and merged-model flow.</li>\n<li>Compare decoded outputs, task metrics, and any competition-specific scoring proxies.</li>\n<li>Accept minor formatting drift, but investigate large semantic divergence.</li>\n</ul>\n<h3>4. Stand up vLLM inference</h3>\n<ul>\n<li>Start with NVIDIA’s documented vLLM recipe for Nemotron-3-Nano-30B-A3B, including <code>--trust-remote-code</code> and model-specific parser flags where needed.[4][1]</li>\n<li>Point vLLM at the merged model directory instead of the base-plus-adapter pair.</li>\n<li>Build a thin client script that submits prompts and writes predictions in the format required by the competition.</li>\n</ul>\n<h3>5. Benchmark on target hardware</h3>\n<ul>\n<li>Measure end-to-end throughput on the same class of hardware expected for Kaggle submission or local dry runs.</li>\n<li>Benchmark several realistic settings: short prompts, long prompts, and the competition’s typical <code>max_new_tokens</code> budget.</li>\n<li>Record tokens per second, total runtime, memory footprint, and failure modes.[4]</li>\n</ul>\n<h3>6. Integrate into submission flow</h3>\n<ul>\n<li>Add a clear switch in the pipeline such as <code>--backend hf</code> vs <code>--backend vllm</code>.</li>\n<li>Default local validation to Hugging Face only if simplicity matters more than speed.</li>\n<li>Default submission generation to vLLM once parity and stability are confirmed.</li>\n</ul>\n<h2>Fallback Option</h2>\n<p>If vLLM integration becomes blocked, the secondary path is a custom generation loop that calls <code>model.forward()</code> directly and passes the initialized Nemotron hybrid cache through <code>cache_params</code> on every step.[3][6] This should restore cache-aware decoding in principle, but it is more brittle and requires maintaining custom decoding logic, stopping criteria, and sampling behavior.[3]</p>\n<h2>Non-Goals</h2>\n<ul>\n<li>Do not refactor the existing baseline path until the merged-model path is validated.</li>\n<li>Do not rely on raw Hugging Face <code>model.generate()</code> performance improvements landing in time for the current competition run.[2]</li>\n<li>Do not introduce multiple inference backends at once beyond a simple baseline-versus-vLLM split.</li>\n</ul>\n<h2>Risks</h2>\n<table>\n<thead>\n<tr>\n<th>Risk</th>\n<th>Impact</th>\n<th>Mitigation</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>Merged model outputs differ from adapter-attached outputs</td>\n<td>Medium</td>\n<td>Run parity tests on a fixed sample set before switching default inference</td>\n</tr>\n<tr>\n<td>vLLM environment differs from Kaggle runtime</td>\n<td>High</td>\n<td>Dry-run on the closest available hardware and container stack before final submission</td>\n</tr>\n<tr>\n<td>Nemotron-specific flags or parser settings are incomplete</td>\n<td>Medium</td>\n<td>Start from NVIDIA and vLLM published examples rather than a generic vLLM command.[4][1]</td>\n</tr>\n<tr>\n<td>Time spent on custom HF patching delays delivery</td>\n<td>Medium</td>\n<td>Treat HF monkey-patching as a last resort, not the main path.[2]</td>\n</tr>\n</tbody>\n</table>\n<h2>Recommended Deliverables</h2>\n<ul>\n<li><code>scripts/merge_lora.py</code></li>\n<li><code>scripts/serve_vllm.sh</code></li>\n<li><code>scripts/infer_vllm.py</code></li>\n<li><code>docs/nemotron_inference_notes.md</code></li>\n<li><code>output/merged_nemotron_model/</code> directory contract</li>\n</ul>\n<h2>Acceptance Criteria</h2>\n<p>The migration is successful when all of the following are true:</p>\n<ul>\n<li>The merged checkpoint loads cleanly in vLLM.[4][5]</li>\n<li>Output quality is materially unchanged on a representative validation slice.</li>\n<li>End-to-end inference runtime is significantly lower than the current raw Hugging Face path.</li>\n<li>The submission pipeline can run without manual intervention.</li>\n<li>The old Hugging Face path remains available for debugging and quick validation.</li>\n</ul>\n<h2>Suggested Sequence</h2>\n<ol>\n<li>Benchmark the current script.</li>\n<li>Implement and test adapter merge.</li>\n<li>Validate output parity.</li>\n<li>Bring up vLLM with the merged model.</li>\n<li>Benchmark throughput.</li>\n<li>Switch submission inference to vLLM.</li>\n<li>Keep custom HF cache work only as an optional experimental branch.[4][2]</li>\n</ol>\n<h2>References</h2>\n<p>[1] <a href=\"https://huggingface.co/nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16\" target=\"_blank\">nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16 - Hugging Face</a></p>\n<p>[2] <a href=\"https://huggingface.co/nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16/discussions/14\" target=\"_blank\">nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16 · doesn't do kv cache when using Transformers · Discussion #14 - Hugging Face</a></p>\n<p>[3] <a href=\"https://huggingface.co/nvidia/NVIDIA-Nemotron-3-Nano-4B-BF16/discussions/2\" target=\"_blank\">nvidia/NVIDIA-Nemotron-3-Nano-4B-BF16 · Bug Report: <code>model.generate()</code> does not use cache_params · Discussion #2 - Hugging Face</a></p>\n<p>[4] <a href=\"https://docs.vllm.ai/projects/recipes/en/latest/NVIDIA/Nemotron-3-Nano-30B-A3B.html\" target=\"_blank\">NVIDIA Nemotron-3-Nano-30B-A3B User Guide - vLLM Recipes</a></p>\n<p>[5] <a href=\"https://github.com/NVIDIA-NeMo/Nemotron/blob/main/usage-cookbook/Nemotron-3-Nano/vllm_cookbook.ipynb\" target=\"_blank\">Deploying NVIDIA Nemotron-3-Nano with vLLM - GitHub</a></p>\n<p>[6] <a href=\"https://huggingface.co/docs/transformers/model_doc/nemotron_h\" target=\"_blank\">NemotronH - Hugging Face Transformers Documentation</a></p>\n<p>`</p>",
+        "feedbackTrackingData": {},
+        "id": 3452892,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-05-04T13:53:39.190Z",
+        "rawMarkdown": "> I also tried using vLLM, but the GPU memory was completely insufficient.\n\nMind sharing your efforts? I am running on DGX Spark so GPU/RAM should be sufficient.\n\n`\nLoading tokenizer: nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16\nLoading base model: nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16\nLoading checkpoint shards:   0%|          | 0/13 [00:00<?, ?it                                          Loading checkpoint shards: 100%|██████████| 13/13 [06:13<00:00, 28.70s/it]\nLoading adapter: /workspace/output/adapter_20260503_203554\nInference:   0%|          | 0/950 [00:00<?, ?it/s]This model does not support `Cache` instances. `cache_implementation` (set to hybrid) will be ignored.\nNemotronH requires an initialized `NemotronHHybridDynamicCache` to return a cache. None was provided, so no cache will be returned.Inference:  10%|█         | 99/950 [30:40<5:58:22, 25.27s/it]  \n`\n\nBelow is my verbose research thread (perplexity) where I am planning an improvement. How will Kaggle deal with the l;ong inference times? \n\n`\n# Nemotron Inference Improvement Plan\n\n## Objective\nImprove inference throughput for the LoRA-adapted Nemotron-3-Nano-30B-A3B model by moving performance-critical runs away from raw Hugging Face `model.generate()` and toward a cache-aware serving path suitable for Kaggle time limits.[1][2]\n\n## Current State\nThe current inference script uses plain `transformers` generation with a PEFT adapter attached to the base model.[1] This path is functionally correct for validation, but the current Hugging Face NemotronH integration has a known cache-plumbing issue: `generate()` follows the standard `past_key_values` protocol, while the model expects its hybrid cache under `cache_params`, so KV or hybrid cache is not actually used during decoding.[3][2]\n\n## Problem Summary\nBecause the hybrid cache is not threaded through correctly, generation repeatedly recomputes context instead of benefiting from incremental cached decoding.[3][2] NVIDIA’s own guidance says Hugging Face is mainly for prototyping here and points users to optimized inference engines such as vLLM, TRT-LLM, SGLang, and llama.cpp for KV-cache-aware deployment.[2][1]\n\n## Target Architecture\nThe preferred production path is:\n\n1. Load the fine-tuned PEFT or LoRA adapter onto the Nemotron base model.\n2. Merge the adapter into the base weights with `merge_and_unload()`.\n3. Save the merged checkpoint as a standalone model artifact.\n4. Run inference through vLLM using the merged model.\n5. Keep the existing Hugging Face script only for smoke tests and small validation runs.[4][5][2]\n\n## Why vLLM\nvLLM has a documented deployment path for NVIDIA Nemotron-3-Nano-30B-A3B and is part of NVIDIA’s recommended inference stack for this model family.[4][5][1] This avoids the current Hugging Face cache mismatch and gives a better chance of meeting Kaggle runtime limits.[2]\n\n## Implementation Steps\n\n### 1. Freeze the baseline\n- Keep the current `scripts/infer_lora.py` path unchanged for reproducibility and baseline comparison.[1]\n- Record current runtime metrics: prompt length, `max_new_tokens`, tokens per second, total job duration, and hardware profile.\n\n### 2. Add a merge script\n- Create a script such as `scripts/merge_lora.py`.\n- Load base model + tokenizer + adapter.\n- Call `merge_and_unload()` on the PEFT model.\n- Save merged model and tokenizer to a new output directory such as `output/merged_nemotron_model/`.\n- Validate that the merged checkpoint loads without PEFT dependencies in the inference environment.\n\n### 3. Validate output parity\n- Run a small fixed eval set through both paths: current HF+adapter flow and merged-model flow.\n- Compare decoded outputs, task metrics, and any competition-specific scoring proxies.\n- Accept minor formatting drift, but investigate large semantic divergence.\n\n### 4. Stand up vLLM inference\n- Start with NVIDIA’s documented vLLM recipe for Nemotron-3-Nano-30B-A3B, including `--trust-remote-code` and model-specific parser flags where needed.[4][1]\n- Point vLLM at the merged model directory instead of the base-plus-adapter pair.\n- Build a thin client script that submits prompts and writes predictions in the format required by the competition.\n\n### 5. Benchmark on target hardware\n- Measure end-to-end throughput on the same class of hardware expected for Kaggle submission or local dry runs.\n- Benchmark several realistic settings: short prompts, long prompts, and the competition’s typical `max_new_tokens` budget.\n- Record tokens per second, total runtime, memory footprint, and failure modes.[4]\n\n### 6. Integrate into submission flow\n- Add a clear switch in the pipeline such as `--backend hf` vs `--backend vllm`.\n- Default local validation to Hugging Face only if simplicity matters more than speed.\n- Default submission generation to vLLM once parity and stability are confirmed.\n\n## Fallback Option\nIf vLLM integration becomes blocked, the secondary path is a custom generation loop that calls `model.forward()` directly and passes the initialized Nemotron hybrid cache through `cache_params` on every step.[3][6] This should restore cache-aware decoding in principle, but it is more brittle and requires maintaining custom decoding logic, stopping criteria, and sampling behavior.[3]\n\n## Non-Goals\n- Do not refactor the existing baseline path until the merged-model path is validated.\n- Do not rely on raw Hugging Face `model.generate()` performance improvements landing in time for the current competition run.[2]\n- Do not introduce multiple inference backends at once beyond a simple baseline-versus-vLLM split.\n\n## Risks\n| Risk | Impact | Mitigation |\n|---|---|---|\n| Merged model outputs differ from adapter-attached outputs | Medium | Run parity tests on a fixed sample set before switching default inference |\n| vLLM environment differs from Kaggle runtime | High | Dry-run on the closest available hardware and container stack before final submission |\n| Nemotron-specific flags or parser settings are incomplete | Medium | Start from NVIDIA and vLLM published examples rather than a generic vLLM command.[4][1] |\n| Time spent on custom HF patching delays delivery | Medium | Treat HF monkey-patching as a last resort, not the main path.[2] |\n\n## Recommended Deliverables\n- `scripts/merge_lora.py`\n- `scripts/serve_vllm.sh`\n- `scripts/infer_vllm.py`\n- `docs/nemotron_inference_notes.md`\n- `output/merged_nemotron_model/` directory contract\n\n## Acceptance Criteria\nThe migration is successful when all of the following are true:\n\n- The merged checkpoint loads cleanly in vLLM.[4][5]\n- Output quality is materially unchanged on a representative validation slice.\n- End-to-end inference runtime is significantly lower than the current raw Hugging Face path.\n- The submission pipeline can run without manual intervention.\n- The old Hugging Face path remains available for debugging and quick validation.\n\n## Suggested Sequence\n1. Benchmark the current script.\n2. Implement and test adapter merge.\n3. Validate output parity.\n4. Bring up vLLM with the merged model.\n5. Benchmark throughput.\n6. Switch submission inference to vLLM.\n7. Keep custom HF cache work only as an optional experimental branch.[4][2]\n\n## References\n[1] [nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16 - Hugging Face](https://huggingface.co/nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16)\n\n[2] [nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16 · doesn't do kv cache when using Transformers · Discussion #14 - Hugging Face](https://huggingface.co/nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16/discussions/14)\n\n[3] [nvidia/NVIDIA-Nemotron-3-Nano-4B-BF16 · Bug Report: `model.generate()` does not use cache_params · Discussion #2 - Hugging Face](https://huggingface.co/nvidia/NVIDIA-Nemotron-3-Nano-4B-BF16/discussions/2)\n\n[4] [NVIDIA Nemotron-3-Nano-30B-A3B User Guide - vLLM Recipes](https://docs.vllm.ai/projects/recipes/en/latest/NVIDIA/Nemotron-3-Nano-30B-A3B.html)\n\n[5] [Deploying NVIDIA Nemotron-3-Nano with vLLM - GitHub](https://github.com/NVIDIA-NeMo/Nemotron/blob/main/usage-cookbook/Nemotron-3-Nano/vllm_cookbook.ipynb)\n\n[6] [NemotronH - Hugging Face Transformers Documentation](https://huggingface.co/docs/transformers/model_doc/nemotron_h)\n\n`",
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Mark Susol",
+            "id": 3049666,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/gdataranger",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/3049666-kg.jpeg?t=2026-05-03-20-23-50",
+            "tier": "CONTRIBUTOR",
+            "url": "/gdataranger",
+            "userId": 3049666,
+            "userName": "gdataranger"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      },
+      {
+        "author": {
+          "displayName": "MAJ0RT0M",
+          "id": 2071133,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "CONTRIBUTOR",
+          "url": "/maj0rt0m"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 1268,
+        "content": "<p>Supposedly transformers GRPO trainer lets you share model memory b/w training and VLLM inference so you dont have to load the model twice - although I haven't tried this (I also had problems even loading LORA in vllm - so I'm curious if you managed to solve this) - Also helpful to let you compute KL-div against base model by swapping LORA in and out to save memory</p>\n<p>Additionally - you could try loading the model in 4bit quantization</p>",
+        "feedbackTrackingData": {},
+        "id": 3433638,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-01T22:30:25.367Z",
+        "rawMarkdown": "Supposedly transformers GRPO trainer lets you share model memory b/w training and VLLM inference so you dont have to load the model twice - although I haven't tried this (I also had problems even loading LORA in vllm - so I'm curious if you managed to solve this) - Also helpful to let you compute KL-div against base model by swapping LORA in and out to save memory\n\nAdditionally - you could try loading the model in 4bit quantization\n",
+        "replies": [
+          {
+            "author": {
+              "displayName": "Adarsh Kumar",
+              "id": 25818777,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/25818777-kg.png?t=2026-04-20-16-49-43",
+              "tier": "MASTER",
+              "url": "/adarsh2626"
+            },
+            "authorType": "COMMENT",
+            "competitionRanking": 654,
+            "content": "<p>Quantization make training terribly long</p>",
+            "feedbackTrackingData": {},
+            "id": 3433741,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-04-02T03:51:28.067Z",
+            "rawMarkdown": "Quantization make training terribly long",
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "Muhammad Ibrahim Qasmi",
+                "id": 24946333,
+                "performanceTier": "GRANDMASTER",
+                "profileUrl": "/ibrahimqasimi",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/24946333-kg.jpeg?t=2025-12-22-22-44-57",
+                "tier": "GRANDMASTER",
+                "url": "/ibrahimqasimi",
+                "userId": 24946333,
+                "userName": "ibrahimqasimi"
+              }
+            },
+            "votes": {
+              "canUpvote": true
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "MAJ0RT0M",
+            "id": 2071133,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/maj0rt0m",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+            "tier": "CONTRIBUTOR",
+            "url": "/maj0rt0m",
+            "userId": 2071133,
+            "userName": "maj0rt0m"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      },
+      {
+        "author": {
+          "displayName": "Adarsh Kumar",
+          "id": 25818777,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/25818777-kg.png?t=2026-04-20-16-49-43",
+          "tier": "MASTER",
+          "url": "/adarsh2626"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 654,
+        "content": "<p>yes need to fix this problem</p>",
+        "feedbackTrackingData": {},
+        "id": 3432313,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-31T12:00:43.073Z",
+        "rawMarkdown": "yes need to fix this problem",
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Muhammad Ibrahim Qasmi",
+            "id": 24946333,
+            "performanceTier": "GRANDMASTER",
+            "profileUrl": "/ibrahimqasimi",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/24946333-kg.jpeg?t=2025-12-22-22-44-57",
+            "tier": "GRANDMASTER",
+            "url": "/ibrahimqasimi",
+            "userId": 24946333,
+            "userName": "ibrahimqasimi"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "WillTLing",
+        "id": 14555359,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/14555359-kg.jpg?t=2026-05-03-06-22-31",
+        "tier": "CONTRIBUTOR",
+        "url": "/willtling"
+      },
+      "authorType": "TOPIC",
+      "competitionRanking": 849,
+      "content": "<p>I encountered the following issue:</p>\n<pre><code>transformers_modules.nemotron_model.modeling_nemotron_h|WARNING] NemotronH requires an initialized `NemotronHHybridDynamicCache` to return a cache. None was provided, so no cache will be returned\n</code></pre>\n<p>When I was conducting GRPO training, the training speed was very slow. I suspect this might be related to the issue mentioned above. I noticed that a similar problem was also mentioned in <a href=\"https://huggingface.co/nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16/discussions/14\" target=\"_blank\">this discussion</a>, but I'm not sure if it has been fixed. Additionally, I also tried using vLLM, but the GPU memory was completely insufficient.</p>",
+      "feedbackTrackingData": {},
+      "id": 3432256,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-03-31T10:00:21.407Z",
+      "rawMarkdown": "I encountered the following issue:\n\n```\ntransformers_modules.nemotron_model.modeling_nemotron_h|WARNING] NemotronH requires an initialized `NemotronHHybridDynamicCache` to return a cache. None was provided, so no cache will be returned\n```\n\nWhen I was conducting GRPO training, the training speed was very slow. I suspect this might be related to the issue mentioned above. I noticed that a similar problem was also mentioned in [this discussion](https://huggingface.co/nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16/discussions/14), but I'm not sure if it has been fixed. Additionally, I also tried using vLLM, but the GPU memory was completely insufficient.",
+      "teamUpInfo": {
+        "intro": "",
+        "teamLeader": {
+          "displayName": "WillTLing",
+          "id": 14555359,
+          "performanceTier": "CONTRIBUTOR",
+          "profileUrl": "/willtling",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/14555359-kg.jpg?t=2026-05-03-06-22-31",
+          "tier": "CONTRIBUTOR",
+          "url": "/willtling",
+          "userId": 14555359,
+          "userName": "willtling"
+        }
+      },
+      "votes": {
+        "canUpvote": true,
+        "totalUpvotes": 4,
+        "totalVotes": 4
+      }
+    },
+    "firstMessageId": 3432256,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 686444,
+    "name": "It seems the KV cache is not enabled during RL training",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-03-31T10:00:21.407002200Z",
+    "totalMessages": 4,
+    "totalVotes": 4,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/686444"
+  }
+}

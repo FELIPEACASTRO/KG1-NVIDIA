@@ -1,0 +1,305 @@
+{
+  "forumTopic": {
+    "authorId": 5927283,
+    "authorPerformanceTier": "MASTER",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "5927283-kg.jpg?t=2023-10-25-03-24-26",
+    "authorUserDisplayName": "ISAKA Tsuyoshi",
+    "authorUserName": "isakatsuyoshi",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "c-number",
+          "id": 6624777,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/6624777-kg.jpg",
+          "tier": "GRANDMASTER",
+          "url": "/cnumber"
+        },
+        "authorType": "COMMENT",
+        "content": "<p>I haven't checked myself, but this may work.\n<a href=\"https://github.com/Kaggle/kaggle-cli/blob/main/docs/kernels.md#:~:text=NvidiaH100-,NvidiaRtxPro6000,-Some%20of%20these\" target=\"_blank\">https://github.com/Kaggle/kaggle-cli/blob/main/docs/kernels.md#:~:text=NvidiaH100-,NvidiaRtxPro6000,-Some%20of%20these</a></p>",
+        "feedbackTrackingData": {},
+        "id": 3422892,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-18T02:47:42.597Z",
+        "rawMarkdown": "I haven't checked myself, but this may work.\nhttps://github.com/Kaggle/kaggle-cli/blob/main/docs/kernels.md#:~:text=NvidiaH100-,NvidiaRtxPro6000,-Some%20of%20these",
+        "reactions": [
+          {
+            "emoji": "THANK_YOU",
+            "featuredUserNames": [
+              "isakatsuyoshi",
+              "sabarnasaha1"
+            ],
+            "userCount": 2
+          },
+          {
+            "emoji": "SURPRISE",
+            "featuredUserNames": [
+              "weedoo",
+              "sangrampatil5150"
+            ],
+            "userCount": 2
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "c-number",
+            "id": 6624777,
+            "performanceTier": "GRANDMASTER",
+            "profileUrl": "/cnumber",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/6624777-kg.jpg",
+            "tier": "GRANDMASTER",
+            "url": "/cnumber",
+            "userId": 6624777,
+            "userName": "cnumber"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 6,
+          "totalVotes": 6
+        }
+      },
+      {
+        "author": {
+          "displayName": "ISAKA Tsuyoshi",
+          "id": 5927283,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/5927283-kg.jpg?t=2023-10-25-03-24-26",
+          "tier": "MASTER",
+          "url": "/isakatsuyoshi"
+        },
+        "authorType": "TOPIC",
+        "competitionRanking": 312,
+        "content": "<p>It worked with <a href=\"https://www.kaggle.com/cnumber\" target=\"_blank\">@cnumber</a> ’s method! Thank you!</p>\n<p>I’d also like to thank <a href=\"https://www.kaggle.com/ravi20076\" target=\"_blank\">@ravi20076</a> and <a href=\"https://www.kaggle.com/luciankucera\" target=\"_blank\">@luciankucera</a> for their comments.</p>",
+        "feedbackTrackingData": {},
+        "id": 3423144,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-18T07:46:03.127Z",
+        "rawMarkdown": "It worked with @cnumber ’s method! Thank you!\n\nI’d also like to thank @ravi20076 and @luciankucera for their comments.\n",
+        "replies": [
+          {
+            "author": {
+              "displayName": "YashasGunderia",
+              "id": 23268982,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+              "tier": "CONTRIBUTOR",
+              "url": "/yashasgunderia"
+            },
+            "authorType": "COMMENT",
+            "competitionRanking": 2829,
+            "content": "<p>hey, comment link?</p>",
+            "feedbackTrackingData": {},
+            "id": 3423644,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-03-18T20:00:09.377Z",
+            "rawMarkdown": "hey, comment link?\n",
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "YashasGunderia",
+                "id": 23268982,
+                "performanceTier": "CONTRIBUTOR",
+                "profileUrl": "/yashasgunderia",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                "tier": "CONTRIBUTOR",
+                "url": "/yashasgunderia",
+                "userId": 23268982,
+                "userName": "yashasgunderia"
+              }
+            },
+            "votes": {
+              "canUpvote": true
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "ISAKA Tsuyoshi",
+            "id": 5927283,
+            "performanceTier": "MASTER",
+            "profileUrl": "/isakatsuyoshi",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/5927283-kg.jpg?t=2023-10-25-03-24-26",
+            "tier": "MASTER",
+            "url": "/isakatsuyoshi",
+            "userId": 5927283,
+            "userName": "isakatsuyoshi"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 3,
+          "totalVotes": 3
+        }
+      },
+      {
+        "author": {
+          "displayName": "lucian kucera",
+          "id": 17819385,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "CONTRIBUTOR",
+          "url": "/luciankucera"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 1657,
+        "content": "<p>No there is no way. Just use kaggle notebooks.</p>",
+        "feedbackTrackingData": {},
+        "id": 3422875,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-18T02:25:32.273Z",
+        "rawMarkdown": "No there is no way. Just use kaggle notebooks.",
+        "reactions": [
+          {
+            "emoji": "THANK_YOU",
+            "featuredUserNames": [
+              "isakatsuyoshi"
+            ],
+            "userCount": 1
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "lucian kucera",
+            "id": 17819385,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/luciankucera",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+            "tier": "CONTRIBUTOR",
+            "url": "/luciankucera",
+            "userId": 17819385,
+            "userName": "luciankucera"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 1,
+          "totalVotes": 1
+        }
+      },
+      {
+        "author": {
+          "displayName": "Ravi Ramakrishnan",
+          "id": 8273630,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/8273630-kg.JPG?t=2024-03-26-14-51-52",
+          "tier": "GRANDMASTER",
+          "url": "/ravi20076"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 7,
+        "content": "<p><a href=\"https://www.kaggle.com/isakatsuyoshi\" target=\"_blank\">@isakatsuyoshi</a> use kaggle notebooks - this is the easiest and safest way to ensure A6000 is selected</p>",
+        "feedbackTrackingData": {},
+        "id": 3423028,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-18T05:22:41.290Z",
+        "rawMarkdown": "@isakatsuyoshi use kaggle notebooks - this is the easiest and safest way to ensure A6000 is selected",
+        "reactions": [
+          {
+            "emoji": "THANK_YOU",
+            "featuredUserNames": [
+              "isakatsuyoshi"
+            ],
+            "userCount": 1
+          },
+          {
+            "emoji": "FUNNY",
+            "featuredUserNames": [
+              "nina2025"
+            ],
+            "userCount": 1
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Kishan Vavdara",
+            "id": 12951282,
+            "performanceTier": "MASTER",
+            "profileUrl": "/kishanvavdara",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/12951282-kg.jpeg",
+            "tier": "MASTER",
+            "url": "/kishanvavdara",
+            "userId": 12951282,
+            "userName": "kishanvavdara"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 1
+        }
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "ISAKA Tsuyoshi",
+        "id": 5927283,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/5927283-kg.jpg?t=2023-10-25-03-24-26",
+        "tier": "MASTER",
+        "url": "/isakatsuyoshi"
+      },
+      "authorType": "TOPIC",
+      "competitionRanking": 312,
+      "content": "<p>When saving and committing a notebook via the Kaggle API, the GPU is automatically set to P100.\nIs there a way to set it to RTX Pro 6000 instead?</p>",
+      "feedbackTrackingData": {},
+      "id": 3422864,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-03-18T02:10:18.550Z",
+      "rawMarkdown": "When saving and committing a notebook via the Kaggle API, the GPU is automatically set to P100.\nIs there a way to set it to RTX Pro 6000 instead?",
+      "teamUpInfo": {
+        "intro": "",
+        "teamLeader": {
+          "displayName": "ISAKA Tsuyoshi",
+          "id": 5927283,
+          "performanceTier": "MASTER",
+          "profileUrl": "/isakatsuyoshi",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/5927283-kg.jpg?t=2023-10-25-03-24-26",
+          "tier": "MASTER",
+          "url": "/isakatsuyoshi",
+          "userId": 5927283,
+          "userName": "isakatsuyoshi"
+        }
+      },
+      "votes": {
+        "canUpvote": true,
+        "totalUpvotes": 12,
+        "totalVotes": 12
+      }
+    },
+    "firstMessageId": 3422864,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 682197,
+    "name": "[RESOLVED] How to use RTX Pro 6000 instead of P100 with the Kaggle API?",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-03-18T02:10:18.548586400Z",
+    "totalMessages": 5,
+    "totalVotes": 12,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/682197"
+  }
+}

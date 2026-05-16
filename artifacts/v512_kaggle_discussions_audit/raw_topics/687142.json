@@ -1,0 +1,242 @@
+{
+  "forumTopic": {
+    "authorId": 75976,
+    "authorPerformanceTier": "GRANDMASTER",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "75976-gr.jpg",
+    "authorUserDisplayName": "CPMP",
+    "authorUserName": "cpmpml",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "Darren Amadeus Martin",
+          "id": 10290345,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/10290345-kg.jpg?t=2026-03-17-04-10-40",
+          "tier": "CONTRIBUTOR",
+          "url": "/darrenamadeusmartin"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 1404,
+        "content": "<p>Thank you for replying to my comment in another discussion forum. This is a feature that I did not even know existed. So with this feature, basically for submission or saving version that must not use internet, pips can be installed with relative ease. Youu mentioned that internet access are allowed before submitting while running notebooks. However, the issue is, everytime I try to put internet on with the gpu rtx pro 6000, it gave me an error of \"internet not allowed with this accelerator\" hence even for debugging or trial and error while editting the notebook (not using save version), it requires me to download the wheels on a different notebook. Moreover, if the pip requires to be compiled in the same environment, I have to run it twice, one notebook without accelerator to pip download and one notebook with accelerator for installation and compile process. Morever, latelt notebooks with rtx pro 6000 prevents me from adding new datasets/models/notebook outputs with the same \"internet not allowed with this accelerator\" error unless I deattach the competition data and add the datas I need before attaching the competition data again. So 2 things I'd like to note is</p>\n<ol>\n<li>Turning internet on while editting with rtx pro 6000 on gave an error</li>\n<li>Notebook with rtx pro 6000 can't add another dataset</li>\n</ol>\n<p>I hope that competition host and kaggle staff can look at this matter</p>",
+        "feedbackTrackingData": {},
+        "id": 3433994,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-02T12:56:00.043Z",
+        "rawMarkdown": "Thank you for replying to my comment in another discussion forum. This is a feature that I did not even know existed. So with this feature, basically for submission or saving version that must not use internet, pips can be installed with relative ease. Youu mentioned that internet access are allowed before submitting while running notebooks. However, the issue is, everytime I try to put internet on with the gpu rtx pro 6000, it gave me an error of \"internet not allowed with this accelerator\" hence even for debugging or trial and error while editting the notebook (not using save version), it requires me to download the wheels on a different notebook. Moreover, if the pip requires to be compiled in the same environment, I have to run it twice, one notebook without accelerator to pip download and one notebook with accelerator for installation and compile process. Morever, latelt notebooks with rtx pro 6000 prevents me from adding new datasets/models/notebook outputs with the same \"internet not allowed with this accelerator\" error unless I deattach the competition data and add the datas I need before attaching the competition data again. So 2 things I'd like to note is\n\n1. Turning internet on while editting with rtx pro 6000 on gave an error\n2. Notebook with rtx pro 6000 can't add another dataset\n\nI hope that competition host and kaggle staff can look at this matter",
+        "replies": [
+          {
+            "author": {
+              "displayName": "CPMP",
+              "id": 75976,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/75976-gr.jpg",
+              "tier": "GRANDMASTER",
+              "url": "/cpmpml"
+            },
+            "authorType": "HOST",
+            "content": "<p>Sorry, I did not know internet access was disabled for this accelerator, my bad.</p>\n<p>I get that for interactive use this is a bit painful. </p>",
+            "feedbackTrackingData": {},
+            "id": 3434141,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-04-02T16:34:12.077Z",
+            "rawMarkdown": "Sorry, I did not know internet access was disabled for this accelerator, my bad.\n\nI get that for interactive use this is a bit painful. ",
+            "replies": [
+              {
+                "author": {
+                  "displayName": "Darren Amadeus Martin",
+                  "id": 10290345,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/10290345-kg.jpg?t=2026-03-17-04-10-40",
+                  "tier": "CONTRIBUTOR",
+                  "url": "/darrenamadeusmartin"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 1404,
+                "content": "<p>I think that's what everybody concerns about. I know that disabling internet is to prevent GPU exploitation but having internet access on the notebook would really help with debuggings and pip installations. So it would be rewlly helpful if competition hosts and kaggle staffs take a look and reconsideration</p>",
+                "feedbackTrackingData": {},
+                "id": 3434363,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-02T21:18:46.313Z",
+                "rawMarkdown": "I think that's what everybody concerns about. I know that disabling internet is to prevent GPU exploitation but having internet access on the notebook would really help with debuggings and pip installations. So it would be rewlly helpful if competition hosts and kaggle staffs take a look and reconsideration",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "Darren Amadeus Martin",
+                    "id": 10290345,
+                    "performanceTier": "CONTRIBUTOR",
+                    "profileUrl": "/darrenamadeusmartin",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/10290345-kg.jpg?t=2026-03-17-04-10-40",
+                    "tier": "CONTRIBUTOR",
+                    "url": "/darrenamadeusmartin",
+                    "userId": 10290345,
+                    "userName": "darrenamadeusmartin"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true,
+                  "totalUpvotes": 1,
+                  "totalVotes": 1
+                }
+              },
+              {
+                "author": {
+                  "displayName": "matmul_in_W_plus_b",
+                  "id": 20756635,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                  "tier": "CONTRIBUTOR",
+                  "url": "/matmulinwplusb"
+                },
+                "authorType": "COMMENT",
+                "content": "<p>It's really hard to run code on a offline environment. Please consider enabling internet.</p>",
+                "feedbackTrackingData": {},
+                "id": 3435063,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-03T16:13:38.693Z",
+                "rawMarkdown": "It's really hard to run code on a offline environment. Please consider enabling internet.",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "matmul_in_W_plus_b",
+                    "id": 20756635,
+                    "performanceTier": "CONTRIBUTOR",
+                    "profileUrl": "/matmulinwplusb",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                    "tier": "CONTRIBUTOR",
+                    "url": "/matmulinwplusb",
+                    "userId": 20756635,
+                    "userName": "matmulinwplusb"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true,
+                  "totalUpvotes": 2,
+                  "totalVotes": 2
+                }
+              }
+            ],
+            "votes": {
+              "canUpvote": true,
+              "totalVotes": -3
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Darren Amadeus Martin",
+            "id": 10290345,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/darrenamadeusmartin",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/10290345-kg.jpg?t=2026-03-17-04-10-40",
+            "tier": "CONTRIBUTOR",
+            "url": "/darrenamadeusmartin",
+            "userId": 10290345,
+            "userName": "darrenamadeusmartin"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 3,
+          "totalVotes": 3
+        }
+      },
+      {
+        "author": {
+          "displayName": "HZM",
+          "id": 9464013,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/9464013-kg.jpg?t=2023-09-30-12-35-57",
+          "tier": "GRANDMASTER",
+          "url": "/leehann"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 1051,
+        "content": "<p>i am using <a href=\"https://github.com/NVIDIA-NeMo/RL/tree/main\" target=\"_blank\">https://github.com/NVIDIA-NeMo/RL/tree/main</a> to sft the model, but do you need how to covnert the dist torch model weight to hf format, it brothes me a lot</p>",
+        "feedbackTrackingData": {},
+        "id": 3434054,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-02T14:21:22.157Z",
+        "rawMarkdown": "i am using https://github.com/NVIDIA-NeMo/RL/tree/main to sft the model, but do you need how to covnert the dist torch model weight to hf format, it brothes me a lot",
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "HZM",
+            "id": 9464013,
+            "performanceTier": "GRANDMASTER",
+            "profileUrl": "/leehann",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/9464013-kg.jpg?t=2023-09-30-12-35-57",
+            "tier": "GRANDMASTER",
+            "url": "/leehann",
+            "userId": 9464013,
+            "userName": "leehann"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "CPMP",
+        "id": 75976,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/75976-gr.jpg",
+        "tier": "GRANDMASTER",
+        "url": "/cpmpml"
+      },
+      "authorType": "HOST",
+      "content": "<p>I responded to a comment but this maybe worth sharing as a topic. There is a little known or not visible enough feature that allows for pip installs without the need to create additional notebooks with downloaded wheels.</p>\n<p>When running notebooks before submitting you can allow internet access, and have your pip installs in the notebook.</p>\n<p>When you submit, or save for submission, with internet access disabled, then you can just move your pip installs as indicated in this screenshot. Just click on the dots at the right of the submit button, click on \"install dependencies\", and put all your pip install commands there. More info: <a href=\"https://www.kaggle.com/docs/notebooks#modifying-a-notebook-specific-environment\" target=\"_blank\">https://www.kaggle.com/docs/notebooks#modifying-a-notebook-specific-environment</a></p>\n<p><img src=\"https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F75976%2Ff3148ed096e177604b322416d6caecb6%2FScreenshot%202026-04-02%20at%2013-42-25%20Kaggle%20Notebook%20Editor.png?generation=1775130229811286&amp;alt=media\" alt=\"\"></p>\n<p><img src=\"https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F75976%2F230f3f8026ee43a9f757f5755e32404a%2FScreenshot%202026-04-02%20at%2013-45-42%20Kaggle%20Notebook%20Editor.png?generation=1775130373656759&amp;alt=media\" alt=\"\"></p>",
+      "feedbackTrackingData": {},
+      "id": 3433969,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-04-02T11:50:32.907Z",
+      "rawMarkdown": "I responded to a comment but this maybe worth sharing as a topic. There is a little known or not visible enough feature that allows for pip installs without the need to create additional notebooks with downloaded wheels.\n\nWhen running notebooks before submitting you can allow internet access, and have your pip installs in the notebook.\n\nWhen you submit, or save for submission, with internet access disabled, then you can just move your pip installs as indicated in this screenshot. Just click on the dots at the right of the submit button, click on \"install dependencies\", and put all your pip install commands there. More info: https://www.kaggle.com/docs/notebooks#modifying-a-notebook-specific-environment\n\n![](https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F75976%2Ff3148ed096e177604b322416d6caecb6%2FScreenshot%202026-04-02%20at%2013-42-25%20Kaggle%20Notebook%20Editor.png?generation=1775130229811286&alt=media)\n\n![](https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F75976%2F230f3f8026ee43a9f757f5755e32404a%2FScreenshot%202026-04-02%20at%2013-45-42%20Kaggle%20Notebook%20Editor.png?generation=1775130373656759&alt=media)\n\n",
+      "reactions": [
+        {
+          "emoji": "THANK_YOU",
+          "featuredUserNames": [
+            "ngcferreira",
+            "russcore"
+          ],
+          "userCount": 2
+        }
+      ],
+      "votes": {
+        "canUpvote": true,
+        "totalUpvotes": 23,
+        "totalVotes": 22
+      }
+    },
+    "firstMessageId": 3433969,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 687142,
+    "name": "Pip install with internet disabled: install dependencies feature",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-04-02T11:50:32.905913600Z",
+    "totalMessages": 5,
+    "totalVotes": 22,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/687142"
+  }
+}

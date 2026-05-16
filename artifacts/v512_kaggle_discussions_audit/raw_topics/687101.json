@@ -1,0 +1,172 @@
+{
+  "forumTopic": {
+    "authorId": 22671844,
+    "authorPerformanceTier": "CONTRIBUTOR",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "default-thumb.png",
+    "authorUserDisplayName": "NatSwamin",
+    "authorUserName": "natswamin",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "MD Mushfirat Mohaimin",
+          "id": 5956875,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/5956875-kg.jpg?t=2024-04-26-21-54-01",
+          "tier": "EXPERT",
+          "url": "/mushfirat"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 1971,
+        "content": "<p>For numerical values, the tolerance is 1%.</p>\n<p>This is the evaluation code: <a href=\"https://www.kaggle.com/code/metric/nvidia-nemotron-metric\" target=\"_blank\">https://www.kaggle.com/code/metric/nvidia-nemotron-metric</a></p>",
+        "feedbackTrackingData": {},
+        "id": 3433851,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-02T08:09:55.730Z",
+        "rawMarkdown": "For numerical values, the tolerance is 1%.\n\nThis is the evaluation code: https://www.kaggle.com/code/metric/nvidia-nemotron-metric",
+        "replies": [
+          {
+            "author": {
+              "displayName": "NatSwamin",
+              "id": 22671844,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+              "tier": "CONTRIBUTOR",
+              "url": "/natswamin"
+            },
+            "authorType": "TOPIC",
+            "content": "<p>Hi ,</p>\n<p>Thanks for your response.</p>\n<p>Where is this 0.01 tolerance is mentioned? Not all training examples confirm to this tolerance either? Does this mean train dataset is not validated for confirmance?</p>\n<p>Many Thanks\nNat!</p>",
+            "feedbackTrackingData": {},
+            "id": 3433931,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-04-02T10:44:45.457Z",
+            "rawMarkdown": "Hi ,\n\nThanks for your response.\n\nWhere is this 0.01 tolerance is mentioned? Not all training examples confirm to this tolerance either? Does this mean train dataset is not validated for confirmance?\n\nMany Thanks\nNat!",
+            "replies": [
+              {
+                "author": {
+                  "displayName": "CPMP",
+                  "id": 75976,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/75976-gr.jpg",
+                  "tier": "GRANDMASTER",
+                  "url": "/cpmpml"
+                },
+                "authorType": "HOST",
+                "content": "<p>It is in the notebook you were pointed to.</p>",
+                "feedbackTrackingData": {},
+                "id": 3433962,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-02T11:41:19.967Z",
+                "rawMarkdown": "It is in the notebook you were pointed to.",
+                "reactions": [
+                  {
+                    "emoji": "FUNNY",
+                    "featuredUserNames": [
+                      "mccocoful"
+                    ],
+                    "userCount": 1
+                  }
+                ],
+                "votes": {
+                  "canUpvote": true
+                }
+              }
+            ],
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "NatSwamin",
+                "id": 22671844,
+                "performanceTier": "CONTRIBUTOR",
+                "profileUrl": "/natswamin",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                "tier": "CONTRIBUTOR",
+                "url": "/natswamin",
+                "userId": 22671844,
+                "userName": "natswamin"
+              }
+            },
+            "votes": {
+              "canUpvote": true
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "MD Mushfirat Mohaimin",
+            "id": 5956875,
+            "performanceTier": "EXPERT",
+            "profileUrl": "/mushfirat",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/5956875-kg.jpg?t=2024-04-26-21-54-01",
+            "tier": "EXPERT",
+            "url": "/mushfirat",
+            "userId": 5956875,
+            "userName": "mushfirat"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 1,
+          "totalVotes": 1
+        }
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "NatSwamin",
+        "id": 22671844,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+        "tier": "CONTRIBUTOR",
+        "url": "/natswamin"
+      },
+      "authorType": "TOPIC",
+      "content": "<p>Hi,</p>\n<p>All the answers in  the column are rounded off just to two place alone in training. This results in rounding off errors when the prompt gets solved.  Is there a tolerance built in to accept the answers if so what is it? I am wondering what needs to be consistent treatment in train and test dataset. can the challenge organiser clarify?</p>\n<p>Many Thanks\nNat!</p>",
+      "feedbackTrackingData": {},
+      "id": 3433847,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-04-02T08:04:05.143Z",
+      "rawMarkdown": "Hi,\n\nAll the answers in  the column are rounded off just to two place alone in training. This results in rounding off errors when the prompt gets solved.  Is there a tolerance built in to accept the answers if so what is it? I am wondering what needs to be consistent treatment in train and test dataset. can the challenge organiser clarify?\n\nMany Thanks\nNat!\n\n",
+      "teamUpInfo": {
+        "intro": "",
+        "teamLeader": {
+          "displayName": "NatSwamin",
+          "id": 22671844,
+          "performanceTier": "CONTRIBUTOR",
+          "profileUrl": "/natswamin",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "CONTRIBUTOR",
+          "url": "/natswamin",
+          "userId": 22671844,
+          "userName": "natswamin"
+        }
+      },
+      "votes": {
+        "canUpvote": true
+      }
+    },
+    "firstMessageId": 3433847,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 687101,
+    "name": "Rounding off issues numerical problems",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-04-02T08:04:05.143861600Z",
+    "totalMessages": 3,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/687101"
+  }
+}

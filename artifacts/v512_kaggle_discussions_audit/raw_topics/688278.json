@@ -1,0 +1,110 @@
+{
+  "forumTopic": {
+    "authorId": 25818777,
+    "authorPerformanceTier": "MASTER",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "25818777-kg.png?t=2026-04-20-16-49-43",
+    "authorUserDisplayName": "Adarsh Kumar",
+    "authorUserName": "adarsh2626",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "Fabian Henning",
+          "id": 859143,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/859143-kg.jpeg?t=2023-12-05-14-24-40",
+          "tier": "EXPERT",
+          "url": "/crustacean"
+        },
+        "authorType": "COMMENT",
+        "content": "<p>Usually earlier submission is the tie breaker</p>",
+        "feedbackTrackingData": {},
+        "id": 3436043,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-05T08:17:16.700Z",
+        "rawMarkdown": "Usually earlier submission is the tie breaker",
+        "reactions": [
+          {
+            "emoji": "THANK_YOU",
+            "featuredUserNames": [
+              "adarsh2626"
+            ],
+            "userCount": 1
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Fabian Henning",
+            "id": 859143,
+            "performanceTier": "EXPERT",
+            "profileUrl": "/crustacean",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/859143-kg.jpeg?t=2023-12-05-14-24-40",
+            "tier": "EXPERT",
+            "url": "/crustacean",
+            "userId": 859143,
+            "userName": "crustacean"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "Adarsh Kumar",
+        "id": 25818777,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/25818777-kg.png?t=2026-04-20-16-49-43",
+        "tier": "MASTER",
+        "url": "/adarsh2626"
+      },
+      "authorType": "TOPIC",
+      "competitionRanking": 654,
+      "content": "<p>I have a doubt on same score how is leaderboard rank decided?</p>",
+      "feedbackTrackingData": {},
+      "id": 3436038,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-04-05T08:08:08.177Z",
+      "rawMarkdown": "I have a doubt on same score how is leaderboard rank decided?",
+      "teamUpInfo": {
+        "intro": "",
+        "teamLeader": {
+          "displayName": "Muhammad Ibrahim Qasmi",
+          "id": 24946333,
+          "performanceTier": "GRANDMASTER",
+          "profileUrl": "/ibrahimqasimi",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/24946333-kg.jpeg?t=2025-12-22-22-44-57",
+          "tier": "GRANDMASTER",
+          "url": "/ibrahimqasimi",
+          "userId": 24946333,
+          "userName": "ibrahimqasimi"
+        }
+      },
+      "votes": {
+        "canUpvote": true,
+        "totalUpvotes": 3,
+        "totalVotes": 3
+      }
+    },
+    "firstMessageId": 3436038,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 688278,
+    "name": "How is leaderboard rank decided on same score",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-04-05T08:08:08.176650300Z",
+    "totalMessages": 1,
+    "totalVotes": 3,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/688278"
+  }
+}

@@ -1,0 +1,246 @@
+{
+  "forumTopic": {
+    "authorId": 19279158,
+    "authorPerformanceTier": "CONTRIBUTOR",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "19279158-kg.jpg?t=2024-08-13-12-48-21",
+    "authorUserDisplayName": "Шерхан Масакбаев",
+    "authorUserName": "sherkhango",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "SwiftyOS",
+          "id": 649041,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/649041-kg.jpg?t=2026-03-26-11-13-20",
+          "tier": "CONTRIBUTOR",
+          "url": "/swifty13"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 1667,
+        "content": "<p>I've managed to programmatically solve all but 55 of the bit manipulation ones. The symbol transformations have been much harder with most unsolved still. Just a matter of time as they all must follow logical rules</p>",
+        "feedbackTrackingData": {},
+        "id": 3428586,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-25T17:31:01.780Z",
+        "rawMarkdown": "I've managed to programmatically solve all but 55 of the bit manipulation ones. The symbol transformations have been much harder with most unsolved still. Just a matter of time as they all must follow logical rules",
+        "replies": [
+          {
+            "author": {
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+              "url": "/"
+            },
+            "authorType": "COMMENT",
+            "canDelete": true,
+            "feedbackTrackingData": {},
+            "id": 3428869,
+            "isDeleted": true,
+            "isThankYou": false,
+            "isUserAuthor": true,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-03-26T02:20:18.003Z",
+            "rawMarkdown": "",
+            "votes": {}
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "SwiftyOS",
+            "id": 649041,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/swifty13",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/649041-kg.jpg?t=2026-03-26-11-13-20",
+            "tier": "CONTRIBUTOR",
+            "url": "/swifty13",
+            "userId": 649041,
+            "userName": "swifty13"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 1,
+          "totalVotes": 1
+        }
+      },
+      {
+        "author": {
+          "displayName": "m4nocha",
+          "id": 21092801,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/21092801-kg.jpg?t=2024-12-20-16-21-01",
+          "tier": "CONTRIBUTOR",
+          "url": "/aksh1t"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 1450,
+        "content": "<p>I was able to solve quite a lot of bit manipulation using brute force</p>\n<pre><code>🏁 FINAL REPORT\nTotal Solved: 934\nStill Unsolved: 668\nSaved successful results to 'solved_results.json'\n</code></pre>",
+        "feedbackTrackingData": {},
+        "id": 3428282,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-25T07:47:22.563Z",
+        "rawMarkdown": "I was able to solve quite a lot of bit manipulation using brute force\n```\n🏁 FINAL REPORT\nTotal Solved: 934\nStill Unsolved: 668\nSaved successful results to 'solved_results.json'\n```",
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "m4nocha",
+            "id": 21092801,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/aksh1t",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/21092801-kg.jpg?t=2024-12-20-16-21-01",
+            "tier": "CONTRIBUTOR",
+            "url": "/aksh1t",
+            "userId": 21092801,
+            "userName": "aksh1t"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 1
+        }
+      },
+      {
+        "author": {
+          "displayName": "Boris Polishchuk",
+          "id": 2427837,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "CONTRIBUTOR",
+          "url": "/polishch"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 2039,
+        "content": "<p>My best is 8 correct solutions out of 50 rollouts for one random Bit Transformation task. Only two of them demonstrates the well-pronounced non-trivial reasoning, the rest of 6 are just like  [\\boxed{00000011}.] which render them useless for RL. Most of the runs ended with 0 corrects out of 50, so it's still a long way to DeepSeek \"aha moment\".. :)</p>",
+        "feedbackTrackingData": {},
+        "id": 3444740,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-18T10:37:31.487Z",
+        "rawMarkdown": "My best is 8 correct solutions out of 50 rollouts for one random Bit Transformation task. Only two of them demonstrates the well-pronounced non-trivial reasoning, the rest of 6 are just like <think></think> \\[\\boxed{00000011}.\\] which render them useless for RL. Most of the runs ended with 0 corrects out of 50, so it's still a long way to DeepSeek \"aha moment\".. :)",
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Boris Polishchuk",
+            "id": 2427837,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/polishch",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+            "tier": "CONTRIBUTOR",
+            "url": "/polishch",
+            "userId": 2427837,
+            "userName": "polishch"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      },
+      {
+        "author": {
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "url": "/"
+        },
+        "authorType": "COMMENT",
+        "canDelete": true,
+        "feedbackTrackingData": {},
+        "id": 3428867,
+        "isDeleted": true,
+        "isThankYou": false,
+        "isUserAuthor": true,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-26T02:13:53.457Z",
+        "rawMarkdown": "",
+        "votes": {}
+      },
+      {
+        "author": {
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "url": "/"
+        },
+        "authorType": "COMMENT",
+        "canDelete": true,
+        "feedbackTrackingData": {},
+        "id": 3428281,
+        "isDeleted": true,
+        "isThankYou": false,
+        "isUserAuthor": true,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-25T07:46:55.473Z",
+        "rawMarkdown": "",
+        "votes": {}
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "Шерхан Масакбаев",
+        "id": 19279158,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/19279158-kg.jpg?t=2024-08-13-12-48-21",
+        "tier": "CONTRIBUTOR",
+        "url": "/sherkhango"
+      },
+      "authorType": "TOPIC",
+      "competitionRanking": 2330,
+      "content": "<p>I've been analyzing the problem types and wanted to share some findings on what seems to be the hardest category.\nBased on <a href=\"https://www.kaggle.com/huikang\" target=\"_blank\">@huikang</a> 's visualization, the base model solves only 2 out of 823 Equation Symbolic problems (0.2%). For comparison, Numeral is at 96%, Unit Conversion at 75%, Gravity at 59%.\nI did some deeper analysis of the structure:\nFormat: Each problem has equations like <code>AB_CD = result</code> where _ is an operator character and A,B,C,D are ASCII characters (printable range).\nWhat makes it so hard:</p>\n<p>On average only 1.6 examples per operator per problem - very few data points to infer a rule\nVariable output length - the same operator within the same problem can produce outputs of length 1, 2, 3, or 4. This rules out simple per-position mappings\n137 out of 813 problems have a query operator that doesn't appear in any example at all - you need to infer the rule with zero examples\nThe rules appear to be unique per problem - the + operator means identity in one problem and something completely different in another</p>\n<p>What I've tried (programmatically):</p>\n<p>Per-position char mappings with 50+ expressions (addition, XOR, AND, OR, modular arithmetic on char values)\nBase-93 arithmetic (treating AB and CD as two-digit base-93 numbers)\nSigned base-93 with carry\nAll 24 permutations of (a,b,c,d)\nBrute-force with 3-operand combinations</p>\n<p>Only ~5% are solvable (identity and swap permutations). The remaining 95% resist all approaches I've tried.\nHas anyone had more success with this type? Or is the consensus that these ~820 problems are essentially noise in the leaderboard - a fixed ~8.7% accuracy loss that everyone shares?\nCurious to hear if anyone found patterns I'm missing.</p>",
+      "feedbackTrackingData": {},
+      "id": 3428029,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-03-24T20:27:05.143Z",
+      "rawMarkdown": "I've been analyzing the problem types and wanted to share some findings on what seems to be the hardest category.\nBased on @huikang 's visualization, the base model solves only 2 out of 823 Equation Symbolic problems (0.2%). For comparison, Numeral is at 96%, Unit Conversion at 75%, Gravity at 59%.\nI did some deeper analysis of the structure:\nFormat: Each problem has equations like `AB_CD = result` where _ is an operator character and A,B,C,D are ASCII characters (printable range).\nWhat makes it so hard:\n\nOn average only 1.6 examples per operator per problem - very few data points to infer a rule\nVariable output length - the same operator within the same problem can produce outputs of length 1, 2, 3, or 4. This rules out simple per-position mappings\n137 out of 813 problems have a query operator that doesn't appear in any example at all - you need to infer the rule with zero examples\nThe rules appear to be unique per problem - the + operator means identity in one problem and something completely different in another\n\nWhat I've tried (programmatically):\n\nPer-position char mappings with 50+ expressions (addition, XOR, AND, OR, modular arithmetic on char values)\nBase-93 arithmetic (treating AB and CD as two-digit base-93 numbers)\nSigned base-93 with carry\nAll 24 permutations of (a,b,c,d)\nBrute-force with 3-operand combinations\n\nOnly ~5% are solvable (identity and swap permutations). The remaining 95% resist all approaches I've tried.\nHas anyone had more success with this type? Or is the consensus that these ~820 problems are essentially noise in the leaderboard - a fixed ~8.7% accuracy loss that everyone shares?\nCurious to hear if anyone found patterns I'm missing.",
+      "reactions": [
+        {
+          "emoji": "THANK_YOU",
+          "featuredUserNames": [
+            "aemado"
+          ],
+          "userCount": 1
+        }
+      ],
+      "teamUpInfo": {
+        "intro": "",
+        "teamLeader": {
+          "displayName": "Шерхан Масакбаев",
+          "id": 19279158,
+          "performanceTier": "CONTRIBUTOR",
+          "profileUrl": "/sherkhango",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/19279158-kg.jpg?t=2024-08-13-12-48-21",
+          "tier": "CONTRIBUTOR",
+          "url": "/sherkhango",
+          "userId": 19279158,
+          "userName": "sherkhango"
+        }
+      },
+      "votes": {
+        "canUpvote": true,
+        "totalUpvotes": 9,
+        "totalVotes": 9
+      }
+    },
+    "firstMessageId": 3428029,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 684432,
+    "name": "Equation Symbolic has anyone figured out the pattern?",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-03-24T20:27:05.144180700Z",
+    "totalMessages": 6,
+    "totalVotes": 9,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/684432"
+  }
+}

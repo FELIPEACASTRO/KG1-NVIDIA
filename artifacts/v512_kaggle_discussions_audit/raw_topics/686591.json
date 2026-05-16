@@ -1,0 +1,120 @@
+{
+  "forumTopic": {
+    "authorId": 16730252,
+    "authorPerformanceTier": "CONTRIBUTOR",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "16730252-kg.jpeg?t=2023-12-05-20-23-24",
+    "authorUserDisplayName": "AlexxxSem",
+    "authorUserName": "alexxxsem",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "einherjer",
+          "id": 1521642,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1521642-kg.jpg?t=2025-02-28-08-49-36",
+          "tier": "CONTRIBUTOR",
+          "url": "/einherjer"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 2114,
+        "content": "<p>This solution works. It is also the only example that makes sense. Thanks for sharing!</p>",
+        "feedbackTrackingData": {},
+        "id": 3444635,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-18T05:20:50.703Z",
+        "rawMarkdown": "This solution works. It is also the only example that makes sense. Thanks for sharing!",
+        "reactions": [
+          {
+            "emoji": "THANK_YOU",
+            "featuredUserNames": [
+              "alexxxsem"
+            ],
+            "userCount": 1
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "einherjer",
+            "id": 1521642,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/einherjer",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1521642-kg.jpg?t=2025-02-28-08-49-36",
+            "tier": "CONTRIBUTOR",
+            "url": "/einherjer",
+            "userId": 1521642,
+            "userName": "einherjer"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "AlexxxSem",
+        "id": 16730252,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/16730252-kg.jpeg?t=2023-12-05-20-23-24",
+        "tier": "CONTRIBUTOR",
+        "url": "/alexxxsem"
+      },
+      "authorType": "TOPIC",
+      "competitionRanking": 1776,
+      "content": "<p><strong>To resolve offline dependency installation issues, you need to create two new notebooks with identical preinstalled library versions:</strong></p>\n<ol>\n<li>Utility Notebook (Setup Environment) <a href=\"https://www.kaggle.com/code/alexxxsem/nemotron-offline-dependencies\" target=\"_blank\">Example</a></li>\n</ol>\n<ul>\n<li>File/Set as Utility Script</li>\n<li>Accelerator: GPU T4</li>\n<li>Internet: On</li>\n</ul>\n<ol>\n<li>Competition Notebook (Offline Execution) (<a href=\"https://www.kaggle.com/code/alexxxsem/nemotron-simple-offline-working-demo\" target=\"_blank\">Example</a>)</li>\n</ol>\n<ul>\n<li><p>Attach to competition</p></li>\n<li><p>Accelerator: GPU RTX Pro 6000</p></li>\n<li><p>Internet: Off</p></li>\n<li><p>Add Input/Utility Scripts/<em>Your Utility Notebook</em></p>\n<p>You can use my notebooks, but over time version mismatch issues may appear.</p></li>\n</ul>",
+      "feedbackTrackingData": {},
+      "id": 3432601,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-03-31T19:52:26.867Z",
+      "rawMarkdown": "**To resolve offline dependency installation issues, you need to create two new notebooks with identical preinstalled library versions:**\n1. Utility Notebook (Setup Environment) [Example](https://www.kaggle.com/code/alexxxsem/nemotron-offline-dependencies)\n* File/Set as Utility Script\n* Accelerator: GPU T4\n* Internet: On\n2. Competition Notebook (Offline Execution) ([Example](https://www.kaggle.com/code/alexxxsem/nemotron-simple-offline-working-demo))\n* Attach to competition\n* Accelerator: GPU RTX Pro 6000\n* Internet: Off\n* Add Input/Utility Scripts/*Your Utility Notebook*\n\n You can use my notebooks, but over time version mismatch issues may appear.",
+      "reactions": [
+        {
+          "emoji": "YAY",
+          "featuredUserNames": [
+            "giacomoveneri1"
+          ],
+          "userCount": 1
+        }
+      ],
+      "teamUpInfo": {
+        "intro": "",
+        "teamLeader": {
+          "displayName": "AlexxxSem",
+          "id": 16730252,
+          "performanceTier": "CONTRIBUTOR",
+          "profileUrl": "/alexxxsem",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/16730252-kg.jpeg?t=2023-12-05-20-23-24",
+          "tier": "CONTRIBUTOR",
+          "url": "/alexxxsem",
+          "userId": 16730252,
+          "userName": "alexxxsem"
+        }
+      },
+      "votes": {
+        "canUpvote": true,
+        "totalUpvotes": 4,
+        "totalVotes": 4
+      }
+    },
+    "firstMessageId": 3432601,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 686591,
+    "name": "Offline Dependencies and a Simple Fix for ModuleNotFoundError and PermissionError",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-03-31T19:52:26.867227700Z",
+    "totalMessages": 1,
+    "totalVotes": 4,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/686591"
+  }
+}

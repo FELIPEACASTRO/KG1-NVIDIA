@@ -1,0 +1,189 @@
+{
+  "forumTopic": {
+    "authorId": 31589483,
+    "authorPerformanceTier": "CONTRIBUTOR",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "31589483-kg.png?t=2026-02-11-14-20-14",
+    "authorUserDisplayName": "Aurorcys",
+    "authorUserName": "aurorcys",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "ForcewithMe",
+          "id": 7285387,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/7285387-kg.jpg",
+          "tier": "GRANDMASTER",
+          "url": "/forcewithme"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 1,
+        "content": "<p>Hi <a href=\"https://www.kaggle.com/aurorcys\" target=\"_blank\">@aurorcys</a> , I trained the model on my local machine and get terrible scores.\nI report this issues in <a href=\"https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/686419\" target=\"_blank\">https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/686419</a>.</p>\n<p>The mamba is 2.3.1 in my training environment. Do you think mamba version is why my score are bad?</p>",
+        "feedbackTrackingData": {},
+        "id": 3432194,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-31T07:43:52.587Z",
+        "rawMarkdown": "Hi @aurorcys , I trained the model on my local machine and get terrible scores.\nI report this issues in https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/686419.\n\nThe mamba is 2.3.1 in my training environment. Do you think mamba version is why my score are bad?",
+        "replies": [
+          {
+            "author": {
+              "displayName": "Aurorcys",
+              "id": 31589483,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/31589483-kg.png?t=2026-02-11-14-20-14",
+              "tier": "CONTRIBUTOR",
+              "url": "/aurorcys"
+            },
+            "authorType": "TOPIC",
+            "competitionRanking": 506,
+            "content": "<p>I think it might've been the utility script updating, which directly affects the mamba ver and other stuff, not sure if it is exactly that, but makes the most sense considering that was the thing that changed</p>",
+            "feedbackTrackingData": {},
+            "id": 3432241,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-03-31T09:30:51.470Z",
+            "rawMarkdown": "I think it might've been the utility script updating, which directly affects the mamba ver and other stuff, not sure if it is exactly that, but makes the most sense considering that was the thing that changed",
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "Aurorcys",
+                "id": 31589483,
+                "performanceTier": "CONTRIBUTOR",
+                "profileUrl": "/aurorcys",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/31589483-kg.png?t=2026-02-11-14-20-14",
+                "tier": "CONTRIBUTOR",
+                "url": "/aurorcys",
+                "userId": 31589483,
+                "userName": "aurorcys"
+              }
+            },
+            "votes": {
+              "canUpvote": true
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "MOONMOON",
+            "id": 5569141,
+            "performanceTier": "MASTER",
+            "profileUrl": "/kevin1742064161",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/5569141-kg.jpg?t=2025-09-17-15-48-11",
+            "tier": "MASTER",
+            "url": "/kevin1742064161",
+            "userId": 5569141,
+            "userName": "kevin1742064161"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      },
+      {
+        "author": {
+          "displayName": "Shoto",
+          "id": 5578954,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/5578954-kg.png?t=2023-11-25-02-36-56",
+          "tier": "CONTRIBUTOR",
+          "url": "/bloodymonday"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 418,
+        "content": "<p>I am in the very same situation, I saw the change, tried to install cutlass but figure out internet is off in this competition. I mocked the function and submission was 53 with training loss .4 something.</p>",
+        "feedbackTrackingData": {},
+        "id": 3428812,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-26T00:34:35.117Z",
+        "rawMarkdown": "I am in the very same situation, I saw the change, tried to install cutlass but figure out internet is off in this competition. I mocked the function and submission was 53 with training loss .4 something.",
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Shoto",
+            "id": 5578954,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/bloodymonday",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/5578954-kg.png?t=2023-11-25-02-36-56",
+            "tier": "CONTRIBUTOR",
+            "url": "/bloodymonday",
+            "userId": 5578954,
+            "userName": "bloodymonday"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "Aurorcys",
+        "id": 31589483,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/31589483-kg.png?t=2026-02-11-14-20-14",
+        "tier": "CONTRIBUTOR",
+        "url": "/aurorcys"
+      },
+      "authorType": "TOPIC",
+      "competitionRanking": 506,
+      "content": "<p>The version of the mamba ssm changed from 2.2.2 when downloaded, to 2.3.1 recently, its giving me cutlass errors where I have to mock cutlass, and all my previous submissions that I reuse are worse now. Is there any reason why the mamba 2.3.1 that is now in the utility script is messing stuff up?</p>",
+      "feedbackTrackingData": {},
+      "id": 3428792,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-03-25T23:26:50.780Z",
+      "rawMarkdown": "The version of the mamba ssm changed from 2.2.2 when downloaded, to 2.3.1 recently, its giving me cutlass errors where I have to mock cutlass, and all my previous submissions that I reuse are worse now. Is there any reason why the mamba 2.3.1 that is now in the utility script is messing stuff up?",
+      "reactions": [
+        {
+          "emoji": "THANK_YOU",
+          "featuredUserNames": [
+            "bloodymonday"
+          ],
+          "userCount": 1
+        }
+      ],
+      "teamUpInfo": {
+        "intro": "",
+        "teamLeader": {
+          "displayName": "Aurorcys",
+          "id": 31589483,
+          "performanceTier": "CONTRIBUTOR",
+          "profileUrl": "/aurorcys",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/31589483-kg.png?t=2026-02-11-14-20-14",
+          "tier": "CONTRIBUTOR",
+          "url": "/aurorcys",
+          "userId": 31589483,
+          "userName": "aurorcys"
+        }
+      },
+      "votes": {
+        "canUpvote": true,
+        "totalUpvotes": 6,
+        "totalVotes": 6
+      }
+    },
+    "firstMessageId": 3428792,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 684748,
+    "name": "MAMBA 2.3.1 from 2.2.2 lowering performance and cutlass mock",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-03-25T23:26:50.780657100Z",
+    "totalMessages": 3,
+    "totalVotes": 6,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/684748"
+  }
+}

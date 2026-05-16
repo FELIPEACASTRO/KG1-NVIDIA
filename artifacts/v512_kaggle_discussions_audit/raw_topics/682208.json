@@ -1,0 +1,193 @@
+{
+  "forumTopic": {
+    "authorId": 17819385,
+    "authorPerformanceTier": "CONTRIBUTOR",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "default-thumb.png",
+    "authorUserDisplayName": "lucian kucera",
+    "authorUserName": "luciankucera",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "Javier Hernández",
+          "id": 3098761,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/3098761-kg.png?t=2025-02-13-22-27-27",
+          "tier": "EXPERT",
+          "url": "/javihm77"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 664,
+        "content": "<p>Thanks for sharing <a href=\"https://www.kaggle.com/luciankucera\" target=\"_blank\">@luciankucera</a>, I tried to run your notebook but had some issues with the vLLM and the dataset you are calling, seems to be private</p>\n<p><img src=\"https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F3098761%2F91eeb5ce81de54dd4028ce86e8cec9c9%2FCaptura%20de%20pantalla%202026-03-21%20a%20la(s)%2010.22.13a.m..png?generation=1774110588640105&amp;alt=media\" alt=\"\">\n<img src=\"https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F3098761%2F4d846e439dcf0b39ef7ded9904629162%2FCaptura%20de%20pantalla%202026-03-21%20a%20la(s)%2010.30.40a.m..png?generation=1774110654381258&amp;alt=media\" alt=\"\"></p>",
+        "feedbackTrackingData": {},
+        "id": 3425979,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-21T16:30:59.017Z",
+        "rawMarkdown": "Thanks for sharing @luciankucera, I tried to run your notebook but had some issues with the vLLM and the dataset you are calling, seems to be private\n\n![](https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F3098761%2F91eeb5ce81de54dd4028ce86e8cec9c9%2FCaptura%20de%20pantalla%202026-03-21%20a%20la(s)%2010.22.13a.m..png?generation=1774110588640105&alt=media)\n![](https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F3098761%2F4d846e439dcf0b39ef7ded9904629162%2FCaptura%20de%20pantalla%202026-03-21%20a%20la(s)%2010.30.40a.m..png?generation=1774110654381258&alt=media)",
+        "replies": [
+          {
+            "author": {
+              "displayName": "lucian kucera",
+              "id": 17819385,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+              "tier": "CONTRIBUTOR",
+              "url": "/luciankucera"
+            },
+            "authorType": "TOPIC",
+            "competitionRanking": 1662,
+            "content": "<p>Made the dataset public, my mistake.</p>",
+            "feedbackTrackingData": {},
+            "id": 3426489,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-03-22T17:16:54.470Z",
+            "rawMarkdown": "Made the dataset public, my mistake.",
+            "reactions": [
+              {
+                "emoji": "LOVE",
+                "featuredUserNames": [
+                  "javihm77"
+                ],
+                "userCount": 1
+              }
+            ],
+            "replies": [
+              {
+                "author": {
+                  "displayName": "Javier Hernández",
+                  "id": 3098761,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/3098761-kg.png?t=2025-02-13-22-27-27",
+                  "tier": "EXPERT",
+                  "url": "/javihm77"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 664,
+                "content": "<p>Thanks a lot Lucian! </p>",
+                "feedbackTrackingData": {},
+                "id": 3427019,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-03-23T16:32:54.820Z",
+                "rawMarkdown": "Thanks a lot Lucian! ",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "Javier Hernández",
+                    "id": 3098761,
+                    "performanceTier": "EXPERT",
+                    "profileUrl": "/javihm77",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/3098761-kg.png?t=2025-02-13-22-27-27",
+                    "tier": "EXPERT",
+                    "url": "/javihm77",
+                    "userId": 3098761,
+                    "userName": "javihm77"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true
+                }
+              }
+            ],
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "lucian kucera",
+                "id": 17819385,
+                "performanceTier": "CONTRIBUTOR",
+                "profileUrl": "/luciankucera",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                "tier": "CONTRIBUTOR",
+                "url": "/luciankucera",
+                "userId": 17819385,
+                "userName": "luciankucera"
+              }
+            },
+            "votes": {
+              "canUpvote": true,
+              "totalUpvotes": 1,
+              "totalVotes": 1
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Javier Hernández",
+            "id": 3098761,
+            "performanceTier": "EXPERT",
+            "profileUrl": "/javihm77",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/3098761-kg.png?t=2025-02-13-22-27-27",
+            "tier": "EXPERT",
+            "url": "/javihm77",
+            "userId": 3098761,
+            "userName": "javihm77"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "lucian kucera",
+        "id": 17819385,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+        "tier": "CONTRIBUTOR",
+        "url": "/luciankucera"
+      },
+      "authorType": "TOPIC",
+      "competitionRanking": 1662,
+      "content": "<p>If ur intereseted i created notebook, where I test models zero shot capability.</p>\n<p><a href=\"https://www.kaggle.com/code/luciankucera/train-set-zero-shot-inference-exploration\" target=\"_blank\">notebook</a></p>\n<p>Interesting findings:</p>\n<ol>\n<li>number conversion 100% accuracy</li>\n<li>bit,equaton and ecryption it does horribly</li>\n<li>gravitation and mesurement it has like 33% success</li>\n</ol>\n<p>Also notebook contains csv with model predictions as raw text if u want to analyze it more.</p>",
+      "feedbackTrackingData": {},
+      "id": 3422881,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-03-18T02:32:23.267Z",
+      "rawMarkdown": "If ur intereseted i created notebook, where I test models zero shot capability.\n\n[notebook](https://www.kaggle.com/code/luciankucera/train-set-zero-shot-inference-exploration)\n\nInteresting findings:\n1. number conversion 100% accuracy\n2. bit,equaton and ecryption it does horribly\n3. gravitation and mesurement it has like 33% success\n\nAlso notebook contains csv with model predictions as raw text if u want to analyze it more.",
+      "teamUpInfo": {
+        "intro": "",
+        "teamLeader": {
+          "displayName": "lucian kucera",
+          "id": 17819385,
+          "performanceTier": "CONTRIBUTOR",
+          "profileUrl": "/luciankucera",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "CONTRIBUTOR",
+          "url": "/luciankucera",
+          "userId": 17819385,
+          "userName": "luciankucera"
+        }
+      },
+      "votes": {
+        "canUpvote": true,
+        "totalUpvotes": 17,
+        "totalVotes": 17
+      }
+    },
+    "firstMessageId": 3422881,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 682208,
+    "name": "Zero shot predictions",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-03-18T02:32:23.267714700Z",
+    "totalMessages": 3,
+    "totalVotes": 17,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/682208"
+  }
+}

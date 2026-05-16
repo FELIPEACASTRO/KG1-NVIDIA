@@ -1,0 +1,186 @@
+{
+  "forumTopic": {
+    "authorId": 23273573,
+    "authorPerformanceTier": "CONTRIBUTOR",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "default-thumb.png",
+    "authorUserDisplayName": "[RU] Evgeniy Kamyshan (sharing)",
+    "authorUserName": "svo1488zov",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "CPMP",
+          "id": 75976,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/75976-gr.jpg",
+          "tier": "GRANDMASTER",
+          "url": "/cpmpml"
+        },
+        "authorType": "HOST",
+        "content": "<p>What are the things not connected with research you would not do if you had internet access?</p>",
+        "feedbackTrackingData": {},
+        "id": 3433891,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-02T09:20:50.700Z",
+        "rawMarkdown": "What are the things not connected with research you would not do if you had internet access?",
+        "replies": [
+          {
+            "author": {
+              "displayName": "Darren Amadeus Martin",
+              "id": 10290345,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/10290345-kg.jpg?t=2026-03-17-04-10-40",
+              "tier": "CONTRIBUTOR",
+              "url": "/darrenamadeusmartin"
+            },
+            "authorType": "COMMENT",
+            "competitionRanking": 1407,
+            "content": "<p>I understand that disabling internet is a way to prevent GPU abuse or exploit that is unrelated to the competition. However, with internet access, pip installations can be much easier done without having to create multiple notebooks or wheels and it would definitely make researches or trial and error faster. </p>",
+            "feedbackTrackingData": {},
+            "id": 3433947,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-04-02T11:28:33.397Z",
+            "rawMarkdown": "I understand that disabling internet is a way to prevent GPU abuse or exploit that is unrelated to the competition. However, with internet access, pip installations can be much easier done without having to create multiple notebooks or wheels and it would definitely make researches or trial and error faster. ",
+            "replies": [
+              {
+                "author": {
+                  "displayName": "CPMP",
+                  "id": 75976,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/75976-gr.jpg",
+                  "tier": "GRANDMASTER",
+                  "url": "/cpmpml"
+                },
+                "authorType": "HOST",
+                "content": "<p>when running notebooks before submitting you can allow internet access ofc. When you submit, or save for submission, with internet access disabled, then you can just put your pip installs as indicated in this screenshot. Just click on the dots at the right of the submit button, click on \"install dependencies\", and put all your pip install commands there. More info: <a href=\"https://www.kaggle.com/docs/notebooks#modifying-a-notebook-specific-environment\" target=\"_blank\">https://www.kaggle.com/docs/notebooks#modifying-a-notebook-specific-environment</a></p>\n<p><img src=\"https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F75976%2Ff3148ed096e177604b322416d6caecb6%2FScreenshot%202026-04-02%20at%2013-42-25%20Kaggle%20Notebook%20Editor.png?generation=1775130229811286&amp;alt=media\" alt=\"\"></p>\n<p><img src=\"https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F75976%2F230f3f8026ee43a9f757f5755e32404a%2FScreenshot%202026-04-02%20at%2013-45-42%20Kaggle%20Notebook%20Editor.png?generation=1775130373656759&amp;alt=media\" alt=\"\"></p>",
+                "feedbackTrackingData": {},
+                "id": 3433967,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-02T11:46:41.117Z",
+                "rawMarkdown": "when running notebooks before submitting you can allow internet access ofc. When you submit, or save for submission, with internet access disabled, then you can just put your pip installs as indicated in this screenshot. Just click on the dots at the right of the submit button, click on \"install dependencies\", and put all your pip install commands there. More info: https://www.kaggle.com/docs/notebooks#modifying-a-notebook-specific-environment\n\n![](https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F75976%2Ff3148ed096e177604b322416d6caecb6%2FScreenshot%202026-04-02%20at%2013-42-25%20Kaggle%20Notebook%20Editor.png?generation=1775130229811286&alt=media)\n\n![](https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F75976%2F230f3f8026ee43a9f757f5755e32404a%2FScreenshot%202026-04-02%20at%2013-45-42%20Kaggle%20Notebook%20Editor.png?generation=1775130373656759&alt=media)\n\n",
+                "votes": {
+                  "canUpvote": true,
+                  "totalUpvotes": 1,
+                  "totalVotes": 1
+                }
+              },
+              {
+                "author": {
+                  "displayName": "badwolfe",
+                  "id": 28916260,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                  "tier": "CONTRIBUTOR",
+                  "url": "/badwolfe"
+                },
+                "authorType": "COMMENT",
+                "content": "<p>This does not work, it still fails. \nError:</p>\n<p>Session is starting…\nRequirement already satisfied: wandb in /usr/local/lib/python3.12/dist-packages (0.25.0)\nWARNING: Retrying (Retry(total=4, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError(': Failed to establish a new connection: [Errno -3] Temporary failure in name resolution')': /simple/unsloth/</p>",
+                "feedbackTrackingData": {},
+                "id": 3438373,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-09T02:30:11.437Z",
+                "rawMarkdown": "This does not work, it still fails. \nError:\n\nSession is starting...\nRequirement already satisfied: wandb in /usr/local/lib/python3.12/dist-packages (0.25.0)\nWARNING: Retrying (Retry(total=4, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x78bbb40df230>: Failed to establish a new connection: [Errno -3] Temporary failure in name resolution')': /simple/unsloth/\n",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "badwolfe",
+                    "id": 28916260,
+                    "performanceTier": "CONTRIBUTOR",
+                    "profileUrl": "/badwolfe",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                    "tier": "CONTRIBUTOR",
+                    "url": "/badwolfe",
+                    "userId": 28916260,
+                    "userName": "badwolfe"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true
+                }
+              }
+            ],
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "Darren Amadeus Martin",
+                "id": 10290345,
+                "performanceTier": "CONTRIBUTOR",
+                "profileUrl": "/darrenamadeusmartin",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/10290345-kg.jpg?t=2026-03-17-04-10-40",
+                "tier": "CONTRIBUTOR",
+                "url": "/darrenamadeusmartin",
+                "userId": 10290345,
+                "userName": "darrenamadeusmartin"
+              }
+            },
+            "votes": {
+              "canUpvote": true
+            }
+          }
+        ],
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 1
+        }
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "[RU] Evgeniy Kamyshan (sharing)",
+        "id": 23273573,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+        "tier": "CONTRIBUTOR",
+        "url": "/svo1488zov"
+      },
+      "authorType": "TOPIC",
+      "content": "<p>I don't understand what the point of banning Internet access here. I'd understand if you had to send submissions with solved tasks, it'd be fair, but here you need to send an exact LoRA adapter of the exact model, prohibiting Internet usage js requires to spend a lot more time on things not connected with research. Or am i dumb and Internet access can be turned on while using RTX 6000?</p>",
+      "feedbackTrackingData": {},
+      "id": 3433887,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-04-02T09:15:40.977Z",
+      "rawMarkdown": "I don't understand what the point of banning Internet access here. I'd understand if you had to send submissions with solved tasks, it'd be fair, but here you need to send an exact LoRA adapter of the exact model, prohibiting Internet usage js requires to spend a lot more time on things not connected with research. Or am i dumb and Internet access can be turned on while using RTX 6000?",
+      "teamUpInfo": {
+        "intro": "",
+        "teamLeader": {
+          "displayName": "[RU] Evgeniy Kamyshan (sharing)",
+          "id": 23273573,
+          "performanceTier": "CONTRIBUTOR",
+          "profileUrl": "/svo1488zov",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "CONTRIBUTOR",
+          "url": "/svo1488zov",
+          "userId": 23273573,
+          "userName": "svo1488zov"
+        }
+      },
+      "votes": {
+        "canUpvote": true
+      }
+    },
+    "firstMessageId": 3433887,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 687119,
+    "name": "WHY is internet access banned if free GPU provided by competition is used?",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-04-02T09:15:40.976087200Z",
+    "totalMessages": 4,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/687119"
+  }
+}

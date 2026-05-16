@@ -1,0 +1,698 @@
+{
+  "forumTopic": {
+    "authorId": 7583266,
+    "authorPerformanceTier": "MASTER",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "7583266-kg.PNG",
+    "authorUserDisplayName": "Youhei Tomio",
+    "authorUserName": "youheitomio",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "Irving Ernesto",
+          "id": 14455774,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/14455774-kg.jpeg?t=2024-01-08-02-59-47",
+          "tier": "CONTRIBUTOR",
+          "url": "/thermostatic"
+        },
+        "authorType": "COMMENT",
+        "content": "<p>Honestly, no. Lately the competitions have downgraded into people who have the necessary compute being able to win. I'm not saying they don't put effort, they put a massive amount of effort, but the barrier to win has increased massively in terms of having the right amount of VRAM, not only for this but for a lot of competitions where Deep Learning is king.\nYou can get a good ranking, though.</p>",
+        "feedbackTrackingData": {},
+        "id": 3433006,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-01T04:52:45.297Z",
+        "rawMarkdown": "Honestly, no. Lately the competitions have downgraded into people who have the necessary compute being able to win. I'm not saying they don't put effort, they put a massive amount of effort, but the barrier to win has increased massively in terms of having the right amount of VRAM, not only for this but for a lot of competitions where Deep Learning is king.\nYou can get a good ranking, though.",
+        "reactions": [
+          {
+            "emoji": "THANK_YOU",
+            "featuredUserNames": [
+              "taprgmr",
+              "qingyicloud"
+            ],
+            "userCount": 2
+          }
+        ],
+        "replies": [
+          {
+            "author": {
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+              "url": "/"
+            },
+            "authorType": "COMMENT",
+            "canDelete": true,
+            "feedbackTrackingData": {},
+            "id": 3437668,
+            "isDeleted": true,
+            "isThankYou": false,
+            "isUserAuthor": true,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-04-07T22:00:33.847Z",
+            "rawMarkdown": "",
+            "votes": {
+              "totalVotes": -1
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Irving Ernesto",
+            "id": 14455774,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/thermostatic",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/14455774-kg.jpeg?t=2024-01-08-02-59-47",
+            "tier": "CONTRIBUTOR",
+            "url": "/thermostatic",
+            "userId": 14455774,
+            "userName": "thermostatic"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 8,
+          "totalVotes": 8
+        }
+      },
+      {
+        "author": {
+          "displayName": "Donald Galliano III",
+          "id": 29434769,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/29434769-kg.png?t=2026-03-14-05-23-02",
+          "tier": "CONTRIBUTOR",
+          "url": "/donaldgalliano"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 2312,
+        "content": "<p>From what im seeing? Absolutely not. Even with perfect data training SFT, you still need to do other things ( i wont list here because its a free ticket to 1st ) that eat so much vram it doesnt fit on the provided stuff. </p>",
+        "feedbackTrackingData": {},
+        "id": 3431788,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-30T17:16:07.193Z",
+        "rawMarkdown": "From what im seeing? Absolutely not. Even with perfect data training SFT, you still need to do other things ( i wont list here because its a free ticket to 1st ) that eat so much vram it doesnt fit on the provided stuff. ",
+        "replies": [
+          {
+            "author": {
+              "displayName": "Kiki",
+              "id": 27081224,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/27081224-kg.jpg?t=2026-03-28-05-27-40",
+              "tier": "CONTRIBUTOR",
+              "url": "/rouiou"
+            },
+            "authorType": "COMMENT",
+            "competitionRanking": 654,
+            "content": "<p>Hello, I'd like to ask you how you destructure high-quality datasets.</p>",
+            "feedbackTrackingData": {},
+            "id": 3437096,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-04-07T06:41:25.910Z",
+            "rawMarkdown": "Hello, I'd like to ask you how you destructure high-quality datasets.",
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "Muhammad Ibrahim Qasmi",
+                "id": 24946333,
+                "performanceTier": "GRANDMASTER",
+                "profileUrl": "/ibrahimqasimi",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/24946333-kg.jpeg?t=2025-12-22-22-44-57",
+                "tier": "GRANDMASTER",
+                "url": "/ibrahimqasimi",
+                "userId": 24946333,
+                "userName": "ibrahimqasimi"
+              }
+            },
+            "votes": {
+              "canUpvote": true
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Donald Galliano III",
+            "id": 29434769,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/donaldgalliano",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/29434769-kg.png?t=2026-03-14-05-23-02",
+            "tier": "CONTRIBUTOR",
+            "url": "/donaldgalliano",
+            "userId": 29434769,
+            "userName": "donaldgalliano"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 3,
+          "totalVotes": 2
+        }
+      },
+      {
+        "author": {
+          "displayName": "Ravi Ramakrishnan",
+          "id": 8273630,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/8273630-kg.JPG?t=2024-03-26-14-51-52",
+          "tier": "GRANDMASTER",
+          "url": "/ravi20076"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 7,
+        "content": "<p>99% no <a href=\"https://www.kaggle.com/youheitomio\" target=\"_blank\">@youheitomio</a> </p>",
+        "feedbackTrackingData": {},
+        "id": 3431507,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-30T08:55:39.967Z",
+        "rawMarkdown": "99% no @youheitomio ",
+        "replies": [
+          {
+            "author": {
+              "displayName": "JK-Piece",
+              "id": 3937164,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/3937164-kg.png?t=2023-11-07-17-35-27",
+              "tier": "MASTER",
+              "url": "/jeannkouagou"
+            },
+            "authorType": "COMMENT",
+            "competitionRanking": 138,
+            "content": "<p>Why not? One can train for 30h on the right data.</p>",
+            "feedbackTrackingData": {},
+            "id": 3431550,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-03-30T09:36:11.640Z",
+            "rawMarkdown": "Why not? One can train for 30h on the right data.",
+            "replies": [
+              {
+                "author": {
+                  "displayName": "Muhammad Haaris 27083",
+                  "id": 23163275,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                  "tier": "CONTRIBUTOR",
+                  "url": "/muhammadhaaris27083"
+                },
+                "authorType": "COMMENT",
+                "content": "<p>I think we cant bypass the 12 hr notebook limit for GPU runtime .</p>",
+                "feedbackTrackingData": {},
+                "id": 3432118,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-03-31T05:26:46.027Z",
+                "rawMarkdown": "I think we cant bypass the 12 hr notebook limit for GPU runtime .",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "Muhammad Haaris 27083",
+                    "id": 23163275,
+                    "performanceTier": "CONTRIBUTOR",
+                    "profileUrl": "/muhammadhaaris27083",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                    "tier": "CONTRIBUTOR",
+                    "url": "/muhammadhaaris27083",
+                    "userId": 23163275,
+                    "userName": "muhammadhaaris27083"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true,
+                  "totalUpvotes": 2,
+                  "totalVotes": 2
+                }
+              },
+              {
+                "author": {
+                  "displayName": "JK-Piece",
+                  "id": 3937164,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/3937164-kg.png?t=2023-11-07-17-35-27",
+                  "tier": "MASTER",
+                  "url": "/jeannkouagou"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 138,
+                "content": "<p>Of course you can. Simple hit the save button, 12h is only for interactive session </p>",
+                "feedbackTrackingData": {},
+                "id": 3432142,
+                "isCollapsed": true,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-03-31T06:01:13.813Z",
+                "rawMarkdown": "Of course you can. Simple hit the save button, 12h is only for interactive session ",
+                "teamUpInfo": {
+                  "intro": "Hey Kagglers. I am looking for a teammate with current score around 0.78-0.80. I have strong checkpoints and great training data that would benefit the team to be formed. Feel free to reach out.",
+                  "teamLeader": {
+                    "displayName": "JK-Piece",
+                    "id": 3937164,
+                    "performanceTier": "MASTER",
+                    "profileUrl": "/jeannkouagou",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/3937164-kg.png?t=2023-11-07-17-35-27",
+                    "tier": "MASTER",
+                    "url": "/jeannkouagou",
+                    "userId": 3937164,
+                    "userName": "jeannkouagou"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true,
+                  "totalUpvotes": 1,
+                  "totalVotes": 1
+                }
+              },
+              {
+                "author": {
+                  "displayName": "Muhammad Haaris 27083",
+                  "id": 23163275,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                  "tier": "CONTRIBUTOR",
+                  "url": "/muhammadhaaris27083"
+                },
+                "authorType": "COMMENT",
+                "content": "<p>hi well, GPU notebooks auto timeout after 12 hrs, but I am unsure if thats the case here as well , \ni ll try out .</p>",
+                "feedbackTrackingData": {},
+                "id": 3432174,
+                "isCollapsed": true,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-03-31T07:00:44.633Z",
+                "rawMarkdown": "hi well, GPU notebooks auto timeout after 12 hrs, but I am unsure if thats the case here as well , \ni ll try out .",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "Muhammad Haaris 27083",
+                    "id": 23163275,
+                    "performanceTier": "CONTRIBUTOR",
+                    "profileUrl": "/muhammadhaaris27083",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                    "tier": "CONTRIBUTOR",
+                    "url": "/muhammadhaaris27083",
+                    "userId": 23163275,
+                    "userName": "muhammadhaaris27083"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true,
+                  "totalUpvotes": 1,
+                  "totalVotes": 1
+                }
+              },
+              {
+                "author": {
+                  "displayName": "akshit manocha",
+                  "id": 18256095,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                  "tier": "CONTRIBUTOR",
+                  "url": "/akshitmanocha"
+                },
+                "authorType": "COMMENT",
+                "content": "<p>can you please tell me about this in detail?</p>",
+                "feedbackTrackingData": {},
+                "id": 3432478,
+                "isCollapsed": true,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-03-31T16:59:19.750Z",
+                "rawMarkdown": "can you please tell me about this in detail?",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "akshit manocha",
+                    "id": 18256095,
+                    "performanceTier": "CONTRIBUTOR",
+                    "profileUrl": "/akshitmanocha",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                    "tier": "CONTRIBUTOR",
+                    "url": "/akshitmanocha",
+                    "userId": 18256095,
+                    "userName": "akshitmanocha"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true
+                }
+              },
+              {
+                "author": {
+                  "displayName": "ImperfectKitto",
+                  "id": 11905020,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/11905020-kg.jpg",
+                  "tier": "EXPERT",
+                  "url": "/defdet"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 492,
+                "content": "<p>It's not. Notebook gets cancelled after 12 hours anyway.</p>",
+                "feedbackTrackingData": {},
+                "id": 3437599,
+                "isCollapsed": true,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-07T20:09:14.853Z",
+                "rawMarkdown": "It's not. Notebook gets cancelled after 12 hours anyway.",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "ImperfectKitto",
+                    "id": 11905020,
+                    "performanceTier": "EXPERT",
+                    "profileUrl": "/defdet",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/11905020-kg.jpg",
+                    "tier": "EXPERT",
+                    "url": "/defdet",
+                    "userId": 11905020,
+                    "userName": "defdet"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true
+                }
+              }
+            ],
+            "teamUpInfo": {
+              "intro": "Hey Kagglers. I am looking for a teammate with current score around 0.78-0.80. I have strong checkpoints and great training data that would benefit the team to be formed. Feel free to reach out.",
+              "teamLeader": {
+                "displayName": "JK-Piece",
+                "id": 3937164,
+                "performanceTier": "MASTER",
+                "profileUrl": "/jeannkouagou",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/3937164-kg.png?t=2023-11-07-17-35-27",
+                "tier": "MASTER",
+                "url": "/jeannkouagou",
+                "userId": 3937164,
+                "userName": "jeannkouagou"
+              }
+            },
+            "votes": {
+              "canUpvote": true,
+              "totalUpvotes": 6,
+              "totalVotes": 6
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Kishan Vavdara",
+            "id": 12951282,
+            "performanceTier": "MASTER",
+            "profileUrl": "/kishanvavdara",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/12951282-kg.jpeg",
+            "tier": "MASTER",
+            "url": "/kishanvavdara",
+            "userId": 12951282,
+            "userName": "kishanvavdara"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 3,
+          "totalVotes": 2
+        }
+      },
+      {
+        "author": {
+          "displayName": "zkhdGuoFeng",
+          "id": 33234793,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/33234793-kg.png?t=2026-04-14-08-07-34",
+          "tier": "CONTRIBUTOR",
+          "url": "/forky99"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 2766,
+        "content": "<p>how to get  the free GPU that  the competition provided？</p>",
+        "feedbackTrackingData": {},
+        "id": 3432137,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-31T05:57:31.470Z",
+        "rawMarkdown": "how to get  the free GPU that  the competition provided？",
+        "replies": [
+          {
+            "author": {
+              "displayName": "Youhei Tomio",
+              "id": 7583266,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/7583266-kg.PNG",
+              "tier": "MASTER",
+              "url": "/youheitomio"
+            },
+            "authorType": "TOPIC",
+            "competitionRanking": 2275,
+            "content": "<p>You can change it from the Session options within the notebook.</p>\n<p><img src=\"https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F7583266%2F155a720781d2b76567b025073ee6acac%2F2026-03-31%20151131.png?generation=1774938159791188&amp;alt=media\" alt=\"\"></p>",
+            "feedbackTrackingData": {},
+            "id": 3432160,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-03-31T06:23:31.877Z",
+            "rawMarkdown": "You can change it from the Session options within the notebook.\n\n\n![](https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F7583266%2F155a720781d2b76567b025073ee6acac%2F2026-03-31%20151131.png?generation=1774938159791188&alt=media)",
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "Youhei Tomio",
+                "id": 7583266,
+                "performanceTier": "MASTER",
+                "profileUrl": "/youheitomio",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/7583266-kg.PNG",
+                "tier": "MASTER",
+                "url": "/youheitomio",
+                "userId": 7583266,
+                "userName": "youheitomio"
+              }
+            },
+            "votes": {
+              "canUpvote": true,
+              "totalUpvotes": 1,
+              "totalVotes": 1
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "zkhdGuoFeng",
+            "id": 33234793,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/forky99",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/33234793-kg.png?t=2026-04-14-08-07-34",
+            "tier": "CONTRIBUTOR",
+            "url": "/forky99",
+            "userId": 33234793,
+            "userName": "forky99"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 1,
+          "totalVotes": 1
+        }
+      },
+      {
+        "author": {
+          "displayName": "ducnh279",
+          "id": 10714081,
+          "progressionOptOut": true,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/10714081-kg.jpeg?t=2025-08-17-19-57-58",
+          "tier": "MASTER",
+          "url": "/ducnh279"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 19,
+        "content": "<p>The right question might be \"Is it possible to win this competition using synthetic data from open-sourced models that we can load and do inference with Kaggle-provided machine resources?\" 😅</p>",
+        "feedbackTrackingData": {},
+        "id": 3431700,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-30T14:21:45.627Z",
+        "rawMarkdown": "The right question might be \"Is it possible to win this competition using synthetic data from open-sourced models that we can load and do inference with Kaggle-provided machine resources?\" 😅",
+        "replies": [
+          {
+            "author": {
+              "displayName": "lucian kucera",
+              "id": 17819385,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+              "tier": "CONTRIBUTOR",
+              "url": "/luciankucera"
+            },
+            "authorType": "COMMENT",
+            "competitionRanking": 1657,
+            "content": "<p>Thats the right question, synthetic data creation is main challange of this competition. So far Iam using GPT-OSS 120B. Not sure If there is better option. </p>\n<p>If anybody finds better model for generating synthetic data let me know.</p>",
+            "feedbackTrackingData": {},
+            "id": 3431701,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-03-30T14:23:40.537Z",
+            "rawMarkdown": "Thats the right question, synthetic data creation is main challange of this competition. So far Iam using GPT-OSS 120B. Not sure If there is better option. \n\nIf anybody finds better model for generating synthetic data let me know.",
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "lucian kucera",
+                "id": 17819385,
+                "performanceTier": "CONTRIBUTOR",
+                "profileUrl": "/luciankucera",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                "tier": "CONTRIBUTOR",
+                "url": "/luciankucera",
+                "userId": 17819385,
+                "userName": "luciankucera"
+              }
+            },
+            "votes": {
+              "canUpvote": true,
+              "totalUpvotes": 3,
+              "totalVotes": 3
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "ducnh279",
+            "id": 10714081,
+            "performanceTier": "MASTER",
+            "profileUrl": "/ducnh279",
+            "progressionOptOut": true,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/10714081-kg.jpeg?t=2025-08-17-19-57-58",
+            "tier": "MASTER",
+            "url": "/ducnh279",
+            "userId": 10714081,
+            "userName": "ducnh279"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 2,
+          "totalVotes": 2
+        }
+      },
+      {
+        "author": {
+          "displayName": "QianYuu",
+          "id": 15950992,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/15950992-kg.png?t=2023-11-20-06-16-48",
+          "tier": "EXPERT",
+          "url": "/qianyuu"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 621,
+        "content": "<p>Can I complete this competition using only one A100-80G graphics card, or three 5090 graphics cards? Has anyone tried multi-GPU training?</p>",
+        "feedbackTrackingData": {},
+        "id": 3439038,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-10T06:21:40.287Z",
+        "rawMarkdown": "Can I complete this competition using only one A100-80G graphics card, or three 5090 graphics cards? Has anyone tried multi-GPU training?",
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "QianYuu",
+            "id": 15950992,
+            "performanceTier": "EXPERT",
+            "profileUrl": "/qianyuu",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/15950992-kg.png?t=2023-11-20-06-16-48",
+            "tier": "EXPERT",
+            "url": "/qianyuu",
+            "userId": 15950992,
+            "userName": "qianyuu"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "Youhei Tomio",
+        "id": 7583266,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/7583266-kg.PNG",
+        "tier": "MASTER",
+        "url": "/youheitomio"
+      },
+      "authorType": "TOPIC",
+      "competitionRanking": 2275,
+      "content": "<p>I tried copying high-scoring notebooks and making small adjustments, such as tuning parameters or modifying the training approach, but I quickly run into out-of-memory errors. For participants with scores around 0.8, are they achieving those results using only Kaggle’s provided resources, or are they relying on external computing resources?</p>",
+      "feedbackTrackingData": {},
+      "id": 3431464,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-03-30T07:13:31.247Z",
+      "rawMarkdown": "I tried copying high-scoring notebooks and making small adjustments, such as tuning parameters or modifying the training approach, but I quickly run into out-of-memory errors. For participants with scores around 0.8, are they achieving those results using only Kaggle’s provided resources, or are they relying on external computing resources?",
+      "teamUpInfo": {
+        "intro": "",
+        "teamLeader": {
+          "displayName": "Youhei Tomio",
+          "id": 7583266,
+          "performanceTier": "MASTER",
+          "profileUrl": "/youheitomio",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/7583266-kg.PNG",
+          "tier": "MASTER",
+          "url": "/youheitomio",
+          "userId": 7583266,
+          "userName": "youheitomio"
+        }
+      },
+      "votes": {
+        "canUpvote": true,
+        "totalUpvotes": 13,
+        "totalVotes": 12
+      }
+    },
+    "firstMessageId": 3431464,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 686036,
+    "name": "Is it possible to win this competition using only Kaggle-provided machine resources?",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-03-30T07:13:31.246268300Z",
+    "totalMessages": 16,
+    "totalVotes": 12,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/686036"
+  }
+}
