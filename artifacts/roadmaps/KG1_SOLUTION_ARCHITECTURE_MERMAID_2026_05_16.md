@@ -8,15 +8,19 @@ with emphasis on the current weak families:
 - `bit_manipulation`
 - `equation_transform`
 
-Current active execution line: V487 H200 smoke, launched from seed adapter
-`felipesp1983/kg1-nemotron-lora-v290-rank19-micro-patch-smoke/checkpoint-6`.
+Latest execution line: V487 H200 training proved the `target_parameters`
+alias path, then V488 focused weak eval on `checkpoint-10` blocked promotion:
+`191/315`, `equation_transform=57/155`, `bit_manipulation=134/160`,
+`truncated=1`. The submit-safe floor remains V291/V290 checkpoint-6:
+`192/315`, `equation_transform=56/155`, `bit_manipulation=136/160`,
+`truncated=0`.
 
 ## Main Pieces
 
 ```mermaid
 graph TB
   U[User and Codex operator] --> R[GitHub branch v230-v226-complementarity]
-  R --> L[HF launcher V487]
+  R --> L[HF launcher V487/V488]
   L --> P0[Static safety gate]
   L --> P1[HF job preflight gate]
   L --> P2[V485 PEFT metadata round-trip gate]
@@ -165,11 +169,13 @@ flowchart LR
   D --> E[Weak ACC]
 
   A -. strong signal .-> A1[Potential equation 60 and bit 146]
-  C -. current plateau .-> C1[Adapter-only best safe: total 192, equation 56, bit 136]
+  C -. current plateau .-> C1[Adapter-only best safe: total 192, equation 56, bit 136, trunc 0]
+  C -. latest V488 failed .-> C2[V488 ckpt-10: total 191, equation 57, bit 134, trunc 1]
   E --> P{Promotion}
   P -->|not yet| N[Need real weak gain, not lower eval_loss]
 
   style C1 fill:#331a1a,stroke:#cc4444,color:#ffffff
+  style C2 fill:#331a1a,stroke:#cc4444,color:#ffffff
   style N fill:#332a00,stroke:#d6a100,color:#ffffff
 ```
 
