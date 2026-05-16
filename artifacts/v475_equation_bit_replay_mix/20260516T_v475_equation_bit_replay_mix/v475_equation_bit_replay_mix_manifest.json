@@ -1,0 +1,119 @@
+{
+  "baseline": {
+    "bit_manipulation": "136/160",
+    "equation_transform": "56/155",
+    "truncated": 0,
+    "weak_total": "192/315"
+  },
+  "cpu_projection": {
+    "bit_guardrail_required": ">=136/160",
+    "equation_transform": "60/155",
+    "source_manifest": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v475_equation_no_loss_distill_dataset\\20260516T_v325_current_baseline\\v475_v325_equation_no_loss_distill_manifest.json",
+    "submit_ready": false,
+    "weak_total_if_equation_only": "196/315"
+  },
+  "generated_at_utc": "2026-05-16T03:33:40.639307+00:00",
+  "inputs": {
+    "v217_train": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\data\\v217\\v217_short_answer_train.jsonl",
+    "v217_train_sha256": "a56938b1ae9eb471b779ebfc415ee88c05322941732128752680317495157984",
+    "v217_val": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\data\\v217\\v217_short_answer_val.jsonl",
+    "v217_val_sha256": "65c4cb88b8ff2fc96940ccea33b8ca493769790c7ae80d27f2b69ac818fc6451",
+    "v325_manifest": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v475_equation_no_loss_distill_dataset\\20260516T_v325_current_baseline\\v475_v325_equation_no_loss_distill_manifest.json",
+    "v325_manifest_sha256": "a6c52f5fe34a1de829ae2e4320cbc99b1d202c4d007ef417a35cee258a028dff",
+    "v325_token_gate": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v475_equation_no_loss_distill_dataset\\20260516T_v325_current_baseline\\tokenization_gate_real\\v286_generic_tokenization_gate_manifest.json",
+    "v325_token_gate_sha256": "8380f03811df174260be05b69148d8e1a2721498984db19a0c49204cc102c7a0"
+  },
+  "outputs": {
+    "comparison_md": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v475_equation_bit_replay_mix\\20260516T_v475_equation_bit_replay_mix\\V475_VS_PREVIOUS.md",
+    "manifest_json": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v475_equation_bit_replay_mix\\20260516T_v475_equation_bit_replay_mix\\v475_equation_bit_replay_mix_manifest.json",
+    "train_jsonl": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v475_equation_bit_replay_mix\\20260516T_v475_equation_bit_replay_mix\\v475_equation_bit_replay_mix_train.jsonl",
+    "train_sha256": "22aa443a0c7d2f0dea790fe7afcd7249cc4d775e5627671e7dc6377105095aa6",
+    "val_jsonl": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v475_equation_bit_replay_mix\\20260516T_v475_equation_bit_replay_mix\\v475_equation_bit_replay_mix_val.jsonl",
+    "val_sha256": "2a3945ffd7cc795043fdc14ef12d37a044a5a3d304c5a5d1b9c0fa37b89cc0e7"
+  },
+  "reference_summary": [
+    {
+      "path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v290_rank19_micro_patch_reference\\runtime_artifacts\\v245_weak_eval_bridge\\v245-weak-bridge-hfonly-20260510T1950Z\\v221_weak_315.csv",
+      "rows": 315,
+      "sha256": "85da758e14d57ea40270de5747f98726a0ad0b6d1795bff7dd46183005e0f9b6"
+    },
+    {
+      "path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v293_gap_mining\\inputs\\v291_full_predictions.csv",
+      "rows": 947,
+      "sha256": "d9634ea15cb55e17bbfb90229f1cdbfd9b0f5a4cdba0d61848e6f746393dde20"
+    }
+  ],
+  "required_next_gate": [
+    "python scripts/run_v286_generic_tokenization_gate.py --dataset-manifest-json <manifest> --assistant-final-answer-mode boxed_suffix --min-train-rows 1312 --min-val-rows 328",
+    "run scripts/kg1_static_safety_gate.py against changed scripts/artifacts",
+    "do not launch HF unless combined tokenization passes with zero truncation and no reference overlap",
+    "first HF checkpoint kill-switch: total>192 equation>56 bit>=136 truncated=0"
+  ],
+  "schema_version": "kg1_v475_equation_bit_replay_mix_v1",
+  "source_policy": {
+    "adapter_training_authorization": "blocked_until_combined_real_tokenization_gate_and_hf_preflight",
+    "v324_accepted_rows_used_as_rule_evidence_only": true,
+    "v324_accepted_rows_used_as_training": false,
+    "weak_or_full_gate_rows_used_for_training": false
+  },
+  "train_summary": {
+    "bad_rows_first20": [],
+    "duplicate_ids": 0,
+    "duplicate_prompt_answers": 0,
+    "duplicate_prompts": 0,
+    "family_counts": {
+      "bit_manipulation": 512,
+      "equation_transform": 800
+    },
+    "label": "train",
+    "reference_id_overlap": 0,
+    "reference_prompt_answer_overlap": 0,
+    "reference_prompt_overlap": 0,
+    "rows": 1312,
+    "source_counts": {
+      "v475_v217_bit_replay_guardrail": 512,
+      "v475_v325_equation_no_loss_distill": 800
+    },
+    "subcategory_counts": {
+      "bit_guardrail_replay": 512,
+      "equation_numeric_add_direct": 160,
+      "equation_numeric_colon_absdiff": 160,
+      "equation_numeric_colon_trailing_zero": 160,
+      "equation_numeric_minus_direct_negative": 160,
+      "equation_numeric_minus_signed": 160
+    },
+    "unique_ids": 1312,
+    "unique_prompt_answer_hashes": 1312,
+    "unique_prompt_hashes": 1312
+  },
+  "validation_summary": {
+    "bad_rows_first20": [],
+    "duplicate_ids": 0,
+    "duplicate_prompt_answers": 0,
+    "duplicate_prompts": 0,
+    "family_counts": {
+      "bit_manipulation": 128,
+      "equation_transform": 200
+    },
+    "label": "validation",
+    "reference_id_overlap": 0,
+    "reference_prompt_answer_overlap": 0,
+    "reference_prompt_overlap": 0,
+    "rows": 328,
+    "source_counts": {
+      "v475_v217_bit_replay_guardrail": 128,
+      "v475_v325_equation_no_loss_distill": 200
+    },
+    "subcategory_counts": {
+      "bit_guardrail_replay": 128,
+      "equation_numeric_add_direct": 40,
+      "equation_numeric_colon_absdiff": 40,
+      "equation_numeric_colon_trailing_zero": 40,
+      "equation_numeric_minus_direct_negative": 40,
+      "equation_numeric_minus_signed": 40
+    },
+    "unique_ids": 328,
+    "unique_prompt_answer_hashes": 328,
+    "unique_prompt_hashes": 328
+  }
+}

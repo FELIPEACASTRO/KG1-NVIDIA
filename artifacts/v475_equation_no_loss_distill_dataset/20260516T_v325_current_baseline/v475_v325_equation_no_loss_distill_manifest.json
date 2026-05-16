@@ -1,0 +1,115 @@
+{
+  "generated_at_utc": "2026-05-16T03:26:15.992086+00:00",
+  "hashes": {
+    "preferences_train_sha256": "b4016af20add3fba25550165212ddaf362556507fcfe09fdad34bfc6bc3e3ae4",
+    "preferences_val_sha256": "fed74c8f7db2b9fba817f487a902584b6fe9badd344296394e2b989e475c0db4",
+    "sft_train_sha256": "94903eee68d74849147505e4c17b36c4e2d7d5976b88d5e847eeae34908389a5",
+    "sft_val_sha256": "174548ccec92e0f290c7f426958c822d6cae0704e91f8252dff4088f02410cbd"
+  },
+  "outputs": {
+    "manifest_json": "artifacts\\v475_equation_no_loss_distill_dataset\\20260516T_v325_current_baseline\\v475_v325_equation_no_loss_distill_manifest.json",
+    "preferences_train_jsonl": "artifacts\\v475_equation_no_loss_distill_dataset\\20260516T_v325_current_baseline\\v475_v325_equation_no_loss_distill_preferences_train.jsonl",
+    "preferences_val_jsonl": "artifacts\\v475_equation_no_loss_distill_dataset\\20260516T_v325_current_baseline\\v475_v325_equation_no_loss_distill_preferences_val.jsonl",
+    "sft_train_jsonl": "artifacts\\v475_equation_no_loss_distill_dataset\\20260516T_v325_current_baseline\\v475_v325_equation_no_loss_distill_sft_train.jsonl",
+    "sft_val_jsonl": "artifacts\\v475_equation_no_loss_distill_dataset\\20260516T_v325_current_baseline\\v475_v325_equation_no_loss_distill_sft_val.jsonl",
+    "train_jsonl": "artifacts\\v475_equation_no_loss_distill_dataset\\20260516T_v325_current_baseline\\v475_v325_equation_no_loss_distill_sft_train.jsonl",
+    "train_sha256": "94903eee68d74849147505e4c17b36c4e2d7d5976b88d5e847eeae34908389a5",
+    "val_jsonl": "artifacts\\v475_equation_no_loss_distill_dataset\\20260516T_v325_current_baseline\\v475_v325_equation_no_loss_distill_sft_val.jsonl",
+    "val_sha256": "174548ccec92e0f290c7f426958c822d6cae0704e91f8252dff4088f02410cbd"
+  },
+  "reference_summary": [
+    {
+      "path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v290_rank19_micro_patch_reference\\runtime_artifacts\\v245_weak_eval_bridge\\v245-weak-bridge-hfonly-20260510T1950Z\\v221_weak_315.csv",
+      "rows": "315",
+      "sha256": "85da758e14d57ea40270de5747f98726a0ad0b6d1795bff7dd46183005e0f9b6"
+    },
+    {
+      "path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v293_gap_mining\\inputs\\v291_full_predictions.csv",
+      "rows": "947",
+      "sha256": "d9634ea15cb55e17bbfb90229f1cdbfd9b0f5a4cdba0d61848e6f746393dde20"
+    }
+  ],
+  "required_next_gate": [
+    "real_tokenization_gate_with_offset_masks",
+    "combine_with_strong_bit_replay_before_any_hf_train",
+    "first_checkpoint_kill_switch_bit_ge_136_equation_gt_56",
+    "weak_eval_before_full_eval_or_submit"
+  ],
+  "schema_version": "kg1_v325_equation_no_loss_distill_dataset_v1",
+  "train_preference_summary": {
+    "negative_type_counts": {
+      "format_negative_multiple_boxes": 800,
+      "format_negative_no_box": 800,
+      "format_negative_trailing_text": 800,
+      "hard_negative_equation_near_miss": 800
+    },
+    "rows": 3200
+  },
+  "train_rule_counts": {
+    "add_direct_over_model_add_variant": 160,
+    "colon_absdiff_restore_trailing_zero": 160,
+    "colon_absdiff_unreverse_same_len": 160,
+    "minus_direct_negative_restore_sign": 160,
+    "minus_signed_opposite_sign_guarded": 160
+  },
+  "train_summary": {
+    "family_counts": {
+      "equation_transform": 800
+    },
+    "reference_id_overlap": 0,
+    "reference_prompt_overlap": 0,
+    "rows": 800,
+    "subcategory_counts": {
+      "equation_numeric_add_direct": 160,
+      "equation_numeric_colon_absdiff": 160,
+      "equation_numeric_colon_trailing_zero": 160,
+      "equation_numeric_minus_direct_negative": 160,
+      "equation_numeric_minus_signed": 160
+    },
+    "unique_ids": 800,
+    "unique_prompt_hashes": 800
+  },
+  "training_authorization": "blocked_until_real_tokenization_and_no_regression_gate",
+  "v324_accepted_candidate_ids": [
+    "274def88",
+    "7688e06e",
+    "c5b058d6",
+    "d1bd7478"
+  ],
+  "v324_manifest_json": "artifacts\\v475_cpu_equation_solver_regate\\20260516T_cpu_v324_current_baseline\\v324_equation_expanded_solver_manifest.json",
+  "v324_manifest_sha256": "45c52c79333de4ae86fbb35d4686c48a8e9c37c90ba036e104458b37bc6c8ed6",
+  "v324_projected_equation_correct": 60,
+  "validation_preference_summary": {
+    "negative_type_counts": {
+      "format_negative_multiple_boxes": 200,
+      "format_negative_no_box": 200,
+      "format_negative_trailing_text": 200,
+      "hard_negative_equation_near_miss": 200
+    },
+    "rows": 800
+  },
+  "validation_rule_counts": {
+    "add_direct_over_model_add_variant": 40,
+    "colon_absdiff_restore_trailing_zero": 40,
+    "colon_absdiff_unreverse_same_len": 40,
+    "minus_direct_negative_restore_sign": 40,
+    "minus_signed_opposite_sign_guarded": 40
+  },
+  "validation_summary": {
+    "family_counts": {
+      "equation_transform": 200
+    },
+    "reference_id_overlap": 0,
+    "reference_prompt_overlap": 0,
+    "rows": 200,
+    "subcategory_counts": {
+      "equation_numeric_add_direct": 40,
+      "equation_numeric_colon_absdiff": 40,
+      "equation_numeric_colon_trailing_zero": 40,
+      "equation_numeric_minus_direct_negative": 40,
+      "equation_numeric_minus_signed": 40
+    },
+    "unique_ids": 200,
+    "unique_prompt_hashes": 200
+  }
+}

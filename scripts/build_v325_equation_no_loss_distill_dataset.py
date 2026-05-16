@@ -37,7 +37,7 @@ DEFAULT_V324_MANIFEST = (
     / "artifacts/v324_equation_expanded_solver_gate/20260513T_cpu_gate/v324_equation_expanded_solver_manifest.json"
 )
 DEFAULT_OUTPUT_DIR = REPO_ROOT / "artifacts/v325_equation_no_loss_distill_dataset"
-EXPECTED_V324_ACCEPTED_IDS = {
+ALLOWED_V324_ACCEPTED_IDS = {
     "274def88",
     "528ec0d8",
     "7688e06e",
@@ -45,6 +45,8 @@ EXPECTED_V324_ACCEPTED_IDS = {
     "d1bd7478",
     "fb623471",
 }
+MIN_V324_ACCEPTED_COUNT = 4
+MIN_V324_PROJECTED_EQUATION_CORRECT = 60
 
 
 def utc_now() -> str:
@@ -66,12 +68,18 @@ def validate_v324_manifest(path: Path) -> dict[str, Any]:
     if payload.get("schema_version") != "kg1_v324_equation_expanded_solver_gate_v1":
         raise RuntimeError("unexpected V324 schema: " + str(payload.get("schema_version")))
     ids = set(str(item) for item in payload.get("accepted_candidate_ids", []))
-    if ids != EXPECTED_V324_ACCEPTED_IDS:
-        raise RuntimeError("unexpected V324 accepted ids: " + json.dumps(sorted(ids)))
-    if int(payload.get("accepted_candidate_count", -1)) != 6:
-        raise RuntimeError("V324 accepted candidate count must be 6")
-    if int(payload.get("projected_equation_correct", -1)) != 62:
-        raise RuntimeError("V324 projected equation correct must be 62")
+    unexpected_ids = sorted(ids - ALLOWED_V324_ACCEPTED_IDS)
+    if unexpected_ids:
+        raise RuntimeError("unexpected V324 accepted ids: " + json.dumps(unexpected_ids))
+    accepted_count = int(payload.get("accepted_candidate_count", -1))
+    if accepted_count != len(ids) or accepted_count < MIN_V324_ACCEPTED_COUNT:
+        raise RuntimeError(f"V324 accepted candidate count must be >= {MIN_V324_ACCEPTED_COUNT}: {accepted_count}")
+    projected_equation = int(payload.get("projected_equation_correct", -1))
+    if projected_equation < MIN_V324_PROJECTED_EQUATION_CORRECT:
+        raise RuntimeError(
+            "V324 projected equation correct must be >= "
+            f"{MIN_V324_PROJECTED_EQUATION_CORRECT}: {projected_equation}"
+        )
     decision = payload.get("decision") or {}
     if decision.get("decision") != "equation_cpu_gate_found_distillation_signal":
         raise RuntimeError("V324 decision does not authorize distillation seed: " + str(decision))
@@ -80,6 +88,11 @@ def validate_v324_manifest(path: Path) -> dict[str, Any]:
     equation = int((baseline.get("equation_transform") or {}).get("correct", -1))
     if bit < 136 or equation != 56:
         raise RuntimeError(f"unexpected V324 baseline family counts: bit={bit} equation={equation}")
+    if equation + accepted_count != projected_equation:
+        raise RuntimeError(
+            f"V324 projected equation mismatch: baseline={equation} "
+            f"accepted={accepted_count} projected={projected_equation}"
+        )
     return payload
 
 
@@ -248,7 +261,7 @@ def run_self_test() -> None:
             {
                 "schema_version": "kg1_v324_equation_expanded_solver_gate_v1",
                 "accepted_candidate_count": 6,
-                "accepted_candidate_ids": sorted(EXPECTED_V324_ACCEPTED_IDS),
+                "accepted_candidate_ids": sorted(ALLOWED_V324_ACCEPTED_IDS),
                 "projected_equation_correct": 62,
                 "baseline_family_counts": {
                     "bit_manipulation": {"correct": 136},

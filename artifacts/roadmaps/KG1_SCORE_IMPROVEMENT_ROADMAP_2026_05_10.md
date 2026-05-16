@@ -1,6 +1,6 @@
 # KG1 Score Improvement Roadmap
 
-Atualizado: 2026-05-15
+Atualizado: 2026-05-16
 
 Este e o roadmap ativo a partir do V435. O historico pre-V435 foi arquivado em:
 
@@ -65,6 +65,9 @@ Regra central: ganho so conta se aparecer no adapter/package. Teacher CPU, solve
 | V463 synthetic numeric hard-negative audit | 26 hard negatives reais em 3 classes | quarentenado V474; `v464_dataset_build_allowed=false` |
 | V464 numeric multirule dataset | train 558 rows: 46 equation, 512 bit replay | removido/quarentenado; nao usar |
 | V465/V469 derived adapters | derivados de rota V464/V468 contaminada | fail-closed; nao avaliar, packagear ou submeter |
+| V475 CPU equation no-loss regate | V324 atual sobre baseline V290 checkpoint-6 aceitou 4 candidatos; projeta equation `56 -> 60`, weak `192 -> 196`, bit guardrail `136` | sinal CPU real; ainda nao submit-safe |
+| V475 equation+bit replay mix | train `1312` = 800 equation + 512 bit replay; val `328` = 200 equation + 128 bit replay; V286 real passou com truncation `0`, offset masks completos e overlap `0` | primeiro dataset limpo autorizado para smoke HF curto |
+| V476 H200 smoke launcher | debug local passou; custo H200 `0.083333/min`, timeout `3600s`, init adapter V290 checkpoint-6, hashes HF batem | pode lançar apos commit/push; avaliar checkpoints 2/4/6/8/10/12 |
 
 ## Regras Permanentes
 
@@ -1375,3 +1378,42 @@ Decisao operacional V474:
   ate rebuild limpo;
 - proximo passo segue CPU-first: provar ganho real em `equation_transform` sem
   perdas e sem truncation antes de qualquer HF job.
+
+## Atualizacao V475/V476 - CPU Signal to HF Smoke
+
+V475 finalmente encontrou um sinal CPU limpo no baseline submit-safe ativo
+V290/V291 checkpoint-6, sem usar weak/full como treino:
+
+| Etapa | Resultado |
+|---|---:|
+| Baseline ativo | weak `192/315`, equation `56/155`, bit `136/160`, trunc `0` |
+| V324 current-baseline regate | `4` candidatos aceitos, `0` conflitos |
+| IDs aceitos | `274def88`, `7688e06e`, `c5b058d6`, `d1bd7478` |
+| Projecao CPU equation-only | weak `196/315`, equation `60/155`, bit guardrail `136` |
+| V325 equation dataset | train `800`, val `200`, referencias overlap `0` |
+| V325 token gate real | passed, token max `262`, prompt truncation `0`, offset masks completos |
+| V475 mixed dataset | train `1312`, val `328`, bit replay `512/128`, referencias overlap `0` |
+| V475 mixed token gate real | passed, token max `331`, prompt truncation `0`, offset masks completos |
+
+Achado importante: o ganho ainda e CPU/teacher/verifier, nao adapter-only. Ele
+so vira ganho de ranking se o smoke V476 transferir para o adapter e o weak eval
+mostrar `total>192`, `equation>56`, `bit>=136`, `truncated=0`.
+
+Decisao operacional:
+
+1. V475 e a rota ativa mais limpa para tentar transferencia curta.
+2. V476 pode rodar um smoke H200 de ate 1 hora, com `MAX_STEPS=12`,
+   checkpoints a cada 2 steps, LR `6e-8 -> 1.5e-8`, answer-span weight `16`.
+3. Monitorar logs a cada 40 segundos enquanto o job estiver ativo.
+4. Apos treino, rodar weak eval dos checkpoints 2/4/6/8/10/12.
+5. FinOps: cancelar/arquivar se nenhum checkpoint puder bater `total>192`,
+   `equation>56`, `bit>=136`, `truncated=0`.
+6. Nao fazer full eval, package ou submit ate existir ganho adapter-only medido.
+
+Artefatos:
+
+- `artifacts/v475_cpu_equation_solver_regate/20260516T_cpu_v324_current_baseline/v324_equation_expanded_solver_manifest.json`
+- `artifacts/v475_equation_no_loss_distill_dataset/20260516T_v325_current_baseline/v475_v325_equation_no_loss_distill_manifest.json`
+- `artifacts/v475_equation_bit_replay_mix/20260516T_v475_equation_bit_replay_mix/v475_equation_bit_replay_mix_manifest.json`
+- `artifacts/v475_equation_bit_replay_mix/20260516T_v475_equation_bit_replay_mix/tokenization_gate_real/v286_generic_tokenization_gate_manifest.json`
+- `artifacts/v476_hf_h200_v475_equation_bit_replay_launch/launch_v476_hf_h200_v475_equation_bit_replay.py`
