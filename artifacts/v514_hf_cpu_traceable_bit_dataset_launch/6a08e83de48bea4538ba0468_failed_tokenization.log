@@ -1,0 +1,105 @@
++ export DEBIAN_FRONTEND=noninteractive
++ DEBIAN_FRONTEND=noninteractive
++ python -
+{"platform": "Linux-6.12.83-113.160.amzn2023.x86_64-x86_64-with-glibc2.41", "python": "3.11.15"}
++ apt-get update -qq
++ apt-get install -y -qq git
++ python -m pip install -q --no-cache-dir --upgrade pip
+WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv
++ python -m pip install -q --no-cache-dir 'huggingface_hub>=0.36.0' 'transformers>=4.51.0' 'tokenizers>=0.20.0' 'pandas>=2.0.0'
+WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.
++ rm -rf /tmp/kg1
++ git clone --depth 1 --branch v230-v226-complementarity https://github.com/FELIPEACASTRO/KG1-NVIDIA.git /tmp/kg1
+Cloning into '/tmp/kg1'...
+Updating files:  44% (990/2224)Updating files:  45% (1001/2224)Updating files:  46% (1024/2224)Updating files:  47% (1046/2224)Updating files:  48% (1068/2224)Updating files:  49% (1090/2224)Updating files:  50% (1112/2224)Updating files:  51% (1135/2224)Updating files:  52% (1157/2224)Updating files:  53% (1179/2224)Updating files:  54% (1201/2224)Updating files:  55% (1224/2224)Updating files:  56% (1246/2224)Updating files:  57% (1268/2224)Updating files:  58% (1290/2224)Updating files:  59% (1313/2224)Updating files:  60% (1335/2224)Updating files:  61% (1357/2224)Updating files:  62% (1379/2224)Updating files:  63% (1402/2224)Updating files:  64% (1424/2224)Updating files:  65% (1446/2224)Updating files:  66% (1468/2224)Updating files:  67% (1491/2224)Updating files:  68% (1513/2224)Updating files:  69% (1535/2224)Updating files:  70% (1557/2224)Updating files:  71% (1580/2224)Updating files:  72% (1602/2224)Updating files:  73% (1624/2224)Updating files:  74% (1646/2224)Updating files:  75% (1668/2224)Updating files:  76% (1691/2224)Updating files:  77% (1713/2224)Updating files:  78% (1735/2224)Updating files:  79% (1757/2224)Updating files:  80% (1780/2224)Updating files:  81% (1802/2224)Updating files:  82% (1824/2224)Updating files:  83% (1846/2224)Updating files:  84% (1869/2224)Updating files:  85% (1891/2224)Updating files:  86% (1913/2224)Updating files:  87% (1935/2224)Updating files:  88% (1958/2224)Updating files:  89% (1980/2224)Updating files:  90% (2002/2224)Updating files:  91% (2024/2224)Updating files:  92% (2047/2224)Updating files:  93% (2069/2224)Updating files:  94% (2091/2224)Updating files:  95% (2113/2224)Updating files:  96% (2136/2224)Updating files:  97% (2158/2224)Updating files:  98% (2180/2224)Updating files:  99% (2202/2224)Updating files: 100% (2224/2224)Updating files: 100% (2224/2224), done.
++ cd /tmp/kg1
++ git fetch --depth 1 origin 158183ed80b141ad97f067b0524c35c4a55f18d3
+From https://github.com/FELIPEACASTRO/KG1-NVIDIA
+ * branch            158183ed80b141ad97f067b0524c35c4a55f18d3 -> FETCH_HEAD
++ git checkout --detach 158183ed80b141ad97f067b0524c35c4a55f18d3
+HEAD is now at 158183e Fix V514 HF CPU dependency gate
+++ git rev-parse HEAD
++ observed=158183ed80b141ad97f067b0524c35c4a55f18d3
++ echo repo_commit=158183ed80b141ad97f067b0524c35c4a55f18d3
++ '[' 158183ed80b141ad97f067b0524c35c4a55f18d3 '!=' 158183ed80b141ad97f067b0524c35c4a55f18d3 ']'
++ python -m py_compile scripts/build_v514_traceable_bit_v510_dataset.py scripts/run_v286_generic_tokenization_gate.py scripts/audit_v513_trace_learnability_gate.py
+repo_commit=158183ed80b141ad97f067b0524c35c4a55f18d3
++ echo '=== V514 HF CPU TRACEABLE BIT DATASET START ==='
++ echo run_id=v514-hf-cpu-traceable-bit-20260516T215611Z
++ echo output_dataset_repo=felipesp1983/kg1-v514-traceable-bit-v510-artifacts
++ OUT=artifacts/v514_traceable_bit_v510_dataset/v514-hf-cpu-traceable-bit-20260516T215611Z
++ python scripts/build_v514_traceable_bit_v510_dataset.py --output-dir artifacts/v514_traceable_bit_v510_dataset/v514-hf-cpu-traceable-bit-20260516T215611Z
+=== V514 HF CPU TRACEABLE BIT DATASET START ===
+run_id=v514-hf-cpu-traceable-bit-20260516T215611Z
+output_dataset_repo=felipesp1983/kg1-v514-traceable-bit-v510-artifacts
+=== V514 TRACEABLE BIT V510 DATASET START ===
+generated_at_utc = 2026-05-16T21:57:49.787108+00:00
+train_jsonl = /tmp/kg1/artifacts/v510_canonical_training_dataset/v510_canonical_active_training_pool/v510_canonical_active_training_pool_train.jsonl
+val_jsonl = /tmp/kg1/artifacts/v510_canonical_training_dataset/v510_canonical_active_training_pool/v510_canonical_active_training_pool_val.jsonl
+output_dir = artifacts/v514_traceable_bit_v510_dataset/v514-hf-cpu-traceable-bit-20260516T215611Z
+train_summary = {"bit_trace_word_max": 73, "bit_trace_word_min": 8, "bit_trace_word_p50": 47, "counts": {"bit_rows_converted_to_trace": 466, "bit_rows_dropped_unverified": 143, "bit_rows_seen": 609, "kept_equation_rows": 2018}, "dropped_unverified_examples": ["v498_train_bit_replay_00037_v217_train_d0d29c4ee7916b79", "v498_train_bit_replay_00505_v217_train_a36be5658f9fb7c0", "v498_train_bit_replay_00390_v217_train_57541ea0458a2dc9", "v498_train_bit_replay_00211_v217_train_65f44338f16fd66f", "v498_train_bit_replay_00188_v217_train_87c9fd0682bbe8ed", "v498_train_bit_replay_00453_v217_train_bb799fede88121a4", "v498_train_bit_replay_00383_v217_train_73a6dc99f3e315a9", "v498_train_bit_replay_00448_v217_train_d7d35ba38f31ee0a", "v498_train_bit_replay_00144_v217_train_73fa8aff06b69af1", "v498_train_bit_replay_00101_v217_train_a7f5b13c59d339c4", "v498_train_bit_replay_00163_v217_train_0fea7254dec4a4a5", "v498_train_bit_replay_00119_v217_train_6b8efb2f37374caa", "v498_train_bit_replay_00082_v217_train_c58157560c58d518", "v498_train_bit_replay_00095_v217_train_b0116f8749b977c7", "v498_train_bit_replay_00408_v217_train_59c20456fb9cafcd", "v498_train_bit_replay_00084_v217_train_3299602c948a2123", "v498_train_bit_replay_00190_v217_train_5eb938737144ba44", "v498_train_bit_replay_00450_v217_train_420959ec3837d66e", "v498_train_bit_replay_00124_v217_train_f5994fe906c2f8ed", "v498_train_bit_replay_00354_v217_train_56608ff9a3a4fe9f"], "family_counts": {"bit_manipulation": 466, "equation_transform": 2018}, "input_rows": 2627, "methods": {"bit_solver_v4": 431, "v296_stride_solver": 35}, "output_rows": 2484, "split": "train"}
+validation_summary = {"bit_trace_word_max": 73, "bit_trace_word_min": 8, "bit_trace_word_p50": 47, "counts": {"bit_rows_converted_to_trace": 115, "bit_rows_dropped_unverified": 18, "bit_rows_seen": 133, "kept_equation_rows": 504}, "dropped_unverified_examples": ["v498_validation_bit_replay_00020_v217_val_cd18aa38cec980bc", "v498_validation_bit_replay_00053_v217_val_109165ecceca27d6", "v498_validation_bit_replay_00081_v217_val_f936b923ba41eefd", "v498_validation_bit_replay_00117_v217_val_5da1f7270d869bb9", "v498_validation_bit_replay_00023_v217_val_ebbbdd613c535b33", "v498_validation_bit_replay_00045_v217_val_ec8e37854c0d313c", "v498_validation_bit_replay_00046_v217_val_38962b3ffa4fc81d", "v498_validation_bit_replay_00124_v217_val_208af6dab734f14a", "v498_validation_bit_replay_00086_v217_val_5e62bb2f46b0c5fb", "v498_validation_bit_replay_00065_v217_val_427276fd915271d6", "v498_validation_bit_replay_00096_v217_val_a66f4ce065571eb3", "v498_validation_bit_replay_00091_v217_val_b5e4913de55e4316", "v498_validation_bit_replay_00121_v217_val_d056416962bd185e", "v498_validation_bit_replay_00049_v217_val_5f3834f87b8cebbc", "v498_validation_bit_replay_00060_v217_val_123bc09bd0f4f5ae", "v498_validation_bit_replay_00089_v217_val_770f78c81e84053c", "v498_validation_bit_replay_00118_v217_val_eadd68ce8f5f5053", "v498_validation_bit_replay_00076_v217_val_43f906712f6dfdd2"], "family_counts": {"bit_manipulation": 115, "equation_transform": 504}, "input_rows": 637, "methods": {"bit_solver_v4": 111, "v296_stride_solver": 4}, "output_rows": 619, "split": "validation"}
+manifest_json = artifacts/v514_traceable_bit_v510_dataset/v514-hf-cpu-traceable-bit-20260516T215611Z/v514_traceable_bit_v510_manifest.json
+=== V514 TRACEABLE BIT V510 DATASET END ===
++ python scripts/run_v286_generic_tokenization_gate.py --dataset-manifest-json artifacts/v514_traceable_bit_v510_dataset/v514-hf-cpu-traceable-bit-20260516T215611Z/v514_traceable_bit_v510_manifest.json --output-dir artifacts/v514_traceable_bit_v510_dataset/v514-hf-cpu-traceable-bit-20260516T215611Z/tokenization_gate_real --assistant-final-answer-mode boxed_suffix --min-train-rows 2400 --min-val-rows 600 --reference-csv artifacts/v290_rank19_micro_patch_reference/runtime_artifacts/v245_weak_eval_bridge/v245-weak-bridge-hfonly-20260510T1950Z/v221_weak_315.csv
+=== V286 GENERIC TOKENIZATION GATE START ===
+generated_at_utc = 2026-05-16T21:58:40.348404+00:00
+dataset_manifest_json = artifacts/v514_traceable_bit_v510_dataset/v514-hf-cpu-traceable-bit-20260516T215611Z/v514_traceable_bit_v510_manifest.json
+model_name = nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16
+model_revision = cbd3fa9f933d55ef16a84236559f4ee2a0526848
+max_length = 8192
+max_prompt_truncation_rate = 0.0
+require_offset_mask = True
+assistant_final_answer_mode = boxed_suffix
+output_dir = artifacts/v514_traceable_bit_v510_dataset/v514-hf-cpu-traceable-bit-20260516T215611Z/tokenization_gate_real
+train_jsonl = artifacts/v514_traceable_bit_v510_dataset/v514-hf-cpu-traceable-bit-20260516T215611Z/v514_traceable_bit_v510_train.jsonl
+validation_jsonl = artifacts/v514_traceable_bit_v510_dataset/v514-hf-cpu-traceable-bit-20260516T215611Z/v514_traceable_bit_v510_val.jsonl
+observed_train_sha256 = 2c20b9d74bab968f477e4ad9e5912e67f4a2941cfbc93bab58c15a898d5c2198
+observed_val_sha256 = c3037314cb9edeee4f0e845fa7b5dd16e615b110bdf01273f0faa71e3bde7dd8
+train_val_prompt_answer_overlap = 0
+train_val_prompt_overlap = 0
+reference_overlap = {"enabled": true, "id_overlap_count": 0, "id_overlap_first10": [], "prompt_answer_overlap_count": 0, "prompt_answer_overlap_first10": [], "prompt_overlap_count": 0, "prompt_overlap_first10": [], "reference_csvs": ["artifacts/v290_rank19_micro_patch_reference/runtime_artifacts/v245_weak_eval_bridge/v245-weak-bridge-hfonly-20260510T1950Z/v221_weak_315.csv"]}
+[transformers] PyTorch was not found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+
+config.json:   0%|          | 0.00/1.82k [00:00<?, ?B/s][Aconfig.json: 100%|██████████| 1.82k/1.82k [00:00<00:00, 12.2MB/s]
+
+configuration_nemotron_h.py:   0%|          | 0.00/12.9k [00:00<?, ?B/s][Aconfiguration_nemotron_h.py: 100%|██████████| 12.9k/12.9k [00:00<00:00, 54.2MB/s]
+
+tokenizer_config.json:   0%|          | 0.00/188k [00:00<?, ?B/s][Atokenizer_config.json: 100%|██████████| 188k/188k [00:00<00:00, 149MB/s]
+
+tokenizer.json:   0%|          | 0.00/17.1M [00:00<?, ?B/s][Atokenizer.json: 100%|██████████| 17.1M/17.1M [00:00<00:00, 36.5MB/s]
+
+special_tokens_map.json:   0%|          | 0.00/420 [00:00<?, ?B/s][Aspecial_tokens_map.json: 100%|██████████| 420/420 [00:00<00:00, 1.51MB/s]
+
+chat_template.jinja:   0%|          | 0.00/10.5k [00:00<?, ?B/s][Achat_template.jinja: 100%|██████████| 10.5k/10.5k [00:00<00:00, 46.0MB/s]
+tokenizer_info = {"class": "TokenizersBackend", "eos_token": "<|im_end|>", "is_fast": true, "pad_token": "<|im_end|>", "toy": false}
+Traceback (most recent call last):
+  File "/tmp/kg1/scripts/run_v286_generic_tokenization_gate.py", line 1070, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "/tmp/kg1/scripts/run_v286_generic_tokenization_gate.py", line 1065, in main
+    run(args)
+  File "/tmp/kg1/scripts/run_v286_generic_tokenization_gate.py", line 537, in run
+    train_tokenization = tokenize_rows(
+                         ^^^^^^^^^^^^^^
+  File "/tmp/kg1/scripts/run_v286_generic_tokenization_gate.py", line 346, in tokenize_rows
+    input_ids, loss_mask, used_offsets = build_completion_mask(tokenizer, row["messages"], require_offset_mask)
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/kg1/scripts/run_v286_generic_tokenization_gate.py", line 283, in build_completion_mask
+    full_text = apply_chat_template(tokenizer, messages)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/kg1/scripts/run_v286_generic_tokenization_gate.py", line 268, in apply_chat_template
+    return tokenizer.apply_chat_template(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/transformers/tokenization_utils_base.py", line 3086, in apply_chat_template
+    rendered_chat, generation_indices = render_jinja_template(
+                                        ^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/transformers/utils/chat_template_utils.py", line 514, in render_jinja_template
+    compiled_template = _compile_jinja_template(chat_template)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/transformers/utils/chat_template_utils.py", line 421, in _compile_jinja_template
+    return _cached_compile_jinja_template(chat_template)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/transformers/utils/chat_template_utils.py", line 427, in _cached_compile_jinja_template
+    raise ImportError(
+ImportError: apply_chat_template requires jinja2 to be installed. Please install it using `pip install jinja2`.

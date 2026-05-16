@@ -111,6 +111,33 @@ Regra preventiva:
 
 Status: corrigido no launcher V514 com `pandas>=2.0.0`; aguardando relaunch.
 
+### E060 - V514 HF CPU tokenizer gate sem `jinja2`
+
+Evidencia:
+
+- HF CPU job `felipesp1983/6a08e83de48bea4538ba0468` clonou o commit correto
+  `158183ed80b141ad97f067b0524c35c4a55f18d3`.
+- V514 build reproduziu os counts locais no HF CPU: train bit `466`
+  convertidas e `143` descartadas; val bit `115` convertidas e `18`
+  descartadas.
+- O tokenizer oficial baixou, mas `tokenizer.apply_chat_template` falhou
+  porque `jinja2` nao estava instalado.
+
+Impacto:
+
+- Nenhum treino, eval, package ou submit rodou.
+- O dataset V514 esta reprodutivel; a falha foi no ambiente minimo do
+  tokenization gate.
+
+Regra preventiva:
+
+- Todo launcher que usa tokenizer real com `apply_chat_template` deve instalar
+  `jinja2`.
+- O HF CPU reproduction precisa executar builder, tokenizer real e V513 no
+  mesmo ambiente antes de liberar qualquer GPU.
+
+Status: corrigido no launcher V514 com `jinja2>=3.1.0`; aguardando relaunch.
+
 ### E001 - V435E misto contaminou preference
 
 Evidencia:
