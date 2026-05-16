@@ -1,0 +1,188 @@
+{
+  "dataset_manifest_json": "",
+  "findings": [],
+  "generated_at_utc": "2026-05-16T19:00:19.513739+00:00",
+  "hf_gpu_allowed": true,
+  "schema_version": "kg1_v478_training_objective_alignment_gate_v1",
+  "source_weights": {
+    "v498_bit_replay_guardrail_from_v475": 1.5,
+    "v498_numeric_teacher_trace_pack": 1.0
+  },
+  "subcategory_weights": {
+    "bit_guardrail_replay": 1.0,
+    "equation_numeric_add_direct_hard_negative": 1.0,
+    "equation_numeric_colon_trailing_zero_hard_negative": 1.0,
+    "equation_numeric_minus_signed_hard_negative": 1.0
+  },
+  "thresholds": {
+    "max_any_family_effective_share": 0.95,
+    "max_equation_effective_share": 0.65,
+    "min_bit_effective_share": 0.35
+  },
+  "train": {
+    "effective_share_by_family": {
+      "bit_manipulation": {
+        "share": 0.390244,
+        "weight": 768.0
+      },
+      "equation_transform": {
+        "share": 0.609756,
+        "weight": 1200.0
+      }
+    },
+    "effective_share_by_source": {
+      "v498_bit_replay_guardrail_from_v475": {
+        "share": 0.390244,
+        "weight": 768.0
+      },
+      "v498_numeric_teacher_trace_pack": {
+        "share": 0.609756,
+        "weight": 1200.0
+      }
+    },
+    "effective_share_by_subcategory": {
+      "bit_guardrail_replay": {
+        "share": 0.390244,
+        "weight": 768.0
+      },
+      "equation_numeric_add_direct_hard_negative": {
+        "share": 0.203252,
+        "weight": 400.0
+      },
+      "equation_numeric_colon_trailing_zero_hard_negative": {
+        "share": 0.203252,
+        "weight": 400.0
+      },
+      "equation_numeric_minus_signed_hard_negative": {
+        "share": 0.203252,
+        "weight": 400.0
+      }
+    },
+    "effective_total_weight": 1968.0,
+    "physical_share_by_family": {
+      "bit_manipulation": {
+        "rows": 512,
+        "share": 0.299065
+      },
+      "equation_transform": {
+        "rows": 1200,
+        "share": 0.700935
+      }
+    },
+    "physical_share_by_source": {
+      "v498_bit_replay_guardrail_from_v475": {
+        "rows": 512,
+        "share": 0.299065
+      },
+      "v498_numeric_teacher_trace_pack": {
+        "rows": 1200,
+        "share": 0.700935
+      }
+    },
+    "physical_share_by_subcategory": {
+      "bit_guardrail_replay": {
+        "rows": 512,
+        "share": 0.299065
+      },
+      "equation_numeric_add_direct_hard_negative": {
+        "rows": 400,
+        "share": 0.233645
+      },
+      "equation_numeric_colon_trailing_zero_hard_negative": {
+        "rows": 400,
+        "share": 0.233645
+      },
+      "equation_numeric_minus_signed_hard_negative": {
+        "rows": 400,
+        "share": 0.233645
+      }
+    },
+    "rows": 1712,
+    "unknown_source_rows": 0,
+    "unknown_subcategory_rows": 0
+  },
+  "train_jsonl": "C:\\Users\\davis\\.cache\\huggingface\\hub\\datasets--felipesp1983--kg1-nemotron-training\\snapshots\\c7e27fd39c598dd23cb25481f567787bdff50820\\data\\v498_numeric_teacher_trace_pack\\20260516T_v498_numeric_teacher\\v498_numeric_teacher_trace_train.jsonl",
+  "val_jsonl": "C:\\Users\\davis\\.cache\\huggingface\\hub\\datasets--felipesp1983--kg1-nemotron-training\\snapshots\\c7e27fd39c598dd23cb25481f567787bdff50820\\data\\v498_numeric_teacher_trace_pack\\20260516T_v498_numeric_teacher\\v498_numeric_teacher_trace_val.jsonl",
+  "validation": {
+    "effective_share_by_family": {
+      "bit_manipulation": {
+        "share": 0.390244,
+        "weight": 192.0
+      },
+      "equation_transform": {
+        "share": 0.609756,
+        "weight": 300.0
+      }
+    },
+    "effective_share_by_source": {
+      "v498_bit_replay_guardrail_from_v475": {
+        "share": 0.390244,
+        "weight": 192.0
+      },
+      "v498_numeric_teacher_trace_pack": {
+        "share": 0.609756,
+        "weight": 300.0
+      }
+    },
+    "effective_share_by_subcategory": {
+      "bit_guardrail_replay": {
+        "share": 0.390244,
+        "weight": 192.0
+      },
+      "equation_numeric_add_direct_hard_negative": {
+        "share": 0.203252,
+        "weight": 100.0
+      },
+      "equation_numeric_colon_trailing_zero_hard_negative": {
+        "share": 0.203252,
+        "weight": 100.0
+      },
+      "equation_numeric_minus_signed_hard_negative": {
+        "share": 0.203252,
+        "weight": 100.0
+      }
+    },
+    "effective_total_weight": 492.0,
+    "physical_share_by_family": {
+      "bit_manipulation": {
+        "rows": 128,
+        "share": 0.299065
+      },
+      "equation_transform": {
+        "rows": 300,
+        "share": 0.700935
+      }
+    },
+    "physical_share_by_source": {
+      "v498_bit_replay_guardrail_from_v475": {
+        "rows": 128,
+        "share": 0.299065
+      },
+      "v498_numeric_teacher_trace_pack": {
+        "rows": 300,
+        "share": 0.700935
+      }
+    },
+    "physical_share_by_subcategory": {
+      "bit_guardrail_replay": {
+        "rows": 128,
+        "share": 0.299065
+      },
+      "equation_numeric_add_direct_hard_negative": {
+        "rows": 100,
+        "share": 0.233645
+      },
+      "equation_numeric_colon_trailing_zero_hard_negative": {
+        "rows": 100,
+        "share": 0.233645
+      },
+      "equation_numeric_minus_signed_hard_negative": {
+        "rows": 100,
+        "share": 0.233645
+      }
+    },
+    "rows": 428,
+    "unknown_source_rows": 0,
+    "unknown_subcategory_rows": 0
+  }
+}
