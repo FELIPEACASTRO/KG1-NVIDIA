@@ -64,6 +64,8 @@ Ultima evidencia operacional relevante:
 | V514 traceable bit V510 dataset | V510 refeito apenas no bloco bit: `581/742` bit rows convertidas para traces verificadas (`466` train, `115` val); `161` bit rows sem prova foram descartadas; equation V510 mantido; tokenization real passou com `0` trunc, offset masks `2484/619`, token max `553/541`; V513 recheck passou com `0` blockers | primeiro dataset estruturalmente melhor que V510; ainda nao e submit-safe nem autoriza GPU sem HF CPU reproduction, objective/pre-paid gate e smoke minimo |
 | V514 HF CPU attempt 1 | job `felipesp1983/6a08e6fe3308d79117b915bb` falhou antes dos gates por dependencia ausente: `pandas` exigido pelo `run_v296_bit_stride_solver_audit.py`; nenhum treino/eval/package/submit rodou | launcher corrigido para instalar `pandas>=2.0.0`; relancar CPU apos commit/push |
 | V514 HF CPU attempt 2 | job `felipesp1983/6a08e83de48bea4538ba0468` reproduziu o build V514 no HF CPU, mas o tokenizer gate falhou por `jinja2` ausente em `apply_chat_template`; nenhum treino/eval/package/submit rodou | launcher corrigido para instalar `jinja2>=3.1.0`; relancar CPU apos commit/push |
+| V514 HF CPU attempt 3 | job `felipesp1983/6a08e9ad3308d79117b91609` completou no HF CPU; build V514 reproduzido; tokenization real passou com `0` trunc e offset masks `2484/619`; V513 recheck passou com `0` blockers; artefatos enviados para `felipesp1983/kg1-v514-traceable-bit-v510-artifacts/v514-hf-cpu-traceable-bit-20260516T220219Z` | HF CPU reproduction concluido; proximo passo e V515 CPU residual full-byte, nao GPU amplo |
+| V515 V514 fullbyte residual | recuperou somente rows bit residuais com `fullbyte_unique_prediction`: `+7` train e `+1` validation; V515 total `2491/620`; tokenization real passou com `0` trunc, offset masks `2491/620`, token max `553/541`; V513 recheck passou com `0` blockers | ganho pequeno de cobertura verificavel; reproduzir no HF CPU antes de qualquer GPU |
 
 ## Achados Principais V484-V492
 
@@ -288,6 +290,12 @@ reproduzido no HF e provar:
     marcar explicitamente `KG1_WEAK_EVAL_DIAGNOSTIC_ONLY=1`.
 21. V499 e V501 sao artefatos de forense, nao candidatos. Qualquer launcher que
     referencie os repos desses adapters deve falhar no static/pre-paid gate.
+22. Regra F2/backfire permanente: antes de qualquer job ou notebook
+    promocional, analisar se houve `F2 backfired`, bug silencioso ou regressao
+    mascarada por loss. Se houver suspeita concreta, entrar em crisis mode:
+    bloquear promocao, registrar no ledger, reverter/ajustar a rota afetada e
+    corrigir o gate para impedir repeticao. O static/pre-paid gate deve exigir
+    `KG1_CRISIS_MODE_BACKFIRE_GUARD=1` em launchers pagos.
 
 ## Plano Cronologico Ativo
 
@@ -659,6 +667,13 @@ Executar:
   descartados no V514 com solver full-byte/ternary/3-input; aceitar somente
   predicao unica, sem conflito e com trace curto. Se nao houver cobertura nova,
   manter V514 como esta e nao inflar dataset com guess.
+- V515 deve materializar esse residual como dataset/gate pequeno:
+  - comparar os IDs bit originais do V510 contra os IDs convertidos pelo V514;
+  - rodar o solver full-byte/global apenas nos descartados;
+  - aceitar somente regra `fullbyte_unique_prediction` com verificacao exata;
+  - anexar traces curtos ao V514 e rerodar V286 + V513;
+  - nao abrir GPU se o ganho de cobertura for zero ou se tokenizacao/trace
+    regredir.
 
 Nao abrir job bit-only enquanto teacher CPU nao transfere para adapter.
 
@@ -712,10 +727,12 @@ Sem isso, nao packagear e nao submeter.
    - `kg1_pre_paid_job_integration_gate.py --dataset-schema sft|preference`;
    - `hf_job_preflight_gate.py` com flags anti-leakage obrigatorias;
    - weak eval promocional official-like e bloqueante por default.
-6. Se a revalidacao label-free nao produzir candidato `>192/315`, voltar para
+6. V515 local ja recuperou `+8` bit traces residuais e passou V286/V513; o
+   proximo passo barato e reproduzir V515 no HF CPU.
+7. Se a revalidacao label-free nao produzir candidato `>192/315`, voltar para
    CPU teacher/verifier discovery. Nao abrir H200 ate existir novo sinal CPU
    que projete `equation>=60`, preserve `bit>=136` e tenha `trunc=0`.
-7. Se surgir novo candidato, weak eval promocional deve usar thinking ligado,
+8. Se surgir novo candidato, weak eval promocional deve usar thinking ligado,
    `max_tokens=7680`, `max_model_len=8192`, `max_num_seqs=64` e falhar se nao
    passar `total>=196`, `equation>=60`, `bit>=136`, `trunc=0`.
 

@@ -79,11 +79,14 @@ Regra preventiva:
   `bit_trace_rows>=32`, `bit_answer_only_share<=0.05`, truncation zero e
   objective/FinOps gates passarem.
 
-Status: mitigado estruturalmente pelo V514, mas ainda aberto ate weak eval
+Status: mitigado estruturalmente pelo V514/V515, mas ainda aberto ate weak eval
 provar que nao houve regressao. V514 converteu `581/742` linhas bit para traces
 verificadas, descartou `161` bit sem prova, passou tokenization real e passou
-V513 recheck com `0` blockers. GPU continua bloqueada ate HF CPU reproduction,
-objective/pre-paid gate e smoke minimo.
+V513 recheck com `0` blockers. HF CPU reproduction tambem passou no job
+`felipesp1983/6a08e9ad3308d79117b91609`. V515 recuperou mais `8` bit rows
+residuais com `fullbyte_unique_prediction` e passou V286/V513 localmente. GPU
+continua bloqueada ate HF CPU reproduction do V515, objective/pre-paid gate e
+smoke minimo.
 
 ### E059 - V514 HF CPU launcher sem dependencia transitiva do stride solver
 
@@ -109,7 +112,8 @@ Regra preventiva:
 - Antes de relancar, `py_compile` e static gate continuam obrigatorios; o
   log da tentativa falha deve ficar versionado para nao repetir o erro.
 
-Status: corrigido no launcher V514 com `pandas>=2.0.0`; aguardando relaunch.
+Status: corrigido no launcher V514 com `pandas>=2.0.0`; validado pelo job HF
+CPU `felipesp1983/6a08e9ad3308d79117b91609`.
 
 ### E060 - V514 HF CPU tokenizer gate sem `jinja2`
 
@@ -136,7 +140,8 @@ Regra preventiva:
 - O HF CPU reproduction precisa executar builder, tokenizer real e V513 no
   mesmo ambiente antes de liberar qualquer GPU.
 
-Status: corrigido no launcher V514 com `jinja2>=3.1.0`; aguardando relaunch.
+Status: corrigido no launcher V514 com `jinja2>=3.1.0`; validado pelo job HF
+CPU `felipesp1983/6a08e9ad3308d79117b91609`.
 
 ### E001 - V435E misto contaminou preference
 
