@@ -5,10 +5,10 @@
 - Rows audited: `56`.
 - Real hard negatives: `26`.
 - Real hard-negative rule classes: `3`.
-- Decision: `v463_multi_rule_synthetic_signal_ready_for_v464_cpu_dataset`.
-- V464 dataset build allowed: `true`.
+- Decision: `v463_quarantined_signal_present_but_dataset_build_blocked`.
+- V464 dataset build allowed: `false`.
 - HF GPU train allowed: `false`.
-- Next action: Build V464 CPU dataset proposal with only real adapter hard negatives, bit replay, tokenization gates, and weak/full promotion guards. Do not train yet.
+- Next action: Do not build V464 from this audit. Rebuild a clean V475+ CPU route with isolated sources and contradiction gates.
 
 ## Rule Detail
 

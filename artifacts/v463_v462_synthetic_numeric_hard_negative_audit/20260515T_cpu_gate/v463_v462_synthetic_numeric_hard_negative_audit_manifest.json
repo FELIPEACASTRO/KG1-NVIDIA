@@ -5,16 +5,19 @@
     "hard_negative_count_ge_min": true,
     "hard_negative_rule_classes_ge_min": true,
     "postprocessor_all_correct": true,
-    "prompt_hashes_all_match": true
+    "prompt_hashes_all_match": true,
+    "route_not_quarantined_after_v473": false
   },
   "decision": {
-    "blocking_conditions": [],
-    "decision": "v463_multi_rule_synthetic_signal_ready_for_v464_cpu_dataset",
+    "blocking_conditions": [
+      "route_not_quarantined_after_v473"
+    ],
+    "decision": "v463_quarantined_signal_present_but_dataset_build_blocked",
     "hard_negative_count": 26,
     "hard_negative_rule_class_count": 3,
     "hf_gpu_train_allowed": false,
-    "next_action": "Build V464 CPU dataset proposal with only real adapter hard negatives, bit replay, tokenization gates, and weak/full promotion guards. Do not train yet.",
-    "v464_dataset_build_allowed": true
+    "next_action": "Do not build V464 from this audit. Rebuild a clean V475+ CPU route with isolated sources and contradiction gates.",
+    "v464_dataset_build_allowed": false
   },
   "generated_at_utc": "2026-05-15T22:59:42.730183+00:00",
   "inputs": {
@@ -35,7 +38,7 @@
     "hard_negatives_sha256": "63fb85e6ec604378d10ab1b26989a8d4f84f8ff069306f93e29b94bcc5f71876",
     "manifest_json": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v463_v462_synthetic_numeric_hard_negative_audit\\20260515T_cpu_gate\\v463_v462_synthetic_numeric_hard_negative_audit_manifest.json",
     "report_md": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v463_v462_synthetic_numeric_hard_negative_audit\\20260515T_cpu_gate\\v463_v462_synthetic_numeric_hard_negative_audit.md",
-    "report_sha256": "ec7c21f1ed8cd17ba0ff7c821a44b3e7b7f31b0328fa5115c4858579a9672cf9"
+    "report_sha256": "438110d3fb3254a200de61608046167213e18e43903424668c92b287a3173993"
   },
   "schema_version": "kg1_v463_v462_synthetic_numeric_hard_negative_audit_v1",
   "source_policy": {

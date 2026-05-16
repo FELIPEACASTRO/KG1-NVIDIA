@@ -42,6 +42,7 @@ from src.competition_utils import (  # noqa: E402
     OFFICIAL_INFERENCE_CONFIG,
     classify_puzzle,
     extract_final_answer,
+    extract_final_answer_for_expected,
     verify_answer,
 )
 
@@ -248,12 +249,18 @@ def main() -> int:
                 completion = output.outputs[0]
                 raw_output = completion.text
                 prompt = str(getattr(row, "prompt"))
+                expected = getattr(row, "answer", None)
+                prediction = (
+                    extract_final_answer_for_expected(raw_output, expected)
+                    if expected is not None
+                    else extract_final_answer(raw_output)
+                )
                 rows.append(
                     {
                         "id": str(getattr(row, "id")),
                         "prompt": prompt,
                         "raw_output": raw_output,
-                        "prediction": extract_final_answer(raw_output),
+                        "prediction": prediction,
                         "prompt_tokens": len(getattr(output, "prompt_token_ids", []) or []),
                         "completion_tokens": len(getattr(completion, "token_ids", []) or []),
                         "finish_reason": completion.finish_reason or "",

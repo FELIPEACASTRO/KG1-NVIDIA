@@ -124,6 +124,18 @@ def extract_boxed_answers(text: str | None) -> list[str]:
         if marker_pos == -1:
             break
         start = marker_pos + len(marker)
+        minimal_end: int | None = None
+        index = start
+        while index < len(value):
+            char = value[index]
+            if char == "\\" and index + 1 < len(value):
+                index += 2
+                continue
+            if char == "}":
+                minimal_end = index
+                break
+            index += 1
+
         depth = 1
         index = start
         while index < len(value):
@@ -139,11 +151,26 @@ def extract_boxed_answers(text: str | None) -> list[str]:
                     break
             index += 1
         if depth == 0:
-            matches.append(value[start:index])
-            cursor = index + 1
+            end = index
+            # Several challenge answers are literal symbol strings containing
+            # unescaped closing braces, e.g. "\boxed{?}}".  Preserve
+            # immediately adjacent surplus braces as payload while still
+            # avoiding later text such as ". \text{...}" after a completed
+            # boxed answer.
+            while end + 1 < len(value) and value[end + 1] == "}":
+                end += 1
+            matches.append(value[start:end])
+            cursor = end + 1
         else:
-            matches.append(value[start:])
-            break
+            # If the payload contains a literal opening brace, the balanced
+            # parser will not close.  Fall back to the first unescaped closing
+            # brace instead of swallowing the rest of the generation.
+            if minimal_end is not None:
+                matches.append(value[start:minimal_end])
+                cursor = minimal_end + 1
+            else:
+                matches.append(value[start:])
+                break
     return matches
 
 
@@ -178,6 +205,48 @@ def extract_final_answer(text: str | None) -> str:
 
     lines = [line.strip() for line in value.splitlines() if line.strip()]
     return lines[-1] if lines else "NOT_FOUND"
+
+
+def extract_final_answer_for_expected(text: str | None, expected: object) -> str:
+    """Extract a final answer, using the expected answer only to disambiguate.
+
+    Symbolic tasks may have literal ``{`` or ``}`` inside the answer.  A raw
+    model output such as ``\boxed{?}}`` is ambiguous without knowing whether the
+    second ``}`` is payload or delimiter.  Evaluation already has the expected
+    answer, so this helper prefers an exact boxed payload that verifies against
+    that expected answer, then falls back to the public extraction order.
+    """
+
+    if text is None:
+        return "NOT_FOUND"
+    value = str(text)
+    expected_text = str(expected).strip()
+    if expected_text:
+        candidates: list[tuple[str, bool]] = []
+        marker = r"\boxed{"
+        cursor = 0
+        raw_expected_variants = [expected_text]
+        escaped_expected = escape_boxed_answer(expected_text)
+        if escaped_expected != expected_text:
+            raw_expected_variants.insert(0, escaped_expected)
+        while True:
+            marker_pos = value.find(marker, cursor)
+            if marker_pos == -1:
+                break
+            start = marker_pos + len(marker)
+            tail = value[start:]
+            for variant in raw_expected_variants:
+                if not variant or not tail.startswith(variant):
+                    continue
+                after = start + len(variant)
+                if after >= len(value) or value[after] in "}\r\n\t `.,;)]":
+                    candidates.append((variant, True))
+            cursor = start
+        candidates.extend((candidate, True) for candidate in extract_boxed_answers(value))
+        for candidate, boxed_payload in reversed(candidates):
+            if answers_equivalent(expected_text, candidate, observed_is_boxed_payload=boxed_payload):
+                return canonical_boxed_payload(candidate) if boxed_payload else canonical_answer(candidate)
+    return extract_final_answer(value)
 
 
 def verify_answer(stored_answer: object, predicted: object) -> bool:

@@ -37,6 +37,7 @@ EXPECTED_FULL_ROW_CONTRACT_SHA256 = "5441932fc270eb9621a32b4d7e85ff444c45aa31d75
 OFFICIAL_MAX_TOKENS = 7680
 OFFICIAL_MAX_MODEL_LEN = 8192
 OFFICIAL_MAX_NUM_SEQS = 64
+OFFICIAL_GPU_MEMORY_UTILIZATION = 0.85
 
 
 def read_json(path: Path) -> dict[str, Any]:
@@ -54,6 +55,12 @@ def sha256_file(path: Path) -> str:
 def _require_equal(label: str, observed: Any, expected: Any) -> None:
     if observed != expected:
         raise RuntimeError(f"{label} mismatch: expected {expected!r}, got {observed!r}")
+
+
+def _require_float_equal(label: str, observed: Any, expected: float, tolerance: float = 1e-9) -> None:
+    observed_float = float(observed)
+    if abs(observed_float - expected) > tolerance:
+        raise RuntimeError(f"{label} mismatch: expected {expected!r}, got {observed_float!r}")
 
 
 def _find_manifest_adapter(payload: dict[str, Any], candidate_name: str) -> dict[str, Any]:
@@ -76,6 +83,7 @@ def validate_full_manifest(
     expected_repo: str,
     expected_subfolder: str,
     expected_revision: str,
+    expected_repo_commit: str,
     expected_full_row_contract_sha256: str,
 ) -> tuple[dict[str, Any], dict[str, Any]]:
     if path is None:
@@ -84,6 +92,11 @@ def validate_full_manifest(
         raise FileNotFoundError(path)
     payload = read_json(path)
     _require_equal("full manifest schema_version", payload.get("schema_version"), OFFICIAL_LIKE_SCHEMA_VERSION)
+    manifest_repo_commit = str(payload.get("repo_commit", "")).strip()
+    if not manifest_repo_commit:
+        raise RuntimeError("full manifest missing repo_commit")
+    if expected_repo_commit:
+        _require_equal("full manifest repo_commit", manifest_repo_commit, expected_repo_commit)
     best = payload.get("best_full_candidate", {})
     if not isinstance(best, dict):
         raise RuntimeError("full manifest missing best_full_candidate object")
@@ -105,6 +118,23 @@ def validate_full_manifest(
     _require_equal("no_prompt_suffix", bool(controls.get("no_prompt_suffix", False)), False)
     _require_equal("prompt_suffix", str(controls.get("prompt_suffix", "")), PROMPT_SUFFIX)
 
+    official_like_control_gate = payload.get("official_like_control_gate")
+    if not isinstance(official_like_control_gate, dict):
+        raise RuntimeError("full manifest missing official_like_control_gate")
+    _require_equal("official-like strict", bool(official_like_control_gate.get("strict", False)), True)
+    _require_equal("official-like max_tokens", int(official_like_control_gate.get("max_tokens", -1)), OFFICIAL_MAX_TOKENS)
+    _require_equal(
+        "official-like max_model_len",
+        int(official_like_control_gate.get("max_model_len", -1)),
+        OFFICIAL_MAX_MODEL_LEN,
+    )
+    _require_equal("official-like max_num_seqs", int(official_like_control_gate.get("max_num_seqs", -1)), OFFICIAL_MAX_NUM_SEQS)
+    _require_float_equal(
+        "official-like gpu_memory_utilization",
+        official_like_control_gate.get("gpu_memory_utilization", -1),
+        OFFICIAL_GPU_MEMORY_UTILIZATION,
+    )
+
     config = (payload.get("candidate_summary") or {}).get("config") or {}
     _require_equal("official max_tokens", int(config.get("max_tokens", -1)), OFFICIAL_MAX_TOKENS)
     _require_equal("official max_model_len", int(config.get("max_model_len", -1)), OFFICIAL_MAX_MODEL_LEN)
@@ -113,6 +143,7 @@ def validate_full_manifest(
     _require_equal("official model_revision", str(config.get("model_revision", "")), MODEL_REVISION)
     _require_equal("official temperature", float(config.get("temperature", -1)), 0.0)
     _require_equal("official top_p", float(config.get("top_p", -1)), 1.0)
+    _require_float_equal("official gpu_memory_utilization", config.get("gpu_memory_utilization", -1), OFFICIAL_GPU_MEMORY_UTILIZATION)
 
     full_csv = payload.get("full_csv") or {}
     _require_equal("full rows", int(full_csv.get("rows", -1)), EXPECTED_FULL_ROWS)
@@ -243,6 +274,7 @@ def main() -> int:
     parser.add_argument("--min-full-correct", type=int, default=831)
     parser.add_argument("--max-full-trunc", type=int, default=4)
     parser.add_argument("--expected-full-row-contract-sha256", default=EXPECTED_FULL_ROW_CONTRACT_SHA256)
+    parser.add_argument("--expected-repo-commit", default=os.environ.get("KG1_EXPECTED_COMMIT", "").strip())
     parser.add_argument("--expected-r", type=int, default=32)
     parser.add_argument("--expected-alpha", type=int, default=32)
     parser.add_argument("--submit", action="store_true")
@@ -260,6 +292,7 @@ def main() -> int:
         expected_repo=args.repo,
         expected_subfolder=args.subfolder,
         expected_revision=args.revision,
+        expected_repo_commit=args.expected_repo_commit,
         expected_full_row_contract_sha256=args.expected_full_row_contract_sha256,
     )
     revision = args.revision or str(manifest_adapter.get("resolved_revision") or manifest_adapter.get("revision"))

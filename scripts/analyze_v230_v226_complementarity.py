@@ -926,6 +926,10 @@ def run_self_test() -> int:
         raise AssertionError("boxed extraction consumed text after the balanced closing brace")
     if extract_final_answer(r"Answer \boxed{\frac{1}{2}} trailing") != r"\frac{1}{2}":
         raise AssertionError("boxed extraction failed nested LaTeX payload")
+    if extract_final_answer(r"Answer \boxed{?}}") != "?}":
+        raise AssertionError("boxed extraction dropped a literal trailing close brace")
+    if extract_final_answer(r"Answer \boxed{{17}") != "{17":
+        raise AssertionError("boxed extraction dropped a literal opening brace")
     if not verify_answer("00101010", "00101010"):
         raise AssertionError("binary exact verify failed")
     if verify_answer("00101010", "101010"):

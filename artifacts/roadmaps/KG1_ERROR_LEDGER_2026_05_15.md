@@ -887,6 +887,84 @@ Regra preventiva:
 
 Status: corrigido em V473.
 
+### E032 - Parser/eval podiam subextrair respostas simbolicas com braces literais
+
+Evidencia:
+
+- Auditoria V474 mostrou que a correcao balanceada de V473 resolvia texto
+  LaTeX apos a resposta, mas podia subextrair payloads simbolicos como
+  `\boxed{?}}`, `\boxed{{17}` e respostas com `{`, `}` ou `\` literais.
+- Isso criava falso negativo de ACC em datasets com respostas de
+  `text_encryption`/simbolicas e podia invalidar o tokenization gate para
+  datasets corretos que usassem escape adequado.
+
+Impacto:
+
+- Loss podia parecer saudavel, mas a metrica de eval podia marcar correto como
+  errado no parser.
+- Novos datasets poderiam ser aprovados com boxed target concatenado de forma
+  insegura, ou rejeitados quando escapados corretamente.
+
+Regra preventiva:
+
+- `extract_final_answer_for_expected` usa o answer conhecido para desambiguar
+  payloads boxed no caminho de eval.
+- `evaluate_lora_adapter.py` e `evaluate_lora_adapters_batch.py` usam esse
+  helper quando a coluna `answer` existe.
+- `run_v286_generic_tokenization_gate.py` usa `box_answer(answer)` para modos
+  `boxed_*` e valida com extracao expected-aware.
+- `kg1_static_safety_gate.py` passa a exigir esses snippets.
+
+Status: corrigido em V474.
+
+### E033 - Flags antigas V461/V463 podiam reabrir rota quarentenada
+
+Evidencia:
+
+- V461 ainda gravava `hf_raw_probe_allowed=true` em builder/manifest.
+- V463 ainda gravava `v464_dataset_build_allowed=true` em builder/manifest.
+- Essas flags contradiziam a decisao V473 de quarentenar V464/V468 e adapters
+  derivados.
+
+Impacto:
+
+- Um operador ou launcher manual poderia interpretar os artefatos antigos como
+  autorizacao para novo raw probe/dataset/GPU, reabrindo a rota contaminada.
+
+Regra preventiva:
+
+- V461 agora e fail-closed: `hf_raw_probe_allowed=false` e
+  `quarantined_after_v473=true`.
+- V463 agora e fail-closed: `v464_dataset_build_allowed=false` e a condicao
+  `route_not_quarantined_after_v473=false` fica no manifest.
+- A rota so pode voltar em V475+ com pack novo, fonte isolada e gates de
+  contradicao/referencia proibida.
+
+Status: corrigido em V474.
+
+### E034 - Package podia aceitar manifest sem controle official-like completo
+
+Evidencia:
+
+- `package_hf_adapter_submission.py` validava max tokens/model len/modelo e
+  hashes de adapter, mas nao exigia `official_like_control_gate` nem `strict`.
+- Manifest antigo com `KG1_OFFICIAL_LIKE_STRICT=0` ou sem
+  `gpu_memory_utilization=0.85` poderia passar se outros campos batessem.
+
+Impacto:
+
+- Risco de package submit-safe ser criado a partir de full eval que nao seguiu
+  exatamente o contrato oficial-like.
+
+Regra preventiva:
+
+- V284 passa a gravar `official_like_control_gate` no manifest final.
+- O package agora exige `repo_commit`, `strict=true`, max tokens/model len/seqs,
+  `gpu_memory_utilization=0.85`, ausencia de postprocessor e hashes/revision do
+  adapter.
+
+Status: corrigido em V474.
+
 ## Prompt Externo
 
 Prompt consolidado para OpenRouter/outras APIs:

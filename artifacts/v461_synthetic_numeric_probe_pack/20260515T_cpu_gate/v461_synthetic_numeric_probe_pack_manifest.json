@@ -1,9 +1,9 @@
 {
   "decision": {
-    "decision": "v461_prompt_pack_ready_for_inference_only_raw_probe",
+    "decision": "v461_quarantined_no_raw_probe",
     "hf_gpu_train_allowed": false,
-    "hf_raw_probe_allowed": true,
-    "next_action": "Run inference-only adapter raw-output probe, then join labels locally and require multi-rule real hard negatives before any training."
+    "hf_raw_probe_allowed": false,
+    "next_action": "Do not run raw probes from this pack. Rebuild a clean V475+ pack with source isolation and contradiction gates if this route is needed again."
   },
   "generated_at_utc": "2026-05-15T22:35:00.363347+00:00",
   "outputs": {
@@ -28,7 +28,8 @@
   },
   "summary": {
     "hf_gpu_train_allowed": false,
-    "hf_raw_probe_allowed": true,
+    "hf_raw_probe_allowed": false,
+    "quarantined_after_v473": true,
     "rows": 56,
     "rule_class_counts": {
       "v274_guarded_numeric_add_direct_over_model_add_variant": 16,

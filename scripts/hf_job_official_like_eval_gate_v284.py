@@ -178,7 +178,7 @@ def validate_official_like_controls(
     no_prompt_suffix: bool,
     prompt_suffix: str,
     prediction_postprocessor: str,
-) -> None:
+) -> dict[str, Any]:
     strict = env_bool("KG1_OFFICIAL_LIKE_STRICT", True)
     controls = {
         "strict": strict,
@@ -197,7 +197,7 @@ def validate_official_like_controls(
     }
     log_json("official_like_control_gate", controls)
     if not strict:
-        return
+        return controls
     if max_tokens != OFFICIAL_MAX_TOKENS:
         raise RuntimeError(f"official-like gate requires max_tokens={OFFICIAL_MAX_TOKENS}, got {max_tokens}")
     if max_model_len != OFFICIAL_MAX_MODEL_LEN:
@@ -217,6 +217,7 @@ def validate_official_like_controls(
         raise RuntimeError("official-like gate requires the exact Kaggle Overview prompt suffix")
     if prediction_postprocessor not in {"", "none"}:
         raise RuntimeError("official-like gate forbids external prediction postprocessors")
+    return controls
 
 
 def validate_repo_commit() -> str:
@@ -497,7 +498,7 @@ def run_eval(args: argparse.Namespace) -> dict[str, Any]:
     max_model_len = env_int("KG1_MAX_MODEL_LEN", OFFICIAL_MAX_MODEL_LEN)
     max_num_seqs = env_int("KG1_MAX_NUM_SEQS", OFFICIAL_MAX_NUM_SEQS)
     gpu_memory_utilization = env_float("KG1_GPU_MEMORY_UTILIZATION", OFFICIAL_GPU_MEMORY_UTILIZATION)
-    validate_official_like_controls(
+    official_like_control_gate = validate_official_like_controls(
         max_tokens=max_tokens,
         max_model_len=max_model_len,
         max_num_seqs=max_num_seqs,
@@ -597,6 +598,7 @@ def run_eval(args: argparse.Namespace) -> dict[str, Any]:
             "prompt_suffix": "" if no_prompt_suffix else prompt_suffix,
             "prediction_postprocessor": prediction_postprocessor,
         },
+        "official_like_control_gate": official_like_control_gate,
         "blocked_actions": ["package", "kaggle_submit"],
     }
     final_manifest_path = output_dir / "v284_hf_official_like_eval_gate_manifest.json"

@@ -335,21 +335,15 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         "postprocessor_all_correct": summary["totals"].get("postprocessor_correct", 0) == len(detail_rows),
         "hard_negative_count_ge_min": hard_count >= args.min_hard_negatives,
         "hard_negative_rule_classes_ge_min": hard_rule_count >= args.min_rule_classes,
+        "route_not_quarantined_after_v473": False,
     }
-    v464_dataset_build_allowed = all(conditions.values())
+    v464_dataset_build_allowed = False
     hf_gpu_train_allowed = False
-    if v464_dataset_build_allowed:
-        decision_text = "v463_multi_rule_synthetic_signal_ready_for_v464_cpu_dataset"
-        next_action = (
-            "Build V464 CPU dataset proposal with only real adapter hard negatives, bit replay, "
-            "tokenization gates, and weak/full promotion guards. Do not train yet."
-        )
-    elif hard_count:
-        decision_text = "v463_signal_present_but_gpu_blocked"
-        next_action = "Do not train; either add more CPU probe classes or restrict V464 to a non-training analysis pack."
+    if hard_count:
+        decision_text = "v463_quarantined_signal_present_but_dataset_build_blocked"
     else:
-        decision_text = "v463_no_real_hard_negative_signal_gpu_blocked"
-        next_action = "Archive this route for training; return to public-train/code-mining or solver/verifier work."
+        decision_text = "v463_quarantined_no_real_hard_negative_signal"
+    next_action = "Do not build V464 from this audit. Rebuild a clean V475+ CPU route with isolated sources and contradiction gates."
 
     detail_csv = args.output_dir / f"{args.label}_detail.csv"
     hard_csv = args.output_dir / f"{args.label}_hard_negatives.csv"

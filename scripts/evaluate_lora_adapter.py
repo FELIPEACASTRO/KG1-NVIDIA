@@ -34,6 +34,7 @@ from src.competition_utils import (  # noqa: E402
     canonical_family,
     classify_puzzle,
     extract_final_answer,
+    extract_final_answer_for_expected,
     verify_answer,
 )
 from src.kg1_v274_numeric_postprocessor import postprocess_rows as v274_postprocess_rows  # noqa: E402
@@ -370,7 +371,12 @@ def evaluate_adapter(
     for row, output in zip(questions.itertuples(index=False), outputs):
         completion = output.outputs[0]
         raw_output = completion.text
-        prediction = extract_final_answer(raw_output)
+        expected = getattr(row, "answer", None)
+        prediction = (
+            extract_final_answer_for_expected(raw_output, expected)
+            if expected is not None
+            else extract_final_answer(raw_output)
+        )
         row_id = str(getattr(row, "id"))
         prompt = str(getattr(row, "prompt"))
         rows.append(

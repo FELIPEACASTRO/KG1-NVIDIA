@@ -263,9 +263,9 @@ Consulta feita em 2026-05-15 via OpenRouter:
 - `google/gemini-3.1-pro-preview`: resposta truncada, mas iniciou validando a
   mesma tese de diluicao de sinal.
 
-Conclusao: V441 pode ser rodado como smoke curto, desde que nao seja tratado
-como ganho. Ele apenas testa se o problema era a diluicao da loss em tokens de
-boilerplate.
+Conclusao atualizada: V441 ja foi executado e cancelado. Nao deve ser repetido.
+Ele testou a hipotese de diluicao da loss em tokens de boilerplate e nao trouxe
+sinal interno suficiente para weak/full.
 
 Preflight local V441:
 
@@ -336,21 +336,21 @@ Nao repetir:
 - mais preference simples sobre final answer sem novo sinal CPU;
 - submit sem weak/full gain.
 
-Executar agora:
+Historico fechado:
 
-1. V443 CPU certified equation pair builder:
+1. V443 CPU certified equation pair builder foi executado:
    - focar primeiro `equation_symbolic_sequence` e `equation_symbolic_short`;
    - congelar regra antes do answer;
    - exigir MDL, Leave-One-Out, renaming stability, candidate count unico e
      slot/substring alignment stats.
-2. Medir se o builder encontra novos pares certificados sem tocar em weak/full
-   como treino.
-3. Se existir sinal, gerar dataset de distilacao apenas com:
+2. O builder encontrou `0` pares certificados, portanto a rota simples ficou
+   fechada.
+3. Uma nova rota so pode gerar dataset de distilacao se trouxer:
    - prompt original;
    - final answer curto derivado da regra congelada;
    - hard negative real do adapter;
    - trace deterministico curto somente se nao contaminar target.
-4. So voltar a treino se o CPU gate produzir novo sinal verificavel.
+4. So voltar a treino se um novo CPU gate produzir sinal verificavel.
 5. Rodar novo HF job somente se o CPU gate provar ganho potencial e o
    integration gate aprovar tudo.
 
@@ -397,3 +397,22 @@ Decisao:
 4. O proximo plano nao e mais SFT reconstruido; volta para auditoria CPU de
    raw output/parse ou DSL/solver equation mais expressivo, com prova CPU antes
    de qualquer GPU.
+
+## Atualizacao V474 - Problema De Metrica Simbolica
+
+V474 encontrou um problema no caminho de parse/eval, nao um ganho de modelo:
+respostas simbolicas com braces literais podiam ser subextraidas do
+`\boxed{}`. Isso podia criar falso negativo de ACC e confundir analises de
+loss/eval.
+
+Correcao aplicada:
+
+- `extract_final_answer_for_expected` desambigua payload boxed usando o
+  `answer` conhecido durante eval;
+- `evaluate_lora_adapter.py` e `evaluate_lora_adapters_batch.py` usam esse
+  caminho quando a coluna `answer` existe;
+- V286 usa `box_answer(answer)` para novos datasets boxed e bloqueia
+  concatenacao insegura.
+
+Impacto no mapa do problema: antes de culpar treino ou adapter, todo novo
+dataset/resultado precisa provar que o parse simbolico esta correto pelo gate.

@@ -6,8 +6,11 @@ Generated: 2026-05-15T22:35:00.363347+00:00
 |---|---:|
 | Prompt rows | `56` |
 | Rule classes | `4` |
-| `hf_raw_probe_allowed` | `True` |
+| `hf_raw_probe_allowed` | `False` |
 | `hf_gpu_train_allowed` | `False` |
+
+V474 update: this route is quarantined and must not be used for new raw probes
+or downstream training. Rebuild a clean V475+ pack if this idea is revisited.
 
 ## Rule Counts
 

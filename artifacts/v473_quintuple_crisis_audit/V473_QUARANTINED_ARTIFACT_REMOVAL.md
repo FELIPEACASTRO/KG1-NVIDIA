@@ -9,6 +9,8 @@ not valid training/eval/package inputs after the crisis audits:
   the rejected candidate verified equal to the gold answer.
 - `artifacts/v468_v464_symbol_fix_dataset/**`: V468 fixed the rejected-candidate
   contradiction but still inherited a full-reference exact prompt/answer seed.
+  JSONL/manifests/gates were removed from active use; the audit report may stay
+  tracked as evidence.
 
 The operational record is preserved in:
 

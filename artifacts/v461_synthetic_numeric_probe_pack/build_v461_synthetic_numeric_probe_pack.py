@@ -336,8 +336,9 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         "summary": {
             "rows": len(rows),
             "rule_class_counts": dict(sorted(counts.items())),
-            "hf_raw_probe_allowed": len(counts) >= 4 and all(counts[rule] >= min(4, args.max_per_rule) for rule in TARGET_RULES),
+            "hf_raw_probe_allowed": False,
             "hf_gpu_train_allowed": False,
+            "quarantined_after_v473": True,
         },
         "outputs": {
             "audit_csv": str(audit_csv),
@@ -350,10 +351,10 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             "report_md": str(report_md),
         },
         "decision": {
-            "decision": "v461_prompt_pack_ready_for_inference_only_raw_probe",
-            "hf_raw_probe_allowed": True,
+            "decision": "v461_quarantined_no_raw_probe",
+            "hf_raw_probe_allowed": False,
             "hf_gpu_train_allowed": False,
-            "next_action": "Run inference-only adapter raw-output probe, then join labels locally and require multi-rule real hard negatives before any training.",
+            "next_action": "Do not run raw probes from this pack. Rebuild a clean V475+ pack with source isolation and contradiction gates if this route is needed again.",
         },
     }
     write_json(manifest_json, manifest)

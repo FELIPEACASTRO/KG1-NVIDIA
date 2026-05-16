@@ -66,6 +66,28 @@ CRITICAL_SNIPPETS = {
         "adapter config hash check": "adapter_config sha mismatch",
         "adapter model hash check": "adapter_model sha mismatch",
         "official postprocessor rejected": "submission package cannot rely on external prediction postprocessor",
+        "official-like control required": "full manifest missing official_like_control_gate",
+        "official-like strict required": "official-like strict",
+        "official gpu utilization required": "official-like gpu_memory_utilization",
+        "manifest commit required": "full manifest missing repo_commit",
+    },
+    "src/competition_utils.py": {
+        "expected-aware boxed extraction": "def extract_final_answer_for_expected",
+        "literal closing brace guard": "immediately adjacent surplus braces",
+        "escaped expected variant": "escaped_expected = escape_boxed_answer(expected_text)",
+    },
+    "scripts/evaluate_lora_adapter.py": {
+        "expected-aware extraction import": "extract_final_answer_for_expected",
+        "expected-aware extraction call": "extract_final_answer_for_expected(raw_output, expected)",
+    },
+    "scripts/evaluate_lora_adapters_batch.py": {
+        "expected-aware extraction import": "extract_final_answer_for_expected",
+        "expected-aware extraction call": "extract_final_answer_for_expected(raw_output, expected)",
+    },
+    "scripts/run_v286_generic_tokenization_gate.py": {
+        "escaped boxed target": "box_answer(answer)",
+        "expected-aware assistant extraction": "extract_final_answer_for_expected(assistant_content, answer)",
+        "unescaped symbolic self-test": "unescaped symbolic boxed answer must fail",
     },
     "scripts/hf_job_official_like_eval_gate_v284.py": {
         "failed gate exit hard": "official-like full eval gate failed; refusing successful exit",
@@ -73,6 +95,17 @@ CRITICAL_SNIPPETS = {
         "adapter config sha emitted": "adapter_config_sha256",
         "adapter model sha emitted": "adapter_model_sha256",
         "adapter resolved revision emitted": "resolved_revision",
+        "official-like controls persisted": "\"official_like_control_gate\": official_like_control_gate",
+    },
+    "artifacts/v461_synthetic_numeric_probe_pack/build_v461_synthetic_numeric_probe_pack.py": {
+        "raw probe fail closed": "\"hf_raw_probe_allowed\": False",
+        "quarantine marker": "\"quarantined_after_v473\": True",
+        "quarantine decision": "v461_quarantined_no_raw_probe",
+    },
+    "artifacts/v463_v462_synthetic_numeric_hard_negative_audit/build_v463_v462_synthetic_numeric_hard_negative_audit.py": {
+        "dataset build fail closed": "v464_dataset_build_allowed = False",
+        "quarantine condition": "\"route_not_quarantined_after_v473\": False",
+        "quarantine decision": "v463_quarantined_signal_present_but_dataset_build_blocked",
     },
     "scripts/hf_job_full_eval_v276.py": {
         "failed gate exit hard": "full eval gate failed; refusing successful exit",

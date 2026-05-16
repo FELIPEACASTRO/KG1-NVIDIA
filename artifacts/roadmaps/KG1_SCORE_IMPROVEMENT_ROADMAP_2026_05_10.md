@@ -56,15 +56,15 @@ Regra central: ganho so conta se aparecer no adapter/package. Teacher CPU, solve
 | V454 bit guardrail decision | teacher CPU chega a bit `159/160`, mas adapter-transfer V359/V368 fica em `134-135/160` | bit-only GPU bloqueado; bit vira replay/guardrail |
 | V455 equation target audit | V324 tinha 6 candidatos no-loss; V452 cobriu 2 pares; faltam 4 rows verificadas em 3 classes numericas; simbolico verificado 0 | `hf_gpu_allowed=false`; V456 precisa fechar classes faltantes antes de GPU |
 | V456 missing numeric class decision | 3 classes faltantes auditadas; 2 ja tinham sintético massivo sem transferir; 1 precisa raw probe; 0 elegiveis para treino | `hf_gpu_allowed=false`; nao repetir SFT sintetico |
-| V457 public-train numeric probe pack | 22 prompts public-train sem answer para `minus_signed_opposite_sign_guarded`; pack sem chaves answer-like | `hf_raw_probe_allowed=true`; treino ainda bloqueado ate raw outputs reais |
-| V458 HF raw-output probe | H200 inference-only nos 22 prompts V457; 22 outputs, stop-only, 0 labels no input | concluido; habilitou V459 CPU audit |
-| V459 numeric hard-negative audit | 22 rows auditadas; adapter acerta 15, erra 7 exatamente no padrao opposite-sign; postprocessor corrige 22/22 | sinal real, mas 1 classe so; `hf_gpu_allowed=false` |
-| V460 one-rule micro dataset | train 146 rows: 18 equation, 128 bit replay; val 36 rows; token gate passou, trunc 0 | GPU bloqueada ate aceitar risco explicito de micro-smoke de uma classe |
-| V461 synthetic numeric probe pack | 56 prompts sem labels para 4 classes numericas | permitido apenas inference-only |
-| V462 HF raw-output probe | H200 inference-only; 56/56 outputs, stop-only, 0 labels no input | concluido; habilitou V463 CPU audit |
-| V463 synthetic numeric hard-negative audit | 26 hard negatives reais em 3 classes; prompt hashes 56/56; postprocessor 56/56 | autoriza V464 dataset CPU; treino ainda bloqueado |
-| V464 numeric multirule dataset | train 558 rows: 46 equation, 512 bit replay; val 138 rows; token gate passou, trunc 0 | dataset pronto para smoke V465 |
-| V465 H200 numeric multirule smoke | dataset/gate enviados ao HF; launcher com H200 <=1h, 16 steps, checkpoints 4/8/12/16 | proxima execucao paga, com kill-switch weak |
+| V457 public-train numeric probe pack | 22 prompts public-train sem answer para `minus_signed_opposite_sign_guarded` | historico; nao libera treino |
+| V458 HF raw-output probe | H200 inference-only nos 22 prompts V457; 22 outputs, stop-only, 0 labels no input | historico; habilitou V459 CPU audit |
+| V459 numeric hard-negative audit | 22 rows auditadas; adapter erra 7 no padrao opposite-sign; postprocessor corrige 22/22 | sinal real de 1 classe, insuficiente para GPU |
+| V460 one-rule micro dataset | train 146 rows: 18 equation, 128 bit replay; token gate passou | arquivado; one-rule risk sem promocao |
+| V461 synthetic numeric probe pack | 56 prompts sem labels para 4 classes numericas | quarentenado V474; `hf_raw_probe_allowed=false` |
+| V462 HF raw-output probe | H200 inference-only; 56/56 outputs, stop-only, 0 labels no input | historico; nao reusar como autorizacao |
+| V463 synthetic numeric hard-negative audit | 26 hard negatives reais em 3 classes | quarentenado V474; `v464_dataset_build_allowed=false` |
+| V464 numeric multirule dataset | train 558 rows: 46 equation, 512 bit replay | removido/quarentenado; nao usar |
+| V465/V469 derived adapters | derivados de rota V464/V468 contaminada | fail-closed; nao avaliar, packagear ou submeter |
 
 ## Regras Permanentes
 
@@ -1088,7 +1088,8 @@ V457 entao construiu um pack de raw-output probe, usando apenas public-train:
 - Rows: `22` prompts public-train de `minus_signed_opposite_sign_guarded`.
 - O prompt pack omite `answer` e nao contem chaves `answer`, `label`, `target`,
   `correct`, `is_correct` ou `solution`.
-- `hf_raw_probe_allowed=true` apenas para inferencia e coleta de raw output.
+- Na epoca, o pack foi usado apenas para inferencia e coleta de raw output;
+  isso nao autoriza reuso operacional depois da quarentena V473/V474.
 - `hf_gpu_train_allowed=false` ate os raw outputs provarem hard negatives reais
   do adapter, sem overlap weak/full.
 
@@ -1350,3 +1351,27 @@ Status operacional atualizado:
 - worktree deve permanecer com gates passando antes de qualquer nova execucao;
 - proximo passo continua CPU-first em nova versao limpa, com gate de
   contradicao, referencias proibidas e simbolos antes de qualquer gasto HF.
+
+## Atualizacao V474 - Sextuple Crisis Audit
+
+V474 reabriu o caminho de metrica depois da V473. O achado novo nao e ganho de
+ACC ainda; e correcao de falso negativo/contaminacao de metrica para respostas
+simbolicas.
+
+| Achado | Acao |
+|---|---|
+| Parser balanceado V473 podia subextrair respostas com braces literais, por exemplo `\boxed{?}}` ou `\boxed{{17}` | `extract_boxed_answers` agora preserva `}` adjacente como payload e tem fallback para `{` literal |
+| Eval extraia `prediction` sem usar o `answer` conhecido, perdendo casos simbolicos ambiguos | `extract_final_answer_for_expected` foi adicionado e usado por `evaluate_lora_adapter.py` e `evaluate_lora_adapters_batch.py` quando ha coluna `answer` |
+| V286 montava `\boxed{answer}` por concatenacao, inseguro para `{`, `}` e `\` | V286 agora usa `box_answer(answer)` e valida com extracao expected-aware |
+| Static gate nao protegia essas regras | `kg1_static_safety_gate.py` agora exige snippets de parser expected-aware e target boxed escapado |
+| Package podia aceitar manifest sem `official_like_control_gate` estrito | V284 grava o controle oficial completo e `package_hf_adapter_submission.py` exige strict, max_tokens, max_model_len, max_num_seqs, gpu_memory_utilization e commit de manifest |
+| V461/V463 ainda carregavam flags operacionais antigas | builders/manifests agora ficam fail-closed: V461 nao autoriza raw probe e V463 nao autoriza build V464 |
+
+Decisao operacional V474:
+
+- isto corrige o caminho de ACC/eval, mas nao autoriza novo submit nem GPU;
+- qualquer dataset novo com resposta simbolica precisa usar `box_answer`;
+- dataset historico que so passa com `\boxed{answer}` concatenado fica bloqueado
+  ate rebuild limpo;
+- proximo passo segue CPU-first: provar ganho real em `equation_transform` sem
+  perdas e sem truncation antes de qualquer HF job.
