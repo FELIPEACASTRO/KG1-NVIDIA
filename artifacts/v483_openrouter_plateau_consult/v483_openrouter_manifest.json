@@ -1,0 +1,194 @@
+{
+  "generated_at_utc": "2026-05-16T06:09:01.556085+00:00",
+  "models": [
+    "openai/gpt-5.5-pro",
+    "openai/gpt-5.3-codex",
+    "anthropic/claude-opus-4.7",
+    "google/gemini-3.1-pro-preview",
+    "qwen/qwen3-max-thinking",
+    "deepseek/deepseek-v4-pro"
+  ],
+  "responses": [
+    {
+      "elapsed_s": 60.36,
+      "markdown": "artifacts\\v483_openrouter_plateau_consult\\openai__gpt-5.5-pro.md",
+      "model": "openai/gpt-5.5-pro",
+      "raw_json": "artifacts\\v483_openrouter_plateau_consult\\openai__gpt-5.5-pro.raw.json",
+      "status": "ok",
+      "usage": {
+        "completion_tokens": 2600,
+        "completion_tokens_details": {
+          "audio_tokens": 0,
+          "image_tokens": 0,
+          "reasoning_tokens": 2600
+        },
+        "cost": 0.51471,
+        "cost_details": {
+          "upstream_inference_completions_cost": 0.468,
+          "upstream_inference_cost": 0.51471,
+          "upstream_inference_prompt_cost": 0.04671
+        },
+        "is_byok": false,
+        "prompt_tokens": 1557,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cache_write_tokens": 0,
+          "cached_tokens": 0,
+          "video_tokens": 0
+        },
+        "total_tokens": 4157
+      }
+    },
+    {
+      "elapsed_s": 28.59,
+      "markdown": "artifacts\\v483_openrouter_plateau_consult\\openai__gpt-5.3-codex.md",
+      "model": "openai/gpt-5.3-codex",
+      "raw_json": "artifacts\\v483_openrouter_plateau_consult\\openai__gpt-5.3-codex.raw.json",
+      "status": "ok",
+      "usage": {
+        "completion_tokens": 2038,
+        "completion_tokens_details": {
+          "audio_tokens": 0,
+          "image_tokens": 0,
+          "reasoning_tokens": 516
+        },
+        "cost": 0.03125675,
+        "cost_details": {
+          "upstream_inference_completions_cost": 0.028532,
+          "upstream_inference_cost": 0.03125675,
+          "upstream_inference_prompt_cost": 0.00272475
+        },
+        "is_byok": false,
+        "prompt_tokens": 1557,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cache_write_tokens": 0,
+          "cached_tokens": 0,
+          "video_tokens": 0
+        },
+        "total_tokens": 3595
+      }
+    },
+    {
+      "elapsed_s": 40.19,
+      "markdown": "artifacts\\v483_openrouter_plateau_consult\\anthropic__claude-opus-4.7.md",
+      "model": "anthropic/claude-opus-4.7",
+      "raw_json": "artifacts\\v483_openrouter_plateau_consult\\anthropic__claude-opus-4.7.raw.json",
+      "status": "ok",
+      "usage": {
+        "completion_tokens": 2600,
+        "completion_tokens_details": {
+          "audio_tokens": 0,
+          "image_tokens": 0,
+          "reasoning_tokens": 0
+        },
+        "cost": 0.078065,
+        "cost_details": {
+          "upstream_inference_completions_cost": 0.065,
+          "upstream_inference_cost": 0.078065,
+          "upstream_inference_prompt_cost": 0.013065
+        },
+        "is_byok": false,
+        "prompt_tokens": 2613,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cache_write_tokens": 0,
+          "cached_tokens": 0,
+          "video_tokens": 0
+        },
+        "total_tokens": 5213
+      }
+    },
+    {
+      "elapsed_s": 26.95,
+      "markdown": "artifacts\\v483_openrouter_plateau_consult\\google__gemini-3.1-pro-preview.md",
+      "model": "google/gemini-3.1-pro-preview",
+      "raw_json": "artifacts\\v483_openrouter_plateau_consult\\google__gemini-3.1-pro-preview.raw.json",
+      "status": "ok",
+      "usage": {
+        "completion_tokens": 2596,
+        "completion_tokens_details": {
+          "audio_tokens": 0,
+          "image_tokens": 0,
+          "reasoning_tokens": 1602
+        },
+        "cost": 0.034848,
+        "cost_details": {
+          "upstream_inference_completions_cost": 0.031152,
+          "upstream_inference_cost": 0.034848,
+          "upstream_inference_prompt_cost": 0.003696
+        },
+        "is_byok": false,
+        "prompt_tokens": 1848,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cache_write_tokens": 0,
+          "cached_tokens": 0,
+          "video_tokens": 0
+        },
+        "total_tokens": 4444
+      }
+    },
+    {
+      "elapsed_s": 44.44,
+      "markdown": "artifacts\\v483_openrouter_plateau_consult\\qwen__qwen3-max-thinking.md",
+      "model": "qwen/qwen3-max-thinking",
+      "raw_json": "artifacts\\v483_openrouter_plateau_consult\\qwen__qwen3-max-thinking.raw.json",
+      "status": "ok",
+      "usage": {
+        "completion_tokens": 1434,
+        "completion_tokens_details": {
+          "audio_tokens": 0,
+          "image_tokens": 0,
+          "reasoning_tokens": 0
+        },
+        "cost": 0.00691158,
+        "cost_details": {
+          "upstream_inference_completions_cost": 0.0055926,
+          "upstream_inference_cost": 0.00691158,
+          "upstream_inference_prompt_cost": 0.00131898
+        },
+        "is_byok": false,
+        "prompt_tokens": 1691,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cache_write_tokens": 0,
+          "cached_tokens": 0,
+          "video_tokens": 0
+        },
+        "total_tokens": 3125
+      }
+    },
+    {
+      "elapsed_s": 90.21,
+      "markdown": "artifacts\\v483_openrouter_plateau_consult\\deepseek__deepseek-v4-pro.md",
+      "model": "deepseek/deepseek-v4-pro",
+      "raw_json": "artifacts\\v483_openrouter_plateau_consult\\deepseek__deepseek-v4-pro.raw.json",
+      "status": "ok",
+      "usage": {
+        "completion_tokens": 2258,
+        "completion_tokens_details": {
+          "audio_tokens": 0,
+          "image_tokens": 0,
+          "reasoning_tokens": 1548
+        },
+        "cost": 0.01068882,
+        "cost_details": {
+          "upstream_inference_completions_cost": 0.00785784,
+          "upstream_inference_cost": 0.01068882,
+          "upstream_inference_prompt_cost": 0.00283098
+        },
+        "is_byok": false,
+        "prompt_tokens": 1627,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cache_write_tokens": 0,
+          "cached_tokens": 0,
+          "video_tokens": 0
+        },
+        "total_tokens": 3885
+      }
+    }
+  ],
+  "version": "v483_openrouter_plateau_consult"
+}

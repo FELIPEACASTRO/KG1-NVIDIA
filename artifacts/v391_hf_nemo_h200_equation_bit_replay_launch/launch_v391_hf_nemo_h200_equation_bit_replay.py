@@ -39,6 +39,7 @@ VAL_ROWS = 532
 
 INIT_ADAPTER_REPO = "felipesp1983/kg1-nemotron-lora-v290-rank19-micro-patch-smoke"
 INIT_ADAPTER_SUBFOLDER = "checkpoint-6"
+INIT_ADAPTER_TARGET_PARAMETERS = "mlp.experts.gate_up_proj,mlp.experts.down_proj"
 OUTPUT_REPO = "felipesp1983/kg1-nemotron-lora-v391-nemo-h200-equation-bit-replay-v290ckpt6"
 
 MAX_STEPS = 12
@@ -126,11 +127,11 @@ export LORA_R=32
 export LORA_ALPHA=32
 export LORA_DROPOUT=0.0
 export LORA_TARGET_MODULES='down_proj,in_proj,k_proj,lm_head,o_proj,out_proj,q_proj,up_proj,v_proj'
-export LORA_TARGET_PARAMETERS=''
+export LORA_TARGET_PARAMETERS="$KG1_LORA_TARGET_PARAMETERS"
 export TRAINABLE_LORA_MODULES='q_proj,k_proj,v_proj,o_proj,lm_head'
 export TRAINABLE_LORA_NAME_SUBSTRINGS=''
 export REQUIRED_TRAINABLE_LORA_NAME_SUBSTRINGS='q_proj,k_proj,v_proj,o_proj,lm_head'
-export REQUIRE_LORA_TARGET_PARAMETER_MATCH=0
+export REQUIRE_LORA_TARGET_PARAMETER_MATCH=1
 export MAX_TRAINABLE_PARAM_RATIO=0.035
 export MAX_LENGTH=1024
 export BATCH_SIZE=4
@@ -167,6 +168,53 @@ export TORCH_FLOAT32_MATMUL_PRECISION='high'
 export GRADIENT_CHECKPOINTING=1
 $PYBIN scripts/hf_job_preflight_gate.py --phase preinstall
 $PYBIN scripts/hf_job_preflight_gate.py --phase artifacts
+$PYBIN - <<'PY'
+import os
+import subprocess
+import sys
+from pathlib import Path
+
+from huggingface_hub import hf_hub_download
+
+train_path = hf_hub_download(
+    repo_id=os.environ["DATA_REPO"],
+    filename=os.environ["DATA_FILE"],
+    repo_type="dataset",
+    token=os.environ.get("HF_TOKEN"),
+)
+val_path = hf_hub_download(
+    repo_id=os.environ["DATA_REPO"],
+    filename=os.environ["VAL_FILE"],
+    repo_type="dataset",
+    token=os.environ.get("HF_TOKEN"),
+)
+output_json = "/tmp/kg1_v391_objective_alignment_gate.json"
+cmd = [
+    sys.executable,
+    "scripts/audit_v478_training_objective_alignment.py",
+    "--train-jsonl",
+    train_path,
+    "--val-jsonl",
+    val_path,
+    "--source-weights",
+    os.environ["SOURCE_WEIGHTS"],
+    "--subcategory-weights",
+    os.environ["SUBCATEGORY_WEIGHTS"],
+    "--min-bit-effective-share",
+    "0.20",
+    "--max-equation-effective-share",
+    "0.80",
+    "--max-any-family-effective-share",
+    "0.80",
+    "--output-json",
+    output_json,
+    "--enforce",
+]
+print("objective_alignment_cmd = " + " ".join(cmd), flush=True)
+subprocess.run(cmd, check=True)
+print("objective_alignment_gate_json = " + output_json, flush=True)
+print(Path(output_json).read_text(encoding="utf-8"), flush=True)
+PY
 $PYBIN - <<'PY'
 import inspect, json
 from peft import LoraConfig
@@ -241,6 +289,7 @@ def build_job_env(hardware: dict[str, object]) -> dict[str, str]:
         "KG1_VAL_ROWS": str(VAL_ROWS),
         "KG1_INIT_ADAPTER_REPO": INIT_ADAPTER_REPO,
         "KG1_INIT_ADAPTER_SUBFOLDER": INIT_ADAPTER_SUBFOLDER,
+        "KG1_LORA_TARGET_PARAMETERS": INIT_ADAPTER_TARGET_PARAMETERS,
         "KG1_ANSWER_SPAN_LOSS_WEIGHT": ANSWER_SPAN_LOSS_WEIGHT,
         "KG1_ANSWER_SPAN_MIN_WEIGHTED_TOKENS": ANSWER_SPAN_MIN_WEIGHTED_TOKENS,
         "KG1_SOURCE_WEIGHTS": SOURCE_WEIGHTS,
@@ -297,8 +346,12 @@ def local_debug(api: HfApi, token: str) -> tuple[dict[str, object], dict[str, st
         "export VAL_FILE=\"$KG1_VAL_FILE\"",
         "export SOURCE_WEIGHTS=\"$KG1_SOURCE_WEIGHTS\"",
         "export SUBCATEGORY_WEIGHTS=\"$KG1_SUBCATEGORY_WEIGHTS\"",
+        "export LORA_TARGET_PARAMETERS=\"$KG1_LORA_TARGET_PARAMETERS\"",
         "export TRAINABLE_LORA_MODULES='q_proj,k_proj,v_proj,o_proj,lm_head'",
+        "export REQUIRE_LORA_TARGET_PARAMETER_MATCH=1",
         "$PYBIN scripts/hf_job_preflight_gate.py --phase artifacts",
+        "scripts/audit_v478_training_objective_alignment.py",
+        "objective_alignment_gate_json",
         "$PYBIN scripts/hf_job_train_v90.py",
     ]
     missing_snippets = [item for item in required_snippets if item not in COMMAND_SCRIPT]

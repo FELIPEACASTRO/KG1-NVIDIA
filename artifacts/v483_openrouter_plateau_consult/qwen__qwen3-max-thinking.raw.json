@@ -1,0 +1,45 @@
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "logprobs": null,
+      "message": {
+        "content": "## Verdict  \nRelaunch a minimal continuation job from V290 checkpoint-6 **with strict target_parameters preservation and preflight validation**, as the missing target_parameters in V480 is a **plausible and high-impact root cause** for the accuracy plateau and bit regression. The evidence strongly suggests V480 trained a non-MoE-aware LoRA (effectively freezing expert paths), which explains loss stagnation and weak accuracy decoupling. A 2-step smoke job with CPU preflight checks is low-cost and necessary before further GPU spend.\n\n---\n\n## Evidence Assessment  \n- **V480 training logs show `LORA_TARGET_PARAMETERS` empty and `REQUIRE_LORA_TARGET_PARAMETER_MATCH=0`**: PROVEN  \n- **V290 seed adapter has non-null `target_parameters` targeting MoE expert layers**: PROVEN  \n- **V480 adapter_config.json has `target_parameters = null`**: PROVEN  \n- **V480 eval shows bit accuracy regressed by 2 despite lower eval_loss**: PROVEN  \n- **Equation +1 paired with bit -1/-2 is consistent with MoE path dropout**: PLAUSIBLE  \n- **Loss decreased but weak accuracy unchanged \u2192 misaligned optimization**: PLAUSIBLE  \n- **`accuracy=0.0000` logs indicate possible output masking or tokenizer misalignment**: UNKNOWN (needs generation debug logs)  \n\n---\n\n## Root Cause Ranking  \n1. **Missing `target_parameters` in V480 \u2192 LoRA not applied to MoE expert layers** (Confidence: 85%)  \n   - Explains bit regression, loss/accuracy decoupling, and failure to improve on weak set.  \n2. **Incorrect PEFT state loading \u2192 adapter weights not properly initialized from seed** (Confidence: 60%)  \n   - If `set_peft_model_state_dict` used without config alignment, MoE tensors may be ignored.  \n3. **Tokenizer or prompt template drift in V479+ data pipeline** (Confidence: 40%)  \n   - Could cause silent truncation or misalignment, but `truncated=0` in most runs argues against this.  \n4. **Seed adapter corruption or safetensors key mismatch** (Confidence: 30%)  \n   - File size similarity doesn\u2019t guarantee tensor correctness; key coverage needed.  \n5. **Overfitting to equation subset due to residual objective imbalance** (Confidence: 25%)  \n   - V477 showed equation+1/bit-1, but V480 shows no equation gain \u2192 less likely primary cause.\n\n---\n\n## Required Code/Gate Patches  \nAdd to `hf_job_preflight_gate.py` (run on CPU before GPU job):\n\n```python\ndef validate_adapter_continuation(init_adapter_path: str, job_config: dict):\n    # 1. Load seed adapter config\n    seed_config = json.load(open(f\"{init_adapter_path}/adapter_config.json\"))\n    \n    # 2. Enforce target_parameters match if present in seed\n    if seed_config.get(\"target_parameters\"):\n        assert job_config.get(\"LORA_TARGET_PARAMETERS\") == \",\".join(seed_config[\"target_parameters\"]), \\\n            \"LORA_TARGET_PARAMETERS must match seed adapter\"\n        assert job_config.get(\"REQUIRE_LORA_TARGET_PARAMETER_MATCH\") == \"1\", \\\n            \"REQUIRE_LORA_TARGET_PARAMETER_MATCH must be 1 for MoE adapters\"\n    \n    # 3. Validate safetensors keys cover all target_parameters\n    from safetensors import safe_open\n    with safe_open(f\"{init_adapter_path}/adapter_model.safetensors\", framework=\"pt\") as f:\n        keys = set(f.keys())\n    expected_keys = set()\n    for param in seed_config[\"target_parameters\"]:\n        expected_keys.update([f\"{param}.lora_A.weight\", f\"{param}.lora_B.weight\"])\n    assert expected_keys.issubset(keys), f\"Missing LoRA tensors: {expected_keys - keys}\"\n    \n    # 4. Confirm new config will preserve target_parameters\n    new_config = build_lora_config(job_config)  # your config builder\n    assert new_config.target_parameters == seed_config[\"target_parameters\"], \\\n        \"New adapter config must preserve target_parameters\"\n```\n\nAlso enforce in launcher:\n```bash\nexport KG1_LORA_TARGET_PARAMETERS=\"mlp.experts.gate_up_proj,mlp.experts.down_proj\"\nexport REQUIRE_LORA_TARGET_PARAMETER_MATCH=1\n```\n\n---\n\n## Minimal Next Experiment  \n**Goal**: Validate that correct MoE LoRA continuation recovers baseline and shows equation gain.  \n\n**Steps**:  \n1. **CPU preflight**: Run `hf_job_preflight_gate.py` on V290 checkpoint-6 with V480+ launcher env. Must pass.  \n2. **Launch 2-step job** on H200:  \n   - Seed: V290 checkpoint-6  \n   - Data: V479 objective-aligned (equation:bit = 50:50)  \n   - Config: `LORA_TARGET_PARAMETERS=mlp.experts.gate_up_proj,mlp.experts.down_proj`, `REQUIRE_LORA_TARGET_PARAMETER_MATCH=1`  \n   - Steps: 2 (save checkpoint-2 only)  \n3. **Evaluate checkpoint-2 on weak set**:  \n   - **Pass**: total \u2265 193, equation \u2265 57, bit \u2265 136, truncated = 0  \n   - **Fail**: any metric below \u2192 kill job, no further steps.  \n\n**Budget**: < 0.5 H200-hour. If pass, proceed to 8-step; if fail, debug loading.\n\n---\n\n## Stop Doing  \n- **Training without `REQUIRE_LORA_TARGET_PARAMETER_MATCH=1` for MoE adapters** \u2192 silent regression risk.  \n- **Using `set_peft_model_state_dict` without config parity checks** \u2192 state may ignore MoE tensors.  \n- **Chasing eval_loss reductions without weak accuracy gating** \u2192 loss \u2260 submit-safe gain.  \n- **Launching jobs without CPU preflight config/tensor validation** \u2192 wastes GPU on broken setups.  \n- **Replay/SFT on full data without hard-negative focus on equation_transform** \u2192 low ROI.\n\n---\n\n## Missing Evidence  \n- **V290 checkpoint-6 `adapter_model.safetensors` key list** \u2192 confirm MoE LoRA tensors exist.  \n- **V480 training step debug logs showing which modules received gradients** \u2192 verify MoE layers frozen.  \n- **Weak eval generation logs for V480 checkpoint-2** \u2192 inspect bit/equation failure patterns (e.g., truncation, format errors).  \n- **PEFT loading trace from V480 job** \u2192 confirm whether `PeftModel.from_pretrained` was used vs manual state dict.",
+        "reasoning": null,
+        "refusal": null,
+        "role": "assistant"
+      },
+      "native_finish_reason": "stop"
+    }
+  ],
+  "created": 1778911963,
+  "id": "gen-1778911963-j1n9yknPkkTvO7yGCsXy",
+  "model": "qwen/qwen3-max-thinking-20260123",
+  "object": "chat.completion",
+  "provider": "Alibaba",
+  "system_fingerprint": null,
+  "usage": {
+    "completion_tokens": 1434,
+    "completion_tokens_details": {
+      "audio_tokens": 0,
+      "image_tokens": 0,
+      "reasoning_tokens": 0
+    },
+    "cost": 0.00691158,
+    "cost_details": {
+      "upstream_inference_completions_cost": 0.0055926,
+      "upstream_inference_cost": 0.00691158,
+      "upstream_inference_prompt_cost": 0.00131898
+    },
+    "is_byok": false,
+    "prompt_tokens": 1691,
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cache_write_tokens": 0,
+      "cached_tokens": 0,
+      "video_tokens": 0
+    },
+    "total_tokens": 3125
+  }
+}

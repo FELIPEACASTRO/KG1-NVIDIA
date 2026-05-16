@@ -314,6 +314,10 @@ def check_training_env() -> None:
         raise RuntimeError("Blocked quarantined training dataset: " + json.dumps(blocked, sort_keys=True))
 
 
+def parse_csv_env(name: str) -> list[str]:
+    return [item.strip() for item in env_str(name).split(",") if item.strip()]
+
+
 def check_repo_gate() -> None:
     observed = run_git_head()
     expected = env_str("KG1_EXPECTED_COMMIT")
@@ -470,6 +474,7 @@ def check_hub_artifacts() -> None:
     )
     config = json.loads(config_path.read_text(encoding="utf-8"))
     target_modules = sorted(str(item) for item in (config.get("target_modules") or []))
+    target_parameters = sorted(str(item) for item in (config.get("target_parameters") or []))
     log_json(
         "init_adapter_gate",
         {
@@ -480,7 +485,7 @@ def check_hub_artifacts() -> None:
             "r": config.get("r"),
             "lora_alpha": config.get("lora_alpha"),
             "target_modules": target_modules,
-            "target_parameters": config.get("target_parameters"),
+            "target_parameters": target_parameters,
         },
     )
     if env_bool("KG1_STRICT_INIT_ADAPTER_CONFIG", False):
@@ -489,6 +494,28 @@ def check_hub_artifacts() -> None:
         if int(config.get("lora_alpha", -1)) != env_int("LORA_ALPHA"):
             raise RuntimeError(
                 f"Init adapter alpha mismatch: {config.get('lora_alpha')} != LORA_ALPHA={env_int('LORA_ALPHA')}"
+            )
+        configured_target_modules = sorted(parse_csv_env("LORA_TARGET_MODULES"))
+        if target_modules and configured_target_modules != target_modules:
+            raise RuntimeError(
+                "Init adapter target_modules mismatch: "
+                + json.dumps(
+                    {"adapter": target_modules, "env": configured_target_modules},
+                    sort_keys=True,
+                )
+            )
+        configured_target_parameters = sorted(parse_csv_env("LORA_TARGET_PARAMETERS"))
+        if configured_target_parameters != target_parameters:
+            raise RuntimeError(
+                "Init adapter target_parameters mismatch: "
+                + json.dumps(
+                    {"adapter": target_parameters, "env": configured_target_parameters},
+                    sort_keys=True,
+                )
+            )
+        if target_parameters and not env_bool("REQUIRE_LORA_TARGET_PARAMETER_MATCH", False):
+            raise RuntimeError(
+                "Init adapter has target_parameters but REQUIRE_LORA_TARGET_PARAMETER_MATCH is disabled."
             )
 
 

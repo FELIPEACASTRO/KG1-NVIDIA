@@ -965,6 +965,52 @@ Regra preventiva:
 
 Status: corrigido em V474.
 
+### E035 - Treino incremental podia perder `target_parameters` do adapter inicial
+
+Evidencia:
+
+- V480 usou o adapter inicial
+  `felipesp1983/kg1-nemotron-lora-v290-rank19-micro-patch-smoke/checkpoint-6`.
+- O preflight remoto registrou que esse adapter inicial tem
+  `target_parameters=["mlp.experts.gate_up_proj","mlp.experts.down_proj"]`.
+- O proprio log de treino V480 registrou `LoRA target_parameters: disabled` e
+  `Require LoRA target-parameter match: False`.
+- Os checkpoints V480 foram salvos com `adapter_config.json` de `1149` bytes e
+  `target_parameters=null`, enquanto o seed V290 tem `1210` bytes e preserva os
+  dois `target_parameters`.
+- V481 confirmou que os checkpoints V480 nao eram submit-safe: melhor ponto
+  observado `191/315`, equation `57/155`, bit `134/160`, trunc `1`.
+
+Impacto:
+
+- O job podia aparentar carregar `12011` tensores e treinar normalmente, mas a
+  configuracao PEFT salva nao preservava a receita declarada da linhagem V290.
+- Isso criava um bug silencioso: loss/eval_loss se moviam, porem a transferencia
+  para ACC weak regredia bit e truncation.
+
+Regra preventiva:
+
+- `hf_job_preflight_gate.py` agora compara `target_modules` e
+  `target_parameters` do adapter inicial contra o ambiente do job quando
+  `KG1_STRICT_INIT_ADAPTER_CONFIG=1`.
+- Se o adapter inicial tem `target_parameters`, o preflight exige
+  `REQUIRE_LORA_TARGET_PARAMETER_MATCH=1`.
+- `kg1_static_safety_gate.py` bloqueia launchers ativos que zerem
+  `LORA_TARGET_PARAMETERS` ou desliguem a verificacao para `mlp.experts.*`.
+- O launcher base V391 agora injeta
+  `KG1_LORA_TARGET_PARAMETERS=mlp.experts.gate_up_proj,mlp.experts.down_proj`.
+
+Status: corrigido em V482; proximo job pago deve confirmar no log que
+`target_parameter_lora_tensors` nao esta vazio antes de qualquer weak eval.
+
+Atualizacao V483: painel OpenRouter (`openai/gpt-5.3-codex`,
+`anthropic/claude-opus-4.7`, `google/gemini-3.1-pro-preview`,
+`qwen/qwen3-max-thinking`, `deepseek/deepseek-v4-pro`) confirmou o mesmo
+diagnostico operacional: o proximo passo correto e um CPU preflight de
+round-trip PEFT nativo, preferindo `PeftModel.from_pretrained(...,
+is_trainable=True)`, e comparando `adapter_config.json`, keys, shapes, dtypes,
+coverage de `mlp.experts.*` e parametros trainable antes de qualquer GPU.
+
 ## Prompt Externo
 
 Prompt consolidado para OpenRouter/outras APIs:

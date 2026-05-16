@@ -1,0 +1,46 @@
+{
+  "baseline_submit_safe": {
+    "bit_manipulation": 136,
+    "equation_transform": 56,
+    "total": 192,
+    "truncated": 0
+  },
+  "decision": {
+    "hf_gpu_allowed_for_repeat_v480": false,
+    "next_action": "Run only a target-parameter-preserving smoke; no V480 repeat with blank LORA_TARGET_PARAMETERS.",
+    "reason": "V480 did not preserve init adapter target_parameters and V481 produced no submit-safe checkpoint."
+  },
+  "evidence": {
+    "v290_adapter_config": {
+      "adapter_config_sha256": "a3d74c5a52ce75f71a8406222d877b9760ea18a40a772bcf407686c8ea19f11d",
+      "adapter_config_size": 1210,
+      "target_parameters": [
+        "mlp.experts.gate_up_proj",
+        "mlp.experts.down_proj"
+      ]
+    },
+    "v480_adapter_config": {
+      "adapter_config_sha256": "ca52d6d86aa6be727be6af3b7ce1d8c7a1743c429034a7e3e742f0ec3e8fefe7",
+      "adapter_config_size": 1149,
+      "target_parameters": null
+    },
+    "v480_training_env": {
+      "lora_target_parameters": "",
+      "require_lora_target_parameter_match": false
+    },
+    "v481_best_observed": {
+      "bit_manipulation": 134,
+      "equation_transform": 57,
+      "total": 191,
+      "truncated": 1
+    }
+  },
+  "fixes": [
+    "scripts/hf_job_preflight_gate.py strict target_modules/target_parameters check",
+    "scripts/kg1_static_safety_gate.py launcher target-parameter preservation checks",
+    "artifacts/v391_hf_nemo_h200_equation_bit_replay_launch target-parameter preserving env",
+    "artifacts/v480_hf_h200_v479_objective_aligned_launch stale-snippet hard block"
+  ],
+  "generated_at_utc": "2026-05-16T05:54:08Z",
+  "schema_version": "kg1_v482_solution_debug_audit_v1"
+}

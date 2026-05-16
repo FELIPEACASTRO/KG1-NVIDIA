@@ -1503,3 +1503,126 @@ Artefatos:
 - `artifacts/v479_objective_aligned_filter/20260516T_v479_objective_aligned_filter/v479_objective_alignment_gate_equal_weights.json`
 - `artifacts/v479_objective_aligned_filter/20260516T_v479_objective_aligned_filter/tokenization_gate_real/v286_generic_tokenization_gate_manifest.json`
 - `artifacts/v479_objective_aligned_filter/20260516T_v479_objective_aligned_filter/V479_GATE_SUMMARY.md`
+
+## Atualizacao V480/V481/V482 - Debug do Plateau
+
+V480 levou V479 para H200 com pesos corrigidos. V481 avaliou os checkpoints
+contra o contrato weak. O resultado nao foi submit-safe e revelou um erro de
+configuracao que os gates ainda nao bloqueavam.
+
+### Resultado real V480/V481
+
+| Checkpoint | Total weak | equation_transform | bit_manipulation | truncated | Decisao |
+|---|---:|---:|---:|---:|---|
+| Baseline submit-safe | `192/315` | `56/155` | `136/160` | `0` | referencia |
+| V480 checkpoint-2 | `191/315` | `57/155` | `134/160` | `1` | rejeitado |
+| V480 checkpoint-4 | `190/315` | `56/155` | `134/160` | `0` | rejeitado |
+| V480 checkpoint-6 | `191/315` | `57/155` | `134/160` | `1` | rejeitado |
+| V480 checkpoint-8 | parcial | parcial | parcial | parcial | cancelado por FinOps |
+
+O screenshot/log com `equation=57` nao representa ganho: ele vem acompanhado de
+`bit=134` ou truncation. A regra de promocao continua bloqueando corretamente.
+
+### Achado tecnico V482
+
+| Peca | Evidencia | Impacto |
+|---|---|---|
+| Adapter inicial V290 ckpt-6 | `target_parameters=["mlp.experts.gate_up_proj","mlp.experts.down_proj"]` | receita PEFT da linhagem 0.86 |
+| V480 command/env | `LORA_TARGET_PARAMETERS` vazio e `REQUIRE_LORA_TARGET_PARAMETER_MATCH=0` | config do adapter nao foi preservada |
+| V480 checkpoints | `adapter_config.json` com `target_parameters=null` | checkpoint salvo diverge do seed |
+| V480 eval_loss | baseline `0.9725`; steps `0.9761/0.9752/0.9738/0.9739` | treino piorou validation antes do weak ACC |
+
+Conclusao: V480 corrigiu o bug de peso do V476, mas introduziu/expôs outro gap:
+o treino incremental nao preservou `target_parameters` do adapter inicial. Isso
+explica por que o job parecia tecnicamente saudavel, mas nao saiu do plato de
+ACC e ainda regrediu bit.
+
+### Correcoes V482
+
+- `scripts/hf_job_preflight_gate.py` agora compara `target_modules` e
+  `target_parameters` do adapter inicial com o ambiente quando
+  `KG1_STRICT_INIT_ADAPTER_CONFIG=1`.
+- O mesmo preflight exige `REQUIRE_LORA_TARGET_PARAMETER_MATCH=1` quando o seed
+  tem `target_parameters`.
+- `scripts/kg1_static_safety_gate.py` bloqueia launchers que zerem
+  `LORA_TARGET_PARAMETERS` ou desativem o match para MoE target parameters.
+- O launcher base V391 agora passa
+  `KG1_LORA_TARGET_PARAMETERS=mlp.experts.gate_up_proj,mlp.experts.down_proj`.
+- V480 agora falha em debug se snippets antigos de target-parameter vazio
+  reaparecerem.
+
+### Plano imediato
+
+1. Nao repetir V480 como executado.
+2. Rodar localmente static gate e preflight/gates sobre os arquivos alterados.
+3. Se todos passarem, a unica GPU autorizada e um smoke minimo
+   target-parameter-preserving, com `MAX_STEPS<=2` inicialmente.
+4. O log do proximo job precisa provar:
+   - `LoRA target_parameters` nao vazio;
+   - `Require LoRA target-parameter match: True`;
+   - `target_parameter_lora_tensors` com contadores nao vazios;
+   - `adapter_config.json` salvo com os mesmos `target_parameters` do V290.
+5. Weak eval imediato. Continuar apenas se `total>=193`,
+   `equation>=57`, `bit>=136`, `truncated=0`.
+6. Se isso falhar, bloquear SFT curto novamente e voltar para solver/verifier
+   CPU ou preference hard-negative; nao gastar em mais epochs.
+
+Artefatos:
+
+- `artifacts/v480_hf_h200_v479_objective_aligned_launch/v480_hf_job_6a07f7e63308d79117b90eff_logs.txt`
+- `artifacts/v481_hf_h200_v480_weak_eval_launch/V481_WEAK_RESULTS_SUMMARY.json`
+- `artifacts/v481_hf_h200_v480_weak_eval_launch/V481_TERMINAL_RESULT.md`
+- `artifacts/v482_solution_debug_audit/V482_SOLUTION_DEBUG_AUDIT.md`
+- `artifacts/v482_solution_debug_audit/v482_solution_debug_audit_manifest.json`
+
+## Atualizacao V483 - OpenRouter Plateau Debug Consensus
+
+V483 chamou um painel pequeno no OpenRouter para auditar a decisao tecnica apos
+o achado V482. Modelos consultados: `openai/gpt-5.5-pro`,
+`openai/gpt-5.3-codex`, `anthropic/claude-opus-4.7`,
+`google/gemini-3.1-pro-preview`, `qwen/qwen3-max-thinking` e
+`deepseek/deepseek-v4-pro`. Cinco respostas trouxeram conteudo util; o
+`gpt-5.5-pro` consumiu tokens de raciocinio mas nao gerou texto final
+aproveitavel. Custo total registrado pelo OpenRouter: `$0.67648015`.
+
+### Consenso V483
+
+| Pergunta | Resposta do consenso | Decisao |
+|---|---|---|
+| `target_parameters=null` em V480 e relevante? | sim; e bug/gap real de continuidade PEFT | tratar como root-cause candidato principal |
+| Basta rodar mais epochs? | nao; `eval_loss` nao esta alinhado ao weak exact-match | proibido gastar GPU longa sem novo gate |
+| Caminho de load preferido | `PeftModel.from_pretrained(base, seed_adapter, is_trainable=True)` | priorizar PEFT nativo |
+| `LoraConfig` novo + `set_peft_model_state_dict` | aceitavel so com equivalencia provada | exigir config/key/trainable coverage |
+| File size do safetensors | nao prova equivalencia | comparar keys, shapes, dtypes e coverage |
+
+### Plano V483
+
+1. Fazer CPU preflight de round-trip antes de qualquer GPU:
+   - carregar base + V290 checkpoint-6 via PEFT nativo;
+   - exigir `target_parameters=["mlp.experts.gate_up_proj","mlp.experts.down_proj"]`;
+   - listar parametros trainable e exigir LoRA em `mlp.experts.gate_up_proj` e
+     `mlp.experts.down_proj`;
+   - salvar checkpoint temporario;
+   - reabrir e comparar `adapter_config.json`, keys, shapes e dtypes.
+2. Se o CPU preflight falhar, nao abrir HF GPU.
+3. Se passar, rodar somente smoke HF de `MAX_STEPS<=2`.
+4. Weak eval imediato. Continuar apenas se:
+   - `total>=193`;
+   - `equation_transform>=57`;
+   - `bit_manipulation>=136`;
+   - `truncated=0`.
+5. Se falhar, cancelar por FinOps e bloquear novamente SFT curto; a rota volta
+   para solver/verifier CPU ou preference hard-negative com prova previa.
+
+### O Que Foi Retirado Como Acao Imediata
+
+- Mais epochs sobre V480/V479 sem preflight PEFT nativo.
+- Decisoes por `eval_loss` quando weak ACC nao passa.
+- Jobs que imprimam `target_parameter_lora_tensors: {}`.
+- Uso de postprocessor/verifier como se fosse submit adapter-only.
+
+Artefatos:
+
+- `artifacts/v483_openrouter_plateau_consult/V483_OPENROUTER_PROMPT.md`
+- `artifacts/v483_openrouter_plateau_consult/V483_OPENROUTER_CONSENSUS.md`
+- `artifacts/v483_openrouter_plateau_consult/v483_openrouter_manifest.json`

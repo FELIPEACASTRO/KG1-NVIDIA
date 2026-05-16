@@ -59,6 +59,11 @@ CRITICAL_SNIPPETS = {
         "first checkpoint eval gate": "launcher_missing_first_checkpoint_eval",
         "format negatives blocked": "launcher_allows_format_negatives",
     },
+    "scripts/hf_job_preflight_gate.py": {
+        "strict target modules check": "Init adapter target_modules mismatch",
+        "strict target parameters check": "Init adapter target_parameters mismatch",
+        "target parameter require check": "Init adapter has target_parameters but REQUIRE_LORA_TARGET_PARAMETER_MATCH is disabled",
+    },
     "scripts/package_hf_adapter_submission.py": {
         "official-like manifest schema required": "OFFICIAL_LIKE_SCHEMA_VERSION",
         "package threshold aligned": "--min-full-correct\", type=int, default=831",
@@ -145,6 +150,14 @@ TRUE_FORMAT_NEGATIVE_RE = re.compile(
     re.IGNORECASE,
 )
 CLI_FORMAT_NEGATIVE_RE = re.compile(r"--(?:include|allow)-format-negatives\b")
+EMPTY_LORA_TARGET_PARAMETERS_RE = re.compile(
+    r"export\s+LORA_TARGET_PARAMETERS\s*=\s*(['\"]{2}|['\"]\s*['\"])",
+    re.IGNORECASE,
+)
+DISABLED_TARGET_PARAMETER_MATCH_RE = re.compile(
+    r"export\s+REQUIRE_LORA_TARGET_PARAMETER_MATCH\s*=\s*0\b",
+    re.IGNORECASE,
+)
 
 
 @dataclass
@@ -271,6 +284,37 @@ def audit_text(path: Path, text: str) -> list[Finding]:
                 "error",
                 "format_negative_cli_in_active_job",
                 "Active job/notebook must not pass --include-format-negatives or --allow-format-negatives.",
+            )
+        )
+
+    if (
+        job_or_notebook
+        and not is_archived_fail_closed(text)
+        and "INIT_ADAPTER_REPO" in text
+        and EMPTY_LORA_TARGET_PARAMETERS_RE.search(text)
+    ):
+        findings.append(
+            Finding(
+                rel,
+                "error",
+                "init_adapter_target_parameters_not_preserved",
+                "HF training launchers with an init adapter must not blank LORA_TARGET_PARAMETERS; "
+                "the V290/V291 lineage uses MoE target_parameters and losing them can change adapter behavior.",
+            )
+        )
+
+    if (
+        job_or_notebook
+        and not is_archived_fail_closed(text)
+        and "mlp.experts.gate_up_proj" in text
+        and DISABLED_TARGET_PARAMETER_MATCH_RE.search(text)
+    ):
+        findings.append(
+            Finding(
+                rel,
+                "error",
+                "lora_target_parameter_match_disabled",
+                "Launchers that configure MoE target_parameters must keep REQUIRE_LORA_TARGET_PARAMETER_MATCH=1.",
             )
         )
 
@@ -592,6 +636,41 @@ def run_self_test() -> int:
         )
         if "missing_v478_objective_alignment_gate" in {item.code for item in weighted_checked_findings}:
             print("false positive V478 objective alignment self-test finding", flush=True)
+            return 1
+        missing_target_parameters = tmp / "launch_missing_target_parameters.py"
+        missing_target_parameters.write_text(
+            "from huggingface_hub import HfApi\n"
+            "INIT_ADAPTER_REPO='felipesp1983/kg1-nemotron-lora-v290-rank19-micro-patch-smoke'\n"
+            "COMMAND_SCRIPT=\"\"\"\n"
+            "export LORA_TARGET_PARAMETERS=''\n"
+            "export REQUIRE_LORA_TARGET_PARAMETER_MATCH=0\n"
+            "\"\"\"\n"
+            "HfApi().run_job(command=['true'])\n",
+            encoding="utf-8",
+        )
+        target_findings = audit_text(
+            missing_target_parameters,
+            missing_target_parameters.read_text(encoding="utf-8"),
+        )
+        if "init_adapter_target_parameters_not_preserved" not in {item.code for item in target_findings}:
+            print("missing init adapter target_parameters preservation self-test finding", flush=True)
+            return 1
+        disabled_target_match = tmp / "launch_disabled_target_match.py"
+        disabled_target_match.write_text(
+            "from huggingface_hub import HfApi\n"
+            "COMMAND_SCRIPT=\"\"\"\n"
+            "export LORA_TARGET_PARAMETERS='mlp.experts.gate_up_proj,mlp.experts.down_proj'\n"
+            "export REQUIRE_LORA_TARGET_PARAMETER_MATCH=0\n"
+            "\"\"\"\n"
+            "HfApi().run_job(command=['true'])\n",
+            encoding="utf-8",
+        )
+        disabled_match_findings = audit_text(
+            disabled_target_match,
+            disabled_target_match.read_text(encoding="utf-8"),
+        )
+        if "lora_target_parameter_match_disabled" not in {item.code for item in disabled_match_findings}:
+            print("missing disabled target-parameter match self-test finding", flush=True)
             return 1
         archived_quarantine = tmp / "launch_archived_quarantine.py"
         archived_quarantine.write_text(

@@ -135,6 +135,8 @@ def local_debug(api: HfApi, token: str) -> tuple[dict[str, object], dict[str, st
         "timeout=5400",
         "export MAX_STEPS=12",
         "v475_v325_equation_no_loss_distill=8.00",
+        "export LORA_TARGET_PARAMETERS=" + "''",
+        "export REQUIRE_LORA_TARGET_PARAMETER_MATCH=" + "0",
     ]
     found_forbidden = [item for item in forbidden_snippets if item in base.COMMAND_SCRIPT or item in json.dumps(job_env)]
     if found_forbidden:
@@ -144,6 +146,8 @@ def local_debug(api: HfApi, token: str) -> tuple[dict[str, object], dict[str, st
         "export OUTPUT_DIR='/tmp/kg1_v480_output'",
         "export SOURCE_WEIGHTS=\"$KG1_SOURCE_WEIGHTS\"",
         "export SUBCATEGORY_WEIGHTS=\"$KG1_SUBCATEGORY_WEIGHTS\"",
+        "export LORA_TARGET_PARAMETERS=\"$KG1_LORA_TARGET_PARAMETERS\"",
+        "export REQUIRE_LORA_TARGET_PARAMETER_MATCH=1",
     ]
     missing_command_snippets = [item for item in required_command_snippets if item not in base.COMMAND_SCRIPT]
     if missing_command_snippets:
@@ -160,6 +164,7 @@ def local_debug(api: HfApi, token: str) -> tuple[dict[str, object], dict[str, st
         "KG1_HF_JOB_TIMEOUT_SECONDS": str(HF_JOB_TIMEOUT_SECONDS),
         "KG1_SOURCE_WEIGHTS": base.SOURCE_WEIGHTS,
         "KG1_SUBCATEGORY_WEIGHTS": base.SUBCATEGORY_WEIGHTS,
+        "KG1_LORA_TARGET_PARAMETERS": base.INIT_ADAPTER_TARGET_PARAMETERS,
         "KG1_REQUIRED_TRAIN_SUBCATEGORIES": (
             "bit_guardrail_replay,"
             "equation_numeric_add_direct,equation_numeric_colon_trailing_zero,"

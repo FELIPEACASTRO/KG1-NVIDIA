@@ -1,0 +1,46 @@
+{
+  "choices": [
+    {
+      "finish_reason": "length",
+      "index": 0,
+      "logprobs": null,
+      "message": {
+        "content": "## Verdict\n\nThe missing `target_parameters` in V480 is the single most likely root cause of the plateau and the bit-regression pattern, and it is sufficiently supported by the adapter_config sha256 mismatch and the explicit \"LoRA target_parameters: disabled\" log line to justify one minimal, gated relaunch. However, it is not yet *proven* \u2014 you have shown that V480 *did not train the MoE expert projections*, but you have not yet shown that *re-enabling them on the same data* recovers the 0.86-plateau seed behavior. Before any paid GPU run, add a preflight that fails closed on adapter_config drift and on zero trainable MoE-expert parameters, then run a 2-step smoke whose only job is to confirm the expert tensors actually receive gradient and the saved adapter_config matches the seed's `target_parameters`. Do not resume broad SFT until that smoke is green.\n\n## Evidence Assessment\n\n- PROVEN: V290 seed adapter_config has `target_parameters = [\"mlp.experts.gate_up_proj\", \"mlp.experts.down_proj\"]` (sha a3d74c5a\u2026).\n- PROVEN: V480 saved adapter_config has `target_parameters = null` (sha ca52d6d8\u2026), and logs show `LORA_TARGET_PARAMETERS empty`, `target_parameter_lora_params: {}`.\n- PROVEN: V480 eval_loss moved only in the 4th decimal (0.9725 \u2192 0.9739) while weak total stayed at 190\u2013191 \u2014 consistent with training only non-expert LoRA modules on an MoE base.\n- PLAUSIBLE: The 0.86 plateau lineage depended on LoRA deltas inside MoE expert projections, and V480 lost that capacity entirely. Supported by the config diff and the flat eval_loss, but not yet demonstrated by a controlled re-enable run.\n- PLAUSIBLE: equation +1 / bit \u22121 pattern in V477/V481 is the signature of catastrophic interference when the only trainable subspace is attention+MLP+lm_head (non-expert), which biases toward equation surface form at bit's cost.\n- PLAUSIBLE: V476 objective weighting bug (99/1 split) was real and is now corrected; its residual effect on cached datasets is UNKNOWN without a dataset hash log.\n- UNKNOWN: Whether the V479 dataset is byte-identical to what V480 actually loaded (no dataset content hash shown in the V480 log excerpt provided).\n- UNKNOWN: Whether `accuracy=0.0000` events were a logging artifact or a real eval path failure \u2014 no stack trace or row sample shown.\n- UNKNOWN: Whether `truncated=1` cases on ckpt 2/6 were equation or bit rows, and whether they involved generation cutoff vs. template mismatch.\n\n## Root Cause Ranking\n\n1. **Lost MoE `target_parameters` in V480 LoRA config (confidence ~75%).** Direct config sha mismatch + empty target_parameter tensor dict + flat eval_loss + flat weak accuracy.\n2. **Objective/loss-mask weighting residue from V476 lineage (confidence ~35%).** V477 only partially corrected and produced eq+1/bit\u22121; V479 fixed dataset checks but the *loss reduction* (per-token vs per-sample, family reweighting) may still favor equation.\n3. **Train/eval prompt-template or offset-mask drift between seed-era inference and current training (confidence ~25%).** Would explain eval_loss moving without weak accuracy moving, since loss is computed on supervised spans that may not match the generation contract.\n4. **Catastrophic interference from training non-expert modules only (confidence ~20%, partially overlaps #1).** Even with correct data, restricting LoRA to attention/MLP/lm_head on an MoE base tends to trade families.\n5. **Dataset content drift or dedupe collapsing one family (confidence ~10%).** V479 added strict checks, so this is lower, but not zero without a logged content hash.\n\n## Required Code/Gate Patches\n\nPreflight (must run, must fail closed, CPU-only):\n\n```python\n# preflight_adapter_lineage.py\nimport json, hashlib, os\nfrom safetensors import safe_open\n\nSEED = os.environ[\"KG1_SEED_ADAPTER_DIR\"]\nOUT  = os.environ[\"KG1_OUTPUT_ADAPTER_DIR\"]  # post-train, for output gate\nEXPECTED_TPARAMS = {\"mlp.experts.gate_up_proj\", \"mlp.experts.down_proj\"}\n\ndef load_cfg(p):\n    with open(os.path.join(p, \"adapter_config.json\")) as f:\n        return json.load(f)\n\ndef assert_seed_cfg(cfg):\n    tp = set(cfg.get(\"target_parameters\") or [])\n    assert tp == EXPECTED_TPARAMS, f\"seed target_parameters drift: {tp}\"\n    assert cfg.get(\"target_modules\"), \"seed target_modules empty\"\n\ndef assert_env_matches(cfg):\n    env_tp = set(filter(None, os.environ.get(\"KG1_LORA_TARGET_PARAMETERS\",\"\").split(\",\")))\n    assert env_tp == set(cfg[\"target_parameters\"]), \\\n        f\"env target_parameters {env_tp} != seed {cfg['target_parameters']}\"\n    assert os.environ.get(\"REQUIRE_LORA_TARGET_PARAMETER_MATCH\") == \"1\"\n\ndef assert_trainable_covers_experts(model):\n    names = [n for n,p in model.named_parameters() if p.requires_grad]\n    has_gu = any(\"mlp.experts.gate_up_proj\" in n and \"lora_\" in n for n in names)\n    has_dn = any(\"mlp.experts.down_proj\"    in n and \"lora_\" in n for n in names)\n    assert has_gu and has_dn, f\"no LoRA params on expert projections; trainable={names[:20]}\"\n\ndef assert_output_cfg_equals_seed():\n    s, o = load_cfg(SEED), load_cfg(OUT)\n    for k in (\"target_modules\",\"target_parameters\",\"r\",\"lora_alpha\",\"lora_dropout\",\"bias\",\"task_type\"):\n        assert s.get(k) == o.get(k), f\"adapter_config drift on {k}: seed={s.get(k)} out={o.get(k)}\"\n\ndef assert_safetensors_has_expert_keys():\n    path = os.path.join(OUT, \"adapter_model.safetensors\")\n    with safe_open(path, framework=\"pt\") as f:\n        keys = list(f.keys())\n    assert any(\"experts.gate_up_proj\" in k for k in keys), \"no expert gate_up keys in saved adapter\"\n    assert any(\"experts.down_proj\"    in k for k in keys), \"no expert down_proj keys in saved adapter\"\n```\n\nLoading the seed (preferred order):\n\n1. **Preferred: `PeftModel.from_pretrained(base, SEED, is_trainable=True)`**. This rehydrates `target_modules` *and* `target_parameters` exactly from the seed's `adapter_config.json`. Do not build a fresh `LoraConfig`.\n2. Acceptable fallback: load seed `adapter_config.json` verbatim, construct `LoraConfig(**cfg)` (after stripping non-init fields), then `get_peft_model`, then `set_peft_model_state_dict(model, load_file(adapter_model.safetensors))`. Verify with the preflight above.\n3. **Forbidden**: hand-authored `LoraConfig` that omits `target_parameters`, or any path where `LORA_TARGET_PAR",
+        "reasoning": null,
+        "refusal": null,
+        "role": "assistant"
+      },
+      "native_finish_reason": "max_tokens"
+    }
+  ],
+  "created": 1778911895,
+  "id": "gen-1778911895-hOUAMygpCY0D0hfElotU",
+  "model": "anthropic/claude-4.7-opus-20260416",
+  "object": "chat.completion",
+  "provider": "Anthropic",
+  "service_tier": "standard",
+  "system_fingerprint": null,
+  "usage": {
+    "completion_tokens": 2600,
+    "completion_tokens_details": {
+      "audio_tokens": 0,
+      "image_tokens": 0,
+      "reasoning_tokens": 0
+    },
+    "cost": 0.078065,
+    "cost_details": {
+      "upstream_inference_completions_cost": 0.065,
+      "upstream_inference_cost": 0.078065,
+      "upstream_inference_prompt_cost": 0.013065
+    },
+    "is_byok": false,
+    "prompt_tokens": 2613,
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cache_write_tokens": 0,
+      "cached_tokens": 0,
+      "video_tokens": 0
+    },
+    "total_tokens": 5213
+  }
+}
