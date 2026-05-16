@@ -1,0 +1,35 @@
+{
+  "baseline": {
+    "bit_manipulation": 136,
+    "equation_transform": 55,
+    "total": 191,
+    "truncated": 0
+  },
+  "changed_or_prediction_diff_rows": 6,
+  "decision": "V518 blocked; use 518deb39 as equation positive only if 8740ed31 bit guard remains correct.",
+  "delta_counts": {
+    "-1": 1,
+    "0": 4,
+    "1": 1
+  },
+  "eval_report_json_hf": "evals/v518-h200-v221contract-v517-checkpoint2-20260516T230945Z/eval/v518_v517_checkpoint_2_v221_contract/v518_hf_weak_v518_v517_checkpoint_2_v221_contract_eval_report.json",
+  "family_delta_counts": {
+    "bit_manipulation:-1": 1,
+    "equation_transform:0": 4,
+    "equation_transform:1": 1
+  },
+  "source": "V518 weak eval vs V516 label-free baseline",
+  "true_gain_ids": [
+    "518deb39"
+  ],
+  "true_loss_ids": [
+    "8740ed31"
+  ],
+  "v518": {
+    "bit_manipulation": 135,
+    "equation_transform": 56,
+    "total": 191,
+    "truncated": 0
+  },
+  "version": "V519"
+}

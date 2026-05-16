@@ -1,0 +1,28 @@
+{
+  "baseline_csv": "artifacts\\v516_label_free_weak_baseline\\v516_label_free_v290_checkpoint6_baseline.csv",
+  "blockers": [
+    "protected_id_backfire:8740ed31"
+  ],
+  "candidate_correct_by_family": {
+    "bit_manipulation": 0,
+    "equation_transform": 1
+  },
+  "candidate_csv": "artifacts\\v519_v518_backfire_row_audit\\v519_v518_backfire_changed_rows.csv",
+  "passed": false,
+  "protected_id_answer": {
+    "8740ed31": "01101000"
+  },
+  "rows": [
+    {
+      "answer_matches_expected": false,
+      "baseline_correct": true,
+      "baseline_prediction": "01101000",
+      "candidate_correct": false,
+      "candidate_prediction": "01111000",
+      "expected_answer": "01101000",
+      "id": "8740ed31",
+      "protected_ok": false
+    }
+  ],
+  "schema_version": "kg1_weak_backfire_row_guard_v1"
+}

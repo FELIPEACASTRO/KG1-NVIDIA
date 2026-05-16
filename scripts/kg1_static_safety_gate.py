@@ -62,6 +62,12 @@ CRITICAL_SNIPPETS = {
         "first checkpoint eval gate": "launcher_missing_first_checkpoint_eval",
         "format negatives blocked": "launcher_allows_format_negatives",
     },
+    "scripts/kg1_weak_backfire_row_guard.py": {
+        "known bit backfire id": "8740ed31=01101000",
+        "protected id blocker": "protected_id_backfire",
+        "loss not promotion comment": "Loss movement alone is not actionable",
+        "self test ok marker": "kg1_weak_backfire_row_guard_self_test=ok",
+    },
     "scripts/hf_job_preflight_gate.py": {
         "strict target modules check": "Init adapter target_modules mismatch",
         "strict target parameters check": "Init adapter target_parameters mismatch",

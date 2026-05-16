@@ -1949,6 +1949,39 @@ Regra preventiva:
 
 Status: crise/revert aplicado; V517/V518 arquivados como diagnostico negativo.
 
+### E065 - Backfire de bit precisa de guard por linha, nao so por media
+
+Evidencia:
+
+- V519 comparou V518 contra o baseline V516 label-free e reduziu o diagnostico
+  a 6 linhas mudadas.
+- Mudancas reais:
+  - ganho equation: `518deb39`, baseline `{`, V518 `$`, answer `$`;
+  - perda bit: `8740ed31`, baseline `01101000`, V518 `01111000`, answer
+    `01101000`, erro no bit posicao `3`.
+- As outras 4 mudancas foram apenas trocas entre respostas ainda erradas de
+  `equation_transform`.
+- Busca local confirmou que o mesmo par ganho/perda ja apareceu em auditorias
+  anteriores, incluindo V488/V494/V496. Portanto nao e ruido isolado do V518.
+
+Impacto:
+
+- O agregado por familia bloqueou V518, mas o motivo tecnico acionavel e uma
+  troca linha-a-linha: `+1 equation` por `-1 bit`.
+- Sem guard por linha, um futuro treino pode parecer promissor por loss ou por
+  equation parcial e repetir a mesma perda silenciosa.
+
+Regra preventiva:
+
+- `scripts/kg1_weak_backfire_row_guard.py` foi criado para rodar apos weak eval
+  e antes de qualquer full/package/submit.
+- O guard protege inicialmente `8740ed31=01101000` e falha com
+  `protected_id_backfire:<id>` se o candidato perder esse acerto.
+- `scripts/kg1_static_safety_gate.py` agora exige snippets criticos desse novo
+  guard para evitar remocao acidental.
+
+Status: implementado e validado com self-test; V518 falha corretamente no guard.
+
 ## Prompt Externo
 
 Prompt consolidado para OpenRouter/outras APIs:

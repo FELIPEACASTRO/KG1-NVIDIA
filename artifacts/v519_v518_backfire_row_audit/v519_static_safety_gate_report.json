@@ -1,0 +1,10 @@
+{
+  "file_count": 2,
+  "files": [
+    "scripts/kg1_static_safety_gate.py",
+    "scripts/kg1_weak_backfire_row_guard.py"
+  ],
+  "findings": [],
+  "ok": true,
+  "schema_version": "kg1_static_safety_gate_v1"
+}
