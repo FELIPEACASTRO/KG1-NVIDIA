@@ -309,6 +309,26 @@ def parse_target_parameters(value: str) -> list[str]:
     return [item.strip() for item in value.split(",") if item.strip()]
 
 
+def target_parameter_name_matches(target_parameter: str, tensor_name: str) -> bool:
+    """Match configured PEFT target_parameters against live LoRA tensor names.
+
+    Nemotron/PEFT stores ``mlp.experts.gate_up_proj`` target-parameter adapters
+    under live ``mixer.experts.<id>.up_proj`` LoRA names.  The round-trip gate
+    already accepts that structural alias; the train-time filter must use the
+    same rule or it will fail after a valid PEFT load.
+    """
+
+    if target_parameter in tensor_name:
+        return True
+    lowered_target = target_parameter.lower()
+    lowered_name = tensor_name.lower()
+    if lowered_target.endswith("experts.gate_up_proj"):
+        return "experts." in lowered_name and ".up_proj." in lowered_name
+    if lowered_target.endswith("experts.down_proj"):
+        return "experts." in lowered_name and ".down_proj." in lowered_name
+    return False
+
+
 def parse_csv_items(value: str) -> list[str]:
     return [item.strip() for item in value.split(",") if item.strip()]
 
@@ -629,7 +649,7 @@ def apply_trainable_lora_module_filter(model: torch.nn.Module) -> dict[str, Any]
         matched_module = next((module for module in modules if f".{module}." in name), None)
         matched_name_substrings = [substring for substring in name_substrings if substring in name]
         for target_parameter in target_parameters:
-            if target_parameter in name:
+            if target_parameter_name_matches(target_parameter, name):
                 count = int(param.numel())
                 target_parameter_lora_tensors[target_parameter] += 1
                 target_parameter_lora_params[target_parameter] += count
@@ -2342,6 +2362,18 @@ def self_test() -> None:
             pass
         else:
             raise AssertionError(f"parse_weight_map should reject {bad!r}")
+    assert target_parameter_name_matches(
+        "mlp.experts.gate_up_proj",
+        "base_model.model.backbone.layers.0.mixer.experts.7.up_proj.lora_A.default.weight",
+    )
+    assert target_parameter_name_matches(
+        "mlp.experts.down_proj",
+        "base_model.model.backbone.layers.0.mixer.experts.7.down_proj.lora_B.default.weight",
+    )
+    assert not target_parameter_name_matches(
+        "mlp.experts.gate_up_proj",
+        "base_model.model.backbone.layers.0.mixer.experts.7.down_proj.lora_B.default.weight",
+    )
     toy_rows = [
         {"family": "equation_transform", "subcategory": "rule_a", "source": "source_a"},
         {"family": "bit_manipulation", "subcategory": "bit_guardrail_replay", "source": "source_b"},

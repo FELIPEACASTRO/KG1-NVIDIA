@@ -64,6 +64,12 @@ CRITICAL_SNIPPETS = {
         "strict target parameters check": "Init adapter target_parameters mismatch",
         "target parameter require check": "Init adapter has target_parameters but REQUIRE_LORA_TARGET_PARAMETER_MATCH is disabled",
     },
+    "scripts/hf_job_train_v90.py": {
+        "target parameter alias matcher": "def target_parameter_name_matches",
+        "gate-up alias target": "experts.gate_up_proj",
+        "gate-up alias live name": ".up_proj.",
+        "down alias live name": ".down_proj.",
+    },
     "scripts/package_hf_adapter_submission.py": {
         "official-like manifest schema required": "OFFICIAL_LIKE_SCHEMA_VERSION",
         "package threshold aligned": "--min-full-correct\", type=int, default=831",

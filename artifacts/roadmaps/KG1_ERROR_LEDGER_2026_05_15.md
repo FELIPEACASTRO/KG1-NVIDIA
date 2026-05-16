@@ -1074,6 +1074,35 @@ Regra preventiva:
 Status: corrigido para o proximo smoke V486; V391 ficou registrado como
 rejeicao FinOps correta.
 
+### E037 - Filtro de treino nao aplicava alias Nemotron para `target_parameters`
+
+Evidencia:
+
+- O job H200 V486 `felipesp1983/6a0872193308d79117b910a1` passou V485, V478,
+  postinstall, tokenizacao e carregou o adapter inicial via PEFT.
+- Antes do primeiro optimizer step, `scripts/hf_job_train_v90.py` falhou em
+  `apply_trainable_lora_module_filter`:
+  `LORA_TARGET_PARAMETERS were configured but no matching LoRA tensors were found:
+  mlp.experts.gate_up_proj, mlp.experts.down_proj`.
+- A causa foi que V485 aceitava corretamente o alias estrutural
+  `mlp.experts.gate_up_proj -> mixer.experts.<id>.up_proj`, mas o script de
+  treino ainda fazia busca literal por nome.
+
+Impacto:
+
+- Job pago podia passar gates de metadata e falhar somente apos baixar modelo e
+  adapter, desperdicando tempo de H200 antes de qualquer step.
+
+Regra preventiva:
+
+- `hf_job_train_v90.py` agora usa `target_parameter_name_matches`, com a mesma
+  regra de alias da V485.
+- O self-test do treino cobre `gate_up_proj -> up_proj` e `down_proj`.
+- `kg1_static_safety_gate.py` passa a exigir a presenca desse matcher no script
+  de treino.
+
+Status: corrigido para V487.
+
 ## Prompt Externo
 
 Prompt consolidado para OpenRouter/outras APIs:

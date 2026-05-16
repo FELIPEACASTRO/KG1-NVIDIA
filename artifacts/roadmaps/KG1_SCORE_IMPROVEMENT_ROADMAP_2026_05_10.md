@@ -200,6 +200,13 @@ Regra atualizada: qualquer novo HF job deve passar o gate V478 e manter
 `bit_manipulation` com pressao efetiva minima. `eval_loss` continua sendo
 diagnostico secundario; promocao depende de weak micro-ACC.
 
+Atualizacao V487: V486 passou V485/V478 e falhou antes do treino porque o
+script de treino nao aplicava o alias estrutural de `target_parameters`
+(`mlp.experts.gate_up_proj` salvo/carregado como `mixer.experts.<id>.up_proj`).
+O matcher foi alinhado com V485 e V487 e o relancamento correto.
+
+Artefato: `artifacts/version_diffs/V487_VS_V486.md`.
+
 ### P3 - Smoke HF Minimo
 
 Objetivo: verificar se o bug de continuidade era o gargalo sem gastar longo.
