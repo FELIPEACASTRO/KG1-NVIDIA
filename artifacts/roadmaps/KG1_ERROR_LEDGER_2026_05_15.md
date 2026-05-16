@@ -85,6 +85,32 @@ verificadas, descartou `161` bit sem prova, passou tokenization real e passou
 V513 recheck com `0` blockers. GPU continua bloqueada ate HF CPU reproduction,
 objective/pre-paid gate e smoke minimo.
 
+### E059 - V514 HF CPU launcher sem dependencia transitiva do stride solver
+
+Evidencia:
+
+- HF CPU job `felipesp1983/6a08e6fe3308d79117b915bb` clonou o commit correto
+  `bcfd28b0f0fa399da2d7c36e4a2e43b935e5f0b9` e falhou antes dos gates.
+- `scripts/build_v514_traceable_bit_v510_dataset.py` importa
+  `solve_stride` de `scripts/run_v296_bit_stride_solver_audit.py`.
+- O script V296 importa `pandas`, mas o launcher V514 instalava apenas
+  `huggingface_hub`, `transformers` e `tokenizers`.
+
+Impacto:
+
+- Nenhum treino, eval, package ou submit rodou.
+- Falha barata de dependencia no HF CPU, nao falha de dado ou metrica.
+
+Regra preventiva:
+
+- Launcher CPU/GPU que importa scripts auxiliares deve instalar tambem as
+  dependencias transitivas desses scripts, ou mover a funcao reutilizada para
+  modulo sem dependencia pesada.
+- Antes de relancar, `py_compile` e static gate continuam obrigatorios; o
+  log da tentativa falha deve ficar versionado para nao repetir o erro.
+
+Status: corrigido no launcher V514 com `pandas>=2.0.0`; aguardando relaunch.
+
 ### E001 - V435E misto contaminou preference
 
 Evidencia:

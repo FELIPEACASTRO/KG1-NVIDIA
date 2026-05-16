@@ -1,0 +1,41 @@
++ export DEBIAN_FRONTEND=noninteractive
++ DEBIAN_FRONTEND=noninteractive
++ python -
+{"platform": "Linux-6.12.83-113.160.amzn2023.x86_64-x86_64-with-glibc2.41", "python": "3.11.15"}
++ apt-get update -qq
++ apt-get install -y -qq git
++ python -m pip install -q --no-cache-dir --upgrade pip
+WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv
++ python -m pip install -q --no-cache-dir 'huggingface_hub>=0.36.0' 'transformers>=4.51.0' 'tokenizers>=0.20.0'
+WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.
++ rm -rf /tmp/kg1
++ git clone --depth 1 --branch v230-v226-complementarity https://github.com/FELIPEACASTRO/KG1-NVIDIA.git /tmp/kg1
+Cloning into '/tmp/kg1'...
+Updating files:  44% (990/2221)Updating files:  45% (1000/2221)Updating files:  46% (1022/2221)Updating files:  47% (1044/2221)Updating files:  48% (1067/2221)Updating files:  49% (1089/2221)Updating files:  50% (1111/2221)Updating files:  51% (1133/2221)Updating files:  52% (1155/2221)Updating files:  53% (1178/2221)Updating files:  54% (1200/2221)Updating files:  55% (1222/2221)Updating files:  56% (1244/2221)Updating files:  57% (1266/2221)Updating files:  58% (1289/2221)Updating files:  59% (1311/2221)Updating files:  60% (1333/2221)Updating files:  61% (1355/2221)Updating files:  62% (1378/2221)Updating files:  63% (1400/2221)Updating files:  64% (1422/2221)Updating files:  65% (1444/2221)Updating files:  66% (1466/2221)Updating files:  67% (1489/2221)Updating files:  68% (1511/2221)Updating files:  69% (1533/2221)Updating files:  70% (1555/2221)Updating files:  71% (1577/2221)Updating files:  72% (1600/2221)Updating files:  73% (1622/2221)Updating files:  74% (1644/2221)Updating files:  75% (1666/2221)Updating files:  76% (1688/2221)Updating files:  77% (1711/2221)Updating files:  78% (1733/2221)Updating files:  79% (1755/2221)Updating files:  80% (1777/2221)Updating files:  81% (1800/2221)Updating files:  82% (1822/2221)Updating files:  83% (1844/2221)Updating files:  84% (1866/2221)Updating files:  85% (1888/2221)Updating files:  86% (1911/2221)Updating files:  87% (1933/2221)Updating files:  88% (1955/2221)Updating files:  89% (1977/2221)Updating files:  90% (1999/2221)Updating files:  91% (2022/2221)Updating files:  92% (2044/2221)Updating files:  93% (2066/2221)Updating files:  94% (2088/2221)Updating files:  95% (2110/2221)Updating files:  96% (2133/2221)Updating files:  97% (2155/2221)Updating files:  98% (2177/2221)Updating files:  99% (2199/2221)Updating files: 100% (2221/2221)Updating files: 100% (2221/2221), done.
++ cd /tmp/kg1
++ git fetch --depth 1 origin bcfd28b0f0fa399da2d7c36e4a2e43b935e5f0b9
+From https://github.com/FELIPEACASTRO/KG1-NVIDIA
+ * branch            bcfd28b0f0fa399da2d7c36e4a2e43b935e5f0b9 -> FETCH_HEAD
++ git checkout --detach bcfd28b0f0fa399da2d7c36e4a2e43b935e5f0b9
+HEAD is now at bcfd28b Add V514 traceable bit dataset CPU gates
+++ git rev-parse HEAD
+repo_commit=bcfd28b0f0fa399da2d7c36e4a2e43b935e5f0b9
++ observed=bcfd28b0f0fa399da2d7c36e4a2e43b935e5f0b9
++ echo repo_commit=bcfd28b0f0fa399da2d7c36e4a2e43b935e5f0b9
++ '[' bcfd28b0f0fa399da2d7c36e4a2e43b935e5f0b9 '!=' bcfd28b0f0fa399da2d7c36e4a2e43b935e5f0b9 ']'
++ python -m py_compile scripts/build_v514_traceable_bit_v510_dataset.py scripts/run_v286_generic_tokenization_gate.py scripts/audit_v513_trace_learnability_gate.py
++ echo '=== V514 HF CPU TRACEABLE BIT DATASET START ==='
++ echo run_id=v514-hf-cpu-traceable-bit-20260516T215052Z
++ echo output_dataset_repo=felipesp1983/kg1-v514-traceable-bit-v510-artifacts
++ OUT=artifacts/v514_traceable_bit_v510_dataset/v514-hf-cpu-traceable-bit-20260516T215052Z
++ python scripts/build_v514_traceable_bit_v510_dataset.py --output-dir artifacts/v514_traceable_bit_v510_dataset/v514-hf-cpu-traceable-bit-20260516T215052Z
+=== V514 HF CPU TRACEABLE BIT DATASET START ===
+run_id=v514-hf-cpu-traceable-bit-20260516T215052Z
+output_dataset_repo=felipesp1983/kg1-v514-traceable-bit-v510-artifacts
+Traceback (most recent call last):
+  File "/tmp/kg1/scripts/build_v514_traceable_bit_v510_dataset.py", line 31, in <module>
+    from scripts.run_v296_bit_stride_solver_audit import solve_stride  # noqa: E402
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/kg1/scripts/run_v296_bit_stride_solver_audit.py", line 20, in <module>
+    import pandas as pd
+ModuleNotFoundError: No module named 'pandas'

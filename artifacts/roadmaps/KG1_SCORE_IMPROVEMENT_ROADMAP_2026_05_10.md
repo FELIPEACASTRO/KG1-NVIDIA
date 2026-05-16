@@ -62,6 +62,7 @@ Ultima evidencia operacional relevante:
 | V512 Kaggle discussions audit | `140` topicos e `586` posts varridos via API; `392` hits; achados concretos: THK bit-pair/bitsum/stride, min-logprob, prompt-loss masking, logprob/learnability test, trace curto, duplicate-CoT/format-clash, solvers simbolicos como oracle | reforca CPU-first e trace learnability; nao autoriza novo broad SFT |
 | V513 trace learnability gate | Local + HF CPU job `felipesp1983/6a08e383e48bea4538ba03ba` reproduziram `blocked_no_gpu`; V510 tem `742/742` bit rows como `Final answer: boxed` sem trace; bit assistant p50 `3` palavras, `0` bit traces; equation tem traces curtos p50 `31` palavras; tokenization segue OK | bloqueia GPU a partir de V510 como esta; proximo passo e substituir bit answer-only por traces deterministicas bit-pair/bitsum/stride antes de qualquer novo treino |
 | V514 traceable bit V510 dataset | V510 refeito apenas no bloco bit: `581/742` bit rows convertidas para traces verificadas (`466` train, `115` val); `161` bit rows sem prova foram descartadas; equation V510 mantido; tokenization real passou com `0` trunc, offset masks `2484/619`, token max `553/541`; V513 recheck passou com `0` blockers | primeiro dataset estruturalmente melhor que V510; ainda nao e submit-safe nem autoriza GPU sem HF CPU reproduction, objective/pre-paid gate e smoke minimo |
+| V514 HF CPU attempt 1 | job `felipesp1983/6a08e6fe3308d79117b915bb` falhou antes dos gates por dependencia ausente: `pandas` exigido pelo `run_v296_bit_stride_solver_audit.py`; nenhum treino/eval/package/submit rodou | launcher corrigido para instalar `pandas>=2.0.0`; relancar CPU apos commit/push |
 
 ## Achados Principais V484-V492
 
@@ -199,9 +200,11 @@ entram no plano:
 |---|---|---|
 | Discussion `690307`, Tong Hui Kang | bit-pair/bitsum/stride resolve a maior parte de bit sem enumerar todas as expressoes; o proprio autor declara que a transferencia depende do modelo reproduzir exatamente a CoT | bit continua guardrail; novo bit dataset so vale se gerar traces curtos e stride-verificados, nao full brute force longo |
 | Discussion `689915`, Tong Hui Kang | vencedor usou SFT, CoT deterministica, objetivo de maximizar minimo logprob e codigo gerado por solver; nao apostou em RL/distill generico | proximo dataset deve passar teste de learnability/logprob antes de GPU |
+| Discussion `690756`, Mark Cooper | full-byte unary/global tem baixa divergencia; per-bit/pair pode cobrir mais, mas sem restricao global diverge muito | recuperar os `161` bit descartados no V514 com gate CPU residual full-byte/3-input, aceitando apenas predicao unica sem conflito |
 | Discussion `697491`, Taha/Russell | dataset mais correto por solver pode piorar LB; oversampling, trace dificil, duplicate CoT e format clash causam regressao; traces acima de ~1300 tokens tendem a ser caros e pouco transferiveis | todo novo trace precisa auditoria de duplicidade textual, comprimento e logprob base; evitar mudar formato global |
 | Discussion `694710`, Taha/CPMP | prompt-loss masking/pretokenized response mask e requisito; loss baixo sem mask correta e ilusao | manter offset-mask gate obrigatorio e nao interpretar loss sem ACC |
 | Discussion `690891`, Mark Cooper | equation/cryptarithm devem ser separados em solver coverage e modelo gerar CoT; heuristicas para guess sao limite informacional | equation deve ser CPU solver + trace learnability; nao broad SFT |
+| Discussions `684192`/`689877` | operador da query pode estar ausente nos exemplos; nesses casos a regra pode ser ambigua ou nao-constrangida | criar gate semantico equation com `query_operator_seen`, `same_operator_examples`, `candidate_count`, `conflict_count`, `derivable_vs_guess` |
 | Discussion `698293`, lkevincc/Taha | solver simbolico gold-conditioned mostra estrutura latente, mas nao e submit-safe e nao transfere automaticamente para LoRA | usar como oracle de pesquisa/rotulagem, nunca como runtime ou label weak/full |
 | Discussion `694556`, Murugesan/NguyenThanhNhan | categorias simbolicas tem muitos duplicados e DSL publica cobre so parte; muitos traces sao fallback/guess | dataset simbolico precisa deduplicacao forte e marca de "derivavel" vs "guess" |
 
@@ -213,6 +216,10 @@ reproduzido no HF e provar:
 - max trace preferencial abaixo de `1300` tokens;
 - response-mask/offset-mask completo;
 - bit replay com CoT deterministica curta, nao somente `Final answer`;
+- bit residual testado com full-byte/ternary/3-input apenas quando houver
+  predicao unica sem conflito;
+- equation rows marcadas como derivaveis vs guess, com operador da query visto
+  ou ambiguidade explicitamente bloqueada;
 - base logprob/learnability melhor ou igual ao baseline por subfamilia;
 - CPU projection `equation>=60`, `bit>=136`, `trunc=0`;
 - nenhum ganho dependente de expected-aware extraction.
@@ -627,6 +634,9 @@ Como P3 falhou no V390/V326 e depois V495/V496 falhou no V475:
   sem novo sinal CPU;
 - rodar CPU-only para auditar os residuos de equation e bit:
   - mapear os 99 misses de equation por padrao simbolico;
+  - marcar cada equation row como `derivable` ou `guess` usando
+    `query_operator_seen`, quantidade de exemplos do mesmo operador, numero de
+    candidatos e conflitos; rows ambiguas nao viram teacher promocional;
   - separar ganho bruto vs ganho por extracao;
   - identificar qualquer regra que resolva pelo menos +4 equation com zero
     perda de bit quando convertida para trace/teacher;
@@ -644,6 +654,10 @@ Executar:
 - validar que qualquer ganho de equation nao derruba bit;
 - usar bit-pair/bitsum/stride somente para gerar traces curtos e verificados se
   houver cobertura nova maior que a linha V304.
+- antes de GPU, rodar `V514b` CPU residual: tentar recuperar os `161` bit rows
+  descartados no V514 com solver full-byte/ternary/3-input; aceitar somente
+  predicao unica, sem conflito e com trace curto. Se nao houver cobertura nova,
+  manter V514 como esta e nao inflar dataset com guess.
 
 Nao abrir job bit-only enquanto teacher CPU nao transfere para adapter.
 
