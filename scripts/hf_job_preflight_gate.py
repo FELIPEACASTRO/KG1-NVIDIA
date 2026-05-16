@@ -475,6 +475,7 @@ def check_hub_artifacts() -> None:
     config = json.loads(config_path.read_text(encoding="utf-8"))
     target_modules = sorted(str(item) for item in (config.get("target_modules") or []))
     target_parameters = sorted(str(item) for item in (config.get("target_parameters") or []))
+    modules_to_save = sorted(str(item) for item in (config.get("modules_to_save") or []))
     log_json(
         "init_adapter_gate",
         {
@@ -486,9 +487,15 @@ def check_hub_artifacts() -> None:
             "lora_alpha": config.get("lora_alpha"),
             "target_modules": target_modules,
             "target_parameters": target_parameters,
+            "modules_to_save": modules_to_save,
         },
     )
     if env_bool("KG1_STRICT_INIT_ADAPTER_CONFIG", False):
+        if modules_to_save:
+            raise RuntimeError(
+                "Init adapter modules_to_save must be empty for KG1 adapter-only submit path: "
+                + json.dumps(modules_to_save, sort_keys=True)
+            )
         if int(config.get("r", -1)) != env_int("LORA_R"):
             raise RuntimeError(f"Init adapter r mismatch: {config.get('r')} != LORA_R={env_int('LORA_R')}")
         if int(config.get("lora_alpha", -1)) != env_int("LORA_ALPHA"):

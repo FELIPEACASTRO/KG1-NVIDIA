@@ -35,7 +35,14 @@
     "hf_job_preflight_gate blocks manual load when target_parameters exist.",
     "kg1_static_safety_gate blocks active launchers with manual load and MoE target_parameters.",
     "V391 launcher now exports INIT_ADAPTER_LOAD_MODE=peft.",
-    "Roadmap rewritten as active-only plan with old details archived."
+    "Roadmap rewritten as active-only plan with old details archived.",
+    "hf_job_preflight_gate logs and blocks non-empty modules_to_save under strict init-adapter config.",
+    "package_hf_adapter_submission blocks non-empty modules_to_save in final packages."
+  ],
+  "second_pass_additions": [
+    "modules_to_save must be empty; lm_head is allowed only as LoRA target_modules, not as a full saved module.",
+    "P2 round-trip gate must include adapter_config SHA and safetensors key/shape/dtype fingerprints before and after save/reload.",
+    "P3 smoke must include weak micro-ACC kill-switch and answer-span loss component logging, not eval_loss alone."
   ],
   "next_required_step": "Implement V485 CPU PEFT round-trip gate before any paid GPU smoke."
 }

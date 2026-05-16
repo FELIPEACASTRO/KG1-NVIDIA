@@ -89,6 +89,26 @@ Implemented in this cleanup:
 - The roadmap was rewritten to keep only the active plan and archive old
   history/noise.
 
+## V484B Double Check Addendum
+
+The second structural pass inspected item payloads, not only top-level text and
+URLs. Additional actionable findings:
+
+| Finding | Decision |
+|---|---|
+| Several useful responses mention `modules_to_save`/`lm_head` risk. | Keep `lm_head` only as LoRA `target_modules`; block non-empty `modules_to_save` in preflight/package validation. |
+| Multiple responses say `adapter_config` SHA/fingerprint must be compared pre/post. | P2 round-trip gate must record SHA plus key/shape/dtype fingerprints before and after save/reload. |
+| `answer_span_loss_weight=12.0` was repeatedly flagged as a possible ACC mask. | Not proven root cause; do not remove blindly. P3 smoke must log loss components and use weak micro-ACC for kill-switch. |
+| Some models returned empty/no final response. | No roadmap action; counted as non-evidence. |
+| Generic advice to use more training, more epochs, or external solvers reappeared. | Kept out of roadmap unless backed by CPU gate and adapter-only transfer proof. |
+
+Extra implementation from the double check:
+
+- `scripts/hf_job_preflight_gate.py` logs `modules_to_save` and blocks it under
+  strict init-adapter config.
+- `scripts/package_hf_adapter_submission.py` blocks packages whose
+  `adapter_config.json` has non-empty `modules_to_save`.
+
 ## Required Next Work
 
 Create V485 CPU PEFT round-trip gate:
@@ -102,4 +122,3 @@ Create V485 CPU PEFT round-trip gate:
 6. Emit `hf_gpu_allowed=true` only if all checks pass.
 
 Only after V485 passes should any paid HF GPU smoke run.
-

@@ -189,6 +189,12 @@ def validate_adapter(
         raise RuntimeError(f"adapter r mismatch: expected {expected_r}, got {config.get('r')}")
     if int(config.get("lora_alpha", -1)) != expected_alpha:
         raise RuntimeError(f"adapter alpha mismatch: expected {expected_alpha}, got {config.get('lora_alpha')}")
+    modules_to_save = sorted(str(item) for item in (config.get("modules_to_save") or []))
+    if modules_to_save:
+        raise RuntimeError(
+            "adapter modules_to_save must be empty for KG1 adapter-only submit path: "
+            + json.dumps(modules_to_save, sort_keys=True)
+        )
     weight_path = adapter_dir / "adapter_model.safetensors"
     if weight_path.stat().st_size <= 0:
         raise RuntimeError("adapter_model.safetensors is empty")
@@ -207,6 +213,7 @@ def validate_adapter(
         "lora_alpha": int(config.get("lora_alpha", -1)),
         "target_modules": config.get("target_modules"),
         "target_parameters": config.get("target_parameters"),
+        "modules_to_save": modules_to_save,
     }
 
 

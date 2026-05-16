@@ -47,6 +47,8 @@ Consenso acionavel:
 | `target_parameters` perdido ou carregado por caminho manual pode quebrar continuidade do adapter MoE | risco alto, agora bloqueado por gate | usar `PeftModel.from_pretrained(..., is_trainable=True)` como padrao |
 | `adapter_config.json` precisa bater com env de treino | obrigatorio | gate compara `r`, `alpha`, `target_modules`, `target_parameters` |
 | key/shape/dtype de `adapter_model.safetensors` precisa ser auditado | obrigatorio antes de GPU | criar/rodar CPU round-trip gate |
+| `modules_to_save` nao pode carregar pesos cheios | obrigatorio | permitir `lm_head` apenas como LoRA em `target_modules`, nunca como modulo salvo inteiro |
+| `answer_span_loss_weight=12.0` pode mascarar ACC | risco nao comprovado, mas recorrente no double check | logar componentes e usar micro-ACC como kill-switch; nao aumentar peso sem evidencia |
 | `eval_loss` baixo nao comprova ACC | regra permanente | promover so por weak/full ACC e truncation |
 | Mais epochs, LR sweep ou H200 longo sem novo gate e desperdicio | removido | FinOps cancela antes de custo |
 
@@ -75,17 +77,19 @@ Fontes: `artifacts/v484_openrouter_uploaded_audit/V484_OPENROUTER_UPLOAD_AUDIT.m
    e diagnostico-only.
 4. Nenhum job pago roda se `target_parameters` estiver ausente, divergente ou
    carregado por modo manual sem round-trip CPU aprovado.
-5. Todo launcher/job/notebook novo ou alterado passa por
+5. `modules_to_save` deve ficar vazio no seed e no pacote final. `lm_head` pode
+   aparecer em `target_modules` como LoRA, mas nao como peso cheio salvo.
+6. Todo launcher/job/notebook novo ou alterado passa por
    `scripts/kg1_static_safety_gate.py`.
-6. Antes de job pago, rodar `scripts/kg1_pre_paid_job_integration_gate.py` e
+7. Antes de job pago, rodar `scripts/kg1_pre_paid_job_integration_gate.py` e
    `scripts/hf_job_preflight_gate.py`.
-7. FinOps: cancelar job que nao possa mais superar `total>192`,
+8. FinOps: cancelar job que nao possa mais superar `total>192`,
    `equation>56`, `bit>=136`, `truncated=0`.
-8. H200 pode ser usada ate 1 hora por execucao. Acima disso exige autorizacao
+9. H200 pode ser usada ate 1 hora por execucao. Acima disso exige autorizacao
    humana.
-9. Todo erro novo entra em `KG1_ERROR_LEDGER_2026_05_15.md` antes de novo job
+10. Todo erro novo entra em `KG1_ERROR_LEDGER_2026_05_15.md` antes de novo job
    pago.
-10. Toda versao nova precisa quadro comparativo contra V291/V290.
+11. Toda versao nova precisa quadro comparativo contra V291/V290.
 
 ## Plano Cronologico Ativo
 
@@ -114,11 +118,14 @@ Executar:
   `target_parameters`.
 - Verificar no gate:
   - `adapter_config.json` preserva `target_parameters`.
+  - `adapter_config.json` tem `modules_to_save` vazio.
   - LoRA tensors de `mlp.experts.gate_up_proj` e `mlp.experts.down_proj`
     existem.
   - `target_parameter_lora_tensors` nao e vazio.
   - nomes treinaveis contem os modulos obrigatorios.
   - nao ha warnings de missing adapter keys.
+  - SHA256 de `adapter_config.json` e fingerprints de keys/shapes/dtypes sao
+    registrados antes e depois do treino.
 
 Promove para P2 quando: CPU preflight e static gate passam sem excecao.
 
@@ -134,6 +141,7 @@ Implementar/rodar um gate CPU que:
 - recarrega;
 - compara `adapter_config.json`, lista de keys, shapes, dtypes e contagem de
   tensores LoRA;
+- confirma `modules_to_save=[]` ou `null`;
 - roda um micro forward/backward em batch dummy e confirma gradiente nos
   parametros LoRA esperados;
 - emite manifesto com `hf_gpu_allowed=true` somente se tudo bater.
@@ -149,6 +157,8 @@ Executar:
 - max 2 a 4 steps;
 - mesmo dataset limpo V390/V475;
 - bit replay obrigatorio;
+- log de componentes de loss, incluindo answer-span;
+- weak micro-ACC no primeiro checkpoint, nao apenas `eval_loss`;
 - kill-switch no primeiro checkpoint.
 
 Gate:
