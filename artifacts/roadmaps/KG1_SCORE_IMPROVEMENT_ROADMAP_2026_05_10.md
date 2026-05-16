@@ -37,6 +37,7 @@ Ultima evidencia operacional relevante:
 | V487 treino H200 | treino completo, checkpoint-10 melhor `eval_loss=1.3519`; target params 5934/5934 ativos | continuidade PEFT corrigida, mas nao prova ACC |
 | V488 ckpt-10 weak eval | weak 191, equation 57, bit 134, trunc 1 | nao promove; target params nao eram o unico gargalo |
 | V489 audit integridade | metrica ACC estrita correta; V488 teve +1 equation, -2 bit, +1 trunc; F2 frozen-active nao era visivel no manifesto; expected-aware antigo podia vazar boxed anterior | corrigir observabilidade/guard/extracao antes de novo GPU |
+| V490 debug double check | compilacao, self-tests, static gate, dataset V390/V326, tokenization e metric path OK; HF jobs ativos 0 | proximo passo deve mudar mecanismo treinavel, nao repetir V487 |
 
 ## Achado Principal V484
 
@@ -245,18 +246,32 @@ expected-aware que agora so pode desambiguar o ultimo boxed.
 
 Artefato: `artifacts/v489_solution_integrity_audit/V489_SOLUTION_INTEGRITY_AUDIT.md`.
 
+Atualizacao V490: o double check em modo debug confirmou que o gap atual nao e
+um erro simples de ACC, split, tokenizacao ou threshold. V488 realmente ganhou
+1 linha de equation (`518deb39`) e perdeu 2 linhas de bit (`8740ed31`,
+`59bee375`), com truncation em `59bee375`. O dataset V390/V326 tem 5031/532
+linhas, IDs/prompts unicos, zero overlap train/val e flags `gate/weak/full`
+como `False`. A proxima tentativa so faz sentido se for estruturalmente
+diferente: testar `target_parameters` MoE como treinaveis, nao apenas
+frozen-active.
+
+Artefato: `artifacts/v490_debug_double_check/V490_DEBUG_DOUBLE_CHECK_2026_05_16.md`.
+
 ### P3 - Smoke HF Minimo
 
 Objetivo: verificar se o bug de continuidade era o gargalo sem gastar longo.
 
 Executar:
 
-- max 2 a 4 steps;
+- max 2 a 4 steps na primeira leitura de ACC;
 - mesmo dataset limpo V390/V475;
 - bit replay obrigatorio;
 - log de componentes de loss, incluindo answer-span;
 - weak micro-ACC no primeiro checkpoint, nao apenas `eval_loss`;
 - kill-switch no primeiro checkpoint.
+- proxima variante deve declarar `REQUIRE_LORA_TARGET_PARAMETERS_TRAINABLE=1`
+  e incluir os LoRA `up_proj/down_proj` ligados aos `target_parameters`, porque
+  V487 provou que `q/k/v/o/lm_head` com MoE frozen-active nao basta.
 
 Gate:
 
@@ -276,7 +291,8 @@ equation nao vale se derruba o guardrail de bit ou truncation.
 
 Objetivo: transformar os 4 ganhos CPU de equation em comportamento do adapter.
 
-Executar somente se P3 mostrar ganho real sem perder bit:
+Executar somente se P3 mostrar ganho real sem perder bit. Se P3 repetir
+`equation=57` com `bit<136` ou truncation, nao continuar GPU; voltar para CPU.
 
 - construir dataset hard-negative curto com apenas regras CPU verificadas;
 - target final-answer-only, sem auditoria textual;
@@ -334,17 +350,18 @@ Sem isso, nao packagear e nao submeter.
 
 ## Proxima Acao Imediata
 
-1. Baixar somente os artefatos pequenos da V488 weak eval e comparar linha a
-   linha contra V291/V290 e V477: identificar os 2 bit regressions, a truncation
-   e quais misses de equation foram ganhos/perdidos.
-2. Usar o V489 audit como baseline de diagnostico: qualquer novo treino deve
+1. Usar o V489/V490 audit como baseline de diagnostico: qualquer novo treino deve
    mostrar no manifesto se `target_parameters` estao `frozen_active`,
    `partially_trainable` ou `trainable`.
-3. Criar gate CPU de regressao que bloqueie qualquer dataset/objetivo que
+2. Criar gate CPU de regressao que bloqueie qualquer dataset/objetivo que
    reproduza o padrao `equation +1` com `bit -1/-2` ou truncation.
-4. Rodar auditoria de extracao raw em todo weak eval novo:
+3. Rodar auditoria de extracao raw em todo weak eval novo:
    `simple_extracted` vs `expected_aware_extracted`, com delta documentado por
    familia.
+4. Criar o proximo smoke com `REQUIRE_LORA_TARGET_PARAMETERS_TRAINABLE=1` e
+   `up_proj/down_proj` treinaveis junto ao conjunto minimo necessario. O job so
+   pode seguir alem do primeiro checkpoint se mantiver `bit>=136`, `trunc=0` e
+   superar `equation=56`.
 5. Minerar `kishanvavdara/nemotron-reasoning-traj` apenas como fonte de
    padroes/fixtures apos anti-leakage; nao treinar direto sem gate.
 6. So voltar para H200 se o gate CPU mostrar uma mudanca verificavel com
