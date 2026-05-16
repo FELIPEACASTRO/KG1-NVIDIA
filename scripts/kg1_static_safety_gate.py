@@ -118,6 +118,12 @@ CRITICAL_SNIPPETS = {
     "scripts/hf_job_train_v90.py": {
         "default max length official": "MAX_LENGTH = env_int(\"MAX_LENGTH\", 8192)",
     },
+    "scripts/audit_v478_training_objective_alignment.py": {
+        "effective family share": "effective_share_by_family",
+        "bit effective floor": "min_bit_effective_share",
+        "equation effective ceiling": "max_equation_effective_share",
+        "gpu allowed decision": "hf_gpu_allowed",
+    },
 }
 
 BLOCKED_TRAINING_DATASET_MARKERS = {
@@ -265,6 +271,25 @@ def audit_text(path: Path, text: str) -> list[Finding]:
                 "error",
                 "format_negative_cli_in_active_job",
                 "Active job/notebook must not pass --include-format-negatives or --allow-format-negatives.",
+            )
+        )
+
+    if (
+        job_or_notebook
+        and not is_archived_fail_closed(text)
+        and "bit_manipulation" in text
+        and "equation_transform" in text
+        and ("SOURCE_WEIGHTS" in text or "KG1_SOURCE_WEIGHTS" in text)
+        and ("SUBCATEGORY_WEIGHTS" in text or "KG1_SUBCATEGORY_WEIGHTS" in text)
+        and "audit_v478_training_objective_alignment.py" not in text
+        and "objective_alignment" not in text
+    ):
+        findings.append(
+            Finding(
+                rel,
+                "error",
+                "missing_v478_objective_alignment_gate",
+                "Weighted bit+equation HF job/notebook must run the V478 objective-alignment gate before GPU.",
             )
         )
 
@@ -534,6 +559,39 @@ def run_self_test() -> int:
         blocked_adapter_findings = audit_text(blocked_adapter, blocked_adapter.read_text(encoding="utf-8"))
         if "blocked_adapter_referenced" not in {item.code for item in blocked_adapter_findings}:
             print("missing blocked adapter self-test finding", flush=True)
+            return 1
+        weighted_without_objective_gate = tmp / "launch_weighted_hf.py"
+        weighted_without_objective_gate.write_text(
+            "from huggingface_hub import HfApi\n"
+            "KG1_REQUIRED_TRAIN_FAMILIES='bit_manipulation,equation_transform'\n"
+            "KG1_SOURCE_WEIGHTS='equation=8,bit=1'\n"
+            "KG1_SUBCATEGORY_WEIGHTS='equation_transform=12,bit_manipulation=1'\n"
+            "HfApi().run_job(command=['true'])\n",
+            encoding="utf-8",
+        )
+        weighted_gate_findings = audit_text(
+            weighted_without_objective_gate,
+            weighted_without_objective_gate.read_text(encoding="utf-8"),
+        )
+        if "missing_v478_objective_alignment_gate" not in {item.code for item in weighted_gate_findings}:
+            print("missing V478 objective alignment self-test finding", flush=True)
+            return 1
+        weighted_with_objective_gate = tmp / "launch_weighted_hf_checked.py"
+        weighted_with_objective_gate.write_text(
+            "from huggingface_hub import HfApi\n"
+            "KG1_REQUIRED_TRAIN_FAMILIES='bit_manipulation,equation_transform'\n"
+            "KG1_SOURCE_WEIGHTS='equation=8,bit=1'\n"
+            "KG1_SUBCATEGORY_WEIGHTS='equation_transform=12,bit_manipulation=1'\n"
+            "OBJECTIVE_ALIGNMENT_GATE='scripts/audit_v478_training_objective_alignment.py'\n"
+            "HfApi().run_job(command=['true'])\n",
+            encoding="utf-8",
+        )
+        weighted_checked_findings = audit_text(
+            weighted_with_objective_gate,
+            weighted_with_objective_gate.read_text(encoding="utf-8"),
+        )
+        if "missing_v478_objective_alignment_gate" in {item.code for item in weighted_checked_findings}:
+            print("false positive V478 objective alignment self-test finding", flush=True)
             return 1
         archived_quarantine = tmp / "launch_archived_quarantine.py"
         archived_quarantine.write_text(

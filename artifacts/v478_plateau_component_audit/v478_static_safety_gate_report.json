@@ -1,0 +1,10 @@
+{
+  "file_count": 2,
+  "files": [
+    "scripts/audit_v478_training_objective_alignment.py",
+    "scripts/kg1_static_safety_gate.py"
+  ],
+  "findings": [],
+  "ok": true,
+  "schema_version": "kg1_static_safety_gate_v1"
+}

@@ -1418,3 +1418,47 @@ Artefatos:
 - `artifacts/v475_equation_bit_replay_mix/20260516T_v475_equation_bit_replay_mix/v475_equation_bit_replay_mix_manifest.json`
 - `artifacts/v475_equation_bit_replay_mix/20260516T_v475_equation_bit_replay_mix/tokenization_gate_real/v286_generic_tokenization_gate_manifest.json`
 - `artifacts/v476_hf_h200_v475_equation_bit_replay_launch/launch_v476_hf_h200_v475_equation_bit_replay.py`
+
+## Atualizacao V478 - Plateau Component Audit
+
+V477 confirmou que o primeiro checkpoint V476 ganhou `+1` em equation, mas
+perdeu `-1` em bit, mantendo total `192/315`. O checkpoint seguinte piorou para
+`191/315`. A auditoria V478 encontrou o motivo operacional mais forte: o bit
+guardrail existia fisicamente no dataset, mas foi quase removido pelo sampler
+ponderado.
+
+| Peca auditada | Resultado |
+|---|---|
+| ACC weak | contrato weak/family/checks corretos; screenshot `192/315`, equation `57/155`, bit `135/160` e real, nao bug de metrica |
+| V475 dataset fisico | train `1312`, val `328`, bit `512/128`, equation `800/200`, overlap `0` |
+| V286 token gate | prompt truncation `0`, offset masks completos, token max `331` |
+| Loss | CE mascarado correto, mas mede validacao sintetica; nao e criterio de promocao |
+| Sampler V476 | equation `99.0508%` do peso efetivo; bit `0.9492%` do peso efetivo |
+| Conclusao | objetivo de treino desalinhado com o gate: equation dominou e bit regrediu |
+
+Regra nova: todo novo HF train que misture `equation_transform` e
+`bit_manipulation` deve passar `scripts/audit_v478_training_objective_alignment.py`
+antes de GPU. Threshold inicial:
+
+- `bit_manipulation` precisa ter pelo menos `20%` do peso efetivo;
+- `equation_transform` nao pode passar de `80%` do peso efetivo;
+- nenhuma familia pode passar de `80%` do peso efetivo.
+
+Decisao operacional V478:
+
+1. Nao relancar V476 com mais steps, mais epochs, H200 ou os mesmos pesos.
+2. `eval_loss` continua apenas diagnostico; weak ACC e truncation sao a fonte de
+   verdade.
+3. Proximo dataset/launcher precisa usar sampler balanceado por familia ou pesos
+   capados. Bit replay nao pode ser so presenca fisica no arquivo.
+4. GPU so volta se V286 token gate e V478 objective-alignment gate passarem.
+5. Weak eval kill switch permanece: `total>192`, `equation>56`,
+   `bit>=136`, `truncated=0`.
+6. `kg1_static_safety_gate.py` agora bloqueia novos launchers/notebooks
+   ponderados de bit+equation que nao referenciem o gate V478.
+
+Artefatos:
+
+- `scripts/audit_v478_training_objective_alignment.py`
+- `artifacts/v478_plateau_component_audit/V478_PLATEAU_COMPONENT_AUDIT.md`
+- `artifacts/v478_plateau_component_audit/v478_training_objective_alignment_gate_v476.json`
