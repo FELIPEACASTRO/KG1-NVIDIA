@@ -1,0 +1,434 @@
+{
+  "branch": "v230-v226-complementarity",
+  "dataset": {
+    "data_repo": "felipesp1983/kg1-nemotron-training",
+    "dataset_upload_commit": "dataset:e53b9c95eaa990d4b541f87857dcdef6627199e4;gate:97f492729f271e5267db1a524a6dfb541bc9ee1b",
+    "train_file": "data/v390_equation_bit_replay_mix/20260514T193847Z/v390_v326_equation_bit_replay_mix_train.jsonl",
+    "train_rows": 5031,
+    "train_sha256": "92db92f4ce5a14ae9a27d1bd21cf64966fb94b63ccf35c6ebbbafa57f9b8a959",
+    "val_file": "data/v390_equation_bit_replay_mix/20260514T193847Z/v390_v326_equation_bit_replay_mix_val.jsonl",
+    "val_rows": 532,
+    "val_sha256": "90ec8a24d74d0fcc921665f20493469fae6e1e0d5a96730e430750d38fda0d82"
+  },
+  "expected_commit": "1066a7641e468d3c50c704563779320156db2c03",
+  "flavor": "h200",
+  "generated_at_utc": "2026-05-16T16:23:37.726708+00:00",
+  "hardware": {
+    "accelerator_model": "H200",
+    "accelerator_quantity": "1",
+    "accelerator_vram": "141 GB",
+    "cpu": "23 vCPU",
+    "name": "h200",
+    "pretty_name": "Nvidia H200",
+    "ram": "256 GB",
+    "unit_cost_usd": 0.083333,
+    "unit_label": "minute"
+  },
+  "image": "nvcr.io/nvidia/nemo:25.11.nemotron_3_nano",
+  "init_adapter": {
+    "repo": "felipesp1983/kg1-nemotron-lora-v290-rank19-micro-patch-smoke",
+    "subfolder": "checkpoint-6"
+  },
+  "job_env": {
+    "KG1_ALLOWED_HF_FLAVORS": "h200",
+    "KG1_ANSWER_SPAN_LOSS_WEIGHT": "1.0",
+    "KG1_ANSWER_SPAN_MIN_WEIGHTED_TOKENS": "1",
+    "KG1_BRANCH": "v230-v226-complementarity",
+    "KG1_EXPECTED_COMMIT": "1066a7641e468d3c50c704563779320156db2c03",
+    "KG1_EXPECTED_MAX_STEPS": "2",
+    "KG1_EXPECTED_TORCH_VERSION": "",
+    "KG1_HF_FLAVOR": "h200",
+    "KG1_HF_MAX_UNIT_COST_USD": "0.09",
+    "KG1_HF_UNIT_COST_USD": "0.083333",
+    "KG1_INIT_ADAPTER_REPO": "felipesp1983/kg1-nemotron-lora-v290-rank19-micro-patch-smoke",
+    "KG1_INIT_ADAPTER_SUBFOLDER": "checkpoint-6",
+    "KG1_LORA_TARGET_PARAMETERS": "mlp.experts.gate_up_proj,mlp.experts.down_proj",
+    "KG1_MAX_PROMPT_TRUNCATION_RATE": "0.0",
+    "KG1_MIN_GPU_TOTAL_GIB": "130",
+    "KG1_OUTPUT_REPO": "felipesp1983/kg1-nemotron-lora-v493-nemo-h200-moe-trainable-no-lmhead-v290ckpt6",
+    "KG1_REQUIRED_GPU_NAME_REGEX": "H200",
+    "KG1_REQUIRED_TRAIN_FAMILIES": "bit_manipulation,equation_transform",
+    "KG1_REQUIRED_TRAIN_SUBCATEGORIES": "bit_fullbyte_v300_gain_pattern,bit_fullbyte_safe_ternary,bit_fullbyte_binary,equation_numeric_add_direct,equation_numeric_colon_absdiff,equation_numeric_colon_trailing_zero,equation_numeric_minus_direct_negative,equation_numeric_minus_signed",
+    "KG1_REQUIRED_VAL_FAMILIES": "bit_manipulation,equation_transform",
+    "KG1_REQUIRE_CUDA": "1",
+    "KG1_REQUIRE_MAMBA_IMPORTS": "1",
+    "KG1_REQUIRE_OFFSET_MASK": "1",
+    "KG1_RUN_ID": "v493-nemo-h200-moe-trainable-no-lmhead-v290ckpt6-20260516T162335Z",
+    "KG1_SOURCE_WEIGHTS": "v325_equation_no_loss_distill=1.00,v304_solver_trace_bit_fullbyte_distill_exact=2.00,v304_solver_trace_bit_fullbyte_distill_random=2.00,v216_base_clean_safe_strict_bit=1.50,v216_synthetic_kg1_bit_rules=1.50,v215_replay_anchor=1.00",
+    "KG1_STRICT_INIT_ADAPTER_CONFIG": "1",
+    "KG1_SUBCATEGORY_WEIGHTS": "equation_numeric_add_direct=1.00,equation_numeric_colon_absdiff=1.00,equation_numeric_colon_trailing_zero=1.00,equation_numeric_minus_direct_negative=1.00,equation_numeric_minus_signed=1.00,bit_fullbyte_v300_gain_pattern=2.00,bit_fullbyte_safe_ternary=2.00,bit_fullbyte_binary=1.50,bit_manipulation=1.10,unknown=1.00",
+    "KG1_TRAIN_FILE": "data/v390_equation_bit_replay_mix/20260514T193847Z/v390_v326_equation_bit_replay_mix_train.jsonl",
+    "KG1_TRAIN_ROWS": "5031",
+    "KG1_TRAIN_SHA": "92db92f4ce5a14ae9a27d1bd21cf64966fb94b63ccf35c6ebbbafa57f9b8a959",
+    "KG1_VAL_FILE": "data/v390_equation_bit_replay_mix/20260514T193847Z/v390_v326_equation_bit_replay_mix_val.jsonl",
+    "KG1_VAL_ROWS": "532",
+    "KG1_VAL_SHA": "90ec8a24d74d0fcc921665f20493469fae6e1e0d5a96730e430750d38fda0d82"
+  },
+  "mode": "debug_only_no_job_launched",
+  "namespace": "felipesp1983",
+  "next_action": "Run this launcher with --launch only after the commit is pushed to GitHub.",
+  "objective_alignment": {
+    "path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v493_hf_nemo_h200_moe_trainable_no_lmhead_launch\\v493-nemo-h200-moe-trainable-no-lmhead-v290ckpt6-20260516T162335Z_objective_alignment_gate.json",
+    "report": {
+      "dataset_manifest_json": "",
+      "findings": [],
+      "generated_at_utc": "2026-05-16T16:23:37.483695+00:00",
+      "hf_gpu_allowed": true,
+      "schema_version": "kg1_v478_training_objective_alignment_gate_v1",
+      "source_weights": {
+        "v215_replay_anchor": 1.0,
+        "v216_base_clean_safe_strict_bit": 1.5,
+        "v216_synthetic_kg1_bit_rules": 1.5,
+        "v304_solver_trace_bit_fullbyte_distill_exact": 2.0,
+        "v304_solver_trace_bit_fullbyte_distill_random": 2.0,
+        "v325_equation_no_loss_distill": 1.0
+      },
+      "subcategory_weights": {
+        "bit_fullbyte_binary": 1.5,
+        "bit_fullbyte_safe_ternary": 2.0,
+        "bit_fullbyte_v300_gain_pattern": 2.0,
+        "bit_manipulation": 1.1,
+        "equation_numeric_add_direct": 1.0,
+        "equation_numeric_colon_absdiff": 1.0,
+        "equation_numeric_colon_trailing_zero": 1.0,
+        "equation_numeric_minus_direct_negative": 1.0,
+        "equation_numeric_minus_signed": 1.0,
+        "unknown": 1.0
+      },
+      "thresholds": {
+        "max_any_family_effective_share": 0.95,
+        "max_equation_effective_share": 0.65,
+        "min_bit_effective_share": 0.35
+      },
+      "train": {
+        "effective_share_by_family": {
+          "bit_manipulation": {
+            "share": 0.926178,
+            "weight": 10036.9
+          },
+          "equation_transform": {
+            "share": 0.073822,
+            "weight": 800.0
+          }
+        },
+        "effective_share_by_source": {
+          "v215_replay_anchor": {
+            "share": 0.023346,
+            "weight": 253.0
+          },
+          "v216_base_clean_safe_strict_bit": {
+            "share": 0.248595,
+            "weight": 2694.0
+          },
+          "v216_synthetic_kg1_bit_rules": {
+            "share": 0.098358,
+            "weight": 1065.9
+          },
+          "v304_solver_trace_bit_fullbyte_distill_exact": {
+            "share": 0.389779,
+            "weight": 4224.0
+          },
+          "v304_solver_trace_bit_fullbyte_distill_random": {
+            "share": 0.166099,
+            "weight": 1800.0
+          },
+          "v325_equation_no_loss_distill": {
+            "share": 0.073822,
+            "weight": 800.0
+          }
+        },
+        "effective_share_by_subcategory": {
+          "bit_fullbyte_binary": {
+            "share": 0.03322,
+            "weight": 360.0
+          },
+          "bit_fullbyte_safe_ternary": {
+            "share": 0.132879,
+            "weight": 1440.0
+          },
+          "bit_fullbyte_v300_gain_pattern": {
+            "share": 0.389779,
+            "weight": 4224.0
+          },
+          "bit_manipulation": {
+            "share": 0.098358,
+            "weight": 1065.9
+          },
+          "equation_numeric_add_direct": {
+            "share": 0.014764,
+            "weight": 160.0
+          },
+          "equation_numeric_colon_absdiff": {
+            "share": 0.014764,
+            "weight": 160.0
+          },
+          "equation_numeric_colon_trailing_zero": {
+            "share": 0.014764,
+            "weight": 160.0
+          },
+          "equation_numeric_minus_direct_negative": {
+            "share": 0.014764,
+            "weight": 160.0
+          },
+          "equation_numeric_minus_signed": {
+            "share": 0.014764,
+            "weight": 160.0
+          },
+          "unknown": {
+            "share": 0.271941,
+            "weight": 2947.0
+          }
+        },
+        "effective_total_weight": 10836.9,
+        "physical_share_by_family": {
+          "bit_manipulation": {
+            "rows": 4231,
+            "share": 0.840986
+          },
+          "equation_transform": {
+            "rows": 800,
+            "share": 0.159014
+          }
+        },
+        "physical_share_by_source": {
+          "v215_replay_anchor": {
+            "rows": 253,
+            "share": 0.050288
+          },
+          "v216_base_clean_safe_strict_bit": {
+            "rows": 1796,
+            "share": 0.356987
+          },
+          "v216_synthetic_kg1_bit_rules": {
+            "rows": 646,
+            "share": 0.128404
+          },
+          "v304_solver_trace_bit_fullbyte_distill_exact": {
+            "rows": 1056,
+            "share": 0.209899
+          },
+          "v304_solver_trace_bit_fullbyte_distill_random": {
+            "rows": 480,
+            "share": 0.095408
+          },
+          "v325_equation_no_loss_distill": {
+            "rows": 800,
+            "share": 0.159014
+          }
+        },
+        "physical_share_by_subcategory": {
+          "bit_fullbyte_binary": {
+            "rows": 120,
+            "share": 0.023852
+          },
+          "bit_fullbyte_safe_ternary": {
+            "rows": 360,
+            "share": 0.071556
+          },
+          "bit_fullbyte_v300_gain_pattern": {
+            "rows": 1056,
+            "share": 0.209899
+          },
+          "bit_manipulation": {
+            "rows": 646,
+            "share": 0.128404
+          },
+          "equation_numeric_add_direct": {
+            "rows": 160,
+            "share": 0.031803
+          },
+          "equation_numeric_colon_absdiff": {
+            "rows": 160,
+            "share": 0.031803
+          },
+          "equation_numeric_colon_trailing_zero": {
+            "rows": 160,
+            "share": 0.031803
+          },
+          "equation_numeric_minus_direct_negative": {
+            "rows": 160,
+            "share": 0.031803
+          },
+          "equation_numeric_minus_signed": {
+            "rows": 160,
+            "share": 0.031803
+          },
+          "unknown": {
+            "rows": 2049,
+            "share": 0.407275
+          }
+        },
+        "rows": 5031,
+        "unknown_source_rows": 0,
+        "unknown_subcategory_rows": 0
+      },
+      "train_jsonl": "C:\\Users\\davis\\.cache\\huggingface\\hub\\datasets--felipesp1983--kg1-nemotron-training\\snapshots\\dbb97ac737969a69794d2e93895049a8ccbb8eb5\\data\\v390_equation_bit_replay_mix\\20260514T193847Z\\v390_v326_equation_bit_replay_mix_train.jsonl",
+      "val_jsonl": "C:\\Users\\davis\\.cache\\huggingface\\hub\\datasets--felipesp1983--kg1-nemotron-training\\snapshots\\dbb97ac737969a69794d2e93895049a8ccbb8eb5\\data\\v390_equation_bit_replay_mix\\20260514T193847Z\\v390_v326_equation_bit_replay_mix_val.jsonl",
+      "validation": {
+        "effective_share_by_family": {
+          "bit_manipulation": {
+            "share": 0.816699,
+            "weight": 891.1
+          },
+          "equation_transform": {
+            "share": 0.183301,
+            "weight": 200.0
+          }
+        },
+        "effective_share_by_source": {
+          "v215_replay_anchor": {
+            "share": 0.027495,
+            "weight": 30.0
+          },
+          "v216_base_clean_safe_strict_bit": {
+            "share": 0.109981,
+            "weight": 120.0
+          },
+          "v216_synthetic_kg1_bit_rules": {
+            "share": 0.081661,
+            "weight": 89.1
+          },
+          "v304_solver_trace_bit_fullbyte_distill_exact": {
+            "share": 0.32261,
+            "weight": 352.0
+          },
+          "v304_solver_trace_bit_fullbyte_distill_random": {
+            "share": 0.274952,
+            "weight": 300.0
+          },
+          "v325_equation_no_loss_distill": {
+            "share": 0.183301,
+            "weight": 200.0
+          }
+        },
+        "effective_share_by_subcategory": {
+          "bit_fullbyte_binary": {
+            "share": 0.05499,
+            "weight": 60.0
+          },
+          "bit_fullbyte_safe_ternary": {
+            "share": 0.219962,
+            "weight": 240.0
+          },
+          "bit_fullbyte_v300_gain_pattern": {
+            "share": 0.32261,
+            "weight": 352.0
+          },
+          "bit_manipulation": {
+            "share": 0.081661,
+            "weight": 89.1
+          },
+          "equation_numeric_add_direct": {
+            "share": 0.03666,
+            "weight": 40.0
+          },
+          "equation_numeric_colon_absdiff": {
+            "share": 0.03666,
+            "weight": 40.0
+          },
+          "equation_numeric_colon_trailing_zero": {
+            "share": 0.03666,
+            "weight": 40.0
+          },
+          "equation_numeric_minus_direct_negative": {
+            "share": 0.03666,
+            "weight": 40.0
+          },
+          "equation_numeric_minus_signed": {
+            "share": 0.03666,
+            "weight": 40.0
+          },
+          "unknown": {
+            "share": 0.137476,
+            "weight": 150.0
+          }
+        },
+        "effective_total_weight": 1091.1,
+        "physical_share_by_family": {
+          "bit_manipulation": {
+            "rows": 332,
+            "share": 0.62406
+          },
+          "equation_transform": {
+            "rows": 200,
+            "share": 0.37594
+          }
+        },
+        "physical_share_by_source": {
+          "v215_replay_anchor": {
+            "rows": 30,
+            "share": 0.056391
+          },
+          "v216_base_clean_safe_strict_bit": {
+            "rows": 80,
+            "share": 0.150376
+          },
+          "v216_synthetic_kg1_bit_rules": {
+            "rows": 54,
+            "share": 0.101504
+          },
+          "v304_solver_trace_bit_fullbyte_distill_exact": {
+            "rows": 88,
+            "share": 0.165414
+          },
+          "v304_solver_trace_bit_fullbyte_distill_random": {
+            "rows": 80,
+            "share": 0.150376
+          },
+          "v325_equation_no_loss_distill": {
+            "rows": 200,
+            "share": 0.37594
+          }
+        },
+        "physical_share_by_subcategory": {
+          "bit_fullbyte_binary": {
+            "rows": 20,
+            "share": 0.037594
+          },
+          "bit_fullbyte_safe_ternary": {
+            "rows": 60,
+            "share": 0.112782
+          },
+          "bit_fullbyte_v300_gain_pattern": {
+            "rows": 88,
+            "share": 0.165414
+          },
+          "bit_manipulation": {
+            "rows": 54,
+            "share": 0.101504
+          },
+          "equation_numeric_add_direct": {
+            "rows": 40,
+            "share": 0.075188
+          },
+          "equation_numeric_colon_absdiff": {
+            "rows": 40,
+            "share": 0.075188
+          },
+          "equation_numeric_colon_trailing_zero": {
+            "rows": 40,
+            "share": 0.075188
+          },
+          "equation_numeric_minus_direct_negative": {
+            "rows": 40,
+            "share": 0.075188
+          },
+          "equation_numeric_minus_signed": {
+            "rows": 40,
+            "share": 0.075188
+          },
+          "unknown": {
+            "rows": 110,
+            "share": 0.206767
+          }
+        },
+        "rows": 532,
+        "unknown_source_rows": 0,
+        "unknown_subcategory_rows": 0
+      }
+    }
+  },
+  "output_repo": "felipesp1983/kg1-nemotron-lora-v493-nemo-h200-moe-trainable-no-lmhead-v290ckpt6",
+  "run_id": "v493-nemo-h200-moe-trainable-no-lmhead-v290ckpt6-20260516T162335Z",
+  "version": "v493_moe_trainable_no_lmhead_equation_bit_replay_from_v290_checkpoint6_nemo_h200"
+}
