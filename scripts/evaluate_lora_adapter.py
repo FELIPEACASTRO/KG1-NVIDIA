@@ -123,6 +123,17 @@ def normalize_questions(solution: pd.DataFrame, questions: pd.DataFrame, limit: 
         if "prompt" not in solution.columns:
             raise ValueError("questions or solution must contain a prompt column")
         questions = solution[["id", "prompt"]].copy()
+    if "answer" in questions.columns and "answer" in solution.columns:
+        answer_check = solution[["id", "answer"]].merge(
+            questions[["id", "answer"]].rename(columns={"answer": "question_answer"}),
+            on="id",
+            how="inner",
+            validate="one_to_one",
+        )
+        mismatch = answer_check["answer"].astype(str).ne(answer_check["question_answer"].astype(str))
+        if mismatch.any():
+            sample = answer_check.loc[mismatch, ["id", "answer", "question_answer"]].head(5).to_dict(orient="records")
+            raise ValueError(f"questions answer column conflicts with solution answers; sample={sample}")
     ordered = solution[["id"]].merge(questions, on="id", how="left", validate="one_to_one")
     missing_prompt = ordered["prompt"].isna().sum()
     if missing_prompt:
@@ -372,10 +383,11 @@ def evaluate_adapter(
         completion = output.outputs[0]
         raw_output = completion.text
         expected = getattr(row, "answer", None)
-        prediction = (
+        prediction = extract_final_answer(raw_output)
+        label_aware_debug_prediction = (
             extract_final_answer_for_expected(raw_output, expected)
             if expected is not None
-            else extract_final_answer(raw_output)
+            else prediction
         )
         row_id = str(getattr(row, "id"))
         prompt = str(getattr(row, "prompt"))
@@ -385,6 +397,8 @@ def evaluate_adapter(
                 "prompt": prompt,
                 "raw_output": raw_output,
                 "prediction": prediction,
+                "submit_safe_label_free_prediction": prediction,
+                "label_aware_debug_prediction": label_aware_debug_prediction,
                 "prompt_tokens": len(getattr(output, "prompt_token_ids", []) or []),
                 "completion_tokens": len(getattr(completion, "token_ids", []) or []),
                 "finish_reason": completion.finish_reason or "",
@@ -408,6 +422,11 @@ def evaluate_adapter(
     if "answer" not in merged.columns:
         raise RuntimeError("merged predictions are missing answer column after join")
     merged["correct"] = merged.apply(lambda r: verify_answer(r["answer"], r["prediction"]), axis=1)
+    if "label_aware_debug_prediction" in merged.columns:
+        merged["label_aware_debug_correct"] = merged.apply(
+            lambda r: verify_answer(r["answer"], r["label_aware_debug_prediction"]),
+            axis=1,
+        )
     merged["truncated"] = merged["finish_reason"].fillna("").astype(str).eq("length")
 
     total_tokens = int(merged["completion_tokens"].fillna(0).sum())
@@ -426,7 +445,13 @@ def evaluate_adapter(
         "seed": int(seed),
         "config": config,
         "prediction_postprocessor": str(prediction_postprocessor or "none"),
+        "prediction_metric_mode": "submit_safe_label_free",
     }
+    if "label_aware_debug_correct" in merged.columns:
+        summary["label_aware_debug_correct"] = int(merged["label_aware_debug_correct"].sum())
+        summary["label_aware_debug_accuracy"] = (
+            float(merged["label_aware_debug_correct"].mean()) if len(merged) else 0.0
+        )
     print("summary =", json.dumps(summary, indent=2, sort_keys=True))
     return summary, merged
 

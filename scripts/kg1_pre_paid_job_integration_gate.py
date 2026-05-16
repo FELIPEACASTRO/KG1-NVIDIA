@@ -20,6 +20,11 @@ from typing import Any
 
 
 ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from src.competition_utils import extract_final_answer, verify_answer  # noqa: E402
+
 BLOCKED_DATASET_MARKERS = {
     "v447_v446_trace_dataset": "V447 traces contain hypothesis_formed contradictions.",
     "v461_synthetic_numeric_probe_pack": "V461 contains a full-reference exact prompt/answer seed.",
@@ -31,6 +36,12 @@ BLOCKED_ADAPTER_MARKERS = {
     "kg1-nemotron-lora-v448-nemo-h200-v447-clean-trace-v290ckpt6": "Adapter trained from quarantined V447 traces.",
     "kg1-nemotron-lora-v465-v464-numeric-multirule-v290ckpt6": "Adapter trained from quarantined V464 traces.",
     "kg1-nemotron-lora-v469-v468-symbol-fix-v290ckpt6": "Adapter trained from quarantined V468 traces.",
+    "kg1-nemotron-lora-v499-nemo-h200-v498-numeric-teacher-v290ckpt6": (
+        "V499 final eval regressed and answer-span weighting was inactive; forensics only."
+    ),
+    "kg1-nemotron-lora-v501-nemo-h200-v498-answer-span-v290ckpt6": (
+        "V501 answer-span run was blocked by final eval regression; forensics only."
+    ),
 }
 
 
@@ -103,12 +114,23 @@ def audit_launcher(args: argparse.Namespace, findings: list[Finding]) -> dict[st
         "launcher_init_subfolder_mismatch",
         findings,
     )
-    require_text(text, "export ALLOW_FORMAT_NEGATIVES=0", "launcher_allows_format_negatives", findings)
+    if args.dataset_schema == "preference":
+        require_text(text, "export ALLOW_FORMAT_NEGATIVES=0", "launcher_allows_format_negatives", findings)
     require_text(text, "timeout=3600", "launcher_timeout_not_one_hour", findings)
     require_text(text, 'FLAVOR = "h200"', "launcher_not_h200", findings)
     require_text(text, 'KG1_HF_MAX_UNIT_COST_USD": "0.09"', "launcher_missing_cost_gate", findings)
-    require_text(text, "SAVE_EVERY_STEPS = 3", "launcher_missing_first_checkpoint_save", findings)
-    require_text(text, "EVAL_EVERY_STEPS = 3", "launcher_missing_first_checkpoint_eval", findings)
+    require_text(
+        text,
+        f"SAVE_EVERY_STEPS = {args.expected_save_every_steps}",
+        "launcher_missing_first_checkpoint_save",
+        findings,
+    )
+    require_text(
+        text,
+        f"EVAL_EVERY_STEPS = {args.expected_eval_every_steps}",
+        "launcher_missing_first_checkpoint_eval",
+        findings,
+    )
     require_regex(text, r"MAX_STEPS\s*=\s*(?:[1-9]|1[0-2])\b", "launcher_max_steps_too_high", findings)
     if args.expected_pair_score_mode:
         require_text(
@@ -117,12 +139,16 @@ def audit_launcher(args: argparse.Namespace, findings: list[Finding]) -> dict[st
             "launcher_pair_score_mode_mismatch",
             findings,
         )
-    require_text(
-        text,
-        "export PREFERENCE_SYSTEM_PROMPT='Solve the KG1 puzzle. End with exactly one final answer in \\boxed{}.'",
-        "launcher_system_prompt_not_final_answer_only",
-        findings,
-    )
+    if args.dataset_schema == "preference":
+        require_text(
+            text,
+            "export PREFERENCE_SYSTEM_PROMPT='Solve the KG1 puzzle. End with exactly one final answer in \\boxed{}.'",
+            "launcher_system_prompt_not_final_answer_only",
+            findings,
+        )
+    else:
+        require_text(text, "ANSWER_SPAN_LOSS_WEIGHT", "launcher_missing_answer_span_loss_control", findings)
+        require_text(text, "ANSWER_SPAN_MIN_WEIGHTED_TOKENS", "launcher_missing_answer_span_min_token_gate", findings)
     require_text(text, "KG1_REQUIRED_TRAIN_FAMILIES", "launcher_missing_train_family_gate", findings)
     require_text(text, "KG1_REQUIRED_VAL_FAMILIES", "launcher_missing_val_family_gate", findings)
     require_text(text, "KG1_REQUIRED_TRAIN_SUBCATEGORIES", "launcher_missing_train_subcategory_gate", findings)
@@ -142,7 +168,23 @@ def audit_launcher(args: argparse.Namespace, findings: list[Finding]) -> dict[st
     }
 
 
-def audit_dataset_file(path: Path, expected_sha: str, expected_rows: int, split: str, findings: list[Finding]) -> dict[str, Any]:
+def _metadata_flag_is_false(row: dict[str, Any], metadata: dict[str, Any], flag: str) -> bool:
+    if flag in row:
+        return row.get(flag) is False
+    if flag in metadata:
+        return metadata.get(flag) is False
+    return True
+
+
+def audit_dataset_file(
+    path: Path,
+    expected_sha: str,
+    expected_rows: int,
+    split: str,
+    findings: list[Finding],
+    *,
+    dataset_schema: str,
+) -> dict[str, Any]:
     block_quarantined_identity(str(path), findings, source=f"{split}_path")
     observed_sha = sha256_file(path)
     rows = read_jsonl(path)
@@ -158,35 +200,47 @@ def audit_dataset_file(path: Path, expected_sha: str, expected_rows: int, split:
     for index, row in enumerate(rows, start=1):
         row_id = str(row.get("id", ""))
         metadata = row.get("metadata") or {}
-        chosen = str(row.get("chosen", ""))
-        rejected = str(row.get("rejected", ""))
         if not row_id or row_id in ids:
             bad_rows.append(f"{index}:duplicate_or_missing_id:{row_id}")
         ids.add(row_id)
         family_counts[str(row.get("family") or metadata.get("family") or "unknown")] += 1
         subcategory_counts[str(row.get("subcategory") or metadata.get("subcategory") or metadata.get("rule_class") or "unknown")] += 1
-        negative_type = str(metadata.get("negative_type") or "unknown")
-        negative_type_counts[negative_type] += 1
-        if negative_type != "hard_negative_adapter_exact_wrong":
-            bad_rows.append(f"{row_id}:negative_type:{negative_type}")
-        if chosen == rejected:
-            bad_rows.append(f"{row_id}:chosen_equals_rejected")
-        if not chosen.startswith("Final answer: \\boxed{") or not chosen.endswith("}"):
-            bad_rows.append(f"{row_id}:chosen_template")
-        if not rejected.startswith("Final answer: \\boxed{") or not rejected.endswith("}"):
-            bad_rows.append(f"{row_id}:rejected_template")
-        if chosen.count("\\boxed{") != 1 or rejected.count("\\boxed{") != 1:
-            bad_rows.append(f"{row_id}:box_count")
-        for term in ("public-train label audit", "frozen adapter", "Rejected adapter"):
-            if term in chosen:
-                bad_rows.append(f"{row_id}:chosen_forbidden_term:{term}")
         messages = row.get("messages")
-        if not isinstance(messages, list) or not messages or messages[-1].get("role") != "assistant":
-            bad_rows.append(f"{row_id}:assistant_message_missing")
-        elif messages[-1].get("content") != chosen:
-            bad_rows.append(f"{row_id}:assistant_content_not_chosen")
+        if dataset_schema == "preference":
+            chosen = str(row.get("chosen", ""))
+            rejected = str(row.get("rejected", ""))
+            negative_type = str(metadata.get("negative_type") or "unknown")
+            negative_type_counts[negative_type] += 1
+            if negative_type != "hard_negative_adapter_exact_wrong":
+                bad_rows.append(f"{row_id}:negative_type:{negative_type}")
+            if chosen == rejected:
+                bad_rows.append(f"{row_id}:chosen_equals_rejected")
+            if not chosen.startswith("Final answer: \\boxed{") or not chosen.endswith("}"):
+                bad_rows.append(f"{row_id}:chosen_template")
+            if not rejected.startswith("Final answer: \\boxed{") or not rejected.endswith("}"):
+                bad_rows.append(f"{row_id}:rejected_template")
+            if chosen.count("\\boxed{") != 1 or rejected.count("\\boxed{") != 1:
+                bad_rows.append(f"{row_id}:box_count")
+            for term in ("public-train label audit", "frozen adapter", "Rejected adapter"):
+                if term in chosen:
+                    bad_rows.append(f"{row_id}:chosen_forbidden_term:{term}")
+            if not isinstance(messages, list) or not messages or messages[-1].get("role") != "assistant":
+                bad_rows.append(f"{row_id}:assistant_message_missing")
+            elif messages[-1].get("content") != chosen:
+                bad_rows.append(f"{row_id}:assistant_content_not_chosen")
+        else:
+            answer = str(row.get("answer", "")).strip()
+            if not answer:
+                bad_rows.append(f"{row_id}:missing_answer")
+            if not isinstance(messages, list) or not messages or messages[-1].get("role") != "assistant":
+                bad_rows.append(f"{row_id}:assistant_message_missing")
+            else:
+                assistant_content = str(messages[-1].get("content", ""))
+                extracted = extract_final_answer(assistant_content)
+                if not verify_answer(answer, extracted):
+                    bad_rows.append(f"{row_id}:assistant_final_answer_mismatch:{extracted}")
         for flag in ("gate_rows_used_for_training", "weak_gate_rows_used_for_training", "full_gate_rows_used_for_training"):
-            if metadata.get(flag) is not False:
+            if not _metadata_flag_is_false(row, metadata, flag):
                 bad_rows.append(f"{row_id}:{flag}_not_false")
         if len(bad_rows) >= 30:
             break
@@ -233,7 +287,10 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--launcher", type=Path, required=True)
     parser.add_argument("--train-jsonl", type=Path, required=True)
     parser.add_argument("--val-jsonl", type=Path, required=True)
-    parser.add_argument("--v438-audit-manifest", type=Path, required=True)
+    parser.add_argument("--v438-audit-manifest", type=Path, default=None)
+    parser.add_argument("--dataset-schema", choices=["preference", "sft"], default="preference")
+    parser.add_argument("--expected-save-every-steps", type=int, default=3)
+    parser.add_argument("--expected-eval-every-steps", type=int, default=3)
     parser.add_argument("--expected-data-root", required=True)
     parser.add_argument("--expected-train-sha256", required=True)
     parser.add_argument("--expected-val-sha256", required=True)
@@ -252,22 +309,49 @@ def main() -> int:
     findings: list[Finding] = []
     print("=== KG1 PRE PAID JOB INTEGRATION GATE START ===", flush=True)
     launcher_report = audit_launcher(args, findings)
-    train_report = audit_dataset_file(args.train_jsonl, args.expected_train_sha256, args.expected_train_rows, "train", findings)
-    val_report = audit_dataset_file(args.val_jsonl, args.expected_val_sha256, args.expected_val_rows, "validation", findings)
-    v438_report = audit_v438_manifest(args.v438_audit_manifest, findings)
-    report = {
-        "schema_version": "kg1_pre_paid_job_integration_gate_v1",
-        "ok": not any(item.level == "error" for item in findings),
-        "launcher": launcher_report,
-        "train_dataset": train_report,
-        "validation_dataset": val_report,
-        "v438_audit": {
+    train_report = audit_dataset_file(
+        args.train_jsonl,
+        args.expected_train_sha256,
+        args.expected_train_rows,
+        "train",
+        findings,
+        dataset_schema=args.dataset_schema,
+    )
+    val_report = audit_dataset_file(
+        args.val_jsonl,
+        args.expected_val_sha256,
+        args.expected_val_rows,
+        "validation",
+        findings,
+        dataset_schema=args.dataset_schema,
+    )
+    if args.dataset_schema == "preference":
+        if args.v438_audit_manifest is None:
+            findings.append(Finding("error", "v438_audit_manifest_missing", "preference schema requires --v438-audit-manifest"))
+            v438_report = {}
+        else:
+            v438_report = audit_v438_manifest(args.v438_audit_manifest, findings)
+    else:
+        v438_report = {}
+    v438_summary = (
+        {
             "manifest": str(args.v438_audit_manifest),
             "rows": v438_report.get("rows"),
             "hf_gpu_allowed_for_same_objective": v438_report.get("hf_gpu_allowed_for_same_objective"),
             "total_summary": v438_report.get("total_summary"),
             "decision_flags": v438_report.get("decision_flags"),
-        },
+        }
+        if args.dataset_schema == "preference"
+        else {"skipped": True, "reason": "sft_schema_does_not_use_v438_preference_audit"}
+    )
+    report = {
+        "schema_version": "kg1_pre_paid_job_integration_gate_v2",
+        "dataset_schema": args.dataset_schema,
+        "ok": not any(item.level == "error" for item in findings),
+        "launcher": launcher_report,
+        "train_dataset": train_report,
+        "validation_dataset": val_report,
+        "v438_audit": v438_summary,
         "findings": [item.__dict__ for item in findings],
     }
     if args.output_json:

@@ -379,7 +379,7 @@ def run_eval(args: argparse.Namespace) -> dict[str, Any]:
     candidate_json = output_dir / "v276_full_eval_candidates.json"
     candidate_json.write_text(json.dumps(candidate_payload, indent=2, sort_keys=True), encoding="utf-8")
     eval_out = output_dir / "eval"
-    disable_thinking = env_bool("KG1_DISABLE_THINKING", True)
+    disable_thinking = env_bool("KG1_DISABLE_THINKING", False)
     no_prompt_suffix = env_bool("KG1_NO_PROMPT_SUFFIX", False)
     prompt_suffix = os.environ.get("KG1_PROMPT_SUFFIX", DEFAULT_PROMPT_SUFFIX)
     prediction_postprocessor = env_str("KG1_PREDICTION_POSTPROCESSOR", DEFAULT_POSTPROCESSOR)
@@ -412,11 +412,11 @@ def run_eval(args: argparse.Namespace) -> dict[str, Any]:
         "--output-dir",
         str(eval_out),
         "--max-tokens",
-        str(env_int("KG1_MAX_TOKENS", 96)),
+        str(env_int("KG1_MAX_TOKENS", 7680)),
         "--max-model-len",
-        str(env_int("KG1_MAX_MODEL_LEN", 4096)),
+        str(env_int("KG1_MAX_MODEL_LEN", 8192)),
         "--max-num-seqs",
-        str(env_int("KG1_MAX_NUM_SEQS", 8)),
+        str(env_int("KG1_MAX_NUM_SEQS", 64)),
         "--warmup-rows",
         "0",
         "--prediction-postprocessor",
@@ -438,12 +438,24 @@ def run_eval(args: argparse.Namespace) -> dict[str, Any]:
     log_json("candidate_summary_payload", summary)
     best_rows = [row for row in summary.get("rows", []) if str(row.get("status", "")) == "ok"]
     full_candidate_gate = False
+    full_min_candidate = env_int("KG1_FULL_MIN_CANDIDATE", 831)
+    full_max_trunc = env_int("KG1_FULL_MAX_TRUNC", 4)
     if best_rows:
-        best = max(best_rows, key=lambda row: int(row.get("correct", 0)))
-        full_candidate_gate = (
-            int(best.get("correct", 0)) >= env_int("KG1_FULL_MIN_CANDIDATE", 831)
-            and int(best.get("truncated", 999999)) <= env_int("KG1_FULL_MAX_TRUNC", 4)
+        passed_rows = [
+            row
+            for row in best_rows
+            if int(row.get("correct", 0)) >= full_min_candidate
+            and int(row.get("truncated", 999999)) <= full_max_trunc
+        ]
+        ranked_rows = passed_rows or best_rows
+        best = max(
+            ranked_rows,
+            key=lambda row: (
+                int(row.get("correct", 0)),
+                -int(row.get("truncated", 999999)),
+            ),
         )
+        full_candidate_gate = bool(passed_rows)
         log_json("best_full_candidate", best)
     else:
         best = {}

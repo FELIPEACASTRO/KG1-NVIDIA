@@ -250,10 +250,11 @@ def main() -> int:
                 raw_output = completion.text
                 prompt = str(getattr(row, "prompt"))
                 expected = getattr(row, "answer", None)
-                prediction = (
+                prediction = extract_final_answer(raw_output)
+                label_aware_debug_prediction = (
                     extract_final_answer_for_expected(raw_output, expected)
                     if expected is not None
-                    else extract_final_answer(raw_output)
+                    else prediction
                 )
                 rows.append(
                     {
@@ -261,6 +262,8 @@ def main() -> int:
                         "prompt": prompt,
                         "raw_output": raw_output,
                         "prediction": prediction,
+                        "submit_safe_label_free_prediction": prediction,
+                        "label_aware_debug_prediction": label_aware_debug_prediction,
                         "prompt_tokens": len(getattr(output, "prompt_token_ids", []) or []),
                         "completion_tokens": len(getattr(completion, "token_ids", []) or []),
                         "finish_reason": completion.finish_reason or "",
@@ -283,6 +286,11 @@ def main() -> int:
             if "answer" not in merged.columns:
                 raise RuntimeError("merged predictions are missing answer column after join")
             merged["correct"] = merged.apply(lambda r: verify_answer(r["answer"], r["prediction"]), axis=1)
+            if "label_aware_debug_prediction" in merged.columns:
+                merged["label_aware_debug_correct"] = merged.apply(
+                    lambda r: verify_answer(r["answer"], r["label_aware_debug_prediction"]),
+                    axis=1,
+                )
             merged["truncated"] = merged["finish_reason"].fillna("").astype(str).eq("length")
 
             predictions_path = candidate_dir / f"{label}_predictions.csv"
@@ -310,6 +318,7 @@ def main() -> int:
                 "seed": int(args.seed),
                 "config": config,
                 "prediction_postprocessor": str(args.prediction_postprocessor or "none"),
+                "prediction_metric_mode": "submit_safe_label_free",
                 "outputs": {
                     "raw_predictions_pre_score_csv": str(raw_predictions_path),
                     "postprocessed_raw_predictions_pre_score_csv": postprocessed_raw_predictions_path,
@@ -335,6 +344,11 @@ def main() -> int:
                 "report_json": str(report_path),
                 "error": "",
             }
+            if "label_aware_debug_correct" in merged.columns:
+                aggregate["label_aware_debug_correct"] = int(merged["label_aware_debug_correct"].sum())
+                aggregate["label_aware_debug_accuracy"] = (
+                    float(merged["label_aware_debug_correct"].mean()) if len(merged) else 0.0
+                )
             aggregate_rows.append(aggregate)
             print("candidate_summary =", json.dumps(aggregate, indent=2, sort_keys=True))
             print("candidate_per_task =")

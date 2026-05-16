@@ -47,12 +47,17 @@ def add_alternatives(frame: pd.DataFrame) -> pd.DataFrame:
     out = frame.copy()
     out["raw_chars"] = out["raw_output"].fillna("").astype(str).str.len()
     out["boxed_count"] = out["raw_output"].map(count_boxed)
+    out["official_reextract_prediction"] = out["raw_output"].map(extract_final_answer)
     out["first_boxed_prediction"] = out["raw_output"].map(first_boxed_answer)
     out["early_512_prediction"] = out["raw_output"].map(lambda value: early_window_answer(value, 512))
     out["early_1024_prediction"] = out["raw_output"].map(lambda value: early_window_answer(value, 1024))
     out["early_2048_prediction"] = out["raw_output"].map(lambda value: early_window_answer(value, 2048))
     if "answer" in out.columns:
-        out["official_correct"] = out.apply(lambda row: verify_answer(row["answer"], row["prediction"]), axis=1)
+        out["stored_prediction_correct"] = out.apply(lambda row: verify_answer(row["answer"], row["prediction"]), axis=1)
+        out["official_correct"] = out.apply(
+            lambda row: verify_answer(row["answer"], row["official_reextract_prediction"]),
+            axis=1,
+        )
         out["first_boxed_correct"] = out.apply(lambda row: verify_answer(row["answer"], row["first_boxed_prediction"]), axis=1)
         for chars in (512, 1024, 2048):
             col = f"early_{chars}_prediction"
@@ -75,6 +80,7 @@ def summarize(frame: pd.DataFrame) -> dict[str, Any]:
         summary["truncated"] = int(truncated.sum())
         summary["truncation_rate"] = float(truncated.mean()) if len(frame) else 0.0
     for col in [
+        "stored_prediction_correct",
         "official_correct",
         "first_boxed_correct",
         "early_512_correct",
@@ -90,6 +96,7 @@ def summarize(frame: pd.DataFrame) -> dict[str, Any]:
         for family, group in frame.groupby(family_col, dropna=False):
             row: dict[str, Any] = {"family": str(family), "rows": int(len(group))}
             for col in [
+                "stored_prediction_correct",
                 "official_correct",
                 "first_boxed_correct",
                 "early_512_correct",

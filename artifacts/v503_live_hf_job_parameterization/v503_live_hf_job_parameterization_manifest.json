@@ -1,0 +1,190 @@
+{
+  "checks": [
+    {
+      "area": "runtime",
+      "detail": "V501 repo marker present",
+      "name": "job log contains V501 output repo",
+      "ok": true,
+      "severity": "fail"
+    },
+    {
+      "area": "runtime",
+      "detail": "H200 marker present",
+      "name": "H200 context visible",
+      "ok": true,
+      "severity": "fail"
+    },
+    {
+      "area": "runtime",
+      "detail": "controlled final-eval regression abort",
+      "name": "no unexpected python traceback",
+      "ok": true,
+      "severity": "fail"
+    },
+    {
+      "area": "runtime",
+      "detail": "controlled final-eval regression abort",
+      "name": "no unexpected failure",
+      "ok": true,
+      "severity": "fail"
+    },
+    {
+      "area": "runtime",
+      "detail": "max_mem_reserved=76.1",
+      "name": "reserved memory under cap",
+      "ok": true,
+      "severity": "fail"
+    },
+    {
+      "area": "tokenization",
+      "detail": "train_answer_span_loss_weight=4.0",
+      "name": "answer-span weight active",
+      "ok": true,
+      "severity": "fail"
+    },
+    {
+      "area": "tokenization",
+      "detail": "train_weighted_examples=1712",
+      "name": "train answer-span examples nonzero",
+      "ok": true,
+      "severity": "fail"
+    },
+    {
+      "area": "tokenization",
+      "detail": "train_weighted_tokens=15197",
+      "name": "train answer-span tokens above gate",
+      "ok": true,
+      "severity": "fail"
+    },
+    {
+      "area": "tokenization",
+      "detail": "val_weighted_examples=428",
+      "name": "validation answer-span examples nonzero",
+      "ok": true,
+      "severity": "fail"
+    },
+    {
+      "area": "tokenization",
+      "detail": "truncation markers present",
+      "name": "no truncation in summaries",
+      "ok": true,
+      "severity": "fail"
+    },
+    {
+      "area": "training",
+      "detail": "planned_steps=4",
+      "name": "planned steps is short V501 smoke",
+      "ok": true,
+      "severity": "fail"
+    },
+    {
+      "area": "training",
+      "detail": "trainable_pct=2.6776",
+      "name": "trainable percent bounded",
+      "ok": true,
+      "severity": "fail"
+    },
+    {
+      "area": "training",
+      "detail": "target_parameters_trainability_mode=trainable",
+      "name": "target parameters trainable",
+      "ok": true,
+      "severity": "fail"
+    },
+    {
+      "area": "training",
+      "detail": "{\"mlp.experts.down_proj\": 432791552, \"mlp.experts.gate_up_proj\": 432791552}",
+      "name": "MoE target params have trainable tensors",
+      "ok": true,
+      "severity": "fail"
+    },
+    {
+      "area": "training",
+      "detail": "frozen=4280320 trainable=0",
+      "name": "lm_head frozen",
+      "ok": true,
+      "severity": "fail"
+    },
+    {
+      "area": "sampling",
+      "detail": "{\"v498_bit_replay_guardrail_from_v475\": 0.390244, \"v498_numeric_teacher_trace_pack\": 0.609756}",
+      "name": "bit replay guardrail share active",
+      "ok": true,
+      "severity": "fail"
+    },
+    {
+      "area": "sampling",
+      "detail": "{\"v498_bit_replay_guardrail_from_v475\": 0.390244, \"v498_numeric_teacher_trace_pack\": 0.609756}",
+      "name": "equation share active",
+      "ok": true,
+      "severity": "fail"
+    },
+    {
+      "area": "sampling",
+      "detail": "{\"bit_guardrail_replay\": 0.390244, \"equation_numeric_add_direct_hard_negative\": 0.203252, \"equation_numeric_colon_trailing_zero_hard_negative\": 0.203252, \"equation_numeric_minus_signed_hard_negative\": 0.203252}",
+      "name": "three equation subcategories present",
+      "ok": true,
+      "severity": "fail"
+    },
+    {
+      "area": "eval",
+      "detail": "baseline eval is running or complete",
+      "name": "baseline eval reached progress",
+      "ok": true,
+      "severity": "fail"
+    },
+    {
+      "area": "eval",
+      "detail": "baseline_eval_loss=1.9919",
+      "name": "baseline eval complete",
+      "ok": true,
+      "severity": "warn"
+    },
+    {
+      "area": "eval",
+      "detail": "final_eval_loss=1.9923",
+      "name": "final eval available",
+      "ok": true,
+      "severity": "warn"
+    },
+    {
+      "area": "eval",
+      "detail": "baseline=1.9919 final=1.9923",
+      "name": "final eval does not regress",
+      "ok": false,
+      "severity": "fail"
+    }
+  ],
+  "decision": {
+    "hard_failures": 1,
+    "human_action_required": false,
+    "next_action": "Do not weak-eval or submit V501; keep V290 checkpoint-6 as submit-safe baseline and return to CPU/teacher search.",
+    "status": "candidate_blocked_by_final_eval_regression",
+    "warnings": 0
+  },
+  "generated_at_utc": "2026-05-16T19:35:30.201975+00:00",
+  "job_id": "6a08bf05e48bea4538b9ffb5",
+  "observed": {
+    "baseline_eval_loss": 1.9919,
+    "final_eval_loss": 1.9923,
+    "max_mem_reserved_gib": 76.1,
+    "planned_steps": 4,
+    "target_parameters_trainability_mode": "trainable",
+    "train_answer_span_loss_weight": 4.0,
+    "train_answer_span_weighted_examples": 1712,
+    "train_answer_span_weighted_tokens": 15197,
+    "trainable_pct": 2.6776,
+    "validation_answer_span_weighted_examples": 428,
+    "weighted_share_by_source": {
+      "v498_bit_replay_guardrail_from_v475": 0.390244,
+      "v498_numeric_teacher_trace_pack": 0.609756
+    },
+    "weighted_share_by_subcategory": {
+      "bit_guardrail_replay": 0.390244,
+      "equation_numeric_add_direct_hard_negative": 0.203252,
+      "equation_numeric_colon_trailing_zero_hard_negative": 0.203252,
+      "equation_numeric_minus_signed_hard_negative": 0.203252
+    }
+  },
+  "schema_version": "kg1_v503_live_hf_job_parameterization_v1"
+}

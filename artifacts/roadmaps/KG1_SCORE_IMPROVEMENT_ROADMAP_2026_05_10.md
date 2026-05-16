@@ -48,7 +48,9 @@ Ultima evidencia operacional relevante:
 | V496 V495 checkpoint-2 weak eval | weak 191, equation 57, bit 134, trunc 1; diff real vs V290: +1 equation (`518deb39`), -2 bit (`8740ed31`, `59bee375`) | nao promove; V475 SFT transfer tambem bloqueada; proximo passo e CPU teacher/guardrail, nao mais H200 SFT amplo |
 | V497 CPU residual transfer audit | baseline 192; V324 CPU projeta 196; V496 projeta 191; 4 ganhos CPU nao transferiram; 1 ganho simbolico V496; 2 perdas bit | confirma que o gargalo e transferencia teacher->LoRA, nao metrica/loss; proximo passo e trace numeric curto + bit guardrail |
 | V498 numeric teacher trace pack | 1712/428 linhas; 3 regras numeric com hard negatives; bit replay guardrail; zero overlap id/prompt/prompt+answer com weak/full; token max 331; offset masks completos | dataset elegivel para um unico smoke H200 curto, nao para treino amplo |
-| V499 local debug | dataset V498 uploaded no HF commit `c7e27fd39c598dd23cb25481f567787bdff50820`; V478 objetivo passou com bit efetivo 39.02% e equation 60.98%; H200 custo 0.083333/min | liberar um smoke H200 de 2 steps apos commit/push; promover somente se weak `>192`, `equation>=60`, `bit>=136`, `trunc=0` |
+| V499 H200 smoke | dataset V498 uploaded no HF commit `c7e27fd39c598dd23cb25481f567787bdff50820`; V478 objetivo passou; H200 rodou, mas final eval `2.8125 -> 2.8162` e answer-span inativo | bloqueado; nao weak-eval/package/submit |
+| V501 H200 answer-span | answer-span ativo: train `1712` exemplos e `15197` tokens; MoE `gate_up/down` treinaveis; `lm_head` congelado; final eval `1.9919 -> 1.9923` | bloqueado por kill-switch; nao rodar weak/full/package/submit |
+| V504 crisis root-cause audit | achou bugs reais em metrica/gates: ACC label-aware, thresholds weak antigos, weak defaults diagnosticos, full best selection, anti-leak flags ausentes, pre-paid gate sem schema SFT | corrigir gates e revalidar candidatos com extracao label-free antes de qualquer novo GPU |
 
 ## Achados Principais V484-V492
 
@@ -176,11 +178,12 @@ ao CPU teacher, sem broad SFT.
    postprocessor, logit mask, prompt hack ou threshold.
 2. Weak/full sao apenas avaliacao e gate. Nao podem construir dataset, pares,
    chosen/rejected, desempate de regra ou cherry-pick.
-3. ACC de promocao usa `src.competition_utils.verify_answer`. `answers_equivalent`
-   e diagnostico-only.
-4. Extracao expected-aware so pode desambiguar o ultimo `\boxed{}` usando
-   `verify_answer`; nunca pode escolher um `\boxed{}` anterior por bater com o
-   gabarito.
+3. ACC de promocao usa predicao label-free:
+   `extract_final_answer(raw_output)` seguido de
+   `src.competition_utils.verify_answer`. `answers_equivalent` e
+   diagnostico-only.
+4. Extracao expected-aware e diagnostico-only para datasets com label; ela nao
+   pode produzir a coluna `prediction` usada em gate, package ou submit.
 5. Nenhum job pago roda se `target_parameters` estiver ausente, divergente ou
    carregado por modo manual sem round-trip CPU aprovado.
 6. `modules_to_save` deve ficar vazio no seed e no pacote final. `lm_head` pode
@@ -191,9 +194,11 @@ ao CPU teacher, sem broad SFT.
    `REQUIRE_LORA_TARGET_PARAMETERS_TRAINABLE=0` ou `1`.
 8. Todo launcher/job/notebook novo ou alterado passa por
    `scripts/kg1_static_safety_gate.py`.
-9. Antes de job pago, rodar `scripts/kg1_pre_paid_job_integration_gate.py` e
-   `scripts/hf_job_preflight_gate.py`; o preflight deve falhar se qualquer linha
-   de treino vier marcada como gate/weak/full usada para treino.
+9. Antes de job pago, rodar `scripts/kg1_pre_paid_job_integration_gate.py` no
+   schema correto (`preference` ou `sft`) e `scripts/hf_job_preflight_gate.py`;
+   o preflight deve falhar se qualquer linha de treino vier marcada como
+   gate/weak/full usada para treino ou se as flags anti-leakage estiverem
+   ausentes.
 10. FinOps: cancelar job que nao possa mais superar `total>192`,
    `equation>56`, `bit>=136`, `truncated=0`.
 11. H200 pode ser usada ate 1 hora por execucao. Acima disso exige autorizacao
@@ -218,9 +223,13 @@ ao CPU teacher, sem broad SFT.
     static gate bloqueia isso em jobs/notebooks promocionais.
 19. Weak eval promocional com `scripts/hf_job_weak_eval_v245.py` deve declarar
     controles long-context: `KG1_DISABLE_THINKING=0`, `KG1_NO_PROMPT_SUFFIX=0`,
-    `KG1_MAX_TOKENS=7680`, `KG1_MAX_MODEL_LEN=8192` e
-    `KG1_MAX_NUM_SEQS=64`. Defaults curtos sao apenas diagnostico e exigem
-    `KG1_WEAK_EVAL_DIAGNOSTIC_ONLY=1`.
+    `KG1_MAX_TOKENS=7680`, `KG1_MAX_MODEL_LEN=8192`,
+    `KG1_MAX_NUM_SEQS=64`; os defaults agora tambem seguem esse modo.
+20. Weak eval promocional falha por padrao se nao passar
+    `total>=196`, `equation>=60`, `bit>=136`, `trunc=0`. Para sweep barato,
+    marcar explicitamente `KG1_WEAK_EVAL_DIAGNOSTIC_ONLY=1`.
+21. V499 e V501 sao artefatos de forense, nao candidatos. Qualquer launcher que
+    referencie os repos desses adapters deve falhar no static/pre-paid gate.
 
 ## Plano Cronologico Ativo
 
@@ -569,37 +578,27 @@ Sem isso, nao packagear e nao submeter.
 ## Proxima Acao Imediata
 
 1. Manter V290 checkpoint-6 como unico adapter submit-safe ate haver weak/full
-   gate melhor.
-2. V498 esta criado, tokenizado, validado e uploaded:
-   - train SHA `920b3c30b9ada9ad2685091194dcc53e717f72a9c037cafeef6e494f21511e79`;
-   - val SHA `68cda4162214359aaf7cda304c2a06902775b1aadb53fcadfd0edf7ff481ed80`;
-   - HF dataset commit `c7e27fd39c598dd23cb25481f567787bdff50820`.
-3. V499 H200 executou e subiu `checkpoint-2` e `final_adapter`, mas a auditoria
-   V500 bloqueou promocao/weak eval pago:
-   - dataset, hashes, offset masks, MoE trainavel, `lm_head` congelado, custo,
-     upload e memoria passaram;
-   - baseline eval loss `2.8125`, final eval loss `2.8162` (`+0.0037`);
-   - `ANSWER_SPAN_LOSS_WEIGHT=1.0` gerou `0` answer-span weighted examples;
-   - `MAX_STEPS=2` era smoke-only.
-4. Nao rodar weak eval pago no V499. A decisao FinOps correta e nao gastar com
-   ACC caro quando o objetivo local ficou plano/pior.
-5. Proxima execucao deve ser V500/V501 com answer-focused loss antes de qualquer
-   weak eval:
-   - `ANSWER_SPAN_LOSS_WEIGHT>=4.0`;
-   - gate exigindo `answer_span_weighted_examples_train>0` e
-     `answer_span_weighted_examples_val>0`;
-   - `MAX_STEPS=4..8`, `EVAL_EVERY_STEPS=2`, `SAVE_EVERY_STEPS=2`;
-   - manter V290 checkpoint-6, MoE `gate_up/down` treinaveis, `lm_head`
-     congelado e replay bit efetivo >= `39%`;
-   - abortar se eval loss ultrapassar baseline ou se memoria/custo sair do
-     gate.
-6. Rodar weak eval official-like apenas se V500/V501 tiver sinal local melhor
-   ou novo CPU gate deterministico. Promover somente se `total>192`,
-   `equation>=60`, `bit>=136`, `trunc=0`.
-7. Qualquer weak eval promocional continua official-like e caro por desenho:
-   thinking ligado, `max_tokens=7680`, `max_model_len=8192`. Para performance,
-   usar avaliacoes baratas/diagnosticas antes; nao mudar essas configuracoes
-   em resultado que pretende comparar com V290.
+   gate melhor com metrica label-free.
+2. V499 e V501 estao bloqueados:
+   - V499: final eval loss `2.8125 -> 2.8162`, answer-span inativo;
+   - V501: answer-span ativo, MoE trainavel e `lm_head` congelado, mas final
+     eval loss `1.9919 -> 1.9923`.
+3. Nao rodar weak/full/package/submit em V499/V501. A decisao FinOps correta e
+   nao gastar com ACC caro quando o kill-switch local ja bloqueou o candidato.
+4. Revalidar inventario de candidatos anteriores usando somente
+   `submit_safe_label_free_prediction`. Qualquer ganho que exista apenas em
+   `label_aware_debug_prediction` e descartado.
+5. Atualizar/usar os gates corrigidos antes de qualquer novo job:
+   - `kg1_static_safety_gate.py`;
+   - `kg1_pre_paid_job_integration_gate.py --dataset-schema sft|preference`;
+   - `hf_job_preflight_gate.py` com flags anti-leakage obrigatorias;
+   - weak eval promocional official-like e bloqueante por default.
+6. Se a revalidacao label-free nao produzir candidato `>192/315`, voltar para
+   CPU teacher/verifier discovery. Nao abrir H200 ate existir novo sinal CPU
+   que projete `equation>=60`, preserve `bit>=136` e tenha `trunc=0`.
+7. Se surgir novo candidato, weak eval promocional deve usar thinking ligado,
+   `max_tokens=7680`, `max_model_len=8192`, `max_num_seqs=64` e falhar se nao
+   passar `total>=196`, `equation>=60`, `bit>=136`, `trunc=0`.
 
 ## Atualizacao V500 - Auditoria De Parametros V499
 
@@ -644,8 +643,38 @@ Resultado do double check:
 Decisao:
 
 - V499 nao deve receber weak eval pago.
-- V501 pode ser lançado somente depois de commit/push e debug final no HEAD
-  commitado.
-- Se V501 nao reduzir eval loss com answer-span ativo, nao rodar weak eval e
-  voltar para CPU/teacher; se reduzir, executar weak eval official-like e
-  promover apenas se `total>192`, `equation>=60`, `bit>=136`, `trunc=0`.
+- V501 foi lancado como smoke H200 curto depois do debug de parametrizacao e
+  foi bloqueado pelo kill-switch: final eval `1.9919 -> 1.9923`.
+- Nao rodar weak/full/package/submit em V499/V501; ambos sao artefatos
+  forenses, nao candidatos.
+
+## Atualizacao V503/V504 - Causa Raiz Do Plateau
+
+Artefatos:
+
+- `artifacts/v503_live_hf_job_parameterization/KG1_V503_LIVE_HF_JOB_PARAMETERIZATION.md`;
+- `artifacts/v504_crisis_root_cause_audit/KG1_V504_CRISIS_ROOT_CAUSE_AUDIT.md`;
+- `artifacts/v504_crisis_root_cause_audit/v504_crisis_root_cause_audit_manifest.json`.
+
+Conclusao: as pecas de treino V501 estavam tecnicamente presentes, mas a rota
+de promocao tinha bugs silenciosos suficientes para explicar falsas esperancas
+de ganho:
+
+| Problema | Correcao |
+|---|---|
+| `prediction` podia ser extraida com `extract_final_answer_for_expected`, usando label esperado | `prediction` agora e label-free; expected-aware fica somente em `label_aware_debug_prediction` |
+| expected-aware aceitava prefixo inseguro como `\boxed{30 wrong}` para expected `30` | helper agora aceita apenas delimitador real `}` |
+| weak eval V245 tinha defaults diagnosticos (`max_tokens=96`, thinking off) e threshold `equation>=57` | defaults agora sao official-like e promocao exige `total>=196`, `equation>=60`, `bit>=136`, `trunc=0` |
+| weak eval podia terminar com exit 0 sem candidato promovido se env nao estivesse setado | promocao e bloqueante por padrao; sweeps baratos exigem `KG1_WEAK_EVAL_DIAGNOSTIC_ONLY=1` |
+| full eval escolhia maior `correct` antes de aplicar truncation gate | agora escolhe primeiro entre candidatos que passam correct/truncation |
+| pre-paid gate era preference-only e nao cobria V498/V501 SFT | adicionado `--dataset-schema sft` e save/eval steps configuraveis |
+| flags anti-leakage ausentes eram apenas contadas | agora bloqueiam preflight promocional |
+
+O que ficou provado como nao raiz: hashes V498, row counts, offset masks,
+truncation do dataset, MoE `gate_up/down` treinaveis, `lm_head` congelado,
+memoria H200 e custo.
+
+Decisao operacional: V499 e V501 entram na lista de adapters bloqueados. O
+proximo passo e revalidar qualquer candidato antigo com a metrica label-free
+corrigida. Sem candidato `>192/315`, nao ha novo GPU; volta para CPU
+teacher/verifier discovery.

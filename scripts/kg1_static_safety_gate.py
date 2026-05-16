@@ -65,6 +65,7 @@ CRITICAL_SNIPPETS = {
         "target parameter require check": "Init adapter has target_parameters but REQUIRE_LORA_TARGET_PARAMETER_MATCH is disabled",
         "gate row contamination flag": "weak_gate_rows_used_for_training",
         "gate row contamination fail": "gate/full/weak rows used for training",
+        "missing gate flags fail": "missing required anti-leakage gate flags",
     },
     "scripts/hf_job_train_v90.py": {
         "target parameter alias matcher": "def target_parameter_name_matches",
@@ -93,15 +94,29 @@ CRITICAL_SNIPPETS = {
         "expected-aware boxed extraction": "def extract_final_answer_for_expected",
         "literal closing brace guard": "immediately adjacent surplus braces",
         "escaped expected variant": "escaped_expected = escape_boxed_answer(expected_text)",
+        "expected-aware debug warning": "submit-safe predictions",
+        "expected-aware no prefix overcount": 'value[after] != "}"',
         "expected-aware uses strict verifier": "if verify_answer(expected_text, observed_text)",
     },
     "scripts/evaluate_lora_adapter.py": {
-        "expected-aware extraction import": "extract_final_answer_for_expected",
-        "expected-aware extraction call": "extract_final_answer_for_expected(raw_output, expected)",
+        "submit-safe extraction call": "prediction = extract_final_answer(raw_output)",
+        "submit-safe prediction column": "submit_safe_label_free_prediction",
+        "label-aware debug column": "label_aware_debug_prediction",
+        "prediction metric mode": "\"prediction_metric_mode\": \"submit_safe_label_free\"",
     },
     "scripts/evaluate_lora_adapters_batch.py": {
-        "expected-aware extraction import": "extract_final_answer_for_expected",
-        "expected-aware extraction call": "extract_final_answer_for_expected(raw_output, expected)",
+        "submit-safe extraction call": "prediction = extract_final_answer(raw_output)",
+        "submit-safe prediction column": "submit_safe_label_free_prediction",
+        "label-aware debug column": "label_aware_debug_prediction",
+        "prediction metric mode": "\"prediction_metric_mode\": \"submit_safe_label_free\"",
+    },
+    "scripts/hf_job_weak_eval_v245.py": {
+        "promotion equation floor": "KG1_WEAK_PROMOTE_EQUATION_MIN\", 60",
+        "promotion total floor": "KG1_WEAK_PROMOTE_TOTAL_MIN\", 196",
+        "promotion enforced by default": "not diagnostic_only",
+        "official thinking default": "disable_thinking = env_bool(\"KG1_DISABLE_THINKING\", False)",
+        "official token default": "KG1_MAX_TOKENS\", 7680",
+        "official context default": "KG1_MAX_MODEL_LEN\", 8192",
     },
     "scripts/run_v286_generic_tokenization_gate.py": {
         "escaped boxed target": "box_answer(answer)",
@@ -160,6 +175,8 @@ BLOCKED_ADAPTER_MARKERS = {
     "kg1-nemotron-lora-v448-nemo-h200-v447-clean-trace-v290ckpt6": "Adapter was trained from quarantined V447 trace data.",
     "kg1-nemotron-lora-v465-v464-numeric-multirule-v290ckpt6": "Adapter was trained from quarantined V464 data.",
     "kg1-nemotron-lora-v469-v468-symbol-fix-v290ckpt6": "Adapter was trained from quarantined V468 data.",
+    "kg1-nemotron-lora-v499-nemo-h200-v498-numeric-teacher-v290ckpt6": "V499 final eval regressed and answer-span weighting was inactive; forensics only.",
+    "kg1-nemotron-lora-v501-nemo-h200-v498-answer-span-v290ckpt6": "V501 answer-span run was blocked by final eval regression; forensics only.",
 }
 
 TRUE_FORMAT_NEGATIVE_RE = re.compile(
@@ -549,6 +566,46 @@ def audit_text(path: Path, text: str) -> list[Finding]:
         )
 
     if rel != "scripts/kg1_static_safety_gate.py" and re.search(
+        r"\bprediction\s*=\s*\(?\s*extract_final_answer_for_expected\s*\(",
+        text,
+    ):
+        findings.append(
+            Finding(
+                rel,
+                "error",
+                "label_aware_prediction_used_for_submit_safe_metric",
+                "Expected-aware extraction may be logged only as label_aware_debug_prediction; "
+                "submit-safe prediction must use extract_final_answer(raw_output).",
+            )
+        )
+
+    if rel != "scripts/kg1_static_safety_gate.py" and re.search(
+        r"KG1_WEAK_PROMOTE_EQUATION_MIN[\"']?\s*,\s*57\b|KG1_WEAK_PROMOTE_EQUATION_MIN[\"']?\s*[,=]\s*57\b",
+        text,
+    ):
+        findings.append(
+            Finding(
+                rel,
+                "error",
+                "stale_weak_equation_env_gate",
+                "Weak promotion env/default gate must use the current equation floor 60, not 57.",
+            )
+        )
+
+    if rel != "scripts/kg1_static_safety_gate.py" and re.search(
+        r"KG1_WEAK_PROMOTE_TOTAL_MIN[\"']?\s*,\s*193\b|KG1_WEAK_PROMOTE_TOTAL_MIN[\"']?\s*[,=]\s*193\b",
+        text,
+    ):
+        findings.append(
+            Finding(
+                rel,
+                "error",
+                "stale_weak_total_env_gate",
+                "Weak promotion env/default gate must use the submit-safe floor 196, not 193.",
+            )
+        )
+
+    if rel != "scripts/kg1_static_safety_gate.py" and re.search(
         r"\bWEAK_BIT_MIN_FOR_FULL\s*=\s*133\b", text
     ):
         findings.append(
@@ -758,10 +815,28 @@ def run_self_test() -> int:
         if "permissive_metric_used_for_official_correct" not in {item.code for item in metric_findings}:
             print("missing permissive metric self-test finding", flush=True)
             return 1
+        label_aware_metric = tmp / "label_aware_metric.py"
+        label_aware_metric.write_text(
+            "from src.competition_utils import extract_final_answer_for_expected\n"
+            "prediction = extract_final_answer_for_expected(raw_output, expected)\n",
+            encoding="utf-8",
+        )
+        label_aware_findings = audit_text(label_aware_metric, label_aware_metric.read_text(encoding="utf-8"))
+        if "label_aware_prediction_used_for_submit_safe_metric" not in {
+            item.code for item in label_aware_findings
+        }:
+            print("missing label-aware submit-safe metric self-test finding", flush=True)
+            return 1
         stale_gate = tmp / "build_old_gate.py"
         stale_gate.write_text(
             "WEAK_BIT_MIN_FOR_FULL = 133\nWEAK_MAX_TRUNC_FOR_FULL = 3\n"
             "KG1_WEAK_BIT_MIN\", 133\nKG1_WEAK_TRUNC_MAX\", 3\n",
+            encoding="utf-8",
+        )
+        stale_weak_promote = tmp / "run_old_weak_promote.py"
+        stale_weak_promote.write_text(
+            "equation_min = env_int(\"KG1_WEAK_PROMOTE_EQUATION_MIN\", 57)\n"
+            "total_min = env_int(\"KG1_WEAK_PROMOTE_TOTAL_MIN\", 193)\n",
             encoding="utf-8",
         )
         stale_argparse = tmp / "run_old_argparse.py"
@@ -771,6 +846,7 @@ def run_self_test() -> int:
             encoding="utf-8",
         )
         stale_gate_findings = audit_text(stale_gate, stale_gate.read_text(encoding="utf-8"))
+        stale_gate_findings.extend(audit_text(stale_weak_promote, stale_weak_promote.read_text(encoding="utf-8")))
         stale_gate_findings.extend(audit_text(stale_argparse, stale_argparse.read_text(encoding="utf-8")))
         stale_codes = {item.code for item in stale_gate_findings}
         if not {
@@ -778,6 +854,8 @@ def run_self_test() -> int:
             "stale_weak_trunc_gate",
             "stale_weak_bit_env_gate",
             "stale_weak_trunc_env_gate",
+            "stale_weak_equation_env_gate",
+            "stale_weak_total_env_gate",
             "stale_weak_bit_argparse_default",
             "stale_weak_trunc_argparse_default",
         }.issubset(stale_codes):

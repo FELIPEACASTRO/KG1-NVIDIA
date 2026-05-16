@@ -215,6 +215,10 @@ def extract_final_answer_for_expected(text: str | None, expected: object) -> str
     second ``}`` is payload or delimiter.  Evaluation already has the expected
     answer, so this helper prefers an exact boxed payload that verifies against
     that expected answer, then falls back to the public extraction order.
+
+    This helper is for labeled dataset/tokenization/debug audits only.  It must
+    not be used to produce submit-safe predictions because hidden test rows do
+    not provide ``expected``.
     """
 
     if text is None:
@@ -242,7 +246,12 @@ def extract_final_answer_for_expected(text: str | None, expected: object) -> str
                 if not variant or not tail.startswith(variant):
                     continue
                 after = start + len(variant)
-                if after >= len(value) or value[after] in "}\r\n\t `.,;)]":
+                # Accept only a real boxed delimiter.  Prefix matches such as
+                # expected=30 and "\boxed{30 wrong}" are not submit-equivalent
+                # and must fall back to the public label-free extraction.
+                if after < len(value) and value[after] != "}":
+                    continue
+                if after >= len(value) or value[after] == "}":
                     observed_text = canonical_boxed_payload(variant)
                     if verify_answer(expected_text, observed_text):
                         return observed_text

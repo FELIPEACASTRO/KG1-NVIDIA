@@ -405,14 +405,17 @@ respostas simbolicas com braces literais podiam ser subextraidas do
 `\boxed{}`. Isso podia criar falso negativo de ACC e confundir analises de
 loss/eval.
 
-Correcao aplicada:
+Correcao V504 aplicada:
 
-- `extract_final_answer_for_expected` desambigua payload boxed usando o
-  `answer` conhecido durante eval;
-- `evaluate_lora_adapter.py` e `evaluate_lora_adapters_batch.py` usam esse
-  caminho quando a coluna `answer` existe;
-- V286 usa `box_answer(answer)` para novos datasets boxed e bloqueia
-  concatenacao insegura.
+- `extract_final_answer` label-free e o unico caminho valido para `prediction`
+  promocional/submittable;
+- `extract_final_answer_for_expected` fica restrito a coluna de debug
+  `label_aware_debug_prediction`, nunca para ACC submit-safe;
+- `evaluate_lora_adapter.py`, `evaluate_lora_adapters_batch.py` e
+  `analyze_eval_predictions.py` reextraem a resposta de `raw_output` sem usar o
+  `answer` conhecido;
+- V286 continua usando `box_answer(answer)` para gerar datasets boxed, mas o
+  gate de avaliacao precisa provar parse label-free antes de promover.
 
 Impacto no mapa do problema: antes de culpar treino ou adapter, todo novo
 dataset/resultado precisa provar que o parse simbolico esta correto pelo gate.

@@ -570,12 +570,24 @@ def run_eval(args: argparse.Namespace) -> dict[str, Any]:
     log_json("candidate_summary_payload", summary)
     best_rows = [row for row in summary.get("rows", []) if str(row.get("status", "")) == "ok"]
     full_candidate_gate = False
+    full_min_candidate = env_int("KG1_FULL_MIN_CANDIDATE", 831)
+    full_max_trunc = env_int("KG1_FULL_MAX_TRUNC", 4)
     if best_rows:
-        best = max(best_rows, key=lambda row: int(row.get("correct", 0)))
-        full_candidate_gate = (
-            int(best.get("correct", 0)) >= env_int("KG1_FULL_MIN_CANDIDATE", 831)
-            and int(best.get("truncated", 999999)) <= env_int("KG1_FULL_MAX_TRUNC", 4)
+        passed_rows = [
+            row
+            for row in best_rows
+            if int(row.get("correct", 0)) >= full_min_candidate
+            and int(row.get("truncated", 999999)) <= full_max_trunc
+        ]
+        ranked_rows = passed_rows or best_rows
+        best = max(
+            ranked_rows,
+            key=lambda row: (
+                int(row.get("correct", 0)),
+                -int(row.get("truncated", 999999)),
+            ),
         )
+        full_candidate_gate = bool(passed_rows)
         log_json("best_full_candidate", best)
     else:
         best = {}

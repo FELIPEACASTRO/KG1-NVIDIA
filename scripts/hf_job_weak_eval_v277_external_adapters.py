@@ -281,7 +281,7 @@ def run_eval(args: argparse.Namespace) -> dict[str, Any]:
     candidate_json = output_dir / "v277_external_adapter_candidates.json"
     candidate_json.write_text(json.dumps(candidate_payload, indent=2, sort_keys=True), encoding="utf-8")
     eval_out = output_dir / "eval"
-    disable_thinking = env_bool("KG1_DISABLE_THINKING", True)
+    disable_thinking = env_bool("KG1_DISABLE_THINKING", False)
     no_prompt_suffix = env_bool("KG1_NO_PROMPT_SUFFIX", False)
     prompt_suffix = os.environ.get("KG1_PROMPT_SUFFIX", DEFAULT_PROMPT_SUFFIX)
     prediction_postprocessor = env_str("KG1_PREDICTION_POSTPROCESSOR", "none")
@@ -314,11 +314,11 @@ def run_eval(args: argparse.Namespace) -> dict[str, Any]:
         "--output-dir",
         str(eval_out),
         "--max-tokens",
-        str(env_int("KG1_MAX_TOKENS", 96)),
+        str(env_int("KG1_MAX_TOKENS", 7680)),
         "--max-model-len",
-        str(env_int("KG1_MAX_MODEL_LEN", 4096)),
+        str(env_int("KG1_MAX_MODEL_LEN", 8192)),
         "--max-num-seqs",
-        str(env_int("KG1_MAX_NUM_SEQS", 8)),
+        str(env_int("KG1_MAX_NUM_SEQS", 64)),
         "--warmup-rows",
         "0",
         "--prediction-postprocessor",
@@ -338,13 +338,32 @@ def run_eval(args: argparse.Namespace) -> dict[str, Any]:
         raise FileNotFoundError(summary_path)
     summary = read_json(summary_path)
     rows = summary_rows(summary)
-    best = max([row for row in rows if str(row.get("status", "")) == "ok"], key=lambda row: int(row.get("correct", 0)), default={})
+    ok_rows = [row for row in rows if str(row.get("status", "")) == "ok"]
+    weak_total_min = env_int("KG1_WEAK_TOTAL_MIN", 196)
+    weak_eq_min = env_int("KG1_WEAK_EQ_MIN", 60)
+    weak_bit_min = env_int("KG1_WEAK_BIT_MIN", 136)
+    weak_trunc_max = env_int("KG1_WEAK_TRUNC_MAX", 0)
+    passed_rows = [
+        row
+        for row in ok_rows
+        if int(row.get("correct", 0)) >= weak_total_min
+        and int(row.get("equation_transform_correct", 0)) >= weak_eq_min
+        and int(row.get("bit_manipulation_correct", 0)) >= weak_bit_min
+        and int(row.get("truncated", 999999)) <= weak_trunc_max
+    ]
+    ranked_rows = passed_rows or ok_rows
+    best = max(
+        ranked_rows,
+        key=lambda row: (
+            int(row.get("correct", 0)),
+            int(row.get("equation_transform_correct", 0)),
+            int(row.get("bit_manipulation_correct", 0)),
+            -int(row.get("truncated", 999999)),
+        ),
+        default={},
+    )
     weak_gate_pass = bool(
-        best
-        and int(best.get("correct", 0)) >= env_int("KG1_WEAK_TOTAL_MIN", 193)
-        and int(best.get("equation_transform_correct", 0)) >= env_int("KG1_WEAK_EQ_MIN", 60)
-        and int(best.get("bit_manipulation_correct", 0)) >= env_int("KG1_WEAK_BIT_MIN", 136)
-        and int(best.get("truncated", 999999)) <= env_int("KG1_WEAK_TRUNC_MAX", 0)
+        best and best in passed_rows
     )
     log_json("candidate_summary_payload", summary)
     log_json("v277_best_candidate_gate", {"best": best, "weak_gate_pass": weak_gate_pass})

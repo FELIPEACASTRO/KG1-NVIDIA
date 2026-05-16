@@ -120,7 +120,7 @@ flowchart TD
 | Dados | Anti-leakage | Bloqueia uso de weak/full ou IDs proibidos em treino |
 | Hipoteses | Literatura/OpenRouter/Kaggle | Gera ideias, mas nao promove nada sem gate local |
 | CPU Gate | DSL/probes/audits | Prova sinal barato antes de GPU |
-| Metric Parse | `extract_final_answer_for_expected` + `box_answer` | Evita falso negativo de ACC em respostas simbolicas com `{`, `}` ou `\` |
+| Metric Parse | `extract_final_answer` label-free para `prediction`; `extract_final_answer_for_expected` apenas em debug | Impede ACC submit-safe contaminado pelo `answer` conhecido; respostas simbolicas devem ser validadas sem label no caminho promocional |
 | Error Ledger | `KG1_ERROR_LEDGER_2026_05_15.md` | Guarda falhas, causas, regras preventivas e prompts externos |
 | Integration Gate | `scripts/kg1_pre_paid_job_integration_gate.py` | Valida pecas, dataset, launcher e kill-switch antes de job pago |
 | HF Job | H200 curto | Executa apenas smoke com limite de 1 hora |

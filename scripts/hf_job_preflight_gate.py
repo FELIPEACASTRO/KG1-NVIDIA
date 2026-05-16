@@ -416,6 +416,11 @@ def count_and_audit_jsonl(path: Path, label: str) -> dict[str, Any]:
             f"{label} has rows marked as gate/full/weak rows used for training: "
             + json.dumps(gate_row_flag_bad_rows[:10], sort_keys=True)
         )
+    if any(count for count in gate_row_flag_missing_counts.values()):
+        raise RuntimeError(
+            f"{label} has rows missing required anti-leakage gate flags: "
+            + json.dumps(gate_row_flag_missing_counts, sort_keys=True)
+        )
     return summary
 
 
@@ -671,6 +676,56 @@ def self_test() -> None:
     assert blocked_dataset_matches("repo data/v468_v464_symbol_fix_dataset/train.jsonl")
     assert blocked_dataset_matches("repo data/v447_v446_trace_dataset/train.jsonl")
     assert not blocked_dataset_matches("repo data/v469_symbol_fix_rebuilt_clean/train.jsonl")
+    import tempfile
+
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        tmp = Path(tmp_dir)
+        missing_flags = tmp / "missing_flags.jsonl"
+        missing_flags.write_text(
+            json.dumps(
+                {
+                    "id": "x",
+                    "family": "equation_transform",
+                    "messages": [{"role": "assistant", "content": "Final answer: \\boxed{1}"}],
+                    "metadata": {},
+                },
+                sort_keys=True,
+            )
+            + "\n",
+            encoding="utf-8",
+        )
+        try:
+            count_and_audit_jsonl(missing_flags, "missing_flags")
+        except RuntimeError as exc:
+            if "missing required anti-leakage gate flags" not in str(exc):
+                raise
+        else:
+            raise RuntimeError("self-test expected missing anti-leakage flags failure")
+
+        clean_flags = tmp / "clean_flags.jsonl"
+        clean_flags.write_text(
+            json.dumps(
+                {
+                    "id": "x",
+                    "family": "equation_transform",
+                    "messages": [{"role": "assistant", "content": "Final answer: \\boxed{1}"}],
+                    "metadata": {
+                        "gate_rows_used_for_training": False,
+                        "weak_gate_rows_used_for_training": False,
+                        "full_gate_rows_used_for_training": False,
+                    },
+                },
+                sort_keys=True,
+            )
+            + "\n",
+            encoding="utf-8",
+        )
+        clean_summary = count_and_audit_jsonl(clean_flags, "clean_flags")
+        assert clean_summary["gate_row_flag_missing_counts"] == {
+            "gate_rows_used_for_training": 0,
+            "weak_gate_rows_used_for_training": 0,
+            "full_gate_rows_used_for_training": 0,
+        }
     print("hf_job_preflight_gate_self_test=ok", flush=True)
 
 

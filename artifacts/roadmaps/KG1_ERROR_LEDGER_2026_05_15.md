@@ -1395,7 +1395,58 @@ Regra preventiva:
 - Se repetir `equation=57` com perda de bit/truncation, cancelar por FinOps e
   voltar para CPU.
 
-Status: aberto; aguardando V499 smoke/weak eval.
+Status: fechado como bloqueado. V499 executou, mas final eval regrediu e
+answer-span ficou inativo; nao rodar weak/full/package/submit.
+
+### E048 - ACC promocional podia usar extracao label-aware
+
+Evidencia:
+
+- `extract_final_answer_for_expected()` usa o answer esperado para desambiguar
+  `\boxed{}`.
+- `evaluate_lora_adapter.py` e `evaluate_lora_adapters_batch.py` usavam esse
+  helper para gerar a coluna `prediction` quando `questions-csv` continha
+  `answer`.
+- Em teste simples, `expected=30` e `raw=\boxed{30 wrong}` poderia virar
+  `30`, inflando ACC local.
+
+Impacto:
+
+- Um ganho poderia ser melhoria do parser com label, nao comportamento
+  submit-safe do adapter.
+- Isso explica divergencias entre valores vistos em logs e valores
+  submit-safe.
+
+Regra preventiva:
+
+- `prediction` promocional deve ser sempre
+  `extract_final_answer(raw_output)`.
+- Expected-aware fica apenas como `label_aware_debug_prediction`.
+- Static gate bloqueia `prediction = extract_final_answer_for_expected(...)`.
+
+Status: corrigido em V504.
+
+### E049 - V501 answer-span trainable-MoE bloqueado por final eval regression
+
+Evidencia:
+
+- V501 ativou answer-span weighting: train `1712` exemplos, `15197` tokens;
+  validation `428` exemplos.
+- MoE `mlp.experts.gate_up_proj` e `mlp.experts.down_proj` ficaram treinaveis.
+- `lm_head` ficou congelado.
+- Baseline eval loss `1.9919`; final eval loss `1.9923`.
+
+Impacto:
+
+- F2 trainable e answer-span ativo nao sao suficientes para ganho.
+- Weak eval caro em V501 seria desperdicio de FinOps.
+
+Regra preventiva:
+
+- V501 adapter/repo entra na lista de bloqueio.
+- Nao abrir novo H200 a partir de V498/V501 sem novo sinal CPU label-free.
+
+Status: bloqueado por V503/V504.
 
 ## Prompt Externo
 

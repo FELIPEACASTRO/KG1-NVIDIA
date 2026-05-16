@@ -24,7 +24,7 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from src.competition_utils import canonical_family, classify_puzzle  # noqa: E402
+from src.competition_utils import PROMPT_SUFFIX, canonical_family, classify_puzzle  # noqa: E402
 
 
 EXPECTED_WEAK_COUNTS = {"bit_manipulation": 160, "equation_transform": 155}
@@ -45,7 +45,7 @@ DEFAULT_ADAPTER_SUBFOLDER = "final"
 DEFAULT_OUTPUT_REPO = "felipesp1983/kg1-nemotron-lora-v243-safe-equation-fixtures"
 DEFAULT_MODEL_NAME = "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16"
 DEFAULT_MODEL_REVISION = "cbd3fa9f933d55ef16a84236559f4ee2a0526848"
-DEFAULT_PROMPT_SUFFIX = "\nReturn only one line: `\\boxed{answer}`. No reasoning. No explanation."
+DEFAULT_PROMPT_SUFFIX = PROMPT_SUFFIX
 
 
 def utc_now() -> str:
@@ -281,8 +281,8 @@ def parse_adapter_specs(adapter_repo: str, adapter_subfolders_raw: str) -> list[
 
 
 def weak_promotion_gate(summary: dict[str, Any]) -> dict[str, Any]:
-    total_min = env_int("KG1_WEAK_PROMOTE_TOTAL_MIN", 193)
-    equation_min = env_int("KG1_WEAK_PROMOTE_EQUATION_MIN", 57)
+    total_min = env_int("KG1_WEAK_PROMOTE_TOTAL_MIN", 196)
+    equation_min = env_int("KG1_WEAK_PROMOTE_EQUATION_MIN", 60)
     bit_min = env_int("KG1_WEAK_PROMOTE_BIT_MIN", 136)
     trunc_max = env_int("KG1_WEAK_PROMOTE_TRUNC_MAX", 0)
     rows = summary.get("rows", [])
@@ -327,8 +327,11 @@ def weak_promotion_gate(summary: dict[str, Any]) -> dict[str, Any]:
             }
         )
     passed_candidates = [row for row in candidates if row["passed"]]
+    diagnostic_only = env_bool("KG1_WEAK_EVAL_DIAGNOSTIC_ONLY", False)
+    enforced = env_bool("KG1_ENFORCE_WEAK_PROMOTION_GATE", not diagnostic_only)
     return {
-        "enforced": env_bool("KG1_ENFORCE_WEAK_PROMOTION_GATE", False),
+        "enforced": enforced,
+        "diagnostic_only": diagnostic_only,
         "thresholds": {
             "correct_min": total_min,
             "equation_transform_min": equation_min,
@@ -471,7 +474,7 @@ def run_eval(args: argparse.Namespace) -> dict[str, Any]:
     candidate_json = output_dir / "v245_weak_eval_candidates.json"
     candidate_json.write_text(json.dumps(candidate_payload, indent=2, sort_keys=True), encoding="utf-8")
     eval_out = output_dir / "eval"
-    disable_thinking = env_bool("KG1_DISABLE_THINKING", True)
+    disable_thinking = env_bool("KG1_DISABLE_THINKING", False)
     no_prompt_suffix = env_bool("KG1_NO_PROMPT_SUFFIX", False)
     prompt_suffix = os.environ.get("KG1_PROMPT_SUFFIX", DEFAULT_PROMPT_SUFFIX)
     log_json(
@@ -502,11 +505,11 @@ def run_eval(args: argparse.Namespace) -> dict[str, Any]:
         "--output-dir",
         str(eval_out),
         "--max-tokens",
-        str(env_int("KG1_MAX_TOKENS", 96)),
+        str(env_int("KG1_MAX_TOKENS", 7680)),
         "--max-model-len",
-        str(env_int("KG1_MAX_MODEL_LEN", 4096)),
+        str(env_int("KG1_MAX_MODEL_LEN", 8192)),
         "--max-num-seqs",
-        str(env_int("KG1_MAX_NUM_SEQS", 8)),
+        str(env_int("KG1_MAX_NUM_SEQS", 64)),
         "--warmup-rows",
         "0",
         "--continue-on-error",
@@ -595,8 +598,12 @@ def self_test() -> int:
             raise
     else:
         raise RuntimeError("self-test expected small weak CSV count failure")
-    old_env = {name: os.environ.get(name) for name in ["KG1_ENFORCE_WEAK_PROMOTION_GATE"]}
-    os.environ["KG1_ENFORCE_WEAK_PROMOTION_GATE"] = "1"
+    old_env = {
+        name: os.environ.get(name)
+        for name in ["KG1_ENFORCE_WEAK_PROMOTION_GATE", "KG1_WEAK_EVAL_DIAGNOSTIC_ONLY"]
+    }
+    os.environ.pop("KG1_ENFORCE_WEAK_PROMOTION_GATE", None)
+    os.environ.pop("KG1_WEAK_EVAL_DIAGNOSTIC_ONLY", None)
     blocked = weak_promotion_gate(
         {
             "rows": [
@@ -612,14 +619,20 @@ def self_test() -> int:
         }
     )
     assert blocked["decision"] == "weak_promotion_gate_blocked"
+    assert blocked["enforced"] is True
+    os.environ["KG1_WEAK_EVAL_DIAGNOSTIC_ONLY"] = "1"
+    diagnostic = weak_promotion_gate({"rows": []})
+    assert diagnostic["diagnostic_only"] is True
+    assert diagnostic["enforced"] is False
+    os.environ.pop("KG1_WEAK_EVAL_DIAGNOSTIC_ONLY", None)
     passed = weak_promotion_gate(
         {
             "rows": [
                 {
                     "name": "good",
                     "status": "ok",
-                    "correct": 193,
-                    "equation_transform_correct": 57,
+                    "correct": 196,
+                    "equation_transform_correct": 60,
                     "bit_manipulation_correct": 136,
                     "truncated": 0,
                 }

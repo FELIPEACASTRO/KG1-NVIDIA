@@ -1,0 +1,34 @@
+{
+  "schema_version": "kg1_v504_crisis_root_cause_audit_v1",
+  "generated_at": "2026-05-16",
+  "decision": {
+    "status": "v501_blocked_return_to_cpu_teacher_search",
+    "submit_safe_baseline": {
+      "weak_total": "192/315",
+      "equation_transform": "56/155",
+      "bit_manipulation": "136/160",
+      "truncated": 0
+    },
+    "human_action_required": false
+  },
+  "root_causes": [
+    "label_aware_extraction_was_used_for_scored_prediction",
+    "expected_aware_extraction_allowed_unsafe_prefix_match",
+    "weak_eval_defaults_were_diagnostic_not_official_like",
+    "weak_promotion_thresholds_were_stale",
+    "full_eval_best_selection_ranked_correct_before_truncation_gate",
+    "v501_final_eval_regressed",
+    "answer_span_weight_active_but_not_answer_dominant",
+    "pre_paid_integration_gate_was_preference_route_only",
+    "anti_leakage_flags_missing_did_not_fail"
+  ],
+  "blocked_candidates": [
+    "felipesp1983/kg1-nemotron-lora-v499-nemo-h200-v498-numeric-teacher-v290ckpt6",
+    "felipesp1983/kg1-nemotron-lora-v501-nemo-h200-v498-answer-span-v290ckpt6"
+  ],
+  "references": {
+    "v503_report": "artifacts/v503_live_hf_job_parameterization/KG1_V503_LIVE_HF_JOB_PARAMETERIZATION.md",
+    "v501_log": "artifacts/v501_hf_nemo_h200_v498_answer_span_weighted_launch/v501_hf_job_6a08bf05e48bea4538b9ffb5.log",
+    "diagram_pieces": "C:/Users/davis/Downloads/Peças dos Diagramas SVG.md"
+  }
+}
