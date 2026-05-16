@@ -1,0 +1,222 @@
+{
+  "dataset_manifest_json": "",
+  "findings": [],
+  "generated_at_utc": "2026-05-16T17:13:42.627493+00:00",
+  "hf_gpu_allowed": true,
+  "schema_version": "kg1_v478_training_objective_alignment_gate_v1",
+  "source_weights": {
+    "v475_v217_bit_replay_guardrail": 1.0,
+    "v475_v325_equation_no_loss_distill": 1.0
+  },
+  "subcategory_weights": {
+    "bit_guardrail_replay": 1.0,
+    "equation_numeric_add_direct": 1.0,
+    "equation_numeric_colon_absdiff": 1.0,
+    "equation_numeric_colon_trailing_zero": 1.0,
+    "equation_numeric_minus_direct_negative": 1.0,
+    "equation_numeric_minus_signed": 1.0
+  },
+  "thresholds": {
+    "max_any_family_effective_share": 0.95,
+    "max_equation_effective_share": 0.65,
+    "min_bit_effective_share": 0.35
+  },
+  "train": {
+    "effective_share_by_family": {
+      "bit_manipulation": {
+        "share": 0.390244,
+        "weight": 512.0
+      },
+      "equation_transform": {
+        "share": 0.609756,
+        "weight": 800.0
+      }
+    },
+    "effective_share_by_source": {
+      "v475_v217_bit_replay_guardrail": {
+        "share": 0.390244,
+        "weight": 512.0
+      },
+      "v475_v325_equation_no_loss_distill": {
+        "share": 0.609756,
+        "weight": 800.0
+      }
+    },
+    "effective_share_by_subcategory": {
+      "bit_guardrail_replay": {
+        "share": 0.390244,
+        "weight": 512.0
+      },
+      "equation_numeric_add_direct": {
+        "share": 0.121951,
+        "weight": 160.0
+      },
+      "equation_numeric_colon_absdiff": {
+        "share": 0.121951,
+        "weight": 160.0
+      },
+      "equation_numeric_colon_trailing_zero": {
+        "share": 0.121951,
+        "weight": 160.0
+      },
+      "equation_numeric_minus_direct_negative": {
+        "share": 0.121951,
+        "weight": 160.0
+      },
+      "equation_numeric_minus_signed": {
+        "share": 0.121951,
+        "weight": 160.0
+      }
+    },
+    "effective_total_weight": 1312.0,
+    "physical_share_by_family": {
+      "bit_manipulation": {
+        "rows": 512,
+        "share": 0.390244
+      },
+      "equation_transform": {
+        "rows": 800,
+        "share": 0.609756
+      }
+    },
+    "physical_share_by_source": {
+      "v475_v217_bit_replay_guardrail": {
+        "rows": 512,
+        "share": 0.390244
+      },
+      "v475_v325_equation_no_loss_distill": {
+        "rows": 800,
+        "share": 0.609756
+      }
+    },
+    "physical_share_by_subcategory": {
+      "bit_guardrail_replay": {
+        "rows": 512,
+        "share": 0.390244
+      },
+      "equation_numeric_add_direct": {
+        "rows": 160,
+        "share": 0.121951
+      },
+      "equation_numeric_colon_absdiff": {
+        "rows": 160,
+        "share": 0.121951
+      },
+      "equation_numeric_colon_trailing_zero": {
+        "rows": 160,
+        "share": 0.121951
+      },
+      "equation_numeric_minus_direct_negative": {
+        "rows": 160,
+        "share": 0.121951
+      },
+      "equation_numeric_minus_signed": {
+        "rows": 160,
+        "share": 0.121951
+      }
+    },
+    "rows": 1312,
+    "unknown_source_rows": 0,
+    "unknown_subcategory_rows": 0
+  },
+  "train_jsonl": "artifacts\\v475_equation_bit_replay_mix\\20260516T_v475_equation_bit_replay_mix\\v475_equation_bit_replay_mix_train.jsonl",
+  "val_jsonl": "artifacts\\v475_equation_bit_replay_mix\\20260516T_v475_equation_bit_replay_mix\\v475_equation_bit_replay_mix_val.jsonl",
+  "validation": {
+    "effective_share_by_family": {
+      "bit_manipulation": {
+        "share": 0.390244,
+        "weight": 128.0
+      },
+      "equation_transform": {
+        "share": 0.609756,
+        "weight": 200.0
+      }
+    },
+    "effective_share_by_source": {
+      "v475_v217_bit_replay_guardrail": {
+        "share": 0.390244,
+        "weight": 128.0
+      },
+      "v475_v325_equation_no_loss_distill": {
+        "share": 0.609756,
+        "weight": 200.0
+      }
+    },
+    "effective_share_by_subcategory": {
+      "bit_guardrail_replay": {
+        "share": 0.390244,
+        "weight": 128.0
+      },
+      "equation_numeric_add_direct": {
+        "share": 0.121951,
+        "weight": 40.0
+      },
+      "equation_numeric_colon_absdiff": {
+        "share": 0.121951,
+        "weight": 40.0
+      },
+      "equation_numeric_colon_trailing_zero": {
+        "share": 0.121951,
+        "weight": 40.0
+      },
+      "equation_numeric_minus_direct_negative": {
+        "share": 0.121951,
+        "weight": 40.0
+      },
+      "equation_numeric_minus_signed": {
+        "share": 0.121951,
+        "weight": 40.0
+      }
+    },
+    "effective_total_weight": 328.0,
+    "physical_share_by_family": {
+      "bit_manipulation": {
+        "rows": 128,
+        "share": 0.390244
+      },
+      "equation_transform": {
+        "rows": 200,
+        "share": 0.609756
+      }
+    },
+    "physical_share_by_source": {
+      "v475_v217_bit_replay_guardrail": {
+        "rows": 128,
+        "share": 0.390244
+      },
+      "v475_v325_equation_no_loss_distill": {
+        "rows": 200,
+        "share": 0.609756
+      }
+    },
+    "physical_share_by_subcategory": {
+      "bit_guardrail_replay": {
+        "rows": 128,
+        "share": 0.390244
+      },
+      "equation_numeric_add_direct": {
+        "rows": 40,
+        "share": 0.121951
+      },
+      "equation_numeric_colon_absdiff": {
+        "rows": 40,
+        "share": 0.121951
+      },
+      "equation_numeric_colon_trailing_zero": {
+        "rows": 40,
+        "share": 0.121951
+      },
+      "equation_numeric_minus_direct_negative": {
+        "rows": 40,
+        "share": 0.121951
+      },
+      "equation_numeric_minus_signed": {
+        "rows": 40,
+        "share": 0.121951
+      }
+    },
+    "rows": 328,
+    "unknown_source_rows": 0,
+    "unknown_subcategory_rows": 0
+  }
+}

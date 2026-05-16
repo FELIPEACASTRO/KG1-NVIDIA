@@ -9,6 +9,13 @@ Adapter repo:
 
 Adapter subfolder: `checkpoint-2`
 
+Important scope correction: V493/V494 evaluated a checkpoint trained on the
+older V390/V326 mix:
+`data/v390_equation_bit_replay_mix/20260514T193847Z`. It did not train the
+newer V475 CPU-gated dataset that projected `equation_transform 56 -> 60`.
+Therefore this result blocks repeating V390/V326 with the same mechanism, but
+does not by itself reject a short V475 smoke.
+
 ## Result
 
 | Metric | V290 checkpoint-6 baseline | V494 checkpoint-2 | Delta |
@@ -94,5 +101,15 @@ The V493/V494 mechanism test succeeded technically but failed competitively:
 - the result still regressed bit and introduced truncation.
 
 Therefore the active plan must not spend more GPU on broad SFT over the V290
-lineage until a CPU teacher/verifier shows a new, non-leaking signal that keeps
-`bit_manipulation>=136` and `truncated=0`.
+lineage using the V390/V326 mix. The only remaining paid exception is a
+fail-fast V495 smoke on the V475 CPU-gated dataset, because that dataset has:
+
+- `1312` train rows and `328` validation rows.
+- `800/200` equation rows and `512/128` bit replay rows.
+- combined tokenization gate passed with token max `331`, truncation `0`, and
+  complete offset masks.
+- CPU projection `weak 196`, `equation_transform=60`, `bit_manipulation=136`.
+
+If V495 does not beat `192/315` while keeping `bit_manipulation>=136` and
+`truncated=0`, SFT transfer should be treated as blocked until a new CPU
+teacher/verifier signal appears.
