@@ -60,6 +60,18 @@ V513 trace learnability recheck passed:
 | warnings | `0` |
 | info | `1` |
 
+V478 objective alignment gate:
+
+| Weights | bit effective share | equation effective share | Decision |
+|---|---:|---:|---|
+| equal source/subcategory weights | `18.99%` | `81.01%` | blocked |
+| bit sources `1.5x`, other sources/subcategories `1.0x` | `26.01%` | `73.99%` | passed |
+
+Artifacts:
+
+- `v515_objective_alignment_equal_weights.json`
+- `v515_objective_alignment_bit_source_1p5.json`
+
 ## Decision
 
 V515 is a small verified coverage gain over V514, but still not a submit-safe ACC gain. It is eligible for HF CPU reproduction only. Paid GPU remains blocked until objective/pre-paid gates approve a tiny smoke and FinOps rules are satisfied.

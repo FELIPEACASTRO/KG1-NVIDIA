@@ -1782,6 +1782,38 @@ Regra preventiva:
 Status: regra ativa; V512 gerou
 `artifacts/v512_kaggle_discussions_audit/V512_KAGGLE_DISCUSSION_AUDIT_SUMMARY.md`.
 
+### E058 - V515 pesos iguais subponderam bit e podem repetir backfire
+
+Evidencia:
+
+- V515 local e HF CPU reproduziram dataset limpo com `2491` train e `620`
+  validation, mas a distribuicao fisica ainda ficou em `473/2491` bit
+  (`18.99%`) e `2018/2491` equation (`81.01%`).
+- O gate `audit_v478_training_objective_alignment.py --enforce` com pesos
+  iguais bloqueou o candidato por:
+  `bit_effective_share_below_floor`,
+  `equation_effective_share_above_ceiling` e
+  `one_family_dominates_effective_objective`.
+- A ponderacao fonte bit `1.5x` passou sem findings, com `bit=26.01%` e
+  `equation=73.99%`.
+
+Impacto:
+
+- Rodar V515 com pesos iguais seria um bug silencioso de objetivo: o dataset
+  parece conter bit suficiente, mas o objetivo efetivo continua enviesado para
+  equation e pode repetir perda de bit.
+
+Regra preventiva:
+
+- Qualquer launcher V515 deve usar pesos fonte:
+  `v514_traceable_bit_from_v510=1.5` e
+  `v515_fullbyte_residual_from_v510=1.5`, mantendo os demais sources e
+  subcategorias em `1.0`, ou passar um novo gate objetivo com thresholds
+  iguais ou mais duros.
+- `KG1_CRISIS_MODE_BACKFIRE_GUARD=1` permanece obrigatorio em launcher pago.
+
+Status: mitigado por gate; ainda sem ACC submit-safe.
+
 ## Prompt Externo
 
 Prompt consolidado para OpenRouter/outras APIs:

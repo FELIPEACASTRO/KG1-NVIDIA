@@ -67,6 +67,7 @@ Ultima evidencia operacional relevante:
 | V514 HF CPU attempt 3 | job `felipesp1983/6a08e9ad3308d79117b91609` completou no HF CPU; build V514 reproduzido; tokenization real passou com `0` trunc e offset masks `2484/619`; V513 recheck passou com `0` blockers; artefatos enviados para `felipesp1983/kg1-v514-traceable-bit-v510-artifacts/v514-hf-cpu-traceable-bit-20260516T220219Z` | HF CPU reproduction concluido; proximo passo e V515 CPU residual full-byte, nao GPU amplo |
 | V515 V514 fullbyte residual | recuperou somente rows bit residuais com `fullbyte_unique_prediction`: `+7` train e `+1` validation; V515 total `2491/620`; tokenization real passou com `0` trunc, offset masks `2491/620`, token max `553/541`; V513 recheck passou com `0` blockers | ganho pequeno de cobertura verificavel; reproduzir no HF CPU antes de qualquer GPU |
 | V515 HF CPU reproduction | job `felipesp1983/6a08edcf3308d79117b9167f` completou; V515 reproduzido no HF CPU; V286 passou com `0` trunc e offset masks `2491/620`; V513 passou com `0` blockers; upload para `felipesp1983/kg1-v515-v514-fullbyte-residual-artifacts/v515-hf-cpu-fullbyte-residual-20260516T221957Z` | V515 e o dataset ativo mais limpo; ainda nao e ACC submit-safe; proximo passo e gate objetivo/pre-paid antes de qualquer GPU |
+| V515 objective alignment gate | pesos iguais falham: `bit=18.99%`, `equation=81.01%`; pesos fonte bit `1.5x` passam sem findings: `bit=26.01%`, `equation=73.99%` | qualquer launcher V515 deve usar exatamente essa ponderacao ou passar novo gate objetivo; pesos iguais ficam bloqueados por risco de backfire |
 
 ## Achados Principais V484-V492
 
@@ -729,8 +730,10 @@ Sem isso, nao packagear e nao submeter.
    - `hf_job_preflight_gate.py` com flags anti-leakage obrigatorias;
    - weak eval promocional official-like e bloqueante por default.
 6. V515 local e HF CPU ja recuperaram `+8` bit traces residuais e passaram
-   V286/V513; o proximo passo e gate objetivo/pre-paid para decidir se existe
-   justificativa para um smoke minimo.
+   V286/V513. O gate objetivo mostrou que pesos iguais voltam a subponderar
+   bit (`18.99%`) e superponderar equation (`81.01%`). A unica ponderacao V515
+   aceita ate aqui e fonte bit `1.5x`, que produz `bit=26.01%` e
+   `equation=73.99%`.
 7. Se a revalidacao label-free nao produzir candidato `>192/315`, voltar para
    CPU teacher/verifier discovery. Nao abrir H200 ate existir novo sinal CPU
    que projete `equation>=60`, preserve `bit>=136` e tenha `trunc=0`.
