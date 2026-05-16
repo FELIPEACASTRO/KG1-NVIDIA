@@ -1103,6 +1103,44 @@ Regra preventiva:
 
 Status: corrigido para V487.
 
+### E038 - V487 corrigiu `target_parameters`, mas V488 ainda regrediu bit/truncation
+
+Evidencia:
+
+- O treino H200 V487 `felipesp1983/6a0876033308d79117b910bf` completou com
+  `target_parameter_lora_tensors=5934/5934` e checkpoints
+  `2/4/6/8/10/12/final`.
+- O melhor checkpoint por `eval_loss` foi o checkpoint-10 (`eval_loss=1.3519`).
+- A weak eval focada V488
+  `felipesp1983/6a087d493308d79117b91108` no checkpoint-10 retornou
+  `191/315`, `equation_transform=57/155`, `bit_manipulation=134/160` e
+  `truncated=1`.
+- O gate de promocao bloqueou por `correct_lt_193`, `bit_lt_136` e
+  `truncated_gt_0`.
+
+Impacto:
+
+- O bug de continuidade PEFT/alias era real e foi corrigido, mas nao era o
+  unico gargalo.
+- `eval_loss` melhor e `target_parameters` ativos ainda nao garantem ganho
+  submit-safe.
+- Repetir o mesmo SFT ou varrer todos os checkpoints em H200 tem baixa chance
+  de retorno sem novo sinal CPU, pois o ganho de equation veio acompanhado de
+  regressao de bit e truncation.
+
+Regra preventiva:
+
+- Depois de qualquer correcao estrutural de treino, a primeira weak eval deve
+  manter `bit>=136` e `truncated=0`; se falhar, bloquear novo job pago na mesma
+  receita.
+- Antes de novo H200, baixar apenas artefatos pequenos de predictions/report e
+  fazer diff por linha contra V291/V290/V477 para localizar regressao real.
+- Candidate order deve ser focado por evidencia previa; nao varrer todos os
+  checkpoints em H200 se o tempo projetado ultrapassar a janela FinOps.
+
+Status: V488 bloqueado; proxima acao e diff CPU de predictions e gate de
+regressao antes de novo treino pago.
+
 ## Prompt Externo
 
 Prompt consolidado para OpenRouter/outras APIs:

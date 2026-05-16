@@ -34,6 +34,8 @@ Ultima evidencia operacional relevante:
 | V475 CPU solver projection | weak 196, equation 60, bit 136 | sinal CPU; ainda nao submit-safe |
 | V480/V483 linha recente | loss mexe, ACC nao sai do plateau | suspeita forte de PEFT continuity bug |
 | V485 seed PEFT metadata gate | `hf_gpu_allowed=true`; 12011 tensors; target params 5934/5934; `modules_to_save=[]` | seed V290/V291 estruturalmente liberado |
+| V487 treino H200 | treino completo, checkpoint-10 melhor `eval_loss=1.3519`; target params 5934/5934 ativos | continuidade PEFT corrigida, mas nao prova ACC |
+| V488 ckpt-10 weak eval | weak 191, equation 57, bit 134, trunc 1 | nao promove; target params nao eram o unico gargalo |
 
 ## Achado Principal V484
 
@@ -207,6 +209,14 @@ O matcher foi alinhado com V485 e V487 e o relancamento correto.
 
 Artefato: `artifacts/version_diffs/V487_VS_V486.md`.
 
+Atualizacao V488: o treino V487 completou em H200 e confirmou LoRA ativa para
+os `target_parameters`, mas a weak eval focada do checkpoint-10 produziu
+`191/315`, `equation_transform=57/155`, `bit_manipulation=134/160` e
+`truncated=1`. Portanto a continuidade PEFT era um bug real, mas nao era
+suficiente para romper o plateau. A rota de repetir o mesmo SFT/mesmo objetivo
+esta bloqueada por FinOps ate existir novo sinal CPU que preserve bit e
+truncation.
+
 ### P3 - Smoke HF Minimo
 
 Objetivo: verificar se o bug de continuidade era o gargalo sem gastar longo.
@@ -229,8 +239,10 @@ Gate:
 | bit_manipulation | >= 136 |
 | truncated | 0 |
 
-Se o smoke der `equation=57` e `bit=135`, nao promove. Esse caso ja ocorreu e
-nao e submit-safe.
+Se o smoke der `equation=57` com perda de bit, nao promove. Esse caso ja
+ocorreu duas vezes: V477 (`equation=57`, `bit=135`, `trunc=0`) e V488
+(`equation=57`, `bit=134`, `trunc=1`). O ganho isolado de uma linha em
+equation nao vale se derruba o guardrail de bit ou truncation.
 
 ### P4 - Equation Somente Se P3 Sinalizar
 
@@ -294,8 +306,13 @@ Sem isso, nao packagear e nao submeter.
 
 ## Proxima Acao Imediata
 
-1. Validar as alteracoes de gate que bloqueiam `INIT_ADAPTER_LOAD_MODE=manual`
-   com `target_parameters`.
-2. Implementar/rodar o CPU round-trip PEFT gate V485.
-3. Se V485 passar, abrir smoke curto HF. Se nao passar, corrigir carga PEFT
-   antes de qualquer treino.
+1. Baixar somente os artefatos pequenos da V488 weak eval e comparar linha a
+   linha contra V291/V290 e V477: identificar os 2 bit regressions, a truncation
+   e quais misses de equation foram ganhos/perdidos.
+2. Criar gate CPU de regressao que bloqueie qualquer dataset/objetivo que
+   reproduza o padrao `equation +1` com `bit -1/-2` ou truncation.
+3. So voltar para H200 se o gate CPU mostrar uma mudanca verificavel com
+   `bit>=136`, `trunc=0` e pelo menos `equation>=57` sem regressao total.
+4. Se o CPU diff mostrar que o erro vem de truncation/formato, corrigir formato
+   e parser de treino antes de novo SFT. Se mostrar erro semantico, voltar ao
+   DSL/trace curto e nao ao broad SFT.
