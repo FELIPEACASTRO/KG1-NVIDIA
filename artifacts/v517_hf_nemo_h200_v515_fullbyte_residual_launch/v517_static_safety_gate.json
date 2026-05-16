@@ -1,0 +1,9 @@
+{
+  "file_count": 1,
+  "files": [
+    "artifacts/v517_hf_nemo_h200_v515_fullbyte_residual_launch/launch_v517_hf_nemo_h200_v515_fullbyte_residual.py"
+  ],
+  "findings": [],
+  "ok": true,
+  "schema_version": "kg1_static_safety_gate_v1"
+}

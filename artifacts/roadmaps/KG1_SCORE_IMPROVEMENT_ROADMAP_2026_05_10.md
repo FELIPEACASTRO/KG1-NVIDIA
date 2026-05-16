@@ -69,6 +69,7 @@ Ultima evidencia operacional relevante:
 | V515 HF CPU reproduction | job `felipesp1983/6a08edcf3308d79117b9167f` completou; V515 reproduzido no HF CPU; V286 passou com `0` trunc e offset masks `2491/620`; V513 passou com `0` blockers; upload para `felipesp1983/kg1-v515-v514-fullbyte-residual-artifacts/v515-hf-cpu-fullbyte-residual-20260516T221957Z` | V515 e o dataset ativo mais limpo; ainda nao e ACC submit-safe; proximo passo e gate objetivo/pre-paid antes de qualquer GPU |
 | V515 objective alignment gate | pesos iguais falham: `bit=18.99%`, `equation=81.01%`; pesos fonte bit `1.5x` passam sem findings: `bit=26.01%`, `equation=73.99%` | qualquer launcher V515 deve usar exatamente essa ponderacao ou passar novo gate objetivo; pesos iguais ficam bloqueados por risco de backfire |
 | V516 label-free equation regate | baseline correto e `191/315`, `equation=55`, `bit=136`; gate equation achou os mesmos `4` ganhos no-loss conhecidos e `0` conflitos, projetando `195/315`, `equation=59`; V324 agora bloqueia CSV com `raw_output` se `prediction` nao for label-free | nao e novo dado de equation; esses IDs ja estao cobertos no V475/V510/V515, entao o gargalo e transferencia |
+| V517 H200 V515 smoke prep | launcher criado para V515 HF CPU path; py_compile, static safety, pre-paid integration, HF download/hash, hardware/cost, init adapter e objective alignment passaram sem findings; debug local agora usa marcador V517 | pronto para commit/push e launch minimo, se a linha continuar autorizada por FinOps; promocao so por weak ACC label-free |
 
 ## Achados Principais V484-V492
 
@@ -743,6 +744,12 @@ Sem isso, nao packagear e nao submeter.
 8. Se surgir novo candidato, weak eval promocional deve usar thinking ligado,
    `max_tokens=7680`, `max_model_len=8192`, `max_num_seqs=64` e falhar se nao
    passar `total>=196`, `equation>=60`, `bit>=136`, `trunc=0`.
+9. V517 e o unico smoke GPU atualmente autorizado: H200, `MAX_STEPS=2`,
+   dataset V515 HF CPU, bit source weights `1.5x`, `lm_head` congelado,
+   MoE `gate_up/down` treinaveis, `KG1_CRISIS_MODE_BACKFIRE_GUARD=1`.
+   Se o checkpoint nao puder superar o baseline label-free
+   `191/315`, `equation=55`, `bit=136`, a linha deve ser cancelada por
+   FinOps e nao receber package/submit.
 
 ## Atualizacao V500 - Auditoria De Parametros V499
 

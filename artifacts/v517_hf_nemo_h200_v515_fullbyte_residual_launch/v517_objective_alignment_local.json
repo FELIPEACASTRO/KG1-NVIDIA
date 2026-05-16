@@ -1,0 +1,341 @@
+{
+  "dataset_manifest_json": "artifacts\\v515_v514_fullbyte_residual_dataset\\v515_v514_fullbyte_residual_manifest.json",
+  "findings": [],
+  "generated_at_utc": "2026-05-16T22:42:51.444964+00:00",
+  "hf_gpu_allowed": true,
+  "schema_version": "kg1_v478_training_objective_alignment_gate_v1",
+  "source_weights": {
+    "v460_v459_numeric_one_rule_micro_dataset": 1.0,
+    "v475_v325_equation_no_loss_distill": 1.0,
+    "v498_numeric_teacher_trace_pack": 1.0,
+    "v514_traceable_bit_from_v510": 1.5,
+    "v515_fullbyte_residual_from_v510": 1.5
+  },
+  "subcategory_weights": {
+    "bit_guardrail_replay": 1.0,
+    "equation_numeric_add_direct": 1.0,
+    "equation_numeric_add_direct_hard_negative": 1.0,
+    "equation_numeric_colon_absdiff": 1.0,
+    "equation_numeric_colon_trailing_zero": 1.0,
+    "equation_numeric_colon_trailing_zero_hard_negative": 1.0,
+    "equation_numeric_minus_direct_negative": 1.0,
+    "equation_numeric_minus_signed": 1.0,
+    "equation_numeric_minus_signed_hard_negative": 1.0,
+    "v274_guarded_numeric_minus_signed_opposite_sign_guarded": 1.0
+  },
+  "thresholds": {
+    "max_any_family_effective_share": 0.8,
+    "max_equation_effective_share": 0.8,
+    "min_bit_effective_share": 0.2
+  },
+  "train": {
+    "effective_share_by_family": {
+      "bit_manipulation": {
+        "share": 0.260128,
+        "weight": 709.5
+      },
+      "equation_transform": {
+        "share": 0.739872,
+        "weight": 2018.0
+      }
+    },
+    "effective_share_by_source": {
+      "v460_v459_numeric_one_rule_micro_dataset": {
+        "share": 0.006599,
+        "weight": 18.0
+      },
+      "v475_v325_equation_no_loss_distill": {
+        "share": 0.293309,
+        "weight": 800.0
+      },
+      "v498_numeric_teacher_trace_pack": {
+        "share": 0.439963,
+        "weight": 1200.0
+      },
+      "v514_traceable_bit_from_v510": {
+        "share": 0.256279,
+        "weight": 699.0
+      },
+      "v515_fullbyte_residual_from_v510": {
+        "share": 0.00385,
+        "weight": 10.5
+      }
+    },
+    "effective_share_by_subcategory": {
+      "bit_guardrail_replay": {
+        "share": 0.260128,
+        "weight": 709.5
+      },
+      "equation_numeric_add_direct": {
+        "share": 0.058662,
+        "weight": 160.0
+      },
+      "equation_numeric_add_direct_hard_negative": {
+        "share": 0.146654,
+        "weight": 400.0
+      },
+      "equation_numeric_colon_absdiff": {
+        "share": 0.058662,
+        "weight": 160.0
+      },
+      "equation_numeric_colon_trailing_zero": {
+        "share": 0.058662,
+        "weight": 160.0
+      },
+      "equation_numeric_colon_trailing_zero_hard_negative": {
+        "share": 0.146654,
+        "weight": 400.0
+      },
+      "equation_numeric_minus_direct_negative": {
+        "share": 0.058662,
+        "weight": 160.0
+      },
+      "equation_numeric_minus_signed": {
+        "share": 0.058662,
+        "weight": 160.0
+      },
+      "equation_numeric_minus_signed_hard_negative": {
+        "share": 0.146654,
+        "weight": 400.0
+      },
+      "v274_guarded_numeric_minus_signed_opposite_sign_guarded": {
+        "share": 0.006599,
+        "weight": 18.0
+      }
+    },
+    "effective_total_weight": 2727.5,
+    "physical_share_by_family": {
+      "bit_manipulation": {
+        "rows": 473,
+        "share": 0.189884
+      },
+      "equation_transform": {
+        "rows": 2018,
+        "share": 0.810116
+      }
+    },
+    "physical_share_by_source": {
+      "v460_v459_numeric_one_rule_micro_dataset": {
+        "rows": 18,
+        "share": 0.007226
+      },
+      "v475_v325_equation_no_loss_distill": {
+        "rows": 800,
+        "share": 0.321156
+      },
+      "v498_numeric_teacher_trace_pack": {
+        "rows": 1200,
+        "share": 0.481734
+      },
+      "v514_traceable_bit_from_v510": {
+        "rows": 466,
+        "share": 0.187073
+      },
+      "v515_fullbyte_residual_from_v510": {
+        "rows": 7,
+        "share": 0.00281
+      }
+    },
+    "physical_share_by_subcategory": {
+      "bit_guardrail_replay": {
+        "rows": 473,
+        "share": 0.189884
+      },
+      "equation_numeric_add_direct": {
+        "rows": 160,
+        "share": 0.064231
+      },
+      "equation_numeric_add_direct_hard_negative": {
+        "rows": 400,
+        "share": 0.160578
+      },
+      "equation_numeric_colon_absdiff": {
+        "rows": 160,
+        "share": 0.064231
+      },
+      "equation_numeric_colon_trailing_zero": {
+        "rows": 160,
+        "share": 0.064231
+      },
+      "equation_numeric_colon_trailing_zero_hard_negative": {
+        "rows": 400,
+        "share": 0.160578
+      },
+      "equation_numeric_minus_direct_negative": {
+        "rows": 160,
+        "share": 0.064231
+      },
+      "equation_numeric_minus_signed": {
+        "rows": 160,
+        "share": 0.064231
+      },
+      "equation_numeric_minus_signed_hard_negative": {
+        "rows": 400,
+        "share": 0.160578
+      },
+      "v274_guarded_numeric_minus_signed_opposite_sign_guarded": {
+        "rows": 18,
+        "share": 0.007226
+      }
+    },
+    "rows": 2491,
+    "unknown_source_rows": 0,
+    "unknown_subcategory_rows": 0
+  },
+  "train_jsonl": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v515_v514_fullbyte_residual_dataset\\v515_v514_fullbyte_residual_train.jsonl",
+  "val_jsonl": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v515_v514_fullbyte_residual_dataset\\v515_v514_fullbyte_residual_val.jsonl",
+  "validation": {
+    "effective_share_by_family": {
+      "bit_manipulation": {
+        "share": 0.256637,
+        "weight": 174.0
+      },
+      "equation_transform": {
+        "share": 0.743363,
+        "weight": 504.0
+      }
+    },
+    "effective_share_by_source": {
+      "v460_v459_numeric_one_rule_micro_dataset": {
+        "share": 0.0059,
+        "weight": 4.0
+      },
+      "v475_v325_equation_no_loss_distill": {
+        "share": 0.294985,
+        "weight": 200.0
+      },
+      "v498_numeric_teacher_trace_pack": {
+        "share": 0.442478,
+        "weight": 300.0
+      },
+      "v514_traceable_bit_from_v510": {
+        "share": 0.254425,
+        "weight": 172.5
+      },
+      "v515_fullbyte_residual_from_v510": {
+        "share": 0.002212,
+        "weight": 1.5
+      }
+    },
+    "effective_share_by_subcategory": {
+      "bit_guardrail_replay": {
+        "share": 0.256637,
+        "weight": 174.0
+      },
+      "equation_numeric_add_direct": {
+        "share": 0.058997,
+        "weight": 40.0
+      },
+      "equation_numeric_add_direct_hard_negative": {
+        "share": 0.147493,
+        "weight": 100.0
+      },
+      "equation_numeric_colon_absdiff": {
+        "share": 0.058997,
+        "weight": 40.0
+      },
+      "equation_numeric_colon_trailing_zero": {
+        "share": 0.058997,
+        "weight": 40.0
+      },
+      "equation_numeric_colon_trailing_zero_hard_negative": {
+        "share": 0.147493,
+        "weight": 100.0
+      },
+      "equation_numeric_minus_direct_negative": {
+        "share": 0.058997,
+        "weight": 40.0
+      },
+      "equation_numeric_minus_signed": {
+        "share": 0.058997,
+        "weight": 40.0
+      },
+      "equation_numeric_minus_signed_hard_negative": {
+        "share": 0.147493,
+        "weight": 100.0
+      },
+      "v274_guarded_numeric_minus_signed_opposite_sign_guarded": {
+        "share": 0.0059,
+        "weight": 4.0
+      }
+    },
+    "effective_total_weight": 678.0,
+    "physical_share_by_family": {
+      "bit_manipulation": {
+        "rows": 116,
+        "share": 0.187097
+      },
+      "equation_transform": {
+        "rows": 504,
+        "share": 0.812903
+      }
+    },
+    "physical_share_by_source": {
+      "v460_v459_numeric_one_rule_micro_dataset": {
+        "rows": 4,
+        "share": 0.006452
+      },
+      "v475_v325_equation_no_loss_distill": {
+        "rows": 200,
+        "share": 0.322581
+      },
+      "v498_numeric_teacher_trace_pack": {
+        "rows": 300,
+        "share": 0.483871
+      },
+      "v514_traceable_bit_from_v510": {
+        "rows": 115,
+        "share": 0.185484
+      },
+      "v515_fullbyte_residual_from_v510": {
+        "rows": 1,
+        "share": 0.001613
+      }
+    },
+    "physical_share_by_subcategory": {
+      "bit_guardrail_replay": {
+        "rows": 116,
+        "share": 0.187097
+      },
+      "equation_numeric_add_direct": {
+        "rows": 40,
+        "share": 0.064516
+      },
+      "equation_numeric_add_direct_hard_negative": {
+        "rows": 100,
+        "share": 0.16129
+      },
+      "equation_numeric_colon_absdiff": {
+        "rows": 40,
+        "share": 0.064516
+      },
+      "equation_numeric_colon_trailing_zero": {
+        "rows": 40,
+        "share": 0.064516
+      },
+      "equation_numeric_colon_trailing_zero_hard_negative": {
+        "rows": 100,
+        "share": 0.16129
+      },
+      "equation_numeric_minus_direct_negative": {
+        "rows": 40,
+        "share": 0.064516
+      },
+      "equation_numeric_minus_signed": {
+        "rows": 40,
+        "share": 0.064516
+      },
+      "equation_numeric_minus_signed_hard_negative": {
+        "rows": 100,
+        "share": 0.16129
+      },
+      "v274_guarded_numeric_minus_signed_opposite_sign_guarded": {
+        "rows": 4,
+        "share": 0.006452
+      }
+    },
+    "rows": 620,
+    "unknown_source_rows": 0,
+    "unknown_subcategory_rows": 0
+  }
+}

@@ -1847,6 +1847,38 @@ Regra preventiva:
 
 Status: baseline corrigido em `artifacts/v516_label_free_weak_baseline`.
 
+### E062 - V517 so e valido se mantiver V515 weights e label-free promotion
+
+Evidencia:
+
+- V517 foi criado como smoke H200 minimo usando o dataset V515 reproduzido no
+  HF CPU (`v515-hf-cpu-fullbyte-residual-20260516T221957Z`).
+- Gates locais passaram sem findings:
+  - `py_compile`;
+  - `kg1_static_safety_gate.py`;
+  - `kg1_pre_paid_job_integration_gate.py --dataset-schema sft`;
+  - HF local debug com download/hash dos arquivos remotos;
+  - objective alignment com `bit=26.01%`, `equation=73.99%`.
+- O launcher exige `KG1_CRISIS_MODE_BACKFIRE_GUARD=1`,
+  `REQUIRE_LORA_TARGET_PARAMETERS_TRAINABLE=1`, `lm_head` congelado e
+  `MAX_STEPS=2`.
+
+Impacto:
+
+- V517 fecha o gap operacional criado pelo V515: nao deixa rodar pesos iguais
+  que subponderam bit e nao deixa promover por loss.
+- Ainda nao existe ganho submit-safe. O baseline promocional correto segue
+  `191/315`, `equation=55`, `bit=136`, `trunc=0`.
+
+Regra preventiva:
+
+- Promover apenas por weak ACC label-free: `total>192`, `bit>=136`,
+  `trunc=0`, preferencialmente `equation>=59/60`.
+- Se o primeiro checkpoint nao puder superar esse baseline, cancelar por
+  FinOps e arquivar a linha.
+
+Status: launcher/gates prontos; aguardando execucao curta ou decisao de stop.
+
 ## Prompt Externo
 
 Prompt consolidado para OpenRouter/outras APIs:
