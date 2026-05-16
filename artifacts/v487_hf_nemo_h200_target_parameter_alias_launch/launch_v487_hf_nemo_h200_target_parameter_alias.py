@@ -132,6 +132,7 @@ export TRAINABLE_LORA_MODULES='q_proj,k_proj,v_proj,o_proj,lm_head'
 export TRAINABLE_LORA_NAME_SUBSTRINGS=''
 export REQUIRED_TRAINABLE_LORA_NAME_SUBSTRINGS='q_proj,k_proj,v_proj,o_proj,lm_head'
 export REQUIRE_LORA_TARGET_PARAMETER_MATCH=1
+export REQUIRE_LORA_TARGET_PARAMETERS_TRAINABLE=0
 export MAX_TRAINABLE_PARAM_RATIO=0.035
 export MAX_LENGTH=1024
 export BATCH_SIZE=4
@@ -357,6 +358,7 @@ def local_debug(api: HfApi, token: str) -> tuple[dict[str, object], dict[str, st
         "export LORA_TARGET_PARAMETERS=\"$KG1_LORA_TARGET_PARAMETERS\"",
         "export TRAINABLE_LORA_MODULES='q_proj,k_proj,v_proj,o_proj,lm_head'",
         "export REQUIRE_LORA_TARGET_PARAMETER_MATCH=1",
+        "export REQUIRE_LORA_TARGET_PARAMETERS_TRAINABLE=0",
         "$PYBIN scripts/hf_job_preflight_gate.py --phase artifacts",
         "scripts/audit_v478_training_objective_alignment.py",
         "objective_alignment_gate_json",
@@ -470,7 +472,7 @@ def main() -> int:
             "answer_span_min_weighted_tokens": ANSWER_SPAN_MIN_WEIGHTED_TOKENS,
             "source_weights": SOURCE_WEIGHTS,
             "subcategory_weights": SUBCATEGORY_WEIGHTS,
-            "promotion_gate": "reject if total<192 or bit<136; inspect only if equation>56 or total>=193; promote only if equation>=60 and bit>=136",
+            "promotion_gate": "reject if total<=192 or bit<136 or truncated>0; inspect only if equation>56; promote only if total>192 and equation>56 and bit>=136 and truncated=0",
             "version_comparison_artifact": "artifacts/version_diffs/V487_VS_V486.md",
             "previous_version": "V486 H200 target-parameter alias rejection before training",
         },

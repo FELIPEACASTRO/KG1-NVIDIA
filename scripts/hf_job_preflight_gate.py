@@ -332,6 +332,14 @@ def count_and_audit_jsonl(path: Path, label: str) -> dict[str, Any]:
     bad_rows: list[dict[str, Any]] = []
     families: dict[str, int] = {}
     subcategories: dict[str, int] = {}
+    gate_row_flags = [
+        "gate_rows_used_for_training",
+        "weak_gate_rows_used_for_training",
+        "full_gate_rows_used_for_training",
+    ]
+    gate_row_flag_counts: dict[str, int] = {flag: 0 for flag in gate_row_flags}
+    gate_row_flag_missing_counts: dict[str, int] = {flag: 0 for flag in gate_row_flags}
+    gate_row_flag_bad_rows: list[dict[str, Any]] = []
     ids: set[str] = set()
     duplicate_ids = 0
     assistant_missing = 0
@@ -353,6 +361,23 @@ def count_and_audit_jsonl(path: Path, label: str) -> dict[str, Any]:
             family = str(row.get("family") or row.get("category") or "unknown")
             families[family] = families.get(family, 0) + 1
             metadata = row.get("metadata") or {}
+            if not isinstance(metadata, dict):
+                metadata = {}
+            for flag in gate_row_flags:
+                if flag not in metadata:
+                    gate_row_flag_missing_counts[flag] += 1
+                    continue
+                if metadata.get(flag) is False:
+                    gate_row_flag_counts[flag] += 1
+                else:
+                    gate_row_flag_bad_rows.append(
+                        {
+                            "line": line_no,
+                            "id": row_id,
+                            "flag": flag,
+                            "value": metadata.get(flag),
+                        }
+                    )
             subcategory = str(
                 metadata.get("subcategory")
                 or metadata.get("subtype")
@@ -374,6 +399,9 @@ def count_and_audit_jsonl(path: Path, label: str) -> dict[str, Any]:
         "duplicate_ids": duplicate_ids,
         "assistant_missing": assistant_missing,
         "bad_rows_first10": bad_rows[:10],
+        "gate_row_flag_counts": gate_row_flag_counts,
+        "gate_row_flag_missing_counts": gate_row_flag_missing_counts,
+        "gate_row_flag_bad_rows_first10": gate_row_flag_bad_rows[:10],
         "family_counts": dict(sorted(families.items())),
         "subcategory_counts": dict(sorted(subcategories.items())),
         "subcategory_counts_top20": dict(sorted(subcategories.items(), key=lambda item: (-item[1], item[0]))[:20]),
@@ -383,6 +411,11 @@ def count_and_audit_jsonl(path: Path, label: str) -> dict[str, Any]:
         raise RuntimeError(f"{label} JSONL has invalid rows: {bad_rows[:3]}")
     if assistant_missing:
         raise RuntimeError(f"{label} has rows without assistant messages: {assistant_missing}")
+    if gate_row_flag_bad_rows:
+        raise RuntimeError(
+            f"{label} has rows marked as gate/full/weak rows used for training: "
+            + json.dumps(gate_row_flag_bad_rows[:10], sort_keys=True)
+        )
     return summary
 
 

@@ -63,12 +63,19 @@ CRITICAL_SNIPPETS = {
         "strict target modules check": "Init adapter target_modules mismatch",
         "strict target parameters check": "Init adapter target_parameters mismatch",
         "target parameter require check": "Init adapter has target_parameters but REQUIRE_LORA_TARGET_PARAMETER_MATCH is disabled",
+        "gate row contamination flag": "weak_gate_rows_used_for_training",
+        "gate row contamination fail": "gate/full/weak rows used for training",
     },
     "scripts/hf_job_train_v90.py": {
         "target parameter alias matcher": "def target_parameter_name_matches",
         "gate-up alias target": "experts.gate_up_proj",
         "gate-up alias live name": ".up_proj.",
         "down alias live name": ".down_proj.",
+        "target parameter trainability env": "REQUIRE_LORA_TARGET_PARAMETERS_TRAINABLE",
+        "target parameter trainability tensors": "target_parameter_trainable_lora_tensors",
+        "target parameter trainability mode": "target_parameters_trainability_mode",
+        "manifest trainable filter report": "trainable_lora_module_filter",
+        "default max length official": "MAX_LENGTH = env_int(\"MAX_LENGTH\", 8192)",
     },
     "scripts/package_hf_adapter_submission.py": {
         "official-like manifest schema required": "OFFICIAL_LIKE_SCHEMA_VERSION",
@@ -86,6 +93,7 @@ CRITICAL_SNIPPETS = {
         "expected-aware boxed extraction": "def extract_final_answer_for_expected",
         "literal closing brace guard": "immediately adjacent surplus braces",
         "escaped expected variant": "escaped_expected = escape_boxed_answer(expected_text)",
+        "expected-aware uses strict verifier": "if verify_answer(expected_text, observed_text)",
     },
     "scripts/evaluate_lora_adapter.py": {
         "expected-aware extraction import": "extract_final_answer_for_expected",
@@ -99,6 +107,12 @@ CRITICAL_SNIPPETS = {
         "escaped boxed target": "box_answer(answer)",
         "expected-aware assistant extraction": "extract_final_answer_for_expected(assistant_content, answer)",
         "unescaped symbolic self-test": "unescaped symbolic boxed answer must fail",
+    },
+    "scripts/audit_v449_acc_metric_integrity.py": {
+        "strict metric verifier": "verify_answer",
+        "raw extraction audit": "raw_extraction_audit",
+        "expected-aware delta": "expected_aware_minus_simple_correct",
+        "no earlier boxed leakage self-test": "earlier_correct_later_wrong",
     },
     "scripts/hf_job_official_like_eval_gate_v284.py": {
         "failed gate exit hard": "official-like full eval gate failed; refusing successful exit",
@@ -125,9 +139,6 @@ CRITICAL_SNIPPETS = {
     "scripts/hf_job_weak_eval_v277_external_adapters.py": {
         "failed gate exit hard": "weak eval gate failed; refusing successful exit",
         "failed gate override explicit": "KG1_ALLOW_FAILED_GATE_EXIT_0",
-    },
-    "scripts/hf_job_train_v90.py": {
-        "default max length official": "MAX_LENGTH = env_int(\"MAX_LENGTH\", 8192)",
     },
     "scripts/audit_v478_training_objective_alignment.py": {
         "effective family share": "effective_share_by_family",
@@ -162,6 +173,10 @@ EMPTY_LORA_TARGET_PARAMETERS_RE = re.compile(
 )
 DISABLED_TARGET_PARAMETER_MATCH_RE = re.compile(
     r"export\s+REQUIRE_LORA_TARGET_PARAMETER_MATCH\s*=\s*0\b",
+    re.IGNORECASE,
+)
+EXPLICIT_TARGET_PARAMETER_TRAINABILITY_RE = re.compile(
+    r"export\s+REQUIRE_LORA_TARGET_PARAMETERS_TRAINABLE\s*=\s*[01]\b",
     re.IGNORECASE,
 )
 MANUAL_INIT_ADAPTER_LOAD_RE = re.compile(
@@ -325,6 +340,25 @@ def audit_text(path: Path, text: str) -> list[Finding]:
                 "error",
                 "lora_target_parameter_match_disabled",
                 "Launchers that configure MoE target_parameters must keep REQUIRE_LORA_TARGET_PARAMETER_MATCH=1.",
+            )
+        )
+
+    if (
+        job_or_notebook
+        and rel not in {"scripts/hf_job_train_v90.py", "scripts/kg1_static_safety_gate.py"}
+        and not is_archived_fail_closed(text)
+        and "mlp.experts.gate_up_proj" in text
+        and ("TRAINABLE_LORA_MODULES" in text or "KG1_TRAINABLE_LORA_MODULES" in text)
+        and not EXPLICIT_TARGET_PARAMETER_TRAINABILITY_RE.search(text)
+    ):
+        findings.append(
+            Finding(
+                rel,
+                "error",
+                "target_parameter_trainability_not_explicit",
+                "Launchers that combine MoE target_parameters with a trainable LoRA allowlist must set "
+                "REQUIRE_LORA_TARGET_PARAMETERS_TRAINABLE=0 or 1 explicitly. This prevents confusing "
+                "frozen-active target_parameters with actually trained target_parameters.",
             )
         )
 
@@ -699,6 +733,47 @@ def run_self_test() -> int:
         )
         if "lora_target_parameter_match_disabled" not in {item.code for item in disabled_match_findings}:
             print("missing disabled target-parameter match self-test finding", flush=True)
+            return 1
+        implicit_target_trainability = tmp / "launch_implicit_target_trainability.py"
+        implicit_target_trainability.write_text(
+            "from huggingface_hub import HfApi\n"
+            "COMMAND_SCRIPT=\"\"\"\n"
+            "export LORA_TARGET_PARAMETERS='mlp.experts.gate_up_proj,mlp.experts.down_proj'\n"
+            "export TRAINABLE_LORA_MODULES='q_proj,k_proj,v_proj,o_proj,lm_head'\n"
+            "export REQUIRE_LORA_TARGET_PARAMETER_MATCH=1\n"
+            "\"\"\"\n"
+            "HfApi().run_job(command=['true'])\n",
+            encoding="utf-8",
+        )
+        implicit_trainability_findings = audit_text(
+            implicit_target_trainability,
+            implicit_target_trainability.read_text(encoding="utf-8"),
+        )
+        if "target_parameter_trainability_not_explicit" not in {
+            item.code for item in implicit_trainability_findings
+        }:
+            print("missing target-parameter trainability self-test finding", flush=True)
+            return 1
+        explicit_target_trainability = tmp / "launch_explicit_target_trainability.py"
+        explicit_target_trainability.write_text(
+            "from huggingface_hub import HfApi\n"
+            "COMMAND_SCRIPT=\"\"\"\n"
+            "export LORA_TARGET_PARAMETERS='mlp.experts.gate_up_proj,mlp.experts.down_proj'\n"
+            "export TRAINABLE_LORA_MODULES='q_proj,k_proj,v_proj,o_proj,lm_head'\n"
+            "export REQUIRE_LORA_TARGET_PARAMETER_MATCH=1\n"
+            "export REQUIRE_LORA_TARGET_PARAMETERS_TRAINABLE=0\n"
+            "\"\"\"\n"
+            "HfApi().run_job(command=['true'])\n",
+            encoding="utf-8",
+        )
+        explicit_trainability_findings = audit_text(
+            explicit_target_trainability,
+            explicit_target_trainability.read_text(encoding="utf-8"),
+        )
+        if "target_parameter_trainability_not_explicit" in {
+            item.code for item in explicit_trainability_findings
+        }:
+            print("false positive target-parameter trainability self-test finding", flush=True)
             return 1
         manual_target_parameter_load = tmp / "launch_manual_target_parameter_load.py"
         manual_target_parameter_load.write_text(

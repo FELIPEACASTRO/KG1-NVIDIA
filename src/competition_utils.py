@@ -222,9 +222,9 @@ def extract_final_answer_for_expected(text: str | None, expected: object) -> str
     value = str(text)
     expected_text = str(expected).strip()
     if expected_text:
-        candidates: list[tuple[str, bool]] = []
         marker = r"\boxed{"
         cursor = 0
+        marker_positions: list[int] = []
         raw_expected_variants = [expected_text]
         escaped_expected = escape_boxed_answer(expected_text)
         if escaped_expected != expected_text:
@@ -233,19 +233,19 @@ def extract_final_answer_for_expected(text: str | None, expected: object) -> str
             marker_pos = value.find(marker, cursor)
             if marker_pos == -1:
                 break
-            start = marker_pos + len(marker)
+            marker_positions.append(marker_pos)
+            cursor = marker_pos + len(marker)
+        if marker_positions:
+            start = marker_positions[-1] + len(marker)
             tail = value[start:]
             for variant in raw_expected_variants:
                 if not variant or not tail.startswith(variant):
                     continue
                 after = start + len(variant)
                 if after >= len(value) or value[after] in "}\r\n\t `.,;)]":
-                    candidates.append((variant, True))
-            cursor = start
-        candidates.extend((candidate, True) for candidate in extract_boxed_answers(value))
-        for candidate, boxed_payload in reversed(candidates):
-            if answers_equivalent(expected_text, candidate, observed_is_boxed_payload=boxed_payload):
-                return canonical_boxed_payload(candidate) if boxed_payload else canonical_answer(candidate)
+                    observed_text = canonical_boxed_payload(variant)
+                    if verify_answer(expected_text, observed_text):
+                        return observed_text
     return extract_final_answer(value)
 
 

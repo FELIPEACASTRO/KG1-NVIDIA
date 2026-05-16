@@ -15,6 +15,16 @@ alias path, then V488 focused weak eval on `checkpoint-10` blocked promotion:
 `192/315`, `equation_transform=56/155`, `bit_manipulation=136/160`,
 `truncated=0`.
 
+V489 audit update: the ACC verifier is strict, but two silent validation gaps
+were corrected:
+
+- expected-aware extraction may only disambiguate the last `\boxed{}` and now
+  uses `verify_answer`;
+- PEFT target-parameter observability now records whether MoE target parameters
+  are `frozen_active`, `partially_trainable`, or `trainable`.
+- SFT preflight now fails if row metadata marks gate/weak/full rows as used for
+  training.
+
 ## Main Pieces
 
 ```mermaid
@@ -30,7 +40,8 @@ graph TB
   D0 --> D2[V390/V475 validation JSONL]
   D1 --> H[Hash, rows, family, subcategory audit]
   D2 --> H
-  H --> T[Tokenizer and offset-mask contract]
+  H --> HC[Gate row contamination flags]
+  HC --> T[Tokenizer and offset-mask contract]
 
   A0[V290 checkpoint-6 seed adapter] --> A1[PEFT native load]
   A1 --> A2[target_modules check]
@@ -41,12 +52,18 @@ graph TB
   A4 --> M
   M --> F[Trainable LoRA filter]
   F --> F1[Train q/k/v/o/lm_head LoRA]
-  F --> F2[Freeze up/down/in/out experts but keep active]
+  F --> F2[MoE target params trainability mode]
+  F2 --> F2A[frozen_active]
+  F2 --> F2B[partially_trainable]
+  F2 --> F2C[trainable]
 
   F1 --> TR[HF H200 training job]
-  F2 --> TR
+  F2A --> TR
+  F2B --> TR
+  F2C --> TR
   TR --> C[Checkpoints 2/4/6/8/10/12]
-  C --> W[Weak eval 315-row contract]
+  C --> X[Raw extraction audit]
+  X --> W[Weak eval 315-row contract]
   W --> G{Promotion gate}
 
   G -->|pass| FULL[Official-like full eval]
@@ -83,12 +100,17 @@ flowchart TD
   DATA --> DOK{Hashes, rows, families, subcategories OK?}
   DOK -->|no| FIXDATA[Fix or quarantine dataset]
   FIXDATA --> DATA
-  DOK -->|yes| ADAPT[Audit seed adapter]
+  DOK -->|yes| CGATE{Gate/weak/full flags clean?}
+  CGATE -->|no| FIXDATA
+  CGATE -->|yes| ADAPT[Audit seed adapter]
 
   ADAPT --> AOK{PEFT config, tensors, target_parameters OK?}
   AOK -->|no| FIXADAPT[Fix loader or block route]
   FIXADAPT --> ADAPT
-  AOK -->|yes| OBJ[Run V478 objective alignment]
+  AOK -->|yes| TPAR{Target params trainability explicit?}
+  TPAR -->|no| FIXTP[Declare frozen_active or trainable intent]
+  FIXTP --> ADAPT
+  TPAR -->|yes| OBJ[Run V478 objective alignment]
 
   OBJ --> OOK{Bit share >= 0.20 and equation share <= 0.80?}
   OOK -->|no| REWEIGHT[Rebalance source/subcategory weights]
@@ -102,7 +124,9 @@ flowchart TD
   FFAIL -->|no| CKPT[Wait for first checkpoint]
 
   CKPT --> WEAK[Run weak eval]
-  WEAK --> WGATE{total > 192 and equation > 56 and bit >= 136 and trunc = 0?}
+  WEAK --> XAUDIT{Expected-aware extraction only changed last boxed?}
+  XAUDIT -->|no| LEDGER
+  XAUDIT -->|yes| WGATE{total > 192 and equation > 56 and bit >= 136 and trunc = 0?}
   WGATE -->|no| CANCEL[Cancel/stop by FinOps]
   CANCEL --> LEDGER
   WGATE -->|yes| FULL[Run official-like full eval]
@@ -142,6 +166,7 @@ sequenceDiagram
   Adapter-->>Train: Adapter config and tensors
   Train->>Train: Validate target_modules and target_parameters
   Train->>Train: Apply Nemotron alias matcher
+  Train->>Train: Record target_parameters trainability mode
   Train->>Train: Run baseline eval_loss
   Train->>Train: Train short smoke checkpoints
   Train->>HF: Upload checkpoints during training
@@ -149,6 +174,7 @@ sequenceDiagram
 
   alt First checkpoint is submit-safe candidate
     Codex->>Eval: Run weak eval on checkpoint
+    Eval->>Eval: Audit raw extraction delta
     Eval-->>Codex: Return total/equation/bit/trunc metrics
     Codex->>Eval: Run official-like full eval
     Eval-->>Codex: Return full score
@@ -171,11 +197,15 @@ flowchart LR
   A -. strong signal .-> A1[Potential equation 60 and bit 146]
   C -. current plateau .-> C1[Adapter-only best safe: total 192, equation 56, bit 136, trunc 0]
   C -. latest V488 failed .-> C2[V488 ckpt-10: total 191, equation 57, bit 134, trunc 1]
+  C -. V489 silent gap .-> C3[Expected-aware extraction fixed to last boxed only]
+  C -. V489 F2 gap .-> C4[MoE target params must declare frozen_active or trainable]
   E --> P{Promotion}
   P -->|not yet| N[Need real weak gain, not lower eval_loss]
 
   style C1 fill:#331a1a,stroke:#cc4444,color:#ffffff
   style C2 fill:#331a1a,stroke:#cc4444,color:#ffffff
+  style C3 fill:#332a00,stroke:#d6a100,color:#ffffff
+  style C4 fill:#332a00,stroke:#d6a100,color:#ffffff
   style N fill:#332a00,stroke:#d6a100,color:#ffffff
 ```
 

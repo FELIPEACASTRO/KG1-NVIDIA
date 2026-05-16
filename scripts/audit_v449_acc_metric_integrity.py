@@ -22,7 +22,13 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from src.competition_utils import answers_equivalent, canonical_family, verify_answer  # noqa: E402
+from src.competition_utils import (  # noqa: E402
+    answers_equivalent,
+    canonical_family,
+    extract_final_answer,
+    extract_final_answer_for_expected,
+    verify_answer,
+)
 
 
 DEFAULT_WEAK_CSV = (
@@ -49,6 +55,13 @@ PREDICTION_COLUMN_CANDIDATES = [
     "v363_prediction",
     "v357_prediction",
     "v350_prediction",
+]
+
+RAW_OUTPUT_COLUMN_CANDIDATES = [
+    "raw_output",
+    "generated",
+    "completion",
+    "assistant",
 ]
 
 
@@ -181,10 +194,98 @@ def prediction_metric_audit(path: Path) -> dict[str, Any]:
     }
 
 
+def raw_extraction_audit(path: Path, answer_csv: Path | None) -> dict[str, Any]:
+    frame = pd.read_csv(path, dtype=str, keep_default_na=False)
+    if "answer" not in frame.columns and answer_csv is not None:
+        answer_frame = pd.read_csv(answer_csv, dtype=str, keep_default_na=False)
+        answer_cols = ["id", "answer"]
+        family_cols = [column for column in ["type", "task_type", "family"] if column in answer_frame.columns]
+        answer_frame = answer_frame[answer_cols + family_cols].copy()
+        rename_family = {}
+        for family_col in family_cols:
+            if family_col in frame.columns:
+                rename_family[family_col] = f"answer_{family_col}"
+        if rename_family:
+            answer_frame = answer_frame.rename(columns=rename_family)
+        frame = frame.merge(answer_frame, on="id", how="left", validate="one_to_one")
+    missing = sorted({"id", "answer"} - set(frame.columns))
+    if missing:
+        raise ValueError(f"{path} missing required columns for raw extraction audit: {missing}")
+    missing_answer_rows = int(frame["answer"].isna().sum()) if frame["answer"].isna().any() else 0
+    if missing_answer_rows:
+        raise ValueError(f"{path} has {missing_answer_rows} raw rows without joined answers")
+    raw_columns = [column for column in RAW_OUTPUT_COLUMN_CANDIDATES if column in frame.columns]
+    if not raw_columns:
+        raise ValueError(f"{path} has no known raw output column; checked {RAW_OUTPUT_COLUMN_CANDIDATES}")
+    raw_column = raw_columns[0]
+    family_col = (
+        "type"
+        if "type" in frame.columns
+        else "task_type"
+        if "task_type" in frame.columns
+        else "family"
+        if "family" in frame.columns
+        else "answer_type"
+        if "answer_type" in frame.columns
+        else "answer_task_type"
+        if "answer_task_type" in frame.columns
+        else "answer_family"
+        if "answer_family" in frame.columns
+        else ""
+    )
+    if family_col:
+        frame["family_norm"] = frame[family_col].map(canonical_family)
+    else:
+        frame["family_norm"] = ""
+    frame["simple_extracted"] = frame[raw_column].map(extract_final_answer)
+    frame["expected_aware_extracted"] = frame.apply(
+        lambda row: extract_final_answer_for_expected(row[raw_column], row["answer"]), axis=1
+    )
+    frame["simple_correct"] = frame.apply(
+        lambda row: verify_answer(row["answer"], row["simple_extracted"]), axis=1
+    )
+    frame["expected_aware_correct"] = frame.apply(
+        lambda row: verify_answer(row["answer"], row["expected_aware_extracted"]), axis=1
+    )
+    disagreement = frame[frame["simple_extracted"] != frame["expected_aware_extracted"]].copy()
+    correctness_delta = frame[frame["simple_correct"] != frame["expected_aware_correct"]].copy()
+    return {
+        "path": str(path),
+        "rows": int(len(frame)),
+        "raw_output_column": raw_column,
+        "answer_csv": str(answer_csv) if answer_csv else "",
+        "simple_correct": int(frame["simple_correct"].sum()),
+        "expected_aware_correct": int(frame["expected_aware_correct"].sum()),
+        "expected_aware_minus_simple_correct": int(frame["expected_aware_correct"].sum())
+        - int(frame["simple_correct"].sum()),
+        "extraction_disagreement_rows": int(len(disagreement)),
+        "correctness_delta_rows": int(len(correctness_delta)),
+        "correctness_delta_by_family": {
+            str(k): int(v) for k, v in correctness_delta.groupby("family_norm").size().to_dict().items()
+        },
+        "correctness_delta_examples": correctness_delta[
+            [
+                "id",
+                "family_norm",
+                "answer",
+                "simple_extracted",
+                "expected_aware_extracted",
+                "simple_correct",
+                "expected_aware_correct",
+            ]
+        ]
+        .head(20)
+        .to_dict(orient="records"),
+    }
+
+
 def run(args: argparse.Namespace) -> dict[str, Any]:
     tests = builtin_metric_tests()
     weak = weak_answer_audit(args.weak_csv) if args.weak_csv else {}
     prediction_audits = [prediction_metric_audit(path) for path in args.prediction_csv]
+    raw_extraction_audits = [
+        raw_extraction_audit(path, args.weak_csv) for path in args.raw_prediction_csv
+    ]
     report = {
         "schema_version": "kg1_v449_acc_metric_integrity_v1",
         "generated_at_utc": utc_now(),
@@ -192,9 +293,12 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         "builtin_metric_tests": tests,
         "weak_answer_audit": weak,
         "prediction_metric_audits": prediction_audits,
+        "raw_extraction_audits": raw_extraction_audits,
         "rule": (
             "Promotion ACC must be computed with src.competition_utils.verify_answer. "
-            "answers_equivalent is diagnostic-only because it numerically overcounts binary bit strings."
+            "answers_equivalent is diagnostic-only because it numerically overcounts binary bit strings. "
+            "Expected-aware extraction may only disambiguate the last boxed payload; it must not select "
+            "an earlier boxed answer because that would leak the validation answer into extraction."
         ),
     }
     if args.output_dir:
@@ -219,6 +323,11 @@ def run_self_test() -> None:
     print("v449_acc_metric_integrity_self_test =", json.dumps(payload, indent=2, sort_keys=True), flush=True)
     if not payload["passed"]:
         raise RuntimeError("V449 ACC metric integrity self-test failed")
+    symbolic = r"prefix \boxed{wrong} final \boxed{]\}\\!}"
+    assert extract_final_answer_for_expected(symbolic, r"]}\!") == r"]}\!"
+    earlier_correct_later_wrong = r"prefix \boxed{1010} final \boxed{1011}"
+    assert extract_final_answer_for_expected(earlier_correct_later_wrong, "1010") == "1011"
+    assert not verify_answer("1010", extract_final_answer_for_expected(earlier_correct_later_wrong, "1010"))
     print("=== V449 ACC METRIC INTEGRITY SELF TEST END ===", flush=True)
 
 
@@ -227,6 +336,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--self-test", action="store_true", help="Run built-in strict metric checks and exit.")
     parser.add_argument("--weak-csv", type=Path, default=DEFAULT_WEAK_CSV)
     parser.add_argument("--prediction-csv", type=Path, action="append", default=[])
+    parser.add_argument("--raw-prediction-csv", type=Path, action="append", default=[])
     parser.add_argument("--output-dir", type=Path, default=Path("artifacts/v449_acc_metric_integrity_audit/20260515T_cpu_gate"))
     parser.add_argument("--label", default="v449_acc_metric_integrity")
     return parser

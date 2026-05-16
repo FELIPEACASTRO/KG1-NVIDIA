@@ -1141,6 +1141,128 @@ Regra preventiva:
 Status: V488 bloqueado; proxima acao e diff CPU de predictions e gate de
 regressao antes de novo treino pago.
 
+### E039 - `target_parameters` carregados nao significavam `target_parameters` treinados
+
+Evidencia:
+
+- A auditoria V489 comparou V488 checkpoint-10 contra o baseline V290/V291 e
+  confirmou que a metrica estrita estava correta: V488 teve `191/315`,
+  `equation_transform=57/155`, `bit_manipulation=134/160`, `truncated=1`.
+- O diff linha a linha encontrou um ganho real em equation (`518deb39`) e duas
+  regressoes reais de bit (`8740ed31`, `59bee375`), sendo uma por truncation.
+- O manifesto V487 registrava `target_parameters` na config, mas nao registrava
+  contadores de `target_parameter_trainable_lora_tensors`.
+- A receita V487 usava
+  `LORA_TARGET_PARAMETERS=mlp.experts.gate_up_proj,mlp.experts.down_proj` e
+  `TRAINABLE_LORA_MODULES=q_proj,k_proj,v_proj,o_proj,lm_head`; portanto os
+  LoRA de `up_proj/down_proj` podiam estar ativos no forward, mas congelados
+  no treino.
+
+Impacto:
+
+- O resultado podia ser interpretado incorretamente como "MoE target_parameters
+  foram treinados", quando o que estava provado era apenas "MoE
+  target_parameters foram carregados e ficaram ativos".
+- Isso e um F2/silent-observability bug: nao corrompe a metrica, mas pode levar
+  a nova rodada de GPU com a hipotese errada.
+
+Regra preventiva:
+
+- `scripts/hf_job_train_v90.py` agora grava
+  `target_parameter_trainable_lora_tensors`,
+  `target_parameter_trainable_lora_params`,
+  `target_parameters_trainability_mode` e
+  `trainable_parameter_report_after_filter` no manifesto final.
+- `scripts/kg1_static_safety_gate.py` exige esses campos de observabilidade no
+  script de treino.
+- Launchers com MoE `target_parameters` e allowlist `TRAINABLE_LORA_MODULES`
+  precisam declarar explicitamente
+  `REQUIRE_LORA_TARGET_PARAMETERS_TRAINABLE=0` ou `1`.
+- O launcher V487 foi marcado como `0`, porque aquela receita era
+  frozen-active, nao treino de `up_proj/down_proj`.
+
+Status: corrigido em V489. Proximo job pago so pode ser interpretado se o
+manifesto declarar `target_parameters_trainability_mode`.
+
+### E040 - Expected-aware extraction podia escolher boxed anterior
+
+Evidencia:
+
+- A auditoria independente apontou que `extract_final_answer_for_expected`
+  verificava todos os `\boxed{}` do texto e podia escolher um payload anterior
+  se ele batesse com o gabarito.
+- Isso nao afetou o V488 por essa via, mas e leakage de avaliacao: o correto e
+  usar o gabarito apenas para desambiguar payload simbolico no ultimo boxed.
+- No V488, a diferenca real entre extracao simples e expected-aware e uma linha
+  simbolica (`4bb8c6cd`), em que o ultimo boxed contem `]}\!` e a extracao
+  simples parava em `]`.
+
+Impacto:
+
+- Um run poderia parecer melhor no weak gate se o modelo colocasse a resposta
+  correta no raciocinio e uma resposta final errada no ultimo boxed.
+
+Regra preventiva:
+
+- `src/competition_utils.py` agora restringe a expected-aware extraction ao
+  ultimo `\boxed{}` e valida o payload com `verify_answer`.
+- `scripts/audit_v449_acc_metric_integrity.py` agora possui auditoria raw
+  `simple_extracted` vs `expected_aware_extracted`.
+- O self-test cobre o caso em que o boxed anterior esta correto e o final esta
+  errado; o final errado deve permanecer errado.
+
+Status: corrigido em V489.
+
+### E041 - Static gate anulava snippets criticos por chave duplicada
+
+Evidencia:
+
+- `scripts/kg1_static_safety_gate.py` tinha duas entradas
+  `scripts/hf_job_train_v90.py` em `CRITICAL_SNIPPETS`.
+- Em dict Python, a segunda entrada sobrescreve a primeira; com isso checks de
+  alias Nemotron, trainability de target_parameters e manifesto do filtro
+  LoRA nao eram de fato exigidos.
+
+Impacto:
+
+- O gate podia retornar `ok=true` mesmo se um refactor removesse checks
+  criticos de F2/target-parameter observability.
+
+Regra preventiva:
+
+- As entradas foram consolidadas.
+- O static gate agora exige explicitamente:
+  `REQUIRE_LORA_TARGET_PARAMETERS_TRAINABLE`,
+  `target_parameter_trainable_lora_tensors`,
+  `target_parameters_trainability_mode`,
+  `trainable_lora_module_filter` e
+  `expected-aware uses strict verifier`.
+
+Status: corrigido em V489.
+
+### E042 - Preflight SFT nao registrava flags gate/weak/full por linha
+
+Evidencia:
+
+- A auditoria independente apontou que `hf_job_preflight_gate.py` validava
+  JSONL, IDs e assistant messages, mas nao registrava os flags
+  `gate_rows_used_for_training`, `weak_gate_rows_used_for_training` e
+  `full_gate_rows_used_for_training`.
+- O gate de preferencia ja fazia esse tipo de check; a rota SFT ainda nao.
+
+Impacto:
+
+- Um dataset futuro poderia carregar metadados de contaminacao sem o preflight
+  SFT bloquear antes de GPU.
+
+Regra preventiva:
+
+- `hf_job_preflight_gate.py` agora conta flags presentes/ausentes e falha se
+  qualquer flag presente nao for `false`.
+- `kg1_static_safety_gate.py` exige essa protecao.
+
+Status: corrigido em V489.
+
 ## Prompt Externo
 
 Prompt consolidado para OpenRouter/outras APIs:

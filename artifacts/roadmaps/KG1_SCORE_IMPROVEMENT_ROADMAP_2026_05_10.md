@@ -36,6 +36,7 @@ Ultima evidencia operacional relevante:
 | V485 seed PEFT metadata gate | `hf_gpu_allowed=true`; 12011 tensors; target params 5934/5934; `modules_to_save=[]` | seed V290/V291 estruturalmente liberado |
 | V487 treino H200 | treino completo, checkpoint-10 melhor `eval_loss=1.3519`; target params 5934/5934 ativos | continuidade PEFT corrigida, mas nao prova ACC |
 | V488 ckpt-10 weak eval | weak 191, equation 57, bit 134, trunc 1 | nao promove; target params nao eram o unico gargalo |
+| V489 audit integridade | metrica ACC estrita correta; V488 teve +1 equation, -2 bit, +1 trunc; F2 frozen-active nao era visivel no manifesto; expected-aware antigo podia vazar boxed anterior | corrigir observabilidade/guard/extracao antes de novo GPU |
 
 ## Achado Principal V484
 
@@ -78,21 +79,29 @@ Fontes: `artifacts/v484_openrouter_uploaded_audit/V484_OPENROUTER_UPLOAD_AUDIT.m
    chosen/rejected, desempate de regra ou cherry-pick.
 3. ACC de promocao usa `src.competition_utils.verify_answer`. `answers_equivalent`
    e diagnostico-only.
-4. Nenhum job pago roda se `target_parameters` estiver ausente, divergente ou
+4. Extracao expected-aware so pode desambiguar o ultimo `\boxed{}` usando
+   `verify_answer`; nunca pode escolher um `\boxed{}` anterior por bater com o
+   gabarito.
+5. Nenhum job pago roda se `target_parameters` estiver ausente, divergente ou
    carregado por modo manual sem round-trip CPU aprovado.
-5. `modules_to_save` deve ficar vazio no seed e no pacote final. `lm_head` pode
+6. `modules_to_save` deve ficar vazio no seed e no pacote final. `lm_head` pode
    aparecer em `target_modules` como LoRA, mas nao como peso cheio salvo.
-6. Todo launcher/job/notebook novo ou alterado passa por
+7. Se um launcher usa `LORA_TARGET_PARAMETERS` MoE junto com allowlist
+   `TRAINABLE_LORA_MODULES`, ele deve declarar explicitamente se esses
+   `target_parameters` precisam ser treinaveis:
+   `REQUIRE_LORA_TARGET_PARAMETERS_TRAINABLE=0` ou `1`.
+8. Todo launcher/job/notebook novo ou alterado passa por
    `scripts/kg1_static_safety_gate.py`.
-7. Antes de job pago, rodar `scripts/kg1_pre_paid_job_integration_gate.py` e
-   `scripts/hf_job_preflight_gate.py`.
-8. FinOps: cancelar job que nao possa mais superar `total>192`,
+9. Antes de job pago, rodar `scripts/kg1_pre_paid_job_integration_gate.py` e
+   `scripts/hf_job_preflight_gate.py`; o preflight deve falhar se qualquer linha
+   de treino vier marcada como gate/weak/full usada para treino.
+10. FinOps: cancelar job que nao possa mais superar `total>192`,
    `equation>56`, `bit>=136`, `truncated=0`.
-9. H200 pode ser usada ate 1 hora por execucao. Acima disso exige autorizacao
+11. H200 pode ser usada ate 1 hora por execucao. Acima disso exige autorizacao
    humana.
-10. Todo erro novo entra em `KG1_ERROR_LEDGER_2026_05_15.md` antes de novo job
+12. Todo erro novo entra em `KG1_ERROR_LEDGER_2026_05_15.md` antes de novo job
    pago.
-11. Toda versao nova precisa quadro comparativo contra V291/V290.
+13. Toda versao nova precisa quadro comparativo contra V291/V290.
 
 ## Plano Cronologico Ativo
 
@@ -111,8 +120,9 @@ com `LORA_TARGET_PARAMETERS`.
 
 ### P1 - Corrigir Continuidade PEFT
 
-Objetivo: garantir que o adapter inicial V290/V291 e carregado e treinado no
-mesmo espaco estrutural que gerou 192/315.
+Objetivo: garantir que o adapter inicial V290/V291 e carregado no mesmo espaco
+estrutural que gerou 192/315 e que o manifesto declare claramente quais LoRA
+ficaram treinaveis.
 
 Executar:
 
@@ -125,6 +135,8 @@ Executar:
   - LoRA tensors de `mlp.experts.gate_up_proj` e `mlp.experts.down_proj`
     existem.
   - `target_parameter_lora_tensors` nao e vazio.
+  - `target_parameter_trainable_lora_tensors` e
+    `target_parameters_trainability_mode` ficam registrados no manifesto.
   - nomes treinaveis contem os modulos obrigatorios.
   - nao ha warnings de missing adapter keys.
   - SHA256 de `adapter_config.json` e fingerprints de keys/shapes/dtypes sao
@@ -147,8 +159,9 @@ Implementar/rodar um gate CPU que:
 - compara `adapter_config.json`, lista de keys, shapes, dtypes e contagem de
   tensores LoRA;
 - confirma `modules_to_save=[]` ou `null`;
-- roda um micro forward/backward em batch dummy e confirma gradiente nos
-  parametros LoRA esperados;
+- roda um micro forward/backward em batch dummy quando aplicavel e confirma se
+  os parametros LoRA esperados estao treinaveis ou explicitamente
+  `frozen_active`;
 - emite manifesto com `hf_gpu_allowed=true` somente se tudo bater.
 
 Implementacao atual:
@@ -216,6 +229,21 @@ os `target_parameters`, mas a weak eval focada do checkpoint-10 produziu
 suficiente para romper o plateau. A rota de repetir o mesmo SFT/mesmo objetivo
 esta bloqueada por FinOps ate existir novo sinal CPU que preserve bit e
 truncation.
+
+Atualizacao V489: o diff linha a linha confirmou que a metrica estrita esta
+correta e que V488 teve exatamente um ganho real de equation (`518deb39`) e duas
+regressoes reais de bit (`8740ed31`, `59bee375`), sendo uma com truncation. A
+auditoria tambem mostrou um gap de F2/observabilidade: V487 carregava
+`target_parameters`, mas a allowlist treinavel era `q/k/v/o/lm_head`; logo
+`up_proj/down_proj` ficavam frozen-active, nao comprovadamente treinados. O
+script de treino agora grava `target_parameters_trainability_mode` e os contadores
+de tensores trainaveis por `target_parameter`; launchers futuros precisam
+declarar explicitamente se esperam `target_parameters` treinaveis. A auditoria
+tambem corrigiu dois bugs silenciosos de validação: uma chave duplicada no
+static gate que anulava checks de `hf_job_train_v90.py`, e a extracao
+expected-aware que agora so pode desambiguar o ultimo boxed.
+
+Artefato: `artifacts/v489_solution_integrity_audit/V489_SOLUTION_INTEGRITY_AUDIT.md`.
 
 ### P3 - Smoke HF Minimo
 
@@ -309,10 +337,18 @@ Sem isso, nao packagear e nao submeter.
 1. Baixar somente os artefatos pequenos da V488 weak eval e comparar linha a
    linha contra V291/V290 e V477: identificar os 2 bit regressions, a truncation
    e quais misses de equation foram ganhos/perdidos.
-2. Criar gate CPU de regressao que bloqueie qualquer dataset/objetivo que
+2. Usar o V489 audit como baseline de diagnostico: qualquer novo treino deve
+   mostrar no manifesto se `target_parameters` estao `frozen_active`,
+   `partially_trainable` ou `trainable`.
+3. Criar gate CPU de regressao que bloqueie qualquer dataset/objetivo que
    reproduza o padrao `equation +1` com `bit -1/-2` ou truncation.
-3. So voltar para H200 se o gate CPU mostrar uma mudanca verificavel com
+4. Rodar auditoria de extracao raw em todo weak eval novo:
+   `simple_extracted` vs `expected_aware_extracted`, com delta documentado por
+   familia.
+5. Minerar `kishanvavdara/nemotron-reasoning-traj` apenas como fonte de
+   padroes/fixtures apos anti-leakage; nao treinar direto sem gate.
+6. So voltar para H200 se o gate CPU mostrar uma mudanca verificavel com
    `bit>=136`, `trunc=0` e pelo menos `equation>=57` sem regressao total.
-4. Se o CPU diff mostrar que o erro vem de truncation/formato, corrigir formato
+7. Se o CPU diff mostrar que o erro vem de truncation/formato, corrigir formato
    e parser de treino antes de novo SFT. Se mostrar erro semantico, voltar ao
    DSL/trace curto e nao ao broad SFT.

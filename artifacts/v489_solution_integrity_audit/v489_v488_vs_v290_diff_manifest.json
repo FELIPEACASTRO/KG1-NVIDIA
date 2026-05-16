@@ -1,0 +1,44 @@
+{
+  "baseline_path": "artifacts\\v489_solution_integrity_audit\\inputs\\v290_baseline_predictions.csv",
+  "baseline_sha256": "910a051d8b8e652e37c0b0814ac59fe4a400b95cb432945b6a0244f97f5b31bf",
+  "candidate_path": "artifacts\\v489_solution_integrity_audit\\inputs\\v488_predictions.csv",
+  "candidate_sha256": "f42c632252d82f80406d7890914b1d563ef2b2c253af193698dcf1ace61e2da6",
+  "column_correct_mismatches": [],
+  "family_summary": {
+    "bit_manipulation": {
+      "both_correct": 134,
+      "both_wrong": 24,
+      "regression": 2,
+      "rows": 160,
+      "v488_truncated": 1
+    },
+    "equation_transform": {
+      "both_correct": 56,
+      "both_wrong": 98,
+      "gain": 1,
+      "rows": 155
+    }
+  },
+  "gate": {
+    "baseline_by_family": {
+      "bit_manipulation": 136,
+      "equation_transform": 56
+    },
+    "baseline_total": 192,
+    "candidate_by_family": {
+      "bit_manipulation": 134,
+      "equation_transform": 57
+    },
+    "candidate_total": 191,
+    "promote": false,
+    "reason": "V488 has total 191, bit 134, equation 57, truncated 1; fails total/bit/truncation gate."
+  },
+  "overall": {
+    "both_correct": 190,
+    "both_wrong": 122,
+    "gain": 1,
+    "regression": 2
+  },
+  "rows": 315,
+  "schema_version": "kg1_v489_v488_vs_v290_diff_v1"
+}

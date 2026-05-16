@@ -258,6 +258,7 @@ FAIL_ON_MISSING_ADAPTER_KEYS = env_bool("FAIL_ON_MISSING_ADAPTER_KEYS", True)
 TRAINABLE_LORA_MODULES = env_str("TRAINABLE_LORA_MODULES", "")
 TRAINABLE_LORA_NAME_SUBSTRINGS = env_str("TRAINABLE_LORA_NAME_SUBSTRINGS", "")
 REQUIRE_LORA_TARGET_PARAMETER_MATCH = env_bool("REQUIRE_LORA_TARGET_PARAMETER_MATCH", False)
+REQUIRE_LORA_TARGET_PARAMETERS_TRAINABLE = env_bool("REQUIRE_LORA_TARGET_PARAMETERS_TRAINABLE", False)
 REQUIRED_TRAINABLE_LORA_NAME_SUBSTRINGS = env_str("REQUIRED_TRAINABLE_LORA_NAME_SUBSTRINGS", "")
 ADAPTER_LOAD_TORCH_DEVICE = env_str("ADAPTER_LOAD_TORCH_DEVICE", "")
 ADAPTER_LOAD_LOW_CPU_MEM_USAGE = env_bool("ADAPTER_LOAD_LOW_CPU_MEM_USAGE", False)
@@ -614,23 +615,77 @@ def apply_trainable_lora_module_filter(model: torch.nn.Module) -> dict[str, Any]
     target_parameters = parse_target_parameters(LORA_TARGET_PARAMETERS)
     target_parameter_lora_tensors: dict[str, int] = {item: 0 for item in target_parameters}
     target_parameter_lora_params: dict[str, int] = {item: 0 for item in target_parameters}
+    target_parameter_trainable_lora_tensors: dict[str, int] = {item: 0 for item in target_parameters}
+    target_parameter_trainable_lora_params: dict[str, int] = {item: 0 for item in target_parameters}
     required_trainable_lora_tensors: dict[str, int] = {item: 0 for item in required_trainable_substrings}
     required_trainable_lora_params: dict[str, int] = {item: 0 for item in required_trainable_substrings}
 
     if not modules and not name_substrings:
+        trainable_lora_params = 0
+        frozen_lora_params = 0
+        trainable_lora_tensors = 0
+        frozen_lora_tensors = 0
+        for name, param in model.named_parameters():
+            if ".lora_" not in name:
+                continue
+            count = int(param.numel())
+            matched_target_parameters = [
+                item for item in target_parameters if target_parameter_name_matches(item, name)
+            ]
+            for target_parameter in matched_target_parameters:
+                target_parameter_lora_tensors[target_parameter] += 1
+                target_parameter_lora_params[target_parameter] += count
+            if param.requires_grad:
+                trainable_lora_params += count
+                trainable_lora_tensors += 1
+                for target_parameter in matched_target_parameters:
+                    target_parameter_trainable_lora_tensors[target_parameter] += 1
+                    target_parameter_trainable_lora_params[target_parameter] += count
+            else:
+                frozen_lora_params += count
+                frozen_lora_tensors += 1
+        missing_target_parameters = [
+            item for item, tensors in target_parameter_lora_tensors.items() if tensors <= 0
+        ]
+        if REQUIRE_LORA_TARGET_PARAMETER_MATCH and missing_target_parameters:
+            raise RuntimeError(
+                "LORA_TARGET_PARAMETERS were configured but no matching LoRA tensors were found: "
+                + ", ".join(missing_target_parameters)
+            )
+        missing_trainable_target_parameters = [
+            item for item, tensors in target_parameter_trainable_lora_tensors.items() if tensors <= 0
+        ]
+        if target_parameters and len(missing_trainable_target_parameters) == len(target_parameters):
+            target_parameters_trainability_mode = "frozen_active"
+        elif missing_trainable_target_parameters:
+            target_parameters_trainability_mode = "partially_trainable"
+        elif target_parameters:
+            target_parameters_trainability_mode = "trainable"
+        else:
+            target_parameters_trainability_mode = "not_configured"
+        if REQUIRE_LORA_TARGET_PARAMETERS_TRAINABLE and missing_trainable_target_parameters:
+            raise RuntimeError(
+                "LORA_TARGET_PARAMETERS were configured but are not all trainable under the current "
+                "LoRA selector. Missing trainable target_parameters: "
+                + ", ".join(missing_trainable_target_parameters)
+            )
         return {
             "enabled": False,
             "modules": [],
             "name_substrings": [],
-            "trainable_lora_params": 0,
-            "frozen_lora_params": 0,
-            "trainable_lora_tensors": 0,
-            "frozen_lora_tensors": 0,
+            "trainable_lora_params": trainable_lora_params,
+            "frozen_lora_params": frozen_lora_params,
+            "trainable_lora_tensors": trainable_lora_tensors,
+            "frozen_lora_tensors": frozen_lora_tensors,
             "trainable_by_module": {},
             "trainable_by_name_substring": {},
             "frozen_by_module": {},
             "target_parameter_lora_tensors": target_parameter_lora_tensors,
             "target_parameter_lora_params": target_parameter_lora_params,
+            "target_parameter_trainable_lora_tensors": target_parameter_trainable_lora_tensors,
+            "target_parameter_trainable_lora_params": target_parameter_trainable_lora_params,
+            "target_parameters_trainability_mode": target_parameters_trainability_mode,
+            "require_lora_target_parameters_trainable": REQUIRE_LORA_TARGET_PARAMETERS_TRAINABLE,
             "required_trainable_lora_tensors": required_trainable_lora_tensors,
             "required_trainable_lora_params": required_trainable_lora_params,
         }
@@ -648,8 +703,10 @@ def apply_trainable_lora_module_filter(model: torch.nn.Module) -> dict[str, Any]
             continue
         matched_module = next((module for module in modules if f".{module}." in name), None)
         matched_name_substrings = [substring for substring in name_substrings if substring in name]
+        matched_target_parameters: list[str] = []
         for target_parameter in target_parameters:
             if target_parameter_name_matches(target_parameter, name):
+                matched_target_parameters.append(target_parameter)
                 count = int(param.numel())
                 target_parameter_lora_tensors[target_parameter] += 1
                 target_parameter_lora_params[target_parameter] += count
@@ -665,6 +722,9 @@ def apply_trainable_lora_module_filter(model: torch.nn.Module) -> dict[str, Any]
                 trainable_by_name_substring[substring] = (
                     trainable_by_name_substring.get(substring, 0) + count
                 )
+            for target_parameter in matched_target_parameters:
+                target_parameter_trainable_lora_tensors[target_parameter] += 1
+                target_parameter_trainable_lora_params[target_parameter] += count
             for required_substring in required_trainable_substrings:
                 if required_substring in name:
                     required_trainable_lora_tensors[required_substring] += 1
@@ -706,6 +766,23 @@ def apply_trainable_lora_module_filter(model: torch.nn.Module) -> dict[str, Any]
                 "LORA_TARGET_PARAMETERS were configured but no matching LoRA tensors were found: "
                 + ", ".join(missing_target_parameters)
             )
+    missing_trainable_target_parameters = [
+        item for item, tensors in target_parameter_trainable_lora_tensors.items() if tensors <= 0
+    ]
+    if target_parameters and len(missing_trainable_target_parameters) == len(target_parameters):
+        target_parameters_trainability_mode = "frozen_active"
+    elif missing_trainable_target_parameters:
+        target_parameters_trainability_mode = "partially_trainable"
+    elif target_parameters:
+        target_parameters_trainability_mode = "trainable"
+    else:
+        target_parameters_trainability_mode = "not_configured"
+    if REQUIRE_LORA_TARGET_PARAMETERS_TRAINABLE and missing_trainable_target_parameters:
+        raise RuntimeError(
+            "LORA_TARGET_PARAMETERS were configured but are not all trainable under the current "
+            "LoRA selector. Missing trainable target_parameters: "
+            + ", ".join(missing_trainable_target_parameters)
+        )
     missing_required_trainable = [
         item for item, tensors in required_trainable_lora_tensors.items() if tensors <= 0
     ]
@@ -728,6 +805,10 @@ def apply_trainable_lora_module_filter(model: torch.nn.Module) -> dict[str, Any]
         "frozen_by_module": frozen_by_module,
         "target_parameter_lora_tensors": target_parameter_lora_tensors,
         "target_parameter_lora_params": target_parameter_lora_params,
+        "target_parameter_trainable_lora_tensors": target_parameter_trainable_lora_tensors,
+        "target_parameter_trainable_lora_params": target_parameter_trainable_lora_params,
+        "target_parameters_trainability_mode": target_parameters_trainability_mode,
+        "require_lora_target_parameters_trainable": REQUIRE_LORA_TARGET_PARAMETERS_TRAINABLE,
         "required_trainable_lora_tensors": required_trainable_lora_tensors,
         "required_trainable_lora_params": required_trainable_lora_params,
     }
@@ -1526,6 +1607,8 @@ def make_manifest(
     final_step: int,
     best_eval_loss: float,
     elapsed_seconds: float,
+    lora_filter_report: dict[str, Any] | None = None,
+    trainable_report: dict[str, float | int] | None = None,
 ) -> dict[str, Any]:
     manifest: dict[str, Any] = {
         "run_id": RUN_ID,
@@ -1556,8 +1639,11 @@ def make_manifest(
             "trainable_lora_modules": TRAINABLE_LORA_MODULES,
             "trainable_lora_name_substrings": TRAINABLE_LORA_NAME_SUBSTRINGS,
             "require_lora_target_parameter_match": REQUIRE_LORA_TARGET_PARAMETER_MATCH,
+            "require_lora_target_parameters_trainable": REQUIRE_LORA_TARGET_PARAMETERS_TRAINABLE,
             "required_trainable_lora_name_substrings": REQUIRED_TRAINABLE_LORA_NAME_SUBSTRINGS,
             "max_trainable_param_ratio": MAX_TRAINABLE_PARAM_RATIO,
+            "trainable_lora_module_filter": lora_filter_report or {},
+            "trainable_parameter_report_after_filter": trainable_report or {},
         },
         "training": {
             "max_length": MAX_LENGTH,
@@ -1727,6 +1813,7 @@ def train() -> None:
     print(f"Trainable LoRA module filter: {TRAINABLE_LORA_MODULES or 'disabled'}")
     print(f"Trainable LoRA name substring filter: {TRAINABLE_LORA_NAME_SUBSTRINGS or 'disabled'}")
     print(f"Require LoRA target-parameter match: {REQUIRE_LORA_TARGET_PARAMETER_MATCH}")
+    print(f"Require LoRA target-parameters trainable: {REQUIRE_LORA_TARGET_PARAMETERS_TRAINABLE}")
     print(
         "Required trainable LoRA name substrings: "
         f"{REQUIRED_TRAINABLE_LORA_NAME_SUBSTRINGS or 'disabled'}"
@@ -2328,6 +2415,8 @@ def train() -> None:
         final_step=global_step,
         best_eval_loss=best_eval_loss,
         elapsed_seconds=elapsed,
+        lora_filter_report=lora_filter_report,
+        trainable_report=trainable_report,
     )
     manifest["training"]["baseline_eval_loss"] = baseline_eval_loss
     manifest["training"]["final_eval_loss"] = final_eval_loss

@@ -1,0 +1,4 @@
+id,family,answer,baseline_prediction,baseline_correct,baseline_finish_reason,baseline_truncated,v488_prediction,v488_correct,v488_finish_reason,v488_truncated,change,truncation_change,baseline_completion_tokens,v488_completion_tokens
+518deb39,equation_transform,$,{}>{,False,stop,False,$,True,stop,False,gain,none,592,592
+8740ed31,bit_manipulation,01101000,01101000,True,stop,False,01111000,False,stop,False,regression,none,6290,6290
+59bee375,bit_manipulation,10010101,10010101,True,stop,False,2,False,length,True,regression,new_truncation,6589,7680
