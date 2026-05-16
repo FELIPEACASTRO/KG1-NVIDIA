@@ -50,6 +50,37 @@ Status: mitigado por gate; V485 seed metadata gate aprovado para V290
 checkpoint-6. Proximo job ainda precisa passar o V485 embutido no launcher
 antes de qualquer treino.
 
+### E058 - V510/V511 bit replay answer-only nao transfere ACC
+
+Evidencia:
+
+- V511 executou tecnicamente correto no H200: dataset HF correto, MoE
+  `gate_up/down` treinaveis, `lm_head` congelado, checkpoint salvo e upload
+  completo.
+- Mesmo assim o loss local piorou levemente: `2.8125 -> 2.8128`, sem sinal
+  para weak eval.
+- V513 auditou o dataset ativo V510 e encontrou `742/742` linhas de
+  `bit_manipulation` no estilo `Final answer: \boxed{...}` sem CoT ou termos
+  de regra; p50 de assistant bit = `3` palavras, `0` bit traces.
+
+Impacto:
+
+- O modelo recebe pressao para memorizar respostas binaria curtas, mas nao para
+  reproduzir o algoritmo bit-pair/bitsum/stride descrito nas discussions.
+- Isso explica o padrao recorrente: loss pode mexer, mas `bit_manipulation`
+  perde guardrail ou nao sobe de forma submit-safe.
+
+Regra preventiva:
+
+- Bloquear novo GPU se o dataset ativo tiver share alto de bit answer-only.
+- Exigir no minimo `32` bit traces deterministicas curtas antes de qualquer
+  novo treino que envolva bit guardrail.
+- Rerodar V513 apos qualquer alteracao de dataset/trace; so promover se
+  `bit_trace_rows>=32`, `bit_answer_only_share<=0.05`, truncation zero e
+  objective/FinOps gates passarem.
+
+Status: aberto; V510 atual bloqueado para GPU como esta.
+
 ### E001 - V435E misto contaminou preference
 
 Evidencia:

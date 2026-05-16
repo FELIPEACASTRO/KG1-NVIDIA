@@ -1,0 +1,4 @@
+severity,code,detail
+blocker,bit_answer_only_trace_not_learnable_enough,bit_answer_only=742/742 share=1.0000; V511 showed loss-only transfer is insufficient
+blocker,bit_trace_rows_below_gpu_floor,bit_trace_rows=0; required>=32
+info,style_by_family_snapshot,"{""bit_manipulation:bit_answer_only_boxed"": 742, ""equation_transform:equation_short_rule_reject_boxed"": 2522}"
