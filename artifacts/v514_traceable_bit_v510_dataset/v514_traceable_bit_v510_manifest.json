@@ -1,0 +1,109 @@
+{
+  "decision": {
+    "gpu_allowed": false,
+    "next_action": "Run V513 against V514 plus real tokenization gate before any HF GPU job.",
+    "reason": "bit answer-only rows were replaced only where solver/stride reproduced the answer; unverified bit rows dropped",
+    "status": "dataset_ready_for_v513_and_tokenization_gate"
+  },
+  "generated_at_utc": "2026-05-16T21:41:58.334389+00:00",
+  "inputs": {
+    "train_jsonl": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v510_canonical_training_dataset\\v510_canonical_active_training_pool\\v510_canonical_active_training_pool_train.jsonl",
+    "train_sha256": "9033e794bad98679f26bb2fc7f1eb5d4d7f32d06ef6231ee6e0fffc66fc70d3b",
+    "val_jsonl": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v510_canonical_training_dataset\\v510_canonical_active_training_pool\\v510_canonical_active_training_pool_val.jsonl",
+    "val_sha256": "062514b8a74ba3656df44ad99667ba63dda69f56d41a20ffb0500f17393ceea8"
+  },
+  "outputs": {
+    "manifest_json": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v514_traceable_bit_v510_dataset\\v514_traceable_bit_v510_manifest.json",
+    "train_jsonl": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v514_traceable_bit_v510_dataset\\v514_traceable_bit_v510_train.jsonl",
+    "train_sha256": "2c20b9d74bab968f477e4ad9e5912e67f4a2941cfbc93bab58c15a898d5c2198",
+    "val_jsonl": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v514_traceable_bit_v510_dataset\\v514_traceable_bit_v510_val.jsonl",
+    "val_sha256": "c3037314cb9edeee4f0e845fa7b5dd16e615b110bdf01273f0faa71e3bde7dd8"
+  },
+  "schema_version": "kg1_v514_traceable_bit_v510_dataset_v1",
+  "train_summary": {
+    "bit_trace_word_max": 73,
+    "bit_trace_word_min": 8,
+    "bit_trace_word_p50": 47,
+    "counts": {
+      "bit_rows_converted_to_trace": 466,
+      "bit_rows_dropped_unverified": 143,
+      "bit_rows_seen": 609,
+      "kept_equation_rows": 2018
+    },
+    "dropped_unverified_examples": [
+      "v498_train_bit_replay_00037_v217_train_d0d29c4ee7916b79",
+      "v498_train_bit_replay_00505_v217_train_a36be5658f9fb7c0",
+      "v498_train_bit_replay_00390_v217_train_57541ea0458a2dc9",
+      "v498_train_bit_replay_00211_v217_train_65f44338f16fd66f",
+      "v498_train_bit_replay_00188_v217_train_87c9fd0682bbe8ed",
+      "v498_train_bit_replay_00453_v217_train_bb799fede88121a4",
+      "v498_train_bit_replay_00383_v217_train_73a6dc99f3e315a9",
+      "v498_train_bit_replay_00448_v217_train_d7d35ba38f31ee0a",
+      "v498_train_bit_replay_00144_v217_train_73fa8aff06b69af1",
+      "v498_train_bit_replay_00101_v217_train_a7f5b13c59d339c4",
+      "v498_train_bit_replay_00163_v217_train_0fea7254dec4a4a5",
+      "v498_train_bit_replay_00119_v217_train_6b8efb2f37374caa",
+      "v498_train_bit_replay_00082_v217_train_c58157560c58d518",
+      "v498_train_bit_replay_00095_v217_train_b0116f8749b977c7",
+      "v498_train_bit_replay_00408_v217_train_59c20456fb9cafcd",
+      "v498_train_bit_replay_00084_v217_train_3299602c948a2123",
+      "v498_train_bit_replay_00190_v217_train_5eb938737144ba44",
+      "v498_train_bit_replay_00450_v217_train_420959ec3837d66e",
+      "v498_train_bit_replay_00124_v217_train_f5994fe906c2f8ed",
+      "v498_train_bit_replay_00354_v217_train_56608ff9a3a4fe9f"
+    ],
+    "family_counts": {
+      "bit_manipulation": 466,
+      "equation_transform": 2018
+    },
+    "input_rows": 2627,
+    "methods": {
+      "bit_solver_v4": 431,
+      "v296_stride_solver": 35
+    },
+    "output_rows": 2484,
+    "split": "train"
+  },
+  "validation_summary": {
+    "bit_trace_word_max": 73,
+    "bit_trace_word_min": 8,
+    "bit_trace_word_p50": 47,
+    "counts": {
+      "bit_rows_converted_to_trace": 115,
+      "bit_rows_dropped_unverified": 18,
+      "bit_rows_seen": 133,
+      "kept_equation_rows": 504
+    },
+    "dropped_unverified_examples": [
+      "v498_validation_bit_replay_00020_v217_val_cd18aa38cec980bc",
+      "v498_validation_bit_replay_00053_v217_val_109165ecceca27d6",
+      "v498_validation_bit_replay_00081_v217_val_f936b923ba41eefd",
+      "v498_validation_bit_replay_00117_v217_val_5da1f7270d869bb9",
+      "v498_validation_bit_replay_00023_v217_val_ebbbdd613c535b33",
+      "v498_validation_bit_replay_00045_v217_val_ec8e37854c0d313c",
+      "v498_validation_bit_replay_00046_v217_val_38962b3ffa4fc81d",
+      "v498_validation_bit_replay_00124_v217_val_208af6dab734f14a",
+      "v498_validation_bit_replay_00086_v217_val_5e62bb2f46b0c5fb",
+      "v498_validation_bit_replay_00065_v217_val_427276fd915271d6",
+      "v498_validation_bit_replay_00096_v217_val_a66f4ce065571eb3",
+      "v498_validation_bit_replay_00091_v217_val_b5e4913de55e4316",
+      "v498_validation_bit_replay_00121_v217_val_d056416962bd185e",
+      "v498_validation_bit_replay_00049_v217_val_5f3834f87b8cebbc",
+      "v498_validation_bit_replay_00060_v217_val_123bc09bd0f4f5ae",
+      "v498_validation_bit_replay_00089_v217_val_770f78c81e84053c",
+      "v498_validation_bit_replay_00118_v217_val_eadd68ce8f5f5053",
+      "v498_validation_bit_replay_00076_v217_val_43f906712f6dfdd2"
+    ],
+    "family_counts": {
+      "bit_manipulation": 115,
+      "equation_transform": 504
+    },
+    "input_rows": 637,
+    "methods": {
+      "bit_solver_v4": 111,
+      "v296_stride_solver": 4
+    },
+    "output_rows": 619,
+    "split": "validation"
+  }
+}

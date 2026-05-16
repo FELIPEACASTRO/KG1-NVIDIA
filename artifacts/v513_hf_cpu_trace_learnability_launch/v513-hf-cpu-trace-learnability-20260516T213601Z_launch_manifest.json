@@ -1,0 +1,35 @@
+{
+  "branch": "v230-v226-complementarity",
+  "completed_log_path": "artifacts\\v513_hf_cpu_trace_learnability_launch\\6a08e383e48bea4538ba03ba_completed.log",
+  "completed_observed_at_utc": "2026-05-16T21:38:00Z",
+  "expected_commit": "10cd921023da2fd0431cf85fe45259abfd91705a",
+  "flavor": "cpu-upgrade",
+  "gates": {
+    "cpu_only": true,
+    "finops_cancel_if_no_gain": true,
+    "gpu_allowed": false,
+    "kaggle_submit_allowed": false,
+    "package_allowed": false,
+    "train_allowed": false
+  },
+  "generated_at_utc": "2026-05-16T21:36:01.777254+00:00",
+  "hardware": {
+    "accelerator_model": "",
+    "accelerator_quantity": "",
+    "accelerator_vram": "",
+    "cpu": "8 vCPU",
+    "name": "cpu-upgrade",
+    "pretty_name": "CPU Upgrade",
+    "ram": "32 GB",
+    "unit_cost_usd": 0.0005,
+    "unit_label": "minute"
+  },
+  "image": "python:3.11",
+  "job_id": "6a08e383e48bea4538ba03ba",
+  "job_status": "COMPLETED",
+  "job_url": "https://huggingface.co/jobs/felipesp1983/6a08e383e48bea4538ba03ba",
+  "mode": "launched",
+  "output_dataset_repo": "felipesp1983/kg1-v513-trace-learnability-gate-artifacts",
+  "run_id": "v513-hf-cpu-trace-learnability-20260516T213601Z",
+  "version": "v513_hf_cpu_trace_learnability_gate"
+}

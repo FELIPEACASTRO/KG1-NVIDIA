@@ -1,0 +1,204 @@
+{
+  "dataset_summary": {
+    "combined": {
+      "assistant_length_by_family": {
+        "bit_manipulation": {
+          "assistant_line_max": 10,
+          "assistant_line_p50": 10,
+          "assistant_word_max": 73,
+          "assistant_word_min": 8,
+          "assistant_word_p50": 47,
+          "assistant_word_p90": 52,
+          "assistant_word_p99": 73
+        },
+        "equation_transform": {
+          "assistant_line_max": 10,
+          "assistant_line_p50": 4,
+          "assistant_word_max": 55,
+          "assistant_word_min": 22,
+          "assistant_word_p50": 31,
+          "assistant_word_p90": 54,
+          "assistant_word_p99": 55
+        }
+      },
+      "assistant_style_counts": {
+        "bit_trace_with_rule_terms": 485,
+        "boxed_other": 96,
+        "equation_short_rule_reject_boxed": 2522
+      },
+      "family_counts": {
+        "bit_manipulation": 581,
+        "equation_transform": 2522
+      },
+      "rows": 3103,
+      "source_counts": {
+        "v460_v459_numeric_one_rule_micro_dataset": 22,
+        "v475_v325_equation_no_loss_distill": 1000,
+        "v498_numeric_teacher_trace_pack": 1500,
+        "v514_traceable_bit_from_v510": 581
+      },
+      "subcategory_counts": {
+        "bit_guardrail_replay": 581,
+        "equation_numeric_add_direct": 200,
+        "equation_numeric_add_direct_hard_negative": 500,
+        "equation_numeric_colon_absdiff": 200,
+        "equation_numeric_colon_trailing_zero": 200,
+        "equation_numeric_colon_trailing_zero_hard_negative": 500,
+        "equation_numeric_minus_direct_negative": 200,
+        "equation_numeric_minus_signed": 200,
+        "equation_numeric_minus_signed_hard_negative": 500,
+        "v274_guarded_numeric_minus_signed_opposite_sign_guarded": 22
+      }
+    },
+    "train": {
+      "assistant_length_by_family": {
+        "bit_manipulation": {
+          "assistant_line_max": 10,
+          "assistant_line_p50": 10,
+          "assistant_word_max": 73,
+          "assistant_word_min": 8,
+          "assistant_word_p50": 47,
+          "assistant_word_p90": 52,
+          "assistant_word_p99": 73
+        },
+        "equation_transform": {
+          "assistant_line_max": 10,
+          "assistant_line_p50": 4,
+          "assistant_word_max": 55,
+          "assistant_word_min": 22,
+          "assistant_word_p50": 31,
+          "assistant_word_p90": 54,
+          "assistant_word_p99": 55
+        }
+      },
+      "assistant_style_counts": {
+        "bit_trace_with_rule_terms": 391,
+        "boxed_other": 75,
+        "equation_short_rule_reject_boxed": 2018
+      },
+      "family_counts": {
+        "bit_manipulation": 466,
+        "equation_transform": 2018
+      },
+      "rows": 2484,
+      "source_counts": {
+        "v460_v459_numeric_one_rule_micro_dataset": 18,
+        "v475_v325_equation_no_loss_distill": 800,
+        "v498_numeric_teacher_trace_pack": 1200,
+        "v514_traceable_bit_from_v510": 466
+      },
+      "subcategory_counts": {
+        "bit_guardrail_replay": 466,
+        "equation_numeric_add_direct": 160,
+        "equation_numeric_add_direct_hard_negative": 400,
+        "equation_numeric_colon_absdiff": 160,
+        "equation_numeric_colon_trailing_zero": 160,
+        "equation_numeric_colon_trailing_zero_hard_negative": 400,
+        "equation_numeric_minus_direct_negative": 160,
+        "equation_numeric_minus_signed": 160,
+        "equation_numeric_minus_signed_hard_negative": 400,
+        "v274_guarded_numeric_minus_signed_opposite_sign_guarded": 18
+      }
+    },
+    "validation": {
+      "assistant_length_by_family": {
+        "bit_manipulation": {
+          "assistant_line_max": 10,
+          "assistant_line_p50": 10,
+          "assistant_word_max": 73,
+          "assistant_word_min": 8,
+          "assistant_word_p50": 47,
+          "assistant_word_p90": 51,
+          "assistant_word_p99": 73
+        },
+        "equation_transform": {
+          "assistant_line_max": 10,
+          "assistant_line_p50": 4,
+          "assistant_word_max": 55,
+          "assistant_word_min": 22,
+          "assistant_word_p50": 31,
+          "assistant_word_p90": 54,
+          "assistant_word_p99": 55
+        }
+      },
+      "assistant_style_counts": {
+        "bit_trace_with_rule_terms": 94,
+        "boxed_other": 21,
+        "equation_short_rule_reject_boxed": 504
+      },
+      "family_counts": {
+        "bit_manipulation": 115,
+        "equation_transform": 504
+      },
+      "rows": 619,
+      "source_counts": {
+        "v460_v459_numeric_one_rule_micro_dataset": 4,
+        "v475_v325_equation_no_loss_distill": 200,
+        "v498_numeric_teacher_trace_pack": 300,
+        "v514_traceable_bit_from_v510": 115
+      },
+      "subcategory_counts": {
+        "bit_guardrail_replay": 115,
+        "equation_numeric_add_direct": 40,
+        "equation_numeric_add_direct_hard_negative": 100,
+        "equation_numeric_colon_absdiff": 40,
+        "equation_numeric_colon_trailing_zero": 40,
+        "equation_numeric_colon_trailing_zero_hard_negative": 100,
+        "equation_numeric_minus_direct_negative": 40,
+        "equation_numeric_minus_signed": 40,
+        "equation_numeric_minus_signed_hard_negative": 100,
+        "v274_guarded_numeric_minus_signed_opposite_sign_guarded": 4
+      }
+    }
+  },
+  "decision": {
+    "full_eval_allowed": false,
+    "hf_gpu_allowed": true,
+    "kaggle_submit_allowed": false,
+    "next_action": "Run only a tiny paid smoke after objective alignment and FinOps gates.",
+    "package_allowed": false,
+    "reason": "no structural blockers; still requires objective and FinOps gates before GPU",
+    "status": "passed_cpu_structure_only"
+  },
+  "duplicate_group_counts": {
+    "assistant_exact_groups": 143,
+    "assistant_template_groups": 59
+  },
+  "finding_counts": {
+    "blocker": 0,
+    "info": 1,
+    "warning": 0
+  },
+  "findings": [
+    {
+      "code": "style_by_family_snapshot",
+      "detail": "{\"bit_manipulation:bit_trace_with_rule_terms\": 485, \"bit_manipulation:boxed_other\": 96, \"equation_transform:equation_short_rule_reject_boxed\": 2522}",
+      "severity": "info"
+    }
+  ],
+  "generated_at_utc": "2026-05-16T21:42:40.516861+00:00",
+  "inputs": {
+    "tokenization_manifest": "artifacts\\v514_traceable_bit_v510_dataset\\tokenization_gate_real\\v286_generic_tokenization_gate_manifest.json",
+    "tokenization_manifest_sha256": "36fd524f83baba80242720016dbfc83cb49f2ac887e096451d9ee19758ba8a99",
+    "train_jsonl": "artifacts\\v514_traceable_bit_v510_dataset\\v514_traceable_bit_v510_train.jsonl",
+    "train_sha256": "2c20b9d74bab968f477e4ad9e5912e67f4a2941cfbc93bab58c15a898d5c2198",
+    "val_jsonl": "artifacts\\v514_traceable_bit_v510_dataset\\v514_traceable_bit_v510_val.jsonl",
+    "val_sha256": "c3037314cb9edeee4f0e845fa7b5dd16e615b110bdf01273f0faa71e3bde7dd8"
+  },
+  "outputs": {
+    "findings_csv": "artifacts\\v514_traceable_bit_v510_dataset\\v513_recheck\\v513_findings.csv",
+    "manifest_json": "artifacts\\v514_traceable_bit_v510_dataset\\v513_recheck\\v513_trace_learnability_gate_manifest.json",
+    "summary_md": "artifacts\\v514_traceable_bit_v510_dataset\\v513_recheck\\V513_TRACE_LEARNABILITY_GATE_SUMMARY.md",
+    "top_assistant_exact_groups_csv": "artifacts\\v514_traceable_bit_v510_dataset\\v513_recheck\\v513_top_assistant_exact_groups.csv",
+    "top_template_groups_csv": "artifacts\\v514_traceable_bit_v510_dataset\\v513_recheck\\v513_top_template_groups.csv"
+  },
+  "schema_version": "kg1_v513_trace_learnability_gate_v1",
+  "thresholds": {
+    "max_assistant_words_warning": 1300,
+    "max_bit_answer_only_share_for_gpu": 0.05,
+    "max_loss_tokens_warning": 1300,
+    "max_prompt_truncation_rate": 0.0,
+    "min_bit_trace_rows_for_gpu": 32
+  },
+  "tokenization_gate_status": "tokenization_gate_passed"
+}

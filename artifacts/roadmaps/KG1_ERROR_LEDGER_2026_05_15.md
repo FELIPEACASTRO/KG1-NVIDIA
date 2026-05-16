@@ -79,7 +79,11 @@ Regra preventiva:
   `bit_trace_rows>=32`, `bit_answer_only_share<=0.05`, truncation zero e
   objective/FinOps gates passarem.
 
-Status: aberto; V510 atual bloqueado para GPU como esta.
+Status: mitigado estruturalmente pelo V514, mas ainda aberto ate weak eval
+provar que nao houve regressao. V514 converteu `581/742` linhas bit para traces
+verificadas, descartou `161` bit sem prova, passou tokenization real e passou
+V513 recheck com `0` blockers. GPU continua bloqueada ate HF CPU reproduction,
+objective/pre-paid gate e smoke minimo.
 
 ### E001 - V435E misto contaminou preference
 

@@ -60,7 +60,8 @@ Ultima evidencia operacional relevante:
 | V510 tokenization real local | tokenizer oficial local passou: `offset_masks=2627/637`, `prompt_truncation_rate=0`, `completion_truncation=0`, token max `331`, sem overlap weak/full | V510 esta pronto para launch fail-fast, desde que pre-paid/debug tambem passem |
 | V511 canonical H200 smoke | job `felipesp1983/6a08dc43e48bea4538ba02ce` completou em `0.05h`; MoE `gate_up/down` treinaveis `5934/5934`, `lm_head` congelado, checkpoint/final adapter uploaded; eval loss `2.8125 -> 2.8128` | bloqueado por FinOps; nao weak-eval/package/submit; V510 nao trouxe sinal de transferencia |
 | V512 Kaggle discussions audit | `140` topicos e `586` posts varridos via API; `392` hits; achados concretos: THK bit-pair/bitsum/stride, min-logprob, prompt-loss masking, logprob/learnability test, trace curto, duplicate-CoT/format-clash, solvers simbolicos como oracle | reforca CPU-first e trace learnability; nao autoriza novo broad SFT |
-| V513 trace learnability gate | V510 tem `742/742` bit rows como `Final answer: boxed` sem trace; bit assistant p50 `3` palavras, `0` bit traces; equation tem traces curtos p50 `31` palavras; tokenization segue OK | bloqueia GPU a partir de V510 como esta; proximo passo e substituir bit answer-only por traces deterministicas bit-pair/bitsum/stride antes de qualquer novo treino |
+| V513 trace learnability gate | Local + HF CPU job `felipesp1983/6a08e383e48bea4538ba03ba` reproduziram `blocked_no_gpu`; V510 tem `742/742` bit rows como `Final answer: boxed` sem trace; bit assistant p50 `3` palavras, `0` bit traces; equation tem traces curtos p50 `31` palavras; tokenization segue OK | bloqueia GPU a partir de V510 como esta; proximo passo e substituir bit answer-only por traces deterministicas bit-pair/bitsum/stride antes de qualquer novo treino |
+| V514 traceable bit V510 dataset | V510 refeito apenas no bloco bit: `581/742` bit rows convertidas para traces verificadas (`466` train, `115` val); `161` bit rows sem prova foram descartadas; equation V510 mantido; tokenization real passou com `0` trunc, offset masks `2484/619`, token max `553/541`; V513 recheck passou com `0` blockers | primeiro dataset estruturalmente melhor que V510; ainda nao e submit-safe nem autoriza GPU sem HF CPU reproduction, objective/pre-paid gate e smoke minimo |
 
 ## Achados Principais V484-V492
 
@@ -204,9 +205,9 @@ entram no plano:
 | Discussion `698293`, lkevincc/Taha | solver simbolico gold-conditioned mostra estrutura latente, mas nao e submit-safe e nao transfere automaticamente para LoRA | usar como oracle de pesquisa/rotulagem, nunca como runtime ou label weak/full |
 | Discussion `694556`, Murugesan/NguyenThanhNhan | categorias simbolicas tem muitos duplicados e DSL publica cobre so parte; muitos traces sao fallback/guess | dataset simbolico precisa deduplicacao forte e marca de "derivavel" vs "guess" |
 
-Decisao apos V511/V512/V513: parar H200 de treino amplo sobre o V510 atual. O
-caminho mais rapido e barato agora e CPU-only ate haver um novo pacote de
-traces que prove:
+Decisao apos V511/V512/V513/V514: parar H200 de treino amplo sobre o V510
+answer-only. O caminho mais rapido e barato agora e CPU-only ate o V514 ser
+reproduzido no HF e provar:
 
 - zero duplicate-CoT conflitante;
 - max trace preferencial abaixo de `1300` tokens;
