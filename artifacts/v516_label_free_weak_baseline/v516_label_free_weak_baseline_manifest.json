@@ -1,0 +1,35 @@
+{
+  "family_summary": {
+    "bit_manipulation": {
+      "label_free_correct": 136,
+      "rows": 160,
+      "stored_correct": 136,
+      "truncated": 0
+    },
+    "equation_transform": {
+      "label_free_correct": 55,
+      "rows": 155,
+      "stored_correct": 56,
+      "truncated": 0
+    }
+  },
+  "generated_at_utc": "2026-05-16T22:31:47.893352+00:00",
+  "input_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v342_acc_first_diagnostic\\v290_checkpoint6_baseline_predictions.csv",
+  "input_sha256": "910a051d8b8e652e37c0b0814ac59fe4a400b95cb432945b6a0244f97f5b31bf",
+  "label_free_correct": 191,
+  "metric_sources": {
+    "raw_output_label_free": 315
+  },
+  "output_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v516_label_free_weak_baseline\\v516_label_free_v290_checkpoint6_baseline.csv",
+  "output_sha256": "9fcfa2b0f2ac60d90c43d605569753711017b6440445596983531806bc8ba237",
+  "outputs": {
+    "csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v516_label_free_weak_baseline\\v516_label_free_v290_checkpoint6_baseline.csv",
+    "manifest_json": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v516_label_free_weak_baseline\\v516_label_free_weak_baseline_manifest.json"
+  },
+  "prediction_changed_rows": 9,
+  "row_contract_sha256": "bf055e3b9ebce79d4bfc9e48bce5a305b1d83da882f14afddec80d6afaba5fff",
+  "rows": 315,
+  "schema_version": "kg1_v516_label_free_weak_baseline_v1",
+  "stored_correct": 192,
+  "stored_vs_label_free_diff_rows": 1
+}

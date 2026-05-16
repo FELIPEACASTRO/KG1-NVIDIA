@@ -35,7 +35,7 @@ for item in (REPO_ROOT, SRC_ROOT, SCRIPTS_ROOT):
     if str(item) not in sys.path:
         sys.path.insert(0, str(item))
 
-from competition_utils import verify_answer  # noqa: E402
+from competition_utils import extract_final_answer, verify_answer  # noqa: E402
 from kg1_v274_numeric_postprocessor import postprocess_numeric_prediction  # noqa: E402
 from run_v278_symbolic_pbe_dsl_audit_hf import (  # noqa: E402
     AUDIT_COLUMNS as V278_AUDIT_COLUMNS,
@@ -358,7 +358,31 @@ def accepted_no_loss_candidates(audit_rows: list[dict[str, Any]]) -> tuple[list[
 def load_rows(args: argparse.Namespace) -> tuple[list[dict[str, Any]], dict[str, Any]]:
     if args.input_csv:
         path = Path(args.input_csv)
-        return [normalize_row(row) for row in read_csv(path)], {
+        raw_rows = read_csv(path)
+        rows = [normalize_row(row) for row in raw_rows]
+        raw_output_mismatch_examples: list[dict[str, str]] = []
+        for raw, row in zip(raw_rows, rows, strict=True):
+            raw_output = str(raw.get("raw_output", ""))
+            if not raw_output.strip():
+                continue
+            label_free = extract_final_answer(raw_output)
+            if str(row.get("prediction", "")).strip() != str(label_free).strip():
+                raw_output_mismatch_examples.append(
+                    {
+                        "id": str(row.get("id", "")),
+                        "prediction": str(row.get("prediction", "")),
+                        "label_free_prediction": str(label_free),
+                    }
+                )
+                if len(raw_output_mismatch_examples) >= 10:
+                    break
+        if raw_output_mismatch_examples:
+            raise RuntimeError(
+                "input CSV contains raw_output but prediction is not label-free; "
+                "run scripts/build_v516_label_free_weak_baseline.py first. examples="
+                + json.dumps(raw_output_mismatch_examples, sort_keys=True)
+            )
+        return rows, {
             "source": "local_csv",
             "path": str(path),
             "sha256": sha256_file(path),

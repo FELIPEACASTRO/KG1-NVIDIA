@@ -68,6 +68,7 @@ Ultima evidencia operacional relevante:
 | V515 V514 fullbyte residual | recuperou somente rows bit residuais com `fullbyte_unique_prediction`: `+7` train e `+1` validation; V515 total `2491/620`; tokenization real passou com `0` trunc, offset masks `2491/620`, token max `553/541`; V513 recheck passou com `0` blockers | ganho pequeno de cobertura verificavel; reproduzir no HF CPU antes de qualquer GPU |
 | V515 HF CPU reproduction | job `felipesp1983/6a08edcf3308d79117b9167f` completou; V515 reproduzido no HF CPU; V286 passou com `0` trunc e offset masks `2491/620`; V513 passou com `0` blockers; upload para `felipesp1983/kg1-v515-v514-fullbyte-residual-artifacts/v515-hf-cpu-fullbyte-residual-20260516T221957Z` | V515 e o dataset ativo mais limpo; ainda nao e ACC submit-safe; proximo passo e gate objetivo/pre-paid antes de qualquer GPU |
 | V515 objective alignment gate | pesos iguais falham: `bit=18.99%`, `equation=81.01%`; pesos fonte bit `1.5x` passam sem findings: `bit=26.01%`, `equation=73.99%` | qualquer launcher V515 deve usar exatamente essa ponderacao ou passar novo gate objetivo; pesos iguais ficam bloqueados por risco de backfire |
+| V516 label-free equation regate | baseline correto e `191/315`, `equation=55`, `bit=136`; gate equation achou os mesmos `4` ganhos no-loss conhecidos e `0` conflitos, projetando `195/315`, `equation=59`; V324 agora bloqueia CSV com `raw_output` se `prediction` nao for label-free | nao e novo dado de equation; esses IDs ja estao cobertos no V475/V510/V515, entao o gargalo e transferencia |
 
 ## Achados Principais V484-V492
 
@@ -734,9 +735,11 @@ Sem isso, nao packagear e nao submeter.
    bit (`18.99%`) e superponderar equation (`81.01%`). A unica ponderacao V515
    aceita ate aqui e fonte bit `1.5x`, que produz `bit=26.01%` e
    `equation=73.99%`.
-7. Se a revalidacao label-free nao produzir candidato `>192/315`, voltar para
-   CPU teacher/verifier discovery. Nao abrir H200 ate existir novo sinal CPU
-   que projete `equation>=60`, preserve `bit>=136` e tenha `trunc=0`.
+7. V516 corrigiu o gate de equation para baseline label-free: o sinal real
+   atual e `+4` equation (`55 -> 59`) nos mesmos IDs ja usados em V475/V510/V515.
+   Isso nao autoriza outro treino focado em equation sozinho; so autoriza um
+   smoke se houver mudanca de mecanismo, como V515 bit traceability + pesos bit
+   corrigidos.
 8. Se surgir novo candidato, weak eval promocional deve usar thinking ligado,
    `max_tokens=7680`, `max_model_len=8192`, `max_num_seqs=64` e falhar se nao
    passar `total>=196`, `equation>=60`, `bit>=136`, `trunc=0`.

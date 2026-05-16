@@ -1814,6 +1814,39 @@ Regra preventiva:
 
 Status: mitigado por gate; ainda sem ACC submit-safe.
 
+### E061 - Equation gate antigo superestimava baseline por stored prediction
+
+Evidencia:
+
+- V516 materializou o baseline V290 checkpoint-6 em modo label-free a partir de
+  `raw_output`.
+- O resultado correto e `191/315`, `equation=55/155`, `bit=136/160`,
+  enquanto o stored antigo indicava `192/315`, `equation=56/155`.
+- Rodando V324 sobre o CSV V516, o gate encontrou `4` accepted candidates,
+  projetando `equation=59/155` e weak `195/315`, nao `60/155`.
+- Os IDs aceitos sao os mesmos ja conhecidos e ja cobertos por V475/V510/V515:
+  `274def88`, `7688e06e`, `c5b058d6`, `d1bd7478`.
+
+Impacto:
+
+- O objetivo `equation=60` ainda nao tem sinal label-free novo. O sinal
+  comprovado e `equation=59` via solver/verifier, que precisa ser transferido
+  ao adapter para ser submit-safe.
+- Treinar novamente a mesma cobertura equation V475/V510/V515 sem mudar o
+  mecanismo provavelmente repete plateau.
+
+Regra preventiva:
+
+- Gates de solver/equation devem receber CSV label-free quando houver
+  `raw_output`; `prediction` armazenada antiga nao pode ser usada como baseline
+  promocional.
+- `run_v324_equation_expanded_solver_gate.py` agora bloqueia diretamente CSVs
+  que contem `raw_output` mas cuja `prediction` diverge da extracao label-free.
+- Todo manifesto de gate deve registrar `stored_correct` e
+  `label_free_correct` quando a origem tiver raw output.
+
+Status: baseline corrigido em `artifacts/v516_label_free_weak_baseline`.
+
 ## Prompt Externo
 
 Prompt consolidado para OpenRouter/outras APIs:
