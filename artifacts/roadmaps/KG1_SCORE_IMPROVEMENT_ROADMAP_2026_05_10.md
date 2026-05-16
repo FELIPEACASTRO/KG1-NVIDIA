@@ -40,7 +40,8 @@ Ultima evidencia operacional relevante:
 | V490 debug double check | compilacao, self-tests, static gate, dataset V390/V326, tokenization e metric path OK; HF jobs ativos 0 | proximo passo deve mudar mecanismo treinavel, nao repetir V487 |
 | V491 OpenRouter consult | GPT-5.5, Claude Opus 4.7, Gemini 3.1 Pro, Qwen 3.6 Max convergem em MoE trainability, freeze `lm_head`, loss weight 1.0 e kill-switch cedo | roteiro de smoke alterado; nao repetir treino attention+`lm_head` |
 | V492 uploaded OpenRouter double check | 12 modelos adicionais reforcam MoE `up_proj/down_proj` frozen-active como principal suspeita; tambem alertam que o +1 equation pode ser extracao, nao aprendizado bruto | roadmap limpo para um unico experimento fail-fast, depois pivot/stop |
-| V493 launcher/gate | static gate agora bloqueia MoE trainable sem `up_proj/down_proj`, com `lm_head` treinavel ou `ANSWER_SPAN_LOSS_WEIGHT!=1.0`; debug local passou hashes HF, adapter seed e V478 objective gate | pronto para smoke H200 de 2 steps apos commit/push |
+| V493 H200 smoke | treino completo; `target_parameters_trainability_mode=trainable`; `up_proj/down_proj` treinaveis; `lm_head` congelado; eval loss `1.9233 -> 1.9152`; checkpoint-2 uploaded | loss saudavel mas ganho nao comprovado; seguir para V494 weak eval |
+| V494 loss/ACC sync audit | loss path correto como CE mascarada; ACC path correto como geracao+extracao+`verify_answer`; loss nao e proxy matematico de ACC; V245 precisa controles long-context explicitos | static gate atualizado; rodar weak eval promocional com `KG1_MAX_TOKENS=7680`, thinking on e gate bloqueante |
 
 ## Achados Principais V484-V492
 
@@ -133,6 +134,14 @@ de mecanismo. Se o MoE treinavel com `lm_head` congelado nao preservar
 17. Nenhum ganho baseado apenas em `expected_aware_extracted` promove pacote.
     O diff precisa mostrar que a saida bruta ou a extracao simples tambem nao
     introduz regressao ilegal.
+18. `PRETOKENIZED_VAL_COPY_ONLY=1` e diagnostico-only. Ele invalida
+    independencia de `eval_loss` porque pode copiar treino para validacao; o
+    static gate bloqueia isso em jobs/notebooks promocionais.
+19. Weak eval promocional com `scripts/hf_job_weak_eval_v245.py` deve declarar
+    controles long-context: `KG1_DISABLE_THINKING=0`, `KG1_NO_PROMPT_SUFFIX=0`,
+    `KG1_MAX_TOKENS=7680`, `KG1_MAX_MODEL_LEN=8192` e
+    `KG1_MAX_NUM_SEQS=64`. Defaults curtos sao apenas diagnostico e exigem
+    `KG1_WEAK_EVAL_DIAGNOSTIC_ONLY=1`.
 
 ## Plano Cronologico Ativo
 
@@ -224,6 +233,32 @@ Resultado V485 seed:
 Manifest: `artifacts/v485_peft_roundtrip_gate/v485_seed_adapter_manifest.json`.
 
 Promove para P3 quando: round-trip manifesto aprovado.
+
+### P3 - V493 Checkpoint-2 Weak Eval V494
+
+Objetivo: testar se a correcao de mecanismo V493 transferiu para ACC real. O
+loss melhorou pouco (`1.9233 -> 1.9152`), entao a unica decisao valida vem do
+weak eval.
+
+Executar:
+
+- Rodar V494 H200 weak eval no `checkpoint-2` do repo
+  `felipesp1983/kg1-nemotron-lora-v493-nemo-h200-moe-trainable-no-lmhead-v290ckpt6`.
+- Usar controles long-context:
+  - `KG1_DISABLE_THINKING=0`
+  - `KG1_NO_PROMPT_SUFFIX=0`
+  - `KG1_MAX_TOKENS=7680`
+  - `KG1_MAX_MODEL_LEN=8192`
+  - `KG1_MAX_NUM_SEQS=64`
+- Enforcar gate:
+  - `total > 192`
+  - `equation_transform > 56`
+  - `bit_manipulation >= 136`
+  - `truncated = 0`
+
+Se falhar: encerrar a rota "mais treino SFT no adapter V290" para promocao e
+voltar para CPU solver/teacher com novo sinal comprovado antes de qualquer H200
+longo.
 
 ### V391/V486 Objective Balance Update
 

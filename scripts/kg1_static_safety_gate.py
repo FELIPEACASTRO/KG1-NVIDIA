@@ -195,6 +195,14 @@ MANUAL_INIT_ADAPTER_LOAD_RE = re.compile(
     r"export\s+INIT_ADAPTER_LOAD_MODE\s*=\s*['\"]manual['\"]",
     re.IGNORECASE,
 )
+PRETOKENIZED_VAL_COPY_ONLY_TRUE_RE = re.compile(
+    r"PRETOKENIZED_VAL_COPY_ONLY\s*(?:[\"']?\s*:\s*[\"']?(?:1|true|yes|on)|=\s*[\"']?(?:1|true|yes|on))",
+    re.IGNORECASE,
+)
+WEAK_EVAL_DIAGNOSTIC_ONLY_RE = re.compile(
+    r"KG1_WEAK_EVAL_DIAGNOSTIC_ONLY\s*(?:[\"']?\s*:\s*[\"']?(?:1|true|yes|on)|=\s*[\"']?(?:1|true|yes|on))",
+    re.IGNORECASE,
+)
 
 
 @dataclass
@@ -439,6 +447,53 @@ def audit_text(path: Path, text: str) -> list[Finding]:
                 "manual state_dict injection is equivalent.",
             )
         )
+
+    if (
+        job_or_notebook
+        and rel != "scripts/hf_job_train_v90.py"
+        and not is_archived_fail_closed(text)
+        and PRETOKENIZED_VAL_COPY_ONLY_TRUE_RE.search(text)
+    ):
+        findings.append(
+            Finding(
+                rel,
+                "error",
+                "pretokenized_val_copy_only_enabled",
+                "PRETOKENIZED_VAL_COPY_ONLY=1 reuses train rows as validation and makes eval_loss non-independent. "
+                "It is diagnostic-only and must not appear in promotional HF jobs/notebooks.",
+            )
+        )
+
+    if (
+        job_or_notebook
+        and rel != "scripts/hf_job_weak_eval_v245.py"
+        and not is_archived_fail_closed(text)
+        and "hf_job_weak_eval_v245.py" in text
+        and not WEAK_EVAL_DIAGNOSTIC_ONLY_RE.search(text)
+    ):
+        weak_eval_required_controls = {
+            "KG1_DISABLE_THINKING=0": r"[\"']KG1_DISABLE_THINKING[\"']\s*:\s*[\"']0[\"']|export\s+KG1_DISABLE_THINKING\s*=\s*0\b",
+            "KG1_NO_PROMPT_SUFFIX=0": r"[\"']KG1_NO_PROMPT_SUFFIX[\"']\s*:\s*[\"']0[\"']|export\s+KG1_NO_PROMPT_SUFFIX\s*=\s*0\b",
+            "KG1_MAX_TOKENS=7680": r"[\"']KG1_MAX_TOKENS[\"']\s*:\s*[\"']7680[\"']|export\s+KG1_MAX_TOKENS\s*=\s*7680\b",
+            "KG1_MAX_MODEL_LEN=8192": r"[\"']KG1_MAX_MODEL_LEN[\"']\s*:\s*[\"']8192[\"']|export\s+KG1_MAX_MODEL_LEN\s*=\s*8192\b",
+            "KG1_MAX_NUM_SEQS=64": r"[\"']KG1_MAX_NUM_SEQS[\"']\s*:\s*[\"']64[\"']|export\s+KG1_MAX_NUM_SEQS\s*=\s*64\b",
+        }
+        missing_controls = [
+            name
+            for name, pattern in weak_eval_required_controls.items()
+            if not re.search(pattern, text)
+        ]
+        if missing_controls:
+            findings.append(
+                Finding(
+                    rel,
+                    "error",
+                    "weak_eval_not_official_like",
+                    "Promotional weak eval launchers must override hf_job_weak_eval_v245.py diagnostic defaults. "
+                    "Missing controls: " + ", ".join(missing_controls) + ". "
+                    "Set KG1_WEAK_EVAL_DIAGNOSTIC_ONLY=1 only for explicit non-promotional sweeps.",
+                )
+            )
 
     if (
         job_or_notebook
@@ -923,6 +978,65 @@ def run_self_test() -> int:
         )
         if "manual_init_adapter_load_with_target_parameters" not in {item.code for item in manual_target_findings}:
             print("missing manual target-parameter load self-test finding", flush=True)
+            return 1
+        pretokenized_val_copy = tmp / "launch_pretokenized_copy.py"
+        pretokenized_val_copy.write_text(
+            "from huggingface_hub import HfApi\n"
+            "COMMAND_SCRIPT=\"\"\"\n"
+            "export PRETOKENIZED_VAL_COPY_ONLY=1\n"
+            "\"\"\"\n"
+            "HfApi().run_job(command=['true'])\n",
+            encoding="utf-8",
+        )
+        pretokenized_findings = audit_text(
+            pretokenized_val_copy,
+            pretokenized_val_copy.read_text(encoding="utf-8"),
+        )
+        if "pretokenized_val_copy_only_enabled" not in {item.code for item in pretokenized_findings}:
+            print("missing pretokenized validation copy self-test finding", flush=True)
+            return 1
+        weak_eval_short = tmp / "launch_weak_short.py"
+        weak_eval_short.write_text(
+            "from huggingface_hub import HfApi\n"
+            "COMMAND_SCRIPT='python3 scripts/hf_job_weak_eval_v245.py'\n"
+            "job_env={'KG1_DISABLE_THINKING':'1','KG1_MAX_TOKENS':'96'}\n"
+            "HfApi().run_job(command=['true'])\n",
+            encoding="utf-8",
+        )
+        weak_short_findings = audit_text(weak_eval_short, weak_eval_short.read_text(encoding="utf-8"))
+        if "weak_eval_not_official_like" not in {item.code for item in weak_short_findings}:
+            print("missing weak eval official-like self-test finding", flush=True)
+            return 1
+        weak_eval_diag = tmp / "launch_weak_diag.py"
+        weak_eval_diag.write_text(
+            "from huggingface_hub import HfApi\n"
+            "COMMAND_SCRIPT='python3 scripts/hf_job_weak_eval_v245.py'\n"
+            "KG1_WEAK_EVAL_DIAGNOSTIC_ONLY='1'\n"
+            "job_env={'KG1_DISABLE_THINKING':'1','KG1_MAX_TOKENS':'96'}\n"
+            "HfApi().run_job(command=['true'])\n",
+            encoding="utf-8",
+        )
+        weak_diag_findings = audit_text(weak_eval_diag, weak_eval_diag.read_text(encoding="utf-8"))
+        if "weak_eval_not_official_like" in {item.code for item in weak_diag_findings}:
+            print("false positive weak eval diagnostic-only self-test finding", flush=True)
+            return 1
+        weak_eval_official = tmp / "launch_weak_official.py"
+        weak_eval_official.write_text(
+            "from huggingface_hub import HfApi\n"
+            "COMMAND_SCRIPT='python3 scripts/hf_job_weak_eval_v245.py'\n"
+            "job_env={"
+            "'KG1_DISABLE_THINKING':'0',"
+            "'KG1_NO_PROMPT_SUFFIX':'0',"
+            "'KG1_MAX_TOKENS':'7680',"
+            "'KG1_MAX_MODEL_LEN':'8192',"
+            "'KG1_MAX_NUM_SEQS':'64'"
+            "}\n"
+            "HfApi().run_job(command=['true'])\n",
+            encoding="utf-8",
+        )
+        weak_official_findings = audit_text(weak_eval_official, weak_eval_official.read_text(encoding="utf-8"))
+        if "weak_eval_not_official_like" in {item.code for item in weak_official_findings}:
+            print(json.dumps([item.__dict__ for item in weak_official_findings], indent=2), flush=True)
             return 1
         archived_quarantine = tmp / "launch_archived_quarantine.py"
         archived_quarantine.write_text(
