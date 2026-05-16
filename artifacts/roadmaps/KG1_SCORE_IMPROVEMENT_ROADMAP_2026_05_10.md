@@ -67,7 +67,8 @@ Regra central: ganho so conta se aparecer no adapter/package. Teacher CPU, solve
 | V465/V469 derived adapters | derivados de rota V464/V468 contaminada | fail-closed; nao avaliar, packagear ou submeter |
 | V475 CPU equation no-loss regate | V324 atual sobre baseline V290 checkpoint-6 aceitou 4 candidatos; projeta equation `56 -> 60`, weak `192 -> 196`, bit guardrail `136` | sinal CPU real; ainda nao submit-safe |
 | V475 equation+bit replay mix | train `1312` = 800 equation + 512 bit replay; val `328` = 200 equation + 128 bit replay; V286 real passou com truncation `0`, offset masks completos e overlap `0` | primeiro dataset limpo autorizado para smoke HF curto |
-| V476 H200 smoke launcher | debug local passou; custo H200 `0.083333/min`, timeout `3600s`, init adapter V290 checkpoint-6, hashes HF batem | pode lançar apos commit/push; avaliar checkpoints 2/4/6/8/10/12 |
+| V476 H200 smoke train | checkpoints 2/4/6/8/10/12 completos; best eval_loss `0.9041` contra baseline `0.9020`; sem melhora de loss | treino concluido e job cancelado apos completion para FinOps |
+| V477 H200 weak eval V476 | ckpt-2 `192/315`, equation `57/155`, bit `135/160`, trunc `0`; ckpt-4 `191/315`, equation `57/155`, bit `134/160`, trunc `1` | cancelado por FinOps; sem ganho submit-safe; nao packagear/submeter |
 
 ## Regras Permanentes
 
