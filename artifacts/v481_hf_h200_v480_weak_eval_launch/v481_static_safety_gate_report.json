@@ -1,0 +1,11 @@
+{
+  "file_count": 3,
+  "files": [
+    "artifacts/v480_hf_h200_v479_objective_aligned_launch/launch_v480_hf_h200_v479_objective_aligned.py",
+    "artifacts/v480_hf_h200_v479_objective_aligned_launch/upload_v479_dataset_to_hf.py",
+    "artifacts/v481_hf_h200_v480_weak_eval_launch/launch_v481_hf_weak_eval.py"
+  ],
+  "findings": [],
+  "ok": true,
+  "schema_version": "kg1_static_safety_gate_v1"
+}
