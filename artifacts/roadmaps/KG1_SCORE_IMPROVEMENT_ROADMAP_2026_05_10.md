@@ -40,6 +40,7 @@ Ultima evidencia operacional relevante:
 | V490 debug double check | compilacao, self-tests, static gate, dataset V390/V326, tokenization e metric path OK; HF jobs ativos 0 | proximo passo deve mudar mecanismo treinavel, nao repetir V487 |
 | V491 OpenRouter consult | GPT-5.5, Claude Opus 4.7, Gemini 3.1 Pro, Qwen 3.6 Max convergem em MoE trainability, freeze `lm_head`, loss weight 1.0 e kill-switch cedo | roteiro de smoke alterado; nao repetir treino attention+`lm_head` |
 | V492 uploaded OpenRouter double check | 12 modelos adicionais reforcam MoE `up_proj/down_proj` frozen-active como principal suspeita; tambem alertam que o +1 equation pode ser extracao, nao aprendizado bruto | roadmap limpo para um unico experimento fail-fast, depois pivot/stop |
+| V493 launcher/gate | static gate agora bloqueia MoE trainable sem `up_proj/down_proj`, com `lm_head` treinavel ou `ANSWER_SPAN_LOSS_WEIGHT!=1.0`; debug local passou hashes HF, adapter seed e V478 objective gate | pronto para smoke H200 de 2 steps apos commit/push |
 
 ## Achados Principais V484-V492
 
@@ -296,7 +297,7 @@ guardrail duro.
 
 Executar:
 
-- max 4 steps, com leitura obrigatoria de ACC no step/checkpoint 2;
+- max 2 steps no primeiro smoke, com leitura obrigatoria de ACC no checkpoint 2;
 - mesmo dataset limpo V390/V326;
 - bit replay obrigatorio;
 - log de componentes de loss, incluindo answer-span;
@@ -311,9 +312,13 @@ Executar:
   - `LEARNING_RATE=2.0e-8`
   - `FINAL_LEARNING_RATE=5.0e-9`
 - pressao de dados bit-protective para smoke:
-  - preferir `v304_bit_replay_only=2.0`
+  - usar fontes concretas V390 `v304_solver_trace_bit_fullbyte_distill_exact=2.0`
+    e `v304_solver_trace_bit_fullbyte_distill_random=2.0`
   - `v325_equation_no_loss_distill=1.0`
   - qualquer peso equation maior exige justificativa e aborta se bit cair.
+  - como V390 ja e fisicamente dominado por bit, o V478 gate promocional usa
+    `bit_effective_share>=0.35`, `equation_effective_share<=0.65` e
+    `any_family_effective_share<=0.95`.
 
 Gate:
 

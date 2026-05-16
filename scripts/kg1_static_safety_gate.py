@@ -179,6 +179,18 @@ EXPLICIT_TARGET_PARAMETER_TRAINABILITY_RE = re.compile(
     r"export\s+REQUIRE_LORA_TARGET_PARAMETERS_TRAINABLE\s*=\s*[01]\b",
     re.IGNORECASE,
 )
+ENABLED_TARGET_PARAMETER_TRAINABILITY_RE = re.compile(
+    r"export\s+REQUIRE_LORA_TARGET_PARAMETERS_TRAINABLE\s*=\s*1\b",
+    re.IGNORECASE,
+)
+TRAINABLE_LORA_MODULES_EXPORT_RE = re.compile(
+    r"export\s+TRAINABLE_LORA_MODULES\s*=\s*['\"]([^'\"]*)['\"]",
+    re.IGNORECASE,
+)
+HIGH_ANSWER_SPAN_LOSS_WEIGHT_RE = re.compile(
+    r"ANSWER_SPAN_LOSS_WEIGHT\s*=\s*['\"]?([0-9]+(?:\.[0-9]+)?)['\"]?",
+    re.IGNORECASE,
+)
 MANUAL_INIT_ADAPTER_LOAD_RE = re.compile(
     r"export\s+INIT_ADAPTER_LOAD_MODE\s*=\s*['\"]manual['\"]",
     re.IGNORECASE,
@@ -361,6 +373,55 @@ def audit_text(path: Path, text: str) -> list[Finding]:
                 "frozen-active target_parameters with actually trained target_parameters.",
             )
         )
+
+    if (
+        job_or_notebook
+        and rel not in {"scripts/hf_job_train_v90.py", "scripts/kg1_static_safety_gate.py"}
+        and not is_archived_fail_closed(text)
+        and "mlp.experts.gate_up_proj" in text
+        and ENABLED_TARGET_PARAMETER_TRAINABILITY_RE.search(text)
+    ):
+        trainable_module_exports = TRAINABLE_LORA_MODULES_EXPORT_RE.findall(text)
+        trainable_modules_text = ",".join(trainable_module_exports)
+        trainable_modules = {
+            item.strip()
+            for export in trainable_module_exports
+            for item in export.split(",")
+            if item.strip()
+        }
+        missing_moe_modules = sorted({"up_proj", "down_proj"} - trainable_modules)
+        if missing_moe_modules:
+            findings.append(
+                Finding(
+                    rel,
+                    "error",
+                    "trainable_target_parameters_missing_moe_modules",
+                    "When REQUIRE_LORA_TARGET_PARAMETERS_TRAINABLE=1, TRAINABLE_LORA_MODULES must include "
+                    f"up_proj and down_proj. Missing: {', '.join(missing_moe_modules)}. "
+                    f"Observed TRAINABLE_LORA_MODULES={trainable_modules_text!r}",
+                )
+            )
+        if "lm_head" in trainable_modules:
+            findings.append(
+                Finding(
+                    rel,
+                    "error",
+                    "lm_head_trainable_in_moe_smoke",
+                    "V491/V492 route requires lm_head frozen in the promotional MoE smoke; use a separate "
+                    "documented ablation before re-enabling lm_head.",
+                )
+            )
+        high_answer_span_match = HIGH_ANSWER_SPAN_LOSS_WEIGHT_RE.search(text)
+        if high_answer_span_match and float(high_answer_span_match.group(1)) != 1.0:
+            findings.append(
+                Finding(
+                    rel,
+                    "error",
+                    "high_answer_span_loss_weight_in_moe_smoke",
+                    "V491/V492 route requires ANSWER_SPAN_LOSS_WEIGHT=1.0 for promotional MoE smokes. "
+                    f"Observed numeric value {high_answer_span_match.group(1)}.",
+                )
+            )
 
     if (
         job_or_notebook
@@ -774,6 +835,75 @@ def run_self_test() -> int:
             item.code for item in explicit_trainability_findings
         }:
             print("false positive target-parameter trainability self-test finding", flush=True)
+            return 1
+        p3_missing_moe_modules = tmp / "launch_p3_missing_moe_modules.py"
+        p3_missing_moe_modules.write_text(
+            "from huggingface_hub import HfApi\n"
+            "COMMAND_SCRIPT=\"\"\"\n"
+            "export LORA_TARGET_PARAMETERS='mlp.experts.gate_up_proj,mlp.experts.down_proj'\n"
+            "export TRAINABLE_LORA_MODULES='q_proj,k_proj,v_proj,o_proj,lm_head'\n"
+            "export REQUIRE_LORA_TARGET_PARAMETER_MATCH=1\n"
+            "export REQUIRE_LORA_TARGET_PARAMETERS_TRAINABLE=1\n"
+            "export ANSWER_SPAN_LOSS_WEIGHT='1.0'\n"
+            "\"\"\"\n"
+            "HfApi().run_job(command=['true'])\n",
+            encoding="utf-8",
+        )
+        p3_missing_findings = audit_text(
+            p3_missing_moe_modules,
+            p3_missing_moe_modules.read_text(encoding="utf-8"),
+        )
+        p3_missing_codes = {item.code for item in p3_missing_findings}
+        if "trainable_target_parameters_missing_moe_modules" not in p3_missing_codes:
+            print("missing P3 trainable target-parameter module self-test finding", flush=True)
+            return 1
+        if "lm_head_trainable_in_moe_smoke" not in p3_missing_codes:
+            print("missing P3 lm_head frozen self-test finding", flush=True)
+            return 1
+        p3_high_answer_span = tmp / "launch_p3_high_answer_span.py"
+        p3_high_answer_span.write_text(
+            "from huggingface_hub import HfApi\n"
+            "COMMAND_SCRIPT=\"\"\"\n"
+            "export LORA_TARGET_PARAMETERS='mlp.experts.gate_up_proj,mlp.experts.down_proj'\n"
+            "export TRAINABLE_LORA_MODULES='q_proj,k_proj,v_proj,o_proj,up_proj,down_proj'\n"
+            "export REQUIRE_LORA_TARGET_PARAMETER_MATCH=1\n"
+            "export REQUIRE_LORA_TARGET_PARAMETERS_TRAINABLE=1\n"
+            "export ANSWER_SPAN_LOSS_WEIGHT='12.0'\n"
+            "\"\"\"\n"
+            "HfApi().run_job(command=['true'])\n",
+            encoding="utf-8",
+        )
+        p3_high_findings = audit_text(
+            p3_high_answer_span,
+            p3_high_answer_span.read_text(encoding="utf-8"),
+        )
+        if "high_answer_span_loss_weight_in_moe_smoke" not in {item.code for item in p3_high_findings}:
+            print("missing P3 answer-span loss weight self-test finding", flush=True)
+            return 1
+        p3_valid_moe_smoke = tmp / "launch_p3_valid_moe_smoke.py"
+        p3_valid_moe_smoke.write_text(
+            "from huggingface_hub import HfApi\n"
+            "COMMAND_SCRIPT=\"\"\"\n"
+            "export LORA_TARGET_PARAMETERS='mlp.experts.gate_up_proj,mlp.experts.down_proj'\n"
+            "export TRAINABLE_LORA_MODULES='q_proj,k_proj,v_proj,o_proj,up_proj,down_proj'\n"
+            "export REQUIRE_LORA_TARGET_PARAMETER_MATCH=1\n"
+            "export REQUIRE_LORA_TARGET_PARAMETERS_TRAINABLE=1\n"
+            "export ANSWER_SPAN_LOSS_WEIGHT='1.0'\n"
+            "\"\"\"\n"
+            "HfApi().run_job(command=['true'])\n",
+            encoding="utf-8",
+        )
+        p3_valid_findings = audit_text(
+            p3_valid_moe_smoke,
+            p3_valid_moe_smoke.read_text(encoding="utf-8"),
+        )
+        p3_forbidden_codes = {
+            "trainable_target_parameters_missing_moe_modules",
+            "lm_head_trainable_in_moe_smoke",
+            "high_answer_span_loss_weight_in_moe_smoke",
+        }
+        if p3_forbidden_codes & {item.code for item in p3_valid_findings}:
+            print(json.dumps([item.__dict__ for item in p3_valid_findings], indent=2), flush=True)
             return 1
         manual_target_parameter_load = tmp / "launch_manual_target_parameter_load.py"
         manual_target_parameter_load.write_text(
