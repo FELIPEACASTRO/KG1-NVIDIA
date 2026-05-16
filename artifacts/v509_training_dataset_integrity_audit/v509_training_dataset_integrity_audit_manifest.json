@@ -1,0 +1,20 @@
+{
+  "blocked_dataset_count": 4,
+  "blocked_paths": [
+    "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v439_final_answer_only_pairs\\20260515T_v439_final_answer_only\\v439_final_answer_only_pairs_train.jsonl",
+    "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v439_final_answer_only_pairs\\20260515T_v439_final_answer_only\\v439_final_answer_only_pairs_val.jsonl",
+    "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v443_certified_equation_pair_builder\\20260515T_v443_certified_equation_pair_builder\\v443_certified_equation_pair_builder_preferences_train.jsonl",
+    "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v443_certified_equation_pair_builder\\20260515T_v443_certified_equation_pair_builder\\v443_certified_equation_pair_builder_preferences_val.jsonl"
+  ],
+  "dataset_count": 20,
+  "decision": {
+    "next_action": "Do not launch paid training with any dataset marked blocked. Inspect hard_fail_codes and either fix the dataset or remove it from active roadmap.",
+    "status": "datasets_need_triage"
+  },
+  "full_reference_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v293_gap_mining\\inputs\\v291_full_predictions.csv",
+  "generated_at_utc": "2026-05-16T20:39:32.779581+00:00",
+  "issues_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v509_training_dataset_integrity_audit\\v509_training_dataset_integrity_audit_issues.csv",
+  "schema_version": "kg1_v509_training_dataset_integrity_audit_v1",
+  "summary_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v509_training_dataset_integrity_audit\\v509_training_dataset_integrity_audit_summary.csv",
+  "weak_reference_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v290_rank19_micro_patch_reference\\runtime_artifacts\\v245_weak_eval_bridge\\v245-weak-bridge-hfonly-20260510T1950Z\\v221_weak_315.csv"
+}

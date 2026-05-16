@@ -1488,6 +1488,109 @@ Regra preventiva:
 Status: aberto como regra permanente; nenhum novo submit-safe gain encontrado
 em V505.
 
+### E051 - V274 expected-aware overcount nao e ganho submit-safe
+
+Evidencia:
+
+- V507 aplicou V274 somente depois de `extract_final_answer(raw_output)`.
+- O melhor adapter raw label-free sobe de `191/315` para `195/315`, com
+  `equation=59/155`, `bit=136/160`, `0` perdas.
+- O valor historico `196/315`, `equation=60/155` dependia de uma linha
+  simbolica (`4bb8c6cd`, answer `]}\!`) em que a predicao armazenada/esperada
+  preservava payload escapado que o parser label-free nao extrai de forma
+  submit-safe.
+
+Impacto:
+
+- `196/equation=60` nao pode ser tratado como candidato de submit adapter-only.
+- O alvo real sem violar parser/label e `195/equation=59/bit=136`, ainda como
+  postprocessor diagnostico.
+
+Regra preventiva:
+
+- Toda promocao precisa diff por `raw_output`, `simple_extracted`,
+  `label_aware_debug_prediction` e `prediction` label-free.
+- Linhas simbolicas com braces/backslashes entram em quarantine ate existir
+  convencao symbol-safe validada pela metrica label-free.
+
+Status: regra ativa; nenhum package/submit autorizado.
+
+### E052 - V439 tem respostas simbolicas escapadas que nao roundtripam
+
+Evidencia:
+
+- V509 auditou `v439_final_answer_only_pairs_train/val`.
+- Resultado: train `109` rows com `26` `assistant_answer_mismatch`; val `24`
+  rows com `5` mismatches.
+- Exemplos incluem answers literais com `\\`, `\{` e `\}`. O assistant renderiza
+  esses caracteres dentro de `\boxed{}`, mas a extracao label-free retorna
+  payload escapado ou truncado, diferente do `answer`.
+- V440/V441 ja tinham falhado em converter V439 em ganho adapter-only.
+
+Impacto:
+
+- V439 pode baixar loss ensinando strings que a metrica nao extrai como a
+  resposta oficial.
+- Treinar V439 novamente sem reconstruir a renderizacao simbolica e repetir um
+  bug silencioso.
+
+Regra preventiva:
+
+- V439 fica fora do dataset ativo.
+- So pode voltar como novo dataset se passar roundtrip:
+  `answer == extract_final_answer(assistant)` para 100% das linhas, sem
+  expected-aware.
+
+Status: excluido do V510.
+
+### E053 - V443 e dataset vazio, nao fonte de treino
+
+Evidencia:
+
+- O manifesto V443 registra `candidate_rows=0`, `certified_pair_rows=0`,
+  `train_pairs=0`, `val_pairs=0`, `hf_gpu_allowed=false`.
+- Os arquivos JSONL tem SHA256 vazio (`e3b0...b855`).
+
+Impacto:
+
+- Qualquer launcher apontando para V443 pode passar por caminhos sem dado real
+  ou gastar validacao em input nulo.
+
+Regra preventiva:
+
+- V443 fica fora do dataset ativo.
+- Builder CPU certificado precisa gerar pares reais antes de qualquer treino.
+
+Status: excluido do V510.
+
+### E054 - Pool de treino disperso causava reuso de linhas historicas falhas
+
+Evidencia:
+
+- V509 auditou 20 arquivos de dataset recentes/historicos.
+- V510 criou um pool unico e rastreavel com apenas V498, V475 e V460:
+  `2627` train, `637` val.
+- V510 removeu `543` duplicados de train e `155` de val por
+  `prompt+answer`.
+- O reaudit V509 do V510 passou com `blocked_dataset_count=0`.
+- O tokenization gate local com tokenizer oficial passou: `offset_masks=2627/637`,
+  token max `331`, sem truncation e sem overlap weak/full.
+
+Impacto:
+
+- Reduz risco de misturar datasets antigos que ja falharam transferencia
+  (V390/V406/V410/V416), datasets unboxed antigos (V293), V439 escapado ou
+  V443 vazio.
+
+Regra preventiva:
+
+- Todo novo job deve apontar explicitamente para V510 ou versao posterior com
+  manifesto equivalente.
+- Dataset novo so entra se passar V509, tokenization gate e pre-paid gate.
+
+Status: V510 criado e tokenizado localmente; proximo passo e pre-paid gate, nao
+GPU direta.
+
 ## Prompt Externo
 
 Prompt consolidado para OpenRouter/outras APIs:

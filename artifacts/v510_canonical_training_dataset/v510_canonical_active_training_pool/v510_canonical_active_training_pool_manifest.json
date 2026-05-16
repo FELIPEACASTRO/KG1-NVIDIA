@@ -1,0 +1,168 @@
+{
+  "decision": {
+    "next_action": "Run V509 integrity audit and tokenization/pre-paid gates on V510 before any HF job.",
+    "status": "canonical_dataset_ready_for_tokenization_gate"
+  },
+  "duplicate_examples": [
+    {
+      "id": "v217_train_2e637917502686a2",
+      "prompt_answer_hash": "e5146ec2f7a9b7dd442cfdc5944b6643a36e4aa801038c9f33c13f27e6121044",
+      "source_dataset": "v475_equation_bit_replay_mix_train",
+      "split": "train"
+    },
+    {
+      "id": "v217_train_3514c4e7e552bb62",
+      "prompt_answer_hash": "e26011245877521fdc5a546be241da68f271cfc5743b6be3a3283950cba9ade9",
+      "source_dataset": "v475_equation_bit_replay_mix_train",
+      "split": "train"
+    },
+    {
+      "id": "v217_train_6eb85f7522a0ae4c",
+      "prompt_answer_hash": "d57c43b86fdb34753b86aa627d8ba10c02027a682d0c40eba8e1a418f49fd974",
+      "source_dataset": "v475_equation_bit_replay_mix_train",
+      "split": "train"
+    },
+    {
+      "id": "v217_train_1bc0b904fb0ad218",
+      "prompt_answer_hash": "78042804a968f7df50159a5efcda51ad55f394a0b20d7b83dc627b8c3326b973",
+      "source_dataset": "v475_equation_bit_replay_mix_train",
+      "split": "train"
+    },
+    {
+      "id": "v217_train_6a63c310b0476784",
+      "prompt_answer_hash": "a8b8e1c8b6400b61251f652bd2555dc83969269e649af9cdbb3ad1c35aede358",
+      "source_dataset": "v475_equation_bit_replay_mix_train",
+      "split": "train"
+    },
+    {
+      "id": "v217_train_8454fff81b1247dc",
+      "prompt_answer_hash": "a8c1655fa055a38cf3efd11e130ddde608b35c668a660b126a2ec7d1a3eab909",
+      "source_dataset": "v475_equation_bit_replay_mix_train",
+      "split": "train"
+    },
+    {
+      "id": "v217_train_c973293dd09414f8",
+      "prompt_answer_hash": "4d32b1d882e1927e997c065093ef47c91f4f3a87dd27679cd2e9af2637d45931",
+      "source_dataset": "v475_equation_bit_replay_mix_train",
+      "split": "train"
+    },
+    {
+      "id": "v217_train_7822bf7e06dd9675",
+      "prompt_answer_hash": "40436533c141ffeb11cb6faef9385077d9e5a657b6c0c997514a72dc579e2fbc",
+      "source_dataset": "v475_equation_bit_replay_mix_train",
+      "split": "train"
+    },
+    {
+      "id": "v217_train_c8b761c7afef4565",
+      "prompt_answer_hash": "7f8749d25e8f29df358b9822b52783888606400ccd28bca245c6918e2ab4cae2",
+      "source_dataset": "v475_equation_bit_replay_mix_train",
+      "split": "train"
+    },
+    {
+      "id": "v217_train_095705edfa75b1de",
+      "prompt_answer_hash": "b7ae9aa82d246ae7dbf2321edfde7e4cb4a63e9e171b47abf52093b7eb88941d",
+      "source_dataset": "v475_equation_bit_replay_mix_train",
+      "split": "train"
+    },
+    {
+      "id": "v217_train_39d1aebbb5af1732",
+      "prompt_answer_hash": "92153d67b57defa677984f5f29c95556301f5a22a5f4878cc5247ea2712a3ada",
+      "source_dataset": "v475_equation_bit_replay_mix_train",
+      "split": "train"
+    },
+    {
+      "id": "v217_train_dbad0ba45cf428cf",
+      "prompt_answer_hash": "287ace34bf477650e18e32eb2d173f43ed1ff2983ed36c1fd55a5377a1a78322",
+      "source_dataset": "v475_equation_bit_replay_mix_train",
+      "split": "train"
+    },
+    {
+      "id": "v217_train_8b5cecce053dc7ce",
+      "prompt_answer_hash": "4cd48b53a10ab7fef4cc398d393cc2a95379137735389a3a7053c7010c394617",
+      "source_dataset": "v475_equation_bit_replay_mix_train",
+      "split": "train"
+    },
+    {
+      "id": "v217_train_ed302c05c60e1beb",
+      "prompt_answer_hash": "b38de4f6aafc188d9c0bb6caa60174444021366d86afffb1b8f816ffe2b32334",
+      "source_dataset": "v475_equation_bit_replay_mix_train",
+      "split": "train"
+    },
+    {
+      "id": "v217_train_28a982d5d862fb1a",
+      "prompt_answer_hash": "4c109cff1cf4e388ca8c8cefb1be4c62196154d7f40d8db211651333f4ba57a9",
+      "source_dataset": "v475_equation_bit_replay_mix_train",
+      "split": "train"
+    },
+    {
+      "id": "v217_train_5de595e8b6ec2dcb",
+      "prompt_answer_hash": "97148f6a624ff5d4db734868f10d8c7fb7dc419624f5388cc54e511dcf1beb76",
+      "source_dataset": "v475_equation_bit_replay_mix_train",
+      "split": "train"
+    },
+    {
+      "id": "v217_train_42108339278ee5ea",
+      "prompt_answer_hash": "c0152725a2c0e754b4b1520c072ded1c26fce093eb4476ce1358ced584217b3f",
+      "source_dataset": "v475_equation_bit_replay_mix_train",
+      "split": "train"
+    },
+    {
+      "id": "v217_train_c8352747b45b4f95",
+      "prompt_answer_hash": "9fbca513f73190185bbe116180d52852f887f791d4f251fefa1a97ae17554802",
+      "source_dataset": "v475_equation_bit_replay_mix_train",
+      "split": "train"
+    },
+    {
+      "id": "v217_train_b5080bec166cd9d4",
+      "prompt_answer_hash": "f03c782295028f2d70d85edbb08fe1f7170f1eac85d9e11552a09e7040044f18",
+      "source_dataset": "v475_equation_bit_replay_mix_train",
+      "split": "train"
+    },
+    {
+      "id": "v217_train_574eb5aed5b79c96",
+      "prompt_answer_hash": "0c4fcfb1fb87a3105f3390fe04a1b5dcfe2b110ffbe3ad5d16edad5951c9806e",
+      "source_dataset": "v475_equation_bit_replay_mix_train",
+      "split": "train"
+    }
+  ],
+  "excluded_source_count": 14,
+  "family_counts": {
+    "train:bit_manipulation": 609,
+    "train:equation_transform": 2018,
+    "val:bit_manipulation": 133,
+    "val:equation_transform": 504
+  },
+  "generated_at_utc": "2026-05-16T20:47:17.429180+00:00",
+  "included_source_count": 6,
+  "inputs": {
+    "v509_summary_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v509_training_dataset_integrity_audit\\v509_training_dataset_integrity_audit_summary.csv"
+  },
+  "label": "v510_canonical_active_training_pool",
+  "outputs": {
+    "manifest_json": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v510_canonical_training_dataset\\v510_canonical_active_training_pool\\v510_canonical_active_training_pool_manifest.json",
+    "source_decisions_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v510_canonical_training_dataset\\v510_canonical_active_training_pool\\v510_canonical_active_training_pool_source_decisions.csv",
+    "train_jsonl": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v510_canonical_training_dataset\\v510_canonical_active_training_pool\\v510_canonical_active_training_pool_train.jsonl",
+    "train_sha256": "9033e794bad98679f26bb2fc7f1eb5d4d7f32d06ef6231ee6e0fffc66fc70d3b",
+    "val_jsonl": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v510_canonical_training_dataset\\v510_canonical_active_training_pool\\v510_canonical_active_training_pool_val.jsonl",
+    "val_sha256": "062514b8a74ba3656df44ad99667ba63dda69f56d41a20ffb0500f17393ceea8"
+  },
+  "schema_version": "kg1_v510_canonical_training_dataset_v1",
+  "skipped_counts": {
+    "duplicate_prompt_answer_train": 543,
+    "duplicate_prompt_answer_val": 155
+  },
+  "source_counts": {
+    "train:v460_numeric_one_rule_micro_dataset_train": 115,
+    "train:v475_equation_bit_replay_mix_train": 800,
+    "train:v498_numeric_teacher_trace_train": 1712,
+    "val:v460_numeric_one_rule_micro_dataset_val": 9,
+    "val:v475_equation_bit_replay_mix_val": 200,
+    "val:v498_numeric_teacher_trace_val": 428
+  },
+  "source_decisions_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v510_canonical_training_dataset\\v510_canonical_active_training_pool\\v510_canonical_active_training_pool_source_decisions.csv",
+  "train_jsonl": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v510_canonical_training_dataset\\v510_canonical_active_training_pool\\v510_canonical_active_training_pool_train.jsonl",
+  "train_rows": 2627,
+  "v509_summary_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v509_training_dataset_integrity_audit\\v509_training_dataset_integrity_audit_summary.csv",
+  "val_jsonl": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v510_canonical_training_dataset\\v510_canonical_active_training_pool\\v510_canonical_active_training_pool_val.jsonl",
+  "val_rows": 637
+}

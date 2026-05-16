@@ -1,0 +1,52 @@
+{
+  "adapter_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v333_tong_bit_reasoner_gate\\20260513T171304Z\\v333_tong_bit_reasoner_gate_tong_bit_replace_predictions.csv",
+  "base_family_counts_label_free": {
+    "bit_manipulation": {
+      "correct": 136,
+      "rows": 160,
+      "truncated": 0
+    },
+    "equation_transform": {
+      "correct": 55,
+      "rows": 155,
+      "truncated": 0
+    }
+  },
+  "base_total_label_free": 191,
+  "changes_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v507_v274_label_free_projection\\v507_v274_label_free_projection_changes.csv",
+  "decision": {
+    "cpu_signal": "positive_no_loss",
+    "next_action": "Do not package/submit this as adapter-only. Use the four label-free V274 gains and the symbolic boxing failure as transfer/debug evidence only.",
+    "status": "postprocessor_signal_not_adapter_only_gain"
+  },
+  "gain_ids": [
+    "7688e06e",
+    "274def88",
+    "d1bd7478",
+    "c5b058d6"
+  ],
+  "gains": 4,
+  "generated_at_utc": "2026-05-16T20:29:17.559119+00:00",
+  "loss_ids": [],
+  "losses": 0,
+  "package_allowed": false,
+  "rows_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v507_v274_label_free_projection\\v507_v274_label_free_projection_rows.csv",
+  "schema_version": "kg1_v507_v274_label_free_projection_v1",
+  "submit_safe": false,
+  "symbolic_boxing_overcount_ids": [
+    "4bb8c6cd"
+  ],
+  "v274_family_counts_label_free": {
+    "bit_manipulation": {
+      "correct": 136,
+      "rows": 160,
+      "truncated": 0
+    },
+    "equation_transform": {
+      "correct": 59,
+      "rows": 155,
+      "truncated": 0
+    }
+  },
+  "v274_total_label_free": 195
+}

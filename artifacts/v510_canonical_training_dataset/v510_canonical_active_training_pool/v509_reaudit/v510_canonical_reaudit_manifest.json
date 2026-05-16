@@ -1,0 +1,15 @@
+{
+  "blocked_dataset_count": 0,
+  "blocked_paths": [],
+  "dataset_count": 2,
+  "decision": {
+    "next_action": "Dataset integrity checks passed for audited files; still run tokenization/pre-paid gates before HF.",
+    "status": "datasets_pass_integrity_audit"
+  },
+  "full_reference_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v293_gap_mining\\inputs\\v291_full_predictions.csv",
+  "generated_at_utc": "2026-05-16T20:45:55.907393+00:00",
+  "issues_csv": "artifacts\\v510_canonical_training_dataset\\v510_canonical_active_training_pool\\v509_reaudit\\v510_canonical_reaudit_issues.csv",
+  "schema_version": "kg1_v509_training_dataset_integrity_audit_v1",
+  "summary_csv": "artifacts\\v510_canonical_training_dataset\\v510_canonical_active_training_pool\\v509_reaudit\\v510_canonical_reaudit_summary.csv",
+  "weak_reference_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v290_rank19_micro_patch_reference\\runtime_artifacts\\v245_weak_eval_bridge\\v245-weak-bridge-hfonly-20260510T1950Z\\v221_weak_315.csv"
+}

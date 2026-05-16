@@ -53,6 +53,11 @@ Ultima evidencia operacional relevante:
 | V504 crisis root-cause audit | achou bugs reais em metrica/gates: ACC label-aware, thresholds weak antigos, weak defaults diagnosticos, full best selection, anti-leak flags ausentes, pre-paid gate sem schema SFT | corrigir gates e revalidar candidatos com extracao label-free antes de qualquer novo GPU |
 | V505 label-free revalidation | 30 CSVs varridos; 22 weak315; raw-output adapter top `191/315`, `equation=55`, `bit=136`; reference-only solver/postprocessor chega a `222/315`, mas nao e adapter-only | bloquear promocao de CSV sem `raw_output`; proximo ganho precisa converter sinal solver em comportamento do adapter ou pacote valido |
 | V506 reference signal gap | compara melhor adapter raw vs melhor reference-only: `31` targets (`23` bit, `8` equation), `0` reference-loss risk, `93` ambos errados | inventario alvo para transferencia; ainda nao e submit-safe |
+| V507 V274 label-free projection | melhor adapter raw + V274 em `raw_output` label-free: `195/315`, `equation=59`, `bit=136`, `0` perdas; `196/equation=60` dependia de overcount simbolico expected-aware em `4bb8c6cd` | sinal de postprocessor, nao adapter-only; usar como alvo, nao como submit |
+| V508 adapter raw V274 sweep | 8 candidatos adapter raw varridos; melhor geral `195`, `equation=60`, `bit=135`; melhor com guardrail `bit>=136` e `195`, `equation=59` | nao ha candidato adapter-only submit-safe novo; equation 60 atual perde bit |
+| V509 dataset integrity audit | 20 datasets auditados; V439 bloqueado por `31` mismatches de resposta simbolica/escape; V443 bloqueado por dataset vazio; V475/V498/V460 passam integridade | nao treinar com V439/V443; consolidar dataset ativo limpo |
+| V510 canonical active training pool | dataset unico criado: `2627` train, `637` val; incluiu V498/V475/V460; removeu `543` duplicados train e `155` val; reaudit V509 com `0` bloqueios | usar V510 como unica fonte ativa antes de tokenization/pre-paid gate |
+| V510 tokenization real local | tokenizer oficial local passou: `offset_masks=2627/637`, `prompt_truncation_rate=0`, `completion_truncation=0`, token max `331`, sem overlap weak/full | V510 esta pronto para pre-paid integration gate; ainda nao autoriza GPU sem launch diff comparativo |
 
 ## Achados Principais V484-V492
 
@@ -201,7 +206,11 @@ ao CPU teacher, sem broad SFT.
    o preflight deve falhar se qualquer linha de treino vier marcada como
    gate/weak/full usada para treino ou se as flags anti-leakage estiverem
    ausentes.
-10. FinOps: cancelar job que nao possa mais superar `total>192`,
+10. Dataset de treino ativo deve vir do V510 ou de uma versao posterior com
+   manifesto equivalente. V439 fica excluido ate ser reconstruido com
+   renderizacao simbolica label-free validada; V443 fica excluido por estar
+   vazio.
+11. FinOps: cancelar job que nao possa mais superar `total>192`,
    `equation>56`, `bit>=136`, `truncated=0`.
 11. H200 pode ser usada ate 1 hora por execucao. Acima disso exige autorizacao
    humana.
