@@ -57,7 +57,8 @@ Ultima evidencia operacional relevante:
 | V508 adapter raw V274 sweep | 8 candidatos adapter raw varridos; melhor geral `195`, `equation=60`, `bit=135`; melhor com guardrail `bit>=136` e `195`, `equation=59` | nao ha candidato adapter-only submit-safe novo; equation 60 atual perde bit |
 | V509 dataset integrity audit | 20 datasets auditados; V439 bloqueado por `31` mismatches de resposta simbolica/escape; V443 bloqueado por dataset vazio; V475/V498/V460 passam integridade | nao treinar com V439/V443; consolidar dataset ativo limpo |
 | V510 canonical active training pool | dataset unico criado: `2627` train, `637` val; incluiu V498/V475/V460; removeu `543` duplicados train e `155` val; reaudit V509 com `0` bloqueios | usar V510 como unica fonte ativa antes de tokenization/pre-paid gate |
-| V510 tokenization real local | tokenizer oficial local passou: `offset_masks=2627/637`, `prompt_truncation_rate=0`, `completion_truncation=0`, token max `331`, sem overlap weak/full | V510 esta pronto para pre-paid integration gate; ainda nao autoriza GPU sem launch diff comparativo |
+| V510 tokenization real local | tokenizer oficial local passou: `offset_masks=2627/637`, `prompt_truncation_rate=0`, `completion_truncation=0`, token max `331`, sem overlap weak/full | V510 esta pronto para launch fail-fast, desde que pre-paid/debug tambem passem |
+| V511 canonical H200 smoke preflight | V510 foi enviado ao HF dataset commit `40e71a686d9970c3c842d26dcf89200fc4990a51`; static gate, pre-paid integration gate e launcher debug passaram; H200 custa `$0.083333/min`; init adapter V290 ckpt-6 existe | proximo passo executavel e commit/push do launcher V511 e smoke H200 de 2 steps, nao treino longo |
 
 ## Achados Principais V484-V492
 
@@ -445,21 +446,48 @@ frozen-active, e auditar se qualquer ganho de equation aparece na saida bruta.
 
 Artefato: `artifacts/v490_debug_double_check/V490_DEBUG_DOUBLE_CHECK_2026_05_16.md`.
 
-### P3 - Smoke HF Minimo V491/V492
+### P3 - Smoke HF Minimo V511
 
-Objetivo: testar o mecanismo apontado por V491/V492 sem gastar longo: MoE LoRA
-treinavel, `lm_head` congelado, answer-span sem peso artificial e bit como
-guardrail duro.
+Objetivo: testar uma rota submit-safe depois da limpeza de dados V509/V510,
+sem repetir os datasets antigos que ja falharam. O smoke V511 combina:
+
+- dataset unico V510, com V498 + V475 + V460 e V439/V443 excluidos;
+- MoE LoRA treinavel em `up_proj/down_proj`;
+- `lm_head` congelado;
+- `ANSWER_SPAN_LOSS_WEIGHT=1.0`;
+- bit replay com peso efetivo suficiente para preservar `136/160`;
+- fail-fast em 2 steps.
+
+Status atual: preflight completo, sem job pago ainda.
+
+Evidencia pronta:
+
+- dataset HF: `felipesp1983/kg1-nemotron-training`
+- dataset commit: `40e71a686d9970c3c842d26dcf89200fc4990a51`
+- train: `2627` rows,
+  SHA256 `9033e794bad98679f26bb2fc7f1eb5d4d7f32d06ef6231ee6e0fffc66fc70d3b`
+- val: `637` rows,
+  SHA256 `062514b8a74ba3656df44ad99667ba63dda69f56d41a20ffb0500f17393ceea8`
+- objective alignment:
+  - train bit effective share `0.475163`
+  - train equation effective share `0.524837`
+  - val bit effective share `0.441860`
+  - val equation effective share `0.558140`
+- static safety gate: passou.
+- pre-paid integration gate: passou.
+- launcher debug: passou, H200 `0.083333 USD/min`, `timeout=3600`.
 
 Executar:
 
-- max 2 steps no primeiro smoke, com leitura obrigatoria de ACC no checkpoint 2;
-- mesmo dataset limpo V390/V326;
-- bit replay obrigatorio;
-- log de componentes de loss, incluindo answer-span;
-- weak micro-ACC no primeiro checkpoint, nao apenas `eval_loss`;
-- kill-switch no primeiro checkpoint.
-- configuracao minima do launcher:
+- commitar e enviar V511 para `v230-v226-complementarity` antes do launch,
+  porque o job usa `KG1_EXPECTED_COMMIT`;
+- rodar V511 com `--launch` somente apos push;
+- acompanhar logs de 40 em 40 segundos;
+- cancelar por FinOps se o primeiro checkpoint nao puder superar o gate;
+- weak micro-ACC no checkpoint 2, nao apenas `eval_loss`.
+
+Configuracao minima do launcher:
+
   - `TRAINABLE_LORA_MODULES=q_proj,k_proj,v_proj,o_proj,up_proj,down_proj`
   - `LORA_TARGET_PARAMETERS=mlp.experts.gate_up_proj,mlp.experts.down_proj`
   - `REQUIRE_LORA_TARGET_PARAMETERS_TRAINABLE=1`
@@ -467,14 +495,24 @@ Executar:
   - `lm_head` ausente da allowlist treinavel
   - `LEARNING_RATE=2.0e-8`
   - `FINAL_LEARNING_RATE=5.0e-9`
-- pressao de dados bit-protective para smoke:
-  - usar fontes concretas V390 `v304_solver_trace_bit_fullbyte_distill_exact=2.0`
-    e `v304_solver_trace_bit_fullbyte_distill_random=2.0`
-  - `v325_equation_no_loss_distill=1.0`
-  - qualquer peso equation maior exige justificativa e aborta se bit cair.
-  - como V390 ja e fisicamente dominado por bit, o V478 gate promocional usa
-    `bit_effective_share>=0.35`, `equation_effective_share<=0.65` e
-    `any_family_effective_share<=0.95`.
+  - `MAX_STEPS=2`
+  - `SAVE_EVERY_STEPS=2`
+  - `EVAL_EVERY_STEPS=2`
+  - `KG1_CRISIS_MODE_BACKFIRE_GUARD=1`
+
+Pesos do V511:
+
+- source weights:
+  - `v498_bit_replay_guardrail_from_v475=3.00`
+  - `v475_v217_bit_replay_guardrail=3.00`
+  - `v217_bit_replay_guardrail=3.00`
+  - `v498_numeric_teacher_trace_pack=1.00`
+  - `v475_v325_equation_no_loss_distill=1.00`
+  - `v460_v459_numeric_one_rule_micro_dataset=1.00`
+- subcategory weights:
+  - bit replay `1.00`
+  - equation direct/colon/minus/hard-negative families `1.00`
+  - V274 guarded numeric minus signed `1.00`
 
 Gate:
 

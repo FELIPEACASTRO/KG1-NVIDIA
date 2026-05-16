@@ -1588,8 +1588,41 @@ Regra preventiva:
   manifesto equivalente.
 - Dataset novo so entra se passar V509, tokenization gate e pre-paid gate.
 
-Status: V510 criado e tokenizado localmente; proximo passo e pre-paid gate, nao
-GPU direta.
+Status: V510 criado, tokenizado localmente, enviado ao HF dataset repo no commit
+`40e71a686d9970c3c842d26dcf89200fc4990a51`, e aprovado no pre-paid gate/debug
+do launcher V511. Proximo passo permitido: commit/push do launcher V511 e smoke
+H200 de 2 steps com kill-switch, nao treino longo.
+
+### E055 - Launcher novo podia omitir contrato literal de trainability MoE
+
+Evidencia:
+
+- O primeiro `kg1_static_safety_gate.py` no V511 falhou antes de qualquer GPU:
+  `target_parameter_trainability_not_explicit`.
+- Depois de declarar `REQUIRE_LORA_TARGET_PARAMETERS_TRAINABLE=1`, o gate
+  apontou outro risco: `TRAINABLE_LORA_MODULES` nao estava visivel em formato
+  literal para provar `up_proj/down_proj`.
+- O codigo remoto herdado do V493 exportava esses valores, mas o launcher V511
+  precisava carregar o contrato explicitamente para impedir drift silencioso
+  entre manifesto, env local e shell remoto.
+
+Impacto:
+
+- Sem essa regra, seria possivel relancar um smoke com `target_parameters`
+  carregados, mas nao treinaveis, repetindo a classe de erro F2
+  frozen-active.
+
+Regra preventiva:
+
+- Todo launcher promocional com MoE deve conter, em formato auditavel:
+  `export TRAINABLE_LORA_MODULES="q_proj,k_proj,v_proj,o_proj,up_proj,down_proj"`
+  e `export REQUIRE_LORA_TARGET_PARAMETERS_TRAINABLE=1`.
+- O `job_env` tambem deve registrar `KG1_TRAINABLE_LORA_MODULES` e
+  `KG1_REQUIRE_LORA_TARGET_PARAMETERS_TRAINABLE`.
+- Static gate e pre-paid gate devem rodar antes do upload/launch pago.
+
+Status: corrigido no V511; `py_compile`, static gate, pre-paid integration gate
+e launcher debug passaram.
 
 ## Prompt Externo
 

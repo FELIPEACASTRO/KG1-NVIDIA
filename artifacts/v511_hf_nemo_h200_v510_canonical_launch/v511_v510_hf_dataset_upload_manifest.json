@@ -1,0 +1,27 @@
+{
+  "data_repo": "felipesp1983/kg1-nemotron-training",
+  "generated_at_utc": "2026-05-16T20:59:46.616389+00:00",
+  "hf_train_file": "data/v510_canonical_training_dataset/v510_canonical_active_training_pool/v510_canonical_active_training_pool_train.jsonl",
+  "hf_val_file": "data/v510_canonical_training_dataset/v510_canonical_active_training_pool/v510_canonical_active_training_pool_val.jsonl",
+  "local_report": {
+    "integrity_manifest_file": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v510_canonical_training_dataset\\v510_canonical_active_training_pool\\v509_reaudit\\v510_canonical_reaudit_manifest.json",
+    "integrity_reaudit_status": "datasets_pass_integrity_audit",
+    "manifest_file": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v510_canonical_training_dataset\\v510_canonical_active_training_pool\\v510_canonical_active_training_pool_manifest.json",
+    "objective_alignment_file": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v510_canonical_training_dataset\\v510_canonical_active_training_pool\\v510_objective_alignment_gate.json",
+    "objective_alignment_hf_gpu_allowed": true,
+    "tokenization_gate_decision": "tokenization_gate_passed",
+    "tokenization_manifest_file": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v510_canonical_training_dataset\\v510_canonical_active_training_pool\\tokenization_gate_real_local\\v286_generic_tokenization_gate_manifest.json",
+    "train_file": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v510_canonical_training_dataset\\v510_canonical_active_training_pool\\v510_canonical_active_training_pool_train.jsonl",
+    "train_rows": 2627,
+    "train_sha256": "9033e794bad98679f26bb2fc7f1eb5d4d7f32d06ef6231ee6e0fffc66fc70d3b",
+    "triage_file": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v510_canonical_training_dataset\\v510_canonical_active_training_pool\\V510_CANONICAL_DATASET_TRIAGE.md",
+    "val_file": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v510_canonical_training_dataset\\v510_canonical_active_training_pool\\v510_canonical_active_training_pool_val.jsonl",
+    "val_rows": 637,
+    "val_sha256": "062514b8a74ba3656df44ad99667ba63dda69f56d41a20ffb0500f17393ceea8"
+  },
+  "mode": "uploaded",
+  "path_in_repo": "data/v510_canonical_training_dataset/v510_canonical_active_training_pool",
+  "schema_version": "kg1_v511_v510_hf_dataset_upload_v1",
+  "upload_info": "https://huggingface.co/datasets/felipesp1983/kg1-nemotron-training/commit/40e71a686d9970c3c842d26dcf89200fc4990a51",
+  "uploaded_at_utc": "2026-05-16T20:59:49.819631+00:00"
+}

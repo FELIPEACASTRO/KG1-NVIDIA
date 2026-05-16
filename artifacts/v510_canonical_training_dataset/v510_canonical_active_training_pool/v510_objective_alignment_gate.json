@@ -1,0 +1,342 @@
+{
+  "dataset_manifest_json": "",
+  "findings": [],
+  "generated_at_utc": "2026-05-16T20:55:02.105837+00:00",
+  "hf_gpu_allowed": true,
+  "schema_version": "kg1_v478_training_objective_alignment_gate_v1",
+  "source_weights": {
+    "v217_bit_replay_guardrail": 3.0,
+    "v460_v459_numeric_one_rule_micro_dataset": 1.0,
+    "v475_v217_bit_replay_guardrail": 3.0,
+    "v475_v325_equation_no_loss_distill": 1.0,
+    "v498_bit_replay_guardrail_from_v475": 3.0,
+    "v498_numeric_teacher_trace_pack": 1.0
+  },
+  "subcategory_weights": {
+    "bit_guardrail_replay": 1.0,
+    "equation_numeric_add_direct": 1.0,
+    "equation_numeric_add_direct_hard_negative": 1.0,
+    "equation_numeric_colon_absdiff": 1.0,
+    "equation_numeric_colon_trailing_zero": 1.0,
+    "equation_numeric_colon_trailing_zero_hard_negative": 1.0,
+    "equation_numeric_minus_direct_negative": 1.0,
+    "equation_numeric_minus_signed": 1.0,
+    "equation_numeric_minus_signed_hard_negative": 1.0,
+    "v274_guarded_numeric_minus_signed_opposite_sign_guarded": 1.0
+  },
+  "thresholds": {
+    "max_any_family_effective_share": 0.95,
+    "max_equation_effective_share": 0.65,
+    "min_bit_effective_share": 0.35
+  },
+  "train": {
+    "effective_share_by_family": {
+      "bit_manipulation": {
+        "share": 0.475163,
+        "weight": 1827.0
+      },
+      "equation_transform": {
+        "share": 0.524837,
+        "weight": 2018.0
+      }
+    },
+    "effective_share_by_source": {
+      "v217_bit_replay_guardrail": {
+        "share": 0.075683,
+        "weight": 291.0
+      },
+      "v460_v459_numeric_one_rule_micro_dataset": {
+        "share": 0.004681,
+        "weight": 18.0
+      },
+      "v475_v325_equation_no_loss_distill": {
+        "share": 0.208062,
+        "weight": 800.0
+      },
+      "v498_bit_replay_guardrail_from_v475": {
+        "share": 0.39948,
+        "weight": 1536.0
+      },
+      "v498_numeric_teacher_trace_pack": {
+        "share": 0.312094,
+        "weight": 1200.0
+      }
+    },
+    "effective_share_by_subcategory": {
+      "bit_guardrail_replay": {
+        "share": 0.475163,
+        "weight": 1827.0
+      },
+      "equation_numeric_add_direct": {
+        "share": 0.041612,
+        "weight": 160.0
+      },
+      "equation_numeric_add_direct_hard_negative": {
+        "share": 0.104031,
+        "weight": 400.0
+      },
+      "equation_numeric_colon_absdiff": {
+        "share": 0.041612,
+        "weight": 160.0
+      },
+      "equation_numeric_colon_trailing_zero": {
+        "share": 0.041612,
+        "weight": 160.0
+      },
+      "equation_numeric_colon_trailing_zero_hard_negative": {
+        "share": 0.104031,
+        "weight": 400.0
+      },
+      "equation_numeric_minus_direct_negative": {
+        "share": 0.041612,
+        "weight": 160.0
+      },
+      "equation_numeric_minus_signed": {
+        "share": 0.041612,
+        "weight": 160.0
+      },
+      "equation_numeric_minus_signed_hard_negative": {
+        "share": 0.104031,
+        "weight": 400.0
+      },
+      "v274_guarded_numeric_minus_signed_opposite_sign_guarded": {
+        "share": 0.004681,
+        "weight": 18.0
+      }
+    },
+    "effective_total_weight": 3845.0,
+    "physical_share_by_family": {
+      "bit_manipulation": {
+        "rows": 609,
+        "share": 0.231823
+      },
+      "equation_transform": {
+        "rows": 2018,
+        "share": 0.768177
+      }
+    },
+    "physical_share_by_source": {
+      "v217_bit_replay_guardrail": {
+        "rows": 97,
+        "share": 0.036924
+      },
+      "v460_v459_numeric_one_rule_micro_dataset": {
+        "rows": 18,
+        "share": 0.006852
+      },
+      "v475_v325_equation_no_loss_distill": {
+        "rows": 800,
+        "share": 0.30453
+      },
+      "v498_bit_replay_guardrail_from_v475": {
+        "rows": 512,
+        "share": 0.194899
+      },
+      "v498_numeric_teacher_trace_pack": {
+        "rows": 1200,
+        "share": 0.456795
+      }
+    },
+    "physical_share_by_subcategory": {
+      "bit_guardrail_replay": {
+        "rows": 609,
+        "share": 0.231823
+      },
+      "equation_numeric_add_direct": {
+        "rows": 160,
+        "share": 0.060906
+      },
+      "equation_numeric_add_direct_hard_negative": {
+        "rows": 400,
+        "share": 0.152265
+      },
+      "equation_numeric_colon_absdiff": {
+        "rows": 160,
+        "share": 0.060906
+      },
+      "equation_numeric_colon_trailing_zero": {
+        "rows": 160,
+        "share": 0.060906
+      },
+      "equation_numeric_colon_trailing_zero_hard_negative": {
+        "rows": 400,
+        "share": 0.152265
+      },
+      "equation_numeric_minus_direct_negative": {
+        "rows": 160,
+        "share": 0.060906
+      },
+      "equation_numeric_minus_signed": {
+        "rows": 160,
+        "share": 0.060906
+      },
+      "equation_numeric_minus_signed_hard_negative": {
+        "rows": 400,
+        "share": 0.152265
+      },
+      "v274_guarded_numeric_minus_signed_opposite_sign_guarded": {
+        "rows": 18,
+        "share": 0.006852
+      }
+    },
+    "rows": 2627,
+    "unknown_source_rows": 0,
+    "unknown_subcategory_rows": 0
+  },
+  "train_jsonl": "artifacts\\v510_canonical_training_dataset\\v510_canonical_active_training_pool\\v510_canonical_active_training_pool_train.jsonl",
+  "val_jsonl": "artifacts\\v510_canonical_training_dataset\\v510_canonical_active_training_pool\\v510_canonical_active_training_pool_val.jsonl",
+  "validation": {
+    "effective_share_by_family": {
+      "bit_manipulation": {
+        "share": 0.44186,
+        "weight": 399.0
+      },
+      "equation_transform": {
+        "share": 0.55814,
+        "weight": 504.0
+      }
+    },
+    "effective_share_by_source": {
+      "v217_bit_replay_guardrail": {
+        "share": 0.016611,
+        "weight": 15.0
+      },
+      "v460_v459_numeric_one_rule_micro_dataset": {
+        "share": 0.00443,
+        "weight": 4.0
+      },
+      "v475_v325_equation_no_loss_distill": {
+        "share": 0.221484,
+        "weight": 200.0
+      },
+      "v498_bit_replay_guardrail_from_v475": {
+        "share": 0.425249,
+        "weight": 384.0
+      },
+      "v498_numeric_teacher_trace_pack": {
+        "share": 0.332226,
+        "weight": 300.0
+      }
+    },
+    "effective_share_by_subcategory": {
+      "bit_guardrail_replay": {
+        "share": 0.44186,
+        "weight": 399.0
+      },
+      "equation_numeric_add_direct": {
+        "share": 0.044297,
+        "weight": 40.0
+      },
+      "equation_numeric_add_direct_hard_negative": {
+        "share": 0.110742,
+        "weight": 100.0
+      },
+      "equation_numeric_colon_absdiff": {
+        "share": 0.044297,
+        "weight": 40.0
+      },
+      "equation_numeric_colon_trailing_zero": {
+        "share": 0.044297,
+        "weight": 40.0
+      },
+      "equation_numeric_colon_trailing_zero_hard_negative": {
+        "share": 0.110742,
+        "weight": 100.0
+      },
+      "equation_numeric_minus_direct_negative": {
+        "share": 0.044297,
+        "weight": 40.0
+      },
+      "equation_numeric_minus_signed": {
+        "share": 0.044297,
+        "weight": 40.0
+      },
+      "equation_numeric_minus_signed_hard_negative": {
+        "share": 0.110742,
+        "weight": 100.0
+      },
+      "v274_guarded_numeric_minus_signed_opposite_sign_guarded": {
+        "share": 0.00443,
+        "weight": 4.0
+      }
+    },
+    "effective_total_weight": 903.0,
+    "physical_share_by_family": {
+      "bit_manipulation": {
+        "rows": 133,
+        "share": 0.208791
+      },
+      "equation_transform": {
+        "rows": 504,
+        "share": 0.791209
+      }
+    },
+    "physical_share_by_source": {
+      "v217_bit_replay_guardrail": {
+        "rows": 5,
+        "share": 0.007849
+      },
+      "v460_v459_numeric_one_rule_micro_dataset": {
+        "rows": 4,
+        "share": 0.006279
+      },
+      "v475_v325_equation_no_loss_distill": {
+        "rows": 200,
+        "share": 0.313972
+      },
+      "v498_bit_replay_guardrail_from_v475": {
+        "rows": 128,
+        "share": 0.200942
+      },
+      "v498_numeric_teacher_trace_pack": {
+        "rows": 300,
+        "share": 0.470958
+      }
+    },
+    "physical_share_by_subcategory": {
+      "bit_guardrail_replay": {
+        "rows": 133,
+        "share": 0.208791
+      },
+      "equation_numeric_add_direct": {
+        "rows": 40,
+        "share": 0.062794
+      },
+      "equation_numeric_add_direct_hard_negative": {
+        "rows": 100,
+        "share": 0.156986
+      },
+      "equation_numeric_colon_absdiff": {
+        "rows": 40,
+        "share": 0.062794
+      },
+      "equation_numeric_colon_trailing_zero": {
+        "rows": 40,
+        "share": 0.062794
+      },
+      "equation_numeric_colon_trailing_zero_hard_negative": {
+        "rows": 100,
+        "share": 0.156986
+      },
+      "equation_numeric_minus_direct_negative": {
+        "rows": 40,
+        "share": 0.062794
+      },
+      "equation_numeric_minus_signed": {
+        "rows": 40,
+        "share": 0.062794
+      },
+      "equation_numeric_minus_signed_hard_negative": {
+        "rows": 100,
+        "share": 0.156986
+      },
+      "v274_guarded_numeric_minus_signed_opposite_sign_guarded": {
+        "rows": 4,
+        "share": 0.006279
+      }
+    },
+    "rows": 637,
+    "unknown_source_rows": 0,
+    "unknown_subcategory_rows": 0
+  }
+}
