@@ -1,0 +1,44 @@
+{
+  "baseline_counts": {
+    "bit_manipulation": {
+      "correct": 136,
+      "rows": 160,
+      "truncated": 0
+    },
+    "equation_transform": {
+      "correct": 56,
+      "rows": 155,
+      "truncated": 0
+    }
+  },
+  "baseline_total_correct": 192,
+  "decision": {
+    "decision": "do_not_promote_v496_or_repeat_h200_sft",
+    "next_action": "Implement a CPU teacher/verifier that explains equation gains without bit regression before any paid GPU job.",
+    "reason": "v496_total_projection=191; baseline_total=192; v496_bit_losses=2; v324_cpu_gain=4"
+  },
+  "equation_miss_rows": 99,
+  "expected_shared_row_contract_sha256": "bf055e3b9ebce79d4bfc9e48bce5a305b1d83da882f14afddec80d6afaba5fff",
+  "generated_at_utc": "2026-05-16T18:08:04.056674+00:00",
+  "observed_shared_row_contract_sha256": "bf055e3b9ebce79d4bfc9e48bce5a305b1d83da882f14afddec80d6afaba5fff",
+  "outputs": {
+    "bit_guardrail_failures_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v497_cpu_residual_transfer_audit\\20260516T_v497_cpu_audit\\v497_bit_guardrail_failures.csv",
+    "equation_cluster_summary_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v497_cpu_residual_transfer_audit\\20260516T_v497_cpu_audit\\v497_equation_cluster_summary.csv",
+    "equation_residual_transfer_audit_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v497_cpu_residual_transfer_audit\\20260516T_v497_cpu_audit\\v497_equation_residual_transfer_audit.csv",
+    "manifest_json": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v497_cpu_residual_transfer_audit\\20260516T_v497_cpu_audit\\v497_cpu_residual_transfer_audit_manifest.json",
+    "summary_md": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v497_cpu_residual_transfer_audit\\20260516T_v497_cpu_audit\\KG1_V497_CPU_RESIDUAL_TRANSFER_AUDIT_2026_05_16.md"
+  },
+  "schema_version": "v497_cpu_residual_transfer_audit_v1",
+  "v324_manifest_decision": {
+    "decision": "equation_cpu_gate_found_distillation_signal",
+    "next_action": "Convert accepted no-loss rows into short deterministic hard-negative traces; run a no-GPU dataset gate before HF.",
+    "reason": "accepted_equation_gain=4; projected_equation_correct=60; bit_correct_guardrail=136>=136; conflicts=0"
+  },
+  "v324_projected_total_correct": 196,
+  "v324_verified_equation_gain": 4,
+  "v496_bit_loss_rows": 2,
+  "v496_changed_rows": 17,
+  "v496_loss_rows": 2,
+  "v496_total_projection_from_diff": 191,
+  "v496_verified_equation_gain": 1
+}

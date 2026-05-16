@@ -46,6 +46,7 @@ Ultima evidencia operacional relevante:
 | V494 dataset mismatch audit | V493/V494 usou `data/v390_equation_bit_replay_mix`, nao `data/v475_equation_bit_replay_mix`; V475 tem 1312/328 linhas, token max 331, trunc 0 e projecao CPU `equation 56 -> 60` | justificou V495; apos V496, V475 SFT tambem esta bloqueado sem novo sinal CPU |
 | V495 H200 V475 smoke | treino tecnico OK; MoE `up_proj/down_proj` treinaveis; `lm_head` congelado; eval loss `1.695015 -> 1.694518` | loss saudavel, mas muito pequeno; decisao dependeu do V496 weak eval |
 | V496 V495 checkpoint-2 weak eval | weak 191, equation 57, bit 134, trunc 1; diff real vs V290: +1 equation (`518deb39`), -2 bit (`8740ed31`, `59bee375`) | nao promove; V475 SFT transfer tambem bloqueada; proximo passo e CPU teacher/guardrail, nao mais H200 SFT amplo |
+| V497 CPU residual transfer audit | baseline 192; V324 CPU projeta 196; V496 projeta 191; 4 ganhos CPU nao transferiram; 1 ganho simbolico V496; 2 perdas bit | confirma que o gargalo e transferencia teacher->LoRA, nao metrica/loss; proximo passo e trace numeric curto + bit guardrail |
 
 ## Achados Principais V484-V492
 
@@ -141,6 +142,19 @@ Auditoria V496:
 Decisao: V475 SFT transfer tambem esta bloqueada. A rota mais rapida agora e
 CPU-first: descobrir teacher/verifier de equation que projete pelo menos
 `equation>=60`, `bit>=136`, `trunc=0` antes de qualquer novo H200.
+
+Atualizacao V497: a auditoria CPU residual separou o problema em tres grupos:
+
+| Grupo | Evidencia | Acao |
+|---|---|---|
+| 4 ganhos V324 numeric nao transferidos | `7688e06e`, `274def88`, `d1bd7478`, `c5b058d6` sao corretos no CPU solver e continuam errados no adapter | transformar em traces numericos deterministas curtos, com hard negatives e sem weak/full labels como alvo de treino |
+| 1 ganho V496 simbolico isolado | `518deb39` virou correto no adapter, mas nao veio do V324 numeric gate | usar apenas como padrao de diagnostico de formato/pontuacao; nao treinar diretamente pelo label weak |
+| 2 perdas bit bloqueantes | `8740ed31` virou `01111000`; `59bee375` virou `2` | qualquer novo dataset/job deve falhar se nao preservar essas duas linhas e saida binaria exata |
+
+Top clusters residuais continuam majoritariamente `equation_symbolic_punct`
+opacos. Portanto, para ganhar hoje, o alvo mais barato e mais controlavel nao e
+"resolver todos os simbolicos"; e transferir corretamente os 4 numeric gains ja
+verificados pelo CPU gate sem perder bit.
 
 ## Regras Ativas
 
@@ -540,22 +554,28 @@ Sem isso, nao packagear e nao submeter.
 ## Proxima Acao Imediata
 
 1. Manter V290 checkpoint-6 como unico adapter submit-safe.
-2. Criar V497/V498 CPU residual audit focado em equation:
-   - listar os 99 misses de equation do baseline;
-   - separar simbolico/pontuacao, numerico direto, colon/quote/backslash e
-     casos onde simple extraction difere do expected-aware;
-   - comparar V324/V475/V496 para saber quais regras realmente mudam a saida;
-   - bloquear qualquer regra que use weak/full como label de treino.
-3. Criar guardrail CPU de bit antes de qualquer novo dataset:
+2. V497 CPU residual audit esta executado. Usar seus outputs como fonte de
+   decisao:
+   - `artifacts/v497_cpu_residual_transfer_audit/20260516T_v497_cpu_audit/v497_equation_residual_transfer_audit.csv`;
+   - `artifacts/v497_cpu_residual_transfer_audit/20260516T_v497_cpu_audit/v497_bit_guardrail_failures.csv`.
+3. Criar V498 numeric teacher trace pack somente para os 4 ganhos V324 que nao
+   transferiram:
+   - `274def88`: `-92 -> 92`;
+   - `7688e06e`: `55 -> -55`;
+   - `d1bd7478`: `3 -> 30`;
+   - `c5b058d6`: `35 -> 134`;
+   - incluir hard negatives do baseline e resposta final curta no mesmo formato
+     oficial do V290.
+4. Criar guardrail CPU de bit antes de qualquer novo dataset:
    - rejeitar candidatos que possam reproduzir `8740ed31` ou `59bee375 -> 2`;
    - exigir saida binaria exata para todo probe bit;
    - exigir `bit>=136` e `trunc=0` na projecao weak.
-4. So montar novo dataset adapter-only se a projecao CPU independente chegar a:
+5. So montar novo dataset adapter-only se a projecao CPU independente chegar a:
    `equation>=60`, `bit>=136`, `trunc=0`, `total>192`.
-5. Se esse gate passar, fazer apenas um H200 smoke curto com kill-switch no
+6. Se esse gate passar, fazer apenas um H200 smoke curto com kill-switch no
    primeiro checkpoint. Se repetir `equation=57` com `bit<136` ou truncation,
    cancelar e voltar para CPU.
-6. Qualquer weak eval promocional continua official-like e caro por desenho:
+7. Qualquer weak eval promocional continua official-like e caro por desenho:
    thinking ligado, `max_tokens=7680`, `max_model_len=8192`. Para performance,
    usar avaliacoes baratas/diagnosticas antes; nao mudar essas configuracoes
    em resultado que pretende comparar com V290.

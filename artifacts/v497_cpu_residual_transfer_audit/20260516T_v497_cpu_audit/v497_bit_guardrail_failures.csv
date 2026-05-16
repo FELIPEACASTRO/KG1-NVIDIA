@@ -1,0 +1,3 @@
+id,answer,base_prediction,v496_prediction,base_correct,v496_correct,binary_shape_ok,failure_type,guardrail_action
+8740ed31,01101000,01101000,01111000,True,False,True,binary_wrong_value,block_candidate_family_until_bit_replay_preserves_this_row
+59bee375,10010101,10010101,2,True,False,False,non_binary_or_wrong_length,block_candidate_family_until_bit_replay_preserves_this_row

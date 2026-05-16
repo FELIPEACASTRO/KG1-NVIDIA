@@ -1320,6 +1320,34 @@ Regra preventiva:
 
 Status: regra ativa de FinOps/performance.
 
+### E045 - CPU solver gain nao transfere automaticamente para LoRA
+
+Evidencia:
+
+- V497 CPU residual transfer audit:
+  - baseline V290 checkpoint-6: `192/315`;
+  - V324 CPU solver projection: `196/315`, com +4 em equation;
+  - V496 adapter transfer: `191/315`, com apenas +1 equation e -2 bit.
+- Os quatro ganhos V324 que nao transferiram foram:
+  `7688e06e`, `274def88`, `d1bd7478`, `c5b058d6`.
+- O unico ganho V496 foi `518deb39`, que e simbolico/pontuacao e nao veio da
+  regra numeric V324.
+
+Impacto:
+
+- O problema atual nao e o calculo de ACC nem um bug simples de loss.
+- O problema e transformar uma regra CPU correta em comportamento gerativo
+  estavel do adapter sem quebrar bit.
+
+Regra preventiva:
+
+- Nenhum novo H200 SFT deve rodar apenas porque existe projecao CPU.
+- Primeiro criar trace/teacher curto, deterministico, com hard negatives e
+  guardrail de bit, e provar em CPU que o pacote preserva `bit>=136`,
+  `trunc=0`, `total>192`.
+
+Status: aberto; proxima acao e V498 numeric teacher trace pack.
+
 ## Prompt Externo
 
 Prompt consolidado para OpenRouter/outras APIs:
