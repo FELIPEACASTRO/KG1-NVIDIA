@@ -42,6 +42,7 @@ Ultima evidencia operacional relevante:
 | V492 uploaded OpenRouter double check | 12 modelos adicionais reforcam MoE `up_proj/down_proj` frozen-active como principal suspeita; tambem alertam que o +1 equation pode ser extracao, nao aprendizado bruto | roadmap limpo para um unico experimento fail-fast, depois pivot/stop |
 | V493 H200 smoke | treino completo; `target_parameters_trainability_mode=trainable`; `up_proj/down_proj` treinaveis; `lm_head` congelado; eval loss `1.9233 -> 1.9152`; checkpoint-2 uploaded | loss saudavel mas ganho nao comprovado; seguir para V494 weak eval |
 | V494 loss/ACC sync audit | loss path correto como CE mascarada; ACC path correto como geracao+extracao+`verify_answer`; loss nao e proxy matematico de ACC; V245 precisa controles long-context explicitos | static gate atualizado; rodar weak eval promocional com `KG1_MAX_TOKENS=7680`, thinking on e gate bloqueante |
+| V494 V493 checkpoint-2 weak eval | weak 190, equation 57, bit 133, trunc 1; simple extraction 189; strict-vs-permissive bit overcount 15 | nao promove; MoE treinavel + `lm_head` congelado nao basta; rota de mais SFT no V290 fica bloqueada ate novo sinal CPU |
 
 ## Achados Principais V484-V492
 
@@ -89,6 +90,19 @@ quatro conclusoes praticas:
 Consenso util dos modelos: a proxima tentativa nao e "mais treino"; e um teste
 de mecanismo. Se o MoE treinavel com `lm_head` congelado nao preservar
 `bit>=136` no primeiro checkpoint, broad SFT segue bloqueado por FinOps.
+
+Atualizacao V494: o teste de mecanismo foi executado. O adapter treinou com
+`target_parameters_trainability_mode="trainable"`, `up_proj/down_proj`
+treinaveis, `lm_head` congelado e `ANSWER_SPAN_LOSS_WEIGHT=1.0`, mas a weak
+eval longa retornou `190/315`, `equation_transform=57/155`,
+`bit_manipulation=133/160` e `truncated=1`. A auditoria local confirmou que a
+metrica estrita esta sincronizada e que o valor de loss nao deve mais ser usado
+como preditor de ACC. O unico ganho liquido vs V290 checkpoint-6 foi
+`518deb39` em equation, contra tres perdas em bit (`5b9964c7`, `8740ed31`,
+`59bee375`). Alem disso, a extracao expected-aware adicionou 1 acerto em
+equation (`4bb8c6cd`) que nao existe na extracao simples. Conclusao: qualquer
+proximo passo pago exige novo teacher/verifier CPU com ganho demonstrado e
+zero perdas de bit/truncation antes de GPU.
 
 ## Regras Ativas
 
@@ -240,25 +254,46 @@ Objetivo: testar se a correcao de mecanismo V493 transferiu para ACC real. O
 loss melhorou pouco (`1.9233 -> 1.9152`), entao a unica decisao valida vem do
 weak eval.
 
-Executar:
+Status: executado em H200.
 
-- Rodar V494 H200 weak eval no `checkpoint-2` do repo
+- Rodou V494 H200 weak eval no `checkpoint-2` do repo
   `felipesp1983/kg1-nemotron-lora-v493-nemo-h200-moe-trainable-no-lmhead-v290ckpt6`.
-- Usar controles long-context:
+- Usou controles long-context:
   - `KG1_DISABLE_THINKING=0`
   - `KG1_NO_PROMPT_SUFFIX=0`
   - `KG1_MAX_TOKENS=7680`
   - `KG1_MAX_MODEL_LEN=8192`
   - `KG1_MAX_NUM_SEQS=64`
-- Enforcar gate:
+- Gate enforcado:
   - `total > 192`
   - `equation_transform > 56`
   - `bit_manipulation >= 136`
   - `truncated = 0`
 
-Se falhar: encerrar a rota "mais treino SFT no adapter V290" para promocao e
-voltar para CPU solver/teacher com novo sinal comprovado antes de qualquer H200
-longo.
+Resultado:
+
+| Metrica | V290 checkpoint-6 baseline | V494 checkpoint-2 | Delta |
+|---|---:|---:|---:|
+| Total weak | 192/315 | 190/315 | -2 |
+| equation_transform | 56/155 | 57/155 | +1 |
+| bit_manipulation | 136/160 | 133/160 | -3 |
+| truncated | 0 | 1 | +1 pior |
+
+Auditoria de metrica:
+
+- `scripts/audit_v449_acc_metric_integrity.py` passou com
+  `decision=metric_path_ok`.
+- `simple_correct=189` e `expected_aware_correct=190`; logo 1 acerto de
+  equation (`4bb8c6cd`) depende de extracao expected-aware e nao pode ser
+  tratado como ganho bruto do adapter.
+- Strict vs permissive divergiu em 15 linhas de bit; `verify_answer` estrito
+  esta correto e impede overcount numerico em strings binarias.
+- Diff vs V290 checkpoint-6: ganho `518deb39` em equation; perdas
+  `5b9964c7`, `8740ed31` e `59bee375` em bit.
+
+Decisao: falhou. Encerrar a rota "mais treino SFT no adapter V290" para
+promocao e voltar para CPU solver/teacher com novo sinal comprovado antes de
+qualquer H200 longo.
 
 ### V391/V486 Objective Balance Update
 
@@ -383,8 +418,10 @@ equation nao vale se derruba o guardrail de bit ou truncation.
 
 Objetivo: transformar os 4 ganhos CPU de equation em comportamento do adapter.
 
-Executar somente se P3 mostrar ganho real sem perder bit. Se P3 repetir
-`equation=57` com `bit<136` ou truncation, nao continuar GPU; voltar para CPU.
+Executar somente em CPU enquanto nao houver novo sinal. P3 repetiu
+`equation=57` com `bit<136` e truncation, entao nao continuar GPU nesta rota.
+O objetivo agora e descobrir um teacher/verifier que produza ganhos de equation
+sem usar weak/full como label de treino e sem perder bit.
 
 - construir dataset hard-negative curto com apenas regras CPU verificadas;
 - target final-answer-only, sem auditoria textual;
@@ -402,14 +439,19 @@ Nao executar:
   `518deb39`, `8740ed31` e `59bee375` so podem ser usados como diagnostico de
   diff/gate, nao como exemplos de treino promocional.
 
-Se P3 falhar no step 2:
+Como P3 falhou:
 
 - nao continuar o mesmo job;
-- rodar apenas ablation curta:
-  - MoE-only se o trainer suportar grupos de parametro ou freeze de attention;
-  - ou attention-only sem `lm_head` para isolar truncation;
-- se duas ablations falharem `bit>=136`, broad SFT fica encerrado ate existir
-  novo dataset/teacher nao contaminado com sinal CPU verificavel.
+- nao abrir nova H200 para repetir V493/V494;
+- rodar CPU-only para auditar os residuos de equation e bit:
+  - mapear os 99 misses de equation por padrao simbolico;
+  - separar ganho bruto vs ganho por extracao;
+  - identificar qualquer regra que resolva pelo menos +4 equation com zero
+    perda de bit quando convertida para trace/teacher;
+  - produzir dataset curto somente se o solver CPU independente passar
+    leakage/contract gate.
+- broad SFT fica encerrado ate existir novo dataset/teacher nao contaminado com
+  sinal CPU verificavel.
 
 ### P5 - Bit Como Guardrail
 
