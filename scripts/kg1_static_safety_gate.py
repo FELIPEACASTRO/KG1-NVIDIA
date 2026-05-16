@@ -53,6 +53,8 @@ CRITICAL_SNIPPETS = {
         "target template check": "Final answer: \\\\boxed{",
         "blocked dataset marker gate": "BLOCKED_DATASET_MARKERS",
         "blocked adapter marker gate": "BLOCKED_ADAPTER_MARKERS",
+        "data repo gate": "expected_data_repo",
+        "command data repo export gate": "launcher_command_data_repo_export_mismatch",
         "crisis backfire guard": "launcher_missing_crisis_backfire_guard",
         "audit manifest gate": "hf_gpu_allowed_for_same_objective",
         "system prompt alignment gate": "launcher_system_prompt_not_final_answer_only",

@@ -1,0 +1,10 @@
+{
+  "file_count": 2,
+  "files": [
+    "artifacts/v517_hf_nemo_h200_v515_fullbyte_residual_launch/launch_v517_hf_nemo_h200_v515_fullbyte_residual.py",
+    "scripts/kg1_pre_paid_job_integration_gate.py"
+  ],
+  "findings": [],
+  "ok": true,
+  "schema_version": "kg1_static_safety_gate_v1"
+}

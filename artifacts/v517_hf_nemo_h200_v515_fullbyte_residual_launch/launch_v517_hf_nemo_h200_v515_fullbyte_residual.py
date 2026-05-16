@@ -237,6 +237,7 @@ def configure_base(base: Any) -> None:
         .replace("V493", "V517")
         .replace("kg1_v493_output", "kg1_v517_output")
         .replace("kg1_v517_objective_alignment_gate", "kg1_v517_objective_alignment_gate")
+        .replace("export DATA_REPO='felipesp1983/kg1-nemotron-training'", f"export DATA_REPO='{DATA_REPO}'")
         .replace('"0.35"', '"0.20"')
         .replace('"0.65"', '"0.80"')
         .replace('"0.95"', '"0.80"')
@@ -285,6 +286,7 @@ def local_debug(base: Any, api: HfApi, token: str) -> tuple[dict[str, object], d
     required_snippets = [
         "export DATA_FILE=\"$KG1_TRAIN_FILE\"",
         "export VAL_FILE=\"$KG1_VAL_FILE\"",
+        f"export DATA_REPO='{DATA_REPO}'",
         "export SOURCE_WEIGHTS=\"$KG1_SOURCE_WEIGHTS\"",
         "export SUBCATEGORY_WEIGHTS=\"$KG1_SUBCATEGORY_WEIGHTS\"",
         "export LORA_TARGET_PARAMETERS=\"$KG1_LORA_TARGET_PARAMETERS\"",

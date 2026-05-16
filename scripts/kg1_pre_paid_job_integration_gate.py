@@ -108,6 +108,21 @@ def audit_launcher(args: argparse.Namespace, findings: list[Finding]) -> dict[st
             "launcher_missing_crisis_backfire_guard",
             findings,
         )
+    if args.expected_data_repo:
+        require_text(text, f'DATA_REPO = "{args.expected_data_repo}"', "launcher_data_repo_constant_mismatch", findings)
+        command_export_forms = [
+            f"export DATA_REPO='{args.expected_data_repo}'",
+            'f"export DATA_REPO=\'{DATA_REPO}\'"',
+            'f"export DATA_REPO=\'{base.DATA_REPO}\'"',
+        ]
+        if not any(snippet in text for snippet in command_export_forms):
+            findings.append(
+                Finding(
+                    "error",
+                    "launcher_command_data_repo_export_mismatch",
+                    "missing command export for expected DATA_REPO",
+                )
+            )
     require_text(text, f'DATA_ROOT = "{args.expected_data_root}"', "launcher_data_root_mismatch", findings)
     require_text(text, f'PREF_TRAIN_SHA256 = "{args.expected_train_sha256}"', "launcher_train_sha_mismatch", findings)
     require_text(text, f'PREF_VAL_SHA256 = "{args.expected_val_sha256}"', "launcher_val_sha_mismatch", findings)
@@ -170,6 +185,7 @@ def audit_launcher(args: argparse.Namespace, findings: list[Finding]) -> dict[st
             findings.append(Finding("error", "launcher_references_blocked_mixed_dataset", marker))
     return {
         "launcher": str(launcher),
+        "expected_data_repo": args.expected_data_repo,
         "contains_h200": 'FLAVOR = "h200"' in text,
         "contains_timeout_3600": "timeout=3600" in text,
     }
@@ -298,6 +314,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--dataset-schema", choices=["preference", "sft"], default="preference")
     parser.add_argument("--expected-save-every-steps", type=int, default=3)
     parser.add_argument("--expected-eval-every-steps", type=int, default=3)
+    parser.add_argument("--expected-data-repo", default="")
     parser.add_argument("--expected-data-root", required=True)
     parser.add_argument("--expected-train-sha256", required=True)
     parser.add_argument("--expected-val-sha256", required=True)

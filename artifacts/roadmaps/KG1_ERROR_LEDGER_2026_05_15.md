@@ -1879,6 +1879,40 @@ Regra preventiva:
 
 Status: launcher/gates prontos; aguardando execucao curta ou decisao de stop.
 
+### E063 - V517 pre-paid gate nao validava DATA_REPO do COMMAND_SCRIPT
+
+Evidencia:
+
+- O primeiro job V517 (`felipesp1983/6a08f4713308d79117b916c8`) falhou antes de
+  carregar modelo, em `phase=artifacts`.
+- A constante Python `DATA_REPO` do launcher apontava corretamente para
+  `felipesp1983/kg1-v515-v514-fullbyte-residual-artifacts`.
+- O `COMMAND_SCRIPT` herdado ainda exportava
+  `DATA_REPO='felipesp1983/kg1-nemotron-training'`, fazendo o HF procurar os
+  arquivos V515 em repo errado e receber `404 EntryNotFound`.
+- O debug local nao pegou a falha porque baixava usando a constante Python
+  correta, nao a exportacao remota executada pelo job.
+
+Impacto:
+
+- Nao houve treino, eval, adapter ou submit corrompido. O erro foi barato, mas
+  mostrou um bug silencioso de integracao entre launcher Python e shell remoto.
+- Sem gate especifico, qualquer launcher futuro poderia repetir o mesmo tipo de
+  mismatch e desperdicaria GPU em preflight remoto.
+
+Regra preventiva:
+
+- `kg1_pre_paid_job_integration_gate.py` agora aceita
+  `--expected-data-repo` e exige simultaneamente:
+  - constante `DATA_REPO = "<repo esperado>"`;
+  - export seguro no comando remoto, literal ou via interpolacao explicita de
+    `DATA_REPO`.
+- `kg1_static_safety_gate.py` trata essa checagem como snippet critico do
+  pre-paid gate.
+
+Status: mitigado por gate local; V517 so pode ser relancado apos commit/push e
+debug local atualizado.
+
 ## Prompt Externo
 
 Prompt consolidado para OpenRouter/outras APIs:

@@ -1,0 +1,62 @@
+{
+  "dataset_schema": "sft",
+  "findings": [],
+  "launcher": {
+    "contains_h200": true,
+    "contains_timeout_3600": true,
+    "expected_data_repo": "felipesp1983/kg1-v515-v514-fullbyte-residual-artifacts",
+    "launcher": "artifacts\\v517_hf_nemo_h200_v515_fullbyte_residual_launch\\launch_v517_hf_nemo_h200_v515_fullbyte_residual.py"
+  },
+  "ok": true,
+  "schema_version": "kg1_pre_paid_job_integration_gate_v2",
+  "train_dataset": {
+    "bad_rows_first30": [],
+    "family_counts": {
+      "bit_manipulation": 473,
+      "equation_transform": 2018
+    },
+    "negative_type_counts": {},
+    "path": "artifacts\\v515_v514_fullbyte_residual_dataset\\v515_v514_fullbyte_residual_train.jsonl",
+    "rows": 2491,
+    "sha256": "145f7b8f6d4ba14efc1255073e73f1c6096aa2267a8cf4d5be63b44cf6dc71d9",
+    "subcategory_counts": {
+      "bit_guardrail_replay": 473,
+      "equation_numeric_add_direct": 160,
+      "equation_numeric_add_direct_hard_negative": 400,
+      "equation_numeric_colon_absdiff": 160,
+      "equation_numeric_colon_trailing_zero": 160,
+      "equation_numeric_colon_trailing_zero_hard_negative": 400,
+      "equation_numeric_minus_direct_negative": 160,
+      "equation_numeric_minus_signed": 160,
+      "equation_numeric_minus_signed_hard_negative": 400,
+      "v274_guarded_numeric_minus_signed_opposite_sign_guarded": 18
+    }
+  },
+  "v438_audit": {
+    "reason": "sft_schema_does_not_use_v438_preference_audit",
+    "skipped": true
+  },
+  "validation_dataset": {
+    "bad_rows_first30": [],
+    "family_counts": {
+      "bit_manipulation": 116,
+      "equation_transform": 504
+    },
+    "negative_type_counts": {},
+    "path": "artifacts\\v515_v514_fullbyte_residual_dataset\\v515_v514_fullbyte_residual_val.jsonl",
+    "rows": 620,
+    "sha256": "06bb9f0a7c60b9a2840ea14e0f960439b68813fd0a4bc555d23b4b5b09a42206",
+    "subcategory_counts": {
+      "bit_guardrail_replay": 116,
+      "equation_numeric_add_direct": 40,
+      "equation_numeric_add_direct_hard_negative": 100,
+      "equation_numeric_colon_absdiff": 40,
+      "equation_numeric_colon_trailing_zero": 40,
+      "equation_numeric_colon_trailing_zero_hard_negative": 100,
+      "equation_numeric_minus_direct_negative": 40,
+      "equation_numeric_minus_signed": 40,
+      "equation_numeric_minus_signed_hard_negative": 100,
+      "v274_guarded_numeric_minus_signed_opposite_sign_guarded": 4
+    }
+  }
+}
