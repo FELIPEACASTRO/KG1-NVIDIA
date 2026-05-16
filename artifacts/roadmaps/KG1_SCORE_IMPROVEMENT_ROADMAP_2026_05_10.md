@@ -1342,3 +1342,28 @@ Proximo passo obrigatorio:
    `extract_final_answer`/`verify_answer` usado no weak eval;
 4. em qualquer smoke futuro, o primeiro checkpoint precisa passar o gate de
    promocao. Caso contrario, cancelar por FinOps.
+
+## Atualizacao V472 - Quadruple Crisis Audit
+
+V472 reabriu a solucao procurando bugs silenciosos em metric/loss/eval/ACC,
+dados, simbolos, builders e FinOps. Achados acionaveis:
+
+| Achado | Acao |
+|---|---|
+| Builders historicos V217-V231/V244/V245 ainda tinham `bit=133` e `trunc=3` | Corrigidos para `bit=136` e `trunc=0`; static safety gate agora bloqueia esses valores antigos |
+| Dataset V464 contaminado ainda existia como artefato rastreado | Mantido como evidencia historica, mas bloqueado no HF preflight por marcador `v464_v463_numeric_multirule_dataset` |
+| V468 ainda continha seed exata de referencia full (`63-19 -> -55`) herdada de V461/V463 | V461/V463/V464/V468 bloqueados para treino ate rebuild com nova versao limpa |
+| V447 tinha `141` traces `hypothesis_formed` com resposta interna contraditoria | V446/V447 agora aceitam somente `rule_found` para essa rota |
+| Postprocessor de eval rodava antes de `truncated` existir | Eval agora marca `truncated` antes de V274; linhas truncadas abstain |
+| CSV de eval podia coercer ids/respostas | Leitura agora usa `dtype=str`, preserva zeros a esquerda e falha em campos criticos vazios |
+| Bit full-byte V300 escolhia o primeiro programa compativel | Agora so aplica quando todos os programas compativeis dao a mesma predicao |
+| JSONL de probe/raw-output aparecem sem `answer`/assistant | Classificados como diagnosticos, nao datasets de treino |
+| Caches e artefatos locais substituidos por V471 | Removidos quando nao rastreados e derivados |
+
+Regra nova: qualquer rota futura que tente treinar com V464 ou thresholds antigos
+de weak gate deve falhar antes de GPU. A proxima execucao valida continua sendo
+CPU-first: minerar novas classes de `equation_transform`, provar `+4` equation
+com `0` perdas e `bit>=136`, passar V286 com referencias proibidas quando
+existirem, e so entao liberar smoke HF. V447/V461/V463/V464/V468 nao podem ser
+reutilizados como dataset de treino; se algum achado deles for reaproveitado,
+precisa ser reconstruido em uma nova versao limpa com hashes novos.

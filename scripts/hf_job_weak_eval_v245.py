@@ -24,7 +24,7 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from src.competition_utils import classify_puzzle  # noqa: E402
+from src.competition_utils import canonical_family, classify_puzzle  # noqa: E402
 
 
 EXPECTED_WEAK_COUNTS = {"bit_manipulation": 160, "equation_transform": 155}
@@ -147,7 +147,7 @@ def validate_weak_csv(path: Path, expected_csv_sha: str, expected_contract: str)
     if expected_csv_sha and observed_csv_sha != expected_csv_sha:
         raise RuntimeError(f"weak CSV sha mismatch: expected {expected_csv_sha}, got {observed_csv_sha}")
 
-    frame = pd.read_csv(path, dtype=str)
+    frame = pd.read_csv(path, dtype=str, keep_default_na=False)
     required = {"id", "prompt", "answer"}
     missing = sorted(required - set(frame.columns))
     if missing:
@@ -157,7 +157,16 @@ def validate_weak_csv(path: Path, expected_csv_sha: str, expected_contract: str)
             frame["family"] = frame["type"]
         else:
             frame["family"] = frame["prompt"].map(classify_puzzle)
-    frame["family"] = frame["family"].map(str)
+    frame["family"] = frame["family"].map(canonical_family)
+    inferred = frame["prompt"].map(classify_puzzle)
+    mismatch = frame["family"].ne("unknown") & inferred.ne("unknown") & frame["family"].ne(inferred)
+    if mismatch.any():
+        sample = frame.loc[mismatch, ["id", "family", "prompt"]].head(5).to_dict(orient="records")
+        raise RuntimeError("weak CSV family/prompt mismatch: " + json.dumps(sample, sort_keys=True))
+    if frame["id"].fillna("").astype(str).eq("").any():
+        raise RuntimeError("weak CSV contains empty ids")
+    if frame["answer"].fillna("").astype(str).eq("").any():
+        raise RuntimeError("weak CSV contains empty answers")
     counts = {str(k): int(v) for k, v in frame["family"].value_counts().sort_index().to_dict().items()}
     if counts != EXPECTED_WEAK_COUNTS:
         raise RuntimeError(f"weak family counts mismatch: expected {EXPECTED_WEAK_COUNTS}, got {counts}")

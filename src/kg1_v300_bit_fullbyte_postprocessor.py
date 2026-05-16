@@ -137,17 +137,18 @@ def solve_fullbyte(prompt: str) -> tuple[str | None, str, str]:
             per_transform[name].append(out)
     names = list(per_transform)
     n_examples = len(inputs)
+    matches: list[tuple[str, str, str]] = []
 
     for name in names:
         if all(per_transform[name][idx] == outputs[idx] for idx in range(n_examples)):
-            return from_vec(per_transform[name][n_examples]), "fullbyte_unary", name
+            matches.append((from_vec(per_transform[name][n_examples]), "fullbyte_unary", name))
 
     for left in names:
         for right in names:
             for op_name, op in BINARY_OPS:
                 if all(op(per_transform[left][idx], per_transform[right][idx]) == outputs[idx] for idx in range(n_examples)):
                     pred = op(per_transform[left][n_examples], per_transform[right][n_examples])
-                    return from_vec(pred), "fullbyte_binary", f"{op_name}({left},{right})"
+                    matches.append((from_vec(pred), "fullbyte_binary", f"{op_name}({left},{right})"))
 
     for a in names:
         for b in names:
@@ -158,8 +159,16 @@ def solve_fullbyte(prompt: str) -> tuple[str | None, str, str]:
                         for idx in range(n_examples)
                     ):
                         pred = op(per_transform[a][n_examples], per_transform[b][n_examples], per_transform[c][n_examples])
-                        return from_vec(pred), "fullbyte_safe_ternary", f"{op_name}({a},{b},{c})"
+                        matches.append((from_vec(pred), "fullbyte_safe_ternary", f"{op_name}({a},{b},{c})"))
 
+    if matches:
+        predictions = sorted({prediction for prediction, _, _ in matches})
+        if len(predictions) != 1:
+            return None, "ambiguous_fullbyte_expression", f"candidate_predictions={predictions[:10]}; match_count={len(matches)}"
+        first_prediction = predictions[0]
+        proof_items = [proof for prediction, _, proof in matches if prediction == first_prediction]
+        rule_items = sorted({rule for prediction, rule, _ in matches if prediction == first_prediction})
+        return first_prediction, "fullbyte_unique_prediction", f"rules={rule_items}; match_count={len(matches)}; examples={proof_items[:5]}"
     return None, "no_fullbyte_expression", "no accepted full-byte expression matched all examples"
 
 

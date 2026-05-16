@@ -28,7 +28,7 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from src.competition_utils import classify_puzzle  # noqa: E402
+from src.competition_utils import canonical_family, classify_puzzle  # noqa: E402
 
 
 EXPECTED_FULL_COUNTS = {
@@ -241,7 +241,7 @@ def validate_full_csv(path: Path, expected_csv_sha: str) -> dict[str, Any]:
     observed_csv_sha = sha256_file(path)
     if expected_csv_sha and observed_csv_sha != expected_csv_sha:
         raise RuntimeError(f"full CSV sha mismatch: expected {expected_csv_sha}, got {observed_csv_sha}")
-    frame = pd.read_csv(path, dtype=str)
+    frame = pd.read_csv(path, dtype=str, keep_default_na=False)
     required = {"id", "prompt", "answer"}
     missing = sorted(required - set(frame.columns))
     if missing:
@@ -251,7 +251,16 @@ def validate_full_csv(path: Path, expected_csv_sha: str) -> dict[str, Any]:
             frame["family"] = frame["type"]
         else:
             frame["family"] = frame["prompt"].map(classify_puzzle)
-    frame["family"] = frame["family"].map(str)
+    frame["family"] = frame["family"].map(canonical_family)
+    inferred = frame["prompt"].map(classify_puzzle)
+    mismatch = frame["family"].ne("unknown") & inferred.ne("unknown") & frame["family"].ne(inferred)
+    if mismatch.any():
+        sample = frame.loc[mismatch, ["id", "family", "prompt"]].head(5).to_dict(orient="records")
+        raise RuntimeError("full CSV family/prompt mismatch: " + json.dumps(sample, sort_keys=True))
+    if frame["id"].fillna("").astype(str).eq("").any():
+        raise RuntimeError("full CSV contains empty ids")
+    if frame["answer"].fillna("").astype(str).eq("").any():
+        raise RuntimeError("full CSV contains empty answers")
     counts = {str(k): int(v) for k, v in frame["family"].value_counts().sort_index().to_dict().items()}
     expected_counts = json.loads(env_str("KG1_EXPECTED_FULL_COUNTS_JSON", json.dumps(EXPECTED_FULL_COUNTS)))
     expected_rows = env_int("KG1_EXPECTED_FULL_ROWS", EXPECTED_FULL_ROWS)

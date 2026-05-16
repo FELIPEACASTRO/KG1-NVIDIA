@@ -376,21 +376,22 @@ e renaming stability. Essa rota fica fechada ate existir uma DSL mais forte.
 V444 mudou a frente ativa para um teste minimo de transferencia supervisionada:
 usar apenas os traces reconstruidos de alta confianca (`rule_found` e
 `hypothesis_formed`) e remover `rule_unknown`. O dataset ficou com `1848`
-linhas de treino e `172` de validacao, passou tokenizacao sem truncation, e foi
-publicado no HF para um smoke H200 de quatro steps.
+linhas de treino e `172` de validacao, passou tokenizacao sem truncation, foi
+publicado no HF e treinou um smoke H200 de quatro steps.
 
 Problema principal agora:
 
 ```text
 Dados com regra simples certificada     -> 0 pares V443
 Dados reconstruidos amplos V397/V398    -> sem ganho weak
-Dados reconstruidos high-confidence V444 -> ainda nao testado no weak gate
+Dados reconstruidos high-confidence V444 -> checkpoint-2 caiu para 190/315
 ```
 
 Decisao:
 
-1. V444 e o unico job GPU ativo permitido agora.
-2. O job deve parar se nao bater `192/315`, `equation>56`, `bit>=136`,
-   `truncated=0`.
-3. Se V444 nao ganhar, o proximo plano nao e mais SFT reconstruido; volta para
-   DSL/solver equation mais expressivo, com prova CPU antes de GPU.
+1. V444 foi cancelado por FinOps no primeiro checkpoint avaliado.
+2. Resultado checkpoint-2: total `190/315`, equation `56/155`, bit `134/160`,
+   truncated `1`.
+3. O proximo plano nao e mais SFT reconstruido; volta para auditoria CPU de
+   raw output/parse ou DSL/solver equation mais expressivo, com prova CPU antes
+   de qualquer GPU.

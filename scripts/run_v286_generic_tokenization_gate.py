@@ -9,6 +9,7 @@ It does not train, load base model weights, run generation, package, or submit.
 from __future__ import annotations
 
 import argparse
+import csv
 import hashlib
 import json
 import re
@@ -30,6 +31,14 @@ from src.competition_utils import extract_final_answer, verify_answer  # noqa: E
 
 DEFAULT_MODEL_NAME = "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16"
 DEFAULT_MODEL_REVISION = "cbd3fa9f933d55ef16a84236559f4ee2a0526848"
+
+BLOCKED_DATASET_MARKERS = {
+    "v461_synthetic_numeric_probe_pack": "V461 contained a full-reference exact prompt/answer seed.",
+    "v463_v462_synthetic_numeric_hard_negative_audit": "V463 depends on the quarantined V461/V462 route.",
+    "v464_v463_numeric_multirule_dataset": "V464 contains contradictory rejected candidates.",
+    "v468_v464_symbol_fix_dataset": "V468 still contains a full-reference exact prompt/answer seed.",
+    "v447_v446_trace_dataset": "Current V447 contains hypothesis_formed contradictory traces.",
+}
 
 
 def utc_now() -> str:
@@ -75,6 +84,14 @@ def read_jsonl(path: Path) -> list[dict[str, Any]]:
     return rows
 
 
+def blocked_dataset_matches(data_identity: str) -> list[dict[str, str]]:
+    return [
+        {"marker": marker, "reason": reason}
+        for marker, reason in BLOCKED_DATASET_MARKERS.items()
+        if marker in data_identity
+    ]
+
+
 def normalize_prompt(prompt: Any) -> str:
     return re.sub(r"\s+", " ", str(prompt)).strip()
 
@@ -89,6 +106,63 @@ def prompt_key(row: dict[str, Any]) -> str:
 
 def prompt_answer_key(row: dict[str, Any]) -> str:
     return sha256_text(normalize_prompt(row.get("prompt", "")) + "\0" + normalize_answer(row.get("answer", "")))
+
+
+def load_reference_csv(path: Path) -> dict[str, set[str]]:
+    ids: set[str] = set()
+    prompts: set[str] = set()
+    prompt_answers: set[str] = set()
+    with path.open("r", encoding="utf-8", newline="") as handle:
+        reader = csv.DictReader(handle)
+        fieldnames = set(reader.fieldnames or [])
+        if "prompt" not in fieldnames:
+            raise RuntimeError(f"reference CSV missing prompt column: {path}")
+        for row in reader:
+            rid = str(row.get("id", "") or row.get("row_id", "")).strip()
+            prompt = str(row.get("prompt", ""))
+            answer = str(row.get("answer", ""))
+            if rid:
+                ids.add(rid)
+            if prompt:
+                prompts.add(sha256_text(normalize_prompt(prompt)))
+            if prompt and answer:
+                prompt_answers.add(sha256_text(normalize_prompt(prompt) + "\0" + normalize_answer(answer)))
+    return {"ids": ids, "prompts": prompts, "prompt_answers": prompt_answers}
+
+
+def reference_overlap_report(rows: list[dict[str, Any]], reference_csvs: list[Path]) -> dict[str, Any]:
+    if not reference_csvs:
+        return {
+            "enabled": False,
+            "reference_csvs": [],
+            "id_overlap_count": 0,
+            "prompt_overlap_count": 0,
+            "prompt_answer_overlap_count": 0,
+        }
+    row_ids = {str(row.get("id", "")).strip() for row in rows if str(row.get("id", "")).strip()}
+    row_prompts = {prompt_key(row) for row in rows}
+    row_prompt_answers = {prompt_answer_key(row) for row in rows}
+    ref_ids: set[str] = set()
+    ref_prompts: set[str] = set()
+    ref_prompt_answers: set[str] = set()
+    for path in reference_csvs:
+        loaded = load_reference_csv(path)
+        ref_ids.update(loaded["ids"])
+        ref_prompts.update(loaded["prompts"])
+        ref_prompt_answers.update(loaded["prompt_answers"])
+    id_overlap = sorted(row_ids & ref_ids)
+    prompt_overlap = sorted(row_prompts & ref_prompts)
+    prompt_answer_overlap = sorted(row_prompt_answers & ref_prompt_answers)
+    return {
+        "enabled": True,
+        "reference_csvs": [str(path) for path in reference_csvs],
+        "id_overlap_count": len(id_overlap),
+        "prompt_overlap_count": len(prompt_overlap),
+        "prompt_answer_overlap_count": len(prompt_answer_overlap),
+        "id_overlap_first10": id_overlap[:10],
+        "prompt_overlap_first10": prompt_overlap[:10],
+        "prompt_answer_overlap_first10": prompt_answer_overlap[:10],
+    }
 
 
 def validate_rows(
@@ -154,8 +228,14 @@ def validate_rows(
         if not verify_answer(answer, extracted_answer):
             bad_rows.append(rid)
             continue
-        if metadata.get("weak_gate_rows_used_for_training") is not False:
-            bad_rows.append(rid)
+        for flag in (
+            "weak_gate_rows_used_for_training",
+            "full_gate_rows_used_for_training",
+            "gate_rows_used_for_training",
+        ):
+            if metadata.get(flag) is not False:
+                bad_rows.append(rid)
+                break
         rejected = str(metadata.get("rejected_candidate", "")).strip()
         if rejected and verify_answer(answer, rejected):
             bad_rows.append(rid)
@@ -377,6 +457,18 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
     args.output_dir.mkdir(parents=True, exist_ok=True)
 
     dataset_manifest = read_json(args.dataset_manifest_json)
+    data_identity = " ".join(
+        [
+            str(args.dataset_manifest_json),
+            json.dumps(dataset_manifest.get("outputs", {}), sort_keys=True),
+            json.dumps(dataset_manifest.get("inputs", {}), sort_keys=True),
+            str(dataset_manifest.get("schema_version", "")),
+            str(dataset_manifest.get("label", "")),
+        ]
+    )
+    blocked = blocked_dataset_matches(data_identity)
+    if blocked:
+        raise RuntimeError("blocked quarantined dataset marker detected: " + json.dumps(blocked, sort_keys=True))
     train_path = Path(dataset_manifest["outputs"]["train_jsonl"])
     val_path = Path(dataset_manifest["outputs"]["val_jsonl"])
     expected_train_sha = str(dataset_manifest["outputs"].get("train_sha256", ""))
@@ -420,6 +512,18 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         raise RuntimeError(
             f"train/validation overlap detected: prompt_answer={prompt_answer_overlap} prompt={prompt_overlap}"
         )
+    reference_csvs = [Path(item) for item in getattr(args, "reference_csvs", []) or []]
+    manifest_reference_csvs = [
+        Path(item)
+        for item in dataset_manifest.get("forbidden_reference_csvs", dataset_manifest.get("reference_csvs", []))
+        if str(item).strip()
+    ]
+    reference_csvs.extend(manifest_reference_csvs)
+    reference_csvs = [path for path in reference_csvs if path.exists()]
+    reference_overlap = reference_overlap_report(train_rows + val_rows, reference_csvs)
+    print("reference_overlap =", json.dumps(reference_overlap, sort_keys=True), flush=True)
+    if reference_overlap["id_overlap_count"] or reference_overlap["prompt_overlap_count"] or reference_overlap["prompt_answer_overlap_count"]:
+        raise RuntimeError("reference overlap detected: " + json.dumps(reference_overlap, sort_keys=True))
 
     tokenizer = load_tokenizer(args)
     tokenizer_info = {
@@ -468,6 +572,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             "validation": val_validation,
             "train_val_prompt_answer_overlap": prompt_answer_overlap,
             "train_val_prompt_overlap": prompt_overlap,
+            "reference_overlap": reference_overlap,
         },
         "tokenizer_info": tokenizer_info,
         "tokenization": {
@@ -523,7 +628,12 @@ def self_test() -> int:
                     {"role": "user", "content": prompt},
                     {"role": "assistant", "content": "Final answer: " + answer},
                 ],
-                "metadata": {"source_dataset": "toy", "weak_gate_rows_used_for_training": False},
+                "metadata": {
+                    "source_dataset": "toy",
+                    "weak_gate_rows_used_for_training": False,
+                    "full_gate_rows_used_for_training": False,
+                    "gate_rows_used_for_training": False,
+                },
             }
             rows.append((split, row))
         with train.open("w", encoding="utf-8", newline="\n") as handle:
@@ -557,9 +667,48 @@ def self_test() -> int:
             min_val_rows=1,
             use_toy_tokenizer=True,
             assistant_final_answer_mode="exact",
+            reference_csvs=[],
         )
         manifest = run(args)
         assert manifest["decision"]["status"] == "tokenization_gate_passed"
+
+        reference_csv = tmp / "reference.csv"
+        reference_csv.write_text("id,prompt,answer\nr1,Question 1,1\n", encoding="utf-8")
+        ref_args = argparse.Namespace(
+            **{
+                **vars(args),
+                "output_dir": tmp / "ref_overlap_out",
+                "reference_csvs": [reference_csv],
+            }
+        )
+        try:
+            run(ref_args)
+        except RuntimeError as exc:
+            assert "reference overlap detected" in str(exc)
+        else:
+            raise AssertionError("reference overlap must fail")
+
+        blocked_manifest_path = tmp / "blocked_dataset_manifest.json"
+        write_json(
+            blocked_manifest_path,
+            {
+                "label": "v468_v464_symbol_fix_dataset",
+                "outputs": {
+                    "train_jsonl": str(train),
+                    "train_sha256": sha256_file(train),
+                    "val_jsonl": str(val),
+                    "val_sha256": sha256_file(val),
+                },
+            },
+        )
+        blocked_args = argparse.Namespace(**{**vars(args), "dataset_manifest_json": blocked_manifest_path})
+        try:
+            run(blocked_args)
+        except RuntimeError as exc:
+            assert "blocked quarantined dataset marker" in str(exc)
+        else:
+            raise AssertionError("blocked dataset marker must fail")
+
         trace_row = {
             "id": "trace",
             "prompt": "Trace question",
@@ -572,7 +721,12 @@ def self_test() -> int:
                 {"role": "user", "content": "Trace question"},
                 {"role": "assistant", "content": "Reason with a rule.\nFinal answer: 42"},
             ],
-            "metadata": {"source_dataset": "toy", "weak_gate_rows_used_for_training": False},
+            "metadata": {
+                "source_dataset": "toy",
+                "weak_gate_rows_used_for_training": False,
+                "full_gate_rows_used_for_training": False,
+                "gate_rows_used_for_training": False,
+            },
         }
         trace_train = tmp / "trace_train.jsonl"
         trace_val = tmp / "trace_val.jsonl"
@@ -613,6 +767,7 @@ def self_test() -> int:
             min_val_rows=1,
             use_toy_tokenizer=True,
             assistant_final_answer_mode="suffix",
+            reference_csvs=[],
         )
         trace_manifest_out = run(trace_args)
         assert trace_manifest_out["decision"]["status"] == "tokenization_gate_passed"
@@ -628,7 +783,12 @@ def self_test() -> int:
                 {"role": "user", "content": "Boxed trace question"},
                 {"role": "assistant", "content": r"Reason with a boxed rule." + "\n" + r"Final answer: \boxed{00000101}"},
             ],
-            "metadata": {"source_dataset": "toy", "weak_gate_rows_used_for_training": False},
+            "metadata": {
+                "source_dataset": "toy",
+                "weak_gate_rows_used_for_training": False,
+                "full_gate_rows_used_for_training": False,
+                "gate_rows_used_for_training": False,
+            },
         }
         boxed_train = tmp / "boxed_train.jsonl"
         boxed_val = tmp / "boxed_val.jsonl"
@@ -669,6 +829,7 @@ def self_test() -> int:
             min_val_rows=1,
             use_toy_tokenizer=True,
             assistant_final_answer_mode="boxed_suffix",
+            reference_csvs=[],
         )
         boxed_manifest_out = run(boxed_args)
         assert boxed_manifest_out["decision"]["status"] == "tokenization_gate_passed"
@@ -730,6 +891,7 @@ def self_test() -> int:
             min_val_rows=1,
             use_toy_tokenizer=True,
             assistant_final_answer_mode="boxed_suffix",
+            reference_csvs=[],
         )
         symbolic_boxed_manifest_out = run(symbolic_boxed_args)
         assert symbolic_boxed_manifest_out["decision"]["status"] == "tokenization_gate_passed"
@@ -790,6 +952,7 @@ def self_test() -> int:
             min_val_rows=1,
             use_toy_tokenizer=True,
             assistant_final_answer_mode="boxed_suffix",
+            reference_csvs=[],
         )
         try:
             run(escaped_symbolic_bad_args)
@@ -816,6 +979,8 @@ def self_test() -> int:
             "metadata": {
                 "source_dataset": "toy",
                 "weak_gate_rows_used_for_training": False,
+                "full_gate_rows_used_for_training": False,
+                "gate_rows_used_for_training": False,
                 "rejected_candidate": "30",
             },
         }
@@ -847,6 +1012,7 @@ def self_test() -> int:
             min_val_rows=1,
             use_toy_tokenizer=True,
             assistant_final_answer_mode="boxed_suffix",
+            reference_csvs=[],
         )
         try:
             run(bad_args)
@@ -877,6 +1043,14 @@ def build_parser() -> argparse.ArgumentParser:
         help="Use exact for short-answer rows, suffix for solver traces, boxed_* for rows ending in \\boxed{answer}.",
     )
     parser.add_argument("--use-toy-tokenizer", action="store_true")
+    parser.add_argument(
+        "--reference-csv",
+        dest="reference_csvs",
+        action="append",
+        default=[],
+        type=Path,
+        help="Forbidden reference CSV. Fails on id, prompt, or prompt+answer overlap.",
+    )
     parser.add_argument("--self-test", action="store_true")
     return parser
 

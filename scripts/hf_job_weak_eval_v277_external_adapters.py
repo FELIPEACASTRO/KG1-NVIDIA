@@ -343,8 +343,8 @@ def run_eval(args: argparse.Namespace) -> dict[str, Any]:
         best
         and int(best.get("correct", 0)) >= env_int("KG1_WEAK_TOTAL_MIN", 193)
         and int(best.get("equation_transform_correct", 0)) >= env_int("KG1_WEAK_EQ_MIN", 60)
-        and int(best.get("bit_manipulation_correct", 0)) >= env_int("KG1_WEAK_BIT_MIN", 133)
-        and int(best.get("truncated", 999999)) <= env_int("KG1_WEAK_TRUNC_MAX", 3)
+        and int(best.get("bit_manipulation_correct", 0)) >= env_int("KG1_WEAK_BIT_MIN", 136)
+        and int(best.get("truncated", 999999)) <= env_int("KG1_WEAK_TRUNC_MAX", 0)
     )
     log_json("candidate_summary_payload", summary)
     log_json("v277_best_candidate_gate", {"best": best, "weak_gate_pass": weak_gate_pass})

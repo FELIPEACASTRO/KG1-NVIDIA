@@ -59,6 +59,14 @@ CRITICAL_SNIPPETS = {
     },
 }
 
+BLOCKED_TRAINING_DATASET_MARKERS = {
+    "v461_synthetic_numeric_probe_pack": "V461 prompt pack contained a full-reference exact prompt/answer seed.",
+    "v463_v462_synthetic_numeric_hard_negative_audit": "V463 depends on the quarantined V461/V462 numeric route.",
+    "v464_v463_numeric_multirule_dataset": "V464 rejected candidates can equal the answer and is quarantined.",
+    "v468_v464_symbol_fix_dataset": "V468 still contains a full-reference exact prompt/answer seed.",
+    "v447_v446_trace_dataset": "Current V447 contains hypothesis_formed traces with contradictory boxed answers.",
+}
+
 TRUE_FORMAT_NEGATIVE_RE = re.compile(
     r"ALLOW_FORMAT_NEGATIVES\s*(?:=|:)\s*['\"]?(?:1|true|yes|on)['\"]?",
     re.IGNORECASE,
@@ -116,6 +124,7 @@ def is_scannable(path: Path) -> bool:
         return False
     return (
         rel.startswith("scripts/")
+        or rel.startswith("src/")
         or rel.startswith("notebooks/")
         or rel.startswith(".github/workflows/")
         or rel.startswith("artifacts/")
@@ -193,6 +202,66 @@ def audit_text(path: Path, text: str) -> list[Finding]:
                 "Official ACC diagnostics must use verify_answer, not answers_equivalent; numeric tolerance overcounts binary strings.",
             )
         )
+
+    if rel != "scripts/kg1_static_safety_gate.py" and re.search(
+        r"\bWEAK_BIT_MIN_FOR_FULL\s*=\s*133\b", text
+    ):
+        findings.append(
+            Finding(
+                rel,
+                "error",
+                "stale_weak_bit_gate",
+                "Weak promotion gate must use the current no-regression bit floor: WEAK_BIT_MIN_FOR_FULL = 136.",
+            )
+        )
+
+    if rel != "scripts/kg1_static_safety_gate.py" and re.search(
+        r"\bWEAK_MAX_TRUNC_FOR_FULL\s*=\s*3\b", text
+    ):
+        findings.append(
+            Finding(
+                rel,
+                "error",
+                "stale_weak_trunc_gate",
+                "Weak promotion gate must use current no-truncation floor: WEAK_MAX_TRUNC_FOR_FULL = 0.",
+            )
+        )
+
+    if rel != "scripts/kg1_static_safety_gate.py" and re.search(
+        r"\bKG1_WEAK_(?:PROMOTE_)?BIT_MIN[\"']?\s*[,=]\s*133\b", text
+    ):
+        findings.append(
+            Finding(
+                rel,
+                "error",
+                "stale_weak_bit_env_gate",
+                "Weak promotion env/default gate must use bit floor 136, not 133.",
+            )
+        )
+
+    if rel != "scripts/kg1_static_safety_gate.py" and re.search(
+        r"\bKG1_WEAK_(?:PROMOTE_)?TRUNC_MAX[\"']?\s*[,=]\s*3\b", text
+    ):
+        findings.append(
+            Finding(
+                rel,
+                "error",
+                "stale_weak_trunc_env_gate",
+                "Weak promotion env/default gate must use truncation cap 0, not 3.",
+            )
+        )
+
+    if job_or_notebook and rel != "scripts/hf_job_preflight_gate.py":
+        for marker, reason in BLOCKED_TRAINING_DATASET_MARKERS.items():
+            if marker in text and not is_archived_fail_closed(text):
+                findings.append(
+                    Finding(
+                        rel,
+                        "error",
+                        "blocked_training_dataset_referenced",
+                        f"{marker}: {reason}",
+                    )
+                )
 
     for critical_rel, snippets in CRITICAL_SNIPPETS.items():
         if rel != critical_rel:
@@ -296,6 +365,33 @@ def run_self_test() -> int:
         metric_findings = audit_text(permissive_metric, permissive_metric.read_text(encoding="utf-8"))
         if "permissive_metric_used_for_official_correct" not in {item.code for item in metric_findings}:
             print("missing permissive metric self-test finding", flush=True)
+            return 1
+        stale_gate = tmp / "build_old_gate.py"
+        stale_gate.write_text(
+            "WEAK_BIT_MIN_FOR_FULL = 133\nWEAK_MAX_TRUNC_FOR_FULL = 3\n"
+            "KG1_WEAK_BIT_MIN\", 133\nKG1_WEAK_TRUNC_MAX\", 3\n",
+            encoding="utf-8",
+        )
+        stale_gate_findings = audit_text(stale_gate, stale_gate.read_text(encoding="utf-8"))
+        stale_codes = {item.code for item in stale_gate_findings}
+        if not {
+            "stale_weak_bit_gate",
+            "stale_weak_trunc_gate",
+            "stale_weak_bit_env_gate",
+            "stale_weak_trunc_env_gate",
+        }.issubset(stale_codes):
+            print("missing stale weak gate self-test finding", flush=True)
+            return 1
+        blocked_dataset = tmp / "job_blocked_dataset.py"
+        blocked_dataset.write_text(
+            "from huggingface_hub import HfApi\n"
+            "DATA_FILE='data/v468_v464_symbol_fix_dataset/train.jsonl'\n"
+            "HfApi().run_job(command=['true'])\n",
+            encoding="utf-8",
+        )
+        blocked_findings = audit_text(blocked_dataset, blocked_dataset.read_text(encoding="utf-8"))
+        if "blocked_training_dataset_referenced" not in {item.code for item in blocked_findings}:
+            print("missing blocked training dataset self-test finding", flush=True)
             return 1
     print("kg1_static_safety_gate_self_test=ok", flush=True)
     print("=== KG1 STATIC SAFETY GATE SELF TEST END ===", flush=True)

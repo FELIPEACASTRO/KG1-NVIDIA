@@ -30,6 +30,7 @@ from scripts.evaluate_lora_adapter import (  # noqa: E402
     apply_vllm_runtime_safety_settings,
     normalize_questions,
     prepare_merged_predictions,
+    read_csv_str,
     render_prompts,
     resolve_base_model_path,
     resolve_model_revision,
@@ -142,14 +143,16 @@ def main() -> int:
         json.dumps(apply_vllm_runtime_safety_settings(), indent=2, sort_keys=True),
     )
 
-    solution = pd.read_csv(args.solution_csv)
+    solution = read_csv_str(args.solution_csv)
     if args.limit > 0:
         solution = solution.head(args.limit).copy()
     if "answer" not in solution.columns:
         raise RuntimeError(
             "solution CSV is missing the answer column; refusing to emit an all-false accuracy report."
         )
-    questions = pd.read_csv(args.questions_csv or args.solution_csv)
+    if solution["answer"].fillna("").astype(str).eq("").any():
+        raise RuntimeError("solution CSV contains empty answers; refusing to score.")
+    questions = read_csv_str(args.questions_csv or args.solution_csv)
     if args.limit > 0:
         ids = set(solution[row_id_column(solution)].astype(str))
         q_id = row_id_column(questions)
@@ -259,6 +262,8 @@ def main() -> int:
                 )
 
             pred = pd.DataFrame(rows)
+            pred["truncated"] = pred["finish_reason"].fillna("").astype(str).eq("length")
+            pred["truncated_bool"] = pred["truncated"]
             raw_predictions_path = candidate_dir / f"{label}_raw_predictions_pre_score.csv"
             pred.to_csv(raw_predictions_path, index=False)
             pred = apply_prediction_postprocessor(pred, args.prediction_postprocessor)

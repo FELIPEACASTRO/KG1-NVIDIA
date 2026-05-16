@@ -39,9 +39,9 @@ def sha256_file(path: Path) -> str:
     return digest.hexdigest()
 
 
-def validate_full_manifest(path: Path | None, min_correct: int, max_trunc: int) -> dict[str, Any] | None:
+def validate_full_manifest(path: Path | None, min_correct: int, max_trunc: int) -> dict[str, Any]:
     if path is None:
-        return None
+        raise RuntimeError("full manifest is required before packaging an adapter-only submission")
     if not path.exists():
         raise FileNotFoundError(path)
     payload = read_json(path)
@@ -146,7 +146,7 @@ def main() -> int:
     parser.add_argument("--repo", required=True)
     parser.add_argument("--subfolder", default="")
     parser.add_argument("--output-dir", type=Path, required=True)
-    parser.add_argument("--full-manifest-json", type=Path)
+    parser.add_argument("--full-manifest-json", type=Path, required=True)
     parser.add_argument("--min-full-correct", type=int, default=823)
     parser.add_argument("--max-full-trunc", type=int, default=4)
     parser.add_argument("--expected-r", type=int, default=32)
@@ -173,7 +173,7 @@ def main() -> int:
         "full_manifest_gate": {
             "min_full_correct": args.min_full_correct,
             "max_full_trunc": args.max_full_trunc,
-            "validated": full_manifest is not None,
+            "validated": True,
         },
         "kaggle_submit_attempted": bool(args.submit),
     }

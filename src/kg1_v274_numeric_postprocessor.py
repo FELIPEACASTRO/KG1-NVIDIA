@@ -200,24 +200,28 @@ def choose_guarded_numeric_override(examples: list[tuple[str, str]], query: str,
     grouped, op_sequence = grouped_result
     query_op = parsed_query[1]
     base = normalize_payload(model_prediction)
-    if query_op == "-":
-        query_left, _, query_right = parsed_query
-        try:
-            direct_difference = int(query_left) - int(query_right)
-        except ValueError:
-            direct_difference = 0
-        direct_candidate = str(direct_difference)
-        if direct_candidate.startswith("-") and base == direct_candidate[1:]:
-            return (
-                direct_candidate,
-                "minus_direct_negative_restore_sign",
-                f"candidate={direct_candidate}; baseline={model_prediction}",
-            )
     if query_op not in grouped:
         return None, "query_operator_unseen", f"query_op={query_op!r} not present in examples"
     group = grouped[query_op]
 
     if query_op == "-":
+        direct_candidates = sorted(
+            {
+                str(item["prediction"])
+                for item in numeric_candidates(group, query, {"sub_ab"})
+                if str(item["name"]) == "sub_ab"
+                and not bool(item["reverse_operands"])
+                and not bool(item["reverse_result"])
+            }
+        )
+        if len(direct_candidates) == 1:
+            direct_candidate = direct_candidates[0]
+            if direct_candidate.startswith("-") and base == direct_candidate[1:]:
+                return (
+                    direct_candidate,
+                    "minus_direct_negative_restore_sign",
+                    f"candidate={direct_candidate}; baseline={model_prediction}; guarded_by_examples=true",
+                )
         signed = numeric_candidates(group, query, {"sub_ab", "rev_sub_ab"})
         predictions = sorted({str(item["prediction"]) for item in signed})
         if len(predictions) != 1:
@@ -328,6 +332,24 @@ def self_test() -> None:
     decision = postprocess_numeric_prediction(prompt, "55", family="equation_transform")
     if not decision.applied or decision.prediction != "-55" or decision.rule != "minus_signed_opposite_sign_guarded":
         raise AssertionError(f"minus self-test failed: {decision}")
+
+    prompt = (
+        "In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:\n"
+        "90-10 = 80\n70-30 = 40\n55-20 = 35\n"
+        "Now, determine the result for: 19-68"
+    )
+    decision = postprocess_numeric_prediction(prompt, "49", family="equation_transform")
+    if not decision.applied or decision.prediction != "-49" or decision.rule != "minus_direct_negative_restore_sign":
+        raise AssertionError(f"guarded direct minus self-test failed: {decision}")
+
+    prompt = (
+        "In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:\n"
+        "90+10 = 100\n70+30 = 100\n"
+        "Now, determine the result for: 19-68"
+    )
+    decision = postprocess_numeric_prediction(prompt, "49", family="equation_transform")
+    if decision.applied:
+        raise AssertionError(f"unseen minus operator must abstain: {decision}")
 
     prompt = (
         "In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:\n"

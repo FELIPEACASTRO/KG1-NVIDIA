@@ -636,6 +636,155 @@ Regra preventiva:
 Status: corrigido em `scripts/run_v286_generic_tokenization_gate.py` e
 `scripts/build_v447_v446_trace_dataset.py`.
 
+### E021 - Builders historicos mantinham gates fracos obsoletos
+
+Evidencia:
+
+- Quadruple check V472 encontrou builders de Colab V217-V231/V244/V245 ainda com:
+  - `WEAK_BIT_MIN_FOR_FULL = 133`;
+  - `WEAK_MAX_TRUNC_FOR_FULL = 3`.
+- Isso nao afetava notebooks ja versionados diretamente, mas poderia recriar
+  notebook ou manifest com criterio de promocao inferior ao piso submit-safe
+  atual.
+
+Impacto:
+
+- Risco de full eval/submission ser liberado em rota com regressao de bit ou
+  truncation.
+
+Regra preventiva:
+
+- Builders foram atualizados para `WEAK_BIT_MIN_FOR_FULL = 136` e
+  `WEAK_MAX_TRUNC_FOR_FULL = 0`.
+- `kg1_static_safety_gate.py` agora falha se detectar esses valores antigos em
+  arquivo novo/alterado.
+
+Status: corrigido em V472.
+
+### E023 - V468 ainda herdava uma seed exata de referencia full
+
+Evidencia:
+
+- Auditoria independente V472 encontrou o prompt/answer `63-19 -> -55` em
+  `v468_v464_symbol_fix_dataset_train.jsonl`.
+- A mesma combinacao bate com a referencia full local `v291_full_predictions`
+  no id `7688e06e`.
+- A origem rastreada foi a rota V461/V463.
+
+Impacto:
+
+- Mesmo com a contradicao `rejected_candidate == answer` corrigida, V468 nao e
+  limpo para treino porque contem contaminacao de referencia full.
+
+Regra preventiva:
+
+- `hf_job_preflight_gate.py` bloqueia V461/V463/V464/V468 por marcador.
+- `run_v286_generic_tokenization_gate.py` agora tambem bloqueia esses
+  marcadores e aceita CSVs de referencia proibida para falhar por overlap de
+  `id`, `prompt` ou `prompt+answer`.
+
+Status: corrigido em V472. V468/V469/V470 ficam encerrados para GPU.
+
+### E024 - V447 incluia traces `hypothesis_formed` contraditorios
+
+Evidencia:
+
+- Auditoria V472 contou `141` traces `hypothesis_formed` em V447.
+- Nesses casos o raciocinio podia conter um `\boxed{...}` interno diferente e,
+  depois, apendar a resposta oficial correta.
+
+Impacto:
+
+- O treino pode aprender uma trajetoria contraditoria: loss cai, mas o padrao
+  de decisao nao melhora ACC.
+
+Regra preventiva:
+
+- `run_v446_tong_source_target_alignment_gate.py` nao aceita mais
+  `hypothesis_formed`.
+- `build_v447_v446_trace_dataset.py` descarta qualquer status diferente de
+  `rule_found` nessa rota.
+
+Status: corrigido em V472. O dataset V447 existente fica quarantined.
+
+### E025 - Postprocessor de eval rodava antes de truncation existir
+
+Evidencia:
+
+- `evaluate_lora_adapter.py` e `evaluate_lora_adapters_batch.py` aplicavam o
+  postprocessor antes de popular `truncated`.
+- V274 abstain em linhas truncadas, mas nao recebia essa informacao.
+
+Impacto:
+
+- Linha finalizada por `length` poderia receber override e contaminar ACC de
+  weak/full eval.
+
+Regra preventiva:
+
+- Eval agora popula `truncated` e `truncated_bool` antes de qualquer
+  postprocessor.
+
+Status: corrigido em V472.
+
+### E026 - CSV de eval podia perder zeros a esquerda e ids corretos
+
+Evidencia:
+
+- Leituras via `pd.read_csv` sem `dtype=str` ainda existiam em eval/analyze.
+
+Impacto:
+
+- Respostas como `03`, ids numericos e campos vazios poderiam ser coercedidos,
+  gerando ACC falso ou comparacao errada.
+
+Regra preventiva:
+
+- CSVs de eval/analyze agora usam `dtype=str, keep_default_na=False`.
+- `id`/`row_id` e campos criticos vazios passam a falhar explicitamente.
+
+Status: corrigido em V472.
+
+### E027 - V300 bit full-byte podia escolher programa ambiguo
+
+Evidencia:
+
+- O solver full-byte retornava o primeiro programa compativel com exemplos.
+
+Impacto:
+
+- Em prompts subdeterminados, programas diferentes poderiam bater nos exemplos
+  e divergir na query, criando override regressivo.
+
+Regra preventiva:
+
+- V300 agora coleta todos os programas compativeis e so aplica quando a
+  predicao da query e unica.
+
+Status: corrigido em V472.
+
+### E022 - V464 contaminado precisava de bloqueio operacional, nao so documentacao
+
+Evidencia:
+
+- Data integrity scan V472 confirmou novamente que V464 antigo contem
+  `24` linhas train e `6` linhas validation onde o rejected candidate verifica
+  igual ao gabarito.
+- V468 corrigiu a geracao, mas V464 ainda existe como artefato historico.
+
+Impacto:
+
+- Um launch HF manual poderia apontar para o dataset V464 antigo e repetir a
+  rota contaminada.
+
+Regra preventiva:
+
+- `hf_job_preflight_gate.py` agora bloqueia qualquer training identity que
+  contenha `v464_v463_numeric_multirule_dataset`.
+- A mensagem instrui usar V468 ou dataset posterior corrigido.
+
+Status: corrigido em V472.
+
 ## Prompt Externo
 
 Prompt consolidado para OpenRouter/outras APIs:

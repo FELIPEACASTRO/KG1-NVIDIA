@@ -47,7 +47,7 @@ DEFAULT_REFERENCE_WEAK_CSV = (
 DEFAULT_REFERENCE_FULL_CSV = REPO_ROOT / "artifacts/v293_gap_mining/inputs/v291_full_predictions.csv"
 DEFAULT_OUTPUT_ROOT = REPO_ROOT / "artifacts/v446_tong_source_target_alignment_gate"
 
-TRACE_STATUSES_ALLOWED = {"rule_found", "hypothesis_formed", "verified", "ok"}
+TRACE_STATUSES_ALLOWED = {"rule_found", "verified", "ok"}
 TARGET_FAMILIES = {"bit_manipulation", "equation_transform"}
 CSV_COLUMNS = [
     "row_no",

@@ -33,11 +33,13 @@ def count_boxed(text: object) -> int:
 
 
 def load_frame(path: Path) -> pd.DataFrame:
-    frame = pd.read_csv(path)
+    frame = pd.read_csv(path, dtype=str, keep_default_na=False)
     required = {"id", "raw_output", "prediction"}
     missing = sorted(required - set(frame.columns))
     if missing:
         raise ValueError(f"{path} missing required columns: {missing}")
+    if frame["id"].fillna("").astype(str).eq("").any():
+        raise ValueError(f"{path} contains empty ids")
     return frame
 
 

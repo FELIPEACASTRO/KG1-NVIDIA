@@ -31,6 +31,7 @@ from src.competition_utils import (  # noqa: E402
     MODEL_NAME,
     OFFICIAL_INFERENCE_CONFIG,
     PROMPT_SUFFIX,
+    canonical_family,
     classify_puzzle,
     extract_final_answer,
     verify_answer,
@@ -91,7 +92,17 @@ def row_id_column(frame: pd.DataFrame) -> str:
     for candidate in ("id", "row_id"):
         if candidate in frame.columns:
             return candidate
-    return str(frame.columns.to_list()[0])
+    raise ValueError("CSV must contain an id or row_id column")
+
+
+def read_csv_str(path: str | Path) -> pd.DataFrame:
+    """Read challenge CSVs without numeric coercion or NA rewriting."""
+
+    frame = pd.read_csv(path, dtype=str, keep_default_na=False)
+    empty_columns = [column for column in frame.columns if not str(column).strip()]
+    if empty_columns:
+        raise ValueError(f"{path} contains empty CSV column names")
+    return frame
 
 
 def normalize_questions(solution: pd.DataFrame, questions: pd.DataFrame, limit: int = 0) -> pd.DataFrame:
@@ -105,6 +116,8 @@ def normalize_questions(solution: pd.DataFrame, questions: pd.DataFrame, limit: 
         questions = questions.rename(columns={q_id: "id"})
     solution["id"] = solution["id"].astype(str)
     questions["id"] = questions["id"].astype(str)
+    if solution["id"].eq("").any() or questions["id"].eq("").any():
+        raise ValueError("solution/questions contain empty ids")
     if "prompt" not in questions.columns:
         if "prompt" not in solution.columns:
             raise ValueError("questions or solution must contain a prompt column")
@@ -113,6 +126,9 @@ def normalize_questions(solution: pd.DataFrame, questions: pd.DataFrame, limit: 
     missing_prompt = ordered["prompt"].isna().sum()
     if missing_prompt:
         raise ValueError(f"questions missing prompts for {missing_prompt} solution rows")
+    empty_prompt = ordered["prompt"].fillna("").astype(str).eq("").sum()
+    if empty_prompt:
+        raise ValueError(f"questions contain empty prompts for {empty_prompt} solution rows")
     if limit > 0:
         ordered = ordered.head(limit).copy()
     return ordered
@@ -235,6 +251,13 @@ def prepare_merged_predictions(solution: pd.DataFrame, pred: pd.DataFrame) -> pd
     missing_type = merged["type"].fillna("").astype(str).eq("")
     if missing_type.any():
         merged.loc[missing_type, "type"] = merged.loc[missing_type, "prompt"].map(classify_puzzle)
+    declared = merged["type"].map(canonical_family)
+    inferred = merged["prompt"].map(classify_puzzle)
+    mismatch = declared.ne("unknown") & inferred.ne("unknown") & declared.ne(inferred)
+    if mismatch.any():
+        sample = merged.loc[mismatch, ["id", "type", "prompt"]].head(5).to_dict(orient="records")
+        raise ValueError(f"declared family does not match prompt classifier; sample={sample}")
+    merged["type"] = declared
 
     return merged
 
@@ -364,6 +387,8 @@ def evaluate_adapter(
         )
 
     pred = pd.DataFrame(rows)
+    pred["truncated"] = pred["finish_reason"].fillna("").astype(str).eq("length")
+    pred["truncated_bool"] = pred["truncated"]
     if raw_predictions_path is not None:
         raw_path = Path(raw_predictions_path)
         raw_path.parent.mkdir(parents=True, exist_ok=True)
@@ -460,14 +485,16 @@ def main() -> int:
     args = parser.parse_args()
 
     args.output_dir.mkdir(parents=True, exist_ok=True)
-    solution = pd.read_csv(args.solution_csv)
+    solution = read_csv_str(args.solution_csv)
     if args.limit > 0:
         solution = solution.head(args.limit).copy()
     if "answer" not in solution.columns:
         raise RuntimeError(
             "solution CSV is missing the answer column; refusing to emit an all-false accuracy report."
         )
-    questions = pd.read_csv(args.questions_csv or args.solution_csv)
+    if solution["answer"].fillna("").astype(str).eq("").any():
+        raise RuntimeError("solution CSV contains empty answers; refusing to score.")
+    questions = read_csv_str(args.questions_csv or args.solution_csv)
     if args.limit > 0:
         ids = set(solution[row_id_column(solution)].astype(str))
         q_id = row_id_column(questions)

@@ -22,6 +22,27 @@ from typing import Any
 
 VALID_PHASES = {"preinstall", "artifacts", "postinstall", "eval-preinstall", "eval-postinstall", "all"}
 VALID_SAMPLING_MODES = {"shuffle", "weighted_replacement"}
+BLOCKED_DATASET_MARKERS = {
+    "v461_synthetic_numeric_probe_pack": (
+        "V461 is quarantined: crisis audit found a synthetic prompt/answer seed "
+        "matching the full reference set. Rebuild without full-reference seeds."
+    ),
+    "v463_v462_synthetic_numeric_hard_negative_audit": (
+        "V463 is quarantined because it depends on the V461/V462 numeric route."
+    ),
+    "v464_v463_numeric_multirule_dataset": (
+        "V464 is quarantined: crisis audit found rejected_candidate == answer "
+        "in 24 train rows and 6 validation rows. Use a later corrected dataset."
+    ),
+    "v468_v464_symbol_fix_dataset": (
+        "V468 is quarantined: crisis audit found it still contains a full-reference "
+        "exact prompt/answer seed."
+    ),
+    "v447_v446_trace_dataset": (
+        "Current V447 is quarantined: crisis audit found hypothesis_formed traces "
+        "with contradictory boxed answers. Rebuild with rule_found-only traces."
+    ),
+}
 
 
 def log_json(label: str, payload: dict[str, Any]) -> None:
@@ -51,6 +72,14 @@ def env_float(name: str, default: float = 0.0) -> float:
 def env_bool(name: str, default: bool = False) -> bool:
     value = env_str(name, "1" if default else "0").lower()
     return value in {"1", "true", "yes", "y", "on"}
+
+
+def blocked_dataset_matches(data_identity: str) -> list[dict[str, str]]:
+    return [
+        {"marker": marker, "reason": reason}
+        for marker, reason in BLOCKED_DATASET_MARKERS.items()
+        if marker in data_identity
+    ]
 
 
 def require_env(names: list[str]) -> None:
@@ -266,6 +295,19 @@ def check_training_env() -> None:
         ),
     }
     log_json("training_env_gate", summary)
+
+    data_identity = " ".join(
+        [
+            env_str("DATA_REPO"),
+            env_str("DATA_FILE"),
+            env_str("VAL_FILE"),
+            env_str("EXPECTED_TRAIN_SHA256"),
+            env_str("EXPECTED_VAL_SHA256"),
+        ]
+    )
+    blocked = blocked_dataset_matches(data_identity)
+    if blocked:
+        raise RuntimeError("Blocked quarantined training dataset: " + json.dumps(blocked, sort_keys=True))
 
 
 def check_repo_gate() -> None:
@@ -529,6 +571,10 @@ def self_test() -> None:
     os.environ.setdefault("SAMPLING_MODE", "weighted_replacement")
     if env_str("SAMPLING_MODE") not in VALID_SAMPLING_MODES:
         raise RuntimeError("self-test failed")
+    assert blocked_dataset_matches("repo data/v464_v463_numeric_multirule_dataset/train.jsonl")
+    assert blocked_dataset_matches("repo data/v468_v464_symbol_fix_dataset/train.jsonl")
+    assert blocked_dataset_matches("repo data/v447_v446_trace_dataset/train.jsonl")
+    assert not blocked_dataset_matches("repo data/v469_symbol_fix_rebuilt_clean/train.jsonl")
     print("hf_job_preflight_gate_self_test=ok", flush=True)
 
 

@@ -164,6 +164,7 @@ def build_rows(args: argparse.Namespace) -> tuple[list[dict[str, Any]], dict[str
         "accepted_audit_rows": len(accepted),
         "missing_source_row": 0,
         "missing_answer": 0,
+        "dropped_non_rule_found_status": 0,
         "dropped_rows": 0,
         "normalization_status": Counter(),
         "family_counts": Counter(),
@@ -180,6 +181,10 @@ def build_rows(args: argparse.Namespace) -> tuple[list[dict[str, Any]], dict[str
         if not answer:
             stats["missing_answer"] += 1
             continue
+        status = str(audit.get("status", "")).strip()
+        if status != "rule_found":
+            stats["dropped_non_rule_found_status"] += 1
+            continue
         prompt, assistant = message_parts(source)
         if sha256_text(prompt) != str(audit.get("prompt_sha256", "")):
             raise RuntimeError(f"prompt hash mismatch for row_no={row_no} id={rid}")
@@ -193,7 +198,6 @@ def build_rows(args: argparse.Namespace) -> tuple[list[dict[str, Any]], dict[str
             stats["dropped_rows"] += 1
             continue
         family = str(audit.get("family", "")).strip()
-        status = str(audit.get("status", "")).strip()
         row = {
             "id": f"v447_{rid}",
             "prompt": prompt,
