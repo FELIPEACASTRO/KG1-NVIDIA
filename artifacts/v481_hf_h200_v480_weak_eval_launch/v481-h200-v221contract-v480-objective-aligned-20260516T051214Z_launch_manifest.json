@@ -1,0 +1,68 @@
+{
+  "adapter_repo": "felipesp1983/kg1-nemotron-lora-v480-v479-objective-aligned-v290ckpt6",
+  "adapters": [
+    {
+      "name": "v480_objective_aligned_checkpoint_2_v221_contract",
+      "repo": "felipesp1983/kg1-nemotron-lora-v480-v479-objective-aligned-v290ckpt6",
+      "subfolder": "checkpoint-2"
+    },
+    {
+      "name": "v480_objective_aligned_checkpoint_4_v221_contract",
+      "repo": "felipesp1983/kg1-nemotron-lora-v480-v479-objective-aligned-v290ckpt6",
+      "subfolder": "checkpoint-4"
+    },
+    {
+      "name": "v480_objective_aligned_checkpoint_6_v221_contract",
+      "repo": "felipesp1983/kg1-nemotron-lora-v480-v479-objective-aligned-v290ckpt6",
+      "subfolder": "checkpoint-6"
+    },
+    {
+      "name": "v480_objective_aligned_checkpoint_8_v221_contract",
+      "repo": "felipesp1983/kg1-nemotron-lora-v480-v479-objective-aligned-v290ckpt6",
+      "subfolder": "checkpoint-8"
+    }
+  ],
+  "branch": "v230-v226-complementarity",
+  "expected_commit": "e45353d1d233fd4eb564a2100029668d60b732cc",
+  "flavor": "h200",
+  "generated_at_utc": "2026-05-16T05:12:16.258907+00:00",
+  "hardware": {
+    "accelerator_model": "H200",
+    "accelerator_quantity": "1",
+    "accelerator_vram": "141 GB",
+    "cpu": "23 vCPU",
+    "name": "h200",
+    "pretty_name": "Nvidia H200",
+    "ram": "256 GB",
+    "unit_cost_usd": 0.083333,
+    "unit_label": "minute"
+  },
+  "image": "vllm/vllm-openai:v0.20.1",
+  "job_id": "6a07fcf1e48bea4538b9f6f8",
+  "job_status": "RUNNING",
+  "job_url": "https://huggingface.co/jobs/felipesp1983/6a07fcf1e48bea4538b9f6f8",
+  "missing_optional_adapters": [],
+  "namespace": "felipesp1983",
+  "output_path_in_repo": "evals/v481-h200-v221contract-v480-objective-aligned-20260516T051214Z",
+  "output_repo": "felipesp1983/kg1-nemotron-lora-v480-v479-objective-aligned-v290ckpt6",
+  "previous_version": "V480 objective-aligned H200 training; V477 showed 57 equation with bit regression.",
+  "promotion_gate": {
+    "baseline_bit_manipulation": 136,
+    "baseline_equation_transform": 56,
+    "baseline_total": 192,
+    "baseline_truncated": 0,
+    "full_eval_only_if": "total>=193 and equation>=57 and bit>=136 and truncated=0",
+    "promote_if_bit_gte": 136,
+    "promote_if_equation_gte": 57,
+    "promote_if_total_gte": 193,
+    "promote_if_truncated_eq": 0,
+    "reject_if_bit_lt": 136,
+    "reject_if_equation_lte": 56,
+    "reject_if_total_lte": 192,
+    "reject_if_truncated_gt": 0,
+    "submit_only_if_full_official_like_gte": 831
+  },
+  "run_id": "v481-h200-v221contract-v480-objective-aligned-20260516T051214Z",
+  "version": "v481_v480_objective_aligned_v221_weak_eval",
+  "version_comparison_artifact": "artifacts/v481_hf_h200_v480_weak_eval_launch/V481_VS_PREVIOUS.md"
+}
