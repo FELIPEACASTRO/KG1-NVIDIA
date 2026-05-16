@@ -84,9 +84,9 @@ provar que nao houve regressao. V514 converteu `581/742` linhas bit para traces
 verificadas, descartou `161` bit sem prova, passou tokenization real e passou
 V513 recheck com `0` blockers. HF CPU reproduction tambem passou no job
 `felipesp1983/6a08e9ad3308d79117b91609`. V515 recuperou mais `8` bit rows
-residuais com `fullbyte_unique_prediction` e passou V286/V513 localmente. GPU
-continua bloqueada ate HF CPU reproduction do V515, objective/pre-paid gate e
-smoke minimo.
+residuais com `fullbyte_unique_prediction` e passou V286/V513 localmente e no
+HF CPU job `felipesp1983/6a08edcf3308d79117b9167f`. GPU continua bloqueada ate
+objective/pre-paid gate e smoke minimo.
 
 ### E059 - V514 HF CPU launcher sem dependencia transitiva do stride solver
 

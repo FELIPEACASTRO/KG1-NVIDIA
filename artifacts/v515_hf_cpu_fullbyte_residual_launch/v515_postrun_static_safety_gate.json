@@ -1,0 +1,10 @@
+{
+  "file_count": 2,
+  "files": [
+    "artifacts/v515_hf_cpu_fullbyte_residual_launch/launch_v515_hf_cpu_fullbyte_residual.py",
+    "scripts/build_v515_v514_fullbyte_residual_dataset.py"
+  ],
+  "findings": [],
+  "ok": true,
+  "schema_version": "kg1_static_safety_gate_v1"
+}

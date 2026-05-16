@@ -1,0 +1,34 @@
+{
+  "branch": "v230-v226-complementarity",
+  "expected_commit": "bf259e368de90634cbeec4b1d8175f1787ba9ccc",
+  "flavor": "cpu-upgrade",
+  "gates": {
+    "cpu_only": true,
+    "crisis_mode_backfire_guard": true,
+    "finops_cancel_if_no_gain": true,
+    "gpu_allowed": false,
+    "kaggle_submit_allowed": false,
+    "package_allowed": false,
+    "train_allowed": false
+  },
+  "generated_at_utc": "2026-05-16T22:19:57.900968+00:00",
+  "hardware": {
+    "accelerator_model": "",
+    "accelerator_quantity": "",
+    "accelerator_vram": "",
+    "cpu": "8 vCPU",
+    "name": "cpu-upgrade",
+    "pretty_name": "CPU Upgrade",
+    "ram": "32 GB",
+    "unit_cost_usd": 0.0005,
+    "unit_label": "minute"
+  },
+  "image": "python:3.11",
+  "job_id": "6a08edcf3308d79117b9167f",
+  "job_status": "COMPLETED",
+  "job_url": "https://huggingface.co/jobs/felipesp1983/6a08edcf3308d79117b9167f",
+  "mode": "launched",
+  "output_dataset_repo": "felipesp1983/kg1-v515-v514-fullbyte-residual-artifacts",
+  "run_id": "v515-hf-cpu-fullbyte-residual-20260516T221957Z",
+  "version": "v515_hf_cpu_fullbyte_residual_gate"
+}
