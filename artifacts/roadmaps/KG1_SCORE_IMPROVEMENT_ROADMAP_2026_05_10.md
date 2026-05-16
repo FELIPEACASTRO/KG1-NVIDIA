@@ -1462,3 +1462,44 @@ Artefatos:
 - `scripts/audit_v478_training_objective_alignment.py`
 - `artifacts/v478_plateau_component_audit/V478_PLATEAU_COMPONENT_AUDIT.md`
 - `artifacts/v478_plateau_component_audit/v478_training_objective_alignment_gate_v476.json`
+
+## Atualizacao V479 - Objective-Aligned CPU Candidate
+
+V479 aplica a correcao direta do achado V478 sem gastar GPU: filtra V475 para
+manter apenas classes equation com evidencia direta em V324 e preserva bit replay
+como componente real do objetivo.
+
+| Item | V475/V476 | V479 |
+|---|---:|---:|
+| Train rows | `1312` | `992` |
+| Train equation | `800` | `480` |
+| Train bit | `512` | `512` |
+| Validation rows | `328` | `248` |
+| Validation equation | `200` | `120` |
+| Validation bit | `128` | `128` |
+| Peso efetivo equation | `99.0508%` | `48.3871%` |
+| Peso efetivo bit | `0.9492%` | `51.6129%` |
+
+Gates V479:
+
+- Static safety: passed.
+- V478 objective alignment com pesos iguais: passed.
+- V286 tokenization real: passed, token max `331`, prompt truncation `0`,
+  offset masks completos.
+
+Decisao operacional:
+
+1. V479 substitui V476 como proxima candidata CPU limpa.
+2. Se houver novo H200 smoke, usar pesos iguais ou sampler balanceado, nao os
+   pesos V476.
+3. O primeiro checkpoint precisa passar `total>192`, `equation>56`,
+   `bit>=136`, `truncated=0`; caso contrario cancelar imediatamente.
+4. Ainda nao ha ganho adapter-only; logo nao ha submit/full eval/package.
+
+Artefatos:
+
+- `artifacts/v479_objective_aligned_filter/build_v479_objective_aligned_filter.py`
+- `artifacts/v479_objective_aligned_filter/20260516T_v479_objective_aligned_filter/v479_objective_aligned_filter_manifest.json`
+- `artifacts/v479_objective_aligned_filter/20260516T_v479_objective_aligned_filter/v479_objective_alignment_gate_equal_weights.json`
+- `artifacts/v479_objective_aligned_filter/20260516T_v479_objective_aligned_filter/tokenization_gate_real/v286_generic_tokenization_gate_manifest.json`
+- `artifacts/v479_objective_aligned_filter/20260516T_v479_objective_aligned_filter/V479_GATE_SUMMARY.md`

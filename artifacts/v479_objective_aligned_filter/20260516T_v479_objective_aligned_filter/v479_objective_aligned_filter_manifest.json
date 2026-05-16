@@ -1,0 +1,92 @@
+{
+  "allowed_subcategories": [
+    "bit_guardrail_replay",
+    "equation_numeric_add_direct",
+    "equation_numeric_colon_trailing_zero",
+    "equation_numeric_minus_signed"
+  ],
+  "baseline": {
+    "bit_manipulation": "136/160",
+    "equation_transform": "56/155",
+    "truncated": 0,
+    "weak_total": "192/315"
+  },
+  "generated_at_utc": "2026-05-16T04:36:46.813874+00:00",
+  "outputs": {
+    "comparison_md": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v479_objective_aligned_filter\\20260516T_v479_objective_aligned_filter\\V479_VS_PREVIOUS.md",
+    "manifest_json": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v479_objective_aligned_filter\\20260516T_v479_objective_aligned_filter\\v479_objective_aligned_filter_manifest.json",
+    "train_jsonl": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v479_objective_aligned_filter\\20260516T_v479_objective_aligned_filter\\v479_objective_aligned_filter_train.jsonl",
+    "train_sha256": "d7236e27f6dc437441217434f40216128e4412e52ff03e523eeb36775c927971",
+    "val_jsonl": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v479_objective_aligned_filter\\20260516T_v479_objective_aligned_filter\\v479_objective_aligned_filter_val.jsonl",
+    "val_sha256": "c1124008f967a94ce380694201648bb09c3a73d5873581995763be7c604b62b6"
+  },
+  "required_next_gate": [
+    "V286 real tokenization gate with boxed_suffix",
+    "V478 objective-alignment gate with bit effective share >= 20%",
+    "static safety gate",
+    "no HF GPU unless weak kill-switch remains total>192 equation>56 bit>=136 truncated=0"
+  ],
+  "schema_version": "kg1_v479_objective_aligned_filter_v1",
+  "source_manifest": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v475_equation_bit_replay_mix\\20260516T_v475_equation_bit_replay_mix\\v475_equation_bit_replay_mix_manifest.json",
+  "source_manifest_sha256": "8eef890939507d5fc9896c672bc19c00c1b3ee40be59070c1feffd069eb024f3",
+  "train_summary": {
+    "bad_rows_first20": [],
+    "duplicate_ids": 0,
+    "duplicate_prompts": 0,
+    "family_counts": {
+      "bit_manipulation": 512,
+      "equation_transform": 480
+    },
+    "label": "train",
+    "rows": 992,
+    "source_counts": {
+      "v475_v217_bit_replay_guardrail": 512,
+      "v475_v325_equation_no_loss_distill": 480
+    },
+    "subcategory_counts": {
+      "bit_guardrail_replay": 512,
+      "equation_numeric_add_direct": 160,
+      "equation_numeric_colon_trailing_zero": 160,
+      "equation_numeric_minus_signed": 160
+    },
+    "unique_ids": 992,
+    "unique_prompts": 992
+  },
+  "training_authorization": "blocked_until_v286_and_v478_gates_pass",
+  "v476_v477_failure_mode": {
+    "checkpoint_2": {
+      "bit_manipulation": "135/160",
+      "equation_transform": "57/155",
+      "weak_total": "192/315"
+    },
+    "checkpoint_4": {
+      "bit_manipulation": "134/160",
+      "equation_transform": "57/155",
+      "weak_total": "191/315"
+    },
+    "root_gap": "V476 effective sampling made bit only 0.9492% of weighted objective."
+  },
+  "validation_summary": {
+    "bad_rows_first20": [],
+    "duplicate_ids": 0,
+    "duplicate_prompts": 0,
+    "family_counts": {
+      "bit_manipulation": 128,
+      "equation_transform": 120
+    },
+    "label": "validation",
+    "rows": 248,
+    "source_counts": {
+      "v475_v217_bit_replay_guardrail": 128,
+      "v475_v325_equation_no_loss_distill": 120
+    },
+    "subcategory_counts": {
+      "bit_guardrail_replay": 128,
+      "equation_numeric_add_direct": 40,
+      "equation_numeric_colon_trailing_zero": 40,
+      "equation_numeric_minus_signed": 40
+    },
+    "unique_ids": 248,
+    "unique_prompts": 248
+  }
+}
