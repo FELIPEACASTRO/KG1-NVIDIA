@@ -1,0 +1,94 @@
+{
+  "generated_at_utc": "2026-05-16T18:14:16.789693+00:00",
+  "label": "v498_numeric_teacher_trace_pack",
+  "outputs": {
+    "manifest_json": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v498_numeric_teacher_trace_pack\\20260516T_v498_numeric_teacher\\v498_numeric_teacher_trace_manifest.json",
+    "train_jsonl": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v498_numeric_teacher_trace_pack\\20260516T_v498_numeric_teacher\\v498_numeric_teacher_trace_train.jsonl",
+    "train_sha256": "920b3c30b9ada9ad2685091194dcc53e717f72a9c037cafeef6e494f21511e79",
+    "val_jsonl": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v498_numeric_teacher_trace_pack\\20260516T_v498_numeric_teacher\\v498_numeric_teacher_trace_val.jsonl",
+    "val_sha256": "68cda4162214359aaf7cda304c2a06902775b1aadb53fcadfd0edf7ff481ed80"
+  },
+  "reference_csvs": [
+    "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v290_rank19_micro_patch_reference\\runtime_artifacts\\v245_weak_eval_bridge\\v245-weak-bridge-hfonly-20260510T1950Z\\v221_weak_315.csv",
+    "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v293_gap_mining\\inputs\\v291_full_predictions.csv"
+  ],
+  "reference_summary": [
+    {
+      "exists": true,
+      "path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v290_rank19_micro_patch_reference\\runtime_artifacts\\v245_weak_eval_bridge\\v245-weak-bridge-hfonly-20260510T1950Z\\v221_weak_315.csv",
+      "rows": 315,
+      "sha256": "85da758e14d57ea40270de5747f98726a0ad0b6d1795bff7dd46183005e0f9b6"
+    },
+    {
+      "exists": true,
+      "path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v293_gap_mining\\inputs\\v291_full_predictions.csv",
+      "rows": 947,
+      "sha256": "d9634ea15cb55e17bbfb90229f1cdbfd9b0f5a4cdba0d61848e6f746393dde20"
+    }
+  ],
+  "required_next_gate": [
+    "v286_tokenization_gate_boxed_suffix",
+    "bit_guardrail_exact_binary",
+    "first_checkpoint_kill_switch_equation_ge_60_bit_ge_136_trunc_0_total_gt_192"
+  ],
+  "rule_focus": [
+    "add_direct_over_model_add_variant",
+    "colon_absdiff_restore_trailing_zero",
+    "minus_signed_opposite_sign_guarded"
+  ],
+  "schema_version": "kg1_v498_numeric_teacher_trace_pack_v1",
+  "train_summary": {
+    "duplicate_ids": 0,
+    "equation_rule_counts": {
+      "add_direct_over_model_add_variant": 400,
+      "colon_absdiff_restore_trailing_zero": 400,
+      "minus_signed_opposite_sign_guarded": 400
+    },
+    "family_counts": {
+      "bit_manipulation": 512,
+      "equation_transform": 1200
+    },
+    "label": "train",
+    "missing_boxed_final": 0,
+    "reference_id_overlap": 0,
+    "reference_prompt_answer_overlap": 0,
+    "reference_prompt_overlap": 0,
+    "rows": 1712,
+    "source_counts": {
+      "v498_bit_replay_guardrail_from_v475": 512,
+      "v498_numeric_teacher_trace_pack": 1200
+    },
+    "unique_ids": 1712
+  },
+  "training_authorization": "blocked_until_tokenization_gate_and_v498_cpu_projection_gate",
+  "v497_decision": {
+    "decision": "do_not_promote_v496_or_repeat_h200_sft",
+    "next_action": "Implement a CPU teacher/verifier that explains equation gains without bit regression before any paid GPU job.",
+    "reason": "v496_total_projection=191; baseline_total=192; v496_bit_losses=2; v324_cpu_gain=4"
+  },
+  "v497_manifest_json": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v497_cpu_residual_transfer_audit\\20260516T_v497_cpu_audit\\v497_cpu_residual_transfer_audit_manifest.json",
+  "v497_manifest_sha256": "c26bda7d7d91281706296b86ea759acccecacd5d0b1c512dcbd7d0453556a34a",
+  "validation_summary": {
+    "duplicate_ids": 0,
+    "equation_rule_counts": {
+      "add_direct_over_model_add_variant": 100,
+      "colon_absdiff_restore_trailing_zero": 100,
+      "minus_signed_opposite_sign_guarded": 100
+    },
+    "family_counts": {
+      "bit_manipulation": 128,
+      "equation_transform": 300
+    },
+    "label": "validation",
+    "missing_boxed_final": 0,
+    "reference_id_overlap": 0,
+    "reference_prompt_answer_overlap": 0,
+    "reference_prompt_overlap": 0,
+    "rows": 428,
+    "source_counts": {
+      "v498_bit_replay_guardrail_from_v475": 128,
+      "v498_numeric_teacher_trace_pack": 300
+    },
+    "unique_ids": 428
+  }
+}

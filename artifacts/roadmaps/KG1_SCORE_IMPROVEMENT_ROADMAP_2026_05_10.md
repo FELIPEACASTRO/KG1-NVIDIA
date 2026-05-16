@@ -47,6 +47,8 @@ Ultima evidencia operacional relevante:
 | V495 H200 V475 smoke | treino tecnico OK; MoE `up_proj/down_proj` treinaveis; `lm_head` congelado; eval loss `1.695015 -> 1.694518` | loss saudavel, mas muito pequeno; decisao dependeu do V496 weak eval |
 | V496 V495 checkpoint-2 weak eval | weak 191, equation 57, bit 134, trunc 1; diff real vs V290: +1 equation (`518deb39`), -2 bit (`8740ed31`, `59bee375`) | nao promove; V475 SFT transfer tambem bloqueada; proximo passo e CPU teacher/guardrail, nao mais H200 SFT amplo |
 | V497 CPU residual transfer audit | baseline 192; V324 CPU projeta 196; V496 projeta 191; 4 ganhos CPU nao transferiram; 1 ganho simbolico V496; 2 perdas bit | confirma que o gargalo e transferencia teacher->LoRA, nao metrica/loss; proximo passo e trace numeric curto + bit guardrail |
+| V498 numeric teacher trace pack | 1712/428 linhas; 3 regras numeric com hard negatives; bit replay guardrail; zero overlap id/prompt/prompt+answer com weak/full; token max 331; offset masks completos | dataset elegivel para um unico smoke H200 curto, nao para treino amplo |
+| V499 local debug | dataset V498 uploaded no HF commit `c7e27fd39c598dd23cb25481f567787bdff50820`; V478 objetivo passou com bit efetivo 39.02% e equation 60.98%; H200 custo 0.083333/min | liberar um smoke H200 de 2 steps apos commit/push; promover somente se weak `>192`, `equation>=60`, `bit>=136`, `trunc=0` |
 
 ## Achados Principais V484-V492
 
@@ -155,6 +157,17 @@ Top clusters residuais continuam majoritariamente `equation_symbolic_punct`
 opacos. Portanto, para ganhar hoje, o alvo mais barato e mais controlavel nao e
 "resolver todos os simbolicos"; e transferir corretamente os 4 numeric gains ja
 verificados pelo CPU gate sem perder bit.
+
+Atualizacao V498/V499: o pacote V498 foi criado para atacar somente as tres
+classes numericas que explicam os quatro ganhos CPU de V324. Ele nao usa linhas
+weak/full como treino; essas linhas entram apenas como fingerprints proibidos.
+O gate real V286 passou com `prompt_truncation_rate=0`, `completion_tokens_dropped=0`,
+`offset_masks=train 1712/1712` e `validation 428/428`. O V478 local e o debug
+HF do V499 confirmaram que os pesos do launcher nao repetem a sub-representacao
+de bit: o objetivo efetivo fica `bit=0.390244` e `equation=0.609756`. Isso
+autoriza um unico smoke H200 curto. Se o primeiro checkpoint repetir o padrao
+V496 (`equation=57` com `bit<136` ou truncation), cancelar por FinOps e voltar
+ao CPU teacher, sem broad SFT.
 
 ## Regras Ativas
 
@@ -553,29 +566,24 @@ Sem isso, nao packagear e nao submeter.
 
 ## Proxima Acao Imediata
 
-1. Manter V290 checkpoint-6 como unico adapter submit-safe.
-2. V497 CPU residual audit esta executado. Usar seus outputs como fonte de
-   decisao:
-   - `artifacts/v497_cpu_residual_transfer_audit/20260516T_v497_cpu_audit/v497_equation_residual_transfer_audit.csv`;
-   - `artifacts/v497_cpu_residual_transfer_audit/20260516T_v497_cpu_audit/v497_bit_guardrail_failures.csv`.
-3. Criar V498 numeric teacher trace pack somente para os 4 ganhos V324 que nao
-   transferiram:
-   - `274def88`: `-92 -> 92`;
-   - `7688e06e`: `55 -> -55`;
-   - `d1bd7478`: `3 -> 30`;
-   - `c5b058d6`: `35 -> 134`;
-   - incluir hard negatives do baseline e resposta final curta no mesmo formato
-     oficial do V290.
-4. Criar guardrail CPU de bit antes de qualquer novo dataset:
-   - rejeitar candidatos que possam reproduzir `8740ed31` ou `59bee375 -> 2`;
-   - exigir saida binaria exata para todo probe bit;
-   - exigir `bit>=136` e `trunc=0` na projecao weak.
-5. So montar novo dataset adapter-only se a projecao CPU independente chegar a:
-   `equation>=60`, `bit>=136`, `trunc=0`, `total>192`.
-6. Se esse gate passar, fazer apenas um H200 smoke curto com kill-switch no
-   primeiro checkpoint. Se repetir `equation=57` com `bit<136` ou truncation,
-   cancelar e voltar para CPU.
-7. Qualquer weak eval promocional continua official-like e caro por desenho:
+1. Manter V290 checkpoint-6 como unico adapter submit-safe ate haver weak/full
+   gate melhor.
+2. V498 esta criado, tokenizado, validado e uploaded:
+   - train SHA `920b3c30b9ada9ad2685091194dcc53e717f72a9c037cafeef6e494f21511e79`;
+   - val SHA `68cda4162214359aaf7cda304c2a06902775b1aadb53fcadfd0edf7ff481ed80`;
+   - HF dataset commit `c7e27fd39c598dd23cb25481f567787bdff50820`.
+3. Commitar/pushar V498/V499 para a branch e executar exatamente um smoke V499
+   H200 de 2 steps com:
+   - `lm_head` congelado;
+   - `up_proj/down_proj` MoE treinaveis;
+   - `ANSWER_SPAN_LOSS_WEIGHT=1.0`;
+   - pesos efetivos `bit=39.02%`, `equation=60.98%`.
+4. Rodar weak eval official-like apenas no checkpoint V499 completo. Promover
+   somente se `total>192`, `equation>=60`, `bit>=136`, `trunc=0`.
+5. Se V499 retornar `equation=57` com qualquer perda de bit ou truncation,
+   cancelar a rota teacher-trace SFT e voltar para CPU. O proximo plano devera
+   ser isolado por uma unica familia, com equation primeiro.
+6. Qualquer weak eval promocional continua official-like e caro por desenho:
    thinking ligado, `max_tokens=7680`, `max_model_len=8192`. Para performance,
    usar avaliacoes baratas/diagnosticas antes; nao mudar essas configuracoes
    em resultado que pretende comparar com V290.

@@ -1346,7 +1346,56 @@ Regra preventiva:
   guardrail de bit, e provar em CPU que o pacote preserva `bit>=136`,
   `trunc=0`, `total>192`.
 
-Status: aberto; proxima acao e V498 numeric teacher trace pack.
+Status: mitigacao em andamento; V498 foi criado, passou tokenization/leakage
+gate real e V499 local debug. A prova final ainda depende de weak eval do
+checkpoint V499.
+
+### E046 - Manifest decision schema mismatch no uploader
+
+Evidencia:
+
+- O primeiro dry-run de `upload_v498_dataset_to_hf.py` falhou porque esperava
+  `decision == "tokenization_gate_passed"`.
+- O manifesto real V286 usa `decision.status == "tokenization_gate_passed"`.
+- Hashes/linhas estavam corretos; a falha era na leitura do schema do gate.
+
+Impacto:
+
+- Sem essa correcao, um dataset valido seria bloqueado por falso negativo.
+- A correcao nao relaxa o gate: continua exigindo status
+  `tokenization_gate_passed`.
+
+Regra preventiva:
+
+- Scripts que consomem manifests devem ler o schema real do produtor e, quando
+  possivel, cobrir o campo em dry-run antes de upload/job pago.
+
+Status: corrigido no uploader V499; dry-run e upload passaram.
+
+### E047 - V498/V499 rota autorizada somente como smoke curto
+
+Evidencia:
+
+- V498: 1712/428 linhas, zero overlap com weak/full, token max 331, truncation
+  zero e offset masks completos.
+- V499 local debug baixou o dataset do HF commit
+  `c7e27fd39c598dd23cb25481f567787bdff50820`, conferiu hashes, passou V478 e
+  validou H200 a `0.083333/min`.
+- O objetivo efetivo ficou `bit=0.390244` e `equation=0.609756`.
+
+Impacto:
+
+- A rota V498 ataca exatamente os 4 ganhos numeric V324 nao transferidos, mas
+  ainda nao prova ACC submit-safe.
+- So ha justificativa para um H200 smoke de 2 steps, nao treino amplo.
+
+Regra preventiva:
+
+- Promover somente se weak `total>192`, `equation>=60`, `bit>=136`, `trunc=0`.
+- Se repetir `equation=57` com perda de bit/truncation, cancelar por FinOps e
+  voltar para CPU.
+
+Status: aberto; aguardando V499 smoke/weak eval.
 
 ## Prompt Externo
 

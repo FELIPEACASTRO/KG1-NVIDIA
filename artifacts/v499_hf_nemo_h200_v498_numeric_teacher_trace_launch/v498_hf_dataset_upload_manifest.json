@@ -1,0 +1,22 @@
+{
+  "data_repo": "felipesp1983/kg1-nemotron-training",
+  "generated_at_utc": "2026-05-16T18:31:50.233953+00:00",
+  "hf_train_file": "data/v498_numeric_teacher_trace_pack/20260516T_v498_numeric_teacher/v498_numeric_teacher_trace_train.jsonl",
+  "hf_val_file": "data/v498_numeric_teacher_trace_pack/20260516T_v498_numeric_teacher/v498_numeric_teacher_trace_val.jsonl",
+  "local_report": {
+    "manifest_file": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v498_numeric_teacher_trace_pack\\20260516T_v498_numeric_teacher\\v498_numeric_teacher_trace_manifest.json",
+    "tokenization_gate_decision": "tokenization_gate_passed",
+    "tokenization_manifest_file": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v498_numeric_teacher_trace_pack\\20260516T_v498_numeric_teacher\\tokenization_gate_real\\v286_generic_tokenization_gate_manifest.json",
+    "train_file": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v498_numeric_teacher_trace_pack\\20260516T_v498_numeric_teacher\\v498_numeric_teacher_trace_train.jsonl",
+    "train_rows": 1712,
+    "train_sha256": "920b3c30b9ada9ad2685091194dcc53e717f72a9c037cafeef6e494f21511e79",
+    "val_file": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v498_numeric_teacher_trace_pack\\20260516T_v498_numeric_teacher\\v498_numeric_teacher_trace_val.jsonl",
+    "val_rows": 428,
+    "val_sha256": "68cda4162214359aaf7cda304c2a06902775b1aadb53fcadfd0edf7ff481ed80"
+  },
+  "mode": "uploaded",
+  "path_in_repo": "data/v498_numeric_teacher_trace_pack/20260516T_v498_numeric_teacher",
+  "schema_version": "kg1_v498_hf_dataset_upload_v1",
+  "upload_info": "https://huggingface.co/datasets/felipesp1983/kg1-nemotron-training/commit/c7e27fd39c598dd23cb25481f567787bdff50820",
+  "uploaded_at_utc": "2026-05-16T18:31:52.987853+00:00"
+}
