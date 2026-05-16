@@ -1448,6 +1448,46 @@ Regra preventiva:
 
 Status: bloqueado por V503/V504.
 
+### E050 - CSVs reference-only pareciam ganhos submittable
+
+Evidencia:
+
+- V505 varreu `30` CSVs locais de predicao e revalidou `22` conjuntos weak315.
+- O melhor conjunto com `raw_output` de adapter ficou em `191/315`,
+  `equation=55/155`, `bit=136/160`, `trunc=0`.
+- O melhor conjunto reference-only, `v366_integrated_predictions.csv`, chegou a
+  `222/315`, `equation=63/155`, `bit=159/160`, mas nao possui `raw_output` de
+  modelo e representa solver/postprocessor/projecao CPU.
+- O baseline historico `192/315` tinha pelo menos um overcount simbolico
+  (`4bb8c6cd`, answer `]}\!`) causado por parse com label/escape, nao por
+  resposta label-free limpa.
+- V506 comparou melhor adapter raw e melhor reference-only: existem `31`
+  targets (`23` bit, `8` equation), com `0` reference-loss risk. Eles sao
+  inventario de transferencia, nao ganho submittable.
+
+Impacto:
+
+- Parte da sensacao de "temos ganho mas o adapter nao aprende" vinha de
+  misturar duas coisas diferentes: sinal CPU reference-only e comportamento
+  adapter-only submit-safe.
+- Nenhum CSV sem `raw_output` pode justificar full eval, package ou submit.
+
+Regra preventiva:
+
+- V505 classifica `has_raw_output=false` como
+  `not_adapter_only_reference_solver_or_postprocessor`.
+- Static/pre-paid gates agora exigem `KG1_CRISIS_MODE_BACKFIRE_GUARD=1` para
+  launchers pagos, forçando revisao de F2/backfire, metrica label-free,
+  bloqueios de artefatos e FinOps antes de gastar GPU.
+- O proximo experimento precisa converter o sinal solver em comportamento do
+  adapter ou em pacote permitido; nao promover CSV reference-only.
+- O arquivo `v506_reference_gain_targets.csv` vira fonte de debug/transferencia
+  controlada; qualquer uso em treino precisa de anti-leakage, tokenization gate
+  e weak eval raw-output label-free.
+
+Status: aberto como regra permanente; nenhum novo submit-safe gain encontrado
+em V505.
+
 ## Prompt Externo
 
 Prompt consolidado para OpenRouter/outras APIs:

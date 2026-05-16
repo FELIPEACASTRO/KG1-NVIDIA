@@ -1,0 +1,39 @@
+{
+  "adapter_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v333_tong_bit_reasoner_gate\\20260513T171304Z\\v333_tong_bit_reasoner_gate_tong_bit_replace_predictions.csv",
+  "common_ids": 315,
+  "decision": {
+    "next_action": "Use v506_reference_gain_targets.csv only as a transfer-target inventory; do not promote without a new adapter raw-output weak eval that beats the gate.",
+    "status": "reference_signal_not_adapter_gain"
+  },
+  "family_status_counts": {
+    "bit_manipulation": {
+      "both_correct": 136,
+      "both_wrong": 1,
+      "reference_gain_target": 23
+    },
+    "equation_transform": {
+      "both_correct": 55,
+      "both_wrong": 92,
+      "reference_gain_target": 8
+    }
+  },
+  "gap_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v506_reference_signal_gap\\v506_reference_signal_gap_rows.csv",
+  "generated_at_utc": "2026-05-16T20:00:33.842725+00:00",
+  "reference_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v366_bit_fullbyte_ternary_op_gate\\20260514T_cpu_gate\\v366_integrated_predictions.csv",
+  "reference_gain_rule_counts": {
+    "bit_manipulation|bit_exact_global_binary_XOR||": 1,
+    "bit_manipulation||bit_exact_global_ternary_unique_prediction|": 13,
+    "bit_manipulation|||": 1,
+    "bit_manipulation|||bit_fullbyte_ternary_op_CHO": 4,
+    "bit_manipulation|||bit_fullbyte_ternary_op_MAJ3": 4,
+    "equation_transform|||": 8
+  },
+  "schema_version": "kg1_v506_reference_signal_gap_v1",
+  "status_counts": {
+    "both_correct": 191,
+    "both_wrong": 93,
+    "reference_gain_target": 31
+  },
+  "target_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v506_reference_signal_gap\\v506_reference_gain_targets.csv",
+  "v505_manifest": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v505_label_free_candidate_revalidation\\v505_label_free_candidate_revalidation_manifest.json"
+}

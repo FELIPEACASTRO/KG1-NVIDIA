@@ -15,8 +15,8 @@ executavel e somente o que esta abaixo.
 
 | Metrica | Melhor submit-safe atual | Promocao minima |
 |---|---:|---:|
-| Total weak | 192/315 | > 192/315 |
-| equation_transform | 56/155 | > 56/155, alvo inicial 60/155 |
+| Total weak adapter raw label-free | 191/315 | > 192/315 |
+| equation_transform adapter raw label-free | 55/155 | alvo inicial 60/155 |
 | bit_manipulation | 136/160 | >= 136/160 |
 | truncated | 0 | 0 |
 | Full official-like conhecido | 823/947 | > 823/947 |
@@ -29,7 +29,7 @@ Ultima evidencia operacional relevante:
 
 | Versao | Resultado | Decisao |
 |---|---:|---|
-| V291/V290 checkpoint-6 | weak 192, equation 56, bit 136, trunc 0 | baseline ativo |
+| V291/V290 checkpoint-6 | stored weak 192, equation 56, bit 136, trunc 0; V505 label-free recalcula 191, equation 55, bit 136 | baseline forense; promocao precisa metrica label-free |
 | V477 ckpt-2 | weak 192, equation 57, bit 135, trunc 0 | nao promove; ganhou equation mas perdeu bit |
 | V475 CPU solver projection | weak 196, equation 60, bit 136 | sinal CPU; ainda nao submit-safe |
 | V480/V483 linha recente | loss mexe, ACC nao sai do plateau | suspeita forte de PEFT continuity bug |
@@ -51,6 +51,8 @@ Ultima evidencia operacional relevante:
 | V499 H200 smoke | dataset V498 uploaded no HF commit `c7e27fd39c598dd23cb25481f567787bdff50820`; V478 objetivo passou; H200 rodou, mas final eval `2.8125 -> 2.8162` e answer-span inativo | bloqueado; nao weak-eval/package/submit |
 | V501 H200 answer-span | answer-span ativo: train `1712` exemplos e `15197` tokens; MoE `gate_up/down` treinaveis; `lm_head` congelado; final eval `1.9919 -> 1.9923` | bloqueado por kill-switch; nao rodar weak/full/package/submit |
 | V504 crisis root-cause audit | achou bugs reais em metrica/gates: ACC label-aware, thresholds weak antigos, weak defaults diagnosticos, full best selection, anti-leak flags ausentes, pre-paid gate sem schema SFT | corrigir gates e revalidar candidatos com extracao label-free antes de qualquer novo GPU |
+| V505 label-free revalidation | 30 CSVs varridos; 22 weak315; raw-output adapter top `191/315`, `equation=55`, `bit=136`; reference-only solver/postprocessor chega a `222/315`, mas nao e adapter-only | bloquear promocao de CSV sem `raw_output`; proximo ganho precisa converter sinal solver em comportamento do adapter ou pacote valido |
+| V506 reference signal gap | compara melhor adapter raw vs melhor reference-only: `31` targets (`23` bit, `8` equation), `0` reference-loss risk, `93` ambos errados | inventario alvo para transferencia; ainda nao e submit-safe |
 
 ## Achados Principais V484-V492
 
@@ -669,12 +671,52 @@ de ganho:
 | full eval escolhia maior `correct` antes de aplicar truncation gate | agora escolhe primeiro entre candidatos que passam correct/truncation |
 | pre-paid gate era preference-only e nao cobria V498/V501 SFT | adicionado `--dataset-schema sft` e save/eval steps configuraveis |
 | flags anti-leakage ausentes eram apenas contadas | agora bloqueiam preflight promocional |
+| launchers pagos podiam ser criados sem declarar que os guards F2/backfire/FinOps estavam ativos | `kg1_static_safety_gate.py` e `kg1_pre_paid_job_integration_gate.py` agora exigem `KG1_CRISIS_MODE_BACKFIRE_GUARD=1` |
+| CSV de solver/postprocessor podia parecer candidato promocional | V505 separa `raw_output` adapter-only de reference-only; CSV sem `raw_output` nao promove |
 
 O que ficou provado como nao raiz: hashes V498, row counts, offset masks,
 truncation do dataset, MoE `gate_up/down` treinaveis, `lm_head` congelado,
 memoria H200 e custo.
 
-Decisao operacional: V499 e V501 entram na lista de adapters bloqueados. O
-proximo passo e revalidar qualquer candidato antigo com a metrica label-free
-corrigida. Sem candidato `>192/315`, nao ha novo GPU; volta para CPU
-teacher/verifier discovery.
+Decisao operacional: V499 e V501 entram na lista de adapters bloqueados. A
+revalidacao V505 ja foi executada e nao encontrou candidato adapter-only acima
+do gate. O melhor CSV `raw_output` de adapter ficou em `191/315`, enquanto
+solvers/postprocessors reference-only chegam a `222/315` mas nao sao
+submittable. Sem novo candidato adapter-only `>192/315`, nao ha novo GPU; volta
+para CPU teacher/verifier discovery com obrigacao de converter sinal em
+comportamento LoRA ou pacote permitido.
+
+## Atualizacao V506 - Alvo Real De Transferencia
+
+Artefatos:
+
+- `artifacts/v506_reference_signal_gap/v506_reference_signal_gap_manifest.json`;
+- `artifacts/v506_reference_signal_gap/v506_reference_signal_gap_rows.csv`;
+- `artifacts/v506_reference_signal_gap/v506_reference_gain_targets.csv`.
+
+V506 comparou o melhor adapter `raw_output` label-free contra o melhor sinal
+reference-only. Resultado:
+
+| Status | Total | bit | equation |
+|---|---:|---:|---:|
+| both_correct | 191 | 136 | 55 |
+| reference_gain_target | 31 | 23 | 8 |
+| both_wrong | 93 | 1 | 92 |
+| reference_loss_risk | 0 | 0 | 0 |
+
+Quebra dos `31` targets:
+
+- `13` bit por `bit_exact_global_ternary_unique_prediction`;
+- `4` bit por `bit_fullbyte_ternary_op_CHO`;
+- `4` bit por `bit_fullbyte_ternary_op_MAJ3`;
+- `1` bit por `bit_exact_global_binary_XOR`;
+- `1` bit sem regra preenchida;
+- `8` equation sem `source_rule` preenchido no CSV reference-only, exigindo
+  inspeção/rotulagem antes de qualquer dataset sintetico.
+
+Interpretacao: existe sinal tecnico forte para subir `191 -> 222` no weak, mas
+ele ainda esta fora do comportamento adapter-only. A tarefa agora nao e "mais
+treino" generico; e converter esses `31` targets em saida do adapter sem
+quebrar os `191` atuais. Qualquer job pago precisa declarar
+`KG1_CRISIS_MODE_BACKFIRE_GUARD=1`, passar pre-paid gate, e so pode ser
+promovido apos weak eval `raw_output` label-free.

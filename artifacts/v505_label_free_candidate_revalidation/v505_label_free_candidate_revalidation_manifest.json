@@ -1,0 +1,121 @@
+{
+  "best_adapter_raw_weak315": {
+    "columns": [
+      "answer",
+      "completion_tokens",
+      "correct",
+      "correct_bool",
+      "family",
+      "finish_reason",
+      "generated_prompt",
+      "id",
+      "pred_type",
+      "prediction",
+      "prompt",
+      "prompt_sha256",
+      "prompt_tokens",
+      "raw_output",
+      "truncated",
+      "truncated_bool",
+      "type"
+    ],
+    "decision": "do_not_promote_weak315",
+    "delta_label_free_minus_stored": -1,
+    "family": {
+      "bit_manipulation": {
+        "label_free_correct": 136,
+        "stored_correct": 136,
+        "total": 160
+      },
+      "equation_transform": {
+        "label_free_correct": 55,
+        "stored_correct": 56,
+        "total": 155
+      }
+    },
+    "has_raw_output": true,
+    "label_free_correct": 191,
+    "metric_sources": {
+      "raw_output_label_free": 315
+    },
+    "name": "v333_tong_bit_reasoner_gate_tong_bit_replace_predictions",
+    "path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v333_tong_bit_reasoner_gate\\20260513T171304Z\\v333_tong_bit_reasoner_gate_tong_bit_replace_predictions.csv",
+    "prediction_changed_rows": 12,
+    "rows": 315,
+    "stored_correct": 192,
+    "stored_vs_label_free_diff_rows": 1,
+    "total": 315,
+    "truncated": 0
+  },
+  "best_reference_only_weak315": {
+    "columns": [
+      "answer",
+      "baseline_correct",
+      "baseline_prediction",
+      "correct_bool",
+      "current_correct",
+      "current_prediction",
+      "family",
+      "id",
+      "integrated_correct",
+      "prediction",
+      "prompt",
+      "prompt_sha256",
+      "truncated",
+      "truncated_bool",
+      "v343_prediction",
+      "v350_correct",
+      "v350_prediction",
+      "v350_source_rule",
+      "v357_correct",
+      "v357_prediction",
+      "v357_source_rule",
+      "v366_correct",
+      "v366_prediction",
+      "v366_source_rule"
+    ],
+    "decision": "not_adapter_only_reference_solver_or_postprocessor",
+    "delta_label_free_minus_stored": 0,
+    "family": {
+      "bit_manipulation": {
+        "label_free_correct": 159,
+        "stored_correct": 159,
+        "total": 160
+      },
+      "equation_transform": {
+        "label_free_correct": 63,
+        "stored_correct": 63,
+        "total": 155
+      }
+    },
+    "has_raw_output": false,
+    "label_free_correct": 222,
+    "metric_sources": {
+      "stored_prediction_only": 315
+    },
+    "name": "v366_integrated_predictions",
+    "path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v366_bit_fullbyte_ternary_op_gate\\20260514T_cpu_gate\\v366_integrated_predictions.csv",
+    "prediction_changed_rows": 0,
+    "rows": 315,
+    "stored_correct": 222,
+    "stored_vs_label_free_diff_rows": 0,
+    "total": 315,
+    "truncated": 0
+  },
+  "decision": {
+    "next_action": "Do not spend GPU; continue CPU teacher/verifier discovery or inspect label-free diffs only.",
+    "status": "no_label_free_candidate_above_gate"
+  },
+  "diff_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v505_label_free_candidate_revalidation\\v505_label_free_diff_rows.csv",
+  "files_scanned": 30,
+  "files_scored": 24,
+  "generated_at_utc": "2026-05-16T19:54:50.869635+00:00",
+  "output_dir": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v505_label_free_candidate_revalidation",
+  "promotable_count": 0,
+  "scan_root": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts",
+  "schema_version": "kg1_v505_label_free_candidate_revalidation_v1",
+  "summary_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v505_label_free_candidate_revalidation\\v505_label_free_revalidation_summary.csv",
+  "weak315_adapter_raw_scored": 8,
+  "weak315_reference_only_scored": 14,
+  "weak315_scored": 22
+}

@@ -101,6 +101,13 @@ def audit_launcher(args: argparse.Namespace, findings: list[Finding]) -> dict[st
     launcher = args.launcher
     text = launcher.read_text(encoding="utf-8", errors="replace")
     block_quarantined_identity(text, findings, source=str(launcher))
+    if args.require_crisis_guards:
+        require_regex(
+            text,
+            r"KG1_CRISIS_MODE_BACKFIRE_GUARD\s*(?:[\"']?\s*:\s*[\"']?(?:1|true|yes|on)|=\s*[\"']?(?:1|true|yes|on))",
+            "launcher_missing_crisis_backfire_guard",
+            findings,
+        )
     require_text(text, f'DATA_ROOT = "{args.expected_data_root}"', "launcher_data_root_mismatch", findings)
     require_text(text, f'PREF_TRAIN_SHA256 = "{args.expected_train_sha256}"', "launcher_train_sha_mismatch", findings)
     require_text(text, f'PREF_VAL_SHA256 = "{args.expected_val_sha256}"', "launcher_val_sha_mismatch", findings)
@@ -300,8 +307,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--expected-init-adapter-repo", required=True)
     parser.add_argument("--expected-init-adapter-subfolder", required=True)
     parser.add_argument("--expected-pair-score-mode", default="")
+    parser.add_argument("--allow-missing-crisis-guards", action="store_true")
     parser.add_argument("--output-json", type=Path, default=None)
-    return parser.parse_args()
+    args = parser.parse_args()
+    args.require_crisis_guards = not args.allow_missing_crisis_guards
+    return args
 
 
 def main() -> int:

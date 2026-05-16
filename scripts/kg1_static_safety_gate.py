@@ -53,6 +53,7 @@ CRITICAL_SNIPPETS = {
         "target template check": "Final answer: \\\\boxed{",
         "blocked dataset marker gate": "BLOCKED_DATASET_MARKERS",
         "blocked adapter marker gate": "BLOCKED_ADAPTER_MARKERS",
+        "crisis backfire guard": "launcher_missing_crisis_backfire_guard",
         "audit manifest gate": "hf_gpu_allowed_for_same_objective",
         "system prompt alignment gate": "launcher_system_prompt_not_final_answer_only",
         "h200 timeout gate": "launcher_timeout_not_one_hour",
@@ -109,6 +110,11 @@ CRITICAL_SNIPPETS = {
         "submit-safe prediction column": "submit_safe_label_free_prediction",
         "label-aware debug column": "label_aware_debug_prediction",
         "prediction metric mode": "\"prediction_metric_mode\": \"submit_safe_label_free\"",
+    },
+    "scripts/audit_v505_label_free_candidate_revalidation.py": {
+        "raw output label-free scoring": "extract_final_answer(raw_output)",
+        "reference only blocked": "not_adapter_only_reference_solver_or_postprocessor",
+        "adapter raw manifest field": "weak315_adapter_raw_scored",
     },
     "scripts/hf_job_weak_eval_v245.py": {
         "promotion equation floor": "KG1_WEAK_PROMOTE_EQUATION_MIN\", 60",
@@ -214,6 +220,10 @@ MANUAL_INIT_ADAPTER_LOAD_RE = re.compile(
 )
 PRETOKENIZED_VAL_COPY_ONLY_TRUE_RE = re.compile(
     r"PRETOKENIZED_VAL_COPY_ONLY\s*(?:[\"']?\s*:\s*[\"']?(?:1|true|yes|on)|=\s*[\"']?(?:1|true|yes|on))",
+    re.IGNORECASE,
+)
+CRISIS_BACKFIRE_GUARD_RE = re.compile(
+    r"KG1_CRISIS_MODE_BACKFIRE_GUARD\s*(?:[\"']?\s*:\s*[\"']?(?:1|true|yes|on)|=\s*[\"']?(?:1|true|yes|on))",
     re.IGNORECASE,
 )
 WEAK_EVAL_DIAGNOSTIC_ONLY_RE = re.compile(
@@ -501,6 +511,32 @@ def audit_text(path: Path, text: str) -> list[Finding]:
                 "pretokenized_val_copy_only_enabled",
                 "PRETOKENIZED_VAL_COPY_ONLY=1 reuses train rows as validation and makes eval_loss non-independent. "
                 "It is diagnostic-only and must not appear in promotional HF jobs/notebooks.",
+            )
+        )
+
+    if (
+        job_or_notebook
+        and rel not in {
+            "scripts/hf_job_train_v90.py",
+            "scripts/hf_job_weak_eval_v245.py",
+            "scripts/hf_job_weak_eval_v277_external_adapters.py",
+            "scripts/hf_job_full_eval_v276.py",
+            "scripts/hf_job_official_like_eval_gate_v284.py",
+            "scripts/hf_job_preflight_gate.py",
+        }
+        and not is_archived_fail_closed(text)
+        and ("api.run_job(" in text or "HfApi(" in text)
+        and ("FLAVOR = \"h200\"" in text or "FLAVOR = \"a100\"" in text or "FLAVOR = \"a10g" in text)
+        and not CRISIS_BACKFIRE_GUARD_RE.search(text)
+    ):
+        findings.append(
+            Finding(
+                rel,
+                "error",
+                "missing_crisis_mode_backfire_guard",
+                "Paid HF/Kaggle launchers must set KG1_CRISIS_MODE_BACKFIRE_GUARD=1. "
+                "This records that F2/backfire/silent-bug checks, blocked adapter/dataset lists, "
+                "label-free metric gates, and FinOps kill-switches are intentional for this run.",
             )
         )
 
@@ -1179,6 +1215,8 @@ def run_self_test() -> int:
         weak_eval_official.write_text(
             "from huggingface_hub import HfApi\n"
             "COMMAND_SCRIPT='python3 scripts/hf_job_weak_eval_v245.py'\n"
+            "FLAVOR = \"h200\"\n"
+            "KG1_CRISIS_MODE_BACKFIRE_GUARD=1\n"
             "job_env={"
             "'KG1_DISABLE_THINKING':'0',"
             "'KG1_NO_PROMPT_SUFFIX':'0',"
@@ -1192,6 +1230,32 @@ def run_self_test() -> int:
         weak_official_findings = audit_text(weak_eval_official, weak_eval_official.read_text(encoding="utf-8"))
         if "weak_eval_not_official_like" in {item.code for item in weak_official_findings}:
             print(json.dumps([item.__dict__ for item in weak_official_findings], indent=2), flush=True)
+            return 1
+        missing_crisis_guard = tmp / "launch_missing_crisis_guard.py"
+        missing_crisis_guard.write_text(
+            "from huggingface_hub import HfApi\n"
+            "FLAVOR = \"h200\"\n"
+            "HfApi().run_job(command=['true'])\n",
+            encoding="utf-8",
+        )
+        missing_crisis_findings = audit_text(
+            missing_crisis_guard,
+            missing_crisis_guard.read_text(encoding="utf-8"),
+        )
+        if "missing_crisis_mode_backfire_guard" not in {item.code for item in missing_crisis_findings}:
+            print("missing crisis-mode backfire guard self-test finding", flush=True)
+            return 1
+        with_crisis_guard = tmp / "launch_with_crisis_guard.py"
+        with_crisis_guard.write_text(
+            "from huggingface_hub import HfApi\n"
+            "FLAVOR = \"h200\"\n"
+            "KG1_CRISIS_MODE_BACKFIRE_GUARD=1\n"
+            "HfApi().run_job(command=['true'])\n",
+            encoding="utf-8",
+        )
+        with_crisis_findings = audit_text(with_crisis_guard, with_crisis_guard.read_text(encoding="utf-8"))
+        if "missing_crisis_mode_backfire_guard" in {item.code for item in with_crisis_findings}:
+            print("false positive crisis-mode backfire guard self-test finding", flush=True)
             return 1
         archived_quarantine = tmp / "launch_archived_quarantine.py"
         archived_quarantine.write_text(
