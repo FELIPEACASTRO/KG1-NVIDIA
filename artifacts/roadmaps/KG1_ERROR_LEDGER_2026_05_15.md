@@ -46,7 +46,9 @@ Regra preventiva:
 - Proxima etapa obrigatoria: gate CPU round-trip V485 antes de qualquer novo
   job pago.
 
-Status: mitigado por gate; requer V485 para liberar GPU.
+Status: mitigado por gate; V485 seed metadata gate aprovado para V290
+checkpoint-6. Proximo job ainda precisa passar o V485 embutido no launcher
+antes de qualquer treino.
 
 ### E001 - V435E misto contaminou preference
 

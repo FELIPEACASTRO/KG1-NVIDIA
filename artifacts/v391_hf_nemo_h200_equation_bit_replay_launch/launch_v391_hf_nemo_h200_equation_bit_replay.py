@@ -98,7 +98,7 @@ git checkout --detach "$KG1_EXPECTED_COMMIT"
 observed=$(git rev-parse HEAD)
 echo "repo_commit=$observed"
 if [ "$observed" != "$KG1_EXPECTED_COMMIT" ]; then echo "commit mismatch: expected=$KG1_EXPECTED_COMMIT observed=$observed" >&2; exit 12; fi
-$PYBIN -m py_compile scripts/hf_job_train_v90.py scripts/hf_job_preflight_gate.py
+$PYBIN -m py_compile scripts/hf_job_train_v90.py scripts/hf_job_preflight_gate.py scripts/run_v485_peft_roundtrip_gate.py
 export HF_HUB_ENABLE_HF_TRANSFER=1
 export TOKENIZERS_PARALLELISM=false
 export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
@@ -168,6 +168,14 @@ export TORCH_FLOAT32_MATMUL_PRECISION='high'
 export GRADIENT_CHECKPOINTING=1
 $PYBIN scripts/hf_job_preflight_gate.py --phase preinstall
 $PYBIN scripts/hf_job_preflight_gate.py --phase artifacts
+$PYBIN scripts/run_v485_peft_roundtrip_gate.py \
+  --adapter-repo "$KG1_INIT_ADAPTER_REPO" \
+  --adapter-subfolder "$KG1_INIT_ADAPTER_SUBFOLDER" \
+  --expected-r 32 \
+  --expected-alpha 32 \
+  --expected-target-modules 'down_proj,in_proj,k_proj,lm_head,o_proj,out_proj,q_proj,up_proj,v_proj' \
+  --expected-target-parameters "$KG1_LORA_TARGET_PARAMETERS" \
+  --output-json /tmp/kg1_v485_peft_roundtrip_gate_manifest.json
 $PYBIN - <<'PY'
 import os
 import subprocess

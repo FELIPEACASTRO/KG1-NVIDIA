@@ -33,6 +33,7 @@ Ultima evidencia operacional relevante:
 | V477 ckpt-2 | weak 192, equation 57, bit 135, trunc 0 | nao promove; ganhou equation mas perdeu bit |
 | V475 CPU solver projection | weak 196, equation 60, bit 136 | sinal CPU; ainda nao submit-safe |
 | V480/V483 linha recente | loss mexe, ACC nao sai do plateau | suspeita forte de PEFT continuity bug |
+| V485 seed PEFT metadata gate | `hf_gpu_allowed=true`; 12011 tensors; target params 5934/5934; `modules_to_save=[]` | seed V290/V291 estruturalmente liberado |
 
 ## Achado Principal V484
 
@@ -131,7 +132,9 @@ Promove para P2 quando: CPU preflight e static gate passam sem excecao.
 
 ### P2 - CPU Round-Trip Gate V484/V485
 
-Objetivo: provar equivalencia antes de qualquer GPU.
+Status: implementado e aprovado no adapter seed V290 checkpoint-6.
+
+Objetivo: provar equivalencia estrutural antes de qualquer GPU.
 
 Implementar/rodar um gate CPU que:
 
@@ -145,6 +148,34 @@ Implementar/rodar um gate CPU que:
 - roda um micro forward/backward em batch dummy e confirma gradiente nos
   parametros LoRA esperados;
 - emite manifesto com `hf_gpu_allowed=true` somente se tudo bater.
+
+Implementacao atual:
+
+- usa metadados Hub/safetensors para evitar download multi-GB;
+- valida `target_modules`, `target_parameters`, `modules_to_save`, keys,
+  shapes, dtypes, contagens LoRA e fingerprints;
+- aceita o alias estrutural real do Nemotron em que
+  `mlp.experts.gate_up_proj` aparece como LoRA em
+  `mixer.experts.<id>.up_proj`;
+- aceita apenas o `lm_head.base_layer.weight` conhecido do seed como tensor
+  nao-LoRA fingerprintado; qualquer `modules_to_save` segue bloqueado;
+- foi conectado ao launcher V391 antes do download de dataset e antes de
+  qualquer treino pago.
+
+Resultado V485 seed:
+
+| Campo | Valor |
+|---|---:|
+| resolved revision | `75909c9b40d8b7fa846d379d9d764fa33daeb9e2` |
+| adapter_model bytes | 4259063856 |
+| tensor_count | 12011 |
+| target_parameter_lora_tensors gate_up | 5934 |
+| target_parameter_lora_tensors down | 5934 |
+| modules_to_save | `[]` |
+| allowed non-LoRA key | `base_model.model.lm_head.base_layer.weight` |
+| hf_gpu_allowed | `true` |
+
+Manifest: `artifacts/v485_peft_roundtrip_gate/v485_seed_adapter_manifest.json`.
 
 Promove para P3 quando: round-trip manifesto aprovado.
 
