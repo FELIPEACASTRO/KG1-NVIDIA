@@ -1,0 +1,9 @@
+family,failure_class,rows,misses
+bit_manipulation,answer_literal_nonfinal_or_ambiguous,11,11
+bit_manipulation,boxed_or_generation_wrong,14,14
+bit_manipulation,correct,134,0
+bit_manipulation,truncated,1,1
+equation_transform,answer_literal_nonfinal_or_ambiguous,19,19
+equation_transform,boxed_or_generation_wrong,79,79
+equation_transform,correct,56,0
+equation_transform,no_boxed,1,1

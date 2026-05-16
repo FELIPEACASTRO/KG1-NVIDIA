@@ -1293,3 +1293,52 @@ de promocao permanece:
 Se checkpoint-4 do novo treino V468 nao passar nesses criterios, cancelar
 imediatamente por FinOps e voltar para mining CPU de novas classes reais, sem
 treinar mais epochs sobre o mesmo sinal.
+
+## Atualizacao V471 - Crisis Triple-Check
+
+Status real apos V470:
+
+| Estado | Total weak | equation_transform | bit_manipulation | truncated | Decisao |
+|---|---:|---:|---:|---:|---|
+| Melhor submit-safe travado | `192/315` | `56/155` | `136/160` | `0` | manter |
+| V470, checkpoint-4 de V469 | `190/315` | `56/155` | `134/160` | `1` | rejeitar |
+
+Conclusao: a rota V468 -> V469 -> V470 nao transfere ganho para ACC. Mesmo com
+dataset corrigido e loss aparentemente saudavel, o weak gate mostrou regressao
+de bit e truncation. Esta rota esta encerrada para GPU.
+
+Correcoes de gate implementadas em V471:
+
+- `scripts/evaluate_lora_adapter.py` e `scripts/evaluate_lora_adapters_batch.py`
+  agora falham se o CSV de solucao nao tiver `answer` ou se a quantidade de
+  outputs vLLM divergir da quantidade de prompts.
+- `scripts/hf_job_train_v90.py` agora falha se truncation remover qualquer token
+  supervisionado da completion.
+- `scripts/run_v286_generic_tokenization_gate.py` agora exige que o texto do
+  assistant seja extraivel por `extract_final_answer` e verifique contra
+  `answer`; isso bloqueia simbolos/braces/backslashes que parecam validos, mas
+  que o metric path nao entenderia.
+- `scripts/build_v447_v446_trace_dataset.py` agora so preserva/apende final
+  answer se o resultado final for metricamente extraivel e correto.
+- `scripts/hf_job_weak_eval_v245.py` agora tem gate de promocao executavel:
+  `total>=193`, `equation>=57`, `bit>=136`, `truncated=0`.
+- `scripts/notebook_release_gate.py` foi apertado para bloquear notebooks com
+  `WEAK_BIT_MIN_FOR_FULL = 133` ou `WEAK_MAX_TRUNC_FOR_FULL = 3`; o piso atual e
+  bit `136` e truncation `0`.
+
+Evidencias:
+
+- `artifacts/v471_crisis_solution_audit/V471_CRISIS_AUDIT_RESULT.md`;
+- `artifacts/v471_crisis_solution_audit/v470_metric_integrity/v470_metric_integrity_manifest.json`;
+- `artifacts/v471_crisis_solution_audit/v470_parse_audit/v470_parse_audit_manifest.json`;
+- `artifacts/v470_hf_h200_v469_checkpoint4_weak_eval_launch/V470_TERMINAL_RESULT.md`.
+
+Proximo passo obrigatorio:
+
+1. parar treino amplo e qualquer repeat da rota V468/V469;
+2. voltar para CPU mining dos `99` misses de `equation_transform`;
+3. so liberar HF GPU quando um gate CPU encontrar pelo menos `+4` equation,
+   `0` perdas, `bit>=136`, e todos os simbolos finais passarem pelo mesmo
+   `extract_final_answer`/`verify_answer` usado no weak eval;
+4. em qualquer smoke futuro, o primeiro checkpoint precisa passar o gate de
+   promocao. Caso contrario, cancelar por FinOps.

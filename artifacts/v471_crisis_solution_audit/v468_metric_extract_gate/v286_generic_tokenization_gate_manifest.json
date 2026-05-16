@@ -1,0 +1,164 @@
+{
+  "blocked_actions": [
+    "full_eval",
+    "package",
+    "kaggle_submit"
+  ],
+  "config": {
+    "assistant_final_answer_mode": "boxed_suffix",
+    "max_length": 8192,
+    "max_prompt_truncation_rate": 0.0,
+    "min_train_rows": 558,
+    "min_val_rows": 138,
+    "require_offset_mask": true
+  },
+  "dataset_manifest_json": "artifacts\\v468_v464_symbol_fix_dataset\\20260515T_cpu_gate\\v468_v464_symbol_fix_dataset_manifest.json",
+  "dataset_manifest_sha256": "d39d32674db53c794b7f5498bae00ab458c8906975a3d8a562011603b1f287b1",
+  "decision": {
+    "next_action": "Only consider a tiny HF smoke train if roadmap risk/budget gates approve it.",
+    "reason": "train_rows=558; val_rows=138; train_token_max=671; val_token_max=820; completion_truncation=0",
+    "status": "tokenization_gate_passed"
+  },
+  "generated_at_utc": "2026-05-16T01:10:44.847606+00:00",
+  "model_name": "toy",
+  "model_revision": "",
+  "outputs": {
+    "manifest_json": "artifacts\\v471_crisis_solution_audit\\v468_metric_extract_gate\\v286_generic_tokenization_gate_manifest.json"
+  },
+  "schema_version": "kg1_v286_generic_tokenization_gate_v1",
+  "tokenization": {
+    "train": {
+      "completion_tokens_dropped": 0,
+      "fallback_masks": 0,
+      "family_summary": {
+        "bit_manipulation": {
+          "loss_token_max": 114,
+          "loss_token_min": 114,
+          "loss_token_p50": 114,
+          "rows": 512,
+          "token_max": 671,
+          "token_p50": 629,
+          "token_p90": 650,
+          "token_p99": 671
+        },
+        "equation_transform": {
+          "loss_token_max": 223,
+          "loss_token_min": 180,
+          "loss_token_p50": 209,
+          "rows": 46,
+          "token_max": 568,
+          "token_p50": 565,
+          "token_p90": 568,
+          "token_p99": 568
+        }
+      },
+      "loss_token_max": 223,
+      "loss_token_min": 114,
+      "loss_token_p50": 114,
+      "offset_masks": 558,
+      "prompt_truncated": 0,
+      "prompt_truncation_rate": 0.0,
+      "rows": 558,
+      "token_max": 671,
+      "token_mean": 627.686,
+      "token_min": 538,
+      "token_p50": 629,
+      "token_p90": 650,
+      "token_p99": 671
+    },
+    "validation": {
+      "completion_tokens_dropped": 0,
+      "fallback_masks": 0,
+      "family_summary": {
+        "bit_manipulation": {
+          "loss_token_max": 114,
+          "loss_token_min": 114,
+          "loss_token_p50": 114,
+          "rows": 128,
+          "token_max": 820,
+          "token_p50": 671,
+          "token_p90": 800,
+          "token_p99": 820
+        },
+        "equation_transform": {
+          "loss_token_max": 223,
+          "loss_token_min": 183,
+          "loss_token_p50": 204,
+          "rows": 10,
+          "token_max": 568,
+          "token_p50": 560,
+          "token_p90": 568,
+          "token_p99": 568
+        }
+      },
+      "loss_token_max": 223,
+      "loss_token_min": 114,
+      "loss_token_p50": 114,
+      "offset_masks": 138,
+      "prompt_truncated": 0,
+      "prompt_truncation_rate": 0.0,
+      "rows": 138,
+      "token_max": 820,
+      "token_mean": 694.065,
+      "token_min": 541,
+      "token_p50": 650,
+      "token_p90": 799,
+      "token_p99": 820
+    }
+  },
+  "tokenizer_info": {
+    "class": "ToyTokenizer",
+    "eos_token": "<eos>",
+    "is_fast": true,
+    "pad_token": null,
+    "toy": true
+  },
+  "validation": {
+    "train": {
+      "family_counts": {
+        "bit_manipulation": 512,
+        "equation_transform": 46
+      },
+      "prompt_answer_hash_count": 558,
+      "prompt_hash_count": 558,
+      "rows": 558,
+      "sha256_expected": "6f04f07e0406cfab4eb599b868055d2abc0c043a8dde2eba4fb7f76cdc7f3cb8",
+      "source_counts": {
+        "v217_bit_replay_guardrail": 512,
+        "v468_v464_symbol_fix_dataset": 46
+      },
+      "subcategory_counts": {
+        "bit_guardrail_replay": 512,
+        "v274_guarded_numeric_add_direct_over_model_add_variant": 14,
+        "v274_guarded_numeric_colon_absdiff_restore_trailing_zero": 13,
+        "v274_guarded_numeric_minus_direct_negative_restore_sign": 6,
+        "v274_guarded_numeric_minus_signed_opposite_sign_guarded": 13
+      },
+      "unique_ids": 558
+    },
+    "train_val_prompt_answer_overlap": 0,
+    "train_val_prompt_overlap": 0,
+    "validation": {
+      "family_counts": {
+        "bit_manipulation": 128,
+        "equation_transform": 10
+      },
+      "prompt_answer_hash_count": 138,
+      "prompt_hash_count": 138,
+      "rows": 138,
+      "sha256_expected": "b99c6d57f31636221a045dcfe108fbf2c908bffe8db26cb207b9f3de871da162",
+      "source_counts": {
+        "v217_bit_replay_guardrail": 128,
+        "v468_v464_symbol_fix_dataset": 10
+      },
+      "subcategory_counts": {
+        "bit_guardrail_replay": 128,
+        "v274_guarded_numeric_add_direct_over_model_add_variant": 2,
+        "v274_guarded_numeric_colon_absdiff_restore_trailing_zero": 3,
+        "v274_guarded_numeric_minus_direct_negative_restore_sign": 2,
+        "v274_guarded_numeric_minus_signed_opposite_sign_guarded": 3
+      },
+      "unique_ids": 138
+    }
+  }
+}

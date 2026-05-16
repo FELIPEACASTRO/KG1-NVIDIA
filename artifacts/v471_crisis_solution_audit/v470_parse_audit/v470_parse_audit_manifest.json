@@ -1,0 +1,52 @@
+{
+  "baseline_gate": {
+    "bit_manipulation": 136,
+    "equation_transform": 56,
+    "total": 192,
+    "truncated": 0
+  },
+  "current": {
+    "bit_manipulation_correct": 134,
+    "changed_predictions": 0,
+    "correct": 190,
+    "equation_transform_correct": 56,
+    "gains_vs_current": 0,
+    "losses_vs_current": 0,
+    "net_vs_current": 0,
+    "no_loss": true,
+    "promotes": false,
+    "rows": 315,
+    "strategy": "current_prediction",
+    "truncated": 1
+  },
+  "decision": {
+    "decision": "no_parser_or_extractor_gain",
+    "hf_gpu_allowed": false,
+    "reason": "No deterministic parser strategy beats the locked submit-safe gate."
+  },
+  "generated_at_utc": "2026-05-16T00:54:47.086826+00:00",
+  "inputs": {
+    "predictions_csv": "C:\\Users\\davis\\AppData\\Local\\Temp\\kg1_v470_download\\evals\\v470-h200-v221contract-v469-ckpt4-20260516T003443Z\\eval\\v469_symbol_fix_checkpoint_4_v221_contract\\v470_hf_weak_v469_symbol_fix_checkpoint_4_v221_contract_predictions.csv",
+    "predictions_csv_sha256": "0a878369a0fd049f7867cc8e219af6ed274a4bb6f9097d4c011284e450685287"
+  },
+  "label": "v470_parse_audit",
+  "outputs": {
+    "detail_csv": "omitted_from_repo_large_raw_output_artifact",
+    "detail_sha256": "",
+    "failure_summary_csv": "artifacts\\v471_crisis_solution_audit\\v470_parse_audit\\v470_parse_audit_failure_summary.csv",
+    "failure_summary_sha256": "9b7eaafd054d542ebfd7ffdbdc4293660efc784566a486fc2b531d48b4486806",
+    "family_summary_csv": "artifacts\\v471_crisis_solution_audit\\v470_parse_audit\\v470_parse_audit_family_summary.csv",
+    "family_summary_sha256": "658f879cfd7b7eabd03630f74167c7f521fd4047eab13afe9837705776a4086e",
+    "manifest_json": "artifacts\\v471_crisis_solution_audit\\v470_parse_audit\\v470_parse_audit_manifest.json",
+    "strategy_scores_csv": "artifacts\\v471_crisis_solution_audit\\v470_parse_audit\\v470_parse_audit_strategy_scores.csv",
+    "strategy_scores_sha256": "d3abc7f85dd4b2cd352ccc0ce27662c2870c9284ec7bb1ec55ccfa5feccd982d"
+  },
+  "promotable_strategies": [],
+  "promotable_strategy_count": 0,
+  "schema_version": "kg1_v445_prediction_parse_audit_v1",
+  "source_policy": {
+    "adapter_only_submit_safe": false,
+    "purpose": "Audit parser/extractor failure classes only.",
+    "weak_full_used_for_training": false
+  }
+}

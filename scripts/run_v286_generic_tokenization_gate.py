@@ -25,7 +25,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
-from src.competition_utils import verify_answer  # noqa: E402
+from src.competition_utils import extract_final_answer, verify_answer  # noqa: E402
 
 
 DEFAULT_MODEL_NAME = "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16"
@@ -150,6 +150,10 @@ def validate_rows(
             continue
         if assistant_final_answer_mode not in {"exact", "suffix", "boxed_exact", "boxed_suffix", "boxed_only"}:
             raise RuntimeError(f"unknown assistant_final_answer_mode={assistant_final_answer_mode!r}")
+        extracted_answer = extract_final_answer(assistant_content)
+        if not verify_answer(answer, extracted_answer):
+            bad_rows.append(rid)
+            continue
         if metadata.get("weak_gate_rows_used_for_training") is not False:
             bad_rows.append(rid)
         rejected = str(metadata.get("rejected_candidate", "")).strip()
@@ -668,6 +672,131 @@ def self_test() -> int:
         )
         boxed_manifest_out = run(boxed_args)
         assert boxed_manifest_out["decision"]["status"] == "tokenization_gate_passed"
+
+        symbolic_boxed_row = {
+            **boxed_row,
+            "id": "symbolic_boxed_trace",
+            "prompt": "Symbolic boxed trace question",
+            "answer": "a{b}\\c",
+            "family": "equation_transform",
+            "subcategory": "toy_symbolic_boxed_trace",
+            "messages": [
+                {"role": "system", "content": "system"},
+                {"role": "user", "content": "Symbolic boxed trace question"},
+                {"role": "assistant", "content": r"Reason with symbols." + "\n" + r"Final answer: \boxed{a{b}\c}"},
+            ],
+        }
+        symbolic_boxed_train = tmp / "symbolic_boxed_train.jsonl"
+        symbolic_boxed_val = tmp / "symbolic_boxed_val.jsonl"
+        symbolic_boxed_train.write_text(json.dumps(symbolic_boxed_row, sort_keys=True) + "\n", encoding="utf-8")
+        symbolic_boxed_val.write_text(
+            json.dumps(
+                {
+                    **symbolic_boxed_row,
+                    "id": "symbolic_boxed_trace_val",
+                    "prompt": "Symbolic boxed validation question",
+                    "messages": [
+                        {"role": "system", "content": "system"},
+                        {"role": "user", "content": "Symbolic boxed validation question"},
+                        {"role": "assistant", "content": r"Reason with validation symbols." + "\n" + r"Final answer: \boxed{a{b}\c}"},
+                    ],
+                },
+                sort_keys=True,
+            )
+            + "\n",
+            encoding="utf-8",
+        )
+        symbolic_boxed_manifest = tmp / "symbolic_boxed_dataset_manifest.json"
+        write_json(
+            symbolic_boxed_manifest,
+            {
+                "outputs": {
+                    "train_jsonl": str(symbolic_boxed_train),
+                    "train_sha256": sha256_file(symbolic_boxed_train),
+                    "val_jsonl": str(symbolic_boxed_val),
+                    "val_sha256": sha256_file(symbolic_boxed_val),
+                }
+            },
+        )
+        symbolic_boxed_args = argparse.Namespace(
+            dataset_manifest_json=symbolic_boxed_manifest,
+            output_dir=tmp / "symbolic_boxed_out",
+            model_name="toy",
+            model_revision="",
+            max_length=2048,
+            max_prompt_truncation_rate=0.0,
+            require_offset_mask=True,
+            min_train_rows=1,
+            min_val_rows=1,
+            use_toy_tokenizer=True,
+            assistant_final_answer_mode="boxed_suffix",
+        )
+        symbolic_boxed_manifest_out = run(symbolic_boxed_args)
+        assert symbolic_boxed_manifest_out["decision"]["status"] == "tokenization_gate_passed"
+
+        escaped_symbolic_bad_row = {
+            **symbolic_boxed_row,
+            "id": "escaped_symbolic_bad",
+            "messages": [
+                {"role": "system", "content": "system"},
+                {"role": "user", "content": "Symbolic boxed trace question"},
+                {"role": "assistant", "content": r"Reason with escaped symbols." + "\n" + r"Final answer: \boxed{a\{b\}\\c}"},
+            ],
+        }
+        escaped_symbolic_bad_train = tmp / "escaped_symbolic_bad_train.jsonl"
+        escaped_symbolic_bad_val = tmp / "escaped_symbolic_bad_val.jsonl"
+        escaped_symbolic_bad_train.write_text(
+            json.dumps(escaped_symbolic_bad_row, sort_keys=True) + "\n",
+            encoding="utf-8",
+        )
+        escaped_symbolic_bad_val.write_text(
+            json.dumps(
+                {
+                    **escaped_symbolic_bad_row,
+                    "id": "escaped_symbolic_bad_val",
+                    "prompt": "Escaped symbolic boxed validation question",
+                    "messages": [
+                        {"role": "system", "content": "system"},
+                        {"role": "user", "content": "Escaped symbolic boxed validation question"},
+                        {"role": "assistant", "content": r"Reason with escaped validation symbols." + "\n" + r"Final answer: \boxed{a\{b\}\\c}"},
+                    ],
+                },
+                sort_keys=True,
+            )
+            + "\n",
+            encoding="utf-8",
+        )
+        escaped_symbolic_bad_manifest = tmp / "escaped_symbolic_bad_dataset_manifest.json"
+        write_json(
+            escaped_symbolic_bad_manifest,
+            {
+                "outputs": {
+                    "train_jsonl": str(escaped_symbolic_bad_train),
+                    "train_sha256": sha256_file(escaped_symbolic_bad_train),
+                    "val_jsonl": str(escaped_symbolic_bad_val),
+                    "val_sha256": sha256_file(escaped_symbolic_bad_val),
+                }
+            },
+        )
+        escaped_symbolic_bad_args = argparse.Namespace(
+            dataset_manifest_json=escaped_symbolic_bad_manifest,
+            output_dir=tmp / "escaped_symbolic_bad_out",
+            model_name="toy",
+            model_revision="",
+            max_length=2048,
+            max_prompt_truncation_rate=0.0,
+            require_offset_mask=True,
+            min_train_rows=1,
+            min_val_rows=1,
+            use_toy_tokenizer=True,
+            assistant_final_answer_mode="boxed_suffix",
+        )
+        try:
+            run(escaped_symbolic_bad_args)
+        except RuntimeError as exc:
+            assert "bad rows" in str(exc)
+        else:
+            raise AssertionError("metric-inextractable escaped symbolic boxed answer must fail")
 
         bad_row = {
             **boxed_row,

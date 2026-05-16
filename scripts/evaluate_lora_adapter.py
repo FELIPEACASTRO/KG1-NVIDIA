@@ -274,6 +274,10 @@ def evaluate_adapter(
     if id_col != "id":
         solution = solution.rename(columns={id_col: "id"})
     solution["id"] = solution["id"].astype(str)
+    if "answer" not in solution.columns:
+        raise RuntimeError(
+            "solution CSV is missing the answer column; refusing to emit an all-false accuracy report."
+        )
 
     print("========================================================================")
     print("KG1 official-like adapter evaluation")
@@ -335,6 +339,8 @@ def evaluate_adapter(
     gen_start = time.time()
     outputs = llm.generate(rendered, sampling_params=sampling_params, lora_request=lora_request)
     gen_elapsed = time.time() - gen_start
+    if len(outputs) != len(rendered):
+        raise RuntimeError(f"vLLM output count mismatch: outputs={len(outputs)} prompts={len(rendered)}")
     print(f"generation_elapsed_s = {gen_elapsed:.1f}")
 
     rows: list[dict[str, Any]] = []
@@ -368,10 +374,9 @@ def evaluate_adapter(
     pred = apply_prediction_postprocessor(pred, prediction_postprocessor)
 
     merged = prepare_merged_predictions(solution, pred)
-    if "answer" in merged.columns:
-        merged["correct"] = merged.apply(lambda r: verify_answer(r["answer"], r["prediction"]), axis=1)
-    else:
-        merged["correct"] = False
+    if "answer" not in merged.columns:
+        raise RuntimeError("merged predictions are missing answer column after join")
+    merged["correct"] = merged.apply(lambda r: verify_answer(r["answer"], r["prediction"]), axis=1)
     merged["truncated"] = merged["finish_reason"].fillna("").astype(str).eq("length")
 
     total_tokens = int(merged["completion_tokens"].fillna(0).sum())
@@ -458,6 +463,10 @@ def main() -> int:
     solution = pd.read_csv(args.solution_csv)
     if args.limit > 0:
         solution = solution.head(args.limit).copy()
+    if "answer" not in solution.columns:
+        raise RuntimeError(
+            "solution CSV is missing the answer column; refusing to emit an all-false accuracy report."
+        )
     questions = pd.read_csv(args.questions_csv or args.solution_csv)
     if args.limit > 0:
         ids = set(solution[row_id_column(solution)].astype(str))

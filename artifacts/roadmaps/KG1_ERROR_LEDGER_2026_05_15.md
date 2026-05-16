@@ -540,6 +540,102 @@ Regra preventiva:
 Status: corrigido em V468/V469. V468 tem `0/56` contradicoes, passou token gate
 real, foi reenviado ao HF e e a unica rota liberada para novo smoke.
 
+### E017 - Evaluator podia gerar accuracy falso quando `answer` estava ausente
+
+Evidencia:
+
+- A auditoria de crise identificou que `evaluate_lora_adapter.py` e
+  `evaluate_lora_adapters_batch.py` aceitavam CSV de solucao sem coluna
+  `answer`.
+- Nesse caso, o fluxo podia preencher `correct=False` e produzir
+  `accuracy=0.0000`, que parece resultado de modelo mas e erro de entrada.
+
+Impacto:
+
+- Um job/notebook poderia parecer ter ACC horrivel por modelo, quando na verdade
+  a avaliacao estava sem gabarito.
+- Isso afeta diretamente decisoes de FinOps, checkpoint e roadmap.
+
+Regra preventiva:
+
+- Qualquer eval weak/full/local precisa falhar cedo se `answer` nao existir no
+  CSV de solucao ou no merge final.
+- O avaliador tambem precisa falhar se `len(outputs) != len(prompts)`.
+
+Status: corrigido em `scripts/evaluate_lora_adapter.py` e
+`scripts/evaluate_lora_adapters_batch.py`.
+
+### E018 - Truncation podia remover tokens supervisionados
+
+Evidencia:
+
+- `hf_job_train_v90.py` fazia left truncation quando `len(full_ids) >
+  MAX_LENGTH`.
+- Antes do V471, o job contava truncation/prompt truncation, mas nao bloqueava
+  explicitamente o caso em que o overflow cortava tokens com `loss_mask > 0`.
+
+Impacto:
+
+- O treino poderia otimizar loss sobre completion amputada.
+- Isso ajuda a explicar situacoes em que loss cai, mas ACC de familia nao sobe.
+
+Regra preventiva:
+
+- Se qualquer token supervisionado seria removido por truncation, o treino deve
+  abortar antes de GPU.
+
+Status: corrigido em `scripts/hf_job_train_v90.py`.
+
+### E019 - Weak promotion gate nao era bloqueante no job de weak eval
+
+Evidencia:
+
+- V470 avaliou checkpoint ruim e o launch manifest original ficou com status
+  operacional `RUNNING`, exigindo auditoria manual posterior para registrar
+  rejeicao.
+- O resultado terminal foi `190/315`, `equation=56`, `bit=134`,
+  `truncated=1`, abaixo do piso submit-safe.
+
+Impacto:
+
+- Jobs ruins podiam terminar como execucao tecnica bem-sucedida, sem quebrar a
+  pipeline.
+- Isso aumenta risco de gastar GPU em rotas que ja falharam no primeiro
+  checkpoint.
+
+Regra preventiva:
+
+- Weak eval precisa registrar e, quando configurado, impor gate:
+  `total>=193`, `equation>=57`, `bit>=136`, `truncated=0`.
+
+Status: corrigido em `scripts/hf_job_weak_eval_v245.py`; launcher V470 novo ja
+define `KG1_ENFORCE_WEAK_PROMOTION_GATE=1`.
+
+### E020 - Resposta simbolica podia parecer boxed, mas nao ser extraivel pelo metric path
+
+Evidencia:
+
+- Datasets com braces/backslashes podem passar por verificacao visual de
+  `\boxed{...}` e ainda falhar se `extract_final_answer` nao recuperar o mesmo
+  valor.
+- V447 foi auditado e os arquivos existentes verificam corretamente, mas a
+  lacuna existia no gate generico.
+
+Impacto:
+
+- Datasets poderiam treinar a forma textual errada; loss cairia sem melhorar
+  ACC.
+
+Regra preventiva:
+
+- O gate de tokenizacao deve executar `extract_final_answer(assistant_text)` e
+  validar o resultado com `verify_answer(answer, extracted)`.
+- Builders de trace so devem manter/apendar final answer quando o resultado
+  final passa pela mesma rota de metrica.
+
+Status: corrigido em `scripts/run_v286_generic_tokenization_gate.py` e
+`scripts/build_v447_v446_trace_dataset.py`.
+
 ## Prompt Externo
 
 Prompt consolidado para OpenRouter/outras APIs:

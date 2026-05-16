@@ -1249,6 +1249,12 @@ def tokenize_examples(
         if len(full_ids) > MAX_LENGTH:
             first_loss_idx = next((idx for idx, value in enumerate(loss_mask) if value), len(loss_mask))
             overflow = len(full_ids) - MAX_LENGTH
+            dropped_loss = float(sum(loss_mask[:overflow]))
+            if dropped_loss > 0:
+                raise RuntimeError(
+                    f"{label} truncation would drop supervised completion tokens for {ex.get('id', '')}: "
+                    f"overflow={overflow} dropped_loss_weight={dropped_loss:.4f} max_length={MAX_LENGTH}"
+                )
             dropped_prompt_tokens = min(overflow, first_loss_idx)
             if dropped_prompt_tokens > 0:
                 prompt_truncated_count += 1

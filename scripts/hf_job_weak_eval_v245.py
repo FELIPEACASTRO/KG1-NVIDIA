@@ -271,6 +271,69 @@ def parse_adapter_specs(adapter_repo: str, adapter_subfolders_raw: str) -> list[
     return specs
 
 
+def weak_promotion_gate(summary: dict[str, Any]) -> dict[str, Any]:
+    total_min = env_int("KG1_WEAK_PROMOTE_TOTAL_MIN", 193)
+    equation_min = env_int("KG1_WEAK_PROMOTE_EQUATION_MIN", 57)
+    bit_min = env_int("KG1_WEAK_PROMOTE_BIT_MIN", 136)
+    trunc_max = env_int("KG1_WEAK_PROMOTE_TRUNC_MAX", 0)
+    rows = summary.get("rows", [])
+    if not isinstance(rows, list):
+        rows = []
+    candidates: list[dict[str, Any]] = []
+    for row in rows:
+        if not isinstance(row, dict):
+            continue
+        status_ok = str(row.get("status", "")).lower() == "ok"
+        correct = int(row.get("correct", 0) or 0)
+        equation = int(row.get("equation_transform_correct", 0) or 0)
+        bit = int(row.get("bit_manipulation_correct", 0) or 0)
+        truncated = int(row.get("truncated", 0) or 0)
+        passed = (
+            status_ok
+            and correct >= total_min
+            and equation >= equation_min
+            and bit >= bit_min
+            and truncated <= trunc_max
+        )
+        candidates.append(
+            {
+                "name": str(row.get("name", "")),
+                "status_ok": status_ok,
+                "correct": correct,
+                "equation_transform_correct": equation,
+                "bit_manipulation_correct": bit,
+                "truncated": truncated,
+                "passed": passed,
+                "blocking_reasons": [
+                    reason
+                    for reason, blocked in [
+                        ("status_not_ok", not status_ok),
+                        (f"correct_lt_{total_min}", correct < total_min),
+                        (f"equation_lt_{equation_min}", equation < equation_min),
+                        (f"bit_lt_{bit_min}", bit < bit_min),
+                        (f"truncated_gt_{trunc_max}", truncated > trunc_max),
+                    ]
+                    if blocked
+                ],
+            }
+        )
+    passed_candidates = [row for row in candidates if row["passed"]]
+    return {
+        "enforced": env_bool("KG1_ENFORCE_WEAK_PROMOTION_GATE", False),
+        "thresholds": {
+            "correct_min": total_min,
+            "equation_transform_min": equation_min,
+            "bit_manipulation_min": bit_min,
+            "truncated_max": trunc_max,
+        },
+        "candidate_count": len(candidates),
+        "passed_candidate_count": len(passed_candidates),
+        "passed_candidates": [row["name"] for row in passed_candidates],
+        "candidates": candidates,
+        "decision": "weak_promotion_gate_passed" if passed_candidates else "weak_promotion_gate_blocked",
+    }
+
+
 def ensure_import(module_name: str) -> None:
     __import__(module_name)
     print(f"import_ok = {module_name}", flush=True)
@@ -451,6 +514,8 @@ def run_eval(args: argparse.Namespace) -> dict[str, Any]:
         raise FileNotFoundError(summary_path)
     summary = read_json(summary_path)
     log_json("candidate_summary_payload", summary)
+    promotion_gate = weak_promotion_gate(summary)
+    log_json("weak_promotion_gate", promotion_gate)
 
     final_manifest = {
         "schema_version": "kg1_v245_hf_weak_eval_manifest_v1",
@@ -461,6 +526,7 @@ def run_eval(args: argparse.Namespace) -> dict[str, Any]:
         "adapters": adapter_metas,
         "eval_summary_json": str(summary_path),
         "candidate_summary": summary,
+        "weak_promotion_gate": promotion_gate,
         "eval_prompt_controls": {
             "disable_thinking": disable_thinking,
             "no_prompt_suffix": no_prompt_suffix,
@@ -491,6 +557,12 @@ def run_eval(args: argparse.Namespace) -> dict[str, Any]:
         final_manifest_path.write_text(json.dumps(final_manifest, indent=2, sort_keys=True), encoding="utf-8")
         print("upload_info =", upload_info, flush=True)
 
+    if promotion_gate["enforced"] and not promotion_gate["passed_candidates"]:
+        raise RuntimeError(
+            "Weak promotion gate blocked all candidates after uploading diagnostics: "
+            + json.dumps(promotion_gate["thresholds"], sort_keys=True)
+        )
+
     print("=== V245 HF WEAK EVAL JOB END ===", flush=True)
     return final_manifest
 
@@ -514,6 +586,43 @@ def self_test() -> int:
             raise
     else:
         raise RuntimeError("self-test expected small weak CSV count failure")
+    old_env = {name: os.environ.get(name) for name in ["KG1_ENFORCE_WEAK_PROMOTION_GATE"]}
+    os.environ["KG1_ENFORCE_WEAK_PROMOTION_GATE"] = "1"
+    blocked = weak_promotion_gate(
+        {
+            "rows": [
+                {
+                    "name": "bad",
+                    "status": "ok",
+                    "correct": 192,
+                    "equation_transform_correct": 56,
+                    "bit_manipulation_correct": 136,
+                    "truncated": 0,
+                }
+            ]
+        }
+    )
+    assert blocked["decision"] == "weak_promotion_gate_blocked"
+    passed = weak_promotion_gate(
+        {
+            "rows": [
+                {
+                    "name": "good",
+                    "status": "ok",
+                    "correct": 193,
+                    "equation_transform_correct": 57,
+                    "bit_manipulation_correct": 136,
+                    "truncated": 0,
+                }
+            ]
+        }
+    )
+    assert passed["decision"] == "weak_promotion_gate_passed"
+    for name, value in old_env.items():
+        if value is None:
+            os.environ.pop(name, None)
+        else:
+            os.environ[name] = value
     print("v245_hf_weak_eval_self_test=ok", flush=True)
     print("=== V245 HF WEAK EVAL SELF TEST END ===", flush=True)
     return 0

@@ -12,6 +12,7 @@ import csv
 import hashlib
 import json
 import re
+import sys
 from collections import Counter, defaultdict
 from datetime import datetime, timezone
 from pathlib import Path
@@ -19,6 +20,11 @@ from typing import Any
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+from src.competition_utils import extract_final_answer, verify_answer  # noqa: E402
+
 DEFAULT_V446_AUDIT_CSV = (
     REPO_ROOT
     / "artifacts/v446_tong_source_target_alignment_gate/20260515T_v446_cpu_gate/"
@@ -120,15 +126,26 @@ def normalize_assistant(content: str, answer: str, *, allow_different_boxed: boo
     text = str(content or "").rstrip()
     final_line = r"Final answer: \boxed{" + str(answer) + "}"
     if text.endswith(final_line):
-        return text, "already_boxed_suffix", True
+        if verify_answer(answer, extract_final_answer(text)):
+            return text, "already_boxed_suffix", True
+        return text, "dropped_metric_inextractable_already_boxed_suffix", False
     matches = BOXED_RE.findall(text)
     if matches and matches[-1].strip() == str(answer).strip():
-        return text + "\n" + final_line, "appended_confirming_boxed_suffix", True
+        candidate = text + "\n" + final_line
+        if verify_answer(answer, extract_final_answer(candidate)):
+            return candidate, "appended_confirming_boxed_suffix", True
+        return candidate, "dropped_metric_inextractable_confirming_boxed_suffix", False
     if matches:
         if allow_different_boxed:
-            return text + "\n" + final_line, "appended_train_answer_after_different_boxed", True
+            candidate = text + "\n" + final_line
+            if verify_answer(answer, extract_final_answer(candidate)):
+                return candidate, "appended_train_answer_after_different_boxed", True
+            return candidate, "dropped_metric_inextractable_after_different_boxed", False
         return text, "dropped_different_boxed_mismatch", False
-    return text + "\n" + final_line, "appended_train_answer_no_boxed", True
+    candidate = text + "\n" + final_line
+    if verify_answer(answer, extract_final_answer(candidate)):
+        return candidate, "appended_train_answer_no_boxed", True
+    return candidate, "dropped_metric_inextractable_no_boxed", False
 
 
 def deterministic_split_key(row: dict[str, Any]) -> int:
@@ -336,6 +353,11 @@ def self_test() -> None:
     assert text4.endswith(r"Final answer: \boxed{42}")
     assert status4 == "appended_train_answer_after_different_boxed"
     assert keep4 is True
+    text5, status5, keep5 = normalize_assistant("abc", "a{b}\\c")
+    assert text5.endswith(r"Final answer: \boxed{a{b}\c}")
+    assert verify_answer("a{b}\\c", extract_final_answer(text5))
+    assert status5 == "appended_train_answer_no_boxed"
+    assert keep5 is True
     print("v447_self_test=ok", flush=True)
     print("=== V447 SELF TEST END ===", flush=True)
 
