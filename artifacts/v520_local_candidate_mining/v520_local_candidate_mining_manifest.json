@@ -1,0 +1,148 @@
+{
+  "baseline_label_free": {
+    "bit_manipulation": 136,
+    "equation_transform": 55,
+    "total": 191,
+    "truncated": 0
+  },
+  "decision": "No existing local adapter-only CSV beats the V516 label-free baseline without backfire. High-scoring CSVs are solver/postprocessor references only.",
+  "scanned_candidate_csvs": 26,
+  "submit_safe_adapter_candidates_above_baseline": 0,
+  "top_adapter_eval_candidates": [
+    {
+      "bit_manipulation": 135,
+      "class": "adapter_eval_candidate",
+      "equation_transform": 56,
+      "path": "artifacts\\v368_hf_a100_v367_bit_ternary_launch\\eval_checkpoint1\\predictions.csv",
+      "prediction_column": "prediction",
+      "protected_8740ed31_correct": false,
+      "protected_8740ed31_prediction": "01111000",
+      "total": 191,
+      "truncated": 0
+    },
+    {
+      "bit_manipulation": 135,
+      "class": "adapter_eval_candidate",
+      "equation_transform": 56,
+      "path": "artifacts\\v368_hf_a100_v367_bit_ternary_launch\\eval_checkpoint1\\raw_predictions_pre_score.csv",
+      "prediction_column": "prediction",
+      "protected_8740ed31_correct": false,
+      "protected_8740ed31_prediction": "01111000",
+      "total": 191,
+      "truncated": 0
+    },
+    {
+      "bit_manipulation": 135,
+      "class": "adapter_eval_candidate",
+      "equation_transform": 56,
+      "path": "artifacts\\v352_hf_a100_v351_bit_transfer_launch\\eval_v352_checkpoint2\\predictions.csv",
+      "prediction_column": "prediction",
+      "protected_8740ed31_correct": false,
+      "protected_8740ed31_prediction": "01111000",
+      "total": 191,
+      "truncated": 0
+    },
+    {
+      "bit_manipulation": 134,
+      "class": "adapter_eval_candidate",
+      "equation_transform": 56,
+      "path": "artifacts\\v342_acc_first_diagnostic\\v341_checkpoint2_predictions.csv",
+      "prediction_column": "prediction",
+      "protected_8740ed31_correct": false,
+      "protected_8740ed31_prediction": "01111000",
+      "total": 190,
+      "truncated": 1
+    }
+  ],
+  "top_reference_solver_or_postprocessor": [
+    {
+      "bit_manipulation": 159,
+      "class": "reference_solver_or_postprocessor_not_submit_adapter",
+      "equation_transform": 63,
+      "path": "artifacts\\v380_solver_results_patch_gate\\20260514T_cpu_gate\\v380_reexecuted_teacher_predictions.csv",
+      "prediction_column": "prediction",
+      "protected_8740ed31_correct": true,
+      "protected_8740ed31_prediction": "01101000",
+      "total": 222,
+      "truncated": 0
+    },
+    {
+      "bit_manipulation": 159,
+      "class": "reference_solver_or_postprocessor_not_submit_adapter",
+      "equation_transform": 63,
+      "path": "artifacts\\v366_bit_fullbyte_ternary_op_gate\\20260514T_cpu_gate\\v366_integrated_predictions.csv",
+      "prediction_column": "prediction",
+      "protected_8740ed31_correct": true,
+      "protected_8740ed31_prediction": "01101000",
+      "total": 222,
+      "truncated": 0
+    },
+    {
+      "bit_manipulation": 151,
+      "class": "reference_solver_or_postprocessor_not_submit_adapter",
+      "equation_transform": 63,
+      "path": "artifacts\\v365_bit_residual_boolean_grammar_gate\\20260514T_cpu_gate\\v365_integrated_predictions.csv",
+      "prediction_column": "prediction",
+      "protected_8740ed31_correct": true,
+      "protected_8740ed31_prediction": "01101000",
+      "total": 214,
+      "truncated": 0
+    },
+    {
+      "bit_manipulation": 151,
+      "class": "reference_solver_or_postprocessor_not_submit_adapter",
+      "equation_transform": 63,
+      "path": "artifacts\\v357_bit_global_ternary_gate\\20260514T_cpu_gate\\v357_integrated_predictions.csv",
+      "prediction_column": "prediction",
+      "protected_8740ed31_correct": true,
+      "protected_8740ed31_prediction": "01101000",
+      "total": 214,
+      "truncated": 0
+    },
+    {
+      "bit_manipulation": 147,
+      "class": "reference_solver_or_postprocessor_not_submit_adapter",
+      "equation_transform": 60,
+      "path": "artifacts\\v301_bit_postprocessor_gate\\20260512T1130Z\\v301_bit_postprocessed_predictions.csv",
+      "prediction_column": "prediction",
+      "protected_8740ed31_correct": true,
+      "protected_8740ed31_prediction": "01101000",
+      "total": 207,
+      "truncated": 0
+    },
+    {
+      "bit_manipulation": 146,
+      "class": "reference_solver_or_postprocessor_not_submit_adapter",
+      "equation_transform": 60,
+      "path": "artifacts\\v302_combined_postprocessor_gate\\20260512T1200Z\\v302_combined_postprocessed_predictions.csv",
+      "prediction_column": "prediction",
+      "protected_8740ed31_correct": true,
+      "protected_8740ed31_prediction": "01101000",
+      "total": 206,
+      "truncated": 1
+    },
+    {
+      "bit_manipulation": 138,
+      "class": "reference_solver_or_postprocessor_not_submit_adapter",
+      "equation_transform": 63,
+      "path": "artifacts\\v364_symbolic_pair_table_gate\\20260514T_cpu_gate\\v364_integrated_predictions.csv",
+      "prediction_column": "prediction",
+      "protected_8740ed31_correct": true,
+      "protected_8740ed31_prediction": "01101000",
+      "total": 201,
+      "truncated": 0
+    },
+    {
+      "bit_manipulation": 138,
+      "class": "reference_solver_or_postprocessor_not_submit_adapter",
+      "equation_transform": 63,
+      "path": "artifacts\\v363_equation_residual_operator_support\\20260514T_cpu_gate\\v363_integrated_predictions.csv",
+      "prediction_column": "prediction",
+      "protected_8740ed31_correct": true,
+      "protected_8740ed31_prediction": "01101000",
+      "total": 201,
+      "truncated": 0
+    }
+  ],
+  "version": "V520"
+}

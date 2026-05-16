@@ -1982,6 +1982,34 @@ Regra preventiva:
 
 Status: implementado e validado com self-test; V518 falha corretamente no guard.
 
+### E066 - Nenhum CSV adapter-only local ja resolve o plato
+
+Evidencia:
+
+- V520 varreu 224 CSVs locais e encontrou 26 candidatos weak comparaveis ao
+  contrato V516 label-free.
+- Resultado:
+  - `submit_safe_adapter_candidates_above_baseline = 0`;
+  - os melhores CSVs `201/315`, `207/315`, `222/315` sao classificados como
+    `reference_solver_or_postprocessor_not_submit_adapter`;
+  - os melhores adapter eval candidates locais ficam em `191/315` com
+    `equation=56`, `bit=135`, perdendo `8740ed31`.
+
+Impacto:
+
+- Nao ha arquivo antigo pronto para submit que tenha sido esquecido.
+- Reusar CSVs solver/postprocessor como se fossem adapter-only seria erro de
+  regra/negocio e geraria falsa expectativa de ranking.
+
+Regra preventiva:
+
+- Antes de novo submit, candidato precisa vir de eval adapter-only label-free
+  ou de package permitido pelas regras, nao de projection/integrated solver CSV.
+- O V519 row guard deve rodar junto com o weak promotion gate.
+
+Status: trilha de CSV antigo encerrada; continuar apenas com conversao de sinal
+solver para comportamento do adapter.
+
 ## Prompt Externo
 
 Prompt consolidado para OpenRouter/outras APIs:
