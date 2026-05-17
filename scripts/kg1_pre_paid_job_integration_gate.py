@@ -543,6 +543,18 @@ def audit_launcher(args: argparse.Namespace, findings: list[Finding]) -> dict[st
             "launcher_missing_required_row_loss_weight",
             findings,
         )
+        row_weight_flag_counts = {
+            "--use-row-loss-weight": text.count("--use-row-loss-weight"),
+            "--require-row-loss-weight": text.count("--require-row-loss-weight"),
+        }
+        if row_weight_flag_counts["--use-row-loss-weight"] < 2 or row_weight_flag_counts["--require-row-loss-weight"] < 2:
+            findings.append(
+                Finding(
+                    "error",
+                    "launcher_row_loss_weight_not_enforced_in_local_and_remote_commands",
+                    json.dumps(row_weight_flag_counts, sort_keys=True),
+                )
+            )
     if args.expected_pair_score_mode:
         require_text(
             text,
@@ -613,6 +625,10 @@ def audit_launcher(args: argparse.Namespace, findings: list[Finding]) -> dict[st
         "expected_abort_max_reserved_gib": args.expected_abort_max_reserved_gib,
         "expected_loss_normalization_mode": args.expected_loss_normalization_mode,
         "require_row_loss_weight": args.require_row_loss_weight,
+        "row_loss_weight_flag_counts": {
+            "--use-row-loss-weight": text.count("--use-row-loss-weight"),
+            "--require-row-loss-weight": text.count("--require-row-loss-weight"),
+        },
         "declared_dataset_schema": declared_schema,
         "residual_first_gpu_gate": residual_first_report,
         "decoding_vs_adapter_drift_gate": decoding_vs_adapter_drift_report,
@@ -1162,6 +1178,8 @@ export DATA_REPO='kg1/self-test-data'
 export MAX_LENGTH=2048
 export ABORT_MAX_RESERVED_GIB=70
 export LOSS_NORMALIZATION_MODE=example_mean
+local_objective_alignment_cmd = "python scripts/audit_v478_training_objective_alignment.py --use-row-loss-weight --require-row-loss-weight"
+python scripts/audit_v478_training_objective_alignment.py --use-row-loss-weight --require-row-loss-weight
 timeout=3600
 Return only one line with \\boxed{{...}}. No reasoning.
 """
@@ -1256,6 +1274,23 @@ def self_test() -> None:
         drift_codes = {item["code"] for item in drift_report["findings"]}
         if "decoding_vs_adapter_drift_margin_regression" not in drift_codes:
             raise RuntimeError("self-test expected protected margin regression to fail")
+
+        local_only_row_weight_launcher = root / "launcher_local_only_row_weight.py"
+        local_only_row_weight_launcher.write_text(
+            _self_test_launcher_text(train_sha, val_sha).replace(
+                "python scripts/audit_v478_training_objective_alignment.py --use-row-loss-weight --require-row-loss-weight",
+                "python scripts/audit_v478_training_objective_alignment.py",
+                1,
+            ),
+            encoding="utf-8",
+            newline="\n",
+        )
+        local_only_row_weight_args = common_args.copy()
+        local_only_row_weight_args[local_only_row_weight_args.index(str(launcher))] = str(local_only_row_weight_launcher)
+        local_only_row_weight_report = run_gate(parse_args(local_only_row_weight_args), emit=False)
+        local_only_row_weight_codes = {item["code"] for item in local_only_row_weight_report["findings"]}
+        if "launcher_row_loss_weight_not_enforced_in_local_and_remote_commands" not in local_only_row_weight_codes:
+            raise RuntimeError("self-test expected missing remote row weight flags to fail")
 
         rule_train = root / "train_rule_prefix.jsonl"
         _write_jsonl(rule_train, _self_test_sft_rows(rule_prefix=True))

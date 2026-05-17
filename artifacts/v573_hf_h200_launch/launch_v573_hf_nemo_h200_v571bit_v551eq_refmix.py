@@ -247,6 +247,7 @@ def patch_module(module: Any) -> None:
         return {"path": str(out_path), "report": report}
 
     original_configure_base = module.configure_base
+    original_local_debug = module.local_debug
 
     def configure_base(base: Any) -> None:
         original_configure_base(base)
@@ -274,14 +275,37 @@ def patch_module(module: Any) -> None:
                 'export USE_ROW_LOSS_WEIGHT="$KG1_USE_ROW_LOSS_WEIGHT"\n'
                 'export REQUIRE_ROW_LOSS_WEIGHT="$KG1_REQUIRE_ROW_LOSS_WEIGHT"',
             )
+            .replace(
+                '    os.environ["SUBCATEGORY_WEIGHTS"],\n'
+                '    "--min-bit-effective-share",',
+                '    os.environ["SUBCATEGORY_WEIGHTS"],\n'
+                '    "--use-row-loss-weight",\n'
+                '    "--require-row-loss-weight",\n'
+                '    "--min-bit-effective-share",',
+            )
             .replace(f"export MAX_STEPS={module.MAX_STEPS}", f"export MAX_STEPS={MAX_STEPS}")
             .replace(f"export EVAL_MAX_EXAMPLES={module.EVAL_MAX_EXAMPLES}", f"export EVAL_MAX_EXAMPLES={EVAL_MAX_EXAMPLES}")
         )
         base.download_and_hash = download_and_hash_no_symlink_cache
 
+    def local_debug(base: Any, api: HfApi, token: str) -> tuple[dict[str, object], dict[str, str], dict[str, object]]:
+        result = original_local_debug(base, api, token)
+        row_weight_required = [
+            'export USE_ROW_LOSS_WEIGHT="$KG1_USE_ROW_LOSS_WEIGHT"',
+            'export REQUIRE_ROW_LOSS_WEIGHT="$KG1_REQUIRE_ROW_LOSS_WEIGHT"',
+            '"--use-row-loss-weight"',
+            '"--require-row-loss-weight"',
+        ]
+        missing = [item for item in row_weight_required if item not in base.COMMAND_SCRIPT]
+        if missing:
+            raise RuntimeError("remote command missing row-loss-weight contract snippets: " + json.dumps(missing))
+        print("remote_row_loss_weight_contract_debug = ok", flush=True)
+        return result
+
     module.build_job_env = build_job_env
     module.run_local_objective_alignment = run_local_objective_alignment
     module.configure_base = configure_base
+    module.local_debug = local_debug
 
 
 def sha256_file(path: Path) -> str:
