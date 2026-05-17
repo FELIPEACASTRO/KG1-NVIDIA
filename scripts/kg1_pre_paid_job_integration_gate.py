@@ -153,6 +153,27 @@ def audit_launcher(args: argparse.Namespace, findings: list[Finding]) -> dict[st
         "launcher_missing_first_checkpoint_eval",
         findings,
     )
+    if args.expected_max_length:
+        require_text(text, f"MAX_LENGTH = {args.expected_max_length}", "launcher_max_length_constant_mismatch", findings)
+        max_length_export_forms = [
+            f"export MAX_LENGTH={args.expected_max_length}",
+            'f"export MAX_LENGTH={MAX_LENGTH}"',
+            'f"export MAX_LENGTH={base.MAX_LENGTH}"',
+        ]
+        if not any(snippet in text for snippet in max_length_export_forms):
+            findings.append(
+                Finding(
+                    "error",
+                    "launcher_command_max_length_mismatch",
+                    "missing command export for expected MAX_LENGTH",
+                )
+            )
+        require_text(
+            text,
+            '"KG1_EXPECTED_MAX_LENGTH": str(MAX_LENGTH)',
+            "launcher_missing_expected_max_length_env",
+            findings,
+        )
     require_regex(text, r"MAX_STEPS\s*=\s*(?:[1-9]|1[0-2])\b", "launcher_max_steps_too_high", findings)
     if args.expected_pair_score_mode:
         require_text(
@@ -188,6 +209,47 @@ def audit_launcher(args: argparse.Namespace, findings: list[Finding]) -> dict[st
         "expected_data_repo": args.expected_data_repo,
         "contains_h200": 'FLAVOR = "h200"' in text,
         "contains_timeout_3600": "timeout=3600" in text,
+        "expected_max_length": args.expected_max_length,
+    }
+
+
+def audit_tokenization_manifest(path: Path | None, args: argparse.Namespace, findings: list[Finding]) -> dict[str, Any]:
+    if path is None:
+        return {"skipped": True, "reason": "tokenization_manifest_not_provided"}
+    manifest = read_json(path)
+    if manifest.get("decision", {}).get("status") != "tokenization_gate_passed":
+        findings.append(
+            Finding("error", "tokenization_manifest_not_passed", str(manifest.get("decision", {}).get("status")))
+        )
+    tokenization = manifest.get("tokenization", {})
+    train_max = int((tokenization.get("train") or {}).get("token_max", 0) or 0)
+    val_max = int((tokenization.get("validation") or {}).get("token_max", 0) or 0)
+    max_observed = max(train_max, val_max)
+    manifest_max_length = int((manifest.get("config") or {}).get("max_length", 0) or 0)
+    if args.expected_max_length and max_observed > args.expected_max_length:
+        findings.append(
+            Finding(
+                "error",
+                "runtime_max_length_below_tokenization_max",
+                f"token_max={max_observed} expected_max_length={args.expected_max_length}",
+            )
+        )
+    if args.expected_max_length and manifest_max_length and manifest_max_length < args.expected_max_length:
+        findings.append(
+            Finding(
+                "error",
+                "tokenization_gate_max_length_below_runtime",
+                f"manifest_max_length={manifest_max_length} expected_max_length={args.expected_max_length}",
+            )
+        )
+    return {
+        "manifest": str(path),
+        "status": manifest.get("decision", {}).get("status"),
+        "manifest_max_length": manifest_max_length,
+        "train_token_max": train_max,
+        "validation_token_max": val_max,
+        "runtime_expected_max_length": args.expected_max_length,
+        "runtime_length_safe": (not args.expected_max_length) or max_observed <= args.expected_max_length,
     }
 
 
@@ -314,6 +376,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--dataset-schema", choices=["preference", "sft"], default="preference")
     parser.add_argument("--expected-save-every-steps", type=int, default=3)
     parser.add_argument("--expected-eval-every-steps", type=int, default=3)
+    parser.add_argument("--expected-max-length", type=int, default=0)
+    parser.add_argument("--tokenization-manifest-json", type=Path, default=None)
     parser.add_argument("--expected-data-repo", default="")
     parser.add_argument("--expected-data-root", required=True)
     parser.add_argument("--expected-train-sha256", required=True)
@@ -371,6 +435,7 @@ def main() -> int:
         if args.dataset_schema == "preference"
         else {"skipped": True, "reason": "sft_schema_does_not_use_v438_preference_audit"}
     )
+    tokenization_summary = audit_tokenization_manifest(args.tokenization_manifest_json, args, findings)
     report = {
         "schema_version": "kg1_pre_paid_job_integration_gate_v2",
         "dataset_schema": args.dataset_schema,
@@ -378,6 +443,7 @@ def main() -> int:
         "launcher": launcher_report,
         "train_dataset": train_report,
         "validation_dataset": val_report,
+        "tokenization_manifest": tokenization_summary,
         "v438_audit": v438_summary,
         "findings": [item.__dict__ for item in findings],
     }

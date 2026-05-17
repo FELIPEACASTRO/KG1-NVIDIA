@@ -1,0 +1,222 @@
+{
+  "dataset_manifest_json": "",
+  "findings": [],
+  "generated_at_utc": "2026-05-17T03:02:56.888340+00:00",
+  "hf_gpu_allowed": true,
+  "schema_version": "kg1_v478_training_objective_alignment_gate_v1",
+  "source_weights": {
+    "v536_v534_bit_v523_equation_pack": 1.0
+  },
+  "subcategory_weights": {
+    "bit_huikang_synthetic_cho": 1.0,
+    "bit_huikang_synthetic_maj": 1.0,
+    "bit_konbu_high_confidence_trace": 1.0,
+    "equation_numeric_add_direct": 1.0,
+    "equation_numeric_colon_absdiff": 1.0,
+    "equation_numeric_colon_trailing_zero": 1.0,
+    "equation_numeric_minus_signed": 1.0
+  },
+  "thresholds": {
+    "max_any_family_effective_share": 0.75,
+    "max_equation_effective_share": 0.4,
+    "min_bit_effective_share": 0.6
+  },
+  "train": {
+    "effective_share_by_family": {
+      "bit_manipulation": {
+        "share": 0.688109,
+        "weight": 706.0
+      },
+      "equation_transform": {
+        "share": 0.311891,
+        "weight": 320.0
+      }
+    },
+    "effective_share_by_source": {
+      "v536_v534_bit_v523_equation_pack": {
+        "share": 1.0,
+        "weight": 1026.0
+      }
+    },
+    "effective_share_by_subcategory": {
+      "bit_huikang_synthetic_cho": {
+        "share": 0.230019,
+        "weight": 236.0
+      },
+      "bit_huikang_synthetic_maj": {
+        "share": 0.229045,
+        "weight": 235.0
+      },
+      "bit_konbu_high_confidence_trace": {
+        "share": 0.229045,
+        "weight": 235.0
+      },
+      "equation_numeric_add_direct": {
+        "share": 0.077973,
+        "weight": 80.0
+      },
+      "equation_numeric_colon_absdiff": {
+        "share": 0.077973,
+        "weight": 80.0
+      },
+      "equation_numeric_colon_trailing_zero": {
+        "share": 0.077973,
+        "weight": 80.0
+      },
+      "equation_numeric_minus_signed": {
+        "share": 0.077973,
+        "weight": 80.0
+      }
+    },
+    "effective_total_weight": 1026.0,
+    "physical_share_by_family": {
+      "bit_manipulation": {
+        "rows": 706,
+        "share": 0.688109
+      },
+      "equation_transform": {
+        "rows": 320,
+        "share": 0.311891
+      }
+    },
+    "physical_share_by_source": {
+      "v536_v534_bit_v523_equation_pack": {
+        "rows": 1026,
+        "share": 1.0
+      }
+    },
+    "physical_share_by_subcategory": {
+      "bit_huikang_synthetic_cho": {
+        "rows": 236,
+        "share": 0.230019
+      },
+      "bit_huikang_synthetic_maj": {
+        "rows": 235,
+        "share": 0.229045
+      },
+      "bit_konbu_high_confidence_trace": {
+        "rows": 235,
+        "share": 0.229045
+      },
+      "equation_numeric_add_direct": {
+        "rows": 80,
+        "share": 0.077973
+      },
+      "equation_numeric_colon_absdiff": {
+        "rows": 80,
+        "share": 0.077973
+      },
+      "equation_numeric_colon_trailing_zero": {
+        "rows": 80,
+        "share": 0.077973
+      },
+      "equation_numeric_minus_signed": {
+        "rows": 80,
+        "share": 0.077973
+      }
+    },
+    "rows": 1026,
+    "unknown_source_rows": 0,
+    "unknown_subcategory_rows": 0
+  },
+  "train_jsonl": "C:\\Users\\davis\\.cache\\huggingface\\hub\\datasets--felipesp1983--kg1-v536-v534-bit-v523-equation-artifacts\\snapshots\\d2f11d82b40e3e9aa0f5add58c3698a7428bf550\\v536-v534-bit-v523-equation-20260517T024752Z\\v536_v534_bit_v523_equation_pack_train.jsonl",
+  "val_jsonl": "C:\\Users\\davis\\.cache\\huggingface\\hub\\datasets--felipesp1983--kg1-v536-v534-bit-v523-equation-artifacts\\snapshots\\d2f11d82b40e3e9aa0f5add58c3698a7428bf550\\v536-v534-bit-v523-equation-20260517T024752Z\\v536_v534_bit_v523_equation_pack_val.jsonl",
+  "validation": {
+    "effective_share_by_family": {
+      "bit_manipulation": {
+        "share": 0.634703,
+        "weight": 139.0
+      },
+      "equation_transform": {
+        "share": 0.365297,
+        "weight": 80.0
+      }
+    },
+    "effective_share_by_source": {
+      "v536_v534_bit_v523_equation_pack": {
+        "share": 1.0,
+        "weight": 219.0
+      }
+    },
+    "effective_share_by_subcategory": {
+      "bit_huikang_synthetic_cho": {
+        "share": 0.214612,
+        "weight": 47.0
+      },
+      "bit_huikang_synthetic_maj": {
+        "share": 0.210046,
+        "weight": 46.0
+      },
+      "bit_konbu_high_confidence_trace": {
+        "share": 0.210046,
+        "weight": 46.0
+      },
+      "equation_numeric_add_direct": {
+        "share": 0.091324,
+        "weight": 20.0
+      },
+      "equation_numeric_colon_absdiff": {
+        "share": 0.091324,
+        "weight": 20.0
+      },
+      "equation_numeric_colon_trailing_zero": {
+        "share": 0.091324,
+        "weight": 20.0
+      },
+      "equation_numeric_minus_signed": {
+        "share": 0.091324,
+        "weight": 20.0
+      }
+    },
+    "effective_total_weight": 219.0,
+    "physical_share_by_family": {
+      "bit_manipulation": {
+        "rows": 139,
+        "share": 0.634703
+      },
+      "equation_transform": {
+        "rows": 80,
+        "share": 0.365297
+      }
+    },
+    "physical_share_by_source": {
+      "v536_v534_bit_v523_equation_pack": {
+        "rows": 219,
+        "share": 1.0
+      }
+    },
+    "physical_share_by_subcategory": {
+      "bit_huikang_synthetic_cho": {
+        "rows": 47,
+        "share": 0.214612
+      },
+      "bit_huikang_synthetic_maj": {
+        "rows": 46,
+        "share": 0.210046
+      },
+      "bit_konbu_high_confidence_trace": {
+        "rows": 46,
+        "share": 0.210046
+      },
+      "equation_numeric_add_direct": {
+        "rows": 20,
+        "share": 0.091324
+      },
+      "equation_numeric_colon_absdiff": {
+        "rows": 20,
+        "share": 0.091324
+      },
+      "equation_numeric_colon_trailing_zero": {
+        "rows": 20,
+        "share": 0.091324
+      },
+      "equation_numeric_minus_signed": {
+        "rows": 20,
+        "share": 0.091324
+      }
+    },
+    "rows": 219,
+    "unknown_source_rows": 0,
+    "unknown_subcategory_rows": 0
+  }
+}

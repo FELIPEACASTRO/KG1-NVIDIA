@@ -5,10 +5,20 @@
     "contains_h200": true,
     "contains_timeout_3600": true,
     "expected_data_repo": "felipesp1983/kg1-v536-v534-bit-v523-equation-artifacts",
+    "expected_max_length": 2048,
     "launcher": "artifacts\\v536_hf_h200_launch\\launch_v536_hf_nemo_h200_v534_bit_v523_equation.py"
   },
   "ok": true,
   "schema_version": "kg1_pre_paid_job_integration_gate_v2",
+  "tokenization_manifest": {
+    "manifest": "artifacts\\v536_v534_bit_v523_equation_pack\\20260517T024752Z\\tokenization_gate_real\\v286_generic_tokenization_gate_manifest.json",
+    "manifest_max_length": 8192,
+    "runtime_expected_max_length": 2048,
+    "runtime_length_safe": true,
+    "status": "tokenization_gate_passed",
+    "train_token_max": 1123,
+    "validation_token_max": 1123
+  },
   "train_dataset": {
     "bad_rows_first30": [],
     "family_counts": {

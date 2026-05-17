@@ -59,6 +59,7 @@ MAX_STEPS = 4
 SAVE_EVERY_STEPS = 2
 EVAL_EVERY_STEPS = 2
 EVAL_MAX_EXAMPLES = 219
+MAX_LENGTH = 2048
 ANSWER_SPAN_LOSS_WEIGHT = "1.0"
 ANSWER_SPAN_MIN_WEIGHTED_TOKENS = "1"
 LOSS_NORMALIZATION_MODE = "example_mean"
@@ -124,6 +125,7 @@ def build_job_env(hardware: dict[str, object]) -> dict[str, str]:
         "KG1_EXPECTED_COMMIT": EXPECTED_COMMIT,
         "KG1_EXPECTED_TORCH_VERSION": "",
         "KG1_EXPECTED_MAX_STEPS": str(MAX_STEPS),
+        "KG1_EXPECTED_MAX_LENGTH": str(MAX_LENGTH),
         "KG1_REQUIRE_CUDA": "1",
         "KG1_MIN_GPU_TOTAL_GIB": "130",
         "KG1_REQUIRED_GPU_NAME_REGEX": "H200",
@@ -231,6 +233,7 @@ def configure_base(base: Any) -> None:
         .replace("export SAVE_EVERY_STEPS=2", f"export SAVE_EVERY_STEPS={SAVE_EVERY_STEPS}")
         .replace("export EVAL_EVERY_STEPS=2", f"export EVAL_EVERY_STEPS={EVAL_EVERY_STEPS}")
         .replace("export EVAL_MAX_EXAMPLES=96", f"export EVAL_MAX_EXAMPLES={EVAL_MAX_EXAMPLES}")
+        .replace("export MAX_LENGTH=1024", f"export MAX_LENGTH={MAX_LENGTH}")
         .replace("export SUBCATEGORY_WEIGHTS=\"$KG1_SUBCATEGORY_WEIGHTS\"", "export SUBCATEGORY_WEIGHTS=\"$KG1_SUBCATEGORY_WEIGHTS\"\nexport LOSS_NORMALIZATION_MODE=\"$KG1_LOSS_NORMALIZATION_MODE\"")
         .replace('"0.35"', '"0.60"')
         .replace('"0.65"', '"0.40"')
@@ -348,6 +351,7 @@ def manifest_payload(
             "save_every_steps": SAVE_EVERY_STEPS,
             "eval_every_steps": EVAL_EVERY_STEPS,
             "eval_max_examples": EVAL_MAX_EXAMPLES,
+            "max_length": MAX_LENGTH,
             "trainable_lora_modules": TRAINABLE_LORA_MODULES,
             "target_parameters_trainability": "required_trainable",
             "learning_rate": "2.0e-8",

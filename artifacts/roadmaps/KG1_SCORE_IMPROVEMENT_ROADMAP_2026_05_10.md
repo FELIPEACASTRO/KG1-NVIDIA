@@ -92,6 +92,7 @@ Ultima evidencia operacional relevante:
 | V535 specialist triple check | revisao independente apontou risco de leakage no CSV V532, fallback silencioso para `prediction`, superconfianca em `verifier_score=1.0`, thresholds contraditorios e adapter externo conflitando com itens removidos | V532 deixou de exportar decisoes row-level, `--fail-on-blocked` validado, CSVs weak-overlap Huikang removidos; adapters externos rebaixados para diagnostico/proveniencia; thresholds separados em smoke, weak promocional e package |
 | V536 V534-bit/V523-equation pack | dataset source-only controlado criado: `1026` train, `219` val; quotas iguais ao V523 (`706/320` train bit/equation, `139/80` val); bit substituido por Konbu high-confidence + Huikang CHO/MAJ; `0` overlap weak/full, `0` duplicidade; V286, V513, V524 e V526 passam | autoriza somente um smoke H200 curto com `LOSS_NORMALIZATION_MODE=example_mean`; nao autoriza treino longo nem submit sem ACC label-free real |
 | V536 HF upload/debug/pre-paid | dataset enviado para HF commit `d2f11d82b40e3e9aa0f5add58c3698a7428bf550`; launcher debug baixou do HF e validou hashes, H200 `0.083333/min`, adapter inicial e objetivo; `kg1_pre_paid_job_integration_gate` passou sem findings | pronto para commit/push e um smoke H200 de 4 steps; ainda nao ha ganho ACC medido |
+| V536 H200 attempt 1 | job `felipesp1983/6a0930223308d79117b9181a` falhou antes do treino: runtime `MAX_LENGTH=1024` truncava `78/1026` prompts (`7.6023%`) apesar do V286 ter `token_max=1123` com `max_length=8192` | falha barata e correta; launcher corrigido para `MAX_LENGTH=2048`, `KG1_EXPECTED_MAX_LENGTH=2048`, e pre-paid gate agora compara `token_max <= runtime MAX_LENGTH` |
 
 ## Decisao Atual V536
 
@@ -117,6 +118,7 @@ Artefatos:
 - `artifacts/v536_v534_bit_v523_equation_pack/20260517T024752Z/v526_example_mean_dry_run/v526_example_mean_objective_dry_run_manifest.json`;
 - `artifacts/v536_hf_h200_launch/v536_hf_dataset_upload_manifest.json`;
 - `artifacts/v536_hf_h200_launch/v536_pre_paid_job_integration_gate.json`;
+- `artifacts/v536_hf_h200_launch/v536-nemo-h200-v534bit-v523eq-v290ckpt6-20260517T030732Z_launch_manifest.json`;
 - `artifacts/version_diffs/V536_VS_V523.md`.
 
 O consenso externo e a auditoria dos notebooks baixados nao autorizam treino
@@ -127,6 +129,7 @@ em ordem de prioridade:
    - V534/V536 ja materializou a frente CPU bit source-only com Konbu
      high-confidence e Huikang CHO/MAJ, removendo qualquer overlap weak/full;
    - usar exatamente `LOSS_NORMALIZATION_MODE=example_mean`;
+   - usar `MAX_LENGTH=2048`, validado contra `token_max=1123` do V286;
    - manter `lm_head` congelado e MoE `up_proj/down_proj` treinaveis;
    - abortar no primeiro checkpoint que violar `bit>=136`, `equation>=57`,
      `trunc=0` ou linhas protegidas;
