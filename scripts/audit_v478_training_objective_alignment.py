@@ -79,16 +79,51 @@ def resolve_manifest_path(manifest: dict[str, Any], key: str) -> Path | None:
     return Path(str(value))
 
 
-def item_weight(row: dict[str, Any], source_weights: dict[str, float], subcategory_weights: dict[str, float]) -> float:
+def parse_row_loss_weight(row: dict[str, Any], *, require: bool) -> tuple[float, bool]:
+    metadata = row.get("metadata") if isinstance(row.get("metadata"), dict) else {}
+    raw_weight = metadata.get("loss_weight", row.get("loss_weight"))
+    if raw_weight in (None, ""):
+        if require:
+            raise RuntimeError(f"row {row.get('id', '<missing>')} is missing metadata.loss_weight")
+        return 1.0, False
+    try:
+        weight = float(raw_weight)
+    except (TypeError, ValueError) as exc:
+        raise RuntimeError(
+            f"row {row.get('id', '<missing>')} has non-numeric metadata.loss_weight={raw_weight!r}"
+        ) from exc
+    if not math.isfinite(weight) or weight <= 0:
+        raise RuntimeError(
+            f"row {row.get('id', '<missing>')} has invalid metadata.loss_weight={raw_weight!r}"
+        )
+    return weight, True
+
+
+def item_weight(
+    row: dict[str, Any],
+    source_weights: dict[str, float],
+    subcategory_weights: dict[str, float],
+    *,
+    use_row_loss_weight: bool,
+    require_row_loss_weight: bool,
+) -> tuple[float, bool]:
     source = str(row.get("source", ""))
     subcategory = str(row.get("subcategory", ""))
-    return source_weights.get(source, 1.0) * subcategory_weights.get(subcategory, 1.0)
+    weight = source_weights.get(source, 1.0) * subcategory_weights.get(subcategory, 1.0)
+    has_row_weight = False
+    if use_row_loss_weight:
+        row_weight, has_row_weight = parse_row_loss_weight(row, require=require_row_loss_weight)
+        weight *= row_weight
+    return weight, has_row_weight
 
 
 def summarize_split(
     rows: list[dict[str, Any]],
     source_weights: dict[str, float],
     subcategory_weights: dict[str, float],
+    *,
+    use_row_loss_weight: bool,
+    require_row_loss_weight: bool,
 ) -> dict[str, Any]:
     family_counts: Counter[str] = Counter()
     source_counts: Counter[str] = Counter()
@@ -98,6 +133,7 @@ def summarize_split(
     subcategory_weight: dict[str, float] = defaultdict(float)
     unknown_source_rows = 0
     unknown_subcategory_rows = 0
+    explicit_row_weight_rows = 0
     total_weight = 0.0
 
     for row in rows:
@@ -111,7 +147,15 @@ def summarize_split(
             unknown_source_rows += 1
         if subcategory_weights and subcategory not in subcategory_weights:
             unknown_subcategory_rows += 1
-        weight = item_weight(row, source_weights, subcategory_weights)
+        weight, has_row_weight = item_weight(
+            row,
+            source_weights,
+            subcategory_weights,
+            use_row_loss_weight=use_row_loss_weight,
+            require_row_loss_weight=require_row_loss_weight,
+        )
+        if has_row_weight:
+            explicit_row_weight_rows += 1
         total_weight += weight
         family_weight[family] += weight
         source_weight[source] += weight
@@ -141,6 +185,9 @@ def summarize_split(
         "effective_share_by_subcategory": share_from_weights(subcategory_weight),
         "unknown_source_rows": int(unknown_source_rows),
         "unknown_subcategory_rows": int(unknown_subcategory_rows),
+        "use_row_loss_weight": bool(use_row_loss_weight),
+        "require_row_loss_weight": bool(require_row_loss_weight),
+        "explicit_row_weight_rows": int(explicit_row_weight_rows),
     }
 
 
@@ -208,6 +255,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--min-bit-effective-share", type=float, default=0.20)
     parser.add_argument("--max-equation-effective-share", type=float, default=0.80)
     parser.add_argument("--max-any-family-effective-share", type=float, default=0.80)
+    parser.add_argument("--use-row-loss-weight", action="store_true")
+    parser.add_argument("--require-row-loss-weight", action="store_true")
     parser.add_argument("--output-json", type=Path, default=None)
     parser.add_argument("--enforce", action="store_true")
     return parser.parse_args()
@@ -245,9 +294,23 @@ def main() -> int:
             "min_bit_effective_share": args.min_bit_effective_share,
             "max_equation_effective_share": args.max_equation_effective_share,
             "max_any_family_effective_share": args.max_any_family_effective_share,
+            "use_row_loss_weight": args.use_row_loss_weight,
+            "require_row_loss_weight": args.require_row_loss_weight,
         },
-        "train": summarize_split(train_rows, source_weights, subcategory_weights),
-        "validation": summarize_split(val_rows, source_weights, subcategory_weights),
+        "train": summarize_split(
+            train_rows,
+            source_weights,
+            subcategory_weights,
+            use_row_loss_weight=args.use_row_loss_weight,
+            require_row_loss_weight=args.require_row_loss_weight,
+        ),
+        "validation": summarize_split(
+            val_rows,
+            source_weights,
+            subcategory_weights,
+            use_row_loss_weight=False,
+            require_row_loss_weight=False,
+        ),
     }
     findings = gate_findings(args, report)
     report["findings"] = findings

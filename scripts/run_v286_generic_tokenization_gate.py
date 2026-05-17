@@ -26,7 +26,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
-from src.competition_utils import box_answer, extract_final_answer_for_expected, verify_answer  # noqa: E402
+from src.competition_utils import box_answer, extract_final_answer, extract_final_answer_for_expected, verify_answer  # noqa: E402
 
 
 DEFAULT_MODEL_NAME = "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16"
@@ -202,32 +202,48 @@ def validate_rows(
             bad_rows.append(rid)
             continue
         assistant_content = str(messages[2].get("content", ""))
-        final_answer_line = "Final answer: " + answer
-        if assistant_final_answer_mode.startswith("boxed_"):
-            final_answer_line = "Final answer: " + box_answer(answer)
-        if assistant_final_answer_mode == "boxed_only":
-            final_answer_line = box_answer(answer)
-        if assistant_final_answer_mode == "exact" and assistant_content != final_answer_line:
-            bad_rows.append(rid)
-            continue
-        if assistant_final_answer_mode == "suffix" and not assistant_content.rstrip().endswith(final_answer_line):
-            bad_rows.append(rid)
-            continue
-        if assistant_final_answer_mode == "boxed_exact" and assistant_content != final_answer_line:
-            bad_rows.append(rid)
-            continue
-        if assistant_final_answer_mode == "boxed_suffix" and not assistant_content.rstrip().endswith(final_answer_line):
-            bad_rows.append(rid)
-            continue
-        if assistant_final_answer_mode == "boxed_only" and assistant_content != final_answer_line:
-            bad_rows.append(rid)
-            continue
-        if assistant_final_answer_mode not in {"exact", "suffix", "boxed_exact", "boxed_suffix", "boxed_only"}:
+        if assistant_final_answer_mode == "submit_safe_suffix":
+            if "Final answer:" not in assistant_content:
+                bad_rows.append(rid)
+                continue
+            extracted_answer = extract_final_answer(assistant_content)
+            if not verify_answer(answer, extracted_answer):
+                bad_rows.append(rid)
+                continue
+        else:
+            final_answer_line = "Final answer: " + answer
+            if assistant_final_answer_mode.startswith("boxed_"):
+                final_answer_line = "Final answer: " + box_answer(answer)
+            if assistant_final_answer_mode == "boxed_only":
+                final_answer_line = box_answer(answer)
+            if assistant_final_answer_mode == "exact" and assistant_content != final_answer_line:
+                bad_rows.append(rid)
+                continue
+            if assistant_final_answer_mode == "suffix" and not assistant_content.rstrip().endswith(final_answer_line):
+                bad_rows.append(rid)
+                continue
+            if assistant_final_answer_mode == "boxed_exact" and assistant_content != final_answer_line:
+                bad_rows.append(rid)
+                continue
+            if assistant_final_answer_mode == "boxed_suffix" and not assistant_content.rstrip().endswith(final_answer_line):
+                bad_rows.append(rid)
+                continue
+            if assistant_final_answer_mode == "boxed_only" and assistant_content != final_answer_line:
+                bad_rows.append(rid)
+                continue
+            extracted_answer = extract_final_answer_for_expected(assistant_content, answer)
+            if not verify_answer(answer, extracted_answer):
+                bad_rows.append(rid)
+                continue
+        if assistant_final_answer_mode not in {
+            "exact",
+            "suffix",
+            "boxed_exact",
+            "boxed_suffix",
+            "boxed_only",
+            "submit_safe_suffix",
+        }:
             raise RuntimeError(f"unknown assistant_final_answer_mode={assistant_final_answer_mode!r}")
-        extracted_answer = extract_final_answer_for_expected(assistant_content, answer)
-        if not verify_answer(answer, extracted_answer):
-            bad_rows.append(rid)
-            continue
         for flag in (
             "weak_gate_rows_used_for_training",
             "full_gate_rows_used_for_training",
@@ -1038,9 +1054,12 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--min-val-rows", type=int, default=60)
     parser.add_argument(
         "--assistant-final-answer-mode",
-        choices=("exact", "suffix", "boxed_exact", "boxed_suffix", "boxed_only"),
+        choices=("exact", "suffix", "boxed_exact", "boxed_suffix", "boxed_only", "submit_safe_suffix"),
         default="exact",
-        help="Use exact for short-answer rows, suffix for solver traces, boxed_* for rows ending in \\boxed{answer}.",
+        help=(
+            "Use exact for short-answer rows, suffix for solver traces, boxed_* for rows ending in "
+            "\\boxed{answer}, submit_safe_suffix for mixed boxed/unboxed rows that must pass label-free extraction."
+        ),
     )
     parser.add_argument("--use-toy-tokenizer", action="store_true")
     parser.add_argument(

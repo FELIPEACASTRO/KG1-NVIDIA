@@ -44,6 +44,12 @@ BLOCKED_ADAPTER_MARKERS = {
     ),
 }
 
+RESIDUAL_FIRST_MIN_TOTAL = 200
+RESIDUAL_FIRST_MIN_BIT = 136
+RESIDUAL_FIRST_MIN_EQUATION = 59
+RESIDUAL_FIRST_MIN_COVERAGE = 0.70
+PROTECTED_ROW_EXPECTED = "8740ed31=01101000"
+
 
 @dataclass
 class Finding:
@@ -88,6 +94,137 @@ def require_regex(text: str, pattern: str, code: str, findings: list[Finding]) -
         findings.append(Finding("error", code, f"missing pattern: {pattern}"))
 
 
+def parse_launcher_env_value(text: str, name: str) -> str:
+    """Best-effort parser for launcher constants/env literals used by KG1 launchers."""
+    patterns = [
+        rf"{re.escape(name)}\s*=\s*[\"']([^\"']+)[\"']",
+        rf"[\"']{re.escape(name)}[\"']\s*:\s*[\"']([^\"']+)[\"']",
+        rf"export\s+{re.escape(name)}=([^\s\"']+)",
+        rf"export\s+{re.escape(name)}=[\"']([^\"']+)[\"']",
+    ]
+    for pattern in patterns:
+        match = re.search(pattern, text)
+        if match:
+            return str(match.group(1)).strip()
+    return ""
+
+
+def parse_launcher_env_float(text: str, name: str) -> float | None:
+    value = parse_launcher_env_value(text, name)
+    if not value:
+        return None
+    try:
+        return float(value)
+    except ValueError:
+        return None
+
+
+def audit_residual_first_gpu_gate(text: str, findings: list[Finding]) -> dict[str, Any]:
+    """Require V540/V541 CPU evidence before any new paid training launcher."""
+    required_exact = {
+        "KG1_RESIDUAL_FIRST_GATE": "1",
+        "KG1_V540_EXTRACTION_GATE_STATUS": "passed",
+        "KG1_CPU_EXTRACTOR_PARITY_STATUS": "passed",
+        "KG1_PROMPT_TEMPLATE_PARITY_STATUS": "passed",
+        "KG1_V541_MISSMAP_GATE_STATUS": "passed",
+        "KG1_V541_FLIP_LEDGER_STATUS": "passed",
+        "KG1_EXPECTED_TRUNCATED": "0",
+        "KG1_ADAPTER_CPU_FORMAT_PARITY_STATUS": "passed",
+        "KG1_V536_VAL_STATS_AS_WEAK_EVIDENCE": "0",
+        "KG1_WEAK_LABEL_AWARE_SELECTION": "0",
+        "KG1_CPU_SIMULATION_USES_WEAK_LABELS": "0",
+    }
+    observed: dict[str, Any] = {}
+    for name, expected in required_exact.items():
+        value = parse_launcher_env_value(text, name)
+        observed[name] = value
+        if value.lower() != expected.lower():
+            findings.append(
+                Finding(
+                    "error",
+                    "residual_first_gate_env_mismatch",
+                    f"{name} expected {expected!r}, got {value or '<missing>'!r}",
+                )
+            )
+
+    protected = parse_launcher_env_value(text, "KG1_PROTECTED_ID_ANSWERS")
+    observed["KG1_PROTECTED_ID_ANSWERS"] = protected
+    if PROTECTED_ROW_EXPECTED not in protected:
+        findings.append(
+            Finding(
+                "error",
+                "residual_first_missing_protected_row_guard",
+                f"KG1_PROTECTED_ID_ANSWERS must include {PROTECTED_ROW_EXPECTED}",
+            )
+        )
+
+    numeric_thresholds = {
+        "KG1_CPU_SIMULATED_TOTAL_CORRECT": RESIDUAL_FIRST_MIN_TOTAL,
+        "KG1_CPU_SIMULATED_BIT_CORRECT": RESIDUAL_FIRST_MIN_BIT,
+        "KG1_CPU_SIMULATED_EQUATION_CORRECT": RESIDUAL_FIRST_MIN_EQUATION,
+        "KG1_CPU_MISS_CLASSIFICATION_COVERAGE": RESIDUAL_FIRST_MIN_COVERAGE,
+    }
+    for name, threshold in numeric_thresholds.items():
+        value = parse_launcher_env_float(text, name)
+        observed[name] = value
+        if value is None:
+            findings.append(Finding("error", "residual_first_numeric_gate_missing", f"{name} is missing or non-numeric"))
+            continue
+        if value < float(threshold):
+            findings.append(
+                Finding(
+                    "error",
+                    "residual_first_numeric_gate_failed",
+                    f"{name}={value} below required {threshold}",
+                )
+            )
+
+    numeric_max_thresholds = {
+        "KG1_CPU_SIMULATED_LOST_ROWS": 0.0,
+        "KG1_CPU_SIMULATED_LOST_BIT_ROWS": 0.0,
+        "KG1_CPU_SIMULATED_LOST_EQUATION_ROWS": 0.0,
+        "KG1_MAX_TOKEN_HEADROOM_RATIO": 0.90,
+    }
+    for name, threshold in numeric_max_thresholds.items():
+        value = parse_launcher_env_float(text, name)
+        observed[name] = value
+        if value is None:
+            findings.append(Finding("error", "residual_first_numeric_gate_missing", f"{name} is missing or non-numeric"))
+            continue
+        if value > float(threshold):
+            findings.append(
+                Finding(
+                    "error",
+                    "residual_first_numeric_max_gate_failed",
+                    f"{name}={value} above required maximum {threshold}",
+                )
+            )
+
+    return {
+        "required": {
+            "v540_extraction_gate_status": "passed",
+            "cpu_extractor_parity_status": "passed",
+            "prompt_template_parity_status": "passed",
+            "v541_missmap_gate_status": "passed",
+            "v541_flip_ledger_status": "passed",
+            "cpu_simulated_total_min": RESIDUAL_FIRST_MIN_TOTAL,
+            "cpu_simulated_bit_min": RESIDUAL_FIRST_MIN_BIT,
+            "cpu_simulated_equation_min": RESIDUAL_FIRST_MIN_EQUATION,
+            "cpu_miss_classification_coverage_min": RESIDUAL_FIRST_MIN_COVERAGE,
+            "cpu_simulated_lost_rows_max": 0,
+            "cpu_simulated_lost_bit_rows_max": 0,
+            "cpu_simulated_lost_equation_rows_max": 0,
+            "max_token_headroom_ratio_max": 0.90,
+            "expected_truncated": 0,
+            "protected_row": PROTECTED_ROW_EXPECTED,
+            "weak_label_aware_selection": "0",
+            "cpu_simulation_uses_weak_labels": "0",
+            "v536_val_stats_as_weak_evidence": "0",
+        },
+        "observed": observed,
+    }
+
+
 def block_quarantined_identity(text: str, findings: list[Finding], *, source: str) -> None:
     for marker, reason in BLOCKED_DATASET_MARKERS.items():
         if marker in text:
@@ -101,6 +238,11 @@ def audit_launcher(args: argparse.Namespace, findings: list[Finding]) -> dict[st
     launcher = args.launcher
     text = launcher.read_text(encoding="utf-8", errors="replace")
     block_quarantined_identity(text, findings, source=str(launcher))
+    residual_first_report = (
+        {"skipped": True, "reason": "explicitly_allowed_missing_residual_first_gates"}
+        if args.allow_missing_residual_first_gates
+        else audit_residual_first_gpu_gate(text, findings)
+    )
     if args.require_crisis_guards:
         require_regex(
             text,
@@ -232,6 +374,19 @@ def audit_launcher(args: argparse.Namespace, findings: list[Finding]) -> dict[st
                 )
             )
     require_regex(text, r"MAX_STEPS\s*=\s*(?:[1-9]|1[0-2])\b", "launcher_max_steps_too_high", findings)
+    if args.require_row_loss_weight:
+        require_regex(
+            text,
+            r"USE_ROW_LOSS_WEIGHT\s*(?:[\"']?\s*:\s*[\"']?(?:1|true|yes|on)|=\s*[\"']?(?:1|true|yes|on))",
+            "launcher_missing_row_loss_weight",
+            findings,
+        )
+        require_regex(
+            text,
+            r"REQUIRE_ROW_LOSS_WEIGHT\s*(?:[\"']?\s*:\s*[\"']?(?:1|true|yes|on)|=\s*[\"']?(?:1|true|yes|on))",
+            "launcher_missing_required_row_loss_weight",
+            findings,
+        )
     if args.expected_pair_score_mode:
         require_text(
             text,
@@ -298,7 +453,9 @@ def audit_launcher(args: argparse.Namespace, findings: list[Finding]) -> dict[st
         "expected_max_length": args.expected_max_length,
         "expected_abort_max_reserved_gib": args.expected_abort_max_reserved_gib,
         "expected_loss_normalization_mode": args.expected_loss_normalization_mode,
+        "require_row_loss_weight": args.require_row_loss_weight,
         "declared_dataset_schema": declared_schema,
+        "residual_first_gpu_gate": residual_first_report,
     }
 
 
@@ -468,6 +625,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--expected-max-length", type=int, default=0)
     parser.add_argument("--expected-abort-max-reserved-gib", type=int, default=0)
     parser.add_argument("--expected-loss-normalization-mode", default="")
+    parser.add_argument("--require-row-loss-weight", action="store_true")
     parser.add_argument("--tokenization-manifest-json", type=Path, default=None)
     parser.add_argument("--expected-data-repo", default="")
     parser.add_argument("--expected-data-root", required=True)
@@ -480,6 +638,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--expected-init-adapter-subfolder", required=True)
     parser.add_argument("--expected-pair-score-mode", default="")
     parser.add_argument("--allow-missing-crisis-guards", action="store_true")
+    parser.add_argument("--allow-missing-residual-first-gates", action="store_true")
     parser.add_argument("--output-json", type=Path, default=None)
     args = parser.parse_args()
     args.require_crisis_guards = not args.allow_missing_crisis_guards

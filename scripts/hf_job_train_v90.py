@@ -29,7 +29,8 @@ Optional env:
   UPLOAD_CHECKPOINTS_DURING_TRAINING, SAMPLING_MODE, SUBCATEGORY_WEIGHTS, SOURCE_WEIGHTS,
   TRAINABLE_LORA_MODULES, TRAINABLE_LORA_NAME_SUBSTRINGS,
   REQUIRE_LORA_TARGET_PARAMETER_MATCH, REQUIRED_TRAINABLE_LORA_NAME_SUBSTRINGS,
-  ANSWER_SPAN_LOSS_WEIGHT, ANSWER_SPAN_MIN_WEIGHTED_TOKENS
+  ANSWER_SPAN_LOSS_WEIGHT, ANSWER_SPAN_MIN_WEIGHTED_TOKENS,
+  USE_ROW_LOSS_WEIGHT, REQUIRE_ROW_LOSS_WEIGHT
 """
 
 from __future__ import annotations
@@ -228,6 +229,8 @@ SUBCATEGORY_WEIGHTS = env_str("SUBCATEGORY_WEIGHTS", "")
 SOURCE_WEIGHTS = env_str("SOURCE_WEIGHTS", "")
 ANSWER_SPAN_LOSS_WEIGHT = env_float("ANSWER_SPAN_LOSS_WEIGHT", 1.0)
 ANSWER_SPAN_MIN_WEIGHTED_TOKENS = env_int("ANSWER_SPAN_MIN_WEIGHTED_TOKENS", 0)
+USE_ROW_LOSS_WEIGHT = env_bool("USE_ROW_LOSS_WEIGHT", False)
+REQUIRE_ROW_LOSS_WEIGHT = env_bool("REQUIRE_ROW_LOSS_WEIGHT", False)
 LOSS_NORMALIZATION_MODE = env_str("LOSS_NORMALIZATION_MODE", "token_mean")
 VALID_LOSS_NORMALIZATION_MODES = {"token_mean", "example_mean"}
 if LOSS_NORMALIZATION_MODE not in VALID_LOSS_NORMALIZATION_MODES:
@@ -597,6 +600,26 @@ def parse_weight_map(value: str) -> dict[str, float]:
 
 SUBCATEGORY_WEIGHT_MAP = parse_weight_map(SUBCATEGORY_WEIGHTS)
 SOURCE_WEIGHT_MAP = parse_weight_map(SOURCE_WEIGHTS)
+
+
+def parse_example_loss_weight(example: dict[str, Any], *, require: bool) -> tuple[float, bool]:
+    metadata = example.get("metadata") if isinstance(example.get("metadata"), dict) else {}
+    raw_weight = metadata.get("loss_weight", example.get("loss_weight"))
+    if raw_weight in (None, ""):
+        if require:
+            raise ValueError(f"example {example.get('id', '<missing>')} is missing metadata.loss_weight")
+        return 1.0, False
+    try:
+        weight = float(raw_weight)
+    except (TypeError, ValueError) as exc:
+        raise ValueError(
+            f"example {example.get('id', '<missing>')} has non-numeric metadata.loss_weight={raw_weight!r}"
+        ) from exc
+    if not math.isfinite(weight) or weight <= 0:
+        raise ValueError(
+            f"example {example.get('id', '<missing>')} has invalid metadata.loss_weight={raw_weight!r}"
+        )
+    return weight, True
 
 
 def trainable_parameter_report(model: torch.nn.Module) -> dict[str, float | int]:
@@ -1312,6 +1335,8 @@ def tokenize_examples(
     examples: list[dict[str, Any]],
     tokenizer: Any,
     label: str,
+    *,
+    apply_row_loss_weight: bool = False,
 ) -> list[dict[str, Any]]:
     tokenized: list[dict[str, Any]] = []
     skipped_missing_messages = 0
@@ -1324,6 +1349,10 @@ def tokenize_examples(
     fallback_prefix_mismatch_count = 0
     answer_span_weighted_examples = 0
     answer_span_weighted_tokens = 0
+    row_loss_weight_examples = 0
+    row_loss_weight_sum = 0.0
+    row_loss_weight_min = float("inf")
+    row_loss_weight_max = 0.0
     for ex in examples:
         msgs = ex.get("messages", [])
         if not msgs:
@@ -1353,6 +1382,17 @@ def tokenize_examples(
         if weighted_tokens:
             answer_span_weighted_examples += 1
             answer_span_weighted_tokens += weighted_tokens
+        row_loss_weight = 1.0
+        if apply_row_loss_weight and USE_ROW_LOSS_WEIGHT:
+            row_loss_weight, has_explicit_row_weight = parse_example_loss_weight(
+                ex,
+                require=REQUIRE_ROW_LOSS_WEIGHT,
+            )
+            if has_explicit_row_weight:
+                row_loss_weight_examples += 1
+                row_loss_weight_sum += row_loss_weight
+                row_loss_weight_min = min(row_loss_weight_min, row_loss_weight)
+                row_loss_weight_max = max(row_loss_weight_max, row_loss_weight)
 
         if len(full_ids) > MAX_LENGTH:
             first_loss_idx = next((idx for idx, value in enumerate(loss_mask) if value), len(loss_mask))
@@ -1389,6 +1429,7 @@ def tokenize_examples(
                     or "unknown"
                 ),
                 "source": ex.get("source") or (ex.get("metadata") or {}).get("source") or "unknown",
+                "row_loss_weight": row_loss_weight,
             }
         )
 
@@ -1402,8 +1443,19 @@ def tokenize_examples(
         f"fallback_prefix_mismatches={fallback_prefix_mismatch_count} "
         f"answer_span_loss_weight={ANSWER_SPAN_LOSS_WEIGHT} "
         f"answer_span_weighted_examples={answer_span_weighted_examples} "
-        f"answer_span_weighted_tokens={answer_span_weighted_tokens}"
+        f"answer_span_weighted_tokens={answer_span_weighted_tokens} "
+        f"use_row_loss_weight={USE_ROW_LOSS_WEIGHT if apply_row_loss_weight else False} "
+        f"row_loss_weight_examples={row_loss_weight_examples} "
+        f"row_loss_weight_min={(row_loss_weight_min if row_loss_weight_examples else 1.0):.4f} "
+        f"row_loss_weight_max={(row_loss_weight_max if row_loss_weight_examples else 1.0):.4f} "
+        f"row_loss_weight_mean={(row_loss_weight_sum / row_loss_weight_examples if row_loss_weight_examples else 1.0):.4f}"
     )
+    if apply_row_loss_weight and USE_ROW_LOSS_WEIGHT and REQUIRE_ROW_LOSS_WEIGHT:
+        if row_loss_weight_examples != len(tokenized):
+            raise RuntimeError(
+                f"{label} requires explicit metadata.loss_weight for every tokenized row: "
+                f"{row_loss_weight_examples}/{len(tokenized)}"
+            )
     if ANSWER_SPAN_LOSS_WEIGHT > 1.0 and answer_span_weighted_examples <= 0:
         raise RuntimeError(
             f"{label} ANSWER_SPAN_LOSS_WEIGHT={ANSWER_SPAN_LOSS_WEIGHT} "
@@ -1486,6 +1538,7 @@ def masked_cross_entropy_loss(
     logits: torch.Tensor,
     input_ids: torch.Tensor,
     loss_mask: torch.Tensor,
+    example_weights: torch.Tensor | None = None,
 ) -> torch.Tensor:
     shift_logits = logits[..., :-1, :].contiguous()
     shift_labels = input_ids[..., 1:].contiguous()
@@ -1497,18 +1550,29 @@ def masked_cross_entropy_loss(
     flat_mask = shift_mask.view(batch * seq_len)
 
     per_token_loss = F.cross_entropy(flat_logits, flat_labels, reduction="none")
-    masked_loss = per_token_loss * flat_mask
+    if example_weights is not None:
+        expanded_example_weights = example_weights.float().view(batch, 1).expand(batch, seq_len).reshape(batch * seq_len)
+        effective_mask = flat_mask * expanded_example_weights
+    else:
+        effective_mask = flat_mask
+    masked_loss = per_token_loss * effective_mask
     if LOSS_NORMALIZATION_MODE == "example_mean":
-        token_loss = masked_loss.view(batch, seq_len)
+        token_loss = (per_token_loss * flat_mask).view(batch, seq_len)
         token_mask = flat_mask.view(batch, seq_len)
         per_example_counts = token_mask.sum(dim=1).clamp_min(1.0)
         active_examples = (token_mask.sum(dim=1) > 0).float()
         if active_examples.sum() == 0:
             return torch.tensor(0.0, device=logits.device)
         per_example_loss = token_loss.sum(dim=1) / per_example_counts
+        if example_weights is not None:
+            active_weights = example_weights.float() * active_examples
+            total_active_weight = active_weights.sum()
+            if total_active_weight == 0:
+                return torch.tensor(0.0, device=logits.device)
+            return (per_example_loss * active_weights).sum() / total_active_weight
         return (per_example_loss * active_examples).sum() / active_examples.sum()
 
-    num_unmasked = flat_mask.sum()
+    num_unmasked = effective_mask.sum()
     if num_unmasked == 0:
         return torch.tensor(0.0, device=logits.device)
     return masked_loss.sum() / num_unmasked
@@ -1524,21 +1588,24 @@ def get_lr(global_step: int, total_steps: int) -> float:
 def tensorize_batch(
     batch: list[dict[str, Any]],
     pad_token_id: int,
-) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
+) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor]:
     max_len = max(len(ex["input_ids"]) for ex in batch)
     input_ids_batch: list[list[int]] = []
     attention_mask_batch: list[list[int]] = []
     loss_mask_batch: list[list[float]] = []
+    example_weights_batch: list[float] = []
     for ex in batch:
         pad_len = max_len - len(ex["input_ids"])
         input_ids_batch.append(ex["input_ids"] + [pad_token_id] * pad_len)
         attention_mask_batch.append([1] * len(ex["input_ids"]) + [0] * pad_len)
         loss_mask_batch.append(ex["loss_mask"] + [0] * pad_len)
+        example_weights_batch.append(float(ex.get("row_loss_weight", 1.0)))
 
     input_ids = torch.tensor(input_ids_batch, dtype=torch.long, device="cuda")
     attention_mask = torch.tensor(attention_mask_batch, dtype=torch.long, device="cuda")
     loss_mask = torch.tensor(loss_mask_batch, dtype=torch.float32, device="cuda")
-    return input_ids, attention_mask, loss_mask
+    example_weights = torch.tensor(example_weights_batch, dtype=torch.float32, device="cuda")
+    return input_ids, attention_mask, loss_mask, example_weights
 
 
 def select_eval_sample(val_data: list[dict[str, Any]], max_examples: int) -> list[dict[str, Any]]:
@@ -1593,11 +1660,11 @@ def evaluate_loss(
 
     with torch.no_grad():
         for index, item in enumerate(sample, start=1):
-            input_ids, attention_mask, loss_mask = tensorize_batch([item], tokenizer.pad_token_id)
+            input_ids, attention_mask, loss_mask, example_weights = tensorize_batch([item], tokenizer.pad_token_id)
             outputs = model(input_ids=input_ids, attention_mask=attention_mask, use_cache=False)
-            loss = masked_cross_entropy_loss(outputs.logits, input_ids, loss_mask)
+            loss = masked_cross_entropy_loss(outputs.logits, input_ids, loss_mask, example_weights)
             losses.append(float(loss.item()))
-            del input_ids, attention_mask, loss_mask, outputs, loss
+            del input_ids, attention_mask, loss_mask, example_weights, outputs, loss
             if index == 1 or index == total or index % 8 == 0:
                 partial = sum(losses) / max(1, len(losses))
                 print(
@@ -1708,6 +1775,12 @@ def make_manifest(
                 "weight": ANSWER_SPAN_LOSS_WEIGHT,
                 "min_weighted_tokens": ANSWER_SPAN_MIN_WEIGHTED_TOKENS,
                 "markers": ["Final answer:", "ANSWER:", "\\boxed{...}"],
+            },
+            "row_loss_weight": {
+                "enabled": USE_ROW_LOSS_WEIGHT,
+                "required_for_train_rows": REQUIRE_ROW_LOSS_WEIGHT,
+                "source_fields": ["metadata.loss_weight", "loss_weight"],
+                "validation_ignores_row_weight": True,
             },
             "loss_normalization": {
                 "mode": LOSS_NORMALIZATION_MODE,
@@ -1914,8 +1987,8 @@ def train() -> None:
             raise RuntimeError(
                 f"Validation dataset too small: {len(val_examples)} < MIN_VAL_EXAMPLES={MIN_VAL_EXAMPLES}"
             )
-        train_data = tokenize_examples(train_examples, tokenizer, "Train")
-        val_data = tokenize_examples(val_examples, tokenizer, "Validation")
+        train_data = tokenize_examples(train_examples, tokenizer, "Train", apply_row_loss_weight=True)
+        val_data = tokenize_examples(val_examples, tokenizer, "Validation", apply_row_loss_weight=False)
     if len(train_data) < MIN_TOKENIZED_TRAIN_EXAMPLES:
         raise RuntimeError(
             "Too few train examples survived tokenization: "
@@ -2219,9 +2292,9 @@ def train() -> None:
             if not batch:
                 continue
 
-            input_ids, attention_mask, loss_mask = tensorize_batch(batch, tokenizer.pad_token_id)
+            input_ids, attention_mask, loss_mask, example_weights = tensorize_batch(batch, tokenizer.pad_token_id)
             outputs = model(input_ids=input_ids, attention_mask=attention_mask, use_cache=False)
-            loss = masked_cross_entropy_loss(outputs.logits, input_ids, loss_mask)
+            loss = masked_cross_entropy_loss(outputs.logits, input_ids, loss_mask, example_weights)
             if not torch.isfinite(loss):
                 raise FloatingPointError(f"Non-finite loss at step {global_step}: {loss}")
 
@@ -2234,7 +2307,7 @@ def train() -> None:
             micro_in_step = accum_count % GRADIENT_ACCUMULATION
             should_step_optimizer = micro_in_step == 0
 
-            del input_ids, attention_mask, loss_mask, outputs, loss, scaled_loss
+            del input_ids, attention_mask, loss_mask, example_weights, outputs, loss, scaled_loss
 
             if (
                 MICRO_LOG_EVERY > 0
@@ -2471,6 +2544,27 @@ def self_test() -> None:
             pass
         else:
             raise AssertionError(f"parse_weight_map should reject {bad!r}")
+    assert parse_example_loss_weight({"metadata": {"loss_weight": 2.0}}, require=True) == (2.0, True)
+    assert parse_example_loss_weight({"loss_weight": "1.25"}, require=True) == (1.25, True)
+    assert parse_example_loss_weight({}, require=False) == (1.0, False)
+    for bad_example in [
+        {"metadata": {"loss_weight": 0}},
+        {"metadata": {"loss_weight": -1}},
+        {"metadata": {"loss_weight": "nan"}},
+        {"metadata": {"loss_weight": "bad"}},
+    ]:
+        try:
+            parse_example_loss_weight(bad_example, require=True)
+        except ValueError:
+            pass
+        else:
+            raise AssertionError(f"parse_example_loss_weight should reject {bad_example!r}")
+    try:
+        parse_example_loss_weight({}, require=True)
+    except ValueError:
+        pass
+    else:
+        raise AssertionError("parse_example_loss_weight should reject missing weight when require=True")
     assert target_parameter_name_matches(
         "mlp.experts.gate_up_proj",
         "base_model.model.backbone.layers.0.mixer.experts.7.up_proj.lora_A.default.weight",

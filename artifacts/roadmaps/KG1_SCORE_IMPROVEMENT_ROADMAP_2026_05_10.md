@@ -1112,3 +1112,369 @@ Decisao:
 - se V537 nao atingir o gate, arquivar os checkpoints como diagnostico e voltar
   para frente CPU/dataset; se atingir, rodar full official-like antes de
   qualquer package/submit.
+
+## Atualizacao V537 Resultado - Linha V536 Bloqueada
+
+Artefatos:
+
+- `artifacts/v537_hf_h200_v536_weak_eval_launch/downloaded_20260517T040250Z/evals/v537-h200-v221contract-v536-cp2-step4-20260517T040250Z/eval/batch_candidate_summary.json`;
+- `artifacts/v537_hf_h200_v536_weak_eval_launch/downloaded_20260517T040250Z/evals/v537-h200-v221contract-v536-cp2-step4-20260517T040250Z/eval/batch_candidate_summary.csv`;
+- upload remoto em `felipesp1983/kg1-nemotron-lora-v536-nemo-h200-v534bit-v523eq-v290ckpt6/evals/v537-h200-v221contract-v536-cp2-step4-20260517T040250Z`.
+
+Resultado:
+
+| Candidato | Total | bit | equation | trunc | Protected row | Decisao |
+|---|---:|---:|---:|---:|---|---|
+| `checkpoint-2` | 191/315 | 135/160 | 56/155 | 0 | quebrou `8740ed31`: `01111000` vs `01101000` | bloqueado |
+| `checkpoint-abort-step4` | 191/315 | 135/160 | 56/155 | 0 | preservou | bloqueado |
+
+Diagnostico:
+
+- V536/V537 repetiu a troca ruim vista em outras linhas: pequeno ganho ou
+  estabilidade em equation com perda em bit;
+- o melhor candidato nao atingiu `total>=193`, `equation>=57`, `bit>=136`;
+- `checkpoint-2` ainda acionou o guard de F2/backfire por quebrar a linha
+  protegida.
+
+Decisao:
+
+- arquivar V536/V537 como diagnostico;
+- nao relancar H200 nessa familia de dataset/parametros;
+- voltar para CPU residual, extracao/canonicalizacao e miss-map antes de
+  qualquer novo treino pago.
+
+## Atualizacao V538/V539 - Consenso OpenRouter E Plano Residual-First
+
+Artefatos:
+
+- `artifacts/v538_openrouter_residual_first_consult/KG1_V538_OPENROUTER_RESIDUAL_FIRST_PROMPT.md`;
+- `artifacts/v538_openrouter_residual_first_consult/v538_openrouter_manifest.json`;
+- `artifacts/v538_openrouter_residual_first_consult/v539_free_double_check/KG1_V539_OPENROUTER_FREE_DOUBLE_CHECK_PROMPT.md`;
+- `artifacts/v538_openrouter_residual_first_consult/v539_free_double_check/v539_openrouter_free_manifest.json`;
+- `artifacts/v538_openrouter_residual_first_consult/KG1_V539_FREE_DOUBLE_CHECK_CONSENSUS.md`.
+
+Painel V538 pago: DeepSeek, Qwen, Claude, Gemini e GPT-5.5 foram chamados; o
+conteudo utilizavel convergiu para CPU residual-first. Painel V539 gratuito:
+`openai/gpt-oss-120b:free`, `z-ai/glm-4.5-air:free`,
+`poolside/laguna-m.1:free` e
+`nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free` responderam com custo `0`;
+`qwen/qwen3-coder:free` e `meta-llama/llama-3.3-70b-instruct:free` deram `429`
+e nao contam como evidencia tecnica.
+
+Consenso:
+
+- o loop atual nao sai do plateau porque estamos tentando transferir sinal de
+  solver/verifier para LoRA sem mapear a causa exata de cada erro;
+- loss menor nao e criterio promocional e nao deve autorizar novo GPU;
+- o proximo passo precisa ser CPU, por linha, com evidencia de extracao,
+  canonicalizacao, token-offset, regra faltante e risco de regressao;
+- antes do miss-map, validar se extracao/canonicalizacao/prompt-template e
+  answer-span estao alinhados com a metrica ACC; se essa camada tiver mismatch,
+  qualquer treino continuara parecendo saudavel no loss e ruim no ACC.
+
+Plano ativo, em ordem:
+
+1. `V540 validate_answer_extraction_v1.py`: auditar raw output, extracted answer,
+   `verify_answer`, prompt hash, token offsets, truncation e protected row para
+   baseline strict e V537. Gate: `0` blockers e `8740ed31=01101000` estavel.
+2. `V541 weak_missmap_v1`: construir CSV/parquet com uma linha por weak row:
+   `id`, `family`, `prompt_sha256`, `raw_output`, `extracted_answer`,
+   `verify_answer_ok`, `answer_span_start`, `answer_span_end`, `token_count`,
+   `miss_class`, `operator_tag`, `required_rule`, `solver_trace`,
+   `is_protected`.
+3. CPU simulation: somente aprovar treino se projetar `>=200/315`, `bit>=136`,
+   `equation>=59`, `trunc=0`, protected row preservada, `>=70%` dos misses
+   classificados e `0` overlap/duplicidade.
+4. Se e somente se o gate CPU passar, gerar `400-600` traces curtas, source-only,
+   deterministicas e verificadas, com kill-switch de probe antes de weak full.
+5. Se o primeiro checkpoint nao preservar bit/protected row ou nao indicar ganho
+   em probe, cancelar por FinOps.
+
+Stop list:
+
+- parar broad SFT, treino H200 por loss, replay generico e selector direto de
+  candidate pool;
+- parar qualquer GPU paga sem V540/V541 aprovados;
+- parar qualquer avaliacao que dependa de `prediction` label-aware em vez de
+  `raw_output` label-free.
+
+## Atualizacao V540 - Gate Residual-First Agora E Bloqueante
+
+Artefatos:
+
+- `artifacts/v540_openrouter_gate_prompt_consult/KG1_V540_OPENROUTER_GATE_PROMPT.md`;
+- `artifacts/v540_openrouter_gate_prompt_consult/v540_openrouter_gate_manifest.json`;
+- `artifacts/v540_openrouter_gate_prompt_consult/KG1_V540_OPENROUTER_GATE_CONSENSUS.md`.
+
+Consulta: DeepSeek, Gemini, Claude, GPT e Qwen foram chamados. Gemini, Claude e
+Qwen trouxeram conteudo acionavel; DeepSeek e GPT retornaram resposta
+reasoning-only/null e foram tratados como nao acionaveis.
+
+Mudanca implementada:
+
+- `scripts/kg1_pre_paid_job_integration_gate.py` agora bloqueia launchers pagos
+  sem evidencias V540/V541;
+- `scripts/hf_job_preflight_gate.py` agora bloqueia o job remoto antes de
+  carregar modelo se as evidencias V540/V541 nao estiverem no ambiente;
+- `hf_job_preflight_gate.py --self-test` cobre o novo gate.
+
+Regra bloqueante para qualquer novo treino pago:
+
+| Campo | Regra |
+|---|---|
+| `KG1_RESIDUAL_FIRST_GATE` | `1` |
+| `KG1_V540_EXTRACTION_GATE_STATUS` | `passed` |
+| `KG1_CPU_EXTRACTOR_PARITY_STATUS` | `passed` |
+| `KG1_PROMPT_TEMPLATE_PARITY_STATUS` | `passed` |
+| `KG1_V541_MISSMAP_GATE_STATUS` | `passed` |
+| `KG1_V541_FLIP_LEDGER_STATUS` | `passed` |
+| `KG1_CPU_SIMULATED_TOTAL_CORRECT` | `>=200` |
+| `KG1_CPU_SIMULATED_BIT_CORRECT` | `>=136` |
+| `KG1_CPU_SIMULATED_EQUATION_CORRECT` | `>=59` |
+| `KG1_CPU_MISS_CLASSIFICATION_COVERAGE` | `>=0.70` |
+| `KG1_CPU_SIMULATED_LOST_ROWS` | `0` |
+| `KG1_CPU_SIMULATED_LOST_BIT_ROWS` | `0` |
+| `KG1_CPU_SIMULATED_LOST_EQUATION_ROWS` | `0` |
+| `KG1_MAX_TOKEN_HEADROOM_RATIO` | `<=0.90` |
+| `KG1_EXPECTED_TRUNCATED` | `0` |
+| `KG1_PROTECTED_ID_ANSWERS` | inclui `8740ed31=01101000` |
+| `KG1_ADAPTER_CPU_FORMAT_PARITY_STATUS` | `passed` |
+| `KG1_V536_VAL_STATS_AS_WEAK_EVIDENCE` | `0` |
+| `KG1_WEAK_LABEL_AWARE_SELECTION` | `0` |
+| `KG1_CPU_SIMULATION_USES_WEAK_LABELS` | `0` |
+
+Decisao:
+
+- manter `>=200/315` como meta CPU antes de GPU; se isso bloquear, o bloqueio e
+  correto, porque o sinal atual `195-196` ja falhou na transferencia;
+- proxima implementacao obrigatoria e `V540 validate_answer_extraction_v1.py`,
+  seguida por `V541 weak_missmap_v1`;
+- nao fazer novo H200 enquanto esses gates nao produzirem os valores acima.
+
+## Atualizacao V540/V541/V542 - Primeiro Ganho CPU Real Sem Perdas
+
+Artefatos:
+
+- `scripts/validate_answer_extraction_v1.py`;
+- `scripts/build_v541_weak_missmap_v1.py`;
+- `artifacts/v540_answer_extraction_audit_baseline_only/v540_baseline_only_answer_extraction_audit_summary.json`;
+- `artifacts/v540_answer_extraction_audit/v540_answer_extraction_audit_summary.json`;
+- `artifacts/v541_weak_missmap/v541_weak_missmap_manifest.json`;
+- `artifacts/v542_cpu_equation_solver_gate/v324_on_v516_strict/v324_equation_expanded_solver_manifest.json`;
+- `artifacts/v542_cpu_equation_solver_gate/v329_on_v516_strict/v329_symbolic_cryptarithm_manifest.json`;
+- `artifacts/v542_cpu_equation_solver_gate/v336_integrated_on_v516_strict/v336a_integrated_no_loss_solver_gate_manifest.json`;
+- `artifacts/v542_cpu_equation_solver_gate/KG1_V542_CPU_EQUATION_GAIN_SUMMARY.md`;
+- `artifacts/v542_cpu_equation_solver_gate/KG1_V542_PACKAGE_PERMISSION_RECHECK.md`.
+
+Resultado validado:
+
+| Métrica | Baseline V516 label-free | V542 CPU integrado | Delta |
+|---|---:|---:|---:|
+| Total weak | 191/315 | 196/315 | +5 |
+| `bit_manipulation` | 136/160 | 136/160 | 0 |
+| `equation_transform` | 55/155 | 60/155 | +5 |
+| truncation | 0 | 0 | 0 |
+| perdas | - | 0 | 0 |
+
+O V540 baseline-only passou:
+
+- contrato weak `bf055e3b9ebce79d4bfc9e48bce5a305b1d83da882f14afddec80d6afaba5fff`;
+- `cpu_extractor_parity_status=passed`;
+- `prompt_template_parity_status=passed`;
+- protected row `8740ed31=01101000` preservada;
+- aviso legado: `stored_correct_column_mismatch=1` em `4bb8c6cd`, mas `correct`
+  e extração label-free estão alinhados, portanto não é blocker.
+
+O V540 incluindo V537 ficou bloqueado de propósito:
+
+- os artefatos baixados de V537 têm apenas `batch_candidate_summary.*` e
+  manifest, sem prediction CSV/raw output por linha;
+- portanto V537 é diagnóstico, não evidência para promoção.
+
+O V541 miss-map passou e mostrou o gargalo real:
+
+| Classe | Misses |
+|---|---:|
+| `bit_residual_miss` | 24 |
+| `equation_numeric_miss` | 12 |
+| `equation_symbolic_punctuation_miss` | 88 |
+
+Conclusão técnica:
+
+- a frente com ganho comprovado agora é `equation_transform`, principalmente
+  regras numéricas guardadas e um caso simbólico de cryptarithm;
+- cinco linhas foram corrigidas em simulação CPU sem perda:
+  `274def88`, `7688e06e`, `c5b058d6`, `d1bd7478`, `99d6a3b5`;
+- isso atende ao objetivo de achar ganho real, mas ainda não atende o gate para
+  treino pago (`>=200/315`);
+- não fazer submit, package ou H200 ainda. O próximo passo é ampliar a DSL
+  simbólica/pontuação sobre os 83+ misses restantes até a simulação CPU passar
+  `>=200/315`, preservando `bit>=136` e `losses=0`.
+
+Recheck de pacote/submissao:
+
+- o pacote local validado e adapter-only: apenas `adapter_config.json` e
+  `adapter_model.safetensors`;
+- `scripts/package_hf_adapter_submission.py` rejeita `prediction_postprocessor`;
+- o gate V336B conclui `direct_solver_package_allowed=false`;
+- rerodando V336B contra o manifesto V542 atual, o gate bloqueia antes do
+  pacote porque V542 ainda e `196/315`, abaixo do piso `>=200/315`;
+- portanto `196/315` nao deve ser submetido diretamente. Ele e sinal CPU real
+  para transferencia ou para expansao residual, nao pacote Kaggle pronto.
+
+Próximo passo obrigatório:
+
+1. implementar V543 symbolic-punctuation residual expansion com foco nos 83
+   misses restantes após V324/V329;
+2. regras candidatas somente source-derived, nunca escolhidas por label;
+3. aceitar uma regra apenas se o class gate tiver `verified>0` e
+   `incorrect=0`;
+4. rerodar V336 integrado com thresholds `total>=200`, `equation>=59`,
+   `bit>=136`, `losses=0`;
+5. só depois gerar traces curtos para LoRA ou avaliar se existe caminho
+   submit-safe permitido pelas regras da competição.
+
+## Atualizacao V543/V544 - CPU >=200 Atingido, Distilacao Agora E O Caminho Ativo
+
+Artefatos:
+
+- `scripts/run_v543_symbolic_queryop_refinement_gate.py`;
+- `artifacts/v542_cpu_equation_solver_gate/v543_symbolic_queryop_on_v350_v516_strict/v543_symbolic_queryop_refinement_manifest.json`;
+- `artifacts/openrouter/v544_distillation_transfer_consult/KG1_V544_OPENROUTER_DISTILLATION_TRANSFER_PROMPT.md`;
+- `artifacts/openrouter/v544_distillation_transfer_consult/v544_openrouter_distillation_transfer_manifest.json`;
+- `artifacts/openrouter/v544_distillation_transfer_consult/KG1_V544_OPENROUTER_DISTILLATION_TRANSFER_CONSENSUS.md`.
+
+Resultado V543 validado:
+
+| Métrica | Baseline V516 label-free | V350 CPU | V543 CPU | Delta vs baseline |
+|---|---:|---:|---:|---:|
+| Total weak | 191/315 | 198/315 | 200/315 | +9 |
+| `bit_manipulation` | 136/160 | 138/160 | 138/160 | +2 |
+| `equation_transform` | 55/155 | 60/155 | 62/155 | +7 |
+| truncation | 0 | 0 | 0 | 0 |
+| perdas | - | 0 | 0 | 0 |
+
+V543 aceitou três assinaturas source-derived por `rule_class + query_op`:
+
+- `symbolic_cryptarithm_multi_operator_digits_add | query_op=!`, ganho
+  `6cc5dafb`;
+- `symbolic_cryptarithm_multi_operator_digits_mul | query_op=$`, ganho
+  `5501c054`;
+- `symbolic_cryptarithm_single_operator_digits_mul | query_op=%`, já coberto
+  pelo V350 em `99d6a3b5`.
+
+Decisão:
+
+- o gate CPU que antes bloqueava GPU (`>=200/315`) agora foi atingido;
+- isso ainda **não** é submit direto: o pacote Kaggle continua adapter-only e
+  bloqueia `prediction_postprocessor`;
+- o próximo caminho ativo é V544: destilar o comportamento V350/V543 para
+  adapter-only, com dataset mínimo e gates antes de qualquer H200.
+
+Consenso OpenRouter V544:
+
+- chamados: DeepSeek V4 Pro, DeepSeek R1 Distill Qwen 32B, Qwen 3.6 Max,
+  Claude Opus 4.7, Gemini 3.1 Pro Preview, GPT-5.5 Pro;
+- respostas estruturadas aproveitáveis: DeepSeek R1 Distill, Qwen, Claude e
+  Gemini;
+- respostas reasoning-only/null: DeepSeek V4 Pro e GPT-5.5 Pro, retidas apenas
+  como artefato bruto;
+- consenso acionável: não repetir broad SFT; usar traces curtos,
+  deterministicos, answer-focused, replay forte de bit e kill-switch por ACC.
+
+Contrato V544 obrigatório:
+
+1. criar `scripts/build_v544_minimal_distillation_dataset.py`;
+2. incluir os 9 ganhos teacher:
+   `99d6a3b5`, `7688e06e`, `274def88`, `d1bd7478`, `c5b058d6`,
+   `4ada9150`, `4c327b55`, `6cc5dafb`, `5501c054`;
+3. incluir replay de linhas baseline-correct, com `8740ed31=01101000`
+   obrigatório e peso alto;
+4. usar alvo curto submit-safe: `RULE: <tag>. Final answer: \boxed{<answer>}`
+   quando a extracao label-free preserva o valor, ou `Final answer: <answer>`
+   quando simbolos com `}` tornam o boxed ambiguo;
+5. mascarar prompt com `labels=-100` e provar via self-test que tokens
+   não mascarados decodificam para o target esperado;
+6. rodar gates de dedup, leakage, tokenização, truncation, extraction
+   round-trip, protected row e familia antes de qualquer GPU;
+7. primeiro checkpoint H200 deve abortar se `bit<136`, `equation<55`,
+   `total<191`, `truncation>0`, `8740ed31!=01101000` ou `raw_output`
+   estiver ausente.
+
+Double check V544 dataset:
+
+- artefato: `artifacts/v544_minimal_distillation_dataset/20260517T_v544_cpu_gate/v544_dataset_doublecheck_audit.json`;
+- decisão: `dataset_doublecheck_passed`, com `issues=[]` e `warnings=[]`;
+- SHA do treino e validação batem com o manifesto:
+  `09f542297d9bafe85015b2955c09289817487ebf9fc53746de4ea68cb5f3e4f3`
+  e `894a1df7590ccd0ded77f307438e646f870aa2cc6e6e006cb536e88f8aedb921`;
+- treino: `236` linhas, `146` bit, `90` equation, `200` prompts/source IDs
+  únicos;
+- validação: `115` linhas, `22` bit, `93` equation, `115` prompts/source IDs
+  únicos;
+- roles de treino: `136` `bit_replay`, `55` `equation_replay`, `45`
+  `teacher_gain`;
+- os 9 teacher gains aparecem exatamente 5x cada;
+- `8740ed31=01101000` aparece uma vez, como `bit_replay`, com peso `3.0`;
+- não há overlap train/val por prompt ou source ID;
+- bug encontrado no pre-paid gate: a versao inicial escapava `{`, `}` e `\`
+  dentro de `\boxed{}`, passando apenas em extracao expected-aware, mas falhando
+  no caminho label-free usado para score/submit;
+- correcao implementada: `scripts/build_v544_minimal_distillation_dataset.py`
+  agora exige `extract_final_answer` label-free em todas as linhas; `V286`
+  ganhou o modo `submit_safe_suffix`;
+- todas as respostas extraem corretamente no caminho label-free; treino tem
+  `236/236` em `boxed_raw_label_free`; validação tem `111` boxed raw e `4`
+  `unboxed_label_free_fallback`;
+- tokenização real V286 passou em `submit_safe_suffix`: `train_token_max=342`,
+  `val_token_max=336`, `completion_tokens_dropped=0`, `prompt_truncated=0`,
+  `fallback_masks=0`;
+- upload HF verificado:
+  `felipesp1983/kg1-v544-minimal-distillation-artifacts`,
+  root `v544-minimal-distillation-20260517T063045Z`,
+  commit `c71e4ea4029ac2a77efd913c4d251752e4bbee18`.
+
+Risco resolvido antes de GPU:
+
+- resolvido o gap crítico encontrado no double check: `hf_job_train_v90.py`
+  lia `metadata.loss_weight` no dataset, mas não transferia esse valor para
+  o loss real;
+- correção: `metadata.loss_weight` agora vira `row_loss_weight` no treino
+  quando `USE_ROW_LOSS_WEIGHT=1`; validação ignora esse peso para não zerar o
+  eval com os rows `loss_weight=0.0`;
+- a loss foi ajustada para respeitar `row_loss_weight` tanto em `token_mean`
+  quanto em `example_mean`, sem cancelamento matemático do peso por exemplo;
+- `scripts/kg1_pre_paid_job_integration_gate.py` agora aceita
+  `--require-row-loss-weight` e falha se o launcher não expuser
+  `USE_ROW_LOSS_WEIGHT=1` e `REQUIRE_ROW_LOSS_WEIGHT=1`;
+- `scripts/audit_v478_training_objective_alignment.py` agora mede o objetivo
+  efetivo com `metadata.loss_weight` via `--use-row-loss-weight` e
+  `--require-row-loss-weight`;
+- V478 row-weighted passou em
+  `artifacts/v544_minimal_distillation_dataset/20260517T_v544_cpu_gate/v478_objective_alignment_row_weighted.json`:
+  objetivo efetivo de treino `66.42%` bit, `33.58%` equation, `45` teacher
+  gains com peso total `90.0`, sem source/subcategory desconhecida;
+- validações rodadas: `py_compile`, `hf_job_train_v90.py --self-test` e
+  `kg1_static_safety_gate.py` passaram.
+
+Launcher V544:
+
+- launcher: `artifacts/v544_hf_h200_launch/launch_v544_hf_nemo_h200_minimal_distillation.py`;
+- H200 controlado: `MAX_STEPS=8`, checkpoints a cada `2`, timeout `3600s`,
+  custo HF observado `0.083333 USD/min`;
+- dataset remoto baixado e hasheado em debug local;
+- adapter inicial `felipesp1983/kg1-nemotron-lora-v290-rank19-micro-patch-smoke/checkpoint-6`
+  verificado;
+- `kg1_pre_paid_job_integration_gate.py` passou com `ok=true`,
+  `--require-row-loss-weight`, root remoto novo, hashes novos e sem
+  `assistant_final_answer_mismatch`;
+- bloqueador final antes de `--launch`: commitar/pushar os scripts alterados,
+  porque o HF clona o branch GitHub; sem isso o job rodaria trainer antigo.
+
+Meta realista:
+
+- CPU teacher: `200/315` já provado;
+- adapter-only esperado: `194-198/315` se a transferencia funcionar;
+- submit só volta a ser considerado após weak label-free `raw_output` passar
+  `total>=194`, `bit>=136`, `equation>=58`, `truncation=0` e protected row
+  intacta.

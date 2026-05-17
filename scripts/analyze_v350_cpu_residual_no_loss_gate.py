@@ -421,11 +421,14 @@ def apply_accepted(rows: list[dict[str, Any]], decisions: list[dict[str, Any]]) 
         item = dict(row)
         item["v343_prediction"] = current_prediction(row)
         accepted = accepted_by_id.get(str(row["id"]), [])
-        if len(accepted) == 1:
-            item["v350_prediction"] = str(accepted[0]["new_prediction"])
-            item["v350_source_rule"] = str(accepted[0]["rule_class"])
-        elif len(accepted) > 1:
-            raise RuntimeError(f"accepted prediction conflict for id={row['id']}")
+        if accepted:
+            unique_predictions = sorted({str(candidate["new_prediction"]) for candidate in accepted})
+            if len(unique_predictions) != 1:
+                raise RuntimeError(f"accepted prediction conflict for id={row['id']}: {unique_predictions}")
+            item["v350_prediction"] = unique_predictions[0]
+            item["v350_source_rule"] = ";".join(
+                sorted({str(candidate["rule_class"]) for candidate in accepted if candidate.get("rule_class")})
+            )
         else:
             item["v350_prediction"] = current_prediction(row)
             item["v350_source_rule"] = ""

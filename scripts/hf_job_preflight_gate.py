@@ -44,6 +44,12 @@ BLOCKED_DATASET_MARKERS = {
     ),
 }
 
+RESIDUAL_FIRST_MIN_TOTAL = 200
+RESIDUAL_FIRST_MIN_BIT = 136
+RESIDUAL_FIRST_MIN_EQUATION = 59
+RESIDUAL_FIRST_MIN_COVERAGE = 0.70
+PROTECTED_ROW_EXPECTED = "8740ed31=01101000"
+
 
 def log_json(label: str, payload: dict[str, Any]) -> None:
     print(f"{label} = {json.dumps(payload, sort_keys=True)}", flush=True)
@@ -86,6 +92,110 @@ def require_env(names: list[str]) -> None:
     missing = [name for name in names if not env_str(name)]
     if missing:
         raise RuntimeError("Missing required HF job environment variables: " + ", ".join(missing))
+
+
+def check_residual_first_gpu_gate() -> dict[str, Any]:
+    """Block paid training unless V540/V541 CPU gates have already passed."""
+    if env_bool("KG1_ALLOW_MISSING_RESIDUAL_FIRST_GATES", False):
+        raise RuntimeError(
+            "KG1_ALLOW_MISSING_RESIDUAL_FIRST_GATES is not allowed in paid HF training. "
+            "Run V540 extraction/canonicalization and V541 miss-map CPU gates first."
+        )
+
+    required_exact = {
+        "KG1_RESIDUAL_FIRST_GATE": "1",
+        "KG1_V540_EXTRACTION_GATE_STATUS": "passed",
+        "KG1_CPU_EXTRACTOR_PARITY_STATUS": "passed",
+        "KG1_PROMPT_TEMPLATE_PARITY_STATUS": "passed",
+        "KG1_V541_MISSMAP_GATE_STATUS": "passed",
+        "KG1_V541_FLIP_LEDGER_STATUS": "passed",
+        "KG1_EXPECTED_TRUNCATED": "0",
+        "KG1_ADAPTER_CPU_FORMAT_PARITY_STATUS": "passed",
+        "KG1_V536_VAL_STATS_AS_WEAK_EVIDENCE": "0",
+        "KG1_WEAK_LABEL_AWARE_SELECTION": "0",
+        "KG1_CPU_SIMULATION_USES_WEAK_LABELS": "0",
+    }
+    observed: dict[str, Any] = {}
+    for name, expected in required_exact.items():
+        value = env_str(name)
+        observed[name] = value
+        if value.lower() != expected.lower():
+            raise RuntimeError(f"{name} must be {expected!r} before paid training, got {value or '<missing>'!r}")
+
+    protected = env_str("KG1_PROTECTED_ID_ANSWERS")
+    observed["KG1_PROTECTED_ID_ANSWERS"] = protected
+    if PROTECTED_ROW_EXPECTED not in protected:
+        raise RuntimeError(
+            f"KG1_PROTECTED_ID_ANSWERS must include {PROTECTED_ROW_EXPECTED} before paid training"
+        )
+
+    total = env_int("KG1_CPU_SIMULATED_TOTAL_CORRECT", -1)
+    bit = env_int("KG1_CPU_SIMULATED_BIT_CORRECT", -1)
+    equation = env_int("KG1_CPU_SIMULATED_EQUATION_CORRECT", -1)
+    coverage = env_float("KG1_CPU_MISS_CLASSIFICATION_COVERAGE", -1.0)
+    observed.update(
+        {
+            "KG1_CPU_SIMULATED_TOTAL_CORRECT": total,
+            "KG1_CPU_SIMULATED_BIT_CORRECT": bit,
+            "KG1_CPU_SIMULATED_EQUATION_CORRECT": equation,
+            "KG1_CPU_MISS_CLASSIFICATION_COVERAGE": coverage,
+        }
+    )
+    if total < RESIDUAL_FIRST_MIN_TOTAL:
+        raise RuntimeError(f"CPU simulated total {total} below required {RESIDUAL_FIRST_MIN_TOTAL}")
+    if bit < RESIDUAL_FIRST_MIN_BIT:
+        raise RuntimeError(f"CPU simulated bit {bit} below required {RESIDUAL_FIRST_MIN_BIT}")
+    if equation < RESIDUAL_FIRST_MIN_EQUATION:
+        raise RuntimeError(f"CPU simulated equation {equation} below required {RESIDUAL_FIRST_MIN_EQUATION}")
+    if coverage < RESIDUAL_FIRST_MIN_COVERAGE:
+        raise RuntimeError(
+            f"CPU miss classification coverage {coverage} below required {RESIDUAL_FIRST_MIN_COVERAGE}"
+        )
+    lost_rows = env_int("KG1_CPU_SIMULATED_LOST_ROWS", -1)
+    lost_bit = env_int("KG1_CPU_SIMULATED_LOST_BIT_ROWS", -1)
+    lost_equation = env_int("KG1_CPU_SIMULATED_LOST_EQUATION_ROWS", -1)
+    max_token_headroom_ratio = env_float("KG1_MAX_TOKEN_HEADROOM_RATIO", 2.0)
+    observed.update(
+        {
+            "KG1_CPU_SIMULATED_LOST_ROWS": lost_rows,
+            "KG1_CPU_SIMULATED_LOST_BIT_ROWS": lost_bit,
+            "KG1_CPU_SIMULATED_LOST_EQUATION_ROWS": lost_equation,
+            "KG1_MAX_TOKEN_HEADROOM_RATIO": max_token_headroom_ratio,
+        }
+    )
+    if lost_rows != 0:
+        raise RuntimeError(f"CPU simulated lost rows must be 0 before paid training, got {lost_rows}")
+    if lost_bit != 0:
+        raise RuntimeError(f"CPU simulated lost bit rows must be 0 before paid training, got {lost_bit}")
+    if lost_equation != 0:
+        raise RuntimeError(f"CPU simulated lost equation rows must be 0 before paid training, got {lost_equation}")
+    if max_token_headroom_ratio > 0.90:
+        raise RuntimeError(
+            f"token headroom ratio must be <=0.90 before paid training, got {max_token_headroom_ratio}"
+        )
+    return {
+        "required": {
+            "v540_extraction_gate_status": "passed",
+            "cpu_extractor_parity_status": "passed",
+            "prompt_template_parity_status": "passed",
+            "v541_missmap_gate_status": "passed",
+            "v541_flip_ledger_status": "passed",
+            "cpu_simulated_total_min": RESIDUAL_FIRST_MIN_TOTAL,
+            "cpu_simulated_bit_min": RESIDUAL_FIRST_MIN_BIT,
+            "cpu_simulated_equation_min": RESIDUAL_FIRST_MIN_EQUATION,
+            "cpu_miss_classification_coverage_min": RESIDUAL_FIRST_MIN_COVERAGE,
+            "cpu_simulated_lost_rows_max": 0,
+            "cpu_simulated_lost_bit_rows_max": 0,
+            "cpu_simulated_lost_equation_rows_max": 0,
+            "max_token_headroom_ratio_max": 0.90,
+            "expected_truncated": 0,
+            "protected_row": PROTECTED_ROW_EXPECTED,
+            "weak_label_aware_selection": "0",
+            "cpu_simulation_uses_weak_labels": "0",
+            "v536_val_stats_as_weak_evidence": "0",
+        },
+        "observed": observed,
+    }
 
 
 def sha256_file(path: Path) -> str:
@@ -276,6 +386,8 @@ def check_training_env() -> None:
     if env_bool("KG1_REQUIRE_OFFSET_MASK", True) and not env_bool("REQUIRE_OFFSET_MASK", False):
         raise RuntimeError("REQUIRE_OFFSET_MASK must remain enabled for real training.")
 
+    residual_first_gate = check_residual_first_gpu_gate()
+
     max_prompt_truncation_rate = env_float("MAX_PROMPT_TRUNCATION_RATE", 1.0)
     if max_prompt_truncation_rate > env_float("KG1_MAX_PROMPT_TRUNCATION_RATE", 0.0):
         raise RuntimeError(
@@ -313,6 +425,7 @@ def check_training_env() -> None:
         "required_trainable_lora_name_substrings": env_str(
             "REQUIRED_TRAINABLE_LORA_NAME_SUBSTRINGS"
         ),
+        "residual_first_gpu_gate": residual_first_gate,
     }
     log_json("training_env_gate", summary)
 
@@ -692,6 +805,41 @@ def self_test() -> None:
     assert blocked_dataset_matches("repo data/v468_v464_symbol_fix_dataset/train.jsonl")
     assert blocked_dataset_matches("repo data/v447_v446_trace_dataset/train.jsonl")
     assert not blocked_dataset_matches("repo data/v469_symbol_fix_rebuilt_clean/train.jsonl")
+    old_env = dict(os.environ)
+    try:
+        os.environ["KG1_RESIDUAL_FIRST_GATE"] = "1"
+        os.environ["KG1_V540_EXTRACTION_GATE_STATUS"] = "passed"
+        os.environ["KG1_CPU_EXTRACTOR_PARITY_STATUS"] = "passed"
+        os.environ["KG1_PROMPT_TEMPLATE_PARITY_STATUS"] = "passed"
+        os.environ["KG1_V541_MISSMAP_GATE_STATUS"] = "passed"
+        os.environ["KG1_V541_FLIP_LEDGER_STATUS"] = "passed"
+        os.environ["KG1_EXPECTED_TRUNCATED"] = "0"
+        os.environ["KG1_ADAPTER_CPU_FORMAT_PARITY_STATUS"] = "passed"
+        os.environ["KG1_V536_VAL_STATS_AS_WEAK_EVIDENCE"] = "0"
+        os.environ["KG1_WEAK_LABEL_AWARE_SELECTION"] = "0"
+        os.environ["KG1_CPU_SIMULATION_USES_WEAK_LABELS"] = "0"
+        os.environ["KG1_PROTECTED_ID_ANSWERS"] = PROTECTED_ROW_EXPECTED
+        os.environ["KG1_CPU_SIMULATED_TOTAL_CORRECT"] = "200"
+        os.environ["KG1_CPU_SIMULATED_BIT_CORRECT"] = "136"
+        os.environ["KG1_CPU_SIMULATED_EQUATION_CORRECT"] = "59"
+        os.environ["KG1_CPU_MISS_CLASSIFICATION_COVERAGE"] = "0.70"
+        os.environ["KG1_CPU_SIMULATED_LOST_ROWS"] = "0"
+        os.environ["KG1_CPU_SIMULATED_LOST_BIT_ROWS"] = "0"
+        os.environ["KG1_CPU_SIMULATED_LOST_EQUATION_ROWS"] = "0"
+        os.environ["KG1_MAX_TOKEN_HEADROOM_RATIO"] = "0.90"
+        gate = check_residual_first_gpu_gate()
+        assert gate["observed"]["KG1_CPU_SIMULATED_TOTAL_CORRECT"] == 200
+        os.environ["KG1_CPU_SIMULATED_TOTAL_CORRECT"] = "199"
+        try:
+            check_residual_first_gpu_gate()
+        except RuntimeError as exc:
+            if "below required" not in str(exc):
+                raise
+        else:
+            raise RuntimeError("self-test expected residual-first CPU total failure")
+    finally:
+        os.environ.clear()
+        os.environ.update(old_env)
     import tempfile
 
     with tempfile.TemporaryDirectory() as tmp_dir:
