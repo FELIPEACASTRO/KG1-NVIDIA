@@ -48,7 +48,7 @@ RESIDUAL_FIRST_MIN_TOTAL = 200
 RESIDUAL_FIRST_MIN_BIT = 136
 RESIDUAL_FIRST_MIN_EQUATION = 59
 RESIDUAL_FIRST_MIN_COVERAGE = 0.70
-PROTECTED_ROW_EXPECTED = "8740ed31=01101000"
+PROTECTED_ROW_EXPECTED = ["8740ed31=01101000", "59bee375=10010101"]
 
 
 def log_json(label: str, payload: dict[str, Any]) -> None:
@@ -124,9 +124,13 @@ def check_residual_first_gpu_gate() -> dict[str, Any]:
 
     protected = env_str("KG1_PROTECTED_ID_ANSWERS")
     observed["KG1_PROTECTED_ID_ANSWERS"] = protected
-    if PROTECTED_ROW_EXPECTED not in protected:
+    missing_protected = [item for item in PROTECTED_ROW_EXPECTED if item not in protected]
+    if missing_protected:
         raise RuntimeError(
-            f"KG1_PROTECTED_ID_ANSWERS must include {PROTECTED_ROW_EXPECTED} before paid training"
+            "KG1_PROTECTED_ID_ANSWERS must include "
+            + ", ".join(PROTECTED_ROW_EXPECTED)
+            + " before paid training; missing "
+            + ", ".join(missing_protected)
         )
 
     total = env_int("KG1_CPU_SIMULATED_TOTAL_CORRECT", -1)
@@ -189,7 +193,7 @@ def check_residual_first_gpu_gate() -> dict[str, Any]:
             "cpu_simulated_lost_equation_rows_max": 0,
             "max_token_headroom_ratio_max": 0.90,
             "expected_truncated": 0,
-            "protected_row": PROTECTED_ROW_EXPECTED,
+            "protected_rows": PROTECTED_ROW_EXPECTED,
             "weak_label_aware_selection": "0",
             "cpu_simulation_uses_weak_labels": "0",
             "v536_val_stats_as_weak_evidence": "0",
@@ -316,6 +320,180 @@ def check_hf_flavor_cost() -> None:
     )
 
 
+def check_eval_prompt_contract_guard() -> dict[str, Any]:
+    """Block weak-eval promotion settings proven unsafe by V563/V567.
+
+    V567 showed that short/no-think evaluation is useful only as a diagnostic:
+    it destroys protected rows and does not reproduce the V290 weak contract.
+    Promotional weak evals must keep thinking enabled and keep the historical
+    long generation budget unless the job explicitly marks itself diagnostic.
+    """
+
+    diagnostic_only = (
+        env_bool("KG1_WEAK_EVAL_DIAGNOSTIC_ONLY", False)
+        or env_bool("KG1_PROMPT_CONTRACT_DIAGNOSTIC_ONLY", False)
+        or env_bool("KG1_ALLOW_PROMPT_CONTRACT_DIAGNOSTIC", False)
+    )
+    enforced = env_bool("KG1_ENFORCE_WEAK_PROMOTION_GATE", not diagnostic_only)
+    disable_thinking = env_bool("KG1_DISABLE_THINKING", False)
+    no_prompt_suffix = env_bool("KG1_NO_PROMPT_SUFFIX", False)
+    prompt_suffix = env_str("KG1_PROMPT_SUFFIX")
+    max_tokens = env_int("KG1_MAX_TOKENS", 7680)
+    min_max_tokens = env_int("KG1_PROMOTIONAL_MIN_MAX_TOKENS", 7680)
+    require_prompt_suffix = env_bool("KG1_REQUIRE_PROMPT_SUFFIX_FOR_PROMOTION", True)
+    lower_suffix = prompt_suffix.lower()
+    blockers: list[str] = []
+
+    if enforced and not diagnostic_only:
+        if disable_thinking:
+            blockers.append("disable_thinking_promotional_eval_blocked")
+        if max_tokens < min_max_tokens:
+            blockers.append(f"max_tokens_lt_{min_max_tokens}")
+        if require_prompt_suffix and no_prompt_suffix:
+            blockers.append("no_prompt_suffix_promotional_eval_blocked")
+        if "do not use <think>" in lower_suffix or "disable thinking" in lower_suffix:
+            blockers.append("strict_no_think_prompt_suffix_promotional_eval_blocked")
+
+    payload = {
+        "enforced": enforced,
+        "diagnostic_only": diagnostic_only,
+        "disable_thinking": disable_thinking,
+        "no_prompt_suffix": no_prompt_suffix,
+        "max_tokens": max_tokens,
+        "min_max_tokens": min_max_tokens,
+        "require_prompt_suffix": require_prompt_suffix,
+        "prompt_suffix_sha256": hashlib.sha256(prompt_suffix.encode("utf-8")).hexdigest() if prompt_suffix else "",
+        "blockers": blockers,
+    }
+    log_json("eval_prompt_contract_guard", payload)
+    if blockers:
+        raise RuntimeError(
+            "Unsafe promotional weak-eval prompt contract blocked by V563/V567 guard: "
+            + ", ".join(blockers)
+        )
+    return payload
+
+
+def check_decoding_vs_adapter_drift_gate() -> dict[str, Any]:
+    """Require the V568 diagnostic before paid promotional training.
+
+    This gate prevents a recurring failure mode: treating every weak ACC drop as
+    a decoding problem when the adapter may actually have moved probability mass
+    toward a known wrong answer. A new paid train/promotion path must first show
+    that protected rows did not regress against a baseline margin and that the
+    logits/NLL probe is complete. Absolute negative margins are informative, but
+    not fatal by default because V568 showed that the long CoT trajectory can
+    still recover rows whose immediate short-answer margin is negative.
+    """
+
+    if not env_bool("KG1_REQUIRE_DECODING_VS_ADAPTER_DRIFT_GATE", True):
+        payload = {"required": False, "reason": "KG1_REQUIRE_DECODING_VS_ADAPTER_DRIFT_GATE=0"}
+        log_json("decoding_vs_adapter_drift_gate", payload)
+        return payload
+
+    status_value = env_str("KG1_DECODING_VS_ADAPTER_DRIFT_GATE_STATUS")
+    if status_value.lower() == "deferred_post_checkpoint":
+        max_steps = env_int("MAX_STEPS", env_int("KG1_EXPECTED_MAX_STEPS", 999999))
+        save_every = env_int("SAVE_EVERY_STEPS", 999999)
+        eval_every = env_int("EVAL_EVERY_STEPS", 999999)
+        allow_defer = env_bool("KG1_ALLOW_DECODING_DRIFT_DEFERRED_FOR_FIRST_CHECKPOINT", False)
+        first_checkpoint_eval_required = env_bool("KG1_FIRST_CHECKPOINT_WEAK_EVAL_REQUIRED", False)
+        blockers: list[str] = []
+        if not allow_defer:
+            blockers.append("deferred_gate_not_explicitly_allowed")
+        if not first_checkpoint_eval_required:
+            blockers.append("first_checkpoint_weak_eval_not_required")
+        if max_steps > 2:
+            blockers.append(f"max_steps_gt_2:{max_steps}")
+        if save_every > 2:
+            blockers.append(f"save_every_gt_2:{save_every}")
+        if eval_every > 2:
+            blockers.append(f"eval_every_gt_2:{eval_every}")
+        payload = {
+            "required": True,
+            "mode": "deferred_post_checkpoint",
+            "purpose": "permit one tiny smoke when a new adapter checkpoint is required before V568 can be measured",
+            "observed": {
+                "KG1_DECODING_VS_ADAPTER_DRIFT_GATE_STATUS": status_value,
+                "KG1_ALLOW_DECODING_DRIFT_DEFERRED_FOR_FIRST_CHECKPOINT": allow_defer,
+                "KG1_FIRST_CHECKPOINT_WEAK_EVAL_REQUIRED": first_checkpoint_eval_required,
+                "MAX_STEPS": max_steps,
+                "SAVE_EVERY_STEPS": save_every,
+                "EVAL_EVERY_STEPS": eval_every,
+            },
+            "blockers": blockers,
+        }
+        log_json("decoding_vs_adapter_drift_gate", payload)
+        if blockers:
+            raise RuntimeError(
+                "Deferred decoding-vs-adapter drift gate is unsafe: " + ", ".join(blockers)
+            )
+        return payload
+
+    required_statuses = {
+        "KG1_DECODING_VS_ADAPTER_DRIFT_GATE_STATUS": "passed",
+        "KG1_V568_LOGITS_NLL_GATE_STATUS": "passed",
+        "KG1_V568_PROTECTED_MARGIN_STATUS": "passed",
+    }
+    observed: dict[str, Any] = {}
+    blockers: list[str] = []
+
+    for name, expected in required_statuses.items():
+        value = env_str(name)
+        observed[name] = value
+        if value.lower() != expected:
+            blockers.append(f"{name}_not_{expected}")
+
+    min_wrong_minus_correct_margin = env_float(
+        "KG1_V568_MIN_WRONG_MINUS_CORRECT_MARGIN", -999.0
+    )
+    max_protected_margin_regression = env_float(
+        "KG1_V568_MAX_OBSERVED_PROTECTED_MARGIN_REGRESSION", 999.0
+    )
+    allowed_protected_margin_regression = env_float(
+        "KG1_V568_ALLOWED_PROTECTED_MARGIN_REGRESSION", 0.0
+    )
+    require_nonnegative_absolute_margin = env_bool(
+        "KG1_V568_REQUIRE_NONNEGATIVE_ABSOLUTE_MARGIN", False
+    )
+    missing_logprob_rows = env_int("KG1_V568_MISSING_LOGPROB_ROWS", 999999)
+    protected_rows_checked = env_int("KG1_V568_PROTECTED_ROWS_CHECKED", 0)
+    observed.update(
+        {
+            "KG1_V568_MIN_WRONG_MINUS_CORRECT_MARGIN": min_wrong_minus_correct_margin,
+            "KG1_V568_MAX_OBSERVED_PROTECTED_MARGIN_REGRESSION": max_protected_margin_regression,
+            "KG1_V568_ALLOWED_PROTECTED_MARGIN_REGRESSION": allowed_protected_margin_regression,
+            "KG1_V568_REQUIRE_NONNEGATIVE_ABSOLUTE_MARGIN": require_nonnegative_absolute_margin,
+            "KG1_V568_MISSING_LOGPROB_ROWS": missing_logprob_rows,
+            "KG1_V568_PROTECTED_ROWS_CHECKED": protected_rows_checked,
+        }
+    )
+
+    if require_nonnegative_absolute_margin and min_wrong_minus_correct_margin < 0.0:
+        blockers.append("protected_wrong_answer_margin_negative")
+    if max_protected_margin_regression > allowed_protected_margin_regression:
+        blockers.append("protected_margin_regressed_vs_baseline")
+    if missing_logprob_rows != 0:
+        blockers.append("missing_logprob_rows_nonzero")
+    if protected_rows_checked < len(PROTECTED_ROW_EXPECTED):
+        blockers.append("protected_rows_checked_incomplete")
+
+    payload = {
+        "required": True,
+        "purpose": "separate bad decoding from adapter drift toward known wrong answers",
+        "required_statuses": required_statuses,
+        "observed": observed,
+        "blockers": blockers,
+    }
+    log_json("decoding_vs_adapter_drift_gate", payload)
+    if blockers:
+        raise RuntimeError(
+            "Decoding-vs-adapter drift gate failed; do not spend paid GPU training: "
+            + ", ".join(blockers)
+        )
+    return payload
+
+
 def check_training_env() -> None:
     require_env(
         [
@@ -387,6 +565,7 @@ def check_training_env() -> None:
         raise RuntimeError("REQUIRE_OFFSET_MASK must remain enabled for real training.")
 
     residual_first_gate = check_residual_first_gpu_gate()
+    decoding_vs_adapter_drift_gate = check_decoding_vs_adapter_drift_gate()
 
     max_prompt_truncation_rate = env_float("MAX_PROMPT_TRUNCATION_RATE", 1.0)
     if max_prompt_truncation_rate > env_float("KG1_MAX_PROMPT_TRUNCATION_RATE", 0.0):
@@ -426,6 +605,7 @@ def check_training_env() -> None:
             "REQUIRED_TRAINABLE_LORA_NAME_SUBSTRINGS"
         ),
         "residual_first_gpu_gate": residual_first_gate,
+        "decoding_vs_adapter_drift_gate": decoding_vs_adapter_drift_gate,
     }
     log_json("training_env_gate", summary)
 
@@ -445,6 +625,13 @@ def check_training_env() -> None:
 
 def parse_csv_env(name: str) -> list[str]:
     return [item.strip() for item in env_str(name).split(",") if item.strip()]
+
+
+def percentile_int(values: list[int], ratio: float) -> int:
+    if not values:
+        return 0
+    ordered = sorted(values)
+    return int(ordered[int(ratio * (len(ordered) - 1))])
 
 
 def check_repo_gate() -> None:
@@ -472,6 +659,7 @@ def count_and_audit_jsonl(path: Path, label: str) -> dict[str, Any]:
     ids: set[str] = set()
     duplicate_ids = 0
     assistant_missing = 0
+    assistant_lengths_by_family: dict[str, list[int]] = {}
     with path.open(encoding="utf-8") as handle:
         for line_no, raw in enumerate(handle, start=1):
             if not raw.strip():
@@ -520,6 +708,21 @@ def count_and_audit_jsonl(path: Path, label: str) -> dict[str, Any]:
                 isinstance(item, dict) and item.get("role") == "assistant" for item in messages
             ):
                 assistant_missing += 1
+            else:
+                assistant_text = ""
+                for item in reversed(messages):
+                    if isinstance(item, dict) and item.get("role") == "assistant":
+                        assistant_text = str(item.get("content", ""))
+                        break
+                assistant_lengths_by_family.setdefault(family, []).append(len(assistant_text))
+    assistant_length_stats: dict[str, dict[str, int]] = {}
+    for family, lengths in sorted(assistant_lengths_by_family.items()):
+        assistant_length_stats[family] = {
+            "rows": len(lengths),
+            "chars_p50": percentile_int(lengths, 0.50),
+            "chars_p95": percentile_int(lengths, 0.95),
+            "chars_max": max(lengths) if lengths else 0,
+        }
     summary = {
         "label": label,
         "path": str(path),
@@ -534,6 +737,7 @@ def count_and_audit_jsonl(path: Path, label: str) -> dict[str, Any]:
         "family_counts": dict(sorted(families.items())),
         "subcategory_counts": dict(sorted(subcategories.items())),
         "subcategory_counts_top20": dict(sorted(subcategories.items(), key=lambda item: (-item[1], item[0]))[:20]),
+        "assistant_length_stats": assistant_length_stats,
     }
     log_json(f"{label}_jsonl_audit", summary)
     if bad_rows:
@@ -550,6 +754,30 @@ def count_and_audit_jsonl(path: Path, label: str) -> dict[str, Any]:
             f"{label} has rows missing required anti-leakage gate flags: "
             + json.dumps(gate_row_flag_missing_counts, sort_keys=True)
         )
+    max_p95 = env_int("KG1_MAX_ASSISTANT_CHARS_P95", 0)
+    max_chars = env_int("KG1_MAX_ASSISTANT_CHARS_MAX", 0)
+    if max_p95:
+        offenders = {
+            family: stats
+            for family, stats in assistant_length_stats.items()
+            if int(stats.get("chars_p95", 0)) > max_p95
+        }
+        if offenders:
+            raise RuntimeError(
+                f"{label} assistant chars p95 exceeds KG1_MAX_ASSISTANT_CHARS_P95={max_p95}: "
+                + json.dumps(offenders, sort_keys=True)
+            )
+    if max_chars:
+        offenders = {
+            family: stats
+            for family, stats in assistant_length_stats.items()
+            if int(stats.get("chars_max", 0)) > max_chars
+        }
+        if offenders:
+            raise RuntimeError(
+                f"{label} assistant chars max exceeds KG1_MAX_ASSISTANT_CHARS_MAX={max_chars}: "
+                + json.dumps(offenders, sort_keys=True)
+            )
     return summary
 
 
@@ -763,11 +991,13 @@ def run_phase(phase: str) -> None:
         check_repo_gate()
         check_torch_and_gpu("eval_preinstall")
         check_hf_flavor_cost()
+        check_eval_prompt_contract_guard()
         return
     if phase == "eval-postinstall":
         check_torch_and_gpu("eval_postinstall")
         check_eval_postinstall_imports()
         check_hf_flavor_cost()
+        check_eval_prompt_contract_guard()
         return
     if phase == "all":
         run_phase("preinstall")
@@ -807,6 +1037,38 @@ def self_test() -> None:
     assert not blocked_dataset_matches("repo data/v469_symbol_fix_rebuilt_clean/train.jsonl")
     old_env = dict(os.environ)
     try:
+        os.environ["KG1_MAX_TOKENS"] = "7680"
+        os.environ["KG1_DISABLE_THINKING"] = "0"
+        os.environ["KG1_NO_PROMPT_SUFFIX"] = "0"
+        os.environ["KG1_ENFORCE_WEAK_PROMOTION_GATE"] = "1"
+        good_contract = check_eval_prompt_contract_guard()
+        assert good_contract["blockers"] == []
+        os.environ["KG1_MAX_TOKENS"] = "2048"
+        try:
+            check_eval_prompt_contract_guard()
+        except RuntimeError as exc:
+            if "max_tokens_lt_7680" not in str(exc):
+                raise
+        else:
+            raise RuntimeError("self-test expected short max_tokens contract failure")
+        os.environ["KG1_MAX_TOKENS"] = "7680"
+        os.environ["KG1_DISABLE_THINKING"] = "1"
+        try:
+            check_eval_prompt_contract_guard()
+        except RuntimeError as exc:
+            if "disable_thinking_promotional_eval_blocked" not in str(exc):
+                raise
+        else:
+            raise RuntimeError("self-test expected disable-thinking contract failure")
+        os.environ["KG1_PROMPT_CONTRACT_DIAGNOSTIC_ONLY"] = "1"
+        diagnostic_contract = check_eval_prompt_contract_guard()
+        assert diagnostic_contract["diagnostic_only"] is True
+        assert diagnostic_contract["blockers"] == []
+    finally:
+        os.environ.clear()
+        os.environ.update(old_env)
+    old_env = dict(os.environ)
+    try:
         os.environ["KG1_RESIDUAL_FIRST_GATE"] = "1"
         os.environ["KG1_V540_EXTRACTION_GATE_STATUS"] = "passed"
         os.environ["KG1_CPU_EXTRACTOR_PARITY_STATUS"] = "passed"
@@ -818,7 +1080,7 @@ def self_test() -> None:
         os.environ["KG1_V536_VAL_STATS_AS_WEAK_EVIDENCE"] = "0"
         os.environ["KG1_WEAK_LABEL_AWARE_SELECTION"] = "0"
         os.environ["KG1_CPU_SIMULATION_USES_WEAK_LABELS"] = "0"
-        os.environ["KG1_PROTECTED_ID_ANSWERS"] = PROTECTED_ROW_EXPECTED
+        os.environ["KG1_PROTECTED_ID_ANSWERS"] = ",".join(PROTECTED_ROW_EXPECTED)
         os.environ["KG1_CPU_SIMULATED_TOTAL_CORRECT"] = "200"
         os.environ["KG1_CPU_SIMULATED_BIT_CORRECT"] = "136"
         os.environ["KG1_CPU_SIMULATED_EQUATION_CORRECT"] = "59"
@@ -837,6 +1099,52 @@ def self_test() -> None:
                 raise
         else:
             raise RuntimeError("self-test expected residual-first CPU total failure")
+    finally:
+        os.environ.clear()
+        os.environ.update(old_env)
+    old_env = dict(os.environ)
+    try:
+        os.environ["KG1_REQUIRE_DECODING_VS_ADAPTER_DRIFT_GATE"] = "1"
+        os.environ["KG1_DECODING_VS_ADAPTER_DRIFT_GATE_STATUS"] = "passed"
+        os.environ["KG1_V568_LOGITS_NLL_GATE_STATUS"] = "passed"
+        os.environ["KG1_V568_PROTECTED_MARGIN_STATUS"] = "passed"
+        os.environ["KG1_V568_MIN_WRONG_MINUS_CORRECT_MARGIN"] = "0.01"
+        os.environ["KG1_V568_MAX_OBSERVED_PROTECTED_MARGIN_REGRESSION"] = "0.0"
+        os.environ["KG1_V568_ALLOWED_PROTECTED_MARGIN_REGRESSION"] = "0.0"
+        os.environ["KG1_V568_MISSING_LOGPROB_ROWS"] = "0"
+        os.environ["KG1_V568_PROTECTED_ROWS_CHECKED"] = str(len(PROTECTED_ROW_EXPECTED))
+        drift_gate = check_decoding_vs_adapter_drift_gate()
+        assert drift_gate["blockers"] == []
+        os.environ["KG1_V568_MIN_WRONG_MINUS_CORRECT_MARGIN"] = "-0.01"
+        negative_absolute_allowed = check_decoding_vs_adapter_drift_gate()
+        assert negative_absolute_allowed["blockers"] == []
+        os.environ["KG1_V568_REQUIRE_NONNEGATIVE_ABSOLUTE_MARGIN"] = "1"
+        try:
+            check_decoding_vs_adapter_drift_gate()
+        except RuntimeError as exc:
+            if "protected_wrong_answer_margin_negative" not in str(exc):
+                raise
+        else:
+            raise RuntimeError("self-test expected absolute protected margin failure")
+        os.environ["KG1_V568_REQUIRE_NONNEGATIVE_ABSOLUTE_MARGIN"] = "0"
+        os.environ["KG1_V568_MIN_WRONG_MINUS_CORRECT_MARGIN"] = "0.01"
+        os.environ["KG1_V568_MAX_OBSERVED_PROTECTED_MARGIN_REGRESSION"] = "0.01"
+        try:
+            check_decoding_vs_adapter_drift_gate()
+        except RuntimeError as exc:
+            if "protected_margin_regressed_vs_baseline" not in str(exc):
+                raise
+        else:
+            raise RuntimeError("self-test expected protected margin regression failure")
+        os.environ["KG1_V568_MAX_OBSERVED_PROTECTED_MARGIN_REGRESSION"] = "0.0"
+        os.environ["KG1_V568_MISSING_LOGPROB_ROWS"] = "1"
+        try:
+            check_decoding_vs_adapter_drift_gate()
+        except RuntimeError as exc:
+            if "missing_logprob_rows_nonzero" not in str(exc):
+                raise
+        else:
+            raise RuntimeError("self-test expected missing logprob row failure")
     finally:
         os.environ.clear()
         os.environ.update(old_env)

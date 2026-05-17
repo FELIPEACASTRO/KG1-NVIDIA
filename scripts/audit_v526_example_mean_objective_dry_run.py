@@ -119,39 +119,108 @@ def inspect_rows(rows: list[dict[str, Any]]) -> dict[str, Any]:
     }
 
 
+def parse_row_loss_weight(row: dict[str, Any], *, require: bool) -> tuple[float, bool]:
+    metadata = row.get("metadata") if isinstance(row.get("metadata"), dict) else {}
+    raw_weight = metadata.get("loss_weight", row.get("loss_weight"))
+    if raw_weight is None:
+        if require:
+            raise ValueError(f"row {row.get('id', '<missing>')} is missing metadata.loss_weight")
+        return 1.0, False
+    try:
+        weight = float(raw_weight)
+    except (TypeError, ValueError) as exc:
+        raise ValueError(
+            f"row {row.get('id', '<missing>')} has non-numeric metadata.loss_weight={raw_weight!r}"
+        ) from exc
+    if not math.isfinite(weight) or weight <= 0.0:
+        raise ValueError(
+            f"row {row.get('id', '<missing>')} has invalid metadata.loss_weight={raw_weight!r}"
+        )
+    return weight, True
+
+
+def weighted_family_counts(
+    rows: list[dict[str, Any]],
+    *,
+    use_row_loss_weight: bool,
+    require_row_loss_weight: bool,
+) -> tuple[dict[str, float], dict[str, int]]:
+    weighted: Counter[str] = Counter()
+    explicit: Counter[str] = Counter()
+    for row in rows:
+        family = str(row.get("family") or row.get("metadata", {}).get("family") or "")
+        weight = 1.0
+        has_explicit_weight = False
+        if use_row_loss_weight:
+            weight, has_explicit_weight = parse_row_loss_weight(row, require=require_row_loss_weight)
+        weighted[family] += weight
+        if has_explicit_weight:
+            explicit[family] += 1
+    return {key: float(value) for key, value in weighted.items()}, dict(explicit)
+
+
 def compute_objective_mix(
     v524_manifest: dict[str, Any],
+    train_rows: list[dict[str, Any]],
     max_example_mean_target_delta: float,
+    *,
+    use_row_loss_weight: bool,
+    require_row_loss_weight: bool,
 ) -> dict[str, Any]:
     mix = v524_manifest["v523_train_mix"]
     counts = mix["row_family_counts"]
     loss_mass = mix["loss_token_mass"]
+    weighted_counts, explicit_weight_counts = weighted_family_counts(
+        train_rows,
+        use_row_loss_weight=use_row_loss_weight,
+        require_row_loss_weight=require_row_loss_weight,
+    )
     total_rows = sum(counts.values())
+    total_weight = sum(weighted_counts.values())
     total_tokens = sum(loss_mass.values())
     bit_rows = counts.get("bit_manipulation", 0)
     eq_rows = counts.get("equation_transform", 0)
+    bit_weight = weighted_counts.get("bit_manipulation", 0.0)
+    eq_weight = weighted_counts.get("equation_transform", 0.0)
     bit_tokens = loss_mass.get("bit_manipulation", 0)
     eq_tokens = loss_mass.get("equation_transform", 0)
 
     reference = v524_manifest["reference_gain_mix"]["target_bit_share"]
     token_mean_bit_share = bit_tokens / total_tokens if total_tokens else math.nan
-    example_mean_bit_share = bit_rows / total_rows if total_rows else math.nan
+    physical_example_mean_bit_share = bit_rows / total_rows if total_rows else math.nan
+    weighted_example_mean_bit_share = bit_weight / total_weight if total_weight else math.nan
+    example_mean_bit_share = (
+        weighted_example_mean_bit_share if use_row_loss_weight else physical_example_mean_bit_share
+    )
     token_mean_bit_to_eq = bit_tokens / eq_tokens if eq_tokens else math.inf
-    example_mean_bit_to_eq = bit_rows / eq_rows if eq_rows else math.inf
+    physical_example_mean_bit_to_eq = bit_rows / eq_rows if eq_rows else math.inf
+    weighted_example_mean_bit_to_eq = bit_weight / eq_weight if eq_weight else math.inf
+    example_mean_bit_to_eq = (
+        weighted_example_mean_bit_to_eq if use_row_loss_weight else physical_example_mean_bit_to_eq
+    )
     reference_bit_to_eq = reference / (1.0 - reference)
     example_delta = abs(example_mean_bit_share - reference)
 
     return {
+        "use_row_loss_weight": bool(use_row_loss_weight),
+        "require_row_loss_weight": bool(require_row_loss_weight),
         "reference_bit_share": round(reference, 6),
         "token_mean_bit_share": round(token_mean_bit_share, 6),
+        "physical_example_mean_bit_share": round(physical_example_mean_bit_share, 6),
+        "weighted_example_mean_bit_share": round(weighted_example_mean_bit_share, 6),
         "example_mean_bit_share": round(example_mean_bit_share, 6),
         "token_mean_bit_to_equation_ratio": round(token_mean_bit_to_eq, 6),
+        "physical_example_mean_bit_to_equation_ratio": round(physical_example_mean_bit_to_eq, 6),
+        "weighted_example_mean_bit_to_equation_ratio": round(weighted_example_mean_bit_to_eq, 6),
         "example_mean_bit_to_equation_ratio": round(example_mean_bit_to_eq, 6),
         "reference_bit_to_equation_ratio": round(reference_bit_to_eq, 6),
         "example_mean_delta_from_reference": round(example_delta, 6),
         "max_example_mean_target_delta": max_example_mean_target_delta,
         "example_mean_close_to_reference": example_delta <= max_example_mean_target_delta,
         "token_mean_is_dominated_by_bit": token_mean_bit_share >= 0.85,
+        "row_family_counts": dict(sorted(counts.items())),
+        "weighted_family_counts": {key: round(value, 6) for key, value in sorted(weighted_counts.items())},
+        "explicit_weight_counts": dict(sorted(explicit_weight_counts.items())),
     }
 
 
@@ -168,10 +237,24 @@ def run_audit(args: argparse.Namespace) -> dict[str, Any]:
 
     train_inspection = inspect_rows(train_rows)
     val_inspection = inspect_rows(val_rows)
-    objective_mix = compute_objective_mix(
-        quota_manifest,
-        max_example_mean_target_delta=args.max_example_mean_target_delta,
-    )
+    try:
+        objective_mix = compute_objective_mix(
+            quota_manifest,
+            train_rows,
+            max_example_mean_target_delta=args.max_example_mean_target_delta,
+            use_row_loss_weight=args.use_row_loss_weight,
+            require_row_loss_weight=args.require_row_loss_weight,
+        )
+        objective_mix_error = ""
+    except ValueError as exc:
+        objective_mix = {
+            "use_row_loss_weight": bool(args.use_row_loss_weight),
+            "require_row_loss_weight": bool(args.require_row_loss_weight),
+            "example_mean_close_to_reference": False,
+            "example_mean_delta_from_reference": math.inf,
+            "error": str(exc),
+        }
+        objective_mix_error = str(exc)
 
     tokenization_status = tokenization_manifest.get("decision", {}).get("status")
     tokenization = tokenization_manifest.get("tokenization", {})
@@ -203,6 +286,8 @@ def run_audit(args: argparse.Namespace) -> dict[str, Any]:
         if inspection["forbidden_training_flag_count"]:
             add_blocker(f"{split_name}_forbidden_training_flags", str(inspection["forbidden_training_flag_first10"]))
 
+    if objective_mix_error:
+        add_blocker("row_loss_weight_invalid", objective_mix_error)
     if not objective_mix["example_mean_close_to_reference"]:
         add_blocker(
             "example_mean_mix_far_from_reference",
@@ -237,6 +322,8 @@ def run_audit(args: argparse.Namespace) -> dict[str, Any]:
         "config": {
             "loss_normalization_mode_required": "example_mean",
             "max_example_mean_target_delta": args.max_example_mean_target_delta,
+            "use_row_loss_weight": bool(args.use_row_loss_weight),
+            "require_row_loss_weight": bool(args.require_row_loss_weight),
         },
         "train_inspection": train_inspection,
         "validation_inspection": val_inspection,
@@ -266,13 +353,19 @@ def write_report(manifest: dict[str, Any], output_dir: Path) -> Path:
         "",
         "| Metric | Value |",
         "|---|---:|",
-        f"| reference bit share | {mix['reference_bit_share']} |",
-        f"| token_mean bit share | {mix['token_mean_bit_share']} |",
-        f"| example_mean bit share | {mix['example_mean_bit_share']} |",
-        f"| token_mean bit/equation ratio | {mix['token_mean_bit_to_equation_ratio']} |",
-        f"| example_mean bit/equation ratio | {mix['example_mean_bit_to_equation_ratio']} |",
-        f"| reference bit/equation ratio | {mix['reference_bit_to_equation_ratio']} |",
-        f"| example_mean delta from reference | {mix['example_mean_delta_from_reference']} |",
+        f"| use row loss weight | {mix.get('use_row_loss_weight')} |",
+        f"| require row loss weight | {mix.get('require_row_loss_weight')} |",
+        f"| reference bit share | {mix.get('reference_bit_share')} |",
+        f"| token_mean bit share | {mix.get('token_mean_bit_share')} |",
+        f"| physical example_mean bit share | {mix.get('physical_example_mean_bit_share')} |",
+        f"| weighted example_mean bit share | {mix.get('weighted_example_mean_bit_share')} |",
+        f"| selected example_mean bit share | {mix.get('example_mean_bit_share')} |",
+        f"| token_mean bit/equation ratio | {mix.get('token_mean_bit_to_equation_ratio')} |",
+        f"| physical example_mean bit/equation ratio | {mix.get('physical_example_mean_bit_to_equation_ratio')} |",
+        f"| weighted example_mean bit/equation ratio | {mix.get('weighted_example_mean_bit_to_equation_ratio')} |",
+        f"| selected example_mean bit/equation ratio | {mix.get('example_mean_bit_to_equation_ratio')} |",
+        f"| reference bit/equation ratio | {mix.get('reference_bit_to_equation_ratio')} |",
+        f"| example_mean delta from reference | {mix.get('example_mean_delta_from_reference')} |",
         "",
         "## Dataset Checks",
         "",
@@ -310,6 +403,20 @@ def self_test() -> None:
     assert result["answer_mismatch_count"] == 0
     assert result["control_char_count"] == 0
     assert result["forbidden_training_flag_count"] == 0
+    assert parse_row_loss_weight({"metadata": {"loss_weight": 1.25}}, require=True) == (1.25, True)
+    assert parse_row_loss_weight({}, require=False) == (1.0, False)
+    for bad in (
+        {"metadata": {"loss_weight": 0}},
+        {"metadata": {"loss_weight": -1}},
+        {"metadata": {"loss_weight": "nan"}},
+        {"metadata": {"loss_weight": "bad"}},
+    ):
+        try:
+            parse_row_loss_weight(bad, require=True)
+        except ValueError:
+            pass
+        else:
+            raise AssertionError(f"parse_row_loss_weight should reject {bad!r}")
 
 
 def main() -> int:
@@ -319,6 +426,8 @@ def main() -> int:
     parser.add_argument("--quota-manifest-json", type=Path)
     parser.add_argument("--output-dir", type=Path)
     parser.add_argument("--max-example-mean-target-delta", type=float, default=0.08)
+    parser.add_argument("--use-row-loss-weight", action="store_true")
+    parser.add_argument("--require-row-loss-weight", action="store_true")
     parser.add_argument("--self-test", action="store_true")
     args = parser.parse_args()
 

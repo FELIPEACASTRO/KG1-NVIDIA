@@ -1,0 +1,25 @@
+{
+  "data_repo": "felipesp1983/kg1-v573-v571-bitpair-v551-equation-reference-artifacts",
+  "generated_at_utc": "2026-05-17T18:30:00.847431+00:00",
+  "hf_train_file": "v573-v571-bitpair-v551-equation-reference-20260517T-v573-cpu-gate/v572_v571_bitpair_v551_equation_mix_train.jsonl",
+  "hf_val_file": "v573-v571-bitpair-v551-equation-reference-20260517T-v573-cpu-gate/v572_v571_bitpair_v551_equation_mix_val.jsonl",
+  "local_report": {
+    "example_mean_manifest_file": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v573_v571_bitpair_v551_equation_reference_mix\\20260517T_v573_cpu_gate\\v526_example_mean_row_weight_dry_run\\v526_example_mean_objective_dry_run_manifest.json",
+    "learnability_manifest_file": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v573_v571_bitpair_v551_equation_reference_mix\\20260517T_v573_cpu_gate\\v513_learnability_real\\v513_trace_learnability_gate_manifest.json",
+    "manifest_file": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v573_v571_bitpair_v551_equation_reference_mix\\20260517T_v573_cpu_gate\\v572_v571_bitpair_v551_equation_mix_manifest.json",
+    "objective_alignment_file": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v573_v571_bitpair_v551_equation_reference_mix\\20260517T_v573_cpu_gate\\v478_objective_alignment.json",
+    "quota_manifest_file": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v573_v571_bitpair_v551_equation_reference_mix\\20260517T_v573_cpu_gate\\v524_objective_real\\v524_quota_token_objective_manifest.json",
+    "tokenization_manifest_file": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v573_v571_bitpair_v551_equation_reference_mix\\20260517T_v573_cpu_gate\\v286_tokenization_real\\v286_generic_tokenization_gate_manifest.json",
+    "train_file": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v573_v571_bitpair_v551_equation_reference_mix\\20260517T_v573_cpu_gate\\v572_v571_bitpair_v551_equation_mix_train.jsonl",
+    "train_rows": 757,
+    "train_sha256": "ba51538ddeedd16e9a5d5e2330b910616de79164a4d1c92bb705d6f2d664d1ae",
+    "val_file": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v573_v571_bitpair_v551_equation_reference_mix\\20260517T_v573_cpu_gate\\v572_v571_bitpair_v551_equation_mix_val.jsonl",
+    "val_rows": 159,
+    "val_sha256": "6957f0ac518050c4bb41272ccad5b514bc1d045e02778df7e7ef69101d5f2e75"
+  },
+  "mode": "uploaded",
+  "path_in_repo": "v573-v571-bitpair-v551-equation-reference-20260517T-v573-cpu-gate",
+  "schema_version": "kg1_v573_hf_dataset_upload_v1",
+  "upload_info": "https://huggingface.co/datasets/felipesp1983/kg1-v573-v571-bitpair-v551-equation-reference-artifacts/commit/3d321aff1e68d72769f167ceab2a28123faa18fd",
+  "uploaded_at_utc": "2026-05-17T18:30:05.503069+00:00"
+}

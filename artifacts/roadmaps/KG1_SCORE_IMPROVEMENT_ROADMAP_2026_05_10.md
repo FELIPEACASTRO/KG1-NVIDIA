@@ -93,8 +93,366 @@ Ultima evidencia operacional relevante:
 | V536 V534-bit/V523-equation pack | dataset source-only controlado criado: `1026` train, `219` val; quotas iguais ao V523 (`706/320` train bit/equation, `139/80` val); bit substituido por Konbu high-confidence + Huikang CHO/MAJ; `0` overlap weak/full, `0` duplicidade; V286, V513, V524 e V526 passam | autoriza somente um smoke H200 curto com `LOSS_NORMALIZATION_MODE=example_mean`; nao autoriza treino longo nem submit sem ACC label-free real |
 | V536 HF upload/debug/pre-paid | dataset enviado para HF commit `d2f11d82b40e3e9aa0f5add58c3698a7428bf550`; launcher debug baixou do HF e validou hashes, H200 `0.083333/min`, adapter inicial e objetivo; `kg1_pre_paid_job_integration_gate` passou sem findings | pronto para commit/push e um smoke H200 de 4 steps; ainda nao ha ganho ACC medido |
 | V536 H200 attempt 1 | job `felipesp1983/6a0930223308d79117b9181a` falhou antes do treino: runtime `MAX_LENGTH=1024` truncava `78/1026` prompts (`7.6023%`) apesar do V286 ter `token_max=1123` com `max_length=8192` | falha barata e correta; launcher corrigido para `MAX_LENGTH=2048`, `KG1_EXPECTED_MAX_LENGTH=2048`, e pre-paid gate agora compara `token_max <= runtime MAX_LENGTH` |
+| V536 H200 current retry | job `felipesp1983/6a0981fe3308d79117b91bc6` completou; checkpoints atuais `2/4`; MoE/target params corretos, `lm_head` congelado, `MAX_LENGTH=2048`, loss `3.0276 -> 3.0257/3.0277` | loss nao promove; decisao dependeu da weak eval V549 |
+| V549 weak eval V536 current | job `felipesp1983/6a098851e48bea4538ba0f1f`; checkpoint-2 `190/315`, `bit=134`, `equation=56`, `trunc=1`, avg completion `4774.9`, max `7680`; checkpoint-4 `190/315`, `bit=135`, `equation=55`, `trunc=0`, avg completion `4772.0`, max `7492` | ambos bloqueados; nenhum full/package/submit; V536/V549 rejeitado como linha de ganho |
+| V549 protected/token guards | ambos checkpoints erraram `8740ed31`: esperado `01101000`, previsto `01111000`; `weak_promotion_gate` bloqueou por `correct_lt_193`, `equation_lt_57`, `bit_lt_136`, tokens excessivos e protected-row backfire; `catastrophic_eval_guard` passou porque nao foi colapso total | guards atualizados estao funcionando; condicoes atuais de promocao continuam: `total>=193`, `bit>=136`, `equation>=57`, `trunc=0`, protected rows preservadas e saida curta |
+| V550 condition sync audit | scripts/launchers ativos agora exigem `8740ed31=01101000` e `59bee375=10010101`; V536 tem bit traces longas (`p95=1669` chars) e V549 repetiu trade-off antigo: cp2 ganhou `518deb39`, mas perdeu `8740ed31` e `59bee375`; cp4 perdeu `8740ed31` sem ganho | `gpu_allowed=false`; nao repetir V536/V549; proxima linha precisa dataset curto answer-span ou hard-negative CPU gate preservando os dois protegidos antes de qualquer job pago |
+| V551 short bit trace pack | V536 foi reescrito em CPU mantendo fonte-only: bit train `706`, equation train `320`; bit assistant `p95=250`, `max=251` chars contra `p95=1669` no V536; V509 integridade passou, V286 real passou (`token_max=383`, trunc `0`, offset masks `1026/219`), V513 real passou, V524 real ficou `quota_ok_cpu_only` com bit loss-token share `0.592993`; static safety gate passou apos bloquear/diagnosticar launcher V548 historico | novo candidato de dataset curto; ainda `gpu_allowed=false` ate pre-paid/HF CPU/preflight/protected weak smoke; gates agora tambem aceitam limite `KG1_MAX_ASSISTANT_CHARS_P95/MAX` para impedir repetir traces longas |
+| V547 contract-aligned distillation | dataset `236/111` criado com targets `Final answer: \boxed{...}`; sem `RULE:`; train `bit=146`, `equation=90`; tokenization `max=328`, trunc `0`; objective alignment passou | dataset tecnicamente limpo, mas era answer-only pequeno; exigia weak eval antes de qualquer package |
+| V547 H200 train | job `felipesp1983/6a097803e48bea4538ba0df2` completou em `0.19h`; checkpoints `2/4/6/8`; melhor loss em checkpoint-4 (`3.0138`) | loss nao promove; seguir somente por ACC label-free |
+| V548 weak eval V547 | job `felipesp1983/6a097c51e48bea4538ba0e3a`; checkpoint-2 e checkpoint-4 deram `3/315`, `equation=3/155`, `bit=0/160`, `truncated=288/315`, avg completion `509.9/512`; cp2/cp4 identicos | linha V547 rejeitada; job cancelado por FinOps; sem full eval/package/submit |
+| V548 catastrophic guard | `scripts/hf_job_weak_eval_v245.py` agora tem `catastrophic_eval_guard`; bloqueia ACC quase zero + truncation massiva mesmo se `STOP_AFTER_CONSECUTIVE_FAILED_CANDIDATES=0` | evita repetir custo H200 quando um checkpoint destrói o contrato de saida |
+| V548 package permission recheck | V336B reexecutado; regras extraidas confirmam `submission.zip` com LoRA adapter rank<=32; pacote local valido contem somente `adapter_config.json` e `adapter_model.safetensors`; script rejeita postprocessor | solver/verifier direto continua bloqueado para submit; ganho precisa virar adapter-only |
+| V552/V553 short-bit smoke | V552 treinou em H200 sobre V551; checkpoint-2 reduziu loss minimamente, mas V553 weak eval deu `190/315`, `bit=134`, `equation=56`, `trunc=1`, media `4775` tokens; perdeu `8740ed31` e `59bee375`; checkpoint-4 foi cancelado por FinOps | linha V551/V552 bloqueada; nao package/full/submit; proxima acao deve atacar backfire/protected rows em CPU antes de novo SFT pago |
+| V560/V561 answer-only smoke | dataset `236/111`, train `bit=146`, `equation=90`, targets de uma linha `Final answer: \boxed{...}`, sem `RULE:`/`Trace:`; V561 H200 treinou 4 steps a partir de V290 checkpoint-6 | tecnicamente limpo, mas ainda dependia de weak ACC; loss nao autoriza submit |
+| V562 weak eval V561 | checkpoint-2 `191/315`, `bit=135`, `equation=56`, `trunc=1`, avg completion `4775`, max `7680`; backfire nos protected ids `8740ed31` e `59bee375`; gate bloqueou e parou antes dos demais checkpoints | causa concreta: mesmo com target answer-only, a inferencia official-like ativou CoT longo/runaway; nao package/full/submit; proximo passo e separar erro de treino vs erro de inferencia |
+| V563 strict diagnostic | job `felipesp1983/6a09da1ee7940de6ee6cd80c` completou com `disable_thinking=1`, `max_tokens=128`; checkpoint-2 `16/315` (`bit=8`, `equation=8`), checkpoint-4 `15/315` (`bit=7`, `equation=8`), final `16/315` (`bit=7`, `equation=9`), trunc `0`, tokens curtos, protected rows falharam em todos | diagnostico negativo: prompt curto resolve runaway, mas destrói ACC; V560/V561 ficam bloqueados; nao package/full/submit |
+| V564 OpenRouter plateau consult | 8 respostas validas de 9 modelos (`Claude`, `DeepSeek`, `Gemini`, `Kimi`, `Nemotron`, `Qwen`) sobre V562/V563; consenso dominante: `STOP_BROAD_LORA`/`INVESTIGATE_BUG_FIRST`; causas provaveis: contrato/prompt, mask/label/weight, logica solver nao transferivel por SFT curto, possivel PEFT continuity | novo roadmap deve comecar por auditoria de contrato+mask+logits/protected rows; H200 amplo bloqueado ate gate CPU/tiny mostrar ganho real |
+| V564 contract/mask audit | `scripts/audit_v564_contract_mask_alignment.py` rodou em CPU no V560; mask/weights passaram (`train 236/236`, validation `111/111` zero-weight ignored), protected rows existem uma vez com peso `3.0`; blocker real isolado: `train_eval_prompt_token_mismatch` em `347/347` linhas, prefixo comum de apenas `3` tokens | causa concreta nova: treino usa system prompt `You are solving Kaggle...`, enquanto eval official-like usa system vazio + `PROMPT_SUFFIX`; qualquer novo GPU fica bloqueado ate padronizar treino/inferencia |
+| V565 official-like dataset | `build_v547_contract_aligned_distillation_dataset.py` agora suporta `--prompt-contract official_like`; dataset V565 `236/111` criado com user prompt `prompt + PROMPT_SUFFIX`, sem system prompt; V564 contract/mask passou, V286 tokenization passou (`max=315`, trunc `0`), V478 objective passou (`bit_share=0.665689`, `equation_share=0.334311`) | primeiro dataset candidato com contrato alinhado; ainda nao autoriza submit nem treino longo; proximo passo e diagnostico tiny/baseline antes de H200 |
+| V566 uploaded OpenRouter double check | arquivo `C:\Users\davis\Downloads\OpenRouter Chat Sun May 17 2026.json` tem 13 respostas uteis; consenso reforca `INVESTIGATE_BUG_FIRST`, contrato de prompt, protected rows, hard negatives e small gate; URLs do arquivo sao majoritariamente provider/legal/model-card e nao trazem dado novo do desafio | novo achado acionavel: antes de usar strict no-think como contrato, rodar diagnostico baseline/no-adapter strict; V565 continua a unica rota adapter-only plausivel, com kill-switch no primeiro checkpoint |
+| V567 prompt-contract probe | job H200 `felipesp1983/6a09ee09a5e509f1a841336f` avaliou base, V290 ckpt-6 e V561 ckpt-2 em 11 linhas criticas; `strict_no_think` e `hybrid_one_line` deram `0/11`; `official_like`/`legacy` com `max_tokens=2048` truncaram e nao preservaram protected rows | diagnostico negativo: nao promover prompt curto/no-think; eval promocional precisa manter thinking habilitado e `max_tokens=7680`; qualquer variante curta so pode rodar como diagnostico |
+| V568 logits/NLL probe e drift gate | job H200 `felipesp1983/6a09f63ea5e509f1a841342d` completou; `missing_logprob_rows=0`, `prefix_mismatch_rows=0`; analisador `scripts/analyze_v568_decoding_adapter_drift.py` gerou `decision=blocked`; margem curta absoluta pode ser negativa ate no `base_no_adapter`, mas V290/V561 regrediram vs base em `59bee375` (`max_regression` boxed `0.246333/0.218400`; final-answer `0.107941/0.106541`) | `hf_job_preflight_gate.py` e `kg1_pre_paid_job_integration_gate.py` agora bloqueiam regressao de margem vs baseline, nao apenas margem absoluta; nao rodar treino pago se o adapter aumenta probabilidade relativa de respostas erradas protegidas |
+| V569 OpenRouter plateau resolution consult | 7 modelos consultados; 6 respostas uteis; consenso dominante `PROTECTED_REPLAY_FIRST`, com `PREFERENCE_TRAINING_WITH_GATES` como segunda fase; `openai/gpt-5.5-pro` retornou conteudo vazio/utilizavel insuficiente | proxima acao muda para V570 protected trajectory replay audit/build; equation fica bloqueado ate preservar margem protegida/bit floor; broad SFT, answer-only, strict no-think e CPU-solver direto saem do plano ativo |
+| V570 protected replay audit | `scripts/build_v570_protected_replay_audit.py` recuperou do V516/V290 baseline as duas trajetorias longas protegidas corretas (`8740ed31=01101000`, `59bee375=10010101`) e `40` anchors corretos (`30` bit, `10` equation); `42` linhas, `training_allowed_rows=0`, `blockers=[]`, `decision=diagnostic_only_no_training`; warnings apenas por `completion_tokens` ausente no CSV fonte | evidencia util para debug/replay/margem, mas nao pode virar treino direto por ser weak-gate; proximo passo e derivar analogos source-only/hard-negative preference e medir V568 margin gate antes de qualquer H200 |
+| V571 source-only bit-pair traces | `scripts/build_v571_bitpair_source_only_trace_pack.py` criou traces bit-pair/bitsum deterministicas apenas de fonte externa; `437` train e `79` val aceitas; V509/V286/V513 passaram; V524 bloqueou treino bit-only por objetivo dominado por bit | achado aproveitavel: bit-pair source-only existe e e verificavel; nao treinar isolado |
+| V572 aggressive bit/equation mix | V571 + V551 equation, `757/159` linhas, pesos `bit=0.5`, `equation=1.5`; V509/V286/V478/V513 passaram, mas V526 row-weighted corrigido bloqueou: peso efetivo `bit=31.28%`, delta `42.9pp` vs referencia | nao ir para GPU; risco alto de repetir regressao de bit |
+| V573 reference-weighted source-only mix | mesmo conteudo V571+V551, mas pesos `bit=1.5`, `equation=1.0`; V509 passou, V286 real passou (`token_max=1074`, `0` trunc, offset masks `757/159`), V478 passou (`bit=67.20%`, `equation=32.80%`), V513 passou e V526 row-weighted passou (`delta=6.997pp`) | primeiro candidato novo pos-V570 que passa gates CPU com protecao de objetivo; autoriza somente auditoria pre-paid e smoke curto com kill-switch, nao submit |
+| V573 HF upload/pre-paid | dataset V573 subido para HF dataset commit `3d321aff1e68d72769f167ceab2a28123faa18fd`; launcher debug baixou do HF sem symlink cache, validou hashes `ba515.../6957...`, adapter seed e objetivo; pre-paid gate passou sem findings com deferimento V568 restrito a `MAX_STEPS=2` e weak eval obrigatoria no primeiro checkpoint | pronto para commit/push dos gates e um smoke H200 de 2 steps; se checkpoint-2 nao passar `total>=193`, `bit>=136`, `equation>=57`, `trunc=0` e protected rows, cancelar/abandonar |
 
-## Decisao Atual V536
+## Decisao Atual V560-V573
+
+O problema ativo nao e mais falta de busca externa nem apenas hiperparametro de
+loss. A evidencia V562/V563 mostra desalinhamento entre treino e inferencia:
+
+- V560 removeu `RULE:` e `Trace:` e treinou targets curtos, mas o adapter V561
+  ainda gerou CoT longo em weak eval;
+- V562 mediu `avg_completion_tokens=4775`, `max_completion_tokens=7680` e
+  `truncated=1`, com regressao de bit para `135/160`;
+- os dois protected rows que o baseline acertava foram perdidos:
+  `8740ed31: 01101000 -> 01111000` e `59bee375: 10010101 -> 2`;
+- o gate bloqueou por `correct_lt_193`, `equation_lt_57`, `bit_lt_136`,
+  `truncated_gt_0`, tokens excessivos e protected-row backfire.
+- V563 eliminou o runaway com `disable_thinking=1` e `max_tokens=128`, mas
+  colapsou a ACC para `15-16/315` nos tres checkpoints e manteve backfire nos
+  protected rows. Portanto prompt curto sozinho nao e solucao.
+- V564 consultou OpenRouter e confirmou a decisao operacional: parar broad
+  LoRA, investigar bug/contrato/mask/logits primeiro e so voltar para GPU apos
+  gate pequeno com ganho medido.
+- V564 contract/mask audit confirmou que mask, pesos e protected rows nao sao
+  o blocker imediato do V560. O blocker real e contrato de prompt: `347/347`
+  prompts de treino diferem do prompt official-like, com prefixo comum de
+  apenas `3` tokens. Isso torna invalido repetir H200 antes de alinhar o
+  template.
+- V565 corrigiu o contrato no dataset: treino e eval official-like agora usam
+  o mesmo texto de prompt. As validacoes V564/V286/V478 passaram sem blockers.
+- V566 analisou o arquivo OpenRouter de 17/05/2026 e adicionou uma cautela
+  concreta: o colapso V563 pode ser incompatibilidade global do prompt strict,
+  nao apenas erro do adapter. Portanto `disable_thinking=1`/`max_tokens=128`
+  nao pode virar contrato padrao antes de um teste baseline/no-adapter.
+- V567 executou esse teste em H200. O resultado foi negativo: strict/no-think
+  e one-line nao acertaram nenhuma das 11 linhas criticas, e as variantes
+  longas com `max_tokens=2048` truncaram. O cross-check historico mostrou que
+  o V290 correto nas protected rows usa `6290` e `6589` completion tokens.
+  Portanto V567 nao substitui weak eval oficial; ele prova que qualquer rota
+  promocional precisa manter o contrato longo `max_tokens=7680` e thinking
+  habilitado.
+- V568 executou o probe logits/NLL em H200 e refinou a regra: margem absoluta
+  negativa e um alerta, mas nao pode ser bloqueio automatico porque ate o
+  `base_no_adapter` mostra margem curta negativa em algumas alternativas. O
+  bloqueio correto e regressao de margem contra baseline. V290/V561 pioraram
+  principalmente `59bee375`, entao a proxima linha deve corrigir protected-row
+  drift antes de tentar novos ganhos em equation. A regra entrou tanto no gate
+  de runtime HF quanto no pre-paid integration gate.
+- V569 consultou novamente OpenRouter com o estado completo pos-V568. O consenso
+  mais forte foi `PROTECTED_REPLAY_FIRST`: antes de tentar ganhar equation,
+  recuperar/ancorar as trajetorias longas que preservam `8740ed31` e
+  `59bee375`. DPO/ORPO/preference fica como segunda fase, somente apos replay
+  protegido passar V568 sem piorar margem.
+- V570 recuperou essas trajetorias e anchors em modo diagnostico. O artefato
+  tem `42` linhas corretas, mas `training_allowed_rows=0` por seguranca: sao
+  linhas do weak gate, portanto servem para entender o comportamento, construir
+  negativos duros e criar analogos source-only, nao para treinar diretamente.
+- V571 criou o primeiro material novo bit-pair source-only depois do plateau,
+  com trace deterministica curta o bastante para tokenizar sem truncation. O
+  dataset isolado e bit-only, por isso permanece bloqueado para GPU.
+- V572 mostrou um erro de calibragem de peso antes de gastar H200: aumentar
+  equation para `1.5` e reduzir bit para `0.5` produziria apenas `31.28%` de
+  peso efetivo em bit. Esse desenho fica bloqueado porque tende a repetir a
+  perda de `bit>=136`.
+- V526 foi corrigido para enxergar `metadata.loss_weight`; antes ele avaliava
+  apenas contagem fisica e podia aprovar/reprovar a calibragem errada. Esse era
+  um bug silencioso de gate, nao um ganho de ACC.
+- V573 reaproveita os mesmos dados source-only verificados, mas com peso
+  `bit=1.5` e `equation=1.0`, ficando em `67.20%` bit e `32.80%` equation.
+  Esta e a primeira rota treinavel plausivel apos V570, ainda sem ganho ACC
+  medido.
+- V573 upload/pre-paid tambem corrigiu um bug operacional: o debug local do HF
+  falhava no Windows por symlink/cache; o launcher agora baixa para pasta local
+  explicita e valida hash. Isso evita confundir erro de cache com erro do
+  dataset.
+
+Plano efetivo a partir daqui:
+
+1. Bloquear novo broad LoRA em H200. Loss nao autoriza gasto nem submit.
+2. Concluido: auditoria local V564 de contrato/mask separou falso positivo de
+   validacao e isolou o mismatch train-vs-eval como blocker real.
+3. Concluido: V565 reconstruiu o dataset answer-only com contrato official-like
+   e passou contract/mask/tokenization/objective gates.
+4. Concluido: V567 descartou strict no-think/one-line e tambem mostrou que
+   `max_tokens=2048` e insuficiente para as protected rows.
+5. Gate novo: weak eval promocional fica bloqueado se `KG1_DISABLE_THINKING=1`
+   ou `KG1_MAX_TOKENS<7680`, exceto quando o job declarar diagnostico explicito.
+6. Gate novo: treino promocional pago fica bloqueado ate o diagnostico V568
+   separar decoding ruim de drift do adapter com `0` logprobs faltantes,
+   protected rows completos e regressao de margem vs baseline dentro do limite
+   (`KG1_V568_MAX_OBSERVED_PROTECTED_MARGIN_REGRESSION <=
+   KG1_V568_ALLOWED_PROTECTED_MARGIN_REGRESSION`). Margem absoluta negativa e
+   alerta, nao bloqueio padrao.
+7. Concluido: V569 confirmou que o proximo passo nao e outro broad SFT; e
+   recuperar/reproduzir trajetorias protegidas longas e medir margens.
+8. Concluido: V570 recuperou `raw_output` correto do V290 ckpt-6 para
+   `8740ed31` e `59bee375`, mais `40` anchors corretos, com prompt hash,
+   completion hash, resposta final, truncation e decisao `diagnostic_only`.
+9. Gate V570:
+   protected final answers exatos, `max_tokens=7680`, thinking habilitado,
+   tokenization sem truncation, e reproducao V568 dentro da tolerancia. Como as
+   linhas sao weak-gate, o gate tambem exige `training_allowed_rows=0` ate haver
+   analogos source-only ou pares preference sem contaminacao.
+10. Concluido parcial: V571/V573 construiram analogos source-only verificaveis
+   para bit-pair e mantiveram equation V551 limpa. Isso nao usa as linhas
+   weak-gate V570 como treino.
+11. Concluido: V573 upload/debug/pre-paid passou. O job so pode declarar
+   `LOSS_NORMALIZATION_MODE=example_mean`, `USE_ROW_LOSS_WEIGHT=1`,
+   `REQUIRE_ROW_LOSS_WEIGHT=1`, `MAX_LENGTH=2048`, `MAX_STEPS=2`, protected
+   rows `8740ed31=01101000` e `59bee375=10010101`, e weak eval obrigatoria no
+   primeiro checkpoint.
+12. Executar smoke V573 H200 somente apos commit/push dos gates usados pelo job.
+   O checkpoint-2 deve ser avaliado em weak official-like com `max_tokens=7680`.
+13. Executar auditoria de logits/protected rows apos contrato padronizado:
+   medir top-k e probabilidade das respostas corretas em `8740ed31` e
+   `59bee375`; qualquer adapter que reduza esses logits fica bloqueado.
+14. Se o diagnostico de logits/protected passar, rodar apenas smoke curto V573
+   com primeiro checkpoint kill-switch; se falhar, nao gastar H200.
+15. So entao montar microexperimento hard-negative/protected:
+   baseline-wrong/solver-right como positivos e baseline-correct protected como
+   no-change; sucesso minimo `total>=193`, `bit>=136`, `equation>=57`,
+   protected rows OK e trunc `0`; falha aborta GPU.
+
+Itens removidos do plano ativo apos V569:
+
+- broad LoRA/SFT sem novo gate de margem;
+- answer-only V560/V561 como estrategia principal;
+- strict `disable_thinking`/short answer como contrato promocional;
+- CPU solver/verifier direto como submit;
+- novos H200 justificados por eval loss;
+- treino equation-first enquanto `8740ed31` e `59bee375` nao estiverem
+  protegidos por replay/margem.
+
+## Decisao Atual V551/V552/V553
+
+V551 executou o proximo passo obrigatorio do V550 sem gastar GPU e depois foi
+promovido para um smoke curto V552 H200. O problema concreto era que V536
+ensinava bit traces longas/repetitivas: isso reduziu um pouco o loss, mas na
+weak eval gerou completions medias perto de `4770` tokens e regrediu bit. V551
+manteve o mesmo material fonte-only do V536, mas trocou os targets de
+`bit_manipulation` por trace cards curtos com `Final answer: \boxed{...}`.
+
+Achado tecnico principal:
+
+- V551 reduziu o target de bit para `p95=250` e `max=251` caracteres, contra
+  `p95=1669` no V536;
+- V509 integridade passou em train/val, sem overlap weak/full e sem mismatch;
+- V286 tokenization real passou com `token_max=383`, `prompt_truncation=0`,
+  `completion_truncation=0`, `offset_masks=1026/219` e tokenizer oficial
+  `nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16`;
+- V513 learnability real passou sem blocker;
+- V524 real ficou `quota_ok_cpu_only`, com loss-token bit share `0.592993`;
+- gates foram atualizados para bloquear novos datasets SFT com assistant
+  comprido: `kg1_pre_paid_job_integration_gate.py` agora aceita
+  `--max-assistant-chars-p95` e `--max-assistant-chars-max`, e
+  `hf_job_preflight_gate.py` aceita `KG1_MAX_ASSISTANT_CHARS_P95` e
+  `KG1_MAX_ASSISTANT_CHARS_MAX`.
+
+Resultado pago V552/V553:
+
+- V552 H200 rodou `4` steps e gerou checkpoints `2` e `4`;
+- checkpoint-2 teve a menor melhora de loss (`5.9880 -> 5.9840`), mas loss
+  nao promove;
+- V553 weak eval label-free do checkpoint-2 mediu:
+  - total `190/315`;
+  - `bit_manipulation=134/160`;
+  - `equation_transform=56/155`;
+  - `truncated=1`;
+  - `avg_completion_tokens=4775.12`, `max_completion_tokens=7680`;
+  - protected rows quebradas:
+    `8740ed31: 01101000 -> 01111000` e
+    `59bee375: 10010101 -> 2`;
+- o `weak_promotion_gate` bloqueou por `correct_lt_193`,
+  `equation_lt_57`, `bit_lt_136`, `truncated_gt_0`,
+  completion tokens excessivos e `protected_row_backfire_guard_failed`;
+- V553 foi cancelado antes do checkpoint-4, porque checkpoint-4 tinha loss
+  pior no treino e checkpoint-2 ja repetiu o backfire conhecido.
+
+Decisao:
+
+- V551/V552/V553 nao e submit-safe;
+- nao rodar full eval, package ou submit desta linha;
+- nao relancar SFT curto de bit traces se o novo CPU gate nao provar antes
+  preservacao de `8740ed31=01101000`, `59bee375=10010101`, `bit>=136`,
+  `equation>=57`, `trunc=0` e completions curtas;
+- o gargalo atual nao e mais comprimento bruto do target: mesmo target curto
+  repetiu a troca antiga `+equation/-bit`, entao a proxima frente precisa ser
+  hard-negative/protected-row first ou package permitido para solver, nao
+  mais uma variacao de SFT amplo.
+
+Proximo passo obrigatorio:
+
+1. usar o resultado V553 como negativo duro obrigatorio:
+   `8740ed31`, `59bee375` e os outputs runaway devem entrar no gate local,
+   nao como weak labels de treino;
+2. construir/avaliar em CPU uma rota que preserve primeiro os dois protegidos
+   e so depois tente `equation_transform`;
+3. so liberar novo HF pago se o gate CPU provar novo sinal sem perdas:
+   `total>=193`, `bit>=136`, `equation>=57`, `trunc=0`, protected rows
+   preservadas e completions baixas;
+4. se o pacote Kaggle permitir executar solver/verifier no caminho de
+   inferencia dentro do formato oficial de submissao, priorizar essa auditoria
+   porque a projecao CPU continua sendo o unico caminho com ganho real
+   (`200/315`, `bit=138`, `equation=62`) sem backfire.
+
+Artefato V551:
+
+- `artifacts/v551_short_bit_trace_pack/20260517T_v551_cpu_gate/KG1_V551_SHORT_BIT_TRACE_PACK.md`;
+- `artifacts/v551_short_bit_trace_pack/20260517T_v551_cpu_gate/v551_short_bit_trace_pack_manifest.json`;
+- `artifacts/v551_short_bit_trace_pack/20260517T_v551_cpu_gate/v509_integrity/v551_v509_integrity_manifest.json`;
+- `artifacts/v551_short_bit_trace_pack/20260517T_v551_cpu_gate/v286_tokenization_real/v286_generic_tokenization_gate_manifest.json`;
+- `artifacts/v551_short_bit_trace_pack/20260517T_v551_cpu_gate/v513_learnability_real/v513_trace_learnability_gate_manifest.json`;
+- `artifacts/v551_short_bit_trace_pack/20260517T_v551_cpu_gate/v524_objective_real/v524_quota_token_objective_manifest.json`;
+- `artifacts/v551_short_bit_trace_pack/20260517T_v551_cpu_gate/static_safety_gate_after_v551.json`.
+
+Artefato V553:
+
+- `artifacts/v553_hf_h200_v552_weak_eval_launch/V553_RESULT_SUMMARY.md`;
+- `artifacts/v553_hf_h200_v552_weak_eval_launch/v553_job_6a099c123308d79117b91cf0_logs_after_cancel.txt`;
+- HF job: `felipesp1983/6a099c123308d79117b91cf0`.
+
+Atualizacao V554 - condicoes sincronizadas no gate:
+
+- `scripts/kg1_pre_paid_job_integration_gate.py` agora tem `--self-test`;
+- o self-test prova que um launcher/dataset SFT limpo passa;
+- o self-test falha se `KG1_PROTECTED_ID_ANSWERS` nao incluir tambem
+  `59bee375=10010101`;
+- o self-test falha se o launcher pede saida `one_line_boxed_no_reasoning`
+  mas o target SFT ainda comeca com `RULE:`;
+- a bateria passou:
+  - `python scripts/kg1_pre_paid_job_integration_gate.py --self-test`;
+  - `python scripts/kg1_static_safety_gate.py --self-test`;
+  - `python scripts/kg1_weak_backfire_row_guard.py --self-test`;
+  - `python scripts/hf_job_weak_eval_v245.py --self-test`;
+  - static safety dos scripts criticos sem findings.
+
+Decisao V554: as condicoes estao agora testaveis antes do job pago. O proximo
+dataset/launcher que nao preservar os dois protected rows, nao respeitar o
+contrato curto, ou tentar promover por loss deve falhar no pre-paid gate.
+
+Atualizacao V555 - missmap refeito com dois protected rows:
+
+- V541 foi reexecutado em CPU para eliminar a evidencia antiga que registrava
+  so `8740ed31`;
+- novo manifest:
+  `artifacts/v555_condition_refresh/v541_missmap_two_protected/v555_v541_two_protected_manifest.json`;
+- resultado: `191/315`, `bit=136/160`, `equation=55/155`, `trunc=0`,
+  `protected_passed=true`;
+- `protected_id_answers` agora inclui explicitamente:
+  `8740ed31=01101000` e `59bee375=10010101`;
+- miss classes continuam: `24` bit residual, `12` equation numeric,
+  `88` equation symbolic/punctuation; coverage `1.0`.
+
+Decisao V555: a base diagnostica CPU esta sincronizada com os guards atuais.
+Qualquer proximo dataset/launcher deve apontar para esta evidencia ou para uma
+derivacao mais nova, nunca para o V541 antigo de um protected row.
+
+## Decisao Anterior V550
+
+V550 fecha uma lacuna real nas condicoes: o guard antigo protegia
+`8740ed31=01101000`, mas V549 checkpoint-2 tambem perdeu `59bee375=10010101`
+ao emitir `2`. A partir de agora, scripts e launchers ativos devem exigir os
+dois protegidos antes de weak/full/package/submit.
+
+Achado tecnico principal:
+
+- V536 nao deve ser repetido: as bit traces continuam longas (`p95=1669`
+  caracteres), e a weak eval mostrou completions medias perto de `4770`
+  tokens; isso explica por que loss saudavel nao virou ACC e por que bit
+  regressou;
+- checkpoint-2 fez o trade-off proibido: `+518deb39` em equation, mas
+  `-8740ed31` e `-59bee375` em bit;
+- checkpoint-4 nao ganhou equation e ainda perdeu `8740ed31`;
+- `gpu_allowed=false` ate existir dataset/gate CPU curto, answer-span, com os
+  dois protegidos preservados.
+
+Artefato V550:
+
+- `artifacts/v550_condition_sync_audit/20260517T095613Z/KG1_V550_CONDITION_SYNC_AUDIT.md`;
+- `artifacts/v550_condition_sync_audit/20260517T095613Z/v550_condition_sync_audit_manifest.json`.
+
+## Decisao Anterior V549
+
+V536/V549 encerra a rota V534-bit + V523-equation como ganho submit-safe. O
+treino H200 tecnicamente rodou, mas a weak eval label-free atual dos
+checkpoints atuais mostrou regressao: checkpoint-2 `190/315`, `bit=134`,
+`equation=56`, `trunc=1`; checkpoint-4 `190/315`, `bit=135`, `equation=55`,
+`trunc=0`. Ambos violam o protected row `8740ed31=01101000` ao prever
+`01111000`, e ambos excedem muito os limites de completions curtas.
+
+Decisao:
+
+- nao usar V536 checkpoint-2 ou checkpoint-4 para full eval, package ou submit;
+- nao continuar a linha V534/Konbu/Huikang + V523-equation com o mesmo prompt
+  e objetivo sem um novo sinal CPU que preserve `8740ed31` e reduza completions;
+- manter V290/V291 checkpoint-6 como baseline packageable ate existir adapter
+  com `total>=193`, `bit>=136`, `equation>=57`, `trunc=0`, protected rows
+  preservadas e completions dentro do limite;
+- diagnostico row-level V549 contra V516 mostrou que checkpoint-2 faz o mesmo
+  trade-off antigo: ganha `518deb39` em equation, mas perde `8740ed31` e
+  `59bee375` em bit; checkpoint-4 nao ganha nenhuma linha e perde `8740ed31`;
+- a proxima acao deve abandonar esse mix como linha promocional e focar em
+  blindar `8740ed31`/`59bee375` com hard negatives curtos antes de tentar
+  qualquer nova transferencia de `518deb39`/equation.
+
+Artefatos V549:
+
+- `artifacts/v549_hf_h200_v536_current_weak_eval_launch/v549-h200-v221contract-v536-current-cp2-cp4-20260517T091907Z_launch_manifest.json`;
+- `artifacts/v549_hf_h200_v536_current_weak_eval_results/evals/v549-h200-v221contract-v536-current-cp2-cp4-20260517T091907Z/v245_hf_weak_eval_manifest.json`;
+- `artifacts/v549_hf_h200_v536_current_weak_eval_results/delta_audit/v549_delta_audit_summary.json`.
+
+## Decisao Anterior V548
+
+V547/V548 encerrou a rota de destilacao answer-only curta para transformar
+solver/verifier em adapter. O modelo aprendeu a emitir raciocinio longo e
+ignorou o contrato de uma linha `\boxed{...}`. O resultado e pior que regressao
+normal: `0/160` bit e `288/315` truncados. Portanto:
+
+- nao usar V547 para full eval, package ou submit;
+- nao repetir treino answer-only pequeno sem um smoke de geracao antes;
+- qualquer paid eval deve abortar automaticamente se ocorrer colapso
+  catastrofico (`correct<=10`, truncation massiva ou bit destruido);
+- ganho CPU solver/verifier continua util como teacher/diagnostico, mas nao
+  autoriza submit enquanto o pacote oficial permanecer adapter-only.
+- recheck V336B em `artifacts/v548_package_permission_recheck/` confirma que
+  solver/verifier direto continua bloqueado: o submit oficial exige ZIP com
+  LoRA adapter, e o nosso packager rejeita `prediction_postprocessor`.
+
+Artefatos V547/V548:
+
+- `artifacts/v547_contract_aligned_distillation_dataset/20260517T_v547_cpu_gate/v547_contract_aligned_manifest.json`;
+- `artifacts/v547_hf_h200_launch/v547-nemo-h200-contract-final-v290ckpt6-20260517T080936Z_launch_manifest.json`;
+- `artifacts/v548_hf_h200_v547_weak_eval_launch/v548-h200-v221contract-v547-cp2-cp4-cp6-cp8-20260517T082755Z_launch_manifest.json`;
+- `artifacts/v548_hf_h200_v547_weak_eval_launch/KG1_V548_CATASTROPHIC_TRANSFER_COLLAPSE_AUDIT.md`;
+- `artifacts/v548_hf_h200_v547_weak_eval_launch/v548_catastrophic_transfer_collapse_audit.json`.
+
+## Decisao Anterior V536
 
 Artefatos:
 
@@ -1478,3 +1836,150 @@ Meta realista:
 - submit só volta a ser considerado após weak label-free `raw_output` passar
   `total>=194`, `bit>=136`, `equation>=58`, `truncation=0` e protected row
   intacta.
+
+## Atualizacao V545 - V544 Nao Transferiu para ACC
+
+Artefatos:
+
+- treino V544 H200:
+  `artifacts/v544_hf_h200_launch/v544_job_6a0962bce48bea4538ba0c71_logs.txt`;
+- treino V544 H200, log refetched completo:
+  `artifacts/v544_hf_h200_launch/v544_job_6a0962bce48bea4538ba0c71_logs_refetched.txt`;
+- launcher/eval V545:
+  `artifacts/v545_hf_h200_v544_weak_eval_launch/launch_v545_hf_weak_eval_v544_checkpoints.py`;
+- logs V545:
+  `artifacts/v545_hf_h200_v544_weak_eval_launch/v545_job_6a09681d3308d79117b91ab2_logs.txt`;
+- logs V545 refetched:
+  `artifacts/v545_hf_h200_v544_weak_eval_launch/v545_job_6a09681d3308d79117b91ab2_logs_refetched.txt`;
+- launch manifest:
+  `artifacts/v545_hf_h200_v544_weak_eval_launch/v545-h200-v221contract-v544-checkpoints-20260517T070146Z_launch_manifest.json`.
+
+Resultado do treino V544:
+
+- job HF `felipesp1983/6a0962bce48bea4538ba0c71` completou;
+- checkpoints gerados: `checkpoint-2`, `checkpoint-4`, `checkpoint-6`,
+  `checkpoint-8` e `final`;
+- `checkpoint-4` foi o melhor por `eval_loss` (`5.4595` vs baseline
+  `5.4607`), mas a melhoria de loss foi muito pequena e precisava de weak ACC.
+- curva refetched do treino:
+  - `step=2`: `eval_loss=5.4693`;
+  - `step=4`: `eval_loss=5.4595`, melhor por loss;
+  - `step=6`: `eval_loss=5.4651`;
+  - `step=8/final`: `eval_loss=5.4675`;
+  - `train_loss` oscilou entre `3.9648` e `6.8580`, sem correlação útil com
+    ACC label-free.
+
+Resultado V545 weak ACC label-free:
+
+| Candidato | Total weak | bit | equation | trunc | Decisao |
+|---|---:|---:|---:|---:|---|
+| V544 `checkpoint-2` | 189/315 | 134/160 | 55/155 | 0 | bloqueado; regressao forte |
+| V544 `checkpoint-4` | 188/315 | 133/160 | 55/155 | 1 | bloqueado; regressao + truncation |
+
+Diagnostico adicional dos logs:
+
+- os dois checkpoints avaliados geraram runaway output:
+  - `checkpoint-2`: `1,503,221` completion tokens em `315` linhas,
+    media `4,772` tokens/linha;
+  - `checkpoint-4`: `1,504,064` completion tokens em `315` linhas,
+    media `4,775` tokens/linha;
+- isso prova que a rota V544 nao apenas perdeu ACC: ela tambem quebrou a
+  obediencia ao formato curto de resposta, mesmo com prompt `No reasoning`;
+- correcao implementada no gate: `scripts/evaluate_lora_adapters_batch.py`
+  agora grava `rows`, `avg_completion_tokens` e `max_completion_tokens`; e
+  `scripts/hf_job_weak_eval_v245.py` bloqueia candidatos com
+  `avg_completion_tokens>512` ou `max_completion_tokens>2048`;
+- correcao operacional implementada no wrapper V245: quando
+  ha mais de um candidato, `KG1_EVAL_CANDIDATE_BY_CANDIDATE` passa a ser
+  `true` por padrao; cada checkpoint e avaliado em uma rodada isolada, grava
+  manifest incremental, pode fazer upload parcial de diagnosticos e para por
+  padrao apos `2` candidatos consecutivos bloqueados;
+- consequencia: qualquer novo checkpoint com output runaway sera barrado
+  como bug silencioso/F2 backfire antes de package/full/submit.
+
+Decisao FinOps:
+
+- o job V545 `felipesp1983/6a09681d3308d79117b91ab2` foi cancelado em
+  `2026-05-17T07:22:00Z`, antes de gastar H200 com `checkpoint-6`,
+  `checkpoint-8` e `final`;
+- motivo: os dois primeiros checkpoints ficaram abaixo do baseline
+  adapter-only (`192/315`, `bit=136`, `equation=56` historico) e abaixo do
+  recompute strict (`191/315`, `bit=136`, `equation=55`);
+- `eval_loss` menor no `checkpoint-4` nao refletiu ACC e ainda introduziu
+  truncation, portanto a rota V544 minimal distillation fica bloqueada para
+  package/full/submit.
+
+Impacto no roadmap:
+
+1. nao relancar V544, nem avaliar os checkpoints restantes sem novo sinal CPU;
+2. manter o CPU teacher `200/315` como sinal valido, mas nao como submit;
+3. qualquer novo eval de varios checkpoints deve manter o padrao
+   candidato-a-candidato do wrapper V245 e upload incremental ligado, para
+   preservar row-level diagnostics antes de cancelamento FinOps;
+4. proximo passo deve ser diagnostico row-level da transferencia:
+   - comparar os exemplos teacher-gain/replay do V544 contra as saidas reais
+     dos checkpoints 2 e 4, usando apenas logs/diagnosticos label-free;
+   - identificar se a falha vem de target curto, peso por linha,
+     answer extraction, prompt template ou interferencia MoE;
+   - so construir novo dataset se houver causa concreta e teste CPU que
+     preserve `8740ed31=01101000`, `bit>=136`, `equation>=57` e `trunc=0`.
+5. se nao houver causa concreta, voltar para a frente CPU equation
+   canonicalization/hard negatives e abandonar treino LoRA dessa familia ate
+   aparecer novo sinal verificavel.
+
+## Atualizacao V546 - Diagnostico Formal do Backfire V544
+
+Artefatos:
+
+- script:
+  `scripts/analyze_v546_v544_transfer_runaway_audit.py`;
+- manifest:
+  `artifacts/v546_v544_transfer_runaway_audit/20260517T_cpu_audit/v546_v544_transfer_runaway_audit_manifest.json`;
+- static gate:
+  `artifacts/v546_v544_transfer_runaway_audit/20260517T_cpu_audit/v546_static_safety.json`.
+
+Achado principal:
+
+- V544 nao falhou apenas por hiperparametro ou por loss fraco;
+- o audit V546 mostra que `236/236` linhas de treino e `115/115` linhas de
+  validacao tinham assistant target iniciando com `RULE:`;
+- ao mesmo tempo, o V545 avaliou com prompt suffix:
+  `Return only one line: \boxed{answer}. No reasoning. No explanation.`;
+- portanto o treino ensinou um prefixo de resposta diferente do contrato de
+  inferencia submit-safe. Isso e uma causa concreta para o runaway output e
+  para a perda de formato observada no V545.
+
+Bloqueadores V546:
+
+- `checkpoint-2`: `189/315`, `bit=134`, `equation=55`,
+  `avg_completion_tokens=4772`;
+- `checkpoint-4`: `188/315`, `bit=133`, `equation=55`, `truncated=1`,
+  `avg_completion_tokens=4775`;
+- V545 antigo nao gerou `candidate_summary_payload`, nao subiu diagnosticos
+  finais e iniciou `checkpoint-6` antes do cancelamento, sem summary final;
+- isso confirma que a mudanca V245 candidato-a-candidato e obrigatoria para
+  proximos evals pagos.
+
+Decisao:
+
+- V544 fica bloqueado como rota LoRA;
+- nao rodar novo H200 com targets `RULE: ... Final answer: ...` se o eval
+  continuar exigindo uma unica linha `\boxed{...}`;
+- qualquer nova tentativa de distilacao precisa passar antes por gate CPU de
+  compatibilidade entre target de treino e output esperado:
+  - `assistant_final_answer_only_rows > 0` ou `assistant_boxed_only_rows > 0`;
+  - zero linhas com prefixo incompatível quando a inferencia pedir boxed-only;
+  - weak label-free seco em CPU ou amostra HF barata antes de H200;
+  - protected row `8740ed31=01101000`, `bit>=136`, `equation>=57`,
+    `truncation=0` e completion tokens baixos.
+
+Proximo passo tecnico:
+
+1. nao corrigir V544 por mais epochs;
+2. se insistirmos em LoRA, construir um micro dataset novo com target
+   compatível com o contrato de inferencia, por exemplo somente
+   `\boxed{answer}` ou `Final answer: \boxed{answer}`, e testar primeiro em
+   amostra pequena;
+3. caminho preferido continua CPU solver/verifier/canonicalization para
+   `equation_transform`, porque ja mostrou `200/315` sem perda, enquanto LoRA
+   ainda nao transferiu esse ganho.
