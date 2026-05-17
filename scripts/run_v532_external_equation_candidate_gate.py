@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import hashlib
 import json
 import math
 import shutil
@@ -74,6 +75,17 @@ def write_csv(path: Path, rows: list[dict[str, Any]], fieldnames: list[str]) -> 
         writer.writeheader()
         for row in rows:
             writer.writerow({key: row.get(key, "") for key in fieldnames})
+
+
+def sha256_file(path: Path, chunk_size: int = 1024 * 1024) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        while True:
+            chunk = handle.read(chunk_size)
+            if not chunk:
+                break
+            digest.update(chunk)
+    return digest.hexdigest()
 
 
 def truthy(value: object) -> bool:
@@ -196,11 +208,17 @@ def iter_zip_csv(zip_path: Path, member_name: str) -> list[dict[str, str]]:
     return list(csv.DictReader(text.splitlines()))
 
 
-def baseline_label_free_prediction(row: dict[str, str]) -> str:
+def baseline_label_free_prediction(row: dict[str, str], *, allow_stored_prediction: bool = False) -> str:
     raw = row.get("raw_output")
     if raw is not None and str(raw).strip():
         return extract_final_answer(raw)
-    return str(row.get("prediction", "")).strip()
+    if allow_stored_prediction and str(row.get("prediction", "")).strip():
+        return str(row.get("prediction", "")).strip()
+    rid = str(row.get("id", "")).strip() or "<unknown>"
+    raise RuntimeError(
+        f"missing raw_output for baseline row {rid}; refusing to fall back to stored prediction without "
+        "--diagnostic-allow-stored-prediction"
+    )
 
 
 def score_selector(
@@ -208,6 +226,8 @@ def score_selector(
     baseline_rows: dict[str, dict[str, str]],
     candidate_rows: list[dict[str, str]],
     selector_name: str,
+    *,
+    allow_stored_prediction: bool,
 ) -> tuple[dict[str, Any], list[dict[str, Any]]]:
     equation_rows = [row for row in weak_rows if row.get("type") == "equation_transform"]
     by_id: dict[str, list[dict[str, str]]] = defaultdict(list)
@@ -218,13 +238,13 @@ def score_selector(
             continue
         by_id[rid].append(row)
 
-    decisions: list[dict[str, Any]] = []
+    family_diag: dict[tuple[str, str, str], Counter] = defaultdict(Counter)
     counts = Counter()
     for weak in equation_rows:
         rid = weak["id"]
         answer = weak["answer"]
         base_row = baseline_rows.get(rid, {})
-        baseline_pred = baseline_label_free_prediction(base_row)
+        baseline_pred = baseline_label_free_prediction(base_row, allow_stored_prediction=allow_stored_prediction)
         baseline_correct = verify_answer(answer, baseline_pred)
         rows = by_id.get(rid, [])
         chosen = None
@@ -249,27 +269,17 @@ def score_selector(
             counts["selected_correct"] += 1
         if baseline_correct:
             counts["baseline_correct"] += 1
-        decisions.append(
-            {
-                "selector": selector_name,
-                "id": rid,
-                "answer": answer,
-                "baseline_prediction": baseline_pred,
-                "baseline_correct": baseline_correct,
-                "selected_prediction": chosen_pred,
-                "selected_correct": chosen_correct,
-                "outcome": outcome,
-                "candidate_count": len(rows),
-                "source": chosen.get("_source", "") if chosen else "",
-                "best_program_family": chosen.get("best_program_family", "") if chosen else "",
-                "verifier_valid": chosen.get("verifier_valid", "") if chosen else "",
-                "verifier_score": chosen.get("verifier_score", "") if chosen else "",
-                "canonicalization_status": chosen.get("canonicalization_status", "") if chosen else "",
-                "sympy_parse_success": chosen.get("sympy_parse_success", "") if chosen else "",
-                "failure_reason": chosen.get("failure_reason", "") if chosen else "",
-                "competition_match_audit_only": chosen.get("competition_match", "") if chosen else "",
-            }
-        )
+        source = chosen.get("_source", "") if chosen else ""
+        family = chosen.get("best_program_family", "") if chosen else ""
+        diag = family_diag[(selector_name, source, family)]
+        diag["rows"] += 1
+        diag[outcome] += 1
+        if rows:
+            diag["rows_with_candidates"] += 1
+        if chosen_correct:
+            diag["selected_correct"] += 1
+        if baseline_correct:
+            diag["baseline_correct"] += 1
 
     summary = {
         "selector": selector_name,
@@ -282,9 +292,27 @@ def score_selector(
         "preserve_correct": counts["preserve_correct"],
         "still_wrong": counts["still_wrong"],
         "net": counts["gain"] - counts["loss"],
-        "promotable": counts["gain"] > 0 and counts["loss"] == 0,
+        "diagnostic_no_loss_candidate": counts["gain"] > 0 and counts["loss"] == 0,
     }
-    return summary, decisions
+    diagnostics: list[dict[str, Any]] = []
+    for (selector, source, family), diag in sorted(family_diag.items()):
+        diagnostics.append(
+            {
+                "selector": selector,
+                "source": source,
+                "best_program_family": family,
+                "rows": diag["rows"],
+                "rows_with_candidates": diag["rows_with_candidates"],
+                "baseline_correct": diag["baseline_correct"],
+                "selected_correct": diag["selected_correct"],
+                "gains": diag["gain"],
+                "losses": diag["loss"],
+                "preserve_correct": diag["preserve_correct"],
+                "still_wrong": diag["still_wrong"],
+                "net": diag["gain"] - diag["loss"],
+            }
+        )
+    return summary, diagnostics
 
 
 def main() -> int:
@@ -292,6 +320,12 @@ def main() -> int:
     parser.add_argument("--output-dir", type=Path, default=REPO_ROOT / "artifacts" / "v532_external_equation_candidate_gate")
     parser.add_argument("--weak-csv", type=Path, default=DEFAULT_WEAK_CSV)
     parser.add_argument("--baseline-predictions-csv", type=Path, default=DEFAULT_BASELINE_CSV)
+    parser.add_argument("--fail-on-blocked", action="store_true", help="Exit non-zero if the diagnostic gate is blocked.")
+    parser.add_argument(
+        "--diagnostic-allow-stored-prediction",
+        action="store_true",
+        help="Diagnostic-only escape hatch. Allows fallback to stored prediction if raw_output is unavailable.",
+    )
     args = parser.parse_args()
 
     print("=== V532 EXTERNAL EQUATION CANDIDATE GATE START ===", flush=True)
@@ -334,6 +368,7 @@ def main() -> int:
                     "source": source,
                     "ref": ref,
                     "zip_size": zip_path.stat().st_size,
+                    "zip_sha256": sha256_file(zip_path),
                     "rows": len(rows),
                     "weak_overlap_rows": len(overlap),
                     "unique_weak_ids": len({str(row.get("id", "")).strip() for row in overlap}),
@@ -355,33 +390,42 @@ def main() -> int:
     }
 
     summaries: list[dict[str, Any]] = []
-    all_decisions: list[dict[str, Any]] = []
+    all_family_diagnostics: list[dict[str, Any]] = []
     for name, rows in selector_inputs.items():
-        summary, decisions = score_selector(weak_rows, baseline_by_id, rows, name)
+        summary, family_diagnostics = score_selector(
+            weak_rows,
+            baseline_by_id,
+            rows,
+            name,
+            allow_stored_prediction=args.diagnostic_allow_stored_prediction,
+        )
         summaries.append(summary)
-        all_decisions.extend(decisions)
+        all_family_diagnostics.extend(family_diagnostics)
         print("selector_summary =", json.dumps(summary, sort_keys=True), flush=True)
 
-    decision_fields = [
+    stale_decisions_path = args.output_dir / "v532_external_equation_candidate_decisions.csv"
+    if stale_decisions_path.exists():
+        stale_decisions_path.unlink()
+        print("deleted_row_level_decisions_csv =", stale_decisions_path, flush=True)
+    family_diagnostic_fields = [
         "selector",
-        "id",
-        "answer",
-        "baseline_prediction",
-        "baseline_correct",
-        "selected_prediction",
-        "selected_correct",
-        "outcome",
-        "candidate_count",
         "source",
         "best_program_family",
-        "verifier_valid",
-        "verifier_score",
-        "canonicalization_status",
-        "sympy_parse_success",
-        "failure_reason",
-        "competition_match_audit_only",
+        "rows",
+        "rows_with_candidates",
+        "baseline_correct",
+        "selected_correct",
+        "gains",
+        "losses",
+        "preserve_correct",
+        "still_wrong",
+        "net",
     ]
-    write_csv(args.output_dir / "v532_external_equation_candidate_decisions.csv", all_decisions, decision_fields)
+    write_csv(
+        args.output_dir / "v532_external_equation_candidate_family_diagnostics.csv",
+        all_family_diagnostics,
+        family_diagnostic_fields,
+    )
     write_csv(
         args.output_dir / "v532_external_equation_candidate_summary.csv",
         summaries,
@@ -396,23 +440,32 @@ def main() -> int:
             "preserve_correct",
             "still_wrong",
             "net",
-            "promotable",
+            "diagnostic_no_loss_candidate",
         ],
     )
     (args.output_dir / "v532_external_equation_dataset_summaries.json").write_text(
         json.dumps(dataset_summaries, indent=2, sort_keys=True),
         encoding="utf-8",
     )
+    no_loss_selectors = [row["selector"] for row in summaries if row["diagnostic_no_loss_candidate"]]
+    blocked = not bool(no_loss_selectors)
     manifest = {
         "schema_version": "kg1_v532_external_equation_candidate_gate_v1",
         "generated_at_utc": utc_now(),
         "weak_csv": str(args.weak_csv),
         "baseline_predictions_csv": str(args.baseline_predictions_csv),
+        "diagnostic_allow_stored_prediction": bool(args.diagnostic_allow_stored_prediction),
+        "row_level_weak_decisions_written": False,
+        "blocked": blocked,
+        "hf_gpu_allowed": False,
         "dataset_summaries": dataset_summaries,
         "selector_summaries": summaries,
         "decision": {
-            "promotable_selectors": [row["selector"] for row in summaries if row["promotable"]],
-            "next_action": "Only promote to training data if a selector has gains>0 and losses=0. Otherwise use as diagnosis/verifier feature source.",
+            "diagnostic_no_loss_selectors": no_loss_selectors,
+            "next_action": (
+                "Do not convert weak gain rows into training data. If a diagnostic selector has gains>0 "
+                "and losses=0, derive a source-only rule/canonicalization hypothesis and rerun anti-leakage gates."
+            ),
         },
     }
     (args.output_dir / "v532_external_equation_candidate_manifest.json").write_text(
@@ -423,26 +476,45 @@ def main() -> int:
     lines = [
         "# V532 External Equation Candidate Gate",
         "",
-        "CPU-only diagnostic. Candidate selection did not use labels, expected answers, or `competition_match`; those fields are audit-only.",
+        "CPU-only diagnostic. Candidate selection did not use labels, expected answers, or `competition_match`; weak labels are used only after selection to audit aggregate gains/losses.",
         "",
         "## Selector Summary",
         "",
-        "| selector | selected_correct | baseline_correct | gains | losses | net | promotable |",
+        "| selector | selected_correct | baseline_correct | gains | losses | net | diagnostic no-loss candidate |",
         "|---|---:|---:|---:|---:|---:|---|",
     ]
     for row in summaries:
         lines.append(
             f"| `{row['selector']}` | {row['selected_correct']}/{row['rows']} | "
             f"{row['baseline_correct']}/{row['rows']} | {row['gains']} | {row['losses']} | "
-            f"{row['net']} | `{row['promotable']}` |"
+            f"{row['net']} | `{row['diagnostic_no_loss_candidate']}` |"
         )
     lines.extend(
         [
             "",
-            "## Decision",
+            "## Dataset Scope",
             "",
-            "- If no selector is promotable, these datasets are useful as verifier/canonicalization feature references, not direct submit-safe gains.",
-            "- If a selector is promotable, convert only its gain rows into a guarded CPU rule or short hard-negative training pack and rerun weak gates.",
+            "| source | rows | weak overlap rows | unique weak ids | direct candidate pool |",
+            "|---|---:|---:|---:|---|",
+        ]
+    )
+    for row in dataset_summaries:
+        lines.append(
+            f"| `{row['source']}` | {row['rows']} | {row['weak_overlap_rows']} | "
+            f"{row['unique_weak_ids']} | `{row['direct_candidate_pool']}` |"
+        )
+    lines.extend(
+        [
+            "",
+        "## Decision",
+        "",
+        f"- `blocked`: `{blocked}`.",
+        "- `hf_gpu_allowed`: `False`.",
+        "- No row-level weak decision file is written; row IDs/outcomes/correctness are not materialized.",
+        "- No weak gain row may be copied into training. This artifact is diagnostic-only.",
+            "- If no selector is a diagnostic no-loss candidate, these datasets are useful only as verifier/canonicalization feature references.",
+            "- `selection_v2` and `solver_swap_v1` were inventoried but not used as direct selectors in V532; they require a separate V535 source-only rule/canonicalization audit.",
+            "- If a selector becomes a diagnostic no-loss candidate in a future run, derive a source-only rule or hard-negative hypothesis and rerun weak/full anti-leakage gates before any training.",
         ]
     )
     (args.output_dir / "KG1_V532_EXTERNAL_EQUATION_CANDIDATE_GATE.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
@@ -450,6 +522,8 @@ def main() -> int:
     print("manifest_path =", args.output_dir / "v532_external_equation_candidate_manifest.json", flush=True)
     print("summary_path =", args.output_dir / "KG1_V532_EXTERNAL_EQUATION_CANDIDATE_GATE.md", flush=True)
     print("=== V532 EXTERNAL EQUATION CANDIDATE GATE END ===", flush=True)
+    if blocked and args.fail_on_blocked:
+        return 2
     return 0
 
 

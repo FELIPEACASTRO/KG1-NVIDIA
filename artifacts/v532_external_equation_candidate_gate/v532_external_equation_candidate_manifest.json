@@ -1,5 +1,6 @@
 {
   "baseline_predictions_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v342_acc_first_diagnostic\\v290_checkpoint6_baseline_predictions.csv",
+  "blocked": true,
   "dataset_summaries": [
     {
       "direct_candidate_pool": true,
@@ -8,6 +9,7 @@
       "source": "critic_v2",
       "unique_weak_ids": 155,
       "weak_overlap_rows": 5833,
+      "zip_sha256": "234da59bdf835903add7c7d978aebd46e061bc026083cee58b24238c31d378aa",
       "zip_size": 2759915
     },
     {
@@ -17,6 +19,7 @@
       "source": "router_v1",
       "unique_weak_ids": 155,
       "weak_overlap_rows": 5833,
+      "zip_sha256": "0e84db6c23321df6831074ec54a11ab476cb65ddc45f7e9822440b25507d14db",
       "zip_size": 2860712
     },
     {
@@ -26,6 +29,7 @@
       "source": "selection_v2",
       "unique_weak_ids": 0,
       "weak_overlap_rows": 0,
+      "zip_sha256": "98438c53b8670e07af196935c7c97030039c1ff20b22d9bdccdde75755757f6d",
       "zip_size": 30681
     },
     {
@@ -35,23 +39,27 @@
       "source": "solver_swap_v1",
       "unique_weak_ids": 71,
       "weak_overlap_rows": 74,
+      "zip_sha256": "c0288170ddfd8f30459ce5b7b906dde8a545214c8eb8d8910bdbb0495be98511",
       "zip_size": 905968
     }
   ],
   "decision": {
-    "next_action": "Only promote to training data if a selector has gains>0 and losses=0. Otherwise use as diagnosis/verifier feature source.",
-    "promotable_selectors": []
+    "diagnostic_no_loss_selectors": [],
+    "next_action": "Do not convert weak gain rows into training data. If a diagnostic selector has gains>0 and losses=0, derive a source-only rule/canonicalization hypothesis and rerun anti-leakage gates."
   },
-  "generated_at_utc": "2026-05-17T01:50:23.971573+00:00",
+  "diagnostic_allow_stored_prediction": false,
+  "generated_at_utc": "2026-05-17T02:23:25.116618+00:00",
+  "hf_gpu_allowed": false,
+  "row_level_weak_decisions_written": false,
   "schema_version": "kg1_v532_external_equation_candidate_gate_v1",
   "selector_summaries": [
     {
       "baseline_correct": 55,
+      "diagnostic_no_loss_candidate": false,
       "gains": 2,
       "losses": 28,
       "net": -26,
       "preserve_correct": 27,
-      "promotable": false,
       "rows": 155,
       "rows_with_candidates": 155,
       "selected_correct": 29,
@@ -60,11 +68,11 @@
     },
     {
       "baseline_correct": 55,
+      "diagnostic_no_loss_candidate": false,
       "gains": 2,
       "losses": 28,
       "net": -26,
       "preserve_correct": 27,
-      "promotable": false,
       "rows": 155,
       "rows_with_candidates": 155,
       "selected_correct": 29,
@@ -73,11 +81,11 @@
     },
     {
       "baseline_correct": 55,
+      "diagnostic_no_loss_candidate": false,
       "gains": 2,
       "losses": 28,
       "net": -26,
       "preserve_correct": 27,
-      "promotable": false,
       "rows": 155,
       "rows_with_candidates": 155,
       "selected_correct": 29,

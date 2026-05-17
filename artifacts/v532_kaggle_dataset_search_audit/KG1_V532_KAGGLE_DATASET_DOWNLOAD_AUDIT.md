@@ -79,6 +79,8 @@ used to build a CPU-first equation selection gate:
   - `candidate_pool.csv`: `51338` equation candidate rows with
     `verifier_valid`, `verifier_score`, `failure_reason`,
     `best_program_family`, and `competition_match`.
+  - `competition_match` is audit-only/quarantined. It must never be exported as
+    a selector feature or training signal.
 - `itskshivam/nemotron-equation-candidate-critique-router-v1`
   - `candidate_pool.csv`: `51334` rows with `canonicalization_status`,
     `profile_normalized_prediction`, `expression_family`,
@@ -114,3 +116,6 @@ For bit, the useful material remains deterministic trace data and solver logic:
   scanned official overlap; useful as code/reference, not as unfiltered gold.
 - Generic broad SFT from these bundles remains blocked until a CPU gate proves
   row-level gains with zero regressions.
+- Weak row gains found by any diagnostic scan are not training rows. They may
+  only motivate a source-only rule/canonicalization hypothesis after all
+  weak/full overlaps are excluded.

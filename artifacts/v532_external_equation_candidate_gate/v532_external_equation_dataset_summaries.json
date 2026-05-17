@@ -6,6 +6,7 @@
     "source": "critic_v2",
     "unique_weak_ids": 155,
     "weak_overlap_rows": 5833,
+    "zip_sha256": "234da59bdf835903add7c7d978aebd46e061bc026083cee58b24238c31d378aa",
     "zip_size": 2759915
   },
   {
@@ -15,6 +16,7 @@
     "source": "router_v1",
     "unique_weak_ids": 155,
     "weak_overlap_rows": 5833,
+    "zip_sha256": "0e84db6c23321df6831074ec54a11ab476cb65ddc45f7e9822440b25507d14db",
     "zip_size": 2860712
   },
   {
@@ -24,6 +26,7 @@
     "source": "selection_v2",
     "unique_weak_ids": 0,
     "weak_overlap_rows": 0,
+    "zip_sha256": "98438c53b8670e07af196935c7c97030039c1ff20b22d9bdccdde75755757f6d",
     "zip_size": 30681
   },
   {
@@ -33,6 +36,7 @@
     "source": "solver_swap_v1",
     "unique_weak_ids": 71,
     "weak_overlap_rows": 74,
+    "zip_sha256": "c0288170ddfd8f30459ce5b7b906dde8a545214c8eb8d8910bdbb0495be98511",
     "zip_size": 905968
   }
 ]

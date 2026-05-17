@@ -33,6 +33,12 @@
 This is a diagnostic only; weak rows must not be copied directly into training
 packs used to judge promotion.
 
+The row-level CSV overlap exports were removed from the active tree because
+they included weak row ids, answer previews, baseline predictions, or
+correctness flags. Builders must not recreate or consume those diagnostics as
+training data or candidate-selection input. Use only aggregate coverage counts,
+then rebuild any usable pack from source files with weak/full exclusion.
+
 - `bit_manipulation_3input_traces.jsonl` overlaps `10` weak bit rows.
 - Of those, `8` are current baseline misses:
   - `048cc279`

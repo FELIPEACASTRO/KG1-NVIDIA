@@ -13,11 +13,12 @@ executavel e somente o que esta abaixo.
 
 ## Estado Real
 
-| Metrica | Melhor submit-safe atual | Promocao minima |
+| Metrica | Estado atual | Promocao minima |
 |---|---:|---:|
-| Total weak adapter raw label-free | 191/315 | > 192/315 |
-| equation_transform adapter raw label-free | 55/155 | alvo inicial 60/155 |
-| bit_manipulation | 136/160 | >= 136/160 |
+| Baseline historico packageable | 192/315 | > 192/315 |
+| Recompute strict label-free recente | 191/315 | >= 193/315 |
+| equation_transform baseline | 56/155 historico; 55/155 strict | alvo inicial 60/155 |
+| bit_manipulation baseline | 136/160 | >= 136/160 |
 | truncated | 0 | 0 |
 | Full official-like conhecido | 823/947 | > 823/947 |
 
@@ -87,8 +88,10 @@ Ultima evidencia operacional relevante:
 | V532 Kaggle dataset/topics/comments search | `70` datasets listados por CLI; `18` candidatos baixados/analisados em temp e apagados; P0/P1 concreto: Konbu BM/ET CoT, `itskshivam` candidate_pool/critic/router, `sohamp13` 3-way selector, `furkankesen` solver-swap, `adityakrishnanmohan` hard triad; topics/comments refresh: `58` topicos, `357` posts, `238` hits | novo plano muda equation para candidate/verifier/canonicalization CPU gate; nao usar bundles com mismatches como gold; Huikang foi auditado localmente no V533 sem commitar ZIP/pesos |
 | V532 external equation candidate gate | `critic_v2`, `router_v1`, `selection_v2`, `solver_swap_v1` baixados em temp; candidate pools cobrem `155/155` weak equation, mas seletor label-free por `verifier_score/canonicalization/sympy/rank` cai de `55/155` para `29/155`, com `2` ganhos e `28` perdas | nao promotavel; usar esses datasets como fonte de features/canonizacao/hard negatives, nao como seletor direto nem treino direto |
 | V533 Huikang local package | `archive (9).zip` auditado sem extrair pesos; `adapter_v26`: LoRA `all-linear`, r32/alpha32, `418` tensores F32, `386072576` params; `bit_manipulation_3input_traces`: `100` oficiais, `0` mismatch; `2000` sinteticos CHO/MAJ no ZIP local, apesar da metadata citar `10000`; overlap weak bit `10`, incluindo `8` misses atuais | P0 para bit CHO/MAJ trace mining source-only; nao copiar weak rows para treino promocional; adapter v26 e P1 weak eval estatico, nao submit-safe sem gate |
+| V534 roadmap/F2 double check | corrigiu contradicao "duas frentes"; reafirmou que `competition_match`/`answer`/`expected_answer` sao auditoria, nao selecao; removeu broad SFT/V-CARS/Tatoeba/candidate-pool direto do plano ativo | plano ativo agora e CPU source-only bit, CPU equation canonicalization/hard negatives, adapter-only eval barato, GPU bloqueada ate novo sinal |
+| V535 specialist triple check | revisao independente apontou risco de leakage no CSV V532, fallback silencioso para `prediction`, superconfianca em `verifier_score=1.0`, thresholds contraditorios e adapter externo conflitando com itens removidos | V532 deixou de exportar decisoes row-level, `--fail-on-blocked` validado, CSVs weak-overlap Huikang removidos; adapters externos rebaixados para diagnostico/proveniencia; thresholds separados em smoke, weak promocional e package |
 
-## Decisao Atual V533
+## Decisao Atual V535
 
 Artefatos:
 
@@ -104,17 +107,18 @@ Artefatos:
 - `artifacts/v532_kaggle_dataset_search_audit/KG1_V532_KAGGLE_DATASET_DOWNLOAD_AUDIT.md`;
 - `artifacts/v532_kaggle_dataset_search_audit/discussion_refresh/V512_KAGGLE_DISCUSSION_AUDIT_SUMMARY.md`;
 - `artifacts/v532_external_equation_candidate_gate/KG1_V532_EXTERNAL_EQUATION_CANDIDATE_GATE.md`;
-- `artifacts/v533_huikang_artifacts_audit/KG1_V533_HUIKANG_ARTIFACTS_AUDIT.md`.
+- `artifacts/v533_huikang_artifacts_audit/KG1_V533_HUIKANG_ARTIFACTS_AUDIT.md`;
+- `artifacts/v534_roadmap_double_check/KG1_V534_ROADMAP_DOUBLE_CHECK.md`;
+- `artifacts/v535_specialist_triple_check/KG1_V535_SPECIALIST_TRIPLE_CHECK.md`.
 
 O consenso externo e a auditoria dos notebooks baixados nao autorizam treino
-longo nem broad SFT. Eles autorizam duas frentes, nesta ordem:
+longo nem broad SFT. O plano executavel agora fica restrito as frentes abaixo,
+em ordem de prioridade:
 
-1. Frente CPU V530, obrigatoria para buscar ganho real:
+1. Frente CPU V534 bit source-only, obrigatoria antes de GPU:
    - portar/implementar as ideias P0 dos notebooks `pjt222`, `pearpn25`,
      `konbu17` e `zzys0316`;
    - bit: per-bit/bitsum/stride, INHIB/IMPL, CH/CHO, MAJ3, XOR3, GF(2), ANF;
-   - equation: concat/reverse concat, operands/result reversal, `+1/-1`,
-     divisao/modulo, prefix/suffix operator encoding, `Z_94`/mod-94;
    - medir label-free em source/weak diagnostic, sem usar weak/full como
      treino;
    - gerar traces curtas somente de source rows verificadas.
@@ -125,13 +129,11 @@ longo nem broad SFT. Eles autorizam duas frentes, nesta ordem:
    - atualizacao V533: usar Huikang CHO/MAJ como fonte P0 adicional, mas
      remover qualquer row weak/full do treino promocional; os 8 weak misses
      cobertos sao diagnostico de cobertura, nao exemplos de treino.
-2. Frente CPU equation V532, agora obrigatoria antes de qualquer GPU:
-   - baixar/analisar apenas os arquivos pequenos necessarios dos datasets
-     `itskshivam/nemotron-equation-candidate-critic-v2`,
-     `itskshivam/nemotron-equation-candidate-critique-router-v1`,
-     `sohamp13/nemotron-equation-candidate-selection-v2` e
-     `furkankesen/equation-solver-swap-v1`;
-   - criar um gate local que ranqueia candidatos por features label-free:
+2. Frente CPU V535 equation canonicalization/hard negatives:
+   - usar os downloads pequenos ja auditados no V532 como referencia, nao como
+     patch direto;
+   - qualquer novo gate local so pode ranquear candidatos por features
+     label-free:
      `verifier_valid`, `verifier_score`, `canonicalization_status`,
      `profile_normalized_prediction`, `sympy_parse_success`,
      `best_program_family` e voto/top-k;
@@ -144,26 +146,32 @@ longo nem broad SFT. Eles autorizam duas frentes, nesta ordem:
    - resultado V532 atual: seletor simples nao promove (`29/155` vs baseline
      `55/155`); proxima acao e derivar regras de canonizacao/hard negatives,
      nao usar o pool como patch direto.
-3. Frente GPU V523, opcional e estritamente limitada:
-   - `LOSS_NORMALIZATION_MODE=example_mean` ativo;
-   - perda por exemplo calculada como `CE_sum / active_label_tokens`;
-   - labels decodificados com `\\boxed{` literal, sem `\b`/control chars;
-   - prompt tokens com peso zero;
-   - offset masks completos;
-   - V526 ja passou este dry-run (`example_mean_bit_share=0.688109`).
-4. Frente adapter externo V531, opcional e mais barata que treino:
+3. Frente adapter externo V531/V533, opcional e diagnostica:
    - avaliar Yoiko ver5 apenas como candidato adapter-only, sem treino;
+   - avaliar Huikang `adapter_v26` apenas como candidato adapter-only, sem
+     extrair/commitar pesos;
    - antes de rodar, validar `adapter_config`, header safetensors, regex
      `target_modules`, ausencia de non-LoRA tensors e zip root-level;
    - usar weak eval label-free curto, com FinOps kill-switch se cair abaixo do
      baseline nas primeiras metricas;
-   - promover somente se superar baseline raw atual sem perder bit/truncation.
-5. Qualquer smoke V523/V530/V531/V532 precisa falhar fechado se:
+   - nao usar peso publico como submissao direta nem como fonte de treino; se
+     superar baseline, usar apenas como diagnostico/proveniencia e abrir uma
+     decisao separada de compatibilidade/licenca/submit antes de qualquer
+     package.
+4. GPU SFT volta a ficar bloqueada ate a frente CPU produzir novo dataset
+   source-only com:
+   - zero overlap weak/full por `id`, `prompt_sha256` e
+     `prompt+answer_sha256`;
+   - tokenization/offset-mask/truncation gates limpos;
+   - trace learnability gate sem respostas answer-only;
+   - objetivo `example_mean` ou equivalente validado por contribution audit.
+5. Qualquer smoke V530/V531/V532/V533/V534/V535 precisa falhar fechado se:
    - `total < 193/315`;
    - `equation < 57/155`;
    - `bit < 136/160`;
    - `trunc != 0`;
    - `8740ed31 != 01101000`;
+   - `59bee375 != 10010101`;
    - `518deb39 != $`.
 
 Promocao/package/submit continua bloqueado ate haver ganho label-free real em
@@ -783,13 +791,22 @@ Nao abrir job bit-only enquanto teacher CPU nao transfere para adapter.
 
 Objetivo: submeter apenas quando existir ganho real.
 
-Condicao minima:
+Condicao minima para sair de diagnostico e abrir full official-like:
 
-- weak > 192;
-- equation > 56;
-- bit >= 136;
-- trunc 0;
-- full official-like > 823/947 ou evidencia equivalente via gate oficial-like.
+- weak promocional `>=196/315`;
+- equation `>=60/155`;
+- bit `>=136/160`;
+- trunc `0`;
+- predicao `submit_safe_label_free_prediction`, sem expected-aware extraction.
+
+Condicao minima para package/submit:
+
+- full official-like `>823/947`;
+- sem regressao conhecida em bit/equation/truncation;
+- artefato final adapter-only com `adapter_config.json` e
+  `adapter_model.safetensors` no root;
+- nenhuma dependencia de runtime solver, verifier, postprocessor, prompt hack,
+  logit mask ou cherry-pick por weak/full.
 
 Sem isso, nao packagear e nao submeter.
 
@@ -802,7 +819,7 @@ Sem isso, nao packagear e nao submeter.
 | V435E misto e format negatives | contaminado e bloqueado |
 | V447/V448 trace SFT limpo | nao transferiu para adapter |
 | V464/V468/V469 derivados | rota contaminada/quarentenada |
-| Public adapters/submissions de terceiros | somente tecnica, nunca peso/submissao direta |
+| Public adapters/submissions de terceiros | tecnica/proveniencia/diagnostico apenas; nunca peso/submissao direta sem decisao separada |
 | Solver/verifier no runtime submit | contra regra adapter-only |
 | Prompt hack, logit mask, constrained decoding | nao submit-safe |
 | OpenRouter/provider/legal URLs | ruido; nao afeta ACC |
