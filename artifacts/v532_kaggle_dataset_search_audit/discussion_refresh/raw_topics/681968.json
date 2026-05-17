@@ -1,0 +1,305 @@
+{
+  "forumTopic": {
+    "authorId": 25887013,
+    "authorPerformanceTier": "CONTRIBUTOR",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "default-thumb.png",
+    "authorUserDisplayName": "mindset324",
+    "authorUserName": "mindset324",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "Kh0a",
+          "id": 21691005,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/21691005-kg.png?t=2025-08-27-03-21-25",
+          "tier": "MASTER",
+          "url": "/llkh0a"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 4,
+        "content": "<p>You can add this utility script to your notebook <a href=\"https://www.kaggle.com/code/ryanholbrook/nvidia-utility-script\" target=\"_blank\">https://www.kaggle.com/code/ryanholbrook/nvidia-utility-script</a></p>",
+        "feedbackTrackingData": {},
+        "id": 3422901,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-18T02:57:56.117Z",
+        "rawMarkdown": "You can add this utility script to your notebook https://www.kaggle.com/code/ryanholbrook/nvidia-utility-script",
+        "replies": [
+          {
+            "attachments": [
+              {
+                "fileType": ".png",
+                "id": 39329,
+                "name": "Screenshot 2026-03-18 181504.png",
+                "totalBytes": 83008,
+                "url": "https://storage.googleapis.com/kaggle-forum-message-attachments/3423498/39329/Screenshot 2026-03-18 181504.png"
+              }
+            ],
+            "author": {
+              "displayName": "HADY",
+              "id": 28656359,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+              "tier": "CONTRIBUTOR",
+              "url": "/johnhady101"
+            },
+            "authorType": "COMMENT",
+            "competitionRanking": 2983,
+            "content": "<p>it didn't work for me</p>",
+            "feedbackTrackingData": {},
+            "id": 3423498,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-03-18T16:15:32.383Z",
+            "rawMarkdown": "it didn't work for me",
+            "replies": [
+              {
+                "author": {
+                  "displayName": "water joe",
+                  "id": 16297364,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                  "tier": "EXPERT",
+                  "url": "/waterjoe"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 2064,
+                "content": "<p>Use the official script directly, do not create your own.</p>",
+                "feedbackTrackingData": {},
+                "id": 3423871,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-03-19T04:40:08.043Z",
+                "rawMarkdown": "Use the official script directly, do not create your own.",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "water joe",
+                    "id": 16297364,
+                    "performanceTier": "EXPERT",
+                    "profileUrl": "/waterjoe",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                    "tier": "EXPERT",
+                    "url": "/waterjoe",
+                    "userId": 16297364,
+                    "userName": "waterjoe"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true
+                }
+              },
+              {
+                "author": {
+                  "displayName": "badwolfe",
+                  "id": 28916260,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                  "tier": "CONTRIBUTOR",
+                  "url": "/badwolfe"
+                },
+                "authorType": "COMMENT",
+                "content": "<p>so can we not use unsloth?</p>",
+                "feedbackTrackingData": {},
+                "id": 3438379,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-09T02:46:40.390Z",
+                "rawMarkdown": "so can we not use unsloth?",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "badwolfe",
+                    "id": 28916260,
+                    "performanceTier": "CONTRIBUTOR",
+                    "profileUrl": "/badwolfe",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                    "tier": "CONTRIBUTOR",
+                    "url": "/badwolfe",
+                    "userId": 28916260,
+                    "userName": "badwolfe"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true
+                }
+              },
+              {
+                "author": {
+                  "displayName": "Fusion Flux",
+                  "id": 5725195,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                  "tier": "CONTRIBUTOR",
+                  "url": "/mithilleshkumar"
+                },
+                "authorType": "COMMENT",
+                "content": "<p>It is not working for me; please suggest any other method</p>",
+                "feedbackTrackingData": {},
+                "id": 3440517,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-12T14:30:00.497Z",
+                "rawMarkdown": "It is not working for me; please suggest any other method",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "Fusion Flux",
+                    "id": 5725195,
+                    "performanceTier": "CONTRIBUTOR",
+                    "profileUrl": "/mithilleshkumar",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                    "tier": "CONTRIBUTOR",
+                    "url": "/mithilleshkumar",
+                    "userId": 5725195,
+                    "userName": "mithilleshkumar"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true
+                }
+              }
+            ],
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "HADY",
+                "id": 28656359,
+                "performanceTier": "CONTRIBUTOR",
+                "profileUrl": "/johnhady101",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                "tier": "CONTRIBUTOR",
+                "url": "/johnhady101",
+                "userId": 28656359,
+                "userName": "johnhady101"
+              }
+            },
+            "votes": {
+              "canUpvote": true
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Kh0a",
+            "id": 21691005,
+            "performanceTier": "MASTER",
+            "profileUrl": "/llkh0a",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/21691005-kg.png?t=2025-08-27-03-21-25",
+            "tier": "MASTER",
+            "url": "/llkh0a",
+            "userId": 21691005,
+            "userName": "llkh0a"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 1,
+          "totalVotes": 1
+        }
+      },
+      {
+        "author": {
+          "displayName": "Komil Parmar",
+          "id": 11351811,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/11351811-kg.jpg?t=2025-07-02-06-16-19",
+          "tier": "EXPERT",
+          "url": "/komilparmar"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 963,
+        "content": "<p>There are lots and lots of Amazing Public notebooks that people have shared. Use one of them for reference, or make a replica and then update it to do your experiments. In the practice, You will notice how to set up the environment properly. </p>",
+        "feedbackTrackingData": {},
+        "id": 3440533,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-12T15:17:57.657Z",
+        "rawMarkdown": "There are lots and lots of Amazing Public notebooks that people have shared. Use one of them for reference, or make a replica and then update it to do your experiments. In the practice, You will notice how to set up the environment properly. ",
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Komil Parmar",
+            "id": 11351811,
+            "performanceTier": "EXPERT",
+            "profileUrl": "/komilparmar",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/11351811-kg.jpg?t=2025-07-02-06-16-19",
+            "tier": "EXPERT",
+            "url": "/komilparmar",
+            "userId": 11351811,
+            "userName": "komilparmar"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "mindset324",
+        "id": 25887013,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+        "tier": "CONTRIBUTOR",
+        "url": "/mindset324"
+      },
+      "authorType": "TOPIC",
+      "competitionRanking": 1133,
+      "content": "<p>I’m facing an issue while trying to load the Nemotron-3-Nano-30B-A3B-BF16 model.</p>\n<p>From what I understand, this model relies on Mamba SSM components, which require the mamba_ssm library. Since the Kaggle GPU RTX PRO 6000 environment has internet access disabled, I’m unable to install this dependency using pip, which prevents the model from loading successfully.</p>\n<p>Issue:</p>\n<p>Model: Nemotron-3-Nano-30B-A3B-BF16</p>\n<p>Error: Missing mamba_ssm dependency</p>\n<p>Constraint: No internet access → cannot install required package</p>\n<p>What I’ve tried:</p>\n<p>Attempted standard pip install mamba-ssm (fails due to no internet)</p>\n<p>Checked for preinstalled packages (not available)</p>\n<p>Questions:</p>\n<p>Is there a preinstalled or offline-compatible version of mamba_ssm available in this environment?</p>\n<p>Are we expected to vendor the dependency manually (e.g., upload wheels or source code as a dataset)?</p>\n<p>Is there an alternative way to run Nemotron-3 models in this setup (e.g., prebuilt runtime, container, or supported inference framework)?</p>\n<p>Has anyone successfully run this model in the competition environment?</p>\n<p>Any guidance from organizers or participants would be really helpful.</p>",
+      "feedbackTrackingData": {},
+      "id": 3422552,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-03-17T19:16:11.563Z",
+      "rawMarkdown": "I’m facing an issue while trying to load the Nemotron-3-Nano-30B-A3B-BF16 model.\n\nFrom what I understand, this model relies on Mamba SSM components, which require the mamba_ssm library. Since the Kaggle GPU RTX PRO 6000 environment has internet access disabled, I’m unable to install this dependency using pip, which prevents the model from loading successfully.\n\nIssue:\n\nModel: Nemotron-3-Nano-30B-A3B-BF16\n\nError: Missing mamba_ssm dependency\n\nConstraint: No internet access → cannot install required package\n\nWhat I’ve tried:\n\nAttempted standard pip install mamba-ssm (fails due to no internet)\n\nChecked for preinstalled packages (not available)\n\nQuestions:\n\nIs there a preinstalled or offline-compatible version of mamba_ssm available in this environment?\n\nAre we expected to vendor the dependency manually (e.g., upload wheels or source code as a dataset)?\n\nIs there an alternative way to run Nemotron-3 models in this setup (e.g., prebuilt runtime, container, or supported inference framework)?\n\nHas anyone successfully run this model in the competition environment?\n\nAny guidance from organizers or participants would be really helpful.",
+      "teamUpInfo": {
+        "intro": "",
+        "teamLeader": {
+          "displayName": "mindset324",
+          "id": 25887013,
+          "performanceTier": "CONTRIBUTOR",
+          "profileUrl": "/mindset324",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "CONTRIBUTOR",
+          "url": "/mindset324",
+          "userId": 25887013,
+          "userName": "mindset324"
+        }
+      },
+      "votes": {
+        "canUpvote": true,
+        "totalUpvotes": 3,
+        "totalVotes": 3
+      }
+    },
+    "firstMessageId": 3422552,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 681968,
+    "name": "Unable to load Nemotron-3-Nano-30B-A3B-BF16 due to mamba_ssm dependency (No Internet Environment)",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-03-17T19:16:11.563966300Z",
+    "totalMessages": 6,
+    "totalVotes": 3,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/681968"
+  }
+}

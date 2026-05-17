@@ -1,0 +1,581 @@
+{
+  "forumTopic": {
+    "authorId": 636309,
+    "authorPerformanceTier": "CONTRIBUTOR",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "636309-fb.jpg",
+    "authorUserDisplayName": "VaidehiPandey",
+    "authorUserName": "bauapandey",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "Ioannis M",
+          "id": 2596066,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2596066-gp.jpg",
+          "tier": "MASTER",
+          "url": "/imeintanis"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 1433,
+        "content": "<p>try to change <code>-</code> with <code>_</code>  in the utility script path</p>\n<p><code>\"/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/\"</code></p>",
+        "feedbackTrackingData": {},
+        "id": 3430445,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-28T13:18:08.367Z",
+        "rawMarkdown": "try to change `-` with `_`  in the utility script path\n\n`\"/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/\"`",
+        "replies": [
+          {
+            "author": {
+              "displayName": "Ievgenii Krevenets",
+              "id": 111065,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/111065-gr.jpg",
+              "tier": "CONTRIBUTOR",
+              "url": "/hyzhak"
+            },
+            "authorType": "COMMENT",
+            "competitionRanking": 2854,
+            "content": "<p>hm, but there is no: <code>/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/</code> at the environment.</p>\n<p>e.g.:</p>\n<pre><code>!ls /kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/\n\nls: cannot access '/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/': No such file or directory\n</code></pre>",
+            "feedbackTrackingData": {},
+            "id": 3430629,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-03-28T18:21:07.510Z",
+            "rawMarkdown": "hm, but there is no: `/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/` at the environment.\n\ne.g.:\n```\n!ls /kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/\n\nls: cannot access '/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/': No such file or directory\n```",
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "Ievgenii Krevenets",
+                "id": 111065,
+                "performanceTier": "CONTRIBUTOR",
+                "profileUrl": "/hyzhak",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/111065-gr.jpg",
+                "tier": "CONTRIBUTOR",
+                "url": "/hyzhak",
+                "userId": 111065,
+                "userName": "hyzhak"
+              }
+            },
+            "votes": {
+              "canUpvote": true
+            }
+          },
+          {
+            "author": {
+              "displayName": "Ievgenii Krevenets",
+              "id": 111065,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/111065-gr.jpg",
+              "tier": "CONTRIBUTOR",
+              "url": "/hyzhak"
+            },
+            "authorType": "COMMENT",
+            "competitionRanking": 2854,
+            "content": "<p>also script fails now with error:</p>\n<pre><code>ModuleNotFoundError: No module named 'cutlass'\n</code></pre>",
+            "feedbackTrackingData": {},
+            "id": 3430631,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-03-28T18:22:15.740Z",
+            "rawMarkdown": "also script fails now with error:\n```\nModuleNotFoundError: No module named 'cutlass'\n```",
+            "replies": [
+              {
+                "author": {
+                  "displayName": "Ioannis M",
+                  "id": 2596066,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2596066-gp.jpg",
+                  "tier": "MASTER",
+                  "url": "/imeintanis"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 1433,
+                "content": "<p>actually make sure that you run this \"fix\" before any<code>torch</code>, <code>transformers</code>, or <code>model</code> import otherwise is not working. </p>\n<blockquote>\n  <p>hm, but there is no: /kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/ at the environment.</p>\n</blockquote>\n<p>depends on which version you use, e.g. select a file and copy path (with right click) to check it.</p>",
+                "feedbackTrackingData": {},
+                "id": 3430680,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-03-28T19:32:07.487Z",
+                "rawMarkdown": "actually make sure that you run this \"fix\" before any` torch`, `transformers`, or `model` import otherwise is not working. \n\n> hm, but there is no: /kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/ at the environment.\n\ndepends on which version you use, e.g. select a file and copy path (with right click) to check it.",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "Ioannis M",
+                    "id": 2596066,
+                    "performanceTier": "MASTER",
+                    "profileUrl": "/imeintanis",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2596066-gp.jpg",
+                    "tier": "MASTER",
+                    "url": "/imeintanis",
+                    "userId": 2596066,
+                    "userName": "imeintanis"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true
+                }
+              },
+              {
+                "author": {
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                  "url": "/"
+                },
+                "authorType": "COMMENT",
+                "canDelete": true,
+                "feedbackTrackingData": {},
+                "id": 3442621,
+                "isCollapsed": true,
+                "isDeleted": true,
+                "isThankYou": false,
+                "isUserAuthor": true,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-15T18:09:18.543Z",
+                "rawMarkdown": "",
+                "votes": {}
+              },
+              {
+                "author": {
+                  "displayName": "harsha7754",
+                  "id": 11787342,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                  "tier": "CONTRIBUTOR",
+                  "url": "/harsha7754"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 1840,
+                "content": "<p>I really didn't understand the fix, can you please elaborate it, I am currently facing this error and idk how to fix this? and the path is /kaggle/usr/lib/notebooks/ryanholbrook/nvidia-utility-script/ in my case. Now can you please suggest me the fix now</p>",
+                "feedbackTrackingData": {},
+                "id": 3443039,
+                "isCollapsed": true,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-16T03:36:47.240Z",
+                "rawMarkdown": "I really didn't understand the fix, can you please elaborate it, I am currently facing this error and idk how to fix this? and the path is /kaggle/usr/lib/notebooks/ryanholbrook/nvidia-utility-script/ in my case. Now can you please suggest me the fix now",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "harsha7754",
+                    "id": 11787342,
+                    "performanceTier": "CONTRIBUTOR",
+                    "profileUrl": "/harsha7754",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                    "tier": "CONTRIBUTOR",
+                    "url": "/harsha7754",
+                    "userId": 11787342,
+                    "userName": "harsha7754"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true
+                }
+              },
+              {
+                "author": {
+                  "displayName": "blckvia",
+                  "id": 7885022,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/7885022-kg.jpg?t=2026-04-26-11-10-13",
+                  "tier": "CONTRIBUTOR",
+                  "url": "/blckvia"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 2480,
+                "content": "<pre><code>import site\ncutlass_pkg_path = \"/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/nvidia_cutlass_dsl/python_packages/\"\nsite.addsitedir(cutlass_pkg_path)\n\nimport os, shutil, stat\n\nsrc = \"/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/triton/backends/nvidia/bin/ptxas-blackwell\"\ndst = \"/kaggle/working/ptxas-blackwell\"\n\nshutil.copy2(src, dst)\nos.chmod(dst, os.stat(dst).st_mode | stat.S_IEXEC | stat.S_IXGRP | stat.S_IXOTH)\n\nos.environ[\"TRITON_PTXAS_BLACKWELL_PATH\"] = dst\n</code></pre>",
+                "feedbackTrackingData": {},
+                "id": 3444029,
+                "isCollapsed": true,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-17T06:54:40.193Z",
+                "rawMarkdown": "```python\nimport site\ncutlass_pkg_path = \"/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/nvidia_cutlass_dsl/python_packages/\"\nsite.addsitedir(cutlass_pkg_path)\n\nimport os, shutil, stat\n\nsrc = \"/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/triton/backends/nvidia/bin/ptxas-blackwell\"\ndst = \"/kaggle/working/ptxas-blackwell\"\n\nshutil.copy2(src, dst)\nos.chmod(dst, os.stat(dst).st_mode | stat.S_IEXEC | stat.S_IXGRP | stat.S_IXOTH)\n\nos.environ[\"TRITON_PTXAS_BLACKWELL_PATH\"] = dst\n\n```",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "blckvia",
+                    "id": 7885022,
+                    "performanceTier": "CONTRIBUTOR",
+                    "profileUrl": "/blckvia",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/7885022-kg.jpg?t=2026-04-26-11-10-13",
+                    "tier": "CONTRIBUTOR",
+                    "url": "/blckvia",
+                    "userId": 7885022,
+                    "userName": "blckvia"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true
+                }
+              }
+            ],
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "Ievgenii Krevenets",
+                "id": 111065,
+                "performanceTier": "CONTRIBUTOR",
+                "profileUrl": "/hyzhak",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/111065-gr.jpg",
+                "tier": "CONTRIBUTOR",
+                "url": "/hyzhak",
+                "userId": 111065,
+                "userName": "hyzhak"
+              }
+            },
+            "votes": {
+              "canUpvote": true
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Ioannis M",
+            "id": 2596066,
+            "performanceTier": "MASTER",
+            "profileUrl": "/imeintanis",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2596066-gp.jpg",
+            "tier": "MASTER",
+            "url": "/imeintanis",
+            "userId": 2596066,
+            "userName": "imeintanis"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 1,
+          "totalVotes": 1
+        }
+      },
+      {
+        "author": {
+          "displayName": "Mark Cooper",
+          "id": 33183648,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/33183648-kg.png?t=2026-03-25-21-09-26",
+          "tier": "CONTRIBUTOR",
+          "url": "/markjcooper"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 708,
+        "content": "<p>The rename trick only works if your notebook actually has <code>nvidia_utility_script</code> with\n  underscores — some versions have dashes (<code>nvidia-utility-script</code>). Either way, <code>Errno 13        \n  Permission denied</code> is a filesystem permission issue on a read-only mount, not a path issue.     </p>\n<p>Robust fix that works for either path variant — find your actual <code>ptxas-blackwell</code> location,<br>\n  then:</p>\n<p>```python\n  import shutil, os, stat, glob</p>\n<p>candidates =\n  glob.glob('/kaggle/usr/lib/notebooks/<em>/</em>/triton/backends/nvidia/bin/ptxas-blackwell')\n  if not candidates:\n      raise FileNotFoundError('ptxas-blackwell not found — check your notebook utility script<br>\n  path')\n  src = candidates[0]\n  dst = '/tmp/ptxas-blackwell'\n  shutil.copy2(src, dst)\n  os.chmod(dst, os.stat(dst).st_mode | stat.S_IEXEC | stat.S_IXGRP | stat.S_IXOTH)\n  os.environ['TRITON_PTXAS_PATH'] = dst\n  print(f'TRITON_PTXAS_PATH = {dst} (copied from {src})')</p>\n<p>Critical: run this cell BEFORE any import torch, import transformers, import peft etc. Triton<br>\n  binds to ptxas at import time, so setting the env var later has no effect.</p>\n<p>For the separate ModuleNotFoundError: cutlass — install cutlass via !pip install -q\n  nvidia-cutlass-dsl or pull it from the utility script's dataset. That's a different issue.</p>",
+        "feedbackTrackingData": {},
+        "id": 3443273,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-16T10:12:01.473Z",
+        "rawMarkdown": "The rename trick only works if your notebook actually has `nvidia_utility_script` with\n  underscores — some versions have dashes (`nvidia-utility-script`). Either way, `Errno 13        \n  Permission denied` is a filesystem permission issue on a read-only mount, not a path issue.     \n\n  Robust fix that works for either path variant — find your actual `ptxas-blackwell` location,    \n  then:\n\n  ```python\n  import shutil, os, stat, glob\n\n  candidates =\n  glob.glob('/kaggle/usr/lib/notebooks/*/*/triton/backends/nvidia/bin/ptxas-blackwell')\n  if not candidates:\n      raise FileNotFoundError('ptxas-blackwell not found — check your notebook utility script     \n  path')\n  src = candidates[0]\n  dst = '/tmp/ptxas-blackwell'\n  shutil.copy2(src, dst)\n  os.chmod(dst, os.stat(dst).st_mode | stat.S_IEXEC | stat.S_IXGRP | stat.S_IXOTH)\n  os.environ['TRITON_PTXAS_PATH'] = dst\n  print(f'TRITON_PTXAS_PATH = {dst} (copied from {src})')\n\n  Critical: run this cell BEFORE any import torch, import transformers, import peft etc. Triton   \n  binds to ptxas at import time, so setting the env var later has no effect.\n\n  For the separate ModuleNotFoundError: cutlass — install cutlass via !pip install -q\n  nvidia-cutlass-dsl or pull it from the utility script's dataset. That's a different issue.",
+        "reactions": [
+          {
+            "emoji": "LOVE",
+            "featuredUserNames": [
+              "tingkaigong",
+              "sidhantbajaj26"
+            ],
+            "userCount": 2
+          }
+        ],
+        "replies": [
+          {
+            "author": {
+              "displayName": "harsha7754",
+              "id": 11787342,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+              "tier": "CONTRIBUTOR",
+              "url": "/harsha7754"
+            },
+            "authorType": "COMMENT",
+            "competitionRanking": 1840,
+            "content": "<p>I am still getting the error </p>\n<p>This is my code</p>\n<p>src = \"/kaggle/usr/lib/notebooks/ryanholbrook/nvidia-utility-script/nvidia_cutlass_dsl/python_packages/\"</p>\n<p>ptx_src = \"/kaggle/usr/lib/notebooks/ryanholbrook/nvidia-utility-script/triton/backends/nvidia/bin/ptxas-blackwell\"</p>\n<p>CUTLASS_PKG_PATH = Path(src)\nif not CUTLASS_PKG_PATH.exists():\n    raise RuntimeError(\n        \"Missing NVIDIA utility script path. In Kaggle, add the notebook data source \"\n        \"'ryanholbrook/nvidia-utility-script' before running this notebook.\"\n    )\nsys.path.insert(0, str(CUTLASS_PKG_PATH))</p>\n<p>import kagglehub\nimport mamba_ssm</p>\n<p>import os, shutil, stat</p>\n<p>dst = \"/tmp/ptxas-blackwell\"</p>\n<p>if os.path.exists(src):\n    shutil.copy2(ptx_src, dst)\n    os.chmod(dst, os.stat(dst).st_mode | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)\n    os.environ[\"TRITON_PTXAS_PATH\"] = dst</p>\n<p>import torch\nfrom torch.utils.data import Dataset\nfrom peft import LoraConfig, TaskType, get_peft_model</p>\n<p>from transformers import (\n    AutoModelForCausalLM,\n    AutoTokenizer,\n    Trainer,\n    TrainingArguments,\n    default_data_collator,\n)</p>",
+            "feedbackTrackingData": {},
+            "id": 3443308,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-04-16T11:14:52.110Z",
+            "rawMarkdown": "I am still getting the error \n\nThis is my code\n\nsrc = \"/kaggle/usr/lib/notebooks/ryanholbrook/nvidia-utility-script/nvidia_cutlass_dsl/python_packages/\"\n\nptx_src = \"/kaggle/usr/lib/notebooks/ryanholbrook/nvidia-utility-script/triton/backends/nvidia/bin/ptxas-blackwell\"\n\nCUTLASS_PKG_PATH = Path(src)\nif not CUTLASS_PKG_PATH.exists():\n    raise RuntimeError(\n        \"Missing NVIDIA utility script path. In Kaggle, add the notebook data source \"\n        \"'ryanholbrook/nvidia-utility-script' before running this notebook.\"\n    )\nsys.path.insert(0, str(CUTLASS_PKG_PATH))\n\nimport kagglehub\nimport mamba_ssm\n\nimport os, shutil, stat\n\ndst = \"/tmp/ptxas-blackwell\"\n\nif os.path.exists(src):\n    shutil.copy2(ptx_src, dst)\n    os.chmod(dst, os.stat(dst).st_mode | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)\n    os.environ[\"TRITON_PTXAS_PATH\"] = dst\n\nimport torch\nfrom torch.utils.data import Dataset\nfrom peft import LoraConfig, TaskType, get_peft_model\n\nfrom transformers import (\n    AutoModelForCausalLM,\n    AutoTokenizer,\n    Trainer,\n    TrainingArguments,\n    default_data_collator,\n)",
+            "replies": [
+              {
+                "author": {
+                  "displayName": "Mark Cooper",
+                  "id": 33183648,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/33183648-kg.png?t=2026-03-25-21-09-26",
+                  "tier": "CONTRIBUTOR",
+                  "url": "/markjcooper"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 708,
+                "content": "<p>Your import order is the bug. <code>import mamba_ssm</code> (and <code>import kagglehub</code> potentially) pulls in CUDA/Triton, which binds to <code>ptxas</code> at that moment — <strong>before</strong> your <code>os.environ[\"TRITON_PTXAS_PATH\"]</code> line runs. Setting the env var after \n  that point has no effect.<br><br>Move the ptxas setup to the <strong>very top of the notebook</strong>, before any other import that could touch CUDA / Triton / torch. Like this:<br><br><strong>Cell 1 — ptxas setup MUST be first, before ANY other import</strong><br></p><pre><code>import os,\n  shutil, stat, glob, sys                                                                                                                                                                                                                                                                               from pathlib import Path\n\n  candidates = glob.glob('/kaggle/usr/lib/notebooks/*/nvidia*utility*script/triton/backends/nvidia/bin/ptxas-blackwell')\n  if not candidates:                                                                                                                                                                                                                                                                                  \n      raise FileNotFoundError('ptxas-blackwell not found')\n  src_ptx = candidates[0]\n  dst = '/tmp/ptxas-blackwell'\n  shutil.copy2(src_ptx, dst)\n  os.chmod(dst, os.stat(dst).st_mode | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)\n  os.environ['TRITON_PTXAS_PATH'] = dst\n  print(f'TRITON_PTXAS_PATH set to {dst}')</code></pre><strong>Cell 2 — cutlass path (still before mamba_ssm)</strong><br><pre><code>CUTLASS_PKG_PATH = Path('/kaggle/usr/lib/notebooks/ryanholbrook/nvidia-utility-script/nvidia_cutlass_dsl/python_packages/')\n  if not CUTLASS_PKG_PATH.exists():\n      raise RuntimeError(\"Missing NVIDIA utility script path — add ryanholbrook/nvidia-utility-script as a notebook data source\")\n  sys.path.insert(0, str(CUTLASS_PKG_PATH))</code></pre><strong>Cell 3 — NOW do the heavy imports (Triton is already pointed at the writable ptxas)</strong><br><pre><code>import kagglehub\n  import mamba_ssm\n  import torch\n  from torch.utils.data import Dataset\n  from peft import LoraConfig, TaskType, get_peft_model\n  from transformers import AutoModelForCausalLM, AutoTokenizer, Trainer, TrainingArguments, default_data_collator</code></pre>Key changes:<br>- The three lines that matter (<code>os.environ[...]</code>, <code>shutil.copy2</code>, <code>os.chmod</code>) go in a cell that runs FIRST, with<br>\n  nothing above them<br>- <code>mamba_ssm</code> and <code>torch</code> go AFTER. If you put them before, the env var is a no-op.<br><br>If you're already past the env var line at runtime and Triton has already been loaded, restart the kernel and run cells top-to-bottom in the corrected order.\n   A <code>del torch; import torch</code> won't fix it — Triton's state persists.<p></p>",
+                "feedbackTrackingData": {},
+                "id": 3443319,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-16T11:39:42.313Z",
+                "rawMarkdown": "Your import order is the bug. <code>import mamba_ssm</code> (and <code>import kagglehub</code> potentially) pulls in CUDA/Triton, which binds to <code>ptxas</code> at that moment — <strong>before</strong> your <code>os.environ[\"TRITON_PTXAS_PATH\"]</code> line runs. Setting the env var after \n  that point has no effect.<br><br>Move the ptxas setup to the <strong>very top of the notebook</strong>, before any other import that could touch CUDA / Triton / torch. Like this:<br><br><strong>Cell 1 — ptxas setup MUST be first, before ANY other import</strong><br><pre><code>import os,\n  shutil, stat, glob, sys                                                                                                                                                                                                                                                                               from pathlib import Path\n                                                                                                                                                                                                                                                                                                      \n  candidates = glob.glob('/kaggle/usr/lib/notebooks/*/nvidia*utility*script/triton/backends/nvidia/bin/ptxas-blackwell')\n  if not candidates:                                                                                                                                                                                                                                                                                  \n      raise FileNotFoundError('ptxas-blackwell not found')\n  src_ptx = candidates[0]\n  dst = '/tmp/ptxas-blackwell'\n  shutil.copy2(src_ptx, dst)\n  os.chmod(dst, os.stat(dst).st_mode | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)\n  os.environ['TRITON_PTXAS_PATH'] = dst\n  print(f'TRITON_PTXAS_PATH set to {dst}')</code></pre><strong>Cell 2 — cutlass path (still before mamba_ssm)</strong><br><pre><code>CUTLASS_PKG_PATH = Path('/kaggle/usr/lib/notebooks/ryanholbrook/nvidia-utility-script/nvidia_cutlass_dsl/python_packages/')\n  if not CUTLASS_PKG_PATH.exists():\n      raise RuntimeError(\"Missing NVIDIA utility script path — add ryanholbrook/nvidia-utility-script as a notebook data source\")\n  sys.path.insert(0, str(CUTLASS_PKG_PATH))</code></pre><strong>Cell 3 — NOW do the heavy imports (Triton is already pointed at the writable ptxas)</strong><br><pre><code>import kagglehub\n  import mamba_ssm\n  import torch\n  from torch.utils.data import Dataset\n  from peft import LoraConfig, TaskType, get_peft_model\n  from transformers import AutoModelForCausalLM, AutoTokenizer, Trainer, TrainingArguments, default_data_collator</code></pre>Key changes:<br>- The three lines that matter (<code>os.environ[...]</code>, <code>shutil.copy2</code>, <code>os.chmod</code>) go in a cell that runs FIRST, with       \n  nothing above them<br>- <code>mamba_ssm</code> and <code>torch</code> go AFTER. If you put them before, the env var is a no-op.<br><br>If you're already past the env var line at runtime and Triton has already been loaded, restart the kernel and run cells top-to-bottom in the corrected order.\n   A <code>del torch; import torch</code> won't fix it — Triton's state persists.",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "Mark Cooper",
+                    "id": 33183648,
+                    "performanceTier": "CONTRIBUTOR",
+                    "profileUrl": "/markjcooper",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/33183648-kg.png?t=2026-03-25-21-09-26",
+                    "tier": "CONTRIBUTOR",
+                    "url": "/markjcooper",
+                    "userId": 33183648,
+                    "userName": "markjcooper"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true
+                }
+              },
+              {
+                "author": {
+                  "displayName": "harsha7754",
+                  "id": 11787342,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                  "tier": "CONTRIBUTOR",
+                  "url": "/harsha7754"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 1840,
+                "content": "<p>Nope still no luck😪</p>\n<p>`import os, shutil, stat, glob, sys\nfrom pathlib import Path</p>\n<p>candidates = glob.glob('/kaggle/usr/lib/notebooks/ryanholbrook/nvidia-utility-script/triton/backends/nvidia/bin/ptxas-blackwell')\nif not candidates:<br>\n  raise FileNotFoundError('ptxas-blackwell not found')\nsrc_ptx = candidates[0]\ndst = '/tmp/ptxas-blackwell'\nshutil.copy2(src_ptx, dst)\nos.chmod(dst, os.stat(dst).st_mode | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)\nos.environ['TRITON_PTXAS_PATH'] = dst\nprint(f'TRITON_PTXAS_PATH set to {dst}')`</p>\n<p><code>CUTLASS_PKG_PATH = Path('/kaggle/usr/lib/notebooks/ryanholbrook/nvidia-utility-script/nvidia_cutlass_dsl/python_packages/')\nif not CUTLASS_PKG_PATH.exists():\n  raise RuntimeError(\"Missing NVIDIA utility script path — add ryanholbrook/nvidia-utility-script as a notebook data source\")\nsys.path.insert(0, str(CUTLASS_PKG_PATH))</code></p>\n<p><code>import kagglehub\nimport mamba_ssm\nimport torch\nfrom torch.utils.data import Dataset\nfrom peft import LoraConfig, TaskType, get_peft_model\nfrom transformers import AutoModelForCausalLM, AutoTokenizer, Trainer, TrainingArguments, default_data_collator</code></p>\n<p><code>import random\nimport re\nimport subprocess\n</code></p>\n<p>Follwed by main logics, prompts and functions</p>",
+                "feedbackTrackingData": {},
+                "id": 3443346,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-16T12:27:20.340Z",
+                "rawMarkdown": "Nope still no luck😪\n\n`import os, shutil, stat, glob, sys\nfrom pathlib import Path\n\ncandidates = glob.glob('/kaggle/usr/lib/notebooks/ryanholbrook/nvidia-utility-script/triton/backends/nvidia/bin/ptxas-blackwell')\nif not candidates:                                                                                                                                                                                                                                                                                  \n  raise FileNotFoundError('ptxas-blackwell not found')\nsrc_ptx = candidates[0]\ndst = '/tmp/ptxas-blackwell'\nshutil.copy2(src_ptx, dst)\nos.chmod(dst, os.stat(dst).st_mode | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)\nos.environ['TRITON_PTXAS_PATH'] = dst\nprint(f'TRITON_PTXAS_PATH set to {dst}')`\n\n\n`CUTLASS_PKG_PATH = Path('/kaggle/usr/lib/notebooks/ryanholbrook/nvidia-utility-script/nvidia_cutlass_dsl/python_packages/')\nif not CUTLASS_PKG_PATH.exists():\n  raise RuntimeError(\"Missing NVIDIA utility script path — add ryanholbrook/nvidia-utility-script as a notebook data source\")\nsys.path.insert(0, str(CUTLASS_PKG_PATH))`\n\n`import kagglehub\nimport mamba_ssm\nimport torch\nfrom torch.utils.data import Dataset\nfrom peft import LoraConfig, TaskType, get_peft_model\nfrom transformers import AutoModelForCausalLM, AutoTokenizer, Trainer, TrainingArguments, default_data_collator`\n\n`import random\nimport re\nimport subprocess\n`\n\nFollwed by main logics, prompts and functions",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "harsha7754",
+                    "id": 11787342,
+                    "performanceTier": "CONTRIBUTOR",
+                    "profileUrl": "/harsha7754",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                    "tier": "CONTRIBUTOR",
+                    "url": "/harsha7754",
+                    "userId": 11787342,
+                    "userName": "harsha7754"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true
+                }
+              }
+            ],
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "harsha7754",
+                "id": 11787342,
+                "performanceTier": "CONTRIBUTOR",
+                "profileUrl": "/harsha7754",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                "tier": "CONTRIBUTOR",
+                "url": "/harsha7754",
+                "userId": 11787342,
+                "userName": "harsha7754"
+              }
+            },
+            "votes": {
+              "canUpvote": true
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Mark Cooper",
+            "id": 33183648,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/markjcooper",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/33183648-kg.png?t=2026-03-25-21-09-26",
+            "tier": "CONTRIBUTOR",
+            "url": "/markjcooper",
+            "userId": 33183648,
+            "userName": "markjcooper"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      },
+      {
+        "author": {
+          "displayName": "Ievgenii Krevenets",
+          "id": 111065,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/111065-gr.jpg",
+          "tier": "CONTRIBUTOR",
+          "url": "/hyzhak"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 2854,
+        "content": "<p>got the same error, have you managed to solve it?</p>",
+        "feedbackTrackingData": {},
+        "id": 3430298,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-28T07:48:31.497Z",
+        "rawMarkdown": "got the same error, have you managed to solve it?",
+        "replies": [
+          {
+            "author": {
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+              "url": "/"
+            },
+            "authorType": "COMMENT",
+            "canDelete": true,
+            "feedbackTrackingData": {},
+            "id": 3436811,
+            "isDeleted": true,
+            "isThankYou": false,
+            "isUserAuthor": true,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-04-06T18:10:53.560Z",
+            "rawMarkdown": "",
+            "votes": {}
+          },
+          {
+            "author": {
+              "displayName": "harsha7754",
+              "id": 11787342,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+              "tier": "CONTRIBUTOR",
+              "url": "/harsha7754"
+            },
+            "authorType": "COMMENT",
+            "competitionRanking": 1840,
+            "content": "<p>did you resolve the issue?</p>",
+            "feedbackTrackingData": {},
+            "id": 3442623,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-04-15T18:10:18.960Z",
+            "rawMarkdown": "did you resolve the issue?\n",
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "harsha7754",
+                "id": 11787342,
+                "performanceTier": "CONTRIBUTOR",
+                "profileUrl": "/harsha7754",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                "tier": "CONTRIBUTOR",
+                "url": "/harsha7754",
+                "userId": 11787342,
+                "userName": "harsha7754"
+              }
+            },
+            "votes": {
+              "canUpvote": true
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Ievgenii Krevenets",
+            "id": 111065,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/hyzhak",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/111065-gr.jpg",
+            "tier": "CONTRIBUTOR",
+            "url": "/hyzhak",
+            "userId": 111065,
+            "userName": "hyzhak"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "VaidehiPandey",
+        "id": 636309,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/636309-fb.jpg",
+        "tier": "CONTRIBUTOR",
+        "url": "/bauapandey"
+      },
+      "authorType": "TOPIC",
+      "competitionRanking": 2545,
+      "content": "<p>I am getting this error when I try to train my lora adapter: </p>\n<p>PermissionError: [Errno 13] Permission denied: '/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/triton/backends/nvidia/bin/ptxas-blackwell'</p>",
+      "feedbackTrackingData": {},
+      "id": 3430111,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-03-27T21:26:44.567Z",
+      "rawMarkdown": "I am getting this error when I try to train my lora adapter: \n\nPermissionError: [Errno 13] Permission denied: '/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/triton/backends/nvidia/bin/ptxas-blackwell'",
+      "teamUpInfo": {
+        "intro": "",
+        "teamLeader": {
+          "displayName": "VaidehiPandey",
+          "id": 636309,
+          "performanceTier": "CONTRIBUTOR",
+          "profileUrl": "/bauapandey",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/636309-fb.jpg",
+          "tier": "CONTRIBUTOR",
+          "url": "/bauapandey",
+          "userId": 636309,
+          "userName": "bauapandey"
+        }
+      },
+      "votes": {
+        "canUpvote": true,
+        "totalUpvotes": 4,
+        "totalVotes": 4
+      }
+    },
+    "firstMessageId": 3430111,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 685380,
+    "name": "Permission denied error for ptxas-blackwell",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-03-27T21:26:44.566230400Z",
+    "totalMessages": 14,
+    "totalVotes": 4,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/685380"
+  }
+}

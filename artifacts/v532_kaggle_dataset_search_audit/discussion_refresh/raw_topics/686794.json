@@ -1,0 +1,559 @@
+{
+  "forumTopic": {
+    "authorId": 10290345,
+    "authorPerformanceTier": "CONTRIBUTOR",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "10290345-kg.jpg?t=2026-03-17-04-10-40",
+    "authorUserDisplayName": "Darren Amadeus Martin",
+    "authorUserName": "darrenamadeusmartin",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "ImperfectKitto",
+          "id": 11905020,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/11905020-kg.jpg",
+          "tier": "EXPERT",
+          "url": "/defdet"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 492,
+        "content": "<p>vLLM + sleep mode worked for me</p>",
+        "feedbackTrackingData": {},
+        "id": 3433359,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-01T15:48:04.957Z",
+        "rawMarkdown": "vLLM + sleep mode worked for me",
+        "replies": [
+          {
+            "author": {
+              "displayName": "MAJ0RT0M",
+              "id": 2071133,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+              "tier": "CONTRIBUTOR",
+              "url": "/maj0rt0m"
+            },
+            "authorType": "COMMENT",
+            "competitionRanking": 1268,
+            "content": "<p>curious how were able to load your LORA adaptor in VLLM - getting this error: <code>AssertionError: Module model.layers.0.mixer.conv1d must be a BaseLayerWithLoRA instance</code></p>",
+            "feedbackTrackingData": {},
+            "id": 3433640,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-04-01T22:33:46.170Z",
+            "rawMarkdown": "curious how were able to load your LORA adaptor in VLLM - getting this error: `  AssertionError: Module model.layers.0.mixer.conv1d must be a BaseLayerWithLoRA instance`",
+            "replies": [
+              {
+                "author": {
+                  "displayName": "Darren Amadeus Martin",
+                  "id": 10290345,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/10290345-kg.jpg?t=2026-03-17-04-10-40",
+                  "tier": "CONTRIBUTOR",
+                  "url": "/darrenamadeusmartin"
+                },
+                "authorType": "TOPIC",
+                "competitionRanking": 1407,
+                "content": "<p>Would you mind explaining what sleep mode is ?</p>",
+                "feedbackTrackingData": {},
+                "id": 3433952,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-02T11:32:24.893Z",
+                "rawMarkdown": "Would you mind explaining what sleep mode is ?",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "Darren Amadeus Martin",
+                    "id": 10290345,
+                    "performanceTier": "CONTRIBUTOR",
+                    "profileUrl": "/darrenamadeusmartin",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/10290345-kg.jpg?t=2026-03-17-04-10-40",
+                    "tier": "CONTRIBUTOR",
+                    "url": "/darrenamadeusmartin",
+                    "userId": 10290345,
+                    "userName": "darrenamadeusmartin"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true
+                }
+              },
+              {
+                "author": {
+                  "displayName": "ImperfectKitto",
+                  "id": 11905020,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/11905020-kg.jpg",
+                  "tier": "EXPERT",
+                  "url": "/defdet"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 492,
+                "content": "<p>My comment wasn't complete. I meant to say vLLM with trl's colocate mode: they occupy the same memory, and vLLM releases memory when it stops generating, allowing trl's trainer to proceed (and vice versa). <a href=\"https://huggingface.co/blog/vllm-colocate\" target=\"_blank\">From this blogpost.</a></p>",
+                "feedbackTrackingData": {},
+                "id": 3434083,
+                "isCollapsed": true,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-02T15:09:37.557Z",
+                "rawMarkdown": "My comment wasn't complete. I meant to say vLLM with trl's colocate mode: they occupy the same memory, and vLLM releases memory when it stops generating, allowing trl's trainer to proceed (and vice versa). [From this blogpost.](https://huggingface.co/blog/vllm-colocate)",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "ImperfectKitto",
+                    "id": 11905020,
+                    "performanceTier": "EXPERT",
+                    "profileUrl": "/defdet",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/11905020-kg.jpg",
+                    "tier": "EXPERT",
+                    "url": "/defdet",
+                    "userId": 11905020,
+                    "userName": "defdet"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true,
+                  "totalUpvotes": 1,
+                  "totalVotes": 1
+                }
+              },
+              {
+                "author": {
+                  "displayName": "ImperfectKitto",
+                  "id": 11905020,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/11905020-kg.jpg",
+                  "tier": "EXPERT",
+                  "url": "/defdet"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 492,
+                "content": "<p>I had a wide variety of errors, but this one I don't think ever occured to me. It sounds like you're attaching LoRA adapter to a layer vLLM doesn't support adding an adapter to.</p>",
+                "feedbackTrackingData": {},
+                "id": 3434085,
+                "isCollapsed": true,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-02T15:10:49Z",
+                "rawMarkdown": "I had a wide variety of errors, but this one I don't think ever occured to me. It sounds like you're attaching LoRA adapter to a layer vLLM doesn't support adding an adapter to.",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "ImperfectKitto",
+                    "id": 11905020,
+                    "performanceTier": "EXPERT",
+                    "profileUrl": "/defdet",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/11905020-kg.jpg",
+                    "tier": "EXPERT",
+                    "url": "/defdet",
+                    "userId": 11905020,
+                    "userName": "defdet"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true
+                }
+              },
+              {
+                "author": {
+                  "displayName": "MAJ0RT0M",
+                  "id": 2071133,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                  "tier": "CONTRIBUTOR",
+                  "url": "/maj0rt0m"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 1268,
+                "content": "<p>Yeah - I'm guessing you are only targeting the attention modules - I targeted the mamba layers also - which vLLM doesn't support LORA loading for  </p>",
+                "feedbackTrackingData": {},
+                "id": 3434268,
+                "isCollapsed": true,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-02T19:12:59.650Z",
+                "rawMarkdown": "Yeah - I'm guessing you are only targeting the attention modules - I targeted the mamba layers also - which vLLM doesn't support LORA loading for  ",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "MAJ0RT0M",
+                    "id": 2071133,
+                    "performanceTier": "CONTRIBUTOR",
+                    "profileUrl": "/maj0rt0m",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                    "tier": "CONTRIBUTOR",
+                    "url": "/maj0rt0m",
+                    "userId": 2071133,
+                    "userName": "maj0rt0m"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true
+                }
+              },
+              {
+                "author": {
+                  "displayName": "ImperfectKitto",
+                  "id": 11905020,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/11905020-kg.jpg",
+                  "tier": "EXPERT",
+                  "url": "/defdet"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 492,
+                "content": "<p>Not quite, I'm also targeting expert projection as well. Getting expert projection to work was a lot of suffering though</p>",
+                "feedbackTrackingData": {},
+                "id": 3434278,
+                "isCollapsed": true,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-02T19:19:01.497Z",
+                "rawMarkdown": "Not quite, I'm also targeting expert projection as well. Getting expert projection to work was a lot of suffering though",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "ImperfectKitto",
+                    "id": 11905020,
+                    "performanceTier": "EXPERT",
+                    "profileUrl": "/defdet",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/11905020-kg.jpg",
+                    "tier": "EXPERT",
+                    "url": "/defdet",
+                    "userId": 11905020,
+                    "userName": "defdet"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true,
+                  "totalUpvotes": 1,
+                  "totalVotes": 1
+                }
+              },
+              {
+                "author": {
+                  "displayName": "Darren Amadeus Martin",
+                  "id": 10290345,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/10290345-kg.jpg?t=2026-03-17-04-10-40",
+                  "tier": "CONTRIBUTOR",
+                  "url": "/darrenamadeusmartin"
+                },
+                "authorType": "TOPIC",
+                "competitionRanking": 1407,
+                "content": "<p>Yeah the debugging is really harsh. I got OOM or really weird C++ compiling error everytime. If you don't mind, can you share your code here on how to deal with the errors?</p>",
+                "feedbackTrackingData": {},
+                "id": 3434364,
+                "isCollapsed": true,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-02T21:21:14.600Z",
+                "rawMarkdown": "Yeah the debugging is really harsh. I got OOM or really weird C++ compiling error everytime. If you don't mind, can you share your code here on how to deal with the errors?",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "Darren Amadeus Martin",
+                    "id": 10290345,
+                    "performanceTier": "CONTRIBUTOR",
+                    "profileUrl": "/darrenamadeusmartin",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/10290345-kg.jpg?t=2026-03-17-04-10-40",
+                    "tier": "CONTRIBUTOR",
+                    "url": "/darrenamadeusmartin",
+                    "userId": 10290345,
+                    "userName": "darrenamadeusmartin"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true
+                }
+              }
+            ],
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "MAJ0RT0M",
+                "id": 2071133,
+                "performanceTier": "CONTRIBUTOR",
+                "profileUrl": "/maj0rt0m",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                "tier": "CONTRIBUTOR",
+                "url": "/maj0rt0m",
+                "userId": 2071133,
+                "userName": "maj0rt0m"
+              }
+            },
+            "votes": {
+              "canUpvote": true
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "ImperfectKitto",
+            "id": 11905020,
+            "performanceTier": "EXPERT",
+            "profileUrl": "/defdet",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/11905020-kg.jpg",
+            "tier": "EXPERT",
+            "url": "/defdet",
+            "userId": 11905020,
+            "userName": "defdet"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 1,
+          "totalVotes": 1
+        }
+      },
+      {
+        "author": {
+          "displayName": "WillTLing",
+          "id": 14555359,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/14555359-kg.jpg?t=2026-05-03-06-22-31",
+          "tier": "CONTRIBUTOR",
+          "url": "/willtling"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 849,
+        "content": "<p>unsloth not support fast_inference for Mamba hybrid models (<a href=\"https://github.com/unslothai/unsloth/issues/4073)\" target=\"_blank\">https://github.com/unslothai/unsloth/issues/4073)</a>, so vLLM won’t work in unsloth. Also, since this model seem is no KV cache implemented under the transformers inference engine, the inference speed is painfully slow.</p>",
+        "feedbackTrackingData": {},
+        "id": 3433193,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-01T11:24:52.770Z",
+        "rawMarkdown": "unsloth not support fast_inference for Mamba hybrid models (https://github.com/unslothai/unsloth/issues/4073), so vLLM won’t work in unsloth. Also, since this model seem is no KV cache implemented under the transformers inference engine, the inference speed is painfully slow.",
+        "replies": [
+          {
+            "author": {
+              "displayName": "MAJ0RT0M",
+              "id": 2071133,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+              "tier": "CONTRIBUTOR",
+              "url": "/maj0rt0m"
+            },
+            "authorType": "COMMENT",
+            "competitionRanking": 1268,
+            "content": "<p>Have you tried huggingface GRPO trainer? it supports the same VLLM + pytorch RAM sharing as unsloth (supposedly - haven't got it to work)</p>",
+            "feedbackTrackingData": {},
+            "id": 3433641,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-04-01T22:35:04.130Z",
+            "rawMarkdown": "Have you tried huggingface GRPO trainer? it supports the same VLLM + pytorch RAM sharing as unsloth (supposedly - haven't got it to work)",
+            "replies": [
+              {
+                "author": {
+                  "displayName": "Darren Amadeus Martin",
+                  "id": 10290345,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/10290345-kg.jpg?t=2026-03-17-04-10-40",
+                  "tier": "CONTRIBUTOR",
+                  "url": "/darrenamadeusmartin"
+                },
+                "authorType": "TOPIC",
+                "competitionRanking": 1407,
+                "content": "<p>Wait, huggingface GRPO trainer also support ram sharing like unsloth? I thought only unsloth does that</p>",
+                "feedbackTrackingData": {},
+                "id": 3433951,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-02T11:32:10.813Z",
+                "rawMarkdown": "Wait, huggingface GRPO trainer also support ram sharing like unsloth? I thought only unsloth does that",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "Darren Amadeus Martin",
+                    "id": 10290345,
+                    "performanceTier": "CONTRIBUTOR",
+                    "profileUrl": "/darrenamadeusmartin",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/10290345-kg.jpg?t=2026-03-17-04-10-40",
+                    "tier": "CONTRIBUTOR",
+                    "url": "/darrenamadeusmartin",
+                    "userId": 10290345,
+                    "userName": "darrenamadeusmartin"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true
+                }
+              },
+              {
+                "author": {
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                  "url": "/"
+                },
+                "authorType": "COMMENT",
+                "canDelete": true,
+                "feedbackTrackingData": {},
+                "id": 3434275,
+                "isDeleted": true,
+                "isThankYou": false,
+                "isUserAuthor": true,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-02T19:17:14.697Z",
+                "rawMarkdown": "",
+                "votes": {}
+              },
+              {
+                "author": {
+                  "displayName": "MAJ0RT0M",
+                  "id": 2071133,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                  "tier": "CONTRIBUTOR",
+                  "url": "/maj0rt0m"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 1268,
+                "content": "<p>Ah no - I was mistaken - it doesnt</p>",
+                "feedbackTrackingData": {},
+                "id": 3434282,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-02T19:21:58.953Z",
+                "rawMarkdown": "Ah no - I was mistaken - it doesnt",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "MAJ0RT0M",
+                    "id": 2071133,
+                    "performanceTier": "CONTRIBUTOR",
+                    "profileUrl": "/maj0rt0m",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                    "tier": "CONTRIBUTOR",
+                    "url": "/maj0rt0m",
+                    "userId": 2071133,
+                    "userName": "maj0rt0m"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true
+                }
+              }
+            ],
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "MAJ0RT0M",
+                "id": 2071133,
+                "performanceTier": "CONTRIBUTOR",
+                "profileUrl": "/maj0rt0m",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                "tier": "CONTRIBUTOR",
+                "url": "/maj0rt0m",
+                "userId": 2071133,
+                "userName": "maj0rt0m"
+              }
+            },
+            "votes": {
+              "canUpvote": true
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "WillTLing",
+            "id": 14555359,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/willtling",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/14555359-kg.jpg?t=2026-05-03-06-22-31",
+            "tier": "CONTRIBUTOR",
+            "url": "/willtling",
+            "userId": 14555359,
+            "userName": "willtling"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 2,
+          "totalVotes": 2
+        }
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "Darren Amadeus Martin",
+        "id": 10290345,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/10290345-kg.jpg?t=2026-03-17-04-10-40",
+        "tier": "CONTRIBUTOR",
+        "url": "/darrenamadeusmartin"
+      },
+      "authorType": "TOPIC",
+      "competitionRanking": 1407,
+      "content": "<p>Has anybody tried using RL techniques such as GRPO ? Since on RL, we basically need to hold 2 copies of the model, training in bf16 is absolutely impossible and training with quantized model can lower performance. I tried using unsloth where it said that you don't need 2 copies of the model to be loaded at the gpu at the same time but the debugging is super hard and is very prone to errors. Has anybody managed to do RL and if you had done it, how slow was it ?</p>",
+      "feedbackTrackingData": {},
+      "id": 3433089,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-04-01T07:51:58.830Z",
+      "rawMarkdown": "Has anybody tried using RL techniques such as GRPO ? Since on RL, we basically need to hold 2 copies of the model, training in bf16 is absolutely impossible and training with quantized model can lower performance. I tried using unsloth where it said that you don't need 2 copies of the model to be loaded at the gpu at the same time but the debugging is super hard and is very prone to errors. Has anybody managed to do RL and if you had done it, how slow was it ?",
+      "teamUpInfo": {
+        "intro": "",
+        "teamLeader": {
+          "displayName": "Darren Amadeus Martin",
+          "id": 10290345,
+          "performanceTier": "CONTRIBUTOR",
+          "profileUrl": "/darrenamadeusmartin",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/10290345-kg.jpg?t=2026-03-17-04-10-40",
+          "tier": "CONTRIBUTOR",
+          "url": "/darrenamadeusmartin",
+          "userId": 10290345,
+          "userName": "darrenamadeusmartin"
+        }
+      },
+      "votes": {
+        "canUpvote": true,
+        "totalUpvotes": 5,
+        "totalVotes": 5
+      }
+    },
+    "firstMessageId": 3433089,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 686794,
+    "name": "RL/GRPO difficulty",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-04-01T07:51:58.829584700Z",
+    "totalMessages": 13,
+    "totalVotes": 5,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/686794"
+  }
+}

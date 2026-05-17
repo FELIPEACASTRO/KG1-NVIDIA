@@ -1,0 +1,1402 @@
+{
+  "zip": "C:\\Users\\davis\\Downloads\\archive (9).zip",
+  "metadata": "C:\\Users\\davis\\Downloads\\huikang-nemotron-artifacts-metadata.json",
+  "official_rows": 9500,
+  "files": [
+    {
+      "name": "adapter_v26_config.json",
+      "size": 736
+    },
+    {
+      "name": "adapter_v26_model.safetensors",
+      "size": 1544348352
+    },
+    {
+      "name": "bit_manip_3input_synthesized_traces.jsonl",
+      "size": 4434094
+    },
+    {
+      "name": "bit_manipulation_3input_traces.jsonl",
+      "size": 203366
+    },
+    {
+      "name": "corpus.jsonl",
+      "size": 42851896
+    },
+    {
+      "name": "corpus/._corpus",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._00021b51",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._00066667",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._0012cd1f",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._00189f6a",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._001c63cb",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._001e4e8f",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._00209eb5",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._002591df",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._002bd7f9",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._002bfdd2",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._0031df9c",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._0031df9c-p0",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._0035eff5",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._0039c90b",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._003ec6f7",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._0040ff76",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._00445647",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._004e0150",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._004ef7c7",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._004ef7c7-p0",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._0058e59a",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._005ad22a",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._00619cba",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._0061b4af",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._00662ac2",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._0066a2b7",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._00674059",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._00674059-p0",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._006a46d3",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._006b4d8a",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._00754598",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._007ae030",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._007dd144",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._0086c2a9",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._008b52fd",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._008b54d1",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._008e5038",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._008eabe5",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._008f22a9",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._009a74b6",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._009c7245",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._00a3fd23",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._00a77d86",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._00ab9296",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._00afad1c",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._00b2a841",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._00b65221",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._00ba6b90",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._00bd8ec4",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._00c4d819",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._00c7b0bb",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._00c8ab45",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._00ca9bff",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._00caf240",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._00d9f682",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._00e8d539",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._00e9792b",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._00ec1c63",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._00ed1836",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._00efa37c",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._00f4649d",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._00fdc0be",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._00fdc0be-p0",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._00ff44d9",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._00ffc416",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._01063cbf",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._0106eb4a",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._0106ffa2",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._010a4d68",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._01144d90",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._01185c51",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._011aadc7",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._011e7e12",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._01248b76",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._01248b76-p0",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._01299acb",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._012c0bbc",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._0133bcec",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._0133bcec-d0",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._013d51b4",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._013f8218",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._01466f0b",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._0146fc38",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._014c4f83",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._014c7478",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._014f5e80",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._01573a23",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._015838fc",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._015bffea",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._01601c47",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._016482c8",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._0166cbb7",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._01671ea6",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._0168d188",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._01696019",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._016c474c",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._017a161b",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._017a30b7",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._01813f76",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._0184a864",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._0184b0fc",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._018c6f61",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._018c6f61-p0",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._019b47b9",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._01a44deb",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._01a5b1e0",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._01b0f857",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._01b973b9",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._01bf0639",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._01c02f40",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._01c5cb71",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._01cd504a",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._01d0e899",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._01d894fb",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._01d894fb-p0",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._01d96398",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._01d96398-p0",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._01dfdb97",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._01e18095",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._01e38ad2",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._01e395d0",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._01ec64a3",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._01ef1e3e",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._01f8c0c5",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._01f90423",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._01fa1f37",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._0201e198",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._0201e198-p0",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._02021540",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._020609c4",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._020b6cb1",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._02102281",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._0214e81f",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._02165077",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._02187c33",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._021ed764",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._021ed764-p0",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._0220c8b2",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._0220d208",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._0224a397",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._0228335b",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._022b5f8b",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._022fb2d3",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._02324ba1",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._02324ba1-p0",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._02356cb8",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._023739fe",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._024101d9",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._024101d9-p0",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._02434651",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._024678e0",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._02473b23",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._0248f7a8",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._024c171c",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._025a2b64",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._025abbbb",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._026106f5",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._026d1fc7",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._026d3cab",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._026d61a2",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._026f3594",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._0274c738",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._02778bd7",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._027bba7c",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._027d07c5",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._027f2256",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._028fed0d",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._02902eb3",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._0290f51a",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._0296cb5f",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._02a02383",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._02a04b59",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._02a04b59-d0",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._02a28f91",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._02a4e0dc",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._02a66bcb",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._02a66bcb-p0",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._02a916a6",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._02aefd0b",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._02b8d816",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._02b8d816-d0",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._02b96080",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._02beaa05",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._02d15672",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._02d24e53",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._02da60a0",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._02e2589e",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._02e4851e",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._02e585af",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._02e63d56",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._02e71485",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._02e871e4",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._02ed1aa7",
+      "size": 163
+    },
+    {
+      "name": "corpus/corpus/._02f75bcb",
+      "size": 163
+    }
+  ],
+  "jsonl_summaries": [
+    {
+      "name": "bit_manip_3input_synthesized_traces.jsonl",
+      "rows": 2000,
+      "parse_errors": 0,
+      "top_keys": [
+        [
+          "problem_id",
+          2000
+        ],
+        [
+          "category",
+          2000
+        ],
+        [
+          "prompt",
+          2000
+        ],
+        [
+          "answer",
+          2000
+        ],
+        [
+          "reasoning_text",
+          2000
+        ],
+        [
+          "rule",
+          2000
+        ]
+      ],
+      "family_guess": [
+        [
+          "bit_like",
+          2000
+        ]
+      ],
+      "category_top": [
+        [
+          "bit_manipulation",
+          2000
+        ]
+      ],
+      "source_top": [],
+      "official_overlap": 0,
+      "official_answer_match": 0,
+      "official_answer_mismatch": 0,
+      "boxed_rows": 2000,
+      "text_len_min": 1931,
+      "text_len_p50": 2197,
+      "text_len_max": 2467,
+      "id_examples": [],
+      "examples": [
+        {
+          "problem_id": "synth3_756528252",
+          "category": "bit_manipulation",
+          "prompt": "In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.\n\nHere are some examples of input -> output:\n10110000 -> 00011111\n10000111 -> 11110000\n00010110 -> 11100011\n11101011 -> 01111100\n00111111 -> 11100011\n11000001 -> 00111000\n00101000 -> 00000111\n10010110 -> 11100001\n10111001 -> 00011011\n\nNow, determine the output for: 01100010",
+          "answer": "01100110",
+          "reasoning_text": "We need to infer the per-bit transformation rule from the examples.\n\nExample 0: 10110000 -> 00011111\nExample 1: 10000111 -> 11110000\nExample 2: 00010110 -> 11100011\nExample 3: 11101011 -> 01111100\nExample 4: 00111111 -> 11100011\nExample 5: 11000001 -> 00111000\nExample 6: 00101000 -> 00000111\nExample 7: 10010110 -> 11100001\nExample 8: 10111001 -> 00011011\n\nRule: MAJ(ROT(4), NOT ROT(2), ROT(5))\n\nVerification:\n  Example 0: ROT(4)=00001011  NOT ROT(2)=00111101  ROT(5)=00010110  MAJ=00011111 expected",
+          "rule": "MAJ(ROT(4), NOT ROT(2), ROT(5))"
+        },
+        {
+          "problem_id": "synth3_882403818",
+          "category": "bit_manipulation",
+          "prompt": "In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.\n\nHere are some examples of input -> output:\n00100100 -> 11111111\n01010111 -> 11111111\n01111101 -> 11111111\n01010011 -> 11111110\n11101100 -> 11111110\n11000010 -> 11111100\n10001010 -> 11111110\n01110000 -> 11111110\n10100110 -> 11111101\n00011100 -> 11111111\n\nNow, determine the output for",
+          "answer": "11111111",
+          "reasoning_text": "We need to infer the per-bit transformation rule from the examples.\n\nExample 0: 00100100 -> 11111111\nExample 1: 01010111 -> 11111111\nExample 2: 01111101 -> 11111111\nExample 3: 01010011 -> 11111110\nExample 4: 11101100 -> 11111110\nExample 5: 11000010 -> 11111100\nExample 6: 10001010 -> 11111110\nExample 7: 01110000 -> 11111110\nExample 8: 10100110 -> 11111101\nExample 9: 00011100 -> 11111111\n\nRule: MAJ(NOT SHR(6), SHR(2), NOT SHR(7))\n\nVerification:\n  Example 0: NOT SHR(6)=11111111  SHR(2)=00001001  NO",
+          "rule": "MAJ(NOT SHR(6), SHR(2), NOT SHR(7))"
+        },
+        {
+          "problem_id": "synth3_413140753",
+          "category": "bit_manipulation",
+          "prompt": "In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.\n\nHere are some examples of input -> output:\n01110000 -> 11111001\n01000110 -> 00010101\n11111100 -> 00011000\n00101110 -> 00101110\n00011000 -> 11111100\n00111000 -> 11111100\n01001110 -> 00010101\n01010001 -> 11110101\n11011000 -> 10101000\n\nNow, determine the output for: 00100000",
+          "answer": "11111011",
+          "reasoning_text": "We need to infer the per-bit transformation rule from the examples.\n\nExample 0: 01110000 -> 11111001\nExample 1: 01000110 -> 00010101\nExample 2: 11111100 -> 00011000\nExample 3: 00101110 -> 00101110\nExample 4: 00011000 -> 11111100\nExample 5: 00111000 -> 11111100\nExample 6: 01001110 -> 00010101\nExample 7: 01010001 -> 11110101\nExample 8: 11011000 -> 10101000\n\nRule: CHO(NOT SHR(1), NOT ROT(5), NOT ROT(3))\n\nVerification:\n  Example 0: NOT SHR(1)=11000111  NOT ROT(5)=11110001  NOT ROT(3)=01111100  CHO=1",
+          "rule": "CHO(NOT SHR(1), NOT ROT(5), NOT ROT(3))"
+        }
+      ]
+    },
+    {
+      "name": "bit_manipulation_3input_traces.jsonl",
+      "rows": 100,
+      "parse_errors": 0,
+      "top_keys": [
+        [
+          "problem_id",
+          100
+        ],
+        [
+          "category",
+          100
+        ],
+        [
+          "prompt",
+          100
+        ],
+        [
+          "answer",
+          100
+        ],
+        [
+          "reasoning_text",
+          100
+        ],
+        [
+          "rule",
+          100
+        ]
+      ],
+      "family_guess": [
+        [
+          "bit_like",
+          100
+        ]
+      ],
+      "category_top": [
+        [
+          "bit_manipulation",
+          100
+        ]
+      ],
+      "source_top": [],
+      "official_overlap": 100,
+      "official_answer_match": 100,
+      "official_answer_mismatch": 0,
+      "boxed_rows": 100,
+      "text_len_min": 1829,
+      "text_len_p50": 1983,
+      "text_len_max": 2291,
+      "id_examples": [
+        {
+          "id": "000b53cf",
+          "cat": "bit_manipulation",
+          "answer": "01000011",
+          "official_answer": "01000011"
+        },
+        {
+          "id": "00890aff",
+          "cat": "bit_manipulation",
+          "answer": "01110000",
+          "official_answer": "01110000"
+        },
+        {
+          "id": "01e09228",
+          "cat": "bit_manipulation",
+          "answer": "10010101",
+          "official_answer": "10010101"
+        },
+        {
+          "id": "02a66bcb",
+          "cat": "bit_manipulation",
+          "answer": "00011110",
+          "official_answer": "00011110"
+        },
+        {
+          "id": "0311b798",
+          "cat": "bit_manipulation",
+          "answer": "00000100",
+          "official_answer": "00000100"
+        }
+      ],
+      "examples": [
+        {
+          "problem_id": "000b53cf",
+          "category": "bit_manipulation",
+          "prompt": "In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.\n\nHere are some examples of input -> output:\n10001110 -> 00100110\n10011001 -> 01000100\n01100100 -> 00010001\n10000010 -> 00001010\n00011011 -> 01001100\n00111010 -> 10011100\n01101111 -> 00110111\n10010110 -> 01011010\n00001010 -> 00101100\n\nNow, determine the output for: 11100000",
+          "answer": "01000011",
+          "reasoning_text": "We need to infer the per-bit transformation rule from the examples.\n\nExample 0: 10001110 -> 00100110\nExample 1: 10011001 -> 01000100\nExample 2: 01100100 -> 00010001\nExample 3: 10000010 -> 00001010\nExample 4: 00011011 -> 01001100\nExample 5: 00111010 -> 10011100\nExample 6: 01101111 -> 00110111\nExample 7: 10010110 -> 01011010\nExample 8: 00001010 -> 00101100\n\nRule: CHO(SHL(1), SHR(1), ROT(2))\n\nVerification:\n  Example 0: SHL(1)=00011100  SHR(1)=01000111  ROT(2)=00111010  CHO=00100110 expected 0010011",
+          "rule": "CHO(SHL(1), SHR(1), ROT(2))"
+        },
+        {
+          "problem_id": "00890aff",
+          "category": "bit_manipulation",
+          "prompt": "In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.\n\nHere are some examples of input -> output:\n01110000 -> 00011000\n11101010 -> 10111000\n00001011 -> 00000100\n00111101 -> 01011110\n01010101 -> 01010100\n01111001 -> 01111100\n11001001 -> 01100100\n01101110 -> 10111011\n10111001 -> 01101100\n01111110 -> 10111111\n\nNow, determine the output for",
+          "answer": "01110000",
+          "reasoning_text": "We need to infer the per-bit transformation rule from the examples.\n\nExample 0: 01110000 -> 00011000\nExample 1: 11101010 -> 10111000\nExample 2: 00001011 -> 00000100\nExample 3: 00111101 -> 01011110\nExample 4: 01010101 -> 01010100\nExample 5: 01111001 -> 01111100\nExample 6: 11001001 -> 01100100\nExample 7: 01101110 -> 10111011\nExample 8: 10111001 -> 01101100\nExample 9: 01111110 -> 10111111\n\nRule: MAJ(ROT(6), SHL(2), SHR(1))\n\nVerification:\n  Example 0: ROT(6)=00011100  SHL(2)=11000000  SHR(1)=0011100",
+          "rule": "MAJ(ROT(6), SHL(2), SHR(1))"
+        },
+        {
+          "problem_id": "01e09228",
+          "category": "bit_manipulation",
+          "prompt": "In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.\n\nHere are some examples of input -> output:\n01000111 -> 01110000\n00100010 -> 00101010\n10101100 -> 01101010\n10000110 -> 01100000\n01100010 -> 00101110\n00100011 -> 00111010\n00001011 -> 10010000\n11100110 -> 01111110\n\nNow, determine the output for: 01011001",
+          "answer": "10010101",
+          "reasoning_text": "We need to infer the per-bit transformation rule from the examples.\n\nExample 0: 01000111 -> 01110000\nExample 1: 00100010 -> 00101010\nExample 2: 10101100 -> 01101010\nExample 3: 10000110 -> 01100000\nExample 4: 01100010 -> 00101110\nExample 5: 00100011 -> 00111010\nExample 6: 00001011 -> 10010000\nExample 7: 11100110 -> 01111110\n\nRule: CHO(SHL(2), SHR(2), ROT(4))\n\nVerification:\n  Example 0: SHL(2)=00011100  SHR(2)=00010001  ROT(4)=01110100  CHO=01110000 expected 01110000 OK\n  Example 1: SHL(2)=1000100",
+          "rule": "CHO(SHL(2), SHR(2), ROT(4))"
+        }
+      ]
+    },
+    {
+      "name": "corpus.jsonl",
+      "rows": 15979,
+      "parse_errors": 0,
+      "top_keys": [
+        [
+          "problem_id",
+          15979
+        ],
+        [
+          "segment",
+          15979
+        ],
+        [
+          "category",
+          15979
+        ],
+        [
+          "masked_token_count",
+          15979
+        ],
+        [
+          "unmasked_token_count",
+          15979
+        ],
+        [
+          "token_count",
+          15979
+        ],
+        [
+          "answer",
+          15979
+        ],
+        [
+          "included",
+          15979
+        ]
+      ],
+      "family_guess": [
+        [
+          "other",
+          8275
+        ],
+        [
+          "bit_like",
+          2059
+        ],
+        [
+          "cipher_like",
+          1768
+        ],
+        [
+          "equation_like",
+          1147
+        ],
+        [
+          "unit_like",
+          1081
+        ],
+        [
+          "gravity_like",
+          976
+        ],
+        [
+          "numeral_like",
+          673
+        ]
+      ],
+      "category_top": [
+        [
+          "matching",
+          4515
+        ],
+        [
+          "bit_manipulation",
+          2059
+        ],
+        [
+          "cipher",
+          1756
+        ],
+        [
+          "splitting",
+          1500
+        ],
+        [
+          "concatenation",
+          1500
+        ],
+        [
+          "unit_conversion",
+          987
+        ],
+        [
+          "gravity",
+          975
+        ],
+        [
+          "spelling",
+          648
+        ],
+        [
+          "equation_numeric_deduce",
+          635
+        ],
+        [
+          "numeral",
+          624
+        ],
+        [
+          "lstrip",
+          300
+        ],
+        [
+          "cryptarithm_guess",
+          183
+        ],
+        [
+          "equation_numeric_guess",
+          172
+        ],
+        [
+          "cryptarithm_deduce",
+          125
+        ]
+      ],
+      "source_top": [],
+      "official_overlap": 6355,
+      "official_answer_match": 6355,
+      "official_answer_mismatch": 0,
+      "boxed_rows": 0,
+      "text_len_min": 188,
+      "text_len_p50": 307,
+      "text_len_max": 6443,
+      "id_examples": [
+        {
+          "id": "00066667",
+          "cat": "bit_manipulation",
+          "answer": "10010111",
+          "official_answer": "10010111"
+        },
+        {
+          "id": "00189f6a",
+          "cat": "cipher",
+          "answer": "cat imagines book",
+          "official_answer": "cat imagines book"
+        },
+        {
+          "id": "001c63cb",
+          "cat": "cipher",
+          "answer": "wizard creates secret",
+          "official_answer": "wizard creates secret"
+        },
+        {
+          "id": "0031df9c",
+          "cat": "bit_manipulation",
+          "answer": "00110100",
+          "official_answer": "00110100"
+        },
+        {
+          "id": "0040ff76",
+          "cat": "gravity",
+          "answer": "154.62",
+          "official_answer": "154.62"
+        }
+      ],
+      "examples": [
+        {
+          "problem_id": "00021b51",
+          "segment": "synthetic.jsonl",
+          "category": "matching",
+          "masked_token_count": "290",
+          "unmasked_token_count": "114",
+          "token_count": "404",
+          "answer": "0 3\n1 4\n2 5\n3 6\n4 7\n5 0\n6 1\n7 2\n\nLeft\n3 4 5 6 7 0 1 2\nBest: 3 4 5 6 7 0 1 2: 8\n\nRight\n2 1 0 7 6 5 4 3\nBest: 2 1 0 7 6 5 4 3: 8",
+          "included": "True"
+        },
+        {
+          "problem_id": "00066667",
+          "segment": "synthetic.jsonl",
+          "category": "bit_manipulation",
+          "masked_token_count": "259",
+          "unmasked_token_count": "6673",
+          "token_count": "6932",
+          "answer": "10010111",
+          "included": "True"
+        },
+        {
+          "problem_id": "0012cd1f",
+          "segment": "synthetic.jsonl",
+          "category": "matching",
+          "masked_token_count": "1073",
+          "unmasked_token_count": "76",
+          "token_count": "1149",
+          "answer": "0 absent\n1 45\n2 65\n3 absent\n4 12\n5 21\n6 32\n7 43\n\nLeft\nnone\nBest: none\n\nRight\n43 32 21 10x\nBest: 43 32 21: 3",
+          "included": "True"
+        }
+      ]
+    }
+  ],
+  "adapter": {
+    "config": {
+      "alpha_pattern": {},
+      "auto_mapping": null,
+      "base_model_name_or_path": null,
+      "bias": "none",
+      "corda_config": null,
+      "eva_config": null,
+      "exclude_modules": null,
+      "fan_in_fan_out": false,
+      "inference_mode": false,
+      "init_lora_weights": true,
+      "layer_replication": null,
+      "layers_pattern": null,
+      "layers_to_transform": null,
+      "loftq_config": {},
+      "lora_alpha": 32,
+      "lora_bias": false,
+      "lora_dropout": 0,
+      "megatron_config": null,
+      "megatron_core": "megatron.core",
+      "modules_to_save": null,
+      "peft_type": "LORA",
+      "r": 32,
+      "rank_pattern": {},
+      "revision": null,
+      "target_modules": "all-linear",
+      "task_type": "CAUSAL_LM",
+      "trainable_token_indices": null,
+      "use_dora": false,
+      "use_rslora": false
+    },
+    "safetensors_header_len": 58040,
+    "tensor_count": 418,
+    "dtype_counts": {
+      "F32": 418
+    },
+    "key_group_counts": {
+      "out_proj": 46,
+      "experts": 230,
+      "down_proj": 46,
+      "up_proj": 46,
+      "lm_head": 2
+    },
+    "total_params": 386072576,
+    "non_lora_key_count": 0,
+    "sample_keys": [
+      "base_model.model.model.layers.0.mixer.gate_proj.lora_A.weight",
+      "base_model.model.model.layers.0.mixer.gate_proj.lora_B.weight",
+      "base_model.model.model.layers.0.mixer.out_proj.lora_A.weight",
+      "base_model.model.model.layers.0.mixer.out_proj.lora_B.weight",
+      "base_model.model.model.layers.0.mixer.x_proj.lora_A.weight",
+      "base_model.model.model.layers.0.mixer.x_proj.lora_B.weight",
+      "base_model.model.model.layers.1.mixer.experts.w1.lora_A.weight",
+      "base_model.model.model.layers.1.mixer.experts.w1.lora_B.weight",
+      "base_model.model.model.layers.1.mixer.experts.w2.lora_A.weight",
+      "base_model.model.model.layers.1.mixer.experts.w2.lora_B.weight",
+      "base_model.model.model.layers.1.mixer.experts.w3.lora_A.weight",
+      "base_model.model.model.layers.1.mixer.experts.w3.lora_B.weight",
+      "base_model.model.model.layers.1.mixer.shared_experts.down_proj.lora_A.weight",
+      "base_model.model.model.layers.1.mixer.shared_experts.down_proj.lora_B.weight",
+      "base_model.model.model.layers.1.mixer.shared_experts.up_proj.lora_A.weight",
+      "base_model.model.model.layers.1.mixer.shared_experts.up_proj.lora_B.weight",
+      "base_model.model.model.layers.10.mixer.experts.w1.lora_A.weight",
+      "base_model.model.model.layers.10.mixer.experts.w1.lora_B.weight",
+      "base_model.model.model.layers.10.mixer.experts.w2.lora_A.weight",
+      "base_model.model.model.layers.10.mixer.experts.w2.lora_B.weight"
+    ]
+  },
+  "zip_entry_count": 47947,
+  "zip_uncompressed_bytes": 1989183041,
+  "top_level_files": [
+    {
+      "name": "adapter_v26_config.json",
+      "size": 736
+    },
+    {
+      "name": "adapter_v26_model.safetensors",
+      "size": 1544348352
+    },
+    {
+      "name": "bit_manip_3input_synthesized_traces.jsonl",
+      "size": 4434094
+    },
+    {
+      "name": "bit_manipulation_3input_traces.jsonl",
+      "size": 203366
+    },
+    {
+      "name": "corpus.jsonl",
+      "size": 42851896
+    },
+    {
+      "name": "cryptarithm_solver_traces.jsonl",
+      "size": 110478
+    },
+    {
+      "name": "cryptarithm_synthesized_traces.jsonl",
+      "size": 13937460
+    },
+    {
+      "name": "huikang_augmenters_traces.jsonl",
+      "size": 57910896
+    },
+    {
+      "name": "problems.jsonl",
+      "size": 931581
+    }
+  ],
+  "corpus_dir_regular_file_count": 15979,
+  "corpus_dir_regular_size_total": 319244865,
+  "corpus_dir_samples": [
+    {
+      "name": "corpus/corpus/00021b51/synthetic.jsonl",
+      "size": 2506
+    },
+    {
+      "name": "corpus/corpus/00066667/synthetic.jsonl",
+      "size": 42069
+    },
+    {
+      "name": "corpus/corpus/0012cd1f/synthetic.jsonl",
+      "size": 6981
+    },
+    {
+      "name": "corpus/corpus/00189f6a/synthetic.jsonl",
+      "size": 23304
+    },
+    {
+      "name": "corpus/corpus/001c63cb/synthetic.jsonl",
+      "size": 14963
+    },
+    {
+      "name": "corpus/corpus/001e4e8f/synthetic.jsonl",
+      "size": 2195
+    },
+    {
+      "name": "corpus/corpus/00209eb5/synthetic.jsonl",
+      "size": 2336
+    },
+    {
+      "name": "corpus/corpus/002591df/synthetic.jsonl",
+      "size": 4752
+    },
+    {
+      "name": "corpus/corpus/002bd7f9/synthetic.jsonl",
+      "size": 5028
+    },
+    {
+      "name": "corpus/corpus/002bfdd2/synthetic.jsonl",
+      "size": 22241
+    },
+    {
+      "name": "corpus/corpus/0031df9c-p0/synthetic.jsonl",
+      "size": 44488
+    },
+    {
+      "name": "corpus/corpus/0031df9c/synthetic.jsonl",
+      "size": 44488
+    },
+    {
+      "name": "corpus/corpus/0035eff5/synthetic.jsonl",
+      "size": 6732
+    },
+    {
+      "name": "corpus/corpus/0039c90b/synthetic.jsonl",
+      "size": 29581
+    },
+    {
+      "name": "corpus/corpus/003ec6f7/synthetic.jsonl",
+      "size": 4850
+    },
+    {
+      "name": "corpus/corpus/0040ff76/synthetic.jsonl",
+      "size": 29896
+    },
+    {
+      "name": "corpus/corpus/00445647/synthetic.jsonl",
+      "size": 6373
+    },
+    {
+      "name": "corpus/corpus/004e0150/synthetic.jsonl",
+      "size": 27531
+    },
+    {
+      "name": "corpus/corpus/004ef7c7-p0/synthetic.jsonl",
+      "size": 41537
+    },
+    {
+      "name": "corpus/corpus/004ef7c7/synthetic.jsonl",
+      "size": 41537
+    }
+  ],
+  "metadata_summary": {
+    "name": "Nemotron Huikang Artifacts",
+    "alternateName": "Training corpus from huikang's 0.85 Nemotron solution + v11 synthetic traces",
+    "description": "Pre-tokenized training corpus from Tong Hui Kang's (huikang) open-source Nemotron Reasoning Challenge solution. v11 additions: 3,948 huikang augmenter traces (spelling/concatenation/splitting/lstrip), 4,733 Z3-verified cryptarithm synthesized traces, 10,000 bit-manip 3-input synthesized traces. Ready for direct HF Trainer consumption.",
+    "url": "https://www.kaggle.com/datasets/samvalladares/huikang-nemotron-artifacts/versions/7",
+    "version": 7,
+    "datePublished": "2026-04-13T02:52:33.2239189",
+    "dateModified": "2026-04-18T00:43:52.027"
+  },
+  "metadata_license": {
+    "@type": "sc:CreativeWork",
+    "name": "CC0: Public Domain",
+    "url": "https://creativecommons.org/publicdomain/zero/1.0/"
+  }
+}

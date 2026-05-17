@@ -1,0 +1,580 @@
+{
+  "forumTopic": {
+    "authorId": 32391938,
+    "authorPerformanceTier": "CONTRIBUTOR",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "32391938-kg.png?t=2026-03-26-17-36-44",
+    "authorUserDisplayName": "lakshmig82",
+    "authorUserName": "lakshmig82",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "CPMP",
+          "id": 75976,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/75976-gr.jpg",
+          "tier": "GRANDMASTER",
+          "url": "/cpmpml"
+        },
+        "authorType": "HOST",
+        "content": "<p>Yes, the prize is for notebooks shared prior the mid point deadline.</p>\n<p>It is precisely why we set this prize: to foster sharing of high value notebooks.</p>\n<p>It is you call if you prefer to keep your advantage for the end of competition.</p>",
+        "feedbackTrackingData": {},
+        "id": 3438064,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-08T15:53:17.957Z",
+        "rawMarkdown": "Yes, the prize is for notebooks shared prior the mid point deadline.\n\nIt is precisely why we set this prize: to foster sharing of high value notebooks.\n\nIt is you call if you prefer to keep your advantage for the end of competition.",
+        "replies": [
+          {
+            "author": {
+              "displayName": "Just a test",
+              "id": 14522089,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+              "tier": "EXPERT",
+              "url": "/yiyangzheng"
+            },
+            "authorType": "COMMENT",
+            "competitionRanking": 1098,
+            "content": "<p>Hi <a href=\"https://www.kaggle.com/cpmpml\" target=\"_blank\">@cpmpml</a> ,</p>\n<p>Thanks for the reply! When you mention that notebooks must be shared \"prior to the mid point deadline,\" could you clarify exactly how that interacts with the April 9th and April 16th dates?</p>\n<p>Specifically, I want to clarify the deadline to hit the 'publish' button:\nDoes the highest-scoring notebook need to be made public before April 9th (the leaderboard cut-off) to be eligible? Or, is it acceptable to get the highest score by April 9th, and then make that winning notebook public by April 16th (the methodology cut-off)?</p>",
+            "feedbackTrackingData": {},
+            "id": 3438074,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-04-08T16:14:06.353Z",
+            "rawMarkdown": "Hi @cpmpml ,\n\nThanks for the reply! When you mention that notebooks must be shared \"prior to the mid point deadline,\" could you clarify exactly how that interacts with the April 9th and April 16th dates?\n\nSpecifically, I want to clarify the deadline to hit the 'publish' button:\nDoes the highest-scoring notebook need to be made public before April 9th (the leaderboard cut-off) to be eligible? Or, is it acceptable to get the highest score by April 9th, and then make that winning notebook public by April 16th (the methodology cut-off)?",
+            "replies": [
+              {
+                "author": {
+                  "displayName": "CPMP",
+                  "id": 75976,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/75976-gr.jpg",
+                  "tier": "GRANDMASTER",
+                  "url": "/cpmpml"
+                },
+                "authorType": "HOST",
+                "content": "<p>Notebook should be shared publicly by end of day April 9.</p>",
+                "feedbackTrackingData": {},
+                "id": 3438149,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-08T18:15:29.677Z",
+                "rawMarkdown": "Notebook should be shared publicly by end of day April 9.",
+                "votes": {
+                  "canUpvote": true
+                }
+              },
+              {
+                "author": {
+                  "displayName": "Tong Hui Kang",
+                  "id": 1680925,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1680925-kg.jpg",
+                  "tier": "MASTER",
+                  "url": "/huikang"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 751,
+                "content": "<blockquote>\n  <p>Notebook should be shared publicly by end of day April 9.</p>\n</blockquote>\n<p>While I understand that you are a competition host, I have been interpreting rule to be that the notebook needs to be shared before April 16th.</p>\n<p>Is there a precedent (prior Kaggle competition) for having the leaderboard submission and notebook sharing to be the same day? How did they prevent people from simply forking, submitting and sharing the notebook?</p>\n<p>If we interpret April 9th is also the notebook sharing deadline, how do we interpret what April 16th is for?</p>",
+                "feedbackTrackingData": {},
+                "id": 3438153,
+                "isCollapsed": true,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-08T18:21:43.810Z",
+                "rawMarkdown": "> Notebook should be shared publicly by end of day April 9.\n\nWhile I understand that you are a competition host, I have been interpreting rule to be that the notebook needs to be shared before April 16th.\n\nIs there a precedent (prior Kaggle competition) for having the leaderboard submission and notebook sharing to be the same day? How did they prevent people from simply forking, submitting and sharing the notebook?\n\nIf we interpret April 9th is also the notebook sharing deadline, how do we interpret what April 16th is for?",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "Tong Hui Kang",
+                    "id": 1680925,
+                    "performanceTier": "MASTER",
+                    "profileUrl": "/huikang",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1680925-kg.jpg",
+                    "tier": "MASTER",
+                    "url": "/huikang",
+                    "userId": 1680925,
+                    "userName": "huikang"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true,
+                  "totalUpvotes": 2,
+                  "totalVotes": 2
+                }
+              },
+              {
+                "author": {
+                  "displayName": "Victor Ogobi",
+                  "id": 8603319,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                  "tier": "EXPERT",
+                  "url": "/victorogobi"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 350,
+                "content": "<p>The competition host has clarified it: 'Notebook should be shared publicly by END OF DAY April 9.'</p>",
+                "feedbackTrackingData": {},
+                "id": 3438218,
+                "isCollapsed": true,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-08T19:55:41.963Z",
+                "rawMarkdown": "The competition host has clarified it: 'Notebook should be shared publicly by END OF DAY April 9.'",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "Victor Ogobi",
+                    "id": 8603319,
+                    "performanceTier": "EXPERT",
+                    "profileUrl": "/victorogobi",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                    "tier": "EXPERT",
+                    "url": "/victorogobi",
+                    "userId": 8603319,
+                    "userName": "victorogobi"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true,
+                  "totalUpvotes": 1
+                }
+              },
+              {
+                "author": {
+                  "displayName": "Tong Hui Kang",
+                  "id": 1680925,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1680925-kg.jpg",
+                  "tier": "MASTER",
+                  "url": "/huikang"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 751,
+                "content": "<p>Since the current first and second place are on this thread, cc <a href=\"https://www.kaggle.com/ryanholbrook\" target=\"_blank\">@ryanholbrook</a></p>",
+                "feedbackTrackingData": {},
+                "id": 3438320,
+                "isCollapsed": true,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-08T23:43:36.327Z",
+                "rawMarkdown": "Since the current first and second place are on this thread, cc @ryanholbrook",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "Tong Hui Kang",
+                    "id": 1680925,
+                    "performanceTier": "MASTER",
+                    "profileUrl": "/huikang",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1680925-kg.jpg",
+                    "tier": "MASTER",
+                    "url": "/huikang",
+                    "userId": 1680925,
+                    "userName": "huikang"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true
+                }
+              },
+              {
+                "author": {
+                  "displayName": "Chew Kok Wah",
+                  "id": 3967558,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                  "tier": "EXPERT",
+                  "url": "/chewkokwahibrainai"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 62,
+                "content": "<p>Maybe you need to open a new thread to get the confirmation that 16th April is the correct date because they might missed out question from the thread reply. The Host could have mentioned the wrong date as it is illogical to have the notebook shared before 9 April deadline as nobody know for sure who is the Winner yet before the deadline.</p>",
+                "feedbackTrackingData": {},
+                "id": 3438333,
+                "isCollapsed": true,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-09T00:15:54.433Z",
+                "rawMarkdown": "Maybe you need to open a new thread to get the confirmation that 16th April is the correct date because they might missed out question from the thread reply. The Host could have mentioned the wrong date as it is illogical to have the notebook shared before 9 April deadline as nobody know for sure who is the Winner yet before the deadline.",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "Chew Kok Wah",
+                    "id": 3967558,
+                    "performanceTier": "EXPERT",
+                    "profileUrl": "/chewkokwahibrainai",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                    "tier": "EXPERT",
+                    "url": "/chewkokwahibrainai",
+                    "userId": 3967558,
+                    "userName": "chewkokwahibrainai"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true
+                }
+              },
+              {
+                "author": {
+                  "displayName": "Addison Howard",
+                  "id": 1095143,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1095143-kg.jpeg",
+                  "tier": "STAFF",
+                  "url": "/addisonhoward"
+                },
+                "authorType": "ADMIN",
+                "content": "<p>Hey all - The deadline for the mid-point prize winner providing documentation is April 16. Sharing earlier is obviously better, but the intent of the gap is to allow a few days in the event that the first place team chose to decline the prize and we needed time to find a suitable runner up, or if the winner was unavailable at the deadline and we wanted to provide a reasonable amount of time to share documentation.</p>",
+                "feedbackTrackingData": {},
+                "id": 3438337,
+                "isCollapsed": true,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-09T00:27:21.067Z",
+                "rawMarkdown": "Hey all - The deadline for the mid-point prize winner providing documentation is April 16. Sharing earlier is obviously better, but the intent of the gap is to allow a few days in the event that the first place team chose to decline the prize and we needed time to find a suitable runner up, or if the winner was unavailable at the deadline and we wanted to provide a reasonable amount of time to share documentation.",
+                "votes": {
+                  "canUpvote": true,
+                  "totalUpvotes": 3,
+                  "totalVotes": 3
+                }
+              },
+              {
+                "author": {
+                  "displayName": "Tong Hui Kang",
+                  "id": 1680925,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1680925-kg.jpg",
+                  "tier": "MASTER",
+                  "url": "/huikang"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 751,
+                "content": "<p>Thanks, to confirm (assuming I am first place at April 9, 11:59pm UTC)</p>\n<ul>\n<li>I do not need to make my notebook public before end of day April 9 (and I rather not because it is possible someone can clone my notebook and score higher than me)</li>\n<li>I will receive some confirmation that I am first in-line for the mid-point prize soon after the end of day April 9</li>\n</ul>",
+                "feedbackTrackingData": {},
+                "id": 3438339,
+                "isCollapsed": true,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-09T00:35:39.403Z",
+                "rawMarkdown": "Thanks, to confirm (assuming I am first place at April 9, 11:59pm UTC)\n- I do not need to make my notebook public before end of day April 9 (and I rather not because it is possible someone can clone my notebook and score higher than me)\n- I will receive some confirmation that I am first in-line for the mid-point prize soon after the end of day April 9",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "Tong Hui Kang",
+                    "id": 1680925,
+                    "performanceTier": "MASTER",
+                    "profileUrl": "/huikang",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1680925-kg.jpg",
+                    "tier": "MASTER",
+                    "url": "/huikang",
+                    "userId": 1680925,
+                    "userName": "huikang"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true
+                }
+              },
+              {
+                "author": {
+                  "displayName": "Addison Howard",
+                  "id": 1095143,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1095143-kg.jpeg",
+                  "tier": "STAFF",
+                  "url": "/addisonhoward"
+                },
+                "authorType": "ADMIN",
+                "content": "<p>If you're in first place, no need to await confirmation - you can go ahead and make your notebook and any associated documentation/write-up public. We'll follow up on the paperwork after that.</p>",
+                "feedbackTrackingData": {},
+                "id": 3438621,
+                "isCollapsed": true,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-09T13:12:06.863Z",
+                "rawMarkdown": "If you're in first place, no need to await confirmation - you can go ahead and make your notebook and any associated documentation/write-up public. We'll follow up on the paperwork after that.",
+                "votes": {
+                  "canUpvote": true,
+                  "totalUpvotes": 1,
+                  "totalVotes": 1
+                }
+              },
+              {
+                "author": {
+                  "displayName": "Addison Howard",
+                  "id": 1095143,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1095143-kg.jpeg",
+                  "tier": "STAFF",
+                  "url": "/addisonhoward"
+                },
+                "authorType": "ADMIN",
+                "content": "<p><a href=\"https://www.kaggle.com/huikang\" target=\"_blank\">@huikang</a> Congratulations! Feel free to publish to claim the prize! Kaggle will be in touch after publishing on how to distribute the cash portion of the prize, and NVIDIA will be distributing the GPU portion.</p>",
+                "feedbackTrackingData": {},
+                "id": 3438925,
+                "isCollapsed": true,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-10T00:09:50.730Z",
+                "rawMarkdown": "@huikang Congratulations! Feel free to publish to claim the prize! Kaggle will be in touch after publishing on how to distribute the cash portion of the prize, and NVIDIA will be distributing the GPU portion.",
+                "votes": {
+                  "canUpvote": true,
+                  "totalUpvotes": 3,
+                  "totalVotes": 3
+                }
+              },
+              {
+                "author": {
+                  "displayName": "yash bhaskar",
+                  "id": 12063947,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/12063947-kg.jpeg?t=2025-12-19-14-37-37",
+                  "tier": "GRANDMASTER",
+                  "url": "/yash9439"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 149,
+                "content": "<p><a href=\"https://www.kaggle.com/huikang\" target=\"_blank\">@huikang</a> Congratulations!! 🎉🎉🎉</p>",
+                "feedbackTrackingData": {},
+                "id": 3438932,
+                "isCollapsed": true,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-10T01:20:41.967Z",
+                "rawMarkdown": "@huikang Congratulations!! 🎉🎉🎉",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "Aneesh",
+                    "id": 18445905,
+                    "performanceTier": "EXPERT",
+                    "profileUrl": "/aneeshmukkamala",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/18445905-kg.jpeg?t=2025-05-12-17-38-43",
+                    "tier": "EXPERT",
+                    "url": "/aneeshmukkamala",
+                    "userId": 18445905,
+                    "userName": "aneeshmukkamala"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true
+                }
+              }
+            ],
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "Just a test",
+                "id": 14522089,
+                "performanceTier": "EXPERT",
+                "profileUrl": "/yiyangzheng",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                "tier": "EXPERT",
+                "url": "/yiyangzheng",
+                "userId": 14522089,
+                "userName": "yiyangzheng"
+              }
+            },
+            "votes": {
+              "canUpvote": true,
+              "totalUpvotes": 1,
+              "totalVotes": 1
+            }
+          }
+        ],
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 1,
+          "totalVotes": 1
+        }
+      },
+      {
+        "author": {
+          "displayName": "Chew Kok Wah",
+          "id": 3967558,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "EXPERT",
+          "url": "/chewkokwahibrainai"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 62,
+        "content": "<p>Need to Openly share to the Public and make sure all shared methods are reproduceable. </p>",
+        "feedbackTrackingData": {},
+        "id": 3436028,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-05T07:28:36.900Z",
+        "rawMarkdown": "Need to Openly share to the Public and make sure all shared methods are reproduceable. ",
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Chew Kok Wah",
+            "id": 3967558,
+            "performanceTier": "EXPERT",
+            "profileUrl": "/chewkokwahibrainai",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+            "tier": "EXPERT",
+            "url": "/chewkokwahibrainai",
+            "userId": 3967558,
+            "userName": "chewkokwahibrainai"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      },
+      {
+        "author": {
+          "displayName": "Tong Hui Kang",
+          "id": 1680925,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1680925-kg.jpg",
+          "tier": "MASTER",
+          "url": "/huikang"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 751,
+        "content": "<p>In the section header I see this</p>\n<blockquote>\n  <p>To be eligible for any prize, teams must publish a public Kaggle notebook and solution write-up documenting the methods, datasets, and techniques used to produce the submission. Submissions without qualifying public documentation may be deemed ineligible for prizes.</p>\n</blockquote>\n<p>I do agree that this should be clearer that you need to share to get the prize.</p>",
+        "feedbackTrackingData": {},
+        "id": 3435439,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-04T07:10:44.593Z",
+        "rawMarkdown": "In the section header I see this\n\n> To be eligible for any prize, teams must publish a public Kaggle notebook and solution write-up documenting the methods, datasets, and techniques used to produce the submission. Submissions without qualifying public documentation may be deemed ineligible for prizes.\n\nI do agree that this should be clearer that you need to share to get the prize.",
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Tong Hui Kang",
+            "id": 1680925,
+            "performanceTier": "MASTER",
+            "profileUrl": "/huikang",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1680925-kg.jpg",
+            "tier": "MASTER",
+            "url": "/huikang",
+            "userId": 1680925,
+            "userName": "huikang"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      },
+      {
+        "author": {
+          "displayName": "lakshmig82",
+          "id": 32391938,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/32391938-kg.png?t=2026-03-26-17-36-44",
+          "tier": "CONTRIBUTOR",
+          "url": "/lakshmig82"
+        },
+        "authorType": "TOPIC",
+        "competitionRanking": 2354,
+        "content": "<p><a href=\"https://www.kaggle.com/ryanholbrook\" target=\"_blank\">@ryanholbrook</a> </p>\n<p>Requesting for clarification on this </p>",
+        "feedbackTrackingData": {},
+        "id": 3435395,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-04T05:21:06.953Z",
+        "rawMarkdown": "@ryanholbrook \n\nRequesting for clarification on this ",
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "lakshmig82",
+            "id": 32391938,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/lakshmig82",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/32391938-kg.png?t=2026-03-26-17-36-44",
+            "tier": "CONTRIBUTOR",
+            "url": "/lakshmig82",
+            "userId": 32391938,
+            "userName": "lakshmig82"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "lakshmig82",
+        "id": 32391938,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/32391938-kg.png?t=2026-03-26-17-36-44",
+        "tier": "CONTRIBUTOR",
+        "url": "/lakshmig82"
+      },
+      "authorType": "TOPIC",
+      "competitionRanking": 2354,
+      "content": "<p>Hi <a href=\"https://www.kaggle.com/ashleyoldacre\" target=\"_blank\">@ashleyoldacre</a> ,</p>\n<p>Just a quick question,\nFor the Open Progress Prize, do we have to openly share our work to all contestants like in AIMO-3 or just submit the findings to the hosts?</p>\n<p><img src=\"https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F32391938%2Fee1ee1e910e63a99a78b555fc4097ecc%2F1b2b8713-99b4-47c9-ae4d-f7e0a1676ef1.png?generation=1774546304927320&amp;alt=media\" alt=\"\"></p>",
+      "feedbackTrackingData": {},
+      "id": 3429395,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-03-26T17:33:14.937Z",
+      "rawMarkdown": "Hi @ashleyoldacre ,\n\nJust a quick question,\nFor the Open Progress Prize, do we have to openly share our work to all contestants like in AIMO-3 or just submit the findings to the hosts?\n\n![](https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F32391938%2Fee1ee1e910e63a99a78b555fc4097ecc%2F1b2b8713-99b4-47c9-ae4d-f7e0a1676ef1.png?generation=1774546304927320&alt=media)",
+      "teamUpInfo": {
+        "intro": "",
+        "teamLeader": {
+          "displayName": "lakshmig82",
+          "id": 32391938,
+          "performanceTier": "CONTRIBUTOR",
+          "profileUrl": "/lakshmig82",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/32391938-kg.png?t=2026-03-26-17-36-44",
+          "tier": "CONTRIBUTOR",
+          "url": "/lakshmig82",
+          "userId": 32391938,
+          "userName": "lakshmig82"
+        }
+      },
+      "votes": {
+        "canUpvote": true,
+        "totalUpvotes": 2,
+        "totalVotes": 2
+      }
+    },
+    "firstMessageId": 3429395,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 685031,
+    "name": "Open Progress Prize question",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-03-26T17:33:14.935635Z",
+    "totalMessages": 15,
+    "totalVotes": 2,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/685031"
+  }
+}

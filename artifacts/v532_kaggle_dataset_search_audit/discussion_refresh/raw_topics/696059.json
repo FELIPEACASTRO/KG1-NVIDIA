@@ -1,0 +1,503 @@
+{
+  "forumTopic": {
+    "authorId": 28395422,
+    "authorPerformanceTier": "CONTRIBUTOR",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "default-thumb.png",
+    "authorUserDisplayName": "Birtley Doru (DB)",
+    "authorUserName": "hastws",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "Ogurtsov",
+          "id": 682731,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/682731-kg.jpg?t=2024-04-01-08-44-00",
+          "tier": "MASTER",
+          "url": "/ogurtsov"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 619,
+        "content": "<p><a href=\"https://www.kaggle.com/ryanholbrook\" target=\"_blank\">@ryanholbrook</a> \nIf we have any chance to get fixed train dataset, please also inspect such cases (task <strong>00d8b3db</strong>):</p>\n<pre><code>In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:\n34/44 = 1\n41/32 = 9\n34|25 = 69\n87\\64 = 8853\nNow, determine the result for: 69/52\n</code></pre>\n<p>It assumes answer <code>17/</code> but where does the symbol <code>/</code> come from?\nAnother example (task <strong>0c8a8a16</strong>): answer <code>{17</code> contains redundant <code>{</code>.\nOne more example is reported here <a href=\"https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/697333\" target=\"_blank\">https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/697333</a></p>",
+        "feedbackTrackingData": {},
+        "id": 3453927,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-05-06T07:37:11.657Z",
+        "rawMarkdown": "@ryanholbrook \nIf we have any chance to get fixed train dataset, please also inspect such cases (task **00d8b3db**):\n```\nIn Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:\n34/44 = 1\n41/32 = 9\n34|25 = 69\n87\\64 = 8853\nNow, determine the result for: 69/52\n```\nIt assumes answer `17/` but where does the symbol `/` come from?\nAnother example (task **0c8a8a16**): answer `{17` contains redundant `{`.\nOne more example is reported here https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/697333",
+        "replies": [
+          {
+            "author": {
+              "displayName": "Kh0a",
+              "id": 21691005,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/21691005-kg.png?t=2025-08-27-03-21-25",
+              "tier": "MASTER",
+              "url": "/llkh0a"
+            },
+            "authorType": "COMMENT",
+            "competitionRanking": 4,
+            "content": "<p>I have explained it in this discussion:\n<a href=\"https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/686185#3432076\" target=\"_blank\">https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/686185#3432076</a></p>",
+            "feedbackTrackingData": {},
+            "id": 3454506,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-05-07T11:33:29.663Z",
+            "rawMarkdown": "I have explained it in this discussion:\nhttps://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/686185#3432076",
+            "replies": [
+              {
+                "author": {
+                  "displayName": "daulettoibazar",
+                  "id": 6191295,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/6191295-kg.png?t=2026-04-17-16-02-32",
+                  "tier": "CONTRIBUTOR",
+                  "url": "/daulettoibazar"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 3,
+                "content": "<p>Assuming model encounters this sample in inference time, applying abs(rev(a) - rev(b)) = output:</p>\n<p>abs(rev(34) - rev(44)) = 1 correct 🟩\nabs(rev(41) - rev(32)) = 9 correct 🟩</p>\n<p>which leads to\nabs(rev(69) - rev(52)) = 71 incorrect 🟥 </p>\n<p>This indicates that the issue is not a case of multiple valid solution paths converging on the same final answer. Instead, different solution approaches can lead to different answers, which makes the problem insufficiently represented in the dataset. The only way to reliably obtain the specific ground-truth answer provided here would be to train directly on this formulation and effectively overfit to it.</p>",
+                "feedbackTrackingData": {},
+                "id": 3454544,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-05-07T12:43:49.427Z",
+                "rawMarkdown": "Assuming model encounters this sample in inference time, applying abs(rev(a) - rev(b)) = output:\n\nabs(rev(34) - rev(44)) = 1 correct 🟩\nabs(rev(41) - rev(32)) = 9 correct 🟩\n\nwhich leads to\nabs(rev(69) - rev(52)) = 71 incorrect 🟥 \n\nThis indicates that the issue is not a case of multiple valid solution paths converging on the same final answer. Instead, different solution approaches can lead to different answers, which makes the problem insufficiently represented in the dataset. The only way to reliably obtain the specific ground-truth answer provided here would be to train directly on this formulation and effectively overfit to it.",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "daulettoibazar",
+                    "id": 6191295,
+                    "performanceTier": "CONTRIBUTOR",
+                    "profileUrl": "/daulettoibazar",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/6191295-kg.png?t=2026-04-17-16-02-32",
+                    "tier": "CONTRIBUTOR",
+                    "url": "/daulettoibazar",
+                    "userId": 6191295,
+                    "userName": "daulettoibazar"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true,
+                  "totalUpvotes": 2,
+                  "totalVotes": 2
+                }
+              },
+              {
+                "author": {
+                  "displayName": "Ogurtsov",
+                  "id": 682731,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/682731-kg.jpg?t=2024-04-01-08-44-00",
+                  "tier": "MASTER",
+                  "url": "/ogurtsov"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 619,
+                "content": "<p>Different meanings of the same symbol in different parts of an equation is very counterintuitive. It even violates the entire definition of equation.</p>",
+                "feedbackTrackingData": {},
+                "id": 3454612,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-05-07T14:54:14.403Z",
+                "rawMarkdown": "Different meanings of the same symbol in different parts of an equation is very counterintuitive. It even violates the entire definition of equation.",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "Ogurtsov",
+                    "id": 682731,
+                    "performanceTier": "MASTER",
+                    "profileUrl": "/ogurtsov",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/682731-kg.jpg?t=2024-04-01-08-44-00",
+                    "tier": "MASTER",
+                    "url": "/ogurtsov",
+                    "userId": 682731,
+                    "userName": "ogurtsov"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true
+                }
+              }
+            ],
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "Kh0a",
+                "id": 21691005,
+                "performanceTier": "MASTER",
+                "profileUrl": "/llkh0a",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/21691005-kg.png?t=2025-08-27-03-21-25",
+                "tier": "MASTER",
+                "url": "/llkh0a",
+                "userId": 21691005,
+                "userName": "llkh0a"
+              }
+            },
+            "votes": {
+              "canUpvote": true
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Ogurtsov",
+            "id": 682731,
+            "performanceTier": "MASTER",
+            "profileUrl": "/ogurtsov",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/682731-kg.jpg?t=2024-04-01-08-44-00",
+            "tier": "MASTER",
+            "url": "/ogurtsov",
+            "userId": 682731,
+            "userName": "ogurtsov"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 1,
+          "totalVotes": 1
+        }
+      },
+      {
+        "author": {
+          "displayName": "Shivam Shinde",
+          "id": 27044890,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/27044890-kg.png?t=2026-01-31-10-27-05",
+          "tier": "MASTER",
+          "url": "/shindeshivam"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 10,
+        "content": "<p>I had posted about this a month ago as well:</p>\n<p><a href=\"https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/689284\" target=\"_blank\">https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/689284</a></p>\n<p>Still no response from the hosts.</p>",
+        "feedbackTrackingData": {},
+        "id": 3452293,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-05-03T03:03:09.523Z",
+        "rawMarkdown": "I had posted about this a month ago as well:\n\nhttps://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/689284\n\nStill no response from the hosts.\n",
+        "replies": [
+          {
+            "author": {
+              "displayName": "CPMP",
+              "id": 75976,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/75976-gr.jpg",
+              "tier": "GRANDMASTER",
+              "url": "/cpmpml"
+            },
+            "authorType": "HOST",
+            "content": "<p>We missed it obviously.</p>\n<p>We'll look into that.</p>",
+            "feedbackTrackingData": {},
+            "id": 3452294,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-05-03T03:04:52.220Z",
+            "rawMarkdown": "We missed it obviously.\n\nWe'll look into that.\n",
+            "replies": [
+              {
+                "author": {
+                  "displayName": "Russell Kirk",
+                  "id": 27681700,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/27681700-kg.jpg?t=2026-03-31-11-28-38",
+                  "tier": "CONTRIBUTOR",
+                  "url": "/russcore"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 1383,
+                "content": "<p>Another quick question: Because our eval/submission path loads the adapter through vLLM LoRA, the final submitted adapter cannot rely on lm_head or embedding LoRA tensors --- was that intended?</p>",
+                "feedbackTrackingData": {},
+                "id": 3452435,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-05-03T11:46:12.510Z",
+                "rawMarkdown": "Another quick question: Because our eval/submission path loads the adapter through vLLM LoRA, the final submitted adapter cannot rely on lm_head or embedding LoRA tensors --- was that intended?",
+                "teamUpInfo": {
+                  "enabled": true,
+                  "intro": "If you got the time, I got the data .. I hope :D",
+                  "teamLeader": {
+                    "displayName": "Russell Kirk",
+                    "id": 27681700,
+                    "performanceTier": "CONTRIBUTOR",
+                    "profileUrl": "/russcore",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/27681700-kg.jpg?t=2026-03-31-11-28-38",
+                    "tier": "CONTRIBUTOR",
+                    "url": "/russcore",
+                    "userId": 27681700,
+                    "userName": "russcore"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true
+                }
+              },
+              {
+                "author": {
+                  "displayName": "CPMP",
+                  "id": 75976,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/75976-gr.jpg",
+                  "tier": "GRANDMASTER",
+                  "url": "/cpmpml"
+                },
+                "authorType": "HOST",
+                "content": "<p>Yes, we aimed for simplicity.</p>",
+                "feedbackTrackingData": {},
+                "id": 3452456,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-05-03T12:50:12.240Z",
+                "rawMarkdown": "Yes, we aimed for simplicity.",
+                "reactions": [
+                  {
+                    "emoji": "THANK_YOU",
+                    "featuredUserNames": [
+                      "cher112",
+                      "russcore",
+                      "hastws"
+                    ],
+                    "userCount": 3
+                  }
+                ],
+                "votes": {
+                  "canUpvote": true
+                }
+              }
+            ],
+            "votes": {
+              "canUpvote": true,
+              "totalUpvotes": 4,
+              "totalVotes": 4
+            }
+          },
+          {
+            "author": {
+              "displayName": "Ryan Holbrook",
+              "id": 2003505,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2003505-kg.jpg",
+              "tier": "STAFF",
+              "url": "/ryanholbrook"
+            },
+            "authorType": "ADMIN",
+            "content": "<p>Thanks for flagging, and apologies for missing this the first time. I will look into it.</p>",
+            "feedbackTrackingData": {},
+            "id": 3452791,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-05-04T10:34:40.897Z",
+            "rawMarkdown": "Thanks for flagging, and apologies for missing this the first time. I will look into it.",
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "Ryan Holbrook",
+                "id": 2003505,
+                "performanceTier": "STAFF",
+                "profileUrl": "/ryanholbrook",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2003505-kg.jpg",
+                "tier": "STAFF",
+                "url": "/ryanholbrook",
+                "userId": 2003505,
+                "userName": "ryanholbrook"
+              }
+            },
+            "votes": {
+              "canUpvote": true,
+              "totalUpvotes": 2,
+              "totalVotes": 2
+            }
+          },
+          {
+            "author": {
+              "displayName": "Shivam Shinde",
+              "id": 27044890,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/27044890-kg.png?t=2026-01-31-10-27-05",
+              "tier": "MASTER",
+              "url": "/shindeshivam"
+            },
+            "authorType": "COMMENT",
+            "competitionRanking": 10,
+            "content": "<p><a href=\"https://www.kaggle.com/cpmpml\" target=\"_blank\">@cpmpml</a> <a href=\"https://www.kaggle.com/ryanholbrook\" target=\"_blank\">@ryanholbrook</a> \nI have a suggestion to fix this :<a href=\"https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/689284#3454216\" target=\"_blank\">https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/689284#3454216</a></p>",
+            "feedbackTrackingData": {},
+            "id": 3454221,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-05-06T18:34:38.343Z",
+            "rawMarkdown": "@cpmpml @ryanholbrook \nI have a suggestion to fix this :https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/689284#3454216",
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "Shivam Shinde",
+                "id": 27044890,
+                "performanceTier": "MASTER",
+                "profileUrl": "/shindeshivam",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/27044890-kg.png?t=2026-01-31-10-27-05",
+                "tier": "MASTER",
+                "url": "/shindeshivam",
+                "userId": 27044890,
+                "userName": "shindeshivam"
+              }
+            },
+            "votes": {
+              "canUpvote": true
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Shivam Shinde",
+            "id": 27044890,
+            "performanceTier": "MASTER",
+            "profileUrl": "/shindeshivam",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/27044890-kg.png?t=2026-01-31-10-27-05",
+            "tier": "MASTER",
+            "url": "/shindeshivam",
+            "userId": 27044890,
+            "userName": "shindeshivam"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 5,
+          "totalVotes": 5
+        }
+      },
+      {
+        "author": {
+          "displayName": "Giovanny Rodríguez",
+          "id": 23653385,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "EXPERT",
+          "url": "/giovannyrodrguez"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 178,
+        "content": "<pre><code> def _extract_last_boxed(text: str) -&gt; str | None:\n        if not starts:\n            return None\n        start = starts[-1]\n        depth = 1\n        i = start\n        while i &lt; len(text):\n            c = text[i]\n            if c == \"{\":\n                depth += 1\n            elif c == \"}\":\n                depth -= 1\n                if depth == 0:\n                    if text[i + 1 :].strip():\n                        return None\n                    return text[start:i]\n            i += 1\n        return None\n</code></pre>\n<p>Hi <a href=\"https://www.kaggle.com/ryanholbrook\" target=\"_blank\">@ryanholbrook</a>, the metric regex \\boxed{([^}]*)(?:}|$) stops at the first }. In cryptarithm puzzles { and } can be valid answer characters — about 20% of cryptarithm puzzles in train.csv (169/823) have such answers and can never be marked correct.</p>",
+        "feedbackTrackingData": {},
+        "id": 3452165,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-05-02T17:57:23.663Z",
+        "rawMarkdown": "```python\n def _extract_last_boxed(text: str) -> str | None:\n        if not starts:\n            return None\n        start = starts[-1]\n        depth = 1\n        i = start\n        while i < len(text):\n            c = text[i]\n            if c == \"{\":\n                depth += 1\n            elif c == \"}\":\n                depth -= 1\n                if depth == 0:\n                    if text[i + 1 :].strip():\n                        return None\n                    return text[start:i]\n            i += 1\n        return None\n```\n\nHi @ryanholbrook, the metric regex \\\\boxed\\{([^}]*)(?:\\}|$) stops at the first }. In cryptarithm puzzles { and } can be valid answer characters — about 20% of cryptarithm puzzles in train.csv (169/823) have such answers and can never be marked correct.\n",
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Giovanny Rodríguez",
+            "id": 23653385,
+            "performanceTier": "EXPERT",
+            "profileUrl": "/giovannyrodrguez",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+            "tier": "EXPERT",
+            "url": "/giovannyrodrguez",
+            "userId": 23653385,
+            "userName": "giovannyrodrguez"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 4,
+          "totalVotes": 4
+        }
+      },
+      {
+        "author": {
+          "displayName": "faizan",
+          "id": 24331489,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/24331489-kg.jpeg?t=2026-05-04-12-35-33",
+          "tier": "CONTRIBUTOR",
+          "url": "/faizan729"
+        },
+        "authorType": "COMMENT",
+        "content": "<p>Not really — the box itself doesn't do anything, it's just a visual thing. What actually tells you if a character is right or wrong is the logic running behind it. The box is just how that result gets shown to you.</p>",
+        "feedbackTrackingData": {},
+        "id": 3456857,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-05-12T17:12:32.523Z",
+        "rawMarkdown": "Not really — the box itself doesn't do anything, it's just a visual thing. What actually tells you if a character is right or wrong is the logic running behind it. The box is just how that result gets shown to you.",
+        "votes": {
+          "canUpvote": true
+        }
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "Birtley Doru (DB)",
+        "id": 28395422,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+        "tier": "CONTRIBUTOR",
+        "url": "/hastws"
+      },
+      "authorType": "TOPIC",
+      "competitionRanking": 119,
+      "content": "<p>fa5dfa46,\"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:\n$&lt;<em>&amp;@ = &amp;$@\\\n}-&gt;@ = -!$\n}&gt;+@&lt; = !}}\n\\@</em>@@ = &amp;&lt;&gt;$\nNow, determine the result for: }^-`}\",-^}</p>\n<p>What if the answer contains square brackets?\nCan putting a box over a character correctly identify whether it's right or wrong?</p>",
+      "feedbackTrackingData": {},
+      "id": 3451305,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-05-01T06:21:40.283Z",
+      "rawMarkdown": "fa5dfa46,\"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:\n$<*&@ = &$@\\\n\\}->@ = -!$\n}>+@< = !}}\n\\@*@@ = &<>$\nNow, determine the result for: }^-`}\",-^}\n\nWhat if the answer contains square brackets?\nCan putting a box over a character correctly identify whether it's right or wrong?",
+      "teamUpInfo": {
+        "intro": "",
+        "teamLeader": {
+          "displayName": "Birtley Doru (DB)",
+          "id": 28395422,
+          "performanceTier": "CONTRIBUTOR",
+          "profileUrl": "/hastws",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "CONTRIBUTOR",
+          "url": "/hastws",
+          "userId": 28395422,
+          "userName": "hastws"
+        }
+      },
+      "votes": {
+        "canUpvote": true,
+        "totalUpvotes": 11,
+        "totalVotes": 11
+      }
+    },
+    "firstMessageId": 3451305,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 696059,
+    "name": "What if the answer contains square brackets?",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-05-01T06:21:40.283591700Z",
+    "totalMessages": 12,
+    "totalVotes": 11,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/696059"
+  }
+}

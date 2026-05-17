@@ -1,0 +1,812 @@
+{
+  "forumTopic": {
+    "authorId": 2003505,
+    "authorPerformanceTier": "STAFF",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "2003505-kg.jpg",
+    "authorUserDisplayName": "Ryan Holbrook",
+    "authorUserName": "ryanholbrook",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "Ryan Holbrook",
+          "id": 2003505,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2003505-kg.jpg",
+          "tier": "STAFF",
+          "url": "/ryanholbrook"
+        },
+        "authorType": "ADMIN",
+        "content": "<p>The rescore is complete!</p>",
+        "feedbackTrackingData": {},
+        "id": 3438100,
+        "isPinned": true,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-08T17:04:03.267Z",
+        "rawMarkdown": "The rescore is complete!",
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Ryan Holbrook",
+            "id": 2003505,
+            "performanceTier": "STAFF",
+            "profileUrl": "/ryanholbrook",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2003505-kg.jpg",
+            "tier": "STAFF",
+            "url": "/ryanholbrook",
+            "userId": 2003505,
+            "userName": "ryanholbrook"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 3,
+          "totalVotes": 3
+        }
+      },
+      {
+        "author": {
+          "displayName": "Ryan Holbrook",
+          "id": 2003505,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2003505-kg.jpg",
+          "tier": "STAFF",
+          "url": "/ryanholbrook"
+        },
+        "authorType": "ADMIN",
+        "content": "<p>I am about to begin the rescore process. The leaderboard may be in a strange state for a bit until the rescore completes. Here is what will happen:</p>\n<ol>\n<li><strong>DONE</strong> I will invalidate submissions <em>not</em> still present on the leaderboard that were made on or before March 28th.</li>\n<li><strong>DONE</strong> I will initiate a rescore of those submissions still present on the leaderboard that were made on or before March 28th.</li>\n</ol>\n<p>The rescore may take awhile to complete. I will keep you updated here.</p>",
+        "feedbackTrackingData": {},
+        "id": 3436872,
+        "isPinned": true,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-06T19:52:06.950Z",
+        "rawMarkdown": "I am about to begin the rescore process. The leaderboard may be in a strange state for a bit until the rescore completes. Here is what will happen:\n\n1. **DONE** I will invalidate submissions *not* still present on the leaderboard that were made on or before March 28th.\n2. **DONE** I will initiate a rescore of those submissions still present on the leaderboard that were made on or before March 28th.\n\nThe rescore may take awhile to complete. I will keep you updated here.",
+        "reactions": [
+          {
+            "emoji": "THANK_YOU",
+            "featuredUserNames": [
+              "tsebaka",
+              "zokost"
+            ],
+            "userCount": 2
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Ryan Holbrook",
+            "id": 2003505,
+            "performanceTier": "STAFF",
+            "profileUrl": "/ryanholbrook",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2003505-kg.jpg",
+            "tier": "STAFF",
+            "url": "/ryanholbrook",
+            "userId": 2003505,
+            "userName": "ryanholbrook"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 4,
+          "totalVotes": 4
+        }
+      },
+      {
+        "author": {
+          "displayName": "Tong Hui Kang",
+          "id": 1680925,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1680925-kg.jpg",
+          "tier": "MASTER",
+          "url": "/huikang"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 751,
+        "content": "<p>I want to confirm if the stored answer is <code>0234</code>, is <code>234</code> the considered correct?</p>\n<p>I remember someone wrote a comment asking this, but I think it has since been deleted.</p>\n<pre><code>import re\nimport math\n\ndef verify(stored_answer: str, predicted: str) -&gt; bool:\n    # Clean up strings\n    stored_answer = stored_answer.strip()\n    predicted = predicted.strip()\n\n    # If the answer is a binary string, compare strictly as strings\n    if re.fullmatch(r'[01]+', stored_answer):\n        return predicted.lower() == stored_answer.lower()\n\n    try:\n        # Try to convert the answers to floating point numbers\n        stored_num = float(stored_answer)\n        predicted_num = float(predicted)\n        # Use a small absolute tolerance for numbers near zero\n        return math.isclose(stored_num, predicted_num, rel_tol=1e-2, abs_tol=1e-5)\n    except Exception as e:\n        print(e)\n        # Fallback to case-insensitive string comparison\n        return predicted.lower() == stored_answer.lower()\n\nprint(verify(\"0234\", \"234\"))\n</code></pre>\n<p>Currently this is True.</p>",
+        "feedbackTrackingData": {},
+        "id": 3435391,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-04T05:04:09.803Z",
+        "rawMarkdown": "I want to confirm if the stored answer is `0234`, is `234` the considered correct?\n\nI remember someone wrote a comment asking this, but I think it has since been deleted.\n\n```\nimport re\nimport math\n\ndef verify(stored_answer: str, predicted: str) -> bool:\n    # Clean up strings\n    stored_answer = stored_answer.strip()\n    predicted = predicted.strip()\n\n    # If the answer is a binary string, compare strictly as strings\n    if re.fullmatch(r'[01]+', stored_answer):\n        return predicted.lower() == stored_answer.lower()\n\n    try:\n        # Try to convert the answers to floating point numbers\n        stored_num = float(stored_answer)\n        predicted_num = float(predicted)\n        # Use a small absolute tolerance for numbers near zero\n        return math.isclose(stored_num, predicted_num, rel_tol=1e-2, abs_tol=1e-5)\n    except Exception as e:\n        print(e)\n        # Fallback to case-insensitive string comparison\n        return predicted.lower() == stored_answer.lower()\n\nprint(verify(\"0234\", \"234\"))\n```\n\nCurrently this is True.",
+        "replies": [
+          {
+            "author": {
+              "displayName": "Ryan Holbrook",
+              "id": 2003505,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2003505-kg.jpg",
+              "tier": "STAFF",
+              "url": "/ryanholbrook"
+            },
+            "authorType": "ADMIN",
+            "content": "<p>I will look into it. As this would require another update and rerun, perhaps it's better to accept the ambiguity if it doesn't meaningfully affect the scores. Will let you know.</p>",
+            "feedbackTrackingData": {},
+            "id": 3435528,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-04-04T11:05:38.983Z",
+            "rawMarkdown": "I will look into it. As this would require another update and rerun, perhaps it's better to accept the ambiguity if it doesn't meaningfully affect the scores. Will let you know.",
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "Ryan Holbrook",
+                "id": 2003505,
+                "performanceTier": "STAFF",
+                "profileUrl": "/ryanholbrook",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2003505-kg.jpg",
+                "tier": "STAFF",
+                "url": "/ryanholbrook",
+                "userId": 2003505,
+                "userName": "ryanholbrook"
+              }
+            },
+            "votes": {
+              "canUpvote": true,
+              "totalUpvotes": 2,
+              "totalVotes": 1
+            }
+          },
+          {
+            "author": {
+              "displayName": "Sangram Patil",
+              "id": 23276411,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/23276411-kg.jpg?t=2026-05-12-05-11-11",
+              "tier": "EXPERT",
+              "url": "/sangrampatil5150"
+            },
+            "authorType": "COMMENT",
+            "competitionRanking": 217,
+            "content": "<p>One of the bit manipulation questions is:</p>\n<pre><code>In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.\n\nHere are some examples of input -&gt; output:\n01100110 -&gt; 00000001  \n01111111 -&gt; 10000001  \n11111111 -&gt; 10000011  \n00011110 -&gt; 00000000  \n11000011 -&gt; 10000011  \n00100101 -&gt; 10000000  \n11100101 -&gt; 10000011  \n11100100 -&gt; 00000011  \n01011110 -&gt; 00000001  \n\nNow, determine the output for: 01011000\n</code></pre>\n<p>The given ground truth label is <strong>1 only</strong>, but the expected output is <code>00000001</code>. So I think the labels were created according to this format.</p>\n<p>Also, some of the ground truth labels in the bit manipulation tasks are not 8-bit (e.g., <code>1</code>, <code>111101</code>, <code>1000100</code>, <code>10111111</code>, etc.). Even if we train the model to predict 8-bit outputs, we need the ground truth labels to be in the same format if we want to compute accurate metrics.</p>",
+            "feedbackTrackingData": {},
+            "id": 3437052,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-04-07T03:51:17.717Z",
+            "rawMarkdown": "One of the bit manipulation questions is:\n\n```\nIn Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.\n\nHere are some examples of input -> output:\n01100110 -> 00000001  \n01111111 -> 10000001  \n11111111 -> 10000011  \n00011110 -> 00000000  \n11000011 -> 10000011  \n00100101 -> 10000000  \n11100101 -> 10000011  \n11100100 -> 00000011  \n01011110 -> 00000001  \n\nNow, determine the output for: 01011000\n```\n\nThe given ground truth label is **1 only**, but the expected output is `00000001`. So I think the labels were created according to this format.\n\nAlso, some of the ground truth labels in the bit manipulation tasks are not 8-bit (e.g., `1`, `111101`, `1000100`, `10111111`, etc.). Even if we train the model to predict 8-bit outputs, we need the ground truth labels to be in the same format if we want to compute accurate metrics.\n",
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "Sangram Patil",
+                "id": 23276411,
+                "performanceTier": "EXPERT",
+                "profileUrl": "/sangrampatil5150",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/23276411-kg.jpg?t=2026-05-12-05-11-11",
+                "tier": "EXPERT",
+                "url": "/sangrampatil5150",
+                "userId": 23276411,
+                "userName": "sangrampatil5150"
+              }
+            },
+            "votes": {
+              "canUpvote": true,
+              "totalUpvotes": 1,
+              "totalVotes": 1
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Tong Hui Kang",
+            "id": 1680925,
+            "performanceTier": "MASTER",
+            "profileUrl": "/huikang",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1680925-kg.jpg",
+            "tier": "MASTER",
+            "url": "/huikang",
+            "userId": 1680925,
+            "userName": "huikang"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 3,
+          "totalVotes": 3
+        }
+      },
+      {
+        "author": {
+          "displayName": "CPMP",
+          "id": 75976,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/75976-gr.jpg",
+          "tier": "GRANDMASTER",
+          "url": "/cpmpml"
+        },
+        "authorType": "HOST",
+        "content": "<p>chatGPT, Gemini, Claude? Which one did you use?</p>",
+        "feedbackTrackingData": {},
+        "id": 3440013,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-11T18:30:42.373Z",
+        "rawMarkdown": "chatGPT, Gemini, Claude? Which one did you use?",
+        "reactions": [
+          {
+            "emoji": "FUNNY",
+            "featuredUserNames": [
+              "adariyashwanth",
+              "komilparmar",
+              "creampuffgz",
+              "jctesting"
+            ],
+            "userCount": 4
+          }
+        ],
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 2,
+          "totalVotes": -1
+        }
+      },
+      {
+        "author": {
+          "displayName": "Sandy",
+          "id": 32817761,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "CONTRIBUTOR",
+          "url": "/sandeepgoyal1980"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 983,
+        "content": "<p><img src=\"https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F32817761%2F80bd3e3539a0200f9da4658899dc3f1d%2FScreenshot%202026-04-16%20122210.png?generation=1776322383346556&amp;alt=media\" alt=\"\"></p>\n<p>has the submissions been rescored today too?\ni am sure i had 5x0.84s and 2x0.85 before</p>",
+        "feedbackTrackingData": {},
+        "id": 3443140,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-16T06:53:59.777Z",
+        "rawMarkdown": "![](https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F32817761%2F80bd3e3539a0200f9da4658899dc3f1d%2FScreenshot%202026-04-16%20122210.png?generation=1776322383346556&alt=media)\n\nhas the submissions been rescored today too?\ni am sure i had 5x0.84s and 2x0.85 before",
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Sandy",
+            "id": 32817761,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/sandeepgoyal1980",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+            "tier": "CONTRIBUTOR",
+            "url": "/sandeepgoyal1980",
+            "userId": 32817761,
+            "userName": "sandeepgoyal1980"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalVotes": -1
+        }
+      },
+      {
+        "author": {
+          "displayName": "Ravi Ramakrishnan",
+          "id": 8273630,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/8273630-kg.JPG?t=2024-03-26-14-51-52",
+          "tier": "GRANDMASTER",
+          "url": "/ravi20076"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 7,
+        "content": "<p><a href=\"https://www.kaggle.com/ryanholbrook\" target=\"_blank\">@ryanholbrook</a> I wish to purport that a lot of the recently launched competitions are having such operational issues including-</p>\n<ol>\n<li>Post launch metric adjustments</li>\n<li>Post launch data adjustments </li>\n<li>Post launch data + metric adjustments </li>\n<li>Ethical issues resulting in pausing the competition after launch</li>\n</ol>\n<p>I think some additional operational enhancements with human-driven supervision could be improved to curb such post-launch sub-optimalities. </p>",
+        "feedbackTrackingData": {},
+        "id": 3435384,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-04T04:45:08.540Z",
+        "rawMarkdown": "@ryanholbrook I wish to purport that a lot of the recently launched competitions are having such operational issues including-\n1. Post launch metric adjustments\n2. Post launch data adjustments \n3. Post launch data + metric adjustments \n4. Ethical issues resulting in pausing the competition after launch\n\nI think some additional operational enhancements with human-driven supervision could be improved to curb such post-launch sub-optimalities. ",
+        "reactions": [
+          {
+            "emoji": "FUNNY",
+            "featuredUserNames": [
+              "tsebaka",
+              "askdkjanfkqf"
+            ],
+            "userCount": 2
+          },
+          {
+            "emoji": "SURPRISE",
+            "featuredUserNames": [
+              "defdet",
+              "nataliajakowska",
+              "llkh0a"
+            ],
+            "userCount": 3
+          }
+        ],
+        "replies": [
+          {
+            "author": {
+              "displayName": "CPMP",
+              "id": 75976,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/75976-gr.jpg",
+              "tier": "GRANDMASTER",
+              "url": "/cpmpml"
+            },
+            "authorType": "HOST",
+            "content": "<p>Which ethical issues?\nWhich post launch data adjustment?</p>\n<p>There has been one metric change so far.</p>",
+            "feedbackTrackingData": {},
+            "id": 3435533,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-04-04T11:13:22.647Z",
+            "rawMarkdown": "Which ethical issues?\nWhich post launch data adjustment?\n\nThere has been one metric change so far.",
+            "replies": [
+              {
+                "author": {
+                  "displayName": "ImperfectKitto",
+                  "id": 11905020,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/11905020-kg.jpg",
+                  "tier": "EXPERT",
+                  "url": "/defdet"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 493,
+                "content": "<p><a href=\"https://www.kaggle.com/ravi20076\" target=\"_blank\">@ravi20076</a> is most likely talking about overall decline in quality of Kaggle competitions (those are issues other past and current competitions have)</p>",
+                "feedbackTrackingData": {},
+                "id": 3435584,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-04T12:39:59.217Z",
+                "rawMarkdown": "@ravi20076 is most likely talking about overall decline in quality of Kaggle competitions (those are issues other past and current competitions have)",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "ImperfectKitto",
+                    "id": 11905020,
+                    "performanceTier": "EXPERT",
+                    "profileUrl": "/defdet",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/11905020-kg.jpg",
+                    "tier": "EXPERT",
+                    "url": "/defdet",
+                    "userId": 11905020,
+                    "userName": "defdet"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true,
+                  "totalUpvotes": 1
+                }
+              },
+              {
+                "author": {
+                  "displayName": "Ravi Ramakrishnan",
+                  "id": 8273630,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/8273630-kg.JPG?t=2024-03-26-14-51-52",
+                  "tier": "GRANDMASTER",
+                  "url": "/ravi20076"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 7,
+                "content": "<p><a href=\"https://www.kaggle.com/defdet\" target=\"_blank\">@defdet</a> yes, a lot of the recently launched competitions in the last 4-5 months have had these issues. I am unsure if this is due to AI usage / supervision / governance issues. </p>",
+                "feedbackTrackingData": {},
+                "id": 3435595,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-04T12:53:24.547Z",
+                "rawMarkdown": "@defdet yes, a lot of the recently launched competitions in the last 4-5 months have had these issues. I am unsure if this is due to AI usage / supervision / governance issues. ",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "Kishan Vavdara",
+                    "id": 12951282,
+                    "performanceTier": "MASTER",
+                    "profileUrl": "/kishanvavdara",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/12951282-kg.jpeg",
+                    "tier": "MASTER",
+                    "url": "/kishanvavdara",
+                    "userId": 12951282,
+                    "userName": "kishanvavdara"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true,
+                  "totalUpvotes": 1,
+                  "totalVotes": -1
+                }
+              },
+              {
+                "author": {
+                  "displayName": "CPMP",
+                  "id": 75976,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/75976-gr.jpg",
+                  "tier": "GRANDMASTER",
+                  "url": "/cpmpml"
+                },
+                "authorType": "HOST",
+                "content": "<p>Why use this competition forum for a cross competition discussion?</p>",
+                "feedbackTrackingData": {},
+                "id": 3435621,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-04T13:34:19.710Z",
+                "rawMarkdown": "Why use this competition forum for a cross competition discussion?",
+                "votes": {
+                  "canUpvote": true,
+                  "totalUpvotes": 5,
+                  "totalVotes": 5
+                }
+              }
+            ],
+            "votes": {
+              "canUpvote": true,
+              "totalUpvotes": 1
+            }
+          },
+          {
+            "author": {
+              "displayName": "Ryan Holbrook",
+              "id": 2003505,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2003505-kg.jpg",
+              "tier": "STAFF",
+              "url": "/ryanholbrook"
+            },
+            "authorType": "ADMIN",
+            "content": "<p>Hi <a href=\"https://www.kaggle.com/ravi20076\" target=\"_blank\">@ravi20076</a>,</p>\n<p>I will bring your concerns up with the team. You might wish to raise them in the <a href=\"https://www.kaggle.com/discussions/product-feedback\" target=\"_blank\">Product Feedback</a> forum instead to keep this forum on topic.</p>",
+            "feedbackTrackingData": {},
+            "id": 3435704,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-04-04T15:47:42.010Z",
+            "rawMarkdown": "Hi @ravi20076,\n\nI will bring your concerns up with the team. You might wish to raise them in the [Product Feedback](https://www.kaggle.com/discussions/product-feedback) forum instead to keep this forum on topic.",
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "Ryan Holbrook",
+                "id": 2003505,
+                "performanceTier": "STAFF",
+                "profileUrl": "/ryanholbrook",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2003505-kg.jpg",
+                "tier": "STAFF",
+                "url": "/ryanholbrook",
+                "userId": 2003505,
+                "userName": "ryanholbrook"
+              }
+            },
+            "votes": {
+              "canUpvote": true,
+              "totalUpvotes": 4,
+              "totalVotes": 4
+            }
+          },
+          {
+            "author": {
+              "displayName": "Chew Kok Wah",
+              "id": 3967558,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+              "tier": "EXPERT",
+              "url": "/chewkokwahibrainai"
+            },
+            "authorType": "COMMENT",
+            "competitionRanking": 62,
+            "content": "<p>Host willingness to adjust Metric and data when error is found is showing a behavior of high integrity. It is unfair and discouraging to them to negatively turn a highly ethical behavior into something negative.</p>\n<p>Beside that, there is no way to confirm if all the past Competitions before these 4, 5 months is better or worst in term of data or Metric incorrect issues. Most of them are private and never reveal to you.</p>",
+            "feedbackTrackingData": {},
+            "id": 3436026,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-04-05T07:20:52.147Z",
+            "rawMarkdown": "Host willingness to adjust Metric and data when error is found is showing a behavior of high integrity. It is unfair and discouraging to them to negatively turn a highly ethical behavior into something negative.\n\nBeside that, there is no way to confirm if all the past Competitions before these 4, 5 months is better or worst in term of data or Metric incorrect issues. Most of them are private and never reveal to you.",
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "Chew Kok Wah",
+                "id": 3967558,
+                "performanceTier": "EXPERT",
+                "profileUrl": "/chewkokwahibrainai",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                "tier": "EXPERT",
+                "url": "/chewkokwahibrainai",
+                "userId": 3967558,
+                "userName": "chewkokwahibrainai"
+              }
+            },
+            "votes": {
+              "canUpvote": true,
+              "totalUpvotes": 4,
+              "totalVotes": 4
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Kishan Vavdara",
+            "id": 12951282,
+            "performanceTier": "MASTER",
+            "profileUrl": "/kishanvavdara",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/12951282-kg.jpeg",
+            "tier": "MASTER",
+            "url": "/kishanvavdara",
+            "userId": 12951282,
+            "userName": "kishanvavdara"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 3,
+          "totalVotes": -3
+        }
+      },
+      {
+        "author": {
+          "displayName": "songningyu",
+          "id": 5586672,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "CONTRIBUTOR",
+          "url": "/songningyu"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 1239,
+        "content": "<p>Bug Report: extract_final_answer regex fails when the ground truth answer\n  contains a literal } character</p>\n<p>The extract_final_answer function in the metric uses the following regex to\n  extract answers from \\boxed{}:</p>\n<p>matches = re.findall(r'\\boxed{([^}]*)(?:}|$)', text)</p>\n<p>The pattern [^}]* stops at the first } character encountered. This works\n  correctly for most problem types, but fails systematically for\n  equation_symbolic problems where the answer itself can contain } as a literal\n  symbol character.</p>\n<p>Example: problem b50cf853</p>\n<ul>\n<li><p>Ground truth answer: |?\"} (four symbols: |, ?, \", })</p></li>\n<li><p>The model is instructed to output \\boxed{|?\"}</p></li>\n<li><p>In the raw output this appears as: \\boxed{|?\"}}</p></li>\n<li><p>The regex [^}]* matches |?\" and stops at the first }, extracting |?\" instead\nof |?\"}</p></li>\n<li><p>Result: |?\" ≠ |?\"} → marked incorrect, even though the model produced the\nright answer</p>\n<p>Impact:</p>\n<p>94 out of 9500 problems in the training set (all equation_symbolic type) have\nanswers containing }. These are impossible to answer correctly under the\ncurrent extraction logic, regardless of model quality. This means the\ntheoretical maximum accuracy is capped at approximately 99.0% instead of 100%.</p>\n<p>Suggested fix:</p>\n<p>Use a greedy/balanced-brace matching approach instead of [^}]*, for example:</p>\n<h1>Match the LAST \\boxed{…}, allowing nested braces</h1>\n<p>matches = re.findall(r'\\boxed{((?:[^{}]|{[^{}]<em>})</em>)}', text)</p>\n<p>Or alternatively, accept escaped braces like } inside boxed content.</p></li>\n</ul>",
+        "feedbackTrackingData": {},
+        "id": 3454461,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-05-07T08:40:35.170Z",
+        "rawMarkdown": "Bug Report: extract_final_answer regex fails when the ground truth answer\n  contains a literal } character\n\n  The extract_final_answer function in the metric uses the following regex to\n  extract answers from \\boxed{}:\n\n  matches = re.findall(r'\\\\boxed\\{([^}]*)(?:\\}|$)', text)\n\n  The pattern [^}]* stops at the first } character encountered. This works\n  correctly for most problem types, but fails systematically for\n  equation_symbolic problems where the answer itself can contain } as a literal\n  symbol character.\n\n  Example: problem b50cf853\n\n  - Ground truth answer: |?\"} (four symbols: |, ?, \", })\n  - The model is instructed to output \\boxed{|?\"}\n  - In the raw output this appears as: \\boxed{|?\"}}\n  - The regex [^}]* matches |?\" and stops at the first }, extracting |?\" instead\n   of |?\"}\n  - Result: |?\" ≠ |?\"} → marked incorrect, even though the model produced the\n  right answer\n\n  Impact:\n\n  94 out of 9500 problems in the training set (all equation_symbolic type) have\n  answers containing }. These are impossible to answer correctly under the\n  current extraction logic, regardless of model quality. This means the\n  theoretical maximum accuracy is capped at approximately 99.0% instead of 100%.\n\n  Suggested fix:\n\n  Use a greedy/balanced-brace matching approach instead of [^}]*, for example:\n\n  # Match the LAST \\boxed{...}, allowing nested braces\n  matches = re.findall(r'\\\\boxed\\{((?:[^{}]|\\{[^{}]*\\})*)\\}', text)\n\n  Or alternatively, accept escaped braces like \\} inside boxed content.",
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "songningyu",
+            "id": 5586672,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/songningyu",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+            "tier": "CONTRIBUTOR",
+            "url": "/songningyu",
+            "userId": 5586672,
+            "userName": "songningyu"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      },
+      {
+        "author": {
+          "displayName": "Muhammad",
+          "id": 2853990,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2853990-kg.jpg?t=2023-10-24-11-46-05",
+          "tier": "EXPERT",
+          "url": "/hark99"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 2925,
+        "content": "<p><a href=\"https://www.kaggle.com/ryanholbrook\" target=\"_blank\">@ryanholbrook</a> I just want to do inference on the model to check results but \"\"\"PermissionError: [Errno 13] Permission denied: '/kaggle/usr/lib/notebooks/ryanholbrook/nvidia-utility-script/triton/backends/nvidia/bin/ptxas-blackwell'\"\"\"</p>",
+        "feedbackTrackingData": {},
+        "id": 3439246,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-10T11:25:16.480Z",
+        "rawMarkdown": "@ryanholbrook I just want to do inference on the model to check results but \"\"\"PermissionError: [Errno 13] Permission denied: '/kaggle/usr/lib/notebooks/ryanholbrook/nvidia-utility-script/triton/backends/nvidia/bin/ptxas-blackwell'\"\"\"",
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Muhammad",
+            "id": 2853990,
+            "performanceTier": "EXPERT",
+            "profileUrl": "/hark99",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2853990-kg.jpg?t=2023-10-24-11-46-05",
+            "tier": "EXPERT",
+            "url": "/hark99",
+            "userId": 2853990,
+            "userName": "hark99"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      },
+      {
+        "author": {
+          "displayName": "Yurnero",
+          "id": 13977249,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/13977249-kg.jpg?t=2025-06-08-06-49-23",
+          "tier": "GRANDMASTER",
+          "url": "/samson8"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 713,
+        "content": "<p><a href=\"https://www.kaggle.com/ryanholbrook\" target=\"_blank\">@ryanholbrook</a> </p>\n<p>In the overview tab we can find this.</p>\n<p><img src=\"https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F13977249%2F2558cd409c1e98a690dfd190659dad08%2F1.jpg?generation=1775398654086016&amp;alt=media\" alt=\"\"></p>\n<p>but in the last version (14th) of the <a href=\"https://www.kaggle.com/code/metric/nvidia-nemotron-metric\" target=\"_blank\">NVIDIA Nemotron Metric notebook</a> I see this</p>\n<pre><code>def score(\n    solution: pd.DataFrame,\n    submission: pd.DataFrame,\n    row_id_column_name: str,\n    max_lora_rank: int = 32,\n    max_tokens: int = 3584,\n    top_p: float = 1.0,\n    temperature: float = 1.0,\n    max_num_seqs: int = 128,\n    gpu_memory_utilization: float = 0.85,\n    max_model_len: int = 4096,\n    debug: bool = False,\n)\n</code></pre>\n<p>Is it a placeholder and actual scoring parameters are correct in the overview tab. I'm specifically interested in <code>max_tokens</code> and <code>max_model_length</code></p>",
+        "feedbackTrackingData": {},
+        "id": 3436215,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-05T14:19:43.110Z",
+        "rawMarkdown": "@ryanholbrook \n\nIn the overview tab we can find this.\n\n![](https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F13977249%2F2558cd409c1e98a690dfd190659dad08%2F1.jpg?generation=1775398654086016&alt=media)\n\nbut in the last version (14th) of the [NVIDIA Nemotron Metric notebook](https://www.kaggle.com/code/metric/nvidia-nemotron-metric) I see this\n\n```\ndef score(\n    solution: pd.DataFrame,\n    submission: pd.DataFrame,\n    row_id_column_name: str,\n    max_lora_rank: int = 32,\n    max_tokens: int = 3584,\n    top_p: float = 1.0,\n    temperature: float = 1.0,\n    max_num_seqs: int = 128,\n    gpu_memory_utilization: float = 0.85,\n    max_model_len: int = 4096,\n    debug: bool = False,\n)\n```\n\nIs it a placeholder and actual scoring parameters are correct in the overview tab. I'm specifically interested in `max_tokens` and `max_model_length`",
+        "replies": [
+          {
+            "author": {
+              "displayName": "Ryan Holbrook",
+              "id": 2003505,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2003505-kg.jpg",
+              "tier": "STAFF",
+              "url": "/ryanholbrook"
+            },
+            "authorType": "ADMIN",
+            "content": "<p>The defaults are only defaults. The correct parameters are in the Overview tab.</p>",
+            "feedbackTrackingData": {},
+            "id": 3436298,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-04-05T17:01:47.900Z",
+            "rawMarkdown": "The defaults are only defaults. The correct parameters are in the Overview tab.",
+            "replies": [
+              {
+                "author": {
+                  "displayName": "Yashpal M",
+                  "id": 25859936,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                  "tier": "CONTRIBUTOR",
+                  "url": "/r17754"
+                },
+                "authorType": "COMMENT",
+                "content": "<p><a href=\"https://www.kaggle.com/ryanholbrook\" target=\"_blank\">@ryanholbrook</a> I need to update the bitsandbytes package in the run (I am using the 2026-02-18 PIN to Environment)\n2/ Can I include any other POST training for LoRA.DoRA any specific training requirements.</p>\n<p>/edit <a href=\"https://www.kaggle.com/ryanholbrook\" target=\"_blank\">@ryanholbrook</a> <a href=\"https://www.kaggle.com/cpmpml\" target=\"_blank\">@cpmpml</a> What is the PYTHONPATH you used in the utility script. I can not edit the export in the utility script.</p>",
+                "feedbackTrackingData": {},
+                "id": 3453667,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-05-05T19:18:19.060Z",
+                "rawMarkdown": "@ryanholbrook I need to update the bitsandbytes package in the run (I am using the 2026-02-18 PIN to Environment)\n2/ Can I include any other POST training for LoRA.DoRA any specific training requirements.\n\n/edit @ryanholbrook @cpmpml What is the PYTHONPATH you used in the utility script. I can not edit the export in the utility script.",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "Yashpal M",
+                    "id": 25859936,
+                    "performanceTier": "CONTRIBUTOR",
+                    "profileUrl": "/r17754",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                    "tier": "CONTRIBUTOR",
+                    "url": "/r17754",
+                    "userId": 25859936,
+                    "userName": "r17754"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true
+                }
+              }
+            ],
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "Ryan Holbrook",
+                "id": 2003505,
+                "performanceTier": "STAFF",
+                "profileUrl": "/ryanholbrook",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2003505-kg.jpg",
+                "tier": "STAFF",
+                "url": "/ryanholbrook",
+                "userId": 2003505,
+                "userName": "ryanholbrook"
+              }
+            },
+            "votes": {
+              "canUpvote": true,
+              "totalUpvotes": 2,
+              "totalVotes": 2
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Yurnero",
+            "id": 13977249,
+            "performanceTier": "GRANDMASTER",
+            "profileUrl": "/samson8",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/13977249-kg.jpg?t=2025-06-08-06-49-23",
+            "tier": "GRANDMASTER",
+            "url": "/samson8",
+            "userId": 13977249,
+            "userName": "samson8"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "Ryan Holbrook",
+        "id": 2003505,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2003505-kg.jpg",
+        "tier": "STAFF",
+        "url": "/ryanholbrook"
+      },
+      "authorType": "ADMIN",
+      "content": "<p>Hi everyone,</p>\n<p>Recently, there was an update to the <a href=\"https://www.kaggle.com/code/metric/nvidia-nemotron-metric\" target=\"_blank\">evaluation metric</a> that fixed a bug that was causing binary answers to match as floats instead of exactly as strings. This update led to a drop of about 0.3-0.4 points on new submissions. (The update is in the <code>verify()</code> function of the linked notebook.)</p>\n<p>So that the leaderboard will only reflect submissions using the new metric, I will be initiating a rescore on Monday. This rescore will only evaluate those submissions that both are still present on the Public Leaderboard and that were made on or before March 28th, that is, prior to the metric update. This will affect a little less than 2/3 of the current LB. Other submissions made on or before March 28th, I will invalidate. Submissions made after that time will be preserved.</p>\n<p>Why are we not rescoring every submission? Unfortunately, this would amount to over 9000 rescores and would strain our available capacity of the special GPUs used in this competition. We believe the above approach is the best compromise, that both preserves the existing leaderboard and maintains GPU availability for the community going forward.</p>\n<p>Please let us know if you have any questions or concerns below.</p>",
+      "feedbackTrackingData": {},
+      "id": 3435110,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-04-03T17:30:58.430Z",
+      "rawMarkdown": "Hi everyone,\n\nRecently, there was an update to the [evaluation metric](https://www.kaggle.com/code/metric/nvidia-nemotron-metric) that fixed a bug that was causing binary answers to match as floats instead of exactly as strings. This update led to a drop of about 0.3-0.4 points on new submissions. (The update is in the `verify()` function of the linked notebook.)\n\nSo that the leaderboard will only reflect submissions using the new metric, I will be initiating a rescore on Monday. This rescore will only evaluate those submissions that both are still present on the Public Leaderboard and that were made on or before March 28th, that is, prior to the metric update. This will affect a little less than 2/3 of the current LB. Other submissions made on or before March 28th, I will invalidate. Submissions made after that time will be preserved.\n\nWhy are we not rescoring every submission? Unfortunately, this would amount to over 9000 rescores and would strain our available capacity of the special GPUs used in this competition. We believe the above approach is the best compromise, that both preserves the existing leaderboard and maintains GPU availability for the community going forward.\n\nPlease let us know if you have any questions or concerns below.",
+      "teamUpInfo": {
+        "intro": "",
+        "teamLeader": {
+          "displayName": "Ryan Holbrook",
+          "id": 2003505,
+          "performanceTier": "STAFF",
+          "profileUrl": "/ryanholbrook",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2003505-kg.jpg",
+          "tier": "STAFF",
+          "url": "/ryanholbrook",
+          "userId": 2003505,
+          "userName": "ryanholbrook"
+        }
+      },
+      "votes": {
+        "canUpvote": true,
+        "totalUpvotes": 16,
+        "totalVotes": 16
+      }
+    },
+    "firstMessageId": 3435110,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 687798,
+    "isStickied": true,
+    "name": "Rescore After Metric Update",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-04-03T17:30:58.430944100Z",
+    "totalMessages": 19,
+    "totalVotes": 16,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/687798"
+  }
+}

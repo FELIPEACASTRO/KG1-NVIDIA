@@ -1,0 +1,269 @@
+{
+  "forumTopic": {
+    "authorId": 7885022,
+    "authorPerformanceTier": "CONTRIBUTOR",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "7885022-kg.jpg?t=2026-04-26-11-10-13",
+    "authorUserDisplayName": "blckvia",
+    "authorUserName": "blckvia",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "CPMP",
+          "id": 75976,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/75976-gr.jpg",
+          "tier": "GRANDMASTER",
+          "url": "/cpmpml"
+        },
+        "authorType": "HOST",
+        "content": "<p>you must use the RTX Pro 6000 Blackwell GPU.</p>",
+        "feedbackTrackingData": {},
+        "id": 3435623,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-04T13:35:51.023Z",
+        "rawMarkdown": "you must use the RTX Pro 6000 Blackwell GPU.",
+        "replies": [
+          {
+            "author": {
+              "displayName": "blckvia",
+              "id": 7885022,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/7885022-kg.jpg?t=2026-04-26-11-10-13",
+              "tier": "CONTRIBUTOR",
+              "url": "/blckvia"
+            },
+            "authorType": "TOPIC",
+            "competitionRanking": 2480,
+            "content": "<p>When I trained, I used a Blackwell GPU, but when I tried to commit and submit, I selected \"Run with GPU for all/this sessions\" and Kaggle used a P100 instead. I also have submission.zip in my working directory in Kaggle but it's 3GB and I can't download it through the browser. Is there another way to submit this file?\n<a href=\"https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F7885022%2Fabf0089d3b10efc66c50681c99b5bff7%2FScreenshot%202026-04-04%20at%2016.40.07.png?generation=1775310034257947&amp;alt=media\" target=\"_blank\">pic</a></p>",
+            "feedbackTrackingData": {},
+            "id": 3435634,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-04-04T13:45:12.877Z",
+            "rawMarkdown": "When I trained, I used a Blackwell GPU, but when I tried to commit and submit, I selected \"Run with GPU for all/this sessions\" and Kaggle used a P100 instead. I also have submission.zip in my working directory in Kaggle but it's 3GB and I can't download it through the browser. Is there another way to submit this file?\n[pic](https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F7885022%2Fabf0089d3b10efc66c50681c99b5bff7%2FScreenshot%202026-04-04%20at%2016.40.07.png?generation=1775310034257947&alt=media)",
+            "replies": [
+              {
+                "author": {
+                  "displayName": "CPMP",
+                  "id": 75976,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/75976-gr.jpg",
+                  "tier": "GRANDMASTER",
+                  "url": "/cpmpml"
+                },
+                "authorType": "HOST",
+                "content": "<p>sleect the blackwell when you submit.</p>",
+                "feedbackTrackingData": {},
+                "id": 3435681,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-04T14:54:49.987Z",
+                "rawMarkdown": "sleect the blackwell when you submit.",
+                "votes": {
+                  "canUpvote": true,
+                  "totalUpvotes": 1,
+                  "totalVotes": 1
+                }
+              },
+              {
+                "author": {
+                  "displayName": "Vedrin Jeliazkov",
+                  "id": 28480955,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/28480955-gr.jpg",
+                  "tier": "CONTRIBUTOR",
+                  "url": "/vedrinjeliazkov"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 15,
+                "content": "<blockquote>\n  <p>When I trained, I used a Blackwell GPU, but when I tried to commit and submit, I selected \"Run with GPU for all/this sessions\" and Kaggle used a P100 instead. I also have submission.zip in my working directory in Kaggle but it's 3GB and I can't download it through the browser. Is there another way to submit this file?</p>\n</blockquote>\n<p>With persistence enabled (files only) you could start a new CPU-only session (without any accelerator and with Internet enabled) and submit to the competition by running a command like:</p>\n<p><code>!kaggle competitions submit -c nvidia-nemotron-model-reasoning-challenge -f submission.zip -m \"My first submission\"</code></p>\n<p>In such a way you would avoid consuming some of your GPU quota in the submission process. </p>",
+                "feedbackTrackingData": {},
+                "id": 3435755,
+                "isCollapsed": true,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-04T17:20:59.157Z",
+                "rawMarkdown": "> When I trained, I used a Blackwell GPU, but when I tried to commit and submit, I selected \"Run with GPU for all/this sessions\" and Kaggle used a P100 instead. I also have submission.zip in my working directory in Kaggle but it's 3GB and I can't download it through the browser. Is there another way to submit this file?\n\nWith persistence enabled (files only) you could start a new CPU-only session (without any accelerator and with Internet enabled) and submit to the competition by running a command like:\n\n`!kaggle competitions submit -c nvidia-nemotron-model-reasoning-challenge -f submission.zip -m \"My first submission\"`\n\nIn such a way you would avoid consuming some of your GPU quota in the submission process. \n\n",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "Vedrin Jeliazkov",
+                    "id": 28480955,
+                    "performanceTier": "CONTRIBUTOR",
+                    "profileUrl": "/vedrinjeliazkov",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/28480955-gr.jpg",
+                    "tier": "CONTRIBUTOR",
+                    "url": "/vedrinjeliazkov",
+                    "userId": 28480955,
+                    "userName": "vedrinjeliazkov"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true,
+                  "totalUpvotes": 2,
+                  "totalVotes": 2
+                }
+              },
+              {
+                "author": {
+                  "displayName": "blckvia",
+                  "id": 7885022,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/7885022-kg.jpg?t=2026-04-26-11-10-13",
+                  "tier": "CONTRIBUTOR",
+                  "url": "/blckvia"
+                },
+                "authorType": "TOPIC",
+                "competitionRanking": 2480,
+                "content": "<p>Thank you a lot</p>",
+                "feedbackTrackingData": {},
+                "id": 3436000,
+                "isCollapsed": true,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-05T06:02:24.150Z",
+                "rawMarkdown": "Thank you a lot",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "blckvia",
+                    "id": 7885022,
+                    "performanceTier": "CONTRIBUTOR",
+                    "profileUrl": "/blckvia",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/7885022-kg.jpg?t=2026-04-26-11-10-13",
+                    "tier": "CONTRIBUTOR",
+                    "url": "/blckvia",
+                    "userId": 7885022,
+                    "userName": "blckvia"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true
+                }
+              },
+              {
+                "author": {
+                  "displayName": "blckvia",
+                  "id": 7885022,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/7885022-kg.jpg?t=2026-04-26-11-10-13",
+                  "tier": "CONTRIBUTOR",
+                  "url": "/blckvia"
+                },
+                "authorType": "TOPIC",
+                "competitionRanking": 2480,
+                "content": "<p>I finally found where I can choose GPU for \"Save &amp; Run All\"</p>",
+                "feedbackTrackingData": {},
+                "id": 3436001,
+                "isCollapsed": true,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-05T06:03:43.093Z",
+                "rawMarkdown": "I finally found where I can choose GPU for \"Save & Run All\"",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "blckvia",
+                    "id": 7885022,
+                    "performanceTier": "CONTRIBUTOR",
+                    "profileUrl": "/blckvia",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/7885022-kg.jpg?t=2026-04-26-11-10-13",
+                    "tier": "CONTRIBUTOR",
+                    "url": "/blckvia",
+                    "userId": 7885022,
+                    "userName": "blckvia"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true
+                }
+              }
+            ],
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "blckvia",
+                "id": 7885022,
+                "performanceTier": "CONTRIBUTOR",
+                "profileUrl": "/blckvia",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/7885022-kg.jpg?t=2026-04-26-11-10-13",
+                "tier": "CONTRIBUTOR",
+                "url": "/blckvia",
+                "userId": 7885022,
+                "userName": "blckvia"
+              }
+            },
+            "votes": {
+              "canUpvote": true
+            }
+          }
+        ],
+        "votes": {
+          "canUpvote": true
+        }
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "blckvia",
+        "id": 7885022,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/7885022-kg.jpg?t=2026-04-26-11-10-13",
+        "tier": "CONTRIBUTOR",
+        "url": "/blckvia"
+      },
+      "authorType": "TOPIC",
+      "competitionRanking": 2480,
+      "content": "<p>I trained a model but the submission.zip file is too large to download and then upload to Kaggle. I also tried Save &amp; Run All (Commit), but it runs on a P100 GPU which doesn't have enough memory, so it fails as well. How can I submit my output file?</p>",
+      "feedbackTrackingData": {},
+      "id": 3435603,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-04-04T13:13:35.877Z",
+      "rawMarkdown": "I trained a model but the submission.zip file is too large to download and then upload to Kaggle. I also tried Save & Run All (Commit), but it runs on a P100 GPU which doesn't have enough memory, so it fails as well. How can I submit my output file?",
+      "teamUpInfo": {
+        "intro": "",
+        "teamLeader": {
+          "displayName": "blckvia",
+          "id": 7885022,
+          "performanceTier": "CONTRIBUTOR",
+          "profileUrl": "/blckvia",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/7885022-kg.jpg?t=2026-04-26-11-10-13",
+          "tier": "CONTRIBUTOR",
+          "url": "/blckvia",
+          "userId": 7885022,
+          "userName": "blckvia"
+        }
+      },
+      "votes": {
+        "canUpvote": true,
+        "totalUpvotes": 1
+      }
+    },
+    "firstMessageId": 3435603,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 688052,
+    "name": "Large submission.zip can't be downloaded and Commit fails due to insufficient GPU memory",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-04-04T13:13:35.877883500Z",
+    "totalMessages": 6,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/688052"
+  }
+}

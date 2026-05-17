@@ -1,0 +1,286 @@
+{
+  "forumTopic": {
+    "authorId": 33728306,
+    "authorPerformanceTier": "CONTRIBUTOR",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "33728306-kg.png?t=2026-04-25-07-15-05",
+    "authorUserDisplayName": "Taha",
+    "authorUserName": "tahaalam2009",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "Tong Hui Kang",
+          "id": 1680925,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1680925-kg.jpg",
+          "tier": "MASTER",
+          "url": "/huikang"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 750,
+        "content": "<p>Thanks for listing three of the changes that I have made.</p>\n<p>However, none of the the changes here makes a material difference to training time directly.</p>\n<p>Point 1 on cut cross entropy do make a difference to memory, otherwise the sequences would not fit in memory. It does not materially change how many floats are being computed. The mechanism on how this affects training time is that I could fit more sequences in a GPU, which makes training faster.</p>\n<p>Point 2 on loss masking is simply necessary to ensure you are training the model on the correct things. If you ask the model to memorize the question the model is less effective at memorizing the solution approach. This does not materially change how many floats are being computed either.</p>\n<p>Point 3 on weight tying does not affect training time much either. Most of the forward and backward passes involves the base Nemotron model and that it not being reduced. If implemented correctly weight tying reduces memory usage of the adapter, but I did not implement it correctly. In my implementation, each expert still has a copy of weights, they are just synchronized before weight updates. I have not talked to the team behind Tinker, I am still curious why did they implement their output this way.</p>\n<p>I suggest studying the <a href=\"https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/687961\" target=\"_blank\">mathematics</a>.</p>",
+        "feedbackTrackingData": {},
+        "id": 3448796,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-26T16:00:16.953Z",
+        "rawMarkdown": "Thanks for listing three of the changes that I have made.\n\nHowever, none of the the changes here makes a material difference to training time directly.\n\nPoint 1 on cut cross entropy do make a difference to memory, otherwise the sequences would not fit in memory. It does not materially change how many floats are being computed. The mechanism on how this affects training time is that I could fit more sequences in a GPU, which makes training faster.\n\nPoint 2 on loss masking is simply necessary to ensure you are training the model on the correct things. If you ask the model to memorize the question the model is less effective at memorizing the solution approach. This does not materially change how many floats are being computed either.\n\nPoint 3 on weight tying does not affect training time much either. Most of the forward and backward passes involves the base Nemotron model and that it not being reduced. If implemented correctly weight tying reduces memory usage of the adapter, but I did not implement it correctly. In my implementation, each expert still has a copy of weights, they are just synchronized before weight updates. I have not talked to the team behind Tinker, I am still curious why did they implement their output this way.\n\nI suggest studying the [mathematics](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/687961).",
+        "replies": [
+          {
+            "author": {
+              "displayName": "Taha",
+              "id": 33728306,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/33728306-kg.png?t=2026-04-25-07-15-05",
+              "tier": "CONTRIBUTOR",
+              "url": "/tahaalam2009"
+            },
+            "authorType": "TOPIC",
+            "competitionRanking": 315,
+            "content": "<p>Thank you for taking the time to write this out and correct my assumptions, Tong. I definitely conflated the memory optimization (which allowed the run to actually fit on my GPU without OOMing) with a direct reduction in compute FLOPs.</p>\n<p>I also appreciate the clarification on the weight tying synchronization vs. true memory reduction. I clearly have more reading to do on the underlying math of how the MoE backward passes are handled here.</p>\n<p>Thanks again for open-sourcing the script and for keeping the technical standard high. I'm going back to study the math!</p>",
+            "feedbackTrackingData": {},
+            "id": 3448800,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-04-26T16:23:03.250Z",
+            "rawMarkdown": "Thank you for taking the time to write this out and correct my assumptions, Tong. I definitely conflated the memory optimization (which allowed the run to actually fit on my GPU without OOMing) with a direct reduction in compute FLOPs.\n\nI also appreciate the clarification on the weight tying synchronization vs. true memory reduction. I clearly have more reading to do on the underlying math of how the MoE backward passes are handled here.\n\nThanks again for open-sourcing the script and for keeping the technical standard high. I'm going back to study the math!",
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "Taha",
+                "id": 33728306,
+                "performanceTier": "CONTRIBUTOR",
+                "profileUrl": "/tahaalam2009",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/33728306-kg.png?t=2026-04-25-07-15-05",
+                "tier": "CONTRIBUTOR",
+                "url": "/tahaalam2009",
+                "userId": 33728306,
+                "userName": "tahaalam2009"
+              }
+            },
+            "votes": {
+              "canUpvote": true,
+              "totalUpvotes": 1
+            }
+          },
+          {
+            "author": {
+              "displayName": "Taha",
+              "id": 33728306,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/33728306-kg.png?t=2026-04-25-07-15-05",
+              "tier": "CONTRIBUTOR",
+              "url": "/tahaalam2009"
+            },
+            "authorType": "TOPIC",
+            "competitionRanking": 315,
+            "content": "<p>corrected it out now </p>",
+            "feedbackTrackingData": {},
+            "id": 3448801,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-04-26T16:25:26.660Z",
+            "rawMarkdown": "corrected it out now ",
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "Taha",
+                "id": 33728306,
+                "performanceTier": "CONTRIBUTOR",
+                "profileUrl": "/tahaalam2009",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/33728306-kg.png?t=2026-04-25-07-15-05",
+                "tier": "CONTRIBUTOR",
+                "url": "/tahaalam2009",
+                "userId": 33728306,
+                "userName": "tahaalam2009"
+              }
+            },
+            "votes": {
+              "canUpvote": true
+            }
+          },
+          {
+            "author": {
+              "displayName": "Stas Kolchin",
+              "id": 20259507,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/20259507-kg.jpg?t=2024-06-27-09-33-23",
+              "tier": "CONTRIBUTOR",
+              "url": "/mordechaichick"
+            },
+            "authorType": "COMMENT",
+            "content": "<p>Hi, so you connected the experts for better memory allocation, not for regularization to reduce complexity of adapter?</p>",
+            "feedbackTrackingData": {},
+            "id": 3453163,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-05-05T04:21:55.930Z",
+            "rawMarkdown": "Hi, so you connected the experts for better memory allocation, not for regularization to reduce complexity of adapter?",
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "Stas Kolchin",
+                "id": 20259507,
+                "performanceTier": "CONTRIBUTOR",
+                "profileUrl": "/mordechaichick",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/20259507-kg.jpg?t=2024-06-27-09-33-23",
+                "tier": "CONTRIBUTOR",
+                "url": "/mordechaichick",
+                "userId": 20259507,
+                "userName": "mordechaichick"
+              }
+            },
+            "votes": {
+              "canUpvote": true
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Tong Hui Kang",
+            "id": 1680925,
+            "performanceTier": "MASTER",
+            "profileUrl": "/huikang",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1680925-kg.jpg",
+            "tier": "MASTER",
+            "url": "/huikang",
+            "userId": 1680925,
+            "userName": "huikang"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 8,
+          "totalVotes": 8
+        }
+      },
+      {
+        "author": {
+          "displayName": "CPMP",
+          "id": 75976,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/75976-gr.jpg",
+          "tier": "GRANDMASTER",
+          "url": "/cpmpml"
+        },
+        "authorType": "HOST",
+        "content": "<p>Thanks for sharing. Masking prompt loss is key indeed. I think it was first documented (but probably used before at frontier labs) in the Llama paper.</p>",
+        "feedbackTrackingData": {},
+        "id": 3448734,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-26T13:58:44.080Z",
+        "rawMarkdown": "Thanks for sharing. Masking prompt loss is key indeed. I think it was first documented (but probably used before at frontier labs) in the Llama paper.",
+        "replies": [
+          {
+            "author": {
+              "displayName": "ducnh279",
+              "id": 10714081,
+              "progressionOptOut": true,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/10714081-kg.jpeg?t=2025-08-17-19-57-58",
+              "tier": "MASTER",
+              "url": "/ducnh279"
+            },
+            "authorType": "COMMENT",
+            "competitionRanking": 19,
+            "content": "<p>Add:</p>\n<p>In 2024, I found a dedicated paper on this topic!</p>\n<ul>\n<li>Paper: <a href=\"https://arxiv.org/abs/2405.14394\" target=\"_blank\">https://arxiv.org/abs/2405.14394</a></li>\n<li>Blog: <a href=\"https://magazine.sebastianraschka.com/p/llm-research-insights-instruction\" target=\"_blank\">https://magazine.sebastianraschka.com/p/llm-research-insights-instruction</a></li>\n</ul>\n<p><img src=\"https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F10714081%2F0ac7e6fb1e16da1371d6b1f9b8a3f4c8%2Fed9ccd32-a70e-43bf-975d-cd707345e882_1600x1269.webp?generation=1777213628913828&amp;alt=media\" alt=\"\"></p>",
+            "feedbackTrackingData": {},
+            "id": 3448752,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-04-26T14:28:15.330Z",
+            "rawMarkdown": "Add:\n\nIn 2024, I found a dedicated paper on this topic!\n\n- Paper: https://arxiv.org/abs/2405.14394\n- Blog: https://magazine.sebastianraschka.com/p/llm-research-insights-instruction\n\n![](https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F10714081%2F0ac7e6fb1e16da1371d6b1f9b8a3f4c8%2Fed9ccd32-a70e-43bf-975d-cd707345e882_1600x1269.webp?generation=1777213628913828&alt=media)\n",
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "ducnh279",
+                "id": 10714081,
+                "performanceTier": "MASTER",
+                "profileUrl": "/ducnh279",
+                "progressionOptOut": true,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/10714081-kg.jpeg?t=2025-08-17-19-57-58",
+                "tier": "MASTER",
+                "url": "/ducnh279",
+                "userId": 10714081,
+                "userName": "ducnh279"
+              }
+            },
+            "votes": {
+              "canUpvote": true,
+              "totalUpvotes": 5,
+              "totalVotes": 5
+            }
+          }
+        ],
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 1,
+          "totalVotes": 1
+        }
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "Taha",
+        "id": 33728306,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/33728306-kg.png?t=2026-04-25-07-15-05",
+        "tier": "CONTRIBUTOR",
+        "url": "/tahaalam2009"
+      },
+      "authorType": "TOPIC",
+      "competitionRanking": 315,
+      "content": "<p>Hey everyone, \nIf you are burning through your Kaggle/Modal GPU quotas watching standard HuggingFace <code>SFTTrainer</code> crawl for 10–11 hours, I want to share a pipeline shift that cut my LoRA training time down to <strong>5 hours and 40 minutes</strong> while vastly improving convergence. \nI initially struggled with standard SFT runs taking 11 hours and throwing artificially high loss rates (~2.5 to 3.0), which led to catastrophic forgetting of easy categories when injecting custom synthetic data. \nBy adapting the custom training loop shared by Tong and others, I achieved a massive performance jump. <em>Note: I originally misunderstood the exact tensor-level mechanics of why this loop is so much better, but thanks to some direct corrections from Tong, here is the actual mathematical reality of why this pipeline works:</em></p>\n<h3>1. The VRAM Unlock: Cut Cross-Entropy</h3>\n<p>Standard <code>SFTTrainer</code> materializes a massive logits matrix (calculating probabilities for all 128,000 words in the vocab for every single token). This absolutely devours VRAM. \n<strong>The Reality:</strong> Using the <code>cut-cross-entropy</code> library (<code>linear_cross_entropy</code>) does <em>not</em> significantly reduce the number of floating-point operations (FLOPs) computed. However, it avoids materializing that massive logits matrix in memory. This massive VRAM saving allows you to fit more sequences into the GPU, preventing OOMs and dramatically reducing overall wall-clock training time. </p>\n<h3>2. Fixing the \"Loss Illusion\" via Pre-Tokenized Masking</h3>\n<p>In standard SFT, the loss function averages across the <em>entire text</em>—including the unpredictable user prompt. Because the model can't predict what question is coming, your loss permanently hovers around 2.5. \n<strong>The Reality:</strong> I pre-tokenized my entire dataset into a JSONL format and built a binary mask (<code>0</code> for the prompt, <code>1</code> for the CoT/Answer). In the custom training loop, the loss is mathematically multiplied by this mask. \nWhile this doesn't speed up training, it solves a massive quality issue: it prevents the model from wasting its capacity trying to memorize the question. It spends 100% of its updates learning the solution approach. Training loss instantly drops to the <code>0.15</code> - <code>0.0X</code> range, letting you actually see your convergence.</p>\n<h3>3. MoE Weight Synchronization</h3>\n<p>Nemotron is a Mixture of Experts (MoE) model. Standard LoRA tries to train all 128 experts separately. \n<strong>The Reality:</strong> The custom loop explicitly synchronizes the MoE experts' LoRA weights before weight updates. While the base model still does the heavy lifting (so this doesn't drastically speed up the forward/backward pass time), keeping the experts in sync ensures the gradients don't diffuse. It forces the model to rapidly learn your structural reasoning format in a single epoch without forgetting baseline knowledge.</p>\n<h3>The Takeaway</h3>\n<p>If you are generating custom synthetic CoTs, don't just dump raw CSV text into a standard <code>SFTTrainer</code>. </p>\n<ol>\n<li><strong>Pre-tokenize</strong> your data offline with a <code>[0..0, 1..1]</code> prompt/response mask.</li>\n<li><strong>Use a custom training loop</strong> with <code>cut-cross-entropy</code> to save VRAM and pack your batches.</li>\n<li><strong>Synchronize</strong> your MoE expert weights for stable convergence.\nBig thanks to the community (especially Tong <a href=\"https://www.kaggle.com/huikang\" target=\"_blank\">@huikang</a>) for open-sourcing these methods and keeping the technical standard high. I'm currently running a surgically merged dataset focusing heavily on <code>cryptarithm</code> and <code>equation_numeric_guess</code> I will report back on how the LB score responds to the new 5.5-hour adapter!</li>\n</ol>",
+      "feedbackTrackingData": {},
+      "id": 3448732,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-04-26T13:56:00.393Z",
+      "rawMarkdown": "\n\nHey everyone, \n\nIf you are burning through your Kaggle/Modal GPU quotas watching standard HuggingFace `SFTTrainer` crawl for 10–11 hours, I want to share a pipeline shift that cut my LoRA training time down to **5 hours and 40 minutes** while vastly improving convergence. \n\nI initially struggled with standard SFT runs taking 11 hours and throwing artificially high loss rates (~2.5 to 3.0), which led to catastrophic forgetting of easy categories when injecting custom synthetic data. \n\nBy adapting the custom training loop shared by Tong and others, I achieved a massive performance jump. *Note: I originally misunderstood the exact tensor-level mechanics of why this loop is so much better, but thanks to some direct corrections from Tong, here is the actual mathematical reality of why this pipeline works:*\n\n### 1. The VRAM Unlock: Cut Cross-Entropy\nStandard `SFTTrainer` materializes a massive logits matrix (calculating probabilities for all 128,000 words in the vocab for every single token). This absolutely devours VRAM. \n**The Reality:** Using the `cut-cross-entropy` library (`linear_cross_entropy`) does *not* significantly reduce the number of floating-point operations (FLOPs) computed. However, it avoids materializing that massive logits matrix in memory. This massive VRAM saving allows you to fit more sequences into the GPU, preventing OOMs and dramatically reducing overall wall-clock training time. \n\n### 2. Fixing the \"Loss Illusion\" via Pre-Tokenized Masking\nIn standard SFT, the loss function averages across the *entire text*—including the unpredictable user prompt. Because the model can't predict what question is coming, your loss permanently hovers around 2.5. \n**The Reality:** I pre-tokenized my entire dataset into a JSONL format and built a binary mask (`0` for the prompt, `1` for the CoT/Answer). In the custom training loop, the loss is mathematically multiplied by this mask. \nWhile this doesn't speed up training, it solves a massive quality issue: it prevents the model from wasting its capacity trying to memorize the question. It spends 100% of its updates learning the solution approach. Training loss instantly drops to the `0.15` - `0.0X` range, letting you actually see your convergence.\n\n### 3. MoE Weight Synchronization\nNemotron is a Mixture of Experts (MoE) model. Standard LoRA tries to train all 128 experts separately. \n**The Reality:** The custom loop explicitly synchronizes the MoE experts' LoRA weights before weight updates. While the base model still does the heavy lifting (so this doesn't drastically speed up the forward/backward pass time), keeping the experts in sync ensures the gradients don't diffuse. It forces the model to rapidly learn your structural reasoning format in a single epoch without forgetting baseline knowledge.\n\n### The Takeaway\nIf you are generating custom synthetic CoTs, don't just dump raw CSV text into a standard `SFTTrainer`. \n1. **Pre-tokenize** your data offline with a `[0..0, 1..1]` prompt/response mask.\n2. **Use a custom training loop** with `cut-cross-entropy` to save VRAM and pack your batches.\n3. **Synchronize** your MoE expert weights for stable convergence.\n\nBig thanks to the community (especially Tong @huikang) for open-sourcing these methods and keeping the technical standard high. I'm currently running a surgically merged dataset focusing heavily on `cryptarithm` and `equation_numeric_guess` I will report back on how the LB score responds to the new 5.5-hour adapter!\n",
+      "teamUpInfo": {
+        "intro": "",
+        "teamLeader": {
+          "displayName": "Taha",
+          "id": 33728306,
+          "performanceTier": "CONTRIBUTOR",
+          "profileUrl": "/tahaalam2009",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/33728306-kg.png?t=2026-04-25-07-15-05",
+          "tier": "CONTRIBUTOR",
+          "url": "/tahaalam2009",
+          "userId": 33728306,
+          "userName": "tahaalam2009"
+        }
+      },
+      "votes": {
+        "canUpvote": true,
+        "totalUpvotes": 13,
+        "totalVotes": 12
+      }
+    },
+    "firstMessageId": 3448732,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 694710,
+    "name": "How to Cut Nemotron Training from 11 Hours to 5h 40m (And Fix the \"Loss Illusion\")",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-04-26T13:56:00.393436100Z",
+    "totalMessages": 6,
+    "totalVotes": 12,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/694710"
+  }
+}

@@ -1,0 +1,299 @@
+{
+  "forumTopic": {
+    "authorId": 17819385,
+    "authorPerformanceTier": "CONTRIBUTOR",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "default-thumb.png",
+    "authorUserDisplayName": "lucian kucera",
+    "authorUserName": "luciankucera",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "Harui-ig",
+          "id": 22004535,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/22004535-kg.jpg?t=2025-05-03-05-56-45",
+          "tier": "CONTRIBUTOR",
+          "url": "/haruiig"
+        },
+        "authorType": "COMMENT",
+        "content": "<p>Can anyone use this trick now?\nI couldn't reproduce it.</p>\n<p>I tried a few ways but all didn't work.</p>\n<p>Add data -&gt; RTX -&gt; Turn off internet -&gt; Turn on internet -&gt; run: FAILED</p>\n<p>Add data -&gt; RTX -&gt; Start Session -&gt; Turn off internet -&gt; Turn on internet(Error: Internet cannot be enabled for this competition with the current accelerator.) -&gt; Run: FAILED</p>\n<p>Add data -&gt; RTX -&gt; Run -&gt; Turn off internet -&gt; Turn on internet(Error) -&gt; Run: FAILED</p>",
+        "feedbackTrackingData": {},
+        "id": 3423986,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-19T08:24:18.877Z",
+        "rawMarkdown": "Can anyone use this trick now?\nI couldn't reproduce it.\n\nI tried a few ways but all didn't work.\n\nAdd data -> RTX -> Turn off internet -> Turn on internet -> run: FAILED\n\nAdd data -> RTX -> Start Session -> Turn off internet -> Turn on internet(Error: Internet cannot be enabled for this competition with the current accelerator.) -> Run: FAILED\n\nAdd data -> RTX -> Run -> Turn off internet -> Turn on internet(Error) -> Run: FAILED",
+        "replies": [
+          {
+            "author": {
+              "displayName": "OM MODI",
+              "id": 16758063,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/16758063-kg.jpg?t=2024-11-09-16-53-46",
+              "tier": "CONTRIBUTOR",
+              "url": "/ommodi07"
+            },
+            "authorType": "COMMENT",
+            "competitionRanking": 3076,
+            "content": "<p>facing same issue, hope that this must be solved as soon as possible</p>",
+            "feedbackTrackingData": {},
+            "id": 3424072,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-03-19T10:31:42.533Z",
+            "rawMarkdown": "facing same issue, hope that this must be solved as soon as possible",
+            "teamUpInfo": {
+              "enabled": true,
+              "intro": "requirements : deep knowledge in LLM and NLP.",
+              "teamLeader": {
+                "displayName": "OM MODI",
+                "id": 16758063,
+                "performanceTier": "CONTRIBUTOR",
+                "profileUrl": "/ommodi07",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/16758063-kg.jpg?t=2024-11-09-16-53-46",
+                "tier": "CONTRIBUTOR",
+                "url": "/ommodi07",
+                "userId": 16758063,
+                "userName": "ommodi07"
+              }
+            },
+            "votes": {
+              "canUpvote": true
+            }
+          },
+          {
+            "author": {
+              "displayName": "lucian kucera",
+              "id": 17819385,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+              "tier": "CONTRIBUTOR",
+              "url": "/luciankucera"
+            },
+            "authorType": "TOPIC",
+            "competitionRanking": 1662,
+            "content": "<p>Sadly doesnt work anymore</p>",
+            "feedbackTrackingData": {},
+            "id": 3424108,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-03-19T11:18:39.377Z",
+            "rawMarkdown": "Sadly doesnt work anymore",
+            "replies": [
+              {
+                "author": {
+                  "displayName": "OM MODI",
+                  "id": 16758063,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/16758063-kg.jpg?t=2024-11-09-16-53-46",
+                  "tier": "CONTRIBUTOR",
+                  "url": "/ommodi07"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 3076,
+                "content": "<p>yes exactly what can we do now ?</p>",
+                "feedbackTrackingData": {},
+                "id": 3424156,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-03-19T12:07:34.183Z",
+                "rawMarkdown": "yes exactly what can we do now ?",
+                "teamUpInfo": {
+                  "enabled": true,
+                  "intro": "requirements : deep knowledge in LLM and NLP.",
+                  "teamLeader": {
+                    "displayName": "OM MODI",
+                    "id": 16758063,
+                    "performanceTier": "CONTRIBUTOR",
+                    "profileUrl": "/ommodi07",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/16758063-kg.jpg?t=2024-11-09-16-53-46",
+                    "tier": "CONTRIBUTOR",
+                    "url": "/ommodi07",
+                    "userId": 16758063,
+                    "userName": "ommodi07"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true
+                }
+              },
+              {
+                "author": {
+                  "displayName": "lucian kucera",
+                  "id": 17819385,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                  "tier": "CONTRIBUTOR",
+                  "url": "/luciankucera"
+                },
+                "authorType": "TOPIC",
+                "competitionRanking": 1662,
+                "content": "<p>Nothing u can only use preinstalled dependencies inside NVDIA script. Just clone this notebook and start from this: <a href=\"https://www.kaggle.com/code/ryanholbrook/nvidia-nemotron-submission-demo\" target=\"_blank\">https://www.kaggle.com/code/ryanholbrook/nvidia-nemotron-submission-demo</a></p>",
+                "feedbackTrackingData": {},
+                "id": 3424168,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-03-19T12:29:58.953Z",
+                "rawMarkdown": "Nothing u can only use preinstalled dependencies inside NVDIA script. Just clone this notebook and start from this: https://www.kaggle.com/code/ryanholbrook/nvidia-nemotron-submission-demo",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "lucian kucera",
+                    "id": 17819385,
+                    "performanceTier": "CONTRIBUTOR",
+                    "profileUrl": "/luciankucera",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                    "tier": "CONTRIBUTOR",
+                    "url": "/luciankucera",
+                    "userId": 17819385,
+                    "userName": "luciankucera"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true
+                }
+              }
+            ],
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "lucian kucera",
+                "id": 17819385,
+                "performanceTier": "CONTRIBUTOR",
+                "profileUrl": "/luciankucera",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                "tier": "CONTRIBUTOR",
+                "url": "/luciankucera",
+                "userId": 17819385,
+                "userName": "luciankucera"
+              }
+            },
+            "votes": {
+              "canUpvote": true,
+              "totalUpvotes": 1,
+              "totalVotes": 1
+            }
+          },
+          {
+            "author": {
+              "displayName": "Ᏸ𐍂Ꭷ",
+              "id": 26297165,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/26297165-kg.png?t=2026-05-04-10-38-46",
+              "tier": "CONTRIBUTOR",
+              "url": "/dheerajkannaujiya"
+            },
+            "authorType": "COMMENT",
+            "competitionRanking": 1109,
+            "content": "<p>This is happening because of a bug. When your code runs in the session, if you turn the internet off and on three to four times at that moment, the problem will be fixed. That’s how I solved it.</p>",
+            "feedbackTrackingData": {},
+            "id": 3424367,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-03-19T16:09:28.923Z",
+            "rawMarkdown": "This is happening because of a bug. When your code runs in the session, if you turn the internet off and on three to four times at that moment, the problem will be fixed. That’s how I solved it.",
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "Ᏸ𐍂Ꭷ",
+                "id": 26297165,
+                "performanceTier": "CONTRIBUTOR",
+                "profileUrl": "/dheerajkannaujiya",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/26297165-kg.png?t=2026-05-04-10-38-46",
+                "tier": "CONTRIBUTOR",
+                "url": "/dheerajkannaujiya",
+                "userId": 26297165,
+                "userName": "dheerajkannaujiya"
+              }
+            },
+            "votes": {
+              "canUpvote": true
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Harui-ig",
+            "id": 22004535,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/haruiig",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/22004535-kg.jpg?t=2025-05-03-05-56-45",
+            "tier": "CONTRIBUTOR",
+            "url": "/haruiig",
+            "userId": 22004535,
+            "userName": "haruiig"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "lucian kucera",
+        "id": 17819385,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+        "tier": "CONTRIBUTOR",
+        "url": "/luciankucera"
+      },
+      "authorType": "TOPIC",
+      "competitionRanking": 1662,
+      "content": "<p>Am I the only one?</p>\n<p>I always get:</p>\n<pre><code>WARNING: Retrying (Retry(total=4, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('&lt;pip._vendor.urllib3.connection.HTTPSConnection object at 0x79967ff024b0&gt;: Failed to establish a new connection: [Errno -3] Temporary failure in name resolution')': /simple/torch/\n</code></pre>\n<p>Fixed it by using this trick:  turning internet off and then on</p>",
+      "feedbackTrackingData": {},
+      "id": 3422306,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-03-17T12:49:17.010Z",
+      "rawMarkdown": "Am I the only one?\n\nI always get:\n\n```\nWARNING: Retrying (Retry(total=4, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x79967ff024b0>: Failed to establish a new connection: [Errno -3] Temporary failure in name resolution')': /simple/torch/\n```\n\nFixed it by using this trick:  turning internet off and then on",
+      "teamUpInfo": {
+        "intro": "",
+        "teamLeader": {
+          "displayName": "lucian kucera",
+          "id": 17819385,
+          "performanceTier": "CONTRIBUTOR",
+          "profileUrl": "/luciankucera",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "CONTRIBUTOR",
+          "url": "/luciankucera",
+          "userId": 17819385,
+          "userName": "luciankucera"
+        }
+      },
+      "votes": {
+        "canUpvote": true,
+        "totalUpvotes": 7,
+        "totalVotes": 7
+      }
+    },
+    "firstMessageId": 3422306,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 681821,
+    "name": "Downloading packeges using pip doesn't work![FIX INCLUDED][FIX DOESN'T WORK ANYMORE] ",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-03-17T12:49:17.010398100Z",
+    "totalMessages": 6,
+    "totalVotes": 7,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/681821"
+  }
+}

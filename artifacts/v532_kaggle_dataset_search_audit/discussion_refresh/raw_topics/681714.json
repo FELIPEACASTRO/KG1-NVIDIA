@@ -1,0 +1,381 @@
+{
+  "forumTopic": {
+    "authorId": 8939556,
+    "authorPerformanceTier": "STAFF",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "8939556-kg.png?t=2025-08-22-16-55-54",
+    "authorUserDisplayName": "Ashley Oldacre",
+    "authorUserName": "ashleyoldacre",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "KaizaburoChubachi",
+          "id": 408648,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/408648-fb.jpg",
+          "tier": "GRANDMASTER",
+          "url": "/zaburo"
+        },
+        "authorType": "COMMENT",
+        "content": "<p>Hi <a href=\"https://www.kaggle.com/ashleyoldacre\" target=\"_blank\">@ashleyoldacre</a>!</p>\n<p>On the Overview page, it says:</p>\n<blockquote>\n  <p>Submitting\n  You must submit a LoRA adapter of rank at most 32 for the NVIDIA Nemotron-3-Nano-30B model packaged into a submission.zip file. You may consider adapting the <a href=\"https://www.kaggle.com/code/ryanholbrook/nvidia-nemotron-submission-demo\" target=\"_blank\">NVIDIA Nemotron Submission Demo</a> to produce your submission.</p>\n</blockquote>\n<p>But the link <a href=\"https://www.kaggle.com/code/ryanholbrook/nvidia-nemotron-submission-demo\" target=\"_blank\">https://www.kaggle.com/code/ryanholbrook/nvidia-nemotron-submission-demo</a> gives a 404 error. Could you look into it?</p>",
+        "feedbackTrackingData": {},
+        "id": 3422190,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-17T05:47:20.160Z",
+        "rawMarkdown": "Hi @ashleyoldacre!\n\nOn the Overview page, it says:\n\n>Submitting\n>You must submit a LoRA adapter of rank at most 32 for the NVIDIA Nemotron-3-Nano-30B model packaged into a submission.zip file. You may consider adapting the [NVIDIA Nemotron Submission Demo](https://www.kaggle.com/code/ryanholbrook/nvidia-nemotron-submission-demo) to produce your submission.\n\nBut the link https://www.kaggle.com/code/ryanholbrook/nvidia-nemotron-submission-demo gives a 404 error. Could you look into it?\n",
+        "reactions": [
+          {
+            "emoji": "FUNNY",
+            "featuredUserNames": [
+              "junkoda",
+              "donmarch14",
+              "sweetyheehee"
+            ],
+            "userCount": 3
+          }
+        ],
+        "replies": [
+          {
+            "author": {
+              "displayName": "Ryan Holbrook",
+              "id": 2003505,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2003505-kg.jpg",
+              "tier": "STAFF",
+              "url": "/ryanholbrook"
+            },
+            "authorType": "ADMIN",
+            "content": "<p>My mistake. It should be fixed now!</p>",
+            "feedbackTrackingData": {},
+            "id": 3422248,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-03-17T09:55:58.450Z",
+            "rawMarkdown": "My mistake. It should be fixed now!",
+            "reactions": [
+              {
+                "emoji": "THANK_YOU",
+                "featuredUserNames": [
+                  "junkoda",
+                  "taiowa",
+                  "drahmedmabdelsalam33"
+                ],
+                "userCount": 3
+              }
+            ],
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "Ryan Holbrook",
+                "id": 2003505,
+                "performanceTier": "STAFF",
+                "profileUrl": "/ryanholbrook",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2003505-kg.jpg",
+                "tier": "STAFF",
+                "url": "/ryanholbrook",
+                "userId": 2003505,
+                "userName": "ryanholbrook"
+              }
+            },
+            "votes": {
+              "canUpvote": true,
+              "totalUpvotes": 1,
+              "totalVotes": 1
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "KaizaburoChubachi",
+            "id": 408648,
+            "performanceTier": "GRANDMASTER",
+            "profileUrl": "/zaburo",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/408648-fb.jpg",
+            "tier": "GRANDMASTER",
+            "url": "/zaburo",
+            "userId": 408648,
+            "userName": "zaburo"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 5,
+          "totalVotes": 5
+        }
+      },
+      {
+        "author": {
+          "displayName": "harsha7754",
+          "id": 11787342,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "CONTRIBUTOR",
+          "url": "/harsha7754"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 1841,
+        "content": "<p>Hi <a href=\"https://www.kaggle.com/ryanholbrook\" target=\"_blank\">@ryanholbrook</a> and everyone</p>\n<p>How to incrase the speed of computation.</p>\n<p>How to decrease the evaluation time and also. what are some steps to reduce the whole training time. I am a bit beginer, I know I can increase the batch size and resuce the epochs but, I want to know if there are any other techniques to consider, specifically to lower the evaluationn time after submission because it is taking lot of time and the GPUs are not getting available to test experiments</p>",
+        "feedbackTrackingData": {},
+        "id": 3446227,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-21T08:52:55.353Z",
+        "rawMarkdown": "Hi @ryanholbrook and everyone\n\nHow to incrase the speed of computation.\n\nHow to decrease the evaluation time and also. what are some steps to reduce the whole training time. I am a bit beginer, I know I can increase the batch size and resuce the epochs but, I want to know if there are any other techniques to consider, specifically to lower the evaluationn time after submission because it is taking lot of time and the GPUs are not getting available to test experiments",
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "harsha7754",
+            "id": 11787342,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/harsha7754",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+            "tier": "CONTRIBUTOR",
+            "url": "/harsha7754",
+            "userId": 11787342,
+            "userName": "harsha7754"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      },
+      {
+        "author": {
+          "displayName": "Anton Kratz",
+          "id": 1423843,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1423843-kg.png?t=2026-03-17-23-53-30",
+          "tier": "CONTRIBUTOR",
+          "url": "/antonkratz"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 2613,
+        "content": "<p>Do you have any recommendation how can we get the necessary compute for this competition? Is the kaggle notebook free tier realistic? Or do participants typically have their own, private infrastructure? I have an ancient nvidia Tesla V100 (16GB) GPU and am trying to understand how to acquire an environment to realistically participate in this competition. Context: I have some experience fine-tuning smaller Qwen models, but I am new to Kaggle and have no experience working with large(r) models.</p>",
+        "feedbackTrackingData": {},
+        "id": 3422173,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-17T04:47:37.123Z",
+        "rawMarkdown": "Do you have any recommendation how can we get the necessary compute for this competition? Is the kaggle notebook free tier realistic? Or do participants typically have their own, private infrastructure? I have an ancient nvidia Tesla V100 (16GB) GPU and am trying to understand how to acquire an environment to realistically participate in this competition. Context: I have some experience fine-tuning smaller Qwen models, but I am new to Kaggle and have no experience working with large(r) models.",
+        "replies": [
+          {
+            "author": {
+              "displayName": "Ryan Holbrook",
+              "id": 2003505,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2003505-kg.jpg",
+              "tier": "STAFF",
+              "url": "/ryanholbrook"
+            },
+            "authorType": "ADMIN",
+            "content": "<p>We have made RTX PRO 6000 GPUs available for this competition only! They are quite powerful and can be used to train the LoRA adapters for this competition. See <a href=\"https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/overview/compute-powered-by-nvidia-blackwell-on-google-cloud\" target=\"_blank\">this competition page</a> for more.</p>",
+            "feedbackTrackingData": {},
+            "id": 3422250,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-03-17T09:58:31.813Z",
+            "rawMarkdown": "We have made RTX PRO 6000 GPUs available for this competition only! They are quite powerful and can be used to train the LoRA adapters for this competition. See [this competition page](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/overview/compute-powered-by-nvidia-blackwell-on-google-cloud) for more.",
+            "reactions": [
+              {
+                "emoji": "THANK_YOU",
+                "featuredUserNames": [
+                  "antonkratz"
+                ],
+                "userCount": 1
+              }
+            ],
+            "replies": [
+              {
+                "author": {
+                  "displayName": "HADY",
+                  "id": 28656359,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                  "tier": "CONTRIBUTOR",
+                  "url": "/johnhady101"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 2985,
+                "content": "<p>Hi Ryan, is there a guide for how to access them?</p>",
+                "feedbackTrackingData": {},
+                "id": 3422284,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-03-17T11:41:19.187Z",
+                "rawMarkdown": "Hi Ryan, is there a guide for how to access them?",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "HADY",
+                    "id": 28656359,
+                    "performanceTier": "CONTRIBUTOR",
+                    "profileUrl": "/johnhady101",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                    "tier": "CONTRIBUTOR",
+                    "url": "/johnhady101",
+                    "userId": 28656359,
+                    "userName": "johnhady101"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true
+                }
+              },
+              {
+                "author": {
+                  "displayName": "Adarsh Kumar",
+                  "id": 25818777,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/25818777-kg.png?t=2026-04-20-16-49-43",
+                  "tier": "MASTER",
+                  "url": "/adarsh2626"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 655,
+                "content": "<p><a href=\"https://www.kaggle.com/johnhady101\" target=\"_blank\">@johnhady101</a> make a notebook with this competition's dataset added then you will get it\n<img src=\"https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F25818777%2F91922c0d71dda060751e4a65ff7205d4%2FScreenshot%202026-03-17%20181545.png?generation=1773751548056120&amp;alt=media\" alt=\"\"></p>",
+                "feedbackTrackingData": {},
+                "id": 3422305,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-03-17T12:45:50.027Z",
+                "rawMarkdown": "@johnhady101 make a notebook with this competition's dataset added then you will get it\n![](https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F25818777%2F91922c0d71dda060751e4a65ff7205d4%2FScreenshot%202026-03-17%20181545.png?generation=1773751548056120&alt=media)",
+                "reactions": [
+                  {
+                    "emoji": "THANK_YOU",
+                    "featuredUserNames": [
+                      "johnhady101"
+                    ],
+                    "userCount": 1
+                  }
+                ],
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "Muhammad Ibrahim Qasmi",
+                    "id": 24946333,
+                    "performanceTier": "GRANDMASTER",
+                    "profileUrl": "/ibrahimqasimi",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/24946333-kg.jpeg?t=2025-12-22-22-44-57",
+                    "tier": "GRANDMASTER",
+                    "url": "/ibrahimqasimi",
+                    "userId": 24946333,
+                    "userName": "ibrahimqasimi"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true,
+                  "totalUpvotes": 3,
+                  "totalVotes": 3
+                }
+              }
+            ],
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "Ryan Holbrook",
+                "id": 2003505,
+                "performanceTier": "STAFF",
+                "profileUrl": "/ryanholbrook",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2003505-kg.jpg",
+                "tier": "STAFF",
+                "url": "/ryanholbrook",
+                "userId": 2003505,
+                "userName": "ryanholbrook"
+              }
+            },
+            "votes": {
+              "canUpvote": true,
+              "totalUpvotes": 2,
+              "totalVotes": 2
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Anton Kratz",
+            "id": 1423843,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/antonkratz",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1423843-kg.png?t=2026-03-17-23-53-30",
+            "tier": "CONTRIBUTOR",
+            "url": "/antonkratz",
+            "userId": 1423843,
+            "userName": "antonkratz"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "Ashley Oldacre",
+        "id": 8939556,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/8939556-kg.png?t=2025-08-22-16-55-54",
+        "tier": "STAFF",
+        "url": "/ashleyoldacre"
+      },
+      "authorType": "ADMIN",
+      "content": "<p><strong>Welcome!</strong></p>\n<h3>Information for newbies</h3>\n<p><strong>New to machine learning and data science?</strong> No question is too basic or too simple. Feel free to start your own thread, or use this thread as a place to post any first-timer clarifying questions for the Kaggle community to help you with!</p>\n<p><strong>New to Kaggle?</strong> Take a look at a few videos to learn a bit more about <a href=\"https://www.youtube.com/watch?v=aIus8si_Et0\" target=\"_blank\">site etiquette</a>, <a href=\"https://www.youtube.com/watch?v=sEJHyuWKd-s\" target=\"_blank\">Kaggle lingo</a>, and <a href=\"https://www.youtube.com/watch?&amp;v=GJBOMWpLpTQ\" target=\"_blank\">how to enter a competition using Kaggle Notebooks</a>. Publish and share your <a href=\"https://www.kaggle.com/docs/models#publishing-a-model\" target=\"_blank\">models on Kaggle Models</a>!</p>\n<p><strong>Looking for a team?</strong> Express your interest in joining a team through our <a href=\"https://www.kaggle.com/discussions/product-feedback/341195\" target=\"_blank\">Team Up</a> feature.</p>\n<p><strong>Remember</strong>: Kaggle is for everyone. Whether you're teaming up or sharing tips in the competition forum, we expect everyone to follow our Kaggle community guidelines.</p>\n<h3>Competition's Official Discord</h3>\n<p>In addition to this competition forum, you can continue the discussion in our official Kaggle Discord Server here:</p>\n<h1><a href=\"http://discord.gg/kaggle\" target=\"_blank\">discord.gg/kaggle</a></h1>\n<p>The Discord is a great place to ask getting started questions, chat about the nuances of this competition, and connect with potential team mates. Learn more about Discord at our <a href=\"https://www.kaggle.com/discussions/general/429933\" target=\"_blank\">announcement here</a>. Here are a few things to keep in mind though:</p>\n<p><strong>1. Discord Competition Channels are 'Public' - Don't Share Private Information</strong></p>\n<p>Discord channels for specific competitions are considered 'public' spaces where you are allowed to talk about competition details. Please remember that private sharing of competition code or data outside of your team is, as always, not permitted. Code sharing must always be done publicly through the Kaggle forums/notebooks.</p>\n<p><strong>2. Discord Competition Channels are Not Monitored by Staff - Keep Important Information on the Kaggle Forums</strong></p>\n<p>Kaggle Staff and Hosts running competitions will not monitor Discord or be available to answer questions in Discord. This is intended to be a more casual space to discuss competitions and help each other. Please keep important questions, insights, writeups, and other valuable conversation on the Kaggle forums. </p>\n<p>Happy modeling! </p>",
+      "feedbackTrackingData": {},
+      "id": 3422030,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-03-16T18:08:34.473Z",
+      "rawMarkdown": "**Welcome!**\n\n### Information for newbies\n**New to machine learning and data science?** No question is too basic or too simple. Feel free to start your own thread, or use this thread as a place to post any first-timer clarifying questions for the Kaggle community to help you with!\n\n**New to Kaggle?** Take a look at a few videos to learn a bit more about [site etiquette](https://www.youtube.com/watch?v=aIus8si_Et0), [Kaggle lingo](https://www.youtube.com/watch?v=sEJHyuWKd-s), and [how to enter a competition using Kaggle Notebooks](https://www.youtube.com/watch?&v=GJBOMWpLpTQ). Publish and share your [models on Kaggle Models](https://www.kaggle.com/docs/models#publishing-a-model)!\n\n**Looking for a team?** Express your interest in joining a team through our [Team Up](https://www.kaggle.com/discussions/product-feedback/341195) feature.\n\n**Remember**: Kaggle is for everyone. Whether you're teaming up or sharing tips in the competition forum, we expect everyone to follow our Kaggle community guidelines.\n\n### Competition's Official Discord\nIn addition to this competition forum, you can continue the discussion in our official Kaggle Discord Server here:\n# [discord.gg/kaggle](http://discord.gg/kaggle)\n \nThe Discord is a great place to ask getting started questions, chat about the nuances of this competition, and connect with potential team mates. Learn more about Discord at our [announcement here](https://www.kaggle.com/discussions/general/429933). Here are a few things to keep in mind though:\n\n**1. Discord Competition Channels are 'Public' - Don't Share Private Information**\n\nDiscord channels for specific competitions are considered 'public' spaces where you are allowed to talk about competition details. Please remember that private sharing of competition code or data outside of your team is, as always, not permitted. Code sharing must always be done publicly through the Kaggle forums/notebooks.\n\n**2. Discord Competition Channels are Not Monitored by Staff - Keep Important Information on the Kaggle Forums**\n\nKaggle Staff and Hosts running competitions will not monitor Discord or be available to answer questions in Discord. This is intended to be a more casual space to discuss competitions and help each other. Please keep important questions, insights, writeups, and other valuable conversation on the Kaggle forums. \n\nHappy modeling! ",
+      "teamUpInfo": {
+        "intro": "",
+        "teamLeader": {
+          "displayName": "Ashley Oldacre",
+          "id": 8939556,
+          "performanceTier": "STAFF",
+          "profileUrl": "/ashleyoldacre",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/8939556-kg.png?t=2025-08-22-16-55-54",
+          "tier": "STAFF",
+          "url": "/ashleyoldacre",
+          "userId": 8939556,
+          "userName": "ashleyoldacre"
+        }
+      },
+      "votes": {
+        "canUpvote": true,
+        "totalUpvotes": 12,
+        "totalVotes": 12
+      }
+    },
+    "firstMessageId": 3422030,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 681714,
+    "isStickied": true,
+    "name": "How to get started + Competition's Official Discord",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-03-16T18:08:34.473960600Z",
+    "totalMessages": 7,
+    "totalVotes": 12,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/681714"
+  }
+}

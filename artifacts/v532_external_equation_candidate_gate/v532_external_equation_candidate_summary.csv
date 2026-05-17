@@ -1,0 +1,4 @@
+selector,rows,rows_with_candidates,baseline_correct,selected_correct,gains,losses,preserve_correct,still_wrong,net,promotable
+critic_v2_only,155,155,55,29,2,28,27,98,-26,False
+router_v1_only,155,155,55,29,2,28,27,98,-26,False
+critic_router_union,155,155,55,29,2,28,27,98,-26,False

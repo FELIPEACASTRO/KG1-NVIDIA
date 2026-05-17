@@ -1,0 +1,237 @@
+{
+  "forumTopic": {
+    "authorId": 30501742,
+    "authorPerformanceTier": "CONTRIBUTOR",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "30501742-kg.jpg?t=2026-04-11-18-48-22",
+    "authorUserDisplayName": "Monruho",
+    "authorUserName": "monruho",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "Ashley Oldacre",
+          "id": 8939556,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/8939556-kg.png?t=2025-08-22-16-55-54",
+          "tier": "STAFF",
+          "url": "/ashleyoldacre"
+        },
+        "authorType": "ADMIN",
+        "content": "<p>Thank you for asking the question. Please have your parent/guardian fill out this consent form. Please also note that your parent/guardian must create a Kaggle account on your behalf and accept our Terms of Service and the competition-specific rules.</p>",
+        "feedbackTrackingData": {},
+        "id": 3424639,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-19T21:42:05.853Z",
+        "rawMarkdown": "Thank you for asking the question. Please have your parent/guardian fill out this consent form. Please also note that your parent/guardian must create a Kaggle account on your behalf and accept our Terms of Service and the competition-specific rules.",
+        "replies": [
+          {
+            "author": {
+              "displayName": "Monruho",
+              "id": 30501742,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/30501742-kg.jpg?t=2026-04-11-18-48-22",
+              "tier": "CONTRIBUTOR",
+              "url": "/monruho"
+            },
+            "authorType": "TOPIC",
+            "content": "<p>Thank you for your replay.</p>\n<p>I have a question regarding this requirement.\nDoes “guardian” here specifically refer to a legal guardian?\nIf not, would it be acceptable for an adult who is not my legal guardian, but is collaborating with me on the team, to complete the consent form on my behalf?</p>",
+            "feedbackTrackingData": {},
+            "id": 3424720,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-03-19T23:20:33.643Z",
+            "rawMarkdown": "Thank you for your replay.\n\nI have a question regarding this requirement.\nDoes “guardian” here specifically refer to a legal guardian?\nIf not, would it be acceptable for an adult who is not my legal guardian, but is collaborating with me on the team, to complete the consent form on my behalf?",
+            "replies": [
+              {
+                "author": {
+                  "displayName": "CPMP",
+                  "id": 75976,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/75976-gr.jpg",
+                  "tier": "GRANDMASTER",
+                  "url": "/cpmpml"
+                },
+                "authorType": "HOST",
+                "content": "<p>It has to be someone legally responsible for you.</p>",
+                "feedbackTrackingData": {},
+                "id": 3426062,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-03-21T20:09:02.800Z",
+                "rawMarkdown": "It has to be someone legally responsible for you.",
+                "votes": {
+                  "canUpvote": true
+                }
+              }
+            ],
+            "votes": {
+              "canUpvote": true
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Ashley Oldacre",
+            "id": 8939556,
+            "performanceTier": "STAFF",
+            "profileUrl": "/ashleyoldacre",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/8939556-kg.png?t=2025-08-22-16-55-54",
+            "tier": "STAFF",
+            "url": "/ashleyoldacre",
+            "userId": 8939556,
+            "userName": "ashleyoldacre"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 1,
+          "totalVotes": 1
+        }
+      },
+      {
+        "author": {
+          "displayName": "hengck23",
+          "id": 113660,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/113660-fb.jpg",
+          "tier": "GRANDMASTER",
+          "url": "/hengck23"
+        },
+        "authorType": "COMMENT",
+        "content": "<p><a href=\"https://www.kaggle.com/jamilcsemaan\" target=\"_blank\">@jamilcsemaan</a>, <a href=\"https://www.kaggle.com/ashleyoldacre\" target=\"_blank\">@ashleyoldacre</a> </p>\n<p>i think it is encouraging to see high school students take part in kaggle competition. It had happened before and medals were won by young students. Can you outline the steps required for students to join? e.g. parent consent letters? who and how to contact? Thanks a lot!</p>",
+        "feedbackTrackingData": {},
+        "id": 3422968,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-18T03:57:47.613Z",
+        "rawMarkdown": "@jamilcsemaan, @ashleyoldacre \n\ni think it is encouraging to see high school students take part in kaggle competition. It had happened before and medals were won by young students. Can you outline the steps required for students to join? e.g. parent consent letters? who and how to contact? Thanks a lot!\n",
+        "replies": [
+          {
+            "author": {
+              "displayName": "CPMP",
+              "id": 75976,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/75976-gr.jpg",
+              "tier": "GRANDMASTER",
+              "url": "/cpmpml"
+            },
+            "authorType": "HOST",
+            "content": "<p>I concur. Some of us remember <a href=\"https://www.kaggle.com/anokas\" target=\"_blank\">@anokas</a> who became a GM at the age of 17.</p>",
+            "feedbackTrackingData": {},
+            "id": 3426064,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-03-21T20:09:35.933Z",
+            "rawMarkdown": "I concur. Some of us remember @anokas who became a GM at the age of 17.",
+            "votes": {
+              "canUpvote": true
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "hengck23",
+            "id": 113660,
+            "performanceTier": "GRANDMASTER",
+            "profileUrl": "/hengck23",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/113660-fb.jpg",
+            "tier": "GRANDMASTER",
+            "url": "/hengck23",
+            "userId": 113660,
+            "userName": "hengck23"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 2,
+          "totalVotes": 2
+        }
+      },
+      {
+        "author": {
+          "displayName": "lucian kucera",
+          "id": 17819385,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "CONTRIBUTOR",
+          "url": "/luciankucera"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 1662,
+        "content": "<p>I guess you could participate, but u wouldnt recive any rewards. Thats my guess but maybe kaggle staff knows better.</p>",
+        "feedbackTrackingData": {},
+        "id": 3422879,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-18T02:28:17.490Z",
+        "rawMarkdown": "I guess you could participate, but u wouldnt recive any rewards. Thats my guess but maybe kaggle staff knows better.",
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "lucian kucera",
+            "id": 17819385,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/luciankucera",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+            "tier": "CONTRIBUTOR",
+            "url": "/luciankucera",
+            "userId": 17819385,
+            "userName": "luciankucera"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalVotes": -1
+        }
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "Monruho",
+        "id": 30501742,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/30501742-kg.jpg?t=2026-04-11-18-48-22",
+        "tier": "CONTRIBUTOR",
+        "url": "/monruho"
+      },
+      "authorType": "TOPIC",
+      "content": "<p>Hello,</p>\n<p>I am a high school student under 18 and I am very interested in participating in this competition.</p>\n<p>I noticed that the rules state participants must be 18 or older unless the competition sponsor allows minors with parental/guardian consent.</p>\n<p>Could you please let me know if minors are allowed to participate in this competition with parental consent?</p>\n<p>I also noticed that it is possible to post in the discussion without joining the competition, so I am asking here.</p>\n<p>Thank you for your time.</p>\n<p><img src=\"https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F30501742%2Fb2d42f92b6c9b5ad407d959e2d9c3ee9%2FIMG_0362.jpeg?generation=1773799707087561&amp;alt=media\" alt=\"\"></p>",
+      "feedbackTrackingData": {},
+      "id": 3422868,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-03-18T02:13:57.523Z",
+      "rawMarkdown": "Hello,\n\nI am a high school student under 18 and I am very interested in participating in this competition.\n\nI noticed that the rules state participants must be 18 or older unless the competition sponsor allows minors with parental/guardian consent.\n\nCould you please let me know if minors are allowed to participate in this competition with parental consent?\n\nI also noticed that it is possible to post in the discussion without joining the competition, so I am asking here.\n\nThank you for your time.\n\n![](https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F30501742%2Fb2d42f92b6c9b5ad407d959e2d9c3ee9%2FIMG_0362.jpeg?generation=1773799707087561&alt=media)",
+      "votes": {
+        "canUpvote": true,
+        "totalUpvotes": 2,
+        "totalVotes": 2
+      }
+    },
+    "firstMessageId": 3422868,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 682200,
+    "name": "Question about minor participation",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-03-18T02:13:57.523074500Z",
+    "totalMessages": 6,
+    "totalVotes": 2,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/682200"
+  }
+}

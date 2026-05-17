@@ -1,0 +1,474 @@
+{
+  "forumTopic": {
+    "authorId": 7285387,
+    "authorPerformanceTier": "GRANDMASTER",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "7285387-kg.jpg",
+    "authorUserDisplayName": "ForcewithMe",
+    "authorUserName": "forcewithme",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "datnt114",
+          "id": 2730329,
+          "progressionOptOut": true,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2730329-kg.jpg",
+          "tier": "EXPERT",
+          "url": "/kingkong153"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 75,
+        "content": "<p>same for me, I rent GPU in vast.ai and train 12h for 4 submit best submit 0.63 :( \nI think I should double-check the data and use Kaggle's GPU to save money.</p>\n<p><img src=\"https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F2730329%2Fdd754214913af0cbd9866ecdbf3708ed%2FScreenshot%20from%202026-04-03%2023-14-18.png?generation=1775232898732942&amp;alt=media\" alt=\"\"></p>\n<p><img src=\"https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F2730329%2F0e6ecb1db922b5b4e20e90d20f2ae0ea%2FScreenshot%20from%202026-04-03%2023-17-20.png?generation=1775233058721114&amp;alt=media\" alt=\"\"></p>",
+        "feedbackTrackingData": {},
+        "id": 3435066,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-03T16:15:52.387Z",
+        "rawMarkdown": "same for me, I rent GPU in vast.ai and train 12h for 4 submit best submit 0.63 :( \nI think I should double-check the data and use Kaggle's GPU to save money.\n\n![](https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F2730329%2Fdd754214913af0cbd9866ecdbf3708ed%2FScreenshot%20from%202026-04-03%2023-14-18.png?generation=1775232898732942&alt=media)\n\n![](https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F2730329%2F0e6ecb1db922b5b4e20e90d20f2ae0ea%2FScreenshot%20from%202026-04-03%2023-17-20.png?generation=1775233058721114&alt=media)",
+        "replies": [
+          {
+            "author": {
+              "displayName": "ForcewithMe",
+              "id": 7285387,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/7285387-kg.jpg",
+              "tier": "GRANDMASTER",
+              "url": "/forcewithme"
+            },
+            "authorType": "TOPIC",
+            "competitionRanking": 1,
+            "content": "<p>What is the score if yo use kaggle gpu to train?</p>",
+            "feedbackTrackingData": {},
+            "id": 3437123,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-04-07T07:48:49.600Z",
+            "rawMarkdown": "What is the score if yo use kaggle gpu to train?",
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "MOONMOON",
+                "id": 5569141,
+                "performanceTier": "MASTER",
+                "profileUrl": "/kevin1742064161",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/5569141-kg.jpg?t=2025-09-17-15-48-11",
+                "tier": "MASTER",
+                "url": "/kevin1742064161",
+                "userId": 5569141,
+                "userName": "kevin1742064161"
+              }
+            },
+            "votes": {
+              "canUpvote": true
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "datnt114",
+            "id": 2730329,
+            "performanceTier": "EXPERT",
+            "profileUrl": "/kingkong153",
+            "progressionOptOut": true,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2730329-kg.jpg",
+            "tier": "EXPERT",
+            "url": "/kingkong153",
+            "userId": 2730329,
+            "userName": "kingkong153"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 2,
+          "totalVotes": 2
+        }
+      },
+      {
+        "author": {
+          "displayName": "ForcewithMe",
+          "id": 7285387,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/7285387-kg.jpg",
+          "tier": "GRANDMASTER",
+          "url": "/forcewithme"
+        },
+        "authorType": "TOPIC",
+        "competitionRanking": 1,
+        "content": "<p>It's terrible… Sampling 600 data is much better than 9500 data.</p>",
+        "feedbackTrackingData": {},
+        "id": 3433198,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-01T11:32:55.440Z",
+        "rawMarkdown": "It's terrible... Sampling 600 data is much better than 9500 data.",
+        "replies": [
+          {
+            "author": {
+              "displayName": "QianYuu",
+              "id": 15950992,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/15950992-kg.png?t=2023-11-20-06-16-48",
+              "tier": "EXPERT",
+              "url": "/qianyuu"
+            },
+            "authorType": "COMMENT",
+            "competitionRanking": 621,
+            "content": "<p>I encountered the same problem: 0.62 for 9500 data points, 0.67 for 600 data points, and 0.66 for 1200 data points.🥹</p>",
+            "feedbackTrackingData": {},
+            "id": 3433207,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-04-01T11:53:05.213Z",
+            "rawMarkdown": "I encountered the same problem: 0.62 for 9500 data points, 0.67 for 600 data points, and 0.66 for 1200 data points.🥹",
+            "reactions": [
+              {
+                "emoji": "SURPRISE",
+                "featuredUserNames": [
+                  "tahaalshatiri"
+                ],
+                "userCount": 1
+              }
+            ],
+            "replies": [
+              {
+                "author": {
+                  "displayName": "MD Mushfirat Mohaimin",
+                  "id": 5956875,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/5956875-kg.jpg?t=2024-04-26-21-54-01",
+                  "tier": "EXPERT",
+                  "url": "/mushfirat"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 1971,
+                "content": "<p>maybe the distribution of those 600 samples was somehow close to the distribution of the LB test data?  </p>\n<p>Did you try a different random seed for selecting those 600 samples?</p>",
+                "feedbackTrackingData": {},
+                "id": 3433213,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-01T12:04:23.107Z",
+                "rawMarkdown": "maybe the distribution of those 600 samples was somehow close to the distribution of the LB test data?  \n\nDid you try a different random seed for selecting those 600 samples?",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "MD Mushfirat Mohaimin",
+                    "id": 5956875,
+                    "performanceTier": "EXPERT",
+                    "profileUrl": "/mushfirat",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/5956875-kg.jpg?t=2024-04-26-21-54-01",
+                    "tier": "EXPERT",
+                    "url": "/mushfirat",
+                    "userId": 5956875,
+                    "userName": "mushfirat"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true
+                }
+              },
+              {
+                "author": {
+                  "displayName": "QianYuu",
+                  "id": 15950992,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/15950992-kg.png?t=2023-11-20-06-16-48",
+                  "tier": "EXPERT",
+                  "url": "/qianyuu"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 621,
+                "content": "<p>Yes, I'd like to try, but I only have 5 hours of GPU time left. I'll try again next week.</p>",
+                "feedbackTrackingData": {},
+                "id": 3433772,
+                "isCollapsed": true,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-02T05:40:18.263Z",
+                "rawMarkdown": "Yes, I'd like to try, but I only have 5 hours of GPU time left. I'll try again next week.",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "QianYuu",
+                    "id": 15950992,
+                    "performanceTier": "EXPERT",
+                    "profileUrl": "/qianyuu",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/15950992-kg.png?t=2023-11-20-06-16-48",
+                    "tier": "EXPERT",
+                    "url": "/qianyuu",
+                    "userId": 15950992,
+                    "userName": "qianyuu"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true
+                }
+              },
+              {
+                "author": {
+                  "displayName": "ForcewithMe",
+                  "id": 7285387,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/7285387-kg.jpg",
+                  "tier": "GRANDMASTER",
+                  "url": "/forcewithme"
+                },
+                "authorType": "TOPIC",
+                "competitionRanking": 1,
+                "content": "<p>do you use cot or not?</p>",
+                "feedbackTrackingData": {},
+                "id": 3433801,
+                "isCollapsed": true,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-02T06:46:16.963Z",
+                "rawMarkdown": "do you use cot or not?",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "MOONMOON",
+                    "id": 5569141,
+                    "performanceTier": "MASTER",
+                    "profileUrl": "/kevin1742064161",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/5569141-kg.jpg?t=2025-09-17-15-48-11",
+                    "tier": "MASTER",
+                    "url": "/kevin1742064161",
+                    "userId": 5569141,
+                    "userName": "kevin1742064161"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true
+                }
+              },
+              {
+                "author": {
+                  "displayName": "QianYuu",
+                  "id": 15950992,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/15950992-kg.png?t=2023-11-20-06-16-48",
+                  "tier": "EXPERT",
+                  "url": "/qianyuu"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 621,
+                "content": "<p>yes,use cot</p>",
+                "feedbackTrackingData": {},
+                "id": 3433814,
+                "isCollapsed": true,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-02T07:06:07.470Z",
+                "rawMarkdown": "yes,use cot",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "QianYuu",
+                    "id": 15950992,
+                    "performanceTier": "EXPERT",
+                    "profileUrl": "/qianyuu",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/15950992-kg.png?t=2023-11-20-06-16-48",
+                    "tier": "EXPERT",
+                    "url": "/qianyuu",
+                    "userId": 15950992,
+                    "userName": "qianyuu"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true
+                }
+              }
+            ],
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "QianYuu",
+                "id": 15950992,
+                "performanceTier": "EXPERT",
+                "profileUrl": "/qianyuu",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/15950992-kg.png?t=2023-11-20-06-16-48",
+                "tier": "EXPERT",
+                "url": "/qianyuu",
+                "userId": 15950992,
+                "userName": "qianyuu"
+              }
+            },
+            "votes": {
+              "canUpvote": true,
+              "totalUpvotes": 3,
+              "totalVotes": 3
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "MOONMOON",
+            "id": 5569141,
+            "performanceTier": "MASTER",
+            "profileUrl": "/kevin1742064161",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/5569141-kg.jpg?t=2025-09-17-15-48-11",
+            "tier": "MASTER",
+            "url": "/kevin1742064161",
+            "userId": 5569141,
+            "userName": "kevin1742064161"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 2,
+          "totalVotes": 2
+        }
+      },
+      {
+        "author": {
+          "displayName": "Noizersam",
+          "id": 9894684,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "EXPERT",
+          "url": "/noizersam"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 215,
+        "content": "<p>Based on my own experience, a larger sample size is not necessarily better, nor is a longer CoT. I am currently still experimenting to determine which specific settings yield the best results. My hypothesis is that this is due to significant distributional shifts between the training and test sets, as well as the presence of noisy data—such as problems that have no valid solution😅</p>",
+        "feedbackTrackingData": {},
+        "id": 3432223,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-31T09:01:33.600Z",
+        "rawMarkdown": "Based on my own experience, a larger sample size is not necessarily better, nor is a longer CoT. I am currently still experimenting to determine which specific settings yield the best results. My hypothesis is that this is due to significant distributional shifts between the training and test sets, as well as the presence of noisy data—such as problems that have no valid solution😅",
+        "replies": [
+          {
+            "author": {
+              "displayName": "HaoKwok",
+              "id": 16965195,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/16965195-kg.jpg?t=2025-11-10-06-08-13",
+              "tier": "CONTRIBUTOR",
+              "url": "/haokwok2002"
+            },
+            "authorType": "COMMENT",
+            "competitionRanking": 2168,
+            "content": "<p>Yes, fine-tuning for 1 epoch with my own dataset of ~4,800 CoT samples resulted in a score of 0.26, whereas using ~3,500 CoT samples for ~0.60 epochs yielded a score of 0.52.</p>",
+            "feedbackTrackingData": {},
+            "id": 3432303,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-03-31T11:44:15.937Z",
+            "rawMarkdown": "Yes, fine-tuning for 1 epoch with my own dataset of ~4,800 CoT samples resulted in a score of 0.26, whereas using ~3,500 CoT samples for ~0.60 epochs yielded a score of 0.52.",
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "HaoKwok",
+                "id": 16965195,
+                "performanceTier": "CONTRIBUTOR",
+                "profileUrl": "/haokwok2002",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/16965195-kg.jpg?t=2025-11-10-06-08-13",
+                "tier": "CONTRIBUTOR",
+                "url": "/haokwok2002",
+                "userId": 16965195,
+                "userName": "haokwok2002"
+              }
+            },
+            "votes": {
+              "canUpvote": true,
+              "totalUpvotes": 2,
+              "totalVotes": 2
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Noizersam",
+            "id": 9894684,
+            "performanceTier": "EXPERT",
+            "profileUrl": "/noizersam",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+            "tier": "EXPERT",
+            "url": "/noizersam",
+            "userId": 9894684,
+            "userName": "noizersam"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 2,
+          "totalVotes": 2
+        }
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "ForcewithMe",
+        "id": 7285387,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/7285387-kg.jpg",
+        "tier": "GRANDMASTER",
+        "url": "/forcewithme"
+      },
+      "authorType": "TOPIC",
+      "competitionRanking": 1,
+      "content": "<p>I trained models with all 9500 samples with/without cot on my local machine. Upload the lora weight to kagge dataset, and submit with the following code:</p>\n<pre><code>import os\nos.chdir('kaggle_lora_path')\n!zip -r /kaggle/working/submission.zip ./*\n</code></pre>\n<p>No mater with/without cot, no matter how many iterations, the score is always lower than 0.6. I noticed that public notebook easily score 0.6x with 600 samples. My score doesn't make any sense! Has anyone faced the same issues and know the reason?</p>\n<p>I just joined this competition two days before, don't downvote me!🤣</p>",
+      "feedbackTrackingData": {},
+      "id": 3432189,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-03-31T07:32:10.987Z",
+      "rawMarkdown": "I trained models with all 9500 samples with/without cot on my local machine. Upload the lora weight to kagge dataset, and submit with the following code:\n```\nimport os\nos.chdir('kaggle_lora_path')\n!zip -r /kaggle/working/submission.zip ./*\n```\n\nNo mater with/without cot, no matter how many iterations, the score is always lower than 0.6. I noticed that public notebook easily score 0.6x with 600 samples. My score doesn't make any sense! Has anyone faced the same issues and know the reason?\n\nI just joined this competition two days before, don't downvote me!🤣",
+      "teamUpInfo": {
+        "intro": "",
+        "teamLeader": {
+          "displayName": "MOONMOON",
+          "id": 5569141,
+          "performanceTier": "MASTER",
+          "profileUrl": "/kevin1742064161",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/5569141-kg.jpg?t=2025-09-17-15-48-11",
+          "tier": "MASTER",
+          "url": "/kevin1742064161",
+          "userId": 5569141,
+          "userName": "kevin1742064161"
+        }
+      },
+      "votes": {
+        "canUpvote": true,
+        "totalUpvotes": 11,
+        "totalVotes": 10
+      }
+    },
+    "firstMessageId": 3432189,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 686419,
+    "name": "Train locally and get lower scores.",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-03-31T07:32:10.987471400Z",
+    "totalMessages": 10,
+    "totalVotes": 10,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/686419"
+  }
+}

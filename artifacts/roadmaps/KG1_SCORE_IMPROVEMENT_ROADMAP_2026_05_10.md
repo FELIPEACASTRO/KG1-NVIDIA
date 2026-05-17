@@ -83,8 +83,12 @@ Ultima evidencia operacional relevante:
 | V528 notebooks 0.86/0.85 | notebooks `0.86` sao principalmente packaging do Tinker adapter `kienngx/.../tinker-adapter/1`; tecnicas uteis estao nos notebooks Tong/Pear/Konbu/PJT/ZZYS, nao nos zips de score | usar `0.86` apenas para schema/provenance/package; usar solver/CoT para novo sinal CPU |
 | V529 todos os kernels baixados | `704` kernels puxados, `702` parseados; lista filtrada indica P0: `pjt222/nemotron-cot-review`, `pearpn25/bit-cot-85-1364-sample`, `konbu17/bit-manipulation-solver-cot-generator`, `zzys0316/full-pipeline...`; notebooks 0.86 nao resolvem familias | proximo passo efetivo e V530 CPU solver harness antes de qualquer H200 amplo; GPU so se houver novo sinal label-free ou smoke V523 estritamente limitado |
 | V530 anexos/datasets | `archive.zip`/Konbu v2 cobre `1508/1602` linhas bit do `competition_train`; `success.csv` tem `1134` CoTs corretas, `671` high-confidence, `0` mismatch de prompt/resposta; `failed.csv` nao pode ser positivo; `archive (1)/(6)` tem `3000` sinteticos, mas `1341` `solver_correct=False`; `archive (2)/(3)` sao dataset oficial duplicado; `archive (4)` adiciona só `28` CoTs numeral/Roman | nova fonte P0 para bit somente; converter/encurtar success high-confidence para KG1 com `\boxed{}` e `example_mean`; nenhum ganho direto para equation |
+| V531 anexos V-CARS/Yoiko | `archive (7)` e pacote V-CARS/offline deps/notebook smoke, sem solver novo para bit/equation; `vcars-external-data` aponta para Tatoeba/sentences e nao e fonte P0; `archive (8)` contem LoRA Yoiko ver5 rank 32 alpha 32, base Nemotron correto, `11960` tensores F32, `880138240` params, sem non-LoRA tensors | nao treinar com V-CARS/Tatoeba; registrar Yoiko como candidato P1 de weak eval adapter-only curto, apos gate de config/header e empacotamento root-level temporario; nao e ganho submit-safe sem weak label-free |
+| V532 Kaggle dataset/topics/comments search | `70` datasets listados por CLI; `18` candidatos baixados/analisados em temp e apagados; P0/P1 concreto: Konbu BM/ET CoT, `itskshivam` candidate_pool/critic/router, `sohamp13` 3-way selector, `furkankesen` solver-swap, `adityakrishnanmohan` hard triad; topics/comments refresh: `58` topicos, `357` posts, `238` hits | novo plano muda equation para candidate/verifier/canonicalization CPU gate; nao usar bundles com mismatches como gold; Huikang foi auditado localmente no V533 sem commitar ZIP/pesos |
+| V532 external equation candidate gate | `critic_v2`, `router_v1`, `selection_v2`, `solver_swap_v1` baixados em temp; candidate pools cobrem `155/155` weak equation, mas seletor label-free por `verifier_score/canonicalization/sympy/rank` cai de `55/155` para `29/155`, com `2` ganhos e `28` perdas | nao promotavel; usar esses datasets como fonte de features/canonizacao/hard negatives, nao como seletor direto nem treino direto |
+| V533 Huikang local package | `archive (9).zip` auditado sem extrair pesos; `adapter_v26`: LoRA `all-linear`, r32/alpha32, `418` tensores F32, `386072576` params; `bit_manipulation_3input_traces`: `100` oficiais, `0` mismatch; `2000` sinteticos CHO/MAJ no ZIP local, apesar da metadata citar `10000`; overlap weak bit `10`, incluindo `8` misses atuais | P0 para bit CHO/MAJ trace mining source-only; nao copiar weak rows para treino promocional; adapter v26 e P1 weak eval estatico, nao submit-safe sem gate |
 
-## Decisao Atual V530
+## Decisao Atual V533
 
 Artefatos:
 
@@ -95,7 +99,12 @@ Artefatos:
 - `artifacts/v526_example_mean_objective_dry_run/KG1_V526_EXAMPLE_MEAN_OBJECTIVE_DRY_RUN.md`;
 - `artifacts/v528_score086_notebook_double_check/KG1_V528_SCORE086_NOTEBOOK_DOUBLE_CHECK.md`;
 - `artifacts/v529_all_downloaded_notebook_helpfulness/KG1_V529_ALL_DOWNLOADED_NOTEBOOK_HELPFULNESS.md`;
-- `artifacts/v530_uploaded_bit_cot_dataset_audit/KG1_V530_UPLOADED_BIT_COT_DATASET_AUDIT.md`.
+- `artifacts/v530_uploaded_bit_cot_dataset_audit/KG1_V530_UPLOADED_BIT_COT_DATASET_AUDIT.md`;
+- `artifacts/v531_uploaded_vcars_yoiko_dataset_audit/KG1_V531_UPLOADED_VCARS_YOIKO_DATASET_AUDIT.md`;
+- `artifacts/v532_kaggle_dataset_search_audit/KG1_V532_KAGGLE_DATASET_DOWNLOAD_AUDIT.md`;
+- `artifacts/v532_kaggle_dataset_search_audit/discussion_refresh/V512_KAGGLE_DISCUSSION_AUDIT_SUMMARY.md`;
+- `artifacts/v532_external_equation_candidate_gate/KG1_V532_EXTERNAL_EQUATION_CANDIDATE_GATE.md`;
+- `artifacts/v533_huikang_artifacts_audit/KG1_V533_HUIKANG_ARTIFACTS_AUDIT.md`.
 
 O consenso externo e a auditoria dos notebooks baixados nao autorizam treino
 longo nem broad SFT. Eles autorizam duas frentes, nesta ordem:
@@ -113,14 +122,43 @@ longo nem broad SFT. Eles autorizam duas frentes, nesta ordem:
      comecando por `bit_manipulation_cot_success.csv` e `confidence=high`;
      `bit_manipulation_cot_failed.csv` entra somente como diagnostico/hard
      negative.
-2. Frente GPU V523, opcional e estritamente limitada:
+   - atualizacao V533: usar Huikang CHO/MAJ como fonte P0 adicional, mas
+     remover qualquer row weak/full do treino promocional; os 8 weak misses
+     cobertos sao diagnostico de cobertura, nao exemplos de treino.
+2. Frente CPU equation V532, agora obrigatoria antes de qualquer GPU:
+   - baixar/analisar apenas os arquivos pequenos necessarios dos datasets
+     `itskshivam/nemotron-equation-candidate-critic-v2`,
+     `itskshivam/nemotron-equation-candidate-critique-router-v1`,
+     `sohamp13/nemotron-equation-candidate-selection-v2` e
+     `furkankesen/equation-solver-swap-v1`;
+   - criar um gate local que ranqueia candidatos por features label-free:
+     `verifier_valid`, `verifier_score`, `canonicalization_status`,
+     `profile_normalized_prediction`, `sympy_parse_success`,
+     `best_program_family` e voto/top-k;
+   - manter `competition_match`, `answer` e `expected_answer` apenas como
+     campos de auditoria posterior, nunca como criterio de selecao;
+   - testar somente contra os misses atuais de `equation_transform` e exigir
+     ganho row-level label-free sem trocar bit por equation;
+   - bloquear qualquer CSV com mismatch oficial ou sem prova de answer
+     canonicalizada.
+   - resultado V532 atual: seletor simples nao promove (`29/155` vs baseline
+     `55/155`); proxima acao e derivar regras de canonizacao/hard negatives,
+     nao usar o pool como patch direto.
+3. Frente GPU V523, opcional e estritamente limitada:
    - `LOSS_NORMALIZATION_MODE=example_mean` ativo;
    - perda por exemplo calculada como `CE_sum / active_label_tokens`;
    - labels decodificados com `\\boxed{` literal, sem `\b`/control chars;
    - prompt tokens com peso zero;
    - offset masks completos;
    - V526 ja passou este dry-run (`example_mean_bit_share=0.688109`).
-3. Qualquer smoke V523/V530 precisa falhar fechado se:
+4. Frente adapter externo V531, opcional e mais barata que treino:
+   - avaliar Yoiko ver5 apenas como candidato adapter-only, sem treino;
+   - antes de rodar, validar `adapter_config`, header safetensors, regex
+     `target_modules`, ausencia de non-LoRA tensors e zip root-level;
+   - usar weak eval label-free curto, com FinOps kill-switch se cair abaixo do
+     baseline nas primeiras metricas;
+   - promover somente se superar baseline raw atual sem perder bit/truncation.
+5. Qualquer smoke V523/V530/V531/V532 precisa falhar fechado se:
    - `total < 193/315`;
    - `equation < 57/155`;
    - `bit < 136/160`;

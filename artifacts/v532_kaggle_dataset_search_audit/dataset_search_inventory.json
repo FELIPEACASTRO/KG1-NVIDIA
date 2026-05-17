@@ -1,0 +1,871 @@
+{
+  "williamlu931/vcars-offline-wheels": {
+    "ref": "williamlu931/vcars-offline-wheels",
+    "title": "vcars-offline-wheels",
+    "size": "3418307265",
+    "lastUpdated": "2026-05-16 09:23:53.423000",
+    "downloadCount": "3",
+    "voteCount": "0",
+    "usabilityRating": "0.1875",
+    "_queries": [
+      "NVIDIA Nemotron"
+    ]
+  },
+  "williamlu931/vcars-external-data": {
+    "ref": "williamlu931/vcars-external-data",
+    "title": "vcars-external-data",
+    "size": "354046861",
+    "lastUpdated": "2026-05-16 05:26:14.867000",
+    "downloadCount": "0",
+    "voteCount": "0",
+    "usabilityRating": "0.29411766",
+    "_queries": [
+      "NVIDIA Nemotron"
+    ]
+  },
+  "ananayshiv/nvidia-nemotron": {
+    "ref": "ananayshiv/nvidia-nemotron",
+    "title": "nvidia_nemotron",
+    "size": "643019",
+    "lastUpdated": "2026-05-10 15:36:47.260000",
+    "downloadCount": "4",
+    "voteCount": "1",
+    "usabilityRating": "0.23529412",
+    "_queries": [
+      "NVIDIA Nemotron"
+    ]
+  },
+  "nctuan/nvidia-nemotron-reasoning-challenge": {
+    "ref": "nctuan/nvidia-nemotron-reasoning-challenge",
+    "title": "NVIDIA Nemotron Reasoning Challenge Dataset",
+    "size": "643019",
+    "lastUpdated": "2026-04-28 08:50:43.960000",
+    "downloadCount": "27",
+    "voteCount": "0",
+    "usabilityRating": "0.9411765",
+    "_queries": [
+      "NVIDIA Nemotron",
+      "nemotron reasoning",
+      "nvidia nemotron model reasoning challenge",
+      "bit manipulation nemotron",
+      "nemotron cot",
+      "nemotron adapter"
+    ]
+  },
+  "yoikoarmor/nvidia-nemotron-yoiko-ver5": {
+    "ref": "yoikoarmor/nvidia-nemotron-yoiko-ver5",
+    "title": "NVIDIA-nemotron-yoiko-ver5",
+    "size": "3212044621",
+    "lastUpdated": "2026-04-28 02:49:16.390000",
+    "downloadCount": "17",
+    "voteCount": "0",
+    "usabilityRating": "0.25",
+    "_queries": [
+      "NVIDIA Nemotron"
+    ]
+  },
+  "basmaessatouti/smart-train-data": {
+    "ref": "basmaessatouti/smart-train-data",
+    "title": "smart-train-data",
+    "size": "1293964",
+    "lastUpdated": "2026-04-23 18:27:33.140000",
+    "downloadCount": "10",
+    "voteCount": "1",
+    "usabilityRating": "0.23529412",
+    "_queries": [
+      "NVIDIA Nemotron",
+      "nemotron reasoning",
+      "nvidia nemotron model reasoning challenge"
+    ]
+  },
+  "uditjain13/nemotron-30b-science-expert-peft": {
+    "ref": "uditjain13/nemotron-30b-science-expert-peft",
+    "title": "Nemotron-30B Science Expert PEFT",
+    "size": "22000223",
+    "lastUpdated": "2026-04-22 16:25:05.113000",
+    "downloadCount": "26",
+    "voteCount": "1",
+    "usabilityRating": "0.9375",
+    "_queries": [
+      "NVIDIA Nemotron",
+      "nemotron adapter"
+    ]
+  },
+  "uditjain13/nemotron-30b-code-hyper-reasoner-peft": {
+    "ref": "uditjain13/nemotron-30b-code-hyper-reasoner-peft",
+    "title": "Nemotron-30B Code Hyper-Reasoner PEFT",
+    "size": "22011029",
+    "lastUpdated": "2026-04-22 16:23:44.847000",
+    "downloadCount": "24",
+    "voteCount": "1",
+    "usabilityRating": "0.9375",
+    "_queries": [
+      "NVIDIA Nemotron",
+      "nemotron adapter"
+    ]
+  },
+  "uditjain13/nemotron-30b-math-reasoner-peft": {
+    "ref": "uditjain13/nemotron-30b-math-reasoner-peft",
+    "title": "Nemotron-30B Math Reasoner PEFT",
+    "size": "22010886",
+    "lastUpdated": "2026-04-22 16:23:03.147000",
+    "downloadCount": "32",
+    "voteCount": "1",
+    "usabilityRating": "0.9375",
+    "_queries": [
+      "NVIDIA Nemotron",
+      "nemotron adapter"
+    ]
+  },
+  "uditjain13/nemotron-30b-multi-domain-merged-peft": {
+    "ref": "uditjain13/nemotron-30b-multi-domain-merged-peft",
+    "title": "Nemotron-30B Multi-Domain Merged PEFT",
+    "size": "30569278",
+    "lastUpdated": "2026-04-22 16:15:05.080000",
+    "downloadCount": "43",
+    "voteCount": "1",
+    "usabilityRating": "0.9375",
+    "_queries": [
+      "NVIDIA Nemotron",
+      "nemotron reasoning",
+      "nemotron adapter"
+    ]
+  },
+  "saurabhkumar234/nvidia-nemotrom-compitition-strategu-guide": {
+    "ref": "saurabhkumar234/nvidia-nemotrom-compitition-strategu-guide",
+    "title": "NVIDIA Nemotron Compitition Strategy Guide",
+    "size": "30616",
+    "lastUpdated": "2026-04-17 14:45:33.560000",
+    "downloadCount": "1",
+    "voteCount": "1",
+    "usabilityRating": "0.125",
+    "_queries": [
+      "NVIDIA Nemotron"
+    ]
+  },
+  "swami93/nvidia-nemorton-reasoning-sft-adapter": {
+    "ref": "swami93/nvidia-nemorton-reasoning-sft-adapter",
+    "title": "nvidia-nemotron-reasoning-challenge-sft-adapter",
+    "size": "9899498116",
+    "lastUpdated": "2026-04-13 18:28:54.347000",
+    "downloadCount": "35",
+    "voteCount": "0",
+    "usabilityRating": "0.1875",
+    "_queries": [
+      "NVIDIA Nemotron",
+      "nemotron reasoning",
+      "nemotron adapter"
+    ]
+  },
+  "torpidoff/nvidia-nemotron-reasoning-offline-packages": {
+    "ref": "torpidoff/nvidia-nemotron-reasoning-offline-packages",
+    "title": "NVIDIA Nemotron Reasoning - offline packages",
+    "size": "1011991160",
+    "lastUpdated": "2026-04-06 23:44:23.137000",
+    "downloadCount": "4",
+    "voteCount": "1",
+    "usabilityRating": "0.25",
+    "_queries": [
+      "NVIDIA Nemotron",
+      "nemotron reasoning"
+    ]
+  },
+  "tancute/nvidia-nemotron-offline-packages": {
+    "ref": "tancute/nvidia-nemotron-offline-packages",
+    "title": "NVIDIA Nemotron - Offline Packages",
+    "size": "8273",
+    "lastUpdated": "2026-04-03 10:33:37.187000",
+    "downloadCount": "0",
+    "voteCount": "0",
+    "usabilityRating": "0.25",
+    "_queries": [
+      "NVIDIA Nemotron"
+    ]
+  },
+  "nctuan/nvidia-offline-packages-nemotron": {
+    "ref": "nctuan/nvidia-offline-packages-nemotron",
+    "title": "NVIDIA Offline Packages - Nemotron",
+    "size": "9290000121",
+    "lastUpdated": "2026-04-03 08:10:34.743000",
+    "downloadCount": "1",
+    "voteCount": "0",
+    "usabilityRating": "0.9375",
+    "_queries": [
+      "NVIDIA Nemotron"
+    ]
+  },
+  "gojay001/nvidia-nemotron": {
+    "ref": "gojay001/nvidia-nemotron",
+    "title": "Nvidia-Nemotron",
+    "size": "264670",
+    "lastUpdated": "2026-04-03 02:43:26.013000",
+    "downloadCount": "4",
+    "voteCount": "1",
+    "usabilityRating": "0.23529412",
+    "_queries": [
+      "NVIDIA Nemotron"
+    ]
+  },
+  "itskshivam/nvidia-nemotron-two-adapter": {
+    "ref": "itskshivam/nvidia-nemotron-two-adapter",
+    "title": "NVIDIA Nemotron Two Adapter",
+    "size": "3188654128",
+    "lastUpdated": "2026-03-31 20:24:59.400000",
+    "downloadCount": "20",
+    "voteCount": "0",
+    "usabilityRating": "0.25",
+    "_queries": [
+      "NVIDIA Nemotron"
+    ]
+  },
+  "dennisfong/nvidia-nemotron-offline-packages": {
+    "ref": "dennisfong/nvidia-nemotron-offline-packages",
+    "title": "NVIDIA Nemotron - Offline Packages",
+    "size": "9290000121",
+    "lastUpdated": "2026-03-29 14:42:56.567000",
+    "downloadCount": "610",
+    "voteCount": "35",
+    "usabilityRating": "0.375",
+    "_queries": [
+      "NVIDIA Nemotron"
+    ]
+  },
+  "konbu17/bit-manipulation-synthetic-cot": {
+    "ref": "konbu17/bit-manipulation-synthetic-cot",
+    "title": "Synthetic Bit Manipulation CoT",
+    "size": "895101",
+    "lastUpdated": "2026-03-29 14:08:22.730000",
+    "downloadCount": "61",
+    "voteCount": "4",
+    "usabilityRating": "0.47058824",
+    "_queries": [
+      "NVIDIA Nemotron",
+      "nemotron reasoning",
+      "nvidia nemotron model reasoning challenge",
+      "bit manipulation nemotron",
+      "nemotron cot"
+    ]
+  },
+  "konbu17/bit-manipulation-cot-dataset": {
+    "ref": "konbu17/bit-manipulation-cot-dataset",
+    "title": "Synthetic Bit Manipulation CoT",
+    "size": "624941",
+    "lastUpdated": "2026-03-29 14:08:18.890000",
+    "downloadCount": "76",
+    "voteCount": "5",
+    "usabilityRating": "0.47058824",
+    "_queries": [
+      "NVIDIA Nemotron",
+      "nemotron reasoning",
+      "nvidia nemotron model reasoning challenge",
+      "bit manipulation nemotron",
+      "nemotron cot"
+    ]
+  },
+  "penguin069/nemotron-adapter-run": {
+    "ref": "penguin069/nemotron-adapter-run",
+    "title": "nemotron-adapter-run",
+    "size": "1425455568",
+    "lastUpdated": "2026-05-15 07:37:29.160000",
+    "downloadCount": "10",
+    "voteCount": "0",
+    "usabilityRating": "0.3125",
+    "_queries": [
+      "nemotron reasoning",
+      "nemotron adapter"
+    ]
+  },
+  "adityakrishnanmohan/nemotron-synthetic-cot-gpt-clean": {
+    "ref": "adityakrishnanmohan/nemotron-synthetic-cot-gpt-clean",
+    "title": "Nemotron Synthetic CoT GPT Clean",
+    "size": "1864571",
+    "lastUpdated": "2026-05-12 05:59:53.093000",
+    "downloadCount": "41",
+    "voteCount": "0",
+    "usabilityRating": "0.5882353",
+    "_queries": [
+      "nemotron reasoning",
+      "nemotron cot"
+    ]
+  },
+  "zfturbo/hard-math-problems-for-aimo-3": {
+    "ref": "zfturbo/hard-math-problems-for-aimo-3",
+    "title": "Hard Math Problems for AIMO 3",
+    "size": "8104",
+    "lastUpdated": "2026-05-08 19:33:48.480000",
+    "downloadCount": "374",
+    "voteCount": "24",
+    "usabilityRating": "0.64705884",
+    "_queries": [
+      "nemotron reasoning"
+    ]
+  },
+  "charwisreno/nemotron-master-reasoning-corpus": {
+    "ref": "charwisreno/nemotron-master-reasoning-corpus",
+    "title": "Master Reasoning Corpus",
+    "size": "19552621196",
+    "lastUpdated": "2026-05-07 02:56:16.697000",
+    "downloadCount": "2",
+    "voteCount": "0",
+    "usabilityRating": "0.23529412",
+    "_queries": [
+      "nemotron reasoning"
+    ]
+  },
+  "kevpan096/nemotron-reasoning-competition": {
+    "ref": "kevpan096/nemotron-reasoning-competition",
+    "title": "nemotron-reasoning-competition",
+    "size": "7480957",
+    "lastUpdated": "2026-05-05 01:47:02.373000",
+    "downloadCount": "23",
+    "voteCount": "0",
+    "usabilityRating": "0.23529412",
+    "_queries": [
+      "nemotron reasoning"
+    ]
+  },
+  "mohammedtanvir/nemotron-reasoning-traces": {
+    "ref": "mohammedtanvir/nemotron-reasoning-traces",
+    "title": "Nemotron Reasoning Traces",
+    "size": "12824713",
+    "lastUpdated": "2026-04-27 09:50:12.440000",
+    "downloadCount": "26",
+    "voteCount": "0",
+    "usabilityRating": "0.29411766",
+    "_queries": [
+      "nemotron reasoning",
+      "bit manipulation nemotron"
+    ]
+  },
+  "narendrabayutama/nemotron-clinical-reasoning": {
+    "ref": "narendrabayutama/nemotron-clinical-reasoning",
+    "title": "nemotron-clinical-reasoning",
+    "size": "10442794",
+    "lastUpdated": "2026-04-21 19:46:17.993000",
+    "downloadCount": "0",
+    "voteCount": "0",
+    "usabilityRating": "0.25",
+    "_queries": [
+      "nemotron reasoning"
+    ]
+  },
+  "dsrathore11/train-dataset": {
+    "ref": "dsrathore11/train-dataset",
+    "title": "Reasoning_puzzles_dataset",
+    "size": "431549",
+    "lastUpdated": "2026-04-19 13:20:36.507000",
+    "downloadCount": "0",
+    "voteCount": "1",
+    "usabilityRating": "0.3125",
+    "_queries": [
+      "nemotron reasoning"
+    ]
+  },
+  "alexproger23/nemotron-validation-runtime": {
+    "ref": "alexproger23/nemotron-validation-runtime",
+    "title": "Nemotron Validation Runtime",
+    "size": "8165972",
+    "lastUpdated": "2026-04-18 19:54:38.010000",
+    "downloadCount": "2",
+    "voteCount": "0",
+    "usabilityRating": "0.3125",
+    "_queries": [
+      "nemotron reasoning"
+    ]
+  },
+  "samvalladares/huikang-nemotron-artifacts": {
+    "ref": "samvalladares/huikang-nemotron-artifacts",
+    "title": "Nemotron Huikang Artifacts",
+    "size": "1495393103",
+    "lastUpdated": "2026-04-18 00:43:52.027000",
+    "downloadCount": "63",
+    "voteCount": "0",
+    "usabilityRating": "0.5",
+    "_queries": [
+      "nemotron reasoning"
+    ]
+  },
+  "talariar/nemotron": {
+    "ref": "talariar/nemotron",
+    "title": "nemotron",
+    "size": "643203",
+    "lastUpdated": "2026-03-28 04:55:07.567000",
+    "downloadCount": "3",
+    "voteCount": "0",
+    "usabilityRating": "0.23529412",
+    "_queries": [
+      "nemotron reasoning",
+      "nvidia nemotron model reasoning challenge"
+    ]
+  },
+  "kishanvavdara/nemotron-reasoning-traj": {
+    "ref": "kishanvavdara/nemotron-reasoning-traj",
+    "title": "Nemotron 30B Reasoning Trajectories ",
+    "size": "40764029",
+    "lastUpdated": "2026-03-26 06:48:15.617000",
+    "downloadCount": "377",
+    "voteCount": "25",
+    "usabilityRating": "0.7058824",
+    "_queries": [
+      "nemotron reasoning",
+      "nvidia nemotron model reasoning challenge"
+    ]
+  },
+  "kienngx/nemotron-30b-competition-trainingdata-cot-labels": {
+    "ref": "kienngx/nemotron-30b-competition-trainingdata-cot-labels",
+    "title": "Nemotron-30B competition trainingdata (CoT+labels)",
+    "size": "3903114",
+    "lastUpdated": "2026-03-24 01:42:23.850000",
+    "downloadCount": "1267",
+    "voteCount": "48",
+    "usabilityRating": "1",
+    "_queries": [
+      "nemotron reasoning",
+      "nemotron cot"
+    ]
+  },
+  "vsnihal/nvidia-nemotron-model-reasoning-challenge-01": {
+    "ref": "vsnihal/nvidia-nemotron-model-reasoning-challenge-01",
+    "title": "NVIDIA Nemotron Model Reasoning Challenge 01",
+    "size": "643019",
+    "lastUpdated": "2026-03-21 04:28:24.990000",
+    "downloadCount": "6",
+    "voteCount": "0",
+    "usabilityRating": "0.23529412",
+    "_queries": [
+      "nvidia nemotron model reasoning challenge"
+    ]
+  },
+  "harshmali0403/nvidia-nemotron-model-reasoning-challenge": {
+    "ref": "harshmali0403/nvidia-nemotron-model-reasoning-challenge",
+    "title": "nvidia-nemotron-model-reasoning-challenge",
+    "size": "643187",
+    "lastUpdated": "2026-03-19 09:24:57.037000",
+    "downloadCount": "3",
+    "voteCount": "0",
+    "usabilityRating": "0.23529412",
+    "_queries": [
+      "nvidia nemotron model reasoning challenge"
+    ]
+  },
+  "sebmontreal/nvidia-nemotron-model-reasoning-challenge": {
+    "ref": "sebmontreal/nvidia-nemotron-model-reasoning-challenge",
+    "title": "NVIDIA Nemotron Model Reasoning Challenge",
+    "size": "643019",
+    "lastUpdated": "2026-03-19 01:01:42.230000",
+    "downloadCount": "17",
+    "voteCount": "0",
+    "usabilityRating": "0.29411766",
+    "_queries": [
+      "nvidia nemotron model reasoning challenge"
+    ]
+  },
+  "furkankesen/equation-solver-swap-v1": {
+    "ref": "furkankesen/equation-solver-swap-v1",
+    "title": "Nemotron Equation Solver Swap V1",
+    "size": "905968",
+    "lastUpdated": "2026-04-10 15:32:19.423000",
+    "downloadCount": "9",
+    "voteCount": "0",
+    "usabilityRating": "0.23529412",
+    "_queries": [
+      "equation nemotron"
+    ]
+  },
+  "sohamp13/nemotron-equation-candidate-selection-v2": {
+    "ref": "sohamp13/nemotron-equation-candidate-selection-v2",
+    "title": "Nemotron Equation Candidate Selection v2",
+    "size": "30681",
+    "lastUpdated": "2026-03-26 18:29:29.360000",
+    "downloadCount": "3",
+    "voteCount": "0",
+    "usabilityRating": "0.23529412",
+    "_queries": [
+      "equation nemotron"
+    ]
+  },
+  "itskshivam/nemotron-equation-candidate-critique-router-v1": {
+    "ref": "itskshivam/nemotron-equation-candidate-critique-router-v1",
+    "title": "Nemotron Equation Candidate Critique Router v1",
+    "size": "2860712",
+    "lastUpdated": "2026-03-25 06:46:38.347000",
+    "downloadCount": "3",
+    "voteCount": "0",
+    "usabilityRating": "0.23529412",
+    "_queries": [
+      "equation nemotron"
+    ]
+  },
+  "itskshivam/nemotron-equation-candidate-critic-v2": {
+    "ref": "itskshivam/nemotron-equation-candidate-critic-v2",
+    "title": "Nemotron Equation Candidate Critic v2",
+    "size": "2759915",
+    "lastUpdated": "2026-03-24 07:49:01.290000",
+    "downloadCount": "3",
+    "voteCount": "0",
+    "usabilityRating": "0.23529412",
+    "_queries": [
+      "equation nemotron"
+    ]
+  },
+  "itskshivam/nemotron-equation-candidate-distill-v2": {
+    "ref": "itskshivam/nemotron-equation-candidate-distill-v2",
+    "title": "Nemotron Equation Candidate Distill v2",
+    "size": "103628",
+    "lastUpdated": "2026-03-23 08:07:06.790000",
+    "downloadCount": "9",
+    "voteCount": "0",
+    "usabilityRating": "0.23529412",
+    "_queries": [
+      "equation nemotron"
+    ]
+  },
+  "moussaouallaf/espresso-carbon-footprint": {
+    "ref": "moussaouallaf/espresso-carbon-footprint",
+    "title": "ESPResso - Textile Carbon Footprint Dataset",
+    "size": "2650676",
+    "lastUpdated": "2026-03-05 00:12:12.410000",
+    "downloadCount": "41",
+    "voteCount": "1",
+    "usabilityRating": "0.9411765",
+    "_queries": [
+      "equation nemotron"
+    ]
+  },
+  "kimberleyduran/nemotron-cot-v55": {
+    "ref": "kimberleyduran/nemotron-cot-v55",
+    "title": "Nemotron CoT v55 (Ward-Repaired)",
+    "size": "9856812",
+    "lastUpdated": "2026-05-11 20:42:59.070000",
+    "downloadCount": "5",
+    "voteCount": "0",
+    "usabilityRating": "0.23529412",
+    "_queries": [
+      "nemotron cot"
+    ]
+  },
+  "tkm2261/nemotron-exp043-bundle": {
+    "ref": "tkm2261/nemotron-exp043-bundle",
+    "title": "Nemotron EXP043 Bundle",
+    "size": "22482331",
+    "lastUpdated": "2026-05-01 09:48:10.480000",
+    "downloadCount": "18",
+    "voteCount": "1",
+    "usabilityRating": "0.23529412",
+    "_queries": [
+      "nemotron cot"
+    ]
+  },
+  "miguelbeta/nemotron-cot-seed": {
+    "ref": "miguelbeta/nemotron-cot-seed",
+    "title": "Nemotron CoT Seed",
+    "size": "25305",
+    "lastUpdated": "2026-04-19 19:01:41.933000",
+    "downloadCount": "6",
+    "voteCount": "0",
+    "usabilityRating": "0.25",
+    "_queries": [
+      "nemotron cot"
+    ]
+  },
+  "dgxchen/nemotron-cot-tong": {
+    "ref": "dgxchen/nemotron-cot-tong",
+    "title": "Nemotron-cot-Tong",
+    "size": "19297882",
+    "lastUpdated": "2026-04-19 05:25:21.843000",
+    "downloadCount": "876",
+    "voteCount": "5",
+    "usabilityRating": "0.29411766",
+    "_queries": [
+      "nemotron cot"
+    ]
+  },
+  "sebastiangil00/nemotron-cot-v2": {
+    "ref": "sebastiangil00/nemotron-cot-v2",
+    "title": "Nemotron CoT v2",
+    "size": "10712241",
+    "lastUpdated": "2026-04-18 15:21:23.223000",
+    "downloadCount": "2",
+    "voteCount": "2",
+    "usabilityRating": "0.23529412",
+    "_queries": [
+      "nemotron cot"
+    ]
+  },
+  "kimberleyduran/nemotron-cot-v2": {
+    "ref": "kimberleyduran/nemotron-cot-v2",
+    "title": "Nemotron CoT v2",
+    "size": "10712241",
+    "lastUpdated": "2026-04-17 22:27:32.243000",
+    "downloadCount": "3",
+    "voteCount": "0",
+    "usabilityRating": "0.23529412",
+    "_queries": [
+      "nemotron cot"
+    ]
+  },
+  "gopigogineni/nemotron-30b-competition-training-data": {
+    "ref": "gopigogineni/nemotron-30b-competition-training-data",
+    "title": "Nemotron-30B competition training data",
+    "size": "2092348",
+    "lastUpdated": "2026-04-04 23:26:25.340000",
+    "downloadCount": "7",
+    "voteCount": "0",
+    "usabilityRating": "0.5882353",
+    "_queries": [
+      "nemotron cot"
+    ]
+  },
+  "konbu17/nemotron-sft-lora-cot-selection": {
+    "ref": "konbu17/nemotron-sft-lora-cot-selection",
+    "title": "nemotron-sft-lora-cot-selection",
+    "size": "3231393015",
+    "lastUpdated": "2026-04-01 14:30:53.420000",
+    "downloadCount": "877",
+    "voteCount": "13",
+    "usabilityRating": "0.29411766",
+    "_queries": [
+      "nemotron cot"
+    ]
+  },
+  "khursani8/nemotron-cot100-adapter": {
+    "ref": "khursani8/nemotron-cot100-adapter",
+    "title": "NVIDIA Nemotron CoT-100 Filtered LoRA Adapter",
+    "size": "105298861",
+    "lastUpdated": "2026-03-29 06:09:13.303000",
+    "downloadCount": "24",
+    "voteCount": "0",
+    "usabilityRating": "0.125",
+    "_queries": [
+      "nemotron cot"
+    ]
+  },
+  "amanux/nemotron-cot-v1": {
+    "ref": "amanux/nemotron-cot-v1",
+    "title": "nemotron-cot-v1.",
+    "size": "1547057",
+    "lastUpdated": "2026-03-28 19:20:29.393000",
+    "downloadCount": "3",
+    "voteCount": "0",
+    "usabilityRating": "0.25",
+    "_queries": [
+      "nemotron cot"
+    ]
+  },
+  "konbu17/nemotron-doc2lora-training-data": {
+    "ref": "konbu17/nemotron-doc2lora-training-data",
+    "title": "Nemotron Doc2LoRA Training Data",
+    "size": "1567225",
+    "lastUpdated": "2026-03-28 15:16:28.827000",
+    "downloadCount": "56",
+    "voteCount": "5",
+    "usabilityRating": "0.29411766",
+    "_queries": [
+      "nemotron cot"
+    ]
+  },
+  "konbu17/nemotron-bm-et-with-generated-cot": {
+    "ref": "konbu17/nemotron-bm-et-with-generated-cot",
+    "title": "Nemotron BM ET with Generated CoT",
+    "size": "1508435",
+    "lastUpdated": "2026-03-28 15:16:06.670000",
+    "downloadCount": "29",
+    "voteCount": "2",
+    "usabilityRating": "0.29411766",
+    "_queries": [
+      "nemotron cot"
+    ]
+  },
+  "akihikokatsumata/nemotron-lora-cot-labels-merged": {
+    "ref": "akihikokatsumata/nemotron-lora-cot-labels-merged",
+    "title": "nemotron-lora-cot-labels-merged",
+    "size": "6931285",
+    "lastUpdated": "2026-03-28 14:11:34.977000",
+    "downloadCount": "7",
+    "voteCount": "0",
+    "usabilityRating": "0.25",
+    "_queries": [
+      "nemotron cot"
+    ]
+  },
+  "damndeepesh/nemotron-cot-labels": {
+    "ref": "damndeepesh/nemotron-cot-labels",
+    "title": "Nemotron COT labels",
+    "size": "3903114",
+    "lastUpdated": "2026-03-27 02:17:45.647000",
+    "downloadCount": "9",
+    "voteCount": "0",
+    "usabilityRating": "0.23529412",
+    "_queries": [
+      "nemotron cot"
+    ]
+  },
+  "ritwikakancharla/nemotron-math-v2-filtered-high": {
+    "ref": "ritwikakancharla/nemotron-math-v2-filtered-high",
+    "title": "nemotron-math-v2-filtered-high",
+    "size": "3696689617",
+    "lastUpdated": "2026-03-22 02:27:15.197000",
+    "downloadCount": "13",
+    "voteCount": "4",
+    "usabilityRating": "0.88235295",
+    "_queries": [
+      "nemotron cot"
+    ]
+  },
+  "leegongman/0-86-adapter": {
+    "ref": "leegongman/0-86-adapter",
+    "title": "0.86_adapter",
+    "size": "3270313975",
+    "lastUpdated": "2026-05-14 00:50:20.613000",
+    "downloadCount": "2",
+    "voteCount": "0",
+    "usabilityRating": "0.0",
+    "_queries": [
+      "nemotron adapter"
+    ]
+  },
+  "penguin069/nemotron-adapter-run-peft": {
+    "ref": "penguin069/nemotron-adapter-run-peft",
+    "title": "nemotron-adapter-run-peft",
+    "size": "3286489066",
+    "lastUpdated": "2026-05-13 13:45:09.857000",
+    "downloadCount": "6",
+    "voteCount": "0",
+    "usabilityRating": "0.25",
+    "_queries": [
+      "nemotron adapter"
+    ]
+  },
+  "nybbler/nemotron-v6-aux-adapter": {
+    "ref": "nybbler/nemotron-v6-aux-adapter",
+    "title": "Nemotron v6 aux adapter",
+    "size": "3248324006",
+    "lastUpdated": "2026-05-13 07:48:53.957000",
+    "downloadCount": "8",
+    "voteCount": "0",
+    "usabilityRating": "0.25",
+    "_queries": [
+      "nemotron adapter"
+    ]
+  },
+  "nybbler/nemotron-v5-adapter": {
+    "ref": "nybbler/nemotron-v5-adapter",
+    "title": "Nemotron v5 adapter",
+    "size": "3244592520",
+    "lastUpdated": "2026-05-12 11:21:12.757000",
+    "downloadCount": "10",
+    "voteCount": "0",
+    "usabilityRating": "0.25",
+    "_queries": [
+      "nemotron adapter"
+    ]
+  },
+  "aidenzhao0912/nemotron-v4b-submission-adapter": {
+    "ref": "aidenzhao0912/nemotron-v4b-submission-adapter",
+    "title": "nemotron-v4b-submission-adapter",
+    "size": "3816767741",
+    "lastUpdated": "2026-05-11 04:43:06.867000",
+    "downloadCount": "10",
+    "voteCount": "0",
+    "usabilityRating": "0.25",
+    "_queries": [
+      "nemotron adapter"
+    ]
+  },
+  "rohitjarali1/nemotron-judge-adapter": {
+    "ref": "rohitjarali1/nemotron-judge-adapter",
+    "title": "nemotron-judge-adapter",
+    "size": "459821657",
+    "lastUpdated": "2026-05-04 17:41:59.917000",
+    "downloadCount": "41",
+    "voteCount": "1",
+    "usabilityRating": "0.3125",
+    "_queries": [
+      "nemotron adapter"
+    ]
+  },
+  "andreyyunoshev/huikang-nemotron-adapter-mirror": {
+    "ref": "andreyyunoshev/huikang-nemotron-adapter-mirror",
+    "title": "huikang-nemotron-adapter-mirror",
+    "size": "1425431877",
+    "lastUpdated": "2026-04-16 14:21:36.807000",
+    "downloadCount": "17",
+    "voteCount": "0",
+    "usabilityRating": "0.3125",
+    "_queries": [
+      "nemotron adapter"
+    ]
+  },
+  "bharatmohan/nemotron-v30-sft-mixed-adapter": {
+    "ref": "bharatmohan/nemotron-v30-sft-mixed-adapter",
+    "title": "Nemotron V30 SFT Mixed Adapter",
+    "size": "3226034308",
+    "lastUpdated": "2026-04-08 18:48:53.343000",
+    "downloadCount": "21",
+    "voteCount": "0",
+    "usabilityRating": "0.25",
+    "_queries": [
+      "nemotron adapter"
+    ]
+  },
+  "furkankesen/format-contract-v2-adapter": {
+    "ref": "furkankesen/format-contract-v2-adapter",
+    "title": "Nemotron Format Contract V2 Adapter",
+    "size": "3229551834",
+    "lastUpdated": "2026-04-08 16:39:23.980000",
+    "downloadCount": "27",
+    "voteCount": "0",
+    "usabilityRating": "0.25",
+    "_queries": [
+      "nemotron adapter"
+    ]
+  },
+  "bharatmohan/nemotron-v31-grpo-adapter": {
+    "ref": "bharatmohan/nemotron-v31-grpo-adapter",
+    "title": "Nemotron V31 GRPO Adapter",
+    "size": "3229208665",
+    "lastUpdated": "2026-04-08 10:27:04.740000",
+    "downloadCount": "22",
+    "voteCount": "0",
+    "usabilityRating": "0.25",
+    "_queries": [
+      "nemotron adapter"
+    ]
+  },
+  "mauroprotocassina/nemotron-b79-adapter": {
+    "ref": "mauroprotocassina/nemotron-b79-adapter",
+    "title": "Nemotron B79 Adapter",
+    "size": "102569393",
+    "lastUpdated": "2026-04-06 02:53:59.350000",
+    "downloadCount": "29",
+    "voteCount": "0",
+    "usabilityRating": "0.25",
+    "_queries": [
+      "nemotron adapter"
+    ]
+  },
+  "rickwujizhang/nemotron-eval-adapter-v41-full": {
+    "ref": "rickwujizhang/nemotron-eval-adapter-v41-full",
+    "title": "nemotron eval adapter v41 full",
+    "size": "3243085674",
+    "lastUpdated": "2026-04-05 14:33:31.093000",
+    "downloadCount": "18",
+    "voteCount": "0",
+    "usabilityRating": "0.25",
+    "_queries": [
+      "nemotron adapter"
+    ]
+  },
+  "rickwujizhang/nemotron-eval-adapter-v41-split": {
+    "ref": "rickwujizhang/nemotron-eval-adapter-v41-split",
+    "title": "nemotron eval adapter v41 split",
+    "size": "3243084772",
+    "lastUpdated": "2026-04-05 14:19:57.497000",
+    "downloadCount": "4",
+    "voteCount": "0",
+    "usabilityRating": "0.25",
+    "_queries": [
+      "nemotron adapter"
+    ]
+  }
+}

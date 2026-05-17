@@ -1,0 +1,910 @@
+{
+  "forumTopic": {
+    "authorId": 1565062,
+    "authorPerformanceTier": "MASTER",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "1565062-kg.PNG",
+    "authorUserDisplayName": "Zhuang Jia",
+    "authorUserName": "jiazhuang",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "James Day",
+          "id": 3512350,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "GRANDMASTER",
+          "url": "/jsday96"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 753,
+        "content": "<p>Here are similar statistics for some local models with a 16K token reasoning budget &amp; same prompt template as the official metric.</p>\n<table>\n<thead>\n<tr>\n<th>Model</th>\n<th>Quantization</th>\n<th>Temperature</th>\n<th>Accuracy (%)</th>\n<th>Avg Tokens / Correct</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>Qwen3.5-27B</td>\n<td>FP8</td>\n<td>1.0</td>\n<td>72.3</td>\n<td>5851</td>\n</tr>\n<tr>\n<td>Qwen3.5-27B</td>\n<td>AWQ-4bit</td>\n<td>1.0</td>\n<td>71.2</td>\n<td>6264</td>\n</tr>\n<tr>\n<td>Qwen3.5-27B</td>\n<td>FP8</td>\n<td>0.6</td>\n<td>65.8</td>\n<td>6601</td>\n</tr>\n<tr>\n<td>nemotron-sft-baseline</td>\n<td>FP8</td>\n<td>1.0</td>\n<td>69.2</td>\n<td>2446</td>\n</tr>\n<tr>\n<td>nemotron-sft-baseline</td>\n<td>FP8</td>\n<td>0.0</td>\n<td>68.4</td>\n<td>2004</td>\n</tr>\n<tr>\n<td>Qwen3-Next-80B-A3B-Instruct</td>\n<td>AWQ-4bit</td>\n<td>1.0</td>\n<td>62.2</td>\n<td>5246</td>\n</tr>\n<tr>\n<td>Nemotron-3-Super-120B-A12B</td>\n<td>GGUF UD-IQ4_K_XS</td>\n<td>1.0</td>\n<td>54.9</td>\n<td>4111</td>\n</tr>\n<tr>\n<td>Nemotron-3-Nano-30B-A3B</td>\n<td>NVFP4</td>\n<td>1.0</td>\n<td>54.8</td>\n<td>4465</td>\n</tr>\n<tr>\n<td>Nemotron-3-Nano-30B-A3B</td>\n<td>NVFP4</td>\n<td>0.7</td>\n<td>54.8</td>\n<td>3954</td>\n</tr>\n<tr>\n<td>gpt-oss-20b</td>\n<td>MXFP4</td>\n<td>0.7</td>\n<td>51.5</td>\n<td>2435</td>\n</tr>\n<tr>\n<td>gpt-oss-20b</td>\n<td>MXFP4</td>\n<td>1.0</td>\n<td>51.2</td>\n<td>2710</td>\n</tr>\n</tbody>\n</table>\n<ul>\n<li>The \"nemotron-sft-baseline\" LoRA above scored 0.66 LB. The accuracy figures above were measured on 1K questions from outside the training dataset (random partitioning).</li>\n<li>One common problem is that models tend to think too long and hit the 8K token limit in the submission environment, thereby crippling accuracy. A histogram illustrating that for the Nemotron foundation model is included below.</li>\n</ul>\n<p><img src=\"https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F3512350%2F79e834fc64cef76760e5e6fd6380d3c9%2FNemotronResponseLengths.png?generation=1774411662979950&amp;alt=media\" alt=\"\"></p>",
+        "feedbackTrackingData": {},
+        "id": 3428191,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-25T04:01:10.100Z",
+        "rawMarkdown": "Here are similar statistics for some local models with a 16K token reasoning budget & same prompt template as the official metric.\n\n| Model                          | Quantization     | Temperature | Accuracy (%) | Avg Tokens / Correct |\n| ------------------------------ | ---------------- | ----------- | ------------ | -------------------- |\n| Qwen3.5-27B                    | FP8              | 1.0         | 72.3         | 5851                 |\n| Qwen3.5-27B                    | AWQ-4bit         | 1.0         | 71.2         | 6264                 |\n| Qwen3.5-27B                    | FP8              | 0.6         | 65.8         | 6601                 |\n| nemotron-sft-baseline       | FP8         | 1.0         | 69.2         | 2446                 |\n| nemotron-sft-baseline       | FP8         | 0.0         | 68.4         | 2004                 |\n| Qwen3-Next-80B-A3B-Instruct    | AWQ-4bit         | 1.0         | 62.2         | 5246                 |\n| Nemotron-3-Super-120B-A12B     | GGUF UD-IQ4_K_XS | 1.0         | 54.9         | 4111                 |\n| Nemotron-3-Nano-30B-A3B | NVFP4            | 1.0         | 54.8         | 4465                 |\n| Nemotron-3-Nano-30B-A3B | NVFP4            | 0.7         | 54.8         | 3954                 |\n| gpt-oss-20b                    | MXFP4         | 0.7         | 51.5         | 2435                 |\n| gpt-oss-20b                    | MXFP4         | 1.0         | 51.2         | 2710                 |\n\n* The \"nemotron-sft-baseline\" LoRA above scored 0.66 LB. The accuracy figures above were measured on 1K questions from outside the training dataset (random partitioning).\n* One common problem is that models tend to think too long and hit the 8K token limit in the submission environment, thereby crippling accuracy. A histogram illustrating that for the Nemotron foundation model is included below.\n\n![](https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F3512350%2F79e834fc64cef76760e5e6fd6380d3c9%2FNemotronResponseLengths.png?generation=1774411662979950&alt=media)",
+        "reactions": [
+          {
+            "emoji": "THANK_YOU",
+            "featuredUserNames": [
+              "woosungyoon",
+              "truthisneverlinear",
+              "jinghangshi"
+            ],
+            "userCount": 3
+          }
+        ],
+        "replies": [
+          {
+            "author": {
+              "displayName": "Zhuang Jia",
+              "id": 1565062,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1565062-kg.PNG",
+              "tier": "MASTER",
+              "url": "/jiazhuang"
+            },
+            "authorType": "TOPIC",
+            "competitionRanking": 145,
+            "content": "<p>Impressive! You did exactly what I had in mind. Thank you so much.</p>",
+            "feedbackTrackingData": {},
+            "id": 3428196,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-03-25T04:15:58.633Z",
+            "rawMarkdown": "Impressive! You did exactly what I had in mind. Thank you so much.",
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "Zhuang Jia",
+                "id": 1565062,
+                "performanceTier": "MASTER",
+                "profileUrl": "/jiazhuang",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1565062-kg.PNG",
+                "tier": "MASTER",
+                "url": "/jiazhuang",
+                "userId": 1565062,
+                "userName": "jiazhuang"
+              }
+            },
+            "votes": {
+              "canUpvote": true,
+              "totalUpvotes": 2,
+              "totalVotes": 2
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "James Day",
+            "id": 3512350,
+            "performanceTier": "GRANDMASTER",
+            "profileUrl": "/jsday96",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+            "tier": "GRANDMASTER",
+            "url": "/jsday96",
+            "userId": 3512350,
+            "userName": "jsday96"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 13,
+          "totalVotes": 13
+        }
+      },
+      {
+        "author": {
+          "displayName": "Serhii Hrynko",
+          "id": 2586962,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2586962-kg.jpg",
+          "tier": "EXPERT",
+          "url": "/elvenmonk"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 855,
+        "content": "<p>Where is GPT-OSS-120B (one that crushes AIMO3)?</p>",
+        "feedbackTrackingData": {},
+        "id": 3427896,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-24T16:48:31.817Z",
+        "rawMarkdown": "Where is GPT-OSS-120B (one that crushes AIMO3)?",
+        "replies": [
+          {
+            "author": {
+              "displayName": "Zhuang Jia",
+              "id": 1565062,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1565062-kg.PNG",
+              "tier": "MASTER",
+              "url": "/jiazhuang"
+            },
+            "authorType": "TOPIC",
+            "competitionRanking": 145,
+            "content": "<p>I will have a try</p>",
+            "feedbackTrackingData": {},
+            "id": 3428086,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-03-24T23:52:37.617Z",
+            "rawMarkdown": "I will have a try",
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "Zhuang Jia",
+                "id": 1565062,
+                "performanceTier": "MASTER",
+                "profileUrl": "/jiazhuang",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1565062-kg.PNG",
+                "tier": "MASTER",
+                "url": "/jiazhuang",
+                "userId": 1565062,
+                "userName": "jiazhuang"
+              }
+            },
+            "votes": {
+              "canUpvote": true
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Serhii Hrynko",
+            "id": 2586962,
+            "performanceTier": "EXPERT",
+            "profileUrl": "/elvenmonk",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2586962-kg.jpg",
+            "tier": "EXPERT",
+            "url": "/elvenmonk",
+            "userId": 2586962,
+            "userName": "elvenmonk"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 3,
+          "totalVotes": 3
+        }
+      },
+      {
+        "author": {
+          "displayName": "Serhii Hrynko",
+          "id": 2586962,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2586962-kg.jpg",
+          "tier": "EXPERT",
+          "url": "/elvenmonk"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 855,
+        "content": "<p>Also accessing proprietary LLM via API where it is backed by dynamic math specific RAG is not the same as running standalone model without access to any tools or inference time data augmentation.</p>",
+        "feedbackTrackingData": {},
+        "id": 3428038,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-24T20:54:17.030Z",
+        "rawMarkdown": "Also accessing proprietary LLM via API where it is backed by dynamic math specific RAG is not the same as running standalone model without access to any tools or inference time data augmentation.",
+        "replies": [
+          {
+            "author": {
+              "displayName": "Zhuang Jia",
+              "id": 1565062,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1565062-kg.PNG",
+              "tier": "MASTER",
+              "url": "/jiazhuang"
+            },
+            "authorType": "TOPIC",
+            "competitionRanking": 145,
+            "content": "<p>Subsequent considerations will include the addition of some locally deployed model evaluations.</p>",
+            "feedbackTrackingData": {},
+            "id": 3428085,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-03-24T23:51:57.883Z",
+            "rawMarkdown": "Subsequent considerations will include the addition of some locally deployed model evaluations.",
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "Zhuang Jia",
+                "id": 1565062,
+                "performanceTier": "MASTER",
+                "profileUrl": "/jiazhuang",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1565062-kg.PNG",
+                "tier": "MASTER",
+                "url": "/jiazhuang",
+                "userId": 1565062,
+                "userName": "jiazhuang"
+              }
+            },
+            "votes": {
+              "canUpvote": true
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Serhii Hrynko",
+            "id": 2586962,
+            "performanceTier": "EXPERT",
+            "profileUrl": "/elvenmonk",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2586962-kg.jpg",
+            "tier": "EXPERT",
+            "url": "/elvenmonk",
+            "userId": 2586962,
+            "userName": "elvenmonk"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 1,
+          "totalVotes": 1
+        }
+      },
+      {
+        "author": {
+          "displayName": "HZM",
+          "id": 9464013,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/9464013-kg.jpg?t=2023-09-30-12-35-57",
+          "tier": "GRANDMASTER",
+          "url": "/leehann"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 1055,
+        "content": "<p>could you please set max_tokens as 7680, cause our vllm infere max_tokens is that. 32k + is too much</p>",
+        "feedbackTrackingData": {},
+        "id": 3427767,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-24T14:14:59.900Z",
+        "rawMarkdown": "could you please set max_tokens as 7680, cause our vllm infere max_tokens is that. 32k + is too much",
+        "replies": [
+          {
+            "author": {
+              "displayName": "Zhuang Jia",
+              "id": 1565062,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1565062-kg.PNG",
+              "tier": "MASTER",
+              "url": "/jiazhuang"
+            },
+            "authorType": "TOPIC",
+            "competitionRanking": 145,
+            "content": "<p>if set 7680，most of the requests will fail</p>",
+            "feedbackTrackingData": {},
+            "id": 3427774,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-03-24T14:27:15.013Z",
+            "rawMarkdown": "if set 7680，most of the requests will fail",
+            "replies": [
+              {
+                "author": {
+                  "displayName": "lucian kucera",
+                  "id": 17819385,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                  "tier": "CONTRIBUTOR",
+                  "url": "/luciankucera"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 1663,
+                "content": "<p>But if u dont set it to 7680, then well its not really relevant, since token constrain plays huge role in this competition. But nontheless its interesting, but would be much more interesting with token generation contraint, so its easier to compare with nemeotron directly.</p>",
+                "feedbackTrackingData": {},
+                "id": 3427827,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-03-24T15:48:15.410Z",
+                "rawMarkdown": "But if u dont set it to 7680, then well its not really relevant, since token constrain plays huge role in this competition. But nontheless its interesting, but would be much more interesting with token generation contraint, so its easier to compare with nemeotron directly.",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "lucian kucera",
+                    "id": 17819385,
+                    "performanceTier": "CONTRIBUTOR",
+                    "profileUrl": "/luciankucera",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                    "tier": "CONTRIBUTOR",
+                    "url": "/luciankucera",
+                    "userId": 17819385,
+                    "userName": "luciankucera"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true,
+                  "totalUpvotes": 3,
+                  "totalVotes": 2
+                }
+              },
+              {
+                "author": {
+                  "displayName": "Zhuang Jia",
+                  "id": 1565062,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1565062-kg.PNG",
+                  "tier": "MASTER",
+                  "url": "/jiazhuang"
+                },
+                "authorType": "TOPIC",
+                "competitionRanking": 145,
+                "content": "<p>You are right. The current testing is still quite rudimentary. Perhaps we could find a way to control the \"thinking budget\" rather than letting it fail due to exceeding the max_token limit.</p>",
+                "feedbackTrackingData": {},
+                "id": 3427859,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-03-24T16:20:00.120Z",
+                "rawMarkdown": "You are right. The current testing is still quite rudimentary. Perhaps we could find a way to control the \"thinking budget\" rather than letting it fail due to exceeding the max_token limit.",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "Zhuang Jia",
+                    "id": 1565062,
+                    "performanceTier": "MASTER",
+                    "profileUrl": "/jiazhuang",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1565062-kg.PNG",
+                    "tier": "MASTER",
+                    "url": "/jiazhuang",
+                    "userId": 1565062,
+                    "userName": "jiazhuang"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true,
+                  "totalUpvotes": 1,
+                  "totalVotes": 1
+                }
+              }
+            ],
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "Zhuang Jia",
+                "id": 1565062,
+                "performanceTier": "MASTER",
+                "profileUrl": "/jiazhuang",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1565062-kg.PNG",
+                "tier": "MASTER",
+                "url": "/jiazhuang",
+                "userId": 1565062,
+                "userName": "jiazhuang"
+              }
+            },
+            "votes": {
+              "canUpvote": true,
+              "totalUpvotes": 1,
+              "totalVotes": 1
+            }
+          },
+          {
+            "author": {
+              "displayName": "datnt114",
+              "id": 2730329,
+              "progressionOptOut": true,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2730329-kg.jpg",
+              "tier": "EXPERT",
+              "url": "/kingkong153"
+            },
+            "authorType": "COMMENT",
+            "competitionRanking": 75,
+            "content": "<p>I think we already have response reasoning, so we can use another LLM to summarize it to fit the 7680 tokens.</p>",
+            "feedbackTrackingData": {},
+            "id": 3427855,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-03-24T16:12:11.600Z",
+            "rawMarkdown": "I think we already have response reasoning, so we can use another LLM to summarize it to fit the 7680 tokens.",
+            "replies": [
+              {
+                "author": {
+                  "displayName": "Zhuang Jia",
+                  "id": 1565062,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1565062-kg.PNG",
+                  "tier": "MASTER",
+                  "url": "/jiazhuang"
+                },
+                "authorType": "TOPIC",
+                "competitionRanking": 145,
+                "content": "<p>Indeed, that is a direction worth trying.</p>",
+                "feedbackTrackingData": {},
+                "id": 3427860,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-03-24T16:21:05.010Z",
+                "rawMarkdown": "Indeed, that is a direction worth trying.",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "Zhuang Jia",
+                    "id": 1565062,
+                    "performanceTier": "MASTER",
+                    "profileUrl": "/jiazhuang",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1565062-kg.PNG",
+                    "tier": "MASTER",
+                    "url": "/jiazhuang",
+                    "userId": 1565062,
+                    "userName": "jiazhuang"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true,
+                  "totalUpvotes": 2,
+                  "totalVotes": 2
+                }
+              }
+            ],
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "datnt114",
+                "id": 2730329,
+                "performanceTier": "EXPERT",
+                "profileUrl": "/kingkong153",
+                "progressionOptOut": true,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2730329-kg.jpg",
+                "tier": "EXPERT",
+                "url": "/kingkong153",
+                "userId": 2730329,
+                "userName": "kingkong153"
+              }
+            },
+            "votes": {
+              "canUpvote": true,
+              "totalUpvotes": 1,
+              "totalVotes": 1
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "HZM",
+            "id": 9464013,
+            "performanceTier": "GRANDMASTER",
+            "profileUrl": "/leehann",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/9464013-kg.jpg?t=2023-09-30-12-35-57",
+            "tier": "GRANDMASTER",
+            "url": "/leehann",
+            "userId": 9464013,
+            "userName": "leehann"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 1,
+          "totalVotes": 1
+        }
+      },
+      {
+        "author": {
+          "displayName": "ImperfectKitto",
+          "id": 11905020,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/11905020-kg.jpg",
+          "tier": "EXPERT",
+          "url": "/defdet"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 493,
+        "content": "<p>Interesting to see GPT-5.4 fail so badly</p>",
+        "feedbackTrackingData": {},
+        "id": 3427650,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-24T11:01:27.447Z",
+        "rawMarkdown": "Interesting to see GPT-5.4 fail so badly",
+        "replies": [
+          {
+            "author": {
+              "displayName": "Zhuang Jia",
+              "id": 1565062,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1565062-kg.PNG",
+              "tier": "MASTER",
+              "url": "/jiazhuang"
+            },
+            "authorType": "TOPIC",
+            "competitionRanking": 145,
+            "content": "<p>The default reasoning effort of GPT-5.4 model is 'none', which means no reasoning. May be it's the reason.</p>",
+            "feedbackTrackingData": {},
+            "id": 3427654,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-03-24T11:08:53.537Z",
+            "rawMarkdown": "The default reasoning effort of GPT-5.4 model is 'none', which means no reasoning. May be it's the reason.",
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "Zhuang Jia",
+                "id": 1565062,
+                "performanceTier": "MASTER",
+                "profileUrl": "/jiazhuang",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1565062-kg.PNG",
+                "tier": "MASTER",
+                "url": "/jiazhuang",
+                "userId": 1565062,
+                "userName": "jiazhuang"
+              }
+            },
+            "votes": {
+              "canUpvote": true,
+              "totalUpvotes": 2,
+              "totalVotes": 2
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "ImperfectKitto",
+            "id": 11905020,
+            "performanceTier": "EXPERT",
+            "profileUrl": "/defdet",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/11905020-kg.jpg",
+            "tier": "EXPERT",
+            "url": "/defdet",
+            "userId": 11905020,
+            "userName": "defdet"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 1,
+          "totalVotes": 1
+        }
+      },
+      {
+        "author": {
+          "displayName": "Hassan Gasim",
+          "id": 25208025,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/25208025-kg.png?t=2026-03-25-06-33-08",
+          "tier": "CONTRIBUTOR",
+          "url": "/hassangasem"
+        },
+        "authorType": "COMMENT",
+        "content": "<p>As a data analyst focused on AI and advanced model evaluation, I find this discussion extremely insightful. The Nemotron Model Reasoning Challenge highlights key challenges in evaluating large language models (LLMs), especially concerning token limits, reasoning budgets, and consistent benchmarking across both proprietary and open-source models.  </p>\n<p>From the data presented, it’s clear that differences in max token settings, inference time reasoning, and local deployment constraints significantly impact performance comparisons. For example, a model like GPT-5.4 may appear underperforming due to default reasoning effort or token allocation rather than intrinsic capability. Similarly, the differences between zero-shot prompting and local model deployment must be accounted for when interpreting results.  </p>\n<p>I would recommend the Kaggle community consider:  </p>\n<ul>\n<li>Standardizing token budgets for fair comparison while respecting local environment limits.  </li>\n<li>Evaluating reasoning performance separately from raw generation ability.  </li>\n<li>Incorporating preprocessing steps like summarization to manage token overflow, as suggested.  </li>\n<li>Reporting metrics that clearly distinguish architecture performance versus inference constraints.  </li>\n</ul>\n<p>This challenge demonstrates the complexity of benchmarking modern LLMs, and careful experimental design is essential to draw meaningful conclusions. Transparent documentation of reasoning effort, token allocation, and environment constraints will improve reproducibility and fairness in model comparisons.</p>",
+        "feedbackTrackingData": {},
+        "id": 3428226,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-25T05:30:42.597Z",
+        "rawMarkdown": "As a data analyst focused on AI and advanced model evaluation, I find this discussion extremely insightful. The Nemotron Model Reasoning Challenge highlights key challenges in evaluating large language models (LLMs), especially concerning token limits, reasoning budgets, and consistent benchmarking across both proprietary and open-source models.  \n\nFrom the data presented, it’s clear that differences in max token settings, inference time reasoning, and local deployment constraints significantly impact performance comparisons. For example, a model like GPT-5.4 may appear underperforming due to default reasoning effort or token allocation rather than intrinsic capability. Similarly, the differences between zero-shot prompting and local model deployment must be accounted for when interpreting results.  \n\nI would recommend the Kaggle community consider:  \n- Standardizing token budgets for fair comparison while respecting local environment limits.  \n- Evaluating reasoning performance separately from raw generation ability.  \n- Incorporating preprocessing steps like summarization to manage token overflow, as suggested.  \n- Reporting metrics that clearly distinguish architecture performance versus inference constraints.  \n\nThis challenge demonstrates the complexity of benchmarking modern LLMs, and careful experimental design is essential to draw meaningful conclusions. Transparent documentation of reasoning effort, token allocation, and environment constraints will improve reproducibility and fairness in model comparisons.",
+        "replies": [
+          {
+            "author": {
+              "displayName": "Serhii Hrynko",
+              "id": 2586962,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2586962-kg.jpg",
+              "tier": "EXPERT",
+              "url": "/elvenmonk"
+            },
+            "authorType": "COMMENT",
+            "competitionRanking": 855,
+            "content": "<p>Thank you Claude, we always appreciate your feedback.</p>",
+            "feedbackTrackingData": {},
+            "id": 3428235,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-03-25T05:49:21.003Z",
+            "rawMarkdown": "Thank you Claude, we always appreciate your feedback.",
+            "reactions": [
+              {
+                "emoji": "FUNNY",
+                "featuredUserNames": [
+                  "geethasaikrishna",
+                  "tetelias",
+                  "pranavpoduval",
+                  "kingkong153",
+                  "donmarch14",
+                  "jsday96",
+                  "andreiace",
+                  "zacchaeus",
+                  "calibrator",
+                  "nishantbhansali",
+                  "vandongtran",
+                  "paritoshtripathi5",
+                  "sergeyfedatsenka",
+                  "colewheatley",
+                  "biancochiu",
+                  "nguyennguyen599",
+                  "fishcat37",
+                  "adaluvu",
+                  "jiaqiweijqw",
+                  "shayml",
+                  "tweakai"
+                ],
+                "userCount": 21
+              }
+            ],
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "Serhii Hrynko",
+                "id": 2586962,
+                "performanceTier": "EXPERT",
+                "profileUrl": "/elvenmonk",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2586962-kg.jpg",
+                "tier": "EXPERT",
+                "url": "/elvenmonk",
+                "userId": 2586962,
+                "userName": "elvenmonk"
+              }
+            },
+            "votes": {
+              "canUpvote": true,
+              "totalUpvotes": 7,
+              "totalVotes": 7
+            }
+          }
+        ],
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 2,
+          "totalVotes": -10
+        }
+      },
+      {
+        "author": {
+          "displayName": "Deval Mukherjee1",
+          "id": 28837165,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "CONTRIBUTOR",
+          "url": "/devalmukherjee1"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 975,
+        "content": "<p>Can I ask how are you testing out these models ? When I tried to do that the safety filter for the API doesn't let me.</p>",
+        "feedbackTrackingData": {},
+        "id": 3430096,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-27T20:35:12.217Z",
+        "rawMarkdown": "Can I ask how are you testing out these models ? When I tried to do that the safety filter for the API doesn't let me.",
+        "replies": [
+          {
+            "author": {
+              "displayName": "Zhuang Jia",
+              "id": 1565062,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1565062-kg.PNG",
+              "tier": "MASTER",
+              "url": "/jiazhuang"
+            },
+            "authorType": "TOPIC",
+            "competitionRanking": 145,
+            "content": "<p>I run the requests on my own computer</p>",
+            "feedbackTrackingData": {},
+            "id": 3431419,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-03-30T05:12:15.303Z",
+            "rawMarkdown": "I run the requests on my own computer",
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "Zhuang Jia",
+                "id": 1565062,
+                "performanceTier": "MASTER",
+                "profileUrl": "/jiazhuang",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1565062-kg.PNG",
+                "tier": "MASTER",
+                "url": "/jiazhuang",
+                "userId": 1565062,
+                "userName": "jiazhuang"
+              }
+            },
+            "votes": {
+              "canUpvote": true
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Deval Mukherjee1",
+            "id": 28837165,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/devalmukherjee1",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+            "tier": "CONTRIBUTOR",
+            "url": "/devalmukherjee1",
+            "userId": 28837165,
+            "userName": "devalmukherjee1"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      },
+      {
+        "author": {
+          "displayName": "DePie",
+          "id": 11624111,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/11624111-kg.jpg?t=2024-09-26-01-58-49",
+          "tier": "CONTRIBUTOR",
+          "url": "/phucthaiv02"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 1542,
+        "content": "<p>The distribution of the questions you use is unbalanced.</p>\n<p>2 types \"equations transformation\" (prefix: In Alice's Wonderland, a secret set of transformation rules is applied to equations) and \"bit manipulation\" (prefix: In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers) are easier to get wrong, but there are fewer samples of them (11 and 13 compared to ~20 for the rest)</p>",
+        "feedbackTrackingData": {},
+        "id": 3428166,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-25T03:01:35.920Z",
+        "rawMarkdown": "The distribution of the questions you use is unbalanced.\n\n2 types \"equations transformation\" (prefix: In Alice's Wonderland, a secret set of transformation rules is applied to equations) and \"bit manipulation\" (prefix: In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers) are easier to get wrong, but there are fewer samples of them (11 and 13 compared to ~20 for the rest)\n\n",
+        "replies": [
+          {
+            "author": {
+              "displayName": "Zhuang Jia",
+              "id": 1565062,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1565062-kg.PNG",
+              "tier": "MASTER",
+              "url": "/jiazhuang"
+            },
+            "authorType": "TOPIC",
+            "competitionRanking": 145,
+            "content": "<p>I haven't had a chance to analyze the data distribution yet; I simply randomly sampled 100 instances from the training set.</p>",
+            "feedbackTrackingData": {},
+            "id": 3431423,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-03-30T05:14:14.773Z",
+            "rawMarkdown": "I haven't had a chance to analyze the data distribution yet; I simply randomly sampled 100 instances from the training set.",
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "Zhuang Jia",
+                "id": 1565062,
+                "performanceTier": "MASTER",
+                "profileUrl": "/jiazhuang",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1565062-kg.PNG",
+                "tier": "MASTER",
+                "url": "/jiazhuang",
+                "userId": 1565062,
+                "userName": "jiazhuang"
+              }
+            },
+            "votes": {
+              "canUpvote": true
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "DePie",
+            "id": 11624111,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/phucthaiv02",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/11624111-kg.jpg?t=2024-09-26-01-58-49",
+            "tier": "CONTRIBUTOR",
+            "url": "/phucthaiv02",
+            "userId": 11624111,
+            "userName": "phucthaiv02"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "Zhuang Jia",
+        "id": 1565062,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1565062-kg.PNG",
+        "tier": "MASTER",
+        "url": "/jiazhuang"
+      },
+      "authorType": "TOPIC",
+      "competitionRanking": 145,
+      "content": "<p>Directly use the zero-shot prompting method to test the performance of mainstream LLMs. The prompt used for the request is consistent with the official testing method:</p>\n<pre><code>prompt + '\\nPlease put your final answer inside `\\\\boxed{}`. For example: `\\\\boxed{your answer}`'\n</code></pre>\n<p>The test results are as follows:</p>\n<table>\n<thead>\n<tr>\n<th>model</th>\n<th>think</th>\n<th>max_tokens</th>\n<th>score</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>Gemini-3.1-Pro</td>\n<td>✅</td>\n<td>32768</td>\n<td><strong>0.81</strong></td>\n</tr>\n<tr>\n<td>Claude-Opus-4.6</td>\n<td>✅</td>\n<td>32768</td>\n<td><strong>0.78</strong></td>\n</tr>\n<tr>\n<td>DeepSeek-V3.2</td>\n<td>✅</td>\n<td>32768</td>\n<td><strong>0.74</strong></td>\n</tr>\n<tr>\n<td>Kimi-K2.5</td>\n<td>✅</td>\n<td>32768</td>\n<td>0.72</td>\n</tr>\n<tr>\n<td>Qwen3-Max</td>\n<td>✅</td>\n<td>32768</td>\n<td>0.72</td>\n</tr>\n<tr>\n<td>MiniMax-M2.5</td>\n<td>✅</td>\n<td>32768</td>\n<td>0.66</td>\n</tr>\n<tr>\n<td>Qwen3.5-Plus</td>\n<td>✅</td>\n<td>32768</td>\n<td>0.64</td>\n</tr>\n<tr>\n<td>GLM-5</td>\n<td>✅</td>\n<td>32768</td>\n<td>0.52</td>\n</tr>\n<tr>\n<td>Claude-Sonnet-4.5</td>\n<td>❌</td>\n<td>32768</td>\n<td>0.51</td>\n</tr>\n<tr>\n<td>GPT-5.4</td>\n<td>❌</td>\n<td>32768</td>\n<td>0.36</td>\n</tr>\n</tbody>\n</table>\n<p>For the complete comparison, see here：<a href=\"https://www.kaggle.com/code/jiazhuang/nemotron-mainstream-llm-performance-comparison\" target=\"_blank\">https://www.kaggle.com/code/jiazhuang/nemotron-mainstream-llm-performance-comparison</a></p>",
+      "feedbackTrackingData": {},
+      "id": 3427626,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-03-24T10:06:54.490Z",
+      "rawMarkdown": "Directly use the zero-shot prompting method to test the performance of mainstream LLMs. The prompt used for the request is consistent with the official testing method:\n```\nprompt + '\\nPlease put your final answer inside `\\\\boxed{}`. For example: `\\\\boxed{your answer}`'\n```\n\nThe test results are as follows:\n\n| model | think | max_tokens | score |\n| --- | --- | --- | --- |\n| Gemini-3.1-Pro | ✅ | 32768 | **0.81** |\n| Claude-Opus-4.6 | ✅ | 32768 | **0.78** |\n| DeepSeek-V3.2   | ✅ | 32768 | **0.74** |\n| Kimi-K2.5 | ✅ | 32768 | 0.72 |\n| Qwen3-Max | ✅ | 32768 | 0.72 |\n| MiniMax-M2.5 | ✅ | 32768 | 0.66 |\n| Qwen3.5-Plus | ✅ | 32768 | 0.64 |\n| GLM-5 | ✅ | 32768 | 0.52 | 0.52 |\n| Claude-Sonnet-4.5 | ❌ | 32768 | 0.51 |\n| GPT-5.4 | ❌ | 32768 | 0.36 |\n\n\nFor the complete comparison, see here：https://www.kaggle.com/code/jiazhuang/nemotron-mainstream-llm-performance-comparison",
+      "reactions": [
+        {
+          "emoji": "THANK_YOU",
+          "featuredUserNames": [
+            "mostafaelaraby",
+            "woosungyoon",
+            "truthisneverlinear",
+            "zheyuxin",
+            "jinghangshi",
+            "adaluvu"
+          ],
+          "userCount": 6
+        }
+      ],
+      "teamUpInfo": {
+        "intro": "",
+        "teamLeader": {
+          "displayName": "Zhuang Jia",
+          "id": 1565062,
+          "performanceTier": "MASTER",
+          "profileUrl": "/jiazhuang",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1565062-kg.PNG",
+          "tier": "MASTER",
+          "url": "/jiazhuang",
+          "userId": 1565062,
+          "userName": "jiazhuang"
+        }
+      },
+      "votes": {
+        "canUpvote": true,
+        "totalUpvotes": 60,
+        "totalVotes": 60
+      }
+    },
+    "firstMessageId": 3427626,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 684283,
+    "name": "Mainstream LLM Performance Comparison：Gemini-3.1-Pro delivers the best performance, while DeepSeek-V3.2 is also highly impressive.",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-03-24T10:06:54.488476600Z",
+    "totalMessages": 20,
+    "totalVotes": 60,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/684283"
+  }
+}

@@ -1,0 +1,964 @@
+{
+  "forumTopic": {
+    "authorId": 29434769,
+    "authorPerformanceTier": "CONTRIBUTOR",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "29434769-kg.png?t=2026-03-14-05-23-02",
+    "authorUserDisplayName": "Donald Galliano III",
+    "authorUserName": "donaldgalliano",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "Addison Howard",
+          "id": 1095143,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1095143-kg.jpeg",
+          "tier": "STAFF",
+          "url": "/addisonhoward"
+        },
+        "authorType": "ADMIN",
+        "content": "<p>We're working on upgrading the docker image and getting it released shortly!</p>",
+        "feedbackTrackingData": {},
+        "id": 3424486,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-19T18:15:14.017Z",
+        "rawMarkdown": "We're working on upgrading the docker image and getting it released shortly!",
+        "reactions": [
+          {
+            "emoji": "KAGGLE",
+            "featuredUserNames": [
+              "antonkratz",
+              "ashu1399"
+            ],
+            "userCount": 2
+          },
+          {
+            "emoji": "LOVE",
+            "featuredUserNames": [
+              "marinuzzi",
+              "donaldgalliano"
+            ],
+            "userCount": 2
+          }
+        ],
+        "replies": [
+          {
+            "author": {
+              "displayName": "Donald Galliano III",
+              "id": 29434769,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/29434769-kg.png?t=2026-03-14-05-23-02",
+              "tier": "CONTRIBUTOR",
+              "url": "/donaldgalliano"
+            },
+            "authorType": "TOPIC",
+            "competitionRanking": 2317,
+            "content": "<p>Thank you!</p>",
+            "feedbackTrackingData": {},
+            "id": 3424487,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-03-19T18:16:37.653Z",
+            "rawMarkdown": "Thank you!",
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "Donald Galliano III",
+                "id": 29434769,
+                "performanceTier": "CONTRIBUTOR",
+                "profileUrl": "/donaldgalliano",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/29434769-kg.png?t=2026-03-14-05-23-02",
+                "tier": "CONTRIBUTOR",
+                "url": "/donaldgalliano",
+                "userId": 29434769,
+                "userName": "donaldgalliano"
+              }
+            },
+            "votes": {
+              "canUpvote": true
+            }
+          },
+          {
+            "author": {
+              "displayName": "Jaisree D.R.",
+              "id": 10995547,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+              "tier": "CONTRIBUTOR",
+              "url": "/jaisreedr"
+            },
+            "authorType": "COMMENT",
+            "content": "<p>Hello, are there any updates on the docker image yet? Thank you!</p>",
+            "feedbackTrackingData": {},
+            "id": 3426109,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-03-21T22:42:03.820Z",
+            "rawMarkdown": "Hello, are there any updates on the docker image yet? Thank you!",
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "Jaisree D.R.",
+                "id": 10995547,
+                "performanceTier": "CONTRIBUTOR",
+                "profileUrl": "/jaisreedr",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                "tier": "CONTRIBUTOR",
+                "url": "/jaisreedr",
+                "userId": 10995547,
+                "userName": "jaisreedr"
+              }
+            },
+            "votes": {
+              "canUpvote": true,
+              "totalUpvotes": 1,
+              "totalVotes": 1
+            }
+          },
+          {
+            "author": {
+              "displayName": "Anton Kratz",
+              "id": 1423843,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1423843-kg.png?t=2026-03-17-23-53-30",
+              "tier": "CONTRIBUTOR",
+              "url": "/antonkratz"
+            },
+            "authorType": "COMMENT",
+            "competitionRanking": 2610,
+            "content": "<p>Dear <a href=\"https://www.kaggle.com/addisonhoward\" target=\"_blank\">@addisonhoward</a> has there been any progress on this issue? I want to participate in this challenge, however I depend on the provided Blackwell GPU. I have spend over 10 GPU hours on this plus more for troubleshooting, documented my work in a public notebook here on Kaggle, could not get it to work. I believe this really needs to be fixed from the Kaggle side, not by the much slower workarounds that the community could develop. I would be excited to implement some of the ideas that I have for increasing the reasoning score, however I feel the \"AcceleratorError: CUDA error: no kernel image is available for execution on the device\" issue is a real blocker.</p>",
+            "feedbackTrackingData": {},
+            "id": 3426613,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-03-22T23:39:01.630Z",
+            "rawMarkdown": "Dear @addisonhoward has there been any progress on this issue? I want to participate in this challenge, however I depend on the provided Blackwell GPU. I have spend over 10 GPU hours on this plus more for troubleshooting, documented my work in a public notebook here on Kaggle, could not get it to work. I believe this really needs to be fixed from the Kaggle side, not by the much slower workarounds that the community could develop. I would be excited to implement some of the ideas that I have for increasing the reasoning score, however I feel the \"AcceleratorError: CUDA error: no kernel image is available for execution on the device\" issue is a real blocker.",
+            "replies": [
+              {
+                "author": {
+                  "displayName": "[Deleted User]",
+                  "id": 28444649,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                  "url": "/del=358c10d722d32731"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 2763,
+                "content": "<p>i set this up for you hope it helps  <a href=\"https://www.kaggle.com/code/kingkush123/reasoning-challenge-starter-notebook\" target=\"_blank\">https://www.kaggle.com/code/kingkush123/reasoning-challenge-starter-notebook</a></p>",
+                "feedbackTrackingData": {},
+                "id": 3426633,
+                "isDeleted": true,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-03-23T00:43:36.750Z",
+                "rawMarkdown": "i set this up for you hope it helps  https://www.kaggle.com/code/kingkush123/reasoning-challenge-starter-notebook",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "[Deleted User]",
+                    "id": 28444649,
+                    "profileUrl": "/del=358c10d722d32731",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                    "url": "/del=358c10d722d32731",
+                    "userId": 28444649,
+                    "userName": "del=358c10d722d32731"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true
+                }
+              }
+            ],
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "Anton Kratz",
+                "id": 1423843,
+                "performanceTier": "CONTRIBUTOR",
+                "profileUrl": "/antonkratz",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1423843-kg.png?t=2026-03-17-23-53-30",
+                "tier": "CONTRIBUTOR",
+                "url": "/antonkratz",
+                "userId": 1423843,
+                "userName": "antonkratz"
+              }
+            },
+            "votes": {
+              "canUpvote": true
+            }
+          }
+        ],
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 7,
+          "totalVotes": 7
+        }
+      },
+      {
+        "author": {
+          "displayName": "Tiffany Xiang",
+          "id": 16010057,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/16010057-kg.jpg?t=2024-01-16-18-04-29",
+          "tier": "STAFF",
+          "url": "/tifftoff"
+        },
+        "authorType": "ADMIN",
+        "content": "<p>The new Docker image with CUDA 12.8 and updated PyTorch and Triton is rolled out now! Thanks everyone for your patience :)</p>",
+        "feedbackTrackingData": {},
+        "id": 3426963,
+        "isPinned": true,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-23T15:03:24.963Z",
+        "rawMarkdown": "The new Docker image with CUDA 12.8 and updated PyTorch and Triton is rolled out now! Thanks everyone for your patience :)",
+        "reactions": [
+          {
+            "emoji": "LOVE",
+            "featuredUserNames": [
+              "edyvision"
+            ],
+            "userCount": 1
+          },
+          {
+            "emoji": "YAY",
+            "featuredUserNames": [
+              "tiffanyseah"
+            ],
+            "userCount": 1
+          }
+        ],
+        "replies": [
+          {
+            "author": {
+              "displayName": "[Deleted User]",
+              "id": 28444649,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+              "url": "/del=358c10d722d32731"
+            },
+            "authorType": "COMMENT",
+            "competitionRanking": 2763,
+            "content": "<p>tiffany thanks for your hard work!! I did analysis this is what i found post update if this is expected everything is good ty KK</p>\n<p>What's FIXED (can drop from notebooks):</p>\n<p>sklearn — imports clean, no blocker needed\nflash_attn 2.8.3 — available, so packing=True is now safe (no cross-contamination warning)</p>\n<p>What STILL needs fixing (keep in notebooks):</p>\n<p>mamba_ssm — still from utility script, sys.path.insert still required</p>\n<p>ptxas-blackwell — executable=False, still need to copy to /tmp</p>\n<p>Triton get_ptxas_version — still fails ('&gt;=' not supported between str and int), patch still needed\ntrl — NOT installed, still need offline pip install</p>\n<p>is_fast_path_available — still needs patching (model loaded but crashed before we could check)</p>\n<p>New info:</p>\n<p>transformers 5.3.0 from utility script (was unversioned before)\ndatasets 4.8.3 pre-installed (don't need offline install for this one)\nCompute capability 12.0, 188 SMs — Blackwell confirmed\nCUDA driver 13.0, nvcc 12.8\nflash_sdp enabled — flash attention works natively\nModel loads in 682s (~11 min), same as before</p>",
+            "feedbackTrackingData": {},
+            "id": 3427071,
+            "isDeleted": true,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-03-23T17:31:54.013Z",
+            "rawMarkdown": "tiffany thanks for your hard work!! I did analysis this is what i found post update if this is expected everything is good ty KK\n\nWhat's FIXED (can drop from notebooks):\n\nsklearn — imports clean, no blocker needed\nflash_attn 2.8.3 — available, so packing=True is now safe (no cross-contamination warning)\n\nWhat STILL needs fixing (keep in notebooks):\n\nmamba_ssm — still from utility script, sys.path.insert still required\n\nptxas-blackwell — executable=False, still need to copy to /tmp\n\nTriton get_ptxas_version — still fails ('>=' not supported between str and int), patch still needed\ntrl — NOT installed, still need offline pip install\n\nis_fast_path_available — still needs patching (model loaded but crashed before we could check)\n\nNew info:\n\ntransformers 5.3.0 from utility script (was unversioned before)\ndatasets 4.8.3 pre-installed (don't need offline install for this one)\nCompute capability 12.0, 188 SMs — Blackwell confirmed\nCUDA driver 13.0, nvcc 12.8\nflash_sdp enabled — flash attention works natively\nModel loads in 682s (~11 min), same as before",
+            "reactions": [
+              {
+                "emoji": "LOVE",
+                "featuredUserNames": [
+                  "antonkratz"
+                ],
+                "userCount": 1
+              }
+            ],
+            "replies": [
+              {
+                "author": {
+                  "displayName": "Anton Kratz",
+                  "id": 1423843,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1423843-kg.png?t=2026-03-17-23-53-30",
+                  "tier": "CONTRIBUTOR",
+                  "url": "/antonkratz"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 2610,
+                "content": "<p>I want to install mamba_ssm. It does not seem to be there post update. I try:</p>\n<pre><code># Fix 1: Add utility script to Python path (provides mamba_ssm, triton, etc.)\nsys.path.insert(0, '/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script')\n</code></pre>\n<p>Then I get:\n<code>ModuleNotFoundError: No module named 'cutlass'</code></p>",
+                "feedbackTrackingData": {},
+                "id": 3427286,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-03-23T22:38:14.427Z",
+                "rawMarkdown": "I want to install mamba_ssm. It does not seem to be there post update. I try:\n```python\n# Fix 1: Add utility script to Python path (provides mamba_ssm, triton, etc.)\nsys.path.insert(0, '/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script')\n```\nThen I get:\n`ModuleNotFoundError: No module named 'cutlass'`",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "Anton Kratz",
+                    "id": 1423843,
+                    "performanceTier": "CONTRIBUTOR",
+                    "profileUrl": "/antonkratz",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1423843-kg.png?t=2026-03-17-23-53-30",
+                    "tier": "CONTRIBUTOR",
+                    "url": "/antonkratz",
+                    "userId": 1423843,
+                    "userName": "antonkratz"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true,
+                  "totalUpvotes": 1,
+                  "totalVotes": 1
+                }
+              },
+              {
+                "author": {
+                  "displayName": "Anton Kratz",
+                  "id": 1423843,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1423843-kg.png?t=2026-03-17-23-53-30",
+                  "tier": "CONTRIBUTOR",
+                  "url": "/antonkratz"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 2610,
+                "content": "<p>P.S.: I get the <code>ModuleNotFoundError: No module named 'cutlass'</code> even with <a href=\"https://www.kaggle.com/code/kingkush123/reasoning-challenge-starter-notebook\" target=\"_blank\">https://www.kaggle.com/code/kingkush123/reasoning-challenge-starter-notebook</a> from <a href=\"https://www.kaggle.com/kingkush123\" target=\"_blank\">@kingkush123</a> </p>",
+                "feedbackTrackingData": {},
+                "id": 3427288,
+                "isCollapsed": true,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-03-23T22:45:39.113Z",
+                "rawMarkdown": "P.S.: I get the `ModuleNotFoundError: No module named 'cutlass'` even with https://www.kaggle.com/code/kingkush123/reasoning-challenge-starter-notebook from @kingkush123 ",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "Anton Kratz",
+                    "id": 1423843,
+                    "performanceTier": "CONTRIBUTOR",
+                    "profileUrl": "/antonkratz",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1423843-kg.png?t=2026-03-17-23-53-30",
+                    "tier": "CONTRIBUTOR",
+                    "url": "/antonkratz",
+                    "userId": 1423843,
+                    "userName": "antonkratz"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true,
+                  "totalUpvotes": 1,
+                  "totalVotes": 1
+                }
+              },
+              {
+                "author": {
+                  "displayName": "[Deleted User]",
+                  "id": 28444649,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                  "url": "/del=358c10d722d32731"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 2763,
+                "content": "<p>anton get the latest version i fixed the mamba 3 issue..  should run now</p>",
+                "feedbackTrackingData": {},
+                "id": 3427297,
+                "isCollapsed": true,
+                "isDeleted": true,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-03-23T23:17:46.367Z",
+                "rawMarkdown": "anton get the latest version i fixed the mamba 3 issue..  should run now",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "[Deleted User]",
+                    "id": 28444649,
+                    "profileUrl": "/del=358c10d722d32731",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                    "url": "/del=358c10d722d32731",
+                    "userId": 28444649,
+                    "userName": "del=358c10d722d32731"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true,
+                  "totalUpvotes": 1,
+                  "totalVotes": 1
+                }
+              },
+              {
+                "author": {
+                  "displayName": "Anton Kratz",
+                  "id": 1423843,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1423843-kg.png?t=2026-03-17-23-53-30",
+                  "tier": "CONTRIBUTOR",
+                  "url": "/antonkratz"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 2610,
+                "content": "<p>Thank you <a href=\"https://www.kaggle.com/kingkush123\" target=\"_blank\">@kingkush123</a> Version 3 of 3? Yes just started it seems to be working! (I am during training stage right so of course it will take a couple of hours to finish). I think your notebook is extremely valuable.</p>",
+                "feedbackTrackingData": {},
+                "id": 3427299,
+                "isCollapsed": true,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-03-23T23:25:46.333Z",
+                "rawMarkdown": "Thank you @kingkush123 Version 3 of 3? Yes just started it seems to be working! (I am during training stage right so of course it will take a couple of hours to finish). I think your notebook is extremely valuable.",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "Anton Kratz",
+                    "id": 1423843,
+                    "performanceTier": "CONTRIBUTOR",
+                    "profileUrl": "/antonkratz",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1423843-kg.png?t=2026-03-17-23-53-30",
+                    "tier": "CONTRIBUTOR",
+                    "url": "/antonkratz",
+                    "userId": 1423843,
+                    "userName": "antonkratz"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true
+                }
+              },
+              {
+                "author": {
+                  "displayName": "[Deleted User]",
+                  "id": 28444649,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                  "url": "/del=358c10d722d32731"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 2763,
+                "content": "<p>Aton btw,,these are the failure modes i hit i have yet to get a valid train with convergence and im out of credits for 99 hours so see what you can find out until then ill be around i just cant train yet<img src=\"https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F28444649%2Fd60e342dff80ebfc344b072d36c6ada5%2FScreenshot_2026_03_23-1.png?generation=1774312639333613&amp;alt=media\" alt=\"\"></p>",
+                "feedbackTrackingData": {},
+                "id": 3427321,
+                "isCollapsed": true,
+                "isDeleted": true,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-03-24T00:40:00.720Z",
+                "rawMarkdown": "Aton btw,,these are the failure modes i hit i have yet to get a valid train with convergence and im out of credits for 99 hours so see what you can find out until then ill be around i just cant train yet![](https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F28444649%2Fd60e342dff80ebfc344b072d36c6ada5%2FScreenshot_2026_03_23-1.png?generation=1774312639333613&alt=media)",
+                "reactions": [
+                  {
+                    "emoji": "KAGGLE",
+                    "featuredUserNames": [
+                      "antonkratz",
+                      "kai1992"
+                    ],
+                    "userCount": 2
+                  }
+                ],
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "[Deleted User]",
+                    "id": 28444649,
+                    "profileUrl": "/del=358c10d722d32731",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                    "url": "/del=358c10d722d32731",
+                    "userId": 28444649,
+                    "userName": "del=358c10d722d32731"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true,
+                  "totalUpvotes": 2,
+                  "totalVotes": 2
+                }
+              },
+              {
+                "author": {
+                  "displayName": "Anton Kratz",
+                  "id": 1423843,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1423843-kg.png?t=2026-03-17-23-53-30",
+                  "tier": "CONTRIBUTOR",
+                  "url": "/antonkratz"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 2610,
+                "content": "<p>Please clarify what do you mean by \"convergence\"? convergence == \"Training loss going down\"?!?</p>",
+                "feedbackTrackingData": {},
+                "id": 3427327,
+                "isCollapsed": true,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-03-24T00:56:38.567Z",
+                "rawMarkdown": "Please clarify what do you mean by \"convergence\"? convergence == \"Training loss going down\"?!?",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "Anton Kratz",
+                    "id": 1423843,
+                    "performanceTier": "CONTRIBUTOR",
+                    "profileUrl": "/antonkratz",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1423843-kg.png?t=2026-03-17-23-53-30",
+                    "tier": "CONTRIBUTOR",
+                    "url": "/antonkratz",
+                    "userId": 1423843,
+                    "userName": "antonkratz"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true
+                }
+              },
+              {
+                "author": {
+                  "displayName": "[Deleted User]",
+                  "id": 28444649,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                  "url": "/del=358c10d722d32731"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 2763,
+                "content": "<p>yes exactly</p>",
+                "feedbackTrackingData": {},
+                "id": 3427355,
+                "isCollapsed": true,
+                "isDeleted": true,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-03-24T01:54:02.077Z",
+                "rawMarkdown": "yes exactly",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "[Deleted User]",
+                    "id": 28444649,
+                    "profileUrl": "/del=358c10d722d32731",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                    "url": "/del=358c10d722d32731",
+                    "userId": 28444649,
+                    "userName": "del=358c10d722d32731"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true
+                }
+              },
+              {
+                "author": {
+                  "displayName": "Anton Kratz",
+                  "id": 1423843,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1423843-kg.png?t=2026-03-17-23-53-30",
+                  "tier": "CONTRIBUTOR",
+                  "url": "/antonkratz"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 2610,
+                "content": "<p>I ran your entire most reecent notebook. I submitted, it scores 0.56! Can confirm that this is legit.</p>",
+                "feedbackTrackingData": {},
+                "id": 3427422,
+                "isCollapsed": true,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-03-24T03:59:27.140Z",
+                "rawMarkdown": "I ran your entire most reecent notebook. I submitted, it scores 0.56! Can confirm that this is legit.",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "Anton Kratz",
+                    "id": 1423843,
+                    "performanceTier": "CONTRIBUTOR",
+                    "profileUrl": "/antonkratz",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1423843-kg.png?t=2026-03-17-23-53-30",
+                    "tier": "CONTRIBUTOR",
+                    "url": "/antonkratz",
+                    "userId": 1423843,
+                    "userName": "antonkratz"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true
+                }
+              },
+              {
+                "author": {
+                  "displayName": "[Deleted User]",
+                  "id": 28444649,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                  "url": "/del=358c10d722d32731"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 2763,
+                "content": "<p>ok perfect.. thanks for the report👍</p>",
+                "feedbackTrackingData": {},
+                "id": 3427441,
+                "isCollapsed": true,
+                "isDeleted": true,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-03-24T04:40:50.180Z",
+                "rawMarkdown": "ok perfect.. thanks for the report👍",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "[Deleted User]",
+                    "id": 28444649,
+                    "profileUrl": "/del=358c10d722d32731",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                    "url": "/del=358c10d722d32731",
+                    "userId": 28444649,
+                    "userName": "del=358c10d722d32731"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true
+                }
+              },
+              {
+                "author": {
+                  "displayName": "Raja Sudhan M",
+                  "id": 577170,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/577170-gp.jpg",
+                  "tier": "CONTRIBUTOR",
+                  "url": "/untamable"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 1565,
+                "content": "<p>I went through your notebook, didn't do the sft training, went for eval and token speed is so slow. Do help if you know the reason</p>",
+                "feedbackTrackingData": {},
+                "id": 3427804,
+                "isCollapsed": true,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-03-24T15:11:27.323Z",
+                "rawMarkdown": "I went through your notebook, didn't do the sft training, went for eval and token speed is so slow. Do help if you know the reason",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "Raja Sudhan M",
+                    "id": 577170,
+                    "performanceTier": "CONTRIBUTOR",
+                    "profileUrl": "/untamable",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/577170-gp.jpg",
+                    "tier": "CONTRIBUTOR",
+                    "url": "/untamable",
+                    "userId": 577170,
+                    "userName": "untamable"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true
+                }
+              }
+            ],
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "[Deleted User]",
+                "id": 28444649,
+                "profileUrl": "/del=358c10d722d32731",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                "url": "/del=358c10d722d32731",
+                "userId": 28444649,
+                "userName": "del=358c10d722d32731"
+              }
+            },
+            "votes": {
+              "canUpvote": true,
+              "totalUpvotes": 3,
+              "totalVotes": 3
+            }
+          },
+          {
+            "author": {
+              "displayName": "Anton Kratz",
+              "id": 1423843,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1423843-kg.png?t=2026-03-17-23-53-30",
+              "tier": "CONTRIBUTOR",
+              "url": "/antonkratz"
+            },
+            "authorType": "COMMENT",
+            "competitionRanking": 2610,
+            "content": "<p>How can I import vllm into the Kaggle environment? I have the newest script pack, data set and model attached, GTX 6000 selected. It does not find vllm. Inference is extremely slow below 5 tokens/sec.</p>",
+            "feedbackTrackingData": {},
+            "id": 3427658,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-03-24T11:16:42.117Z",
+            "rawMarkdown": "How can I import vllm into the Kaggle environment? I have the newest script pack, data set and model attached, GTX 6000 selected. It does not find vllm. Inference is extremely slow below 5 tokens/sec.",
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "Anton Kratz",
+                "id": 1423843,
+                "performanceTier": "CONTRIBUTOR",
+                "profileUrl": "/antonkratz",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1423843-kg.png?t=2026-03-17-23-53-30",
+                "tier": "CONTRIBUTOR",
+                "url": "/antonkratz",
+                "userId": 1423843,
+                "userName": "antonkratz"
+              }
+            },
+            "votes": {
+              "canUpvote": true,
+              "totalUpvotes": 1,
+              "totalVotes": 1
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Tiffany Xiang",
+            "id": 16010057,
+            "performanceTier": "STAFF",
+            "profileUrl": "/tifftoff",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/16010057-kg.jpg?t=2024-01-16-18-04-29",
+            "tier": "STAFF",
+            "url": "/tifftoff",
+            "userId": 16010057,
+            "userName": "tifftoff"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 4,
+          "totalVotes": 4
+        }
+      },
+      {
+        "author": {
+          "displayName": "Eidan Rosado",
+          "id": 3278541,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/3278541-kg.jpeg?t=2024-07-31-00-38-42",
+          "tier": "CONTRIBUTOR",
+          "url": "/edyvision"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 2131,
+        "content": "<p>I ended up burning through a bit of the week's credits debugging, but I made the patches public (without my fine-tuning logic for now): <a href=\"https://www.kaggle.com/code/edyvision/nvidia-nemotron-submission-demo-w-blackwell-patch\" target=\"_blank\">https://www.kaggle.com/code/edyvision/nvidia-nemotron-submission-demo-w-blackwell-patch</a></p>\n<p>Hope this unblocks some folks in the meantime while the official env gets updated! It is indeed exceptionally slow.</p>",
+        "feedbackTrackingData": {},
+        "id": 3425545,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-20T23:33:08.710Z",
+        "rawMarkdown": "I ended up burning through a bit of the week's credits debugging, but I made the patches public (without my fine-tuning logic for now): https://www.kaggle.com/code/edyvision/nvidia-nemotron-submission-demo-w-blackwell-patch\n\nHope this unblocks some folks in the meantime while the official env gets updated! It is indeed exceptionally slow.",
+        "replies": [
+          {
+            "author": {
+              "displayName": "[Deleted User]",
+              "id": 28444649,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+              "url": "/del=358c10d722d32731"
+            },
+            "authorType": "COMMENT",
+            "competitionRanking": 2763,
+            "content": "<p>thanks i also used gpu on this debugging and im out now so ill test your method when resets..i got working but no mamba cores was really slow training wasted like 6 hours got not much roi</p>",
+            "feedbackTrackingData": {},
+            "id": 3425549,
+            "isDeleted": true,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-03-20T23:42:11.077Z",
+            "rawMarkdown": "thanks i also used gpu on this debugging and im out now so ill test your method when resets..i got working but no mamba cores was really slow training wasted like 6 hours got not much roi",
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "[Deleted User]",
+                "id": 28444649,
+                "profileUrl": "/del=358c10d722d32731",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                "url": "/del=358c10d722d32731",
+                "userId": 28444649,
+                "userName": "del=358c10d722d32731"
+              }
+            },
+            "votes": {
+              "canUpvote": true
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Eidan Rosado",
+            "id": 3278541,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/edyvision",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/3278541-kg.jpeg?t=2024-07-31-00-38-42",
+            "tier": "CONTRIBUTOR",
+            "url": "/edyvision",
+            "userId": 3278541,
+            "userName": "edyvision"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 1,
+          "totalVotes": 1
+        }
+      },
+      {
+        "author": {
+          "displayName": "Dustin",
+          "id": 2039816,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2039816-kg.jpg",
+          "tier": "STAFF",
+          "url": "/herbison"
+        },
+        "authorType": "ADMIN",
+        "content": "<p><a href=\"https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/681820#3422400\" target=\"_blank\">https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/681820#3422400</a></p>\n<p>We're working on getting the default env updated. In the meantime, its probably best to dump the needed deps into a dataset/notebook, and then do an \"offline\" install of the upgrades on the rtx pro 6000 machine.</p>",
+        "feedbackTrackingData": {},
+        "id": 3424489,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-19T18:17:04.330Z",
+        "rawMarkdown": "https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/681820#3422400\n\nWe're working on getting the default env updated. In the meantime, its probably best to dump the needed deps into a dataset/notebook, and then do an \"offline\" install of the upgrades on the rtx pro 6000 machine.",
+        "replies": [
+          {
+            "author": {
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+              "url": "/"
+            },
+            "authorType": "COMMENT",
+            "canDelete": true,
+            "feedbackTrackingData": {},
+            "id": 3424870,
+            "isDeleted": true,
+            "isThankYou": false,
+            "isUserAuthor": true,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-03-20T02:30:57.787Z",
+            "rawMarkdown": "",
+            "votes": {}
+          },
+          {
+            "author": {
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+              "url": "/"
+            },
+            "authorType": "COMMENT",
+            "canDelete": true,
+            "feedbackTrackingData": {},
+            "id": 3425359,
+            "isDeleted": true,
+            "isThankYou": false,
+            "isUserAuthor": true,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-03-20T18:31:14.143Z",
+            "rawMarkdown": "",
+            "votes": {}
+          }
+        ],
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 1
+        }
+      },
+      {
+        "author": {
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "url": "/"
+        },
+        "authorType": "COMMENT",
+        "canDelete": true,
+        "feedbackTrackingData": {},
+        "id": 3425326,
+        "isDeleted": true,
+        "isThankYou": false,
+        "isUserAuthor": true,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-20T17:42:23.677Z",
+        "rawMarkdown": "",
+        "votes": {}
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "Donald Galliano III",
+        "id": 29434769,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/29434769-kg.png?t=2026-03-14-05-23-02",
+        "tier": "CONTRIBUTOR",
+        "url": "/donaldgalliano"
+      },
+      "authorType": "TOPIC",
+      "competitionRanking": 2317,
+      "content": "<p>The pre-installed mamba_ssm and causal_conv1d packages in the competition environment are compiled for sm_90, but the RTX PRO 6000 Blackwell GPU requires sm_120. </p>\n<p>This means:</p>\n<p>The demo notebook loads and saves weights fine (no forward pass required)\nAny actual training or inference immediately crashes with AcceleratorError: CUDA error: no kernel image is available for execution on the device\nInternet is disabled on the Blackwell accelerator, so we cannot pip install fixed packages\nThe workaround (forcing Mamba's Python slow path + patching Triton's ptxas permissions) works but is extremely slow and incompatible with gradient checkpointing</p>\n<p>I've spent hours of GPU time across multiple sessions just debugging environment issues — not training, not experimenting, just trying to get a single forward pass to complete. Based on the other threads here, I'm far from alone.</p>\n<p>Two questions for the organizers:</p>\n<p>Is there a timeline for updating the base environment with sm_120-compatible builds of mamba_ssm, causal_conv1d, and Triton? This is currently a blocker for every participant attempting to train on the provided hardware. ( i dont have strong enough local hardware for it )</p>\n<p>Will GPU hours consumed debugging this infrastructure issue be credited back? The weekly GPU quota is limited, and a significant portion has been spent on an environment problem rather than actual competition work.</p>\n<p>For context: I'm not just raising this from the sidelines. I've put significant time into dataset analysis and training data preparation, and I have a working notebook ready to go via slow-path workarounds. I just need the environment to cooperate so I can train at a reasonable speed.</p>\n<p>I'm genuinely excited about this competition! The problem design is clever (love ciphers… nah, not those substitution ones) and the reasoning challenges are legitimately hard. Would love to focus that energy on training and iteration rather than fighting CUDA kernels.</p>\n<p>Thanks for the op guys! </p>",
+      "feedbackTrackingData": {},
+      "id": 3424477,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-03-19T17:56:41.673Z",
+      "rawMarkdown": "The pre-installed mamba_ssm and causal_conv1d packages in the competition environment are compiled for sm_90, but the RTX PRO 6000 Blackwell GPU requires sm_120. \n\nThis means:\n\nThe demo notebook loads and saves weights fine (no forward pass required)\nAny actual training or inference immediately crashes with AcceleratorError: CUDA error: no kernel image is available for execution on the device\nInternet is disabled on the Blackwell accelerator, so we cannot pip install fixed packages\nThe workaround (forcing Mamba's Python slow path + patching Triton's ptxas permissions) works but is extremely slow and incompatible with gradient checkpointing\n\nI've spent hours of GPU time across multiple sessions just debugging environment issues — not training, not experimenting, just trying to get a single forward pass to complete. Based on the other threads here, I'm far from alone.\n\nTwo questions for the organizers:\n\nIs there a timeline for updating the base environment with sm_120-compatible builds of mamba_ssm, causal_conv1d, and Triton? This is currently a blocker for every participant attempting to train on the provided hardware. ( i dont have strong enough local hardware for it )\n\nWill GPU hours consumed debugging this infrastructure issue be credited back? The weekly GPU quota is limited, and a significant portion has been spent on an environment problem rather than actual competition work.\n\nFor context: I'm not just raising this from the sidelines. I've put significant time into dataset analysis and training data preparation, and I have a working notebook ready to go via slow-path workarounds. I just need the environment to cooperate so I can train at a reasonable speed.\n\nI'm genuinely excited about this competition! The problem design is clever (love ciphers... nah, not those substitution ones) and the reasoning challenges are legitimately hard. Would love to focus that energy on training and iteration rather than fighting CUDA kernels.\n\nThanks for the op guys! ",
+      "teamUpInfo": {
+        "intro": "",
+        "teamLeader": {
+          "displayName": "Donald Galliano III",
+          "id": 29434769,
+          "performanceTier": "CONTRIBUTOR",
+          "profileUrl": "/donaldgalliano",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/29434769-kg.png?t=2026-03-14-05-23-02",
+          "tier": "CONTRIBUTOR",
+          "url": "/donaldgalliano",
+          "userId": 29434769,
+          "userName": "donaldgalliano"
+        }
+      },
+      "votes": {
+        "canUpvote": true,
+        "totalUpvotes": 18,
+        "totalVotes": 18
+      }
+    },
+    "firstMessageId": 3424477,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 683067,
+    "name": "RTX PRO 6000 Blackwell — CUDA kernel incompatibility status + GPU time spent debugging",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-03-19T17:56:41.674205900Z",
+    "totalMessages": 24,
+    "totalVotes": 18,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/683067"
+  }
+}

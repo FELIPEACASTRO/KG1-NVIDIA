@@ -1,0 +1,408 @@
+{
+  "endpoint": "https://www.kaggle.com/api/i/discussions.DiscussionsService/GetForumTopicById",
+  "failure_count": 82,
+  "failures": [
+    {
+      "error": "HTTPError('404 Client Error: Not Found for url: https://www.kaggle.com/api/i/discussions.DiscussionsService/GetForumTopicById?forumTopicId=689840&includeComments=true')",
+      "topic_id": 689840
+    },
+    {
+      "error": "HTTPError('404 Client Error: Not Found for url: https://www.kaggle.com/api/i/discussions.DiscussionsService/GetForumTopicById?forumTopicId=685971&includeComments=true')",
+      "topic_id": 685971
+    },
+    {
+      "error": "HTTPError('404 Client Error: Not Found for url: https://www.kaggle.com/api/i/discussions.DiscussionsService/GetForumTopicById?forumTopicId=682197&includeComments=true')",
+      "topic_id": 682197
+    },
+    {
+      "error": "HTTPError('404 Client Error: Not Found for url: https://www.kaggle.com/api/i/discussions.DiscussionsService/GetForumTopicById?forumTopicId=682878&includeComments=true')",
+      "topic_id": 682878
+    },
+    {
+      "error": "HTTPError('404 Client Error: Not Found for url: https://www.kaggle.com/api/i/discussions.DiscussionsService/GetForumTopicById?forumTopicId=684508&includeComments=true')",
+      "topic_id": 684508
+    },
+    {
+      "error": "HTTPError('404 Client Error: Not Found for url: https://www.kaggle.com/api/i/discussions.DiscussionsService/GetForumTopicById?forumTopicId=683866&includeComments=true')",
+      "topic_id": 683866
+    },
+    {
+      "error": "HTTPError('404 Client Error: Not Found for url: https://www.kaggle.com/api/i/discussions.DiscussionsService/GetForumTopicById?forumTopicId=683401&includeComments=true')",
+      "topic_id": 683401
+    },
+    {
+      "error": "HTTPError('404 Client Error: Not Found for url: https://www.kaggle.com/api/i/discussions.DiscussionsService/GetForumTopicById?forumTopicId=682926&includeComments=true')",
+      "topic_id": 682926
+    },
+    {
+      "error": "HTTPError('404 Client Error: Not Found for url: https://www.kaggle.com/api/i/discussions.DiscussionsService/GetForumTopicById?forumTopicId=682542&includeComments=true')",
+      "topic_id": 682542
+    },
+    {
+      "error": "HTTPError('404 Client Error: Not Found for url: https://www.kaggle.com/api/i/discussions.DiscussionsService/GetForumTopicById?forumTopicId=686185&includeComments=true')",
+      "topic_id": 686185
+    },
+    {
+      "error": "HTTPError('404 Client Error: Not Found for url: https://www.kaggle.com/api/i/discussions.DiscussionsService/GetForumTopicById?forumTopicId=685247&includeComments=true')",
+      "topic_id": 685247
+    },
+    {
+      "error": "HTTPError('404 Client Error: Not Found for url: https://www.kaggle.com/api/i/discussions.DiscussionsService/GetForumTopicById?forumTopicId=686444&includeComments=true')",
+      "topic_id": 686444
+    },
+    {
+      "error": "HTTPError('404 Client Error: Not Found for url: https://www.kaggle.com/api/i/discussions.DiscussionsService/GetForumTopicById?forumTopicId=684490&includeComments=true')",
+      "topic_id": 684490
+    },
+    {
+      "error": "HTTPError('404 Client Error: Not Found for url: https://www.kaggle.com/api/i/discussions.DiscussionsService/GetForumTopicById?forumTopicId=685020&includeComments=true')",
+      "topic_id": 685020
+    },
+    {
+      "error": "HTTPError('404 Client Error: Not Found for url: https://www.kaggle.com/api/i/discussions.DiscussionsService/GetForumTopicById?forumTopicId=685817&includeComments=true')",
+      "topic_id": 685817
+    },
+    {
+      "error": "HTTPError('404 Client Error: Not Found for url: https://www.kaggle.com/api/i/discussions.DiscussionsService/GetForumTopicById?forumTopicId=687119&includeComments=true')",
+      "topic_id": 687119
+    },
+    {
+      "error": "HTTPError('404 Client Error: Not Found for url: https://www.kaggle.com/api/i/discussions.DiscussionsService/GetForumTopicById?forumTopicId=696854&includeComments=true')",
+      "topic_id": 696854
+    },
+    {
+      "error": "HTTPError('404 Client Error: Not Found for url: https://www.kaggle.com/api/i/discussions.DiscussionsService/GetForumTopicById?forumTopicId=691380&includeComments=true')",
+      "topic_id": 691380
+    },
+    {
+      "error": "HTTPError('404 Client Error: Not Found for url: https://www.kaggle.com/api/i/discussions.DiscussionsService/GetForumTopicById?forumTopicId=697746&includeComments=true')",
+      "topic_id": 697746
+    },
+    {
+      "error": "HTTPError('404 Client Error: Not Found for url: https://www.kaggle.com/api/i/discussions.DiscussionsService/GetForumTopicById?forumTopicId=698293&includeComments=true')",
+      "topic_id": 698293
+    },
+    {
+      "error": "HTTPError('404 Client Error: Not Found for url: https://www.kaggle.com/api/i/discussions.DiscussionsService/GetForumTopicById?forumTopicId=685910&includeComments=true')",
+      "topic_id": 685910
+    },
+    {
+      "error": "HTTPError('404 Client Error: Not Found for url: https://www.kaggle.com/api/i/discussions.DiscussionsService/GetForumTopicById?forumTopicId=697139&includeComments=true')",
+      "topic_id": 697139
+    },
+    {
+      "error": "HTTPError('404 Client Error: Not Found for url: https://www.kaggle.com/api/i/discussions.DiscussionsService/GetForumTopicById?forumTopicId=694350&includeComments=true')",
+      "topic_id": 694350
+    },
+    {
+      "error": "HTTPError('404 Client Error: Not Found for url: https://www.kaggle.com/api/i/discussions.DiscussionsService/GetForumTopicById?forumTopicId=687547&includeComments=true')",
+      "topic_id": 687547
+    },
+    {
+      "error": "HTTPError('404 Client Error: Not Found for url: https://www.kaggle.com/api/i/discussions.DiscussionsService/GetForumTopicById?forumTopicId=687740&includeComments=true')",
+      "topic_id": 687740
+    },
+    {
+      "error": "HTTPError('404 Client Error: Not Found for url: https://www.kaggle.com/api/i/discussions.DiscussionsService/GetForumTopicById?forumTopicId=687101&includeComments=true')",
+      "topic_id": 687101
+    },
+    {
+      "error": "HTTPError('404 Client Error: Not Found for url: https://www.kaggle.com/api/i/discussions.DiscussionsService/GetForumTopicById?forumTopicId=686865&includeComments=true')",
+      "topic_id": 686865
+    },
+    {
+      "error": "HTTPError('404 Client Error: Not Found for url: https://www.kaggle.com/api/i/discussions.DiscussionsService/GetForumTopicById?forumTopicId=685886&includeComments=true')",
+      "topic_id": 685886
+    },
+    {
+      "error": "HTTPError('404 Client Error: Not Found for url: https://www.kaggle.com/api/i/discussions.DiscussionsService/GetForumTopicById?forumTopicId=684748&includeComments=true')",
+      "topic_id": 684748
+    },
+    {
+      "error": "HTTPError('404 Client Error: Not Found for url: https://www.kaggle.com/api/i/discussions.DiscussionsService/GetForumTopicById?forumTopicId=684515&includeComments=true')",
+      "topic_id": 684515
+    },
+    {
+      "error": "HTTPError('404 Client Error: Not Found for url: https://www.kaggle.com/api/i/discussions.DiscussionsService/GetForumTopicById?forumTopicId=682167&includeComments=true')",
+      "topic_id": 682167
+    },
+    {
+      "error": "HTTPError('404 Client Error: Not Found for url: https://www.kaggle.com/api/i/discussions.DiscussionsService/GetForumTopicById?forumTopicId=682208&includeComments=true')",
+      "topic_id": 682208
+    },
+    {
+      "error": "HTTPError('404 Client Error: Not Found for url: https://www.kaggle.com/api/i/discussions.DiscussionsService/GetForumTopicById?forumTopicId=682355&includeComments=true')",
+      "topic_id": 682355
+    },
+    {
+      "error": "HTTPError('404 Client Error: Not Found for url: https://www.kaggle.com/api/i/discussions.DiscussionsService/GetForumTopicById?forumTopicId=681853&includeComments=true')",
+      "topic_id": 681853
+    },
+    {
+      "error": "HTTPError('404 Client Error: Not Found for url: https://www.kaggle.com/api/i/discussions.DiscussionsService/GetForumTopicById?forumTopicId=683853&includeComments=true')",
+      "topic_id": 683853
+    },
+    {
+      "error": "HTTPError('404 Client Error: Not Found for url: https://www.kaggle.com/api/i/discussions.DiscussionsService/GetForumTopicById?forumTopicId=684385&includeComments=true')",
+      "topic_id": 684385
+    },
+    {
+      "error": "HTTPError('404 Client Error: Not Found for url: https://www.kaggle.com/api/i/discussions.DiscussionsService/GetForumTopicById?forumTopicId=684459&includeComments=true')",
+      "topic_id": 684459
+    },
+    {
+      "error": "HTTPError('404 Client Error: Not Found for url: https://www.kaggle.com/api/i/discussions.DiscussionsService/GetForumTopicById?forumTopicId=684469&includeComments=true')",
+      "topic_id": 684469
+    },
+    {
+      "error": "HTTPError('404 Client Error: Not Found for url: https://www.kaggle.com/api/i/discussions.DiscussionsService/GetForumTopicById?forumTopicId=684244&includeComments=true')",
+      "topic_id": 684244
+    },
+    {
+      "error": "HTTPError('404 Client Error: Not Found for url: https://www.kaggle.com/api/i/discussions.DiscussionsService/GetForumTopicById?forumTopicId=684251&includeComments=true')",
+      "topic_id": 684251
+    },
+    {
+      "error": "HTTPError('404 Client Error: Not Found for url: https://www.kaggle.com/api/i/discussions.DiscussionsService/GetForumTopicById?forumTopicId=682877&includeComments=true')",
+      "topic_id": 682877
+    },
+    {
+      "error": "HTTPError('404 Client Error: Not Found for url: https://www.kaggle.com/api/i/discussions.DiscussionsService/GetForumTopicById?forumTopicId=683820&includeComments=true')",
+      "topic_id": 683820
+    },
+    {
+      "error": "HTTPError('404 Client Error: Not Found for url: https://www.kaggle.com/api/i/discussions.DiscussionsService/GetForumTopicById?forumTopicId=683484&includeComments=true')",
+      "topic_id": 683484
+    },
+    {
+      "error": "HTTPError('404 Client Error: Not Found for url: https://www.kaggle.com/api/i/discussions.DiscussionsService/GetForumTopicById?forumTopicId=683573&includeComments=true')",
+      "topic_id": 683573
+    },
+    {
+      "error": "HTTPError('404 Client Error: Not Found for url: https://www.kaggle.com/api/i/discussions.DiscussionsService/GetForumTopicById?forumTopicId=681824&includeComments=true')",
+      "topic_id": 681824
+    },
+    {
+      "error": "HTTPError('404 Client Error: Not Found for url: https://www.kaggle.com/api/i/discussions.DiscussionsService/GetForumTopicById?forumTopicId=681773&includeComments=true')",
+      "topic_id": 681773
+    },
+    {
+      "error": "HTTPError('404 Client Error: Not Found for url: https://www.kaggle.com/api/i/discussions.DiscussionsService/GetForumTopicById?forumTopicId=682375&includeComments=true')",
+      "topic_id": 682375
+    },
+    {
+      "error": "HTTPError('404 Client Error: Not Found for url: https://www.kaggle.com/api/i/discussions.DiscussionsService/GetForumTopicById?forumTopicId=682058&includeComments=true')",
+      "topic_id": 682058
+    },
+    {
+      "error": "HTTPError('404 Client Error: Not Found for url: https://www.kaggle.com/api/i/discussions.DiscussionsService/GetForumTopicById?forumTopicId=682732&includeComments=true')",
+      "topic_id": 682732
+    },
+    {
+      "error": "HTTPError('404 Client Error: Not Found for url: https://www.kaggle.com/api/i/discussions.DiscussionsService/GetForumTopicById?forumTopicId=685421&includeComments=true')",
+      "topic_id": 685421
+    },
+    {
+      "error": "HTTPError('404 Client Error: Not Found for url: https://www.kaggle.com/api/i/discussions.DiscussionsService/GetForumTopicById?forumTopicId=686431&includeComments=true')",
+      "topic_id": 686431
+    },
+    {
+      "error": "HTTPError('404 Client Error: Not Found for url: https://www.kaggle.com/api/i/discussions.DiscussionsService/GetForumTopicById?forumTopicId=686800&includeComments=true')",
+      "topic_id": 686800
+    },
+    {
+      "error": "HTTPError('404 Client Error: Not Found for url: https://www.kaggle.com/api/i/discussions.DiscussionsService/GetForumTopicById?forumTopicId=685922&includeComments=true')",
+      "topic_id": 685922
+    },
+    {
+      "error": "HTTPError('404 Client Error: Not Found for url: https://www.kaggle.com/api/i/discussions.DiscussionsService/GetForumTopicById?forumTopicId=689877&includeComments=true')",
+      "topic_id": 689877
+    },
+    {
+      "error": "HTTPError('404 Client Error: Not Found for url: https://www.kaggle.com/api/i/discussions.DiscussionsService/GetForumTopicById?forumTopicId=688277&includeComments=true')",
+      "topic_id": 688277
+    },
+    {
+      "error": "HTTPError('404 Client Error: Not Found for url: https://www.kaggle.com/api/i/discussions.DiscussionsService/GetForumTopicById?forumTopicId=694358&includeComments=true')",
+      "topic_id": 694358
+    },
+    {
+      "error": "HTTPError('404 Client Error: Not Found for url: https://www.kaggle.com/api/i/discussions.DiscussionsService/GetForumTopicById?forumTopicId=694446&includeComments=true')",
+      "topic_id": 694446
+    },
+    {
+      "error": "HTTPError('404 Client Error: Not Found for url: https://www.kaggle.com/api/i/discussions.DiscussionsService/GetForumTopicById?forumTopicId=692813&includeComments=true')",
+      "topic_id": 692813
+    },
+    {
+      "error": "HTTPError('404 Client Error: Not Found for url: https://www.kaggle.com/api/i/discussions.DiscussionsService/GetForumTopicById?forumTopicId=694041&includeComments=true')",
+      "topic_id": 694041
+    },
+    {
+      "error": "HTTPError('404 Client Error: Not Found for url: https://www.kaggle.com/api/i/discussions.DiscussionsService/GetForumTopicById?forumTopicId=690891&includeComments=true')",
+      "topic_id": 690891
+    },
+    {
+      "error": "HTTPError('404 Client Error: Not Found for url: https://www.kaggle.com/api/i/discussions.DiscussionsService/GetForumTopicById?forumTopicId=691125&includeComments=true')",
+      "topic_id": 691125
+    },
+    {
+      "error": "HTTPError('404 Client Error: Not Found for url: https://www.kaggle.com/api/i/discussions.DiscussionsService/GetForumTopicById?forumTopicId=692092&includeComments=true')",
+      "topic_id": 692092
+    },
+    {
+      "error": "HTTPError('404 Client Error: Not Found for url: https://www.kaggle.com/api/i/discussions.DiscussionsService/GetForumTopicById?forumTopicId=694074&includeComments=true')",
+      "topic_id": 694074
+    },
+    {
+      "error": "HTTPError('404 Client Error: Not Found for url: https://www.kaggle.com/api/i/discussions.DiscussionsService/GetForumTopicById?forumTopicId=694213&includeComments=true')",
+      "topic_id": 694213
+    },
+    {
+      "error": "HTTPError('404 Client Error: Not Found for url: https://www.kaggle.com/api/i/discussions.DiscussionsService/GetForumTopicById?forumTopicId=692815&includeComments=true')",
+      "topic_id": 692815
+    },
+    {
+      "error": "HTTPError('404 Client Error: Not Found for url: https://www.kaggle.com/api/i/discussions.DiscussionsService/GetForumTopicById?forumTopicId=692667&includeComments=true')",
+      "topic_id": 692667
+    },
+    {
+      "error": "HTTPError('404 Client Error: Not Found for url: https://www.kaggle.com/api/i/discussions.DiscussionsService/GetForumTopicById?forumTopicId=696734&includeComments=true')",
+      "topic_id": 696734
+    },
+    {
+      "error": "HTTPError('404 Client Error: Not Found for url: https://www.kaggle.com/api/i/discussions.DiscussionsService/GetForumTopicById?forumTopicId=696993&includeComments=true')",
+      "topic_id": 696993
+    },
+    {
+      "error": "HTTPError('404 Client Error: Not Found for url: https://www.kaggle.com/api/i/discussions.DiscussionsService/GetForumTopicById?forumTopicId=694859&includeComments=true')",
+      "topic_id": 694859
+    },
+    {
+      "error": "HTTPError('404 Client Error: Not Found for url: https://www.kaggle.com/api/i/discussions.DiscussionsService/GetForumTopicById?forumTopicId=698277&includeComments=true')",
+      "topic_id": 698277
+    },
+    {
+      "error": "HTTPError('404 Client Error: Not Found for url: https://www.kaggle.com/api/i/discussions.DiscussionsService/GetForumTopicById?forumTopicId=698857&includeComments=true')",
+      "topic_id": 698857
+    },
+    {
+      "error": "HTTPError('404 Client Error: Not Found for url: https://www.kaggle.com/api/i/discussions.DiscussionsService/GetForumTopicById?forumTopicId=688278&includeComments=true')",
+      "topic_id": 688278
+    },
+    {
+      "error": "HTTPError('404 Client Error: Not Found for url: https://www.kaggle.com/api/i/discussions.DiscussionsService/GetForumTopicById?forumTopicId=689284&includeComments=true')",
+      "topic_id": 689284
+    },
+    {
+      "error": "HTTPError('404 Client Error: Not Found for url: https://www.kaggle.com/api/i/discussions.DiscussionsService/GetForumTopicById?forumTopicId=690756&includeComments=true')",
+      "topic_id": 690756
+    },
+    {
+      "error": "HTTPError('404 Client Error: Not Found for url: https://www.kaggle.com/api/i/discussions.DiscussionsService/GetForumTopicById?forumTopicId=687789&includeComments=true')",
+      "topic_id": 687789
+    },
+    {
+      "error": "HTTPError('404 Client Error: Not Found for url: https://www.kaggle.com/api/i/discussions.DiscussionsService/GetForumTopicById?forumTopicId=688120&includeComments=true')",
+      "topic_id": 688120
+    },
+    {
+      "error": "HTTPError('404 Client Error: Not Found for url: https://www.kaggle.com/api/i/discussions.DiscussionsService/GetForumTopicById?forumTopicId=686839&includeComments=true')",
+      "topic_id": 686839
+    },
+    {
+      "error": "HTTPError('404 Client Error: Not Found for url: https://www.kaggle.com/api/i/discussions.DiscussionsService/GetForumTopicById?forumTopicId=686591&includeComments=true')",
+      "topic_id": 686591
+    },
+    {
+      "error": "HTTPError('404 Client Error: Not Found for url: https://www.kaggle.com/api/i/discussions.DiscussionsService/GetForumTopicById?forumTopicId=686615&includeComments=true')",
+      "topic_id": 686615
+    },
+    {
+      "error": "HTTPError('404 Client Error: Not Found for url: https://www.kaggle.com/api/i/discussions.DiscussionsService/GetForumTopicById?forumTopicId=686691&includeComments=true')",
+      "topic_id": 686691
+    },
+    {
+      "error": "HTTPError('404 Client Error: Not Found for url: https://www.kaggle.com/api/i/discussions.DiscussionsService/GetForumTopicById?forumTopicId=685434&includeComments=true')",
+      "topic_id": 685434
+    },
+    {
+      "error": "HTTPError('404 Client Error: Not Found for url: https://www.kaggle.com/api/i/discussions.DiscussionsService/GetForumTopicById?forumTopicId=684641&includeComments=true')",
+      "topic_id": 684641
+    }
+  ],
+  "generated_at_utc": "2026-05-17T01:43:54.841993+00:00",
+  "hit_count": 238,
+  "keyword_groups": {
+    "adapter_training": [
+      "adapter",
+      "lora",
+      "qlora",
+      "peft",
+      "sft",
+      "cot",
+      "chain of thought",
+      "trace",
+      "distill",
+      "synthetic",
+      "teacher",
+      "student",
+      "nemotron"
+    ],
+    "bit_solver": [
+      "bit_manipulation",
+      "bit manipulation",
+      "bitwise",
+      "bitsum",
+      "bit sum",
+      "stride",
+      "rotation",
+      "rot(",
+      "shift",
+      "shl",
+      "shr",
+      "xor",
+      "and-not",
+      "or-not",
+      "fullbyte",
+      "tong hui kang",
+      "huikang"
+    ],
+    "concrete_artifact": [
+      "github.com",
+      "huggingface.co",
+      "kaggle.com/code",
+      "dataset",
+      "notebook",
+      "solver.py",
+      ".ipynb",
+      ".jsonl",
+      ".csv",
+      "release",
+      "repo",
+      "code"
+    ],
+    "equation_solver": [
+      "equation_transform",
+      "transformation/equation",
+      "symbol_transform",
+      "symbol transform",
+      "numeric_equation",
+      "equation_numeric",
+      "cryptarithm",
+      "equation",
+      "deduce",
+      "operator",
+      "dsl",
+      "verifier",
+      "parser",
+      "postprocessor"
+    ]
+  },
+  "post_count_scanned": 357,
+  "schema_version": "kg1_v512_kaggle_discussion_audit_v1",
+  "summary_md": "artifacts\\v532_kaggle_dataset_search_audit\\discussion_refresh\\V512_KAGGLE_DISCUSSION_AUDIT_SUMMARY.md",
+  "top_hits_json": "artifacts\\v532_kaggle_dataset_search_audit\\discussion_refresh\\v512_kaggle_discussion_top_hits.json",
+  "topic_count_fetched": 58,
+  "topic_count_requested": 140
+}

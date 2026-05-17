@@ -1,0 +1,48 @@
+{
+  "official_trace_rows": 100,
+  "synthetic_trace_rows": 2000,
+  "corpus_bit_rows": 2059,
+  "weak_overlap_rows": 10,
+  "weak_overlap_baseline_correct": 2,
+  "weak_overlap_baseline_miss": 8,
+  "weak_overlap_rule_counts": [
+    [
+      "MAJ",
+      6
+    ],
+    [
+      "CHO",
+      4
+    ]
+  ],
+  "official_trace_rule_counts": [
+    [
+      "MAJ",
+      52
+    ],
+    [
+      "CHO",
+      48
+    ]
+  ],
+  "synthetic_rule_counts": [
+    [
+      "CHO",
+      1078
+    ],
+    [
+      "MAJ",
+      922
+    ]
+  ],
+  "baseline_miss_ids": [
+    "048cc279",
+    "1a7c8520",
+    "1abaffca",
+    "5ba26f21",
+    "7192535b",
+    "a6192d29",
+    "b8722d19",
+    "b8aa3072"
+  ]
+}

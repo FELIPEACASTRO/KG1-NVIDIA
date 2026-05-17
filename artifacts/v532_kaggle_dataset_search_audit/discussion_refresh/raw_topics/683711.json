@@ -1,0 +1,312 @@
+{
+  "forumTopic": {
+    "authorId": 2596066,
+    "authorPerformanceTier": "MASTER",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "2596066-gp.jpg",
+    "authorUserDisplayName": "Ioannis M",
+    "authorUserName": "imeintanis",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "Ioannis M",
+          "id": 2596066,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2596066-gp.jpg",
+          "tier": "MASTER",
+          "url": "/imeintanis"
+        },
+        "authorType": "TOPIC",
+        "competitionRanking": 1433,
+        "content": "<p><a href=\"https://www.kaggle.com/ryanholbrook\" target=\"_blank\">@ryanholbrook</a> or someone from kaggle mods - please let us know if you have any updates or plan any fixes on this issue with ptxas and permission error? </p>\n<p>It is been hours of failed trials and gpu hours without any result and people continue struggling. Thanks for the support</p>",
+        "feedbackTrackingData": {},
+        "id": 3431073,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-29T11:25:11.107Z",
+        "rawMarkdown": "@ryanholbrook or someone from kaggle mods - please let us know if you have any updates or plan any fixes on this issue with ptxas and permission error? \n\nIt is been hours of failed trials and gpu hours without any result and people continue struggling. Thanks for the support",
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Ioannis M",
+            "id": 2596066,
+            "performanceTier": "MASTER",
+            "profileUrl": "/imeintanis",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2596066-gp.jpg",
+            "tier": "MASTER",
+            "url": "/imeintanis",
+            "userId": 2596066,
+            "userName": "imeintanis"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 1,
+          "totalVotes": 1
+        }
+      },
+      {
+        "author": {
+          "displayName": "omkar_pavale",
+          "id": 18444456,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "CONTRIBUTOR",
+          "url": "/omkarpawale"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 1739,
+        "content": "<p>Did you get any solution for this?</p>",
+        "feedbackTrackingData": {},
+        "id": 3429860,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-27T12:56:20.097Z",
+        "rawMarkdown": "Did you get any solution for this?",
+        "replies": [
+          {
+            "author": {
+              "displayName": "Ioannis M",
+              "id": 2596066,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2596066-gp.jpg",
+              "tier": "MASTER",
+              "url": "/imeintanis"
+            },
+            "authorType": "TOPIC",
+            "competitionRanking": 1433,
+            "content": "<p>not yet actually. sometimes works, most not. Not sure how to debug this.</p>",
+            "feedbackTrackingData": {},
+            "id": 3431072,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-03-29T11:20:35.477Z",
+            "rawMarkdown": "not yet actually. sometimes works, most not. Not sure how to debug this.",
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "Ioannis M",
+                "id": 2596066,
+                "performanceTier": "MASTER",
+                "profileUrl": "/imeintanis",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2596066-gp.jpg",
+                "tier": "MASTER",
+                "url": "/imeintanis",
+                "userId": 2596066,
+                "userName": "imeintanis"
+              }
+            },
+            "votes": {
+              "canUpvote": true
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "omkar_pavale",
+            "id": 18444456,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/omkarpawale",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+            "tier": "CONTRIBUTOR",
+            "url": "/omkarpawale",
+            "userId": 18444456,
+            "userName": "omkarpawale"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 2,
+          "totalVotes": 2
+        }
+      },
+      {
+        "author": {
+          "displayName": "ulasdesouza",
+          "id": 18831627,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/18831627-kg.jpg?t=2025-08-13-20-54-01",
+          "tier": "CONTRIBUTOR",
+          "url": "/ulasdesouza"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 977,
+        "content": "<ul>\n<li>replace with _ for - nvidia-utility-script part</li>\n</ul>",
+        "feedbackTrackingData": {},
+        "id": 3426083,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-21T21:02:10.623Z",
+        "rawMarkdown": "- replace with _ for - nvidia-utility-script part",
+        "reactions": [
+          {
+            "emoji": "SURPRISE",
+            "featuredUserNames": [
+              "imeintanis",
+              "thisisstan7"
+            ],
+            "userCount": 2
+          }
+        ],
+        "replies": [
+          {
+            "author": {
+              "displayName": "Ievgenii Krevenets",
+              "id": 111065,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/111065-gr.jpg",
+              "tier": "CONTRIBUTOR",
+              "url": "/hyzhak"
+            },
+            "authorType": "COMMENT",
+            "competitionRanking": 2854,
+            "content": "<p>hm, when I did these changes I got:</p>\n<pre><code>ModuleNotFoundError: No module named 'cutlass'\n</code></pre>",
+            "feedbackTrackingData": {},
+            "id": 3430630,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-03-28T18:21:51.723Z",
+            "rawMarkdown": "hm, when I did these changes I got:\n\n```\nModuleNotFoundError: No module named 'cutlass'\n```",
+            "replies": [
+              {
+                "author": {
+                  "displayName": "omkar_pavale",
+                  "id": 18444456,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                  "tier": "CONTRIBUTOR",
+                  "url": "/omkarpawale"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 1739,
+                "content": "<p>add this to resolve that issue.</p>\n<pre><code>import site\n\ncutlass_pkg_path = \"/kaggle/usr/lib/notebooks/ryanholbrook/nvidia-utility-script/nvidia_cutlass_dsl/python_packages/\"\n\nsite.addsitedir(cutlass_pkg_path)\n</code></pre>",
+                "feedbackTrackingData": {},
+                "id": 3430649,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-03-28T18:44:30.893Z",
+                "rawMarkdown": "add this to resolve that issue.\n\n```python\nimport site\n\ncutlass_pkg_path = \"/kaggle/usr/lib/notebooks/ryanholbrook/nvidia-utility-script/nvidia_cutlass_dsl/python_packages/\"\n\nsite.addsitedir(cutlass_pkg_path)\n```",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "omkar_pavale",
+                    "id": 18444456,
+                    "performanceTier": "CONTRIBUTOR",
+                    "profileUrl": "/omkarpawale",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                    "tier": "CONTRIBUTOR",
+                    "url": "/omkarpawale",
+                    "userId": 18444456,
+                    "userName": "omkarpawale"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true
+                }
+              }
+            ],
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "Ievgenii Krevenets",
+                "id": 111065,
+                "performanceTier": "CONTRIBUTOR",
+                "profileUrl": "/hyzhak",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/111065-gr.jpg",
+                "tier": "CONTRIBUTOR",
+                "url": "/hyzhak",
+                "userId": 111065,
+                "userName": "hyzhak"
+              }
+            },
+            "votes": {
+              "canUpvote": true
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "ulasdesouza",
+            "id": 18831627,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/ulasdesouza",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/18831627-kg.jpg?t=2025-08-13-20-54-01",
+            "tier": "CONTRIBUTOR",
+            "url": "/ulasdesouza",
+            "userId": 18831627,
+            "userName": "ulasdesouza"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "Ioannis M",
+        "id": 2596066,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2596066-gp.jpg",
+        "tier": "MASTER",
+        "url": "/imeintanis"
+      },
+      "authorType": "TOPIC",
+      "competitionRanking": 1433,
+      "content": "<p>any ideas how this can be solved? I think until yesterday was fine</p>\n<blockquote>\n  <p>PermissionError: [Errno 13] Permission denied: '/kaggle/usr/lib/notebooks/ryanholbrook/nvidia-utility-script/triton/backends/nvidia/bin/ptxas-blackwell'</p>\n</blockquote>\n<p>Thanks in advance</p>",
+      "feedbackTrackingData": {},
+      "id": 3426060,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-03-21T19:56:29.293Z",
+      "rawMarkdown": "any ideas how this can be solved? I think until yesterday was fine\n\n> PermissionError: [Errno 13] Permission denied: '/kaggle/usr/lib/notebooks/ryanholbrook/nvidia-utility-script/triton/backends/nvidia/bin/ptxas-blackwell'\n\n\nThanks in advance\n",
+      "teamUpInfo": {
+        "intro": "",
+        "teamLeader": {
+          "displayName": "Ioannis M",
+          "id": 2596066,
+          "performanceTier": "MASTER",
+          "profileUrl": "/imeintanis",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/2596066-gp.jpg",
+          "tier": "MASTER",
+          "url": "/imeintanis",
+          "userId": 2596066,
+          "userName": "imeintanis"
+        }
+      },
+      "votes": {
+        "canUpvote": true,
+        "totalUpvotes": 7,
+        "totalVotes": 7
+      }
+    },
+    "firstMessageId": 3426060,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 683711,
+    "name": "[BUG] Utility script permission error",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-03-21T19:56:29.294499500Z",
+    "totalMessages": 6,
+    "totalVotes": 7,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/683711"
+  }
+}

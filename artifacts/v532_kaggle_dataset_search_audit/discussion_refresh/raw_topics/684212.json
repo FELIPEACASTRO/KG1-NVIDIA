@@ -1,0 +1,1035 @@
+{
+  "forumTopic": {
+    "authorId": 1680925,
+    "authorPerformanceTier": "MASTER",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "1680925-kg.jpg",
+    "authorUserDisplayName": "Tong Hui Kang",
+    "authorUserName": "huikang",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "Kishan Vavdara",
+          "id": 12951282,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/12951282-kg.jpeg",
+          "tier": "MASTER",
+          "url": "/kishanvavdara"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 7,
+        "content": "<p><a href=\"https://www.kaggle.com/huikang\" target=\"_blank\">@huikang</a> I took the liberty and published the dataset <a href=\"https://www.kaggle.com/datasets/kishanvavdara/nemotron-reasoning-traj/data/data/data\" target=\"_blank\">here</a></p>",
+        "feedbackTrackingData": {},
+        "id": 3428990,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-26T07:04:47.480Z",
+        "rawMarkdown": "@huikang I took the liberty and published the dataset [here](https://www.kaggle.com/datasets/kishanvavdara/nemotron-reasoning-traj/data/data/data)",
+        "replies": [
+          {
+            "author": {
+              "displayName": "Tong Hui Kang",
+              "id": 1680925,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1680925-kg.jpg",
+              "tier": "MASTER",
+              "url": "/huikang"
+            },
+            "authorType": "TOPIC",
+            "competitionRanking": 748,
+            "content": "<p>Thanks! I uploaded my copy as well <a href=\"https://www.kaggle.com/datasets/huikang/nemotron-base-model-generation\" target=\"_blank\">https://www.kaggle.com/datasets/huikang/nemotron-base-model-generation</a></p>",
+            "feedbackTrackingData": {},
+            "id": 3429662,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-03-27T03:46:30.330Z",
+            "rawMarkdown": "Thanks! I uploaded my copy as well https://www.kaggle.com/datasets/huikang/nemotron-base-model-generation",
+            "reactions": [
+              {
+                "emoji": "THANK_YOU",
+                "featuredUserNames": [
+                  "komilparmar",
+                  "jamesweatherhead",
+                  "russcore"
+                ],
+                "userCount": 3
+              }
+            ],
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "Tong Hui Kang",
+                "id": 1680925,
+                "performanceTier": "MASTER",
+                "profileUrl": "/huikang",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1680925-kg.jpg",
+                "tier": "MASTER",
+                "url": "/huikang",
+                "userId": 1680925,
+                "userName": "huikang"
+              }
+            },
+            "votes": {
+              "canUpvote": true,
+              "totalUpvotes": 5,
+              "totalVotes": 5
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Kishan Vavdara",
+            "id": 12951282,
+            "performanceTier": "MASTER",
+            "profileUrl": "/kishanvavdara",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/12951282-kg.jpeg",
+            "tier": "MASTER",
+            "url": "/kishanvavdara",
+            "userId": 12951282,
+            "userName": "kishanvavdara"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 3,
+          "totalVotes": 3
+        }
+      },
+      {
+        "author": {
+          "displayName": "Anton Kratz",
+          "id": 1423843,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1423843-kg.png?t=2026-03-17-23-53-30",
+          "tier": "CONTRIBUTOR",
+          "url": "/antonkratz"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 2610,
+        "content": "<p>Excellent work <a href=\"https://www.kaggle.com/huikang\" target=\"_blank\">@huikang</a> ! How long did it  take to run all 9500 problems at least once? I am woking on something similar, using Blackwell here on Kaggle, I need about 4 minutes per problem. This seems… slow?!?</p>",
+        "feedbackTrackingData": {},
+        "id": 3427440,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-24T04:35:59.920Z",
+        "rawMarkdown": "Excellent work @huikang ! How long did it  take to run all 9500 problems at least once? I am woking on something similar, using Blackwell here on Kaggle, I need about 4 minutes per problem. This seems... slow?!?",
+        "replies": [
+          {
+            "author": {
+              "displayName": "Tong Hui Kang",
+              "id": 1680925,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1680925-kg.jpg",
+              "tier": "MASTER",
+              "url": "/huikang"
+            },
+            "authorType": "TOPIC",
+            "competitionRanking": 748,
+            "content": "<p>If I only consider the latest run for each of the 9500 problems, apparently there are 48,217,898 tokens generated.</p>\n<p>At 2.5k tokens per second it is 5.35 hours, which is about right.</p>",
+            "feedbackTrackingData": {},
+            "id": 3427444,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-03-24T04:45:10.827Z",
+            "rawMarkdown": "If I only consider the latest run for each of the 9500 problems, apparently there are 48,217,898 tokens generated.\n\nAt 2.5k tokens per second it is 5.35 hours, which is about right.",
+            "reactions": [
+              {
+                "emoji": "THANK_YOU",
+                "featuredUserNames": [
+                  "antonkratz",
+                  "meera2305",
+                  "rauffauzanrambe"
+                ],
+                "userCount": 3
+              }
+            ],
+            "replies": [
+              {
+                "author": {
+                  "displayName": "Ra'uf Fauzan Rambe",
+                  "id": 31589109,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/31589109-kg.png?t=2026-01-18-04-00-38",
+                  "tier": "EXPERT",
+                  "url": "/rauffauzanrambe"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 93,
+                "content": "<p>Wow, that's nearly 50 million. At our current speed of 2.5k tokens per second, it should wrap up in about 5 hours, right?</p>",
+                "feedbackTrackingData": {},
+                "id": 3446363,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-04-21T13:38:21.097Z",
+                "rawMarkdown": "Wow, that's nearly 50 million. At our current speed of 2.5k tokens per second, it should wrap up in about 5 hours, right?",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "Ra'uf Fauzan Rambe",
+                    "id": 31589109,
+                    "performanceTier": "EXPERT",
+                    "profileUrl": "/rauffauzanrambe",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/31589109-kg.png?t=2026-01-18-04-00-38",
+                    "tier": "EXPERT",
+                    "url": "/rauffauzanrambe",
+                    "userId": 31589109,
+                    "userName": "rauffauzanrambe"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true
+                }
+              }
+            ],
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "Tong Hui Kang",
+                "id": 1680925,
+                "performanceTier": "MASTER",
+                "profileUrl": "/huikang",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1680925-kg.jpg",
+                "tier": "MASTER",
+                "url": "/huikang",
+                "userId": 1680925,
+                "userName": "huikang"
+              }
+            },
+            "votes": {
+              "canUpvote": true,
+              "totalUpvotes": 6,
+              "totalVotes": 6
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Anton Kratz",
+            "id": 1423843,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/antonkratz",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1423843-kg.png?t=2026-03-17-23-53-30",
+            "tier": "CONTRIBUTOR",
+            "url": "/antonkratz",
+            "userId": 1423843,
+            "userName": "antonkratz"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 3,
+          "totalVotes": 3
+        }
+      },
+      {
+        "author": {
+          "displayName": "shitmaster",
+          "id": 28667721,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "CONTRIBUTOR",
+          "url": "/shitmaster"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 289,
+        "content": "<p>你好，请教一下是否需要自己在官方给的9500条训练数据以外再加一些训练数据以达到更高分数。\n谢谢！！</p>",
+        "feedbackTrackingData": {},
+        "id": 3438472,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-09T07:27:52.750Z",
+        "rawMarkdown": "你好，请教一下是否需要自己在官方给的9500条训练数据以外再加一些训练数据以达到更高分数。\n谢谢！！",
+        "teamUpInfo": {
+          "enabled": true,
+          "intro": "",
+          "teamLeader": {
+            "displayName": "shitmaster",
+            "id": 28667721,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/shitmaster",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+            "tier": "CONTRIBUTOR",
+            "url": "/shitmaster",
+            "userId": 28667721,
+            "userName": "shitmaster"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalVotes": -3
+        }
+      },
+      {
+        "author": {
+          "displayName": "Tong Hui Kang",
+          "id": 1680925,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1680925-kg.jpg",
+          "tier": "MASTER",
+          "url": "/huikang"
+        },
+        "authorType": "TOPIC",
+        "competitionRanking": 748,
+        "content": "<p>FAQ</p>\n<ul>\n<li>Is this the base model? It is the base model.</li>\n<li>Why are the partially solved problems in the middle? Most of the questions are ran only once, except some at the start and some in the middle. I ran the inference script in alphabetical and reverse alphabetical order and went for a nap. When I woke up, each script is slightly more than half done and I terminated it.</li>\n<li>Where is the prompt from? It is from the official <a href=\"https://www.kaggle.com/code/metric/nvidia-nemotron-metric/notebook\" target=\"_blank\">metric</a> notebook.</li>\n<li>How much money did it cost? On Modal I ran on an RTX PRO 6000 which is <a href=\"https://modal.com/pricing\" target=\"_blank\">$3.03</a> per hour. I think I ran this for five hours. The throughput was 2.5k tokens per second.</li>\n</ul>\n<p>Comments</p>\n<ul>\n<li>You see that the solve rate is almost 50%, which aligns with the demo submission from the <a href=\"https://www.kaggle.com/code/ryanholbrook/nvidia-nemotron-submission-demo\" target=\"_blank\">organizer</a>.</li>\n<li>For many entries of equation numeric, and almost all entries in equation symbolic, I could not figure the pattern. This is reported in other <a href=\"https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/684192\" target=\"_blank\">threads</a>.</li>\n</ul>",
+        "feedbackTrackingData": {},
+        "id": 3427425,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-24T04:07:04.903Z",
+        "rawMarkdown": "FAQ\n- Is this the base model? It is the base model.\n- Why are the partially solved problems in the middle? Most of the questions are ran only once, except some at the start and some in the middle. I ran the inference script in alphabetical and reverse alphabetical order and went for a nap. When I woke up, each script is slightly more than half done and I terminated it.\n- Where is the prompt from? It is from the official [metric](https://www.kaggle.com/code/metric/nvidia-nemotron-metric/notebook) notebook.\n- How much money did it cost? On Modal I ran on an RTX PRO 6000 which is [$3.03](https://modal.com/pricing) per hour. I think I ran this for five hours. The throughput was 2.5k tokens per second.\n\nComments\n- You see that the solve rate is almost 50%, which aligns with the demo submission from the [organizer](https://www.kaggle.com/code/ryanholbrook/nvidia-nemotron-submission-demo).\n- For many entries of equation numeric, and almost all entries in equation symbolic, I could not figure the pattern. This is reported in other [threads](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/684192).",
+        "reactions": [
+          {
+            "emoji": "LOVE",
+            "featuredUserNames": [
+              "frozenorb",
+              "hechtjp"
+            ],
+            "userCount": 2
+          }
+        ],
+        "replies": [
+          {
+            "author": {
+              "displayName": "Darshan Makwana",
+              "id": 10524112,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/10524112-kg.png?t=2026-05-05-17-08-52",
+              "tier": "CONTRIBUTOR",
+              "url": "/ellipticaloranges"
+            },
+            "authorType": "COMMENT",
+            "content": "<p>Hey <a href=\"https://www.kaggle.com/huikang\" target=\"_blank\">@huikang</a> thanks for sharing this, it's really helpful to understand the model's current behaviour around these puzzles. I have one doubt regarding the partial problems, as you said problems where attempted more than twice due to the way you ran two separate scripts, but in the inference metrics the temperature is set to 0.0 so this still shouldn't happen and every inference run should give me the same thinking and answer chain, or maybe I misunderstood something</p>",
+            "feedbackTrackingData": {},
+            "id": 3427561,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-03-24T08:42:34.713Z",
+            "rawMarkdown": "Hey @huikang thanks for sharing this, it's really helpful to understand the model's current behaviour around these puzzles. I have one doubt regarding the partial problems, as you said problems where attempted more than twice due to the way you ran two separate scripts, but in the inference metrics the temperature is set to 0.0 so this still shouldn't happen and every inference run should give me the same thinking and answer chain, or maybe I misunderstood something",
+            "replies": [
+              {
+                "author": {
+                  "displayName": "Tong Hui Kang",
+                  "id": 1680925,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1680925-kg.jpg",
+                  "tier": "MASTER",
+                  "url": "/huikang"
+                },
+                "authorType": "TOPIC",
+                "competitionRanking": 748,
+                "content": "<p>Great question, the temperature was 1.0.</p>\n<p>Otherwise everything will be logprob zero (need to confirm). I want to see which tokens are super likely and which tokens are unlikely.</p>",
+                "feedbackTrackingData": {},
+                "id": 3427618,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-03-24T10:02:16.193Z",
+                "rawMarkdown": "Great question, the temperature was 1.0.\n\nOtherwise everything will be logprob zero (need to confirm). I want to see which tokens are super likely and which tokens are unlikely.",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "Tong Hui Kang",
+                    "id": 1680925,
+                    "performanceTier": "MASTER",
+                    "profileUrl": "/huikang",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1680925-kg.jpg",
+                    "tier": "MASTER",
+                    "url": "/huikang",
+                    "userId": 1680925,
+                    "userName": "huikang"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true
+                }
+              }
+            ],
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "Darshan Makwana",
+                "id": 10524112,
+                "performanceTier": "CONTRIBUTOR",
+                "profileUrl": "/ellipticaloranges",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/10524112-kg.png?t=2026-05-05-17-08-52",
+                "tier": "CONTRIBUTOR",
+                "url": "/ellipticaloranges",
+                "userId": 10524112,
+                "userName": "ellipticaloranges"
+              }
+            },
+            "votes": {
+              "canUpvote": true,
+              "totalUpvotes": 1,
+              "totalVotes": 1
+            }
+          },
+          {
+            "author": {
+              "displayName": "Ankith Savio",
+              "id": 9132165,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/9132165-kg.png?t=2025-04-20-22-21-37",
+              "tier": "CONTRIBUTOR",
+              "url": "/weedoo"
+            },
+            "authorType": "COMMENT",
+            "competitionRanking": 1219,
+            "content": "<p>What was the batch size here? I am trying to understand how we can achieve that throughput.</p>",
+            "feedbackTrackingData": {},
+            "id": 3427584,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-03-24T09:14:40.813Z",
+            "rawMarkdown": "What was the batch size here? I am trying to understand how we can achieve that throughput.",
+            "replies": [
+              {
+                "author": {
+                  "displayName": "Tong Hui Kang",
+                  "id": 1680925,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1680925-kg.jpg",
+                  "tier": "MASTER",
+                  "url": "/huikang"
+                },
+                "authorType": "TOPIC",
+                "competitionRanking": 748,
+                "content": "<p>For vLLM inference, we do not think in terms of batch size but in terms of concurrency <a href=\"https://docs.vllm.ai/en/stable/configuration/engine_args/#-max-num-seqs\" target=\"_blank\"><code>--max-num-seqs</code></a>.</p>\n<p>I remember having a concurrency of 256. I do not think I needed that high, I remember achieving the same 2.5k token throughput with a concurrency of 128.</p>",
+                "feedbackTrackingData": {},
+                "id": 3427624,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-03-24T10:05:40.083Z",
+                "rawMarkdown": "For vLLM inference, we do not think in terms of batch size but in terms of concurrency [`--max-num-seqs`](https://docs.vllm.ai/en/stable/configuration/engine_args/#-max-num-seqs).\n\nI remember having a concurrency of 256. I do not think I needed that high, I remember achieving the same 2.5k token throughput with a concurrency of 128.",
+                "reactions": [
+                  {
+                    "emoji": "THANK_YOU",
+                    "featuredUserNames": [
+                      "weedoo"
+                    ],
+                    "userCount": 1
+                  }
+                ],
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "Tong Hui Kang",
+                    "id": 1680925,
+                    "performanceTier": "MASTER",
+                    "profileUrl": "/huikang",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1680925-kg.jpg",
+                    "tier": "MASTER",
+                    "url": "/huikang",
+                    "userId": 1680925,
+                    "userName": "huikang"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true,
+                  "totalUpvotes": 3,
+                  "totalVotes": 3
+                }
+              },
+              {
+                "author": {
+                  "displayName": "Ankith Savio",
+                  "id": 9132165,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/9132165-kg.png?t=2025-04-20-22-21-37",
+                  "tier": "CONTRIBUTOR",
+                  "url": "/weedoo"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 1219,
+                "content": "<blockquote>\n  <p>I remember having a concurrency of 256. I do not think I needed that high, I remember achieving the same 2.5k token throughput with a concurrency of 128.</p>\n</blockquote>\n<p>I am only able to achieve half of this. Any tips? Are you utilizing quantized model?</p>",
+                "feedbackTrackingData": {},
+                "id": 3428966,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-03-26T06:16:57.143Z",
+                "rawMarkdown": "> I remember having a concurrency of 256. I do not think I needed that high, I remember achieving the same 2.5k token throughput with a concurrency of 128.\n\nI am only able to achieve half of this. Any tips? Are you utilizing quantized model?",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "Ankith Savio",
+                    "id": 9132165,
+                    "performanceTier": "CONTRIBUTOR",
+                    "profileUrl": "/weedoo",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/9132165-kg.png?t=2025-04-20-22-21-37",
+                    "tier": "CONTRIBUTOR",
+                    "url": "/weedoo",
+                    "userId": 9132165,
+                    "userName": "weedoo"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true
+                }
+              }
+            ],
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "Ankith Savio",
+                "id": 9132165,
+                "performanceTier": "CONTRIBUTOR",
+                "profileUrl": "/weedoo",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/9132165-kg.png?t=2025-04-20-22-21-37",
+                "tier": "CONTRIBUTOR",
+                "url": "/weedoo",
+                "userId": 9132165,
+                "userName": "weedoo"
+              }
+            },
+            "votes": {
+              "canUpvote": true
+            }
+          },
+          {
+            "author": {
+              "displayName": "Tito_42",
+              "id": 33027978,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/33027978-kg.png?t=2026-03-17-19-32-47",
+              "tier": "CONTRIBUTOR",
+              "url": "/bastienramseyer"
+            },
+            "authorType": "COMMENT",
+            "competitionRanking": 446,
+            "content": "<p>Hi Tong Hui Kang, thank you for sharing ;) I rent a GPU RTX Pro 6000 at $0.90 per hour on Google Cloud (Spot option).</p>",
+            "feedbackTrackingData": {},
+            "id": 3428724,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-03-25T21:15:32.960Z",
+            "rawMarkdown": "Hi Tong Hui Kang, thank you for sharing ;) I rent a GPU RTX Pro 6000 at $0.90 per hour on Google Cloud (Spot option).",
+            "teamUpInfo": {
+              "intro": "Looking someone to help me cross 0.80 ;)",
+              "teamLeader": {
+                "displayName": "Dido Grigorov",
+                "id": 26308823,
+                "performanceTier": "CONTRIBUTOR",
+                "profileUrl": "/didogrigorov88",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/26308823-gr.jpg",
+                "tier": "CONTRIBUTOR",
+                "url": "/didogrigorov88",
+                "userId": 26308823,
+                "userName": "didogrigorov88"
+              }
+            },
+            "votes": {
+              "canUpvote": true
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Tong Hui Kang",
+            "id": 1680925,
+            "performanceTier": "MASTER",
+            "profileUrl": "/huikang",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1680925-kg.jpg",
+            "tier": "MASTER",
+            "url": "/huikang",
+            "userId": 1680925,
+            "userName": "huikang"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 2,
+          "totalVotes": 2
+        }
+      },
+      {
+        "author": {
+          "displayName": "HZM",
+          "id": 9464013,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/9464013-kg.jpg?t=2023-09-30-12-35-57",
+          "tier": "GRANDMASTER",
+          "url": "/leehann"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 1052,
+        "content": "<p>may i ask where the problem type comes from? I am a liitle bit late to join this competation</p>",
+        "feedbackTrackingData": {},
+        "id": 3427408,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-24T03:42:12.060Z",
+        "rawMarkdown": "may i ask where the problem type comes from? I am a liitle bit late to join this competation",
+        "replies": [
+          {
+            "author": {
+              "displayName": "Tong Hui Kang",
+              "id": 1680925,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1680925-kg.jpg",
+              "tier": "MASTER",
+              "url": "/huikang"
+            },
+            "authorType": "TOPIC",
+            "competitionRanking": 748,
+            "content": "<p>Oh, that is extracted from the problem. If you see, the problems categorizes nicely into 6 (or 7) formats.</p>",
+            "feedbackTrackingData": {},
+            "id": 3427409,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-03-24T03:44:41.777Z",
+            "rawMarkdown": "Oh, that is extracted from the problem. If you see, the problems categorizes nicely into 6 (or 7) formats.",
+            "reactions": [
+              {
+                "emoji": "YAY",
+                "featuredUserNames": [
+                  "leehann",
+                  "shanzhong8"
+                ],
+                "userCount": 2
+              }
+            ],
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "Tong Hui Kang",
+                "id": 1680925,
+                "performanceTier": "MASTER",
+                "profileUrl": "/huikang",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1680925-kg.jpg",
+                "tier": "MASTER",
+                "url": "/huikang",
+                "userId": 1680925,
+                "userName": "huikang"
+              }
+            },
+            "votes": {
+              "canUpvote": true,
+              "totalUpvotes": 6,
+              "totalVotes": 6
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "HZM",
+            "id": 9464013,
+            "performanceTier": "GRANDMASTER",
+            "profileUrl": "/leehann",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/9464013-kg.jpg?t=2023-09-30-12-35-57",
+            "tier": "GRANDMASTER",
+            "url": "/leehann",
+            "userId": 9464013,
+            "userName": "leehann"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 2,
+          "totalVotes": 2
+        }
+      },
+      {
+        "author": {
+          "displayName": "Ashutosh Kumar",
+          "id": 11379547,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "CONTRIBUTOR",
+          "url": "/ashutoshkumar432"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 1389,
+        "content": "<p>Very true! It's the worst model I have ever seen.</p>",
+        "feedbackTrackingData": {},
+        "id": 3436325,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-05T17:59:01.850Z",
+        "rawMarkdown": "Very true! It's the worst model I have ever seen.",
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Ashutosh Kumar",
+            "id": 11379547,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/ashutoshkumar432",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+            "tier": "CONTRIBUTOR",
+            "url": "/ashutoshkumar432",
+            "userId": 11379547,
+            "userName": "ashutoshkumar432"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      },
+      {
+        "author": {
+          "displayName": "Bisnu sarkar",
+          "id": 4020109,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/4020109-kg.jpg",
+          "tier": "CONTRIBUTOR",
+          "url": "/bisnusarkar"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 1676,
+        "content": "<p>Thank you for the amazing work <a href=\"https://www.kaggle.com/huikang\" target=\"_blank\">@huikang</a> . It becomes a useful tool for exploring the dataset.</p>",
+        "feedbackTrackingData": {},
+        "id": 3435754,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-04T17:20:22.527Z",
+        "rawMarkdown": "Thank you for the amazing work @huikang . It becomes a useful tool for exploring the dataset.",
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "mustafizur rahman chy",
+            "id": 19309915,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/mustafizurrahmanchy",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+            "tier": "CONTRIBUTOR",
+            "url": "/mustafizurrahmanchy",
+            "userId": 19309915,
+            "userName": "mustafizurrahmanchy"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      },
+      {
+        "author": {
+          "displayName": "Aurora Rabbit",
+          "id": 9409676,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/9409676-kg.png",
+          "tier": "EXPERT",
+          "url": "/nghiahoangtrung"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 267,
+        "content": "<p><a href=\"https://www.kaggle.com/huikang\" target=\"_blank\">@huikang</a> Great job! This seems to work really well. The results are also quite consistent with my own evaluation.</p>\n<p><img src=\"https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F9409676%2Fe724c436730690b792d1966dd5e641e1%2FScreenshot%202026-03-27%20at%2016.37.56.png?generation=1774604310068955&amp;alt=media\" alt=\"\"></p>",
+        "feedbackTrackingData": {},
+        "id": 3429795,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-27T09:41:36.520Z",
+        "rawMarkdown": "@huikang Great job! This seems to work really well. The results are also quite consistent with my own evaluation.\n\n![](https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F9409676%2Fe724c436730690b792d1966dd5e641e1%2FScreenshot%202026-03-27%20at%2016.37.56.png?generation=1774604310068955&alt=media)",
+        "reactions": [
+          {
+            "emoji": "THANK_YOU",
+            "featuredUserNames": [
+              "nicbarthelemy1",
+              "komilparmar"
+            ],
+            "userCount": 2
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Aurora Rabbit",
+            "id": 9409676,
+            "performanceTier": "EXPERT",
+            "profileUrl": "/nghiahoangtrung",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/9409676-kg.png",
+            "tier": "EXPERT",
+            "url": "/nghiahoangtrung",
+            "userId": 9409676,
+            "userName": "nghiahoangtrung"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      },
+      {
+        "author": {
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "url": "/"
+        },
+        "authorType": "COMMENT",
+        "canDelete": true,
+        "feedbackTrackingData": {},
+        "id": 3436041,
+        "isDeleted": true,
+        "isThankYou": false,
+        "isUserAuthor": true,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-04-05T08:11:26.670Z",
+        "rawMarkdown": "",
+        "votes": {}
+      },
+      {
+        "author": {
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "url": "/"
+        },
+        "authorType": "COMMENT",
+        "canDelete": true,
+        "feedbackTrackingData": {},
+        "id": 3427568,
+        "isDeleted": true,
+        "isThankYou": false,
+        "isUserAuthor": true,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-24T08:54:17.780Z",
+        "rawMarkdown": "",
+        "replies": [
+          {
+            "author": {
+              "displayName": "Tong Hui Kang",
+              "id": 1680925,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1680925-kg.jpg",
+              "tier": "MASTER",
+              "url": "/huikang"
+            },
+            "authorType": "TOPIC",
+            "competitionRanking": 748,
+            "content": "<p>lol I somewhat gave up on AIMO 3, I want to prove that I can finetune models here, then I go back to AIMO 3</p>\n<p></p>",
+            "feedbackTrackingData": {},
+            "id": 3427625,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-03-24T10:06:16.957Z",
+            "rawMarkdown": "lol I somewhat gave up on AIMO 3, I want to prove that I can finetune models here, then I go back to AIMO 3\n\n~~Also I am waiting for the Tinker credits for use in AIMO 3~~",
+            "replies": [
+              {
+                "author": {
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+                  "url": "/"
+                },
+                "authorType": "COMMENT",
+                "canDelete": true,
+                "feedbackTrackingData": {},
+                "id": 3427631,
+                "isDeleted": true,
+                "isThankYou": false,
+                "isUserAuthor": true,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-03-24T10:15:27.233Z",
+                "rawMarkdown": "",
+                "votes": {}
+              }
+            ],
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "Tong Hui Kang",
+                "id": 1680925,
+                "performanceTier": "MASTER",
+                "profileUrl": "/huikang",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1680925-kg.jpg",
+                "tier": "MASTER",
+                "url": "/huikang",
+                "userId": 1680925,
+                "userName": "huikang"
+              }
+            },
+            "votes": {
+              "canUpvote": true,
+              "totalUpvotes": 1,
+              "totalVotes": 1
+            }
+          }
+        ],
+        "votes": {}
+      },
+      {
+        "author": {
+          "displayName": "Navneet",
+          "id": 15692441,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/15692441-kg.jpg?t=2025-05-18-07-58-06",
+          "tier": "CONTRIBUTOR",
+          "url": "/navneetbende"
+        },
+        "authorType": "COMMENT",
+        "content": "<p>Thank you for the base model <a href=\"https://www.kaggle.com/huikang\" target=\"_blank\">@huikang</a> </p>",
+        "feedbackTrackingData": {},
+        "id": 3429086,
+        "isThankYou": true,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-26T10:53:27.843Z",
+        "rawMarkdown": "Thank you for the base model @huikang ",
+        "votes": {
+          "canUpvote": true,
+          "totalVotes": -4
+        }
+      },
+      {
+        "author": {
+          "displayName": "DaoHe Liu",
+          "id": 21415108,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/21415108-kg.jpg?t=2025-08-26-11-25-10",
+          "tier": "EXPERT",
+          "url": "/daoheliu"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 315,
+        "content": "<p>Great work！</p>",
+        "feedbackTrackingData": {},
+        "id": 3428309,
+        "isThankYou": true,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-25T08:54:02.710Z",
+        "rawMarkdown": "Great work！",
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "DaoHe Liu",
+            "id": 21415108,
+            "performanceTier": "EXPERT",
+            "profileUrl": "/daoheliu",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/21415108-kg.jpg?t=2025-08-26-11-25-10",
+            "tier": "EXPERT",
+            "url": "/daoheliu",
+            "userId": 21415108,
+            "userName": "daoheliu"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "Tong Hui Kang",
+        "id": 1680925,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1680925-kg.jpg",
+        "tier": "MASTER",
+        "url": "/huikang"
+      },
+      "authorType": "TOPIC",
+      "competitionRanking": 748,
+      "content": "<p>I ran the base model (yes, the base model) over all the 9500 problems at least once. These are the results.</p>\n<p><a href=\"https://nemotron.huikang.dev/base\" target=\"_blank\">https://nemotron.huikang.dev/base</a></p>\n<p><img src=\"https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F1680925%2Fc52362d70d95e25bcd2c90b32cb66e4a%2FScreenshot%202026-03-23%20at%2020.43.10.png?generation=1774323809172370&amp;alt=media\" alt=\"\"></p>\n<p>You can see the model generation as well.</p>\n<p><img src=\"https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F1680925%2F2ec0a9bf244160a624ce832546c8454f%2FScreenshot%202026-03-23%20at%2020.52.27.png?generation=1774324365015607&amp;alt=media\" alt=\"\"></p>\n<p>The code is <a href=\"https://github.com/tonghuikang/nemotron\" target=\"_blank\">here</a>. This is derived from my work in <a href=\"https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-3/discussion/672528\" target=\"_blank\">AIMO 3</a> and <a href=\"https://www.kaggle.com/competitions/arc-prize-2025/writeups/my-attempt-at-arc-agi-2\" target=\"_blank\">ARC-AGI-2</a>.</p>",
+      "feedbackTrackingData": {},
+      "id": 3427405,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-03-24T03:34:27.017Z",
+      "rawMarkdown": "I ran the base model (yes, the base model) over all the 9500 problems at least once. These are the results.\n\nhttps://nemotron.huikang.dev/base\n\n![](https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F1680925%2Fc52362d70d95e25bcd2c90b32cb66e4a%2FScreenshot%202026-03-23%20at%2020.43.10.png?generation=1774323809172370&alt=media)\n\nYou can see the model generation as well.\n\n![](https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F1680925%2F2ec0a9bf244160a624ce832546c8454f%2FScreenshot%202026-03-23%20at%2020.52.27.png?generation=1774324365015607&alt=media)\n\nThe code is [here](https://github.com/tonghuikang/nemotron). This is derived from my work in [AIMO 3](https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-3/discussion/672528) and [ARC-AGI-2](https://www.kaggle.com/competitions/arc-prize-2025/writeups/my-attempt-at-arc-agi-2).",
+      "reactions": [
+        {
+          "emoji": "LOVE",
+          "featuredUserNames": [
+            "hyzhak",
+            "yassinealouini",
+            "eemonn",
+            "bigmiao",
+            "antonkratz",
+            "skr1125",
+            "samu2505",
+            "javihm77",
+            "tovvelie",
+            "jsday96",
+            "shwsun73",
+            "hechtjp",
+            "mushfirat",
+            "mikiota",
+            "weedoo",
+            "goodmeatday",
+            "adithyahegdekota",
+            "guoqingu",
+            "siddhsql",
+            "muzayyanraufrana786",
+            "ranjithhhhhh",
+            "davisdenner",
+            "trenaudiedatadog",
+            "andreaderosa",
+            "samaru0521",
+            "zuhairsan"
+          ],
+          "userCount": 26
+        }
+      ],
+      "teamUpInfo": {
+        "intro": "",
+        "teamLeader": {
+          "displayName": "Tong Hui Kang",
+          "id": 1680925,
+          "performanceTier": "MASTER",
+          "profileUrl": "/huikang",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/1680925-kg.jpg",
+          "tier": "MASTER",
+          "url": "/huikang",
+          "userId": 1680925,
+          "userName": "huikang"
+        }
+      },
+      "votes": {
+        "canUpvote": true,
+        "totalUpvotes": 139,
+        "totalVotes": 138
+      }
+    },
+    "firstMessageId": 3427405,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 684212,
+    "name": "Visualize the problems and completions from the base model",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-03-24T03:34:27.018316700Z",
+    "totalMessages": 24,
+    "totalVotes": 138,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/684212"
+  }
+}

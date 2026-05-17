@@ -1,0 +1,349 @@
+{
+  "forumTopic": {
+    "authorId": 6262292,
+    "authorPerformanceTier": "CONTRIBUTOR",
+    "authorProgressionOptOut": false,
+    "authorThumbnailName": "6262292-kg.jpg",
+    "authorUserDisplayName": "Pradeep Boopathy",
+    "authorUserName": "pradeepboopathy",
+    "commentSort": "COMMENT_LIST_SORT_BY_HOT",
+    "comments": [
+      {
+        "author": {
+          "displayName": "Yann",
+          "id": 3513565,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/3513565-kg.png?t=2026-03-24-09-34-03",
+          "tier": "CONTRIBUTOR",
+          "url": "/ylamidon"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 1201,
+        "content": "<p>For the TRL import, I was using <a href=\"https://www.kaggle.com/datasets/dennisfong/nvidia-nemotron-offline-packages\" target=\"_blank\">https://www.kaggle.com/datasets/dennisfong/nvidia-nemotron-offline-packages</a>\n, but the new version no longer includes TRL.</p>",
+        "feedbackTrackingData": {},
+        "id": 3431018,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-29T08:50:38.113Z",
+        "rawMarkdown": "For the TRL import, I was using https://www.kaggle.com/datasets/dennisfong/nvidia-nemotron-offline-packages\n, but the new version no longer includes TRL.",
+        "reactions": [
+          {
+            "emoji": "THANK_YOU",
+            "featuredUserNames": [
+              "pradeepboopathy"
+            ],
+            "userCount": 1
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Yann",
+            "id": 3513565,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/ylamidon",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/3513565-kg.png?t=2026-03-24-09-34-03",
+            "tier": "CONTRIBUTOR",
+            "url": "/ylamidon",
+            "userId": 3513565,
+            "userName": "ylamidon"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 3,
+          "totalVotes": 3
+        }
+      },
+      {
+        "author": {
+          "displayName": "Yann",
+          "id": 3513565,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/3513565-kg.png?t=2026-03-24-09-34-03",
+          "tier": "CONTRIBUTOR",
+          "url": "/ylamidon"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 1201,
+        "content": "<p>I'm using <a href=\"https://www.kaggle.com/datasets/mayukh18/nemotron-packages\" target=\"_blank\">https://www.kaggle.com/datasets/mayukh18/nemotron-packages</a> now. \nThe following code should be in top cell:</p>\n<pre><code>import os, sys\nos.environ[\"WANDB_DISABLED\"] = \"true\"\nos.environ[\"WANDB_MODE\"] = \"disabled\"\n\n!pip install -q --no-index --find-links /kaggle/input/datasets/mayukh18/nemotron-packages/packages \\\n    --ignore-installed \\\n    unsloth trl peft transformers datasets accelerate bitsandbytes\n\n!pip install -q /kaggle/input/datasets/mayukh18/nemotron-packages/causal_conv1d-1.6.1+cu12torch2.10cxx11abiTRUE-cp312-cp312-linux_x86_64.whl\n!pip install -q /kaggle/input/datasets/mayukh18/nemotron-packages/mamba_ssm-2.3.1+cu12torch2.10cxx11abiTRUE-cp312-cp312-linux_x86_64.whl\n\nfrom trl import SFTTrainer\n</code></pre>\n<p>You may need to uninstall wandb juste before with: <code>!pip uninstall -y wandb</code></p>",
+        "feedbackTrackingData": {},
+        "id": 3431231,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-29T17:44:01.933Z",
+        "rawMarkdown": "I'm using https://www.kaggle.com/datasets/mayukh18/nemotron-packages now. \nThe following code should be in top cell:\n```\nimport os, sys\nos.environ[\"WANDB_DISABLED\"] = \"true\"\nos.environ[\"WANDB_MODE\"] = \"disabled\"\n\n!pip install -q --no-index --find-links /kaggle/input/datasets/mayukh18/nemotron-packages/packages \\\n    --ignore-installed \\\n    unsloth trl peft transformers datasets accelerate bitsandbytes\n\n!pip install -q /kaggle/input/datasets/mayukh18/nemotron-packages/causal_conv1d-1.6.1+cu12torch2.10cxx11abiTRUE-cp312-cp312-linux_x86_64.whl\n!pip install -q /kaggle/input/datasets/mayukh18/nemotron-packages/mamba_ssm-2.3.1+cu12torch2.10cxx11abiTRUE-cp312-cp312-linux_x86_64.whl\n\nfrom trl import SFTTrainer\n```\nYou may need to uninstall wandb juste before with: `!pip uninstall -y wandb`\n",
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Yann",
+            "id": 3513565,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/ylamidon",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/3513565-kg.png?t=2026-03-24-09-34-03",
+            "tier": "CONTRIBUTOR",
+            "url": "/ylamidon",
+            "userId": 3513565,
+            "userName": "ylamidon"
+          }
+        },
+        "votes": {
+          "canUpvote": true,
+          "totalUpvotes": 1,
+          "totalVotes": 1
+        }
+      },
+      {
+        "author": {
+          "displayName": "Ralph Neumann",
+          "id": 269809,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/269809-kg.png",
+          "tier": "CONTRIBUTOR",
+          "url": "/xscripter"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 282,
+        "content": "<p>I am facing the same problem.</p>",
+        "feedbackTrackingData": {},
+        "id": 3431034,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-29T09:49:38.840Z",
+        "rawMarkdown": "I am facing the same problem.",
+        "replies": [
+          {
+            "author": {
+              "displayName": "Pradeep Boopathy",
+              "id": 6262292,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/6262292-kg.jpg",
+              "tier": "CONTRIBUTOR",
+              "url": "/pradeepboopathy"
+            },
+            "authorType": "TOPIC",
+            "competitionRanking": 277,
+            "content": "<p>Fixed. Please add the above code.</p>",
+            "feedbackTrackingData": {},
+            "id": 3431055,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-03-29T10:34:59.493Z",
+            "rawMarkdown": "Fixed. Please add the above code.",
+            "replies": [
+              {
+                "author": {
+                  "displayName": "Ralph Neumann",
+                  "id": 269809,
+                  "progressionOptOut": false,
+                  "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/269809-kg.png",
+                  "tier": "CONTRIBUTOR",
+                  "url": "/xscripter"
+                },
+                "authorType": "COMMENT",
+                "competitionRanking": 282,
+                "content": "<p>Which above code?\nThanks for your reply</p>",
+                "feedbackTrackingData": {},
+                "id": 3431058,
+                "isThankYou": false,
+                "kernelVersion": 0,
+                "parent": {},
+                "postDate": "2026-03-29T10:38:20.830Z",
+                "rawMarkdown": "Which above code?\nThanks for your reply",
+                "teamUpInfo": {
+                  "intro": "",
+                  "teamLeader": {
+                    "displayName": "Ralph Neumann",
+                    "id": 269809,
+                    "performanceTier": "CONTRIBUTOR",
+                    "profileUrl": "/xscripter",
+                    "progressionOptOut": false,
+                    "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/269809-kg.png",
+                    "tier": "CONTRIBUTOR",
+                    "url": "/xscripter",
+                    "userId": 269809,
+                    "userName": "xscripter"
+                  }
+                },
+                "votes": {
+                  "canUpvote": true
+                }
+              }
+            ],
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "Pradeep Boopathy",
+                "id": 6262292,
+                "performanceTier": "CONTRIBUTOR",
+                "profileUrl": "/pradeepboopathy",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/6262292-kg.jpg",
+                "tier": "CONTRIBUTOR",
+                "url": "/pradeepboopathy",
+                "userId": 6262292,
+                "userName": "pradeepboopathy"
+              }
+            },
+            "votes": {
+              "canUpvote": true
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Ralph Neumann",
+            "id": 269809,
+            "performanceTier": "CONTRIBUTOR",
+            "profileUrl": "/xscripter",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/269809-kg.png",
+            "tier": "CONTRIBUTOR",
+            "url": "/xscripter",
+            "userId": 269809,
+            "userName": "xscripter"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      },
+      {
+        "author": {
+          "displayName": "Noizersam",
+          "id": 9894684,
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+          "tier": "EXPERT",
+          "url": "/noizersam"
+        },
+        "authorType": "COMMENT",
+        "competitionRanking": 215,
+        "content": "<p>I've encountered the same problem. Have you solved it?</p>",
+        "feedbackTrackingData": {},
+        "id": 3431002,
+        "isThankYou": false,
+        "kernelVersion": 0,
+        "parent": {},
+        "postDate": "2026-03-29T08:03:04.090Z",
+        "rawMarkdown": "I've encountered the same problem. Have you solved it?",
+        "replies": [
+          {
+            "author": {
+              "displayName": "Pradeep Boopathy",
+              "id": 6262292,
+              "progressionOptOut": false,
+              "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/6262292-kg.jpg",
+              "tier": "CONTRIBUTOR",
+              "url": "/pradeepboopathy"
+            },
+            "authorType": "TOPIC",
+            "competitionRanking": 277,
+            "content": "<p>Fixed. Check above</p>",
+            "feedbackTrackingData": {},
+            "id": 3431056,
+            "isThankYou": false,
+            "kernelVersion": 0,
+            "parent": {},
+            "postDate": "2026-03-29T10:35:22.793Z",
+            "rawMarkdown": "Fixed. Check above",
+            "teamUpInfo": {
+              "intro": "",
+              "teamLeader": {
+                "displayName": "Pradeep Boopathy",
+                "id": 6262292,
+                "performanceTier": "CONTRIBUTOR",
+                "profileUrl": "/pradeepboopathy",
+                "progressionOptOut": false,
+                "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/6262292-kg.jpg",
+                "tier": "CONTRIBUTOR",
+                "url": "/pradeepboopathy",
+                "userId": 6262292,
+                "userName": "pradeepboopathy"
+              }
+            },
+            "votes": {
+              "canUpvote": true
+            }
+          }
+        ],
+        "teamUpInfo": {
+          "intro": "",
+          "teamLeader": {
+            "displayName": "Noizersam",
+            "id": 9894684,
+            "performanceTier": "EXPERT",
+            "profileUrl": "/noizersam",
+            "progressionOptOut": false,
+            "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/default-thumb.png",
+            "tier": "EXPERT",
+            "url": "/noizersam",
+            "userId": 9894684,
+            "userName": "noizersam"
+          }
+        },
+        "votes": {
+          "canUpvote": true
+        }
+      }
+    ],
+    "firstMessage": {
+      "author": {
+        "displayName": "Pradeep Boopathy",
+        "id": 6262292,
+        "progressionOptOut": false,
+        "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/6262292-kg.jpg",
+        "tier": "CONTRIBUTOR",
+        "url": "/pradeepboopathy"
+      },
+      "authorType": "TOPIC",
+      "competitionRanking": 277,
+      "content": "<p>Add this in the first cell\nalso add dataset: /kaggle/input/datasets/pradeepboopathy/nvidia-nemotron-offline-package\nin the dataset panel</p>\n<pre><code>import subprocess, sys, os\nfrom pathlib import Path\ndef resolve_python_path(target_dir):\n    for pth_file in Path(target_dir).glob(\"*.pth\"):\n        with pth_file.open() as fp:\n            relpath = fp.read()\n            rel_pack_path = (pth_file.parent/relpath)\n            if rel_pack_path.exists():\n                print(f\"append {rel_pack_path}\")\n                sys.path.append(str(rel_pack_path))\n\n\n\noffline_dir = \"/kaggle/input/datasets/pradeepboopathy/nvidia-nemotron-offline-package/extra_packages\"\ntarget_dir = \"/kaggle/working/packages\"\n\nos.makedirs(target_dir, exist_ok=True)\nresolve_python_path(\"/kaggle/usr/lib/notebooks/ryanholbrook/nvidia-utility-script/\")\n\nif os.path.exists(offline_dir):\n    subprocess.check_call([\n        sys.executable, \"-m\", \"pip\", \"install\", \"-q\",\n        \"--no-index\",\n        \"--find-links\", offline_dir,\n        \"--target\", target_dir,\n        \"datasets\", \"trl\"\n    ])\n    print(\"Installed from offline packages\")\n\n\n# Add to Python path\nsys.path.append(target_dir)\nresolve_python_path(target_dir)\n\nimport datasets, cutlass\n</code></pre>",
+      "feedbackTrackingData": {},
+      "id": 3428618,
+      "isThankYou": false,
+      "kernelVersion": 0,
+      "parent": {},
+      "postDate": "2026-03-25T18:16:35.603Z",
+      "rawMarkdown": "Add this in the first cell\nalso add dataset: /kaggle/input/datasets/pradeepboopathy/nvidia-nemotron-offline-package\nin the dataset panel\n\n```python\nimport subprocess, sys, os\nfrom pathlib import Path\ndef resolve_python_path(target_dir):\n    for pth_file in Path(target_dir).glob(\"*.pth\"):\n        with pth_file.open() as fp:\n            relpath = fp.read()\n            rel_pack_path = (pth_file.parent/relpath)\n            if rel_pack_path.exists():\n                print(f\"append {rel_pack_path}\")\n                sys.path.append(str(rel_pack_path))\n\n\n\noffline_dir = \"/kaggle/input/datasets/pradeepboopathy/nvidia-nemotron-offline-package/extra_packages\"\ntarget_dir = \"/kaggle/working/packages\"\n\nos.makedirs(target_dir, exist_ok=True)\nresolve_python_path(\"/kaggle/usr/lib/notebooks/ryanholbrook/nvidia-utility-script/\")\n\nif os.path.exists(offline_dir):\n    subprocess.check_call([\n        sys.executable, \"-m\", \"pip\", \"install\", \"-q\",\n        \"--no-index\",\n        \"--find-links\", offline_dir,\n        \"--target\", target_dir,\n        \"datasets\", \"trl\"\n    ])\n    print(\"Installed from offline packages\")\n\n\n# Add to Python path\nsys.path.append(target_dir)\nresolve_python_path(target_dir)\n\nimport datasets, cutlass\n```",
+      "teamUpInfo": {
+        "intro": "",
+        "teamLeader": {
+          "displayName": "Pradeep Boopathy",
+          "id": 6262292,
+          "performanceTier": "CONTRIBUTOR",
+          "profileUrl": "/pradeepboopathy",
+          "progressionOptOut": false,
+          "thumbnailUrl": "https://storage.googleapis.com/kaggle-avatars/thumbnails/6262292-kg.jpg",
+          "tier": "CONTRIBUTOR",
+          "url": "/pradeepboopathy",
+          "userId": 6262292,
+          "userName": "pradeepboopathy"
+        }
+      },
+      "votes": {
+        "canUpvote": true,
+        "totalUpvotes": 6,
+        "totalVotes": 5
+      }
+    },
+    "firstMessageId": 3428618,
+    "forumId": 10085877,
+    "forumName": "NVIDIA Nemotron Model Reasoning Challenge",
+    "id": 684654,
+    "name": "Fixed: Any fix for trl installation?",
+    "parentName": "nvidia-nemotron-model-reasoning-challenge",
+    "parentUrl": "/competitions/nvidia-nemotron-model-reasoning-challenge",
+    "postDate": "2026-03-25T18:16:35.602265Z",
+    "totalMessages": 7,
+    "totalVotes": 5,
+    "url": "/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/684654"
+  }
+}
