@@ -1,0 +1,321 @@
+{
+  "branch": "v230-v226-complementarity",
+  "dataset": {
+    "data_repo": "felipesp1983/kg1-v536-v534-bit-v523-equation-artifacts",
+    "data_root": "v536-v534-bit-v523-equation-20260517T024752Z",
+    "dataset_upload_commit": "d2f11d82b40e3e9aa0f5add58c3698a7428bf550",
+    "train_file": "v536-v534-bit-v523-equation-20260517T024752Z/v536_v534_bit_v523_equation_pack_train.jsonl",
+    "train_rows": 1026,
+    "train_sha256": "6c7a91891156cdc666ffbd6478ddfe02bc0c258473615907e40675c2aa716700",
+    "val_file": "v536-v534-bit-v523-equation-20260517T024752Z/v536_v534_bit_v523_equation_pack_val.jsonl",
+    "val_rows": 219,
+    "val_sha256": "26bf3b0393c3f9757e22b13d91583f15542a5b6f2d1ae13fbf3e34322262f093"
+  },
+  "expected_commit": "6512c3385fa308890a1c02b56d8d8ef85d887d72",
+  "flavor": "h200",
+  "generated_at_utc": "2026-05-17T02:59:06.251993+00:00",
+  "hardware": {
+    "accelerator_model": "H200",
+    "accelerator_quantity": "1",
+    "accelerator_vram": "141 GB",
+    "cpu": "23 vCPU",
+    "name": "h200",
+    "pretty_name": "Nvidia H200",
+    "ram": "256 GB",
+    "unit_cost_usd": 0.083333,
+    "unit_label": "minute"
+  },
+  "image": "nvcr.io/nvidia/nemo:25.11.nemotron_3_nano",
+  "init_adapter": {
+    "repo": "felipesp1983/kg1-nemotron-lora-v290-rank19-micro-patch-smoke",
+    "subfolder": "checkpoint-6"
+  },
+  "job_env": {
+    "KG1_ALLOWED_HF_FLAVORS": "h200",
+    "KG1_ANSWER_SPAN_LOSS_WEIGHT": "1.0",
+    "KG1_ANSWER_SPAN_MIN_WEIGHTED_TOKENS": "1",
+    "KG1_BRANCH": "v230-v226-complementarity",
+    "KG1_CRISIS_MODE_BACKFIRE_GUARD": "1",
+    "KG1_EXPECTED_COMMIT": "6512c3385fa308890a1c02b56d8d8ef85d887d72",
+    "KG1_EXPECTED_MAX_STEPS": "4",
+    "KG1_EXPECTED_TORCH_VERSION": "",
+    "KG1_HF_FLAVOR": "h200",
+    "KG1_HF_MAX_UNIT_COST_USD": "0.09",
+    "KG1_HF_UNIT_COST_USD": "0.083333",
+    "KG1_INIT_ADAPTER_REPO": "felipesp1983/kg1-nemotron-lora-v290-rank19-micro-patch-smoke",
+    "KG1_INIT_ADAPTER_SUBFOLDER": "checkpoint-6",
+    "KG1_LORA_TARGET_PARAMETERS": "mlp.experts.gate_up_proj,mlp.experts.down_proj",
+    "KG1_LOSS_NORMALIZATION_MODE": "example_mean",
+    "KG1_MAX_PROMPT_TRUNCATION_RATE": "0.0",
+    "KG1_MIN_GPU_TOTAL_GIB": "130",
+    "KG1_OUTPUT_REPO": "felipesp1983/kg1-nemotron-lora-v536-nemo-h200-v534bit-v523eq-v290ckpt6",
+    "KG1_REQUIRED_GPU_NAME_REGEX": "H200",
+    "KG1_REQUIRED_TRAIN_FAMILIES": "bit_manipulation,equation_transform",
+    "KG1_REQUIRED_TRAIN_SUBCATEGORIES": "bit_huikang_synthetic_cho,bit_huikang_synthetic_maj,bit_konbu_high_confidence_trace,equation_numeric_add_direct,equation_numeric_colon_absdiff,equation_numeric_colon_trailing_zero,equation_numeric_minus_signed",
+    "KG1_REQUIRED_VAL_FAMILIES": "bit_manipulation,equation_transform",
+    "KG1_REQUIRED_VAL_SUBCATEGORIES": "bit_huikang_synthetic_cho,bit_huikang_synthetic_maj,bit_konbu_high_confidence_trace,equation_numeric_add_direct,equation_numeric_colon_absdiff,equation_numeric_colon_trailing_zero,equation_numeric_minus_signed",
+    "KG1_REQUIRE_CUDA": "1",
+    "KG1_REQUIRE_LORA_TARGET_PARAMETERS_TRAINABLE": "1",
+    "KG1_REQUIRE_MAMBA_IMPORTS": "1",
+    "KG1_REQUIRE_OFFSET_MASK": "1",
+    "KG1_RUN_ID": "v536-nemo-h200-v534bit-v523eq-v290ckpt6-20260517T025904Z",
+    "KG1_SOURCE_WEIGHTS": "v536_v534_bit_v523_equation_pack=1.00",
+    "KG1_STRICT_INIT_ADAPTER_CONFIG": "1",
+    "KG1_SUBCATEGORY_WEIGHTS": "bit_huikang_synthetic_cho=1.00,bit_huikang_synthetic_maj=1.00,bit_konbu_high_confidence_trace=1.00,equation_numeric_add_direct=1.00,equation_numeric_colon_absdiff=1.00,equation_numeric_colon_trailing_zero=1.00,equation_numeric_minus_signed=1.00",
+    "KG1_TRAINABLE_LORA_MODULES": "q_proj,k_proj,v_proj,o_proj,up_proj,down_proj",
+    "KG1_TRAIN_FILE": "v536-v534-bit-v523-equation-20260517T024752Z/v536_v534_bit_v523_equation_pack_train.jsonl",
+    "KG1_TRAIN_ROWS": "1026",
+    "KG1_TRAIN_SHA": "6c7a91891156cdc666ffbd6478ddfe02bc0c258473615907e40675c2aa716700",
+    "KG1_VAL_FILE": "v536-v534-bit-v523-equation-20260517T024752Z/v536_v534_bit_v523_equation_pack_val.jsonl",
+    "KG1_VAL_ROWS": "219",
+    "KG1_VAL_SHA": "26bf3b0393c3f9757e22b13d91583f15542a5b6f2d1ae13fbf3e34322262f093"
+  },
+  "mode": "debug_only_no_job_launched",
+  "namespace": "felipesp1983",
+  "next_action": "Monitor every 40 seconds; run weak eval checkpoint-2/checkpoint-4 only if training uploads complete adapters.",
+  "objective_alignment": {
+    "path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v536_hf_h200_launch\\v536-nemo-h200-v534bit-v523eq-v290ckpt6-20260517T025904Z_objective_alignment_gate.json",
+    "report": {
+      "dataset_manifest_json": "",
+      "findings": [],
+      "generated_at_utc": "2026-05-17T02:59:06.053426+00:00",
+      "hf_gpu_allowed": true,
+      "schema_version": "kg1_v478_training_objective_alignment_gate_v1",
+      "source_weights": {
+        "v536_v534_bit_v523_equation_pack": 1.0
+      },
+      "subcategory_weights": {
+        "bit_huikang_synthetic_cho": 1.0,
+        "bit_huikang_synthetic_maj": 1.0,
+        "bit_konbu_high_confidence_trace": 1.0,
+        "equation_numeric_add_direct": 1.0,
+        "equation_numeric_colon_absdiff": 1.0,
+        "equation_numeric_colon_trailing_zero": 1.0,
+        "equation_numeric_minus_signed": 1.0
+      },
+      "thresholds": {
+        "max_any_family_effective_share": 0.75,
+        "max_equation_effective_share": 0.4,
+        "min_bit_effective_share": 0.6
+      },
+      "train": {
+        "effective_share_by_family": {
+          "bit_manipulation": {
+            "share": 0.688109,
+            "weight": 706.0
+          },
+          "equation_transform": {
+            "share": 0.311891,
+            "weight": 320.0
+          }
+        },
+        "effective_share_by_source": {
+          "v536_v534_bit_v523_equation_pack": {
+            "share": 1.0,
+            "weight": 1026.0
+          }
+        },
+        "effective_share_by_subcategory": {
+          "bit_huikang_synthetic_cho": {
+            "share": 0.230019,
+            "weight": 236.0
+          },
+          "bit_huikang_synthetic_maj": {
+            "share": 0.229045,
+            "weight": 235.0
+          },
+          "bit_konbu_high_confidence_trace": {
+            "share": 0.229045,
+            "weight": 235.0
+          },
+          "equation_numeric_add_direct": {
+            "share": 0.077973,
+            "weight": 80.0
+          },
+          "equation_numeric_colon_absdiff": {
+            "share": 0.077973,
+            "weight": 80.0
+          },
+          "equation_numeric_colon_trailing_zero": {
+            "share": 0.077973,
+            "weight": 80.0
+          },
+          "equation_numeric_minus_signed": {
+            "share": 0.077973,
+            "weight": 80.0
+          }
+        },
+        "effective_total_weight": 1026.0,
+        "physical_share_by_family": {
+          "bit_manipulation": {
+            "rows": 706,
+            "share": 0.688109
+          },
+          "equation_transform": {
+            "rows": 320,
+            "share": 0.311891
+          }
+        },
+        "physical_share_by_source": {
+          "v536_v534_bit_v523_equation_pack": {
+            "rows": 1026,
+            "share": 1.0
+          }
+        },
+        "physical_share_by_subcategory": {
+          "bit_huikang_synthetic_cho": {
+            "rows": 236,
+            "share": 0.230019
+          },
+          "bit_huikang_synthetic_maj": {
+            "rows": 235,
+            "share": 0.229045
+          },
+          "bit_konbu_high_confidence_trace": {
+            "rows": 235,
+            "share": 0.229045
+          },
+          "equation_numeric_add_direct": {
+            "rows": 80,
+            "share": 0.077973
+          },
+          "equation_numeric_colon_absdiff": {
+            "rows": 80,
+            "share": 0.077973
+          },
+          "equation_numeric_colon_trailing_zero": {
+            "rows": 80,
+            "share": 0.077973
+          },
+          "equation_numeric_minus_signed": {
+            "rows": 80,
+            "share": 0.077973
+          }
+        },
+        "rows": 1026,
+        "unknown_source_rows": 0,
+        "unknown_subcategory_rows": 0
+      },
+      "train_jsonl": "C:\\Users\\davis\\.cache\\huggingface\\hub\\datasets--felipesp1983--kg1-v536-v534-bit-v523-equation-artifacts\\snapshots\\d2f11d82b40e3e9aa0f5add58c3698a7428bf550\\v536-v534-bit-v523-equation-20260517T024752Z\\v536_v534_bit_v523_equation_pack_train.jsonl",
+      "val_jsonl": "C:\\Users\\davis\\.cache\\huggingface\\hub\\datasets--felipesp1983--kg1-v536-v534-bit-v523-equation-artifacts\\snapshots\\d2f11d82b40e3e9aa0f5add58c3698a7428bf550\\v536-v534-bit-v523-equation-20260517T024752Z\\v536_v534_bit_v523_equation_pack_val.jsonl",
+      "validation": {
+        "effective_share_by_family": {
+          "bit_manipulation": {
+            "share": 0.634703,
+            "weight": 139.0
+          },
+          "equation_transform": {
+            "share": 0.365297,
+            "weight": 80.0
+          }
+        },
+        "effective_share_by_source": {
+          "v536_v534_bit_v523_equation_pack": {
+            "share": 1.0,
+            "weight": 219.0
+          }
+        },
+        "effective_share_by_subcategory": {
+          "bit_huikang_synthetic_cho": {
+            "share": 0.214612,
+            "weight": 47.0
+          },
+          "bit_huikang_synthetic_maj": {
+            "share": 0.210046,
+            "weight": 46.0
+          },
+          "bit_konbu_high_confidence_trace": {
+            "share": 0.210046,
+            "weight": 46.0
+          },
+          "equation_numeric_add_direct": {
+            "share": 0.091324,
+            "weight": 20.0
+          },
+          "equation_numeric_colon_absdiff": {
+            "share": 0.091324,
+            "weight": 20.0
+          },
+          "equation_numeric_colon_trailing_zero": {
+            "share": 0.091324,
+            "weight": 20.0
+          },
+          "equation_numeric_minus_signed": {
+            "share": 0.091324,
+            "weight": 20.0
+          }
+        },
+        "effective_total_weight": 219.0,
+        "physical_share_by_family": {
+          "bit_manipulation": {
+            "rows": 139,
+            "share": 0.634703
+          },
+          "equation_transform": {
+            "rows": 80,
+            "share": 0.365297
+          }
+        },
+        "physical_share_by_source": {
+          "v536_v534_bit_v523_equation_pack": {
+            "rows": 219,
+            "share": 1.0
+          }
+        },
+        "physical_share_by_subcategory": {
+          "bit_huikang_synthetic_cho": {
+            "rows": 47,
+            "share": 0.214612
+          },
+          "bit_huikang_synthetic_maj": {
+            "rows": 46,
+            "share": 0.210046
+          },
+          "bit_konbu_high_confidence_trace": {
+            "rows": 46,
+            "share": 0.210046
+          },
+          "equation_numeric_add_direct": {
+            "rows": 20,
+            "share": 0.091324
+          },
+          "equation_numeric_colon_absdiff": {
+            "rows": 20,
+            "share": 0.091324
+          },
+          "equation_numeric_colon_trailing_zero": {
+            "rows": 20,
+            "share": 0.091324
+          },
+          "equation_numeric_minus_signed": {
+            "rows": 20,
+            "share": 0.091324
+          }
+        },
+        "rows": 219,
+        "unknown_source_rows": 0,
+        "unknown_subcategory_rows": 0
+      }
+    }
+  },
+  "output_repo": "felipesp1983/kg1-nemotron-lora-v536-nemo-h200-v534bit-v523eq-v290ckpt6",
+  "recipe": {
+    "answer_span_loss_weight": "1.0",
+    "eval_every_steps": 2,
+    "eval_max_examples": 219,
+    "final_learning_rate": "5.0e-9",
+    "learning_rate": "2.0e-8",
+    "loss_normalization_mode": "example_mean",
+    "max_steps": 4,
+    "previous_version": "V523 targeted source trace pack",
+    "promotion_gate": "reject unless total>=193, equation>=57 label-free, bit>=136, truncated=0 and protected rows hold",
+    "save_every_steps": 2,
+    "source_weights": "v536_v534_bit_v523_equation_pack=1.00",
+    "subcategory_weights": "bit_huikang_synthetic_cho=1.00,bit_huikang_synthetic_maj=1.00,bit_konbu_high_confidence_trace=1.00,equation_numeric_add_direct=1.00,equation_numeric_colon_absdiff=1.00,equation_numeric_colon_trailing_zero=1.00,equation_numeric_minus_signed=1.00",
+    "target_parameters_trainability": "required_trainable",
+    "trainable_lora_modules": "q_proj,k_proj,v_proj,o_proj,up_proj,down_proj",
+    "version_comparison_artifact": "artifacts/version_diffs/V536_VS_V523.md"
+  },
+  "run_id": "v536-nemo-h200-v534bit-v523eq-v290ckpt6-20260517T025904Z",
+  "version": "v536_v534_bit_v523_equation_example_mean_h200"
+}

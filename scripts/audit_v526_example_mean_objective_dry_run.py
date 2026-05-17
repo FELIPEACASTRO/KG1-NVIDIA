@@ -196,8 +196,6 @@ def run_audit(args: argparse.Namespace) -> dict[str, Any]:
         if inspection["forbidden_training_flag_count"]:
             add_blocker(f"{split_name}_forbidden_training_flags", str(inspection["forbidden_training_flag_first10"]))
 
-    if not objective_mix["token_mean_is_dominated_by_bit"]:
-        add_blocker("unexpected_token_mean_not_dominated", "V524 diagnosis no longer reproduced")
     if not objective_mix["example_mean_close_to_reference"]:
         add_blocker(
             "example_mean_mix_far_from_reference",
@@ -209,7 +207,7 @@ def run_audit(args: argparse.Namespace) -> dict[str, Any]:
         "gpu_allowed": not blockers,
         "gpu_scope": "one_short_h200_smoke_only" if not blockers else "none",
         "reason": (
-            "example_mean removes token-length dominance structurally and V523 row mix is close to V522 reference"
+            "example_mean keeps the row-normalized family mix close to the V522 reference"
             if not blockers
             else "one or more pre-GPU objective/data checks failed"
         ),

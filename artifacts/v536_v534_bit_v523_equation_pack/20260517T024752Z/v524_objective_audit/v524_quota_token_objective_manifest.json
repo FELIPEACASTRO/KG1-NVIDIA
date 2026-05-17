@@ -1,0 +1,39 @@
+{
+  "decision": {
+    "gpu_allowed": false,
+    "next_action": "Before GPU, either enable row/family-normalized loss or build V525 shorter bit traces, then rerun V286/V513/V524.",
+    "reason": "Rows and loss-token mass differ materially; paid GPU must use an objective that prevents token-length bias.",
+    "status": "quota_ok_cpu_only"
+  },
+  "findings": [
+    {
+      "code": "quota_within_reference_gain_band",
+      "detail": "row/token shares are within the configured tolerance band",
+      "severity": "info"
+    }
+  ],
+  "generated_at_utc": "2026-05-17T02:48:42.495670+00:00",
+  "outputs": {
+    "manifest_json": "artifacts\\v536_v534_bit_v523_equation_pack\\20260517T024752Z\\v524_objective_audit\\v524_quota_token_objective_manifest.json",
+    "summary_md": "artifacts\\v536_v534_bit_v523_equation_pack\\20260517T024752Z\\v524_objective_audit\\KG1_V524_QUOTA_TOKEN_OBJECTIVE_AUDIT.md"
+  },
+  "reference_gain_mix": {
+    "bit_manipulation": 23,
+    "equation_transform": 8,
+    "target_bit_share": 0.741935
+  },
+  "schema_version": "kg1_v524_quota_token_objective_audit_v1",
+  "v523_train_mix": {
+    "loss_token_bit_share": 0.819409,
+    "loss_token_mass": {
+      "bit_manipulation": 153908,
+      "equation_transform": 33920
+    },
+    "row_bit_share": 0.688109,
+    "row_family_counts": {
+      "bit_manipulation": 706,
+      "equation_transform": 320
+    }
+  },
+  "version": "V524"
+}

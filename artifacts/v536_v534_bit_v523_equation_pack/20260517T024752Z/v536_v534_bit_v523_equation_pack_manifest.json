@@ -1,0 +1,96 @@
+{
+  "blocked_actions": [
+    "train_gpu",
+    "full_eval",
+    "package",
+    "kaggle_submit"
+  ],
+  "blockers": [],
+  "decision": {
+    "dataset_ready_for_cpu_gates": true,
+    "gpu_allowed": false,
+    "next_action": "Run V286 boxed_suffix, V513, V524, then only a short example_mean smoke if all pass.",
+    "reason": "V536 is a controlled replacement of V523 bit rows with V534 shorter bit traces. It still requires V286, V513, objective audit, and FinOps gates before GPU.",
+    "status": "dataset_ready_for_cpu_gates"
+  },
+  "forbidden_reference_csvs": [
+    "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v516_label_free_weak_baseline\\v516_label_free_v290_checkpoint6_baseline.csv",
+    "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v293_gap_mining\\inputs\\v291_full_predictions.csv"
+  ],
+  "generated_at_utc": "2026-05-17T02:47:52.996932+00:00",
+  "inputs": {
+    "train_bit_rows": 706,
+    "train_equation_rows": 320,
+    "v523_manifest_json": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v523_targeted_source_trace_pack\\20260516T235821Z\\v523_targeted_source_trace_pack_manifest.json",
+    "v523_manifest_sha256": "23dc60e6991bd646994d2a0876a8abba4933601b1b2499990c21f1462ca15a16",
+    "v534_manifest_json": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v534_bit_source_only_trace_pack\\20260517T024405Z\\v534_bit_source_only_trace_pack_manifest.json",
+    "v534_manifest_sha256": "f33022dc17be8a36075133a2c45bc815d1a488a81066e22261cae9867ea2597b",
+    "val_bit_rows": 139,
+    "val_equation_rows": 80
+  },
+  "label": "v536_v534_bit_v523_equation_pack",
+  "outputs": {
+    "comparison_md": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v536_v534_bit_v523_equation_pack\\20260517T024752Z\\V536_VS_V523.md",
+    "manifest_json": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v536_v534_bit_v523_equation_pack\\20260517T024752Z\\v536_v534_bit_v523_equation_pack_manifest.json",
+    "train_jsonl": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v536_v534_bit_v523_equation_pack\\20260517T024752Z\\v536_v534_bit_v523_equation_pack_train.jsonl",
+    "train_sha256": "6c7a91891156cdc666ffbd6478ddfe02bc0c258473615907e40675c2aa716700",
+    "val_jsonl": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v536_v534_bit_v523_equation_pack\\20260517T024752Z\\v536_v534_bit_v523_equation_pack_val.jsonl",
+    "val_sha256": "26bf3b0393c3f9757e22b13d91583f15542a5b6f2d1ae13fbf3e34322262f093"
+  },
+  "schema_version": "kg1_v536_v534_bit_v523_equation_pack_v1",
+  "train_summary": {
+    "bad_final_answer": 0,
+    "component_counts": {
+      "v523_equation": 320,
+      "v534_bit": 706
+    },
+    "duplicate_prompt_answer": 0,
+    "family_counts": {
+      "bit_manipulation": 706,
+      "equation_transform": 320
+    },
+    "reference_overlap_counts": {},
+    "rows": 1026,
+    "source_counts": {
+      "v536_v534_bit_v523_equation_pack": 1026
+    },
+    "subcategory_counts": {
+      "bit_huikang_synthetic_cho": 236,
+      "bit_huikang_synthetic_maj": 235,
+      "bit_konbu_high_confidence_trace": 235,
+      "equation_numeric_add_direct": 80,
+      "equation_numeric_colon_absdiff": 80,
+      "equation_numeric_colon_trailing_zero": 80,
+      "equation_numeric_minus_signed": 80
+    },
+    "training_flag_counts": {}
+  },
+  "validation_summary": {
+    "bad_final_answer": 0,
+    "component_counts": {
+      "v523_equation": 80,
+      "v534_bit": 139
+    },
+    "duplicate_prompt_answer": 0,
+    "family_counts": {
+      "bit_manipulation": 139,
+      "equation_transform": 80
+    },
+    "reference_overlap_counts": {},
+    "rows": 219,
+    "source_counts": {
+      "v536_v534_bit_v523_equation_pack": 219
+    },
+    "subcategory_counts": {
+      "bit_huikang_synthetic_cho": 47,
+      "bit_huikang_synthetic_maj": 46,
+      "bit_konbu_high_confidence_trace": 46,
+      "equation_numeric_add_direct": 20,
+      "equation_numeric_colon_absdiff": 20,
+      "equation_numeric_colon_trailing_zero": 20,
+      "equation_numeric_minus_signed": 20
+    },
+    "training_flag_counts": {}
+  },
+  "version": "V536"
+}

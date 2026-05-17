@@ -90,8 +90,10 @@ Ultima evidencia operacional relevante:
 | V533 Huikang local package | `archive (9).zip` auditado sem extrair pesos; `adapter_v26`: LoRA `all-linear`, r32/alpha32, `418` tensores F32, `386072576` params; `bit_manipulation_3input_traces`: `100` oficiais, `0` mismatch; `2000` sinteticos CHO/MAJ no ZIP local, apesar da metadata citar `10000`; overlap weak bit `10`, incluindo `8` misses atuais | P0 para bit CHO/MAJ trace mining source-only; nao copiar weak rows para treino promocional; adapter v26 e P1 weak eval estatico, nao submit-safe sem gate |
 | V534 roadmap/F2 double check | corrigiu contradicao "duas frentes"; reafirmou que `competition_match`/`answer`/`expected_answer` sao auditoria, nao selecao; removeu broad SFT/V-CARS/Tatoeba/candidate-pool direto do plano ativo | plano ativo agora e CPU source-only bit, CPU equation canonicalization/hard negatives, adapter-only eval barato, GPU bloqueada ate novo sinal |
 | V535 specialist triple check | revisao independente apontou risco de leakage no CSV V532, fallback silencioso para `prediction`, superconfianca em `verifier_score=1.0`, thresholds contraditorios e adapter externo conflitando com itens removidos | V532 deixou de exportar decisoes row-level, `--fail-on-blocked` validado, CSVs weak-overlap Huikang removidos; adapters externos rebaixados para diagnostico/proveniencia; thresholds separados em smoke, weak promocional e package |
+| V536 V534-bit/V523-equation pack | dataset source-only controlado criado: `1026` train, `219` val; quotas iguais ao V523 (`706/320` train bit/equation, `139/80` val); bit substituido por Konbu high-confidence + Huikang CHO/MAJ; `0` overlap weak/full, `0` duplicidade; V286, V513, V524 e V526 passam | autoriza somente um smoke H200 curto com `LOSS_NORMALIZATION_MODE=example_mean`; nao autoriza treino longo nem submit sem ACC label-free real |
+| V536 HF upload/debug/pre-paid | dataset enviado para HF commit `d2f11d82b40e3e9aa0f5add58c3698a7428bf550`; launcher debug baixou do HF e validou hashes, H200 `0.083333/min`, adapter inicial e objetivo; `kg1_pre_paid_job_integration_gate` passou sem findings | pronto para commit/push e um smoke H200 de 4 steps; ainda nao ha ganho ACC medido |
 
-## Decisao Atual V535
+## Decisao Atual V536
 
 Artefatos:
 
@@ -109,27 +111,28 @@ Artefatos:
 - `artifacts/v532_external_equation_candidate_gate/KG1_V532_EXTERNAL_EQUATION_CANDIDATE_GATE.md`;
 - `artifacts/v533_huikang_artifacts_audit/KG1_V533_HUIKANG_ARTIFACTS_AUDIT.md`;
 - `artifacts/v534_roadmap_double_check/KG1_V534_ROADMAP_DOUBLE_CHECK.md`;
-- `artifacts/v535_specialist_triple_check/KG1_V535_SPECIALIST_TRIPLE_CHECK.md`.
+- `artifacts/v535_specialist_triple_check/KG1_V535_SPECIALIST_TRIPLE_CHECK.md`;
+- `artifacts/v534_bit_source_only_trace_pack/20260517T024405Z/v534_bit_source_only_trace_pack_manifest.json`;
+- `artifacts/v536_v534_bit_v523_equation_pack/20260517T024752Z/v536_v534_bit_v523_equation_pack_manifest.json`;
+- `artifacts/v536_v534_bit_v523_equation_pack/20260517T024752Z/v526_example_mean_dry_run/v526_example_mean_objective_dry_run_manifest.json`;
+- `artifacts/v536_hf_h200_launch/v536_hf_dataset_upload_manifest.json`;
+- `artifacts/v536_hf_h200_launch/v536_pre_paid_job_integration_gate.json`;
+- `artifacts/version_diffs/V536_VS_V523.md`.
 
 O consenso externo e a auditoria dos notebooks baixados nao autorizam treino
 longo nem broad SFT. O plano executavel agora fica restrito as frentes abaixo,
 em ordem de prioridade:
 
-1. Frente CPU V534 bit source-only, obrigatoria antes de GPU:
-   - portar/implementar as ideias P0 dos notebooks `pjt222`, `pearpn25`,
-     `konbu17` e `zzys0316`;
-   - bit: per-bit/bitsum/stride, INHIB/IMPL, CH/CHO, MAJ3, XOR3, GF(2), ANF;
-   - medir label-free em source/weak diagnostic, sem usar weak/full como
-     treino;
-   - gerar traces curtas somente de source rows verificadas.
-   - atualizacao V530: usar `archive.zip` como fonte P0 adicional de bit,
-     comecando por `bit_manipulation_cot_success.csv` e `confidence=high`;
-     `bit_manipulation_cot_failed.csv` entra somente como diagnostico/hard
-     negative.
-   - atualizacao V533: usar Huikang CHO/MAJ como fonte P0 adicional, mas
-     remover qualquer row weak/full do treino promocional; os 8 weak misses
-     cobertos sao diagnostico de cobertura, nao exemplos de treino.
-2. Frente CPU V535 equation canonicalization/hard negatives:
+1. Frente V536 smoke H200 curto:
+   - V534/V536 ja materializou a frente CPU bit source-only com Konbu
+     high-confidence e Huikang CHO/MAJ, removendo qualquer overlap weak/full;
+   - usar exatamente `LOSS_NORMALIZATION_MODE=example_mean`;
+   - manter `lm_head` congelado e MoE `up_proj/down_proj` treinaveis;
+   - abortar no primeiro checkpoint que violar `bit>=136`, `equation>=57`,
+     `trunc=0` ou linhas protegidas;
+   - se o smoke nao mostrar ganho ACC label-free, bloquear GPU e voltar para
+     equation canonicalization/hard negatives.
+2. Frente CPU equation canonicalization/hard negatives:
    - usar os downloads pequenos ja auditados no V532 como referencia, nao como
      patch direto;
    - qualquer novo gate local so pode ranquear candidatos por features
@@ -158,8 +161,8 @@ em ordem de prioridade:
      superar baseline, usar apenas como diagnostico/proveniencia e abrir uma
      decisao separada de compatibilidade/licenca/submit antes de qualquer
      package.
-4. GPU SFT volta a ficar bloqueada ate a frente CPU produzir novo dataset
-   source-only com:
+4. Novo GPU SFT alem do smoke V536 volta a ficar bloqueado ate a frente CPU
+   produzir novo dataset source-only com:
    - zero overlap weak/full por `id`, `prompt_sha256` e
      `prompt+answer_sha256`;
    - tokenization/offset-mask/truncation gates limpos;

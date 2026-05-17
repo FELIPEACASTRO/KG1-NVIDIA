@@ -1,0 +1,179 @@
+{
+  "blocked_actions": [
+    "full_eval",
+    "package",
+    "kaggle_submit"
+  ],
+  "config": {
+    "assistant_final_answer_mode": "boxed_suffix",
+    "max_length": 8192,
+    "max_prompt_truncation_rate": 0.0,
+    "min_train_rows": 1026,
+    "min_val_rows": 219,
+    "require_offset_mask": true
+  },
+  "dataset_manifest_json": "artifacts\\v536_v534_bit_v523_equation_pack\\20260517T024752Z\\v536_v534_bit_v523_equation_pack_manifest.json",
+  "dataset_manifest_sha256": "63d6f7796feaa04157e5c4295dc2495835cbe2fb8c399fc688d383adfd5269e6",
+  "decision": {
+    "next_action": "Only consider a tiny HF smoke train if roadmap risk/budget gates approve it.",
+    "reason": "train_rows=1026; val_rows=219; train_token_max=1123; val_token_max=1123; completion_truncation=0",
+    "status": "tokenization_gate_passed"
+  },
+  "generated_at_utc": "2026-05-17T02:48:25.114040+00:00",
+  "model_name": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+  "model_revision": "cbd3fa9f933d55ef16a84236559f4ee2a0526848",
+  "outputs": {
+    "manifest_json": "artifacts\\v536_v534_bit_v523_equation_pack\\20260517T024752Z\\tokenization_gate_real\\v286_generic_tokenization_gate_manifest.json"
+  },
+  "schema_version": "kg1_v286_generic_tokenization_gate_v1",
+  "tokenization": {
+    "train": {
+      "completion_tokens_dropped": 0,
+      "fallback_masks": 0,
+      "family_summary": {
+        "bit_manipulation": {
+          "loss_token_max": 813,
+          "loss_token_min": 212,
+          "loss_token_p50": 218,
+          "rows": 706,
+          "token_max": 1123,
+          "token_p50": 526,
+          "token_p90": 1057,
+          "token_p99": 1123
+        },
+        "equation_transform": {
+          "loss_token_max": 116,
+          "loss_token_min": 92,
+          "loss_token_p50": 106,
+          "rows": 320,
+          "token_max": 262,
+          "token_p50": 242,
+          "token_p90": 260,
+          "token_p99": 262
+        }
+      },
+      "loss_token_max": 813,
+      "loss_token_min": 92,
+      "loss_token_p50": 217,
+      "offset_masks": 1026,
+      "prompt_truncated": 0,
+      "prompt_truncation_rate": 0.0,
+      "rows": 1026,
+      "token_max": 1123,
+      "token_mean": 538.327,
+      "token_min": 235,
+      "token_p50": 507,
+      "token_p90": 987,
+      "token_p99": 1123
+    },
+    "validation": {
+      "completion_tokens_dropped": 0,
+      "fallback_masks": 0,
+      "family_summary": {
+        "bit_manipulation": {
+          "loss_token_max": 813,
+          "loss_token_min": 212,
+          "loss_token_p50": 218,
+          "rows": 139,
+          "token_max": 1123,
+          "token_p50": 523,
+          "token_p90": 1024,
+          "token_p99": 1123
+        },
+        "equation_transform": {
+          "loss_token_max": 116,
+          "loss_token_min": 92,
+          "loss_token_p50": 106,
+          "rows": 80,
+          "token_max": 262,
+          "token_p50": 242,
+          "token_p90": 262,
+          "token_p99": 262
+        }
+      },
+      "loss_token_max": 813,
+      "loss_token_min": 92,
+      "loss_token_p50": 215,
+      "offset_masks": 219,
+      "prompt_truncated": 0,
+      "prompt_truncation_rate": 0.0,
+      "rows": 219,
+      "token_max": 1123,
+      "token_mean": 513.945,
+      "token_min": 236,
+      "token_p50": 491,
+      "token_p90": 976,
+      "token_p99": 1123
+    }
+  },
+  "tokenizer_info": {
+    "class": "TokenizersBackend",
+    "eos_token": "<|im_end|>",
+    "is_fast": true,
+    "pad_token": "<|im_end|>",
+    "toy": false
+  },
+  "validation": {
+    "reference_overlap": {
+      "enabled": true,
+      "id_overlap_count": 0,
+      "id_overlap_first10": [],
+      "prompt_answer_overlap_count": 0,
+      "prompt_answer_overlap_first10": [],
+      "prompt_overlap_count": 0,
+      "prompt_overlap_first10": [],
+      "reference_csvs": [
+        "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v516_label_free_weak_baseline\\v516_label_free_v290_checkpoint6_baseline.csv",
+        "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v293_gap_mining\\inputs\\v291_full_predictions.csv"
+      ]
+    },
+    "train": {
+      "family_counts": {
+        "bit_manipulation": 706,
+        "equation_transform": 320
+      },
+      "prompt_answer_hash_count": 1026,
+      "prompt_hash_count": 1026,
+      "rows": 1026,
+      "sha256_expected": "6c7a91891156cdc666ffbd6478ddfe02bc0c258473615907e40675c2aa716700",
+      "source_counts": {
+        "v536_v534_bit_v523_equation_pack": 1026
+      },
+      "subcategory_counts": {
+        "bit_huikang_synthetic_cho": 236,
+        "bit_huikang_synthetic_maj": 235,
+        "bit_konbu_high_confidence_trace": 235,
+        "equation_numeric_add_direct": 80,
+        "equation_numeric_colon_absdiff": 80,
+        "equation_numeric_colon_trailing_zero": 80,
+        "equation_numeric_minus_signed": 80
+      },
+      "unique_ids": 1026
+    },
+    "train_val_prompt_answer_overlap": 0,
+    "train_val_prompt_overlap": 0,
+    "validation": {
+      "family_counts": {
+        "bit_manipulation": 139,
+        "equation_transform": 80
+      },
+      "prompt_answer_hash_count": 219,
+      "prompt_hash_count": 219,
+      "rows": 219,
+      "sha256_expected": "26bf3b0393c3f9757e22b13d91583f15542a5b6f2d1ae13fbf3e34322262f093",
+      "source_counts": {
+        "v536_v534_bit_v523_equation_pack": 219
+      },
+      "subcategory_counts": {
+        "bit_huikang_synthetic_cho": 47,
+        "bit_huikang_synthetic_maj": 46,
+        "bit_konbu_high_confidence_trace": 46,
+        "equation_numeric_add_direct": 20,
+        "equation_numeric_colon_absdiff": 20,
+        "equation_numeric_colon_trailing_zero": 20,
+        "equation_numeric_minus_signed": 20
+      },
+      "unique_ids": 219
+    }
+  }
+}

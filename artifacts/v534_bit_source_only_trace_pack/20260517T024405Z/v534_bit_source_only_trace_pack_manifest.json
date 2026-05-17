@@ -1,0 +1,146 @@
+{
+  "all_summary": {
+    "assistant_words_p50": 76,
+    "assistant_words_p95": 272,
+    "bad_final_answer": 0,
+    "duplicate_prompt_answer": 0,
+    "family_counts": {
+      "bit_manipulation": 1796
+    },
+    "reference_overlap_counts": {},
+    "rows": 1796,
+    "rule_or_method_counts": {
+      "CHO": 600,
+      "MAJ": 600,
+      "ctx": 335,
+      "w_mix": 164,
+      "w_perm": 7,
+      "w_rot": 68,
+      "w_uni2": 22
+    },
+    "source_counts": {
+      "huikang_synthetic_3input_bit_traces": 1200,
+      "konbu_bit_manipulation_cot_success_high": 596
+    },
+    "subcategory_counts": {
+      "bit_huikang_synthetic_cho": 600,
+      "bit_huikang_synthetic_maj": 600,
+      "bit_konbu_high_confidence_trace": 596
+    },
+    "training_flag_counts": {}
+  },
+  "blocked_actions": [
+    "train_gpu",
+    "full_eval",
+    "package",
+    "kaggle_submit"
+  ],
+  "blockers": [],
+  "decision": {
+    "dataset_ready_for_cpu_gates": true,
+    "gpu_allowed": false,
+    "next_action": "Run V286 boxed_suffix tokenization gate and V513 learnability gate. Do not train or submit directly from this manifest.",
+    "reason": "V534 is bit-only source material. It must pass V286 tokenization, V513 learnability, objective contribution, and FinOps gates before any GPU.",
+    "status": "dataset_ready_for_cpu_gates"
+  },
+  "forbidden_reference_csvs": [
+    "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v516_label_free_weak_baseline\\v516_label_free_v290_checkpoint6_baseline.csv",
+    "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v293_gap_mining\\inputs\\v291_full_predictions.csv"
+  ],
+  "generated_at_utc": "2026-05-17T02:44:11.051200+00:00",
+  "inputs": {
+    "huikang_zip": "C:\\Users\\davis\\Downloads\\archive (9).zip",
+    "input_sha256": {
+      "C:\\Users\\davis\\Downloads\\archive (5).zip": "157b80a2e8e4ae37ca6411ca8462ecdcb4ec79f6817116d45bcfd7bed7a2a340",
+      "C:\\Users\\davis\\Downloads\\archive (9).zip": "5dc5cf5e252d45cf9ef54b7fd4e13ed7ed91bbe6742ddebf5d9c833ccbcc2f46",
+      "C:\\Users\\davis\\Downloads\\archive.zip": "157b80a2e8e4ae37ca6411ca8462ecdcb4ec79f6817116d45bcfd7bed7a2a340"
+    },
+    "konbu_zips": [
+      "C:\\Users\\davis\\Downloads\\archive.zip",
+      "C:\\Users\\davis\\Downloads\\archive (5).zip"
+    ],
+    "max_huikang_synth": 1200,
+    "max_konbu_high": 700
+  },
+  "label": "v534_bit_source_only_trace_pack",
+  "outputs": {
+    "comparison_md": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v534_bit_source_only_trace_pack\\20260517T024405Z\\V534_VS_V523.md",
+    "manifest_json": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v534_bit_source_only_trace_pack\\20260517T024405Z\\v534_bit_source_only_trace_pack_manifest.json",
+    "train_jsonl": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v534_bit_source_only_trace_pack\\20260517T024405Z\\v534_bit_source_only_trace_pack_train.jsonl",
+    "train_sha256": "36c0fc0a0382133552ee993d6ac1d7999ce5d7f0e3967f3b57397061c5bed816",
+    "val_jsonl": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v534_bit_source_only_trace_pack\\20260517T024405Z\\v534_bit_source_only_trace_pack_val.jsonl",
+    "val_sha256": "68740e8fb7a82eec3637f49c3f50b177640811ad122752b918642236e23eb9d2"
+  },
+  "schema_version": "kg1_v534_bit_source_only_trace_pack_v1",
+  "selection": {
+    "huikang_selected": 1200,
+    "konbu_selected": 596,
+    "skipped_huikang": {},
+    "skipped_konbu": {
+      "duplicate_prompt_answer": 596,
+      "reference_overlap_id": 150,
+      "reference_overlap_prompt": 150,
+      "reference_overlap_prompt_answer": 150
+    }
+  },
+  "train_summary": {
+    "assistant_words_p50": 76,
+    "assistant_words_p95": 272,
+    "bad_final_answer": 0,
+    "duplicate_prompt_answer": 0,
+    "family_counts": {
+      "bit_manipulation": 1541
+    },
+    "reference_overlap_counts": {},
+    "rows": 1541,
+    "rule_or_method_counts": {
+      "CHO": 527,
+      "MAJ": 512,
+      "ctx": 281,
+      "w_mix": 139,
+      "w_perm": 7,
+      "w_rot": 58,
+      "w_uni2": 17
+    },
+    "source_counts": {
+      "huikang_synthetic_3input_bit_traces": 1039,
+      "konbu_bit_manipulation_cot_success_high": 502
+    },
+    "subcategory_counts": {
+      "bit_huikang_synthetic_cho": 527,
+      "bit_huikang_synthetic_maj": 512,
+      "bit_konbu_high_confidence_trace": 502
+    },
+    "training_flag_counts": {}
+  },
+  "validation_summary": {
+    "assistant_words_p50": 76,
+    "assistant_words_p95": 272,
+    "bad_final_answer": 0,
+    "duplicate_prompt_answer": 0,
+    "family_counts": {
+      "bit_manipulation": 255
+    },
+    "reference_overlap_counts": {},
+    "rows": 255,
+    "rule_or_method_counts": {
+      "CHO": 73,
+      "MAJ": 88,
+      "ctx": 54,
+      "w_mix": 25,
+      "w_rot": 10,
+      "w_uni2": 5
+    },
+    "source_counts": {
+      "huikang_synthetic_3input_bit_traces": 161,
+      "konbu_bit_manipulation_cot_success_high": 94
+    },
+    "subcategory_counts": {
+      "bit_huikang_synthetic_cho": 73,
+      "bit_huikang_synthetic_maj": 88,
+      "bit_konbu_high_confidence_trace": 94
+    },
+    "training_flag_counts": {}
+  },
+  "version": "V534"
+}

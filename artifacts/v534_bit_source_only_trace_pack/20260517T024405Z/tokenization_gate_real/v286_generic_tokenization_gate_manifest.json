@@ -1,0 +1,151 @@
+{
+  "blocked_actions": [
+    "full_eval",
+    "package",
+    "kaggle_submit"
+  ],
+  "config": {
+    "assistant_final_answer_mode": "boxed_suffix",
+    "max_length": 8192,
+    "max_prompt_truncation_rate": 0.0,
+    "min_train_rows": 1541,
+    "min_val_rows": 255,
+    "require_offset_mask": true
+  },
+  "dataset_manifest_json": "artifacts\\v534_bit_source_only_trace_pack\\20260517T024405Z\\v534_bit_source_only_trace_pack_manifest.json",
+  "dataset_manifest_sha256": "f33022dc17be8a36075133a2c45bc815d1a488a81066e22261cae9867ea2597b",
+  "decision": {
+    "next_action": "Only consider a tiny HF smoke train if roadmap risk/budget gates approve it.",
+    "reason": "train_rows=1541; val_rows=255; train_token_max=1123; val_token_max=1123; completion_truncation=0",
+    "status": "tokenization_gate_passed"
+  },
+  "generated_at_utc": "2026-05-17T02:44:42.632154+00:00",
+  "model_name": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+  "model_revision": "cbd3fa9f933d55ef16a84236559f4ee2a0526848",
+  "outputs": {
+    "manifest_json": "artifacts\\v534_bit_source_only_trace_pack\\20260517T024405Z\\tokenization_gate_real\\v286_generic_tokenization_gate_manifest.json"
+  },
+  "schema_version": "kg1_v286_generic_tokenization_gate_v1",
+  "tokenization": {
+    "train": {
+      "completion_tokens_dropped": 0,
+      "fallback_masks": 0,
+      "family_summary": {
+        "bit_manipulation": {
+          "loss_token_max": 813,
+          "loss_token_min": 212,
+          "loss_token_p50": 218,
+          "rows": 1541,
+          "token_max": 1123,
+          "token_p50": 525,
+          "token_p90": 1055,
+          "token_p99": 1123
+        }
+      },
+      "loss_token_max": 813,
+      "loss_token_min": 212,
+      "loss_token_p50": 218,
+      "offset_masks": 1541,
+      "prompt_truncated": 0,
+      "prompt_truncation_rate": 0.0,
+      "rows": 1541,
+      "token_max": 1123,
+      "token_mean": 667.671,
+      "token_min": 484,
+      "token_p50": 525,
+      "token_p90": 1055,
+      "token_p99": 1123
+    },
+    "validation": {
+      "completion_tokens_dropped": 0,
+      "fallback_masks": 0,
+      "family_summary": {
+        "bit_manipulation": {
+          "loss_token_max": 813,
+          "loss_token_min": 212,
+          "loss_token_p50": 218,
+          "rows": 255,
+          "token_max": 1123,
+          "token_p50": 526,
+          "token_p90": 1055,
+          "token_p99": 1123
+        }
+      },
+      "loss_token_max": 813,
+      "loss_token_min": 212,
+      "loss_token_p50": 218,
+      "offset_masks": 255,
+      "prompt_truncated": 0,
+      "prompt_truncation_rate": 0.0,
+      "rows": 255,
+      "token_max": 1123,
+      "token_mean": 689.718,
+      "token_min": 484,
+      "token_p50": 526,
+      "token_p90": 1055,
+      "token_p99": 1123
+    }
+  },
+  "tokenizer_info": {
+    "class": "TokenizersBackend",
+    "eos_token": "<|im_end|>",
+    "is_fast": true,
+    "pad_token": "<|im_end|>",
+    "toy": false
+  },
+  "validation": {
+    "reference_overlap": {
+      "enabled": true,
+      "id_overlap_count": 0,
+      "id_overlap_first10": [],
+      "prompt_answer_overlap_count": 0,
+      "prompt_answer_overlap_first10": [],
+      "prompt_overlap_count": 0,
+      "prompt_overlap_first10": [],
+      "reference_csvs": [
+        "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v516_label_free_weak_baseline\\v516_label_free_v290_checkpoint6_baseline.csv",
+        "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v293_gap_mining\\inputs\\v291_full_predictions.csv"
+      ]
+    },
+    "train": {
+      "family_counts": {
+        "bit_manipulation": 1541
+      },
+      "prompt_answer_hash_count": 1541,
+      "prompt_hash_count": 1541,
+      "rows": 1541,
+      "sha256_expected": "36c0fc0a0382133552ee993d6ac1d7999ce5d7f0e3967f3b57397061c5bed816",
+      "source_counts": {
+        "huikang_synthetic_3input_bit_traces": 1039,
+        "konbu_bit_manipulation_cot_success_high": 502
+      },
+      "subcategory_counts": {
+        "bit_huikang_synthetic_cho": 527,
+        "bit_huikang_synthetic_maj": 512,
+        "bit_konbu_high_confidence_trace": 502
+      },
+      "unique_ids": 1541
+    },
+    "train_val_prompt_answer_overlap": 0,
+    "train_val_prompt_overlap": 0,
+    "validation": {
+      "family_counts": {
+        "bit_manipulation": 255
+      },
+      "prompt_answer_hash_count": 255,
+      "prompt_hash_count": 255,
+      "rows": 255,
+      "sha256_expected": "68740e8fb7a82eec3637f49c3f50b177640811ad122752b918642236e23eb9d2",
+      "source_counts": {
+        "huikang_synthetic_3input_bit_traces": 161,
+        "konbu_bit_manipulation_cot_success_high": 94
+      },
+      "subcategory_counts": {
+        "bit_huikang_synthetic_cho": 73,
+        "bit_huikang_synthetic_maj": 88,
+        "bit_konbu_high_confidence_trace": 94
+      },
+      "unique_ids": 255
+    }
+  }
+}

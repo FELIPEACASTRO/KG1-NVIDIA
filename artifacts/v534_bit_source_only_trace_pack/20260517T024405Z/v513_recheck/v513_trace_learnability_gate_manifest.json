@@ -1,0 +1,138 @@
+{
+  "dataset_summary": {
+    "combined": {
+      "assistant_length_by_family": {
+        "bit_manipulation": {
+          "assistant_line_max": 2,
+          "assistant_line_p50": 2,
+          "assistant_word_max": 286,
+          "assistant_word_min": 74,
+          "assistant_word_p50": 76,
+          "assistant_word_p90": 268,
+          "assistant_word_p99": 277
+        }
+      },
+      "assistant_style_counts": {
+        "bit_trace_with_rule_terms": 1796
+      },
+      "family_counts": {
+        "bit_manipulation": 1796
+      },
+      "rows": 1796,
+      "source_counts": {
+        "v534_bit_source_only_trace_pack": 1796
+      },
+      "subcategory_counts": {
+        "bit_huikang_synthetic_cho": 600,
+        "bit_huikang_synthetic_maj": 600,
+        "bit_konbu_high_confidence_trace": 596
+      }
+    },
+    "train": {
+      "assistant_length_by_family": {
+        "bit_manipulation": {
+          "assistant_line_max": 2,
+          "assistant_line_p50": 2,
+          "assistant_word_max": 283,
+          "assistant_word_min": 74,
+          "assistant_word_p50": 76,
+          "assistant_word_p90": 268,
+          "assistant_word_p99": 277
+        }
+      },
+      "assistant_style_counts": {
+        "bit_trace_with_rule_terms": 1541
+      },
+      "family_counts": {
+        "bit_manipulation": 1541
+      },
+      "rows": 1541,
+      "source_counts": {
+        "v534_bit_source_only_trace_pack": 1541
+      },
+      "subcategory_counts": {
+        "bit_huikang_synthetic_cho": 527,
+        "bit_huikang_synthetic_maj": 512,
+        "bit_konbu_high_confidence_trace": 502
+      }
+    },
+    "validation": {
+      "assistant_length_by_family": {
+        "bit_manipulation": {
+          "assistant_line_max": 2,
+          "assistant_line_p50": 2,
+          "assistant_word_max": 286,
+          "assistant_word_min": 74,
+          "assistant_word_p50": 76,
+          "assistant_word_p90": 270,
+          "assistant_word_p99": 276
+        }
+      },
+      "assistant_style_counts": {
+        "bit_trace_with_rule_terms": 255
+      },
+      "family_counts": {
+        "bit_manipulation": 255
+      },
+      "rows": 255,
+      "source_counts": {
+        "v534_bit_source_only_trace_pack": 255
+      },
+      "subcategory_counts": {
+        "bit_huikang_synthetic_cho": 73,
+        "bit_huikang_synthetic_maj": 88,
+        "bit_konbu_high_confidence_trace": 94
+      }
+    }
+  },
+  "decision": {
+    "full_eval_allowed": false,
+    "hf_gpu_allowed": true,
+    "kaggle_submit_allowed": false,
+    "next_action": "Run only a tiny paid smoke after objective alignment and FinOps gates.",
+    "package_allowed": false,
+    "reason": "no structural blockers; still requires objective and FinOps gates before GPU",
+    "status": "passed_cpu_structure_only"
+  },
+  "duplicate_group_counts": {
+    "assistant_exact_groups": 0,
+    "assistant_template_groups": 333
+  },
+  "finding_counts": {
+    "blocker": 0,
+    "info": 1,
+    "warning": 0
+  },
+  "findings": [
+    {
+      "code": "style_by_family_snapshot",
+      "detail": "{\"bit_manipulation:bit_trace_with_rule_terms\": 1796}",
+      "severity": "info"
+    }
+  ],
+  "generated_at_utc": "2026-05-17T02:44:54.445917+00:00",
+  "inputs": {
+    "tokenization_manifest": "artifacts\\v534_bit_source_only_trace_pack\\20260517T024405Z\\tokenization_gate_real\\v286_generic_tokenization_gate_manifest.json",
+    "tokenization_manifest_sha256": "ab64ced4e14cce3614f959ac928c0e544cb92f1d35f957b1a6704346becc5de1",
+    "train_jsonl": "artifacts\\v534_bit_source_only_trace_pack\\20260517T024405Z\\v534_bit_source_only_trace_pack_train.jsonl",
+    "train_sha256": "36c0fc0a0382133552ee993d6ac1d7999ce5d7f0e3967f3b57397061c5bed816",
+    "val_jsonl": "artifacts\\v534_bit_source_only_trace_pack\\20260517T024405Z\\v534_bit_source_only_trace_pack_val.jsonl",
+    "val_sha256": "68740e8fb7a82eec3637f49c3f50b177640811ad122752b918642236e23eb9d2"
+  },
+  "outputs": {
+    "findings_csv": "artifacts\\v534_bit_source_only_trace_pack\\20260517T024405Z\\v513_recheck\\v513_findings.csv",
+    "manifest_json": "artifacts\\v534_bit_source_only_trace_pack\\20260517T024405Z\\v513_recheck\\v513_trace_learnability_gate_manifest.json",
+    "summary_md": "artifacts\\v534_bit_source_only_trace_pack\\20260517T024405Z\\v513_recheck\\V513_TRACE_LEARNABILITY_GATE_SUMMARY.md",
+    "top_assistant_exact_groups_csv": "artifacts\\v534_bit_source_only_trace_pack\\20260517T024405Z\\v513_recheck\\v513_top_assistant_exact_groups.csv",
+    "top_template_groups_csv": "artifacts\\v534_bit_source_only_trace_pack\\20260517T024405Z\\v513_recheck\\v513_top_template_groups.csv"
+  },
+  "schema_version": "kg1_v513_trace_learnability_gate_v1",
+  "thresholds": {
+    "max_assistant_words_warning": 1300,
+    "max_bit_answer_only_share_for_gpu": 0.05,
+    "max_loss_tokens_warning": 1300,
+    "max_prompt_truncation_rate": 0.0,
+    "min_bit_trace_rows_for_gpu": 32
+  },
+  "tokenization_gate_status": "tokenization_gate_passed"
+}
