@@ -1,0 +1,1502 @@
+[
+  {
+    "ref": "ryanholbrook/nvidia-nemotron-submission-demo",
+    "title": "NVIDIA Nemotron Submission Demo",
+    "author": "Ryan Holbrook",
+    "lastRunTime": "2026-03-25 10:25:34.577000",
+    "totalVotes": "2232",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 1
+  },
+  {
+    "ref": "dennisfong/nvidia-nemotron-sfttrainer-training",
+    "title": "NVIDIA Nemotron - SFTTrainer training",
+    "author": "Dennis",
+    "lastRunTime": "2026-03-19 08:21:19.207000",
+    "totalVotes": "769",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 1
+  },
+  {
+    "ref": "kienngx/nvidia-nemotron-training-cot-labels",
+    "title": "NVIDIA Nemotron Training (CoT + Labels)",
+    "author": "Ngô Xuân Kiên",
+    "lastRunTime": "2026-03-25 03:21:59.290000",
+    "totalVotes": "646",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 1
+  },
+  {
+    "ref": "kienngx/nvidia-nemotron-trained-models-submission",
+    "title": "Nvidia Nemotron Trained Models Submission",
+    "author": "Ngô Xuân Kiên",
+    "lastRunTime": "2026-04-17 03:42:03.243000",
+    "totalVotes": "584",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 1
+  },
+  {
+    "ref": "asalhi/tinker-adapter-to-ready-to-submit-adapter",
+    "title": "Tinker Adapter to Ready To Submit Adapter",
+    "author": "Ali",
+    "lastRunTime": "2026-04-15 06:46:31.057000",
+    "totalVotes": "499",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 1
+  },
+  {
+    "ref": "konbu17/nemotron-sft-lora-with-cot",
+    "title": "Nemotron SFT LoRA with CoT",
+    "author": "konbu17",
+    "lastRunTime": "2026-04-13 05:08:53.973000",
+    "totalVotes": "498",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 1
+  },
+  {
+    "ref": "huikang/tinker-submission-notebook",
+    "title": "Tinker submission notebook",
+    "author": "Tong Hui Kang",
+    "lastRunTime": "2026-04-14 07:42:19.977000",
+    "totalVotes": "470",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 1
+  },
+  {
+    "ref": "dgxchen/training-with-unsloth-to-achieve-0-85-lb",
+    "title": "Training with Unsloth to Achieve 0.85 LB",
+    "author": "dz",
+    "lastRunTime": "2026-04-25 02:13:56.293000",
+    "totalVotes": "351",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 1
+  },
+  {
+    "ref": "huikang/end-to-end-finetuning-for-lb-0-85",
+    "title": "End-to-end finetuning for LB 0.85",
+    "author": "Tong Hui Kang",
+    "lastRunTime": "2026-04-25 04:51:03.970000",
+    "totalVotes": "308",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 1
+  },
+  {
+    "ref": "huikang/adapter-validation-notebook",
+    "title": "Adapter validation notebook",
+    "author": "Tong Hui Kang",
+    "lastRunTime": "2026-04-12 19:06:09.760000",
+    "totalVotes": "286",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 1
+  },
+  {
+    "ref": "kienngx/nvidia-nemotron-training-copy-run-instantly",
+    "title": "NVIDIA Nemotron Training (copy & run instantly)",
+    "author": "Ngô Xuân Kiên",
+    "lastRunTime": "2026-03-22 15:40:45.550000",
+    "totalVotes": "253",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 1
+  },
+  {
+    "ref": "johnnyhyland/nvidia-nemotron-training",
+    "title": "NVIDIA Nemotron - training",
+    "author": "Johnny Hyland",
+    "lastRunTime": "2026-03-17 17:04:09.093000",
+    "totalVotes": "244",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 1
+  },
+  {
+    "ref": "mayukh18/unsloth-sft-full-data-training",
+    "title": "Unsloth SFT Full Data Training",
+    "author": "Mayukh Bhattacharyya",
+    "lastRunTime": "2026-03-29 06:29:21.313000",
+    "totalVotes": "232",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 1
+  },
+  {
+    "ref": "llkh0a/nemotron-unsloth-sft-training-3-30-2",
+    "title": "Nemotron | Unsloth SFT Training 3/30 -2",
+    "author": "Kh0a",
+    "lastRunTime": "2026-03-30 17:28:16.140000",
+    "totalVotes": "214",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 1
+  },
+  {
+    "ref": "amanatar/nvidia-nemotron-sfttrainer-training",
+    "title": "NVIDIA Nemotron - SFTTrainer training",
+    "author": "Aman Atar",
+    "lastRunTime": "2026-03-19 19:58:09.410000",
+    "totalVotes": "176",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 1
+  },
+  {
+    "ref": "johnnyhyland/nvidia-nemotron-sft-grpo-colab-faster",
+    "title": "NVIDIA Nemotron - SFT → GRPO - Colab faster",
+    "author": "Johnny Hyland",
+    "lastRunTime": "2026-03-27 07:15:58.400000",
+    "totalVotes": "148",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 1
+  },
+  {
+    "ref": "jek1wantaufik/nvidia-nemotron-model-reasoning-challenge",
+    "title": "NVIDIA Nemotron Model Reasoning Challenge",
+    "author": "Jeki Wan Taufik",
+    "lastRunTime": "2026-03-17 03:00:28.330000",
+    "totalVotes": "147",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 1
+  },
+  {
+    "ref": "michaelkong537/tinker-adapter-solved-some-internet-issues",
+    "title": "Tinker Adapter (Solved Some Internet issues)",
+    "author": "Michael Kong",
+    "lastRunTime": "2026-04-28 06:48:23.290000",
+    "totalVotes": "113",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 1
+  },
+  {
+    "ref": "kienngx/nemotron-sft-reasoning-trajectories-dataset",
+    "title": "Nemotron SFT (Reasoning Trajectories Dataset)",
+    "author": "Ngô Xuân Kiên",
+    "lastRunTime": "2026-04-08 08:41:20.727000",
+    "totalVotes": "106",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 1
+  },
+  {
+    "ref": "newduck/nvidia-nemotron-soft-balanced-sampling-sft",
+    "title": "NVIDIA Nemotron - Soft-Balanced Sampling + SFT",
+    "author": "newduck",
+    "lastRunTime": "2026-03-28 13:10:32.897000",
+    "totalVotes": "99",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 1
+  },
+  {
+    "ref": "hiroshige1/start",
+    "title": "start",
+    "author": "hiros",
+    "lastRunTime": "2026-03-19 00:00:51.757000",
+    "totalVotes": "98",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 1
+  },
+  {
+    "ref": "mirzayasirabdullah07/nvidia-nemotron-model-notebook",
+    "title": "NVIDIA Nemotron Model Notebook",
+    "author": "Mirza Yasir Abdullah Baig",
+    "lastRunTime": "2026-05-12 20:10:29.707000",
+    "totalVotes": "96",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 1
+  },
+  {
+    "ref": "konbu17/nemotron-tong-style-cot-sft-updated-v2",
+    "title": "Nemotron Tong-Style CoT SFT (updated v2)",
+    "author": "konbu17",
+    "lastRunTime": "2026-04-19 02:06:34.357000",
+    "totalVotes": "92",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 1
+  },
+  {
+    "ref": "rohanrk1813/nvidia-comp",
+    "title": "NVIDIA_COMP",
+    "author": "Rohanrk1813",
+    "lastRunTime": "2026-05-06 08:53:38.767000",
+    "totalVotes": "85",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 1
+  },
+  {
+    "ref": "comistrymo/nvidia-nemotron-training-cot-labels",
+    "title": "NVIDIA Nemotron Training (CoT + Labels)",
+    "author": "ComistryMo",
+    "lastRunTime": "2026-04-02 02:28:27.800000",
+    "totalVotes": "84",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 1
+  },
+  {
+    "ref": "konstantinboyko/01-04-training-with-unsloth-batch-2-epoch-2",
+    "title": "01-04 Training with Unsloth batch=2 epoch=2",
+    "author": "AI-Cat",
+    "lastRunTime": "2026-04-17 16:03:33.053000",
+    "totalVotes": "81",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 1
+  },
+  {
+    "ref": "sarcasmos/nvidia-nemotron-model-reasoning-challenge",
+    "title": " NVIDIA Nemotron Model Reasoning Challenge",
+    "author": "Sheikh Abdul Rehman",
+    "lastRunTime": "2026-03-29 19:21:36.467000",
+    "totalVotes": "80",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 1
+  },
+  {
+    "ref": "kalyankkr/all-6-puzzle-types-decoded-sft-training-data",
+    "title": "All 6 Puzzle Types Decoded + SFT Training Data",
+    "author": "Kalyan",
+    "lastRunTime": "2026-03-19 05:39:25.180000",
+    "totalVotes": "79",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 1
+  },
+  {
+    "ref": "amanatar/nemotron-ultimate-sft-grpo-v3",
+    "title": "nemotron-ultimate-sft-grpo-v3",
+    "author": "Aman Atar",
+    "lastRunTime": "2026-04-08 21:42:01.277000",
+    "totalVotes": "78",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 1
+  },
+  {
+    "ref": "mohankrishnathalla/nemotron-6-puzzle-types-decoded-rule-solvers",
+    "title": "Nemotron: 6 Puzzle Types Decoded + Rule Solvers",
+    "author": "Mohan Krishna Thalla",
+    "lastRunTime": "2026-03-21 08:14:33.190000",
+    "totalVotes": "69",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 1
+  },
+  {
+    "ref": "amanatar/nemotron-3-nano-blackwell-optimized-reasoning",
+    "title": "Nemotron-3-Nano: Blackwell-Optimized Reasoning ",
+    "author": "Aman Atar",
+    "lastRunTime": "2026-03-26 08:15:23.487000",
+    "totalVotes": "67",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 1
+  },
+  {
+    "ref": "emanuellcs/nvidia-nemotron-sft",
+    "title": "NVIDIA Nemotron | SFT",
+    "author": "Emanuel Lázaro",
+    "lastRunTime": "2026-04-06 17:53:15.510000",
+    "totalVotes": "66",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 1
+  },
+  {
+    "ref": "hammadfarooq470/think-twice-self-correcting-reasoning",
+    "title": "Think Twice: Self-Correcting Reasoning",
+    "author": "Hammad Farooq",
+    "lastRunTime": "2026-05-06 09:47:43.647000",
+    "totalVotes": "63",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 1
+  },
+  {
+    "ref": "hlly34/nemotron-baseline-evaluation",
+    "title": "Nemotron Baseline Evaluation",
+    "author": "i_love_huyen_tran",
+    "lastRunTime": "2026-03-21 05:33:38.133000",
+    "totalVotes": "63",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 1
+  },
+  {
+    "ref": "jiazhuang/nemotron-mainstream-llm-performance-comparison",
+    "title": "Nemotron Mainstream LLM Performance Comparison ",
+    "author": "Zhuang Jia",
+    "lastRunTime": "2026-03-24 10:09:00.090000",
+    "totalVotes": "61",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 1
+  },
+  {
+    "ref": "hastws/sfttrainer-training",
+    "title": "SFTTrainer training",
+    "author": "Birtley Doru (DB)",
+    "lastRunTime": "2026-03-21 01:50:48.827000",
+    "totalVotes": "60",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 1
+  },
+  {
+    "ref": "torpidoff/full-pipeline-nvidia-nemotron-3-reasoning",
+    "title": "🏆 Full Pipeline NVIDIA Nemotron-3 Reasoning",
+    "author": "David khaldi",
+    "lastRunTime": "2026-04-13 23:57:11.143000",
+    "totalVotes": "57",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 1
+  },
+  {
+    "ref": "rauffauzanrambe/lora-adapter-fusion-and-rank-compression-pipeline",
+    "title": "LoRA Adapter Fusion and Rank Compression Pipeline ",
+    "author": "Ra'uf Fauzan Rambe",
+    "lastRunTime": "2026-05-05 03:34:45.130000",
+    "totalVotes": "54",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 1
+  },
+  {
+    "ref": "alexxxsem/nemotron-simple-offline-working-demo",
+    "title": "Nemotron Simple Offline Working Demo",
+    "author": "AlexxxSem",
+    "lastRunTime": "2026-04-05 15:54:14.460000",
+    "totalVotes": "53",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 1
+  },
+  {
+    "ref": "matthewblakeward/glyphmatics-d4c-cipher-98substitution",
+    "title": "GlyphMatics●D4C°Cipher#98Substitution ",
+    "author": "Matthew Blake Ward",
+    "lastRunTime": "2026-05-17 00:13:45.153000",
+    "totalVotes": "51",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 1
+  },
+  {
+    "ref": "rn8205/adapter-validation-notebook",
+    "title": "Adapter validation notebook",
+    "author": "rn8205",
+    "lastRunTime": "2026-05-16 18:12:53.377000",
+    "totalVotes": "46",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 1
+  },
+  {
+    "ref": "esaaak/nemotron-3-nano-30b-starter-lora-fine-tuning",
+    "title": "Nemotron-3-Nano-30B: Starter LoRA Fine-Tuning 🚀",
+    "author": "Ilya Gerasimov",
+    "lastRunTime": "2026-03-17 20:56:10.340000",
+    "totalVotes": "44",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 1
+  },
+  {
+    "ref": "ulyanovantonamaranta/nemotron-tinker-adapter-repro",
+    "title": "Nemotron Tinker Adapter Repro",
+    "author": "Amaranta",
+    "lastRunTime": "2026-05-05 10:55:13.973000",
+    "totalVotes": "43",
+    "kernel_type": "script",
+    "seen_sort": "voteCount",
+    "seen_page": 1
+  },
+  {
+    "ref": "teasue05/tinker-submission-notebook",
+    "title": "Tinker submission notebook",
+    "author": "BNBU_23DS_SuHongSheng",
+    "lastRunTime": "2026-05-10 04:33:35.993000",
+    "totalVotes": "41",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 1
+  },
+  {
+    "ref": "konbu17/bit-manipulation-solver-cot-generator",
+    "title": "bit-manipulation-solver-cot-generator",
+    "author": "konbu17",
+    "lastRunTime": "2026-03-29 14:38:16.273000",
+    "totalVotes": "39",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 1
+  },
+  {
+    "ref": "waterjoe/nvidia-nemotron-mask-loss",
+    "title": "NVIDIA Nemotron - Mask Loss",
+    "author": "water joe",
+    "lastRunTime": "2026-03-26 13:55:38.370000",
+    "totalVotes": "39",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 1
+  },
+  {
+    "ref": "impooping/generate-cots-labels",
+    "title": "Generate CoTs + Labels",
+    "author": "I'mPooping",
+    "lastRunTime": "2026-03-27 08:41:37.987000",
+    "totalVotes": "39",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 1
+  },
+  {
+    "ref": "edyvision/nvidia-nemotron-submission-demo-w-blackwell-patch",
+    "title": "NVIDIA Nemotron Submission Demo w/ Blackwell Patch",
+    "author": "Eidan Rosado",
+    "lastRunTime": "2026-03-20 23:17:49.323000",
+    "totalVotes": "39",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 1
+  },
+  {
+    "ref": "jek1wantaufik/nvidia-nemotron-model-reasoning-0-68",
+    "title": "NVIDIA Nemotron Model Reasoning 0.68",
+    "author": "Jeki Wan Taufik",
+    "lastRunTime": "2026-03-28 00:32:17.037000",
+    "totalVotes": "38",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 1
+  },
+  {
+    "ref": "occultainsights/synthetic-data-generation",
+    "title": "Synthetic Data Generation",
+    "author": "Priyan Chandrapala",
+    "lastRunTime": "2026-03-27 17:42:06.047000",
+    "totalVotes": "37",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 1
+  },
+  {
+    "ref": "kimberleyduran/solver-verified-cryptarithm-cot-v2-dataset",
+    "title": "Solver-Verified Cryptarithm CoT (v2 dataset)",
+    "author": "Kimberley Duran",
+    "lastRunTime": "2026-05-04 21:38:44.803000",
+    "totalVotes": "34",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 1
+  },
+  {
+    "ref": "pearpn25/bit-cot-85-1364-sample",
+    "title": "bit cot 85% ~~ 1364 sample",
+    "author": "Nam Lê Phương",
+    "lastRunTime": "2026-04-20 10:39:50.997000",
+    "totalVotes": "34",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 1
+  },
+  {
+    "ref": "mpwolke/alice-in-nvidia-wonderland",
+    "title": "Alice in Nvidia Wonderland",
+    "author": "Marília Prata",
+    "lastRunTime": "2026-03-17 12:58:44.123000",
+    "totalVotes": "34",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 1
+  },
+  {
+    "ref": "sakhawathossen/nemotron-reasoning-boost-hf-qlora-trainer",
+    "title": "Nemotron Reasoning Boost - HF QLoRA Trainer",
+    "author": "Sakhawat Hossen",
+    "lastRunTime": "2026-04-07 14:14:08.590000",
+    "totalVotes": "33",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 1
+  },
+  {
+    "ref": "suryamilenial/end-to-end-finetuning-for-lb-0-83-6e2fa5",
+    "title": "End-to-end finetuning for LB 0.83 6e2fa5",
+    "author": "Surya milenial",
+    "lastRunTime": "2026-05-11 10:01:40.730000",
+    "totalVotes": "32",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 1
+  },
+  {
+    "ref": "konbu17/doc-to-lora-knowledge-injection-nemotron-3-nano",
+    "title": "Doc-to-LoRA Knowledge Injection Nemotron-3-Nano",
+    "author": "konbu17",
+    "lastRunTime": "2026-03-29 20:12:27.710000",
+    "totalVotes": "32",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 1
+  },
+  {
+    "ref": "adilshamim8/nvidia-nemotron-model-reasoning-challenge-101",
+    "title": "NVIDIA Nemotron Model Reasoning Challenge 101",
+    "author": "Adil Shamim",
+    "lastRunTime": "2026-05-09 03:13:53.840000",
+    "totalVotes": "31",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 1
+  },
+  {
+    "ref": "sanjaysuthraye96/exploratory-data-analysis-nvidia-nemotron",
+    "title": "Exploratory Data Analysis - NVIDIA Nemotron",
+    "author": "Sanjay Suthraye",
+    "lastRunTime": "2026-03-21 17:50:52.213000",
+    "totalVotes": "31",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 1
+  },
+  {
+    "ref": "markjcooper/thk-public-fork-2026-05-14-v14-tinker-adapter",
+    "title": "THK public fork 2026-05-14 (v14 tinker-adapter)",
+    "author": "Mark Cooper",
+    "lastRunTime": "2026-05-14 10:37:03.837000",
+    "totalVotes": "28",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 1
+  },
+  {
+    "ref": "pauldumontunc/lora-training",
+    "title": "LoRa Training",
+    "author": "Paul Dumont UNC",
+    "lastRunTime": "2026-04-21 03:04:40.347000",
+    "totalVotes": "28",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 1
+  },
+  {
+    "ref": "mah20050/nvidia-nemotron-the-wonderland-nsa",
+    "title": "NVIDIA-Nemotron: The Wonderland NSA 🔥",
+    "author": "Mahmoud saad Elgharib",
+    "lastRunTime": "2026-03-26 21:55:44.060000",
+    "totalVotes": "27",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 1
+  },
+  {
+    "ref": "citerne/from-local-dev-rtx-6000-kaggle-cli-guide",
+    "title": "From Local Dev → RTX 6000 (Kaggle CLI Guide)",
+    "author": "Keanan",
+    "lastRunTime": "2026-05-06 20:25:45.537000",
+    "totalVotes": "27",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 1
+  },
+  {
+    "ref": "rauffauzanrambe/lora-nvidia-nemotron-models-with-pytorch",
+    "title": "LoRA Nvidia Nemotron Models with Pytorch",
+    "author": "Ra'uf Fauzan Rambe",
+    "lastRunTime": "2026-05-08 01:11:19.637000",
+    "totalVotes": "26",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 1
+  },
+  {
+    "ref": "warmtea/lb-training",
+    "title": "LB Training ",
+    "author": "warmtea",
+    "lastRunTime": "2026-05-01 21:51:20.857000",
+    "totalVotes": "26",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 1
+  },
+  {
+    "ref": "kodatirevanth/7-prompts-tested-which-one-wins",
+    "title": "7 Prompts tested which one wins",
+    "author": "Revanth Kodati",
+    "lastRunTime": "2026-03-21 21:58:46.047000",
+    "totalVotes": "26",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 1
+  },
+  {
+    "ref": "kacchanwriting/nemotron-baseline-v2",
+    "title": "Nemotron Baseline v2",
+    "author": "Ikki Katsuyama",
+    "lastRunTime": "2026-03-17 13:38:36.937000",
+    "totalVotes": "26",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 1
+  },
+  {
+    "ref": "tahaalam2009/end-to-end-finetuning-for-lb-0-82-csv-custom",
+    "title": "End-to-end finetuning for LB 0.82 (CSV CUSTOM)",
+    "author": "Taha",
+    "lastRunTime": "2026-05-05 12:15:19.627000",
+    "totalVotes": "25",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 1
+  },
+  {
+    "ref": "jiazhuang/nemotron-distillation-from-llm",
+    "title": "nemotron distillation from llm",
+    "author": "Zhuang Jia",
+    "lastRunTime": "2026-04-16 01:26:03.190000",
+    "totalVotes": "25",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 1
+  },
+  {
+    "ref": "optiminist/equation-eda-operator-operation-84-solve-rate",
+    "title": "Equation EDA: Operator-Operation 84% Solve Rate",
+    "author": "Haruto Nishioka",
+    "lastRunTime": "2026-04-13 00:13:48.040000",
+    "totalVotes": "25",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 1
+  },
+  {
+    "ref": "konbu17/cot-generation-for-nemotron-challenge",
+    "title": "CoT generation for Nemotron challenge",
+    "author": "konbu17",
+    "lastRunTime": "2026-04-08 04:39:59.810000",
+    "totalVotes": "25",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 1
+  },
+  {
+    "ref": "evgendvorkin/nemotron-3-nano-lora-adapter-submission",
+    "title": "Nemotron-3 Nano: LoRA Adapter Submission",
+    "author": "Дворкин Евгений Владимирович",
+    "lastRunTime": "2026-05-12 17:44:00.690000",
+    "totalVotes": "25",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 1
+  },
+  {
+    "ref": "johnjanson/agi-for-medal-0-87-is-possible",
+    "title": "💗AGI FOR MEDAL, 0.87 IS POSSIBLE? 💨",
+    "author": "bogdan janson",
+    "lastRunTime": "2026-04-15 17:21:25.837000",
+    "totalVotes": "22",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 1
+  },
+  {
+    "ref": "storm2501/nvidia-nemotron-two",
+    "title": "NVIDIA Nemotron two",
+    "author": "VTH",
+    "lastRunTime": "2026-03-31 02:08:34.980000",
+    "totalVotes": "22",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 1
+  },
+  {
+    "ref": "rauffauzanrambe/nvidia-next-gen-reasoning-ai-for-deep-learning",
+    "title": "NVIDIA Next-Gen Reasoning AI for Deep Learning",
+    "author": "Ra'uf Fauzan Rambe",
+    "lastRunTime": "2026-03-17 05:51:13.367000",
+    "totalVotes": "22",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 1
+  },
+  {
+    "ref": "hoangvux/nvidia-nemotron-synthetic-data",
+    "title": "NVIDIA Nemotron — Synthetic Data ",
+    "author": "Vu Tran Hoang",
+    "lastRunTime": "2026-04-09 09:35:15.743000",
+    "totalVotes": "21",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 1
+  },
+  {
+    "ref": "huikang/nvidia-nemotron-all-linear",
+    "title": "NVIDIA Nemotron - all-linear",
+    "author": "Tong Hui Kang",
+    "lastRunTime": "2026-03-22 14:27:00.667000",
+    "totalVotes": "21",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 1
+  },
+  {
+    "ref": "rauffauzanrambe/lora-autonomous-cot-engine",
+    "title": "LoRA + Autonomous CoT Engine",
+    "author": "Ra'uf Fauzan Rambe",
+    "lastRunTime": "2026-05-02 03:09:31.183000",
+    "totalVotes": "20",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 1
+  },
+  {
+    "ref": "mohamedamr992/easy-loading-of-nemotron-3",
+    "title": "Easy_Loading_of_Nemotron_3",
+    "author": "Mohamed Amr992",
+    "lastRunTime": "2026-03-27 20:39:38.303000",
+    "totalVotes": "20",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 1
+  },
+  {
+    "ref": "krupalpatel07/advanced-nemotron-model-2",
+    "title": "Advanced Nemotron Model_2",
+    "author": "Krupal Patel",
+    "lastRunTime": "2026-03-23 05:04:25.963000",
+    "totalVotes": "20",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 1
+  },
+  {
+    "ref": "krupalpatel07/nemotron-model-1",
+    "title": "Nemotron Model_1",
+    "author": "Krupal Patel",
+    "lastRunTime": "2026-03-24 06:08:50.693000",
+    "totalVotes": "19",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 1
+  },
+  {
+    "ref": "nadiakhalid/nvidia-nemotron-model-reasoning",
+    "title": "NVIDIA Nemotron Model Reasoning",
+    "author": "Nadia khalid",
+    "lastRunTime": "2026-04-17 06:24:26.630000",
+    "totalVotes": "17",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 1
+  },
+  {
+    "ref": "hammadfarooq470/geometry-of-intelligence-svd-lora-art-compression",
+    "title": "Geometry of Intelligence: SVD,LoRA&Art Compression",
+    "author": "Hammad Farooq",
+    "lastRunTime": "2026-05-05 13:25:10.583000",
+    "totalVotes": "16",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 1
+  },
+  {
+    "ref": "eslamelokpy/tinker-adapter",
+    "title": "Tinker Adapter ",
+    "author": "Eslam Elokpy",
+    "lastRunTime": "2026-05-08 12:59:40.790000",
+    "totalVotes": "15",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 1
+  },
+  {
+    "ref": "zzys0316/full-pipeline-nvidia-nemotron-3-reasoning",
+    "title": "🏆 Full Pipeline NVIDIA Nemotron-3 Reasoning",
+    "author": "zzys0316",
+    "lastRunTime": "2026-04-22 12:32:38.700000",
+    "totalVotes": "15",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 1
+  },
+  {
+    "ref": "pjt222/nemotron-cot-review",
+    "title": "nemotron-cot-review",
+    "author": "Philipp Thoss",
+    "lastRunTime": "2026-04-08 14:02:32.413000",
+    "totalVotes": "14",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 1
+  },
+  {
+    "ref": "impooping/nemotron-sft-reasoning-trajectories-dataset",
+    "title": "Nemotron SFT (Reasoning Trajectories Dataset)",
+    "author": "I'mPooping",
+    "lastRunTime": "2026-04-09 03:21:31.400000",
+    "totalVotes": "14",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 1
+  },
+  {
+    "ref": "afr1ste/nemotron-0-86-tinker-adapter-guide",
+    "title": "Nemotron 0.86 Tinker Adapter Guide",
+    "author": "Afr1ste",
+    "lastRunTime": "2026-05-10 18:24:47.407000",
+    "totalVotes": "13",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 1
+  },
+  {
+    "ref": "ringustheimp/tinker-w-svd-rank-16",
+    "title": "Tinker w/ SVD & Rank 16",
+    "author": "ringusTheImp",
+    "lastRunTime": "2026-04-24 23:23:41.060000",
+    "totalVotes": "13",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 1
+  },
+  {
+    "ref": "yashanathaniel/nvidia-nemotron-training",
+    "title": "NVIDIA Nemotron - training",
+    "author": "Yaserntx'",
+    "lastRunTime": "2026-03-19 11:37:10.607000",
+    "totalVotes": "13",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 1
+  },
+  {
+    "ref": "drchenb/nvidia-nemotron-trained-models-submission",
+    "title": "Nvidia Nemotron Trained Models Submission",
+    "author": "kara",
+    "lastRunTime": "2026-05-02 16:28:20.437000",
+    "totalVotes": "12",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 2
+  },
+  {
+    "ref": "aliafzal9323/nemotron-30b-deterministic-solvers-cot-fine-tu",
+    "title": "Nemotron 30B | Deterministic Solvers + CoT Fine-Tu",
+    "author": "Ali Afzal",
+    "lastRunTime": "2026-04-03 08:29:19.350000",
+    "totalVotes": "12",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 2
+  },
+  {
+    "ref": "ravi20076/nemotron2026-public-submission-v1",
+    "title": "Nemotron2026|Public|Submission|V1",
+    "author": "Ravi Ramakrishnan",
+    "lastRunTime": "2026-03-21 05:03:56.523000",
+    "totalVotes": "12",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 2
+  },
+  {
+    "ref": "rauffauzanrambe/nvidia-advances-pytorch-rnn-training-pipeline",
+    "title": "NVIDIA Advances PYTORCH + RNN TRAINING PIPELINE",
+    "author": "Ra'uf Fauzan Rambe",
+    "lastRunTime": "2026-05-13 07:25:10.810000",
+    "totalVotes": "11",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 2
+  },
+  {
+    "ref": "sorajiang/notebooksft",
+    "title": "notebookSFT",
+    "author": "Sora Jiang",
+    "lastRunTime": "2026-04-11 12:46:01.707000",
+    "totalVotes": "11",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 2
+  },
+  {
+    "ref": "lalit7881/nvidia-reasoning-challenge",
+    "title": "NVIDIA Reasoning Challenge",
+    "author": "Lalit sonawane",
+    "lastRunTime": "2026-03-25 12:35:00.020000",
+    "totalVotes": "11",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 2
+  },
+  {
+    "ref": "rahulchauhan016/nemotron-lora-reasoning-pipeline",
+    "title": "Nemotron LoRA Reasoning Pipeline",
+    "author": "RAHUL CHAUHAN",
+    "lastRunTime": "2026-03-22 06:37:23.123000",
+    "totalVotes": "10",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 2
+  },
+  {
+    "ref": "uraniumdistilled/nvidia-nemotron-grpo-training",
+    "title": "NVIDIA Nemotron grpo training",
+    "author": "uranium_distilled",
+    "lastRunTime": "2026-05-01 15:46:59.937000",
+    "totalVotes": "9",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 2
+  },
+  {
+    "ref": "jal313/nvidia-nemotron-training-cot-labels-70ddae",
+    "title": "NVIDIA Nemotron Training (CoT + Labels) 70ddae",
+    "author": "Jal313",
+    "lastRunTime": "2026-04-06 16:42:41.507000",
+    "totalVotes": "9",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 2
+  },
+  {
+    "ref": "trnhquangminh140/nvidia-nemotron-model-reasoning-trinh-quang-minh",
+    "title": "NVIDIA Nemotron Model Reasoning_Trinh Quang Minh",
+    "author": "Trịnh Quang Minh",
+    "lastRunTime": "2026-03-22 09:59:34.410000",
+    "totalVotes": "9",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 2
+  },
+  {
+    "ref": "torpidoff/cot-nvidia-nemotron-3",
+    "title": "🏆 COT-NVIDIA Nemotron-3",
+    "author": "David khaldi",
+    "lastRunTime": "2026-04-19 22:21:34.737000",
+    "totalVotes": "8",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 2
+  },
+  {
+    "ref": "johnnyhyland/offline-packages-trl",
+    "title": "offline packages - trl",
+    "author": "Johnny Hyland",
+    "lastRunTime": "2026-03-23 16:27:11.477000",
+    "totalVotes": "8",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 2
+  },
+  {
+    "ref": "safar1/lb-score-0-86",
+    "title": "[LB] [SCORE] [0.86]",
+    "author": "Safarbek",
+    "lastRunTime": "2026-05-13 15:35:55.467000",
+    "totalVotes": "7",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 2
+  },
+  {
+    "ref": "leegongman/sft-my-data-balace",
+    "title": "SFT_My_Data_balace",
+    "author": "Gongman",
+    "lastRunTime": "2026-05-14 04:47:09.377000",
+    "totalVotes": "7",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 2
+  },
+  {
+    "ref": "jek1wantaufik/nemotron-lora-adapter",
+    "title": "Nemotron LoRA Adapter",
+    "author": "Jeki Wan Taufik",
+    "lastRunTime": "2026-04-22 17:05:04.620000",
+    "totalVotes": "7",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 2
+  },
+  {
+    "ref": "hammadfarooq470/nemotron-sft-lora-with-cot-selected-data",
+    "title": "Nemotron SFT LoRA with CoT-Selected Data",
+    "author": "Hammad Farooq",
+    "lastRunTime": "2026-04-02 11:52:25.750000",
+    "totalVotes": "7",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 2
+  },
+  {
+    "ref": "rauffauzanrambe/nvidia-nemotron-trained-meachine-learning",
+    "title": "NVIDIA Nemotron Trained Meachine Learning ",
+    "author": "Ra'uf Fauzan Rambe",
+    "lastRunTime": "2026-04-27 06:36:43.310000",
+    "totalVotes": "7",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 2
+  },
+  {
+    "ref": "raunakdey07/nemotron-tinker-adapter",
+    "title": "Nemotron Tinker Adapter",
+    "author": "Raunak Dey",
+    "lastRunTime": "2026-05-02 11:37:23.533000",
+    "totalVotes": "6",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 2
+  },
+  {
+    "ref": "bbobwayne/nemotron-tier-1-lora-baseline",
+    "title": "Nemotron Tier-1 LoRA Baseline",
+    "author": "bbobWayne",
+    "lastRunTime": "2026-05-10 21:27:31.657000",
+    "totalVotes": "6",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 2
+  },
+  {
+    "ref": "bbobwayne/nemotron-lora32-r1-tier-1-heuristic-baseline",
+    "title": "Nemotron LoRA32 R1 · Tier-1 Heuristic Baseline",
+    "author": "bbobWayne",
+    "lastRunTime": "2026-05-04 01:47:52.923000",
+    "totalVotes": "6",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 2
+  },
+  {
+    "ref": "rdn2k00/cot-preprocessing",
+    "title": "CoT, Preprocessing",
+    "author": "rdn2k00",
+    "lastRunTime": "2026-05-15 19:19:59.737000",
+    "totalVotes": "6",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 2
+  },
+  {
+    "ref": "hammadfarooq470/nvidia-nemotron-model-reasoning-0-68",
+    "title": "NVIDIA Nemotron Model Reasoning 0.68",
+    "author": "Hammad Farooq",
+    "lastRunTime": "2026-04-02 14:18:17.637000",
+    "totalVotes": "6",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 2
+  },
+  {
+    "ref": "denislu/nvidia-nemotron-model-reasoning-challenge",
+    "title": "NVIDIA Nemotron Model Reasoning Challenge",
+    "author": "Chang Lu",
+    "lastRunTime": "2026-05-15 10:57:11.447000",
+    "totalVotes": "6",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 2
+  },
+  {
+    "ref": "nguyenducdung1107/colsmol-training-with-rtx6000",
+    "title": "COLSMOL TRAINING WITH RTX6000",
+    "author": "NGUYEN DUC DUNG 1107",
+    "lastRunTime": "2026-04-04 08:34:18.823000",
+    "totalVotes": "6",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 2
+  },
+  {
+    "ref": "amanatar/synthetic-nemotron-hard-reasoning",
+    "title": "synthetic_nemotron_hard_reasoning",
+    "author": "Aman Atar",
+    "lastRunTime": "2026-03-29 17:38:45.610000",
+    "totalVotes": "6",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 2
+  },
+  {
+    "ref": "croftadams/nemotron-working-submission-test",
+    "title": "Nemotron Working Submission Test",
+    "author": "Croft Adams",
+    "lastRunTime": "2026-05-01 13:52:32.300000",
+    "totalVotes": "5",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 2
+  },
+  {
+    "ref": "rdn2k00/nemotron-qlora",
+    "title": "Nemotron, QLoRA",
+    "author": "rdn2k00",
+    "lastRunTime": "2026-05-16 17:43:14.143000",
+    "totalVotes": "5",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 2
+  },
+  {
+    "ref": "hammadfarooq470/nvidia-nemotron-trained-models-submission",
+    "title": "Nvidia Nemotron Trained Models Submission",
+    "author": "Hammad Farooq",
+    "lastRunTime": "2026-04-15 16:49:39.710000",
+    "totalVotes": "5",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 2
+  },
+  {
+    "ref": "koushikrudra/nvidia-9500-step-training",
+    "title": "NVIDIA 9500 STEP Training",
+    "author": "Koushik Rudra",
+    "lastRunTime": "2026-03-22 02:50:38",
+    "totalVotes": "5",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 2
+  },
+  {
+    "ref": "anhhkhoi/nvidia-nemotron-submission-demo",
+    "title": "NVIDIA Nemotron Submission Demo",
+    "author": "MightyK",
+    "lastRunTime": "2026-04-29 04:32:20.720000",
+    "totalVotes": "5",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 2
+  },
+  {
+    "ref": "ahmadzulfiqar001/exploratory-data-analysis-nvidia",
+    "title": "Exploratory Data Analysis - NVIDIA",
+    "author": "Ahmad Zulfiqar",
+    "lastRunTime": "2026-03-18 22:52:46.577000",
+    "totalVotes": "5",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 2
+  },
+  {
+    "ref": "sakshatpatil25/nvidia-nemotron-submission-demo",
+    "title": "NVIDIA Nemotron Submission Demo",
+    "author": "Sakshat Patil 25",
+    "lastRunTime": "2026-05-12 04:28:08.697000",
+    "totalVotes": "4",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 2
+  },
+  {
+    "ref": "sluitel/dsoc-baseline-submission",
+    "title": "DSOC Baseline Submission",
+    "author": "Somnath Luitel",
+    "lastRunTime": "2026-04-15 17:35:17.810000",
+    "totalVotes": "4",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 2
+  },
+  {
+    "ref": "manhha25022005/nemotron-sft-lora-with-cot-v2-prep-now-plz-wait",
+    "title": "Nemotron SFT LoRA with CoT (v2 prep now plz wait)",
+    "author": "manhha25022005",
+    "lastRunTime": "2026-04-12 17:54:15.663000",
+    "totalVotes": "4",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 2
+  },
+  {
+    "ref": "nhtdngtrn/nemotron-sft-lora-with-cot-v2-prep-now-plz-wait",
+    "title": "Nemotron SFT LoRA with CoT (v2 prep now plz wait)",
+    "author": "Nhật Dương Trần",
+    "lastRunTime": "2026-04-12 14:10:45.210000",
+    "totalVotes": "4",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 2
+  },
+  {
+    "ref": "hammadfarooq470/nvidia-nemotron-reasoning",
+    "title": "NVIDIA Nemotron Reasoning",
+    "author": "Hammad Farooq",
+    "lastRunTime": "2026-04-15 06:42:20.253000",
+    "totalVotes": "4",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 2
+  },
+  {
+    "ref": "saivimenthanvlai/nemotron-model-reasoning-challenge",
+    "title": "Nemotron Model Reasoning Challenge",
+    "author": "Sai Vimenthan",
+    "lastRunTime": "2026-04-06 05:48:37.373000",
+    "totalVotes": "4",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 2
+  },
+  {
+    "ref": "yashm917/nemotronmodel-reasoning-0-72-lb-score-unsloth",
+    "title": "NemotronModel Reasoning (0.72 LB Score) [Unsloth]",
+    "author": "Yash Mohan",
+    "lastRunTime": "2026-04-07 07:05:07.407000",
+    "totalVotes": "4",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 2
+  },
+  {
+    "ref": "cmirani/nemotron-lora-fine-tuning-pipeline",
+    "title": "Nemotron LoRA Fine-Tuning Pipeline",
+    "author": "Chirag",
+    "lastRunTime": "2026-03-30 12:20:06.633000",
+    "totalVotes": "4",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 2
+  },
+  {
+    "ref": "waterjoe/fork-of-nvidia-nemotron-sft-grpo-trainer",
+    "title": "Fork of NVIDIA Nemotron - SFT+GRPO Trainer ",
+    "author": "water joe",
+    "lastRunTime": "2026-03-24 01:39:14.347000",
+    "totalVotes": "4",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 2
+  },
+  {
+    "ref": "privatepiecerec/nemotron-reasoning-task-family-tour",
+    "title": "Nemotron Reasoning: Task Family Tour",
+    "author": "PrivatePieceRec",
+    "lastRunTime": "2026-05-14 12:03:53.327000",
+    "totalVotes": "3",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 2
+  },
+  {
+    "ref": "revatidharmadhikari/revati-experiments-nvidia-nemotron-submission",
+    "title": "Revati Experiments NVIDIA Nemotron Submission ",
+    "author": "Revati Dharmadhikari",
+    "lastRunTime": "2026-05-12 04:07:12.727000",
+    "totalVotes": "3",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 2
+  },
+  {
+    "ref": "mohamedamr992/0-86-adapter-packaging-workflow",
+    "title": "0.86 Adapter Packaging Workflow",
+    "author": "Mohamed Amr992",
+    "lastRunTime": "2026-05-09 18:12:26.093000",
+    "totalVotes": "3",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 3
+  },
+  {
+    "ref": "dhruvb2028/tinker-adapter-ready-to-submit-adapter",
+    "title": "Tinker Adapter Ready To Submit Adapter",
+    "author": "Dhruv Bansal",
+    "lastRunTime": "2026-05-04 10:22:10.937000",
+    "totalVotes": "3",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 3
+  },
+  {
+    "ref": "cryptdragon/nemotron-30b-deterministic-solvers-cot-fine-tu",
+    "title": "Nemotron 30B | Deterministic Solvers + CoT Fine-Tu",
+    "author": "Abul Kalam Faruk",
+    "lastRunTime": "2026-04-13 13:13:24.827000",
+    "totalVotes": "3",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 3
+  },
+  {
+    "ref": "mirzayasirabdullah07/nvidia-nemotron-model-reasoning-notebook",
+    "title": "NVIDIA Nemotron Model Reasoning NoteBook",
+    "author": "Mirza Yasir Abdullah Baig",
+    "lastRunTime": "2026-04-08 10:09:44.670000",
+    "totalVotes": "3",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 3
+  },
+  {
+    "ref": "javihm77/nvidia-nemotron-sfttrainer-training-jh",
+    "title": "NVIDIA Nemotron - SFTTrainer training JH",
+    "author": "Javier Hernández",
+    "lastRunTime": "2026-05-03 04:09:53.837000",
+    "totalVotes": "3",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 3
+  },
+  {
+    "ref": "mebbbbbbius/nvidia-nemotron-submission-demo",
+    "title": "NVIDIA Nemotron Submission Demo",
+    "author": "mebbbbbbius",
+    "lastRunTime": "2026-04-30 20:01:47.653000",
+    "totalVotes": "3",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 3
+  },
+  {
+    "ref": "rauffauzanrambe/nvidia-advanced-ai-training-analytics-system",
+    "title": "NVIDIA Advanced AI Training Analytics System",
+    "author": "Ra'uf Fauzan Rambe",
+    "lastRunTime": "2026-05-13 07:09:00.770000",
+    "totalVotes": "3",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 3
+  },
+  {
+    "ref": "ritikroshan4857/nvidia-nemotron-model-reasoning-challenge",
+    "title": "NVIDIA Nemotron Model Reasoning Challenge",
+    "author": "faaaaaaaaaaaaaaaah",
+    "lastRunTime": "2026-03-20 15:55:42.853000",
+    "totalVotes": "3",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 3
+  },
+  {
+    "ref": "ulyanovantonamaranta/nemotron-9500-adapter-repro",
+    "title": "Nemotron 9500 Adapter Repro",
+    "author": "Amaranta",
+    "lastRunTime": "2026-05-05 10:56:31.313000",
+    "totalVotes": "3",
+    "kernel_type": "script",
+    "seen_sort": "voteCount",
+    "seen_page": 1
+  },
+  {
+    "ref": "manderson240/nemotron-pure-symbolic-solver-v28",
+    "title": "Nemotron Pure Symbolic Solver v28",
+    "author": "Mike Anderson",
+    "lastRunTime": "2026-04-23 03:12:46.437000",
+    "totalVotes": "3",
+    "kernel_type": "script",
+    "seen_sort": "voteCount",
+    "seen_page": 1
+  },
+  {
+    "ref": "markjcooper/thk-public-fork-2026-05-14-v10-kienngx",
+    "title": "THK public fork 2026-05-14 v10 kienngx",
+    "author": "Mark Cooper",
+    "lastRunTime": "2026-05-14 17:39:24.513000",
+    "totalVotes": "2",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 3
+  },
+  {
+    "ref": "vohuutridung/3930-sft-summarization-models",
+    "title": "[3930] sft summarization models",
+    "author": "Võ Hữu Trí Dũng",
+    "lastRunTime": "2026-04-29 16:29:45.257000",
+    "totalVotes": "2",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 3
+  },
+  {
+    "ref": "manderson240/nemotron-symbolic-solver-v36-fixed",
+    "title": "Nemotron Symbolic Solver v36 - Fixed",
+    "author": "Mike Anderson",
+    "lastRunTime": "2026-04-25 04:34:00.193000",
+    "totalVotes": "2",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 3
+  },
+  {
+    "ref": "konstantinboyko/nnmrc-2026-whl-unsloth-01-01-d168",
+    "title": "NNMRC-2026 WHL-Unsloth-01-01-D168",
+    "author": "AI-Cat",
+    "lastRunTime": "2026-04-17 13:16:37.193000",
+    "totalVotes": "2",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 3
+  },
+  {
+    "ref": "marcelocruzeta/nemotron-mrc-02-submission-v2",
+    "title": "Nemotron-mrc-02-submission-v2",
+    "author": "Cruzeta",
+    "lastRunTime": "2026-04-25 16:39:41.893000",
+    "totalVotes": "2",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 3
+  },
+  {
+    "ref": "include4eto/nvidia-nemotron-training",
+    "title": "NVIDIA Nemotron - Training",
+    "author": "Traiko Dinev",
+    "lastRunTime": "2026-04-15 13:07:11.713000",
+    "totalVotes": "2",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 3
+  },
+  {
+    "ref": "rohansan1/nemotron-reasoning-lora-solution-writeup",
+    "title": "Nemotron Reasoning LoRA Solution Writeup",
+    "author": "Rohan San1",
+    "lastRunTime": "2026-04-08 03:33:22.407000",
+    "totalVotes": "2",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 3
+  },
+  {
+    "ref": "damndeepesh/nemotron-sft-lora-with-cot-v2-prep-now-plz-wait",
+    "title": "Nemotron SFT LoRA with CoT (v2 prep now plz wait)",
+    "author": "Deepesh Gupta",
+    "lastRunTime": "2026-04-11 12:30:00.783000",
+    "totalVotes": "2",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 3
+  },
+  {
+    "ref": "rezaazami/0-64-nvidia-nemotron-training",
+    "title": "[0.64] NVIDIA Nemotron Training",
+    "author": "Reza Azami",
+    "lastRunTime": "2026-04-07 03:07:46.200000",
+    "totalVotes": "2",
+    "kernel_type": "notebook",
+    "seen_sort": "voteCount",
+    "seen_page": 3
+  }
+]

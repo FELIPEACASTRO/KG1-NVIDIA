@@ -2010,6 +2010,212 @@ Regra preventiva:
 Status: trilha de CSV antigo encerrada; continuar apenas com conversao de sinal
 solver para comportamento do adapter.
 
+### E067 - Active datasets as-is nao justificam outro GPU
+
+Evidencia:
+
+- V521 auditou os datasets que sustentaram as ultimas linhas de treino:
+  V390, V475, V510, V515 e V304.
+- V390 e equation-only e nao tem guardrail de bit; portanto nao pode ir direto
+  para GPU.
+- V475 tem `512/128` linhas de bit replay, mas V495/V496 ja mostraram que o
+  mix ganha equation e perde bit/truncation.
+- V510 ainda tem bit answer-only nas linhas ativas originais; V511/V513 ja
+  bloquearam a linha por falta de trace transferivel.
+- V515 melhorou a estrutura de bit (`406/473` bit traces em treino), mas V517
+  reduziu loss e V518 ainda perdeu `8740ed31`, ficando em `191/315`.
+- V520 confirmou que nao existe CSV adapter-only local acima do baseline sem
+  backfire.
+
+Impacto:
+
+- O gargalo atual nao e falta de H200, epochs ou LR; e falta de prova CPU de
+  que o sinal de solver/postprocessor virou comportamento adapter-only sem
+  trocar `+equation` por `-bit`.
+- Repetir V475/V510/V515 como estao e desperdicio FinOps e risco de regressao.
+
+Regra preventiva:
+
+- Antes de qualquer job pago, exigir um V522 CPU source-target
+  alignment/learnability gate com:
+  - zero overlap de prompt/id com weak/full;
+  - nenhum flag `weak/full rows used for training`;
+  - cobertura nova para a classe de backfire bit;
+  - pelo menos uma classe de equation transferivel;
+  - bloqueio se nao preservar `8740ed31=01101000`.
+
+Status: V521 implementado; GPU segue bloqueada ate novo sinal CPU real.
+
+### E068 - O sinal existe, mas precisa virar dataset fonte-only direcionado
+
+Evidencia:
+
+- V522 comparou o baseline V516 label-free contra a referencia teacher V380.
+- A referencia tem `31` ganhos no-loss e `0` perdas:
+  - `bit_manipulation=23`;
+  - `equation_transform=8`.
+- Regras de bit com ganho:
+  - `bit_exact_global_ternary_unique_prediction=13`;
+  - `bit_fullbyte_ternary_op_CHO=4`;
+  - `bit_fullbyte_ternary_op_MAJ3=4`;
+  - `bit_exact_global_binary_OR=1`;
+  - `bit_exact_global_binary_XOR=1`.
+- A cobertura fonte permitida existe principalmente no V304:
+  - treino V304 contem `CHO=506`, `MAJ3=709`, `PAR3=105`,
+    `fullbyte=1536` e `bit_v300_gain_pattern=1056`;
+  - V515 contem apenas `CHO=4`, `MAJ3=3`, `fullbyte=7` em treino.
+- As classes equation label-free atuais sao apenas os quatro IDs do V516:
+  `274def88`, `7688e06e`, `c5b058d6`, `d1bd7478`.
+
+Impacto:
+
+- O erro dos ultimos dias foi tentar converter sinal geral com datasets
+  amplos ou pequenos demais. O caminho mais rapido agora e construir um
+  trace pack direcionado por classe de regra, usando somente linhas de fonte
+  permitida e nao os labels weak.
+- A prioridade pratica e bit primeiro, porque ha `23` ganhos de referencia e
+  cobertura fonte forte no V304. Equation entra como bloco pequeno das classes
+  V516 atuais, nao como broad symbolic SFT.
+
+Regra preventiva:
+
+- Ganhos teacher/weak sao diagnosticos de alvo, nao labels de treino.
+- V523 deve filtrar ou gerar linhas fonte-only por regra CHO/MAJ3/global
+  ternary/OR/XOR e equation classes atuais, depois passar V286, V513, V521 e
+  static/pre-paid gates antes de qualquer GPU.
+
+Status: V522 implementado; construir V523 dataset direcionado.
+
+### E069 - Quota por linha escondia viés por tokens de loss
+
+Evidencia:
+
+- V523 passou como dataset fonte-only direcionado:
+  - `1026` train, `219` validation;
+  - train `706` bit e `320` equation;
+  - `0` overlap weak/full e `0` duplicidade;
+  - V286 real: token max `749`, offset masks `1026/219`, truncation `0`;
+  - V513: `0` blockers.
+- V524 calculou o peso real no objetivo token-level:
+  - row bit share `0.688`;
+  - loss-token bit share `0.907`;
+  - referencia V522 sugere target bit share `23/31 = 0.742`.
+
+Impacto:
+
+- O dataset parecia balanceado por linhas, mas o otimizador via quase tudo
+  como bit porque traces de bit sao muito mais longos.
+- Isso explica uma classe de falha recorrente: `eval_loss` muda, mas ACC nao
+  acompanha, porque a loss otimiza massa de tokens e nao acertos por puzzle.
+
+Regra preventiva:
+
+- Para V523 ou datasets parecidos, nao usar `token_mean` puro.
+- `hf_job_train_v90.py` agora tem `LOSS_NORMALIZATION_MODE=example_mean`, que
+  calcula CE media por exemplo antes de fazer a media do batch.
+- Qualquer launcher V523 deve declarar explicitamente
+  `LOSS_NORMALIZATION_MODE=example_mean` ou passar novo V524 apos encurtar
+  traces de bit.
+
+Status: bug de objetivo corrigido no trainer; ainda falta launcher/pre-paid
+gate antes de qualquer GPU.
+
+### E070 - Consultas externas confirmam que V523 precisa de dry-run objetivo
+
+Evidencia:
+
+- V525 consultou 5 modelos no OpenRouter com prompt completo contendo V516,
+  V518, V521, V522, V523, V524 e o trecho de `hf_job_train_v90.py`.
+- Todos os modelos concordaram que:
+  - `token_mean` e inadequado quando bit tem `90.7%` dos tokens de loss;
+  - `example_mean` e uma correcao necessaria;
+  - `8740ed31=01101000` deve ser guard hard anti-backfire;
+  - primeiro checkpoint precisa ter kill-switch por ACC, nao por loss;
+  - submit continua bloqueado sem ganho label-free weak/full.
+- Divergencia util:
+  - 3/5 aceitariam um smoke V523 curto com `example_mean`;
+  - 2/5 preferem rebuild V525 antes de GPU porque V523 ainda pode ter bit
+    traces longas demais.
+
+Impacto:
+
+- A decisao correta e intermediaria: antes de H200, provar em CPU que
+  `example_mean` esta ativo e que a contribuicao normalizada por familia nao
+  segue dominada por bit.
+- Se a contribuicao seguir desequilibrada, V523 fica bloqueado e V525 deve
+  encurtar traces de bit e controlar token-mass antes de qualquer GPU.
+
+Regra preventiva:
+
+- Nenhum launcher V523/V525 pode rodar sem:
+  - `LOSS_NORMALIZATION_MODE=example_mean`;
+  - dry-run de batch misto bit/equation;
+  - checagem de `\\boxed{` literal e ausencia de control chars;
+  - prompt tokens com peso zero;
+  - offset masks completos;
+  - gate do primeiro checkpoint com `total>=193`, `equation>=57`,
+    `bit>=136`, `trunc=0`, `8740ed31=01101000` e `518deb39=$`.
+
+Status: V525 consult concluido; proximo passo e CPU objective dry-run ou V525
+rebuild se o dry-run falhar.
+
+### E071 - Score 0.86 packaging foi confundido com tecnica de familia
+
+Evidencia:
+
+- V528 analisou notebooks publicos que citam `0.86`/`0.85`.
+- Os notebooks explicitamente `0.86` mais relevantes (`afr1ste`, `safar1`,
+  `mohamedamr992`) empacotam o adapter publico
+  `kienngx/nemotron-nano-30b-trained/Triton/tinker-adapter/1`.
+- Eles ajudam a validar zip/schema/provenance, mas nao mostram regra nova para
+  `bit_manipulation` ou `equation_transform`.
+
+Impacto:
+
+- Perder tempo tentando extrair ganho de notebooks de packaging aumenta ruido e
+  nao muda ACC.
+- A tecnica real esta em notebooks solver/CoT, especialmente PJT, PearPN25,
+  Konbu, ZZYS e Tong/Huikang.
+
+Regra preventiva:
+
+- Antes de inserir notebook no roadmap, classificar como:
+  `solver`, `trace_generator`, `training_recipe`, `adapter_conversion`,
+  `packaging`, `eda` ou `unrelated`.
+- Somente `solver` e `trace_generator` podem entrar como P0 de ganho de
+  familia. `packaging` entra apenas em gate de submit.
+
+Status: V528 registrado; roadmap atualizado para usar `0.86` somente como
+referencia de package.
+
+### E072 - Ranking automatico de notebooks gera falso positivo
+
+Evidencia:
+
+- V529 parseou `702` diretorios baixados e marcou `190` candidatos bit,
+  `89` equation e `197` treino/package.
+- Parte dos top hits automaticos era falso positivo por termos genericos como
+  `bit`, `train`, `adapter` ou metadata do desafio, sem tecnica acionavel para
+  nossas familias.
+
+Impacto:
+
+- Se a triagem automatica virar acao direta, o plano volta a broad SFT/GRPO ou
+  notebooks irrelevantes.
+- Isso tambem pode liberar GPU sem sinal CPU novo, repetindo o plateau.
+
+Regra preventiva:
+
+- Toda lista automatica precisa de filtro manual de evidencia antes do roadmap:
+  1. existe solver/regra concreta?;
+  2. existe trace verificavel ou codigo portavel?;
+  3. melhora bit/equation sem usar weak/full como treino?;
+  4. e diferente do que ja falhou em V475/V510/V515/V517?
+- Falsos positivos ficam bloqueados como `unrelated_or_packaging_only`.
+
+Status: V529 registrado; P0 filtrado para `pjt222`, `pearpn25`, `konbu17` e
+`zzys0316`.
+
 ## Prompt Externo
 
 Prompt consolidado para OpenRouter/outras APIs:

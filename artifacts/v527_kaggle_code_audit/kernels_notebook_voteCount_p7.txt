@@ -1,0 +1,92 @@
+ref,title,author,lastRunTime,totalVotes
+omnillos/mysolution,mysolution,[Ru] Гулякин Иля,2026-05-09 21:41:30.063000,0
+camvsfd/notebook-colsmol-mmdocir-page-vrq,[notebook] ColSmol MMDocIR Page VRQ,cóa má,2026-05-07 06:11:37.080000,0
+nguyenducdung1107/notebook-ex-colpali-layout-rvq,[notebook-ex] Colpali layout RVQ,NGUYEN DUC DUNG 1107,2026-05-06 16:25:08.030000,0
+nguyenducdung1107/notebook-ex-colsmol500layoutrvq, [notebook-ex]Colsmol500layoutRVQ,NGUYEN DUC DUNG 1107,2026-05-07 13:02:47.243000,0
+abky189/notebook17effa02a5,notebook17effa02a5,Bharath,2026-05-06 10:01:23.507000,0
+lfreedom2750/scrape-html,scrape_html,lfreedom2750,2026-05-05 07:28:19.540000,0
+onkarmario/unsloth-dependency-rtx-pro-6000,unsloth dependency RTX PRO 6000,OnkarMario,2026-05-04 09:24:31.193000,0
+datatemple/run24-050326,run24_050326,Oluyinka Oginni,2026-05-04 03:06:12,0
+sonlee25/nvidia-nemotron-submission-demo,NVIDIA Nemotron Submission Demo,Sơn Lê,2026-05-14 10:08:34.650000,0
+quangnguyen711/baseline-ic-payt,Baseline_IC_PAYT,QuangNguyen711,2026-05-07 11:29:23.727000,0
+syu21125/nemotron-kienngx-tinker-submit,Nemotron kienngx tinker submit,SYU21125,2026-05-03 10:35:44.060000,0
+syu21125/nemotron-dgxchen-085-submit,Nemotron dgxchen 085 submit,SYU21125,2026-05-03 08:50:20.970000,0
+syu21125/nemotron-kienngx-2400-submit,Nemotron kienngx 2400 submit,SYU21125,2026-05-03 08:32:25.540000,0
+dloc19/ecapa-tdnn-dialect-vivoice34,Ecapa-tdnn-dialect-vivoice34,Lộc Dương,2026-05-03 08:26:24.387000,0
+syu21125/nemotron-path-d-tinker-conversion,Nemotron Path D Tinker Conversion,SYU21125,2026-05-03 03:42:27.180000,0
+sathvikreddy1287/notebook8f45059149,notebook8f45059149,sathvikreddy1287,2026-05-03 03:13:34.530000,0
+xduan7/nemotron-dgxchen-repro-eval,Nemotron dgxchen Repro Eval,Xiaotian Duan,2026-05-02 17:56:59.370000,0
+martinijean/nemotron-sft-lora-with-cot,Nemotron SFT LoRA with CoT,Martini Jean,2026-05-02 15:29:06.657000,0
+llccqq624/nvidia-nemotron-tinker-adapter-notebook,NVIDIA Nemotron Tinker Adapter Notebook,Jiachen Li,2026-05-02 13:26:02.723000,0
+ohhhlgm/unsloth-to-achieve-0-85-lb-use-dora-and-adapter,Unsloth to Achieve 0.85 LB use DoRA and adapter,ohhhlgm,2026-05-03 08:51:19.470000,0
+meoconbngu/fork-of-vivoice34-compare-to-vimd,Fork of ViVoice34_compare_to_ViMD,Đinh Ngọc Tuyển,2026-05-02 15:54:11.293000,0
+syu21125/nemotron-v15-huikang-085-submission,Nemotron v15 huikang 085 Submission,SYU21125,2026-05-02 08:26:00.857000,0
+adv1102/nvidia-nemotron-submission,NVIDIA Nemotron Submission,adv_1102,2026-05-10 23:43:23.430000,0
+xduan7/nemotron-moe-tied-lora-eval-scout,Nemotron MoE-Tied LoRA Eval Scout,Xiaotian Duan,2026-04-30 23:00:24.093000,0
+mohamedamr992/deterministic-solvers-for-reasoning-task,Deterministic Solvers for Reasoning Task,Mohamed Amr992,2026-05-06 15:35:04.233000,0
+anhtran10/radius-smote-test-2,Radius_SMOTE_test_2,Trần Kim Anh,2026-04-30 15:56:52.487000,0
+anhtran10/cdsmote-test,CDSMOTE_test,Trần Kim Anh,2026-04-30 15:33:50.477000,0
+tylerm16/nemotron-sft-lora-with-cot-w-no-curriculum,Nemotron SFT LoRA with CoT w/ no Curriculum,Tyler Mak,2026-04-30 09:25:19.447000,0
+amlear/tinker-adapter-solved-some-internet-issues,Tinker Adapter (Solved Some Internet issues),AmLear,2026-04-30 00:34:16.660000,0
+xduan7/nemotron-deterministic-cot-moe-tied-lora-eval,Nemotron Deterministic CoT MoE-Tied LoRA Eval,Xiaotian Duan,2026-04-30 23:31:23.740000,0
+mtoshidesu/nemotron-reasoning-made-simple-visual-starter,🚀 Nemotron Reasoning Made Simple — Visual Starter,m-toshi desu,2026-04-29 14:13:54.187000,0
+sarabstudentsaidane/soai-rl-vision,SOAI_RL -vision,Sarab,2026-05-04 04:27:42.103000,0
+vodung020905/lab-kto,[Lab] kto,vodung020905,2026-04-28 13:37:12.067000,0
+dickjun/nemotron-public085-pretrained-control-v1,nemotron-public085-pretrained-control-v1,zhangjun,2026-04-28 01:33:05.657000,0
+vodung020905/3930-sft-summarization-models,[3930] sft summarization models,vodung020905,2026-04-30 05:26:35.737000,0
+pranavtrivedi02/pranav-sft-grpo,Pranav-SFT+GRPO,Pranav Trivedi,2026-05-05 21:22:56.040000,0
+adam017/notebook0e80a07ad1,notebook0e80a07ad1,Adam017,2026-04-28 11:39:09.430000,0
+francisbanda/nemotron-reasoning-solver,Nemotron Reasoning Solver,Francis Banda,2026-04-26 11:45:37.833000,0
+hngliththu/lo-lightgbm-dask-final,LO_LightGBM(Dask)_Final,Hương Lại Thị Thu,2026-04-26 10:48:03.887000,0
+shamathmika/nemotron-reasoning-challenge,Nemotron-Reasoning-Challenge,Shamathmika,2026-05-11 15:41:17.853000,0
+mbarathmybranz/kaggle-submission,kaggle_submission,M BARATH Mybranz,2026-04-25 04:08:57.737000,0
+cdnghnam/mlproject-xgboost-random-forest,MLPROJECT|XGBOOST +RANDOM FOREST,Đức Dũng Hà Nam,2026-05-01 09:53:51.530000,0
+javihm77/nemotron-cot-validation-jh,Nemotron CoT Validation - JH,Javier Hernández,2026-05-05 03:11:20.763000,0
+anhtran10/v0-mask-v3,V0_mask_v3,Trần Kim Anh,2026-04-22 03:01:26.790000,0
+vhmbhjfhgdgfx/cct-qwen35-4b-test,CCT Qwen35 4B Test,vhmbhjfhgdgfx,2026-04-23 02:31:10.603000,0
+wukeneth/cct-qwen35-4b-test,CCT Qwen35 4B Test,KE WU,2026-04-22 21:06:10.807000,0
+prashantmhaske123/training-with-unsloth-to-achieve-0-85-lb,Training with Unsloth to Achieve 0.85 LB,Prashant Mhaske,2026-04-19 07:23:09.247000,0
+yashashavdk/nemotron-training-dl-class-cmpe258-assignment,nemotron-training-dl-class-cmpe258-assignment,yashashav_dk,2026-04-18 18:25:02.830000,0
+alamin7002/utility-script,Utility Script,Alamin 7002,2026-04-22 13:00:29.887000,0
+saivenkataganeshb/nvidia-nemotron-fine-tuning-methodology,NVIDIA Nemotron Fine-tuning Methodology,Sai Venkata Ganesh Bandaluppi,2026-04-16 21:48:54.480000,0
+haiduonghuynhle/lightgcl-steam17m,LightGCL-steam17m,Hải Dương,2026-04-16 15:57:09.653000,0
+camvsfd/notebook-methodology-doc-colsmol-vidore,[notebook] METHODOLOGY-doc ColSmol ViDoRe,cóa má,2026-04-21 20:49:42.363000,0
+harsha7754/nvidia-nemotron-prompting-on-base-model,NVIDIA Nemotron Prompting on base model,harsha7754,2026-04-24 08:49:12.020000,0
+haiduonghuynhle/lightgcl-movielens,LightGCL-movielens,Hải Dương,2026-04-18 15:36:53.247000,0
+haiduonghuynhle/lightgcl-gowalla,LightGCL-gowalla,Hải Dương,2026-04-18 14:35:21.437000,0
+haiduonghuynhle/lightgcl-amazon-books,LightGCL-amazon-books,Hải Dương,2026-04-18 15:15:23.933000,0
+marcelocruzeta/nemotron-mrc-01-utility,Nemotron-MRC-01-(Utility),Cruzeta,2026-04-14 11:54:51.850000,0
+haiduonghuynhle/lightgcl-yelp,LightGCL-yelp,Hải Dương,2026-04-17 06:53:59.590000,0
+itskshivam/nemotron-light-competition-adapt-sft,Nemotron Light Competition Adapt SFT,shivam,2026-04-13 10:19:37.710000,0
+atharvshete10/notebook7707cd0ec8,notebook7707cd0ec8,Atharv Shete,2026-04-14 00:04:14.693000,0
+felipe1983/kg1-top1-100x-double-check-20260412,KG1 Top1 100x Double Check 20260412,Felipe KNBIS,2026-04-12 18:03:41.060000,0
+itskshivam/nemotron-strict-reasoning-mix-sft-1024,Nemotron Strict Reasoning Mix SFT 1024,shivam,2026-04-11 18:54:12.107000,0
+dennislanov/nvidia-nemotron-submission-v2,NVIDIA Nemotron Submission v2,Dennis Lanov,2026-04-11 16:26:08.363000,0
+dennislanov/nvidia-nemotron-submission-demo,NVIDIA Nemotron Submission Demo,Dennis Lanov,2026-04-11 05:10:13.203000,0
+gracerockysavestars/uhaul,uhaul,gracerockysavestars,2026-04-09 18:19:39.297000,0
+dloc19/07-01-lightgbm,07.01-LightGBM,Lộc Dương,2026-04-09 15:30:26.153000,0
+richardjacob04/timekan-full-vivoice34,TimeKAN-Full-ViVoice34,Richard Jacob 04,2026-04-09 11:15:44.317000,0
+dloc19/notebooka8fde9a327,notebooka8fde9a327,Lộc Dương,2026-04-08 17:57:13.867000,0
+nhatranvan/notebook3b5827228b,notebook3b5827228b,NhaTranVan,2026-04-08 17:09:56.153000,0
+nhatranvan/notebook3b9ba9b7c6,notebook3b9ba9b7c6,NhaTranVan,2026-04-08 16:05:13.880000,0
+rlaajgus/nemotron-0430-1445,Nemotron_0430_1445,rlaajgus,2026-05-13 11:48:53.337000,0
+vasilisabaginskaya/nemotron-reasoning-challenge,Nemotron Reasoning Challenge,vasi3js,2026-04-07 16:15:55.073000,0
+david01szu/nemotron-gpu-debug,Nemotron GPU Debug,David01SZU,2026-04-05 15:51:25.150000,0
+quan242/nvidia-nemotron-training-v2-cot-labels,NVIDIA Nemotron training v2 (CoT + Labels),quan242,2026-05-12 04:56:36.283000,0
+sanchitgarg999/multimodel,Multimodel,Sanchit Garg,2026-04-10 16:02:13.253000,0
+udaken10/automl-finetunng,autoML_finetunng,really?,2026-04-01 08:15:35.277000,0
+smilyaiiscoolgubby/nvidia-nemotron-training-cot-labels-my-edition,NVIDIA Nemotron Training (CoT + Labels) MY EDITION,Boning Cui,2026-04-01 03:29:10.097000,0
+quan242/nvidia-nemotron-reasoning-dataset-gen,nvidia-nemotron-reasoning-dataset-gen,quan242,2026-05-14 14:54:20.843000,0
+udaken10/just-see-and-think,just_see_and_think,really?,2026-03-31 16:46:34.403000,0
+quan242/nemotron-baseline-evaluation,Nemotron Baseline Evaluation,quan242,2026-05-01 14:57:49.820000,0
+esabellechen/nvidia-nemotron-training,NVIDIA Nemotron Training,Esabelle Chen,2026-05-08 09:44:11.857000,0
+ulvisharifzade/nemotron-azerbaijan,Nemotron Azerbaijan,Ulvi Sharifzade,2026-04-03 21:40:36.020000,0
+manderson240/nemotron-lora-v41-training-all-data,Nemotron LoRA v41 Training All Data,Mike Anderson,2026-03-26 01:51:58.017000,0
+luciankucera/bit-analyzing-unit-test-depth1,bit:analyzing-unit-test-depth1,lucian kucera,2026-03-24 10:30:53.037000,0
+nguyenducdung1107/notebook1e76876f42,notebook1e76876f42,NGUYEN DUC DUNG 1107,2026-03-23 14:55:21.987000,0
+elgorrimmohamed/nvidia-nemotron-model-reasoning-challenge,nvidia-nemotron-model-reasoning-challenge,EL GORRIM MOHAMED,2026-03-23 03:34:08.917000,0
+rishabhshukla111/notebookneotronreasoningmodel,notebookneotronreasoningmodel,Rishabh Shukla 111,2026-04-11 13:08:55.837000,0
+mohankrishnathalla/nvidia-nemotron-model-reasoning-challenge,NVIDIA Nemotron Model Reasoning Challenge,Mohan Krishna Thalla,2026-03-21 14:32:23.460000,0
+stevanuso/nvidia-nemotron-training,NVIDIA Nemotron Training,StevanusO,2026-03-21 03:59:03.880000,0
+franekwodarczyk/nvidia-nemotron-model-reasoning-by-me-0-6-score,NVIDIA Nemotron Model Reasoning by me 0.6 score,Franek Włodarczyk,2026-04-13 10:16:58.670000,0
+cdnghnam/test-rtx-pro-6000,[test] rtx pro 6000,Đức Dũng Hà Nam,2026-03-24 09:26:58.557000,0

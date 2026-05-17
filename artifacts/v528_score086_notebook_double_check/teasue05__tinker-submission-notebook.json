@@ -1,0 +1,1466 @@
+{
+  "ref": "teasue05/tinker-submission-notebook",
+  "title": "Tinker submission notebook",
+  "notebook": "artifacts\\v284_official_gate_worktree\\artifacts\\v527_kaggle_code_audit\\pulled_code\\teasue05__tinker-submission-notebook\\tinker-submission-notebook.ipynb",
+  "metadata": {
+    "id": "teasue05/tinker-submission-notebook",
+    "id_no": 115935036,
+    "title": "Tinker submission notebook",
+    "code_file": "tinker-submission-notebook.ipynb",
+    "language": "python",
+    "kernel_type": "notebook",
+    "is_private": false,
+    "enable_gpu": false,
+    "enable_tpu": false,
+    "enable_internet": false,
+    "keywords": [
+      "gpu"
+    ],
+    "dataset_sources": [
+      ""
+    ],
+    "kernel_sources": [
+      "metric/nvidia-metric-utility-script",
+      "huikang/nvidia-nemotron-all-linear",
+      "ryanholbrook/nvidia-utility-script"
+    ],
+    "competition_sources": [
+      "nvidia-nemotron-model-reasoning-challenge"
+    ],
+    "model_sources": [
+      "metric/nemotron-3-nano-30b-a3b-bf16/Transformers/default/1",
+      "huikang/nemotron-adapter/Transformers/default/20"
+    ],
+    "docker_image": "gcr.io/kaggle-images/python@sha256:221c8b519c4f2efa4e712ac0f2e85878a403ea4d523a2cedf8ebf60cf1136c45",
+    "machine_shape": "None"
+  },
+  "kaggle_metadata": {
+    "accelerator": "none",
+    "dataSources": [
+      {
+        "sourceType": "competition",
+        "sourceId": 129716,
+        "databundleVersionId": 16082784
+      },
+      {
+        "sourceType": "modelInstanceVersion",
+        "sourceId": 784907,
+        "databundleVersionId": 16059913,
+        "modelInstanceId": 598905,
+        "modelId": 611168
+      },
+      {
+        "sourceType": "modelInstanceVersion",
+        "sourceId": 823163,
+        "databundleVersionId": 16526052,
+        "modelInstanceId": 607259,
+        "modelId": 619204
+      },
+      {
+        "sourceType": "kernelVersion",
+        "sourceId": 303162475
+      },
+      {
+        "sourceType": "kernelVersion",
+        "sourceId": 305616567
+      },
+      {
+        "sourceType": "kernelVersion",
+        "sourceId": 306236690
+      }
+    ],
+    "dockerImageVersionId": 31287,
+    "isInternetEnabled": false,
+    "language": "python",
+    "sourceType": "notebook",
+    "isGpuEnabled": false
+  },
+  "relevant": [
+    {
+      "cell": 0,
+      "line": 1,
+      "kind": "code",
+      "text": "ADAPTER_PATH = \"/kaggle/input/models/huikang/nemotron-adapter/transformers/default/20\""
+    },
+    {
+      "cell": 0,
+      "line": 2,
+      "kind": "code",
+      "text": "REFERENCE_NOTEBOOK_PATH = \"/kaggle/input/notebooks/huikang/nvidia-nemotron-all-linear\""
+    },
+    {
+      "cell": 0,
+      "line": 3,
+      "kind": "code",
+      "text": "TRAIN_DATA_PATH = \"/kaggle/input/nvidia-nemotron-3-reasoning-challenge/train.csv\""
+    },
+    {
+      "cell": 0,
+      "line": 6,
+      "kind": "code",
+      "text": "RUN_NAME = \"huikang-baseline-v1\""
+    },
+    {
+      "cell": 0,
+      "line": 18,
+      "kind": "code",
+      "text": "\"inside a single LaTeX \\\\boxed{} command.\\n\\n\""
+    },
+    {
+      "cell": 0,
+      "line": 20,
+      "kind": "code",
+      "text": "\"Rules for the final boxed answer:\\n\""
+    },
+    {
+      "cell": 0,
+      "line": 21,
+      "kind": "code",
+      "text": "\"- Use exactly one \\\\boxed{}\\n\""
+    },
+    {
+      "cell": 0,
+      "line": 27,
+      "kind": "code",
+      "text": "\"- Do not output multiple boxed answers\\n\""
+    },
+    {
+      "cell": 0,
+      "line": 28,
+      "kind": "code",
+      "text": "\"- The final \\\\boxed{} must appear at the end of the response\\n\""
+    },
+    {
+      "cell": 0,
+      "line": 29,
+      "kind": "code",
+      "text": "\"- Do not output any text after the final \\\\boxed{}\""
+    },
+    {
+      "cell": 1,
+      "line": 3,
+      "kind": "code",
+      "text": "shutil.copytree("
+    },
+    {
+      "cell": 1,
+      "line": 4,
+      "kind": "code",
+      "text": "ADAPTER_PATH,"
+    },
+    {
+      "cell": 1,
+      "line": 9,
+      "kind": "code",
+      "text": "shutil.copytree("
+    },
+    {
+      "cell": 2,
+      "line": 1,
+      "kind": "code",
+      "text": "import zipfile"
+    },
+    {
+      "cell": 2,
+      "line": 3,
+      "kind": "code",
+      "text": "with zipfile.ZipFile(\"reference/submission.zip\", \"r\") as zip_ref:"
+    },
+    {
+      "cell": 2,
+      "line": 4,
+      "kind": "code",
+      "text": "zip_ref.extractall(\"reference\")"
+    },
+    {
+      "cell": 3,
+      "line": 1,
+      "kind": "markdown",
+      "text": "# Compare configs"
+    },
+    {
+      "cell": 4,
+      "line": 3,
+      "kind": "code",
+      "text": "with open(\"reference/adapter_config.json\") as f:"
+    },
+    {
+      "cell": 4,
+      "line": 4,
+      "kind": "code",
+      "text": "reference_adapter_config = json.load(f)"
+    },
+    {
+      "cell": 4,
+      "line": 6,
+      "kind": "code",
+      "text": "print(reference_adapter_config)"
+    },
+    {
+      "cell": 5,
+      "line": 3,
+      "kind": "code",
+      "text": "with open(\"adapter_config.json\") as f:"
+    },
+    {
+      "cell": 5,
+      "line": 4,
+      "kind": "code",
+      "text": "trained_adapter_config = json.load(f)"
+    },
+    {
+      "cell": 5,
+      "line": 6,
+      "kind": "code",
+      "text": "print(trained_adapter_config)"
+    },
+    {
+      "cell": 6,
+      "line": 1,
+      "kind": "code",
+      "text": "for k, reference_value in reference_adapter_config.items():"
+    },
+    {
+      "cell": 6,
+      "line": 2,
+      "kind": "code",
+      "text": "if k in trained_adapter_config and reference_value != trained_adapter_config[k]:"
+    },
+    {
+      "cell": 6,
+      "line": 5,
+      "kind": "code",
+      "text": "print(trained_adapter_config[k])"
+    },
+    {
+      "cell": 7,
+      "line": 1,
+      "kind": "code",
+      "text": "for k, reference_value in reference_adapter_config.items():"
+    },
+    {
+      "cell": 7,
+      "line": 2,
+      "kind": "code",
+      "text": "if k not in trained_adapter_config:"
+    },
+    {
+      "cell": 8,
+      "line": 1,
+      "kind": "code",
+      "text": "for k, v in trained_adapter_config.items():"
+    },
+    {
+      "cell": 8,
+      "line": 2,
+      "kind": "code",
+      "text": "if k not in reference_adapter_config:"
+    },
+    {
+      "cell": 9,
+      "line": 1,
+      "kind": "markdown",
+      "text": "# Align configs"
+    },
+    {
+      "cell": 10,
+      "line": 1,
+      "kind": "code",
+      "text": "trained_adapter_config[\"target_modules\"] = ["
+    },
+    {
+      "cell": 10,
+      "line": 4,
+      "kind": "code",
+      "text": "\"in_proj\","
+    },
+    {
+      "cell": 10,
+      "line": 9,
+      "kind": "code",
+      "text": "\"out_proj\","
+    },
+    {
+      "cell": 10,
+      "line": 10,
+      "kind": "code",
+      "text": "\"lm_head\","
+    },
+    {
+      "cell": 10,
+      "line": 13,
+      "kind": "code",
+      "text": "with open(\"adapter_config.json\", \"w\") as f:"
+    },
+    {
+      "cell": 10,
+      "line": 14,
+      "kind": "code",
+      "text": "f.write(json.dumps(trained_adapter_config))"
+    },
+    {
+      "cell": 11,
+      "line": 1,
+      "kind": "code",
+      "text": "with open(\"adapter_config.json\") as f:"
+    },
+    {
+      "cell": 12,
+      "line": 1,
+      "kind": "markdown",
+      "text": "# Compare adapters"
+    },
+    {
+      "cell": 13,
+      "line": 1,
+      "kind": "code",
+      "text": "def trained_adapter_key_rename(key_name: str) -> str:"
+    },
+    {
+      "cell": 14,
+      "line": 1,
+      "kind": "code",
+      "text": "from safetensors import safe_open"
+    },
+    {
+      "cell": 14,
+      "line": 3,
+      "kind": "code",
+      "text": "trained_adapter_keys = set()"
+    },
+    {
+      "cell": 14,
+      "line": 4,
+      "kind": "code",
+      "text": "with safe_open(\"adapter_model.safetensors\", framework=\"pt\", device=\"cpu\") as f:"
+    },
+    {
+      "cell": 14,
+      "line": 7,
+      "kind": "code",
+      "text": "trained_adapter_keys.add("
+    },
+    {
+      "cell": 15,
+      "line": 1,
+      "kind": "code",
+      "text": "from safetensors import safe_open"
+    },
+    {
+      "cell": 15,
+      "line": 3,
+      "kind": "code",
+      "text": "reference_adapter_keys = set()"
+    },
+    {
+      "cell": 15,
+      "line": 5,
+      "kind": "code",
+      "text": "\"reference/adapter_model.safetensors\", framework=\"pt\", device=\"cpu\""
+    },
+    {
+      "cell": 15,
+      "line": 9,
+      "kind": "code",
+      "text": "reference_adapter_keys.add("
+    },
+    {
+      "cell": 16,
+      "line": 1,
+      "kind": "code",
+      "text": "from safetensors import safe_open"
+    },
+    {
+      "cell": 16,
+      "line": 5,
+      "kind": "code",
+      "text": "for model_safetensors in glob.glob("
+    },
+    {
+      "cell": 16,
+      "line": 6,
+      "kind": "code",
+      "text": "\"/kaggle/input/models/metric/nemotron-3-nano-30b-a3b-bf16/transformers/default/1/*.safetensors\""
+    },
+    {
+      "cell": 16,
+      "line": 8,
+      "kind": "code",
+      "text": "with safe_open(model_safetensors, framework=\"pt\", device=\"cpu\") as f:"
+    },
+    {
+      "cell": 17,
+      "line": 1,
+      "kind": "code",
+      "text": "# set([\".\".join(x.split(\".\")[3:]) for x in trained_adapter_keys]) - set([\".\".join(x.split(\".\")[3:]) for x in reference_adapter_keys])"
+    },
+    {
+      "cell": 19,
+      "line": 1,
+      "kind": "code",
+      "text": "sorted(reference_adapter_keys)[-20:]"
+    },
+    {
+      "cell": 20,
+      "line": 1,
+      "kind": "code",
+      "text": "sorted(trained_adapter_keys)[-20:]"
+    },
+    {
+      "cell": 21,
+      "line": 1,
+      "kind": "code",
+      "text": "len(trained_adapter_keys), len(reference_adapter_keys)"
+    },
+    {
+      "cell": 22,
+      "line": 2,
+      "kind": "code",
+      "text": "len(trained_adapter_keys - reference_adapter_keys),"
+    },
+    {
+      "cell": 22,
+      "line": 3,
+      "kind": "code",
+      "text": "len(reference_adapter_keys - trained_adapter_keys),"
+    },
+    {
+      "cell": 23,
+      "line": 1,
+      "kind": "markdown",
+      "text": "# Update adapter"
+    },
+    {
+      "cell": 24,
+      "line": 4,
+      "kind": "code",
+      "text": "from safetensors import safe_open"
+    },
+    {
+      "cell": 24,
+      "line": 5,
+      "kind": "code",
+      "text": "from safetensors.torch import save_file"
+    },
+    {
+      "cell": 24,
+      "line": 7,
+      "kind": "code",
+      "text": "# --- Load all trained adapter tensors ---"
+    },
+    {
+      "cell": 24,
+      "line": 8,
+      "kind": "code",
+      "text": "adapter_tensors = {}"
+    },
+    {
+      "cell": 24,
+      "line": 9,
+      "kind": "code",
+      "text": "with safe_open(\"adapter_model.safetensors\", framework=\"pt\", device=\"cpu\") as f:"
+    },
+    {
+      "cell": 24,
+      "line": 11,
+      "kind": "code",
+      "text": "adapter_tensors[key] = f.get_tensor(key)"
+    },
+    {
+      "cell": 24,
+      "line": 13,
+      "kind": "code",
+      "text": "# --- Collect adapter base names (without .lora_A/.lora_B.weight suffix) ---"
+    },
+    {
+      "cell": 24,
+      "line": 15,
+      "kind": "code",
+      "text": "for key in adapter_tensors:"
+    },
+    {
+      "cell": 24,
+      "line": 16,
+      "kind": "code",
+      "text": "base = re.sub(r\"\\.lora_[AB]\\.weight$\", \"\", key)"
+    },
+    {
+      "cell": 24,
+      "line": 19,
+      "kind": "code",
+      "text": "# --- Identify Mamba layers needing gate_proj+x_proj → in_proj ---"
+    },
+    {
+      "cell": 24,
+      "line": 30,
+      "kind": "code",
+      "text": "# --- Build model_key_shapes for in_proj dimension lookup ---"
+    },
+    {
+      "cell": 24,
+      "line": 37,
+      "kind": "code",
+      "text": "lora_A = adapter_tensors[f\"{base}.lora_A.weight\"]"
+    },
+    {
+      "cell": 24,
+      "line": 38,
+      "kind": "code",
+      "text": "lora_B = adapter_tensors[f\"{base}.lora_B.weight\"]"
+    },
+    {
+      "cell": 24,
+      "line": 39,
+      "kind": "code",
+      "text": "renamed = trained_adapter_key_rename(base)"
+    },
+    {
+      "cell": 24,
+      "line": 41,
+      "kind": "code",
+      "text": "# Skip empty w3 experts"
+    },
+    {
+      "cell": 24,
+      "line": 42,
+      "kind": "code",
+      "text": "if \".experts.w3\" in base and lora_A.numel() == 0:"
+    },
+    {
+      "cell": 24,
+      "line": 45,
+      "kind": "code",
+      "text": "# # Skip lm_head (not in reference adapter)"
+    },
+    {
+      "cell": 24,
+      "line": 46,
+      "kind": "code",
+      "text": "# if \".lm_head\" in base:"
+    },
+    {
+      "cell": 24,
+      "line": 54,
+      "kind": "code",
+      "text": "if \".experts.w1\" in base or \".experts.w2\" in base:"
+    },
+    {
+      "cell": 24,
+      "line": 56,
+      "kind": "code",
+      "text": "# Use expand + contiguous to avoid shared memory in safetensors"
+    },
+    {
+      "cell": 24,
+      "line": 57,
+      "kind": "code",
+      "text": "if lora_A.shape[0] == 1:"
+    },
+    {
+      "cell": 24,
+      "line": 58,
+      "kind": "code",
+      "text": "lora_A = lora_A.expand(lora_B.shape[0], -1, -1).contiguous()"
+    },
+    {
+      "cell": 24,
+      "line": 59,
+      "kind": "code",
+      "text": "elif lora_B.shape[0] == 1:"
+    },
+    {
+      "cell": 24,
+      "line": 60,
+      "kind": "code",
+      "text": "lora_B = lora_B.expand(lora_A.shape[0], -1, -1).contiguous()"
+    },
+    {
+      "cell": 24,
+      "line": 62,
+      "kind": "code",
+      "text": "num_experts = lora_A.shape[0]"
+    },
+    {
+      "cell": 24,
+      "line": 65,
+      "kind": "code",
+      "text": "for i in range(num_experts):"
+    },
+    {
+      "cell": 24,
+      "line": 67,
+      "kind": "code",
+      "text": "r\"\\.experts\\.w[12]\","
+    },
+    {
+      "cell": 24,
+      "line": 68,
+      "kind": "code",
+      "text": "f\".experts.{i}.{proj_name}\","
+    },
+    {
+      "cell": 24,
+      "line": 71,
+      "kind": "code",
+      "text": "tensors[f\"{exp_renamed}.lora_A.weight\"] = lora_A[i].contiguous()"
+    },
+    {
+      "cell": 24,
+      "line": 72,
+      "kind": "code",
+      "text": "tensors[f\"{exp_renamed}.lora_B.weight\"] = lora_B[i].contiguous()"
+    },
+    {
+      "cell": 24,
+      "line": 76,
+      "kind": "code",
+      "text": "tensors[f\"{renamed}.lora_A.weight\"] = lora_A"
+    },
+    {
+      "cell": 24,
+      "line": 77,
+      "kind": "code",
+      "text": "tensors[f\"{renamed}.lora_B.weight\"] = lora_B"
+    },
+    {
+      "cell": 24,
+      "line": 79,
+      "kind": "code",
+      "text": "# --- Mamba: gate_proj + x_proj → in_proj via SVD ---"
+    },
+    {
+      "cell": 24,
+      "line": 81,
+      "kind": "code",
+      "text": "renamed_layer = trained_adapter_key_rename(layer_path)"
+    },
+    {
+      "cell": 24,
+      "line": 82,
+      "kind": "code",
+      "text": "in_proj_base = f\"{renamed_layer}.in_proj\""
+    },
+    {
+      "cell": 24,
+      "line": 84,
+      "kind": "code",
+      "text": "model_in_proj_key = ("
+    },
+    {
+      "cell": 24,
+      "line": 85,
+      "kind": "code",
+      "text": "renamed_layer.replace(\"base_model.model.\", \"\") + \".in_proj.weight\""
+    },
+    {
+      "cell": 24,
+      "line": 87,
+      "kind": "code",
+      "text": "in_proj_dim = model_key_shapes[model_in_proj_key][0]"
+    },
+    {
+      "cell": 24,
+      "line": 89,
+      "kind": "code",
+      "text": "gate_A = adapter_tensors[f\"{projs['gate_proj']}.lora_A.weight\"].float()"
+    },
+    {
+      "cell": 24,
+      "line": 90,
+      "kind": "code",
+      "text": "gate_B = adapter_tensors[f\"{projs['gate_proj']}.lora_B.weight\"].float()"
+    },
+    {
+      "cell": 24,
+      "line": 91,
+      "kind": "code",
+      "text": "x_A = adapter_tensors[f\"{projs['x_proj']}.lora_A.weight\"].float()"
+    },
+    {
+      "cell": 24,
+      "line": 92,
+      "kind": "code",
+      "text": "x_B = adapter_tensors[f\"{projs['x_proj']}.lora_B.weight\"].float()"
+    },
+    {
+      "cell": 24,
+      "line": 93,
+      "kind": "code",
+      "text": "rank = gate_A.shape[0]"
+    },
+    {
+      "cell": 24,
+      "line": 95,
+      "kind": "code",
+      "text": "# Build combined rank-64 representation, then SVD to best rank-32"
+    },
+    {
+      "cell": 24,
+      "line": 97,
+      "kind": "code",
+      "text": "B_block = torch.zeros(in_proj_dim, 2 * rank)"
+    },
+    {
+      "cell": 24,
+      "line": 98,
+      "kind": "code",
+      "text": "B_block[: gate_B.shape[0], :rank] = gate_B"
+    },
+    {
+      "cell": 24,
+      "line": 99,
+      "kind": "code",
+      "text": "B_block[gate_B.shape[0] : gate_B.shape[0] + x_B.shape[0], rank:] = x_B"
+    },
+    {
+      "cell": 24,
+      "line": 106,
+      "kind": "code",
+      "text": "k = rank"
+    },
+    {
+      "cell": 24,
+      "line": 117,
+      "kind": "code",
+      "text": "tensors[f\"{in_proj_base}.lora_A.weight\"] = new_A"
+    },
+    {
+      "cell": 24,
+      "line": 118,
+      "kind": "code",
+      "text": "tensors[f\"{in_proj_base}.lora_B.weight\"] = new_B"
+    },
+    {
+      "cell": 24,
+      "line": 121,
+      "kind": "code",
+      "text": "f\"\\nConverted {len(adapter_tensors)} trained tensors → {len(tensors)} output tensors\""
+    },
+    {
+      "cell": 24,
+      "line": 123,
+      "kind": "code",
+      "text": "save_file(tensors, \"adapter_model.safetensors\")"
+    },
+    {
+      "cell": 25,
+      "line": 1,
+      "kind": "code",
+      "text": "from safetensors import safe_open"
+    },
+    {
+      "cell": 25,
+      "line": 3,
+      "kind": "code",
+      "text": "updated_adapter_keys = set()"
+    },
+    {
+      "cell": 25,
+      "line": 4,
+      "kind": "code",
+      "text": "with safe_open(\"adapter_model.safetensors\", framework=\"pt\", device=\"cpu\") as f:"
+    },
+    {
+      "cell": 25,
+      "line": 7,
+      "kind": "code",
+      "text": "updated_adapter_keys.add("
+    },
+    {
+      "cell": 26,
+      "line": 1,
+      "kind": "code",
+      "text": "sorted(updated_adapter_keys)[-20:]"
+    },
+    {
+      "cell": 27,
+      "line": 1,
+      "kind": "code",
+      "text": "len(updated_adapter_keys), len(reference_adapter_keys)"
+    },
+    {
+      "cell": 28,
+      "line": 2,
+      "kind": "code",
+      "text": "len(updated_adapter_keys - reference_adapter_keys),"
+    },
+    {
+      "cell": 28,
+      "line": 3,
+      "kind": "code",
+      "text": "len(reference_adapter_keys - updated_adapter_keys),"
+    },
+    {
+      "cell": 29,
+      "line": 1,
+      "kind": "code",
+      "text": "sorted(reference_adapter_keys - updated_adapter_keys)[:20]"
+    },
+    {
+      "cell": 30,
+      "line": 1,
+      "kind": "code",
+      "text": "sorted(updated_adapter_keys - reference_adapter_keys)[:20]"
+    },
+    {
+      "cell": 33,
+      "line": 13,
+      "kind": "code",
+      "text": "# Cloud resource configuration"
+    },
+    {
+      "cell": 33,
+      "line": 15,
+      "kind": "code",
+      "text": "\"metric/nemotron-3-nano-30b-a3b-bf16/transformers/default\""
+    },
+    {
+      "cell": 34,
+      "line": 7,
+      "kind": "code",
+      "text": "exts: tuple[str, ...] = (\".bin\", \".pt\", \".safetensors\"),"
+    },
+    {
+      "cell": 34,
+      "line": 72,
+      "kind": "code",
+      "text": "cleaned = re.sub(r\"^\\\\boxed\\{([^}]*)\\}$\", r\"\\1\", cleaned)"
+    },
+    {
+      "cell": 34,
+      "line": 89,
+      "kind": "code",
+      "text": "boxed_matches = re.findall(r\"\\\\boxed\\{([^}]*)\\}\", text)"
+    },
+    {
+      "cell": 34,
+      "line": 90,
+      "kind": "code",
+      "text": "if boxed_matches:"
+    },
+    {
+      "cell": 34,
+      "line": 91,
+      "kind": "code",
+      "text": "return clean_extracted_answer(boxed_matches[-1])"
+    },
+    {
+      "cell": 34,
+      "line": 161,
+      "kind": "code",
+      "text": "def find_lora_path(extra_dirs: list[str] | None = None) -> str:"
+    },
+    {
+      "cell": 34,
+      "line": 166,
+      "kind": "code",
+      "text": "adapter_configs = []"
+    },
+    {
+      "cell": 34,
+      "line": 170,
+      "kind": "code",
+      "text": "adapter_configs.extend("
+    },
+    {
+      "cell": 34,
+      "line": 171,
+      "kind": "code",
+      "text": "glob.glob(os.path.join(search_dir, \"**/adapter_config.json\"), recursive=True)"
+    },
+    {
+      "cell": 34,
+      "line": 174,
+      "kind": "code",
+      "text": "adapter_configs = sorted("
+    },
+    {
+      "cell": 34,
+      "line": 177,
+      "kind": "code",
+      "text": "for path in adapter_configs"
+    },
+    {
+      "cell": 34,
+      "line": 181,
+      "kind": "code",
+      "text": "path.replace(\"\\\\\", \"/\") != \"/kaggle/working/adapter_config.json\","
+    },
+    {
+      "cell": 34,
+      "line": 186,
+      "kind": "code",
+      "text": "if not adapter_configs:"
+    },
+    {
+      "cell": 34,
+      "line": 187,
+      "kind": "code",
+      "text": "raise ParticipantVisibleError(\"No adapter_config.json found outside the reference directory.\")"
+    },
+    {
+      "cell": 34,
+      "line": 189,
+      "kind": "code",
+      "text": "return os.path.dirname(adapter_configs[0])"
+    },
+    {
+      "cell": 34,
+      "line": 194,
+      "kind": "code",
+      "text": "lora_path: str,"
+    },
+    {
+      "cell": 34,
+      "line": 195,
+      "kind": "code",
+      "text": "experiment_config: dict,"
+    },
+    {
+      "cell": 34,
+      "line": 198,
+      "kind": "code",
+      "text": "accuracy = float(correct_series.mean()) if not correct_series.empty else None"
+    },
+    {
+      "cell": 34,
+      "line": 202,
+      "kind": "code",
+      "text": "\"run_name\": experiment_config[\"run_name\"],"
+    },
+    {
+      "cell": 34,
+      "line": 204,
+      "kind": "code",
+      "text": "\"accuracy\": accuracy,"
+    },
+    {
+      "cell": 34,
+      "line": 206,
+      "kind": "code",
+      "text": "\"lora_path\": lora_path,"
+    },
+    {
+      "cell": 34,
+      "line": 207,
+      "kind": "code",
+      "text": "\"config\": experiment_config,"
+    },
+    {
+      "cell": 34,
+      "line": 210,
+      "kind": "code",
+      "text": "task_accuracy = eval_df.groupby(\"task\")[\"correct\"].mean().sort_values().to_dict()"
+    },
+    {
+      "cell": 34,
+      "line": 211,
+      "kind": "code",
+      "text": "summary[\"task_accuracy\"] = {"
+    },
+    {
+      "cell": 34,
+      "line": 212,
+      "kind": "code",
+      "text": "task: float(score) for task, score in task_accuracy.items()"
+    },
+    {
+      "cell": 34,
+      "line": 219,
+      "kind": "code",
+      "text": "lora_path: str,"
+    },
+    {
+      "cell": 34,
+      "line": 220,
+      "kind": "code",
+      "text": "experiment_config: dict,"
+    },
+    {
+      "cell": 34,
+      "line": 228,
+      "kind": "code",
+      "text": "run_name = experiment_config[\"run_name\"]"
+    },
+    {
+      "cell": 34,
+      "line": 229,
+      "kind": "code",
+      "text": "summary = summarize_eval_df(eval_df, lora_path=lora_path, experiment_config=experiment_config)"
+    },
+    {
+      "cell": 34,
+      "line": 265,
+      "kind": "code",
+      "text": "lora_path: str,"
+    },
+    {
+      "cell": 34,
+      "line": 267,
+      "kind": "code",
+      "text": "experiment_configs: list[dict],"
+    },
+    {
+      "cell": 34,
+      "line": 274,
+      "kind": "code",
+      "text": "for experiment_config in experiment_configs:"
+    },
+    {
+      "cell": 34,
+      "line": 276,
+      "kind": "code",
+      "text": "temperature=experiment_config[\"temperature\"],"
+    },
+    {
+      "cell": 34,
+      "line": 277,
+      "kind": "code",
+      "text": "top_p=experiment_config[\"top_p\"],"
+    },
+    {
+      "cell": 34,
+      "line": 278,
+      "kind": "code",
+      "text": "max_tokens=experiment_config[\"max_tokens\"],"
+    },
+    {
+      "cell": 34,
+      "line": 284,
+      "kind": "code",
+      "text": "lora_request=LoRARequest(\"adapter\", 1, lora_path),"
+    },
+    {
+      "cell": 34,
+      "line": 312,
+      "kind": "code",
+      "text": "lora_path=lora_path,"
+    },
+    {
+      "cell": 34,
+      "line": 313,
+      "kind": "code",
+      "text": "experiment_config=experiment_config,"
+    },
+    {
+      "cell": 34,
+      "line": 315,
+      "kind": "code",
+      "text": "write_legacy_files=experiment_config[\"run_name\"] == primary_run_name,"
+    },
+    {
+      "cell": 34,
+      "line": 320,
+      "kind": "code",
+      "text": "\"run_name\": experiment_config[\"run_name\"],"
+    },
+    {
+      "cell": 34,
+      "line": 321,
+      "kind": "code",
+      "text": "\"max_tokens\": experiment_config[\"max_tokens\"],"
+    },
+    {
+      "cell": 34,
+      "line": 322,
+      "kind": "code",
+      "text": "\"temperature\": experiment_config[\"temperature\"],"
+    },
+    {
+      "cell": 34,
+      "line": 323,
+      "kind": "code",
+      "text": "\"top_p\": experiment_config[\"top_p\"],"
+    },
+    {
+      "cell": 34,
+      "line": 324,
+      "kind": "code",
+      "text": "\"enable_thinking\": experiment_config[\"enable_thinking\"],"
+    },
+    {
+      "cell": 34,
+      "line": 325,
+      "kind": "code",
+      "text": "\"accuracy\": summary[\"accuracy\"],"
+    },
+    {
+      "cell": 34,
+      "line": 330,
+      "kind": "code",
+      "text": "run_results[experiment_config[\"run_name\"]] = {"
+    },
+    {
+      "cell": 34,
+      "line": 336,
+      "kind": "code",
+      "text": "\"run_name\": experiment_config[\"run_name\"],"
+    },
+    {
+      "cell": 34,
+      "line": 337,
+      "kind": "code",
+      "text": "\"max_tokens\": experiment_config[\"max_tokens\"],"
+    },
+    {
+      "cell": 34,
+      "line": 338,
+      "kind": "code",
+      "text": "\"accuracy\": summary[\"accuracy\"],"
+    },
+    {
+      "cell": 34,
+      "line": 344,
+      "kind": "code",
+      "text": "by=[\"accuracy\", \"max_tokens\"],"
+    },
+    {
+      "cell": 34,
+      "line": 353,
+      "kind": "code",
+      "text": "def generate_standard_submission(submission_dir: str):"
+    },
+    {
+      "cell": 34,
+      "line": 354,
+      "kind": "code",
+      "text": "\"\"\"Process an extracted submission archive to produce a standard submission file.\"\"\""
+    },
+    {
+      "cell": 34,
+      "line": 355,
+      "kind": "code",
+      "text": "lora_path = find_lora_path(extra_dirs=[submission_dir])"
+    },
+    {
+      "cell": 34,
+      "line": 364,
+      "kind": "code",
+      "text": "\"prediction\": lora_path,"
+    },
+    {
+      "cell": 34,
+      "line": 368,
+      "kind": "code",
+      "text": "submission_df = pd.DataFrame(predictions)"
+    },
+    {
+      "cell": 34,
+      "line": 369,
+      "kind": "code",
+      "text": "submission_df.to_csv(\"submission.csv\", index=False)"
+    },
+    {
+      "cell": 34,
+      "line": 374,
+      "kind": "code",
+      "text": "lora_path: str,"
+    },
+    {
+      "cell": 34,
+      "line": 376,
+      "kind": "code",
+      "text": "max_lora_rank: int,"
+    },
+    {
+      "cell": 34,
+      "line": 388,
+      "kind": "code",
+      "text": "os.environ[\"TRANSFORMERS_NO_TF\"] = \"1\""
+    },
+    {
+      "cell": 34,
+      "line": 389,
+      "kind": "code",
+      "text": "os.environ[\"TRANSFORMERS_NO_FLAX\"] = \"1\""
+    },
+    {
+      "cell": 34,
+      "line": 390,
+      "kind": "code",
+      "text": "os.environ[\"TRANSFORMERS_OFFLINE\"] = \"1\""
+    },
+    {
+      "cell": 34,
+      "line": 395,
+      "kind": "code",
+      "text": "from vllm.lora.request import LoRARequest"
+    },
+    {
+      "cell": 34,
+      "line": 405,
+      "kind": "code",
+      "text": "enable_lora=True,"
+    },
+    {
+      "cell": 34,
+      "line": 406,
+      "kind": "code",
+      "text": "max_lora_rank=max_lora_rank,"
+    },
+    {
+      "cell": 34,
+      "line": 427,
+      "kind": "code",
+      "text": "lora_request=LoRARequest(\"adapter\", 1, lora_path),"
+    },
+    {
+      "cell": 34,
+      "line": 432,
+      "kind": "code",
+      "text": "for item, output in zip(test_df.itertuples(index=False), outputs):"
+    },
+    {
+      "cell": 34,
+      "line": 460,
+      "kind": "code",
+      "text": "def score("
+    },
+    {
+      "cell": 34,
+      "line": 462,
+      "kind": "code",
+      "text": "submission: pd.DataFrame,"
+    },
+    {
+      "cell": 34,
+      "line": 464,
+      "kind": "code",
+      "text": "max_lora_rank: int = 32,"
+    },
+    {
+      "cell": 34,
+      "line": 469,
+      "kind": "code",
+      "text": "gpu_memory_utilization: float = 0.85,"
+    },
+    {
+      "cell": 34,
+      "line": 474,
+      "kind": "code",
+      "text": "lora_path = submission[\"prediction\"].iloc[0]"
+    },
+    {
+      "cell": 34,
+      "line": 480,
+      "kind": "code",
+      "text": "submission = generate_predictions("
+    },
+    {
+      "cell": 34,
+      "line": 482,
+      "kind": "code",
+      "text": "lora_path=lora_path,"
+    },
+    {
+      "cell": 34,
+      "line": 484,
+      "kind": "code",
+      "text": "max_lora_rank=max_lora_rank,"
+    },
+    {
+      "cell": 34,
+      "line": 494,
+      "kind": "code",
+      "text": "dataset = solution.merge(submission, on=row_id_column_name)"
+    },
+    {
+      "cell": 34,
+      "line": 496,
+      "kind": "code",
+      "text": "for item in dataset.itertuples(index=False):"
+    },
+    {
+      "cell": 37,
+      "line": 1,
+      "kind": "code",
+      "text": "os.environ[\"TRANSFORMERS_NO_TF\"] = \"1\""
+    },
+    {
+      "cell": 37,
+      "line": 2,
+      "kind": "code",
+      "text": "os.environ[\"TRANSFORMERS_NO_FLAX\"] = \"1\""
+    },
+    {
+      "cell": 37,
+      "line": 3,
+      "kind": "code",
+      "text": "os.environ[\"TRANSFORMERS_OFFLINE\"] = \"1\""
+    },
+    {
+      "cell": 37,
+      "line": 8,
+      "kind": "code",
+      "text": "from vllm.lora.request import LoRARequest"
+    },
+    {
+      "cell": 38,
+      "line": 3,
+      "kind": "code",
+      "text": "max_lora_rank = 32"
+    },
+    {
+      "cell": 38,
+      "line": 8,
+      "kind": "code",
+      "text": "gpu_memory_utilization = 0.85"
+    },
+    {
+      "cell": 38,
+      "line": 10,
+      "kind": "code",
+      "text": "BASE_EXPERIMENT_CONFIG = {"
+    },
+    {
+      "cell": 38,
+      "line": 12,
+      "kind": "code",
+      "text": "\"adapter_path\": ADAPTER_PATH,"
+    },
+    {
+      "cell": 38,
+      "line": 14,
+      "kind": "code",
+      "text": "\"max_lora_rank\": max_lora_rank,"
+    },
+    {
+      "cell": 38,
+      "line": 23,
+      "kind": "code",
+      "text": "LOCAL_EXPERIMENTS = [BASE_EXPERIMENT_CONFIG]"
+    },
+    {
+      "cell": 38,
+      "line": 27,
+      "kind": "code",
+      "text": "**BASE_EXPERIMENT_CONFIG,"
+    },
+    {
+      "cell": 38,
+      "line": 33,
+      "kind": "code",
+      "text": "PRIMARY_RUN_NAME = BASE_EXPERIMENT_CONFIG[\"run_name\"]"
+    },
+    {
+      "cell": 38,
+      "line": 34,
+      "kind": "code",
+      "text": "EXPERIMENT_CONFIG = BASE_EXPERIMENT_CONFIG"
+    },
+    {
+      "cell": 39,
+      "line": 12,
+      "kind": "code",
+      "text": "enable_lora=True,"
+    },
+    {
+      "cell": 39,
+      "line": 13,
+      "kind": "code",
+      "text": "max_lora_rank=max_lora_rank,"
+    },
+    {
+      "cell": 41,
+      "line": 3,
+      "kind": "code",
+      "text": "df = pd.read_csv(TRAIN_DATA_PATH)"
+    },
+    {
+      "cell": 41,
+      "line": 6,
+      "kind": "code",
+      "text": "# bit_manipulation"
+    },
+    {
+      "cell": 41,
+      "line": 21,
+      "kind": "code",
+      "text": "# equation_numeric_deduce"
+    },
+    {
+      "cell": 41,
+      "line": 24,
+      "kind": "code",
+      "text": "# equation_numeric_guess"
+    },
+    {
+      "cell": 43,
+      "line": 1,
+      "kind": "code",
+      "text": "# Generate predictions using continuous batching (without adapter, for baseline comparison)"
+    },
+    {
+      "cell": 45,
+      "line": 1,
+      "kind": "code",
+      "text": "lora_path = find_lora_path()"
+    },
+    {
+      "cell": 47,
+      "line": 1,
+      "kind": "code",
+      "text": "with open(\"adapter_config.json\") as f:"
+    },
+    {
+      "cell": 48,
+      "line": 1,
+      "kind": "code",
+      "text": "print(lora_path)"
+    },
+    {
+      "cell": 49,
+      "line": 1,
+      "kind": "code",
+      "text": "# Generate predictions using continuous batching (with adapter)"
+    },
+    {
+      "cell": 49,
+      "line": 6,
+      "kind": "code",
+      "text": "lora_path=lora_path,"
+    },
+    {
+      "cell": 49,
+      "line": 8,
+      "kind": "code",
+      "text": "experiment_configs=LOCAL_EXPERIMENTS,"
+    },
+    {
+      "cell": 50,
+      "line": 1,
+      "kind": "markdown",
+      "text": "# Produce submission"
+    },
+    {
+      "cell": 51,
+      "line": 1,
+      "kind": "code",
+      "text": "import zipfile as _zf"
+    },
+    {
+      "cell": 51,
+      "line": 3,
+      "kind": "code",
+      "text": "NON_SUBMISSION_FILES = {"
+    },
+    {
+      "cell": 51,
+      "line": 4,
+      "kind": "code",
+      "text": "\"submission.zip\","
+    },
+    {
+      "cell": 51,
+      "line": 12,
+      "kind": "code",
+      "text": "with _zf.ZipFile(\"submission.zip\", \"w\", _zf.ZIP_DEFLATED) as zf:"
+    },
+    {
+      "cell": 51,
+      "line": 14,
+      "kind": "code",
+      "text": "if file.startswith(\".\") or file in NON_SUBMISSION_FILES or not os.path.isfile(file):"
+    }
+  ]
+}

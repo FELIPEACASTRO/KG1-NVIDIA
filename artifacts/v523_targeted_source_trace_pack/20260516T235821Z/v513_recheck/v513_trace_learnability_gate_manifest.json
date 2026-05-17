@@ -1,0 +1,186 @@
+{
+  "dataset_summary": {
+    "combined": {
+      "assistant_length_by_family": {
+        "bit_manipulation": {
+          "assistant_line_max": 27,
+          "assistant_line_p50": 27,
+          "assistant_word_max": 106,
+          "assistant_word_min": 97,
+          "assistant_word_p50": 99,
+          "assistant_word_p90": 106,
+          "assistant_word_p99": 106
+        },
+        "equation_transform": {
+          "assistant_line_max": 10,
+          "assistant_line_p50": 9,
+          "assistant_word_max": 54,
+          "assistant_word_min": 46,
+          "assistant_word_p50": 52,
+          "assistant_word_p90": 54,
+          "assistant_word_p99": 54
+        }
+      },
+      "assistant_style_counts": {
+        "bit_trace_with_rule_terms": 845,
+        "equation_short_rule_reject_boxed": 400
+      },
+      "family_counts": {
+        "bit_manipulation": 845,
+        "equation_transform": 400
+      },
+      "rows": 1245,
+      "source_counts": {
+        "v523_targeted_source_trace_pack": 1245
+      },
+      "subcategory_counts": {
+        "bit_cho_trace": 314,
+        "bit_maj3_trace": 320,
+        "bit_par3_trace": 107,
+        "bit_v300_gain_pattern_other": 104,
+        "equation_numeric_add_direct": 100,
+        "equation_numeric_colon_absdiff": 100,
+        "equation_numeric_colon_trailing_zero": 100,
+        "equation_numeric_minus_signed": 100
+      }
+    },
+    "train": {
+      "assistant_length_by_family": {
+        "bit_manipulation": {
+          "assistant_line_max": 27,
+          "assistant_line_p50": 27,
+          "assistant_word_max": 106,
+          "assistant_word_min": 97,
+          "assistant_word_p50": 99,
+          "assistant_word_p90": 106,
+          "assistant_word_p99": 106
+        },
+        "equation_transform": {
+          "assistant_line_max": 10,
+          "assistant_line_p50": 9,
+          "assistant_word_max": 54,
+          "assistant_word_min": 46,
+          "assistant_word_p50": 52,
+          "assistant_word_p90": 54,
+          "assistant_word_p99": 54
+        }
+      },
+      "assistant_style_counts": {
+        "bit_trace_with_rule_terms": 706,
+        "equation_short_rule_reject_boxed": 320
+      },
+      "family_counts": {
+        "bit_manipulation": 706,
+        "equation_transform": 320
+      },
+      "rows": 1026,
+      "source_counts": {
+        "v523_targeted_source_trace_pack": 1026
+      },
+      "subcategory_counts": {
+        "bit_cho_trace": 260,
+        "bit_maj3_trace": 260,
+        "bit_par3_trace": 90,
+        "bit_v300_gain_pattern_other": 96,
+        "equation_numeric_add_direct": 80,
+        "equation_numeric_colon_absdiff": 80,
+        "equation_numeric_colon_trailing_zero": 80,
+        "equation_numeric_minus_signed": 80
+      }
+    },
+    "validation": {
+      "assistant_length_by_family": {
+        "bit_manipulation": {
+          "assistant_line_max": 27,
+          "assistant_line_p50": 27,
+          "assistant_word_max": 106,
+          "assistant_word_min": 97,
+          "assistant_word_p50": 99,
+          "assistant_word_p90": 106,
+          "assistant_word_p99": 106
+        },
+        "equation_transform": {
+          "assistant_line_max": 10,
+          "assistant_line_p50": 9,
+          "assistant_word_max": 54,
+          "assistant_word_min": 46,
+          "assistant_word_p50": 52,
+          "assistant_word_p90": 54,
+          "assistant_word_p99": 54
+        }
+      },
+      "assistant_style_counts": {
+        "bit_trace_with_rule_terms": 139,
+        "equation_short_rule_reject_boxed": 80
+      },
+      "family_counts": {
+        "bit_manipulation": 139,
+        "equation_transform": 80
+      },
+      "rows": 219,
+      "source_counts": {
+        "v523_targeted_source_trace_pack": 219
+      },
+      "subcategory_counts": {
+        "bit_cho_trace": 54,
+        "bit_maj3_trace": 60,
+        "bit_par3_trace": 17,
+        "bit_v300_gain_pattern_other": 8,
+        "equation_numeric_add_direct": 20,
+        "equation_numeric_colon_absdiff": 20,
+        "equation_numeric_colon_trailing_zero": 20,
+        "equation_numeric_minus_signed": 20
+      }
+    }
+  },
+  "decision": {
+    "full_eval_allowed": false,
+    "hf_gpu_allowed": true,
+    "kaggle_submit_allowed": false,
+    "next_action": "Run only a tiny paid smoke after objective alignment and FinOps gates.",
+    "package_allowed": false,
+    "reason": "no structural blockers; still requires objective and FinOps gates before GPU",
+    "status": "passed_cpu_structure_only"
+  },
+  "duplicate_group_counts": {
+    "assistant_exact_groups": 0,
+    "assistant_template_groups": 16
+  },
+  "finding_counts": {
+    "blocker": 0,
+    "info": 1,
+    "warning": 0
+  },
+  "findings": [
+    {
+      "code": "style_by_family_snapshot",
+      "detail": "{\"bit_manipulation:bit_trace_with_rule_terms\": 845, \"equation_transform:equation_short_rule_reject_boxed\": 400}",
+      "severity": "info"
+    }
+  ],
+  "generated_at_utc": "2026-05-16T23:59:59.380702+00:00",
+  "inputs": {
+    "tokenization_manifest": "artifacts\\v523_targeted_source_trace_pack\\20260516T235821Z\\tokenization_gate_real\\v286_generic_tokenization_gate_manifest.json",
+    "tokenization_manifest_sha256": "dd1a3cc9492d421ab65e3bd2546410cc7a55baf5068c48cbbc37534b8d5988e5",
+    "train_jsonl": "artifacts\\v523_targeted_source_trace_pack\\20260516T235821Z\\v523_targeted_source_trace_pack_train.jsonl",
+    "train_sha256": "4a83d329bd6932fd33ce43d149816c9cddffd0de46e482b13a1447ec5278789e",
+    "val_jsonl": "artifacts\\v523_targeted_source_trace_pack\\20260516T235821Z\\v523_targeted_source_trace_pack_val.jsonl",
+    "val_sha256": "11a50fb71a028c1bef6053f2d0134ff94906ce0e867ff224429a18268725696a"
+  },
+  "outputs": {
+    "findings_csv": "artifacts\\v523_targeted_source_trace_pack\\20260516T235821Z\\v513_recheck\\v513_findings.csv",
+    "manifest_json": "artifacts\\v523_targeted_source_trace_pack\\20260516T235821Z\\v513_recheck\\v513_trace_learnability_gate_manifest.json",
+    "summary_md": "artifacts\\v523_targeted_source_trace_pack\\20260516T235821Z\\v513_recheck\\V513_TRACE_LEARNABILITY_GATE_SUMMARY.md",
+    "top_assistant_exact_groups_csv": "artifacts\\v523_targeted_source_trace_pack\\20260516T235821Z\\v513_recheck\\v513_top_assistant_exact_groups.csv",
+    "top_template_groups_csv": "artifacts\\v523_targeted_source_trace_pack\\20260516T235821Z\\v513_recheck\\v513_top_template_groups.csv"
+  },
+  "schema_version": "kg1_v513_trace_learnability_gate_v1",
+  "thresholds": {
+    "max_assistant_words_warning": 1300,
+    "max_bit_answer_only_share_for_gpu": 0.05,
+    "max_loss_tokens_warning": 1300,
+    "max_prompt_truncation_rate": 0.0,
+    "min_bit_trace_rows_for_gpu": 32
+  },
+  "tokenization_gate_status": "tokenization_gate_passed"
+}

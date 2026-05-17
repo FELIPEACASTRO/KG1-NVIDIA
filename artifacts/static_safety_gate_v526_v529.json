@@ -1,0 +1,14 @@
+{
+  "file_count": 6,
+  "files": [
+    "scripts/audit_v521_transfer_blockers.py",
+    "scripts/audit_v522_source_target_alignment.py",
+    "scripts/audit_v524_quota_token_objective.py",
+    "scripts/audit_v526_example_mean_objective_dry_run.py",
+    "scripts/build_v523_targeted_source_trace_pack.py",
+    "scripts/hf_job_train_v90.py"
+  ],
+  "findings": [],
+  "ok": true,
+  "schema_version": "kg1_static_safety_gate_v1"
+}

@@ -228,6 +228,13 @@ SUBCATEGORY_WEIGHTS = env_str("SUBCATEGORY_WEIGHTS", "")
 SOURCE_WEIGHTS = env_str("SOURCE_WEIGHTS", "")
 ANSWER_SPAN_LOSS_WEIGHT = env_float("ANSWER_SPAN_LOSS_WEIGHT", 1.0)
 ANSWER_SPAN_MIN_WEIGHTED_TOKENS = env_int("ANSWER_SPAN_MIN_WEIGHTED_TOKENS", 0)
+LOSS_NORMALIZATION_MODE = env_str("LOSS_NORMALIZATION_MODE", "token_mean")
+VALID_LOSS_NORMALIZATION_MODES = {"token_mean", "example_mean"}
+if LOSS_NORMALIZATION_MODE not in VALID_LOSS_NORMALIZATION_MODES:
+    raise ValueError(
+        "LOSS_NORMALIZATION_MODE must be one of "
+        f"{sorted(VALID_LOSS_NORMALIZATION_MODES)}, got {LOSS_NORMALIZATION_MODE!r}."
+    )
 ABORT_EVAL_LOSS_GT = env_float("ABORT_EVAL_LOSS_GT", 0.0)
 BASELINE_EVAL_BEFORE_TRAIN = env_bool("BASELINE_EVAL_BEFORE_TRAIN", False)
 ABORT_EVAL_RELATIVE_TO_BASELINE_DELTA = env_float(
@@ -1491,8 +1498,17 @@ def masked_cross_entropy_loss(
 
     per_token_loss = F.cross_entropy(flat_logits, flat_labels, reduction="none")
     masked_loss = per_token_loss * flat_mask
-    num_unmasked = flat_mask.sum()
+    if LOSS_NORMALIZATION_MODE == "example_mean":
+        token_loss = masked_loss.view(batch, seq_len)
+        token_mask = flat_mask.view(batch, seq_len)
+        per_example_counts = token_mask.sum(dim=1).clamp_min(1.0)
+        active_examples = (token_mask.sum(dim=1) > 0).float()
+        if active_examples.sum() == 0:
+            return torch.tensor(0.0, device=logits.device)
+        per_example_loss = token_loss.sum(dim=1) / per_example_counts
+        return (per_example_loss * active_examples).sum() / active_examples.sum()
 
+    num_unmasked = flat_mask.sum()
     if num_unmasked == 0:
         return torch.tensor(0.0, device=logits.device)
     return masked_loss.sum() / num_unmasked
@@ -1692,6 +1708,10 @@ def make_manifest(
                 "weight": ANSWER_SPAN_LOSS_WEIGHT,
                 "min_weighted_tokens": ANSWER_SPAN_MIN_WEIGHTED_TOKENS,
                 "markers": ["Final answer:", "ANSWER:", "\\boxed{...}"],
+            },
+            "loss_normalization": {
+                "mode": LOSS_NORMALIZATION_MODE,
+                "meaning": "token_mean divides by all unmasked tokens; example_mean averages per-example CE first.",
             },
         },
         "output_repo": OUTPUT_REPO,

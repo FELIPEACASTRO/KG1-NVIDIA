@@ -1,0 +1,810 @@
+{
+  "ref": "dgxchen/training-with-unsloth-to-achieve-0-85-lb",
+  "title": "Training with Unsloth to Achieve 0.85 LB",
+  "notebook": "artifacts\\v284_official_gate_worktree\\artifacts\\v527_kaggle_code_audit\\pulled_code\\dgxchen__training-with-unsloth-to-achieve-0-85-lb\\training-with-unsloth-to-achieve-0-85-lb.ipynb",
+  "metadata": {
+    "id": "dgxchen/training-with-unsloth-to-achieve-0-85-lb",
+    "id_no": 115580456,
+    "title": "Training with Unsloth to Achieve 0.85 LB",
+    "code_file": "training-with-unsloth-to-achieve-0-85-lb.ipynb",
+    "language": "python",
+    "kernel_type": "notebook",
+    "is_private": false,
+    "enable_gpu": true,
+    "enable_tpu": false,
+    "enable_internet": false,
+    "keywords": [
+      "gpu"
+    ],
+    "dataset_sources": [
+      "mayukh18/nemotron-packages",
+      "dgxchen/nemotron-cot-tong",
+      "dennisfong/nvidia-nemotron-offline-packages",
+      "rubyducklove/nvidia-cutlass",
+      "dgxchen/trained-adapter"
+    ],
+    "kernel_sources": [],
+    "competition_sources": [
+      "nvidia-nemotron-model-reasoning-challenge"
+    ],
+    "model_sources": [
+      "metric/nemotron-3-nano-30b-a3b-bf16/Transformers/default/1"
+    ],
+    "docker_image": "gcr.io/kaggle-private-byod/python@sha256:00377cd1b3d470a605bc5b0ceca79969e369644e9b36802242a1c70e627372f9",
+    "machine_shape": "NvidiaRtxPro6000"
+  },
+  "kaggle_metadata": {
+    "accelerator": "nvidiaRtxPro6000",
+    "dataSources": [
+      {
+        "sourceType": "competition",
+        "sourceId": 129716,
+        "databundleVersionId": 16082784
+      },
+      {
+        "sourceType": "datasetVersion",
+        "sourceId": 15432120,
+        "datasetId": 9785342,
+        "databundleVersionId": 16351222
+      },
+      {
+        "sourceType": "datasetVersion",
+        "sourceId": 15815024,
+        "datasetId": 10073520,
+        "databundleVersionId": 16763296
+      },
+      {
+        "sourceType": "datasetVersion",
+        "sourceId": 15427911,
+        "datasetId": 9762543,
+        "databundleVersionId": 16346404
+      },
+      {
+        "sourceType": "datasetVersion",
+        "sourceId": 15353167,
+        "datasetId": 9820572,
+        "databundleVersionId": 16263135
+      },
+      {
+        "sourceType": "datasetVersion",
+        "sourceId": 15781843,
+        "datasetId": 10115300,
+        "databundleVersionId": 16727542
+      },
+      {
+        "sourceType": "modelInstanceVersion",
+        "sourceId": 784907,
+        "databundleVersionId": 16059913,
+        "modelInstanceId": 598905,
+        "modelId": 611168
+      }
+    ],
+    "dockerImageVersionId": 31329,
+    "isInternetEnabled": false,
+    "language": "python",
+    "sourceType": "notebook",
+    "isGpuEnabled": true
+  },
+  "relevant": [
+    {
+      "cell": 0,
+      "line": 5,
+      "kind": "markdown",
+      "text": "The CoT data and part of the hyperparameter settings used in this notebook are adapted from Tong Hui Kang’s open-source GitHub repository, while the training code is modified based on konbu17’s public notebook."
+    },
+    {
+      "cell": 0,
+      "line": 6,
+      "kind": "markdown",
+      "text": "- [Tong Hui Kang’s open-source GitHub repository](https://github.com/tonghuikang/nemotron)"
+    },
+    {
+      "cell": 0,
+      "line": 7,
+      "kind": "markdown",
+      "text": "- [konbu17’s public notebook](https://www.kaggle.com/code/konbu17/nemotron-sft-lora-with-cot)"
+    },
+    {
+      "cell": 0,
+      "line": 11,
+      "kind": "markdown",
+      "text": "In this notebook, I will try to reproduce the method released by Tong Hui Kang and train a model that can reach around **0.85** on the public leaderboard."
+    },
+    {
+      "cell": 0,
+      "line": 13,
+      "kind": "markdown",
+      "text": "In this version, training on **\"lm_head\"** in target_modules has been **removed**. At the same time, the microbatch size has been reset to **1**. In my experiments, increasing the microbatch size to 2 reduced training time by about **3 h..."
+    },
+    {
+      "cell": 0,
+      "line": 15,
+      "kind": "markdown",
+      "text": "## Notes on Training"
+    },
+    {
+      "cell": 0,
+      "line": 17,
+      "kind": "markdown",
+      "text": "Setting per_device_train_batch_size to 2 and gradient_accumulation_steps to 16 can reduce the training time to around **4 hours** while maintaining similar performance **(0.84–0.85)**. However, given the nature of the competition, a scor..."
+    },
+    {
+      "cell": 0,
+      "line": 19,
+      "kind": "markdown",
+      "text": "It may be possible to restore training performance comparable to that of a microbatch size of 1 through **further hyperparameter tuning**."
+    },
+    {
+      "cell": 2,
+      "line": 7,
+      "kind": "code",
+      "text": "if hasattr(sys.stdout, \"reconfigure\"):"
+    },
+    {
+      "cell": 2,
+      "line": 8,
+      "kind": "code",
+      "text": "sys.stdout.reconfigure(encoding=\"utf-8\", errors=\"strict\")"
+    },
+    {
+      "cell": 2,
+      "line": 9,
+      "kind": "code",
+      "text": "if hasattr(sys.stderr, \"reconfigure\"):"
+    },
+    {
+      "cell": 2,
+      "line": 10,
+      "kind": "code",
+      "text": "sys.stderr.reconfigure(encoding=\"utf-8\", errors=\"strict\")"
+    },
+    {
+      "cell": 2,
+      "line": 12,
+      "kind": "code",
+      "text": "# Mode A: Train LoRA from scratch on Kaggle GPU"
+    },
+    {
+      "cell": 2,
+      "line": 13,
+      "kind": "code",
+      "text": "TRAIN_ON_KAGGLE = 1"
+    },
+    {
+      "cell": 2,
+      "line": 15,
+      "kind": "code",
+      "text": "# Mode B: Use pre-trained LoRA weights from dataset and just package them"
+    },
+    {
+      "cell": 2,
+      "line": 16,
+      "kind": "code",
+      "text": "USE_PRETRAINED = 0"
+    },
+    {
+      "cell": 2,
+      "line": 18,
+      "kind": "code",
+      "text": "assert (TRAIN_ON_KAGGLE + USE_PRETRAINED) == 1, \\"
+    },
+    {
+      "cell": 2,
+      "line": 19,
+      "kind": "code",
+      "text": "\"Set exactly one of TRAIN_ON_KAGGLE / USE_PRETRAINED to 1.\""
+    },
+    {
+      "cell": 2,
+      "line": 21,
+      "kind": "code",
+      "text": "PRETRAINED_ADAPTER_DATASET_PATH = \"/kaggle/input/datasets/dgxchen/trained-adapter\""
+    },
+    {
+      "cell": 2,
+      "line": 25,
+      "kind": "code",
+      "text": "\"TRAIN_ON_KAGGLE\": TRAIN_ON_KAGGLE,"
+    },
+    {
+      "cell": 2,
+      "line": 26,
+      "kind": "code",
+      "text": "\"USE_PRETRAINED\": USE_PRETRAINED,"
+    },
+    {
+      "cell": 2,
+      "line": 27,
+      "kind": "code",
+      "text": "\"PRETRAINED_ADAPTER_DATASET_PATH\": PRETRAINED_ADAPTER_DATASET_PATH,"
+    },
+    {
+      "cell": 5,
+      "line": 1,
+      "kind": "code",
+      "text": "if TRAIN_ON_KAGGLE:"
+    },
+    {
+      "cell": 5,
+      "line": 16,
+      "kind": "code",
+      "text": "shutil.copytree(src_bin, dst_bin, dirs_exist_ok=True)"
+    },
+    {
+      "cell": 5,
+      "line": 31,
+      "kind": "code",
+      "text": "print('Training environment fixes applied.')"
+    },
+    {
+      "cell": 5,
+      "line": 33,
+      "kind": "code",
+      "text": "print(\"USE_PRETRAINED=1: skipping Triton / ptxas environment fixes.\")"
+    },
+    {
+      "cell": 6,
+      "line": 2,
+      "kind": "code",
+      "text": "if TRAIN_ON_KAGGLE:"
+    },
+    {
+      "cell": 7,
+      "line": 1,
+      "kind": "code",
+      "text": "if TRAIN_ON_KAGGLE:"
+    },
+    {
+      "cell": 7,
+      "line": 10,
+      "kind": "code",
+      "text": "packages_dir = \"/kaggle/input/datasets/mayukh18/nemotron-packages/packages\""
+    },
+    {
+      "cell": 7,
+      "line": 24,
+      "kind": "code",
+      "text": "raise RuntimeError(\"TRAIN_ON_KAGGLE=1 requires a GPU runtime because Nemotron depends on CUDA wheels.\")"
+    },
+    {
+      "cell": 7,
+      "line": 33,
+      "kind": "code",
+      "text": "\"unsloth\", \"trl\", \"peft\", \"transformers\", \"datasets\", \"accelerate\", \"bitsandbytes\","
+    },
+    {
+      "cell": 7,
+      "line": 55,
+      "kind": "code",
+      "text": "print(\"USE_PRETRAINED=1: skipping datasets / trl / mamba_ssm / unsloth installation.\")"
+    },
+    {
+      "cell": 8,
+      "line": 1,
+      "kind": "code",
+      "text": "if TRAIN_ON_KAGGLE:"
+    },
+    {
+      "cell": 8,
+      "line": 7,
+      "kind": "code",
+      "text": "MODEL_PATH = kagglehub.model_download(\"metric/nemotron-3-nano-30b-a3b-bf16/transformers/default\")"
+    },
+    {
+      "cell": 8,
+      "line": 10,
+      "kind": "code",
+      "text": "model, tokenizer = FastLanguageModel.from_pretrained("
+    },
+    {
+      "cell": 8,
+      "line": 13,
+      "kind": "code",
+      "text": "load_in_4bit=False,"
+    },
+    {
+      "cell": 8,
+      "line": 14,
+      "kind": "code",
+      "text": "load_in_8bit=False,"
+    },
+    {
+      "cell": 8,
+      "line": 25,
+      "kind": "code",
+      "text": "print(\"USE_PRETRAINED=1: skipping base model and tokenizer loading.\")"
+    },
+    {
+      "cell": 9,
+      "line": 1,
+      "kind": "code",
+      "text": "if TRAIN_ON_KAGGLE:"
+    },
+    {
+      "cell": 9,
+      "line": 4,
+      "kind": "code",
+      "text": "LORA_RANK = 32"
+    },
+    {
+      "cell": 9,
+      "line": 5,
+      "kind": "code",
+      "text": "LORA_ALPHA = 32"
+    },
+    {
+      "cell": 9,
+      "line": 6,
+      "kind": "code",
+      "text": "LORA_DROPOUT = 0.0"
+    },
+    {
+      "cell": 9,
+      "line": 7,
+      "kind": "code",
+      "text": "target_modules = ["
+    },
+    {
+      "cell": 9,
+      "line": 9,
+      "kind": "code",
+      "text": "\"in_proj\", \"out_proj\", \"up_proj\", \"down_proj\","
+    },
+    {
+      "cell": 9,
+      "line": 12,
+      "kind": "code",
+      "text": "print(\"Creating trainable LoRA wrapper via FastLanguageModel.get_peft_model ...\")"
+    },
+    {
+      "cell": 9,
+      "line": 15,
+      "kind": "code",
+      "text": "r=LORA_RANK,"
+    },
+    {
+      "cell": 9,
+      "line": 16,
+      "kind": "code",
+      "text": "lora_alpha=LORA_ALPHA,"
+    },
+    {
+      "cell": 9,
+      "line": 17,
+      "kind": "code",
+      "text": "lora_dropout=LORA_DROPOUT,"
+    },
+    {
+      "cell": 9,
+      "line": 18,
+      "kind": "code",
+      "text": "target_modules=target_modules,"
+    },
+    {
+      "cell": 9,
+      "line": 23,
+      "kind": "code",
+      "text": "model.print_trainable_parameters()"
+    },
+    {
+      "cell": 9,
+      "line": 25,
+      "kind": "code",
+      "text": "print(\"USE_PRETRAINED=1: skipping trainable LoRA construction.\")"
+    },
+    {
+      "cell": 10,
+      "line": 1,
+      "kind": "markdown",
+      "text": "## Mode A: Train on Kaggle"
+    },
+    {
+      "cell": 11,
+      "line": 1,
+      "kind": "code",
+      "text": "if TRAIN_ON_KAGGLE:"
+    },
+    {
+      "cell": 11,
+      "line": 5,
+      "kind": "code",
+      "text": "from datasets import Dataset as HFDataset"
+    },
+    {
+      "cell": 11,
+      "line": 6,
+      "kind": "code",
+      "text": "from trl import SFTTrainer, SFTConfig"
+    },
+    {
+      "cell": 11,
+      "line": 9,
+      "kind": "code",
+      "text": "PROMPT_SUFFIX = '\\nPlease put your final answer inside `\\\\boxed{}`. For example: `\\\\boxed{your answer}`'"
+    },
+    {
+      "cell": 11,
+      "line": 12,
+      "kind": "code",
+      "text": "DATASET_PATH = \"/kaggle/input/datasets/dgxchen/nemotron-cot-tong/problem_ids_matched.csv\""
+    },
+    {
+      "cell": 11,
+      "line": 13,
+      "kind": "code",
+      "text": "df = pd.read_csv(DATASET_PATH)"
+    },
+    {
+      "cell": 11,
+      "line": 14,
+      "kind": "code",
+      "text": "print(f\"Full dataset: {len(df)} rows\")"
+    },
+    {
+      "cell": 11,
+      "line": 17,
+      "kind": "code",
+      "text": "train_df = df.sample(frac=1, random_state=SEED).reset_index(drop=True)"
+    },
+    {
+      "cell": 11,
+      "line": 18,
+      "kind": "code",
+      "text": "print(f\"Full dataset: {len(df)} rows\")"
+    },
+    {
+      "cell": 11,
+      "line": 27,
+      "kind": "code",
+      "text": "for _, row in train_df.iterrows():"
+    },
+    {
+      "cell": 11,
+      "line": 30,
+      "kind": "code",
+      "text": "cot = str(row[\"generated_cot\"])"
+    },
+    {
+      "cell": 11,
+      "line": 31,
+      "kind": "code",
+      "text": "if not cot or cot == \"nan\" or len(cot.strip()) < 5:"
+    },
+    {
+      "cell": 11,
+      "line": 33,
+      "kind": "code",
+      "text": "cot_cleaned = re.sub(r'\\\\boxed\\{[^}]*\\}', '', cot).rstrip()"
+    },
+    {
+      "cell": 11,
+      "line": 35,
+      "kind": "code",
+      "text": "assistant_content = cot_cleaned + f\"\\n</think>\\n\\\\boxed{{{answer}}}\""
+    },
+    {
+      "cell": 11,
+      "line": 41,
+      "kind": "code",
+      "text": "dataset = HFDataset.from_list(records)"
+    },
+    {
+      "cell": 11,
+      "line": 70,
+      "kind": "code",
+      "text": "training_args = SFTConfig("
+    },
+    {
+      "cell": 11,
+      "line": 72,
+      "kind": "code",
+      "text": "num_train_epochs=1,"
+    },
+    {
+      "cell": 11,
+      "line": 73,
+      "kind": "code",
+      "text": "per_device_train_batch_size=1,"
+    },
+    {
+      "cell": 11,
+      "line": 132,
+      "kind": "code",
+      "text": "class StratifiedSFTTrainer(SFTTrainer):"
+    },
+    {
+      "cell": 11,
+      "line": 137,
+      "kind": "code",
+      "text": "def get_train_dataloader(self):"
+    },
+    {
+      "cell": 11,
+      "line": 138,
+      "kind": "code",
+      "text": "if self.train_dataset is None:"
+    },
+    {
+      "cell": 11,
+      "line": 139,
+      "kind": "code",
+      "text": "raise ValueError(\"Trainer requires a train_dataset.\")"
+    },
+    {
+      "cell": 11,
+      "line": 141,
+      "kind": "code",
+      "text": "return super().get_train_dataloader()"
+    },
+    {
+      "cell": 11,
+      "line": 142,
+      "kind": "code",
+      "text": "if len(self.stratified_order) != len(self.train_dataset):"
+    },
+    {
+      "cell": 11,
+      "line": 143,
+      "kind": "code",
+      "text": "raise ValueError(\"Stratified order length does not match train dataset\")"
+    },
+    {
+      "cell": 11,
+      "line": 146,
+      "kind": "code",
+      "text": "\"batch_size\": self.args.per_device_train_batch_size,"
+    },
+    {
+      "cell": 11,
+      "line": 157,
+      "kind": "code",
+      "text": "return DataLoader(self.train_dataset, **dataloader_kwargs)"
+    },
+    {
+      "cell": 11,
+      "line": 161,
+      "kind": "code",
+      "text": "training_args.per_device_train_batch_size * training_args.gradient_accumulation_steps,"
+    },
+    {
+      "cell": 11,
+      "line": 167,
+      "kind": "code",
+      "text": "trainer = StratifiedSFTTrainer("
+    },
+    {
+      "cell": 11,
+      "line": 169,
+      "kind": "code",
+      "text": "args=training_args,"
+    },
+    {
+      "cell": 11,
+      "line": 170,
+      "kind": "code",
+      "text": "train_dataset=dataset,"
+    },
+    {
+      "cell": 11,
+      "line": 176,
+      "kind": "code",
+      "text": "print(\"Starting SFT training...\")"
+    },
+    {
+      "cell": 11,
+      "line": 178,
+      "kind": "code",
+      "text": "trainer.train()"
+    },
+    {
+      "cell": 11,
+      "line": 180,
+      "kind": "code",
+      "text": "print(f\"Training done in {elapsed/60:.1f} min\")"
+    },
+    {
+      "cell": 11,
+      "line": 183,
+      "kind": "code",
+      "text": "ADAPTER_DIR = \"/kaggle/working/sft_adapter\""
+    },
+    {
+      "cell": 11,
+      "line": 184,
+      "kind": "code",
+      "text": "model.save_pretrained(ADAPTER_DIR)"
+    },
+    {
+      "cell": 11,
+      "line": 185,
+      "kind": "code",
+      "text": "tokenizer.save_pretrained(ADAPTER_DIR)"
+    },
+    {
+      "cell": 11,
+      "line": 186,
+      "kind": "code",
+      "text": "print(f\"Adapter saved to {ADAPTER_DIR}\")"
+    },
+    {
+      "cell": 12,
+      "line": 1,
+      "kind": "markdown",
+      "text": "## Mode B: Load Pre-trained LoRA"
+    },
+    {
+      "cell": 13,
+      "line": 1,
+      "kind": "code",
+      "text": "if USE_PRETRAINED:"
+    },
+    {
+      "cell": 13,
+      "line": 4,
+      "kind": "code",
+      "text": "SRC_ADAPTER_DIR = PRETRAINED_ADAPTER_DATASET_PATH"
+    },
+    {
+      "cell": 13,
+      "line": 5,
+      "kind": "code",
+      "text": "required_files = [\"adapter_config.json\", \"adapter_model.safetensors\"]"
+    },
+    {
+      "cell": 13,
+      "line": 7,
+      "kind": "code",
+      "text": "print(\"Using pre-trained adapter from:\", SRC_ADAPTER_DIR)"
+    },
+    {
+      "cell": 13,
+      "line": 9,
+      "kind": "code",
+      "text": "fpath = os.path.join(SRC_ADAPTER_DIR, fname)"
+    },
+    {
+      "cell": 13,
+      "line": 11,
+      "kind": "code",
+      "text": "raise FileNotFoundError(f\"Missing required adapter file: {fpath}\")"
+    },
+    {
+      "cell": 13,
+      "line": 14,
+      "kind": "code",
+      "text": "print(\"TRAIN_ON_KAGGLE=1: pretrained adapter path check skipped.\")"
+    },
+    {
+      "cell": 14,
+      "line": 1,
+      "kind": "markdown",
+      "text": "## Create submission.zip"
+    },
+    {
+      "cell": 15,
+      "line": 1,
+      "kind": "code",
+      "text": "import json, os, shutil, zipfile"
+    },
+    {
+      "cell": 15,
+      "line": 4,
+      "kind": "code",
+      "text": "SUBMISSION_ADAPTER_DIR = os.path.join(OUTPUT_DIR, \"submission_adapter\")"
+    },
+    {
+      "cell": 15,
+      "line": 5,
+      "kind": "code",
+      "text": "os.makedirs(SUBMISSION_ADAPTER_DIR, exist_ok=True)"
+    },
+    {
+      "cell": 15,
+      "line": 7,
+      "kind": "code",
+      "text": "required_files = [\"adapter_config.json\", \"adapter_model.safetensors\"]"
+    },
+    {
+      "cell": 15,
+      "line": 9,
+      "kind": "code",
+      "text": "if TRAIN_ON_KAGGLE:"
+    },
+    {
+      "cell": 15,
+      "line": 10,
+      "kind": "code",
+      "text": "src_adapter_dir = \"/kaggle/working/sft_adapter\""
+    },
+    {
+      "cell": 15,
+      "line": 11,
+      "kind": "code",
+      "text": "print(\"Packaging freshly trained adapter from:\", src_adapter_dir)"
+    },
+    {
+      "cell": 15,
+      "line": 13,
+      "kind": "code",
+      "text": "src_adapter_dir = PRETRAINED_ADAPTER_DATASET_PATH"
+    },
+    {
+      "cell": 15,
+      "line": 14,
+      "kind": "code",
+      "text": "print(\"Packaging pre-trained adapter directly from:\", src_adapter_dir)"
+    },
+    {
+      "cell": 15,
+      "line": 17,
+      "kind": "code",
+      "text": "src = os.path.join(src_adapter_dir, fname)"
+    },
+    {
+      "cell": 15,
+      "line": 18,
+      "kind": "code",
+      "text": "dst = os.path.join(SUBMISSION_ADAPTER_DIR, fname)"
+    },
+    {
+      "cell": 15,
+      "line": 20,
+      "kind": "code",
+      "text": "raise FileNotFoundError(f\"Missing required adapter file: {src}\")"
+    },
+    {
+      "cell": 15,
+      "line": 24,
+      "kind": "code",
+      "text": "config_path = os.path.join(SUBMISSION_ADAPTER_DIR, \"adapter_config.json\")"
+    },
+    {
+      "cell": 15,
+      "line": 25,
+      "kind": "code",
+      "text": "with open(config_path, \"r\") as f:"
+    },
+    {
+      "cell": 15,
+      "line": 30,
+      "kind": "code",
+      "text": "cfg[\"lora_dropout\"] = 0.0"
+    },
+    {
+      "cell": 15,
+      "line": 32,
+      "kind": "code",
+      "text": "with open(config_path, \"w\") as f:"
+    },
+    {
+      "cell": 15,
+      "line": 35,
+      "kind": "code",
+      "text": "zip_path = os.path.join(OUTPUT_DIR, \"submission.zip\")"
+    },
+    {
+      "cell": 15,
+      "line": 36,
+      "kind": "code",
+      "text": "with zipfile.ZipFile(zip_path, \"w\", zipfile.ZIP_DEFLATED) as zf:"
+    },
+    {
+      "cell": 15,
+      "line": 38,
+      "kind": "code",
+      "text": "fpath = os.path.join(SUBMISSION_ADAPTER_DIR, fname)"
+    },
+    {
+      "cell": 15,
+      "line": 42,
+      "kind": "code",
+      "text": "zip_sz = os.path.getsize(zip_path) / 1024 / 1024"
+    },
+    {
+      "cell": 15,
+      "line": 43,
+      "kind": "code",
+      "text": "print(f\"\\nsubmission.zip: {zip_sz:.1f} MB\")"
+    }
+  ]
+}

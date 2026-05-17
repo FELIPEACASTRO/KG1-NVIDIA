@@ -1,0 +1,101 @@
+ref,title,author,lastRunTime,totalVotes
+tanluu/probe-pcc-reason,probe-pcc-reason,tan luu,2026-05-12 06:00:59.927000,0
+truongdinhduc06/probe-vanilla-s4,probe-vanilla-s4,Trương Đình Đức,2026-05-12 06:00:58.810000,0
+devpateltech/notebookd7186e4fc9,notebookd7186e4fc9,Dev Patel,2026-05-12 06:00:08.283000,0
+dfbjdsbds/pretrain-vanilla-d2048-3b-baseline,pretrain-vanilla-d2048-3b-baseline,Space_cowboy,2026-05-12 05:38:48.257000,0
+nguyenduongtrong/pretrain-vanilla-d2048-3b-synth,pretrain-vanilla-d2048-3b-synth,Nguyen Duong Trong,2026-05-12 05:38:10.917000,0
+truongdinhduc06/steered-pcc-d2048-seed1-loose-chain,steered-pcc-d2048-seed1-loose-chain,Trương Đình Đức,2026-05-12 05:36:57.407000,0
+truongdinhduc06/lle-v2-pcc-d2048-seed1-loose,lle-v2-pcc-d2048-seed1-loose,Trương Đình Đức,2026-05-12 05:36:54.323000,0
+quan242/nvidia-nemotron-training-v2-cot-labels,NVIDIA Nemotron training v2 (CoT + Labels),quan242,2026-05-12 04:56:36.283000,0
+tanluu/steered-pcc-d2048-reason-chain,steered-pcc-d2048-reason-chain,tan luu,2026-05-12 04:51:22.977000,0
+truongdinhduc06/steered-vanilla-d2048-s4-chain,steered-vanilla-d2048-s4-chain,Trương Đình Đức,2026-05-12 04:51:20.467000,0
+hiulnho/pretrain-pcc-d2048-reason-synth,pretrain-pcc-d2048-reason-synth,Hiếu Lê Nho,2026-05-12 04:34:26.947000,0
+kanakasarat1/lora-adapter-fusion-and-rank-compression-pipeline,LoRA Adapter Fusion and Rank Compression Pipeline ,Kanaka Sarat Siripurapu,2026-05-12 04:33:43.717000,0
+sakshatpatil25/nvidia-nemotron-submission-demo,NVIDIA Nemotron Submission Demo,Sakshat Patil 25,2026-05-12 04:28:08.697000,4
+tuananhtran37/lle-v2-vanilla-d2048-s3,lle-v2-vanilla-d2048-s3,Tuan Anh Tran 37,2026-05-12 04:27:06.083000,0
+truongdinhduc06/lle-v2-vanilla-d2048-s1,lle-v2-vanilla-d2048-s1,Trương Đình Đức,2026-05-12 04:27:05.080000,0
+dfbjdsbds/lle-v2-vanilla-d2048-s2,lle-v2-vanilla-d2048-s2,Space_cowboy,2026-05-12 04:27:04.980000,0
+tanluu/lle-v2-pcc-d2048-reason,lle-v2-pcc-d2048-reason,tan luu,2026-05-12 04:27:04.673000,0
+revatidharmadhikari/revati-experiments-nvidia-nemotron-submission,Revati Experiments NVIDIA Nemotron Submission ,Revati Dharmadhikari,2026-05-12 04:07:12.727000,3
+tanluu/lle-pcc-d2048-reason-tanluu,lle-pcc-d2048-reason-tanluu,tan luu,2026-05-12 04:05:23.740000,0
+kanakasarat1/nvidia-nemotron-submission-demo,NVIDIA Nemotron Submission Demo,Kanaka Sarat Siripurapu,2026-05-12 03:03:03.397000,0
+tuetrandoanminh/pretrain-pcc-d2048-reason-tight,pretrain-pcc-d2048-reason-tight,Tue Tran Doan Minh,2026-05-12 02:36:00.940000,0
+tuetrandoanminh/lle-hybrid-d1280-l8,lle-hybrid-d1280-l8,Tue Tran Doan Minh,2026-05-12 02:28:25.723000,0
+tuananhtran37/lle-vanilla-iter-d2048-s2,lle-vanilla-iter-d2048-s2,Tuan Anh Tran 37,2026-05-12 02:26:37.023000,0
+dfbjdsbds/lle-vanilla-iter-d2048-s1,lle-vanilla-iter-d2048-s1,Space_cowboy,2026-05-12 02:26:36.043000,0
+truongdinhduc06/lle-xloop-d1280-s2,lle-xloop-d1280-s2,Trương Đình Đức,2026-05-12 02:26:33.337000,0
+tuananhtran37/lle-pcc-iter-d1280-s1,lle-pcc-iter-d1280-s1,Tuan Anh Tran 37,2026-05-12 02:19:26.080000,0
+dfbjdsbds/lle-vanilla-d2048-s3,lle-vanilla-d2048-s3,Space_cowboy,2026-05-12 02:19:23.707000,0
+truongdinhduc06/lle-vanilla-d2048-s2,lle-vanilla-d2048-s2,Trương Đình Đức,2026-05-12 02:19:22.120000,0
+truongdinhduc06/lle-vanilla-d2048-s1,lle-vanilla-d2048-s1,Trương Đình Đức,2026-05-12 01:58:14.087000,0
+tuananhtran37/lle-vanilla-d2048-seed1,lle-vanilla-d2048-seed1,Tuan Anh Tran 37,2026-05-12 01:54:16.643000,0
+dfbjdsbds/lle-vanilla-d2048-s4,lle-vanilla-d2048-s4,Space_cowboy,2026-05-12 01:54:15.707000,0
+anng1112/eval-vanilla-s4-chained-x,eval-vanilla-s4-chained-x,Nguyen An,2026-05-12 01:38:28.977000,0
+tuetrandoanminh/eval-vanilla-d2048-seed1,eval-vanilla-d2048-seed1,Tue Tran Doan Minh,2026-05-12 01:38:13.490000,0
+toney02/nemotron-sft-lora-with-cot,Nemotron SFT LoRA with CoT,Toney02,2026-05-11 23:35:26.130000,0
+ramyagopalaswamy/nvidia-nemotron-submission-demo,NVIDIA Nemotron Submission Demo,Ramya Gopalaswamy,2026-05-11 21:24:39.440000,0
+ksk872/nvidia-initial,NVIDIA - initial,Sumanth Kumar,2026-05-11 19:24:11.527000,0
+renukaprasadpatwari/nvidia-nemotron-challenge,Nvidia Nemotron Challenge,Renuka Prasad Patwari,2026-05-11 17:38:04.520000,5
+anng1112/pretrain-pcc-d2048-reason-seed1,pretrain-pcc-d2048-reason-seed1,Nguyen An,2026-05-11 17:29:08.913000,0
+shamathmika/nemotron-reasoning-challenge,Nemotron-Reasoning-Challenge,Shamathmika,2026-05-11 15:41:17.853000,0
+skripsipesolmokelar/prep-vectors-llama,prep_vectors_llama,skripsi pesol mo kelar,2026-05-11 15:30:22.460000,0
+minhhoiphan/data-mine-nemotron-data,Data_mine_Nemotron data,Minh Hoài Phan,2026-05-11 13:57:06.950000,0
+hduong/pretrain-vanilla-d2048-15b-s4,pretrain-vanilla-d2048-15b-s4,Hoang Duong,2026-05-11 12:36:35.293000,0
+hduong/probe-vanilla-s3-6-5b,probe-vanilla-s3-6_5b,Hoang Duong,2026-05-11 11:55:07.517000,0
+tanluu/probe-pcc-d2048-reason,probe-pcc-d2048-reason,tan luu,2026-05-11 11:55:07.317000,0
+leehoangquan006/probe-pcc-iter-d1280-2b,probe-pcc-iter-d1280-2b,Lê Hoàng Quân,2026-05-11 11:55:07.023000,0
+khoidang67/eval-vanilla-iter-s2-x,eval-vanilla-iter-s2-x,Khôi Đăng,2026-05-11 11:21:57.887000,0
+tuetrandoanminh/pretrain-vanilla-d2048-15b-seed1,pretrain-vanilla-d2048-15b-seed1,Tue Tran Doan Minh,2026-05-11 11:16:20.713000,0
+hduong/eval-vanilla-d2048-s3-final,eval-vanilla-d2048-s3-final,Hoang Duong,2026-05-11 11:00:07.957000,0
+phmthanhlm24022379/eval-hybrid-d1280-l8,eval-hybrid-d1280-l8, Phạm Thanh Lâm 24022379,2026-05-11 10:53:05.647000,0
+tanluu/eval-pcc-d2048-reason,eval-pcc-d2048-reason,tan luu,2026-05-11 10:53:05.443000,0
+leehoangquan006/eval-hr-d1280-reason,eval-hr-d1280-reason,Lê Hoàng Quân,2026-05-11 10:53:05.380000,0
+phmthanhlm24022379/eval-pcc-matched-1b,eval-pcc-matched-1b, Phạm Thanh Lâm 24022379,2026-05-11 10:53:04.547000,0
+suryamilenial/end-to-end-finetuning-for-lb-0-83-6e2fa5,End-to-end finetuning for LB 0.83 6e2fa5,Surya milenial,2026-05-11 10:01:40.730000,32
+toney02/nvidia-nemotron-sfttrainer-training,NVIDIA Nemotron - SFTTrainer training,Toney02,2026-05-11 07:31:25.567000,0
+adv1102/notebookcc9dc9084a,notebookcc9dc9084a,adv_1102,2026-05-11 04:29:22.037000,0
+rauffauzanrambe/nvidia-transformer-cnn-gr-smart-reinforcement,NVIDIA Transformer CNN + GR Smart + Reinforcement ,Ra'uf Fauzan Rambe,2026-05-11 02:08:30.047000,14
+leehoangquan006/eval-pcc-iter-d1280-2b,eval-pcc-iter-d1280-2b,Lê Hoàng Quân,2026-05-11 01:06:29.743000,0
+namphmbuwu/eval-vanilla-iter-d2048-s1,eval-vanilla-iter-d2048-s1,Nam Phạm Bá UWU,2026-05-11 00:48:57.823000,0
+adv1102/nvidia-nemotron-submission,NVIDIA Nemotron Submission,adv_1102,2026-05-10 23:43:23.430000,0
+xduan7/nemotron-concat-only-diagnostic-memcheck,Nemotron Concat-Only Diagnostic Memcheck,Xiaotian Duan,2026-05-10 22:45:28.477000,0
+xduan7/nemotron-concat-only-diagnostic-eval,Nemotron Concat-Only Diagnostic Eval,Xiaotian Duan,2026-05-10 22:45:26.110000,0
+bbobwayne/nemotron-tier-1-lora-baseline,Nemotron Tier-1 LoRA Baseline,bbobWayne,2026-05-10 21:27:31.657000,6
+ethnwen/nvidia-nemotron-model-v1,NVIDIA nemotron model v1 ,ethn.wen,2026-05-10 21:02:35.783000,2
+akankshathalla/nvidia-nemotron-final,NVIDIA Nemotron final,Akanksha Thalla,2026-05-10 20:48:35.410000,0
+yinkaog/run28-051026,run28_051026,YinkaOG,2026-05-10 20:25:57.783000,0
+nicholas33/nb153-nvidia-nemotron,NB153 || NVIDIA Nemotron,NikolAiD153,2026-05-10 18:33:10.127000,1
+afr1ste/nemotron-0-86-tinker-adapter-guide,Nemotron 0.86 Tinker Adapter Guide,Afr1ste,2026-05-10 18:24:47.407000,13
+chaitanyajamble/nvidia-nmrc-4,Nvidia-NMRC--4,Chaitanya Jamble,2026-05-10 17:53:22.630000,0
+leehoangquan006/pretrain-pcc-iter-d1280-2b-s1,pretrain-pcc-iter-d1280-2b-s1,Lê Hoàng Quân,2026-05-10 17:27:48.280000,0
+harshitakumari256/notebook633554d240,notebook633554d240,Harshita Kumari,2026-05-10 17:27:34.167000,1
+chaitanyajamble/nvidia-nmrc-1,Nvidia-NMRC-!/1,Chaitanya Jamble,2026-05-10 17:18:42.517000,6
+namphmbuwu/pretrain-vanilla-iter-d2048-15b-s2,pretrain-vanilla-iter-d2048-15b-s2,Nam Phạm Bá UWU,2026-05-10 16:57:58.433000,0
+truongdinhduc06/pretrain-xloop-d1280-15b-s2,pretrain-xloop-d1280-15b-s2,Trương Đình Đức,2026-05-10 16:45:38.247000,0
+hduong/pretrain-vanilla-d2048-15b-s3,pretrain-vanilla-d2048-15b-s3,Hoang Duong,2026-05-10 16:45:34.507000,0
+dzung271828/graphcodebert-semeval2026,GraphCodeBert-SemEval2026,manifolium,2026-05-10 16:06:41.280000,1
+truongdinhduc06/eval-xloop-d1280-s2,eval-xloop-d1280-s2,Trương Đình Đức,2026-05-10 16:05:09.457000,0
+hduong/eval-vanilla-d2048-s3,eval-vanilla-d2048-s3,Hoang Duong,2026-05-10 16:05:08.317000,0
+svanikkolli/nemotron-engine-ensembler,Nemotron Engine Ensembler,Svanik Kolli,2026-05-10 15:30:44.063000,15
+anng1112/probe-r12-pcc-qkv-bias-v2,probe-r12-pcc-qkv-bias-v2,Nguyen An,2026-05-10 11:07:02.567000,0
+anng1112/repr-r12-pcc-qkv-bias,repr-r12-pcc-qkv-bias,Nguyen An,2026-05-10 11:01:48.817000,0
+tuananhtran37/probe-pcchr-d1280-l6,probe-pcchr-d1280-l6,Tuan Anh Tran 37,2026-05-10 10:49:22.587000,0
+zhongzhing/probe-probe-vanilla-d2048-4b,probe-probe-vanilla-d2048-4b,Zhong Zhing ,2026-05-10 10:37:44.550000,0
+tuetrandoanminh/probe-probe-xloop-d1280,probe-probe-xloop-d1280,Tue Tran Doan Minh,2026-05-10 10:37:43.913000,0
+truongdinhduc06/probe-probe-pcc-d2048,probe-probe-pcc-d2048,Trương Đình Đức,2026-05-10 10:37:43.530000,0
+anng1112/pretrain-r12-pcc-qkv-bias-d1024,pretrain-r12-pcc-qkv-bias-d1024,Nguyen An,2026-05-10 10:29:14.437000,0
+tuetrandoanminh/repr-flow-xloop-d1280-v2,repr-flow-xloop-d1280-v2,Tue Tran Doan Minh,2026-05-10 10:00:04.857000,0
+truongdinhduc06/repr-flow-pcc-d2048,repr-flow-pcc-d2048,Trương Đình Đức,2026-05-10 09:55:50.163000,0
+zhongzhing/repr-flow-vanilla-d2048-4b,repr-flow-vanilla-d2048-4b,Zhong Zhing ,2026-05-10 09:55:49.760000,0
+anng1112/dim-flow-r11-mol,dim-flow-r11-mol,Nguyen An,2026-05-10 09:07:47.083000,0
+anng1112/pretrain-r11-mol-d1024,pretrain-r11-mol-d1024,Nguyen An,2026-05-10 08:49:45.327000,0
+namphmbuwu/dim-flow-r11-pcclb,dim-flow-r11-pcclb,Nam Phạm Bá UWU,2026-05-10 08:27:59.167000,0
+anng1112/dim-flow-r11-plb,dim-flow-r11-plb,Nguyen An,2026-05-10 08:12:44.663000,0
+anng1112/pretrain-r11-per-loop-bias-d1024,pretrain-r11-per-loop-bias-d1024,Nguyen An,2026-05-10 07:56:45.743000,0
+namphmbuwu/pretrain-r11-pcc-loop-bias-d1024,pretrain-r11-pcc-loop-bias-d1024,Nam Phạm Bá UWU,2026-05-10 07:56:44.993000,0
+tuetrandoanminh/dim-flow-xloop-d1280-2b,dim-flow-xloop-d1280-2b,Tue Tran Doan Minh,2026-05-10 07:34:01.430000,0
+truongdinhduc06/dim-flow-pcc-d2048,dim-flow-pcc-d2048,Trương Đình Đức,2026-05-10 07:34:00.380000,0
+zhongzhing/dim-flow-vanilla-d2048-4b,dim-flow-vanilla-d2048-4b,Zhong Zhing ,2026-05-10 07:33:59.883000,0
+zhongzhing/grad-flow-vanilla-d2048-4b-own,grad-flow-vanilla-d2048-4b-own,Zhong Zhing ,2026-05-10 06:23:46.780000,0
+truongdinhduc06/grad-flow-pcc-d2048-own,grad-flow-pcc-d2048-own,Trương Đình Đức,2026-05-10 06:21:15.947000,0
+tuetrandoanminh/grad-flow-xloop-d1280-2b-v2,grad-flow-xloop-d1280-2b-v2,Tue Tran Doan Minh,2026-05-10 06:17:09.647000,0

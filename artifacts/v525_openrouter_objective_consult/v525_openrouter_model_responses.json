@@ -1,0 +1,162 @@
+[
+  {
+    "model": "openai/gpt-5.5",
+    "started_at_utc": "2026-05-17T00:08:56.464648+00:00",
+    "ok": true,
+    "elapsed_s": 54.17,
+    "usage": {
+      "prompt_tokens": 12425,
+      "completion_tokens": 3000,
+      "total_tokens": 15425,
+      "cost": 0.152125,
+      "is_byok": false,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": 0,
+        "audio_tokens": 0,
+        "video_tokens": 0
+      },
+      "cost_details": {
+        "upstream_inference_cost": 0.152125,
+        "upstream_inference_prompt_cost": 0.062125,
+        "upstream_inference_completions_cost": 0.09
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 2588,
+        "image_tokens": 0,
+        "audio_tokens": 0
+      }
+    },
+    "response": "## Verdict\n\nV523/V524 is technically directionally correct: V524 correctly identified that V523’s token-level objective is dominated by long bit traces, and `example_mean` is the fastest responsible correction because it removes the most obvious token-length bias without rebuilding data.\n\nHowever, V523 is **not justified for a full run**. It is justified only for a **short H200 smoke** if preflight proves that `LOSS_NORMALIZATION_MODE=example_mean` is actually active and the first checkpoint is weak-gate evaluated immediately.\n\nDecision: **GO for one short V523 + `example_mean` smoke, not for extended training.** If the first checkpoint does not beat the adapter-only baseline without bit regression, stop and build V525.\n\n---\n\n## Ranked Next Actions\n\n1. **Run V523 with `LOSS_NORMALIZATION_MODE=example_mean` as a short smoke.**\n   - Evidence: V523 is source-only, no weak/full overlap, tokenization passed, trace learnability passed.\n   - Evidence: V524 shows token loss mass is badly skewed: bit token share `0.9067` vs reference gain bit share `0.7419`.\n   - `example_mean` directly corrects the token-mass skew with minimal new moving parts.\n   - This is the fastest responsible test.\n\n2. **If V523 smoke fails, build V525 with shorter bit traces and reference-mix quotas.**\n   - Goal: keep bit signal but prevent bit CoT length from dominating.\n   - Use V522 no-loss gain mix as the target: roughly `74% bit / 26% equation` by rows, but cap bit token mass near that range too.\n\n3. **Add reference-mix family row weights only after the example-mean smoke.**\n   - Hypothesis: mild bit upweighting could preserve `8740ed31` while allowing equation improvement.\n   - Do **not** use naive 50/50 family-balanced loss; it would overweight equation relative to",
+    "raw_id": "gen-1778976602-CGJhXAASei0DSzFLK3lZ",
+    "finish_reason": "length"
+  },
+  {
+    "model": "anthropic/claude-opus-4.7",
+    "started_at_utc": "2026-05-17T00:09:51.636191+00:00",
+    "ok": true,
+    "elapsed_s": 49.74,
+    "usage": {
+      "prompt_tokens": 21852,
+      "completion_tokens": 3000,
+      "total_tokens": 24852,
+      "cost": 0.18426,
+      "is_byok": false,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": 0,
+        "audio_tokens": 0,
+        "video_tokens": 0
+      },
+      "cost_details": {
+        "upstream_inference_cost": 0.18426,
+        "upstream_inference_prompt_cost": 0.10926,
+        "upstream_inference_completions_cost": 0.075
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 0,
+        "image_tokens": 0,
+        "audio_tokens": 0
+      }
+    },
+    "response": "# Verdict\n\nV523 + `example_mean` is a **necessary but insufficient** correction. The token-level dominance (90.7% bit token mass for 68.8% bit rows) is real, but `example_mean` alone treats a 5-token equation answer as equally weighted to a 500-token bit CoT — which is what you want for ACC, but it will also dilute the **per-token gradient signal on bit answers** and may destabilize the protected bit row `8740ed31`. The safer path is **`example_mean` + an answer-span loss weight that ignores the long CoT prefix**, combined with a small rebuild (V525) that caps bit trace length. Going to GPU with `example_mean` on V523 *as-is* is a coin-flip on the protected bit row. **No-go on V523 H200; build V525 first, then 1 short smoke.**\n\n# Ranked Next Actions\n\n1. **Build V525** (CPU only, 2–4h): same source pool as V523, but cap bit trace length and rebalance row counts so token-mass ratio matches reference gain share (~74/26).\n2. **Add answer-span loss weighting** (`ANSWER_SPAN_LOSS_WEIGHT=4.0–8.0` on the `\\boxed{...}` payload) in addition to `LOSS_NORMALIZATION_MODE=example_mean`. This is what actually matters for exact-answer ACC.\n3. **Run V525 H200 smoke** ≤30min, eval at step 25/50 with the kill-switch in §4.\n4. *(Hypothesis)* If V525 still backfires on `8740ed31`, add that row's rule family (full-byte ternary, position-3 sensitive) as an explicit hard-mined source trace — not the row itself.\n5. *(Hypothesis, last resort)* Family-balanced loss (per-batch family reweighting) — defer; harder to verify and easier to silently break.\n\n**Ranking of objective corrections (Q1):**\n1. **Answer-span loss weight on `\\boxed{...}` payload** (highest leverage; directly aligned with exact-match metric).\n2. **example_mean normalization** (correct direction, partial fix).\n3. **Shorter bit traces in V525** (structural; reduces the problem at the source).\n4. Family-balanced row weights (works but adds a hyperparameter to tune blind).\n5. Hard negatives (rejected — already failed in V436/V440/V441 lineage).\n\nThe right answer is **(1)+(2)+(3) combined**, not any single one.\n\n# Exact V525/V526 Configuration\n\n**V525 dataset quotas** (derived from V522 reference: 74.2% bit / 25.8% equation gain share; V524 token mass 90.7% bit → must drop to ~74%):\n\n| Field | Target |\n|---|---:|\n| Train rows total | ~900 |\n| Bit rows | 540 (60%) |\n| Equation rows | 360 (40%) |\n| Val rows total | 200 |\n| Val bit | 120 |\n| Val equation | 80 |\n| **Max bit trace tokens per row** | **256** (V523 had effectively ~470 avg implied by 329702/706) |\n| **Max equation trace tokens per row** | 128 |\n| Target loss-token bit share | 0.70–0.78 (within ±5pp of reference 0.742) |\n| Target loss-token mass bit | ~140k |\n| Target loss-token mass equation | ~46k |\n\n**Bucket allocation (mirrors V522 no-loss gain rule distribution):**\n- `bit_exact_global_ternary_unique_prediction`: 220 rows (was top gain rule, 13/23)\n- `bit_fullbyte_ternary_op_CHO`: 80\n- `bit_fullbyte_ternary_op_MAJ3`: 80\n- `bit_fullbyte_ternary_op_PAR3`: 60 (covers position-sensitive class likely related to `8740ed31`)\n- `bit_exact_global_binary_OR/XOR`: 50 each\n- Equation 4 classes × 90 rows = 360\n\n**Trainer env for V525 smoke (V526 = the run):**\n```\nLOSS_NORMALIZATION_MODE=example_mean\nANSWER_SPAN_LOSS_WEIGHT=6.0\nANSWER_SPAN_MIN_WEIGHTED_TOKENS=3\nMAX_STEPS=80\nEVAL_EVERY_STEPS=20\nSAVE_EVERY_STEPS=20\nBATCH_SIZE=16\nMICRO_BATCH_SIZE=1\nLEARNING_RATE=1e-4    # lowered from 2e-4: don't disturb 136/160 bit floor\nFINAL_LEARNING_RATE=5e-5\nMAX_LENGTH=2048       # bit traces capped at 256 + prompt\nBASELINE_EVAL_BEFORE_TRAIN=true\nABORT_EVAL_RELATIVE_TO_BASELINE_DELTA=0.02\nSEED=525\n```\n\n# Kill-Switch / Gates\n\n**Pre-GPU (must all pass on V525):**\n- V286 tokenization gate: trunc=0, offset masks present 100%\n- V513 trace learnability: 0 blockers\n- V521 transfer blocker re-run: weak/full prompt overlap = 0\n- V524 quota re-run: `loss_token_bit_share ∈ [0.70, 0.78]`\n- New gate: protected row `8740ed31` rule family present in train ≥ 8 rows\n\n**During GPU (eval at step 20 and step 40):**\n| Metric | Kill threshold |\n|---|---|\n| `prompt_sha256=8740ed31` predicted answer | **Must == `01101000`. Any other value → abort.** |\n| `bit_manipulation` weak | **< 136 → abort** |\n| `equation_transform` weak | < 56 at step 40 → abort (allow temporary <56 at step 20) |\n| weak total | < 191 at step 40 → abort |\n| `truncated` | > 0 → abort |\n| `eval_loss` vs baseline | rise > +0.02 → abort |\n| reserved GPU mem | > 75 GiB → abort |\n\n**Promote checkpoint only if:** bit ≥ 136 AND equation ≥ 58 AND total ≥ 194 AND `8740ed31` preserved AND trunc = 0. Anything weaker → no promotion, no submit.\n\n# Silent Bug Checklist\n\nRun all before GPU. These are the failure modes that have actually bitten this project:\n\n1. **`\\boxed{}` literal escape**: re-grep the V525 builder for `\\b` → backspace bug (you caught this in V523; re-verify hexdump of 20 random target strings).\n2. **Offset mask coverage**: assert `offset_mask_present == 1.0` on 100% of train/val, not just sampled rows.\n3. **Answer-span mask non-empty**: for every row, assert `sum(answer_span_mask) >= ANSWER_SPAN_MIN_WEIGHTED_TOKENS`. V441 had non-empty payload masks but check the new combined mode.\n4. **Prompt template parity**: diff V525 prompt template byte-for-byte against the weak gate's inference prompt template. Single trailing newline mismatches have silently caused ACC drops before.\n5. **Family mapping**: confirm `family` field is derived from source metadata, not regex on prompt (regex was wrong for ~3% of bit rows in earlier versions per V438 lineage).\n6. **Tokenizer revision pin**: `MODEL_REVISION` is pinned but verify tokenizer hash separately — Nemotron tokenizer updates have shipped silently.\n7. **Duplicate leakage**: hash-join V525 train prompts against (a) weak 315 rows, (b) full gate rows, (c) test set. Assert 0 overlap on all three.\n8. **Protected row regression precheck**: before any training, run baseline eval and confirm V516 adapter still gets `8740ed31=01101000`. If not, you're measuring against a moved baseline.\n9. **Loss-mode unit test**: assert that with `example_mean`, a batch of [1 row × 500 tokens + 1 row × 10 tokens] produces loss = mean of two per-example CEs, not token-weighted. Add as a `pytest`.\n10. **LoRA target_modules parity**: V90 trainer has the gate-up alias matcher — confirm `target_parameters` matches the init adapter exactly, else silent partial init.\n11. **Gradient checkpointing × answer-span mask**: confirm the answer-span weighting tensor isn't being recomputed/lost across the checkpoint boundary (this is subtle; add a hash assertion).\n12. **`gate_rows_used_for_training=false`** in V525 manifest (you fixed this in V523",
+    "raw_id": "gen-1778976657-DkNhOK2JJpiOhfViDzNp",
+    "finish_reason": "length"
+  },
+  {
+    "model": "google/gemini-3.1-pro-preview",
+    "started_at_utc": "2026-05-17T00:10:42.380366+00:00",
+    "ok": true,
+    "elapsed_s": 30.4,
+    "usage": {
+      "prompt_tokens": 15509,
+      "completion_tokens": 2996,
+      "total_tokens": 18505,
+      "cost": 0.06697,
+      "is_byok": false,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": 0,
+        "audio_tokens": 0,
+        "video_tokens": 0
+      },
+      "cost_details": {
+        "upstream_inference_cost": 0.06697,
+        "upstream_inference_prompt_cost": 0.031018,
+        "upstream_inference_completions_cost": 0.035952
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 1882,
+        "image_tokens": 0,
+        "audio_tokens": 0
+      }
+    },
+    "response": "**VERDICT**\nThe V523/V524 plan is technically correct in identifying token-mass bias as the primary blocker. The 90.7% bit token share in V523 mathematically drowns out the 31.2% equation row share under standard `token_mean` loss. `example_mean` is the correct, immediate mathematical fix to realign the gradient with the row distribution. V523 is safe for a strictly gated 1-hour H200 smoke test.\n\n**RANKED NEXT ACTIONS**\n\n1. **(Fastest Path) Run V523 H200 Smoke with `example_mean`**: Execute a <=1 hour job on V523 using `LOSS_NORMALIZATION_MODE=example_mean`. This directly tests the hypothesis that token-mass bias caused the V518 plateau, without requiring a new dataset build.\n2. **(Fallback Path) Build V525 Shorter Traces**: If V523 + `example_mean` fails to produce a submit-safe gain at checkpoint 1, the traces themselves lack transferable signal. Immediately build V525 by truncating bit traces to their core logic and increasing equation row mass, then rerun CPU gates.\n3. **(Hypothesis) Payload-Only Score Masking**: If `example_mean` still results in loss/ACC divergence, apply the V441-style `boxed_payload_loss_mask` to force the adapter to focus exclusively on the final answer tokens rather than the trace boilerplate.\n\n**EXACT V525 CONFIGURATION (IF REBUILD REQUIRED)**\nIf V523 fails, V525 must strictly enforce the V522 reference gain distribution (74.2% bit, 25.8% equation) at *both* the row and token levels.\n*   **Train Rows**: ~1,000 total (742 `bit_manipulation`, 258 `equation_transform`).\n*   **Val Rows**: ~200 total (148 bit, 52 equation).\n*   **Token Mass Limits**: Cap bit traces at ~450 tokens max. Do not allow 1000+ token bit traces. Target a token mass ratio of roughly 75% bit / 25% equation.\n*   **Hard Negatives**: Exclude format-only negatives. Use only verified solver traces (CHO/MAJ3/global ternary) that do not overlap with weak/full prompts.\n\n**KILL-SWITCH / GATES**\nCancel the H200 job immediately at the first evaluation checkpoint (e.g., step 50) if the local weak gate does not meet **ALL** of the following exact thresholds:\n*   `overall >= 192/315` (Must beat or tie baseline immediately)\n*   `bit_manipulation >= 136/160` (Zero tolerance for bit regression)\n*   `equation_transform >= 56/155` (Must show at least baseline stability, ideally 57+)\n*   `truncation == 0`\n*   Protected row `8740ed31` prediction must exactly match `01101000` (No backfire).\n\n**SILENT BUG CHECKLIST (PRE-GPU)**\n1. **Offset-Mask**: Verify `REQUIRE_OFFSET_MASK=True` and that the mask array is not empty/all-zeros for any row.\n2. **Prompt Template**: Verify the Python `\\b` backspace bug is permanently fixed and the template strictly emits `Final answer: \\boxed{`.\n3. **Answer Extraction**: Verify the regex correctly extracts the payload from `\\boxed{...}` without capturing trailing braces or whitespace.\n4. **Family Mapping**: Verify weak gate rows map exactly to `bit_manipulation` and `equation_transform` (no silent drops due to ID mismatches).\n5. **Tokenization**: Verify `MAX_LENGTH=8192` is respected and `max_tokens` in the batch is well below this limit.\n6. **Duplicate Leakage**: Assert 0 exact prompt string overlaps between V523 train/val and the 315 weak gate rows.\n7. **Protected Row Regression**: Explicitly assert that row `8740ed31` is present in the eval suite and tracked.\n\n**EXPECTED GAIN / RISK**\n*   **Expected Gain**: +1 to +3 rows in `equation_transform` (reaching 57-59) by allowing the equation loss to actually influence the adapter weights without being drowned by bit tokens.\n*   **Risk**: `example_mean` upweights short equation traces, which might cause the model to forget long-context bit tracking, risking a drop in `bit_manipulation` below 136. The kill-switch mitigates this.\n*   **Diagnostic for Loss/ACC Divergence**: If eval_loss drops but exact ACC is flat/worse, the model is memorizing the *trace format* (e.g., outputting CHO/MAJ3 steps",
+    "raw_id": "gen-1778976708-qBzQymvZyAoa3z9lxu2I",
+    "finish_reason": "length"
+  },
+  {
+    "model": "qwen/qwen3.6-max-preview",
+    "started_at_utc": "2026-05-17T00:11:13.785525+00:00",
+    "ok": true,
+    "elapsed_s": 135.59,
+    "usage": {
+      "prompt_tokens": 14163,
+      "completion_tokens": 5383,
+      "total_tokens": 19546,
+      "cost": 0.04831944,
+      "is_byok": false,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": 0,
+        "audio_tokens": 0,
+        "video_tokens": 0
+      },
+      "cost_details": {
+        "upstream_inference_cost": 0.04831944,
+        "upstream_inference_prompt_cost": 0.01472952,
+        "upstream_inference_completions_cost": 0.03358992
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 3647,
+        "image_tokens": 0,
+        "audio_tokens": 0
+      }
+    },
+    "response": "**Verdict**\nV523 is structurally sound and correctly targeted to V522 no-loss gain rules, but V524 proves it is optimization-biased: bit CoT traces consume 90.7% of loss tokens despite representing only 68.8% of rows. This length dominance drowns equation signal and destabilizes fragile bit boundaries (evidenced by V518's backfire on `8740ed31`). `LOSS_NORMALIZATION_MODE=example_mean` is the correct, lowest-latency correction. A short, strictly gated H200 smoke is justified. If it fails, a V525 rebuild with explicit token-mass quotas is mandatory. All projected gains are hypotheses until gate-validated.\n\n**Ranked Next Actions**\n1. **Dry-run verify `example_mean` implementation:** Run a CPU tokenization + forward pass on 10 V523 rows (5 long bit, 5 short equation). Confirm per-example loss is computed as `CE_sum / active_label_tokens` and then averaged across the batch. Verify bit vs equation loss contributions are within 1.5x, not 9x.\n2. **Launch ≤1-hour H200 smoke on V523:** Use `LOSS_NORMALIZATION_MODE=example_mean`, `MAX_STEPS=50`, `EVAL_EVERY_STEPS=25`. Attach the exact kill-switch below. Cancel immediately if checkpoint-1 fails.\n3. **If smoke fails, build V525:** Rebalance dataset to cap bit token mass at ≤70% of total loss tokens. Strip verbose CoT boilerplate from bit traces while preserving rule-critical tokens (CHO/MAJ3/PAR3 operations). Rerun V286/V513/V524 CPU gates before any GPU.\n4. **Post-smoke analysis (if thresholds met):** Run full weak gate (315 rows). If `bit>=136`, `equation>=57`, `total>=193`, `trunc=0`, and protected rows hold, package adapter for submit. Do not extend training without a second gate validation.\n\n**Exact V525/V526 Configuration**\n*(Use only if V523 smoke fails or shows bit regression)*\n- **Train row ratio:** 60% bit / 40% equation (~600 bit, ~400 equation). Compensates for inherent bit trace length.\n- **Validation row ratio:** 50% bit / 50% equation (100/100). Ensures early signal isn't masked by family imbalance.\n- **Token-mass limits:** Bit loss-token share must be ≤0.70. Equation loss-token share ≥0.30. Enforce via `example_mean` + explicit row weights if needed (`eq_weight=1.3`, `bit_weight=1.0`).\n- **Trace length caps:** Max bit trace tokens = 450. Truncate repetitive CoT narration; retain only operation steps, intermediate states, and final `\\boxed{}`. Equation traces remain untruncated (already short).\n- **Rule coverage:** Maintain V522 priority: `CHO≥200`, `MAJ3≥200`, `PAR3≥80`, `global_ternary≥100`, equation classes `['274def88','7688e06e','c5b058d6','d1bd7478']` at ≥80 each.\n- **Metadata:** `gate_rows_used_for_training=false`, `loss_normalization=example_mean`, `max_bit_trace_tokens=450`.\n\n**Kill-Switch / Gates**\nEvaluate at checkpoint-1 (step 25 or 50). Abort job immediately if ANY condition fails:\n- `bit_manipulation >= 136` (no regression from V516 floor)\n- `equation_transform >= 57` (minimum +1 net gain vs V516/V518)\n- `weak_total >= 193`\n- `truncation_rate == 0`\n- Protected row `8740ed31` prediction == `01101000` (exact string match)\n- Reference gain row `518deb39` prediction == `$` (exact string match)\n- `eval_loss <= baseline_eval_loss` (sanity check; not promotional)\n- FinOps hard stop: walltime ≤60 minutes. No checkpoint-2 unless checkpoint-1 passes all above.\n\n**Silent Bug Checklist**\nRun these CPU checks before GPU launch:\n- [ ] **Offset-mask alignment:** Verify loss mask covers ONLY CoT + answer tokens. Prompt tokens must have weight 0. Spot-check 3 long bit rows and 3 short equation rows.\n- [ ] **`\\boxed` tokenization:** Confirm the backspace fix propagates to tokenized tensors. Decode a sample target sequence; must contain literal `\\boxed{` and `}` with no control characters.\n- [ ] **Prompt template parity:** Training system prompt and few-shot format must byte-match inference packaging. Mismatches cause silent distribution shift.\n- [ ] **Answer extraction regex:** Test on V523 val set. Must handle whitespace, newlines, and trailing punctuation. Fail if extraction rate <98%.\n- [ ] **Family mapping integrity:** Cross-check `prompt_sha256` routing against `bit_manipulation`/`equation_transform` tags. Zero cross-family contamination allowed.\n- [ ] **Duplicate/leakage scan:** SHA256 hash all V523 train prompts against weak/full gate prompts. Overlap must be exactly 0.\n- [ ] **Protected row regression guard:** Explicitly run `8740ed31` and `518deb39` through the untrained adapter and checkpoint-1. Log exact token probabilities at the flip position (bit index 3 for `8740ed31`).\n\n**Expected Gain / Risk**\n- **Hypothesis:** `example_mean` will reduce bit token dominance from 90.7% to ~65-70%, allowing equation gradient signal to register. Expected gain: +1 to +3 equation rows, bit stable at 136. Total weak: 193-195/315.\n- **Risk:** `example_mean` may overcorrect, causing gradient instability on long bit traces or slight bit regression (135/160). Mitigated by hard kill-switch and protected row guard. If equation loss drops but exact ACC stays flat, the model is learning format/boilerplate, not rule logic (requires V525 trace shortening).\n- **Diagnostic for low eval_loss / flat ACC:** Compute per-family eval loss and per-row logprob of the exact target answer. If bit loss drops >10% but equation loss is flat, token bias persists. If fragile rows show probability mass shifting to adjacent tokens (e.g., bit position 3 flips `0`→`1`), the decision boundary is destabilizing. Stop training; adjust family weights or trace length. Do not trust aggregate loss.\n\n**What Not To Do**\n- Do not train on weak/full gate labels or test prompts.\n- Do not run another broad SFT or preference job without a new CPU transfer signal.\n- Do not extend training past checkpoint-1 if kill-switch thresholds are not met.\n- Do not submit unless the 315-row weak gate shows measured gain with zero regression on protected rows and `trunc=0`.\n- Do not rely on hidden verifiers, postprocessors, or solver routing for submit-safe packaging.\n\n**One-Sentence Decision**\nRun a single ≤1-hour H200 smoke on V523 with `LOSS_NORMALIZATION_MODE=example_mean` and a hard checkpoint-1 kill-switch; abort and rebuild V525 with strict token-mass quotas if thresholds are not met.",
+    "raw_id": "gen-1778976739-E65X0vMkkVWLesqzhE4x",
+    "finish_reason": "stop"
+  },
+  {
+    "model": "deepseek/deepseek-v4-pro",
+    "started_at_utc": "2026-05-17T00:13:30.379887+00:00",
+    "ok": true,
+    "elapsed_s": 82.03,
+    "usage": {
+      "prompt_tokens": 13562,
+      "completion_tokens": 4936,
+      "total_tokens": 18498,
+      "cost": 0.01903264,
+      "is_byok": false,
+      "prompt_tokens_details": {
+        "cached_tokens": 13184,
+        "cache_write_tokens": 0,
+        "audio_tokens": 0,
+        "video_tokens": 0
+      },
+      "cost_details": {
+        "upstream_inference_cost": 0.01903264,
+        "upstream_inference_prompt_cost": 0.00234896,
+        "upstream_inference_completions_cost": 0.01668368
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 3001,
+        "image_tokens": 0,
+        "audio_tokens": 0
+      }
+    },
+    "response": "Verdict\nThe V523/V524 plan is technically correct in its diagnosis but incomplete for a paid GPU run. The token-level loss dominance by bit traces (90.7% of loss tokens vs. 74.2% reference gain share) is a real blocker. `example_mean` is a necessary but insufficient fix—it equalizes per-example weight but does not rebalance the signal content (long bit traces may still dominate gradient updates through token count within each example). A V525 dataset rebuild with shorter bit traces and higher equation token mass is required before any GPU smoke. The current V523 dataset is not safe for H200 even with `example_mean` because the token-mass imbalance will still bias early checkpoint learning toward bit patterns at the expense of equation signal.\n\nRanked Next Actions\n1. **Build V525 dataset with token-mass quotas** (highest priority, CPU-only). This directly addresses the V524 warning and is the only path that can produce a submit-safe gain without risking another backfire. Must be completed and pass V286/V513/V524 before any GPU.\n2. **Implement and validate `example_mean` loss normalization** (already coded, needs dry-run validation with V525). This is the correct objective correction for the remaining row-count imbalance after token-mass is rebalanced.\n3. **Run V525 + `example_mean` on H200 with strict kill-switch** (only after V525 passes all CPU gates). This is the first GPU action.\n4. **If V525 fails kill-switch, build V526 with family-balanced loss weights** (hypothesis: explicit per-family loss weights may be needed if `example_mean` alone does not sufficiently boost equation gradient signal). This is a fallback, not the primary plan.\n5. **Investigate shorter bit trace formats** (hypothesis: bit traces can be compressed to essential operations only, reducing token count by 50-70% while preserving rule coverage). This is a medium-term optimization, not for immediate smoke.\n\nExact V525/V526 Configuration\n**V525 dataset quotas (derived from V522 no-loss gain distribution and V524 token dominance):**\n- Train rows: 800-1000 total\n  - bit_manipulation: 400-500 rows (50-62.5% row share, down from 68.8%)\n  - equation_transform: 400-500 rows (37.5-50% row share, up from 31.1%)\n- Target token-mass ratio: bit ≤ 70% of total loss tokens (down from 90.7%)\n- Bit trace construction:\n  - CHO/MAJ3 traces: limit to ≤ 200 tokens per example (current V523 bit traces average ~467 tokens)\n  - PAR3 traces: limit to ≤ 150 tokens\n  - Remove verbose CoT explanations; keep only operational steps\n- Equation trace construction:\n  - Maintain current format (short rule reject boxed, ~106 tokens avg)\n  - Include all 4 V516 label-free equation classes equally\n- Validation: 200-250 rows with same family ratio as train\n- Source: v304_solver_trace_distill only, filtered to V522 no-loss gain rule families\n- Hard constraint: zero overlap with weak/full prompts, protected row 8740ed31 must be in validation\n\n**V526 fallback (if V525 kill-switch triggers):**\n- Same row quotas as V525\n- Add `LOSS_FAMILY_WEIGHTS` env var: `{\"bit_manipulation\": 0.4, \"equation_transform\": 0.6}`\n- Implement as multiplicative weight on per-example loss before averaging\n\nKill-Switch / Gates\n**Pre-GPU gates (must all pass before H200 launch):**\n- V286 tokenization gate: max tokens ≤ 749, truncation = 0, offset masks present for all rows\n- V513 trace learnability gate: 0 blockers, 0 warnings\n- V524 quota/token objective audit: bit token share ≤ 0.70, equation token mass ≥ 30% of total\n- V521 transfer blocker audit: no weak/full overlap, protected row 8740ed31 in validation\n- Static gate: no gate_rows_used_for_training=true, no blocked dataset markers\n\n**GPU kill-switch (abort at first checkpoint if ANY condition fails):**\n- Checkpoint evaluation at step 50 (or earliest save step):\n  - bit_manipulation ≥ 136 (no regression from V516 baseline)\n  - equation_transform ≥ 57 (minimum +1 gain over V516's 56)\n  - weak total ≥ 193 (minimum +1 gain over V516's 191)\n  - Protected row 8740ed31 prediction = `01101000` (no backfire)\n  - Truncation = 0\n- If any condition fails: immediate abort, no further checkpoints, no upload\n- Additional abort conditions:\n  - eval_loss > 3.30 (should not increase significantly from V518's 3.2720)\n  - GPU memory reservation > 80% of available\n\nSilent Bug Checklist\n**Before any GPU, verify:**\n1. **Offset mask correctness**: Confirm offset_mask=1 for all label tokens and 0 for all prompt tokens. Test on 10 random examples with manual token alignment.\n2. **Prompt template consistency**: Verify V525 uses identical prompt template as V516 baseline (no extra spaces, newlines, or system prompts). Compare tokenized prompt lengths for same raw prompts.\n3. **Answer extraction**: Confirm `\\boxed{...}` extraction regex matches exactly between training data construction and weak gate evaluation. Test on protected row 8740ed31.\n4. **Family mapping**: Verify bit_manipulation/equation_transform family labels are assigned correctly in V525. Cross-reference 10 random examples against source dataset family tags.\n5. **Tokenization determinism**: Run tokenization twice with same seed, confirm identical input_ids. Test with `use_fast=True` vs `use_fast=False`.\n6. **Duplicate leakage**: Check for exact prompt hash collisions between V525 train and weak/full gate prompts. Also check for near-duplicates (edit distance < 10 chars).\n7. **Protected row regression**: Run V516 baseline adapter on V525 validation set, confirm 8740ed31 is correct. If not, V525 validation construction is flawed.\n8. **`example_mean` implementation**: Verify loss normalization divides by per-example active label token count, not total tokens. Test with a batch of 2 examples with different label lengths—loss should be equal if both are 100% correct.\n9. **Gradient accumulation with `example_mean`**: Confirm loss is averaged over examples within each micro-batch, then gradients are accumulated correctly across micro-batches. Test with batch_size=4, micro_batch_size=2.\n10. **Checkpoint evaluation consistency**: Run weak gate evaluation twice on same checkpoint, confirm identical scores (no sampling or non-determinism).\n\nExpected Gain / Risk\n**Expected gain (if V525 + example_mean works):**\n- equation_transform: +2-4 rows (to 58-60/155), based on V522 teacher showing 8 equation gains from these rule families\n- bit_manipulation: 0 to +2 rows (to 136-138/160), preserving baseline while potentially gaining from CHO/MAJ3 traces\n- weak total: 193-196/315\n- Probability of success: 40-50% (first targeted dataset with token-mass rebalancing; previous failures were with un-balanced objectives)\n\n**Risk:**\n- High: Another backfire on protected row 8740ed31 (mitigated by kill-switch)\n- Medium: equation_transform stays at 56 despite objective fix (signal may still be too weak for LoRA rank 32)\n- Low: bit_manipulation drops below 136 (mitigated by kill-switch and bit trace preservation)\n- Low: New silent bug in `example_mean` causes training instability (mitigated by pre-GPU dry-run)\n\nWhat Not To Do\n- Do NOT run V523 on H200 even with `example_mean`—the token-mass imbalance is fatal\n- Do NOT train another broad SFT without CPU gate signal (V518 already proved this fails)\n- Do NOT use V515/V510/V475 datasets as-is (already tested and failed)\n- Do NOT implement family-balanced loss weights before trying `example_mean` with rebalanced token mass (over-engineering before simpler fix is tested)\n- Do NOT submit to Kaggle without weak/full gate showing measured gain with zero regression\n- Do NOT extend training beyond first checkpoint if kill-switch triggers (FinOps rules)\n- Do NOT add more bit traces to \"preserve\" bit—the current bit score is stable; the risk is drowning equation, not losing bit\n\nOne-Sentence Decision\nBuild V525 with bit token-mass ≤ 70% and equation rows ≥ 400, validate through all CPU gates, then run a 1-hour H200 smoke with `example_mean` loss and abort at first checkpoint unless equation ≥ 57, bit ≥ 136, and protected row 8740ed31 is preserved.",
+    "raw_id": "gen-1778976876-BWW3lyBQDyyBJS1UDORY",
+    "finish_reason": "stop"
+  }
+]

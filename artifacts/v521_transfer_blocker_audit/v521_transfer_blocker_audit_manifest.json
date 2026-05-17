@@ -1,0 +1,88 @@
+{
+  "backfire_rows": [
+    {
+      "answer": "$",
+      "baseline": "{",
+      "candidate": "$",
+      "delta": "",
+      "delta_correct": "1",
+      "family": "equation_transform",
+      "id": "518deb39"
+    },
+    {
+      "answer": "^&/",
+      "baseline": "\"$ $]\"",
+      "candidate": "\"$$]\"",
+      "delta": "",
+      "delta_correct": "0",
+      "family": "equation_transform",
+      "id": "b06625c4"
+    },
+    {
+      "answer": "]$!",
+      "baseline": "$){",
+      "candidate": "$){}",
+      "delta": "",
+      "delta_correct": "0",
+      "family": "equation_transform",
+      "id": "b0206bb7"
+    },
+    {
+      "answer": "01101000",
+      "baseline": "01101000",
+      "candidate": "01111000",
+      "delta": "",
+      "delta_correct": "-1",
+      "family": "bit_manipulation",
+      "id": "8740ed31"
+    },
+    {
+      "answer": "/\"",
+      "baseline": "`@>``",
+      "candidate": "`*``",
+      "delta": "",
+      "delta_correct": "0",
+      "family": "equation_transform",
+      "id": "844f826c"
+    },
+    {
+      "answer": "-!#",
+      "baseline": "\"{!\"",
+      "candidate": "\"{!",
+      "delta": "",
+      "delta_correct": "0",
+      "family": "equation_transform",
+      "id": "5bcb572e"
+    }
+  ],
+  "blockers": [
+    "v390_equation_no_loss_distill:blocks direct GPU: equation-only dataset has no bit guardrail rows",
+    "v475_equation_bit_replay_mix:already tested: V495/V496 gained equation but lost bit and truncation",
+    "v510_canonical_active_training_pool:blocks as-is: bit trace ratio below 80 percent|already tested: V511/V513 showed no transferable bit trace signal as built",
+    "v515_v514_fullbyte_residual:already tested: V517/V518 lower loss still lost protected bit row|risk: unweighted bit share below 25 percent"
+  ],
+  "decision": {
+    "gpu_allowed": false,
+    "next_action": "Build V522 CPU source-target alignment/learnability audit: mine only train/public solver traces, prove new coverage over the protected bit backfire class and at least one equation rule class, then permit GPU only if the no-GPU gate predicts a real label-free gain with bit>=136, trunc=0, and 8740ed31 preserved.",
+    "reason": "V518 showed loss/ACC divergence and V520 found zero submit-safe adapter candidates above baseline. The active datasets are either already failed as-is or have insufficient new bit transfer signal.",
+    "status": "blocked_until_new_cpu_transfer_signal"
+  },
+  "generated_at_utc": "2026-05-16T23:44:12.820629+00:00",
+  "outputs": {
+    "manifest_json": "artifacts\\v521_transfer_blocker_audit\\v521_transfer_blocker_audit_manifest.json",
+    "report_md": "artifacts\\v521_transfer_blocker_audit\\KG1_V521_TRANSFER_BLOCKER_AUDIT.md",
+    "summary_csv": "artifacts\\v521_transfer_blocker_audit\\v521_transfer_blocker_dataset_summary.csv"
+  },
+  "schema_version": "kg1_v521_transfer_blocker_audit_v1",
+  "v520_summary": {
+    "baseline_label_free": {
+      "bit_manipulation": 136,
+      "equation_transform": 55,
+      "total": 191,
+      "truncated": 0
+    },
+    "decision": "No existing local adapter-only CSV beats the V516 label-free baseline without backfire. High-scoring CSVs are solver/postprocessor references only.",
+    "submit_safe_adapter_candidates_above_baseline": 0
+  },
+  "version": "V521"
+}

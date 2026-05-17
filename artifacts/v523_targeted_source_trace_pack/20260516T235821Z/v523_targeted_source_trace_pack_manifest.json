@@ -1,0 +1,110 @@
+{
+  "blockers": [],
+  "decision": {
+    "dataset_ready_for_gates": true,
+    "gpu_allowed": false,
+    "next_action": "Run V286 boxed_suffix tokenization gate and V513 trace learnability gate; do not run GPU from V523 until both pass.",
+    "reason": "V523 is source-only and targeted to V522 no-loss rule families. It still requires V286 tokenization, V513 learnability, V521 transfer blocker, and pre-paid gates before GPU.",
+    "status": "dataset_ready_for_cpu_gates"
+  },
+  "generated_at_utc": "2026-05-16T23:58:21.829448+00:00",
+  "inputs": {
+    "v304_train_jsonl": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v304_solver_trace_distill_dataset\\20260512T1430Z\\v304_solver_trace_distill_train.jsonl",
+    "v304_train_sha256": "7935ff999cdd8318de67538922de3651170c59baa2664a10beac3334dfcf9082",
+    "v304_val_jsonl": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v304_solver_trace_distill_dataset\\20260512T1430Z\\v304_solver_trace_distill_val.jsonl",
+    "v304_val_sha256": "2b06224afe035c5085798f4a4be27e764ffaebde3ff7eee11c558c0cd5bdd29d",
+    "v390_train_jsonl": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v390_v325_equation_no_loss_distill_dataset\\20260514T193847Z\\v390_v325_equation_no_loss_distill_sft_train.jsonl",
+    "v390_train_sha256": "d78704157cd6ea55f6340dd5218f45c372dbe72ba227e9fd1e5851430d670793",
+    "v390_val_jsonl": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v390_v325_equation_no_loss_distill_dataset\\20260514T193847Z\\v390_v325_equation_no_loss_distill_sft_val.jsonl",
+    "v390_val_sha256": "bdca7d2b7787e87eb1645ed6cb5b1e8687f1445fa76d58510b768de8eae1b5fa",
+    "v522_manifest_json": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v522_source_target_alignment_audit\\v522_source_target_alignment_manifest.json"
+  },
+  "outputs": {
+    "comparison_md": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v523_targeted_source_trace_pack\\20260516T235821Z\\V523_VS_V515.md",
+    "manifest_json": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v523_targeted_source_trace_pack\\20260516T235821Z\\v523_targeted_source_trace_pack_manifest.json",
+    "train_jsonl": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v523_targeted_source_trace_pack\\20260516T235821Z\\v523_targeted_source_trace_pack_train.jsonl",
+    "train_sha256": "4a83d329bd6932fd33ce43d149816c9cddffd0de46e482b13a1447ec5278789e",
+    "val_jsonl": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v523_targeted_source_trace_pack\\20260516T235821Z\\v523_targeted_source_trace_pack_val.jsonl",
+    "val_sha256": "11a50fb71a028c1bef6053f2d0134ff94906ce0e867ff224429a18268725696a"
+  },
+  "schema_version": "kg1_v523_targeted_source_trace_pack_v1",
+  "train_bucket_counts": {
+    "bit_cho_trace": 260,
+    "bit_fullbyte_ternary_other": 0,
+    "bit_maj3_trace": 260,
+    "bit_par3_trace": 90,
+    "bit_v300_gain_pattern_other": 96,
+    "equation_numeric_add_direct": 80,
+    "equation_numeric_colon_absdiff": 80,
+    "equation_numeric_colon_trailing_zero": 80,
+    "equation_numeric_minus_signed": 80
+  },
+  "train_summary": {
+    "bucket_counts": {
+      "bit_cho_trace": 260,
+      "bit_maj3_trace": 260,
+      "bit_par3_trace": 90,
+      "bit_v300_gain_pattern_other": 96,
+      "equation_numeric_add_direct": 80,
+      "equation_numeric_colon_absdiff": 80,
+      "equation_numeric_colon_trailing_zero": 80,
+      "equation_numeric_minus_signed": 80
+    },
+    "duplicate_prompt_answer": 0,
+    "family_counts": {
+      "bit_manipulation": 706,
+      "equation_transform": 320
+    },
+    "reference_prompt_overlap": 0,
+    "rows": 1026,
+    "training_flag_counts": {}
+  },
+  "v522_signal": {
+    "gain_family_counts": {
+      "bit_manipulation": 23,
+      "equation_transform": 8
+    },
+    "gain_rule_counts": {
+      "bit_manipulation:bit_exact_global_binary_OR": 1,
+      "bit_manipulation:bit_exact_global_binary_XOR": 1,
+      "bit_manipulation:bit_exact_global_ternary_unique_prediction": 13,
+      "bit_manipulation:bit_fullbyte_ternary_op_CHO": 4,
+      "bit_manipulation:bit_fullbyte_ternary_op_MAJ3": 4,
+      "equation_transform:equation_reference_gain_untyped": 8
+    },
+    "gain_total": 31,
+    "loss_total": 0
+  },
+  "validation_bucket_counts": {
+    "bit_cho_trace": 54,
+    "bit_fullbyte_ternary_other": 0,
+    "bit_maj3_trace": 60,
+    "bit_par3_trace": 17,
+    "bit_v300_gain_pattern_other": 8,
+    "equation_numeric_add_direct": 20,
+    "equation_numeric_colon_absdiff": 20,
+    "equation_numeric_colon_trailing_zero": 20,
+    "equation_numeric_minus_signed": 20
+  },
+  "validation_summary": {
+    "bucket_counts": {
+      "bit_cho_trace": 54,
+      "bit_maj3_trace": 60,
+      "bit_par3_trace": 17,
+      "bit_v300_gain_pattern_other": 8,
+      "equation_numeric_add_direct": 20,
+      "equation_numeric_colon_absdiff": 20,
+      "equation_numeric_colon_trailing_zero": 20,
+      "equation_numeric_minus_signed": 20
+    },
+    "duplicate_prompt_answer": 0,
+    "family_counts": {
+      "bit_manipulation": 139,
+      "equation_transform": 80
+    },
+    "reference_prompt_overlap": 0,
+    "rows": 219,
+    "training_flag_counts": {}
+  },
+  "version": "V523"
+}

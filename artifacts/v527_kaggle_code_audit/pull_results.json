@@ -1,0 +1,1202 @@
+[
+  {
+    "ref": "ryanholbrook/nvidia-nemotron-submission-demo",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.36,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\ryanholbrook__nvidia-nemotron-submission-demo",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\ryanholbrook__nvidia-nemotron-submission-demo\r\n"
+  },
+  {
+    "ref": "dennisfong/nvidia-nemotron-sfttrainer-training",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.42,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\dennisfong__nvidia-nemotron-sfttrainer-training",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\dennisfong__nvidia-nemotron-sfttrainer-training\r\n"
+  },
+  {
+    "ref": "kienngx/nvidia-nemotron-training-cot-labels",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.62,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\kienngx__nvidia-nemotron-training-cot-labels",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\kienngx__nvidia-nemotron-training-cot-labels\r\n"
+  },
+  {
+    "ref": "kienngx/nvidia-nemotron-trained-models-submission",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.66,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\kienngx__nvidia-nemotron-trained-models-submission",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\kienngx__nvidia-nemotron-trained-models-submission\r\n"
+  },
+  {
+    "ref": "asalhi/tinker-adapter-to-ready-to-submit-adapter",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.43,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\asalhi__tinker-adapter-to-ready-to-submit-adapter",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\asalhi__tinker-adapter-to-ready-to-submit-adapter\r\n"
+  },
+  {
+    "ref": "konbu17/nemotron-sft-lora-with-cot",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.45,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\konbu17__nemotron-sft-lora-with-cot",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\konbu17__nemotron-sft-lora-with-cot\r\n"
+  },
+  {
+    "ref": "huikang/tinker-submission-notebook",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.32,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\huikang__tinker-submission-notebook",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\huikang__tinker-submission-notebook\r\n"
+  },
+  {
+    "ref": "dgxchen/training-with-unsloth-to-achieve-0-85-lb",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.42,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\dgxchen__training-with-unsloth-to-achieve-0-85-lb",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\dgxchen__training-with-unsloth-to-achieve-0-85-lb\r\n"
+  },
+  {
+    "ref": "huikang/end-to-end-finetuning-for-lb-0-85",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.35,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\huikang__end-to-end-finetuning-for-lb-0-85",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\huikang__end-to-end-finetuning-for-lb-0-85\r\n"
+  },
+  {
+    "ref": "huikang/adapter-validation-notebook",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.52,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\huikang__adapter-validation-notebook",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\huikang__adapter-validation-notebook\r\n"
+  },
+  {
+    "ref": "kienngx/nvidia-nemotron-training-copy-run-instantly",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.75,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\kienngx__nvidia-nemotron-training-copy-run-instantly",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\kienngx__nvidia-nemotron-training-copy-run-instantly\r\n"
+  },
+  {
+    "ref": "johnnyhyland/nvidia-nemotron-training",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.45,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\johnnyhyland__nvidia-nemotron-training",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\johnnyhyland__nvidia-nemotron-training\r\n"
+  },
+  {
+    "ref": "mayukh18/unsloth-sft-full-data-training",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.39,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\mayukh18__unsloth-sft-full-data-training",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\mayukh18__unsloth-sft-full-data-training\r\n"
+  },
+  {
+    "ref": "llkh0a/nemotron-unsloth-sft-training-3-30-2",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.65,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\llkh0a__nemotron-unsloth-sft-training-3-30-2",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\llkh0a__nemotron-unsloth-sft-training-3-30-2\r\n"
+  },
+  {
+    "ref": "amanatar/nvidia-nemotron-sfttrainer-training",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.41,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\amanatar__nvidia-nemotron-sfttrainer-training",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\amanatar__nvidia-nemotron-sfttrainer-training\r\n"
+  },
+  {
+    "ref": "johnnyhyland/nvidia-nemotron-sft-grpo-colab-faster",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.69,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\johnnyhyland__nvidia-nemotron-sft-grpo-colab-faster",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\johnnyhyland__nvidia-nemotron-sft-grpo-colab-faster\r\n"
+  },
+  {
+    "ref": "jek1wantaufik/nvidia-nemotron-model-reasoning-challenge",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.68,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\jek1wantaufik__nvidia-nemotron-model-reasoning-challenge",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\jek1wantaufik__nvidia-nemotron-model-reasoning-challenge\r\n"
+  },
+  {
+    "ref": "michaelkong537/tinker-adapter-solved-some-internet-issues",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.76,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\michaelkong537__tinker-adapter-solved-some-internet-issues",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\michaelkong537__tinker-adapter-solved-some-internet-issues\r\n"
+  },
+  {
+    "ref": "kienngx/nemotron-sft-reasoning-trajectories-dataset",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.43,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\kienngx__nemotron-sft-reasoning-trajectories-dataset",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\kienngx__nemotron-sft-reasoning-trajectories-dataset\r\n"
+  },
+  {
+    "ref": "newduck/nvidia-nemotron-soft-balanced-sampling-sft",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.36,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\newduck__nvidia-nemotron-soft-balanced-sampling-sft",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\newduck__nvidia-nemotron-soft-balanced-sampling-sft\r\n"
+  },
+  {
+    "ref": "hiroshige1/start",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.41,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\hiroshige1__start",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\hiroshige1__start\r\n"
+  },
+  {
+    "ref": "mirzayasirabdullah07/nvidia-nemotron-model-notebook",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.31,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\mirzayasirabdullah07__nvidia-nemotron-model-notebook",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\mirzayasirabdullah07__nvidia-nemotron-model-notebook\r\n"
+  },
+  {
+    "ref": "konbu17/nemotron-tong-style-cot-sft-updated-v2",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.47,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\konbu17__nemotron-tong-style-cot-sft-updated-v2",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\konbu17__nemotron-tong-style-cot-sft-updated-v2\r\n"
+  },
+  {
+    "ref": "rohanrk1813/nvidia-comp",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.9,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\rohanrk1813__nvidia-comp",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\rohanrk1813__nvidia-comp\r\n"
+  },
+  {
+    "ref": "comistrymo/nvidia-nemotron-training-cot-labels",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.66,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\comistrymo__nvidia-nemotron-training-cot-labels",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\comistrymo__nvidia-nemotron-training-cot-labels\r\n"
+  },
+  {
+    "ref": "konstantinboyko/01-04-training-with-unsloth-batch-2-epoch-2",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.33,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\konstantinboyko__01-04-training-with-unsloth-batch-2-epoch-2",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\konstantinboyko__01-04-training-with-unsloth-batch-2-epoch-2\r\n"
+  },
+  {
+    "ref": "sarcasmos/nvidia-nemotron-model-reasoning-challenge",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.55,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\sarcasmos__nvidia-nemotron-model-reasoning-challenge",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\sarcasmos__nvidia-nemotron-model-reasoning-challenge\r\n"
+  },
+  {
+    "ref": "kalyankkr/all-6-puzzle-types-decoded-sft-training-data",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.32,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\kalyankkr__all-6-puzzle-types-decoded-sft-training-data",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\kalyankkr__all-6-puzzle-types-decoded-sft-training-data\r\n"
+  },
+  {
+    "ref": "amanatar/nemotron-ultimate-sft-grpo-v3",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.43,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\amanatar__nemotron-ultimate-sft-grpo-v3",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\amanatar__nemotron-ultimate-sft-grpo-v3\r\n"
+  },
+  {
+    "ref": "mohankrishnathalla/nemotron-6-puzzle-types-decoded-rule-solvers",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.43,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\mohankrishnathalla__nemotron-6-puzzle-types-decoded-rule-solvers",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\mohankrishnathalla__nemotron-6-puzzle-types-decoded-rule-solvers\r\n"
+  },
+  {
+    "ref": "amanatar/nemotron-3-nano-blackwell-optimized-reasoning",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.75,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\amanatar__nemotron-3-nano-blackwell-optimized-reasoning",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\amanatar__nemotron-3-nano-blackwell-optimized-reasoning\r\n"
+  },
+  {
+    "ref": "emanuellcs/nvidia-nemotron-sft",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.52,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\emanuellcs__nvidia-nemotron-sft",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\emanuellcs__nvidia-nemotron-sft\r\n"
+  },
+  {
+    "ref": "hammadfarooq470/think-twice-self-correcting-reasoning",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.34,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\hammadfarooq470__think-twice-self-correcting-reasoning",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\hammadfarooq470__think-twice-self-correcting-reasoning\r\n"
+  },
+  {
+    "ref": "hlly34/nemotron-baseline-evaluation",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.32,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\hlly34__nemotron-baseline-evaluation",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\hlly34__nemotron-baseline-evaluation\r\n"
+  },
+  {
+    "ref": "jiazhuang/nemotron-mainstream-llm-performance-comparison",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.71,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\jiazhuang__nemotron-mainstream-llm-performance-comparison",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\jiazhuang__nemotron-mainstream-llm-performance-comparison\r\n"
+  },
+  {
+    "ref": "hastws/sfttrainer-training",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.46,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\hastws__sfttrainer-training",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\hastws__sfttrainer-training\r\n"
+  },
+  {
+    "ref": "torpidoff/full-pipeline-nvidia-nemotron-3-reasoning",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.33,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\torpidoff__full-pipeline-nvidia-nemotron-3-reasoning",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\torpidoff__full-pipeline-nvidia-nemotron-3-reasoning\r\n"
+  },
+  {
+    "ref": "rauffauzanrambe/lora-adapter-fusion-and-rank-compression-pipeline",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.37,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\rauffauzanrambe__lora-adapter-fusion-and-rank-compression-pipeline",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\rauffauzanrambe__lora-adapter-fusion-and-rank-compression-pipeline\r\n"
+  },
+  {
+    "ref": "alexxxsem/nemotron-simple-offline-working-demo",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.37,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\alexxxsem__nemotron-simple-offline-working-demo",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\alexxxsem__nemotron-simple-offline-working-demo\r\n"
+  },
+  {
+    "ref": "matthewblakeward/glyphmatics-d4c-cipher-98substitution",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.37,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\matthewblakeward__glyphmatics-d4c-cipher-98substitution",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\matthewblakeward__glyphmatics-d4c-cipher-98substitution\r\n"
+  },
+  {
+    "ref": "rn8205/adapter-validation-notebook",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.6,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\rn8205__adapter-validation-notebook",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\rn8205__adapter-validation-notebook\r\n"
+  },
+  {
+    "ref": "esaaak/nemotron-3-nano-30b-starter-lora-fine-tuning",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.34,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\esaaak__nemotron-3-nano-30b-starter-lora-fine-tuning",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\esaaak__nemotron-3-nano-30b-starter-lora-fine-tuning\r\n"
+  },
+  {
+    "ref": "ulyanovantonamaranta/nemotron-tinker-adapter-repro",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.24,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\ulyanovantonamaranta__nemotron-tinker-adapter-repro",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\ulyanovantonamaranta__nemotron-tinker-adapter-repro\r\n"
+  },
+  {
+    "ref": "teasue05/tinker-submission-notebook",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.32,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\teasue05__tinker-submission-notebook",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\teasue05__tinker-submission-notebook\r\n"
+  },
+  {
+    "ref": "konbu17/bit-manipulation-solver-cot-generator",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.37,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\konbu17__bit-manipulation-solver-cot-generator",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\konbu17__bit-manipulation-solver-cot-generator\r\n"
+  },
+  {
+    "ref": "waterjoe/nvidia-nemotron-mask-loss",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.42,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\waterjoe__nvidia-nemotron-mask-loss",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\waterjoe__nvidia-nemotron-mask-loss\r\n"
+  },
+  {
+    "ref": "impooping/generate-cots-labels",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.4,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\impooping__generate-cots-labels",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\impooping__generate-cots-labels\r\n"
+  },
+  {
+    "ref": "edyvision/nvidia-nemotron-submission-demo-w-blackwell-patch",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.35,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\edyvision__nvidia-nemotron-submission-demo-w-blackwell-patch",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\edyvision__nvidia-nemotron-submission-demo-w-blackwell-patch\r\n"
+  },
+  {
+    "ref": "jek1wantaufik/nvidia-nemotron-model-reasoning-0-68",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.42,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\jek1wantaufik__nvidia-nemotron-model-reasoning-0-68",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\jek1wantaufik__nvidia-nemotron-model-reasoning-0-68\r\n"
+  },
+  {
+    "ref": "occultainsights/synthetic-data-generation",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.42,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\occultainsights__synthetic-data-generation",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\occultainsights__synthetic-data-generation\r\n"
+  },
+  {
+    "ref": "kimberleyduran/solver-verified-cryptarithm-cot-v2-dataset",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.45,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\kimberleyduran__solver-verified-cryptarithm-cot-v2-dataset",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\kimberleyduran__solver-verified-cryptarithm-cot-v2-dataset\r\n"
+  },
+  {
+    "ref": "pearpn25/bit-cot-85-1364-sample",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.44,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\pearpn25__bit-cot-85-1364-sample",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\pearpn25__bit-cot-85-1364-sample\r\n"
+  },
+  {
+    "ref": "mpwolke/alice-in-nvidia-wonderland",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.5,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\mpwolke__alice-in-nvidia-wonderland",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\mpwolke__alice-in-nvidia-wonderland\r\n"
+  },
+  {
+    "ref": "sakhawathossen/nemotron-reasoning-boost-hf-qlora-trainer",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.35,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\sakhawathossen__nemotron-reasoning-boost-hf-qlora-trainer",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\sakhawathossen__nemotron-reasoning-boost-hf-qlora-trainer\r\n"
+  },
+  {
+    "ref": "suryamilenial/end-to-end-finetuning-for-lb-0-83-6e2fa5",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.32,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\suryamilenial__end-to-end-finetuning-for-lb-0-83-6e2fa5",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\suryamilenial__end-to-end-finetuning-for-lb-0-83-6e2fa5\r\n"
+  },
+  {
+    "ref": "konbu17/doc-to-lora-knowledge-injection-nemotron-3-nano",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.48,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\konbu17__doc-to-lora-knowledge-injection-nemotron-3-nano",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\konbu17__doc-to-lora-knowledge-injection-nemotron-3-nano\r\n"
+  },
+  {
+    "ref": "adilshamim8/nvidia-nemotron-model-reasoning-challenge-101",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.59,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\adilshamim8__nvidia-nemotron-model-reasoning-challenge-101",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\adilshamim8__nvidia-nemotron-model-reasoning-challenge-101\r\n"
+  },
+  {
+    "ref": "sanjaysuthraye96/exploratory-data-analysis-nvidia-nemotron",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.54,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\sanjaysuthraye96__exploratory-data-analysis-nvidia-nemotron",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\sanjaysuthraye96__exploratory-data-analysis-nvidia-nemotron\r\n"
+  },
+  {
+    "ref": "markjcooper/thk-public-fork-2026-05-14-v14-tinker-adapter",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.8,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\markjcooper__thk-public-fork-2026-05-14-v14-tinker-adapter",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\markjcooper__thk-public-fork-2026-05-14-v14-tinker-adapter\r\n"
+  },
+  {
+    "ref": "pauldumontunc/lora-training",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.6,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\pauldumontunc__lora-training",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\pauldumontunc__lora-training\r\n"
+  },
+  {
+    "ref": "mah20050/nvidia-nemotron-the-wonderland-nsa",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.94,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\mah20050__nvidia-nemotron-the-wonderland-nsa",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\mah20050__nvidia-nemotron-the-wonderland-nsa\r\n"
+  },
+  {
+    "ref": "citerne/from-local-dev-rtx-6000-kaggle-cli-guide",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.3,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\citerne__from-local-dev-rtx-6000-kaggle-cli-guide",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\citerne__from-local-dev-rtx-6000-kaggle-cli-guide\r\n"
+  },
+  {
+    "ref": "rauffauzanrambe/lora-nvidia-nemotron-models-with-pytorch",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.65,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\rauffauzanrambe__lora-nvidia-nemotron-models-with-pytorch",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\rauffauzanrambe__lora-nvidia-nemotron-models-with-pytorch\r\n"
+  },
+  {
+    "ref": "warmtea/lb-training",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.35,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\warmtea__lb-training",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\warmtea__lb-training\r\n"
+  },
+  {
+    "ref": "kodatirevanth/7-prompts-tested-which-one-wins",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.41,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\kodatirevanth__7-prompts-tested-which-one-wins",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\kodatirevanth__7-prompts-tested-which-one-wins\r\n"
+  },
+  {
+    "ref": "kacchanwriting/nemotron-baseline-v2",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.51,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\kacchanwriting__nemotron-baseline-v2",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\kacchanwriting__nemotron-baseline-v2\r\n"
+  },
+  {
+    "ref": "tahaalam2009/end-to-end-finetuning-for-lb-0-82-csv-custom",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.47,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\tahaalam2009__end-to-end-finetuning-for-lb-0-82-csv-custom",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\tahaalam2009__end-to-end-finetuning-for-lb-0-82-csv-custom\r\n"
+  },
+  {
+    "ref": "jiazhuang/nemotron-distillation-from-llm",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.32,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\jiazhuang__nemotron-distillation-from-llm",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\jiazhuang__nemotron-distillation-from-llm\r\n"
+  },
+  {
+    "ref": "optiminist/equation-eda-operator-operation-84-solve-rate",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.42,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\optiminist__equation-eda-operator-operation-84-solve-rate",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\optiminist__equation-eda-operator-operation-84-solve-rate\r\n"
+  },
+  {
+    "ref": "konbu17/cot-generation-for-nemotron-challenge",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.43,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\konbu17__cot-generation-for-nemotron-challenge",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\konbu17__cot-generation-for-nemotron-challenge\r\n"
+  },
+  {
+    "ref": "evgendvorkin/nemotron-3-nano-lora-adapter-submission",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.36,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\evgendvorkin__nemotron-3-nano-lora-adapter-submission",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\evgendvorkin__nemotron-3-nano-lora-adapter-submission\r\n"
+  },
+  {
+    "ref": "johnjanson/agi-for-medal-0-87-is-possible",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.31,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\johnjanson__agi-for-medal-0-87-is-possible",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\johnjanson__agi-for-medal-0-87-is-possible\r\n"
+  },
+  {
+    "ref": "storm2501/nvidia-nemotron-two",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.51,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\storm2501__nvidia-nemotron-two",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\storm2501__nvidia-nemotron-two\r\n"
+  },
+  {
+    "ref": "rauffauzanrambe/nvidia-next-gen-reasoning-ai-for-deep-learning",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.42,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\rauffauzanrambe__nvidia-next-gen-reasoning-ai-for-deep-learning",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\rauffauzanrambe__nvidia-next-gen-reasoning-ai-for-deep-learning\r\n"
+  },
+  {
+    "ref": "hoangvux/nvidia-nemotron-synthetic-data",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.47,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\hoangvux__nvidia-nemotron-synthetic-data",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\hoangvux__nvidia-nemotron-synthetic-data\r\n"
+  },
+  {
+    "ref": "huikang/nvidia-nemotron-all-linear",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.56,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\huikang__nvidia-nemotron-all-linear",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\huikang__nvidia-nemotron-all-linear\r\n"
+  },
+  {
+    "ref": "rauffauzanrambe/lora-autonomous-cot-engine",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.73,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\rauffauzanrambe__lora-autonomous-cot-engine",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\rauffauzanrambe__lora-autonomous-cot-engine\r\n"
+  },
+  {
+    "ref": "mohamedamr992/easy-loading-of-nemotron-3",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.54,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\mohamedamr992__easy-loading-of-nemotron-3",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\mohamedamr992__easy-loading-of-nemotron-3\r\n"
+  },
+  {
+    "ref": "krupalpatel07/advanced-nemotron-model-2",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.41,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\krupalpatel07__advanced-nemotron-model-2",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\krupalpatel07__advanced-nemotron-model-2\r\n"
+  },
+  {
+    "ref": "krupalpatel07/nemotron-model-1",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.43,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\krupalpatel07__nemotron-model-1",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\krupalpatel07__nemotron-model-1\r\n"
+  },
+  {
+    "ref": "nadiakhalid/nvidia-nemotron-model-reasoning",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.31,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\nadiakhalid__nvidia-nemotron-model-reasoning",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\nadiakhalid__nvidia-nemotron-model-reasoning\r\n"
+  },
+  {
+    "ref": "hammadfarooq470/geometry-of-intelligence-svd-lora-art-compression",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.4,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\hammadfarooq470__geometry-of-intelligence-svd-lora-art-compression",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\hammadfarooq470__geometry-of-intelligence-svd-lora-art-compression\r\n"
+  },
+  {
+    "ref": "eslamelokpy/tinker-adapter",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.42,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\eslamelokpy__tinker-adapter",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\eslamelokpy__tinker-adapter\r\n"
+  },
+  {
+    "ref": "zzys0316/full-pipeline-nvidia-nemotron-3-reasoning",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.6,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\zzys0316__full-pipeline-nvidia-nemotron-3-reasoning",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\zzys0316__full-pipeline-nvidia-nemotron-3-reasoning\r\n"
+  },
+  {
+    "ref": "pjt222/nemotron-cot-review",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.66,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\pjt222__nemotron-cot-review",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\pjt222__nemotron-cot-review\r\n"
+  },
+  {
+    "ref": "impooping/nemotron-sft-reasoning-trajectories-dataset",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.38,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\impooping__nemotron-sft-reasoning-trajectories-dataset",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\impooping__nemotron-sft-reasoning-trajectories-dataset\r\n"
+  },
+  {
+    "ref": "afr1ste/nemotron-0-86-tinker-adapter-guide",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.4,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\afr1ste__nemotron-0-86-tinker-adapter-guide",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\afr1ste__nemotron-0-86-tinker-adapter-guide\r\n"
+  },
+  {
+    "ref": "ringustheimp/tinker-w-svd-rank-16",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.43,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\ringustheimp__tinker-w-svd-rank-16",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\ringustheimp__tinker-w-svd-rank-16\r\n"
+  },
+  {
+    "ref": "yashanathaniel/nvidia-nemotron-training",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.43,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\yashanathaniel__nvidia-nemotron-training",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\yashanathaniel__nvidia-nemotron-training\r\n"
+  },
+  {
+    "ref": "drchenb/nvidia-nemotron-trained-models-submission",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.66,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\drchenb__nvidia-nemotron-trained-models-submission",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\drchenb__nvidia-nemotron-trained-models-submission\r\n"
+  },
+  {
+    "ref": "aliafzal9323/nemotron-30b-deterministic-solvers-cot-fine-tu",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.53,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\aliafzal9323__nemotron-30b-deterministic-solvers-cot-fine-tu",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\aliafzal9323__nemotron-30b-deterministic-solvers-cot-fine-tu\r\n"
+  },
+  {
+    "ref": "ravi20076/nemotron2026-public-submission-v1",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.53,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\ravi20076__nemotron2026-public-submission-v1",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\ravi20076__nemotron2026-public-submission-v1\r\n"
+  },
+  {
+    "ref": "rauffauzanrambe/nvidia-advances-pytorch-rnn-training-pipeline",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.7,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\rauffauzanrambe__nvidia-advances-pytorch-rnn-training-pipeline",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\rauffauzanrambe__nvidia-advances-pytorch-rnn-training-pipeline\r\n"
+  },
+  {
+    "ref": "sorajiang/notebooksft",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.46,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\sorajiang__notebooksft",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\sorajiang__notebooksft\r\n"
+  },
+  {
+    "ref": "lalit7881/nvidia-reasoning-challenge",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.46,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\lalit7881__nvidia-reasoning-challenge",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\lalit7881__nvidia-reasoning-challenge\r\n"
+  },
+  {
+    "ref": "rahulchauhan016/nemotron-lora-reasoning-pipeline",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.5,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\rahulchauhan016__nemotron-lora-reasoning-pipeline",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\rahulchauhan016__nemotron-lora-reasoning-pipeline\r\n"
+  },
+  {
+    "ref": "uraniumdistilled/nvidia-nemotron-grpo-training",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.35,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\uraniumdistilled__nvidia-nemotron-grpo-training",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\uraniumdistilled__nvidia-nemotron-grpo-training\r\n"
+  },
+  {
+    "ref": "jal313/nvidia-nemotron-training-cot-labels-70ddae",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.45,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\jal313__nvidia-nemotron-training-cot-labels-70ddae",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\jal313__nvidia-nemotron-training-cot-labels-70ddae\r\n"
+  },
+  {
+    "ref": "trnhquangminh140/nvidia-nemotron-model-reasoning-trinh-quang-minh",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.54,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\trnhquangminh140__nvidia-nemotron-model-reasoning-trinh-quang-minh",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\trnhquangminh140__nvidia-nemotron-model-reasoning-trinh-quang-minh\r\n"
+  },
+  {
+    "ref": "torpidoff/cot-nvidia-nemotron-3",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.58,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\torpidoff__cot-nvidia-nemotron-3",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\torpidoff__cot-nvidia-nemotron-3\r\n"
+  },
+  {
+    "ref": "johnnyhyland/offline-packages-trl",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.43,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\johnnyhyland__offline-packages-trl",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\johnnyhyland__offline-packages-trl\r\n"
+  },
+  {
+    "ref": "safar1/lb-score-0-86",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.7,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\safar1__lb-score-0-86",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\safar1__lb-score-0-86\r\n"
+  },
+  {
+    "ref": "leegongman/sft-my-data-balace",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.43,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\leegongman__sft-my-data-balace",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\leegongman__sft-my-data-balace\r\n"
+  },
+  {
+    "ref": "jek1wantaufik/nemotron-lora-adapter",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.61,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\jek1wantaufik__nemotron-lora-adapter",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\jek1wantaufik__nemotron-lora-adapter\r\n"
+  },
+  {
+    "ref": "hammadfarooq470/nemotron-sft-lora-with-cot-selected-data",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.67,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\hammadfarooq470__nemotron-sft-lora-with-cot-selected-data",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\hammadfarooq470__nemotron-sft-lora-with-cot-selected-data\r\n"
+  },
+  {
+    "ref": "rauffauzanrambe/nvidia-nemotron-trained-meachine-learning",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.4,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\rauffauzanrambe__nvidia-nemotron-trained-meachine-learning",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\rauffauzanrambe__nvidia-nemotron-trained-meachine-learning\r\n"
+  },
+  {
+    "ref": "raunakdey07/nemotron-tinker-adapter",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.39,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\raunakdey07__nemotron-tinker-adapter",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\raunakdey07__nemotron-tinker-adapter\r\n"
+  },
+  {
+    "ref": "bbobwayne/nemotron-tier-1-lora-baseline",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.76,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\bbobwayne__nemotron-tier-1-lora-baseline",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\bbobwayne__nemotron-tier-1-lora-baseline\r\n"
+  },
+  {
+    "ref": "bbobwayne/nemotron-lora32-r1-tier-1-heuristic-baseline",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.45,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\bbobwayne__nemotron-lora32-r1-tier-1-heuristic-baseline",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\bbobwayne__nemotron-lora32-r1-tier-1-heuristic-baseline\r\n"
+  },
+  {
+    "ref": "rdn2k00/cot-preprocessing",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.56,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\rdn2k00__cot-preprocessing",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\rdn2k00__cot-preprocessing\r\n"
+  },
+  {
+    "ref": "hammadfarooq470/nvidia-nemotron-model-reasoning-0-68",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.54,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\hammadfarooq470__nvidia-nemotron-model-reasoning-0-68",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\hammadfarooq470__nvidia-nemotron-model-reasoning-0-68\r\n"
+  },
+  {
+    "ref": "denislu/nvidia-nemotron-model-reasoning-challenge",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.73,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\denislu__nvidia-nemotron-model-reasoning-challenge",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\denislu__nvidia-nemotron-model-reasoning-challenge\r\n"
+  },
+  {
+    "ref": "nguyenducdung1107/colsmol-training-with-rtx6000",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.54,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\nguyenducdung1107__colsmol-training-with-rtx6000",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\nguyenducdung1107__colsmol-training-with-rtx6000\r\n"
+  },
+  {
+    "ref": "amanatar/synthetic-nemotron-hard-reasoning",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.45,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\amanatar__synthetic-nemotron-hard-reasoning",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\amanatar__synthetic-nemotron-hard-reasoning\r\n"
+  },
+  {
+    "ref": "croftadams/nemotron-working-submission-test",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.41,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\croftadams__nemotron-working-submission-test",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\croftadams__nemotron-working-submission-test\r\n"
+  },
+  {
+    "ref": "rdn2k00/nemotron-qlora",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.33,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\rdn2k00__nemotron-qlora",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\rdn2k00__nemotron-qlora\r\n"
+  },
+  {
+    "ref": "hammadfarooq470/nvidia-nemotron-trained-models-submission",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.7,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\hammadfarooq470__nvidia-nemotron-trained-models-submission",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\hammadfarooq470__nvidia-nemotron-trained-models-submission\r\n"
+  },
+  {
+    "ref": "koushikrudra/nvidia-9500-step-training",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.41,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\koushikrudra__nvidia-9500-step-training",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\koushikrudra__nvidia-9500-step-training\r\n"
+  },
+  {
+    "ref": "anhhkhoi/nvidia-nemotron-submission-demo",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.61,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\anhhkhoi__nvidia-nemotron-submission-demo",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\anhhkhoi__nvidia-nemotron-submission-demo\r\n"
+  },
+  {
+    "ref": "ahmadzulfiqar001/exploratory-data-analysis-nvidia",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.45,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\ahmadzulfiqar001__exploratory-data-analysis-nvidia",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\ahmadzulfiqar001__exploratory-data-analysis-nvidia\r\n"
+  },
+  {
+    "ref": "sakshatpatil25/nvidia-nemotron-submission-demo",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.38,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\sakshatpatil25__nvidia-nemotron-submission-demo",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\sakshatpatil25__nvidia-nemotron-submission-demo\r\n"
+  },
+  {
+    "ref": "sluitel/dsoc-baseline-submission",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.46,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\sluitel__dsoc-baseline-submission",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\sluitel__dsoc-baseline-submission\r\n"
+  },
+  {
+    "ref": "manhha25022005/nemotron-sft-lora-with-cot-v2-prep-now-plz-wait",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.44,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\manhha25022005__nemotron-sft-lora-with-cot-v2-prep-now-plz-wait",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\manhha25022005__nemotron-sft-lora-with-cot-v2-prep-now-plz-wait\r\n"
+  },
+  {
+    "ref": "nhtdngtrn/nemotron-sft-lora-with-cot-v2-prep-now-plz-wait",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.55,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\nhtdngtrn__nemotron-sft-lora-with-cot-v2-prep-now-plz-wait",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\nhtdngtrn__nemotron-sft-lora-with-cot-v2-prep-now-plz-wait\r\n"
+  },
+  {
+    "ref": "hammadfarooq470/nvidia-nemotron-reasoning",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.54,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\hammadfarooq470__nvidia-nemotron-reasoning",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\hammadfarooq470__nvidia-nemotron-reasoning\r\n"
+  },
+  {
+    "ref": "saivimenthanvlai/nemotron-model-reasoning-challenge",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.52,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\saivimenthanvlai__nemotron-model-reasoning-challenge",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\saivimenthanvlai__nemotron-model-reasoning-challenge\r\n"
+  },
+  {
+    "ref": "yashm917/nemotronmodel-reasoning-0-72-lb-score-unsloth",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.64,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\yashm917__nemotronmodel-reasoning-0-72-lb-score-unsloth",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\yashm917__nemotronmodel-reasoning-0-72-lb-score-unsloth\r\n"
+  },
+  {
+    "ref": "cmirani/nemotron-lora-fine-tuning-pipeline",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.53,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\cmirani__nemotron-lora-fine-tuning-pipeline",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\cmirani__nemotron-lora-fine-tuning-pipeline\r\n"
+  },
+  {
+    "ref": "waterjoe/fork-of-nvidia-nemotron-sft-grpo-trainer",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.55,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\waterjoe__fork-of-nvidia-nemotron-sft-grpo-trainer",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\waterjoe__fork-of-nvidia-nemotron-sft-grpo-trainer\r\n"
+  },
+  {
+    "ref": "privatepiecerec/nemotron-reasoning-task-family-tour",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.38,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\privatepiecerec__nemotron-reasoning-task-family-tour",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\privatepiecerec__nemotron-reasoning-task-family-tour\r\n"
+  },
+  {
+    "ref": "revatidharmadhikari/revati-experiments-nvidia-nemotron-submission",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.48,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\revatidharmadhikari__revati-experiments-nvidia-nemotron-submission",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\revatidharmadhikari__revati-experiments-nvidia-nemotron-submission\r\n"
+  },
+  {
+    "ref": "mohamedamr992/0-86-adapter-packaging-workflow",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.37,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\mohamedamr992__0-86-adapter-packaging-workflow",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\mohamedamr992__0-86-adapter-packaging-workflow\r\n"
+  },
+  {
+    "ref": "dhruvb2028/tinker-adapter-ready-to-submit-adapter",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.43,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\dhruvb2028__tinker-adapter-ready-to-submit-adapter",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\dhruvb2028__tinker-adapter-ready-to-submit-adapter\r\n"
+  },
+  {
+    "ref": "cryptdragon/nemotron-30b-deterministic-solvers-cot-fine-tu",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.51,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\cryptdragon__nemotron-30b-deterministic-solvers-cot-fine-tu",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\cryptdragon__nemotron-30b-deterministic-solvers-cot-fine-tu\r\n"
+  },
+  {
+    "ref": "mirzayasirabdullah07/nvidia-nemotron-model-reasoning-notebook",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.71,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\mirzayasirabdullah07__nvidia-nemotron-model-reasoning-notebook",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\mirzayasirabdullah07__nvidia-nemotron-model-reasoning-notebook\r\n"
+  },
+  {
+    "ref": "javihm77/nvidia-nemotron-sfttrainer-training-jh",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.42,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\javihm77__nvidia-nemotron-sfttrainer-training-jh",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\javihm77__nvidia-nemotron-sfttrainer-training-jh\r\n"
+  },
+  {
+    "ref": "mebbbbbbius/nvidia-nemotron-submission-demo",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.76,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\mebbbbbbius__nvidia-nemotron-submission-demo",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\mebbbbbbius__nvidia-nemotron-submission-demo\r\n"
+  },
+  {
+    "ref": "rauffauzanrambe/nvidia-advanced-ai-training-analytics-system",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.55,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\rauffauzanrambe__nvidia-advanced-ai-training-analytics-system",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\rauffauzanrambe__nvidia-advanced-ai-training-analytics-system\r\n"
+  },
+  {
+    "ref": "ritikroshan4857/nvidia-nemotron-model-reasoning-challenge",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.75,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\ritikroshan4857__nvidia-nemotron-model-reasoning-challenge",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\ritikroshan4857__nvidia-nemotron-model-reasoning-challenge\r\n"
+  },
+  {
+    "ref": "ulyanovantonamaranta/nemotron-9500-adapter-repro",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.73,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\ulyanovantonamaranta__nemotron-9500-adapter-repro",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\ulyanovantonamaranta__nemotron-9500-adapter-repro\r\n"
+  },
+  {
+    "ref": "manderson240/nemotron-pure-symbolic-solver-v28",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.51,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\manderson240__nemotron-pure-symbolic-solver-v28",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\manderson240__nemotron-pure-symbolic-solver-v28\r\n"
+  },
+  {
+    "ref": "markjcooper/thk-public-fork-2026-05-14-v10-kienngx",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.85,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\markjcooper__thk-public-fork-2026-05-14-v10-kienngx",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\markjcooper__thk-public-fork-2026-05-14-v10-kienngx\r\n"
+  },
+  {
+    "ref": "vohuutridung/3930-sft-summarization-models",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.45,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\vohuutridung__3930-sft-summarization-models",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\vohuutridung__3930-sft-summarization-models\r\n"
+  },
+  {
+    "ref": "manderson240/nemotron-symbolic-solver-v36-fixed",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.64,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\manderson240__nemotron-symbolic-solver-v36-fixed",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\manderson240__nemotron-symbolic-solver-v36-fixed\r\n"
+  },
+  {
+    "ref": "konstantinboyko/nnmrc-2026-whl-unsloth-01-01-d168",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.52,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\konstantinboyko__nnmrc-2026-whl-unsloth-01-01-d168",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\konstantinboyko__nnmrc-2026-whl-unsloth-01-01-d168\r\n"
+  },
+  {
+    "ref": "marcelocruzeta/nemotron-mrc-02-submission-v2",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.33,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\marcelocruzeta__nemotron-mrc-02-submission-v2",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\marcelocruzeta__nemotron-mrc-02-submission-v2\r\n"
+  },
+  {
+    "ref": "include4eto/nvidia-nemotron-training",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.52,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\include4eto__nvidia-nemotron-training",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\include4eto__nvidia-nemotron-training\r\n"
+  },
+  {
+    "ref": "rohansan1/nemotron-reasoning-lora-solution-writeup",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.74,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\rohansan1__nemotron-reasoning-lora-solution-writeup",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\rohansan1__nemotron-reasoning-lora-solution-writeup\r\n"
+  },
+  {
+    "ref": "damndeepesh/nemotron-sft-lora-with-cot-v2-prep-now-plz-wait",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.46,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\damndeepesh__nemotron-sft-lora-with-cot-v2-prep-now-plz-wait",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\damndeepesh__nemotron-sft-lora-with-cot-v2-prep-now-plz-wait\r\n"
+  },
+  {
+    "ref": "rezaazami/0-64-nvidia-nemotron-training",
+    "status": "ok",
+    "returncode": 0,
+    "elapsed_s": 1.63,
+    "path": "artifacts\\v527_kaggle_code_audit\\pulled_code\\rezaazami__0-64-nvidia-nemotron-training",
+    "log": "Source code and metadata downloaded to artifacts\\v527_kaggle_code_audit\\pulled_code\\rezaazami__0-64-nvidia-nemotron-training\r\n"
+  }
+]

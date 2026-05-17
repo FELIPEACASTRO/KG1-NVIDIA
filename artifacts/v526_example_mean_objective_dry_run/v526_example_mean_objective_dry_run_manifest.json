@@ -1,0 +1,76 @@
+{
+  "blockers": [],
+  "config": {
+    "loss_normalization_mode_required": "example_mean",
+    "max_example_mean_target_delta": 0.08
+  },
+  "decision": {
+    "gpu_allowed": true,
+    "gpu_scope": "one_short_h200_smoke_only",
+    "next_action": "Create a V523 example_mean smoke launcher with first-checkpoint ACC kill-switch",
+    "reason": "example_mean removes token-length dominance structurally and V523 row mix is close to V522 reference",
+    "status": "example_mean_dry_run_passed"
+  },
+  "generated_at_utc": "2026-05-17T01:03:54.303593+00:00",
+  "inputs": {
+    "dataset_manifest_json": "artifacts\\v523_targeted_source_trace_pack\\20260516T235821Z\\v523_targeted_source_trace_pack_manifest.json",
+    "quota_manifest_json": "artifacts\\v524_quota_token_objective_audit\\v524_quota_token_objective_manifest.json",
+    "tokenization_manifest_json": "artifacts\\v523_targeted_source_trace_pack\\20260516T235821Z\\tokenization_gate_real\\v286_generic_tokenization_gate_manifest.json"
+  },
+  "objective_mix": {
+    "example_mean_bit_share": 0.688109,
+    "example_mean_bit_to_equation_ratio": 2.20625,
+    "example_mean_close_to_reference": true,
+    "example_mean_delta_from_reference": 0.053826,
+    "max_example_mean_target_delta": 0.08,
+    "reference_bit_share": 0.741935,
+    "reference_bit_to_equation_ratio": 2.874993,
+    "token_mean_bit_share": 0.906716,
+    "token_mean_bit_to_equation_ratio": 9.719988,
+    "token_mean_is_dominated_by_bit": true
+  },
+  "outputs": {
+    "manifest_json": "artifacts\\v526_example_mean_objective_dry_run\\v526_example_mean_objective_dry_run_manifest.json",
+    "report_md": "artifacts\\v526_example_mean_objective_dry_run\\KG1_V526_EXAMPLE_MEAN_OBJECTIVE_DRY_RUN.md"
+  },
+  "schema_version": "kg1_v526_example_mean_objective_dry_run_v1",
+  "train_inspection": {
+    "answer_mismatch_count": 0,
+    "answer_mismatch_first10": [],
+    "assistant_chars_by_family": {
+      "bit_manipulation": 511942,
+      "equation_transform": 82015
+    },
+    "boxed_missing_count": 0,
+    "boxed_missing_first10": [],
+    "control_char_count": 0,
+    "control_char_first10": [],
+    "family_counts": {
+      "bit_manipulation": 706,
+      "equation_transform": 320
+    },
+    "forbidden_training_flag_count": 0,
+    "forbidden_training_flag_first10": [],
+    "rows": 1026
+  },
+  "validation_inspection": {
+    "answer_mismatch_count": 0,
+    "answer_mismatch_first10": [],
+    "assistant_chars_by_family": {
+      "bit_manipulation": 101635,
+      "equation_transform": 20527
+    },
+    "boxed_missing_count": 0,
+    "boxed_missing_first10": [],
+    "control_char_count": 0,
+    "control_char_first10": [],
+    "family_counts": {
+      "bit_manipulation": 139,
+      "equation_transform": 80
+    },
+    "forbidden_training_flag_count": 0,
+    "forbidden_training_flag_first10": [],
+    "rows": 219
+  },
+  "version": "V526"
+}

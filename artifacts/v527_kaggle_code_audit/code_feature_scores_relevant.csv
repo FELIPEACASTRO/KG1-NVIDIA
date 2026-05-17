@@ -1,0 +1,254 @@
+ref,title,score,bit_family,equation_family,bit_ops,equation_ops,solver,training,inference,safety,chars,path
+pjt222/nemotron-cot-review,nemotron-cot-review,1027,23,19,154,49,8,2,0,45,90487,artifacts\v527_kaggle_code_audit\pulled_code\pjt222__nemotron-cot-review
+zzys0316/full-pipeline-nvidia-nemotron-3-reasoning,🏆 Full Pipeline NVIDIA Nemotron-3 Reasoning,964,12,24,95,62,11,19,50,85,131077,artifacts\v527_kaggle_code_audit\pulled_code\zzys0316__full-pipeline-nvidia-nemotron-3-reasoning
+kjibinraj/nemotron-challenge-v1,Nemotron_challenge_v1,862,20,24,110,11,15,39,59,34,146465,artifacts\v527_kaggle_code_audit\pulled_code\kjibinraj__nemotron-challenge-v1
+habanwer/nemotron-atlas,Nemotron ATLAS,742,4,20,130,10,10,19,2,20,119364,artifacts\v527_kaggle_code_audit\pulled_code\habanwer__nemotron-atlas
+konbu17/bit-manipulation-solver-cot-generator,bit-manipulation-solver-cot-generator,738,34,1,154,0,2,0,2,5,58335,artifacts\v527_kaggle_code_audit\pulled_code\konbu17__bit-manipulation-solver-cot-generator
+matthewblakeward/glyphmatics-d4c-cipher-98substitution,GlyphMatics●D4C°Cipher#98Substitution ,616,8,3,110,23,1,7,4,28,84605,artifacts\v527_kaggle_code_audit\pulled_code\matthewblakeward__glyphmatics-d4c-cipher-98substitution
+pearpn25/bit-cot-85-1364-sample,bit cot 85% ~~ 1364 sample,614,9,0,137,1,3,0,9,11,76542,artifacts\v527_kaggle_code_audit\pulled_code\pearpn25__bit-cot-85-1364-sample
+johnnyhyland/nvidia-nemotron-sft-grpo-colab-faster,NVIDIA Nemotron - SFT → GRPO - Colab faster,453,11,8,60,9,10,24,6,16,58499,artifacts\v527_kaggle_code_audit\pulled_code\johnnyhyland__nvidia-nemotron-sft-grpo-colab-faster
+amanatar/nemotron-ultimate-sft-grpo-v3,nemotron-ultimate-sft-grpo-v3,406,13,11,54,11,7,12,8,7,48034,artifacts\v527_kaggle_code_audit\pulled_code\amanatar__nemotron-ultimate-sft-grpo-v3
+llkh0a/nemotron-unsloth-sft-training-3-30-2,Nemotron | Unsloth SFT Training 3/30 -2,406,15,28,29,4,6,18,58,21,81190,artifacts\v527_kaggle_code_audit\pulled_code\llkh0a__nemotron-unsloth-sft-training-3-30-2
+ulvisharifzade/nemotron-azerbaijan,Nemotron Azerbaijan,390,20,2,57,0,4,31,3,11,43061,artifacts\v527_kaggle_code_audit\pulled_code\ulvisharifzade__nemotron-azerbaijan
+itskshivam/nemotron-strict-reasoning-mix-sft-1024,Nemotron Strict Reasoning Mix SFT 1024,377,0,0,80,2,0,12,5,20,55328,artifacts\v527_kaggle_code_audit\pulled_code\itskshivam__nemotron-strict-reasoning-mix-sft-1024
+itskshivam/nemotron-light-competition-adapt-sft,Nemotron Light Competition Adapt SFT,373,0,0,80,2,0,10,5,20,56419,artifacts\v527_kaggle_code_audit\pulled_code\itskshivam__nemotron-light-competition-adapt-sft
+yashm917/nemotronmodel-reasoning-0-72-lb-score-unsloth,NemotronModel Reasoning (0.72 LB Score) [Unsloth],348,13,11,60,0,3,8,3,2,23167,artifacts\v527_kaggle_code_audit\pulled_code\yashm917__nemotronmodel-reasoning-0-72-lb-score-unsloth
+banwait13/nemotron-on-steroids,Nemotron on Steroids,329,5,0,45,2,0,32,30,32,92053,artifacts\v527_kaggle_code_audit\pulled_code\banwait13__nemotron-on-steroids
+maulikgajera/nemotron-vs-alice-s-wonderland-who-reasons-bett,Nemotron vs Alice's Wonderland - Who Reasons Bett ,324,20,10,45,0,6,4,4,12,42530,artifacts\v527_kaggle_code_audit\pulled_code\maulikgajera__nemotron-vs-alice-s-wonderland-who-reasons-bett
+kacchanwriting/nemotron-eda-v1,Nemotron EDA v1,320,9,9,65,1,0,0,0,2,30699,artifacts\v527_kaggle_code_audit\pulled_code\kacchanwriting__nemotron-eda-v1
+teasue05/tinker-submission-notebook,Tinker submission notebook,313,1,2,33,3,3,10,110,15,33735,artifacts\v527_kaggle_code_audit\pulled_code\teasue05__tinker-submission-notebook
+meenalsinha/glyphmatics,Glyphmatics ,292,0,0,55,6,0,8,0,32,31438,artifacts\v527_kaggle_code_audit\pulled_code\meenalsinha__glyphmatics
+mohamedamr992/deterministic-solvers-for-reasoning-task,Deterministic Solvers for Reasoning Task,286,6,1,58,0,6,0,2,1,43154,artifacts\v527_kaggle_code_audit\pulled_code\mohamedamr992__deterministic-solvers-for-reasoning-task
+tylerm16/nemotron-sft-lora-with-cot,Nemotron SFT LoRA with CoT,264,15,9,33,6,1,11,4,5,43203,artifacts\v527_kaggle_code_audit\pulled_code\tylerm16__nemotron-sft-lora-with-cot
+tylerm16/nemotron-sft-lora-with-cot-w-no-curriculum,Nemotron SFT LoRA with CoT w/ no Curriculum,263,8,7,34,10,1,13,3,8,40714,artifacts\v527_kaggle_code_audit\pulled_code\tylerm16__nemotron-sft-lora-with-cot-w-no-curriculum
+nikitagajbhiye30/nvidia-00,NVIDIA 00,262,12,9,31,3,12,1,0,1,24885,artifacts\v527_kaggle_code_audit\pulled_code\nikitagajbhiye30__nvidia-00
+adilshamim8/nvidia-nemotron-model-reasoning-challenge-101,NVIDIA Nemotron Model Reasoning Challenge 101,258,1,0,36,0,0,25,21,40,56066,artifacts\v527_kaggle_code_audit\pulled_code\adilshamim8__nvidia-nemotron-model-reasoning-challenge-101
+pranavtrivedi02/pranav-sft-grpo,Pranav-SFT+GRPO,256,13,0,42,3,0,12,5,8,40186,artifacts\v527_kaggle_code_audit\pulled_code\pranavtrivedi02__pranav-sft-grpo
+viswasurya/nvidia-nemotron-training,Nvidia-Nemotron Training,251,3,0,42,0,0,19,7,29,288649,artifacts\v527_kaggle_code_audit\pulled_code\viswasurya__nvidia-nemotron-training
+francisbanda/nemotron-reasoning-solver,Nemotron Reasoning Solver,240,2,0,51,0,6,0,0,0,11348,artifacts\v527_kaggle_code_audit\pulled_code\francisbanda__nemotron-reasoning-solver
+konbu17/doc-to-lora-knowledge-injection-nemotron-3-nano,Doc-to-LoRA Knowledge Injection Nemotron-3-Nano,219,5,5,29,5,3,16,2,4,25542,artifacts\v527_kaggle_code_audit\pulled_code\konbu17__doc-to-lora-knowledge-injection-nemotron-3-nano
+svanikkolli/nemotron-engine-ensembler,Nemotron Engine Ensembler,216,0,0,51,0,0,3,0,6,28295,artifacts\v527_kaggle_code_audit\pulled_code\svanikkolli__nemotron-engine-ensembler
+mohankrishnathalla/nemotron-6-puzzle-types-decoded-rule-solvers,Nemotron: 6 Puzzle Types Decoded + Rule Solvers,214,29,15,14,0,4,2,2,0,28306,artifacts\v527_kaggle_code_audit\pulled_code\mohankrishnathalla__nemotron-6-puzzle-types-decoded-rule-solvers
+aliafzal9323/nemotron-30b-deterministic-solvers-cot-fine-tu,Nemotron 30B | Deterministic Solvers + CoT Fine-Tu,211,6,0,31,0,10,8,0,3,23594,artifacts\v527_kaggle_code_audit\pulled_code\aliafzal9323__nemotron-30b-deterministic-solvers-cot-fine-tu
+ahmadzulfiqar001/exploratory-data-analysis-nvidia,Exploratory Data Analysis - NVIDIA,210,0,0,43,0,2,11,4,2,40603,artifacts\v527_kaggle_code_audit\pulled_code\ahmadzulfiqar001__exploratory-data-analysis-nvidia
+emanuellcs/nvidia-nemotron-sft,NVIDIA Nemotron | SFT,204,0,0,36,1,0,21,0,14,29939,artifacts\v527_kaggle_code_audit\pulled_code\emanuellcs__nvidia-nemotron-sft
+huikang/tinker-submission-notebook,Tinker submission notebook,204,2,4,8,3,7,10,69,18,41305,artifacts\v527_kaggle_code_audit\pulled_code\huikang__tinker-submission-notebook
+storm2501/nvidia-nemotron-two,NVIDIA Nemotron two,202,3,0,32,8,0,14,0,5,19184,artifacts\v527_kaggle_code_audit\pulled_code\storm2501__nvidia-nemotron-two
+manderson240/nemotron-pure-symbolic-solver-v29,Nemotron Pure Symbolic Solver v29,201,2,0,35,6,6,0,0,1,48540,artifacts\v527_kaggle_code_audit\pulled_code\manderson240__nemotron-pure-symbolic-solver-v29
+ethnwen/nvidia-nemotron-model-v1,NVIDIA nemotron model v1 ,195,1,2,8,3,7,10,69,18,29354,artifacts\v527_kaggle_code_audit\pulled_code\ethnwen__nvidia-nemotron-model-v1
+thesharifzade/nemotron-azerbaijan,Nemotron Azerbaijan,194,3,1,23,0,7,19,4,13,19767,artifacts\v527_kaggle_code_audit\pulled_code\thesharifzade__nemotron-azerbaijan
+amanatar/synthetic-nemotron-hard-reasoning,synthetic_nemotron_hard_reasoning,193,11,0,39,0,0,0,0,4,26887,artifacts\v527_kaggle_code_audit\pulled_code\amanatar__synthetic-nemotron-hard-reasoning
+adv1102/nvidia-nemotron-submission,NVIDIA Nemotron Submission,191,0,0,24,9,0,27,0,5,44127,artifacts\v527_kaggle_code_audit\pulled_code\adv1102__nvidia-nemotron-submission
+konbu17/nemotron-tong-style-cot-sft-updated-v2,Nemotron Tong-Style CoT SFT (updated v2),188,16,10,14,4,0,10,12,6,26231,artifacts\v527_kaggle_code_audit\pulled_code\konbu17__nemotron-tong-style-cot-sft-updated-v2
+kimberleyduran/solver-verified-cryptarithm-cot-v2-dataset,Solver-Verified Cryptarithm CoT (v2 dataset),185,4,6,13,19,2,0,0,17,44612,artifacts\v527_kaggle_code_audit\pulled_code\kimberleyduran__solver-verified-cryptarithm-cot-v2-dataset
+bloodmoonwq/nemotron-sft-lora-with-cot,Nemotron SFT LoRA with CoT,179,10,9,15,4,0,20,1,5,24114,artifacts\v527_kaggle_code_audit\pulled_code\bloodmoonwq__nemotron-sft-lora-with-cot
+sorajiang/notebooksft,notebookSFT,171,9,8,19,4,0,11,1,5,21527,artifacts\v527_kaggle_code_audit\pulled_code\sorajiang__notebooksft
+impooping/nemotron-sft-reasoning-trajectories-dataset,Nemotron SFT (Reasoning Trajectories Dataset),170,11,11,15,4,0,11,1,5,19462,artifacts\v527_kaggle_code_audit\pulled_code\impooping__nemotron-sft-reasoning-trajectories-dataset
+kienngx/nemotron-sft-reasoning-trajectories-dataset,Nemotron SFT (Reasoning Trajectories Dataset),170,11,11,15,4,0,11,1,5,19491,artifacts\v527_kaggle_code_audit\pulled_code\kienngx__nemotron-sft-reasoning-trajectories-dataset
+tahaalam2009/nemotron-batched-logprob-filter-train,Nemotron Batched Logprob Filter + Train,168,3,4,21,3,0,18,13,2,19058,artifacts\v527_kaggle_code_audit\pulled_code\tahaalam2009__nemotron-batched-logprob-filter-train
+mirzayasirabdullah07/nvidia-nemotron-model-reasoning-notebook,NVIDIA Nemotron Model Reasoning NoteBook,167,9,7,16,5,0,14,1,6,23058,artifacts\v527_kaggle_code_audit\pulled_code\mirzayasirabdullah07__nvidia-nemotron-model-reasoning-notebook
+marcelocruzeta/nemotron-mrc-02-submission-v2,Nemotron-mrc-02-submission-v2,166,3,3,26,0,0,17,0,10,58695,artifacts\v527_kaggle_code_audit\pulled_code\marcelocruzeta__nemotron-mrc-02-submission-v2
+harsha7754/nvidia-nemotron-prompting-on-base-model,NVIDIA Nemotron Prompting on base model,159,8,5,22,2,1,9,0,1,40768,artifacts\v527_kaggle_code_audit\pulled_code\harsha7754__nvidia-nemotron-prompting-on-base-model
+hoangvux/nvidia-nemotron-synthetic-data,NVIDIA Nemotron — Synthetic Data ,157,3,1,28,8,0,0,0,1,27152,artifacts\v527_kaggle_code_audit\pulled_code\hoangvux__nvidia-nemotron-synthetic-data
+lalit7881/nvidia-reasoning-challenge,NVIDIA Reasoning Challenge,157,19,9,11,0,5,1,0,2,25997,artifacts\v527_kaggle_code_audit\pulled_code\lalit7881__nvidia-reasoning-challenge
+hammadfarooq470/nemotron-sft-lora-with-cot-selected-data,Nemotron SFT LoRA with CoT-Selected Data,155,9,8,15,4,0,11,1,5,19013,artifacts\v527_kaggle_code_audit\pulled_code\hammadfarooq470__nemotron-sft-lora-with-cot-selected-data
+konbu17/nemotron-sft-lora-with-cot,Nemotron SFT LoRA with CoT,155,9,8,15,4,0,11,1,5,19047,artifacts\v527_kaggle_code_audit\pulled_code\konbu17__nemotron-sft-lora-with-cot
+martinijean/nemotron-sft-lora-with-cot,Nemotron SFT LoRA with CoT,155,9,8,15,4,0,11,1,5,20303,artifacts\v527_kaggle_code_audit\pulled_code\martinijean__nemotron-sft-lora-with-cot
+prashantmhaske123/nemotron-sft-lora-with-cot-v2-prep-now-plz-wait,Nemotron SFT LoRA with CoT (v2 prep now plz wait),155,9,8,15,4,0,11,1,5,19077,artifacts\v527_kaggle_code_audit\pulled_code\prashantmhaske123__nemotron-sft-lora-with-cot-v2-prep-now-plz-wait
+toney02/nemotron-sft-lora-with-cot,Nemotron SFT LoRA with CoT,155,9,8,15,4,0,11,1,5,19621,artifacts\v527_kaggle_code_audit\pulled_code\toney02__nemotron-sft-lora-with-cot
+krupalpatel07/nvidia-beast-model,NVidia Beast Model ,154,0,0,28,0,0,14,5,9,17011,artifacts\v527_kaggle_code_audit\pulled_code\krupalpatel07__nvidia-beast-model
+quan242/nvidia-nemotron-reasoning-dataset-gen,nvidia-nemotron-reasoning-dataset-gen,145,0,1,29,0,5,0,0,1,18910,artifacts\v527_kaggle_code_audit\pulled_code\quan242__nvidia-nemotron-reasoning-dataset-gen
+chaitanyajamble/nvidia-nrc,Nvidia NRC,144,0,0,29,1,0,4,6,10,49602,artifacts\v527_kaggle_code_audit\pulled_code\chaitanyajamble__nvidia-nrc
+manish756/nvidia-nemotron-notebook,nvidia-Nemotron notebook ,144,1,0,25,4,0,9,2,5,18691,artifacts\v527_kaggle_code_audit\pulled_code\manish756__nvidia-nemotron-notebook
+rn8205/adapter-validation-notebook,Adapter validation notebook,140,3,5,6,3,7,0,43,2,18200,artifacts\v527_kaggle_code_audit\pulled_code\rn8205__adapter-validation-notebook
+caoruizhe/nemotron-cotsafe,Nemotron Cotsafe,139,1,0,21,4,0,17,0,2,20618,artifacts\v527_kaggle_code_audit\pulled_code\caoruizhe__nemotron-cotsafe
+dimaspashaakrilian/nemotron-3-nano-lora-sft-with-verified-cot,Nemotron 3 Nano Lora SFT with Verified Cot,139,2,1,16,8,0,14,3,3,20461,artifacts\v527_kaggle_code_audit\pulled_code\dimaspashaakrilian__nemotron-3-nano-lora-sft-with-verified-cot
+nicholas33/nb153-nvidia-nemotron,NB153 || NVIDIA Nemotron,139,0,0,15,7,4,7,2,15,23571,artifacts\v527_kaggle_code_audit\pulled_code\nicholas33__nb153-nvidia-nemotron
+hastws/sfttrainer-training,SFTTrainer training,138,2,0,20,3,2,8,8,6,13116,artifacts\v527_kaggle_code_audit\pulled_code\hastws__sfttrainer-training
+mohamedamr992/nemotron3-reasoning-pipeline-v1,Nemotron3_Reasoning_Pipeline_V1,136,5,3,21,0,0,10,0,8,16504,artifacts\v527_kaggle_code_audit\pulled_code\mohamedamr992__nemotron3-reasoning-pipeline-v1
+huikang/adapter-validation-notebook,Adapter validation notebook,134,3,3,6,2,7,0,46,3,15963,artifacts\v527_kaggle_code_audit\pulled_code\huikang__adapter-validation-notebook
+tamgujoa/adapter-validation-notebook,Adapter validation notebook,134,3,3,6,2,7,0,46,3,15959,artifacts\v527_kaggle_code_audit\pulled_code\tamgujoa__adapter-validation-notebook
+torpidoff/full-pipeline-nvidia-nemotron-3-reasoning,🏆 Full Pipeline NVIDIA Nemotron-3 Reasoning,132,1,0,21,1,0,15,2,9,22974,artifacts\v527_kaggle_code_audit\pulled_code\torpidoff__full-pipeline-nvidia-nemotron-3-reasoning
+chaitanyajamble/nvidia-nmrc-1,Nvidia-NMRC-!/1,130,0,0,26,0,0,8,2,8,37367,artifacts\v527_kaggle_code_audit\pulled_code\chaitanyajamble__nvidia-nmrc-1
+toney02/nvidia-nemotron-sfttrainer-training,NVIDIA Nemotron - SFTTrainer training,130,0,0,26,0,0,8,0,10,13029,artifacts\v527_kaggle_code_audit\pulled_code\toney02__nvidia-nemotron-sfttrainer-training
+kalyankkr/all-6-puzzle-types-decoded-sft-training-data,All 6 Puzzle Types Decoded + SFT Training Data,129,14,6,9,0,0,15,1,2,27166,artifacts\v527_kaggle_code_audit\pulled_code\kalyankkr__all-6-puzzle-types-decoded-sft-training-data
+konbu17/cot-generation-for-nemotron-challenge,CoT generation for Nemotron challenge,129,8,1,24,0,0,0,6,0,24585,artifacts\v527_kaggle_code_audit\pulled_code\konbu17__cot-generation-for-nemotron-challenge
+leegongman/sft-my-data-balace,SFT_My_Data_balace,129,0,0,12,0,0,33,0,15,30516,artifacts\v527_kaggle_code_audit\pulled_code\leegongman__sft-my-data-balace
+smilyaiiscoolgubby/nvidia-nemotron-training-cot-labels-my-edition,NVIDIA Nemotron Training (CoT + Labels) MY EDITION,128,0,0,23,1,0,10,0,12,26654,artifacts\v527_kaggle_code_audit\pulled_code\smilyaiiscoolgubby__nvidia-nemotron-training-cot-labels-my-edition
+koushikrudra/nvidia-utility-script,NVIDIA Utility Script,127,0,0,29,0,0,3,0,5,25636,artifacts\v527_kaggle_code_audit\pulled_code\koushikrudra__nvidia-utility-script
+saivimenthanvlai/nemotron-model-reasoning-challenge,Nemotron Model Reasoning Challenge,127,2,0,20,0,8,0,0,1,14460,artifacts\v527_kaggle_code_audit\pulled_code\saivimenthanvlai__nemotron-model-reasoning-challenge
+johnakwei/nvidia-nemotron-contextbase-v3,NVIDIA_Nemotron_ContextBase_V3,126,0,1,25,0,0,7,0,9,13602,artifacts\v527_kaggle_code_audit\pulled_code\johnakwei__nvidia-nemotron-contextbase-v3
+torpidoff/cot-nvidia-nemotron-3,🏆 COT-NVIDIA Nemotron-3,126,3,0,25,0,0,1,6,9,18837,artifacts\v527_kaggle_code_audit\pulled_code\torpidoff__cot-nvidia-nemotron-3
+newduck/nvidia-nemotron-soft-balanced-sampling-sft,NVIDIA Nemotron - Soft-Balanced Sampling + SFT,123,3,1,19,0,0,16,2,1,13053,artifacts\v527_kaggle_code_audit\pulled_code\newduck__nvidia-nemotron-soft-balanced-sampling-sft
+kacchanwriting/nemotron-baseline-v2,Nemotron Baseline v2,122,10,9,11,0,0,10,0,1,15151,artifacts\v527_kaggle_code_audit\pulled_code\kacchanwriting__nemotron-baseline-v2
+quan242/nvidia-nemotron-training-v2-cot-labels,NVIDIA Nemotron training v2 (CoT + Labels),120,0,0,24,0,0,9,1,5,14062,artifacts\v527_kaggle_code_audit\pulled_code\quan242__nvidia-nemotron-training-v2-cot-labels
+damndeepesh/nemotron-sft-lora-with-cot-v2-prep-now-plz-wait,Nemotron SFT LoRA with CoT (v2 prep now plz wait),119,1,5,15,3,0,12,0,5,18316,artifacts\v527_kaggle_code_audit\pulled_code\damndeepesh__nemotron-sft-lora-with-cot-v2-prep-now-plz-wait
+ohhhlgm/unsloth-to-achieve-0-85-lb-use-dora-and-adapter,Unsloth to Achieve 0.85 LB use DoRA and adapter,119,0,0,18,2,0,18,1,2,17931,artifacts\v527_kaggle_code_audit\pulled_code\ohhhlgm__unsloth-to-achieve-0-85-lb-use-dora-and-adapter
+amanatar/nemotron-3-nano-blackwell-optimized-reasoning,Nemotron-3-Nano: Blackwell-Optimized Reasoning ,116,0,0,20,5,0,7,0,2,13135,artifacts\v527_kaggle_code_audit\pulled_code\amanatar__nemotron-3-nano-blackwell-optimized-reasoning
+mohankrishnathalla/nvidia-nemotron-model-reasoning-challenge,NVIDIA Nemotron Model Reasoning Challenge,116,3,1,13,0,6,9,1,3,14189,artifacts\v527_kaggle_code_audit\pulled_code\mohankrishnathalla__nvidia-nemotron-model-reasoning-challenge
+dgxchen/training-with-unsloth-to-achieve-0-85-lb,Training with Unsloth to Achieve 0.85 LB,113,0,0,18,2,0,15,1,2,17646,artifacts\v527_kaggle_code_audit\pulled_code\dgxchen__training-with-unsloth-to-achieve-0-85-lb
+dickjun/nemotron-public085-pretrained-control-v1,nemotron-public085-pretrained-control-v1,113,0,0,18,2,0,15,1,2,17687,artifacts\v527_kaggle_code_audit\pulled_code\dickjun__nemotron-public085-pretrained-control-v1
+xduan7/nemotron-bit-verifier-append-memcheck,Nemotron Bit Verifier Append Memcheck,113,3,1,6,3,4,0,29,16,10531,artifacts\v527_kaggle_code_audit\pulled_code\xduan7__nemotron-bit-verifier-append-memcheck
+xduan7/nemotron-bit-verifier-replace-memcheck,Nemotron Bit Verifier Replace Memcheck,113,3,1,6,3,4,0,29,16,10533,artifacts\v527_kaggle_code_audit\pulled_code\xduan7__nemotron-bit-verifier-replace-memcheck
+quan242/nemotron-baseline-evaluation,Nemotron Baseline Evaluation,112,0,0,5,1,7,0,50,3,17330,artifacts\v527_kaggle_code_audit\pulled_code\quan242__nemotron-baseline-evaluation
+prashantmhaske123/training-with-unsloth-to-achieve-0-85-lb,Training with Unsloth to Achieve 0.85 LB,111,0,0,18,2,0,14,1,2,18125,artifacts\v527_kaggle_code_audit\pulled_code\prashantmhaske123__training-with-unsloth-to-achieve-0-85-lb
+comistrymo/nvidia-nemotron-training-cot-labels,NVIDIA Nemotron Training (CoT + Labels),110,0,0,22,0,0,9,0,4,11944,artifacts\v527_kaggle_code_audit\pulled_code\comistrymo__nvidia-nemotron-training-cot-labels
+konstantinboyko/01-04-training-with-unsloth-batch-2-epoch-2,01-04 Training with Unsloth batch=2 epoch=2,109,0,0,18,2,0,13,1,2,16640,artifacts\v527_kaggle_code_audit\pulled_code\konstantinboyko__01-04-training-with-unsloth-batch-2-epoch-2
+hlly34/nemotron-baseline-evaluation,Nemotron Baseline Evaluation,107,0,0,5,1,6,0,50,3,16317,artifacts\v527_kaggle_code_audit\pulled_code\hlly34__nemotron-baseline-evaluation
+jiazhuang/nemotron-local-cv,nemotron local cv,107,0,0,5,1,6,0,50,3,17374,artifacts\v527_kaggle_code_audit\pulled_code\jiazhuang__nemotron-local-cv
+tamgujoa/training-with-unsloth,Training with Unsloth,107,0,0,18,2,0,12,1,2,16090,artifacts\v527_kaggle_code_audit\pulled_code\tamgujoa__training-with-unsloth
+mah20050/nvidia-nemotron-the-wonderland-nsa,NVIDIA-Nemotron: The Wonderland NSA 🔥,105,2,0,16,0,0,13,7,2,40749,artifacts\v527_kaggle_code_audit\pulled_code\mah20050__nvidia-nemotron-the-wonderland-nsa
+minhhoiphan/data-mine-nemotron-data,Data_mine_Nemotron data,103,2,2,13,0,5,7,0,0,22775,artifacts\v527_kaggle_code_audit\pulled_code\minhhoiphan__data-mine-nemotron-data
+xduan7/nemotron-bit-verifier-append-eval,Nemotron Bit Verifier Append Eval,103,3,1,6,3,2,0,29,16,10808,artifacts\v527_kaggle_code_audit\pulled_code\xduan7__nemotron-bit-verifier-append-eval
+xduan7/nemotron-bit-verifier-replace-eval,Nemotron Bit Verifier Replace Eval,103,3,1,6,3,2,0,29,16,10808,artifacts\v527_kaggle_code_audit\pulled_code\xduan7__nemotron-bit-verifier-replace-eval
+xduan7/nemotron-concat-only-diagnostic-eval,Nemotron Concat-Only Diagnostic Eval,103,3,1,6,3,2,0,29,16,10808,artifacts\v527_kaggle_code_audit\pulled_code\xduan7__nemotron-concat-only-diagnostic-eval
+xduan7/nemotron-concat-only-diagnostic-memcheck,Nemotron Concat-Only Diagnostic Memcheck,103,3,1,6,3,2,0,29,16,10539,artifacts\v527_kaggle_code_audit\pulled_code\xduan7__nemotron-concat-only-diagnostic-memcheck
+xduan7/nemotron-deterministic-cot-moe-tied-lora-eval,Nemotron Deterministic CoT MoE-Tied LoRA Eval,103,3,1,6,3,2,0,29,16,10886,artifacts\v527_kaggle_code_audit\pulled_code\xduan7__nemotron-deterministic-cot-moe-tied-lora-eval
+xduan7/nemotron-dgxchen-repro-eval,Nemotron dgxchen Repro Eval,103,3,1,6,3,2,0,29,16,10808,artifacts\v527_kaggle_code_audit\pulled_code\xduan7__nemotron-dgxchen-repro-eval
+xduan7/nemotron-symbolic-eq-corpus-inject-eval,Nemotron Symbolic Eq Corpus Inject Eval,103,3,1,6,3,2,0,29,16,10808,artifacts\v527_kaggle_code_audit\pulled_code\xduan7__nemotron-symbolic-eq-corpus-inject-eval
+xduan7/nemotron-symbolic-eq-memcheck-eval,Nemotron Symbolic Eq Memcheck Eval,103,3,1,6,3,2,0,29,16,10534,artifacts\v527_kaggle_code_audit\pulled_code\xduan7__nemotron-symbolic-eq-memcheck-eval
+adityaghai01/nemotron-adapter-via-kaggle-agent-ps-0-66,nemotron-adapter via Kaggle Agent [ PS 0.66 ],101,0,0,20,0,0,9,0,3,13604,artifacts\v527_kaggle_code_audit\pulled_code\adityaghai01__nemotron-adapter-via-kaggle-agent-ps-0-66
+koushikrudra/nvidia-9500-step-training,NVIDIA 9500 STEP Training,101,0,0,19,0,0,9,0,7,19813,artifacts\v527_kaggle_code_audit\pulled_code\koushikrudra__nvidia-9500-step-training
+kenilv/nvidia-nemotron-submission-demo,NVIDIA Nemotron Submission Demo,100,2,0,9,8,0,8,2,8,12601,artifacts\v527_kaggle_code_audit\pulled_code\kenilv__nvidia-nemotron-submission-demo
+sarcasmos/nvidia-nemotron-model-reasoning-challenge, NVIDIA Nemotron Model Reasoning Challenge,99,9,0,18,0,0,0,0,0,40391,artifacts\v527_kaggle_code_audit\pulled_code\sarcasmos__nvidia-nemotron-model-reasoning-challenge
+dennislanov/nvidia-nemotron-submission-v2,NVIDIA Nemotron Submission v2,98,0,0,15,0,0,10,10,8,17094,artifacts\v527_kaggle_code_audit\pulled_code\dennislanov__nvidia-nemotron-submission-v2
+jal313/nvidia-nemotron-training-cot-labels-70ddae,NVIDIA Nemotron Training (CoT + Labels) 70ddae,98,0,0,19,0,0,9,0,4,10814,artifacts\v527_kaggle_code_audit\pulled_code\jal313__nvidia-nemotron-training-cot-labels-70ddae
+javihm77/nvidia-nemotron-sfttrainer-training-jh,NVIDIA Nemotron - SFTTrainer training JH,98,3,3,14,1,0,8,1,3,13064,artifacts\v527_kaggle_code_audit\pulled_code\javihm77__nvidia-nemotron-sfttrainer-training-jh
+kienngx/nvidia-nemotron-training-copy-run-instantly,NVIDIA Nemotron Training (copy & run instantly),98,0,0,19,0,0,9,0,4,10364,artifacts\v527_kaggle_code_audit\pulled_code\kienngx__nvidia-nemotron-training-copy-run-instantly
+cmirani/nemotron-lora-fine-tuning-pipeline,Nemotron LoRA Fine-Tuning Pipeline,97,1,0,16,1,0,11,0,4,14654,artifacts\v527_kaggle_code_audit\pulled_code\cmirani__nemotron-lora-fine-tuning-pipeline
+waterjoe/fork-of-nvidia-nemotron-sft-grpo-trainer,Fork of NVIDIA Nemotron - SFT+GRPO Trainer ,97,2,1,16,0,0,10,1,3,16176,artifacts\v527_kaggle_code_audit\pulled_code\waterjoe__fork-of-nvidia-nemotron-sft-grpo-trainer
+mayukh18/unsloth-sft-full-data-training,Unsloth SFT Full Data Training,96,0,0,12,1,2,10,9,5,14389,artifacts\v527_kaggle_code_audit\pulled_code\mayukh18__unsloth-sft-full-data-training
+javihm77/nemotron-cot-validation-jh,Nemotron CoT Validation - JH,94,3,3,4,1,6,0,24,2,14807,artifacts\v527_kaggle_code_audit\pulled_code\javihm77__nemotron-cot-validation-jh
+kienngx/nvidia-nemotron-training-cot-labels,NVIDIA Nemotron Training (CoT + Labels),94,0,0,18,0,0,9,0,4,10511,artifacts\v527_kaggle_code_audit\pulled_code\kienngx__nvidia-nemotron-training-cot-labels
+krishnagupta02468/tinker-submission-notebook,Tinker submission notebook,94,0,0,4,2,2,11,23,15,15291,artifacts\v527_kaggle_code_audit\pulled_code\krishnagupta02468__tinker-submission-notebook
+rezaazami/0-64-nvidia-nemotron-training,[0.64] NVIDIA Nemotron Training,94,0,0,18,0,0,9,0,4,10507,artifacts\v527_kaggle_code_audit\pulled_code\rezaazami__0-64-nvidia-nemotron-training
+jeffreypikeai/nemotron-supervised-tuning,Nemotron: Supervised Tuning,92,1,1,12,0,0,14,5,5,21200,artifacts\v527_kaggle_code_audit\pulled_code\jeffreypikeai__nemotron-supervised-tuning
+sakhawathossen/nemotron-reasoning-boost-hf-qlora-trainer,Nemotron Reasoning Boost - HF QLoRA Trainer,92,0,0,16,0,2,7,0,4,16010,artifacts\v527_kaggle_code_audit\pulled_code\sakhawathossen__nemotron-reasoning-boost-hf-qlora-trainer
+hammadfarooq470/nvidia-nemotron-reasoning,NVIDIA Nemotron Reasoning,91,0,0,14,2,0,7,10,3,16155,artifacts\v527_kaggle_code_audit\pulled_code\hammadfarooq470__nvidia-nemotron-reasoning
+ksk872/nvidia-initial,NVIDIA - initial,91,0,0,17,3,0,5,0,1,11888,artifacts\v527_kaggle_code_audit\pulled_code\ksk872__nvidia-initial
+impooping/generate-cots-labels,Generate CoTs + Labels,88,1,0,21,0,0,0,0,1,6491,artifacts\v527_kaggle_code_audit\pulled_code\impooping__generate-cots-labels
+rauffauzanrambe/nvidia-next-gen-reasoning-ai-for-deep-learning,NVIDIA Next-Gen Reasoning AI for Deep Learning,88,0,0,17,0,0,8,0,4,15825,artifacts\v527_kaggle_code_audit\pulled_code\rauffauzanrambe__nvidia-next-gen-reasoning-ai-for-deep-learning
+amanatar/nvidia-nemotron-sfttrainer-training,NVIDIA Nemotron - SFTTrainer training,86,0,0,15,0,0,12,0,2,14605,artifacts\v527_kaggle_code_audit\pulled_code\amanatar__nvidia-nemotron-sfttrainer-training
+nhtdngtrn/nemotron-sft-lora-with-cot-v2-prep-now-plz-wait,Nemotron SFT LoRA with CoT (v2 prep now plz wait),85,1,1,12,2,0,9,0,5,14283,artifacts\v527_kaggle_code_audit\pulled_code\nhtdngtrn__nemotron-sft-lora-with-cot-v2-prep-now-plz-wait
+xduan7/nemotron-moe-tied-lora-eval-scout,Nemotron MoE-Tied LoRA Eval Scout,85,3,1,3,3,2,0,29,10,10155,artifacts\v527_kaggle_code_audit\pulled_code\xduan7__nemotron-moe-tied-lora-eval-scout
+jiazhuang/nemotron-mainstream-llm-performance-comparison,Nemotron Mainstream LLM Performance Comparison ,84,0,0,2,0,14,0,1,5,9654,artifacts\v527_kaggle_code_audit\pulled_code\jiazhuang__nemotron-mainstream-llm-performance-comparison
+yashanathaniel/nvidia-nemotron-training,NVIDIA Nemotron - training,83,0,0,16,0,0,5,0,9,14004,artifacts\v527_kaggle_code_audit\pulled_code\yashanathaniel__nvidia-nemotron-training
+nikitagajbhiye30/nvidia-cpu-00,NVIDIA CPU 00,82,6,5,4,0,6,1,0,1,15124,artifacts\v527_kaggle_code_audit\pulled_code\nikitagajbhiye30__nvidia-cpu-00
+stevanuso/nvidia-nemotron-training,NVIDIA Nemotron Training,82,0,0,15,0,0,9,0,4,8188,artifacts\v527_kaggle_code_audit\pulled_code\stevanuso__nvidia-nemotron-training
+manhha25022005/nemotron-sft-lora-with-cot-v2-prep-now-plz-wait,Nemotron SFT LoRA with CoT (v2 prep now plz wait),81,1,1,11,2,0,9,0,5,13663,artifacts\v527_kaggle_code_audit\pulled_code\manhha25022005__nemotron-sft-lora-with-cot-v2-prep-now-plz-wait
+renukaprasadpatwari/nvidia-nemotron-challenge,Nvidia Nemotron Challenge,80,7,0,1,8,0,6,2,9,26553,artifacts\v527_kaggle_code_audit\pulled_code\renukaprasadpatwari__nvidia-nemotron-challenge
+akankshathalla/nvidia-nemotron-final,NVIDIA Nemotron final,79,0,0,16,1,0,5,0,1,7739,artifacts\v527_kaggle_code_audit\pulled_code\akankshathalla__nvidia-nemotron-final
+esabellechen/nvidia-nemotron-training,NVIDIA Nemotron Training,78,0,0,14,0,1,7,0,3,8966,artifacts\v527_kaggle_code_audit\pulled_code\esabellechen__nvidia-nemotron-training
+manderson240/nemotron-pure-symbolic-solver-v28,Nemotron Pure Symbolic Solver v28,77,1,0,11,0,6,0,0,0,18036,artifacts\v527_kaggle_code_audit\pulled_code\manderson240__nemotron-pure-symbolic-solver-v28
+manderson240/nemotron-pure-symbolic-solver-v33,Nemotron Pure Symbolic Solver v33,77,1,0,11,0,6,0,0,0,18036,artifacts\v527_kaggle_code_audit\pulled_code\manderson240__nemotron-pure-symbolic-solver-v33
+optiminist/equation-eda-operator-operation-84-solve-rate,Equation EDA: Operator-Operation 84% Solve Rate,75,0,6,10,2,0,0,0,9,19671,artifacts\v527_kaggle_code_audit\pulled_code\optiminist__equation-eda-operator-operation-84-solve-rate
+pauldumontunc/lora-training,LoRa Training,75,0,0,13,0,0,10,0,3,11922,artifacts\v527_kaggle_code_audit\pulled_code\pauldumontunc__lora-training
+trishanthmellimi/finding-nemo-v4-cot,finding_nemo_v4_cot,75,0,0,13,0,0,7,0,9,7932,artifacts\v527_kaggle_code_audit\pulled_code\trishanthmellimi__finding-nemo-v4-cot
+krupalpatel07/nemotron-model-1,Nemotron Model_1,74,0,0,13,0,0,5,3,9,7323,artifacts\v527_kaggle_code_audit\pulled_code\krupalpatel07__nemotron-model-1
+mohamedamr992/easy-loading-of-nemotron-3,Easy_Loading_of_Nemotron_3,74,0,0,16,0,0,2,0,6,8982,artifacts\v527_kaggle_code_audit\pulled_code\mohamedamr992__easy-loading-of-nemotron-3
+mirzayasirabdullah07/nvidia-nemotron-model-notebook,NVIDIA Nemotron Model Notebook,73,0,0,9,1,0,8,0,17,13393,artifacts\v527_kaggle_code_audit\pulled_code\mirzayasirabdullah07__nvidia-nemotron-model-notebook
+include4eto/nvidia-nemotron-training,NVIDIA Nemotron - Training,70,0,0,13,0,0,6,0,6,10057,artifacts\v527_kaggle_code_audit\pulled_code\include4eto__nvidia-nemotron-training
+mtoshidesu/lora-nvidia-nemotron-models-with-pytorch,LoRA Nvidia Nemotron Models with Pytorch,70,0,0,6,0,0,22,0,2,7972,artifacts\v527_kaggle_code_audit\pulled_code\mtoshidesu__lora-nvidia-nemotron-models-with-pytorch
+rauffauzanrambe/lora-nvidia-nemotron-models-with-pytorch,LoRA Nvidia Nemotron Models with Pytorch,70,0,0,6,0,0,22,0,2,7972,artifacts\v527_kaggle_code_audit\pulled_code\rauffauzanrambe__lora-nvidia-nemotron-models-with-pytorch
+elgorrimmohamed/nvidia-nemotron-model-reasoning-challenge,nvidia-nemotron-model-reasoning-challenge,69,0,0,14,0,0,5,1,2,14471,artifacts\v527_kaggle_code_audit\pulled_code\elgorrimmohamed__nvidia-nemotron-model-reasoning-challenge
+uraniumdistilled/nvidia-nemotron-grpo-training,NVIDIA Nemotron grpo training,67,0,0,9,2,0,3,12,5,17354,artifacts\v527_kaggle_code_audit\pulled_code\uraniumdistilled__nvidia-nemotron-grpo-training
+aminmahmoudalifayed/nvidia-golden,🏆 NVIDIA – Golden,66,0,0,6,0,2,11,5,5,16250,artifacts\v527_kaggle_code_audit\pulled_code\aminmahmoudalifayed__nvidia-golden
+dennisfong/nvidia-nemotron-sfttrainer-training,NVIDIA Nemotron - SFTTrainer training,66,0,0,12,0,0,8,0,2,7126,artifacts\v527_kaggle_code_audit\pulled_code\dennisfong__nvidia-nemotron-sfttrainer-training
+manderson240/nemotron-symbolic-solver-v36-fixed,Nemotron Symbolic Solver v36 - Fixed,66,2,0,4,1,7,0,0,5,8738,artifacts\v527_kaggle_code_audit\pulled_code\manderson240__nemotron-symbolic-solver-v36-fixed
+robinhad/nvidia-nemotron-sfttrainer-training-97274f,NVIDIA Nemotron - SFTTrainer training 97274f,66,0,0,12,0,0,8,0,2,7126,artifacts\v527_kaggle_code_audit\pulled_code\robinhad__nvidia-nemotron-sfttrainer-training-97274f
+waterjoe/nvidia-nemotron-mask-loss,NVIDIA Nemotron - Mask Loss,66,0,0,12,0,0,8,0,2,7527,artifacts\v527_kaggle_code_audit\pulled_code\waterjoe__nvidia-nemotron-mask-loss
+jeromejoseph2026/sft-lora-unit-conversion,sft_lora_unit_conversion,62,0,0,6,0,3,9,2,3,14816,artifacts\v527_kaggle_code_audit\pulled_code\jeromejoseph2026__sft-lora-unit-conversion
+johnnyhyland/nvidia-nemotron-training,NVIDIA Nemotron - training,62,0,0,12,0,0,5,0,4,7705,artifacts\v527_kaggle_code_audit\pulled_code\johnnyhyland__nvidia-nemotron-training
+revatidharmadhikari/revati-experiments-nvidia-nemotron-submission,Revati Experiments NVIDIA Nemotron Submission ,56,0,0,6,0,0,13,0,6,13665,artifacts\v527_kaggle_code_audit\pulled_code\revatidharmadhikari__revati-experiments-nvidia-nemotron-submission
+drchenb/nvidia-nemotron-trained-models-submission,Nvidia Nemotron Trained Models Submission,54,0,0,0,0,0,26,0,2,6766,artifacts\v527_kaggle_code_audit\pulled_code\drchenb__nvidia-nemotron-trained-models-submission
+haradibots/nemotron-3-nano-30b-a3,nemotron-3-nano-30b-a3,53,0,0,11,0,0,3,1,2,10449,artifacts\v527_kaggle_code_audit\pulled_code\haradibots__nemotron-3-nano-30b-a3
+manderson240/nemotron-symbolic-solver-v33-production,Nemotron Symbolic Solver v33 - Production,53,2,0,3,1,6,0,0,1,7610,artifacts\v527_kaggle_code_audit\pulled_code\manderson240__nemotron-symbolic-solver-v33-production
+mtoshidesu/nemotron-reasoning-made-simple-visual-starter,🚀 Nemotron Reasoning Made Simple — Visual Starter,52,0,0,10,0,2,0,2,0,14518,artifacts\v527_kaggle_code_audit\pulled_code\mtoshidesu__nemotron-reasoning-made-simple-visual-starter
+dennislanov/nvidia-nemotron-submission-demo,NVIDIA Nemotron Submission Demo,50,0,0,8,0,0,6,0,6,11429,artifacts\v527_kaggle_code_audit\pulled_code\dennislanov__nvidia-nemotron-submission-demo
+manderson240/nemotron-symbolic-solver-v32-competition-ready,Nemotron Symbolic Solver v32 - Competition Ready,49,1,0,4,0,6,0,0,0,6356,artifacts\v527_kaggle_code_audit\pulled_code\manderson240__nemotron-symbolic-solver-v32-competition-ready
+hammadfarooq470/geometry-of-intelligence-svd-lora-art-compression,"Geometry of Intelligence: SVD,LoRA&Art Compression",48,0,0,7,3,0,4,0,0,6223,artifacts\v527_kaggle_code_audit\pulled_code\hammadfarooq470__geometry-of-intelligence-svd-lora-art-compression
+krishnapanjiyar123/nvidia-nemotron-submission-demo,NVIDIA Nemotron Submission Demo,47,0,0,7,0,0,7,0,5,9019,artifacts\v527_kaggle_code_audit\pulled_code\krishnapanjiyar123__nvidia-nemotron-submission-demo
+nadiakhalid/nvidia-nemotron-model-reasoning,NVIDIA Nemotron Model Reasoning,47,2,0,7,0,1,1,0,6,15473,artifacts\v527_kaggle_code_audit\pulled_code\nadiakhalid__nvidia-nemotron-model-reasoning
+sakshatpatil25/nvidia-nemotron-submission-demo,NVIDIA Nemotron Submission Demo,47,0,0,7,0,0,7,0,5,9554,artifacts\v527_kaggle_code_audit\pulled_code\sakshatpatil25__nvidia-nemotron-submission-demo
+vohuutridung/3930-sft-summarization-models,[3930] sft summarization models,47,0,0,5,0,0,12,0,3,8496,artifacts\v527_kaggle_code_audit\pulled_code\vohuutridung__3930-sft-summarization-models
+hammadfarooq470/nvidia-nemotron-trained-models-submission,Nvidia Nemotron Trained Models Submission,46,0,0,0,0,0,22,0,2,2455,artifacts\v527_kaggle_code_audit\pulled_code\hammadfarooq470__nvidia-nemotron-trained-models-submission
+kienngx/nvidia-nemotron-trained-models-submission,Nvidia Nemotron Trained Models Submission,46,0,0,0,0,0,22,0,2,4172,artifacts\v527_kaggle_code_audit\pulled_code\kienngx__nvidia-nemotron-trained-models-submission
+markjcooper/thk-public-fork-2026-05-14-v14-tinker-adapter,THK public fork 2026-05-14 (v14 tinker-adapter),46,0,0,0,0,0,22,0,2,4172,artifacts\v527_kaggle_code_audit\pulled_code\markjcooper__thk-public-fork-2026-05-14-v14-tinker-adapter
+rahuljiwane/nvidia-nemotron-rahul-jiwane,Nvidia Nemotron : Rahul Jiwane,46,0,0,0,0,0,22,0,2,2455,artifacts\v527_kaggle_code_audit\pulled_code\rahuljiwane__nvidia-nemotron-rahul-jiwane
+trnhquangminh140/nvidia-nemotron-model-reasoning-trinh-quang-minh,NVIDIA Nemotron Model Reasoning_Trinh Quang Minh,46,2,0,6,0,0,6,4,0,11872,artifacts\v527_kaggle_code_audit\pulled_code\trnhquangminh140__nvidia-nemotron-model-reasoning-trinh-quang-minh
+afr1ste/nemotron-0-86-tinker-adapter-guide,Nemotron 0.86 Tinker Adapter Guide,45,0,0,8,0,0,6,0,1,9535,artifacts\v527_kaggle_code_audit\pulled_code\afr1ste__nemotron-0-86-tinker-adapter-guide
+shamathmika/nemotron-reasoning-challenge,Nemotron-Reasoning-Challenge,45,4,1,3,0,0,8,0,2,11224,artifacts\v527_kaggle_code_audit\pulled_code\shamathmika__nemotron-reasoning-challenge
+ulyanovantonamaranta/nemotron-huikang-tinker27-repro,Nemotron Huikang Tinker27 Repro,44,0,0,5,0,0,6,0,12,6074,artifacts\v527_kaggle_code_audit\pulled_code\ulyanovantonamaranta__nemotron-huikang-tinker27-repro
+avikdas567/retrieval-pattern-reasoning-pipeline-for-nemotron,Retrieval Pattern Reasoning Pipeline for Nemotron,41,0,0,6,0,3,1,0,0,4528,artifacts\v527_kaggle_code_audit\pulled_code\avikdas567__retrieval-pattern-reasoning-pipeline-for-nemotron
+privatepiecerec/nemotron-reasoning-task-family-tour,Nemotron Reasoning: Task Family Tour,41,6,1,4,1,0,0,0,0,7789,artifacts\v527_kaggle_code_audit\pulled_code\privatepiecerec__nemotron-reasoning-task-family-tour
+syu21125/nemotron-v15-huikang-085-fixed-v5,Nemotron v15 huikang 085 fixed v5,39,0,0,5,0,0,8,1,2,3528,artifacts\v527_kaggle_code_audit\pulled_code\syu21125__nemotron-v15-huikang-085-fixed-v5
+franekwodarczyk/nvidia-nemotron-model-reasoning-by-me-0-6-score,NVIDIA Nemotron Model Reasoning by me 0.6 score,38,2,0,2,0,0,10,2,2,21355,artifacts\v527_kaggle_code_audit\pulled_code\franekwodarczyk__nvidia-nemotron-model-reasoning-by-me-0-6-score
+jek1wantaufik/nvidia-nemotron-model-reasoning-challenge,NVIDIA Nemotron Model Reasoning Challenge,37,0,0,7,0,0,4,0,1,6214,artifacts\v527_kaggle_code_audit\pulled_code\jek1wantaufik__nvidia-nemotron-model-reasoning-challenge
+ritikroshan4857/nvidia-nemotron-model-reasoning-challenge,NVIDIA Nemotron Model Reasoning Challenge,37,0,0,7,0,0,4,0,1,6214,artifacts\v527_kaggle_code_audit\pulled_code\ritikroshan4857__nvidia-nemotron-model-reasoning-challenge
+esaaak/nemotron-3-nano-30b-starter-lora-fine-tuning,Nemotron-3-Nano-30B: Starter LoRA Fine-Tuning 🚀,36,0,0,4,0,0,8,4,0,10490,artifacts\v527_kaggle_code_audit\pulled_code\esaaak__nemotron-3-nano-30b-starter-lora-fine-tuning
+rauffauzanrambe/nvidia-nemotron-trained-meachine-learning,NVIDIA Nemotron Trained Meachine Learning ,36,0,0,4,0,0,10,0,0,4156,artifacts\v527_kaggle_code_audit\pulled_code\rauffauzanrambe__nvidia-nemotron-trained-meachine-learning
+shrikantmalagi/nvidia-nemotron-model-reasoning-challenge,NVIDIA Nemotron Model Reasoning Challenge,36,3,0,4,0,0,5,0,1,11847,artifacts\v527_kaggle_code_audit\pulled_code\shrikantmalagi__nvidia-nemotron-model-reasoning-challenge
+vodung020905/3930-sft-summarization-models,[3930] sft summarization models,36,0,0,5,0,0,7,0,2,8099,artifacts\v527_kaggle_code_audit\pulled_code\vodung020905__3930-sft-summarization-models
+haradibots/nvidia-nemotron,NVIDIA Nemotron,35,0,0,7,0,0,3,0,1,5279,artifacts\v527_kaggle_code_audit\pulled_code\haradibots__nvidia-nemotron
+chaitanyajamble/nvidia-nmrc-4,Nvidia-NMRC--4,34,0,0,5,1,1,2,0,1,11759,artifacts\v527_kaggle_code_audit\pulled_code\chaitanyajamble__nvidia-nmrc-4
+kanakasarat1/lora-adapter-fusion-and-rank-compression-pipeline,LoRA Adapter Fusion and Rank Compression Pipeline ,34,0,0,4,3,0,2,0,2,6715,artifacts\v527_kaggle_code_audit\pulled_code\kanakasarat1__lora-adapter-fusion-and-rank-compression-pipeline
+rauffauzanrambe/lora-adapter-fusion-and-rank-compression-pipeline,LoRA Adapter Fusion and Rank Compression Pipeline ,34,0,0,4,3,0,2,0,2,6715,artifacts\v527_kaggle_code_audit\pulled_code\rauffauzanrambe__lora-adapter-fusion-and-rank-compression-pipeline
+david01szu/nemotron-soft-balanced-sampling-sft,Nemotron Soft-Balanced Sampling SFT,33,0,0,3,0,0,9,2,1,5917,artifacts\v527_kaggle_code_audit\pulled_code\david01szu__nemotron-soft-balanced-sampling-sft
+rdn2k00/cot-preprocessing,"CoT, Preprocessing",31,0,0,5,0,2,0,1,0,6349,artifacts\v527_kaggle_code_audit\pulled_code\rdn2k00__cot-preprocessing
+syu21125/nemotron-dgxchen-085-submit,Nemotron dgxchen 085 submit,31,0,0,3,0,0,8,1,2,3994,artifacts\v527_kaggle_code_audit\pulled_code\syu21125__nemotron-dgxchen-085-submit
+syu21125/nemotron-kienngx-2400-submit,Nemotron kienngx 2400 submit,31,0,0,3,0,0,8,1,2,3996,artifacts\v527_kaggle_code_audit\pulled_code\syu21125__nemotron-kienngx-2400-submit
+syu21125/nemotron-kienngx-tinker-submit,Nemotron kienngx tinker submit,31,0,0,3,0,0,8,1,2,4000,artifacts\v527_kaggle_code_audit\pulled_code\syu21125__nemotron-kienngx-tinker-submit
+syu21125/nemotron-v39-huikang-reasoning-sft-submit,Nemotron v39 huikang reasoning sft submit,31,0,0,3,0,0,8,1,2,4002,artifacts\v527_kaggle_code_audit\pulled_code\syu21125__nemotron-v39-huikang-reasoning-sft-submit
+ringustheimp/tinker-w-svd-rank-16,Tinker w/ SVD & Rank 16,29,0,0,2,3,0,3,0,3,3692,artifacts\v527_kaggle_code_audit\pulled_code\ringustheimp__tinker-w-svd-rank-16
+khanshakir14/competition-nvidia,Competition_NVIDIA,28,2,0,1,3,0,3,0,0,13676,artifacts\v527_kaggle_code_audit\pulled_code\khanshakir14__competition-nvidia
+alexxxsem/nemotron-simple-offline-working-demo,Nemotron Simple Offline Working Demo,27,0,0,3,0,0,7,0,1,4578,artifacts\v527_kaggle_code_audit\pulled_code\alexxxsem__nemotron-simple-offline-working-demo
+sanjaysuthraye96/exploratory-data-analysis-nvidia-nemotron,Exploratory Data Analysis - NVIDIA Nemotron,27,3,2,3,0,0,0,0,0,6522,artifacts\v527_kaggle_code_audit\pulled_code\sanjaysuthraye96__exploratory-data-analysis-nvidia-nemotron
+syu21125/nemotron-v15-huikang-085-submission,Nemotron v15 huikang 085 Submission,27,0,0,6,0,0,1,0,1,3076,artifacts\v527_kaggle_code_audit\pulled_code\syu21125__nemotron-v15-huikang-085-submission
+suryamilenial/fork-of-fork-of-fork-of-nvidia-nemotron-mod-4291c4,Fork of Fork of Fork of NVIDIA Nemotron Mod 4291c4,26,0,0,5,0,0,3,0,0,5649,artifacts\v527_kaggle_code_audit\pulled_code\suryamilenial__fork-of-fork-of-fork-of-nvidia-nemotron-mod-4291c4
+amlear/tinker-adapter-solved-some-internet-issues,Tinker Adapter (Solved Some Internet issues),25,0,0,2,3,0,2,0,1,3762,artifacts\v527_kaggle_code_audit\pulled_code\amlear__tinker-adapter-solved-some-internet-issues
+asalhi/tinker-adapter-to-ready-to-submit-adapter,Tinker Adapter to Ready To Submit Adapter,25,0,0,2,3,0,2,0,1,3484,artifacts\v527_kaggle_code_audit\pulled_code\asalhi__tinker-adapter-to-ready-to-submit-adapter
+hammadfarooq470/think-twice-self-correcting-reasoning,Think Twice: Self-Correcting Reasoning,25,0,0,2,3,0,2,0,1,3691,artifacts\v527_kaggle_code_audit\pulled_code\hammadfarooq470__think-twice-self-correcting-reasoning
+kaziaishikuzzaman/end-to-end-finetuning-for-nemotron,End-to-end finetuning for Nemotron,25,0,0,2,3,0,2,0,1,4724,artifacts\v527_kaggle_code_audit\pulled_code\kaziaishikuzzaman__end-to-end-finetuning-for-nemotron
+llccqq624/nvidia-nemotron-tinker-adapter-notebook,NVIDIA Nemotron Tinker Adapter Notebook,25,0,0,2,3,0,2,0,1,3762,artifacts\v527_kaggle_code_audit\pulled_code\llccqq624__nvidia-nemotron-tinker-adapter-notebook
+michaelkong537/tinker-adapter-solved-some-internet-issues,Tinker Adapter (Solved Some Internet issues),25,0,0,2,3,0,2,0,1,3762,artifacts\v527_kaggle_code_audit\pulled_code\michaelkong537__tinker-adapter-solved-some-internet-issues
+bloodmoonwq/fork-of-nemotron-tinker-adapter-repro-c9ee4-15cc8c,Fork of Nemotron Tinker Adapter Repro c9ee4 15cc8c,24,0,0,5,0,0,2,0,0,3238,artifacts\v527_kaggle_code_audit\pulled_code\bloodmoonwq__fork-of-nemotron-tinker-adapter-repro-c9ee4-15cc8c
+nrapendraiec/nvidia-nemotron,nvidia_nemotron,24,0,0,2,0,0,7,0,2,7367,artifacts\v527_kaggle_code_audit\pulled_code\nrapendraiec__nvidia-nemotron
+suryamilenial/fork-of-nvidia-nemotron-model-notebook,Fork of NVIDIA Nemotron Model Notebook,24,0,0,5,0,0,2,0,0,5280,artifacts\v527_kaggle_code_audit\pulled_code\suryamilenial__fork-of-nvidia-nemotron-model-notebook
+suryamilenial/nvidia-nemotron-model-notebook,NVIDIA Nemotron Model Notebook,24,0,0,5,0,0,2,0,0,5280,artifacts\v527_kaggle_code_audit\pulled_code\suryamilenial__nvidia-nemotron-model-notebook
+syu21125/nemotron-path-d-tinker-conversion,Nemotron Path D Tinker Conversion,23,0,0,1,3,0,2,2,1,3960,artifacts\v527_kaggle_code_audit\pulled_code\syu21125__nemotron-path-d-tinker-conversion
+rdn2k00/nemotron-qlora,"Nemotron, QLoRA",22,0,0,1,0,0,9,0,0,2387,artifacts\v527_kaggle_code_audit\pulled_code\rdn2k00__nemotron-qlora
+dhruvb2028/tinker-adapter-ready-to-submit-adapter,Tinker Adapter Ready To Submit Adapter,21,0,0,1,3,0,2,0,1,3893,artifacts\v527_kaggle_code_audit\pulled_code\dhruvb2028__tinker-adapter-ready-to-submit-adapter
+kunrittyhe/nvidia-nemotron-submission-demo,NVIDIA Nemotron Submission Demo,21,0,0,2,0,0,6,0,1,5543,artifacts\v527_kaggle_code_audit\pulled_code\kunrittyhe__nvidia-nemotron-submission-demo
+manderson240/nemotron-lora-v41-training-all-data,Nemotron LoRA v41 Training All Data,21,0,0,2,0,0,6,0,1,4070,artifacts\v527_kaggle_code_audit\pulled_code\manderson240__nemotron-lora-v41-training-all-data
+mebbbbbbius/nvidia-nemotron-submission-demo,NVIDIA Nemotron Submission Demo,21,1,0,4,0,0,1,0,0,15173,artifacts\v527_kaggle_code_audit\pulled_code\mebbbbbbius__nvidia-nemotron-submission-demo
+nidhish1010/nvidia-nemotron-submission-demo-c37b25,NVIDIA Nemotron Submission Demo c37b25,21,1,0,1,0,0,6,0,2,5760,artifacts\v527_kaggle_code_audit\pulled_code\nidhish1010__nvidia-nemotron-submission-demo-c37b25
+raunakdey07/nemotron-tinker-adapter,Nemotron Tinker Adapter,21,0,0,1,3,0,2,0,1,3515,artifacts\v527_kaggle_code_audit\pulled_code\raunakdey07__nemotron-tinker-adapter
+rlaajgus/nemotron-0430-1445,Nemotron_0430_1445,21,0,0,0,0,0,10,0,1,6540,artifacts\v527_kaggle_code_audit\pulled_code\rlaajgus__nemotron-0430-1445
+mohithramesh/nemotron-training,Nemotron Training,20,0,0,2,0,0,5,0,2,7978,artifacts\v527_kaggle_code_audit\pulled_code\mohithramesh__nemotron-training
+krupalpatel07/advanced-nemotron-model-2,Advanced Nemotron Model_2,18,0,0,3,0,0,2,1,1,4790,artifacts\v527_kaggle_code_audit\pulled_code\krupalpatel07__advanced-nemotron-model-2
+muhammadshoaibaltaf/nvidia-nemotron-model-simple-version-1,NVIDIA NEMOTRON MODEL SIMPLE VERSION-1,18,0,0,2,0,0,4,0,2,5263,artifacts\v527_kaggle_code_audit\pulled_code\muhammadshoaibaltaf__nvidia-nemotron-model-simple-version-1
+edyvision/nvidia-nemotron-submission-demo-w-blackwell-patch,NVIDIA Nemotron Submission Demo w/ Blackwell Patch,17,0,0,1,0,0,6,0,1,7093,artifacts\v527_kaggle_code_audit\pulled_code\edyvision__nvidia-nemotron-submission-demo-w-blackwell-patch
+yashashavdk/nemotron-training-dl-class-cmpe258-assignment,nemotron-training-dl-class-cmpe258-assignment,17,0,0,0,0,0,6,0,5,4512,artifacts\v527_kaggle_code_audit\pulled_code\yashashavdk__nemotron-training-dl-class-cmpe258-assignment
+hammadfarooq470/nvidia-nemotron-model-reasoning-0-68,NVIDIA Nemotron Model Reasoning 0.68,16,0,0,3,0,0,2,0,0,3638,artifacts\v527_kaggle_code_audit\pulled_code\hammadfarooq470__nvidia-nemotron-model-reasoning-0-68
+jek1wantaufik/nvidia-nemotron-model-reasoning-0-68,NVIDIA Nemotron Model Reasoning 0.68,16,0,0,3,0,0,2,0,0,3700,artifacts\v527_kaggle_code_audit\pulled_code\jek1wantaufik__nvidia-nemotron-model-reasoning-0-68
+david01szu/simple-nemotron-baseline,Simple Nemotron Baseline,15,1,0,3,0,0,0,0,0,1283,artifacts\v527_kaggle_code_audit\pulled_code\david01szu__simple-nemotron-baseline
+ramyagopalaswamy/nvidia-nemotron-submission-demo,NVIDIA Nemotron Submission Demo,13,0,0,1,0,0,4,0,1,6491,artifacts\v527_kaggle_code_audit\pulled_code\ramyagopalaswamy__nvidia-nemotron-submission-demo
+rishabhshukla111/notebookneotronreasoningmodel,notebookneotronreasoningmodel,13,0,0,0,0,0,5,2,1,6069,artifacts\v527_kaggle_code_audit\pulled_code\rishabhshukla111__notebookneotronreasoningmodel
+rohansan1/nemotron-reasoning-lora-solution-writeup,Nemotron Reasoning LoRA Solution Writeup,11,0,0,1,0,0,1,1,4,8877,artifacts\v527_kaggle_code_audit\pulled_code\rohansan1__nemotron-reasoning-lora-solution-writeup
+cryptdragon/nemotron-30b-deterministic-solvers-cot-fine-tu,Nemotron 30B | Deterministic Solvers + CoT Fine-Tu,10,0,0,0,0,0,5,0,0,2287,artifacts\v527_kaggle_code_audit\pulled_code\cryptdragon__nemotron-30b-deterministic-solvers-cot-fine-tu
+dhruvb2028/nemotron-comp,Nemotron Comp,10,0,0,1,0,0,3,0,0,6632,artifacts\v527_kaggle_code_audit\pulled_code\dhruvb2028__nemotron-comp
+evgendvorkin/nemotron-3-nano-lora-adapter-submission,Nemotron-3 Nano: LoRA Adapter Submission,10,2,0,0,0,0,1,0,2,6948,artifacts\v527_kaggle_code_audit\pulled_code\evgendvorkin__nemotron-3-nano-lora-adapter-submission
+jeanfranciscodasilva/nvidia-nemotron-submission-demo,NVIDIA Nemotron Submission Demo,10,0,0,0,0,0,5,0,0,1443,artifacts\v527_kaggle_code_audit\pulled_code\jeanfranciscodasilva__nvidia-nemotron-submission-demo
+kanakasarat1/nvidia-nemotron-submission-demo,NVIDIA Nemotron Submission Demo,10,0,0,0,0,0,5,0,0,1589,artifacts\v527_kaggle_code_audit\pulled_code\kanakasarat1__nvidia-nemotron-submission-demo
+m1ndthegap/nemotron-lora-script-submission,Nemotron LoRA Script Submission,10,0,0,0,0,0,5,0,0,2052,artifacts\v527_kaggle_code_audit\pulled_code\m1ndthegap__nemotron-lora-script-submission
+parthgala07/nvidia-nemotron-submission-training-1,NVIDIA Nemotron Submission Training 1,10,0,0,0,0,0,5,0,0,1498,artifacts\v527_kaggle_code_audit\pulled_code\parthgala07__nvidia-nemotron-submission-training-1
+ryanholbrook/nvidia-nemotron-submission-demo,NVIDIA Nemotron Submission Demo,10,0,0,0,0,0,5,0,0,1589,artifacts\v527_kaggle_code_audit\pulled_code\ryanholbrook__nvidia-nemotron-submission-demo
+rahulchauhan016/nemotron-lora-reasoning-pipeline,Nemotron LoRA Reasoning Pipeline,9,0,0,0,0,0,4,0,1,6080,artifacts\v527_kaggle_code_audit\pulled_code\rahulchauhan016__nemotron-lora-reasoning-pipeline
+apachikoff/nvidia-constraint-ai-comp,NVIDIA_CONSTRAINT_AI_COMP,8,0,0,1,0,0,2,0,0,3304,artifacts\v527_kaggle_code_audit\pulled_code\apachikoff__nvidia-constraint-ai-comp
+croftadams/nemotron-working-submission-test,Nemotron Working Submission Test,6,0,0,1,0,0,1,0,0,2403,artifacts\v527_kaggle_code_audit\pulled_code\croftadams__nemotron-working-submission-test
+huikang/nvidia-nemotron-all-linear,NVIDIA Nemotron - all-linear,6,0,0,0,0,0,3,0,0,1411,artifacts\v527_kaggle_code_audit\pulled_code\huikang__nvidia-nemotron-all-linear
+prena0808/nemotron-quick-submit-v1,Nemotron Quick Submit v1,6,0,0,0,0,0,3,0,0,1321,artifacts\v527_kaggle_code_audit\pulled_code\prena0808__nemotron-quick-submit-v1
+rauffauzanrambe/nvidia-advances-pytorch-rnn-training-pipeline,NVIDIA Advances PYTORCH + RNN TRAINING PIPELINE,6,0,0,1,0,0,1,0,0,8032,artifacts\v527_kaggle_code_audit\pulled_code\rauffauzanrambe__nvidia-advances-pytorch-rnn-training-pipeline
+mtoshidesu/testnvidia-comp,testNVIDIA_COMP,4,0,0,0,0,0,2,0,0,1567,artifacts\v527_kaggle_code_audit\pulled_code\mtoshidesu__testnvidia-comp
+rohanrk1813/nvidia-comp,NVIDIA_COMP,4,0,0,0,0,0,2,0,0,1567,artifacts\v527_kaggle_code_audit\pulled_code\rohanrk1813__nvidia-comp
+denislu/nvidia-nemotron-model-reasoning-challenge,NVIDIA Nemotron Model Reasoning Challenge,2,0,0,0,0,0,1,0,0,1688,artifacts\v527_kaggle_code_audit\pulled_code\denislu__nvidia-nemotron-model-reasoning-challenge

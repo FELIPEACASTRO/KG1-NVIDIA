@@ -1,0 +1,92 @@
+ref,title,author,lastRunTime,totalVotes
+xduan7/nemotron-bit-verifier-replace-memcheck,Nemotron Bit Verifier Replace Memcheck,Xiaotian Duan,2026-05-12 15:29:56.603000,0
+tanluu/stage2-pcc-listops,stage2-pcc-listops,tan luu,2026-05-12 14:33:00.663000,0
+tanluu/stage2-pcc-v24-k8,stage2-pcc-V24-k8,tan luu,2026-05-12 14:29:11.270000,0
+tanluu/stage2-pcc-modular,stage2-pcc-modular,tan luu,2026-05-12 14:29:10.713000,0
+tanluu/stage2-vanilla-listops-v3,stage2-vanilla-listops-v3,tan luu,2026-05-12 13:57:02.030000,0
+nguyenduongtrong/stage2-vanilla-modular-v2,stage2-vanilla-modular-v2,Nguyen Duong Trong,2026-05-12 13:52:14.363000,0
+truongdinhduc06/stage2-vanilla-v12-k8-deep,stage2-vanilla-V12-k8-deep,Trương Đình Đức,2026-05-12 13:25:18.320000,0
+dfbjdsbds/stage2-vanilla-v24-k8,stage2-vanilla-V24-k8,Space_cowboy,2026-05-12 13:25:17.650000,0
+tuananhtran37/stage2-vanilla-v12-k16,stage2-vanilla-V12-k16,Tuan Anh Tran 37,2026-05-12 13:25:16.657000,0
+xduan7/nemotron-bit-verifier-append-eval,Nemotron Bit Verifier Append Eval,Xiaotian Duan,2026-05-12 13:23:14.830000,0
+xduan7/nemotron-bit-verifier-replace-eval,Nemotron Bit Verifier Replace Eval,Xiaotian Duan,2026-05-12 13:23:11.713000,0
+dfbjdsbds/stage2-vanilla-mp-v2,stage2-vanilla-mp-v2,Space_cowboy,2026-05-12 12:30:12.603000,0
+tanluu/stage2-pcc-mp-v2,stage2-pcc-mp-v2,tan luu,2026-05-12 12:30:12.070000,0
+dfbjdsbds/stage2-vanilla-d2048-s4,stage2-vanilla-d2048-s4,Space_cowboy,2026-05-12 11:27:14.247000,0
+tanluu/stage2-pcc-d2048-reason,stage2-pcc-d2048-reason,tan luu,2026-05-12 11:27:11.293000,0
+truongdinhduc06/pretrain-sanity-bigbatch16,pretrain-sanity-bigbatch16,Trương Đình Đức,2026-05-12 10:37:47.460000,0
+truongdinhduc06/pretrain-sanity-compile-v2,pretrain-sanity-compile-v2,Trương Đình Đức,2026-05-12 08:16:42.813000,0
+truongdinhduc06/pretrain-sanity-baseline-pcc,pretrain-sanity-baseline-pcc,Trương Đình Đức,2026-05-12 07:47:57.173000,0
+tuananhtran37/pretrain-sanity-compile-pcc,pretrain-sanity-compile-pcc,Tuan Anh Tran 37,2026-05-12 07:50:20.577000,0
+truongdinhduc06/probe-vanilla-s4,probe-vanilla-s4,Trương Đình Đức,2026-05-12 06:00:58.810000,0
+dfbjdsbds/pretrain-vanilla-d2048-3b-baseline,pretrain-vanilla-d2048-3b-baseline,Space_cowboy,2026-05-12 05:38:48.257000,0
+nguyenduongtrong/pretrain-vanilla-d2048-3b-synth,pretrain-vanilla-d2048-3b-synth,Nguyen Duong Trong,2026-05-12 05:38:10.917000,0
+truongdinhduc06/steered-pcc-d2048-seed1-loose-chain,steered-pcc-d2048-seed1-loose-chain,Trương Đình Đức,2026-05-12 05:36:57.407000,0
+truongdinhduc06/lle-v2-pcc-d2048-seed1-loose,lle-v2-pcc-d2048-seed1-loose,Trương Đình Đức,2026-05-12 05:36:54.323000,0
+tanluu/steered-pcc-d2048-reason-chain,steered-pcc-d2048-reason-chain,tan luu,2026-05-12 04:51:22.977000,0
+truongdinhduc06/steered-vanilla-d2048-s4-chain,steered-vanilla-d2048-s4-chain,Trương Đình Đức,2026-05-12 04:51:20.467000,0
+tuananhtran37/lle-v2-vanilla-d2048-s3,lle-v2-vanilla-d2048-s3,Tuan Anh Tran 37,2026-05-12 04:27:06.083000,0
+dfbjdsbds/lle-v2-vanilla-d2048-s2,lle-v2-vanilla-d2048-s2,Space_cowboy,2026-05-12 04:27:04.980000,0
+tanluu/lle-v2-pcc-d2048-reason,lle-v2-pcc-d2048-reason,tan luu,2026-05-12 04:27:04.673000,0
+tanluu/lle-pcc-d2048-reason-tanluu,lle-pcc-d2048-reason-tanluu,tan luu,2026-05-12 04:05:23.740000,0
+tuetrandoanminh/pretrain-pcc-d2048-reason-tight,pretrain-pcc-d2048-reason-tight,Tue Tran Doan Minh,2026-05-12 02:36:00.940000,0
+tuetrandoanminh/lle-hybrid-d1280-l8,lle-hybrid-d1280-l8,Tue Tran Doan Minh,2026-05-12 02:28:25.723000,0
+tuananhtran37/lle-vanilla-iter-d2048-s2,lle-vanilla-iter-d2048-s2,Tuan Anh Tran 37,2026-05-12 02:26:37.023000,0
+dfbjdsbds/lle-vanilla-iter-d2048-s1,lle-vanilla-iter-d2048-s1,Space_cowboy,2026-05-12 02:26:36.043000,0
+truongdinhduc06/lle-xloop-d1280-s2,lle-xloop-d1280-s2,Trương Đình Đức,2026-05-12 02:26:33.337000,0
+tuananhtran37/lle-pcc-iter-d1280-s1,lle-pcc-iter-d1280-s1,Tuan Anh Tran 37,2026-05-12 02:19:26.080000,0
+dfbjdsbds/lle-vanilla-d2048-s3,lle-vanilla-d2048-s3,Space_cowboy,2026-05-12 02:19:23.707000,0
+truongdinhduc06/lle-vanilla-d2048-s2,lle-vanilla-d2048-s2,Trương Đình Đức,2026-05-12 02:19:22.120000,0
+tuananhtran37/lle-vanilla-d2048-seed1,lle-vanilla-d2048-seed1,Tuan Anh Tran 37,2026-05-12 01:54:16.643000,0
+dfbjdsbds/lle-vanilla-d2048-s4,lle-vanilla-d2048-s4,Space_cowboy,2026-05-12 01:54:15.707000,0
+truongdinhduc06/lle-vanilla-d2048-s1,lle-vanilla-d2048-s1,Trương Đình Đức,2026-05-12 01:58:14.087000,0
+anng1112/eval-vanilla-s4-chained-x,eval-vanilla-s4-chained-x,Nguyen An,2026-05-12 01:38:28.977000,0
+tuetrandoanminh/eval-vanilla-d2048-seed1,eval-vanilla-d2048-seed1,Tue Tran Doan Minh,2026-05-12 01:38:13.490000,0
+anng1112/pretrain-pcc-d2048-reason-seed1,pretrain-pcc-d2048-reason-seed1,Nguyen An,2026-05-11 17:29:08.913000,0
+hduong/pretrain-vanilla-d2048-15b-s4,pretrain-vanilla-d2048-15b-s4,Hoang Duong,2026-05-11 12:36:35.293000,0
+tanluu/probe-pcc-d2048-reason,probe-pcc-d2048-reason,tan luu,2026-05-11 11:55:07.317000,0
+khoidang67/eval-vanilla-iter-s2-x,eval-vanilla-iter-s2-x,Khôi Đăng,2026-05-11 11:21:57.887000,0
+tuetrandoanminh/pretrain-vanilla-d2048-15b-seed1,pretrain-vanilla-d2048-15b-seed1,Tue Tran Doan Minh,2026-05-11 11:16:20.713000,0
+tanluu/eval-pcc-d2048-reason,eval-pcc-d2048-reason,tan luu,2026-05-11 10:53:05.443000,0
+leehoangquan006/eval-hr-d1280-reason,eval-hr-d1280-reason,Lê Hoàng Quân,2026-05-11 10:53:05.380000,0
+phmthanhlm24022379/eval-pcc-matched-1b,eval-pcc-matched-1b, Phạm Thanh Lâm 24022379,2026-05-11 10:53:04.547000,0
+phmthanhlm24022379/eval-hybrid-d1280-l8,eval-hybrid-d1280-l8, Phạm Thanh Lâm 24022379,2026-05-11 10:53:05.647000,0
+leehoangquan006/eval-pcc-iter-d1280-2b,eval-pcc-iter-d1280-2b,Lê Hoàng Quân,2026-05-11 01:06:29.743000,0
+namphmbuwu/eval-vanilla-iter-d2048-s1,eval-vanilla-iter-d2048-s1,Nam Phạm Bá UWU,2026-05-11 00:48:57.823000,0
+namphmbuwu/pretrain-vanilla-iter-d2048-15b-s2,pretrain-vanilla-iter-d2048-15b-s2,Nam Phạm Bá UWU,2026-05-10 16:57:58.433000,0
+truongdinhduc06/eval-xloop-d1280-s2,eval-xloop-d1280-s2,Trương Đình Đức,2026-05-10 16:05:09.457000,0
+hduong/eval-vanilla-d2048-s3,eval-vanilla-d2048-s3,Hoang Duong,2026-05-10 16:05:08.317000,0
+anng1112/probe-r12-pcc-qkv-bias-v2,probe-r12-pcc-qkv-bias-v2,Nguyen An,2026-05-10 11:07:02.567000,0
+tuetrandoanminh/probe-probe-xloop-d1280,probe-probe-xloop-d1280,Tue Tran Doan Minh,2026-05-10 10:37:43.913000,0
+zhongzhing/probe-probe-vanilla-d2048-4b,probe-probe-vanilla-d2048-4b,Zhong Zhing ,2026-05-10 10:37:44.550000,0
+truongdinhduc06/probe-probe-pcc-d2048,probe-probe-pcc-d2048,Trương Đình Đức,2026-05-10 10:37:43.530000,0
+anng1112/pretrain-r12-pcc-qkv-bias-d1024,pretrain-r12-pcc-qkv-bias-d1024,Nguyen An,2026-05-10 10:29:14.437000,0
+tuetrandoanminh/repr-flow-xloop-d1280-v2,repr-flow-xloop-d1280-v2,Tue Tran Doan Minh,2026-05-10 10:00:04.857000,0
+truongdinhduc06/repr-flow-pcc-d2048,repr-flow-pcc-d2048,Trương Đình Đức,2026-05-10 09:55:50.163000,0
+zhongzhing/repr-flow-vanilla-d2048-4b,repr-flow-vanilla-d2048-4b,Zhong Zhing ,2026-05-10 09:55:49.760000,0
+anng1112/dim-flow-r11-mol,dim-flow-r11-mol,Nguyen An,2026-05-10 09:07:47.083000,0
+anng1112/pretrain-r11-mol-d1024,pretrain-r11-mol-d1024,Nguyen An,2026-05-10 08:49:45.327000,0
+namphmbuwu/dim-flow-r11-pcclb,dim-flow-r11-pcclb,Nam Phạm Bá UWU,2026-05-10 08:27:59.167000,0
+anng1112/dim-flow-r11-plb,dim-flow-r11-plb,Nguyen An,2026-05-10 08:12:44.663000,0
+anng1112/pretrain-r11-per-loop-bias-d1024,pretrain-r11-per-loop-bias-d1024,Nguyen An,2026-05-10 07:56:45.743000,0
+namphmbuwu/pretrain-r11-pcc-loop-bias-d1024,pretrain-r11-pcc-loop-bias-d1024,Nam Phạm Bá UWU,2026-05-10 07:56:44.993000,0
+tuetrandoanminh/dim-flow-xloop-d1280-2b,dim-flow-xloop-d1280-2b,Tue Tran Doan Minh,2026-05-10 07:34:01.430000,0
+truongdinhduc06/dim-flow-pcc-d2048,dim-flow-pcc-d2048,Trương Đình Đức,2026-05-10 07:34:00.380000,0
+zhongzhing/dim-flow-vanilla-d2048-4b,dim-flow-vanilla-d2048-4b,Zhong Zhing ,2026-05-10 07:33:59.883000,0
+zhongzhing/grad-flow-vanilla-d2048-4b-own,grad-flow-vanilla-d2048-4b-own,Zhong Zhing ,2026-05-10 06:23:46.780000,0
+truongdinhduc06/grad-flow-pcc-d2048-own,grad-flow-pcc-d2048-own,Trương Đình Đức,2026-05-10 06:21:15.947000,0
+tuetrandoanminh/grad-flow-xloop-d1280-2b-v2,grad-flow-xloop-d1280-2b-v2,Tue Tran Doan Minh,2026-05-10 06:17:09.647000,0
+namphmbuwu/pretrain-vanilla-iter-d2048-15b-s1,pretrain-vanilla-iter-d2048-15b-s1,Nam Phạm Bá UWU,2026-05-10 04:44:42.493000,0
+truongdv006/pretrain-hybrid-d1280-15b-s1,pretrain-hybrid-d1280-15b-s1,38.Đinh Văn Trường,2026-05-10 02:07:36.013000,0
+truongdinhduc06/pretrain-xloop-d1280-15b-s2,pretrain-xloop-d1280-15b-s2,Trương Đình Đức,2026-05-10 16:45:38.247000,0
+hduong/pretrain-vanilla-d2048-15b-s3,pretrain-vanilla-d2048-15b-s3,Hoang Duong,2026-05-10 16:45:34.507000,0
+tuetrandoanminh/eval-xloop-d1280-2b,eval-xloop-d1280-2b,Tue Tran Doan Minh,2026-05-09 18:47:28.553000,0
+anng1112/eval-vanilla-d1024-1b,eval-vanilla-d1024-1b,Nguyen An,2026-05-09 18:21:48.993000,0
+anng1112/eval-vanilla-d2048-4b,eval-vanilla-d2048-4b,Nguyen An,2026-05-09 16:23:17.207000,0
+dfbjdsbds/pretrain-r10-vanilla-d1024-xlong,pretrain-r10-vanilla-d1024-xlong,Space_cowboy,2026-05-09 16:03:41.177000,0
+namphmbuwu/pretrain-r10-pcc-d1024-xlong,pretrain-r10-pcc-d1024-xlong,Nam Phạm Bá UWU,2026-05-09 15:58:19.573000,0
+tuetrandoanminh/eval-r10-loop2-aux,eval-r10-loop2-aux,Tue Tran Doan Minh,2026-05-09 15:55:17.023000,0
+anng1112/eval-r10-vanilla-d1024,eval-r10-vanilla-d1024,Nguyen An,2026-05-09 15:55:04.350000,0
+tuetrandoanminh/pretrain-r10-loop2-aux-long,pretrain-r10-loop2-aux-long,Tue Tran Doan Minh,2026-05-09 13:24:05.760000,0
+tuananhtran37/pretrain-r10-pcc-d1024-long,pretrain-r10-pcc-d1024-long,Tuan Anh Tran 37,2026-05-09 13:24:03.160000,0
+truongdv006/pretrain-xloop-3b,pretrain-xloop-3b,38.Đinh Văn Trường,2026-05-09 07:09:34.777000,0

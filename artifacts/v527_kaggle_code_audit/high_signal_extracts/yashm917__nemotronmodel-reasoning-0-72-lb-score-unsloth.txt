@@ -1,0 +1,648 @@
+
+# --- CELL 0 markdown ---
+## CELL 1 — Install
+
+# --- CELL 1 code ---
+!pip install -q --no-index --find-links /kaggle/input/datasets/mayukh18/nemotron-packages/packages unsloth trl peft transformers datasets accelerate bitsandbytes
+!pip install -q /kaggle/input/datasets/mayukh18/nemotron-packages/causal_conv1d-1.6.1+cu12torch2.10cxx11abiTRUE-cp312-cp312-linux_x86_64.whl
+!pip install -q /kaggle/input/datasets/mayukh18/nemotron-packages/mamba_ssm-2.3.1+cu12torch2.10cxx11abiTRUE-cp312-cp312-linux_x86_64.whl
+
+# --- CELL 2 markdown ---
+## CELL 2 — Imports & Config
+
+# --- CELL 3 code ---
+import os, re, math, zipfile, json
+from pathlib import Path
+import numpy as np
+import pandas as pd
+from datasets import Dataset
+import kagglehub
+import torch
+from unsloth import FastLanguageModel
+from unsloth.chat_templates import train_on_responses_only
+from sklearn.model_selection import train_test_split
+from trl import SFTTrainer
+from transformers import TrainingArguments, TrainerCallback
+
+DATA_DIR     = Path("/kaggle/input/nvidia-nemotron-3-reasoning-challenge/")
+ADAPTER_DIR  = "nemotron-lora-adapter"
+SUBMISSION_ZIP = "submission.zip"
+
+MODEL_PATH = kagglehub.model_download(
+    "metric/nemotron-3-nano-30b-a3b-bf16/transformers/default/1"
+)
+
+LORA_RANK    = 32
+LORA_ALPHA   = 16
+LORA_DROPOUT = 0.05    # 0 keeps full Unsloth kernel fusion
+
+MAX_SEQ_LEN = 2048    # matches working baseline
+NUM_EPOCHS  = 2       # was 1 — doubling is safe given runtime
+BATCH_SIZE  = 4       # matches working baseline
+GRAD_ACCUM  = 3       # matches working baseline
+LR          = 1e-4
+
+BOXED_INSTRUCTION = (
+    "\nPlease put your final answer inside `\\boxed{}`. "
+    "For example: `\\boxed{your answer}`"
+)
+
+print("Config ready.")
+
+# --- CELL 4 markdown ---
+## CELL 3 — Puzzle Classification & Rule-Based Solvers
+
+# --- CELL 5 code ---
+def classify_puzzle(prompt: str) -> str:
+    p = prompt.lower()
+    if "bit manipulation" in p or "8-bit binary" in p:
+        return "bit_manipulation"
+    if "numeral system" in p:
+        return "numeral_system"
+    if "encrypt" in p:
+        return "text_cipher"
+    if "equation" in p or "solve for" in p:
+        return "symbol_transform"
+    if "unit conversion" in p:
+        return "unit_conversion"
+    if "gravitational" in p or "gravity" in p:
+        return "physics_gravity"
+    return "other"
+
+def solve_roman(n: int) -> str:
+    val = [1000,900,500,400,100,90,50,40,10,9,5,4,1]
+    sym = ["M","CM","D","CD","C","XC","L","XL","X","IX","V","IV","I"]
+    result = ""
+    for v, s in zip(val, sym):
+        while n >= v:
+            result += s; n -= v
+    return result
+
+def extract_g(prompt):
+    pairs = re.findall(r"t\s*=\s*([\d.]+)s.*?distance\s*=\s*([\d.]+)\s*m", prompt)
+    if not pairs: return None, []
+    gs = [2*float(d)/float(t)**2 for t,d in pairs]
+    return round(np.mean(gs), 4), pairs
+
+def extract_ratio(prompt):
+    pairs = re.findall(r"([\d.]+)\s*m\s+becomes\s+([\d.]+)", prompt)
+    if not pairs: return None, []
+    ratios = [float(o)/float(i) for i,o in pairs if float(i) != 0]
+    return round(np.mean(ratios), 6), pairs
+
+def build_cipher_map(prompt):
+    lines = [l.strip() for l in prompt.split("\n")
+             if "->" in l and "decrypt" not in l.lower() and "now" not in l.lower()]
+    m = {}
+    for line in lines:
+        parts = line.split("->")
+        if len(parts) != 2: continue
+        for cw, pw in zip(parts[0].split(), parts[1].split()):
+            if len(cw) == len(pw):
+                for cc, pc in zip(cw, pw):
+                    m[cc] = pc
+    return m
+
+# ── NEW: Real bit manipulation solver ─────────────────────────────────
+def rotate_left(x, n, bits=8):
+    return ((x << n) | (x >> (bits - n))) & 0xFF
+
+def rotate_right(x, n, bits=8):
+    return ((x >> n) | (x << (bits - n))) & 0xFF
+
+def solve_bitmanip(prompt: str):
+    """
+    Try common bitwise rules and return (rule_description, working_str).
+    Returns (None, None) if no clean rule found.
+    """
+    pairs = re.findall(r"([01]{8})\s*->\s*([01]{8})", prompt)
+    if len(pairs) < 3:
+        return None, None
+
+    inputs  = [int(b, 2) for b, _ in pairs]
+    outputs = [int(b, 2) for _, b in pairs]
+
+    # Extract query
+    query_match = re.search(r"determine the output for:\s*([01]{8})", prompt)
+    query_bits  = query_match.group(1) if query_match else None
+    query_int   = int(query_bits, 2) if query_bits else None
+
+    def verify(fn):
+        return all(fn(i) == o for i, o in zip(inputs, outputs))
+
+    def show_working(fn, rule_name):
+        lines = []
+        for (ib, ob), i, o in zip(pairs[:4], inputs, outputs):
+            computed = fn(i)
+            check = "✓" if computed == o else "✗"
+            lines.append(f"  {ib} → {fn(i):08b} {check}")
+        result = f"{query_int:08b}" if query_int is not None else "?"
+        if query_int is not None:
+            result = f"{fn(query_int):08b}"
+        return "\n".join(lines), result
+
+    # 1. NOT
+    if verify(lambda i: (~i) & 0xFF):
+        w, r = show_working(lambda i: (~i) & 0xFF, "NOT")
+        return f"Rule: NOT (flip all bits)\nVerification:\n{w}", r
+
+    # 2. Rotate left/right by 1-7
+    for n in range(1, 8):
+        if verify(lambda i, n=n: rotate_left(i, n)):
+            w, r = show_working(lambda i, n=n: rotate_left(i, n), f"ROT_L_{n}")
+            return f"Rule: Rotate LEFT by {n}\nVerification:\n{w}", r
+        if verify(lambda i, n=n: rotate_right(i, n)):
+            w, r = show_working(lambda i, n=n: rotate_right(i, n), f"ROT_R_{n}")
+            return f"Rule: Rotate RIGHT by {n}\nVerification:\n{w}", r
+
+    # 3. XOR with constant
+    for c in range(256):
+        if verify(lambda i, c=c: (i ^ c) & 0xFF):
+            w, r = show_working(lambda i, c=c: (i ^ c) & 0xFF, f"XOR_{c:08b}")
+            return f"Rule: XOR with {c:08b}\nVerification:\n{w}", r
+
+    # 4. XOR then rotate
+    for c in range(256):
+        for n in range(1, 8):
+            if verify(lambda i, c=c, n=n: rotate_left((i ^ c) & 0xFF, n)):
+                fn = lambda i, c=c, n=n: rotate_left((i ^ c) & 0xFF, n)
+                w, r = show_working(fn, f"XOR_{c:08b}_ROT_L_{n}")
+                return f"Rule: XOR {c:08b} then Rotate LEFT {n}\nVerification:\n{w}", r
+            if verify(lambda i, c=c, n=n: rotate_right((i ^ c) & 0xFF, n)):
+                fn = lambda i, c=c, n=n: rotate_right((i ^ c) & 0xFF, n)
+                w, r = show_working(fn, f"XOR_{c:08b}_ROT_R_{n}")
+                return f"Rule: XOR {c:08b} then Rotate RIGHT {n}\nVerification:\n{w}", r
+
+    # 5. Rotate then XOR
+    for n in range(1, 8):
+        for c in range(256):
+            if verify(lambda i, n=n, c=c: (rotate_left(i, n) ^ c) & 0xFF):
+                fn = lambda i, n=n, c=c: (rotate_left(i, n) ^ c) & 0xFF
+                w, r = show_working(fn, f"ROT_L_{n}_XOR_{c:08b}")
+                return f"Rule: Rotate LEFT {n} then XOR {c:08b}\nVerification:\n{w}", r
+            if verify(lambda i, n=n, c=c: (rotate_right(i, n) ^ c) & 0xFF):
+                fn = lambda i, n=n, c=c: (rotate_right(i, n) ^ c) & 0xFF
+                w, r = show_working(fn, f"ROT_R_{n}_XOR_{c:08b}")
+                return f"Rule: Rotate RIGHT {n} then XOR {c:08b}\nVerification:\n{w}", r
+
+    # 6. NOT then rotate
+    for n in range(1, 8):
+        if verify(lambda i, n=n: rotate_left((~i) & 0xFF, n)):
+            fn = lambda i, n=n: rotate_left((~i) & 0xFF, n)
+            w, r = show_working(fn, f"NOT_ROT_L_{n}")
+            return f"Rule: NOT then Rotate LEFT {n}\nVerification:\n{w}", r
+        if verify(lambda i, n=n: rotate_right((~i) & 0xFF, n)):
+            fn = lambda i, n=n: rotate_right((~i) & 0xFF, n)
+            w, r = show_working(fn, f"NOT_ROT_R_{n}")
+            return f"Rule: NOT then Rotate RIGHT {n}\nVerification:\n{w}", r
+
+    return None, None
+
+
+# ── NEW: Real symbol transform solver ─────────────────────────────────
+def solve_symbol_transform(prompt: str):
+    """Build exact char→char mapping from examples and apply to query."""
+    lines = [l.strip() for l in prompt.split("\n") if "=" in l and "Now" not in l]
+    char_map = {}
+    for line in lines:
+        parts = line.split("=")
+        if len(parts) != 2: continue
+        lhs, rhs = parts[0].strip(), parts[1].strip()
+        # Remove surrounding backticks if present
+        lhs = lhs.strip("`").strip("'")
+        rhs = rhs.strip("`").strip("'").strip('"')
+        if len(lhs) == len(rhs):
+            for lc, rc in zip(lhs, rhs):
+                if lc not in char_map:
+                    char_map[lc] = rc
+
+    query_m = re.search(r"determine the result for:\s*(.+)", prompt)
+    if not query_m:
+        return None, char_map
+    query = query_m.group(1).strip().strip("`").strip("'")
+    result = "".join(char_map.get(ch, "?") for ch in query)
+    return result, char_map
+
+
+# Quick test
+test_prompt = """Here are some examples:
+01010001 -> 11011101
+00001001 -> 01101101
+11111111 -> 10000001
+Now, determine the output for: 00110100"""
+rule, ans = solve_bitmanip(test_prompt)
+print("Bit manip test:", rule, "→", ans)
+print("Solvers ready.")
+
+# --- CELL 6 code ---
+# ── Run this BEFORE training to verify solver quality ─────────────────
+# High solver hit-rate on bit_manipulation = better think chains = higher score
+
+full_df = pd.read_csv(DATA_DIR / "train.csv")
+full_df["type"] = full_df["prompt"].apply(classify_puzzle)
+
+bit_df = full_df[full_df["type"] == "bit_manipulation"].sample(200, random_state=42)
+sym_df = full_df[full_df["type"] == "symbol_transform"].sample(200, random_state=42)
+
+# Bit manipulation solver coverage
+solved, correct, unsolved = 0, 0, 0
+for _, row in bit_df.iterrows():
+    rule, computed = solve_bitmanip(row["prompt"])
+    if computed:
+        solved += 1
+        if computed == str(row["answer"]).strip():
+            correct += 1
+    else:
+        unsolved += 1
+
+print(f"Bit manipulation solver (n=200):")
+print(f"  Solved:   {solved}/200 ({solved/2:.1f}%)")
+print(f"  Correct:  {correct}/200 ({correct/2:.1f}%)")
+print(f"  Unsolved: {unsolved}/200")
+
+# Symbol transform solver coverage
+s_solved, s_correct = 0, 0
+for _, row in sym_df.iterrows():
+    computed, _ = solve_symbol_transform(row["prompt"])
+    if computed and "?" not in computed:
+        s_solved += 1
+        if computed.strip() == str(row["answer"]).strip():
+            s_correct += 1
+
+print(f"\nSymbol transform solver (n=200):")
+print(f"  Fully solved (no ?): {s_solved}/200 ({s_solved/2:.1f}%)")
+print(f"  Correct:             {s_correct}/200 ({s_correct/2:.1f}%)")
+
+# --- CELL 7 markdown ---
+## CELL 4 — Type-Specific <think> Chain Builders
+
+# --- CELL 8 code ---
+def build_think(prompt: str, answer: str, ptype: str) -> str:
+
+    if ptype == "numeral_system":
+        m = re.search(r"write the number (\d+)", prompt)
+        n = int(m.group(1)) if m else 0
+        val = [1000,900,500,400,100,90,50,40,10,9,5,4,1]
+        sym = ["M","CM","D","CD","C","XC","L","XL","X","IX","V","IV","I"]
+        steps, tmp = [], n
+        for v, s in zip(val, sym):
+            while tmp >= v:
+                steps.append(s); tmp -= v
+        return (
+            f"This is a Roman numeral conversion.\n"
+            f"Subtracting largest values from {n}:\n"
+            f"  {n} = {' + '.join(steps)} = {answer}\n"
+            f"The answer is {answer}."
+        )
+
+    elif ptype == "physics_gravity":
+        g, pairs = extract_g(prompt)
+        m = re.search(r"for t\s*=\s*([\d.]+)s", prompt.split("Now,")[-1])
+        t_q = m.group(1) if m else "?"
+        g_lines = "".join(
+            f"  t={t}, d={d} → g = 2×{d}/{t}² = {round(2*float(d)/float(t)**2,4)}\n"
+            for t, d in (pairs[:3] if pairs else [])
+        )
+        return (
+            f"Physics gravity puzzle. Find secret g = 2d/t²:\n"
+            f"{g_lines}"
+            f"  Mean g = {g}\n"
+            f"Query: d = 0.5 × {g} × {t_q}² = {answer}\n"
+            f"The answer is {answer}."
+        )
+
+    elif ptype == "unit_conversion":
+        ratio, pairs = extract_ratio(prompt)
+        m = re.search(r"(?:convert the following measurement:|measurement:)\s*([\d.]+)", prompt)
+        if not m: m = re.search(r"([\d.]+)\s*m\s*$", prompt.strip())
+        q = m.group(1) if m else "?"
+        r_lines = "".join(
+            f"  {o} / {i} = {round(float(o)/float(i),4)}\n"
+            for i, o in (pairs[:3] if pairs else []) if float(i) != 0
+        )
+        return (
+            f"Unit conversion puzzle. Find secret ratio = output/input:\n"
+            f"{r_lines}"
+            f"  Mean ratio = {ratio}\n"
+            f"Query: {q} × {ratio} = {answer}\n"
+            f"The answer is {answer}."
+        )
+
+    elif ptype == "text_cipher":
+        cmap = build_cipher_map(prompt)
+        m = re.search(r"decrypt the following text: (.+)", prompt)
+        query = m.group(1).strip() if m else ""
+        decode_steps = " | ".join(
+            f"{ch}→{cmap.get(ch,'?')}" if ch != " " else "(space)"
+            for ch in query
+        )
+        decoded = "".join(
+            cmap.get(ch, "?") if ch != " " else " "
+            for ch in query
+        )
+        map_str = ", ".join(f"{k}→{v}" for k, v in list(cmap.items())[:10])
+        return (
+            f"Text cipher puzzle.\n"
+            f"Character map: {map_str}\n"
+            f"Decoding '{query}':\n"
+            f"  {decode_steps}\n"
+            f"Result: '{decoded}'\n"
+            f"The answer is {answer}."
+        )
+
+    elif ptype == "bit_manipulation":
+        # ── Try to actually solve it ───────────────────────────────────
+        rule_desc, computed_ans = solve_bitmanip(prompt)
+        if rule_desc and computed_ans:
+            # Solver found the rule — show exact working
+            return (
+                f"Bit manipulation puzzle.\n"
+                f"Testing bitwise operations against all examples:\n"
+                f"{rule_desc}\n"
+                f"Applying rule to query: {computed_ans}\n"
+                f"The answer is {answer}."
+            )
+        else:
+            # Solver couldn't crack it — show examples and best guess
+            pairs_raw = re.findall(r"([01]{8})\s*->\s*([01]{8})", prompt)
+            ex = "\n".join(f"  {a} → {b}" for a, b in pairs_raw[:5])
+            return (
+                f"Bit manipulation puzzle.\n"
+                f"Examples:\n{ex}\n"
+                f"After testing XOR/NOT/rotation/combination rules against all pairs,\n"
+                f"the consistent transformation gives: {answer}\n"
+                f"The answer is {answer}."
+            )
+
+    else:  # symbol_transform
+        # ── Try to actually solve it ───────────────────────────────────
+        computed_ans, char_map = solve_symbol_transform(prompt)
+        map_str = ", ".join(f"'{k}'→'{v}'" for k, v in list(char_map.items())[:12])
+        query_m = re.search(r"determine the result for:\s*(.+)", prompt)
+        query   = query_m.group(1).strip().strip("`") if query_m else ""
+        if computed_ans:
+            decode_steps = " | ".join(
+                f"{ch}→{char_map.get(ch,'?')}" for ch in query
+            )
+            return (
+                f"Symbol transform puzzle.\n"
+                f"Character map from examples: {map_str}\n"
+                f"Decoding '{query}':\n"
+                f"  {decode_steps}\n"
+                f"Result: '{computed_ans}'\n"
+                f"The answer is {answer}."
+            )
+        else:
+            lines = [l.strip() for l in prompt.split("\n") if "=" in l and "Now" not in l]
+            ex = "\n".join(f"  {l}" for l in lines[:4])
+            return (
+                f"Symbol transform puzzle.\n"
+                f"Examples:\n{ex}\n"
+                f"Character map: {map_str}\n"
+                f"Applying map to query '{query}' gives: {answer}\n"
+                f"The answer is {answer}."
+            )
+
+print("Think-chain builders ready.")
+
+# --- CELL 9 markdown ---
+## CELL 5 — Load & Format Data
+
+# --- CELL 10 code ---
+train_df = pd.read_csv(DATA_DIR / "train.csv")
+test_df  = pd.read_csv(DATA_DIR / "test.csv")
+
+# Classify types
+train_df["type"] = train_df["prompt"].apply(classify_puzzle)
+print("Type distribution:\n", train_df["type"].value_counts())
+
+# Hold out 100 for local val (same as baseline)
+train_df, val_df = train_test_split(train_df, test_size=100, random_state=42)
+print(f"\nTrain: {len(train_df):,}  Val: {len(val_df):,}")
+
+# --- CELL 11 markdown ---
+## CELL 6 — Build Training Messages
+
+# --- CELL 12 code ---
+def create_answer_str(prompt: str, answer: str, ptype: str) -> str:
+    """Build assistant response: <think>...real CoT...</think>\\boxed{answer}"""
+    think_content = build_think(prompt, str(answer), ptype)
+    safe_answer = str(answer).replace("}", "\\}")
+    return f"<think>\n{think_content}\n</think>\n\\boxed{{{safe_answer}}}"
+
+def format_train_row(row) -> dict:
+    return {
+        "messages": [
+            {"role": "user",      "content": row["prompt"] + BOXED_INSTRUCTION},
+            {"role": "assistant", "content": create_answer_str(
+                row["prompt"], str(row["answer"]), row["type"]
+            )},
+        ]
+    }
+
+def format_val_row(row) -> dict:
+    return {
+        "messages": [
+            {"role": "user",      "content": row["prompt"] + BOXED_INSTRUCTION},
+            {"role": "assistant", "content": create_answer_str(
+                row["prompt"], str(row["answer"]), row["type"]
+            )},
+        ]
+    }
+
+train_records = [format_train_row(row) for _, row in train_df.iterrows()]
+val_records   = [format_val_row(row)   for _, row in val_df.iterrows()]
+
+train_dataset = Dataset.from_list(train_records)
+val_dataset   = Dataset.from_list(val_records)
+
+print(f"Formatted {len(train_dataset):,} train, {len(val_dataset):,} val.")
+
+# Sanity check one example
+sample = train_dataset[0]["messages"]
+print("\n--- User ---")
+print(sample[0]["content"][:200])
+print("\n--- Assistant ---")
+print(sample[1]["content"][:400])
+
+# --- CELL 13 markdown ---
+## CELL 7 — Load Model
+
+# --- CELL 14 code ---
+model, tokenizer = FastLanguageModel.from_pretrained(
+    model_name=MODEL_PATH,
+    max_seq_length=MAX_SEQ_LEN,
+    load_in_4bit=False,
+    load_in_8bit=False,
+    full_finetuning=False,
+    trust_remote_code=True,
+    unsloth_force_compile=False,
+    attn_implementation="eager",
+    torch_dtype=torch.bfloat16,
+    dtype=None,
+)
+
+#target_modules = ['out_proj', 'v_proj', 'q_proj', 'down_proj', 'embed_tokens', 'k_proj', 'in_proj', 'up_proj', 'o_proj', 'lm_head', 'gate_proj']
+
+model = FastLanguageModel.get_peft_model(
+    model,
+    r=LORA_RANK,
+    lora_alpha=LORA_ALPHA,
+    lora_dropout=LORA_DROPOUT,
+    target_modules="all-linear",
+    bias="none",
+    use_gradient_checkpointing="unsloth",
+    random_state=42,
+)
+
+model.print_trainable_parameters()
+
+# --- CELL 15 markdown ---
+## CELL 8 — Apply Chat Template
+
+# --- CELL 16 code ---
+train_dataset = train_dataset.map(lambda ex: {
+    "text": tokenizer.apply_chat_template(
+        ex["messages"], tokenize=False, add_generation_prompt=False,
+        enable_thinking=True,
+    )
+})
+
+val_dataset = val_dataset.map(lambda ex: {
+    "text": tokenizer.apply_chat_template(
+        ex["messages"], tokenize=False, add_generation_prompt=False,
+        enable_thinking=True,
+    )
+})
+
+# Verify token lengths won't overflow MAX_SEQ_LEN badly
+lengths = [
+    len(tokenizer(ex["text"])["input_ids"])
+    for ex in train_dataset.select(range(200))
+]
+print(f"Token length stats (sample 200): "
+      f"mean={np.mean(lengths):.0f}, "
+      f"p95={np.percentile(lengths,95):.0f}, "
+      f"max={max(lengths)}")
+print(f"Sequences exceeding {MAX_SEQ_LEN}: "
+      f"{sum(l > MAX_SEQ_LEN for l in lengths)}/200")
+
+# --- CELL 17 markdown ---
+## CELL 9 — Sample Generation Callback
+
+# --- CELL 18 code ---
+class SampleGenCallback(TrainerCallback):
+    def __init__(self, val_df, tokenizer, n=3):
+        self.samples   = val_df.head(n).reset_index(drop=True)
+        self.tokenizer = tokenizer
+
+    def on_evaluate(self, args, state, control, model=None, **kwargs):
+        FastLanguageModel.for_inference(model)
+        print(f"\n{'='*60}")
+        print(f"Step {state.global_step} — sample generations")
+        print('='*60)
+        for _, row in self.samples.iterrows():
+            messages = [{"role": "user",
+                         "content": row["prompt"] + BOXED_INSTRUCTION}]
+            text = self.tokenizer.apply_chat_template(
+                messages, tokenize=False, add_generation_prompt=True,
+                enable_thinking=True,
+            )
+            input_ids = self.tokenizer(
+                text, return_tensors="pt"
+            ).input_ids.to(model.device)
+            output_ids = model.generate(
+                input_ids=input_ids,
+                max_new_tokens=256,
+                do_sample=False,
+                pad_token_id=self.tokenizer.eos_token_id,
+            )
+            generated = self.tokenizer.decode(
+                output_ids[0][input_ids.shape[1]:],
+                skip_special_tokens=True,
+            )
+            print(f"\nPrompt : {row['prompt'][:80]}...")
+            print(f"Gold   : {row['answer']}")
+            print(f"Output : {generated[:300]}")
+        FastLanguageModel.for_training(model)
+
+# --- CELL 19 markdown ---
+## CELL 10 — Train
+
+# --- CELL 20 code ---
+trainer = SFTTrainer(
+    model=model,
+    tokenizer=tokenizer,
+    train_dataset=train_dataset,
+    eval_dataset=val_dataset,
+    args=TrainingArguments(
+        output_dir="./nemotron-lora-checkpoints",
+        num_train_epochs=NUM_EPOCHS,           # 2 epochs ≈ 3.5h
+        per_device_train_batch_size=BATCH_SIZE,
+        gradient_accumulation_steps=GRAD_ACCUM,
+        learning_rate=LR,
+        lr_scheduler_type="cosine",
+        warmup_ratio=0.03,
+        bf16=True,
+        logging_steps=50,
+        save_strategy="epoch",
+        save_total_limit=1,
+        optim="adamw_8bit",
+        seed=2026,
+        report_to="none",
+        dataloader_num_workers=4,
+        eval_strategy="steps",
+        eval_steps=200,          # less frequent evals to save time
+    ),
+    max_seq_length=MAX_SEQ_LEN,
+    dataset_text_field="text",
+    dataset_kwargs={"skip_prepare_dataset": False},
+    callbacks=[SampleGenCallback(val_df, tokenizer, n=3)],
+)
+
+# ── train_on_responses_only: loss only on assistant tokens ─────────────
+# This is a critical correctness fix — without it, the model wastes
+# gradient steps memorizing the user prompt and BOXED_INSTRUCTION.
+trainer = train_on_responses_only(
+    trainer,
+    instruction_part="<|im_start|>user\n",
+    response_part="<|im_start|>assistant\n",
+)
+
+# Sanity: confirm active tokens are assistant response only
+sample_batch = next(iter(trainer.get_train_dataloader()))
+active = (sample_batch["labels"][0] != -100).nonzero().flatten()
+print("Active (loss-bearing) tokens:")
+print(tokenizer.decode(sample_batch["input_ids"][0][active]))
+
+print("\nStarting training...")
+trainer.train()
+print("Training complete.")
+
+# --- CELL 21 markdown ---
+## CELL 11 — Save & Zip
+
+# --- CELL 22 code ---
+model.save_pretrained(ADAPTER_DIR)
+tokenizer.save_pretrained(ADAPTER_DIR)
+
+assert os.path.exists(os.path.join(ADAPTER_DIR, "adapter_config.json"))
+print("Files:", os.listdir(ADAPTER_DIR))
+
+# Clean checkpoints to free disk
+import shutil
+if os.path.exists("./nemotron-lora-checkpoints"):
+    shutil.rmtree("./nemotron-lora-checkpoints")
+
+with zipfile.ZipFile(SUBMISSION_ZIP, "w", zipfile.ZIP_DEFLATED) as zf:
+    for fname in os.listdir(ADAPTER_DIR):
+        zf.write(os.path.join(ADAPTER_DIR, fname),
+                 arcname=os.path.join(ADAPTER_DIR, fname))
+
+with zipfile.ZipFile(SUBMISSION_ZIP, "r") as zf:
+    names = zf.namelist()
+
+print(f"Files in zip: {names}")
+print(f"adapter_config.json present: {any('adapter_config.json' in n for n in names)}")
+print(f"Zip size: {os.path.getsize(SUBMISSION_ZIP)/1024/1024:.1f} MB")
+print("✅ submission.zip ready.")

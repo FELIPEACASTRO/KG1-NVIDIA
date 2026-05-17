@@ -1,0 +1,14 @@
+ref,title,author,lastRunTime,totalVotes
+ulyanovantonamaranta/nemotron-tinker-adapter-repro,Nemotron Tinker Adapter Repro,Amaranta,2026-05-05 10:55:13.973000,43
+ulyanovantonamaranta/nemotron-9500-adapter-repro,Nemotron 9500 Adapter Repro,Amaranta,2026-05-05 10:56:31.313000,3
+ulyanovantonamaranta/nemotron-kien-variant-packager,Nemotron Kien Variant Packager,Amaranta,2026-05-05 14:51:13.580000,2
+ulyanovantonamaranta/nemotron-huikang-tinker27-repro,Nemotron Huikang Tinker27 Repro,Amaranta,2026-05-05 14:50:17.257000,0
+bloodmoonwq/fork-of-nemotron-tinker-adapter-repro-c9ee4-15cc8c,Fork of Nemotron Tinker Adapter Repro c9ee4 15cc8c,CuteClaw,2026-05-14 10:52:29.490000,0
+manderson240/nemotron-pure-symbolic-solver-v33,Nemotron Pure Symbolic Solver v33,Mike Anderson,2026-04-28 17:40:59.097000,0
+adityaghai01/nemotron-adapter-via-kaggle-agent-ps-0-66,nemotron-adapter via Kaggle Agent [ PS 0.66 ],adityaghai07,2026-04-24 09:05:47.667000,1
+manderson240/nemotron-pure-symbolic-solver-v29,Nemotron Pure Symbolic Solver v29,Mike Anderson,2026-05-14 19:30:54.667000,2
+prena0808/nemotron-quick-submit-v1,Nemotron Quick Submit v1,PRERNA TYAGI,2026-04-08 14:57:19.177000,0
+manderson240/nemotron-pure-symbolic-solver-v28,Nemotron Pure Symbolic Solver v28,Mike Anderson,2026-04-23 03:12:46.437000,3
+caoruizhe/nemotron-cotsafe,Nemotron Cotsafe,rz cao,2026-04-11 16:23:25.190000,0
+kanakasarat1/nemotron-tinker-adapter-repro,Nemotron Tinker Adapter Repro,Kanaka Sarat Siripurapu,2026-05-12 04:20:01.150000,0
+m1ndthegap/nemotron-lora-script-submission,Nemotron LoRA Script Submission,m1ndthegap,2026-04-25 13:58:01.453000,0

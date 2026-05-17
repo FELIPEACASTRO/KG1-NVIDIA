@@ -1,0 +1,3770 @@
+
+# --- CELL 0 markdown ---
+# 🏆 NVIDIA Nemotron-3 Reasoning Challenge
+### RTX PRO 6000 (Blackwell SM 12.0) — Upgraded SFT + GRPO Pipeline
+
+**Required data sources (add via right panel → Add data):**
+1. Competition dataset → `nvidia-nemotron-3-reasoning-challenge`
+2. Offline packages → `nvidia-nemotron-offline-packages`
+3. Model weights → Models → `metric/nemotron-3-nano-30b-a3b-bf16/transformers/default`
+4. Utility script → Notebooks → `ryanholbrook/nvidia-utility-script` ← **CRITICAL for Blackwell ptxas**
+
+**What this notebook does:**
+- **Phase 0:** EDA — puzzle classification + answer distribution
+- **Phase 1:** SFT — Supervised Fine-Tuning on gold answers with LoRA r=32
+- **Phase 2:** GRPO — Group Relative Policy Optimisation with three reward signals
+- **Phase 3:** Save, validate, and package `submission.zip`
+
+All Triton / Blackwell bugs are fixed before any model load.
+
+
+# --- CELL 1 markdown ---
+# 1. Offline Package Installation
+
+> Only `datasets` and `trl` need updating. All other packages (`torch`, `transformers`, `peft`, `triton`, `bitsandbytes`, `kagglehub`) come from the Kaggle Docker image and must **not** be reinstalled — they carry Blackwell-specific patches.
+
+# --- CELL 2 code ---
+# ─── Install ONLY what is missing from the Kaggle Docker image ────────────────
+# torch, transformers, peft, triton, bitsandbytes, kagglehub are PRE-INSTALLED
+# in dockerImageVersionId 31287. DO NOT reinstall them — they contain
+# Blackwell-specific patches from Kaggle/NVIDIA.
+!pip install -q --no-index --find-links /kaggle/input/datasets/mayukh18/nemotron-packages/packages unsloth --ignore-installed
+!pip install -q --no-index \
+    --find-links /kaggle/input/datasets/dennisfong/nvidia-nemotron-offline-packages/offline_packages \
+    datasets trl \
+    --ignore-installed
+
+# --- CELL 3 markdown ---
+# 2. Imports & Global Configuration
+
+# --- CELL 4 markdown ---
+## 2.1 Imports
+
+# --- CELL 5 code ---
+import os, sys, stat, shutil, gc, re, json, types, zipfile
+from collections import Counter
+import statistics
+
+import torch
+import torch.nn.functional as F
+import pandas as pd
+import matplotlib.pyplot as plt
+import kagglehub
+
+import datasets, trl
+
+from datasets import Dataset
+
+
+# --- CELL 6 code ---
+from transformers import AutoModelForCausalLM, AutoTokenizer
+from peft import LoraConfig, get_peft_model, TaskType
+from trl import SFTTrainer, SFTConfig, GRPOTrainer, GRPOConfig
+from unsloth import FastLanguageModel
+
+
+
+
+# Required for the Triton version spoof applied before each trainer.train()
+import triton.backends.nvidia.compiler as nv_compiler
+# ─── GPU diagnostics ──────────────────────────────────────────────────────────
+print(f'torch        : {torch.__version__}')
+print(f'GPU          : {torch.cuda.get_device_name(0)}')
+print(f'VRAM total   : {torch.cuda.get_device_properties(0).total_memory / 1e9:.1f} GB')
+COMPUTE_DTYPE = torch.bfloat16
+
+# --- CELL 7 markdown ---
+## 2.2 Global Configuration
+
+# --- CELL 8 code ---
+import os, sys, stat, shutil, gc, re, json, types, zipfile
+from collections import Counter
+import statistics
+
+import pandas as pd
+import matplotlib.pyplot as plt
+import kagglehub
+
+# ─── DateSet ──────────────────────────────────────────────────────────
+# 训练集每个种类的样本数量
+TRAIN_SAMPLES_PER_CATEGORY = {
+    "bit_manipulation": 1602,   # max 1602 
+    "text_decryption" : 1576,   # max 1576 
+    "unit_conversion" : 1594,   # max 1594 
+    "numeral_system"  : 1576,   # max 1576 
+    "gravity_physics" : 1597,   # max 1597 
+    "symbol_transform": 823,   # max 823 
+    "numeric_equation": 732    # max 732 
+}
+# TRAIN_SAMPLES_PER_CATEGORY = {
+#     "bit_manipulation": 1400,   # max 1602 
+#     "text_decryption" : 1300,   # max 1576 
+#     "unit_conversion" : 400,   # max 1594 
+#     "numeral_system"  : 400,   # max 1576 
+#     "gravity_physics" : 400,   # max 1597 
+#     "symbol_transform": 100,   # max 823 
+#     "numeric_equation": 580    # max 732 
+# }
+# TRAIN_SAMPLES_PER_CATEGORY = {
+#     "bit_manipulation": 10,   # max 1602 
+#     "text_decryption" : 10,   # max 1576 
+#     "unit_conversion" : 10,   # max 1594 
+#     "numeral_system"  : 10,   # max 1576 
+#     "gravity_physics" : 10,   # max 1597 
+#     "symbol_transform": 10,   # max 823 
+#     "numeric_equation": 10    # max 732 
+# }
+
+MAX_SEQ_LEN = 4096
+
+# ─── Hyperparameters ──────────────────────────────────────────────────────────
+# SFT_MAX_LEN        = MAX_SEQ_LEN         # token budget per sample
+SFT_EPOCHS         = 2
+SFT_LR             = 2e-5
+GRPO_EPOCHS        = 2
+GRPO_LR            = 5e-6
+GRPO_NUM_GEN       = 8           # completions sampled per prompt
+GRPO_MAX_COMP_LEN  = 512
+OUTPUT_DIR         = '/kaggle/working'
+os.makedirs(OUTPUT_DIR, exist_ok=True)
+
+
+# ─── LoRA config ──────────────────────────────────────────────────────────
+LORA_RANK    = 32
+LORA_ALPHA   = 32
+LORA_DROPOUT = 0.05
+
+
+print('\nHyperparameters loaded ✅')
+
+
+BOXED_INSTRUCTION = (
+    "\nPlease put your final answer inside `\\boxed{}`. "
+    "For example: `\\boxed{your answer}`"
+ )
+
+
+# --- CELL 9 markdown ---
+# 3. Bug Fixes — MUST Run Before Any Model Loading
+
+> Five fixes are required for Nemotron-H on a Blackwell GPU. Run this cell first, every session.
+
+# --- CELL 10 code ---
+import sys
+# ─────────────────────────────────────────────────────────────────────────────
+# FIX 1: Bypass Triton RMSNorm kernel
+# Nemotron-H uses Mamba SSM blocks with a Triton-accelerated rmsnorm_fn.
+# On Blackwell (SM 12.0) that kernel cannot compile yet.
+# Replace with an identical pure-PyTorch fallback.
+# ─────────────────────────────────────────────────────────────────────────────
+def _pure_rmsnorm_fn(x, weight, bias=None, z=None, eps=1e-5,
+                     group_size=None, norm_before_gate=True, upcast=True):
+    dtype = x.dtype
+    if upcast:
+        x = x.float()
+    variance = x.pow(2).mean(-1, keepdim=True)
+    x_normed = x * torch.rsqrt(variance + eps)
+    out = x_normed * weight.float()
+    if bias is not None:
+        out = out + bias.float()
+    if z is not None:
+        out = out * F.silu(z.float())
+    return out.to(dtype)
+
+modules_patched = 0
+for name, mod in list(sys.modules.items()):
+    if hasattr(mod, 'rmsnorm_fn'):
+        mod.rmsnorm_fn = _pure_rmsnorm_fn
+        modules_patched += 1
+print(f'Fix 1 ✅  RMSNorm bypassed ({modules_patched} modules patched)')
+
+# ─────────────────────────────────────────────────────────────────────────────
+# FIX 2: Copy PTXAS binary to /tmp and make it executable
+# The utility script is installed at /kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script
+# The binary is read‑only there, so we copy it to /tmp and fix permissions.
+# ─────────────────────────────────────────────────────────────────────────────
+ptxas_src = '/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/triton/backends/nvidia/bin/ptxas-blackwell'
+ptxas_dst = '/tmp/ptxas-blackwell'
+
+try:
+    if os.path.exists(ptxas_src):
+        # Remove any existing file to avoid permission conflicts
+        if os.path.exists(ptxas_dst):
+            os.remove(ptxas_dst)
+        
+        shutil.copy2(ptxas_src, ptxas_dst)
+        os.chmod(ptxas_dst, 0o755)  # rwxr-xr-x
+
+        import triton.backends.nvidia as nv_backend
+        src_bin = os.path.join(os.path.dirname(nv_backend.__file__), 'bin')
+        dst_bin = '/tmp/triton_nvidia_bin'
+        shutil.copytree(src_bin, dst_bin, dirs_exist_ok=True)
+        for f in os.listdir(dst_bin):
+            fp = os.path.join(dst_bin, f)
+            if os.path.isfile(fp):
+                os.chmod(fp, 0o755)
+
+        os.environ['TRITON_PTXAS_PATH'] = ptxas_dst
+        os.environ['TRITON_PTXAS_BLACKWELL_PATH'] = ptxas_dst
+        print('Fix 2 ✅  PTXAS binary copied to /tmp and env vars set')
+    else:
+        print(f'Fix 2 ❌  PTXAS binary not found at expected location: {ptxas_src}')
+        print('    Please ensure "ryanholbrook/nvidia-utility-script" is added via "Add Data" (Notebooks tab).')
+except Exception as e:
+    print(f'Fix 2 ❌  {e}')
+                
+
+# ─────────────────────────────────────────────────────────────────────────────
+# FIX 3: Stub out mamba_ssm.modules.mamba3
+# Nemotron-H optionally imports Mamba3 which triggers a cutlass C++ extension
+# not compiled for Blackwell SM 12.0. A dummy stub prevents the crash.
+# ─────────────────────────────────────────────────────────────────────────────
+try:
+    mamba3_stub = types.ModuleType('mamba_ssm.modules.mamba3')
+    class DummyMamba3:
+        def __init__(self, *a, **kw):
+            raise RuntimeError('Mamba3 stub — should not be instantiated')
+    mamba3_stub.Mamba3 = DummyMamba3
+    sys.modules['mamba_ssm.modules.mamba3'] = mamba3_stub
+    print('Fix 3 ✅  mamba_ssm.modules.mamba3 stubbed')
+except Exception as e:
+    print(f'Fix 3 ❌  {e}')
+
+print('\nAll pre-load fixes applied ✅')
+
+
+# --- CELL 11 code ---
+import os
+input_dir = '/kaggle/input'
+if os.path.exists(input_dir):
+    print("Contents of /kaggle/input:")
+    for item in os.listdir(input_dir):
+        print(f"  {item}")
+else:
+    print("/kaggle/input not found")
+
+# --- CELL 12 markdown ---
+# 4. EDA — Data Loading & Puzzle Analysis
+
+# --- CELL 13 markdown ---
+## 4.1 数据分类和随机抽样
+
+# --- CELL 14 code ---
+train_df = pd.read_csv('/kaggle/input/competitions/nvidia-nemotron-model-reasoning-challenge/train.csv')
+test_df  = pd.read_csv('/kaggle/input/competitions/nvidia-nemotron-model-reasoning-challenge/test.csv')
+
+print(f'Train: {len(train_df)} rows | Test: {len(test_df)} rows')
+print(f'Columns: {list(train_df.columns)}')
+display(train_df.head(3))
+
+
+# --- CELL 15 code ---
+import random
+random.seed(42)
+
+def classify_equation_vs_symbol(prompt: str) -> str:
+    q = prompt.strip()
+
+    # extract the target expression after "determine the result for" if present
+    m = re.search(r"determine the result for[:\s]*([^\n\r]*)", q, re.IGNORECASE)
+    expr = m.group(1).strip() if m else q
+
+    # counts
+    digit_count = len(re.findall(r"\d", expr))
+    alpha_count = len(re.findall(r"[A-Za-z]", expr))
+    symbol_count = len(re.findall(r"[^\w\s]", expr))  # punctuation / symbols
+
+    # rule 1: numeric_equation if expression contains two numeric groups separated by a non-digit operator
+    if re.search(r"\d+\s*[^0-9\s]\s*\d+", expr):
+        return "numeric_equation"
+
+    # rule 2: symbol_transform if symbols dominate and digits/letters are scarce
+    total_chars = max(1, len(expr))
+    if symbol_count / total_chars > 0.5 and digit_count + alpha_count < max(2, symbol_count//2):
+        return "symbol_transform"
+
+    # fallback: look at examples in the prompt body (presence of lines with digits → numeric)
+    if re.search(r"^\s*\d+[^=\n]*=", q, re.MULTILINE):
+        return "numeric_equation"
+    if re.search(r"[^\w\s]{2,}", q):  # repeated punctuation sequences
+        return "symbol_transform"
+
+    return "unknown"
+
+def classify_puzzle(prompt: str) -> str:
+    p = prompt.lower()
+    if "bit manipulation" in p:
+        return "bit_manipulation"
+    if "secret encryption rules" in p:
+        return "text_decryption"
+    if "unit conversion" in p:
+        return "unit_conversion"
+    if "numeral system" in p:
+        return "numeral_system"
+    if "gravitational constant" in p:
+        return "gravity_physics"
+    if "transformation rules" in p:
+        return classify_equation_vs_symbol(prompt) if 'classify_equation_vs_symbol' in globals() else "symbol_transform"
+    return "unknown"
+
+
+VALIDATION_SIZE = 50  # 每类抽取10%作为验证集，也可改为固定数量
+
+# --- 1. 添加类别标签 ---
+train_df['puzzle_type'] = train_df['prompt'].apply(classify_puzzle)
+
+# --- 2. 分层划分训练集与验证集 ---
+train_parts = []
+val_parts = []
+
+for puzzle_type in train_df['puzzle_type'].unique():
+    category_df = train_df[train_df['puzzle_type'] == puzzle_type]
+    n_total = len(category_df)
+
+    if VALIDATION_SIZE == 0:
+        n_val = 0
+    # 计算验证集大小（可配置为比例或固定数量）
+    elif isinstance(VALIDATION_SIZE, float):
+        n_val = max(1, int(n_total * VALIDATION_SIZE))
+    else:
+        n_val = min(VALIDATION_SIZE, n_total - 1)  # 至少留一个训练样本
+    
+    # 随机抽取验证集
+    val_df_cat = category_df.sample(n=n_val, random_state=42)
+    # 剩余作为训练候选池
+    train_pool = category_df.drop(val_df_cat.index)
+    
+    # 从候选池中抽取指定数量的训练样本（若候选不足则全取）
+    n_train_desired = TRAIN_SAMPLES_PER_CATEGORY.get(puzzle_type, len(train_pool))
+    n_train_actual = min(n_train_desired, len(train_pool))
+    train_df_cat = train_pool.sample(n=n_train_actual, random_state=42)
+    
+    train_parts.append(train_df_cat)
+    val_parts.append(val_df_cat)
+    
+    print(f"{puzzle_type}: total={n_total}, val={len(val_df_cat)}, train_pool={len(train_pool)}, train_selected={len(train_df_cat)}")
+
+def try_float(v):
+    try: return float(v)
+    except: return None
+
+# 合并所有类别
+train_df_sampled = pd.concat(train_parts, ignore_index=True)
+val_df = pd.concat(val_parts, ignore_index=True)
+
+# 打乱顺序（可选）
+train_df_sampled = train_df_sampled.sample(frac=1, random_state=42).reset_index(drop=True)
+val_df = val_df.sample(frac=1, random_state=42).reset_index(drop=True)
+
+# 最终使用的训练集
+train_df = train_df_sampled
+
+print(f"\nFinal train size: {len(train_df)}, validation size: {len(val_df)}")
+print("\nTraining set category distribution:")
+print(train_df['puzzle_type'].value_counts())
+print("\nValidation set category distribution:")
+print(val_df['puzzle_type'].value_counts())
+
+# --- 3. 可视化（可选）---
+fig, axes = plt.subplots(2, 2, figsize=(14, 8))
+
+# 训练集类别分布
+counts_train = train_df['puzzle_type'].value_counts()
+axes[0,0].bar(counts_train.index, counts_train.values, color='#5DCAA5')
+axes[0,0].set_title('Train: Puzzle type distribution')
+axes[0,0].tick_params(axis='x', rotation=45)
+
+# 验证集类别分布
+counts_val = val_df['puzzle_type'].value_counts()
+axes[0,1].bar(counts_val.index, counts_val.values, color='#7F77DD')
+axes[0,1].set_title('Validation: Puzzle type distribution')
+axes[0,1].tick_params(axis='x', rotation=45)
+
+# 训练集答案分布
+nums_train = train_df['answer'].apply(try_float).dropna()
+axes[1,0].hist(nums_train.clip(-200, 500), bins=50, color='#378ADD', edgecolor='none')
+axes[1,0].set_title('Train: Answer distribution (clipped -200 to 500)')
+
+# 验证集答案分布
+nums_val = val_df['answer'].apply(try_float).dropna()
+axes[1,1].hist(nums_val.clip(-200, 500), bins=50, color='#D85A30', edgecolor='none')
+axes[1,1].set_title('Validation: Answer distribution (clipped -200 to 500)')
+
+plt.tight_layout()
+plt.savefig('/kaggle/working/eda_with_val.png', dpi=110)
+plt.show()
+
+# --- CELL 16 markdown ---
+## 4.2 COT Trace
+
+# --- CELL 17 markdown ---
+### 4.2.1 Numeral_system
+
+# --- CELL 18 code ---
+import re
+from typing import Optional, Tuple
+
+def int_to_roman(num: int) -> str:
+    """Convert integer to Roman numeral."""
+    vals = [1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1]
+    syms = ["M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I"]
+    out = ""
+    for v, s in zip(vals, syms):
+        while num >= v:
+            out += s
+            num -= v
+    return out
+
+
+def solve_numeral_with_trace(prompt: str) -> Tuple[Optional[str], Optional[str]]:
+    """
+    Generate COT trace for Roman numeral conversion.
+    
+    Args:
+        prompt: The input prompt containing the number to convert
+    
+    Returns:
+        Tuple of (final_answer, trace)
+    """
+    # Extract the target number from prompt
+    m = re.search(r"write the number (\d+)", prompt, re.IGNORECASE)
+    if not m:
+        return None, None
+    
+    num = int(m.group(1))
+    computed = int_to_roman(num)
+    
+    
+    # Extract examples from prompt
+    examples = re.findall(r"(\d+)\s*->\s*([A-Z]+)", prompt)
+    
+    # Build trace using program 2's superior approach
+    lines: list[str] = []
+    
+    # Step 1: Identify the pattern from examples
+    lines.append("We need to determine the conversion rule from the examples:")
+    lines.append("I will put my final answer inside \\boxed{}.")
+    lines.append("")
+    
+    if examples:
+        lines.append("Given examples:")
+        for arab, roman in examples:
+            lines.append(f"  {arab} -> {roman}")
+        lines.append("")
+    
+    lines.append("This is Arabic to Roman numeral conversion.")
+    lines.append("")
+    
+    # Step 2: Provide reference table (optimized range)
+    lines.append("Key conversion reference:")
+    lines.append("  Basic symbols: I=1, V=5, X=10, L=50, C=100, D=500, M=1000")
+    lines.append("  Subtractive pairs: IV=4, IX=9, XL=40, XC=90, CD=400, CM=900")
+    lines.append("")
+    
+    # Additional examples for context
+    lines.append("Reference examples:")
+    key_nums = [1, 2, 3, 4, 5, 9, 10, 40, 50, 90, 100, 400, 500, 900, 1000]
+    for i in key_nums:
+        lines.append(f"  {i} = {int_to_roman(i)}")
+    lines.append("")
+    
+    # Step 3: Convert the target number
+    lines.append(f"Converting {num} to Roman numerals:")
+    lines.append("  Using greedy algorithm (largest symbol first):")
+    lines.append("")
+    
+    remaining = num
+    parts: list[str] = []
+    vals = [1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1]
+    syms = ["M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I"]
+    
+    for val, sym in zip(vals, syms):
+        while remaining >= val:
+            lines.append(f"  {remaining} >= {val} -> {sym}, remainder = {remaining - val}")
+            parts.append(sym)
+            remaining -= val
+    
+    lines.append("")
+    
+    # Step 4: Show the result
+    spaced_parts = " + ".join(parts)
+    lines.append(f"Combining parts: {spaced_parts}")
+    lines.append(f"Result: {''.join(parts)}")
+    lines.append("")
+    
+    # Step 5: Verification (optional, only if examples exist)
+    if examples and len(examples) > 0:
+        lines.append("Verification against examples:")
+        for arab, roman in examples[:3]:  # Limit to first 3
+            computed_check = int_to_roman(int(arab))
+            match_str = "✓" if computed_check == roman else "✗"
+            lines.append(f"  {arab} -> {computed_check} {match_str}")
+        lines.append("")
+    
+    # Final answer
+    final_answer = ''.join(parts)
+    lines.append("Final Answer:")
+    lines.append(f"The answer is \\boxed{{{final_answer}}}")
+    
+    
+    trace = "\n".join(lines)
+    
+    return final_answer, trace
+
+# --- CELL 19 markdown ---
+### 4.2.2 Gravity_physics
+
+# --- CELL 20 code ---
+import re
+import statistics
+from typing import Optional, Tuple
+
+
+def long_multiplication_lines(a_str: str, b_str: str) -> Tuple[list[str], str]:
+    """Generate long multiplication step-by-step trace."""
+    a = float(a_str)
+    b = float(b_str)
+    result = a * b
+    
+    lines = []
+    lines.append(f"    {a_str}")
+    lines.append(f"  × {b_str}")
+    lines.append(f"  " + "-" * max(len(a_str), len(b_str) + 2))
+    
+    # For simplicity, show the result (full implementation would show partial products)
+    result_str = f"{result:.4f}".rstrip('0').rstrip('.')
+    lines.append(f"  {result_str}")
+    
+    return lines, result_str
+
+
+def long_division_lines(dividend_str: str, divisor_str: str) -> Tuple[list[str], str]:
+    """Generate long division step-by-step trace."""
+    dividend = float(dividend_str)
+    divisor = float(divisor_str)
+    
+    if divisor == 0:
+        return [f"  {dividend_str} / {divisor_str} = undefined"], "undefined"
+    
+    result = dividend / divisor
+    result_str = f"{result:.4f}".rstrip('0').rstrip('.')
+    
+    lines = []
+    lines.append(f"  {dividend_str} ÷ {divisor_str}")
+    lines.append(f"  = {result_str}")
+    
+    return lines, result_str
+
+
+def truncate_3dp(num_str: str) -> str:
+    """Truncate to 3 decimal places."""
+    if '.' not in num_str:
+        return num_str
+    parts = num_str.split('.')
+    if len(parts[1]) <= 3:
+        return num_str
+    return f"{parts[0]}.{parts[1][:3]}"
+
+
+def solve_gravity_with_trace(prompt: str) -> Tuple[Optional[str], Optional[str]]:
+    """
+    Generate COT trace for gravity problem with explicit arithmetic.
+    
+    Args:
+        prompt: The input prompt containing examples and query
+        answer: The expected answer (ground truth)
+    
+    Returns:
+        Tuple of (final_answer, trace)
+    """
+    # Extract examples: t = X.XXs, distance = Y.YY m
+    pairs = re.findall(r"t = ([\d.]+)s, distance = ([\d.]+) m", prompt)
+    if not pairs:
+        return None, None
+    
+    lines: list[str] = []
+    
+    # Header
+    lines.append("We need to determine the falling distance using d = k*t^2.")
+    lines.append("Let me find k from the examples with explicit arithmetic.")
+    lines.append("I will put my final answer inside \\boxed{}.")
+    lines.append("")
+    
+    # Step 1: Calculate k from each example with EXPLICIT arithmetic
+    lines.append("Step 1: Calculate gravitational constant k from each example")
+    lines.append("Formula: k = d/t^2")
+    lines.append("")
+    
+    k_strs: list[str] = []
+    k_values: list[float] = []
+    
+    for i, (t_str, d_str) in enumerate(pairs, 1):
+        t = float(t_str)
+        d = float(d_str)
+        
+        if t <= 0:
+            continue
+        
+        lines.append(f"Example {i}: t = {t_str}s, d = {d_str}m")
+        
+        # Calculate t^2 with explicit multiplication
+        lines.append(f"  First, calculate t^2 = {t_str} × {t_str}:")
+        mult_lines, t_sq_str = long_multiplication_lines(t_str, t_str)
+        lines.extend(["  " + line for line in mult_lines])
+        lines.append(f"  t^2 = {t_sq_str}")
+        lines.append("")
+        
+        # Calculate k = d/t^2 with explicit division
+        t_sq_truncated = truncate_3dp(t_sq_str)
+        d_truncated = truncate_3dp(d_str)
+        
+        lines.append(f"  Then, calculate k = d/t^2 = {d_truncated} ÷ {t_sq_truncated}:")
+        div_lines, k_str = long_division_lines(d_truncated, t_sq_truncated)
+        lines.extend(["  " + line for line in div_lines])
+        lines.append(f"  k = {k_str}")
+        lines.append("")
+        
+        k_strs.append(k_str)
+        k_values.append(float(k_str))
+    
+    if not k_strs:
+        return None, None
+    
+    # Step 2: Find median k (more robust than mean)
+    lines.append("Step 2: Determine representative k value")
+    lines.append(f"  k values: {', '.join(k_strs)}")
+    
+    paired = sorted(zip(k_values, k_strs))
+    sorted_k_str = ", ".join(s for _, s in paired)
+    lines.append(f"  Sorted: {sorted_k_str}")
+    
+    # Use median (for even count, take lower middle value)
+    if len(paired) % 2 == 0 and len(paired) >= 2:
+        _, k_fit_str = paired[len(paired) // 2 - 1]
+    else:
+        mid = len(paired) // 2
+        _, k_fit_str = paired[mid]
+    
+    lines.append(f"  Using median k = {k_fit_str} (robust to outliers)")
+    lines.append("")
+    
+    # Step 3: Extract query time
+    q = re.search(r"determine the falling distance for t = ([\d.]+)s", prompt, re.IGNORECASE)
+    if not q:
+        # Fallback: get the last "for t = X.XXs"
+        all_t_matches = re.findall(r"for t = ([\d.]+)s", prompt, re.IGNORECASE)
+        if not all_t_matches:
+            # Try to find query from different pattern
+            q2 = re.search(r"(?:for|at|when) t = ([\d.]+)", prompt, re.IGNORECASE)
+            if not q2:
+                return None, None
+            t_query_str = q2.group(1)
+        else:
+            t_query_str = all_t_matches[-1]
+    else:
+        t_query_str = q.group(1)
+    
+    lines.append(f"Step 3: Apply to query (t = {t_query_str}s)")
+    lines.append(f"  Formula: d = k × t^2")
+    lines.append("")
+    
+    # Calculate t_query^2 with explicit multiplication
+    lines.append(f"  First, calculate t^2 = {t_query_str} × {t_query_str}:")
+    sq_lines, t_sq_query_str = long_multiplication_lines(t_query_str, t_query_str)
+    lines.extend(["  " + line for line in sq_lines])
+    lines.append(f"  t^2 = {t_sq_query_str}")
+    lines.append("")
+    
+    # Calculate d = k * t^2 with explicit multiplication
+    k_display = k_fit_str.rstrip("0").rstrip(".")
+    lines.append(f"  Then, calculate d = k × t^2 = {k_display} × {t_sq_query_str}:")
+    final_mult_lines, mult_result = long_multiplication_lines(k_display, t_sq_query_str)
+    lines.extend(["  " + line for line in final_mult_lines])
+    
+    # Truncate to 3 decimal places (2 for final answer as per common convention)
+    if '.' in mult_result:
+        dot = mult_result.index(".")
+        # Use 3 decimal places (can be adjusted to 2 if needed)
+        boxed_answer = mult_result[: dot + 3]  # .XXX = 3 decimals
+    else:
+        boxed_answer = mult_result
+    
+    lines.append(f"  d = {boxed_answer} m")
+    lines.append("")
+    
+    # Final answer
+    final_answer = boxed_answer
+    
+    lines.append("Final Answer:")
+    lines.append(f"The answer is \\boxed{{{final_answer}}}")
+    
+    trace = "\n".join(lines)
+    
+    return final_answer, trace
+
+# --- CELL 21 code ---
+
+# def solve_gravity_with_trace(prompt: str, answer: str = ""):
+#     """Improved gravity trace with explicit arithmetic and bias-breaking."""
+#     pairs = re.findall(r"t = ([\d.]+)s, distance = ([\d.]+) m", prompt)
+#     if not pairs:
+#         return None, None
+    
+#     gs = []
+#     steps = []
+    
+#     # Build detailed trace
+#     trace = "WARNING: This is WONDERLAND gravity, NOT Earth's 9.81 m/s^2!\n\n"
+#     trace += "Step 1: Calculate gravitational constant from each example\n"
+#     trace += "Formula: g = 2d/t^2 (rearranged from d = 0.5gt^2)\n\n"
+    
+#     for i, (t_str, d_str) in enumerate(pairs[:6], 1):  # Show max 6 examples
+#         t, d = float(t_str), float(d_str)
+#         if t > 0:
+#             g = 2 * d / (t ** 2)
+#             gs.append(g)
+#             trace += f"Example {i}:\n"
+#             trace += f"  Given: t = {t:.2f}s, d = {d:.2f}m\n"
+#             trace += f"  Calculate: g = 2 * {d:.2f} / ({t:.2f})^2\n"
+#             trace += f"  Calculate: g = {2*d:.2f} / {t**2:.2f}\n"
+#             trace += f"  Result: g = {g:.4f} m/s^2\n\n"
+    
+#     if not gs:
+#         return None, None
+    
+#     g_avg = statistics.mean(gs)
+    
+#     trace += f"Step 2: Average gravitational constant\n"
+#     trace += f"  g_avg = ({' + '.join(f'{g:.4f}' for g in gs)}"
+#     trace += f") / {len(gs)}\n"
+#     trace += f"  g_avg = {g_avg:.4f} m/s^2\n\n"
+    
+#     # Extract query time — specifically from "determine the falling distance for t = X.XXs"
+#     q = re.search(r"determine the falling distance for t = ([\d.]+)s", prompt, re.IGNORECASE)
+#     if not q:
+#         # Fallback: get the LAST "for t = X.XXs" match (which is the query, not examples)
+#         all_t_matches = re.findall(r"for t = ([\d.]+)s", prompt, re.IGNORECASE)
+#         if not all_t_matches:
+#             return None, None
+#         t_query = float(all_t_matches[-1])
+#     else:
+#         t_query = float(q.group(1))
+    
+#     # Calculate with explicit steps
+#     t_squared = t_query ** 2
+#     product = g_avg * t_squared
+#     d_result = 0.5 * product
+#     computed = f"{d_result:.2f}"
+#     final_answer = computed if computed else answer
+    
+#     trace += f"Step 3: Apply to query (t = {t_query:.2f}s)\n"
+#     trace += f"  Formula: d = 0.5 * g * t^2\n"
+#     trace += f"  Substitute: d = 0.5 * {g_avg:.4f} * ({t_query:.2f})^2\n"
+#     trace += f"  Calculate t^2: ({t_query:.2f})^2 = {t_squared:.4f}\n"
+#     trace += f"  Calculate g*t^2: {g_avg:.4f} * {t_squared:.4f} = {product:.4f}\n"
+#     trace += f"  Calculate 0.5*(g*t^2): 0.5 * {product:.4f} = {d_result:.4f}\n"
+#     trace += f"  Rounded to 2 decimals: {final_answer} m"
+    
+#     return final_answer, trace
+
+
+# --- CELL 22 markdown ---
+### 4.3.3 Unit_conversion
+
+# --- CELL 23 code ---
+import re
+import statistics
+from typing import Optional, Tuple, List
+
+
+def truncate_3dp(num_str: str) -> str:
+    """Truncate to 3 decimal places."""
+    if '.' not in num_str:
+        return num_str
+    parts = num_str.split('.')
+    if len(parts[1]) <= 3:
+        return num_str
+    return f"{parts[0]}.{parts[1][:3]}"
+
+
+def cast_dp_pair(a_str: str, b_str: str) -> Tuple[str, str, int, int]:
+    """
+    Cast two decimal numbers to same precision for division.
+    Returns: (a_cast, b_cast, a_decimal_places, b_decimal_places)
+    """
+    a_dp = len(a_str.split('.')[-1]) if '.' in a_str else 0
+    b_dp = len(b_str.split('.')[-1]) if '.' in b_str else 0
+    
+    # Convert to integers by removing decimal point
+    a_int = a_str.replace('.', '')
+    b_int = b_str.replace('.', '')
+    
+    return a_int, b_int, a_dp, b_dp
+
+
+def long_division_lines(dividend_str: str, divisor_str: str) -> Tuple[List[str], str]:
+    """Generate long division step-by-step trace."""
+    dividend = float(dividend_str)
+    divisor = float(divisor_str)
+    
+    if divisor == 0:
+        return [f"  {dividend_str} ÷ {divisor_str} = undefined"], "undefined"
+    
+    result = dividend / divisor
+    result_str = f"{result:.6f}".rstrip('0').rstrip('.')
+    
+    lines = []
+    lines.append(f"  {dividend_str} ÷ {divisor_str}")
+    lines.append(f"  = {result_str}")
+    
+    return lines, result_str
+
+
+def long_multiplication_lines(a_str: str, b_str: str) -> Tuple[List[str], str]:
+    """Generate long multiplication step-by-step trace."""
+    a = float(a_str)
+    b = float(b_str)
+    result = a * b
+    
+    lines = []
+    lines.append(f"    {a_str}")
+    lines.append(f"  × {b_str}")
+    lines.append(f"  " + "-" * max(len(a_str), len(b_str) + 2))
+    
+    result_str = f"{result:.6f}".rstrip('0').rstrip('.')
+    lines.append(f"  {result_str}")
+    
+    return lines, result_str
+
+
+def solve_unit_conversion_with_trace(prompt: str) -> Tuple[Optional[str], Optional[str]]:
+    """
+    Generate COT trace for unit conversion with explicit arithmetic.
+    
+    Args:
+        prompt: The input prompt containing examples and query
+    
+    Returns:
+        Tuple of (final_answer, trace)
+    """
+    # Extract examples: X.XX m becomes Y.YY
+    pairs = re.findall(r"([\d.]+) m becomes ([\d.]+)", prompt)
+    if not pairs:
+        return None, None
+    
+    lines: List[str] = []
+    
+    # Header
+    lines.append("We need to find a conversion rule that maps meters to the new unit.")
+    lines.append("Let me check if it's a linear factor (output = factor × input).")
+    lines.append("I will put my final answer inside \\boxed{}.")
+    lines.append("")
+    
+    # Step 1: Calculate conversion factor from each example with EXPLICIT arithmetic
+    lines.append("Step 1: Calculate conversion factor from each example")
+    lines.append("Formula: factor = output / input")
+    lines.append("")
+    
+    factor_strs: List[str] = []
+    factor_values: List[float] = []
+    
+    for i, (inp_str, out_str) in enumerate(pairs, 1):
+        inp = float(inp_str)
+        out = float(out_str)
+        
+        if inp == 0:
+            continue
+        
+        lines.append(f"Example {i}: {inp_str} m → {out_str} wonderland_units")
+        
+        # Truncate to consistent precision
+        inp_truncated = truncate_3dp(inp_str)
+        out_truncated = truncate_3dp(out_str)
+        
+        # Cast to same decimal precision for clean division
+        inp_cast, out_cast, inp_dp, out_dp = cast_dp_pair(inp_truncated, out_truncated)
+        
+        lines.append(f"  Standardizing precision:")
+        lines.append(f"    Input: {inp_str} → {inp_truncated} ({inp_dp} decimal places)")
+        lines.append(f"    Output: {out_str} → {out_truncated} ({out_dp} decimal places)")
+        lines.append(f"  For clean division: {out_cast} / {inp_cast}")
+        lines.append("")
+        
+        # Calculate factor with explicit division
+        lines.append(f"  Calculate factor = {out_truncated} ÷ {inp_truncated}:")
+        div_lines, factor_str = long_division_lines(out_truncated, inp_truncated)
+        lines.extend(["  " + line for line in div_lines])
+        lines.append(f"  factor = {factor_str}")
+        lines.append("")
+        
+        factor_strs.append(factor_str)
+        factor_values.append(float(factor_str))
+    if not factor_strs:
+        return None, None
+    
+    # Step 2: Find median factor (more robust than mean)
+    lines.append("Step 2: Determine representative conversion factor")
+    lines.append(f"  factor values: {', '.join(factor_strs)}")
+    
+    paired = sorted(zip(factor_values, factor_strs))
+    sorted_str = ", ".join(s for _, s in paired)
+    lines.append(f"  Sorted: {sorted_str}")
+    
+    # Use median (for even count, take lower middle value)
+    if len(paired) % 2 == 0 and len(paired) >= 2:
+        _, med_factor_str = paired[len(paired) // 2 - 1]
+    else:
+        mid = len(paired) // 2
+        _, med_factor_str = paired[mid]
+    
+    lines.append(f"  Using median factor = {med_factor_str} (robust to outliers)")
+    lines.append("")
+    
+    # Step 3: Extract query
+    q = re.search(r"convert the following measurement: ([\d.]+) m", prompt, re.IGNORECASE)
+    if not q:
+        # Try alternative patterns
+        q = re.search(r"convert ([\d.]+) m", prompt, re.IGNORECASE)
+        if not q:
+            q = re.search(r"([\d.]+) m\?", prompt, re.IGNORECASE)
+            if not q:
+                return None, None
+    
+    query_str = q.group(1)
+    
+    lines.append(f"Step 3: Apply conversion to query ({query_str} m)")
+    lines.append(f"  Formula: wonderland_units = meters × factor")
+    lines.append("")
+    
+    # Calculate result with explicit multiplication
+    med_display = med_factor_str.rstrip("0").rstrip(".")
+    lines.append(f"  Calculate: {query_str} × {med_display}:")
+    mult_lines, mult_result = long_multiplication_lines(query_str, med_display)
+    lines.extend(["  " + line for line in mult_lines])
+    
+    # Truncate to 3 decimal places (or 2 for final answer)
+    if '.' in mult_result:
+        dot = mult_result.index(".")
+        # Use 2 decimal places for final answer (common in unit conversion)
+        boxed_answer = mult_result[: dot + 3]  # .XX = 2 decimals
+    else:
+        boxed_answer = mult_result
+    
+    lines.append(f"  Result = {boxed_answer} wonderland_units")
+    lines.append("")
+    
+    # Final answer
+    final_answer = boxed_answer
+    
+    lines.append("Final Answer:")
+    lines.append(f"The answer is \\boxed{{{final_answer}}}")
+    
+    trace = "\n".join(lines)
+    return final_answer, trace
+
+
+# --- CELL 24 markdown ---
+### 4.3.4 text_decryption
+
+# --- CELL 25 code ---
+import re
+import string
+from typing import Optional, Tuple, List
+from pathlib import Path
+from functools import lru_cache
+
+
+# Load Wonderland dictionary (simplified - you'll need the actual file)
+@lru_cache(maxsize=1)
+def _load_wonderland() -> List[str]:
+    """Load word list for validation."""
+    # In production, load from file
+    # For now, use a basic English word list
+
+    common_words = [
+    "above", "alice", "ancient", "around", "beyond", "bird", "book",
+    "bright", "castle", "cat", "cave", "chases", "clever", "colorful",
+    "creates", "crystal", "curious", "dark", "discovers", "door",
+    "dragon", "draws", "dreams", "explores", "follows", "forest",
+    "found", "garden", "golden", "hatter", "hidden", "imagines",
+    "in", "inside", "island", "key", "king", "knight", "library",
+    "magical", "map", "message", "mirror", "mountain", "mouse",
+    "mysterious", "near", "ocean", "palace", "potion", "princess",
+    "puzzle", "queen", "rabbit", "reads", "school", "secret", "sees",
+    "silver", "story", "strange", "student", "studies", "teacher",
+    "the", "through", "tower", "treasure", "turtle", "under",
+    "valley", "village", "watches", "wise", "wizard", "wonderland",
+    "writes"
+    ]
+    return sorted(set(common_words))
+
+
+def _word_pattern(word: str) -> Tuple[int, ...]:
+    """
+    Convert word to pattern based on character repetition.
+    Example: 'hello' → (0,1,2,2,3), 'world' → (0,1,2,3,4)
+    """
+    seen: dict[str, int] = {}
+    pattern: List[int] = []
+    for char in word:
+        if char not in seen:
+            seen[char] = len(seen)
+        pattern.append(seen[char])
+    return tuple(pattern)
+
+
+def _candidate_words_for_partial(
+    partial: str,
+    cipher_to_plain: dict[str, str],
+    plain_to_cipher: dict[str, str],
+    cipher_word: str,
+) -> List[str]:
+    """
+    Find dictionary words matching a partial decryption.
+    
+    Args:
+        partial: Partially decoded word with '?' for unknowns
+        cipher_to_plain: Current cipher→plain mapping
+        plain_to_cipher: Current plain→cipher mapping
+        cipher_word: Original cipher text word
+    
+    Returns:
+        List of candidate words from dictionary
+    """
+    candidates: List[str] = []
+    target_len = len(partial)
+    target_pattern = _word_pattern(cipher_word)
+    
+    for word in _load_wonderland():
+        # Length check
+        if len(word) != target_len:
+            continue
+        
+        # Pattern check
+        if _word_pattern(word) != target_pattern:
+            continue
+        
+        # Partial match check
+        match = True
+        for i, ch in enumerate(partial):
+            if ch != "?" and ch != word[i]:
+                match = False
+                break
+        if not match:
+            continue
+        
+        # Forward consistency check (cipher→plain)
+        consistent = True
+        for cc, wc in zip(cipher_word, word):
+            if cc in cipher_to_plain and cipher_to_plain[cc] != wc:
+                consistent = False
+                break
+        
+        if consistent:
+            candidates.append(word)
+    
+    candidates.sort()
+    return candidates
+
+
+def generate_text_decryption_trace(prompt: str) -> Tuple[Optional[str], Optional[str]]:
+    """
+    Generate COT trace for substitution cipher decryption.
+    
+    Uses systematic reasoning:
+    1. Extract cipher→plain mappings from examples
+    2. Apply known mappings to question
+    3. Use dictionary + pattern matching for unknown words
+    4. Verify mapping consistency
+    
+    Args:
+        prompt: Input containing examples and question
+    
+    Returns:
+        Tuple of (final_answer, trace)
+    """
+    dash = "–"
+    text = (prompt or "").lower()
+    lines_raw = [l.strip() for l in text.splitlines() if l.strip()]
+    
+    # Extract example pairs "cipher -> plain"
+    examples: List[Tuple[str, str]] = []
+    for line in lines_raw:
+        if "->" in line:
+            left, right = line.split("->", 1)
+            left = re.sub(r"[^a-z\s]", "", left).strip()
+            right = re.sub(r"[^a-z\s]", "", right).strip()
+            if left and right:
+                examples.append((left, right))
+    
+    if not examples:
+        return None, None
+    
+    # Find target ciphertext
+    target = ""
+    m = re.search(r"now[, ]*decrypt(?: the)?(?: following)?(?: text)?:\s*(.+)", text, re.IGNORECASE)
+    if m:
+        target = re.sub(r"[^a-z\s]", "", m.group(1)).strip()
+    else:
+        # Fallback: last non-example line
+        for line in reversed(lines_raw):
+            if "->" not in line and len(line.split()) > 1:
+                target = re.sub(r"[^a-z\s]", "", line).strip()
+                break
+    
+    if not target:
+        return None, None
+    
+    lines: List[str] = []
+    
+    # Header
+    lines.append("We need to find the decryption mapping from the examples.")
+    lines.append("It looks like a substitution cipher (one-to-one letter mapping).")
+    lines.append("I will put my final answer inside \\boxed{}.")
+    lines.append("")
+    
+    # Step 1: List all words
+    lines.append("Step 1: List all input words")
+    lines.append("")
+    for cipher, plain in examples:
+        lines.append(f"【{cipher}】 -> 【{plain}】")
+        for w in cipher.split():
+            lines.append(f"  {w}")
+    lines.append("")
+    lines.append(f"Question: 【{target}】")
+    for w in target.split():
+        lines.append(f"  {w}")
+    lines.append("")
+    
+    # Step 2: Break into characters
+    lines.append("Step 2: Break down into characters")
+    lines.append("")
+    for cipher, plain in examples:
+        lines.append(f"【{cipher}】:")
+        for w in cipher.split():
+            lines.append(f"  {dash.join(w)}")
+    lines.append("")
+    lines.append(f"【{target}】:")
+    for w in target.split():
+        lines.append(f"  {dash.join(w)}")
+    lines.append("")
+    
+    # Step 3: Build cipher→plain mapping from examples
+    lines.append("Step 3: Build letter mappings from examples")
+    lines.append("")
+    
+    cipher_to_plain: dict[str, str] = {}
+    plain_to_cipher: dict[str, str] = {}
+    
+    for ex_num, (cipher, plain) in enumerate(examples, 1):
+        cipher_words = cipher.split()
+        plain_words = plain.split()
+        
+        if len(cipher_words) != len(plain_words):
+            continue
+        
+        lines.append(f"Example {ex_num}: 【{cipher}】 -> 【{plain}】")
+        lines.append("")
+        
+        for wi, (cw, pw) in enumerate(zip(cipher_words, plain_words), 1):
+            if len(cw) != len(pw):
+                continue
+            
+            word_mappings: List[str] = []
+            for cc, pc in zip(cw, pw):
+                if cc not in cipher_to_plain:
+                    cipher_to_plain[cc] = pc
+                    plain_to_cipher[pc] = cc
+                    word_mappings.append(f"{cc}->{pc}")
+                elif cipher_to_plain[cc] != pc:
+                    lines.append(f"  WARNING: Conflict for '{cc}': was '{cipher_to_plain[cc]}', now '{pc}'")
+            
+            cipher_dashed = dash.join(cw)
+            plain_dashed = dash.join(pw)
+            lines.append(f"  Word {wi}: 【{cw}】->【{pw}】")
+            lines.append(f"    {cipher_dashed} -> {plain_dashed}")
+            if word_mappings:
+                lines.append(f"    New: {', '.join(word_mappings)}")
+            lines.append("")
+    
+    # Step 4: Show current mapping
+    lines.append("Step 4: Current mapping")
+    lines.append("")
+    lines.append("Cipher -> Plain:")
+    for c in sorted(string.ascii_lowercase):
+        p = cipher_to_plain.get(c, "?")
+        lines.append(f"  {c} -> {p}")
+    lines.append("")
+    
+    # Unknown letters
+    unknown_cipher = sorted(set(string.ascii_lowercase) - set(cipher_to_plain.keys()))
+    unmapped_plain = sorted(set(string.ascii_lowercase) - set(cipher_to_plain.values()))
+    
+    if unknown_cipher:
+        lines.append(f"Unknown cipher letters: {', '.join(unknown_cipher)}")
+    if unmapped_plain:
+        lines.append(f"Unmapped plain letters: {', '.join(unmapped_plain)}")
+    lines.append("")
+    
+    # Step 5: Decrypt target
+    lines.append(f"Step 5: Decrypt target 【{target}】")
+    lines.append("")
+    
+    target_words = target.split()
+    decoded_words: List[str] = []
+    unknown_word_indices: List[int] = []
+    
+    for wi, cw in enumerate(target_words):
+        partial_chars: List[str] = []
+        display_chars: List[str] = []
+        has_unknown = False
+        
+        for cc in cw:
+            if cc in cipher_to_plain:
+                partial_chars.append(cipher_to_plain[cc])
+                display_chars.append(cipher_to_plain[cc])
+            else:
+                partial_chars.append("?")
+                display_chars.append(f"({cc})")
+                has_unknown = True
+        
+        partial = "".join(partial_chars)
+        display = "".join(display_chars)
+        
+        cipher_dashed = dash.join(cw)
+        display_dashed = dash.join(display_chars)
+        
+        lines.append(f"  Word {wi+1}: 【{cw}】")
+        lines.append(f"    {cipher_dashed}")
+        for cc, dc in zip(cw, display_chars):
+            pc = cipher_to_plain.get(cc, "?")
+            lines.append(f"    {cc} -> {pc}")
+        lines.append(f"    Result: {display_dashed} -> 【{display}】")
+        
+        if has_unknown:
+            unknown_word_indices.append(wi)
+            decoded_words.append("")  # Placeholder
+        else:
+            decoded_words.append(partial)
+        
+        lines.append("")
+    
+    # Current sentence state
+    sentence_parts = []
+    for i, w in enumerate(decoded_words):
+        if w:
+            sentence_parts.append(w)
+        else:
+            cw = target_words[i]
+            display = dash.join(
+                f"({cc})" if cc not in cipher_to_plain else cipher_to_plain[cc]
+                for cc in cw
+            )
+            sentence_parts.append(display)
+    
+    lines.append(f"Current decryption: {' '.join(sentence_parts)}")
+    lines.append("")
+    
+    # Step 6: Resolve unknown words using dictionary
+    if unknown_word_indices:
+        lines.append("Step 6: Resolve unknown words using dictionary matching")
+        lines.append("")
+        
+        wonderland_set = set(_load_wonderland())
+        
+        for idx in unknown_word_indices:
+            cw = target_words[idx]
+            
+            # Recompute partial with current mappings
+            partial = "".join(
+                cipher_to_plain[cc] if cc in cipher_to_plain else "?"
+                for cc in cw
+            )
+            
+            display_dashed = dash.join(
+                cipher_to_plain.get(cc, f"({cc})") for cc in cw
+            )
+            
+            lines.append(f"  Word {idx+1}: 【{display_dashed}】 (cipher: 【{cw}】)")
+            lines.append(f"    Pattern: {partial}")
+            lines.append(f"    Length: {len(cw)}")
+            lines.append("")
+            
+            # Find candidates
+            candidates = _candidate_words_for_partial(
+                partial, cipher_to_plain, plain_to_cipher, cw
+            )
+            
+            if not candidates:
+                lines.append("    No matching words found in dictionary!")
+                # Fallback: use answer if provided
+                if answer:
+                    answer_words = answer.lower().split()
+                    if idx < len(answer_words):
+                        chosen = answer_words[idx]
+                        lines.append(f"    Using provided answer: {chosen}")
+                    else:
+                        return None, None
+                else:
+                    return None, None
+            else:
+                # Show candidate matching process
+                lines.append(f"    Checking {len(_load_wonderland())} dictionary words...")
+                lines.append("")
+                
+                shown_count = 0
+                for word in _load_wonderland():
+                    if len(word) != len(cw):
+                        continue
+                    
+                    # Show first few comparisons
+                    if shown_count < 10:
+                        word_dashed = dash.join(word)
+                        comparisons = []
+                        mismatch = False
+                        
+                        for pos, (wc, cc) in enumerate(zip(word, cw)):
+                            if cc in cipher_to_plain:
+                                pc = cipher_to_plain[cc]
+                                if wc == pc:
+                                    comparisons.append(f"{pos}【{wc}】=【{pc}】✓")
+                                else:
+                                    comparisons.append(f"{pos}【{wc}】≠【{pc}】✗")
+                                    mismatch = True
+                                    break
+                            else:
+                                comparisons.append(f"{pos}【{wc}】=【({cc})】✓")
+                        
+                        if not mismatch:
+                            comparisons.append("all match")
+                        
+                        lines.append(f"    {word}: {', '.join(comparisons)}")
+                        shown_count += 1
+                
+                if shown_count < len([w for w in _load_wonderland() if len(w) == len(cw)]):
+                    lines.append(f"    ... (showing first {shown_count} candidates)")
+                
+                lines.append("")
+                lines.append(f"    Found {len(candidates)} matching candidates:")
+                for c in candidates[:10]:
+                    lines.append(f"      {c}")
+                if len(candidates) > 10:
+                    lines.append(f"      ... and {len(candidates) - 10} more")
+                lines.append("")
+                
+                # Prefer Wonderland words
+                wonderland_candidates = [c for c in candidates if c in wonderland_set]
+                if wonderland_candidates:
+                    chosen = wonderland_candidates[0]
+                    lines.append(f"    Best match (from Wonderland dictionary): 【{chosen}】")
+                else:
+                    chosen = candidates[0]
+                    lines.append(f"    Best match: 【{chosen}】")
+            
+            decoded_words[idx] = chosen
+            
+            # Update mappings
+            lines.append("")
+            lines.append("    Updating mappings:")
+            new_mappings: List[Tuple[str, str]] = []
+            for cc, pc in zip(cw, chosen):
+                if cc in cipher_to_plain:
+                    lines.append(f"      {cc} -> {cipher_to_plain[cc]} (already known)")
+                else:
+                    lines.append(f"      {cc} -> {pc} (NEW)")
+                    new_mappings.append((cc, pc))
+            
+            for cc, pc in new_mappings:
+                cipher_to_plain[cc] = pc
+                plain_to_cipher[pc] = cc
+            
+            lines.append("")
+    
+    # Final answer
+    if any(w == "" for w in decoded_words):
+        return None, None
+    
+    computed = " ".join(decoded_words)
+
+
+    # Final answer
+    final_answer = computed
+    
+    lines.append("Final Answer:")
+    lines.append(f"The answer is \\boxed{{{final_answer}}}")
+    
+    trace = "\n".join(lines)
+    
+    # Use computed answer, or fall back to provided answer for validation
+    final_answer = computed if computed else answer
+    
+    return final_answer, trace
+
+
+# --- CELL 26 markdown ---
+### 4.3.5 symbol_transform
+
+# --- CELL 27 code ---
+import re
+from typing import Optional, Tuple, List
+from dataclasses import dataclass
+
+
+@dataclass
+class _Example:
+    """Parsed example structure."""
+    left: Tuple[str, str]    # Two-character left operand
+    op: str                   # Single-character operator
+    right: Tuple[str, str]    # Two-character right operand
+    output: str               # Result string
+
+
+def _box(s: str) -> str:
+    """Wrap each character in 【】 brackets."""
+    return "".join(f"【{c}】" for c in s)
+
+
+def _quote(s: str) -> str:
+    """Wrap string in 【】 brackets."""
+    return f"【{s}】"
+
+
+def _concat_type(examples: List[_Example]) -> Optional[str]:
+    """
+    Determine concatenation type from examples.
+    
+    Returns:
+        'fwd' if all examples match forward concatenation (AB+CD = ABCD)
+        'rev' if all examples match reverse concatenation (AB+CD = CDAB)
+        None if neither pattern matches
+    """
+    if all(ex.output == ex.left[0] + ex.left[1] + ex.right[0] + ex.right[1] 
+           for ex in examples):
+        return "fwd"
+    
+    if all(ex.output == ex.right[0] + ex.right[1] + ex.left[0] + ex.left[1] 
+           for ex in examples):
+        return "rev"
+    
+    return None
+
+
+def generate_symbol_transform_trace(prompt: str) -> Tuple[Optional[str], Optional[str]]:
+    """
+    Generate COT trace for symbol transformation (cryptarithm) puzzles.
+    
+    Focuses on concatenation operations (forward and reverse).
+    Uses actual pattern matching rather than digit assignment.
+    
+    Args:
+        prompt: Input containing examples and question
+    
+    Returns:
+        Tuple of (final_answer, trace)
+    """
+    # Extract examples: "AB+CD = EFGH"
+    example_lines = re.findall(r"([^\n=]+?)\s*=\s*([^\n]+)", prompt)
+    if not example_lines:
+        return None, None
+    
+    # Extract query: "determine the result for: AB+CD"
+    query_match = re.search(r"determine the result for:\s*([^\n]+)", prompt, re.IGNORECASE)
+    if not query_match:
+        # Fallback: last line without '='
+        lines = [l.strip() for l in prompt.split('\n') if l.strip()]
+        for line in reversed(lines):
+            if '=' not in line and len(line) >= 5:
+                query = line
+                break
+        else:
+            return None, None
+    else:
+        query = query_match.group(1).strip()
+    
+    # Remove spaces from query
+    query = query.replace(" ", "")
+    
+    if len(query) != 5:
+        return None, None
+    
+    lines: List[str] = []
+    
+    # Header
+    lines.append("We need to infer the transformation rule from the examples.")
+    lines.append("I will analyze the structure and detect the operation pattern.")
+    lines.append("I will put my final answer inside \\boxed{}.")
+    lines.append("")
+    
+    # Step 1: Parse all examples
+    lines.append("Step 1: Parse all examples")
+    lines.append("")
+    
+    examples: List[_Example] = []
+    
+    for lhs, rhs in example_lines:
+        lhs = lhs.strip().replace(" ", "")
+        rhs = rhs.strip().replace(" ", "")
+        
+        if len(lhs) != 5:
+            continue
+        
+        ex = _Example(
+            left=(lhs[0], lhs[1]),
+            op=lhs[2],
+            right=(lhs[3], lhs[4]),
+            output=rhs
+        )
+        examples.append(ex)
+        
+        lines.append(f"{_quote(lhs)} = {_quote(rhs)}")
+        lines.append(f"  Input: {_box(lhs)}")
+        lines.append(f"  Left operand: {_quote(ex.left[0])}{_quote(ex.left[1])}")
+        lines.append(f"  Operator: {_quote(ex.op)}")
+        lines.append(f"  Right operand: {_quote(ex.right[0])}{_quote(ex.right[1])}")
+        lines.append(f"  Output: {_box(rhs)}")
+        lines.append("")
+    
+    if not examples:
+        return None, None
+    
+    # Step 2: Group examples by operator
+    lines.append("Step 2: Group examples by operator")
+    lines.append("")
+    
+    by_operator: dict[str, List[_Example]] = {}
+    for ex in examples:
+        by_operator.setdefault(ex.op, []).append(ex)
+    
+    for op, op_examples in by_operator.items():
+        lines.append(f"Operator {_quote(op)}: {len(op_examples)} example(s)")
+    lines.append("")
+    
+    # Step 3: Test concatenation patterns for each example
+    lines.append("Step 3: Test concatenation patterns")
+    lines.append("")
+    
+    concat_types: dict[str, str] = {}
+    
+    for ex in examples:
+        left_str = ex.left[0] + ex.left[1]
+        right_str = ex.right[0] + ex.right[1]
+        
+        fwd = left_str + right_str
+        rev = right_str + left_str
+        
+        is_fwd = (ex.output == fwd)
+        is_rev = (ex.output == rev)
+        
+        lines.append(f"Example: {_quote(left_str + ex.op + right_str)} = {_quote(ex.output)}")
+        lines.append(f"  Forward concatenation: {_box(fwd)} {'match' if is_fwd else 'mismatch'}")
+        lines.append(f"  Reverse concatenation: {_box(rev)} {'match' if is_rev else 'mismatch'}")
+        lines.append("")
+    
+    # Step 4: Determine operator rules
+    lines.append("Step 4: Determine operator rules")
+    lines.append("")
+    
+    for op, op_examples in by_operator.items():
+        ct = _concat_type(op_examples)
+        
+        if ct == "fwd":
+            concat_types[op] = "fwd"
+            lines.append(f"Operator {_quote(op)}: forward concatenation (AB{op}CD = ABCD)")
+        elif ct == "rev":
+            concat_types[op] = "rev"
+            lines.append(f"Operator {_quote(op)}: reverse concatenation (AB{op}CD = CDAB)")
+        else:
+            lines.append(f"Operator {_quote(op)}: pattern unclear, defaulting to forward")
+            concat_types[op] = "fwd"
+    
+    lines.append("")
+    
+    # Step 5: Parse and solve query
+    lines.append("Step 5: Apply rule to query")
+    lines.append("")
+    
+    query_left = (query[0], query[1])
+    query_op = query[2]
+    query_right = (query[3], query[4])
+    
+    lines.append(f"Query: {_quote(query)}")
+    lines.append(f"  Input: {_box(query)}")
+    lines.append(f"  Left operand: {_quote(query_left[0])}{_quote(query_left[1])}")
+    lines.append(f"  Operator: {_quote(query_op)}")
+    lines.append(f"  Right operand: {_quote(query_right[0])}{_quote(query_right[1])}")
+    lines.append("")
+    
+    # Determine operation type for query
+    if query_op in concat_types:
+        q_type = concat_types[query_op]
+        lines.append(f"The operator {_quote(query_op)} is known: {q_type} concatenation")
+    else:
+        q_type = "fwd"
+        lines.append(f"The operator {_quote(query_op)} is unknown, defaulting to forward concatenation")
+    
+    lines.append("")
+    
+    # Compute result
+    left_str = query_left[0] + query_left[1]
+    right_str = query_right[0] + query_right[1]
+    
+    if q_type == "fwd":
+        computed = left_str + right_str
+        lines.append(f"  Forward concatenation({_quote(left_str)}, {_quote(right_str)})")
+    else:
+        computed = right_str + left_str
+        lines.append(f"  Reverse concatenation({_quote(left_str)}, {_quote(right_str)})")
+    
+    lines.append(f"  = {_box(computed)}")
+    lines.append(f"  Output: {_quote(computed)}")
+    lines.append("")
+    # Final answer
+    final_answer = computed
+    
+    lines.append("Final Answer:")
+    lines.append(f"The answer is \\boxed{{{final_answer}}}")
+    
+    trace = "\n".join(lines)
+    
+    return final_answer, trace
+
+
+
+# --- CELL 28 markdown ---
+### 4.3.6 numeric_equation
+
+# --- CELL 29 code ---
+import re
+import math
+from typing import Optional, Tuple, List
+from collections import defaultdict
+from dataclasses import dataclass
+
+
+@dataclass
+class FoundOperation:
+    """Detected operation for an operator."""
+    name: str
+    reverse_operands: bool
+    reverse_result: bool
+    format_type: str  # 'num', 'neg_suffix', 'neg_prefix', 'pre'
+    operator_char: str
+
+
+def _safe_eval(fn, a: int, b: int) -> Optional[int]:
+    """Safely evaluate a function, returning None on error."""
+    try:
+        result = fn(a, b)
+        return int(result) if result is not None else None
+    except:
+        return None
+
+
+def _reverse_str(s: str) -> str:
+    """Reverse a string, preserving negative sign."""
+    if s.startswith("-"):
+        return "-" + s[1:][::-1]
+    return s[::-1]
+
+
+def _common_operations(a: int, b: int) -> List[Tuple[str, int]]:
+    """Return list of (name, result) for common operations."""
+    ops = []
+    ops.append(("addition", a + b))
+    ops.append(("subtraction (a-b)", a - b))
+    ops.append(("reverse subtraction (b-a)", b - a))
+    ops.append(("multiplication", a * b))
+    ops.append(("absolute difference", abs(a - b)))
+    ops.append(("negated absolute difference", -abs(a - b)))
+    ops.append(("concatenation", int(str(abs(a)) + str(abs(b)))))
+    ops.append(("reverse concatenation", int(str(abs(b)) + str(abs(a)))))
+    return ops
+
+
+def _rare_operations(a: int, b: int) -> List[Tuple[str, int]]:
+    """Return list of (name, result) for rare operations."""
+    ops = []
+    ops.append(("multiply+1", a * b + 1))
+    ops.append(("multiply-1", a * b - 1))
+    ops.append(("add+1", a + b + 1))
+    ops.append(("add-1", a + b - 1))
+    
+    if b != 0:
+        ops.append(("division (a/b)", a // b))
+        ops.append(("modulo (a mod b)", a % b))
+    
+    if a != 0 and b != 0:
+        ops.append(("gcd", math.gcd(abs(a), abs(b))))
+    
+    # Two-digit specific operations
+    sa, sb = str(abs(a)), str(abs(b))
+    if len(sa) == 2 and len(sb) == 2:
+        d1, d2, d3, d4 = int(sa[0]), int(sa[1]), int(sb[0]), int(sb[1])
+        ops.append(("digit sum diff", (d1 + d2) - (d3 + d4)))
+        ops.append(("cross multiply", d1 * d3 + d2 * d4))
+        ops.append(("determinant", d1 * d4 - d2 * d3))
+    
+    return ops
+
+
+def _all_operations(a: int, b: int) -> List[Tuple[str, int]]:
+    """Return all operations (common first, then rare)."""
+    return _common_operations(a, b) + _rare_operations(a, b)
+
+
+def _format_expr(op_name: str, a: str, b: str) -> str:
+    """Format the mathematical expression for display."""
+    if op_name == "addition":
+        return f"{a} + {b}"
+    elif op_name == "subtraction (a-b)":
+        return f"{a} - {b}"
+    elif op_name == "multiplication":
+        return f"{a} * {b}"
+    elif op_name == "absolute difference":
+        return f"|{a} - {b}|"
+    elif op_name == "concatenation":
+        return f"{a} || {b}"
+    elif "determinant" in op_name and len(a) == 2 and len(b) == 2:
+        return f"{a[0]}*{b[1]} - {a[1]}*{b[0]}"
+    return f"{op_name}({a}, {b})"
+
+
+def generate_numeric_equation_trace(prompt: str) -> Tuple[Optional[str], Optional[str]]:
+    """
+    Generate COT trace for numeric equation puzzles.
+    
+    Supports:
+    - Multiple operators with different rules
+    - Reversed operands and/or results
+    - Prefix/suffix operator encoding
+    - Systematic rule detection
+    
+    Args:
+        prompt: Input containing examples and question
+    
+    Returns:
+        Tuple of (final_answer, trace)
+    """
+    # Extract examples: "12 + 34 = 46"
+    example_lines = re.findall(r"([^\n=]+?)\s*=\s*([^\n]+)", prompt)
+    
+    if not example_lines:
+        return None, None
+    
+    # Extract query
+    query_match = re.search(r"determine the result for:\s*([^\n]+)", prompt, re.IGNORECASE)
+    if not query_match:
+        # Fallback: last line without '='
+        lines = [l.strip() for l in prompt.split('\n') if l.strip()]
+        for line in reversed(lines):
+            if '=' not in line:
+                query = line
+                break
+        else:
+            return None, None
+    else:
+        query = query_match.group(1).strip()
+    
+    lines_out: List[str] = []
+    
+    # Header
+    lines_out.append("We need to infer the transformation rule from the examples.")
+    lines_out.append("Each operator symbol may have its own hidden rule.")
+    lines_out.append("I will put my final answer inside \\boxed{}.")
+    lines_out.append("")
+    
+    # Step 1: List examples
+    lines_out.append("Step 1: List all examples")
+    lines_out.append("")
+    
+    parsed_examples: List[Tuple[int, str, int, str]] = []  # (a, op, b, result)
+    
+    for lhs, rhs in example_lines:
+        m = re.match(r"(-?\d+)\s*([^\d\s-]|(?<=\d)[-](?=\d))\s*(-?\d+)", lhs.strip())
+        if not m:
+            continue
+        
+        try:
+            a, op_char, b = int(m.group(1)), m.group(2), int(m.group(3))
+            result_str = rhs.strip()
+            parsed_examples.append((a, op_char, b, result_str))
+            lines_out.append(f"  {a} {op_char} {b} = {result_str}")
+        except ValueError:
+            continue
+    
+    if not parsed_examples:
+        return None, None
+    
+    lines_out.append("")
+    
+    # Step 2: Group by operator
+    lines_out.append("Step 2: Group examples by operator symbol")
+    lines_out.append("")
+    
+    by_operator: dict[str, List[Tuple[int, int, str]]] = defaultdict(list)
+    for a, op, b, result in parsed_examples:
+        by_operator[op].append((a, b, result))
+    
+    unique_operators = sorted(by_operator.keys())
+    
+    for op in unique_operators:
+        examples_str = ", ".join(f"{a}{op}{b}={r}" for a, b, r in by_operator[op])
+        lines_out.append(f"  Operator '{op}': {examples_str}")
+    
+    lines_out.append("")
+    
+    # Step 3: Detect format (prefix/suffix)
+    lines_out.append("Step 3: Detect output format")
+    lines_out.append("")
+    
+    detected_formats: dict[str, str] = {}
+    transformed_groups: dict[str, List[Tuple[int, int, int]]] = {}
+    
+    for op, group in by_operator.items():
+        # Check for suffix/prefix patterns
+        has_suffix = any(
+            result.endswith(op) and len(result) > 1
+            for _, _, result in group
+        )
+        has_prefix = any(
+            result.startswith(op) and len(result) > 1
+            for _, _, result in group
+        )
+        
+        fmt = "num"
+        transformed = []
+        
+        if has_suffix:
+            fmt = "neg_suffix"
+            lines_out.append(f"  Operator '{op}': suffix format detected")
+            for a, b, result in group:
+                if result.endswith(op) and len(result) > 1:
+                    # Remove suffix and add negative sign
+                    transformed.append((a, b, -int(result[:-len(op)])))
+                else:
+                    transformed.append((a, b, int(result)))
+        elif has_prefix:
+            fmt = "neg_prefix"
+            lines_out.append(f"  Operator '{op}': prefix format detected")
+            for a, b, result in group:
+                if result.startswith(op) and len(result) > 1:
+                    transformed.append((a, b, -int(result[len(op):])))
+                else:
+                    transformed.append((a, b, int(result)))
+        else:
+            fmt = "num"
+            for a, b, result in group:
+                transformed.append((a, b, int(result)))
+        
+        detected_formats[op] = fmt
+        transformed_groups[op] = transformed
+    
+    if not any(fmt != "num" for fmt in detected_formats.values()):
+        lines_out.append("  All outputs are in standard numeric format")
+    
+    lines_out.append("")
+    
+    # Step 4: Find rule for each operator
+    lines_out.append("Step 4: Detect operation rule for each operator")
+    lines_out.append("")
+    
+    found_operations: dict[str, FoundOperation] = {}
+    
+    for op in unique_operators:
+        group = transformed_groups[op]
+        fmt = detected_formats[op]
+        
+        lines_out.append(f"Operator '{op}' ({len(group)} example(s)):")
+        lines_out.append("")
+        
+        found = None
+        
+        # Try 4 combinations: (rev_ops, rev_res)
+        for reverse_ops, reverse_result in [
+            (False, False),  # Identity
+            (True, False),   # Reverse operands only
+            (False, True),   # Reverse result only
+            (True, True),    # Both reversed
+        ]:
+            if found:
+                break
+            
+            # Describe what we're trying
+            if reverse_ops and reverse_result:
+                desc = "reversed operands and reversed result"
+            elif reverse_ops:
+                desc = "reversed operands"
+            elif reverse_result:
+                desc = "reversed result"
+            else:
+                desc = "identity (no reversal)"
+            
+            lines_out.append(f"  Trying {desc}:")
+            
+            # Test common operations first
+            for op_name, op_fn in [
+                ("addition", lambda a, b: a + b),
+                ("subtraction (a-b)", lambda a, b: a - b),
+                ("multiplication", lambda a, b: a * b),
+                ("absolute difference", lambda a, b: abs(a - b)),
+                ("concatenation", lambda a, b: int(str(abs(a)) + str(abs(b)))),
+            ]:
+                all_match = True
+                
+                for a, b, expected in group:
+                    # Apply reversal if needed
+                    ta = int(str(abs(a))[::-1]) if reverse_ops else a
+                    tb = int(str(abs(b))[::-1]) if reverse_ops else b
+                    
+                    # Compute
+                    computed = _safe_eval(op_fn, ta, tb)
+                    if computed is None:
+                        all_match = False
+                        break
+                    
+                    # Apply result reversal if needed
+                    if reverse_result:
+                        computed_str = str(abs(computed))[::-1]
+                        if computed < 0:
+                            computed = -int(computed_str)
+                        else:
+                            computed = int(computed_str)
+                    
+                    if computed != expected:
+                        all_match = False
+                        break
+                
+                if all_match:
+                    # Show verification
+                    verifications = []
+                    for a, b, expected in group:
+                        ta = int(str(abs(a))[::-1]) if reverse_ops else a
+                        tb = int(str(abs(b))[::-1]) if reverse_ops else b
+                        expr = _format_expr(op_name, str(ta), str(tb))
+                        verifications.append(f"{expr}={expected}")
+                    
+                    lines_out.append(f"    {op_name}: {', '.join(verifications)} ✓ MATCH")
+                    
+                    found = FoundOperation(
+                        name=op_name,
+                        reverse_operands=reverse_ops,
+                        reverse_result=reverse_result,
+                        format_type=fmt,
+                        operator_char=op
+                    )
+                    break
+            
+            lines_out.append("")
+        
+        if found:
+            found_operations[op] = found
+        else:
+            lines_out.append(f"  No matching rule found for operator '{op}'")
+            lines_out.append("")
+    
+    # Step 5: Parse and apply to query
+    lines_out.append("Step 5: Apply to query")
+    lines_out.append("")
+    
+    q_match = re.match(r"(-?\d+)\s*([^\d\s-]|(?<=\d)[-](?=\d))\s*(-?\d+)", query)
+    if not q_match:
+        return None, None
+    
+    qa, q_op, qb = int(q_match.group(1)), q_match.group(2), int(q_match.group(3))
+    
+    lines_out.append(f"Query: {qa} {q_op} {qb}")
+    lines_out.append("")
+    
+    # Check if query operator is known
+    if q_op not in found_operations:
+        # Fallback: use most common operator's rule
+        # if by_operator:
+        #     most_common_op = max(by_operator, key=lambda op: len(by_operator[op]))
+        #     lines_out.append(f"Operator '{q_op}' not found in examples.")
+        #     lines_out.append(f"Using rule from most common operator '{most_common_op}'")
+        #     lines_out.append("")
+            
+        #     # Use absolute difference as fallback
+        #     # computed = abs(qa - qb)
+        #     op_rule = found_operations[most_common_op]
+        # else:
+        return None, None
+    else:
+        op_rule = found_operations[q_op]
+        
+        # Apply transformation
+        ta = int(str(abs(qa))[::-1]) if op_rule.reverse_operands else qa
+        tb = int(str(abs(qb))[::-1]) if op_rule.reverse_operands else qb
+        
+        # Get operation function
+        if op_rule.name == "addition":
+            computed = ta + tb
+        elif op_rule.name == "subtraction (a-b)":
+            computed = ta - tb
+        elif op_rule.name == "multiplication":
+            computed = ta * tb
+        elif op_rule.name == "absolute difference":
+            computed = abs(ta - tb)
+        elif op_rule.name == "concatenation":
+            computed = int(str(abs(ta)) + str(abs(tb)))
+        else:
+            computed = 0
+        
+        # Apply result reversal if needed
+        if op_rule.reverse_result:
+            computed_str = str(abs(computed))[::-1]
+            if computed < 0:
+                computed = -int(computed_str)
+            else:
+                computed = int(computed_str)
+        
+        # Apply format
+        if op_rule.format_type == "neg_suffix" and computed < 0:
+            final_answer = str(-computed) + op_rule.operator_char
+        elif op_rule.format_type == "neg_prefix" and computed < 0:
+            final_answer = op_rule.operator_char + str(-computed)
+        else:
+            final_answer = str(computed)
+        
+        expr = _format_expr(op_rule.name, str(ta), str(tb))
+        lines_out.append(f"  Operation: {op_rule.name}")
+        lines_out.append(f"  Expression: {expr}")
+        lines_out.append(f"  Computed: {computed}")
+        if op_rule.format_type != "num":
+            lines_out.append(f"  Formatted: {final_answer}")
+        lines_out.append("")
+    
+    # Final answer
+    
+    lines_out.append("Final Answer:")
+    lines_out.append(f"The answer is \\boxed{{{final_answer}}}")
+    
+    
+    trace = "\n".join(lines_out)
+    
+    return final_answer, trace
+
+
+# --- CELL 30 markdown ---
+### 4.3.7 bit_manipulation
+
+# --- CELL 31 code ---
+import re
+from typing import Optional, Tuple, List
+
+
+def solve_bit_manipulation_with_trace(prompt: str) -> Tuple[Optional[str], Optional[str]]:
+    """
+    Generate COT trace for bit manipulation with simplified but effective reasoning.
+    
+    Focuses on the most common patterns:
+    - Identity (I)
+    - NOT
+    - Simple binary operations with stride-1 patterns
+    """
+    # Extract examples
+    examples = re.findall(r"(\d{8})\s*->\s*(\d{8})", prompt)
+    if not examples:
+        return None, None
+    
+    # Extract question
+    q = re.search(r"(?:transform|convert|apply to)\s*(\d{8})", prompt, re.IGNORECASE)
+    if not q:
+        # Try to find last 8-bit number as question
+        all_8bit = re.findall(r"\b(\d{8})\b", prompt)
+        if not all_8bit or len(all_8bit) < len(examples) + 1:
+            return None, None
+        question = all_8bit[-1]
+    else:
+        question = q.group(1)
+    
+    if len(question) != 8 or not all(c in '01' for c in question):
+        return None, None
+    
+    inputs = [inp for inp, _ in examples]
+    outputs = [out for _, out in examples]
+    
+    lines: List[str] = []
+    
+    # Header
+    lines.append("We need to deduce the bit transformation rule from examples.")
+    lines.append("I will analyze each output bit position to find its rule.")
+    lines.append("I will put my final answer inside \\boxed{}.")
+    lines.append("")
+    
+    # Step 1: Show examples
+    lines.append("Step 1: Examine the examples")
+    for i, (inp, out) in enumerate(examples):
+        lines.append(f"Example {i+1}: {inp} → {out}")
+    lines.append("")
+    
+    # Step 2: Analyze bit columns
+    lines.append("Step 2: Analyze each output bit position")
+    lines.append("")
+    
+    rules: List[str] = []
+    rule_exprs: List[str] = []
+    
+    for bit_pos in range(8):
+        lines.append(f"Output bit {bit_pos}:")
+        
+        # Get output column
+        out_col = ''.join(outputs[j][bit_pos] for j in range(len(outputs)))
+        lines.append(f"  Output pattern: {out_col}")
+        
+        # Try identity (I)
+        found_rule = None
+        for src in range(8):
+            in_col = ''.join(inputs[j][src] for j in range(len(inputs)))
+            if in_col == out_col:
+                found_rule = f"I{src}"
+                lines.append(f"  Input bit {src}: {in_col} ← Match!")
+                lines.append(f"  Rule: bit{bit_pos}_out = bit{src}_in")
+                break
+        
+        # Try NOT
+        if not found_rule:
+            for src in range(8):
+                in_col = ''.join(inputs[j][src] for j in range(len(inputs)))
+                in_col_inv = ''.join('1' if c == '0' else '0' for c in in_col)
+                if in_col_inv == out_col:
+                    found_rule = f"NOT{src}"
+                    lines.append(f"  Input bit {src}: {in_col}")
+                    lines.append(f"  Inverted: {in_col_inv} ← Match!")
+                    lines.append(f"  Rule: bit{bit_pos}_out = NOT(bit{src}_in)")
+                    break
+        
+        # Try XOR with adjacent bits
+        if not found_rule:
+            for a in range(8):
+                for b in range(a+1, min(a+4, 8)):  # Only check nearby bits
+                    xor_col = ''
+                    for j in range(len(inputs)):
+                        val_a = inputs[j][a]
+                        val_b = inputs[j][b]
+                        xor_col += '1' if val_a != val_b else '0'
+                    if xor_col == out_col:
+                        found_rule = f"XOR{a}{b}"
+                        lines.append(f"  XOR(bit{a}, bit{b}): {xor_col} ← Match!")
+                        lines.append(f"  Rule: bit{bit_pos}_out = XOR(bit{a}_in, bit{b}_in)")
+                        break
+                if found_rule:
+                    break
+        
+        # Default: constant
+        if not found_rule:
+            if out_col == '0' * len(outputs):
+                found_rule = "C0"
+                lines.append(f"  Rule: bit{bit_pos}_out = 0 (constant)")
+            elif out_col == '1' * len(outputs):
+                found_rule = "C1"
+                lines.append(f"  Rule: bit{bit_pos}_out = 1 (constant)")
+            else:
+                found_rule = "DEFAULT"
+                lines.append(f"  Rule: bit{bit_pos}_out = 1 (default)")
+        
+        rules.append(found_rule)
+        rule_exprs.append(found_rule)
+        lines.append("")
+    
+    # Step 3: Detect patterns
+    lines.append("Step 3: Detect stride patterns")
+    
+    # Check for stride-1 identity pattern
+    identity_stride = True
+    for i in range(len(rules) - 1):
+        if rules[i].startswith('I') and rules[i+1].startswith('I'):
+            src1 = int(rules[i][1:])
+            src2 = int(rules[i+1][1:])
+            if (src2 - src1) % 8 != 1:
+                identity_stride = False
+                break
+        else:
+            identity_stride = False
+            break
+    
+    if identity_stride and rules[0].startswith('I'):
+        offset = int(rules[0][1:])
+        lines.append(f"  Identity with stride +1, offset {offset}")
+        lines.append(f"  Pattern: bit_out[i] = bit_in[(i + {offset}) % 8]")
+    else:
+        lines.append("  No simple stride pattern detected")
+        lines.append("  Using per-bit rules")
+    lines.append("")
+    
+    # Step 4: Apply to question
+    lines.append(f"Step 4: Apply transformation to {question}")
+    lines.append("")
+    
+    lines.append("Input bits:")
+    for i, bit in enumerate(question):
+        lines.append(f"  bit{i} = {bit}")
+    lines.append("")
+    
+    lines.append("Applying rules:")
+    result_bits = []
+    for i, rule in enumerate(rules):
+        if rule.startswith('I'):
+            src = int(rule[1:])
+            val = question[src]
+            lines.append(f"  bit{i}_out = bit{src}_in = {val}")
+            result_bits.append(val)
+        elif rule.startswith('NOT'):
+            src = int(rule[3:])
+            val = question[src]
+            inv_val = '1' if val == '0' else '0'
+            lines.append(f"  bit{i}_out = NOT(bit{src}_in) = NOT({val}) = {inv_val}")
+            result_bits.append(inv_val)
+        elif rule.startswith('XOR'):
+            a = int(rule[3])
+            b = int(rule[4])
+            val_a = question[a]
+            val_b = question[b]
+            xor_val = '1' if val_a != val_b else '0'
+            lines.append(f"  bit{i}_out = XOR(bit{a}_in, bit{b}_in) = XOR({val_a}, {val_b}) = {xor_val}")
+            result_bits.append(xor_val)
+        elif rule == 'C0':
+            lines.append(f"  bit{i}_out = 0")
+            result_bits.append('0')
+        elif rule == 'C1':
+            lines.append(f"  bit{i}_out = 1")
+            result_bits.append('1')
+        else:  # DEFAULT
+            lines.append(f"  bit{i}_out = 1 (default)")
+            result_bits.append('1')
+    
+    lines.append("")
+    computed_answer = ''.join(result_bits)
+    lines.append(f"Output bits: {computed_answer}")
+    lines.append("")
+    
+    final_answer = computed_answer
+    
+    lines.append("Final Answer:")
+    lines.append(f"The answer is \\boxed{{{final_answer}}}")
+    
+    trace = "\n".join(lines)
+    return final_answer, trace
+
+# --- CELL 32 markdown ---
+## 4.3 Final Train COT Trace Generate
+
+# --- CELL 33 code ---
+def is_answer_correct(computed_ans: str, ground_truth: str, rel_tol: float = 1e-2) -> bool:
+    """
+    模拟官方评测逻辑，验证生成的答案是否正确。
+    """
+    if computed_ans is None or ground_truth is None:
+        return False
+        
+    # 去除首尾空格进行清理
+    c_ans = str(computed_ans).strip()
+    gt_ans = str(ground_truth).strip()
+
+    # 1. 优先进行严格的字符串匹配 (处理文本、十六进制等)
+    if c_ans == gt_ans:
+        return True
+
+    # 2. 如果字符串不匹配，尝试转化为浮点数进行容差比较 (处理物理、单位换算等)
+    try:
+        c_float = float(c_ans)
+        gt_float = float(gt_ans)
+        
+        # 使用 math.isclose 进行相对误差计算 (rel_tol)
+        # 比赛说明中被隐藏的数字大概率是 1e-3, 1e-4 或 1e-5，你可以按需调整
+        return math.isclose(c_float, gt_float, rel_tol=rel_tol)
+    except ValueError:
+        # 如果无法转换为浮点数（说明是纯文本类题目且没匹配上），直接判错
+        return False
+        
+a1 = 1
+a2 = 1
+a3 = 1
+a4 = 1
+a5 = 1
+a6 = 1
+a7 = 1
+
+
+# 如果COT 内部返回None或答案不对，我们需要让这个函数返回一个False，从训练集踢出（可能可以加入测试集？），可以观察一下分布，看哪种题目解的好？
+# 记得还有Lora rank训练的调优
+
+
+def build_thinking_trace(prompt: str, answer: str, sample_id: str = ""):
+    """
+    Build thinking trace for a given puzzle.
+    
+    Returns:
+        Tuple of (category, final_answer, trace)
+        - category: str, the puzzle type
+        - final_answer: str, the computed or fallback answer
+        - trace: str or None, the reasoning trace
+    """
+    global a1, a2, a3, a4, a5, a6, a7   # 声明这些是全局变量
+    category = classify_puzzle(prompt)
+    solved = ""
+    trace = ""
+    correct = False
+    
+    if category == "numeral_system":
+        solved, trace = solve_numeral_with_trace(prompt)
+        # Handle None returns
+        if a1 == 0:
+            a1 = 1
+            print(f"category:{category}\nfinal_answer:{solved}\nfinal_trace:{trace}")
+            print("=================================================================================")
+    
+    if category == "gravity_physics":
+        solved, trace = solve_gravity_with_trace(prompt)
+        if a2 == 0:
+            a2 = 1
+            print(f"category:{category}\nfinal_answer:{solved}\nfinal_trace:{trace}")
+            print("=================================================================================")
+    
+    if category == "unit_conversion":
+        solved, trace = solve_unit_conversion_with_trace(prompt)
+        if a3 == 0:
+            a3 = 1
+            print(f"category:{category}\nfinal_answer:{solved}\nfinal_trace:{trace}")
+            print("=================================================================================")
+    
+    if category == "text_decryption":
+        solved, trace = generate_text_decryption_trace(prompt)
+        if a4 == 0:
+            a4 = 1
+            print(f"category:{category}\nfinal_answer:{solved}\nfinal_trace:{trace}")
+            print("=================================================================================")
+    
+    if category == "bit_manipulation":
+        solved, trace = solve_bit_manipulation_with_trace(prompt)
+        if a5 == 0:
+            a5 = 1
+            print(f"category:{category}\nfinal_answer:{solved}\nfinal_trace:{trace}")
+            print("=================================================================================")
+                
+    if category == "symbol_transform":
+        solved, trace = generate_symbol_transform_trace(prompt)
+        if a6 == 0:
+            a6 = 1
+            print(f"category:{category}\nfinal_answer:{solved}\nfinal_trace:{trace}")
+            print("=================================================================================")
+    
+    if category == "numeric_equation":
+        solved, trace = generate_numeric_equation_trace(prompt)
+        if a7 == 0:
+            a7 = 1
+            print(f"category:{category}\nfinal_answer:{solved}\nfinal_trace:{trace}")
+            print("=================================================================================")
+    
+    correct = is_answer_correct(solved, answer)
+    if not correct:
+        # print(f"category:{category},ground_truth:{answer},answer:{solved}\n")
+        return category, None, None
+        
+    return category, solved, trace
+
+
+def format_train_row(prompt: str, trace: str | None = None) -> dict:
+    return {
+        "messages": [
+            {"role": "user", "content": prompt + BOXED_INSTRUCTION},
+            {"role": "assistant", "content": trace},
+        ]
+    }
+
+
+import pandas as pd
+from collections import Counter
+from datasets import Dataset # 假设你使用的是 HuggingFace datasets
+
+def process_and_track_data(df, dataset_name="Train"):
+    """
+    处理数据并生成统计报告的封装函数
+    """
+    records = []
+    
+    # 初始化统计指标
+    stats = {
+        "total": 0,
+        "kept": 0,
+        "dropped_logic": 0,  # 因为返回 None 被踢出的
+        "dropped_error": 0,  # 因为代码崩溃抛出 Exception 被踢出的
+        "category_kept": Counter(),
+        "category_dropped": Counter(),
+        "failed_details": [] # 记录被踢出的详细信息，方便你 debug 脚本
+    }
+
+    print(f"\n🚀 开始处理 {dataset_name} 集...")
+    
+    for idx, row in df.iterrows():
+        stats["total"] += 1
+        prompt = row["prompt"]
+        gt_answer = str(row["answer"])
+        sid = str(row["id"])
+        
+        try:
+            category, final_answer, trace = build_thinking_trace(prompt, gt_answer, sample_id=sid)
+            
+            # 防御性编程：如果脚本崩溃返回了 None，尝试从原始 row 中获取类别
+            cat_label = category if category else row.get("category", "Unknown")
+            
+            # 规则拦截：COT程序无法正确解答
+            if final_answer is None or trace is None:
+                stats["dropped_logic"] += 1
+                stats["category_dropped"][cat_label] += 1
+                stats["failed_details"].append({"id": sid, "category": cat_label, "reason": "Logic/Trace returned None"})
+                continue
+            
+            # 成功保留
+            records.append(format_train_row(prompt, trace))
+            stats["kept"] += 1
+            stats["category_kept"][cat_label] += 1
+            
+        except Exception as e:
+            stats["dropped_error"] += 1
+            # 尝试获取类别，获取不到记为 Exception_Unknown
+            cat_label = row.get("category", "Exception_Unknown") 
+            stats["category_dropped"][cat_label] += 1
+            stats["failed_details"].append({"id": sid, "category": cat_label, "reason": f"Exception: {str(e)}"})
+            # 建议将这里的 print 注释掉，否则遇到大面积报错会刷屏。我们统一在最后看报告。
+            # print(f"Error processing sample {sid}: {e}")
+
+    # === 打印华丽的统计报告 ===
+    print("=" * 50)
+    print(f"📊 {dataset_name} 集清洗统计报告")
+    print("=" * 50)
+    print(f"总样本数: {stats['total']}")
+    
+    if stats['total'] > 0:
+        kept_ratio = stats['kept'] / stats['total']
+        print(f"✅ 成功保留: {stats['kept']} ({kept_ratio:.1%})")
+        print(f"❌ 逻辑踢出: {stats['dropped_logic']}")
+        print(f"⚠️ 异常报错: {stats['dropped_error']}")
+        print("-" * 50)
+        print("📈 各类别保留情况 (保留数 / 总数):")
+        
+        # 合并所有出现过的类别
+        all_cats = set(stats["category_kept"].keys()).union(set(stats["category_dropped"].keys()))
+        
+        for cat in sorted(all_cats):
+            k = stats["category_kept"][cat]
+            d = stats["category_dropped"][cat]
+            t = k + d
+            cat_ratio = k / t if t > 0 else 0
+            
+            # 根据保留率给个小提示，低于 50% 标红报警（这里用文字提示）
+            alert = " 🚨 (需优化脚本!)" if cat_ratio < 0.5 else ""
+            print(f"  - {cat:<20}: {k:<4} / {t:<4} ({cat_ratio:>6.1%}){alert}")
+    print("=" * 50 + "\n")
+
+    return Dataset.from_list(records), stats
+
+# ==========================================
+# 实际调用 (一键搞定 Train 和 Val)
+# ==========================================
+
+# 1. 处理训练集
+train_dataset, train_stats = process_and_track_data(train_df, dataset_name="Train")
+
+# 2. 处理验证集
+val_dataset, val_stats = process_and_track_data(val_df, dataset_name="Validation")
+
+# 如果你想单独拿出那些失败的 ID 去分析为什么生成失败，可以这样做：
+failed_df = pd.DataFrame(train_stats["failed_details"])
+failed_df.to_csv("failed_train_samples.csv", index=False)
+
+
+print(f"\n{'='*60}")
+print("Sample messages:")
+print(f"{'='*60}")
+print(train_dataset[0]["messages"])
+print(f"\n{'='*60}")
+
+# --- CELL 34 code ---
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from datasets import Dataset
+
+# 1. 假设你已经有了清洗后的干净 DataFrame
+# （你可以把前面清洗函数返回的 Dataset 转回 pandas，或者直接修改清洗逻辑返回 DataFrame）
+clean_train_df = train_dataset.to_pandas()
+clean_val_df = val_dataset.to_pandas()
+
+# 2. 将干净的数据全部合并成一个大池子
+full_clean_df = pd.concat([clean_train_df, clean_val_df], ignore_index=True)
+
+# 3. 调整验证集比例（因为总数据少了，验证集不需要太大，留 5% 足够看 Loss 趋势了）
+VAL_RATIO = 0.05  
+
+# 4. 重点：使用 stratify=full_clean_df['category'] 进行分层拆分
+# 这能保证哪怕只剩几十条的稀有类别，也会按 95:5 的比例劈开，不会在验证集里绝迹
+new_train_df, new_val_df = train_test_split(
+    full_clean_df, 
+    test_size=VAL_RATIO, 
+    random_state=42, 
+    stratify=full_clean_df['category']  # 核心：按类别分层！
+)
+
+print(f"🔥 重组完成！")
+print(f"新训练集: {len(new_train_df)} 条")
+print(f"新验证集: {len(new_val_df)} 条")
+
+# 5. 转换回 HuggingFace Dataset 供训练使用
+final_train_dataset = Dataset.from_pandas(new_train_df)
+final_val_dataset = Dataset.from_pandas(new_val_df)
+
+# --- CELL 35 markdown ---
+# 5. Tokenizer & Model Loading
+
+> Full bfloat16, single GPU. With 96 GB VRAM no quantisation is needed.
+> `device_map={'': 0}` forces all layers onto GPU 0 — no CPU offload, maximum throughput.
+
+# --- CELL 36 code ---
+MODEL_PATH = "/kaggle/input/models/metric/nemotron-3-nano-30b-a3b-bf16/transformers/default/1"
+model, tokenizer = FastLanguageModel.from_pretrained(
+    model_name = MODEL_PATH,
+    max_seq_length = MAX_SEQ_LEN, # Choose any for long context!
+    load_in_4bit = False,  # 4 bit quantization to reduce memory
+    load_in_8bit = False, # [NEW!] A bit more accurate, uses 2x memory
+    full_finetuning = False, # [NEW!] We have full finetuning now!
+    trust_remote_code = True,
+    unsloth_force_compile = False,
+    attn_implementation = "eager",
+    dtype = torch.bfloat16,  # explicit bf16; RTX PRO 6000 Blackwell supports bf16
+)
+
+# --- CELL 37 markdown ---
+# 6. LoRA Setup
+
+> Nemotron-H is a **Mamba-H hybrid** — NOT a standard transformer. SSM blocks use `in_proj` / `out_proj` instead of `q_proj` / `k_proj` / `v_proj`. The target_modules must be a regex string.
+
+# --- CELL 38 code ---
+import os
+from peft import set_peft_model_state_dict, load_peft_weights
+PRETRAINED_ADAPTER_DIR = None
+target_modules=[
+    'out_proj', 'v_proj', 'q_proj', 'down_proj', 
+    'k_proj', 'in_proj', 'up_proj', 'o_proj', 'gate_proj'
+]
+print("Creating trainable LoRA wrapper via FastLanguageModel.get_peft_model …")
+model = FastLanguageModel.get_peft_model(
+    model,
+    r                          = LORA_RANK,
+    lora_alpha                 = LORA_ALPHA,
+    lora_dropout               = LORA_DROPOUT,
+    target_modules             = target_modules,
+    bias                       = "none",
+    use_gradient_checkpointing = "unsloth",
+    random_state               = 42,
+    use_rslora = True,  # [NEW] Rank-Stabilized LoRA，更稳定
+)
+model.print_trainable_parameters()   # should show ~800 M for Nemotron-30B
+# ── Final trainability assertion ──────────────────────────────────────────────
+print("\n--- Final state ---")
+model.print_trainable_parameters()
+_n_trainable = sum(p.numel() for p in model.parameters() if p.requires_grad)
+assert _n_trainable > 0, "BUG: 0 trainable parameters after LoRA setup!"
+print(f"Assertion passed: {_n_trainable:,} trainable params OK")
+
+# --- CELL 39 code ---
+# # ─── LoRA Configuration ───────────────────────────────────────────────────────
+# lora_config = LoraConfig(
+#     r              = LORA_RANK,
+#     lora_alpha     = 16,
+#     # Regex matches Mamba-H SSM layers + MLP projection layers
+#     target_modules = target_modules,
+#     lora_dropout   = 0.1,
+#     bias           = 'none',
+#     task_type      = TaskType.CAUSAL_LM,
+# )
+
+# model = get_peft_model(model, lora_config)
+# model.print_trainable_parameters()
+# # Expect: ~880M trainable / 32.4B total (~2.7%)
+# print('✅ LoRA adapter attached')
+
+
+# --- CELL 40 markdown ---
+# 7. Data Formatting for SFT
+
+# --- CELL 41 markdown ---
+## 7.1 SFT 格式化
+
+# --- CELL 42 code ---
+def apply_chat_template(example):
+    return {
+        "text": tokenizer.apply_chat_template(
+            example["messages"],
+            tokenize=False,
+            add_generation_prompt=False,
+            enable_thinking=False,
+        )
+    }
+
+train_dataset = train_dataset.map(apply_chat_template)
+val_dataset = val_dataset.map(apply_chat_template)
+
+# --- CELL 43 code ---
+from tqdm import tqdm
+import numpy as np
+
+lengths = []
+
+for example in tqdm(train_dataset):
+    text = example["text"]
+    tokens = tokenizer(
+        text,
+        add_special_tokens=False,
+        return_attention_mask=False,
+        return_token_type_ids=False,
+    )["input_ids"]
+    
+    lengths.append(len(tokens))
+
+lengths = np.array(lengths)
+
+print("===== Length Statistics (in tokens) =====")
+print(f"Total samples: {len(lengths)}")
+print(f"Min length: {lengths.min()}")
+print(f"Max length: {lengths.max()}")
+print(f"Mean length: {lengths.mean():.2f}")
+
+for p in [50, 75, 90, 95, 99]:
+    print(f"P{p}: {np.percentile(lengths, p):.0f}")
+
+
+import matplotlib.pyplot as plt
+
+plt.hist(lengths, bins=100)
+plt.title("Token Length Distribution")
+plt.xlabel("Token Length")
+plt.ylabel("Frequency")
+plt.show()
+
+import matplotlib.pyplot as plt
+
+plt.hist(lengths, bins=100)
+plt.title("Token Length Distribution")
+plt.xlabel("Token Length")
+plt.ylabel("Frequency")
+plt.show()
+
+def truncation_ratio(lengths, max_len):
+    return (lengths > max_len).mean()
+
+for max_len in [1024, 2048, 4096, 8192]:
+    ratio = truncation_ratio(lengths, max_len)
+    print(f"max_len={max_len}: truncate {ratio*100:.2f}% samples")
+
+# --- CELL 44 markdown ---
+## 7.2 COT Trace 截断
+
+# --- CELL 45 code ---
+# import torch
+# from transformers import PreTrainedTokenizerBase
+# from datasets import Dataset
+# from typing import Any, Dict, List
+
+# def tokenize_and_truncate_preserve_answer(
+#     dataset: Dataset,
+#     tokenizer: PreTrainedTokenizerBase,
+#     max_seq_len: int,
+#     answer_marker: str = "\\boxed{",
+#     num_proc: int = 8,
+# ) -> Dataset:
+#     """
+#     对数据集进行 tokenize，并智能截断：保留答案及末尾的 eos，截断中间的推理部分。
+    
+#     Args:
+#         dataset: 包含 "text" 字段的 HuggingFace Dataset
+#         tokenizer: 已配置好的 tokenizer (pad_token=eos_token, padding_side='right')
+#         max_seq_len: 最大序列长度
+#         answer_marker: 标识答案开始的字符串，默认为 "\boxed{"
+#         num_proc: 并行处理进程数
+    
+#     Returns:
+#         添加了 input_ids, attention_mask, labels 字段的 Dataset
+#     """
+    
+#     # 预先编码答案起始标记，用于定位答案起始位置
+#     answer_marker_ids = tokenizer.encode(answer_marker, add_special_tokens=False)
+#     eos_token_id = tokenizer.eos_token_id
+    
+#     def process_example(examples: Dict[str, List[Any]]) -> Dict[str, List[Any]]:
+#         """批量处理函数，由 dataset.map 调用"""
+#         input_ids_list = []
+#         attention_mask_list = []
+#         labels_list = []
+        
+#         for text in examples["text"]:
+#             # 1. 完整 tokenize，不截断
+#             tokenized = tokenizer(
+#                 text,
+#                 truncation=False,
+#                 padding=False,
+#                 return_attention_mask=True,
+#                 return_tensors=None,  # 返回 python list
+#             )
+#             input_ids = tokenized["input_ids"]
+#             attention_mask = tokenized["attention_mask"]
+            
+#             # 确保末尾有 eos_token（某些模板可能自动添加，若无则补）
+#             if input_ids[-1] != eos_token_id:
+#                 input_ids.append(eos_token_id)
+#                 attention_mask.append(1)
+            
+#             total_len = len(input_ids)
+            
+#             # 2. 如果长度未超限，直接使用
+#             if total_len <= max_seq_len:
+#                 # labels 与 input_ids 相同（因果语言模型）
+#                 labels = input_ids.copy()
+#                 # Padding 至统一长度（后续 collator 会处理，这里先保持原样）
+#                 input_ids_list.append(input_ids)
+#                 attention_mask_list.append(attention_mask)
+#                 labels_list.append(labels)
+#                 continue
+            
+#             # 3. 超长处理：寻找答案起始位置
+#             answer_start_idx = None
+#             # 滑动窗口搜索答案标记（处理 tokenization 边界不完整的情况）
+#             for i in range(len(input_ids) - len(answer_marker_ids) + 1):
+#                 if input_ids[i:i+len(answer_marker_ids)] == answer_marker_ids:
+#                     answer_start_idx = i
+#                     break
+            
+#             # 4. 若未找到答案标记，保守截断（保留最后部分，因为答案通常在末尾）
+#             if answer_start_idx is None:
+#                 # 保留开头 1/4 和结尾 3/4，确保答案大概率在保留部分
+#                 keep_head = max_seq_len // 4
+#                 keep_tail = max_seq_len - keep_head
+#                 truncated_ids = input_ids[:keep_head] + input_ids[-keep_tail:]
+#                 truncated_mask = [1] * len(truncated_ids)
+#                 labels = truncated_ids.copy()
+#                 input_ids_list.append(truncated_ids)
+#                 attention_mask_list.append(truncated_mask)
+#                 labels_list.append(labels)
+#                 continue
+            
+#             # 5. 找到答案标记：计算需要保留的头部与尾部长度
+#             # 我们想保留：开头部分 + 从答案开始直到末尾的全部内容
+#             # 尾部必须包含：answer_start_idx 到结尾（包括 eos）
+#             tail_len = total_len - answer_start_idx
+            
+#             if tail_len >= max_seq_len:
+#                 # 尾部本身已超过最大长度，这极少发生（答案超长）
+#                 # 此时只能截断答案部分，但优先保留答案结尾
+#                 truncated_ids = input_ids[-max_seq_len:]
+#                 truncated_mask = [1] * max_seq_len
+#                 labels = truncated_ids.copy()
+#             else:
+#                 # 正常情况：头部保留 max_seq_len - tail_len 个 token
+#                 keep_head_len = max_seq_len - tail_len
+#                 truncated_ids = input_ids[:keep_head_len] + input_ids[answer_start_idx:]
+#                 truncated_mask = [1] * len(truncated_ids)
+#                 labels = truncated_ids.copy()
+            
+#             input_ids_list.append(truncated_ids)
+#             attention_mask_list.append(truncated_mask)
+#             labels_list.append(labels)
+        
+#         return {
+#             "input_ids": input_ids_list,
+#             "attention_mask": attention_mask_list,
+#             "labels": labels_list,
+#         }
+    
+#     # 应用处理函数
+#     tokenized_dataset = dataset.map(
+#         process_example,
+#         batched=True,
+#         remove_columns=dataset.column_names,  # 只保留 tokenized 字段
+#         num_proc=num_proc,
+#         desc="Tokenizing and truncating with answer preservation",
+#     )
+    
+#     return tokenized_dataset
+
+
+
+# train_dataset = tokenize_and_truncate_preserve_answer(
+#     train_dataset, tokenizer, max_seq_len=MAX_SEQ_LEN
+# )
+# print(f'SFT dataset: {len(train_dataset)} samples')
+# print('\nSample (first 500 chars):')
+# print(train_dataset[0])
+
+# --- CELL 46 markdown ---
+## 7.3 COT Trace 长度分析
+
+# --- CELL 47 code ---
+# # Cell: Analyze token length distribution for SFT training data
+# # This helps check if any samples exceed SFTConfig.max_length
+
+# import matplotlib.pyplot as plt
+# import numpy as np
+# from datasets import Dataset
+
+# # --- Configuration ---
+# # If you have an SFTConfig object already, uncomment the next line:
+# # max_length = SFTConfig.max_length
+# # Otherwise, set your desired maximum length here (e.g., 2048, 4096):
+# max_length = MAX_SEQ_LEN  # <-- CHANGE THIS TO YOUR ACTUAL max_length
+
+# # Ensure tokenizer is available (should be defined earlier in notebook)
+# try:
+#     tokenizer
+# except NameError:
+#     raise NameError("Tokenizer not defined. Please load your tokenizer first.")
+
+# # --- Compute token lengths efficiently ---
+# # Add a new column 'token_len' to train_dataset
+# def compute_token_len(example):
+#     # Tokenize the already formatted text, truncation=False to get real length
+#     tokens = tokenizer(example["text"], truncation=False, return_length=True)
+#     example["token_len"] = tokens.length[0]  # length is a list of 1 element
+#     return example
+
+# # Apply mapping (in-memory, could be batched for speed)
+# train_dataset = train_dataset.map(compute_token_len, desc="Computing token lengths")
+
+# # Extract lengths into a list for analysis
+# lengths = train_dataset["token_len"]
+# lengths = np.array(lengths)
+
+# # --- Summary statistics ---
+# print("=" * 50)
+# print("Token Length Distribution Analysis")
+# print("=" * 50)
+# print(f"Total samples: {len(lengths)}")
+# print(f"Mean length: {lengths.mean():.2f}")
+# print(f"Std dev: {lengths.std():.2f}")
+# print(f"Min length: {lengths.min()}")
+# print(f"Max length: {lengths.max()}")
+# print(f"25th percentile: {np.percentile(lengths, 25):.0f}")
+# print(f"50th percentile (median): {np.percentile(lengths, 50):.0f}")
+# print(f"75th percentile: {np.percentile(lengths, 75):.0f}")
+# print(f"90th percentile: {np.percentile(lengths, 90):.0f}")
+# print(f"95th percentile: {np.percentile(lengths, 95):.0f}")
+# print(f"99th percentile: {np.percentile(lengths, 99):.0f}")
+
+# # --- Check against max_length ---
+# exceed_mask = lengths > max_length
+# num_exceed = exceed_mask.sum()
+# pct_exceed = 100 * num_exceed / len(lengths)
+
+# print(f"\nSFTConfig.max_length = {max_length}")
+# print(f"Samples exceeding max_length: {num_exceed} ({pct_exceed:.2f}%)")
+# if num_exceed > 0:
+#     print("⚠️  Warning: Some sequences exceed max_length! Consider truncation or filtering.")
+#     # Show indices of exceeding samples (first 10)
+#     exceed_indices = np.where(exceed_mask)[0]
+#     print(f"First 10 exceeding indices: {exceed_indices[:10].tolist()}")
+# else:
+#     print("✅ All sequences fit within max_length.")
+
+# # --- Plot distribution ---
+# fig, ax = plt.subplots(figsize=(12, 5))
+
+# # Histogram
+# ax.hist(lengths, bins=50, alpha=0.7, color='steelblue', edgecolor='black')
+# ax.axvline(x=max_length, color='red', linestyle='--', linewidth=2, label=f'max_length = {max_length}')
+# ax.axvline(x=np.percentile(lengths, 99), color='orange', linestyle=':', linewidth=2, label='99th percentile')
+
+# ax.set_xlabel('Token Length', fontsize=12)
+# ax.set_ylabel('Number of Samples', fontsize=12)
+# ax.set_title('Token Length Distribution of Training Data', fontsize=14)
+# ax.legend()
+# ax.grid(True, alpha=0.3)
+
+# # Add a zoomed inset for the tail if needed
+# if num_exceed > 0:
+#     from mpl_toolkits.axes_grid1.inset_locator import inset_axes, mark_inset
+#     # Determine zoom region: from max_length to max length
+#     xlim_max = max(max_length, lengths.max())
+#     if xlim_max > max_length:
+#         axins = inset_axes(ax, width="40%", height="30%", loc='upper right',
+#                            bbox_to_anchor=(0, 0, 1, 1), bbox_transform=ax.transAxes)
+#         # Filter lengths that are > max_length * 0.8 for zoom
+#         zoom_start = max_length * 0.8
+#         zoom_lengths = lengths[lengths >= zoom_start]
+#         axins.hist(zoom_lengths, bins=20, alpha=0.7, color='steelblue', edgecolor='black')
+#         axins.axvline(x=max_length, color='red', linestyle='--', linewidth=2)
+#         axins.set_xlabel('Length')
+#         axins.set_ylabel('Count')
+#         axins.set_title('Tail (≥ {:.0f})'.format(zoom_start))
+#         mark_inset(ax, axins, loc1=2, loc2=4, fc="none", ec="gray")
+
+# plt.tight_layout()
+# plt.show()
+
+# --- CELL 48 markdown ---
+## 7.4 SFT Trainer 构造
+
+# --- CELL 49 code ---
+# ─── Fix 5: Triton env vars + version spoof ───────────────────────────────────
+# Must be set before the first Triton JIT compilation (= first training step)
+os.environ['TRITON_PTXAS_BLACKWELL_PATH'] = '/tmp/ptxas-blackwell'
+nv_compiler.get_ptxas_version = lambda arch: '12.0'
+print('Fix 5 ✅  Triton env vars set')
+
+# ─── SFT Configuration ────────────────────────────────────────────────────────
+sft_config = SFTConfig(
+    output_dir                    = OUTPUT_DIR,
+    per_device_train_batch_size   = 2,
+    gradient_accumulation_steps   = 8,
+    gradient_checkpointing        = True,
+    gradient_checkpointing_kwargs = {'use_reentrant': False},
+    learning_rate                 = SFT_LR,
+    num_train_epochs              = SFT_EPOCHS,
+    logging_steps                 = 10,
+    save_strategy                 = 'no',
+    fp16                          = False,
+    bf16                          = True,
+    optim                         = 'adamw_8bit',   # no BNB dependency
+    lr_scheduler_type             = 'cosine',
+    warmup_ratio                  = 0.03,
+    max_grad_norm                 = 1.0,
+    report_to                     = 'none',
+    dataset_text_field            = 'text',
+    max_length                    = MAX_SEQ_LEN,
+    packing                       = False,
+    weight_decay=                 = 0.01,
+
+    eval_strategy="steps",
+    eval_steps=10,
+)
+
+# ─── SFTTrainer ───────────────────────────────────────────────────────────────
+# processing_class=tokenizer  ←  correct TRL 0.29 API (tokenizer= is deprecated)
+sft_trainer = SFTTrainer(
+    model            = model,
+    train_dataset    = train_dataset,
+    eval_dataset     = val_dataset,
+    args             = sft_config,
+    max_seq_length   = MAX_SEQ_LEN,
+    processing_class = tokenizer,
+)
+
+# --- CELL 50 markdown ---
+# 8. Phase 1 — SFT Training
+
+> Fix 5 (Triton env vars + version spoof) must be set **before** `trainer.train()` to prevent ptxas failures during the first JIT compilation.
+
+# --- CELL 51 code ---
+print('🏋️  Starting SFT...')
+train_out = sft_trainer.train()
+print('✅ SFT complete')
+print({k: train_out.metrics.get(k) for k in ["train_runtime", "train_samples_per_second", "train_steps_per_second", "train_loss"]})
+
+# --- CELL 52 code ---
+# import torch
+# import re
+# import math
+# from tqdm import tqdm
+# from typing import Dict, List, Tuple
+
+# def extract_boxed_answer(text: str) -> str:
+#     """提取 \boxed{...} 中的内容，与 Kaggle 评测逻辑一致"""
+#     matches = re.findall(r"\\boxed\{([^}]*(?:\}[^}]*)*)\}", text)
+#     if matches:
+#         # 取最后一个非空匹配
+#         for m in reversed(matches):
+#             if m.strip():
+#                 return m.strip()
+#         return matches[-1].strip()
+#     # 降级：匹配最后一个数字或常见答案格式
+#     nums = re.findall(r"-?\d+(?:\.\d+)?", text)
+#     return nums[-1] if nums else ""
+
+# def compare_answers(pred: str, gt: str) -> bool:
+#     """与 Kaggle 评测一致的比对逻辑"""
+#     pred = pred.strip()
+#     gt = gt.strip()
+    
+#     # 二进制字符串严格比对
+#     if re.fullmatch(r"[01]+", gt):
+#         return pred.lower() == gt.lower()
+    
+#     try:
+#         pred_num = float(pred)
+#         gt_num = float(gt)
+#         return math.isclose(pred_num, gt_num, rel_tol=1e-2, abs_tol=1e-5)
+#     except (ValueError, TypeError):
+#         return pred.lower() == gt.lower()
+
+# def evaluate_on_validation(
+#     model,
+#     tokenizer,
+#     val_dataset,
+#     max_new_tokens: int = 2048,
+#     batch_size: int = 4,
+#     device: str = "cuda"
+# ) -> Dict:
+#     """
+#     在验证集上评估模型准确率。
+    
+#     Args:
+#         model: 训练后的模型（已加载 LoRA 适配器）
+#         tokenizer: 对应的 tokenizer
+#         val_dataset: HuggingFace Dataset，需包含 "messages" 字段或可直接格式化的字段
+#         max_new_tokens: 生成的最大 token 数
+#         batch_size: 推理批次大小（根据显存调整）
+#         device: 设备
+    
+#     Returns:
+#         包含总体准确率、分类型准确率及详细错误样本的字典
+#     """
+#     model.eval()
+#     model.to(device)
+    
+#     results = {
+#         "correct": 0,
+#         "total": 0,
+#         "category_stats": {},      # {category: {"correct": int, "total": int}}
+#         "failed_cases": []         # 记录错误样本以供分析
+#     }
+    
+#     # 准备所有 prompt（应用与训练一致的 chat template）
+#     prompts = []
+#     ground_truths = []
+#     categories = []
+    
+#     for example in val_dataset:
+#         # 假设 val_dataset 保留了 messages 字段；若无则需根据实际结构调整
+#         messages = example.get("messages", [])
+#         if not messages:
+#             # 降级：如果数据集只有 text，则直接用 text
+#             prompt = example.get("text", "")
+#             ground_truth = example.get("answer", "")
+#             category = example.get("puzzle_type", "unknown")
+#         else:
+#             # 只取 user 消息作为 prompt
+#             user_msgs = [m["content"] for m in messages if m["role"] == "user"]
+#             prompt = user_msgs[-1] if user_msgs else ""
+#             # 从 assistant 消息中提取 ground truth
+#             assistant_msgs = [m["content"] for m in messages if m["role"] == "assistant"]
+#             if assistant_msgs:
+#                 ground_truth = extract_boxed_answer(assistant_msgs[-1])
+#             else:
+#                 ground_truth = example.get("answer", "")
+#             category = example.get("puzzle_type", "unknown")
+        
+#         prompts.append(prompt)
+#         ground_truths.append(ground_truth)
+#         categories.append(category)
+    
+#     # 批量推理
+#     for i in tqdm(range(0, len(prompts), batch_size), desc="Evaluating on validation set"):
+#         batch_prompts = prompts[i:i+batch_size]
+#         batch_gts = ground_truths[i:i+batch_size]
+#         batch_cats = categories[i:i+batch_size]
+        
+#         # 应用 chat template（若需要）
+#         batch_texts = []
+#         for p in batch_prompts:
+#             # 使用与训练相同的模板
+#             messages = [{"role": "user", "content": p}]
+#             text = tokenizer.apply_chat_template(
+#                 messages,
+#                 tokenize=False,
+#                 add_generation_prompt=True,  # 提示模型开始生成
+#                 enable_thinking=False        # 与训练保持一致
+#             )
+#             batch_texts.append(text)
+        
+#         inputs = tokenizer(
+#             batch_texts,
+#             return_tensors="pt",
+#             padding=True,
+#             truncation=True,
+#             max_length=3072,  # 与训练 max_seq_len 对齐
+#         ).to(device)
+        
+#         with torch.no_grad():
+#             outputs = model.generate(
+#                 **inputs,
+#                 max_new_tokens=max_new_tokens,
+#                 do_sample=False,                # 确定性推理，提高稳定性
+#                 temperature=1.0,
+#                 pad_token_id=tokenizer.pad_token_id,
+#                 eos_token_id=tokenizer.eos_token_id,
+#             )
+        
+#         # 解码生成的回答（仅保留新生成的部分）
+#         generated_ids = outputs[:, inputs["input_ids"].shape[1]:]
+#         generated_texts = tokenizer.batch_decode(generated_ids, skip_special_tokens=True)
+        
+#         # 比对答案
+#         for j, gen_text in enumerate(generated_texts):
+#             pred_answer = extract_boxed_answer(gen_text)
+#             gt = batch_gts[j]
+#             cat = batch_cats[j]
+#             is_correct = compare_answers(pred_answer, gt)
+            
+#             # 更新统计
+#             results["total"] += 1
+#             if cat not in results["category_stats"]:
+#                 results["category_stats"][cat] = {"correct": 0, "total": 0}
+#             results["category_stats"][cat]["total"] += 1
+            
+#             if is_correct:
+#                 results["correct"] += 1
+#                 results["category_stats"][cat]["correct"] += 1
+#             else:
+#                 # 记录错误样本详情，便于分析
+#                 results["failed_cases"].append({
+#                     "prompt": batch_prompts[j][:200] + "..." if len(batch_prompts[j]) > 200 else batch_prompts[j],
+#                     "ground_truth": gt,
+#                     "predicted": pred_answer,
+#                     "full_generation": gen_text[:500],
+#                     "category": cat
+#                 })
+    
+#     # 计算准确率
+#     results["accuracy"] = results["correct"] / results["total"] if results["total"] else 0
+#     for cat, stat in results["category_stats"].items():
+#         stat["accuracy"] = stat["correct"] / stat["total"] if stat["total"] else 0
+    
+#     return results
+
+# # ========== 使用示例 ==========
+# # 训练完成后直接调用
+# eval_results = evaluate_on_validation(
+#     model=model,           # SFTTrainer 中的 model 对象
+#     tokenizer=tokenizer,
+#     val_dataset=val_dataset,
+#     max_new_tokens=2048,
+#     batch_size=4           # 根据显存调整，30B MoE 建议从 2 开始
+# )
+
+# # 打印结果
+# print("\n" + "="*60)
+# print("Validation Set Evaluation Results")
+# print("="*60)
+# print(f"Overall Accuracy: {eval_results['accuracy']:.4f} ({eval_results['correct']}/{eval_results['total']})")
+# print("\nPer-category Accuracy:")
+# for cat, stat in sorted(eval_results["category_stats"].items()):
+#     print(f"  {cat:<20}: {stat['accuracy']:.4f} ({stat['correct']}/{stat['total']})")
+
+# # 可选：保存错误样本到文件供分析
+# import json
+# with open("validation_errors.json", "w") as f:
+#     json.dump(eval_results["failed_cases"], f, indent=2)
+# print(f"\nError cases saved to validation_errors.json ({len(eval_results['failed_cases'])} samples)")
+
+# --- CELL 53 code ---
+!find /kaggle -name "*.safetensors" -o -name "adapter_*" 2>/dev/null | head -20
+
+# --- CELL 54 code ---
+# Try saving from the trainer (most likely still exists)
+sft_trainer.model.save_pretrained('/kaggle/working')
+print("✅ Adapter saved from trainer")
+
+# --- CELL 55 code ---
+# Fallback to the model variable
+model.save_pretrained('/kaggle/working')
+print("✅ Adapter saved from model")
+
+# --- CELL 56 code ---
+from IPython.display import FileLink, display
+
+# Create download links
+display(FileLink('adapter_model.safetensors'))
+display(FileLink('lora_adapter.zip'))
+
+# --- CELL 57 markdown ---
+# 9. Phase 2 — GRPO Reinforcement Learning
+
+## 9a. Reward Functions
+
+Three reward signals:
+| Signal | Weight | Rationale |
+|---|---|---|
+| `reward_correct_answer` | +1.0 | Primary: exact match or numerical tolerance |
+| `reward_has_boxed` | +0.2 | Format compliance |
+| `reward_length` | ±0.05–0.1 | Penalise trivially short or verbose responses |
+
+# --- CELL 58 code ---
+# # TRL 0.29 reward signature: (prompts, completions, **kwargs)
+# # Extra dataset columns are passed through **kwargs
+
+# def reward_correct_answer(prompts, completions, **kwargs):
+#     """Primary reward: +1.0 if \\boxed{} answer matches ground truth."""    
+#     answers = kwargs.get('answer', [None] * len(completions))
+#     rewards = []
+#     for comp, ans in zip(completions, answers):
+#         pred = extract_boxed(comp)
+#         if pred is None or ans is None:
+#             rewards.append(0.0); continue
+#         if pred.strip() == str(ans).strip():
+#             rewards.append(1.0); continue
+#         try:
+#             p_f, a_f = float(pred), float(ans)
+#             # Relative tolerance 1e-4 for floating-point answers
+#             rewards.append(1.0 if abs(p_f - a_f) / max(abs(a_f), 1e-9) < 1e-4 else 0.0)
+#         except Exception:
+#             rewards.append(0.0)
+#     return rewards
+
+
+# def reward_has_boxed(prompts, completions, **kwargs):
+#     """Format reward: +0.2 if \\boxed{} present in completion."""    
+#     return [0.2 if re.search(r'\\boxed\{[^}]+\}', c) else 0.0 for c in completions]
+
+
+# def reward_length(prompts, completions, **kwargs):
+#     """Length shaping: penalise trivially short or extremely long responses."""    
+#     rewards = []
+#     for c in completions:
+#         n = len(c.split())
+#         if n < 20:
+#             rewards.append(-0.1)   # too short → likely no reasoning
+#         elif n > 1500:
+#             rewards.append(-0.05)  # too long → verbosity penalty
+#         else:
+#             rewards.append(0.0)
+#     return rewards
+
+
+# print('✅ Reward functions ready')
+
+
+# --- CELL 59 markdown ---
+## 9b. GRPO Dataset
+
+# --- CELL 60 code ---
+# def make_grpo_row(row: dict) -> dict:
+#     """Format a training row as a chat prompt (no assistant turn — model completes it)."""    
+#     user_msg = row['prompt'] + '\nPut your final answer inside \\boxed{}.'
+#     messages = [{'role': 'user', 'content': user_msg}]
+#     try:
+#         prompt_text = tokenizer.apply_chat_template(
+#             messages, tokenize=False, add_generation_prompt=True
+#         )
+#     except Exception:
+#         prompt_text = f'<|im_start|>user\n{user_msg}<|im_end|>\n<|im_start|>assistant\n'
+#     return {'prompt': prompt_text, 'answer': str(row['answer'])}
+
+
+# grpo_dataset = Dataset.from_list(
+#     [make_grpo_row(row) for row in train_df[['prompt', 'answer']].to_dict('records')]
+# )
+# print(f'GRPO dataset: {len(grpo_dataset)} samples')
+# print('Sample prompt (first 300 chars):')
+# print(grpo_dataset[0]['prompt'][:300])
+
+
+# --- CELL 61 markdown ---
+## 9c. GRPO Training
+
+# --- CELL 62 code ---
+# # Fix 5 must remain active for GRPO as well
+# os.environ['TRITON_PTXAS_BLACKWELL_PATH'] = '/tmp/ptxas-blackwell'
+# nv_compiler.get_ptxas_version = lambda arch: '12.0'
+
+# grpo_config = GRPOConfig(
+#     output_dir                  = OUTPUT_DIR,
+#     num_train_epochs            = GRPO_EPOCHS,
+#     per_device_train_batch_size = 1,
+#     gradient_accumulation_steps = 8,
+#     num_generations             = GRPO_NUM_GEN,   # completions per prompt
+#     max_completion_length       = GRPO_MAX_COMP_LEN,
+#     # max_prompt_length           = 512,
+#     beta                        = 0.001,           # KL penalty coefficient
+#     learning_rate               = GRPO_LR,
+#     lr_scheduler_type           = 'cosine',
+#     warmup_ratio                = 0.05,
+#     bf16                        = True,
+#     logging_steps               = 5,
+#     save_strategy               = 'no',
+#     optim                       = 'adamw_torch',
+#     max_grad_norm               = 0.1,
+#     report_to                   = 'none',
+#     use_vllm                    = False,           # vLLM not available on this image
+# )
+
+# grpo_trainer = GRPOTrainer(
+#     model            = model,
+#     processing_class = tokenizer,
+#     args             = grpo_config,
+#     train_dataset    = grpo_dataset,
+#     reward_funcs     = [reward_correct_answer, reward_has_boxed, reward_length],
+# )
+
+# print('🎯 Starting GRPO...')
+# grpo_trainer.train()
+# print('✅ GRPO complete')
+
+
+# --- CELL 63 markdown ---
+# 10. Save Adapter & Package submission.zip
+
+# --- CELL 64 code ---
+# ─── Save the LoRA adapter weights ───────────────────────────────────────────
+print(f'Saving adapter to {OUTPUT_DIR}...')
+sft_trainer.model.save_pretrained(OUTPUT_DIR)
+
+# ─── Remove checkpoint subdirs to save disk space ────────────────────────────
+for item in os.listdir(OUTPUT_DIR):
+    item_path = os.path.join(OUTPUT_DIR, item)
+    if os.path.isdir(item_path) and item.startswith('checkpoint-'):
+        shutil.rmtree(item_path)
+        print(f'Removed checkpoint: {item}')
+
+# ─── List saved files ─────────────────────────────────────────────────────────
+print(f'\nFiles in {OUTPUT_DIR}:')
+for f in sorted(os.listdir(OUTPUT_DIR)):
+    fpath = os.path.join(OUTPUT_DIR, f)
+    if os.path.isfile(fpath):
+        print(f'  {f:55s}  {os.path.getsize(fpath)/1024/1024:.1f} MB')
+
+
+# --- CELL 65 code ---
+# ─── Validate adapter_config.json ────────────────────────────────────────────
+config_path = os.path.join(OUTPUT_DIR, 'adapter_config.json')
+assert os.path.exists(config_path), '❌ adapter_config.json missing'
+
+with open(config_path) as f:
+    cfg = json.load(f)
+
+rank = cfg.get('r', 999)
+assert rank <= 32, f'❌ LoRA rank {rank} exceeds competition limit of 32'
+print(json.dumps(cfg, indent=2))
+print(f'\n✅ LoRA rank = {rank} (≤ 32 ✓)')
+
+
+# --- CELL 66 code ---
+# ─── Build submission.zip ─────────────────────────────────────────────────────
+zip_path     = '/kaggle/working/submission.zip'
+files_to_zip = ['adapter_model.safetensors', 'adapter_config.json', 'README.md']
+
+print(f'Creating {zip_path}...')
+with zipfile.ZipFile(zip_path, 'w', zipfile.ZIP_DEFLATED) as zf:
+    for fname in files_to_zip:
+        fpath = os.path.join(OUTPUT_DIR, fname)
+        if os.path.exists(fpath):
+            zf.write(fpath, fname)
+            print(f'  Added: {fname}')
+        else:
+            print(f'  ⚠️  {fname} not found — skipped')
+
+zip_size = os.path.getsize(zip_path) / 1024 / 1024
+print(f'\nArchive size: {zip_size:.1f} MB')
+
+# ─── Validate the zip ─────────────────────────────────────────────────────────
+with zipfile.ZipFile(zip_path, 'r') as zf:
+    names = zf.namelist()
+    print(f'Contents: {names}')
+    assert 'adapter_config.json'       in names, '❌ adapter_config.json missing from zip'
+    assert 'adapter_model.safetensors' in names, '❌ adapter_model.safetensors missing from zip'
+
+print('\n✅ submission.zip is valid and ready for submission')
+print(f'   Path: {zip_path}')
+
+
+# --- CELL 67 markdown ---
+# Local Eval
+
+# --- CELL 68 markdown ---
+## Helper Func
+
+# --- CELL 69 code ---
+# def extract_final_answer(text: str | None) -> str:
+#     r"""Extract the final answer from model output, prioritising \boxed{}."""
+#     if text is None:
+#         return "NOT_FOUND"
+
+#     # Prefer \boxed{...}
+#     matches = re.findall(r"\\boxed\{([^}]*)(?:\}|$)", text)
+#     if matches:
+#         non_empty = [m.strip() for m in matches if m.strip()]
+#         return non_empty[-1] if non_empty else matches[-1].strip()
+
+#     # Common fallback patterns
+#     patterns = [
+#         r"The final answer is:\s*([^\n]+)",
+#         r"Final answer is:\s*([^\n]+)",
+#         r"Final answer\s*[:：]\s*([^\n]+)",
+#     ]
+#     for pattern in patterns:
+#         m = re.findall(pattern, text, re.IGNORECASE)
+#         if m:
+#             return m[-1].strip()
+
+#     # Last numeric value
+#     nums = re.findall(r"-?\d+(?:\.\d+)?", text)
+#     if nums:
+#         return nums[-1]
+
+#     # Last non-empty line
+#     lines = [l.strip() for l in text.splitlines() if l.strip()]
+#     return lines[-1] if lines else "NOT_FOUND"
+
+
+# def verify(stored_answer: str, predicted: str,cat = None) -> bool:
+#     """Return True if predicted matches stored_answer (numeric or string)."""
+#     stored_answer = stored_answer.strip()
+#     predicted = predicted.strip()
+#     if (cat == 'bit_manipulation'):
+#         return predicted.lower() == stored_answer.lower()
+#     try:
+#         return math.isclose(float(stored_answer), float(predicted),
+#                             rel_tol=1e-2, abs_tol=1e-5)
+#     except Exception:
+#         return predicted.lower() == stored_answer.lower()
+
+
+# print("Helper functions ready.")
+
+# --- CELL 70 markdown ---
+## GPU Clean Up
+
+# --- CELL 71 code ---
+# # Aggressive GPU cleanup (run in the same kernel)
+# import gc, os, traceback
+# import torch
+
+# # 1) Close and delete vLLM/LLM engine if present
+# try:
+#     if 'llm' in globals() and llm is not None:
+#         try:
+#             llm.close()
+#         except Exception:
+#             pass
+#         del llm
+# except Exception:
+#     traceback.print_exc()
+
+# # 2) Delete large model/tokenizer/PEFT objects if present
+# for name in ('model', 'tokenizer', 'peft_model', 'trainer', 'train_out'):
+#     try:
+#         if name in globals():
+#             del globals()[name]
+#     except Exception:
+#         pass
+
+# # 3) Delete large generation/training artifacts if present
+# for name in ('prompts', 'outputs', 'raw_outputs', 'preds', 'pred_df', 'eval_df', 'train_dataset'):
+#     try:
+#         if name in globals():
+#             del globals()[name]
+#     except Exception:
+#         pass
+
+# # 4) PyTorch/CUDA-specific cleanup
+# gc.collect()
+# if torch.cuda.is_available():
+#     torch.cuda.empty_cache()
+#     try:
+#         torch.cuda.ipc_collect()
+#     except Exception:
+#         pass
+#     try:
+#         torch.cuda.reset_peak_memory_stats()
+#     except Exception:
+#         pass
+
+# print('Attempted aggressive GPU cleanup. Current CUDA memory usage:')
+# if torch.cuda.is_available():
+#     for i in range(torch.cuda.device_count()):
+#         allocated = torch.cuda.memory_allocated(i) / 1024**3
+#         reserved = torch.cuda.memory_reserved(i) / 1024**3
+#         print(f'  gpu {i}: allocated={allocated:.3f} GiB, reserved={reserved:.3f} GiB')
+# else:
+#     print('  CUDA not available.')
+
+# --- CELL 72 markdown ---
+## vllm eval
+
+# --- CELL 73 code ---
+# !pip install -q /kaggle/input/datasets/mayukh18/nemotron-packages/causal_conv1d-1.6.1+cu12torch2.10cxx11abiTRUE-cp312-cp312-linux_x86_64.whl
+# !pip install -q /kaggle/input/datasets/mayukh18/nemotron-packages/mamba_ssm-2.3.1+cu12torch2.10cxx11abiTRUE-cp312-cp312-linux_x86_64.whl
+# # Extra offline wheel installs (optional local wheelhouse from notebook dataset)
+# import os
+# import subprocess
+
+# wheel_dirs = [
+#     "/kaggle/input/datasets/llkh0a/rtx-wheels/wheels",
+#     # "/kaggle/working/wheels",
+# ]
+
+# pkgs = [
+#     "vllm"
+# ]
+
+# for wd in wheel_dirs:
+#     if os.path.isdir(wd):
+#         print(f"Using wheel dir: {wd}")
+#         cmd = [
+#             "pip", "install", "-q", "--no-index","--ignore-installed",
+#             "--find-links", wd,
+#             *pkgs,
+#         ]
+#         print("Running:", " ".join(cmd))
+#         subprocess.run(cmd, check=False)
+#     else:
+#         print(f"Wheel dir not found (skip): {wd}")
+
+# --- CELL 74 code ---
+# from vllm import LLM
+# print(vllm.__version__)
+
+# --- CELL 75 code ---
+# # Fast validation with vLLM (metric-aligned + robust fallback)
+# import os
+# import gc
+# import traceback
+# from collections import defaultdict
+# import torch
+# from vllm import LLM, SamplingParams
+# from vllm.lora.request import LoRARequest
+
+# # Competition-aligned inference config
+# MAX_NEW_TOKENS = 7680
+# TOP_P          = 1.0
+# TEMPERATURE    = 0.0
+# MAX_MODEL_LEN = 8192
+# MAX_NUM_SEQS = 64
+# GPU_MEMORY_UTILIZATION = 0.85
+
+# # Environment settings used by metric notebook / offline runs
+# os.environ['TRANSFORMERS_NO_TF'] = '1'
+# os.environ['TRANSFORMERS_NO_FLAX'] = '1'
+# os.environ['TRANSFORMERS_OFFLINE'] = '1'
+# os.environ['CUDA_VISIBLE_DEVICES'] = '0'
+# os.environ['VLLM_WORKER_MULTIPROC_METHOD'] = 'spawn'
+# os.environ['TOKENIZERS_PARALLELISM'] = 'false'
+# os.environ['VLLM_MEMORY_PROFILER_ESTIMATE_CUDAGRAPHS'] = '1'
+# os.environ.setdefault('TRITON_PTXAS_PATH', '/tmp/triton/backends/nvidia/bin/ptxas')
+
+# if not os.path.exists(str(MODEL_PATH)):
+#     raise FileNotFoundError(f'MODEL_PATH not found: {MODEL_PATH}')
+
+# # Choose adapter path: prefer PRETRAINED_ADAPTER_DIR for validation-only runs
+# lora_path = OUTPUT_DIR
+
+# if lora_path is None:
+#     raise FileNotFoundError(f'adapter_config.json missing in {ADAPTER_DIR} and {PRETRAINED_ADAPTER_DIR}')
+
+# print(f'Using LoRA adapter path: {lora_path}')
+
+# # Re-check free memory right before vLLM init
+# gc.collect()
+# if torch.cuda.is_available():
+#     torch.cuda.empty_cache()
+#     free_b, total_b = torch.cuda.mem_get_info()
+#     free_frac = free_b / max(1, total_b)
+# else:
+#     free_b, total_b, free_frac = 0, 1, 0.0
+
+# free_gib = free_b / 1024**3
+# total_gib = total_b / 1024**3
+# max_tokens = MAX_NEW_TOKENS
+# max_model_len = MAX_MODEL_LEN
+# max_num_seqs = MAX_NUM_SEQS
+# safe_gpu_mem_util = GPU_MEMORY_UTILIZATION
+
+# print('vLLM startup config:')
+# print(f'  MODEL_PATH={MODEL_PATH}')
+# print(f'  ADAPTER_PATH={lora_path}')
+# print(f'  free_gpu={free_gib:.2f}/{total_gib:.2f} GiB ({free_frac:.2%} free)')
+# print(f'  gpu_memory_utilization={safe_gpu_mem_util:.3f}')
+# print(f'  max_tokens={max_tokens}, max_num_seqs={max_num_seqs}, max_model_len={max_model_len}')
+
+# # Metric-first attempt, then compatibility fallbacks
+# llm = None
+# last_err = None
+# attempts = [
+#     dict(
+#         gpu_memory_utilization=safe_gpu_mem_util,
+#         max_num_seqs=max_num_seqs,
+#         max_model_len=max_model_len,
+#         enable_prefix_caching=True,
+#         enable_chunked_prefill=True,
+#         enforce_eager=False,
+#     ),
+#     dict(
+#         gpu_memory_utilization=min(0.90, safe_gpu_mem_util + 0.015),
+#         max_num_seqs=max_num_seqs,
+#         max_model_len=max_model_len,
+#         enable_prefix_caching=True,
+#         enable_chunked_prefill=True,
+#         enforce_eager=False,
+#     ),
+#     dict(
+#         gpu_memory_utilization=max(0.70, safe_gpu_mem_util - 0.05),
+#         max_num_seqs=min(16, max_num_seqs),
+#         max_model_len=max_model_len,
+#         enable_prefix_caching=True,
+#         enable_chunked_prefill=False,
+#         enforce_eager=False,
+#     ),
+# ]
+
+# for i, cfg in enumerate(attempts, 1):
+#     try:
+#         print(f'\n[Attempt {i}] Initializing vLLM with {cfg}')
+#         llm = LLM(
+#             model=str(MODEL_PATH),
+#             tensor_parallel_size=1,
+#             dtype='auto',
+#             trust_remote_code=True,
+#             enable_lora=True,
+#             max_lora_rank=LORA_RANK,
+#             **cfg,
+#         )
+#         print(f'[Attempt {i}] vLLM initialized successfully.')
+#         break
+#     except Exception as e:
+#         last_err = e
+#         print(f'[Attempt {i}] failed: {type(e).__name__}: {e}')
+#         traceback.print_exc()
+
+# if llm is None:
+#     raise RuntimeError(
+#         'vLLM failed to initialize after retries. Restart kernel and run only inference cells if needed.'
+#     ) from last_err
+
+# try:
+#     tokenizer_vllm = llm.get_tokenizer()
+
+#     # Build prompts using vLLM tokenizer (matches metric notebook behavior)
+#     prompts, plain_prompts, row_ids, cats = [], [], [], []
+#     for r in eval_df.itertuples(index=False):
+#         user_content = r.prompt + BOXED_INSTRUCTION
+#         plain_prompts.append(user_content)
+#         try:
+#             prompt = tokenizer_vllm.apply_chat_template(
+#                 [{'role': 'user', 'content': user_content}],
+#                 tokenize=False,
+#                 add_generation_prompt=True,
+#                 enable_thinking=True,
+#             )
+#         except Exception:
+#             prompt = user_content
+#         prompts.append(prompt)
+#         row_ids.append(getattr(r, eval_df.columns[0]))
+#         cats.append(r.category)
+
+#     sampling = SamplingParams(
+#         temperature=TEMPERATURE,
+#         top_p=TOP_P,
+#         max_tokens=max_tokens,
+#     )
+
+#     outputs = llm.generate(
+#         prompts,
+#         sampling_params=sampling,
+#         lora_request=LoRARequest('adapter', 1, lora_path),
+#     )
+
+#     raw_outputs, preds = [], []
+#     for out in outputs:
+#         raw = ''
+#         if getattr(out, 'outputs', None):
+#             first_out = out.outputs[0]
+#             raw = getattr(first_out, 'text', '') or ''
+#             if (not raw) and hasattr(first_out, 'structured_output') and first_out.structured_output is not None:
+#                 raw = str(first_out.structured_output)
+#         raw_outputs.append(raw)
+#         preds.append(extract_final_answer(raw))
+
+#     # Fallback: if all outputs are empty, retry once with plain prompts (no chat template)
+#     non_empty = sum(1 for t in raw_outputs if str(t).strip())
+#     if non_empty == 0:
+#         print('All outputs are empty with chat template; retrying once with plain prompts...')
+#         outputs = llm.generate(
+#             plain_prompts,
+#             sampling_params=sampling,
+#             lora_request=LoRARequest('adapter', 1, lora_path),
+#         )
+#         raw_outputs, preds = [], []
+#         for out in outputs:
+#             raw = ''
+#             if getattr(out, 'outputs', None):
+#                 first_out = out.outputs[0]
+#                 raw = getattr(first_out, 'text', '') or ''
+#                 if (not raw) and hasattr(first_out, 'structured_output') and first_out.structured_output is not None:
+#                     raw = str(first_out.structured_output)
+#             raw_outputs.append(raw)
+#             preds.append(extract_final_answer(raw))
+#         non_empty = sum(1 for t in raw_outputs if str(t).strip())
+
+#     print(f'Non-empty outputs: {non_empty}/{len(raw_outputs)}')
+
+#     # compute per-category accuracy quickly
+#     stats = defaultdict(lambda: {'correct': 0, 'total': 0})
+#     for idx, pred, cat, row in zip(row_ids, preds, cats, eval_df.itertuples(index=False)):
+#         gt = str(row.answer)
+#         ok = verify(gt, pred, cat = cat)
+#         stats[cat]['total'] += 1
+#         stats[cat]['correct'] += int(ok)
+
+#     print('\nPer-category:')
+#     for c, s in sorted(stats.items()):
+#         print(f"  {c}: {s['correct']}/{s['total']} = {s['correct']/max(1,s['total']):.2%}")
+#     overall_correct = sum(s['correct'] for s in stats.values())
+#     overall_total = sum(s['total'] for s in stats.values())
+#     print(f'Overall: {overall_correct}/{overall_total} = {overall_correct/max(1, overall_total):.2%}')
+#     # weights for the 7 categories (sum = 1.0)
+#     weights = {
+#         "bit_manipulation": 1/6,
+#         "text_decryption": 1/6,
+#         "unit_conversion": 1/6,
+#         "numeral_system": 1/6,
+#         "gravity_physics": 1/6,
+#         "symbol_transform": 1/12,
+#         "numeric_equation": 1/12,
+#     }
+    
+#     weighted_score = 0.0
+#     for cat, w in weights.items():
+#         s = stats.get(cat, {"correct": 0, "total": 0})
+#         acc = (s["correct"] / s["total"]) if s["total"] > 0 else 0.0
+#         weighted_score += w * acc
+    
+#     cv_score = weighted_score
+#     print(f"Weighted CV score: {cv_score:.2%}")
+    
+#     # Optional: if you want to renormalize when some categories have zero samples:
+#     present_weight_sum = sum(w for c, w in weights.items() if stats.get(c, {"total": 0})["total"] > 0)
+#     if present_weight_sum > 0 and abs(present_weight_sum - 1.0) > 1e-12:
+#         print(f"Weighted CV (renormalized to present cats): {(cv_score / present_weight_sum):.2%}")
+#     pred_df = pd.DataFrame({
+#         'id': row_ids,
+#         'category': cats,
+#         'raw_output': raw_outputs,
+#         'predicted': preds,
+#         'ground_truth': eval_df['answer'].tolist(),
+#     })
+#     pred_df.to_csv('validation_predictions.csv', index=False)
+#     print('\nSample predictions:')
+#     print(pred_df.head())
+# finally:
+#     if llm is not None and hasattr(llm, 'close'):
+#         llm.close()
+
+# --- CELL 76 markdown ---
+---
+# ✅ Final Checklist
+
+| Check | Detail |
+|---|---|
+| Only `datasets` and `trl` installed from wheels | All other packages from pre-installed Docker image |
+| `--ignore-installed` flag on pip | Forces correct version despite pre-existing installs |
+| **Fix 1:** RMSNorm bypassed | Pure-PyTorch fallback, no Triton kernel compilation |
+| **Fix 2:** PTXAS copied to /tmp | Requires `ryanholbrook/nvidia-utility-script` data source |
+| **Fix 3:** Mamba3 stubbed | Prevents cutlass C++ crash on SM 12.0 |
+| **Fix 4:** `is_fast_path_available = False` | Applied after model load, before LoRA attach |
+| **Fix 5:** Triton env vars + version spoof | Set before **each** `trainer.train()` call (SFT and GRPO) |
+| `kagglehub.model_download()` | Accesses Kaggle model registry — works offline |
+| No BitsAndBytes quantisation | Full bfloat16 — 96 GB VRAM has no memory pressure |
+| LoRA target regex `in_proj\|out_proj\|up_proj\|down_proj` | Nemotron-H SSM hybrid layers, not standard transformer |
+| `processing_class=tokenizer` | TRL 0.29 correct API (`tokenizer=` deprecated) |
+| `optim='adamw_torch'` | No BNB dependency |
+| `gradient_checkpointing_kwargs={'use_reentrant': False}` | Stable gradient checkpointing |
+| GRPO `beta=0.001` | Conservative KL penalty — prevents policy collapse |
+| GRPO `num_generations=8` | 8 completions sampled per prompt for relative ranking |
+| Manual zip with exactly 3 files | `adapter_model.safetensors`, `adapter_config.json`, `README.md` |
+| LoRA rank ≤ 32 verified | Assertion before zip creation |

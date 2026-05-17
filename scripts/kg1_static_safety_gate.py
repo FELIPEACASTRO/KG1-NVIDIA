@@ -68,6 +68,26 @@ CRITICAL_SNIPPETS = {
         "loss not promotion comment": "Loss movement alone is not actionable",
         "self test ok marker": "kg1_weak_backfire_row_guard_self_test=ok",
     },
+    "scripts/audit_v521_transfer_blockers.py": {
+        "loss acc divergence finding": "V518 showed loss/ACC divergence",
+        "no hidden adapter candidate": "zero submit-safe adapter candidates",
+        "gpu blocked fail closed": "\"gpu_allowed\": False",
+        "v522 next action": "V522 CPU source-target alignment",
+        "self test ok marker": "audit_v521_transfer_blockers_self_test=ok",
+    },
+    "scripts/audit_v522_source_target_alignment.py": {
+        "reference gains are diagnostic": "They cannot be copied into training labels",
+        "gpu blocked fail closed": "\"gpu_allowed\": False",
+        "dataset build only status": "source_signal_found_dataset_build_only",
+        "teacher signal total": "gain_total",
+        "self test ok marker": "audit_v522_source_target_alignment_self_test=ok",
+    },
+    "scripts/audit_v524_quota_token_objective.py": {
+        "row token distinction": "Rows are not the same as optimization weight",
+        "token bias blocker": "objective_adjustment_required",
+        "loss token bit share": "loss_token_bit_share",
+        "self test ok marker": "audit_v524_quota_token_objective_self_test=ok",
+    },
     "scripts/hf_job_preflight_gate.py": {
         "strict target modules check": "Init adapter target_modules mismatch",
         "strict target parameters check": "Init adapter target_parameters mismatch",
@@ -86,6 +106,9 @@ CRITICAL_SNIPPETS = {
         "target parameter trainability mode": "target_parameters_trainability_mode",
         "manifest trainable filter report": "trainable_lora_module_filter",
         "default max length official": "MAX_LENGTH = env_int(\"MAX_LENGTH\", 8192)",
+        "loss normalization mode": "LOSS_NORMALIZATION_MODE",
+        "example mean loss mode": "\"example_mean\"",
+        "loss normalization manifest": "\"loss_normalization\"",
     },
     "scripts/package_hf_adapter_submission.py": {
         "official-like manifest schema required": "OFFICIAL_LIKE_SCHEMA_VERSION",

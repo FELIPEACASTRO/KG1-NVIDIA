@@ -1,0 +1,101 @@
+ref,title,author,lastRunTime,totalVotes
+markjcooper/thk-public-fork-2026-05-14-v10-kienngx,THK public fork 2026-05-14 v10 kienngx,Mark Cooper,2026-05-14 17:39:24.513000,2
+wkingedewd/new1forcompetion,new1forcompetion,wking edewd,2026-05-14 14:02:13.227000,2
+sakshatpatil25/nvidia-nemotron-submission-demo,NVIDIA Nemotron Submission Demo,Sakshat Patil 25,2026-05-12 04:28:08.697000,4
+dloc19/ecapa-tdnn-dialect-classification,Ecapa-tdnn-dialect-classification,Lộc Dương,2026-05-03 03:39:40.080000,4
+chaitanyajamble/nvidia-nrc,Nvidia NRC,Chaitanya Jamble,2026-05-07 14:11:03.370000,4
+hkhnhduy/notebook785f9cad48,notebook785f9cad48,Hồ Khánh Duy,2026-05-16 11:16:45.270000,0
+dnglethnh/pretrain-vanilla-l16-1b-50b-wsd-s1,pretrain-vanilla-l16-1b-50b-wsd-s1,Dũng Lê Thành,2026-05-15 01:40:48.970000,0
+rauffauzanrambe/nvidia-advanced-ai-training-analytics-system,NVIDIA Advanced AI Training Analytics System,Ra'uf Fauzan Rambe,2026-05-13 07:09:00.770000,3
+anhtran10/sasmotified-gan-test,SASMOTified_GAN_test,Trần Kim Anh,2026-05-08 08:30:18.387000,3
+markjcooper/thk-public-fork-2026-05-14-v12-kienngx,THK public fork 2026-05-14 v12 kienngx,Mark Cooper,2026-05-14 17:58:23.903000,1
+revatidharmadhikari/revati-experiments-nvidia-nemotron-submission,Revati Experiments NVIDIA Nemotron Submission ,Revati Dharmadhikari,2026-05-12 04:07:12.727000,3
+markjcooper/thk-public-fork-2026-05-14-v11-kienngx,THK public fork 2026-05-14 v11 kienngx,Mark Cooper,2026-05-14 17:48:52.887000,1
+dhruvb2028/tinker-adapter-ready-to-submit-adapter,Tinker Adapter Ready To Submit Adapter,Dhruv Bansal,2026-05-04 10:22:10.937000,3
+markjcooper/thk-public-fork-2026-05-14-v13-kienngx,THK public fork 2026-05-14 v13 kienngx,Mark Cooper,2026-05-14 17:25:43.577000,1
+sahangunasekara92/fork-of-3d-obj-det-task3-v2,Fork of 3d-obj-det-task3-v2,220191F_Sahan Gunasekara,2026-05-13 18:50:04.593000,2
+lamnguyenphuong/novamix,novamix,lamn17,2026-05-15 04:21:42.777000,2
+nguyenduongtrong/fp8-bench-v3,fp8-bench-v3,Nguyen Duong Trong,2026-05-13 17:49:53.807000,2
+hiulnho/stage2-extrap-pcc-v24-1024,stage2-extrap-pcc-V24-1024,Hiếu Lê Nho,2026-05-12 17:16:10.660000,2
+ethnwen/nvidia-nemotron-model-v1,NVIDIA nemotron model v1 ,ethn.wen,2026-05-10 21:02:35.783000,2
+uyentran10/radiussmotified-gan-test,RadiusSMOTified_GAN_test,uyentran10,2026-05-08 09:29:15.323000,2
+tbmdemi/pretrain-pretrain-xloop-d2048-n4-50b-wsd-s3,pretrain-pretrain-xloop-d2048-n4-50b-wsd-s3,Trịnh Bình Minh,2026-05-14 17:39:42.330000,0
+dungnguyenhuy/pretrain-pretrain-pcc-reason-d2048-50b-wsd-s3,pretrain-pretrain-pcc-reason-d2048-50b-wsd-s3,Dũng Nguyễn Huy,2026-05-14 17:39:36.403000,0
+hiulnho/pretrain-pretrain-vanilla-d2048-50b-wsd-s3,pretrain-pretrain-vanilla-d2048-50b-wsd-s3,Hiếu Lê Nho,2026-05-14 17:39:32.300000,0
+croftadams/nemotron-working-submission-test,Nemotron Working Submission Test,Croft Adams,2026-05-01 13:52:32.300000,5
+chongnh/stage2-battery-pcc-reason-seed1,stage2-battery-pcc-reason-seed1,Đức Hoàng Đình,2026-05-13 05:33:49.937000,1
+lhuyton/sam3-finetune,sam3-finetune,Lê Huy Toàn,2026-05-04 10:59:42.820000,1
+syu21125/nemotron-v15-huikang-085-fixed-v5,Nemotron v15 huikang 085 fixed v5,SYU21125,2026-05-02 21:13:25.907000,1
+tuantc2306/pretrain-xloop-d2048-n4-50b-wsd-s2,pretrain-xloop-d2048-n4-50b-wsd-s2,TuanTc2306,2026-05-14 05:52:53.097000,0
+tuananhtran37/pretrain-pcc-reason-d2048-50b-wsd-s2,pretrain-pcc-reason-d2048-50b-wsd-s2,Tuan Anh Tran 37,2026-05-14 05:47:06.153000,0
+khunht/pretrain-vanilla-d2048-50b-wsd-s2,pretrain-vanilla-d2048-50b-wsd-s2,Khuê Nhật,2026-05-14 05:46:34.273000,0
+tranvannha/fork-of-vivoice34-compare-to-vimd,Fork of ViVoice34_compare_to_ViMD,Anomynous,2026-05-01 23:58:10.293000,1
+tuananhtran37/stage2-extrap-hybrid-modular,stage2-extrap-hybrid-modular,Tuan Anh Tran 37,2026-05-12 17:16:11.287000,1
+anng1112/stage2-extrap-hybrid-v24-1024,stage2-extrap-hybrid-V24-1024,Nguyen An,2026-05-12 17:15:50.640000,1
+dfbjdsbds/stage2-extrap-vanilla-v24-1024,stage2-extrap-vanilla-V24-1024,Space_cowboy,2026-05-12 17:15:49.683000,1
+dimaspashaakrilian/nemotron-3-nano-lora-sft-with-verified-cot,Nemotron 3 Nano Lora SFT with Verified Cot,Dimas Pasha Akrilian,2026-05-16 11:18:17.960000,1
+cdnghnam/it2022-ecg,it2022|ecg,Đức Dũng Hà Nam,2026-05-02 08:53:30.557000,1
+nguyenduongtrong/pretrain-vanilla-l16-1b-bench-mb10,pretrain-vanilla-l16-1b-bench-mb10,Nguyen Duong Trong,2026-05-14 07:48:53.367000,0
+nguyenduongtrong/pretrain-vanilla-l16-1b-bench,pretrain-vanilla-l16-1b-bench,Nguyen Duong Trong,2026-05-14 07:36:13.483000,0
+dnglethnh/pretrain-xloop-d2048-n4-50b-wsd-s1,pretrain-xloop-d2048-n4-50b-wsd-s1,Dũng Lê Thành,2026-05-13 18:04:46.630000,0
+tuetrandoanminh/pretrain-pcc-reason-d2048-50b-wsd-s1,pretrain-pcc-reason-d2048-50b-wsd-s1,Tue Tran Doan Minh,2026-05-13 18:04:42.323000,0
+nguyenduongtrong/pretrain-vanilla-d2048-50b-wsd-s1,pretrain-vanilla-d2048-50b-wsd-s1,Nguyen Duong Trong,2026-05-13 18:04:39.530000,0
+nguyenduongtrong/fp8-bench-v5,fp8-bench-v5,Nguyen Duong Trong,2026-05-13 17:54:55.287000,0
+nguyenduongtrong/fp8-bench-v4,fp8-bench-v4,Nguyen Duong Trong,2026-05-13 17:52:24.363000,0
+xiaoxizhang2025/try1-fuben,try1-fuben,Xiaoxi Zhang,2026-05-16 01:39:44.380000,0
+nguyenduongtrong/fp8-bench-v2,fp8-bench-v2,Nguyen Duong Trong,2026-05-13 17:42:04.423000,0
+nguyenduongtrong/fp8-bench-vanilla,fp8-bench-vanilla,Nguyen Duong Trong,2026-05-13 17:40:00.133000,0
+nguyenduongtrong/fp8-check-stock,fp8-check-stock,Nguyen Duong Trong,2026-05-13 17:38:26.947000,0
+tuananhtran37/pretrain-bench-vanilla,pretrain-bench-vanilla,Tuan Anh Tran 37,2026-05-13 05:36:42.907000,0
+dfbjdsbds/stage2-extrap-vanilla-s3-v24-1024,stage2-extrap-vanilla-s3-V24-1024,Space_cowboy,2026-05-12 20:32:46.093000,0
+phmthanhlm24022379/stage2-hybrid-v24-n16,stage2-hybrid-V24-n16, Phạm Thanh Lâm 24022379,2026-05-12 20:32:35.133000,0
+leehoangquan006/stage2-battery-vanilla-s3,stage2-battery-vanilla-s3,Lê Hoàng Quân,2026-05-12 17:24:54.250000,0
+phmthanhlm24022379/stage2-battery-pcc-loose-seed1,stage2-battery-pcc-loose-seed1, Phạm Thanh Lâm 24022379,2026-05-12 17:24:53.860000,0
+dfbjdsbds/stage2-hybrid-listops-3k,stage2-hybrid-listops-3k,Space_cowboy,2026-05-12 23:21:02.047000,0
+omnillos/mysolution,mysolution,[Ru] Гулякин Иля,2026-05-09 21:41:30.063000,0
+phmthanhlm24022379/stage2-battery-vanilla-iter-s1-v2,stage2-battery-vanilla-iter-s1-v2, Phạm Thanh Lâm 24022379,2026-05-12 16:32:57.083000,0
+tuananhtran37/stage2-battery-hybrid-d1280-v2,stage2-battery-hybrid-d1280-v2,Tuan Anh Tran 37,2026-05-12 16:32:57.727000,0
+hiulnho/stage2-battery-pcc-tight-v2,stage2-battery-pcc-tight-v2,Hiếu Lê Nho,2026-05-12 16:32:56.460000,0
+leehoangquan006/stage2-battery-vanilla-iter-s2-v2,stage2-battery-vanilla-iter-s2-v2,Lê Hoàng Quân,2026-05-12 16:32:55.943000,0
+anng1112/stage2-debug-codeset-v3,stage2-debug-codeset-v3,Nguyen An,2026-05-12 16:32:31.833000,0
+chaitanyajamble/nvidia-nmrc-4,Nvidia-NMRC--4,Chaitanya Jamble,2026-05-10 17:53:22.630000,0
+anhtran10/radius-smote-test-2,Radius_SMOTE_test_2,Trần Kim Anh,2026-04-30 15:56:52.487000,0
+dloc19/ecapa-tdnn-dialect-vivoice34,Ecapa-tdnn-dialect-vivoice34,Lộc Dương,2026-05-03 08:26:24.387000,0
+tranvannha/vivoice34-compare-to-vimd,ViVoice34_compare_to_ViMD,Anomynous,2026-05-01 13:03:26.127000,2
+uraniumdistilled/nvidia-nemotron-grpo-training,NVIDIA Nemotron grpo training,uranium_distilled,2026-05-01 15:46:59.937000,9
+anhtran10/extra-trees-imputation,Extra_trees_imputation,Trần Kim Anh,2026-05-01 01:27:33.013000,2
+bbobwayne/nemotron-tier-1-lora-baseline,Nemotron Tier-1 LoRA Baseline,bbobWayne,2026-05-10 21:27:31.657000,6
+bbobwayne/nemotron-lora32-r1-tier-1-heuristic-baseline,Nemotron LoRA32 R1 · Tier-1 Heuristic Baseline,bbobWayne,2026-05-04 01:47:52.923000,6
+dzung271828/graphcodebert-semeval2026,GraphCodeBert-SemEval2026,manifolium,2026-05-10 16:06:41.280000,1
+baohg153/ductri-s-model,DucTri's Model,BaoHg153,2026-04-30 05:16:51.180000,1
+vohuutridung/3930-sft-summarization-models,[3930] sft summarization models,Võ Hữu Trí Dũng,2026-04-29 16:29:45.257000,2
+mbarathmybranz/kaggle-submission,kaggle_submission,M BARATH Mybranz,2026-04-25 04:08:57.737000,0
+krishnagupta02468/tinker-submission-notebook,Tinker submission notebook,KrishnaGupta02468,2026-05-15 13:45:51.003000,0
+kimberleyduran/solver-verified-cryptarithm-cot-v2-dataset,Solver-Verified Cryptarithm CoT (v2 dataset),Kimberley Duran,2026-05-04 21:38:44.803000,34
+nidhish1010/nvidia-nemotron-submission-demo-c37b25,NVIDIA Nemotron Submission Demo c37b25,nidhish1010,2026-05-13 18:58:08.697000,0
+akankshathalla/nvidia-nemotron-final,NVIDIA Nemotron final,Akanksha Thalla,2026-05-10 20:48:35.410000,0
+toney02/nvidia-nemotron-sfttrainer-training,NVIDIA Nemotron - SFTTrainer training,Toney02,2026-05-11 07:31:25.567000,0
+ramyagopalaswamy/nvidia-nemotron-submission-demo,NVIDIA Nemotron Submission Demo,Ramya Gopalaswamy,2026-05-11 21:24:39.440000,0
+esabellechen/nvidia-nemotron-training,NVIDIA Nemotron Training,Esabelle Chen,2026-05-08 09:44:11.857000,0
+minhhoiphan/data-mine-nemotron-data,Data_mine_Nemotron data,Minh Hoài Phan,2026-05-11 13:57:06.950000,0
+sathvikreddy1287/notebook8f45059149,notebook8f45059149,sathvikreddy1287,2026-05-03 03:13:34.530000,0
+manderson240/nemotron-lora-v41-training-all-data,Nemotron LoRA v41 Training All Data,Mike Anderson,2026-03-26 01:51:58.017000,0
+toney02/nemotron-sft-lora-with-cot,Nemotron SFT LoRA with CoT,Toney02,2026-05-11 23:35:26.130000,0
+skripsipesolmokelar/ln-global-runner-llama-norm,ln-global-runner-llama-norm,skripsi pesol mo kelar,2026-05-12 12:45:14.497000,0
+ksk872/nvidia-initial,NVIDIA - initial,Sumanth Kumar,2026-05-11 19:24:11.527000,0
+bloodmoonwq/nemotron-sft-lora-with-cot,Nemotron SFT LoRA with CoT,CuteClaw,2026-05-12 16:29:33.293000,0
+venkatasivasai0/notebookddb5a45181,notebookddb5a45181,Venkata Siva Sai Krishna,2026-05-13 04:12:16.140000,0
+abky189/notebook17effa02a5,notebook17effa02a5,Bharath,2026-05-06 10:01:23.507000,0
+rlaajgus/nemotron-0430-1445,Nemotron_0430_1445,rlaajgus,2026-05-13 11:48:53.337000,0
+martinijean/nemotron-sft-lora-with-cot,Nemotron SFT LoRA with CoT,Martini Jean,2026-05-02 15:29:06.657000,0
+ringustheimp/tinker-w-svd-rank-16,Tinker w/ SVD & Rank 16,ringusTheImp,2026-04-24 23:23:41.060000,13
+ringustheimp/nemo-finetune,Nemo FineTune,ringusTheImp,2026-04-25 16:18:52.883000,10
+mtoshidesu/nemotron-reasoning-made-simple-visual-starter,🚀 Nemotron Reasoning Made Simple — Visual Starter,m-toshi desu,2026-04-29 14:13:54.187000,0
+thangkth/notebookc775762247,notebookc775762247,Phạm Ngọc Thắng,2026-04-29 08:29:53.200000,3
+alamin7002/utility-script,Utility Script,Alamin 7002,2026-04-22 13:00:29.887000,0
+uyentran10/model-rnn-hybrid-sa-mean,model_RNN_hybrid_SA_Mean,uyentran10,2026-04-26 02:47:07.080000,3
+hngliththu/lo-lightgbm-dask-final,LO_LightGBM(Dask)_Final,Hương Lại Thị Thu,2026-04-26 10:48:03.887000,0
+francisbanda/nemotron-reasoning-solver,Nemotron Reasoning Solver,Francis Banda,2026-04-26 11:45:37.833000,0
+hngliththu/cdsmote-final-test1-1-1,CDSMOTE_Final_Test1(1:1),Hương Lại Thị Thu,2026-05-01 05:38:03.907000,1
+manderson240/nemotron-symbolic-solver-v36-fixed,Nemotron Symbolic Solver v36 - Fixed,Mike Anderson,2026-04-25 04:34:00.193000,2
+yashm917/nemotronmodel-reasoning-0-72-lb-score-unsloth,NemotronModel Reasoning (0.72 LB Score) [Unsloth],Yash Mohan,2026-04-07 07:05:07.407000,4

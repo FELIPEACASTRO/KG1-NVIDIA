@@ -1,0 +1,426 @@
+
+# --- CELL 0 markdown ---
+# Compact LoRA with Soft-Balanced Sampling for Nemotron Reasoning
+
+
+## Notebook Overview
+This notebook demonstrates a simple and reproducible pipeline for the
+Nemotron reasoning challenge using:
+- 4-category task grouping
+- Soft balance sampling
+- Lightweight SFT
+- Compact LoRA adapter for submission  
+The goal is not heavy training but a reproducible and competition-friendly pipeline.
+
+**What this notebook does / does not do**
+- does: simple category-aware sampling + lightweight LoRA
+- does not: full hyperparameter search, synthetic data, multi-run ensembling
+
+## 4-category task grouping
+The dataset contains multiple types of reasoning tasks rather than a single uniform task.
+To better balance the training data, I group prompts into four categories based on their dominant transformation pattern:
+- Bit manipulation (binary transformations)
+- String transformation (character or symbol mappings)
+- Number / representation conversion (Roman numerals, unit conversions, etc.)
+- Mathematical reasoning (arithmetic and symbolic operations)
+
+This simple grouping captures the main task types in the dataset and allows us to apply soft-balanced sampling before lightweight LoRA fine-tuning.
+
+# --- CELL 1 code ---
+!pip install -q --no-index --find-links /kaggle/input/datasets/dennisfong/nvidia-nemotron-offline-packages/offline_packages datasets trl --ignore-installed
+
+# --- CELL 2 code ---
+import os
+import sys
+import types
+import stat
+import shutil
+import re
+import time
+import random
+import zipfile
+import torch
+import torch.nn.functional as F
+import pandas as pd
+import datasets
+import trl
+import kagglehub
+import triton.backends.nvidia.compiler as nv_compiler
+import triton.backends.nvidia as nv_backend
+
+from datasets import Dataset
+from transformers import AutoTokenizer, AutoModelForCausalLM,TrainerCallback
+from peft import LoraConfig, get_peft_model, TaskType
+from trl import SFTTrainer, SFTConfig
+
+print("datasets version:", datasets.__version__, "trl version:", trl.__version__)
+
+# --- CELL 3 code ---
+# Copy PTXAS binaries to a writable temp directory
+src = "/kaggle/usr/lib/notebooks/ryanholbrook/nvidia_utility_script/triton/backends/nvidia/bin/ptxas-blackwell"
+dst = "/tmp/ptxas-blackwell"
+
+if os.path.exists(src):
+    shutil.copy2(src, dst)
+    os.chmod(dst, os.stat(dst).st_mode | stat.S_IEXEC | stat.S_IXGRP | stat.S_IXOTH)
+
+    src_bin = os.path.join(os.path.dirname(nv_backend.__file__), "bin")
+    dst_bin = "/tmp/triton_nvidia_bin"
+    shutil.copytree(src_bin, dst_bin, dirs_exist_ok=True)
+    for f in os.listdir(dst_bin):
+        fp = os.path.join(dst_bin, f)
+        if os.path.isfile(fp):
+            os.chmod(fp, os.stat(fp).st_mode | stat.S_IEXEC | stat.S_IXGRP | stat.S_IXOTH)
+
+    nv_backend.__file__ = os.path.join(dst_bin, "..", "__init__.py")
+    os.environ["TRITON_PTXAS_PATH"] = dst
+
+print(os.environ["TRITON_PTXAS_PATH"])
+
+# --- CELL 4 code ---
+os.environ["TRITON_PTXAS_BLACKWELL_PATH"] = "/tmp/ptxas-blackwell"
+nv_compiler.get_ptxas_version = lambda arch: "12.0"
+
+def _pure_rmsnorm_fn(x, weight, bias=None, z=None, eps=1e-5,
+                     group_size=None, norm_before_gate=True, upcast=True):
+    dtype = x.dtype
+    if upcast:
+        x = x.float()
+    variance = x.pow(2).mean(-1, keepdim=True)
+    x_normed = x * torch.rsqrt(variance + eps)
+    out = x_normed * weight.float()
+    if bias is not None:
+        out = out + bias.float()
+    if z is not None:
+        out = out * F.silu(z.float())
+    return out.to(dtype)
+
+for name, mod in list(sys.modules.items()):
+    if hasattr(mod, 'rmsnorm_fn'):
+        mod.rmsnorm_fn = _pure_rmsnorm_fn
+
+# --- CELL 5 code ---
+#Parameters
+MAX_LORA_RANK = 32
+MAX_SEQ_LEN = 2048 
+NUM_EPOCHS = 2 
+GRAD_ACCUM = 4 
+LR = 2e-4 
+
+SAMPLE_SIZE = 600
+BALANCE_ALPHA=0.5  # 0 = original distribution, 1 = fully balanced
+SEED = 777
+
+random.seed(SEED)
+torch.manual_seed(SEED)
+torch.cuda.manual_seed_all(SEED)
+
+OUTPUT_DIR = "/kaggle/working/lora_adapter"
+ZIP_PATH = "/kaggle/working/submission.zip"
+os.makedirs(OUTPUT_DIR, exist_ok=True)
+
+# --- CELL 6 code ---
+train = pd.read_csv('/kaggle/input/competitions/nvidia-nemotron-model-reasoning-challenge/train.csv')
+print("Train dataset loaded")
+print("=== Dataset Summary ===")
+print(f"Train shape: {train.shape}")
+print(f"Number of prompts: {train.shape[0]}")
+print(f"Number of columns: {train.shape[1]}")
+train.head()
+
+# --- CELL 7 code ---
+def classify_prompt(text):
+    """
+    Classify a Nemotron reasoning prompt into one of four categories:
+    bit, string, number, math.
+
+    The classification is based on heuristic scoring using pattern matching.
+    Each category receives points depending on detected patterns,
+    and the category with the highest score is selected.
+
+    Categories:
+        bit    : binary / bit manipulation patterns
+        string : character or symbol transformations
+        number : numeric representation conversions (Roman numerals, units, etc.)
+        math   : arithmetic or symbolic expressions
+
+    This rule-based approach is simple, reproducible, and suitable for
+    data-centric sampling strategies in lightweight SFT pipelines.
+    """
+
+    text_lower = text.lower()
+    scores = {
+        "bit": 0,
+        "string": 0,
+        "number": 0,
+        "math": 0
+    }
+
+    # Bit manipulation patterns
+    if re.search(r'[01]{6,}', text):
+        scores["bit"] += 3
+    if "bit" in text_lower or "binary" in text_lower:
+        scores["bit"] += 2
+
+    # String transformation patterns
+    if "->" in text:
+        scores["string"] += 3
+    if re.search(r'[a-z]{3,}\s*->\s*[a-z]{3,}', text_lower):
+        scores["string"] += 2
+    if re.search(r'[!@#$%^&*()\[\]{}]', text):
+        scores["string"] += 1
+
+    # Number / representation conversion
+    if re.search(r'\b[ivxlcdm]+\b', text_lower):
+        scores["number"] += 3
+    if re.search(r'\d+\.\d+', text):
+        scores["number"] += 2
+    if re.search(r'\d+\s*(cm|mm|kg|m)', text_lower):
+        scores["number"] += 2
+
+    # Math expressions
+    if re.search(r'[\+\-\*/=]', text):
+        scores["math"] += 2
+    if re.search(r'\d+\s*[\+\-\*/]\s*\d+', text):
+        scores["math"] += 2
+    if any(op in text for op in ["@", "|", "!", "%"]):
+        scores["math"] += 1
+
+    # Select highest score
+    return max(scores, key=scores.get)
+
+train['category'] = train['prompt'].apply(classify_prompt)
+
+# --- CELL 8 code ---
+def soft_balance_sample(df, total=600, alpha=0.5):
+    """
+    Sample a small training subset by interpolating between the
+    original category distribution and a fully balanced distribution.
+
+    alpha = 0 keeps the original distribution.
+    alpha = 1 uses a fully balanced distribution.
+    """
+    
+    counts = df['category'].value_counts()
+    orig_ratio = counts / counts.sum()
+
+    balanced = {c: 1/len(counts) for c in counts.index}
+    target_ratio = (1-alpha)*orig_ratio + alpha*pd.Series(balanced)
+
+    samples = []
+    for c in counts.index:
+        n = int(total * target_ratio[c])
+        subset = df[df.category == c]
+        samples.append(subset.sample(min(n, len(subset)), random_state=SEED))
+    return pd.concat(samples)
+
+sampled = soft_balance_sample(train, total=SAMPLE_SIZE, alpha=BALANCE_ALPHA)
+
+def show_category_distribution(df, title):
+    counts = df["category"].value_counts().sort_index()
+    ratios = (counts / counts.sum()).round(3)
+
+    dist_df = counts.to_frame(name="count")
+    dist_df["ratio"] = ratios
+
+    print(title)
+    display(dist_df)
+
+print("Train dataset sampled")
+print("=== Sampling Summary ===")
+print("\nOriginal dataset:")
+print(f"Total original rows: {len(train)}")
+show_category_distribution(train, "Original category distribution:")
+print("\nSampled dataset:")
+print(f"Total sampled rows: {len(sampled)}")
+show_category_distribution(sampled, "Sampled category distribution:")
+
+# --- CELL 9 code ---
+def create_sft_text(example):
+    """
+    Build supervised fine-tuning text using a chat-style format.
+    The model learns to return the final answer inside \\boxed{}.
+    """
+    prompt = example["prompt"]
+    answer = example["answer"]
+
+    user_msg = (
+        prompt
+        + "\n\nSolve the task and put the final answer inside \\boxed{}."
+    )
+    assistant_msg = f"\\boxed{{{answer}}}"
+
+    try:
+        messages = [
+            {"role": "user", "content": user_msg},
+            {"role": "assistant", "content": assistant_msg},
+        ]
+
+        text = tokenizer.apply_chat_template(
+            messages,
+            tokenize=False,
+            add_generation_prompt=False
+        )
+
+    except Exception:
+        text = (
+            f"<|im_start|>user\n{user_msg}<|im_end|>\n"
+            f"<|im_start|>assistant\n{assistant_msg}<|im_end|>"
+        )
+
+    return {"text": text}
+
+
+dataset = Dataset.from_pandas(sampled)
+dataset = dataset.map(create_sft_text)
+dataset = dataset.select_columns(["text"])
+print(dataset[0]["text"])
+
+# --- CELL 10 code ---
+# --------------------------------------------------
+# Stub out mamba_ssm.modules.mamba3 to avoid cutlass import
+# --------------------------------------------------
+mamba3_stub = types.ModuleType("mamba_ssm.modules.mamba3")
+
+class DummyMamba3:
+    def __init__(self, *args, **kwargs):
+        raise RuntimeError("Dummy Mamba3 stub should not be instantiated.")
+
+mamba3_stub.Mamba3 = DummyMamba3
+sys.modules["mamba_ssm.modules.mamba3"] = mamba3_stub
+
+print("Patched: mamba_ssm.modules.mamba3 -> stub")
+
+
+BASE_MODEL = kagglehub.model_download("metric/nemotron-3-nano-30b-a3b-bf16/transformers/default")
+
+print("=== Model Loading ===")
+start_time = time.time()
+
+print("Loading tokenizer...")
+tokenizer = AutoTokenizer.from_pretrained(BASE_MODEL)
+if tokenizer.pad_token is None:
+    tokenizer.pad_token = tokenizer.eos_token
+
+print("Loading base model...")
+model = AutoModelForCausalLM.from_pretrained(
+    BASE_MODEL,
+    trust_remote_code=True, 
+    dtype=torch.bfloat16,
+    device_map="auto"
+)
+
+elapsed = time.time() - start_time
+print(f"Model and tokenizer loaded in {elapsed:.1f} seconds.")
+
+# --- CELL 11 code ---
+for name, mod in sys.modules.items():
+    if "modeling_nemotron_h" in name:
+        mod.is_fast_path_available = False
+        print(f"Patched {name}: is_fast_path_available = False")
+
+# --- CELL 12 code ---
+print("=== LoRA Setup ===")
+lora_config = LoraConfig(
+    r=MAX_LORA_RANK,
+    lora_alpha=16,
+    target_modules="all-linear", #["q_proj","k_proj","v_proj","o_proj"],
+    lora_dropout=0.05,
+    bias="none",
+    task_type="CAUSAL_LM"
+)
+
+model = get_peft_model(model, lora_config)
+model.print_trainable_parameters()
+
+# --- CELL 13 code ---
+os.environ["TRITON_PTXAS_BLACKWELL_PATH"] = "/tmp/ptxas-blackwell"
+import triton.backends.nvidia.compiler as nv_compiler
+nv_compiler.get_ptxas_version = lambda arch: "12.0"
+
+training_args = SFTConfig(
+    output_dir=OUTPUT_DIR,
+    per_device_train_batch_size=1,           
+    gradient_accumulation_steps=GRAD_ACCUM,  
+    num_train_epochs=NUM_EPOCHS,             
+    learning_rate=LR,                        
+    logging_steps=5,
+    disable_tqdm=False,
+    bf16=True,                               
+    max_grad_norm=1.0,                       
+    optim="adamw_torch",                     
+    lr_scheduler_type="cosine",              
+    warmup_steps=0.1,                        
+    save_strategy="no",                      
+    report_to="none",
+    dataset_text_field="text",               
+    max_length=MAX_SEQ_LEN,              
+    packing=False,
+    gradient_checkpointing=True,
+    gradient_checkpointing_kwargs={"use_reentrant": True}
+)
+
+class ProgressCallback(TrainerCallback):
+    def on_log(self, args, state, control, logs=None, **kwargs):
+        if logs:
+            print(
+                f"[step {state.global_step}/{state.max_steps}] "
+                f"loss={logs.get('loss')} "
+                f"lr={logs.get('learning_rate')} "
+                f"epoch={logs.get('epoch')}"
+            )
+
+trainer = SFTTrainer(
+    model=model,
+    train_dataset=dataset,
+    processing_class=tokenizer,
+    args=training_args,
+    callbacks=[ProgressCallback()]
+)
+
+
+print("=== Training ===")
+trainer.train()
+
+# --- CELL 14 code ---
+# Save LoRA adapter files
+print("=== Saving Adapter ===")
+trainer.model.save_pretrained(OUTPUT_DIR)
+
+print(f"Saved adapter files to: {OUTPUT_DIR}")
+
+saved_files = sorted(
+    f for f in os.listdir(OUTPUT_DIR)
+    if os.path.isfile(os.path.join(OUTPUT_DIR, f))
+)
+
+for fname in saved_files:
+    fpath = os.path.join(OUTPUT_DIR, fname)
+    size_kb = os.path.getsize(fpath) / 1024
+    print(f"  - {fname} ({size_kb:.1f} KB)")
+
+# --- CELL 15 code ---
+# Create submission.zip with files placed at the zip root
+with zipfile.ZipFile(ZIP_PATH, "w", compression=zipfile.ZIP_DEFLATED) as zf:
+    for fname in saved_files:
+        fpath = os.path.join(OUTPUT_DIR, fname)
+        zf.write(fpath, arcname=fname)
+
+zip_size_mb = os.path.getsize(ZIP_PATH) / 1024 / 1024
+print(f"\nCreated submission archive: {ZIP_PATH} ({zip_size_mb:.2f} MB)")
+
+# Verify required files
+with zipfile.ZipFile(ZIP_PATH, "r") as zf:
+    archive_files = sorted(zf.namelist())
+
+print("Archive contents:")
+for fname in archive_files:
+    print(f"  - {fname}")
+
+required_files = ["adapter_config.json"]
+missing_files = [fname for fname in required_files if fname not in archive_files]
+
+if missing_files:
+    raise ValueError(f"Missing required file(s) in submission.zip: {missing_files}")
+
+print("\nSubmission package looks valid and is ready for upload.")

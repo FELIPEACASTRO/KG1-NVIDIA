@@ -1,0 +1,26 @@
+{
+  "version": "V525_OPENROUTER_OBJECTIVE_CONSULT_20260516",
+  "generated_at_utc": "2026-05-17T00:14:53.424433+00:00",
+  "models": [
+    "openai/gpt-5.5",
+    "anthropic/claude-opus-4.7",
+    "google/gemini-3.1-pro-preview",
+    "qwen/qwen3.6-max-preview",
+    "deepseek/deepseek-v4-pro"
+  ],
+  "models_ok": [
+    "openai/gpt-5.5",
+    "anthropic/claude-opus-4.7",
+    "google/gemini-3.1-pro-preview",
+    "qwen/qwen3.6-max-preview",
+    "deepseek/deepseek-v4-pro"
+  ],
+  "models_failed": [],
+  "prompt_path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v525_openrouter_objective_consult\\KG1_V525_OPENROUTER_OBJECTIVE_PROMPT.md",
+  "responses_path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v525_openrouter_objective_consult\\v525_openrouter_model_responses.json",
+  "consensus_path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v525_openrouter_objective_consult\\KG1_V525_OPENROUTER_OBJECTIVE_CONSENSUS.md",
+  "decision": {
+    "gpu_allowed_from_consult_alone": false,
+    "next_action": "Use the responses as advisory input only; preserve CPU/token/objective gates before any HF/H200 job."
+  }
+}

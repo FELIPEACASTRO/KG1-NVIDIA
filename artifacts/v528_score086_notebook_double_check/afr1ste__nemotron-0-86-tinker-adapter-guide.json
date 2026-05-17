@@ -1,0 +1,595 @@
+{
+  "ref": "afr1ste/nemotron-0-86-tinker-adapter-guide",
+  "title": "Nemotron 0.86 Tinker Adapter Guide",
+  "notebook": "artifacts\\v284_official_gate_worktree\\artifacts\\v527_kaggle_code_audit\\pulled_code\\afr1ste__nemotron-0-86-tinker-adapter-guide\\nemotron-0-86-tinker-adapter-guide.ipynb",
+  "metadata": {
+    "id": "afr1ste/nemotron-0-86-tinker-adapter-guide",
+    "id_no": 118664478,
+    "title": "Nemotron 0.86 Tinker Adapter Guide",
+    "code_file": "nemotron-0-86-tinker-adapter-guide.ipynb",
+    "language": "python",
+    "kernel_type": "notebook",
+    "is_private": false,
+    "enable_gpu": false,
+    "enable_tpu": false,
+    "enable_internet": false,
+    "keywords": [],
+    "dataset_sources": [],
+    "kernel_sources": [],
+    "competition_sources": [
+      "nvidia-nemotron-model-reasoning-challenge"
+    ],
+    "model_sources": [
+      "kienngx/nemotron-nano-30b-trained/Triton/tinker-adapter/1"
+    ],
+    "docker_image": "gcr.io/kaggle-images/python@sha256:c370a5ff133d162d17c2dca332b50f3e85c0b0ed1471ee18e98e3009eee80b08",
+    "machine_shape": "None"
+  },
+  "kaggle_metadata": {},
+  "relevant": [
+    {
+      "cell": 0,
+      "line": 1,
+      "kind": "markdown",
+      "text": "# Nemotron 0.86 Tinker Adapter Guide"
+    },
+    {
+      "cell": 0,
+      "line": 3,
+      "kind": "markdown",
+      "text": "This notebook is a practical public baseline for the **NVIDIA Nemotron Model Reasoning Challenge**. It does one thing carefully: it turns a public LoRA adapter into the exact `submission.zip` package expected by the competition evaluator..."
+    },
+    {
+      "cell": 0,
+      "line": 5,
+      "kind": "markdown",
+      "text": "The public score reached by this package was **0.86**. That was not achieved by a complicated local trick. The durable lesson is simpler: in this competition, adapter schema, namespace, zip layout, and provenance matter more than a long ..."
+    },
+    {
+      "cell": 1,
+      "line": 5,
+      "kind": "markdown",
+      "text": "- finding a public adapter attached as a Kaggle model input,"
+    },
+    {
+      "cell": 1,
+      "line": 7,
+      "kind": "markdown",
+      "text": "- inspecting the LoRA config and safetensors header without loading a 30B model,"
+    },
+    {
+      "cell": 1,
+      "line": 8,
+      "kind": "markdown",
+      "text": "- creating a root-level `submission.zip`, and"
+    },
+    {
+      "cell": 1,
+      "line": 9,
+      "kind": "markdown",
+      "text": "- avoiding common failed-submission patterns."
+    },
+    {
+      "cell": 1,
+      "line": 11,
+      "kind": "markdown",
+      "text": "It intentionally does **not** need internet or GPU. The adapter is treated as a submission artifact, not as a model to load for inference."
+    },
+    {
+      "cell": 2,
+      "line": 5,
+      "kind": "markdown",
+      "text": "`kienngx/nemotron-nano-30b-trained/Triton/tinker-adapter/1`"
+    },
+    {
+      "cell": 2,
+      "line": 7,
+      "kind": "markdown",
+      "text": "Credit goes to the original publisher of that adapter. This notebook adds a careful packaging, audit, and decision guide around the public artifact so that others can reproduce the submission shape and understand why several tempting alt..."
+    },
+    {
+      "cell": 3,
+      "line": 1,
+      "kind": "markdown",
+      "text": "## Public score evidence"
+    },
+    {
+      "cell": 3,
+      "line": 3,
+      "kind": "markdown",
+      "text": "These were the most useful score anchors from my public-score audit trail:"
+    },
+    {
+      "cell": 3,
+      "line": 5,
+      "kind": "markdown",
+      "text": "| Candidate family | Public score | Lesson |"
+    },
+    {
+      "cell": 3,
+      "line": 7,
+      "kind": "markdown",
+      "text": "| Kien Tinker adapter package | 0.86 | Current public baseline to protect |"
+    },
+    {
+      "cell": 3,
+      "line": 8,
+      "kind": "markdown",
+      "text": "| Huikang v20 converted adapter | 0.85 | Valid package, but below the best |"
+    },
+    {
+      "cell": 3,
+      "line": 9,
+      "kind": "markdown",
+      "text": "| Sluitel broad adapter with best `lm_head` fill | 0.62 | Structural compatibility alone is not enough |"
+    },
+    {
+      "cell": 3,
+      "line": 10,
+      "kind": "markdown",
+      "text": "| Error1249x broad adapter with best `lm_head` fill | 0.59 | Another valid but task-misaligned broad adapter |"
+    },
+    {
+      "cell": 3,
+      "line": 11,
+      "kind": "markdown",
+      "text": "| Rick v41 full adapter replacement | 0.57 | Full public replacements can collapse |"
+    },
+    {
+      "cell": 3,
+      "line": 12,
+      "kind": "markdown",
+      "text": "| BharatMohan v31 full adapter replacement | 0.62 | Same warning as above |"
+    },
+    {
+      "cell": 3,
+      "line": 13,
+      "kind": "markdown",
+      "text": "| Tiny positive public-donor grafts | 0.86 | Some perturbations preserve score, but did not improve it |"
+    },
+    {
+      "cell": 3,
+      "line": 14,
+      "kind": "markdown",
+      "text": "| Takeshi verified-focus positive grafts | 0.86 | Sparse inproj/attention direction tied but did not beat 0.86 |"
+    },
+    {
+      "cell": 3,
+      "line": 16,
+      "kind": "markdown",
+      "text": "The point is not that `0.86` is unbeatable. The point is that the best-known public baseline is surprisingly easy to damage, so each candidate should be audited before spending a daily submission slot."
+    },
+    {
+      "cell": 4,
+      "line": 1,
+      "kind": "markdown",
+      "text": "## Step 1: locate the adapter files"
+    },
+    {
+      "cell": 4,
+      "line": 3,
+      "kind": "markdown",
+      "text": "The competition submission is an adapter package. A naked CSV is not the real artifact for this challenge. The zip must contain, at minimum, these two files at the **zip root**:"
+    },
+    {
+      "cell": 4,
+      "line": 5,
+      "kind": "markdown",
+      "text": "- `adapter_config.json`"
+    },
+    {
+      "cell": 4,
+      "line": 6,
+      "kind": "markdown",
+      "text": "- `adapter_model.safetensors`"
+    },
+    {
+      "cell": 4,
+      "line": 8,
+      "kind": "markdown",
+      "text": "The cell below searches `/kaggle/input` for directories containing both files and prefers paths that look like a Tinker adapter."
+    },
+    {
+      "cell": 5,
+      "line": 4,
+      "kind": "code",
+      "text": "import zipfile"
+    },
+    {
+      "cell": 5,
+      "line": 9,
+      "kind": "code",
+      "text": "REQUIRED = ['adapter_config.json', 'adapter_model.safetensors']"
+    },
+    {
+      "cell": 5,
+      "line": 12,
+      "kind": "code",
+      "text": "def find_adapter_dirs(root=INPUT_ROOT):"
+    },
+    {
+      "cell": 5,
+      "line": 14,
+      "kind": "code",
+      "text": "for config_path in root.rglob('adapter_config.json'):"
+    },
+    {
+      "cell": 5,
+      "line": 15,
+      "kind": "code",
+      "text": "adapter_dir = config_path.parent"
+    },
+    {
+      "cell": 5,
+      "line": 16,
+      "kind": "code",
+      "text": "if all((adapter_dir / name).exists() for name in REQUIRED):"
+    },
+    {
+      "cell": 5,
+      "line": 17,
+      "kind": "code",
+      "text": "model_size = (adapter_dir / 'adapter_model.safetensors').stat().st_size"
+    },
+    {
+      "cell": 5,
+      "line": 18,
+      "kind": "code",
+      "text": "candidates.append((adapter_dir, model_size))"
+    },
+    {
+      "cell": 5,
+      "line": 19,
+      "kind": "code",
+      "text": "return sorted(candidates, key=lambda item: ('tinker' not in str(item[0]).lower(), -item[1]))"
+    },
+    {
+      "cell": 5,
+      "line": 21,
+      "kind": "code",
+      "text": "candidates = find_adapter_dirs()"
+    },
+    {
+      "cell": 5,
+      "line": 23,
+      "kind": "code",
+      "text": "raise FileNotFoundError('No adapter directory with adapter_config.json and adapter_model.safetensors was found under /kaggle/input')"
+    },
+    {
+      "cell": 5,
+      "line": 28,
+      "kind": "code",
+      "text": "ADAPTER_DIR = candidates[0][0]"
+    },
+    {
+      "cell": 5,
+      "line": 29,
+      "kind": "code",
+      "text": "print('\\nSelected adapter directory:')"
+    },
+    {
+      "cell": 5,
+      "line": 30,
+      "kind": "code",
+      "text": "print(ADAPTER_DIR)"
+    },
+    {
+      "cell": 6,
+      "line": 1,
+      "kind": "markdown",
+      "text": "## Step 2: inspect the adapter config"
+    },
+    {
+      "cell": 6,
+      "line": 3,
+      "kind": "markdown",
+      "text": "For this baseline, the important signs are a broad LoRA target set, rank 32, alpha 32, and root-level adapter files. The target modules include both attention projections and expert/feed-forward projections, plus `lm_head`."
+    },
+    {
+      "cell": 7,
+      "line": 1,
+      "kind": "code",
+      "text": "config_path = ADAPTER_DIR / 'adapter_config.json'"
+    },
+    {
+      "cell": 7,
+      "line": 2,
+      "kind": "code",
+      "text": "config = json.loads(config_path.read_text())"
+    },
+    {
+      "cell": 7,
+      "line": 5,
+      "kind": "code",
+      "text": "'peft_type': config.get('peft_type'),"
+    },
+    {
+      "cell": 7,
+      "line": 6,
+      "kind": "code",
+      "text": "'r': config.get('r'),"
+    },
+    {
+      "cell": 7,
+      "line": 7,
+      "kind": "code",
+      "text": "'lora_alpha': config.get('lora_alpha'),"
+    },
+    {
+      "cell": 7,
+      "line": 8,
+      "kind": "code",
+      "text": "'lora_dropout': config.get('lora_dropout'),"
+    },
+    {
+      "cell": 7,
+      "line": 9,
+      "kind": "code",
+      "text": "'target_modules': config.get('target_modules'),"
+    },
+    {
+      "cell": 7,
+      "line": 10,
+      "kind": "code",
+      "text": "'task_type': config.get('task_type'),"
+    },
+    {
+      "cell": 8,
+      "line": 1,
+      "kind": "markdown",
+      "text": "## Step 3: inspect the safetensors header without loading the model"
+    },
+    {
+      "cell": 8,
+      "line": 3,
+      "kind": "markdown",
+      "text": "The adapter file is large, but we can cheaply read only the safetensors header. This catches many bad candidates before upload: missing LoRA tensors, narrow target coverage, extra nesting, or a path that points to the wrong artifact."
+    },
+    {
+      "cell": 9,
+      "line": 1,
+      "kind": "code",
+      "text": "def read_safetensors_header(path):"
+    },
+    {
+      "cell": 9,
+      "line": 7,
+      "kind": "code",
+      "text": "model_path = ADAPTER_DIR / 'adapter_model.safetensors'"
+    },
+    {
+      "cell": 9,
+      "line": 8,
+      "kind": "code",
+      "text": "header = read_safetensors_header(model_path)"
+    },
+    {
+      "cell": 9,
+      "line": 12,
+      "kind": "code",
+      "text": "print('Adapter size GiB:', round(model_path.stat().st_size / (1024**3), 3))"
+    },
+    {
+      "cell": 9,
+      "line": 17,
+      "kind": "code",
+      "text": "modules = config.get('target_modules') or []"
+    },
+    {
+      "cell": 10,
+      "line": 1,
+      "kind": "markdown",
+      "text": "## Step 4: build `submission.zip`"
+    },
+    {
+      "cell": 10,
+      "line": 3,
+      "kind": "markdown",
+      "text": "The archive must place `adapter_config.json` and `adapter_model.safetensors` at the zip root. Do not put them inside an extra folder. `allowZip64=True` is required for multi-GB adapter packages."
+    },
+    {
+      "cell": 11,
+      "line": 1,
+      "kind": "code",
+      "text": "OUTPUT_ZIP = WORKING / 'submission.zip'"
+    },
+    {
+      "cell": 11,
+      "line": 2,
+      "kind": "code",
+      "text": "if OUTPUT_ZIP.exists():"
+    },
+    {
+      "cell": 11,
+      "line": 3,
+      "kind": "code",
+      "text": "OUTPUT_ZIP.unlink()"
+    },
+    {
+      "cell": 11,
+      "line": 5,
+      "kind": "code",
+      "text": "files_to_zip = [ADAPTER_DIR / name for name in REQUIRED]"
+    },
+    {
+      "cell": 11,
+      "line": 7,
+      "kind": "code",
+      "text": "with zipfile.ZipFile("
+    },
+    {
+      "cell": 11,
+      "line": 8,
+      "kind": "code",
+      "text": "OUTPUT_ZIP,"
+    },
+    {
+      "cell": 11,
+      "line": 10,
+      "kind": "code",
+      "text": "compression=zipfile.ZIP_DEFLATED,"
+    },
+    {
+      "cell": 11,
+      "line": 12,
+      "kind": "code",
+      "text": "allowZip64=True,"
+    },
+    {
+      "cell": 11,
+      "line": 14,
+      "kind": "code",
+      "text": "for path in files_to_zip:"
+    },
+    {
+      "cell": 11,
+      "line": 17,
+      "kind": "code",
+      "text": "print('Created:', OUTPUT_ZIP)"
+    },
+    {
+      "cell": 11,
+      "line": 18,
+      "kind": "code",
+      "text": "print('Size GiB:', round(OUTPUT_ZIP.stat().st_size / (1024**3), 3))"
+    },
+    {
+      "cell": 12,
+      "line": 1,
+      "kind": "markdown",
+      "text": "## Step 5: verify the zip layout"
+    },
+    {
+      "cell": 12,
+      "line": 3,
+      "kind": "markdown",
+      "text": "This is the last cheap check before submission. The two required files should be exactly at the root."
+    },
+    {
+      "cell": 13,
+      "line": 1,
+      "kind": "code",
+      "text": "with zipfile.ZipFile(OUTPUT_ZIP) as zf:"
+    },
+    {
+      "cell": 13,
+      "line": 8,
+      "kind": "code",
+      "text": "raise RuntimeError(f'Missing required files from zip root: {missing}')"
+    },
+    {
+      "cell": 13,
+      "line": 12,
+      "kind": "code",
+      "text": "raise RuntimeError(f'Unexpected nested file paths in submission zip: {nested[:5]}')"
+    },
+    {
+      "cell": 13,
+      "line": 17,
+      "kind": "code",
+      "text": "print('\\nReady for Kaggle submission.')"
+    },
+    {
+      "cell": 14,
+      "line": 3,
+      "kind": "markdown",
+      "text": "A strong competition workflow starts by protecting the current best. In this challenge, many candidates look plausible because they are valid LoRA packages, but valid packages can still be very poor public submissions."
+    },
+    {
+      "cell": 14,
+      "line": 7,
+      "kind": "markdown",
+      "text": "- Treat `submission.zip` shape as a hard contract."
+    },
+    {
+      "cell": 14,
+      "line": 8,
+      "kind": "markdown",
+      "text": "- Inspect adapter namespace and target coverage before upload."
+    },
+    {
+      "cell": 14,
+      "line": 9,
+      "kind": "markdown",
+      "text": "- Compare candidate tensors against the best known adapter before spending quota."
+    },
+    {
+      "cell": 14,
+      "line": 10,
+      "kind": "markdown",
+      "text": "- Use small, information-bearing public-score probes instead of blind full replacement."
+    },
+    {
+      "cell": 14,
+      "line": 11,
+      "kind": "markdown",
+      "text": "- Stop a branch when repeated public scores show it only ties or hurts."
+    },
+    {
+      "cell": 14,
+      "line": 17,
+      "kind": "markdown",
+      "text": "- Replacing the whole adapter with a structurally compatible but task-misaligned public adapter."
+    },
+    {
+      "cell": 14,
+      "line": 18,
+      "kind": "markdown",
+      "text": "- Over-interpreting tiny tensor perturbations when the public score is coarse."
+    },
+    {
+      "cell": 15,
+      "line": 1,
+      "kind": "markdown",
+      "text": "## A reusable audit pattern for new adapters"
+    },
+    {
+      "cell": 15,
+      "line": 3,
+      "kind": "markdown",
+      "text": "For future candidates, I use this decision checklist before spending a daily submission slot:"
+    },
+    {
+      "cell": 15,
+      "line": 5,
+      "kind": "markdown",
+      "text": "1. Does the candidate produce a real `adapter_config.json` and `adapter_model.safetensors`?"
+    },
+    {
+      "cell": 15,
+      "line": 6,
+      "kind": "markdown",
+      "text": "2. Are the files at the correct root layout after zipping?"
+    },
+    {
+      "cell": 15,
+      "line": 7,
+      "kind": "markdown",
+      "text": "3. Does the config target the same broad module family as the best package?"
+    },
+    {
+      "cell": 15,
+      "line": 10,
+      "kind": "markdown",
+      "text": "6. Is the candidate genuinely new, or just a duplicate of a known 0.85/0.86 family?"
+    },
+    {
+      "cell": 15,
+      "line": 11,
+      "kind": "markdown",
+      "text": "7. Does the public-score history justify using one of the limited daily submissions?"
+    },
+    {
+      "cell": 15,
+      "line": 13,
+      "kind": "markdown",
+      "text": "That process is less exciting than a giant training notebook, but it prevents most wasted submissions."
+    },
+    {
+      "cell": 16,
+      "line": 3,
+      "kind": "markdown",
+      "text": "If this notebook saves you a failed upload or gives you a clean starting point, please consider upvoting it and also checking the original public adapter source. The best next step is not to keep resubmitting this same package; it is to ..."
+    }
+  ]
+}

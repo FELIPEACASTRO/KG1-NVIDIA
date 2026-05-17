@@ -1,0 +1,5 @@
+source,split,rows,family_counts,marker_CHO,marker_MAJ3,marker_PAR3,marker_XOR,marker_OR,marker_fullbyte_safe_ternary,marker_bit_v300_gain_pattern
+v304_solver_trace_distill,train,12822,"{'bit_manipulation': 4231, 'equation_transform': 8015, 'gravity_constant': 144, 'numeral_system': 144, 'text_encryption': 144, 'unit_conversion': 144}",506,709,105,5034,4873,1536,1056
+v304_solver_trace_distill,validation,969,"{'bit_manipulation': 332, 'equation_transform': 573, 'gravity_constant': 16, 'numeral_system': 16, 'text_encryption': 16, 'unit_conversion': 16}",54,69,17,369,350,168,88
+v515_v514_fullbyte_residual,train,2491,"{'bit_manipulation': 473, 'equation_transform': 2018}",4,3,0,237,238,7,0
+v515_v514_fullbyte_residual,validation,620,"{'bit_manipulation': 116, 'equation_transform': 504}",0,1,0,57,57,1,0

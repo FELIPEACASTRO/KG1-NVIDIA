@@ -1,0 +1,393 @@
+{
+  "ref": "huikang/adapter-validation-notebook",
+  "title": "Adapter validation notebook",
+  "notebook": "artifacts\\v284_official_gate_worktree\\artifacts\\v527_kaggle_code_audit\\pulled_code\\huikang__adapter-validation-notebook\\adapter-validation-notebook.ipynb",
+  "metadata": {
+    "id": "huikang/adapter-validation-notebook",
+    "id_no": 113126826,
+    "title": "Adapter validation notebook",
+    "code_file": "adapter-validation-notebook.ipynb",
+    "language": "python",
+    "kernel_type": "notebook",
+    "is_private": false,
+    "enable_gpu": true,
+    "enable_tpu": false,
+    "enable_internet": false,
+    "keywords": [
+      "gpu"
+    ],
+    "dataset_sources": [],
+    "kernel_sources": [
+      "metric/nvidia-metric-utility-script",
+      "ryanholbrook/nvidia-utility-script",
+      "huikang/tinker-submission-notebook",
+      "huikang/adapter-validation-notebook"
+    ],
+    "competition_sources": [
+      "nvidia-nemotron-model-reasoning-challenge"
+    ],
+    "model_sources": [
+      "metric/nemotron-3-nano-30b-a3b-bf16/Transformers/default/1"
+    ],
+    "docker_image": "gcr.io/kaggle-private-byod/python@sha256:9fa0da194fad2241d3f01a80581cbecbd3a258b4d1b695e2cbbbc62a0fd205ac",
+    "machine_shape": "NvidiaRtxPro6000"
+  },
+  "kaggle_metadata": {
+    "accelerator": "nvidiaRtxPro6000",
+    "dataSources": [
+      {
+        "sourceType": "competition",
+        "sourceId": 129716,
+        "databundleVersionId": 16082784,
+        "isSourceIdPinned": false
+      },
+      {
+        "sourceType": "modelInstanceVersion",
+        "sourceId": 784907,
+        "databundleVersionId": 16059913,
+        "modelInstanceId": 598905,
+        "modelId": 611168,
+        "isSourceIdPinned": false
+      },
+      {
+        "sourceType": "kernelVersion",
+        "sourceId": 303162475,
+        "isSourceIdPinned": false
+      },
+      {
+        "sourceType": "kernelVersion",
+        "sourceId": 306236690,
+        "isSourceIdPinned": false
+      },
+      {
+        "sourceType": "kernelVersion",
+        "sourceId": 310617879,
+        "isSourceIdPinned": false
+      },
+      {
+        "sourceType": "kernelVersion",
+        "sourceId": 310925867,
+        "isSourceIdPinned": false
+      }
+    ],
+    "dockerImageVersionId": 31287,
+    "isInternetEnabled": false,
+    "language": "python",
+    "sourceType": "notebook",
+    "isGpuEnabled": true
+  },
+  "relevant": [
+    {
+      "cell": 0,
+      "line": 1,
+      "kind": "markdown",
+      "text": "This is standalone validation notebook that takes in a `submission.zip` and returns the same `submission.zip` along with evaluation metrics."
+    },
+    {
+      "cell": 0,
+      "line": 3,
+      "kind": "markdown",
+      "text": "These validation concepts were taken from Kh0a's [notebook](https://www.kaggle.com/code/llkh0a/nemotron-unsloth-sft-training-3-30-2)."
+    },
+    {
+      "cell": 1,
+      "line": 1,
+      "kind": "code",
+      "text": "SUBMISSION_ZIP_PATH = ("
+    },
+    {
+      "cell": 1,
+      "line": 2,
+      "kind": "code",
+      "text": "\"/kaggle/input/notebooks/huikang/tinker-submission-notebook/submission.zip\""
+    },
+    {
+      "cell": 2,
+      "line": 1,
+      "kind": "code",
+      "text": "import zipfile"
+    },
+    {
+      "cell": 2,
+      "line": 3,
+      "kind": "code",
+      "text": "with zipfile.ZipFile(SUBMISSION_ZIP_PATH, \"r\") as zip_ref:"
+    },
+    {
+      "cell": 2,
+      "line": 4,
+      "kind": "code",
+      "text": "zip_ref.extractall()"
+    },
+    {
+      "cell": 3,
+      "line": 1,
+      "kind": "markdown",
+      "text": "# Print configs"
+    },
+    {
+      "cell": 4,
+      "line": 3,
+      "kind": "code",
+      "text": "with open(\"adapter_config.json\") as f:"
+    },
+    {
+      "cell": 4,
+      "line": 4,
+      "kind": "code",
+      "text": "trained_adapter_config = json.load(f)"
+    },
+    {
+      "cell": 4,
+      "line": 6,
+      "kind": "code",
+      "text": "print(trained_adapter_config)"
+    },
+    {
+      "cell": 7,
+      "line": 13,
+      "kind": "code",
+      "text": "# Configuration"
+    },
+    {
+      "cell": 7,
+      "line": 15,
+      "kind": "code",
+      "text": "\"metric/nemotron-3-nano-30b-a3b-bf16/transformers/default\""
+    },
+    {
+      "cell": 8,
+      "line": 7,
+      "kind": "code",
+      "text": "exts: tuple[str, ...] = (\".bin\", \".pt\", \".safetensors\"),"
+    },
+    {
+      "cell": 8,
+      "line": 81,
+      "kind": "code",
+      "text": "Prioritizes extracting answers inside `\\boxed{}`."
+    },
+    {
+      "cell": 8,
+      "line": 82,
+      "kind": "code",
+      "text": "If no `\\boxed{}` format is found, attempts to extract numbers from other formats."
+    },
+    {
+      "cell": 8,
+      "line": 85,
+      "kind": "code",
+      "text": ">>> extract_final_answer(r\"The answer is \\boxed{42}\")"
+    },
+    {
+      "cell": 8,
+      "line": 97,
+      "kind": "code",
+      "text": "# Search for boxed answer"
+    },
+    {
+      "cell": 8,
+      "line": 98,
+      "kind": "code",
+      "text": "# Match all instances of \\boxed{...} or unclosed \\boxed{ at the end"
+    },
+    {
+      "cell": 8,
+      "line": 99,
+      "kind": "code",
+      "text": "matches = re.findall(r\"\\\\boxed\\{([^}]*)(?:\\}|$)\", text)"
+    },
+    {
+      "cell": 8,
+      "line": 106,
+      "kind": "code",
+      "text": "# Other common formats if \\boxed{} is not found"
+    },
+    {
+      "cell": 8,
+      "line": 152,
+      "kind": "code",
+      "text": "lora_path: str,"
+    },
+    {
+      "cell": 8,
+      "line": 154,
+      "kind": "code",
+      "text": "max_lora_rank: int,"
+    },
+    {
+      "cell": 8,
+      "line": 171,
+      "kind": "code",
+      "text": "os.environ[\"TRANSFORMERS_NO_TF\"] = \"1\""
+    },
+    {
+      "cell": 8,
+      "line": 172,
+      "kind": "code",
+      "text": "os.environ[\"TRANSFORMERS_NO_FLAX\"] = \"1\""
+    },
+    {
+      "cell": 8,
+      "line": 173,
+      "kind": "code",
+      "text": "os.environ[\"TRANSFORMERS_OFFLINE\"] = \"1\""
+    },
+    {
+      "cell": 8,
+      "line": 178,
+      "kind": "code",
+      "text": "from vllm.lora.request import LoRARequest"
+    },
+    {
+      "cell": 8,
+      "line": 189,
+      "kind": "code",
+      "text": "enable_lora=True,"
+    },
+    {
+      "cell": 8,
+      "line": 190,
+      "kind": "code",
+      "text": "max_lora_rank=max_lora_rank,"
+    },
+    {
+      "cell": 8,
+      "line": 206,
+      "kind": "code",
+      "text": "+ \"\\nPlease put your final answer inside `\\\\boxed{}`. For example: `\\\\boxed{your answer}`\""
+    },
+    {
+      "cell": 8,
+      "line": 225,
+      "kind": "code",
+      "text": "lora_request=LoRARequest(\"adapter\", 1, lora_path),"
+    },
+    {
+      "cell": 8,
+      "line": 230,
+      "kind": "code",
+      "text": "for item, output in zip(test_df.itertuples(index=False), outputs):"
+    },
+    {
+      "cell": 11,
+      "line": 1,
+      "kind": "code",
+      "text": "os.environ[\"TRANSFORMERS_NO_TF\"] = \"1\""
+    },
+    {
+      "cell": 11,
+      "line": 2,
+      "kind": "code",
+      "text": "os.environ[\"TRANSFORMERS_NO_FLAX\"] = \"1\""
+    },
+    {
+      "cell": 11,
+      "line": 3,
+      "kind": "code",
+      "text": "os.environ[\"TRANSFORMERS_OFFLINE\"] = \"1\""
+    },
+    {
+      "cell": 11,
+      "line": 8,
+      "kind": "code",
+      "text": "from vllm.lora.request import LoRARequest"
+    },
+    {
+      "cell": 12,
+      "line": 3,
+      "kind": "code",
+      "text": "max_lora_rank = 32"
+    },
+    {
+      "cell": 12,
+      "line": 8,
+      "kind": "code",
+      "text": "gpu_memory_utilization = 0.85"
+    },
+    {
+      "cell": 13,
+      "line": 12,
+      "kind": "code",
+      "text": "enable_lora=True,"
+    },
+    {
+      "cell": 13,
+      "line": 13,
+      "kind": "code",
+      "text": "max_lora_rank=max_lora_rank,"
+    },
+    {
+      "cell": 15,
+      "line": 3,
+      "kind": "code",
+      "text": "df = pd.read_csv(\"/kaggle/input/nvidia-nemotron-3-reasoning-challenge/train.csv\")"
+    },
+    {
+      "cell": 17,
+      "line": 2,
+      "kind": "code",
+      "text": "if \"secret bit manipulation rule transforms 8-bit binary numbers\" in prompt:"
+    },
+    {
+      "cell": 17,
+      "line": 3,
+      "kind": "code",
+      "text": "return \"bit_manipulation\""
+    },
+    {
+      "cell": 17,
+      "line": 6,
+      "kind": "code",
+      "text": "if \"secret set of transformation rules is applied to equations\" in prompt:"
+    },
+    {
+      "cell": 17,
+      "line": 15,
+      "kind": "code",
+      "text": "return \"equation_numeric_deduce\""
+    },
+    {
+      "cell": 17,
+      "line": 16,
+      "kind": "code",
+      "text": "return \"equation_numeric_guess\""
+    },
+    {
+      "cell": 18,
+      "line": 2,
+      "kind": "code",
+      "text": "lora_path = \"/kaggle/working\""
+    },
+    {
+      "cell": 18,
+      "line": 8,
+      "kind": "code",
+      "text": "lora_request=LoRARequest(\"adapter\", 1, lora_path),"
+    },
+    {
+      "cell": 19,
+      "line": 1,
+      "kind": "markdown",
+      "text": "# Produce submission"
+    },
+    {
+      "cell": 20,
+      "line": 1,
+      "kind": "code",
+      "text": "import zipfile as _zf"
+    },
+    {
+      "cell": 20,
+      "line": 4,
+      "kind": "code",
+      "text": "with _zf.ZipFile(\"submission.zip\", \"w\", _zf.ZIP_DEFLATED) as zf:"
+    },
+    {
+      "cell": 20,
+      "line": 6,
+      "kind": "code",
+      "text": "if \"adapter\" not in file:"
+    }
+  ]
+}

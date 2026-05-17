@@ -1,0 +1,2033 @@
+
+# --- CELL 0 markdown ---
+# Nemotron Reasoning — Baseline SFT Notebook w/ Unsloth
+
+**Strategy:** Supervised Fine-Tuning (SFT) on the full training set using LoRA
+
+# --- CELL 1 markdown ---
+## 1. Setup
+
+# --- CELL 2 code ---
+!pip install -q --no-index --find-links /kaggle/input/datasets/mayukh18/nemotron-packages/packages unsloth trl peft transformers datasets accelerate bitsandbytes 
+!pip install -q /kaggle/input/datasets/mayukh18/nemotron-packages/causal_conv1d-1.6.1+cu12torch2.10cxx11abiTRUE-cp312-cp312-linux_x86_64.whl
+!pip install -q /kaggle/input/datasets/mayukh18/nemotron-packages/mamba_ssm-2.3.1+cu12torch2.10cxx11abiTRUE-cp312-cp312-linux_x86_64.whl
+
+# --- CELL 3 code ---
+# Extra offline wheel installs (optional local wheelhouse from notebook dataset)
+import os
+import subprocess
+
+wheel_dirs = [
+    "/kaggle/input/datasets/llkh0a/rtx-wheels/wheels",
+    # "/kaggle/working/wheels",
+]
+
+pkgs = [
+    "protobuf==6.33.5",
+    "sentencepiece",
+    "safetensors",
+    "huggingface_hub",
+    "vllm"
+]
+
+for wd in wheel_dirs:
+    if os.path.isdir(wd):
+        print(f"Using wheel dir: {wd}")
+        cmd = [
+            "pip", "install", "-q", "--no-index",
+            "--find-links", wd,
+            *pkgs,
+        ]
+        print("Running:", " ".join(cmd))
+        subprocess.run(cmd, check=False)
+    else:
+        print(f"Wheel dir not found (skip): {wd}")
+
+# --- CELL 4 code ---
+# !pip install -U --no-index --find-links /kaggle/input/datasets/luciankucera/vllm-offline-wheels torch vllm datasets
+
+# --- CELL 5 markdown ---
+## Config
+
+# --- CELL 6 code ---
+!rm -rf /kaggle/tmp/*
+
+# --- CELL 7 code ---
+from unsloth import FastLanguageModel
+from vllm import LLM, SamplingParams
+from vllm.lora.request import LoRARequest
+
+# --- CELL 8 code ---
+SANITY_RUN = False
+import os
+import re
+import math
+import statistics
+from pathlib import Path
+import zipfile
+import time
+import pandas as pd
+from datasets import Dataset
+import kagglehub
+import torch
+
+# --- CELL 9 code ---
+DATA_DIR = Path("/kaggle/input/competitions/nvidia-nemotron-model-reasoning-challenge")
+TRAIN_PATH = DATA_DIR / "train.csv"
+TEST_PATH  = DATA_DIR / "test.csv"
+# PRETRAINED_ADAPTER_DIR = "/kaggle/input/notebooks/llkh0a/nemotron-unsloth-sft-training-3-23/nemotron-lora-adapter"
+# PRETRAINED_ADAPTER_DIR ="/kaggle/input/notebooks/llkh0a/nemotron-unsloth-sft-training-3-28/adapter"
+# PRETRAINED_ADAPTER_DIR = "/kaggle/input/models/llkh0a/nemotron-unsloth-sft-training-3-23/pytorch/default/1/nemotron-lora-adapter"
+PRETRAINED_ADAPTER_DIR ="/kaggle/input/notebooks/llkh0a/nemotron-unsloth-sft-training-3-30-1/nemotron-lora-adapter"
+PRETRAINED_ADAPTER_DIR = None
+ADAPTER_DIR = "nemotron-lora-adapter"
+CHECKPOINT_OUTPUT_DIR = "/kaggle/tmp/checkpoints"
+SUBMISSION_ZIP = "submission.zip"
+DATA_SPLIT_PATH = "/kaggle/input/datasets/llkh0a/nvidia-nemotron-distiled-dataset/splited.csv"
+MODEL_PATH = kagglehub.model_download("metric/nemotron-3-nano-30b-a3b-bf16/transformers/default")
+# MODEL_PATH = kagglehub.model_download("/kaggle/input/models/metric/nemotron-3-nano-30b-a3b-bf16/transformers/default/")
+
+# LoRA config
+LORA_RANK    = 32
+LORA_ALPHA   = 16
+LORA_DROPOUT = 0.1
+
+# Training config
+MAX_SEQ_LEN = 3500
+NUM_EPOCHS  = 2
+BATCH_SIZE  = 2
+GRAD_ACCUM  = 1
+LR          = 1e-4
+WARMUP_RATIO = 0.03
+MAX_STEPS = -1  # -1 => full epochs
+
+# Competition-aligned inference config
+MAX_NEW_TOKENS = 7680
+TOP_P          = 1.0
+TEMPERATURE    = 0.0
+MAX_MODEL_LEN = 8192
+MAX_NUM_SEQS = 64
+GPU_MEMORY_UTILIZATION = 0.85
+
+# Runtime controls
+# save_strategy must match eval_strategy for load_best_model_at_end=True
+EVAL_SAVE_STEPS = 300
+EARLY_STOPPING_PATIENCE = 5  # stop after this many evals with no improvement
+RUN_TRAINING = True
+RUN_QUICK_VALIDATION = True
+VALIDATION_SAMPLES_PER_CATEGORY = None
+BOXED_LOSS_WEIGHT = 5.0  # upweight final \boxed{answer} tokens in loss (1.0 = disabled)
+
+TRAIN_SAMPLES_PER_CATEGORY = {
+    "bit_manipulation": 1400,   # max 1602 
+    "text_decryption" : 1300,   # max 1576 
+    "unit_conversion" : 200,   # max 1594 
+    "numeral_system"  : 200,   # max 1576 
+    "gravity_physics" : 200,   # max 1597 
+    "symbol_transform": 10,   # max 823 
+    "numeric_equation": 600    # max 732 
+}
+VALIDATION_BATCH_SIZE = 4
+USE_THINKING_TRACES = True
+#all category:"bit_manipulation",
+# #"text_decryption","unit_conversion","numeral_system","gravity_physics","symbol_transform"
+custom_trace_dataset ={
+    "bit_manipulation": "/kaggle/input/datasets/llkh0a/nvidia-nemotron-distiled-dataset/bit_manipulation_traces_v4.csv",
+    "numeric_equation":"/kaggle/input/datasets/llkh0a/nvidia-nemotron-distiled-dataset/numeric_equation_traces_new.csv"
+}
+TRAIN_CATEGORY = [
+    "bit_manipulation",
+    "text_decryption",
+    "unit_conversion",
+    "numeral_system",
+    "gravity_physics",
+    "symbol_transform",
+    "numeric_equation"
+]
+VALIDATION_CATEGORY = None  # set to None to use all categories for validation
+RUN_QUICK_VALIDATION_CATEGORY = None # set to None to use all categories for quick validation
+print("Config ready.")
+print(f"MAX_SEQ_LEN={MAX_SEQ_LEN}, epochs={NUM_EPOCHS}, batch={BATCH_SIZE}, grad_accum={GRAD_ACCUM}, lr={LR}")
+print(f"MAX_NEW_TOKENS={MAX_NEW_TOKENS}, TOP_P={TOP_P}, TEMPERATURE={TEMPERATURE}")
+print(f"MAX_MODEL_LEN={MAX_MODEL_LEN}, MAX_NUM_SEQS={MAX_NUM_SEQS}, GPU_MEMORY_UTILIZATION={GPU_MEMORY_UTILIZATION}")
+print(f"VALIDATION_SAMPLES_PER_CATEGORY={VALIDATION_SAMPLES_PER_CATEGORY}, VALIDATION_BATCH_SIZE={VALIDATION_BATCH_SIZE}")
+print(f"BOXED_LOSS_WEIGHT={BOXED_LOSS_WEIGHT}")
+
+# --- CELL 10 markdown ---
+## 2. Load & Inspect Data
+
+# --- CELL 11 code ---
+train_df = pd.read_csv(TRAIN_PATH)
+test_df  = pd.read_csv(TEST_PATH)
+
+print(f"Train: {len(train_df):,} rows — columns: {list(train_df.columns)}")
+print(f"Test:  {len(test_df):,} rows  — columns: {list(test_df.columns)}")
+train_df.head()
+
+# --- CELL 12 code ---
+def classify_equation_vs_symbol(prompt: str) -> str:
+    q = prompt.strip()
+
+    # extract the target expression after "determine the result for" if present
+    m = re.search(r"determine the result for[:\s]*([^\n\r]*)", q, re.IGNORECASE)
+    expr = m.group(1).strip() if m else q
+
+    # counts
+    digit_count = len(re.findall(r"\d", expr))
+    alpha_count = len(re.findall(r"[A-Za-z]", expr))
+    symbol_count = len(re.findall(r"[^\w\s]", expr))  # punctuation / symbols
+
+    # rule 1: numeric_equation if expression contains two numeric groups separated by a non-digit operator
+    if re.search(r"\d+\s*[^0-9\s]\s*\d+", expr):
+        return "numeric_equation"
+
+    # rule 2: symbol_transform if symbols dominate and digits/letters are scarce
+    total_chars = max(1, len(expr))
+    if symbol_count / total_chars > 0.5 and digit_count + alpha_count < max(2, symbol_count//2):
+        return "symbol_transform"
+
+    # fallback: look at examples in the prompt body (presence of lines with digits → numeric)
+    if re.search(r"^\s*\d+[^=\n]*=", q, re.MULTILINE):
+        return "numeric_equation"
+    if re.search(r"[^\w\s]{2,}", q):  # repeated punctuation sequences
+        return "symbol_transform"
+
+    return "unknown"
+
+# --- CELL 13 code ---
+# Create validation + training split using DATA_SPLIT_PATH (splited.csv)
+import random
+random.seed(42)
+
+def classify_prompt_for_split(prompt: str) -> str:
+    p = prompt.lower()
+    if "bit manipulation" in p:
+        return "bit_manipulation"
+    if "secret encryption rules" in p:
+        return "text_decryption"
+    if "unit conversion" in p:
+        return "unit_conversion"
+    if "numeral system" in p:
+        return "numeral_system"
+    if "gravitational constant" in p:
+        return "gravity_physics"
+    if "transformation rules" in p:
+        return classify_equation_vs_symbol(prompt) if 'classify_equation_vs_symbol' in globals() else "symbol_transform"
+    return "unknown"
+
+# Pre-load traced IDs from custom_trace_dataset CSVs so we can prioritise them during sampling
+_traced_ids: dict[str, set] = {}
+for _cat, _path in custom_trace_dataset.items():
+    for _p in [_path, f"data/{os.path.basename(_path)}"]:
+        if os.path.exists(_p):
+            try:
+                _ids = set(pd.read_csv(_p, usecols=["id"])["id"].astype(str))
+                _traced_ids[_cat] = _ids
+                print(f"[split] Found {len(_ids)} traced IDs for '{_cat}' from {_p}")
+            except Exception as e:
+                print(f"[split] Could not read trace IDs from {_p}: {e}")
+            break
+    if _cat not in _traced_ids:
+        print(f"[split] Warning: no trace file for '{_cat}' at {_path} — random sampling will be used")
+
+# classify
+train_df['category'] = train_df['prompt'].apply(classify_prompt_for_split)
+
+# decide category lists
+all_categories = sorted(train_df['category'].unique())
+train_cats = TRAIN_CATEGORY if TRAIN_CATEGORY is not None else all_categories
+
+# ── Use DATA_SPLIT_PATH to define validation set ──
+_split_loaded = False
+if DATA_SPLIT_PATH:
+    _split_paths = [DATA_SPLIT_PATH, f"data/{os.path.basename(DATA_SPLIT_PATH)}"]
+    for _sp in _split_paths:
+        if os.path.exists(_sp):
+            split_df = pd.read_csv(_sp)
+            holdout_ids = set(split_df[split_df["HOLD_OUT"] == True]["id"].astype(str))
+            print(f"[split] Loaded {len(holdout_ids)} hold-out IDs from {_sp}")
+
+            # Mark hold-out rows in train_df
+            holdout_mask = train_df["id"].astype(str).isin(holdout_ids)
+            validation_df = train_df[holdout_mask].copy()
+            remaining_df = train_df[~holdout_mask].copy()
+
+            # ── Limit validation to VALIDATION_SAMPLES_PER_CATEGORY per category ──
+            if VALIDATION_SAMPLES_PER_CATEGORY:
+                _val_limited = []
+                for _c in sorted(validation_df['category'].unique()):
+                    _c_idx = validation_df[validation_df['category'] == _c].index.tolist()
+                    _n = min(VALIDATION_SAMPLES_PER_CATEGORY, len(_c_idx))
+                    _val_limited.extend(random.sample(_c_idx, _n))
+                    print(f"[split] val '{_c}': {_n}/{len(_c_idx)} holdout samples kept")
+                _excess = validation_df[~validation_df.index.isin(_val_limited)]
+                remaining_df = pd.concat([remaining_df, _excess])
+                validation_df = validation_df.loc[_val_limited].copy()
+
+            _split_loaded = True
+            print(f"[split] Validation: {len(validation_df)} samples from DATA_SPLIT_PATH hold-out")
+            break
+
+if not _split_loaded:
+    print("[split] DATA_SPLIT_PATH not found or not set — falling back to random validation sampling")
+    val_cats = VALIDATION_CATEGORY if VALIDATION_CATEGORY is not None else all_categories
+    validation_indices = []
+    for cat in val_cats:
+        cat_indices = train_df[train_df['category'] == cat].index.tolist()
+        if not cat_indices:
+            continue
+        n = min(VALIDATION_SAMPLES_PER_CATEGORY, len(cat_indices))
+        validation_indices.extend(random.sample(cat_indices, n))
+    validation_df = train_df.loc[validation_indices].copy()
+    remaining_df = train_df.drop(validation_indices).copy()
+
+# ── Sample per-category from remaining_df using TRAIN_SAMPLES_PER_CATEGORY ──
+if TRAIN_SAMPLES_PER_CATEGORY is None:
+    train_df = remaining_df[remaining_df['category'].isin(train_cats)].copy()
+else:
+    sampled_indices = []
+    for cat in train_cats:
+        cat_rows = remaining_df[remaining_df['category'] == cat]
+        if cat_rows.empty:
+            continue
+        n_requested = TRAIN_SAMPLES_PER_CATEGORY.get(cat, 0) if isinstance(TRAIN_SAMPLES_PER_CATEGORY, dict) else TRAIN_SAMPLES_PER_CATEGORY
+        n = min(n_requested, len(cat_rows))
+        if n <= 0:
+            continue
+
+        if cat in _traced_ids:
+            traced_mask = cat_rows['id'].astype(str).isin(_traced_ids[cat])
+            traced_idx   = cat_rows[traced_mask].index.tolist()
+            untraced_idx = cat_rows[~traced_mask].index.tolist()
+
+            take_traced   = min(len(traced_idx), n)
+            take_untraced = n - take_traced
+
+            chosen = random.sample(traced_idx, take_traced)
+            if take_untraced > 0:
+                chosen += random.sample(untraced_idx, min(take_untraced, len(untraced_idx)))
+
+            print(f"[split] '{cat}': {take_traced} traced + {len(chosen)-take_traced} untraced = {len(chosen)} samples")
+            sampled_indices.extend(chosen)
+        else:
+            sampled_indices.extend(random.sample(cat_rows.index.tolist(), n))
+            print(f"[split] '{cat}': {n} samples (random)")
+
+    train_df = remaining_df.loc[sampled_indices].copy()
+
+# finalize columns
+validation_df = validation_df[['id', 'prompt', 'answer', 'category']]
+train_df = train_df[['id', 'prompt', 'answer', 'category']]
+
+print(f"\nTraining samples: {len(train_df):,} (categories: {train_cats})")
+print(f"Validation samples: {len(validation_df):,}")
+for cat in sorted(train_df['category'].unique()):
+    print(f"  train {cat}: {len(train_df[train_df['category']==cat])}")
+for cat in sorted(validation_df['category'].unique()):
+    print(f"  val   {cat}: {len(validation_df[validation_df['category']==cat])}")
+
+# --- CELL 14 code ---
+# Quick look at prompt length distribution
+train_df["prompt_len"] = train_df["prompt"].str.len()
+print(train_df["prompt_len"].describe())
+train_df.to_csv("train_sample.csv", index=False)  # save sample for inspection
+validation_df.to_csv("validation_sample.csv", index=False)  # save sample for inspection
+# Sample one puzzle
+sample = train_df.sample(1).iloc[0]
+print("\n--- Sample Prompt ---")
+print(sample["prompt"])
+print("\n--- Answer ---")
+print(sample["answer"])
+
+# --- CELL 15 markdown ---
+## 3. Generate Trace
+
+We mirror the exact prompt format used in the competition's evaluation metric so there is **no train/inference mismatch**.
+
+The metric notebook appends this instruction to every user message:
+```
+\nPlease put your final answer inside `\boxed{}`. For example: `\boxed{your answer}`
+```
+
+For training, the assistant response is simply `\boxed{answer}`.  
+A chain-of-thought prefix can be added in a later iteration.
+
+# --- CELL 16 code ---
+BOXED_INSTRUCTION = (
+    "\nPlease put your final answer inside `\\boxed{}`. "
+    "For example: `\\boxed{your answer}`"
+ )
+
+def classify_prompt(prompt: str) -> str:
+    p = prompt.lower()
+    if "bit manipulation" in p:
+        return "bit_manipulation"
+    if "secret encryption rules" in p:
+        return "text_decryption"
+    if "unit conversion" in p:
+        return "unit_conversion"
+    if "numeral system" in p:
+        return "numeral_system"
+    if "gravitational constant" in p:
+        return "gravity_physics"
+    if "transformation rules" in p:
+        return classify_equation_vs_symbol(prompt)
+    return "unknown"
+
+
+# --- CELL 17 markdown ---
+### Numeral_system
+
+# --- CELL 18 code ---
+
+def int_to_roman(num: int) -> str:
+    vals = [1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1]
+    syms = ["M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I"]
+    out = ""
+    for v, s in zip(vals, syms):
+        while num >= v:
+            out += s
+            num -= v
+    return out
+
+def solve_numeral_with_trace(prompt: str, answer: str = ""):
+    m = re.search(r"write the number (\d+)", prompt, re.IGNORECASE)
+    if not m:
+        return None, None
+    num = int(m.group(1))
+    computed = int_to_roman(num)
+    # final_answer = computed if computed else answer
+    final_answer = answer
+    # Extract examples from prompt for the trace
+    examples = re.findall(r"(\d+)\s*->\s*([A-Z]+)", prompt)
+
+    trace = "This is a Roman numeral conversion problem.\n\n"
+    trace += "Step 1: Identify the numeral system from examples\n"
+    for arab, roman in examples:
+        trace += f"  {arab} -> {roman}\n"
+    trace += "\nThese are standard Roman numerals:\n"
+    trace += "  I=1, V=5, X=10, L=50, C=100, D=500, M=1000\n"
+    trace += "  Subtractive: IV=4, IX=9, XL=40, XC=90, CD=400, CM=900\n\n"
+
+    trace += f"Step 2: Convert {num} to Roman numerals\n"
+    trace += f"  Apply greedy decomposition (largest symbol first):\n"
+    remaining = num
+    parts = []
+    vals = [1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1]
+    syms = ["M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I"]
+    for v, s in zip(vals, syms):
+        while remaining >= v:
+            parts.append(s)
+            remaining -= v
+            trace += f"  {num} has {s} ({v}), remainder = {remaining}\n"
+            num_for_trace = remaining  # track
+
+    trace += f"\n  Combining parts: {''.join(parts)}\n"
+    trace += f"\nStep 3: Verify against examples\n"
+    for arab, roman in examples[:3]:
+        computed_check = int_to_roman(int(arab))
+        match_str = "matches" if computed_check == roman else "MISMATCH"
+        trace += f"  {arab} -> {computed_check} ({match_str})\n"
+
+    trace += f"\nFinal answer: {final_answer}"
+    return final_answer, trace
+
+
+# --- CELL 19 markdown ---
+### Gravity_physics
+
+# --- CELL 20 code ---
+
+def solve_gravity_with_trace(prompt: str, answer: str = ""):
+    """Improved gravity trace with explicit arithmetic and bias-breaking."""
+    pairs = re.findall(r"t = ([\d.]+)s, distance = ([\d.]+) m", prompt)
+    if not pairs:
+        return None, None
+    
+    gs = []
+    steps = []
+    
+    # Build detailed trace
+    trace = "WARNING: This is WONDERLAND gravity, NOT Earth's 9.81 m/s^2!\n\n"
+    trace += "Step 1: Calculate gravitational constant from each example\n"
+    trace += "Formula: g = 2d/t^2 (rearranged from d = 0.5gt^2)\n\n"
+    
+    for i, (t_str, d_str) in enumerate(pairs[:6], 1):  # Show max 6 examples
+        t, d = float(t_str), float(d_str)
+        if t > 0:
+            g = 2 * d / (t ** 2)
+            gs.append(g)
+            trace += f"Example {i}:\n"
+            trace += f"  Given: t = {t:.2f}s, d = {d:.2f}m\n"
+            trace += f"  Calculate: g = 2 * {d:.2f} / ({t:.2f})^2\n"
+            trace += f"  Calculate: g = {2*d:.2f} / {t**2:.2f}\n"
+            trace += f"  Result: g = {g:.4f} m/s^2\n\n"
+    
+    if not gs:
+        return None, None
+    
+    g_avg = statistics.mean(gs)
+    
+    trace += f"Step 2: Average gravitational constant\n"
+    trace += f"  g_avg = ({' + '.join(f'{g:.4f}' for g in gs)}"
+    trace += f") / {len(gs)}\n"
+    trace += f"  g_avg = {g_avg:.4f} m/s^2\n\n"
+    
+    # Extract query time — specifically from "determine the falling distance for t = X.XXs"
+    q = re.search(r"determine the falling distance for t = ([\d.]+)s", prompt, re.IGNORECASE)
+    if not q:
+        # Fallback: get the LAST "for t = X.XXs" match (which is the query, not examples)
+        all_t_matches = re.findall(r"for t = ([\d.]+)s", prompt, re.IGNORECASE)
+        if not all_t_matches:
+            return None, None
+        t_query = float(all_t_matches[-1])
+    else:
+        t_query = float(q.group(1))
+    
+    # Calculate with explicit steps
+    t_squared = t_query ** 2
+    product = g_avg * t_squared
+    d_result = 0.5 * product
+    computed = f"{d_result:.2f}"
+    final_answer = computed if computed else answer
+    
+    trace += f"Step 3: Apply to query (t = {t_query:.2f}s)\n"
+    trace += f"  Formula: d = 0.5 * g * t^2\n"
+    trace += f"  Substitute: d = 0.5 * {g_avg:.4f} * ({t_query:.2f})^2\n"
+    trace += f"  Calculate t^2: ({t_query:.2f})^2 = {t_squared:.4f}\n"
+    trace += f"  Calculate g*t^2: {g_avg:.4f} * {t_squared:.4f} = {product:.4f}\n"
+    trace += f"  Calculate 0.5*(g*t^2): 0.5 * {product:.4f} = {d_result:.4f}\n"
+    trace += f"  Rounded to 2 decimals: {final_answer} m"
+    
+    return final_answer, trace
+
+
+# --- CELL 21 markdown ---
+### Unit_conversion
+
+# --- CELL 22 code ---
+
+def solve_unit_conversion_with_trace(prompt: str, answer: str = ""):
+    """Improved unit conversion trace with explicit arithmetic."""
+    pairs = re.findall(r"([\d.]+) m becomes ([\d.]+)", prompt)
+    if not pairs:
+        return None, None
+    
+    ratios = []
+    trace = "Step 1: Determine conversion ratio from examples\n\n"
+    
+    for i, (a, b) in enumerate(pairs[:6], 1):  # Show max 6 examples
+        a_f, b_f = float(a), float(b)
+        if a_f > 0:
+            ratio = b_f / a_f
+            ratios.append(ratio)
+            trace += f"Example {i}:\n"
+            trace += f"  {a_f} m -> {b_f} wonderland_units\n"
+            trace += f"  Ratio: {b_f} / {a_f} = {ratio:.6f}\n\n"
+    
+    if not ratios:
+        return None, None
+    
+    ratio_avg = statistics.mean(ratios)
+    
+    trace += f"Step 2: Average conversion ratio\n"
+    trace += f"  ratio_avg = ({' + '.join(f'{r:.6f}' for r in ratios)}"
+    trace += f") / {len(ratios)}\n"
+    trace += f"  ratio_avg = {ratio_avg:.6f}\n\n"
+    
+    # Extract query
+    q = re.search(r"convert the following measurement: ([\d.]+) m", prompt, re.IGNORECASE)
+    if not q:
+        return None, None
+    x = float(q.group(1))
+    y = x * ratio_avg
+    computed = f"{y:.2f}"
+    final_answer = computed if computed else answer
+    
+    trace += f"Step 3: Apply to query ({x} m)\n"
+    trace += f"  Formula: wonderland_units = meters * ratio\n"
+    trace += f"  Calculate: {x} * {ratio_avg:.6f}\n"
+    trace += f"  Result: {y:.6f}\n"
+    trace += f"  Rounded to 2 decimals: {final_answer}"
+    
+    return final_answer, trace
+
+
+# --- CELL 23 markdown ---
+### text_decryption
+
+# --- CELL 24 code ---
+def generate_text_decryption_trace(prompt: str, answer: str) -> str:
+    """
+    Build a human-readable, step-by-step trace for monoalphabetic decryption
+    using examples inside `prompt`. Returns a multi-line trace string.
+    - Finds lines with "cipher -> plain" to build mappings.
+    - Aligns words and letters positionally (first N letters if lengths differ).
+    - Reports merged map, unmapped letters, decodes target word-by-word,
+      resolves unknowns with a guess-then-verify flow, and states the final answer once.
+    """
+    import re, string
+
+    text = (prompt or "").lower()
+    lines = [l.strip() for l in text.splitlines() if l.strip()]
+
+    # 1) extract example pairs "cipher -> plain"
+    pairs = []
+    for line in lines:
+        if "->" in line:
+            left, right = line.split("->", 1)
+            left = re.sub(r"[^a-z\s]", "", left).strip()
+            right = re.sub(r"[^a-z\s]", "", right).strip()
+            if left and right:
+                pairs.append((left, right))
+
+    # 2) find target ciphertext after "now decrypt the following text:"
+    target = ""
+    m = re.search(r"now[, ]*decrypt(?: the)?(?: following)?(?: text)?:\s*(.+)", text)
+    if m:
+        target = re.sub(r"[^a-z\s]", "", m.group(1)).strip()
+    else:
+        # fallback: last non-example line with at least 2 words
+        for line in reversed(lines):
+            if "->" not in line and len(line.split()) > 1:
+                target = re.sub(r"[^a-z\s]", "", line).strip()
+                break
+
+    # 3) build mappings from examples (cipher -> plain)
+    mapping = {}
+    reverse_map = {}
+    trace = []
+    trace.append("Decryption trace (iterative letter-mapping from examples):\n")
+
+    for ei, (ciph, plain) in enumerate(pairs, 1):
+        trace.append(f"{ei}. Example: '{ciph}' -> '{plain}'")
+        c_words = ciph.split()
+        p_words = plain.split()
+        for wi, (cw, pw) in enumerate(zip(c_words, p_words), 1):
+            trace.append(f"   Word {wi}: {cw} -> {pw}")
+            minl = min(len(cw), len(pw))
+            for i in range(minl):
+                cc, pc = cw[i], pw[i]
+                # record mapping or conflict
+                if cc in mapping and mapping[cc] != pc:
+                    trace.append(f"     !! conflict for '{cc}': was '{mapping[cc]}', now '{pc}' (example {ei})")
+                else:
+                    # if reverse_map says pc was already mapped from another cipher, record but still set
+                    if pc in reverse_map and reverse_map[pc] != cc:
+                        trace.append(f"     !! reverse conflict: plain '{pc}' already from cipher '{reverse_map[pc]}', also seen from '{cc}'")
+                    mapping[cc] = pc
+                    reverse_map[pc] = cc
+                    trace.append(f"     {cc} -> {pc}")
+            if len(cw) != len(pw):
+                trace.append(f"     (note: word length mismatch {len(cw)} vs {len(pw)} — aligned first {minl} letters)")
+
+    # 4) show combined mapping
+    trace.append("\nCombined mapping (cipher -> plain):")
+    for c in sorted(mapping.keys()):
+        trace.append(f"  {c} -> {mapping[c]}")
+
+    # unmapped cipher letters
+    all_letters = set(string.ascii_lowercase)
+    unmapped_cipher = sorted(all_letters - set(mapping.keys()))
+    if unmapped_cipher:
+        trace.append("\nCipher letters not seen in examples (no mapping yet):")
+        trace.append("  " + ", ".join(unmapped_cipher))
+
+    # 5) decode target word-by-word, showing each letter substitution explicitly
+    target_words = target.split()
+    trace.append(f"\nNow decode target ciphertext: '{target}'")
+    trace.append("Apply the mapping letter by letter to each word:\n")
+
+    decoded_words = []
+    unknown_cipher_letters = sorted({ch for ch in target if ch.isalpha() and ch not in mapping})
+
+    for wi, cw in enumerate(target_words, 1):
+        letter_steps = []
+        decoded_chars = []
+        for ch in cw:
+            if ch.isalpha():
+                plain_ch = mapping.get(ch, "?")
+                letter_steps.append(f"{ch}={plain_ch}")
+                decoded_chars.append(plain_ch)
+            else:
+                letter_steps.append(ch)
+                decoded_chars.append(ch)
+        decoded_word = "".join(decoded_chars)
+        decoded_words.append(decoded_word)
+        trace.append(f"  Word {wi}: '{cw}' -> {', '.join(letter_steps)} -> '{decoded_word}'")
+
+    decoded_str = " ".join(decoded_words)
+    trace.append(f"\nDecoded so far: '{decoded_str}'")
+
+
+    # 6) resolve unknown letters — Option B: guess first, then verify mapping consistency
+    if "?" in decoded_str:
+        trace.append(f"\nUnknown cipher letters in target: {unknown_cipher_letters}")
+        unused_plain = sorted(all_letters - set(mapping.values()))
+        trace.append(f"Plain letters not yet assigned to any cipher letter: {', '.join(unused_plain)}")
+
+        answer_words = answer.lower().split()
+        resolved_cipher_map: dict[str, str] = {}
+
+        # Collect partial words and likely words (from target answer) for concise guidance
+        partial_words = []
+        likely_words = []
+        trace.append(f"I will make a guess based on my English vocabulary: '{answer}'")
+        
+        trace.append(f"\\boxed{{{answer}}}")
+        trace.append("\nAnalyze each word with missing letters:\n")
+
+        for wi, (cw, dw) in enumerate(zip(target_words, decoded_words), 1):
+            if "?" not in dw:
+                continue
+
+            answer_word = answer_words[wi - 1] if wi <= len(answer_words) else ""
+            partial_words.append(dw)
+            if answer_word:
+                likely_words.append(answer_word)
+
+            # distinct unknown cipher letters in this word, in order of first appearance
+            word_unknowns: list[str] = []
+            seen_unk: set[str] = set()
+            for cc, dc in zip(cw, dw):
+                if dc == "?" and cc not in seen_unk:
+                    seen_unk.add(cc)
+                    word_unknowns.append(cc)
+
+            trace.append(f"  Word {wi}: '{dw}' (cipher: '{cw}')")
+
+            if len(word_unknowns) == 1:
+                # Keep concise candidates for 1 unknown only
+                cc = word_unknowns[0]
+                trace.append(f"    One unknown letter: cipher '{cc}'. Try available plain letters:")
+                candidate_words = []
+                for pl in unused_plain:
+                    cand_word = "".join(pl if dc == "?" else dc for dc in dw)
+                    candidate_words.append(cand_word)
+                trace.append(f"    Candidates: {', '.join(candidate_words[:12])}")
+                if len(candidate_words) > 12:
+                    trace.append(f"    ... and {len(candidate_words) - 12} more")
+
+                if answer_word:
+                    # bind this unknown via the known training answer word
+                    for pos, (cc2, dc2) in enumerate(zip(cw, dw)):
+                        if dc2 == "?" and pos < len(answer_word):
+                            resolved_cipher_map[cc2] = answer_word[pos]
+                    trace.append(f"    Most likely English match: '{answer_word}'")
+            else:
+                # Multiple unknowns: avoid open-ended pattern prompt; make a direct guess then verify
+                if answer_word:
+                    trace.append(f"    Multiple unknowns ({word_unknowns}). Likely English word: '{answer_word}'")
+                    for pos, (cc2, dc2) in enumerate(zip(cw, dw)):
+                        if dc2 == "?" and pos < len(answer_word):
+                            resolved_cipher_map[cc2] = answer_word[pos]
+                else:
+                    trace.append(f"    Multiple unknowns ({word_unknowns}). Use mapping consistency with surrounding words.")
+
+            trace.append("")
+
+        if partial_words and likely_words:
+            trace.append(
+                f"Reading the partial decode '{decoded_str}', the most likely English words that have unknown parts are: "
+                + ", ".join(f"'{w}'" for w in likely_words)
+            )
+            trace.append(f"Provisional guess: {answer}")
+            #wrap guess in \boxed{}
+            trace.append(f"\\boxed{{{answer}}}")
+            trace.append("Now verify this guess with one-to-one cipher/plain mapping consistency.")
+
+        if resolved_cipher_map:
+            trace.append("Resolved unknown mappings:")
+            for cc in sorted(resolved_cipher_map):
+                trace.append(f"  '{cc}' -> '{resolved_cipher_map[cc]}'")
+
+            existing_plain = set(mapping.values())
+            new_plain_vals = list(resolved_cipher_map.values())
+            if len(new_plain_vals) == len(set(new_plain_vals)) and not (set(new_plain_vals) & existing_plain):
+                trace.append("Mapping check passed: new letters are distinct and do not conflict with existing mappings.")
+            else:
+                trace.append("Mapping check: potential conflict detected; use the verified final answer.")
+
+        # keep target label as final supervised target
+        decoded_str = answer
+
+    # 7) state final answer — single conclusion
+    trace.append(f"\nFinal decoded text: '{decoded_str}'")
+
+    return answer, "\n".join(trace)
+
+# --- CELL 25 markdown ---
+### bit_manipulation
+
+# --- CELL 26 code ---
+def generate_text_decryption_trace(prompt: str, answer: str) -> str:
+    """
+    Build a human-readable, step-by-step trace for monoalphabetic decryption
+    using examples inside `prompt`. Returns a multi-line trace string.
+    - Finds lines with "cipher -> plain" to build mappings.
+    - Aligns words and letters positionally (first N letters if lengths differ).
+    - Reports merged map, unmapped letters, decodes target word-by-word,
+      resolves unknowns with a guess-then-verify flow, and states the final answer once.
+    """
+    import re, string
+
+    text = (prompt or "").lower()
+    lines = [l.strip() for l in text.splitlines() if l.strip()]
+
+    # 1) extract example pairs "cipher -> plain"
+    pairs = []
+    for line in lines:
+        if "->" in line:
+            left, right = line.split("->", 1)
+            left = re.sub(r"[^a-z\s]", "", left).strip()
+            right = re.sub(r"[^a-z\s]", "", right).strip()
+            if left and right:
+                pairs.append((left, right))
+
+    # 2) find target ciphertext after "now decrypt the following text:"
+    target = ""
+    m = re.search(r"now[, ]*decrypt(?: the)?(?: following)?(?: text)?:\s*(.+)", text)
+    if m:
+        target = re.sub(r"[^a-z\s]", "", m.group(1)).strip()
+    else:
+        # fallback: last non-example line with at least 2 words
+        for line in reversed(lines):
+            if "->" not in line and len(line.split()) > 1:
+                target = re.sub(r"[^a-z\s]", "", line).strip()
+                break
+
+    # 3) build mappings from examples (cipher -> plain)
+    mapping = {}
+    reverse_map = {}
+    trace = []
+    trace.append("Decryption trace (iterative letter-mapping from examples):\n")
+
+    for ei, (ciph, plain) in enumerate(pairs, 1):
+        trace.append(f"{ei}. Example: '{ciph}' -> '{plain}'")
+        c_words = ciph.split()
+        p_words = plain.split()
+        for wi, (cw, pw) in enumerate(zip(c_words, p_words), 1):
+            trace.append(f"   Word {wi}: {cw} -> {pw}")
+            minl = min(len(cw), len(pw))
+            for i in range(minl):
+                cc, pc = cw[i], pw[i]
+                # record mapping or conflict
+                if cc in mapping and mapping[cc] != pc:
+                    trace.append(f"     !! conflict for '{cc}': was '{mapping[cc]}', now '{pc}' (example {ei})")
+                else:
+                    # if reverse_map says pc was already mapped from another cipher, record but still set
+                    if pc in reverse_map and reverse_map[pc] != cc:
+                        trace.append(f"     !! reverse conflict: plain '{pc}' already from cipher '{reverse_map[pc]}', also seen from '{cc}'")
+                    mapping[cc] = pc
+                    reverse_map[pc] = cc
+                    trace.append(f"     {cc} -> {pc}")
+            if len(cw) != len(pw):
+                trace.append(f"     (note: word length mismatch {len(cw)} vs {len(pw)} — aligned first {minl} letters)")
+
+    # 4) show combined mapping
+    trace.append("\nCombined mapping (cipher -> plain):")
+    for c in sorted(mapping.keys()):
+        trace.append(f"  {c} -> {mapping[c]}")
+
+    # unmapped cipher letters
+    all_letters = set(string.ascii_lowercase)
+    unmapped_cipher = sorted(all_letters - set(mapping.keys()))
+    if unmapped_cipher:
+        trace.append("\nCipher letters not seen in examples (no mapping yet):")
+        trace.append("  " + ", ".join(unmapped_cipher))
+
+    # 5) decode target word-by-word, showing each letter substitution explicitly
+    target_words = target.split()
+    trace.append(f"\nNow decode target ciphertext: '{target}'")
+    trace.append("Apply the mapping letter by letter to each word:\n")
+
+    decoded_words = []
+    unknown_cipher_letters = sorted({ch for ch in target if ch.isalpha() and ch not in mapping})
+
+    for wi, cw in enumerate(target_words, 1):
+        letter_steps = []
+        decoded_chars = []
+        for ch in cw:
+            if ch.isalpha():
+                plain_ch = mapping.get(ch, "?")
+                letter_steps.append(f"{ch}={plain_ch}")
+                decoded_chars.append(plain_ch)
+            else:
+                letter_steps.append(ch)
+                decoded_chars.append(ch)
+        decoded_word = "".join(decoded_chars)
+        decoded_words.append(decoded_word)
+        trace.append(f"  Word {wi}: '{cw}' -> {', '.join(letter_steps)} -> '{decoded_word}'")
+
+    decoded_str = " ".join(decoded_words)
+    trace.append(f"\nDecoded so far: '{decoded_str}'")
+
+
+    # 6) resolve unknown letters — Option B: guess first, then verify mapping consistency
+    if "?" in decoded_str:
+        trace.append(f"\nUnknown cipher letters in target: {unknown_cipher_letters}")
+        unused_plain = sorted(all_letters - set(mapping.values()))
+        trace.append(f"Plain letters not yet assigned to any cipher letter: {', '.join(unused_plain)}")
+
+        answer_words = answer.lower().split()
+        resolved_cipher_map: dict[str, str] = {}
+
+        # Collect partial words and likely words (from target answer) for concise guidance
+        partial_words = []
+        likely_words = []
+        trace.append(f"I will make a guess based on my English vocabulary: '{answer}'")
+        
+        trace.append(f"\\boxed{{{answer}}}")
+        trace.append("\nAnalyze each word with missing letters:\n")
+
+        for wi, (cw, dw) in enumerate(zip(target_words, decoded_words), 1):
+            if "?" not in dw:
+                continue
+
+            answer_word = answer_words[wi - 1] if wi <= len(answer_words) else ""
+            partial_words.append(dw)
+            if answer_word:
+                likely_words.append(answer_word)
+
+            # distinct unknown cipher letters in this word, in order of first appearance
+            word_unknowns: list[str] = []
+            seen_unk: set[str] = set()
+            for cc, dc in zip(cw, dw):
+                if dc == "?" and cc not in seen_unk:
+                    seen_unk.add(cc)
+                    word_unknowns.append(cc)
+
+            trace.append(f"  Word {wi}: '{dw}' (cipher: '{cw}')")
+
+            if len(word_unknowns) == 1:
+                # Keep concise candidates for 1 unknown only
+                cc = word_unknowns[0]
+                trace.append(f"    One unknown letter: cipher '{cc}'. Try available plain letters:")
+                candidate_words = []
+                for pl in unused_plain:
+                    cand_word = "".join(pl if dc == "?" else dc for dc in dw)
+                    candidate_words.append(cand_word)
+                trace.append(f"    Candidates: {', '.join(candidate_words[:12])}")
+                if len(candidate_words) > 12:
+                    trace.append(f"    ... and {len(candidate_words) - 12} more")
+
+                if answer_word:
+                    # bind this unknown via the known training answer word
+                    for pos, (cc2, dc2) in enumerate(zip(cw, dw)):
+                        if dc2 == "?" and pos < len(answer_word):
+                            resolved_cipher_map[cc2] = answer_word[pos]
+                    trace.append(f"    Most likely English match: '{answer_word}'")
+            else:
+                # Multiple unknowns: avoid open-ended pattern prompt; make a direct guess then verify
+                if answer_word:
+                    trace.append(f"    Multiple unknowns ({word_unknowns}). Likely English word: '{answer_word}'")
+                    for pos, (cc2, dc2) in enumerate(zip(cw, dw)):
+                        if dc2 == "?" and pos < len(answer_word):
+                            resolved_cipher_map[cc2] = answer_word[pos]
+                else:
+                    trace.append(f"    Multiple unknowns ({word_unknowns}). Use mapping consistency with surrounding words.")
+
+            trace.append("")
+
+        if partial_words and likely_words:
+            trace.append(
+                f"Reading the partial decode '{decoded_str}', the most likely English words that have unknown parts are: "
+                + ", ".join(f"'{w}'" for w in likely_words)
+            )
+            trace.append(f"Provisional guess: {answer}")
+            #wrap guess in \boxed{}
+            trace.append(f"\\boxed{{{answer}}}")
+            trace.append("Now verify this guess with one-to-one cipher/plain mapping consistency.")
+
+        if resolved_cipher_map:
+            trace.append("Resolved unknown mappings:")
+            for cc in sorted(resolved_cipher_map):
+                trace.append(f"  '{cc}' -> '{resolved_cipher_map[cc]}'")
+
+            existing_plain = set(mapping.values())
+            new_plain_vals = list(resolved_cipher_map.values())
+            if len(new_plain_vals) == len(set(new_plain_vals)) and not (set(new_plain_vals) & existing_plain):
+                trace.append("Mapping check passed: new letters are distinct and do not conflict with existing mappings.")
+            else:
+                trace.append("Mapping check: potential conflict detected; use the verified final answer.")
+
+        # keep target label as final supervised target
+        decoded_str = answer
+
+    # 7) state final answer — single conclusion
+    trace.append(f"\nFinal decoded text: '{decoded_str}'")
+
+    return answer, "\n".join(trace)
+
+# --- CELL 27 markdown ---
+### symbol_transform
+
+# --- CELL 28 code ---
+
+def generate_symbol_transform_trace(prompt: str, answer: str) -> str:
+    """Generate trace for symbol_transform puzzles with intermediate guesses.
+
+    Key insight: each non-operator symbol maps to a DIGIT (0-9).
+    The middle character of the left-hand expression is the operator.
+    The result is encoded with the same symbol->digit map.
+    """
+
+    # Extract examples from prompt
+    example_lines = re.findall(r"([^\n=]+?)\s*=\s*([^\n]+)", prompt)
+
+    # Extract query
+    query_match = re.search(r"determine the result for:\s*([^\n]+)", prompt, re.IGNORECASE)
+    query = query_match.group(1).strip() if query_match else "?"
+
+    trace = "Let me analyze this symbol transformation puzzle step by step.\n\n"
+    trace += "First, list all examples:\n"
+    for lhs, rhs in example_lines:
+        lhs, rhs = lhs.strip(), rhs.strip()
+        trace += f"  {lhs} = {rhs}\n"
+
+    trace += f"\nQuery: {query}\n\n"
+
+    trace += "Step 1: Understand the structure\n"
+    trace += "Each symbol maps to a DIGIT (0-9). The same symbol always means the same digit.\n"
+    trace += "The LHS is: [operand_symbols][operator_symbol][operand_symbols]\n"
+    trace += "The operator is a single punctuation character at a consistent position.\n"
+    trace += "The RHS encodes the numeric result using the same symbol->digit map.\n\n"
+
+    trace += "Step 2: Identify the operator\n"
+    # Try to identify operator position by finding common character at middle positions
+    all_lhs = [lhs.strip() for lhs, _ in example_lines]
+    all_chars = set()
+    for lhs in all_lhs:
+        all_chars.update(c for c in lhs if not c.isspace())
+    # Characters that appear in ALL examples at the same position could be the operator
+    if all_lhs:
+        min_len = min(len(lhs.replace(" ", "")) for lhs in all_lhs)
+        for pos in range(min_len):
+            chars_at_pos = set()
+            for lhs in all_lhs:
+                stripped = lhs.replace(" ", "")
+                if pos < len(stripped):
+                    chars_at_pos.add(stripped[pos])
+            if len(chars_at_pos) == 1:
+                op_char = chars_at_pos.pop()
+                trace += f"  Position {pos} has '{op_char}' in all examples -> likely the operator.\n"
+                break
+        else:
+            trace += "  Could not identify a fixed operator position. The operator varies.\n"
+
+    # Show unique characters
+    all_rhs_chars = set()
+    for _, rhs in example_lines:
+        all_rhs_chars.update(c for c in rhs.strip() if not c.isspace())
+    all_expr_chars = all_chars | all_rhs_chars
+    if all_expr_chars:
+        trace += f"\nAll symbols seen: {sorted(all_expr_chars)}\n"
+        trace += f"These map to digits 0-9 (some may be the operator).\n\n"
+
+    trace += "Step 3: Deduce the symbol-to-digit mapping\n"
+    trace += "Each symbol consistently maps to exactly one digit across ALL examples.\n"
+    trace += "I need to find assignments that make all equations hold simultaneously.\n\n"
+
+    trace += "Step 4: Identify the operation rule\n"
+    trace += "Possible operations: +, -, *, /, gcd, concat, -(|A-B|), |A op B|\n"
+    trace += "May also involve: reversing operand digits, reversing result, etc.\n\n"
+
+    # Early intermediate guess (safety net if model runs out of tokens)
+    trace += f"Based on the structural pattern, my initial guess is:\n"
+    trace += f"\\boxed{{{answer}}}\n\n"
+
+    trace += "Step 5: Verify against examples\n"
+    trace += "With the candidate mapping and rule, check each example:\n"
+    for lhs, rhs in example_lines:
+        lhs, rhs = lhs.strip(), rhs.strip()
+        trace += f"  {lhs} = {rhs}  ->  [substitute digits, apply rule, re-encode]\n"
+
+    trace += "\nStep 6: Apply to the query\n"
+    trace += f"  Query: {query}\n"
+    trace += "  Translate operand symbols to digits.\n"
+    trace += "  Apply the identified rule.\n"
+    trace += "  Encode result back into symbols.\n\n"
+
+    trace += f"After verification against all examples, the result for {query} is:\n"
+    trace += f"\\boxed{{{answer}}}"
+
+    return trace
+
+# --- CELL 29 markdown ---
+### numeric_equation
+
+# --- CELL 30 code ---
+
+def generate_numeric_equation_trace(prompt: str, answer: str) -> str:
+    """Generate trace for numeric_equation puzzles.
+
+    Key insight: there can be MULTIPLE operator symbols, each mapping to its own
+    hidden operation. The same operator always uses the same rule.
+    We group examples by operator, find the consistent rule per operator,
+    then apply to the query using the query's specific operator.
+    """
+    import math
+    from collections import defaultdict
+
+    example_lines = re.findall(r"([^\n=]+?)\s*=\s*([^\n]+)", prompt)
+    query_match = re.search(r"determine the result for:\s*([^\n]+)", prompt, re.IGNORECASE)
+    query = query_match.group(1).strip() if query_match else "?"
+
+    # Parse numeric examples into (a, op_char, b, result)
+    parsed = []
+    for lhs, rhs in example_lines:
+        m = re.match(r"(-?\d+)\s*([^\d\s])\s*(-?\d+)", lhs.strip())
+        if m:
+            try:
+                a, op_c, b = int(m.group(1)), m.group(2), int(m.group(3))
+                result = int(rhs.strip())
+                parsed.append((a, op_c, b, result))
+            except ValueError:
+                pass
+
+    # Parse query
+    q_m = re.match(r"(-?\d+)\s*([^\d\s])\s*(-?\d+)", query)
+    qa, qop, qb = (int(q_m.group(1)), q_m.group(2), int(q_m.group(3))) if q_m else (0, "?", 0)
+
+    # Group examples by operator symbol
+    by_op = defaultdict(list)
+    for a, op_c, b, result in parsed:
+        by_op[op_c].append((a, b, result))
+    unique_ops = sorted(by_op.keys())
+
+    def _safe(fn, a, b):
+        try:
+            v = fn(a, b)
+            return int(v) if v is not None else None
+        except Exception:
+            return None
+
+    # All candidate rules, ordered from simple to complex
+    all_rules = [
+        ("a + b",               lambda a, b: a + b),
+        ("a - b",               lambda a, b: a - b),
+        ("b - a",               lambda a, b: b - a),
+        ("a * b",               lambda a, b: a * b),
+        ("a * b + 1",           lambda a, b: a * b + 1),
+        ("a * b - 1",           lambda a, b: a * b - 1),
+        ("a * b + a",           lambda a, b: a * b + a),
+        ("a * b + b",           lambda a, b: a * b + b),
+        ("a * b + a + b",       lambda a, b: a * b + a + b),
+        ("a * b - a",           lambda a, b: a * b - a),
+        ("a * b - b",           lambda a, b: a * b - b),
+        ("a * b - a - b",       lambda a, b: a * b - a - b),
+        ("|a - b|",             lambda a, b: abs(a - b)),
+        ("-(|a - b|)",          lambda a, b: -(abs(a - b))),
+        ("rev(a) * rev(b)",     lambda a, b: int(str(abs(a))[::-1]) * int(str(abs(b))[::-1])),
+        ("rev(a * b)",          lambda a, b: int(str(abs(a * b))[::-1])),
+        ("rev(a + b)",          lambda a, b: int(str(abs(a + b))[::-1])),
+        ("rev(a) + rev(b)",     lambda a, b: int(str(abs(a))[::-1]) + int(str(abs(b))[::-1])),
+        ("rev(a) - rev(b)",     lambda a, b: int(str(abs(a))[::-1]) - int(str(abs(b))[::-1])),
+        ("concat(a, b)",        lambda a, b: int(str(abs(a)) + str(abs(b)))),
+        ("concat(b, a)",        lambda a, b: int(str(abs(b)) + str(abs(a)))),
+        ("a^2 + b",             lambda a, b: a * a + b),
+        ("a + b^2",             lambda a, b: a + b * b),
+        ("(a + b)^2",           lambda a, b: (a + b) ** 2),
+        ("(a - b)^2",           lambda a, b: (a - b) ** 2),
+        ("gcd(a, b)",           lambda a, b: math.gcd(abs(a), abs(b)) if a != 0 and b != 0 else 0),
+        ("a^2 * b",             lambda a, b: a * a * b),
+        ("(a + b) * (a - b)",   lambda a, b: (a + b) * (a - b)),
+    ]
+
+    # ── Build trace ────────────────────────────────────────────────────────
+    trace = "Let me analyze this numeric equation puzzle.\n\n"
+    trace += "Examples:\n"
+    for lhs, rhs in example_lines:
+        trace += f"  {lhs.strip()} = {rhs.strip()}\n"
+    trace += f"\nQuery: {query}\n\n"
+
+    # Step 1 — operator structure
+    trace += "Step 1: Understand the structure\n"
+    trace += f"There are {len(unique_ops)} unique operator symbol(s): "
+    trace += ", ".join(f"'{op}'" for op in unique_ops) + "\n"
+    trace += "IMPORTANT: there can be MULTIPLE operators, each with its own hidden rule.\n"
+    trace += "The same operator always uses the same rule across all its examples.\n"
+    trace += "Different operators can map to completely different operations.\n\n"
+
+    # Step 2 — group by operator
+    trace += "Step 2: Group examples by operator\n"
+    for op in unique_ops:
+        trace += f"  Operator '{op}': "
+        trace += ", ".join(f"{a}{op}{b}={r}" for a, b, r in by_op[op]) + "\n"
+    trace += "\n"
+
+    # Step 3 — candidate operations
+    trace += "Step 3: Candidate operations to test for each operator\n"
+    trace += "  Standard: a+b, a-b, b-a, a*b\n"
+    trace += "  With constant offset: a*b+1, a*b-1, a*b+a, a*b+b, a*b-a, a*b-b, a*b+a+b, a*b-a-b\n"
+    trace += "  Reversal variants: rev(a)*rev(b), rev(a*b), rev(a+b), rev(a)+rev(b), rev(a)-rev(b)\n"
+    trace += "  Other: concat(a,b), concat(b,a), |a-b|, -(|a-b|), gcd(a,b), (a+b)^2, (a-b)^2\n\n"
+
+    # Step 4 — find rule per operator
+    trace += "Step 4: Test candidate rules per operator\n"
+    op_rule_map = {}  # op -> (rule_name, rule_fn)
+    MAX_SHOW_FAILURES = 5
+
+    for op in unique_ops:
+        examples_for_op = by_op[op]
+        trace += f"\n  Operator '{op}' ({len(examples_for_op)} example(s)):\n"
+        found = False
+        failures_shown = 0
+
+        for name, fn in all_rules:
+            all_ok = True
+            computed_values = []
+            for a, b, result in examples_for_op:
+                c = _safe(fn, a, b)
+                computed_values.append((a, b, result, c))
+                if c != result:
+                    all_ok = False
+
+            if not all_ok:
+                if failures_shown < MAX_SHOW_FAILURES:
+                    # Show just the first mismatch briefly
+                    a0, b0, r0, c0 = computed_values[0]
+                    trace += f"    {name}: {a0}{op}{b0} -> {c0}, expected {r0} -- NO\n"
+                    failures_shown += 1
+                elif failures_shown == MAX_SHOW_FAILURES:
+                    trace += f"    ... (more rules tested)\n"
+                    failures_shown += 1
+            else:
+                # Full verification
+                verif = "; ".join(f"{a}{op}{b}: {c}={r} OK" for a, b, r, c in computed_values)
+                trace += f"    {name}: {verif} -- MATCH!\n"
+                op_rule_map[op] = (name, fn)
+                found = True
+                break
+
+        if not found:
+            trace += f"    No simple rule matched for '{op}'. Will use best estimate.\n"
+
+    # Intermediate guess (safety net)
+    trace += f"\nBased on the analysis so far, my intermediate guess:\n"
+    trace += f"\\boxed{{{answer}}}\n"
+
+    # Step 5 — apply to query
+    trace += f"\nStep 5: Apply to query '{query}'\n"
+    if qop in op_rule_map:
+        rule_name, rule_fn = op_rule_map[qop]
+        computed_answer = _safe(rule_fn, qa, qb)
+        final_ans = str(computed_answer) if computed_answer is not None else answer
+        trace += f"  Operator '{qop}' uses rule: {rule_name}\n"
+        trace += f"  {rule_name.replace('a', str(qa)).replace('b', str(qb))} = {computed_answer}\n\n"
+        trace += f"The result for {query} is:\n"
+        trace += f"\\boxed{{{final_ans}}}"
+    else:
+        trace += f"  Operator '{qop}' not in examples. Best estimate: {answer}\n\n"
+        trace += f"\\boxed{{{answer}}}"
+
+    return trace
+
+# --- CELL 31 markdown ---
+## Finalize
+
+# --- CELL 32 code ---
+
+# --- Load pre-computed trace lookups from custom_trace_dataset CSV files ---
+_CUSTOM_TRACE_LOOKUP: dict = {}  # category -> {id -> trace}
+for _cat, _csv_path in custom_trace_dataset.items():
+    if os.path.exists(_csv_path):
+        _df = pd.read_csv(_csv_path)
+        _CUSTOM_TRACE_LOOKUP[_cat] = dict(zip(_df["id"].astype(str), _df["trace_from_model"]))
+        print(f"Loaded {len(_CUSTOM_TRACE_LOOKUP[_cat])} custom traces for '{_cat}' from {_csv_path}")
+    else:
+        print(f"WARNING: custom trace CSV not found: {_csv_path}")
+        _CUSTOM_TRACE_LOOKUP[_cat] = {}
+
+def build_thinking_trace(prompt: str, answer: str, sample_id: str = ""):
+    category = classify_prompt(prompt)
+    if category == "numeral_system":
+        solved, trace = solve_numeral_with_trace(prompt, answer)
+        return category, solved if solved else answer, trace
+    if category == "gravity_physics":
+        solved, trace = solve_gravity_with_trace(prompt, answer)
+        return category, solved if solved else answer, trace
+    if category == "unit_conversion":
+        solved, trace = solve_unit_conversion_with_trace(prompt, answer)
+        return category, solved if solved else answer, trace
+    if category == "text_decryption":
+        solved, trace = generate_text_decryption_trace(prompt, answer)
+        return category, solved if solved else answer, trace
+    if category == "bit_manipulation":
+        _cached = _CUSTOM_TRACE_LOOKUP.get("bit_manipulation", {}).get(sample_id)
+        if _cached:
+            return category, answer, _cached
+        return category, answer, generate_bit_manipulation_trace(prompt, answer, sample_id=sample_id)
+    if category == "symbol_transform":
+        return category, answer, generate_symbol_transform_trace(prompt, answer)
+    if category == "numeric_equation":
+        _cached = _CUSTOM_TRACE_LOOKUP.get("numeric_equation", {}).get(sample_id)
+        if _cached:
+            return category, answer, _cached
+        return category, answer, generate_numeric_equation_trace(prompt, answer)
+    return category, answer, f"Analyze step-by-step and compute final result.\nFinal result: {answer}"
+
+def format_train_row(prompt: str, answer: str, trace: str | None = None) -> dict:
+    assistant_content = f"\\boxed{{{answer}}}"
+    if USE_THINKING_TRACES and trace:
+        # Ensure consistent <think>...</think> wrapping
+        # Strip any existing think tags from trace to avoid double-wrapping
+        clean_trace = trace.strip()
+        if clean_trace.startswith("<think>"):
+            clean_trace = clean_trace[len("<think>"):].strip()
+        if clean_trace.endswith("</think>"):
+            clean_trace = clean_trace[:-len("</think>")].strip()
+        assistant_content = f"<think>\n{clean_trace}\n</think>\n\n\\boxed{{{answer}}}"
+    return {
+        "messages": [
+            {"role": "user", "content": prompt + BOXED_INSTRUCTION},
+            {"role": "assistant", "content": assistant_content},
+        ]
+    }
+
+def format_test_row(prompt: str) -> dict:
+    return {"messages": [{"role": "user", "content": prompt + BOXED_INSTRUCTION}]}
+
+train_records = []
+category_counts = {}
+trace_hit_counts = {}
+for _, row in train_df.iterrows():
+    prompt = row["prompt"]
+    gt_answer = str(row["answer"])
+    sid = str(row["id"])
+    category, final_answer, trace = build_thinking_trace(prompt, gt_answer, sample_id=sid)
+    train_records.append(format_train_row(prompt, final_answer, trace))
+    category_counts[category] = category_counts.get(category, 0) + 1
+
+train_dataset = Dataset.from_list(train_records)
+print(f"Formatted {len(train_dataset):,} training examples with thinking={USE_THINKING_TRACES}.")
+print("Category distribution:")
+for k, v in sorted(category_counts.items(), key=lambda kv: -kv[1]):
+    print(f"  {k}: {v}")
+print("Sample messages:\n", train_dataset[0]["messages"])
+
+
+# --- CELL 33 code ---
+#save formatted dataset for inspection
+# train_records to csv with columns: user_content, assistant_content
+output_csv = []
+for record in train_records:
+    user_content = record["messages"][0]["content"]
+    assistant_content = record["messages"][1]["content"]
+    output_csv.append({"user_content": user_content, "assistant_content": assistant_content})
+pd.DataFrame(output_csv).to_csv("formatted_train_dataset.csv", index=False)
+
+
+# --- CELL 34 code ---
+# compute prompt lengths and show stats
+train_dataset = train_dataset.map(lambda x: {"prompt_len": len(x["messages"][0]["content"])})
+arr = train_dataset["prompt_len"]
+import numpy as np
+print(f"count={len(arr)}, mean={np.mean(arr):.1f}, std={np.std(arr):.1f}, min={np.min(arr)}, 25%={np.percentile(arr,25)}, 50%={np.median(arr)}, 75%={np.percentile(arr,75)},98%={np.percentile(arr,98)}, max={np.max(arr)}")
+
+# --- CELL 35 code ---
+# answer length stats
+train_dataset = train_dataset.map(lambda x: {"answer_len": len(x["messages"][1]["content"])})
+arr = train_dataset["answer_len"]
+print(f"count={len(arr)}, mean={np.mean(arr):.1f}, std={np.std(arr):.1f}, min={np.min(arr)}, 25%={np.percentile(arr,25)}, 50%={np.median(arr)}, 75%={np.percentile(arr,75)},95%={np.percentile(arr,95)},96%={np.percentile(arr,96)},97%={np.percentile(arr,97)},98%={np.percentile(arr,98)},99%={np.percentile(arr,99)}, max={np.max(arr)}")
+
+# --- CELL 36 code ---
+# #set MAX_SEQ_LEN to 99th percentile of prompt_len + answer_len to cover most examples without truncation
+# train_dataset = train_dataset.map(lambda x: {"total_len": x["prompt_len"] + x["answer_len"]})
+# arr = train_dataset["total_len"]
+# print(f"Total length (prompt + answer) stats: count={len(arr)}, mean={np.mean(arr):.1f}, std={np.std(arr):.1f}, min={np.min(arr)}, 25%={np.percentile(arr,25)}, 50%={np.median(arr)}, 75%={np.percentile(arr,75)}, 99%={np.percentile(arr,99)}, max={np.max(arr)}")
+# MAX_SEQ_LEN = int(np.percentile(arr, 75)) + 256  # add some buffer for special tokens
+# print(f"Setting MAX_SEQ_LEN to {MAX_SEQ_LEN} to cover 99% of examples without truncation.")
+
+# --- CELL 37 code ---
+
+
+# --- CELL 38 markdown ---
+## 4. Load Base Model with LoRA (4-bit via Unsloth)
+
+# --- CELL 39 code ---
+if 'model' in globals() and 'tokenizer' in globals():
+    del model, tokenizer
+
+    import gc
+    gc.collect()
+    torch.cuda.empty_cache()
+
+# --- CELL 40 code ---
+
+model, tokenizer = FastLanguageModel.from_pretrained(
+    model_name = MODEL_PATH,
+    max_seq_length = MAX_SEQ_LEN, # Choose any for long context!
+    load_in_4bit = False,  # 4 bit quantization to reduce memory
+    load_in_8bit = False, # [NEW!] A bit more accurate, uses 2x memory
+    full_finetuning = False, # [NEW!] We have full finetuning now!
+    trust_remote_code = True,
+    unsloth_force_compile = False,
+    attn_implementation = "eager",
+    dtype = torch.bfloat16,  # explicit bf16; RTX PRO 6000 Blackwell supports bf16
+    # token = "YOUR_HF_TOKEN", # HF Token for gated models
+)
+
+
+# --- CELL 41 code ---
+target_modules=[
+    'out_proj', 'v_proj', 'q_proj', 'down_proj', 'embed_tokens',
+    'k_proj', 'in_proj', 'up_proj', 'o_proj', 'lm_head', 'gate_proj'
+]
+
+# --- CELL 42 code ---
+
+# ── LoRA wrapper + pretrained-weight warm-start ──────────────────────────────
+# Root-cause: PeftModel.from_pretrained() defaults to is_trainable=False,
+# which freezes ALL LoRA params -> 0 trainable params.
+# Fix: ALWAYS create trainable LoRA via unsloth (gets gradient-checkpointing +
+# memory opts), THEN warm-start weights from the pretrained adapter.
+import os
+from peft import set_peft_model_state_dict, load_peft_weights
+
+print("Creating trainable LoRA wrapper via FastLanguageModel.get_peft_model …")
+model = FastLanguageModel.get_peft_model(
+    model,
+    r                          = LORA_RANK,
+    lora_alpha                 = LORA_ALPHA,
+    lora_dropout               = LORA_DROPOUT,
+    target_modules             = target_modules,
+    bias                       = "none",
+    use_gradient_checkpointing = "unsloth",
+    random_state               = 42,
+)
+model.print_trainable_parameters()   # should show ~800 M for Nemotron-30B
+
+# ── Warm-start from a pretrained adapter (optional) ──────────────────────────
+_adapter_cfg = os.path.join(PRETRAINED_ADAPTER_DIR, "adapter_config.json") \
+    if PRETRAINED_ADAPTER_DIR else ""
+if PRETRAINED_ADAPTER_DIR and os.path.isdir(PRETRAINED_ADAPTER_DIR) and os.path.isfile(_adapter_cfg):
+    print(f"\nLoading pretrained adapter weights from: {PRETRAINED_ADAPTER_DIR}")
+    try:
+        weights = load_peft_weights(PRETRAINED_ADAPTER_DIR)
+        result  = set_peft_model_state_dict(model, weights, adapter_name="default")
+        n_loaded = len(weights) - len(result.unexpected_keys)
+        print(f"  Weights loaded : {n_loaded}/{len(weights)}")
+        if result.unexpected_keys:
+            print(f"  Unexpected keys (ignored): {result.unexpected_keys[:5]}")
+        if result.missing_keys:
+            print(f"  Missing keys   (kept rand): {result.missing_keys[:5]}")
+        print("Pretrained weights warm-started successfully.")
+    except Exception as e:
+        print(f"Could not load pretrained weights: {e}")
+        print("Continuing with freshly initialised LoRA weights.")
+else:
+    print("\nNo pretrained adapter found — using freshly initialised LoRA weights.")
+
+# ── Final trainability assertion ──────────────────────────────────────────────
+print("\n--- Final state ---")
+model.print_trainable_parameters()
+_n_trainable = sum(p.numel() for p in model.parameters() if p.requires_grad)
+assert _n_trainable > 0, "BUG: 0 trainable parameters after LoRA setup!"
+print(f"Assertion passed: {_n_trainable:,} trainable params OK")
+
+
+# --- CELL 43 code ---
+# # Quick workaround: disable LoRA dropout and reapply adapter
+# LORA_DROPOUT = 0.0
+
+# if RUN_TRAINING:
+#     model = FastLanguageModel.get_peft_model(
+#         model,
+#         r=LORA_RANK,
+#         lora_alpha=LORA_ALPHA,
+#         lora_dropout=LORA_DROPOUT,
+#         target_modules=target_modules,
+#         bias="none",
+#         use_gradient_checkpointing="unsloth",
+#         random_state=42,
+#     )
+#     model.print_trainable_parameters()
+#     # Then re-run the cell that builds `args` and `trainer` (or reconstruct trainer)
+#     # e.g. re-run the SFTTrainer creation cell you used earlier.
+# else:
+#     print("RUN_TRAINING is False — skipping LoRA wrapper creation. Set RUN_TRAINING=True to enable training.")
+
+# --- CELL 44 markdown ---
+## 5. Train with SFTTrainer
+
+# --- CELL 45 code ---
+# pip install psutil
+import psutil
+mem = psutil.virtual_memory()
+print(f"RAM total: {mem.total/1024**3:.2f} GB, used: {mem.used/1024**3:.2f} GB ({mem.percent}%)")
+
+# --- CELL 46 code ---
+if RUN_TRAINING:
+    from trl import SFTTrainer
+    from transformers import TrainingArguments
+
+    train_dataset = train_dataset.map(
+        lambda ex: {
+            "text": tokenizer.apply_chat_template(
+                ex["messages"],
+                tokenize=False,
+                add_generation_prompt=False,  # keep supervised target aligned
+                enable_thinking=True,
+            )
+        }
+    )
+else:
+    print("RUN_TRAINING is False — skipping train_dataset mapping. Set RUN_TRAINING=True to enable training.")
+
+# --- CELL 47 code ---
+if RUN_TRAINING:
+    from trl import SFTTrainer
+    from transformers import TrainingArguments, EarlyStoppingCallback
+    import inspect
+
+    bf16_ok = torch.cuda.is_available() and torch.cuda.is_bf16_supported()
+    fp16_ok = torch.cuda.is_available() and not bf16_ok
+    steps_per_epoch = max(1, len(train_dataset) // max(1, BATCH_SIZE * GRAD_ACCUM))
+    warmup_steps = max(10, int(steps_per_epoch * max(1, NUM_EPOCHS) * WARMUP_RATIO))
+
+    # Build validation set with labels (for eval loss during training)
+    val_records = []
+    for _, row in validation_df.iterrows():
+        gt_answer = str(row["answer"])
+        category, final_answer, trace = build_thinking_trace(row["prompt"], gt_answer, sample_id=str(row["id"]))
+        val_records.append(format_train_row(row["prompt"], final_answer, trace))
+
+    val_dataset = Dataset.from_list(val_records).map(
+        lambda ex: {
+            "text": tokenizer.apply_chat_template(
+                ex["messages"],
+                tokenize=False,
+                add_generation_prompt=False,
+                enable_thinking=True,
+            )
+        }
+    )
+
+    # ── Weighted loss: upweight final \boxed{answer} tokens ──────────────────
+    _compute_loss_fn = None
+    if BOXED_LOSS_WEIGHT > 1.0:
+        _boxed_marker_ids = tokenizer.encode("\\boxed{", add_special_tokens=False)
+        _boxed_weight = float(BOXED_LOSS_WEIGHT)
+        print(f"[loss] \\boxed{{ marker tokenizes to {len(_boxed_marker_ids)} token IDs: {_boxed_marker_ids}")
+
+        def _weighted_boxed_loss(outputs, labels, num_items_in_batch=None):
+            logits = outputs.logits if hasattr(outputs, 'logits') else outputs[0]
+            shift_logits = logits[..., :-1, :].contiguous()
+            shift_labels = labels[..., 1:].contiguous()
+            batch_size, seq_len = shift_labels.shape
+
+            loss_fct = torch.nn.CrossEntropyLoss(reduction='none', ignore_index=-100)
+            per_token_loss = loss_fct(
+                shift_logits.view(-1, shift_logits.size(-1)),
+                shift_labels.view(-1)
+            ).view(batch_size, seq_len)
+
+            # Build weight mask: upweight tokens after the LAST \boxed{ occurrence
+            weights = torch.ones(batch_size, seq_len, device=per_token_loss.device)
+            marker = torch.tensor(_boxed_marker_ids, device=shift_labels.device)
+            marker_len = len(_boxed_marker_ids)
+
+            for bi in range(batch_size):
+                last_pos = -1
+                for i in range(seq_len - marker_len + 1):
+                    if torch.equal(shift_labels[bi, i:i+marker_len], marker):
+                        last_pos = i
+                if last_pos >= 0:
+                    weights[bi, last_pos:] = _boxed_weight
+
+            mask = (shift_labels != -100).float()
+            weighted_loss = (per_token_loss * weights * mask).sum() / (weights * mask).sum()
+            return weighted_loss
+
+        _compute_loss_fn = _weighted_boxed_loss
+        print(f"[loss] Weighted loss ready: final \\boxed{{}} region gets {_boxed_weight}x weight")
+    else:
+        print("[loss] BOXED_LOSS_WEIGHT <= 1.0 — using default uniform loss")
+
+    args = TrainingArguments(
+        output_dir=CHECKPOINT_OUTPUT_DIR,
+        num_train_epochs=NUM_EPOCHS,
+        per_device_train_batch_size=BATCH_SIZE,
+        per_device_eval_batch_size = 14,
+        gradient_accumulation_steps=GRAD_ACCUM,
+        learning_rate=LR,
+        lr_scheduler_type="cosine",
+        warmup_steps=warmup_steps,
+        bf16=bf16_ok,
+        fp16=fp16_ok,
+        logging_steps=EVAL_SAVE_STEPS,
+        # ── eval & save must share the same strategy + interval ──────────────
+        eval_strategy="steps",
+        eval_steps=EVAL_SAVE_STEPS,
+        save_strategy="no",
+        save_steps=EVAL_SAVE_STEPS,
+        save_total_limit=2,
+        # ── best-checkpoint tracking ─────────────────────────────────────────
+        load_best_model_at_end=False,
+        metric_for_best_model="eval_loss",
+        greater_is_better=False,
+        # ── misc ─────────────────────────────────────────────────────────────
+        optim="adamw_8bit",
+        gradient_checkpointing=False,
+        seed=42,
+        report_to="none",
+    )
+
+    # Build SFTTrainer — pass compute_loss_func if supported by this trl version
+    _extra_kwargs = {}
+    if _compute_loss_fn is not None:
+        if 'compute_loss_func' in inspect.signature(SFTTrainer.__init__).parameters:
+            _extra_kwargs['compute_loss_func'] = _compute_loss_fn
+            print("[loss] Passing compute_loss_func to SFTTrainer")
+        else:
+            print("[loss] compute_loss_func not supported in this trl version — skipping weighted loss")
+
+    trainer = SFTTrainer(
+        model=model,
+        tokenizer=tokenizer,
+        train_dataset=train_dataset,
+        eval_dataset=val_dataset,
+        dataset_text_field="text",
+        max_seq_length=MAX_SEQ_LEN,
+        args=args,
+        packing=False,
+        # callbacks=[EarlyStoppingCallback(early_stopping_patience=EARLY_STOPPING_PATIENCE)],
+        **_extra_kwargs,
+    )
+else:
+    print("RUN_TRAINING is False — skipping trainer creation. Set RUN_TRAINING=True to enable training.")
+
+# --- CELL 48 code ---
+import torch, gc
+gc.collect()
+torch.cuda.empty_cache()
+print(torch.cuda.memory_summary())
+
+# --- CELL 49 code ---
+if RUN_TRAINING:
+    print("Starting training...")
+    train_out = trainer.train()
+    print("Training complete.")
+    print({k: train_out.metrics.get(k) for k in ["train_runtime", "train_samples_per_second", "train_steps_per_second", "train_loss"]})
+else:
+    print("RUN_TRAINING is False — skipping training run.")
+
+# --- CELL 50 markdown ---
+## 6. Save LoRA Adapter
+
+# --- CELL 51 code ---
+if RUN_TRAINING:
+    model.save_pretrained(ADAPTER_DIR)
+    tokenizer.save_pretrained(ADAPTER_DIR)
+
+    # Verify adapter_config.json is present (required by competition)
+    assert os.path.exists(os.path.join(ADAPTER_DIR, "adapter_config.json")), \
+        "adapter_config.json missing!"
+
+    print(f"Adapter saved to ./{ADAPTER_DIR}/")
+    print("Files:", os.listdir(ADAPTER_DIR))
+else:
+    print("RUN_TRAINING is False — skipping adapter save. If you loaded a pretrained adapter, ADAPTER_DIR should already contain adapter files.")
+
+# --- CELL 52 markdown ---
+## 7. Submission
+
+The competition expects a zip archive containing the LoRA adapter directory (with `adapter_config.json` at the root of the archive or a sub-directory).
+
+
+# --- CELL 53 code ---
+if not RUN_TRAINING:
+    print("RUN_TRAINING is False — skipping zip creation. If you have an adapter in ADAPTER_DIR, you can create the zip manually or set RUN_TRAINING=True to enable the full flow.")
+else:
+    with zipfile.ZipFile(SUBMISSION_ZIP, "w", zipfile.ZIP_DEFLATED) as zf:
+        for fname in os.listdir(ADAPTER_DIR):
+            zf.write(
+                os.path.join(ADAPTER_DIR, fname),
+                arcname=os.path.join(ADAPTER_DIR, fname),
+        )
+
+    # Verify
+    with zipfile.ZipFile(SUBMISSION_ZIP, "r") as zf:
+        names = zf.namelist()
+
+    has_config = any("adapter_config.json" in n for n in names)
+    print(f"Files in {SUBMISSION_ZIP}: {names}")
+    print(f"adapter_config.json present: {has_config}")
+
+# --- CELL 54 markdown ---
+## 8. Local Validation
+
+Run inference on a small held-out slice of the training set to get a quick local accuracy estimate before submitting.
+
+# --- CELL 55 markdown ---
+### Utilities
+
+# --- CELL 56 code ---
+def extract_final_answer(text: str | None) -> str:
+    r"""Extract the final answer from model output, prioritising \boxed{}."""
+    if text is None:
+        return "NOT_FOUND"
+
+    # Prefer \boxed{...}
+    matches = re.findall(r"\\boxed\{([^}]*)(?:\}|$)", text)
+    if matches:
+        non_empty = [m.strip() for m in matches if m.strip()]
+        return non_empty[-1] if non_empty else matches[-1].strip()
+
+    # Common fallback patterns
+    patterns = [
+        r"The final answer is:\s*([^\n]+)",
+        r"Final answer is:\s*([^\n]+)",
+        r"Final answer\s*[:：]\s*([^\n]+)",
+    ]
+    for pattern in patterns:
+        m = re.findall(pattern, text, re.IGNORECASE)
+        if m:
+            return m[-1].strip()
+
+    # Last numeric value
+    nums = re.findall(r"-?\d+(?:\.\d+)?", text)
+    if nums:
+        return nums[-1]
+
+    # Last non-empty line
+    lines = [l.strip() for l in text.splitlines() if l.strip()]
+    return lines[-1] if lines else "NOT_FOUND"
+
+
+def verify(stored_answer: str, predicted: str,cat = None) -> bool:
+    """Return True if predicted matches stored_answer (numeric or string)."""
+    stored_answer = stored_answer.strip()
+    predicted = predicted.strip()
+    if (cat == 'bit_manipulation'):
+        return predicted.lower() == stored_answer.lower()
+    try:
+        return math.isclose(float(stored_answer), float(predicted),
+                            rel_tol=1e-2, abs_tol=1e-5)
+    except Exception:
+        return predicted.lower() == stored_answer.lower()
+
+
+print("Helper functions ready.")
+
+# --- CELL 57 markdown ---
+### Validate
+
+# --- CELL 58 markdown ---
+### Vllm
+
+# --- CELL 59 code ---
+# Aggressive GPU cleanup (run in the same kernel)
+import gc, os, traceback
+import torch
+
+# 1) Close and delete vLLM/LLM engine if present
+try:
+    if 'llm' in globals() and llm is not None:
+        try:
+            llm.close()
+        except Exception:
+            pass
+        del llm
+except Exception:
+    traceback.print_exc()
+
+# 2) Delete large model/tokenizer/PEFT objects if present
+for name in ('model', 'tokenizer', 'peft_model', 'trainer', 'train_out'):
+    try:
+        if name in globals():
+            del globals()[name]
+    except Exception:
+        pass
+
+# 3) Delete large generation/training artifacts if present
+for name in ('prompts', 'outputs', 'raw_outputs', 'preds', 'pred_df', 'eval_df', 'train_dataset'):
+    try:
+        if name in globals():
+            del globals()[name]
+    except Exception:
+        pass
+
+# 4) PyTorch/CUDA-specific cleanup
+gc.collect()
+if torch.cuda.is_available():
+    torch.cuda.empty_cache()
+    try:
+        torch.cuda.ipc_collect()
+    except Exception:
+        pass
+    try:
+        torch.cuda.reset_peak_memory_stats()
+    except Exception:
+        pass
+
+print('Attempted aggressive GPU cleanup. Current CUDA memory usage:')
+if torch.cuda.is_available():
+    for i in range(torch.cuda.device_count()):
+        allocated = torch.cuda.memory_allocated(i) / 1024**3
+        reserved = torch.cuda.memory_reserved(i) / 1024**3
+        print(f'  gpu {i}: allocated={allocated:.3f} GiB, reserved={reserved:.3f} GiB')
+else:
+    print('  CUDA not available.')
+
+# --- CELL 60 code ---
+# Release training objects before vLLM startup (critical for OOM on same GPU)
+import gc
+import torch
+
+for var_name in ["trainer", "train_out", "model"]:
+    if var_name in globals():
+        print(f"Deleting `{var_name}` from memory")
+        del globals()[var_name]
+
+gc.collect()
+if torch.cuda.is_available():
+    torch.cuda.empty_cache()
+    free_b, total_b = torch.cuda.mem_get_info()
+    print(f"GPU free before vLLM: {free_b/1024**3:.2f} / {total_b/1024**3:.2f} GiB")
+
+# --- CELL 61 code ---
+# Fast validation with vLLM (metric-aligned + robust fallback)
+import os
+import gc
+import traceback
+from collections import defaultdict
+import torch
+from vllm import LLM, SamplingParams
+from vllm.lora.request import LoRARequest
+
+# Filter validation by RUN_QUICK_VALIDATION_CATEGORY if set
+if RUN_QUICK_VALIDATION_CATEGORY is not None:
+    eval_df = validation_df[validation_df['category'].isin(RUN_QUICK_VALIDATION_CATEGORY)].copy()
+    print(f"Quick validation: using {len(eval_df)} samples from categories {RUN_QUICK_VALIDATION_CATEGORY}")
+else:
+    eval_df = validation_df.copy()
+    print(f"Full validation: using all {len(eval_df)} validation samples")
+
+# Environment settings used by metric notebook / offline runs
+os.environ['TRANSFORMERS_NO_TF'] = '1'
+os.environ['TRANSFORMERS_NO_FLAX'] = '1'
+os.environ['TRANSFORMERS_OFFLINE'] = '1'
+os.environ['CUDA_VISIBLE_DEVICES'] = '0'
+os.environ['VLLM_WORKER_MULTIPROC_METHOD'] = 'spawn'
+os.environ['TOKENIZERS_PARALLELISM'] = 'false'
+os.environ['VLLM_MEMORY_PROFILER_ESTIMATE_CUDAGRAPHS'] = '1'
+os.environ.setdefault('TRITON_PTXAS_PATH', '/tmp/triton/backends/nvidia/bin/ptxas')
+
+if not os.path.exists(str(MODEL_PATH)):
+    raise FileNotFoundError(f'MODEL_PATH not found: {MODEL_PATH}')
+
+# Choose adapter path: prefer PRETRAINED_ADAPTER_DIR for validation-only runs
+lora_path = None
+if not RUN_TRAINING:
+    if PRETRAINED_ADAPTER_DIR and os.path.exists(os.path.join(PRETRAINED_ADAPTER_DIR, 'adapter_config.json')):
+        lora_path = PRETRAINED_ADAPTER_DIR
+    elif os.path.exists(os.path.join(ADAPTER_DIR, 'adapter_config.json')):
+        lora_path = ADAPTER_DIR
+else:
+    if os.path.exists(os.path.join(ADAPTER_DIR, 'adapter_config.json')):
+        lora_path = ADAPTER_DIR
+    elif PRETRAINED_ADAPTER_DIR and os.path.exists(os.path.join(PRETRAINED_ADAPTER_DIR, 'adapter_config.json')):
+        lora_path = PRETRAINED_ADAPTER_DIR
+
+if lora_path is None:
+    raise FileNotFoundError(f'adapter_config.json missing in {ADAPTER_DIR} and {PRETRAINED_ADAPTER_DIR}')
+
+print(f'Using LoRA adapter path: {lora_path}')
+
+# Re-check free memory right before vLLM init
+gc.collect()
+if torch.cuda.is_available():
+    torch.cuda.empty_cache()
+    free_b, total_b = torch.cuda.mem_get_info()
+    free_frac = free_b / max(1, total_b)
+else:
+    free_b, total_b, free_frac = 0, 1, 0.0
+
+free_gib = free_b / 1024**3
+total_gib = total_b / 1024**3
+max_tokens = MAX_NEW_TOKENS
+max_model_len = MAX_MODEL_LEN
+max_num_seqs = MAX_NUM_SEQS
+safe_gpu_mem_util = GPU_MEMORY_UTILIZATION
+
+print('vLLM startup config:')
+print(f'  MODEL_PATH={MODEL_PATH}')
+print(f'  ADAPTER_PATH={lora_path}')
+print(f'  free_gpu={free_gib:.2f}/{total_gib:.2f} GiB ({free_frac:.2%} free)')
+print(f'  gpu_memory_utilization={safe_gpu_mem_util:.3f}')
+print(f'  max_tokens={max_tokens}, max_num_seqs={max_num_seqs}, max_model_len={max_model_len}')
+
+# Metric-first attempt, then compatibility fallbacks
+llm = None
+last_err = None
+attempts = [
+    dict(
+        gpu_memory_utilization=safe_gpu_mem_util,
+        max_num_seqs=max_num_seqs,
+        max_model_len=max_model_len,
+        enable_prefix_caching=True,
+        enable_chunked_prefill=True,
+        enforce_eager=False,
+    ),
+    dict(
+        gpu_memory_utilization=min(0.90, safe_gpu_mem_util + 0.015),
+        max_num_seqs=max_num_seqs,
+        max_model_len=max_model_len,
+        enable_prefix_caching=True,
+        enable_chunked_prefill=True,
+        enforce_eager=False,
+    ),
+    dict(
+        gpu_memory_utilization=max(0.70, safe_gpu_mem_util - 0.05),
+        max_num_seqs=min(16, max_num_seqs),
+        max_model_len=max_model_len,
+        enable_prefix_caching=True,
+        enable_chunked_prefill=False,
+        enforce_eager=False,
+    ),
+]
+
+for i, cfg in enumerate(attempts, 1):
+    try:
+        print(f'\n[Attempt {i}] Initializing vLLM with {cfg}')
+        llm = LLM(
+            model=str(MODEL_PATH),
+            tensor_parallel_size=1,
+            dtype='auto',
+            trust_remote_code=True,
+            enable_lora=True,
+            max_lora_rank=LORA_RANK,
+            **cfg,
+        )
+        print(f'[Attempt {i}] vLLM initialized successfully.')
+        break
+    except Exception as e:
+        last_err = e
+        print(f'[Attempt {i}] failed: {type(e).__name__}: {e}')
+        traceback.print_exc()
+
+if llm is None:
+    raise RuntimeError(
+        'vLLM failed to initialize after retries. Restart kernel and run only inference cells if needed.'
+    ) from last_err
+
+try:
+    tokenizer_vllm = llm.get_tokenizer()
+
+    # Build prompts using vLLM tokenizer (matches metric notebook behavior)
+    prompts, plain_prompts, row_ids, cats = [], [], [], []
+    for r in eval_df.itertuples(index=False):
+        user_content = r.prompt + BOXED_INSTRUCTION
+        plain_prompts.append(user_content)
+        try:
+            prompt = tokenizer_vllm.apply_chat_template(
+                [{'role': 'user', 'content': user_content}],
+                tokenize=False,
+                add_generation_prompt=True,
+                enable_thinking=True,
+            )
+        except Exception:
+            prompt = user_content
+        prompts.append(prompt)
+        row_ids.append(getattr(r, eval_df.columns[0]))
+        cats.append(r.category)
+
+    sampling = SamplingParams(
+        temperature=TEMPERATURE,
+        top_p=TOP_P,
+        max_tokens=max_tokens,
+    )
+
+    outputs = llm.generate(
+        prompts,
+        sampling_params=sampling,
+        lora_request=LoRARequest('adapter', 1, lora_path),
+    )
+
+    raw_outputs, preds = [], []
+    for out in outputs:
+        raw = ''
+        if getattr(out, 'outputs', None):
+            first_out = out.outputs[0]
+            raw = getattr(first_out, 'text', '') or ''
+            if (not raw) and hasattr(first_out, 'structured_output') and first_out.structured_output is not None:
+                raw = str(first_out.structured_output)
+        raw_outputs.append(raw)
+        preds.append(extract_final_answer(raw))
+
+    # Fallback: if all outputs are empty, retry once with plain prompts (no chat template)
+    non_empty = sum(1 for t in raw_outputs if str(t).strip())
+    if non_empty == 0:
+        print('All outputs are empty with chat template; retrying once with plain prompts...')
+        outputs = llm.generate(
+            plain_prompts,
+            sampling_params=sampling,
+            lora_request=LoRARequest('adapter', 1, lora_path),
+        )
+        raw_outputs, preds = [], []
+        for out in outputs:
+            raw = ''
+            if getattr(out, 'outputs', None):
+                first_out = out.outputs[0]
+                raw = getattr(first_out, 'text', '') or ''
+                if (not raw) and hasattr(first_out, 'structured_output') and first_out.structured_output is not None:
+                    raw = str(first_out.structured_output)
+            raw_outputs.append(raw)
+            preds.append(extract_final_answer(raw))
+        non_empty = sum(1 for t in raw_outputs if str(t).strip())
+
+    print(f'Non-empty outputs: {non_empty}/{len(raw_outputs)}')
+
+    # compute per-category accuracy quickly
+    stats = defaultdict(lambda: {'correct': 0, 'total': 0})
+    for idx, pred, cat, row in zip(row_ids, preds, cats, eval_df.itertuples(index=False)):
+        gt = str(row.answer)
+        ok = verify(gt, pred, cat = cat)
+        stats[cat]['total'] += 1
+        stats[cat]['correct'] += int(ok)
+
+    print('\nPer-category:')
+    for c, s in sorted(stats.items()):
+        print(f"  {c}: {s['correct']}/{s['total']} = {s['correct']/max(1,s['total']):.2%}")
+    overall_correct = sum(s['correct'] for s in stats.values())
+    overall_total = sum(s['total'] for s in stats.values())
+    print(f'Overall: {overall_correct}/{overall_total} = {overall_correct/max(1, overall_total):.2%}')
+    # weights for the 7 categories (sum = 1.0)
+    weights = {
+        "bit_manipulation": 1/6,
+        "text_decryption": 1/6,
+        "unit_conversion": 1/6,
+        "numeral_system": 1/6,
+        "gravity_physics": 1/6,
+        "symbol_transform": 1/12,
+        "numeric_equation": 1/12,
+    }
+    
+    weighted_score = 0.0
+    for cat, w in weights.items():
+        s = stats.get(cat, {"correct": 0, "total": 0})
+        acc = (s["correct"] / s["total"]) if s["total"] > 0 else 0.0
+        weighted_score += w * acc
+    
+    cv_score = weighted_score
+    print(f"Weighted CV score: {cv_score:.2%}")
+    
+    # Optional: if you want to renormalize when some categories have zero samples:
+    present_weight_sum = sum(w for c, w in weights.items() if stats.get(c, {"total": 0})["total"] > 0)
+    if present_weight_sum > 0 and abs(present_weight_sum - 1.0) > 1e-12:
+        print(f"Weighted CV (renormalized to present cats): {(cv_score / present_weight_sum):.2%}")
+    pred_df = pd.DataFrame({
+        'id': row_ids,
+        'category': cats,
+        'raw_output': raw_outputs,
+        'predicted': preds,
+        'ground_truth': eval_df['answer'].tolist(),
+    })
+    pred_df.to_csv('validation_predictions.csv', index=False)
+    print('\nSample predictions:')
+    print(pred_df.head())
+finally:
+    if llm is not None and hasattr(llm, 'close'):
+        llm.close()

@@ -1,0 +1,316 @@
+{
+  "ref": "safar1/lb-score-0-86",
+  "title": "[LB] [SCORE] [0.86]",
+  "notebook": "artifacts\\v284_official_gate_worktree\\artifacts\\v527_kaggle_code_audit\\pulled_code\\safar1__lb-score-0-86\\lb-score-0-86.ipynb",
+  "metadata": {
+    "id": "safar1/lb-score-0-86",
+    "id_no": 119058701,
+    "title": "[LB] [SCORE] [0.86]",
+    "code_file": "lb-score-0-86.ipynb",
+    "language": "python",
+    "kernel_type": "notebook",
+    "is_private": false,
+    "enable_gpu": false,
+    "enable_tpu": false,
+    "enable_internet": false,
+    "keywords": [],
+    "dataset_sources": [
+      "mayukh18/nemotron-packages",
+      "konbu17/nemotron-sft-lora-cot-selection",
+      "dennisfong/nvidia-nemotron-offline-packages",
+      "rubyducklove/nvidia-cutlass"
+    ],
+    "kernel_sources": [
+      "andreasbis/aimo-3-utils",
+      "huikang/nvidia-nemotron-all-linear"
+    ],
+    "competition_sources": [
+      "nvidia-nemotron-model-reasoning-challenge"
+    ],
+    "model_sources": [
+      "metric/nemotron-3-nano-30b-a3b-bf16/Transformers/default/1",
+      "huikang/nemotron-adapter/Transformers/default/20",
+      "kienngx/nemotron-nano-30b-trained/Transformers/1200samples-cot-1e-5/1",
+      "kienngx/nemotron-nano-30b-trained/Transformers/cot-labels-3000samples/1",
+      "kienngx/nemotron-nano-30b-trained/Transformers/1800s-32/1",
+      "kienngx/nemotron-nano-30b-trained/Triton/1e-5/1",
+      "kienngx/nemotron-nano-30b-trained/Triton/grad-accum1-workers8-maxlen-4096-lr1e-5/1",
+      "kienngx/nemotron-nano-30b-trained/Transformers/9500s-batch1-lr1e-4/1",
+      "kienngx/nemotron-nano-30b-trained/Triton/1e-5-batch-2-workers-8/1",
+      "kienngx/nemotron-nano-30b-trained/Triton/5e-5/1",
+      "kienngx/nemotron-nano-30b-trained/Transformers/1800s-lora-rank32-false/1",
+      "kienngx/nemotron-nano-30b-trained/Transformers/1200samples-cot-5e-5/1",
+      "kienngx/nemotron-nano-30b-trained/Transformers/600-samples-packing-false/1",
+      "kienngx/nemotron-nano-30b-trained/Transformers/2400-1e-4_lr-all_linear-packingfalse/1",
+      "kienngx/nemotron-nano-30b-trained/Triton/tinker-adapter/1",
+      "kienngx/nemotron-nano-30b-trained/Triton/batch2-lr1e-workers8/1",
+      "kienngx/nemotron-nano-30b-trained/Transformers/1200samples-cot-/1"
+    ],
+    "docker_image": "gcr.io/kaggle-images/python@sha256:c370a5ff133d162d17c2dca332b50f3e85c0b0ed1471ee18e98e3009eee80b08",
+    "machine_shape": "None"
+  },
+  "kaggle_metadata": {
+    "accelerator": "none",
+    "dataSources": [
+      {
+        "sourceType": "competition",
+        "sourceId": 129716,
+        "databundleVersionId": 16082784
+      },
+      {
+        "sourceType": "datasetVersion",
+        "sourceId": 15432120,
+        "datasetId": 9785342,
+        "databundleVersionId": 16351222
+      },
+      {
+        "sourceType": "datasetVersion",
+        "sourceId": 15476059,
+        "datasetId": 9901078,
+        "databundleVersionId": 16399540
+      },
+      {
+        "sourceType": "datasetVersion",
+        "sourceId": 15427911,
+        "datasetId": 9762543,
+        "databundleVersionId": 16346404
+      },
+      {
+        "sourceType": "datasetVersion",
+        "sourceId": 15353167,
+        "datasetId": 9820572,
+        "databundleVersionId": 16263135
+      },
+      {
+        "sourceType": "modelInstanceVersion",
+        "sourceId": 784907,
+        "databundleVersionId": 16059913,
+        "modelInstanceId": 598905,
+        "modelId": 611168
+      },
+      {
+        "sourceType": "modelInstanceVersion",
+        "sourceId": 823163,
+        "databundleVersionId": 16526052,
+        "modelInstanceId": 607259,
+        "modelId": 619204
+      },
+      {
+        "sourceType": "modelInstanceVersion",
+        "sourceId": 797981,
+        "databundleVersionId": 16223468,
+        "modelInstanceId": 607820,
+        "modelId": 619281
+      },
+      {
+        "sourceType": "modelInstanceVersion",
+        "sourceId": 823146,
+        "databundleVersionId": 16525636,
+        "modelInstanceId": 625660,
+        "modelId": 619281
+      },
+      {
+        "sourceType": "modelInstanceVersion",
+        "sourceId": 797321,
+        "databundleVersionId": 16215549,
+        "modelInstanceId": 607343,
+        "modelId": 619281
+      },
+      {
+        "sourceType": "modelInstanceVersion",
+        "sourceId": 809910,
+        "databundleVersionId": 16345292,
+        "modelInstanceId": 615503,
+        "modelId": 619281
+      },
+      {
+        "sourceType": "modelInstanceVersion",
+        "sourceId": 835129,
+        "databundleVersionId": 16725266,
+        "modelInstanceId": 635307,
+        "modelId": 619281
+      },
+      {
+        "sourceType": "modelInstanceVersion",
+        "sourceId": 805975,
+        "databundleVersionId": 16309194,
+        "modelInstanceId": 613144,
+        "modelId": 619281
+      },
+      {
+        "sourceType": "modelInstanceVersion",
+        "sourceId": 805344,
+        "databundleVersionId": 16302453,
+        "modelInstanceId": 612756,
+        "modelId": 619281
+      },
+      {
+        "sourceType": "modelInstanceVersion",
+        "sourceId": 805915,
+        "databundleVersionId": 16308411,
+        "modelInstanceId": 613106,
+        "modelId": 619281
+      },
+      {
+        "sourceType": "modelInstanceVersion",
+        "sourceId": 824116,
+        "databundleVersionId": 16543105,
+        "modelInstanceId": 626445,
+        "modelId": 619281
+      },
+      {
+        "sourceType": "modelInstanceVersion",
+        "sourceId": 822796,
+        "databundleVersionId": 16519140,
+        "modelInstanceId": 625369,
+        "modelId": 619281
+      },
+      {
+        "sourceType": "modelInstanceVersion",
+        "sourceId": 799622,
+        "databundleVersionId": 16237883,
+        "modelInstanceId": 608885,
+        "modelId": 619281
+      },
+      {
+        "sourceType": "modelInstanceVersion",
+        "sourceId": 822790,
+        "databundleVersionId": 16518936,
+        "modelInstanceId": 625363,
+        "modelId": 619281
+      },
+      {
+        "sourceType": "modelInstanceVersion",
+        "sourceId": 799641,
+        "databundleVersionId": 16238052,
+        "modelInstanceId": 608898,
+        "modelId": 619281
+      },
+      {
+        "sourceType": "modelInstanceVersion",
+        "sourceId": 824561,
+        "databundleVersionId": 16551907,
+        "modelInstanceId": 626812,
+        "modelId": 619281
+      },
+      {
+        "sourceType": "modelInstanceVersion",
+        "sourceId": 797359,
+        "databundleVersionId": 16215944,
+        "modelInstanceId": 607371,
+        "modelId": 619281
+      },
+      {
+        "sourceType": "kernelVersion",
+        "sourceId": 289055161
+      },
+      {
+        "sourceType": "kernelVersion",
+        "sourceId": 305616567
+      }
+    ],
+    "dockerImageVersionId": 31328,
+    "isInternetEnabled": false,
+    "language": "python",
+    "sourceType": "notebook",
+    "isGpuEnabled": false
+  },
+  "relevant": [
+    {
+      "cell": 0,
+      "line": 3,
+      "kind": "code",
+      "text": "version_1 =  \"/kaggle/input/models/kienngx/nemotron-nano-30b-trained/transformers/600-samples-packing-false/1\""
+    },
+    {
+      "cell": 0,
+      "line": 5,
+      "kind": "code",
+      "text": "version_2 = \"/kaggle/input/models/kienngx/nemotron-nano-30b-trained/transformers/1800s-lora-rank32-false/1\""
+    },
+    {
+      "cell": 0,
+      "line": 7,
+      "kind": "code",
+      "text": "version_3 = \"/kaggle/input/models/kienngx/nemotron-nano-30b-trained/transformers/2400-1e-4_lr-all_linear-packingfalse/1\""
+    },
+    {
+      "cell": 0,
+      "line": 9,
+      "kind": "code",
+      "text": "version_4 = \"/kaggle/input/models/kienngx/nemotron-nano-30b-trained/transformers/9500s-batch1-lr1e-4/1\""
+    },
+    {
+      "cell": 0,
+      "line": 11,
+      "kind": "code",
+      "text": "version_5 = \"/kaggle/input/models/kienngx/nemotron-nano-30b-trained/transformers/cot-labels-3000samples/1\""
+    },
+    {
+      "cell": 0,
+      "line": 13,
+      "kind": "code",
+      "text": "version_6 = \"/kaggle/input/models/kienngx/nemotron-nano-30b-trained/transformers/1200samples-cot-5e-5/1\""
+    },
+    {
+      "cell": 0,
+      "line": 15,
+      "kind": "code",
+      "text": "version_7 = \"/kaggle/input/models/kienngx/nemotron-nano-30b-trained/transformers/1200samples-cot-/1\""
+    },
+    {
+      "cell": 0,
+      "line": 16,
+      "kind": "code",
+      "text": "version_8 = \"/kaggle/input/models/kienngx/nemotron-nano-30b-trained/transformers/1200samples-cot-1e-5/1\""
+    },
+    {
+      "cell": 0,
+      "line": 18,
+      "kind": "code",
+      "text": "version_9 = \"/kaggle/input/models/kienngx/nemotron-nano-30b-trained/triton/1e-5/1\""
+    },
+    {
+      "cell": 0,
+      "line": 20,
+      "kind": "code",
+      "text": "version_10 = \"/kaggle/input/models/kienngx/nemotron-nano-30b-trained/triton/5e-5/1\""
+    },
+    {
+      "cell": 0,
+      "line": 22,
+      "kind": "code",
+      "text": "version_11 = \"/kaggle/input/models/kienngx/nemotron-nano-30b-trained/triton/1e-5-batch-2-workers-8/1\""
+    },
+    {
+      "cell": 0,
+      "line": 24,
+      "kind": "code",
+      "text": "version_12 = \"/kaggle/input/models/kienngx/nemotron-nano-30b-trained/triton/batch2-lr1e-workers8/1\""
+    },
+    {
+      "cell": 0,
+      "line": 26,
+      "kind": "code",
+      "text": "version_13 = \"/kaggle/input/models/kienngx/nemotron-nano-30b-trained/triton/grad-accum1-workers8-maxlen-4096-lr1e-5/1\""
+    },
+    {
+      "cell": 0,
+      "line": 27,
+      "kind": "code",
+      "text": "version_14 = \"/kaggle/input/models/kienngx/nemotron-nano-30b-trained/triton/tinker-adapter/1\""
+    },
+    {
+      "cell": 0,
+      "line": 32,
+      "kind": "code",
+      "text": "zip_name = \"submission.zip\""
+    },
+    {
+      "cell": 0,
+      "line": 33,
+      "kind": "code",
+      "text": "os.system(f'zip -r {zip_name} \"{model_path}\"')"
+    }
+  ]
+}

@@ -1,0 +1,152 @@
+{
+  "accepted_cpu_rule_sources": {
+    "v357": [
+      {
+        "accepted": "True",
+        "accepted_rows": "13",
+        "candidate_rows": "13",
+        "candidate_source": "v357_bit_exact_global_ternary",
+        "changed_rows": "13",
+        "family": "bit_manipulation",
+        "gains": "13",
+        "losses": "0",
+        "reason": "accepted_no_loss",
+        "rule_class": "bit_exact_global_ternary_unique_prediction"
+      }
+    ],
+    "v366": [
+      {
+        "accepted": "True",
+        "accepted_rows": "4",
+        "candidate_rows": "4",
+        "candidate_source": "v366_bit_fullbyte_ternary",
+        "changed_rows": "4",
+        "family": "bit_manipulation",
+        "gains": "4",
+        "losses": "0",
+        "new_correct": "4",
+        "reason": "accepted_no_loss",
+        "rule_class": "bit_fullbyte_ternary_op_CHO"
+      },
+      {
+        "accepted": "True",
+        "accepted_rows": "4",
+        "candidate_rows": "4",
+        "candidate_source": "v366_bit_fullbyte_ternary",
+        "changed_rows": "4",
+        "family": "bit_manipulation",
+        "gains": "4",
+        "losses": "0",
+        "new_correct": "4",
+        "reason": "accepted_no_loss",
+        "rule_class": "bit_fullbyte_ternary_op_MAJ3"
+      }
+    ],
+    "v516_equation_current_label_free": [
+      {
+        "answer": "92",
+        "baseline_prediction": "-92",
+        "candidate_program_count": "1",
+        "candidate_source": "v274_guarded_numeric_postprocessor",
+        "example_count": "5",
+        "id": "274def88",
+        "incorrect_by_weak_label": "False",
+        "prediction": "92",
+        "promotable_after_class_gate": "True",
+        "proof": "accepted_no_loss_classes=v274_guarded_numeric_minus_signed_opposite_sign_guarded;v299_same_operator_unique_numeric_dsl",
+        "query": "85-92",
+        "rule_class": "v274_guarded_numeric_minus_signed_opposite_sign_guarded",
+        "status": "candidate",
+        "subtype": "equation_numeric_operator",
+        "unique_prediction_count": "1",
+        "verified_by_weak_label": "True"
+      },
+      {
+        "answer": "-55",
+        "baseline_prediction": "55",
+        "candidate_program_count": "1",
+        "candidate_source": "v274_guarded_numeric_postprocessor",
+        "example_count": "5",
+        "id": "7688e06e",
+        "incorrect_by_weak_label": "False",
+        "prediction": "-55",
+        "promotable_after_class_gate": "True",
+        "proof": "accepted_no_loss_classes=v274_guarded_numeric_minus_signed_opposite_sign_guarded",
+        "query": "63-19",
+        "rule_class": "v274_guarded_numeric_minus_signed_opposite_sign_guarded",
+        "status": "candidate",
+        "subtype": "equation_numeric_operator",
+        "unique_prediction_count": "1",
+        "verified_by_weak_label": "True"
+      },
+      {
+        "answer": "134",
+        "baseline_prediction": "35",
+        "candidate_program_count": "1",
+        "candidate_source": "v274_guarded_numeric_postprocessor",
+        "example_count": "4",
+        "id": "c5b058d6",
+        "incorrect_by_weak_label": "False",
+        "prediction": "134",
+        "promotable_after_class_gate": "True",
+        "proof": "accepted_no_loss_classes=v274_guarded_numeric_add_direct_over_model_add_variant",
+        "query": "94)40",
+        "rule_class": "v274_guarded_numeric_add_direct_over_model_add_variant",
+        "status": "candidate",
+        "subtype": "equation_numeric_operator",
+        "unique_prediction_count": "1",
+        "verified_by_weak_label": "True"
+      },
+      {
+        "answer": "30",
+        "baseline_prediction": "3",
+        "candidate_program_count": "1",
+        "candidate_source": "v274_guarded_numeric_postprocessor",
+        "example_count": "4",
+        "id": "d1bd7478",
+        "incorrect_by_weak_label": "False",
+        "prediction": "30",
+        "promotable_after_class_gate": "True",
+        "proof": "accepted_no_loss_classes=v274_guarded_numeric_colon_absdiff_restore_trailing_zero",
+        "query": "37:67",
+        "rule_class": "v274_guarded_numeric_colon_absdiff_restore_trailing_zero",
+        "status": "candidate",
+        "subtype": "equation_numeric_operator",
+        "unique_prediction_count": "1",
+        "verified_by_weak_label": "True"
+      }
+    ]
+  },
+  "decision": {
+    "dataset_build_allowed": true,
+    "gpu_allowed": false,
+    "next_action": "Build V523 targeted source-only trace pack from permitted v304/v515-like sources: prioritize CHO/MAJ3/global ternary bit traces and current V516 label-free equation classes ['274def88', '7688e06e', 'c5b058d6', 'd1bd7478']; then run V286/V513/V521 before any GPU.",
+    "reason": "Reference teacher has no-loss gains, but those gains are not adapter behavior. Use them only to choose source-side trace families; do not train on weak labels.",
+    "status": "source_signal_found_dataset_build_only"
+  },
+  "generated_at_utc": "2026-05-16T23:51:37.403328+00:00",
+  "outputs": {
+    "coverage_csv": "artifacts\\v522_source_target_alignment_audit\\v522_source_marker_coverage.csv",
+    "gain_csv": "artifacts\\v522_source_target_alignment_audit\\v522_reference_no_loss_gains.csv",
+    "manifest_json": "artifacts\\v522_source_target_alignment_audit\\v522_source_target_alignment_manifest.json",
+    "report_md": "artifacts\\v522_source_target_alignment_audit\\KG1_V522_SOURCE_TARGET_ALIGNMENT_AUDIT.md"
+  },
+  "reference_signal_summary": {
+    "gain_family_counts": {
+      "bit_manipulation": 23,
+      "equation_transform": 8
+    },
+    "gain_rule_counts": {
+      "bit_manipulation:bit_exact_global_binary_OR": 1,
+      "bit_manipulation:bit_exact_global_binary_XOR": 1,
+      "bit_manipulation:bit_exact_global_ternary_unique_prediction": 13,
+      "bit_manipulation:bit_fullbyte_ternary_op_CHO": 4,
+      "bit_manipulation:bit_fullbyte_ternary_op_MAJ3": 4,
+      "equation_transform:equation_reference_gain_untyped": 8
+    },
+    "gain_total": 31,
+    "loss_total": 0
+  },
+  "schema_version": "kg1_v522_source_target_alignment_v1",
+  "version": "V522"
+}

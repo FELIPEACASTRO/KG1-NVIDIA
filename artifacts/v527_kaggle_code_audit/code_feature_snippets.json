@@ -1,0 +1,488 @@
+[
+  {
+    "ref": "adilshamim8/nvidia-nemotron-model-reasoning-challenge-101",
+    "score": 150,
+    "snippets": [
+      "skipped = 0\naugmented_added = 0\nrebalanced_added = 0\naug_rng = random.Random(SEED + 101)\n\nfor _, row in train_df.iterrows():\n    if not is_valid(row):",
+      "        \"template_key\": row[\"template_key\"],\n        \"is_augmented\": False,\n        \"is_rebalanced\": False,\n    })\n\n    if ENABLE_STYLE_AUG:\n        for aug_idx in range(MAX_AUG_PER_ROW):",
+      "                \"template_key\": f\"{row['template_key']}_aug\",\n                \"is_augmented\": True,\n                \"is_rebalanced\": False,\n            })\n            augmented_added += 1\n\n# Optional per-type rebalancing (duplicates minority puzzle types).",
+      "    if base_type_counts:\n        max_count = max(base_type_counts.values())\n        balanced = []\n\n        for s in samples:\n            balanced.append(s)\n",
+      "\n        for s in samples:\n            balanced.append(s)\n\n            # Rebalance only original (non-augmented) rows to avoid exploding data size.\n            if s.get(\"is_augmented\", False):\n                continue",
+      "                dup = dict(s)\n                dup[\"id\"] = f\"{s['id']}_rb{k}\"\n                dup[\"is_rebalanced\"] = True\n                balanced.append(dup)\n                rebalanced_added += 1\n\n        samples = balanced",
+      "                dup[\"id\"] = f\"{s['id']}_rb{k}\"\n                dup[\"is_rebalanced\"] = True\n                balanced.append(dup)\n                rebalanced_added += 1\n\n        samples = balanced\n",
+      "                dup[\"is_rebalanced\"] = True\n                balanced.append(dup)\n                rebalanced_added += 1\n\n        samples = balanced\n\nprint(f\"Samples kept          : {len(samples):,}\")"
+    ]
+  },
+  {
+    "ref": "ahmadzulfiqar001/exploratory-data-analysis-nvidia",
+    "score": 136,
+    "snippets": [
+      "| Base Model | `nvidia/Nemotron-3-Nano-30B` |\n| Submission | LoRA adapter (rank ≤ 32) + `adapter_config.json` |\n| Inference Engine | vLLM (`max_tokens=7680`, `temp=0.0`, `top_p=1.0`) |\n| Answer Format | `\\\\boxed{answer}` LaTeX |\n| Metric | Accuracy (exact string OR numerical tolerance 1e-6) |\n| Max Context | 8192 tokens |\n"
+    ]
+  },
+  {
+    "ref": "aliafzal9323/nemotron-30b-deterministic-solvers-cot-fine-tu",
+    "score": 164,
+    "snippets": [
+      "    else: return 'unknown'\n\ndef solve_bit_manipulation(prompt, answer):\n    lines = prompt.strip().split('\\n')\n    examples, test_input = [], None\n    for line in lines:\n        line = line.strip()",
+      "    return None\n\ndef solve_equation(prompt, answer):\n    lines = prompt.strip().split('\\n')\n    examples, test_input = [], None\n    for line in lines:\n        line = line.strip()"
+    ]
+  },
+  {
+    "ref": "amanatar/nemotron-ultimate-sft-grpo-v3",
+    "score": 283,
+    "snippets": [
+      "# CELL 5: CONFIGURATION (MATCHED TO COMPETITION EVAL RULES)\n# ════════════════════════════════════════════════════════════════\n# Competition eval: max_lora_rank=32, max_tokens=7680, temperature=0.0\n# We MUST train with these constraints!\n\nif QUICK_TEST:\n    SFT_EPOCHS = 1",
+      "SFT_BATCH = 1\nSFT_GRAD_ACCUM = 8         # Effective batch = 8\nSFT_MAX_LEN = 7680         # MATCH EVAL max_tokens=7680 (was 4096 — truncating CoT!)\nSFT_PACKING = False\nNEFTUNE_ALPHA = 5.0         # Regularization during training\n\n# GRPO (if enabled)",
+      "    return str(func)\n\ndef solve_bit_manipulation(prompt, answer):\n    pairs = re.findall(r'([01]{8})\\s*->\\s*([01]{8})', prompt)\n    query_m = re.search(r'output for:\\s*([01]{8})', prompt)\n    if not pairs or not query_m: return None, None\n    query = query_m.group(1)",
+      "    return examples, query\n\ndef solve_equation_transformation(prompt, answer):\n    examples, query = _parse_eq_examples(prompt)\n    if not examples or not query or len(query) != 5: return None, None\n    parsed = []\n    for lhs, rhs in examples:",
+      "            text = tokenizer.apply_chat_template(\n                messages, tokenize=False, add_generation_prompt=False,\n                enable_thinking=True,\n            )\n        except Exception:\n            text = f'<extra_id_1>User\\n{user_content}\\n<extra_id_1>Assistant\\n{assistant_msg}\\n'\n        return {'text': text}"
+    ]
+  },
+  {
+    "ref": "comistrymo/nvidia-nemotron-training-cot-labels",
+    "score": 70,
+    "snippets": [
+      "- Converts to HuggingFace Dataset\n\n✅ Balanced for:\n  - H100 VRAM usage\n  - Reasoning fine-tuning\n\n# === Hyperparameters ==="
+    ]
+  },
+  {
+    "ref": "dgxchen/training-with-unsloth-to-achieve-0-85-lb",
+    "score": 63,
+    "snippets": [
+      "                    tokenize=False,\n                    add_generation_prompt=False,\n                    enable_thinking=True,\n                )\n            except TypeError:\n                text = tokenizer.apply_chat_template(\n                    conversation,"
+    ]
+  },
+  {
+    "ref": "hastws/sfttrainer-training",
+    "score": 76,
+    "snippets": [
+      "        {'role': 'assistant', 'content': assistant_msg},\n    ]\n    for kwargs in [{'enable_thinking': True}, {}]:\n        try:\n            text = tokenizer.apply_chat_template(\n                messages, tokenize=False, add_generation_prompt=False, **kwargs\n            )",
+      "and reinforces better reasoning strategies. This is the key to beating SFT.\n\n# --- Monkeypatch tokenizer for enable_thinking ---\n# GRPO calls apply_chat_template internally to format prompts.\n# We need enable_thinking=True to match evaluation (vLLM uses it).\n_orig_apply_chat_template = tokenizer.apply_chat_template\n",
+      "# --- Monkeypatch tokenizer for enable_thinking ---\n# GRPO calls apply_chat_template internally to format prompts.\n# We need enable_thinking=True to match evaluation (vLLM uses it).\n_orig_apply_chat_template = tokenizer.apply_chat_template\n\ndef _apply_with_thinking(*args, **kwargs):\n    kwargs.setdefault('enable_thinking', True)",
+      "\ndef _apply_with_thinking(*args, **kwargs):\n    kwargs.setdefault('enable_thinking', True)\n    try:\n        return _orig_apply_chat_template(*args, **kwargs)\n    except TypeError:\n        kwargs.pop('enable_thinking', None)",
+      "        return _orig_apply_chat_template(*args, **kwargs)\n    except TypeError:\n        kwargs.pop('enable_thinking', None)\n        return _orig_apply_chat_template(*args, **kwargs)\n\ntokenizer.apply_chat_template = _apply_with_thinking\n"
+    ]
+  },
+  {
+    "ref": "hlly34/nemotron-baseline-evaluation",
+    "score": 54,
+    "snippets": [
+      "                tokenize=False,\n                add_generation_prompt=True,\n                enable_thinking=True,\n            )\n        except Exception:\n            # Fallback if chat template fails\n            prompt = user_content"
+    ]
+  },
+  {
+    "ref": "huikang/adapter-validation-notebook",
+    "score": 74,
+    "snippets": [
+      "                tokenize=False,\n                add_generation_prompt=True,\n                enable_thinking=True,\n            )\n        except Exception:\n            # Fallback if chat template fails\n            prompt = user_content",
+      "max_model_len = 8192\nmax_lora_rank = 32\nmax_tokens = 7680\ntop_p = 1.0\ntemperature = 0.0\nmax_num_seqs = 64\ngpu_memory_utilization = 0.85",
+      "            tokenize=False,\n            add_generation_prompt=True,\n            enable_thinking=True,\n        )\n        prompts.append(prompt)\n\ndef detect_category(prompt: str) -> str:",
+      "                r\"\\d\" + re.escape(q_match.group(2)) + r\"\\d\", examples_text\n            ):\n                return \"equation_numeric_deduce\"\n            return \"equation_numeric_guess\"\n        if len(question_text) == 5:\n            q_op = question_text[2]\n            for ex_line in examples_text.strip().splitlines():",
+      "            ):\n                return \"equation_numeric_deduce\"\n            return \"equation_numeric_guess\"\n        if len(question_text) == 5:\n            q_op = question_text[2]\n            for ex_line in examples_text.strip().splitlines():\n                inp = ex_line.split(\" = \")[0].strip()"
+    ]
+  },
+  {
+    "ref": "huikang/tinker-submission-notebook",
+    "score": 105,
+    "snippets": [
+      "                tokenize=False,\n                add_generation_prompt=True,\n                enable_thinking=True,\n            )\n        except Exception:\n            # Fallback if chat template fails\n            prompt = user_content",
+      "max_model_len = 8192\nmax_lora_rank = 32\nmax_tokens = 7680\ntop_p = 1.0\ntemperature = 0.0\nmax_num_seqs = 64\ngpu_memory_utilization = 0.85",
+      "    \"deed3497\", \"c7844441\", \"25ee72c3\", \"9dfe5ac9\", \"e38c423b\", \"0da1841f\", \"258b796b\", \"2e9973b7\",\n    \"0fcf912a\", \"07b440f0\", \"55f4fa64\",\n    # equation_numeric_deduce\n    \"836d6c4a\", \"9e5d97de\", \"ed561f79\", \"b26d8818\", \"852d16cb\", \"1019ee55\", \"26b716ed\", \"93481650\",\n    \"4a8eafe3\", \"25f2f2cd\", \"8bc6a26c\", \"1e248995\", \"d8735cc4\", \"118889da\", \"93f3ae6b\", \"3a8a4ebc\",\n    \"e9b69bf8\", \"fe393711\", \"92471ca4\", \"1d6c587d\", \"ff8409cd\", \"d8b3310a\", \"4c19c1cb\", \"324f918b\",\n    \"912d2b79\", \"45582be0\", \"936b3ae5\", \"31eb8247\", \"c7420a23\", \"74b9b0ec\", \"a04ecffd\", \"79f29eb5\",",
+      "    \"49578b02\", \"04322d27\", \"debff779\", \"891942ba\", \"51dafb5b\", \"3ee36e0a\", \"8011cb24\", \"9f2fae58\",\n    \"3b2e0cc3\", \"d46df3b0\", \"f28681ad\", \"912c6ea5\", \"d67f28ad\", \"67de8e10\", \"9a9f6025\", \"dc7a5e7b\",\n    # equation_numeric_guess\n    \"8df3daad\", \"662fd21c\", \"9fa9ecdc\", \"9c91b226\", \"8ae8e12a\", \"be877da5\", \"69fe4b0d\", \"ef1b13ac\",\n    \"b7ad0671\", \"c763054a\", \"6e6401d7\", \"5d89a09c\", \"260f20c1\", \"e7b87b82\", \"e9e6b620\", \"83f2724b\",\n    \"32a31236\", \"4e840a1a\", \"7c0c5227\", \"dc178d1c\", \"66a0856f\",\n    # gravity",
+      "    \"c7844441\", \"0fcf912a\", \"07b440f0\", \"25ee72c3\", \"9dfe5ac9\", \"deed3497\", \"258b796b\", \"0da1841f\",  # min_lp: -12.5001 .. -0.1081\n    \"e38c423b\", \"2e9973b7\", \"55f4fa64\",  # min_lp: -0.0486 .. -0.0202\n    # equation_numeric_deduce\n    \"91488dc9\", \"7e2e8a95\", \"35a89469\", \"a04ecffd\", \"27cec7a9\", \"d6a2e332\", \"04322d27\", \"8bc6a26c\",  # min_lp: -21.2890 .. -17.3401\n    \"5c743e8a\", \"30763ac0\", \"91b42a45\", \"fecad63c\", \"c857a727\", \"b69391b8\", \"45df54db\", \"e5956ffa\",  # min_lp: -17.0230 .. -15.1098\n    # equation_numeric_guess\n    \"662fd21c\", \"e9e6b620\", \"8ae8e12a\", \"dc178d1c\", \"9c91b226\", \"c763054a\", \"66a0856f\", \"ef1b13ac\",  # min_lp: -19.6251 .. -2.2399",
+      "    \"91488dc9\", \"7e2e8a95\", \"35a89469\", \"a04ecffd\", \"27cec7a9\", \"d6a2e332\", \"04322d27\", \"8bc6a26c\",  # min_lp: -21.2890 .. -17.3401\n    \"5c743e8a\", \"30763ac0\", \"91b42a45\", \"fecad63c\", \"c857a727\", \"b69391b8\", \"45df54db\", \"e5956ffa\",  # min_lp: -17.0230 .. -15.1098\n    # equation_numeric_guess\n    \"662fd21c\", \"e9e6b620\", \"8ae8e12a\", \"dc178d1c\", \"9c91b226\", \"c763054a\", \"66a0856f\", \"ef1b13ac\",  # min_lp: -19.6251 .. -2.2399\n    \"8df3daad\", \"e7b87b82\", \"5d89a09c\", \"be877da5\", \"7c0c5227\", \"69fe4b0d\", \"b7ad0671\", \"4e840a1a\",  # min_lp: -2.1279 .. -0.1560\n    # gravity\n    \"d0dd2df7\", \"74a50b2c\", \"f9f20a7a\", \"ef3c7703\", \"85bc954c\", \"8de7d8bc\", \"22bb13b8\", \"87eb7ce0\",  # min_lp: -18.8125 .. -16.7516",
+      "            tokenize=False,\n            add_generation_prompt=True,\n            enable_thinking=True,\n        )\n        prompts.append(prompt)\n\n# Generate predictions using continuous batching (without adapter, for baseline comparison)"
+    ]
+  },
+  {
+    "ref": "impooping/nemotron-sft-reasoning-trajectories-dataset",
+    "score": 121,
+    "snippets": [
+      "    \"cipher\": \"Text Encryption\",\n    \"bit_manipulation\": \"Bit Manipulation\",\n    \"equation_numeric\": \"Equation Transformation\",\n    \"equation_symbolic\": \"Equation Transformation\",\n}\n\ndf[\"problem type\"] = df[\"problem type\"].map(mapping)"
+    ]
+  },
+  {
+    "ref": "include4eto/nvidia-nemotron-training",
+    "score": 45,
+    "snippets": [
+      "- increase epochs/training params\n\n# mamba3 fix from https://www.kaggle.com/code/newduck/nvidia-nemotron-soft-balanced-sampling-sft/comments\nimport sys\nimport types\n\n# --------------------------------------------------"
+    ]
+  },
+  {
+    "ref": "jal313/nvidia-nemotron-training-cot-labels-70ddae",
+    "score": 61,
+    "snippets": [
+      "- Converts to HuggingFace Dataset\n\n✅ Balanced for:\n  - H100 VRAM usage\n  - Reasoning fine-tuning\n\n# === Hyperparameters ==="
+    ]
+  },
+  {
+    "ref": "javihm77/nvidia-nemotron-sfttrainer-training-jh",
+    "score": 67,
+    "snippets": [
+      "                r\"\\d\" + re.escape(q_match.group(2)) + r\"\\d\", examples_text\n            ):\n                return \"equation_numeric_deduce\"\n            return \"equation_numeric_guess\"\n        if len(question_text) == 5:\n            q_op = question_text[2]\n            for ex_line in examples_text.strip().splitlines():",
+      "            ):\n                return \"equation_numeric_deduce\"\n            return \"equation_numeric_guess\"\n        if len(question_text) == 5:\n            q_op = question_text[2]\n            for ex_line in examples_text.strip().splitlines():\n                inp = ex_line.split(\" = \")[0].strip()"
+    ]
+  },
+  {
+    "ref": "johnjanson/agi-for-medal-0-87-is-possible",
+    "score": 102,
+    "snippets": [
+      "        content = build_user_prompt(problem_text)\n        try:\n            return tokenizer.apply_chat_template([{'role':'user','content':content}], tokenize=False, add_generation_prompt=True, enable_thinking=True)\n        except Exception:\n            return content\n    prompts = [build_eval_prompt(x) for x in eval_df['prompt']]\n    sampling_params = SamplingParams(temperature=0.0, top_p=1.0, max_tokens=7680)",
+      "            return content\n    prompts = [build_eval_prompt(x) for x in eval_df['prompt']]\n    sampling_params = SamplingParams(temperature=0.0, top_p=1.0, max_tokens=7680)\n    outputs = llm.generate(prompts, sampling_params=sampling_params, lora_request=LoRARequest('eval_adapter', 1, str(adapter_dir.resolve()), load_inplace=True))\n    eval_df['output'] = [out.outputs[0].text for out in outputs]\n    eval_df['predicted'] = eval_df['output'].map(extract_final_answer)\n    eval_df['correct'] = eval_df.apply(lambda row: verify(row['answer'], row['predicted']), axis=1)",
+      "    config['base_model_name_or_path'] = str(BASE_MODEL_PATH)\n    if reference_adapter_config is not None:\n        for key in ['alora_invocation_tokens','arrow_config','ensure_weight_tying','peft_version','qalora_group_size','target_parameters','use_qalora']:\n            if key in reference_adapter_config:\n                config[key] = reference_adapter_config[key]\n    config_path.write_text(json.dumps(config, indent=2), encoding='utf-8')\n"
+    ]
+  },
+  {
+    "ref": "johnnyhyland/nvidia-nemotron-sft-grpo-colab-faster",
+    "score": 303,
+    "snippets": [
+      "        return str(func)\n    \n    def solve_bit_manipulation(prompt, answer):\n        \"\"\"Solve bit manipulation: per-bit function mapping.\n        If fully solved → exact CoT. If not → detailed scaffold with answer.\"\"\"\n        pairs = re.findall(r'([01]{8})\\s*->\\s*([01]{8})', prompt)\n        query_m = re.search(r'output for:\\s*([01]{8})', prompt)",
+      "        return examples, query\n    \n    def solve_equation_transformation(prompt, answer):\n        \"\"\"Solve equation transformation puzzles.\n        Tries numeric operator mapping first. Falls back to detailed scaffold.\"\"\"\n        examples, query = _parse_eq_examples(prompt)\n        if not examples or not query or len(query) != 5:",
+      "            text = tokenizer.apply_chat_template(\n                messages, tokenize=False, add_generation_prompt=False,\n                enable_thinking=True,\n            )\n        except Exception as e:\n            import warnings\n            warnings.warn(f\"apply_chat_template failed ({e}). Using manual format.\")"
+    ]
+  },
+  {
+    "ref": "kacchanwriting/nemotron-baseline-v2",
+    "score": 96,
+    "snippets": [
+      "        return 'gravity_constant'\n    elif 'transformation rules' in p and 'equations' in p:\n        return 'symbol_transform'\n    else:\n        return 'other'\n\ntrain_df['task'] = train_df['prompt'].apply(classify_task)",
+      "\n\ndef cot_symbol_transform(row):\n    \"\"\"Generate CoT for symbol transformation (general reasoning).\"\"\"\n    prompt = row['prompt']\n    expected = row['answer']\n",
+      "    'text_encryption': cot_text_encryption,\n    'bit_manipulation': cot_bit_manipulation,\n    'symbol_transform': cot_symbol_transform,\n}\n\nfor task, func in test_tasks.items():\n    subset = train_df[train_df['task'] == task]",
+      "        'text_encryption': cot_text_encryption,\n        'bit_manipulation': cot_bit_manipulation,\n        'symbol_transform': cot_symbol_transform,\n    }.get(task)\n\n    cot = cot_func(row) if cot_func else None\n    if cot is None:"
+    ]
+  },
+  {
+    "ref": "kalyankkr/all-6-puzzle-types-decoded-sft-training-data",
+    "score": 103,
+    "snippets": [
+      "print(f\"Asst:   {sample['messages'][2]['content'][:200]}...\")\n\n# Also create a category-balanced version (oversampling hard categories)\n# This is important since the model already handles easy puzzles well\nhard_types = ['Bit Manipulation', 'Text Encryption', 'Equation Transformation']\nmedium_types = ['Gravitational Constant', 'Unit Conversion']\n",
+      "\n# Oversample: hard x3, medium x2, easy x1\nbalanced_df = pd.concat([\n    hard_df.sample(n=len(hard_df) * 3, replace=True, random_state=42),\n    medium_df.sample(n=len(medium_df) * 2, replace=True, random_state=42),\n    easy_df\n]).sample(frac=1, random_state=42).reset_index(drop=True)",
+      "\nprint(f\"Original training set: {len(train_df)} examples\")\nprint(f\"Balanced training set: {len(balanced_df)} examples\")\nprint(f\"\\nBalanced distribution:\")\nprint(balanced_df['puzzle_type'].value_counts().to_string())\n\n# Save balanced version",
+      "print(f\"Original training set: {len(train_df)} examples\")\nprint(f\"Balanced training set: {len(balanced_df)} examples\")\nprint(f\"\\nBalanced distribution:\")\nprint(balanced_df['puzzle_type'].value_counts().to_string())\n\n# Save balanced version\nbalanced_sft = []",
+      "print(f\"Balanced training set: {len(balanced_df)} examples\")\nprint(f\"\\nBalanced distribution:\")\nprint(balanced_df['puzzle_type'].value_counts().to_string())\n\n# Save balanced version\nbalanced_sft = []\nfor _, row in balanced_df.iterrows():",
+      "print(balanced_df['puzzle_type'].value_counts().to_string())\n\n# Save balanced version\nbalanced_sft = []\nfor _, row in balanced_df.iterrows():\n    assistant_response = create_reasoning_template(row['puzzle_type'], row['answer'])\n    conversation = {",
+      "\n# Save balanced version\nbalanced_sft = []\nfor _, row in balanced_df.iterrows():\n    assistant_response = create_reasoning_template(row['puzzle_type'], row['answer'])\n    conversation = {\n        \"messages\": [",
+      "# Save balanced version\nbalanced_sft = []\nfor _, row in balanced_df.iterrows():\n    assistant_response = create_reasoning_template(row['puzzle_type'], row['answer'])\n    conversation = {\n        \"messages\": [\n            {\"role\": \"system\", \"content\": SYSTEM_PROMPT},"
+    ]
+  },
+  {
+    "ref": "kienngx/nemotron-sft-reasoning-trajectories-dataset",
+    "score": 121,
+    "snippets": [
+      "    \"cipher\": \"Text Encryption\",\n    \"bit_manipulation\": \"Bit Manipulation\",\n    \"equation_numeric\": \"Equation Transformation\",\n    \"equation_symbolic\": \"Equation Transformation\",\n}\n\ndf[\"problem type\"] = df[\"problem type\"].map(mapping)"
+    ]
+  },
+  {
+    "ref": "kienngx/nvidia-nemotron-training-copy-run-instantly",
+    "score": 61,
+    "snippets": [
+      "- Converts to HuggingFace Dataset\n\n✅ Balanced for:\n  - H100 VRAM usage\n  - Reasoning fine-tuning\n\n# === Hyperparameters ==="
+    ]
+  },
+  {
+    "ref": "kienngx/nvidia-nemotron-training-cot-labels",
+    "score": 58,
+    "snippets": [
+      "- Converts to HuggingFace Dataset\n\n✅ Balanced for:\n  - H100 VRAM usage\n  - Reasoning fine-tuning\n\n# === Hyperparameters ==="
+    ]
+  },
+  {
+    "ref": "kimberleyduran/solver-verified-cryptarithm-cot-v2-dataset",
+    "score": 67,
+    "snippets": [
+      "| unit_conversion | 1,594 | 100% |\n| bit_manipulation | 1,602 | 85.1% |\n| equation_numeric_deduce | 596 | 90.6% |\n| equation_numeric_guess | 136 | 15.4% |\n| **cryptarithm_deduce** | **659** | **8.2%** |\n| **cryptarithm_guess** | **164** | **6.7%** |\n",
+      "| bit_manipulation | 1,602 | 85.1% |\n| equation_numeric_deduce | 596 | 90.6% |\n| equation_numeric_guess | 136 | 15.4% |\n| **cryptarithm_deduce** | **659** | **8.2%** |\n| **cryptarithm_guess** | **164** | **6.7%** |\n\n### The puzzle format",
+      "\n# Cryptarithm rows are the ones whose prompt mentions \"transformation rules\"\n# AND whose first example's operand chars are NOT digits (the equation_numeric\n# categories share the same prompt prefix but use real digits).\ncrypto_candidates = train[\n    train[\"prompt\"].str.contains(\"transformation rules is applied to equations\", na=False)\n]",
+      "        continue\n\n    # Filter out the equation_numeric_* rows that share the prompt prefix\n    first = parsed[\"examples\"][0][\"input_value\"]\n    operand_chars = first[0] + first[1] + first[3] + first[4]\n    if all(c.isdigit() for c in operand_chars):\n        stats[\"skipped_numeric\"] += 1"
+    ]
+  },
+  {
+    "ref": "konbu17/doc-to-lora-knowledge-injection-nemotron-3-nano",
+    "score": 143,
+    "snippets": [
+      "    messages = [{\"role\": \"user\", \"content\": user_content}]\n    text = tokenizer.apply_chat_template(\n        messages, tokenize=False, add_generation_prompt=True, enable_thinking=True\n    )\n    input_ids = tokenizer(text, return_tensors=\"pt\").input_ids.to(model.device)\n\n    with torch.no_grad():"
+    ]
+  },
+  {
+    "ref": "konbu17/nemotron-tong-style-cot-sft-updated-v2",
+    "score": 137,
+    "snippets": [
+      "- **1-100 Roman numeral table** for NC\n- **77-word dictionary + char-by-char mapping** for TE\n- **354-candidate per-bit testing + stride detection** for BM\n- **32 operators × 4 pairings + neg format detection** for ET Numeric\n- **Concatenation detection** for Cryptarithm\n- **1st-place training hyperparameters**: LR=2e-4, batch=64, 1 epoch, linear decay, no boxed weight, no NEFTune\n",
+      "# I need to process the data from the six categories derived from train_split.csv.\n# train.csv (original 9500 record) →  train_split.csv (9000 record) + eval_split.csv (500 record)\n# train_split.csv → gravity_physics.csv + numeral_system.csv + unit_conversion.csv + text_decryption.csv + bit_manipulation_including_wrong.csv + equation_numeric_including_wrong.csv + cryptarithm_including_wrong.csv\n# Since I created `eval_split`, I felt there wasn’t quite enough data in the bit manipulation category, so I supplemented it with synthetic data (bit_manipulation_synth_v2.csv, bit_manipulation_synth_including_wrong_v2.csv).\n\n# ○ Three easy categories.\n# gravity_physics.csv, numeral_system.csv, unit_conversion.csv",
+      "\n# ○ Very difficult category 1st\n# equation_numeric.csv                       [deduce + guess] (accurate CoT only)\n# equation_numeric_including_wrong.csv       [deduce + guess] (including wrong CoT)\n# equation_numeric_guess.csv                 [guess only]     (accurate CoT only)\n# equation_numeric_guess_including_wrong.csv [guess only]     (including wrong CoT)\n",
+      "# ○ Very difficult category 1st\n# equation_numeric.csv                       [deduce + guess] (accurate CoT only)\n# equation_numeric_including_wrong.csv       [deduce + guess] (including wrong CoT)\n# equation_numeric_guess.csv                 [guess only]     (accurate CoT only)\n# equation_numeric_guess_including_wrong.csv [guess only]     (including wrong CoT)\n\n# ○ Very difficult category 2nd",
+      "# equation_numeric.csv                       [deduce + guess] (accurate CoT only)\n# equation_numeric_including_wrong.csv       [deduce + guess] (including wrong CoT)\n# equation_numeric_guess.csv                 [guess only]     (accurate CoT only)\n# equation_numeric_guess_including_wrong.csv [guess only]     (including wrong CoT)\n\n# ○ Very difficult category 2nd\n# cryptarithm.csv                       [deduce + guess] (accurate CoT only)",
+      "# equation_numeric_including_wrong.csv       [deduce + guess] (including wrong CoT)\n# equation_numeric_guess.csv                 [guess only]     (accurate CoT only)\n# equation_numeric_guess_including_wrong.csv [guess only]     (including wrong CoT)\n\n# ○ Very difficult category 2nd\n# cryptarithm.csv                       [deduce + guess] (accurate CoT only)\n# cryptarithm_including_wrong.csv       [deduce + guess] (including wrong CoT)",
+      "            \"bit_manipulation.csv\": 10,\n            \"bit_manipulation_synth_including_wrong_v2.csv\": 10,\n            \"equation_numeric.csv\": 10,\n            \"cryptarithm.csv\": 10,\n        }\n        print(\"Data Variant 3: Just for training test\")\n    ",
+      "            \"text_decryption.csv\": 1492,\n            \"bit_manipulation_including_wrong.csv\": 1508,\n            \"equation_numeric.csv\": 535,\n            \"cryptarithm.csv\": 69,\n        }\n        print(\"Data Variant 1: downsampling\")\n        "
+    ]
+  },
+  {
+    "ref": "konstantinboyko/01-04-training-with-unsloth-batch-2-epoch-2",
+    "score": 59,
+    "snippets": [
+      "                    tokenize=False,\n                    add_generation_prompt=False,\n                    enable_thinking=True,\n                )\n            except TypeError:\n                text = tokenizer.apply_chat_template(\n                    conversation,"
+    ]
+  },
+  {
+    "ref": "lalit7881/nvidia-reasoning-challenge",
+    "score": 134,
+    "snippets": [
+      "    'text_cipher':      '#534AB7',\n    'numeral_system':   '#3C3489',\n    'symbol_transform': '#993C1D',\n}\nLABELS = {\n    'bit_manipulation': 'Bit manipulation',\n    'physics_gravity':  'Physics / gravity',",
+      "    'text_cipher':      'Text cipher',\n    'numeral_system':   'Numeral system',\n    'symbol_transform': 'Symbol transform',\n}\n\n\n## Simple Step-by-Step Workflow",
+      "    \n    if 'equation' in p or 'solve' in p:\n        return 'symbol_transform'\n    \n    if 'unit' in p:\n        return 'unit_conversion'\n    ",
+      "             f'{cnt:,}', va='center', fontsize=9)\nax2.set_xlabel('Number of puzzles', fontsize=9)\nax2.set_title('Puzzle counts — perfectly balanced dataset', fontsize=11, fontweight='bold')\nax2.spines[['top','right']].set_visible(False)\nax2.set_xlim(0, 1850)\n\nax3 = fig.add_subplot(gs[1, :2])",
+      "\n\nfor t in ['bit_manipulation', 'symbol_transform']:\n    subset = train[train['type'] == t]\n    n = len(subset)\n    results[t] = (0, n, 0.0)\n",
+      "\nbit_n = results['bit_manipulation'][1]\nsym_n = results['symbol_transform'][1]\n\nmodel_acc = 0.70  # assumed\n\nexpected_total = (",
+      "display(summary)\n\nsym = train[train['type'] == 'symbol_transform'].copy()\n\nsym['prompt'] = sym['prompt'].fillna('')\n\n# Improved detection (more patterns)",
+      "        return 'bit_manipulation'\n    else:\n        return 'symbol_transform'\n\n# -----------------------------\n# 4. Prediction\n# -----------------------------"
+    ]
+  },
+  {
+    "ref": "llkh0a/nemotron-unsloth-sft-training-3-30-2",
+    "score": 239,
+    "snippets": [
+      "    \"numeral_system\"  : 200,   # max 1576 \n    \"gravity_physics\" : 200,   # max 1597 \n    \"symbol_transform\": 10,   # max 823 \n    \"numeric_equation\": 600    # max 732 \n}\nVALIDATION_BATCH_SIZE = 4\nUSE_THINKING_TRACES = True",
+      "USE_THINKING_TRACES = True\n#all category:\"bit_manipulation\",\n# #\"text_decryption\",\"unit_conversion\",\"numeral_system\",\"gravity_physics\",\"symbol_transform\"\ncustom_trace_dataset ={\n    \"bit_manipulation\": \"/kaggle/input/datasets/llkh0a/nvidia-nemotron-distiled-dataset/bit_manipulation_traces_v4.csv\",\n    \"numeric_equation\":\"/kaggle/input/datasets/llkh0a/nvidia-nemotron-distiled-dataset/numeric_equation_traces_new.csv\"\n}",
+      "    \"numeral_system\",\n    \"gravity_physics\",\n    \"symbol_transform\",\n    \"numeric_equation\"\n]\nVALIDATION_CATEGORY = None  # set to None to use all categories for validation\nRUN_QUICK_VALIDATION_CATEGORY = None # set to None to use all categories for quick validation",
+      "        return \"numeric_equation\"\n\n    # rule 2: symbol_transform if symbols dominate and digits/letters are scarce\n    total_chars = max(1, len(expr))\n    if symbol_count / total_chars > 0.5 and digit_count + alpha_count < max(2, symbol_count//2):\n        return \"symbol_transform\"\n",
+      "    total_chars = max(1, len(expr))\n    if symbol_count / total_chars > 0.5 and digit_count + alpha_count < max(2, symbol_count//2):\n        return \"symbol_transform\"\n\n    # fallback: look at examples in the prompt body (presence of lines with digits → numeric)\n    if re.search(r\"^\\s*\\d+[^=\\n]*=\", q, re.MULTILINE):\n        return \"numeric_equation\"",
+      "        return \"numeric_equation\"\n    if re.search(r\"[^\\w\\s]{2,}\", q):  # repeated punctuation sequences\n        return \"symbol_transform\"\n\n    return \"unknown\"\n\n# Create validation + training split using DATA_SPLIT_PATH (splited.csv)",
+      "        return \"gravity_physics\"\n    if \"transformation rules\" in p:\n        return classify_equation_vs_symbol(prompt) if 'classify_equation_vs_symbol' in globals() else \"symbol_transform\"\n    return \"unknown\"\n\n# Pre-load traced IDs from custom_trace_dataset CSVs so we can prioritise them during sampling\n_traced_ids: dict[str, set] = {}",
+      "    return answer, \"\\n\".join(trace)\n\n### symbol_transform\n\n\ndef generate_symbol_transform_trace(prompt: str, answer: str) -> str:\n    \"\"\"Generate trace for symbol_transform puzzles with intermediate guesses."
+    ]
+  },
+  {
+    "ref": "manderson240/nemotron-pure-symbolic-solver-v28",
+    "score": 63,
+    "snippets": [
+      "\n\ndef solve_bit_manip(examples, test_in):\n    pairs = []\n    for inp, out in examples:\n        if len(inp) == 8 and set(inp).issubset({\"0\", \"1\"}):\n            try:",
+      "\n\ndef solve_equations(examples, test_in):\n    first_in = examples[0][0] if examples else \"\"\n    has_digits = any(c.isdigit() for c in first_in)\n    if not has_digits:\n        for inp, out in examples:"
+    ]
+  },
+  {
+    "ref": "manderson240/nemotron-symbolic-solver-v36-fixed",
+    "score": 50,
+    "snippets": [
+      "\n\ndef solve_bit_manip(examples, test_in):\n    \"\"\"Bit manipulation solver.\"\"\"\n    hex_vals = re.findall(r'0x([0-9a-fA-F]+)', str(test_in))\n    bin_vals = re.findall(r'0b([01]+)', str(test_in))\n    ",
+      "\n\ndef solve_equations(examples, test_in):\n    \"\"\"Equation solver (heuristic).\"\"\"\n    if not test_in:\n        return \"0\"\n    # Try simple patterns"
+    ]
+  },
+  {
+    "ref": "marcelocruzeta/nemotron-mrc-02-submission-v2",
+    "score": 102,
+    "snippets": [
+      "\n    if re.search(r\"[^\\w\\s]\", p) and any(k in p for k in [\"symbol\", \"character\", \"transformation\", \"rule\"]):\n        return \"symbol_transformation\"\n\n    if any(k in p for k in [\"sequence\", \"pattern\", \"next term\", \"progression\"]):\n        return \"sequence_pattern\"\n",
+      "            return \"bit_transformation\"\n        if re.search(r\"[^\\w\\s]\", p) and any(k in p for k in [\"symbol\", \"character\", \"transformation\", \"rule\"]):\n            return \"symbol_transformation\"\n        if any(k in p for k in [\"sequence\", \"pattern\", \"next term\", \"progression\"]):\n            return \"sequence_pattern\"\n        return \"other\"\n",
+      "            return \"bit_transformation\"\n        if re.search(r\"[^\\w\\s]\", p) and any(k in p for k in [\"symbol\", \"character\", \"transformation\", \"rule\"]):\n            return \"symbol_transformation\"\n        if any(k in p for k in [\"sequence\", \"pattern\", \"next term\", \"progression\"]):\n            return \"sequence_pattern\"\n        return \"other\"\n"
+    ]
+  },
+  {
+    "ref": "matthewblakeward/glyphmatics-d4c-cipher-98substitution",
+    "score": 368,
+    "snippets": [
+      "    \"unit_conversion\",\n    \"bit_manipulation\",\n    \"equation_numeric\",\n    \"sequence\",\n    \"gravity\",\n    \"cryptarithm\",\n    \"unknown\",",
+      "        return \"sequence\"\n    if any(w in p for w in [\"equation\", \"solve for\", \"hidden rule\", \"function table\", \"f(\"]):\n        return \"equation_numeric\"\n    return \"unknown\"\n\n\ndef _find_col(columns: Sequence[str], candidates: Sequence[str]) -> Optional[str]:",
+      "            ans = ((a + b) * c) - d\n            prompt = f\"Evaluate the integer expression {expr}.\"\n        out.append(make_example(prompt, str(ans), \"equation_numeric\", \"gen_equation\", {\"mode\": mode}))\n    return out\n\n\ndef gen_sequence(n: int, rng: random.Random) -> List[Dict[str, Any]]:"
+    ]
+  },
+  {
+    "ref": "mayukh18/unsloth-sft-full-data-training",
+    "score": 50,
+    "snippets": [
+      "            text = self.tokenizer.apply_chat_template(\n                messages, tokenize=False, add_generation_prompt=True,\n                enable_thinking=True,\n            )\n            input_ids = self.tokenizer(text, return_tensors=\"pt\").input_ids.to(model.device)\n            output_ids = model.generate(\n                input_ids=input_ids,",
+      "    \"text\": tokenizer.apply_chat_template(\n        ex[\"messages\"], tokenize=False, add_generation_prompt=False,\n        enable_thinking=True,\n    )\n})\n\nval_dataset = val_dataset.map(lambda ex: {",
+      "    \"text\": tokenizer.apply_chat_template(\n        ex[\"messages\"], tokenize=False, add_generation_prompt=False,\n        enable_thinking=True,\n    )\n})\n\ntrainer = SFTTrainer(",
+      "#     tokenize=False,\n#     add_generation_prompt=False,\n#     enable_thinking=True,\n# )\n# print(repr(example_text))\n\nprint(\"Starting training...\")"
+    ]
+  },
+  {
+    "ref": "mohankrishnathalla/nemotron-6-puzzle-types-decoded-rule-solvers",
+    "score": 186,
+    "snippets": [
+      "    'text_cipher':      '#534AB7',\n    'numeral_system':   '#3C3489',\n    'symbol_transform': '#993C1D',\n}\nLABELS = {\n    'bit_manipulation': 'Bit manipulation',\n    'physics_gravity':  'Physics / gravity',",
+      "    'text_cipher':      'Text cipher',\n    'numeral_system':   'Numeral system',\n    'symbol_transform': 'Symbol transform',\n}\n\ntrain = pd.read_csv('/kaggle/input/competitions/nvidia-nemotron-model-reasoning-challenge/train.csv')\ntest  = pd.read_csv('/kaggle/input/competitions/nvidia-nemotron-model-reasoning-challenge/test.csv')",
+      "        return 'text_cipher'\n    elif 'equation' in p or 'solve for' in p:\n        return 'symbol_transform'\n    elif 'unit conversion' in p:\n        return 'unit_conversion'\n    elif 'gravitational' in p or 'gravity' in p:\n        return 'physics_gravity'",
+      "             f'{cnt:,}', va='center', fontsize=9)\nax2.set_xlabel('Number of puzzles', fontsize=9)\nax2.set_title('Puzzle counts — perfectly balanced dataset', fontsize=11, fontweight='bold')\nax2.spines[['top','right']].set_visible(False)\nax2.set_xlim(0, 1850)\n\n# 3. Prompt length by type ",
+      "\n# Bit & symbol: 0% without model\nfor t in ['bit_manipulation', 'symbol_transform']:\n    n = len(train[train['type']==t])\n    results[t] = (0, n, 0.0)\n\ntotal_correct = sum(v[0] for v in results.values())",
+      "print(f'\\n  → Rule-based solvers cover ~56% of all puzzles at 99%+ accuracy.')\nprint(f'  → The remaining 44% (bit + symbol) requires model reasoning.')\nprint(f'  → If model gets 70% on bit+symbol: expected total = {(total_correct + int(0.70*(results[\"bit_manipulation\"][1]+results[\"symbol_transform\"][1])))/total_all*100:.1f}%')\n\n## Solver Insights\n\nThree of the six types are **fully deterministic** - no language model required:",
+      "\n# 7.2 Symbol transform sub-type analysis \nsym = train[train['type']=='symbol_transform'].copy()\nsym['subtype'] = np.where(\n    sym['prompt'].str.contains(r'\\d+[+\\-*/\\\\|{]\\d+', regex=True),\n    'Numeric expressions', 'Pure symbol strings'\n)",
+      "        mock_outputs[row['id']] = f'The answer is \\\\boxed{{{pred}}}' if pred else ''\n    else:\n        mock_outputs[row['id']] = ''  # No solver for bit_manipulation / symbol_transform\n\nprint('Rule-based solver evaluation on 20% held-out split:')\nprint('=' * 55)\n_ = evaluate_local(mock_outputs, val[['id','answer','type']])"
+    ]
+  },
+  {
+    "ref": "newduck/nvidia-nemotron-soft-balanced-sampling-sft",
+    "score": 69,
+    "snippets": [
+      "# Compact LoRA with Soft-Balanced Sampling for Nemotron Reasoning\n\n\n## Notebook Overview\nThis notebook demonstrates a simple and reproducible pipeline for the",
+      "- Mathematical reasoning (arithmetic and symbolic operations)\n\nThis simple grouping captures the main task types in the dataset and allows us to apply soft-balanced sampling before lightweight LoRA fine-tuning.\n\n!pip install -q --no-index --find-links /kaggle/input/datasets/dennisfong/nvidia-nemotron-offline-packages/offline_packages datasets trl --ignore-installed\n\nimport os",
+      "\nSAMPLE_SIZE = 600\nBALANCE_ALPHA=0.5  # 0 = original distribution, 1 = fully balanced\nSEED = 777\n\nrandom.seed(SEED)\ntorch.manual_seed(SEED)",
+      "    \"\"\"\n    Sample a small training subset by interpolating between the\n    original category distribution and a fully balanced distribution.\n\n    alpha = 0 keeps the original distribution.\n    alpha = 1 uses a fully balanced distribution.\n    \"\"\"",
+      "\n    alpha = 0 keeps the original distribution.\n    alpha = 1 uses a fully balanced distribution.\n    \"\"\"\n    \n    counts = df['category'].value_counts()\n    orig_ratio = counts / counts.sum()",
+      "    orig_ratio = counts / counts.sum()\n\n    balanced = {c: 1/len(counts) for c in counts.index}\n    target_ratio = (1-alpha)*orig_ratio + alpha*pd.Series(balanced)\n\n    samples = []\n    for c in counts.index:",
+      "\n    balanced = {c: 1/len(counts) for c in counts.index}\n    target_ratio = (1-alpha)*orig_ratio + alpha*pd.Series(balanced)\n\n    samples = []\n    for c in counts.index:\n        n = int(total * target_ratio[c])"
+    ]
+  },
+  {
+    "ref": "pauldumontunc/lora-training",
+    "score": 47,
+    "snippets": [
+      "MODEL_PATH = kagglehub.model_download(\"metric/nemotron-3-nano-30b-a3b-bf16/transformers/default\")\n# DATA_PATH = '/kaggle/input/datasets/kienngx/nemotron-30b-competition-trainingdata-cot-labels/final_Nemotron_training_data.csv'\nDATA_PATH = '/kaggle/input/datasets/pauldumontunc/balanced-cot-dataset-3000/balanced_COT_dataset.csv'\nOUTPUT_DIR = \"/kaggle/working/adapter\"\nos.makedirs(OUTPUT_DIR, exist_ok=True)\n\n# DATA LOADING & FORMATTING"
+    ]
+  },
+  {
+    "ref": "pearpn25/bit-cot-85-1364-sample",
+    "score": 405,
+    "snippets": [
+      "\n\ndef solve_bit_manip(prompt: str):\n    \"\"\"Giải bit manipulation puzzle, trả về answer string hoặc None.\"\"\"\n    ex = _bm_parse_examples(prompt); q = _bm_parse_query(prompt)\n    if not ex or not q: return None\n    qb = _bits(q)",
+      "\ndef gen_cot_via_api(client, system_prompt, prompt, answer, trace,\n                    model=\"deepseek-chat\", max_tokens=7680):\n    response = client.chat.completions.create(\n        model=model,\n        max_tokens=max_tokens,\n        messages=[",
+      "    provider=\"groq\",\n    model=None,\n    max_tokens=7680,\n    pre_pass=None,\n):\n    \"\"\"Generic solver -> GPT CoT pipeline.\n"
+    ]
+  },
+  {
+    "ref": "pjt222/nemotron-cot-review",
+    "score": 453,
+    "snippets": [
+      "    cot = generate_cot(prompt, answer, puzzle_type)\n\n    # Extract answer from CoT using robust balanced-brace extraction.\n    # Fallback: for answers containing literal braces, use end-of-string heuristic\n    # since our CoTs always end with \\boxed{answer} as the final content.\n    cot_answer = extract_boxed_answer(cot)\n    if cot_answer is None or cot_answer.strip() != answer.strip():",
+      "print(f\"  Extraction failures: {len(extraction_failures)}/{len(all_cots)}\")\nassert len(extraction_failures) == 0, f\"FAIL: {len(extraction_failures)} CoTs have non-extractable answers\"\nprint(\"  PASSED: All CoT answers extractable via balanced-brace parser (with fallback)\")\n\n### 6.6 — Minimum CoT Length\n\nNo CoT may be empty or trivially short."
+    ]
+  },
+  {
+    "ref": "privatepiecerec/nemotron-reasoning-task-family-tour",
+    "score": 30,
+    "snippets": [
+      "[tonghuikang's open-source solution](https://github.com/tonghuikang/nemotron) achieves 0.85 on the public leaderboard. Its core moves:\n\n1. **Per-category reasoning generators** — hand-coded solvers for nine categories (bit_manipulation, cipher, equation_numeric, cryptarithm, gravity, numeral, unit_conversion, ...). Each emits a chain-of-thought trace ending in `\\boxed{answer}`.\n2. **Synthetic data augmenters** — five generators for concatenation, lstrip, matching, splitting, spelling.\n3. **SFT LoRA** on Nemotron-3-Nano-30B-A3B with `MOE_TIE_WEIGHTS=True` (ties across MoE experts), rank 32, alpha 32, 1000 steps.\n4. **Inference** loads base + adapter, runs greedy on the hidden test, writes `submission.csv`.\n"
+    ]
+  },
+  {
+    "ref": "rdn2k00/cot-preprocessing",
+    "score": 10,
+    "snippets": [
+      "        tokenize=False,\n        add_generation_prompt=True,\n        enable_thinking=True,\n    )\n \n    text += f\"<think>\\nThe answer is {answer}. The key steps are:\\n\"\n    "
+    ]
+  },
+  {
+    "ref": "revatidharmadhikari/revati-experiments-nvidia-nemotron-submission",
+    "score": 27,
+    "snippets": [
+      "os.makedirs(OFFLOAD_DIR, exist_ok=True)\n\n# Fast diversity-balanced setup.\n# Same data strategy as Experiment 6, but attention-only LoRA to avoid meta-device backward errors.\nLORA_RANK = 16\nLORA_ALPHA = 16\nMAX_TRAIN_EXAMPLES = 640",
+      "candidate_df = train_df.sample(n=candidate_n, seed=SEED, shuffle=True)\n\nprint(\"Experiment 7: safe CUDA-only fast diversity-balanced boxed-only LoRA SFT\")\nprint(\"Candidate subset shape:\", candidate_df.shape)\nprint(\"Columns:\", candidate_df.columns)\nprint(candidate_df.head(3))\n",
+      "    return selected, seen\n\n# Prefer full-context, template-deduplicated, answer-type-balanced examples.\nrecords, seen_signatures = select_diverse(full_context_records, MAX_TRAIN_EXAMPLES)\n\n# If the full-context pool is too small, fill with diverse trimmed examples.\nif len(records) < MAX_TRAIN_EXAMPLES:"
+    ]
+  },
+  {
+    "ref": "rezaazami/0-64-nvidia-nemotron-training",
+    "score": 58,
+    "snippets": [
+      "- Converts to HuggingFace Dataset\n\n✅ Balanced for:\n  - H100 VRAM usage\n  - Reasoning fine-tuning\n\n# === Hyperparameters ==="
+    ]
+  },
+  {
+    "ref": "rn8205/adapter-validation-notebook",
+    "score": 77,
+    "snippets": [
+      "\n        extra = \"\"\n        if category in [\"cryptarithm_guess\", \"equation_numeric_guess\"]:\n            extra = \"\\nTry multiple patterns before final answer. Do not guess immediately.\"\n\n        user_content = f\"\"\"\nSolve step-by-step carefully.",
+      "                tokenize=False,\n                add_generation_prompt=True,\n                enable_thinking=True,\n            )\n        except Exception:\n            prompt = user_content\n",
+      "max_model_len = 8192\nmax_lora_rank = 32\nmax_tokens = 7680\ntop_p = 0.9\ntemperature = 0.7\nmax_num_seqs = 64\ngpu_memory_utilization = 0.85",
+      "                r\"\\d\" + re.escape(q_match.group(2)) + r\"\\d\", examples_text\n            ):\n                return \"equation_numeric_deduce\"\n            return \"equation_numeric_guess\"\n        if len(question_text) == 5:\n            q_op = question_text[2]\n            for ex_line in examples_text.strip().splitlines():",
+      "            ):\n                return \"equation_numeric_deduce\"\n            return \"equation_numeric_guess\"\n        if len(question_text) == 5:\n            q_op = question_text[2]\n            for ex_line in examples_text.strip().splitlines():\n                inp = ex_line.split(\" = \")[0].strip()",
+      "\n        extra = \"\"\n        if category in [\"cryptarithm_guess\", \"equation_numeric_guess\"]:\n            extra = \"\\nTry multiple patterns before final answer. Do not guess immediately.\"\n\n        user_content = f\"\"\"\nSolve step-by-step carefully.",
+      "                tokenize=False,\n                add_generation_prompt=True,\n                enable_thinking=True,\n            )\n        except Exception:\n            prompt = user_content\n"
+    ]
+  },
+  {
+    "ref": "saivimenthanvlai/nemotron-model-reasoning-challenge",
+    "score": 96,
+    "snippets": [
+      "    return None, None\n\ndef solve_equation_map(prompt):\n    pairs = re.findall(r\"(.+?) = (.+)\", prompt)\n    q = re.search(r\"Now, determine the result for: (.+)\", prompt)\n    if not pairs or not q:\n        return None, None",
+      "    return ex, int(q.group(1), 2)\n\ndef solve_bit(prompt, max_binary_checks=50000):\n    parsed = parse_bit_prompt(prompt)\n    if parsed == (None, None):\n        return None, None\n    examples, query = parsed"
+    ]
+  },
+  {
+    "ref": "sluitel/dsoc-baseline-submission",
+    "score": 31,
+    "snippets": [
+      "    @staticmethod\n    def int_to_bit(val): return format(val & 0xFF, '08b')\n    def solve_bit_manipulation(self, prompt):\n        try:\n            matches = re.findall(r\"([01]{8}) -> ([01]{8})\", prompt)\n            if len(matches) < 4: return None\n            examples = [(int(x, 2), int(y, 2)) for x, y in matches]"
+    ]
+  },
+  {
+    "ref": "storm2501/nvidia-nemotron-two",
+    "score": 114,
+    "snippets": [
+      "\n\ndef balanced_sample_df(df, n_per_type: int, seed: int = 42):\n    \"\"\"Sample n_per_type rows per qtype, trả về polars DataFrame đã shuffle.\"\"\"\n    df = df.with_columns(\n        pl.Series(\"qtype\", [classify_qtype(p) for p in df[\"prompt\"].to_list()])\n    )",
+      "\n\nprint(\"TYPE_SYSTEM_PROMPTS, classifier, and balanced_sample_df ready.\")\n\n\n## 3. Tokenizer and Data Formatting\n",
+      "MODEL_PATH = kagglehub.model_download(\"metric/nemotron-3-nano-30b-a3b-bf16/transformers/default\")\n\n# Load, classify, balanced-sample\ntrain_df = pl.read_csv('/kaggle/input/competitions/nvidia-nemotron-model-reasoning-challenge/train.csv')\nprint(f\"Total available: {len(train_df)}\")\n\ntrain_df = balanced_sample_df(train_df, SAMPLES_PER_TYPE, seed=42)",
+      "print(f\"Total available: {len(train_df)}\")\n\ntrain_df = balanced_sample_df(train_df, SAMPLES_PER_TYPE, seed=42)\nhf_dataset = Dataset.from_pandas(train_df.to_pandas())\n\n# Tokenizer\ntokenizer = AutoTokenizer.from_pretrained(MODEL_PATH, trust_remote_code=True)"
+    ]
+  },
+  {
+    "ref": "tahaalam2009/end-to-end-finetuning-for-lb-0-82-csv-custom",
+    "score": 82,
+    "snippets": [
+      "cryptarithm_deduce               54    659       8.2%        0.0\ncryptarithm_guess                11    164       6.7%        0.0\nequation_numeric_deduce         540    596      90.6%        0.6\nequation_numeric_guess           21    136      15.4%        0.7\ngravity                        1597   1597     100.0%        0.1\nnumeral                        1576   1576     100.0%        0.0\nunit_conversion                1594   1594     100.0%        0.1",
+      "cryptarithm_guess                11    164       6.7%        0.0\nequation_numeric_deduce         540    596      90.6%        0.6\nequation_numeric_guess           21    136      15.4%        0.7\ngravity                        1597   1597     100.0%        0.1\nnumeral                        1576   1576     100.0%        0.0\nunit_conversion                1594   1594     100.0%        0.1\n----------------------------------------------------------------",
+      "cryptarithm_deduce              592    659      89.8%        0.0\ncryptarithm_guess               140    164      85.4%        0.0\nequation_numeric_deduce         540    596      90.6%        0.7\nequation_numeric_guess          126    136      92.6%        0.7\ngravity                        1597   1597     100.0%        0.1\nnumeral                        1576   1576     100.0%        0.0\nunit_conversion                1594   1594     100.0%        0.1",
+      "cryptarithm_guess               140    164      85.4%        0.0\nequation_numeric_deduce         540    596      90.6%        0.7\nequation_numeric_guess          126    136      92.6%        0.7\ngravity                        1597   1597     100.0%        0.1\nnumeral                        1576   1576     100.0%        0.0\nunit_conversion                1594   1594     100.0%        0.1\n----------------------------------------------------------------"
+    ]
+  },
+  {
+    "ref": "teasue05/tinker-submission-notebook",
+    "score": 207,
+    "snippets": [
+      "\nRUN_NAME = \"huikang-baseline-v1\"\nENABLE_THINKING = True\nSAVE_BASELINE_ARTIFACTS = True\nBASELINE_ERROR_ROWS = 20\nRUN_MAX_TOKENS_ABLATION = True\nMAX_TOKENS_ABLATION = 7680",
+      "\n\ndef build_prompt(tokenizer, problem_text: str, enable_thinking: bool = True) -> str:\n    user_content = build_user_content(problem_text)\n    try:\n        return tokenizer.apply_chat_template(\n            [{\"role\": \"user\", \"content\": user_content}],",
+      "            tokenize=False,\n            add_generation_prompt=True,\n            enable_thinking=enable_thinking,\n        )\n    except Exception:\n        return user_content\n",
+      "    problem_texts: list[str],\n    tokenizer,\n    enable_thinking: bool = True,\n) -> list[str]:\n    return [\n        build_prompt(tokenizer, problem_text, enable_thinking=enable_thinking)\n        for problem_text in problem_texts",
+      ") -> list[str]:\n    return [\n        build_prompt(tokenizer, problem_text, enable_thinking=enable_thinking)\n        for problem_text in problem_texts\n    ]\n\n",
+      "                \"temperature\": experiment_config[\"temperature\"],\n                \"top_p\": experiment_config[\"top_p\"],\n                \"enable_thinking\": experiment_config[\"enable_thinking\"],\n                \"accuracy\": summary[\"accuracy\"],\n                \"errors\": summary[\"errors\"],\n                \"rows\": summary[\"rows\"],\n            }",
+      "        list(test_df[\"prompt\"]),\n        tokenizer,\n        enable_thinking=ENABLE_THINKING,\n    )\n\n    outputs = llm.generate(\n        prompts,",
+      "max_model_len = 8192\nmax_lora_rank = 32\nmax_tokens = 7680\ntop_p = 0.95\ntemperature = 0.2\nmax_num_seqs = 64\ngpu_memory_utilization = 0.85"
+    ]
+  },
+  {
+    "ref": "trnhquangminh140/nvidia-nemotron-model-reasoning-trinh-quang-minh",
+    "score": 34,
+    "snippets": [
+      "The specific error is: GPU 0 is using 14.55/14.56 GiB, while GPU 1 might be empty.\n\nTo completely resolve the \"not stopping when nearly full\" issue, we need to use the accelerate library to define a balanced Device Map.\n\n🛠 Solution: Force the model to be evenly distributed across 2 GPUs\nUse this code. We've added the device_map=\"balanced\" configuration and specific max_memory for each GPU to force it to reserve space (buffer) and not overload.\n",
+      "\n🛠 Solution: Force the model to be evenly distributed across 2 GPUs\nUse this code. We've added the device_map=\"balanced\" configuration and specific max_memory for each GPU to force it to reserve space (buffer) and not overload.\n\nThe power of the T4 x2 GPU!\n\nHere's why this time is much better:",
+      "=> Both cards will have approximately 2-10GB of free space remaining for processing. This is the key to overcoming the 20MB shortage error mentioned earlier.\n\nWe use T4 x2 and device_map=\"balanced\" because the Nemotron-30B architecture is extremely unique. It's unlike Llama or Mistral. When loaded, the transformers library tries to calculate the size of the layers to distribute them evenly, but the first layers of this model (embedding and the initial Mamba blocks) are too heavy, occupying almost all of GPU 0 before it can be pushed to GPU 1.\n\nThe error reported is only a short 20 MiB (extremely small). To definitively resolve this, we will use the \"GPU 0 as a scapegoat\" strategy: We will force GPU 0 to receive only a very small amount of data, forcing 90% of the model to be pushed to GPU 1 and RAM.\n\nThe current Kaggle environment needs to be updated to the latest bitsandbytes version to support NVIDIA's new model lines."
+    ]
+  },
+  {
+    "ref": "warmtea/lb-training",
+    "score": 120,
+    "snippets": [
+      "                \"convert the candidate answer back to confirm the representation\",\n            ]\n        elif \"equation_numeric\" in problem_type:\n            checks = [\n                \"substitute the candidate value back into the equation\",\n                \"check that the numerical residual is within tolerance\",\n            ]",
+      "                    tokenize=False,\n                    add_generation_prompt=False,\n                    enable_thinking=True,\n                )\n            except TypeError:\n                text = tokenizer.apply_chat_template(\n                    conversation,"
+    ]
+  },
+  {
+    "ref": "yashm917/nemotronmodel-reasoning-0-72-lb-score-unsloth",
+    "score": 274,
+    "snippets": [
+      "        return \"text_cipher\"\n    if \"equation\" in p or \"solve for\" in p:\n        return \"symbol_transform\"\n    if \"unit conversion\" in p:\n        return \"unit_conversion\"\n    if \"gravitational\" in p or \"gravity\" in p:\n        return \"physics_gravity\"",
+      "    return ((x >> n) | (x << (bits - n))) & 0xFF\n\ndef solve_bitmanip(prompt: str):\n    \"\"\"\n    Try common bitwise rules and return (rule_description, working_str).\n    Returns (None, None) if no clean rule found.\n    \"\"\"",
+      "\n# ── NEW: Real symbol transform solver ─────────────────────────────────\ndef solve_symbol_transform(prompt: str):\n    \"\"\"Build exact char→char mapping from examples and apply to query.\"\"\"\n    lines = [l.strip() for l in prompt.split(\"\\n\") if \"=\" in l and \"Now\" not in l]\n    char_map = {}\n    for line in lines:",
+      "\nbit_df = full_df[full_df[\"type\"] == \"bit_manipulation\"].sample(200, random_state=42)\nsym_df = full_df[full_df[\"type\"] == \"symbol_transform\"].sample(200, random_state=42)\n\n# Bit manipulation solver coverage\nsolved, correct, unsolved = 0, 0, 0\nfor _, row in bit_df.iterrows():",
+      "s_solved, s_correct = 0, 0\nfor _, row in sym_df.iterrows():\n    computed, _ = solve_symbol_transform(row[\"prompt\"])\n    if computed and \"?\" not in computed:\n        s_solved += 1\n        if computed.strip() == str(row[\"answer\"]).strip():\n            s_correct += 1",
+      "            )\n\n    else:  # symbol_transform\n        # ── Try to actually solve it ───────────────────────────────────\n        computed_ans, char_map = solve_symbol_transform(prompt)\n        map_str = \", \".join(f\"'{k}'→'{v}'\" for k, v in list(char_map.items())[:12])\n        query_m = re.search(r\"determine the result for:\\s*(.+)\", prompt)",
+      "    else:  # symbol_transform\n        # ── Try to actually solve it ───────────────────────────────────\n        computed_ans, char_map = solve_symbol_transform(prompt)\n        map_str = \", \".join(f\"'{k}'→'{v}'\" for k, v in list(char_map.items())[:12])\n        query_m = re.search(r\"determine the result for:\\s*(.+)\", prompt)\n        query   = query_m.group(1).strip().strip(\"`\") if query_m else \"\"\n        if computed_ans:",
+      "    \"text\": tokenizer.apply_chat_template(\n        ex[\"messages\"], tokenize=False, add_generation_prompt=False,\n        enable_thinking=True,\n    )\n})\n\nval_dataset = val_dataset.map(lambda ex: {"
+    ]
+  },
+  {
+    "ref": "zzys0316/full-pipeline-nvidia-nemotron-3-reasoning",
+    "score": 420,
+    "snippets": [
+      "    \"numeral_system\"  : 1576,   # max 1576 \n    \"gravity_physics\" : 1597,   # max 1597 \n    \"symbol_transform\": 823,   # max 823 \n    \"numeric_equation\": 732    # max 732 \n}\n# TRAIN_SAMPLES_PER_CATEGORY = {\n#     \"bit_manipulation\": 1400,   # max 1602 ",
+      "#     \"numeral_system\"  : 400,   # max 1576 \n#     \"gravity_physics\" : 400,   # max 1597 \n#     \"symbol_transform\": 100,   # max 823 \n#     \"numeric_equation\": 580    # max 732 \n# }\n# TRAIN_SAMPLES_PER_CATEGORY = {\n#     \"bit_manipulation\": 10,   # max 1602 ",
+      "#     \"numeral_system\"  : 10,   # max 1576 \n#     \"gravity_physics\" : 10,   # max 1597 \n#     \"symbol_transform\": 10,   # max 823 \n#     \"numeric_equation\": 10    # max 732 \n# }\n\nMAX_SEQ_LEN = 4096",
+      "        return \"numeric_equation\"\n\n    # rule 2: symbol_transform if symbols dominate and digits/letters are scarce\n    total_chars = max(1, len(expr))\n    if symbol_count / total_chars > 0.5 and digit_count + alpha_count < max(2, symbol_count//2):\n        return \"symbol_transform\"\n",
+      "    total_chars = max(1, len(expr))\n    if symbol_count / total_chars > 0.5 and digit_count + alpha_count < max(2, symbol_count//2):\n        return \"symbol_transform\"\n\n    # fallback: look at examples in the prompt body (presence of lines with digits → numeric)\n    if re.search(r\"^\\s*\\d+[^=\\n]*=\", q, re.MULTILINE):\n        return \"numeric_equation\"",
+      "        return \"numeric_equation\"\n    if re.search(r\"[^\\w\\s]{2,}\", q):  # repeated punctuation sequences\n        return \"symbol_transform\"\n\n    return \"unknown\"\n\ndef classify_puzzle(prompt: str) -> str:",
+      "        return \"gravity_physics\"\n    if \"transformation rules\" in p:\n        return classify_equation_vs_symbol(prompt) if 'classify_equation_vs_symbol' in globals() else \"symbol_transform\"\n    return \"unknown\"\n\n\nVALIDATION_SIZE = 50  # 每类抽取10%作为验证集，也可改为固定数量",
+      "\n\n### 4.3.5 symbol_transform\n\nimport re\nfrom typing import Optional, Tuple, List\nfrom dataclasses import dataclass"
+    ]
+  }
+]

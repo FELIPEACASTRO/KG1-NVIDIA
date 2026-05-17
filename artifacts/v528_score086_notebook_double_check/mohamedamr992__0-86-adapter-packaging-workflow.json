@@ -1,0 +1,166 @@
+{
+  "ref": "mohamedamr992/0-86-adapter-packaging-workflow",
+  "title": "0.86 Adapter Packaging Workflow",
+  "notebook": "artifacts\\v284_official_gate_worktree\\artifacts\\v527_kaggle_code_audit\\pulled_code\\mohamedamr992__0-86-adapter-packaging-workflow\\0-86-adapter-packaging-workflow.ipynb",
+  "metadata": {
+    "id": "mohamedamr992/0-86-adapter-packaging-workflow",
+    "id_no": 118479213,
+    "title": "0.86 Adapter Packaging Workflow",
+    "code_file": "0-86-adapter-packaging-workflow.ipynb",
+    "language": "python",
+    "kernel_type": "notebook",
+    "is_private": false,
+    "enable_gpu": false,
+    "enable_tpu": false,
+    "enable_internet": false,
+    "keywords": [],
+    "dataset_sources": [],
+    "kernel_sources": [],
+    "competition_sources": [
+      "nvidia-nemotron-model-reasoning-challenge"
+    ],
+    "model_sources": [
+      "huikang/nemotron-adapter/Transformers/default/20",
+      "kienngx/nemotron-nano-30b-trained/Triton/5e-5/1",
+      "kienngx/nemotron-nano-30b-trained/Triton/tinker-adapter/1",
+      "kienngx/nemotron-nano-30b-trained/Triton/1e-5-batch-2-workers-8/1",
+      "kienngx/nemotron-nano-30b-trained/Triton/1e-5/1",
+      "kienngx/nemotron-nano-30b-trained/Triton/batch2-lr1e-workers8/1",
+      "kienngx/nemotron-nano-30b-trained/Triton/grad-accum1-workers8-maxlen-4096-lr1e-5/1"
+    ],
+    "docker_image": "gcr.io/kaggle-images/python@sha256:c370a5ff133d162d17c2dca332b50f3e85c0b0ed1471ee18e98e3009eee80b08",
+    "machine_shape": "None"
+  },
+  "kaggle_metadata": {
+    "accelerator": "none",
+    "dataSources": [
+      {
+        "sourceType": "competition",
+        "sourceId": 129716,
+        "databundleVersionId": 16082784
+      },
+      {
+        "sourceType": "modelInstanceVersion",
+        "sourceId": 823163,
+        "databundleVersionId": 16526052,
+        "modelInstanceId": 607259,
+        "modelId": 619204
+      },
+      {
+        "sourceType": "modelInstanceVersion",
+        "sourceId": 824561,
+        "databundleVersionId": 16551907,
+        "modelInstanceId": 626812,
+        "modelId": 619281
+      },
+      {
+        "sourceType": "modelInstanceVersion",
+        "sourceId": 824116,
+        "databundleVersionId": 16543105,
+        "modelInstanceId": 626445,
+        "modelId": 619281
+      },
+      {
+        "sourceType": "modelInstanceVersion",
+        "sourceId": 822790,
+        "databundleVersionId": 16518936,
+        "modelInstanceId": 625363,
+        "modelId": 619281
+      },
+      {
+        "sourceType": "modelInstanceVersion",
+        "sourceId": 823146,
+        "databundleVersionId": 16525636,
+        "modelInstanceId": 625660,
+        "modelId": 619281
+      },
+      {
+        "sourceType": "modelInstanceVersion",
+        "sourceId": 822796,
+        "databundleVersionId": 16519140,
+        "modelInstanceId": 625369,
+        "modelId": 619281
+      },
+      {
+        "sourceType": "modelInstanceVersion",
+        "sourceId": 835129,
+        "databundleVersionId": 16725266,
+        "modelInstanceId": 635307,
+        "modelId": 619281
+      }
+    ],
+    "dockerImageVersionId": 31328,
+    "isInternetEnabled": true,
+    "language": "python",
+    "sourceType": "notebook",
+    "isGpuEnabled": false
+  },
+  "relevant": [
+    {
+      "cell": 0,
+      "line": 1,
+      "kind": "markdown",
+      "text": "# Adapter Packaging Workflow"
+    },
+    {
+      "cell": 0,
+      "line": 4,
+      "kind": "markdown",
+      "text": "This notebook packages the selected Nemotron adapter checkpoint for submission. I keep a few candidate model variants available, then switch `model_name` to choose the final adapter folder."
+    },
+    {
+      "cell": 0,
+      "line": 6,
+      "kind": "markdown",
+      "text": "The output is written to `/kaggle/working/submission.zip` and includes the adapter weights plus config needed by the competition evaluator."
+    },
+    {
+      "cell": 1,
+      "line": 4,
+      "kind": "code",
+      "text": "\"tinker-adapter\": \"/kaggle/input/models/kienngx/nemotron-nano-30b-trained/triton/tinker-adapter/1\","
+    },
+    {
+      "cell": 1,
+      "line": 5,
+      "kind": "code",
+      "text": "\"5e-5\": \"/kaggle/input/models/kienngx/nemotron-nano-30b-trained/triton/5e-5/1\","
+    },
+    {
+      "cell": 1,
+      "line": 6,
+      "kind": "code",
+      "text": "\"1e-5\": \"/kaggle/input/models/kienngx/nemotron-nano-30b-trained/triton/1e-5/1\""
+    },
+    {
+      "cell": 1,
+      "line": 9,
+      "kind": "code",
+      "text": "model_name = \"tinker-adapter\""
+    },
+    {
+      "cell": 1,
+      "line": 12,
+      "kind": "code",
+      "text": "submit_dir = \"/kaggle/working/submission\""
+    },
+    {
+      "cell": 1,
+      "line": 15,
+      "kind": "code",
+      "text": "shutil.copy(f\"{source_path}/adapter_model.safetensors\", submit_dir)"
+    },
+    {
+      "cell": 1,
+      "line": 16,
+      "kind": "code",
+      "text": "shutil.copy(f\"{source_path}/adapter_config.json\", submit_dir)"
+    },
+    {
+      "cell": 1,
+      "line": 17,
+      "kind": "code",
+      "text": "shutil.make_archive(\"/kaggle/working/submission\", \"zip\", submit_dir)"
+    }
+  ]
+}

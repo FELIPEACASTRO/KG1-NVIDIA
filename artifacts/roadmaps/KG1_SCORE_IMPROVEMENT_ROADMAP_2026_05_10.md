@@ -1,6 +1,6 @@
 # KG1 Score Improvement Roadmap
 
-Atualizado: 2026-05-16
+Atualizado: 2026-05-17
 
 Este e o roadmap ativo e limpo apos a revisao V484 dos arquivos OpenRouter de
 16/05/2026. O historico detalhado foi arquivado em:
@@ -74,6 +74,62 @@ Ultima evidencia operacional relevante:
 | V518 V517 checkpoint-2 weak eval | job `felipesp1983/6a08f97ce48bea4538ba05d2` concluiu a inferencia weak e salvou diagnosticos; resultado label-free `191/315`, `equation=56/155`, `bit=135/160`, `trunc=0`; label-aware debug seria `192/315`, mas nao e promocional | F2/backfire confirmado: queda de bit `136 -> 135` e total nao supera baseline; V517/V518 bloqueados para full/package/submit; qualquer nova GPU precisa de novo sinal CPU e gate anti-regressao |
 | V519 V518 row-level backfire audit | baixou diagnosticos V518, comparou contra V516 label-free, destilou apenas 6 linhas mudadas e apagou CSVs brutos; ganho real `518deb39` equation `{ -> $`; perda real `8740ed31` bit `01101000 -> 01111000`; a mesma troca ja aparecia em V488/V494/V496 | novo gate CPU `scripts/kg1_weak_backfire_row_guard.py` protege `8740ed31=01101000`; qualquer novo checkpoint que perder essa linha fica bloqueado mesmo que loss caia |
 | V520 local candidate mining | varreu 224 CSVs locais e reavaliou 26 candidatos weak comparaveis contra V516 label-free; nenhum adapter-only local supera `191/315` preservando `bit>=136`, `trunc=0` e `8740ed31`; top scores `201-222` sao solver/postprocessor/integrated | nao existe submit pronto escondido no repositorio; proximo caminho real e transformar sinal de solver em adapter sem repetir a troca `518deb39` por `8740ed31` |
+| V521 transfer blocker audit | audit CPU varreu V390/V475/V510/V515/V304; V475/V510/V515 estao bloqueados como estao porque ja falharam em V496/V511/V518; V515 tem `406/473` bit traces train mas bit share nao ponderado e `18.99%`, e mesmo assim V518 perdeu `8740ed31`; V304 nao tem blocker estrutural, mas e historico/broad e nao e pool ativo | GPU fica `blocked_until_new_cpu_transfer_signal`; proximo passo obrigatorio e V522 CPU source-target alignment/learnability gate, nao novo H200 com os mesmos dados |
+| V522 source-target alignment audit | melhor referencia teacher V380 tem `31` ganhos no-loss vs baseline label-free e `0` perdas: `23` bit e `8` equation; bit gains concentram em `bit_exact_global_ternary_unique_prediction=13`, `CHO=4`, `MAJ3=4`, `OR=1`, `XOR=1`; V304 contem cobertura fonte alta (`CHO=506`, `MAJ3=709`, `PAR3=105` em treino), enquanto V515 tem cobertura muito pequena (`CHO=4`, `MAJ3=3`) | dataset build permitido, GPU ainda bloqueada; V523 deve criar trace pack fonte-only direcionado a CHO/MAJ3/global ternary + equation classes V516 atuais, sem usar weak labels como treino |
+| V523 targeted source trace pack | dataset fonte-only criado e limpo: `1026` train, `219` val; treino `706` bit e `320` equation; `0` overlap weak/full, `0` duplicidade; V286 real passou com token max `749`, offset masks `1026/219`, trunc `0`; V513 passou com `0` blockers, bit traces p50 `99` palavras e equation p50 `52` | e o primeiro dataset novo apos o plateau que passa gates estruturais; GPU ainda depende do V524 porque quota por tokens pode enviesar o loss |
+| V524 quota/token objective audit | calculo por literatura/objetivo mostrou que V523 tem `68.8%` bit por linhas, mas `90.7%` bit por tokens de loss (`329702` bit vs `33920` equation), enquanto o sinal V522 e `23/31=74.2%` bit | corrigido no trainer: `hf_job_train_v90.py` agora suporta `LOSS_NORMALIZATION_MODE=example_mean`; qualquer job V523 deve usar esse modo ou encurtar bit traces antes de GPU |
+| V525 OpenRouter objective consult | 5 modelos (`gpt-5.5`, Claude Opus 4.7, Gemini 3.1 Pro, Qwen 3.6 Max, DeepSeek V4 Pro) confirmaram que `token_mean` nao pode ser usado com V523; todos recomendam `example_mean`, guard de `8740ed31`, e kill-switch de primeiro checkpoint; 2/5 preferem rebuild V525 antes de GPU | decisao adotada: rodar CPU dry-run de contribuicao por familia; se V523+`example_mean` ainda for dominado por bit, construir V525 com traces bit curtas e token-mass `bit<=70-78%`; se passar, permitir apenas smoke H200 curto com gate `total>=193`, `equation>=57`, `bit>=136`, `trunc=0` |
+| V526 example_mean dry-run | `example_mean` passou: bit share por tokens cairia de `90.67%` para `68.81%`, delta vs referencia `5.38pp`, boxed/control/answer checks `0` blockers | autoriza somente um smoke H200 curto V523 com `LOSS_NORMALIZATION_MODE=example_mean` e kill-switch no primeiro checkpoint; nao autoriza treino longo |
+| V528 notebooks 0.86/0.85 | notebooks `0.86` sao principalmente packaging do Tinker adapter `kienngx/.../tinker-adapter/1`; tecnicas uteis estao nos notebooks Tong/Pear/Konbu/PJT/ZZYS, nao nos zips de score | usar `0.86` apenas para schema/provenance/package; usar solver/CoT para novo sinal CPU |
+| V529 todos os kernels baixados | `704` kernels puxados, `702` parseados; lista filtrada indica P0: `pjt222/nemotron-cot-review`, `pearpn25/bit-cot-85-1364-sample`, `konbu17/bit-manipulation-solver-cot-generator`, `zzys0316/full-pipeline...`; notebooks 0.86 nao resolvem familias | proximo passo efetivo e V530 CPU solver harness antes de qualquer H200 amplo; GPU so se houver novo sinal label-free ou smoke V523 estritamente limitado |
+| V530 anexos/datasets | `archive.zip`/Konbu v2 cobre `1508/1602` linhas bit do `competition_train`; `success.csv` tem `1134` CoTs corretas, `671` high-confidence, `0` mismatch de prompt/resposta; `failed.csv` nao pode ser positivo; `archive (1)/(6)` tem `3000` sinteticos, mas `1341` `solver_correct=False`; `archive (2)/(3)` sao dataset oficial duplicado; `archive (4)` adiciona só `28` CoTs numeral/Roman | nova fonte P0 para bit somente; converter/encurtar success high-confidence para KG1 com `\boxed{}` e `example_mean`; nenhum ganho direto para equation |
+
+## Decisao Atual V530
+
+Artefatos:
+
+- `artifacts/v525_openrouter_objective_consult/KG1_V525_OPENROUTER_OBJECTIVE_PROMPT.md`;
+- `artifacts/v525_openrouter_objective_consult/v525_openrouter_model_responses.json`;
+- `artifacts/v525_openrouter_objective_consult/KG1_V525_OPENROUTER_OBJECTIVE_CONSENSUS.md`;
+- `artifacts/v525_openrouter_objective_consult/KG1_V525_OPENROUTER_OBJECTIVE_DECISION.md`;
+- `artifacts/v526_example_mean_objective_dry_run/KG1_V526_EXAMPLE_MEAN_OBJECTIVE_DRY_RUN.md`;
+- `artifacts/v528_score086_notebook_double_check/KG1_V528_SCORE086_NOTEBOOK_DOUBLE_CHECK.md`;
+- `artifacts/v529_all_downloaded_notebook_helpfulness/KG1_V529_ALL_DOWNLOADED_NOTEBOOK_HELPFULNESS.md`;
+- `artifacts/v530_uploaded_bit_cot_dataset_audit/KG1_V530_UPLOADED_BIT_COT_DATASET_AUDIT.md`.
+
+O consenso externo e a auditoria dos notebooks baixados nao autorizam treino
+longo nem broad SFT. Eles autorizam duas frentes, nesta ordem:
+
+1. Frente CPU V530, obrigatoria para buscar ganho real:
+   - portar/implementar as ideias P0 dos notebooks `pjt222`, `pearpn25`,
+     `konbu17` e `zzys0316`;
+   - bit: per-bit/bitsum/stride, INHIB/IMPL, CH/CHO, MAJ3, XOR3, GF(2), ANF;
+   - equation: concat/reverse concat, operands/result reversal, `+1/-1`,
+     divisao/modulo, prefix/suffix operator encoding, `Z_94`/mod-94;
+   - medir label-free em source/weak diagnostic, sem usar weak/full como
+     treino;
+   - gerar traces curtas somente de source rows verificadas.
+   - atualizacao V530: usar `archive.zip` como fonte P0 adicional de bit,
+     comecando por `bit_manipulation_cot_success.csv` e `confidence=high`;
+     `bit_manipulation_cot_failed.csv` entra somente como diagnostico/hard
+     negative.
+2. Frente GPU V523, opcional e estritamente limitada:
+   - `LOSS_NORMALIZATION_MODE=example_mean` ativo;
+   - perda por exemplo calculada como `CE_sum / active_label_tokens`;
+   - labels decodificados com `\\boxed{` literal, sem `\b`/control chars;
+   - prompt tokens com peso zero;
+   - offset masks completos;
+   - V526 ja passou este dry-run (`example_mean_bit_share=0.688109`).
+3. Qualquer smoke V523/V530 precisa falhar fechado se:
+   - `total < 193/315`;
+   - `equation < 57/155`;
+   - `bit < 136/160`;
+   - `trunc != 0`;
+   - `8740ed31 != 01101000`;
+   - `518deb39 != $`.
+
+Promocao/package/submit continua bloqueado ate haver ganho label-free real em
+weak/full. `eval_loss` menor sem ACC melhor nao promove.
 
 ## Achados Principais V484-V492
 

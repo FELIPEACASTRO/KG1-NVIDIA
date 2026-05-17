@@ -1,0 +1,309 @@
+{
+  "downloaded_dirs": 702,
+  "bit_direct_candidates": 191,
+  "equation_direct_candidates": 90,
+  "training_recipe_candidates": 162,
+  "packaging_candidates": 81,
+  "top_30": [
+    {
+      "ref": "pjt222/nemotron-cot-review",
+      "title": "nemotron-cot-review",
+      "total_score": 5270,
+      "bit_score": 3403,
+      "equation_score": 1778,
+      "training_score": 9,
+      "packaging_score": 0,
+      "category": "bit_direct;equation_direct"
+    },
+    {
+      "ref": "zzys0316/full-pipeline-nvidia-nemotron-3-reasoning",
+      "title": "🏆 Full Pipeline NVIDIA Nemotron-3 Reasoning",
+      "total_score": 3549,
+      "bit_score": 1061,
+      "equation_score": 1684,
+      "training_score": 470,
+      "packaging_score": 354,
+      "category": "bit_direct;equation_direct;training_recipe;adapter_packaging_validation"
+    },
+    {
+      "ref": "habanwer/nemotron-atlas",
+      "title": "Nemotron ATLAS",
+      "total_score": 2869,
+      "bit_score": 1119,
+      "equation_score": 774,
+      "training_score": 624,
+      "packaging_score": 272,
+      "category": "bit_direct;equation_direct;training_recipe;adapter_packaging_validation"
+    },
+    {
+      "ref": "kjibinraj/nemotron-challenge-v1",
+      "title": "Nemotron_challenge_v1",
+      "total_score": 2722,
+      "bit_score": 903,
+      "equation_score": 609,
+      "training_score": 480,
+      "packaging_score": 650,
+      "category": "bit_direct;equation_direct;training_recipe;adapter_packaging_validation"
+    },
+    {
+      "ref": "konbu17/bit-manipulation-solver-cot-generator",
+      "title": "bit-manipulation-solver-cot-generator",
+      "total_score": 2665,
+      "bit_score": 2535,
+      "equation_score": 50,
+      "training_score": 0,
+      "packaging_score": 0,
+      "category": "bit_direct"
+    },
+    {
+      "ref": "matthewblakeward/glyphmatics-d4c-cipher-98substitution",
+      "title": "GlyphMatics●D4C°Cipher#98Substitution ",
+      "total_score": 2587,
+      "bit_score": 882,
+      "equation_score": 773,
+      "training_score": 208,
+      "packaging_score": 664,
+      "category": "bit_direct;equation_direct;training_recipe;adapter_packaging_validation"
+    },
+    {
+      "ref": "pearpn25/bit-cot-85-1364-sample",
+      "title": "bit cot 85% ~~ 1364 sample",
+      "total_score": 2331,
+      "bit_score": 2117,
+      "equation_score": 134,
+      "training_score": 0,
+      "packaging_score": 0,
+      "category": "bit_direct;equation_direct"
+    },
+    {
+      "ref": "llkh0a/nemotron-unsloth-sft-training-3-30-2",
+      "title": "Nemotron | Unsloth SFT Training 3/30 -2",
+      "total_score": 2186,
+      "bit_score": 616,
+      "equation_score": 778,
+      "training_score": 424,
+      "packaging_score": 288,
+      "category": "bit_direct;equation_direct;training_recipe;adapter_packaging_validation"
+    },
+    {
+      "ref": "matthewblakeward/steinifrank",
+      "title": "SteinIFrank",
+      "total_score": 1801,
+      "bit_score": 596,
+      "equation_score": 533,
+      "training_score": 276,
+      "packaging_score": 316,
+      "category": "bit_direct;equation_direct;training_recipe;adapter_packaging_validation"
+    },
+    {
+      "ref": "mbarathmybranz/kaggle-submission",
+      "title": "kaggle_submission",
+      "total_score": 1747,
+      "bit_score": 725,
+      "equation_score": 544,
+      "training_score": 238,
+      "packaging_score": 160,
+      "category": "bit_direct;equation_direct;training_recipe;adapter_packaging_validation"
+    },
+    {
+      "ref": "sarabstudentsaidane/soai-rl-vision",
+      "title": "SOAI_RL -vision",
+      "total_score": 1712,
+      "bit_score": 1479,
+      "equation_score": 308,
+      "training_score": 85,
+      "packaging_score": 50,
+      "category": "bit_direct;equation_direct"
+    },
+    {
+      "ref": "johnnyhyland/nvidia-nemotron-sft-grpo-colab-faster",
+      "title": "NVIDIA Nemotron - SFT → GRPO - Colab faster",
+      "total_score": 1594,
+      "bit_score": 746,
+      "equation_score": 390,
+      "training_score": 374,
+      "packaging_score": 84,
+      "category": "bit_direct;equation_direct;training_recipe"
+    },
+    {
+      "ref": "banwait13/nemotron-on-steroids",
+      "title": "Nemotron on Steroids",
+      "total_score": 1453,
+      "bit_score": 430,
+      "equation_score": 167,
+      "training_score": 532,
+      "packaging_score": 244,
+      "category": "bit_direct;equation_direct;training_recipe;adapter_packaging_validation"
+    },
+    {
+      "ref": "amanatar/nemotron-ultimate-sft-grpo-v3",
+      "title": "nemotron-ultimate-sft-grpo-v3",
+      "total_score": 1392,
+      "bit_score": 589,
+      "equation_score": 490,
+      "training_score": 233,
+      "packaging_score": 80,
+      "category": "bit_direct;equation_direct;training_recipe"
+    },
+    {
+      "ref": "kimberleyduran/solver-verified-cryptarithm-cot-v2-dataset",
+      "title": "Solver-Verified Cryptarithm CoT (v2 dataset)",
+      "total_score": 1374,
+      "bit_score": 252,
+      "equation_score": 1007,
+      "training_score": 35,
+      "packaging_score": 0,
+      "category": "bit_direct;equation_direct"
+    },
+    {
+      "ref": "tylerm16/nemotron-sft-lora-with-cot-w-no-curriculum",
+      "title": "Nemotron SFT LoRA with CoT w/ no Curriculum",
+      "total_score": 1321,
+      "bit_score": 615,
+      "equation_score": 397,
+      "training_score": 217,
+      "packaging_score": 92,
+      "category": "bit_direct;equation_direct;training_recipe"
+    },
+    {
+      "ref": "camvsfd/notebook-ex-colqwen-layout",
+      "title": "[notebook-ex] colqwen layout ",
+      "total_score": 1267,
+      "bit_score": 1220,
+      "equation_score": 515,
+      "training_score": 154,
+      "packaging_score": 78,
+      "category": "bit_direct;equation_direct;training_recipe"
+    },
+    {
+      "ref": "javierrodrguez97/first-easy-approach-3-h",
+      "title": "First Easy Approach - 3 h",
+      "total_score": 1250,
+      "bit_score": 239,
+      "equation_score": 345,
+      "training_score": 594,
+      "packaging_score": 72,
+      "category": "bit_direct;equation_direct;training_recipe"
+    },
+    {
+      "ref": "huikang/tinker-submission-notebook",
+      "title": "Tinker submission notebook",
+      "total_score": 1170,
+      "bit_score": 114,
+      "equation_score": 192,
+      "training_score": 342,
+      "packaging_score": 442,
+      "category": "equation_direct;training_recipe;adapter_packaging_validation"
+    },
+    {
+      "ref": "mohamedamr992/deterministic-solvers-for-reasoning-task",
+      "title": "Deterministic Solvers for Reasoning Task",
+      "total_score": 1161,
+      "bit_score": 974,
+      "equation_score": 102,
+      "training_score": 5,
+      "packaging_score": 0,
+      "category": "bit_direct"
+    },
+    {
+      "ref": "ethnwen/nvidia-nemotron-model-v1",
+      "title": "NVIDIA nemotron model v1 ",
+      "total_score": 1134,
+      "bit_score": 96,
+      "equation_score": 174,
+      "training_score": 342,
+      "packaging_score": 442,
+      "category": "equation_direct;training_recipe;adapter_packaging_validation"
+    },
+    {
+      "ref": "harsha7754/nvidia-nemotron-prompting-on-base-model",
+      "title": "NVIDIA Nemotron Prompting on base model",
+      "total_score": 1131,
+      "bit_score": 709,
+      "equation_score": 118,
+      "training_score": 174,
+      "packaging_score": 50,
+      "category": "bit_direct;training_recipe"
+    },
+    {
+      "ref": "viswasurya/nvidia-nemotron-training",
+      "title": "Nvidia-Nemotron Training",
+      "total_score": 1114,
+      "bit_score": 356,
+      "equation_score": 70,
+      "training_score": 390,
+      "packaging_score": 218,
+      "category": "bit_direct;training_recipe;adapter_packaging_validation"
+    },
+    {
+      "ref": "occultainsights/synthetic-data-generation",
+      "title": "Synthetic Data Generation",
+      "total_score": 1050,
+      "bit_score": 679,
+      "equation_score": 291,
+      "training_score": 0,
+      "packaging_score": 0,
+      "category": "bit_direct;equation_direct"
+    },
+    {
+      "ref": "emanuellcs/nvidia-nemotron-sft",
+      "title": "NVIDIA Nemotron | SFT",
+      "total_score": 1041,
+      "bit_score": 403,
+      "equation_score": 54,
+      "training_score": 378,
+      "packaging_score": 126,
+      "category": "bit_direct;training_recipe;adapter_packaging_validation"
+    },
+    {
+      "ref": "randomhuster/villm-testing-cv-class",
+      "title": "ViLLM testing - CV_Class",
+      "total_score": 1037,
+      "bit_score": 418,
+      "equation_score": 259,
+      "training_score": 480,
+      "packaging_score": 0,
+      "category": "bit_direct;equation_direct;training_recipe"
+    },
+    {
+      "ref": "kacchanwriting/nemotron-eda-v1",
+      "title": "Nemotron EDA v1",
+      "total_score": 1036,
+      "bit_score": 754,
+      "equation_score": 192,
+      "training_score": 10,
+      "packaging_score": 0,
+      "category": "bit_direct;equation_direct"
+    },
+    {
+      "ref": "kirillklem/full-eda-pca-clusters-question-families-hard",
+      "title": "FULL EDA: PCA CLUSTERS + QUESTION FAMILIES + HARD",
+      "total_score": 1023,
+      "bit_score": 449,
+      "equation_score": 410,
+      "training_score": 84,
+      "packaging_score": 0,
+      "category": "bit_direct;equation_direct"
+    },
+    {
+      "ref": "ulvisharifzade/nemotron-azerbaijan",
+      "title": "Nemotron Azerbaijan",
+      "total_score": 1011,
+      "bit_score": 390,
+      "equation_score": 37,
+      "training_score": 436,
+      "packaging_score": 128,
+      "category": "bit_direct;training_recipe;adapter_packaging_validation"
+    },
+    {
+      "ref": "amanatar/notebookc27c750a42",
+      "title": "notebookc27c750a42",
+      "total_score": 1003,
+      "bit_score": 397,
+      "equation_score": 278,
+      "training_score": 162,
+      "packaging_score": 86,
+      "category": "bit_direct;equation_direct;training_recipe"
+    }
+  ]
+}

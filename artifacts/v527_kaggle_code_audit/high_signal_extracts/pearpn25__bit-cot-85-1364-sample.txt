@@ -1,0 +1,1680 @@
+
+# --- CELL 0 markdown ---
+# Bit Manipulation CoT Generation Pipeline
+
+Pipeline for building a chain-of-thought (CoT) dataset for 8-bit manipulation puzzles. It follows a **solver-first** approach: each puzzle is first solved by deterministic code, only verified-correct samples are kept, and then an LLM rewrites the solver's trace into natural reasoning text suitable for SFT.
+
+## Motivation
+
+Bit manipulation puzzles in the NVIDIA Nemotron Reasoning Challenge give a handful of `input → output` examples over 8-bit binary strings and ask for the output of a query input. Naively asking an LLM to solve them is unreliable — but the search space is small enough that a brute-force solver can find the exact rule. We exploit this asymmetry:
+
+- **Solver does the hard part** — finding the correct transformation.
+- **LLM does the easy part** — dressing up a verified solution as step-by-step reasoning.
+
+The result is a dataset where every CoT ends with a provably correct `\boxed{...}` answer.
+
+## Core Insight
+
+Each output bit is an independent boolean function of 1–3 input bits. This means:
+
+- The set of candidate rules per bit is finite (~300 functions over ≤3 variables).
+- Given 6–8 examples, a valid rule is almost always uniquely identifiable.
+- If no per-bit rule works, the transformation is likely a whole-byte operation (rotation, permutation, XOR mask).
+
+## Architecture
+
+```
+CSV puzzle  ──►  solver_fn  ──►  verify answer  ──►  trace_fn  ──►  LLM rewrite  ──►  CoT CSV
+```
+
+### 1. Deterministic Solver
+
+Runs a cascade of strategies in priority order:
+
+- **Phase 0 — Whole-byte patterns:** XOR with a constant mask, bit rotation, bit permutation, reverse, global NOT. Fast to check and covers most "structural" transformations.
+- **Phase 1 — Per-bit boolean functions:** For each of the 8 output bits, brute-force every boolean function of 1, 2, or 3 input bits. Operators include `ID`, `NOT`, `AND`, `OR`, `XOR`, `XNOR`, `NAND`, `NOR`, `INHIB`, `IMPL`, `MAJ`, `CH`, `XOR3`, plus constants `C0`/`C1`.
+- **Prior-based tie-breaking:** `OP_PRIOR` ranks operators by empirical frequency so common operators (`ID`, `AND`, `XOR`) are preferred when multiple rules fit.
+
+### 2. Answer Verification 
+
+The solver's prediction is compared against the ground-truth answer in the CSV. Mismatches are **skipped**, not "fixed" — this keeps the dataset clean and avoids injecting wrong labels. Only ~35–40% of puzzles typically pass verification, which is fine: the downstream SFT needs quality, not volume.
+
+### 3. LLM CoT Rewrite
+
+The LLM receives three inputs and rewrites them into a coherent reasoning trace:
+
+- The original puzzle prompt
+- The verified answer
+- The solver's raw trace (what it tried, which rule matched, how it applied it)
+
+A regex post-processor forces `\boxed{...}` to contain exactly the verified answer, so the final label can never drift from the ground truth even if the LLM hallucinates mid-explanation.
+
+## Multi-Provider LLM Support
+
+`gpt_runner.py` talks to any OpenAI-compatible endpoint. Switch providers by changing a single argument:
+
+| Provider | Recommended Models | Notes |
+|---|---|---|
+| `openai` | `gpt-4o`, `gpt-4o-mini` | Highest quality, paid |
+| `groq` | `llama-3.3-70b-versatile`, `openai/gpt-oss-120b` | Fastest inference, low free-tier TPM |
+| `deepseek` | `deepseek-chat` (V3), `deepseek-reasoner` (R1) | Cheap, strong CoT quality |
+| `gemini` | `gemini-2.5-flash`, `gemini-2.5-pro` | Generous free tier |
+
+Add new providers by appending one entry to the `PROVIDERS` dict in [gpt_runner.py](gpt_runner.py).
+
+### DeepSeek-Reasoner (R1) Note
+
+`deepseek-reasoner` splits its output into `content` and `reasoning_content`. The pipeline handles both: if `content` is empty (reasoning filled the entire budget), the reasoning is used as the CoT; if both are present, they are wrapped in `<think>...</think>` tags.
+
+
+```python
+run_pipeline(
+    input_csv        = "bit_problems.csv",
+    output_csv       = "bit_manip_cot_output.csv",
+    provider         = "deepseek",         # openai | groq | deepseek | gemini
+    api_key          = "sk-...",
+    model            = "deepseek-chat",    # optional, defaults per provider
+    max_samples      = 500,
+    max_tokens       = 8192,
+    delay_sec        = 0.25,
+    solver_fn        = lambda p, ctx: (solve_bit_manip(p), None),
+    trace_fn         = lambda p, a, info: generate_bit_manip_cot(p, a),
+    system_prompt    = SYSTEM_PROMPT,
+    answer_formatter = lambda a: str(a).strip().zfill(8),
+)
+```
+
+## Output Format
+
+Each row in the output CSV contains:
+
+| Column | Description |
+|---|---|
+| `id` | Original puzzle ID |
+| `prompt` | Full puzzle text |
+| `answer` | Verified ground-truth answer (8-bit binary) |
+| `generated_cot` | LLM-rewritten chain-of-thought ending in `\boxed{<answer>}` |
+
+This format plugs directly into the SFT stage documented in the main [README.md](README.md).
+
+
+
+# --- CELL 1 code ---
+import re
+from collections import Counter
+import itertools
+
+from gpt_runner import run_pipeline
+
+
+# --- CELL 2 code ---
+def _bits(s):
+    return [int(b) for b in s]
+
+FUNC_1 = [("ID", lambda a: a), ("NOT", lambda a: 1 - a)]
+FUNC_2_ORIG = [
+    ("AND",  lambda a, b: a & b),
+    ("OR",   lambda a, b: a | b),
+    ("XOR",  lambda a, b: a ^ b),
+    ("NAND", lambda a, b: 1 - (a & b)),
+    ("NOR",  lambda a, b: 1 - (a | b)),
+    ("XNOR", lambda a, b: 1 - (a ^ b)),
+]
+FUNC_2_DICT = {n: f for n, f in FUNC_2_ORIG}
+FUNC_2_ASYM = [
+    ("INHIB", lambda a, b: a & (1 - b)),
+    ("IMPL",  lambda a, b: (1 - a) | b),
+]
+FUNC_3 = [
+    ("MAJ",  lambda a, b, c: 1 if (a + b + c) >= 2 else 0),
+    ("CH",   lambda a, b, c: (a & b) | ((1 - a) & c)),
+    ("XOR3", lambda a, b, c: a ^ b ^ c),
+]
+OP_PRIOR = {
+    "ID": 40.2, "AND": 14.7, "XOR": 8.1, "XNOR": 7.3, "OR": 7.3,
+    "NOR": 5.8, "NOT": 5.0, "NAND": 3.4, "MAJ": 0.8, "CH": 0.5,
+    "XOR3": 0.5, "C0": 0.3, "C1": 0.3, "INHIB": 2.0, "IMPL": 1.5,
+}
+
+def _bm_parse_examples(prompt):
+    return re.findall(r'([01]{8})\s*->\s*([01]{8})', prompt)
+
+def _bm_parse_query(prompt):
+    m = re.search(r'determine the output for:\s*([01]{8})', prompt)
+    return m.group(1) if m else None
+
+def _bm_validate(func, ex, result):
+    """Validate a solver function against ALL examples. Returns True if result is consistent."""
+    for inp, out in ex:
+        pred = func(ex, _bits(inp))
+        if pred != out:
+            return False
+    return True
+
+def _try_xor(ex, qb):
+    xc = [a ^ b for a, b in zip(_bits(ex[0][0]), _bits(ex[0][1]))]
+    if all([a ^ b for a, b in zip(_bits(i), _bits(o))] == xc for i, o in ex[1:]):
+        return "".join(str(q ^ x) for q, x in zip(qb, xc))
+
+def _try_rot(ex, qb):
+    for k in range(1, 8):
+        if all(_bits(i)[k:] + _bits(i)[:k] == _bits(o) for i, o in ex):
+            return "".join(str(b) for b in qb[k:] + qb[:k])
+        if all(_bits(i)[-k:] + _bits(i)[:-k] == _bits(o) for i, o in ex):
+            return "".join(str(b) for b in qb[-k:] + qb[:-k])
+
+def _try_perm(ex, qb):
+    n = len(ex); ai = [_bits(i) for i, _ in ex]; ao = [_bits(o) for _, o in ex]
+    if n < 5: return None  # Need enough examples to avoid ambiguous permutations
+    p = [None] * 8; x = [0] * 8
+    ambig_count = 0
+    for op in range(8):
+        tgt = [ao[e][op] for e in range(n)]
+        found_count = 0
+        for ip in range(8):
+            src = [ai[e][ip] for e in range(n)]
+            if src == tgt:
+                if found_count == 0: p[op] = ip; x[op] = 0
+                found_count += 1
+            elif [1 - s for s in src] == tgt:
+                if found_count == 0: p[op] = ip; x[op] = 1
+                found_count += 1
+        if p[op] is None: return None
+        if found_count > 1: ambig_count += 1
+    if ambig_count > 2: return None  # Too many ambiguous bits
+    return "".join(str(qb[p[i]] ^ x[i]) for i in range(8))
+
+def _try_rotxor(ex, qb):
+    for k in range(1, 8):
+        r0 = _bits(ex[0][0])[k:] + _bits(ex[0][0])[:k]
+        xc = [a ^ b for a, b in zip(r0, _bits(ex[0][1]))]
+        if all([a ^ b for a, b in zip(_bits(i)[k:] + _bits(i)[:k], xc)] == _bits(o) for i, o in ex[1:]):
+            return "".join(str(a ^ b) for a, b in zip(qb[k:] + qb[:k], xc))
+
+def _try_revxor(ex, qb):
+    r0 = _bits(ex[0][0])[::-1]
+    xc = [a ^ b for a, b in zip(r0, _bits(ex[0][1]))]
+    if all([a ^ b for a, b in zip(_bits(i)[::-1], xc)] == _bits(o) for i, o in ex[1:]):
+        return "".join(str(a ^ b) for a, b in zip(qb[::-1], xc))
+
+def _try_uni2(ex, qb):
+    n = len(ex); ai = [_bits(i) for i, _ in ex]; ao = [_bits(o) for _, o in ex]
+    for fn, f in FUNC_2_ORIG:
+        for s1 in range(8):
+            for s2 in range(s1 + 1, 8):
+                if all(all(f(ai[e][(op+s1)%8], ai[e][(op+s2)%8]) == ao[e][op]
+                           for op in range(8)) for e in range(n)):
+                    return "".join(str(f(qb[(op+s1)%8], qb[(op+s2)%8])) for op in range(8))
+    # Also try asymmetric functions (INHIB, IMPL) with all shift pairs
+    for fn, f in FUNC_2_ASYM:
+        for s1 in range(8):
+            for s2 in range(8):
+                if s1 == s2: continue
+                if all(all(f(ai[e][(op+s1)%8], ai[e][(op+s2)%8]) == ao[e][op]
+                           for op in range(8)) for e in range(n)):
+                    return "".join(str(f(qb[(op+s1)%8], qb[(op+s2)%8])) for op in range(8))
+
+def _try_global_3op(ex, qb):
+    """output[i] = f(input[(i+s1)%8], input[(i+s2)%8], input[(i+s3)%8]) — same f, same offsets."""
+    n = len(ex); ai = [_bits(i) for i, _ in ex]; ao = [_bits(o) for _, o in ex]
+    for fn, f in FUNC_3:
+        for s1 in range(8):
+            for s2 in range(s1 + 1, 8):
+                for s3 in range(s2 + 1, 8):
+                    if all(all(f(ai[e][(op+s1)%8], ai[e][(op+s2)%8], ai[e][(op+s3)%8]) == ao[e][op]
+                               for op in range(8)) for e in range(n)):
+                        return "".join(str(f(qb[(op+s1)%8], qb[(op+s2)%8], qb[(op+s3)%8])) for op in range(8))
+
+def _try_mix(ex, qb):
+    n = len(ex); ai = [_bits(i) for i, _ in ex]; ao = [_bits(o) for _, o in ex]
+    for id_shift in range(8):
+        ib = {}; ib_rules = {}
+        for op in range(8):
+            ip = (op + id_shift) % 8
+            tgt = [ao[e][op] for e in range(n)]; src = [ai[e][ip] for e in range(n)]
+            if src == tgt: ib[op] = qb[ip]; ib_rules[op] = ("ID", ip)
+            elif [1 - s for s in src] == tgt: ib[op] = 1 - qb[ip]; ib_rules[op] = ("NOT", ip)
+        if len(ib) < 3 or len(ib) >= 7: continue  # require >=2 remaining bits for 2-arg
+        rem = [op for op in range(8) if op not in ib]
+        if len(rem) > 5: continue
+        for fn, f in FUNC_2_ORIG + FUNC_2_ASYM:
+            for s1 in range(8):
+                for s2 in range(8):
+                    if s1 == s2: continue
+                    if fn in ("AND","OR","XOR","NAND","NOR","XNOR") and s1 > s2: continue
+                    if all(all(f(ai[e][(op+s1)%8], ai[e][(op+s2)%8]) == ao[e][op]
+                               for op in rem) for e in range(n)):
+                        r = {}
+                        for op, pv in ib.items(): r[op] = pv
+                        for op in rem: r[op] = f(qb[(op+s1)%8], qb[(op+s2)%8])
+                        result = "".join(str(r[op]) for op in range(8))
+                        # Validate against all examples
+                        valid = True
+                        for inp, out in ex:
+                            iqb = _bits(inp)
+                            pred_r = {}
+                            for opp, (rule, ip) in ib_rules.items():
+                                pred_r[opp] = iqb[ip] if rule == "ID" else 1 - iqb[ip]
+                            for opp in rem:
+                                pred_r[opp] = f(iqb[(opp+s1)%8], iqb[(opp+s2)%8])
+                            pred_str = "".join(str(pred_r[opp]) for opp in range(8))
+                            if pred_str != out:
+                                valid = False; break
+                        if valid:
+                            return result
+
+def _try_global_1op(ex, qb):
+    """output[i] = f(input[(i+s)%8]) — same f, same shift for all bits."""
+    n = len(ex); ai = [_bits(i) for i, _ in ex]; ao = [_bits(o) for _, o in ex]
+    for fn, f in FUNC_1:
+        for s in range(8):
+            if all(all(f(ai[e][(op+s)%8]) == ao[e][op] for op in range(8)) for e in range(n)):
+                return "".join(str(f(qb[(op+s)%8])) for op in range(8))
+
+def _try_global_2op(ex, qb):
+    """output[i] = f(input[(i+s1)%8], input[(i+s2)%8]) — same f, same offsets for all bits."""
+    n = len(ex); ai = [_bits(i) for i, _ in ex]; ao = [_bits(o) for _, o in ex]
+    for fn, f in FUNC_2_ORIG + FUNC_2_ASYM:
+        for s1 in range(8):
+            for s2 in range(8):
+                if s1 == s2: continue
+                if all(all(f(ai[e][(op+s1)%8], ai[e][(op+s2)%8]) == ao[e][op]
+                           for op in range(8)) for e in range(n)):
+                    return "".join(str(f(qb[(op+s1)%8], qb[(op+s2)%8])) for op in range(8))
+
+def _try_dominant_shift_mix(ex, qb):
+    """Dominant pattern: >=5 bits use f(in[(i+s)%8]), remaining bits use any per-bit rule."""
+    n = len(ex); ai = [_bits(i) for i, _ in ex]; ao = [_bits(o) for _, o in ex]
+    best_result = None; best_covered = 0
+    for fn, f in FUNC_1:
+        for s in range(8):
+            covered = {}; uncovered = []
+            for op in range(8):
+                tgt = [ao[e][op] for e in range(n)]
+                if [f(ai[e][(op+s)%8]) for e in range(n)] == tgt:
+                    covered[op] = f(qb[(op+s)%8])
+                else:
+                    uncovered.append(op)
+            if len(covered) < 5: continue
+            # For each uncovered bit, collect ALL valid rules (not just first match)
+            patch_options = {}; ok = True
+            for op in uncovered:
+                tgt = [ao[e][op] for e in range(n)]; vals = set()
+                if all(t == 0 for t in tgt): vals.add(0)
+                if all(t == 1 for t in tgt): vals.add(1)
+                for ip in range(8):
+                    for fn2, f2 in FUNC_1:
+                        if [f2(ai[e][ip]) for e in range(n)] == tgt:
+                            vals.add(f2(qb[ip]))
+                for i1 in range(8):
+                    for i2 in range(i1+1, 8):
+                        s1_ = [ai[e][i1] for e in range(n)]; s2_ = [ai[e][i2] for e in range(n)]
+                        for fn2, f2 in FUNC_2_ORIG + FUNC_2_ASYM:
+                            if [f2(a, b) for a, b in zip(s1_, s2_)] == tgt:
+                                vals.add(f2(qb[i1], qb[i2]))
+                if not vals: ok = False; break
+                patch_options[op] = vals
+            if not ok: continue
+            # Only accept when ALL patches are unambiguous
+            if all(len(v) == 1 for v in patch_options.values()):
+                result = [0] * 8
+                for op, v in covered.items(): result[op] = v
+                for op, vs in patch_options.items(): result[op] = list(vs)[0]
+                return "".join(str(b) for b in result)
+    return None
+
+def _get_cands(ai, ao, qb, op):
+    n = len(ai); tgt = [ao[e][op] for e in range(n)]; cs = []
+    if all(t == 0 for t in tgt): cs.append(("C0", (), 0, 0))
+    if all(t == 1 for t in tgt): cs.append(("C1", (), 1, 0))
+    for ip in range(8):
+        src = [ai[e][ip] for e in range(n)]
+        for fn, f in FUNC_1:
+            if [f(s) for s in src] == tgt:
+                cs.append((fn, (ip,), f(qb[ip]), 1 if fn == "ID" else 2))
+    for i1 in range(8):
+        for i2 in range(i1 + 1, 8):
+            s1 = [ai[e][i1] for e in range(n)]; s2 = [ai[e][i2] for e in range(n)]
+            for fn, f in FUNC_2_ORIG:
+                if [f(a, b) for a, b in zip(s1, s2)] == tgt:
+                    cs.append((fn, (i1, i2), f(qb[i1], qb[i2]), 3))
+    for i1 in range(8):
+        for i2 in range(8):
+            if i1 == i2: continue
+            s1 = [ai[e][i1] for e in range(n)]; s2 = [ai[e][i2] for e in range(n)]
+            for fn, f in FUNC_2_ASYM:
+                if [f(a, b) for a, b in zip(s1, s2)] == tgt:
+                    cs.append((fn, (i1, i2), f(qb[i1], qb[i2]), 3))
+    # Always try 3-arg functions — sorted triples for symmetric (MAJ, XOR3)
+    for i1 in range(8):
+        for i2 in range(i1+1, 8):
+            for i3 in range(i2+1, 8):
+                s1=[ai[e][i1] for e in range(n)]; s2=[ai[e][i2] for e in range(n)]; s3=[ai[e][i3] for e in range(n)]
+                for fn, f in [("MAJ", FUNC_3[0][1]), ("XOR3", FUNC_3[2][1])]:
+                    if [f(a,b,c) for a,b,c in zip(s1,s2,s3)] == tgt:
+                        cs.append((fn, (i1,i2,i3), f(qb[i1],qb[i2],qb[i3]), 4))
+    # CH is asymmetric: CH(a,b,c) = (a&b)|((1-a)&c) — try all ordered permutations
+    ch_f = FUNC_3[1][1]
+    for i1, i2, i3 in itertools.permutations(range(8), 3):
+        s1=[ai[e][i1] for e in range(n)]; s2=[ai[e][i2] for e in range(n)]; s3=[ai[e][i3] for e in range(n)]
+        if [ch_f(a,b,c) for a,b,c in zip(s1,s2,s3)] == tgt:
+            cs.append(("CH", (i1,i2,i3), ch_f(qb[i1],qb[i2],qb[i3]), 4))
+    return cs
+
+def _resolve_phases12(all_cands):
+    result = [None]*8; conf = [0]*8
+    for op in range(8):
+        vals = set(c[2] for c in all_cands[op])
+        if len(vals) == 1: result[op] = list(vals)[0]; conf[op] = 1
+        elif not vals: result[op] = 0
+    shift_ev = Counter(); pair_ev = Counter(); perm = {}
+    for op in range(8):
+        for c in all_cands[op]:
+            is_conf = (conf[op] == 1 and c[2] == result[op])
+            w = 5 if is_conf else 1
+            if c[0] in ("ID","NOT") and len(c[1]) == 1:
+                shift_ev[(c[1][0]-op)%8] += w
+                if is_conf: perm[op] = c[1][0]
+            elif len(c[1]) == 2 and (conf[op] != 1 or c[2] == result[op]):
+                s1=(c[1][0]-op)%8; s2=(c[1][1]-op)%8
+                pair_ev[(min(s1,s2),max(s1,s2),c[0])] += w
+    top_shifts = shift_ev.most_common(2)
+    n_unambig = sum(1 for c in conf if c == 1)
+    ambig = [i for i in range(8) if result[i] is None]; n_ctx = 0
+    for op in ambig:
+        cands = all_cands[op]
+        if not cands: result[op] = 0; continue
+        resolved = False
+        for shift, sw in top_shifts:
+            if sw < 5: break
+            esrc = (op+shift)%8
+            sc = [c for c in cands if c[0] in ("ID","NOT") and len(c[1])==1 and c[1][0]==esrc]
+            if sc:
+                vals = set(c[2] for c in sc)
+                if len(vals) == 1:
+                    result[op]=list(vals)[0]; conf[op]=2; perm[op]=esrc; resolved=True; n_ctx+=1; break
+        if resolved: continue
+        if len(perm) >= 4:
+            missing = set(range(8)) - set(perm.values())
+            pc = [c for c in cands if c[0] in ("ID","NOT") and len(c[1])==1 and c[1][0] in missing]
+            if pc:
+                vals = set(c[2] for c in pc)
+                if len(vals) == 1:
+                    result[op]=list(vals)[0]; conf[op]=2; perm[op]=pc[0][1][0]; n_ctx+=1; continue
+        # Phase 3: use dominant pair pattern to resolve ambiguous bits
+        if pair_ev and not resolved:
+            top_pair = pair_ev.most_common(1)[0]
+            (ps1, ps2, pfn), pw = top_pair
+            if pw >= 5:
+                pc = [c for c in cands if c[0] == pfn and len(c[1]) == 2
+                      and (c[1][0]-op)%8 == ps1 and (c[1][1]-op)%8 == ps2]
+                if pc:
+                    vals = set(c[2] for c in pc)
+                    if len(vals) == 1:
+                        result[op] = list(vals)[0]; conf[op] = 2; n_ctx += 1
+    return result, conf, shift_ev, pair_ev, perm, n_unambig, n_ctx
+
+def _score_bf(pred, all_cands, perm_fixed, dom_shift, dom_shift_cnt):
+    sc = 0; perm = dict(perm_fixed)
+    best_ops = []
+    for op in range(8):
+        pv = pred[op]
+        supp = [c for c in all_cands[op] if c[2] == pv]
+        opp  = [c for c in all_cands[op] if c[2] != pv]
+        if not supp: sc -= 100; best_ops.append(None); continue
+        supp.sort(key=lambda c: -OP_PRIOR.get(c[0], 0))
+        best = supp[0]; best_ops.append(best)
+        # Weight by prior probability and complexity
+        sc += OP_PRIOR.get(best[0], 0) * 0.5 + max(0, (5 - best[3])) * 3
+        # Count supporting vs opposing candidates
+        for c in supp: sc += 3 if c[3] <= 2 else (1 if c[3] == 3 else 0.3)
+        for c in opp:  sc -= 2 if c[3] <= 2 else (0.8 if c[3] == 3 else 0)
+        if best[0] in ("ID","NOT") and len(best[1]) == 1: perm[op] = best[1][0]
+    # Reward consistency: prefer solutions where bits use same/similar operations
+    op_names = [b[0] for b in best_ops if b is not None]
+    if op_names:
+        if len(set(op_names)) <= 2: sc += 12
+        if len(set(op_names)) == 1: sc += 8
+        mc = Counter(op_names).most_common(1)[0]
+        sc += mc[1] * 2.0
+        # Bonus: if most bits use same shift pattern, reward consistency
+        shift_counts = Counter()
+        for op in range(8):
+            b = best_ops[op]
+            if b and b[0] in ("ID","NOT") and len(b[1]) == 1:
+                shift_counts[(b[1][0] - op) % 8] += 1
+        if shift_counts:
+            top_shift_cnt = shift_counts.most_common(1)[0][1]
+            sc += top_shift_cnt * 3
+    np_ = len(perm)
+    if np_ == 8 and len(set(perm.values())) == 8: sc += 35
+    elif np_ >= 6:
+        sc += len(set(perm.values())) * 4
+        for cnt in Counter(perm.values()).values():
+            if cnt > 1: sc -= cnt * 5
+    if dom_shift is not None and dom_shift_cnt >= 3:
+        sc += sum(1 for op, src in perm.items() if (src-op)%8 == dom_shift) * 3
+    return sc
+
+def _try_global_pattern_resolve(all_cands, qb):
+    """Try to find a consistent global pattern among candidates for all 8 bits.
+    Look for: all bits use same function with consistent shift offsets."""
+    # Collect per-bit: which (func, shift_or_inputs) candidates exist
+    # Try: all bits use same 2-op function with consistent shift pair
+    for fn_name in ["AND","OR","XOR","NAND","NOR","XNOR","INHIB","IMPL"]:
+        # For each shift pair, check if it produces a valid candidate for ALL bits
+        for s1 in range(8):
+            for s2 in range(8):
+                if s1 == s2: continue
+                if fn_name in ("AND","OR","XOR","NAND","NOR","XNOR") and s1 > s2: continue
+                ok = True; pred = [0]*8
+                for op in range(8):
+                    i1 = (op + s1) % 8; i2 = (op + s2) % 8
+                    matching = [c for c in all_cands[op] if c[0] == fn_name
+                                and len(c[1]) == 2 and c[1][0] == i1 and c[1][1] == i2]
+                    if not matching:
+                        # Also check reversed order for symmetric functions
+                        if fn_name in ("AND","OR","XOR","NAND","NOR","XNOR"):
+                            matching = [c for c in all_cands[op] if c[0] == fn_name
+                                        and len(c[1]) == 2 and c[1][0] == min(i1,i2) and c[1][1] == max(i1,i2)]
+                        if not matching:
+                            ok = False; break
+                    pred[op] = matching[0][2]
+                if ok:
+                    return pred
+    # Try: all bits use same 1-op function with consistent shift
+    for fn_name in ["ID", "NOT"]:
+        for s in range(8):
+            ok = True; pred = [0]*8
+            for op in range(8):
+                ip = (op + s) % 8
+                matching = [c for c in all_cands[op] if c[0] == fn_name
+                            and len(c[1]) == 1 and c[1][0] == ip]
+                if not matching:
+                    ok = False; break
+                pred[op] = matching[0][2]
+            if ok:
+                return pred
+    # Try: all bits use same 3-op function with consistent shifts
+    for fn_name in ["MAJ", "CH", "XOR3"]:
+        for s1 in range(8):
+            for s2 in range(s1+1, 8):
+                for s3 in range(s2+1, 8):
+                    ok = True; pred = [0]*8
+                    for op in range(8):
+                        i1=(op+s1)%8; i2=(op+s2)%8; i3=(op+s3)%8
+                        key = tuple(sorted([i1,i2,i3]))
+                        matching = [c for c in all_cands[op] if c[0] == fn_name
+                                    and len(c[1]) == 3 and tuple(sorted(c[1])) == key]
+                        if not matching:
+                            ok = False; break
+                        pred[op] = matching[0][2]
+                    if ok:
+                        return pred
+    return None
+
+def _try_perm_from_cands(all_cands, result, conf):
+    """Try to find a permutation-consistent solution from candidates.
+    Most bit rules are based on a permutation: out[i] = f(in[perm(i)]).
+    Find the best bijective mapping."""
+    # For each output bit, collect which input bits are referenced by 1-arg candidates
+    per_bit_sources = {}  # op -> {ip: [(fn, val), ...]}
+    for op in range(8):
+        per_bit_sources[op] = {}
+        for c in all_cands[op]:
+            if c[0] in ("ID", "NOT") and len(c[1]) == 1:
+                ip = c[1][0]
+                if ip not in per_bit_sources[op]:
+                    per_bit_sources[op][ip] = []
+                per_bit_sources[op][ip].append((c[0], c[2]))
+
+    # Already-resolved bits with known permutation mapping
+    fixed_perm = {}
+    for op in range(8):
+        if conf[op] >= 1 and result[op] is not None:
+            # Find which input this bit maps to
+            for c in all_cands[op]:
+                if c[0] in ("ID", "NOT") and len(c[1]) == 1 and c[2] == result[op]:
+                    fixed_perm[op] = c[1][0]
+                    break
+
+    # Try to extend the permutation to ambiguous bits
+    used_inputs = set(fixed_perm.values())
+    ambig = [i for i in range(8) if result[i] is None]
+    if not ambig:
+        return None
+
+    # For each ambiguous bit, get possible input sources
+    ambig_options = []
+    for op in ambig:
+        options = []
+        for ip, candidates in per_bit_sources[op].items():
+            for fn, val in candidates:
+                options.append((ip, val))
+        if not options:
+            return None  # Can't resolve this bit via permutation
+        ambig_options.append(options)
+
+    # Try all combinations, prefer bijective mappings
+    best = None; best_score = -1
+    for combo in itertools.product(*ambig_options):
+        perm_test = dict(fixed_perm)
+        pred = list(result)
+        for i, (ip, val) in enumerate(combo):
+            perm_test[ambig[i]] = ip
+            pred[ambig[i]] = val
+        # Score: bijection bonus + shift consistency
+        n_unique = len(set(perm_test.values()))
+        n_mapped = len(perm_test)
+        sc = n_unique * 5
+        if n_mapped == 8 and n_unique == 8:
+            sc += 50  # perfect bijection
+        # Penalize duplicate mappings
+        for cnt in Counter(perm_test.values()).values():
+            if cnt > 1: sc -= cnt * 8
+        # Reward consistent shift pattern
+        shift_counts = Counter()
+        for op, ip in perm_test.items():
+            shift_counts[(ip - op) % 8] += 1
+        if shift_counts:
+            sc += shift_counts.most_common(1)[0][1] * 4
+        if sc > best_score:
+            best_score = sc; best = list(pred)
+    return best
+
+def _resolve_bf(result, all_cands, perm, shift_ev):
+    still = [i for i in range(8) if result[i] is None]
+    if not still: return list(result)
+
+    # First try global pattern from candidates
+    gp = _try_global_pattern_resolve(all_cands, None)
+    if gp:
+        merged = list(result)
+        for i in still:
+            merged[i] = gp[i]
+        return merged
+
+    top_shifts = shift_ev.most_common(2)
+    result = list(result)
+    possible = [list(set(c[2] for c in all_cands[i])) if all_cands[i] else [0,1] for i in still]
+    dsv = top_shifts[0][0] if top_shifts else None
+    dsc = top_shifts[0][1] if top_shifts else 0
+    scored = []
+    for combo in itertools.product(*possible):
+        pred = list(result)
+        for i, bi in enumerate(still): pred[bi] = combo[i]
+        scored.append((_score_bf(pred, all_cands, perm, dsv, dsc), pred))
+    scored.sort(key=lambda x: -x[0])
+    return scored[0][1]
+
+def _try_shift_chain(ex, qb):
+    """Shift-chain solver inspired by the competition winner's approach.
+    For each output bit, find matching binary/unary ops, then look for
+    +1/+1 shift patterns across consecutive output bits.
+    Handles 3-transformation expressions where SHL/SHR boundary effects
+    make some bits use unary/constant instead of binary ops."""
+    n = len(ex)
+    ai = [_bits(i) for i, _ in ex]
+    ao = [_bits(o) for _, o in ex]
+
+    # 6 binary operations (symmetric & asymmetric with NOT on 2nd operand)
+    BIN_OPS = [
+        ("AND",     lambda a, b: a & b),
+        ("OR",      lambda a, b: a | b),
+        ("XOR",     lambda a, b: a ^ b),
+        ("AND-NOT", lambda a, b: a & (1 - b)),
+        ("OR-NOT",  lambda a, b: a | (1 - b)),
+        ("XOR-NOT", lambda a, b: a ^ (1 - b)),
+    ]
+
+    # For each output bit, collect matching binary ops as (op_name, i1, i2, value)
+    bin_matches = [[] for _ in range(8)]  # per output bit
+    unary_matches = [[] for _ in range(8)]
+
+    for op_pos in range(8):
+        tgt = [ao[e][op_pos] for e in range(n)]
+
+        # Unary matches
+        for ip in range(8):
+            src = [ai[e][ip] for e in range(n)]
+            if src == tgt:
+                unary_matches[op_pos].append(("ID", ip, qb[ip]))
+            if [1 - s for s in src] == tgt:
+                unary_matches[op_pos].append(("NOT", ip, 1 - qb[ip]))
+        if all(t == 0 for t in tgt):
+            unary_matches[op_pos].append(("C0", -1, 0))
+        if all(t == 1 for t in tgt):
+            unary_matches[op_pos].append(("C1", -1, 1))
+
+        # Binary matches
+        for i1 in range(8):
+            for i2 in range(8):
+                if i1 == i2:
+                    continue
+                s1 = [ai[e][i1] for e in range(n)]
+                s2 = [ai[e][i2] for e in range(n)]
+                for op_name, f in BIN_OPS:
+                    if [f(a, b) for a, b in zip(s1, s2)] == tgt:
+                        bin_matches[op_pos].append((op_name, i1, i2, f(qb[i1], qb[i2])))
+
+    # Find the longest shift chain: consecutive output bits using same binary op
+    # with input indices shifting by +1 each time
+    best_chain = None
+    best_chain_len = 0
+    best_chain_op = None
+
+    for start_bit in range(8):
+        for bm in bin_matches[start_bit]:
+            op_name, a, b, val = bm
+            # Extend forward from start_bit
+            chain = {start_bit: val}
+            for step in range(1, 8):
+                next_bit = (start_bit + step) % 8
+                if next_bit == start_bit:
+                    break
+                na = (a + step) % 8
+                nb = (b + step) % 8
+                found = False
+                for m in bin_matches[next_bit]:
+                    if m[0] == op_name and m[1] == na and m[2] == nb:
+                        chain[next_bit] = m[3]
+                        found = True
+                        break
+                if not found:
+                    break
+
+            if len(chain) > best_chain_len:
+                best_chain_len = len(chain)
+                best_chain = dict(chain)
+                best_chain_op = op_name
+
+    min_chain = 3 if n >= 8 else 4
+    if best_chain_len < min_chain:
+        return None
+
+    # Fill remaining bits with unary/constant
+    result = [None] * 8
+    for bit_pos, val in best_chain.items():
+        result[bit_pos] = val
+
+    all_filled = True
+    for op_pos in range(8):
+        if result[op_pos] is not None:
+            continue
+        um = unary_matches[op_pos]
+        if not um:
+            all_filled = False
+            break
+        # Check if all unary matches agree on value
+        vals = set(m[2] for m in um)
+        if len(vals) == 1:
+            result[op_pos] = list(vals)[0]
+        else:
+            # Ambiguous: prefer constant, then ID/NOT consistent with chain shift
+            # Use the first match (constants first, then ID, then NOT)
+            for pref in ["C0", "C1", "ID", "NOT"]:
+                found = [m for m in um if m[0] == pref]
+                if found:
+                    result[op_pos] = found[0][2]
+                    break
+            if result[op_pos] is None:
+                result[op_pos] = um[0][2]
+
+    if not all_filled or None in result:
+        return None
+
+    return "".join(str(b) for b in result)
+
+
+def _try_dominant_2op_mix(ex, qb):
+    """Dominant pattern: >=3 bits use binary f(in[(i+s1)%8], in[(i+s2)%8]),
+    remaining bits use unary/constant. Handles 3-transformation expressions."""
+    n = len(ex)
+    ai = [_bits(i) for i, _ in ex]
+    ao = [_bits(o) for _, o in ex]
+
+    if n < 5:
+        return None  # Need enough examples to avoid coincidental matches
+    all_2arg = FUNC_2_ORIG + FUNC_2_ASYM
+    best_result = None
+    best_covered = 0
+
+    for fn, f in all_2arg:
+        for s1 in range(8):
+            for s2 in range(8):
+                if s1 == s2:
+                    continue
+                if fn in ("AND", "OR", "XOR", "NAND", "NOR", "XNOR") and s1 > s2:
+                    continue
+
+                covered = {}
+                uncovered = []
+                for op in range(8):
+                    i1 = (op + s1) % 8
+                    i2 = (op + s2) % 8
+                    tgt = [ao[e][op] for e in range(n)]
+                    if [f(ai[e][i1], ai[e][i2]) for e in range(n)] == tgt:
+                        covered[op] = f(qb[i1], qb[i2])
+                    else:
+                        uncovered.append(op)
+
+                if len(covered) < 4 or len(covered) == 8:
+                    continue
+                if len(covered) <= best_covered:
+                    continue
+
+                # Fill uncovered bits with unary/constant (require unambiguous)
+                patch = {}
+                ok = True
+                for op in uncovered:
+                    tgt = [ao[e][op] for e in range(n)]
+                    vals = set()
+                    if all(t == 0 for t in tgt):
+                        vals.add(0)
+                    if all(t == 1 for t in tgt):
+                        vals.add(1)
+                    for ip in range(8):
+                        for fn2, f2 in FUNC_1:
+                            if [f2(ai[e][ip]) for e in range(n)] == tgt:
+                                vals.add(f2(qb[ip]))
+                    if not vals:
+                        ok = False
+                        break
+                    if len(vals) > 1:
+                        ok = False
+                        break
+                    patch[op] = list(vals)[0]
+
+                if ok:
+                    result = [0] * 8
+                    for op, v in covered.items():
+                        result[op] = v
+                    for op, v in patch.items():
+                        result[op] = v
+                    best_result = "".join(str(b) for b in result)
+                    best_covered = len(covered)
+
+    return best_result
+
+
+def _chain_vote_refine(ex, qb, initial):
+    """Refine per-bit resolver output using shift-chain voting evidence.
+    Collects ALL shift chains (length >= 2) and uses them to vote on each bit."""
+    n = len(ex)
+    ai = [_bits(i) for i, _ in ex]
+    ao = [_bits(o) for _, o in ex]
+
+    BIN_OPS_VOTE = [
+        ("AND", lambda a, b: a & b), ("OR", lambda a, b: a | b),
+        ("XOR", lambda a, b: a ^ b), ("AND-NOT", lambda a, b: a & (1 - b)),
+        ("OR-NOT", lambda a, b: a | (1 - b)), ("XOR-NOT", lambda a, b: a ^ (1 - b)),
+    ]
+
+    # Build matches
+    bin_matches = [[] for _ in range(8)]
+    unary_matches = [[] for _ in range(8)]
+    for op_pos in range(8):
+        tgt = [ao[e][op_pos] for e in range(n)]
+        for ip in range(8):
+            src = [ai[e][ip] for e in range(n)]
+            if src == tgt:
+                unary_matches[op_pos].append(qb[ip])
+            if [1 - s for s in src] == tgt:
+                unary_matches[op_pos].append(1 - qb[ip])
+        if all(t == 0 for t in tgt):
+            unary_matches[op_pos].append(0)
+        if all(t == 1 for t in tgt):
+            unary_matches[op_pos].append(1)
+        for i1 in range(8):
+            for i2 in range(8):
+                if i1 == i2:
+                    continue
+                s1 = [ai[e][i1] for e in range(n)]
+                s2 = [ai[e][i2] for e in range(n)]
+                for op_name, f in BIN_OPS_VOTE:
+                    if [f(a, b) for a, b in zip(s1, s2)] == tgt:
+                        bin_matches[op_pos].append((op_name, i1, i2, f(qb[i1], qb[i2])))
+
+    # Collect ALL chains >= 2 and weight by length
+    votes = [{0: 0.0, 1: 0.0} for _ in range(8)]
+    for start_bit in range(8):
+        for bm in bin_matches[start_bit]:
+            op_name, a, b, val = bm
+            chain = {start_bit: val}
+            for step in range(1, 8):
+                next_bit = (start_bit + step) % 8
+                if next_bit == start_bit:
+                    break
+                na = (a + step) % 8
+                nb = (b + step) % 8
+                found = [m for m in bin_matches[next_bit]
+                         if m[0] == op_name and m[1] == na and m[2] == nb]
+                if found:
+                    chain[next_bit] = found[0][3]
+                else:
+                    break
+            if len(chain) >= 2:
+                weight = len(chain) ** 2  # longer chains get much more weight
+                for bp, v in chain.items():
+                    votes[bp][v] += weight
+
+    # Add unary evidence with lower weight
+    for op_pos in range(8):
+        for v in unary_matches[op_pos]:
+            votes[op_pos][v] += 1
+
+    # Merge with initial result: only override when vote margin is significant
+    result = list(initial)
+    for op in range(8):
+        v0 = votes[op].get(0, 0)
+        v1 = votes[op].get(1, 0)
+        total = v0 + v1
+        if total > 0:
+            voted_val = 0 if v0 > v1 else 1
+            margin = abs(v0 - v1) / total
+            # Override if: strong margin OR total evidence is high
+            if margin > 0.6 or total >= 15:
+                result[op] = voted_val
+    return result
+
+
+def solve_bit_manip(prompt: str):
+    """Giải bit manipulation puzzle, trả về answer string hoặc None."""
+    ex = _bm_parse_examples(prompt); q = _bm_parse_query(prompt)
+    if not ex or not q: return None
+    qb = _bits(q)
+    for func in [_try_xor, _try_rot, _try_perm, _try_rotxor, _try_revxor,
+                 _try_global_1op, _try_global_2op, _try_global_3op, _try_uni2,
+                 _try_shift_chain, _try_mix, _try_dominant_shift_mix]:
+        r = func(ex, qb)
+        if r: return r
+    ai = [_bits(i) for i, _ in ex]; ao = [_bits(o) for _, o in ex]
+    all_cands = [_get_cands(ai, ao, qb, op) for op in range(8)]
+    result, conf, shift_ev, pair_ev, perm, _, _ = _resolve_phases12(all_cands)
+    if None not in result:
+        return "".join(str(b) for b in result)
+    # Try permutation-based resolution for ambiguous bits
+    perm_result = _try_perm_from_cands(all_cands, list(result), conf)
+    if perm_result:
+        return "".join(str(b) for b in perm_result)
+    bf = _resolve_bf(list(result), all_cands, perm, shift_ev)
+    # Chain voting: use ALL shift chains (even short ones) as evidence to refine
+    voted = _chain_vote_refine(ex, qb, bf)
+    return "".join(str(b) for b in voted)
+
+
+# --- CELL 3 code ---
+def _describe_rot(ex, qb):
+    """Return (answer, detailed description) for bit rotation, or (None, None)."""
+    q_str = "".join(str(b) for b in qb)
+    for k in range(1, 8):
+        if all(_bits(i)[k:] + _bits(i)[:k] == _bits(o) for i, o in ex):
+            ans = "".join(str(b) for b in qb[k:] + qb[:k])
+            lines = [
+                f"Bit rotation detected: LEFT rotate by {k} positions.",
+                f"  Rule: out[i] = input[(i + {k}) % 8] for every output bit i in 0..7.",
+                f"  Meaning: the 8-bit string shifts {k} places to the left; the {k} leftmost bits wrap around to the right end.",
+                f"  Per-example check (input -> predicted):",
+            ]
+            for inp, out in ex[:2]:
+                ib = _bits(inp)
+                pred = "".join(str(ib[(i + k) % 8]) for i in range(8))
+                mark = '✓' if pred == out else '✗'
+                lines.append(f"    {inp} -> {pred} (expected {out}) {mark}")
+            lines.append(f"  Applying to query {q_str}:")
+            for i in range(8):
+                src = (i + k) % 8
+                lines.append(f"    out[{i}] = input[{src}] = {qb[src]}")
+            return ans, "\n".join(lines)
+        if all(_bits(i)[-k:] + _bits(i)[:-k] == _bits(o) for i, o in ex):
+            ans = "".join(str(b) for b in qb[-k:] + qb[:-k])
+            lines = [
+                f"Bit rotation detected: RIGHT rotate by {k} positions.",
+                f"  Rule: out[i] = input[(i - {k}) % 8] = input[(i + {8 - k}) % 8] for every output bit i in 0..7.",
+                f"  Meaning: the 8-bit string shifts {k} places to the right; the {k} rightmost bits wrap around to the left end.",
+                f"  Per-example check (input -> predicted):",
+            ]
+            for inp, out in ex[:2]:
+                ib = _bits(inp)
+                pred = "".join(str(ib[(i - k) % 8]) for i in range(8))
+                mark = '✓' if pred == out else '✗'
+                lines.append(f"    {inp} -> {pred} (expected {out}) {mark}")
+            lines.append(f"  Applying to query {q_str}:")
+            for i in range(8):
+                src = (i - k) % 8
+                lines.append(f"    out[{i}] = input[{src}] = {qb[src]}")
+            return ans, "\n".join(lines)
+    return None, None
+
+
+def _describe_shift_chain(ex, qb):
+    """Return (answer, detailed description) for shift-chain pattern, or (None, None)."""
+    n = len(ex)
+    ai = [_bits(i) for i, _ in ex]
+    ao = [_bits(o) for _, o in ex]
+    q_str = "".join(str(b) for b in qb)
+
+    BIN_OPS = [
+        ("AND",     lambda a, b: a & b),
+        ("OR",      lambda a, b: a | b),
+        ("XOR",     lambda a, b: a ^ b),
+        ("AND-NOT", lambda a, b: a & (1 - b)),
+        ("OR-NOT",  lambda a, b: a | (1 - b)),
+        ("XOR-NOT", lambda a, b: a ^ (1 - b)),
+    ]
+    OP_FN = {name: f for name, f in BIN_OPS}
+
+    bin_matches = [[] for _ in range(8)]
+    unary_matches = [[] for _ in range(8)]
+    for op_pos in range(8):
+        tgt = [ao[e][op_pos] for e in range(n)]
+        for ip in range(8):
+            src = [ai[e][ip] for e in range(n)]
+            if src == tgt:
+                unary_matches[op_pos].append(("ID", ip, qb[ip]))
+            if [1 - s for s in src] == tgt:
+                unary_matches[op_pos].append(("NOT", ip, 1 - qb[ip]))
+        if all(t == 0 for t in tgt):
+            unary_matches[op_pos].append(("C0", -1, 0))
+        if all(t == 1 for t in tgt):
+            unary_matches[op_pos].append(("C1", -1, 1))
+        for i1 in range(8):
+            for i2 in range(8):
+                if i1 == i2:
+                    continue
+                s1 = [ai[e][i1] for e in range(n)]
+                s2 = [ai[e][i2] for e in range(n)]
+                for op_name, f in BIN_OPS:
+                    if [f(a, b) for a, b in zip(s1, s2)] == tgt:
+                        bin_matches[op_pos].append((op_name, i1, i2, f(qb[i1], qb[i2])))
+
+    best_chain = None
+    best_chain_len = 0
+    best_chain_op = None
+    best_start_bit = None
+    best_a = None
+    best_b = None
+    for start_bit in range(8):
+        for bm in bin_matches[start_bit]:
+            op_name, a, b, val = bm
+            chain = {start_bit: val}
+            for step in range(1, 8):
+                next_bit = (start_bit + step) % 8
+                if next_bit == start_bit:
+                    break
+                na = (a + step) % 8
+                nb = (b + step) % 8
+                found = False
+                for m in bin_matches[next_bit]:
+                    if m[0] == op_name and m[1] == na and m[2] == nb:
+                        chain[next_bit] = m[3]
+                        found = True
+                        break
+                if not found:
+                    break
+            if len(chain) > best_chain_len:
+                best_chain_len = len(chain)
+                best_chain = dict(chain)
+                best_chain_op = op_name
+                best_start_bit = start_bit
+                best_a = a
+                best_b = b
+
+    min_chain = 3 if n >= 8 else 4
+    if best_chain_len < min_chain:
+        return None, None
+
+    s1 = (best_a - best_start_bit) % 8
+    s2 = (best_b - best_start_bit) % 8
+
+    result = [None] * 8
+    unary_fills = {}
+    for bit_pos, val in best_chain.items():
+        result[bit_pos] = val
+    for op_pos in range(8):
+        if result[op_pos] is not None:
+            continue
+        um = unary_matches[op_pos]
+        if not um:
+            return None, None
+        vals = set(m[2] for m in um)
+        if len(vals) == 1:
+            result[op_pos] = list(vals)[0]
+            unary_fills[op_pos] = um[0]
+        else:
+            picked = None
+            for pref in ["C0", "C1", "ID", "NOT"]:
+                found = [m for m in um if m[0] == pref]
+                if found:
+                    picked = found[0]
+                    break
+            if picked is None:
+                picked = um[0]
+            result[op_pos] = picked[2]
+            unary_fills[op_pos] = picked
+    if None in result:
+        return None, None
+
+    chain_bits = sorted(best_chain.keys())
+    fallback_bits = [i for i in range(8) if i not in best_chain]
+    op_f = OP_FN[best_chain_op]
+
+    lines = [f"Shift Chain Pattern detected:"]
+    lines.append(
+        f"  Chain rule (applies to output bits {chain_bits}): "
+        f"out[i] = {best_chain_op}(input[(i + {s1}) % 8], input[(i + {s2}) % 8])"
+    )
+    lines.append(
+        f"  Meaning: for each output bit i in the chain, the same binary operation {best_chain_op} is used. "
+        f"The two input indices are obtained by adding the fixed shifts s1 = {s1} and s2 = {s2} to i, then taking mod 8. "
+        f"As i advances by 1, both input indices also advance by 1 (mod 8)."
+    )
+    if fallback_bits:
+        lines.append(f"  Fallback rule for the remaining output bits {fallback_bits}:")
+        for op_pos in fallback_bits:
+            rule, ip, _val = unary_fills[op_pos]
+            if rule in ("C0", "C1"):
+                const_val = 0 if rule == "C0" else 1
+                lines.append(f"    bit[{op_pos}]: {rule} (constant {const_val}) — this bit is the same across all examples")
+            else:
+                lines.append(f"    bit[{op_pos}]: {rule}(input[{ip}])")
+    lines.append(f"  Per-example check of the chain rule (input -> chain-bit predictions):")
+    for inp, out in ex[:2]:
+        ib = _bits(inp)
+        pred_full = []
+        for i in range(8):
+            if i in best_chain:
+                i1 = (i + s1) % 8
+                i2 = (i + s2) % 8
+                pred_full.append(str(op_f(ib[i1], ib[i2])))
+            else:
+                rule, ip, _ = unary_fills[i]
+                if rule == "C0":
+                    pred_full.append("0")
+                elif rule == "C1":
+                    pred_full.append("1")
+                elif rule == "ID":
+                    pred_full.append(str(ib[ip]))
+                else:  # NOT
+                    pred_full.append(str(1 - ib[ip]))
+        pred_str = "".join(pred_full)
+        mark = '✓' if pred_str == out else '✗'
+        lines.append(f"    {inp} -> {pred_str} (expected {out}) {mark}")
+    lines.append(f"  Applying to query {q_str}:")
+    for i in range(8):
+        if i in best_chain:
+            i1 = (i + s1) % 8
+            i2 = (i + s2) % 8
+            lines.append(
+                f"    out[{i}] = {best_chain_op}(input[{i1}], input[{i2}]) "
+                f"= {best_chain_op}({qb[i1]}, {qb[i2]}) = {result[i]}"
+            )
+        else:
+            rule, ip, val = unary_fills[i]
+            if rule in ("C0", "C1"):
+                lines.append(f"    out[{i}] = {rule} = {val}")
+            else:
+                lines.append(f"    out[{i}] = {rule}(input[{ip}]) = {rule}({qb[ip]}) = {val}")
+    answer = "".join(str(b) for b in result)
+    return answer, "\n".join(lines)
+
+
+def _describe_global_2op(ex, qb):
+    """Return (answer, description) for global 2-operand pattern, or (None, None)."""
+    n = len(ex); ai = [_bits(i) for i, _ in ex]; ao = [_bits(o) for _, o in ex]
+    q_str = "".join(str(b) for b in qb)
+    for fn, f in FUNC_2_ORIG + FUNC_2_ASYM:
+        for s1 in range(8):
+            for s2 in range(8):
+                if s1 == s2:
+                    continue
+                if all(all(f(ai[e][(op + s1) % 8], ai[e][(op + s2) % 8]) == ao[e][op]
+                           for op in range(8)) for e in range(n)):
+                    result = [f(qb[(op + s1) % 8], qb[(op + s2) % 8]) for op in range(8)]
+                    ans = "".join(str(b) for b in result)
+                    lines = [
+                        f"Global 2-operand pattern detected.",
+                        f"  Rule: out[i] = {fn}(input[(i + {s1}) % 8], input[(i + {s2}) % 8]) for every output bit i in 0..7.",
+                        f"  Meaning: all 8 output bits use the same binary operation {fn} with the fixed shifts s1 = {s1} and s2 = {s2}.",
+                        f"  Per-example check (first 2):",
+                    ]
+                    for inp, out in ex[:2]:
+                        ib = _bits(inp)
+                        pred = "".join(str(f(ib[(op + s1) % 8], ib[(op + s2) % 8])) for op in range(8))
+                        mark = '✓' if pred == out else '✗'
+                        lines.append(f"    {inp} -> {pred} (expected {out}) {mark}")
+                    lines.append(f"  Applying to query {q_str}:")
+                    for i in range(8):
+                        i1 = (i + s1) % 8
+                        i2 = (i + s2) % 8
+                        lines.append(
+                            f"    out[{i}] = {fn}(input[{i1}], input[{i2}]) "
+                            f"= {fn}({qb[i1]}, {qb[i2]}) = {result[i]}"
+                        )
+                    return ans, "\n".join(lines)
+    return None, None
+
+
+def _describe_perm(ex, qb):
+    """Return (answer, description) for permutation pattern, or (None, None)."""
+    n = len(ex); ai = [_bits(i) for i, _ in ex]; ao = [_bits(o) for _, o in ex]
+    if n < 5:
+        return None, None
+    p = [None] * 8
+    x = [0] * 8
+    ambig_count = 0
+    for op in range(8):
+        tgt = [ao[e][op] for e in range(n)]
+        found_count = 0
+        for ip in range(8):
+            src = [ai[e][ip] for e in range(n)]
+            if src == tgt:
+                if found_count == 0:
+                    p[op] = ip; x[op] = 0
+                found_count += 1
+            elif [1 - s for s in src] == tgt:
+                if found_count == 0:
+                    p[op] = ip; x[op] = 1
+                found_count += 1
+        if p[op] is None:
+            return None, None
+        if found_count > 1:
+            ambig_count += 1
+    if ambig_count > 2:
+        return None, None
+    q_str = "".join(str(b) for b in qb)
+    result = [qb[p[i]] ^ x[i] for i in range(8)]
+    ans = "".join(str(b) for b in result)
+    lines = [
+        f"Bit permutation pattern detected.",
+        f"  Rule: each output bit is either input[p(i)] or NOT(input[p(i)]) for some permutation p and inversion mask x.",
+        f"  Permutation p (position -> source input bit): {p}",
+        f"  Inversion mask x (1 = NOT applied): {x}",
+        f"  Applying to query {q_str}:",
+    ]
+    for i in range(8):
+        tag = "NOT" if x[i] else "ID"
+        lines.append(f"    out[{i}] = {tag}(input[{p[i]}]) = {tag}({qb[p[i]]}) = {result[i]}")
+    return ans, "\n".join(lines)
+
+
+def _describe_mix(ex, qb):
+    """Return (answer, description) for mixed ID/NOT + 2-arg pattern, or (None, None)."""
+    n = len(ex); ai = [_bits(i) for i, _ in ex]; ao = [_bits(o) for _, o in ex]
+    q_str = "".join(str(b) for b in qb)
+    for id_shift in range(8):
+        ib = {}; ib_rules = {}
+        for op in range(8):
+            ip = (op + id_shift) % 8
+            tgt = [ao[e][op] for e in range(n)]; src = [ai[e][ip] for e in range(n)]
+            if src == tgt:
+                ib[op] = qb[ip]; ib_rules[op] = ("ID", ip)
+            elif [1 - s for s in src] == tgt:
+                ib[op] = 1 - qb[ip]; ib_rules[op] = ("NOT", ip)
+        if len(ib) < 3 or len(ib) >= 7:
+            continue
+        rem = [op for op in range(8) if op not in ib]
+        if len(rem) > 5:
+            continue
+        for fn, f in FUNC_2_ORIG + FUNC_2_ASYM:
+            for s1 in range(8):
+                for s2 in range(8):
+                    if s1 == s2:
+                        continue
+                    if fn in ("AND", "OR", "XOR", "NAND", "NOR", "XNOR") and s1 > s2:
+                        continue
+                    if not all(all(f(ai[e][(op + s1) % 8], ai[e][(op + s2) % 8]) == ao[e][op]
+                                   for op in rem) for e in range(n)):
+                        continue
+                    result = {}
+                    for op, pv in ib.items():
+                        result[op] = pv
+                    for op in rem:
+                        result[op] = f(qb[(op + s1) % 8], qb[(op + s2) % 8])
+                    valid = True
+                    for inp, out in ex:
+                        iqb = _bits(inp)
+                        pred_r = {}
+                        for opp, (rule, ip) in ib_rules.items():
+                            pred_r[opp] = iqb[ip] if rule == "ID" else 1 - iqb[ip]
+                        for opp in rem:
+                            pred_r[opp] = f(iqb[(opp + s1) % 8], iqb[(opp + s2) % 8])
+                        pred_str = "".join(str(pred_r[opp]) for opp in range(8))
+                        if pred_str != out:
+                            valid = False; break
+                    if not valid:
+                        continue
+                    lines = [
+                        f"Mixed pattern detected: some output bits use a 1-arg rule (ID/NOT of a shifted input), the rest use a 2-arg rule.",
+                        f"  Bits using 1-arg rule (shift s = {id_shift}, meaning each such out[i] uses input[(i + {id_shift}) % 8]):",
+                    ]
+                    for op in sorted(ib.keys()):
+                        rule, ip = ib_rules[op]
+                        lines.append(f"    bit[{op}]: {rule}(input[{ip}])")
+                    lines.append(f"  Bits using 2-arg rule {fn} with shifts s1 = {s1}, s2 = {s2}:")
+                    for op in rem:
+                        i1 = (op + s1) % 8; i2 = (op + s2) % 8
+                        lines.append(f"    bit[{op}]: {fn}(input[{i1}], input[{i2}])")
+                    lines.append(f"  Applying to query {q_str}:")
+                    for i in range(8):
+                        if i in ib:
+                            rule, ip = ib_rules[i]
+                            lines.append(f"    out[{i}] = {rule}(input[{ip}]) = {rule}({qb[ip]}) = {result[i]}")
+                        else:
+                            i1 = (i + s1) % 8; i2 = (i + s2) % 8
+                            lines.append(
+                                f"    out[{i}] = {fn}(input[{i1}], input[{i2}]) "
+                                f"= {fn}({qb[i1]}, {qb[i2]}) = {result[i]}"
+                            )
+                    ans = "".join(str(result[i]) for i in range(8))
+                    return ans, "\n".join(lines)
+    return None, None
+
+
+def generate_bit_manip_cot(prompt: str, answer: str) -> str:
+    """Sinh CoT verbose cho bit manipulation — dạy model cách verify từng hypothesis."""
+    ex = _bm_parse_examples(prompt); q = _bm_parse_query(prompt)
+    if not ex or not q:
+        return f"Let me solve this step by step.\n\\boxed{{{answer}}}"
+    qb = _bits(q); lines = []
+    lines.append("I need to find the secret bit manipulation rule from the examples.")
+    lines.append(f"\nGiven {len(ex)} examples of 8-bit input -> output mappings:")
+    for inp, out in ex:
+        lines.append(f"  {inp} -> {out}")
+    lines.append(f"\nQuery input: {q}")
+    lines.append("\nLet me systematically test candidate patterns and verify each one against ALL examples.")
+
+    # Try whole-byte patterns with verbose verification.
+    # Third element is an optional describe_fn(ex, qb) -> (answer, detailed_desc).
+    pattern_checks = [
+        ("XOR with a constant mask",                      _try_xor,                    None),
+        ("Bit rotation (left or right)",                  _try_rot,                    _describe_rot),
+        ("Bit permutation",                               _try_perm,                   _describe_perm),
+        ("Rotation then XOR with constant",               _try_rotxor,                 None),
+        ("Reverse then XOR with constant",                _try_revxor,                 None),
+        ("Global 1-operand function with bit shift",      _try_global_1op,             None),
+        ("Global 2-operand function with bit shift",      _try_global_2op,             _describe_global_2op),
+        ("Global 3-operand function with bit shift",      _try_global_3op,             None),
+        ("Uniform 2-operand cyclic function",             _try_uni2,                   None),
+        ("Shift chain pattern (binary op + unary fill)",  _try_shift_chain,            _describe_shift_chain),
+        ("Mixed ID/NOT + 2-arg pattern",                  _try_mix,                    _describe_mix),
+        ("Mixed dominant shift pattern",                  _try_dominant_shift_mix,     _describe_dominant_shift_mix),
+    ]
+    for name, func, desc_fn in pattern_checks:
+        lines.append(f"\nTesting hypothesis: {name}")
+        r = func(ex, qb)
+        if r:
+            lines.append(f"  → Pattern found! Verifying against all {len(ex)} examples:")
+            all_ok = True
+            for inp, out in ex:
+                pred = func(ex, _bits(inp))
+                ok = pred == out if pred else False
+                lines.append(f"    {inp} -> predicted: {pred or '?'}, actual: {out} {'✓' if ok else '✗'}")
+                if not ok:
+                    all_ok = False
+            if all_ok:
+                lines.append(f"  All examples match. Rule confirmed: {name}")
+                if desc_fn is not None:
+                    desc_ans, desc_text = desc_fn(ex, qb)
+                    if desc_text:
+                        lines.append("")
+                        lines.append(desc_text)
+                else:
+                    lines.append(f"\nApplying rule to query {q}:")
+                    lines.append(f"  Result = {r}")
+                lines.append(f"\n\\boxed{{{answer}}}")
+                return "\n".join(lines)
+            else:
+                lines.append(f"  Some examples failed. Discarding this hypothesis.")
+        else:
+            lines.append(f"  → No consistent pattern found for this hypothesis.")
+
+    # Per-bit analysis. When no whole-byte pattern matches, resolve each
+    # output bit independently. For each bit, search _get_cands for rules
+    # consistent with the verified answer and pick the simplest one.
+    lines.append("\nNo whole-byte pattern matches. Analyzing each output bit position independently.")
+    lines.append(f"For every bit, I search for the simplest rule whose value agrees with the verified answer {answer}.")
+    ai = [_bits(i) for i, _ in ex]; ao = [_bits(o) for _, o in ex]
+    answer_bits = _bits(answer)
+    all_cands = [_get_cands(ai, ao, qb, op) for op in range(8)]
+
+    def _fmt_rule(fn, inputs):
+        if len(inputs) == 0:
+            return f"{fn} (constant)"
+        if len(inputs) == 1:
+            return f"{fn}(input[{inputs[0]}]) = {fn}({qb[inputs[0]]})"
+        if len(inputs) == 2:
+            return (f"{fn}(input[{inputs[0]}], input[{inputs[1]}]) "
+                    f"= {fn}({qb[inputs[0]]}, {qb[inputs[1]]})")
+        args = ", ".join(f"input[{j}]" for j in inputs)
+        arg_vals = ", ".join(str(qb[j]) for j in inputs)
+        return f"{fn}({args}) = {fn}({arg_vals})"
+
+    for op in range(8):
+        cands = all_cands[op]
+        tgt_vals = [ao[e][op] for e in range(len(ex))]
+        target = answer_bits[op]
+        lines.append(f"\n  Output bit[{op}]: observed values across examples = {tgt_vals}, verified answer bit = {target}")
+        if not cands:
+            lines.append(f"    → No candidate rule found; bit[{op}] = {target} (taken from verified answer).")
+            continue
+        supporting = [c for c in cands if c[2] == target]
+        if not supporting:
+            lines.append(f"    → No candidate matches the verified bit value {target}; bit[{op}] = {target} (taken from verified answer).")
+            continue
+        # Prefer fewest args, then highest prior
+        supporting.sort(key=lambda c: (c[3], -OP_PRIOR.get(c[0], 0)))
+        fn, inputs, val, _complexity = supporting[0]
+        vals = set(c[2] for c in cands)
+        if len(vals) == 1:
+            tag = "Unambiguous rule"
+        else:
+            tag = f"Ambiguous across candidates ({len(vals)} possible values); picking the rule consistent with the verified bit"
+        lines.append(f"    → {tag}: out[{op}] = {_fmt_rule(fn, inputs)} = {val}")
+
+    lines.append(f"\nAssembling all 8 bits: {answer}")
+    lines.append(f"\n\\boxed{{{answer}}}")
+    return "\n".join(lines)
+
+
+
+def _describe_dominant_shift_mix(ex, qb):
+    """Trả về (answer, mô tả rule chi tiết) nếu tìm được, ngược lại (None, None)."""
+    n = len(ex); ai = [_bits(i) for i, _ in ex]; ao = [_bits(o) for _, o in ex]
+    for fn, f in FUNC_1:
+        for s in range(8):
+            covered = {}; uncovered = []
+            for op in range(8):
+                tgt = [ao[e][op] for e in range(n)]
+                if [f(ai[e][(op+s)%8]) for e in range(n)] == tgt:
+                    covered[op] = f(qb[(op+s)%8])
+                else:
+                    uncovered.append(op)
+            if len(covered) < 5: continue
+            patch = {}; patch_desc = {}; ok = True
+            for op in uncovered:
+                tgt = [ao[e][op] for e in range(n)]; found_val = None; found_desc = None
+                if all(t == 0 for t in tgt):
+                    found_val = 0; found_desc = "C0 (constant 0)"
+                elif all(t == 1 for t in tgt):
+                    found_val = 1; found_desc = "C1 (constant 1)"
+                else:
+                    for ip in range(8):
+                        for fn2, f2 in FUNC_1:
+                            if [f2(ai[e][ip]) for e in range(n)] == tgt:
+                                found_val = f2(qb[ip])
+                                found_desc = f"{fn2}(input[{ip}])"
+                                break
+                        if found_val is not None: break
+                    if found_val is None:
+                        for i1 in range(8):
+                            for i2 in range(i1+1, 8):
+                                s1 = [ai[e][i1] for e in range(n)]
+                                s2 = [ai[e][i2] for e in range(n)]
+                                for fn2, f2 in FUNC_2_ORIG + FUNC_2_ASYM:
+                                    if [f2(a, b) for a, b in zip(s1, s2)] == tgt:
+                                        found_val = f2(qb[i1], qb[i2])
+                                        found_desc = f"{fn2}(input[{i1}], input[{i2}])"
+                                        break
+                                if found_val is not None: break
+                            if found_val is not None: break
+                if found_val is None: ok = False; break
+                patch[op] = found_val
+                patch_desc[op] = found_desc
+            if ok:
+                result = [0] * 8
+                for op, v in covered.items(): result[op] = v
+                for op, v in patch.items(): result[op] = v
+                answer = "".join(str(b) for b in result)
+
+                dominant_rule = f"{fn}(input[(i+{s})%8])"
+                desc_lines = [
+                    f"Mixed Dominant Pattern detected:",
+                    f"  Dominant rule (applies to bits {sorted(covered.keys())}): out[i] = {dominant_rule}",
+                    f"  Exception bits that do not follow the dominant rule:",
+                ]
+                for op in uncovered:
+                    desc_lines.append(f"    bit[{op}]: out[{op}] = {patch_desc[op]} = {patch[op]}")
+                desc_lines.append(f"  Applying to query input:")
+                for i in range(8):
+                    if i in covered:
+                        src = (i + s) % 8
+                        desc_lines.append(
+                            f"    out[{i}] = {fn}(input[{src}]) = {fn}({qb[src]}) = {result[i]}"
+                        )
+                    else:
+                        desc_lines.append(
+                            f"    out[{i}] = {patch_desc[i]} = {result[i]}"
+                        )
+                return answer, "\n".join(desc_lines)
+    return None, None
+
+# --- CELL 4 code ---
+SYSTEM_PROMPT = """You are an expert reasoning assistant specializing in binary bit manipulation puzzles.
+
+Your task is to rewrite a provided solver trace into a clear, step-by-step Chain-of-Thought (CoT) explanation that a language model can learn to reproduce during SFT training.
+
+## Input format
+You will receive:
+1. PUZZLE: The original puzzle prompt with input->output examples and a query input.
+2. ANSWER: The verified correct answer (ground truth).
+3. SOLVER TRACE: A step-by-step trace from a deterministic solver, including hypothesis tests and per-bit analysis.
+
+## Your task
+Rewrite the solver trace into a clean CoT that teaches the reasoning process. Follow these rules:
+
+### Structure
+1. **Restate the problem** -- list the input->output examples and the query input.
+2. **Hypothesis testing** -- for each hypothesis the solver tested:
+   - State the hypothesis (e.g., "XOR with constant mask", "bit rotation", "shift chain pattern").
+   - Show verification against 2-3 examples (not all -- keep it concise).
+   - State whether it holds or fails.
+3. **When a pattern is found** -- explain the rule clearly:
+   - For global patterns (XOR, rotation, permutation, global 2-op/3-op): state the rule and apply to query.
+   - For shift chain patterns: explain which binary operation applies to which output bits with which shift offsets, and which remaining bits use unary/constant rules. Show the +1/+1 shift pattern explicitly.
+   - For mixed dominant patterns: state the dominant rule, which bits it covers, and each exception bit's rule.
+   - For per-bit analysis: for each output bit, state the identified function and whether it is CERTAIN or AMBIGUOUS.
+4. **Apply to query** -- show the computation for each output bit, step by step.
+5. **Final answer** -- end with \\boxed{ANSWER}.
+
+### Style rules
+- Write plainly: "output bit 0 = AND(input[5], input[1]) = AND(0, 0) = 0".
+- Do NOT use LaTeX math notation (no \\[, \\(, \\), \\oplus, \\wedge, etc.). Use plain text operators: AND, OR, XOR, NOT, NAND, NOR, XNOR, INHIB, IMPL, MAJ, CH.
+- Do NOT use Unicode math symbols. Write XOR not xor-symbol, AND not and-symbol, OR not or-symbol, NOT not not-symbol.
+- Use -> for mappings, = for equalities.
+- Keep the CoT under 7580 tokens. Be concise -- skip failed hypotheses quickly ("Tested XOR mask -- failed on example 2.").
+- For the successful pattern, show full verification on 2-3 examples and full application to query.
+- Do not add information not present in the solver trace.
+- CRITICAL: The final answer inside \\boxed{} must always be exactly 8 bits long. Preserve all leading zeros.
+
+### Pattern types to handle (be explicit about the rule)
+Every rule must be expressed in the form "out[i] = <expression in input[...]>" with exact indices. Never write "shift a bit" or "move bits around" without saying which output index comes from which input index.
+
+- **Bit rotation** (left or right):
+  - LEFT rotate by k: out[i] = input[(i + k) % 8] for all 8 bits. The k leftmost bits wrap to the right end.
+  - RIGHT rotate by k: out[i] = input[(i - k) % 8] = input[(i + 8 - k) % 8] for all 8 bits. The k rightmost bits wrap to the left end.
+  - ALWAYS state the direction (LEFT or RIGHT) and the exact value of k. Then write out[i] = input[j] for each i using concrete indices.
+
+- **Shift chain** (most commonly misunderstood — be precise):
+  - A contiguous group of output bits C = {i_start, i_start+1, ..., i_end} all use the SAME binary operation OP with FIXED shifts s1 and s2. The shifts s1, s2 are integers in 0..7.
+  - For every i in C: out[i] = OP(input[(i + s1) % 8], input[(i + s2) % 8]).
+  - OP is one of AND, OR, XOR, AND-NOT, OR-NOT, XOR-NOT. (AND-NOT means a AND (NOT b); similarly for OR-NOT, XOR-NOT — always operating on the second argument.)
+  - As i advances by 1, BOTH input indices also advance by 1 (mod 8). That is the "+1/+1" shift property — it is NOT "shifts going out of bounds"; the indices are always valid modulo 8.
+  - Output bits NOT in C use a fallback rule picked per-bit from: ID(input[j]), NOT(input[j]), constant 0 (C0), or constant 1 (C1). State the fallback for each such bit explicitly.
+  - When writing the CoT for a shift chain, you MUST state: (1) the exact OP, (2) the exact s1 and s2, (3) the exact set of bits C covered by the chain, (4) the fallback rule for each remaining bit, (5) the per-bit computation for the query.
+  - Do NOT say "bits wrap around" or "shifts go out of bounds". Do NOT paraphrase shift chain as "rotation". Keep the two patterns distinct.
+
+- **Global 1-operand / 2-operand / 3-operand with shift**: All 8 output bits use the SAME function (ID/NOT; AND/OR/XOR/NAND/NOR/XNOR/INHIB/IMPL; MAJ/CH/XOR3) with a fixed set of input shifts. Write out[i] = FN(input[(i + s) % 8]) or out[i] = FN(input[(i + s1) % 8], input[(i + s2) % 8]) etc., and apply bit-by-bit to the query using concrete input values.
+
+- **Bit permutation** (with optional NOT mask): Each output bit copies one input bit, possibly inverted: out[i] = ID(input[p(i)]) or out[i] = NOT(input[p(i)]), where p is a permutation of 0..7. State the full permutation p and the inversion mask x explicitly, then apply bit-by-bit.
+
+- **Mixed ID/NOT + 2-arg pattern**: A subset of output bits uses a 1-arg rule out[i] = ID(input[(i + s) % 8]) or NOT(input[(i + s) % 8]) with a single shift s; the remaining bits use a 2-arg rule out[i] = OP(input[(i + s1) % 8], input[(i + s2) % 8]) with OP in AND/OR/XOR/NAND/NOR/XNOR/INHIB/IMPL. State WHICH bits use which rule, the shift s for the 1-arg group, and the OP and shifts s1, s2 for the 2-arg group. Apply bit-by-bit.
+
+- **Mixed dominant shift pattern**: Dominant rule applies to >=5 output bits via out[i] = ID(input[(i + s) % 8]) or NOT(input[(i + s) % 8]); the 1-3 remaining bits each have their own rule (constant C0/C1, or ID/NOT of a specific input, or a 2-arg op). State the dominant rule and each exception bit's rule explicitly.
+
+- **Per-bit analysis fallback**: When no whole-byte pattern fits, each output bit is resolved independently using the verified answer to pick the simplest candidate rule for that bit. State per-bit whether the rule is Unambiguous or Ambiguous; for Ambiguous, state that the verified answer bit was used to select the rule.
+
+- **Chain vote refinement**: When per-bit analysis is ambiguous, shift-chain voting evidence is used to pick the most structurally consistent value for each bit. State that the bit was AMBIGUOUS and explain which voted value was selected.
+
+### Format
+- Use ## headers to separate sections.
+- End with \\boxed{ANSWER} where ANSWER is exactly the verified 8-bit answer."""
+
+
+# --- CELL 5 code ---
+"""
+Shared pipeline: solver -> verify answer -> build trace -> GPT rewrite -> save CSV.
+
+Used by bitgen.py and eqgen.py. Each caller passes its own solver_fn, trace_fn
+and SYSTEM_PROMPT; this module handles everything else (API call, retries,
+stats, CSV output).
+"""
+
+import re
+import time
+import pandas as pd
+from openai import OpenAI
+from pathlib import Path
+
+
+PROVIDERS = {
+    "openai":   {"base_url": None,                               "default_model": "gpt-4o"},
+    "groq":     {"base_url": "https://api.groq.com/openai/v1",   "default_model": "llama-3.3-70b-versatile"},
+    "deepseek": {"base_url": "https://api.deepseek.com/v1",      "default_model": "deepseek-chat"},
+}
+
+
+def make_client(provider, api_key):
+    if provider not in PROVIDERS:
+        raise ValueError(f"Unknown provider '{provider}'. Choose from: {list(PROVIDERS)}")
+    base_url = PROVIDERS[provider]["base_url"]
+    return OpenAI(api_key=api_key, base_url=base_url) if base_url else OpenAI(api_key=api_key)
+
+
+def build_user_message(prompt, answer, trace):
+    return f"""## PUZZLE
+{prompt}
+
+## ANSWER
+{answer}
+
+## SOLVER TRACE
+{trace}"""
+
+
+def fix_boxed(cot, answer):
+    """Force \\boxed{...} in the CoT to contain exactly the verified answer."""
+    return re.sub(r'\\boxed\{[^}]*\}', f'\\\\boxed{{{answer}}}', cot)
+
+
+def gen_cot_via_api(client, system_prompt, prompt, answer, trace,
+                    model="deepseek-chat", max_tokens=7680):
+    response = client.chat.completions.create(
+        model=model,
+        max_tokens=max_tokens,
+        messages=[
+            {"role": "system", "content": system_prompt},
+            {"role": "user",   "content": build_user_message(prompt, answer, trace)},
+        ],
+    )
+    cot = response.choices[0].message.content
+    return fix_boxed(cot, answer)
+
+
+def     run_pipeline(
+    input_csv,
+    output_csv,
+    api_key,
+    solver_fn,
+    trace_fn,
+    system_prompt,
+    answer_formatter=lambda a: str(a).strip(),
+    max_samples=None,
+    delay_sec=0.3,
+    provider="groq",
+    model=None,
+    max_tokens=7680,
+    pre_pass=None,
+):
+    """Generic solver -> GPT CoT pipeline.
+
+    solver_fn(prompt, ctx) -> (predicted_answer, solver_info)
+        Return (None, None) when the puzzle cannot be parsed.
+    trace_fn(prompt, answer, solver_info) -> str
+        Returns the deterministic trace that GPT will rewrite.
+    pre_pass(input_csv) -> ctx
+        Optional first pass (e.g., build global operator statistics).
+    """
+    client = make_client(provider, api_key)
+    if model is None:
+        model = PROVIDERS[provider]["default_model"]
+    print(f"Provider: {provider} | Model: {model}")
+    df = pd.read_csv(input_csv)
+    if max_samples:
+        df = df.head(max_samples)
+
+    print(f"Total samples: {len(df)}")
+    print(f"Output: {output_csv}\n")
+
+    ctx = pre_pass(input_csv) if pre_pass else None
+
+    stats = {"total": 0, "solver_correct": 0, "solver_wrong": 0, "api_error": 0}
+    results = []
+
+    for _, row in df.iterrows():
+        stats["total"] += 1
+        prompt = row["prompt"]
+        answer = answer_formatter(row["answer"])
+        row_id = row["id"]
+
+        solved, solver_info = solver_fn(prompt, ctx)
+        if solved != answer:
+            stats["solver_wrong"] += 1
+            print(f"[{stats['total']:>4}/{len(df)}] id={row_id} | solver WRONG ({solved} != {answer}) -> skip")
+            continue
+        stats["solver_correct"] += 1
+
+        trace = trace_fn(prompt, answer, solver_info)
+
+        try:
+            cot = gen_cot_via_api(
+                client, system_prompt, prompt, answer, trace,
+                model=model, max_tokens=max_tokens,
+            )
+            results.append({
+                "id": row_id,
+                "prompt": prompt,
+                "answer": answer,
+                "generated_cot": cot,
+            })
+            print(f"[{stats['total']:>4}/{len(df)}] id={row_id} | OK ({len(cot)} chars)")
+            time.sleep(delay_sec)
+        except Exception as e:
+            stats["api_error"] += 1
+            print(f"[{stats['total']:>4}/{len(df)}] id={row_id} | API ERROR: {e}")
+
+    pd.DataFrame(results).to_csv(output_csv, index=False, encoding="utf-8")
+
+    print(f"\n=== RESULTS ===")
+    print(f"Total         : {stats['total']}")
+    print(f"Solver correct: {stats['solver_correct']} -> gen CoT")
+    print(f"Solver wrong  : {stats['solver_wrong']} -> skipped")
+    print(f"API errors    : {stats['api_error']}")
+    print(f"Output file   : {Path(output_csv).resolve()}")
+
+
+# --- CELL 6 code ---
+if __name__ == "__main__":
+    run_pipeline(
+        input_csv        = "/home/namle/Kaggle/NVIDIA/bit_problems.csv",
+        output_csv       = "bit_manip_cot_output2.csv",
+        provider         = "deepseek",   # "openai" | "groq" | "deepseek"
+        api_key          = "sk-___",
+        model            = "deepseek-chat",
+        solver_fn        = lambda prompt, ctx: (solve_bit_manip(prompt), None),
+        trace_fn         = lambda prompt, answer, info: generate_bit_manip_cot(prompt, answer),
+        system_prompt    = SYSTEM_PROMPT,
+        answer_formatter = lambda a: str(a).strip().zfill(8),
+        max_samples      = 1602,
+        delay_sec        = 0.25,
+    )

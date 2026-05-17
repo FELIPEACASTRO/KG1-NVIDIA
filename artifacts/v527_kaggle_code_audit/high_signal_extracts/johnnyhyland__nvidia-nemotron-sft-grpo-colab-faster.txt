@@ -1,0 +1,1328 @@
+
+# --- CELL 0 markdown ---
+# Nemotron 3 Nano — SFT → GRPO Pipeline
+
+This is the version now running in colab. Much easier there to control the kernel. SFT and GRPO are working, time will tell results from GRPO.
+
+**Workflow:**
+1. Full SFT warmup: deterministic solvers generate at least some form of CoT for all puzzle types
+2. GRPO phase: model generates completions, solvers verify answers, policy gradient refines reasoning
+3. LoRA on sensitive layers only (12/52) + shared experts, rank 32
+
+**Why SFT → GRPO?**
+- SFT teaches `\boxed{}` format + basic reasoning patterns (prevents GRPO from wasting time on surface conventions)
+- GRPO lets the model **explore** reasoning paths and self-correct — learns the *process*, not just imitation
+- NVIDIA's own recipe: SFT → RLVR → RLHF. "RLVR surpassed heavily fine-tuned SFT" (§3.2.5)
+
+**Layer targeting rationale (from [§4.2 of the Nemotron 3 Nano report](https://arxiv.org/abs/2512.20848)):**
+- NVIDIA's quantization sensitivity analysis found only **12/52 layers** are sensitive to weight perturbations
+- **6 GQA attention layers** — most sensitive
+- **6 Mamba layers immediately preceding attention** — also sensitive
+- Remaining 40 Mamba layers tolerate aggressive quantization → low LoRA ROI
+- **Shared experts (2 per layer)** — always active, good LoRA targets
+- Router weights frozen (§3.2.5), routable experts excluded (sparse traffic)
+
+**Note:** Competition eval uses temp=0 (greedy). GRPO training uses temp>0 for diverse rollouts — this is expected and necessary.
+
+# --- CELL 1 code ---
+SKIP = True  # Set to False to run all cells
+
+# --- CELL 2 markdown ---
+Installs here:
+
+!pip install -q datasets trl bitsandbytes
+
+!pip install mamba-ssm[causal-conv1d] --no-build-isolation -q
+
+
+# --- CELL 3 code ---
+if not SKIP:
+    import trl; print(trl.__version__)
+
+
+# --- CELL 4 code ---
+if not SKIP:
+    SUBSAMPLE_SIZE = 600  # more unique data > more epochs over same data
+    GRPO_SUBSAMPLE_SIZE = 220  # GRPO subset (each prompt generates multiple completions, so this is compute-heavy)
+    VAL_RATIO = 0.0
+    WARMUP_STEPS = 30
+
+    # ── SFT Configuration ──
+    MAX_SEQ_LEN = 2048
+    NUM_EPOCHS = 1  # 1 epoch over 1200 unique samples — fresh data beats repeated passes
+    GRAD_ACCUM = 4  # smaller accum = more steps (packing compresses 1200 samples into ~462 sequences → 231 steps)
+    LR = 5e-5
+
+    # ── GRPO Configuration ──
+    GRPO_NUM_GENERATIONS = 4    # completions per prompt (memory-constrained)
+    GRPO_MAX_COMPLETION = 2048  # eval allows 3584 tokens; 1024 had truncation issues
+    GRPO_LR = 5e-6             # lower than SFT (fine-tuning a warm-started model)
+    GRPO_EPOCHS = 1
+    GRPO_TEMPERATURE = 0.7     # needs diversity for exploration (eval is greedy, training is not)
+
+
+# --- CELL 5 code ---
+if not SKIP:
+    import polars as pl
+    import os
+    import gc
+    import re
+    import torch
+    import torch.nn.functional as F
+    import mamba_ssm
+    import kagglehub
+    from datasets import Dataset as HFDataset
+    from peft import LoraConfig, get_peft_model, TaskType
+    from transformers import AutoModelForCausalLM, AutoTokenizer, TrainerCallback
+    from trl import SFTTrainer, SFTConfig, GRPOTrainer, GRPOConfig
+    import math
+
+    train_full = pl.read_csv('train.csv')
+    print(f"Training samples (full): {len(train_full)}")
+
+    # ── Puzzle type classifier (needed for CoT templates) ──
+    def classify_puzzle(prompt):
+        prompt_lower = prompt.lower()
+        if re.search(r'numeral system|base[- ]?\d|number.*convert|radix|secret number', prompt_lower):
+            return 'Number Base Conversion'
+        elif re.search(r'gravit|gravity|falling|free.?fall|acceleration due to', prompt_lower):
+            return 'Gravitational Constant'
+        elif re.search(r'transformation rule|equation.*transform|secret.*rule.*equation|rule.*applied.*equation', prompt_lower):
+            return 'Equation Transformation'
+        elif re.search(r'encrypt|cipher|secret.*code.*letter|coded.*message|secret.*text', prompt_lower):
+            return 'Text Encryption'
+        elif re.search(r'bit.?manipul|binary|8.?bit|bitwise|bit.*transform', prompt_lower):
+            return 'Bit Manipulation'
+        elif re.search(r'unit.?conver|measurement|becomes.*\d|secret.*conver.*measur', prompt_lower):
+            return 'Unit Conversion'
+        else:
+            return 'Unknown'
+
+    train_full = train_full.with_columns(
+        pl.col("prompt").map_elements(classify_puzzle, return_dtype=pl.Utf8).alias("puzzle_type")
+    )
+    print("\nPuzzle type distribution:")
+    print(train_full.group_by("puzzle_type").agg(pl.len().alias("count")).sort("count", descending=True))
+
+    seeds = [42, 123, 456, 1024, 9999]
+    # ── Random subsample for SFT (full 600) ──
+    subsample = train_full.sample(n=min(SUBSAMPLE_SIZE, len(train_full)), seed=42)
+    print(f"\nSFT subsample: {len(subsample)} examples")
+
+    # ── Smaller subsample for GRPO (compute-heavy: each prompt → N completions) ──
+    grpo_subsample = subsample.sample(n=min(GRPO_SUBSAMPLE_SIZE, len(subsample)), seed=99)
+    print(f"GRPO subsample: {len(grpo_subsample)} examples (each generates {GRPO_NUM_GENERATIONS} completions)")
+
+    # ── Train/val split (SFT only) ──
+    if VAL_RATIO > 0:
+        n_val = int(len(subsample) * VAL_RATIO)
+        shuffled = subsample.sample(fraction=1.0, seed=123)
+        val_df = shuffled[:n_val]
+        train_df = shuffled[n_val:]
+        print(f"Train: {len(train_df)}, Val: {len(val_df)}")
+    else:
+        train_df = subsample
+        val_df = None
+        print(f"Train: {len(train_df)}, Val: None (VAL_RATIO=0)")
+
+    MODEL_PATH = kagglehub.model_download("metric/nemotron-3-nano-30b-a3b-bf16/transformers/default")
+    OUTPUT_DIR = "/kaggle/working/adapter"
+    os.makedirs(OUTPUT_DIR, exist_ok=True)
+
+
+# --- CELL 6 code ---
+if not SKIP:
+    import shutil, os, stat, sys, json
+    import pandas as pd
+
+    # ── Load model ──
+    model = AutoModelForCausalLM.from_pretrained(
+        MODEL_PATH, device_map="auto", trust_remote_code=True, dtype=torch.bfloat16,
+        offload_folder="/tmp/offload",
+    )
+    tokenizer = AutoTokenizer.from_pretrained(MODEL_PATH, trust_remote_code=True)
+
+    # ═══════════════════════════════════════════════════════════════════════════════
+    # LAYER DISCOVERY — Categorize all Linear layers
+    # ═══════════════════════════════════════════════════════════════════════════════
+    from collections import defaultdict
+
+    layer_categories = defaultdict(list)
+    for name, module in model.named_modules():
+        if isinstance(module, torch.nn.Linear):
+            if "router" in name.lower() or "gate" in name.lower():
+                layer_categories["router"].append(name)
+            elif "self_attn" in name or "attention" in name:
+                layer_categories["attention"].append(name)
+            elif "mamba" in name.lower() or "mixer" in name.lower():
+                layer_categories["mamba"].append(name)
+            elif "shared_expert" in name:
+                layer_categories["shared_expert"].append(name)
+            elif "expert" in name:
+                layer_categories["routable_expert"].append(name)
+            elif "embed" in name or "lm_head" in name:
+                layer_categories["embedding"].append(name)
+            else:
+                layer_categories["other"].append(name)
+
+    print("=" * 60)
+    print("LAYER CATEGORY SUMMARY")
+    print("=" * 60)
+    for cat, layers in sorted(layer_categories.items()):
+        print(f"\n{cat.upper()} ({len(layers)} layers):")
+        for l in layers[:5]:
+            print(f"  {l}")
+        if len(layers) > 5:
+            print(f"  ... and {len(layers) - 5} more")
+
+    # ═══════════════════════════════════════════════════════════════════════════════
+    # LAYER SENSITIVITY — Identify the 12 most important layers for LoRA
+    # Based on NVIDIA's quantization sensitivity analysis (§4.2 of the paper):
+    #   - 6 attention layers are the MOST sensitive
+    #   - 6 Mamba layers immediately preceding attention are also sensitive
+    #   - Remaining 40 Mamba layers tolerate aggressive quantization (low LoRA ROI)
+    # ═══════════════════════════════════════════════════════════════════════════════
+    pattern = getattr(model.config, "hybrid_override_pattern", "")
+    print(f"\nhybrid_override_pattern: {pattern}")
+    print(f"  Length: {len(pattern)} (should match num_hidden_layers={model.config.num_hidden_layers})")
+
+    # * = attention, M = Mamba, E = MoE/FFN
+    attn_layer_indices = [i for i, c in enumerate(pattern) if c == '*']
+    pre_attn_mamba_indices = [i - 1 for i in attn_layer_indices if i > 0]
+    sensitive_layer_indices = sorted(set(attn_layer_indices + pre_attn_mamba_indices))
+
+    print(f"\nAttention layers (*):       {attn_layer_indices}")
+    print(f"Pre-attention Mamba layers: {pre_attn_mamba_indices}")
+    print(f"ALL sensitive layers (12):  {sensitive_layer_indices}")
+
+    # Build filtered module lists: only modules from sensitive layers
+    def _get_layer_idx(module_name):
+        """Extract layer index from module name like 'model.backbone.layers.5.mixer.in_proj'."""
+        import re as _re
+        m = _re.search(r'layers\.(\d+)\.', module_name)
+        return int(m.group(1)) if m else None
+
+    sensitive_mamba = [n for n in layer_categories.get("mamba", [])
+                       if _get_layer_idx(n) in sensitive_layer_indices]
+    all_mamba = layer_categories.get("mamba", [])
+
+    print(f"\nMamba modules (sensitive only): {len(sensitive_mamba)} / {len(all_mamba)} total")
+    print(f"Attention modules: {len(layer_categories.get('attention', []))}")
+    print(f"Shared expert modules: {len(layer_categories.get('shared_expert', []))}")
+
+
+# --- CELL 7 code ---
+if not SKIP:
+    # ═══════════════════════════════════════════════════════════════════════════════
+    # DATA FORMATTING — Deterministic solvers + detailed CoT training data
+    # ═══════════════════════════════════════════════════════════════════════════════
+    from decimal import Decimal, ROUND_HALF_UP
+    from itertools import combinations
+    import math
+    
+    # Match eval prompt format exactly: no system message, boxed instruction appended to user content
+    BOXED_INSTRUCTION = '\nPlease put your final answer inside `\\boxed{}`. For example: `\\boxed{your answer}`'
+    
+    # ═══════════════════════════════════════════════════════════════════════════════
+    # DETERMINISTIC SOLVERS — Generate exact answers + detailed reasoning traces
+    # ═══════════════════════════════════════════════════════════════════════════════
+    
+    def _round2_candidates(val):
+        """Multiple rounding strategies to match answer format."""
+        candidates = set()
+        candidates.add(f"{round(val, 2):.2f}")
+        d = Decimal(str(val)).quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
+        candidates.add(str(d))
+        import math
+        candidates.add(f"{math.floor(val * 100) / 100:.2f}")
+        candidates.add(f"{math.ceil(val * 100) / 100:.2f}")
+        for c in list(candidates):
+            if c.endswith('0') and '.' in c:
+                candidates.add(c.rstrip('0').rstrip('.'))
+        return candidates
+    
+    def solve_gravity(prompt, answer):
+        """Solve gravity puzzles: d = 0.5 * g * t^2"""
+        pairs = re.findall(r't\s*=\s*([\d.]+)\s*s.*?distance\s*=\s*([\d.]+)\s*m', prompt)
+        query_t_m = re.search(r'falling distance for t\s*=\s*([\d.]+)\s*s', prompt)
+        if not pairs or not query_t_m:
+            return None, None
+    
+        gs = [2 * float(d) / (float(t)**2) for t, d in pairs]
+        g_avg = sum(gs) / len(gs)
+        t_q = float(query_t_m.group(1))
+    
+        # Find best g that matches the answer
+        best_g = g_avg
+        val = 0.5 * g_avg * t_q**2
+        candidates = _round2_candidates(val)
+        if answer not in candidates:
+            for gi in gs:
+                vi = 0.5 * gi * t_q**2
+                if answer in _round2_candidates(vi):
+                    best_g = gi
+                    val = vi
+                    break
+    
+        predicted = f"{val:.2f}"
+        if answer in _round2_candidates(val):
+            predicted = answer
+    
+        # Build CoT
+        g_lines = "\n".join(f"  Example {i+1}: g = 2 * {d} / {t}^2 = {2*float(d)/float(t)**2:.4f}"
+                            for i, (t, d) in enumerate(pairs))
+        cot = (
+            f"I need to find the hidden gravitational constant g from the examples using d = 0.5 * g * t^2, so g = 2d / t^2.\n\n"
+            f"Computing g from each example:\n{g_lines}\n\n"
+            f"Average g = {best_g:.4f}\n\n"
+            f"For t = {t_q}s:\n"
+            f"d = 0.5 * {best_g:.4f} * {t_q}^2 = 0.5 * {best_g:.4f} * {t_q**2:.4f} = {predicted}\n\n"
+            f"\\boxed{{{predicted}}}"
+        )
+        return predicted, cot
+    
+    def solve_unit_conversion(prompt, answer):
+        """Solve unit conversion: output = ratio * input"""
+        pairs = re.findall(r'([\d.]+)\s*m\s+becomes\s+([\d.]+)', prompt)
+        query_m = re.search(r'convert the following measurement:\s*([\d.]+)\s*m', prompt)
+        if not pairs or not query_m:
+            return None, None
+    
+        ratios = [float(out) / float(inp) for inp, out in pairs]
+        ratio = sum(ratios) / len(ratios)
+        q = float(query_m.group(1))
+        val = ratio * q
+    
+        predicted = f"{val:.2f}"
+        candidates = _round2_candidates(val)
+        if answer not in candidates:
+            for r in ratios:
+                if answer in _round2_candidates(r * q):
+                    ratio = r
+                    val = r * q
+                    break
+        if answer in _round2_candidates(val):
+            predicted = answer
+    
+        ratio_lines = "\n".join(f"  Example {i+1}: {out} / {inp} = {float(out)/float(inp):.4f}"
+                                for i, (inp, out) in enumerate(pairs))
+        cot = (
+            f"I need to find the secret conversion factor from the examples.\n\n"
+            f"Computing ratio (output / input) for each example:\n{ratio_lines}\n\n"
+            f"Conversion factor = {ratio:.4f}\n\n"
+            f"For input {q} m:\n"
+            f"Result = {ratio:.4f} * {q} = {predicted}\n\n"
+            f"\\boxed{{{predicted}}}"
+        )
+        return predicted, cot
+    
+    def _int_to_roman(num):
+        vals = [1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1]
+        syms = ['M', 'CM', 'D', 'CD', 'C', 'XC', 'L', 'XL', 'X', 'IX', 'V', 'IV', 'I']
+        result = ''
+        for v, s in zip(vals, syms):
+            while num >= v:
+                result += s
+                num -= v
+        return result
+    
+    def _roman_to_int(s):
+        vals = {'I': 1, 'V': 5, 'X': 10, 'L': 50, 'C': 100, 'D': 500, 'M': 1000}
+        total = 0
+        for i in range(len(s)):
+            if i + 1 < len(s) and vals.get(s[i], 0) < vals.get(s[i+1], 0):
+                total -= vals.get(s[i], 0)
+            else:
+                total += vals.get(s[i], 0)
+        return total
+    
+    def solve_base_conversion(prompt, answer):
+        """Solve number base conversion (primarily decimal <-> Roman)."""
+        # Decimal -> Roman
+        examples = re.findall(r'(\d+)\s*->\s*([A-Z]+)', prompt)
+        if examples:
+            is_roman = all(_int_to_roman(int(n)) == r for n, r in examples)
+            if is_roman:
+                query = re.search(r'(?:write|convert)\s+(?:the\s+)?number\s+(\d+)', prompt)
+                if query:
+                    num = int(query.group(1))
+                    predicted = _int_to_roman(num)
+                    cot = (
+                        f"The examples show decimal to Roman numeral conversion.\n\n"
+                        f"Verifying: {', '.join(f'{n} -> {r}' for n, r in examples[:3])}\n\n"
+                        f"Converting {num} to Roman numerals:\n"
+                    )
+                    # Show step-by-step decomposition
+                    remainder = num
+                    parts = []
+                    vals = [1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1]
+                    syms = ['M', 'CM', 'D', 'CD', 'C', 'XC', 'L', 'XL', 'X', 'IX', 'V', 'IV', 'I']
+                    for v, s in zip(vals, syms):
+                        while remainder >= v:
+                            parts.append(f"{s} ({v})")
+                            remainder -= v
+                    cot += f"  {num} = {' + '.join(parts)}\n"
+                    cot += f"  Result: {predicted}\n\n\\boxed{{{predicted}}}"
+                    return predicted, cot
+    
+        # Roman -> Decimal
+        examples_rev = re.findall(r'([A-Z]+)\s*->\s*(\d+)', prompt)
+        if examples_rev:
+            is_roman = all(_roman_to_int(r) == int(n) for r, n in examples_rev)
+            if is_roman:
+                query = re.search(r'(?:write|convert)\s+(?:the\s+)?(?:number\s+)?([A-Z]+)', prompt)
+                if query:
+                    rom = query.group(1)
+                    predicted = str(_roman_to_int(rom))
+                    cot = (
+                        f"The examples show Roman numeral to decimal conversion.\n\n"
+                        f"Converting {rom}:\n"
+                        f"  {'  '.join(f'{c}={_roman_to_int(c)}' for c in rom)}\n"
+                        f"  Total = {predicted}\n\n\\boxed{{{predicted}}}"
+                    )
+                    return predicted, cot
+    
+        return None, None
+    
+    def solve_text_encryption(prompt, answer):
+        """Solve substitution cipher: build char map from examples (+ answer to fill gaps)."""
+        is_decrypt = 'decrypt' in prompt.lower()
+        examples = re.findall(r'(.+?)\s*->\s*(.+)', prompt)
+        query_m = re.search(r'(?:de|en)crypt the following text:\s*(.+?)(?:\n|$)', prompt)
+        if not examples or not query_m:
+            return None, None
+    
+        query = query_m.group(1).strip()
+    
+        # Build char map from examples
+        char_map = {}
+        for a, b in examples:
+            a, b = a.strip(), b.strip()
+            if len(a) != len(b):
+                continue
+            if is_decrypt:
+                pairs_iter = zip(a, b)  # cipher -> plain
+            else:
+                pairs_iter = zip(a, b)  # plain -> cipher
+            for x, y in pairs_iter:
+                if x == ' ' and y == ' ':
+                    continue
+                if x in char_map and char_map[x] != y:
+                    return None, None
+                char_map[x] = y
+    
+        # Complete the map using the known answer
+        if len(query) == len(answer):
+            for c, p in zip(query, answer):
+                if c == ' ' and p == ' ':
+                    continue
+                if c in char_map and char_map[c] != p:
+                    return None, None
+                char_map[c] = p
+    
+        # Apply
+        result = ''
+        for c in query:
+            if c == ' ':
+                result += ' '
+            elif c in char_map:
+                result += char_map[c]
+            else:
+                return None, None
+    
+        # Build CoT showing the substitution table
+        shown_mappings = {}
+        for c in query:
+            if c != ' ' and c in char_map:
+                shown_mappings[c] = char_map[c]
+    
+        direction = "cipher → plain" if is_decrypt else "plain → cipher"
+        table_str = ", ".join(f"'{k}'→'{v}'" for k, v in sorted(shown_mappings.items()))
+        cot = (
+            f"This is a substitution cipher ({direction}). I'll build the letter mapping from the examples.\n\n"
+            f"From the examples, I can extract these mappings:\n  {table_str}\n\n"
+            f"Applying the mapping to '{query}':\n"
+        )
+        words_in = query.split()
+        words_out = result.split()
+        for wi, wo in zip(words_in, words_out):
+            mapping_detail = " ".join(f"{c}→{char_map[c]}" for c in wi)
+            cot += f"  '{wi}' → {mapping_detail} → '{wo}'\n"
+        cot += f"\n\\boxed{{{result}}}"
+        return result, cot
+    
+    
+    # ═══════════════════════════════════════════════════════════════════════════════
+    # BIT MANIPULATION SOLVER — Per-bit function mapping + scaffold
+    # Approach: for each output bit, find a function of input bits that explains
+    # all training examples. Functions: direct, NOT, 2-bit (XOR/AND/OR/NAND/NOR/XNOR),
+    # 3-bit (majority, choice). ~42% of puzzles fully solvable.
+    # ═══════════════════════════════════════════════════════════════════════════════
+    
+    def _get_bit(s, pos):
+        """Get bit at position (0=MSB, 7=LSB) from 8-char binary string."""
+        return int(s[pos])
+    
+    def _solve_bit_functions(pairs):
+        """Find per-output-bit functions that match all training pairs.
+        Returns list of 8 functions (or None for unsolved bits)."""
+        funcs = [None] * 8
+        for out_pos in range(8):
+            expected = [_get_bit(out, out_pos) for _, out in pairs]
+    
+            # Single-bit: direct or inverted
+            for in_pos in range(8):
+                direct = [_get_bit(inp, in_pos) for inp, _ in pairs]
+                if direct == expected:
+                    funcs[out_pos] = ('direct', in_pos)
+                    break
+                if [1 - b for b in direct] == expected:
+                    funcs[out_pos] = ('not', in_pos)
+                    break
+            if funcs[out_pos]:
+                continue
+    
+            # Two-bit combinations
+            found = False
+            for i, j in combinations(range(8), 2):
+                bi = [_get_bit(inp, i) for inp, _ in pairs]
+                bj = [_get_bit(inp, j) for inp, _ in pairs]
+                tests = [
+                    ('xor', [a ^ b for a, b in zip(bi, bj)]),
+                    ('xnor', [1 - (a ^ b) for a, b in zip(bi, bj)]),
+                    ('and', [a & b for a, b in zip(bi, bj)]),
+                    ('nand', [1 - (a & b) for a, b in zip(bi, bj)]),
+                    ('or', [a | b for a, b in zip(bi, bj)]),
+                    ('nor', [1 - (a | b) for a, b in zip(bi, bj)]),
+                ]
+                for name, result in tests:
+                    if result == expected:
+                        funcs[out_pos] = (name, i, j)
+                        found = True
+                        break
+                if found:
+                    break
+            if funcs[out_pos]:
+                continue
+    
+            # Three-bit: majority and choice
+            for i, j, k in combinations(range(8), 3):
+                bi = [_get_bit(inp, i) for inp, _ in pairs]
+                bj = [_get_bit(inp, j) for inp, _ in pairs]
+                bk = [_get_bit(inp, k) for inp, _ in pairs]
+                tests = [
+                    ('majority', [1 if (a + b + c) >= 2 else 0 for a, b, c in zip(bi, bj, bk)]),
+                    ('minority', [1 if (a + b + c) < 2 else 0 for a, b, c in zip(bi, bj, bk)]),
+                    ('choice', [b if a == 1 else c for a, b, c in zip(bi, bj, bk)]),
+                    ('choice_inv', [b if a == 0 else c for a, b, c in zip(bi, bj, bk)]),
+                ]
+                for name, result in tests:
+                    if result == expected:
+                        funcs[out_pos] = (name, i, j, k)
+                        found = True
+                        break
+                if found:
+                    break
+    
+        return funcs
+    
+    def _apply_bit_func(func, query):
+        """Apply a single bit function to the query string."""
+        if func is None:
+            return None
+        name = func[0]
+        if name == 'direct':
+            return _get_bit(query, func[1])
+        elif name == 'not':
+            return 1 - _get_bit(query, func[1])
+        elif name in ('xor', 'xnor', 'and', 'nand', 'or', 'nor'):
+            a, b = _get_bit(query, func[1]), _get_bit(query, func[2])
+            if name == 'xor': return a ^ b
+            elif name == 'xnor': return 1 - (a ^ b)
+            elif name == 'and': return a & b
+            elif name == 'nand': return 1 - (a & b)
+            elif name == 'or': return a | b
+            elif name == 'nor': return 1 - (a | b)
+        elif name in ('majority', 'minority', 'choice', 'choice_inv'):
+            a, b, c = _get_bit(query, func[1]), _get_bit(query, func[2]), _get_bit(query, func[3])
+            if name == 'majority': return 1 if (a + b + c) >= 2 else 0
+            elif name == 'minority': return 1 if (a + b + c) < 2 else 0
+            elif name == 'choice': return b if a == 1 else c
+            elif name == 'choice_inv': return b if a == 0 else c
+        return None
+    
+    def _describe_bit_func(func):
+        """Human-readable description of a bit function."""
+        if func is None:
+            return "unknown"
+        name = func[0]
+        if name == 'direct':
+            return f"input[{func[1]}]"
+        elif name == 'not':
+            return f"NOT input[{func[1]}]"
+        elif name in ('xor', 'xnor', 'and', 'nand', 'or', 'nor'):
+            return f"input[{func[1]}] {name.upper()} input[{func[2]}]"
+        elif name in ('majority', 'minority'):
+            return f"{name}(input[{func[1]}], input[{func[2]}], input[{func[3]}])"
+        elif name == 'choice':
+            return f"if input[{func[1]}] then input[{func[2]}] else input[{func[3]}]"
+        elif name == 'choice_inv':
+            return f"if NOT input[{func[1]}] then input[{func[2]}] else input[{func[3]}]"
+        return str(func)
+    
+    def solve_bit_manipulation(prompt, answer):
+        """Solve bit manipulation: per-bit function mapping.
+        If fully solved → exact CoT. If not → detailed scaffold with answer."""
+        pairs = re.findall(r'([01]{8})\s*->\s*([01]{8})', prompt)
+        query_m = re.search(r'output for:\s*([01]{8})', prompt)
+        if not pairs or not query_m:
+            return None, None
+        query = query_m.group(1)
+    
+        funcs = _solve_bit_functions(pairs)
+    
+        # Try to predict
+        predicted_bits = [_apply_bit_func(f, query) for f in funcs]
+        all_solved = all(b is not None for b in predicted_bits)
+    
+        if all_solved:
+            predicted = ''.join(str(b) for b in predicted_bits)
+            if predicted == answer:
+                # Full deterministic solve — exact CoT
+                cot = "I need to find the secret bit transformation by analyzing each output bit position.\n\n"
+                cot += f"Given {len(pairs)} input→output examples, I'll determine what function produces each output bit.\n\n"
+    
+                # Group by operation type for cleaner presentation
+                simple_bits = [(i, f) for i, f in enumerate(funcs) if f[0] == 'direct']
+                not_bits = [(i, f) for i, f in enumerate(funcs) if f[0] == 'not']
+                complex_bits = [(i, f) for i, f in enumerate(funcs) if f[0] not in ('direct', 'not')]
+    
+                if simple_bits:
+                    cot += "Direct bit mappings (output = input bit):\n"
+                    for pos, f in simple_bits:
+                        cot += f"  output[{pos}] = input[{f[1]}]\n"
+                    cot += "\n"
+                if not_bits:
+                    cot += "Inverted bit mappings (output = NOT input bit):\n"
+                    for pos, f in not_bits:
+                        cot += f"  output[{pos}] = NOT input[{f[1]}]\n"
+                    cot += "\n"
+                if complex_bits:
+                    cot += "Complex bit operations:\n"
+                    for pos, f in complex_bits:
+                        cot += f"  output[{pos}] = {_describe_bit_func(f)}\n"
+                    cot += "\n"
+    
+                # Verify with one example
+                if len(pairs) > 0:
+                    inp0, out0 = pairs[0]
+                    cot += f"Verification with first example: {inp0} → {out0} ✓\n\n"
+    
+                cot += f"Applying to query {query}:\n"
+                for i in range(8):
+                    cot += f"  bit[{i}]: {_describe_bit_func(funcs[i])} = {predicted_bits[i]}\n"
+                cot += f"\nResult: {predicted}\n\n\\boxed{{{predicted}}}"
+                return predicted, cot
+    
+        # Scaffold for unsolved cases: show the analysis process with the ground truth
+        cot = "I need to find the secret bit transformation by analyzing each output bit position.\n\n"
+        cot += f"Given {len(pairs)} input→output pairs:\n"
+        for inp, out in pairs[:4]:
+            cot += f"  {inp} → {out}\n"
+        if len(pairs) > 4:
+            cot += f"  ... and {len(pairs) - 4} more examples\n"
+        cot += "\n"
+    
+        cot += "Analyzing each output bit as a function of input bits:\n"
+        explained = []
+        unexplained = []
+        for i in range(8):
+            if funcs[i] is not None:
+                desc = _describe_bit_func(funcs[i])
+                explained.append((i, desc))
+                cot += f"  output[{i}] = {desc}\n"
+            else:
+                unexplained.append(i)
+                cot += f"  output[{i}] = complex function (multi-bit dependency)\n"
+    
+        cot += f"\nIdentified {len(explained)}/8 bit functions. "
+        if unexplained:
+            cot += f"Bits {unexplained} require more complex analysis.\n"
+        cot += "\n"
+    
+        cot += f"Applying the full transformation to query {query}:\n"
+        cot += f"Result: {answer}\n\n\\boxed{{{answer}}}"
+        return answer, cot
+    
+    
+    # ═══════════════════════════════════════════════════════════════════════════════
+    # EQUATION TRANSFORMATION SOLVER — Operator discovery + scaffold
+    # Structure: 5-char input = A[0]A[1] (operand) + op_char + B[0]B[1] (operand)
+    # Numeric puzzles: each operator char maps to a math operation.
+    # Symbolic puzzles: similar structure with ASCII character arithmetic.
+    # ═══════════════════════════════════════════════════════════════════════════════
+    
+    _EQ_OPERATIONS = {
+        'addition': lambda a, b: str(a + b),
+        'subtraction (A-B)': lambda a, b: str(a - b),
+        'subtraction (B-A)': lambda a, b: str(b - a),
+        'absolute difference': lambda a, b: str(abs(a - b)),
+        'multiplication': lambda a, b: str(a * b),
+        'concatenation (AB)': lambda a, b: str(a) + str(b),
+        'concatenation (BA)': lambda a, b: str(b) + str(a),
+        'integer division (A/B)': lambda a, b: str(a // b) if b != 0 else None,
+        'integer division (B/A)': lambda a, b: str(b // a) if a != 0 else None,
+        'modulo (A%B)': lambda a, b: str(a % b) if b != 0 else None,
+        'modulo (B%A)': lambda a, b: str(b % a) if a != 0 else None,
+        'XOR': lambda a, b: str(a ^ b),
+        'bitwise AND': lambda a, b: str(a & b),
+        'bitwise OR': lambda a, b: str(a | b),
+        'max': lambda a, b: str(max(a, b)),
+        'min': lambda a, b: str(min(a, b)),
+    }
+    
+    def _parse_eq_examples(prompt):
+        """Parse equation transformation prompt into examples and query."""
+        lines = prompt.strip().split('\n')
+        examples = []
+        query = None
+        for line in lines:
+            line = line.strip()
+            if 'determine the result for:' in line.lower():
+                m = re.search(r'determine the result for:\s*(.+)', line, re.IGNORECASE)
+                if m:
+                    query = m.group(1).strip()
+            elif ' = ' in line and 'wonderland' not in line.lower() and 'transformation' not in line.lower() and 'examples' not in line.lower():
+                parts = line.split(' = ', 1)
+                if len(parts) == 2:
+                    examples.append((parts[0].strip(), parts[1].strip()))
+        return examples, query
+    
+    def solve_equation_transformation(prompt, answer):
+        """Solve equation transformation puzzles.
+        Tries numeric operator mapping first. Falls back to detailed scaffold."""
+        examples, query = _parse_eq_examples(prompt)
+        if not examples or not query or len(query) != 5:
+            return None, None
+    
+        # Parse all examples as 5-char: A(2) + op(1) + B(2)
+        parsed = []
+        all_valid = True
+        for lhs, rhs in examples:
+            if len(lhs) != 5:
+                all_valid = False
+                break
+            parsed.append((lhs[:2], lhs[2], lhs[3:], rhs))
+    
+        if not all_valid or not parsed:
+            return None, None
+    
+        q_a, q_op, q_b = query[:2], query[2], query[3:]
+    
+        # ── Numeric solver: A and B are 2-digit numbers ──
+        is_numeric = all(a.isdigit() and b.isdigit() for a, _, b, _ in parsed) and q_a.isdigit() and q_b.isdigit()
+    
+        if is_numeric:
+            # Group by operator char
+            by_op = {}
+            for a, op, b, rhs in parsed:
+                by_op.setdefault(op, []).append((int(a), int(b), rhs))
+    
+            # Discover what each operator does
+            op_mapping = {}
+            for op_char, op_examples in by_op.items():
+                for op_name, op_func in _EQ_OPERATIONS.items():
+                    if all(op_func(a, b) == rhs for a, b, rhs in op_examples):
+                        op_mapping[op_char] = op_name
+                        break
+    
+            # Try to solve query
+            if q_op in op_mapping:
+                op_name = op_mapping[q_op]
+                predicted = _EQ_OPERATIONS[op_name](int(q_a), int(q_b))
+                if predicted == answer:
+                    # Exact solve — detailed CoT
+                    cot = "I need to figure out what each operator symbol means by testing the examples.\n\n"
+                    cot += "Parsing the examples (format: A operator B = result):\n"
+                    for a, op, b, rhs in parsed:
+                        cot += f"  {a} '{op}' {b} = {rhs}\n"
+                    cot += "\n"
+    
+                    cot += "Testing each operator against standard operations:\n"
+                    for op_char, op_name in op_mapping.items():
+                        op_examples = by_op[op_char]
+                        cot += f"  Operator '{op_char}' = {op_name}:\n"
+                        for a, b, rhs in op_examples[:2]:
+                            cot += f"    {a} {op_name.split('(')[0].strip()} {b} = {rhs} ✓\n"
+                    cot += "\n"
+    
+                    cot += f"Applying to query: {q_a} '{q_op}' ({op_mapping[q_op]}) {q_b}\n"
+                    cot += f"Result = {predicted}\n\n\\boxed{{{predicted}}}"
+                    return predicted, cot
+    
+        # ── Scaffold for unsolvable cases ──
+        cot = "I need to figure out the secret transformation rules from the examples.\n\n"
+        cot += "Each expression has the format: operand1 (2 chars) + operator (1 char) + operand2 (2 chars) = result.\n\n"
+        cot += "Given examples:\n"
+        for a, op, b, rhs in parsed:
+            cot += f"  {a} '{op}' {b} = {rhs}\n"
+        cot += "\n"
+    
+        # Show operator grouping
+        by_op = {}
+        for a, op, b, rhs in parsed:
+            by_op.setdefault(op, []).append((a, b, rhs))
+    
+        cot += f"Operators used: {list(by_op.keys())}\n"
+        for op_char, op_examples in by_op.items():
+            cot += f"\n  Operator '{op_char}' examples:\n"
+            for a, b, rhs in op_examples:
+                cot += f"    {a} '{op_char}' {b} → {rhs}\n"
+    
+        if is_numeric:
+            cot += "\nThese are numeric operands. Testing common operations (addition, subtraction, multiplication, concatenation)...\n"
+            # Show what we tried
+            for op_char, op_examples in by_op.items():
+                a, b, rhs = op_examples[0]
+                a_int, b_int = int(a), int(b)
+                cot += f"\n  For '{op_char}': {a_int}+{b_int}={a_int+b_int}, {a_int}-{b_int}={a_int-b_int}, "
+                cot += f"{a_int}*{b_int}={a_int*b_int}, concat={a}{b} → expected {rhs}\n"
+        else:
+            cot += "\nThese are symbolic operands. Each character likely maps to a value, and the operator defines the arithmetic.\n"
+            cot += "Analyzing the character-level patterns across examples to identify the transformation rule.\n"
+    
+        cot += f"\nApplying the identified rule to the query: {q_a} '{q_op}' {q_b}\n"
+        cot += f"Result: {answer}\n\n\\boxed{{{answer}}}"
+        return answer, cot
+    
+    
+    # ═══════════════════════════════════════════════════════════════════════════════
+    # FALLBACK CoT for any remaining edge cases
+    # ═══════════════════════════════════════════════════════════════════════════════
+    
+    FALLBACK_COT_TEMPLATES = {
+        'Equation Transformation': (
+            "I need to figure out the secret transformation rules from the examples.\n\n"
+            "Each expression has format: operand1 operator operand2 = result.\n"
+            "I need to determine what each operator does by analyzing the input-output pairs.\n\n"
+            "After analyzing all the examples and identifying the pattern:\n\n"
+            "\\boxed{{{answer}}}"
+        ),
+        'Bit Manipulation': (
+            "I need to find the secret bit transformation by analyzing each output bit position.\n\n"
+            "Looking at the 8-bit binary input→output pairs, I need to determine what operation "
+            "produces each output bit. Common operations include bit shifts, rotations, XOR, AND, OR, NOT, "
+            "and combinations like majority or choice functions.\n\n"
+            "Testing each output bit against input bits to find the mapping:\n"
+            "After systematic analysis of all 8 bit positions:\n\n"
+            "\\boxed{{{answer}}}"
+        ),
+    }
+    
+    # ═══════════════════════════════════════════════════════════════════════════════
+    # MAIN: Build training data with solver-backed CoT
+    # ═══════════════════════════════════════════════════════════════════════════════
+    
+    SOLVER_MAP = {
+        'Gravitational Constant': solve_gravity,
+        'Unit Conversion': solve_unit_conversion,
+        'Number Base Conversion': solve_base_conversion,
+        'Text Encryption': solve_text_encryption,
+        'Bit Manipulation': solve_bit_manipulation,
+        'Equation Transformation': solve_equation_transformation,
+    }
+    
+    solver_stats = {'solved': 0, 'fallback': 0, 'total': 0}
+    
+    def build_training_text(example):
+        """Build chat-formatted training text with solver-backed CoT when possible."""
+        prompt = example["prompt"]
+        answer = str(example["answer"])
+        puzzle_type = example["puzzle_type"]
+        solver_stats['total'] += 1
+    
+        # Try deterministic solver first
+        assistant_msg = None
+        if puzzle_type in SOLVER_MAP:
+            predicted, cot = SOLVER_MAP[puzzle_type](prompt, answer)
+            if cot is not None:
+                assistant_msg = cot
+                solver_stats['solved'] += 1
+    
+        # Fallback: use template
+        if assistant_msg is None:
+            solver_stats['fallback'] += 1
+            template = FALLBACK_COT_TEMPLATES.get(
+                puzzle_type,
+                "After analyzing the pattern from the examples:\n\n\\boxed{{{answer}}}"
+            )
+            assistant_msg = template.format(answer=answer)
+    
+        user_content = prompt + BOXED_INSTRUCTION
+        try:
+            messages = [
+                {"role": "user", "content": user_content},
+                {"role": "assistant", "content": assistant_msg},
+            ]
+            text = tokenizer.apply_chat_template(
+                messages, tokenize=False, add_generation_prompt=False,
+                enable_thinking=True,
+            )
+        except Exception as e:
+            import warnings
+            warnings.warn(f"apply_chat_template failed ({e}). Using manual format.")
+            text = (
+                f"<extra_id_1>User\n{user_content}\n"
+                f"<extra_id_1>Assistant\n{assistant_msg}\n"
+            )
+        return {"text": text}
+    
+    def format_dataset(df):
+        """Convert a polars DataFrame to HF dataset with solver-backed CoT."""
+        pdf = df.to_pandas()
+        hf_ds = HFDataset.from_pandas(pdf)
+        hf_ds = hf_ds.map(build_training_text, remove_columns=hf_ds.column_names)
+        return hf_ds
+    
+    solver_stats = {'solved': 0, 'fallback': 0, 'total': 0}
+    train_dataset = format_dataset(train_df)
+    print(f"Train dataset: {len(train_dataset)} examples")
+    print(f"  Solver-backed CoT: {solver_stats['solved']}")
+    print(f"  Fallback template: {solver_stats['fallback']}")
+    print(f"Example:\n{train_dataset[0]['text'][:800]}")
+    
+    if val_df is not None:
+        solver_stats = {'solved': 0, 'fallback': 0, 'total': 0}
+        val_dataset = format_dataset(val_df)
+        print(f"\nVal dataset: {len(val_dataset)} examples")
+        print(f"  Solver-backed CoT: {solver_stats['solved']}")
+        print(f"  Fallback template: {solver_stats['fallback']}")
+    else:
+        val_dataset = None
+        print("\nNo validation dataset (VAL_RATIO=0)")
+    
+    # ═══════════════════════════════════════════════════════════════════════════════
+    # GRPO DATASET — Conversational format (prompt only, no gold answer shown)
+    # The model will generate its own completions; reward function verifies them.
+    # ═══════════════════════════════════════════════════════════════════════════════
+    
+    def format_grpo_dataset(df):
+        """Convert polars DataFrame to GRPO-compatible HF dataset.
+    
+        GRPO format: 'prompt' (list of messages) + extra columns passed to reward_funcs.
+        """
+        records = []
+        for row in df.iter_rows(named=True):
+            records.append({
+                "prompt": [
+                    {"role": "user", "content": row["prompt"] + BOXED_INSTRUCTION},
+                ],
+                "ground_truth": str(row["answer"]),
+            })
+        return HFDataset.from_list(records)
+    
+    grpo_dataset = format_grpo_dataset(grpo_subsample)
+    print(f"\nGRPO dataset: {len(grpo_dataset)} prompts (each generates {GRPO_NUM_GENERATIONS} completions)")
+    
+    # ── GRPO Reward Functions ──
+    # Three separate reward signals (summed by GRPOTrainer):
+    #   1. Cosine reward: length-scaled accuracy. Creates reward VARIANCE across
+    #      completions even when all correct/incorrect (different lengths → different rewards).
+    #      This is the key fix for the zero-advantage problem.
+    #   2. Format reward: did the model produce \boxed{}?
+    #   3. Length reward: penalizes overthinking, encourages token efficiency.
+    #
+    # Reference: Light-R1 competition discussion + https://arxiv.org/abs/2501.12599
+    
+    _reward_debug_counter = {"calls": 0}
+    
+    def _normalize_answer(s):
+        """Normalize answer for comparison (42.00 == 42, whitespace, etc.)."""
+        s = s.strip()
+        try:
+            f = float(s)
+            if f == int(f):
+                return str(int(f))
+            return str(f)
+        except (ValueError, OverflowError):
+            return s
+    
+    def _extract_boxed(content):
+        """Extract answer from \\boxed{...}, handling multiline and edge cases."""
+        match = re.search(r'\\boxed\{([^}]*)\}', content, re.DOTALL)
+        if match:
+            return match.group(1).strip()
+        match = re.search(r'boxed\{([^}]*)\}', content, re.DOTALL)
+        if match:
+            return match.group(1).strip()
+        return None
+    
+    def _get_content(completion):
+        if isinstance(completion, list):
+            return completion[-1]["content"] if completion else ""
+        return completion
+    
+    def cosine_reward(completions, ground_truth, **kwargs):
+        """Cosine-scaled accuracy reward (from Light-R1).
+    
+        Correct answers: reward decays from 1.0 → 0.1 as length approaches max.
+        Incorrect answers: reward decays from -0.1 → -1.0 as length approaches max.
+        No \boxed{}: 0.0.
+    
+        Key insight: even when all completions are correct, different lengths produce
+        different rewards → non-zero advantage → actual gradient signal.
+        """
+        max_len = GRPO_MAX_COMPLETION
+        rewards = []
+        _reward_debug_counter["calls"] += 1
+        show_debug = _reward_debug_counter["calls"] <= 2
+    
+        for i, (completion, gt) in enumerate(zip(completions, ground_truth)):
+            content = _get_content(completion)
+            extracted = _extract_boxed(content)
+            clen = len(content)
+            # Cosine scaling factor: 1.0 at length 0, 0.0 at max_len
+            progress = min(clen / max(max_len, 1), 1.0)
+            cos_scale = 0.5 * (1.0 + math.cos(math.pi * progress))  # 1→0
+    
+            if extracted is not None and _normalize_answer(extracted) == _normalize_answer(gt):
+                # Correct: [1.0, 0.1] — short correct = high reward
+                reward = 0.1 + 0.9 * cos_scale
+            elif extracted is not None:
+                # Wrong but has \boxed{}: [-0.1, -1.0] — long wrong = worse
+                reward = -0.1 - 0.9 * (1.0 - cos_scale)
+            else:
+                # No \boxed{} — penalize proportional to length (shorter fail = less bad)
+                reward = -0.5 * progress  # 0.0 at start, -0.5 at max_len
+    
+            rewards.append(reward)
+    
+            if show_debug and i < 2:
+                tail = content[-120:] if len(content) > 120 else content
+                print(f"  [COSINE REWARD batch={_reward_debug_counter['calls']}] "
+                      f"extracted={extracted!r}, gt={gt.strip()!r}, reward={reward:.3f}, "
+                      f"len={clen}, tail={tail!r}", flush=True)
+    
+        return rewards
+    
+    def format_reward(completions, **kwargs):
+        """Binary format reward: 1.0 if \boxed{} present, 0.0 otherwise."""
+        rewards = []
+        for completion in completions:
+            content = _get_content(completion)
+            rewards.append(1.0 if _extract_boxed(content) is not None else 0.0)
+        return rewards
+    
+    def length_reward(completions, **kwargs):
+        """Length penalty: encourages concise reasoning (arxiv:2501.12599).
+    
+        Returns 0.0 for empty, scales to -1.0 at max_completion_length.
+        """
+        max_len = GRPO_MAX_COMPLETION
+        rewards = []
+        for completion in completions:
+            content = _get_content(completion)
+            progress = min(len(content) / max(max_len, 1), 1.0)
+            rewards.append(-progress)  # 0.0 to -1.0
+        return rewards
+    
+    # Quick sanity check
+    _reward_debug_counter["calls"] = 0
+    _test_cos = cosine_reward(
+        completions=["The answer is \\boxed{42}.", "No boxed answer here.", "Wrong: \\boxed{99}." + " " * 800],
+        ground_truth=["42", "42", "42"],
+    )
+    _test_fmt = format_reward(
+        completions=["The answer is \\boxed{42}.", "No boxed answer here.", "Wrong: \\boxed{99}."],
+    )
+    _reward_debug_counter["calls"] = 0
+    print(f"Cosine reward sanity check: {[f'{r:.3f}' for r in _test_cos]}  (expect ~[1.0, 0.0, ~-0.7])")
+    print(f"Format reward sanity check: {_test_fmt}  (expect [1.0, 0.0, 1.0])")
+
+# --- CELL 8 code ---
+if not SKIP:
+    # ═══════════════════════════════════════════════════════════════════════════════
+    # TRAINING UTILITIES
+    # ═══════════════════════════════════════════════════════════════════════════════
+
+    import time
+    import zipfile
+
+    class SaveAdapterCallback(TrainerCallback):
+        """Save adapter zip every N steps during GRPO."""
+        def __init__(self, save_every=40):
+            self.save_every = save_every
+
+        def on_step_end(self, args, state, control, model=None, **kwargs):
+            if state.global_step % self.save_every == 0 and state.global_step > 0:
+                model.save_pretrained(OUTPUT_DIR)
+                zip_path = f"submission_step{state.global_step}.zip"
+                with zipfile.ZipFile(zip_path, 'w', zipfile.ZIP_DEFLATED) as zf:
+                    for fname in os.listdir(OUTPUT_DIR):
+                        zf.write(os.path.join(OUTPUT_DIR, fname), fname)
+                # Also overwrite the latest
+                shutil.copy2(zip_path, "submission.zip")
+                print(f"[CHECKPOINT] Saved {zip_path} at step {state.global_step}", flush=True)
+
+    class PrintLossCallback(TrainerCallback):
+        """Prints loss to stdout so Kaggle notebook output captures it."""
+        def __init__(self, phase="SFT"):
+            self.phase = phase
+            self.start_time = None
+
+        def on_train_begin(self, args, state, control, **kwargs):
+            self.start_time = time.time()
+            print(f"\n{'='*60}")
+            print(f"[{self.phase}] Training started — {state.max_steps} steps")
+            print(f"{'='*60}", flush=True)
+
+        def on_log(self, args, state, control, logs=None, **kwargs):
+            if logs is None:
+                return
+            elapsed = time.time() - self.start_time if self.start_time else 0
+            loss = logs.get("loss", logs.get("train_loss", None))
+            lr = logs.get("learning_rate", None)
+            parts = [f"[{self.phase}] step {state.global_step}/{state.max_steps}"]
+            if loss is not None:
+                parts.append(f"loss={loss:.4f}")
+            if lr is not None:
+                parts.append(f"lr={lr:.2e}")
+            # GRPO-specific metrics
+            for key in ["reward", "reward_mean", "rewards/mean", "completion_length",
+                         "completions/mean_length", "completions/clipped_ratio", "kl"]:
+                if key in logs:
+                    parts.append(f"{key}={logs[key]:.4f}")
+            parts.append(f"elapsed={elapsed/60:.1f}min")
+            print(" | ".join(parts), flush=True)
+
+        def on_train_end(self, args, state, control, **kwargs):
+            elapsed = time.time() - self.start_time if self.start_time else 0
+            print(f"\n[{self.phase}] Training complete — {state.global_step} steps in {elapsed/60:.1f}min", flush=True)
+
+
+    def build_target_modules(groups, sensitive_only=False):
+        """Build LoRA target module list from selected layer category names.
+
+        If sensitive_only=True, filter mamba modules to only the 12 layers
+        identified as quantization-sensitive (6 attention + 6 pre-attention Mamba).
+        Attention and shared_expert modules are always included in full.
+        """
+        targets = []
+        for g in groups:
+            modules = layer_categories.get(g, [])
+            if sensitive_only and g == "mamba":
+                modules = [n for n in modules if _get_layer_idx(n) in sensitive_layer_indices]
+            targets.extend(modules)
+        return targets
+
+    def make_trainer(peft_model, train_ds, val_ds=None):
+        """Create SFTTrainer."""
+        args = SFTConfig(
+            output_dir=OUTPUT_DIR,
+            per_device_train_batch_size=2,
+            per_device_eval_batch_size=1,
+            gradient_accumulation_steps=GRAD_ACCUM,
+            num_train_epochs=NUM_EPOCHS,
+            learning_rate=LR,
+            logging_steps=5,
+            bf16=True,
+            max_grad_norm=0.1,
+            weight_decay=0.1,
+            optim="adamw_8bit",
+            lr_scheduler_type="cosine",
+            warmup_steps=WARMUP_STEPS,
+            save_strategy="no",
+            report_to="none",
+            dataset_text_field="text",
+            max_length=MAX_SEQ_LEN,
+            packing=True,
+            gradient_checkpointing=True,
+            gradient_checkpointing_kwargs={"use_reentrant": True},
+        )
+        return SFTTrainer(
+            model=peft_model,
+            train_dataset=train_ds,
+            eval_dataset=val_ds,
+            processing_class=tokenizer,
+            args=args,
+            callbacks=[PrintLossCallback("SFT")],
+        )
+
+    def make_grpo_trainer(peft_model, grpo_ds):
+        """Create GRPOTrainer for the RL phase.
+
+        Uses three reward functions (cosine accuracy + format + length).
+        beta=0 means no reference model (saves ~50% memory).
+        gradient_accumulation_steps=2 (lowered to ensure optimizer steps with small dataset).
+        """
+        # GRPO requires left-padding for generation
+        tokenizer.padding_side = "left"
+
+        args = GRPOConfig(
+            output_dir=OUTPUT_DIR,
+            num_generations=GRPO_NUM_GENERATIONS,
+            generation_batch_size=GRPO_NUM_GENERATIONS,
+            max_completion_length=GRPO_MAX_COMPLETION,
+            per_device_train_batch_size=1,
+            gradient_accumulation_steps=1,   # no accumulation: 16 prompts = 16 optimizer steps per epoch
+            num_train_epochs=GRPO_EPOCHS,
+            learning_rate=GRPO_LR,
+            temperature=GRPO_TEMPERATURE,
+            beta=0.0,                # no KL penalty -> no reference model loaded
+            loss_type="grpo",
+            mask_truncated_completions=False,
+            # repetition_penalty=1.2,
+            logging_steps=2,
+            max_grad_norm=0.1,      # aggressive clipping — stabilizes small-dataset GRPO
+            weight_decay=0.1,        # regularization
+            optim="adamw_8bit",     # ~50% less optimizer memory vs adamw_torch
+            lr_scheduler_type="cosine",
+            warmup_steps=5,
+            save_strategy="no",
+            report_to="none",
+            gradient_checkpointing=True,
+            gradient_checkpointing_kwargs={"use_reentrant": True},
+            remove_unused_columns=False,   # keep ground_truth column for reward func
+        )
+        return GRPOTrainer(
+            model=peft_model,
+            reward_funcs=[cosine_reward, format_reward, length_reward],
+            train_dataset=grpo_ds,
+            processing_class=tokenizer,
+            args=args,
+            callbacks=[PrintLossCallback("GRPO"), SaveAdapterCallback(save_every=50)],
+        )
+
+
+
+# --- CELL 9 code ---
+if not SKIP:
+    # ═══════════════════════════════════════════════════════════════════════════════
+    # FINAL TRAINING — sensitive layers + shared_expert, rank 32
+    # Per NVIDIA's quantization sensitivity analysis (§4.2):
+    #   - Only 12/52 layers are sensitive (6 attention + 6 pre-attention Mamba)
+    #   - Remaining 40 Mamba layers tolerate weight perturbations (low LoRA ROI)
+    #   - Shared experts always active → good LoRA targets on all layers
+    # ═══════════════════════════════════════════════════════════════════════════════
+    from peft import PeftModel
+
+    BEST_GROUPS = ["attention", "mamba", "shared_expert"]
+    BEST_RANK = 32
+
+    # Check for existing adapter checkpoint to resume from
+    RESUME_ZIP = "submission.zip"
+    if os.path.exists(RESUME_ZIP):
+        print(f"Found {RESUME_ZIP} — loading previous adapter for continued training")
+        import zipfile as _zf
+        _resume_dir = "/tmp/resume_adapter"
+        os.makedirs(_resume_dir, exist_ok=True)
+        with _zf.ZipFile(RESUME_ZIP, 'r') as zf:
+            zf.extractall(_resume_dir)
+        print(f"  Extracted to {_resume_dir}: {os.listdir(_resume_dir)}")
+        model = PeftModel.from_pretrained(model, _resume_dir, is_trainable=True)
+        print("  LoRA adapters loaded from checkpoint (trainable=True)")
+    else:
+        print(f"No {RESUME_ZIP} found — applying fresh LoRA adapters")
+        target_modules = build_target_modules(BEST_GROUPS, sensitive_only=True)
+        print(f"Training config: groups={BEST_GROUPS}, rank={BEST_RANK}, sensitive_only=True")
+        print(f"Target modules: {len(target_modules)} (vs {len(build_target_modules(BEST_GROUPS, sensitive_only=False))} if using ALL mamba layers)")
+        lora_config = LoraConfig(
+            r=BEST_RANK,
+            lora_alpha=BEST_RANK,
+            target_modules=target_modules,
+            lora_dropout=0.05,
+            bias="none",
+            task_type=TaskType.CAUSAL_LM,
+        )
+        model = get_peft_model(model, lora_config)
+
+    model.print_trainable_parameters()
+
+    trainer = make_trainer(model, train_dataset)
+    print("Starting SFT training...")
+    trainer.train()
+
+
+# --- CELL 10 code ---
+if not SKIP:
+    del trainer
+    gc.collect()
+    torch.cuda.empty_cache()
+    torch.cuda.reset_peak_memory_stats()
+    print(f"GPU memory after cleanup: {torch.cuda.memory_allocated()/1024**3:.1f} GB allocated, "
+          f"{torch.cuda.memory_reserved()/1024**3:.1f} GB reserved")
+
+
+# --- CELL 11 code ---
+if not SKIP:
+    import time; time.sleep(10); print("Done")
+
+
+# --- CELL 12 code ---
+if not SKIP:
+    # =============================================================================
+    # GRPO TRAINING — RL refinement phase
+    #
+    # If SFT ran (cell above), reuse the same LoRA adapters — GRPO refines them.
+    # If SFT was skipped, apply fresh LoRA adapters to the base model.
+    #
+    # beta=0 -> no reference model needed (saves memory).
+    # temperature>0 during training for diverse rollouts (eval is always greedy).
+    # =============================================================================
+
+    from peft import PeftModel as _PeftModel
+
+    if isinstance(model, _PeftModel):
+        print("Reusing LoRA adapters from SFT phase (no double-wrapping)")
+    else:
+        BEST_GROUPS = ["attention", "mamba", "shared_expert"]
+        BEST_RANK = 32
+        target_modules = build_target_modules(BEST_GROUPS, sensitive_only=True)
+        print(f"No SFT detected — applying fresh LoRA: groups={BEST_GROUPS}, rank={BEST_RANK}")
+        print(f"Target modules: {len(target_modules)}")
+        lora_config = LoraConfig(
+            r=BEST_RANK,
+            lora_alpha=BEST_RANK,
+            target_modules=target_modules,
+            lora_dropout=0.05,
+            bias="none",
+            task_type=TaskType.CAUSAL_LM,
+        )
+        model = get_peft_model(model, lora_config)
+
+    model.print_trainable_parameters()
+
+    grpo_trainer = make_grpo_trainer(model, grpo_dataset)
+    print(f"GRPO config: {GRPO_NUM_GENERATIONS} generations/prompt, temp={GRPO_TEMPERATURE}, lr={GRPO_LR}")
+    print(f"Effective batch: {GRPO_NUM_GENERATIONS} completions -> {GRPO_NUM_GENERATIONS} prompts per update")
+    print("Starting GRPO training...")
+    grpo_trainer.train()
+
+
+# --- CELL 13 code ---
+if not SKIP:
+    import zipfile
+
+    # Save the final adapter (includes both SFT + GRPO training)
+    model.save_pretrained(OUTPUT_DIR)
+    print(f"Adapter files saved to {OUTPUT_DIR}:")
+    for f in os.listdir(OUTPUT_DIR):
+        size = os.path.getsize(os.path.join(OUTPUT_DIR, f))
+        print(f"  {f} ({size/1024:.1f} KB)")
+
+    zip_path = "submission.zip"
+    with zipfile.ZipFile(zip_path, 'w', zipfile.ZIP_DEFLATED) as zf:
+        for fname in os.listdir(OUTPUT_DIR):
+            fpath = os.path.join(OUTPUT_DIR, fname)
+            zf.write(fpath, fname)  # files at zip root
+
+    print(f"\nCreated {zip_path} ({os.path.getsize(zip_path)/1024/1024:.1f} MB)")
+
+    with zipfile.ZipFile(zip_path, 'r') as zf:
+        names = zf.namelist()
+        print(f"Contents: {names}")
+        assert "adapter_config.json" in names, "Missing adapter_config.json!"
+        print("✓ submission.zip looks correct")
+
+
+# --- CELL 14 code ---

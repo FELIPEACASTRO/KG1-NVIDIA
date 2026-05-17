@@ -1,0 +1,101 @@
+ref,title,author,lastRunTime,totalVotes
+anng1112/pretrain-r9-pcc-d1024-long,pretrain-r9-pcc-d1024-long,Nguyen An,2026-05-09 11:01:16.400000,0
+namphmbuwu/pretrain-r9-xloop-d1024,pretrain-r9-xloop-d1024,Nam Phạm Bá UWU,2026-05-09 10:24:45.300000,0
+anng1112/pretrain-r9-pcc-d1024,pretrain-r9-pcc-d1024,Nguyen An,2026-05-09 10:24:37.987000,0
+namphmbuwu/pretrain-r8-d8l2-v2,pretrain-r8-d8l2-v2,Nam Phạm Bá UWU,2026-05-09 09:39:44.993000,0
+khoidang67/pretrain-r8-d4l2-d1024,pretrain-r8-d4l2-d1024,Khôi Đăng,2026-05-09 09:37:48.123000,0
+tuananhtran37/pretrain-r7-d6l2,pretrain-r7-d6l2,Tuan Anh Tran 37,2026-05-09 09:19:49.083000,0
+khoidang67/pretrain-r7-d3l3,pretrain-r7-d3l3,Khôi Đăng,2026-05-09 09:19:45.260000,0
+tuananhtran37/flow-r5-d4l2-flow,flow-r5-d4l2-flow,Tuan Anh Tran 37,2026-05-09 08:42:16.287000,0
+khoidang67/flow-r5-d1l8-flow,flow-r5-d1l8-flow,Khôi Đăng,2026-05-09 08:42:11.040000,0
+namphmbuwu/pretrain-r6-d8l1-long,pretrain-r6-d8l1-long,Nam Phạm Bá UWU,2026-05-09 08:42:08.140000,0
+tuananhtran37/pretrain-r5-d4l2,pretrain-r5-d4l2,Tuan Anh Tran 37,2026-05-09 08:12:35.890000,0
+khoidang67/pretrain-r5-d1l8,pretrain-r5-d1l8,Khôi Đăng,2026-05-09 08:12:30.773000,0
+tuananhtran37/flow-staging-d,flow-staging-d,Tuan Anh Tran 37,2026-05-09 08:08:30.160000,0
+namphmbuwu/flow-staging-b,flow-staging-b,Nam Phạm Bá UWU,2026-05-09 08:08:24.483000,0
+khoidang67/flow-staging-a,flow-staging-a,Khôi Đăng,2026-05-09 08:08:20.987000,0
+tuananhtran37/pretrain-staging-d-v2,pretrain-staging-d-v2,Tuan Anh Tran 37,2026-05-09 07:38:33.727000,0
+namphmbuwu/pretrain-staging-b-v2,pretrain-staging-b-v2,Nam Phạm Bá UWU,2026-05-09 07:38:27.777000,0
+khoidang67/pretrain-staging-a-v2,pretrain-staging-a-v2,Khôi Đăng,2026-05-09 07:38:25.020000,0
+tanluu/eval-eval-av,eval-eval-AV,tan luu,2026-05-09 07:27:34.060000,0
+phmthanhlm24022379/pretrain-hybrid-d1280-l8,pretrain-hybrid-d1280-l8, Phạm Thanh Lâm 24022379,2026-05-09 07:09:26.363000,0
+tuananhtran37/pretrain-hybrid-d1280-l6,pretrain-hybrid-d1280-l6,Tuan Anh Tran 37,2026-05-09 07:09:17.520000,0
+tuananhtran37/pretrain-staging-d,pretrain-staging-d,Tuan Anh Tran 37,2026-05-09 07:06:34.217000,0
+namphmbuwu/pretrain-staging-b,pretrain-staging-b,Nam Phạm Bá UWU,2026-05-09 07:06:29.093000,0
+khoidang67/pretrain-staging-a,pretrain-staging-a,Khôi Đăng,2026-05-09 07:06:26.853000,0
+truongdinhduc06/eval-pcc-aux-d2048,eval-pcc-aux-d2048,Trương Đình Đức,2026-05-09 06:55:55.900000,0
+phmthanhlm24022379/pretrain-pcc-matched-1b,pretrain-pcc-matched-1b, Phạm Thanh Lâm 24022379,2026-05-09 04:40:12.223000,0
+jeromejoseph2026/sft-lora-unit-conversion,sft_lora_unit_conversion,Jerome Joseph,2026-05-16 17:37:06.693000,0
+dnglethnh/data-dyn-d11-fw,data-dyn-d11-fw,Dũng Lê Thành,2026-05-16 09:22:07.057000,0
+leehoangquan006/data-dyn-d11-code,data-dyn-d11-code,Lê Hoàng Quân,2026-05-16 09:22:02.943000,0
+leehoangquan006/data-dyn-d8-d512-nl2,data-dyn-d8-d512_nl2,Lê Hoàng Quân,2026-05-16 06:54:23.540000,0
+leehoangquan006/data-dyn-d7-d256-nl4,data-dyn-d7-d256_nl4,Lê Hoàng Quân,2026-05-16 03:42:56.697000,0
+thunvng/data-dyn-d6-seed2,data-dyn-d6-seed2,Thuận Vương,2026-05-16 03:26:01.597000,0
+leehoangquan006/data-dyn-d4-recurrence,data-dyn-d4-recurrence,Lê Hoàng Quân,2026-05-16 02:47:03.593000,0
+dnglethnh/data-dyn-d3-positional,data-dyn-d3-positional,Dũng Lê Thành,2026-05-16 02:25:46.007000,0
+thunvng/data-dyn-d2-f0p75,data-dyn-d2-f0p75,Thuận Vương,2026-05-16 02:04:12.320000,0
+dnglethnh/data-dyn-d1-steps,data-dyn-d1-steps,Dũng Lê Thành,2026-05-16 01:43:04.113000,0
+dungnguyenhuy/pretrain-pretrain-pcc-reason-d2048-50b-wsd-s3,pretrain-pretrain-pcc-reason-d2048-50b-wsd-s3,Dũng Nguyễn Huy,2026-05-14 17:39:36.403000,0
+hiulnho/pretrain-pretrain-vanilla-d2048-50b-wsd-s3,pretrain-pretrain-vanilla-d2048-50b-wsd-s3,Hiếu Lê Nho,2026-05-14 17:39:32.300000,0
+tuantc2306/pretrain-xloop-d2048-n4-50b-wsd-s2,pretrain-xloop-d2048-n4-50b-wsd-s2,TuanTc2306,2026-05-14 05:52:53.097000,0
+tuananhtran37/pretrain-pcc-reason-d2048-50b-wsd-s2,pretrain-pcc-reason-d2048-50b-wsd-s2,Tuan Anh Tran 37,2026-05-14 05:47:06.153000,0
+khunht/pretrain-vanilla-d2048-50b-wsd-s2,pretrain-vanilla-d2048-50b-wsd-s2,Khuê Nhật,2026-05-14 05:46:34.273000,0
+tuananhtran37/pretrain-bench-vanilla,pretrain-bench-vanilla,Tuan Anh Tran 37,2026-05-13 05:36:42.907000,0
+dfbjdsbds/stage2-extrap-vanilla-s3-v24-1024,stage2-extrap-vanilla-s3-V24-1024,Space_cowboy,2026-05-12 20:32:46.093000,0
+phmthanhlm24022379/stage2-battery-pcc-loose-seed1,stage2-battery-pcc-loose-seed1, Phạm Thanh Lâm 24022379,2026-05-12 17:24:53.860000,0
+phmthanhlm24022379/stage2-battery-vanilla-iter-s1-v2,stage2-battery-vanilla-iter-s1-v2, Phạm Thanh Lâm 24022379,2026-05-12 16:32:57.083000,0
+tuetrandoanminh/eval-pcc-d2048-reason-tight,eval-pcc-d2048-reason-tight,Tue Tran Doan Minh,2026-05-12 16:08:55.087000,0
+xduan7/nemotron-bit-verifier-append-memcheck,Nemotron Bit Verifier Append Memcheck,Xiaotian Duan,2026-05-12 15:29:59.750000,0
+tanluu/stage2-pcc-v12-k16-v2,stage2-pcc-V12-k16-v2,tan luu,2026-05-12 14:45:42.450000,0
+tanluu/probe-pcc-reason,probe-pcc-reason,tan luu,2026-05-12 06:00:59.927000,0
+truongdinhduc06/lle-v2-vanilla-d2048-s1,lle-v2-vanilla-d2048-s1,Trương Đình Đức,2026-05-12 04:27:05.080000,0
+hduong/probe-vanilla-s3-6-5b,probe-vanilla-s3-6_5b,Hoang Duong,2026-05-11 11:55:07.517000,0
+leehoangquan006/probe-pcc-iter-d1280-2b,probe-pcc-iter-d1280-2b,Lê Hoàng Quân,2026-05-11 11:55:07.023000,0
+xduan7/nemotron-concat-only-diagnostic-memcheck,Nemotron Concat-Only Diagnostic Memcheck,Xiaotian Duan,2026-05-10 22:45:28.477000,0
+xduan7/nemotron-concat-only-diagnostic-eval,Nemotron Concat-Only Diagnostic Eval,Xiaotian Duan,2026-05-10 22:45:26.110000,0
+leehoangquan006/pretrain-pcc-iter-d1280-2b-s1,pretrain-pcc-iter-d1280-2b-s1,Lê Hoàng Quân,2026-05-10 17:27:48.280000,0
+anng1112/repr-r12-pcc-qkv-bias,repr-r12-pcc-qkv-bias,Nguyen An,2026-05-10 11:01:48.817000,0
+tuananhtran37/probe-pcchr-d1280-l6,probe-pcchr-d1280-l6,Tuan Anh Tran 37,2026-05-10 10:49:22.587000,0
+tuetrandoanminh/eval-pcc-xlong-d1024,eval-pcc-xlong-d1024,Tue Tran Doan Minh,2026-05-09 20:43:36.620000,0
+anng1112/eval-vanilla-d2048-2b,eval-vanilla-d2048-2b,Nguyen An,2026-05-09 16:18:59.960000,0
+tuananhtran37/eval-r10-pcc-d1024,eval-r10-pcc-d1024,Tuan Anh Tran 37,2026-05-09 15:55:09.793000,0
+xduan7/nemotron-symbolic-eq-corpus-inject-eval,Nemotron Symbolic Eq Corpus Inject Eval,Xiaotian Duan,2026-05-09 15:39:30.183000,0
+martinijean/nemotron-sft-lora-with-cot,Nemotron SFT LoRA with CoT,Martini Jean,2026-05-02 15:29:06.657000,0
+annabee12/gen-vanilla-l16-1b-s3-sampled,gen-vanilla-l16-1b-s3-sampled,anna _bee,2026-05-16 16:06:32.007000,0
+dnglethnh/latentdim-xval-nl6,latentdim-xval-nl6,Dũng Lê Thành,2026-05-16 16:01:09.037000,1
+leehoangquan006/latentdim-xval-nl4,latentdim-xval-nl4,Lê Hoàng Quân,2026-05-16 16:01:05.233000,1
+tbmdemi/latentdim-pcc-s5,latentdim-pcc-s5,Trịnh Bình Minh,2026-05-16 15:54:40.450000,1
+thunvng/gen-xloop-d2048-n4-s5-sampled,gen-xloop-d2048-n4-s5-sampled,Thuận Vương,2026-05-16 14:51:36.100000,0
+dnglethnh/gen-pcc-reason-d2048-s5-sampled,gen-pcc-reason-d2048-s5-sampled,Dũng Lê Thành,2026-05-16 14:51:35.633000,0
+leehoangquan006/gen-vanilla-d2048-s5-sampled,gen-vanilla-d2048-s5-sampled,Lê Hoàng Quân,2026-05-16 14:51:33.847000,0
+dnglethnh/gen-pcc-reason-d2048-s5,gen-pcc-reason-d2048-s5,Dũng Lê Thành,2026-05-16 14:34:19.387000,0
+thunvng/gen-xloop-d2048-n4-s5,gen-xloop-d2048-n4-s5,Thuận Vương,2026-05-16 14:34:18.183000,0
+leehoangquan006/gen-vanilla-d2048-s5,gen-vanilla-d2048-s5,Lê Hoàng Quân,2026-05-16 14:34:17.770000,0
+leehoangquan006/data-dyn-d10-fw,data-dyn-d10-fw,Lê Hoàng Quân,2026-05-16 09:04:27.813000,0
+dungnguyenhuy/pretrain-vanilla-d2048-50b-wsd-s6,pretrain-vanilla-d2048-50b-wsd-s6,Dũng Nguyễn Huy,2026-05-16 05:12:33.403000,0
+hiulnho/pretrain-xloop-d2048-n4-50b-wsd-s6,pretrain-xloop-d2048-n4-50b-wsd-s6,Hiếu Lê Nho,2026-05-16 05:02:21.570000,0
+hiulnho/pretrain-pcc-reason-d2048-50b-wsd-s6,pretrain-pcc-reason-d2048-50b-wsd-s6,Hiếu Lê Nho,2026-05-16 05:02:17.887000,0
+leehoangquan006/data-dyn-d6-seed0,data-dyn-d6-seed0,Lê Hoàng Quân,2026-05-16 03:25:56.697000,0
+thunvng/data-dyn-d5-flat-iter,data-dyn-d5-flat_iter,Thuận Vương,2026-05-16 03:06:40.317000,0
+leehoangquan006/data-dyn-d5-rec-plain,data-dyn-d5-rec_plain,Lê Hoàng Quân,2026-05-16 03:06:35.227000,0
+thunvng/data-dyn-d4-flat,data-dyn-d4-flat,Thuận Vương,2026-05-16 02:47:09.630000,0
+thunvng/data-dyn-d3-lookup,data-dyn-d3-lookup,Thuận Vương,2026-05-16 02:25:48.493000,0
+leehoangquan006/data-dyn-d3-recurrence,data-dyn-d3-recurrence,Lê Hoàng Quân,2026-05-16 02:25:41.810000,0
+thunvng/lle-xloop-d2048-n4-50b-wsd-s4,lle-xloop-d2048-n4-50b-wsd-s4,Thuận Vương,2026-05-16 02:18:28.703000,0
+leehoangquan006/lle-vanilla-d2048-50b-wsd-s4,lle-vanilla-d2048-50b-wsd-s4,Lê Hoàng Quân,2026-05-16 02:18:14.983000,0
+dnglethnh/lle-pcc-reason-d2048-50b-wsd-s4,lle-pcc-reason-d2048-50b-wsd-s4,Dũng Lê Thành,2026-05-16 02:21:47.227000,0
+leehoangquan006/data-dyn-d2-f0p25,data-dyn-d2-f0p25,Lê Hoàng Quân,2026-05-16 02:04:06.747000,0
+dfbjdsbds/pretrain-vanilla-l16-1b-50b-wsd-s3,pretrain-vanilla-l16-1b-50b-wsd-s3,Space_cowboy,2026-05-16 01:12:46.663000,0
+chongnh/pretrain-vanilla-d2048-50b-wsd-s5,pretrain-vanilla-d2048-50b-wsd-s5,Đức Hoàng Đình,2026-05-15 17:34:53.770000,0
+chongnh/pretrain-xloop-d2048-n4-50b-wsd-s5,pretrain-xloop-d2048-n4-50b-wsd-s5,Đức Hoàng Đình,2026-05-15 17:29:43.353000,0
+leehoangquan006/pretrain-vanilla-l16-1b-50b-wsd-s2,pretrain-vanilla-l16-1b-50b-wsd-s2,Lê Hoàng Quân,2026-05-15 13:25:30.657000,0
+zhongzhing/pretrain-bench-pcc-mb8,pretrain-bench-pcc-mb8,Zhong Zhing ,2026-05-15 11:45:49.283000,2
+dungnguyenhuy/pretrain-xloop-d2048-n4-50b-wsd-s4,pretrain-xloop-d2048-n4-50b-wsd-s4,Dũng Nguyễn Huy,2026-05-15 05:53:30.343000,0
+chongnh/pretrain-pcc-reason-d2048-50b-wsd-s4,pretrain-pcc-reason-d2048-50b-wsd-s4,Đức Hoàng Đình,2026-05-15 05:53:26.030000,0
+dfbjdsbds/pretrain-vanilla-d2048-50b-wsd-s4,pretrain-vanilla-d2048-50b-wsd-s4,Space_cowboy,2026-05-15 05:53:21.463000,0
+dnglethnh/pretrain-vanilla-l16-1b-50b-wsd-s1,pretrain-vanilla-l16-1b-50b-wsd-s1,Dũng Lê Thành,2026-05-15 01:40:48.970000,0
+markjcooper/thk-v27-fork-2026-05-14,THK V27 fork 2026-05-14,Mark Cooper,2026-05-14 12:31:09.367000,0
+privatepiecerec/submission-qc-5-layer-framework,Submission QC: 5-Layer Framework,PrivatePieceRec,2026-05-14 12:12:30.927000,0
+dnglethnh/pretrain-xloop-d2048-n4-50b-wsd-s1,pretrain-xloop-d2048-n4-50b-wsd-s1,Dũng Lê Thành,2026-05-13 18:04:46.630000,0
+tuetrandoanminh/pretrain-pcc-reason-d2048-50b-wsd-s1,pretrain-pcc-reason-d2048-50b-wsd-s1,Tue Tran Doan Minh,2026-05-13 18:04:42.323000,0
+chongnh/stage2-battery-pcc-reason-seed1,stage2-battery-pcc-reason-seed1,Đức Hoàng Đình,2026-05-13 05:33:49.937000,1

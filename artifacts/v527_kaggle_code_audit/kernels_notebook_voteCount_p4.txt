@@ -1,0 +1,101 @@
+ref,title,author,lastRunTime,totalVotes
+camvsfd/notebook-ex-colqwen-layout,[notebook-ex] colqwen layout ,cóa má,2026-04-08 10:42:24.810000,1
+camvsfd/notebook-ex-colpali-layout, [notebook-ex] Colpali layout,cóa má,2026-04-06 16:05:18.840000,1
+trishanthmellimi/phase-1-and-3-aggressive,phase 1 and 3_aggressive,Trishanth Mellimi,2026-04-05 18:04:49.310000,1
+david01szu/nemotron-soft-balanced-sampling-sft,Nemotron Soft-Balanced Sampling SFT,David01SZU,2026-04-05 15:55:47.653000,1
+ganesan21ece97/notebook110acfc687,notebook110acfc687,Ganesan,2026-04-26 18:15:42.160000,1
+nicholas33/nb153-nvidia-nemotron,NB153 || NVIDIA Nemotron,NikolAiD153,2026-05-10 18:33:10.127000,1
+maithin123/m-nh-l-n-3,Mạnh lần 3,Mai Thiên 123,2026-04-04 05:18:17.387000,1
+khaquc123/m-nh-l-n-2,Mạnh lần 2,Kha Quốc 123,2026-04-04 05:16:49.100000,1
+maithin123/linh-l-n-3,Linh lần 3,Mai Thiên 123,2026-04-04 03:54:59.667000,1
+newduck/nvidia-nemotron-build-offline-packages,NVIDIA Nemotron - Build Offline Packages,newduck,2026-03-29 15:23:05.637000,1
+trishanthmellimi/finding-nemo-v4-cot,finding_nemo_v4_cot,Trishanth Mellimi,2026-03-30 05:58:38.863000,1
+bailynlove4ever/nemotron-packages-download,Nemotron packages download,bailynlove,2026-03-29 09:17:15.133000,1
+mohamedamr992/nemotron3-reasoning-pipeline-v1,Nemotron3_Reasoning_Pipeline_V1,Mohamed Amr992,2026-04-08 09:43:25.207000,1
+avikdas567/retrieval-pattern-reasoning-pipeline-for-nemotron,Retrieval Pattern Reasoning Pipeline for Nemotron,Avik Das,2026-03-27 11:33:34.147000,1
+mohithramesh/nemotron-training,Nemotron Training,Mohith Ramesh,2026-03-27 09:02:04.257000,1
+trishanthmellimi/finding-nemo-v3,finding_nemo_v3,Trishanth Mellimi,2026-03-26 10:05:28.100000,1
+nguyenducdung1107/rtx-6000pro-chuan,rtx 6000pro-Chuan,NGUYEN DUC DUNG 1107,2026-03-24 14:03:58.343000,1
+muhammadshoaibaltaf/nvidia-nemotron-model-simple-version-1,NVIDIA NEMOTRON MODEL SIMPLE VERSION-1,Muhammad Shoaib Altaf,2026-03-24 06:21:35.740000,1
+jeanfranciscodasilva/nvidia-nemotron-submission-demo,NVIDIA Nemotron Submission Demo,Jean Francisco da Silva,2026-03-21 07:39:07.707000,1
+roddygreen/xx-0319,xx_0319,RoddyGreen,2026-03-19 12:38:17.967000,1
+buharisalisu/vision-link-ai-hub-nvidia,"""Vision-link AI HUB NVIDIA ",Buhari Salisu,2026-04-10 08:52:54.700000,1
+afidhadra/test-dataset-path,Test Dataset Path,AFIDH ADRA,2026-03-18 19:46:20.170000,1
+mohamedamr992/how-to-load-nemotronh-for-causal-lm,How to load NemotronH For Causal LM,Mohamed Amr992,2026-03-19 19:27:50.193000,1
+nguyenducdung1107/notebook-testing-method-layout,[NOTEBOOK]TESTING METHOD LAYOUT,NGUYEN DUC DUNG 1107,2026-03-29 19:19:42.287000,1
+panweiw/huikang-end-to-end-public-repro,Huikang End-to-end Public Repro,weiwei,2026-05-16 17:16:24.940000,0
+annabee12/gen-vanilla-l16-1b-s3-sampled,gen-vanilla-l16-1b-s3-sampled,anna _bee,2026-05-16 16:06:32.007000,0
+thunvng/gen-xloop-d2048-n4-s5-sampled,gen-xloop-d2048-n4-s5-sampled,Thuận Vương,2026-05-16 14:51:36.100000,0
+dnglethnh/gen-pcc-reason-d2048-s5-sampled,gen-pcc-reason-d2048-s5-sampled,Dũng Lê Thành,2026-05-16 14:51:35.633000,0
+leehoangquan006/gen-vanilla-d2048-s5-sampled,gen-vanilla-d2048-s5-sampled,Lê Hoàng Quân,2026-05-16 14:51:33.847000,0
+dnglethnh/gen-pcc-reason-d2048-s5,gen-pcc-reason-d2048-s5,Dũng Lê Thành,2026-05-16 14:34:19.387000,0
+thunvng/gen-xloop-d2048-n4-s5,gen-xloop-d2048-n4-s5,Thuận Vương,2026-05-16 14:34:18.183000,0
+leehoangquan006/gen-vanilla-d2048-s5,gen-vanilla-d2048-s5,Lê Hoàng Quân,2026-05-16 14:34:17.770000,0
+hkhnhduy/notebook785f9cad48,notebook785f9cad48,Hồ Khánh Duy,2026-05-16 11:16:45.270000,0
+jeromejoseph2026/sft-lora-unit-conversion,sft_lora_unit_conversion,Jerome Joseph,2026-05-16 17:37:06.693000,0
+thunvng/data-dyn-d11-dclm,data-dyn-d11-dclm,Thuận Vương,2026-05-16 09:22:12.507000,0
+dnglethnh/data-dyn-d11-fw,data-dyn-d11-fw,Dũng Lê Thành,2026-05-16 09:22:07.057000,0
+leehoangquan006/data-dyn-d11-code,data-dyn-d11-code,Lê Hoàng Quân,2026-05-16 09:22:02.943000,0
+thunvng/data-dyn-d10-code,data-dyn-d10-code,Thuận Vương,2026-05-16 09:04:34.640000,0
+dnglethnh/data-dyn-d10-dclm,data-dyn-d10-dclm,Dũng Lê Thành,2026-05-16 09:04:32.233000,0
+leehoangquan006/data-dyn-d10-fw,data-dyn-d10-fw,Lê Hoàng Quân,2026-05-16 09:04:27.813000,0
+thunvng/data-dyn-d9-iter-noise,data-dyn-d9-iter_noise,Thuận Vương,2026-05-16 07:11:28.107000,0
+dnglethnh/data-dyn-d9-iter,data-dyn-d9-iter,Dũng Lê Thành,2026-05-16 07:11:25.927000,0
+leehoangquan006/data-dyn-d9-plain,data-dyn-d9-plain,Lê Hoàng Quân,2026-05-16 07:11:24.053000,0
+thunvng/data-dyn-d8-d512-nl6,data-dyn-d8-d512_nl6,Thuận Vương,2026-05-16 06:54:29.693000,0
+dnglethnh/data-dyn-d8-d512-nl3,data-dyn-d8-d512_nl3,Dũng Lê Thành,2026-05-16 06:54:26.107000,0
+leehoangquan006/data-dyn-d8-d512-nl2,data-dyn-d8-d512_nl2,Lê Hoàng Quân,2026-05-16 06:54:23.540000,0
+dungnguyenhuy/pretrain-vanilla-d2048-50b-wsd-s6,pretrain-vanilla-d2048-50b-wsd-s6,Dũng Nguyễn Huy,2026-05-16 05:12:33.403000,0
+hiulnho/pretrain-xloop-d2048-n4-50b-wsd-s6,pretrain-xloop-d2048-n4-50b-wsd-s6,Hiếu Lê Nho,2026-05-16 05:02:21.570000,0
+hiulnho/pretrain-pcc-reason-d2048-50b-wsd-s6,pretrain-pcc-reason-d2048-50b-wsd-s6,Hiếu Lê Nho,2026-05-16 05:02:17.887000,0
+thunvng/data-dyn-d7-d512-nl8,data-dyn-d7-d512_nl8,Thuận Vương,2026-05-16 03:43:02.263000,0
+dnglethnh/data-dyn-d7-d1024-nl4,data-dyn-d7-d1024_nl4,Dũng Lê Thành,2026-05-16 03:42:59.060000,0
+leehoangquan006/data-dyn-d7-d256-nl4,data-dyn-d7-d256_nl4,Lê Hoàng Quân,2026-05-16 03:42:56.697000,0
+thunvng/data-dyn-d6-seed2,data-dyn-d6-seed2,Thuận Vương,2026-05-16 03:26:01.597000,0
+dnglethnh/data-dyn-d6-seed1,data-dyn-d6-seed1,Dũng Lê Thành,2026-05-16 03:25:58.507000,0
+leehoangquan006/data-dyn-d6-seed0,data-dyn-d6-seed0,Lê Hoàng Quân,2026-05-16 03:25:56.697000,0
+krishnapanjiyar123/nvidia-nemotron-submission-demo,NVIDIA Nemotron Submission Demo,krishna panjiyar,2026-05-16 06:02:57.660000,0
+thunvng/data-dyn-d5-flat-iter,data-dyn-d5-flat_iter,Thuận Vương,2026-05-16 03:06:40.317000,0
+dnglethnh/data-dyn-d5-rec-iter,data-dyn-d5-rec_iter,Dũng Lê Thành,2026-05-16 03:06:37.617000,0
+leehoangquan006/data-dyn-d5-rec-plain,data-dyn-d5-rec_plain,Lê Hoàng Quân,2026-05-16 03:06:35.227000,0
+thunvng/data-dyn-d4-flat,data-dyn-d4-flat,Thuận Vương,2026-05-16 02:47:09.630000,0
+dnglethnh/data-dyn-d4-positional,data-dyn-d4-positional,Dũng Lê Thành,2026-05-16 02:47:07.560000,0
+leehoangquan006/data-dyn-d4-recurrence,data-dyn-d4-recurrence,Lê Hoàng Quân,2026-05-16 02:47:03.593000,0
+thunvng/data-dyn-d3-lookup,data-dyn-d3-lookup,Thuận Vương,2026-05-16 02:25:48.493000,0
+dnglethnh/data-dyn-d3-positional,data-dyn-d3-positional,Dũng Lê Thành,2026-05-16 02:25:46.007000,0
+leehoangquan006/data-dyn-d3-recurrence,data-dyn-d3-recurrence,Lê Hoàng Quân,2026-05-16 02:25:41.810000,0
+thunvng/lle-xloop-d2048-n4-50b-wsd-s4,lle-xloop-d2048-n4-50b-wsd-s4,Thuận Vương,2026-05-16 02:18:28.703000,0
+leehoangquan006/lle-vanilla-d2048-50b-wsd-s4,lle-vanilla-d2048-50b-wsd-s4,Lê Hoàng Quân,2026-05-16 02:18:14.983000,0
+dnglethnh/lle-pcc-reason-d2048-50b-wsd-s4,lle-pcc-reason-d2048-50b-wsd-s4,Dũng Lê Thành,2026-05-16 02:21:47.227000,0
+thunvng/data-dyn-d2-f0p75,data-dyn-d2-f0p75,Thuận Vương,2026-05-16 02:04:12.320000,0
+dnglethnh/data-dyn-d2-f0p5,data-dyn-d2-f0p5,Dũng Lê Thành,2026-05-16 02:04:09.343000,0
+leehoangquan006/data-dyn-d2-f0p25,data-dyn-d2-f0p25,Lê Hoàng Quân,2026-05-16 02:04:06.747000,0
+thunvng/data-dyn-d1-prose,data-dyn-d1-prose,Thuận Vương,2026-05-16 01:43:06.417000,0
+dnglethnh/data-dyn-d1-steps,data-dyn-d1-steps,Dũng Lê Thành,2026-05-16 01:43:04.113000,0
+leehoangquan006/data-dyn-d1-flat,data-dyn-d1-flat,Lê Hoàng Quân,2026-05-16 01:43:01.127000,0
+dfbjdsbds/pretrain-vanilla-l16-1b-50b-wsd-s3,pretrain-vanilla-l16-1b-50b-wsd-s3,Space_cowboy,2026-05-16 01:12:46.663000,0
+dhruvb2028/nemotron-comp,Nemotron Comp,Dhruv Bansal,2026-05-16 06:30:42.527000,0
+chongnh/pretrain-vanilla-d2048-50b-wsd-s5,pretrain-vanilla-d2048-50b-wsd-s5,Đức Hoàng Đình,2026-05-15 17:34:53.770000,0
+chongnh/pretrain-xloop-d2048-n4-50b-wsd-s5,pretrain-xloop-d2048-n4-50b-wsd-s5,Đức Hoàng Đình,2026-05-15 17:29:43.353000,0
+tbmdemi/pretrain-pcc-reason-d2048-50b-wsd-s5,pretrain-pcc-reason-d2048-50b-wsd-s5,Trịnh Bình Minh,2026-05-15 17:29:38.183000,0
+leehoangquan006/pretrain-vanilla-l16-1b-50b-wsd-s2,pretrain-vanilla-l16-1b-50b-wsd-s2,Lê Hoàng Quân,2026-05-15 13:25:30.657000,0
+vtsywm/smollm2-teacher-logits-v1,SmolLM2 Teacher Logits v1,vtsywm,2026-05-15 08:52:40.230000,0
+dungnguyenhuy/pretrain-xloop-d2048-n4-50b-wsd-s4,pretrain-xloop-d2048-n4-50b-wsd-s4,Dũng Nguyễn Huy,2026-05-15 05:53:30.343000,0
+chongnh/pretrain-pcc-reason-d2048-50b-wsd-s4,pretrain-pcc-reason-d2048-50b-wsd-s4,Đức Hoàng Đình,2026-05-15 05:53:26.030000,0
+dfbjdsbds/pretrain-vanilla-d2048-50b-wsd-s4,pretrain-vanilla-d2048-50b-wsd-s4,Space_cowboy,2026-05-15 05:53:21.463000,0
+dnglethnh/pretrain-vanilla-l16-1b-50b-wsd-s1,pretrain-vanilla-l16-1b-50b-wsd-s1,Dũng Lê Thành,2026-05-15 01:40:48.970000,0
+backuppesol/prep-vectors-aya,prep_vectors_aya,Backup Pesol,2026-05-15 10:15:50.433000,0
+tbmdemi/pretrain-pretrain-xloop-d2048-n4-50b-wsd-s3,pretrain-pretrain-xloop-d2048-n4-50b-wsd-s3,Trịnh Bình Minh,2026-05-14 17:39:42.330000,0
+dungnguyenhuy/pretrain-pretrain-pcc-reason-d2048-50b-wsd-s3,pretrain-pretrain-pcc-reason-d2048-50b-wsd-s3,Dũng Nguyễn Huy,2026-05-14 17:39:36.403000,0
+hiulnho/pretrain-pretrain-vanilla-d2048-50b-wsd-s3,pretrain-pretrain-vanilla-d2048-50b-wsd-s3,Hiếu Lê Nho,2026-05-14 17:39:32.300000,0
+skripsipesolmokelar/fork-of-oracle-full-run-desire-create-allies-norm,Fork of oracle_full_run_desire_create_allies_norm,skripsi pesol mo kelar,2026-05-14 15:12:23.270000,0
+syu21125/nemotron-v39-huikang-reasoning-sft-submit,Nemotron v39 huikang reasoning sft submit,SYU21125,2026-05-14 13:08:14.740000,0
+markjcooper/thk-v27-fork-2026-05-14,THK V27 fork 2026-05-14,Mark Cooper,2026-05-14 12:31:09.367000,0
+privatepiecerec/submission-qc-5-layer-framework,Submission QC: 5-Layer Framework,PrivatePieceRec,2026-05-14 12:12:30.927000,0
+nguyenduongtrong/pretrain-vanilla-l16-1b-bench-mb10,pretrain-vanilla-l16-1b-bench-mb10,Nguyen Duong Trong,2026-05-14 07:48:53.367000,0
+nguyenduongtrong/pretrain-vanilla-l16-1b-bench,pretrain-vanilla-l16-1b-bench,Nguyen Duong Trong,2026-05-14 07:36:13.483000,0
+tuantc2306/pretrain-xloop-d2048-n4-50b-wsd-s2,pretrain-xloop-d2048-n4-50b-wsd-s2,TuanTc2306,2026-05-14 05:52:53.097000,0
+tuananhtran37/pretrain-pcc-reason-d2048-50b-wsd-s2,pretrain-pcc-reason-d2048-50b-wsd-s2,Tuan Anh Tran 37,2026-05-14 05:47:06.153000,0
+khunht/pretrain-vanilla-d2048-50b-wsd-s2,pretrain-vanilla-d2048-50b-wsd-s2,Khuê Nhật,2026-05-14 05:46:34.273000,0
+dnglethnh/pretrain-xloop-d2048-n4-50b-wsd-s1,pretrain-xloop-d2048-n4-50b-wsd-s1,Dũng Lê Thành,2026-05-13 18:04:46.630000,0
+tuetrandoanminh/pretrain-pcc-reason-d2048-50b-wsd-s1,pretrain-pcc-reason-d2048-50b-wsd-s1,Tue Tran Doan Minh,2026-05-13 18:04:42.323000,0
