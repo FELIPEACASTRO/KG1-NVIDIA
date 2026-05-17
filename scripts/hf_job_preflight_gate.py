@@ -696,10 +696,10 @@ def count_and_audit_jsonl(path: Path, label: str) -> dict[str, Any]:
                         }
                     )
             subcategory = str(
-                metadata.get("subcategory")
-                or metadata.get("subtype")
-                or row.get("subcategory")
+                row.get("subcategory")
                 or row.get("subtype")
+                or metadata.get("subcategory")
+                or metadata.get("subtype")
                 or "unknown"
             )
             subcategories[subcategory] = subcategories.get(subcategory, 0) + 1
@@ -1198,6 +1198,33 @@ def self_test() -> None:
             "weak_gate_rows_used_for_training": 0,
             "full_gate_rows_used_for_training": 0,
         }
+
+        canonical_subcategory = tmp / "canonical_subcategory.jsonl"
+        canonical_subcategory.write_text(
+            json.dumps(
+                {
+                    "id": "x",
+                    "family": "bit_manipulation",
+                    "subcategory": "bit_bitpair_certified_source_only",
+                    "messages": [{"role": "assistant", "content": "Final answer: \\boxed{00000000}"}],
+                    "metadata": {
+                        "subcategory": "bit_konbu_high_confidence_trace",
+                        "gate_rows_used_for_training": False,
+                        "weak_gate_rows_used_for_training": False,
+                        "full_gate_rows_used_for_training": False,
+                    },
+                },
+                sort_keys=True,
+            )
+            + "\n",
+            encoding="utf-8",
+        )
+        canonical_summary = count_and_audit_jsonl(canonical_subcategory, "canonical_subcategory")
+        if canonical_summary["subcategory_counts"] != {"bit_bitpair_certified_source_only": 1}:
+            raise RuntimeError(
+                "self-test expected top-level canonical subcategory to override metadata subcategory: "
+                + json.dumps(canonical_summary["subcategory_counts"], sort_keys=True)
+            )
     print("hf_job_preflight_gate_self_test=ok", flush=True)
 
 

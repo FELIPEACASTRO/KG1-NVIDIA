@@ -119,6 +119,7 @@ Ultima evidencia operacional relevante:
 | V572 aggressive bit/equation mix | V571 + V551 equation, `757/159` linhas, pesos `bit=0.5`, `equation=1.5`; V509/V286/V478/V513 passaram, mas V526 row-weighted corrigido bloqueou: peso efetivo `bit=31.28%`, delta `42.9pp` vs referencia | nao ir para GPU; risco alto de repetir regressao de bit |
 | V573 reference-weighted source-only mix | mesmo conteudo V571+V551, mas pesos `bit=1.5`, `equation=1.0`; V509 passou, V286 real passou (`token_max=1074`, `0` trunc, offset masks `757/159`), V478 passou (`bit=67.20%`, `equation=32.80%`), V513 passou e V526 row-weighted passou (`delta=6.997pp`) | primeiro candidato novo pos-V570 que passa gates CPU com protecao de objetivo; autoriza somente auditoria pre-paid e smoke curto com kill-switch, nao submit |
 | V573 HF upload/pre-paid | dataset V573 subido para HF dataset commit `3d321aff1e68d72769f167ceab2a28123faa18fd`; launcher debug baixou do HF sem symlink cache, validou hashes `ba515.../6957...`, adapter seed e objetivo; pre-paid gate passou sem findings com deferimento V568 restrito a `MAX_STEPS=2` e weak eval obrigatoria no primeiro checkpoint | pronto para commit/push dos gates e um smoke H200 de 2 steps; se checkpoint-2 nao passar `total>=193`, `bit>=136`, `equation>=57`, `trunc=0` e protected rows, cancelar/abandonar |
+| V573 H200 attempt 1 | job `felipesp1983/6a0a0c94a5e509f1a8413626` falhou antes de treinar; H200 correto e preinstall passaram; artifact gate validou hashes e dataset, mas bloqueou por bug silencioso no preflight: `metadata.subcategory` antigo (`bit_konbu_high_confidence_trace`, `bit_huikang_*`) sobrescrevia a subcategoria canonica top-level `bit_bitpair_certified_source_only` usada pelo pre-paid gate | sem custo de treino nem ganho ACC; corrigido para priorizar subcategoria canonica top-level e adicionado self-test `canonical_subcategory`; relancar somente apos commit/push e novo pre-paid/debug |
 
 ## Decisao Atual V560-V573
 
@@ -191,6 +192,13 @@ loss. A evidencia V562/V563 mostra desalinhamento entre treino e inferencia:
   falhava no Windows por symlink/cache; o launcher agora baixa para pasta local
   explicita e valida hash. Isso evita confundir erro de cache com erro do
   dataset.
+- V573 H200 attempt 1 encontrou outro bug silencioso antes do treino: o runtime
+  `hf_job_preflight_gate.py` auditava subcategoria por `metadata.subcategory`
+  antes do campo top-level. O dataset V573 esta correto no campo top-level, mas
+  preserva `metadata.subcategory` da origem para rastreabilidade. Isso fez o
+  gate remoto divergir do pre-paid gate. A correcao e canonica: top-level
+  `subcategory` governa treinamento/quotas; `metadata.subcategory` fica apenas
+  como linhagem.
 
 Plano efetivo a partir daqui:
 
@@ -229,12 +237,16 @@ Plano efetivo a partir daqui:
    primeiro checkpoint.
 12. Executar smoke V573 H200 somente apos commit/push dos gates usados pelo job.
    O checkpoint-2 deve ser avaliado em weak official-like com `max_tokens=7680`.
-13. Executar auditoria de logits/protected rows apos contrato padronizado:
+13. Antes de relancar V573, exigir self-test `canonical_subcategory` no
+   preflight remoto e exportar `HF_HUB_DISABLE_PROGRESS_BARS=1`,
+   `PYTHONIOENCODING=utf-8`, `LC_ALL=C.UTF-8`, `LANG=C.UTF-8` para reduzir ruido
+   de logs/progress bar.
+14. Executar auditoria de logits/protected rows apos contrato padronizado:
    medir top-k e probabilidade das respostas corretas em `8740ed31` e
    `59bee375`; qualquer adapter que reduza esses logits fica bloqueado.
-14. Se o diagnostico de logits/protected passar, rodar apenas smoke curto V573
+15. Se o diagnostico de logits/protected passar, rodar apenas smoke curto V573
    com primeiro checkpoint kill-switch; se falhar, nao gastar H200.
-15. So entao montar microexperimento hard-negative/protected:
+16. So entao montar microexperimento hard-negative/protected:
    baseline-wrong/solver-right como positivos e baseline-correct protected como
    no-change; sucesso minimo `total>=193`, `bit>=136`, `equation>=57`,
    protected rows OK e trunc `0`; falha aborta GPU.

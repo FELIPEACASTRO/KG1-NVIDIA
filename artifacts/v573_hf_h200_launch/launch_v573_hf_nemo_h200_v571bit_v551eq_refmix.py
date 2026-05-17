@@ -207,6 +207,10 @@ def patch_module(module: Any) -> None:
                 "KG1_ALLOW_DECODING_DRIFT_DEFERRED_FOR_FIRST_CHECKPOINT": "1",
                 "KG1_FIRST_CHECKPOINT_WEAK_EVAL_REQUIRED": "1",
                 "KG1_V573_CPU_GATES": "V509,V286,V478,V513,V524,V526",
+                "HF_HUB_DISABLE_PROGRESS_BARS": "1",
+                "PYTHONIOENCODING": "utf-8",
+                "LC_ALL": "C.UTF-8",
+                "LANG": "C.UTF-8",
             }
         )
         return env
@@ -256,6 +260,14 @@ def patch_module(module: Any) -> None:
             base.COMMAND_SCRIPT
             .replace("v536", "v573")
             .replace("V536", "V573")
+            .replace(
+                "export HF_HUB_ENABLE_HF_TRANSFER=1",
+                "export HF_HUB_ENABLE_HF_TRANSFER=1\n"
+                "export HF_HUB_DISABLE_PROGRESS_BARS=1\n"
+                "export PYTHONIOENCODING=utf-8\n"
+                "export LC_ALL=C.UTF-8\n"
+                "export LANG=C.UTF-8",
+            )
             .replace(
                 'export LOSS_NORMALIZATION_MODE="$KG1_LOSS_NORMALIZATION_MODE"',
                 'export LOSS_NORMALIZATION_MODE="$KG1_LOSS_NORMALIZATION_MODE"\n'
