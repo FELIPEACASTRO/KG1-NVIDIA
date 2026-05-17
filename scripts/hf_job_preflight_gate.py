@@ -238,6 +238,7 @@ def check_training_env() -> None:
             "EVAL_EVERY_STEPS",
             "EVAL_MAX_EXAMPLES",
             "SAMPLING_MODE",
+            "LOSS_NORMALIZATION_MODE",
             "MAX_PROMPT_TRUNCATION_RATE",
             "REQUIRE_OFFSET_MASK",
         ]
@@ -257,6 +258,20 @@ def check_training_env() -> None:
     expected_max_length = env_int("KG1_EXPECTED_MAX_LENGTH", 0)
     if expected_max_length and max_length != expected_max_length:
         raise RuntimeError(f"MAX_LENGTH mismatch: expected {expected_max_length}, got {max_length}")
+
+    loss_normalization_mode = env_str("LOSS_NORMALIZATION_MODE")
+    valid_loss_normalization_modes = {"token_mean", "example_mean"}
+    if loss_normalization_mode not in valid_loss_normalization_modes:
+        raise RuntimeError(
+            "LOSS_NORMALIZATION_MODE must be one of "
+            f"{sorted(valid_loss_normalization_modes)}, got {loss_normalization_mode!r}"
+        )
+    expected_loss_normalization_mode = env_str("KG1_EXPECTED_LOSS_NORMALIZATION_MODE")
+    if expected_loss_normalization_mode and loss_normalization_mode != expected_loss_normalization_mode:
+        raise RuntimeError(
+            "LOSS_NORMALIZATION_MODE mismatch: "
+            f"expected {expected_loss_normalization_mode!r}, got {loss_normalization_mode!r}"
+        )
 
     if env_bool("KG1_REQUIRE_OFFSET_MASK", True) and not env_bool("REQUIRE_OFFSET_MASK", False):
         raise RuntimeError("REQUIRE_OFFSET_MASK must remain enabled for real training.")
@@ -286,6 +301,7 @@ def check_training_env() -> None:
         "run_id": env_str("RUN_ID"),
         "max_steps": max_steps,
         "sampling_mode": sampling_mode,
+        "loss_normalization_mode": loss_normalization_mode,
         "max_length": max_length,
         "lora_r": env_int("LORA_R"),
         "lora_alpha": env_int("LORA_ALPHA"),

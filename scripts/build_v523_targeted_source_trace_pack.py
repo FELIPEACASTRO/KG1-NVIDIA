@@ -15,6 +15,7 @@ import csv
 import hashlib
 import json
 import re
+import sys
 from collections import Counter
 from datetime import datetime, timezone
 from pathlib import Path
@@ -22,6 +23,11 @@ from typing import Any, Callable
 
 
 ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from src.competition_utils import extract_final_answer, verify_answer  # noqa: E402
+
 DEFAULT_OUTPUT_DIR = ROOT / "artifacts/v523_targeted_source_trace_pack"
 DEFAULT_V304_TRAIN = ROOT / "artifacts/v304_solver_trace_distill_dataset/20260512T1430Z/v304_solver_trace_distill_train.jsonl"
 DEFAULT_V304_VAL = ROOT / "artifacts/v304_solver_trace_distill_dataset/20260512T1430Z/v304_solver_trace_distill_val.jsonl"
@@ -151,11 +157,10 @@ def normalize_boxed(row: dict[str, Any], *, bucket: str, split: str) -> dict[str
         messages = out["messages"]
         content = str(messages[index].get("content", ""))
         boxed = f"Final answer: \\\\boxed{{{answer}}}"
-        if "\\boxed{" not in content:
-            if "Final answer:" in content:
-                content = re.sub(r"Final answer:\s*.*$", boxed, content, flags=re.DOTALL)
-            else:
-                content = content.rstrip() + "\n" + boxed
+        if "Final answer:" in content:
+            content = re.sub(r"Final answer:\s*.*$", boxed, content, flags=re.DOTALL)
+        else:
+            content = content.rstrip() + "\n" + boxed
         messages[index]["content"] = content
     metadata = dict(row_metadata(out))
     metadata.update(
@@ -303,6 +308,7 @@ def summarize(rows: list[dict[str, Any]], reference_hashes: set[str]) -> dict[st
     prompt_answer_hashes: Counter[str] = Counter()
     prompt_hash_overlap = 0
     flags: Counter[str] = Counter()
+    bad_final_answer = 0
     for row in rows:
         family_counts[row_family(row)] += 1
         bucket_counts[row_subcategory(row)] += 1
@@ -315,6 +321,14 @@ def summarize(rows: list[dict[str, Any]], reference_hashes: set[str]) -> dict[st
         for flag in ("weak_gate_rows_used_for_training", "full_gate_rows_used_for_training"):
             if metadata.get(flag) not in (False, None):
                 flags[flag] += 1
+        index = assistant_index(row)
+        assistant = ""
+        if index is not None:
+            messages = row.get("messages")
+            if isinstance(messages, list):
+                assistant = str(messages[index].get("content", ""))
+        if not verify_answer(row_answer(row), extract_final_answer(assistant)):
+            bad_final_answer += 1
     return {
         "rows": len(rows),
         "family_counts": dict(sorted(family_counts.items())),
@@ -322,6 +336,7 @@ def summarize(rows: list[dict[str, Any]], reference_hashes: set[str]) -> dict[st
         "duplicate_prompt_answer": sum(1 for count in prompt_answer_hashes.values() if count > 1),
         "reference_prompt_overlap": prompt_hash_overlap,
         "training_flag_counts": dict(sorted(flags.items())),
+        "bad_final_answer": bad_final_answer,
     }
 
 
@@ -346,6 +361,8 @@ def build(args: argparse.Namespace) -> dict[str, Any]:
             blockers.append(f"{label}:duplicate_prompt_answer")
         if summary["training_flag_counts"]:
             blockers.append(f"{label}:weak_full_training_flags")
+        if summary["bad_final_answer"]:
+            blockers.append(f"{label}:bad_final_answer")
     if train_summary["family_counts"].get("bit_manipulation", 0) < 700:
         blockers.append("train:bit_rows_lt_700")
     if train_summary["family_counts"].get("equation_transform", 0) < 300:

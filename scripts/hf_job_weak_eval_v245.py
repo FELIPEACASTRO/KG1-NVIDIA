@@ -346,6 +346,156 @@ def weak_promotion_gate(summary: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def _resolve_repo_path(raw_path: str) -> Path:
+    path = Path(raw_path)
+    if path.is_absolute():
+        return path
+    return ROOT / path
+
+
+def protected_row_backfire_guard(summary: dict[str, Any]) -> dict[str, Any]:
+    """Run row-level regression guards on candidate prediction CSVs.
+
+    Family totals are not enough for promotion. A candidate can preserve the
+    aggregate threshold while regressing a known protected row. This guard runs
+    after prediction CSVs are produced and before the weak promotion decision is
+    accepted.
+    """
+
+    enforced = env_bool("KG1_PROTECTED_ROW_GUARD", env_bool("KG1_CRISIS_MODE_BACKFIRE_GUARD", False))
+    guard = {
+        "schema_version": "kg1_v245_protected_row_backfire_guard_v1",
+        "enforced": enforced,
+        "baseline_csv": "",
+        "protected_id_answers": [],
+        "candidate_count": 0,
+        "passed_candidates": [],
+        "blocked_candidates": [],
+        "candidate_reports": [],
+        "blockers": [],
+        "passed": True,
+    }
+    if not enforced:
+        return guard
+
+    baseline_csv = _resolve_repo_path(
+        env_str("KG1_PROTECTED_BASELINE_CSV", "artifacts/v516_label_free_weak_baseline/v516_label_free_v290_checkpoint6_baseline.csv")
+    )
+    protected_id_answers = [
+        part.strip()
+        for part in env_str("KG1_PROTECTED_ID_ANSWERS", "8740ed31=01101000").split(",")
+        if part.strip()
+    ]
+    guard["baseline_csv"] = str(baseline_csv)
+    guard["protected_id_answers"] = protected_id_answers
+    if not baseline_csv.exists():
+        guard["blockers"].append(f"protected_baseline_missing:{baseline_csv}")
+        guard["passed"] = False
+        return guard
+    if not protected_id_answers:
+        guard["blockers"].append("protected_id_answers_empty")
+        guard["passed"] = False
+        return guard
+
+    from scripts.kg1_weak_backfire_row_guard import audit as audit_backfire_rows  # noqa: E402
+
+    rows = summary.get("rows", [])
+    if not isinstance(rows, list):
+        rows = []
+    for row in rows:
+        if not isinstance(row, dict):
+            continue
+        name = str(row.get("name", "")).strip()
+        if str(row.get("status", "")).lower() != "ok":
+            continue
+        guard["candidate_count"] += 1
+        report_json_raw = str(row.get("report_json", "")).strip()
+        if not report_json_raw:
+            blocker = f"candidate_report_json_missing:{name}"
+            guard["blockers"].append(blocker)
+            guard["blocked_candidates"].append(name)
+            guard["candidate_reports"].append({"name": name, "passed": False, "blockers": [blocker]})
+            continue
+        report_json = Path(report_json_raw)
+        if not report_json.exists():
+            blocker = f"candidate_report_json_not_found:{name}:{report_json}"
+            guard["blockers"].append(blocker)
+            guard["blocked_candidates"].append(name)
+            guard["candidate_reports"].append({"name": name, "passed": False, "blockers": [blocker]})
+            continue
+        report_payload = read_json(report_json)
+        predictions_csv_raw = str(report_payload.get("outputs", {}).get("predictions_csv", "")).strip()
+        if not predictions_csv_raw:
+            blocker = f"candidate_predictions_csv_missing:{name}"
+            guard["blockers"].append(blocker)
+            guard["blocked_candidates"].append(name)
+            guard["candidate_reports"].append({"name": name, "passed": False, "blockers": [blocker]})
+            continue
+        predictions_csv = Path(predictions_csv_raw)
+        if not predictions_csv.exists():
+            blocker = f"candidate_predictions_csv_not_found:{name}:{predictions_csv}"
+            guard["blockers"].append(blocker)
+            guard["blocked_candidates"].append(name)
+            guard["candidate_reports"].append({"name": name, "passed": False, "blockers": [blocker]})
+            continue
+        output_json = report_json.with_name(f"{name}_protected_row_backfire_guard.json")
+        audit_args = argparse.Namespace(
+            baseline_csv=baseline_csv,
+            candidate_csv=predictions_csv,
+            protected_id_answer=list(protected_id_answers),
+            baseline_prediction_column="prediction",
+            candidate_prediction_column="prediction",
+            baseline_correct_column="correct",
+            candidate_correct_column="correct",
+            output_json=output_json,
+            allow_blocked=True,
+        )
+        candidate_report = audit_backfire_rows(audit_args)
+        candidate_report["name"] = name
+        candidate_report["output_json"] = str(output_json)
+        guard["candidate_reports"].append(candidate_report)
+        if candidate_report.get("passed"):
+            guard["passed_candidates"].append(name)
+        else:
+            guard["blocked_candidates"].append(name)
+            guard["blockers"].extend([f"{name}:{item}" for item in candidate_report.get("blockers", [])])
+
+    guard["blocked_candidates"] = sorted(set(str(name) for name in guard["blocked_candidates"] if name))
+    guard["passed_candidates"] = sorted(set(str(name) for name in guard["passed_candidates"] if name))
+    guard["passed"] = not guard["blockers"]
+    return guard
+
+
+def apply_protected_row_guard(
+    promotion_gate: dict[str, Any], protected_guard: dict[str, Any]
+) -> dict[str, Any]:
+    if not protected_guard.get("enforced"):
+        promotion_gate["protected_row_backfire_guard_enforced"] = False
+        return promotion_gate
+    blocked = set(str(name) for name in protected_guard.get("blocked_candidates", []))
+    if protected_guard.get("blockers") and not blocked:
+        blocked = set(str(row.get("name", "")) for row in promotion_gate.get("candidates", []) if row.get("name"))
+    updated_candidates = []
+    for candidate in promotion_gate.get("candidates", []):
+        candidate = dict(candidate)
+        if str(candidate.get("name", "")) in blocked:
+            candidate["passed"] = False
+            reasons = list(candidate.get("blocking_reasons", []))
+            if "protected_row_backfire_guard_failed" not in reasons:
+                reasons.append("protected_row_backfire_guard_failed")
+            candidate["blocking_reasons"] = reasons
+        updated_candidates.append(candidate)
+    passed_candidates = [row for row in updated_candidates if row.get("passed")]
+    promotion_gate["protected_row_backfire_guard_enforced"] = True
+    promotion_gate["protected_row_backfire_guard_passed"] = bool(protected_guard.get("passed"))
+    promotion_gate["protected_row_backfire_guard_blocked_candidates"] = sorted(blocked)
+    promotion_gate["candidates"] = updated_candidates
+    promotion_gate["passed_candidate_count"] = len(passed_candidates)
+    promotion_gate["passed_candidates"] = [str(row.get("name", "")) for row in passed_candidates]
+    promotion_gate["decision"] = "weak_promotion_gate_passed" if passed_candidates else "weak_promotion_gate_blocked"
+    return promotion_gate
+
+
 def ensure_import(module_name: str) -> None:
     __import__(module_name)
     print(f"import_ok = {module_name}", flush=True)
@@ -527,6 +677,9 @@ def run_eval(args: argparse.Namespace) -> dict[str, Any]:
     summary = read_json(summary_path)
     log_json("candidate_summary_payload", summary)
     promotion_gate = weak_promotion_gate(summary)
+    protected_guard = protected_row_backfire_guard(summary)
+    log_json("protected_row_backfire_guard", protected_guard)
+    promotion_gate = apply_protected_row_guard(promotion_gate, protected_guard)
     log_json("weak_promotion_gate", promotion_gate)
 
     final_manifest = {
@@ -539,6 +692,7 @@ def run_eval(args: argparse.Namespace) -> dict[str, Any]:
         "eval_summary_json": str(summary_path),
         "candidate_summary": summary,
         "weak_promotion_gate": promotion_gate,
+        "protected_row_backfire_guard": protected_guard,
         "eval_prompt_controls": {
             "disable_thinking": disable_thinking,
             "no_prompt_suffix": no_prompt_suffix,
@@ -600,7 +754,14 @@ def self_test() -> int:
         raise RuntimeError("self-test expected small weak CSV count failure")
     old_env = {
         name: os.environ.get(name)
-        for name in ["KG1_ENFORCE_WEAK_PROMOTION_GATE", "KG1_WEAK_EVAL_DIAGNOSTIC_ONLY"]
+        for name in [
+            "KG1_ENFORCE_WEAK_PROMOTION_GATE",
+            "KG1_WEAK_EVAL_DIAGNOSTIC_ONLY",
+            "KG1_PROTECTED_ROW_GUARD",
+            "KG1_PROTECTED_BASELINE_CSV",
+            "KG1_PROTECTED_ID_ANSWERS",
+            "KG1_CRISIS_MODE_BACKFIRE_GUARD",
+        ]
     }
     os.environ.pop("KG1_ENFORCE_WEAK_PROMOTION_GATE", None)
     os.environ.pop("KG1_WEAK_EVAL_DIAGNOSTIC_ONLY", None)
@@ -640,6 +801,83 @@ def self_test() -> int:
         }
     )
     assert passed["decision"] == "weak_promotion_gate_passed"
+    baseline_csv = tmp / "baseline_predictions.csv"
+    good_predictions_csv = tmp / "good_predictions.csv"
+    bad_predictions_csv = tmp / "bad_predictions.csv"
+    report_good = tmp / "good_report.json"
+    report_bad = tmp / "bad_report.json"
+    baseline_csv.write_text(
+        "id,family,answer,prediction,correct\n8740ed31,bit_manipulation,01101000,01101000,True\n",
+        encoding="utf-8",
+    )
+    good_predictions_csv.write_text(
+        "id,family,answer,prediction,correct\n8740ed31,bit_manipulation,01101000,01101000,True\n",
+        encoding="utf-8",
+    )
+    bad_predictions_csv.write_text(
+        "id,family,answer,prediction,correct\n8740ed31,bit_manipulation,01101000,01111000,False\n",
+        encoding="utf-8",
+    )
+    report_good.write_text(
+        json.dumps({"outputs": {"predictions_csv": str(good_predictions_csv)}}),
+        encoding="utf-8",
+    )
+    report_bad.write_text(
+        json.dumps({"outputs": {"predictions_csv": str(bad_predictions_csv)}}),
+        encoding="utf-8",
+    )
+    os.environ["KG1_PROTECTED_ROW_GUARD"] = "1"
+    os.environ["KG1_PROTECTED_BASELINE_CSV"] = str(baseline_csv)
+    os.environ["KG1_PROTECTED_ID_ANSWERS"] = "8740ed31=01101000"
+    guard_summary = {
+        "rows": [
+            {"name": "good", "status": "ok", "report_json": str(report_good)},
+            {"name": "bad", "status": "ok", "report_json": str(report_bad)},
+        ]
+    }
+    protected_guard = protected_row_backfire_guard(guard_summary)
+    assert protected_guard["enforced"] is True
+    assert "good" in protected_guard["passed_candidates"]
+    assert "bad" in protected_guard["blocked_candidates"]
+    gate = weak_promotion_gate(
+        {
+            "rows": [
+                {
+                    "name": "bad",
+                    "status": "ok",
+                    "correct": 196,
+                    "equation_transform_correct": 60,
+                    "bit_manipulation_correct": 136,
+                    "truncated": 0,
+                }
+            ]
+        }
+    )
+    guarded_gate = apply_protected_row_guard(gate, protected_guard)
+    assert guarded_gate["decision"] == "weak_promotion_gate_blocked"
+    global_blocked_gate = apply_protected_row_guard(
+        weak_promotion_gate(
+            {
+                "rows": [
+                    {
+                        "name": "otherwise_good",
+                        "status": "ok",
+                        "correct": 196,
+                        "equation_transform_correct": 60,
+                        "bit_manipulation_correct": 136,
+                        "truncated": 0,
+                    }
+                ]
+            }
+        ),
+        {
+            "enforced": True,
+            "passed": False,
+            "blocked_candidates": [],
+            "blockers": ["protected_baseline_missing:/tmp/missing.csv"],
+        },
+    )
+    assert global_blocked_gate["decision"] == "weak_promotion_gate_blocked"
     for name, value in old_env.items():
         if value is None:
             os.environ.pop(name, None)

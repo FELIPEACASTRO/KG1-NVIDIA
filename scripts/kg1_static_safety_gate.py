@@ -245,6 +245,10 @@ HIGH_ANSWER_SPAN_LOSS_WEIGHT_RE = re.compile(
     r"ANSWER_SPAN_LOSS_WEIGHT\s*=\s*['\"]?([0-9]+(?:\.[0-9]+)?)['\"]?",
     re.IGNORECASE,
 )
+ANSWER_SPAN_MIN_WEIGHTED_TOKENS_RE = re.compile(
+    r"ANSWER_SPAN_MIN_WEIGHTED_TOKENS\s*=\s*['\"]?([0-9]+)['\"]?",
+    re.IGNORECASE,
+)
 MANUAL_INIT_ADAPTER_LOAD_RE = re.compile(
     r"export\s+INIT_ADAPTER_LOAD_MODE\s*=\s*['\"]manual['\"]",
     re.IGNORECASE,
@@ -496,10 +500,7 @@ def audit_text(path: Path, text: str) -> list[Finding]:
                 )
             )
         if high_answer_span_match and answer_span_weight > 1.0 and explicit_answer_span_route:
-            min_tokens_match = re.search(
-                r"ANSWER_SPAN_MIN_WEIGHTED_TOKENS\s*=\s*['\"]?([0-9]+)['\"]?",
-                text,
-            )
+            min_tokens_match = ANSWER_SPAN_MIN_WEIGHTED_TOKENS_RE.search(text)
             if not min_tokens_match or int(min_tokens_match.group(1)) <= 0:
                 findings.append(
                     Finding(
@@ -509,6 +510,19 @@ def audit_text(path: Path, text: str) -> list[Finding]:
                         "Explicit answer-span routes with ANSWER_SPAN_LOSS_WEIGHT>1.0 must set "
                         "ANSWER_SPAN_MIN_WEIGHTED_TOKENS to a positive value so inactive weighting "
                         "cannot silently pass.",
+                    )
+                )
+        min_tokens_match = ANSWER_SPAN_MIN_WEIGHTED_TOKENS_RE.search(text)
+        if high_answer_span_match and min_tokens_match:
+            answer_span_min_tokens = int(min_tokens_match.group(1))
+            if answer_span_weight <= 1.0 and answer_span_min_tokens > 0:
+                findings.append(
+                    Finding(
+                        rel,
+                        "error",
+                        "answer_span_min_tokens_without_weighting",
+                        "ANSWER_SPAN_MIN_WEIGHTED_TOKENS is positive but ANSWER_SPAN_LOSS_WEIGHT<=1.0. "
+                        "That silently disables answer-span weighting while making the route look guarded.",
                     )
                 )
 
@@ -1156,6 +1170,29 @@ def run_self_test() -> int:
             item.code for item in p3_answer_span_no_min_findings
         }:
             print("missing answer-span min-token gate self-test finding", flush=True)
+            return 1
+        p3_answer_span_fake_min = tmp / "launch_answer_span_fake_min.py"
+        p3_answer_span_fake_min.write_text(
+            "from huggingface_hub import HfApi\n"
+            "COMMAND_SCRIPT=\"\"\"\n"
+            "export LORA_TARGET_PARAMETERS='mlp.experts.gate_up_proj,mlp.experts.down_proj'\n"
+            "export TRAINABLE_LORA_MODULES='q_proj,k_proj,v_proj,o_proj,up_proj,down_proj'\n"
+            "export REQUIRE_LORA_TARGET_PARAMETER_MATCH=1\n"
+            "export REQUIRE_LORA_TARGET_PARAMETERS_TRAINABLE=1\n"
+            "export ANSWER_SPAN_LOSS_WEIGHT='1.0'\n"
+            "export ANSWER_SPAN_MIN_WEIGHTED_TOKENS='1000'\n"
+            "\"\"\"\n"
+            "HfApi().run_job(command=['true'])\n",
+            encoding="utf-8",
+        )
+        p3_answer_span_fake_min_findings = audit_text(
+            p3_answer_span_fake_min,
+            p3_answer_span_fake_min.read_text(encoding="utf-8"),
+        )
+        if "answer_span_min_tokens_without_weighting" not in {
+            item.code for item in p3_answer_span_fake_min_findings
+        }:
+            print("missing inactive answer-span min-token self-test finding", flush=True)
             return 1
         p3_valid_moe_smoke = tmp / "launch_p3_valid_moe_smoke.py"
         p3_valid_moe_smoke.write_text(

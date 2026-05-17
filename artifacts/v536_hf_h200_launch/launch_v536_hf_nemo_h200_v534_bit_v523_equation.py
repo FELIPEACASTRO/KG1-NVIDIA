@@ -60,8 +60,12 @@ SAVE_EVERY_STEPS = 2
 EVAL_EVERY_STEPS = 2
 EVAL_MAX_EXAMPLES = 219
 MAX_LENGTH = 2048
+ABORT_MAX_RESERVED_GIB = 84
 ANSWER_SPAN_LOSS_WEIGHT = "1.0"
-ANSWER_SPAN_MIN_WEIGHTED_TOKENS = "1"
+# Weight 1.0 means this route intentionally uses ordinary completion CE.
+# Keep the min-token floor at 0 so manifests cannot imply answer-span weighting
+# was active when the weighting multiplier is disabled.
+ANSWER_SPAN_MIN_WEIGHTED_TOKENS = "0"
 LOSS_NORMALIZATION_MODE = "example_mean"
 
 SOURCE_WEIGHTS = "v536_v534_bit_v523_equation_pack=1.00"
@@ -126,6 +130,8 @@ def build_job_env(hardware: dict[str, object]) -> dict[str, str]:
         "KG1_EXPECTED_TORCH_VERSION": "",
         "KG1_EXPECTED_MAX_STEPS": str(MAX_STEPS),
         "KG1_EXPECTED_MAX_LENGTH": str(MAX_LENGTH),
+        "KG1_EXPECTED_LOSS_NORMALIZATION_MODE": LOSS_NORMALIZATION_MODE,
+        "KG1_ABORT_MAX_RESERVED_GIB": str(ABORT_MAX_RESERVED_GIB),
         "KG1_REQUIRE_CUDA": "1",
         "KG1_MIN_GPU_TOTAL_GIB": "130",
         "KG1_REQUIRED_GPU_NAME_REGEX": "H200",
@@ -133,6 +139,7 @@ def build_job_env(hardware: dict[str, object]) -> dict[str, str]:
         "KG1_HF_UNIT_COST_USD": str(hardware["unit_cost_usd"]),
         "KG1_HF_MAX_UNIT_COST_USD": "0.09",
         "KG1_ALLOWED_HF_FLAVORS": FLAVOR,
+        "KG1_DATASET_SCHEMA": "sft",
         "KG1_MAX_PROMPT_TRUNCATION_RATE": "0.0",
         "KG1_REQUIRE_OFFSET_MASK": "1",
         "KG1_CRISIS_MODE_BACKFIRE_GUARD": "1",
@@ -234,6 +241,7 @@ def configure_base(base: Any) -> None:
         .replace("export EVAL_EVERY_STEPS=2", f"export EVAL_EVERY_STEPS={EVAL_EVERY_STEPS}")
         .replace("export EVAL_MAX_EXAMPLES=96", f"export EVAL_MAX_EXAMPLES={EVAL_MAX_EXAMPLES}")
         .replace("export MAX_LENGTH=1024", f"export MAX_LENGTH={MAX_LENGTH}")
+        .replace("export ABORT_MAX_RESERVED_GIB=78", f"export ABORT_MAX_RESERVED_GIB={ABORT_MAX_RESERVED_GIB}")
         .replace("export SUBCATEGORY_WEIGHTS=\"$KG1_SUBCATEGORY_WEIGHTS\"", "export SUBCATEGORY_WEIGHTS=\"$KG1_SUBCATEGORY_WEIGHTS\"\nexport LOSS_NORMALIZATION_MODE=\"$KG1_LOSS_NORMALIZATION_MODE\"")
         .replace('"0.35"', '"0.60"')
         .replace('"0.65"', '"0.40"')
@@ -283,6 +291,7 @@ def local_debug(base: Any, api: HfApi, token: str) -> tuple[dict[str, object], d
         "export SOURCE_WEIGHTS=\"$KG1_SOURCE_WEIGHTS\"",
         "export SUBCATEGORY_WEIGHTS=\"$KG1_SUBCATEGORY_WEIGHTS\"",
         "export LOSS_NORMALIZATION_MODE=\"$KG1_LOSS_NORMALIZATION_MODE\"",
+        f"export ABORT_MAX_RESERVED_GIB={ABORT_MAX_RESERVED_GIB}",
         "export LORA_TARGET_PARAMETERS=\"$KG1_LORA_TARGET_PARAMETERS\"",
         "export TRAINABLE_LORA_MODULES='q_proj,k_proj,v_proj,o_proj,up_proj,down_proj'",
         "export REQUIRE_LORA_TARGET_PARAMETER_MATCH=1",
@@ -352,6 +361,7 @@ def manifest_payload(
             "eval_every_steps": EVAL_EVERY_STEPS,
             "eval_max_examples": EVAL_MAX_EXAMPLES,
             "max_length": MAX_LENGTH,
+            "abort_max_reserved_gib": ABORT_MAX_RESERVED_GIB,
             "trainable_lora_modules": TRAINABLE_LORA_MODULES,
             "target_parameters_trainability": "required_trainable",
             "learning_rate": "2.0e-8",

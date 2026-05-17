@@ -18,13 +18,21 @@ import argparse
 import json
 import math
 import re
+import sys
 from collections import Counter
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
 
-BOXED_RE = re.compile(r"\\boxed\{([^{}]*)\}")
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from src.competition_utils import extract_final_answer, verify_answer  # noqa: E402
+
+
+BOXED_LITERAL_RE = re.compile(r"\\boxed\{")
 CONTROL_ALLOWED = {9, 10, 13}
 
 
@@ -85,13 +93,12 @@ def inspect_rows(rows: list[dict[str, Any]]) -> dict[str, Any]:
                     control_char_rows.append(row_id)
                     break
 
-        match = BOXED_RE.search(text)
-        if not match:
+        if not BOXED_LITERAL_RE.search(text):
             boxed_missing.append(row_id)
         else:
-            boxed = match.group(1).strip()
             answer = str(row.get("answer", "")).strip()
-            if answer and boxed != answer:
+            extracted = extract_final_answer(text)
+            if answer and not verify_answer(answer, extracted):
                 answer_mismatch.append(row_id)
 
         if row_has_forbidden_training_flag(row):

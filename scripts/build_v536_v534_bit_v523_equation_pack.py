@@ -148,18 +148,43 @@ def subcategory_of(row: dict[str, Any]) -> str:
 
 def source_dataset_of(row: dict[str, Any]) -> str:
     metadata = row.get("metadata", {}) if isinstance(row.get("metadata"), dict) else {}
-    return str(row.get("source_dataset") or metadata.get("source_dataset") or "")
+    return str(
+        metadata.get("v536_upstream_source_dataset")
+        or row.get("source_dataset")
+        or metadata.get("source_dataset")
+        or ""
+    )
 
 
 def row_overlap(row: dict[str, Any], reference: dict[str, set[str]]) -> list[str]:
     metadata = row.get("metadata", {}) if isinstance(row.get("metadata"), dict) else {}
     reasons: list[str] = []
-    ids = {str(row.get("id", "")).strip(), str(metadata.get("original_id", "")).strip()}
+    ids = {
+        str(row.get("id", "")).strip(),
+        str(row.get("original_id", "")).strip(),
+        str(metadata.get("original_id", "")).strip(),
+        str(metadata.get("v523_original_id", "")).strip(),
+        str(metadata.get("v534_original_id", "")).strip(),
+        str(metadata.get("v536_original_id", "")).strip(),
+        str(metadata.get("v536_upstream_original_id", "")).strip(),
+    }
     if any(value and value in reference["ids"] for value in ids):
         reasons.append("id")
-    if prompt_hash(row.get("prompt", "")) in reference["prompts"]:
+    prompt_hashes = {
+        prompt_hash(row.get("prompt", "")),
+        str(row.get("prompt_sha256", "")).strip(),
+        str(metadata.get("prompt_sha256", "")).strip(),
+        str(metadata.get("v536_upstream_prompt_sha256", "")).strip(),
+    }
+    if any(value and value in reference["prompts"] for value in prompt_hashes):
         reasons.append("prompt")
-    if prompt_answer_hash(row.get("prompt", ""), row.get("answer", "")) in reference["prompt_answers"]:
+    prompt_answer_hashes = {
+        prompt_answer_hash(row.get("prompt", ""), row.get("answer", "")),
+        str(row.get("prompt_answer_sha256", "")).strip(),
+        str(metadata.get("prompt_answer_sha256", "")).strip(),
+        str(metadata.get("v536_upstream_prompt_answer_sha256", "")).strip(),
+    }
+    if any(value and value in reference["prompt_answers"] for value in prompt_answer_hashes):
         reasons.append("prompt_answer")
     return reasons
 
@@ -178,6 +203,12 @@ def normalize_row(row: dict[str, Any], *, split: str, component: str, index: int
     out = copy.deepcopy(row)
     old_id = str(out.get("id", ""))
     metadata = dict(out.get("metadata", {}) if isinstance(out.get("metadata"), dict) else {})
+    upstream_original_id = str(
+        metadata.get("original_id")
+        or metadata.get("v523_original_id")
+        or metadata.get("v534_original_id")
+        or old_id
+    )
     metadata.update(
         {
             "schema_version": "kg1_v536_v534_bit_v523_equation_pack_v1",
@@ -186,6 +217,19 @@ def normalize_row(row: dict[str, Any], *, split: str, component: str, index: int
             "v536_component": component,
             "v536_split": split,
             "v536_original_id": old_id,
+            "v536_upstream_source": str(out.get("source") or metadata.get("source") or ""),
+            "v536_upstream_source_dataset": str(
+                out.get("source_dataset") or metadata.get("source_dataset") or ""
+            ),
+            "v536_upstream_original_id": upstream_original_id,
+            "v536_upstream_prompt_sha256": str(
+                out.get("prompt_sha256") or metadata.get("prompt_sha256") or prompt_hash(out.get("prompt", ""))
+            ),
+            "v536_upstream_prompt_answer_sha256": str(
+                out.get("prompt_answer_sha256")
+                or metadata.get("prompt_answer_sha256")
+                or prompt_answer_hash(out.get("prompt", ""), out.get("answer", ""))
+            ),
             "v536_source_only": True,
         }
     )
@@ -432,6 +476,8 @@ def self_test() -> None:
         raise AssertionError("anti-leak flag missing")
     if not validate_final_answer(out):
         raise AssertionError("final answer should verify")
+    if out["metadata"]["v536_upstream_source_dataset"] != "old_source":
+        raise AssertionError("upstream source dataset was not preserved")
     selected = balanced_take([row, {**row, "id": "old2", "subcategory": "bit_b"}], 2)
     if len(selected) != 2:
         raise AssertionError("balanced_take failed")

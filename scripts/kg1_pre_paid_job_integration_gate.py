@@ -138,6 +138,16 @@ def audit_launcher(args: argparse.Namespace, findings: list[Finding]) -> dict[st
     )
     if args.dataset_schema == "preference":
         require_text(text, "export ALLOW_FORMAT_NEGATIVES=0", "launcher_allows_format_negatives", findings)
+    declared_schema_match = re.search(r"KG1_DATASET_SCHEMA\s*[\"']?\s*:\s*[\"']([^\"']+)[\"']", text)
+    declared_schema = declared_schema_match.group(1) if declared_schema_match else ""
+    if declared_schema != args.dataset_schema:
+        findings.append(
+            Finding(
+                "error",
+                "launcher_dataset_schema_mismatch",
+                f"launcher KG1_DATASET_SCHEMA={declared_schema or '<missing>'} cli_dataset_schema={args.dataset_schema}",
+            )
+        )
     require_text(text, "timeout=3600", "launcher_timeout_not_one_hour", findings)
     require_text(text, 'FLAVOR = "h200"', "launcher_not_h200", findings)
     require_text(text, 'KG1_HF_MAX_UNIT_COST_USD": "0.09"', "launcher_missing_cost_gate", findings)
@@ -174,6 +184,53 @@ def audit_launcher(args: argparse.Namespace, findings: list[Finding]) -> dict[st
             "launcher_missing_expected_max_length_env",
             findings,
         )
+    if args.expected_abort_max_reserved_gib:
+        require_text(
+            text,
+            f"ABORT_MAX_RESERVED_GIB = {args.expected_abort_max_reserved_gib}",
+            "launcher_abort_max_reserved_constant_mismatch",
+            findings,
+        )
+        abort_export_forms = [
+            f"export ABORT_MAX_RESERVED_GIB={args.expected_abort_max_reserved_gib}",
+            'f"export ABORT_MAX_RESERVED_GIB={ABORT_MAX_RESERVED_GIB}"',
+            'f"export ABORT_MAX_RESERVED_GIB={base.ABORT_MAX_RESERVED_GIB}"',
+        ]
+        if not any(snippet in text for snippet in abort_export_forms):
+            findings.append(
+                Finding(
+                    "error",
+                    "launcher_abort_max_reserved_export_mismatch",
+                    "missing command export for expected ABORT_MAX_RESERVED_GIB",
+                )
+            )
+    if args.expected_loss_normalization_mode:
+        require_text(
+            text,
+            f'LOSS_NORMALIZATION_MODE = "{args.expected_loss_normalization_mode}"',
+            "launcher_loss_normalization_mode_constant_mismatch",
+            findings,
+        )
+        require_text(
+            text,
+            '"KG1_EXPECTED_LOSS_NORMALIZATION_MODE": LOSS_NORMALIZATION_MODE',
+            "launcher_missing_expected_loss_normalization_env",
+            findings,
+        )
+        loss_export_forms = [
+            f"export LOSS_NORMALIZATION_MODE={args.expected_loss_normalization_mode}",
+            f"export LOSS_NORMALIZATION_MODE='{args.expected_loss_normalization_mode}'",
+            f'export LOSS_NORMALIZATION_MODE="{args.expected_loss_normalization_mode}"',
+            'export LOSS_NORMALIZATION_MODE="$KG1_LOSS_NORMALIZATION_MODE"',
+        ]
+        if not any(snippet in text for snippet in loss_export_forms):
+            findings.append(
+                Finding(
+                    "error",
+                    "launcher_loss_normalization_export_mismatch",
+                    "missing command export for expected LOSS_NORMALIZATION_MODE",
+                )
+            )
     require_regex(text, r"MAX_STEPS\s*=\s*(?:[1-9]|1[0-2])\b", "launcher_max_steps_too_high", findings)
     if args.expected_pair_score_mode:
         require_text(
@@ -192,6 +249,35 @@ def audit_launcher(args: argparse.Namespace, findings: list[Finding]) -> dict[st
     else:
         require_text(text, "ANSWER_SPAN_LOSS_WEIGHT", "launcher_missing_answer_span_loss_control", findings)
         require_text(text, "ANSWER_SPAN_MIN_WEIGHTED_TOKENS", "launcher_missing_answer_span_min_token_gate", findings)
+        weight_match = re.search(
+            r"ANSWER_SPAN_LOSS_WEIGHT\s*=\s*['\"]?([0-9]+(?:\.[0-9]+)?)['\"]?",
+            text,
+        )
+        min_tokens_match = re.search(
+            r"ANSWER_SPAN_MIN_WEIGHTED_TOKENS\s*=\s*['\"]?([0-9]+)['\"]?",
+            text,
+        )
+        if weight_match and min_tokens_match:
+            answer_span_weight = float(weight_match.group(1))
+            answer_span_min_tokens = int(min_tokens_match.group(1))
+            if answer_span_weight <= 1.0 and answer_span_min_tokens > 0:
+                findings.append(
+                    Finding(
+                        "error",
+                        "launcher_answer_span_min_tokens_without_weighting",
+                        "ANSWER_SPAN_MIN_WEIGHTED_TOKENS is positive but ANSWER_SPAN_LOSS_WEIGHT<=1.0; "
+                        "this silently makes answer-span weighting inactive while the manifest looks gated.",
+                    )
+                )
+            if answer_span_weight > 1.0 and answer_span_min_tokens <= 0:
+                findings.append(
+                    Finding(
+                        "error",
+                        "launcher_answer_span_weighting_without_min_token_floor",
+                        "ANSWER_SPAN_LOSS_WEIGHT>1.0 requires a positive ANSWER_SPAN_MIN_WEIGHTED_TOKENS "
+                        "floor so inactive answer-span weighting cannot pass pre-paid gates.",
+                    )
+                )
     require_text(text, "KG1_REQUIRED_TRAIN_FAMILIES", "launcher_missing_train_family_gate", findings)
     require_text(text, "KG1_REQUIRED_VAL_FAMILIES", "launcher_missing_val_family_gate", findings)
     require_text(text, "KG1_REQUIRED_TRAIN_SUBCATEGORIES", "launcher_missing_train_subcategory_gate", findings)
@@ -210,6 +296,9 @@ def audit_launcher(args: argparse.Namespace, findings: list[Finding]) -> dict[st
         "contains_h200": 'FLAVOR = "h200"' in text,
         "contains_timeout_3600": "timeout=3600" in text,
         "expected_max_length": args.expected_max_length,
+        "expected_abort_max_reserved_gib": args.expected_abort_max_reserved_gib,
+        "expected_loss_normalization_mode": args.expected_loss_normalization_mode,
+        "declared_dataset_schema": declared_schema,
     }
 
 
@@ -377,6 +466,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--expected-save-every-steps", type=int, default=3)
     parser.add_argument("--expected-eval-every-steps", type=int, default=3)
     parser.add_argument("--expected-max-length", type=int, default=0)
+    parser.add_argument("--expected-abort-max-reserved-gib", type=int, default=0)
+    parser.add_argument("--expected-loss-normalization-mode", default="")
     parser.add_argument("--tokenization-manifest-json", type=Path, default=None)
     parser.add_argument("--expected-data-repo", default="")
     parser.add_argument("--expected-data-root", required=True)

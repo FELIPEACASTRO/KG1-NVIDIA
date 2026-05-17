@@ -45,7 +45,23 @@ SYSTEM_PROMPT = (
     "Infer the hidden rule from the examples, then answer with exactly one short final answer."
 )
 
-BIT_TERMS = "bit ROT SHL SHR XOR AND OR NOT stride bitsum CHO MAJ"
+BIT_TERMS = "bit ROT SHL SHR XOR XNOR AND NAND OR NOR NOT IMPL INHIB stride bitsum CHO MAJ"
+ALLOWED_BIT_OPERATORS = {
+    "AND",
+    "NAND",
+    "OR",
+    "NOR",
+    "XOR",
+    "XNOR",
+    "NOT",
+    "ROT",
+    "SHL",
+    "SHR",
+    "CHO",
+    "MAJ",
+    "IMPL",
+    "INHIB",
+}
 ANTI_LEAK_FLAGS = (
     "weak_gate_rows_used_for_training",
     "gate_rows_used_for_training",
@@ -209,6 +225,14 @@ def compact_huikang_trace(reasoning_text: str, rule: str) -> str:
         f"Rule vocabulary: {BIT_TERMS}. "
         f"Evidence: {evidence_text or 'the examples are checked against the same bit rule.'}"
     )
+
+
+def bit_operator_counts(text: str) -> Counter[str]:
+    counts: Counter[str] = Counter()
+    for token in re.findall(r"\b[A-Z][A-Z0-9_-]*\b", str(text or "").upper()):
+        if token in ALLOWED_BIT_OPERATORS:
+            counts[token] += 1
+    return counts
 
 
 def make_chat_row(

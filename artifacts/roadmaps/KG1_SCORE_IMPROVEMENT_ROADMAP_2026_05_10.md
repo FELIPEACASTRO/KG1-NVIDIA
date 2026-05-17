@@ -994,3 +994,121 @@ treino" generico; e converter esses `31` targets em saida do adapter sem
 quebrar os `191` atuais. Qualquer job pago precisa declarar
 `KG1_CRISIS_MODE_BACKFIRE_GUARD=1`, passar pre-paid gate, e so pode ser
 promovido apos weak eval `raw_output` label-free.
+
+## Atualizacao V536 - Auditoria De Parametros E Falha Do H200
+
+Artefatos:
+
+- `artifacts/v536_hf_h200_launch/v536_pre_paid_job_integration_gate_parameter_recheck.json`;
+- `artifacts/v536_hf_h200_launch/v536-nemo-h200-v534bit-v523eq-v290ckpt6-20260517T033326Z_launch_manifest.json`;
+- `artifacts/v536_v534_bit_v523_equation_pack/20260517T024752Z/v526_example_mean_dry_run_after_param_patch/v526_example_mean_objective_dry_run_manifest.json`;
+- `artifacts/v536_v534_bit_v523_equation_pack/20260517T024752Z/v478_objective_alignment_parameter_recheck.json`.
+
+Diagnostico honesto: a ultima falha do job H200 nao foi erro de dataset,
+hash, tokenizacao ou adapter inicial. O job abortou no kill-switch de VRAM:
+`mem_reserved=78.18GiB` contra `ABORT_MAX_RESERVED_GIB=78.00`. Isso era um
+threshold de FinOps apertado demais para H200, nao um sinal de ganho nem de
+perda de ACC.
+
+Parametro atual validado:
+
+| Area | Valor atual | Status |
+|---|---:|---|
+| `MAX_LENGTH` | `2048` | passa; token max observado `1123`, truncation `0` |
+| `LOSS_NORMALIZATION_MODE` | `example_mean` | agora exigido no launcher e no preflight |
+| `ANSWER_SPAN_LOSS_WEIGHT` | `1.0` | intencional: CE normal, sem falsa promessa de answer-span |
+| `ANSWER_SPAN_MIN_WEIGHTED_TOKENS` | `0` | corrigido; peso `1.0` nao pode exigir min-token fake |
+| `ABORT_MAX_RESERVED_GIB` | `84` | corrigido para H200; ainda muito abaixo de 141GB |
+| `MAX_STEPS` | `4` | smoke curto, nao treino longo |
+| save/eval | `2/2` | primeiro checkpoint sempre avaliavel |
+| dataset train/val | `1026/219` | hashes remotos batem com locais |
+| mix train | bit `706`, equation `320` | bit share `68.81%`, equation `31.19%` |
+| mix val | bit `139`, equation `80` | bit share `63.47%`, equation `36.53%` |
+| init adapter | V290 `checkpoint-6` | arquivos presentes no HF |
+| trainable LoRA | `q,k,v,o,up,down` + MoE params | declarado e gateado |
+| dataset schema | `sft` | declarado no launcher; gate bloqueia CLI/schema divergente |
+
+Gates reforcados:
+
+- `kg1_pre_paid_job_integration_gate.py` agora aceita
+  `--expected-loss-normalization-mode` e bloqueia launcher que nao exporte o
+  modo esperado.
+- `hf_job_preflight_gate.py` agora exige `LOSS_NORMALIZATION_MODE` e compara
+  com `KG1_EXPECTED_LOSS_NORMALIZATION_MODE`.
+- `audit_v526_example_mean_objective_dry_run.py` deixou de usar regex simples
+  do primeiro `\boxed{}` e passou a usar `extract_final_answer` +
+  `verify_answer`, alinhando o gate com a metrica compartilhada.
+- `build_v536_v534_bit_v523_equation_pack.py` preserva proveniencia upstream
+  (`v536_upstream_*`) e amplia o overlap gate por id, prompt hash e
+  prompt+answer hash.
+- `kg1_pre_paid_job_integration_gate.py` agora compara o schema declarado no
+  launcher (`KG1_DATASET_SCHEMA`) com `--dataset-schema`; isso evita falso
+  aceite ou falso bloqueio por avaliar dataset SFT como preference/DPO.
+
+Decisao:
+
+- nao relancar H200 automaticamente antes de avaliar se os checkpoints ja
+  gerados (`checkpoint-2` e `checkpoint-abort-step4`) merecem weak eval;
+- se relancar V536, usar somente com os parametros acima e monitoramento
+  FinOps de 40s;
+- qualquer promocao continua bloqueada ate weak ACC label-free mostrar
+  `total>=193`, `equation>=57`, `bit>=136`, `trunc=0`; package/submit exige
+  full official-like `>823/947`.
+
+## Atualizacao V537 - Weak Eval Dos Checkpoints V536 Com Guard Por Linha
+
+Objetivo imediato: medir ACC real dos dois adapters ja produzidos pelo V536
+antes de gastar outro treino H200. O job V536 falhou depois de salvar
+`checkpoint-2` e `checkpoint-abort-step4`; portanto o caminho mais barato e
+correto e avaliar esses dois checkpoints no weak set oficial-like.
+
+Comparativo de versao:
+
+| Item | V536 treino smoke | V537 weak eval |
+|---|---|---|
+| Acao | treinar 4 steps a partir do V290 ckpt6 | avaliar checkpoints ja gerados |
+| Compute | H200 pago com risco de novo abort | H200 apenas para inferencia weak |
+| Candidatos | gera `checkpoint-2` e `checkpoint-abort-step4` | mede ambos no mesmo job |
+| Gate promocional | nao aplicavel sem ACC | `total>=193`, `equation>=57`, `bit>=136`, `trunc=0` |
+| Guard F2/backfire | exigido pelo roadmap | integrado ao `hf_job_weak_eval_v245.py` |
+| Protected id | documentado em V519 | `8740ed31=01101000` bloqueia candidato se regredir |
+
+Correcoes implementadas:
+
+- `hf_job_weak_eval_v245.py` agora roda `protected_row_backfire_guard`
+  imediatamente apos gerar `batch_candidate_summary.json` e antes de aceitar
+  `weak_promotion_gate`;
+- se o guard global falhar por baseline/protected-id ausente, todos os
+  candidatos sao bloqueados;
+- se um candidato melhora totais mas quebra o protected id, ele recebe
+  `protected_row_backfire_guard_failed` e nao pode ser promovido;
+- `launch_v537_hf_weak_eval_v536_checkpoints.py` declara explicitamente
+  `KG1_PROTECTED_ROW_GUARD=1` e `KG1_PROTECTED_ID_ANSWERS=8740ed31=01101000`.
+
+Validacoes locais concluídas antes de qualquer job pago:
+
+- `python -m py_compile scripts/hf_job_weak_eval_v245.py
+  scripts/kg1_weak_backfire_row_guard.py
+  artifacts/v537_hf_h200_v536_weak_eval_launch/launch_v537_hf_weak_eval_v536_checkpoints.py`;
+- `python scripts/hf_job_weak_eval_v245.py --self-test`;
+- `python scripts/kg1_weak_backfire_row_guard.py --self-test`;
+- `python scripts/kg1_static_safety_gate.py
+  artifacts/v537_hf_h200_v536_weak_eval_launch/launch_v537_hf_weak_eval_v536_checkpoints.py`.
+- auditoria focada das pecas ativas (`launch_v536`, `launch_v537`,
+  `hf_job_weak_eval_v245`, `kg1_pre_paid_job_integration_gate`) passou com
+  `findings=[]`;
+- inspeção direta dos JSONL V536 confirmou `0` ids duplicados, `0` respostas
+  vazias, `0` flags weak/full/gate usadas para treino, hashes esperados e
+  contagens `train=1026`, `val=219`;
+- repo HF do V536 contem os quatro arquivos obrigatorios dos dois candidatos:
+  `checkpoint-2/{adapter_config.json,adapter_model.safetensors}` e
+  `checkpoint-abort-step4/{adapter_config.json,adapter_model.safetensors}`.
+
+Decisao:
+
+- nao relancar treino V536 enquanto V537 nao medir os checkpoints existentes;
+- commitar/pushar as alteracoes antes do launch, porque o HF clona o commit
+  remoto e alteracoes locais dirty nao entram no container;
+- se V537 nao atingir o gate, arquivar os checkpoints como diagnostico e voltar
+  para frente CPU/dataset; se atingir, rodar full official-like antes de
+  qualquer package/submit.
