@@ -300,6 +300,8 @@ def main() -> int:
             per_task = summarize_per_task(merged)
             per_task.to_csv(per_task_path, index=False)
             total_tokens = int(merged["completion_tokens"].fillna(0).sum())
+            avg_completion_tokens = float(total_tokens / len(merged)) if len(merged) else 0.0
+            max_completion_tokens = int(merged["completion_tokens"].fillna(0).max()) if len(merged) else 0
             report = {
                 "generated_at_utc": utc_now(),
                 "label": label,
@@ -312,6 +314,8 @@ def main() -> int:
                 "truncated": int(merged["truncated"].sum()),
                 "truncation_rate": float(merged["truncated"].mean()) if len(merged) else 0.0,
                 "completion_tokens": total_tokens,
+                "avg_completion_tokens": avg_completion_tokens,
+                "max_completion_tokens": max_completion_tokens,
                 "generation_elapsed_s": gen_elapsed,
                 "tokens_per_second": float(total_tokens / gen_elapsed) if gen_elapsed > 0 else 0.0,
                 "candidate_elapsed_s": time.time() - cand_start,
@@ -339,7 +343,10 @@ def main() -> int:
                 "truncation_rate": report["truncation_rate"],
                 "equation_transform_correct": int(by_task.get("equation_transform", {}).get("correct", 0)),
                 "bit_manipulation_correct": int(by_task.get("bit_manipulation", {}).get("correct", 0)),
+                "rows": report["rows"],
                 "completion_tokens": report["completion_tokens"],
+                "avg_completion_tokens": report["avg_completion_tokens"],
+                "max_completion_tokens": report["max_completion_tokens"],
                 "tokens_per_second": report["tokens_per_second"],
                 "report_json": str(report_path),
                 "error": "",

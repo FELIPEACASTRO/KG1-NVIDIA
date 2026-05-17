@@ -353,6 +353,12 @@ def check_eval_prompt_contract_guard() -> dict[str, Any]:
             blockers.append("no_prompt_suffix_promotional_eval_blocked")
         if "do not use <think>" in lower_suffix or "disable thinking" in lower_suffix:
             blockers.append("strict_no_think_prompt_suffix_promotional_eval_blocked")
+        if (
+            "no reasoning" in lower_suffix
+            or "no explanation" in lower_suffix
+            or "return only one line" in lower_suffix
+        ):
+            blockers.append("strict_no_reasoning_prompt_suffix_promotional_eval_blocked")
 
     payload = {
         "enforced": enforced,
@@ -1060,6 +1066,16 @@ def self_test() -> None:
                 raise
         else:
             raise RuntimeError("self-test expected disable-thinking contract failure")
+        os.environ["KG1_DISABLE_THINKING"] = "0"
+        os.environ["KG1_PROMPT_SUFFIX"] = "\nReturn only one line: `\\boxed{answer}`. No reasoning. No explanation."
+        try:
+            check_eval_prompt_contract_guard()
+        except RuntimeError as exc:
+            if "strict_no_reasoning_prompt_suffix_promotional_eval_blocked" not in str(exc):
+                raise
+        else:
+            raise RuntimeError("self-test expected strict no-reasoning prompt suffix contract failure")
+        os.environ["KG1_PROMPT_SUFFIX"] = ""
         os.environ["KG1_PROMPT_CONTRACT_DIAGNOSTIC_ONLY"] = "1"
         diagnostic_contract = check_eval_prompt_contract_guard()
         assert diagnostic_contract["diagnostic_only"] is True

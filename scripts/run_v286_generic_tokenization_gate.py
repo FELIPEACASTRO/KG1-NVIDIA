@@ -26,7 +26,13 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
-from src.competition_utils import box_answer, extract_final_answer, extract_final_answer_for_expected, verify_answer  # noqa: E402
+from src.competition_utils import (  # noqa: E402
+    PROMPT_SUFFIX,
+    box_answer,
+    extract_final_answer,
+    extract_final_answer_for_expected,
+    verify_answer,
+)
 
 
 DEFAULT_MODEL_NAME = "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16"
@@ -192,16 +198,28 @@ def validate_rows(
         metadata = row.get("metadata", {}) if isinstance(row.get("metadata"), dict) else {}
         source_counts[str(metadata.get("source_dataset", row.get("source", "")))] += 1
         messages = row.get("messages")
-        if not isinstance(messages, list) or len(messages) != 3:
+        prompt_contract = str(metadata.get("prompt_contract", "legacy_system"))
+        if not isinstance(messages, list):
             bad_rows.append(rid)
             continue
-        if [message.get("role") for message in messages] != ["system", "user", "assistant"]:
-            bad_rows.append(rid)
-            continue
-        if messages[1].get("content") != prompt:
-            bad_rows.append(rid)
-            continue
-        assistant_content = str(messages[2].get("content", ""))
+        roles = [message.get("role") for message in messages]
+        if prompt_contract == "official_like":
+            expected_suffix = str(metadata.get("prompt_suffix", PROMPT_SUFFIX))
+            if len(messages) != 2 or roles != ["user", "assistant"]:
+                bad_rows.append(rid)
+                continue
+            if messages[0].get("content") != prompt + expected_suffix:
+                bad_rows.append(rid)
+                continue
+            assistant_content = str(messages[1].get("content", ""))
+        else:
+            if len(messages) != 3 or roles != ["system", "user", "assistant"]:
+                bad_rows.append(rid)
+                continue
+            if messages[1].get("content") != prompt:
+                bad_rows.append(rid)
+                continue
+            assistant_content = str(messages[2].get("content", ""))
         if assistant_final_answer_mode == "submit_safe_suffix":
             if "Final answer:" not in assistant_content:
                 bad_rows.append(rid)

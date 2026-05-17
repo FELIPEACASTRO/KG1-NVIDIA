@@ -121,6 +121,8 @@ Ultima evidencia operacional relevante:
 | V573 HF upload/pre-paid | dataset V573 subido para HF dataset commit `3d321aff1e68d72769f167ceab2a28123faa18fd`; launcher debug baixou do HF sem symlink cache, validou hashes `ba515.../6957...`, adapter seed e objetivo; pre-paid gate passou sem findings com deferimento V568 restrito a `MAX_STEPS=2` e weak eval obrigatoria no primeiro checkpoint | pronto para commit/push dos gates e um smoke H200 de 2 steps; se checkpoint-2 nao passar `total>=193`, `bit>=136`, `equation>=57`, `trunc=0` e protected rows, cancelar/abandonar |
 | V573 H200 attempt 1 | job `felipesp1983/6a0a0c94a5e509f1a8413626` falhou antes de treinar; H200 correto e preinstall passaram; artifact gate validou hashes e dataset, mas bloqueou por bug silencioso no preflight: `metadata.subcategory` antigo (`bit_konbu_high_confidence_trace`, `bit_huikang_*`) sobrescrevia a subcategoria canonica top-level `bit_bitpair_certified_source_only` usada pelo pre-paid gate | sem custo de treino nem ganho ACC; corrigido para priorizar subcategoria canonica top-level e adicionado self-test `canonical_subcategory`; relancar somente apos commit/push e novo pre-paid/debug |
 | V573 H200 attempt 2 | job `felipesp1983/6a0a0f18a5e509f1a8413664` falhou antes de treinar; preinstall, artifact gate canonico e V485 adapter roundtrip passaram, mas o objective alignment remoto rodou sem `--use-row-loss-weight`/`--require-row-loss-weight` e avaliou share fisico (`bit=57.73%`, `equation=42.27%`) em vez do share efetivo do loss (`bit=67.20%`, `equation=32.80%`) | bug silencioso operacional, nao sinal negativo de modelo; launcher V573 agora injeta os flags no comando remoto e o debug local bloqueia qualquer launch se o contrato de row-loss-weight sumir; sem treino e sem ganho/perda ACC |
+| V573 H200 attempt 3 | job `felipesp1983/6a0a123ae7940de6ee6cdad8` completou; checkpoint-2/final uploaded; baseline/eval loss ficou neutro (`1.4546 -> 1.4546`) e o log expôs bug silencioso local no script de treino: `tokenize_examples` ainda priorizava `metadata.subcategory` antes do `subcategory` canonico top-level, divergindo do preflight | impacto no job atual e baixo porque os pesos de subcategoria sao 1.0 e o objetivo efetivo vem de `metadata.loss_weight`; corrigido em `scripts/hf_job_train_v90.py` para top-level vencer metadata e coberto por self-test; proximo passo e weak eval official-like do checkpoint-2, sem submit antes de `total>=193`, `bit>=136`, `equation>=57`, `trunc=0` e protected rows |
+| Workspace clean rule | regra permanente do usuario formalizada: manter somente fonte, roadmap/gates, datasets/manifests ativos, evidencias futuras reutilizaveis e artefatos necessarios para reproducao; caches/temp/download leftovers/logs redundantes devem sair | criado `scripts/kg1_workspace_clean_gate.py`; modo `--delete-safe` remove apenas lixo inequivoco (`.cache`, `__pycache__`, `.pytest_cache`, `.ipynb_checkpoints`, `*.tmp/*.bak/*.old/*.orig`); logs/manifests/datasets/adapters nunca sao apagados automaticamente |
 
 ## Decisao Atual V560-V573
 
@@ -783,6 +785,11 @@ reproduzido no HF e provar:
     bloquear promocao, registrar no ledger, reverter/ajustar a rota afetada e
     corrigir o gate para impedir repeticao. O static/pre-paid gate deve exigir
     `KG1_CRISIS_MODE_BACKFIRE_GUARD=1` em launchers pagos.
+23. Regra clean permanente: antes de job pago, package ou submit, rodar
+    `python scripts/kg1_workspace_clean_gate.py --delete-safe` e registrar o
+    relatorio quando houver achado. O gate so apaga cache/temp inequivoco; todo
+    dataset, manifest, log decisorio, adapter, roadmap e evidencia reutilizavel
+    fica preservado ou arquivado conscientemente.
 
 ## Plano Cronologico Ativo
 

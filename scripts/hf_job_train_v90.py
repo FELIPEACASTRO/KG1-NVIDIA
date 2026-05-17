@@ -344,6 +344,25 @@ def parse_csv_items(value: str) -> list[str]:
     return [item.strip() for item in value.split(",") if item.strip()]
 
 
+def canonical_example_subcategory(example: dict[str, Any]) -> str:
+    """Return the training subcategory used by gates and samplers.
+
+    Some generated rows keep historical provenance in ``metadata.subcategory``
+    while the CPU gate writes the contract-safe subcategory at top level.  The
+    top-level value must win or sampling reports/weights can silently disagree
+    with the preflight objective gate.
+    """
+
+    metadata = example.get("metadata") if isinstance(example.get("metadata"), dict) else {}
+    return str(
+        example.get("subcategory")
+        or example.get("subtype")
+        or metadata.get("subcategory")
+        or metadata.get("subtype")
+        or "unknown"
+    )
+
+
 def create_lora_model(model: torch.nn.Module) -> torch.nn.Module:
     kwargs: dict[str, Any] = {
         "r": LORA_R,
@@ -1421,13 +1440,7 @@ def tokenize_examples(
                 "input_ids": full_ids,
                 "loss_mask": loss_mask,
                 "category": ex.get("family", ex.get("category", "unknown")),
-                "subcategory": (
-                    (ex.get("metadata") or {}).get("subcategory")
-                    or (ex.get("metadata") or {}).get("subtype")
-                    or ex.get("subcategory")
-                    or ex.get("subtype")
-                    or "unknown"
-                ),
+                "subcategory": canonical_example_subcategory(ex),
                 "source": ex.get("source") or (ex.get("metadata") or {}).get("source") or "unknown",
                 "row_loss_weight": row_loss_weight,
             }
@@ -2576,6 +2589,24 @@ def self_test() -> None:
     assert not target_parameter_name_matches(
         "mlp.experts.gate_up_proj",
         "base_model.model.backbone.layers.0.mixer.experts.7.down_proj.lora_B.default.weight",
+    )
+    assert (
+        canonical_example_subcategory(
+            {
+                "subcategory": "bit_bitpair_certified_source_only",
+                "metadata": {"subcategory": "bit_konbu_high_confidence_trace"},
+            }
+        )
+        == "bit_bitpair_certified_source_only"
+    )
+    assert (
+        canonical_example_subcategory(
+            {
+                "subtype": "equation_numeric_add_direct",
+                "metadata": {"subcategory": "legacy_equation"},
+            }
+        )
+        == "equation_numeric_add_direct"
     )
     toy_rows = [
         {"family": "equation_transform", "subcategory": "rule_a", "source": "source_a"},

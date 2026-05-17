@@ -21,7 +21,7 @@ from typing import Any
 
 
 DEFAULT_BASELINE_CSV = Path("artifacts/v516_label_free_weak_baseline/v516_label_free_v290_checkpoint6_baseline.csv")
-DEFAULT_PROTECTED = ["8740ed31=01101000"]
+DEFAULT_PROTECTED = ["8740ed31=01101000", "59bee375=10010101"]
 
 
 def truthy(value: Any) -> bool:
@@ -124,9 +124,24 @@ def self_test() -> None:
         candidate_ok = root / "candidate_ok.csv"
         candidate_bad = root / "candidate_bad.csv"
         header = "id,family,answer,prediction,correct\n"
-        baseline.write_text(header + "8740ed31,bit_manipulation,01101000,01101000,True\n", encoding="utf-8")
-        candidate_ok.write_text(header + "8740ed31,bit_manipulation,01101000,01101000,True\n", encoding="utf-8")
-        candidate_bad.write_text(header + "8740ed31,bit_manipulation,01101000,01111000,False\n", encoding="utf-8")
+        baseline.write_text(
+            header
+            + "8740ed31,bit_manipulation,01101000,01101000,True\n"
+            + "59bee375,bit_manipulation,10010101,10010101,True\n",
+            encoding="utf-8",
+        )
+        candidate_ok.write_text(
+            header
+            + "8740ed31,bit_manipulation,01101000,01101000,True\n"
+            + "59bee375,bit_manipulation,10010101,10010101,True\n",
+            encoding="utf-8",
+        )
+        candidate_bad.write_text(
+            header
+            + "8740ed31,bit_manipulation,01101000,01111000,False\n"
+            + "59bee375,bit_manipulation,10010101,2,False\n",
+            encoding="utf-8",
+        )
         ok_args = parse_args(
             [
                 "--baseline-csv",
@@ -135,6 +150,8 @@ def self_test() -> None:
                 str(candidate_ok),
                 "--protected-id-answer",
                 "8740ed31=01101000",
+                "--protected-id-answer",
+                "59bee375=10010101",
             ]
         )
         bad_args = parse_args(
@@ -145,6 +162,8 @@ def self_test() -> None:
                 str(candidate_bad),
                 "--protected-id-answer",
                 "8740ed31=01101000",
+                "--protected-id-answer",
+                "59bee375=10010101",
                 "--allow-blocked",
             ]
         )

@@ -2216,6 +2216,66 @@ Regra preventiva:
 Status: V529 registrado; P0 filtrado para `pjt222`, `pearpn25`, `konbu17` e
 `zzys0316`.
 
+### E073 - V551/V552 short traces ainda repetiram backfire protegido
+
+Evidencia:
+
+- V551 encurtou os bit traces de V536 de `p95=1669` para `p95=250`
+  caracteres e passou V509/V286/V513/V524.
+- V552 treinou em H200 por `4` steps; checkpoint-2 reduziu `eval_loss`
+  apenas de `5.9880` para `5.9840`.
+- V553 weak eval label-free do checkpoint-2 retornou:
+  - `190/315` total;
+  - `bit_manipulation=134/160`;
+  - `equation_transform=56/155`;
+  - `truncated=1`;
+  - `avg_completion_tokens=4775.12`, `max_completion_tokens=7680`.
+- O guard protegido falhou nas duas linhas conhecidas:
+  - `8740ed31`: esperado `01101000`, candidato `01111000`;
+  - `59bee375`: esperado `10010101`, candidato `2`.
+- O job V553 foi cancelado antes do checkpoint-4 por FinOps, porque checkpoint-4
+  tinha loss pior e checkpoint-2 ja falhou todos os gates promocionais.
+
+Impacto:
+
+- Encurtar target de bit foi necessario, mas nao suficiente.
+- O problema central agora e transferencia instavel `+equation/-bit`, nao so
+  comprimento de trace ou loss.
+- V551/V552 nao pode ir para full eval, package ou submit.
+- Novo SFT pago so e justificavel se um gate CPU provar preservacao das duas
+  protected rows antes da GPU.
+
+Regra preventiva:
+
+- Todo novo dataset/launcher promocional deve carregar explicitamente:
+  `8740ed31=01101000` e `59bee375=10010101`.
+- O primeiro checkpoint deve ser bloqueado se:
+  - `total<193`;
+  - `bit<136`;
+  - `equation<57`;
+  - `trunc>0`;
+  - `avg_completion_tokens>512`;
+  - `max_completion_tokens>2048`;
+  - qualquer protected row divergir.
+- Resultado de loss nao pode autorizar promocao sem weak ACC label-free.
+
+Atualizacao do guard:
+
+- `scripts/kg1_pre_paid_job_integration_gate.py` agora tem `--self-test`;
+- o self-test cobre:
+  - launcher/dataset SFT limpo passando;
+  - falha quando `59bee375=10010101` fica ausente do protected-row guard;
+  - falha quando o target SFT usa `RULE:` apesar do contrato de saida curta;
+- a bateria de self-tests dos gates criticos passou em 2026-05-17:
+  pre-paid integration, static safety, weak backfire row guard e HF weak eval.
+- V541 missmap foi reexecutado como V555 para corrigir evidencia antiga com
+  apenas um protected row. O novo manifest registra `8740ed31=01101000` e
+  `59bee375=10010101`, com `protected_passed=true`.
+
+Status: V551/V552 bloqueados; gates atualizados; proxima frente e
+hard-negative/protected-row CPU gate ou auditoria de package permitido para
+solver/verifier.
+
 ## Prompt Externo
 
 Prompt consolidado para OpenRouter/outras APIs:

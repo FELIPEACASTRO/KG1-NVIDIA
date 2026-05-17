@@ -285,6 +285,8 @@ def weak_promotion_gate(summary: dict[str, Any]) -> dict[str, Any]:
     equation_min = env_int("KG1_WEAK_PROMOTE_EQUATION_MIN", 60)
     bit_min = env_int("KG1_WEAK_PROMOTE_BIT_MIN", 136)
     trunc_max = env_int("KG1_WEAK_PROMOTE_TRUNC_MAX", 0)
+    avg_completion_tokens_max = env_int("KG1_WEAK_PROMOTE_AVG_COMPLETION_TOKENS_MAX", 512)
+    max_completion_tokens_max = env_int("KG1_WEAK_PROMOTE_MAX_COMPLETION_TOKENS_MAX", 2048)
     rows = summary.get("rows", [])
     if not isinstance(rows, list):
         rows = []
@@ -297,12 +299,20 @@ def weak_promotion_gate(summary: dict[str, Any]) -> dict[str, Any]:
         equation = int(row.get("equation_transform_correct", 0) or 0)
         bit = int(row.get("bit_manipulation_correct", 0) or 0)
         truncated = int(row.get("truncated", 0) or 0)
+        completion_tokens = int(row.get("completion_tokens", 0) or 0)
+        candidate_rows = int(row.get("rows", summary.get("weak_rows", EXPECTED_WEAK_ROWS)) or EXPECTED_WEAK_ROWS)
+        avg_completion_tokens = float(row.get("avg_completion_tokens", 0) or 0)
+        if avg_completion_tokens <= 0 and candidate_rows > 0:
+            avg_completion_tokens = completion_tokens / candidate_rows
+        max_completion_tokens = int(row.get("max_completion_tokens", 0) or 0)
         passed = (
             status_ok
             and correct >= total_min
             and equation >= equation_min
             and bit >= bit_min
             and truncated <= trunc_max
+            and avg_completion_tokens <= avg_completion_tokens_max
+            and max_completion_tokens <= max_completion_tokens_max
         )
         candidates.append(
             {
@@ -312,6 +322,9 @@ def weak_promotion_gate(summary: dict[str, Any]) -> dict[str, Any]:
                 "equation_transform_correct": equation,
                 "bit_manipulation_correct": bit,
                 "truncated": truncated,
+                "completion_tokens": completion_tokens,
+                "avg_completion_tokens": avg_completion_tokens,
+                "max_completion_tokens": max_completion_tokens,
                 "passed": passed,
                 "blocking_reasons": [
                     reason
@@ -321,6 +334,14 @@ def weak_promotion_gate(summary: dict[str, Any]) -> dict[str, Any]:
                         (f"equation_lt_{equation_min}", equation < equation_min),
                         (f"bit_lt_{bit_min}", bit < bit_min),
                         (f"truncated_gt_{trunc_max}", truncated > trunc_max),
+                        (
+                            f"avg_completion_tokens_gt_{avg_completion_tokens_max}",
+                            avg_completion_tokens > avg_completion_tokens_max,
+                        ),
+                        (
+                            f"max_completion_tokens_gt_{max_completion_tokens_max}",
+                            max_completion_tokens > max_completion_tokens_max,
+                        ),
                     ]
                     if blocked
                 ],
@@ -337,12 +358,91 @@ def weak_promotion_gate(summary: dict[str, Any]) -> dict[str, Any]:
             "equation_transform_min": equation_min,
             "bit_manipulation_min": bit_min,
             "truncated_max": trunc_max,
+            "avg_completion_tokens_max": avg_completion_tokens_max,
+            "max_completion_tokens_max": max_completion_tokens_max,
         },
         "candidate_count": len(candidates),
         "passed_candidate_count": len(passed_candidates),
         "passed_candidates": [row["name"] for row in passed_candidates],
         "candidates": candidates,
         "decision": "weak_promotion_gate_passed" if passed_candidates else "weak_promotion_gate_blocked",
+    }
+
+
+def catastrophic_eval_guard(summary: dict[str, Any]) -> dict[str, Any]:
+    """Fail-fast on candidates that are clearly broken, not merely weak.
+
+    This is a FinOps/crisis-mode guard.  A candidate with near-zero weak ACC and
+    mass truncation should not continue through later checkpoints just because
+    the normal consecutive-failure counter was disabled for exploration.
+    """
+
+    enabled = env_bool("KG1_CATASTROPHIC_EVAL_GUARD", True)
+    allow_continue = env_bool("KG1_ALLOW_CATASTROPHIC_EVAL_CONTINUE", False)
+    correct_max = env_int("KG1_CATASTROPHIC_CORRECT_MAX", 10)
+    truncation_rate_min = float(env_str("KG1_CATASTROPHIC_TRUNCATION_RATE_MIN", "0.50"))
+    truncated_min = env_int("KG1_CATASTROPHIC_TRUNCATED_MIN", 100)
+    min_rows = env_int("KG1_CATASTROPHIC_MIN_ROWS", 100)
+    bit_correct_max = env_int("KG1_CATASTROPHIC_BIT_CORRECT_MAX", 5)
+    candidates: list[dict[str, Any]] = []
+    rows = summary.get("rows", [])
+    if not isinstance(rows, list):
+        rows = []
+    for row in rows:
+        if not isinstance(row, dict):
+            continue
+        status_ok = str(row.get("status", "")).lower() == "ok"
+        candidate_rows = int(row.get("rows", summary.get("weak_rows", EXPECTED_WEAK_ROWS)) or EXPECTED_WEAK_ROWS)
+        if not status_ok or candidate_rows < min_rows:
+            continue
+        correct = int(row.get("correct", 0) or 0)
+        bit = int(row.get("bit_manipulation_correct", 0) or 0)
+        truncated = int(row.get("truncated", 0) or 0)
+        truncation_rate = float(row.get("truncation_rate", 0) or 0)
+        if truncation_rate <= 0 and candidate_rows > 0:
+            truncation_rate = truncated / candidate_rows
+        near_zero_with_truncation = (
+            correct <= correct_max
+            and truncated >= truncated_min
+            and truncation_rate >= truncation_rate_min
+        )
+        bit_family_destroyed = bit <= bit_correct_max and truncated >= truncated_min
+        if near_zero_with_truncation or bit_family_destroyed:
+            candidates.append(
+                {
+                    "name": str(row.get("name", "")),
+                    "correct": correct,
+                    "bit_manipulation_correct": bit,
+                    "equation_transform_correct": int(row.get("equation_transform_correct", 0) or 0),
+                    "rows": candidate_rows,
+                    "truncated": truncated,
+                    "truncation_rate": truncation_rate,
+                    "reasons": [
+                        reason
+                        for reason, blocked in [
+                            ("near_zero_acc_with_mass_truncation", near_zero_with_truncation),
+                            ("bit_family_destroyed", bit_family_destroyed),
+                        ]
+                        if blocked
+                    ],
+                }
+            )
+    should_stop = bool(enabled and candidates and not allow_continue)
+    return {
+        "schema_version": "kg1_v245_catastrophic_eval_guard_v1",
+        "enabled": enabled,
+        "allow_continue": allow_continue,
+        "thresholds": {
+            "correct_max": correct_max,
+            "bit_correct_max": bit_correct_max,
+            "truncated_min": truncated_min,
+            "truncation_rate_min": truncation_rate_min,
+            "min_rows": min_rows,
+        },
+        "candidate_count": len(candidates),
+        "catastrophic_candidates": candidates,
+        "should_stop": should_stop,
+        "decision": "catastrophic_eval_stop" if should_stop else "catastrophic_eval_pass",
     }
 
 
@@ -383,7 +483,7 @@ def protected_row_backfire_guard(summary: dict[str, Any]) -> dict[str, Any]:
     )
     protected_id_answers = [
         part.strip()
-        for part in env_str("KG1_PROTECTED_ID_ANSWERS", "8740ed31=01101000").split(",")
+        for part in env_str("KG1_PROTECTED_ID_ANSWERS", "8740ed31=01101000,59bee375=10010101").split(",")
         if part.strip()
     ]
     guard["baseline_csv"] = str(baseline_csv)
@@ -530,6 +630,18 @@ def run_cmd(cmd: list[str], cwd: Path, log_path: Path, timeout_s: int) -> int:
     return rc
 
 
+def replace_cmd_arg(cmd: list[str], arg_name: str, value: str) -> list[str]:
+    updated = list(cmd)
+    try:
+        index = updated.index(arg_name)
+    except ValueError as exc:
+        raise RuntimeError(f"internal command is missing {arg_name}") from exc
+    if index + 1 >= len(updated):
+        raise RuntimeError(f"internal command has no value after {arg_name}")
+    updated[index + 1] = value
+    return updated
+
+
 def run_eval(args: argparse.Namespace) -> dict[str, Any]:
     print("=== V245 HF WEAK EVAL JOB START ===", flush=True)
     print("generated_at_utc =", utc_now(), flush=True)
@@ -670,17 +782,145 @@ def run_eval(args: argparse.Namespace) -> dict[str, Any]:
         cmd.append("--no-prompt-suffix")
     elif prompt_suffix:
         cmd.extend(["--prompt-suffix", prompt_suffix])
-    run_cmd(cmd, cwd=ROOT, log_path=output_dir / "v245_hf_weak_eval.log", timeout_s=env_int("KG1_EVAL_TIMEOUT_S", 1800))
-    summary_path = eval_out / "batch_candidate_summary.json"
-    if not summary_path.exists():
-        raise FileNotFoundError(summary_path)
-    summary = read_json(summary_path)
+    candidate_by_candidate = env_bool("KG1_EVAL_CANDIDATE_BY_CANDIDATE", len(candidate_payload) > 1)
+    incremental_manifests: list[str] = []
+    if not candidate_by_candidate:
+        run_cmd(
+            cmd,
+            cwd=ROOT,
+            log_path=output_dir / "v245_hf_weak_eval.log",
+            timeout_s=env_int("KG1_EVAL_TIMEOUT_S", 1800),
+        )
+        summary_path = eval_out / "batch_candidate_summary.json"
+        if not summary_path.exists():
+            raise FileNotFoundError(summary_path)
+        summary = read_json(summary_path)
+    else:
+        print("candidate_by_candidate_eval = true", flush=True)
+        stop_after_failures = env_int("KG1_STOP_AFTER_CONSECUTIVE_FAILED_CANDIDATES", 2)
+        upload_incremental = env_bool("KG1_UPLOAD_INCREMENTAL_EVAL_DIAGNOSTICS", env_bool("KG1_UPLOAD_TO_HF", True))
+        incremental_api = HfApi(token=token or None) if upload_incremental else None
+        incremental_path_in_repo = env_str("KG1_OUTPUT_PATH_IN_REPO", f"evals/{run_id}")
+        all_rows: list[dict[str, Any]] = []
+        consecutive_failures = 0
+        stopped_early = False
+        for index, candidate in enumerate(candidate_payload, start=1):
+            single_name = f"candidate_{index:02d}_{hashlib.sha256(candidate['name'].encode('utf-8')).hexdigest()[:8]}"
+            single_json = output_dir / f"{single_name}.json"
+            single_out = eval_out / single_name
+            single_json.write_text(json.dumps([candidate], indent=2, sort_keys=True), encoding="utf-8")
+            single_cmd = replace_cmd_arg(cmd, "--candidates-json", str(single_json))
+            single_cmd = replace_cmd_arg(single_cmd, "--output-dir", str(single_out))
+            run_cmd(
+                single_cmd,
+                cwd=ROOT,
+                log_path=output_dir / f"{single_name}_weak_eval.log",
+                timeout_s=env_int("KG1_EVAL_TIMEOUT_S", 1800),
+            )
+            single_summary_path = single_out / "batch_candidate_summary.json"
+            if not single_summary_path.exists():
+                raise FileNotFoundError(single_summary_path)
+            single_summary = read_json(single_summary_path)
+            single_rows = single_summary.get("rows", [])
+            if not isinstance(single_rows, list):
+                single_rows = []
+            all_rows.extend(row for row in single_rows if isinstance(row, dict))
+            current_summary = {
+                "generated_at_utc": utc_now(),
+                "mode": "candidate_by_candidate_incremental",
+                "candidate_index": index,
+                "candidate_count": len(candidate_payload),
+                "current_candidate": candidate["name"],
+                "rows": list(all_rows),
+            }
+            current_gate = weak_promotion_gate(current_summary)
+            current_protected_guard = protected_row_backfire_guard(current_summary)
+            current_gate = apply_protected_row_guard(current_gate, current_protected_guard)
+            current_catastrophic_guard = catastrophic_eval_guard(current_summary)
+            incremental_manifest = {
+                "schema_version": "kg1_v245_incremental_weak_eval_manifest_v1",
+                "generated_at_utc": utc_now(),
+                "run_id": run_id,
+                "candidate_index": index,
+                "candidate_count": len(candidate_payload),
+                "current_candidate": candidate["name"],
+                "candidate_summary": current_summary,
+                "weak_promotion_gate": current_gate,
+                "protected_row_backfire_guard": current_protected_guard,
+                "catastrophic_eval_guard": current_catastrophic_guard,
+            }
+            incremental_path = output_dir / f"{single_name}_incremental_manifest.json"
+            incremental_path.write_text(json.dumps(incremental_manifest, indent=2, sort_keys=True), encoding="utf-8")
+            incremental_manifests.append(str(incremental_path))
+            log_json("incremental_weak_promotion_gate", current_gate)
+            log_json("incremental_catastrophic_eval_guard", current_catastrophic_guard)
+            if upload_incremental and incremental_api is not None:
+                print("incremental_upload_folder_repo =", output_repo, flush=True)
+                print("incremental_upload_folder_path_in_repo =", incremental_path_in_repo, flush=True)
+                incremental_api.upload_folder(
+                    repo_id=output_repo,
+                    repo_type="model",
+                    folder_path=str(output_dir),
+                    path_in_repo=incremental_path_in_repo,
+                    commit_message=f"Add {run_id} weak eval diagnostics through {candidate['name']}",
+                    ignore_patterns=["adapter_snapshot/**"],
+                )
+            if current_gate["passed_candidates"]:
+                consecutive_failures = 0
+            else:
+                consecutive_failures += 1
+            if current_catastrophic_guard.get("should_stop"):
+                print(
+                    "candidate_by_candidate_stop = "
+                    + json.dumps(
+                        {
+                            "reason": "catastrophic_eval_guard",
+                            "last_candidate": candidate["name"],
+                            "catastrophic_candidates": current_catastrophic_guard.get("catastrophic_candidates", []),
+                        },
+                        sort_keys=True,
+                    ),
+                    flush=True,
+                )
+                stopped_early = True
+                break
+            if stop_after_failures > 0 and consecutive_failures >= stop_after_failures:
+                print(
+                    "candidate_by_candidate_stop = "
+                    + json.dumps(
+                        {
+                            "reason": "consecutive_failed_candidates",
+                            "stop_after_failures": stop_after_failures,
+                            "consecutive_failures": consecutive_failures,
+                            "last_candidate": candidate["name"],
+                        },
+                        sort_keys=True,
+                    ),
+                    flush=True,
+                )
+                stopped_early = True
+                break
+        summary_path = eval_out / "batch_candidate_summary.json"
+        summary = {
+            "generated_at_utc": utc_now(),
+            "base_model_path": env_str("KG1_MODEL_NAME", DEFAULT_MODEL_NAME),
+            "solution_csv": str(weak_csv),
+            "questions_csv": str(weak_csv),
+            "candidates_json": str(candidate_json),
+            "mode": "candidate_by_candidate",
+            "stopped_early": stopped_early,
+            "incremental_manifests": incremental_manifests,
+            "rows": all_rows,
+        }
+        summary_path.write_text(json.dumps(summary, indent=2, sort_keys=True), encoding="utf-8")
     log_json("candidate_summary_payload", summary)
     promotion_gate = weak_promotion_gate(summary)
     protected_guard = protected_row_backfire_guard(summary)
+    catastrophic_guard = catastrophic_eval_guard(summary)
     log_json("protected_row_backfire_guard", protected_guard)
     promotion_gate = apply_protected_row_guard(promotion_gate, protected_guard)
     log_json("weak_promotion_gate", promotion_gate)
+    log_json("catastrophic_eval_guard", catastrophic_guard)
 
     final_manifest = {
         "schema_version": "kg1_v245_hf_weak_eval_manifest_v1",
@@ -693,6 +933,9 @@ def run_eval(args: argparse.Namespace) -> dict[str, Any]:
         "candidate_summary": summary,
         "weak_promotion_gate": promotion_gate,
         "protected_row_backfire_guard": protected_guard,
+        "catastrophic_eval_guard": catastrophic_guard,
+        "candidate_by_candidate_eval": candidate_by_candidate,
+        "incremental_manifests": incremental_manifests,
         "eval_prompt_controls": {
             "disable_thinking": disable_thinking,
             "no_prompt_suffix": no_prompt_suffix,
@@ -723,6 +966,11 @@ def run_eval(args: argparse.Namespace) -> dict[str, Any]:
         final_manifest_path.write_text(json.dumps(final_manifest, indent=2, sort_keys=True), encoding="utf-8")
         print("upload_info =", upload_info, flush=True)
 
+    if catastrophic_guard.get("should_stop"):
+        raise RuntimeError(
+            "Catastrophic eval guard stopped/blocked candidates after uploading diagnostics: "
+            + json.dumps(catastrophic_guard.get("thresholds", {}), sort_keys=True)
+        )
     if promotion_gate["enforced"] and not promotion_gate["passed_candidates"]:
         raise RuntimeError(
             "Weak promotion gate blocked all candidates after uploading diagnostics: "
@@ -761,6 +1009,13 @@ def self_test() -> int:
             "KG1_PROTECTED_BASELINE_CSV",
             "KG1_PROTECTED_ID_ANSWERS",
             "KG1_CRISIS_MODE_BACKFIRE_GUARD",
+            "KG1_CATASTROPHIC_EVAL_GUARD",
+            "KG1_ALLOW_CATASTROPHIC_EVAL_CONTINUE",
+            "KG1_CATASTROPHIC_CORRECT_MAX",
+            "KG1_CATASTROPHIC_TRUNCATION_RATE_MIN",
+            "KG1_CATASTROPHIC_TRUNCATED_MIN",
+            "KG1_CATASTROPHIC_MIN_ROWS",
+            "KG1_CATASTROPHIC_BIT_CORRECT_MAX",
         ]
     }
     os.environ.pop("KG1_ENFORCE_WEAK_PROMOTION_GATE", None)
@@ -796,26 +1051,98 @@ def self_test() -> int:
                     "equation_transform_correct": 60,
                     "bit_manipulation_correct": 136,
                     "truncated": 0,
+                    "rows": EXPECTED_WEAK_ROWS,
+                    "completion_tokens": 3150,
+                    "avg_completion_tokens": 10,
+                    "max_completion_tokens": 40,
                 }
             ]
         }
     )
     assert passed["decision"] == "weak_promotion_gate_passed"
+    runaway_blocked = weak_promotion_gate(
+        {
+            "rows": [
+                {
+                    "name": "runaway",
+                    "status": "ok",
+                    "correct": 196,
+                    "equation_transform_correct": 60,
+                    "bit_manipulation_correct": 136,
+                    "truncated": 0,
+                    "rows": EXPECTED_WEAK_ROWS,
+                    "completion_tokens": 1500000,
+                    "avg_completion_tokens": 4761.9,
+                    "max_completion_tokens": 7680,
+                }
+            ]
+        }
+    )
+    assert runaway_blocked["decision"] == "weak_promotion_gate_blocked"
+    assert any(
+        reason.startswith("avg_completion_tokens_gt_")
+        for reason in runaway_blocked["candidates"][0]["blocking_reasons"]
+    )
+    catastrophic = catastrophic_eval_guard(
+        {
+            "rows": [
+                {
+                    "name": "v548_like_collapse",
+                    "status": "ok",
+                    "correct": 3,
+                    "equation_transform_correct": 3,
+                    "bit_manipulation_correct": 0,
+                    "truncated": 288,
+                    "truncation_rate": 288 / EXPECTED_WEAK_ROWS,
+                    "rows": EXPECTED_WEAK_ROWS,
+                }
+            ]
+        }
+    )
+    assert catastrophic["decision"] == "catastrophic_eval_stop"
+    assert catastrophic["should_stop"] is True
+    assert catastrophic["catastrophic_candidates"][0]["name"] == "v548_like_collapse"
+    os.environ["KG1_ALLOW_CATASTROPHIC_EVAL_CONTINUE"] = "1"
+    catastrophic_allowed = catastrophic_eval_guard(
+        {
+            "rows": [
+                {
+                    "name": "diagnostic_collapse",
+                    "status": "ok",
+                    "correct": 3,
+                    "equation_transform_correct": 3,
+                    "bit_manipulation_correct": 0,
+                    "truncated": 288,
+                    "truncation_rate": 288 / EXPECTED_WEAK_ROWS,
+                    "rows": EXPECTED_WEAK_ROWS,
+                }
+            ]
+        }
+    )
+    assert catastrophic_allowed["decision"] == "catastrophic_eval_pass"
+    assert catastrophic_allowed["should_stop"] is False
+    os.environ.pop("KG1_ALLOW_CATASTROPHIC_EVAL_CONTINUE", None)
     baseline_csv = tmp / "baseline_predictions.csv"
     good_predictions_csv = tmp / "good_predictions.csv"
     bad_predictions_csv = tmp / "bad_predictions.csv"
     report_good = tmp / "good_report.json"
     report_bad = tmp / "bad_report.json"
     baseline_csv.write_text(
-        "id,family,answer,prediction,correct\n8740ed31,bit_manipulation,01101000,01101000,True\n",
+        "id,family,answer,prediction,correct\n"
+        "8740ed31,bit_manipulation,01101000,01101000,True\n"
+        "59bee375,bit_manipulation,10010101,10010101,True\n",
         encoding="utf-8",
     )
     good_predictions_csv.write_text(
-        "id,family,answer,prediction,correct\n8740ed31,bit_manipulation,01101000,01101000,True\n",
+        "id,family,answer,prediction,correct\n"
+        "8740ed31,bit_manipulation,01101000,01101000,True\n"
+        "59bee375,bit_manipulation,10010101,10010101,True\n",
         encoding="utf-8",
     )
     bad_predictions_csv.write_text(
-        "id,family,answer,prediction,correct\n8740ed31,bit_manipulation,01101000,01111000,False\n",
+        "id,family,answer,prediction,correct\n"
+        "8740ed31,bit_manipulation,01101000,01111000,False\n"
+        "59bee375,bit_manipulation,10010101,2,False\n",
         encoding="utf-8",
     )
     report_good.write_text(
@@ -828,7 +1155,7 @@ def self_test() -> int:
     )
     os.environ["KG1_PROTECTED_ROW_GUARD"] = "1"
     os.environ["KG1_PROTECTED_BASELINE_CSV"] = str(baseline_csv)
-    os.environ["KG1_PROTECTED_ID_ANSWERS"] = "8740ed31=01101000"
+    os.environ["KG1_PROTECTED_ID_ANSWERS"] = "8740ed31=01101000,59bee375=10010101"
     guard_summary = {
         "rows": [
             {"name": "good", "status": "ok", "report_json": str(report_good)},
@@ -849,6 +1176,10 @@ def self_test() -> int:
                     "equation_transform_correct": 60,
                     "bit_manipulation_correct": 136,
                     "truncated": 0,
+                    "rows": EXPECTED_WEAK_ROWS,
+                    "completion_tokens": 3150,
+                    "avg_completion_tokens": 10,
+                    "max_completion_tokens": 40,
                 }
             ]
         }
@@ -866,6 +1197,10 @@ def self_test() -> int:
                         "equation_transform_correct": 60,
                         "bit_manipulation_correct": 136,
                         "truncated": 0,
+                        "rows": EXPECTED_WEAK_ROWS,
+                        "completion_tokens": 3150,
+                        "avg_completion_tokens": 10,
+                        "max_completion_tokens": 40,
                     }
                 ]
             }
