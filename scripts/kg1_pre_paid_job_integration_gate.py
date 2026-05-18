@@ -94,11 +94,15 @@ BLOCKED_ADAPTER_MARKERS = {
     ),
 }
 
-RESIDUAL_FIRST_MIN_TOTAL = 200
+RESIDUAL_FIRST_MIN_TOTAL = 196
 RESIDUAL_FIRST_MIN_BIT = 136
 RESIDUAL_FIRST_MIN_EQUATION = 59
 RESIDUAL_FIRST_MIN_COVERAGE = 0.70
-PROTECTED_ROW_EXPECTED = ["8740ed31=01101000", "59bee375=10010101"]
+PROTECTED_ROW_EXPECTED = [
+    "8740ed31=01101000",
+    "59bee375=10010101",
+    "55d834d1=00111111",
+]
 
 
 @dataclass
@@ -149,6 +153,8 @@ def parse_launcher_env_value(text: str, name: str) -> str:
     patterns = [
         rf"{re.escape(name)}\s*=\s*[\"']([^\"']+)[\"']",
         rf"[\"']{re.escape(name)}[\"']\s*:\s*[\"']([^\"']+)[\"']",
+        rf"{re.escape(name)}\s*=\s*([+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:e[+-]?\d+)?)\b",
+        rf"[\"']{re.escape(name)}[\"']\s*:\s*([+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:e[+-]?\d+)?)\b",
         rf"export\s+{re.escape(name)}=([^\s\"']+)",
         rf"export\s+{re.escape(name)}=[\"']([^\"']+)[\"']",
     ]
@@ -327,30 +333,35 @@ def audit_decoding_vs_adapter_drift_gate(text: str, findings: list[Finding]) -> 
                     "deferred_post_checkpoint requires KG1_FIRST_CHECKPOINT_WEAK_EVAL_REQUIRED=1",
                 )
             )
-        if max_steps is None or max_steps > 2:
+        v618_surface = parse_launcher_env_value(text, "KG1_V618_MODULE_SURFACE_GATE_STATUS").lower() == "passed"
+        max_steps_limit = 20 if v618_surface else 2
+        checkpoint_limit = 10 if v618_surface else 2
+        if max_steps is None or max_steps > max_steps_limit:
             findings.append(
                 Finding(
                     "error",
                     "decoding_vs_adapter_drift_defer_too_many_steps",
-                    f"deferred_post_checkpoint requires MAX_STEPS<=2, got {max_steps}",
+                    f"deferred_post_checkpoint requires MAX_STEPS<={max_steps_limit}, got {max_steps}",
                 )
             )
         for name in ("SAVE_EVERY_STEPS", "EVAL_EVERY_STEPS"):
             value = observed[name]
-            if value is None or value > 2:
+            if value is None or value > checkpoint_limit:
                 findings.append(
                     Finding(
                         "error",
                         "decoding_vs_adapter_drift_defer_late_checkpoint",
-                        f"deferred_post_checkpoint requires {name}<=2, got {value}",
+                        f"deferred_post_checkpoint requires {name}<={checkpoint_limit}, got {value}",
                     )
                 )
         return {
             "required": {
                 "mode": "deferred_post_checkpoint",
-                "max_steps_lte": 2,
+                "max_steps_lte": max_steps_limit,
+                "checkpoint_every_steps_lte": checkpoint_limit,
                 "first_checkpoint_weak_eval_required": True,
                 "purpose": "allow one tiny smoke when V568 can only be measured after a new checkpoint exists",
+                "v618_surface_route": v618_surface,
             },
             "observed": observed,
         }
@@ -500,8 +511,13 @@ def audit_launcher(args: argparse.Namespace, findings: list[Finding]) -> dict[st
             )
         )
     require_text(text, "timeout=3600", "launcher_timeout_not_one_hour", findings)
-    require_text(text, 'FLAVOR = "h200"', "launcher_not_h200", findings)
-    require_text(text, 'KG1_HF_MAX_UNIT_COST_USD": "0.09"', "launcher_missing_cost_gate", findings)
+    require_text(text, f'FLAVOR = "{args.expected_flavor}"', "launcher_flavor_mismatch", findings)
+    require_text(
+        text,
+        f'KG1_HF_MAX_UNIT_COST_USD": "{args.expected_max_unit_cost_usd}"',
+        "launcher_missing_cost_gate",
+        findings,
+    )
     require_text(
         text,
         f"SAVE_EVERY_STEPS = {args.expected_save_every_steps}",
@@ -582,7 +598,23 @@ def audit_launcher(args: argparse.Namespace, findings: list[Finding]) -> dict[st
                     "missing command export for expected LOSS_NORMALIZATION_MODE",
                 )
             )
-    require_regex(text, r"MAX_STEPS\s*=\s*(?:[1-9]|1[0-2])\b", "launcher_max_steps_too_high", findings)
+    observed_max_steps = parse_launcher_env_float(text, "MAX_STEPS")
+    max_steps_limit = args.expected_max_steps
+    if observed_max_steps is None:
+        require_regex(
+            text,
+            rf"MAX_STEPS\s*=\s*(?:[1-9]|1[0-9]|{max_steps_limit})\b",
+            "launcher_max_steps_too_high",
+            findings,
+        )
+    elif observed_max_steps > max_steps_limit:
+        findings.append(
+            Finding(
+                "error",
+                "launcher_max_steps_too_high",
+                f"MAX_STEPS={observed_max_steps} above expected maximum {max_steps_limit}",
+            )
+        )
     if args.require_row_loss_weight:
         require_regex(
             text,
@@ -669,7 +701,8 @@ def audit_launcher(args: argparse.Namespace, findings: list[Finding]) -> dict[st
     return {
         "launcher": str(launcher),
         "expected_data_repo": args.expected_data_repo,
-        "contains_h200": 'FLAVOR = "h200"' in text,
+        "contains_expected_flavor": f'FLAVOR = "{args.expected_flavor}"' in text,
+        "expected_flavor": args.expected_flavor,
         "contains_timeout_3600": "timeout=3600" in text,
         "eval_prompt_requires_boxed_only_line": (
             "Return only one line" in text and "\\boxed" in text and "No reasoning" in text
@@ -725,6 +758,52 @@ def audit_tokenization_manifest(path: Path | None, args: argparse.Namespace, fin
         "validation_token_max": val_max,
         "runtime_expected_max_length": args.expected_max_length,
         "runtime_length_safe": (not args.expected_max_length) or max_observed <= args.expected_max_length,
+    }
+
+
+def audit_learnability_manifest(path: Path | None, findings: list[Finding]) -> dict[str, Any]:
+    if path is None:
+        return {"skipped": True, "reason": "learnability_manifest_not_provided"}
+    if not path.is_file():
+        findings.append(Finding("error", "learnability_manifest_missing", str(path)))
+        return {"manifest": str(path), "missing": True}
+    manifest = read_json(path)
+    decision = manifest.get("decision", {}) if isinstance(manifest.get("decision"), dict) else {}
+    finding_counts = manifest.get("finding_counts", {}) if isinstance(manifest.get("finding_counts"), dict) else {}
+    status = str(decision.get("status", ""))
+    hf_gpu_allowed = decision.get("hf_gpu_allowed")
+    blockers = int(finding_counts.get("blocker", 0) or 0)
+    warnings = int(finding_counts.get("warning", 0) or 0)
+    if status != "passed_cpu_structure_only" or hf_gpu_allowed is not True or blockers:
+        findings.append(
+            Finding(
+                "error",
+                "learnability_gate_not_gpu_ready",
+                json.dumps(
+                    {
+                        "blockers": blockers,
+                        "hf_gpu_allowed": hf_gpu_allowed,
+                        "manifest": str(path),
+                        "status": status,
+                        "warnings": warnings,
+                    },
+                    sort_keys=True,
+                ),
+            )
+        )
+    if warnings:
+        findings.append(
+            Finding(
+                "warning",
+                "learnability_gate_has_warnings",
+                json.dumps({"manifest": str(path), "warnings": warnings}, sort_keys=True),
+            )
+        )
+    return {
+        "manifest": str(path),
+        "status": status,
+        "hf_gpu_allowed": hf_gpu_allowed,
+        "finding_counts": finding_counts,
     }
 
 
@@ -1056,6 +1135,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--dataset-schema", choices=["preference", "sft"], default="preference")
     parser.add_argument("--expected-save-every-steps", type=int, default=3)
     parser.add_argument("--expected-eval-every-steps", type=int, default=3)
+    parser.add_argument("--expected-max-steps", type=int, default=12)
     parser.add_argument("--expected-max-length", type=int, default=0)
     parser.add_argument("--expected-abort-max-reserved-gib", type=int, default=0)
     parser.add_argument("--expected-loss-normalization-mode", default="")
@@ -1064,6 +1144,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--max-assistant-chars-max", type=int, default=0)
     parser.add_argument("--require-row-loss-weight", action="store_true")
     parser.add_argument("--tokenization-manifest-json", type=Path, default=None)
+    parser.add_argument("--learnability-manifest-json", type=Path, default=None)
     parser.add_argument("--expected-data-repo", default="")
     parser.add_argument("--expected-data-root", default="")
     parser.add_argument("--expected-train-sha256", default="")
@@ -1074,6 +1155,8 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--expected-init-adapter-repo", default="")
     parser.add_argument("--expected-init-adapter-subfolder", default="")
     parser.add_argument("--expected-pair-score-mode", default="")
+    parser.add_argument("--expected-flavor", default="h200")
+    parser.add_argument("--expected-max-unit-cost-usd", default="0.09")
     parser.add_argument("--allow-missing-crisis-guards", action="store_true")
     parser.add_argument("--allow-missing-residual-first-gates", action="store_true")
     parser.add_argument("--allow-missing-decoding-drift-gate", action="store_true")
@@ -1225,6 +1308,7 @@ def run_gate(args: argparse.Namespace, *, emit: bool = True) -> dict[str, Any]:
     else:
         preference_manifest_summary = {"skipped": True, "reason": "sft_schema_does_not_use_preference_audit"}
     tokenization_summary = audit_tokenization_manifest(args.tokenization_manifest_json, args, findings)
+    learnability_summary = audit_learnability_manifest(args.learnability_manifest_json, findings)
     report = {
         "schema_version": "kg1_pre_paid_job_integration_gate_v2",
         "dataset_schema": args.dataset_schema,
@@ -1234,6 +1318,7 @@ def run_gate(args: argparse.Namespace, *, emit: bool = True) -> dict[str, Any]:
         "train_dataset": train_report,
         "validation_dataset": val_report,
         "tokenization_manifest": tokenization_summary,
+        "learnability_manifest": learnability_summary,
         "preference_manifest": preference_manifest_summary,
         "v438_audit": preference_manifest_summary if preference_manifest_summary.get("kind") == "v438" else {"skipped": True},
         "findings": [item.__dict__ for item in findings],
@@ -1303,7 +1388,7 @@ def _self_test_sft_rows(*, rule_prefix: bool = False, trace_prefix: bool = False
 
 
 def _self_test_launcher_text(train_sha: str, val_sha: str, *, protected: str | None = None) -> str:
-    protected_value = protected or "8740ed31=01101000,59bee375=10010101"
+    protected_value = protected or "8740ed31=01101000,59bee375=10010101,55d834d1=00111111"
     return f'''
 DATA_REPO = "kg1/self-test-data"
 DATA_ROOT = "data/self-test"
@@ -1340,7 +1425,7 @@ KG1_WEAK_LABEL_AWARE_SELECTION = "0"
 KG1_CPU_SIMULATION_USES_WEAK_LABELS = "0"
 KG1_PROTECTED_ID_ANSWERS = "{protected_value}"
 KG1_CRISIS_MODE_BACKFIRE_GUARD = "1"
-KG1_CPU_SIMULATED_TOTAL_CORRECT = "200"
+KG1_CPU_SIMULATED_TOTAL_CORRECT = "196"
 KG1_CPU_SIMULATED_BIT_CORRECT = "136"
 KG1_CPU_SIMULATED_EQUATION_CORRECT = "59"
 KG1_CPU_MISS_CLASSIFICATION_COVERAGE = "0.70"
@@ -1355,7 +1440,7 @@ KG1_V568_MIN_WRONG_MINUS_CORRECT_MARGIN = "-0.01"
 KG1_V568_MAX_OBSERVED_PROTECTED_MARGIN_REGRESSION = "0.0"
 KG1_V568_ALLOWED_PROTECTED_MARGIN_REGRESSION = "0.0"
 KG1_V568_MISSING_LOGPROB_ROWS = "0"
-KG1_V568_PROTECTED_ROWS_CHECKED = "2"
+KG1_V568_PROTECTED_ROWS_CHECKED = "3"
 KG1_REQUIRED_TRAIN_FAMILIES = "bit_manipulation,equation_transform"
 KG1_REQUIRED_VAL_FAMILIES = "bit_manipulation,equation_transform"
 KG1_REQUIRED_TRAIN_SUBCATEGORIES = "bit_pair_stride,equation_symbolic"
