@@ -443,20 +443,29 @@ def check_decoding_vs_adapter_drift_gate() -> dict[str, Any]:
             blockers.append("deferred_gate_not_explicitly_allowed")
         if not first_checkpoint_eval_required:
             blockers.append("first_checkpoint_weak_eval_not_required")
-        if max_steps > 2:
-            blockers.append(f"max_steps_gt_2:{max_steps}")
-        if save_every > 2:
-            blockers.append(f"save_every_gt_2:{save_every}")
-        if eval_every > 2:
-            blockers.append(f"eval_every_gt_2:{eval_every}")
+        v618_surface = env_str("KG1_V618_MODULE_SURFACE_GATE_STATUS").lower() == "passed"
+        max_steps_limit = 20 if v618_surface else 2
+        checkpoint_limit = 10 if v618_surface else 2
+        if max_steps > max_steps_limit:
+            blockers.append(f"max_steps_gt_{max_steps_limit}:{max_steps}")
+        if save_every > checkpoint_limit:
+            blockers.append(f"save_every_gt_{checkpoint_limit}:{save_every}")
+        if eval_every > checkpoint_limit:
+            blockers.append(f"eval_every_gt_{checkpoint_limit}:{eval_every}")
         payload = {
             "required": True,
             "mode": "deferred_post_checkpoint",
-            "purpose": "permit one tiny smoke when a new adapter checkpoint is required before V568 can be measured",
+            "purpose": "permit one bounded smoke when a new adapter checkpoint is required before V568 can be measured",
+            "limits": {
+                "max_steps_lte": max_steps_limit,
+                "checkpoint_every_steps_lte": checkpoint_limit,
+                "v618_surface_route": v618_surface,
+            },
             "observed": {
                 "KG1_DECODING_VS_ADAPTER_DRIFT_GATE_STATUS": status_value,
                 "KG1_ALLOW_DECODING_DRIFT_DEFERRED_FOR_FIRST_CHECKPOINT": allow_defer,
                 "KG1_FIRST_CHECKPOINT_WEAK_EVAL_REQUIRED": first_checkpoint_eval_required,
+                "KG1_V618_MODULE_SURFACE_GATE_STATUS": env_str("KG1_V618_MODULE_SURFACE_GATE_STATUS"),
                 "MAX_STEPS": max_steps,
                 "SAVE_EVERY_STEPS": save_every,
                 "EVAL_EVERY_STEPS": eval_every,
@@ -1236,6 +1245,25 @@ def self_test() -> None:
     old_env = dict(os.environ)
     try:
         os.environ["KG1_REQUIRE_DECODING_VS_ADAPTER_DRIFT_GATE"] = "1"
+        os.environ["KG1_DECODING_VS_ADAPTER_DRIFT_GATE_STATUS"] = "deferred_post_checkpoint"
+        os.environ["KG1_ALLOW_DECODING_DRIFT_DEFERRED_FOR_FIRST_CHECKPOINT"] = "1"
+        os.environ["KG1_FIRST_CHECKPOINT_WEAK_EVAL_REQUIRED"] = "1"
+        os.environ["KG1_V618_MODULE_SURFACE_GATE_STATUS"] = "passed"
+        os.environ["MAX_STEPS"] = "20"
+        os.environ["SAVE_EVERY_STEPS"] = "10"
+        os.environ["EVAL_EVERY_STEPS"] = "10"
+        deferred_gate = check_decoding_vs_adapter_drift_gate()
+        assert deferred_gate["blockers"] == []
+        assert deferred_gate["limits"]["max_steps_lte"] == 20
+        assert deferred_gate["limits"]["checkpoint_every_steps_lte"] == 10
+        os.environ["KG1_V618_MODULE_SURFACE_GATE_STATUS"] = ""
+        try:
+            check_decoding_vs_adapter_drift_gate()
+        except RuntimeError as exc:
+            if "max_steps_gt_2:20" not in str(exc):
+                raise
+        else:
+            raise RuntimeError("self-test expected legacy deferred drift limit failure")
         os.environ["KG1_DECODING_VS_ADAPTER_DRIFT_GATE_STATUS"] = "passed"
         os.environ["KG1_V568_LOGITS_NLL_GATE_STATUS"] = "passed"
         os.environ["KG1_V568_PROTECTED_MARGIN_STATUS"] = "passed"
