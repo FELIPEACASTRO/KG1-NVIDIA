@@ -810,6 +810,7 @@ def run_eval(args: argparse.Namespace) -> dict[str, Any]:
     eval_runtime_controls = {
         "eval_limit": eval_limit,
         "gpu_memory_utilization": eval_gpu_memory_utilization,
+        "generation_timeout_s": env_int("KG1_GENERATION_TIMEOUT_S", 0),
         "llm_init_timeout_s": env_int("KG1_LLM_INIT_TIMEOUT_S", 0),
         "vllm_enable_prefix_caching": env_str("KG1_VLLM_ENABLE_PREFIX_CACHING", ""),
         "vllm_enable_chunked_prefill": env_str("KG1_VLLM_ENABLE_CHUNKED_PREFILL", ""),
@@ -846,6 +847,8 @@ def run_eval(args: argparse.Namespace) -> dict[str, Any]:
         str(eval_gpu_memory_utilization),
         "--llm-init-timeout-s",
         str(env_int("KG1_LLM_INIT_TIMEOUT_S", 0)),
+        "--generation-timeout-s",
+        str(env_int("KG1_GENERATION_TIMEOUT_S", 0)),
         "--warmup-rows",
         "0",
         "--continue-on-error",

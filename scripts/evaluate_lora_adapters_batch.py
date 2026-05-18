@@ -197,6 +197,7 @@ def main() -> int:
     parser.add_argument("--max-num-seqs", type=int, default=0)
     parser.add_argument("--gpu-memory-utilization", type=float, default=0.0)
     parser.add_argument("--llm-init-timeout-s", type=int, default=0)
+    parser.add_argument("--generation-timeout-s", type=int, default=0)
     parser.add_argument("--warmup-rows", type=int, default=4)
     parser.add_argument("--disable-thinking", action="store_true")
     parser.add_argument("--prompt-suffix", default="")
@@ -326,13 +327,16 @@ def main() -> int:
                 warmup_n = min(warmup_rows, len(rendered))
                 print(f"warmup_rows = {warmup_n}")
                 warmup_start = time.time()
-                _ = llm.generate(rendered[:warmup_n], sampling_params=sampling_params, lora_request=lora_request)
+                with TimeoutAlarm(args.generation_timeout_s, "vllm_warmup_generate"):
+                    _ = llm.generate(rendered[:warmup_n], sampling_params=sampling_params, lora_request=lora_request)
                 print(f"warmup_elapsed_s = {time.time() - warmup_start:.1f}")
             else:
                 print("warmup_rows = 0")
 
             gen_start = time.time()
-            outputs = llm.generate(rendered, sampling_params=sampling_params, lora_request=lora_request)
+            print("generation_start =", utc_now(), flush=True)
+            with TimeoutAlarm(args.generation_timeout_s, "vllm_batch_generate"):
+                outputs = llm.generate(rendered, sampling_params=sampling_params, lora_request=lora_request)
             gen_elapsed = time.time() - gen_start
             if len(outputs) != len(rendered):
                 raise RuntimeError(f"vLLM output count mismatch: outputs={len(outputs)} prompts={len(rendered)}")
