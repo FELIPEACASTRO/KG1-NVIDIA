@@ -82,7 +82,14 @@ def sha256_text(value: object) -> str:
 
 
 def log_json(label: str, payload: dict[str, Any]) -> None:
-    print(f"{label} = {json.dumps(payload, indent=2, sort_keys=True)}", flush=True)
+    print(f"{label} = {json.dumps(payload, indent=2, sort_keys=True, ensure_ascii=True)}", flush=True)
+
+
+def configure_text_streams() -> None:
+    for stream in (sys.stdout, sys.stderr):
+        reconfigure = getattr(stream, "reconfigure", None)
+        if callable(reconfigure):
+            reconfigure(encoding="utf-8", errors="replace")
 
 
 def read_json(path: Path) -> dict[str, Any]:
@@ -1367,6 +1374,7 @@ def build_parser() -> argparse.ArgumentParser:
 
 
 def main(argv: list[str] | None = None) -> int:
+    configure_text_streams()
     args = build_parser().parse_args(argv)
     if args.self_test:
         return self_test()
