@@ -4597,3 +4597,969 @@ Decisao atual:
   `total>=196/315`, `equation_transform>=60/155`,
   `bit_manipulation>=136/160`, `truncated=0`, protected rows intactas e
   re-score label-free atual sem ganho falso.
+
+### Atualizacao V609 - Weak Eval do V608 e Fechamento da Rota V607 2026-05-18
+
+Resultado medido:
+
+- job HF H200 weak eval:
+  `https://huggingface.co/jobs/felipesp1983/6a0ad85da5e509f1a8414975`;
+- checkpoint avaliado:
+  `felipesp1983/kg1-nemotron-lora-v608-v607compact-v290ckpt6/checkpoint-2`;
+- diagnosticos baixados em:
+  `artifacts/v609_hf_h200_v608_weak_eval_launch/downloaded_diagnostics/`;
+- resultado adapter-only label-free:
+  - `191/315`;
+  - `bit_manipulation=135/160`;
+  - `equation_transform=56/155`;
+  - `truncated=1`;
+  - `label_aware_minus_label_free=0`;
+- weak promotion gate bloqueou corretamente:
+  - `correct_lt_196`;
+  - `equation_lt_60`;
+  - `bit_lt_136`;
+  - `truncated_gt_0`;
+  - `protected_row_backfire_guard_failed`.
+
+Diagnostico cirurgico:
+
+- contra o baseline label-free V516, V608/V609 teve `+1` equation e `-1` bit,
+  net `0`;
+- ganho isolado:
+  - `4bb8c6cd` (`equation_transform`) mudou de `]` para `]}\!` e passou;
+- perda critica:
+  - `59bee375` (`bit_manipulation`) era correto no baseline com `10010101`,
+    mas virou `2`, `finish_reason=length`, `completion_tokens=7680`;
+- protected row `55d834d1` continuou sem aprender o ganho obrigatorio
+  (`10111111` em vez de `00111111`);
+- isso separa claramente dois problemas:
+  - houve algum sinal de aprendizado local de equation;
+  - o treino tambem aumentou tendencia de resposta longa/truncada e backfire em
+    bit, portanto nao e submit-safe.
+
+Decisao:
+
+- fechar a rota V607/V608 como nao promocional;
+- nao repetir H200 com o mesmo dataset/hiperparametros;
+- qualquer proximo treino pago precisa provar, antes, uma mudanca objetiva em
+  CPU/local diagnostics contra:
+  - truncation/length drift;
+  - perda de bit em linhas protegidas;
+  - ganho equation que nao dependa de expected-aware;
+  - contrato adapter-only sem postprocessor.
+
+Proximo passo ativo:
+
+1. Construir uma auditoria local V610 de drift por linha usando os CSVs V609:
+   `raw_output -> extract -> verify_answer`, completion length, finish_reason,
+   gain/loss contra V516 e protected rows.
+2. Se a auditoria confirmar que o problema dominante e output longo/decoding
+   drift, criar somente um micro-dataset source-only/contract-safe que preserve
+   bit com respostas curtas e exemplos equivalentes, sem treinar em weak labels.
+3. Rodar primeiro gate CPU/tokenization/objective; H200 so volta se o novo
+   dataset mostrar contrato melhor que V607 e uma justificativa diferente de
+   "mais steps".
+
+### Atualizacao V611 - Consenso OpenRouter Para Sair do Plato 2026-05-18
+
+Consulta externa:
+
+- prompt:
+  `artifacts/openrouter/v611_plateau_direction_consult/KG1_V611_OPENROUTER_ROADMAP_DIRECTION_PROMPT.md`;
+- respostas brutas:
+  `artifacts/openrouter/v611_plateau_direction_consult/v611_openrouter_raw_results.json`;
+- consenso:
+  `artifacts/openrouter/v611_plateau_direction_consult/KG1_V611_OPENROUTER_CONSENSUS_AND_ROADMAP.md`;
+- modelos consultados:
+  - `openai/gpt-5.4`;
+  - `anthropic/claude-sonnet-4.6`;
+  - `google/gemini-3.1-pro-preview`;
+  - `deepseek/deepseek-v4-pro`;
+  - `qwen/qwen3-max-thinking`.
+
+Consenso util:
+
+- o plato nao e falta simples de epochs, rows ou capacidade;
+- o erro dominante e transferencia de contrato de saida:
+  o adapter aprende continuacao longa/CoT em vez de resposta curta
+  `\boxed{...}` com terminacao estavel;
+- `bit_manipulation` deve ser ancora de preservacao antes de tentar empurrar
+  `equation_transform`;
+- `eval_loss` nao deve ser usado como decisao de promocao sem gates de ACC,
+  completion length, truncation e protected rows;
+- qualquer H200 novo precisa nascer de uma taxonomia CPU dos erros, nao de
+  repeticao de V607/V608.
+
+Itens rejeitados:
+
+- sugestao de treinar diretamente nos `315` weak rows com respostas esperadas
+  foi descartada por risco de leakage/ganho falso;
+- sugestoes de "treinar mais" ou broad SFT sem novo gate foram descartadas;
+- postprocessor/verifier em runtime submit continua bloqueado.
+
+Novo plano ativo:
+
+1. V612 CPU failure taxonomy:
+   - classificar erros por linha em `WRONG_ANSWER`, `FORMAT_FAIL`, `RUNAWAY`,
+     `BLANK`, `NEAR_MISS`;
+   - separar por `bit_manipulation` e `equation_transform`;
+   - rastrear `completion_tokens`, `finish_reason`, `boxed_count`,
+     `raw_output -> extract_final_answer -> verify_answer`;
+   - bloquear qualquer GPU ate sabermos se o proximo dado deve atacar
+     formato/terminacao, raciocinio equation ou ambos.
+2. Se V612 apontar formato/terminacao como dominante:
+   - construir dataset source-only answer-first/short-target;
+   - resposta `\boxed{answer}` no inicio;
+   - EOS/answer boundary unmasked;
+   - hard cap de target tokens;
+   - final-answer tokens com peso maior;
+   - bit preservation gates antes de H200.
+3. Se V612 apontar wrong-answer em equation como dominante:
+   - testar micro-adapter equation-only, curto e estruturado;
+   - weak eval completa so depois de smoke e gates;
+   - promocao exige preservar bit.
+4. Task arithmetic/interpolation so volta como diagnostico apos uma rota
+   equation-only gerar ganho real com pequena perda; nao e caminho default.
+
+Gates novos obrigatorios:
+
+- `high_completion_token_rows` por familia;
+- bloqueio se `finish_reason=length`;
+- bloqueio se high-token bit aumentar contra baseline;
+- protected rows sempre auditadas:
+  `8740ed31=01101000`, `59bee375=10010101`, `55d834d1=00111111`;
+- qualquer checkpoint com `bit<136` ou `truncated>0` nao passa para full/package.
+
+### Atualizacao V612 - Double Check OpenRouter e Taxonomia Real dos Erros 2026-05-18
+
+Motivo da mudanca:
+
+- o plano anterior nao produziu ganho submit-safe;
+- V608/V609 provou que treino com fonte V446 compacta pode gerar `+1`
+  equation, mas tambem gera `-1` bit, truncation e backfire em protected row;
+- continuar H200 sem atacar essa causa seria repetir o mesmo ciclo.
+
+Double check OpenRouter:
+
+- prompt:
+  `artifacts/openrouter/v612_effective_plan_doublecheck/KG1_V612_OPENROUTER_EFFECTIVE_PLAN_PROMPT.md`;
+- respostas:
+  `artifacts/openrouter/v612_effective_plan_doublecheck/v612_openrouter_raw_results.json`;
+- modelos consultados:
+  - `openai/gpt-5.4`;
+  - `anthropic/claude-sonnet-4.6`;
+  - `google/gemini-3.1-pro-preview`;
+  - `deepseek/deepseek-v4-pro`;
+  - `qwen/qwen3-max-thinking`.
+
+Consenso novo, mais restritivo:
+
+- parar broad SFT, sweeps de LR/rank/epochs e H200 sem gate CPU;
+- o problema dominante nao e falta de capacidade, e politica de saida:
+  completions longas, terminacao ruim e contrato `\boxed{...}` instavel;
+- `eval_loss` continua secundario; promocao deve ser por ACC, truncation,
+  protected rows e completion length;
+- o plano efetivo precisa primeiro recuperar emissao curta e estavel, depois
+  tentar transferir o ganho do solver para LoRA;
+- se o contrato curto nao passar em CPU, adapter-only gain nao e plausivel no
+  curto prazo e nao deve consumir H200.
+
+V612 implementado:
+
+- script:
+  `scripts/analyze_v612_failure_taxonomy.py`;
+- validacoes:
+  - `python -m py_compile scripts/analyze_v612_failure_taxonomy.py`;
+  - `python scripts/analyze_v612_failure_taxonomy.py --self-test`;
+- execucao real:
+  `artifacts/v612_failure_taxonomy/`;
+- report:
+  `artifacts/v612_failure_taxonomy/KG1_V612_FAILURE_TAXONOMY.md`;
+- resumo:
+  `artifacts/v612_failure_taxonomy/v612_failure_taxonomy_summary.json`.
+
+Resultado V612 contra V609:
+
+- decisao: `blocked`;
+- total: `191/315`;
+- `bit_manipulation=135/160`;
+- `equation_transform=56/155`;
+- `truncated=1`;
+- avg completion tokens: `4775.5`;
+- p99 completion tokens: `7357`;
+- blockers:
+  - `total_not_above_submit_safe_best`;
+  - `bit_below_submit_safe_best`;
+  - `truncated_nonzero`;
+  - `protected_rows_not_all_ok`;
+  - `bit_long_completion_gt_256_seen`.
+
+Achado principal:
+
+- `bit_manipulation` esta dominado por runaway/saida longa:
+  - `160/160` bit rows tiveram mais de `256` tokens;
+  - `160/160` tiveram mais de `1000` tokens;
+  - `160/160` tiveram mais de `4000` tokens;
+  - `34/160` passaram de `7000` tokens;
+  - categorias: `135` corretas mas com risco runaway,
+    `25` runaway/truncated erradas.
+- `equation_transform` ainda mistura erro real e contrato:
+  - `53` wrong-answer;
+  - `16` boxed/payload format fail;
+  - `14` casos onde a resposta esperada aparece no raw em auditoria label-aware,
+    mas a extracao/formatacao falha;
+  - `16` runaway/truncated;
+  - `49` corretas mas com risco runaway.
+- protected rows:
+  - `8740ed31` correto, mas com `6290` tokens;
+  - `55d834d1` continua errado, com `6285` tokens;
+  - `59bee375` regrediu de `10010101` para `2`, com
+    `finish_reason=length` e `7680` tokens.
+
+Novo plano efetivo, substituindo o ciclo anterior:
+
+1. V613 source-only answer-first anti-runaway dataset:
+   - nao usar weak rows nem weak answers como targets;
+   - targets curtos, idealmente apenas `\boxed{answer}` + EOS;
+   - bit: alvo exatamente 8 bits e EOS;
+   - equation: alvo canonico curto e parse-valid;
+   - sem CoT longo como target;
+   - hard cap de target tokens;
+   - answer/EOS obrigatoriamente unmasked;
+   - exemplos source-only derivados de solver/gerador, com roundtrip
+     `raw_output -> extract -> verify_answer`.
+2. V613 static/CPU gates antes de GPU:
+   - `0` weak ID overlap;
+   - `0` duplicate prompt-target pair;
+   - `100%` bit target regex `^[01]{8}$`;
+   - `100%` target extraivel por label-free extractor;
+   - `0` truncation/token drop/fallback mask;
+   - bit heldout p99 completion tokens `<=32`, max `<=128`;
+   - equation heldout p99 completion tokens `<=160`;
+   - protected rows corretas em `3/3` repeated decodes;
+   - long completion `>256` precisa cair pelo menos `90%` contra V609.
+3. Somente se V613 CPU passar:
+   - fazer um unico smoke GPU curto;
+   - promocao minima:
+     `total>=193`, `bit>=136`, `equation>=57`, `truncated=0`,
+     protected rows intactas;
+   - meta de submissao:
+     `total>=196`, `bit>=136`, `equation>=60`, `truncated=0`.
+4. Se V613 falhar:
+   - nao gastar H200;
+   - abrir diagnostico de decode/prompt/base-vs-adapter antes de treinar;
+   - o ganho solver/projection continua diagnostico, nao submit-safe.
+
+Itens removidos do caminho ativo:
+
+- repetir V607/V608;
+- broad SFT por mais epochs;
+- selecionar checkpoint por `eval_loss` sem ACC/gates;
+- aceitar `+1` equation com `-1` bit;
+- treinar em weak labels;
+- promover postprocessor/verifier runtime como submit adapter-only.
+
+### Atualizacao V613 - Inicio do Novo Plano Efetivo Anti-Runaway 2026-05-18
+
+Objetivo:
+
+- substituir o ciclo que treinava traces longos por um dataset source-only com
+  alvo curto;
+- atacar diretamente o achado V612:
+  completions longas e terminacao instavel estao destruindo bit e impedindo
+  ganho submit-safe;
+- nao gastar GPU ate o contrato curto passar nos gates CPU/estaticos.
+
+Limpeza executada:
+
+- manifest:
+  `artifacts/v613_cleanup/v613_cleanup_manifest.json`;
+- removidos apenas lixos comprovados:
+  - `artifacts/tmp_v610_self_test`;
+  - diretorios `__pycache__` em `scripts`, `src` e launch artifacts antigos;
+- artefatos historicos, CSVs de predicao, manifests e reports foram preservados
+  porque ainda sao evidencias para comparacao e regressao.
+
+Dataset V613 criado:
+
+- script:
+  `scripts/build_v613_answer_first_anti_runaway_dataset.py`;
+- fonte:
+  V607/V446 source-only ja auditado;
+- saida:
+  `artifacts/v613_answer_first_anti_runaway_dataset/20260518T_v613_cpu_gate/`;
+- train:
+  `1099` rows;
+- validation:
+  `194` rows;
+- familias:
+  - train: `721` bit, `378` equation;
+  - validation: `127` bit, `67` equation;
+- contrato:
+  - `official_like`;
+  - assistant target = exatamente uma linha curta
+    `Final answer: \boxed{...}`;
+  - sem CoT, sem explicacao, sem sufixo extra;
+  - `weak_gate_rows_used_for_training=false`;
+  - `full_gate_rows_used_for_training=false`;
+  - `gate_rows_used_for_training=false`;
+- max assistant chars:
+  `30`;
+- weak overlap:
+  - ID overlap `0`;
+  - prompt overlap `0`;
+  - prompt+answer overlap `0`;
+  - weak CSV sha:
+    `85da758e14d57ea40270de5747f98726a0ad0b6d1795bff7dd46183005e0f9b6`.
+
+Correcoes feitas durante V613:
+
+- o primeiro builder usava `box_answer()`, que escapa backslashes e quebrava
+  answers simbolicos como `\93` no extrator label-free;
+- corrigido para usar payload bruto em
+  `Final answer: \boxed{answer}`, que passa por
+  `extract_final_answer -> verify_answer` sem expected-aware;
+- isso evita criar um dataset "limpo" no papel mas errado para o parser real.
+
+Gates V613 passados:
+
+- `python -m py_compile scripts/build_v613_answer_first_anti_runaway_dataset.py`;
+- `python scripts/build_v613_answer_first_anti_runaway_dataset.py`;
+- V286 toy:
+  `artifacts/v613_answer_first_anti_runaway_dataset/20260518T_v613_cpu_gate/v286_tokenization_toy/`;
+- V286 real:
+  `artifacts/v613_answer_first_anti_runaway_dataset/20260518T_v613_cpu_gate/v286_tokenization_real/`;
+- static safety:
+  `artifacts/v613_answer_first_anti_runaway_dataset/20260518T_v613_cpu_gate/v613_static_safety_gate.json`.
+
+Resultado do V286 real:
+
+- status:
+  `tokenization_gate_passed`;
+- tokenizer:
+  `TokenizersBackend`, EOS `<|im_end|>`;
+- train:
+  - rows `1099`;
+  - prompt truncated `0`;
+  - completion tokens dropped `0`;
+  - fallback masks `0`;
+  - offset masks `1099`;
+  - max total tokens `315`;
+  - max loss tokens `18`;
+- validation:
+  - rows `194`;
+  - prompt truncated `0`;
+  - completion tokens dropped `0`;
+  - fallback masks `0`;
+  - offset masks `194`;
+  - max total tokens `315`;
+  - max loss tokens `18`;
+- train/validation overlap:
+  - prompt overlap `0`;
+  - prompt+answer overlap `0`;
+- weak reference overlap:
+  - ID `0`;
+  - prompt `0`;
+  - prompt+answer `0`;
+- static safety:
+  - `ok=true`;
+  - `findings=[]`.
+
+Estado atual:
+
+- V613 e o primeiro artefato do novo plano que realmente corrige a causa
+  medida pela V612;
+- ainda nao e submit-safe e ainda nao autoriza H200;
+- o proximo passo obrigatorio e criar/rodar o gate de decode/protected-row
+  antes de qualquer treino:
+  - `finish_reason=length` precisa ser `0`;
+  - protected rows devem ficar corretas;
+  - completions `>256` precisam cair pelo menos `90%` contra V609;
+  - se isso nao passar, nao ha gasto GPU.
+
+Proximo passo ativo:
+
+1. V614 decode/protected-row gate para V613:
+   - validar contrato curto, protected rows e risco de runaway antes de treino;
+   - bloquear rota se o gate indicar que somente dataset curto nao basta.
+2. Se V614 passar:
+   - preparar um unico smoke GPU curto, nao broad SFT;
+   - treinar com objetivo answer/EOS unmasked;
+   - avaliar checkpoint imediatamente;
+   - promover somente se `total>=193`, `bit>=136`, `equation>=57`,
+     `truncated=0` e protected rows intactas.
+3. Se V614 falhar:
+   - parar GPU;
+   - diagnosticar base-vs-adapter/prompt/decoding antes de novo treino.
+
+### Atualizacao V614 - Gate Anti-Runaway Obrigatorio Para Proximos Checkpoints 2026-05-18
+
+Implementado:
+
+- script:
+  `scripts/run_v614_anti_runaway_promotion_gate.py`;
+- validacoes:
+  - `python -m py_compile scripts/run_v614_anti_runaway_promotion_gate.py`;
+  - `python scripts/run_v614_anti_runaway_promotion_gate.py --self-test`;
+  - static safety em V612/V613/V614:
+    `artifacts/v613_answer_first_anti_runaway_dataset/20260518T_v613_cpu_gate/v613_v614_static_safety_gate.json`;
+  - resultado static safety:
+    `ok=true`, `findings=[]`.
+
+Regra V614:
+
+- o gate e obrigatorio para qualquer proximo weak eval/checkpoint;
+- `finding_counts.warning` tambem precisa ser `0`;
+- promocao minima:
+  - `total>=193`;
+  - `bit>=136`;
+  - `equation>=57`;
+  - `truncated=0`;
+  - `finish_reason=length` igual a `0`;
+  - protected rows corretas:
+    `8740ed31=01101000`, `59bee375=10010101`, `55d834d1=00111111`;
+  - bit p99 completion tokens `<=128`;
+  - equation p99 completion tokens `<=512`;
+  - long completions `>256` precisam cair pelo menos `90%` contra o baseline
+    de referencia informado.
+
+Teste de sanidade em V609:
+
+- comando rodado contra V609, esperando bloqueio:
+  `artifacts/v613_answer_first_anti_runaway_dataset/20260518T_v613_cpu_gate/v614_gate_on_v609_expected_block.json`;
+- resultado:
+  - decision `blocked`;
+  - correct `191/315`;
+  - blockers:
+    - `total_lt_193`;
+    - `bit_lt_136`;
+    - `equation_lt_57`;
+    - `truncated_nonzero`;
+    - `finish_reason_length_nonzero`;
+    - `protected_failed_59bee375`;
+    - `protected_failed_55d834d1`;
+    - `bit_p99_tokens_gt_128`;
+    - `equation_p99_tokens_gt_512`;
+    - long-token reduction ausente em bit/equation.
+
+Decisao atual:
+
+- V613 dataset esta pronto para o proximo passo tecnico;
+- V614 gate esta pronto para bloquear qualquer repeticao do erro V609;
+- V615 executou essa hipotese e foi bloqueado.  Nao repetir V613/V615 como
+  estava.
+
+### Atualizacao V615/V616 - V613 Answer-First Nao Transferiu Termination 2026-05-18
+
+Artefatos:
+
+- treino V615:
+  `artifacts/v615_hf_h200_v613_answer_first_launch/`;
+- checkpoint:
+  `felipesp1983/kg1-nemotron-lora-v615-v613-answerfirst-v290ckpt6/checkpoint-2`;
+- weak eval V615:
+  `artifacts/v615_hf_h200_v613_answer_first_launch/downloaded_eval/`;
+- gate V614:
+  `artifacts/v615_hf_h200_v613_answer_first_launch/v615_v614_anti_runaway_gate.json`;
+- taxonomy:
+  `artifacts/v615_hf_h200_v613_answer_first_launch/v615_failure_taxonomy/`;
+- OpenRouter V616:
+  `artifacts/openrouter/v616_v615_failure_consult/`;
+- consenso V616:
+  `artifacts/openrouter/v616_v615_failure_consult/KG1_V616_OPENROUTER_CONSENSUS.md`;
+- first-answer audit V617:
+  `artifacts/v615_hf_h200_v613_answer_first_launch/v617_first_answer_drift_v2/`.
+
+Resultado V615:
+
+- treino:
+  - baseline eval_loss `1.6998`;
+  - step-1 train_loss `1.6625`;
+  - step-2 train_loss `1.3296`;
+  - post-train eval_loss `1.6959`.
+- weak eval:
+  - total `192/315`;
+  - `bit_manipulation=136/160`;
+  - `equation_transform=56/155`;
+  - `truncated=0`.
+
+Bloqueios:
+
+- `total_lt_193`;
+- `equation_lt_57`;
+- `protected_failed_8740ed31`;
+- `protected_failed_55d834d1`;
+- `bit_p99_tokens_gt_128`;
+- `equation_p99_tokens_gt_512`;
+- `finding_counts.warning=2` no V614.
+
+Diagnostico novo:
+
+- V613 answer-first limpo nao foi suficiente para transferir termination;
+- todas as `160` linhas bit e todas as `155` linhas equation continuam com
+  completion `>256` tokens;
+- bit p99 tokens `7357`;
+- equation p99 tokens `6397`;
+- protected row `8740ed31` regrediu:
+  `01101000 -> 01111000`;
+- protected row `55d834d1` continuou errada:
+  `10111111` em vez de `00111111`;
+- V617 mostrou que nao houve "primeiro boxed correto e depois corrompido":
+  o modelo gera um unico boxed no fim, depois de milhares de tokens;
+- nos protected rows, chars antes do primeiro boxed:
+  - `8740ed31`: `8458`;
+  - `55d834d1`: `8585`;
+  - `59bee375`: `8708`.
+
+Decisao V616:
+
+- parar V613/V615-style GPU:
+  - `max_steps=2`;
+  - LR `1e-7 -> 2e-8`;
+  - MoE expert-only target parameters;
+  - short positive targets sem pressao explicita contra raciocinio longo;
+- nao promover nenhum treino por loss enquanto o weak eval seguir com milhares
+  de tokens antes do boxed;
+- proxima rota precisa atacar o contrato oficial/template + EOS + superficie
+  LoRA capaz de mexer em politica de saida.
+
+### Roadmap Ativo Pos-V616 - V618 Official-Template EOS Policy
+
+Objetivo:
+
+- transformar o sinal answer-first em comportamento adapter-only que responda
+  cedo e pare;
+- preservar `bit>=136`;
+- buscar `equation>=57`;
+- so gastar GPU se os gates novos provarem que o proximo treino mede o
+  mecanismo correto.
+
+Passo 1 - implementar gates CPU/static V618:
+
+- probe set oficial-like com:
+  - protected rows `8740ed31`, `59bee375`, `55d834d1`;
+  - linhas long-risk de V615;
+  - bit/equation balanceados;
+- gate de primeira resposta:
+  - `first_boxed`;
+  - `final_extracted`;
+  - chars/tokens antes do primeiro boxed;
+  - chars/tokens depois do primeiro boxed;
+  - protected rows;
+- gate de template:
+  - treino deve usar o mesmo chat/template do weak eval;
+  - `prompt_suffix` oficial preservado;
+- gate de EOS:
+  - answer + EOS precisam estar unmasked;
+  - EOS deve ser o ultimo token unmasked;
+  - `0` completion tokens dropped;
+  - `0` fallback masks;
+  - `0` truncation;
+- gate de LoRA surface:
+  - enumerar target modules reais;
+  - bloquear rota output-policy se usar somente MoE expert MLP;
+  - exigir superficie attention/output-policy verificavel
+    (`q_proj/v_proj/o_proj` ou equivalente real no Nemotron).
+
+Passo 2 - construir dataset V618:
+
+- derivado do V613, mas com treino no contrato oficial-like real;
+- target:
+  - resposta curta;
+  - boxed;
+  - EOS imediato;
+  - sem CoT;
+  - sem tokens apos EOS;
+- manter:
+  - `0` weak/full ID overlap;
+  - `0` prompt overlap;
+  - `0` prompt+answer overlap;
+  - answers verificadas por extractor label-free.
+
+Passo 3 - so entao considerar um micro-treino:
+
+- iniciar do V290 checkpoint-6;
+- alterar uma variavel principal: template/EOS/LoRA surface;
+- budget GPU curto;
+- probe imediato antes de weak completo;
+- FinOps kill se:
+  - qualquer protected row falhar;
+  - bit p99 tokens `>256` no probe;
+  - equation p99 tokens `>512` no probe;
+  - mais de `6/64` probe rows tiverem muitos tokens antes do boxed;
+  - ACC do probe nao indicar pelo menos `+1` sem perda bit.
+
+Promocao weak:
+
+- total `>=193`;
+- `bit>=136`;
+- `equation>=57`;
+- `truncated=0`;
+- protected rows `3/3`;
+- bit p99 tokens `<=128`;
+- equation p99 tokens `<=512`;
+- `finding_counts.warning=0`.
+
+### Atualizacao V618 - Probe Oficial e Preflight EOS/Output Policy 2026-05-18
+
+Artefatos implementados:
+
+- script probe:
+  `scripts/build_v618_official_template_probe_set.py`;
+- script preflight:
+  `scripts/run_v618_official_template_eos_policy_gate.py`;
+- probe 64 linhas:
+  `artifacts/v618_official_template_eos_policy_probe/v618_official_template_probe_64.jsonl`;
+- auditoria CSV:
+  `artifacts/v618_official_template_eos_policy_probe/v618_official_template_probe_64.csv`;
+- manifest probe:
+  `artifacts/v618_official_template_eos_policy_probe/v618_official_template_probe_manifest.json`;
+- preflight:
+  `artifacts/v618_official_template_eos_policy_probe/v618_route_preflight_gate.json`.
+
+Resultado:
+
+- `build_v618_official_template_probe_set.py --self-test`: passou;
+- `run_v618_official_template_eos_policy_gate.py --self-test`: passou;
+- probe V618 criado com:
+  - `64` linhas;
+  - `32` `bit_manipulation`;
+  - `32` `equation_transform`;
+  - protected rows `8740ed31`, `59bee375`, `55d834d1`;
+  - `used_for_training=false`;
+  - weak CSV sha:
+    `85da758e14d57ea40270de5747f98726a0ad0b6d1795bff7dd46183005e0f9b6`.
+
+Preflight contra V615:
+
+- decisao: `blocked`;
+- blockers:
+  - `launch_missing_all_three_protected_rows:55d834d1`;
+  - `output_policy_steps_lt_20`;
+  - `learning_rate_too_low_for_output_policy_route`;
+- warning:
+  - `final_learning_rate_extremely_low_for_output_policy_route`.
+
+Achado tecnico novo:
+
+- o V615 nao falhou por sujeira de dataset ou tokenizacao basica:
+  - dataset V613 limpo;
+  - `0` weak overlap;
+  - `0` prompt truncation;
+  - `0` completion tokens dropped;
+  - `0` fallback masks;
+  - offset masks em todas as linhas.
+- o erro operacional foi no desenho do treino:
+  - protected row `55d834d1` nao estava no contrato de treino;
+  - apenas `2` steps;
+  - LR efetivo `2e-8 -> 5e-9`;
+  - target_parameters MoE expert-only sem gate V618 de superficie capaz de
+    alterar politica de saida;
+  - weak eval ainda gerou milhares de tokens antes do unico boxed.
+
+Regra permanente adicionada:
+
+- todo treino ou weak eval que nao ocorrer como planejado deve gerar uma
+  consulta OpenRouter com prompt rigoroso, sem ruido, contendo:
+  - logs completos;
+  - metricas loss/eval_loss/acc;
+  - manifest do dataset;
+  - parametros do launcher;
+  - blockers dos gates;
+  - diffs por linha, principalmente protected rows;
+  - separacao entre erro de decoding, erro de adapter e erro de extractor.
+- nenhum novo H200 pode iniciar se essa consulta estiver pendente para a
+  tentativa anterior.
+
+### Atualizacao V619 - Module Surface Gate Nemotron 2026-05-18
+
+Artefatos:
+
+- script:
+  `scripts/run_v619_nemotron_module_surface_gate.py`;
+- relatorio:
+  `artifacts/v619_nemotron_module_surface_gate/v619_module_surface_report.json`.
+
+Resultado:
+
+- `run_v619_nemotron_module_surface_gate.py --self-test`: passou;
+- gate real: `surface_gate_passed`;
+- `finding_counts.blocker=0`;
+- `finding_counts.warning=0`;
+- fonte inspecionada:
+  `nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16`,
+  revision `cbd3fa9f933d55ef16a84236559f4ee2a0526848`;
+- nomes detectados no codigo real:
+  - `q_proj`;
+  - `k_proj`;
+  - `v_proj`;
+  - `o_proj`;
+  - `lm_head`;
+  - `up_proj`;
+  - `down_proj`.
+
+Impacto:
+
+- o bloqueio de "superficie LoRA nao verificada" foi removido;
+- a proxima rota pode usar `KG1_V618_MODULE_SURFACE_GATE_STATUS=passed`;
+- ainda nao pode rodar GPU porque o V615 continua bloqueado por:
+  - protected rows incompletas no contrato de treino;
+  - apenas `2` steps;
+  - LR baixo demais;
+  - weak eval real do V617/anti-runaway com milhares de tokens antes do boxed.
+
+Proximo passo obrigatorio:
+
+1. criar uma rota de treino V620 somente depois do V619:
+   - protected rows `3/3` no contrato;
+   - steps minimos `>=20`;
+   - LR minimo para output-policy `>=1e-6`;
+   - template oficial-like;
+   - EOS/answer imediato validado;
+   - probe V618 antes de weak completo.
+2. se V620 falhar:
+   - aplicar imediatamente a regra OpenRouter de falha de treino/eval;
+   - atualizar este roadmap antes de qualquer novo job.
+
+### Atualizacao V620 - Rota Output-Policy H200 Liberada Por Gates 2026-05-18
+
+Correcoes feitas antes de qualquer GPU:
+
+- `scripts/kg1_pre_paid_job_integration_gate.py` agora reconhece constantes
+  numericas nao-quoted no launcher, evitando falso bloqueio de
+  `MAX_STEPS`, `SAVE_EVERY_STEPS` e `EVAL_EVERY_STEPS`;
+- o mesmo gate passou a exigir as `3` protected rows:
+  `8740ed31=01101000`, `59bee375=10010101`, `55d834d1=00111111`;
+- o launcher V620 agora expõe `KG1_PROTECTED_ID_ANSWERS` como literal
+  auditavel pelo gate estatico.
+
+Artefatos:
+
+- launcher:
+  `artifacts/v620_hf_h200_v613_output_policy_launch/launch_v620_hf_nemo_h200_v613_output_policy.py`;
+- manifest debug mais recente:
+  `artifacts/v620_hf_h200_v613_output_policy_launch/v620-nemo-h200-v613-output-policy-v290ckpt6-20260518T115934Z_launch_manifest.json`;
+- comando remoto auditado:
+  `artifacts/v620_hf_h200_v613_output_policy_launch/v620-nemo-h200-v613-output-policy-v290ckpt6-20260518T115934Z_remote_command.sh`;
+- gate pre-pago:
+  `artifacts/v620_hf_h200_v613_output_policy_launch/v620_pre_paid_job_integration_gate.json`;
+- preflight V618:
+  `artifacts/v620_hf_h200_v613_output_policy_launch/v620_v618_preflight_gate.json`.
+
+Gates executados:
+
+- `python -m py_compile` no gate pre-pago e launcher V620: passou;
+- `python scripts/kg1_pre_paid_job_integration_gate.py --self-test`: passou;
+- gate pre-pago real V620: `ok=true`, `findings=[]`;
+- V618 preflight real V620: `decision=gpu_allowed`, `blockers=none`,
+  `warnings=none`;
+- auditoria do comando remoto: passou, com hash
+  `fbeeb04d695981f71af0f1e6a68b933d4b070dc1ef9e7569be7d94c95c84e05f`
+  e exports sincronizados:
+  `MAX_STEPS=20`, `SAVE_EVERY_STEPS=10`, `EVAL_EVERY_STEPS=10`,
+  `LEARNING_RATE=1.0e-6`, `FINAL_LEARNING_RATE=1.0e-7`,
+  `MAX_LENGTH=1024`, `BATCH_SIZE=4`, `MICRO_BATCH_SIZE=1`;
+- limpeza: removido apenas `scripts/__pycache__`.
+
+Contrato V620:
+
+- dataset ativo: V613 answer-first anti-runaway source-only;
+- weak overlap: `0`;
+- train rows: `1099`;
+- val rows: `194`;
+- objetivo: `example_mean`, row-loss weight ativo;
+- LoRA surface auditada por V619:
+  `q_proj,k_proj,v_proj,o_proj,up_proj,down_proj`;
+- H200 max runtime: `timeout=3600`;
+- `MAX_STEPS=20`, `SAVE_EVERY_STEPS=10`, `EVAL_EVERY_STEPS=10`;
+- LR: `1.0e-6`, final LR: `1.0e-7`;
+- protected rows obrigatorias: `3/3`.
+
+Decisao:
+
+- V620 e a primeira rota pos-V616 que esta liberada por gates para um job curto
+  H200;
+- ainda nao e ganho submit-safe;
+- depois do checkpoint, a ordem obrigatoria e:
+  1. avaliar probe/weak com V614/V618;
+  2. bloquear se `finding_counts.warning>0`;
+  3. aplicar regra OpenRouter se treino/eval nao entregar
+     `total>=193`, `bit>=136`, `equation>=57`, `truncated=0` e protected `3/3`;
+  4. so considerar submit se houver ganho real label-free e submit-safe.
+
+### Atualizacao V621 - Falha V620 Antes Do Treino E Regra Anti-Drift 2026-05-18
+
+Evento real:
+
+- job H200 `felipesp1983/6a0afcf7e7940de6ee6ce78d` falhou no preflight
+  remoto, antes de treinar;
+- erro: `MAX_STEPS mismatch: expected 20, got 200`;
+- causa: o manifesto/local gates esperavam `MAX_STEPS=20`, mas o comando HF
+  renderizado ainda exportava `MAX_STEPS=200`;
+- impacto: nenhum checkpoint, nenhum treino, nenhum sinal de ACC/loss e nenhum
+  ganho/perda de modelo. Foi um bug operacional de sincronizacao de comando.
+
+Regra aplicada:
+
+- por ser treino que nao ocorreu como planejado, foi feita consulta OpenRouter
+  V621 antes de qualquer novo job;
+- artefatos:
+  - prompt:
+    `artifacts/openrouter/v621_v620_launch_failure_consult/KG1_V621_OPENROUTER_V620_LAUNCH_FAILURE_PROMPT.md`;
+  - resultados:
+    `artifacts/openrouter/v621_v620_launch_failure_consult/v621_openrouter_raw_results.json`;
+  - modelos validos:
+    `openai/gpt-5.4`, `deepseek/deepseek-v4-pro`,
+    `qwen/qwen3-max-thinking`.
+
+Consenso V621 adotado:
+
+- corrigir apenas `MAX_STEPS` nao era suficiente;
+- todo launcher HF precisa materializar o comando remoto exato em arquivo local;
+- o manifesto precisa registrar:
+  - caminho do comando remoto;
+  - SHA256 do comando;
+  - exports observados;
+  - exports esperados;
+- V618/pre-paid gate devem bloquear qualquer launch se o comando renderizado
+  divergir do manifesto/contrato;
+- nao mudar dataset, adapter, modelo base, LR ou objetivo por causa dessa falha,
+  porque o modelo nem chegou a treinar.
+
+Implementacao concluida:
+
+- launcher V620 agora reescreve e valida os exports finais de steps antes de
+  qualquer launch;
+- launcher V620 grava o comando remoto em
+  `*_remote_command.sh` e calcula SHA256;
+- V618 preflight agora exige `command_export_audit` completo, valida hash e
+  bloqueia divergencia de exports;
+- gates atuais apos a correcao:
+  - `python -m py_compile`: passou;
+  - V618 preflight: `decision=gpu_allowed`, `blockers=[]`, `warnings=[]`;
+  - pre-paid gate: `ok=true`, `findings=[]`;
+  - `finding_counts.warning=0` permanece obrigatorio.
+
+Regra permanente:
+
+- todo treino/eval que falhar, regressar, divergir de parametros planejados ou
+  produzir resultado inesperado deve gerar uma nova consulta OpenRouter
+  cirurgica com logs, manifestos, comando remoto, parametros, gates, metricas e
+  diffs por linha antes de qualquer novo job pago.
+
+### Atualizacao V622 - Sync Do Gate Remoto Antes De Novo H200 2026-05-18
+
+Evento real:
+
+- relaunch V620 job `felipesp1983/6a0b006ba5e509f1a8414d41` falhou antes do
+  treino;
+- desta vez o comando remoto estava correto:
+  `MAX_STEPS=20`, `SAVE_EVERY_STEPS=10`, `EVAL_EVERY_STEPS=10`;
+- falha:
+  `Deferred decoding-vs-adapter drift gate is unsafe: max_steps_gt_2:20,
+  save_every_gt_2:10, eval_every_gt_2:10`;
+- causa: o HF clonava o commit remoto `8c98388...`, cujo
+  `scripts/hf_job_preflight_gate.py` ainda tinha limite antigo `<=2`, enquanto
+  os gates locais V618/pre-paid ja permitiam a rota V618 com `<=20` e
+  checkpoint `<=10`.
+
+Consulta OpenRouter V622:
+
+- artefatos:
+  - prompt:
+    `artifacts/openrouter/v622_v620_remote_gate_mismatch_consult/KG1_V622_OPENROUTER_V620_REMOTE_GATE_MISMATCH_PROMPT.md`;
+  - resultados:
+    `artifacts/openrouter/v622_v620_remote_gate_mismatch_consult/v622_openrouter_raw_results.json`;
+- modelos validos: `openai/gpt-5.4`, `deepseek/deepseek-v4-pro`,
+  `qwen/qwen3-max-thinking`;
+- consenso unanime:
+  `commit_push_remote_gate`;
+- decisoes rejeitadas:
+  - reduzir para `2` steps, porque isso muda o experimento e tem baixa chance
+    de ganho real em `equation_transform`;
+  - bypass inline do gate, porque enfraquece a protecao que estamos tentando
+    estabilizar;
+  - abandonar V620, porque nao houve sinal negativo de treino.
+
+Implementacao:
+
+- `scripts/hf_job_preflight_gate.py` agora ativa limites V618 quando
+  `KG1_V618_MODULE_SURFACE_GATE_STATUS=passed`:
+  - `MAX_STEPS<=20`;
+  - `SAVE_EVERY_STEPS<=10`;
+  - `EVAL_EVERY_STEPS<=10`;
+- mantem limite antigo `<=2` quando a rota V618 nao esta marcada como passada;
+- self-test cobre:
+  - V618 route passa com `20/10/10`;
+  - rota sem V618 continua falhando com `max_steps_gt_2`;
+- novo gate:
+  `scripts/run_v622_remote_gate_policy_sync.py`;
+- commit remoto pushado:
+  `058fafbcdcd6f0638ad77ea7c91ba2fa82d3c714`.
+
+Gates apos commit/push:
+
+- novo manifest debug:
+  `artifacts/v620_hf_h200_v613_output_policy_launch/v620-nemo-h200-v613-output-policy-v290ckpt6-20260518T121158Z_launch_manifest.json`;
+- `KG1_EXPECTED_COMMIT=058fafbcdcd6f0638ad77ea7c91ba2fa82d3c714`;
+- V622 policy sync:
+  `ok=true`, `findings=[]`, `current_head==expected_commit`;
+- V618 preflight:
+  `decision=gpu_allowed`, `blockers=[]`, `warnings=[]`;
+- pre-paid integration:
+  `ok=true`, `findings=[]`;
+- comando remoto continua auditado com exports esperados.
+
+Proxima acao:
+
+- relancar V620 unchanged usando o commit `058fafb...`;
+- monitorar logs;
+- se qualquer novo bloqueio/falha ocorrer, aplicar novamente a regra
+  OpenRouter antes de outro job pago;
+- se passar do preflight e produzir checkpoint, rodar V614/V618/probe/weak
+  antes de considerar submit.
+
+### Atualizacao V623 - Regra De Consulta E Protected Rows Sincronizadas 2026-05-18
+
+Status operacional:
+
+- job H200 V620 relancado:
+  `felipesp1983/6a0b02a5e7940de6ee6ce7e1`;
+- o job passou `preinstall`, `artifacts`, `postinstall`,
+  `decoding_vs_adapter_drift_gate`, hash dos datasets e tokenizacao;
+- ate o ultimo log, estava carregando o modelo antes do primeiro step;
+- nenhum checkpoint/ACC novo ainda foi produzido.
+
+Regra permanente reforcada:
+
+- todo treino/eval que falhar, regressar, divergir de parametros planejados,
+  travar, produzir warnings bloqueantes, ou entregar ACC/loss fora do plano,
+  deve parar a proxima execucao paga e gerar uma consulta OpenRouter com prompt
+  rigoroso e sem ruido antes de qualquer novo job;
+- o prompt deve incluir obrigatoriamente:
+  logs HF completos, manifestos, comando remoto, commit, dataset hashes,
+  contrato LoRA, parametros de treino, tokenizacao, masks, protected rows,
+  thresholds, predicoes, raw outputs, extract/verify, diffs por linha e
+  decisao FinOps;
+- nao pode haver relaunch pago por intuicao depois de falha.
+
+Correcao implementada:
+
+- `scripts/hf_job_preflight_gate.py` agora exige as 3 protected rows:
+  `8740ed31=01101000`, `59bee375=10010101`, `55d834d1=00111111`;
+- isso sincroniza o preflight remoto com V618 e com
+  `kg1_pre_paid_job_integration_gate.py`;
+- testes locais passaram:
+  - `python -m py_compile`;
+  - `python scripts/hf_job_preflight_gate.py --self-test`;
+  - `python scripts/kg1_pre_paid_job_integration_gate.py --self-test`.
+
+Proxima acao:
+
+- continuar monitorando o job V620 de 40 em 40 segundos;
+- quando checkpoint-10 aparecer, rodar primeiro V614/V618/probe/weak;
+- se checkpoint falhar qualquer contrato ou ACC minima
+  (`total>=193`, `bit>=136`, `equation>=57`, `truncated=0`, protected `3/3`),
+  acionar consulta OpenRouter antes de novo gasto;
+- se passar, continuar para checkpoint-20/final e so considerar submit com
+  ganho submit-safe real.
