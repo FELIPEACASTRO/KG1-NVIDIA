@@ -210,6 +210,85 @@ def validate_weak_csv(path: Path, expected_csv_sha: str, expected_contract: str)
     }
 
 
+def materialize_eval_id_subset_csv(weak_csv: Path, output_dir: Path) -> tuple[Path, dict[str, Any]]:
+    """Create a diagnostic eval subset after the canonical weak CSV is validated.
+
+    This is intentionally eval-only.  The full weak CSV must pass hash/contract
+    validation first, and subset evals must run with the promotion gate disabled
+    or diagnostic-only so a small ID set cannot be promoted as a full weak gain.
+    """
+
+    raw_ids = env_str("KG1_EVAL_ID_ALLOWLIST", "")
+    if not raw_ids:
+        return weak_csv, {
+            "schema_version": "kg1_v245_eval_id_subset_v1",
+            "enabled": False,
+            "eval_csv": str(weak_csv),
+            "source_weak_csv": str(weak_csv),
+        }
+
+    import re
+
+    ids: list[str] = []
+    seen: set[str] = set()
+    for part in re.split(r"[\s,;]+", raw_ids):
+        row_id = part.strip()
+        if row_id and row_id not in seen:
+            ids.append(row_id)
+            seen.add(row_id)
+    if not ids:
+        raise RuntimeError("KG1_EVAL_ID_ALLOWLIST was set but no valid ids were parsed.")
+
+    diagnostic_only = env_bool("KG1_WEAK_EVAL_DIAGNOSTIC_ONLY", False)
+    promotion_enforced = env_bool("KG1_ENFORCE_WEAK_PROMOTION_GATE", not diagnostic_only)
+    if promotion_enforced and not env_bool("KG1_ALLOW_SUBSET_PROMOTION_GATE", False):
+        raise RuntimeError(
+            "KG1_EVAL_ID_ALLOWLIST is eval-smoke only. Set "
+            "KG1_WEAK_EVAL_DIAGNOSTIC_ONLY=1 or KG1_ENFORCE_WEAK_PROMOTION_GATE=0 "
+            "before using an ID subset."
+        )
+
+    frame = pd.read_csv(weak_csv, dtype=str, keep_default_na=False)
+    id_set = set(ids)
+    available = set(frame["id"].astype(str))
+    missing = [row_id for row_id in ids if row_id not in available]
+    if missing:
+        raise RuntimeError("KG1_EVAL_ID_ALLOWLIST contains ids missing from weak CSV: " + json.dumps(missing))
+
+    order = {row_id: index for index, row_id in enumerate(ids)}
+    subset = frame[frame["id"].astype(str).isin(id_set)].copy()
+    subset["_kg1_eval_subset_order"] = subset["id"].map(order)
+    subset = subset.sort_values("_kg1_eval_subset_order").drop(columns=["_kg1_eval_subset_order"])
+    if len(subset) != len(ids):
+        raise RuntimeError(f"eval subset row count mismatch: expected {len(ids)}, got {len(subset)}")
+
+    if "family" not in subset.columns:
+        if "type" in subset.columns:
+            subset["family"] = subset["type"]
+        else:
+            subset["family"] = subset["prompt"].map(classify_puzzle)
+    subset["family"] = subset["family"].map(canonical_family)
+    family_counts = {str(k): int(v) for k, v in subset["family"].value_counts().sort_index().to_dict().items()}
+
+    subset_name = env_str("KG1_EVAL_ID_SUBSET_NAME", "kg1_eval_id_subset")
+    safe_name = re.sub(r"[^A-Za-z0-9_.-]+", "_", subset_name).strip("._") or "kg1_eval_id_subset"
+    subset_csv = output_dir / f"{safe_name}.csv"
+    subset.to_csv(subset_csv, index=False)
+    return subset_csv, {
+        "schema_version": "kg1_v245_eval_id_subset_v1",
+        "enabled": True,
+        "subset_name": safe_name,
+        "source_weak_csv": str(weak_csv),
+        "eval_csv": str(subset_csv),
+        "rows": int(len(subset)),
+        "ids": ids,
+        "family_counts": family_counts,
+        "diagnostic_only": diagnostic_only,
+        "promotion_enforced": promotion_enforced,
+        "reason": env_str("KG1_EVAL_ID_ALLOWLIST_REASON", "targeted weak eval smoke"),
+    }
+
+
 def validate_weak_manifest(path: Path, expected_contract: str) -> dict[str, Any]:
     if not path.exists():
         raise FileNotFoundError(path)
@@ -321,6 +400,9 @@ def weak_promotion_gate(summary: dict[str, Any]) -> dict[str, Any]:
     avg_completion_tokens_max = env_int("KG1_WEAK_PROMOTE_AVG_COMPLETION_TOKENS_MAX", 0)
     max_completion_tokens_max = env_int("KG1_WEAK_PROMOTE_MAX_COMPLETION_TOKENS_MAX", 0)
     label_aware_delta_max = env_int("KG1_WEAK_PROMOTE_LABEL_AWARE_DELTA_MAX", 0)
+    no_box_fallback_max = env_int("KG1_WEAK_PROMOTE_NO_BOX_FALLBACK_MAX", 0)
+    first_boxed_correct_min = env_int("KG1_WEAK_PROMOTE_FIRST_BOXED_CORRECT_MIN", 0)
+    boxed_rate_min = env_float("KG1_WEAK_PROMOTE_BOXED_RATE_MIN", 1.0)
     rows = summary.get("rows", [])
     if not isinstance(rows, list):
         rows = []
@@ -335,6 +417,9 @@ def weak_promotion_gate(summary: dict[str, Any]) -> dict[str, Any]:
         truncated = int(row.get("truncated", 0) or 0)
         label_aware_correct = int(row.get("label_aware_debug_correct", correct) or 0)
         label_aware_delta = max(0, label_aware_correct - correct)
+        no_box_fallback_rows = int(row.get("no_box_fallback_rows", 0) or 0)
+        first_boxed_correct = int(row.get("first_boxed_correct", 0) or 0)
+        boxed_rate = float(row.get("boxed_rate", 0.0) or 0.0)
         completion_tokens = int(row.get("completion_tokens", 0) or 0)
         candidate_rows = int(row.get("rows", summary.get("weak_rows", EXPECTED_WEAK_ROWS)) or EXPECTED_WEAK_ROWS)
         avg_completion_tokens = float(row.get("avg_completion_tokens", 0) or 0)
@@ -347,6 +432,9 @@ def weak_promotion_gate(summary: dict[str, Any]) -> dict[str, Any]:
         max_completion_tokens_blocked = (
             max_completion_tokens_max > 0 and max_completion_tokens > max_completion_tokens_max
         )
+        no_box_fallback_blocked = no_box_fallback_rows > no_box_fallback_max
+        first_boxed_correct_blocked = first_boxed_correct < first_boxed_correct_min
+        boxed_rate_blocked = boxed_rate < boxed_rate_min
         passed = (
             status_ok
             and correct >= total_min
@@ -356,6 +444,9 @@ def weak_promotion_gate(summary: dict[str, Any]) -> dict[str, Any]:
             and not avg_completion_tokens_blocked
             and not max_completion_tokens_blocked
             and label_aware_delta <= label_aware_delta_max
+            and not no_box_fallback_blocked
+            and not first_boxed_correct_blocked
+            and not boxed_rate_blocked
         )
         candidates.append(
             {
@@ -367,6 +458,9 @@ def weak_promotion_gate(summary: dict[str, Any]) -> dict[str, Any]:
                 "truncated": truncated,
                 "label_aware_debug_correct": label_aware_correct,
                 "label_aware_minus_label_free_correct": label_aware_delta,
+                "boxed_rate": boxed_rate,
+                "first_boxed_correct": first_boxed_correct,
+                "no_box_fallback_rows": no_box_fallback_rows,
                 "completion_tokens": completion_tokens,
                 "avg_completion_tokens": avg_completion_tokens,
                 "max_completion_tokens": max_completion_tokens,
@@ -391,6 +485,9 @@ def weak_promotion_gate(summary: dict[str, Any]) -> dict[str, Any]:
                             f"label_aware_delta_gt_{label_aware_delta_max}",
                             label_aware_delta > label_aware_delta_max,
                         ),
+                        (f"no_box_fallback_gt_{no_box_fallback_max}", no_box_fallback_blocked),
+                        (f"first_boxed_correct_lt_{first_boxed_correct_min}", first_boxed_correct_blocked),
+                        (f"boxed_rate_lt_{boxed_rate_min}", boxed_rate_blocked),
                     ]
                     if blocked
                 ],
@@ -410,6 +507,9 @@ def weak_promotion_gate(summary: dict[str, Any]) -> dict[str, Any]:
             "avg_completion_tokens_max": avg_completion_tokens_max,
             "max_completion_tokens_max": max_completion_tokens_max,
             "label_aware_delta_max": label_aware_delta_max,
+            "no_box_fallback_max": no_box_fallback_max,
+            "first_boxed_correct_min": first_boxed_correct_min,
+            "boxed_rate_min": boxed_rate_min,
         },
         "candidate_count": len(candidates),
         "passed_candidate_count": len(passed_candidates),
@@ -739,6 +839,8 @@ def run_eval(args: argparse.Namespace) -> dict[str, Any]:
             "canonical_weak_csv": manifest_meta.get("canonical_weak_csv"),
         },
     )
+    eval_csv, eval_subset_meta = materialize_eval_id_subset_csv(weak_csv, output_dir)
+    log_json("eval_id_subset_gate", eval_subset_meta)
 
     adapter_cache_dir = Path(env_str("KG1_ADAPTER_CACHE_DIR", "/tmp/kg1_v245_adapter_snapshots")) / run_id
     specs_by_repo: dict[str, list[dict[str, str]]] = {}
@@ -822,9 +924,9 @@ def run_eval(args: argparse.Namespace) -> dict[str, Any]:
         sys.executable,
         str(ROOT / "scripts" / "evaluate_lora_adapters_batch.py"),
         "--solution-csv",
-        str(weak_csv),
+        str(eval_csv),
         "--questions-csv",
-        str(weak_csv),
+        str(eval_csv),
         "--candidates-json",
         str(candidate_json),
         "--base-model-path",
@@ -981,8 +1083,8 @@ def run_eval(args: argparse.Namespace) -> dict[str, Any]:
         summary = {
             "generated_at_utc": utc_now(),
             "base_model_path": env_str("KG1_MODEL_NAME", DEFAULT_MODEL_NAME),
-            "solution_csv": str(weak_csv),
-            "questions_csv": str(weak_csv),
+            "solution_csv": str(eval_csv),
+            "questions_csv": str(eval_csv),
             "candidates_json": str(candidate_json),
             "mode": "candidate_by_candidate",
             "stopped_early": stopped_early,
@@ -1005,6 +1107,7 @@ def run_eval(args: argparse.Namespace) -> dict[str, Any]:
         "repo_commit": repo_commit,
         "run_id": run_id,
         "weak_csv": weak_meta,
+        "eval_id_subset": eval_subset_meta,
         "adapters": adapter_metas,
         "eval_summary_json": str(summary_path),
         "candidate_summary": summary,
@@ -1165,6 +1268,9 @@ def self_test() -> int:
             "KG1_CATASTROPHIC_TRUNCATED_MIN",
             "KG1_CATASTROPHIC_MIN_ROWS",
             "KG1_CATASTROPHIC_BIT_CORRECT_MAX",
+            "KG1_WEAK_PROMOTE_NO_BOX_FALLBACK_MAX",
+            "KG1_WEAK_PROMOTE_FIRST_BOXED_CORRECT_MIN",
+            "KG1_WEAK_PROMOTE_BOXED_RATE_MIN",
         ]
     }
     os.environ.pop("KG1_ENFORCE_WEAK_PROMOTION_GATE", None)
@@ -1179,6 +1285,9 @@ def self_test() -> int:
                     "equation_transform_correct": 56,
                     "bit_manipulation_correct": 136,
                     "truncated": 0,
+                    "boxed_rate": 1.0,
+                    "first_boxed_correct": 192,
+                    "no_box_fallback_rows": 0,
                 }
             ]
         }
@@ -1205,6 +1314,9 @@ def self_test() -> int:
                     "completion_tokens": 3150,
                     "avg_completion_tokens": 10,
                     "max_completion_tokens": 40,
+                    "boxed_rate": 1.0,
+                    "first_boxed_correct": 196,
+                    "no_box_fallback_rows": 0,
                 }
             ]
         }
@@ -1227,6 +1339,9 @@ def self_test() -> int:
                     "completion_tokens": 1500000,
                     "avg_completion_tokens": 4761.9,
                     "max_completion_tokens": 7680,
+                    "boxed_rate": 1.0,
+                    "first_boxed_correct": 196,
+                    "no_box_fallback_rows": 0,
                 }
             ]
         }
@@ -1253,6 +1368,9 @@ def self_test() -> int:
                     "completion_tokens": 3150,
                     "avg_completion_tokens": 10,
                     "max_completion_tokens": 40,
+                    "boxed_rate": 1.0,
+                    "first_boxed_correct": 196,
+                    "no_box_fallback_rows": 0,
                 }
             ]
         }
@@ -1359,6 +1477,9 @@ def self_test() -> int:
                     "completion_tokens": 3150,
                     "avg_completion_tokens": 10,
                     "max_completion_tokens": 40,
+                    "boxed_rate": 1.0,
+                    "first_boxed_correct": 196,
+                    "no_box_fallback_rows": 0,
                 }
             ]
         }
@@ -1380,6 +1501,9 @@ def self_test() -> int:
                         "completion_tokens": 3150,
                         "avg_completion_tokens": 10,
                         "max_completion_tokens": 40,
+                        "boxed_rate": 1.0,
+                        "first_boxed_correct": 196,
+                        "no_box_fallback_rows": 0,
                     }
                 ]
             }

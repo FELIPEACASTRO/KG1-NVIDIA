@@ -1,6 +1,7 @@
 # KG1 Score Improvement Roadmap
 
-Atualizado: 2026-05-18, V653 compact trace output-policy como rota ativa.
+Atualizado: 2026-05-18, V653 checkpoint-2 weak-eval bloqueado; rota ativa
+segue em diagnostico de output longo/backfire antes de qualquer novo full eval.
 
 Este e o unico roadmap ativo. Historico antigo fica apenas como evidencia e
 nao guia novas execucoes.
@@ -165,6 +166,33 @@ Correcao V653 pos-auditoria:
   single-line, que nao e o contrato V653. Isso ficou documentado em
   `artifacts/v653_hf_h200_launch/KG1_V653_V618_APPLICABILITY_NOTE.md`.
 
+Resultado V653 checkpoint-2:
+
+- treino H200 `6a0b8e80a5e509f1a8415c52` foi cancelado por FinOps depois de
+  ultrapassar 1h; checkpoints `2`, `4`, `6`, `8` e `10` foram preservados;
+- `eval_loss` caiu de `4.3190` para `4.2012` ate checkpoint-10, mas loss
+  ainda nao e ganho submit-safe;
+- weak-eval oficial-like do checkpoint-2 (`6a0ba12ea5e509f1a8415f07`)
+  terminou e foi bloqueado pelo gate:
+  - total `192/315`;
+  - `bit_manipulation=136/160`;
+  - `equation_transform=56/155`;
+  - `truncated=1`;
+  - boxed rate `314/315`, mas starts-boxed `0/315`;
+  - protected backfire em `59bee375`;
+  - missing required gain em `55d834d1`.
+- checkpoint-2 nao e submetivel e nao pode ser promovido.
+
+Diagnostico de demora V653:
+
+- weak-eval checkpoint-2 gerou `1,504,299` completion tokens para `315` rows;
+- media `4,775.55` completion tokens/row, p50 `6,193`, p90 `7,008.8`;
+- `bit_manipulation` e o gargalo: media `6,689.46` tokens/row;
+- geracao levou `516.1s` apos cold start; a demora e causada por output
+  longo/boxed tardio, nao por baixa utilizacao isolada de GPU;
+- reduzir `max_tokens` isoladamente continua fora do plano, mas output-policy
+  precisa ser corrigida antes de novos full evals caros.
+
 ## Bloqueadores Permanentes
 
 Cancelar ou reprovar se qualquer item ocorrer:
@@ -217,28 +245,22 @@ Nao executar como caminho principal:
 
 ## Proxima Acao Executavel
 
-1. Comitar e pushar apenas arquivos necessarios:
-   - `scripts/kg1_pre_paid_job_integration_gate.py`;
-   - `scripts/build_v653_compact_trace_output_policy_dataset.py`;
-   - `artifacts/v652_hf_h200_v613_patched_launch/launch_v652_hf_nemo_h200_v613_patched_output_policy.py`;
-   - `artifacts/v653_hf_h200_launch/launch_v653_hf_nemo_h200_compact_trace_output_policy.py`;
-   - este roadmap.
-2. Rerodar V653 launcher em modo debug para atualizar `EXPECTED_COMMIT`.
-3. Rerodar static safety e pre-paid integration gate com o novo HEAD e manter
-   `MAX_STEPS=20`, `LEARNING_RATE=1.0e-6`, `FINAL_LEARNING_RATE=1.0e-7`.
-4. Rodar workspace clean gate para caches/lixos seguros.
-5. Rodar `scripts/hf_lfs_upload_preflight.py` contra o output repo V653.
-6. Lancar V653 H200 com `--launch`.
-7. Monitorar logs e parar por FinOps no primeiro checkpoint se houver:
-   - late boxed;
-   - truncation;
-   - protected backfire;
-   - bit `<136/160`;
-   - equation `<56/155`;
-   - total `<=192/315`;
-   - raw correto mas extractor errado.
-8. Rodar weak eval oficial-like do checkpoint-2.
-9. Promover somente se:
+1. Usar os artefatos baixados do checkpoint-2 para diagnosticar:
+   - a row truncada/backfire `59bee375`;
+   - a row de ganho obrigatorio ausente `55d834d1`;
+   - se o erro vem de decoding tardio, ausencia de `\boxed{}`, extractor ou
+     adapter empurrando resposta errada.
+2. Criar um smoke focado antes de qualquer novo full eval:
+   - protected ids `8740ed31`, `59bee375`, `55d834d1`;
+   - top rows longas de `bit_manipulation`;
+   - amostra pequena de `equation_transform`;
+   - criterios: truncation `0`, fallback `0`, protected backfire `0`,
+     boxed presente, bit protegido preservado.
+3. Avaliar checkpoint-10 primeiro no smoke focado, porque checkpoint-10 tem
+   loss menor que checkpoint-2 (`4.2012` vs `4.2914`), mas ainda precisa
+   provar ACC.
+4. Rodar full weak eval do checkpoint-10 somente se o smoke focado passar.
+5. Promover somente se:
    - total `>=196/315`;
    - bit `>=136/160`;
    - equation `>=60/155`;
