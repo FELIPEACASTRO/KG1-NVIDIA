@@ -11,6 +11,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import signal
 import sys
 import time
 import traceback
@@ -75,6 +76,72 @@ def safe_label(value: str) -> str:
     return value.replace("/", "_").replace("\\", "_").replace(" ", "_")
 
 
+def env_bool(name: str, default: bool) -> bool:
+    raw = os.environ.get(name)
+    if raw is None:
+        return default
+    return raw.strip().lower() in {"1", "true", "yes", "y", "on"}
+
+
+def env_float(name: str, default: float) -> float:
+    raw = os.environ.get(name)
+    if raw is None or raw.strip() == "":
+        return default
+    try:
+        return float(raw)
+    except ValueError as exc:
+        raise RuntimeError(f"{name} must be a float, got {raw!r}") from exc
+
+
+def env_int(name: str, default: int) -> int:
+    raw = os.environ.get(name)
+    if raw is None or raw.strip() == "":
+        return default
+    try:
+        return int(raw)
+    except ValueError as exc:
+        raise RuntimeError(f"{name} must be an integer, got {raw!r}") from exc
+
+
+def memory_snapshot() -> dict[str, Any]:
+    try:
+        import torch
+
+        if not torch.cuda.is_available():
+            return {"cuda_available": False}
+        return {
+            "cuda_available": True,
+            "allocated_gib": round(torch.cuda.memory_allocated() / 1024**3, 3),
+            "reserved_gib": round(torch.cuda.memory_reserved() / 1024**3, 3),
+            "max_allocated_gib": round(torch.cuda.max_memory_allocated() / 1024**3, 3),
+            "max_reserved_gib": round(torch.cuda.max_memory_reserved() / 1024**3, 3),
+        }
+    except Exception as exc:  # pragma: no cover - diagnostic only
+        return {"error": repr(exc)}
+
+
+class TimeoutAlarm:
+    def __init__(self, seconds: int, label: str) -> None:
+        self.seconds = max(0, int(seconds))
+        self.label = label
+        self._previous_handler: Any = None
+
+    def _handle(self, _signum: int, _frame: Any) -> None:
+        raise TimeoutError(f"{self.label} timed out after {self.seconds}s")
+
+    def __enter__(self) -> "TimeoutAlarm":
+        if self.seconds > 0 and hasattr(signal, "SIGALRM"):
+            self._previous_handler = signal.signal(signal.SIGALRM, self._handle)
+            signal.alarm(self.seconds)
+        return self
+
+    def __exit__(self, _exc_type: Any, _exc: Any, _tb: Any) -> None:
+        if self.seconds > 0 and hasattr(signal, "SIGALRM"):
+            signal.alarm(0)
+            if self._previous_handler is not None:
+                signal.signal(signal.SIGALRM, self._previous_handler)
+
+
 def build_eval_config(args: argparse.Namespace) -> dict[str, Any]:
     config = dict(OFFICIAL_INFERENCE_CONFIG)
     if args.max_tokens > 0:
@@ -92,6 +159,26 @@ def build_eval_config(args: argparse.Namespace) -> dict[str, Any]:
         config["prompt_suffix"] = ""
     elif args.prompt_suffix:
         config["prompt_suffix"] = args.prompt_suffix
+    config["enable_prefix_caching"] = env_bool(
+        "KG1_VLLM_ENABLE_PREFIX_CACHING",
+        env_bool("KG1_ENABLE_PREFIX_CACHING", bool(config.get("enable_prefix_caching", True))),
+    )
+    config["enable_chunked_prefill"] = env_bool(
+        "KG1_VLLM_ENABLE_CHUNKED_PREFILL",
+        env_bool("KG1_ENABLE_CHUNKED_PREFILL", bool(config.get("enable_chunked_prefill", True))),
+    )
+    if "KG1_VLLM_ENFORCE_EAGER" in os.environ or "KG1_ENFORCE_EAGER" in os.environ:
+        config["enforce_eager"] = env_bool(
+            "KG1_VLLM_ENFORCE_EAGER",
+            env_bool("KG1_ENFORCE_EAGER", bool(config.get("enforce_eager", False))),
+        )
+    if "KG1_VLLM_GPU_MEMORY_UTILIZATION" in os.environ or "KG1_GPU_MEMORY_UTILIZATION" in os.environ:
+        config["gpu_memory_utilization"] = env_float(
+            "KG1_VLLM_GPU_MEMORY_UTILIZATION",
+            env_float("KG1_GPU_MEMORY_UTILIZATION", float(config.get("gpu_memory_utilization", 0.85))),
+        )
+    if "KG1_VLLM_MAX_NUM_SEQS" in os.environ:
+        config["max_num_seqs"] = env_int("KG1_VLLM_MAX_NUM_SEQS", int(config.get("max_num_seqs", 64)))
     return config
 
 
@@ -109,6 +196,7 @@ def main() -> int:
     parser.add_argument("--max-model-len", type=int, default=0)
     parser.add_argument("--max-num-seqs", type=int, default=0)
     parser.add_argument("--gpu-memory-utilization", type=float, default=0.0)
+    parser.add_argument("--llm-init-timeout-s", type=int, default=0)
     parser.add_argument("--warmup-rows", type=int, default=4)
     parser.add_argument("--disable-thinking", action="store_true")
     parser.add_argument("--prompt-suffix", default="")
@@ -138,10 +226,11 @@ def main() -> int:
     print("seed =", args.seed)
     print("limit =", args.limit)
     print("output_dir =", args.output_dir)
-    print("config =", json.dumps(config, indent=2, sort_keys=True))
+    print("config =", json.dumps(config, indent=2, sort_keys=True), flush=True)
     print(
         "vllm_runtime_safety_settings =",
         json.dumps(apply_vllm_runtime_safety_settings(), indent=2, sort_keys=True),
+        flush=True,
     )
 
     solution = read_csv_str(args.solution_csv)
@@ -182,7 +271,7 @@ def main() -> int:
                 raise
         preflight_rows.append(row)
     pd.DataFrame(preflight_rows).to_csv(args.output_dir / "candidate_preflight.csv", index=False)
-    print("valid_candidate_count =", len(valid_candidates))
+    print("valid_candidate_count =", len(valid_candidates), flush=True)
     if not valid_candidates:
         raise RuntimeError("no valid candidates to evaluate")
 
@@ -206,14 +295,19 @@ def main() -> int:
     if model_revision:
         llm_kwargs["revision"] = model_revision
         llm_kwargs["tokenizer_revision"] = model_revision
-    print("llm_revision =", llm_kwargs.get("revision", "local_path_or_default"))
+    print("llm_revision =", llm_kwargs.get("revision", "local_path_or_default"), flush=True)
     if config.get("enforce_eager") is not None:
         llm_kwargs["enforce_eager"] = bool(config["enforce_eager"])
 
     load_start = time.time()
-    llm = LLM(**llm_kwargs)
+    print("llm_init_start =", utc_now(), flush=True)
+    print("llm_kwargs =", json.dumps(llm_kwargs, indent=2, sort_keys=True), flush=True)
+    print("cuda_memory_before_llm_init =", json.dumps(memory_snapshot(), sort_keys=True), flush=True)
+    with TimeoutAlarm(args.llm_init_timeout_s, "vllm_llm_init"):
+        llm = LLM(**llm_kwargs)
+    print("cuda_memory_after_llm_init =", json.dumps(memory_snapshot(), sort_keys=True), flush=True)
     tokenizer = llm.get_tokenizer()
-    print(f"vLLM loaded in {time.time() - load_start:.1f}s")
+    print(f"vLLM loaded in {time.time() - load_start:.1f}s", flush=True)
     rendered = render_prompts(tokenizer, questions, config)
     sampling_params = _sampling_params(config, int(args.seed))
 

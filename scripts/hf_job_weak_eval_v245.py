@@ -64,6 +64,14 @@ def env_int(name: str, default: int) -> int:
         raise RuntimeError(f"{name} must be an integer, got {raw!r}") from exc
 
 
+def env_float(name: str, default: float) -> float:
+    raw = env_str(name, str(default))
+    try:
+        return float(raw)
+    except ValueError as exc:
+        raise RuntimeError(f"{name} must be a float, got {raw!r}") from exc
+
+
 def env_bool(name: str, default: bool = False) -> bool:
     raw = env_str(name, "1" if default else "0").lower()
     return raw in {"1", "true", "yes", "y", "on"}
@@ -789,6 +797,26 @@ def run_eval(args: argparse.Namespace) -> dict[str, Any]:
             "prompt_suffix": "" if no_prompt_suffix else prompt_suffix,
         },
     )
+    eval_limit = env_int("KG1_EVAL_LIMIT", 0)
+    if env_bool("KG1_REQUIRE_SMOKE_EVAL_LIMIT", False) and not (1 <= eval_limit <= 8):
+        raise RuntimeError(
+            "KG1_REQUIRE_SMOKE_EVAL_LIMIT is enabled; KG1_EVAL_LIMIT must be between 1 and 8 "
+            f"for a FinOps-safe smoke eval, got {eval_limit}."
+        )
+    eval_gpu_memory_utilization = env_float(
+        "KG1_VLLM_GPU_MEMORY_UTILIZATION",
+        env_float("KG1_GPU_MEMORY_UTILIZATION", 0.0),
+    )
+    eval_runtime_controls = {
+        "eval_limit": eval_limit,
+        "gpu_memory_utilization": eval_gpu_memory_utilization,
+        "llm_init_timeout_s": env_int("KG1_LLM_INIT_TIMEOUT_S", 0),
+        "vllm_enable_prefix_caching": env_str("KG1_VLLM_ENABLE_PREFIX_CACHING", ""),
+        "vllm_enable_chunked_prefill": env_str("KG1_VLLM_ENABLE_CHUNKED_PREFILL", ""),
+        "vllm_enforce_eager": env_str("KG1_VLLM_ENFORCE_EAGER", ""),
+        "vllm_use_v1": env_str("VLLM_USE_V1", ""),
+    }
+    log_json("eval_runtime_controls", eval_runtime_controls)
     cmd = [
         sys.executable,
         str(ROOT / "scripts" / "evaluate_lora_adapters_batch.py"),
@@ -805,7 +833,7 @@ def run_eval(args: argparse.Namespace) -> dict[str, Any]:
         "--seed",
         env_str("KG1_SEED", "42"),
         "--limit",
-        "0",
+        str(eval_limit),
         "--output-dir",
         str(eval_out),
         "--max-tokens",
@@ -814,6 +842,10 @@ def run_eval(args: argparse.Namespace) -> dict[str, Any]:
         str(env_int("KG1_MAX_MODEL_LEN", 8192)),
         "--max-num-seqs",
         str(env_int("KG1_MAX_NUM_SEQS", 64)),
+        "--gpu-memory-utilization",
+        str(eval_gpu_memory_utilization),
+        "--llm-init-timeout-s",
+        str(env_int("KG1_LLM_INIT_TIMEOUT_S", 0)),
         "--warmup-rows",
         "0",
         "--continue-on-error",
