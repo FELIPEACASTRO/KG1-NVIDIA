@@ -28,7 +28,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
-from src.competition_utils import extract_final_answer, verify_answer  # noqa: E402
+from src.competition_utils import PROMPT_SUFFIX, extract_final_answer, verify_answer  # noqa: E402
 
 
 DEFAULT_DATA_ROOT = (
@@ -48,6 +48,7 @@ ANTI_LEAK_FLAGS = (
     "full_gate_rows_used_for_training",
 )
 EXPECTED_ROLE_SEQUENCE = ("system", "user", "assistant")
+OFFICIAL_LIKE_ROLE_SEQUENCE = ("user", "assistant")
 MAX_ASSISTANT_WORDS_WARN = 1300
 MAX_LOSS_TOKENS_WARN = 1300
 MAX_PROMPT_TRUNCATION_RATE = 0.0
@@ -202,6 +203,7 @@ def normalized_assistant_template(assistant: str) -> str:
 def row_projection(row: dict[str, Any]) -> dict[str, Any]:
     metadata = row.get("metadata") if isinstance(row.get("metadata"), dict) else {}
     system, user, assistant, roles = row_messages(row)
+    prompt_contract = str(metadata.get("prompt_contract", "legacy_system"))
     family = family_of(row)
     answer = answer_of(row)
     source = source_of(row)
@@ -213,6 +215,13 @@ def row_projection(row: dict[str, Any]) -> dict[str, Any]:
     words = len(assistant.split())
     lines = len([line for line in assistant.splitlines() if line.strip()])
     template = normalized_assistant_template(assistant)
+    if prompt_contract == "official_like":
+        expected_roles = OFFICIAL_LIKE_ROLE_SEQUENCE
+        expected_user = prompt.strip() + str(metadata.get("prompt_suffix", PROMPT_SUFFIX)).rstrip()
+        prompt_user_matches = bool(prompt and user.strip() == expected_user)
+    else:
+        expected_roles = EXPECTED_ROLE_SEQUENCE
+        prompt_user_matches = bool(prompt and user.strip() == prompt.strip())
     return {
         "split": row["_split"],
         "path": row["_path"],
@@ -234,7 +243,9 @@ def row_projection(row: dict[str, Any]) -> dict[str, Any]:
         "extracted": extracted,
         "assistant_answer_matches": bool(answer and verify_answer(answer, extracted)),
         "role_sequence": ",".join(roles),
-        "prompt_user_matches": bool(prompt and user.strip() == prompt.strip()),
+        "expected_role_sequence": ",".join(expected_roles),
+        "prompt_contract": prompt_contract,
+        "prompt_user_matches": prompt_user_matches,
         "system": system,
         "metadata": metadata,
     }
@@ -374,7 +385,7 @@ def build_findings(projected: list[dict[str, Any]], tokenization_manifest: dict[
                     "detail": f"{row['split']}:{row['id']} expected={row['answer']} extracted={row['extracted']}",
                 }
             )
-        if row["role_sequence"] != ",".join(EXPECTED_ROLE_SEQUENCE):
+        if row["role_sequence"] != row.get("expected_role_sequence", ",".join(EXPECTED_ROLE_SEQUENCE)):
             findings.append(
                 {
                     "code": "unexpected_role_sequence",

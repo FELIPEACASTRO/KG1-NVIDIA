@@ -21,6 +21,7 @@ import argparse
 import csv
 import hashlib
 import json
+import os
 import sys
 from collections import Counter, defaultdict
 from datetime import datetime, timezone
@@ -32,7 +33,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
-from src.competition_utils import extract_final_answer, verify_answer  # noqa: E402
+from src.competition_utils import PROMPT_SUFFIX, extract_final_answer, verify_answer  # noqa: E402
 
 
 DEFAULT_OUTPUT_DIR = REPO_ROOT / "artifacts/v509_training_dataset_integrity_audit"
@@ -75,7 +76,7 @@ def compact_counter(counter: Counter[Any], limit: int = 20) -> dict[str, int]:
 
 def read_csv_rows(path: Path) -> list[dict[str, str]]:
     if not path.exists():
-        return []
+        raise FileNotFoundError(f"reference CSV not found; fail-closed: {path}")
     with path.open("r", encoding="utf-8", newline="") as handle:
         return list(csv.DictReader(handle))
 
@@ -103,16 +104,35 @@ def load_reference(rows: list[dict[str, str]]) -> dict[str, set[str]]:
 
 def discover_dataset_paths(explicit_paths: list[Path]) -> list[Path]:
     if explicit_paths:
-        return sorted({path.resolve() for path in explicit_paths if path.exists()})
+        missing = [str(path) for path in explicit_paths if not path.exists()]
+        if missing:
+            raise FileNotFoundError(
+                "Explicit dataset JSONL path(s) not found; fail-closed to avoid "
+                "a false clean dataset audit: " + json.dumps(missing, sort_keys=True)
+            )
+        return sorted({path.resolve() for path in explicit_paths})
     candidates: set[Path] = set()
     for root in (REPO_ROOT / "artifacts", REPO_ROOT / "data"):
         if not root.exists():
             continue
-        for path in root.rglob("*.jsonl"):
+        walk_root = windows_long_path(root)
+        for path in walk_root.rglob("*.jsonl"):
             name = path.name.lower()
             if any(token in name for token in ("train", "val", "validation", "preferences")):
                 candidates.add(path.resolve())
     return sorted(candidates)
+
+
+def windows_long_path(path: Path) -> Path:
+    """Use Windows long-path prefix so rglob does not silently miss deep files."""
+
+    resolved = path.resolve()
+    if os.name != "nt":
+        return resolved
+    text = str(resolved)
+    if text.startswith("\\\\?\\"):
+        return resolved
+    return Path("\\\\?\\" + text)
 
 
 def row_messages(row: dict[str, Any]) -> tuple[str, str, str, list[str]]:
@@ -163,6 +183,7 @@ def audit_file(path: Path, weak_ref: dict[str, set[str]], full_ref: dict[str, se
     assistant_style_counts: Counter[str] = Counter()
     missing_flags: Counter[str] = Counter()
     true_flags: Counter[str] = Counter()
+    false_overlap_flags: Counter[str] = Counter()
     blocked_hits: Counter[str] = Counter()
     reference_overlap_counts: Counter[str] = Counter()
     assistant_mismatch_rows: list[str] = []
@@ -219,7 +240,7 @@ def audit_file(path: Path, weak_ref: dict[str, set[str]], full_ref: dict[str, se
             assistant_mismatch_rows.append(row_id or f"line:{row['_line_no']}")
 
         role_sequence = ",".join(roles)
-        if role_sequence != "system,user,assistant":
+        if role_sequence not in {"system,user,assistant", "user,assistant"}:
             issues.append(
                 {
                     "path": str(path),
@@ -229,7 +250,8 @@ def audit_file(path: Path, weak_ref: dict[str, set[str]], full_ref: dict[str, se
                     "detail": role_sequence,
                 }
             )
-        if user and prompt and user.strip() != prompt.strip():
+        allowed_user_prompts = {prompt.strip(), (prompt + PROMPT_SUFFIX).strip()}
+        if user and prompt and user.strip() not in allowed_user_prompts:
             issues.append(
                 {
                     "path": str(path),
@@ -261,6 +283,17 @@ def audit_file(path: Path, weak_ref: dict[str, set[str]], full_ref: dict[str, se
             if marker in combined_text:
                 blocked_hits[marker] += 1
 
+        weak_overlap = (
+            row_id in weak_ref["ids"]
+            or prompt_hash in weak_ref["prompt_hashes"]
+            or pa_hash in weak_ref["prompt_answer_hashes"]
+        )
+        full_overlap = (
+            row_id in full_ref["ids"]
+            or prompt_hash in full_ref["prompt_hashes"]
+            or pa_hash in full_ref["prompt_answer_hashes"]
+        )
+
         if row_id in weak_ref["ids"]:
             reference_overlap_counts["weak_id"] += 1
         if prompt_hash in weak_ref["prompt_hashes"]:
@@ -273,6 +306,39 @@ def audit_file(path: Path, weak_ref: dict[str, set[str]], full_ref: dict[str, se
             reference_overlap_counts["full_prompt"] += 1
         if pa_hash in full_ref["prompt_answer_hashes"]:
             reference_overlap_counts["full_prompt_answer"] += 1
+        if weak_overlap and metadata.get("weak_gate_rows_used_for_training") is False:
+            false_overlap_flags["weak_gate_rows_used_for_training_false_on_overlap"] += 1
+            issues.append(
+                {
+                    "path": str(path),
+                    "line": row["_line_no"],
+                    "id": row_id,
+                    "code": "false_anti_leak_flag_on_weak_overlap",
+                    "detail": "row overlaps weak reference but metadata weak_gate_rows_used_for_training is false",
+                }
+            )
+        if full_overlap and metadata.get("full_gate_rows_used_for_training") is False:
+            false_overlap_flags["full_gate_rows_used_for_training_false_on_overlap"] += 1
+            issues.append(
+                {
+                    "path": str(path),
+                    "line": row["_line_no"],
+                    "id": row_id,
+                    "code": "false_anti_leak_flag_on_full_overlap",
+                    "detail": "row overlaps full reference but metadata full_gate_rows_used_for_training is false",
+                }
+            )
+        if (weak_overlap or full_overlap) and metadata.get("gate_rows_used_for_training") is False:
+            false_overlap_flags["gate_rows_used_for_training_false_on_overlap"] += 1
+            issues.append(
+                {
+                    "path": str(path),
+                    "line": row["_line_no"],
+                    "id": row_id,
+                    "code": "false_anti_leak_flag_on_any_overlap",
+                    "detail": "row overlaps a reference gate but metadata gate_rows_used_for_training is false",
+                }
+            )
 
     duplicate_ids = sum(count - 1 for key, count in id_counter.items() if key and count > 1)
     duplicate_prompts = sum(count - 1 for count in prompt_counter.values() if count > 1)
@@ -296,6 +362,8 @@ def audit_file(path: Path, weak_ref: dict[str, set[str]], full_ref: dict[str, se
         hard_fail_codes.append("blocked_marker_present")
     if reference_overlap_counts:
         hard_fail_codes.append("reference_overlap")
+    if false_overlap_flags:
+        hard_fail_codes.append("false_anti_leak_flag_on_overlap")
     if missing_required_rows:
         hard_fail_codes.append("missing_required_fields")
 
@@ -318,6 +386,8 @@ def audit_file(path: Path, weak_ref: dict[str, set[str]], full_ref: dict[str, se
             blocking_issue_counts[code] = sum(blocked_hits.values())
         elif code == "reference_overlap":
             blocking_issue_counts[code] = sum(reference_overlap_counts.values())
+        elif code == "false_anti_leak_flag_on_overlap":
+            blocking_issue_counts[code] = sum(false_overlap_flags.values())
         elif code == "missing_required_fields":
             blocking_issue_counts[code] = len(missing_required_rows)
 
@@ -342,6 +412,7 @@ def audit_file(path: Path, weak_ref: dict[str, set[str]], full_ref: dict[str, se
         "nonboxed_rows": len(nonboxed_rows),
         "missing_anti_leak_flags": json.dumps(compact_counter(missing_flags), sort_keys=True),
         "true_anti_leak_flags": json.dumps(compact_counter(true_flags), sort_keys=True),
+        "false_anti_leak_flags": json.dumps(compact_counter(false_overlap_flags), sort_keys=True),
         "blocked_markers": json.dumps(compact_counter(blocked_hits), sort_keys=True),
         "reference_overlaps": json.dumps(compact_counter(reference_overlap_counts), sort_keys=True),
         "family_counts": json.dumps(compact_counter(family_counts), sort_keys=True),
@@ -374,6 +445,8 @@ def write_json(path: Path, payload: Any) -> None:
 
 def run(args: argparse.Namespace) -> dict[str, Any]:
     paths = discover_dataset_paths(args.dataset_jsonl)
+    if not paths:
+        raise RuntimeError("dataset_count=0; fail-closed to avoid a false clean dataset audit")
     weak_ref = load_reference(read_csv_rows(args.weak_reference_csv))
     full_ref = load_reference(read_csv_rows(args.full_reference_csv))
 
@@ -411,6 +484,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         "nonboxed_rows",
         "missing_anti_leak_flags",
         "true_anti_leak_flags",
+        "false_anti_leak_flags",
         "blocked_markers",
         "reference_overlaps",
         "family_counts",

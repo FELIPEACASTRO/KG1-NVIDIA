@@ -32,6 +32,34 @@ BLOCKED_DATASET_MARKERS = {
     "v463_v462_synthetic_numeric_hard_negative_audit": "V463 depends on the quarantined V461/V462 route.",
     "v464_v463_numeric_multirule_dataset": "V464 contains rejected_candidate == answer contamination.",
     "v468_v464_symbol_fix_dataset": "V468 still contains a full-reference exact prompt/answer seed.",
+    "v581_combined_teacher_distill_dataset": (
+        "V581/V582 teacher distillation is quarantined for paid training: V589 V509 "
+        "audit found exact weak/full reference overlap plus false anti-leakage flags."
+    ),
+    "v582_combined_teacher_distill_dataset": (
+        "V582 teacher distillation is quarantined for paid training: V589 V509 audit "
+        "found exact weak/full reference overlap plus false anti-leakage flags."
+    ),
+    "v573_v571_bitpair_v551_equation_reference_mix": (
+        "V573/V574 reference mix is quarantined for paid training: V605 plateau audit "
+        "measured 191/315, bit=135, equation=56, trunc=1, protected backfire=2."
+    ),
+    "v579_v571_bitpair_v551_equation_strictedge_mix": (
+        "V579 strict-edge mix is quarantined as a paid-training source: downstream "
+        "V591/V592 preserved no equation gains and triggered protected bit backfire."
+    ),
+    "v591_v579_symbolic_queryop_source_mix": (
+        "V591 symbolic query-op source mix is quarantined for paid training: V605 "
+        "measured 191/315, bit=135, equation=56, trunc=1, protected backfire=2."
+    ),
+    "v594_queryop_cryptarithm_preference_dataset": (
+        "V594/V595 query-op preference route is quarantined for paid training: "
+        "V597 weak eval stayed at equation=56 and regressed bit/protected rows."
+    ),
+    "v596_queryop_answer_only_preference_dataset": (
+        "V596 answer-only query-op preference route is quarantined for paid training: "
+        "V597/V602/V604 showed no equation transfer and no submit-safe total gain."
+    ),
 }
 BLOCKED_ADAPTER_MARKERS = {
     "kg1-nemotron-lora-v448-nemo-h200-v447-clean-trace-v290ckpt6": "Adapter trained from quarantined V447 traces.",
@@ -42,6 +70,27 @@ BLOCKED_ADAPTER_MARKERS = {
     ),
     "kg1-nemotron-lora-v501-nemo-h200-v498-answer-span-v290ckpt6": (
         "V501 answer-span run was blocked by final eval regression; forensics only."
+    ),
+    "kg1-nemotron-lora-v573-v571bit-v551eq-refmix-v290ckpt6": (
+        "V574 eval of V573 checkpoint-2 regressed to 191/315 with protected bit backfire; closed route."
+    ),
+    "kg1-nemotron-lora-v579-v571bit-v551eq-strictedge-v290ckpt6": (
+        "V579/V591 downstream route produced no equation transfer and protected bit backfire; closed route."
+    ),
+    "kg1-nemotron-lora-v582-v581-teacher-transfer-v290ckpt6": (
+        "V582 checkpoint-2 regressed to 191/315 with exact-reference contamination findings; closed route."
+    ),
+    "kg1-nemotron-lora-v591-v579-symbolic-queryop-v290ckpt6": (
+        "V591 checkpoint-2 regressed to 191/315, bit=135, equation=56, trunc=1; closed route."
+    ),
+    "kg1-nemotron-lora-v595-v596-queryop-answeronly-pref-v290ckpt6": (
+        "V595/V597 answer-only preference route failed weak promotion and regressed bit; closed route."
+    ),
+    "kg1-nemotron-lora-v595b-v596-queryop-answeronly-pref-v290ckpt6": (
+        "V595b/V597 answer-only preference route failed weak promotion and regressed bit; closed route."
+    ),
+    "kg1-nemotron-lora-v601-v596-queryop-answeronly-pref-moe-source-v290ckpt6": (
+        "V601/V602/V604 MoE preference route produced no equation gain and no submit-safe total gain; closed route."
     ),
 }
 
@@ -129,6 +178,8 @@ def audit_residual_first_gpu_gate(text: str, findings: list[Finding]) -> dict[st
         "KG1_PROMPT_TEMPLATE_PARITY_STATUS": "passed",
         "KG1_V541_MISSMAP_GATE_STATUS": "passed",
         "KG1_V541_FLIP_LEDGER_STATUS": "passed",
+        "KG1_V516_PARSER_CURRENT_BASELINE_STATUS": "passed",
+        "KG1_STALE_PREDICTION_PARITY_STATUS": "passed",
         "KG1_EXPECTED_TRUNCATED": "0",
         "KG1_ADAPTER_CPU_FORMAT_PARITY_STATUS": "passed",
         "KG1_V536_VAL_STATS_AS_WEAK_EVIDENCE": "0",
@@ -209,6 +260,8 @@ def audit_residual_first_gpu_gate(text: str, findings: list[Finding]) -> dict[st
             "prompt_template_parity_status": "passed",
             "v541_missmap_gate_status": "passed",
             "v541_flip_ledger_status": "passed",
+            "v516_parser_current_baseline_status": "passed",
+            "stale_prediction_parity_status": "passed",
             "cpu_simulated_total_min": RESIDUAL_FIRST_MIN_TOTAL,
             "cpu_simulated_bit_min": RESIDUAL_FIRST_MIN_BIT,
             "cpu_simulated_equation_min": RESIDUAL_FIRST_MIN_EQUATION,
@@ -683,6 +736,14 @@ def _metadata_flag_is_false(row: dict[str, Any], metadata: dict[str, Any], flag:
     return True
 
 
+def _metadata_flag_is_true(row: dict[str, Any], metadata: dict[str, Any], flag: str) -> bool:
+    if flag in row:
+        return row.get(flag) is True
+    if flag in metadata:
+        return metadata.get(flag) is True
+    return False
+
+
 def percentile_int(values: list[int], ratio: float) -> int:
     if not values:
         return 0
@@ -719,6 +780,7 @@ def audit_dataset_file(
     assistant_final_answer_only_rows = 0
     assistant_boxed_only_rows = 0
     assistant_lengths_by_family: dict[str, list[int]] = {}
+    expected_aware_signal_rows: list[str] = []
     bad_rows: list[str] = []
     for index, row in enumerate(rows, start=1):
         row_id = str(row.get("id", ""))
@@ -735,8 +797,10 @@ def audit_dataset_file(
             rejected = str(row.get("rejected", ""))
             negative_type = str(metadata.get("negative_type") or "unknown")
             negative_type_counts[negative_type] += 1
-            if negative_type != "hard_negative_adapter_exact_wrong":
+            if not negative_type.startswith("hard_negative_"):
                 bad_rows.append(f"{row_id}:negative_type:{negative_type}")
+            if negative_type.startswith("format_negative_"):
+                bad_rows.append(f"{row_id}:format_negative_blocked")
             if chosen == rejected:
                 bad_rows.append(f"{row_id}:chosen_equals_rejected")
             if not chosen.startswith("Final answer: \\boxed{") or not chosen.endswith("}"):
@@ -748,10 +812,26 @@ def audit_dataset_file(
             for term in ("public-train label audit", "frozen adapter", "Rejected adapter"):
                 if term in chosen:
                     bad_rows.append(f"{row_id}:chosen_forbidden_term:{term}")
-            if not isinstance(messages, list) or not messages or messages[-1].get("role") != "assistant":
-                bad_rows.append(f"{row_id}:assistant_message_missing")
-            elif messages[-1].get("content") != chosen:
-                bad_rows.append(f"{row_id}:assistant_content_not_chosen")
+            if isinstance(messages, list) and messages:
+                if messages[-1].get("role") != "assistant":
+                    bad_rows.append(f"{row_id}:assistant_message_role")
+                elif messages[-1].get("content") != chosen:
+                    bad_rows.append(f"{row_id}:assistant_content_not_chosen")
+            assistant_content = chosen
+            assistant_stripped = assistant_content.strip()
+            if re.fullmatch(r"Final answer:\s*\\boxed\{.*\}", assistant_stripped):
+                assistant_prefix_counts["Final answer"] += 1
+                assistant_final_answer_only_rows += 1
+            elif re.fullmatch(r"\\boxed\{.*\}", assistant_stripped):
+                assistant_prefix_counts["boxed"] += 1
+                assistant_boxed_only_rows += 1
+            else:
+                assistant_prefix_counts["other"] += 1
+            if "Trace:" in assistant_content:
+                assistant_trace_rows += 1
+            if "\n" in assistant_stripped:
+                assistant_multiline_rows += 1
+            assistant_lengths_by_family.setdefault(family, []).append(len(assistant_content))
         else:
             answer = str(row.get("answer", "")).strip()
             if not answer:
@@ -785,6 +865,9 @@ def audit_dataset_file(
         for flag in ("gate_rows_used_for_training", "weak_gate_rows_used_for_training", "full_gate_rows_used_for_training"):
             if not _metadata_flag_is_false(row, metadata, flag):
                 bad_rows.append(f"{row_id}:{flag}_not_false")
+        for flag in ("expected_aware_teacher_signal", "label_audited_teacher_projection"):
+            if _metadata_flag_is_true(row, metadata, flag):
+                expected_aware_signal_rows.append(f"{row_id}:{flag}_true")
         if len(bad_rows) >= 30:
             break
     assistant_length_stats: dict[str, dict[str, int]] = {}
@@ -825,6 +908,14 @@ def audit_dataset_file(
             )
     if bad_rows:
         findings.append(Finding("error", f"{split}_dataset_content_invalid", json.dumps(bad_rows[:30], sort_keys=True)))
+    if expected_aware_signal_rows:
+        findings.append(
+            Finding(
+                "error",
+                f"{split}_expected_aware_teacher_signal_blocked",
+                json.dumps(expected_aware_signal_rows[:30], sort_keys=True),
+            )
+        )
     return {
         "path": str(path),
         "sha256": observed_sha,
@@ -839,6 +930,7 @@ def audit_dataset_file(
         "assistant_final_answer_only_rows": assistant_final_answer_only_rows,
         "assistant_boxed_only_rows": assistant_boxed_only_rows,
         "assistant_length_stats": assistant_length_stats,
+        "expected_aware_signal_rows_first30": expected_aware_signal_rows[:30],
         "bad_rows_first30": bad_rows[:30],
     }
 
@@ -868,6 +960,91 @@ def audit_v438_manifest(path: Path, findings: list[Finding]) -> dict[str, Any]:
     return manifest
 
 
+def audit_v594_manifest(path: Path, findings: list[Finding]) -> dict[str, Any]:
+    """Audit the V594 source-only query-op preference manifest.
+
+    V594 is not a V438 adapter-exact preference pack; it is a source-only
+    query-operator cryptarithm preference dataset built from CPU-solver rule
+    signatures. The paid gate still needs a concrete manifest audit so a V594
+    launcher cannot silently skip leakage, encoding, or row-count checks.
+    """
+
+    manifest = read_json(path)
+    outputs = manifest.get("outputs") or {}
+    train_summary = manifest.get("train_summary") or {}
+    val_summary = manifest.get("validation_summary") or {}
+    source_gate = manifest.get("source_gate") or {}
+    required_summaries = [
+        ("train", train_summary, "preferences_train_sha256"),
+        ("validation", val_summary, "preferences_val_sha256"),
+    ]
+    def manifest_int(summary: dict[str, Any], key: str, default: int = -1) -> int:
+        value = summary.get(key, default)
+        return default if value is None else int(value)
+
+    for label, summary, sha_key in required_summaries:
+        rows = manifest_int(summary, "rows")
+        unique_ids = manifest_int(summary, "unique_ids")
+        if rows <= 0 or unique_ids != rows:
+            findings.append(
+                Finding(
+                    "error",
+                    "v594_manifest_row_integrity_failed",
+                    f"{label}: rows={rows} unique_ids={unique_ids}",
+                )
+            )
+        for key in ("reference_id_overlap", "reference_prompt_overlap", "reference_prompt_answer_overlap"):
+            if manifest_int(summary, key) != 0:
+                findings.append(Finding("error", "v594_manifest_overlap_not_zero", f"{label}:{key}={summary.get(key)}"))
+        for key in ("non_ascii_chars", "invisible_control_chars"):
+            if manifest_int(summary, key) != 0:
+                findings.append(Finding("error", "v594_manifest_symbol_noise_not_zero", f"{label}:{key}={summary.get(key)}"))
+        family_counts = summary.get("family_counts") or {}
+        if set(family_counts) != {"equation_transform"}:
+            findings.append(
+                Finding("error", "v594_manifest_unexpected_family_counts", f"{label}:{json.dumps(family_counts, sort_keys=True)}")
+            )
+        negative_counts = summary.get("negative_type_counts") or {}
+        blocked_negatives = [name for name in negative_counts if not str(name).startswith("hard_negative_")]
+        if blocked_negatives:
+            findings.append(
+                Finding(
+                    "error",
+                    "v594_manifest_non_hard_negative",
+                    f"{label}:{json.dumps(blocked_negatives, sort_keys=True)}",
+                )
+            )
+        if not outputs.get(sha_key):
+            findings.append(Finding("error", "v594_manifest_missing_output_sha", f"{label}:{sha_key}"))
+
+    accepted_signatures = source_gate.get("accepted_signatures") or []
+    expected_signature_fragments = [
+        "symbolic_cryptarithm_multi_operator_digits_add|query_op=!",
+        "symbolic_cryptarithm_multi_operator_digits_mul|query_op=$",
+        "symbolic_cryptarithm_single_operator_digits_mul|query_op=%",
+    ]
+    for fragment in expected_signature_fragments:
+        if not any(fragment in str(signature) for signature in accepted_signatures):
+            findings.append(Finding("error", "v594_manifest_missing_source_signature", fragment))
+    if source_gate.get("weak_counts_are_diagnostic_not_training_labels") is not True:
+        findings.append(
+            Finding(
+                "error",
+                "v594_manifest_weak_counts_flag_invalid",
+                str(source_gate.get("weak_counts_are_diagnostic_not_training_labels")),
+            )
+        )
+    if manifest.get("training_authorization") != "cpu_dataset_ready_gpu_blocked_until_pre_paid_gate_and_nll_orientation_probe":
+        findings.append(
+            Finding(
+                "error",
+                "v594_manifest_training_authorization_unexpected",
+                str(manifest.get("training_authorization")),
+            )
+        )
+    return manifest
+
+
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--self-test", action="store_true")
@@ -875,6 +1052,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--train-jsonl", type=Path, default=None)
     parser.add_argument("--val-jsonl", type=Path, default=None)
     parser.add_argument("--v438-audit-manifest", type=Path, default=None)
+    parser.add_argument("--v594-manifest", type=Path, default=None)
     parser.add_argument("--dataset-schema", choices=["preference", "sft"], default="preference")
     parser.add_argument("--expected-save-every-steps", type=int, default=3)
     parser.add_argument("--expected-eval-every-steps", type=int, default=3)
@@ -1016,24 +1194,36 @@ def run_gate(args: argparse.Namespace, *, emit: bool = True) -> dict[str, Any]:
                 )
             )
     if args.dataset_schema == "preference":
-        if args.v438_audit_manifest is None:
-            findings.append(Finding("error", "v438_audit_manifest_missing", "preference schema requires --v438-audit-manifest"))
-            v438_report = {}
+        if args.v438_audit_manifest is not None:
+            preference_manifest_report = audit_v438_manifest(args.v438_audit_manifest, findings)
+            preference_manifest_summary = {
+                "kind": "v438",
+                "manifest": str(args.v438_audit_manifest),
+                "rows": preference_manifest_report.get("rows"),
+                "hf_gpu_allowed_for_same_objective": preference_manifest_report.get("hf_gpu_allowed_for_same_objective"),
+                "total_summary": preference_manifest_report.get("total_summary"),
+                "decision_flags": preference_manifest_report.get("decision_flags"),
+            }
+        elif args.v594_manifest is not None:
+            preference_manifest_report = audit_v594_manifest(args.v594_manifest, findings)
+            preference_manifest_summary = {
+                "kind": "v594",
+                "manifest": str(args.v594_manifest),
+                "source_gate": preference_manifest_report.get("source_gate"),
+                "train_summary": preference_manifest_report.get("train_summary"),
+                "validation_summary": preference_manifest_report.get("validation_summary"),
+            }
         else:
-            v438_report = audit_v438_manifest(args.v438_audit_manifest, findings)
+            findings.append(
+                Finding(
+                    "error",
+                    "preference_audit_manifest_missing",
+                    "preference schema requires --v438-audit-manifest or --v594-manifest",
+                )
+            )
+            preference_manifest_summary = {"kind": "missing"}
     else:
-        v438_report = {}
-    v438_summary = (
-        {
-            "manifest": str(args.v438_audit_manifest),
-            "rows": v438_report.get("rows"),
-            "hf_gpu_allowed_for_same_objective": v438_report.get("hf_gpu_allowed_for_same_objective"),
-            "total_summary": v438_report.get("total_summary"),
-            "decision_flags": v438_report.get("decision_flags"),
-        }
-        if args.dataset_schema == "preference"
-        else {"skipped": True, "reason": "sft_schema_does_not_use_v438_preference_audit"}
-    )
+        preference_manifest_summary = {"skipped": True, "reason": "sft_schema_does_not_use_preference_audit"}
     tokenization_summary = audit_tokenization_manifest(args.tokenization_manifest_json, args, findings)
     report = {
         "schema_version": "kg1_pre_paid_job_integration_gate_v2",
@@ -1044,7 +1234,8 @@ def run_gate(args: argparse.Namespace, *, emit: bool = True) -> dict[str, Any]:
         "train_dataset": train_report,
         "validation_dataset": val_report,
         "tokenization_manifest": tokenization_summary,
-        "v438_audit": v438_summary,
+        "preference_manifest": preference_manifest_summary,
+        "v438_audit": preference_manifest_summary if preference_manifest_summary.get("kind") == "v438" else {"skipped": True},
         "findings": [item.__dict__ for item in findings],
     }
     if args.output_json:
@@ -1140,6 +1331,8 @@ KG1_CPU_EXTRACTOR_PARITY_STATUS = "passed"
 KG1_PROMPT_TEMPLATE_PARITY_STATUS = "passed"
 KG1_V541_MISSMAP_GATE_STATUS = "passed"
 KG1_V541_FLIP_LEDGER_STATUS = "passed"
+KG1_V516_PARSER_CURRENT_BASELINE_STATUS = "passed"
+KG1_STALE_PREDICTION_PARITY_STATUS = "passed"
 KG1_EXPECTED_TRUNCATED = "0"
 KG1_ADAPTER_CPU_FORMAT_PARITY_STATUS = "passed"
 KG1_V536_VAL_STATS_AS_WEAK_EVIDENCE = "0"
@@ -1246,6 +1439,19 @@ def self_test() -> None:
         if ok_report["ok"] is not True:
             raise RuntimeError("self-test expected clean launcher/dataset to pass: " + json.dumps(ok_report["findings"]))
 
+        quarantine_findings: list[Finding] = []
+        block_quarantined_identity(
+            "DATA_FILE='artifacts/v596_queryop_answer_only_preference_dataset/train.jsonl'\n"
+            "INIT_ADAPTER_REPO='felipesp1983/kg1-nemotron-lora-v601-v596-queryop-answeronly-pref-moe-source-v290ckpt6'\n",
+            quarantine_findings,
+            source="self-test",
+        )
+        quarantine_codes = {item.code for item in quarantine_findings}
+        if "quarantined_dataset_identity" not in quarantine_codes:
+            raise RuntimeError("self-test expected V596 dataset quarantine to fail")
+        if "quarantined_adapter_identity" not in quarantine_codes:
+            raise RuntimeError("self-test expected V601 adapter quarantine to fail")
+
         missing_protected_launcher = root / "launcher_missing_protected.py"
         missing_protected_launcher.write_text(
             _self_test_launcher_text(train_sha, val_sha, protected="8740ed31=01101000"),
@@ -1274,6 +1480,26 @@ def self_test() -> None:
         drift_codes = {item["code"] for item in drift_report["findings"]}
         if "decoding_vs_adapter_drift_margin_regression" not in drift_codes:
             raise RuntimeError("self-test expected protected margin regression to fail")
+
+        expected_aware_train = root / "train_expected_aware.jsonl"
+        expected_aware_rows = _self_test_sft_rows()
+        expected_aware_rows[0]["metadata"]["expected_aware_teacher_signal"] = True
+        _write_jsonl(expected_aware_train, expected_aware_rows)
+        expected_aware_train_sha = sha256_file(expected_aware_train)
+        expected_aware_launcher = root / "launcher_expected_aware.py"
+        expected_aware_launcher.write_text(
+            _self_test_launcher_text(expected_aware_train_sha, val_sha),
+            encoding="utf-8",
+            newline="\n",
+        )
+        expected_aware_args = common_args.copy()
+        expected_aware_args[expected_aware_args.index(str(launcher))] = str(expected_aware_launcher)
+        expected_aware_args[expected_aware_args.index(str(train))] = str(expected_aware_train)
+        expected_aware_args[expected_aware_args.index(train_sha)] = expected_aware_train_sha
+        expected_aware_report = run_gate(parse_args(expected_aware_args), emit=False)
+        expected_aware_codes = {item["code"] for item in expected_aware_report["findings"]}
+        if "train_expected_aware_teacher_signal_blocked" not in expected_aware_codes:
+            raise RuntimeError("self-test expected expected-aware teacher signal to fail")
 
         local_only_row_weight_launcher = root / "launcher_local_only_row_weight.py"
         local_only_row_weight_launcher.write_text(

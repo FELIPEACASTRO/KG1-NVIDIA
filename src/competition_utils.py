@@ -159,6 +159,18 @@ def extract_boxed_answers(text: str | None) -> list[str]:
             # boxed answer.
             while end + 1 < len(value) and value[end + 1] == "}":
                 end += 1
+            # Some symbolic answers contain a literal close brace followed by
+            # a compact TeX punctuation escape before the real delimiter, e.g.
+            # "\boxed{]}\!}".  This is still label-free because it only uses
+            # local boxed syntax and refuses alphabetic commands like \text.
+            while (
+                end + 3 < len(value)
+                and value[end + 1] == "\\"
+                and not value[end + 2].isalnum()
+                and not value[end + 2].isspace()
+                and value[end + 3] == "}"
+            ):
+                end += 3
             matches.append(value[start:end])
             cursor = end + 1
         else:

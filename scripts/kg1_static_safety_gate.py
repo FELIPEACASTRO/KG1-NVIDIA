@@ -63,6 +63,9 @@ CRITICAL_SNIPPETS = {
         "format negatives blocked": "launcher_allows_format_negatives",
         "assistant length p95 gate": "max_assistant_chars_p95",
         "assistant length max gate": "max_assistant_chars_max",
+        "parser-current baseline gate": "KG1_V516_PARSER_CURRENT_BASELINE_STATUS",
+        "stale prediction parity gate": "KG1_STALE_PREDICTION_PARITY_STATUS",
+        "recent failed route quarantine": "v596_queryop_answer_only_preference_dataset",
     },
     "scripts/kg1_weak_backfire_row_guard.py": {
         "known bit backfire id": "8740ed31=01101000",
@@ -76,6 +79,8 @@ CRITICAL_SNIPPETS = {
         "safe junk dir blocker": "safe_junk_dir_present",
         "safe junk file blocker": "safe_junk_file_present",
         "never auto delete evidence": "logs, manifests, datasets, adapters, roadmaps, and analysis reports",
+        "long path workspace traversal": "windows_long_path(root)",
+        "long path self-test": "did not traverse long-path fixture",
         "self test ok marker": "kg1_workspace_clean_gate_self_test=ok",
     },
     "scripts/audit_v521_transfer_blockers.py": {
@@ -104,6 +109,11 @@ CRITICAL_SNIPPETS = {
         "target parameter require check": "Init adapter has target_parameters but REQUIRE_LORA_TARGET_PARAMETER_MATCH is disabled",
         "gate row contamination flag": "weak_gate_rows_used_for_training",
         "gate row contamination fail": "gate/full/weak rows used for training",
+        "expected-aware teacher signal blocked": "expected-aware/reference-derived teacher rows",
+        "v582 teacher dataset blocked": "v582_combined_teacher_distill_dataset",
+        "parser-current baseline gate": "KG1_V516_PARSER_CURRENT_BASELINE_STATUS",
+        "stale prediction parity gate": "KG1_STALE_PREDICTION_PARITY_STATUS",
+        "recent failed route quarantine": "v596_queryop_answer_only_preference_dataset",
         "missing gate flags fail": "missing required anti-leakage gate flags",
         "promotional no-reasoning suffix blocked": "strict_no_reasoning_prompt_suffix_promotional_eval_blocked",
         "second protected row required": "59bee375=10010101",
@@ -133,6 +143,9 @@ CRITICAL_SNIPPETS = {
         "immutable revision required": "missing immutable revision/resolved_revision",
         "adapter config hash check": "adapter_config sha mismatch",
         "adapter model hash check": "adapter_model sha mismatch",
+        "adapter base model check": "adapter base model mismatch",
+        "adapter expected base arg": "--expected-base-model",
+        "package adapter self-test": "kg1_package_hf_adapter_submission_self_test=ok",
         "official postprocessor rejected": "submission package cannot rely on external prediction postprocessor",
         "official-like control required": "full manifest missing official_like_control_gate",
         "official-like strict required": "official-like strict",
@@ -141,6 +154,8 @@ CRITICAL_SNIPPETS = {
     },
     "src/competition_utils.py": {
         "expected-aware boxed extraction": "def extract_final_answer_for_expected",
+        "label-free symbolic escaped suffix": "\\boxed{]}\\!}",
+        "alphabetic command over-extension guard": "refuses alphabetic commands like \\text",
         "literal closing brace guard": "immediately adjacent surplus braces",
         "escaped expected variant": "escaped_expected = escape_boxed_answer(expected_text)",
         "expected-aware debug warning": "submit-safe predictions",
@@ -164,6 +179,13 @@ CRITICAL_SNIPPETS = {
         "reference only blocked": "not_adapter_only_reference_solver_or_postprocessor",
         "adapter raw manifest field": "weak315_adapter_raw_scored",
     },
+    "scripts/audit_v509_training_dataset_integrity.py": {
+        "explicit missing dataset fail closed": "false clean dataset audit",
+        "explicit missing dataset error": "Explicit dataset JSONL path(s) not found",
+        "zero dataset count fail closed": "dataset_count=0; fail-closed",
+        "long path dataset discovery": "windows_long_path(root)",
+        "missing reference csv fail closed": "reference CSV not found; fail-closed",
+    },
     "scripts/hf_job_weak_eval_v245.py": {
         "promotion equation floor": "KG1_WEAK_PROMOTE_EQUATION_MIN\", 60",
         "promotion total floor": "KG1_WEAK_PROMOTE_TOTAL_MIN\", 196",
@@ -171,6 +193,11 @@ CRITICAL_SNIPPETS = {
         "official thinking default": "disable_thinking = env_bool(\"KG1_DISABLE_THINKING\", False)",
         "official token default": "KG1_MAX_TOKENS\", 7680",
         "official context default": "KG1_MAX_MODEL_LEN\", 8192",
+        "adapter modules_to_save blocked": "adapter modules_to_save must be empty",
+        "adapter base model checked": "adapter base model mismatch",
+        "adapter base model meta emitted": "base_model_name_or_path",
+        "label-aware delta promotion blocker": "KG1_WEAK_PROMOTE_LABEL_AWARE_DELTA_MAX",
+        "label-aware delta blocking reason": "label_aware_delta_gt_",
     },
     "scripts/run_v286_generic_tokenization_gate.py": {
         "escaped boxed target": "box_answer(answer)",
@@ -179,9 +206,30 @@ CRITICAL_SNIPPETS = {
     },
     "scripts/audit_v449_acc_metric_integrity.py": {
         "strict metric verifier": "verify_answer",
+        "long path metric csv read": "windows_long_path(path)",
+        "symbolic escaped suffix self-test": r"\boxed{]}\!}",
         "raw extraction audit": "raw_extraction_audit",
         "expected-aware delta": "expected_aware_minus_simple_correct",
         "no earlier boxed leakage self-test": "earlier_correct_later_wrong",
+    },
+    "scripts/validate_answer_extraction_v1.py": {
+        "strict metric verifier": "verify_answer",
+        "long path row csv read": "windows_long_path(path)",
+        "symbolic escaped suffix self-test": r"\boxed{]}\!}",
+        "row csv exists long path": "path_exists(path)",
+        "stored prediction raw parity": "stored_prediction_not_raw_extraction",
+        "correct column raw parity": "correct_column_not_raw_extraction",
+        "protected row guard": "protected_row_answer_mismatch",
+        "manifest summary diagnostic only": "manifest_summary_missing_row_level_raw_outputs",
+    },
+    "scripts/analyze_v586_plateau_row_diagnostics.py": {
+        "raw-output label-free contract": "raw_output -> label-free extract_final_answer -> verify_answer",
+        "answer anywhere diagnostic": "answer_anywhere_wrong_final",
+        "protected backfire separated": "protected_id_backfire",
+        "missing required gain separated": "protected_id_missing_required_gain",
+        "token runaway blocker": "completion_tokens_mean_gt_",
+        "no stale prediction metric": "stored_prediction_not_raw_extraction",
+        "self-test ok marker": "analyze_v586_plateau_row_diagnostics_self_test=ok",
     },
     "scripts/hf_job_official_like_eval_gate_v284.py": {
         "failed gate exit hard": "official-like full eval gate failed; refusing successful exit",
@@ -223,6 +271,27 @@ BLOCKED_TRAINING_DATASET_MARKERS = {
     "v464_v463_numeric_multirule_dataset": "V464 rejected candidates can equal the answer and is quarantined.",
     "v468_v464_symbol_fix_dataset": "V468 still contains a full-reference exact prompt/answer seed.",
     "v447_v446_trace_dataset": "Current V447 contains hypothesis_formed traces with contradictory boxed answers.",
+    "v581_combined_teacher_distill_dataset": (
+        "V581/V582 teacher distillation overlaps exact weak/full references and is diagnostic-only."
+    ),
+    "v582_combined_teacher_distill_dataset": (
+        "V582 teacher distillation overlaps exact weak/full references and is diagnostic-only."
+    ),
+    "v573_v571_bitpair_v551_equation_reference_mix": (
+        "V573/V574 reference mix regressed to 191/315 with protected bit backfire in V605."
+    ),
+    "v579_v571_bitpair_v551_equation_strictedge_mix": (
+        "V579 strict-edge route fed V591/V592, which preserved no equation gains and backfired protected bit rows."
+    ),
+    "v591_v579_symbolic_queryop_source_mix": (
+        "V591 source mix regressed to 191/315 with protected bit backfire in V605."
+    ),
+    "v594_queryop_cryptarithm_preference_dataset": (
+        "V594/V595 query-op preference stayed at equation=56 and regressed bit/protected rows."
+    ),
+    "v596_queryop_answer_only_preference_dataset": (
+        "V596 answer-only preference produced no equation transfer in V597/V602/V604."
+    ),
 }
 
 BLOCKED_ADAPTER_MARKERS = {
@@ -231,6 +300,13 @@ BLOCKED_ADAPTER_MARKERS = {
     "kg1-nemotron-lora-v469-v468-symbol-fix-v290ckpt6": "Adapter was trained from quarantined V468 data.",
     "kg1-nemotron-lora-v499-nemo-h200-v498-numeric-teacher-v290ckpt6": "V499 final eval regressed and answer-span weighting was inactive; forensics only.",
     "kg1-nemotron-lora-v501-nemo-h200-v498-answer-span-v290ckpt6": "V501 answer-span run was blocked by final eval regression; forensics only.",
+    "kg1-nemotron-lora-v573-v571bit-v551eq-refmix-v290ckpt6": "V574 regressed to 191/315 with protected bit backfire; closed route.",
+    "kg1-nemotron-lora-v579-v571bit-v551eq-strictedge-v290ckpt6": "V579/V591 downstream route produced protected bit backfire; closed route.",
+    "kg1-nemotron-lora-v582-v581-teacher-transfer-v290ckpt6": "V582 regressed to 191/315 and has contamination findings; closed route.",
+    "kg1-nemotron-lora-v591-v579-symbolic-queryop-v290ckpt6": "V591 regressed to 191/315, bit=135, equation=56, trunc=1; closed route.",
+    "kg1-nemotron-lora-v595-v596-queryop-answeronly-pref-v290ckpt6": "V595/V597 failed weak promotion and regressed bit; closed route.",
+    "kg1-nemotron-lora-v595b-v596-queryop-answeronly-pref-v290ckpt6": "V595b/V597 failed weak promotion and regressed bit; closed route.",
+    "kg1-nemotron-lora-v601-v596-queryop-answeronly-pref-moe-source-v290ckpt6": "V601/V602/V604 produced no equation gain and no submit-safe total gain; closed route.",
 }
 
 TRUE_FORMAT_NEGATIVE_RE = re.compile(
@@ -280,6 +356,18 @@ CRISIS_BACKFIRE_GUARD_RE = re.compile(
 )
 WEAK_EVAL_DIAGNOSTIC_ONLY_RE = re.compile(
     r"KG1_WEAK_EVAL_DIAGNOSTIC_ONLY\s*(?:[\"']?\s*:\s*[\"']?(?:1|true|yes|on)|=\s*[\"']?(?:1|true|yes|on))",
+    re.IGNORECASE,
+)
+PEFT_NATIVE_INIT_ADAPTER_LOAD_RE = re.compile(
+    r"INIT_ADAPTER_LOAD_MODE\s*(?:[\"']?\s*:\s*[\"']?peft[\"']?|=\s*[\"']?peft[\"']?)",
+    re.IGNORECASE,
+)
+UNBOUNDED_PEFT_STACK_RE = re.compile(
+    r"(?:^|\s|['\"])(?:transformers|peft)\s*(?:>=|>|~=)",
+    re.IGNORECASE,
+)
+PINNED_PEFT_STACK_RE = re.compile(
+    r"(?:^|\s|['\"])(transformers|peft)\s*==\s*([0-9][^'\"\s]*)",
     re.IGNORECASE,
 )
 
@@ -373,6 +461,17 @@ def is_archived_fail_closed(text: str) -> bool:
         "hard-negative-only V435E",
     ]
     return all(snippet in text for snippet in required)
+
+
+def unbounded_peft_stack_install_lines(text: str) -> list[str]:
+    lines: list[str] = []
+    for raw_line in text.splitlines():
+        line = raw_line.strip()
+        if "pip install" not in line:
+            continue
+        if UNBOUNDED_PEFT_STACK_RE.search(line):
+            lines.append(line)
+    return lines
 
 
 def audit_text(path: Path, text: str) -> list[Finding]:
@@ -562,6 +661,29 @@ def audit_text(path: Path, text: str) -> list[Finding]:
 
     if (
         job_or_notebook
+        and not is_archived_fail_closed(text)
+        and (
+            PEFT_NATIVE_INIT_ADAPTER_LOAD_RE.search(text)
+            or "PeftModel.from_pretrained" in text
+            or ("INIT_ADAPTER_REPO" in text and "target_parameters" in text)
+        )
+    ):
+        unbounded_lines = unbounded_peft_stack_install_lines(text)
+        if unbounded_lines:
+            findings.append(
+                Finding(
+                    rel,
+                    "error",
+                    "unbounded_peft_transformers_versions",
+                    "PEFT-native init-adapter jobs must pin transformers and peft. "
+                    "V595 failed before training when an unbounded install pulled transformers 5.8.1 "
+                    "and broke PeftModel.from_pretrained target-parameter loading. "
+                    "Offending install lines: " + " | ".join(unbounded_lines),
+                )
+            )
+
+    if (
+        job_or_notebook
         and rel != "scripts/hf_job_train_v90.py"
         and not is_archived_fail_closed(text)
         and PRETOKENIZED_VAL_COPY_ONLY_TRUE_RE.search(text)
@@ -702,6 +824,40 @@ def audit_text(path: Path, text: str) -> list[Finding]:
                 "Weak promotion env/default gate must use the submit-safe floor 196, not 193.",
             )
         )
+
+    if rel != "scripts/kg1_static_safety_gate.py" and re.search(
+        r"\bWEAK_MIN_FOR_FULL\s*=\s*193\b", text
+    ):
+        findings.append(
+            Finding(
+                rel,
+                "error",
+                "stale_weak_total_gate",
+                "Weak promotion gate must use the submit-safe floor: WEAK_MIN_FOR_FULL = 196.",
+            )
+        )
+
+    if job_or_notebook and rel != "scripts/kg1_static_safety_gate.py" and not is_archived_fail_closed(text):
+        stale_total_text = re.search(r"\btotal\s*(?:>=|>)\s*193\b|\btotal\s*>\s*192\b", text)
+        stale_equation_text = re.search(r"\bequation\s*(?:>=|>)\s*57\b|\bequation\s*>\s*56\b", text)
+        if stale_total_text:
+            findings.append(
+                Finding(
+                    rel,
+                    "error",
+                    "stale_weak_total_text_gate",
+                    "HF jobs/notebooks must describe and enforce current submit-safe total floor 196, not 193/total>192.",
+                )
+            )
+        if stale_equation_text:
+            findings.append(
+                Finding(
+                    rel,
+                    "error",
+                    "stale_weak_equation_text_gate",
+                    "HF jobs/notebooks must describe and enforce current submit-safe equation floor 60, not 57/equation>56.",
+                )
+            )
 
     if rel != "scripts/kg1_static_safety_gate.py" and re.search(
         r"\bWEAK_BIT_MIN_FOR_FULL\s*=\s*133\b", text
@@ -927,7 +1083,7 @@ def run_self_test() -> int:
             return 1
         stale_gate = tmp / "build_old_gate.py"
         stale_gate.write_text(
-            "WEAK_BIT_MIN_FOR_FULL = 133\nWEAK_MAX_TRUNC_FOR_FULL = 3\n"
+            "WEAK_MIN_FOR_FULL = 193\nWEAK_BIT_MIN_FOR_FULL = 133\nWEAK_MAX_TRUNC_FOR_FULL = 3\n"
             "KG1_WEAK_BIT_MIN\", 133\nKG1_WEAK_TRUNC_MAX\", 3\n",
             encoding="utf-8",
         )
@@ -935,6 +1091,13 @@ def run_self_test() -> int:
         stale_weak_promote.write_text(
             "equation_min = env_int(\"KG1_WEAK_PROMOTE_EQUATION_MIN\", 57)\n"
             "total_min = env_int(\"KG1_WEAK_PROMOTE_TOTAL_MIN\", 193)\n",
+            encoding="utf-8",
+        )
+        stale_text_gate = tmp / "launch_old_text_gate.py"
+        stale_text_gate.write_text(
+            "from huggingface_hub import HfApi\n"
+            "HfApi().run_job(command=['true'])\n"
+            "promotion_gate = 'reject unless total>=193, equation>56, bit>=136'\n",
             encoding="utf-8",
         )
         stale_argparse = tmp / "run_old_argparse.py"
@@ -945,15 +1108,19 @@ def run_self_test() -> int:
         )
         stale_gate_findings = audit_text(stale_gate, stale_gate.read_text(encoding="utf-8"))
         stale_gate_findings.extend(audit_text(stale_weak_promote, stale_weak_promote.read_text(encoding="utf-8")))
+        stale_gate_findings.extend(audit_text(stale_text_gate, stale_text_gate.read_text(encoding="utf-8")))
         stale_gate_findings.extend(audit_text(stale_argparse, stale_argparse.read_text(encoding="utf-8")))
         stale_codes = {item.code for item in stale_gate_findings}
         if not {
             "stale_weak_bit_gate",
             "stale_weak_trunc_gate",
+            "stale_weak_total_gate",
             "stale_weak_bit_env_gate",
             "stale_weak_trunc_env_gate",
             "stale_weak_equation_env_gate",
             "stale_weak_total_env_gate",
+            "stale_weak_equation_text_gate",
+            "stale_weak_total_text_gate",
             "stale_weak_bit_argparse_default",
             "stale_weak_trunc_argparse_default",
         }.issubset(stale_codes):
@@ -969,6 +1136,28 @@ def run_self_test() -> int:
         blocked_findings = audit_text(blocked_dataset, blocked_dataset.read_text(encoding="utf-8"))
         if "blocked_training_dataset_referenced" not in {item.code for item in blocked_findings}:
             print("missing blocked training dataset self-test finding", flush=True)
+            return 1
+        blocked_v582_dataset = tmp / "job_blocked_v582_dataset.py"
+        blocked_v582_dataset.write_text(
+            "from huggingface_hub import HfApi\n"
+            "DATA_FILE='data/v582_combined_teacher_distill_dataset/train.jsonl'\n"
+            "HfApi().run_job(command=['true'])\n",
+            encoding="utf-8",
+        )
+        blocked_v582_findings = audit_text(blocked_v582_dataset, blocked_v582_dataset.read_text(encoding="utf-8"))
+        if "blocked_training_dataset_referenced" not in {item.code for item in blocked_v582_findings}:
+            print("missing blocked V582 training dataset self-test finding", flush=True)
+            return 1
+        blocked_v596_dataset = tmp / "job_blocked_v596_dataset.py"
+        blocked_v596_dataset.write_text(
+            "from huggingface_hub import HfApi\n"
+            "DATA_FILE='artifacts/v596_queryop_answer_only_preference_dataset/train.jsonl'\n"
+            "HfApi().run_job(command=['true'])\n",
+            encoding="utf-8",
+        )
+        blocked_v596_findings = audit_text(blocked_v596_dataset, blocked_v596_dataset.read_text(encoding="utf-8"))
+        if "blocked_training_dataset_referenced" not in {item.code for item in blocked_v596_findings}:
+            print("missing blocked V596 training dataset self-test finding", flush=True)
             return 1
         blocked_adapter = tmp / "job_blocked_adapter.py"
         blocked_adapter.write_text(
@@ -1254,6 +1443,40 @@ def run_self_test() -> int:
         )
         if "manual_init_adapter_load_with_target_parameters" not in {item.code for item in manual_target_findings}:
             print("missing manual target-parameter load self-test finding", flush=True)
+            return 1
+        unbounded_peft_stack = tmp / "launch_unbounded_peft_stack.py"
+        unbounded_peft_stack.write_text(
+            "from huggingface_hub import HfApi\n"
+            "COMMAND_SCRIPT=\"\"\"\n"
+            "export INIT_ADAPTER_LOAD_MODE='peft'\n"
+            "python -m pip install -q --no-cache-dir 'transformers>=4.56.0' 'peft>=0.17.0'\n"
+            "\"\"\"\n"
+            "HfApi().run_job(command=['true'])\n",
+            encoding="utf-8",
+        )
+        unbounded_peft_findings = audit_text(
+            unbounded_peft_stack,
+            unbounded_peft_stack.read_text(encoding="utf-8"),
+        )
+        if "unbounded_peft_transformers_versions" not in {item.code for item in unbounded_peft_findings}:
+            print("missing unbounded PEFT/transformers stack self-test finding", flush=True)
+            return 1
+        pinned_peft_stack = tmp / "launch_pinned_peft_stack.py"
+        pinned_peft_stack.write_text(
+            "from huggingface_hub import HfApi\n"
+            "COMMAND_SCRIPT=\"\"\"\n"
+            "export INIT_ADAPTER_LOAD_MODE='peft'\n"
+            "python -m pip install -q --no-cache-dir 'transformers==4.57.6' 'peft==0.19.1'\n"
+            "\"\"\"\n"
+            "HfApi().run_job(command=['true'])\n",
+            encoding="utf-8",
+        )
+        pinned_peft_findings = audit_text(
+            pinned_peft_stack,
+            pinned_peft_stack.read_text(encoding="utf-8"),
+        )
+        if "unbounded_peft_transformers_versions" in {item.code for item in pinned_peft_findings}:
+            print("false positive pinned PEFT/transformers stack self-test finding", flush=True)
             return 1
         pretokenized_val_copy = tmp / "launch_pretokenized_copy.py"
         pretokenized_val_copy.write_text(

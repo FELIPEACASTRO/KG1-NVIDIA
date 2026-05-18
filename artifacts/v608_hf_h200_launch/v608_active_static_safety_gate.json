@@ -1,0 +1,25 @@
+{
+  "file_count": 17,
+  "files": [
+    "artifacts/v536_hf_h200_launch/launch_v536_hf_nemo_h200_v534_bit_v523_equation.py",
+    "artifacts/v608_hf_h200_launch/launch_v608_hf_nemo_h200_v607_compact_source.py",
+    "scripts/analyze_v586_plateau_row_diagnostics.py",
+    "scripts/audit_v449_acc_metric_integrity.py",
+    "scripts/audit_v509_training_dataset_integrity.py",
+    "scripts/audit_v513_trace_learnability_gate.py",
+    "scripts/audit_v575_solution_sync_contract.py",
+    "scripts/audit_v606_unused_v446_source_pool.py",
+    "scripts/build_v607_compact_v446_source_dataset.py",
+    "scripts/hf_job_preflight_gate.py",
+    "scripts/hf_job_weak_eval_v245.py",
+    "scripts/kg1_pre_paid_job_integration_gate.py",
+    "scripts/kg1_rescore_predictions_label_free.py",
+    "scripts/kg1_static_safety_gate.py",
+    "scripts/kg1_weak_backfire_row_guard.py",
+    "scripts/validate_answer_extraction_v1.py",
+    "src/competition_utils.py"
+  ],
+  "findings": [],
+  "ok": true,
+  "schema_version": "kg1_static_safety_gate_v1"
+}

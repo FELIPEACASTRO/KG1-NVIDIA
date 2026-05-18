@@ -42,6 +42,36 @@ BLOCKED_DATASET_MARKERS = {
         "Current V447 is quarantined: crisis audit found hypothesis_formed traces "
         "with contradictory boxed answers. Rebuild with rule_found-only traces."
     ),
+    "v581_combined_teacher_distill_dataset": (
+        "V581/V582 teacher distillation is quarantined for paid training: V589 V509 "
+        "audit found exact weak/full reference overlap plus false anti-leakage flags. "
+        "Use only as diagnostic evidence, not as an SFT dataset."
+    ),
+    "v582_combined_teacher_distill_dataset": (
+        "V582 teacher distillation is quarantined for paid training: V589 V509 audit "
+        "found exact weak/full reference overlap plus false anti-leakage flags. Use "
+        "only as diagnostic evidence, not as an SFT dataset."
+    ),
+    "v573_v571_bitpair_v551_equation_reference_mix": (
+        "V573/V574 reference mix is quarantined for paid training: V605 plateau audit "
+        "measured 191/315, bit=135, equation=56, trunc=1, protected backfire=2."
+    ),
+    "v579_v571_bitpair_v551_equation_strictedge_mix": (
+        "V579 strict-edge mix is quarantined as a paid-training source: downstream "
+        "V591/V592 preserved no equation gains and triggered protected bit backfire."
+    ),
+    "v591_v579_symbolic_queryop_source_mix": (
+        "V591 symbolic query-op source mix is quarantined for paid training: V605 "
+        "measured 191/315, bit=135, equation=56, trunc=1, protected backfire=2."
+    ),
+    "v594_queryop_cryptarithm_preference_dataset": (
+        "V594/V595 query-op preference route is quarantined for paid training: "
+        "V597 weak eval stayed at equation=56 and regressed bit/protected rows."
+    ),
+    "v596_queryop_answer_only_preference_dataset": (
+        "V596 answer-only query-op preference route is quarantined for paid training: "
+        "V597/V602/V604 showed no equation transfer and no submit-safe total gain."
+    ),
 }
 
 RESIDUAL_FIRST_MIN_TOTAL = 200
@@ -109,6 +139,8 @@ def check_residual_first_gpu_gate() -> dict[str, Any]:
         "KG1_PROMPT_TEMPLATE_PARITY_STATUS": "passed",
         "KG1_V541_MISSMAP_GATE_STATUS": "passed",
         "KG1_V541_FLIP_LEDGER_STATUS": "passed",
+        "KG1_V516_PARSER_CURRENT_BASELINE_STATUS": "passed",
+        "KG1_STALE_PREDICTION_PARITY_STATUS": "passed",
         "KG1_EXPECTED_TRUNCATED": "0",
         "KG1_ADAPTER_CPU_FORMAT_PARITY_STATUS": "passed",
         "KG1_V536_VAL_STATS_AS_WEAK_EVIDENCE": "0",
@@ -184,6 +216,8 @@ def check_residual_first_gpu_gate() -> dict[str, Any]:
             "prompt_template_parity_status": "passed",
             "v541_missmap_gate_status": "passed",
             "v541_flip_ledger_status": "passed",
+            "v516_parser_current_baseline_status": "passed",
+            "stale_prediction_parity_status": "passed",
             "cpu_simulated_total_min": RESIDUAL_FIRST_MIN_TOTAL,
             "cpu_simulated_bit_min": RESIDUAL_FIRST_MIN_BIT,
             "cpu_simulated_equation_min": RESIDUAL_FIRST_MIN_EQUATION,
@@ -640,6 +674,10 @@ def percentile_int(values: list[int], ratio: float) -> int:
     return int(ordered[int(ratio * (len(ordered) - 1))])
 
 
+def boxed_payloads(text: str) -> list[str]:
+    return re.findall(r"\\boxed\{([^{}]*)\}", str(text or ""))
+
+
 def check_repo_gate() -> None:
     observed = run_git_head()
     expected = env_str("KG1_EXPECTED_COMMIT")
@@ -650,8 +688,13 @@ def check_repo_gate() -> None:
 
 
 def count_and_audit_jsonl(path: Path, label: str) -> dict[str, Any]:
+    dataset_schema = env_str("KG1_DATASET_SCHEMA", "sft").strip().lower() or "sft"
+    if dataset_schema not in {"sft", "preference"}:
+        raise RuntimeError(f"KG1_DATASET_SCHEMA must be sft or preference, got {dataset_schema!r}")
     rows = 0
     bad_rows: list[dict[str, Any]] = []
+    preference_bad_rows: list[dict[str, Any]] = []
+    negative_types: dict[str, int] = {}
     families: dict[str, int] = {}
     subcategories: dict[str, int] = {}
     gate_row_flags = [
@@ -662,6 +705,12 @@ def count_and_audit_jsonl(path: Path, label: str) -> dict[str, Any]:
     gate_row_flag_counts: dict[str, int] = {flag: 0 for flag in gate_row_flags}
     gate_row_flag_missing_counts: dict[str, int] = {flag: 0 for flag in gate_row_flags}
     gate_row_flag_bad_rows: list[dict[str, Any]] = []
+    weak_reference_signal_flags = [
+        "expected_aware_teacher_signal",
+        "label_audited_teacher_projection",
+    ]
+    weak_reference_signal_counts: dict[str, int] = {flag: 0 for flag in weak_reference_signal_flags}
+    weak_reference_signal_bad_rows: list[dict[str, Any]] = []
     ids: set[str] = set()
     duplicate_ids = 0
     assistant_missing = 0
@@ -701,6 +750,18 @@ def count_and_audit_jsonl(path: Path, label: str) -> dict[str, Any]:
                             "value": metadata.get(flag),
                         }
                     )
+            for flag in weak_reference_signal_flags:
+                value = row.get(flag) if flag in row else metadata.get(flag)
+                if value is True:
+                    weak_reference_signal_counts[flag] += 1
+                    weak_reference_signal_bad_rows.append(
+                        {
+                            "line": line_no,
+                            "id": row_id,
+                            "flag": flag,
+                            "value": value,
+                        }
+                    )
             subcategory = str(
                 row.get("subcategory")
                 or row.get("subtype")
@@ -709,18 +770,38 @@ def count_and_audit_jsonl(path: Path, label: str) -> dict[str, Any]:
                 or "unknown"
             )
             subcategories[subcategory] = subcategories.get(subcategory, 0) + 1
-            messages = row.get("messages")
-            if not isinstance(messages, list) or not any(
-                isinstance(item, dict) and item.get("role") == "assistant" for item in messages
-            ):
-                assistant_missing += 1
+            if dataset_schema == "preference":
+                prompt = str(row.get("prompt", ""))
+                chosen = str(row.get("chosen", ""))
+                rejected = str(row.get("rejected", ""))
+                negative_type = str(metadata.get("negative_type", "unknown"))
+                negative_types[negative_type] = negative_types.get(negative_type, 0) + 1
+                chosen_boxes = boxed_payloads(chosen)
+                rejected_boxes = boxed_payloads(rejected)
+                if not prompt or not chosen or not rejected:
+                    preference_bad_rows.append({"line": line_no, "id": row_id, "error": "missing_prompt_chosen_rejected"})
+                if len(chosen_boxes) != 1:
+                    preference_bad_rows.append({"line": line_no, "id": row_id, "error": "chosen_box_count"})
+                if len(rejected_boxes) != 1:
+                    preference_bad_rows.append({"line": line_no, "id": row_id, "error": "rejected_box_count"})
+                if chosen_boxes and rejected_boxes and chosen_boxes[0] == rejected_boxes[0]:
+                    preference_bad_rows.append({"line": line_no, "id": row_id, "error": "chosen_equals_rejected_payload"})
+                if negative_type.startswith("format_negative_"):
+                    preference_bad_rows.append({"line": line_no, "id": row_id, "error": "format_negative_blocked"})
+                assistant_lengths_by_family.setdefault(family, []).append(len(chosen))
             else:
-                assistant_text = ""
-                for item in reversed(messages):
-                    if isinstance(item, dict) and item.get("role") == "assistant":
-                        assistant_text = str(item.get("content", ""))
-                        break
-                assistant_lengths_by_family.setdefault(family, []).append(len(assistant_text))
+                messages = row.get("messages")
+                if not isinstance(messages, list) or not any(
+                    isinstance(item, dict) and item.get("role") == "assistant" for item in messages
+                ):
+                    assistant_missing += 1
+                else:
+                    assistant_text = ""
+                    for item in reversed(messages):
+                        if isinstance(item, dict) and item.get("role") == "assistant":
+                            assistant_text = str(item.get("content", ""))
+                            break
+                    assistant_lengths_by_family.setdefault(family, []).append(len(assistant_text))
     assistant_length_stats: dict[str, dict[str, int]] = {}
     for family, lengths in sorted(assistant_lengths_by_family.items()):
         assistant_length_stats[family] = {
@@ -732,14 +813,19 @@ def count_and_audit_jsonl(path: Path, label: str) -> dict[str, Any]:
     summary = {
         "label": label,
         "path": str(path),
+        "dataset_schema": dataset_schema,
         "rows": rows,
         "unique_ids": len(ids),
         "duplicate_ids": duplicate_ids,
         "assistant_missing": assistant_missing,
         "bad_rows_first10": bad_rows[:10],
+        "preference_bad_rows_first10": preference_bad_rows[:10],
+        "negative_type_counts": dict(sorted(negative_types.items())),
         "gate_row_flag_counts": gate_row_flag_counts,
         "gate_row_flag_missing_counts": gate_row_flag_missing_counts,
         "gate_row_flag_bad_rows_first10": gate_row_flag_bad_rows[:10],
+        "weak_reference_signal_counts": weak_reference_signal_counts,
+        "weak_reference_signal_bad_rows_first10": weak_reference_signal_bad_rows[:10],
         "family_counts": dict(sorted(families.items())),
         "subcategory_counts": dict(sorted(subcategories.items())),
         "subcategory_counts_top20": dict(sorted(subcategories.items(), key=lambda item: (-item[1], item[0]))[:20]),
@@ -748,6 +834,11 @@ def count_and_audit_jsonl(path: Path, label: str) -> dict[str, Any]:
     log_json(f"{label}_jsonl_audit", summary)
     if bad_rows:
         raise RuntimeError(f"{label} JSONL has invalid rows: {bad_rows[:3]}")
+    if preference_bad_rows:
+        raise RuntimeError(
+            f"{label} preference JSONL has invalid rows: "
+            + json.dumps(preference_bad_rows[:10], sort_keys=True)
+        )
     if assistant_missing:
         raise RuntimeError(f"{label} has rows without assistant messages: {assistant_missing}")
     if gate_row_flag_bad_rows:
@@ -759,6 +850,12 @@ def count_and_audit_jsonl(path: Path, label: str) -> dict[str, Any]:
         raise RuntimeError(
             f"{label} has rows missing required anti-leakage gate flags: "
             + json.dumps(gate_row_flag_missing_counts, sort_keys=True)
+        )
+    if weak_reference_signal_bad_rows:
+        raise RuntimeError(
+            f"{label} contains expected-aware/reference-derived teacher rows. "
+            "Paid training must not use weak/full reference-derived labels: "
+            + json.dumps(weak_reference_signal_bad_rows[:10], sort_keys=True)
         )
     max_p95 = env_int("KG1_MAX_ASSISTANT_CHARS_P95", 0)
     max_chars = env_int("KG1_MAX_ASSISTANT_CHARS_MAX", 0)
@@ -936,6 +1033,12 @@ def check_hub_artifacts() -> None:
 def check_postinstall_imports() -> None:
     import importlib
 
+    expected_version_env = {
+        "huggingface_hub": "KG1_EXPECTED_HUGGINGFACE_HUB_VERSION",
+        "transformers": "KG1_EXPECTED_TRANSFORMERS_VERSION",
+        "peft": "KG1_EXPECTED_PEFT_VERSION",
+        "accelerate": "KG1_EXPECTED_ACCELERATE_VERSION",
+    }
     required = [
         "huggingface_hub",
         "transformers",
@@ -954,13 +1057,21 @@ def check_postinstall_imports() -> None:
         )
     for module_name in required:
         module = importlib.import_module(module_name)
+        version = str(getattr(module, "__version__", "unknown"))
         log_json(
             "postinstall_import_ok",
             {
                 "module": module_name,
-                "version": str(getattr(module, "__version__", "unknown")),
+                "version": version,
             },
         )
+        expected_env = expected_version_env.get(module_name, "")
+        expected_version = env_str(expected_env) if expected_env else ""
+        if expected_version and version != expected_version:
+            raise RuntimeError(
+                f"{module_name} changed unexpectedly after install: "
+                f"expected {expected_version}, got {version}"
+            )
 
 
 def check_eval_postinstall_imports() -> None:
@@ -1040,6 +1151,8 @@ def self_test() -> None:
     assert blocked_dataset_matches("repo data/v464_v463_numeric_multirule_dataset/train.jsonl")
     assert blocked_dataset_matches("repo data/v468_v464_symbol_fix_dataset/train.jsonl")
     assert blocked_dataset_matches("repo data/v447_v446_trace_dataset/train.jsonl")
+    assert blocked_dataset_matches("repo data/v582_combined_teacher_distill_dataset/train.jsonl")
+    assert blocked_dataset_matches("repo artifacts/v596_queryop_answer_only_preference_dataset/train.jsonl")
     assert not blocked_dataset_matches("repo data/v469_symbol_fix_rebuilt_clean/train.jsonl")
     old_env = dict(os.environ)
     try:
@@ -1091,6 +1204,8 @@ def self_test() -> None:
         os.environ["KG1_PROMPT_TEMPLATE_PARITY_STATUS"] = "passed"
         os.environ["KG1_V541_MISSMAP_GATE_STATUS"] = "passed"
         os.environ["KG1_V541_FLIP_LEDGER_STATUS"] = "passed"
+        os.environ["KG1_V516_PARSER_CURRENT_BASELINE_STATUS"] = "passed"
+        os.environ["KG1_STALE_PREDICTION_PARITY_STATUS"] = "passed"
         os.environ["KG1_EXPECTED_TRUNCATED"] = "0"
         os.environ["KG1_ADAPTER_CPU_FORMAT_PARITY_STATUS"] = "passed"
         os.environ["KG1_V536_VAL_STATS_AS_WEAK_EVIDENCE"] = "0"
@@ -1214,6 +1329,94 @@ def self_test() -> None:
             "weak_gate_rows_used_for_training": 0,
             "full_gate_rows_used_for_training": 0,
         }
+
+        old_schema = os.environ.get("KG1_DATASET_SCHEMA")
+        os.environ["KG1_DATASET_SCHEMA"] = "preference"
+        try:
+            clean_preference = tmp / "clean_preference.jsonl"
+            clean_preference.write_text(
+                json.dumps(
+                    {
+                        "id": "p1",
+                        "prompt": "prompt",
+                        "chosen": "Final answer: \\boxed{12}",
+                        "rejected": "Final answer: \\boxed{21}",
+                        "family": "equation_transform",
+                        "metadata": {
+                            "negative_type": "hard_negative_symbol_flip",
+                            "gate_rows_used_for_training": False,
+                            "weak_gate_rows_used_for_training": False,
+                            "full_gate_rows_used_for_training": False,
+                        },
+                    },
+                    sort_keys=True,
+                )
+                + "\n",
+                encoding="utf-8",
+            )
+            clean_preference_summary = count_and_audit_jsonl(clean_preference, "clean_preference")
+            if clean_preference_summary["dataset_schema"] != "preference":
+                raise RuntimeError("self-test expected preference schema audit")
+            blocked_preference = tmp / "blocked_preference.jsonl"
+            blocked_preference.write_text(
+                json.dumps(
+                    {
+                        "id": "p2",
+                        "prompt": "prompt",
+                        "chosen": "Final answer: \\boxed{12}",
+                        "rejected": "Final answer: \\boxed{12}",
+                        "family": "equation_transform",
+                        "metadata": {
+                            "negative_type": "format_negative_no_box",
+                            "gate_rows_used_for_training": False,
+                            "weak_gate_rows_used_for_training": False,
+                            "full_gate_rows_used_for_training": False,
+                        },
+                    },
+                    sort_keys=True,
+                )
+                + "\n",
+                encoding="utf-8",
+            )
+            try:
+                count_and_audit_jsonl(blocked_preference, "blocked_preference")
+            except RuntimeError as exc:
+                if "preference JSONL has invalid rows" not in str(exc):
+                    raise
+            else:
+                raise RuntimeError("self-test expected invalid preference rows to fail")
+        finally:
+            if old_schema is None:
+                os.environ.pop("KG1_DATASET_SCHEMA", None)
+            else:
+                os.environ["KG1_DATASET_SCHEMA"] = old_schema
+
+        expected_aware_flags = tmp / "expected_aware_flags.jsonl"
+        expected_aware_flags.write_text(
+            json.dumps(
+                {
+                    "id": "x",
+                    "family": "equation_transform",
+                    "messages": [{"role": "assistant", "content": "Final answer: \\boxed{1}"}],
+                    "metadata": {
+                        "expected_aware_teacher_signal": True,
+                        "gate_rows_used_for_training": False,
+                        "weak_gate_rows_used_for_training": False,
+                        "full_gate_rows_used_for_training": False,
+                    },
+                },
+                sort_keys=True,
+            )
+            + "\n",
+            encoding="utf-8",
+        )
+        try:
+            count_and_audit_jsonl(expected_aware_flags, "expected_aware_flags")
+        except RuntimeError as exc:
+            if "expected-aware/reference-derived teacher rows" not in str(exc):
+                raise
+        else:
+            raise RuntimeError("self-test expected expected-aware teacher signal to fail")
 
         canonical_subcategory = tmp / "canonical_subcategory.jsonl"
         canonical_subcategory.write_text(

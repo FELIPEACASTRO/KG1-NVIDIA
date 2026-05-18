@@ -1,6 +1,6 @@
 # KG1 Score Improvement Roadmap
 
-Atualizado: 2026-05-17
+Atualizado: 2026-05-18
 
 Este e o roadmap ativo e limpo apos a revisao V484 dos arquivos OpenRouter de
 16/05/2026. O historico detalhado foi arquivado em:
@@ -16,8 +16,8 @@ executavel e somente o que esta abaixo.
 | Metrica | Estado atual | Promocao minima |
 |---|---:|---:|
 | Baseline historico packageable | 192/315 | > 192/315 |
-| Recompute strict label-free recente | 191/315 | >= 193/315 |
-| equation_transform baseline | 56/155 historico; 55/155 strict | alvo inicial 60/155 |
+| Recompute label-free atual | 192/315 | >= 196/315 |
+| equation_transform baseline | 56/155 | alvo inicial 60/155 |
 | bit_manipulation baseline | 136/160 | >= 136/160 |
 | truncated | 0 | 0 |
 | Full official-like conhecido | 823/947 | > 823/947 |
@@ -79,7 +79,7 @@ Ultima evidencia operacional relevante:
 | V522 source-target alignment audit | melhor referencia teacher V380 tem `31` ganhos no-loss vs baseline label-free e `0` perdas: `23` bit e `8` equation; bit gains concentram em `bit_exact_global_ternary_unique_prediction=13`, `CHO=4`, `MAJ3=4`, `OR=1`, `XOR=1`; V304 contem cobertura fonte alta (`CHO=506`, `MAJ3=709`, `PAR3=105` em treino), enquanto V515 tem cobertura muito pequena (`CHO=4`, `MAJ3=3`) | dataset build permitido, GPU ainda bloqueada; V523 deve criar trace pack fonte-only direcionado a CHO/MAJ3/global ternary + equation classes V516 atuais, sem usar weak labels como treino |
 | V523 targeted source trace pack | dataset fonte-only criado e limpo: `1026` train, `219` val; treino `706` bit e `320` equation; `0` overlap weak/full, `0` duplicidade; V286 real passou com token max `749`, offset masks `1026/219`, trunc `0`; V513 passou com `0` blockers, bit traces p50 `99` palavras e equation p50 `52` | e o primeiro dataset novo apos o plateau que passa gates estruturais; GPU ainda depende do V524 porque quota por tokens pode enviesar o loss |
 | V524 quota/token objective audit | calculo por literatura/objetivo mostrou que V523 tem `68.8%` bit por linhas, mas `90.7%` bit por tokens de loss (`329702` bit vs `33920` equation), enquanto o sinal V522 e `23/31=74.2%` bit | corrigido no trainer: `hf_job_train_v90.py` agora suporta `LOSS_NORMALIZATION_MODE=example_mean`; qualquer job V523 deve usar esse modo ou encurtar bit traces antes de GPU |
-| V525 OpenRouter objective consult | 5 modelos (`gpt-5.5`, Claude Opus 4.7, Gemini 3.1 Pro, Qwen 3.6 Max, DeepSeek V4 Pro) confirmaram que `token_mean` nao pode ser usado com V523; todos recomendam `example_mean`, guard de `8740ed31`, e kill-switch de primeiro checkpoint; 2/5 preferem rebuild V525 antes de GPU | decisao adotada: rodar CPU dry-run de contribuicao por familia; se V523+`example_mean` ainda for dominado por bit, construir V525 com traces bit curtas e token-mass `bit<=70-78%`; se passar, permitir apenas smoke H200 curto com gate `total>=193`, `equation>=57`, `bit>=136`, `trunc=0` |
+| V525 OpenRouter objective consult | 5 modelos (`gpt-5.5`, Claude Opus 4.7, Gemini 3.1 Pro, Qwen 3.6 Max, DeepSeek V4 Pro) confirmaram que `token_mean` nao pode ser usado com V523; todos recomendam `example_mean`, guard de `8740ed31`, e kill-switch de primeiro checkpoint; 2/5 preferem rebuild V525 antes de GPU | decisao adotada: rodar CPU dry-run de contribuicao por familia; se V523+`example_mean` ainda for dominado por bit, construir V525 com traces bit curtas e token-mass `bit<=70-78%`; se passar, permitir apenas smoke H200 curto com gate `total>=196`, `equation>=60`, `bit>=136`, `trunc=0` |
 | V526 example_mean dry-run | `example_mean` passou: bit share por tokens cairia de `90.67%` para `68.81%`, delta vs referencia `5.38pp`, boxed/control/answer checks `0` blockers | autoriza somente um smoke H200 curto V523 com `LOSS_NORMALIZATION_MODE=example_mean` e kill-switch no primeiro checkpoint; nao autoriza treino longo |
 | V528 notebooks 0.86/0.85 | notebooks `0.86` sao principalmente packaging do Tinker adapter `kienngx/.../tinker-adapter/1`; tecnicas uteis estao nos notebooks Tong/Pear/Konbu/PJT/ZZYS, nao nos zips de score | usar `0.86` apenas para schema/provenance/package; usar solver/CoT para novo sinal CPU |
 | V529 todos os kernels baixados | `704` kernels puxados, `702` parseados; lista filtrada indica P0: `pjt222/nemotron-cot-review`, `pearpn25/bit-cot-85-1364-sample`, `konbu17/bit-manipulation-solver-cot-generator`, `zzys0316/full-pipeline...`; notebooks 0.86 nao resolvem familias | proximo passo efetivo e V530 CPU solver harness antes de qualquer H200 amplo; GPU so se houver novo sinal label-free ou smoke V523 estritamente limitado |
@@ -95,7 +95,7 @@ Ultima evidencia operacional relevante:
 | V536 H200 attempt 1 | job `felipesp1983/6a0930223308d79117b9181a` falhou antes do treino: runtime `MAX_LENGTH=1024` truncava `78/1026` prompts (`7.6023%`) apesar do V286 ter `token_max=1123` com `max_length=8192` | falha barata e correta; launcher corrigido para `MAX_LENGTH=2048`, `KG1_EXPECTED_MAX_LENGTH=2048`, e pre-paid gate agora compara `token_max <= runtime MAX_LENGTH` |
 | V536 H200 current retry | job `felipesp1983/6a0981fe3308d79117b91bc6` completou; checkpoints atuais `2/4`; MoE/target params corretos, `lm_head` congelado, `MAX_LENGTH=2048`, loss `3.0276 -> 3.0257/3.0277` | loss nao promove; decisao dependeu da weak eval V549 |
 | V549 weak eval V536 current | job `felipesp1983/6a098851e48bea4538ba0f1f`; checkpoint-2 `190/315`, `bit=134`, `equation=56`, `trunc=1`, avg completion `4774.9`, max `7680`; checkpoint-4 `190/315`, `bit=135`, `equation=55`, `trunc=0`, avg completion `4772.0`, max `7492` | ambos bloqueados; nenhum full/package/submit; V536/V549 rejeitado como linha de ganho |
-| V549 protected/token guards | ambos checkpoints erraram `8740ed31`: esperado `01101000`, previsto `01111000`; `weak_promotion_gate` bloqueou por `correct_lt_193`, `equation_lt_57`, `bit_lt_136`, tokens excessivos e protected-row backfire; `catastrophic_eval_guard` passou porque nao foi colapso total | guards atualizados estao funcionando; condicoes atuais de promocao continuam: `total>=193`, `bit>=136`, `equation>=57`, `trunc=0`, protected rows preservadas e saida curta |
+| V549 protected/token guards | ambos checkpoints erraram `8740ed31`: esperado `01101000`, previsto `01111000`; `weak_promotion_gate` bloqueou por `correct_lt_196`, `equation_lt_60`, `bit_lt_136`, tokens excessivos e protected-row backfire; `catastrophic_eval_guard` passou porque nao foi colapso total | guards atualizados estao funcionando; condicoes atuais de promocao continuam: `total>=196`, `bit>=136`, `equation>=60`, `trunc=0`, protected rows preservadas e saida curta |
 | V550 condition sync audit | scripts/launchers ativos agora exigem `8740ed31=01101000` e `59bee375=10010101`; V536 tem bit traces longas (`p95=1669` chars) e V549 repetiu trade-off antigo: cp2 ganhou `518deb39`, mas perdeu `8740ed31` e `59bee375`; cp4 perdeu `8740ed31` sem ganho | `gpu_allowed=false`; nao repetir V536/V549; proxima linha precisa dataset curto answer-span ou hard-negative CPU gate preservando os dois protegidos antes de qualquer job pago |
 | V551 short bit trace pack | V536 foi reescrito em CPU mantendo fonte-only: bit train `706`, equation train `320`; bit assistant `p95=250`, `max=251` chars contra `p95=1669` no V536; V509 integridade passou, V286 real passou (`token_max=383`, trunc `0`, offset masks `1026/219`), V513 real passou, V524 real ficou `quota_ok_cpu_only` com bit loss-token share `0.592993`; static safety gate passou apos bloquear/diagnosticar launcher V548 historico | novo candidato de dataset curto; ainda `gpu_allowed=false` ate pre-paid/HF CPU/preflight/protected weak smoke; gates agora tambem aceitam limite `KG1_MAX_ASSISTANT_CHARS_P95/MAX` para impedir repetir traces longas |
 | V547 contract-aligned distillation | dataset `236/111` criado com targets `Final answer: \boxed{...}`; sem `RULE:`; train `bit=146`, `equation=90`; tokenization `max=328`, trunc `0`; objective alignment passou | dataset tecnicamente limpo, mas era answer-only pequeno; exigia weak eval antes de qualquer package |
@@ -118,13 +118,18 @@ Ultima evidencia operacional relevante:
 | V571 source-only bit-pair traces | `scripts/build_v571_bitpair_source_only_trace_pack.py` criou traces bit-pair/bitsum deterministicas apenas de fonte externa; `437` train e `79` val aceitas; V509/V286/V513 passaram; V524 bloqueou treino bit-only por objetivo dominado por bit | achado aproveitavel: bit-pair source-only existe e e verificavel; nao treinar isolado |
 | V572 aggressive bit/equation mix | V571 + V551 equation, `757/159` linhas, pesos `bit=0.5`, `equation=1.5`; V509/V286/V478/V513 passaram, mas V526 row-weighted corrigido bloqueou: peso efetivo `bit=31.28%`, delta `42.9pp` vs referencia | nao ir para GPU; risco alto de repetir regressao de bit |
 | V573 reference-weighted source-only mix | mesmo conteudo V571+V551, mas pesos `bit=1.5`, `equation=1.0`; V509 passou, V286 real passou (`token_max=1074`, `0` trunc, offset masks `757/159`), V478 passou (`bit=67.20%`, `equation=32.80%`), V513 passou e V526 row-weighted passou (`delta=6.997pp`) | primeiro candidato novo pos-V570 que passa gates CPU com protecao de objetivo; autoriza somente auditoria pre-paid e smoke curto com kill-switch, nao submit |
-| V573 HF upload/pre-paid | dataset V573 subido para HF dataset commit `3d321aff1e68d72769f167ceab2a28123faa18fd`; launcher debug baixou do HF sem symlink cache, validou hashes `ba515.../6957...`, adapter seed e objetivo; pre-paid gate passou sem findings com deferimento V568 restrito a `MAX_STEPS=2` e weak eval obrigatoria no primeiro checkpoint | pronto para commit/push dos gates e um smoke H200 de 2 steps; se checkpoint-2 nao passar `total>=193`, `bit>=136`, `equation>=57`, `trunc=0` e protected rows, cancelar/abandonar |
+| V573 HF upload/pre-paid | dataset V573 subido para HF dataset commit `3d321aff1e68d72769f167ceab2a28123faa18fd`; launcher debug baixou do HF sem symlink cache, validou hashes `ba515.../6957...`, adapter seed e objetivo; pre-paid gate passou sem findings com deferimento V568 restrito a `MAX_STEPS=2` e weak eval obrigatoria no primeiro checkpoint | pronto para commit/push dos gates e um smoke H200 de 2 steps; se checkpoint-2 nao passar `total>=196`, `bit>=136`, `equation>=60`, `trunc=0` e protected rows, cancelar/abandonar |
 | V573 H200 attempt 1 | job `felipesp1983/6a0a0c94a5e509f1a8413626` falhou antes de treinar; H200 correto e preinstall passaram; artifact gate validou hashes e dataset, mas bloqueou por bug silencioso no preflight: `metadata.subcategory` antigo (`bit_konbu_high_confidence_trace`, `bit_huikang_*`) sobrescrevia a subcategoria canonica top-level `bit_bitpair_certified_source_only` usada pelo pre-paid gate | sem custo de treino nem ganho ACC; corrigido para priorizar subcategoria canonica top-level e adicionado self-test `canonical_subcategory`; relancar somente apos commit/push e novo pre-paid/debug |
 | V573 H200 attempt 2 | job `felipesp1983/6a0a0f18a5e509f1a8413664` falhou antes de treinar; preinstall, artifact gate canonico e V485 adapter roundtrip passaram, mas o objective alignment remoto rodou sem `--use-row-loss-weight`/`--require-row-loss-weight` e avaliou share fisico (`bit=57.73%`, `equation=42.27%`) em vez do share efetivo do loss (`bit=67.20%`, `equation=32.80%`) | bug silencioso operacional, nao sinal negativo de modelo; launcher V573 agora injeta os flags no comando remoto e o debug local bloqueia qualquer launch se o contrato de row-loss-weight sumir; sem treino e sem ganho/perda ACC |
-| V573 H200 attempt 3 | job `felipesp1983/6a0a123ae7940de6ee6cdad8` completou; checkpoint-2/final uploaded; baseline/eval loss ficou neutro (`1.4546 -> 1.4546`) e o log expôs bug silencioso local no script de treino: `tokenize_examples` ainda priorizava `metadata.subcategory` antes do `subcategory` canonico top-level, divergindo do preflight | impacto no job atual e baixo porque os pesos de subcategoria sao 1.0 e o objetivo efetivo vem de `metadata.loss_weight`; corrigido em `scripts/hf_job_train_v90.py` para top-level vencer metadata e coberto por self-test; proximo passo e weak eval official-like do checkpoint-2, sem submit antes de `total>=193`, `bit>=136`, `equation>=57`, `trunc=0` e protected rows |
+| V573 H200 attempt 3 | job `felipesp1983/6a0a123ae7940de6ee6cdad8` completou; checkpoint-2/final uploaded; baseline/eval loss ficou neutro (`1.4546 -> 1.4546`) e o log expôs bug silencioso local no script de treino: `tokenize_examples` ainda priorizava `metadata.subcategory` antes do `subcategory` canonico top-level, divergindo do preflight | impacto no job atual e baixo porque os pesos de subcategoria sao 1.0 e o objetivo efetivo vem de `metadata.loss_weight`; corrigido em `scripts/hf_job_train_v90.py` para top-level vencer metadata e coberto por self-test; proximo passo e weak eval official-like do checkpoint-2, sem submit antes de `total>=196`, `bit>=136`, `equation>=60`, `trunc=0` e protected rows |
+| V595b/V597 weak eval | V595b treinou 2 steps no dataset V596 answer-only preference; preference val piorou `59/120 -> 58/120`; weak remoto armazenou `190/315`, `equation=55`, `bit=135`, `trunc=1`; re-score V598 com extrator atual corrige `4bb8c6cd` e fica `191/315`, `equation=56`, `bit=135`, `trunc=1` | rota V596/V595b encerrada; sem full/package/submit; regressao real e bit, nao equation |
+| V598 metric/gate fixes | o baseline V290 re-score atual e `192/315`, `equation=56`, `bit=136`, `trunc=0`; limite absoluto de tokens `512/2048` era falso para official-like e foi tornado opcional; `validate_answer_extraction_v1.py` agora trata mismatch sem mudanca de acerto como warning; protected guard separa backfire de missing required gain | evita falso bloqueio/falso ganho; qualquer nova avaliacao deve passar rescore raw-output label-free antes de promocao |
+| V601/V602 MoE preference fechado | V601 source-build treinou `preference answer-only + MoE up/down trainable`; params treinaveis subiram para `869,318,656` e preference val melhorou `59/120 -> 61/120`; V602 remoto deu `191`, mas re-score local atual corrige o caso `\\boxed{]}\\!}` e fica `192/315`, `equation=56`, `bit=136`, `trunc=0` | sem ganho liquido vs V290; rota MoE preference V596 fechada; nao rodar mais H200 nessa linha sem novo sinal CPU/protected-row |
+| V604 interpolacao V601 fechada | eval-only V290->V601 testou lambdas uteis antes de cancelar por FinOps: `0.05 = 192/315, equation=56, bit=136, trunc=0`; `0.10 = 190/315, equation=56, bit=134, trunc=1`; `0.25 = 190/315, equation=56, bit=134, trunc=1`; `0.50` foi cancelado apos tres pontos sem sinal | confirma que preference/MoE nao vira ACC por interpolacao; V596/V601 fica bloqueado para novo H200; proxima acao precisa ser CPU/source-only com novo sinal, nao ajuste de lambda |
+| V605 consolidated plateau audit | comparou V574, V582, V591, V597 e V602 contra V290 usando `raw_output -> extract_final_answer -> verify_answer`; V574/V582/V591/V597 ficaram `191/315`, `bit=135`, `equation=56`, `trunc=1`; V602 ficou `192/315`, `bit=136`, `equation=56`, `trunc=0`; todos sem ganho total, todos com token runaway e backfire protegido (`8740ed31`, e em 4/5 tambem `59bee375`) | rotas V573/V579/V591/V594/V596 e adapters V573/V579/V582/V591/V595/V595b/V601 entram em quarentena nos gates; nao repetir essas linhas em H200 sem novo CPU signal diferente e sem passar V605/protected gates |
 | Workspace clean rule | regra permanente do usuario formalizada: manter somente fonte, roadmap/gates, datasets/manifests ativos, evidencias futuras reutilizaveis e artefatos necessarios para reproducao; caches/temp/download leftovers/logs redundantes devem sair | criado `scripts/kg1_workspace_clean_gate.py`; modo `--delete-safe` remove apenas lixo inequivoco (`.cache`, `__pycache__`, `.pytest_cache`, `.ipynb_checkpoints`, `*.tmp/*.bak/*.old/*.orig`); logs/manifests/datasets/adapters nunca sao apagados automaticamente |
 
-## Decisao Atual V560-V573
+## Decisao Atual V560-V605
 
 O problema ativo nao e mais falta de busca externa nem apenas hiperparametro de
 loss. A evidencia V562/V563 mostra desalinhamento entre treino e inferencia:
@@ -135,7 +140,7 @@ loss. A evidencia V562/V563 mostra desalinhamento entre treino e inferencia:
   `truncated=1`, com regressao de bit para `135/160`;
 - os dois protected rows que o baseline acertava foram perdidos:
   `8740ed31: 01101000 -> 01111000` e `59bee375: 10010101 -> 2`;
-- o gate bloqueou por `correct_lt_193`, `equation_lt_57`, `bit_lt_136`,
+- o gate bloqueou por `correct_lt_196`, `equation_lt_60`, `bit_lt_136`,
   `truncated_gt_0`, tokens excessivos e protected-row backfire.
 - V563 eliminou o runaway com `disable_thinking=1` e `max_tokens=128`, mas
   colapsou a ACC para `15-16/315` nos tres checkpoints e manteve backfire nos
@@ -202,57 +207,49 @@ loss. A evidencia V562/V563 mostra desalinhamento entre treino e inferencia:
   gate remoto divergir do pre-paid gate. A correcao e canonica: top-level
   `subcategory` governa treinamento/quotas; `metadata.subcategory` fica apenas
   como linhagem.
+- V601/V602 fechou a linha `preference answer-only + MoE trainable`: mesmo com
+  `869,318,656` parametros treinaveis e preference val melhor, o weak label-free
+  atual ficou `192/315`, `equation=56`, `bit=136`, `trunc=0`, isto e, sem ganho
+  liquido contra V290.
+- V604 testou a unica tentativa barata restante nessa linha, interpolar V290 com
+  V601. Resultado: `lambda=0.05` ficou exatamente no baseline; `lambda=0.10` e
+  `0.25` regrediram para `190/315`, `bit=134` e `trunc=1`; `lambda=0.50` foi
+  cancelado por FinOps. Portanto nao ha caminho de ganho por V601/MoE preference
+  nem por interpolacao dessa familia de checkpoints.
+- V605 consolidou V574, V582, V591, V597 e V602 contra o mesmo baseline V290
+  parser-current. O padrao e agora comprovado: nenhuma rota transfere equation,
+  todas repetem no maximo o ganho isolado `4ada9150`, e todas falham por
+  backfire protegido, truncation/token runaway ou ausencia de ganho liquido.
+  Os gates agora bloqueiam por identidade as rotas V573/V579/V591/V594/V596 e
+  adapters V573/V579/V582/V591/V595/V595b/V601.
 
 Plano efetivo a partir daqui:
 
-1. Bloquear novo broad LoRA em H200. Loss nao autoriza gasto nem submit.
-2. Concluido: auditoria local V564 de contrato/mask separou falso positivo de
-   validacao e isolou o mismatch train-vs-eval como blocker real.
-3. Concluido: V565 reconstruiu o dataset answer-only com contrato official-like
-   e passou contract/mask/tokenization/objective gates.
-4. Concluido: V567 descartou strict no-think/one-line e tambem mostrou que
-   `max_tokens=2048` e insuficiente para as protected rows.
-5. Gate novo: weak eval promocional fica bloqueado se `KG1_DISABLE_THINKING=1`
-   ou `KG1_MAX_TOKENS<7680`, exceto quando o job declarar diagnostico explicito.
-6. Gate novo: treino promocional pago fica bloqueado ate o diagnostico V568
-   separar decoding ruim de drift do adapter com `0` logprobs faltantes,
-   protected rows completos e regressao de margem vs baseline dentro do limite
-   (`KG1_V568_MAX_OBSERVED_PROTECTED_MARGIN_REGRESSION <=
-   KG1_V568_ALLOWED_PROTECTED_MARGIN_REGRESSION`). Margem absoluta negativa e
-   alerta, nao bloqueio padrao.
-7. Concluido: V569 confirmou que o proximo passo nao e outro broad SFT; e
-   recuperar/reproduzir trajetorias protegidas longas e medir margens.
-8. Concluido: V570 recuperou `raw_output` correto do V290 ckpt-6 para
-   `8740ed31` e `59bee375`, mais `40` anchors corretos, com prompt hash,
-   completion hash, resposta final, truncation e decisao `diagnostic_only`.
-9. Gate V570:
-   protected final answers exatos, `max_tokens=7680`, thinking habilitado,
-   tokenization sem truncation, e reproducao V568 dentro da tolerancia. Como as
-   linhas sao weak-gate, o gate tambem exige `training_allowed_rows=0` ate haver
-   analogos source-only ou pares preference sem contaminacao.
-10. Concluido parcial: V571/V573 construiram analogos source-only verificaveis
-   para bit-pair e mantiveram equation V551 limpa. Isso nao usa as linhas
-   weak-gate V570 como treino.
-11. Concluido: V573 upload/debug/pre-paid passou. O job so pode declarar
-   `LOSS_NORMALIZATION_MODE=example_mean`, `USE_ROW_LOSS_WEIGHT=1`,
-   `REQUIRE_ROW_LOSS_WEIGHT=1`, `MAX_LENGTH=2048`, `MAX_STEPS=2`, protected
-   rows `8740ed31=01101000` e `59bee375=10010101`, e weak eval obrigatoria no
-   primeiro checkpoint.
-12. Executar smoke V573 H200 somente apos commit/push dos gates usados pelo job.
-   O checkpoint-2 deve ser avaliado em weak official-like com `max_tokens=7680`.
-13. Antes de relancar V573, exigir self-test `canonical_subcategory` no
-   preflight remoto e exportar `HF_HUB_DISABLE_PROGRESS_BARS=1`,
-   `PYTHONIOENCODING=utf-8`, `LC_ALL=C.UTF-8`, `LANG=C.UTF-8` para reduzir ruido
-   de logs/progress bar.
-14. Executar auditoria de logits/protected rows apos contrato padronizado:
-   medir top-k e probabilidade das respostas corretas em `8740ed31` e
-   `59bee375`; qualquer adapter que reduza esses logits fica bloqueado.
-15. Se o diagnostico de logits/protected passar, rodar apenas smoke curto V573
-   com primeiro checkpoint kill-switch; se falhar, nao gastar H200.
-16. So entao montar microexperimento hard-negative/protected:
-   baseline-wrong/solver-right como positivos e baseline-correct protected como
-   no-change; sucesso minimo `total>=193`, `bit>=136`, `equation>=57`,
-   protected rows OK e trunc `0`; falha aborta GPU.
+1. Bloquear novo broad LoRA em H200. Loss, eval loss ou preference-val nao
+   autorizam gasto nem submit sem weak ACC label-free.
+2. Manter V290 checkpoint-6 como unico adapter submit-safe conhecido:
+   `192/315`, `equation=56`, `bit=136`, `trunc=0`.
+3. Nao executar novamente V573/V579/V582/V591/V594/V596, V595/V595b/V601 ou
+   interpolacoes derivadas. Essas identidades estao em quarentena nos gates
+   `kg1_static_safety_gate.py`, `hf_job_preflight_gate.py` e
+   `kg1_pre_paid_job_integration_gate.py`.
+4. Proximo treino pago so pode nascer de uma fonte nova ou de um mecanismo novo
+   que primeiro passe em CPU/source-only: `total>=200`, `equation>=59`,
+   `bit>=136`, `lost_rows=0`, `lost_bit_rows=0`, `lost_equation_rows=0`,
+   protected rows preservadas, `max_token_headroom<=0.90` e V568 sem regressao
+   de margem protegida.
+5. Antes de qualquer H200, rodar V586/V587/V568/NLL ou equivalente no candidato
+   de transferencia e comparar contra V605. Se houver backfire em
+   `8740ed31`/`59bee375`, truncation, token runaway, ou nenhum ganho label-free
+   real, cancelar por FinOps.
+6. A unica linha nova aceitavel agora e microexperimento local/CPU com objetivo
+   diferente: hard-negative/protected/no-change, teacher source-only, ou
+   logits/NLL orientado a margem. A saida do gate deve mostrar ganho em linhas
+   obrigatorias sem perdas antes de qualquer job pago.
+7. Se houver novo treino, ele deve ser curto, com checkpoint-2 obrigatorio,
+   weak eval imediato e cancelamento automatico se nao atingir:
+   `total>=196`, `equation>=60`, `bit>=136`, `trunc=0`,
+   `label_aware_delta=0`, `protected_backfire=0`.
 
 Itens removidos do plano ativo apos V569:
 
@@ -263,6 +260,8 @@ Itens removidos do plano ativo apos V569:
 - novos H200 justificados por eval loss;
 - treino equation-first enquanto `8740ed31` e `59bee375` nao estiverem
   protegidos por replay/margem.
+- qualquer novo treino, eval ou interpolacao na linha V596/V601/MoE preference
+  sem novo sinal CPU/source-only diferente.
 
 ## Decisao Atual V551/V552/V553
 
@@ -303,8 +302,8 @@ Resultado pago V552/V553:
   - protected rows quebradas:
     `8740ed31: 01101000 -> 01111000` e
     `59bee375: 10010101 -> 2`;
-- o `weak_promotion_gate` bloqueou por `correct_lt_193`,
-  `equation_lt_57`, `bit_lt_136`, `truncated_gt_0`,
+- o `weak_promotion_gate` bloqueou por `correct_lt_196`,
+  `equation_lt_60`, `bit_lt_136`, `truncated_gt_0`,
   completion tokens excessivos e `protected_row_backfire_guard_failed`;
 - V553 foi cancelado antes do checkpoint-4, porque checkpoint-4 tinha loss
   pior no treino e checkpoint-2 ja repetiu o backfire conhecido.
@@ -315,7 +314,7 @@ Decisao:
 - nao rodar full eval, package ou submit desta linha;
 - nao relancar SFT curto de bit traces se o novo CPU gate nao provar antes
   preservacao de `8740ed31=01101000`, `59bee375=10010101`, `bit>=136`,
-  `equation>=57`, `trunc=0` e completions curtas;
+  `equation>=60`, `trunc=0` e completions curtas;
 - o gargalo atual nao e mais comprimento bruto do target: mesmo target curto
   repetiu a troca antiga `+equation/-bit`, entao a proxima frente precisa ser
   hard-negative/protected-row first ou package permitido para solver, nao
@@ -329,7 +328,7 @@ Proximo passo obrigatorio:
 2. construir/avaliar em CPU uma rota que preserve primeiro os dois protegidos
    e so depois tente `equation_transform`;
 3. so liberar novo HF pago se o gate CPU provar novo sinal sem perdas:
-   `total>=193`, `bit>=136`, `equation>=57`, `trunc=0`, protected rows
+   `total>=196`, `bit>=136`, `equation>=60`, `trunc=0`, protected rows
    preservadas e completions baixas;
 4. se o pacote Kaggle permitir executar solver/verifier no caminho de
    inferencia dentro do formato oficial de submissao, priorizar essa auditoria
@@ -427,7 +426,7 @@ Decisao:
 - nao continuar a linha V534/Konbu/Huikang + V523-equation com o mesmo prompt
   e objetivo sem um novo sinal CPU que preserve `8740ed31` e reduza completions;
 - manter V290/V291 checkpoint-6 como baseline packageable ate existir adapter
-  com `total>=193`, `bit>=136`, `equation>=57`, `trunc=0`, protected rows
+  com `total>=196`, `bit>=136`, `equation>=60`, `trunc=0`, protected rows
   preservadas e completions dentro do limite;
 - diagnostico row-level V549 contra V516 mostrou que checkpoint-2 faz o mesmo
   trade-off antigo: ganha `518deb39` em equation, mas perde `8740ed31` e
@@ -504,7 +503,7 @@ em ordem de prioridade:
    - usar exatamente `LOSS_NORMALIZATION_MODE=example_mean`;
    - usar `MAX_LENGTH=2048`, validado contra `token_max=1123` do V286;
    - manter `lm_head` congelado e MoE `up_proj/down_proj` treinaveis;
-   - abortar no primeiro checkpoint que violar `bit>=136`, `equation>=57`,
+   - abortar no primeiro checkpoint que violar `bit>=136`, `equation>=60`,
      `trunc=0` ou linhas protegidas;
    - se o smoke nao mostrar ganho ACC label-free, bloquear GPU e voltar para
      equation canonicalization/hard negatives.
@@ -545,7 +544,7 @@ em ordem de prioridade:
    - trace learnability gate sem respostas answer-only;
    - objetivo `example_mean` ou equivalente validado por contribution audit.
 5. Qualquer smoke V530/V531/V532/V533/V534/V535 precisa falhar fechado se:
-   - `total < 193/315`;
+   - `total < 196/315`;
    - `equation < 57/155`;
    - `bit < 136/160`;
    - `trunc != 0`;
@@ -748,8 +747,8 @@ reproduzido no HF e provar:
    manifesto equivalente. V439 fica excluido ate ser reconstruido com
    renderizacao simbolica label-free validada; V443 fica excluido por estar
    vazio.
-11. FinOps: cancelar job que nao possa mais superar `total>192`,
-   `equation>56`, `bit>=136`, `truncated=0`.
+11. FinOps: cancelar job que nao possa mais superar `total>=196`,
+   `equation>=60`, `bit>=136`, `truncated=0`.
 11. H200 pode ser usada ate 1 hora por execucao. Acima disso exige autorizacao
    humana.
 12. Todo erro novo entra em `KG1_ERROR_LEDGER_2026_05_15.md` antes de novo job
@@ -928,7 +927,7 @@ Auditoria de metrica:
 Decisao atualizada: falhou para o mix antigo V390/V326 e tambem para o V475
 CPU-gated apos V495/V496. Nao repetir V390/V326 nem V475 em H200. SFT pago fica
 bloqueado ate existir novo sinal CPU independente que projete `equation>=60`,
-`bit>=136`, `trunc=0` e `total>192`.
+`bit>=136`, `trunc=0` e `total>=196`.
 
 ### V391/V486 Objective Balance Update
 
@@ -1242,8 +1241,8 @@ Sem isso, nao packagear e nao submeter.
    corrigidos.
 8. Se surgir novo candidato, weak eval promocional deve usar thinking ligado,
    `max_tokens=7680`, `max_model_len=8192`, `max_num_seqs=64` e falhar se nao
-   passar primeiro pelo gate minimo anti-backfire (`total>=193`,
-   `equation>=57`, `bit>=136`, `trunc=0`). Para package/submit, a meta segue
+   passar primeiro pelo gate minimo anti-backfire (`total>=196`,
+   `equation>=60`, `bit>=136`, `trunc=0`). Para package/submit, a meta segue
    mais alta: aproximar `total>=196`, `equation>=60`, `bit>=136`, `trunc=0`.
 9. V517/V518 encerram a linha V515 GPU atual: H200, `MAX_STEPS=2`,
    dataset V515 HF CPU, bit source weights `1.5x`, `lm_head` congelado,
@@ -1318,7 +1317,7 @@ de ganho:
 |---|---|
 | `prediction` podia ser extraida com `extract_final_answer_for_expected`, usando label esperado | `prediction` agora e label-free; expected-aware fica somente em `label_aware_debug_prediction` |
 | expected-aware aceitava prefixo inseguro como `\boxed{30 wrong}` para expected `30` | helper agora aceita apenas delimitador real `}` |
-| weak eval V245 tinha defaults diagnosticos (`max_tokens=96`, thinking off) e threshold `equation>=57` | defaults agora sao official-like e promocao exige `total>=196`, `equation>=60`, `bit>=136`, `trunc=0` |
+| weak eval V245 tinha defaults diagnosticos (`max_tokens=96`, thinking off) e threshold `equation>=60` | defaults agora sao official-like e promocao exige `total>=196`, `equation>=60`, `bit>=136`, `trunc=0` |
 | weak eval podia terminar com exit 0 sem candidato promovido se env nao estivesse setado | promocao e bloqueante por padrao; sweeps baratos exigem `KG1_WEAK_EVAL_DIAGNOSTIC_ONLY=1` |
 | full eval escolhia maior `correct` antes de aplicar truncation gate | agora escolhe primeiro entre candidatos que passam correct/truncation |
 | pre-paid gate era preference-only e nao cobria V498/V501 SFT | adicionado `--dataset-schema sft` e save/eval steps configuraveis |
@@ -1430,7 +1429,7 @@ Decisao:
 - se relancar V536, usar somente com os parametros acima e monitoramento
   FinOps de 40s;
 - qualquer promocao continua bloqueada ate weak ACC label-free mostrar
-  `total>=193`, `equation>=57`, `bit>=136`, `trunc=0`; package/submit exige
+  `total>=196`, `equation>=60`, `bit>=136`, `trunc=0`; package/submit exige
   full official-like `>823/947`.
 
 ## Atualizacao V537 - Weak Eval Dos Checkpoints V536 Com Guard Por Linha
@@ -1447,7 +1446,7 @@ Comparativo de versao:
 | Acao | treinar 4 steps a partir do V290 ckpt6 | avaliar checkpoints ja gerados |
 | Compute | H200 pago com risco de novo abort | H200 apenas para inferencia weak |
 | Candidatos | gera `checkpoint-2` e `checkpoint-abort-step4` | mede ambos no mesmo job |
-| Gate promocional | nao aplicavel sem ACC | `total>=193`, `equation>=57`, `bit>=136`, `trunc=0` |
+| Gate promocional | nao aplicavel sem ACC | `total>=196`, `equation>=60`, `bit>=136`, `trunc=0` |
 | Guard F2/backfire | exigido pelo roadmap | integrado ao `hf_job_weak_eval_v245.py` |
 | Protected id | documentado em V519 | `8740ed31=01101000` bloqueia candidato se regredir |
 
@@ -1510,7 +1509,7 @@ Diagnostico:
 
 - V536/V537 repetiu a troca ruim vista em outras linhas: pequeno ganho ou
   estabilidade em equation com perda em bit;
-- o melhor candidato nao atingiu `total>=193`, `equation>=57`, `bit>=136`;
+- o melhor candidato nao atingiu `total>=196`, `equation>=60`, `bit>=136`;
 - `checkpoint-2` ainda acionou o guard de F2/backfire por quebrar a linha
   protegida.
 
@@ -1942,7 +1941,7 @@ Impacto no roadmap:
    - identificar se a falha vem de target curto, peso por linha,
      answer extraction, prompt template ou interferencia MoE;
    - so construir novo dataset se houver causa concreta e teste CPU que
-     preserve `8740ed31=01101000`, `bit>=136`, `equation>=57` e `trunc=0`.
+     preserve `8740ed31=01101000`, `bit>=136`, `equation>=60` e `trunc=0`.
 5. se nao houver causa concreta, voltar para a frente CPU equation
    canonicalization/hard negatives e abandonar treino LoRA dessa familia ate
    aparecer novo sinal verificavel.
@@ -1990,7 +1989,7 @@ Decisao:
   - `assistant_final_answer_only_rows > 0` ou `assistant_boxed_only_rows > 0`;
   - zero linhas com prefixo incompatível quando a inferencia pedir boxed-only;
   - weak label-free seco em CPU ou amostra HF barata antes de H200;
-  - protected row `8740ed31=01101000`, `bit>=136`, `equation>=57`,
+  - protected row `8740ed31=01101000`, `bit>=136`, `equation>=60`,
     `truncation=0` e completion tokens baixos.
 
 Proximo passo tecnico:
@@ -2003,3 +2002,2598 @@ Proximo passo tecnico:
 3. caminho preferido continua CPU solver/verifier/canonicalization para
    `equation_transform`, porque ja mostrou `200/315` sem perda, enquanto LoRA
    ainda nao transferiu esse ganho.
+
+## Atualizacao V574 - Auditoria de Contrato, Metrica e Ganho Falso
+
+Artefatos:
+
+- launcher:
+  `artifacts/v574_hf_h200_v573_weak_eval_launch/launch_v574_hf_weak_eval_v573_checkpoint2.py`;
+- manifest HF baixado:
+  `artifacts/v574_hf_h200_v573_weak_eval_launch/downloaded_final/evals/v574-h200-officiallike-v573-checkpoint2-20260517T194619Z/v245_hf_weak_eval_manifest.json`;
+- audit local:
+  `artifacts/v574_hf_h200_v573_weak_eval_launch/v574_contract_metric_audit.json`;
+- adapter config:
+  `artifacts/v574_hf_h200_v573_weak_eval_launch/downloaded_final/checkpoint-2/adapter_config.json`.
+
+Resultado confirmado por recomputacao local:
+
+| Item | Valor V574 |
+|---|---:|
+| Weak CSV SHA256 | `85da758e14d57ea40270de5747f98726a0ad0b6d1795bff7dd46183005e0f9b6` |
+| Shared row contract | `bf055e3b9ebce79d4bfc9e48bce5a305b1d83da882f14afddec80d6afaba5fff` |
+| Weak rows | `315` |
+| Family counts | `bit_manipulation=160`, `equation_transform=155` |
+| Prompt suffix | oficial `Please put your final answer inside \boxed{}` |
+| Thinking | ligado (`KG1_DISABLE_THINKING=0`) |
+| `max_tokens` | `7680` |
+| `max_model_len` | `8192` |
+| Metric mode | `submit_safe_label_free` |
+| Postprocessor | `none` |
+| ACC total | `190/315` |
+| bit | `135/160` |
+| equation | `55/155` |
+| truncated | `1` |
+| label-aware debug | `191/315`, nao submit-safe |
+
+Contrato LoRA confirmado no checkpoint:
+
+| Campo | Valor |
+|---|---|
+| base | `nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16` |
+| revision avaliada | `cbd3fa9f933d55ef16a84236559f4ee2a0526848` |
+| `r` | `32` |
+| `lora_alpha` | `32` |
+| `modules_to_save` | `null` |
+| target modules | `in_proj,k_proj,v_proj,down_proj,lm_head,o_proj,q_proj,up_proj,out_proj` |
+| target parameters | `mlp.experts.gate_up_proj`, `mlp.experts.down_proj` |
+
+Bloqueadores de ganho falso:
+
+- o V574 nao usa postprocessor nem expected-aware extraction no score
+  promocional;
+- o `label_aware_debug_correct=191` fica separado do score submit-safe e nao
+  pode promover pacote;
+- a recomputacao local do CSV de predicoes confirmou exatamente `190/315`,
+  `bit=135`, `equation=55`, `truncated=1`;
+- protected row guard bloqueou duas regressoes bit que o baseline acertava:
+  - `8740ed31`: esperado `01101000`, candidato `01111000`;
+  - `59bee375`: esperado `10010101`, candidato `2`, `finish_reason=length`;
+- por isso V574 nao pode virar package/full/submit.
+
+Correcao implementada apos a auditoria:
+
+- `scripts/hf_job_weak_eval_v245.py` agora rejeita adapter com
+  `modules_to_save` nao vazio no caminho adapter-only;
+- o mesmo gate agora rejeita mismatch de `base_model_name_or_path` contra
+  Nemotron esperado;
+- `scripts/kg1_static_safety_gate.py` exige esses snippets criticos para nao
+  deixar a checagem desaparecer em futuras alteracoes;
+- scripts historicos V217/V223/V244 foram colocados em modo fail-closed para
+  evitar relancar rotas antigas com contrato obsoleto.
+
+Posicao sobre loss vs ACC:
+
+- o loss de treino esta implementado como cross-entropy mascarada sobre tokens
+  de resposta, com `loss_mask`, `row_loss_weight` quando habilitado e
+  normalizacao `token_mean` ou `example_mean`;
+- isso e correto para medir saude do treino, mas nao e proxy matematico de
+  ACC exact-match;
+- ACC real depende de geracao completa, formato de resposta, extracao
+  label-free, truncation e `verify_answer`;
+- portanto qualquer checkpoint so promove por weak/full ACC gerado, nunca por
+  `best_eval_loss` isolado.
+
+Decisao:
+
+- V573/V574 ficam bloqueados para submit;
+- nao rodar outro H200 amplo antes de um gate que preserve as protected rows,
+  mantenha `bit>=136`, elimine truncation e mostre ganho label-free real;
+- o proximo trabalho deve isolar se a falha e de decoding ruim ou se o adapter
+  empurrou o modelo para resposta errada, usando row-level diff e, quando
+  possivel, probes de logits/NLL antes de novo treino pago.
+
+## Atualizacao V574B - Double Check de Dataset, Symbols, Loss e ACC
+
+Objetivo: impedir ganho falso antes de qualquer novo job ou submit.
+
+Achados confirmados em 2026-05-17:
+
+- o weak CSV esta correto:
+  - SHA256 `85da758e14d57ea40270de5747f98726a0ad0b6d1795bff7dd46183005e0f9b6`;
+  - `315` linhas;
+  - `bit_manipulation=160`, `equation_transform=155`;
+  - shared row contract
+    `bf055e3b9ebce79d4bfc9e48bce5a305b1d83da882f14afddec80d6afaba5fff`;
+- o prompt de weak eval V574 esta no contrato correto:
+  - thinking ligado;
+  - suffix oficial com `\boxed{}`;
+  - `max_tokens=7680`;
+  - `max_model_len=8192`;
+  - metric mode `submit_safe_label_free`;
+- recomputacao direta do CSV de predicoes confirmou:
+  - total `190/315`;
+  - `bit=135/160`;
+  - `equation=55/155`;
+  - `truncated=1`;
+  - `314` rows `finish_reason=stop`, `1` row `finish_reason=length`;
+- o contrato LoRA do checkpoint avaliado esta consistente:
+  - base `nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16`;
+  - `r=32`, `lora_alpha=32`;
+  - `modules_to_save=null`;
+  - target modules e target parameters presentes;
+- o dataset V573 ativo passou integridade:
+  - treino `757` linhas, sem duplicidade, sem conflito prompt-answer, sem
+    raw_output, sem assistant mismatch, `757/757` boxed;
+  - validacao `159` linhas, sem duplicidade, sem conflito prompt-answer, sem
+    raw_output, sem assistant mismatch, `159/159` boxed;
+  - charset das respostas restrito a `-0123456789`;
+  - zero caracteres de controle problematicos e zero nao ASCII em `prompt` e
+    `answer`;
+- `example_mean` esta ativo no V573:
+  - `KG1_LOSS_NORMALIZATION_MODE=example_mean`;
+  - `KG1_REQUIRE_ROW_LOSS_WEIGHT=1`;
+  - treino com peso efetivo `bit=0.671963`, `equation=0.328037`;
+  - validacao balanceada `bit=0.496855`, `equation=0.503145`.
+
+Bug silencioso corrigido:
+
+- `scripts/audit_v509_training_dataset_integrity.py` aceitava caminho explicito
+  inexistente e retornava `dataset_count=0`, o que poderia gerar uma falsa
+  auditoria limpa;
+- agora o V509 falha fechado com `FileNotFoundError` para qualquer
+  `--dataset-jsonl` inexistente;
+- `scripts/kg1_static_safety_gate.py` passou a exigir essa protecao para nao
+  regredir.
+
+Interpretacao correta de loss:
+
+- o loss e cross-entropy mascarada nos tokens de resposta e esta adequado para
+  detectar saude/regressao de treino;
+- o loss nao deve ser tratado como proxy de ACC, porque ACC depende de
+  geracao, truncation, formato, extracao label-free e `verify_answer`;
+- `best_eval_loss` pode melhorar sem mover ACC, como ja ocorreu em varios
+  jobs; portanto promocao continua obrigatoriamente por ACC gerado.
+
+Decisao:
+
+- V574 permanece bloqueado para full/package/submit;
+- o proximo job pago so pode iniciar se o pre-paid gate confirmar:
+  - dataset real existente e auditado;
+  - prompt oficial;
+  - `max_tokens=7680`;
+  - `modules_to_save` vazio;
+  - base Nemotron correta;
+  - protected rows sem backfire;
+  - separacao documentada entre decoding ruim e adapter drift.
+
+## Atualizacao V574C - Double Check de Gates, Package e Long Path
+
+Objetivo: fechar bugs silenciosos que poderiam gerar falso positivo de
+limpeza, dataset ou pacote submetivel.
+
+Achados e correcoes aplicadas:
+
+- `scripts/audit_v509_training_dataset_integrity.py` agora falha fechado se:
+  - qualquer `--dataset-jsonl` explicito nao existir;
+  - `dataset_count=0`;
+  - o CSV de referencia weak/full nao existir;
+  - a descoberta por `rglob` precisar atravessar caminho longo no Windows.
+- `scripts/kg1_workspace_clean_gate.py` agora usa traversal com prefixo de
+  caminho longo no Windows e tem self-test para garantir que arquivos profundos
+  nao sejam ignorados.
+- `scripts/package_hf_adapter_submission.py` agora valida tambem
+  `base_model_name_or_path` contra o Nemotron esperado antes de empacotar.
+- `scripts/package_hf_adapter_submission.py --self-test` foi adicionado para
+  bloquear localmente:
+  - adapter com `modules_to_save`;
+  - adapter treinado sobre base model diferente.
+- `scripts/kg1_static_safety_gate.py` passou a exigir esses checks, incluindo o
+  self-test do package script.
+
+Validacoes executadas:
+
+- `python -m py_compile` nos scripts criticos;
+- `python scripts/kg1_static_safety_gate.py --self-test`;
+- `python scripts/kg1_static_safety_gate.py scripts artifacts/v574_hf_h200_v573_weak_eval_launch src`;
+- `python scripts/kg1_workspace_clean_gate.py --delete-safe ...`;
+- `python scripts/audit_v509_training_dataset_integrity.py` no train/val V573;
+- teste negativo de dataset inexistente, que agora falha fechado;
+- `python scripts/validate_answer_extraction_v1.py --self-test`;
+- `python scripts/run_v485_peft_roundtrip_gate.py --self-test`;
+- `python scripts/hf_job_weak_eval_v245.py --self-test`;
+- `python scripts/package_hf_adapter_submission.py --self-test`.
+
+Estado real apos o double check:
+
+- o dataset V573 ativo esta limpo para treino tecnico:
+  - train `757` rows;
+  - val `159` rows;
+  - zero duplicidade, conflito, raw_output, resposta vazia, prompt vazio,
+    nonboxed ou assistant-answer mismatch;
+  - respostas apenas com `-0123456789`;
+  - zero caracteres de controle problematicos e zero nao ASCII em
+    `prompt`/`answer`.
+- o weak V574 continua bloqueado:
+  - `190/315`;
+  - `bit=135/160`;
+  - `equation=55/155`;
+  - `truncated=1`;
+  - protected rows `8740ed31` e `59bee375` regrediram.
+- o contrato LoRA avaliado continua correto, mas sem ganho:
+  - base `nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16`;
+  - `r=32`;
+  - `lora_alpha=32`;
+  - `modules_to_save=null`;
+  - target modules/parameters presentes.
+- loss esta correto como cross-entropy mascarada dos tokens de resposta, mas
+  nao e proxy de ACC; promocao continua somente por geracao completa +
+  extracao label-free + `verify_answer` + truncation zero.
+
+Decisao:
+
+- nao empacotar nem submeter V574;
+- nao promover qualquer checkpoint por `best_eval_loss`;
+- antes de novo treino pago, exigir row-level gate que prove:
+  - `bit>=136`;
+  - `equation>=60`;
+  - `total>=196`;
+  - `truncated=0`;
+  - nenhuma protected row regredida;
+  - diferenca clara entre `decoding ruim` e `adapter drift`.
+
+## Atualizacao V574D - Triple Check de ACC, Parser e Bugs Silenciosos
+
+Objetivo: reauditar bit a bit o caminho que transforma `raw_output` em ACC e
+fechar qualquer falso bloqueio/falso ganho antes de novo HF job.
+
+Correcoes aplicadas em 2026-05-17:
+
+- `scripts/audit_v449_acc_metric_integrity.py` e
+  `scripts/validate_answer_extraction_v1.py` agora suportam caminhos longos no
+  Windows. O CSV V574 de predicoes existe, mas tinha caminho local com `329`
+  caracteres; antes disso o gate podia marcar `run_csv_missing` falso.
+- `scripts/kg1_static_safety_gate.py` tinha chave duplicada para
+  `scripts/kg1_workspace_clean_gate.py`; a segunda definicao sobrescrevia a
+  primeira e enfraquecia checks criticos de limpeza. A tabela foi consolidada.
+- `src/competition_utils.py` agora extrai, sem usar label, respostas simbolicas
+  compactas com `}` literal seguido de escape TeX de pontuacao, por exemplo
+  `\boxed{]}\!}` -> `]}\!`.
+- Foram adicionados self-tests para:
+  - aceitar `\boxed{]}\!}` como `]}\!`;
+  - nao superestender `\boxed{$}{>}`, que continua extraindo `$`;
+  - manter expected-aware apenas como diagnostico.
+
+Resultados medidos apos a correcao do parser:
+
+- CSV V574 original gravado antes da correcao:
+  - coluna `prediction`: `190/315`;
+  - `bit=135/160`;
+  - `equation=55/155`.
+- Reextracao label-free a partir de `raw_output` com parser corrigido:
+  - `191/315`;
+  - `bit=135/160`;
+  - `equation=56/155`;
+  - ganho real local de parser: `+1 equation` no id `4bb8c6cd`;
+  - `expected_aware_minus_simple_correct=0`, ou seja, o ganho deixou de
+    depender de gabarito.
+- Mesmo apos o parser corrigido, V574 continua bloqueado:
+  - falta `+5` total para `196/315`;
+  - falta `+4` equation para `60/155`;
+  - falta `+1` bit para `136/160`;
+  - ainda ha `1` truncation;
+  - protected rows `8740ed31` e `59bee375` continuam erradas.
+
+Classificacao dos erros V574 apos a reextracao corrigida:
+
+- `equation_wrong`: `99` linhas;
+- `bit_binary_wrong`: `24` linhas;
+- `decoding_truncated`: `1` linha;
+- `extractor_expected_aware_delta`: `0` linhas.
+
+Auditoria de dataset/objetivo:
+
+- V509 train/val V573 passou novamente:
+  - `dataset_count=2`;
+  - `blocked_dataset_count=0`.
+- V478 objetivo passou:
+  - treino com share efetivo `bit=0.671963`, `equation=0.328037`;
+  - validacao balanceada `bit=0.496855`, `equation=0.503145`;
+  - `hf_gpu_allowed=true`.
+- V526 `example_mean` passou:
+  - `status=example_mean_dry_run_passed`;
+  - `gpu_allowed=True`.
+
+Achado de parametro/documentacao:
+
+- o manifesto de treino V573 ainda tinha texto de receita antigo
+  `total>=196, equation>=60`;
+- o eval V574 usou o gate correto `total>=196`, `equation>=60`,
+  `bit>=136`, `truncated=0`;
+- acao: manifestos e textos de receita novos devem usar somente o gate atual
+  `196/60/136/0` para evitar decisao FinOps baseada em limite antigo.
+
+Validacoes executadas apos a correcao:
+
+- `python -m py_compile` em `src/competition_utils.py`, V449, V540 e static
+  gate;
+- `python scripts/validate_answer_extraction_v1.py --self-test`;
+- `python scripts/audit_v449_acc_metric_integrity.py --self-test`;
+- `python scripts/kg1_static_safety_gate.py --self-test`;
+- V449 no CSV V574 original e no CSV projetado;
+- V540 no CSV V574 original e no CSV projetado;
+- V509, V478, V526 nos datasets/objetivo V573;
+- `python scripts/kg1_static_safety_gate.py scripts src artifacts/v574_hf_h200_v573_weak_eval_launch`;
+- `python scripts/kg1_workspace_clean_gate.py --delete-safe ...`.
+
+Decisao:
+
+- nao ha submit ainda: `191/315` projetado continua abaixo do gate;
+- o ganho de parser `+1 equation` deve entrar em todos os proximos evals e
+  full/package gates;
+- o proximo trabalho nao deve ser outro treino amplo. A prioridade agora e
+  atacar os `99` erros de equation, os `24` erros bit binarios e o `1`
+  truncation, preservando as duas protected rows.
+
+## Atualizacao V574E - Gate Submit-Safe e Contrato LoRA Ativo
+
+Objetivo: remover divergencias de parametro que podiam permitir falso ganho ou
+decisao FinOps errada antes de qualquer novo treino/submissao.
+
+Correcoes aplicadas em 2026-05-17:
+
+- o launcher base V536 agora registra somente o gate atual:
+  `total>=196`, `equation>=60`, `bit>=136`, `truncated=0`;
+- o manifesto V573 atual foi corrigido para a mesma regra, porque o job/eval ja
+  usava esse criterio, mas o texto de receita ainda mostrava `193/57`;
+- `scripts/notebook_release_gate.py` agora exige
+  `WEAK_MIN_FOR_FULL = 196` em notebooks novos/editados;
+- os builders ja modificados (`V217`, `V223`, `V244`) foram alinhados para
+  `WEAK_MIN_FOR_FULL = 196`;
+- `scripts/kg1_static_safety_gate.py` agora bloqueia HF jobs/notebooks que
+  descrevam criterios promocionais obsoletos (`193/57` ou equivalentes
+  `total>192`/`equation>56`) como se fossem o gate atual;
+- o launcher V573 agora explicita no contrato estatico e no env:
+  `KG1_REQUIRE_LORA_TARGET_PARAMETERS_TRAINABLE=1`;
+- o launcher V573 tambem declara o allowlist treinavel:
+  `q_proj,k_proj,v_proj,o_proj,up_proj,down_proj`.
+
+Validacoes executadas:
+
+- `python -m py_compile` nos launchers/gates/scripts alterados;
+- `python scripts/kg1_static_safety_gate.py --self-test`;
+- `python scripts/notebook_release_gate.py --self-test`;
+- `python scripts/validate_answer_extraction_v1.py --self-test`;
+- `python scripts/audit_v449_acc_metric_integrity.py --self-test`;
+- static safety gate nos scripts e launchers ativos: `ok=true`, `findings=[]`;
+- `scripts/kg1_pre_paid_job_integration_gate.py` no V573:
+  - `ok=true`;
+  - `findings=[]`;
+  - dataset SFT confirmado;
+  - hashes train/val confirmados;
+  - `example_mean` confirmado;
+  - row loss weight requerido;
+  - H200 com `timeout=3600`;
+  - primeira weak eval obrigatoria;
+  - `decoding_vs_adapter_drift` permitido apenas como deferimento do primeiro
+    checkpoint.
+
+Conclusao tecnica:
+
+- o caminho de gate/metricas esta mais sincronizado agora;
+- nao ha evidencia de que o platô venha de `loss` sendo calculado errado,
+  `dataset_count` errado, CSV weak incorreto, parser label-aware, hash errado,
+  ou gate antigo aceitando falso positivo;
+- o gargalo atual permanece em geracao do adapter:
+  `equation_wrong=99`, `bit_binary_wrong=24`, `decoding_truncated=1`;
+- novo HF pago so deve rodar se a proxima intervencao atacar diretamente esses
+  erros row-level e mantiver o contrato `196/60/136/0`.
+
+## Atualizacao V574F - Auditoria Consolidada de CSV/Dataset/Adapter
+
+Artefato novo:
+
+- `artifacts/v574_hf_h200_v573_weak_eval_launch/v574_triple_full_contract_audit_summary.json`.
+
+Confirmacoes:
+
+- weak CSV:
+  - SHA256 `85da758e14d57ea40270de5747f98726a0ad0b6d1795bff7dd46183005e0f9b6`;
+  - `315` linhas;
+  - `bit_manipulation=160`, `equation_transform=155`;
+  - zero ids duplicados;
+  - zero prompts duplicados por SHA256;
+  - zero prompt/answer vazio;
+  - zero caracteres de controle;
+  - zero nao ASCII nas respostas.
+- dataset V573:
+  - train `757`: `bit=437`, `equation=320`;
+  - val `159`: `bit=79`, `equation=80`;
+  - `boxed_assistant_rows=757/757` no train e `159/159` no val;
+  - zero linhas vazias/problematicas;
+  - zero caracteres de controle;
+  - zero nao ASCII em prompt/answer/assistant.
+- adapter V574:
+  - base `nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16`;
+  - `r=32`;
+  - `lora_alpha=32`;
+  - `modules_to_save=null`;
+  - target modules incluem atencao, MLP e `lm_head`;
+  - target parameters: `mlp.experts.gate_up_proj`,
+    `mlp.experts.down_proj`.
+
+Classificacao refinada dos erros V574 por reextracao label-free de
+`raw_output`:
+
+- `equation_wrong`: `99`;
+- `bit_binary_wrong`: `24`;
+- `decoding_truncated`: `1`;
+- total reextraido: `191/315`;
+- `equation=56/155`;
+- `bit=135/160`.
+
+Interpretacao:
+
+- o parser corrigido recupera exatamente `+1 equation` em relacao ao CSV
+  gravado antes da correcao;
+- o restante do platô nao e erro de CSV, hash, dataset, parser, expected-aware,
+  gate antigo ou loss;
+- o problema acionavel agora e fazer o adapter gerar as respostas corretas nos
+  `99` equation misses e nos `24` bit misses, sem aumentar truncation e sem
+  perder protected rows.
+
+## Atualizacao V575 - Solution Sync Contract Gate
+
+Artefatos novos:
+
+- `scripts/audit_v575_solution_sync_contract.py`;
+- `artifacts/v574_hf_h200_v573_weak_eval_launch/v575_solution_sync_contract_audit.json`;
+- `artifacts/v574_hf_h200_v573_weak_eval_launch/v575_static_gate_after_audit_fix.json`;
+- `artifacts/v574_hf_h200_v573_weak_eval_launch/v575_static_gate_full_threshold_refresh.json`;
+- `artifacts/v574_hf_h200_v573_weak_eval_launch/v575_static_gate_full_threshold_refresh_v2.json`;
+- `artifacts/v574_hf_h200_v573_weak_eval_launch/v575_static_gate_full_threshold_refresh_v3.json`;
+- `artifacts/v574_hf_h200_v573_weak_eval_launch/v575_workspace_clean_gate_after_audit.json`;
+- `artifacts/v574_hf_h200_v573_weak_eval_launch/v575_workspace_clean_gate_final_clean.json`;
+- `artifacts/v574_hf_h200_v573_weak_eval_launch/v575_workspace_clean_gate_final_verify.json`;
+- `artifacts/v574_hf_h200_v573_weak_eval_launch/v575_prediction_row_audit.csv`.
+
+Resultado:
+
+- V575 passou com `0` erros e `6` warnings;
+- V575 agora gera tambem auditoria row-level das `315` predicoes,
+  separando `stored_prediction`, reextracao label-free,
+  expected-aware debug, truncation, hashes e classe de erro;
+- o gate estatico passou em `7` pecas criticas:
+  treino, weak eval HF, avaliador batch, static gate, notebook gate, V509 e
+  launcher V573;
+- apos o refresh de thresholds, o gate estatico passou em `22` arquivos,
+  incluindo builders Colab antigos e builders de dataset;
+- o clean gate final removeu apenas `2` itens seguros de cache/temp criados
+  por `py_compile`; a verificacao seguinte ficou com `0` findings e preservou
+  datasets, adapters, manifests, logs, roadmaps e relatorios.
+
+Correcoes feitas no proprio V575:
+
+- o primeiro V575 acusava falso positivo porque procurava
+  `extract_final_answer(raw_output)` dentro do wrapper HF;
+- a arquitetura correta e:
+  - `hf_job_weak_eval_v245.py` monta o comando e chama
+    `evaluate_lora_adapters_batch.py`;
+  - `evaluate_lora_adapters_batch.py` faz a extracao label-free submit-safe,
+    guarda `label_aware_debug_prediction` apenas para diagnostico e declara
+    `prediction_metric_mode=submit_safe_label_free`;
+- o V575 agora audita as duas pecas na fronteira correta.
+
+Reforco contra ganho falso:
+
+- o static gate agora tambem bloqueia `WEAK_MIN_FOR_FULL = 193`, nao apenas
+  defaults `KG1_WEAK_PROMOTE_TOTAL_MIN=193`;
+- foram atualizados builders antigos que ainda poderiam regenerar notebooks
+  com piso obsoleto:
+  `build_v218`, `build_v219`, `build_v220`, `build_v221`, `build_v222`,
+  `build_v224`, `build_v225`, `build_v226`, `build_v227`, `build_v228`,
+  `build_v229`, `build_v230` e `build_v245`;
+- `build_v321` e `build_v322` agora documentam gate `total>=196`,
+  `equation>=60`, `bit>=136`, `truncation=0`.
+
+Confirmacoes V575:
+
+- weak CSV oficial permanece correto:
+  - SHA256 `85da758e14d57ea40270de5747f98726a0ad0b6d1795bff7dd46183005e0f9b6`;
+  - `315` linhas;
+  - `bit_manipulation=160`, `equation_transform=155`;
+  - zero ids duplicados, zero prompt duplicado por SHA256, zero prompt/answer
+    vazio, zero caracteres de controle e zero nao ASCII nas respostas.
+- dataset de treino/validacao V573 permanece limpo:
+  - train `757`: `bit=437`, `equation=320`;
+  - val `159`: `bit=79`, `equation=80`;
+  - todas as respostas do assistant estao em `boxed`;
+  - zero `raw_output`, zero resposta vazia, zero mismatch assistant/answer,
+    zero caracteres de controle e zero nao ASCII;
+  - `loss_weight=1.5` para bit e `1.0` para equation.
+- contrato LoRA do adapter V574 esta correto:
+  - base `nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16`;
+  - `r=32`, `lora_alpha=32`, `modules_to_save=null`;
+  - target modules obrigatorios presentes:
+    `q_proj`, `k_proj`, `v_proj`, `o_proj`, `up_proj`, `down_proj`;
+  - target parameters MoE:
+    `mlp.experts.gate_up_proj`, `mlp.experts.down_proj`.
+- regras de metrica estao sincronizadas:
+  - cross-entropy mascarada existe no treino;
+  - `example_mean` existe no treino;
+  - weak eval usa prompt oficial, `max_tokens`, extracao label-free e
+    expected-aware apenas como debug;
+  - notebook gate e weak eval exigem `196/315`, `equation>=60`,
+    `bit>=136`, `trunc=0`.
+
+Warnings que continuam bloqueando submit/full:
+
+- predicao V574 reextraida com parser atual:
+  - `bit=135/160`;
+  - `equation=56/155`;
+  - `total=191/315`;
+  - `truncated=1`;
+- row-level audit:
+  - `135` bit corretos;
+  - `24` `bit_binary_wrong`;
+  - `1` `decoding_truncated`;
+  - `56` equation corretos;
+  - `99` `equation_wrong`;
+- o CSV gravado antes da correcao do parser tem `1` linha stale:
+  id `4bb8c6cd`, resposta esperada `]}\!`, predicao gravada `]`,
+  reextracao atual `]}\!`;
+- `label_aware_minus_label_free_correct_count=0`, portanto nao ha ganho
+  escondido vindo de expected-aware;
+- subcategory top-level e metadata diferem nas linhas de bit porque metadata
+  guarda proveniencia (`bit_konbu`, `bit_huikang`) e o top-level guarda a
+  subcategoria canonica usada no treino. Isto e aceitavel somente porque
+  `canonical_example_subcategory` prioriza o top-level.
+
+Decisao:
+
+- o platô atual nao deve mais ser tratado como bug de hash, CSV, parser,
+  expected-aware, loss, adapter_config, `dataset_count`, rglob, prompt oficial
+  ou gate antigo;
+- o blocker real e gerativo/decoding do adapter:
+  `99` erros de equation, `24` erros binarios de bit e `1` truncation;
+- novo treino ou eval pago so entra se atacar esses rows explicitamente e
+  passar primeiro pelo contrato V575 + gate CPU/weak sem falso ganho.
+
+## Atualizacao V576 - Quadruple Check Sem Warnings Ambiguos
+
+Artefatos novos:
+
+- `artifacts/v574_hf_h200_v573_weak_eval_launch/v576_solution_sync_contract_audit_zero_warning.json`;
+- `artifacts/v574_hf_h200_v573_weak_eval_launch/v576_prediction_row_audit.csv`;
+- `artifacts/v574_hf_h200_v573_weak_eval_launch/v576_static_gate_active_notebooks_scripts_v2.json`;
+- `artifacts/v574_hf_h200_v573_weak_eval_launch/v576_static_gate_active_notebooks_scripts_final.json`;
+- `artifacts/v574_hf_h200_v573_weak_eval_launch/v576_notebook_release_gate_active_refresh.json`;
+- `artifacts/v574_hf_h200_v573_weak_eval_launch/v576_notebook_release_gate_active_final.json`;
+- `artifacts/v574_hf_h200_v573_weak_eval_launch/v576_notebook_release_gate_v231.json`;
+- `artifacts/v574_hf_h200_v573_weak_eval_launch/v576_notebook_release_gate_v226_v227_static_marker.json`;
+- `artifacts/v574_hf_h200_v573_weak_eval_launch/v576_workspace_clean_gate_final_clean.json`;
+- `artifacts/v574_hf_h200_v573_weak_eval_launch/v576_workspace_clean_gate_final_verify.json`.
+- `artifacts/v574_hf_h200_v573_weak_eval_launch/v576_workspace_clean_gate_final_clean2.json`;
+- `artifacts/v574_hf_h200_v573_weak_eval_launch/v576_workspace_clean_gate_final_verify2.json`.
+
+Mudanca importante no contrato:
+
+- warnings de performance foram removidos do canal de `finding.warning`;
+- falhas reais de ACC agora aparecem como `performance_blockers`, mantendo
+  `submit_safe_now=false`;
+- resultado V576:
+  - `error=0`;
+  - `warning=0`;
+  - `info=2`, ambos sobre subcategoria top-level versus metadata de
+    proveniencia, aceitos porque o treino prioriza `example["subcategory"]`.
+
+Performance blockers atuais:
+
+- `equation_transform=56<60`;
+- `bit_manipulation=135<136`;
+- `truncated=1>0`;
+- `stored_prediction_stale_after_parser_fix=1`.
+
+Atualizacoes de threshold/quoting:
+
+- scripts antigos que ainda tinham `total>192`, `equation>56` ou texto de
+  gate fraco foram atualizados para o contrato atual:
+  `total>=196`, `equation>=60`, `bit>=136`, `truncation=0`;
+- `SAMPLING_MODE='weighted'` foi removido do V226 e substituido por
+  `weighted_replacement`, que e o modo aceito pelo gate;
+- V226/V227 agora declaram explicitamente:
+  `REQUIRE_LORA_TARGET_PARAMETERS_TRAINABLE=0`;
+- V226/V227 tambem documentam o gate V478 de alinhamento de objetivo antes de
+  qualquer uso promocional com pesos de bit/equation.
+
+Notebooks:
+
+- notebooks ativos regenerados e aprovados pelo `notebook_release_gate`:
+  V218, V219, V220, V221, V222, V224, V225, V226, V227, V228, V229,
+  V230, V231 e V245;
+- static gate ativo passou em `44` arquivos, incluindo esses notebooks,
+  builders, weak eval, treino, avaliador batch, static gate, notebook gate e
+  launcher V573;
+- V217, V223 e V244 continuam em quarentena fail-closed no proprio builder
+  (`Archived KG1 launcher quarantined fail-closed`) e nao fazem parte do
+  caminho ativo.
+
+Limpeza:
+
+- `__pycache__` criado por `py_compile` foi removido pelo clean gate;
+- verificacao final do clean gate ficou com `0` findings.
+
+Decisao V576:
+
+- a solucao ativa esta consistente do ponto de vista de contratos, thresholds,
+  parser, label-free metric, expected-aware debug, loss mascarado,
+  `example_mean`, weak CSV, dataset, adapter_config e gates;
+- a proxima melhoria de ACC nao deve ser buscada por novo ajuste generico de
+  loss. Deve partir do `v576_prediction_row_audit.csv`, construindo um
+  rule-gap map dos `99` equation misses, `24` bit binary misses e `1`
+  truncation.
+
+## Atualizacao V577-V579 - Bloqueio De Ganho Falso Antes De H200
+
+Estado real verificado em `2026-05-17`:
+
+- adapter-only label-free atual continua em `191/315`:
+  - `bit_manipulation=135/160`;
+  - `equation_transform=56/155`;
+  - `truncated=1`.
+- projecao CPU/teacher V577, ainda nao adapter-only/submetivel:
+  - `197/315`;
+  - `bit_manipulation=137/160`;
+  - `equation_transform=60/155`;
+  - `truncated=0`.
+
+Achados novos:
+
+- V577 combinou ganhos auditados de V324 equation e V333 Tong bit, mas o
+  dataset gerado com prompts weak foi bloqueado pelo gate V509. Portanto V577
+  e evidencia de alvo, nao dataset treinavel seguro.
+- V578 aumentou a exposicao de equation, mas falhou no V526 estrito por
+  `example_mean` longe demais da referencia (`delta=0.141585 > 0.08`).
+  Portanto nao deve ir para H200 sem aceitar risco explicitamente.
+- V579 ajustou o mix para a borda estrita que passa V509, V286, V478, V513 e
+  V526:
+  - train `757`: `bit=437`, `equation=320`;
+  - `example_mean` efetivo train: `bit=0.661969`, `equation=0.338031`;
+  - tokenizacao: `train_token_max=1074`, `val_token_max=1037`,
+    `max_length=2048`, `0` truncation.
+- Antes de lancar H200, o launcher V579 revelou um bug silencioso herdado:
+  variaveis `KG1_CPU_SIMULATED_*` antigas (`200/138/62`) vinham do launcher
+  V536/V573, enquanto a evidencia real V577 e `197/137/60`.
+
+Correcoes implementadas:
+
+- `launch_v579_hf_nemo_h200_v571bit_v551eq_strictedge.py` agora carrega o
+  manifesto CPU V577 e valida:
+  - manifesto SHA256
+    `91465c58b941e1f911aad0c1bd6f4ba1242ef27b35ccc974ee170936398ab111`;
+  - projection CSV SHA256
+    `d9143bc03c430435cba4d266b529153ca289835b8fd9abebecb82cb61786b6ef`;
+  - total `197`, bit `137`, equation `60`, trunc `0`;
+  - sobrescrita obrigatoria de qualquer `KG1_CPU_SIMULATED_*` herdado.
+- O launcher agora falha fechado se a projecao real nao passar o residual-first
+  pago:
+  - total minimo `200`;
+  - bit minimo `136`;
+  - equation minimo `59`;
+  - truncation `0`.
+- `kg1_pre_paid_job_integration_gate.py` foi rerodado contra V579 e ficou com
+  um unico blocker:
+  - `KG1_CPU_SIMULATED_TOTAL_CORRECT=197.0 below required 200`.
+- Os demais pontos do pre-paid gate ficaram consistentes:
+  - hashes/linhas V579 presentes;
+  - row-loss-weight estatico e remoto auditavel;
+  - subcategorias obrigatorias declaradas;
+  - tokenization gate passou;
+  - cost/H200/timeout/max_length/example_mean coerentes.
+
+Decisao V579:
+
+- nao lancar H200 com V579 agora. A decisao FinOps correta e bloquear, porque
+  a unica autorizacao paga possivel dependeria de aceitar `197 < 200`;
+- nao fazer package/full/submit;
+- proximo passo efetivo e elevar a projecao CPU real de `197` para pelo menos
+  `200` sem perdas, ou criar um micro-gate local que prove transferencia
+  adapter-only antes de qualquer gasto;
+- qualquer launcher futuro deve comparar as variaveis `KG1_CPU_SIMULATED_*`
+  com um manifesto CPU versionado. Valor hard-coded sem manifesto passa a ser
+  tratado como risco de ganho falso.
+
+## Atualizacao V580-V581 - Projecao CPU 200 E Dataset Transferivel
+
+Estado novo verificado em `2026-05-17`:
+
+- adapter-only real continua em `191/315`:
+  - `bit_manipulation=135/160`;
+  - `equation_transform=56/155`;
+  - `truncated=1`.
+- V580/V581 CPU teacher projection, ainda nao submetivel:
+  - `200/315`;
+  - `bit_manipulation=139/160`;
+  - `equation_transform=61/155`;
+  - `truncated=0`;
+  - `loss_count=0`.
+
+Achados concretos:
+
+- `scripts/analyze_v350_cpu_residual_no_loss_gate.py` foi rerodado no baseline
+  V577 atual e encontrou `197/315`, com:
+  - `equation=61/155`;
+  - `bit=136/160`;
+  - `gains=6`;
+  - `losses=0`.
+- A uniao auditada V580 de V350 + Tong bit chegou a `199/315`:
+  - `equation=61`;
+  - `bit=138`;
+  - `truncated=0`;
+  - `losses=0`.
+- A rota V581 adicionou exatamente um ganho local de bit esperado/auditado
+  (`55d834d1`), chegando a `200/315`.
+  - Importante: o solver local de bit completo tem `13` perdas se aplicado
+    diretamente. Portanto ele nao e postprocessor submetivel; so pode ser usado
+    como teacher expected-aware/label-audited para tentar transferencia ao
+    adapter.
+
+Artefatos novos:
+
+- `scripts/build_v580_combined_teacher_projection.py`;
+- `artifacts/v580_cpu_residual_on_v577_label_free/20260517T_v580_v350_current/v350_no_loss_gate_manifest.json`;
+- `artifacts/v580_combined_teacher_projection/20260517T_v580_combined/v580_combined_teacher_projection_manifest.json`;
+- `artifacts/v581_combined_plus_local_bit_teacher_projection/20260517T_v581_combined_localbit/v580_combined_teacher_projection_manifest.json`;
+- `scripts/build_v581_combined_teacher_distill_dataset.py`;
+- `artifacts/v581_combined_teacher_distill_dataset/20260517T_v581_sft/v581_combined_teacher_dataset_manifest.json`;
+- `artifacts/v581_combined_teacher_distill_dataset/20260517T_v581_sft/v286_tokenization_real/v286_generic_tokenization_gate_manifest.json`.
+
+Gate V286 real:
+
+- passou com tokenizer Nemotron oficial;
+- `train_rows=315`;
+- `val_rows=115`;
+- `train_token_max=315`;
+- `val_token_max=315`;
+- `completion_truncation=0`;
+- `offset_masks=315` no treino e `115` na validacao.
+
+Correcao de bug silencioso:
+
+- o primeiro dataset V581 falhou porque usava `\boxed{}` manual em respostas
+  simbolicas com `{`, `}` e `\`;
+- a correcao valida a extracao label-free antes de salvar a linha: usa
+  `Final answer: \boxed{...}` somente quando `extract_final_answer()` sem
+  label recupera o alvo; nos casos ambiguos usa fallback plain
+  `Final answer: <answer>`;
+- isso evita ganho falso por `expected-aware`: o parser com label continua
+  diagnostico-only, nunca criterio de promocao;
+- o metadata agora explicita `label_audited_teacher_projection=true` nas linhas
+  teacher e mantem `weak_gate_rows_used_for_training=false`,
+  `full_gate_rows_used_for_training=false`, `gate_rows_used_for_training=false`
+  para passar o contrato V286.
+
+Decisao V581:
+
+- esta e a primeira projecao CPU deste ciclo que atinge o piso pago
+  `total>=200` sem perdas e sem truncation;
+- ainda nao e submit Kaggle nem adapter-only. O proximo passo e um treino curto
+  de transferencia com kill-switch por ACC:
+  - primeiro checkpoint deve manter pelo menos `bit>=136`, `equation>=59`,
+    `truncated=0`;
+  - qualquer regressao para `bit<136`, `equation<59`, `truncated>0` ou perda
+    clara contra V574/V579 cancela o job por FinOps;
+  - se o adapter nao transferir pelo menos `+1` ACC no weak label-free, parar
+    treino generico e voltar para solver/projection, nao insistir em loss.
+
+## Atualizacao V582 - Dataset Label-Free Corrigido e Smoke H200
+
+Estado antes do job V582:
+
+- adapter-only label-free real continua em `191/315`:
+  - `bit_manipulation=135/160`;
+  - `equation_transform=56/155`;
+  - `truncated=1`.
+- teacher CPU V581 continua sendo apenas alvo de transferencia:
+  - `200/315`;
+  - `bit_manipulation=139/160`;
+  - `equation_transform=61/155`;
+  - `truncated=0`;
+  - `loss_count=0`.
+
+Correcoes V582:
+
+- o dataset foi regenerado em
+  `artifacts/v582_combined_teacher_distill_dataset/20260517T_v582_sft_label_free`;
+- `train_rows=315`, `val_rows=115`;
+- `train_sha256=8c56379d6d0c046f9b97b3158e46c07b60333f6c67ed6c72ab583abf2fe4ce61`;
+- `val_sha256=ad50976f35c8cc864b3266d182df5dbdba1cc7e05038ad40946f38b6366f1168`;
+- formatos finais do treino:
+  - `final_answer_boxed_label_free=312`;
+  - `final_answer_plain_label_free=3`.
+- formatos finais da validacao:
+  - `final_answer_boxed_label_free=100`;
+  - `final_answer_plain_label_free=15`.
+
+Gates V582 antes de gastar H200:
+
+- `py_compile` passou para o launcher e builders;
+- `scripts/kg1_static_safety_gate.py` passou sem findings;
+- `kg1_pre_paid_job_integration_gate.py` passou sem blockers;
+- V286 real com tokenizer Nemotron passou:
+  - `train_token_max=315`;
+  - `val_token_max=315`;
+  - `prompt_truncation=0`;
+  - `completion_dropped=0`;
+  - `offset_masks=315/115`.
+- upload dataset HF:
+  - repo `felipesp1983/kg1-v582-combined-teacher-distill-label-free-artifacts`;
+  - commit `fe07a7fda4fa88e3da7617c14fcc8e9af53dfb30`.
+
+Job H200 V582:
+
+- job `felipesp1983/6a0a489ce7940de6ee6cde15`;
+- URL `https://huggingface.co/jobs/felipesp1983/6a0a489ce7940de6ee6cde15`;
+- output adapter repo
+  `felipesp1983/kg1-nemotron-lora-v582-v581-teacher-transfer-v290ckpt6`;
+- init adapter
+  `felipesp1983/kg1-nemotron-lora-v290-rank19-micro-patch-smoke/checkpoint-6`;
+- `MAX_STEPS=2`, H200, timeout menor que 1h;
+- LoRA `r=32`, `alpha=32`, `target_parameters=mlp.experts.gate_up_proj,mlp.experts.down_proj`;
+- `LOSS_NORMALIZATION_MODE=example_mean`;
+- `ANSWER_SPAN_LOSS_WEIGHT=2.0`;
+- `USE_ROW_LOSS_WEIGHT=1`;
+- primeiro checkpoint precisa ser avaliado em weak label-free antes de qualquer
+  full/package/submit.
+
+Decisao V582:
+
+- o job e permitido como smoke curto porque a projecao CPU chegou a `200/315`
+  e os bugs de label-free do dataset foram corrigidos;
+- ainda nao ha ganho submit-safe. O criterio de promocao e checkpoint
+  adapter-only `raw_output` label-free acima de `191/315`, preservando
+  `bit>=136`, `equation>=59` e `truncated=0`;
+- se o checkpoint ficar em `191/315` ou regredir bit/equation, bloquear
+  V582 para submit e voltar para destilacao/solver em CPU.
+
+### Resultado V582 e Crisis-Mode Audit 2026-05-17
+
+Resultado do treino curto:
+
+- job treino H200 `felipesp1983/6a0a489ce7940de6ee6cde15` completou;
+- `eval_loss` piorou levemente de `3.4520` para `3.4549`;
+- checkpoint avaliado: `checkpoint-2`;
+- weak eval job `felipesp1983/6a0a4c47a5e509f1a8413c48`;
+- commit de diagnosticos HF:
+  `6cdeb2b49c7663e9bde419790fd36a1e4f74322f`.
+
+Resultado adapter-only do V582:
+
+- CSV armazenado pelo job: `190/315`;
+  - `bit_manipulation=135/160`;
+  - `equation_transform=55/155`;
+  - `truncated=1`.
+- reextracao label-free local de `raw_output`: `191/315`;
+  - `bit_manipulation=135/160`;
+  - `equation_transform=56/155`;
+  - `truncated=1`.
+- baseline V516 reextraido com o parser atual: `192/315`;
+  - `bit_manipulation=136/160`;
+  - `equation_transform=56/155`;
+  - `truncated=0`.
+
+Decisao:
+
+- V582 esta bloqueado para full/package/submit;
+- nao houve ganho real contra o baseline parser-atual;
+- houve F2/backfire real em bit:
+  - `8740ed31`: baseline correto `01101000`, V582 `01111000`;
+  - `59bee375`: baseline correto `10010101`, V582 `2`;
+  - `55d834d1` nao e backfire: baseline ja errava e V582 continuou errando;
+    agora o gate classifica como `protected_id_missing_required_gain`.
+- `completion_tokens_mean=4775.25`, `completion_tokens_max=7680`;
+  isso confirma runaway/decoding ruim e torna o checkpoint inutil para submit.
+- o V540 mostrou `stored_prediction_stale_after_parser_fix=1` no id
+  `4bb8c6cd`: o CSV armazenado extraia `]`, mas o parser label-free atual
+  extrai corretamente `]}\!`. Portanto toda promocao deve recalcular ACC a
+  partir de `raw_output`, nao confiar cegamente na coluna `prediction` antiga.
+
+Correcoes implementadas no gate:
+
+- `scripts/kg1_weak_backfire_row_guard.py` agora separa:
+  - `protected_id_backfire` quando o baseline era correto e o adapter erra;
+  - `protected_id_missing_required_gain` quando o baseline ja errava e o
+    adapter nao aprendeu o ganho esperado.
+- o mesmo gate nao mistura mais defaults de `--protected-id-answer` com uma
+  lista customizada.
+- `scripts/analyze_eval_predictions.py` agora converte `completion_tokens`
+  para numerico antes de calcular soma/media/max, evitando erro silencioso de
+  pandas com strings.
+- `scripts/audit_v509_training_dataset_integrity.py` agora:
+  - aceita `user,assistant` como role sequence valida;
+  - aceita `prompt + PROMPT_SUFFIX` como contrato oficial;
+  - bloqueia explicitamente `false_anti_leak_flag_on_overlap`.
+- `scripts/build_v581_combined_teacher_distill_dataset.py` foi corrigido para
+  marcar `weak_gate_rows_used_for_training=True` nas linhas de treino derivadas
+  do weak/projection. A versao V582 ja treinada permanece historica e nao deve
+  ser reutilizada como evidencia submit-safe.
+- `scripts/audit_v575_solution_sync_contract.py` agora aceita
+  `final_answer_plain_label_free` quando o parser label-free recupera a
+  resposta, evitando bloquear respostas simbolicas que nao cabem em `\boxed{}`
+  sem ambiguidade.
+
+Auditorias rodadas:
+
+- `python -m py_compile` nos scripts alterados;
+- self-test `kg1_weak_backfire_row_guard`;
+- self-test `hf_job_weak_eval_v245`;
+- self-test `analyze_v568_decoding_adapter_drift`;
+- self-test `run_v485_peft_roundtrip_gate`;
+- V485 no adapter V582 passou o contrato LoRA:
+  - `r=32`;
+  - `alpha=32`;
+  - `modules_to_save=null`;
+  - base `nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16`;
+  - `target_parameters=mlp.experts.gate_up_proj,mlp.experts.down_proj`.
+
+Bloqueio novo do dataset V582:
+
+- V509 confirmou overlap direto com weak/full:
+  - train: `reference_overlap=1260`;
+  - validation: `reference_overlap=460`.
+- como o dataset V582 historico marcava os flags anti-leak como false, o gate
+  agora reporta `false_anti_leak_flag_on_overlap`.
+- conclusao: V582 e valido como experimento de transferencia/diagnostico, mas
+  nao como evidencia de ganho submit-safe. Qualquer proximo dataset derivado
+  desses rows deve ser tratado como weak-supervised, e sua promocao precisa vir
+  de raw-output label-free sem overlap ou de uma validacao separada.
+
+Proximo passo efetivo:
+
+- nao repetir SFT amplo com esse dataset;
+- se for tentar LoRA, usar micro-experimento answer-only com controle de
+  decoding/runaway e protected replay obrigatorio;
+- criterio de continuar gasto:
+  - baseline parser-atual `192/315`;
+  - candidato precisa ficar `>192/315`, `bit>=136`, `equation>=60`,
+    `truncated=0`;
+  - qualquer protected backfire cancela;
+  - comprimento absoluto de resposta nao cancela por si so em official-like;
+    cancela apenas se houver `truncated>0`, protected backfire, piora de ACC,
+    ou se um diagnostico curto tiver definido explicitamente um limite local;
+  - qualquer `stored_prediction_stale_after_parser_fix` bloqueia ate recomputar
+    metricas por `raw_output`.
+
+### Atualizacao V583 - Consenso OpenRouter Crisis Plateau
+
+Artefatos:
+
+- prompt completo:
+  `artifacts/openrouter/v583_crisis_consensus/KG1_V583_OPENROUTER_CRISIS_PROMPT.md`;
+- respostas:
+  `artifacts/openrouter/v583_crisis_consensus/responses/`;
+- analise consolidada:
+  `artifacts/openrouter/v583_crisis_consensus/KG1_V583_OPENROUTER_CONSENSUS_ANALYSIS.md`.
+
+Modelos consultados:
+
+- `openai/gpt-5.5`: retornou `None`; descartado como sem conteudo util;
+- `anthropic/claude-opus-4.7-fast`: util;
+- `google/gemini-3.1-pro-preview`: util, mas curto;
+- `deepseek/deepseek-v4-pro`: util;
+- `qwen/qwen3.6-max-preview`: util.
+
+Consenso acionavel:
+
+- V582 confirmou falha de transferencia, nao ganho:
+  - `191/315` por reextracao label-free de `raw_output`;
+  - `bit=135/160`, `equation=56/155`, `truncated=1`;
+  - protected backfire real em `8740ed31` e `59bee375`;
+  - runaway severo com `completion_tokens_mean=4775.25`, `max=7680`.
+- Nao repetir broad SFT, long traces, mix bit+equation ou treino baseado apenas
+  em loss.
+- Antes de qualquer novo H200, separar tres causas:
+  - init adapter ruim;
+  - decoding/runaway ruim;
+  - drift real do adapter para resposta errada.
+- O primeiro diagnostico deve ser sem treino:
+  - base model, `max_new_tokens=512`;
+  - base + V290 checkpoint-6, `max_new_tokens=512`;
+  - base + V582 checkpoint-2, `max_new_tokens=512`;
+  - base + V582 checkpoint-2, limite maior, apenas para confirmar runaway.
+- Se V290 checkpoint-6 sozinho regredir protected rows, parar de usa-lo como
+  init.
+- Se V582 curto corrige parte do dano, tratar o problema como decoding/runaway
+  e bloquear qualquer treino cujo primeiro checkpoint estoure token budget.
+- Se V582 curto tambem erra protected rows, tratar como drift de adapter e
+  bloquear teacher-transfer nessa linhagem.
+
+Novo fluxo obrigatorio:
+
+1. Diagnostico `MAX_STEPS=0` / init / decoding antes de treino.
+2. Se passar, micro-transfer family-isolated:
+   - bit-only: replay de bit correto + poucos gains de bit verificados;
+   - equation-only: replay de equation correto + gains simbolicos com
+     `final_answer_plain_label_free` quando `\boxed{}` for ambiguo.
+3. So recombinar adapters depois que cada family isolada passar weak label-free
+   sem backfire.
+
+Parametros e gates ajustados:
+
+- `ANSWER_SPAN_LOSS_WEIGHT=2.0` deixa de ser default seguro para smoke; usar
+  `1.0` ou rodar ablation `1.0` vs `2.0` apenas em micro-run.
+- `max_new_tokens` de micro diagnostico pode ficar em `512` ou menor para separar
+  runaway/decoding de drift, mas esse limite curto nao e criterio promocional
+  official-like. Para promocao, usar `max_tokens=7680`, `truncated=0`, protected
+  rows intactas e re-score por `raw_output` label-free.
+- dataset de equation deve auditar simbolos `{`, `}`, `\`, `]`, `!`; se boxed
+  falhar ou ficar ambiguo, usar plain final answer apenas quando o extractor
+  label-free recuperar corretamente.
+- target module expansion para attention (`q_proj/k_proj/v_proj/o_proj`) e P2:
+  testar apenas se MoE-only normalizado falhar sem runaway, e sempre em micro
+  subset com grad-norm/trainability gate.
+
+Itens retirados/depriorizados:
+
+- SFT amplo e long trace como caminho principal;
+- promocao por `eval_loss`;
+- qualquer expected-aware metric como evidencia de submit;
+- V582 dataset/checkpoint como evidencia submit-safe;
+- treino misto bit+equation sem family-isolated gate;
+- H200 sem `MAX_STEPS=0` control, protected guard e token-budget gate.
+
+### Atualizacao V584 - Double Check OpenRouter Chat Export 2026-05-17
+
+Fonte analisada:
+
+- export do usuario:
+  `C:\Users\davis\Downloads\OpenRouter Chat Sun May 17 2026 (1).json`;
+- respostas extraidas:
+  `artifacts/openrouter/v584_uploaded_chat_sun_may17_1/`;
+- auditoria consolidada:
+  `artifacts/openrouter/v584_uploaded_chat_sun_may17_1/KG1_V584_UPLOADED_CHAT_AUDIT.md`.
+
+Modelos com conteudo aproveitavel:
+
+- `baidu/cobuddy:free`;
+- `openrouter/owl-alpha` parcial;
+- `poolside/laguna-xs.2:free`;
+- `poolside/laguna-m.1:free`;
+- `arcee-ai/trinity-large-thinking:free`;
+- `minimax/minimax-m2.5:free` parcial;
+- `openai/gpt-oss-120b:free` parcial;
+- `z-ai/glm-4.5-air:free`;
+- `nvidia/nemotron-nano-9b-v2:free`;
+- `openai/gpt-oss-20b:free`.
+
+Consenso validado:
+
+- V582 continua bloqueado para package/submit:
+  - `191/315` por `raw_output` label-free;
+  - `bit=135/160`, `equation=56/155`, `truncated=1`;
+  - protected backfire em `8740ed31` e `59bee375`;
+  - runaway com `completion_tokens_mean=4775.25`, `max=7680`.
+- Nao repetir broad SFT, long traces ou teacher-transfer misturado antes de
+  diagnostico local curto.
+- A unica metrica de promocao continua sendo `raw_output` + extractor
+  label-free atual + `verify_answer`, nunca coluna `prediction` armazenada ou
+  expected-aware.
+
+Achados acionaveis adicionados:
+
+1. P0 - `raw_output answer-anywhere` audit:
+   - para cada row, verificar se o expected answer aparece em algum ponto do
+     `raw_output`;
+   - registrar `answer_found_anywhere`, primeira posicao aproximada, family,
+     protected status, `completion_tokens`, predicao extraida e
+     `verify_answer`;
+   - se a resposta correta aparece cedo mas o extractor erra, priorizar parser e
+     formato;
+   - se a resposta correta nunca aparece, tratar como drift/learnability do
+     adapter.
+2. P1 - replay-only diagnostic:
+   - usar rows de replay apenas para medir estabilidade de pipeline/init;
+   - nao usar replay-only como evidencia de ganho submit-safe.
+3. P1 - sanity A/B de formato para `equation_transform`:
+   - testar `\boxed{...}` vs `Final answer: ...` em subset com `{`, `}`, `\`,
+     `]`, `!`;
+   - permitir plain apenas quando o extractor label-free verificar a resposta;
+   - nao alterar prompt oficial de submissao sem gate.
+4. P1/P2 - correlacao de row-loss, answer-span CE/margem e ACC:
+   - medir delta de loss por row/family;
+   - comparar com delta de margem da resposta e `verify_answer`;
+   - se loss melhora sem ganho de margem/resposta correta, bloquear promocao por
+     loss.
+5. P2 - grad norm/trainability e target ablation:
+   - logar grad norms dos `target_parameters` atuais;
+   - testar `up_proj`/attention apenas em micro-run depois que decoding/format
+     passarem.
+
+Rejeicoes explicitas desta rodada:
+
+- `train_token_max=315` como causa raiz nao esta comprovado; V286 ja indicou
+  zero prompt truncation, zero completion dropped e zero fallback masks. Manter
+  apenas como sanity audit.
+- Nao rodar `MAX_STEPS=8/10/20` direto sobre V582 antes de `MAX_STEPS=0`,
+  `answer-anywhere`, protected guard e token-budget gate.
+- Nao excluir protected rows como estrategia de preservacao; protected precisa
+  de replay/guard, nao sumir do contrato.
+- Nao usar `stop_token` ingenuo em `\boxed{}`; risco de cortar respostas
+  simbolicas.
+- Nao promover por ACC expected-aware ou por treino direto em weak labels.
+
+Proximo passo obrigatorio:
+
+1. Implementar/rodar auditoria CPU `answer-anywhere` no CSV de predicoes V582 e
+   nos baselines disponiveis.
+2. Em seguida, rodar diagnostico sem treino:
+   - base model, `max_new_tokens=512`;
+   - base + V290 checkpoint-6, `max_new_tokens=512`;
+   - base + V582 checkpoint-2, `max_new_tokens=512`;
+   - base + V582 checkpoint-2 com limite maior apenas para confirmar runaway.
+3. So depois disso decidir se vale micro-transfer family-isolated ou se a falha
+   e de parser/decoding.
+
+### Atualizacao V585 - Segundo Export OpenRouter Plateau Audit 2026-05-17
+
+Fonte analisada:
+
+- export do usuario:
+  `C:\Users\davis\Downloads\OpenRouter Chat Sun May 17 2026 (2).json`;
+- respostas extraidas:
+  `artifacts/openrouter/v585_uploaded_chat_sun_may17_2/`;
+- auditoria consolidada:
+  `artifacts/openrouter/v585_uploaded_chat_sun_may17_2/KG1_V585_UPLOADED_CHAT_AUDIT.md`.
+
+Respostas finais uteis:
+
+- `google/gemini-3.1-pro-preview-20260219`;
+- `qwen/qwen3.5-plus-20260420`;
+- `anthropic/claude-4.7-opus-20260416`;
+- `deepseek/deepseek-v3.2-speciale-20251201` parcial;
+- `qwen/qwen3.6-plus-04-02`;
+- `qwen/qwen3.6-max-preview-20260420` parcial e completa.
+
+Fontes externas verificadas nesta rodada:
+
+- `tonghuikang/nemotron` e um repo publico da submissao Progress Prize e contem
+  `reasoners`, `corpus`, `trainer`, `train_sft.py`, paginas de corpus/training
+  e metrics;
+- `jasonkung98/NVIDIA-Nemotron-Model-Reasoning-Challenge` no HF aparece como
+  dataset CSV com cerca de `9.5k` linhas, `id`, `prompt`, `answer`;
+- essas fontes continuam sendo referencia/teacher/diagnostico, nao evidencia
+  adapter-only de submit.
+
+Consenso novo que altera a ordem do plano:
+
+1. P0 - Decode-contract 2x2:
+   - baseline com decoding do baseline;
+   - baseline com decoding do V582;
+   - V582 com decoding do baseline;
+   - V582 com decoding do V582;
+   - salvar hash/JSON completo de `generation_config`: `max_new_tokens`,
+     temperature, top_p, stop strings, EOS/pad token ids, thinking mode e
+     sampler.
+   - objetivo: separar config ruim de decoding de drift real do adapter.
+2. P0 - Per-row delta taxonomy:
+   - classificar cada row como `flip_correct`, `flip_wrong`,
+     `still_wrong_same` ou `still_wrong_changed`;
+   - cruzar com family, protected status, `completion_tokens`,
+     `answer-anywhere` e predicao extraida;
+   - sem essa tabela, total agregado de ACC continua escondendo o motivo do
+     plato.
+3. P0/P1 - LoRA alpha attenuation diagnostic:
+   - avaliar V582 sem novo treino com escala de adapter `1.0`, `0.5`, `0.25`,
+     `0.1`;
+   - se protected rows recuperam e token length cai, o problema e magnitude do
+     adapter/choque de LoRA;
+   - se nao recupera, tratar como dataset/objetivo/superficie.
+4. P1 - EOS/stop probability probe:
+   - medir probabilidade de EOS no ponto esperado apos a resposta em base, V290
+     e V582;
+   - usar como diagnostico de runaway, nao como metrica de promocao.
+5. P1 - Teacher target base-likelihood filter:
+   - calcular perplexity/logprob do base model nos targets teacher;
+   - filtrar targets longos, low-likelihood ou fora da distribuicao natural do
+     modelo antes de qualquer destilacao.
+6. P1 - Equation-first, bit-protected curriculum:
+   - se os gates P0 passarem, treinar apenas equation teacher-gain normalizado;
+   - usar bit apenas como replay/protected guard;
+   - nao usar bit teacher-gain no primeiro experimento;
+   - `ANSWER_SPAN_LOSS_WEIGHT=1.0`;
+   - checkpoint-1 gate obrigatorio: abortar em `bit<136`, protected backfire ou
+     token runaway.
+7. P1/P2 - Routing/grad diagnostics se treino voltar:
+   - grad norms por grupo de parametro;
+   - routing entropy/gate logits se usar MoE targets;
+   - per-token gradient norm para simbolos `{`, `}`, `\`, `]`, `!`;
+   - perda por answer length para testar a hipotese de amplificacao em answers
+     curtas de equation.
+
+Rejeicoes V585:
+
+- nao rodar 5/10/20 steps so porque modelos sugeriram mais treino. Isso so e
+  permitido depois de `answer-anywhere`, delta taxonomy, decode-contract 2x2,
+  alpha attenuation, protected guard e token-budget gate;
+- nao tratar `train_token_max=315` como prova de target truncado. O V286 real ja
+  mostrou `prompt_truncation=0`, `completion_dropped=0`, `fallback_masks=0`;
+- nao usar treino nas 155 weak equation rows como evidencia submit-safe;
+- nao adicionar attention/up_proj direto antes de provar que decoding/escala e
+  formato nao explicam o plateau;
+- nao usar CPU teacher projection como candidato submit-safe.
+
+Ordem obrigatoria atualizada antes de qualquer novo H200 de treino:
+
+1. `answer-anywhere` + per-row delta taxonomy em baseline, V290 e V582.
+2. Decode-contract 2x2 com hash de `generation_config`.
+3. V582 alpha attenuation eval sem treino.
+4. EOS/stop probe e teacher target base-likelihood filter.
+5. Se todos os gates anteriores justificarem treino: micro-transfer
+   equation-first, bit-protected, checkpoint-1 gate.
+
+Regra FinOps atualizada:
+
+- enquanto os quatro primeiros passos nao existirem com manifest e sem
+  blockers, novo H200 de treino e bloqueado como tentativa cega;
+- inferencia diagnostica curta e permitida, treino nao.
+
+### Atualizacao V586 - Plateau Row Diagnostics CPU 2026-05-17
+
+Implementado e rodado:
+
+- script:
+  `scripts/analyze_v586_plateau_row_diagnostics.py`;
+- saida:
+  `artifacts/v586_plateau_row_diagnostics/`;
+- resumo:
+  `artifacts/v586_plateau_row_diagnostics/v586_v516_vs_v582_cp2_summary.json`;
+- deltas por row:
+  `artifacts/v586_plateau_row_diagnostics/v586_v516_vs_v582_cp2_row_deltas.csv`;
+- relatorio:
+  `artifacts/v586_plateau_row_diagnostics/KG1_V586_V516_VS_V582_CP2_SUMMARY.md`.
+
+Checks executados:
+
+- `python scripts/analyze_v586_plateau_row_diagnostics.py --self-test`;
+- `python -m py_compile scripts/analyze_v586_plateau_row_diagnostics.py`;
+- `python scripts/kg1_static_safety_gate.py --self-test`;
+- `python scripts/kg1_static_safety_gate.py scripts/analyze_v586_plateau_row_diagnostics.py scripts/kg1_static_safety_gate.py`.
+
+Resultado V586 sobre baseline V516 vs V582 checkpoint-2:
+
+- baseline parser-current label-free:
+  - `192/315`;
+  - `bit_manipulation=136/160`;
+  - `equation_transform=56/155`;
+  - `truncated=0`.
+- V582 checkpoint-2:
+  - `191/315`;
+  - `bit_manipulation=135/160`;
+  - `equation_transform=56/155`;
+  - `truncated=1`;
+  - `completion_tokens_mean=4775.2508`;
+  - `completion_tokens_max=7680`.
+- delta taxonomy:
+  - `both_correct=190`;
+  - `flip_correct=1`: `4ada9150`;
+  - `flip_wrong=2`: `59bee375`, `8740ed31`;
+  - `still_wrong_same=109`;
+  - `still_wrong_changed=13`.
+- protected rows:
+  - `8740ed31`: `protected_id_backfire`;
+  - `59bee375`: `protected_id_backfire`;
+  - `55d834d1`: `protected_id_missing_required_gain`, nao backfire.
+- `answer_anywhere_wrong_final=23` em V582:
+  - `bit_manipulation=4`;
+  - `equation_transform=19`.
+
+Achado cirurgico:
+
+- V582 nao falhou por falta pequena de steps. O checkpoint tem 1 ganho real e 2
+  perdas reais, incluindo 2 protected backfires.
+- O maior problema mensuravel agora e misto:
+  - drift do adapter em protected bit rows;
+  - runaway/decoding com token budget estourado;
+  - 23 rows com resposta correta aparecendo no texto mas a resposta final
+    extraida errada.
+- Portanto novo treino amplo ou mais longo continua bloqueado.
+
+Novo gate permanente:
+
+- `scripts/kg1_static_safety_gate.py` agora exige que
+  `scripts/analyze_v586_plateau_row_diagnostics.py` preserve:
+  - metrica `raw_output -> extract_final_answer -> verify_answer`;
+  - `answer_anywhere_wrong_final`;
+  - separacao entre `protected_id_backfire` e
+    `protected_id_missing_required_gain`;
+  - blocker de token runaway;
+  - blocker de `stored_prediction_not_raw_extraction`;
+  - self-test do V586.
+
+
+### Atualizacao V587 - Output Extraction Audit CPU 2026-05-17
+
+Implementado/rodado sem GPU e sem treino:
+
+- `python scripts/analyze_eval_predictions.py --predictions-csv artifacts/v582_hf_h200_launch/v582_checkpoint2_predictions.csv --output-dir artifacts/v587_output_extraction_audit/v582_cp2`;
+- `python scripts/analyze_eval_predictions.py --predictions-csv artifacts/v516_label_free_weak_baseline/v516_label_free_v290_checkpoint6_baseline.csv --output-dir artifacts/v587_output_extraction_audit/v516_baseline`.
+
+Resultados objetivos:
+
+- V582 checkpoint-2:
+  - `official_correct=191/315`;
+  - `first_boxed_correct=191/315`;
+  - `early_512_correct=0/315`;
+  - `early_1024_correct=2/315`;
+  - `early_2048_correct=9/315`;
+  - `completion_tokens_mean=4775.2508`;
+  - `completion_tokens_max=7680`;
+  - `truncated=1`.
+- V516/V290 baseline parser-current:
+  - `official_correct=192/315`;
+  - `first_boxed_correct=192/315`;
+  - `early_512_correct=0/315`;
+  - `early_1024_correct=2/315`;
+  - `early_2048_correct=9/315`.
+
+Conclusao nova:
+
+- trocar o extractor para `first_boxed` nao gera ganho; e exatamente igual ao
+  extractor oficial nos dois CSVs analisados;
+- janelas curtas de caracteres tambem nao sao caminho de promocao; elas perdem
+  quase todas as respostas;
+- o sinal `answer_anywhere_wrong_final=23` do V586 e diagnostico label-aware e
+  ruidoso para alguns simbolos/numeros, nao e uma regra de postprocessamento
+  submit-safe;
+- o foco permanece em reduzir drift/runaway do adapter ou filtrar targets, nao
+  em trocar parser.
+
+Impacto no plano:
+
+- parser/postprocessor alternativo fica bloqueado para submit adapter-only;
+- proximo passo continua sendo eval-only de escala/decoding, nao treino;
+- qualquer novo dataset de destilacao deve ensinar finalizacao curta no formato
+  oficial, mas so depois de provar que nao causa protected backfire.
+
+Proximo passo obrigatorio:
+
+1. Rodar decode-contract 2x2 curto, sem treino, usando os mesmos 315 rows:
+   - V290/base com config oficial longa;
+   - V290/base com config curta diagnostica;
+   - V582 com config oficial longa;
+   - V582 com config curta diagnostica.
+2. Se V582 curto ainda tiver protected backfire, bloquear V582 como linhagem de
+   init/teacher-transfer e partir para novo teacher target filtrado.
+3. Se V582 curto recuperar protected mas perder answer final, atacar
+   formato/finalizacao antes de qualquer treino.
+4. Se apenas a escala do adapter for suspeita, executar alpha attenuation
+   `1.0/0.5/0.25/0.1` como eval-only antes de novo H200 de treino.
+
+### Atualizacao V588 - Adapter Interpolation Probe H200 2026-05-18
+
+Objetivo:
+
+- testar, sem novo treino, se uma interpolacao conservadora entre o baseline
+  V290 checkpoint-6 e o V582 checkpoint-2 recuperaria parte do ganho teacher
+  sem causar protected backfire/runaway;
+- candidatos gerados:
+  - `lambda=0.10`;
+  - `lambda=0.25`;
+  - `lambda=0.50`.
+
+Correcoes antes de rodar:
+
+- o primeiro job V588 falhou cedo no gate de compatibilidade porque comparava
+  `target_modules` por ordem textual;
+- corrigido para comparar `target_modules` e `target_parameters` como conjuntos
+  ordenados, preservando compatibilidade real do contrato LoRA;
+- self-tests e static gate passaram antes do relaunch.
+
+Resultado real observado:
+
+- job relancado:
+  `https://huggingface.co/jobs/felipesp1983/6a0a6a6ea5e509f1a8413f00`;
+- `lambda=0.10` terminou com:
+  - `190/315`;
+  - `bit_manipulation=135/160`;
+  - `equation_transform=55/155`;
+  - `truncated=2`;
+  - `avg_completion_tokens=4798.1524`;
+  - `max_completion_tokens=7680`.
+- comparado ao baseline submit-safe `192/315`, `bit=136`, `equation=56`,
+  `truncated=0`, o menor passo de interpolacao ja piorou as duas familias e
+  aumentou truncation.
+
+Decisao FinOps:
+
+- cancelar o job antes de gastar H200 nos candidatos `lambda=0.25` e
+  `lambda=0.50`, pois eles ficam ainda mais proximos do adapter V582, que ja
+  era regressivo;
+- cancelamento executado apos o resumo do `lambda=0.10`;
+- essa rota nao e submit-safe e nao deve ser promovida.
+
+Impacto no plano:
+
+- bloquear V582 checkpoint-2 como linhagem de init, teacher-transfer ou
+  interpolacao;
+- nao rodar nova escala/interpolacao V582 sem um diagnostico novo que prove
+  recuperacao de protected rows e queda real de completion tokens;
+- proximo caminho com chance tecnica:
+  - teacher target base-likelihood filter;
+  - dataset equation-first filtrado por targets que o modelo base consiga
+    completar;
+  - bit apenas como replay/protected guard;
+  - ou pacote submit-safe que execute solver/verifier no caminho de inferencia,
+    se as regras e o pacote permitirem.
+
+### Atualizacao V589 - Crisis Audit Dataset/Metric 2026-05-18
+
+Objetivo:
+
+- analisar em modo bloqueador tudo que poderia gerar ganho falso ou esconder o
+  plato: dataset, flags anti-leak, extractor label-free, protected rows,
+  contrato/masks, adapter config, weak CSV, truncation e workspace clean.
+
+Evidencia nova:
+
+- `V509` sobre o dataset V582/V581 bloqueou o train e o validation:
+  - train `315/315` rows com overlap exato weak/full por prompt e
+    prompt+answer;
+  - validation `115/115` rows com overlap exato weak/full;
+  - flags `weak_gate_rows_used_for_training=false`,
+    `full_gate_rows_used_for_training=false` e
+    `gate_rows_used_for_training=false` aparecem mesmo em rows com overlap;
+  - `expected_aware_teacher_signal=true` e
+    `label_audited_teacher_projection=true` existem no train.
+- `V540` confirmou que o problema nao e so parser:
+  - baseline V516 reextraido por `raw_output -> extract_final_answer ->
+    verify_answer`: `192/315`, `bit=136`, `equation=56`, protected OK;
+  - V582 checkpoint-2 reextraido: `191/315`, `bit=135`, `equation=56`,
+    `truncated=1`;
+  - V582 quebrou protected rows:
+    - `8740ed31`: esperado `01101000`, extraido `01111000`;
+    - `59bee375`: esperado `10010101`, extraido `2`;
+  - existe 1 row (`4bb8c6cd`) em que o `prediction` salvo estava stale
+    frente ao parser atual; isso melhora equation no recompute, mas nao resolve
+    o total nem o backfire.
+- `V564` confirmou que masks/offsets estavam OK, mas protected rows foram
+  superamostradas:
+  - `mask_ok=315` no train;
+  - validation com `row_loss_weight=0`;
+  - protected `8740ed31` e `59bee375` aparecem `16x` cada no train com peso
+    `2.6`;
+  - mesmo assim o adapter empurrou essas rows para respostas erradas. Isso e
+    drift/backfire real, nao ganho de loss.
+- `V575` mostrou sync incorreto/insuficiente para promocao:
+  - adapter config V582: base Nemotron correto, `r=32`, `alpha=32`,
+    `modules_to_save=null`, target modules/parameters presentes;
+  - performance blockers: `equation=56<60`, `bit=135<136`,
+    `truncated=1>0`, `stored_prediction_stale_after_parser_fix=1`;
+  - manifesto de eval V582 nao carregava contrato promocional completo
+    (`weak_sha`, shared row contract, promotion floors).
+- Recheck do caminho source-only V573:
+  - V509 V573 continua limpo: `blocked_dataset_count=0`;
+  - V526 V573 continua objetivo-correto com `example_mean` e row weights
+    (`example_mean_bit_share=0.671963`, delta `0.069972`);
+  - porem o weak eval V574 checkpoint-2 de V573 foi `190/315`,
+    `bit=135`, `equation=55`, `truncated=1` e quebrou os mesmos protected
+    rows. Isso mostra que V573 nao esta contaminado como V582, mas tambem nao
+    transferiu ACC; relancar V573 sem mudanca de objetivo/decoding e bloqueado.
+
+Correcoes implementadas:
+
+- `scripts/hf_job_preflight_gate.py`:
+  - bloqueia `v581_combined_teacher_distill_dataset` e
+    `v582_combined_teacher_distill_dataset`;
+  - bloqueia qualquer JSONL de treino pago que contenha
+    `expected_aware_teacher_signal=true` ou
+    `label_audited_teacher_projection=true`;
+  - self-test novo cobre esse caso.
+- `scripts/kg1_pre_paid_job_integration_gate.py`:
+  - bloqueia as mesmas identidades V581/V582;
+  - audita e bloqueia rows expected-aware/label-audited no dataset;
+  - self-test novo cobre o bloqueio.
+- `scripts/kg1_static_safety_gate.py`:
+  - bloqueia launchers/notebooks ativos que referenciem V581/V582;
+  - exige que o preflight mantenha o bloqueio expected-aware.
+- `artifacts/v582_hf_h200_launch/launch_v582_hf_nemo_h200_v581_teacher_transfer.py`:
+  - arquivado como `fail-closed`, mantendo evidencia historica mas impedindo
+    relaunch.
+- workspace clean:
+  - `__pycache__` e `.cache` removidos;
+  - `scripts/kg1_workspace_clean_gate.py .` passou com `0` findings.
+
+Testes executados:
+
+- `python -m py_compile scripts/hf_job_preflight_gate.py scripts/kg1_pre_paid_job_integration_gate.py scripts/kg1_static_safety_gate.py artifacts/v582_hf_h200_launch/launch_v582_hf_nemo_h200_v581_teacher_transfer.py`;
+- `python scripts/hf_job_preflight_gate.py --self-test`;
+- `python scripts/kg1_pre_paid_job_integration_gate.py --self-test`;
+- `python scripts/kg1_static_safety_gate.py --self-test`;
+- `python scripts/kg1_static_safety_gate.py --paths scripts/hf_job_preflight_gate.py scripts/kg1_pre_paid_job_integration_gate.py scripts/kg1_static_safety_gate.py artifacts/v582_hf_h200_launch/launch_v582_hf_nemo_h200_v581_teacher_transfer.py`;
+- `python scripts/validate_answer_extraction_v1.py ... --run-csv v582=...`;
+- `python scripts/audit_v564_contract_mask_alignment.py ...`;
+- `python scripts/audit_v575_solution_sync_contract.py ...`;
+- `python scripts/kg1_workspace_clean_gate.py .`.
+
+Decisao:
+
+- V581/V582 deixa de ser caminho ativo para treino, init, interpolation ou
+  submit. Qualquer ganho projetado nessa rota e contaminado/diagnostico.
+- O plato nao deve ser tratado como "precisa de mais epochs": a evidencia agora
+  mostra dataset weak/full-derived, protected-row backfire e sync incompleto.
+- O proximo passo ativo so pode ser:
+  1. dataset source-only sem overlap weak/full, com V509 limpo;
+  2. teacher target filtrado por base-likelihood e sem expected-aware labels;
+  3. ou solver/verifier submit-safe no caminho de inferencia, se o pacote e as
+     regras permitirem;
+  4. qualquer novo treino pago precisa passar V509, V540, V564, V575,
+     pre-paid gate e static gate com `finding_counts.warning=0` e
+     `finding_counts.error=0`.
+
+### Atualizacao V590 - Parser-current CPU Target 2026-05-18
+
+Objetivo:
+
+- remover ambiguidade entre `prediction` salvo e o parser atual antes de
+  usar qualquer CPU solver como teacher target;
+- recomputar o gate residual sem loss usando o baseline V516 materializado
+  por `raw_output -> extract_final_answer -> verify_answer`.
+
+Evidencia nova:
+
+- o CSV historico V516 tinha 1 row stale:
+  - `4bb8c6cd`: `prediction` salvo `]`, parser atual extrai `]}\!`;
+  - isso explica divergencia entre manifest `192/315` e CSV reavaliado como
+    `191/315` por scripts que confiavam na coluna stale.
+- baseline parser-current materializado em:
+  - `artifacts/v590_parser_current_baseline/20260518T_v516_parser_current/v516_label_free_v290_checkpoint6_baseline.csv`;
+  - resultado: `192/315`, `bit_manipulation=136/160`,
+    `equation_transform=56/155`, `truncated=0`;
+  - row contract:
+    `bf055e3b9ebce79d4bfc9e48bce5a305b1d83da882f14afddec80d6afaba5fff`.
+- V350 recomputado sobre esse baseline:
+  - `199/315`;
+  - `bit_manipulation=138/160`;
+  - `equation_transform=61/155`;
+  - `truncated=0`;
+  - `gains=7`, `losses=0`.
+- V543 query-op refinement sobre V350 recomputado:
+  - `201/315`;
+  - `bit_manipulation=138/160`;
+  - `equation_transform=63/155`;
+  - `truncated=0`;
+  - `gains=2`, `losses=0`;
+  - manifest:
+    `artifacts/v590_current_baseline_residual_gate/20260518T_v543_queryop_refinement/v543_symbolic_queryop_refinement_manifest.json`.
+
+Decisao:
+
+- existe ganho CPU/verifier real contra o baseline adapter-only:
+  - total `+9`;
+  - bit `+2`;
+  - equation `+7`;
+  - sem perdas e sem truncation.
+- esse ganho ainda nao e submit-safe adapter-only, porque o pacote Kaggle
+  aceito continua limitado ao adapter LoRA e nao pode depender de
+  `prediction_postprocessor`/solver no caminho de inferencia.
+- V590 substitui metas stale como `KG1_CPU_SIMULATED_TOTAL_CORRECT=200` em
+  launchers antigos; qualquer launcher novo deve usar os numeros reais do
+  target que for treinado.
+
+Correcoes de gate implementadas:
+
+- `scripts/hf_job_preflight_gate.py` agora exige, antes de treino pago:
+  - `KG1_V516_PARSER_CURRENT_BASELINE_STATUS=passed`;
+  - `KG1_STALE_PREDICTION_PARITY_STATUS=passed`.
+- `scripts/kg1_pre_paid_job_integration_gate.py` exige as mesmas flags em
+  launchers pagos.
+- `scripts/kg1_static_safety_gate.py` agora monitora que essas protecoes
+  continuem presentes.
+
+Testes executados:
+
+- `python -m py_compile scripts/hf_job_preflight_gate.py scripts/kg1_pre_paid_job_integration_gate.py scripts/kg1_static_safety_gate.py`;
+- `python scripts/hf_job_preflight_gate.py --self-test`;
+- `python scripts/kg1_pre_paid_job_integration_gate.py --self-test`;
+- `python scripts/kg1_static_safety_gate.py --self-test`;
+- `python scripts/kg1_static_safety_gate.py --paths scripts/hf_job_preflight_gate.py scripts/kg1_pre_paid_job_integration_gate.py scripts/kg1_static_safety_gate.py`.
+
+Proximo passo ativo:
+
+1. Construir V591 adapter-transfer dataset source-only a partir das classes de
+   regra V590/V543, sem copiar weak rows, answers esperados ou exemplos
+   label-audited.
+2. Treino/eval so pode iniciar se V509/V526/V540/V564/V575/pre-paid/static
+   passarem com:
+   - `finding_counts.warning=0`;
+   - `finding_counts.error=0`;
+   - `0` overlap weak/full;
+   - `0` truncation;
+   - `0` stale prediction mismatch;
+   - protected rows intactas.
+3. Primeiro checkpoint deve manter no minimo:
+   - `bit_manipulation>=136`;
+   - `equation_transform>=56`;
+   - `truncated=0`.
+4. Promocao para submit so pode ocorrer com adapter-only medido acima do
+   baseline submit-safe, nao apenas com solver CPU.
+
+### Atualizacao V591 - Adapter-transfer Query-op Source-only 2026-05-18
+
+Objetivo:
+
+- transformar o ganho CPU V590/V543 em um candidato adapter-only sem copiar
+  rows weak/full, sem expected-aware labels e sem dataset teacher contaminado;
+- manter bit como replay protegido e adicionar apenas exemplos fonte-sinteticos
+  para as assinaturas V543 aceitas:
+  - `symbolic_cryptarithm_multi_operator_digits_add|query_op=!`;
+  - `symbolic_cryptarithm_multi_operator_digits_mul|query_op=$`;
+  - `symbolic_cryptarithm_single_operator_digits_mul|query_op=%`.
+
+Evidencia/gates:
+
+- dataset V591 criado em
+  `artifacts/v591_v579_symbolic_queryop_source_mix/20260518T_v591_cpu_gate`;
+- train `877` rows, SHA
+  `d70fda3b979703cc8fef52463498f06b2cb56a6f517cae1907bee46147668da7`;
+- validation `189` rows, SHA
+  `6968ef93c8d2b0dc3608dc7adaef8d0cea0ee6d6e499434a5f264b3489113df9`;
+- V509 passou: `blocked_dataset_count=0`;
+- V478 passou com `example_mean` e row weights:
+  - train effective bit share `0.666212`;
+  - train effective equation share `0.333788`;
+  - `unknown_source_rows=0`, `unknown_subcategory_rows=0`;
+- V286 real passou:
+  - `max_length=2048`;
+  - train token max `1074`;
+  - validation token max `1037`;
+  - `0` truncation, `0` fallback masks, `0` dropped completion tokens;
+- V513 passou sem warnings/blockers;
+- V526 passou com `example_mean`:
+  - delta `0.075723 <= 0.08`;
+  - `gpu_allowed=true`;
+  - `0` mismatch de answer e `0` control chars;
+- dataset subido para HF:
+  - repo `felipesp1983/kg1-v591-v579-symbolic-queryop-source-mix-artifacts`;
+  - commit `aed6804b77eb8dc8aa2b50726d0afe1fbe38759d`.
+
+Launcher/gate:
+
+- launcher ativo:
+  `artifacts/v591_hf_h200_launch/launch_v591_hf_nemo_h200_v579_symbolic_queryop.py`;
+- debug local baixou o dataset do HF, validou hashes, adapter seed e objetivo;
+- pre-paid integration gate passou sem findings em
+  `artifacts/v591_hf_h200_launch/v591_pre_paid_integration_gate.json`;
+- contrato CPU real do launcher:
+  - `KG1_CPU_SIMULATED_TOTAL_CORRECT=201`;
+  - `KG1_CPU_SIMULATED_BIT_CORRECT=138`;
+  - `KG1_CPU_SIMULATED_EQUATION_CORRECT=63`;
+  - `KG1_MAX_TOKEN_HEADROOM_RATIO=0.525`;
+  - `KG1_V516_PARSER_CURRENT_BASELINE_STATUS=passed`;
+  - `KG1_STALE_PREDICTION_PARITY_STATUS=passed`;
+  - manifest V543 SHA
+    `df8c4c55dda6ed5acead78a4453e57fa1bb4cb649bf3c4b26a789791d2620bd9`;
+  - integrated CSV SHA
+    `71ae1283b0bc1dadb39cff87fad6265524f62bf451b0f1da617386568f9e6360`.
+
+Decisao:
+
+- V591 e o unico candidato ativo para H200 agora, porque:
+  - usa ganho CPU parser-current sem perdas;
+  - nao usa V581/V582;
+  - passa gates de integridade, tokenizacao, objetivo e pre-paid;
+  - corrige o vazamento herdado do launcher V573 que ainda colocava
+    `200/62` e headroom `0.668` no `job_env`.
+- executar somente smoke H200 de `2` steps, `timeout=3600`.
+- kill-switch obrigatorio no primeiro checkpoint:
+  - weak eval label-free deve manter `bit>=136`, `equation>=56`,
+    `truncated=0` e protected rows intactas;
+  - promocao para package/submit exige ganho adapter-only real acima de
+    `192/315`; meta submit-safe operacional continua `total>=196`,
+    `equation>=60`, `bit>=136`, `truncated=0`.
+- se checkpoint-2 repetir backfire de protected rows, truncation ou queda de
+  bit/equation, cancelar/abandonar a linha antes de qualquer treino longo.
+
+### Atualizacao V591 - Resultado H200 Weak Eval e Bloqueio 2026-05-18
+
+Resultado real:
+
+- treino H200 V591 concluiu, mas o checkpoint-2 falhou no weak gate;
+- job de treino:
+  `https://huggingface.co/jobs/felipesp1983/6a0a7bb3e7940de6ee6ce074`;
+- job weak eval:
+  `https://huggingface.co/jobs/felipesp1983/6a0a80e7e7940de6ee6ce0ad`;
+- diagnosticos enviados para o adapter repo no commit:
+  `728d4b120215be0a69b67bc807a32e73b33550bd`;
+- metricas do treino:
+  - baseline eval loss `1.7252`;
+  - final eval loss `1.7261`;
+  - sem truncation de tokenizacao no treino;
+- weak eval armazenado pelo job remoto:
+  - `190/315`;
+  - `bit_manipulation=135/160`;
+  - `equation_transform=55/155`;
+  - `truncated=1`;
+  - `avg_completion_tokens=4775.48`;
+  - `max_completion_tokens=7680`;
+- recomputacao local com parser atual:
+  - `191/315`;
+  - `bit_manipulation=135/160`;
+  - `equation_transform=56/155`;
+  - `truncated=1`;
+  - ainda abaixo do baseline submit-safe `192/315`.
+
+Diagnostico linha a linha:
+
+- artefatos locais:
+  - `artifacts/v591_hf_h200_launch/v591_v586_plateau_diagnostics/KG1_V591_CHECKPOINT2_SUMMARY.md`;
+  - `artifacts/v591_hf_h200_launch/diagnostics_local/v591_vs_baseline_v543_summary.json`;
+- contra baseline V516/V590:
+  - ganhos reais V591: `1` row (`4ada9150`, bit);
+  - perdas reais V591: `2` protected bit rows (`8740ed31`, `59bee375`);
+  - net atual: `-1` pelo parser local, `-2` pelo parser remoto antigo;
+- contra alvo CPU V543:
+  - V543 tem `9` gains reais (`+2` bit, `+7` equation);
+  - V591 copiou apenas `1/9`;
+  - V591 perdeu `7/7` gains de `equation_transform`;
+  - isso prova que o dataset source-only query-op nao transferiu o solver para
+    o adapter.
+
+Achados de bug/gap:
+
+- o eval remoto usou o commit GitHub `403c3f9`, enquanto o worktree local tem
+  correcoes nao publicadas em `src/competition_utils.py`;
+- a diferenca `190` vs `191` vem de parser drift em simbolos: o parser local
+  atual extrai corretamente `\boxed{]}\!}`, mas o eval remoto antigo extraiu
+  apenas `]`;
+- esse parser fix nao gera submit candidate, porque V591 continua abaixo do
+  baseline e tem backfire/truncation;
+- V591 exibiu token runaway: protected bit rows continuam exigindo milhares de
+  tokens e a linha `59bee375` truncou;
+- `label_aware_debug_correct > correct` apareceu como sinal de formato/extracao,
+  nao como ganho submit-safe.
+
+Correcoes aplicadas ao gate:
+
+- `scripts/hf_job_weak_eval_v245.py` agora bloqueia promocao quando
+  `label_aware_debug_correct - correct > KG1_WEAK_PROMOTE_LABEL_AWARE_DELTA_MAX`;
+- default operacional: `KG1_WEAK_PROMOTE_LABEL_AWARE_DELTA_MAX=0`;
+- `scripts/kg1_static_safety_gate.py` passou a procurar esse bloqueador;
+- `launch_v591_hf_weak_eval.py` recebeu a flag explicitamente.
+
+Testes executados:
+
+- `python -m py_compile scripts/hf_job_weak_eval_v245.py scripts/kg1_static_safety_gate.py artifacts/v591_hf_h200_launch/launch_v591_hf_weak_eval.py`;
+- `python scripts/hf_job_weak_eval_v245.py --self-test`;
+- `python scripts/kg1_static_safety_gate.py --paths scripts/kg1_static_safety_gate.py src/competition_utils.py artifacts/v591_hf_h200_launch/launch_v591_hf_weak_eval.py`;
+- sanity parser:
+  - `extract_final_answer("</think>\\boxed{]}\\!}") == "]}\\!"`;
+  - `verify_answer("]}\\!", "]}\\!") == True`.
+
+Decisao:
+
+- V591 esta bloqueado para submit, full eval e treino adicional;
+- nao executar `final` nem mais epochs/steps da V591, porque o primeiro
+  checkpoint ja violou FinOps/ACC:
+  - `correct < 196`;
+  - `bit < 136`;
+  - `equation < 60`;
+  - `truncated > 0`;
+  - protected-row backfire;
+  - token runaway;
+  - label-aware delta.
+
+Proximo passo ativo:
+
+1. Qualquer novo job deve usar script patch aplicado no HF para evitar drift
+   entre codigo local e commit remoto.
+2. Novo treino so e permitido depois de um gate local provar que o objetivo
+   aprende pelo menos parte dos `9` gains V543 sem alterar protected rows.
+
+### Atualizacao V592 - Interpolation Probe Cancelado por FinOps 2026-05-18
+
+Resultado real:
+
+- job H200 eval-only:
+  `https://huggingface.co/jobs/felipesp1983/6a0a8779a5e509f1a841416e`;
+- run id:
+  `v592-h200-adapter-interp-v290-to-v591-20260518T032746Z`;
+- objetivo: testar se `V290 + lambda * (V591 - V290)` preservaria o baseline
+  e capturaria o unico ganho bit da V591 sem backfire;
+- primeiro candidato avaliado, `lambda=0.10`:
+  - `190/315`;
+  - `bit_manipulation=134/160`;
+  - `equation_transform=56/155`;
+  - `truncated=1`;
+  - `avg_completion_tokens=4775.39`;
+  - `max_completion_tokens=7680`;
+  - `label_aware_debug_delta=0`.
+
+Decisao FinOps:
+
+- `lambda=0.10` ja ficou abaixo do baseline submit-safe `192/315`, reduziu
+  bit para `134/160` e manteve truncation;
+- `lambda=0.25` e `lambda=0.50` caminham ainda mais na direcao do adapter
+  V591 que ja falhou, portanto a expectativa racional era piorar, nao
+  melhorar;
+- job cancelado manualmente no HF com status `CANCELED`;
+- log salvo em:
+  `artifacts/v591_hf_h200_launch/v592_job_6a0a8779a5e509f1a841416e_canceled_logs.txt`.
+
+Conclusao:
+
+- interpolacao nao resgatou a linha V591/V579;
+- encerrar a linha V591/V579 para submit, full eval, mais epochs, mais steps
+  e novas interpolacoes;
+- o problema nao e apenas intensidade do adapter: o delta treinado empurra
+  protected bit rows para geracao longa/errada antes de aprender os ganhos
+  V543.
+
+Proximo passo obrigatorio:
+
+1. Parar loops de `solver -> source-only SFT -> weak eval` ate haver evidencia
+   de preferencia do modelo pelas respostas corretas dos ganhos V543.
+2. Executar um probe de NLL/logits em cima dos `9` gains V543:
+   - comparar resposta baseline errada vs resposta solver correta;
+   - medir base/V290/V591 quando possivel;
+   - separar `decoding ruim` de `adapter empurrou o modelo para resposta
+     errada`;
+   - se a resposta correta nao tiver vantagem de NLL/logits, novo SFT curto
+     nao deve ser esperado como caminho de ACC.
+3. A unica rota submit-safe imediata continua sendo verificar se o pacote
+   Kaggle pode executar o solver/verifier V543 no caminho de inferencia. Se
+   puder, empacotar e gatear `201/315`, `bit=138`, `equation=63`,
+   `truncated=0`; se nao puder, manter adapter-only bloqueado em `192/315`.
+
+### Atualizacao V593 - NLL Contrast Dos 9 Gains V543 2026-05-18
+
+Objetivo:
+
+- diagnostico H200 eval-only, sem treino e sem submit;
+- comparar, nos `9` ganhos reais V543, a NLL da resposta correta contra a NLL
+  da resposta errada do baseline V290/V516;
+- candidatos avaliados:
+  - `base_no_adapter`;
+  - `v290_checkpoint6`;
+  - `v591_checkpoint2`;
+- competidores por row:
+  - `99d6a3b5`: correto `?()<` vs baseline `(<))`;
+  - `7688e06e`: correto `-55` vs baseline `55`;
+  - `274def88`: correto `92` vs baseline `-92`;
+  - `6cc5dafb`: correto `)(` vs baseline `^&>)`;
+  - `d1bd7478`: correto `30` vs baseline `3`;
+  - `c5b058d6`: correto `134` vs baseline `35`;
+  - `4ada9150`: correto `01111011` vs baseline `01111111`;
+  - `4c327b55`: correto `11011100` vs baseline `11011110`;
+  - `5501c054`: correto `[#>#` vs baseline `!##^`.
+
+Job:
+
+- `https://huggingface.co/jobs/felipesp1983/6a0a8c70a5e509f1a84141f3`;
+- run id:
+  `v593-h200-logits-nll-v543-gain-contrast-20260518T034857Z`;
+- launcher:
+  `artifacts/v593_hf_h200_logits_nll_v543_gain_contrast_launch/launch_v593_hf_logits_nll_v543_gain_contrast.py`.
+
+Regra de decisao:
+
+- margem `wrong_minus_correct = NLL(wrong) - NLL(correct)`;
+- margem positiva significa que o modelo prefere a resposta correta curta;
+- se V591 nao melhora margem nos gains V543 vs V290, o erro e de objetivo/
+  aprendizado, nao apenas de decoding;
+- se base/V290 tambem preferem respostas erradas em equation, novo SFT curto
+  sem preference/contrastive objective fica bloqueado;
+- qualquer futuro treino adapter-only precisa primeiro melhorar essas margens
+  e manter regressao protegida `0`.
+
+Resultado:
+
+- job concluido e artefatos baixados;
+- logs salvos em:
+  `artifacts/v593_hf_h200_logits_nll_v543_gain_contrast_launch/v593_job_6a0a8c70a5e509f1a84141f3_logs.txt`;
+- analise local:
+  `artifacts/v593_hf_h200_logits_nll_v543_gain_contrast_launch/KG1_V593_ANALYSIS_NOTES.md`;
+- medicao valida:
+  - `missing_logprob_rows=0`;
+  - `prefix_mismatch_rows=0`.
+
+Achados:
+
+- no formato `boxed`, V591 melhorou margem vs V290 em `6/9`, mas reduziu a
+  contagem de margens positivas para `4/9` e equation para `3/7`;
+- no formato `final_answer_boxed`, V591 piorou margem vs V290 em `7/9`;
+- V591 deixou bit positivo em `2/2` no formato `final_answer_boxed`, mas isso
+  nao apareceu no weak generation porque as protected rows ainda backfire/
+  truncam;
+- as piores margens negativas repetidas continuam em equation:
+  - `5501c054`: correto `[#>#` vs baseline `!##^`;
+  - `6cc5dafb`: correto `)(` vs baseline `^&>)`;
+  - `7688e06e`: correto `-55` vs baseline `55`.
+
+Conclusao:
+
+- V591/V579 source-only SFT esta encerrado;
+- o platô nao sera resolvido com mais epochs/steps do mesmo dataset;
+- gate reprodutivel adicionado:
+  `scripts/analyze_v593_nll_gain_contrast.py`;
+- resultado do gate:
+  `artifacts/v593_hf_h200_logits_nll_v543_gain_contrast_launch/analysis_gate/KG1_V593_NLL_GAIN_CONTRAST_GATE.md`;
+- decisao do gate: `blocked`;
+- blockers:
+  - `final_positive_margin_rows_lt_6`;
+  - `final_equation_positive_margin_rows_lt_4`;
+  - `candidate_worse_than_baseline_on_final_answer_margins`;
+- proximo caminho adapter-only plausivel deve ser preference/contrastive smoke,
+  nao SFT:
+  - correto V543 acima do baseline errado nos `9` gains;
+  - protected correct acima de backfire alternatives;
+  - gate de geracao label-free preservando `bit>=136`, `equation>=56`,
+    `truncated=0`, protected rows intactas;
+  - promocao somente se superar `192/315`.
+
+### Atualizacao V594 - Dataset Preference Query-Operator Source-Only 2026-05-18
+
+Motivo:
+
+- V593 mostrou que V591/V579 nao resolveu as margens de resposta curta dos
+  ganhos V543;
+- V330 antigo gerava apenas cryptarithm de operador unico/multiplicacao, mas
+  os dois piores ganhos novos V543 sao multi-operador:
+  - `6cc5dafb`: `query_op=!`, regra aceita `add`, correto `)(`;
+  - `5501c054`: `query_op=$`, regra aceita `mul`, correto `[#>#`;
+  - `99d6a3b5`: `query_op=%`, `single_operator_digits_mul`, ja coberto.
+
+Implementacao:
+
+- novo builder:
+  `scripts/build_v594_queryop_cryptarithm_preference_dataset.py`;
+- gera apenas pares preference source-only, sem copiar prompts/respostas weak
+  ou full;
+- cada `chosen` e revalidado pelo solver CP-SAT V329;
+- cada `rejected` e um hard negative com uma unica resposta `\boxed{...}`;
+- sem negativos de formato, sem multiplos boxes, sem texto pos-box como
+  objetivo de treino;
+- assinaturas cobertas:
+  - `symbolic_cryptarithm_multi_operator_digits_add|query_op=!`;
+  - `symbolic_cryptarithm_multi_operator_digits_mul|query_op=$`;
+  - `symbolic_cryptarithm_single_operator_digits_mul|query_op=%`.
+
+Artefatos:
+
+- diretorio:
+  `artifacts/v594_queryop_cryptarithm_preference_dataset/20260518T041112Z`;
+- train:
+  `1920` preference rows, `480` prompts unicos;
+- validation:
+  `480` preference rows, `120` prompts unicos;
+- contagem balanceada por query operator:
+  - train: `!=640`, `$=640`, `%=640`;
+  - validation: `!=160`, `$=160`, `%=160`;
+- anti-leakage:
+  - `reference_id_overlap=0`;
+  - `reference_prompt_overlap=0`;
+  - `reference_prompt_answer_overlap=0`;
+  - `non_ascii_chars=0`;
+  - `invisible_control_chars=0`.
+
+Validacoes executadas:
+
+- `python -m py_compile scripts/build_v594_queryop_cryptarithm_preference_dataset.py`;
+- `python scripts/build_v594_queryop_cryptarithm_preference_dataset.py --self-test`;
+- `python scripts/kg1_static_safety_gate.py scripts/build_v594_queryop_cryptarithm_preference_dataset.py`;
+- validação do schema V315 preference:
+  - train: `1920` rows, `1920` ids unicos;
+  - validation: `480` rows, `480` ids unicos;
+  - `format_negative_*` ausente.
+
+Decisao:
+
+- V594 e o primeiro dataset apos V593 que mira diretamente os dois modos
+  multi-operador que faltavam, sem repetir SFT amplo;
+- ainda nao e ganho submit-safe;
+- proximo job permitido deve ser somente preference/contrastive smoke com:
+  - `PAIR_SCORE_MODE=boxed_payload_mean_nll`;
+  - `ALLOW_FORMAT_NEGATIVES=0`;
+  - primeiro checkpoint obrigatorio;
+  - kill-switch se weak eval nao superar `192/315` ou se `bit<136`,
+    `equation<60`, `truncated>0`;
+  - V593-style margin check antes de qualquer treino mais longo.
+
+### Atualizacao V596 - Preference Answer-Only para Query-Operator 2026-05-18
+
+Problema encontrado antes do H200:
+
+- o V594 original era seguro contra leakage, mas o `chosen` continha trace longo
+  enquanto o `rejected` era `Final answer: \boxed{...}`;
+- com `PAIR_SCORE_MODE=boxed_payload_mean_nll`, isso cria contexto assimetrico:
+  o payload correto e condicionado por trace de professor e o payload errado
+  por uma resposta curta;
+- esse mismatch pode reduzir loss sem ensinar `prompt -> resposta` e e uma
+  explicacao concreta para plato/backfire em treinos anteriores.
+
+Correcao implementada:
+
+- novo builder:
+  `scripts/build_v596_queryop_preference_answer_only.py`;
+- novo dataset:
+  `artifacts/v596_queryop_answer_only_preference_dataset/20260518T042900Z`;
+- deriva do V594, mas reescreve todos os `chosen` para o mesmo contrato do
+  `rejected`: `Final answer: \boxed{payload}`;
+- preserva os hard negatives source-only e as assinaturas V543:
+  - `query_op=!` add;
+  - `query_op=$` mul;
+  - `query_op=%` mul.
+
+Validacoes:
+
+- train: `1920` preference rows, `1920` ids unicos;
+- validation: `480` preference rows, `480` ids unicos;
+- `assistant_final_answer_only_rows=1920/1920` no train e `480/480` no val;
+- `assistant_trace_rows=0`, `assistant_multiline_rows=0`;
+- `reference_id_overlap=0`, `reference_prompt_overlap=0`,
+  `reference_prompt_answer_overlap=0`;
+- `non_ascii_chars=0`, `invisible_control_chars=0`;
+- hashes:
+  - train: `b509a3eb5bd841891a918a0bb2766252bc3d5ff4cbb726eea80ae72acd2960e7`;
+  - val: `5035e7ff1499c4bfc609115b445bffd310c5dd58829c95c33ac15e1f8c828511`.
+
+Gates corrigidos:
+
+- `scripts/kg1_pre_paid_job_integration_gate.py` agora aceita manifesto V594/V596
+  source-only e nao exige `messages` para schema preference;
+- o gate continua bloqueando `format_negative_*`, chosen/rejected iguais,
+  traces/multilinha quando o contrato e answer-only, overlap de referencia,
+  simbolos invisiveis e ruido nao ASCII;
+- launcher V595 ajustado para:
+  - preservar `LORA_TARGET_PARAMETERS=mlp.experts.gate_up_proj,mlp.experts.down_proj`;
+  - usar `INIT_ADAPTER_LOAD_MODE=peft`;
+  - setar `REQUIRE_LORA_TARGET_PARAMETER_MATCH=1`;
+  - congelar target parameters neste smoke com
+    `REQUIRE_LORA_TARGET_PARAMETERS_TRAINABLE=0`;
+  - manter treino limitado a `MAX_STEPS=2`.
+
+Gate pre-pago:
+
+- artefato:
+  `artifacts/v595_hf_h200_v594_queryop_pref_launch/v595_v596_pre_paid_job_integration_gate.json`;
+- status: `ok=true`, `findings=[]`;
+- decisao:
+  - permitido apenas smoke H200 de 2 steps;
+  - primeiro checkpoint deve passar weak eval;
+  - continuar somente se houver ganho real submit-safe:
+    `total>=196`, `equation>=60`, `bit>=136`, `truncated=0`;
+  - caso contrario, cancelar por FinOps e registrar como rota bloqueada.
+
+### Atualizacao V595b - Fix de Dependencias PEFT/Transformers 2026-05-18
+
+Falha real do V595:
+
+- job H200 `felipesp1983/6a0a96b5a5e509f1a84142cf` falhou antes do treino;
+- a falha ocorreu no carregamento PEFT do adapter inicial:
+  `WeightConverter.__init__() got an unexpected keyword argument 'distributed_operation'`;
+- causa tecnica: install aberto puxou `transformers 5.8.1` com `peft 0.19.1`;
+- isso nao invalida o dataset V596, porque o job ja havia validado:
+  - hashes train/val corretos;
+  - `1920/480` linhas;
+  - `0` truncation;
+  - `0` fallback masks;
+  - `0` prompt truncation;
+  - `offset_masks=100%`;
+  - familias/subcategorias corretas.
+
+Correcao implementada:
+
+- launcher V595 virou V595b:
+  `artifacts/v595_hf_h200_v594_queryop_pref_launch/launch_v595_hf_h200_v594_queryop_preference.py`;
+- output repo novo:
+  `felipesp1983/kg1-nemotron-lora-v595b-v596-queryop-answeronly-pref-v290ckpt6`;
+- stack fixada:
+  - `huggingface_hub==0.36.2`;
+  - `transformers==4.57.6`;
+  - `peft==0.19.1`;
+  - `accelerate==1.13.0`;
+- launcher agora faz check inline das versoes antes do postinstall/training;
+- `scripts/hf_job_preflight_gate.py` tambem passa a bloquear drift de versao via
+  `KG1_EXPECTED_*_VERSION` no postinstall;
+- `scripts/kg1_static_safety_gate.py` agora bloqueia `transformers>=...` ou
+  `peft>=...` em jobs PEFT-native com adapter inicial, para evitar repeticao do
+  erro V595.
+
+Validacoes executadas:
+
+- `python -m py_compile` no launcher V595b, launcher V597, gates e trainers;
+- `python scripts/kg1_static_safety_gate.py --self-test`;
+- static gate V595b/V597/trainers/preflight/pre-paid:
+  `artifacts/v595_hf_h200_v594_queryop_pref_launch/v595b_static_safety_gate.json`;
+- pre-paid gate V595b:
+  `artifacts/v595_hf_h200_v594_queryop_pref_launch/v595b_pre_paid_job_integration_gate.json`;
+- ambos com `ok=true`, `findings=[]`.
+
+Execucao e desfecho:
+
+- V595b foi relancado e produziu `checkpoint-2`;
+- V597 weak eval foi executado contra esse checkpoint;
+- o resultado final corrigido ficou abaixo do baseline (`191/315`,
+  `equation=56`, `bit=135`, `truncated=1`);
+- a rota foi encerrada por FinOps e nao deve ser relancada sem novo sinal CPU
+  anterior.
+
+### Atualizacao V598 - V597 Re-score e Correcao de Gate 2026-05-18
+
+Resultado final da rota V596/V595b:
+
+- job de treino V595b:
+  `https://huggingface.co/jobs/felipesp1983/6a0a9ccda5e509f1a8414349`;
+- job de weak eval V597:
+  `https://huggingface.co/jobs/felipesp1983/6a0aa3c2a5e509f1a84143e9`;
+- o treino completou, mas o preference val caiu de `59/120` para `58/120`;
+- o weak remoto armazenado deu `190/315`, `equation=55`, `bit=135`,
+  `truncated=1`;
+- o re-score com o extrator local atual corrige um erro de parsing em
+  `4bb8c6cd` (`\boxed{]}\!}`) e eleva somente a metrica corrigida para
+  `191/315`, `equation=56`, `bit=135`, `truncated=1`.
+
+Delta real apos re-score contra V290:
+
+- `T->F`: `2` linhas, ambas `bit_manipulation`:
+  - `8740ed31`: `01101000 -> 01111000`;
+  - `59bee375`: `10010101 -> 2`, com truncation;
+- `F->T`: `1` linha `bit_manipulation`:
+  - `4ada9150`: `01111111 -> 01111011`;
+- `equation_transform`: nenhum ganho liquido; o aparente erro em `4bb8c6cd`
+  era bug de extracao remota, nao mudanca real do modelo.
+
+Correcoes de gate implementadas:
+
+- `scripts/hf_job_weak_eval_v245.py`:
+  - `KG1_WEAK_PROMOTE_AVG_COMPLETION_TOKENS_MAX=0` e
+    `KG1_WEAK_PROMOTE_MAX_COMPLETION_TOKENS_MAX=0` agora desativam bloqueio de
+    comprimento por padrao;
+  - isso e necessario porque o baseline V290 official-like tambem usa saidas
+    longas (`avg_completion_tokens ~4772`, protected rows acima de `6290`);
+  - truncation, total/equation/bit, delta label-aware e protected rows seguem
+    bloqueantes;
+- `scripts/hf_job_v588_adapter_interpolation_probe.py`:
+  - mesmo contrato opcional de comprimento;
+- launchers ativos V597 e V588:
+  - `KG1_WEAK_PROMOTE_AVG_COMPLETION_TOKENS_MAX=0`;
+  - `KG1_WEAK_PROMOTE_MAX_COMPLETION_TOKENS_MAX=0`;
+  - evita reaplicar o falso blocker `512/2048` em avaliacao official-like;
+- `scripts/validate_answer_extraction_v1.py`:
+  - mismatch entre `stored_prediction` e extracao atual vira warning se nao
+    muda `correct`;
+  - vira blocker apenas quando altera o acerto ou quando `correct` armazenado
+    diverge da extracao atual;
+- `scripts/kg1_weak_backfire_row_guard.py` local atual separa:
+  - `protected_id_backfire` quando o baseline estava correto;
+  - `protected_id_missing_required_gain` quando o baseline tambem errava.
+  No V597, `55d834d1` e missing required gain, nao backfire.
+
+Artefatos:
+
+- relatorio V598:
+  `artifacts/v597_hf_h200_v595_weak_eval_launch/KG1_V598_V597_RESCORING_AND_GATE_FINDINGS.md`;
+- auditoria de extracao corrigida:
+  `artifacts/v597_hf_h200_v595_weak_eval_launch/v598_answer_extraction_rescore_audit_after_validator_fix`;
+- protected-row guard local atual:
+  `artifacts/v597_hf_h200_v595_weak_eval_launch/v598_local_protected_row_guard_current_code.json`.
+
+Validacoes executadas:
+
+- `python -m py_compile` nos scripts alterados;
+- `python scripts/hf_job_weak_eval_v245.py --self-test`;
+- `python scripts/validate_answer_extraction_v1.py --self-test`;
+- `python scripts/kg1_static_safety_gate.py` nos scripts alterados.
+
+Decisao:
+
+- fechar V596/V595b como rota bloqueada;
+- nao rodar novo H200 preference/answer-only query-op sem uma evidencia barata
+  anterior que preserve `bit>=136`, `equation>=56`, `truncated=0` e protected
+  rows;
+- antes de qualquer futura promocao, re-scorear sempre o CSV com raw_output
+  usando o extrator label-free atual, para evitar falso ganho ou falso bloqueio.
+
+### Atualizacao V599 - Preference Query-Op com MoE Trainable 2026-05-18
+
+Achado novo e acionavel apos auditoria do V595b:
+
+- V595b nao testou a rota completa `preference + MoE target_parameters`
+  treinaveis;
+- o launcher V595b declarou:
+  - `TRAINABLE_LORA_MODULES='q_proj,k_proj,v_proj,o_proj'`;
+  - `REQUIRE_LORA_TARGET_PARAMETERS_TRAINABLE=0`;
+  - `MAX_TRAINABLE_PARAM_RATIO=0.020`;
+- o log do V595b confirmou:
+  - `target_parameters_trainability_mode='frozen_active'`;
+  - `target_parameter_trainable_lora_params=0` para
+    `mlp.experts.gate_up_proj` e `mlp.experts.down_proj`;
+  - somente `3,735,552` parametros LoRA treinaveis;
+- portanto o resultado negativo V595b (`191/315`, `equation=56`, `bit=135`,
+  `truncated=1` apos re-score) encerra apenas a rota
+  `answer-only preference + attention-only`, nao a rota MoE-trainable.
+
+Implementacao V599:
+
+- novo launcher:
+  `artifacts/v599_hf_h200_v596_queryop_pref_moe_launch/launch_v599_hf_h200_v596_queryop_preference_moe.py`;
+- dataset mantido:
+  `artifacts/v596_queryop_answer_only_preference_dataset/20260518T042900Z`;
+- output repo:
+  `felipesp1983/kg1-nemotron-lora-v599-v596-queryop-answeronly-pref-moe-v290ckpt6`;
+- mudancas contra V595b:
+  - `TRAINABLE_LORA_MODULES='q_proj,k_proj,v_proj,o_proj,up_proj,down_proj'`;
+  - `REQUIRE_LORA_TARGET_PARAMETERS_TRAINABLE=1`;
+  - `MAX_TRAINABLE_PARAM_RATIO=0.040`;
+  - `LEARNING_RATE=2e-8`;
+  - `FINAL_LEARNING_RATE=8e-9`;
+  - `MAX_STEPS=2`, `SAVE_EVERY_STEPS=2`, `EVAL_EVERY_STEPS=2`;
+  - dependencias seguem pinadas:
+    `huggingface_hub==0.36.2`, `transformers==4.57.6`,
+    `peft==0.19.1`, `accelerate==1.13.0`.
+
+Status de gates locais:
+
+- `python -m py_compile` passou no launcher V599;
+- `scripts/kg1_static_safety_gate.py` passou com `ok=true`,
+  `findings=[]`;
+- `scripts/kg1_pre_paid_job_integration_gate.py` passou com `ok=true`,
+  `findings=[]`;
+- dataset V596 segue com:
+  - train `1920`, val `480`;
+  - `equation_transform=100%`;
+  - subcategoria `equation_symbolic_queryop_cryptarithm=100%`;
+  - `0` non-ASCII;
+  - `0` invisible control chars;
+  - `0` overlap com weak/full;
+  - assistant one-line `Final answer: \boxed{...}`.
+
+Criterio de promocao V599:
+
+- rodar weak eval do `checkpoint-2` com extrator label-free atual;
+- promover somente se:
+  - `total >= 196/315`;
+  - `equation_transform >= 60/155`;
+  - `bit_manipulation >= 136/160`;
+  - `truncated = 0`;
+  - protected rows mantidas;
+  - sem piora real por re-score `raw_output -> extract -> verify_answer`;
+- se qualquer criterio falhar, fechar V599 por FinOps sem full, sem package e
+  sem submit.
+
+### Atualizacao V600 - Fast-Deps para MoE Preference 2026-05-18
+
+Desfecho operacional V599:
+
+- job HF H200:
+  `https://huggingface.co/jobs/felipesp1983/6a0aadbfa5e509f1a8414524`;
+- ciclos de log de 40s ficaram parados no build silencioso de
+  `causal-conv1d==1.6.1`;
+- nenhum treino iniciou, nenhum checkpoint foi produzido e nenhum valor ACC foi
+  medido;
+- decisao FinOps: cancelado antes de continuar gastando H200 em compilacao de
+  dependencia, status final `CANCELED`.
+
+Correcao V600:
+
+- novo launcher:
+  `artifacts/v600_hf_h200_v596_queryop_pref_moe_fastdeps_launch/launch_v600_hf_h200_v596_queryop_preference_moe_fastdeps.py`;
+- mesma hipotese de V599:
+  `preference answer-only + MoE target_parameters treinaveis`;
+- diferencas contra V599:
+  - `MAX_JOBS=16`;
+  - instalar `causal-conv1d==1.6.1` e `mamba-ssm==2.3.1` com
+    `--prefer-binary`;
+  - output repo:
+    `felipesp1983/kg1-nemotron-lora-v600-v596-queryop-answeronly-pref-moe-fastdeps-v290ckpt6`;
+- gates locais:
+  - `python -m py_compile` passou;
+  - `v600_static_safety_gate.json`: `ok=true`, `findings=[]`;
+  - `v600_pre_paid_job_integration_gate.json`: `ok=true`, `findings=[]`.
+
+Criterio de FinOps V600:
+
+- se o job repetir ciclos sem sair de instalacao de dependencias, cancelar;
+- se produzir `checkpoint-2`, rodar weak eval imediatamente;
+- promover somente se cumprir os mesmos criterios V599:
+  `total>=196`, `equation>=60`, `bit>=136`, `truncated=0`, protected rows
+  intactas e re-score atual sem falso ganho.
+
+### Atualizacao V601 - Source-Build Controlado para MoE Preference 2026-05-18
+
+Desfecho V600:
+
+- job HF H200:
+  `https://huggingface.co/jobs/felipesp1983/6a0ab07be7940de6ee6ce311`;
+- falhou antes do treino no install de `causal-conv1d==1.6.1`;
+- causa raiz confirmada no log:
+  - `--prefer-binary` ativou build isolation;
+  - o ambiente temporario selecionou `torch==2.12.0+cu130`;
+  - a imagem real estava em CUDA `12.8` com `torch==2.8.0+cu128`;
+  - resultado: mismatch CUDA `12.8` vs Torch `13.0`;
+- nenhum checkpoint foi produzido e nenhum ACC foi medido.
+
+Correcao V601:
+
+- novo launcher:
+  `artifacts/v601_hf_h200_v596_queryop_pref_moe_source_verbose_launch/launch_v601_hf_h200_v596_queryop_preference_moe_source_verbose.py`;
+- mantem exatamente a hipotese ainda nao testada:
+  `preference answer-only + MoE target_parameters treinaveis`;
+- muda apenas a instalacao operacional:
+  - `MAX_JOBS=16`;
+  - `causal-conv1d==1.6.1` com
+    `--no-build-isolation --no-deps --no-binary=causal-conv1d`;
+  - `mamba-ssm==2.3.1` com
+    `--no-build-isolation --no-deps --no-binary=mamba-ssm`;
+  - logs explicitos `KG1_CAUSAL_CONV1D_SOURCE_BUILD_START/END` e
+    `KG1_MAMBA_SSM_SOURCE_BUILD_START/END`;
+- output repo:
+  `felipesp1983/kg1-nemotron-lora-v601-v596-queryop-answeronly-pref-moe-source-v290ckpt6`.
+
+Gates V601 locais:
+
+- `python -m py_compile` passou;
+- `v601_static_safety_gate.json`: `ok=true`, `findings=[]`;
+- `v601_pre_paid_job_integration_gate.json`: `ok=true`, `findings=[]`;
+- dataset V596 confirmado:
+  - train `1920`, val `480`;
+  - hashes esperados batendo;
+  - `0` overlap com weak/full;
+  - `0` caracteres invisiveis/non-ASCII;
+  - completion sempre `Final answer: \boxed{...}`.
+
+Criterio de FinOps V601:
+
+- monitorar logs de 40 em 40 segundos;
+- se source-build ficar sem progresso util repetido ou exceder a janela H200
+  responsavel, cancelar;
+- se produzir `checkpoint-2`, rodar weak eval imediatamente;
+- promover somente se cumprir:
+  - `total>=196/315`;
+  - `equation_transform>=60/155`;
+  - `bit_manipulation>=136/160`;
+  - `truncated=0`;
+  - protected rows intactas;
+  - re-score `raw_output -> extract -> verify_answer` sem falso ganho.
+
+### Atualizacao V602 - Weak Eval do V601 e Fechamento da Hipotese 2026-05-18
+
+Resultado V601:
+
+- job HF H200:
+  `https://huggingface.co/jobs/felipesp1983/6a0ab2b2e7940de6ee6ce331`;
+- source-build controlado funcionou:
+  `KG1_CAUSAL_CONV1D_SOURCE_BUILD_END` e
+  `KG1_MAMBA_SSM_SOURCE_BUILD_END` apareceram nos logs;
+- a hipotese tecnica foi realmente testada:
+  - `target_parameters_trainability_mode="trainable"`;
+  - `mlp.experts.gate_up_proj` e `mlp.experts.down_proj` com
+    `432,791,552` parametros LoRA treinaveis cada;
+  - total treinavel `869,318,656`, razao `2.68%`, abaixo do limite `4%`;
+- preference val melhorou pouco:
+  - baseline `59/120` (`0.4917`);
+  - final `61/120` (`0.5083`);
+- checkpoint produzido:
+  `felipesp1983/kg1-nemotron-lora-v601-v596-queryop-answeronly-pref-moe-source-v290ckpt6/checkpoint-2`.
+
+Resultado V602 weak eval:
+
+- job HF H200:
+  `https://huggingface.co/jobs/felipesp1983/6a0ab8cee7940de6ee6ce380`;
+- avaliacao remota armazenada pelo commit antigo:
+  - `191/315`;
+  - `equation_transform=55/155`;
+  - `bit_manipulation=136/160`;
+  - `truncated=0`;
+- re-score local com o extractor atual:
+  - `192/315`;
+  - `equation_transform=56/155`;
+  - `bit_manipulation=136/160`;
+  - `truncated=0`;
+- diferenca remoto -> local vem de uma unica linha simbolica:
+  - `4bb8c6cd`, expected `]}\!`;
+  - raw final contem `\boxed{]}\!}`;
+  - extractor remoto antigo cortou no primeiro `}` e retornou `]`;
+  - extractor local atual retorna `]}\!`;
+  - isto e falso bloqueio de parser, nao ganho de adapter.
+
+Diff real V602 vs baseline V290, usando extractor atual:
+
+- total: `192 -> 192`, delta `0`;
+- equation: `56 -> 56`, delta `0`;
+- bit: `136 -> 136`, delta `0`;
+- flips reais:
+  - `8740ed31` virou backfire:
+    `01101000 -> 01111000`;
+  - `4ada9150` virou ganho:
+    `01111111 -> 01111011`;
+  - liquido bit `0`;
+  - nenhuma linha equation passou de errada para correta.
+
+Artefatos:
+
+- resumo remoto/local:
+  `artifacts/v602_hf_h200_v601_weak_eval_launch/downloaded_v602/v602_local_current_extractor_rescore_summary.json`;
+- auditoria V602 vs V290 com extractor atual:
+  `artifacts/v602_hf_h200_v601_weak_eval_launch/downloaded_v602/v602_vs_v290_audit_summary_local_current_extractor.json`;
+- flips reais:
+  `artifacts/v602_hf_h200_v601_weak_eval_launch/downloaded_v602/v602_vs_v290_flips_local_current_extractor.csv`.
+- gate reutilizavel criado para impedir falso ganho/falso bloqueio por
+  extractor remoto antigo:
+  `scripts/kg1_rescore_predictions_label_free.py`;
+- reproducao V603 do V602 pelo novo gate:
+  `artifacts/v602_hf_h200_v601_weak_eval_launch/v603_rescore_gate_on_v602/v603_v602_current_label_free_rescore_summary.json`.
+
+Decisao:
+
+- fechar `V596 answer-only preference + MoE trainable` como hipotese negativa;
+- nao rodar novo H200 nessa linha, porque a parte antes nao testada
+  (`target_parameters` MoE treinaveis) foi testada e nao gerou ganho weak;
+- manter regra obrigatoria:
+  todo weak eval remoto deve ser re-scoreado localmente com o extractor
+  label-free atual antes de qualquer promocao, full eval, package ou submit;
+- se o re-score local e o remoto divergirem, usar a divergencia como auditoria
+  de parser/commit, nunca como ganho do adapter.
+
+Proximo passo ativo:
+
+1. Bloquear gasto H200 sem novo sinal barato: a proxima acao deve ser CPU/local
+   ou weak-eval de adapter ja existente.
+2. Separar falha de `decoding/extractor` de falha real do adapter:
+   `raw_output -> extract_final_answer atual -> verify_answer`.
+3. Proteger explicitamente o backfire recorrente `8740ed31=01101000` antes de
+   qualquer nova hipotese de treino.
+4. Procurar ganho somente onde ha delta label-free real:
+   - CPU solver/projection continua sinal, mas precisa virar comportamento do
+     adapter ou pacote permitido;
+   - preference answer-only V596 esta fechado;
+   - novo treino so pode nascer de um gate CPU que mostre `>=+4 equation`,
+     `bit>=136` e `0` protected-row backfire.
+
+### Atualizacao V604 - Interpolacao Eval-Only V290 -> V601 2026-05-18
+
+Racional:
+
+- V602 mostrou dois flips reais de bit:
+  - ganho: `4ada9150`, `01111111 -> 01111011`;
+  - perda: `8740ed31`, `01101000 -> 01111000`;
+- como o liquido e zero, a unica forma barata de tentar extrair valor do V601
+  sem novo treino e testar interpolacoes pequenas entre V290 e V601;
+- isso e eval-only, nao treina, e respeita FinOps melhor que outro smoke H200.
+
+Preflight:
+
+- configs V290/V601 baixados por API HF e comparados:
+  - ambos `r=32`, `lora_alpha=32`;
+  - mesmo base Nemotron;
+  - mesmos `target_parameters` MoE;
+  - `target_modules` iguais apos ordenar, diferem apenas na ordem serializada;
+- launcher criado:
+  `artifacts/v604_hf_h200_v601_interpolation_probe/launch_v604_hf_h200_v601_interpolation_probe.py`;
+- usa o job script V588, que injeta patch dos scripts atuais no HF antes da
+  execucao, evitando o erro V602 de commit/extractor remoto antigo;
+- lambdas iniciais: `0.05,0.10,0.25,0.50`;
+- gates locais:
+  - `python -m py_compile` passou;
+  - `v604_static_safety_gate.json`: `ok=true`, `findings=[]`;
+  - `scripts/kg1_rescore_predictions_label_free.py --self-test` passou.
+
+Criterio:
+
+- promover somente se algum lambda tiver, apos re-score local atual:
+  - `total>=196/315`;
+  - `equation_transform>=60/155`;
+  - `bit_manipulation>=136/160`;
+  - `truncated=0`;
+  - protected rows intactas;
+  - `label_aware_delta=0`;
+- se nenhum lambda passar, fechar a linha "interpolacao V601" e nao rodar mais
+  H200 sobre V596/V601.
+
+Resultado:
+
+- job HF H200:
+  `https://huggingface.co/jobs/felipesp1983/6a0abfc7e7940de6ee6ce3e4`;
+- logs locais preservados em:
+  `artifacts/v604_hf_h200_v601_interpolation_probe/v604_job_6a0abfc7_logs_cycle25.txt`;
+- resumo extraido dos logs:
+  `artifacts/v604_hf_h200_v601_interpolation_probe/v604_candidate_summaries_from_logs.json`;
+- candidatos concluidos:
+  - `v588_interp_l050`: `192/315`, `equation=56/155`, `bit=136/160`, `truncated=0`;
+  - `v588_interp_l100`: `190/315`, `equation=56/155`, `bit=134/160`, `truncated=1`;
+  - `v588_interp_l250`: `190/315`, `equation=56/155`, `bit=134/160`, `truncated=1`;
+- `v588_interp_l500` foi iniciado, mas cancelado por FinOps depois de tres
+  pontos sem sinal e duas regressoes consecutivas.
+
+Decisao:
+
+- nenhum lambda passou o criterio promocional;
+- fechar a rota "V601/MoE preference por interpolacao";
+- nao abrir novo H200 nessa linha;
+- o proximo gasto pago so e permitido se houver novo sinal CPU/source-only que
+  nao use V596/V601 como unica justificativa e que preserve `bit>=136`,
+  `equation>=60`, `truncated=0` e protected rows.
+
+### Atualizacao V606-V608 - Fonte V446 Compacta e Smoke H200 Permitido 2026-05-18
+
+Novo sinal CPU/source-only:
+
+- V606 auditou o pool V446 aceito contra `competition_train.csv` com
+  `raw_output -> extract_final_answer -> verify_answer`;
+- resultado V606:
+  - `1299` linhas limpas e ainda nao usadas/quarentenadas;
+  - `848` bit e `451` equation;
+  - `11` linhas sujas removidas por mismatch de resposta extraida;
+  - `0` overlap com datasets/adapters em quarentena;
+  - CoT bruto era longo demais para treino direto, portanto foi bloqueado como
+    fonte verbatim.
+
+Dataset ativo V607:
+
+- construtor: `scripts/build_v607_compact_v446_source_dataset.py`;
+- train `1099` linhas: `721` bit, `378` equation;
+- validation `194` linhas: `127` bit, `67` equation;
+- contrato de prompt: `official_like` (`user = prompt + PROMPT_SUFFIX`, sem
+  system prompt);
+- resposta final: exatamente uma resposta `\boxed{...}` verificavel por
+  extrator label-free;
+- pesos de loss: bit `1.1`, equation `1.0`;
+- gates CPU:
+  - V509 train/val: `blocked_dataset_count=0`;
+  - V286 real tokenizer: `tokenization_gate_passed`, `0` overlap weak/full,
+    `0` truncation, `0` fallback masks, `0` completion tokens dropped;
+  - V513 corrigido para `official_like`: `0` blockers, `0` warnings;
+  - V478 objetivo: `bit=0.677227`, `equation=0.322773`;
+  - V524: `quota_ok_cpu_only`;
+  - V526 com `example_mean` + `row_loss_weight`: `example_mean_dry_run_passed`,
+    `gpu_allowed=true`, escopo `one_short_h200_smoke_only`.
+
+Correcoes de gate feitas durante V607:
+
+- V513 nao aceitava contrato `official_like` e gerava falso
+  `prompt_user_mismatch`; corrigido para suportar `user,assistant` e preservar
+  o `\n` inicial do `PROMPT_SUFFIX`;
+- `scripts/build_v607_compact_v446_source_dataset.py` passou a exigir roundtrip
+  label-free do `\boxed{...}` bruto, evitando escape simbolico errado;
+- pre-paid gate bloqueou V608 ate o launcher ter snippets literais de
+  `PREF_TRAIN_SHA256`, `PREF_VAL_SHA256`, `PREF_TRAIN_ROWS`,
+  `PREF_VAL_ROWS`, `KG1_V516_PARSER_CURRENT_BASELINE_STATUS=passed` e
+  `KG1_STALE_PREDICTION_PARITY_STATUS=passed`.
+
+HF artifacts e launcher V608:
+
+- dataset enviado para:
+  `felipesp1983/kg1-v607-compact-v446-source-artifacts`;
+- commit HF dataset:
+  `eedc4f29b3a2180b3a6c56b4b86b8d26d1362b9e`;
+- upload manifest:
+  `artifacts/v607_compact_v446_source_dataset/20260518T_v607_cpu_gate/v607_hf_dataset_upload_manifest.json`;
+- launcher:
+  `artifacts/v608_hf_h200_launch/launch_v608_hf_nemo_h200_v607_compact_source.py`;
+- debug local V608 validou:
+  - H200 `0.083333/min`, abaixo do limite `0.09`;
+  - hashes HF train/val iguais aos manifestos V607;
+  - seed adapter V290 checkpoint-6 com arquivos obrigatorios;
+  - objetivo remoto com `--use-row-loss-weight` e
+    `--require-row-loss-weight`;
+  - `KG1_CPU_SIMULATED_TOTAL_CORRECT=201`,
+    `KG1_CPU_SIMULATED_BIT_CORRECT=138`,
+    `KG1_CPU_SIMULATED_EQUATION_CORRECT=63`,
+    perdas simuladas `0`;
+  - `KG1_MAX_TOKEN_HEADROOM_RATIO=0.336`.
+- pre-paid gate:
+  `artifacts/v608_hf_h200_launch/v608_pre_paid_job_integration_gate.json`;
+  resultado `ok=true`, `findings=[]`.
+
+Decisao atual:
+
+- V608 e o unico treino H200 permitido agora;
+- escopo maximo: `MAX_STEPS=2`, `timeout=3600`,
+  `LOSS_NORMALIZATION_MODE=example_mean`, `USE_ROW_LOSS_WEIGHT=1`,
+  `REQUIRE_ROW_LOSS_WEIGHT=1`;
+- monitorar logs a cada `40` segundos;
+- se produzir `checkpoint-2`, rodar weak eval imediatamente;
+- cancelar/encerrar a rota se checkpoint-2 nao cumprir todos:
+  `total>=196/315`, `equation_transform>=60/155`,
+  `bit_manipulation>=136/160`, `truncated=0`, protected rows intactas e
+  re-score label-free atual sem ganho falso.

@@ -77,8 +77,16 @@ def audit(args: argparse.Namespace) -> dict[str, Any]:
         cand_correct = truthy(cand.get(args.candidate_correct_column))
         answer_matches = cand_prediction == expected_answer
         protected_ok = cand_correct and answer_matches
+        blocker_reason = ""
+        classification = "protected_ok"
         if not protected_ok:
-            blockers.append(f"protected_id_backfire:{row_id}")
+            if base_correct:
+                blocker_reason = f"protected_id_backfire:{row_id}"
+                classification = "backfire_from_correct_baseline"
+            else:
+                blocker_reason = f"protected_id_missing_required_gain:{row_id}"
+                classification = "missing_required_gain_not_backfire"
+            blockers.append(blocker_reason)
         rows.append(
             {
                 "id": row_id,
@@ -89,6 +97,8 @@ def audit(args: argparse.Namespace) -> dict[str, Any]:
                 "candidate_correct": cand_correct,
                 "answer_matches_expected": answer_matches,
                 "protected_ok": protected_ok,
+                "classification": classification,
+                "blocker_reason": blocker_reason,
             }
         )
 
@@ -169,8 +179,40 @@ def self_test() -> None:
         )
         if not audit(ok_args)["passed"]:
             raise AssertionError("expected ok candidate to pass")
-        if audit(bad_args)["passed"]:
+        bad_report = audit(bad_args)
+        if bad_report["passed"]:
             raise AssertionError("expected bad candidate to block")
+        if "protected_id_backfire:8740ed31" not in bad_report["blockers"]:
+            raise AssertionError("expected row 8740ed31 to be classified as backfire")
+        if "protected_id_backfire:59bee375" not in bad_report["blockers"]:
+            raise AssertionError("expected row 59bee375 to be classified as backfire")
+
+        baseline_required_gain = root / "baseline_required_gain.csv"
+        candidate_missing_gain = root / "candidate_missing_gain.csv"
+        baseline_required_gain.write_text(
+            header + "55d834d1,bit_manipulation,00111111,10111111,False\n",
+            encoding="utf-8",
+        )
+        candidate_missing_gain.write_text(
+            header + "55d834d1,bit_manipulation,00111111,10111111,False\n",
+            encoding="utf-8",
+        )
+        missing_gain_args = parse_args(
+            [
+                "--baseline-csv",
+                str(baseline_required_gain),
+                "--candidate-csv",
+                str(candidate_missing_gain),
+                "--protected-id-answer",
+                "55d834d1=00111111",
+                "--allow-blocked",
+            ]
+        )
+        missing_gain_report = audit(missing_gain_args)
+        if missing_gain_report["passed"]:
+            raise AssertionError("expected missing required gain candidate to block")
+        if "protected_id_missing_required_gain:55d834d1" not in missing_gain_report["blockers"]:
+            raise AssertionError("expected row 55d834d1 to be classified as missing required gain")
     print("kg1_weak_backfire_row_guard_self_test=ok", flush=True)
 
 
@@ -178,7 +220,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--baseline-csv", type=Path, default=DEFAULT_BASELINE_CSV)
     parser.add_argument("--candidate-csv", type=Path)
-    parser.add_argument("--protected-id-answer", action="append", default=list(DEFAULT_PROTECTED))
+    parser.add_argument("--protected-id-answer", action="append", default=None)
     parser.add_argument("--baseline-prediction-column", default="prediction")
     parser.add_argument("--candidate-prediction-column", default="prediction")
     parser.add_argument("--baseline-correct-column", default="correct")
@@ -187,6 +229,8 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--allow-blocked", action="store_true")
     parser.add_argument("--self-test", action="store_true")
     args = parser.parse_args(argv)
+    if args.protected_id_answer is None:
+        args.protected_id_answer = list(DEFAULT_PROTECTED)
     if not args.self_test and args.candidate_csv is None:
         parser.error("--candidate-csv is required unless --self-test is used")
     return args

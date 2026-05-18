@@ -69,8 +69,25 @@ def utc_now() -> str:
     return datetime.now(timezone.utc).isoformat()
 
 
+def windows_long_path(path: Path) -> Path:
+    """Return a Windows long-path-safe absolute path without changing POSIX behavior."""
+    resolved = path.resolve(strict=False)
+    if sys.platform != "win32":
+        return resolved
+    text = str(resolved)
+    if text.startswith("\\\\?\\"):
+        return resolved
+    if text.startswith("\\\\"):
+        return Path("\\\\?\\UNC\\" + text.lstrip("\\"))
+    return Path("\\\\?\\" + text)
+
+
+def read_csv_frame(path: Path) -> pd.DataFrame:
+    return pd.read_csv(str(windows_long_path(path)), dtype=str, keep_default_na=False)
+
+
 def read_prediction_csv(path: Path) -> pd.DataFrame:
-    frame = pd.read_csv(path, dtype=str, keep_default_na=False)
+    frame = read_csv_frame(path)
     missing = sorted({"id", "answer"} - set(frame.columns))
     if missing:
         raise ValueError(f"{path} missing required columns: {missing}")
@@ -134,7 +151,7 @@ def builtin_metric_tests() -> list[dict[str, Any]]:
 
 
 def weak_answer_audit(path: Path) -> dict[str, Any]:
-    frame = pd.read_csv(path, dtype=str, keep_default_na=False)
+    frame = read_csv_frame(path)
     family_col = "family" if "family" in frame.columns else "type" if "type" in frame.columns else ""
     if family_col:
         frame["family_norm"] = frame[family_col].map(canonical_family)
@@ -195,9 +212,9 @@ def prediction_metric_audit(path: Path) -> dict[str, Any]:
 
 
 def raw_extraction_audit(path: Path, answer_csv: Path | None) -> dict[str, Any]:
-    frame = pd.read_csv(path, dtype=str, keep_default_na=False)
+    frame = read_csv_frame(path)
     if "answer" not in frame.columns and answer_csv is not None:
-        answer_frame = pd.read_csv(answer_csv, dtype=str, keep_default_na=False)
+        answer_frame = read_csv_frame(answer_csv)
         answer_cols = ["id", "answer"]
         family_cols = [column for column in ["type", "task_type", "family"] if column in answer_frame.columns]
         answer_frame = answer_frame[answer_cols + family_cols].copy()
@@ -304,7 +321,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
     if args.output_dir:
         args.output_dir.mkdir(parents=True, exist_ok=True)
         out_path = args.output_dir / f"{args.label}_manifest.json"
-        out_path.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+        windows_long_path(out_path).write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
         print("metric_integrity_manifest =", out_path, flush=True)
     print("metric_integrity_report =", json.dumps(report, indent=2, sort_keys=True), flush=True)
     if not all(item["passed"] for item in tests):
@@ -325,6 +342,8 @@ def run_self_test() -> None:
         raise RuntimeError("V449 ACC metric integrity self-test failed")
     symbolic = r"prefix \boxed{wrong} final \boxed{]\}\\!}"
     assert extract_final_answer_for_expected(symbolic, r"]}\!") == r"]}\!"
+    assert extract_final_answer(r"\boxed{]}\!}") == r"]}\!"
+    assert extract_final_answer(r"\boxed{$}{>}") == "$"
     earlier_correct_later_wrong = r"prefix \boxed{1010} final \boxed{1011}"
     assert extract_final_answer_for_expected(earlier_correct_later_wrong, "1010") == "1011"
     assert not verify_answer("1010", extract_final_answer_for_expected(earlier_correct_later_wrong, "1010"))

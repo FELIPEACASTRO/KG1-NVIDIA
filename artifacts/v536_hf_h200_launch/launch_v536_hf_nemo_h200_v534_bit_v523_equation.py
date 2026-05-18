@@ -390,7 +390,7 @@ def manifest_payload(
             "loss_normalization_mode": LOSS_NORMALIZATION_MODE,
             "source_weights": SOURCE_WEIGHTS,
             "subcategory_weights": SUBCATEGORY_WEIGHTS,
-            "promotion_gate": "reject unless total>=193, equation>=57 label-free, bit>=136, truncated=0 and protected rows hold",
+            "promotion_gate": "reject unless total>=196, equation>=60 label-free, bit>=136, truncated=0 and protected rows hold",
             "version_comparison_artifact": "artifacts/version_diffs/V536_VS_V523.md",
             "previous_version": "V523 targeted source trace pack",
         },

@@ -219,11 +219,26 @@ def validate_adapter(adapter_dir: Path) -> dict[str, Any]:
         raise RuntimeError(f"adapter r mismatch: expected {expected_r}, got {config.get('r')}")
     if int(config.get("lora_alpha", -1)) != expected_alpha:
         raise RuntimeError(f"adapter alpha mismatch: expected {expected_alpha}, got {config.get('lora_alpha')}")
+    modules_to_save = config.get("modules_to_save") or []
+    if modules_to_save:
+        raise RuntimeError(
+            "adapter modules_to_save must be empty for KG1 adapter-only submit path: "
+            + json.dumps(modules_to_save, sort_keys=True)
+        )
+    expected_base = env_str(
+        "KG1_EXPECTED_ADAPTER_BASE_MODEL_NAME_OR_PATH",
+        env_str("KG1_MODEL_NAME", DEFAULT_MODEL_NAME),
+    ).rstrip("/")
+    adapter_base = str(config.get("base_model_name_or_path") or "").rstrip("/")
+    if expected_base and adapter_base and adapter_base != expected_base:
+        raise RuntimeError(f"adapter base model mismatch: expected {expected_base}, got {adapter_base}")
     return {
         "adapter_dir": str(adapter_dir),
         "adapter_config": str(config_path),
         "adapter_weights": str(weights_path),
         "adapter_weights_bytes": int(weights_path.stat().st_size),
+        "base_model_name_or_path": config.get("base_model_name_or_path"),
+        "modules_to_save": modules_to_save,
         "target_modules": config.get("target_modules"),
         "target_parameters": config.get("target_parameters"),
         "r": config.get("r"),
@@ -285,8 +300,12 @@ def weak_promotion_gate(summary: dict[str, Any]) -> dict[str, Any]:
     equation_min = env_int("KG1_WEAK_PROMOTE_EQUATION_MIN", 60)
     bit_min = env_int("KG1_WEAK_PROMOTE_BIT_MIN", 136)
     trunc_max = env_int("KG1_WEAK_PROMOTE_TRUNC_MAX", 0)
-    avg_completion_tokens_max = env_int("KG1_WEAK_PROMOTE_AVG_COMPLETION_TOKENS_MAX", 512)
-    max_completion_tokens_max = env_int("KG1_WEAK_PROMOTE_MAX_COMPLETION_TOKENS_MAX", 2048)
+    # Official-like weak eval needs long reasoning for the current V290 baseline
+    # itself. Keep length as an optional drift diagnostic, not a default
+    # promotion blocker; truncation and protected-row guards remain mandatory.
+    avg_completion_tokens_max = env_int("KG1_WEAK_PROMOTE_AVG_COMPLETION_TOKENS_MAX", 0)
+    max_completion_tokens_max = env_int("KG1_WEAK_PROMOTE_MAX_COMPLETION_TOKENS_MAX", 0)
+    label_aware_delta_max = env_int("KG1_WEAK_PROMOTE_LABEL_AWARE_DELTA_MAX", 0)
     rows = summary.get("rows", [])
     if not isinstance(rows, list):
         rows = []
@@ -299,20 +318,29 @@ def weak_promotion_gate(summary: dict[str, Any]) -> dict[str, Any]:
         equation = int(row.get("equation_transform_correct", 0) or 0)
         bit = int(row.get("bit_manipulation_correct", 0) or 0)
         truncated = int(row.get("truncated", 0) or 0)
+        label_aware_correct = int(row.get("label_aware_debug_correct", correct) or 0)
+        label_aware_delta = max(0, label_aware_correct - correct)
         completion_tokens = int(row.get("completion_tokens", 0) or 0)
         candidate_rows = int(row.get("rows", summary.get("weak_rows", EXPECTED_WEAK_ROWS)) or EXPECTED_WEAK_ROWS)
         avg_completion_tokens = float(row.get("avg_completion_tokens", 0) or 0)
         if avg_completion_tokens <= 0 and candidate_rows > 0:
             avg_completion_tokens = completion_tokens / candidate_rows
         max_completion_tokens = int(row.get("max_completion_tokens", 0) or 0)
+        avg_completion_tokens_blocked = (
+            avg_completion_tokens_max > 0 and avg_completion_tokens > avg_completion_tokens_max
+        )
+        max_completion_tokens_blocked = (
+            max_completion_tokens_max > 0 and max_completion_tokens > max_completion_tokens_max
+        )
         passed = (
             status_ok
             and correct >= total_min
             and equation >= equation_min
             and bit >= bit_min
             and truncated <= trunc_max
-            and avg_completion_tokens <= avg_completion_tokens_max
-            and max_completion_tokens <= max_completion_tokens_max
+            and not avg_completion_tokens_blocked
+            and not max_completion_tokens_blocked
+            and label_aware_delta <= label_aware_delta_max
         )
         candidates.append(
             {
@@ -322,6 +350,8 @@ def weak_promotion_gate(summary: dict[str, Any]) -> dict[str, Any]:
                 "equation_transform_correct": equation,
                 "bit_manipulation_correct": bit,
                 "truncated": truncated,
+                "label_aware_debug_correct": label_aware_correct,
+                "label_aware_minus_label_free_correct": label_aware_delta,
                 "completion_tokens": completion_tokens,
                 "avg_completion_tokens": avg_completion_tokens,
                 "max_completion_tokens": max_completion_tokens,
@@ -336,11 +366,15 @@ def weak_promotion_gate(summary: dict[str, Any]) -> dict[str, Any]:
                         (f"truncated_gt_{trunc_max}", truncated > trunc_max),
                         (
                             f"avg_completion_tokens_gt_{avg_completion_tokens_max}",
-                            avg_completion_tokens > avg_completion_tokens_max,
+                            avg_completion_tokens_blocked,
                         ),
                         (
                             f"max_completion_tokens_gt_{max_completion_tokens_max}",
-                            max_completion_tokens > max_completion_tokens_max,
+                            max_completion_tokens_blocked,
+                        ),
+                        (
+                            f"label_aware_delta_gt_{label_aware_delta_max}",
+                            label_aware_delta > label_aware_delta_max,
                         ),
                     ]
                     if blocked
@@ -360,6 +394,7 @@ def weak_promotion_gate(summary: dict[str, Any]) -> dict[str, Any]:
             "truncated_max": trunc_max,
             "avg_completion_tokens_max": avg_completion_tokens_max,
             "max_completion_tokens_max": max_completion_tokens_max,
+            "label_aware_delta_max": label_aware_delta_max,
         },
         "candidate_count": len(candidates),
         "passed_candidate_count": len(passed_candidates),
@@ -1000,6 +1035,78 @@ def self_test() -> int:
             raise
     else:
         raise RuntimeError("self-test expected small weak CSV count failure")
+
+    adapter_ok = tmp / "adapter_ok"
+    adapter_ok.mkdir(parents=True, exist_ok=True)
+    (adapter_ok / "adapter_model.safetensors").write_bytes(b"kg1-self-test")
+    (adapter_ok / "adapter_config.json").write_text(
+        json.dumps(
+            {
+                "base_model_name_or_path": DEFAULT_MODEL_NAME,
+                "lora_alpha": 32,
+                "modules_to_save": None,
+                "r": 32,
+                "target_modules": ["q_proj"],
+                "target_parameters": [],
+            },
+            sort_keys=True,
+        ),
+        encoding="utf-8",
+    )
+    adapter_meta = validate_adapter(adapter_ok)
+    if adapter_meta.get("modules_to_save") != []:
+        raise RuntimeError("self-test expected empty modules_to_save in adapter meta")
+
+    adapter_modules_to_save = tmp / "adapter_modules_to_save"
+    adapter_modules_to_save.mkdir(parents=True, exist_ok=True)
+    (adapter_modules_to_save / "adapter_model.safetensors").write_bytes(b"kg1-self-test")
+    (adapter_modules_to_save / "adapter_config.json").write_text(
+        json.dumps(
+            {
+                "base_model_name_or_path": DEFAULT_MODEL_NAME,
+                "lora_alpha": 32,
+                "modules_to_save": ["lm_head"],
+                "r": 32,
+                "target_modules": ["q_proj"],
+                "target_parameters": [],
+            },
+            sort_keys=True,
+        ),
+        encoding="utf-8",
+    )
+    try:
+        validate_adapter(adapter_modules_to_save)
+    except RuntimeError as exc:
+        if "modules_to_save must be empty" not in str(exc):
+            raise
+    else:
+        raise RuntimeError("self-test expected modules_to_save adapter failure")
+
+    adapter_wrong_base = tmp / "adapter_wrong_base"
+    adapter_wrong_base.mkdir(parents=True, exist_ok=True)
+    (adapter_wrong_base / "adapter_model.safetensors").write_bytes(b"kg1-self-test")
+    (adapter_wrong_base / "adapter_config.json").write_text(
+        json.dumps(
+            {
+                "base_model_name_or_path": "wrong/base",
+                "lora_alpha": 32,
+                "modules_to_save": None,
+                "r": 32,
+                "target_modules": ["q_proj"],
+                "target_parameters": [],
+            },
+            sort_keys=True,
+        ),
+        encoding="utf-8",
+    )
+    try:
+        validate_adapter(adapter_wrong_base)
+    except RuntimeError as exc:
+        if "adapter base model mismatch" not in str(exc):
+            raise
+    else:
+        raise RuntimeError("self-test expected adapter base model mismatch failure")
+
     old_env = {
         name: os.environ.get(name)
         for name in [
@@ -1051,6 +1158,7 @@ def self_test() -> int:
                     "equation_transform_correct": 60,
                     "bit_manipulation_correct": 136,
                     "truncated": 0,
+                    "label_aware_debug_correct": 196,
                     "rows": EXPECTED_WEAK_ROWS,
                     "completion_tokens": 3150,
                     "avg_completion_tokens": 10,
@@ -1060,6 +1168,8 @@ def self_test() -> int:
         }
     )
     assert passed["decision"] == "weak_promotion_gate_passed"
+    os.environ["KG1_WEAK_PROMOTE_AVG_COMPLETION_TOKENS_MAX"] = "512"
+    os.environ["KG1_WEAK_PROMOTE_MAX_COMPLETION_TOKENS_MAX"] = "2048"
     runaway_blocked = weak_promotion_gate(
         {
             "rows": [
@@ -1070,6 +1180,7 @@ def self_test() -> int:
                     "equation_transform_correct": 60,
                     "bit_manipulation_correct": 136,
                     "truncated": 0,
+                    "label_aware_debug_correct": 196,
                     "rows": EXPECTED_WEAK_ROWS,
                     "completion_tokens": 1500000,
                     "avg_completion_tokens": 4761.9,
@@ -1082,6 +1193,32 @@ def self_test() -> int:
     assert any(
         reason.startswith("avg_completion_tokens_gt_")
         for reason in runaway_blocked["candidates"][0]["blocking_reasons"]
+    )
+    os.environ.pop("KG1_WEAK_PROMOTE_AVG_COMPLETION_TOKENS_MAX", None)
+    os.environ.pop("KG1_WEAK_PROMOTE_MAX_COMPLETION_TOKENS_MAX", None)
+    label_aware_delta_blocked = weak_promotion_gate(
+        {
+            "rows": [
+                {
+                    "name": "expected_aware_only_gain",
+                    "status": "ok",
+                    "correct": 196,
+                    "label_aware_debug_correct": 197,
+                    "equation_transform_correct": 60,
+                    "bit_manipulation_correct": 136,
+                    "truncated": 0,
+                    "rows": EXPECTED_WEAK_ROWS,
+                    "completion_tokens": 3150,
+                    "avg_completion_tokens": 10,
+                    "max_completion_tokens": 40,
+                }
+            ]
+        }
+    )
+    assert label_aware_delta_blocked["decision"] == "weak_promotion_gate_blocked"
+    assert any(
+        reason.startswith("label_aware_delta_gt_")
+        for reason in label_aware_delta_blocked["candidates"][0]["blocking_reasons"]
     )
     catastrophic = catastrophic_eval_guard(
         {
