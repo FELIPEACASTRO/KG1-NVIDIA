@@ -42,6 +42,7 @@ from scripts.evaluate_lora_adapter import (  # noqa: E402
 from src.competition_utils import (  # noqa: E402
     OFFICIAL_INFERENCE_CONFIG,
     classify_puzzle,
+    extract_boxed_answers,
     extract_final_answer,
     extract_final_answer_for_expected,
     verify_answer,
@@ -120,6 +121,31 @@ def memory_snapshot() -> dict[str, Any]:
         return {"error": repr(exc)}
 
 
+def boxed_output_metrics(raw_output: str) -> dict[str, Any]:
+    """Return output-policy metrics for boxed-answer contract audits.
+
+    The public extractor falls back to final-answer phrases and then to the last
+    number when no ``\boxed{}`` exists.  That fallback can hide failures like
+    V626, where a truncated reasoning trace produced an intermediate number.
+    These metrics make that path visible without changing the submit-safe
+    prediction itself.
+    """
+
+    text = str(raw_output or "")
+    stripped = text.lstrip()
+    boxed_answers = [item.strip() for item in extract_boxed_answers(text)]
+    first_pos = text.find(r"\boxed{")
+    return {
+        "boxed_count": len(boxed_answers),
+        "first_boxed_prediction": boxed_answers[0] if boxed_answers else "",
+        "last_boxed_prediction": boxed_answers[-1] if boxed_answers else "",
+        "first_boxed_char_index": first_pos,
+        "starts_boxed": stripped.startswith(r"\boxed{"),
+        "starts_final_answer_boxed": stripped.startswith(r"Final answer: \boxed{"),
+        "no_box_fallback_used": len(boxed_answers) == 0,
+    }
+
+
 class TimeoutAlarm:
     def __init__(self, seconds: int, label: str) -> None:
         self.seconds = max(0, int(seconds))
@@ -180,6 +206,16 @@ def build_eval_config(args: argparse.Namespace) -> dict[str, Any]:
     if "KG1_VLLM_MAX_NUM_SEQS" in os.environ:
         config["max_num_seqs"] = env_int("KG1_VLLM_MAX_NUM_SEQS", int(config.get("max_num_seqs", 64)))
     return config
+
+
+def vllm_generate_no_progress(llm: Any, prompts: list[str], sampling_params: Any, lora_request: Any) -> Any:
+    """Run vLLM generation without tqdm control characters in HF job logs."""
+    return llm.generate(
+        prompts,
+        sampling_params=sampling_params,
+        lora_request=lora_request,
+        use_tqdm=False,
+    )
 
 
 def main() -> int:
@@ -328,7 +364,12 @@ def main() -> int:
                 print(f"warmup_rows = {warmup_n}")
                 warmup_start = time.time()
                 with TimeoutAlarm(args.generation_timeout_s, "vllm_warmup_generate"):
-                    _ = llm.generate(rendered[:warmup_n], sampling_params=sampling_params, lora_request=lora_request)
+                    _ = vllm_generate_no_progress(
+                        llm,
+                        rendered[:warmup_n],
+                        sampling_params=sampling_params,
+                        lora_request=lora_request,
+                    )
                 print(f"warmup_elapsed_s = {time.time() - warmup_start:.1f}")
             else:
                 print("warmup_rows = 0")
@@ -336,7 +377,12 @@ def main() -> int:
             gen_start = time.time()
             print("generation_start =", utc_now(), flush=True)
             with TimeoutAlarm(args.generation_timeout_s, "vllm_batch_generate"):
-                outputs = llm.generate(rendered, sampling_params=sampling_params, lora_request=lora_request)
+                outputs = vllm_generate_no_progress(
+                    llm,
+                    rendered,
+                    sampling_params=sampling_params,
+                    lora_request=lora_request,
+                )
             gen_elapsed = time.time() - gen_start
             if len(outputs) != len(rendered):
                 raise RuntimeError(f"vLLM output count mismatch: outputs={len(outputs)} prompts={len(rendered)}")
@@ -349,6 +395,7 @@ def main() -> int:
                 prompt = str(getattr(row, "prompt"))
                 expected = getattr(row, "answer", None)
                 prediction = extract_final_answer(raw_output)
+                boxed_metrics = boxed_output_metrics(raw_output)
                 label_aware_debug_prediction = (
                     extract_final_answer_for_expected(raw_output, expected)
                     if expected is not None
@@ -362,6 +409,7 @@ def main() -> int:
                         "prediction": prediction,
                         "submit_safe_label_free_prediction": prediction,
                         "label_aware_debug_prediction": label_aware_debug_prediction,
+                        **boxed_metrics,
                         "prompt_tokens": len(getattr(output, "prompt_token_ids", []) or []),
                         "completion_tokens": len(getattr(completion, "token_ids", []) or []),
                         "finish_reason": completion.finish_reason or "",
@@ -389,6 +437,11 @@ def main() -> int:
                     lambda r: verify_answer(r["answer"], r["label_aware_debug_prediction"]),
                     axis=1,
                 )
+            if "first_boxed_prediction" in merged.columns:
+                merged["first_boxed_correct"] = merged.apply(
+                    lambda r: verify_answer(r["answer"], r["first_boxed_prediction"]),
+                    axis=1,
+                )
             merged["truncated"] = merged["finish_reason"].fillna("").astype(str).eq("length")
 
             predictions_path = candidate_dir / f"{label}_predictions.csv"
@@ -400,6 +453,25 @@ def main() -> int:
             total_tokens = int(merged["completion_tokens"].fillna(0).sum())
             avg_completion_tokens = float(total_tokens / len(merged)) if len(merged) else 0.0
             max_completion_tokens = int(merged["completion_tokens"].fillna(0).max()) if len(merged) else 0
+            boxed_rows = int(merged["boxed_count"].fillna(0).astype(int).gt(0).sum()) if "boxed_count" in merged else 0
+            no_box_fallback_rows = (
+                int(merged["no_box_fallback_used"].fillna(False).astype(bool).sum())
+                if "no_box_fallback_used" in merged
+                else int(len(merged))
+            )
+            first_boxed_correct = (
+                int(merged["first_boxed_correct"].fillna(False).astype(bool).sum())
+                if "first_boxed_correct" in merged
+                else 0
+            )
+            starts_boxed_rows = (
+                int(merged["starts_boxed"].fillna(False).astype(bool).sum()) if "starts_boxed" in merged else 0
+            )
+            starts_final_answer_boxed_rows = (
+                int(merged["starts_final_answer_boxed"].fillna(False).astype(bool).sum())
+                if "starts_final_answer_boxed" in merged
+                else 0
+            )
             report = {
                 "generated_at_utc": utc_now(),
                 "label": label,
@@ -411,6 +483,18 @@ def main() -> int:
                 "accuracy": float(merged["correct"].mean()) if len(merged) else 0.0,
                 "truncated": int(merged["truncated"].sum()),
                 "truncation_rate": float(merged["truncated"].mean()) if len(merged) else 0.0,
+                "boxed_rows": boxed_rows,
+                "boxed_rate": float(boxed_rows / len(merged)) if len(merged) else 0.0,
+                "first_boxed_correct": first_boxed_correct,
+                "first_boxed_accuracy": float(first_boxed_correct / len(merged)) if len(merged) else 0.0,
+                "no_box_fallback_rows": no_box_fallback_rows,
+                "no_box_fallback_rate": float(no_box_fallback_rows / len(merged)) if len(merged) else 0.0,
+                "starts_boxed_rows": starts_boxed_rows,
+                "starts_boxed_rate": float(starts_boxed_rows / len(merged)) if len(merged) else 0.0,
+                "starts_final_answer_boxed_rows": starts_final_answer_boxed_rows,
+                "starts_final_answer_boxed_rate": (
+                    float(starts_final_answer_boxed_rows / len(merged)) if len(merged) else 0.0
+                ),
                 "completion_tokens": total_tokens,
                 "avg_completion_tokens": avg_completion_tokens,
                 "max_completion_tokens": max_completion_tokens,
@@ -439,6 +523,16 @@ def main() -> int:
                 "accuracy": report["accuracy"],
                 "truncated": report["truncated"],
                 "truncation_rate": report["truncation_rate"],
+                "boxed_rows": report["boxed_rows"],
+                "boxed_rate": report["boxed_rate"],
+                "first_boxed_correct": report["first_boxed_correct"],
+                "first_boxed_accuracy": report["first_boxed_accuracy"],
+                "no_box_fallback_rows": report["no_box_fallback_rows"],
+                "no_box_fallback_rate": report["no_box_fallback_rate"],
+                "starts_boxed_rows": report["starts_boxed_rows"],
+                "starts_boxed_rate": report["starts_boxed_rate"],
+                "starts_final_answer_boxed_rows": report["starts_final_answer_boxed_rows"],
+                "starts_final_answer_boxed_rate": report["starts_final_answer_boxed_rate"],
                 "equation_transform_correct": int(by_task.get("equation_transform", {}).get("correct", 0)),
                 "bit_manipulation_correct": int(by_task.get("bit_manipulation", {}).get("correct", 0)),
                 "rows": report["rows"],
