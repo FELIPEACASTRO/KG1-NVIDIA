@@ -31,6 +31,7 @@ MAX_UNIT_COST_USD = 0.05
 MAX_TORCH_CUDA_MAJOR = 12
 WEAK_EVAL_TIMEOUT_S = 2400
 WEAK_GENERATION_TIMEOUT_S = 900
+WEAK_HF_JOB_TIMEOUT_S = 4200
 WEAK_MAX_TOKENS = 2048
 VLLM_VERSION = "0.20.1"
 VLLM_CUDA_FLAVOR = "cu129"
@@ -445,6 +446,7 @@ def main() -> int:
         "runtime_image_gate": runtime_gate,
         "weak_runtime_policy_gate": weak_runtime_policy_gate,
         "finops_policy": "A100-large only; do not launch while another paid KG1 job is active.",
+        "hf_job_timeout_s": WEAK_HF_JOB_TIMEOUT_S,
     }
     if args.launch:
         if not runtime_gate["passed"]:
@@ -455,7 +457,7 @@ def main() -> int:
             env=job_env,
             secrets={"HF_TOKEN": token},
             flavor=FLAVOR,
-            timeout=7200,
+            timeout=WEAK_HF_JOB_TIMEOUT_S,
             namespace=NAMESPACE,
         )
         manifest.update(
