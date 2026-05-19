@@ -1,0 +1,221 @@
+{
+  "dataset_schema": "sft",
+  "expected_eval_output_contract": "",
+  "findings": [],
+  "launcher": {
+    "contains_expected_flavor": true,
+    "contains_timeout_3600": true,
+    "declared_dataset_schema": "sft",
+    "decoding_vs_adapter_drift_gate": {
+      "observed": {
+        "EVAL_EVERY_STEPS": 10.0,
+        "KG1_ALLOW_DECODING_DRIFT_DEFERRED_FOR_FIRST_CHECKPOINT": "1",
+        "KG1_DECODING_VS_ADAPTER_DRIFT_GATE_STATUS": "deferred_post_checkpoint",
+        "KG1_EXPECTED_MAX_STEPS": 20.0,
+        "KG1_FIRST_CHECKPOINT_WEAK_EVAL_REQUIRED": "1",
+        "MAX_STEPS": 20.0,
+        "SAVE_EVERY_STEPS": 10.0
+      },
+      "required": {
+        "checkpoint_every_steps_lte": 10,
+        "first_checkpoint_weak_eval_required": true,
+        "max_steps_lte": 20,
+        "mode": "deferred_post_checkpoint",
+        "purpose": "allow one tiny smoke when V568 can only be measured after a new checkpoint exists",
+        "v618_surface_route": true
+      }
+    },
+    "eval_prompt_requires_boxed_only_line": false,
+    "expected_abort_max_reserved_gib": 78,
+    "expected_data_repo": "felipesp1983/kg1-v673-guarded-equation-bit-transfer-artifacts",
+    "expected_flavor": "a100-large",
+    "expected_loss_normalization_mode": "example_mean",
+    "expected_max_length": 1024,
+    "launcher": "artifacts\\v673_hf_a100_launch\\launch_v673_hf_a100_guarded_eqbit.py",
+    "require_row_loss_weight": true,
+    "residual_first_gpu_gate": {
+      "observed": {
+        "KG1_ADAPTER_CPU_FORMAT_PARITY_STATUS": "passed",
+        "KG1_CPU_EXTRACTOR_PARITY_STATUS": "passed",
+        "KG1_CPU_MISS_CLASSIFICATION_COVERAGE": 1.0,
+        "KG1_CPU_SIMULATED_BIT_CORRECT": 136.0,
+        "KG1_CPU_SIMULATED_EQUATION_CORRECT": 60.0,
+        "KG1_CPU_SIMULATED_LOST_BIT_ROWS": 0.0,
+        "KG1_CPU_SIMULATED_LOST_EQUATION_ROWS": 0.0,
+        "KG1_CPU_SIMULATED_LOST_ROWS": 0.0,
+        "KG1_CPU_SIMULATED_TOTAL_CORRECT": 196.0,
+        "KG1_CPU_SIMULATION_USES_WEAK_LABELS": "0",
+        "KG1_EXPECTED_TRUNCATED": "0",
+        "KG1_MAX_TOKEN_HEADROOM_RATIO": 0.327,
+        "KG1_PROMPT_TEMPLATE_PARITY_STATUS": "passed",
+        "KG1_PROTECTED_ID_ANSWERS": "8740ed31=01101000,59bee375=10010101,55d834d1=00111111",
+        "KG1_RESIDUAL_FIRST_GATE": "1",
+        "KG1_STALE_PREDICTION_PARITY_STATUS": "passed",
+        "KG1_V516_PARSER_CURRENT_BASELINE_STATUS": "passed",
+        "KG1_V536_VAL_STATS_AS_WEAK_EVIDENCE": "0",
+        "KG1_V540_EXTRACTION_GATE_STATUS": "passed",
+        "KG1_V541_FLIP_LEDGER_STATUS": "passed",
+        "KG1_V541_MISSMAP_GATE_STATUS": "passed",
+        "KG1_WEAK_LABEL_AWARE_SELECTION": "0"
+      },
+      "required": {
+        "cpu_extractor_parity_status": "passed",
+        "cpu_miss_classification_coverage_min": 0.7,
+        "cpu_simulated_bit_min": 136,
+        "cpu_simulated_equation_min": 60,
+        "cpu_simulated_lost_bit_rows_max": 0,
+        "cpu_simulated_lost_equation_rows_max": 0,
+        "cpu_simulated_lost_rows_max": 0,
+        "cpu_simulated_total_min": 196,
+        "cpu_simulation_uses_weak_labels": "0",
+        "expected_truncated": 0,
+        "max_token_headroom_ratio_max": 0.9,
+        "prompt_template_parity_status": "passed",
+        "protected_rows": [
+          "8740ed31=01101000",
+          "59bee375=10010101",
+          "55d834d1=00111111"
+        ],
+        "stale_prediction_parity_status": "passed",
+        "v516_parser_current_baseline_status": "passed",
+        "v536_val_stats_as_weak_evidence": "0",
+        "v540_extraction_gate_status": "passed",
+        "v541_flip_ledger_status": "passed",
+        "v541_missmap_gate_status": "passed",
+        "weak_label_aware_selection": "0"
+      }
+    },
+    "row_loss_weight_flag_counts": {
+      "--require-row-loss-weight": 5,
+      "--require-validation-row-loss-weight": 5,
+      "--use-row-loss-weight": 5
+    },
+    "v666_cpu_gate_launcher_contract": {
+      "declared_report": "artifacts/v673_hf_a100_launch/v673_v666_cpu_gate_stack_after_rowloss_adapter_save_fix.json",
+      "observed_status": "passed",
+      "required_status": "passed"
+    }
+  },
+  "learnability_manifest": {
+    "finding_counts": {
+      "blocker": 0,
+      "info": 2,
+      "warning": 0
+    },
+    "hf_gpu_allowed": true,
+    "manifest": "artifacts\\v673_guarded_equation_bit_transfer_dataset\\20260519T190246Z\\v513_learnability\\v513_trace_learnability_gate_manifest.json",
+    "status": "passed_cpu_structure_only"
+  },
+  "ok": true,
+  "preference_manifest": {
+    "reason": "sft_schema_does_not_use_preference_audit",
+    "skipped": true
+  },
+  "schema_version": "kg1_pre_paid_job_integration_gate_v2",
+  "tokenization_manifest": {
+    "manifest": "artifacts\\v673_guarded_equation_bit_transfer_dataset\\20260519T190246Z\\tokenization_gate_real\\v286_generic_tokenization_gate_manifest.json",
+    "manifest_max_length": 1024,
+    "runtime_expected_max_length": 1024,
+    "runtime_length_safe": true,
+    "status": "tokenization_gate_passed",
+    "train_token_max": 335,
+    "validation_token_max": 335
+  },
+  "train_dataset": {
+    "assistant_boxed_only_rows": 0,
+    "assistant_final_answer_only_rows": 0,
+    "assistant_length_stats": {
+      "bit_manipulation": {
+        "chars_max": 233,
+        "chars_p50": 210,
+        "chars_p95": 233,
+        "rows": 240
+      },
+      "equation_transform": {
+        "chars_max": 269,
+        "chars_p50": 260,
+        "chars_p95": 269,
+        "rows": 480
+      }
+    },
+    "assistant_multiline_rows": 720,
+    "assistant_prefix_counts": {
+      "other": 720
+    },
+    "assistant_rule_prefix_rows": 0,
+    "assistant_trace_rows": 0,
+    "bad_rows_first30": [],
+    "expected_aware_signal_rows_first30": [],
+    "family_counts": {
+      "bit_manipulation": 240,
+      "equation_transform": 480
+    },
+    "negative_type_counts": {},
+    "path": "artifacts\\v673_guarded_equation_bit_transfer_dataset\\20260519T190246Z\\v673_guarded_equation_bit_transfer_train.jsonl",
+    "rows": 720,
+    "sha256": "69f76195e2a004de5c01c919038210da0987b67476911ca706e7ba9b4160477f",
+    "subcategory_counts": {
+      "bit_exact_global_binary_replay": 48,
+      "bit_exact_global_ternary_replay": 96,
+      "bit_fullbyte_ternary_v366_new": 96,
+      "equation_numeric_add_direct": 120,
+      "equation_numeric_colon_trailing_zero": 120,
+      "equation_numeric_minus_signed": 240
+    }
+  },
+  "v438_audit": {
+    "skipped": true
+  },
+  "v666_cpu_gate": {
+    "blockers": [],
+    "check_count": 8,
+    "decision": "gpu_allowed",
+    "failed_checks": [],
+    "gpu_allowed": true,
+    "ok": true,
+    "path": "artifacts\\v673_hf_a100_launch\\v673_v666_cpu_gate_stack_after_rowloss_adapter_save_fix.json",
+    "schema_version": "kg1_v666_cpu_gate_stack_v1"
+  },
+  "validation_dataset": {
+    "assistant_boxed_only_rows": 0,
+    "assistant_final_answer_only_rows": 0,
+    "assistant_length_stats": {
+      "bit_manipulation": {
+        "chars_max": 233,
+        "chars_p50": 210,
+        "chars_p95": 233,
+        "rows": 60
+      },
+      "equation_transform": {
+        "chars_max": 269,
+        "chars_p50": 260,
+        "chars_p95": 269,
+        "rows": 120
+      }
+    },
+    "assistant_multiline_rows": 180,
+    "assistant_prefix_counts": {
+      "other": 180
+    },
+    "assistant_rule_prefix_rows": 0,
+    "assistant_trace_rows": 0,
+    "bad_rows_first30": [],
+    "expected_aware_signal_rows_first30": [],
+    "family_counts": {
+      "bit_manipulation": 60,
+      "equation_transform": 120
+    },
+    "negative_type_counts": {},
+    "path": "artifacts\\v673_guarded_equation_bit_transfer_dataset\\20260519T190246Z\\v673_guarded_equation_bit_transfer_val.jsonl",
+    "rows": 180,
+    "sha256": "df2d44e334de65cb91da935768db93f4727f700edd762dd9fd6d48b3d5d8d14b",
+    "subcategory_counts": {
+      "bit_exact_global_binary_replay": 12,
+      "bit_exact_global_ternary_replay": 24,
+      "bit_fullbyte_ternary_v366_new": 24,
+      "equation_numeric_add_direct": 30,
+      "equation_numeric_colon_trailing_zero": 30,
+      "equation_numeric_minus_signed": 60
+    }
+  }
+}

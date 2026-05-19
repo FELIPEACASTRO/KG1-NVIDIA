@@ -1,6 +1,6 @@
 # KG1 Score Improvement Roadmap
 
-Atualizado: 2026-05-19 17:41 UTC. V672/V673 substitui o plano ativo V671. A decisao
+Atualizado: 2026-05-19 20:14 UTC. V672/V673/V674/V675 substitui o plano ativo V671. A decisao
 de hoje vem de cinco fontes: consulta OpenRouter V670, evidencias CPU locais
 V541/V612, sinais no-loss V350/V366, auditoria completa das discussions Kaggle
 V671 e consenso OpenRouter V672. Objetivo de hoje continua: sair de `192/315` mantendo
@@ -35,10 +35,61 @@ Artefatos novos:
   `artifacts/openrouter/v672_today_family_gain_from_kaggle_discussions/KG1_V672_OPENROUTER_TODAY_GAIN_CONSENSUS.md`;
 - ledger V672 dos 36 misses residuais:
   `artifacts/v672_residual_miss_ledger/20260519T173138Z/KG1_V672_RESIDUAL_MISS_LEDGER.md`;
-- dataset V673 guardado equation+bit:
-  `artifacts/v673_guarded_equation_bit_transfer_dataset/20260519T173945Z/v673_guarded_equation_bit_transfer_manifest.json`;
-- gate V286 toy de V673:
-  `artifacts/v673_guarded_equation_bit_transfer_dataset/20260519T173945Z/tokenization_gate_toy/v286_generic_tokenization_gate_manifest.json`.
+- dataset V673 guardado equation+bit ativo:
+  `artifacts/v673_guarded_equation_bit_transfer_dataset/20260519T190246Z/v673_guarded_equation_bit_transfer_manifest.json`;
+- gate V286 tokenizer real de V673:
+  `artifacts/v673_guarded_equation_bit_transfer_dataset/20260519T190246Z/tokenization_gate_real/v286_generic_tokenization_gate_manifest.json`;
+- limpeza V674:
+  `artifacts/v674_cleanup/v674_workspace_clean_after_large_blob_cleanup.json`;
+- manifesto de remocao V674:
+  `artifacts/v674_cleanup/v674_removed_canceled_submission_and_empty_debug_manifest.json`;
+- consulta OpenRouter V674 prelaunch:
+  `artifacts/openrouter/v674_f2_prelaunch_consult/`;
+- gate V659 output policy V673 com limite 60:
+  `artifacts/v675_v673_prelaunch_hardening/v659_output_policy_idx60/v659_local_output_policy_gate_manifest.json`;
+- gate static V675 apos remover `lm_head` e ativar weak length cap:
+  `artifacts/v675_v673_prelaunch_hardening/v675_static_safety_gate_after_weak_length_gate.json`;
+- gate pre-paid V675 apos remover `lm_head`:
+  `artifacts/v675_v673_prelaunch_hardening/v675_pre_paid_job_integration_gate_after_no_lmhead.json`;
+- gate V619 module surface V675:
+  `artifacts/v675_v673_prelaunch_hardening/v675_v619_surface_gate_after_no_lmhead.json`;
+- manifesto debug A100 V673 sem launch pago:
+  `artifacts/v673_hf_a100_launch/v673-a100-guarded-eqbit-v290ckpt6-20260519T201206Z_launch_manifest.json`.
+
+Hardening V675 prelaunch, 2026-05-19 20:14 UTC:
+
+- Consenso OpenRouter V674 foi tratado como bloqueador tecnico antes de nova
+  GPU: `lm_head` nao deve estar em `LORA_TARGET_MODULES` em adapter-only.
+  Correcao aplicada no launcher V673:
+  `LORA_TARGET_MODULES=down_proj,in_proj,k_proj,o_proj,out_proj,q_proj,up_proj,v_proj`.
+  `lm_head`, `embed_tokens` e embeddings passam a ser proibidos pelos gates
+  static/pre-paid quando `SAVE_EMBEDDING_LAYERS=0`.
+- `scripts/kg1_pre_paid_job_integration_gate.py` agora falha se o launcher
+  ativo inclui alvos adapter-only proibidos em `LORA_TARGET_MODULES`.
+  `scripts/kg1_static_safety_gate.py` recebeu a mesma regra estatica.
+- `scripts/hf_job_weak_eval_v245.py` agora tem teto default de comprimento
+  para promocao weak: media de completion `<=512` e max `<=2048`. Isto fecha
+  ganho falso por completions longas/runaway antes de qualquer promocao.
+- Gate V659 output policy passou para V673 usando limite tecnico
+  `max_first_box_word_index=60`: exactly-one boxed, extracao label-free e
+  expected-aware consistentes, sem overlap train/val. Restaram apenas warnings
+  esperados de cobertura bit (`ROT`, `SHL`, `SHR`) porque V673 e replay
+  protegido, nao dataset amplo de bit.
+- Gate V619 module surface passou contra o manifesto V673: atencao
+  `q_proj,k_proj,v_proj,o_proj` existe e esta solicitada; MoE target
+  parameters continuam em `mlp.experts.gate_up_proj` e
+  `mlp.experts.down_proj`; blockers `0`, warnings `0`.
+- Gates limpos depois do hardening:
+  static `ok=true/findings=[]`, pre-paid `ok=true/findings=[]`,
+  V619 `surface_gate_passed`, weak eval self-test OK, `py_compile` OK.
+- Debug do launcher A100 foi executado sem `--launch`, portanto nao consumiu
+  job pago. O flavor detectado e `a100-large`, `80GB`, custo unitario
+  `$0.041667/min`. O remote command gerado esta sem `lm_head`.
+- Bloqueio operacional antes de GPU: o manifesto debug atual ainda aponta
+  `expected_commit=f63f8afc6fdbc0ef9c12e0cbfd9010d6fbde6baf`, anterior ao
+  hardening V675. Proxima acao obrigatoria e commitar/pushar as correcoes,
+  regenerar o manifesto e so entao lancar A100 curto. Nao lancar job pago com
+  manifesto que espera commit antigo.
 
 Atualizacao F2/backfire pre-job, 2026-05-19 18:31 UTC:
 
@@ -81,6 +132,108 @@ Atualizacao F2/backfire pre-job, 2026-05-19 18:31 UTC:
 - Proximo passo permitido: commitar/pushar as correcoes e relancar somente
   `a100-large` curto V673. Primeiro checkpoint precisa de weak eval antes de
   qualquer continuacao ou submit.
+
+Atualizacao F2/backfire pre-relaunch, 2026-05-19 19:15 UTC:
+
+- O job A100 V673 `6a0cada33aba298b21d14304` foi cancelado antes de promover
+  qualquer resultado porque o log PEFT indicou
+  `save_embedding_layers=True` automaticamente. Isto era risco real de
+  "adapter-only falso": o pacote poderia salvar embeddings/lm_head junto do
+  adapter. Correcao: `scripts/hf_job_train_v90.py` agora salva checkpoints e
+  final via `save_adapter_only(..., save_embedding_layers=SAVE_EMBEDDING_LAYERS)`,
+  com default e launcher `SAVE_EMBEDDING_LAYERS=0`.
+- Foi encontrado bug silencioso no objetivo ponderado: com
+  `MICRO_BATCH_SIZE=1`, `LOSS_NORMALIZATION_MODE=example_mean` e reducao antiga
+  por soma dos pesos, `row_loss_weight` se cancelava matematicamente em cada
+  microbatch. Isso podia explicar perda/ACC desalinhados e falsa sensacao de
+  calibragem. Correcao: `ROW_LOSS_WEIGHT_REDUCTION=scale_mean`; em
+  single-example microbatch o peso agora escala o loss de verdade. O self-test
+  do treino prova que `weight=2` dobra o loss nesse caso.
+- A validation continua usando `row_loss_weight` quando o treino usa
+  `row_loss_weight`; a metrica de loss volta a medir a mesma distribuicao que
+  o otimizador. Isto nao garante ACC, mas remove um erro de medicao que podia
+  escolher checkpoint por loss errado.
+- Thresholds promocionais atualizados e travados:
+  `total>=196/315`, `bit>=136/160`, `equation>=60/155`,
+  `truncated=0`, `no_box_fallback=0`, `boxed_rate=1.0`,
+  protected backfire `0`. O piso antigo `equation=59` foi removido dos gates
+  ativos.
+- A100-only continua regra operacional. O abort de memoria foi ajustado para
+  `ABORT_MAX_RESERVED_GIB=78`, porque o run anterior passou de `72 GiB` sem
+  indicar estouro real; H200 permanece fora do plano.
+- O dataset V673 foi regenerado porque o metadata dizia
+  `completion_format=boxed_only`, mas o assistant alvo era trace curto +
+  `Final answer: \boxed{...}`. O metadata ativo agora e
+  `trace_plus_final_boxed` em `100%` das linhas.
+- Dataset ativo V673:
+  `artifacts/v673_guarded_equation_bit_transfer_dataset/20260519T190246Z/`;
+  train `720` linhas, sha256
+  `69f76195e2a004de5c01c919038210da0987b67476911ca706e7ba9b4160477f`;
+  validation `180` linhas, sha256
+  `df2d44e334de65cb91da935768db93f4727f700edd762dd9fd6d48b3d5d8d14b`.
+  Upload HF:
+  `felipesp1983/kg1-v673-guarded-equation-bit-transfer-artifacts`,
+  path `v673-guarded-equation-bit-transfer-20260519T190246Z`,
+  commit `f729f85dded2bc0a680b85059b60f2e267ae4c6e`.
+- Gates limpos para o relaunch V673:
+  - V286 tokenizer real:
+    `tokenization_gate_passed`, `prompt_truncated=0`,
+    `fallback_masks=0`, `completion_tokens_dropped=0`,
+    token max `335`;
+  - V509 dataset integrity:
+    `datasets_pass_integrity_audit`, `blocked_dataset_count=0`;
+  - V513 learnability:
+    `passed_cpu_structure_only`, `blocker=0`, `warning=0`;
+  - V478 objective:
+    `hf_gpu_allowed=true`, bit effective share `0.148936`,
+    equation effective share `0.851064` dentro dos limites V673;
+  - EOS/loss-mask:
+    final loss EOS rate `1.0`, sem linhas sem loss;
+  - static active gate:
+    `artifacts/v673_hf_a100_launch/v673_static_safety_gate_active_after_dryrun_tokenization_fix.json`,
+    `ok=true`, `findings=[]`;
+  - pre-paid integration:
+    `artifacts/v673_hf_a100_launch/v673_pre_paid_job_integration_gate_after_dryrun_tokenization_fix.json`,
+    `ok=true`, `findings=[]`;
+  - V666 stack:
+    `artifacts/v673_hf_a100_launch/v673_v666_cpu_gate_stack_after_rowloss_adapter_save_fix.json`,
+    `gpu_allowed=true`, `blockers=[]`.
+- O dry-run estruturado do script de treino agora grava contadores
+  `tokenization.train/validation` com `prompt_truncated`,
+  `fallback_masks`, `completion_tokens_dropped`, `offset_masks` e resumo de
+  `row_loss_weight`; isso evita depender de leitura manual de log.
+- Proxima acao permitida: commitar e pushar estas correcoes antes de qualquer
+  relaunch, porque o launcher usa o `HEAD` remoto como `EXPECTED_COMMIT`.
+  Depois, relancar somente `a100-large` V673 curto (`max_steps=20`,
+  `save/eval=10`). O checkpoint-10 precisa passar weak eval e protected-row
+  guard antes de qualquer continuacao ou submit.
+
+Limpeza V674, 2026-05-19 19:50 UTC:
+
+- Um agente independente revisou candidatos de limpeza com politica
+  conservadora. Resultado: caches e temporarios podem ser removidos
+  automaticamente; logs, manifests, datasets, adapters, gates, roadmaps,
+  respostas OpenRouter e relatorios de analise ficam preservados salvo decisao
+  explicita.
+- O workspace clean gate antes da limpeza apontou apenas caches seguros como
+  erro e um pacote V668 cancelado como aviso de blob grande. Apos
+  `kg1_workspace_clean_gate.py --delete-safe`, nao restaram `__pycache__`,
+  `.cache`, `.pytest_cache`, `.ipynb_checkpoints` ou temporarios equivalentes.
+- Foi removido o pacote de submissao V668 cancelado, que nao era submit valido
+  e estava gerando risco de confusao por parecer pacote ativo:
+  `artifacts/v668_submission_package/`. A remocao eliminou
+  `submission.zip` e `adapter_model.safetensors` desse pacote cancelado,
+  totalizando `8093249372` bytes. Tambem foi removido o diretorio vazio
+  `artifacts/v573_hf_h200_launch/downloaded_debug/`.
+- Gate final de limpeza:
+  `artifacts/v674_cleanup/v674_workspace_clean_after_large_blob_cleanup.json`
+  com `passed=true`, `error=0`, `warning=0`.
+- Diretorios `downloaded_debug`/`downloaded_eval` que contem logs, manifests,
+  datasets, relatorios ou evidencias de jobs foram preservados. Esses arquivos
+  ainda sao insumo de auditoria F2/backfire e nao devem ser apagados por glob.
+- Regra operacional atualizada: qualquer nova limpeza deve passar pelo
+  workspace clean gate e gerar manifesto de remocao; nao apagar artefatos
+  ativos V673/V674 nem historico necessario para reproduzir loss/ACC.
 
 Consenso OpenRouter V670: nao fazer novo treino cego. Todos os modelos uteis
 convergiram em `needs one cheap diagnostic` antes de GPU. V664 fica congelado
@@ -182,19 +335,21 @@ Execucao V673 local:
   converter o ledger em dados sinteticos sem treinar nas linhas weak. Usa 3
   classes equation V312 (`minus_signed`, `colon_trailing_zero`, `add_direct`) e
   replay bit sintetico V367.
-- Dataset final `20260519T173945Z`: train `720` linhas (`480` equation,
+- Dataset final ativo `20260519T190246Z`: train `720` linhas (`480` equation,
   `240` bit), validation `180` linhas (`120` equation, `60` bit).
 - Pesos por linha: equation `1.0`, bit replay `0.35`, para manter bit como
   protecao e nao como objetivo dominante. O treino deve usar
-  `USE_ROW_LOSS_WEIGHT=1` e preferir `LOSS_NORMALIZATION_MODE=example_mean`.
+  `USE_ROW_LOSS_WEIGHT=1`, `LOSS_NORMALIZATION_MODE=example_mean` e
+  `ROW_LOSS_WEIGHT_REDUCTION=scale_mean`.
 - Contrato corrigido: mensagens `official_like`, prompt com `PROMPT_SUFFIX`,
   exatamente uma linha final `Final answer: \boxed{...}`. O bug de formato V367
   (`\boxed{...}` cru) foi normalizado no V673.
-- Gate V286 toy passou: `tokenization_gate_passed`, `offset_masks=720/180`,
-  `fallback_masks=0`, `completion_tokens_dropped=0`, `prompt_truncated=0`,
+- Gate V286 com tokenizer real passou:
+  `tokenization_gate_passed`, `offset_masks=720/180`, `fallback_masks=0`,
+  `completion_tokens_dropped=0`, `prompt_truncated=0`,
   `train_val_prompt_overlap=0`, overlap com weak/baseline `0`.
-- Ainda falta gate com tokenizer real no ambiente de treino ou preflight HF,
-  porque o gate toy valida estrutura, nao comportamento do tokenizer Nemotron.
+- Gates V509, V513, V478, EOS/loss-mask, static safety, pre-paid e V666 tambem
+  passaram no dataset ativo `20260519T190246Z`.
 
 Regra ativa pos-treino continua: todo treino concluido ou falho deve gerar
 prompt OpenRouter completo, executar a consulta quando houver API key,
@@ -257,14 +412,18 @@ P1, sem treino:
    utilizaveis como alvo primario, 10 bit diretas como replay/protecao,
    answer-only boxed curto, zero symbolic punctuation, sem weak rows como
    seletor oculto. Status: completo em
-   `artifacts/v673_guarded_equation_bit_transfer_dataset/20260519T173945Z/`.
+   `artifacts/v673_guarded_equation_bit_transfer_dataset/20260519T190246Z/`.
 6. Antes de GPU, rodar gate local do dataset: hashes dos inputs, zero overlap
    train/val, zero truncation, completion-only mask, exactly-one-boxed, `\boxed{}`
    obrigatorio, `verify_answer` em todas as targets e contagem de subfamilias.
-   Status: gate V286 toy passou; falta tokenizador real.
-7. Rodar probe em `a100-large` apenas depois do gate V673 real. Parametros: prompt
-   oficial, `temperature=0`, `top_p=1`, `max_tokens=7680` no eval, treino curto,
-   LoRA compatível com adapter-only e sem H200.
+   Status: gates V286 com tokenizer real, V509, V513, V478 e EOS passaram
+   com `0` truncation, `0` fallback mask, `0` completion drop e `0` warnings
+   promocionais.
+7. Rodar probe em `a100-large` apenas depois de commit/push do codigo
+   corrigido. Parametros: prompt oficial, `temperature=0`, `top_p=1`,
+   `max_tokens=7680` no eval, treino curto, `SAVE_EMBEDDING_LAYERS=0`,
+   `ROW_LOSS_WEIGHT_REDUCTION=scale_mean`, LoRA compativel com adapter-only e
+   sem H200.
 8. O sweep de decoding V290/V664 fica diagnostico secundario; nao gastar GPU
    nele antes do dataset V673.
 9. Gate para seguir: `protected_backfire=0`, `8740ed31=01101000`,

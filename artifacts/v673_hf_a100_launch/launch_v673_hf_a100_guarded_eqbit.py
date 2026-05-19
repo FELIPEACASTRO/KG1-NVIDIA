@@ -6,8 +6,7 @@ V673 is the current today-gain route:
 * train only from synthetic/teacher rows, never weak labels;
 * preserve the V290 checkpoint-6 LoRA contract;
 * target the 14 direct residual opportunities found by the V672 ledger;
-* use A100-large by default, with H200 blocked unless a later route proves A100
-  cannot run.
+* use A100-large only; H200 is blocked for this route.
 
 Default mode is a local debug only. Pass ``--launch`` to create the paid HF job
 after dataset hashes, adapter files, hardware cost, and objective-alignment
@@ -39,16 +38,16 @@ FLAVOR = "a100-large"
 RUN_ID = "v673-a100-guarded-eqbit-v290ckpt6-" + datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
 
 DATA_REPO = "felipesp1983/kg1-v673-guarded-equation-bit-transfer-artifacts"
-DATASET_UPLOAD_COMMIT = "bb5459dc70434087ffc731da79333bf26b1a45ab"
-DATA_ROOT = "v673-guarded-equation-bit-transfer-20260519T174833Z"
+DATASET_UPLOAD_COMMIT = "f729f85dded2bc0a680b85059b60f2e267ae4c6e"
+DATA_ROOT = "v673-guarded-equation-bit-transfer-20260519T190246Z"
 TRAIN_FILE = DATA_ROOT + "/v673_guarded_equation_bit_transfer_train.jsonl"
 VAL_FILE = DATA_ROOT + "/v673_guarded_equation_bit_transfer_val.jsonl"
-TRAIN_SHA256 = "cdf85573584c2bb965f8fb19bb8b698e7b03a7231013d39a74ff0410e0d76343"
-VAL_SHA256 = "858c02fcc046d130c4405aac942c102aaf0ded38c347479734c5339d6960e057"
+TRAIN_SHA256 = "69f76195e2a004de5c01c919038210da0987b67476911ca706e7ba9b4160477f"
+VAL_SHA256 = "df2d44e334de65cb91da935768db93f4727f700edd762dd9fd6d48b3d5d8d14b"
 TRAIN_ROWS = 720
 VAL_ROWS = 180
-PREF_TRAIN_SHA256 = "cdf85573584c2bb965f8fb19bb8b698e7b03a7231013d39a74ff0410e0d76343"
-PREF_VAL_SHA256 = "858c02fcc046d130c4405aac942c102aaf0ded38c347479734c5339d6960e057"
+PREF_TRAIN_SHA256 = "69f76195e2a004de5c01c919038210da0987b67476911ca706e7ba9b4160477f"
+PREF_VAL_SHA256 = "df2d44e334de65cb91da935768db93f4727f700edd762dd9fd6d48b3d5d8d14b"
 PREF_TRAIN_ROWS = 720
 PREF_VAL_ROWS = 180
 
@@ -62,7 +61,7 @@ SAVE_EVERY_STEPS = 10
 EVAL_EVERY_STEPS = 10
 EVAL_MAX_EXAMPLES = 180
 MAX_LENGTH = 1024
-ABORT_MAX_RESERVED_GIB = 72
+ABORT_MAX_RESERVED_GIB = 78
 LEARNING_RATE = "5.0e-7"
 FINAL_LEARNING_RATE = "1.0e-7"
 ANSWER_SPAN_LOSS_WEIGHT = "1.0"
@@ -70,7 +69,9 @@ ANSWER_SPAN_MIN_WEIGHTED_TOKENS = "0"
 LOSS_NORMALIZATION_MODE = "example_mean"
 USE_ROW_LOSS_WEIGHT = "1"
 REQUIRE_ROW_LOSS_WEIGHT = "1"
+ROW_LOSS_WEIGHT_REDUCTION = "scale_mean"
 LOSS_MASK_STOP_AFTER_EOS = "1"
+SAVE_EMBEDDING_LAYERS = "0"
 
 SOURCE_WEIGHTS = "v673_guarded_equation_bit_transfer_dataset=1.00"
 SUBCATEGORY_WEIGHTS = (
@@ -95,6 +96,7 @@ REQUIRED_TRAINABLE_LORA_NAME_SUBSTRINGS = (
     "q_proj,k_proj,v_proj,o_proj,up_proj,down_proj"
 )
 REQUIRE_LORA_TARGET_PARAMETERS_TRAINABLE = "1"
+LORA_TARGET_MODULES = "down_proj,in_proj,k_proj,o_proj,out_proj,q_proj,up_proj,v_proj"
 
 # Static/pre-paid gate literals. Keep these duplicated in source so the gate can
 # audit without executing the launcher.
@@ -119,7 +121,7 @@ KG1_V619_MODULE_SURFACE_GATE_STATUS = "passed"
 KG1_ALLOW_CUDA13_ON_A100 = "1"
 KG1_CUDA13_A100_DRIVER_GATE_STATUS = "inline_smoke_required"
 KG1_V666_CPU_GATE_STACK_STATUS = "passed"
-KG1_V666_CPU_GATE_STACK_REPORT = "artifacts/v673_hf_a100_launch/v673_v666_cpu_gate_stack.json"
+KG1_V666_CPU_GATE_STACK_REPORT = "artifacts/v673_hf_a100_launch/v673_v666_cpu_gate_stack_after_rowloss_adapter_save_fix.json"
 
 KG1_STATIC_GATE_CONTRACT = {
     "KG1_DATASET_SCHEMA": "sft",
@@ -129,6 +131,8 @@ KG1_STATIC_GATE_CONTRACT = {
     "KG1_EXPECTED_SAVE_EVERY_STEPS": KG1_EXPECTED_SAVE_EVERY_STEPS,
     "KG1_EXPECTED_EVAL_EVERY_STEPS": KG1_EXPECTED_EVAL_EVERY_STEPS,
     "KG1_EXPECTED_LOSS_NORMALIZATION_MODE": KG1_EXPECTED_LOSS_NORMALIZATION_MODE,
+    "KG1_SAVE_EMBEDDING_LAYERS": SAVE_EMBEDDING_LAYERS,
+    "KG1_ROW_LOSS_WEIGHT_REDUCTION": ROW_LOSS_WEIGHT_REDUCTION,
     "KG1_REQUIRED_TRAIN_FAMILIES": KG1_REQUIRED_TRAIN_FAMILIES,
     "KG1_REQUIRED_VAL_FAMILIES": KG1_REQUIRED_VAL_FAMILIES,
     "KG1_REQUIRED_TRAIN_SUBCATEGORIES": REQUIRED_SUBCATEGORIES,
@@ -148,11 +152,13 @@ KG1_STATIC_GATE_CONTRACT = {
 # export MAX_STEPS=20
 # export SAVE_EVERY_STEPS=10
 # export EVAL_EVERY_STEPS=10
-# export ABORT_MAX_RESERVED_GIB=72
+# export ABORT_MAX_RESERVED_GIB=78
 # export LOSS_NORMALIZATION_MODE=example_mean
 # export USE_ROW_LOSS_WEIGHT=1
 # export REQUIRE_ROW_LOSS_WEIGHT=1
+# export ROW_LOSS_WEIGHT_REDUCTION=scale_mean
 # export LOSS_MASK_STOP_AFTER_EOS=1
+# export SAVE_EMBEDDING_LAYERS=0
 # export TRAINABLE_LORA_MODULES='q_proj,k_proj,v_proj,o_proj,up_proj,down_proj'
 # export TRAINABLE_LORA_NAME_SUBSTRINGS=''
 # export REQUIRED_TRAINABLE_LORA_NAME_SUBSTRINGS='q_proj,k_proj,v_proj,o_proj,up_proj,down_proj'
@@ -241,7 +247,7 @@ export FAIL_ON_MISSING_ADAPTER_KEYS=1
 export LORA_R=32
 export LORA_ALPHA=32
 export LORA_DROPOUT=0.0
-export LORA_TARGET_MODULES='down_proj,in_proj,k_proj,lm_head,o_proj,out_proj,q_proj,up_proj,v_proj'
+export LORA_TARGET_MODULES='down_proj,in_proj,k_proj,o_proj,out_proj,q_proj,up_proj,v_proj'
 export LORA_TARGET_PARAMETERS="$KG1_LORA_TARGET_PARAMETERS"
 export TRAINABLE_LORA_MODULES='q_proj,k_proj,v_proj,o_proj,up_proj,down_proj'
 export TRAINABLE_LORA_NAME_SUBSTRINGS=''
@@ -266,13 +272,15 @@ export ANSWER_SPAN_MIN_WEIGHTED_TOKENS="$KG1_ANSWER_SPAN_MIN_WEIGHTED_TOKENS"
 export LOSS_NORMALIZATION_MODE="$KG1_LOSS_NORMALIZATION_MODE"
 export USE_ROW_LOSS_WEIGHT="$KG1_USE_ROW_LOSS_WEIGHT"
 export REQUIRE_ROW_LOSS_WEIGHT="$KG1_REQUIRE_ROW_LOSS_WEIGHT"
+export ROW_LOSS_WEIGHT_REDUCTION="$KG1_ROW_LOSS_WEIGHT_REDUCTION"
 export LOSS_MASK_STOP_AFTER_EOS="$KG1_LOSS_MASK_STOP_AFTER_EOS"
+export SAVE_EMBEDDING_LAYERS="$KG1_SAVE_EMBEDDING_LAYERS"
 export BASELINE_EVAL_BEFORE_TRAIN=1
 export REQUIRE_FINAL_EVAL_LTE_BASELINE=0
 export ABORT_EVAL_RELATIVE_TO_BASELINE_DELTA=0.16
 export MAX_FINAL_EVAL_REGRESSION=0
 export ABORT_TRAIN_RISE_POINTS=0
-export ABORT_MAX_RESERVED_GIB=72
+export ABORT_MAX_RESERVED_GIB=78
 export SAMPLING_MODE='weighted_replacement'
 export SUBCATEGORY_WEIGHTS="$KG1_SUBCATEGORY_WEIGHTS"
 export SOURCE_WEIGHTS="$KG1_SOURCE_WEIGHTS"
@@ -293,7 +301,7 @@ $PYBIN scripts/run_v485_peft_roundtrip_gate.py \
   --adapter-subfolder "$KG1_INIT_ADAPTER_SUBFOLDER" \
   --expected-r 32 \
   --expected-alpha 32 \
-  --expected-target-modules 'down_proj,in_proj,k_proj,lm_head,o_proj,out_proj,q_proj,up_proj,v_proj' \
+  --expected-target-modules 'down_proj,in_proj,k_proj,o_proj,out_proj,q_proj,up_proj,v_proj' \
   --expected-target-parameters "$KG1_LORA_TARGET_PARAMETERS" \
   --output-json /tmp/kg1_v485_peft_roundtrip_gate_manifest.json
 $PYBIN - <<'PY'
@@ -492,7 +500,9 @@ def build_job_env(hardware: dict[str, object]) -> dict[str, str]:
         "KG1_LOSS_NORMALIZATION_MODE": LOSS_NORMALIZATION_MODE,
         "KG1_USE_ROW_LOSS_WEIGHT": USE_ROW_LOSS_WEIGHT,
         "KG1_REQUIRE_ROW_LOSS_WEIGHT": REQUIRE_ROW_LOSS_WEIGHT,
+        "KG1_ROW_LOSS_WEIGHT_REDUCTION": ROW_LOSS_WEIGHT_REDUCTION,
         "KG1_LOSS_MASK_STOP_AFTER_EOS": LOSS_MASK_STOP_AFTER_EOS,
+        "KG1_SAVE_EMBEDDING_LAYERS": SAVE_EMBEDDING_LAYERS,
         "KG1_SOURCE_WEIGHTS": SOURCE_WEIGHTS,
         "KG1_SUBCATEGORY_WEIGHTS": SUBCATEGORY_WEIGHTS,
         "KG1_REQUIRE_MAMBA_IMPORTS": "1",
@@ -599,6 +609,7 @@ def local_debug(api: HfApi, token: str) -> tuple[dict[str, object], dict[str, st
         "export DATA_FILE=\"$KG1_TRAIN_FILE\"",
         "export VAL_FILE=\"$KG1_VAL_FILE\"",
         "cuda13_a100_driver_gate_ok",
+        "export LORA_TARGET_MODULES='down_proj,in_proj,k_proj,o_proj,out_proj,q_proj,up_proj,v_proj'",
         "export LORA_TARGET_PARAMETERS=\"$KG1_LORA_TARGET_PARAMETERS\"",
         "export TRAINABLE_LORA_MODULES='q_proj,k_proj,v_proj,o_proj,up_proj,down_proj'",
         "export TRAINABLE_LORA_NAME_SUBSTRINGS=''",
@@ -613,7 +624,9 @@ def local_debug(api: HfApi, token: str) -> tuple[dict[str, object], dict[str, st
         "export LOSS_NORMALIZATION_MODE=\"$KG1_LOSS_NORMALIZATION_MODE\"",
         "export USE_ROW_LOSS_WEIGHT=\"$KG1_USE_ROW_LOSS_WEIGHT\"",
         "export REQUIRE_ROW_LOSS_WEIGHT=\"$KG1_REQUIRE_ROW_LOSS_WEIGHT\"",
+        "export ROW_LOSS_WEIGHT_REDUCTION=\"$KG1_ROW_LOSS_WEIGHT_REDUCTION\"",
         "export LOSS_MASK_STOP_AFTER_EOS=\"$KG1_LOSS_MASK_STOP_AFTER_EOS\"",
+        "export SAVE_EMBEDDING_LAYERS=\"$KG1_SAVE_EMBEDDING_LAYERS\"",
         "scripts/audit_v478_training_objective_alignment.py",
         "\"--use-row-loss-weight\"",
         "\"--require-row-loss-weight\"",
@@ -682,7 +695,7 @@ def manifest_payload(
         "init_adapter": {
             "repo": INIT_ADAPTER_REPO,
             "subfolder": INIT_ADAPTER_SUBFOLDER,
-            "contract": "V290 r=32 alpha=32 target_modules plus target_parameters preserved",
+            "contract": "V290 r=32 alpha=32 adapter family preserved; lm_head removed from target_modules for adapter-only save safety",
         },
         "job_env": job_env,
         "objective_alignment": objective_alignment_info,
@@ -698,7 +711,7 @@ def manifest_payload(
             "abort_max_reserved_gib": ABORT_MAX_RESERVED_GIB,
             "lora_r": 32,
             "lora_alpha": 32,
-            "target_modules": "down_proj,in_proj,k_proj,lm_head,o_proj,out_proj,q_proj,up_proj,v_proj",
+            "target_modules": LORA_TARGET_MODULES,
             "target_parameters": INIT_ADAPTER_TARGET_PARAMETERS,
             "trainable_lora_modules": TRAINABLE_LORA_MODULES,
             "trainable_lora_name_substrings": TRAINABLE_LORA_NAME_SUBSTRINGS,
@@ -708,7 +721,9 @@ def manifest_payload(
             "final_learning_rate": FINAL_LEARNING_RATE,
             "loss_normalization_mode": LOSS_NORMALIZATION_MODE,
             "use_row_loss_weight": USE_ROW_LOSS_WEIGHT,
+            "row_loss_weight_reduction": ROW_LOSS_WEIGHT_REDUCTION,
             "loss_mask_stop_after_eos": LOSS_MASK_STOP_AFTER_EOS,
+            "save_embedding_layers": SAVE_EMBEDDING_LAYERS,
             "source_weights": SOURCE_WEIGHTS,
             "subcategory_weights": SUBCATEGORY_WEIGHTS,
             "cuda13_a100_policy": "allowed only after inline torch matmul smoke gate in command",

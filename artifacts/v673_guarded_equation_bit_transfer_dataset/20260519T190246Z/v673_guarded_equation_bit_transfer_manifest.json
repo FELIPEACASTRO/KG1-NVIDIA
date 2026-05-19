@@ -1,0 +1,125 @@
+{
+  "bit_source_ledger_ids": [
+    "1abaffca",
+    "b8722d19",
+    "7192535b",
+    "1a7c8520",
+    "4ada9150",
+    "a6192d29",
+    "048cc279",
+    "4c327b55",
+    "b8aa3072",
+    "5ba26f21"
+  ],
+  "equation_rule_counts": {
+    "v274_guarded_numeric_add_direct_over_model_add_variant": 1,
+    "v274_guarded_numeric_colon_absdiff_restore_trailing_zero": 1,
+    "v274_guarded_numeric_minus_signed_opposite_sign_guarded": 2
+  },
+  "equation_rule_ids": {
+    "v274_guarded_numeric_add_direct_over_model_add_variant": [
+      "c5b058d6"
+    ],
+    "v274_guarded_numeric_colon_absdiff_restore_trailing_zero": [
+      "d1bd7478"
+    ],
+    "v274_guarded_numeric_minus_signed_opposite_sign_guarded": [
+      "7688e06e",
+      "274def88"
+    ]
+  },
+  "generated_at_utc": "2026-05-19T19:02:46.949244+00:00",
+  "hashes": {
+    "sft_train_sha256": "69f76195e2a004de5c01c919038210da0987b67476911ca706e7ba9b4160477f",
+    "sft_val_sha256": "df2d44e334de65cb91da935768db93f4727f700edd762dd9fd6d48b3d5d8d14b"
+  },
+  "ledger_manifest_json": "artifacts/v672_residual_miss_ledger/20260519T173138Z/v672_residual_miss_ledger_manifest.json",
+  "ledger_manifest_sha256": "64e968bb3556134406e314d91eecc3efa743e3fcbc0ae621830775202fac5fd7",
+  "next_gate": [
+    "python scripts/run_v286_generic_tokenization_gate.py --assistant-final-answer-mode boxed_suffix",
+    "cheap A100-large probe only; H200 blocked",
+    "weak eval must reach bit>=136 equation>=60 total>=196 with no protected backfire"
+  ],
+  "outputs": {
+    "manifest_json": "artifacts/v673_guarded_equation_bit_transfer_dataset/20260519T190246Z/v673_guarded_equation_bit_transfer_manifest.json",
+    "sft_train_jsonl": "artifacts/v673_guarded_equation_bit_transfer_dataset/20260519T190246Z/v673_guarded_equation_bit_transfer_train.jsonl",
+    "sft_val_jsonl": "artifacts/v673_guarded_equation_bit_transfer_dataset/20260519T190246Z/v673_guarded_equation_bit_transfer_val.jsonl",
+    "train_jsonl": "artifacts/v673_guarded_equation_bit_transfer_dataset/20260519T190246Z/v673_guarded_equation_bit_transfer_train.jsonl",
+    "val_jsonl": "artifacts/v673_guarded_equation_bit_transfer_dataset/20260519T190246Z/v673_guarded_equation_bit_transfer_val.jsonl"
+  },
+  "parameters": {
+    "bit_loss_weight": 0.35,
+    "bit_train_rows": 240,
+    "bit_val_rows": 60,
+    "equation_loss_weight": 1.0,
+    "equation_train_rows_per_evidence": 120,
+    "equation_val_rows_per_evidence": 30,
+    "seed": 67319
+  },
+  "reference_csvs": [
+    "artifacts/v290_rank19_micro_patch_reference/runtime_artifacts/v245_weak_eval_bridge/v245-weak-bridge-hfonly-20260510T1950Z/v221_weak_315.csv",
+    "artifacts/v516_label_free_weak_baseline/v516_label_free_v290_checkpoint6_baseline.csv"
+  ],
+  "reference_sha256": {
+    "artifacts/v290_rank19_micro_patch_reference/runtime_artifacts/v245_weak_eval_bridge/v245-weak-bridge-hfonly-20260510T1950Z/v221_weak_315.csv": "85da758e14d57ea40270de5747f98726a0ad0b6d1795bff7dd46183005e0f9b6",
+    "artifacts/v516_label_free_weak_baseline/v516_label_free_v290_checkpoint6_baseline.csv": "9fcfa2b0f2ac60d90c43d605569753711017b6440445596983531806bc8ba237"
+  },
+  "schema_version": "kg1_v673_guarded_equation_bit_transfer_dataset_v1",
+  "summary": {
+    "train": {
+      "boxed_rate": 1.0,
+      "boxed_rows": 720,
+      "component_counts": {
+        "bit_replay_synthetic": 240,
+        "equation_primary_synthetic": 480
+      },
+      "family_counts": {
+        "bit_manipulation": 240,
+        "equation_transform": 480
+      },
+      "loss_weight_counts": {
+        "0.35": 240,
+        "1.0": 480
+      },
+      "rows": 720,
+      "subcategory_counts": {
+        "bit_exact_global_binary_replay": 48,
+        "bit_exact_global_ternary_replay": 96,
+        "bit_fullbyte_ternary_v366_new": 96,
+        "equation_numeric_add_direct": 120,
+        "equation_numeric_colon_trailing_zero": 120,
+        "equation_numeric_minus_signed": 240
+      }
+    },
+    "validation": {
+      "boxed_rate": 1.0,
+      "boxed_rows": 180,
+      "component_counts": {
+        "bit_replay_synthetic": 60,
+        "equation_primary_synthetic": 120
+      },
+      "family_counts": {
+        "bit_manipulation": 60,
+        "equation_transform": 120
+      },
+      "loss_weight_counts": {
+        "0.35": 60,
+        "1.0": 120
+      },
+      "rows": 180,
+      "subcategory_counts": {
+        "bit_exact_global_binary_replay": 12,
+        "bit_exact_global_ternary_replay": 24,
+        "bit_fullbyte_ternary_v366_new": 24,
+        "equation_numeric_add_direct": 30,
+        "equation_numeric_colon_trailing_zero": 30,
+        "equation_numeric_minus_signed": 60
+      }
+    }
+  },
+  "training_authorization": "blocked_until_v286_tokenization_gate_then_a100_large_probe",
+  "v367_train_jsonl": "artifacts/v367_v366_bit_ternary_transfer_dataset/20260514T_cpu_gate/v367_v366_bit_ternary_transfer_train.jsonl",
+  "v367_train_sha256": "5ea3cef4d9f589c9c77aabf22ac90b5261cc77cdbdcf5c120f306c6c0edf95fc",
+  "v367_val_jsonl": "artifacts/v367_v366_bit_ternary_transfer_dataset/20260514T_cpu_gate/v367_v366_bit_ternary_transfer_val.jsonl",
+  "v367_val_sha256": "04623efbcfd6c1db9d3988f9efca48ee6f387ae67bede8f55969517ebf06fb00"
+}

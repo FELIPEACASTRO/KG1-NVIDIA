@@ -234,6 +234,13 @@ ANSWER_SPAN_LOSS_WEIGHT = env_float("ANSWER_SPAN_LOSS_WEIGHT", 1.0)
 ANSWER_SPAN_MIN_WEIGHTED_TOKENS = env_int("ANSWER_SPAN_MIN_WEIGHTED_TOKENS", 0)
 USE_ROW_LOSS_WEIGHT = env_bool("USE_ROW_LOSS_WEIGHT", False)
 REQUIRE_ROW_LOSS_WEIGHT = env_bool("REQUIRE_ROW_LOSS_WEIGHT", False)
+ROW_LOSS_WEIGHT_REDUCTION = env_str("ROW_LOSS_WEIGHT_REDUCTION", "scale_mean")
+VALID_ROW_LOSS_WEIGHT_REDUCTIONS = {"scale_mean", "weighted_mean"}
+if ROW_LOSS_WEIGHT_REDUCTION not in VALID_ROW_LOSS_WEIGHT_REDUCTIONS:
+    raise ValueError(
+        "ROW_LOSS_WEIGHT_REDUCTION must be one of "
+        f"{sorted(VALID_ROW_LOSS_WEIGHT_REDUCTIONS)}, got {ROW_LOSS_WEIGHT_REDUCTION!r}."
+    )
 LOSS_MASK_STOP_AFTER_EOS = env_bool("LOSS_MASK_STOP_AFTER_EOS", True)
 LOSS_NORMALIZATION_MODE = env_str("LOSS_NORMALIZATION_MODE", "token_mean")
 VALID_LOSS_NORMALIZATION_MODES = {"token_mean", "example_mean"}
@@ -268,6 +275,7 @@ DRY_RUN_VALIDATE_ONLY = env_bool("DRY_RUN_VALIDATE_ONLY", False)
 TOKENIZE_ONLY_DRY_RUN = env_bool("TOKENIZE_ONLY_DRY_RUN", False)
 UPLOAD_TO_HF = env_bool("UPLOAD_TO_HF", True)
 UPLOAD_CHECKPOINTS_DURING_TRAINING = env_bool("UPLOAD_CHECKPOINTS_DURING_TRAINING", False)
+SAVE_EMBEDDING_LAYERS = env_bool("SAVE_EMBEDDING_LAYERS", False)
 FAIL_ON_MISSING_ADAPTER_KEYS = env_bool("FAIL_ON_MISSING_ADAPTER_KEYS", True)
 TRAINABLE_LORA_MODULES = env_str("TRAINABLE_LORA_MODULES", "")
 TRAINABLE_LORA_NAME_SUBSTRINGS = env_str("TRAINABLE_LORA_NAME_SUBSTRINGS", "")
@@ -1370,6 +1378,18 @@ def build_completion_mask(
     return full_ids, loss_mask, False, prefix_mismatch, 0
 
 
+TOKENIZATION_SUMMARIES: dict[str, dict[str, Any]] = {}
+
+
+def tokenization_summary_key(label: str) -> str:
+    normalized = label.strip().lower()
+    if normalized.startswith("train"):
+        return "train"
+    if normalized.startswith("val"):
+        return "validation"
+    return normalized.replace(" ", "_") or "unknown"
+
+
 def tokenize_examples(
     examples: list[dict[str, Any]],
     tokenizer: Any,
@@ -1383,6 +1403,7 @@ def tokenize_examples(
     truncated_count = 0
     prompt_truncated_count = 0
     prompt_tokens_dropped_est = 0
+    completion_tokens_dropped = 0.0
     offset_mask_count = 0
     fallback_mask_count = 0
     fallback_prefix_mismatch_count = 0
@@ -1437,6 +1458,7 @@ def tokenize_examples(
             first_loss_idx = next((idx for idx, value in enumerate(loss_mask) if value), len(loss_mask))
             overflow = len(full_ids) - MAX_LENGTH
             dropped_loss = float(sum(loss_mask[:overflow]))
+            completion_tokens_dropped += dropped_loss
             if dropped_loss > 0:
                 raise RuntimeError(
                     f"{label} truncation would drop supervised completion tokens for {ex.get('id', '')}: "
@@ -1483,6 +1505,30 @@ def tokenize_examples(
         f"row_loss_weight_max={(row_loss_weight_max if row_loss_weight_examples else 1.0):.4f} "
         f"row_loss_weight_mean={(row_loss_weight_sum / row_loss_weight_examples if row_loss_weight_examples else 1.0):.4f}"
     )
+    TOKENIZATION_SUMMARIES[tokenization_summary_key(label)] = {
+        "raw_records": len(examples),
+        "rows": len(tokenized),
+        "tokenized_records": len(tokenized),
+        "truncated": truncated_count,
+        "prompt_truncated": prompt_truncated_count,
+        "prompt_tokens_dropped_est": prompt_tokens_dropped_est,
+        "completion_tokens_dropped": completion_tokens_dropped,
+        "skipped_missing_messages": skipped_missing_messages,
+        "skipped_no_loss": skipped_no_loss,
+        "offset_masks": offset_mask_count,
+        "fallback_masks": fallback_mask_count,
+        "fallback_prefix_mismatches": fallback_prefix_mismatch_count,
+        "answer_span_loss_weight": ANSWER_SPAN_LOSS_WEIGHT,
+        "answer_span_weighted_examples": answer_span_weighted_examples,
+        "answer_span_weighted_tokens": answer_span_weighted_tokens,
+        "use_row_loss_weight": bool(USE_ROW_LOSS_WEIGHT if apply_row_loss_weight else False),
+        "row_loss_weight_examples": row_loss_weight_examples,
+        "row_loss_weight_min": row_loss_weight_min if row_loss_weight_examples else 1.0,
+        "row_loss_weight_max": row_loss_weight_max if row_loss_weight_examples else 1.0,
+        "row_loss_weight_mean": (
+            row_loss_weight_sum / row_loss_weight_examples if row_loss_weight_examples else 1.0
+        ),
+    }
     if apply_row_loss_weight and USE_ROW_LOSS_WEIGHT and REQUIRE_ROW_LOSS_WEIGHT:
         if row_loss_weight_examples != len(tokenized):
             raise RuntimeError(
@@ -1599,13 +1645,19 @@ def masked_cross_entropy_loss(
         per_example_loss = token_loss.sum(dim=1) / per_example_counts
         if example_weights is not None:
             active_weights = example_weights.float() * active_examples
-            total_active_weight = active_weights.sum()
-            if total_active_weight == 0:
+            if active_weights.sum() == 0:
                 return torch.tensor(0.0, device=logits.device)
-            return (per_example_loss * active_weights).sum() / total_active_weight
+            if ROW_LOSS_WEIGHT_REDUCTION == "weighted_mean":
+                denominator = active_weights.sum()
+            else:
+                denominator = active_examples.sum()
+            return (per_example_loss * active_weights).sum() / denominator.clamp_min(1.0)
         return (per_example_loss * active_examples).sum() / active_examples.sum()
 
-    num_unmasked = effective_mask.sum()
+    if example_weights is not None and ROW_LOSS_WEIGHT_REDUCTION == "scale_mean":
+        num_unmasked = flat_mask.sum()
+    else:
+        num_unmasked = effective_mask.sum()
     if num_unmasked == 0:
         return torch.tensor(0.0, device=logits.device)
     return masked_loss.sum() / num_unmasked
@@ -1781,6 +1833,7 @@ def make_manifest(
             "performance": {
                 "model_device_map": MODEL_DEVICE_MAP,
                 "attn_implementation": ATTN_IMPLEMENTATION,
+                "save_embedding_layers": SAVE_EMBEDDING_LAYERS,
                 "torch_allow_tf32": TORCH_ALLOW_TF32,
                 "torch_float32_matmul_precision": TORCH_FLOAT32_MATMUL_PRECISION,
                 "torch_disable_cudnn_sdp": TORCH_DISABLE_CUDNN_SDP,
@@ -1815,6 +1868,8 @@ def make_manifest(
                 "required_for_weighted_rows": REQUIRE_ROW_LOSS_WEIGHT,
                 "source_fields": ["metadata.loss_weight", "loss_weight"],
                 "validation_ignores_row_weight": False,
+                "reduction": ROW_LOSS_WEIGHT_REDUCTION,
+                "scale_mean_single_example_effective": ROW_LOSS_WEIGHT_REDUCTION == "scale_mean",
             },
             "loss_normalization": {
                 "mode": LOSS_NORMALIZATION_MODE,
@@ -1826,6 +1881,11 @@ def make_manifest(
     if val_path is not None and val_path.exists():
         manifest["val_file_sha256"] = file_sha256(val_path)
     return manifest
+
+
+def save_adapter_only(model: Any, output_dir: Path) -> None:
+    """Save PEFT adapter state without base embedding/output weights by default."""
+    model.save_pretrained(str(output_dir), save_embedding_layers=SAVE_EMBEDDING_LAYERS)
 
 
 def upload_outputs(final_dir: Path) -> None:
@@ -1953,6 +2013,7 @@ def train() -> None:
     print(f"Attention implementation: {ATTN_IMPLEMENTATION or 'transformers-default'}")
     print(f"Gradient checkpointing: {GRADIENT_CHECKPOINTING}")
     print(f"HF transfer enabled: {os.environ.get('HF_HUB_ENABLE_HF_TRANSFER', '')}")
+    print(f"Save embedding layers with adapter: {SAVE_EMBEDDING_LAYERS}")
     print()
 
     if not torch.cuda.is_available() and not (DRY_RUN_VALIDATE_ONLY and TOKENIZE_ONLY_DRY_RUN):
@@ -2056,6 +2117,7 @@ def train() -> None:
                 "pretokenized_validation_fraction": PRETOKENIZED_VAL_FRACTION,
                 "pretokenized_validation_copy_only": PRETOKENIZED_VAL_COPY_ONLY,
             },
+            "tokenization": TOKENIZATION_SUMMARIES,
             "lora": {
                 "r": LORA_R,
                 "alpha": LORA_ALPHA,
@@ -2089,6 +2151,12 @@ def train() -> None:
                 "answer_span_loss": {
                     "weight": ANSWER_SPAN_LOSS_WEIGHT,
                     "min_weighted_tokens": ANSWER_SPAN_MIN_WEIGHTED_TOKENS,
+                },
+                "row_loss_weight": {
+                    "enabled": USE_ROW_LOSS_WEIGHT,
+                    "required_for_weighted_rows": REQUIRE_ROW_LOSS_WEIGHT,
+                    "reduction": ROW_LOSS_WEIGHT_REDUCTION,
+                    "scale_mean_single_example_effective": ROW_LOSS_WEIGHT_REDUCTION == "scale_mean",
                 },
             },
             "runtime": {
@@ -2203,6 +2271,7 @@ def train() -> None:
                 "pretokenized_validation_fraction": PRETOKENIZED_VAL_FRACTION,
                 "pretokenized_validation_copy_only": PRETOKENIZED_VAL_COPY_ONLY,
             },
+            "tokenization": TOKENIZATION_SUMMARIES,
             "lora": {
                 "r": LORA_R,
                 "alpha": LORA_ALPHA,
@@ -2227,6 +2296,12 @@ def train() -> None:
                 "answer_span_loss": {
                     "weight": ANSWER_SPAN_LOSS_WEIGHT,
                     "min_weighted_tokens": ANSWER_SPAN_MIN_WEIGHTED_TOKENS,
+                },
+                "row_loss_weight": {
+                    "enabled": USE_ROW_LOSS_WEIGHT,
+                    "required_for_weighted_rows": REQUIRE_ROW_LOSS_WEIGHT,
+                    "reduction": ROW_LOSS_WEIGHT_REDUCTION,
+                    "scale_mean_single_example_effective": ROW_LOSS_WEIGHT_REDUCTION == "scale_mean",
                 },
             },
             "runtime": cuda_runtime_report(),
@@ -2390,7 +2465,7 @@ def train() -> None:
 
             if ABORT_MAX_RESERVED_GIB > 0 and cuda_reserved_gib() > ABORT_MAX_RESERVED_GIB:
                 checkpoint_dir = Path(OUTPUT_DIR) / f"checkpoint-abort-step{completed_step}"
-                model.save_pretrained(str(checkpoint_dir))
+                save_adapter_only(model, checkpoint_dir)
                 tokenizer.save_pretrained(str(checkpoint_dir))
                 print(
                     f"ABORT: mem_reserved {cuda_reserved_gib():.2f}GiB exceeded "
@@ -2415,7 +2490,7 @@ def train() -> None:
                     window = train_eval_point_losses[-ABORT_TRAIN_RISE_POINTS:]
                     if all(left < right for left, right in zip(window, window[1:])):
                         checkpoint_dir = Path(OUTPUT_DIR) / f"checkpoint-abort-step{completed_step}"
-                        model.save_pretrained(str(checkpoint_dir))
+                        save_adapter_only(model, checkpoint_dir)
                         tokenizer.save_pretrained(str(checkpoint_dir))
                         print(
                             f"ABORT: train_loss rose across {ABORT_TRAIN_RISE_POINTS} "
@@ -2442,7 +2517,7 @@ def train() -> None:
                     raise FloatingPointError(f"Non-finite eval loss at step {completed_step}")
                 if ABORT_EVAL_LOSS_GT > 0 and eval_loss > ABORT_EVAL_LOSS_GT:
                     checkpoint_dir = Path(OUTPUT_DIR) / f"checkpoint-abort-step{completed_step}"
-                    model.save_pretrained(str(checkpoint_dir))
+                    save_adapter_only(model, checkpoint_dir)
                     tokenizer.save_pretrained(str(checkpoint_dir))
                     print(
                         f"ABORT: eval_loss {eval_loss:.4f} exceeded "
@@ -2459,7 +2534,7 @@ def train() -> None:
                     > baseline_eval_loss + ABORT_EVAL_RELATIVE_TO_BASELINE_DELTA
                 ):
                     checkpoint_dir = Path(OUTPUT_DIR) / f"checkpoint-abort-step{completed_step}"
-                    model.save_pretrained(str(checkpoint_dir))
+                    save_adapter_only(model, checkpoint_dir)
                     tokenizer.save_pretrained(str(checkpoint_dir))
                     allowed = baseline_eval_loss + ABORT_EVAL_RELATIVE_TO_BASELINE_DELTA
                     print(
@@ -2476,7 +2551,7 @@ def train() -> None:
 
             if SAVE_EVERY_STEPS > 0 and completed_step > 0 and completed_step % SAVE_EVERY_STEPS == 0:
                 checkpoint_dir = Path(OUTPUT_DIR) / f"checkpoint-{completed_step}"
-                model.save_pretrained(str(checkpoint_dir))
+                save_adapter_only(model, checkpoint_dir)
                 tokenizer.save_pretrained(str(checkpoint_dir))
                 print(f"Checkpoint saved: {checkpoint_dir}")
                 checkpoint_history.append(
@@ -2501,7 +2576,7 @@ def train() -> None:
     print(f"Final step: {global_step}")
 
     final_dir = Path(OUTPUT_DIR) / "final_adapter"
-    model.save_pretrained(str(final_dir))
+    save_adapter_only(model, final_dir)
     tokenizer.save_pretrained(str(final_dir))
 
     final_eval_loss = float("nan")
@@ -2599,6 +2674,20 @@ def self_test() -> None:
         pass
     else:
         raise AssertionError("parse_example_loss_weight should reject missing weight when require=True")
+    toy_logits = torch.zeros((1, 2, 2), dtype=torch.float32)
+    toy_input_ids = torch.tensor([[0, 1]], dtype=torch.long)
+    toy_loss_mask = torch.tensor([[0.0, 1.0]], dtype=torch.float32)
+    toy_base_loss = masked_cross_entropy_loss(toy_logits, toy_input_ids, toy_loss_mask)
+    toy_weighted_loss = masked_cross_entropy_loss(
+        toy_logits,
+        toy_input_ids,
+        toy_loss_mask,
+        torch.tensor([2.0], dtype=torch.float32),
+    )
+    if ROW_LOSS_WEIGHT_REDUCTION == "scale_mean":
+        assert torch.isclose(toy_weighted_loss, toy_base_loss * 2.0, rtol=1e-5, atol=1e-6), (
+            "scale_mean row_loss_weight must affect single-example microbatches"
+        )
     assert target_parameter_name_matches(
         "mlp.experts.gate_up_proj",
         "base_model.model.backbone.layers.0.mixer.experts.7.up_proj.lora_A.default.weight",

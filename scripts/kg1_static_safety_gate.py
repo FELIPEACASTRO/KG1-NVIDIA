@@ -66,6 +66,17 @@ CRITICAL_SNIPPETS = {
         "parser-current baseline gate": "KG1_V516_PARSER_CURRENT_BASELINE_STATUS",
         "stale prediction parity gate": "KG1_STALE_PREDICTION_PARITY_STATUS",
         "recent failed route quarantine": "v596_queryop_answer_only_preference_dataset",
+        "v666 cpu gate report audit": "audit_v666_cpu_gate_report",
+        "v666 launcher status gate": "launcher_v666_cpu_gate_stack_not_passed",
+        "v666 report arg required": "--v666-cpu-gate-report-json",
+        "validation row loss remote gate": "--require-validation-row-loss-weight",
+    },
+    "scripts/kg1_v666_cpu_gate_stack.py": {
+        "v666 schema": "kg1_v666_cpu_gate_stack_v1",
+        "gpu allowed decision": "\"gpu_allowed\": not blockers",
+        "post train openrouter check": "post_train_openrouter_rule",
+        "v614 blocker": "v614_protected_or_length_or_score_failed",
+        "a100 next action": "A100-large may be considered only after cost/preflight gates",
     },
     "scripts/kg1_weak_backfire_row_guard.py": {
         "known bit backfire id": "8740ed31=01101000",
@@ -136,6 +147,15 @@ CRITICAL_SNIPPETS = {
         "loss normalization mode": "LOSS_NORMALIZATION_MODE",
         "example mean loss mode": "\"example_mean\"",
         "loss normalization manifest": "\"loss_normalization\"",
+        "validation row loss weighting": "val_data = tokenize_examples(val_examples, tokenizer, \"Validation\", apply_row_loss_weight=True)",
+        "row loss scale mean default": "ROW_LOSS_WEIGHT_REDUCTION = env_str(\"ROW_LOSS_WEIGHT_REDUCTION\", \"scale_mean\")",
+        "row loss scale mean self test": "scale_mean row_loss_weight must affect single-example microbatches",
+        "loss mask stops after eos": "LOSS_MASK_STOP_AFTER_EOS",
+        "eos trim helper": "def stop_mask_after_first_eos",
+        "adapter-only save helper": "def save_adapter_only",
+        "embedding save disabled default": "SAVE_EMBEDDING_LAYERS = env_bool(\"SAVE_EMBEDDING_LAYERS\", False)",
+        "checkpoint adapter-only save": "save_adapter_only(model, checkpoint_dir)",
+        "final adapter-only save": "save_adapter_only(model, final_dir)",
     },
     "scripts/package_hf_adapter_submission.py": {
         "official-like manifest schema required": "OFFICIAL_LIKE_SCHEMA_VERSION",
@@ -190,6 +210,8 @@ CRITICAL_SNIPPETS = {
         "promotion equation floor": "KG1_WEAK_PROMOTE_EQUATION_MIN\", 60",
         "promotion total floor": "KG1_WEAK_PROMOTE_TOTAL_MIN\", 196",
         "promotion enforced by default": "not diagnostic_only",
+        "promotion avg completion cap": "KG1_WEAK_PROMOTE_AVG_COMPLETION_TOKENS_MAX\", 512",
+        "promotion max completion cap": "KG1_WEAK_PROMOTE_MAX_COMPLETION_TOKENS_MAX\", 2048",
         "official thinking default": "disable_thinking = env_bool(\"KG1_DISABLE_THINKING\", False)",
         "official token default": "KG1_MAX_TOKENS\", 7680",
         "official context default": "KG1_MAX_MODEL_LEN\", 8192",
@@ -261,6 +283,7 @@ CRITICAL_SNIPPETS = {
         "effective family share": "effective_share_by_family",
         "bit effective floor": "min_bit_effective_share",
         "equation effective ceiling": "max_equation_effective_share",
+        "validation row loss sync": "require_validation_row_loss_weight",
         "gpu allowed decision": "hf_gpu_allowed",
     },
 }
@@ -332,6 +355,10 @@ ENABLED_TARGET_PARAMETER_TRAINABILITY_RE = re.compile(
 )
 TRAINABLE_LORA_MODULES_EXPORT_RE = re.compile(
     r"export\s+TRAINABLE_LORA_MODULES\s*=\s*['\"]([^'\"]*)['\"]",
+    re.IGNORECASE,
+)
+LORA_TARGET_MODULES_RE = re.compile(
+    r"(?:^|\n)\s*(?:export\s+)?LORA_TARGET_MODULES\s*=\s*['\"]([^'\"]*)['\"]",
     re.IGNORECASE,
 )
 HIGH_ANSWER_SPAN_LOSS_WEIGHT_RE = re.compile(
@@ -641,6 +668,31 @@ def audit_text(path: Path, text: str) -> list[Finding]:
                         "That silently disables answer-span weighting while making the route look guarded.",
                     )
                 )
+
+    if (
+        job_or_notebook
+        and rel not in {"scripts/hf_job_train_v90.py", "scripts/kg1_static_safety_gate.py"}
+        and not is_archived_fail_closed(text)
+        and "SAVE_EMBEDDING_LAYERS" in text
+    ):
+        target_module_exports = LORA_TARGET_MODULES_RE.findall(text)
+        target_modules = {
+            item.strip()
+            for export in target_module_exports
+            for item in export.split(",")
+            if item.strip()
+        }
+        forbidden_adapter_only_targets = sorted(target_modules & {"lm_head", "embed_tokens", "word_embeddings"})
+        if forbidden_adapter_only_targets:
+            findings.append(
+                Finding(
+                    rel,
+                    "error",
+                    "adapter_only_forbidden_target_modules",
+                    "Adapter-only launchers must not include lm_head/embed targets in LORA_TARGET_MODULES. "
+                    f"Forbidden modules: {', '.join(forbidden_adapter_only_targets)}.",
+                )
+            )
 
     if (
         job_or_notebook

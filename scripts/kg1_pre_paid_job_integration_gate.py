@@ -96,7 +96,7 @@ BLOCKED_ADAPTER_MARKERS = {
 
 RESIDUAL_FIRST_MIN_TOTAL = 196
 RESIDUAL_FIRST_MIN_BIT = 136
-RESIDUAL_FIRST_MIN_EQUATION = 59
+RESIDUAL_FIRST_MIN_EQUATION = 60
 RESIDUAL_FIRST_MIN_COVERAGE = 0.70
 PROTECTED_ROW_EXPECTED = [
     "8740ed31=01101000",
@@ -163,6 +163,10 @@ def parse_launcher_env_value(text: str, name: str) -> str:
         if match:
             return str(match.group(1)).strip()
     return ""
+
+
+def parse_csv_set(value: object) -> set[str]:
+    return {item.strip() for item in str(value or "").split(",") if item.strip()}
 
 
 def parse_launcher_env_float(text: str, name: str) -> float | None:
@@ -681,6 +685,29 @@ def audit_launcher(args: argparse.Namespace, findings: list[Finding]) -> dict[st
                     "missing command export for expected LOSS_NORMALIZATION_MODE",
                 )
             )
+    require_text(
+        text,
+        'SAVE_EMBEDDING_LAYERS = "0"',
+        "launcher_save_embedding_layers_not_disabled",
+        findings,
+    )
+    require_text(
+        text,
+        'export SAVE_EMBEDDING_LAYERS="$KG1_SAVE_EMBEDDING_LAYERS"',
+        "launcher_missing_save_embedding_layers_export",
+        findings,
+    )
+    target_modules = parse_csv_set(parse_launcher_env_value(text, "LORA_TARGET_MODULES"))
+    forbidden_adapter_only_targets = sorted(target_modules & {"lm_head", "embed_tokens", "word_embeddings"})
+    if forbidden_adapter_only_targets:
+        findings.append(
+            Finding(
+                "error",
+                "launcher_adapter_only_forbidden_target_modules",
+                "adapter-only launchers must not target lm_head/embedding modules when SAVE_EMBEDDING_LAYERS=0; "
+                f"observed forbidden modules: {', '.join(forbidden_adapter_only_targets)}",
+            )
+        )
     observed_max_steps = parse_launcher_env_float(text, "MAX_STEPS")
     max_steps_limit = args.expected_max_steps
     if observed_max_steps is None:
@@ -709,6 +736,18 @@ def audit_launcher(args: argparse.Namespace, findings: list[Finding]) -> dict[st
             text,
             r"REQUIRE_ROW_LOSS_WEIGHT\s*(?:[\"']?\s*:\s*[\"']?(?:1|true|yes|on)|=\s*[\"']?(?:1|true|yes|on))",
             "launcher_missing_required_row_loss_weight",
+            findings,
+        )
+        require_text(
+            text,
+            'ROW_LOSS_WEIGHT_REDUCTION = "scale_mean"',
+            "launcher_row_loss_weight_would_cancel_in_microbatch",
+            findings,
+        )
+        require_text(
+            text,
+            'export ROW_LOSS_WEIGHT_REDUCTION="$KG1_ROW_LOSS_WEIGHT_REDUCTION"',
+            "launcher_missing_row_loss_weight_reduction_export",
             findings,
         )
         row_weight_flag_counts = {
@@ -1504,6 +1543,8 @@ ANSWER_SPAN_LOSS_WEIGHT = 2.0
 ANSWER_SPAN_MIN_WEIGHTED_TOKENS = 1
 USE_ROW_LOSS_WEIGHT = "1"
 REQUIRE_ROW_LOSS_WEIGHT = "1"
+ROW_LOSS_WEIGHT_REDUCTION = "scale_mean"
+SAVE_EMBEDDING_LAYERS = "0"
 KG1_RESIDUAL_FIRST_GATE = "1"
 KG1_V540_EXTRACTION_GATE_STATUS = "passed"
 KG1_CPU_EXTRACTOR_PARITY_STATUS = "passed"
@@ -1521,7 +1562,7 @@ KG1_PROTECTED_ID_ANSWERS = "{protected_value}"
 KG1_CRISIS_MODE_BACKFIRE_GUARD = "1"
 KG1_CPU_SIMULATED_TOTAL_CORRECT = "196"
 KG1_CPU_SIMULATED_BIT_CORRECT = "136"
-KG1_CPU_SIMULATED_EQUATION_CORRECT = "59"
+KG1_CPU_SIMULATED_EQUATION_CORRECT = "60"
 KG1_CPU_MISS_CLASSIFICATION_COVERAGE = "0.70"
 KG1_CPU_SIMULATED_LOST_ROWS = "0"
 KG1_CPU_SIMULATED_LOST_BIT_ROWS = "0"
@@ -1552,6 +1593,8 @@ export DATA_REPO='kg1/self-test-data'
 export MAX_LENGTH=2048
 export ABORT_MAX_RESERVED_GIB=70
 export LOSS_NORMALIZATION_MODE=example_mean
+export SAVE_EMBEDDING_LAYERS="$KG1_SAVE_EMBEDDING_LAYERS"
+export ROW_LOSS_WEIGHT_REDUCTION="$KG1_ROW_LOSS_WEIGHT_REDUCTION"
 local_objective_alignment_cmd = "python scripts/audit_v478_training_objective_alignment.py --use-row-loss-weight --require-row-loss-weight --require-validation-row-loss-weight"
 python scripts/audit_v478_training_objective_alignment.py --use-row-loss-weight --require-row-loss-weight --require-validation-row-loss-weight
 timeout=3600

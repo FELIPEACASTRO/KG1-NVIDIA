@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import shutil
 import sys
 import tempfile
@@ -64,11 +65,41 @@ class Finding:
 
 
 def is_relative_to(path: Path, parent: Path) -> bool:
+    if os.name == "nt":
+        child = normalized_windows_path_text(path)
+        root = normalized_windows_path_text(parent)
+        return child == root or child.startswith(root.rstrip("\\") + "\\")
     try:
         path.resolve().relative_to(parent.resolve())
         return True
     except ValueError:
         return False
+
+
+def normalized_windows_path_text(path: Path) -> str:
+    text = str(path.resolve())
+    if text.startswith("\\\\?\\"):
+        text = text[4:]
+    return os.path.normcase(os.path.abspath(text))
+
+
+def windows_long_path(path: Path) -> Path:
+    """Return a Windows long-path version so audits do not silently miss files."""
+
+    resolved = path.resolve()
+    if os.name != "nt":
+        return resolved
+    text = str(resolved)
+    if text.startswith("\\\\?\\"):
+        return resolved
+    return Path("\\\\?\\" + text)
+
+
+def display_path(path: Path) -> str:
+    text = str(path)
+    if os.name == "nt" and text.startswith("\\\\?\\"):
+        return text[4:]
+    return text
 
 
 def file_size(path: Path) -> int:
@@ -80,7 +111,7 @@ def file_size(path: Path) -> int:
 
 def dir_size(path: Path) -> int:
     total = 0
-    for child in path.rglob("*"):
+    for child in windows_long_path(path).rglob("*"):
         if child.is_file():
             total += file_size(child)
     return total
@@ -89,8 +120,9 @@ def dir_size(path: Path) -> int:
 def audit_path(root: Path, large_blob_mb: float) -> list[Finding]:
     findings: list[Finding] = []
     root = root.resolve()
+    walk_root = windows_long_path(root)
 
-    for path in root.rglob("*"):
+    for path in walk_root.rglob("*"):
         try:
             resolved = path.resolve()
         except OSError:
@@ -100,7 +132,7 @@ def audit_path(root: Path, large_blob_mb: float) -> list[Finding]:
                 Finding(
                     "error",
                     "unsafe_path_outside_workspace",
-                    str(path),
+                    display_path(path),
                     "Resolved path is outside the audited workspace.",
                 )
             )
@@ -112,7 +144,7 @@ def audit_path(root: Path, large_blob_mb: float) -> list[Finding]:
                 Finding(
                     "error",
                     "safe_junk_dir_present",
-                    str(path),
+                    display_path(path),
                     "Cache/checkpoint directory must not remain in the solution workspace.",
                     dir_size(path),
                 )
@@ -129,7 +161,7 @@ def audit_path(root: Path, large_blob_mb: float) -> list[Finding]:
                 Finding(
                     "error",
                     "safe_junk_file_present",
-                    str(path),
+                    display_path(path),
                     "Temporary/editor backup file must not remain in the solution workspace.",
                     size,
                 )
@@ -139,7 +171,7 @@ def audit_path(root: Path, large_blob_mb: float) -> list[Finding]:
                 Finding(
                     "warning",
                     "download_archive_present",
-                    str(path),
+                    display_path(path),
                     "Archive inside the repo must be justified by an active manifest or removed after extraction/audit.",
                     size,
                 )
@@ -149,7 +181,7 @@ def audit_path(root: Path, large_blob_mb: float) -> list[Finding]:
                 Finding(
                     "warning",
                     "large_blob_present",
-                    str(path),
+                    display_path(path),
                     "Large binary artifact should live in HF/Kaggle storage unless it is an active submit/package input.",
                     size,
                 )
@@ -167,12 +199,15 @@ def delete_safe(root: Path, findings: list[Finding]) -> int:
         resolved = path.resolve()
         if not is_relative_to(resolved, root):
             raise RuntimeError(f"refusing to delete outside workspace: {resolved}")
-        if path.is_dir():
-            shutil.rmtree(path, ignore_errors=True)
-            deleted += 1
-        elif path.exists():
-            path.unlink()
-            deleted += 1
+        target = windows_long_path(resolved)
+        if target.is_dir():
+            shutil.rmtree(target, ignore_errors=False)
+            if not target.exists():
+                deleted += 1
+        elif target.exists():
+            target.unlink()
+            if not target.exists():
+                deleted += 1
     return deleted
 
 
@@ -196,16 +231,27 @@ def report_payload(root: Path, findings: list[Finding], deleted: int = 0) -> dic
 
 
 def run_self_test() -> None:
-    with tempfile.TemporaryDirectory() as tmp:
+    tmp = tempfile.mkdtemp()
+    try:
         root = Path(tmp)
         (root / ".cache").mkdir()
         (root / ".cache" / "x").write_text("cache", encoding="utf-8")
         (root / "note.tmp").write_text("tmp", encoding="utf-8")
         (root / "evidence.log").write_text("keep", encoding="utf-8")
+        deep = root / ("longpath_" + "x" * 80) / ("child_" + "y" * 80) / ("leaf_" + "z" * 80)
+        deep_long = windows_long_path(deep)
+        deep_long.mkdir(parents=True)
+        (deep_long / "adapter_model.safetensors").write_bytes(b"0123456789")
         findings = audit_path(root, large_blob_mb=1.0)
         codes = {item.code for item in findings}
         if "safe_junk_dir_present" not in codes or "safe_junk_file_present" not in codes:
             raise AssertionError(f"self-test did not catch safe junk: {codes}")
+        if not any(item.path.endswith("adapter_model.safetensors") for item in findings):
+            # No finding is expected for this file; the check below verifies the
+            # long path was at least traversable through a low threshold.
+            long_findings = audit_path(root, large_blob_mb=0.000001)
+            if not any("adapter_model.safetensors" in item.path for item in long_findings):
+                raise AssertionError("self-test did not traverse long-path fixture")
         deleted = delete_safe(root, findings)
         if deleted != 2:
             raise AssertionError(f"self-test expected 2 deleted items, got {deleted}")
@@ -214,6 +260,8 @@ def run_self_test() -> None:
             raise AssertionError(f"self-test cleanup left errors: {findings_after}")
         if not (root / "evidence.log").exists():
             raise AssertionError("self-test deleted evidence log")
+    finally:
+        shutil.rmtree(windows_long_path(Path(tmp)), ignore_errors=True)
     print("kg1_workspace_clean_gate_self_test=ok", flush=True)
 
 

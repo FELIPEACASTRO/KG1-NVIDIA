@@ -1,0 +1,18 @@
+{
+  "api_key_present_without_value": true,
+  "execute": true,
+  "generated_at_utc": "2026-05-19T19:27:10.979734+00:00",
+  "models": [
+    "openai/gpt-5.5",
+    "anthropic/claude-sonnet-4.6",
+    "google/gemini-3.1-pro-preview",
+    "deepseek/deepseek-v4-pro",
+    "qwen/qwen3.6-max-preview"
+  ],
+  "ok_count": 5,
+  "prompt_path": "artifacts\\openrouter\\v674_f2_prelaunch_consult\\KG1_POST_TRAIN_OPENROUTER_PROMPT.md",
+  "raw_results_path": "artifacts\\openrouter\\v674_f2_prelaunch_consult\\openrouter_raw_results.json",
+  "responses_path": "artifacts\\openrouter\\v674_f2_prelaunch_consult\\openrouter_responses.md",
+  "run_id": "v674-f2-prelaunch-rowloss-adapter-save",
+  "schema_version": "kg1_post_train_openrouter_consult_v1"
+}

@@ -394,11 +394,10 @@ def weak_promotion_gate(summary: dict[str, Any]) -> dict[str, Any]:
     equation_min = env_int("KG1_WEAK_PROMOTE_EQUATION_MIN", 60)
     bit_min = env_int("KG1_WEAK_PROMOTE_BIT_MIN", 136)
     trunc_max = env_int("KG1_WEAK_PROMOTE_TRUNC_MAX", 0)
-    # Official-like weak eval needs long reasoning for the current V290 baseline
-    # itself. Keep length as an optional drift diagnostic, not a default
-    # promotion blocker; truncation and protected-row guards remain mandatory.
-    avg_completion_tokens_max = env_int("KG1_WEAK_PROMOTE_AVG_COMPLETION_TOKENS_MAX", 0)
-    max_completion_tokens_max = env_int("KG1_WEAK_PROMOTE_MAX_COMPLETION_TOKENS_MAX", 0)
+    # False gains from V661/V664 came with very long generations. Promotion is
+    # now blocked by default unless the adapter keeps completions bounded.
+    avg_completion_tokens_max = env_int("KG1_WEAK_PROMOTE_AVG_COMPLETION_TOKENS_MAX", 512)
+    max_completion_tokens_max = env_int("KG1_WEAK_PROMOTE_MAX_COMPLETION_TOKENS_MAX", 2048)
     label_aware_delta_max = env_int("KG1_WEAK_PROMOTE_LABEL_AWARE_DELTA_MAX", 0)
     no_box_fallback_max = env_int("KG1_WEAK_PROMOTE_NO_BOX_FALLBACK_MAX", 0)
     first_boxed_correct_min = env_int("KG1_WEAK_PROMOTE_FIRST_BOXED_CORRECT_MIN", 0)

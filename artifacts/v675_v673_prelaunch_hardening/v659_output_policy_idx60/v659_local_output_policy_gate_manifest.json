@@ -1,0 +1,232 @@
+{
+  "blockers": [],
+  "cross_split": {
+    "train_prompt_hashes": 720,
+    "train_val_prompt_answer_overlap": 0,
+    "train_val_prompt_overlap": 0,
+    "val_prompt_hashes": 180
+  },
+  "dataset_summaries": [
+    {
+      "assistant_char_stats": {
+        "count": 720,
+        "max": 269.0,
+        "min": 201.0,
+        "p50": 248.0,
+        "p90": 268.0,
+        "p95": 269.0,
+        "p99": 269.0
+      },
+      "assistant_word_stats": {
+        "count": 720,
+        "max": 54.0,
+        "min": 26.0,
+        "p50": 48.5,
+        "p90": 54.0,
+        "p95": 54.0,
+        "p99": 54.0
+      },
+      "bit_op_counts": {
+        "AND": 26,
+        "CHO": 47,
+        "NOT": 52,
+        "OR": 104,
+        "XOR": 60
+      },
+      "effective_family_weights": {
+        "bit_manipulation": 0.14893617021276573,
+        "equation_transform": 0.8510638297872342
+      },
+      "family_counts": {
+        "bit_manipulation": 240,
+        "equation_transform": 480
+      },
+      "family_weight_sum": {
+        "bit_manipulation": 83.99999999999986,
+        "equation_transform": 480.0
+      },
+      "first_box_word_idx_stats": {
+        "count": 720,
+        "max": 53.0,
+        "min": 25.0,
+        "p50": 47.5,
+        "p90": 53.0,
+        "p95": 53.0,
+        "p99": 53.0
+      },
+      "issue_counts": {},
+      "path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v673_guarded_equation_bit_transfer_dataset\\20260519T190246Z\\v673_guarded_equation_bit_transfer_train.jsonl",
+      "role_sequence_counts": {
+        "user,assistant": 720
+      },
+      "rows": 720,
+      "schema_counts": {
+        "kg1_v673_guarded_equation_bit_transfer_dataset_v1": 720
+      },
+      "sha256": "69f76195e2a004de5c01c919038210da0987b67476911ca706e7ba9b4160477f",
+      "source_counts": {
+        "v673_guarded_equation_bit_transfer_dataset": 720
+      },
+      "split": "train",
+      "subcategory_counts": {
+        "bit_exact_global_binary_replay": 48,
+        "bit_exact_global_ternary_replay": 96,
+        "bit_fullbyte_ternary_v366_new": 96,
+        "equation_numeric_add_direct": 120,
+        "equation_numeric_colon_trailing_zero": 120,
+        "equation_numeric_minus_signed": 240
+      },
+      "subcategory_weight_sum_top": {
+        "bit_exact_global_binary_replay": 16.799999999999994,
+        "bit_exact_global_ternary_replay": 33.60000000000006,
+        "bit_fullbyte_ternary_v366_new": 33.60000000000006,
+        "equation_numeric_add_direct": 120.0,
+        "equation_numeric_colon_trailing_zero": 120.0,
+        "equation_numeric_minus_signed": 240.0
+      }
+    },
+    {
+      "assistant_char_stats": {
+        "count": 180,
+        "max": 269.0,
+        "min": 201.0,
+        "p50": 248.5,
+        "p90": 268.0,
+        "p95": 269.0,
+        "p99": 269.0
+      },
+      "assistant_word_stats": {
+        "count": 180,
+        "max": 54.0,
+        "min": 26.0,
+        "p50": 48.5,
+        "p90": 54.0,
+        "p95": 54.0,
+        "p99": 54.0
+      },
+      "bit_op_counts": {
+        "AND": 5,
+        "CHO": 16,
+        "NOT": 15,
+        "OR": 25,
+        "XOR": 16
+      },
+      "effective_family_weights": {
+        "bit_manipulation": 0.14893617021276603,
+        "equation_transform": 0.851063829787234
+      },
+      "family_counts": {
+        "bit_manipulation": 60,
+        "equation_transform": 120
+      },
+      "family_weight_sum": {
+        "bit_manipulation": 21.00000000000001,
+        "equation_transform": 120.0
+      },
+      "first_box_word_idx_stats": {
+        "count": 180,
+        "max": 53.0,
+        "min": 25.0,
+        "p50": 47.5,
+        "p90": 53.0,
+        "p95": 53.0,
+        "p99": 53.0
+      },
+      "issue_counts": {},
+      "path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v673_guarded_equation_bit_transfer_dataset\\20260519T190246Z\\v673_guarded_equation_bit_transfer_val.jsonl",
+      "role_sequence_counts": {
+        "user,assistant": 180
+      },
+      "rows": 180,
+      "schema_counts": {
+        "kg1_v673_guarded_equation_bit_transfer_dataset_v1": 180
+      },
+      "sha256": "df2d44e334de65cb91da935768db93f4727f700edd762dd9fd6d48b3d5d8d14b",
+      "source_counts": {
+        "v673_guarded_equation_bit_transfer_dataset": 180
+      },
+      "split": "validation",
+      "subcategory_counts": {
+        "bit_exact_global_binary_replay": 12,
+        "bit_exact_global_ternary_replay": 24,
+        "bit_fullbyte_ternary_v366_new": 24,
+        "equation_numeric_add_direct": 30,
+        "equation_numeric_colon_trailing_zero": 30,
+        "equation_numeric_minus_signed": 60
+      },
+      "subcategory_weight_sum_top": {
+        "bit_exact_global_binary_replay": 4.2,
+        "bit_exact_global_ternary_replay": 8.399999999999997,
+        "bit_fullbyte_ternary_v366_new": 8.399999999999997,
+        "equation_numeric_add_direct": 30.0,
+        "equation_numeric_colon_trailing_zero": 30.0,
+        "equation_numeric_minus_signed": 60.0
+      }
+    }
+  ],
+  "decision": {
+    "blocker_count": 0,
+    "next_action": "Run V286 tokenization/mask gate and holdout non-weak eval before any paid job.",
+    "status": "passed",
+    "submit_allowed": false,
+    "train_or_eval_allowed": true,
+    "warning_count": 2
+  },
+  "generated_at_utc": "2026-05-19T20:06:21.327897+00:00",
+  "inputs": {
+    "datasets": [
+      {
+        "path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v673_guarded_equation_bit_transfer_dataset\\20260519T190246Z\\v673_guarded_equation_bit_transfer_train.jsonl",
+        "sha256": "69f76195e2a004de5c01c919038210da0987b67476911ca706e7ba9b4160477f",
+        "split": "train"
+      },
+      {
+        "path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v673_guarded_equation_bit_transfer_dataset\\20260519T190246Z\\v673_guarded_equation_bit_transfer_val.jsonl",
+        "sha256": "df2d44e334de65cb91da935768db93f4727f700edd762dd9fd6d48b3d5d8d14b",
+        "split": "validation"
+      }
+    ],
+    "thresholds": {
+      "allow_multiple_boxed": false,
+      "allow_non_ascii_assistant": false,
+      "allow_trace_after_box": false,
+      "max_assistant_p95_words": 128,
+      "max_first_box_word_index": 60,
+      "require_starts_boxed": false
+    },
+    "weak_reference_csv": {
+      "path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v290_rank19_micro_patch_reference\\runtime_artifacts\\v245_weak_eval_bridge\\v245-weak-bridge-hfonly-20260510T1950Z\\v221_weak_315.csv",
+      "rows": 315,
+      "sha256": "85da758e14d57ea40270de5747f98726a0ad0b6d1795bff7dd46183005e0f9b6"
+    }
+  },
+  "label": "v675_v673_output_policy_after_no_lmhead_idx60",
+  "outputs": {
+    "manifest_json": "artifacts\\v675_v673_prelaunch_hardening\\v659_output_policy_idx60\\v659_local_output_policy_gate_manifest.json",
+    "row_csv": "artifacts\\v675_v673_prelaunch_hardening\\v659_output_policy_idx60\\v659_row_output_policy_audit.csv",
+    "summary_md": "artifacts\\v675_v673_prelaunch_hardening\\v659_output_policy_idx60\\KG1_V659_LOCAL_OUTPUT_POLICY_GATE.md"
+  },
+  "schema_version": "kg1_v659_local_output_policy_gate_v1",
+  "warnings": [
+    {
+      "code": "bit_required_op_absent_from_dataset",
+      "missing_ops": [
+        "ROT",
+        "SHL",
+        "SHR"
+      ],
+      "path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v673_guarded_equation_bit_transfer_dataset\\20260519T190246Z\\v673_guarded_equation_bit_transfer_train.jsonl",
+      "split": "train"
+    },
+    {
+      "code": "bit_required_op_absent_from_dataset",
+      "missing_ops": [
+        "ROT",
+        "SHL",
+        "SHR"
+      ],
+      "path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v673_guarded_equation_bit_transfer_dataset\\20260519T190246Z\\v673_guarded_equation_bit_transfer_val.jsonl",
+      "split": "validation"
+    }
+  ]
+}

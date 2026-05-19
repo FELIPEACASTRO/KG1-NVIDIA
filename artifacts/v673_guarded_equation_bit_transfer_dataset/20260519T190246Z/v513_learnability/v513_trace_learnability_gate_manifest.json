@@ -1,0 +1,185 @@
+{
+  "dataset_summary": {
+    "combined": {
+      "assistant_length_by_family": {
+        "bit_manipulation": {
+          "assistant_line_max": 5,
+          "assistant_line_p50": 5,
+          "assistant_word_max": 26,
+          "assistant_word_min": 26,
+          "assistant_word_p50": 26,
+          "assistant_word_p90": 26,
+          "assistant_word_p99": 26
+        },
+        "equation_transform": {
+          "assistant_line_max": 10,
+          "assistant_line_p50": 10,
+          "assistant_word_max": 54,
+          "assistant_word_min": 46,
+          "assistant_word_p50": 54,
+          "assistant_word_p90": 54,
+          "assistant_word_p99": 54
+        }
+      },
+      "assistant_style_counts": {
+        "bit_trace_with_rule_terms": 300,
+        "equation_short_rule_reject_boxed": 600
+      },
+      "family_counts": {
+        "bit_manipulation": 300,
+        "equation_transform": 600
+      },
+      "rows": 900,
+      "source_counts": {
+        "v673_guarded_equation_bit_transfer_dataset": 900
+      },
+      "subcategory_counts": {
+        "bit_exact_global_binary_replay": 60,
+        "bit_exact_global_ternary_replay": 120,
+        "bit_fullbyte_ternary_v366_new": 120,
+        "equation_numeric_add_direct": 150,
+        "equation_numeric_colon_trailing_zero": 150,
+        "equation_numeric_minus_signed": 300
+      }
+    },
+    "train": {
+      "assistant_length_by_family": {
+        "bit_manipulation": {
+          "assistant_line_max": 5,
+          "assistant_line_p50": 5,
+          "assistant_word_max": 26,
+          "assistant_word_min": 26,
+          "assistant_word_p50": 26,
+          "assistant_word_p90": 26,
+          "assistant_word_p99": 26
+        },
+        "equation_transform": {
+          "assistant_line_max": 10,
+          "assistant_line_p50": 10,
+          "assistant_word_max": 54,
+          "assistant_word_min": 46,
+          "assistant_word_p50": 54,
+          "assistant_word_p90": 54,
+          "assistant_word_p99": 54
+        }
+      },
+      "assistant_style_counts": {
+        "bit_trace_with_rule_terms": 240,
+        "equation_short_rule_reject_boxed": 480
+      },
+      "family_counts": {
+        "bit_manipulation": 240,
+        "equation_transform": 480
+      },
+      "rows": 720,
+      "source_counts": {
+        "v673_guarded_equation_bit_transfer_dataset": 720
+      },
+      "subcategory_counts": {
+        "bit_exact_global_binary_replay": 48,
+        "bit_exact_global_ternary_replay": 96,
+        "bit_fullbyte_ternary_v366_new": 96,
+        "equation_numeric_add_direct": 120,
+        "equation_numeric_colon_trailing_zero": 120,
+        "equation_numeric_minus_signed": 240
+      }
+    },
+    "validation": {
+      "assistant_length_by_family": {
+        "bit_manipulation": {
+          "assistant_line_max": 5,
+          "assistant_line_p50": 5,
+          "assistant_word_max": 26,
+          "assistant_word_min": 26,
+          "assistant_word_p50": 26,
+          "assistant_word_p90": 26,
+          "assistant_word_p99": 26
+        },
+        "equation_transform": {
+          "assistant_line_max": 10,
+          "assistant_line_p50": 10,
+          "assistant_word_max": 54,
+          "assistant_word_min": 46,
+          "assistant_word_p50": 54,
+          "assistant_word_p90": 54,
+          "assistant_word_p99": 54
+        }
+      },
+      "assistant_style_counts": {
+        "bit_trace_with_rule_terms": 60,
+        "equation_short_rule_reject_boxed": 120
+      },
+      "family_counts": {
+        "bit_manipulation": 60,
+        "equation_transform": 120
+      },
+      "rows": 180,
+      "source_counts": {
+        "v673_guarded_equation_bit_transfer_dataset": 180
+      },
+      "subcategory_counts": {
+        "bit_exact_global_binary_replay": 12,
+        "bit_exact_global_ternary_replay": 24,
+        "bit_fullbyte_ternary_v366_new": 24,
+        "equation_numeric_add_direct": 30,
+        "equation_numeric_colon_trailing_zero": 30,
+        "equation_numeric_minus_signed": 60
+      }
+    }
+  },
+  "decision": {
+    "full_eval_allowed": false,
+    "hf_gpu_allowed": true,
+    "kaggle_submit_allowed": false,
+    "next_action": "Run only a tiny paid smoke after objective alignment and FinOps gates.",
+    "package_allowed": false,
+    "reason": "no structural blockers; still requires objective and FinOps gates before GPU",
+    "status": "passed_cpu_structure_only"
+  },
+  "duplicate_group_counts": {
+    "assistant_exact_groups": 6,
+    "assistant_template_groups": 10
+  },
+  "finding_counts": {
+    "blocker": 0,
+    "info": 2,
+    "warning": 0
+  },
+  "findings": [
+    {
+      "code": "normalized_equation_rule_template_collision_expected",
+      "detail": "[{\"answer_count\": 136, \"answers_preview\": [\"-1\", \"-10\", \"-11\", \"-12\", \"-13\", \"-14\", \"-15\", \"-16\", \"-17\", \"-18\"], \"assistant_template_sha256\": \"2842c74f4296f1a0d92c50ccfd1faa8b95c8e17f52fdaad16ee142ffd2e7f485\", \"count\": 300, \"families\": [\"equation_transform\"], \"ids_preview\": [\"v673_train_eq_00439_919a9d6a6e\", \"v673_train_eq_00308_d857c0db41\", \"v673_train_eq_00326_be2addb861\", \"v673_train_eq_00392_f538958be3\", \"v673_train_eq_00444_301d1d6c11\", \"v673_train_eq_00348_14206f3ed1\", \"v673_train_eq_00436_5199970ec2\", \"v673_train_eq_00395_7c0be33663\", \"v673_train_eq_00422_8b4a824c2f\", \"v673_train_eq_00409_d83e94dd88\"], \"styles\": [\"equation_short_rule_reject_boxed\"], \"subcategories\": [\"equation_numeric_minus_signed\"], \"template_preview\": \"rule: for this '-' operator, compute left minus right and preserve the sign. check the examples that use this operator: - <num><num> -> <num> - <num><num> -> <num> - <num><num> -> <num> - <num><num> -> <num> - <num><num>\"}, {\"answer_count\": 9, \"answers_preview\": [\"10\", \"20\", \"30\", \"40\", \"50\", \"60\", \"70\", \"80\", \"90\"], \"assistant_template_sha256\": \"739dfbe065a78b99108a41f3cf221d9160db5fda3b40d4387b2eb707ba2ab8a2\", \"count\": 150, \"families\": [\"equation_transform\"], \"ids_preview\": [\"v673_train_eq_00219_b7b661f65d\", \"v673_train_eq_00186_9d9cc94929\", \"v673_train_eq_00151_8f28e58a2f\", \"v673_train_eq_00222_4ba3f4def7\", \"v673_train_eq_00203_3dfaca89c3\", \"v673_train_eq_00168_e6ac5e0c29\", \"v673_train_eq_00177_5d15486852\", \"v673_train_eq_00232_c516426f94\", \"v673_train_eq_00137_97cdd092a0\", \"v673_train_eq_00127_bd617cb8de\"], \"styles\": [\"equation_short_rule_reject_boxed\"], \"subcategories\": [\"equation_numeric_colon_trailing_zero\"], \"template_preview\": \"rule: for this ':' operator, compute the absolute difference and keep any trailing zero. check the examples that use this operator: - <num>:<num> -> <num> - <num>:<num> -> <num> - <num>:<num> -> <num> - <num>:<num> -> <n\"}, {\"answer_count\": 58, \"answers_preview\": [\"101\", \"107\", \"108\", \"109\", \"110\", \"112\", \"113\", \"114\", \"116\", \"118\"], \"assistant_template_sha256\": \"c9bd83267a6d62076f66f7e0bc2f1747b3ff6fdfbc33f415c4e443d867d20f30\", \"count\": 75, \"families\": [\"equation_transform\"], \"ids_preview\": [\"v673_train_eq_00070_42e0a23002\", \"v673_train_eq_00092_e87fb2b74c\", \"v673_train_eq_00056_2756b03c92\", \"v673_train_eq_00102_0377fd7402\", \"v673_train_eq_00062_48725e3cd6\", \"v673_train_eq_00044_ab12c4689f\", \"v673_train_eq_00090_61dcadcf97\", \"v673_train_eq_00086_a55cb42a9b\", \"v673_train_eq_00078_b352e94ecc\", \"v673_train_eq_00098_aef696916a\"], \"styles\": [\"equation_short_rule_reject_boxed\"], \"subcategories\": [\"equation_numeric_add_direct\"], \"template_preview\": \"rule: for this additive operator, compute the direct sum of the two numbers. check the examples that use this operator: - <num>)<num> -> <num> - <num>)<num> -> <num> - <num>)<num> -> <num> apply the same rule to the quer\"}, {\"answer_count\": 63, \"answers_preview\": [\"101\", \"102\", \"103\", \"104\", \"105\", \"106\", \"107\", \"108\", \"110\", \"112\"], \"assistant_template_sha256\": \"dac4deb74869e448ffde3aa4c225e6190abfbe9078c2d7e682367272080071c6\", \"count\": 75, \"families\": [\"equation_transform\"], \"ids_preview\": [\"v673_train_eq_00067_0073f56827\", \"v673_train_eq_00101_dcb2fea1d9\", \"v673_train_eq_00103_60e582e6b1\", \"v673_train_eq_00085_b7de220a2d\", \"v673_train_eq_00051_60316c2d97\", \"v673_train_eq_00005_f114be363a\", \"v673_train_eq_00065_02fd365bc8\", \"v673_train_eq_00007_b19f86e7e3\", \"v673_train_eq_00047_791ae9be00\", \"v673_train_eq_00091_44fce24997\"], \"styles\": [\"equation_short_rule_reject_boxed\"], \"subcategories\": [\"equation_numeric_add_direct\"], \"template_preview\": \"rule: for this additive operator, compute the direct sum of the two numbers. check the examples that use this operator: - <num>+<num> -> <num> - <num>+<num> -> <num> - <num>+<num> -> <num> apply the same rule to the quer\"}]",
+      "severity": "info"
+    },
+    {
+      "code": "style_by_family_snapshot",
+      "detail": "{\"bit_manipulation:bit_trace_with_rule_terms\": 300, \"equation_transform:equation_short_rule_reject_boxed\": 600}",
+      "severity": "info"
+    }
+  ],
+  "generated_at_utc": "2026-05-19T19:04:20.799767+00:00",
+  "inputs": {
+    "tokenization_manifest": "artifacts\\v673_guarded_equation_bit_transfer_dataset\\20260519T190246Z\\tokenization_gate_real\\v286_generic_tokenization_gate_manifest.json",
+    "tokenization_manifest_sha256": "85224b149831c3d99a15eb30606ec46ac548fe82884612be18abe4c3b5ae1dd3",
+    "train_jsonl": "artifacts\\v673_guarded_equation_bit_transfer_dataset\\20260519T190246Z\\v673_guarded_equation_bit_transfer_train.jsonl",
+    "train_sha256": "69f76195e2a004de5c01c919038210da0987b67476911ca706e7ba9b4160477f",
+    "val_jsonl": "artifacts\\v673_guarded_equation_bit_transfer_dataset\\20260519T190246Z\\v673_guarded_equation_bit_transfer_val.jsonl",
+    "val_sha256": "df2d44e334de65cb91da935768db93f4727f700edd762dd9fd6d48b3d5d8d14b"
+  },
+  "outputs": {
+    "findings_csv": "artifacts\\v673_guarded_equation_bit_transfer_dataset\\20260519T190246Z\\v513_learnability\\v513_findings.csv",
+    "manifest_json": "artifacts\\v673_guarded_equation_bit_transfer_dataset\\20260519T190246Z\\v513_learnability\\v513_trace_learnability_gate_manifest.json",
+    "summary_md": "artifacts\\v673_guarded_equation_bit_transfer_dataset\\20260519T190246Z\\v513_learnability\\V513_TRACE_LEARNABILITY_GATE_SUMMARY.md",
+    "top_assistant_exact_groups_csv": "artifacts\\v673_guarded_equation_bit_transfer_dataset\\20260519T190246Z\\v513_learnability\\v513_top_assistant_exact_groups.csv",
+    "top_template_groups_csv": "artifacts\\v673_guarded_equation_bit_transfer_dataset\\20260519T190246Z\\v513_learnability\\v513_top_template_groups.csv"
+  },
+  "schema_version": "kg1_v513_trace_learnability_gate_v1",
+  "thresholds": {
+    "max_assistant_words_warning": 1300,
+    "max_bit_answer_only_share_for_gpu": 0.05,
+    "max_loss_tokens_warning": 1300,
+    "max_prompt_truncation_rate": 0.0,
+    "min_bit_trace_rows_for_gpu": 32
+  },
+  "tokenization_gate_status": "tokenization_gate_passed"
+}

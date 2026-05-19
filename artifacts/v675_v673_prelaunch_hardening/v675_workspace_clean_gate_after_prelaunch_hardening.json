@@ -1,0 +1,25 @@
+{
+  "deleted_safe_items": 1,
+  "finding_counts": {
+    "error": 0,
+    "warning": 0
+  },
+  "findings": [],
+  "passed": true,
+  "policy": {
+    "auto_deletes_only": [
+      ".cache",
+      ".ipynb_checkpoints",
+      ".pytest_cache",
+      "__pycache__",
+      ".bak",
+      ".old",
+      ".orig",
+      ".tmp"
+    ],
+    "never_auto_delete": "logs, manifests, datasets, adapters, roadmaps, and analysis reports",
+    "rule": "keep only active or future-reusable artifacts; remove caches, temp files, and extracted download leftovers"
+  },
+  "root": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree",
+  "schema_version": "kg1_workspace_clean_gate_v1"
+}
